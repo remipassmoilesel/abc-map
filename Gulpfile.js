@@ -15,7 +15,7 @@ gulp.task('clean', () => {
     return gulp.src('dist/', {read: false}).pipe(clean());
 });
 
-gulp.task('compile-api', () => {
+gulp.task('build-api', () => {
     let failed = false;
     return tsProject.src()
         .pipe(tsProject())
@@ -31,7 +31,7 @@ gulp.task('compile-api', () => {
         .js.pipe(gulp.dest('dist'));
 });
 
-gulp.task('compile-gui', () => {
+gulp.task('build-gui', () => {
 
     let failed = true;
 
@@ -56,8 +56,8 @@ gulp.task('run', () => {
 
 gulp.task('build', gulpSync.sync([
     'clean',
-    'compile-api',
-    'compile-gui',
+    'build-api',
+    'build-gui',
 ]));
 
 gulp.task('start', gulpSync.sync([
@@ -71,8 +71,13 @@ gulp.task('test',
     ])
 );
 
-gulp.task('watch', ['build'], () => {
-    return gulp.watch('src/**/*', ['build']);
+gulp.task('watch-api', ['build'], () => {
+    return gulp.watch('src/api/**/*', ['build-api']);
 });
 
+gulp.task('watch-gui', ['build'], () => {
+    return gulp.watch('src/gui/**/*', ['build-gui']);
+});
+
+gulp.task('watch', ['watch-gui', 'watch-api']);
 gulp.task('default', ['start']);
