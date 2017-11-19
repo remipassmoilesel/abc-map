@@ -2,7 +2,7 @@ import {ExampleService} from "./api/ExampleService";
 import {app, BrowserWindow} from 'electron';
 import * as path from 'path';
 import * as url from 'url';
-import {DevUtilities} from "./api/dev/DevUtilities";
+import {ElectronUtilities} from "./api/dev/ElectronDevUtilities";
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -19,8 +19,8 @@ function createWindow() {
         slashes: true
     }));
 
-    if(DevUtilities.isDevMode()){
-        DevUtilities.setupDevTools();
+    if(ElectronUtilities.isDevMode()){
+        ElectronUtilities.setupDevTools();
     }
 
     // Open the DevTools.

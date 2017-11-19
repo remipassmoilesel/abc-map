@@ -1,22 +1,21 @@
 import installExtension, {VUEJS_DEVTOOLS} from 'electron-devtools-installer';
-import * as CircularJSON from 'circular-json';
 import {Logger} from "./Logger";
 
-export class DevUtilities {
+export class ElectronUtilities {
 
-    private static logger = Logger.getLogger('DevUtilities');
+    private static logger = Logger.getLogger('ElectronUtilities');
     private static DEV_ENV_VAR = 'dev';
 
     public static isDevMode() {
-        return process.env.NODE_ENV === '' || DevUtilities.DEV_ENV_VAR;
+        return process.env.NODE_ENV === '' || ElectronUtilities.DEV_ENV_VAR;
     }
 
     public static setupDevTools() {
 
         // install VueJS dev tools
         installExtension(VUEJS_DEVTOOLS)
-            .then((name) => DevUtilities.logger.info(`Added Extension:  ${name}`))
-            .catch((err) => DevUtilities.logger.error('An error occurred: ', err));
+            .then((name) => ElectronUtilities.logger.info(`Added Extension:  ${name}`))
+            .catch((err) => ElectronUtilities.logger.error('An error occurred: ', err));
 
         // setup hot reloading
         // TODO: FIXME
@@ -29,9 +28,5 @@ export class DevUtilities {
      */
     public static setupDevtron() {
         require('devtron').install();
-    }
-
-    public static safeStringify(data: any) {
-        return CircularJSON.stringify(data);
     }
 }

@@ -2,7 +2,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import CellComponent from "./components/cell/CellComponent";
 import MainView from "./views/main/MainView";
-import {DevUtilities} from "../api/dev/DevUtilities";
+import {ElectronUtilities} from "../api/dev/ElectronDevUtilities";
 import {Logger} from "../api/dev/Logger";
 // import vuetify
 import 'vuetify';
@@ -13,9 +13,9 @@ const logger = Logger.getLogger('index.ts');
 logger.info('Starting main app');
 
 // install dev tools
-if (DevUtilities.isDevMode()) {
+if (ElectronUtilities.isDevMode()) {
     logger.info('Development mode enabled');
-    DevUtilities.setupDevtron();
+    ElectronUtilities.setupDevtron();
 }
 
 // tag name -> component

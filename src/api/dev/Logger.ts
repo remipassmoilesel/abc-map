@@ -1,4 +1,4 @@
-import {DevUtilities} from "./DevUtilities";
+import {DevUtils} from "./DevUtils";
 
 export class Logger {
 
@@ -29,7 +29,7 @@ export class Logger {
     }
 
     private print(msg: string, level: string = Logger.INFO, data?: any) {
-        const stringifiedData = data ? DevUtilities.safeStringify(data) : '';
+        const stringifiedData = data ? DevUtils.safeStringify(data) : '';
         const date = new Date().toString().substr(16, 8);
         console.log(`[${date}] [${level}] [${this.namespace}] ${msg} ${stringifiedData}`);
     }

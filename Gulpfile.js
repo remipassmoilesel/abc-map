@@ -73,7 +73,7 @@ gulp.task('start', gulpSync.sync([
 
 gulp.task('test',
     shell.task([
-        './node_modules/.bin/mocha --require source-map-support ./dist/**/*Test.js',
+        './node_modules/.bin/mocha --require source-map-support ./dist/tests/**/*Test.js',
     ])
 );
 
