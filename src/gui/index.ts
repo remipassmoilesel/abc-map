@@ -1,13 +1,13 @@
 import Vue from 'vue';
-import VueRouter from 'vue-router';
-import CellComponent from "./components/cell/CellComponent";
-import MainView from "./views/main/MainView";
 import {ElectronUtilities} from "../api/dev/ElectronDevUtilities";
 import {Logger} from "../api/dev/Logger";
-// import vuetify
-import 'vuetify';
+import {router} from "./router";
 // Import style
 import './index.scss';
+// import components
+import './components';
+// import vuetify
+import Vuetify = require("vuetify");
 
 const logger = Logger.getLogger('index.ts');
 logger.info('Starting main app');
@@ -18,19 +18,7 @@ if (ElectronUtilities.isDevMode()) {
     ElectronUtilities.setupDevtron();
 }
 
-// tag name -> component
-Vue.component('cell', CellComponent);
-
-// declare routes and router
-const routes = [
-    {path: '/main', component: MainView}
-];
-
-// initializing router
-Vue.use(VueRouter);
-const router = new VueRouter({
-    routes,
-});
+Vue.use(Vuetify);
 
 // declare vue app
 let v = new Vue({
