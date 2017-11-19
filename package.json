@@ -45,7 +45,8 @@
     "vue-loader": "^13.3.0",
     "vue-template-compiler": "^2.2.1",
     "webpack": "^3.8.1",
-    "webpack-dev-server": "^2.9.3"
+    "webpack-dev-server": "^2.9.3",
+    "webpack-stream": "^4.0.0"
   },
   "dependencies": {
     "@types/electron": "^1.6.10",

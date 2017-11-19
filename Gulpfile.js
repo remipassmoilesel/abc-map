@@ -5,29 +5,31 @@ const clean = require('gulp-clean');
 const concat = require('gulp-concat');
 const runElectron = require('gulp-run-electron');
 const gulpSync = require('gulp-sync')(gulp);
+const webpackStream = require('webpack-stream');
+const webpack2 = require('webpack');
 
+const webpackConfig = require('./config/webpack.config.gui');
 const tsProject = ts.createProject('./tsconfig.json');
 
 gulp.task('clean', () => {
     return gulp.src('dist/', {read: false}).pipe(clean());
 });
 
-gulp.task('compile', () => {
+gulp.task('compile-api', () => {
     return tsProject.src()
         .pipe(tsProject())
         .js.pipe(gulp.dest('dist'));
 });
 
-gulp.task('sass', () => {
-    return gulp.src('./src/**/*.scss')
-        .pipe(sass().on('error', sass.logError))
-        .pipe(concat('gui/bundle.css'))
-        .pipe(gulp.dest('dist'))
+gulp.task('compile-gui', () => {
+    return gulp.src('src/gui/index.ts')
+        .pipe(webpackStream(webpackConfig, webpack2))
+        .pipe(gulp.dest('dist/gui'));
 });
 
 gulp.task('sync-assets', () => {
-    return gulp.src(['./src/**/*', '!./**/*.ts', '!./**/*.scss'])
-        .pipe(gulp.dest('dist'));
+    return gulp.src(['./src/resources/**/*'])
+        .pipe(gulp.dest('dist/resources'));
 });
 
 gulp.task('run', () => {
@@ -37,9 +39,9 @@ gulp.task('run', () => {
 
 gulp.task('build', gulpSync.sync([
     'clean',
-    'compile',
-    'sass',
-    'sync-assets'
+    'compile-api',
+    'compile-gui',
+    'sync-assets',
 ]));
 
 gulp.task('start', gulpSync.sync([
