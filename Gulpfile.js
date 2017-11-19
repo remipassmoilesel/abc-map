@@ -1,11 +1,12 @@
 const gulp = require('gulp');
 const ts = require('gulp-typescript');
-const tsProject = ts.createProject('tsconfig.json');
 const sass = require('gulp-sass');
 const clean = require('gulp-clean');
 const concat = require('gulp-concat');
 const runElectron = require('gulp-run-electron');
 const gulpSync = require('gulp-sync')(gulp);
+
+const tsProject = ts.createProject('./tsconfig.json');
 
 gulp.task('clean', () => {
     return gulp.src('dist/', {read: false}).pipe(clean());
