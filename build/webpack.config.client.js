@@ -4,9 +4,9 @@ const webpack = require('webpack');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 module.exports = {
-    entry: './src/client/index.ts',
+    entry: './src/gui/index.ts',
     output: {
-        path: path.resolve('./dist/client/'),
+        path: path.resolve('./dist/gui/'),
         publicPath: '/dist/',
         filename: 'build.js'
     },
@@ -47,6 +47,10 @@ module.exports = {
                 options: {
                     name: '[name].[ext]'
                 }
+            },
+            {
+                test: /\.json$/,
+                loader: 'json'
             },
             {
                 test: /\.scss$/,
