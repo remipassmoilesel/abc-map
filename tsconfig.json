@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "sourceMap": true,
-    "strict": true,
+    "strict": false,
     "moduleResolution": "node",
     "experimentalDecorators": true
   },
@@ -9,6 +9,7 @@
     "./src/**/*"
   ],
   "exclude": [
+    "./node_modules/**/*",
     "./src/gui/**/*"
   ]
 }

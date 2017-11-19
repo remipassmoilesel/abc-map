@@ -5,9 +5,25 @@ const assert = chai.assert;
 
 describe('BuildTest', () => {
 
-    it('Build api should return 0', () => {
+    it('Build task should execute without errors', (done) => {
         assert.doesNotThrow(() => {
-            spawnSync('npm run build-gui');
+            try {
+                spawnSync('npm run build');
+                done();
+            } catch (e) {
+                done(e);
+            }
+        });
+    });
+
+    it('Package task should execute without errors', (done) => {
+        assert.doesNotThrow(() => {
+            try {
+                spawnSync('npm run build');
+                done();
+            } catch (e) {
+                done(e);
+            }
         });
     });
 
