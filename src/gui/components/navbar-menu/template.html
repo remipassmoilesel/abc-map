@@ -1,24 +1,24 @@
 <div class="navbar-menu">
     <div class="navbar-start">
-        <div class="navbar-item has-dropdown is-hoverable">
-            <a class="navbar-link">
-                Left
+        <div class="navbar-item has-dropdown" :class="{'is-active': isActive}">
+            <a class="navbar-link" @click="isActive = !isActive">
+                Menu
             </a>
 
-            <div class="navbar-dropdown">
+            <div class="navbar-dropdown fadeIn">
                 <a class="navbar-item">
-                    Overview
+                    Menu item 1
                 </a>
                 <a class="navbar-item">
-                    Elements
+                    Menu item 2
                 </a>
                 <a class="navbar-item">
-                    Components
+                    Menu item 3
                 </a>
                 <hr class="navbar-divider">
-                <div class="navbar-item">
-                    Version 0.6.1
-                </div>
+                <a class="navbar-item">
+                    Menu item 3
+                </a>
             </div>
         </div>
     </div>

@@ -7,10 +7,13 @@ import './style.scss'
 })
 export default class NavbarMenuComponent extends Vue {
 
+    isActive = false;
+    $store;
+
     /**
      * Triggered when component is displayed
      */
     mounted() {
-
+        console.log(this.$store)
     }
 }

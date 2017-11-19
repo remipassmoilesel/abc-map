@@ -13,6 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "animate.css": "^3.5.2",
     "buefy": "^0.6.1",
     "chalk": "^2.3.0",
     "circular-json": "^0.4.0",
@@ -21,7 +22,8 @@
     "vue": "^2.5.2",
     "vue-class-component": "^6.1.0",
     "vue-router": "^3.0.1",
-    "vuetify": "^0.17.1"
+    "vuetify": "^0.17.1",
+    "vuex": "^3.0.1"
   },
   "devDependencies": {
     "@types/chai": "^4.0.5",
