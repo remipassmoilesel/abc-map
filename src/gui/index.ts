@@ -4,6 +4,8 @@ import './index.scss';
 import CellComponent from "./components/cell/CellComponent";
 import MainView from "./views/main/MainView";
 
+require('devtron').install();
+
 // tag name -> component
 Vue.component('cell', CellComponent);
 

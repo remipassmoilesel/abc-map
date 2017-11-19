@@ -23,9 +23,10 @@ function createWindow() {
         slashes: true
     }));
 
+    // install dev tools
     installExtension(VUEJS_DEVTOOLS)
         .then((name) => console.log(`Added Extension:  ${name}`))
-        .catch((err) => console.log('An error occurred: ', err));
+        .catch((err) => console.error('An error occurred: ', err));
 
     // Open the DevTools.
     win.webContents.openDevTools();

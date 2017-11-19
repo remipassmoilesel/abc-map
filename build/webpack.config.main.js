@@ -1,5 +1,5 @@
 
-const clientConfig = require('./webpack.config.client');
+const guiConfig = require('./webpack.config.gui');
 const apiConfig = require('./webpack.config.api');
 
-module.exports = [clientConfig, apiConfig];
+module.exports = [guiConfig, apiConfig];

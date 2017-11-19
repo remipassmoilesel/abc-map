@@ -7,9 +7,9 @@
     "clean": "node_modules/.bin/rimraf dist",
     "build": "parallel-webpack --config='./build/webpack.config.main.js'",
     "build-api": "webpack --config='./build/webpack.config.api.js'",
-    "build-client": "webpack --config='./build/webpack.config.client.js'",
+    "build-gui": "webpack --config='./build/webpack.config.gui.js'",
     "build-watch-all": "parallel-webpack --config='./build/webpack.config.main.js' --watch",
-    "start": "npm run build-api && npm run build-client && electron .",
+    "start": "npm run build-api && npm run build-gui && electron .",
     "start-watch": "npm run build-watch-all && electron .",
     "clean-build": "npm run clean && npm run build",
     "test-client": "npm run clean-build && mocha 'dist/client/test/**/*Test.js'"

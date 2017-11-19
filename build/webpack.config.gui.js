@@ -2,11 +2,18 @@ const path = require('path');
 const webpack = require('webpack');
 
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+
+const index = './src/gui/index.ts';
+const distDir = path.resolve('./dist/');
+const buildDestination = path.join(distDir, 'gui');
+const nodeModulesRoot = path.resolve('./node_modules');
+const resourcesRoot = path.resolve('./resources');
 
 module.exports = {
-    entry: './src/gui/index.ts',
+    entry: index,
     output: {
-        path: path.resolve('./dist/gui/'),
+        path: buildDestination,
         publicPath: '/dist/',
         filename: 'build.js'
     },
@@ -73,13 +80,28 @@ module.exports = {
     },
     devtool: '#eval-source-map',
     target: 'electron-renderer',
+    node: {     // disable mocking of these values by webpack
+        __dirname: false,
+        __filename: false
+    },
     plugins: [
         new ExtractTextPlugin({ // define where to save the file
             filename: '[name].bundle.css',
             allChunks: true
-        })
-    ],
+        }),
 
+        // Workaround for devtron in webpack
+        new CopyWebpackPlugin([
+            {
+                from: path.resolve(nodeModulesRoot, 'devtron/manifest.json'),
+                to: resourcesRoot
+            },
+            {
+                from: path.resolve(nodeModulesRoot, 'devtron/out/browser-globals.js'),
+                to: path.join(resourcesRoot, 'out')
+            }
+        ])
+    ]
 };
 
 if (process.env.NODE_ENV === 'production') {
