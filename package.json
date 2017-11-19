@@ -4,12 +4,11 @@
   "description": "",
   "main": "build/entrypoint.ts",
   "scripts": {
-    "dev": "node_modules/.bin/webpack-dev-server --content-base .",
-    "clean": "node_modules/.bin/rimraf build",
+    "clean": "node_modules/.bin/rimraf dist",
     "build": "parallel-webpack --config='./build/webpack.config.main.js'",
-    "build-watch": "node_modules/.bin/webpack --progress --colors --watch",
+    "build-watch": "parallel-webpack --config='./build/webpack.config.main.js' --watch",
     "clean-build": "npm run clean && npm run build",
-    "test": "npm run clean-build && node_modules/.bin/mocha 'dist/tests/**/*Test.js'"
+    "test-client": "npm run clean-build && mocha 'dist/client/test/**/*Test.js'"
   },
   "author": "",
   "license": "ISC",
@@ -26,6 +25,7 @@
     "parallel-webpack": "^2.2.0",
     "rimraf": "^2.6.2",
     "sass-loader": "^6.0.6",
+    "source-map-support": "^0.5.0",
     "style-loader": "^0.19.0",
     "ts-loader": "^3.0.5",
     "typescript": "^2.5.3",
