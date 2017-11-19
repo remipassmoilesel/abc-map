@@ -6,8 +6,9 @@ import {router} from "./router";
 import './index.scss';
 // import components
 import './components';
-// import vuetify
-import Vuetify = require("vuetify");
+// import ui lib
+import Buefy from 'buefy'
+Vue.use(Buefy);
 
 const logger = Logger.getLogger('index.ts');
 logger.info('Starting main app');
@@ -17,8 +18,6 @@ if (ElectronUtilities.isDevMode()) {
     logger.info('Development mode enabled');
     ElectronUtilities.setupDevtron();
 }
-
-Vue.use(Vuetify);
 
 // declare vue app
 let v = new Vue({

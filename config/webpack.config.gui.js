@@ -14,7 +14,7 @@ module.exports = {
     entry: index,
     output: {
         path: buildDestination,
-        publicPath: '/dist/',
+        publicPath: path.join(__dirname, '..', '/dist/gui/'),
         filename: 'build.js'
     },
     module: {
@@ -42,13 +42,6 @@ module.exports = {
                 }
             },
             {
-                test: /\.(png|jpg|gif|svg)$/,
-                loader: 'file-loader',
-                options: {
-                    name: '[name].[ext]?[hash]'
-                }
-            },
-            {
                 test: /\.(htm|html)$/,
                 loader: 'html-loader',
                 options: {
@@ -58,6 +51,13 @@ module.exports = {
             {
                 test: /\.scss$/,
                 loader: ExtractTextPlugin.extract(['css-loader', 'sass-loader'])
+            },
+            {
+                test: /\.(png|woff|woff2|eot|ttf|svg)$/,
+                loader: 'file-loader',
+                options: {
+                    name: '[name].[ext]'
+                }
             }
         ]
     },
