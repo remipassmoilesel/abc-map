@@ -12,8 +12,18 @@
   },
   "author": "",
   "license": "ISC",
+  "dependencies": {
+    "chalk": "^2.3.0",
+    "circular-json": "^0.4.0",
+    "electron": "^1.7.9",
+    "vue": "^2.5.2",
+    "vue-class-component": "^6.1.0",
+    "vue-router": "^3.0.1",
+    "vuetify": "^0.17.1"
+  },
   "devDependencies": {
     "@types/chai": "^4.0.5",
+    "@types/electron": "^1.6.10",
     "@types/electron-devtools-installer": "^2.0.2",
     "@types/mocha": "^2.2.44",
     "@types/sinon": "^4.0.0",
@@ -52,13 +62,5 @@
     "webpack": "^3.8.1",
     "webpack-dev-server": "^2.9.3",
     "webpack-stream": "^4.0.0"
-  },
-  "dependencies": {
-    "@types/electron": "^1.6.10",
-    "electron": "^1.7.9",
-    "vue": "^2.5.2",
-    "vue-class-component": "^6.1.0",
-    "vue-router": "^3.0.1",
-    "vuetify": "^0.17.1"
   }
 }

@@ -5,6 +5,7 @@ const runElectron = require('gulp-run-electron');
 const gulpSync = require('gulp-sync')(gulp);
 const webpackStream = require('webpack-stream');
 const webpack2 = require('webpack');
+const chalk = require('chalk');
 const shell = require('gulp-shell');
 
 const webpackConfig = require('./config/webpack.config.gui');
@@ -23,16 +24,28 @@ gulp.task('compile-api', () => {
         })
         .on("finish", () => {
             if (failed) {
-                console.error('Some errors where found while typescript compilation.');
-                process.exit(1);
+                console.error(chalk.red('\n[ API ] Some errors where found during build.\n'));
+                // process.exit(1);
             }
         })
         .js.pipe(gulp.dest('dist'));
 });
 
 gulp.task('compile-gui', () => {
+
+    let failed = true;
+
     return gulp.src('src/gui/index.ts')
         .pipe(webpackStream(webpackConfig, webpack2))
+        .on("error", () => {
+            failed = true;
+        })
+        .on("finish", () => {
+            if (failed) {
+                console.error(chalk.red('\n[ GUI ] Some errors where found during build.\n'.red));
+                // process.exit(1);
+            }
+        })
         .pipe(gulp.dest('dist/gui'));
 });
 
@@ -64,7 +77,7 @@ gulp.task('test',
     ])
 );
 
-gulp.task('watch', ['build'], ()=>{
+gulp.task('watch', ['build'], () => {
     return gulp.watch('src/**/*', ['build']);
 });
 
