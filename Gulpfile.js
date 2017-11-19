@@ -1,22 +1,26 @@
-const gulp = require("gulp");
-const ts = require("gulp-typescript");
-const tsProject = ts.createProject("tsconfig.json");
+const gulp = require('gulp');
+const ts = require('gulp-typescript');
+const tsProject = ts.createProject('tsconfig.json');
 const sass = require('gulp-sass');
 const clean = require('gulp-clean');
+const concat = require('gulp-concat');
+const runElectron = require('gulp-run-electron');
+const gulpSync = require('gulp-sync')(gulp);
 
 gulp.task('clean', () => {
     return gulp.src('dist/', {read: false}).pipe(clean());
 });
 
-gulp.task("compile", () => {
+gulp.task('compile', () => {
     return tsProject.src()
         .pipe(tsProject())
-        .js.pipe(gulp.dest("dist"));
+        .js.pipe(gulp.dest('dist'));
 });
 
-gulp.task('sass',() => {
+gulp.task('sass', () => {
     return gulp.src('./src/**/*.scss')
         .pipe(sass().on('error', sass.logError))
+        .pipe(concat('bundle.css'))
         .pipe(gulp.dest('dist'))
 });
 
@@ -25,5 +29,21 @@ gulp.task('sync-assets', () => {
         .pipe(gulp.dest('dist'));
 });
 
+gulp.task('run', () => {
+    // see https://www.npmjs.com/package/gulp-run-electron for more options
+    return gulp.src('.').pipe(runElectron());
+});
 
-gulp.task('default', ["compile", "sync-assets"]);
+gulp.task('build', gulpSync.sync([
+    'clean',
+    'compile',
+    'sass',
+    'sync-assets'
+]));
+
+gulp.task('start', gulpSync.sync([
+    'build',
+    'run'
+]));
+
+gulp.task('default', ['start']);
