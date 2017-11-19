@@ -3,6 +3,9 @@ import {app, BrowserWindow} from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 import {ElectronUtilities} from "./api/dev/ElectronDevUtilities";
+import {Logger} from "./api/dev/Logger";
+
+const logger = Logger.getLogger('electron-main.ts');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -11,6 +14,7 @@ let win: BrowserWindow | null;
 function createWindow() {
     // Create the browser window.
     win = new BrowserWindow({width: 1024, height: 768});
+    win.maximize();
 
     // and load the index.html of the app.
     win.loadURL(url.format({
@@ -19,12 +23,15 @@ function createWindow() {
         slashes: true
     }));
 
-    if(ElectronUtilities.isDevMode()){
+    if (ElectronUtilities.isDevMode()) {
+        logger.info('Dev mode enabled, installing dev tools');
         ElectronUtilities.setupDevTools();
     }
 
     // Open the DevTools.
-    win.webContents.openDevTools();
+    setTimeout(()=>{
+        win.webContents.openDevTools();
+    }, 500);
 
     // Emitted when the window is closed.
     win.on('closed', () => {
