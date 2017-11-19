@@ -4,13 +4,17 @@ const {app, BrowserWindow} = require('electron');
 const path = require('path');
 const url = require('url');
 
+import installExtension, {
+    VUEJS_DEVTOOLS
+} from 'electron-devtools-installer';
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win;
 
-function createWindow () {
+function createWindow() {
     // Create the browser window.
-    win = new BrowserWindow({width: 800, height: 600});
+    win = new BrowserWindow({width: 1024, height: 768});
 
     // and load the index.html of the app.
     win.loadURL(url.format({
@@ -18,6 +22,10 @@ function createWindow () {
         protocol: 'file:',
         slashes: true
     }));
+
+    installExtension(VUEJS_DEVTOOLS)
+        .then((name) => console.log(`Added Extension:  ${name}`))
+        .catch((err) => console.log('An error occurred: ', err));
 
     // Open the DevTools.
     win.webContents.openDevTools();

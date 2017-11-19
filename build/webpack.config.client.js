@@ -68,12 +68,14 @@ module.exports = {
         hints: false
     },
     devtool: '#eval-source-map',
+    target: 'electron-renderer',
     plugins: [
         new ExtractTextPlugin({ // define where to save the file
             filename: '[name].bundle.css',
             allChunks: true
         })
-    ]
+    ],
+
 };
 
 if (process.env.NODE_ENV === 'production') {

@@ -1,14 +1,16 @@
 const path = require('path');
 const webpack = require('webpack');
 
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
-
 module.exports = {
     entry: './src/electron-main.ts',
     output: {
         path: path.resolve('./dist/'),
         publicPath: '/dist/',
         filename: 'main.js'
+    },
+    node: {     // disable mocking of these values by webpack
+        __dirname: false,
+        __filename: false
     },
     module: {
         rules: [
@@ -30,7 +32,11 @@ module.exports = {
         hints: false
     },
     devtool: '#eval-source-map',
-    target: 'electron-main'
+    target: 'electron-main',
+    plugins: [
+
+    ]
+
 };
 
 if (process.env.NODE_ENV === 'production') {
