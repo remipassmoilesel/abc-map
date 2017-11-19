@@ -4,16 +4,17 @@ const webpack = require('webpack');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
-const index = './src/gui/index.ts';
-const distDir = path.resolve('./dist/');
-const buildDestination = path.join(distDir, 'gui');
+const sourceRoot = path.resolve('./src/gui/');
+const distRoot = path.resolve('./dist/');
+const buildDestinationRoot = path.join(distRoot, 'gui');
+const mainTsPath = path.join(sourceRoot, 'main.ts');
+
 const nodeModulesRoot = path.resolve('./node_modules');
-const resourcesRoot = path.join(distDir, 'resources');
 
 module.exports = {
-    entry: index,
+    entry: mainTsPath,
     output: {
-        path: buildDestination,
+        path: buildDestinationRoot,
         publicPath: path.join(__dirname, '..', '/dist/gui/'),
         filename: 'build.js'
     },
@@ -89,12 +90,16 @@ module.exports = {
         // Workaround for devtron in webpack
         new CopyWebpackPlugin([
             {
+                from: path.resolve(sourceRoot, 'index.html'),
+                to: buildDestinationRoot
+            },
+            {
                 from: path.resolve(nodeModulesRoot, 'devtron/manifest.json'),
-                to: resourcesRoot
+                to: buildDestinationRoot
             },
             {
                 from: path.resolve(nodeModulesRoot, 'devtron/out/browser-globals.js'),
-                to: path.join(resourcesRoot, 'out')
+                to: path.join(buildDestinationRoot, 'out')
             }
         ])
     ]

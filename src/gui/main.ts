@@ -3,11 +3,12 @@ import {ElectronUtilities} from "../api/dev/ElectronDevUtilities";
 import {Logger} from "../api/dev/Logger";
 import {router} from "./router";
 // Import style
-import './index.scss';
+import './app.scss';
 // import components
 import './components';
 // import ui lib
 import Buefy from 'buefy'
+
 Vue.use(Buefy);
 
 const logger = Logger.getLogger('index.ts');
@@ -19,9 +20,9 @@ if (ElectronUtilities.isDevMode()) {
     ElectronUtilities.setupDevtron();
 }
 
-// declare vue app
+// declare main vue app
 let v = new Vue({
     el: '#app',
     router,
-    template: require('./main.html'),
+    template: require('./app.html'),
 });

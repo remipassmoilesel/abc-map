@@ -49,11 +49,6 @@ gulp.task('compile-gui', () => {
         .pipe(gulp.dest('dist/gui'));
 });
 
-gulp.task('sync-assets', () => {
-    return gulp.src(['./src/resources/**/*'])
-        .pipe(gulp.dest('dist/resources'));
-});
-
 gulp.task('run', () => {
     // see https://www.npmjs.com/package/gulp-run-electron for more options
     return gulp.src('.').pipe(runElectron());
@@ -63,7 +58,6 @@ gulp.task('build', gulpSync.sync([
     'clean',
     'compile-api',
     'compile-gui',
-    'sync-assets',
 ]));
 
 gulp.task('start', gulpSync.sync([
