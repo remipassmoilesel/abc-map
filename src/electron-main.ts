@@ -2,8 +2,7 @@ import {ExampleService} from "./api/ExampleService";
 import {app, BrowserWindow} from 'electron';
 import * as path from 'path';
 import * as url from 'url';
-
-import installExtension, {VUEJS_DEVTOOLS} from 'electron-devtools-installer';
+import {DevUtilities} from "./api/DevUtilities";
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -20,10 +19,9 @@ function createWindow() {
         slashes: true
     }));
 
-    // install dev tools
-    installExtension(VUEJS_DEVTOOLS)
-        .then((name) => console.log(`Added Extension:  ${name}`))
-        .catch((err) => console.error('An error occurred: ', err));
+    if(DevUtilities.isDevMode()){
+        DevUtilities.setupDevTools();
+    }
 
     // Open the DevTools.
     win.webContents.openDevTools();
