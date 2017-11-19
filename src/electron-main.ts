@@ -1,16 +1,13 @@
 import {ExampleService} from "./api/ExampleService";
+import {app, BrowserWindow} from 'electron';
+import * as path from 'path';
+import * as url from 'url';
 
-const {app, BrowserWindow} = require('electron');
-const path = require('path');
-const url = require('url');
-
-import installExtension, {
-    VUEJS_DEVTOOLS
-} from 'electron-devtools-installer';
+import installExtension, {VUEJS_DEVTOOLS} from 'electron-devtools-installer';
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let win;
+let win: BrowserWindow | null;
 
 function createWindow() {
     // Create the browser window.

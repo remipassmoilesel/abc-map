@@ -13,6 +13,7 @@
   "license": "ISC",
   "devDependencies": {
     "@types/chai": "^4.0.5",
+    "@types/electron-devtools-installer": "^2.0.2",
     "@types/mocha": "^2.2.44",
     "@types/sinon": "^4.0.0",
     "@types/vue": "^2.0.0",
@@ -47,6 +48,7 @@
     "webpack-dev-server": "^2.9.3"
   },
   "dependencies": {
+    "@types/electron": "^1.6.10",
     "electron": "^1.7.9",
     "vue": "^2.5.2",
     "vue-class-component": "^6.1.0",

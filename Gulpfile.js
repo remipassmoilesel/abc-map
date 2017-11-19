@@ -21,7 +21,7 @@ gulp.task('compile', () => {
 gulp.task('sass', () => {
     return gulp.src('./src/**/*.scss')
         .pipe(sass().on('error', sass.logError))
-        .pipe(concat('bundle.css'))
+        .pipe(concat('gui/bundle.css'))
         .pipe(gulp.dest('dist'))
 });
 
