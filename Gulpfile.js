@@ -62,7 +62,7 @@ gulp.task('build', gulpSync.sync([
 
 gulp.task('start', gulpSync.sync([
     'build',
-    'run'
+    'run',
 ]));
 
 gulp.task('test',

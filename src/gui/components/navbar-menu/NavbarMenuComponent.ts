@@ -1,19 +1,26 @@
 import Vue from 'vue';
-import Component from "vue-class-component";
-import './style.scss'
+import Component from 'vue-class-component';
+import { NavbarMenu } from '../../lib/menu/NavbarMenu';
+import './style.scss';
 
 @Component({
-    template: require('./template.html')
+    props: ['isActive', 'menu', 'onMenuOpened'],
+    template: require('./template.html'),
 })
 export default class NavbarMenuComponent extends Vue {
 
-    isActive = false;
-    $store;
+    public menu: NavbarMenu;
+    public isActive: boolean;
+    public onMenuOpened: () => {};
 
     /**
      * Triggered when component is displayed
      */
-    mounted() {
-        console.log(this.$store)
+    public mounted() {
+        console.log(this.onMenuOpened);
+
+
     }
+
+
 }

@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "sourceMap": true,
+    "strict": false,
+    "moduleResolution": "node",
+    "experimentalDecorators": true
+  }
+}

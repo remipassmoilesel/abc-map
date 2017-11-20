@@ -1,23 +1,13 @@
 <div class="navbar-menu">
     <div class="navbar-start">
-        <div class="navbar-item has-dropdown" :class="{'is-active': isActive}">
-            <a class="navbar-link" @click="isActive = !isActive">
-                Menu
+        <div class="navbar-item has-dropdown" :class="{'is-active': isActive === true}">
+            <a class="navbar-link" @click="onMenuOpened()">
+                {{ menu.title }}
             </a>
 
             <div class="navbar-dropdown fadeIn">
-                <a class="navbar-item">
-                    Menu item 1
-                </a>
-                <a class="navbar-item">
-                    Menu item 2
-                </a>
-                <a class="navbar-item">
-                    Menu item 3
-                </a>
-                <hr class="navbar-divider">
-                <a class="navbar-item">
-                    Menu item 3
+                <a class="navbar-item" v-for="menuItem in menu.items" @click="menuItem.action">
+                    {{ menuItem.title }}
                 </a>
             </div>
         </div>
