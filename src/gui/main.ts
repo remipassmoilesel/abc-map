@@ -8,7 +8,7 @@ import Buefy from 'buefy'
 // import vuejs router
 import {router} from "./router";
 // create vuex store
-import {store} from './store';
+import {store} from './lib/store/store';
 // import components
 import './components';
 
