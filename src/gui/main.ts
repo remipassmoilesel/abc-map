@@ -1,22 +1,23 @@
 import Vue from 'vue';
-import {ElectronUtilities} from "../api/dev/ElectronDevUtilities";
-import {Logger} from "../api/dev/Logger";
+import { ElectronUtilities } from '../api/dev/ElectronDevUtilities';
+import { Logger } from '../api/dev/Logger';
 // Import style
 import './app.scss';
-// import ui lib
-import Buefy from 'buefy'
-// import vuejs router
-import {router} from "./router";
-// create vuex store
-import {store} from './lib/store/store';
 // import components
 import './components';
+// create vuex store
+import { store } from './lib/store/store';
+// import router
+import { router } from './router';
+// import ui lib
+import * as ElementUI from 'element-ui';
+import locale from 'element-ui/lib/locale/lang/en';
 
 const logger = Logger.getLogger('index.ts');
 logger.info('Starting main app');
 
 // initialize plugins
-Vue.use(Buefy);
+Vue.use(ElementUI, { locale });
 
 // install dev tools
 if (ElectronUtilities.isDevMode()) {

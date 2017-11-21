@@ -1,3 +1,22 @@
 @import '~mdi/css/materialdesignicons.css';
-@import '~buefy/lib/buefy.css';
+@import '~element-ui/lib/theme-chalk/index.css';
 @import '~animate.css/animate.css';
+
+* {
+  font-family: sans-serif;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.main-container {
+  height: 100%;
+  border: 1px solid #eee;
+}
