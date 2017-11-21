@@ -4,7 +4,7 @@ import { NavbarMenu } from '../../lib/menu/NavbarMenu';
 import './style.scss';
 
 @Component({
-    props: ['isActive', 'menu', 'onMenuOpened'],
+    props: ['isActive', 'menu', 'onMenuOpened', 'id'],
     template: require('./template.html'),
 })
 export default class NavbarMenuComponent extends Vue {
@@ -17,8 +17,6 @@ export default class NavbarMenuComponent extends Vue {
      * Triggered when component is displayed
      */
     public mounted() {
-        console.log(this.onMenuOpened);
-
 
     }
 

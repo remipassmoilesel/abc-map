@@ -12,8 +12,10 @@
         <div class="navbar-start">
             <navbar-menu v-for="(menu, index) in menus"
                          :key="'navbar-menu-' + index"
+                         :id="'navbar-menu-' + index"
                          :onMenuOpened="onMenuOpened"
-                         :isActive="false" :menu="menu"></navbar-menu>
+                         :isActive="activeMenuId === 'navbar-menu-' + index ? true : false"
+                         :menu="menu"></navbar-menu>
         </div>
     </div>
 
