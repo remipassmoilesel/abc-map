@@ -1,22 +1,22 @@
-<nav class="navbar is-fixed-top is-primary" role="navigation" aria-label="dropdown navigation">
+<nav class="navbar is-primary" role="navigation" aria-label="dropdown navigation">
+    <div class="container">
+        <div class="navbar-brand">
+            <a class="navbar-item">
+                <img src="https://bulma.io/images/bulma-logo.png" alt="Bulma: a modern CSS framework based on Flexbox"
+                     width="112" height="28">
+            </a>
 
-    <div class="navbar-brand">
-        <a class="navbar-item">
-            <img src="https://bulma.io/images/bulma-logo.png" alt="Bulma: a modern CSS framework based on Flexbox"
-                 width="112" height="28">
-        </a>
+        </div>
 
-    </div>
-
-    <div class="navbar-menu">
-        <div class="navbar-start">
-            <navbar-menu v-for="(menu, index) in menus"
-                         :key="'navbar-menu-' + index"
-                         :id="'navbar-menu-' + index"
-                         :onMenuOpened="onMenuOpened"
-                         :isActive="activeMenuId === 'navbar-menu-' + index ? true : false"
-                         :menu="menu"></navbar-menu>
+        <div class="navbar-menu">
+            <div class="navbar-start">
+                <navbar-menu v-for="(menu, index) in menus"
+                             :key="'navbar-menu-' + index"
+                             :id="'navbar-menu-' + index"
+                             :onMenuOpened="onMenuOpened"
+                             :isActive="activeMenuId === 'navbar-menu-' + index ? true : false"
+                             :menu="menu"></navbar-menu>
+            </div>
         </div>
     </div>
-
 </nav>

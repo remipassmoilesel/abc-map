@@ -1,9 +1,24 @@
-<div class="section main-container">
+<section class="hero is-fullheight">
 
-    <navbar></navbar>
-
-    <div class="container ">
-        <router-view></router-view>
+    <!-- Hero head: will stick at the top -->
+    <div class="hero-head">
+        <navbar></navbar>
     </div>
 
-</div>
+    <!-- Hero content: will be in the middle -->
+    <div class="hero-body">
+        <div class="container">
+            <router-view></router-view>
+        </div>
+    </div>
+
+    <!-- Hero footer: will stick at the bottom -->
+    <div class="hero-foot">
+        <nav class="tabs">
+            <div class="container">
+                Footer
+            </div>
+        </nav>
+    </div>
+
+</section>
