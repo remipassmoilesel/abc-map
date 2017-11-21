@@ -7,6 +7,7 @@
     "clean": "gulp clean",
     "build": "gulp build",
     "start": "gulp start",
+    "watch": "gulp watch",
     "test": "gulp build && gulp test",
     "package": "npm run build && electron-packager --out packaged --platform all ."
   },

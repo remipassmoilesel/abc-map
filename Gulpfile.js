@@ -8,6 +8,11 @@ const webpack2 = require('webpack');
 const chalk = require('chalk');
 const shell = require('gulp-shell');
 
+const log = (prefix, message, color) => {
+    color = color || 'blue';
+    console.log(chalk[color](`[ ${prefix} ] ${message}`));
+};
+
 const webpackConfig = require('./config/webpack.config.gui');
 const tsProject = ts.createProject('./tsconfig.json');
 
@@ -24,7 +29,7 @@ gulp.task('build-api', () => {
         })
         .on("finish", () => {
             if (failed) {
-                console.error(chalk.red('\n[ API ] Some errors where found during build.\n'));
+                log('BUILD-API', 'Some errors where found during build.', 'red');
                 // process.exit(1);
             }
         })
@@ -32,9 +37,7 @@ gulp.task('build-api', () => {
 });
 
 gulp.task('build-gui', () => {
-
-    let failed = true;
-
+    let failed = false;
     return gulp.src('src/gui/index.ts')
         .pipe(webpackStream(webpackConfig, webpack2))
         .on("error", () => {
@@ -42,7 +45,7 @@ gulp.task('build-gui', () => {
         })
         .on("finish", () => {
             if (failed) {
-                console.error(chalk.red('\n[ GUI ] Some errors where found during build.\n'.red));
+                log('BUILD-GUI', 'Some errors where found during build.', 'red');
                 // process.exit(1);
             }
         })
@@ -51,7 +54,18 @@ gulp.task('build-gui', () => {
 
 gulp.task('run', () => {
     // see https://www.npmjs.com/package/gulp-run-electron for more options
-    return gulp.src('.').pipe(runElectron());
+    let failed = false;
+    return gulp.src('.')
+        .pipe(runElectron())
+        .on("error", (e) => {
+            failed = true;
+        })
+        .on("finish", () => {
+            if (failed) {
+                log('ELECTRON', `Some errors where found during launch.`, 'red');
+                // process.exit(1);
+            }
+        });
 });
 
 gulp.task('build', gulpSync.sync([
