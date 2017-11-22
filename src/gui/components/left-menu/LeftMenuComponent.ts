@@ -5,12 +5,22 @@ import './style.scss'
 @Component({
     template: require('./template.html')
 })
-export default class NavbarComponent extends Vue {
+export default class LeftMenuComponent extends Vue {
+
+    isCollapse = false;
 
     /**
      * Triggered when component is displayed
      */
-    mounted() {
+    public mounted() {
+
+    }
+
+    public handleOpen(){
+
+    }
+
+    public handleClose(){
 
     }
 }
