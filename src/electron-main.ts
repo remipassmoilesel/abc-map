@@ -1,9 +1,10 @@
-import {ExampleService} from "./api/ExampleService";
 import {app, BrowserWindow} from 'electron';
-import * as path from 'path';
 import * as url from 'url';
 import {ElectronUtilities} from "./api/dev/ElectronDevUtilities";
 import {Logger} from "./api/dev/Logger";
+import {initApplication} from "./api/main";
+
+const paths = require('../config/paths');
 
 const logger = Logger.getLogger('electron-main.ts');
 
@@ -18,7 +19,7 @@ function createWindow() {
 
     // and load the index.html of the app.
     win.loadURL(url.format({
-        pathname: path.join(__dirname, 'gui', 'index.html'),
+        pathname: paths.INDEX_DEST,
         protocol: 'file:',
         slashes: true
     }));
@@ -41,7 +42,7 @@ function createWindow() {
         win = null
     });
 
-    new ExampleService().start();
+    initApplication();
 }
 
 // This method will be called when Electron has finished
