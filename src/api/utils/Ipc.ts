@@ -1,4 +1,4 @@
-import * as ipcPromise from 'ipc-promise';
+import promiseIpc from 'electron-promise-ipc';
 
 export class IpcSubjects {
 
@@ -14,11 +14,11 @@ export class IpcSubjects {
 export class Ipc {
 
     public listen(subject: IpcSubjects, handler: () => Promise<any>): void {
-        ipcPromise.on(subject.id, handler);
+        promiseIpc.on(subject.id, handler);
     }
 
-    public send(subject: IpcSubjects, data?: any): Promise<any> {
-        return ipcPromise.send(subject.id, data);
+    public send(subject: IpcSubjects, data: any = {}): Promise<any> {
+        return promiseIpc.send(subject.id, data);
     }
 
 }
