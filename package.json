@@ -21,6 +21,7 @@
     "circular-json": "^0.4.0",
     "electron": "^1.7.9",
     "element-ui": "^2.0.5",
+    "ipc-promise": "^0.1.4",
     "leaflet": "^1.2.0",
     "mdi": "^2.0.46",
     "vue": "^2.5.2",

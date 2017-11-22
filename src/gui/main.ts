@@ -1,19 +1,21 @@
 import Vue from 'vue';
 import { ElectronUtilities } from '../api/dev/ElectronDevUtilities';
 import { Logger } from '../api/dev/Logger';
-// Import style
-import './app.scss';
-// import components
-import './components';
 // create vuex store
 import { store } from './lib/store/store';
 // import router
-import { router } from './router';
+import { router } from './lib/router';
 // import ui lib
 import * as ElementUI from 'element-ui';
 import locale from 'element-ui/lib/locale/lang/en';
+// import components
+import './components/components';
+// Import style
+import './views/app/app.scss';
+// Import mixins
+import './lib/mixins'
 
-const logger = Logger.getLogger('index.ts');
+const logger = Logger.getLogger('gui/main.ts');
 logger.info('Starting main app');
 
 // initialize plugins
@@ -30,5 +32,5 @@ let v = new Vue({
     el: '#app',
     router,
     store,
-    template: require('./app.html'),
+    template: require('./views/app/app.html'),
 });

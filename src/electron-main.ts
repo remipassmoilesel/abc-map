@@ -8,6 +8,8 @@ const paths = require('../config/paths');
 
 const logger = Logger.getLogger('electron-main.ts');
 
+initApplication();
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win: BrowserWindow | null;
@@ -42,7 +44,6 @@ function createWindow() {
         win = null
     });
 
-    initApplication();
 }
 
 // This method will be called when Electron has finished
