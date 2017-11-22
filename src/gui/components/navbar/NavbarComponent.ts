@@ -7,10 +7,16 @@ import './style.scss'
 })
 export default class NavbarComponent extends Vue {
 
+    activeIndex = '1';
+
     /**
      * Triggered when component is displayed
      */
-    mounted() {
+    public mounted() {
+
+    }
+
+    public handleSelect(){
 
     }
 }
