@@ -1,9 +1,12 @@
-import { StateStore } from './StateStore';
+import {StateStore} from './StateStore';
+import {Project} from "../../../api/entities/Project";
+
+// Warning: mutations must be synchronous
 
 export const mutations = {
 
-    changeExampleValue: (state: StateStore, newValue: string) => {
-        state.exampleValue = newValue;
+    UPDATE_PROJECT: (state: StateStore, newValue: Project) => {
+        state.project = newValue;
     },
 
 };

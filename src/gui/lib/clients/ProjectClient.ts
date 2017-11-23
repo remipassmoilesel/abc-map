@@ -14,7 +14,7 @@ export class ProjectClient {
         return this.ipc.send(IpcSubjects.PROJECT_CREATE_NEW);
     }
 
-    public getCurrentProject(): Promise<void> {
+    public getCurrentProject(): Promise<Project> {
         return this.ipc.send(IpcSubjects.PROJECT_GET_CURRENT).then((data) => {
             return EntitiesUtils.parseFromRaw(Project.prototype, data);
         });

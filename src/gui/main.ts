@@ -2,7 +2,7 @@ import Vue from 'vue';
 import {ElectronUtilities} from '../api/dev/ElectronDevUtilities';
 import {Logger} from '../api/dev/Logger';
 // create vuex store
-import {store} from './lib/store';
+import {store} from './lib/store/store';
 // import router
 import {router} from './lib/router';
 // import ui lib

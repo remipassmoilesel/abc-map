@@ -1,4 +1,6 @@
 
+import {Project} from "../../../api/entities/Project";
+
 export class StateStore {
-    public exampleValue: string;
+    public project: Project;
 }
