@@ -1,14 +1,28 @@
 import {MapClient} from "./MapClient";
+import {ProjectClient} from "./ProjectClient";
 
 export class Clients {
-    private mapClient: MapClient;
+    private _mapClient: MapClient;
+    private _projectClient: ProjectClient;
 
     constructor() {
-        this.mapClient = new MapClient();
+        this._mapClient = new MapClient();
+        this._projectClient = new ProjectClient();
     }
 
-    public getMapClient() {
-        return this.mapClient;
+    get mapClient(): MapClient {
+        return this._mapClient;
     }
 
+    set mapClient(value: MapClient) {
+        this._mapClient = value;
+    }
+
+    get projectClient(): ProjectClient {
+        return this._projectClient;
+    }
+
+    set projectClient(value: ProjectClient) {
+        this._projectClient = value;
+    }
 }

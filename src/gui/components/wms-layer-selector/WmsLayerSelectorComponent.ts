@@ -14,7 +14,7 @@ export default class WmsLayerSelectorComponent extends Vue {
     public layers: WmsLayer[] = [];
 
     public beforeMount() {
-        this.clients.getMapClient().getWmsUrls().then((layers) => {
+        this.clients.mapClient.getWmsUrls().then((layers) => {
             this.layers = layers;
         });
     }
