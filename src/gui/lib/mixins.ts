@@ -8,5 +8,5 @@ Vue.mixin({
         return {
             clients,
         };
-    }
+    },
 });

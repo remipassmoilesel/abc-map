@@ -1,4 +1,5 @@
-import {Ipc, IpcSubjects} from "../../../api/utils/Ipc";
+import { Ipc, IpcSubjects } from '../../../api/utils/Ipc';
+import { WmsLayer } from '../../../api/entities/WmsLayer';
 
 export class MapClient {
 
@@ -8,7 +9,7 @@ export class MapClient {
         this.ipc = new Ipc();
     }
 
-    public getWmsUrls(): Promise<string[]> {
+    public getWmsUrls(): Promise<WmsLayer[]> {
         return this.ipc.send(IpcSubjects.MAP_GET_WMS_URLS);
     }
 

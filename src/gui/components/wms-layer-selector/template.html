@@ -1,0 +1,17 @@
+<el-submenu index="1" class="wms-layers-component">
+
+    <template slot="title">
+        <i class="el-icon-location"></i>
+        <span slot="title">WMS layers</span>
+    </template>
+
+    <el-menu-item-group>
+        <span slot="title">Add a layer</span>
+        <el-menu-item v-for="(layer, index) in layers"
+                      :index="'wmslayer' + index"
+                      :key="'wmslayer' + index">
+            {{ layer.name }}
+        </el-menu-item>
+    </el-menu-item-group>
+
+</el-submenu>

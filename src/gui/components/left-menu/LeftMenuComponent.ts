@@ -1,13 +1,13 @@
 import Vue from 'vue';
-import Component from "vue-class-component";
-import './style.scss'
+import Component from 'vue-class-component';
+import './style.scss';
 
 @Component({
-    template: require('./template.html')
+    template: require('./template.html'),
 })
 export default class LeftMenuComponent extends Vue {
 
-    isCollapse = false;
+    public isCollapse = false;
 
     /**
      * Triggered when component is displayed
