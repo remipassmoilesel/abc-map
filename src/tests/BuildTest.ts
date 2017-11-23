@@ -1,5 +1,6 @@
 import * as chai from 'chai';
-import {spawn, spawnSync} from "child_process";
+import {spawn, spawnSync} from 'child_process';
+import 'mocha';
 
 const assert = chai.assert;
 

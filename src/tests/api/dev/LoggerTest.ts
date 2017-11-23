@@ -1,4 +1,5 @@
-import {Logger} from "../../../api/dev/Logger";
+import {Logger} from '../../../api/dev/Logger';
+import 'mocha';
 
 describe('Logger', () => {
 
@@ -8,9 +9,9 @@ describe('Logger', () => {
 
     it('> log should not throw', () => {
         const logger = Logger.getLogger('Test');
-        logger.info("test message");
-        logger.warning("test message");
-        logger.error("test message");
+        logger.info('test message');
+        logger.warning('test message');
+        logger.error('test message');
     });
 
 });
