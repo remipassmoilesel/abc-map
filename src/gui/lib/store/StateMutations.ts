@@ -2,7 +2,7 @@ import { StateStore } from './StateStore';
 
 export const mutations = {
 
-    changeExampleValue(state: StateStore, newValue: string) {
+    changeExampleValue: (state: StateStore, newValue: string) => {
         state.exampleValue = newValue;
     },
 

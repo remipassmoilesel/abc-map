@@ -1,5 +1,6 @@
 import { Ipc, IpcSubjects } from '../../../api/utils/Ipc';
 import { WmsLayer } from '../../../api/entities/WmsLayer';
+import { EntitiesUtils } from '../../../api/utils/EntitiesUtils';
 
 export class MapClient {
 
@@ -10,7 +11,9 @@ export class MapClient {
     }
 
     public getWmsUrls(): Promise<WmsLayer[]> {
-        return this.ipc.send(IpcSubjects.MAP_GET_WMS_URLS);
+        return this.ipc.send(IpcSubjects.MAP_GET_WMS_URLS).then((rawLayers) => {
+            return EntitiesUtils.parseFromRawArray(WmsLayer.prototype, rawLayers);
+        });
     }
 
 }

@@ -1,8 +1,9 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import { Logger } from '../../../api/dev/Logger';
-import { mutations } from './StateMutator';
-import { StateStore } from './StateStore';
+import { Logger } from '../../api/dev/Logger';
+import { StateStore } from './store/StateStore';
+import { mutations } from './store/StateMutations';
+
 
 const logger = Logger.getLogger('store.ts');
 logger.info('Initializing Vuex store');

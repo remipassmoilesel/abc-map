@@ -2,7 +2,7 @@ import Vue from 'vue';
 import { ElectronUtilities } from '../api/dev/ElectronDevUtilities';
 import { Logger } from '../api/dev/Logger';
 // create vuex store
-import { store } from './lib/store/store';
+import { store } from './lib/store';
 // import router
 import { router } from './lib/router';
 // import ui lib
@@ -13,7 +13,7 @@ import './components/components';
 // Import style
 import './views/app/app.scss';
 // Import mixins
-import './lib/mixins'
+import './lib/mixins';
 
 const logger = Logger.getLogger('gui/main.ts');
 logger.info('Starting main app');

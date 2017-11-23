@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "sourceMap": true,
+    "strict": false,
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "target": "ES5",
+    "types": [
+      "node"
+    ]
+
+  },
+  "include": [
+    "./**/*.ts"
+  ]
+}
