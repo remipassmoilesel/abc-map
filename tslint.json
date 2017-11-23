@@ -15,7 +15,8 @@
     "only-arrow-functions": false,
     "max-classes-per-file": false,
     "quotemark": [true, "single", "avoid-escape", "avoid-template"],
-    "ordered-imports": true
+    "ordered-imports": false,
+    "variable-name": false
   },
   "rulesDirectory": []
 }
