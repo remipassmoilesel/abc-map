@@ -11,6 +11,6 @@ export function initApplication() {
     const ipc = new Ipc();
     const mapService = new MapService();
 
-    ipc.listen(IpcSubjects.MAP_GET_WMS_URLS, mapService.getTilesUrls.bind(mapService));
+    ipc.listen(IpcSubjects.MAP_GET_WMS_URLS, mapService.getDefaultWmsLayers.bind(mapService));
 
 }
