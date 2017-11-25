@@ -1,13 +1,16 @@
 import {MapClient} from "./MapClient";
 import {ProjectClient} from "./ProjectClient";
+import {Ipc} from "../../../api/ipc/Ipc";
 
 export class Clients {
     private _mapClient: MapClient;
     private _projectClient: ProjectClient;
+    private ipc: Ipc;
 
     constructor() {
-        this._mapClient = new MapClient();
-        this._projectClient = new ProjectClient();
+        this.ipc = new Ipc();
+        this._mapClient = new MapClient(this.ipc);
+        this._projectClient = new ProjectClient(this.ipc);
     }
 
     get mapClient(): MapClient {

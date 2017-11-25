@@ -1,4 +1,18 @@
-.navbar {
+.main-navbar {
   width: 100%;
   z-index: 1000;
+
+  input::placeholder {
+    color: rgba(48, 38, 45, 0.86); // menu placeholder color
+  }
+
+  .el-cascader {
+    margin: 1em;
+  }
+
+  .el-input__inner {
+    border: none;
+    color: darkgray;
+  }
+
 }

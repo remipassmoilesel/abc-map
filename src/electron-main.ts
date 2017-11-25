@@ -3,12 +3,12 @@ import * as url from 'url';
 import {ElectronUtilities} from "./api/dev/ElectronDevUtilities";
 import {Logger} from "./api/dev/Logger";
 import {initApplication} from "./api/main";
+import {Ipc} from "./api/ipc/Ipc";
+
+require('source-map-support').install();
 
 const paths = require('../config/paths');
-
 const logger = Logger.getLogger('electron-main.ts');
-
-initApplication();
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -18,6 +18,9 @@ function createWindow() {
     // Create the browser window.
     win = new BrowserWindow({width: 1024, height: 768});
     win.maximize();
+
+    const ipc = new Ipc(win.webContents);
+    initApplication(ipc);
 
     // and load the index.html of the app.
     win.loadURL(url.format({

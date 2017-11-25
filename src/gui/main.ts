@@ -6,7 +6,7 @@ import {Logger} from '../api/dev/Logger';
 // create vuex store
 import {store} from './lib/store/store';
 // import router
-import {router} from './lib/router';
+import {router} from './lib/router/router';
 // import ui lib
 import * as ElementUI from 'element-ui';
 import locale from 'element-ui/lib/locale/lang/en';
