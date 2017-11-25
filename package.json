@@ -10,7 +10,9 @@
     "watch": "gulp watch",
     "test": "gulp build && gulp test-api && gulp test-gui",
     "test-api": "gulp build-api && gulp test-api",
+    "test-api-watch": "gulp test-api-watch",
     "test-gui": "gulp build-gui && gulp test-gui",
+    "test-gui-watch": "gulp test-gui-watch",
     "package": "npm run build && electron-packager --out packaged --platform all ."
   },
   "author": "",

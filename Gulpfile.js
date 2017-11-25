@@ -82,14 +82,22 @@ gulp.task('start', gulpSync.sync([
 gulp.task('test-gui',
     shell.task([
         './node_modules/.bin/mocha --require source-map-support ./dist/tests/gui/**/*Test.js',
-    ])
+    ], {ignoreErrors: true})
 );
 
 gulp.task('test-api',
     shell.task([
         './node_modules/.bin/mocha --require source-map-support ./dist/tests/api/**/*Test.js',
-    ])
+    ], {ignoreErrors: true})
 );
+
+gulp.task('test-gui-watch', ['build-gui', 'test-gui'], () => {
+    return gulp.watch('src/**/*', ['build-gui', 'test-gui']);
+});
+
+gulp.task('test-api-watch', ['build-api', 'test-api'], () => {
+    return gulp.watch('src/**/*', ['build-api', 'test-api']);
+});
 
 gulp.task('watch-api', ['build'], () => {
     return gulp.watch('src/api/**/*', ['build-api']);
