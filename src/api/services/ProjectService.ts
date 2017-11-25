@@ -13,9 +13,8 @@ export class ProjectService {
 
     public newProject(parameters?: any) {
         this.logger.info(`New project created`, parameters);
-        Utils.withDefaultValues(parameters, {name: 'New project'});
-
-        this._currentProject = new Project(parameters.name);
+        const params = Utils.withDefaultValues(parameters, {name: 'New project'});
+        this._currentProject = new Project(params.name);
     }
 
     public getCurrentProject(): Project {
