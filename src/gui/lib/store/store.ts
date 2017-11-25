@@ -1,8 +1,7 @@
 import Vue from 'vue';
-import Vuex from 'vuex';
-import { Logger } from '../../../api/dev/Logger';
-import { StateStore } from './StateStore';
-import { mutations } from './StateMutations';
+import Vuex, {Store} from 'vuex';
+import {Logger} from '../../../api/dev/Logger';
+import {ProjectState, ProjectStoreModule} from "./ProjectStoreModule";
 
 
 const logger = Logger.getLogger('store.ts');
@@ -10,12 +9,18 @@ logger.info('Initializing Vuex store');
 
 Vue.use(Vuex);
 
-// define the current state
-const state = new StateStore();
-
-// create the Vuex instance by combining the state and mutations objects
-// then export the Vuex store for use by our components
+// Create a main vuex store
 export const store = new Vuex.Store({
-    mutations,
-    state,
+    modules: {
+        project: new ProjectStoreModule()
+    }
 });
+
+// Type classes
+export class MainStore extends Store<any> {
+    public state: MainStoreState;
+}
+
+export class MainStoreState {
+    project: ProjectState;
+}

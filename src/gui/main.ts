@@ -1,3 +1,5 @@
+require('source-map-support').install();
+
 import Vue from 'vue';
 import {ElectronUtilities} from '../api/dev/ElectronDevUtilities';
 import {Logger} from '../api/dev/Logger';
@@ -13,7 +15,6 @@ import './components/components';
 // Import style
 import './views/app/app.scss';
 // Import mixins
-import {clients} from './lib/mixins';
 import './lib/mixins';
 
 const logger = Logger.getLogger('gui/main.ts');
