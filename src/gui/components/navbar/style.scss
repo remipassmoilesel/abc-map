@@ -2,17 +2,10 @@
   width: 100%;
   z-index: 1000;
 
-  input::placeholder {
-    color: rgba(48, 38, 45, 0.86); // menu placeholder color
-  }
-
-  .el-cascader {
+  .el-dropdown {
     margin: 1em;
-  }
-
-  .el-input__inner {
-    border: none;
-    color: darkgray;
+    margin-top: 1.5em;
+    cursor: pointer;
   }
 
 }

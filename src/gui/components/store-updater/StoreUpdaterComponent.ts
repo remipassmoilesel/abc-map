@@ -2,7 +2,6 @@ import Vue from 'vue';
 import Component from 'vue-class-component';
 import {MainStore} from "../../lib/store/store";
 import {IpcEvent} from "../../../api/ipc/IpcEvent";
-import {Promise} from "es6-promise";
 import {Evt} from "../../../api/ipc/IpcEventTypes";
 import {Ats} from "../../lib/store/mutationsAndActions";
 import {Logger} from "../../../api/dev/Logger";

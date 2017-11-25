@@ -1,10 +1,24 @@
 <el-container class="main-navbar">
 
-    <el-cascader
-            placeholder="Project"
-            :options="projectOptions"
-            v-model="selectedOptions"
-            @change="handleChange">
-    </el-cascader>
+    <el-dropdown
+            v-for="(menu, index) in menus"
+            :key="'menu-' + index"
+            :hide-on-click="true"
+            @command="handleMenuClick">
+
+        <span class="el-dropdown-link">
+            {{ menu.title }} <i class="el-icon-arrow-down el-icon--right"></i>
+        </span>
+
+        <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item
+                    v-for="(item, index) in menu.items"
+                    :key="'item-' + index"
+                    :command="item.id">
+                {{ item.label }}
+            </el-dropdown-item>
+        </el-dropdown-menu>
+
+    </el-dropdown>
 
 </el-container>

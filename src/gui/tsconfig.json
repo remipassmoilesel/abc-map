@@ -4,7 +4,7 @@
     "strict": false,
     "moduleResolution": "node",
     "experimentalDecorators": true,
-    "target": "ES5",
+    "target": "es2015",
     "types": [
       "node"
     ]
