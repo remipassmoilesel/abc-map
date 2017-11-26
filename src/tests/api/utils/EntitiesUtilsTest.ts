@@ -10,6 +10,7 @@ import {Evt} from "../../../api/ipc/IpcEventTypes";
 const assert = chai.assert;
 
 describe('EntitiesUtils', () => {
+
     const eu = new EntitiesUtils();
 
     // these objects will be serialized then deserialized
@@ -32,7 +33,6 @@ describe('EntitiesUtils', () => {
             const newObj = eu.deserialize(raw);
             assert.deepEqual(obj, newObj, `Serialization failed for: ${obj}, ${newObj}`);
         });
-
     });
 
 });

@@ -17,7 +17,7 @@ export default class StatusBarComponent extends Vue {
 
     }
 
-    get projectName() {
+    public getProjectName() {
         if (this.$store.state.project.currentProject) {
             return this.$store.state.project.currentProject.name;
         } else {

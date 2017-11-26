@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
+import * as _ from 'lodash';
 import {MainStore} from "../../lib/store/store";
 import {IpcEvent} from "../../../api/ipc/IpcEvent";
 import {Evt} from "../../../api/ipc/IpcEventTypes";
@@ -26,7 +27,7 @@ export default class StoreUpdaterComponent extends Vue {
 
             logger.info('Receiving project event', event);
 
-            if (event.type === Evt.PROJECT_NEW_CREATED) {
+            if (_.isEqual(event.type, Evt.PROJECT_NEW_CREATED)) {
                 this.$store.dispatch(Ats.PROJECT_UPDATE, event.data);
             }
 

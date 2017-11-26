@@ -23,9 +23,6 @@ export default class NavbarComponent extends Vue {
 
     public handleMenuClick(id) {
 
-        console.log(arguments);
-        console.log(id);
-
         const menuItem = this.getMenuItemById(id);
 
         try {

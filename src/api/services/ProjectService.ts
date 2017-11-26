@@ -9,7 +9,7 @@ import {AbstractService} from "./AbstractService";
 
 export class ProjectService extends AbstractService{
 
-    private logger = Logger.getLogger('MapService');
+    private logger = Logger.getLogger('ProjectService');
     private currentProject: Project;
 
     constructor(ipc: Ipc) {
