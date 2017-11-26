@@ -1,4 +1,4 @@
-<el-submenu index="1" class="wms-layers-component">
+<el-submenu index="1" class="add-layer-component">
 
     <template slot="title">
         <i class="el-icon-location"></i>
@@ -8,9 +8,9 @@
     <el-menu-item-group>
         <span slot="title">Choose the layer you want to add</span>
         <el-menu-item v-for="(layer, index) in layers"
-                      :index="'wmslayer' + index"
+                      :index="'addLayer' + index"
                       @click="handleSelection(index)"
-                      :key="'wmslayer' + index">
+                      :key="'addLayer' + index">
             {{ layer.name }}
         </el-menu-item>
     </el-menu-item-group>
