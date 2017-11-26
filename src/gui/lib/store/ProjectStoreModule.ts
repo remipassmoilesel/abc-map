@@ -30,6 +30,14 @@ export class ProjectStoreModule {
         }
     };
 
-    getters = {};
+    getters = {
+        projectName: (state) => {
+            if (state.currentProject) {
+                return state.currentProject.name;
+            } else {
+                return 'No current project';
+            }
+        }
+    };
 
 }

@@ -3,7 +3,7 @@ import NavbarComponent from './navbar/NavbarComponent';
 import LeftMenuComponent from './left-menu/LeftMenuComponent';
 import MapComponent from './map/MapComponent';
 import WmsLayerSelectorComponent from './wms-layer-selector/WmsLayerSelectorComponent';
-import StatusBarComponent from "./status-bar/StatusBar";
+import StatusBarComponent from "./status-bar/StatusBarComponent";
 import StoreUpdaterComponent from "./store-updater/StoreUpdaterComponent";
 
 // tag name -> component
