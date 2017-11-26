@@ -59,6 +59,7 @@
     "gulp-run-electron": "^3.0.1",
     "gulp-sass": "^3.1.0",
     "gulp-shell": "^0.6.3",
+    "gulp-sourcemaps": "^2.6.1",
     "gulp-sync": "^0.1.4",
     "gulp-typescript": "^3.2.3",
     "gulp-watch": "^4.3.11",

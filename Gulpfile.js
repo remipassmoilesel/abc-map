@@ -7,6 +7,7 @@ const webpackStream = require('webpack-stream');
 const webpack2 = require('webpack');
 const chalk = require('chalk');
 const shell = require('gulp-shell');
+const sourcemaps = require('gulp-sourcemaps');
 
 const log = (prefix, message, color) => {
     color = color || 'blue';
@@ -23,6 +24,7 @@ gulp.task('clean', () => {
 gulp.task('build-api', () => {
     let failed = false;
     return tsProject.src()
+        .pipe(sourcemaps.init())
         .pipe(tsProject())
         .on("error", () => {
             failed = true;
@@ -33,7 +35,9 @@ gulp.task('build-api', () => {
                 // process.exit(1);
             }
         })
-        .js.pipe(gulp.dest('dist'));
+        .js
+        .pipe(sourcemaps.write('.'))
+        .pipe(gulp.dest('dist'));
 });
 
 gulp.task('build-gui', () => {
@@ -81,13 +85,13 @@ gulp.task('start', gulpSync.sync([
 
 gulp.task('test-gui',
     shell.task([
-        './node_modules/.bin/mocha --require source-map-support ./dist/tests/gui/**/*Test.js',
+        './node_modules/.bin/mocha --require source-map-support/register ./dist/tests/gui/**/*Test.js',
     ], {ignoreErrors: true})
 );
 
 gulp.task('test-api',
     shell.task([
-        './node_modules/.bin/mocha --require source-map-support ./dist/tests/api/**/*Test.js',
+        './node_modules/.bin/mocha --require source-map-support/register ./dist/tests/api/**/*Test.js',
     ], {ignoreErrors: true})
 );
 
