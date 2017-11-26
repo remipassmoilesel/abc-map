@@ -73,7 +73,15 @@ export class Ipc {
     }
 
     private serializeResponse(data: any): IpcMessage {
-        return {serializedData: eu.serialize(data)};
+
+        if (data.then) { // response is a promise
+            return data.then((result) => {
+                return {serializedData: eu.serialize(result)};
+            });
+        } else { // response is a plain response
+            return {serializedData: eu.serialize(data)};
+        }
+
     }
 
     private throwIfMessageIsInvalid(message: IpcMessage) {

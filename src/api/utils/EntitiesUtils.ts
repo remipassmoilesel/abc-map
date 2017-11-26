@@ -35,7 +35,7 @@ export class EntitiesUtils {
         } else {
             return this.necromancer.resurrect(serialized);
         }
-        
+
     }
 
     public deserializeProject(data: string): Project {

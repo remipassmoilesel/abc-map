@@ -3,10 +3,8 @@ import {Ipc} from "./ipc/Ipc";
 import {Logger} from "./dev/Logger";
 import {ProjectService} from "./services/ProjectService";
 import {Subj} from "./ipc/IpcSubjects";
-import {EntitiesUtils} from "./utils/EntitiesUtils";
 
 const logger = Logger.getLogger('api/main.ts');
-const eu = new EntitiesUtils();
 
 export function initApplication(ipc: Ipc) {
 
@@ -16,7 +14,7 @@ export function initApplication(ipc: Ipc) {
     const mapService = new MapService(ipc);
 
     ipc.listen(Subj.PROJECT_CREATE_NEW, () => {
-        projectService.newProject();
+        return projectService.newProject();
     });
 
     ipc.listen(Subj.PROJECT_GET_CURRENT, () => {
