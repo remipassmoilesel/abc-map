@@ -1,0 +1,17 @@
+<el-submenu index="2" class="layer-selector-component">
+
+    <template slot="title">
+        <i class="mdi mdi-format-list-bulleted"></i>
+        <span slot="title">Layers</span>
+    </template>
+
+    <el-menu-item-group>
+        <el-menu-item v-for="(layer, index) in getLayers()"
+                      :index="'projectLayer' + index"
+                      @click="handleSelection(index)"
+                      :key="'projectLayer' + index">
+            {{ layer.name }}
+        </el-menu-item>
+    </el-menu-item-group>
+
+</el-submenu>
