@@ -7,7 +7,7 @@ import './style.scss';
 @Component({
     template: require('./template.html'),
 })
-export default class AddLayerSelectorComponent extends Vue {
+export default class AddLayerComponent extends Vue {
 
     public clients: Clients;
     public layers: AbstractMapLayer[] = [];

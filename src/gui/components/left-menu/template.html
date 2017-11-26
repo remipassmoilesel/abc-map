@@ -1,5 +1,5 @@
 <el-menu class="left-menu"
-         default-active="2"
+         :unique-opened="true"
          @open="handleOpen"
          @close="handleClose"
          :collapse="isCollapse">
@@ -8,7 +8,7 @@
     <!--<el-switch v-model="isCollapse">-->
     <!--</el-switch>-->
 
-    <wms-selector></wms-selector>
+    <add-layer-selector></add-layer-selector>
 
     <el-menu-item index="2">
         <i class="el-icon-menu"></i>

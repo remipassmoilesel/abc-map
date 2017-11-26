@@ -2,7 +2,7 @@ import Vue from 'vue';
 import NavbarComponent from './navbar/NavbarComponent';
 import LeftMenuComponent from './left-menu/LeftMenuComponent';
 import MapComponent from './map/GeoMapComponent';
-import WmsLayerSelectorComponent from './new-layer-selector/NewLayerSelectorComponent';
+import AddLayerComponent from './new-layer-selector/AddLayerComponent';
 import StatusBarComponent from "./status-bar/StatusBarComponent";
 import StoreUpdaterComponent from "./store-updater/StoreUpdaterComponent";
 
@@ -10,7 +10,7 @@ import StoreUpdaterComponent from "./store-updater/StoreUpdaterComponent";
 Vue.component('navbar', NavbarComponent);
 Vue.component('left-menu', LeftMenuComponent);
 Vue.component('geo-map', MapComponent);
-Vue.component('wms-selector', WmsLayerSelectorComponent);
+Vue.component('add-layer-selector', AddLayerComponent);
 Vue.component('status-bar', StatusBarComponent);
 Vue.component('store-updater', StoreUpdaterComponent);
 

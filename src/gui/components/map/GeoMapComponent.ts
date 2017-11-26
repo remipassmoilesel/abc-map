@@ -28,8 +28,6 @@ export default class GeoMapComponent extends Vue {
 
     public updated() {
 
-        console.log(' public updated() {');
-
         const layers = this.getLayers();
 
         // TODO improve
