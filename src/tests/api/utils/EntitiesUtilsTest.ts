@@ -1,37 +1,38 @@
 import * as chai from 'chai';
+import * as _ from 'lodash';
 import 'mocha';
-import { WmsLayer } from '../../../api/entities/WmsLayer';
-import { EntitiesUtils } from '../../../api/utils/EntitiesUtils';
+import {WmsLayer} from '../../../api/entities/WmsLayer';
+import {EntitiesUtils} from '../../../api/utils/EntitiesUtils';
+import {Project} from "../../../api/entities/Project";
+import {IpcEventImpl} from "../../../api/ipc/IpcEvent";
+import {Evt} from "../../../api/ipc/IpcEventTypes";
 
 const assert = chai.assert;
 
 describe('EntitiesUtils', () => {
+    const eu = new EntitiesUtils();
 
-    it('Creation from raw should be correct', () => {
-        const wms = new WmsLayer('name', 'http://url');
-        const raw = JSON.parse(JSON.stringify(wms));
+    // these objects will be serialized then deserialized
+    const toTest: any[] = [];
+    toTest.push(new WmsLayer('name', 'http://url'));
 
-        const newWms = EntitiesUtils.parseFromRaw(WmsLayer.prototype, raw);
+    const project = new Project('name-name');
+    project.layers = [new WmsLayer('name', 'http://url'), new WmsLayer('name2', 'http://url2')]
+    toTest.push(project);
 
-        assert.deepEqual(wms, newWms);
-    });
+    toTest.push(new IpcEventImpl(Evt.PROJECT_NEW_CREATED, project));
 
-    it('Creation from raw array should be correct', () => {
-        const wms = [
-            new WmsLayer('name1', 'http://url1'),
-            new WmsLayer('name2', 'http://url2'),
-            new WmsLayer('name3', 'http://url3'),
-        ];
+    it('Serialize then deserialize should be correct', () => {
 
-        const raws = [
-            JSON.parse(JSON.stringify(wms[0])),
-            JSON.parse(JSON.stringify(wms[1])),
-            JSON.parse(JSON.stringify(wms[2])),
-        ];
+        _.forEach(toTest, (obj, index) => {
+            const raw = eu.serialize(obj);
 
-        const newWms = EntitiesUtils.parseFromRawArray(WmsLayer.prototype, raws);
+            assert.isString(raw);
 
-        assert.deepEqual(wms, newWms);
+            const newObj = eu.deserialize(raw);
+            assert.deepEqual(obj, newObj, `Serialization failed for: ${obj}, ${newObj}`);
+        });
+
     });
 
 });
