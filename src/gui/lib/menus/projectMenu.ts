@@ -7,7 +7,7 @@ const clients = new Clients();
 export const projectMenu = new NavbarMenu('Project');
 
 projectMenu.items.push(new MenuItem('project-new', 'New project', () => {
-    clients.projectClient.createNewProject();
+    clients.project.createNewProject();
 }));
 projectMenu.items.push(new MenuItem('project-save', 'Save project', () => {
     console.log('save-project');

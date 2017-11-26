@@ -1,7 +1,7 @@
 import * as chai from 'chai';
 import * as _ from 'lodash';
 import 'mocha';
-import {WmsLayer} from '../../../api/entities/WmsLayer';
+import {TileLayer} from '../../../api/entities/TileLayer';
 import {EntitiesUtils} from '../../../api/utils/EntitiesUtils';
 import {Project} from "../../../api/entities/Project";
 import {IpcEventImpl} from "../../../api/ipc/IpcEvent";
@@ -15,10 +15,10 @@ describe('EntitiesUtils', () => {
 
     // these objects will be serialized then deserialized
     const toTest: any[] = [];
-    toTest.push(new WmsLayer('name', 'http://url'));
+    toTest.push(new TileLayer('name', 'http://url'));
 
     const project = new Project('name-name');
-    project.layers = [new WmsLayer('name', 'http://url'), new WmsLayer('name2', 'http://url2')]
+    project.layers = [new TileLayer('name', 'http://url'), new TileLayer('name2', 'http://url2')]
     toTest.push(project);
 
     toTest.push(new IpcEventImpl(Evt.PROJECT_NEW_CREATED, project));

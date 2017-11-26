@@ -25,7 +25,7 @@ export default class StoreUpdaterComponent extends Vue {
     }
 
     private registerHandlers() {
-        this.clients.projectClient.onProjectEvent((event: IpcEvent) => {
+        this.clients.project.onProjectEvent((event: IpcEvent) => {
 
             logger.info('Receiving project event', event);
 
@@ -37,10 +37,25 @@ export default class StoreUpdaterComponent extends Vue {
 
             return Promise.resolve();
         });
+
+        this.clients.map.onMapEvent((event: IpcEvent) => {
+
+            logger.info('Receiving map event', event);
+
+            // TODO: improve
+            this.clients.project.getCurrentProject()
+                .then((project) => {
+                    this.$store.dispatch(Ats.PROJECT_UPDATE, project);
+                });
+
+            return Promise.resolve();
+        });
+
+
     }
 
     private initializeStore() {
-        this.clients.projectClient.getCurrentProject().then((project: Project) => {
+        this.clients.project.getCurrentProject().then((project: Project) => {
             this.$store.dispatch(Ats.PROJECT_UPDATE, project);
         });
     }

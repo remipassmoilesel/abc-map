@@ -2,13 +2,14 @@
 
     <template slot="title">
         <i class="el-icon-location"></i>
-        <span slot="title">WMS layers</span>
+        <span slot="title">Add a new layer</span>
     </template>
 
     <el-menu-item-group>
-        <span slot="title">Add a layer</span>
+        <span slot="title">Choose the layer you want to add</span>
         <el-menu-item v-for="(layer, index) in layers"
                       :index="'wmslayer' + index"
+                      @click="handleSelection(index)"
                       :key="'wmslayer' + index">
             {{ layer.name }}
         </el-menu-item>

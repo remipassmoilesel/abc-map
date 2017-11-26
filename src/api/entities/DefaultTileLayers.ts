@@ -1,25 +1,25 @@
-import { WmsLayer } from './WmsLayer';
+import { TileLayer } from './TileLayer';
 
-export class DefaultWmsLayers {
+export class DefaultTileLayers {
 
-    private _layers: WmsLayer[];
+    private _layers: TileLayer[];
 
     constructor() {
         this._layers = [
-            new WmsLayer('OpenStreetMap World',
+            new TileLayer('OpenStreetMap World',
                 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'),
-            new WmsLayer('OpenStreetMap France',
+            new TileLayer('OpenStreetMap France',
                 'https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png'),
-            new WmsLayer('Heidelberg university',
+            new TileLayer('Heidelberg university',
                 'https://korona.geog.uni-heidelberg.de/tiles/roads/x={x}&y={y}&z={z}'),
         ];
     }
 
-    get layers(): WmsLayer[] {
+    get layers(): TileLayer[] {
         return this._layers;
     }
 
-    set layers(value: WmsLayer[]) {
+    set layers(value: TileLayer[]) {
         this._layers = value;
     }
 }

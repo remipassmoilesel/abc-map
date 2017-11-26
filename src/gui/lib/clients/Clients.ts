@@ -3,29 +3,29 @@ import {ProjectClient} from "./ProjectClient";
 import {Ipc} from "../../../api/ipc/Ipc";
 
 export class Clients {
-    private _mapClient: MapClient;
-    private _projectClient: ProjectClient;
+    private _map: MapClient;
+    private _project: ProjectClient;
     private ipc: Ipc;
 
     constructor() {
         this.ipc = new Ipc();
-        this._mapClient = new MapClient(this.ipc);
-        this._projectClient = new ProjectClient(this.ipc);
+        this._map = new MapClient(this.ipc);
+        this._project = new ProjectClient(this.ipc);
     }
 
-    get mapClient(): MapClient {
-        return this._mapClient;
+    get map(): MapClient {
+        return this._map;
     }
 
-    set mapClient(value: MapClient) {
-        this._mapClient = value;
+    set map(value: MapClient) {
+        this._map = value;
     }
 
-    get projectClient(): ProjectClient {
-        return this._projectClient;
+    get project(): ProjectClient {
+        return this._project;
     }
 
-    set projectClient(value: ProjectClient) {
-        this._projectClient = value;
+    set project(value: ProjectClient) {
+        this._project = value;
     }
 }

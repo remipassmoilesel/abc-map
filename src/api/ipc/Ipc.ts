@@ -2,6 +2,7 @@ import promiseIpc from 'electron-promise-ipc';
 import {Subj} from "./IpcSubjects";
 import {IpcEvent} from "./IpcEvent";
 import {EntitiesUtils} from "../utils/EntitiesUtils";
+import * as Promise from 'bluebird';
 
 const eu = new EntitiesUtils();
 
@@ -40,10 +41,16 @@ export class Ipc {
      * @param {IpcHandler} handler
      */
     public listen(subject: Subj, handler: IpcHandler): void {
-        promiseIpc.on(subject.id, (message: IpcMessage) => {
+        promiseIpc.on(subject.id, (message: IpcMessage): IpcMessage => {
             this.throwIfMessageIsInvalid(message);
             const event = eu.deserializeIpcEvent(message.serializedData);
-            return this.serializeResponse(handler(event));
+
+            const response = handler(event);
+            if (response) {
+                return this.serializeResponse(response);
+            } else {
+                return {serializedData: '{}'};
+            }
         });
     }
 
@@ -74,18 +81,22 @@ export class Ipc {
 
     private serializeResponse(data: any): IpcMessage {
 
-        if (data.then) { // response is a promise
+        // response is a promise
+        if (data.then) {
             return data.then((result) => {
                 return {serializedData: eu.serialize(result)};
             });
-        } else { // response is a plain response
+        }
+
+        // response is a plain response
+        else {
             return {serializedData: eu.serialize(data)};
         }
 
     }
 
     private throwIfMessageIsInvalid(message: IpcMessage) {
-        if (!message.serializedData) {
+        if (!message || !message.serializedData) {
             throw new Error(`Invalid message: ${message}`);
         }
     }

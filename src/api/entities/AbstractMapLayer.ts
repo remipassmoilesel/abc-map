@@ -1,5 +1,4 @@
-
-export class AbstractMapLayer {
+export abstract class AbstractMapLayer {
 
     private _name: string;
 
@@ -14,4 +13,5 @@ export class AbstractMapLayer {
     set name(value: string) {
         this._name = value;
     }
+
 }

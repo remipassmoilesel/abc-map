@@ -1,8 +1,8 @@
 import Vue from 'vue';
 import NavbarComponent from './navbar/NavbarComponent';
 import LeftMenuComponent from './left-menu/LeftMenuComponent';
-import MapComponent from './map/MapComponent';
-import WmsLayerSelectorComponent from './wms-layer-selector/WmsLayerSelectorComponent';
+import MapComponent from './map/GeoMapComponent';
+import WmsLayerSelectorComponent from './new-layer-selector/NewLayerSelectorComponent';
 import StatusBarComponent from "./status-bar/StatusBarComponent";
 import StoreUpdaterComponent from "./store-updater/StoreUpdaterComponent";
 

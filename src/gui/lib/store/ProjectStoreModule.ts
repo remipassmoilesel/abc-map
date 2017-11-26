@@ -24,7 +24,7 @@ export class ProjectStoreModule {
     actions = {
         [Ats.PROJECT_UPDATE]: (context) => {
             logger.info(`Dispatching action ${Ats.PROJECT_UPDATE}`);
-            clients.projectClient.getCurrentProject().then((project) => {
+            clients.project.getCurrentProject().then((project) => {
                 context.commit(Mts.PROJECT_UPDATE, {project});
             });
         }
@@ -36,6 +36,13 @@ export class ProjectStoreModule {
                 return state.currentProject.name;
             } else {
                 return 'No current project';
+            }
+        },
+        projectLayers: (state) => {
+            if (state.currentProject) {
+                return state.currentProject.layers;
+            } else {
+                return [];
             }
         }
     };

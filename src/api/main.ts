@@ -3,6 +3,7 @@ import {Ipc} from "./ipc/Ipc";
 import {Logger} from "./dev/Logger";
 import {ProjectService} from "./services/ProjectService";
 import {Subj} from "./ipc/IpcSubjects";
+import {IpcEvent} from "./ipc/IpcEvent";
 
 const logger = Logger.getLogger('api/main.ts');
 
@@ -11,7 +12,7 @@ export function initApplication(ipc: Ipc) {
     logger.info('Initialize main application');
 
     const projectService = new ProjectService(ipc);
-    const mapService = new MapService(ipc);
+    const mapService = new MapService(ipc, projectService);
 
     ipc.listen(Subj.PROJECT_CREATE_NEW, () => {
         return projectService.newProject();
@@ -23,6 +24,10 @@ export function initApplication(ipc: Ipc) {
 
     ipc.listen(Subj.MAP_GET_WMS_DEFAULT_LAYERS, () => {
         return mapService.getDefaultWmsLayers();
+    });
+
+    ipc.listen(Subj.MAP_ADD_LAYER, (event: IpcEvent) => {
+        return mapService.addLayer(event.data);
     });
 
     projectService.newProject();

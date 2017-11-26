@@ -1,7 +1,7 @@
+import {AbstractMapLayer} from './AbstractMapLayer';
 
-import { AbstractMapLayer } from './AbstractMapLayer';
-
-export class WmsLayer extends AbstractMapLayer {
+// TODO: restore credits
+export class TileLayer extends AbstractMapLayer {
 
     private _url: string;
 
@@ -13,4 +13,5 @@ export class WmsLayer extends AbstractMapLayer {
     get url(): string {
         return this._url;
     }
+
 }
