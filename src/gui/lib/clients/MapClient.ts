@@ -15,9 +15,7 @@ export class MapClient {
     }
 
     public getDefaultWmsLayers(): Promise<WmsLayer[]> {
-        return this.ipc.send(Subj.MAP_GET_WMS_DEFAULT_LAYERS).then((message) => {
-            return eu.deserialize(message.data);
-        }).catch(handleRejection);
+        return this.ipc.send(Subj.MAP_GET_WMS_DEFAULT_LAYERS).catch(handleRejection);
     }
 
 }

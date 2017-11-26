@@ -1,4 +1,4 @@
-import {Ipc, IpcHandler, IpcMessage} from '../../../api/ipc/Ipc';
+import {Ipc, IpcHandler} from '../../../api/ipc/Ipc';
 import {EntitiesUtils} from "../../../api/utils/EntitiesUtils";
 import {Project} from "../../../api/entities/Project";
 import {Subj} from "../../../api/ipc/IpcSubjects";
@@ -14,7 +14,7 @@ export class ProjectClient {
         this.ipc = ipc;
     }
 
-    public onProjectEvent(handler: IpcHandler) {
+    public onProjectEvent(handler: IpcHandler): void {
         return this.ipc.listen(Subj.PROJECT_EVENTS_BUS, handler);
     }
 
@@ -23,10 +23,7 @@ export class ProjectClient {
     }
 
     public getCurrentProject(): Promise<Project> {
-        return this.ipc.send(Subj.PROJECT_GET_CURRENT)
-            .then((message: IpcMessage) => {
-                return eu.deserializeProject(message.data);
-            }).catch(handleRejection);
+        return this.ipc.send(Subj.PROJECT_GET_CURRENT).catch(handleRejection);
     }
 
 }

@@ -7,6 +7,7 @@ import {Evt} from "../../../api/ipc/IpcEventTypes";
 import {Ats} from "../../lib/store/mutationsAndActions";
 import {Logger} from "../../../api/dev/Logger";
 import {Clients} from "../../lib/clients/Clients";
+import {Project} from "../../../api/entities/Project";
 
 const logger = Logger.getLogger('StoreUpdaterComponent');
 
@@ -20,6 +21,7 @@ export default class StoreUpdaterComponent extends Vue {
 
     public mounted() {
         this.registerHandlers();
+        this.initializeStore();
     }
 
     private registerHandlers() {
@@ -29,9 +31,17 @@ export default class StoreUpdaterComponent extends Vue {
 
             if (_.isEqual(event.type, Evt.PROJECT_NEW_CREATED)) {
                 this.$store.dispatch(Ats.PROJECT_UPDATE, event.data);
+            } else {
+                logger.warning('Unknown event', event);
             }
 
             return Promise.resolve();
+        });
+    }
+
+    private initializeStore() {
+        this.clients.projectClient.getCurrentProject().then((project: Project) => {
+            this.$store.dispatch(Ats.PROJECT_UPDATE, project);
         });
     }
 }

@@ -3,24 +3,29 @@ import {Subj} from "./IpcSubjects";
 import {IpcEvent} from "./IpcEvent";
 import {EntitiesUtils} from "../utils/EntitiesUtils";
 
-export declare type IpcHandler = (event: IpcEvent) => Promise<any> | any;
-
-export interface IpcMessage {
-    data: string;
-}
-
 const eu = new EntitiesUtils();
 
+export declare type IpcHandler = (event: IpcEvent) => any;
+
 /**
- * Inter process communication tool, allow to communicate between server (main process)
- * and client (renderer process) code.
+ * Raw IPC message containing only serialized data
+ * This kind of message allow to restore true objects
+ * (with class types) when receiving them
+ */
+interface IpcMessage {
+    serializedData: string;
+}
+
+/**
+ * Inter process communication tool, allow to communicate between main process
+ * and renderer process.
  */
 export class Ipc {
     private webContent: any;
 
     /**
      * Web content is mandatory if you want to use IPC from
-     * server side
+     * main process
      *
      * @param webContent
      */
@@ -28,24 +33,53 @@ export class Ipc {
         this.webContent = webContent;
     }
 
+    /**
+     * Register a handler. Handler should never return a promise.
+     *
+     * @param {Subj} subject
+     * @param {IpcHandler} handler
+     */
     public listen(subject: Subj, handler: IpcHandler): void {
-        promiseIpc.on(subject.id, (serialized) => {
-            const event = eu.deserializeIpcEvent(serialized.data);
-            return handler(event);
+        promiseIpc.on(subject.id, (message: IpcMessage) => {
+            this.throwIfMessageIsInvalid(message);
+            const event = eu.deserializeIpcEvent(message.serializedData);
+            return this.serializeResponse(handler(event));
         });
     }
 
     public send(subject: Subj, event: IpcEvent = {}): Promise<any> {
 
-        const serialized: IpcMessage = {data: eu.serialize(event)};
+        const serialized: IpcMessage = {serializedData: eu.serialize(event)};
 
+        // send event from main process
         if (this.webContent) {
-            return promiseIpc.send(subject.id, this.webContent, serialized);
+            return promiseIpc.send(subject.id, this.webContent, serialized)
+                .then((message: IpcMessage) => {
+                    return this.deserializeIpcMessage(message);
+                });
         }
+        // send event from renderer process
         else {
-            return promiseIpc.send(subject.id, serialized);
+            return promiseIpc.send(subject.id, serialized)
+                .then((message: IpcMessage) => {
+                    return this.deserializeIpcMessage(message);
+                });
         }
     }
 
+    private deserializeIpcMessage(message: IpcMessage) {
+        this.throwIfMessageIsInvalid(message);
+        return eu.deserialize(message.serializedData);
+    }
+
+    private serializeResponse(data: any): IpcMessage {
+        return {serializedData: eu.serialize(data)};
+    }
+
+    private throwIfMessageIsInvalid(message: IpcMessage) {
+        if (!message.serializedData) {
+            throw new Error(`Invalid message: ${message}`);
+        }
+    }
 }
 
