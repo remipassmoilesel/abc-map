@@ -3,13 +3,15 @@ import {Project} from "../entities/Project";
 import {TileLayer} from "../entities/layers/TileLayer";
 import {IpcEvent, IpcEventImpl} from "../ipc/IpcEvent";
 import {EventType} from "../ipc/IpcEventTypes";
+import {GeoJsonLayer} from "../entities/layers/GeoJsonLayer";
 
 // List of constructors used to deserialize objects
 const constructors: any = {};
 constructors.TileLayer = TileLayer;
 constructors.Project = Project;
 constructors.IpcEventImpl = IpcEventImpl;
-constructors.Evt = EventType;
+constructors.EventType = EventType;
+constructors.GeoJsonLayer = GeoJsonLayer;
 
 export class EntitiesUtils {
 

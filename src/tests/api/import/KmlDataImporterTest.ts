@@ -8,7 +8,7 @@ const assert = chai.assert;
 
 describe('KmlDataImporter', () => {
 
-    it.only('Import should not fail', () => {
+    it('Import should not fail', () => {
 
         const importer = new KmlDataImporter();
         return importer.getAsLayer(TestData.SAMPLE_KML).then((layer: GeoJsonLayer) => {

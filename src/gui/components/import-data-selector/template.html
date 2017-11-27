@@ -1,0 +1,32 @@
+<el-submenu index="3" class="import-data-component">
+
+    <template slot="title">
+        <i class="el-icon-tickets"></i>
+        <span slot="title">Import data</span>
+    </template>
+
+    <el-menu-item-group>
+
+        <span slot="title">Select files to upload ...</span>
+
+        <div class="upload-area">
+
+            <el-upload class="upload-demo"
+                       :on-remove="handleRemove"
+                       multiple
+                       :limit="3"
+                       :on-exceed="handleExceed"
+                       :file-list="fileList">
+                <el-button size="small" type="primary">Click to upload</el-button>
+                <div slot="tip" class="el-upload__tip">jpg/png files with a size less than 500kb</div>
+            </el-upload>
+
+            <!-- Action buttons -->
+
+            <el-button @click="uploadSelection" type="warning" icon="el-icon-close"></el-button>
+
+        </div>
+
+    </el-menu-item-group>
+
+</el-submenu>

@@ -3,6 +3,7 @@ import {TileLayer} from '../../../api/entities/layers/TileLayer';
 import {EntitiesUtils} from '../../../api/utils/EntitiesUtils';
 import {IpcSubjects} from "../../../api/ipc/IpcSubjects";
 import {handleRejection} from "./clientUtils";
+import * as Promise from 'bluebird';
 
 const eu = new EntitiesUtils();
 

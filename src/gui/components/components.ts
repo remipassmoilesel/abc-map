@@ -6,6 +6,7 @@ import AddLayerComponent from './add-layer/AddLayerComponent';
 import StatusBarComponent from "./status-bar/StatusBarComponent";
 import StoreUpdaterComponent from "./store-updater/StoreUpdaterComponent";
 import LayerSelectorComponent from "./layer-selector/LayerSelectorComponent";
+import ImportDataSelectorComponent from "./import-data-selector/ImportDataComponent";
 
 // tag name -> component
 Vue.component('navbar', NavbarComponent);
@@ -15,4 +16,5 @@ Vue.component('add-layer-selector', AddLayerComponent);
 Vue.component('layer-selector', LayerSelectorComponent);
 Vue.component('status-bar', StatusBarComponent);
 Vue.component('store-updater', StoreUpdaterComponent);
+Vue.component('import-data-selector', ImportDataSelectorComponent);
 
