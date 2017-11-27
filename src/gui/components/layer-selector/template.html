@@ -12,6 +12,11 @@
                       :key="'projectLayer' + index">
             {{ layer.name }}
         </el-menu-item>
+
+        <el-menu-item v-if="!getLayers() || getLayers().length < 1" index="1">
+            <i>No layers yet</i>
+        </el-menu-item>
+
     </el-menu-item-group>
 
 </el-submenu>
