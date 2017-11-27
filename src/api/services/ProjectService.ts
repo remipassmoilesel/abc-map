@@ -3,8 +3,8 @@ import {Project} from "../entities/Project";
 import {Logger} from "../dev/Logger";
 import {Utils} from "../utils/Utils";
 import {Ipc} from "../ipc/Ipc";
-import {Subj} from "../ipc/IpcSubjects";
-import {Evt} from "../ipc/IpcEventTypes";
+import {IpcSubjects} from "../ipc/IpcSubjects";
+import {EventType} from "../ipc/IpcEventTypes";
 import {IpcEvent} from "../ipc/IpcEvent";
 import {AbstractService} from "./AbstractService";
 import {AbstractMapLayer} from "../entities/AbstractMapLayer";
@@ -27,7 +27,7 @@ export class ProjectService extends AbstractService {
         this.currentProject = new Project(params.name);
 
         this.sendProjectEvent({
-            type: Evt.PROJECT_NEW_CREATED,
+            type: EventType.PROJECT_NEW_CREATED,
             data: this.currentProject,
         });
     }
@@ -42,7 +42,7 @@ export class ProjectService extends AbstractService {
         this.currentProject.layers.push(layer);
 
         this.sendProjectEvent({
-            type: Evt.PROJECT_NEW_LAYER_ADDED,
+            type: EventType.PROJECT_NEW_LAYER_ADDED,
             data: this.currentProject
         });
     }
@@ -59,14 +59,14 @@ export class ProjectService extends AbstractService {
         });
 
         this.sendProjectEvent({
-            type: Evt.PROJECT_UPDATED,
+            type: EventType.PROJECT_UPDATED,
             data: this.currentProject
         });
 
     }
 
     private sendProjectEvent(data: IpcEvent) {
-        return this.ipc.send(Subj.PROJECT_EVENTS_BUS, data);
+        return this.ipc.send(IpcSubjects.PROJECT_EVENTS_BUS, data);
     }
 
 

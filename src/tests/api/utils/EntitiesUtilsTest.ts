@@ -5,7 +5,7 @@ import {TileLayer} from '../../../api/entities/TileLayer';
 import {EntitiesUtils} from '../../../api/utils/EntitiesUtils';
 import {Project} from "../../../api/entities/Project";
 import {IpcEventImpl} from "../../../api/ipc/IpcEvent";
-import {Evt} from "../../../api/ipc/IpcEventTypes";
+import {EventType} from "../../../api/ipc/IpcEventTypes";
 
 const assert = chai.assert;
 
@@ -21,7 +21,7 @@ describe('EntitiesUtils', () => {
     project.layers = [new TileLayer('name', 'http://url'), new TileLayer('name2', 'http://url2')]
     toTest.push(project);
 
-    toTest.push(new IpcEventImpl(Evt.PROJECT_NEW_CREATED, project));
+    toTest.push(new IpcEventImpl(EventType.PROJECT_NEW_CREATED, project));
 
     it('Serialize then deserialize should be correct', () => {
 

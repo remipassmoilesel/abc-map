@@ -1,12 +1,12 @@
-import {Evt} from "./IpcEventTypes";
+import {EventType} from "./IpcEventTypes";
 
 export interface IpcEvent {
-    type?: Evt;
+    type?: EventType;
     data?: any;
 }
 
 export class IpcEventImpl implements IpcEvent {
-    public type: Evt;
+    public type: EventType;
     public data: any;
 
     constructor(type, data?) {

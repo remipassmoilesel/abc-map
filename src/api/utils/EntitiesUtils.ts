@@ -2,14 +2,14 @@ import * as Resurrect from 'resurrect-js';
 import {Project} from "../entities/Project";
 import {TileLayer} from "../entities/TileLayer";
 import {IpcEvent, IpcEventImpl} from "../ipc/IpcEvent";
-import {Evt} from "../ipc/IpcEventTypes";
+import {EventType} from "../ipc/IpcEventTypes";
 
 // List of constructors used to deserialize objects
 const constructors: any = {};
 constructors.TileLayer = TileLayer;
 constructors.Project = Project;
 constructors.IpcEventImpl = IpcEventImpl;
-constructors.Evt = Evt;
+constructors.Evt = EventType;
 
 export class EntitiesUtils {
 

@@ -1,5 +1,5 @@
 import promiseIpc from 'electron-promise-ipc';
-import {Subj} from "./IpcSubjects";
+import {IpcSubjects} from "./IpcSubjects";
 import {IpcEvent} from "./IpcEvent";
 import {EntitiesUtils} from "../utils/EntitiesUtils";
 import * as Promise from 'bluebird';
@@ -37,10 +37,10 @@ export class Ipc {
     /**
      * Register a handler. Handler should never return a promise.
      *
-     * @param {Subj} subject
+     * @param {IpcSubjects} subject
      * @param {IpcHandler} handler
      */
-    public listen(subject: Subj, handler: IpcHandler): void {
+    public listen(subject: IpcSubjects, handler: IpcHandler): void {
         promiseIpc.on(subject.id, (message: IpcMessage): IpcMessage => {
             this.throwIfMessageIsInvalid(message);
             const event = eu.deserializeIpcEvent(message.serializedData);
@@ -54,7 +54,7 @@ export class Ipc {
         });
     }
 
-    public send(subject: Subj, event: IpcEvent = {}): Promise<any> {
+    public send(subject: IpcSubjects, event: IpcEvent = {}): Promise<any> {
 
         const serialized: IpcMessage = {serializedData: eu.serialize(event)};
 

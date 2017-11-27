@@ -6,8 +6,8 @@ import {Ipc} from "../ipc/Ipc";
 import {ProjectService} from "./ProjectService";
 import {AbstractMapLayer} from "../entities/AbstractMapLayer";
 import {IpcEvent} from "../ipc/IpcEvent";
-import {Subj} from "../ipc/IpcSubjects";
-import {Evt} from "../ipc/IpcEventTypes";
+import {IpcSubjects} from "../ipc/IpcSubjects";
+import {EventType} from "../ipc/IpcEventTypes";
 
 const logger = Logger.getLogger('MapService');
 
@@ -28,6 +28,6 @@ export class MapService extends AbstractService {
     }
 
     private sendMapEvent(data: IpcEvent) {
-        return this.ipc.send(Subj.MAP_EVENTS_BUS, data);
+        return this.ipc.send(IpcSubjects.MAP_EVENTS_BUS, data);
     }
 }
