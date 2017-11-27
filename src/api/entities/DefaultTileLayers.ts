@@ -1,4 +1,4 @@
-import {TileLayer} from './TileLayer';
+import {TileLayer} from './layers/TileLayer';
 import * as _ from 'lodash';
 
 export class DefaultTileLayers {

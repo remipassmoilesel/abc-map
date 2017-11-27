@@ -3,7 +3,7 @@ import {EntitiesUtils} from "../../../api/utils/EntitiesUtils";
 import {Project} from "../../../api/entities/Project";
 import {IpcSubjects} from "../../../api/ipc/IpcSubjects";
 import {handleRejection} from "./clientUtils";
-import {AbstractMapLayer} from "../../../api/entities/AbstractMapLayer";
+import {AbstractMapLayer} from "../../../api/entities/layers/AbstractMapLayer";
 
 const eu = new EntitiesUtils();
 

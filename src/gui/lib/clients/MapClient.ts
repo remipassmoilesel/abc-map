@@ -1,5 +1,5 @@
 import {Ipc, IpcHandler} from '../../../api/ipc/Ipc';
-import {TileLayer} from '../../../api/entities/TileLayer';
+import {TileLayer} from '../../../api/entities/layers/TileLayer';
 import {EntitiesUtils} from '../../../api/utils/EntitiesUtils';
 import {IpcSubjects} from "../../../api/ipc/IpcSubjects";
 import {handleRejection} from "./clientUtils";

@@ -10,6 +10,7 @@ export class IpcSubjects {
     public static MAP_ROOT = "/map";
     public static MAP_EVENTS_BUS = new IpcSubjects(`${IpcSubjects.MAP_ROOT}/events-bus`);
     public static MAP_GET_WMS_DEFAULT_LAYERS = new IpcSubjects(`${IpcSubjects.MAP_ROOT}/get-default-layers`);
+    public static MAP_IMPORT_KML_AS_LAYER = new IpcSubjects(`${IpcSubjects.MAP_ROOT}/kml/import-as-layer`);
 
     public id: string;
 

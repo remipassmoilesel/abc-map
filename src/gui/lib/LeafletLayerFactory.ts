@@ -1,6 +1,6 @@
 import * as L from 'leaflet';
-import {AbstractMapLayer} from "../../api/entities/AbstractMapLayer";
-import {TileLayer} from "../../api/entities/TileLayer";
+import {AbstractMapLayer} from "../../api/entities/layers/AbstractMapLayer";
+import {TileLayer} from "../../api/entities/layers/TileLayer";
 
 export class LeafletLayerFactory {
 

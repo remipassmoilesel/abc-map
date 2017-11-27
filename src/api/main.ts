@@ -4,6 +4,7 @@ import {Logger} from "./dev/Logger";
 import {ProjectService} from "./services/ProjectService";
 import {IpcSubjects} from "./ipc/IpcSubjects";
 import {IpcEvent} from "./ipc/IpcEvent";
+import {AbstractMapLayer} from "./entities/layers/AbstractMapLayer";
 
 const logger = Logger.getLogger('api/main.ts');
 
@@ -34,6 +35,11 @@ export function initApplication(ipc: Ipc) {
         return mapService.getDefaultWmsLayers();
     });
 
+    ipc.listen(IpcSubjects.MAP_IMPORT_KML_AS_LAYER, (event: IpcEvent) => {
+        return mapService.kmlFileToGeoJsonLayer(event.data).then((layer: AbstractMapLayer) => {
+            projectService.addLayer(layer);
+        });
+    });
 
     projectService.newProject();
 }

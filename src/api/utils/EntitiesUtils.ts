@@ -1,6 +1,6 @@
 import * as Resurrect from 'resurrect-js';
 import {Project} from "../entities/Project";
-import {TileLayer} from "../entities/TileLayer";
+import {TileLayer} from "../entities/layers/TileLayer";
 import {IpcEvent, IpcEventImpl} from "../ipc/IpcEvent";
 import {EventType} from "../ipc/IpcEventTypes";
 

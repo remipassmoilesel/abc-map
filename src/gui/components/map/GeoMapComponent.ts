@@ -3,7 +3,7 @@ import Component from "vue-class-component";
 import * as L from 'leaflet';
 import * as _ from 'lodash';
 import {MainStore} from "../../lib/store/store";
-import {AbstractMapLayer} from "../../../api/entities/AbstractMapLayer";
+import {AbstractMapLayer} from "../../../api/entities/layers/AbstractMapLayer";
 import './style.scss'
 import {LeafletLayerFactory} from "../../lib/LeafletLayerFactory";
 

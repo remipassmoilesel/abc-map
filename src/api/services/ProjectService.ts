@@ -7,7 +7,7 @@ import {IpcSubjects} from "../ipc/IpcSubjects";
 import {EventType} from "../ipc/IpcEventTypes";
 import {IpcEvent} from "../ipc/IpcEvent";
 import {AbstractService} from "./AbstractService";
-import {AbstractMapLayer} from "../entities/AbstractMapLayer";
+import {AbstractMapLayer} from "../entities/layers/AbstractMapLayer";
 
 const logger = Logger.getLogger('ProjectService');
 

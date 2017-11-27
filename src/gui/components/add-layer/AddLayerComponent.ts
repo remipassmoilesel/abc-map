@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import {Clients} from '../../lib/clients/Clients';
-import {AbstractMapLayer} from "../../../api/entities/AbstractMapLayer";
+import {AbstractMapLayer} from "../../../api/entities/layers/AbstractMapLayer";
 import './style.scss';
 
 @Component({

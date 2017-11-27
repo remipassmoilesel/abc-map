@@ -1,7 +1,7 @@
 import * as chai from 'chai';
 import * as _ from 'lodash';
 import 'mocha';
-import {TileLayer} from '../../../api/entities/TileLayer';
+import {TileLayer} from '../../../api/entities/layers/TileLayer';
 import {EntitiesUtils} from '../../../api/utils/EntitiesUtils';
 import {Project} from "../../../api/entities/Project";
 import {IpcEventImpl} from "../../../api/ipc/IpcEvent";

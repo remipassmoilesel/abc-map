@@ -1,4 +1,4 @@
-import {AbstractMapLayer} from "./AbstractMapLayer";
+import {AbstractMapLayer} from "./layers/AbstractMapLayer";
 
 export class Project {
 
