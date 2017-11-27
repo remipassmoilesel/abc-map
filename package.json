@@ -27,7 +27,6 @@
     "electron-promise-ipc": "0.0.4",
     "element-ui": "^2.0.5",
     "leaflet": "^1.2.0",
-    "mdi": "^2.0.46",
     "resurrect-js": "^1.0.1",
     "spectron": "^3.7.2",
     "vue": "^2.5.2",
