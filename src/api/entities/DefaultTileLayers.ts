@@ -1,4 +1,5 @@
-import { TileLayer } from './TileLayer';
+import {TileLayer} from './TileLayer';
+import * as _ from 'lodash';
 
 export class DefaultTileLayers {
 
@@ -13,6 +14,11 @@ export class DefaultTileLayers {
             new TileLayer('Heidelberg university',
                 'https://korona.geog.uni-heidelberg.de/tiles/roads/x={x}&y={y}&z={z}'),
         ];
+
+        // template layers should not have id
+        _.forEach(this._layers, (lay) => {
+            lay.id = '';
+        })
     }
 
     get layers(): TileLayer[] {
