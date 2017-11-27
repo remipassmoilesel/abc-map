@@ -29,9 +29,18 @@ export default class StoreUpdaterComponent extends Vue {
 
             logger.info('Receiving project event', event);
 
+            // new project created
             if (_.isEqual(event.type, Evt.PROJECT_NEW_CREATED)) {
                 this.$store.dispatch(Ats.PROJECT_UPDATE, event.data);
-            } else {
+            }
+
+            // new layer added
+            else  if (_.isEqual(event.type, Evt.PROJECT_NEW_LAYER_ADDED)) {
+                this.$store.dispatch(Ats.PROJECT_UPDATE, event.data);
+            }
+
+            // unknown event
+            else {
                 logger.warning('Unknown event', event);
             }
 
@@ -41,12 +50,6 @@ export default class StoreUpdaterComponent extends Vue {
         this.clients.map.onMapEvent((event: IpcEvent) => {
 
             logger.info('Receiving map event', event);
-
-            // TODO: improve
-            this.clients.project.getCurrentProject()
-                .then((project) => {
-                    this.$store.dispatch(Ats.PROJECT_UPDATE, project);
-                });
 
             return Promise.resolve();
         });

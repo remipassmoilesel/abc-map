@@ -12,7 +12,7 @@ export function initApplication(ipc: Ipc) {
     logger.info('Initialize main application');
 
     const projectService = new ProjectService(ipc);
-    const mapService = new MapService(ipc, projectService);
+    const mapService = new MapService(ipc);
 
     ipc.listen(Subj.PROJECT_CREATE_NEW, () => {
         return projectService.newProject();
@@ -22,13 +22,14 @@ export function initApplication(ipc: Ipc) {
         return projectService.getCurrentProject();
     });
 
+    ipc.listen(Subj.PROJECT_ADD_LAYER, (event: IpcEvent) => {
+        return projectService.addLayer(event.data);
+    });
+
     ipc.listen(Subj.MAP_GET_WMS_DEFAULT_LAYERS, () => {
         return mapService.getDefaultWmsLayers();
     });
 
-    ipc.listen(Subj.MAP_ADD_LAYER, (event: IpcEvent) => {
-        return mapService.addLayer(event.data);
-    });
 
     projectService.newProject();
 }

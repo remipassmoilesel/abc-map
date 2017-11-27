@@ -24,7 +24,7 @@ export class MapClient {
     }
 
     public addLayer(layer: AbstractMapLayer) {
-        return this.ipc.send(Subj.MAP_ADD_LAYER, {data: layer}).catch(handleRejection);
+        return this.ipc.send(Subj.PROJECT_ADD_LAYER, {data: layer}).catch(handleRejection);
     }
 
 }

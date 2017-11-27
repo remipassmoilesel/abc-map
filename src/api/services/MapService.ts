@@ -14,14 +14,12 @@ const logger = Logger.getLogger('MapService');
 export class MapService extends AbstractService {
 
     private defaultLayers: DefaultTileLayers;
-    private projectService: ProjectService;
 
-    constructor(ipc: Ipc, projectService: ProjectService) {
+    constructor(ipc: Ipc) {
         super(ipc);
 
         logger.info('Init MapService');
 
-        this.projectService = projectService;
         this.defaultLayers = new DefaultTileLayers();
     }
 
@@ -29,17 +27,7 @@ export class MapService extends AbstractService {
         return this.defaultLayers.layers;
     }
 
-    public addLayer(layer: AbstractMapLayer) {
-        logger.info(`Adding layer: ${JSON.stringify(layer)}`);
-
-        this.projectService.getCurrentProject().layers.push(layer);
-
-        this.sendProjectEvent({
-            type: Evt.MAP_NEW_LAYER_ADDED,
-        });
-    }
-
-    private sendProjectEvent(data: IpcEvent) {
+    private sendMapEvent(data: IpcEvent) {
         return this.ipc.send(Subj.MAP_EVENTS_BUS, data);
     }
 }
