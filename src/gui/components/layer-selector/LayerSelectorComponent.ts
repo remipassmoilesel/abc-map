@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import {AbstractMapLayer} from "../../../api/entities/AbstractMapLayer";
+import {Clients} from "../../lib/clients/Clients";
 import './style.scss';
 
 @Component({
@@ -8,6 +9,7 @@ import './style.scss';
 })
 export default class LayerSelectorComponent extends Vue {
 
+    public clients: Clients;
     public selectedLayers: string[] = [];
 
     public getLayers(): AbstractMapLayer[] {
@@ -15,8 +17,9 @@ export default class LayerSelectorComponent extends Vue {
     }
 
     public deleteSelection() {
-        console.log(arguments);
-        console.log(this.selectedLayers);
+        if (this.selectedLayers.length > 0) {
+            this.clients.project.deleteLayers(this.selectedLayers);
+        }
     }
 
 }

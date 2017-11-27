@@ -3,6 +3,7 @@ import {EntitiesUtils} from "../../../api/utils/EntitiesUtils";
 import {Project} from "../../../api/entities/Project";
 import {Subj} from "../../../api/ipc/IpcSubjects";
 import {handleRejection} from "./clientUtils";
+import {AbstractMapLayer} from "../../../api/entities/AbstractMapLayer";
 
 const eu = new EntitiesUtils();
 
@@ -26,4 +27,11 @@ export class ProjectClient {
         return this.ipc.send(Subj.PROJECT_GET_CURRENT).catch(handleRejection);
     }
 
+    public addLayer(layer: AbstractMapLayer) {
+        return this.ipc.send(Subj.PROJECT_ADD_LAYER, {data: layer}).catch(handleRejection);
+    }
+
+    public deleteLayers(layerIds: string[]) {
+        return this.ipc.send(Subj.PROJECT_DELETE_LAYERS, {data: layerIds}).catch(handleRejection);
+    }
 }

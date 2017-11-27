@@ -23,7 +23,7 @@ export default class AddLayerComponent extends Vue {
     }
 
     public handleSelection(index: number) {
-        this.clients.map.addLayer(this.layers[index]);
+        this.clients.project.addLayer(this.layers[index]);
     }
 
 }

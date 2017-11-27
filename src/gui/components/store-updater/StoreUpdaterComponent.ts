@@ -11,6 +11,12 @@ import {Project} from "../../../api/entities/Project";
 
 const logger = Logger.getLogger('StoreUpdaterComponent');
 
+const updateEventsType = [
+    Evt.PROJECT_NEW_CREATED,
+    Evt.PROJECT_NEW_LAYER_ADDED,
+    Evt.PROJECT_UPDATED,
+];
+
 @Component({
     template: "<div></div>",
 })
@@ -29,16 +35,10 @@ export default class StoreUpdaterComponent extends Vue {
 
             logger.info('Receiving project event', event);
 
-            // new project created
-            if (_.isEqual(event.type, Evt.PROJECT_NEW_CREATED)) {
+            // event should update project
+            if (this.isEventShouldUpdateProject(event)) {
                 this.$store.dispatch(Ats.PROJECT_UPDATE, event.data);
             }
-
-            // new layer added
-            else  if (_.isEqual(event.type, Evt.PROJECT_NEW_LAYER_ADDED)) {
-                this.$store.dispatch(Ats.PROJECT_UPDATE, event.data);
-            }
-
             // unknown event
             else {
                 logger.warning('Unknown event', event);
@@ -61,5 +61,10 @@ export default class StoreUpdaterComponent extends Vue {
         this.clients.project.getCurrentProject().then((project: Project) => {
             this.$store.dispatch(Ats.PROJECT_UPDATE, project);
         });
+    }
+
+    private isEventShouldUpdateProject(event: IpcEvent): boolean {
+        const res = _.find(updateEventsType, (evt: Evt) => _.isEqual(evt, event.type))
+        return res !== undefined;
     }
 }

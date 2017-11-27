@@ -5,11 +5,12 @@
         <span slot="title">Layers</span>
     </template>
 
-    <el-menu-item-group>
+    <el-menu-item-group v-if="getLayers().length > 0">
 
         <span slot="title">Select layers below ...</span>
 
-        <div v-if="getLayers().length > 0">
+        <div class="select-area">
+
             <select v-model="selectedLayers" multiple>
                 <option v-for="(layer, index) in getLayers()"
                         :key="index"
@@ -20,15 +21,18 @@
 
             <!-- Action buttons -->
 
-            <el-button type="warning" @click="deleteSelection">
-                <span class="el-icon-close"></span>
+            <el-button @click="deleteSelection" type="warning" icon="el-icon-close">
             </el-button>
 
         </div>
 
-        <div v-else>
-            <i>No layers yet</i>
-        </div>
+    </el-menu-item-group>
+
+    <!-- No layers found in project -->
+
+    <el-menu-item-group v-else>
+
+        <span slot="title"><i>No layers yet</i></span>
 
     </el-menu-item-group>
 
