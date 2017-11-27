@@ -8,10 +8,15 @@ import './style.scss';
 })
 export default class LayerSelectorComponent extends Vue {
 
-    public layers: AbstractMapLayer[] = [];
+    public selectedLayers: string[] = [];
 
     public getLayers(): AbstractMapLayer[] {
         return this.$store.getters.projectLayers;
+    }
+
+    public deleteSelection() {
+        console.log(arguments);
+        console.log(this.selectedLayers);
     }
 
 }

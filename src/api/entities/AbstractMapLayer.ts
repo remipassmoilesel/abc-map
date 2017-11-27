@@ -1,8 +1,12 @@
+let layerCount = 0;
+
 export abstract class AbstractMapLayer {
 
+    private _id: string;
     private _name: string;
 
     constructor(name: string) {
+        this._id = `layer-${layerCount++}`;
         this._name = name;
     }
 
@@ -14,4 +18,11 @@ export abstract class AbstractMapLayer {
         this._name = value;
     }
 
+    get id(): string {
+        return this._id;
+    }
+
+    set id(value: string) {
+        this._id = value;
+    }
 }

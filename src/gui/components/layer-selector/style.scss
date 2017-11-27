@@ -1,3 +1,13 @@
-.layer-selector-component{
+.layer-selector-component {
+
+  .el-menu-item-group div {
+    margin: 1em;
+    margin-top: 0.5em;
+    padding: 1em;
+  }
+
+  select {
+    width: 100%;
+  }
 
 }

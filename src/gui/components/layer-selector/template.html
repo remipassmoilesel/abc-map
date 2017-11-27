@@ -1,21 +1,34 @@
 <el-submenu index="2" class="layer-selector-component">
 
     <template slot="title">
-        <i class="mdi mdi-format-list-bulleted"></i>
+        <i class="el-icon-tickets"></i>
         <span slot="title">Layers</span>
     </template>
 
     <el-menu-item-group>
-        <el-menu-item v-for="(layer, index) in getLayers()"
-                      :index="'projectLayer' + index"
-                      @click="handleSelection(index)"
-                      :key="'projectLayer' + index">
-            {{ layer.name }}
-        </el-menu-item>
 
-        <el-menu-item v-if="!getLayers() || getLayers().length < 1" index="1">
+        <span slot="title">Select layers below ...</span>
+
+        <div v-if="getLayers().length > 0">
+            <select v-model="selectedLayers" multiple>
+                <option v-for="(layer, index) in getLayers()"
+                        :key="index"
+                        :value="layer.id">
+                    {{ layer.name }}
+                </option>
+            </select>
+
+            <!-- Action buttons -->
+
+            <el-button type="warning" @click="deleteSelection">
+                <span class="el-icon-close"></span>
+            </el-button>
+
+        </div>
+
+        <div v-else>
             <i>No layers yet</i>
-        </el-menu-item>
+        </div>
 
     </el-menu-item-group>
 
