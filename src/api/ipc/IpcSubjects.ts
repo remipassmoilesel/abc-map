@@ -5,6 +5,7 @@ export class Subj {
     public static PROJECT_CREATE_NEW = new Subj(`${Subj.PROJECT_ROOT}/create-new`);
     public static PROJECT_GET_CURRENT = new Subj(`${Subj.PROJECT_ROOT}/get-current`);
     public static PROJECT_ADD_LAYER = new Subj(`${Subj.PROJECT_ROOT}/add-layer`);
+    public static PROJECT_DELETE_LAYERS = new Subj(`${Subj.PROJECT_ROOT}/delete-layers`);
 
     public static MAP_ROOT = "/map";
     public static MAP_EVENTS_BUS = new Subj(`${Subj.MAP_ROOT}/events-bus`);

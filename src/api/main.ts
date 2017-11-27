@@ -26,6 +26,10 @@ export function initApplication(ipc: Ipc) {
         return projectService.addLayer(event.data);
     });
 
+    ipc.listen(Subj.PROJECT_DELETE_LAYERS, (event: IpcEvent) => {
+        return projectService.deleteLayers(event.data);
+    });
+
     ipc.listen(Subj.MAP_GET_WMS_DEFAULT_LAYERS, () => {
         return mapService.getDefaultWmsLayers();
     });

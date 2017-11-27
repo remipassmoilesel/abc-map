@@ -1,3 +1,4 @@
+import * as _ from "lodash";
 import {Project} from "../entities/Project";
 import {Logger} from "../dev/Logger";
 import {Utils} from "../utils/Utils";
@@ -9,7 +10,6 @@ import {AbstractService} from "./AbstractService";
 import {AbstractMapLayer} from "../entities/AbstractMapLayer";
 
 const logger = Logger.getLogger('ProjectService');
-
 
 export class ProjectService extends AbstractService {
 
@@ -35,6 +35,10 @@ export class ProjectService extends AbstractService {
     public addLayer(layer: AbstractMapLayer) {
         logger.info(`Adding layer: ${JSON.stringify(layer)}`);
 
+        if(!layer.id){
+            layer.generateId();
+        }
+
         this.currentProject.layers.push(layer);
 
         this.sendProjectEvent({
@@ -47,8 +51,23 @@ export class ProjectService extends AbstractService {
         return this.currentProject;
     }
 
+    public deleteLayers(layerIds: string[]) {
+        logger.info(`Deleting layers: ${layerIds}`);
+
+        _.remove(this.currentProject.layers, (lay: AbstractMapLayer) => {
+            return layerIds.indexOf(lay.id) !== -1;
+        });
+
+        this.sendProjectEvent({
+            type: Evt.PROJECT_UPDATED,
+            data: this.currentProject
+        });
+
+    }
+
     private sendProjectEvent(data: IpcEvent) {
         return this.ipc.send(Subj.PROJECT_EVENTS_BUS, data);
     }
+
 
 }
