@@ -12,7 +12,8 @@ export class MapHandlers extends AbstractHandlersGroup {
             return services.map.getDefaultWmsLayers();
         });
 
-        ipc.listen(IpcSubjects.MAP_IMPORT_KML_AS_LAYER, (event: IpcEvent) => {
+        ipc.listen(IpcSubjects.MAP_IMPORT_FILES, (event: IpcEvent) => {
+            // TODO: guess format from extension
             return services.map.kmlFileToGeoJsonLayer(event.data).then((layer: AbstractMapLayer) => {
                 services.project.addLayer(layer);
             });

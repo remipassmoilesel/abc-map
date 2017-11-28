@@ -32,11 +32,15 @@ export default class ImportDataSelectorComponent extends Vue {
         }
 
         this.files = validFiles;
-        
+
     }
 
-    public importFiles(files, fileList) {
-        console.log(this.fileList);
+    public importFiles() {
+        if(this.fileList.length < 1){
+            Toaster.warning('You must select valid files before');
+        } else {
+            this.clients.map.importFiles(this.files);
+        }
     }
 
 }

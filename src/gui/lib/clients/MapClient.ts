@@ -23,4 +23,7 @@ export class MapClient {
         return this.ipc.send(IpcSubjects.MAP_GET_WMS_DEFAULT_LAYERS).catch(handleRejection);
     }
 
+    public importFiles(files: File[]) {
+        return this.ipc.send(IpcSubjects.MAP_IMPORT_FILES, {data: files}).catch(handleRejection);
+    }
 }
