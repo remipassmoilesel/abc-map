@@ -4,3 +4,8 @@ dist/
 resources/out
 resources/manifest.json
 packaged/
+mongodb.tar.gz
+mongodb
+mongodb-data
+logs/*
+!logs/.gitkeep
