@@ -12,6 +12,11 @@ export class IpcSubjects {
     public static MAP_GET_WMS_DEFAULT_LAYERS = new IpcSubjects(`${IpcSubjects.MAP_ROOT}/get-default-layers`);
     public static MAP_IMPORT_KML_AS_LAYER = new IpcSubjects(`${IpcSubjects.MAP_ROOT}/kml/import-as-layer`);
 
+    public static DB_ROOT = "/map";
+    public static DB_START = new IpcSubjects(`${IpcSubjects.DB_ROOT}/start`);
+    public static DB_STOP = new IpcSubjects(`${IpcSubjects.DB_ROOT}/stop`);
+    public static DB_RESTART = new IpcSubjects(`${IpcSubjects.DB_ROOT}/restart`);
+
     public id: string;
 
     constructor(id: string) {

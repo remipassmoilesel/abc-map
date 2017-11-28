@@ -2,9 +2,11 @@ import {MapService} from "./services/MapService";
 import {Ipc} from "./ipc/Ipc";
 import {Logger} from "./dev/Logger";
 import {ProjectService} from "./services/ProjectService";
-import {IpcSubjects} from "./ipc/IpcSubjects";
-import {IpcEvent} from "./ipc/IpcEvent";
-import {AbstractMapLayer} from "./entities/layers/AbstractMapLayer";
+import {DatabaseService} from "./services/DatabaseService";
+import {IServicesMap} from "./handlers/AbstractHandlersGroup";
+import {ProjectHandlers} from "./handlers/ProjectHandlers";
+import {MapHandlers} from "./handlers/MapHandlers";
+import {DatabaseHandlers} from "./handlers/DatabaseHandlers";
 
 const logger = Logger.getLogger('api/main.ts');
 
@@ -14,32 +16,19 @@ export function initApplication(ipc: Ipc) {
 
     const projectService = new ProjectService(ipc);
     const mapService = new MapService(ipc);
+    const databaseService = new DatabaseService(ipc);
 
-    ipc.listen(IpcSubjects.PROJECT_CREATE_NEW, () => {
-        return projectService.newProject();
-    });
+    databaseService.startDatabase();
 
-    ipc.listen(IpcSubjects.PROJECT_GET_CURRENT, () => {
-        return projectService.getCurrentProject();
-    });
+    const services: IServicesMap = {
+        project: projectService,
+        map: mapService,
+        db: databaseService,
+    };
 
-    ipc.listen(IpcSubjects.PROJECT_ADD_LAYER, (event: IpcEvent) => {
-        return projectService.addLayer(event.data);
-    });
-
-    ipc.listen(IpcSubjects.PROJECT_DELETE_LAYERS, (event: IpcEvent) => {
-        return projectService.deleteLayers(event.data);
-    });
-
-    ipc.listen(IpcSubjects.MAP_GET_WMS_DEFAULT_LAYERS, () => {
-        return mapService.getDefaultWmsLayers();
-    });
-
-    ipc.listen(IpcSubjects.MAP_IMPORT_KML_AS_LAYER, (event: IpcEvent) => {
-        return mapService.kmlFileToGeoJsonLayer(event.data).then((layer: AbstractMapLayer) => {
-            projectService.addLayer(layer);
-        });
-    });
+    new ProjectHandlers().init(ipc, services);
+    new MapHandlers().init(ipc, services);
+    new DatabaseHandlers().init(ipc, services);
 
     projectService.newProject();
 }
