@@ -1,7 +1,11 @@
 {
   "name": "abc-map-2",
-  "version": "1.0.0",
+  "version": "2.0.0-dev",
   "description": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/remipassmoilesel/abc-map-2"
+  },
   "main": "./dist/electron-main.js",
   "scripts": {
     "clean": "gulp clean",
@@ -15,8 +19,8 @@
     "test-gui-watch": "gulp test-gui-watch",
     "package": "npm run build && electron-packager --out packaged --platform all ."
   },
-  "author": "",
-  "license": "ISC",
+  "author": "remipassmoilesel",
+  "license": "GPL-2.0",
   "dependencies": {
     "animate.css": "^3.5.2",
     "bluebird": "^3.5.1",
@@ -28,6 +32,7 @@
     "element-ui": "^2.0.5",
     "fs-extra-promise": "^1.0.1",
     "leaflet": "^1.2.0",
+    "mongodb": "^2.2.33",
     "resurrect-js": "^1.0.1",
     "spectron": "^3.7.2",
     "togeojson": "^0.16.0",
