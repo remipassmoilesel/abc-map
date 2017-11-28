@@ -4,5 +4,27 @@
     padding: 40px;
   }
 
+  .label-file {
+    cursor: pointer;
+    color: #60615b;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 1.5em;
+  }
+
+  .input-file {
+    display: none;
+  }
+
+  ul {
+    padding-left: 5px;
+
+    li{
+      list-style: circle !important;
+      margin-bottom: 0.4em;
+    }
+
+    margin-bottom: 1em;
+  }
 
 }

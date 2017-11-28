@@ -6,10 +6,12 @@ export type ToastType = 'success' | 'warning' | 'info' | 'error'
 export class Toaster {
 
     public static toast(message: string, type: ToastType) {
-        vueInstance.$message({
+        vueInstance.$notify(({
+            title: 'Notification',
             message,
-            type
-        });
+            type,
+            position: 'bottom-right',
+        } as any)); // TODO: Merge  request
     }
 
     public static info(message: string) {

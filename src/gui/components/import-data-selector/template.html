@@ -7,23 +7,22 @@
 
     <el-menu-item-group>
 
-        <span slot="title">Select files to upload ...</span>
-
         <div class="upload-area">
 
-            <el-upload class="upload-demo"
-                       :on-remove="handleRemove"
-                       multiple
-                       :limit="3"
-                       :on-exceed="handleExceed"
-                       :file-list="fileList">
-                <el-button size="small" type="primary">Click to upload</el-button>
-                <div slot="tip" class="el-upload__tip">jpg/png files with a size less than 500kb</div>
-            </el-upload>
+            <!-- File selector -->
+
+            <label for="file" class="label-file">Select files...</label>
+            <input @change="selectFiles" id="file" class="input-file" type="file" multiple/>
+
+            <!-- File list -->
+            <ul>
+                <li v-for="file in files">{{ file.name }}</li>
+            </ul>
+
 
             <!-- Action buttons -->
 
-            <el-button @click="uploadSelection" type="warning" icon="el-icon-close"></el-button>
+            <el-button @click="importFiles" class="float-right" type="primary">Import files</el-button>
 
         </div>
 
