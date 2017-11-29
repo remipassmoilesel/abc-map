@@ -23,6 +23,7 @@ export class DatabaseService {
 
     constructor(ipc: Ipc) {
         this.ipc = ipc;
+        this.setupSigintHandler();
     }
 
     public startDatabase() {
@@ -67,4 +68,15 @@ export class DatabaseService {
         });
     }
 
+    private setupSigintHandler() {
+        process.on('SIGINT', function () {
+            console.log("Caught interrupt signal");
+
+            this.stopDatabase(); // TODO: return a promise then exit
+
+            setTimeout(() => {
+                process.exit();
+            }, 2000);
+        });
+    }
 }
