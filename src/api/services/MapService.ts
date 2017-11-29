@@ -1,20 +1,23 @@
+import * as _ from 'lodash';
 import {Logger} from '../dev/Logger';
 import {DefaultTileLayers} from '../entities/DefaultTileLayers';
 import {TileLayer} from '../entities/layers/TileLayer';
 import {AbstractService} from "./AbstractService";
 import {Ipc} from "../ipc/Ipc";
-import {ProjectService} from "./ProjectService";
 import {AbstractMapLayer} from "../entities/layers/AbstractMapLayer";
 import {IpcEvent} from "../ipc/IpcEvent";
 import {IpcSubjects} from "../ipc/IpcSubjects";
-import {EventType} from "../ipc/IpcEventTypes";
 import {KmlDataImporter} from "../import/KmlDataImporter";
+import {GpxDataImporter} from "../import/GpxDataImporter";
+import * as Promise from 'bluebird';
+import {DataImporterFinder} from "../import/AbstractDataImporter";
 
 const logger = Logger.getLogger('MapService');
 
 export class MapService extends AbstractService {
 
     private defaultLayers: DefaultTileLayers;
+    private dataImporterFinder: DataImporterFinder;
 
     constructor(ipc: Ipc) {
         super(ipc);
@@ -22,17 +25,30 @@ export class MapService extends AbstractService {
         logger.info('Init MapService');
 
         this.defaultLayers = new DefaultTileLayers();
+        this.dataImporterFinder = new DataImporterFinder();
     }
 
     public getDefaultWmsLayers(): TileLayer[] {
         return this.defaultLayers.layers;
     }
 
-    public kmlFileToGeoJsonLayer(pathToSourceFile: string): Promise<AbstractMapLayer>{
-        return new KmlDataImporter().getAsLayer(pathToSourceFile);
+    public getLayersFromFiles(files: File[]) {
+        const promises: any = [];
+        _.forEach(files, (file) => {
+            const importer = this.dataImporterFinder.getInstanceForFile(file);
+            if (!importer) {
+                throw new Error(`Unsupported file: ${JSON.stringify(file)}`)
+            }
+
+            const p = importer.getAsLayer(file.path);
+            promises.push(p);
+        });
+        return Promise.all(promises);
     }
 
     private sendMapEvent(data: IpcEvent) {
         return this.ipc.send(IpcSubjects.MAP_EVENTS_BUS, data);
     }
+
+
 }

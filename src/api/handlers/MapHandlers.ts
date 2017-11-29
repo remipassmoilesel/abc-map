@@ -14,9 +14,8 @@ export class MapHandlers extends AbstractHandlersGroup {
 
         ipc.listen(IpcSubjects.MAP_IMPORT_FILES, (event: IpcEvent) => {
             // TODO: guess format from extension
-            return services.map.kmlFileToGeoJsonLayer(event.data).then((layer: AbstractMapLayer) => {
-                services.project.addLayer(layer);
-            });
+            services.map.getLayersFromFiles(event.data);
+
         });
     }
 

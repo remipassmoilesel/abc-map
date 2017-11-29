@@ -6,7 +6,7 @@ import {AbstractMapLayer} from "../entities/layers/AbstractMapLayer";
 import {GeoJsonLayer} from "../entities/layers/GeoJsonLayer";
 import * as Promise from 'bluebird';
 
-export class KmlDataImporter extends AbstractDataImporter {
+export class GpxDataImporter extends AbstractDataImporter {
 
     public getSupportedExtensions(): string[] {
         return ['.gpx'];
@@ -15,9 +15,9 @@ export class KmlDataImporter extends AbstractDataImporter {
     public getAsLayer(pathToSourceFile: string): Promise<AbstractMapLayer> {
 
         return this.getSourceFileAsDom(pathToSourceFile)
-            .then((kmlDom: Document) => {
+            .then((gpxDom: Document) => {
 
-                const geojson = this.convertToGeoJson(kmlDom);
+                const geojson = this.convertToGeoJson(gpxDom);
                 return new GeoJsonLayer(pathToSourceFile, geojson);
 
             });
@@ -30,7 +30,7 @@ export class KmlDataImporter extends AbstractDataImporter {
         })
     }
 
-    private convertToGeoJson(kmlDom: Document): any {
-        return tgj.kml(kmlDom, {styles: true});
+    private convertToGeoJson(gpxDom: Document): any {
+        return tgj.gpx(gpxDom, {styles: true});
     }
 }
