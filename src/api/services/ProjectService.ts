@@ -35,7 +35,7 @@ export class ProjectService extends AbstractService {
     public addLayer(layer: AbstractMapLayer) {
         logger.info(`Adding layer: ${JSON.stringify(layer)}`);
 
-        if(!layer.id){
+        if (!layer.id) {
             layer.generateId();
         }
 
@@ -44,6 +44,12 @@ export class ProjectService extends AbstractService {
         this.sendProjectEvent({
             type: EventType.PROJECT_NEW_LAYER_ADDED,
             data: this.currentProject
+        });
+    }
+
+    public addLayers(layers: any[]) {
+        _.forEach(layers, (lay) => { // TODO: avoid sending too much events ?
+            this.addLayer(lay);
         });
     }
 
@@ -68,6 +74,5 @@ export class ProjectService extends AbstractService {
     private sendProjectEvent(data: IpcEvent) {
         return this.ipc.send(IpcSubjects.PROJECT_EVENTS_BUS, data);
     }
-
 
 }

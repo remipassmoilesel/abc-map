@@ -4,13 +4,10 @@ import {DefaultTileLayers} from '../entities/DefaultTileLayers';
 import {TileLayer} from '../entities/layers/TileLayer';
 import {AbstractService} from "./AbstractService";
 import {Ipc} from "../ipc/Ipc";
-import {AbstractMapLayer} from "../entities/layers/AbstractMapLayer";
 import {IpcEvent} from "../ipc/IpcEvent";
 import {IpcSubjects} from "../ipc/IpcSubjects";
-import {KmlDataImporter} from "../import/KmlDataImporter";
-import {GpxDataImporter} from "../import/GpxDataImporter";
 import * as Promise from 'bluebird';
-import {DataImporterFinder} from "../import/AbstractDataImporter";
+import {DataImporterFinder} from "../import/DataImporterFinder";
 
 const logger = Logger.getLogger('MapService');
 
@@ -32,15 +29,15 @@ export class MapService extends AbstractService {
         return this.defaultLayers.layers;
     }
 
-    public getLayersFromFiles(files: File[]) {
+    public importFilesAsLayers(files: string[]) {
         const promises: any = [];
-        _.forEach(files, (file) => {
+        _.forEach(files, (file: string) => {
             const importer = this.dataImporterFinder.getInstanceForFile(file);
             if (!importer) {
                 throw new Error(`Unsupported file: ${JSON.stringify(file)}`)
             }
 
-            const p = importer.getAsLayer(file.path);
+            const p = importer.getAsLayer(file);
             promises.push(p);
         });
         return Promise.all(promises);

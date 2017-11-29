@@ -13,9 +13,9 @@ export class MapHandlers extends AbstractHandlersGroup {
         });
 
         ipc.listen(IpcSubjects.MAP_IMPORT_FILES, (event: IpcEvent) => {
-            // TODO: guess format from extension
-            services.map.getLayersFromFiles(event.data);
-
+            services.map.importFilesAsLayers(event.data).then((layers)=>{
+               services.project.addLayers(layers);
+            });
         });
     }
 

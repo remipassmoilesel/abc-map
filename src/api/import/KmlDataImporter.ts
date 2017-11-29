@@ -9,7 +9,7 @@ import * as Promise from 'bluebird';
 export class KmlDataImporter extends AbstractDataImporter {
 
     public getSupportedExtensions(): string[] {
-        return ['.gpx'];
+        return ['.kml'];
     }
 
     public getAsLayer(pathToSourceFile: string): Promise<AbstractMapLayer> {

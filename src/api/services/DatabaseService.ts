@@ -69,7 +69,7 @@ export class DatabaseService {
     }
 
     private setupSigintHandler() {
-        process.on('SIGINT', function () {
+        process.on('SIGINT', () => {
             console.log("Caught interrupt signal");
 
             this.stopDatabase(); // TODO: return a promise then exit
