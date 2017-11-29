@@ -6,7 +6,7 @@ import * as path from "path";
 import {Toaster} from "../../lib/Toaster";
 import './style.scss';
 
-const authorizedExtensions = ['json', 'kml'];
+const authorizedExtensions = ['.gpx', '.kml'];
 
 @Component({
     template: require('./template.html'),
@@ -36,7 +36,7 @@ export default class ImportDataSelectorComponent extends Vue {
     }
 
     public importFiles() {
-        if(this.fileList.length < 1){
+        if (this.fileList.length < 1) {
             Toaster.warning('You must select valid files before');
         } else {
             this.clients.map.importFiles(this.files);
