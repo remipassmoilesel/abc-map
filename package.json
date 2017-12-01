@@ -33,6 +33,7 @@
     "element-ui": "^2.0.5",
     "fs-extra-promise": "^1.0.1",
     "leaflet": "^1.2.0",
+    "leaflet-draw": "^0.4.13",
     "mongodb": "^2.2.33",
     "resurrect-js": "^1.0.1",
     "spectron": "^3.7.2",
