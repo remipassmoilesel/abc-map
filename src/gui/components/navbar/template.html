@@ -1,24 +1,42 @@
-<el-container class="main-navbar">
+<div class="main-navbar">
 
-    <el-dropdown
-            v-for="(menu, index) in menus"
-            :key="'menu-' + index"
-            :hide-on-click="true"
-            @command="handleMenuClick">
+    <el-row>
 
-        <span class="el-dropdown-link">
-            {{ menu.title }} <i class="el-icon-arrow-down el-icon--right"></i>
-        </span>
+        <!-- Top navigation menu -->
 
-        <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item
-                    v-for="(item, index) in menu.items"
-                    :key="'item-' + index"
-                    :command="item.id">
-                {{ item.label }}
-            </el-dropdown-item>
-        </el-dropdown-menu>
+        <el-col :span="18" class="navmenu-container">
 
-    </el-dropdown>
+            <el-dropdown
+                    v-for="(menu, index) in menus"
+                    :key="'menu-' + index"
+                    :hide-on-click="true"
+                    @command="handleMenuClick">
 
-</el-container>
+                <span class="el-dropdown-link">
+                    {{ menu.title }} <i class="el-icon-arrow-down el-icon--right"></i>
+                </span>
+
+                <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item
+                            v-for="(item, index) in menu.items"
+                            :key="'item-' + index"
+                            :command="item.id">
+                        {{ item.label }}
+                    </el-dropdown-item>
+                </el-dropdown-menu>
+
+            </el-dropdown>
+
+        </el-col>
+
+        <!-- Location search bar -->
+
+        <el-col :span="6">
+
+            <geo-search class="location-search"></geo-search>
+
+        </el-col>
+
+    </el-row>
+
+</div>

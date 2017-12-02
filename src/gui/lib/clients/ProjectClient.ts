@@ -1,12 +1,12 @@
 import {Ipc, IpcHandler} from '../../../api/ipc/Ipc';
-import {EntitiesUtils} from "../../../api/utils/EntitiesUtils";
+import {EntitySerializer} from "../../../api/entities/EntitySerializer";
 import {Project} from "../../../api/entities/Project";
 import {IpcSubject} from "../../../api/ipc/IpcSubject";
 import {handleRejection} from "./clientUtils";
 import {AbstractMapLayer} from "../../../api/entities/layers/AbstractMapLayer";
 import * as Promise from 'bluebird';
 
-const eu = new EntitiesUtils();
+const eu = new EntitySerializer();
 
 export class ProjectClient {
 

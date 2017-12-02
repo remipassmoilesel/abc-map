@@ -1,10 +1,10 @@
 import promiseIpc from 'electron-promise-ipc';
 import {IpcSubject} from "./IpcSubject";
 import {IpcEvent} from "./IpcEvent";
-import {EntitiesUtils} from "../utils/EntitiesUtils";
+import {EntitySerializer} from "../entities/EntitySerializer";
 import * as Promise from 'bluebird';
 
-const eu = new EntitiesUtils();
+const eu = new EntitySerializer();
 
 export declare type IpcHandler = (event: IpcEvent) => any;
 

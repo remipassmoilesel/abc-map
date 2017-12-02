@@ -1,11 +1,12 @@
 import {Ipc, IpcHandler} from '../../../api/ipc/Ipc';
 import {TileLayer} from '../../../api/entities/layers/TileLayer';
-import {EntitiesUtils} from '../../../api/utils/EntitiesUtils';
+import {EntitySerializer} from '../../../api/entities/EntitySerializer';
 import {IpcSubject} from "../../../api/ipc/IpcSubject";
 import {handleRejection} from "./clientUtils";
 import * as Promise from 'bluebird';
+import {GeocodingResult} from "../../../api/entities/GeocodingResult";
 
-const eu = new EntitiesUtils();
+const eu = new EntitySerializer();
 
 export class MapClient {
 
@@ -25,5 +26,9 @@ export class MapClient {
 
     public importFiles(files: File[]) {
         return this.ipc.send(IpcSubject.MAP_IMPORT_FILES, {data: files}).catch(handleRejection);
+    }
+
+    public geocode(query: string): Promise<GeocodingResult[]> {
+        return this.ipc.send(IpcSubject.MAP_GEOCODE, {data: query}).catch(handleRejection);
     }
 }

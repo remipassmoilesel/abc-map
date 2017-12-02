@@ -1,0 +1,9 @@
+<el-container class="geo-search">
+    <el-autocomplete
+            class="inline-input"
+            v-model="location"
+            :fetch-suggestions="querySearch"
+            placeholder="Search a location"
+            :trigger-on-focus="false"
+            @select="handleSelect"></el-autocomplete>
+</el-container>

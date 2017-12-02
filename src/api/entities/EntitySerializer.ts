@@ -1,9 +1,10 @@
 import * as Resurrect from 'resurrect-js';
-import {Project} from "../entities/Project";
-import {TileLayer} from "../entities/layers/TileLayer";
+import {Project} from "./Project";
+import {TileLayer} from "./layers/TileLayer";
 import {IpcEvent, IpcEventImpl} from "../ipc/IpcEvent";
 import {EventType} from "../ipc/IpcEventTypes";
-import {GeoJsonLayer} from "../entities/layers/GeoJsonLayer";
+import {GeoJsonLayer} from "./layers/GeoJsonLayer";
+import {GeocodingResult} from "./GeocodingResult";
 
 // List of constructors used to deserialize objects
 const constructors: any = {};
@@ -12,8 +13,9 @@ constructors.Project = Project;
 constructors.IpcEventImpl = IpcEventImpl;
 constructors.EventType = EventType;
 constructors.GeoJsonLayer = GeoJsonLayer;
+constructors.GeocodingResult = GeocodingResult;
 
-export class EntitiesUtils {
+export class EntitySerializer {
 
     private necromancer: any;
 

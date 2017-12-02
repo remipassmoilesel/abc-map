@@ -1,21 +1,26 @@
 <el-container class="main-container">
 
+    <!-- Not visible, listen for events and update the Vuex store -->
     <store-updater></store-updater>
 
+    <!-- Left menu of application -->
     <el-aside>
         <left-menu></left-menu>
     </el-aside>
 
     <el-container>
 
+        <!-- Header with navigation menu -->
         <el-header style="text-align: right; font-size: 12px">
             <navbar></navbar>
         </el-header>
 
+        <!-- Main map -->
         <el-main>
             <geo-map></geo-map>
         </el-main>
 
+        <!-- Status bar -->
         <el-footer>
             <status-bar></status-bar>
         </el-footer>

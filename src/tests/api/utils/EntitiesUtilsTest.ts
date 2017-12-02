@@ -2,7 +2,7 @@ import * as chai from 'chai';
 import * as _ from 'lodash';
 import 'mocha';
 import {TileLayer} from '../../../api/entities/layers/TileLayer';
-import {EntitiesUtils} from '../../../api/utils/EntitiesUtils';
+import {EntitySerializer} from '../../../api/entities/EntitySerializer';
 import {Project} from "../../../api/entities/Project";
 import {IpcEventImpl} from "../../../api/ipc/IpcEvent";
 import {EventType} from "../../../api/ipc/IpcEventTypes";
@@ -11,7 +11,7 @@ const assert = chai.assert;
 
 describe('EntitiesUtils', () => {
 
-    const eu = new EntitiesUtils();
+    const eu = new EntitySerializer();
 
     // these objects will be serialized then deserialized
     const toTest: any[] = [];
