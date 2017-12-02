@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Component from "vue-class-component";
 import * as L from 'leaflet';
+import {FeatureGroup} from 'leaflet';
 import * as _ from 'lodash';
 import {MainStore} from "../../lib/store/store";
 import {AbstractMapLayer} from "../../../api/entities/layers/AbstractMapLayer";
@@ -8,8 +9,7 @@ import {LeafletLayerFactory} from "../../lib/LeafletLayerFactory";
 // Import style
 import './style.scss'
 // Import plugins
-import 'leaflet-draw/dist/leaflet.draw.js';
-import {FeatureGroup} from "leaflet";
+import 'leaflet-draw';
 
 let mapIdCounter = 0;
 const layerFactory = new LeafletLayerFactory();
@@ -24,19 +24,19 @@ export default class GeoMapComponent extends Vue {
     public mapId = `map-${mapIdCounter++}`;
     public height: number = 500;
     private map: L.Map;
-    private editableLayers: FeatureGroup<any>;
+    private editableLayersGroup: FeatureGroup<any>;
 
     public mounted() {
         this.height = this.getMaximumHeight();
         this.map = L.map(this.mapId).setView([45.18, 5.72], 13);
-        this.setupDraw();
+        this.setupDrawPlugin();
     }
 
     public updated() {
 
         const layers = this.getLayers();
 
-        // TODO improve
+        // TODO do not remove layers already present
         this.map.eachLayer((layer) => {
             this.map.removeLayer(layer);
         });
@@ -45,22 +45,18 @@ export default class GeoMapComponent extends Vue {
             this.map.addLayer(layerFactory.getLeafletLayer(layer));
         });
 
+        this.map.addLayer(this.editableLayersGroup);
+
     }
 
-    private setupDraw(){
-        this.editableLayers = new L.FeatureGroup();
-        this.map.addLayer(this.editableLayers);
+    private setupDrawPlugin() {
 
-        // var MyCustomMarker = L.Icon.extend({
-        //     options: {
-        //         shadowUrl: null,
-        //         iconAnchor: new L.Point(12, 12),
-        //         iconSize: new L.Point(24, 24),
-        //         iconUrl: 'link/to/image.png'
-        //     }
-        // });
+        // create an editable group to store shapes
+        this.editableLayersGroup = new L.FeatureGroup();
+        this.map.addLayer(this.editableLayersGroup);
 
-        var options = {
+        // See https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/leaflet-draw/leaflet-draw-tests.ts
+        const options = {
             position: 'topright',
             draw: {
                 polyline: {
@@ -79,36 +75,37 @@ export default class GeoMapComponent extends Vue {
                         color: '#bada55'
                     }
                 },
-                circle: true, // Turns off this drawing tool
-                rectangle: {
-                    shapeOptions: {
-                        clickable: false
-                    }
-                },
-                // marker: {
-                //     icon: new MyCustomMarker()
-                // }
+                circle: {},
+                rectangle: {},
+                marker: {},
             },
             edit: {
-                featureGroup: this.editableLayers, //REQUIRED!!
-                remove: false
+                featureGroup: this.editableLayersGroup, //REQUIRED!!
+                remove: true
             }
         };
 
-        const drawControl = new (L.Control as any).Draw(options);
+        // add toolbar on tob of map
+        const drawControl = new L.Control.Draw(options);
         this.map.addControl(drawControl);
 
-       // this. map.on(L.Draw.Event.CREATED, function (e) {
-       //      var type = e.layerType,
-       //          layer = e.layer;
-       //
-       //      if (type === 'marker') {
-       //          layer.bindPopup('A popup!');
-       //      }
-       //
-       //      this.editableLayers.addLayer(layer);
-       //  });
+        // listen for creation events
+        this.map.on(L.Draw.Event.CREATED, this.onDrawCreated.bind(this));
 
+    }
+
+    private onDrawCreated(e: L.DrawEvents.Created) {
+        const type = e.layerType;
+        const layer = e.layer;
+
+        if (type === 'marker') {
+            // Do marker specific actions
+        }
+
+        // add created shapes to group of editable layers
+        this.editableLayersGroup.addLayer(layer);
+
+        // console.log(e);
     }
 
     private getLayers(): AbstractMapLayer[] {

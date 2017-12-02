@@ -18,7 +18,8 @@
     "test-gui": "gulp build-gui && gulp test-gui",
     "test-gui-watch": "gulp test-gui-watch",
     "package": "npm run build && electron-packager --out packaged --platform all .",
-    "start-db": "./mongodb/bin/mongod -f config/mongodb-config.yaml"
+    "start-db": "./mongodb/bin/mongod -f config/mongodb-config.yaml",
+    "clean-db": "rm -rf ./mongodb-data && mkdir ./mongodb-data"
   },
   "author": "remipassmoilesel",
   "license": "GPL-2.0",
