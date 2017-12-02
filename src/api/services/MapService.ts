@@ -5,7 +5,7 @@ import {TileLayer} from '../entities/layers/TileLayer';
 import {AbstractService} from "./AbstractService";
 import {Ipc} from "../ipc/Ipc";
 import {IpcEvent} from "../ipc/IpcEvent";
-import {IpcSubjects} from "../ipc/IpcSubjects";
+import {IpcSubject} from "../ipc/IpcSubject";
 import * as Promise from 'bluebird';
 import {DataImporterFinder} from "../import/DataImporterFinder";
 
@@ -44,7 +44,7 @@ export class MapService extends AbstractService {
     }
 
     private sendMapEvent(data: IpcEvent) {
-        return this.ipc.send(IpcSubjects.MAP_EVENTS_BUS, data);
+        return this.ipc.send(IpcSubject.MAP_EVENTS_BUS, data);
     }
 
 

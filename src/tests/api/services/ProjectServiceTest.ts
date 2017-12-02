@@ -3,7 +3,7 @@ import 'mocha';
 import {ProjectService} from "../../../api/services/ProjectService";
 import {TestUtils} from "../TestUtils";
 import {EventType} from "../../../api/ipc/IpcEventTypes";
-import {IpcSubjects} from "../../../api/ipc/IpcSubjects";
+import {IpcSubject} from "../../../api/ipc/IpcSubject";
 import {IpcEvent} from "../../../api/ipc/IpcEvent";
 
 const assert = chai.assert;
@@ -20,7 +20,7 @@ describe('ProjectService', () => {
         });
 
         assert.lengthOf(sendStub.getCalls(), 1);
-        assert.equal(sendStub.getCalls()[0].args[0], IpcSubjects.PROJECT_EVENTS_BUS);
+        assert.equal(sendStub.getCalls()[0].args[0], IpcSubject.PROJECT_EVENTS_BUS);
         assert.equal((sendStub.getCalls()[0].args[1] as IpcEvent).type, EventType.PROJECT_NEW_CREATED);
     });
 

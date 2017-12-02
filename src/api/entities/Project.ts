@@ -1,5 +1,9 @@
 import {AbstractMapLayer} from "./layers/AbstractMapLayer";
 
+export interface IProjectCreationOptions {
+    name?: string;
+}
+
 export class Project {
 
     private _name: string;

@@ -1,9 +1,9 @@
 import * as _ from "lodash";
-import {Project} from "../entities/Project";
+import {IProjectCreationOptions, Project} from "../entities/Project";
 import {Logger} from "../dev/Logger";
 import {Utils} from "../utils/Utils";
 import {Ipc} from "../ipc/Ipc";
-import {IpcSubjects} from "../ipc/IpcSubjects";
+import {IpcSubject} from "../ipc/IpcSubject";
 import {EventType} from "../ipc/IpcEventTypes";
 import {IpcEvent} from "../ipc/IpcEvent";
 import {AbstractService} from "./AbstractService";
@@ -20,7 +20,7 @@ export class ProjectService extends AbstractService {
         logger.info('Initialize project service');
     }
 
-    public newProject(parameters?: any) {
+    public newProject(parameters?: IProjectCreationOptions): Project {
         logger.info(`Create new project`, parameters);
 
         const params = Utils.withDefaultValues(parameters, {name: 'New project'});
@@ -30,6 +30,8 @@ export class ProjectService extends AbstractService {
             type: EventType.PROJECT_NEW_CREATED,
             data: this.currentProject,
         });
+
+        return this.currentProject;
     }
 
     public addLayer(layer: AbstractMapLayer) {
@@ -72,7 +74,7 @@ export class ProjectService extends AbstractService {
     }
 
     private sendProjectEvent(data: IpcEvent) {
-        return this.ipc.send(IpcSubjects.PROJECT_EVENTS_BUS, data);
+        return this.ipc.send(IpcSubject.PROJECT_EVENTS_BUS, data);
     }
 
 }

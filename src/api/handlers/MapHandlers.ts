@@ -1,21 +1,24 @@
 import {Ipc} from "../ipc/Ipc";
-import {IpcSubjects} from "../ipc/IpcSubjects";
+import {IpcSubject} from "../ipc/IpcSubject";
 import {IpcEvent} from "../ipc/IpcEvent";
-import {AbstractMapLayer} from "../entities/layers/AbstractMapLayer";
 import {AbstractHandlersGroup, IServicesMap} from "./AbstractHandlersGroup";
 
 export class MapHandlers extends AbstractHandlersGroup {
 
-    public init(ipc: Ipc, services: IServicesMap) {
+    constructor(ipc: Ipc, services: IServicesMap) {
+        super(ipc, services);
 
-        ipc.listen(IpcSubjects.MAP_GET_WMS_DEFAULT_LAYERS, () => {
-            return services.map.getDefaultWmsLayers();
-        });
+        this.registerHandler(IpcSubject.MAP_GET_WMS_DEFAULT_LAYERS, this.getDefaultWmsLayers);
+        this.registerHandler(IpcSubject.MAP_IMPORT_FILES, this.importDataFiles);
+    }
 
-        ipc.listen(IpcSubjects.MAP_IMPORT_FILES, (event: IpcEvent) => {
-            services.map.importFilesAsLayers(event.data).then((layers)=>{
-               services.project.addLayers(layers);
-            });
+    public getDefaultWmsLayers() {
+        return this.services.map.getDefaultWmsLayers();
+    }
+
+    public importDataFiles(event: IpcEvent) {
+        this.services.map.importFilesAsLayers(event.data).then((layers) => {
+            this.services.project.addLayers(layers);
         });
     }
 

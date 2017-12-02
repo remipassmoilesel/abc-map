@@ -1,25 +1,27 @@
 import {Ipc} from "../ipc/Ipc";
-import {IpcSubjects} from "../ipc/IpcSubjects";
-import {IpcEvent} from "../ipc/IpcEvent";
-import {AbstractMapLayer} from "../entities/layers/AbstractMapLayer";
+import {IpcSubject} from "../ipc/IpcSubject";
 import {AbstractHandlersGroup, IServicesMap} from "./AbstractHandlersGroup";
 
 export class DatabaseHandlers extends AbstractHandlersGroup {
 
-    public init(ipc: Ipc, services: IServicesMap) {
+    constructor(ipc: Ipc, services: IServicesMap) {
+        super(ipc, services);
 
-        ipc.listen(IpcSubjects.DB_START, () => {
-            services.db.startDatabase();
-        });
-
-        ipc.listen(IpcSubjects.DB_STOP, () => {
-            services.db.stopDatabase();
-        });
-
-        ipc.listen(IpcSubjects.DB_RESTART, () => {
-            services.db.stopDatabase();
-        });
-
+        this.registerHandler(IpcSubject.DB_START, this.startDb);
+        this.registerHandler(IpcSubject.DB_STOP, this.stopDb);
+        this.registerHandler(IpcSubject.DB_RESTART, this.restartDb);
     }
+
+    public startDb() {
+        this.services.db.startDatabase();
+    }
+
+    public stopDb() {
+        this.services.db.stopDatabase();
+    };
+
+    public restartDb() {
+        this.services.db.stopDatabase();
+    };
 
 }

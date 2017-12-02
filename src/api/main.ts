@@ -26,9 +26,9 @@ export function initApplication(ipc: Ipc) {
         db: databaseService,
     };
 
-    new ProjectHandlers().init(ipc, services);
-    new MapHandlers().init(ipc, services);
-    new DatabaseHandlers().init(ipc, services);
+    const projectHandlers = new ProjectHandlers(ipc, services);
+    const mapHandlers = new MapHandlers(ipc, services);
+    const dbHandlers = new DatabaseHandlers(ipc, services);
 
-    projectService.newProject();
+    projectHandlers.createNewProject();
 }
