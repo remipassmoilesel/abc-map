@@ -4,7 +4,7 @@ import * as _ from 'lodash';
 import {MainStore} from "../../lib/store/store";
 import {IpcEvent} from "../../../api/ipc/IpcEvent";
 import {EventType} from "../../../api/ipc/IpcEventTypes";
-import {Ats} from "../../lib/store/mutationsAndActions";
+import {Actions} from "../../lib/store/mutationsAndActions";
 import {Logger} from "../../../api/dev/Logger";
 import {Clients} from "../../lib/clients/Clients";
 import {Project} from "../../../api/entities/Project";
@@ -37,7 +37,7 @@ export default class StoreUpdaterComponent extends Vue {
 
             // event should update project
             if (this.isEventShouldUpdateProject(event)) {
-                this.$store.dispatch(Ats.PROJECT_UPDATE, event.data);
+                this.$store.dispatch(Actions.PROJECT_UPDATE, event.data);
             }
             // unknown event
             else {
@@ -59,7 +59,7 @@ export default class StoreUpdaterComponent extends Vue {
 
     private initializeStore() {
         this.clients.project.getCurrentProject().then((project: Project) => {
-            this.$store.dispatch(Ats.PROJECT_UPDATE, project);
+            this.$store.dispatch(Actions.PROJECT_UPDATE, project);
         });
     }
 

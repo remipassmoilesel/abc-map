@@ -1,4 +1,4 @@
-import {Ats, Mts} from "./mutationsAndActions";
+import {Actions, Mutations} from "./mutationsAndActions";
 import {Clients} from "../clients/Clients";
 import {Logger} from "../../../api/dev/Logger";
 import {Project} from "../../../api/entities/Project";
@@ -16,29 +16,29 @@ export class ProjectStoreModule {
 
     // Warning: all mutations must be synchronous !
     mutations = {
-        [Mts.PROJECT_UPDATE]: (state, payload: any) => {
+        [Mutations.PROJECT_UPDATE]: (state: ProjectState, payload: any) => {
             state.currentProject = payload.project;
         }
     };
 
     actions = {
-        [Ats.PROJECT_UPDATE]: (context) => {
-            logger.info(`Dispatching action ${Ats.PROJECT_UPDATE}`);
+        [Actions.PROJECT_UPDATE]: (context) => {
+            logger.info(`Dispatching action ${Actions.PROJECT_UPDATE}`);
             clients.project.getCurrentProject().then((project) => {
-                context.commit(Mts.PROJECT_UPDATE, {project});
+                context.commit(Mutations.PROJECT_UPDATE, {project});
             });
         }
     };
 
     getters = {
-        projectName: (state) => {
+        projectName: (state: ProjectState) => {
             if (state.currentProject) {
                 return state.currentProject.name;
             } else {
                 return 'No current project';
             }
         },
-        projectLayers: (state) => {
+        projectLayers: (state: ProjectState) => {
             if (state.currentProject) {
                 return state.currentProject.layers;
             } else {

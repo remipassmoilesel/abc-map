@@ -3,7 +3,10 @@ import * as _ from 'lodash';
 import Component from 'vue-class-component';
 import {Clients} from "../../lib/clients/Clients";
 import {GeocodingResult} from "../../../api/entities/GeocodingResult";
+import {MainStore} from "../../lib/store/store";
 import './style.scss';
+import {Actions} from "../../lib/store/mutationsAndActions";
+import {MapView} from "../map/MapView";
 
 @Component({
     template: require('./template.html'),
@@ -12,6 +15,7 @@ export default class GeoSearchComponent extends Vue {
 
     public clients: Clients;
     public location: string = "";
+    public $store: MainStore;
 
     /**
      * Triggered when component is displayed
@@ -36,9 +40,15 @@ export default class GeoSearchComponent extends Vue {
 
     }
 
-    public handleSelect() {
-        console.log("handleSelect");
-        console.log(arguments);
+    public handleSelect(selectedObject) {
+        const res = selectedObject.completeResult;
+        this.$store.dispatch(Actions.MAP_VIEW_UPDATE, {
+            view: ({
+                latitude: res.latitude,
+                longitude: res.longitude,
+                zoom: 8
+            } as MapView)
+        });
     }
 
 

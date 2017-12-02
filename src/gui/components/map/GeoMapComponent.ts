@@ -6,6 +6,8 @@ import * as _ from 'lodash';
 import {MainStore} from "../../lib/store/store";
 import {AbstractMapLayer} from "../../../api/entities/layers/AbstractMapLayer";
 import {LeafletLayerFactory} from "../../lib/LeafletLayerFactory";
+import {MapView} from "./MapView";
+import {Logger} from "../../../api/dev/Logger";
 // Import style
 import './style.scss'
 // Import plugins
@@ -13,6 +15,7 @@ import 'leaflet-draw';
 
 let mapIdCounter = 0;
 const layerFactory = new LeafletLayerFactory();
+const logger = Logger.getLogger('GeoMapComponent');
 
 @Component({
     template: require('./template.html')
@@ -34,6 +37,25 @@ export default class GeoMapComponent extends Vue {
 
     public updated() {
 
+        // update layers
+        this.updateMapLayers();
+
+        // re-add editable group on top
+        this.map.addLayer(this.editableLayersGroup);
+
+        this.updateView();
+
+    }
+
+    private updateView() {
+        const view = this.getCurrentView();
+        if (view) {
+            logger.info('Updating view: ' + view);
+            this.map.panTo([view.latitude, view.longitude], {animate: true});
+        }
+    }
+
+    private updateMapLayers() {
         const layers = this.getLayers();
 
         // TODO do not remove layers already present
@@ -44,9 +66,6 @@ export default class GeoMapComponent extends Vue {
         _.forEach(layers, (layer) => {
             this.map.addLayer(layerFactory.getLeafletLayer(layer));
         });
-
-        this.map.addLayer(this.editableLayersGroup);
-
     }
 
     private setupDrawPlugin() {
@@ -108,6 +127,10 @@ export default class GeoMapComponent extends Vue {
         // console.log(e);
     }
 
+    private getCurrentView(): MapView {
+        return this.$store.getters.mapView;
+    }
+
     private getLayers(): AbstractMapLayer[] {
         return this.$store.getters.projectLayers;
     }
@@ -115,4 +138,5 @@ export default class GeoMapComponent extends Vue {
     private getMaximumHeight(): number {
         return (document.querySelector('.geo-map').parentNode as any).clientHeight - 100;
     }
+
 }
