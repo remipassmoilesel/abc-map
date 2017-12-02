@@ -2,6 +2,7 @@ import {Ipc} from "../ipc/Ipc";
 import {IpcSubject} from "../ipc/IpcSubject";
 import {IpcEvent} from "../ipc/IpcEvent";
 import {AbstractHandlersGroup, IServicesMap} from "./AbstractHandlersGroup";
+import {GeocodingResult} from "../entities/GeocodingResult";
 
 export class MapHandlers extends AbstractHandlersGroup {
 
@@ -10,6 +11,7 @@ export class MapHandlers extends AbstractHandlersGroup {
 
         this.registerHandler(IpcSubject.MAP_GET_WMS_DEFAULT_LAYERS, this.getDefaultWmsLayers);
         this.registerHandler(IpcSubject.MAP_IMPORT_FILES, this.importDataFiles);
+        this.registerHandler(IpcSubject.MAP_GEOCODE, this.geocode);
     }
 
     public getDefaultWmsLayers() {
@@ -22,4 +24,7 @@ export class MapHandlers extends AbstractHandlersGroup {
         });
     }
 
+    public geocode(ev: IpcEvent): Promise<GeocodingResult[]> {
+        return this.services.map.geocode(ev.data);
+    }
 }

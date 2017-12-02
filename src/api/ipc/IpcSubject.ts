@@ -11,6 +11,7 @@ export class IpcSubject {
     public static MAP_EVENTS_BUS = new IpcSubject(`${IpcSubject.MAP_ROOT}/events-bus`);
     public static MAP_GET_WMS_DEFAULT_LAYERS = new IpcSubject(`${IpcSubject.MAP_ROOT}/get-default-layers`);
     public static MAP_IMPORT_FILES = new IpcSubject(`${IpcSubject.MAP_ROOT}/kml/import-as-layer`);
+    public static MAP_GEOCODE = new IpcSubject(`${IpcSubject.MAP_ROOT}/geocode`);
 
     public static DB_ROOT = "/map";
     public static DB_START = new IpcSubject(`${IpcSubject.DB_ROOT}/start`);

@@ -8,6 +8,8 @@ import {IpcEvent} from "../ipc/IpcEvent";
 import {IpcSubject} from "../ipc/IpcSubject";
 import * as Promise from 'bluebird';
 import {DataImporterFinder} from "../import/DataImporterFinder";
+import {NominatimGeocoder} from "../geocoder/NominatimGeocoder";
+import {GeocodingResult} from "../entities/GeocodingResult";
 
 const logger = Logger.getLogger('MapService');
 
@@ -15,6 +17,7 @@ export class MapService extends AbstractService {
 
     private defaultLayers: DefaultTileLayers;
     private dataImporterFinder: DataImporterFinder;
+    private geocoder: NominatimGeocoder;
 
     constructor(ipc: Ipc) {
         super(ipc);
@@ -23,6 +26,11 @@ export class MapService extends AbstractService {
 
         this.defaultLayers = new DefaultTileLayers();
         this.dataImporterFinder = new DataImporterFinder();
+        this.geocoder = new NominatimGeocoder();
+    }
+
+    public geocode(query: string): Promise<GeocodingResult[]>{
+        return this.geocoder.geocode(query);
     }
 
     public getDefaultWmsLayers(): TileLayer[] {
