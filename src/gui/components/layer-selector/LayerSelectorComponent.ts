@@ -3,6 +3,8 @@ import Component from 'vue-class-component';
 import {AbstractMapLayer} from "../../../api/entities/layers/AbstractMapLayer";
 import {Clients} from "../../lib/clients/Clients";
 import './style.scss';
+import {MainStore} from "../../lib/store/store";
+import {StoreWrapper} from "../../lib/store/StoreWrapper";
 
 @Component({
     template: require('./template.html'),
@@ -10,10 +12,13 @@ import './style.scss';
 export default class LayerSelectorComponent extends Vue {
 
     public clients: Clients;
+    public $store: MainStore;
+    public storeWrapper: StoreWrapper;
+
     public selectedLayers: string[] = [];
 
     public getLayers(): AbstractMapLayer[] {
-        return this.$store.getters.projectLayers;
+        return this.storeWrapper.project.getProjectLayers(this.$store);
     }
 
     public deleteSelection() {

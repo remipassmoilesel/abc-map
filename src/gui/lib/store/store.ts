@@ -4,7 +4,7 @@ import {Logger} from '../../../api/dev/Logger';
 import {ProjectState, ProjectStoreModule} from "./ProjectStoreModule";
 import {MapState, MapStoreModule} from "./MapStoreModule";
 import {AbstractMapLayer} from "../../../api/entities/layers/AbstractMapLayer";
-import {MapView} from "../../components/map/MapView";
+import {MapView} from "../map/MapView";
 
 
 const logger = Logger.getLogger('store.ts');

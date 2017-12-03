@@ -5,9 +5,10 @@ import {FeatureGroup} from 'leaflet';
 import * as _ from 'lodash';
 import {MainStore} from "../../lib/store/store";
 import {AbstractMapLayer} from "../../../api/entities/layers/AbstractMapLayer";
-import {LeafletLayerFactory} from "../../lib/LeafletLayerFactory";
-import {MapView} from "./MapView";
+import {LeafletLayerFactory} from "../../lib/map/LeafletLayerFactory";
+import {MapView} from "../../lib/map/MapView";
 import {Logger} from "../../../api/dev/Logger";
+import {StoreWrapper} from "../../lib/store/StoreWrapper";
 // Import style
 import './style.scss'
 // Import plugins
@@ -23,6 +24,7 @@ const logger = Logger.getLogger('GeoMapComponent');
 export default class GeoMapComponent extends Vue {
 
     public $store: MainStore;
+    public storeWrapper: StoreWrapper;
 
     public mapId = `map-${mapIdCounter++}`;
     public height: number = 500;
@@ -128,14 +130,14 @@ export default class GeoMapComponent extends Vue {
     }
 
     public getCurrentMapView(): MapView {
-        return this.$store.state.map.currentMapView;
+        return this.storeWrapper.map.getMapView(this.$store);
     }
 
-    private getLayers(): AbstractMapLayer[] {
-        return this.$store.getters.projectLayers;
+    public getLayers(): AbstractMapLayer[] {
+        return this.storeWrapper.project.getProjectLayers(this.$store);
     }
 
-    private getMaximumHeight(): number {
+    public getMaximumHeight(): number {
         return (document.querySelector('.geo-map').parentNode as any).clientHeight - 100;
     }
 

@@ -1,7 +1,7 @@
 import {Actions, Mutations} from "./mutationsAndActions";
 import {Clients} from "../clients/Clients";
 import {Logger} from "../../../api/dev/Logger";
-import {MapView} from "../../components/map/MapView";
+import {MapView} from "../map/MapView";
 
 const logger = Logger.getLogger('ProjectStoreModule');
 const clients = new Clients();
@@ -30,7 +30,7 @@ export class MapStoreModule {
     };
 
     getters = {
-        mapView: (state: MapState) => {
+        currentMapView: (state: MapState) => {
             return state.currentMapView
         }
     };
