@@ -4,10 +4,9 @@ import * as _ from 'lodash';
 import {MainStore} from "../../lib/store/store";
 import {IpcEvent} from "../../../api/ipc/IpcEvent";
 import {EventType} from "../../../api/ipc/IpcEventTypes";
-import {Actions} from "../../lib/store/mutationsAndActions";
 import {Logger} from "../../../api/dev/Logger";
 import {Clients} from "../../lib/clients/Clients";
-import {Project} from "../../../api/entities/Project";
+import {StoreWrapper} from "../../lib/store/StoreWrapper";
 
 const logger = Logger.getLogger('StoreUpdaterComponent');
 
@@ -18,11 +17,12 @@ const updateEventsType = [
 ];
 
 @Component({
-    template: "<div></div>",
+    template: "<div style='display: none'></div>",
 })
 export default class StoreUpdaterComponent extends Vue {
 
     public $store: MainStore;
+    public storeWrapper: StoreWrapper;
     public clients: Clients;
 
     public mounted() {
@@ -37,7 +37,7 @@ export default class StoreUpdaterComponent extends Vue {
 
             // event should update project
             if (this.isEventShouldUpdateProject(event)) {
-                this.$store.dispatch(Actions.PROJECT_UPDATE, event.data);
+                this.storeWrapper.project.updateProject(this.$store);
             }
             // unknown event
             else {
@@ -54,13 +54,10 @@ export default class StoreUpdaterComponent extends Vue {
             return Promise.resolve();
         });
 
-
     }
 
     private initializeStore() {
-        this.clients.project.getCurrentProject().then((project: Project) => {
-            this.$store.dispatch(Actions.PROJECT_UPDATE, project);
-        });
+        this.storeWrapper.project.updateProject(this.$store);
     }
 
     private isEventShouldUpdateProject(event: IpcEvent): boolean {

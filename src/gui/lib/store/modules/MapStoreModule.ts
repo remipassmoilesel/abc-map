@@ -1,7 +1,8 @@
 import {Actions, Mutations} from "./mutationsAndActions";
-import {Clients} from "../clients/Clients";
-import {Logger} from "../../../api/dev/Logger";
-import {MapView} from "../map/MapView";
+import {Clients} from "../../clients/Clients";
+import {Logger} from "../../../../api/dev/Logger";
+import {MapView} from "../../map/MapView";
+import {MapViewPayload} from "./payloads";
 
 const logger = Logger.getLogger('ProjectStoreModule');
 const clients = new Clients();
@@ -37,6 +38,3 @@ export class MapStoreModule {
 
 }
 
-export interface MapViewPayload {
-    view: MapView;
-}

@@ -1,7 +1,8 @@
 import {Actions, Mutations} from "./mutationsAndActions";
-import {Clients} from "../clients/Clients";
-import {Logger} from "../../../api/dev/Logger";
-import {Project} from "../../../api/entities/Project";
+import {Clients} from "../../clients/Clients";
+import {Logger} from "../../../../api/dev/Logger";
+import {Project} from "../../../../api/entities/Project";
+import {ProjectPayload} from "./payloads";
 
 const logger = Logger.getLogger('ProjectStoreModule');
 const clients = new Clients();
@@ -16,7 +17,7 @@ export class ProjectStoreModule {
 
     // Warning: all mutations must be synchronous !
     mutations = {
-        [Mutations.PROJECT_UPDATE]: (state: ProjectState, payload: any) => {
+        [Mutations.PROJECT_UPDATE]: (state: ProjectState, payload: ProjectPayload) => {
             state.currentProject = payload.project;
         }
     };

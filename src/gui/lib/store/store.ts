@@ -1,8 +1,8 @@
 import Vue from 'vue';
 import Vuex, {Store} from 'vuex';
 import {Logger} from '../../../api/dev/Logger';
-import {ProjectState, ProjectStoreModule} from "./ProjectStoreModule";
-import {MapState, MapStoreModule} from "./MapStoreModule";
+import {ProjectState, ProjectStoreModule} from "./modules/ProjectStoreModule";
+import {MapState, MapStoreModule} from "./modules/MapStoreModule";
 import {AbstractMapLayer} from "../../../api/entities/layers/AbstractMapLayer";
 import {MapView} from "../map/MapView";
 

@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Component from 'vue-class-component';
 import './style.scss';
 import {MainStore} from "../../lib/store/store";
+import {StoreWrapper} from "../../lib/store/StoreWrapper";
 
 @Component({
     template: require('./template.html'),
@@ -9,15 +10,9 @@ import {MainStore} from "../../lib/store/store";
 export default class StatusBarComponent extends Vue {
 
     public $store: MainStore;
-
-    /**
-     * Triggered when component is displayed
-     */
-    public mounted() {
-
-    }
+    public storeWrapper: StoreWrapper;
 
     public getProjectName() {
-        return this.$store.getters.projectName;
+        return this.storeWrapper.project.getProjectName(this.$store);
     }
 }

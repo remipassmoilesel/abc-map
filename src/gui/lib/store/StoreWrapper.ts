@@ -1,6 +1,7 @@
 import {MainStore} from "./store";
-import {Actions} from "./mutationsAndActions";
-import {MapViewPayload} from "./MapStoreModule";
+import {Actions} from "./modules/mutationsAndActions";
+import {MapViewPayload} from "./modules/payloads";
+
 
 export class StoreWrapper {
 
@@ -10,7 +11,7 @@ export class StoreWrapper {
 
 export class ProjectStoreWrapper {
 
-    public updateProject($store: MainStore,) {
+    public updateProject($store: MainStore) {
         $store.dispatch(Actions.PROJECT_UPDATE);
     }
 
@@ -20,6 +21,10 @@ export class ProjectStoreWrapper {
 
     public getProjectLayers($store: MainStore) {
         return $store.getters.projectLayers;
+    }
+
+    public getProjectName($store: MainStore) {
+        return $store.getters.projectName;
     }
 
 }
