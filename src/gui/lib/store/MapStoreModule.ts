@@ -16,14 +16,14 @@ export class MapStoreModule {
 
     // Warning: all mutations must be synchronous !
     mutations = {
-        [Mutations.MAP_VIEW_UPDATE]: (state: MapState, payload: any) => {
+        [Mutations.MAP_VIEW_UPDATE]: (state: MapState, payload: MapViewPayload) => {
             logger.info(`Comitting mutation ${Mutations.MAP_VIEW_UPDATE}`);
             state.currentMapView = payload.view;
         }
     };
 
     actions = {
-        [Actions.MAP_VIEW_UPDATE]: (context, payload: any) => {
+        [Actions.MAP_VIEW_UPDATE]: (context, payload: MapViewPayload) => {
             logger.info(`Dispatching action ${Actions.MAP_VIEW_UPDATE}`);
             context.commit(Mutations.MAP_VIEW_UPDATE, payload);
         }
@@ -35,4 +35,8 @@ export class MapStoreModule {
         }
     };
 
+}
+
+export interface MapViewPayload {
+    view: MapView;
 }

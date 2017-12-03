@@ -3,6 +3,8 @@ import Vuex, {Store} from 'vuex';
 import {Logger} from '../../../api/dev/Logger';
 import {ProjectState, ProjectStoreModule} from "./ProjectStoreModule";
 import {MapState, MapStoreModule} from "./MapStoreModule";
+import {AbstractMapLayer} from "../../../api/entities/layers/AbstractMapLayer";
+import {MapView} from "../../components/map/MapView";
 
 
 const logger = Logger.getLogger('store.ts');
@@ -21,9 +23,16 @@ export const store = new Vuex.Store({
 // Type classes
 export class MainStore extends Store<any> {
     public state: MainStoreState;
+    public getters: MainStoreGetters;
 }
 
 export class MainStoreState {
     project: ProjectState;
     map: MapState;
+}
+
+export class MainStoreGetters {
+    public projectName: String;
+    public projectLayers: AbstractMapLayer[];
+    public currentMapView: MapView;
 }

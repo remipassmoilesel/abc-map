@@ -5,8 +5,7 @@ import {Clients} from "../../lib/clients/Clients";
 import {GeocodingResult} from "../../../api/entities/GeocodingResult";
 import {MainStore} from "../../lib/store/store";
 import './style.scss';
-import {Actions} from "../../lib/store/mutationsAndActions";
-import {MapView} from "../map/MapView";
+import {StoreWrapper} from "../../lib/store/StoreWrapper";
 
 @Component({
     template: require('./template.html'),
@@ -14,8 +13,8 @@ import {MapView} from "../map/MapView";
 export default class GeoSearchComponent extends Vue {
 
     public clients: Clients;
-    public location: string = "";
     public $store: MainStore;
+    public storeWrapper: StoreWrapper;
 
     /**
      * Triggered when component is displayed
@@ -42,14 +41,14 @@ export default class GeoSearchComponent extends Vue {
 
     public handleSelect(selectedObject) {
         const res = selectedObject.completeResult;
-        this.$store.dispatch(Actions.MAP_VIEW_UPDATE, {
-            view: ({
-                latitude: res.latitude,
-                longitude: res.longitude,
-                zoom: 8
-            } as MapView)
-        });
+        this.storeWrapper.map.updateMapView(this.$store,
+            {
+                view: {
+                    latitude: res.latitude,
+                    longitude: res.longitude,
+                    zoom: 8
+                }
+            });
     }
-
 
 }
