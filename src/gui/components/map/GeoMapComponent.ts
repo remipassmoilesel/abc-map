@@ -48,10 +48,10 @@ export default class GeoMapComponent extends Vue {
     }
 
     private updateView() {
-        const view = this.getCurrentView();
+        const view = this.getCurrentMapView();
         if (view) {
             logger.info('Updating view: ' + view);
-            this.map.panTo([view.latitude, view.longitude], {animate: true});
+            this.map.flyTo([view.latitude, view.longitude], 14, {animate: true});
         }
     }
 
@@ -127,8 +127,8 @@ export default class GeoMapComponent extends Vue {
         // console.log(e);
     }
 
-    private getCurrentView(): MapView {
-        return this.$store.getters.mapView;
+    public getCurrentMapView(): MapView {
+        return this.$store.state.map.currentMapView;
     }
 
     private getLayers(): AbstractMapLayer[] {

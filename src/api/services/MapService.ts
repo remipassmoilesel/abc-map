@@ -34,7 +34,7 @@ export class MapService extends AbstractService {
     }
 
     public getDefaultWmsLayers(): TileLayer[] {
-        return this.defaultLayers.layers;
+        return this.defaultLayers.getLayers();
     }
 
     public importFilesAsLayers(files: string[]) {

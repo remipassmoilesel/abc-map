@@ -17,6 +17,7 @@ export class MapStoreModule {
     // Warning: all mutations must be synchronous !
     mutations = {
         [Mutations.MAP_VIEW_UPDATE]: (state: MapState, payload: any) => {
+            logger.info(`Comitting mutation ${Mutations.MAP_VIEW_UPDATE}`);
             state.currentMapView = payload.view;
         }
     };

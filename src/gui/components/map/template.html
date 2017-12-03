@@ -1,6 +1,9 @@
 <div :id="mapId" class="geo-map" :style="{height: height + 'px'}">
 
-    <!-- Render layer names in order to make them reactive -->
-    <div style="display: none">{{ getLayers() }}</div>
+    <!-- Render methods in order to make them reactive -->
+    <div style="display: none">
+        {{ getLayers() }}
+        {{ getCurrentMapView() }}
+    </div>
 
 </div>

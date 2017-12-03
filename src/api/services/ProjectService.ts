@@ -39,6 +39,7 @@ export class ProjectService extends AbstractService {
 
         if (!layer.id) {
             layer.generateId();
+            logger.info(`Layer id not set, generate a new one: ${layer.id}`);
         }
 
         this.currentProject.layers.push(layer);
