@@ -24,7 +24,7 @@ export class MapClient {
         return this.ipc.send(IpcSubject.MAP_GET_WMS_DEFAULT_LAYERS).catch(handleRejection);
     }
 
-    public importFiles(files: File[]) {
+    public importFiles(files: String[]) {
         return this.ipc.send(IpcSubject.MAP_IMPORT_FILES, {data: files}).catch(handleRejection);
     }
 

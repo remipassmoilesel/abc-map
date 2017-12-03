@@ -61,7 +61,7 @@ export default class StoreUpdaterComponent extends Vue {
     }
 
     private isEventShouldUpdateProject(event: IpcEvent): boolean {
-        const res = _.find(updateEventsType, (evt: EventType) => _.isEqual(evt, event.type))
+        const res = _.find(updateEventsType, (evt: EventType) => _.isEqual(evt, event.type));
         return res !== undefined;
     }
 }

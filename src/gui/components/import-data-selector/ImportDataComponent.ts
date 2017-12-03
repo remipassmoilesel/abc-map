@@ -14,14 +14,13 @@ const authorizedExtensions = ['.gpx', '.kml'];
 export default class ImportDataSelectorComponent extends Vue {
 
     public clients: Clients;
-    public fileList: any[] = [];
     public files: File[] = [];
 
     public selectFiles(event) {
 
         const filesToCheck: File[] = event.target.files;
         const validFiles: File[] = [];
-        _.forEach(filesToCheck, (file) => {
+        _.forEach(filesToCheck, (file: File) => {
             if (_.includes(authorizedExtensions, path.extname(file.name))) {
                 validFiles.push(file);
             }
@@ -36,10 +35,15 @@ export default class ImportDataSelectorComponent extends Vue {
     }
 
     public importFiles() {
-        if (this.fileList.length < 1) {
+        if (this.files.length < 1) {
             Toaster.warning('You must select valid files before');
         } else {
-            this.clients.map.importFiles(this.files);
+
+            const paths = _.map(this.files, (file: File) => {
+                return (file as any).path; // FIXME
+            });
+
+            this.clients.map.importFiles(paths);
         }
     }
 
