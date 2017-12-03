@@ -31,8 +31,13 @@ export default class GeoMapComponent extends Vue {
     private map: L.Map;
     private editableLayersGroup: FeatureGroup<any>;
 
-    public mounted() {
+    public beforeMount(){
+        // fix height before in order to prevent troubles on map size
         this.height = this.getMaximumHeight();
+    }
+
+    public mounted() {
+
         this.map = L.map(this.mapId).setView([45.18, 5.72], 13);
         this.setupDrawPlugin();
     }
@@ -138,7 +143,7 @@ export default class GeoMapComponent extends Vue {
     }
 
     public getMaximumHeight(): number {
-        return (document.querySelector('.geo-map').parentNode as any).clientHeight - 100;
+        return window.innerWidth / 100 * 60;
     }
 
 }
