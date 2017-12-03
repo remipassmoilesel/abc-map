@@ -1,4 +1,5 @@
 import * as tgj from 'togeojson';
+import * as path from 'path';
 import * as fs from 'fs-extra-promise';
 import {Document, DOMParser} from 'xmldom';
 import {AbstractDataImporter} from "./AbstractDataImporter";
@@ -18,7 +19,7 @@ export class KmlDataImporter extends AbstractDataImporter {
             .then((kmlDom: Document) => {
 
                 const geojson = this.convertToGeoJson(kmlDom);
-                return new GeoJsonLayer(pathToSourceFile, geojson);
+                return new GeoJsonLayer(path.basename(pathToSourceFile), geojson);
 
             });
 
