@@ -21,11 +21,14 @@ export class DefaultTileLayers {
         })
     }
 
-    get layers(): TileLayer[] {
-        return this._layers;
+    public getLayers(): TileLayer[] {
+        return _.map(this._layers, (lay, index) => {
+            return this.getLayer(index);
+        });
     }
 
-    set layers(value: TileLayer[]) {
-        this._layers = value;
+    public getLayer(index: number) {
+        return _.assign(new TileLayer(), this._layers[index]);
     }
+
 }

@@ -1,11 +1,12 @@
+
 let layerCount = 0;
 
 export abstract class AbstractMapLayer {
 
-    private _id: string;
-    private _name: string;
+    protected _id: string;
+    protected _name: string;
 
-    constructor(name: string) {
+    constructor(name?: string) {
         this.generateId();
         this._name = name;
     }

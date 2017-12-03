@@ -5,7 +5,7 @@ export class TileLayer extends AbstractMapLayer {
 
     private _url: string;
 
-    constructor(name: string, url: string) {
+    constructor(name?: string, url?: string) {
         super(name);
         this._url = url;
     }
