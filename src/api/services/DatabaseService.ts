@@ -4,6 +4,10 @@ import {Logger} from "../dev/Logger";
 import * as path from "path";
 import * as fs from "fs-extra";
 import * as assert from "assert";
+import * as mongodb from "mongodb";
+import {Db} from "mongodb";
+import {Utils} from "../utils/Utils";
+import * as Promise from "bluebird";
 
 const projectRoot: string = path.resolve(__dirname, '..', '..', '..');
 assert.ok(fs.existsSync(projectRoot), 'Project root must exist');
@@ -17,13 +21,24 @@ export enum DatabaseStatus {
 
 export class DatabaseService {
 
+    private static readonly PORT = '30001';
     private ipc: Ipc;
     private child: ChildProcess;
     private databaseStatus: DatabaseStatus;
+    private db: Db;
 
     constructor(ipc: Ipc) {
         this.ipc = ipc;
         this.setupSigintHandler();
+    }
+
+    public connect(): Promise<Db> {
+        return Utils.retryUntilSuccess(() => {
+            return (mongodb.connect(`mongodb://localhost:${DatabaseService.PORT}/abcmap`)
+                .then((db) => {
+                    this.db = db;
+                }) as any);
+        });
     }
 
     public startDatabase() {
@@ -54,6 +69,7 @@ export class DatabaseService {
     }
 
     private spawnDatabaseProcess() {
+
         this.child = exec('./mongodb/bin/mongod -f config/mongodb-config.yaml',
             {cwd: projectRoot});
 
@@ -66,6 +82,7 @@ export class DatabaseService {
             logger.error(`Database process exited: ${err}`);
             this.restartDatabase();
         });
+
     }
 
     private setupSigintHandler() {

@@ -14,21 +14,26 @@ export function initApplication(ipc: Ipc) {
 
     logger.info('Initialize main application');
 
-    const projectService = new ProjectService(ipc);
-    const mapService = new MapService(ipc);
     const databaseService = new DatabaseService(ipc);
-
     databaseService.startDatabase();
 
-    const services: IServicesMap = {
-        project: projectService,
-        map: mapService,
-        db: databaseService,
-    };
+    databaseService.connect().then((db) => {
+        logger.info('Connected to database');
 
-    const projectHandlers = new ProjectHandlers(ipc, services);
-    const mapHandlers = new MapHandlers(ipc, services);
-    const dbHandlers = new DatabaseHandlers(ipc, services);
+        const projectService = new ProjectService(ipc);
+        const mapService = new MapService(ipc);
+        
+        const services: IServicesMap = {
+            project: projectService,
+            map: mapService,
+            db: databaseService,
+        };
 
-    projectHandlers.createNewProject();
+        const projectHandlers = new ProjectHandlers(ipc, services);
+        const mapHandlers = new MapHandlers(ipc, services);
+        const dbHandlers = new DatabaseHandlers(ipc, services);
+
+        projectHandlers.createNewProject();
+    })
+
 }

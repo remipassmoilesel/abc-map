@@ -5,7 +5,8 @@ resources/out
 resources/manifest.json
 packaged/
 mongodb.tar.gz
-mongodb
+mongodb/
+!config/mongodb-config.yaml
 mongodb-data
 logs/*
 !logs/.gitkeep

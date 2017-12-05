@@ -58,6 +58,7 @@
     "@types/leaflet-draw": "^0.4.10",
     "@types/lodash": "^4.14.85",
     "@types/mocha": "^2.2.44",
+    "@types/mongodb": "^2.2.16",
     "@types/node": "^8.0.53",
     "@types/sinon": "^4.0.0",
     "@types/vue": "^2.0.0",
