@@ -1,3 +1,4 @@
+import * as Promise from "bluebird";
 import {MapService} from "./services/MapService";
 import {Ipc} from "./ipc/Ipc";
 import {Logger} from "./dev/Logger";
@@ -9,12 +10,13 @@ import {MapHandlers} from "./handlers/MapHandlers";
 import {DatabaseHandlers} from "./handlers/DatabaseHandlers";
 
 const logger = Logger.getLogger('api/main.ts');
+let databaseService: DatabaseService;
 
 export function initApplication(ipc: Ipc) {
 
     logger.info('Initialize main application');
 
-    const databaseService = new DatabaseService(ipc);
+    databaseService = new DatabaseService(ipc);
     databaseService.startDatabase();
 
     databaseService.connect().then((db) => {
@@ -22,7 +24,7 @@ export function initApplication(ipc: Ipc) {
 
         const projectService = new ProjectService(ipc);
         const mapService = new MapService(ipc);
-        
+
         const services: IServicesMap = {
             project: projectService,
             map: mapService,
@@ -36,4 +38,9 @@ export function initApplication(ipc: Ipc) {
         projectHandlers.createNewProject();
     })
 
+}
+
+export function closeApplication(): Promise<any> {
+    logger.info('Closing main application');
+    return databaseService.stopDatabase();
 }

@@ -29,7 +29,6 @@ export class DatabaseService {
 
     constructor(ipc: Ipc) {
         this.ipc = ipc;
-        this.setupSigintHandler();
     }
 
     public connect(): Promise<Db> {
@@ -60,12 +59,17 @@ export class DatabaseService {
 
     }
 
-    public stopDatabase() {
+    public stopDatabase(): Promise<any> {
         logger.info('Stopping database ...');
-
-        // FIXME: use mongo client
         this.databaseStatus = DatabaseStatus.STOPPED;
-        this.child.kill();
+
+        return (mongodb.connect(`mongodb://localhost:${DatabaseService.PORT}/admin`)
+            .then((db) => {
+                logger.info('connected as admin');
+                return db.command({shutdown: 1});
+            }).catch((e)=>{
+                console.error('', e);
+            }) as Promise<any>);
     }
 
     private spawnDatabaseProcess() {
@@ -85,15 +89,4 @@ export class DatabaseService {
 
     }
 
-    private setupSigintHandler() {
-        process.on('SIGINT', () => {
-            console.log("Caught interrupt signal");
-
-            this.stopDatabase(); // TODO: return a promise then exit
-
-            setTimeout(() => {
-                process.exit();
-            }, 2000);
-        });
-    }
 }

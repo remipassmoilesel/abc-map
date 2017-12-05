@@ -2,7 +2,7 @@ import {app, BrowserWindow} from 'electron';
 import * as url from 'url';
 import {ElectronUtilities} from "./api/dev/ElectronDevUtilities";
 import {Logger} from "./api/dev/Logger";
-import {initApplication} from "./api/main";
+import {closeApplication, initApplication} from "./api/main";
 import {Ipc} from "./api/ipc/Ipc";
 
 require('source-map-support').install();
@@ -19,6 +19,7 @@ function createWindow() {
     win = new BrowserWindow({width: 1024, height: 768});
     win.maximize();
 
+    // init api application
     const ipc = new Ipc(win.webContents);
     initApplication(ipc);
 
@@ -44,7 +45,17 @@ function createWindow() {
         // Dereference the window object, usually you would store windows
         // in an array if your app supports multi windows, this is the time
         // when you should delete the corresponding element.
-        win = null
+        win = null;
+
+        closeApplication()
+            .then(() => {
+                logger.info('Database closed');
+                app.exit();
+            })
+            .catch((error) => {
+                logger.error('Error while closing app: ', error);
+                app.exit(1);
+            });
     });
 
 }
