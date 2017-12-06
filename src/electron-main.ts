@@ -14,15 +14,6 @@ const logger = Logger.getLogger('electron-main.ts');
 // be closed automatically when the JavaScript object is garbage collected.
 let win: BrowserWindow | null;
 
-// listen for unhandled rejections and uncaught errors
-process.on('unhandledRejection', (reason, p) => {
-    logger.error(`[UNHANDLED REJECTION ERROR] Reason=${JSON.stringify(reason)} P=${JSON.stringify(p)}`);
-});
-
-process.on('uncaughtException', (err) => {
-    logger.error(`[UNCAUGHT ERROR] Err=${JSON.stringify(err)}`);
-});
-
 function createWindow() {
     // Create the browser window.
     win = new BrowserWindow({width: 1024, height: 768});
@@ -79,4 +70,13 @@ app.on('window-all-closed', () => {
             app.exit(1);
         });
 
+});
+
+// listen for unhandled rejections and uncaught errors
+process.on('unhandledRejection', (reason, p) => {
+    logger.error(`[UNHANDLED REJECTION ERROR] Reason=${JSON.stringify(reason)} P=${JSON.stringify(p)}`);
+});
+
+process.on('uncaughtException', (err) => {
+    logger.error(`[UNCAUGHT ERROR] Err=${JSON.stringify(err)}`);
 });
