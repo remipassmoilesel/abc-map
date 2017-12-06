@@ -48,10 +48,12 @@ export class DatabaseService {
     }
 
     public restartDatabase() {
-        logger.info('Restarting database ...');
 
         // do not restart database if it was stopped
         if (this.databaseStatus !== DatabaseStatus.STOPPED) {
+
+            logger.info('Restarting database ...');
+
             setTimeout(() => {
                 this.spawnDatabaseProcess();
             }, 1000);
@@ -59,17 +61,11 @@ export class DatabaseService {
 
     }
 
-    public stopDatabase(): Promise<any> {
+    public stopDatabase(): void {
         logger.info('Stopping database ...');
         this.databaseStatus = DatabaseStatus.STOPPED;
 
-        return (mongodb.connect(`mongodb://localhost:${DatabaseService.PORT}/admin`)
-            .then((db) => {
-                logger.info('connected as admin');
-                return db.command({shutdown: 1});
-            }).catch((e)=>{
-                console.error('', e);
-            }) as Promise<any>);
+        this.child.kill();
     }
 
     private spawnDatabaseProcess() {
@@ -82,8 +78,8 @@ export class DatabaseService {
             this.restartDatabase();
         });
 
-        this.child.on('exit', (err) => {
-            logger.error(`Database process exited: ${err}`);
+        this.child.on('exit', () => {
+            logger.error(`Database process exited`);
             this.restartDatabase();
         });
 
