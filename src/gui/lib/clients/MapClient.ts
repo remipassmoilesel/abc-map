@@ -3,7 +3,6 @@ import {TileLayer} from '../../../api/entities/layers/TileLayer';
 import {EntitySerializer} from '../../../api/entities/EntitySerializer';
 import {IpcSubject} from "../../../api/ipc/IpcSubject";
 import {handleRejection} from "./clientUtils";
-import * as Promise from 'bluebird';
 import {GeocodingResult} from "../../../api/entities/GeocodingResult";
 
 const eu = new EntitySerializer();
@@ -30,5 +29,9 @@ export class MapClient {
 
     public geocode(query: string): Promise<GeocodingResult[]> {
         return this.ipc.send(IpcSubject.MAP_GEOCODE, {data: query}).catch(handleRejection);
+    }
+
+    public getDataForLayer(): Promise<L.Layer> {
+        throw new Error('Not implemented');
     }
 }

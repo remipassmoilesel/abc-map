@@ -9,13 +9,14 @@ import {LeafletLayerFactory} from "../../lib/map/LeafletLayerFactory";
 import {MapView} from "../../lib/map/MapView";
 import {Logger} from "../../../api/dev/Logger";
 import {StoreWrapper} from "../../lib/store/StoreWrapper";
+import {clients} from "../../lib/mixins";
 // Import style
 import './style.scss'
 // Import plugins
 import 'leaflet-draw';
 
 let mapIdCounter = 0;
-const layerFactory = new LeafletLayerFactory();
+const layerFactory = new LeafletLayerFactory(clients);
 const logger = Logger.getLogger('GeoMapComponent');
 
 @Component({
@@ -31,7 +32,7 @@ export default class GeoMapComponent extends Vue {
     private map: L.Map;
     private editableLayersGroup: FeatureGroup<any>;
 
-    public beforeMount(){
+    public beforeMount() {
         // fix height before in order to prevent troubles on map size
         this.height = this.getMaximumHeight();
     }
@@ -70,8 +71,10 @@ export default class GeoMapComponent extends Vue {
             this.map.removeLayer(layer);
         });
 
-        _.forEach(layers, (layer) => {
-            this.map.addLayer(layerFactory.getLeafletLayer(layer));
+        _.forEach(layers, async (layer) => {
+            await layerFactory.getLeafletLayer(layer).then((leafletLayer) => {
+                this.map.addLayer(leafletLayer);
+            });
         });
     }
 
