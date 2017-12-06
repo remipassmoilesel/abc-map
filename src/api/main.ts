@@ -42,5 +42,9 @@ export function initApplication(ipc: Ipc) {
 
 export function closeApplication(): Promise<any> {
     logger.info('Closing main application');
-    return databaseService.stopDatabase();
+
+    return new Promise((resolve, reject) => {
+        databaseService.stopDatabase();
+        resolve();
+    });
 }
