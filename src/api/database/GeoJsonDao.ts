@@ -2,6 +2,7 @@ import * as turf from "turf";
 import {IGeoJsonFeature} from "../entities/geojson/IGeoJsonFeature";
 import {Cursor, Db, InsertWriteOpResult} from "mongodb";
 import {IGeoJsonGeometry} from "../entities/geojson/IGeoJsonGeometry";
+import {GeoJsonLayer} from "../entities/layers/GeoJsonLayer";
 
 export class GeoJsonDao {
 
@@ -19,7 +20,7 @@ export class GeoJsonDao {
         return this.writeMany(collectionId, [document]);
     }
 
-    private writeMany(collectionId: string, geoJsonFeatures: [IGeoJsonFeature]): Promise<InsertWriteOpResult> {
+    private writeMany(collectionId: string, geoJsonFeatures: IGeoJsonFeature[]): Promise<InsertWriteOpResult> {
         return this.db.collection(collectionId).insertMany(geoJsonFeatures);
     }
 
@@ -53,5 +54,9 @@ export class GeoJsonDao {
 
         });
 
+    }
+
+    public saveLayer(layer: GeoJsonLayer, data: IGeoJsonFeature[]): Promise<InsertWriteOpResult>{
+        return this.writeMany(layer.id, data);
     }
 }

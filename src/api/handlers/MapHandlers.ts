@@ -1,8 +1,14 @@
+import * as _ from "lodash";
 import {Ipc} from "../ipc/Ipc";
 import {IpcSubject} from "../ipc/IpcSubject";
 import {IpcEvent} from "../ipc/IpcEvent";
 import {AbstractHandlersGroup, IServicesMap} from "./AbstractHandlersGroup";
 import {GeocodingResult} from "../entities/GeocodingResult";
+import {GeoJsonLayer} from "../entities/layers/GeoJsonLayer";
+import {AbstractMapLayer} from "../entities/layers/AbstractMapLayer";
+import {Logger} from "../dev/Logger";
+
+const logger = Logger.getLogger('MapHandlers');
 
 export class MapHandlers extends AbstractHandlersGroup {
 
@@ -18,9 +24,28 @@ export class MapHandlers extends AbstractHandlersGroup {
         return this.services.map.getDefaultWmsLayers();
     }
 
-    public importDataFiles(event: IpcEvent) {
-        this.services.map.importFilesAsLayers(event.data).then((layers) => {
-            this.services.project.addLayers(layers);
+    public importDataFiles(event: IpcEvent): void {
+        this.services.map.importFiles(event.data).then((importedFiles) => {
+
+            const layers: AbstractMapLayer[] = [];
+            const dao = this.services.db.getGeoJsonDao();
+            const promises: Promise<any>[] = [];
+
+            _.forEach(importedFiles, (f) => {
+
+                const layer = new GeoJsonLayer();
+                promises.push(dao.saveLayer(layer, f.data));
+                layers.push(layer);
+
+            });
+
+            return Promise.all(promises)
+                .then(() => {
+                    this.services.project.addLayers(layers);
+                })
+                .catch((e) => {
+                    logger.error(`Error while importing data: ${e}`);
+                })
         });
     }
 

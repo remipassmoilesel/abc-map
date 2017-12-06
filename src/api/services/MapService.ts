@@ -6,10 +6,10 @@ import {AbstractService} from "./AbstractService";
 import {Ipc} from "../ipc/Ipc";
 import {IpcEvent} from "../ipc/IpcEvent";
 import {IpcSubject} from "../ipc/IpcSubject";
-import * as Promise from 'bluebird';
 import {DataImporterFinder} from "../import/DataImporterFinder";
 import {NominatimGeocoder} from "../geocoder/NominatimGeocoder";
 import {GeocodingResult} from "../entities/GeocodingResult";
+import {IImportedFile} from "../import/AbstractDataImporter";
 
 const logger = Logger.getLogger('MapService');
 
@@ -29,25 +29,28 @@ export class MapService extends AbstractService {
         this.geocoder = new NominatimGeocoder();
     }
 
-    public geocode(query: string): Promise<GeocodingResult[]>{
-        return this.geocoder.geocode(query);
+    public geocode(query: string): Promise<GeocodingResult[]> {
+        return (this.geocoder.geocode(query) as any);
     }
 
     public getDefaultWmsLayers(): TileLayer[] {
         return this.defaultLayers.getLayers();
     }
 
-    public importFilesAsLayers(files: string[]) {
-        const promises: any = [];
+    public importFiles(files: string[]): Promise<IImportedFile[]> {
+        const promises: Promise<IImportedFile>[] = [];
+
         _.forEach(files, (file: string) => {
+
             const importer = this.dataImporterFinder.getInstanceForFile(file);
             if (!importer) {
                 throw new Error(`Unsupported file: ${JSON.stringify(file)}`)
             }
 
-            const p = importer.getAsLayer(file);
+            const p: Promise<IImportedFile> = importer.getGeoJson(file);
             promises.push(p);
         });
+
         return Promise.all(promises);
     }
 

@@ -1,10 +1,8 @@
 import * as tgj from 'togeojson';
 import * as fs from 'fs-extra-promise';
 import {Document, DOMParser} from 'xmldom';
-import {AbstractDataImporter} from "./AbstractDataImporter";
-import {AbstractMapLayer} from "../entities/layers/AbstractMapLayer";
-import {GeoJsonLayer} from "../entities/layers/GeoJsonLayer";
-import * as Promise from 'bluebird';
+import {AbstractDataImporter, IImportedFile} from "./AbstractDataImporter";
+import {IGeoJsonFeature} from "../entities/geojson/IGeoJsonFeature";
 
 export class GpxDataImporter extends AbstractDataImporter {
 
@@ -12,25 +10,27 @@ export class GpxDataImporter extends AbstractDataImporter {
         return ['.gpx'];
     }
 
-    public getAsLayer(pathToSourceFile: string): Promise<AbstractMapLayer> {
+    public getGeoJson(pathToSourceFile: string): Promise<IImportedFile> {
 
         return this.getSourceFileAsDom(pathToSourceFile)
             .then((gpxDom: Document) => {
 
-                const geojson = this.convertToGeoJson(gpxDom);
-                return new GeoJsonLayer(pathToSourceFile, geojson);
+                return {
+                    filepath: pathToSourceFile,
+                    data: this.convertToGeoJson(gpxDom)
+                };
 
             });
 
     }
 
     private getSourceFileAsDom(path: string): Promise<Document> {
-        return fs.readFileAsync(path).then((data: Buffer) => {
+        return (fs.readFileAsync(path).then((data: Buffer) => {
             return new DOMParser().parseFromString(data.toString());
-        })
+        }) as any);
     }
 
-    private convertToGeoJson(gpxDom: Document): any {
+    private convertToGeoJson(gpxDom: Document): IGeoJsonFeature[] {
         return tgj.gpx(gpxDom, {styles: true});
     }
 }

@@ -8,6 +8,7 @@ import * as mongodb from "mongodb";
 import {Db} from "mongodb";
 import {Utils} from "../utils/Utils";
 import * as Promise from "bluebird";
+import {GeoJsonDao} from "../database/GeoJsonDao";
 
 const projectRoot: string = path.resolve(__dirname, '..', '..', '..');
 assert.ok(fs.existsSync(projectRoot), 'Project root must exist');
@@ -26,6 +27,7 @@ export class DatabaseService {
     private child: ChildProcess;
     private databaseStatus: DatabaseStatus;
     private db: Db;
+    private geoJsonDao: GeoJsonDao;
 
     constructor(ipc: Ipc) {
         this.ipc = ipc;
@@ -36,6 +38,7 @@ export class DatabaseService {
             return (mongodb.connect(`mongodb://localhost:${DatabaseService.PORT}/abcmap`)
                 .then((db) => {
                     this.db = db;
+                    this.initDao();
                 }) as any);
         });
     }
@@ -68,6 +71,10 @@ export class DatabaseService {
         this.child.kill();
     }
 
+    public getGeoJsonDao(){
+        return this.geoJsonDao;
+    }
+
     private spawnDatabaseProcess() {
 
         this.child = exec('./mongodb/bin/mongod -f config/mongodb-config.yaml',
@@ -85,4 +92,7 @@ export class DatabaseService {
 
     }
 
+    private initDao() {
+        this.geoJsonDao = new GeoJsonDao(this.db);
+    }
 }

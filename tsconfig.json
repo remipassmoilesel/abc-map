@@ -3,7 +3,8 @@
     "sourceMap": true,
     "target": "ES5",
     "lib": [
-      "ES2015"
+      "ES2015",
+      "dom"
     ],
     "strict": false,
     "moduleResolution": "node",

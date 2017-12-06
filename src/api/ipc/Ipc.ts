@@ -2,7 +2,6 @@ import promiseIpc from 'electron-promise-ipc';
 import {IpcSubject} from "./IpcSubject";
 import {IpcEvent} from "./IpcEvent";
 import {EntitySerializer} from "../entities/EntitySerializer";
-import * as Promise from 'bluebird';
 
 const eu = new EntitySerializer();
 

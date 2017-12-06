@@ -2,7 +2,6 @@ import {AbstractGeocoder} from "./AbstractGeocoder";
 import {GeocodingResult} from "../entities/GeocodingResult";
 import * as request from 'request-promise';
 import * as _ from 'lodash';
-import * as Promise from 'bluebird';
 
 export interface INominatimResult {
     place_id: string;
@@ -39,7 +38,7 @@ export class NominatimGeocoder extends AbstractGeocoder {
 
     public requestRaw(query: string): Promise<INominatimResult[]> {
         const requestUrl = this.getRequestUrl(query);
-        return request({uri: requestUrl, json: true});
+        return (request({uri: requestUrl, json: true}) as any);
     }
 
     private getRequestUrl(query: string): string {
