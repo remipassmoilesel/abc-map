@@ -2,6 +2,9 @@
   "compilerOptions": {
     "sourceMap": true,
     "target": "ES5",
+    "lib": [
+      "ES2015"
+    ],
     "strict": false,
     "moduleResolution": "node",
     "experimentalDecorators": true,

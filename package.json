@@ -25,6 +25,7 @@
   "license": "GPL-2.0",
   "dependencies": {
     "@types/request-promise": "^4.1.39",
+    "@types/turf": "^3.5.32",
     "animate.css": "^3.5.2",
     "bluebird": "^3.5.1",
     "buefy": "^0.6.1",
@@ -41,6 +42,7 @@
     "resurrect-js": "^1.0.1",
     "spectron": "^3.7.2",
     "togeojson": "^0.16.0",
+    "turf": "^3.0.14",
     "vue": "^2.5.2",
     "vue-class-component": "^6.1.0",
     "vue-router": "^3.0.1",
