@@ -18,3 +18,7 @@ déterminer si leur affichage est pertinent
 - ~~Utiliser une interface typée pour le Vuex store~~
 - Meilleur arrêt mongodb (db.shutdown())
 - Composant dev de démarrage / redémarrage mongodb
+
+## Ressources
+
+- https://github.com/mbloch/mapshaper: simplification et transformation de shapefiles
