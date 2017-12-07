@@ -28,7 +28,6 @@
     "@types/turf": "^3.5.32",
     "animate.css": "^3.5.2",
     "bluebird": "^3.5.1",
-    "buefy": "^0.6.1",
     "chalk": "^2.3.0",
     "circular-json": "^0.4.0",
     "electron": "^1.7.9",
@@ -46,7 +45,6 @@
     "vue": "^2.5.2",
     "vue-class-component": "^6.1.0",
     "vue-router": "^3.0.1",
-    "vuetify": "^0.17.1",
     "vuex": "^3.0.1",
     "xmldom": "^0.1.27"
   },
