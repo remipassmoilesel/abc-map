@@ -1,6 +1,5 @@
 import * as CircularJSON from 'circular-json';
 import * as _ from 'lodash';
-import * as Promise from 'bluebird';
 
 export class Utils {
 
@@ -17,7 +16,6 @@ export class Utils {
         return new Promise((resolve, reject) => {
 
             const tryWrapper = (remainingTries) => {
-
                 toRetry()
                     .then(resolve)
                     .catch((error) => {

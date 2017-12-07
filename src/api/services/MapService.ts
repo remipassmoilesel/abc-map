@@ -22,7 +22,7 @@ export class MapService extends AbstractService {
     constructor(ipc: Ipc) {
         super(ipc);
 
-        logger.info('Init MapService');
+        logger.info('Initialize MapService');
 
         this.defaultLayers = new DefaultTileLayers();
         this.dataImporterFinder = new DataImporterFinder();

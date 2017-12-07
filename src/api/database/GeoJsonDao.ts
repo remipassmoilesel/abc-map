@@ -16,11 +16,11 @@ export class GeoJsonDao {
         return this.db.collection(collectionId).createIndex({geometry: "2dsphere"});
     }
 
-    public write(collectionId: string, document: IGeoJsonFeature): Promise<InsertWriteOpResult> {
-        return this.writeMany(collectionId, [document]);
+    public insert(collectionId: string, document: IGeoJsonFeature): Promise<InsertWriteOpResult> {
+        return this.insertMany(collectionId, [document]);
     }
 
-    private writeMany(collectionId: string, geoJsonFeatures: IGeoJsonFeature[]): Promise<InsertWriteOpResult> {
+    private insertMany(collectionId: string, geoJsonFeatures: IGeoJsonFeature[]): Promise<InsertWriteOpResult> {
         return this.db.collection(collectionId).insertMany(geoJsonFeatures);
     }
 
@@ -57,6 +57,6 @@ export class GeoJsonDao {
     }
 
     public saveLayer(layer: GeoJsonLayer, data: IGeoJsonFeature[]): Promise<InsertWriteOpResult>{
-        return this.writeMany(layer.id, data);
+        return this.insertMany(layer.id, data);
     }
 }

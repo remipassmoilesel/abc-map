@@ -7,8 +7,8 @@ import * as assert from "assert";
 import * as mongodb from "mongodb";
 import {Db} from "mongodb";
 import {Utils} from "../utils/Utils";
-import * as Promise from "bluebird";
 import {GeoJsonDao} from "../database/GeoJsonDao";
+import {AbstractService} from "./AbstractService";
 
 const projectRoot: string = path.resolve(__dirname, '..', '..', '..');
 assert.ok(fs.existsSync(projectRoot), 'Project root must exist');
@@ -20,22 +20,25 @@ export enum DatabaseStatus {
     STOPPED = 'STOPPED',
 }
 
-export class DatabaseService {
+export class DatabaseService extends AbstractService {
 
-    private static readonly PORT = '30001';
-    private ipc: Ipc;
+    public static readonly SERVER_PORT = '30001';
+
     private child: ChildProcess;
     private databaseStatus: DatabaseStatus;
     private db: Db;
     private geoJsonDao: GeoJsonDao;
 
     constructor(ipc: Ipc) {
-        this.ipc = ipc;
+        super(ipc);
+
+        logger.info('Initialize DatabaseService');
+
     }
 
     public connect(): Promise<Db> {
         return Utils.retryUntilSuccess(() => {
-            return (mongodb.connect(`mongodb://localhost:${DatabaseService.PORT}/abcmap`)
+            return (mongodb.connect(`mongodb://localhost:${DatabaseService.SERVER_PORT}/abcmap`)
                 .then((db) => {
                     this.db = db;
                     this.initDao();
@@ -71,7 +74,7 @@ export class DatabaseService {
         this.child.kill();
     }
 
-    public getGeoJsonDao(){
+    public getGeoJsonDao() {
         return this.geoJsonDao;
     }
 
