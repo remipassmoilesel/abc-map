@@ -9,7 +9,7 @@ import {TestData} from "../TestData";
 
 const assert = chai.assert;
 
-describe.only('MapService', () => {
+describe('MapService', () => {
 
     it('Nominatim results signature should be exact', () => {
 
