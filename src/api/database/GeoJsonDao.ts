@@ -20,7 +20,7 @@ export class GeoJsonDao {
         return this.insertMany(collectionId, [document]);
     }
 
-    private insertMany(collectionId: string, geoJsonFeatures: IGeoJsonFeature[]): Promise<InsertWriteOpResult> {
+    public insertMany(collectionId: string, geoJsonFeatures: IGeoJsonFeature[]): Promise<InsertWriteOpResult> {
         return this.db.collection(collectionId).insertMany(geoJsonFeatures);
     }
 

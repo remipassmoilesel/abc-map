@@ -35,7 +35,7 @@ describe('UtilsTest', () => {
 
     });
 
-    it.only('Retry should fail after max number', () => {
+    it('Retry should fail after max number', () => {
 
         const promiseStub = sinon.stub();
         promiseStub.onCall(0).returns(Promise.reject(new Error()));
@@ -49,6 +49,23 @@ describe('UtilsTest', () => {
             })
             .catch(() => {
                 assert.equal(promiseStub.callCount, 4);
+            });
+    });
+
+    it('Retry should success after max number', () => {
+
+        const promiseStub = sinon.stub();
+        promiseStub.onCall(0).returns(Promise.reject(new Error()));
+        promiseStub.onCall(1).returns(Promise.reject(new Error()));
+        promiseStub.onCall(2).returns(Promise.reject(new Error()));
+        promiseStub.onCall(3).returns(Promise.resolve());
+
+        return Utils.retryUntilSuccess(promiseStub, 3, 10)
+            .then(() => {
+                assert.equal(promiseStub.callCount, 4);
+            })
+            .catch(() => {
+                throw new Error('Should resolve');
             });
     });
 
