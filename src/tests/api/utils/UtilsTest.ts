@@ -1,4 +1,5 @@
 import * as chai from 'chai';
+import * as sinon from 'sinon';
 import 'mocha';
 import {Utils} from "../../../api/utils/Utils";
 
@@ -32,6 +33,23 @@ describe('UtilsTest', () => {
         assert.deepEqual(withDefaults, {someVar: 'parametersVal', someVar2: 'defaultVal2'});
         assert.deepEqual(withDefaultsUndefined, {someVar: 'defaultVal', someVar2: 'defaultVal2'});
 
+    });
+
+    it.only('Retry should fail after max number', () => {
+
+        const promiseStub = sinon.stub();
+        promiseStub.onCall(0).returns(Promise.reject(new Error()));
+        promiseStub.onCall(1).returns(Promise.reject(new Error()));
+        promiseStub.onCall(2).returns(Promise.reject(new Error()));
+        promiseStub.onCall(3).returns(Promise.reject(new Error()));
+
+        return Utils.retryUntilSuccess(promiseStub, 3, 10)
+            .then(() => {
+                throw new Error('Should fail');
+            })
+            .catch(() => {
+                assert.equal(promiseStub.callCount, 4);
+            });
     });
 
 });

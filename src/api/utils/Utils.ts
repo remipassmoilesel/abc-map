@@ -16,6 +16,7 @@ export class Utils {
         return new Promise((resolve, reject) => {
 
             const tryWrapper = (remainingTries) => {
+
                 toRetry()
                     .then(resolve)
                     .catch((error) => {
@@ -26,7 +27,7 @@ export class Utils {
                         } else {
                             reject(new Error(`No remaining retries: ${JSON.stringify(error)}`))
                         }
-                    })
+                    });
 
             };
 

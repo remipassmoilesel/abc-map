@@ -6,7 +6,7 @@ import {IGeoJsonFeature} from "../../../api/entities/geojson/IGeoJsonFeature";
 
 const assert = chai.assert;
 
-describe.only('GeoJsonDao', () => {
+describe('GeoJsonDao', () => {
 
     const feature: IGeoJsonFeature = {
         type: 'Feature',
