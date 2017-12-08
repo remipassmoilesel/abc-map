@@ -33,19 +33,20 @@ describe('GeoJsonDao', () => {
         return feature;
     };
 
-    it('> Insert document in a new collection should success', () => {
+
+    it('> Insert a geojson document in a new collection should success', () => {
         return TestUtils.getMongodbConnection()
             .then((db) => {
 
                 const dao = new GeoJsonDao(db);
                 const collectionId = uuid.v4();
 
-                return dao.insert(collectionId, getGeoJsonFeature())
+                return dao.insertMany(collectionId, require(TestData.SAMPLE_GEOJSON).features)
                     .then(() => {
 
                         const cursor = dao.queryAll(collectionId);
                         return cursor.count().then((count) => {
-                            assert.equal(count, 1)
+                            assert.equal(count, 1);
                         });
 
                     })
@@ -70,25 +71,6 @@ describe('GeoJsonDao', () => {
                         const cursor = dao.queryAll(collectionId);
                         return cursor.count().then((count) => {
                             assert.equal(count, 3);
-                        });
-
-                    })
-            });
-    });
-
-    it('> Insert a geojson document in a new collection should success', () => {
-        return TestUtils.getMongodbConnection()
-            .then((db) => {
-
-                const dao = new GeoJsonDao(db);
-                const collectionId = uuid.v4();
-
-                return dao.insertMany(collectionId, require(TestData.SAMPLE_GEOJSON).features)
-                    .then(() => {
-
-                        const cursor = dao.queryAll(collectionId);
-                        return cursor.count().then((count) => {
-                            assert.equal(count, 1);
                         });
 
                     })
