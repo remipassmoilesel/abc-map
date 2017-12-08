@@ -1,32 +1,35 @@
 import 'mocha';
 import * as chai from 'chai';
-import * as _ from 'lodash';
-import * as uuid from 'uuid';
 import {GeoJsonDao} from "../../../api/database/GeoJsonDao";
 import {TestUtils} from "../TestUtils";
 import {IGeoJsonFeature} from "../../../api/entities/geojson/IGeoJsonFeature";
+import {TestData} from "../TestData";
+
+const uuid = require('uuid');
 
 const assert = chai.assert;
 
-describe.skip('GeoJsonDao', () => {
+describe('GeoJsonDao', () => {
 
-    const feature: IGeoJsonFeature = {
-        _id: null,
-        type: 'Feature',
-        geometry: {
-            type: "Polygon",
-            coordinates: [[
-                [-73.99, 40.75],
-                [-73.98, 40.76],
-                [-73.99, 40.75]
-            ]]
-        },
-        properties: {variable: 'value'}
-    };
+    const coordinates = () => [Math.random() * 80, Math.random() * 50];
 
     const getGeoJsonFeature = () => {
-        const feat = _.cloneDeep(feature);
-        feat._id = uuid.v4();
+
+        const feature: IGeoJsonFeature = {
+            type: 'Feature',
+            geometry: {
+                type: "Polygon",
+                coordinates: [[
+                    [-73.99, 40.75],
+                    [-73.98, 40.76],
+                    [-73.99, 40.75]
+                ]]
+            },
+            properties: {variable: 'value'}
+        };
+
+        feature.geometry.coordinates = [[coordinates(), coordinates()]];
+        feature.properties = [coordinates(), coordinates()];
         return feature;
     };
 
@@ -37,7 +40,7 @@ describe.skip('GeoJsonDao', () => {
                 const dao = new GeoJsonDao(db);
                 const collectionId = uuid.v4();
 
-                return dao.insert(collectionId, feature)
+                return dao.insert(collectionId, getGeoJsonFeature())
                     .then(() => {
 
                         const cursor = dao.queryAll(collectionId);
@@ -49,22 +52,43 @@ describe.skip('GeoJsonDao', () => {
             });
     });
 
-    it('> Insert multiple documents in a new collection should success', () => {
+    it('> Insert many documents in a new collection should success', () => {
         return TestUtils.getMongodbConnection()
             .then((db) => {
 
                 const dao = new GeoJsonDao(db);
                 const collectionId = uuid.v4();
 
+
                 return dao.insertMany(collectionId, [
                     getGeoJsonFeature(),
                     getGeoJsonFeature(),
-                    getGeoJsonFeature()])
+                    getGeoJsonFeature()
+                ])
                     .then(() => {
 
                         const cursor = dao.queryAll(collectionId);
                         return cursor.count().then((count) => {
-                            assert.equal(count, 3)
+                            assert.equal(count, 3);
+                        });
+
+                    })
+            });
+    });
+
+    it('> Insert a geojson document in a new collection should success', () => {
+        return TestUtils.getMongodbConnection()
+            .then((db) => {
+
+                const dao = new GeoJsonDao(db);
+                const collectionId = uuid.v4();
+
+                return dao.insertMany(collectionId, require(TestData.SAMPLE_GEOJSON).features)
+                    .then(() => {
+
+                        const cursor = dao.queryAll(collectionId);
+                        return cursor.count().then((count) => {
+                            assert.equal(count, 1);
                         });
 
                     })

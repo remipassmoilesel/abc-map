@@ -13,6 +13,7 @@ describe('GpxDataImporter', () => {
         const importer = new GpxDataImporter();
         return importer.getGeoJson(TestData.SAMPLE_GPX).then((file: IImportedFile) => {
             assert.isNotNull(file.data);
+            // console.log(JSON.stringify(file))
             // assert.equal(file.type, 'FeatureCollection'); // TODO: restore
         });
 

@@ -7,6 +7,8 @@ export class TestData {
     public static SAMPLE_GPX = path.resolve(dataDir, 'sample.gpx');
     public static SAMPLE_KML = path.resolve(dataDir, 'sample.kml');
 
+    public static SAMPLE_GEOJSON = path.resolve(dataDir, 'sample.json');
+
     public static NOMINATIM_RESULT: INominatimResult = {
         "place_id": "179360921",
         "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http:\/\/www.openstreetmap.org\/copyright",
