@@ -1,0 +1,50 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              5.629552416141797,
+              45.20292842672785,
+              0
+            ],
+            [
+              5.62261434692849,
+              45.11866007414244,
+              0
+            ],
+            [
+              5.696177335385341,
+              45.112347328948,
+              0
+            ],
+            [
+              5.696527128025295,
+              45.20553134803198,
+              0
+            ],
+            [
+              5.629552416141797,
+              45.20292842672785,
+              0
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Sans titre - Polygone",
+        "styleUrl": "#m_ylw-pushpin",
+        "styleHash": "22fec70a",
+        "styleMapHash": {
+          "normal": "#s_ylw-pushpin",
+          "highlight": "#s_ylw-pushpin_hl"
+        }
+      }
+    }
+  ]
+}
+

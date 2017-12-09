@@ -1,0 +1,271 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              5.636737297521828,
+              45.16065667271219,
+              0
+            ],
+            [
+              5.635764999623913,
+              45.12423265724811,
+              0
+            ],
+            [
+              5.684146659340459,
+              45.12368213834244,
+              0
+            ],
+            [
+              5.682754323579992,
+              45.16056466013988,
+              0
+            ],
+            [
+              5.636737297521828,
+              45.16065667271219,
+              0
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Sans titre - Polygone",
+        "styleUrl": "#m_ylw-pushpin",
+        "styleHash": "-5b4ed8d0",
+        "styleMapHash": {
+          "normal": "#s_ylw-pushpin0",
+          "highlight": "#s_ylw-pushpin_hl"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              5.766759748776796,
+              45.13194192918367,
+              0
+            ],
+            [
+              5.761641703642455,
+              45.15781764676218,
+              0
+            ],
+            [
+              5.706202710653554,
+              45.1536189262393,
+              0
+            ],
+            [
+              5.708531985587046,
+              45.11892563568848,
+              0
+            ],
+            [
+              5.766759748776796,
+              45.13194192918367,
+              0
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Sans titre - Polygone",
+        "styleUrl": "#m_ylw-pushpin",
+        "styleHash": "-5b4ed8d0",
+        "styleMapHash": {
+          "normal": "#s_ylw-pushpin0",
+          "highlight": "#s_ylw-pushpin_hl"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              5.688711601202696,
+              45.16755427686071,
+              0
+            ],
+            [
+              5.692008239670465,
+              45.19611960786015,
+              0
+            ],
+            [
+              5.640456812657719,
+              45.19952018406085,
+              0
+            ],
+            [
+              5.639313895650924,
+              45.16591485194454,
+              0
+            ],
+            [
+              5.688711601202696,
+              45.16755427686071,
+              0
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Sans titre - Polygone",
+        "styleUrl": "#m_ylw-pushpin",
+        "styleHash": "-5b4ed8d0",
+        "styleMapHash": {
+          "normal": "#s_ylw-pushpin0",
+          "highlight": "#s_ylw-pushpin_hl"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.777870156465399,
+            45.15626465433269,
+            0
+          ],
+          [
+            5.782355504121471,
+            45.131995435194,
+            0
+          ],
+          [
+            5.799710898258401,
+            45.15690182192563,
+            0
+          ],
+          [
+            5.822484302845718,
+            45.13232417339767,
+            0
+          ],
+          [
+            5.831945593269376,
+            45.15616716654983,
+            0
+          ],
+          [
+            5.855185177278839,
+            45.13634501950777,
+            0
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Sans titre - Trajet",
+        "styleUrl": "#m_ylw-pushpin0",
+        "styleHash": "22fec70a",
+        "styleMapHash": {
+          "normal": "#s_ylw-pushpin",
+          "highlight": "#s_ylw-pushpin_hl0"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              5.70384923354148,
+              45.19337898703054,
+              0
+            ],
+            [
+              5.70558014166709,
+              45.16284353854675,
+              0
+            ],
+            [
+              5.763476958752198,
+              45.16454746396592,
+              0
+            ],
+            [
+              5.758695131024734,
+              45.19366301787891,
+              0
+            ],
+            [
+              5.70384923354148,
+              45.19337898703054,
+              0
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Sans titre - Polygone",
+        "styleUrl": "#m_ylw-pushpin",
+        "styleHash": "-5b4ed8d0",
+        "styleMapHash": {
+          "normal": "#s_ylw-pushpin0",
+          "highlight": "#s_ylw-pushpin_hl"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.775720706310055,
+            45.19214124559469,
+            0
+          ],
+          [
+            5.780756993410792,
+            45.16830186814391,
+            0
+          ],
+          [
+            5.799367395271267,
+            45.19251575258619,
+            0
+          ],
+          [
+            5.816654253809041,
+            45.17078304202806,
+            0
+          ],
+          [
+            5.8234134757458,
+            45.19415285990203,
+            0
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Sans titre - Trajet",
+        "styleUrl": "#m_ylw-pushpin0",
+        "styleHash": "22fec70a",
+        "styleMapHash": {
+          "normal": "#s_ylw-pushpin",
+          "highlight": "#s_ylw-pushpin_hl0"
+        }
+      }
+    }
+  ]
+}
+
