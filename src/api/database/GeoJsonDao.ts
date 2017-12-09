@@ -12,8 +12,8 @@ export class GeoJsonDao {
         this.db = db;
     }
 
-    public createGeoIndex(collectionId: string): Promise<string> {
-        return this.db.collection(collectionId).createIndex({geometry: "2dsphere"});
+    public createGeoIndex(collectionId: string, field?: any): Promise<string> {
+        return this.db.collection(collectionId).createIndex(field || {geometry: "2dsphere"});
     }
 
     public insert(collectionId: string, document: IGeoJsonFeature): Promise<InsertWriteOpResult> {
@@ -31,7 +31,9 @@ export class GeoJsonDao {
     public queryForArea(collectionId: string, geometry: IGeoJsonGeometry): Cursor<IGeoJsonFeature> {
         return this.db.collection(collectionId).find({
             geometry: {
-                $geoIntersects: geometry,
+                $geoWithin: {
+                    $geometry: geometry,
+                }
             }
         });
     }
@@ -39,12 +41,12 @@ export class GeoJsonDao {
     public queryForAreaAndFilter(collectionId: string,
                                  geometry: IGeoJsonGeometry, minArea: number): Promise<IGeoJsonFeature[]> {
 
-        return new Promise(async (resolve, reject)  => {
+        return new Promise(async (resolve, reject) => {
 
             const result = [];
             const cursor = this.queryForArea(collectionId, geometry);
             while (cursor.hasNext()) {
-                await cursor.next().then((feature)=>{
+                await cursor.next().then((feature) => {
                     const area = turf.area(feature);
                     if (area > minArea) {
                         result.push(feature);
@@ -56,7 +58,7 @@ export class GeoJsonDao {
 
     }
 
-    public saveLayer(layer: GeoJsonLayer, data: IGeoJsonFeature[]): Promise<InsertWriteOpResult>{
+    public saveLayer(layer: GeoJsonLayer, data: IGeoJsonFeature[]): Promise<InsertWriteOpResult> {
         return this.insertMany(layer.id, data);
     }
 }
