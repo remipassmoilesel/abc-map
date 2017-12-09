@@ -97,10 +97,12 @@ describe('GeoJsonDao', () => {
             });
     });
 
-    it('> Insert many documents in a new collection should success', () => {
+    it('> Filter shapes with a polygon should success', () => {
 
         const shapes: IFeatureCollection = require(TestData.JSON_GRENOBLE_SHAPES);
         const filter: IFeatureCollection = require(TestData.JSON_GRENOBLE_SHAPES_FILTER1);
+
+        assert.lengthOf(shapes.features, 6);
 
         return TestUtils.getMongodbConnection()
             .then((db) => {
