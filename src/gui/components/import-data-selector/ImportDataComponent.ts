@@ -44,6 +44,7 @@ export default class ImportDataSelectorComponent extends Vue {
             });
 
             this.clients.map.importFiles(paths);
+            this.files = [];
         }
     }
 
