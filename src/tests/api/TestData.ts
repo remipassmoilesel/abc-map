@@ -6,8 +6,15 @@ const dataDir = path.resolve(__dirname, '../../../src/tests/example-data');
 export class TestData {
     public static SAMPLE_GPX = path.resolve(dataDir, 'sample.gpx');
     public static SAMPLE_KML = path.resolve(dataDir, 'sample.kml');
-
     public static SAMPLE_GEOJSON = path.resolve(dataDir, 'sample.json');
+
+    public static GPX_LYON_PARIS = path.resolve(dataDir, 'lyon-paris.gpx');
+    public static JSON_LYON_PARIS = path.resolve(dataDir, 'lyon-paris.json');
+
+    public static KML_GRENOBLE_SHAPES = path.resolve(dataDir, 'grenoble-shapes.kml');
+    public static KML_GRENOBLE_SHAPES_FILTER1 = path.resolve(dataDir, 'grenoble-shapes-filter1.kml');
+    public static JSON_GRENOBLE_SHAPES = path.resolve(dataDir, 'grenoble-shapes.json');
+    public static JSON_GRENOBLE_SHAPES_FILTER1 = path.resolve(dataDir, 'grenoble-shapes-filter1.json');
 
     public static NOMINATIM_RESULT: INominatimResult = {
         "place_id": "179360921",
