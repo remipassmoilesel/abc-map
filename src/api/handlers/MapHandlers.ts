@@ -45,6 +45,7 @@ export class MapHandlers extends AbstractHandlersGroup {
                 })
                 .catch((e) => {
                     logger.error(`Error while importing data: ${e}`);
+                    throw e;
                 })
         });
     }

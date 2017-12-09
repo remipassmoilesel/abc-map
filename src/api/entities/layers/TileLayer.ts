@@ -14,4 +14,8 @@ export class TileLayer extends AbstractMapLayer {
         return this._url;
     }
 
+    public getIdPrefix(): string {
+        return 'tile';
+    }
+
 }

@@ -11,6 +11,8 @@ export abstract class AbstractMapLayer {
         this._name = name;
     }
 
+    public abstract getIdPrefix(): string;
+
     get name(): string {
         return this._name;
     }
@@ -28,6 +30,6 @@ export abstract class AbstractMapLayer {
     }
 
     public generateId() {
-        this.id = `layer-${layerCount++}`;
+        this.id = `layer-${this.getIdPrefix()}-${layerCount++}`;
     }
 }
