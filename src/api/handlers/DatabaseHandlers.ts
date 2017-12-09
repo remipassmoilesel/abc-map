@@ -7,9 +7,10 @@ export class DatabaseHandlers extends AbstractHandlersGroup {
     constructor(ipc: Ipc, services: IServicesMap) {
         super(ipc, services);
 
-        this.registerHandler(IpcSubject.DB_START, this.startDb);
-        this.registerHandler(IpcSubject.DB_STOP, this.stopDb);
-        this.registerHandler(IpcSubject.DB_RESTART, this.restartDb);
+        this.registerHandler(IpcSubject.DB_START, this.startDb.bind(this));
+        this.registerHandler(IpcSubject.DB_STOP, this.stopDb.bind(this));
+        this.registerHandler(IpcSubject.DB_RESTART, this.restartDb.bind(this));
+        this.registerHandler(IpcSubject.DB_GET_LAYER_GEOJSON_DATA, this.getLayerData);
     }
 
     public startDb() {
@@ -18,10 +19,13 @@ export class DatabaseHandlers extends AbstractHandlersGroup {
 
     public stopDb() {
         this.services.db.stopDatabase();
-    };
+    }
 
     public restartDb() {
         this.services.db.stopDatabase();
-    };
+    }
 
+    public getLayerData() {
+
+    }
 }

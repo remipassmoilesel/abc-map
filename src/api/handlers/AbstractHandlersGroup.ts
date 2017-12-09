@@ -1,4 +1,4 @@
-import {Ipc} from "../ipc/Ipc";
+import {Ipc, IpcHandler} from "../ipc/Ipc";
 import {ProjectService} from "../services/ProjectService";
 import {MapService} from "../services/MapService";
 import {DatabaseService} from "../services/DatabaseService";
@@ -19,8 +19,8 @@ export abstract class AbstractHandlersGroup {
         this.services = services;
     }
 
-    protected registerHandler(subject: IpcSubject, handler: Function) {
-        this.ipc.listen(subject, handler.bind(this));
+    protected registerHandler(subject: IpcSubject, handler: IpcHandler) {
+        this.ipc.listen(subject, handler);
     }
 
 }

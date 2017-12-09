@@ -15,9 +15,9 @@ export class MapHandlers extends AbstractHandlersGroup {
     constructor(ipc: Ipc, services: IServicesMap) {
         super(ipc, services);
 
-        this.registerHandler(IpcSubject.MAP_GET_WMS_DEFAULT_LAYERS, this.getDefaultWmsLayers);
-        this.registerHandler(IpcSubject.MAP_IMPORT_FILES, this.importDataFiles);
-        this.registerHandler(IpcSubject.MAP_GEOCODE, this.geocode);
+        this.registerHandler(IpcSubject.MAP_GET_WMS_DEFAULT_LAYERS, this.getDefaultWmsLayers.bind(this));
+        this.registerHandler(IpcSubject.MAP_IMPORT_FILES, this.importDataFiles.bind(this));
+        this.registerHandler(IpcSubject.MAP_GEOCODE, this.geocode.bind(this));
     }
 
     public getDefaultWmsLayers() {

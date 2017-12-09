@@ -8,10 +8,10 @@ export class ProjectHandlers extends AbstractHandlersGroup {
     constructor(ipc: Ipc, services: IServicesMap) {
         super(ipc, services);
 
-        this.registerHandler(IpcSubject.PROJECT_CREATE_NEW, this.createNewProject);
-        this.registerHandler(IpcSubject.PROJECT_GET_CURRENT, this.getCurrentProject);
-        this.registerHandler(IpcSubject.PROJECT_ADD_LAYER, this.addLayer);
-        this.registerHandler(IpcSubject.PROJECT_DELETE_LAYERS, this.deleteLayer);
+        this.registerHandler(IpcSubject.PROJECT_CREATE_NEW, this.createNewProject.bind(this));
+        this.registerHandler(IpcSubject.PROJECT_GET_CURRENT, this.getCurrentProject.bind(this));
+        this.registerHandler(IpcSubject.PROJECT_ADD_LAYER, this.addLayer.bind(this));
+        this.registerHandler(IpcSubject.PROJECT_DELETE_LAYERS, this.deleteLayer.bind(this));
     }
 
     public createNewProject() {
