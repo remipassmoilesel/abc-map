@@ -6,6 +6,9 @@ import {EventType} from "../ipc/IpcEventTypes";
 import {GeoJsonLayer} from "./layers/GeoJsonLayer";
 import {GeocodingResult} from "./GeocodingResult";
 
+// WARNING
+// All constructors declared here are imported in browser
+
 // List of constructors used to deserialize objects
 const constructors: any = {};
 constructors.TileLayer = TileLayer;
@@ -51,3 +54,4 @@ export class EntitySerializer {
     }
 
 }
+

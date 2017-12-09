@@ -3,6 +3,7 @@ import * as fs from 'fs-extra-promise';
 import {Document, DOMParser} from 'xmldom';
 import {AbstractDataImporter, IImportedFile} from "./AbstractDataImporter";
 import {IGeoJsonFeature} from "../entities/geojson/IGeoJsonFeature";
+import {IGeoJsonFeatureCollection} from "../entities/geojson/IGeoJsonFeatureCollection";
 
 export class GpxDataImporter extends AbstractDataImporter {
 
@@ -30,7 +31,7 @@ export class GpxDataImporter extends AbstractDataImporter {
         }) as any);
     }
 
-    private convertToGeoJson(gpxDom: Document): IGeoJsonFeature[] {
+    private convertToGeoJson(gpxDom: Document): IGeoJsonFeatureCollection {
         return tgj.gpx(gpxDom, {styles: true});
     }
 }

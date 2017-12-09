@@ -1,4 +1,5 @@
 import * as _ from "lodash";
+import * as path from "path";
 import {Ipc} from "../ipc/Ipc";
 import {IpcSubject} from "../ipc/IpcSubject";
 import {IpcEvent} from "../ipc/IpcEvent";
@@ -34,7 +35,8 @@ export class MapHandlers extends AbstractHandlersGroup {
             _.forEach(importedFiles, (f) => {
 
                 const layer = new GeoJsonLayer();
-                promises.push(dao.saveLayer(layer, f.data));
+                layer.name = path.basename(f.filepath);
+                promises.push(dao.saveLayer(layer, f.data.features));
                 layers.push(layer);
 
             });

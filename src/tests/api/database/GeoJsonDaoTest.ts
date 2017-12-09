@@ -4,7 +4,7 @@ import {GeoJsonDao} from "../../../api/database/GeoJsonDao";
 import {TestUtils} from "../TestUtils";
 import {IGeoJsonFeature} from "../../../api/entities/geojson/IGeoJsonFeature";
 import {TestData} from "../TestData";
-import {IFeatureCollection} from "../../../api/entities/geojson/IFeatureCollection";
+import {IGeoJsonFeatureCollection} from "../../../api/entities/geojson/IGeoJsonFeatureCollection";
 
 const uuid = require('uuid');
 
@@ -79,7 +79,7 @@ describe('GeoJsonDao', () => {
 
     it('> Create a geoindex should success', () => {
 
-        const shapes: IFeatureCollection = require(TestData.JSON_GRENOBLE_SHAPES);
+        const shapes: IGeoJsonFeatureCollection = require(TestData.JSON_GRENOBLE_SHAPES);
 
         return TestUtils.getMongodbConnection()
             .then((db) => {
@@ -99,8 +99,8 @@ describe('GeoJsonDao', () => {
 
     it('> Filter shapes with a polygon should success', () => {
 
-        const shapes: IFeatureCollection = require(TestData.JSON_GRENOBLE_SHAPES);
-        const filter: IFeatureCollection = require(TestData.JSON_GRENOBLE_SHAPES_FILTER1);
+        const shapes: IGeoJsonFeatureCollection = require(TestData.JSON_GRENOBLE_SHAPES);
+        const filter: IGeoJsonFeatureCollection = require(TestData.JSON_GRENOBLE_SHAPES_FILTER1);
 
         assert.lengthOf(shapes.features, 6);
 

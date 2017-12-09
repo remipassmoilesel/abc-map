@@ -2,7 +2,7 @@ import * as tgj from 'togeojson';
 import * as fs from 'fs-extra-promise';
 import {Document, DOMParser} from 'xmldom';
 import {AbstractDataImporter, IImportedFile} from "./AbstractDataImporter";
-import {IGeoJsonFeature} from "../entities/geojson/IGeoJsonFeature";
+import {IGeoJsonFeatureCollection} from "../entities/geojson/IGeoJsonFeatureCollection";
 
 export class KmlDataImporter extends AbstractDataImporter {
 
@@ -30,7 +30,7 @@ export class KmlDataImporter extends AbstractDataImporter {
         }) as any);
     }
 
-    private convertToGeoJson(kmlDom: Document): IGeoJsonFeature[] {
+    private convertToGeoJson(kmlDom: Document): IGeoJsonFeatureCollection {
         return tgj.kml(kmlDom, {styles: true});
     }
 }

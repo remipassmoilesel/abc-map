@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 import {Logger} from '../dev/Logger';
-import {DefaultTileLayers} from '../entities/DefaultTileLayers';
+import {DefaultTileLayers} from '../entities/layers/DefaultTileLayers';
 import {TileLayer} from '../entities/layers/TileLayer';
 import {AbstractService} from "./AbstractService";
 import {Ipc} from "../ipc/Ipc";

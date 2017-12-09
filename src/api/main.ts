@@ -36,7 +36,7 @@ export function initApplication(ipc: Ipc) {
         const dbHandlers = new DatabaseHandlers(ipc, services);
 
         projectHandlers.createNewProject();
-    })
+    });
 
 }
 
