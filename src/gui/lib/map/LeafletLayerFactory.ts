@@ -31,7 +31,7 @@ export class LeafletLayerFactory {
 
     private getGeojsonLayer(layer: GeoJsonLayer): Promise<L.Layer> {
         return this.clients.map.getGeojsonDataForLayer(layer).then((data: any) => {
-            return L.geoJSON(data); // TODO: better types
+            return L.geoJSON(data); // TODO: find a layer which poll data for area
         });
     }
 }
