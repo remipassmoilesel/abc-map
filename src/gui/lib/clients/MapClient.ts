@@ -4,6 +4,7 @@ import {EntitySerializer} from '../../../api/entities/EntitySerializer';
 import {IpcSubject} from "../../../api/ipc/IpcSubject";
 import {handleRejection} from "./clientUtils";
 import {GeocodingResult} from "../../../api/entities/GeocodingResult";
+import {AbstractMapLayer} from "../../../api/entities/layers/AbstractMapLayer";
 
 const eu = new EntitySerializer();
 
@@ -31,7 +32,7 @@ export class MapClient {
         return this.ipc.send(IpcSubject.MAP_GEOCODE, {data: query}).catch(handleRejection);
     }
 
-    public getDataForLayer(): Promise<L.Layer> {
-        throw new Error('Not implemented');
+    public getGeojsonDataForLayer(layer: AbstractMapLayer): Promise<L.Layer> {
+        return this.ipc.send(IpcSubject.DB_GET_LAYER_GEOJSON_DATA, {data: layer.id});
     }
 }

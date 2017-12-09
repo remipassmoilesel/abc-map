@@ -15,18 +15,23 @@ export class LeafletLayerFactory {
     public getLeafletLayer(layer: AbstractMapLayer): Promise<L.Layer> {
 
         if (layer instanceof TileLayer) {
-            return Promise.resolve(L.tileLayer(layer.url));
+            return this.getTileLayer((layer as TileLayer));
         }
 
         else if (layer instanceof GeoJsonLayer) {
-
-            return this.clients.map.getDataForLayer().then((data: any) => {
-                return L.geoJSON(data); // TODO: better types
-            });
-
+            return this.getGeojsonLayer(layer);
         } else {
             throw new Error(`Unknown layer type: ${JSON.stringify(layer)}`);
         }
     }
 
+    private getTileLayer(layer: TileLayer): Promise<L.Layer> {
+        return Promise.resolve(L.tileLayer(layer.url));
+    }
+
+    private getGeojsonLayer(layer: GeoJsonLayer): Promise<L.Layer> {
+        return this.clients.map.getGeojsonDataForLayer(layer).then((data: any) => {
+            return L.geoJSON(data); // TODO: better types
+        });
+    }
 }
