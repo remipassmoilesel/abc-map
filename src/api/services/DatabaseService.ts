@@ -55,15 +55,11 @@ export class DatabaseService extends AbstractService {
 
     public restartDatabase() {
 
-        // do not restart database if it was stopped
-        if (this.databaseStatus !== DatabaseStatus.STOPPED) {
+        logger.info('Restarting database ...');
 
-            logger.info('Restarting database ...');
-
-            setTimeout(() => {
-                this.spawnDatabaseProcess();
-            }, 1000);
-        }
+        setTimeout(() => {
+            this.spawnDatabaseProcess();
+        }, 1000);
 
     }
 
@@ -71,7 +67,7 @@ export class DatabaseService extends AbstractService {
         logger.info('Stopping database ...');
         this.databaseStatus = DatabaseStatus.STOPPED;
 
-        this.child.kill();
+        exec('./mongodb/bin/mongod -f config/mongodb-config.yaml --shutdown', {cwd: projectRoot});
     }
 
     public getGeoJsonDao() {
@@ -80,17 +76,15 @@ export class DatabaseService extends AbstractService {
 
     private spawnDatabaseProcess() {
 
-        this.child = exec('./mongodb/bin/mongod -f config/mongodb-config.yaml',
-            {cwd: projectRoot});
+        this.child = exec('./mongodb/bin/mongod -f config/mongodb-config.yaml', {cwd: projectRoot});
 
-        this.child.on('error', (err) => {
-            logger.error(`Database process error: ${err}`);
-            this.restartDatabase();
-        });
+        this.child.on('exit', (code) => {
+            logger.error(`Database process exited with code ${code}`);
 
-        this.child.on('exit', () => {
-            logger.error(`Database process exited`);
-            this.restartDatabase();
+            // do not restart database if it was stopped
+            if (this.databaseStatus !== DatabaseStatus.STOPPED) {
+                this.restartDatabase();
+            }
         });
 
     }

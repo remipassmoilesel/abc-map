@@ -78,14 +78,18 @@ app.on('window-all-closed', () => {
 
     closeApplication()
         .then(() => {
-            logger.info('Database closed');
-            app.exit();
+            logger.info('Database closed, quitting app');
+            app.exit(0);
         })
         .catch((error) => {
-            logger.error('Error while closing app: ', error);
+            logger.error('Error while closing app, quitting app. Error: ', error);
             app.exit(1);
         });
 
+});
+
+process.on('exit', (code) => {
+    logger.info(`Process will exit with code ${code}`);
 });
 
 // listen for unhandled rejections and uncaught errors
