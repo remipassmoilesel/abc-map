@@ -1,7 +1,7 @@
 import * as _ from "lodash";
 import * as path from "path";
 import {Ipc} from "../ipc/Ipc";
-import {IpcSubject} from "../ipc/IpcSubject";
+import {MapSubjects} from "../ipc/IpcSubject";
 import {IpcEvent} from "../ipc/IpcEvent";
 import {AbstractHandlersGroup, IServicesMap} from "./AbstractHandlersGroup";
 import {GeocodingResult} from "../entities/GeocodingResult";
@@ -16,9 +16,9 @@ export class MapHandlers extends AbstractHandlersGroup {
     constructor(ipc: Ipc, services: IServicesMap) {
         super(ipc, services);
 
-        this.registerHandler(IpcSubject.MAP_GET_WMS_DEFAULT_LAYERS, this.getDefaultWmsLayers.bind(this));
-        this.registerHandler(IpcSubject.MAP_IMPORT_FILES, this.importDataFiles.bind(this));
-        this.registerHandler(IpcSubject.MAP_GEOCODE, this.geocode.bind(this));
+        this.registerHandler(MapSubjects.GET_WMS_DEFAULT_LAYERS, this.getDefaultWmsLayers.bind(this));
+        this.registerHandler(MapSubjects.IMPORT_FILES, this.importDataFiles.bind(this));
+        this.registerHandler(MapSubjects.GEOCODE, this.geocode.bind(this));
     }
 
     public getDefaultWmsLayers() {

@@ -1,5 +1,5 @@
 import {Ipc} from "../ipc/Ipc";
-import {IpcSubject} from "../ipc/IpcSubject";
+import {ProjectSubjects} from "../ipc/IpcSubject";
 import {IpcEvent} from "../ipc/IpcEvent";
 import {AbstractHandlersGroup, IServicesMap} from "./AbstractHandlersGroup";
 
@@ -8,10 +8,10 @@ export class ProjectHandlers extends AbstractHandlersGroup {
     constructor(ipc: Ipc, services: IServicesMap) {
         super(ipc, services);
 
-        this.registerHandler(IpcSubject.PROJECT_CREATE_NEW, this.createNewProject.bind(this));
-        this.registerHandler(IpcSubject.PROJECT_GET_CURRENT, this.getCurrentProject.bind(this));
-        this.registerHandler(IpcSubject.PROJECT_ADD_LAYER, this.addLayer.bind(this));
-        this.registerHandler(IpcSubject.PROJECT_DELETE_LAYERS, this.deleteLayer.bind(this));
+        this.registerHandler(ProjectSubjects.CREATE_NEW, this.createNewProject.bind(this));
+        this.registerHandler(ProjectSubjects.GET_CURRENT, this.getCurrentProject.bind(this));
+        this.registerHandler(ProjectSubjects.ADD_LAYER, this.addLayer.bind(this));
+        this.registerHandler(ProjectSubjects.DELETE_LAYERS, this.deleteLayer.bind(this));
     }
 
     public createNewProject() {

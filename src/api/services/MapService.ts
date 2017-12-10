@@ -5,7 +5,7 @@ import {TileLayer} from '../entities/layers/TileLayer';
 import {AbstractService} from "./AbstractService";
 import {Ipc} from "../ipc/Ipc";
 import {IpcEvent} from "../ipc/IpcEvent";
-import {IpcSubject} from "../ipc/IpcSubject";
+import {IpcEventBus, IpcSubject, MapSubjects} from "../ipc/IpcSubject";
 import {DataImporterFinder} from "../import/DataImporterFinder";
 import {NominatimGeocoder} from "../geocoder/NominatimGeocoder";
 import {GeocodingResult} from "../entities/GeocodingResult";
@@ -55,7 +55,7 @@ export class MapService extends AbstractService {
     }
 
     private sendMapEvent(data: IpcEvent) {
-        return this.ipc.send(IpcSubject.MAP_EVENTS_BUS, data);
+        return this.ipc.send(IpcEventBus.MAP, data);
     }
 
 

@@ -1,8 +1,8 @@
 import {Ipc, IpcHandler} from '../../../api/ipc/Ipc';
 import {Project} from "../../../api/entities/Project";
-import {IpcSubject} from "../../../api/ipc/IpcSubject";
 import {handleRejection} from "./clientUtils";
 import {AbstractMapLayer} from "../../../api/entities/layers/AbstractMapLayer";
+import {IpcEventBus, ProjectSubjects} from "../../../api/ipc/IpcSubject";
 
 export class ProjectClient {
 
@@ -13,22 +13,22 @@ export class ProjectClient {
     }
 
     public onProjectEvent(handler: IpcHandler): void {
-        return this.ipc.listen(IpcSubject.PROJECT_EVENTS_BUS, handler);
+        return this.ipc.listen(IpcEventBus.PROJECT, handler);
     }
 
     public createNewProject(): Promise<void> {
-        return this.ipc.send(IpcSubject.PROJECT_CREATE_NEW);
+        return this.ipc.send(ProjectSubjects.CREATE_NEW);
     }
 
     public getCurrentProject(): Promise<Project> {
-        return this.ipc.send(IpcSubject.PROJECT_GET_CURRENT).catch(handleRejection);
+        return this.ipc.send(ProjectSubjects.GET_CURRENT).catch(handleRejection);
     }
 
     public addLayer(layer: AbstractMapLayer) {
-        return this.ipc.send(IpcSubject.PROJECT_ADD_LAYER, {data: layer}).catch(handleRejection);
+        return this.ipc.send(ProjectSubjects.ADD_LAYER, {data: layer}).catch(handleRejection);
     }
 
     public deleteLayers(layerIds: string[]) {
-        return this.ipc.send(IpcSubject.PROJECT_DELETE_LAYERS, {data: layerIds}).catch(handleRejection);
+        return this.ipc.send(ProjectSubjects.DELETE_LAYERS, {data: layerIds}).catch(handleRejection);
     }
 }

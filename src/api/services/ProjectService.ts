@@ -3,7 +3,7 @@ import {IProjectCreationOptions, Project} from "../entities/Project";
 import {Logger} from "../dev/Logger";
 import {Utils} from "../utils/Utils";
 import {Ipc} from "../ipc/Ipc";
-import {IpcSubject} from "../ipc/IpcSubject";
+import {IpcEventBus, IpcSubject} from "../ipc/IpcSubject";
 import {EventType} from "../ipc/IpcEventTypes";
 import {IpcEvent} from "../ipc/IpcEvent";
 import {AbstractService} from "./AbstractService";
@@ -75,7 +75,7 @@ export class ProjectService extends AbstractService {
     }
 
     private sendProjectEvent(data: IpcEvent) {
-        return this.ipc.send(IpcSubject.PROJECT_EVENTS_BUS, data);
+        return this.ipc.send(IpcEventBus.PROJECT, data);
     }
 
 }

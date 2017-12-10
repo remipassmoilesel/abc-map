@@ -1,6 +1,6 @@
 import 'mocha';
 import * as chai from 'chai';
-import {IpcSubject} from "../../../api/ipc/IpcSubject";
+import {IpcSubject, ProjectSubjects} from "../../../api/ipc/IpcSubject";
 import {Ipc} from "../../../api/ipc/Ipc";
 import {Logger} from "../../../api/dev/Logger";
 import {Application} from "spectron";
@@ -37,7 +37,7 @@ describe.only('Map handlers', function () {
         logger.info('app.mainProcess', app.mainProcess || 'undefined');
 
         const ipc = new Ipc();
-        return ipc.send(IpcSubject.PROJECT_GET_CURRENT).then((data) => {
+        return ipc.send(ProjectSubjects.GET_CURRENT).then((data) => {
             logger.info(data);
         });
     })

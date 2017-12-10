@@ -1,41 +1,56 @@
-// TODO: refactor subjects as below
 export class IpcSubject {
-
-    public static PROJECT_ROOT = "/project";
-    public static PROJECT_EVENTS_BUS = new IpcSubject(`${IpcSubject.PROJECT_ROOT}/events-bus`);
-    public static PROJECT_CREATE_NEW = new IpcSubject(`${IpcSubject.PROJECT_ROOT}/create-new`);
-    public static PROJECT_GET_CURRENT = new IpcSubject(`${IpcSubject.PROJECT_ROOT}/get-current`);
-    public static PROJECT_ADD_LAYER = new IpcSubject(`${IpcSubject.PROJECT_ROOT}/add-layer`);
-    public static PROJECT_DELETE_LAYERS = new IpcSubject(`${IpcSubject.PROJECT_ROOT}/delete-layers`);
-
-    public static MAP_ROOT = "/map";
-    public static MAP_EVENTS_BUS = new IpcSubject(`${IpcSubject.MAP_ROOT}/events-bus`);
-    public static MAP_GET_WMS_DEFAULT_LAYERS = new IpcSubject(`${IpcSubject.MAP_ROOT}/get-default-layers`);
-    public static MAP_IMPORT_FILES = new IpcSubject(`${IpcSubject.MAP_ROOT}/kml/import-as-layer`);
-    public static MAP_GEOCODE = new IpcSubject(`${IpcSubject.MAP_ROOT}/geocode`);
-
-    public static DB_ROOT = "/map";
-    public static DB_START = new IpcSubject(`${IpcSubject.DB_ROOT}/start`);
-    public static DB_STOP = new IpcSubject(`${IpcSubject.DB_ROOT}/stop`);
-    public static DB_RESTART = new IpcSubject(`${IpcSubject.DB_ROOT}/restart`);
-    public static DB_GET_LAYER_GEOJSON_DATA = new IpcSubject(`${IpcSubject.DB_ROOT}/geojson/data`);
-
     public id: string;
-
     constructor(id: string) {
         this.id = id;
     }
 }
 
-export class MapSubjects extends IpcSubject {
+export class DbSubjects extends IpcSubject {
 
-    public static MAP_ROOT                      = "/map";
-    public static MAP_EVENTS_BUS                = new MapSubjects(`/events-bus`);
-    public static MAP_GET_WMS_DEFAULT_LAYERS    = new MapSubjects(`/get-default-layers`);
-    public static MAP_IMPORT_FILES              = new MapSubjects(`/kml/import-as-layer`);
-    public static MAP_GEOCODE                   = new MapSubjects(`/geocode`);
+    public static ROOT = "/map";
+    public static START_DB = new DbSubjects(`/start`);
+    public static STOP_DB = new DbSubjects(`/stop`);
+    public static RESTART_DB = new DbSubjects(`/restart`);
+    public static GET_LAYER_GEOJSON_DATA = new DbSubjects(`/geojson/data`);
 
     constructor(id: string) {
-        super(MapSubjects.MAP_ROOT + id);
+        super(DbSubjects.ROOT + id);
     }
+}
+
+export class MapSubjects extends IpcSubject {
+
+    public static ROOT = "/map";
+    public static GET_WMS_DEFAULT_LAYERS = new MapSubjects(`/get-default-layers`);
+    public static IMPORT_FILES = new MapSubjects(`/kml/import-as-layer`);
+    public static GEOCODE = new MapSubjects(`/geocode`);
+
+    constructor(id: string) {
+        super(MapSubjects.ROOT + id);
+    }
+}
+
+export class ProjectSubjects extends IpcSubject {
+
+    public static ROOT = "/project";
+    public static CREATE_NEW = new ProjectSubjects(`/create-new`);
+    public static GET_CURRENT = new ProjectSubjects(`/get-current`);
+    public static ADD_LAYER = new ProjectSubjects(`/add-layer`);
+    public static DELETE_LAYERS = new ProjectSubjects(`/delete-layers`);
+
+    constructor(id: string) {
+        super(ProjectSubjects.ROOT + id);
+    }
+}
+
+export class IpcEventBus extends IpcSubject {
+
+    public static ROOT = "/events";
+    public static PROJECT = new IpcEventBus(`/project`);
+    public static MAP = new IpcEventBus(`/map`);
+
+    constructor(id: string) {
+        super(IpcEventBus.ROOT + id);
+    }
+
 }

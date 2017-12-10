@@ -1,5 +1,5 @@
 import {Ipc} from "../ipc/Ipc";
-import {IpcSubject} from "../ipc/IpcSubject";
+import {DbSubjects} from "../ipc/IpcSubject";
 import {AbstractHandlersGroup, IServicesMap} from "./AbstractHandlersGroup";
 import {IpcEvent} from "../ipc/IpcEvent";
 import {Cursor} from "mongodb";
@@ -9,10 +9,10 @@ export class DatabaseHandlers extends AbstractHandlersGroup {
     constructor(ipc: Ipc, services: IServicesMap) {
         super(ipc, services);
 
-        this.registerHandler(IpcSubject.DB_START, this.startDb.bind(this));
-        this.registerHandler(IpcSubject.DB_STOP, this.stopDb.bind(this));
-        this.registerHandler(IpcSubject.DB_RESTART, this.restartDb.bind(this));
-        this.registerHandler(IpcSubject.DB_GET_LAYER_GEOJSON_DATA, this.getLayerData.bind(this));
+        this.registerHandler(DbSubjects.START_DB, this.startDb.bind(this));
+        this.registerHandler(DbSubjects.STOP_DB, this.stopDb.bind(this));
+        this.registerHandler(DbSubjects.RESTART_DB, this.restartDb.bind(this));
+        this.registerHandler(DbSubjects.GET_LAYER_GEOJSON_DATA, this.getLayerData.bind(this));
     }
 
     public startDb() {
