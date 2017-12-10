@@ -11,6 +11,10 @@
 
             <!-- File selector -->
 
+            <div class="drop-zone" @drop="onDrop" @dragover="onDragOver">
+                Drop files here :)
+            </div>
+
             <label for="file" class="label-file">Select files...</label>
             <input @change="selectFiles" id="file" class="input-file" type="file" multiple/>
 

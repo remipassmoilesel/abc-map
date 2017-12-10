@@ -11,14 +11,37 @@ const authorizedExtensions = ['.gpx', '.kml'];
 @Component({
     template: require('./template.html'),
 })
-export default class ImportDataSelectorComponent extends Vue {
+export class ImportDataSelectorComponent extends Vue {
 
     public clients: Clients;
     public files: File[] = [];
 
+    public mounted() {
+    }
+
+    public onDragOver(event) {
+        event.stopPropagation();
+        event.preventDefault();
+
+        console.log(event)
+    }
+
+    public onDrop(event) {
+        event.stopPropagation();
+        event.preventDefault();
+
+        this.checkAndRegisterFiles(event.dataTransfer.files);
+
+        console.log(this.files);
+    }
+
     public selectFiles(event) {
 
         const filesToCheck: File[] = event.target.files;
+        this.checkAndRegisterFiles(filesToCheck);
+    }
+
+    private checkAndRegisterFiles(filesToCheck: File[]) {
         const validFiles: File[] = [];
         _.forEach(filesToCheck, (file: File) => {
             if (_.includes(authorizedExtensions, path.extname(file.name))) {
@@ -31,7 +54,6 @@ export default class ImportDataSelectorComponent extends Vue {
         }
 
         this.files = validFiles;
-
     }
 
     public importFiles() {
