@@ -36,7 +36,7 @@ describe.only('Map handlers', function () {
         logger.info('app.electron', app.electron || 'undefined');
         logger.info('app.mainProcess', app.mainProcess || 'undefined');
 
-        const ipc = new Ipc(app.electron.webContents);
+        const ipc = new Ipc();
         return ipc.send(IpcSubject.PROJECT_GET_CURRENT).then((data) => {
             logger.info(data);
         });
