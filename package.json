@@ -41,6 +41,7 @@
     "mongodb": "^2.2.33",
     "request-promise": "^4.2.2",
     "resurrect-js": "^1.0.1",
+    "shapefile": "^0.6.6",
     "togeojson": "^0.16.0",
     "turf": "^3.0.14",
     "uuid": "^3.1.0",
