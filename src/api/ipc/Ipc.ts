@@ -12,7 +12,7 @@ export declare type IpcHandler = (event: IpcEvent) => any;
  * This kind of message allow to restore true objects
  * (with class types) when receiving them
  */
-interface IpcMessage {
+interface IpcInternalMessage {
     serializedData: string;
 }
 
@@ -40,7 +40,7 @@ export class Ipc {
      * @param {IpcHandler} handler
      */
     public listen(subject: IpcSubject, handler: IpcHandler): void {
-        promiseIpc.on(subject.id, (message: IpcMessage): IpcMessage => {
+        promiseIpc.on(subject.id, (message: IpcInternalMessage): IpcInternalMessage => {
             this.throwIfMessageIsInvalid(message);
             const event = eu.deserializeIpcEvent(message.serializedData);
 
@@ -55,30 +55,30 @@ export class Ipc {
 
     public send(subject: IpcSubject, event: IpcEvent = {}): Promise<any> {
 
-        const serialized: IpcMessage = {serializedData: eu.serialize(event)};
+        const serialized: IpcInternalMessage = {serializedData: eu.serialize(event)};
 
         // send event from main process
         if (this.webContent) {
             return promiseIpc.send(subject.id, this.webContent, serialized)
-                .then((message: IpcMessage) => {
+                .then((message: IpcInternalMessage) => {
                     return this.deserializeIpcMessage(message);
                 });
         }
         // send event from renderer process
         else {
             return promiseIpc.send(subject.id, serialized)
-                .then((message: IpcMessage) => {
+                .then((message: IpcInternalMessage) => {
                     return this.deserializeIpcMessage(message);
                 });
         }
     }
 
-    private deserializeIpcMessage(message: IpcMessage) {
+    private deserializeIpcMessage(message: IpcInternalMessage) {
         this.throwIfMessageIsInvalid(message);
         return eu.deserialize(message.serializedData);
     }
 
-    private serializeResponse(data: any): IpcMessage {
+    private serializeResponse(data: any): IpcInternalMessage {
 
         // response is a promise
         if (data.then) {
@@ -94,7 +94,7 @@ export class Ipc {
 
     }
 
-    private throwIfMessageIsInvalid(message: IpcMessage) {
+    private throwIfMessageIsInvalid(message: IpcInternalMessage) {
         if (!message || !message.serializedData) {
             throw new Error(`Invalid message: ${message}`);
         }
