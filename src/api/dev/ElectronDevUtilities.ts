@@ -4,10 +4,12 @@ import {Logger} from "./Logger";
 export class ElectronUtilities {
 
     private static logger = Logger.getLogger('ElectronUtilities');
-    private static DEV_ENV_VAR = 'dev';
+    private static NODE_ENV_DEV = 'dev';
+    private static NODE_ENV_TEST = 'test';
+    private static NODE_ENV_PROD = 'prod';
 
     public static isDevMode() {
-        return process.env.NODE_ENV === '' || ElectronUtilities.DEV_ENV_VAR;
+        return process.env.NODE_ENV !== ElectronUtilities.NODE_ENV_PROD;
     }
 
     public static setupDevTools() {

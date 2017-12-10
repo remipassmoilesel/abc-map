@@ -1,12 +1,9 @@
 import {Ipc, IpcHandler} from '../../../api/ipc/Ipc';
 import {TileLayer} from '../../../api/entities/layers/TileLayer';
-import {EntitySerializer} from '../../../api/entities/EntitySerializer';
 import {IpcSubject} from "../../../api/ipc/IpcSubject";
 import {handleRejection} from "./clientUtils";
 import {GeocodingResult} from "../../../api/entities/GeocodingResult";
 import {AbstractMapLayer} from "../../../api/entities/layers/AbstractMapLayer";
-
-const eu = new EntitySerializer();
 
 export class MapClient {
 

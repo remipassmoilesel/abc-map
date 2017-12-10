@@ -72,17 +72,6 @@ gulp.task('run', () => {
         });
 });
 
-gulp.task('build', gulpSync.sync([
-    'clean',
-    'build-api',
-    'build-gui',
-]));
-
-gulp.task('start', gulpSync.sync([
-    'build',
-    'run',
-]));
-
 gulp.task('test-gui',
     shell.task([
         './node_modules/.bin/mocha --require source-map-support/register ./dist/tests/gui/**/*Test.js',
@@ -94,6 +83,25 @@ gulp.task('test-api',
         './node_modules/.bin/mocha --require source-map-support/register ./dist/tests/api/**/*Test.js',
     ], {ignoreErrors: true})
 );
+
+gulp.task('test-renderer',
+    shell.task([
+        './node_modules/electron-mocha/bin/electron-mocha '
+            + '--renderer '
+            + '--require source-map-support/register ./dist/tests/renderer/**/*Test.js',
+    ], {ignoreErrors: true})
+);
+
+gulp.task('build', gulpSync.sync([
+    'clean',
+    'build-api',
+    'build-gui',
+]));
+
+gulp.task('start', gulpSync.sync([
+    'build',
+    'run',
+]));
 
 gulp.task('test-gui-watch', ['build-gui', 'test-gui'], () => {
     return gulp.watch('src/**/*', ['build-gui', 'test-gui']);

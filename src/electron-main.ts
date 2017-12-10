@@ -10,18 +10,30 @@ require('source-map-support').install();
 const paths = require('../config/paths');
 const logger = Logger.getLogger('electron-main.ts');
 
+logger.info('');
+logger.info('');
+logger.info('=============================');
+logger.info('Starting Abc-Map application');
+logger.info(`NODE_ENV=${process.env.NODE_ENV}`);
+logger.info('=============================');
+logger.info('');
+logger.info('');
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win: BrowserWindow | null;
 
 function createWindow() {
-    // Create the browser window.
-    win = new BrowserWindow({width: 1024, height: 768});
-    win.maximize();
 
-    // init api application
-    const ipc = new Ipc(win.webContents);
-    initApplication(ipc);
+    // Create the browser window.
+    win = new BrowserWindow({
+        width: 1024,
+        height: 768,
+        webPreferences: {
+            nodeIntegration: true,
+        }
+    });
+    win.maximize();
 
     // and load the index.html of the app.
     win.loadURL(url.format({
@@ -31,7 +43,7 @@ function createWindow() {
     }));
 
     if (ElectronUtilities.isDevMode()) {
-        logger.info('Dev mode enabled, installing dev tools');
+        logger.info(' ** Dev mode enabled, installing dev tools ** ');
         ElectronUtilities.setupDevTools();
     }
 
@@ -47,6 +59,10 @@ function createWindow() {
         // when you should delete the corresponding element.
         win = null;
     });
+
+    // init api application
+    const ipc = new Ipc(win.webContents);
+    initApplication(ipc);
 
 }
 

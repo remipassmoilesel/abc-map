@@ -1,11 +1,8 @@
 import {Ipc, IpcHandler} from '../../../api/ipc/Ipc';
-import {EntitySerializer} from "../../../api/entities/EntitySerializer";
 import {Project} from "../../../api/entities/Project";
 import {IpcSubject} from "../../../api/ipc/IpcSubject";
 import {handleRejection} from "./clientUtils";
 import {AbstractMapLayer} from "../../../api/entities/layers/AbstractMapLayer";
-
-const eu = new EntitySerializer();
 
 export class ProjectClient {
 

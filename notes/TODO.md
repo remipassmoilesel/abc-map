@@ -2,6 +2,8 @@
 
 ## Comportement
 
+- Une commande "Signaler un problème" doit être disponible et doit rediriger vers une adresse récupérée en ligne
+- L'application doit proposer des mises à jour et se mettre a jour simplement (voir electron auto update)
 - ~~Un nouveau project doit avoir comme première couche une carte Openstreetmap.~~
 
 ## Fonctionnalités

@@ -7,8 +7,8 @@ export class Utils {
         return _.assign({}, defaults, parameters);
     }
 
-    public static safeStringify(data: any) {
-        return CircularJSON.stringify(data);
+    public static safeStringify(data: any, indent = 2) {
+        return CircularJSON.stringify(data, null, 2);
     }
 
     public static retryUntilSuccess(toRetry: () => Promise<any>, maxRetries = 3, retryIntervalMs = 100): Promise<any> {

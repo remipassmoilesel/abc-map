@@ -29,7 +29,7 @@ export class Logger {
     }
 
     private print(msg: string, level: string = Logger.INFO, data?: any) {
-        const stringifiedData = data ? Utils.safeStringify(data) : '';
+        const stringifiedData = data ? Utils.safeStringify(data, 2) : '';
         const date = new Date().toString().substr(16, 8);
         console.log(`[${date}] [${level}] [${this.namespace}] ${msg} ${stringifiedData}`);
     }
