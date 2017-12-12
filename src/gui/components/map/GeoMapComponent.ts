@@ -147,7 +147,7 @@ export default class GeoMapComponent extends Vue {
     }
 
     public getMaximumHeight(): number {
-        return window.innerWidth / 100 * 60;
+        return window.innerWidth / 100 * 68;
     }
 
     public onDragOver(event) {
