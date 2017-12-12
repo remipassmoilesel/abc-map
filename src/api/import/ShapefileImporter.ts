@@ -1,6 +1,9 @@
 import * as shapefile from 'shapefile';
 import {AbstractDataImporter, IImportedFile} from "./AbstractDataImporter";
 
+
+//TODO Refactor in order directly data in database
+
 export class ShapefileImporter extends AbstractDataImporter {
 
     public getSupportedExtensions(): string[] {
@@ -8,7 +11,6 @@ export class ShapefileImporter extends AbstractDataImporter {
     }
 
     public getGeoJson(pathToSourceFile: string): Promise<IImportedFile> {
-
 
         return shapefile.open("example.shp")
             .then(source => source.read()

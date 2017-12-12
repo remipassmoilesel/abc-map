@@ -33,6 +33,7 @@ export class ImportDataSelectorComponent extends Vue {
         this.checkAndRegisterFiles(event.dataTransfer.files);
 
         console.log(this.files);
+        Toaster.info('Not implemented, coming soon...');
     }
 
     public selectFiles(event) {

@@ -14,6 +14,7 @@ import {clients} from "../../lib/mixins";
 import './style.scss'
 // Import plugins
 import 'leaflet-draw';
+import {Toaster} from "../../lib/Toaster";
 
 let mapIdCounter = 0;
 const layerFactory = new LeafletLayerFactory(clients);
@@ -147,6 +148,20 @@ export default class GeoMapComponent extends Vue {
 
     public getMaximumHeight(): number {
         return window.innerWidth / 100 * 60;
+    }
+
+    public onDragOver(event) {
+        event.stopPropagation();
+        event.preventDefault();
+
+        console.log(event)
+    }
+
+    public onDrop(event) {
+        event.stopPropagation();
+        event.preventDefault();
+
+        Toaster.info('Not implemented, coming soon...');
     }
 
 }
