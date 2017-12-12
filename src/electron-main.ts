@@ -1,8 +1,8 @@
-import {app, BrowserWindow} from 'electron';
+import {app, BrowserWindow, globalShortcut} from 'electron';
 import * as url from 'url';
 import {ElectronUtilities} from "./api/dev/ElectronDevUtilities";
 import {Logger} from "./api/dev/Logger";
-import {closeApplication, initApplication} from "./api/main";
+import {closeApplication, initApplication, initShortcuts} from "./api/main";
 import {Ipc} from "./api/ipc/Ipc";
 
 require('source-map-support').install();
@@ -62,7 +62,9 @@ function createWindow() {
 
     // init api application
     const ipc = new Ipc(win.webContents);
+
     initApplication(ipc);
+    initShortcuts(ipc);
 
 }
 

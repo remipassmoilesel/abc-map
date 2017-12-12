@@ -1,4 +1,4 @@
-import * as Promise from "bluebird";
+import {globalShortcut} from "electron";
 import {MapService} from "./services/MapService";
 import {Ipc} from "./ipc/Ipc";
 import {Logger} from "./dev/Logger";
@@ -8,6 +8,7 @@ import {IServicesMap} from "./handlers/AbstractHandlersGroup";
 import {ProjectHandlers} from "./handlers/ProjectHandlers";
 import {MapHandlers} from "./handlers/MapHandlers";
 import {DatabaseHandlers} from "./handlers/DatabaseHandlers";
+import {Shortcuts} from "./utils/Shortcuts";
 
 const logger = Logger.getLogger('api/main.ts');
 let databaseService: DatabaseService;
@@ -47,4 +48,8 @@ export function closeApplication(): Promise<any> {
         databaseService.stopDatabase();
         resolve();
     });
+}
+
+export function initShortcuts(ipc: Ipc) {
+    const shortcuts = new Shortcuts(ipc);
 }

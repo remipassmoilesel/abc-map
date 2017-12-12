@@ -1,5 +1,6 @@
 export class IpcSubject {
     public id: string;
+
     constructor(id: string) {
         this.id = id;
     }
@@ -48,9 +49,11 @@ export class IpcEventBus extends IpcSubject {
     public static ROOT = "/events";
     public static PROJECT = new IpcEventBus(`/project`);
     public static MAP = new IpcEventBus(`/map`);
+    public static SHORTCUTS = new IpcEventBus(`/shortcuts`);
 
     constructor(id: string) {
         super(IpcEventBus.ROOT + id);
     }
 
 }
+
