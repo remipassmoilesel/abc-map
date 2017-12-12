@@ -10,8 +10,8 @@ export class Toaster {
             title: 'Notification',
             message,
             type,
-            position: 'bottom-right',
-        } as any)); // TODO: Merge  request
+            position: 'top-right',
+        } as any)); // TODO: Merge request for type fix
     }
 
     public static info(message: string) {
