@@ -33,6 +33,7 @@ function createWindow() {
             nodeIntegration: true,
         }
     });
+    win.setMenu(null);
     win.maximize();
 
     // and load the index.html of the app.
