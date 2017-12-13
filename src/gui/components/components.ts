@@ -25,3 +25,4 @@ Vue.component('action-dialog', ActionDialogComponent);
 
 export const uxActions = new UxActions();
 uxActions.addAction(new GeoSearchComponent());
+uxActions.addAction(new AddLayerComponent());

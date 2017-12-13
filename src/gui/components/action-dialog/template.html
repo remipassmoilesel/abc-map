@@ -3,10 +3,16 @@
             title="Tips"
             :visible.sync="dialogVisible"
             width="50%">
-        <span>This is a message</span>
+        <span>What do you want to do ?</span>
+        <span>
+            <el-input
+                placeholder=""
+                v-model="query"
+                clearable>
+            </el-input>
+        </span>
         <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">Cancel</el-button>
-            <el-button type="primary" @click="dialogVisible = false">Confirm</el-button>
+            <el-button @click="dialogVisible = false">Cancel</el-button>
         </span>
     </el-dialog>
 </div>

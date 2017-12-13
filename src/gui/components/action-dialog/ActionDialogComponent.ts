@@ -12,7 +12,9 @@ export class ActionDialogComponent extends Vue {
 
     public clients: Clients;
     public layers: AbstractMapLayer[] = [];
-    private dialogVisible: boolean = false;
+    public query: string = "";
+
+    public dialogVisible: boolean = false;
 
     public mounted() {
 
