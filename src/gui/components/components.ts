@@ -6,9 +6,10 @@ import StatusBarComponent from "./status-bar/StatusBarComponent";
 import StoreUpdaterComponent from "./store-updater/StoreUpdaterComponent";
 import LayerSelectorComponent from "./layer-selector/LayerSelectorComponent";
 import {ImportDataSelectorComponent} from "./import-data-selector/ImportDataComponent";
-import GeoSearchComponent from "./geo-search/GeoSearchComponent";
+import {GeoSearchComponent} from "./geo-search/GeoSearchComponent";
 import {ActionDialogComponent} from "./action-dialog/ActionDialogComponent";
 import {AddLayerComponent} from "./add-layer/AddLayerComponent";
+import {UxActions} from "./UxActions";
 
 // tag name -> component
 Vue.component('navbar', NavbarComponent);
@@ -22,3 +23,5 @@ Vue.component('import-data-selector', ImportDataSelectorComponent);
 Vue.component('geo-search', GeoSearchComponent);
 Vue.component('action-dialog', ActionDialogComponent);
 
+export const uxActions = new UxActions();
+uxActions.addAction(new GeoSearchComponent());
