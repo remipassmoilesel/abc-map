@@ -4,6 +4,7 @@ import {globalShortcut} from "electron";
 import {Logger} from "../dev/Logger";
 import {IpcEventBus} from "../ipc/IpcSubject";
 import {EventType} from "../ipc/IpcEventTypes";
+import {ElectronUtilities} from "../dev/ElectronDevUtilities";
 
 const logger = Logger.getLogger('Shortcuts');
 
@@ -23,8 +24,15 @@ export class Shortcuts {
     private getShortcuts(): IShortcutDescription[] {
         return [
             {keys: 'CommandOrControl+A', action: this.openActionDialog.bind(this)},
-            {keys: 'CommandOrControl+Q', action: this.quit.bind(this)}
+            {keys: 'CommandOrControl+Q', action: this.quit.bind(this)},
+            {keys: 'CommandOrControl+R', action: this.refresh.bind(this)}
         ];
+    }
+
+    private refresh() {
+        if(ElectronUtilities.isDevMode()){
+            return this.ipc.send(IpcEventBus.SHORTCUTS, {type: EventType.SC_REFRESH});
+        }
     }
 
     private quit() {

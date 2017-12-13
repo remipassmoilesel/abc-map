@@ -12,7 +12,12 @@ export class ShortcutClient {
 
         this.onEvent(EventType.SC_QUIT, () => {
             window.close();
-        })
+        });
+
+        this.onEvent(EventType.SC_REFRESH, () => {
+            location.reload();
+        });
+
     }
 
     public onEvents(handler: IpcHandler): void {
