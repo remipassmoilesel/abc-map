@@ -5,13 +5,13 @@ import {Clients} from "../../lib/clients/Clients";
 import {GeocodingResult} from "../../../api/entities/GeocodingResult";
 import {MainStore} from "../../lib/store/store";
 import {StoreWrapper} from "../../lib/store/StoreWrapper";
-import {IUxComponent} from "../IUxComponent";
+import {UxComponent} from "../UxComponent";
 import './style.scss';
 
 @Component({
     template: require('./template.html'),
 })
-export class GeoSearchComponent extends Vue implements IUxComponent {
+export class GeoSearchComponent extends UxComponent {
 
     public name = "Geo location search";
     public description = "You can search for a place, a location or an address.";

@@ -1,6 +1,6 @@
 import Vue from 'vue';
 
-export abstract class IUxComponent extends Vue{
+export abstract class UxComponent extends Vue{
     name: string;
     description: string;
 }

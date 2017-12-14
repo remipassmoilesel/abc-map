@@ -21,9 +21,10 @@ export class Shortcuts {
         this.initShortcuts();
     }
 
+    // TODO: use Mousetrap.bind('4', () => { console.log('4') }) instead
     private getShortcuts(): IShortcutDescription[] {
         return [
-            {keys: 'CommandOrControl+A', action: this.openActionDialog.bind(this)},
+            {keys: 'CommandOrControl+Shift+A', action: this.openActionDialog.bind(this)},
             {keys: 'CommandOrControl+Q', action: this.quit.bind(this)},
             {keys: 'CommandOrControl+R', action: this.refresh.bind(this)}
         ];

@@ -1,16 +1,19 @@
 <div class="action-dialog-component">
     <el-dialog
-            title="Tips"
+            title="Search an action"
             :visible.sync="dialogVisible"
             width="50%">
         <span>What do you want to do ?</span>
         <span>
             <el-input
                 placeholder=""
+                ref="queryTextField"
+                @keyup.native="onChange"
                 v-model="query"
                 clearable>
             </el-input>
         </span>
+        <span ref="searchResults"></span>
         <span slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false">Cancel</el-button>
         </span>

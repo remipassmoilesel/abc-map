@@ -1,14 +1,13 @@
-import Vue from 'vue';
 import Component from 'vue-class-component';
 import {Clients} from '../../lib/clients/Clients';
 import {AbstractMapLayer} from "../../../api/entities/layers/AbstractMapLayer";
-import {IUxComponent} from "../IUxComponent";
+import {UxComponent} from "../UxComponent";
 import './style.scss';
 
 @Component({
     template: require('./template.html'),
 })
-export class AddLayerComponent extends Vue implements IUxComponent {
+export class AddLayerComponent extends UxComponent {
 
     public name = "Add a Tile layer";
     public description = "Add a tile layer in order to display a world map";

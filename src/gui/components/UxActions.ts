@@ -1,56 +1,64 @@
 import * as _ from "lodash";
-import {IUxComponent} from "./IUxComponent";
+import {UxComponent} from "./UxComponent";
 
-interface IUxSearchResult {
-    [name: string]: {
-        score: number;
-        action: IUxComponent;
-    }
+export interface IUxSearchResult {
+    name: string;
+    score: number;
+    component: UxComponent;
 }
 
 export class UxActions {
 
-    private actions: IUxComponent[];
+    private actions: UxComponent[];
     private nonSignificantWords: string[] = ['of', 'a', 'with', 'then'];
 
     constructor() {
         this.actions = [];
     }
 
-    public addAction(instance: IUxComponent) {
+    public addAction(instance: UxComponent) {
         this.actions.push(instance);
     }
 
     // TODO: suggest better queries, improve word search
-    public search(query: string): IUxSearchResult[] {
+    public search(query: string, max = 5): IUxSearchResult[] {
 
         const words = query.split(" ");
         const significantWords = _.remove(words, (w) => _.includes(this.nonSignificantWords, w));
 
-        const matchingActions: any = {};
+        const matchingComponents: IUxSearchResult[] = [];
 
-        function addToScore(action: IUxComponent, number: number) {
-            if(matchingActions[action.name]){
-                matchingActions[action.name].score += number;
-            } else {
-                matchingActions[action.name] = {
-                    action,
+        function addToScore(component: UxComponent, number: number) {
+
+            // search if element was already added
+            const previous = _.filter(matchingComponents, m => m.name === component.name);
+
+            console.log(previous);
+
+            if (previous.length < 1) {
+                matchingComponents.push({
+                    name: component.name,
+                    component,
                     score: number,
-                }
+                });
+            } else {
+                previous[0].score += number;
             }
         }
 
-        _.forEach(this.actions, (action)=>{
-            _.forEach(significantWords, (w)=>{
-                if(action.name.indexOf(w) !== -1){
+        _.forEach(this.actions, (action) => {
+            _.forEach(significantWords, (w) => {
+                if (action.name.indexOf(w) !== -1) {
                     addToScore(action, 3);
-                }else if (action.description.indexOf(w) !== -1){
+                } else if (action.description.indexOf(w) !== -1) {
                     addToScore(action, 2);
                 }
             });
         });
 
-        return _.sortBy(matchingActions, (m)=> m.score);
+        console.log(matchingComponents);
+
+        return _.sortBy(matchingComponents, (m) => m.score).slice(0, max);
     }
 
 }

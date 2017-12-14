@@ -1,9 +1,13 @@
 import Vue from 'vue';
+import * as _ from 'lodash';
 import Component from 'vue-class-component';
 import {Clients} from '../../lib/clients/Clients';
 import {AbstractMapLayer} from "../../../api/entities/layers/AbstractMapLayer";
 import './style.scss';
 import {EventType} from "../../../api/ipc/IpcEventTypes";
+import {uxActions} from "../components";
+import {UxComponent} from "../UxComponent";
+import {IUxSearchResult} from "../UxActions";
 
 @Component({
     template: require('./template.html'),
@@ -29,11 +33,29 @@ export class ActionDialogComponent extends Vue {
 
     }
 
+    public onChange() {
+        console.log('onChange');
+        _.debounce(this.searchAndMount.bind(this));
+    }
+
+    public searchAndMount(){
+        console.log('searchAndMount');
+        const results: IUxSearchResult[] = uxActions.search(this.query);
+        _.forEach(results, (res)=>{
+            console.log(res);
+        });
+    }
+
     private closeActionDialog() {
         this.dialogVisible = false;
     }
 
     private openActionDialog() {
         this.dialogVisible = true;
+
+        // TODO: improve me
+        setTimeout(() => {
+            (this.$refs.queryTextField as any).focus();
+        }, 600);
     }
 }
