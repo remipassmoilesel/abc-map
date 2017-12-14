@@ -1,5 +1,4 @@
-require('source-map-support').install();
-
+import {Toaster} from "./lib/Toaster";
 import Vue from 'vue';
 import {ElectronUtilities} from '../api/dev/ElectronDevUtilities';
 import {Logger} from '../api/dev/Logger';
@@ -17,8 +16,16 @@ import './views/app/app.scss';
 // Import mixins
 import './lib/mixins';
 
+require('source-map-support').install();
+
+
 const logger = Logger.getLogger('gui/main.ts');
 logger.info('Starting main app');
+
+Vue.config.errorHandler = (err, vm, info) => {
+    console.error({err, vm, info});
+    Toaster.error(JSON.stringify(info));
+};
 
 // initialize plugins
 Vue.use(ElementUI, {locale});
