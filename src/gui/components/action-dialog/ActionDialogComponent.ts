@@ -2,11 +2,13 @@ import Vue from 'vue';
 import * as _ from 'lodash';
 import Component from 'vue-class-component';
 import {Clients} from '../../lib/clients/Clients';
-import {AbstractMapLayer} from "../../../api/entities/layers/AbstractMapLayer";
-import './style.scss';
 import {uxActions} from "../components";
-import {IUxSearchResult} from "../UiActions";
+import {IUxSearchResult} from "../UiSearchableComponents";
 import {UiShortcuts} from "../../lib/UiSortcuts";
+import * as $ from 'jquery';
+import './style.scss';
+
+let instanceNumber = 0;
 
 @Component({
     template: require('./template.html'),
@@ -15,10 +17,19 @@ export class ActionDialogComponent extends Vue {
 
     public shortcuts: UiShortcuts;
     public clients: Clients;
-    public layers: AbstractMapLayer[] = [];
-    public query: string = "";
 
+    public instanceId = instanceNumber++;
+    public searchResultsId = `searchResults-${this.instanceId}`;
+    public query: string = "";
+    public searchMessage: string = "";
     public dialogVisible: boolean = false;
+
+    public debouncedSearch: Function;
+
+    constructor() {
+        super();
+        this.debouncedSearch = _.debounce(this.searchAndMount.bind(this), 800);
+    }
 
     public mounted() {
 
@@ -34,16 +45,23 @@ export class ActionDialogComponent extends Vue {
     }
 
     public onChange() {
-        console.log('onChange');
-        _.debounce(this.searchAndMount.bind(this));
+        this.debouncedSearch();
     }
 
     public searchAndMount() {
-        console.log('searchAndMount');
         const results: IUxSearchResult[] = uxActions.search(this.query);
-        _.forEach(results, (res) => {
-            console.log(res);
-        });
+
+        if (results.length < 1) {
+            this.searchMessage = 'No results found';
+        }
+
+        else {
+            this.emptySearchResults();
+            _.forEach(results, (res, index) => {
+                this.mountResult(res, index);
+            });
+        }
+
     }
 
     private closeActionDialog() {
@@ -57,5 +75,26 @@ export class ActionDialogComponent extends Vue {
         setTimeout(() => {
             (this.$refs.queryTextField as any).focus();
         }, 600);
+    }
+
+    private emptySearchResults() {
+        $(`#${this.searchResultsId}`).empty();
+    }
+
+    private mountResult(res: IUxSearchResult, id: number) {
+        const resultId = `result-${id}`;
+
+        // prepare component mount point
+        const resultArea = $(`#${this.searchResultsId}`);
+
+        const resultWrapper = $(`<div class="result-wrapper"></div>`)
+        resultWrapper.append(`<div class="result-name">${res.name}</div>`);
+        resultWrapper.append(`<div class="result-description">${res.component.description}</div>`);
+        resultWrapper.append(`<div class="${resultId}"></div>`);
+
+        resultArea.append(resultWrapper);
+
+        // mount component
+        res.component.$mount(`#${this.searchResultsId} .${resultId}`);
     }
 }

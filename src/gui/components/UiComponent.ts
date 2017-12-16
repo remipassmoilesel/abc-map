@@ -1,6 +1,6 @@
 import Vue from 'vue';
 
 export abstract class UiComponent extends Vue{
-    name: string;
-    description: string;
+    public abstract name: string;
+    public abstract description: string;
 }

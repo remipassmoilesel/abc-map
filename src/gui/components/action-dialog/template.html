@@ -13,7 +13,8 @@
                 clearable>
             </el-input>
         </span>
-        <span ref="searchResults"></span>
+        <span>{{ searchMessage }}</span>
+        <span class="result-area" :id="searchResultsId"></span>
         <span slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false">Cancel</el-button>
         </span>

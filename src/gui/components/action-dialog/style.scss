@@ -1,3 +1,27 @@
 .action-dialog-component{
 
+  .result-area {
+    max-height: 500px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+  }
+
+  .result-wrapper{
+    border: 1px;
+    padding: 0.5em;
+    margin: 0.5em;
+  }
+
+  .result-name {
+    font-style: italic;
+    padding-top: 0.7em;
+    padding-bottom: 0.7em;
+  }
+
+  .result-description {
+    font-weight: bolder;
+    padding-top: 0.7em;
+    padding-bottom: 0.7em;
+  }
+
 }
