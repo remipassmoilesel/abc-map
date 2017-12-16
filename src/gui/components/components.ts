@@ -9,7 +9,7 @@ import {ImportDataSelectorComponent} from "./import-data-selector/ImportDataComp
 import {GeoSearchComponent} from "./geo-search/GeoSearchComponent";
 import {ActionDialogComponent} from "./action-dialog/ActionDialogComponent";
 import {AddLayerComponent} from "./add-layer/AddLayerComponent";
-import {UxActions} from "./UxActions";
+import {UiActions} from "./UiActions";
 
 // tag name -> component
 Vue.component('navbar', NavbarComponent);
@@ -23,6 +23,6 @@ Vue.component('import-data-selector', ImportDataSelectorComponent);
 Vue.component('geo-search', GeoSearchComponent);
 Vue.component('action-dialog', ActionDialogComponent);
 
-export const uxActions = new UxActions();
+export const uxActions = new UiActions();
 uxActions.addAction(new GeoSearchComponent());
 uxActions.addAction(new AddLayerComponent());

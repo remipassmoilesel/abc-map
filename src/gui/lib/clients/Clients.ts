@@ -1,19 +1,19 @@
 import {MapClient} from "./MapClient";
 import {ProjectClient} from "./ProjectClient";
 import {Ipc} from "../../../api/ipc/Ipc";
-import {ShortcutClient} from "./ShortcutClient";
+import {GlobalShortcutsClient} from "./GlobalShortcutsClient";
 
 export class Clients {
     private _map: MapClient;
     private _project: ProjectClient;
     private ipc: Ipc;
-    private _shortcuts: ShortcutClient;
+    private _shortcuts: GlobalShortcutsClient;
 
     constructor() {
         this.ipc = new Ipc();
         this._map = new MapClient(this.ipc);
         this._project = new ProjectClient(this.ipc);
-        this._shortcuts = new ShortcutClient(this.ipc);
+        this._shortcuts = new GlobalShortcutsClient(this.ipc);
     }
 
     get map(): MapClient {
@@ -24,7 +24,7 @@ export class Clients {
         return this._project;
     }
 
-    get shortcuts(): ShortcutClient {
+    get shortcuts(): GlobalShortcutsClient {
         return this._shortcuts;
     }
 

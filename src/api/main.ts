@@ -8,7 +8,7 @@ import {IServicesMap} from "./handlers/AbstractHandlersGroup";
 import {ProjectHandlers} from "./handlers/ProjectHandlers";
 import {MapHandlers} from "./handlers/MapHandlers";
 import {DatabaseHandlers} from "./handlers/DatabaseHandlers";
-import {Shortcuts} from "./utils/Shortcuts";
+import {Shortcuts} from "./utils/GlobalShortcuts";
 
 const logger = Logger.getLogger('api/main.ts');
 let databaseService: DatabaseService;

@@ -3,20 +3,20 @@ import {IpcEventBus} from "../../../api/ipc/IpcSubject";
 import {EventType} from "../../../api/ipc/IpcEventTypes";
 import {IpcEvent} from "../../../api/ipc/IpcEvent";
 
-export class ShortcutClient {
+export class GlobalShortcutsClient {
 
     private ipc: Ipc;
 
     constructor(ipc: Ipc) {
         this.ipc = ipc;
 
-        this.onEvent(EventType.SC_QUIT, () => {
-            window.close();
-        });
-
-        this.onEvent(EventType.SC_REFRESH, () => {
-            location.reload();
-        });
+        // this.onEvent(EventType.SC_QUIT, () => {
+        //     window.close();
+        // });
+        //
+        // this.onEvent(EventType.SC_REFRESH, () => {
+        //     location.reload();
+        // });
 
     }
 

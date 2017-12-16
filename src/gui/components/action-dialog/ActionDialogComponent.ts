@@ -4,16 +4,16 @@ import Component from 'vue-class-component';
 import {Clients} from '../../lib/clients/Clients';
 import {AbstractMapLayer} from "../../../api/entities/layers/AbstractMapLayer";
 import './style.scss';
-import {EventType} from "../../../api/ipc/IpcEventTypes";
 import {uxActions} from "../components";
-import {UxComponent} from "../UxComponent";
-import {IUxSearchResult} from "../UxActions";
+import {IUxSearchResult} from "../UiActions";
+import {UiShortcuts} from "../../lib/UiSortcuts";
 
 @Component({
     template: require('./template.html'),
 })
 export class ActionDialogComponent extends Vue {
 
+    public shortcuts: UiShortcuts;
     public clients: Clients;
     public layers: AbstractMapLayer[] = [];
     public query: string = "";
@@ -22,14 +22,14 @@ export class ActionDialogComponent extends Vue {
 
     public mounted() {
 
-        this.clients.shortcuts.onEvent(EventType.SC_ACTION_MODAL, () => {
+        this.shortcuts.bindShortcut('ctrl+a', (ev) => {
 
             if (this.dialogVisible === true) {
                 this.closeActionDialog();
             } else {
                 this.openActionDialog();
             }
-        })
+        });
 
     }
 
@@ -38,10 +38,10 @@ export class ActionDialogComponent extends Vue {
         _.debounce(this.searchAndMount.bind(this));
     }
 
-    public searchAndMount(){
+    public searchAndMount() {
         console.log('searchAndMount');
         const results: IUxSearchResult[] = uxActions.search(this.query);
-        _.forEach(results, (res)=>{
+        _.forEach(results, (res) => {
             console.log(res);
         });
     }

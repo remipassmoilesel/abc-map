@@ -5,13 +5,13 @@ import {Clients} from "../../lib/clients/Clients";
 import {GeocodingResult} from "../../../api/entities/GeocodingResult";
 import {MainStore} from "../../lib/store/store";
 import {StoreWrapper} from "../../lib/store/StoreWrapper";
-import {UxComponent} from "../UxComponent";
+import {UiComponent} from "../UiComponent";
 import './style.scss';
 
 @Component({
     template: require('./template.html'),
 })
-export class GeoSearchComponent extends UxComponent {
+export class GeoSearchComponent extends UiComponent {
 
     public name = "Geo location search";
     public description = "You can search for a place, a location or an address.";

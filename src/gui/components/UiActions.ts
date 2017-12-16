@@ -1,22 +1,22 @@
 import * as _ from "lodash";
-import {UxComponent} from "./UxComponent";
+import {UiComponent} from "./UiComponent";
 
 export interface IUxSearchResult {
     name: string;
     score: number;
-    component: UxComponent;
+    component: UiComponent;
 }
 
-export class UxActions {
+export class UiActions {
 
-    private actions: UxComponent[];
+    private actions: UiComponent[];
     private nonSignificantWords: string[] = ['of', 'a', 'with', 'then'];
 
     constructor() {
         this.actions = [];
     }
 
-    public addAction(instance: UxComponent) {
+    public addAction(instance: UiComponent) {
         this.actions.push(instance);
     }
 
@@ -28,7 +28,7 @@ export class UxActions {
 
         const matchingComponents: IUxSearchResult[] = [];
 
-        function addToScore(component: UxComponent, number: number) {
+        function addToScore(component: UiComponent, number: number) {
 
             // search if element was already added
             const previous = _.filter(matchingComponents, m => m.name === component.name);
