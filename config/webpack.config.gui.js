@@ -11,6 +11,27 @@ module.exports = {
         publicPath: paths.PUBLIC_PATH,
         filename: 'build.js'
     },
+    resolve: {
+        extensions: ['.ts', '.js', '.vue', '.json'],
+        alias: {
+            'vue$': 'vue/dist/vue.esm.js'
+        }
+    },
+    devServer: {
+        historyApiFallback: true,
+        noInfo: true
+    },
+    performance: {
+        hints: false
+    },
+    devtool: '#eval-source-map',
+    target: 'electron-renderer',
+    node: {     // disable mocking of these values by webpack
+        __dirname: false,
+        __filename: false,
+        fs: 'empty',
+        path: 'empty',
+    },
     module: {
         rules: [
             {
@@ -54,25 +75,6 @@ module.exports = {
                 }
             }
         ]
-    },
-    resolve: {
-        extensions: ['.ts', '.js', '.vue', '.json'],
-        alias: {
-            'vue$': 'vue/dist/vue.esm.js'
-        }
-    },
-    devServer: {
-        historyApiFallback: true,
-        noInfo: true
-    },
-    performance: {
-        hints: false
-    },
-    devtool: '#eval-source-map',
-    target: 'electron-renderer',
-    node: {     // disable mocking of these values by webpack
-        __dirname: false,
-        __filename: false
     },
     plugins: [
         new ExtractTextPlugin({ // define where to save the file
