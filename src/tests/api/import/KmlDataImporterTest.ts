@@ -1,5 +1,4 @@
 import * as chai from 'chai';
-import 'mocha';
 import {KmlDataImporter} from "../../../api/import/KmlDataImporter";
 import {TestData} from "../TestData";
 import {IImportedFile} from "../../../api/import/AbstractDataImporter";

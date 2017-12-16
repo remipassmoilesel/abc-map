@@ -1,5 +1,4 @@
 import * as chai from 'chai';
-import 'mocha';
 import {GpxDataImporter} from "../../../api/import/GpxDataImporter";
 import {DataImporterFinder} from "../../../api/import/DataImporterFinder";
 import {KmlDataImporter} from "../../../api/import/KmlDataImporter";

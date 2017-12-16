@@ -1,9 +1,8 @@
 import * as chai from 'chai';
-import 'mocha';
 import {ProjectService} from "../../../api/services/ProjectService";
 import {TestUtils} from "../TestUtils";
 import {EventType} from "../../../api/ipc/IpcEventTypes";
-import {IpcEventBus, IpcSubject} from "../../../api/ipc/IpcSubject";
+import {IpcEventBus} from "../../../api/ipc/IpcSubject";
 import {IpcEvent} from "../../../api/ipc/IpcEvent";
 
 const assert = chai.assert;

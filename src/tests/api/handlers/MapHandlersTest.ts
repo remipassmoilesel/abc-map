@@ -1,6 +1,5 @@
-import 'mocha';
 import * as chai from 'chai';
-import {IpcSubject, ProjectSubjects} from "../../../api/ipc/IpcSubject";
+import {ProjectSubjects} from "../../../api/ipc/IpcSubject";
 import {Ipc} from "../../../api/ipc/Ipc";
 import {Logger} from "../../../api/dev/Logger";
 import {Application} from "spectron";
@@ -9,9 +8,12 @@ import {TestUtils} from "../TestUtils";
 const logger = Logger.getLogger('MapHandlersTest');
 const assert = chai.assert;
 
-// voir: https://github.com/StephenDavidson/electron-spectron-example/blob/master/test/search.js
+// See: https://github.com/StephenDavidson/electron-spectron-example/blob/master/test/search.js
 
-describe.only('Map handlers', function () {
+// NOT WORKING FOR THE MOMENT
+// See https://github.com/electron/spectron/issues/254
+
+describe.skip('Map handlers', function () {
 
     this.timeout(10000);
 

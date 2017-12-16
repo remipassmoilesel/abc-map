@@ -1,6 +1,5 @@
 import * as chai from 'chai';
 import * as _ from 'lodash';
-import 'mocha';
 import {TileLayer} from '../../../api/entities/layers/TileLayer';
 import {EntitySerializer} from '../../../api/entities/EntitySerializer';
 import {Project} from "../../../api/entities/Project";

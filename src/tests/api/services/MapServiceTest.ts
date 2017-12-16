@@ -1,6 +1,5 @@
 import * as chai from 'chai';
 import * as _ from 'lodash';
-import 'mocha';
 import {TestUtils} from "../TestUtils";
 import {MapService} from "../../../api/services/MapService";
 import {GeocodingResult} from "../../../api/entities/GeocodingResult";

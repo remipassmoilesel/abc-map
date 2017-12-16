@@ -1,6 +1,5 @@
 import * as chai from 'chai';
 import * as sinon from 'sinon';
-import 'mocha';
 import {Utils} from "../../../api/utils/Utils";
 
 const assert = chai.assert;

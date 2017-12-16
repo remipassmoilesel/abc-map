@@ -1,5 +1,4 @@
 import {Logger} from '../../../api/dev/Logger';
-import 'mocha';
 
 describe('Logger', () => {
 

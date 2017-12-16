@@ -1,4 +1,3 @@
-import 'mocha';
 import * as chai from 'chai';
 import {GeoJsonDao} from "../../../api/database/GeoJsonDao";
 import {TestUtils} from "../TestUtils";
