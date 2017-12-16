@@ -2,6 +2,7 @@
 
 ## Comportement
 
+- Je veux exporter ma carte sous forme de fichier HTML + JS + données JSON
 - Je veux exprimer mon projet sous forme de phrase simple, voir des propositions et afficher des assistants 
 correspondant à mes besoins.
 
@@ -20,6 +21,7 @@ correspondant à mes besoins.
 
 ## Structure
 
+- Tests avec ipc mock
 - Filtrer sur le main process les collections geojson pour éviter des surcharges. Utiliser l'aire des objets pour 
 déterminer si leur affichage est pertinent
 - ~~Ajouter une factory GeojsonLayer > Leaflet layer~~

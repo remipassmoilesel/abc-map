@@ -22,7 +22,7 @@ export class ActionDialogComponent extends Vue {
 
     public mounted() {
 
-        this.shortcuts.bindShortcut('ctrl+a', (ev) => {
+        this.shortcuts.bindShortcut(UiShortcuts.ACTION_MENU, () => {
 
             if (this.dialogVisible === true) {
                 this.closeActionDialog();

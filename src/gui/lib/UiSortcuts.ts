@@ -9,15 +9,19 @@ declare type ShortcutHandler = (e: ExtendedKeyboardEvent, combo: string) => any;
 
 export class UiShortcuts {
 
+    public static readonly QUIT = 'ctrl+q';
+    public static readonly REFRESH = 'ctrl+r';
+    public static readonly ACTION_MENU = 'ctrl+a';
+
+
     constructor() {
         this.initShortcuts();
     }
 
     private initShortcuts() {
 
-
-        this.bindShortcut('ctrl+q', this.closeAllWindows.bind(this));
-        this.bindShortcut('ctrl+r', this.refreshApplication.bind(this));
+        this.bindShortcut(UiShortcuts.QUIT, this.closeAllWindows.bind(this));
+        this.bindShortcut(UiShortcuts.REFRESH, this.refreshApplication.bind(this));
 
     }
 
@@ -31,7 +35,7 @@ export class UiShortcuts {
                 // internet explorer
                 e.returnValue = false;
             }
-            
+
             handler(e, combo);
         });
     }
