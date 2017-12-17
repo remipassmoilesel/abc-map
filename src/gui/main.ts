@@ -12,7 +12,7 @@ import locale from 'element-ui/lib/locale/lang/en';
 // import components
 import './components/components';
 // Import style
-import './views/app/app.scss';
+import './views/style/main.scss';
 // Import mixins
 import './lib/mixins';
 // Import tests
