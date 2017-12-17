@@ -1,22 +1,22 @@
 import * as _ from "lodash";
-import {UiComponent} from "./UiComponent";
+import {AbstractUiComponent} from "./AbstractUiComponent";
 
 export interface IUxSearchResult {
     name: string;
     score: number;
-    component: UiComponent;
+    component: AbstractUiComponent;
 }
 
 export class UiSearchableComponents {
 
-    private components: UiComponent[];
+    private components: AbstractUiComponent[];
     private nonSignificantWords: string[] = ['of', 'a', 'with', 'then'];
 
     constructor() {
         this.components = [];
     }
 
-    public addComponent(instance: UiComponent) {
+    public addComponent(instance: AbstractUiComponent) {
         this.checkIfNameIsUnique(instance);
         this.components.push(instance);
     }
@@ -37,11 +37,11 @@ export class UiSearchableComponents {
         _.forEach(this.components, (component) => {
             _.forEach(significantWords, (w) => {
 
-                if (component.name.toLocaleLowerCase().indexOf(w) !== -1) {
+                if (component.componentName.toLocaleLowerCase().indexOf(w) !== -1) {
                     this.addToScore(matchingComponents, component, 3);
                 }
 
-                if (component.description.toLocaleLowerCase().indexOf(w) !== -1) {
+                if (component.componentDescription.toLocaleLowerCase().indexOf(w) !== -1) {
                     this.addToScore(matchingComponents, component, 2);
                 }
 
@@ -55,14 +55,14 @@ export class UiSearchableComponents {
             .slice(0, max);
     }
 
-    private addToScore(matchingComponents: IUxSearchResult[], component: UiComponent, scoreToAdd: number) {
+    private addToScore(matchingComponents: IUxSearchResult[], component: AbstractUiComponent, scoreToAdd: number) {
 
         // search if element was already added
-        const previous = _.filter(matchingComponents, m => m.name === component.name);
+        const previous = _.filter(matchingComponents, m => m.name === component.componentName);
 
         if (previous.length < 1) {
             matchingComponents.push({
-                name: component.name,
+                name: component.componentName,
                 component,
                 score: scoreToAdd,
             });
@@ -71,10 +71,10 @@ export class UiSearchableComponents {
         }
     }
 
-    private checkIfNameIsUnique(instance: UiComponent) {
-        const sameNames = _.filter(this.components, i => i.name === instance.name);
+    private checkIfNameIsUnique(instance: AbstractUiComponent) {
+        const sameNames = _.filter(this.components, i => i.componentName === instance.componentName);
         if (sameNames.length > 0) {
-            throw new Error(`Name '${instance.name}' is not unique. Number found: ${sameNames.length}`)
+            throw new Error(`Name '${instance.componentName}' is not unique. Number found: ${sameNames.length}`)
         }
     }
 }

@@ -1,16 +1,20 @@
-import Vue from 'vue';
 import * as _ from 'lodash';
 import Component from 'vue-class-component';
 import {navbarMenusList} from "../../lib/menus/navbarMenusList";
 import {NavbarMenu} from "../../lib/menus/NavbarMenu";
 import {Toaster} from "../../lib/Toaster";
 import {MenuItem} from "../../lib/menus/MenuItem";
+import {AbstractUiComponent} from "../AbstractUiComponent";
 import './style.scss';
 
 @Component({
     template: require('./template.html'),
 })
-export default class NavbarComponent extends Vue {
+export class NavbarComponent extends AbstractUiComponent {
+
+    public componentName: string = 'Navigation bar';
+    public componentDescription: string = 'Top navigation bar';
+    public componentTagName: string = 'navbar';
 
     public menus: NavbarMenu[] = navbarMenusList;
 

@@ -5,16 +5,17 @@ import {Clients} from "../../lib/clients/Clients";
 import {GeocodingResult} from "../../../api/entities/GeocodingResult";
 import {MainStore} from "../../lib/store/store";
 import {StoreWrapper} from "../../lib/store/StoreWrapper";
-import {UiComponent} from "../UiComponent";
+import {AbstractUiComponent} from "../AbstractUiComponent";
 import './style.scss';
 
 @Component({
     template: require('./template.html'),
 })
-export class GeoSearchComponent extends UiComponent {
+export class GeoSearchComponent extends AbstractUiComponent {
 
-    public name = "Geo location search";
-    public description = "You can search for a place, a location or an address.";
+    public componentTagName: string = '';
+    public componentName = "Geo location search";
+    public componentDescription = "You can search for a place, a location or an address.";
 
     public clients: Clients;
     public $store: MainStore;

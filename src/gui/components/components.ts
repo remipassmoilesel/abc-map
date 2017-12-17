@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import NavbarComponent from './navbar/NavbarComponent';
+import {NavbarComponent} from './navbar/NavbarComponent';
 import LeftMenuComponent from './left-menu/LeftMenuComponent';
 import MapComponent from './map/GeoMapComponent';
 import StatusBarComponent from "./status-bar/StatusBarComponent";
@@ -10,19 +10,45 @@ import {GeoSearchComponent} from "./geo-search/GeoSearchComponent";
 import {ActionDialogComponent} from "./action-dialog/ActionDialogComponent";
 import {AddLayerComponent} from "./add-layer/AddLayerComponent";
 import {UiSearchableComponents} from "./UiSearchableComponents";
+import {ActionDialogResultComponent} from "./action-dialog-result/ActionDialogResultComponent";
+import {AbstractUiComponent} from "./AbstractUiComponent";
+import * as _ from "lodash";
+import * as assert from "assert";
+
+export const uxSearchableComponents = new UiSearchableComponents();
+
+const components: AbstractUiComponent [] = [
+    new AddLayerComponent(),
+    new NavbarComponent(),
+];
+
+const checkInstance = (inst: AbstractUiComponent) => {
+    assert.ok(inst.componentName && inst.componentName.length > 1);
+    assert.ok(inst.componentDescription && inst.componentDescription.length > 1);
+    assert.ok(inst.componentTagName && inst.componentTagName.length > 1);
+};
+
+_.forEach(components, (instance: AbstractUiComponent) => {
+
+    checkInstance(instance);
+
+    // register components globally
+    Vue.component(instance.componentTagName, instance.constructor);
+
+    // register searchable components
+    if (instance.componentIsSearchable) {
+        uxSearchableComponents.addComponent(instance);
+    }
+
+});
 
 // tag name -> component
-Vue.component('navbar', NavbarComponent);
 Vue.component('left-menu', LeftMenuComponent);
 Vue.component('geo-map', MapComponent);
-Vue.component('add-layer-selector', AddLayerComponent);
 Vue.component('layer-selector', LayerSelectorComponent);
 Vue.component('status-bar', StatusBarComponent);
 Vue.component('store-updater', StoreUpdaterComponent);
 Vue.component('import-data-selector', ImportDataSelectorComponent);
 Vue.component('geo-search', GeoSearchComponent);
 Vue.component('action-dialog', ActionDialogComponent);
-
-export const uxActions = new UiSearchableComponents();
-uxActions.addComponent(new GeoSearchComponent());
-uxActions.addComponent(new AddLayerComponent());
+Vue.component('action-dialog-result', ActionDialogResultComponent);

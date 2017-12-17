@@ -1,16 +1,18 @@
-import {UiComponent} from "../../components/UiComponent";
+import {AbstractUiComponent} from "../../components/AbstractUiComponent";
 import {UiSearchableComponents} from "../../components/UiSearchableComponents";
 import {AbstractTest} from "../../test-man/AbstractTest";
 
 
-class TestComponent extends UiComponent {
-    name: string;
-    description: string;
+class TestComponent extends AbstractUiComponent {
+    componentName: string;
+    componentDescription: string;
+    componentTagName: string;
 
     constructor(name: string, description: string) {
         super();
-        this.name = name;
-        this.description = description;
+        this.componentName = name;
+        this.componentDescription = description;
+        this.componentTagName = new Date().toString();
     }
 }
 
@@ -31,7 +33,7 @@ export class UiSearchableComponentsTest extends AbstractTest {
         const searchables = new UiSearchableComponents();
         searchables.addComponent(new TestComponent('map', 'map'));
 
-        this.assert.throws(()=>{
+        this.assert.throws(() => {
             searchables.addComponent(new TestComponent('map', 'map'));
         });
     }

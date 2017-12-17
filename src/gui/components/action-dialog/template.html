@@ -14,7 +14,13 @@
             </el-input>
         </span>
         <span>{{ searchMessage }}</span>
-        <span class="result-area" :id="searchResultsId"></span>
+        <span class="result-area">
+            <action-dialog-result
+                    v-for='(res, index) in results'
+                    :result="res"
+                    :key="'item-' + index">
+            </action-dialog-result>
+        </span>
         <span slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false">Cancel</el-button>
         </span>

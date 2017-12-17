@@ -1,16 +1,17 @@
 import Component from 'vue-class-component';
 import {Clients} from '../../lib/clients/Clients';
 import {AbstractMapLayer} from "../../../api/entities/layers/AbstractMapLayer";
-import {UiComponent} from "../UiComponent";
+import {AbstractUiComponent} from "../AbstractUiComponent";
 import './style.scss';
 
 @Component({
     template: require('./template.html'),
 })
-export class AddLayerComponent extends UiComponent {
+export class AddLayerComponent extends AbstractUiComponent {
 
-    public name = "Add a Tile layer";
-    public description = "Add a tile layer in order to display a world map";
+    public componentName = "Add a Tile layer";
+    public componentDescription = "Add a tile layer in order to display a world map";
+    public componentTagName: string = 'add-layer-selector';
 
     public clients: Clients;
     public layers: AbstractMapLayer[] = [];
