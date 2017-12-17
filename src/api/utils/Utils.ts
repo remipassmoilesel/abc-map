@@ -11,7 +11,7 @@ export class Utils {
         return CircularJSON.stringify(data, null, 2);
     }
 
-    public static retryUntilSuccess(toRetry: () => Promise<any>, maxRetries = 3, retryIntervalMs = 100): Promise<any> {
+    public static retryUntilSuccess(toRetry: () => Promise<any>, maxRetries = 5, retryIntervalMs = 100): Promise<any> {
 
         return new Promise((resolve, reject) => {
 

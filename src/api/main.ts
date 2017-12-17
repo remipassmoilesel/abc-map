@@ -20,24 +20,30 @@ export function initApplication(ipc: Ipc) {
     databaseService = new DatabaseService(ipc);
     databaseService.startDatabase();
 
-    databaseService.connect().then((db) => {
-        logger.info('Connected to database');
+    databaseService.connect()
 
-        const projectService = new ProjectService(ipc);
-        const mapService = new MapService(ipc);
+        .then((db) => {
+            logger.info('Connected to database');
 
-        const services: IServicesMap = {
-            project: projectService,
-            map: mapService,
-            db: databaseService,
-        };
+            const projectService = new ProjectService(ipc);
+            const mapService = new MapService(ipc);
 
-        const projectHandlers = new ProjectHandlers(ipc, services);
-        const mapHandlers = new MapHandlers(ipc, services);
-        const dbHandlers = new DatabaseHandlers(ipc, services);
+            const services: IServicesMap = {
+                project: projectService,
+                map: mapService,
+                db: databaseService,
+            };
 
-        projectHandlers.createNewProject();
-    });
+            const projectHandlers = new ProjectHandlers(ipc, services);
+            const mapHandlers = new MapHandlers(ipc, services);
+            const dbHandlers = new DatabaseHandlers(ipc, services);
+
+            projectHandlers.createNewProject();
+        })
+        .catch((e) => {
+            console.error('Error while connecting to database: ', e);
+            process.exit(1);
+        });
 
 }
 
