@@ -11,9 +11,11 @@
 
     <!-- File list -->
 
-    <ul>
-        <li v-for="file in files">{{ file.name }}</li>
-    </ul>
+    <select multiple v-if="files.length > 0">
+        <option v-for="(file, index) in files"
+                :v-key="index">{{ file.name }}
+        </option>
+    </select>
 
     <!-- Action buttons -->
 

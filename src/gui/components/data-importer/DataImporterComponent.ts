@@ -12,6 +12,7 @@ export class DataImporterComponent extends AbstractUiComponent {
     public componentName: string = "Data importer";
     public componentDescription: string = "Allow to import data from various sources.";
     public componentTagName: string = "data-importer";
+    public componentIsSearchable: boolean = true;
 
     public clients: Clients;
     public files: File[] = [];
