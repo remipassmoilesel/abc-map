@@ -49,6 +49,14 @@ select[multiple]{
   }
 }
 
+.el-button{
+  padding: 0.5em;
+
+  i {
+    margin: 0.1em !important;
+  }
+}
+
 .component {
   margin: 0.7em 0.5em;
   padding: 1em;

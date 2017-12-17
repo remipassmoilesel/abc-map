@@ -8,6 +8,8 @@
     <!--<el-switch v-model="isCollapse">-->
     <!--</el-switch>-->
 
+    <!-- Add tiles layers -->
+
     <el-submenu index="1">
 
         <template slot="title">
@@ -21,7 +23,20 @@
 
     </el-submenu>
 
-    <layer-selector></layer-selector>
+    <!-- Select project layers-->
+
+    <el-submenu index="2">
+
+        <template slot="title">
+            <i class="el-icon-tickets"></i>
+            <span slot="title">Project layers</span>
+        </template>
+
+        <el-menu-item-group>
+            <layer-selector></layer-selector>
+        </el-menu-item-group>
+
+    </el-submenu>
 
     <data-importer></data-importer>
 
