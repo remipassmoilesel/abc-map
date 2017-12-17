@@ -8,7 +8,6 @@ const webpack2 = require('webpack');
 const chalk = require('chalk');
 const shell = require('gulp-shell');
 const sourcemaps = require('gulp-sourcemaps');
-const Server = require('karma').Server;
 const path = require('path');
 
 const log = (prefix, message, color) => {
@@ -97,22 +96,8 @@ gulp.task('start', gulpSync.sync([
     'run',
 ]));
 
-gulp.task('test-gui', (done) => {
-    new Server({
-        configFile: path.join(__dirname, '/config/karma.conf.js'),
-        singleRun: true
-    }, done).start();
-});
-
 gulp.task('test-api-watch', ['build-api', 'test-api'], () => {
     return gulp.watch('src/**/*', ['build-api', 'test-api']);
-});
-
-gulp.task('test-gui-watch', (done) => {
-    new Server({
-        configFile: path.join(__dirname, '/config/karma.conf.js'),
-        singleRun: false
-    }, done).start();
 });
 
 gulp.task('watch-api', ['build'], () => {

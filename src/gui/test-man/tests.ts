@@ -8,6 +8,9 @@ const testMan = new TestMan();
 testMan.addTestClass(new TestManTest());
 testMan.addTestClass(new UiSearchableComponentsTest());
 
-setTimeout(() => {
-    testMan.runTests();
-}, 1000);
+// TODO: transmit return code and logs to main process then restore
+// this.setFinalHandler(() => {
+//     window.close();
+// });
+
+testMan.init();

@@ -13,12 +13,7 @@ export class TestMan {
 
     public init() {
         if (process.env.NODE_ENV === 'test') {
-
-            this.setFinalHandler(() => {
-                window.close();
-            });
-
-            setTimeout(this.runTests(), 1000);
+            setTimeout(this.runTests.bind(this), 1000);
         }
     }
 
