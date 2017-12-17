@@ -13,16 +13,13 @@ export class UiShortcuts {
     public static readonly REFRESH = 'ctrl+r';
     public static readonly ACTION_MENU = 'ctrl+a';
 
-
     constructor() {
         this.initShortcuts();
     }
 
     private initShortcuts() {
-
         this.bindShortcut(UiShortcuts.QUIT, this.closeAllWindows.bind(this));
         this.bindShortcut(UiShortcuts.REFRESH, this.refreshApplication.bind(this));
-
     }
 
     public bindShortcut(command: string, handler: ShortcutHandler) {
@@ -39,7 +36,6 @@ export class UiShortcuts {
             handler(e, combo);
         });
     }
-
 
     private closeAllWindows() {
         window.close();

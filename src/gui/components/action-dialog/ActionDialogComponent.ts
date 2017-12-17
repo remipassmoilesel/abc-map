@@ -3,7 +3,7 @@ import Component from 'vue-class-component';
 import {Clients} from '../../lib/clients/Clients';
 import {uxSearchableComponents} from "../components";
 import {IUxSearchResult} from "../UiSearchableComponents";
-import {UiShortcuts} from "../../lib/UiSortcuts";
+import {UiShortcuts} from "../../lib/UiShortcuts";
 import './style.scss';
 import {AbstractUiComponent} from "../AbstractUiComponent";
 

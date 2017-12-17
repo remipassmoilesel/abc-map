@@ -1,5 +1,5 @@
 <div class="action-dialog-result">
-    <h3>{{ result.component.componentName }}</h3>
-    <div>{{ result.component.componentDescription }}</div>
+    <div class="result-title">{{ result.component.componentName }}</div>
+    <div class="result-description">{{ result.component.componentDescription }}</div>
     <component :is="result.component.componentTagName"></component>
 </div>

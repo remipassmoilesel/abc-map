@@ -1,3 +1,18 @@
-.action-dialog-result{
+.action-dialog-result {
+
+  margin: 1em 0.4em;
+  padding: 1em;
+  border-radius: 4px;
+  border: 1px solid #dcdfe6;
+
+  .result-title {
+    font-weight: bolder;
+    margin: 0.7em 0em;
+    font-size: 1.2em;
+  }
+
+  .result-description {
+    font-style: italic;
+  }
 
 }

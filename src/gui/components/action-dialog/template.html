@@ -3,7 +3,9 @@
             title="Search an action"
             :visible.sync="dialogVisible"
             width="50%">
+
         <span>What do you want to do ?</span>
+
         <span>
             <el-input
                 placeholder=""
@@ -13,13 +15,16 @@
                 clearable>
             </el-input>
         </span>
-        <span>{{ searchMessage }}</span>
-        <span class="result-area">
+
+        <div class="search-message">{{ searchMessage }}</div>
+
+        <div class="result-area">
             <action-dialog-result
                     v-for='(res, index) in results'
                     :result="res"
                     :key="'item-' + index">
             </action-dialog-result>
-        </span>
+        </div>
+
     </el-dialog>
 </div>

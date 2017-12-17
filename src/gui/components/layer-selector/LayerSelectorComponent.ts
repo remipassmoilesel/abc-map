@@ -15,6 +15,7 @@ export class LayerSelectorComponent extends AbstractUiComponent{
     public componentName: string = "Layer selector";
     public componentDescription: string = "Allow to select, move or delete map layers";
     public componentTagName: string = "layer-selector";
+    public componentIsSearchable: boolean = true;
 
     public clients: Clients;
     public $store: MainStore;
