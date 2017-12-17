@@ -6,8 +6,6 @@
 
         <el-col :span="18" class="navmenu-container">
 
-            <el-button type="default" icon="el-icon-search" @click="showActionDialog"></el-button>
-
             <el-dropdown
                     v-for="(menu, index) in menus"
                     :key="'menu-' + index"
@@ -28,6 +26,10 @@
                 </el-dropdown-menu>
 
             </el-dropdown>
+
+            <el-button type="default" icon="el-icon-search" @click="showActionDialog">
+                Search commands or actions
+            </el-button>
 
         </el-col>
 
