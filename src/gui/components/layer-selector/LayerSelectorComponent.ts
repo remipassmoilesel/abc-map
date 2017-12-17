@@ -5,11 +5,16 @@ import {Clients} from "../../lib/clients/Clients";
 import './style.scss';
 import {MainStore} from "../../lib/store/store";
 import {StoreWrapper} from "../../lib/store/StoreWrapper";
+import {AbstractUiComponent} from "../AbstractUiComponent";
 
 @Component({
     template: require('./template.html'),
 })
-export default class LayerSelectorComponent extends Vue {
+export class LayerSelectorComponent extends AbstractUiComponent{
+
+    public componentName: string = "Layer selector";
+    public componentDescription: string = "Allow to select, move or delete map layers";
+    public componentTagName: string = "layer-selector";
 
     public clients: Clients;
     public $store: MainStore;

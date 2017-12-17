@@ -1,9 +1,9 @@
-import Vue from 'vue';
 import Component from 'vue-class-component';
 import {Clients} from "../../lib/clients/Clients";
 import * as _ from "lodash";
 import * as path from "path";
 import {Toaster} from "../../lib/Toaster";
+import {AbstractUiComponent} from "../AbstractUiComponent";
 import './style.scss';
 
 const authorizedExtensions = ['.gpx', '.kml'];
@@ -11,7 +11,11 @@ const authorizedExtensions = ['.gpx', '.kml'];
 @Component({
     template: require('./template.html'),
 })
-export class ImportDataSelectorComponent extends Vue {
+export class DataImporterComponent extends AbstractUiComponent {
+
+    public componentName: string = "Data importer";
+    public componentDescription: string = "Allow to import data from various sources.";
+    public componentTagName: string = "data-importer";
 
     public clients: Clients;
     public files: File[] = [];

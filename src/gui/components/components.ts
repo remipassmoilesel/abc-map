@@ -2,10 +2,10 @@ import Vue from 'vue';
 import {NavbarComponent} from './navbar/NavbarComponent';
 import {LeftMenuComponent} from './left-menu/LeftMenuComponent';
 import {GeoMapComponent} from './map/GeoMapComponent';
-import StatusBarComponent from "./status-bar/StatusBarComponent";
-import StoreUpdaterComponent from "./store-updater/StoreUpdaterComponent";
-import LayerSelectorComponent from "./layer-selector/LayerSelectorComponent";
-import {ImportDataSelectorComponent} from "./import-data-selector/ImportDataComponent";
+import {StatusBarComponent} from "./status-bar/StatusBarComponent";
+import {StoreUpdaterComponent} from "./store-updater/StoreUpdaterComponent";
+import {LayerSelectorComponent} from "./layer-selector/LayerSelectorComponent";
+import {DataImporterComponent} from "./data-importer/ImportDataComponent";
 import {GeoSearchComponent} from "./geo-search/GeoSearchComponent";
 import {ActionDialogComponent} from "./action-dialog/ActionDialogComponent";
 import {AddLayerComponent} from "./add-layer/AddLayerComponent";
@@ -22,6 +22,13 @@ const components: AbstractUiComponent [] = [
     new NavbarComponent(),
     new LeftMenuComponent(),
     new GeoMapComponent(),
+    new LayerSelectorComponent(),
+    new StatusBarComponent(),
+    new StoreUpdaterComponent(),
+    new DataImporterComponent(),
+    new GeoSearchComponent(),
+    new ActionDialogComponent(),
+    new ActionDialogResultComponent(),
 ];
 
 const checkInstance = (inst: AbstractUiComponent) => {
@@ -44,11 +51,3 @@ _.forEach(components, (instance: AbstractUiComponent) => {
 
 });
 
-// tag name -> component
-Vue.component('layer-selector', LayerSelectorComponent);
-Vue.component('status-bar', StatusBarComponent);
-Vue.component('store-updater', StoreUpdaterComponent);
-Vue.component('import-data-selector', ImportDataSelectorComponent);
-Vue.component('geo-search', GeoSearchComponent);
-Vue.component('action-dialog', ActionDialogComponent);
-Vue.component('action-dialog-result', ActionDialogResultComponent);

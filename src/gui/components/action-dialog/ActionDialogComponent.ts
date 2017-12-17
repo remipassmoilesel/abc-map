@@ -1,4 +1,3 @@
-import Vue from 'vue';
 import * as _ from 'lodash';
 import Component from 'vue-class-component';
 import {Clients} from '../../lib/clients/Clients';
@@ -6,13 +5,18 @@ import {uxSearchableComponents} from "../components";
 import {IUxSearchResult} from "../UiSearchableComponents";
 import {UiShortcuts} from "../../lib/UiSortcuts";
 import './style.scss';
+import {AbstractUiComponent} from "../AbstractUiComponent";
 
 let instanceNumber = 0;
 
 @Component({
     template: require('./template.html'),
 })
-export class ActionDialogComponent extends Vue {
+export class ActionDialogComponent extends AbstractUiComponent {
+
+    public componentName: string = "Action dialog";
+    public componentDescription: string = "Allow to search in component and actions.";
+    public componentTagName: string = "action-dialog";
 
     public shortcuts: UiShortcuts;
     public clients: Clients;

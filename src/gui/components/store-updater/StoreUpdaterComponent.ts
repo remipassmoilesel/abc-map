@@ -1,4 +1,3 @@
-import Vue from 'vue';
 import Component from 'vue-class-component';
 import * as _ from 'lodash';
 import {MainStore} from "../../lib/store/store";
@@ -7,6 +6,7 @@ import {EventType} from "../../../api/ipc/IpcEventTypes";
 import {Logger} from "../../../api/dev/Logger";
 import {Clients} from "../../lib/clients/Clients";
 import {StoreWrapper} from "../../lib/store/StoreWrapper";
+import {AbstractUiComponent} from "../AbstractUiComponent";
 
 const logger = Logger.getLogger('StoreUpdaterComponent');
 
@@ -19,7 +19,11 @@ const updateEventsType = [
 @Component({
     template: "<div style='display: none'></div>",
 })
-export default class StoreUpdaterComponent extends Vue {
+export class StoreUpdaterComponent extends AbstractUiComponent {
+
+    public componentName: string = "Vuex store updater";
+    public componentDescription: string = "Component which update Vuex store from IPC messages";
+    public componentTagName: string = 'store-updater';
 
     public $store: MainStore;
     public storeWrapper: StoreWrapper;

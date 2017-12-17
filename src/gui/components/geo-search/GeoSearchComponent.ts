@@ -1,4 +1,3 @@
-import Vue from 'vue';
 import * as _ from 'lodash';
 import Component from 'vue-class-component';
 import {Clients} from "../../lib/clients/Clients";
@@ -13,9 +12,9 @@ import './style.scss';
 })
 export class GeoSearchComponent extends AbstractUiComponent {
 
-    public componentTagName: string = '';
     public componentName = "Geo location search";
-    public componentDescription = "You can search for a place, a location or an address.";
+    public componentDescription = "Allow to search for a place, a location or an address, then display it on map";
+    public componentTagName: string = 'geo-search';
 
     public clients: Clients;
     public $store: MainStore;

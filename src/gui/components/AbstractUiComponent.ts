@@ -1,7 +1,6 @@
 import Vue from 'vue';
-import * as assert from 'assert';
 
-export abstract class AbstractUiComponent extends Vue{
+export abstract class AbstractUiComponent extends Vue {
 
     public abstract componentName: string;
     public abstract componentDescription: string;
