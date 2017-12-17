@@ -1,35 +1,22 @@
-<el-submenu index="3" class="import-data-component">
+<div class="import-data-component component">
 
-    <template slot="title">
-        <i class="el-icon-tickets"></i>
-        <span slot="title">Import data</span>
-    </template>
+    <!-- File selector -->
 
-    <el-menu-item-group>
+    <div class="drop-zone" @drop="onDrop" @dragover="onDragOver">
+        Drop files here :)
+    </div>
 
-        <div class="upload-area">
+    <label for="file" class="label-file">Or click here to browse files...</label>
+    <input @change="selectFiles" id="file" class="input-file" type="file" multiple/>
 
-            <!-- File selector -->
+    <!-- File list -->
 
-            <div class="drop-zone" @drop="onDrop" @dragover="onDragOver">
-                Drop files here :)
-            </div>
+    <ul>
+        <li v-for="file in files">{{ file.name }}</li>
+    </ul>
 
-            <label for="file" class="label-file">Select files...</label>
-            <input @change="selectFiles" id="file" class="input-file" type="file" multiple/>
+    <!-- Action buttons -->
 
-            <!-- File list -->
-            <ul>
-                <li v-for="file in files">{{ file.name }}</li>
-            </ul>
+    <el-button @click="importFiles" type="primary">Import files</el-button>
 
-
-            <!-- Action buttons -->
-
-            <el-button @click="importFiles" class="float-right" type="primary">Import files</el-button>
-
-        </div>
-
-    </el-menu-item-group>
-
-</el-submenu>
+</div>

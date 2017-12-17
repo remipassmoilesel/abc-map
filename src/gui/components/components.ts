@@ -5,7 +5,7 @@ import {GeoMapComponent} from './map/GeoMapComponent';
 import {StatusBarComponent} from "./status-bar/StatusBarComponent";
 import {StoreUpdaterComponent} from "./store-updater/StoreUpdaterComponent";
 import {LayerSelectorComponent} from "./layer-selector/LayerSelectorComponent";
-import {DataImporterComponent} from "./data-importer/ImportDataComponent";
+import {DataImporterComponent} from "./data-importer/DataImporterComponent";
 import {GeoSearchComponent} from "./geo-search/GeoSearchComponent";
 import {ActionDialogComponent} from "./action-dialog/ActionDialogComponent";
 import {AddLayerComponent} from "./add-layer/AddLayerComponent";

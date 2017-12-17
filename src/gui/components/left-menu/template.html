@@ -17,9 +17,7 @@
             <span slot="title">Add a new layer</span>
         </template>
 
-        <el-menu-item-group>
-            <add-layer-selector></add-layer-selector>
-        </el-menu-item-group>
+        <add-layer-selector></add-layer-selector>
 
     </el-submenu>
 
@@ -32,20 +30,29 @@
             <span slot="title">Project layers</span>
         </template>
 
-        <el-menu-item-group>
-            <layer-selector></layer-selector>
-        </el-menu-item-group>
+        <layer-selector></layer-selector>
 
     </el-submenu>
 
-    <data-importer></data-importer>
+    <!-- Import data -->
 
-    <el-menu-item index="2">
+    <el-submenu index="3">
+
+        <template slot="title">
+            <i class="el-icon-tickets"></i>
+            <span slot="title">Import data</span>
+        </template>
+
+        <data-importer></data-importer>
+
+    </el-submenu>
+
+    <el-menu-item index="4">
         <i class="el-icon-menu"></i>
         <span slot="title">Navigator Two</span>
     </el-menu-item>
 
-    <el-menu-item index="3">
+    <el-menu-item index="5">
         <i class="el-icon-setting"></i>
         <span slot="title">Navigator Three</span>
     </el-menu-item>

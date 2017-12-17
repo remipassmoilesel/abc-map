@@ -11,6 +11,7 @@ import {StoreWrapper} from "../../lib/store/StoreWrapper";
 import {clients} from "../../lib/mixins";
 import {Toaster} from "../../lib/Toaster";
 import {AbstractUiComponent} from "../AbstractUiComponent";
+import {Clients} from "../../lib/clients/Clients";
 // Import style
 import './style.scss'
 // Import plugins
@@ -24,10 +25,12 @@ const logger = Logger.getLogger('GeoMapComponent');
     template: require('./template.html')
 })
 export class GeoMapComponent extends AbstractUiComponent {
+
     public componentName: string = "Map";
     public componentDescription: string = "Component on which we can see the current map"
     public componentTagName: string = "geo-map";
 
+    public clients: Clients;
     public $store: MainStore;
     public storeWrapper: StoreWrapper;
 
@@ -157,14 +160,14 @@ export class GeoMapComponent extends AbstractUiComponent {
         event.stopPropagation();
         event.preventDefault();
 
-        console.log(event)
+        // console.log(event)
     }
 
     public onDrop(event) {
         event.stopPropagation();
         event.preventDefault();
 
-        Toaster.info('Not implemented, coming soon...');
+        this.clients.map.checkAndImportFiles(event.dataTransfer.files);
     }
 
 }

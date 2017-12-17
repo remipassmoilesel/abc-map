@@ -97,9 +97,9 @@ process.on('exit', (code) => {
 
 // listen for unhandled rejections and uncaught errors
 process.on('unhandledRejection', (reason, p) => {
-    logger.error(`[UNHANDLED REJECTION ERROR] Reason=${JSON.stringify(reason)} P=${JSON.stringify(p)}`);
+    logger.error(`[UNHANDLED REJECTION ERROR]`, {reason: reason, p: p});
 });
 
 process.on('uncaughtException', (err) => {
-    logger.error(`[UNCAUGHT ERROR] Err=${JSON.stringify(err)}`);
+    logger.error(`[UNCAUGHT ERROR]`, {error: err});
 });
