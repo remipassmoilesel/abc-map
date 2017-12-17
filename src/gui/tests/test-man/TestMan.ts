@@ -1,11 +1,13 @@
 import {AbstractTest} from "./AbstractTest";
 import {AssertionError} from "chai";
 import * as _ from "lodash";
+import * as $ from "jquery";
 
 export class TestMan {
 
     private testClasses: AbstractTest[] = [];
     private finalHandler: Function;
+    private logStack: any[] = [];
 
     public addTestClass(test: AbstractTest) {
         this.testClasses.push(test);
@@ -31,8 +33,16 @@ export class TestMan {
         });
 
         const classesToRun = withOnly.length > 0 ? withOnly : this.testClasses;
+        let stats = {
+            classes: 0,
+            tests: 0,
+            passed: 0,
+            failed: 0,
+        };
 
         for (const testClass of classesToRun) {
+
+            stats.classes++;
 
             this.logNewLine();
             this.logNewLine();
@@ -41,6 +51,9 @@ export class TestMan {
             await this.runBeforeHook(testClass);
 
             for (const test of testClass.tests) {
+
+                stats.tests++;
+
                 try {
 
                     this.logNewLine();
@@ -55,9 +68,11 @@ export class TestMan {
 
                     await this.runAfterEachHook(testClass);
 
+                    stats.passed++;
                     await this.reportSuccess(testClass, test);
 
                 } catch (e) {
+                    stats.failed++;
                     await this.reportFail(testClass, test, e);
                 }
             }
@@ -69,6 +84,10 @@ export class TestMan {
         }
 
         this.log('INFO', 'End of tests');
+        this.stdout(`test-stats=${JSON.stringify(stats)}`);
+
+        this.sendLogs();
+
         if (this.finalHandler) {
             this.finalHandler();
         }
@@ -86,10 +105,11 @@ export class TestMan {
         await this.log('FAIL', `[${testClass.name}] ${test.name}`, e);
     }
 
-    private log(prefix: 'SUCCESS' | 'INFO' | 'FAIL', message: string, data?: any) {
+    private log(severity: 'SUCCESS' | 'INFO' | 'FAIL', message: string, data?: any) {
 
-        let logFunc = this.getLogFunction(prefix);
-        logFunc(`[${prefix}] ${message}`);
+        const logFunc = severity === 'FAIL' ? this.stderr.bind(this) : this.stdout.bind(this);
+
+        logFunc(`[${severity}] ${message}`);
 
         if (data && data instanceof AssertionError) {
             const error: any = data;
@@ -106,6 +126,20 @@ export class TestMan {
             logFunc(JSON.stringify(data, null, 2));
         }
 
+    }
+
+    private stdout(messageOrData) {
+        console.info(messageOrData);
+        this.logStack.push(messageOrData);
+    }
+
+    private stderr(messageOrData) {
+        console.error(messageOrData);
+        this.logStack.push(messageOrData);
+    }
+
+    private sendLogs() {
+        $.post('http://localhost:5555', this.logStack.join('\n'));
     }
 
     private async runBeforeHook(testClass: AbstractTest) {
@@ -156,20 +190,7 @@ export class TestMan {
         }
     }
 
-    private getLogFunction(prefix: "SUCCESS" | "INFO" | "FAIL") {
-        switch (prefix) {
-            case 'FAIL':
-                return console.error;
-            case 'INFO':
-                return console.log;
-            case 'SUCCESS':
-                return console.info;
-            default:
-                throw new Error('Unknown prefix: ' + prefix);
-        }
-    }
-
     private logNewLine() {
-        console.log('');
+        this.log('INFO', '');
     }
 }
