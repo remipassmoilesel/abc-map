@@ -4,8 +4,13 @@
 @import '../../../../node_modules/animate.css/animate.css';
 @import './helpers';
 
+@font-face {
+  font-family: 'MainFont';
+  src: url('../../fonts/Ubuntu-L.ttf');
+}
+
 * {
-  font-family: sans-serif;
+  font-family: MainFont;
 }
 
 html {
