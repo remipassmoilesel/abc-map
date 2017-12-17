@@ -21,7 +21,7 @@ export class AddLayerComponent extends AbstractUiComponent {
     public layers: AbstractMapLayer[] = [];
 
     public beforeMount() {
-        this.clients.map.getDefaultWmsLayers()
+        this.clients.map.getDefaultTileLayers()
             .then((layers) => {
                 this.layers = layers;
             })

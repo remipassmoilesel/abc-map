@@ -24,7 +24,7 @@ export class MapClient {
         return this.ipc.listen(IpcEventBus.MAP, handler);
     }
 
-    public getDefaultWmsLayers(): Promise<TileLayer[]> {
+    public getDefaultTileLayers(): Promise<TileLayer[]> {
         return this.ipc.send(MapSubjects.GET_WMS_DEFAULT_LAYERS).catch(handleRejection);
     }
 

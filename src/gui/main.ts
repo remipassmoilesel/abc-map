@@ -16,7 +16,7 @@ import './views/style/main.scss';
 // Import mixins
 import './lib/mixins';
 // Import tests
-import './test-man/tests.ts';
+import './tests/tests.ts';
 
 require('source-map-support').install();
 

@@ -1,6 +1,6 @@
 import {AbstractUiComponent} from "../../components/AbstractUiComponent";
 import {UiSearchableComponents} from "../../components/UiSearchableComponents";
-import {AbstractTest} from "../../test-man/AbstractTest";
+import {AbstractTest} from "../test-man/AbstractTest";
 
 
 class TestComponent extends AbstractUiComponent {
@@ -18,7 +18,6 @@ class TestComponent extends AbstractUiComponent {
 
 export class UiSearchableComponentsTest extends AbstractTest {
     public name: string = "UiSearchableComponentsTest";
-    public only: boolean = true;
 
     public registerTests(): any[] {
         return [
