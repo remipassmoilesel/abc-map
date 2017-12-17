@@ -2,13 +2,15 @@
 
     <div class="h3">Click on one layer below to add it to the main map</div>
 
-    <select multiple>
+    <select v-model="layersToAdd" multiple>
         <option v-for="(layer, index) in layers"
-                :index="'addLayer' + index"
-                @click="handleSelection(index)"
+                :value="layer"
                 :key="'addLayer' + index">
             {{ layer.name }}
         </option>
     </select>
+
+    <el-button @click="addLayers" type="primary" icon="el-icon-plus">
+    </el-button>
 
 </div>

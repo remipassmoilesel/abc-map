@@ -2,6 +2,7 @@ import Component from 'vue-class-component';
 import {Clients} from '../../lib/clients/Clients';
 import {AbstractMapLayer} from "../../../api/entities/layers/AbstractMapLayer";
 import {AbstractUiComponent} from "../AbstractUiComponent";
+import {TileLayer} from "../../../api/entities/layers/TileLayer";
 import './style.scss';
 
 @Component({
@@ -9,10 +10,12 @@ import './style.scss';
 })
 export class AddLayerComponent extends AbstractUiComponent {
 
-    public componentName = "Add a Tile layer";
-    public componentDescription = "Add a tile layer in order to display a world map";
+    public componentName = "Add a default Tile layer";
+    public componentDescription = "Add a default tile layer in order to display a world map.";
     public componentTagName: string = 'add-layer-selector';
     public componentIsSearchable: boolean = true;
+
+    public layersToAdd: TileLayer[] = [];
 
     public clients: Clients;
     public layers: AbstractMapLayer[] = [];
@@ -27,8 +30,11 @@ export class AddLayerComponent extends AbstractUiComponent {
             });
     }
 
-    public handleSelection(index: number) {
-        this.clients.project.addLayer(this.layers[index]);
+    public addLayers() {
+        for (const lay of this.layersToAdd) {
+            this.clients.project.addLayer(lay);
+        }
+        this.layersToAdd = [];
     }
 
 }
