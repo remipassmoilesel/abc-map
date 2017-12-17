@@ -1,5 +1,6 @@
 import {AbstractTest} from "./AbstractTest";
 import {AssertionError} from "chai";
+import * as _ from "lodash";
 
 export class TestMan {
 
@@ -27,46 +28,41 @@ export class TestMan {
         this.log('INFO', 'Starting tests');
         this.log('INFO', '===============');
 
-        for (const testClass of this.testClasses) {
+        // filter classes marked with 'only'
+        const withOnly = _.filter(this.testClasses, (testClass: AbstractTest) => {
+            return testClass.only;
+        });
+
+        const classesToRun = withOnly.length > 0 ? withOnly : this.testClasses;
+
+        for (const testClass of classesToRun) {
 
             this.log('INFO', 'Test class: ' + testClass.name);
 
-            const p = testClass.before();
-            if (p && p.then && p.catch) {
-                await p;
-            }
+            await this.runBeforeHook(testClass);
 
             for (const test of testClass.tests) {
                 try {
 
                     this.log('INFO', `[${testClass.name}] Starting: ${test.name}`);
 
-                    const pbe = testClass.beforeEach();
-                    if (pbe && pbe.then && pbe.catch) {
-                        await pbe;
-                    }
+                    await this.runBeforeEachHook(testClass);
 
                     const ret = test.bind(testClass)();
                     if (ret && ret.then && ret.catch) {
                         await ret;
                     }
 
-                    const pae = testClass.afterEach();
-                    if (pae && pae.then && pae.catch) {
-                        await pae;
-                    }
+                    await this.runAfterEachHook(testClass);
 
-                    this.reportSuccess(testClass, test);
+                    await this.reportSuccess(testClass, test);
 
                 } catch (e) {
-                    this.reportFail(testClass, test, e);
+                    await this.reportFail(testClass, test, e);
                 }
             }
 
-            const pa = testClass.after();
-            if (pa && pa.then && pa.catch) {
-                await pa;
-            }
+            await this.runAfterHook(testClass);
 
             this.log('INFO', 'End of test class: ' + testClass.name);
         }
@@ -81,12 +77,12 @@ export class TestMan {
         this.finalHandler = finalHandler;
     }
 
-    private reportSuccess(testClass: AbstractTest, test: any) {
-        this.log('SUCCESS', `[${testClass.name}] ${test.name}`);
+    private async reportSuccess(testClass: AbstractTest, test: any) {
+        await this.log('SUCCESS', `[${testClass.name}] ${test.name}`);
     }
 
-    private reportFail(testClass: AbstractTest, test: any, e: any) {
-        this.log('FAIL', `[${testClass.name}] ${test.name}`, e);
+    private async reportFail(testClass: AbstractTest, test: any, e: any) {
+        await this.log('FAIL', `[${testClass.name}] ${test.name}`, e);
     }
 
     private log(prefix: 'SUCCESS' | 'INFO' | 'FAIL', message: string, data?: any) {
@@ -104,5 +100,51 @@ export class TestMan {
         else if (data) {
             logFunc(JSON.stringify(data, null, 2));
         }
+
     }
+
+    private async runBeforeHook(testClass: AbstractTest) {
+        try {
+            const p = testClass.before();
+            if (p && p.then && p.catch) {
+                await p;
+            }
+        } catch (e) {
+            await this.reportFail(testClass, {name: 'before() hook'}, e);
+        }
+    }
+
+    private async runBeforeEachHook(testClass: AbstractTest) {
+        try {
+            const pbe = testClass.beforeEach();
+            if (pbe && pbe.then && pbe.catch) {
+                await pbe;
+            }
+        } catch (e) {
+            await this.reportFail(testClass, {name: 'beforeEach() hook'}, e);
+        }
+    }
+
+    private async runAfterHook(testClass: AbstractTest) {
+        try {
+            const p = testClass.after();
+            if (p && p.then && p.catch) {
+                await p;
+            }
+        } catch (e) {
+            await this.reportFail(testClass, {name: 'after() hook'}, e);
+        }
+    }
+
+    private async runAfterEachHook(testClass: AbstractTest) {
+        try {
+            const pbe = testClass.afterEach();
+            if (pbe && pbe.then && pbe.catch) {
+                await pbe;
+            }
+        } catch (e) {
+            await this.reportFail(testClass, {name: 'afterEach() hook'}, e);
+        }
+    }
+
 }

@@ -1,4 +1,4 @@
-import {AbstractTest} from "./AbstractTest";
+import {AbstractTest} from "../../gui/test-man/AbstractTest";
 
 export class TestManTest extends AbstractTest {
 
@@ -9,10 +9,11 @@ export class TestManTest extends AbstractTest {
     private secondTestCall: number;
     private afterCall: number;
 
-    constructor() {
-        super();
-        this.addTest(this.firstTest);
-        this.addTest(this.secondTest);
+    public registerTests(): any[] {
+        return [
+            this.firstTest,
+            this.secondTest
+        ];
     }
 
     public before() {

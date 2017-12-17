@@ -1,8 +1,7 @@
-import * as chai from 'chai';
 import {UiComponent} from "../../../gui/components/UiComponent";
 import {UiSearchableComponents} from "../../../gui/components/UiSearchableComponents";
+import {AbstractTest} from "../../../gui/test-man/AbstractTest";
 
-const assert = chai.assert;
 
 class TestComponent extends UiComponent {
     name: string;
@@ -15,17 +14,24 @@ class TestComponent extends UiComponent {
     }
 }
 
-describe.only('UiSearchableComponent', () => {
+export class UiSearchableComponentsTest extends AbstractTest {
+    public name: string = "UiSearchableComponentsTest";
+    public only: boolean = true;
 
-    it('Search should work', () => {
+    public registerTests(): any[] {
+        return [
+            this.searchShouldWork
+        ];
+    }
+
+    public searchShouldWork() {
 
         const searchables = new UiSearchableComponents();
         searchables.addAction(new TestComponent('Search location', 'Search a location and display it on map'));
         searchables.addAction(new TestComponent('Add a tile layer', 'Search and add tiles layers to your project'));
         searchables.addAction(new TestComponent('Draw circles', 'Draw circles on map'));
 
-        assert.equal(searchables.search('map').length, 2);
+        this.assert.equal(searchables.search('map').length, 2);
+    }
 
-    });
-
-});
+}

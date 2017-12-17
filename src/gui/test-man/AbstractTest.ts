@@ -4,12 +4,19 @@ import * as sinon from 'sinon';
 export abstract class AbstractTest {
 
     public abstract name: string;
+    public only = false;
 
     public chai = chai;
     public sinon = sinon;
     public assert = chai.assert;
 
     public tests: any[] = [];
+
+    constructor(){
+        this.tests = this.registerTests();
+    }
+
+    public abstract registerTests(): any[];
 
     public addTest(test: any) {
         this.tests.push(test);
