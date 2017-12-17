@@ -4,7 +4,7 @@ import {Logger} from "../../../../api/dev/Logger";
 import {MapView} from "../../map/MapView";
 import {MapViewPayload} from "./payloads";
 
-const logger = Logger.getLogger('ProjectStoreModule');
+const logger = Logger.getLogger('MapStoreModule');
 const clients = new Clients();
 
 export class MapState {

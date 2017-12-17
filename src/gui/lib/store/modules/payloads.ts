@@ -9,3 +9,7 @@ export interface MapViewPayload {
 export interface ProjectPayload {
     project: Project;
 }
+
+export interface ActionDialogPayload {
+    dialogIsVisible: boolean;
+}

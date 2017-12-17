@@ -2,11 +2,11 @@ import {MainStore} from "./store";
 import {Actions} from "./modules/mutationsAndActions";
 import {MapViewPayload} from "./modules/payloads";
 
-
 export class StoreWrapper {
 
     public map = new MapStoreWrapper();
     public project = new ProjectStoreWrapper();
+    public gui = new GuiStoreWrapper();
 }
 
 export class ProjectStoreWrapper {
@@ -38,4 +38,16 @@ export class MapStoreWrapper {
     public getMapView($store: MainStore) {
         return $store.getters.currentMapView;
     }
+}
+
+export class GuiStoreWrapper {
+
+    public setActionDialogVisible($store: MainStore, visible: boolean) {
+        $store.dispatch(Actions.ACTION_DIALOG, {dialogIsVisible: visible});
+    }
+
+    public isActionDialogVisible($store: MainStore) {
+        return $store.state.gui.actionDialogVisible;
+    }
+
 }

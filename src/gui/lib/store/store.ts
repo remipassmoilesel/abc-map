@@ -5,6 +5,7 @@ import {ProjectState, ProjectStoreModule} from "./modules/ProjectStoreModule";
 import {MapState, MapStoreModule} from "./modules/MapStoreModule";
 import {AbstractMapLayer} from "../../../api/entities/layers/AbstractMapLayer";
 import {MapView} from "../map/MapView";
+import {GuiState, GuiStoreModule} from "./modules/GuiStoreModule";
 
 
 const logger = Logger.getLogger('store.ts');
@@ -16,7 +17,8 @@ Vue.use(Vuex);
 export const store = new Vuex.Store({
     modules: {
         project: new ProjectStoreModule(),
-        map: new MapStoreModule()
+        map: new MapStoreModule(),
+        gui: new GuiStoreModule()
     }
 });
 
@@ -29,6 +31,7 @@ export class MainStore extends Store<any> {
 export class MainStoreState {
     project: ProjectState;
     map: MapState;
+    gui: GuiState;
 }
 
 export class MainStoreGetters {
