@@ -9,54 +9,72 @@ export interface IUxSearchResult {
 
 export class UiSearchableComponents {
 
-    private actions: UiComponent[];
+    private components: UiComponent[];
     private nonSignificantWords: string[] = ['of', 'a', 'with', 'then'];
 
     constructor() {
-        this.actions = [];
+        this.components = [];
     }
 
-    public addAction(instance: UiComponent) {
-        this.actions.push(instance);
+    public addComponent(instance: UiComponent) {
+        this.checkIfNameIsUnique(instance);
+        this.components.push(instance);
     }
 
     // TODO: suggest better queries, improve word search
     public search(query: string, max = 5): IUxSearchResult[] {
 
         const words = query.split(" ");
-        const significantWords = _.remove(words, (w) => _.includes(this.nonSignificantWords, w));
+
+        // remove non-significants words, and pass them in lower case
+        const significantWords: string[] = _.chain(words)
+            .remove((w) => _.findIndex(this.nonSignificantWords, nsw => nsw === w))
+            .map((w) => w.toLocaleLowerCase())
+            .value();
 
         const matchingComponents: IUxSearchResult[] = [];
 
-        _.forEach(this.actions, (action) => {
+        _.forEach(this.components, (component) => {
             _.forEach(significantWords, (w) => {
-                if (action.name.indexOf(w) !== -1) {
-                    this.addToScore(matchingComponents, action, 3);
-                } else if (action.description.indexOf(w) !== -1) {
-                    this.addToScore(matchingComponents, action, 2);
+
+                if (component.name.toLocaleLowerCase().indexOf(w) !== -1) {
+                    this.addToScore(matchingComponents, component, 3);
                 }
+
+                if (component.description.toLocaleLowerCase().indexOf(w) !== -1) {
+                    this.addToScore(matchingComponents, component, 2);
+                }
+
             });
         });
 
-        return _.sortBy(matchingComponents, (m) => m.score).slice(0, max);
+        return _.chain(matchingComponents)
+            .sort((m) => m.score)
+            .reverse()
+            .value()
+            .slice(0, max);
     }
 
-    private addToScore(matchingComponents: IUxSearchResult[], component: UiComponent, number: number) {
+    private addToScore(matchingComponents: IUxSearchResult[], component: UiComponent, scoreToAdd: number) {
 
         // search if element was already added
         const previous = _.filter(matchingComponents, m => m.name === component.name);
-
-        console.log(previous);
 
         if (previous.length < 1) {
             matchingComponents.push({
                 name: component.name,
                 component,
-                score: number,
+                score: scoreToAdd,
             });
         } else {
-            previous[0].score += number;
+            previous[0].score += scoreToAdd;
         }
     }
 
+    private checkIfNameIsUnique(instance: UiComponent) {
+        const sameNames = _.filter(this.components, i => i.name === instance.name);
+        if (sameNames.length > 0) {
+            throw new Error(`Name '${instance.name}' is not unique. Number found: ${sameNames.length}`)
+        }
+    }
 }

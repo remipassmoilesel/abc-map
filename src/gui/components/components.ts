@@ -24,5 +24,5 @@ Vue.component('geo-search', GeoSearchComponent);
 Vue.component('action-dialog', ActionDialogComponent);
 
 export const uxActions = new UiSearchableComponents();
-uxActions.addAction(new GeoSearchComponent());
-uxActions.addAction(new AddLayerComponent());
+uxActions.addComponent(new GeoSearchComponent());
+uxActions.addComponent(new AddLayerComponent());
