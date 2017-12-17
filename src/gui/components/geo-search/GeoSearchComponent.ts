@@ -15,6 +15,7 @@ export class GeoSearchComponent extends AbstractUiComponent {
     public componentName = "Geo location search";
     public componentDescription = "Allow to search for a place, a location or an address, then display it on map";
     public componentTagName: string = 'geo-search';
+    public componentIsSearchable: boolean = true;
 
     public clients: Clients;
     public $store: MainStore;

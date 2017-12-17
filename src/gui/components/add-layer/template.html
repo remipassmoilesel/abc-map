@@ -1,16 +1,14 @@
-<el-container class="add-layer-component">
-    <template slot="title">
-        <i class="el-icon-location"></i>
-        <span slot="title">Add a new layer</span>
-    </template>
+<div class="add-layer-component">
 
-    <el-menu-item-group>
-        <span slot="title">Choose the layer you want to add</span>
-        <el-menu-item v-for="(layer, index) in layers"
-                      :index="'addLayer' + index"
-                      @click="handleSelection(index)"
-                      :key="'addLayer' + index">
+    <div class="title">Click on one layer below to add it to the main map</div>
+
+    <select multiple>
+        <option v-for="(layer, index) in layers"
+                :index="'addLayer' + index"
+                @click="handleSelection(index)"
+                :key="'addLayer' + index">
             {{ layer.name }}
-        </el-menu-item>
-    </el-menu-item-group>
-</el-container>
+        </option>
+    </select>
+
+</div>

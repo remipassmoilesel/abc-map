@@ -9,7 +9,16 @@
     <!--</el-switch>-->
 
     <el-submenu index="1">
-        <add-layer-selector></add-layer-selector>
+
+        <template slot="title">
+            <i class="el-icon-location"></i>
+            <span slot="title">Add a new layer</span>
+        </template>
+
+        <el-menu-item-group>
+            <add-layer-selector></add-layer-selector>
+        </el-menu-item-group>
+
     </el-submenu>
 
     <layer-selector></layer-selector>

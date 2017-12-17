@@ -12,6 +12,7 @@ export class AddLayerComponent extends AbstractUiComponent {
     public componentName = "Add a Tile layer";
     public componentDescription = "Add a tile layer in order to display a world map";
     public componentTagName: string = 'add-layer-selector';
+    public componentIsSearchable: boolean = true;
 
     public clients: Clients;
     public layers: AbstractMapLayer[] = [];
