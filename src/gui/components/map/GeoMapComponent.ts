@@ -1,4 +1,3 @@
-import Vue from 'vue';
 import Component from "vue-class-component";
 import * as L from 'leaflet';
 import {FeatureGroup} from 'leaflet';
@@ -10,11 +9,12 @@ import {MapView} from "../../lib/map/MapView";
 import {Logger} from "../../../api/dev/Logger";
 import {StoreWrapper} from "../../lib/store/StoreWrapper";
 import {clients} from "../../lib/mixins";
+import {Toaster} from "../../lib/Toaster";
+import {AbstractUiComponent} from "../AbstractUiComponent";
 // Import style
 import './style.scss'
 // Import plugins
 import 'leaflet-draw';
-import {Toaster} from "../../lib/Toaster";
 
 let mapIdCounter = 0;
 const layerFactory = new LeafletLayerFactory(clients);
@@ -23,7 +23,10 @@ const logger = Logger.getLogger('GeoMapComponent');
 @Component({
     template: require('./template.html')
 })
-export default class GeoMapComponent extends Vue {
+export class GeoMapComponent extends AbstractUiComponent {
+    public componentName: string = "Map";
+    public componentDescription: string = "Component on which we can see the current map"
+    public componentTagName: string = "geo-map";
 
     public $store: MainStore;
     public storeWrapper: StoreWrapper;

@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import {NavbarComponent} from './navbar/NavbarComponent';
-import LeftMenuComponent from './left-menu/LeftMenuComponent';
-import MapComponent from './map/GeoMapComponent';
+import {LeftMenuComponent} from './left-menu/LeftMenuComponent';
+import {GeoMapComponent} from './map/GeoMapComponent';
 import StatusBarComponent from "./status-bar/StatusBarComponent";
 import StoreUpdaterComponent from "./store-updater/StoreUpdaterComponent";
 import LayerSelectorComponent from "./layer-selector/LayerSelectorComponent";
@@ -20,6 +20,8 @@ export const uxSearchableComponents = new UiSearchableComponents();
 const components: AbstractUiComponent [] = [
     new AddLayerComponent(),
     new NavbarComponent(),
+    new LeftMenuComponent(),
+    new GeoMapComponent(),
 ];
 
 const checkInstance = (inst: AbstractUiComponent) => {
@@ -43,8 +45,6 @@ _.forEach(components, (instance: AbstractUiComponent) => {
 });
 
 // tag name -> component
-Vue.component('left-menu', LeftMenuComponent);
-Vue.component('geo-map', MapComponent);
 Vue.component('layer-selector', LayerSelectorComponent);
 Vue.component('status-bar', StatusBarComponent);
 Vue.component('store-updater', StoreUpdaterComponent);

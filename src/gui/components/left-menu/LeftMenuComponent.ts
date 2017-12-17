@@ -1,11 +1,15 @@
-import Vue from 'vue';
 import Component from 'vue-class-component';
 import './style.scss';
+import {AbstractUiComponent} from "../AbstractUiComponent";
 
 @Component({
     template: require('./template.html'),
 })
-export default class LeftMenuComponent extends Vue {
+export class LeftMenuComponent extends AbstractUiComponent {
+
+    public componentName: string = 'Left menu';
+    public componentDescription: string = 'Menu on left of window with common actions';
+    public componentTagName: string = 'left-menu';
 
     public isCollapse = false;
 
@@ -16,11 +20,11 @@ export default class LeftMenuComponent extends Vue {
 
     }
 
-    public handleOpen(){
+    public handleOpen() {
 
     }
 
-    public handleClose(){
+    public handleClose() {
 
     }
 }
