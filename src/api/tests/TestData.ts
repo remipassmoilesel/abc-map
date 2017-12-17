@@ -1,7 +1,7 @@
 import * as path from 'path';
-import {INominatimResult} from "../../api/geocoder/NominatimGeocoder";
+import {INominatimResult} from "../geocoder/NominatimGeocoder";
 
-const dataDir = path.resolve(__dirname, '../../../src/tests/example-data');
+const dataDir = path.resolve(__dirname, '../../../src/resources/example-data');
 
 export class TestData {
     public static SAMPLE_GPX = path.resolve(dataDir, 'sample.gpx');

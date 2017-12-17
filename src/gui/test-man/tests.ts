@@ -1,6 +1,6 @@
-import {TestManTest} from "../../tests/gui/TestManTest";
+import {TestManTest} from "../tests/TestManTest";
 import {TestMan} from "./TestMan";
-import {UiSearchableComponentsTest} from "../../tests/gui/components/UiSearchableComponentsTest";
+import {UiSearchableComponentsTest} from "../tests/components/UiSearchableComponentsTest";
 
 // TODO: do not import them in prod env ?
 

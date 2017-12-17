@@ -1,9 +1,9 @@
 import * as chai from 'chai';
-import {GeoJsonDao} from "../../../api/database/GeoJsonDao";
+import {GeoJsonDao} from "../../database/GeoJsonDao";
 import {TestUtils} from "../TestUtils";
-import {IGeoJsonFeature} from "../../../api/entities/geojson/IGeoJsonFeature";
+import {IGeoJsonFeature} from "../../entities/geojson/IGeoJsonFeature";
 import {TestData} from "../TestData";
-import {IGeoJsonFeatureCollection} from "../../../api/entities/geojson/IGeoJsonFeatureCollection";
+import {IGeoJsonFeatureCollection} from "../../entities/geojson/IGeoJsonFeatureCollection";
 
 const uuid = require('uuid');
 

@@ -1,6 +1,6 @@
 import * as chai from 'chai';
 import * as sinon from 'sinon';
-import {Utils} from "../../../api/utils/Utils";
+import {Utils} from "../../utils/Utils";
 
 const assert = chai.assert;
 

@@ -1,7 +1,7 @@
 import * as chai from 'chai';
-import {ProjectSubjects} from "../../../api/ipc/IpcSubject";
-import {Ipc} from "../../../api/ipc/Ipc";
-import {Logger} from "../../../api/dev/Logger";
+import {ProjectSubjects} from "../../ipc/IpcSubject";
+import {Ipc} from "../../ipc/Ipc";
+import {Logger} from "../../dev/Logger";
 import {Application} from "spectron";
 import {TestUtils} from "../TestUtils";
 

@@ -73,15 +73,9 @@ gulp.task('run', () => {
         });
 });
 
-gulp.task('test-gui',
-    shell.task([
-        './node_modules/.bin/mocha --require source-map-support/register ./dist/tests/gui/**/*Test.js',
-    ], {ignoreErrors: true})
-);
-
 gulp.task('test-api',
     shell.task([
-        './node_modules/.bin/mocha --require source-map-support/register ./dist/tests/api/**/*Test.js',
+        './node_modules/.bin/mocha --require source-map-support/register ./dist/api/tests/**/*Test.js',
     ], {ignoreErrors: true})
 );
 
@@ -95,10 +89,6 @@ gulp.task('start', gulpSync.sync([
     'build',
     'run',
 ]));
-
-gulp.task('test-api-watch', ['build-api', 'test-api'], () => {
-    return gulp.watch('src/**/*', ['build-api', 'test-api']);
-});
 
 gulp.task('watch-api', ['build'], () => {
     return gulp.watch('src/api/**/*', ['build-api']);

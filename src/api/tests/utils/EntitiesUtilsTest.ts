@@ -1,10 +1,10 @@
 import * as chai from 'chai';
 import * as _ from 'lodash';
-import {TileLayer} from '../../../api/entities/layers/TileLayer';
-import {EntitySerializer} from '../../../api/entities/EntitySerializer';
-import {Project} from "../../../api/entities/Project";
-import {IpcEventImpl} from "../../../api/ipc/IpcEvent";
-import {EventType} from "../../../api/ipc/IpcEventTypes";
+import {TileLayer} from '../../entities/layers/TileLayer';
+import {EntitySerializer} from '../../entities/EntitySerializer';
+import {Project} from "../../entities/Project";
+import {IpcEventImpl} from "../../ipc/IpcEvent";
+import {EventType} from "../../ipc/IpcEventTypes";
 
 const assert = chai.assert;
 

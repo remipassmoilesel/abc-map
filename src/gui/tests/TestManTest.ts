@@ -1,4 +1,4 @@
-import {AbstractTest} from "../../gui/test-man/AbstractTest";
+import {AbstractTest} from "../test-man/AbstractTest";
 
 export class TestManTest extends AbstractTest {
 

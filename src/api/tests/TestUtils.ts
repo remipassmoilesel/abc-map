@@ -1,10 +1,10 @@
 import * as sinon from 'sinon';
 import * as mongodb from 'mongodb';
 import * as path from 'path';
-import {Ipc} from "../../api/ipc/Ipc";
-import {Utils} from "../../api/utils/Utils";
-import {DatabaseService} from "../../api/services/DatabaseService";
-import {Logger} from "../../api/dev/Logger";
+import {Ipc} from "../ipc/Ipc";
+import {Utils} from "../utils/Utils";
+import {DatabaseService} from "../services/DatabaseService";
+import {Logger} from "../dev/Logger";
 import * as electron from 'electron';
 import {Application} from 'spectron';
 

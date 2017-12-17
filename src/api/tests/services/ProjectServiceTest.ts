@@ -1,9 +1,9 @@
 import * as chai from 'chai';
-import {ProjectService} from "../../../api/services/ProjectService";
+import {ProjectService} from "../../services/ProjectService";
 import {TestUtils} from "../TestUtils";
-import {EventType} from "../../../api/ipc/IpcEventTypes";
-import {IpcEventBus} from "../../../api/ipc/IpcSubject";
-import {IpcEvent} from "../../../api/ipc/IpcEvent";
+import {EventType} from "../../ipc/IpcEventTypes";
+import {IpcEventBus} from "../../ipc/IpcSubject";
+import {IpcEvent} from "../../ipc/IpcEvent";
 
 const assert = chai.assert;
 
