@@ -9,7 +9,6 @@ import {MapView} from "../../lib/map/MapView";
 import {Logger} from "../../../api/dev/Logger";
 import {StoreWrapper} from "../../lib/store/StoreWrapper";
 import {clients} from "../../lib/mixins";
-import {Toaster} from "../../lib/Toaster";
 import {AbstractUiComponent} from "../AbstractUiComponent";
 import {Clients} from "../../lib/clients/Clients";
 // Import style

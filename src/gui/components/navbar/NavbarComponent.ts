@@ -6,6 +6,8 @@ import {Toaster} from "../../lib/Toaster";
 import {MenuItem} from "../../lib/menus/MenuItem";
 import {AbstractUiComponent} from "../AbstractUiComponent";
 import './style.scss';
+import {MainStore} from "../../lib/store/store";
+import {StoreWrapper} from "../../lib/store/StoreWrapper";
 
 @Component({
     template: require('./template.html'),
@@ -16,14 +18,10 @@ export class NavbarComponent extends AbstractUiComponent {
     public componentDescription: string = 'Top navigation bar';
     public componentTagName: string = 'navbar';
 
+    public $store: MainStore;
+    public storeWrapper: StoreWrapper;
+
     public menus: NavbarMenu[] = navbarMenusList;
-
-    /**
-     * Triggered when component is displayed
-     */
-    public mounted() {
-
-    }
 
     public handleMenuClick(id) {
 
@@ -53,6 +51,10 @@ export class NavbarComponent extends AbstractUiComponent {
         }
 
         return rslt[0];
+    }
+
+    public showActionDialog() {
+        this.storeWrapper.gui.setActionDialogVisible(this.$store, true);
     }
 
 }

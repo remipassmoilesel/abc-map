@@ -4,10 +4,10 @@ import {Clients} from '../../lib/clients/Clients';
 import {uxSearchableComponents} from "../components";
 import {IUxSearchResult} from "../UiSearchableComponents";
 import {UiShortcuts} from "../../lib/UiShortcuts";
-import './style.scss';
 import {AbstractUiComponent} from "../AbstractUiComponent";
-
-let instanceNumber = 0;
+import {MainStore} from "../../lib/store/store";
+import {StoreWrapper} from "../../lib/store/StoreWrapper";
+import './style.scss';
 
 @Component({
     template: require('./template.html'),
@@ -20,11 +20,11 @@ export class ActionDialogComponent extends AbstractUiComponent {
 
     public shortcuts: UiShortcuts;
     public clients: Clients;
+    public $store: MainStore;
+    public storeWrapper: StoreWrapper;
 
-    public instanceId = instanceNumber++;
     public query: string = "";
     public searchMessage: string = "";
-    public dialogVisible: boolean = false;
     public results: IUxSearchResult[] = [];
     public debouncedSearch: Function;
 
@@ -37,8 +37,8 @@ export class ActionDialogComponent extends AbstractUiComponent {
 
         this.shortcuts.bindShortcut(UiShortcuts.ACTION_MENU, () => {
 
-            if (this.dialogVisible === true) {
-                this.closeActionDialog();
+            if (this.storeWrapper.gui.isActionDialogVisible(this.$store) === true) {
+                this.dialogIsVisible = false;
             } else {
                 this.openActionDialog();
             }
@@ -63,12 +63,16 @@ export class ActionDialogComponent extends AbstractUiComponent {
 
     }
 
-    private closeActionDialog() {
-        this.dialogVisible = false;
+    get dialogIsVisible() {
+        return this.storeWrapper.gui.isActionDialogVisible(this.$store);
+    }
+
+    set dialogIsVisible(value: boolean) {
+        this.storeWrapper.gui.setActionDialogVisible(this.$store, value);
     }
 
     private openActionDialog() {
-        this.dialogVisible = true;
+        this.storeWrapper.gui.setActionDialogVisible(this.$store, true);
 
         // TODO: improve me
         setTimeout(() => {

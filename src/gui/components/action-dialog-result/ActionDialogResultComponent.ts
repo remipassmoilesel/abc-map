@@ -19,8 +19,4 @@ export class ActionDialogResultComponent extends AbstractUiComponent {
         super();
     }
 
-    public mounted() {
-        console.log(this.result);
-    }
-
 }

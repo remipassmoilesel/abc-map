@@ -17,12 +17,12 @@ const updateEventsType = [
 ];
 
 @Component({
-    template: "<div style='display: none'></div>",
+    template: "<div class='hidden'></div>",
 })
 export class StoreUpdaterComponent extends AbstractUiComponent {
 
     public componentName: string = "Vuex store updater";
-    public componentDescription: string = "Component which update Vuex store from IPC messages";
+    public componentDescription: string = "Component which update Vuex store from main process IPC messages";
     public componentTagName: string = 'store-updater';
 
     public $store: MainStore;

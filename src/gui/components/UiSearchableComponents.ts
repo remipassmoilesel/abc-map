@@ -24,7 +24,10 @@ export class UiSearchableComponents {
     // TODO: suggest better queries, improve word search
     public search(query: string, max = 5): IUxSearchResult[] {
 
-        const words = query.split(" ");
+        const words = query.trim().split(" ");
+        if (words.length < 1) {
+            return [];
+        }
 
         // remove non-significants words, and pass them in lower case
         const significantWords: string[] = _.chain(words)

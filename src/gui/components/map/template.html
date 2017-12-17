@@ -1,7 +1,7 @@
 <div :id="mapId" class="geo-map" :style="{height: height + 'px'}" @drop="onDrop" @dragover="onDragOver">>
 
     <!-- Render methods in order to make them reactive -->
-    <div style="display: none;">
+    <div class="hidden">
         {{ getLayers() }}
         {{ getCurrentMapView() }}
     </div>

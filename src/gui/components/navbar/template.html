@@ -6,6 +6,8 @@
 
         <el-col :span="18" class="navmenu-container">
 
+            <el-button type="default" icon="el-icon-search" @click="showActionDialog"></el-button>
+
             <el-dropdown
                     v-for="(menu, index) in menus"
                     :key="'menu-' + index"
@@ -32,9 +34,7 @@
         <!-- Location search bar -->
 
         <el-col :span="6">
-
-            <geo-search class="location-search"></geo-search>
-
+              <geo-search class="location-search"></geo-search>
         </el-col>
 
     </el-row>
