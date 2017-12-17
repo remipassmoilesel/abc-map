@@ -82,14 +82,14 @@ export class TestMan {
 
     private log(prefix: 'SUCCESS' | 'INFO' | 'FAIL', message: string, data?: any) {
 
-        const logFunc = prefix === 'FAIL' ? console.error : console.info;
+        let logFunc = this.getLogFunction(prefix);
         logFunc(`[${prefix}] ${message}`);
 
         if (data && data instanceof AssertionError) {
             const error: any = data;
+            logFunc('- Message: ' + error.message);
             logFunc('- Actual: ' + error.actual);
             logFunc('- Expected: ' + error.expected);
-            logFunc('- Message: ' + error.message);
             logFunc('- Stack: ' + error.stack);
         }
         else if (data) {
@@ -142,4 +142,16 @@ export class TestMan {
         }
     }
 
+    private getLogFunction(prefix: "SUCCESS" | "INFO" | "FAIL") {
+        switch (prefix) {
+            case 'FAIL':
+                return console.error;
+            case 'INFO':
+                return console.log;
+            case 'SUCCESS':
+                return console.info;
+            default:
+                throw new Error('Unknown prefix: ' + prefix);
+        }
+    }
 }
