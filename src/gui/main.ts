@@ -15,9 +15,10 @@ import './components/components';
 import './views/app/app.scss';
 // Import mixins
 import './lib/mixins';
+// Import tests
+import './test-man/tests.ts';
 
 require('source-map-support').install();
-
 
 const logger = Logger.getLogger('gui/main.ts');
 logger.info('Starting main app');
