@@ -19,6 +19,8 @@ export class TestMan {
 
     public async runTests() {
 
+        this.logNewLine();
+        this.logNewLine();
         this.log('INFO', '===============');
         this.log('INFO', 'Starting tests');
         this.log('INFO', '===============');
@@ -32,13 +34,16 @@ export class TestMan {
 
         for (const testClass of classesToRun) {
 
-            this.log('INFO', 'Test class: ' + testClass.name);
+            this.logNewLine();
+            this.logNewLine();
+            this.log('INFO', ` *** Test class: ${testClass.name} ***`);
 
             await this.runBeforeHook(testClass);
 
             for (const test of testClass.tests) {
                 try {
 
+                    this.logNewLine();
                     this.log('INFO', `[${testClass.name}] Starting: ${test.name}`);
 
                     await this.runBeforeEachHook(testClass);
@@ -59,7 +64,8 @@ export class TestMan {
 
             await this.runAfterHook(testClass);
 
-            this.log('INFO', 'End of test class: ' + testClass.name);
+            this.logNewLine();
+            this.log('INFO', `End of test class: ${testClass.name}`);
         }
 
         this.log('INFO', 'End of tests');
@@ -92,6 +98,10 @@ export class TestMan {
             logFunc('- Expected: ' + error.expected);
             logFunc('- Stack: ' + error.stack);
         }
+        else if (data && data instanceof Error) {
+            logFunc(data.message);
+            logFunc(data.stack);
+        }
         else if (data) {
             logFunc(JSON.stringify(data, null, 2));
         }
@@ -106,6 +116,7 @@ export class TestMan {
             }
         } catch (e) {
             await this.reportFail(testClass, {name: 'before() hook'}, e);
+            throw e;
         }
     }
 
@@ -117,6 +128,7 @@ export class TestMan {
             }
         } catch (e) {
             await this.reportFail(testClass, {name: 'beforeEach() hook'}, e);
+            throw e;
         }
     }
 
@@ -128,6 +140,7 @@ export class TestMan {
             }
         } catch (e) {
             await this.reportFail(testClass, {name: 'after() hook'}, e);
+            throw e;
         }
     }
 
@@ -139,6 +152,7 @@ export class TestMan {
             }
         } catch (e) {
             await this.reportFail(testClass, {name: 'afterEach() hook'}, e);
+            throw e;
         }
     }
 
@@ -153,5 +167,9 @@ export class TestMan {
             default:
                 throw new Error('Unknown prefix: ' + prefix);
         }
+    }
+
+    private logNewLine() {
+        console.log('');
     }
 }
