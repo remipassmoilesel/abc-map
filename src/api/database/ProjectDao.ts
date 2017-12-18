@@ -14,8 +14,13 @@ export class ProjectDao {
         return this.db.collection(this.projectCollectionId).insertOne(document);
     }
 
-    public query() {
-        return this.db.collection(this.projectCollectionId).find({});
+    public query(): Promise<Project> {
+        return this.db.collection(this.projectCollectionId).find({}).toArray().then((arr) => {
+            if (arr.length !== 1) {
+                throw new Error('Invalid number of projects: ' + arr.length);
+            }
+            return arr[0];
+        });
     }
 
 }
