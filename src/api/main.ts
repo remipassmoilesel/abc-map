@@ -17,7 +17,7 @@ export function initApplication(ipc: Ipc) {
 
     logger.info('Initialize main application');
 
-    databaseService = new DatabaseService(ipc);
+    databaseService = new DatabaseService(ipc, 'abc-map');
     databaseService.startDatabase();
 
     databaseService.connect()

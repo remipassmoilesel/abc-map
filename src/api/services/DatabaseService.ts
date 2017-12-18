@@ -28,17 +28,18 @@ export class DatabaseService extends AbstractService {
     private databaseStatus: DatabaseStatus;
     private db: Db;
     private geoJsonDao: GeoJsonDao;
+    private databaseName: string;
 
-    constructor(ipc: Ipc) {
+    constructor(ipc: Ipc, databaseName: string) {
         super(ipc);
+        this.databaseName = databaseName;
 
         logger.info('Initialize DatabaseService');
-
     }
 
     public connect(): Promise<Db> {
         return Utils.retryUntilSuccess(() => {
-            return (mongodb.connect(`mongodb://localhost:${DatabaseService.SERVER_PORT}/abcmap`)
+            return (mongodb.connect(`mongodb://localhost:${DatabaseService.SERVER_PORT}/${this.databaseName}`)
                 .then((db) => {
                     this.db = db;
                     this.initDao();
