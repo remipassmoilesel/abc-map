@@ -2,6 +2,9 @@ import {Ipc} from "../ipc/Ipc";
 import {ProjectSubjects} from "../ipc/IpcSubject";
 import {IpcEvent} from "../ipc/IpcEvent";
 import {AbstractHandlersGroup, IServicesMap} from "./AbstractHandlersGroup";
+import {Logger} from "../dev/Logger";
+
+const logger = Logger.getLogger('ProjectHandlers');
 
 export class ProjectHandlers extends AbstractHandlersGroup {
 
@@ -12,6 +15,8 @@ export class ProjectHandlers extends AbstractHandlersGroup {
         this.registerHandler(ProjectSubjects.GET_CURRENT, this.getCurrentProject.bind(this));
         this.registerHandler(ProjectSubjects.ADD_LAYER, this.addLayer.bind(this));
         this.registerHandler(ProjectSubjects.DELETE_LAYERS, this.deleteLayer.bind(this));
+
+        setInterval(this.persistProject.bind(this), 3 * 60 * 1000);
     }
 
     public createNewProject() {
@@ -37,6 +42,13 @@ export class ProjectHandlers extends AbstractHandlersGroup {
 
     public deleteLayer(event: IpcEvent) {
         return this.services.project.deleteLayers(event.data);
+    }
+
+    public persistProject() {
+        logger.info('Automatic update of project in database ...')
+        const projectDao = this.services.db.getProjectDao();
+        const project = this.services.project.getCurrentProject();
+        projectDao.update(project);
     }
 
 
