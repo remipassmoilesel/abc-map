@@ -1,4 +1,5 @@
 import {AbstractMapLayer} from "./layers/AbstractMapLayer";
+import * as uuid from "uuid";
 
 export interface IProjectCreationOptions {
     name?: string;
@@ -6,10 +7,12 @@ export interface IProjectCreationOptions {
 
 export class Project {
 
+    public _id: string;
     private _name: string;
     private _layers: AbstractMapLayer[];
 
     constructor(name: string) {
+        this._id = uuid.v4();
         this._name = name;
         this._layers = [];
     }

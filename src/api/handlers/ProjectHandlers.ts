@@ -15,8 +15,16 @@ export class ProjectHandlers extends AbstractHandlersGroup {
     }
 
     public createNewProject() {
-        this.services.project.newProject();
+
+        // create a new project
+        const project = this.services.project.newProject();
         this.services.project.addLayer(this.services.map.getDefaultWmsLayers()[0]);
+
+        // drop previous one in database, add new
+        // TODO: do not drop previous project if not existing
+        const projectDao = this.services.db.getProjectDao();
+        projectDao.clear();
+        projectDao.insert(project);
     }
 
     public getCurrentProject() {

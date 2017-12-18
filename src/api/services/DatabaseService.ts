@@ -9,6 +9,7 @@ import {Db} from "mongodb";
 import {Utils} from "../utils/Utils";
 import {GeoJsonDao} from "../database/GeoJsonDao";
 import {AbstractService} from "./AbstractService";
+import {ProjectDao} from "../database/ProjectDao";
 
 const projectRoot: string = path.resolve(__dirname, '..', '..', '..');
 assert.ok(fs.existsSync(projectRoot), 'Project root must exist');
@@ -28,6 +29,7 @@ export class DatabaseService extends AbstractService {
     private databaseStatus: DatabaseStatus;
     private db: Db;
     private geoJsonDao: GeoJsonDao;
+    private projectDao: ProjectDao;
     private databaseName: string;
 
     constructor(ipc: Ipc, databaseName: string) {
@@ -71,8 +73,12 @@ export class DatabaseService extends AbstractService {
         execSync('./mongodb/bin/mongod -f config/mongodb-config.yaml --shutdown', {cwd: projectRoot});
     }
 
-    public getGeoJsonDao() {
+    public getGeoJsonDao(): GeoJsonDao {
         return this.geoJsonDao;
+    }
+
+    public getProjectDao(): ProjectDao {
+        return this.projectDao;
     }
 
     private spawnDatabaseProcess() {
@@ -91,5 +97,7 @@ export class DatabaseService extends AbstractService {
 
     private initDao() {
         this.geoJsonDao = new GeoJsonDao(this.db);
+        this.projectDao = new ProjectDao(this.db);
     }
+
 }

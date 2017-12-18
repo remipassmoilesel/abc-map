@@ -10,6 +10,10 @@ export class ProjectDao {
         this.db = db;
     }
 
+    public clear(): Promise<any> {
+        return this.db.dropCollection(this.projectCollectionId);
+    }
+
     public insert(document: Project): Promise<InsertOneWriteOpResult> {
         return this.db.collection(this.projectCollectionId).insertOne(document);
     }
