@@ -21,6 +21,7 @@ correspondant à mes besoins.
 
 ## Structure
 
+- Procédure de test avec: api, gui, build et lancement
 - Tests avec ipc mock
 - Filtrer sur le main process les collections geojson pour éviter des surcharges. Utiliser l'aire des objets pour 
 déterminer si leur affichage est pertinent

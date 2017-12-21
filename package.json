@@ -8,6 +8,7 @@
   },
   "main": "./dist/electron-main.js",
   "scripts": {
+    "package": "./node_modules/electron-packager/cli.js . abcmap2 --all",
     "clean": "gulp clean",
     "build": "gulp build",
     "start": "gulp start",
@@ -37,6 +38,7 @@
     "leaflet": "^1.2.0",
     "leaflet-draw": "^0.4.13",
     "mongodb": "^2.2.33",
+    "mongorito": "^3.0.4",
     "mousetrap": "^1.6.1",
     "path": "^0.12.7",
     "request-promise": "^4.2.2",
