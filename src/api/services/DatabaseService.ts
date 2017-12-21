@@ -41,7 +41,8 @@ export class DatabaseService extends AbstractService {
 
     public connect(): Promise<Db> {
         return Utils.retryUntilSuccess(async () => {
-            this.db = await mongodb.connect(`mongodb://localhost:${DatabaseService.SERVER_PORT}/${this.databaseName}`;
+            this.db = await mongodb.connect(
+                `mongodb://localhost:${DatabaseService.SERVER_PORT}/${this.databaseName}`);
             this.initDao();
         });
     }
