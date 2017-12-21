@@ -19,11 +19,15 @@ export class ProjectDao extends AbstractDao {
     }
 
     public async query(): Promise<Project> {
-        const projects: any[] = await this.db.collection(this.projectCollectionId).find({}).toArray();
-        if (projects.length !== 1) {
-            throw new Error('Invalid number of projects: ' + projects.length);
+        const rawProject: any[] = await this.db.collection(this.projectCollectionId).find({}).toArray();
+        if (rawProject.length !== 1) {
+            throw new Error('Invalid number of projects: ' + rawProject.length);
         }
-        return projects[0];
+
+        const pr = new Project();
+        pr.fromRaw(rawProject[0]);
+
+        return pr;
     }
 
     public update(project: Project) {

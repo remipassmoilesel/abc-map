@@ -1,5 +1,6 @@
 import * as chai from 'chai';
 import {TestUtils} from "../TestUtils";
+import {Db} from "mongodb";
 import {ProjectDao} from "../../database/ProjectDao";
 import {Project} from "../../entities/Project";
 
@@ -7,28 +8,34 @@ const uuid = require('uuid');
 
 const assert = chai.assert;
 
-describe('ProjectDao', () => {
+describe.only('ProjectDao', () => {
+
+    let db: Db;
+
+    before(async () => {
+        db = await TestUtils.getMongodbConnection();
+    });
+
+    after(async () => {
+        await db.close();
+    });
 
     it('> Insert, read and delete a project should succeed', async () => {
+        const dao = new ProjectDao(db);
 
-        const dbConnection = await TestUtils.getMongodbConnection();
-
+        // create a fake project and insert it
         const project = new Project('test project');
-        const dao = new ProjectDao(dbConnection);
+        // project.layers.push(new TileLayer());
 
         await dao.insert(project);
 
+        // query project and compare it
         const queriedProject: Project = await dao.query();
-
-        console.log("queriedProject");
-        console.log(queriedProject);
-        console.log("project");
-        console.log(project);
 
         assert.deepEqual(project, queriedProject);
         assert.instanceOf(queriedProject, Project);
 
-        dao.clear();
+        await dao.clear();
     });
 
 

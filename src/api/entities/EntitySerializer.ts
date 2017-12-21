@@ -18,6 +18,9 @@ constructors.EventType = EventType;
 constructors.GeoJsonLayer = GeoJsonLayer;
 constructors.GeocodingResult = GeocodingResult;
 
+// TODO: use HydrateJS ? (tested)
+// https://github.com/nanodeath/HydrateJS/blob/master/src/hydrate.coffee
+
 export class EntitySerializer {
 
     private necromancer: any;

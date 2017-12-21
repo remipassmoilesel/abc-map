@@ -1,22 +1,23 @@
-import {AbstractMapLayer} from "./layers/AbstractMapLayer";
 import * as uuid from "uuid";
+import * as _ from "lodash";
+import {AbstractMapLayer} from "./layers/AbstractMapLayer";
+import {IDbSerializable} from "./IDbSerializable";
 
 export interface IProjectCreationOptions {
     name?: string;
 }
 
-export class Project {
+export class Project implements IDbSerializable {
 
     public _id: string;
     private _name: string;
     private _layers: AbstractMapLayer[];
 
-    constructor(name: string) {
+    constructor(name?: string) {
         this._id = uuid.v4();
         this._name = name;
         this._layers = [];
     }
-
 
     get name(): string {
         return this._name;
@@ -33,4 +34,9 @@ export class Project {
     set layers(value: AbstractMapLayer[]) {
         this._layers = value;
     }
+
+    public fromRaw(data: any) {
+        _.assign(this, data);
+    }
+
 }

@@ -4,7 +4,7 @@ import {Utils} from "../../utils/Utils";
 
 const assert = chai.assert;
 
-describe.only('UtilsTest', () => {
+describe('UtilsTest', () => {
 
     it('Safe stringify should not throw', () => {
 
