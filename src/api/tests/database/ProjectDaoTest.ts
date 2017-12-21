@@ -7,7 +7,7 @@ const uuid = require('uuid');
 
 const assert = chai.assert;
 
-describe.only('ProjectDao', () => {
+describe('ProjectDao', () => {
 
     it('> Insert, read and delete a project should succeed', async () => {
 

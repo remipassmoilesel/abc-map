@@ -4,7 +4,7 @@ import {Utils} from "../../utils/Utils";
 
 const assert = chai.assert;
 
-describe('UtilsTest', () => {
+describe.only('UtilsTest', () => {
 
     it('Safe stringify should not throw', () => {
 
@@ -51,7 +51,7 @@ describe('UtilsTest', () => {
             });
     });
 
-    it('Retry should succeed after max number', () => {
+    it('Retry should success after max number', () => {
 
         const promiseStub = sinon.stub();
         promiseStub.onCall(0).returns(Promise.reject(new Error()));
@@ -64,6 +64,23 @@ describe('UtilsTest', () => {
                 assert.equal(promiseStub.callCount, 4);
             })
             .catch(() => {
+                throw new Error('Should resolve');
+            });
+    });
+
+    it('Should retry if an error is thrown', () => {
+
+        const promiseStub = sinon.stub();
+        promiseStub.onCall(0).throws();
+        promiseStub.onCall(1).returns(Promise.resolve());
+
+        return Utils.retryUntilSuccess(promiseStub, 3, 10)
+            .then(() => {
+                assert.equal(promiseStub.callCount, 2);
+            })
+            .catch(() => {
+                console.log("promiseStub.callCount");
+                console.log(promiseStub.callCount);
                 throw new Error('Should resolve');
             });
     });

@@ -15,20 +15,25 @@ export class Utils {
 
         return new Promise((resolve, reject) => {
 
+            const onError = (remainingTries, error) => {
+                if (remainingTries > 0) {
+                    setTimeout(() => {
+                        tryWrapper(remainingTries - 1);
+                    }, retryIntervalMs);
+                } else {
+                    reject(new Error(`No remaining retries: ${JSON.stringify(error)}`))
+                }
+            };
+
             const tryWrapper = (remainingTries) => {
 
-                toRetry()
-                    .then(resolve)
-                    .catch((error) => {
-                        if (remainingTries > 0) {
-                            setTimeout(() => {
-                                tryWrapper(remainingTries - 1);
-                            }, retryIntervalMs);
-                        } else {
-                            reject(new Error(`No remaining retries: ${JSON.stringify(error)}`))
-                        }
-                    });
-
+                try {
+                    toRetry()
+                        .then(resolve)
+                        .catch(onError.bind(null, remainingTries));
+                } catch (e) {
+                    onError(remainingTries, e);
+                }
             };
 
             tryWrapper(maxRetries);
