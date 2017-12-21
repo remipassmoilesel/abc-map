@@ -8,7 +8,7 @@
   },
   "main": "./dist/electron-main.js",
   "scripts": {
-    "package": "./node_modules/electron-packager/cli.js . abcmap2 --all",
+    "package": "./node_modules/electron-packager/cli.js . abcmap2 --all --out packaged ",
     "clean": "gulp clean",
     "build": "gulp build",
     "start": "gulp start",
@@ -16,7 +16,6 @@
     "test": "npm run test-api && npm run test-gui",
     "test-api": "gulp build-api && gulp test-api",
     "test-gui": "NODE_ENV=test gulp start",
-    "package": "npm run build && electron-packager --out packaged --platform all .",
     "start-db": "./mongodb/bin/mongod -f config/mongodb-config.yaml",
     "stop-db": "./mongodb/bin/mongod -f config/mongodb-config.yaml --shutdown",
     "clean-db": "rm -rf ./mongodb-data && mkdir ./mongodb-data"
@@ -38,7 +37,6 @@
     "leaflet": "^1.2.0",
     "leaflet-draw": "^0.4.13",
     "mongodb": "^2.2.33",
-    "mongorito": "^3.0.4",
     "mousetrap": "^1.6.1",
     "path": "^0.12.7",
     "request-promise": "^4.2.2",
