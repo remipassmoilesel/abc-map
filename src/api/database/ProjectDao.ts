@@ -1,30 +1,29 @@
 import {Db, InsertOneWriteOpResult} from "mongodb";
 import {Project} from "../entities/Project";
+import {AbstractDao} from "./AbstractDao";
 
-export class ProjectDao {
+export class ProjectDao extends AbstractDao {
 
     private readonly projectCollectionId = "project";
-    private db: Db;
 
     constructor(db: Db) {
-        this.db = db;
+        super(db);
     }
 
     public clear(): Promise<any> {
         return this.db.dropCollection(this.projectCollectionId);
     }
 
-    public insert(document: Project): Promise<InsertOneWriteOpResult> {
-        return this.db.collection(this.projectCollectionId).insertOne(document);
+    public insert(project: Project): Promise<InsertOneWriteOpResult> {
+        return this.db.collection(this.projectCollectionId).insertOne(project);
     }
 
-    public query(): Promise<Project> {
-        return this.db.collection(this.projectCollectionId).find({}).toArray().then((arr) => {
-            if (arr.length !== 1) {
-                throw new Error('Invalid number of projects: ' + arr.length);
-            }
-            return arr[0];
-        });
+    public async query(): Promise<Project> {
+        const projects: any[] = await this.db.collection(this.projectCollectionId).find({}).toArray();
+        if (projects.length !== 1) {
+            throw new Error('Invalid number of projects: ' + projects.length);
+        }
+        return projects[0];
     }
 
     public update(project: Project) {
