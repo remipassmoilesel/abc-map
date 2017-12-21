@@ -34,7 +34,7 @@ describe('GeoJsonDao', () => {
     };
 
 
-    it('> Insert a geojson document in a new collection should success', () => {
+    it('> Insert a geojson document in a new collection should succeed', () => {
         return TestUtils.getMongodbConnection()
             .then((db) => {
 
@@ -53,7 +53,7 @@ describe('GeoJsonDao', () => {
             });
     });
 
-    it('> Insert many documents in a new collection should success', () => {
+    it('> Insert many documents in a new collection should succeed', () => {
         return TestUtils.getMongodbConnection()
             .then((db) => {
 
@@ -76,7 +76,7 @@ describe('GeoJsonDao', () => {
             });
     });
 
-    it('> Create a geoindex should success', () => {
+    it('> Create a geoindex should succeed', () => {
 
         const shapes: IGeoJsonFeatureCollection = require(TestData.JSON_GRENOBLE_SHAPES);
 
@@ -96,7 +96,7 @@ describe('GeoJsonDao', () => {
             });
     });
 
-    it('> Filter shapes with a polygon should success', () => {
+    it('> Filter shapes with a polygon should succeed', () => {
 
         const shapes: IGeoJsonFeatureCollection = require(TestData.JSON_GRENOBLE_SHAPES);
         const filter: IGeoJsonFeatureCollection = require(TestData.JSON_GRENOBLE_SHAPES_FILTER1);

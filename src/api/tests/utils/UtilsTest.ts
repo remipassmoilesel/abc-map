@@ -51,7 +51,7 @@ describe('UtilsTest', () => {
             });
     });
 
-    it('Retry should success after max number', () => {
+    it('Retry should succeed after max number', () => {
 
         const promiseStub = sinon.stub();
         promiseStub.onCall(0).returns(Promise.reject(new Error()));

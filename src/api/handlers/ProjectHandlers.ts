@@ -44,8 +44,12 @@ export class ProjectHandlers extends AbstractHandlersGroup {
         return this.services.project.deleteLayers(event.data);
     }
 
+    public saveProjectAs(event: IpcEvent){
+        return this.services.db.getProjectDao().exportProjectAs(event.data);
+    }
+
     public persistProject() {
-        logger.info('Automatic update of project in database ...')
+        logger.info('Automatic update of project in database ...');
         const projectDao = this.services.db.getProjectDao();
         const project = this.services.project.getCurrentProject();
         projectDao.update(project);

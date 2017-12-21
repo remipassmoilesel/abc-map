@@ -30,4 +30,9 @@ export class ProjectDao {
     public update(project: Project) {
         return this.db.collection(this.projectCollectionId).updateOne({_id: project._id}, project);
     }
+
+    public exportProjectAs(path: string) {
+
+    }
+
 }
