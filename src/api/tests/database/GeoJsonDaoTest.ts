@@ -1,4 +1,5 @@
 import * as chai from 'chai';
+import {Db} from "mongodb";
 import {GeoJsonDao} from "../../database/GeoJsonDao";
 import {TestUtils} from "../TestUtils";
 import {IGeoJsonFeature} from "../../entities/geojson/IGeoJsonFeature";
@@ -9,7 +10,17 @@ const uuid = require('uuid');
 
 const assert = chai.assert;
 
-describe('GeoJsonDao', () => {
+describe.only('GeoJsonDao', () => {
+
+    let db: Db;
+
+    before(async () => {
+        db = await TestUtils.getMongodbConnection();
+    });
+
+    after(async () => {
+        await db.close();
+    });
 
     const coordinates = () => [Math.random() * 80, Math.random() * 50];
 
@@ -33,93 +44,64 @@ describe('GeoJsonDao', () => {
         return feature;
     };
 
+    it('> Insert a geojson document in a new collection should succeed', async () => {
 
-    it('> Insert a geojson document in a new collection should succeed', () => {
-        return TestUtils.getMongodbConnection()
-            .then((db) => {
+        const dao = new GeoJsonDao(db);
+        const collectionId = uuid.v4();
 
-                const dao = new GeoJsonDao(db);
-                const collectionId = uuid.v4();
+        await dao.insertMany(collectionId, require(TestData.SAMPLE_GEOJSON).features);
 
-                return dao.insertMany(collectionId, require(TestData.SAMPLE_GEOJSON).features)
-                    .then(() => {
-
-                        const cursor = dao.queryAll(collectionId);
-                        return cursor.count().then((count) => {
-                            assert.equal(count, 1);
-                        });
-
-                    })
-            });
+        const cursor = await dao.queryAll(collectionId);
+        const count = await cursor.count();
+        assert.equal(count, 1);
     });
 
-    it('> Insert many documents in a new collection should succeed', () => {
-        return TestUtils.getMongodbConnection()
-            .then((db) => {
+    it('> Insert many documents in a new collection should succeed', async () => {
+        const dao = new GeoJsonDao(db);
+        const collectionId = uuid.v4();
 
-                const dao = new GeoJsonDao(db);
-                const collectionId = uuid.v4();
+        await dao.insertMany(collectionId, [
+            getGeoJsonFeature(),
+            getGeoJsonFeature(),
+            getGeoJsonFeature()
+        ]);
 
-                return dao.insertMany(collectionId, [
-                    getGeoJsonFeature(),
-                    getGeoJsonFeature(),
-                    getGeoJsonFeature()
-                ])
-                    .then(() => {
+        const cursor = await dao.queryAll(collectionId);
+        const count = await cursor.count();
+        assert.equal(count, 3);
 
-                        const cursor = dao.queryAll(collectionId);
-                        return cursor.count().then((count) => {
-                            assert.equal(count, 3);
-                        });
-
-                    })
-            });
     });
 
-    it('> Create a geoindex should succeed', () => {
+    it('> Create a geoindex should succeed', async () => {
 
         const shapes: IGeoJsonFeatureCollection = require(TestData.JSON_GRENOBLE_SHAPES);
 
-        return TestUtils.getMongodbConnection()
-            .then((db) => {
+        const dao = new GeoJsonDao(db);
+        const collectionId = uuid.v4();
 
-                const dao = new GeoJsonDao(db);
-                const collectionId = uuid.v4();
+        await dao.insertMany(collectionId, shapes.features);
+        const index = await dao.createGeoIndex(collectionId);
 
-                return dao.insertMany(collectionId, shapes.features)
-                    .then(() => {
-                        return dao.createGeoIndex(collectionId)
-                    })
-                    .then((data) => {
-                        assert.equal(data, 'geometry_2dsphere');
-                    });
-            });
+        assert.equal(index, 'geometry_2dsphere');
+
     });
 
-    it('> Filter shapes with a polygon should succeed', () => {
+    it('> Filter shapes with a polygon should succeed', async () => {
 
         const shapes: IGeoJsonFeatureCollection = require(TestData.JSON_GRENOBLE_SHAPES);
         const filter: IGeoJsonFeatureCollection = require(TestData.JSON_GRENOBLE_SHAPES_FILTER1);
 
         assert.lengthOf(shapes.features, 6);
 
-        return TestUtils.getMongodbConnection()
-            .then((db) => {
+        const dao = new GeoJsonDao(db);
+        const collectionId = uuid.v4();
 
-                const dao = new GeoJsonDao(db);
-                const collectionId = uuid.v4();
+        await dao.insertMany(collectionId, shapes.features);
+        await dao.createGeoIndex(collectionId);
+        const cursor = dao.queryForArea(collectionId, filter.features[0].geometry);
+        const count = await cursor.count();
+        assert.equal(count, 2);
 
-                return dao.insertMany(collectionId, shapes.features)
-                    .then(() => {
-                        return dao.createGeoIndex(collectionId)
-                    })
-                    .then(() => {
-                        const cursor = dao.queryForArea(collectionId, filter.features[0].geometry);
-                        return cursor.count().then((count) => {
-                            assert.equal(count, 2);
-                        });
-                    })
-            });
     });
 
 });
