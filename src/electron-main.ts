@@ -1,9 +1,9 @@
 import {app, BrowserWindow, globalShortcut} from 'electron';
 import * as url from 'url';
-import {ElectronUtilities} from "./api/dev/ElectronDevUtilities";
-import {Logger} from "./api/dev/Logger";
-import {closeApplication, initApplication, initShortcuts} from "./api/main";
-import {Ipc} from "./api/ipc/Ipc";
+import {ElectronUtilities} from './api/dev/ElectronDevUtilities';
+import {Logger} from './api/dev/Logger';
+import {closeApplication, initApplication, initShortcuts} from './api/main';
+import {Ipc} from './api/ipc/Ipc';
 
 require('source-map-support').install();
 
@@ -31,7 +31,7 @@ function createWindow() {
         height: 768,
         webPreferences: {
             nodeIntegration: true,
-        }
+        },
     });
     win.setMenu(null);
     win.maximize();
@@ -40,7 +40,7 @@ function createWindow() {
     win.loadURL(url.format({
         pathname: paths.INDEX_DEST,
         protocol: 'file:',
-        slashes: true
+        slashes: true,
     }));
 
     if (ElectronUtilities.isDevMode()) {
@@ -97,9 +97,9 @@ process.on('exit', (code) => {
 
 // listen for unhandled rejections and uncaught errors
 process.on('unhandledRejection', (reason, p) => {
-    logger.error(`[UNHANDLED REJECTION ERROR]`, {reason: reason, p: p});
+    logger.error('[UNHANDLED REJECTION ERROR]', {reason, p});
 });
 
 process.on('uncaughtException', (err) => {
-    logger.error(`[UNCAUGHT ERROR]`, {error: err});
+    logger.error('[UNCAUGHT ERROR]', {error: err});
 });

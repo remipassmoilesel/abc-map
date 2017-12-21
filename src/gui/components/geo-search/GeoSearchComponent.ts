@@ -1,10 +1,10 @@
 import * as _ from 'lodash';
 import Component from 'vue-class-component';
-import {Clients} from "../../lib/clients/Clients";
-import {GeocodingResult} from "../../../api/entities/GeocodingResult";
-import {MainStore} from "../../lib/store/store";
-import {StoreWrapper} from "../../lib/store/StoreWrapper";
-import {AbstractUiComponent} from "../AbstractUiComponent";
+import {Clients} from '../../lib/clients/Clients';
+import {GeocodingResult} from '../../../api/entities/GeocodingResult';
+import {MainStore} from '../../lib/store/store';
+import {StoreWrapper} from '../../lib/store/StoreWrapper';
+import {AbstractUiComponent} from '../AbstractUiComponent';
 import './style.scss';
 
 @Component({
@@ -12,8 +12,8 @@ import './style.scss';
 })
 export class GeoSearchComponent extends AbstractUiComponent {
 
-    public componentName = "Geo location search";
-    public componentDescription = "Allow to search for a place, a location or an address, then display it on map";
+    public componentName = 'Geo location search';
+    public componentDescription = 'Allow to search for a place, a location or an address, then display it on map';
     public componentTagName: string = 'geo-search';
     public componentIsSearchable: boolean = true;
 
@@ -51,8 +51,8 @@ export class GeoSearchComponent extends AbstractUiComponent {
                 view: {
                     latitude: res.latitude,
                     longitude: res.longitude,
-                    zoom: 8
-                }
+                    zoom: 8,
+                },
             });
     }
 

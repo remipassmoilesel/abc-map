@@ -1,7 +1,7 @@
-import {MapClient} from "./MapClient";
-import {ProjectClient} from "./ProjectClient";
-import {Ipc} from "../../../api/ipc/Ipc";
-import {GlobalShortcutsClient} from "./GlobalShortcutsClient";
+import {MapClient} from './MapClient';
+import {ProjectClient} from './ProjectClient';
+import {Ipc} from '../../../api/ipc/Ipc';
+import {GlobalShortcutsClient} from './GlobalShortcutsClient';
 
 export class Clients {
     private _map: MapClient;

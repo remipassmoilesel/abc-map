@@ -1,6 +1,6 @@
 
-import {MapView} from "../../map/MapView";
-import {Project} from "../../../../api/entities/Project";
+import {MapView} from '../../map/MapView';
+import {Project} from '../../../../api/entities/Project';
 
 export interface MapViewPayload {
     view: MapView;

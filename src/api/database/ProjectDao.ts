@@ -1,10 +1,10 @@
-import {Db, InsertOneWriteOpResult} from "mongodb";
-import {Project} from "../entities/Project";
-import {AbstractDao} from "./AbstractDao";
+import {Db, InsertOneWriteOpResult} from 'mongodb';
+import {Project} from '../entities/Project';
+import {AbstractDao} from './AbstractDao';
 
 export class ProjectDao extends AbstractDao {
 
-    private readonly projectCollectionId = "project";
+    private readonly projectCollectionId = 'project';
 
     constructor(db: Db) {
         super(db);

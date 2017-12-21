@@ -1,6 +1,6 @@
-import {NavbarMenu} from "./NavbarMenu";
-import {MenuItem} from "./MenuItem";
-import {Clients} from "../clients/Clients";
+import {NavbarMenu} from './NavbarMenu';
+import {MenuItem} from './MenuItem';
+import {Clients} from '../clients/Clients';
 
 const clients = new Clients();
 
@@ -11,9 +11,9 @@ projectMenu.items.push(new MenuItem('project-new', 'New project', () => {
 }));
 projectMenu.items.push(new MenuItem('project-save', 'Save project', () => {
     console.log('save-project');
-    throw new Error("Not implemented");
+    throw new Error('Not implemented');
 }));
 projectMenu.items.push(new MenuItem('project-save-as', 'Save project as ...', () => {
     console.log('save-project-as');
-    throw new Error("Not implemented");
+    throw new Error('Not implemented');
 }));

@@ -1,7 +1,7 @@
-import {TestManTest} from "./test-man/TestManTest";
-import {TestMan} from "./test-man/TestMan";
-import {UiSearchableComponentsTest} from "./components/UiSearchableComponentsTest";
-import {MapClientTest} from "./clients/MapClientTest";
+import {TestManTest} from './test-man/TestManTest';
+import {TestMan} from './test-man/TestMan';
+import {UiSearchableComponentsTest} from './components/UiSearchableComponentsTest';
+import {MapClientTest} from './clients/MapClientTest';
 
 // TODO: do not import them in prod env ?
 

@@ -1,18 +1,18 @@
-import Component from "vue-class-component";
+import Component from 'vue-class-component';
 import * as L from 'leaflet';
 import {FeatureGroup} from 'leaflet';
 import * as _ from 'lodash';
-import {MainStore} from "../../lib/store/store";
-import {AbstractMapLayer} from "../../../api/entities/layers/AbstractMapLayer";
-import {LeafletLayerFactory} from "../../lib/map/LeafletLayerFactory";
-import {MapView} from "../../lib/map/MapView";
-import {Logger} from "../../../api/dev/Logger";
-import {StoreWrapper} from "../../lib/store/StoreWrapper";
-import {clients} from "../../lib/mixins";
-import {AbstractUiComponent} from "../AbstractUiComponent";
-import {Clients} from "../../lib/clients/Clients";
+import {MainStore} from '../../lib/store/store';
+import {AbstractMapLayer} from '../../../api/entities/layers/AbstractMapLayer';
+import {LeafletLayerFactory} from '../../lib/map/LeafletLayerFactory';
+import {MapView} from '../../lib/map/MapView';
+import {Logger} from '../../../api/dev/Logger';
+import {StoreWrapper} from '../../lib/store/StoreWrapper';
+import {clients} from '../../lib/mixins';
+import {AbstractUiComponent} from '../AbstractUiComponent';
+import {Clients} from '../../lib/clients/Clients';
 // Import style
-import './style.scss'
+import './style.scss';
 // Import plugins
 import 'leaflet-draw';
 
@@ -21,13 +21,13 @@ const layerFactory = new LeafletLayerFactory(clients);
 const logger = Logger.getLogger('GeoMapComponent');
 
 @Component({
-    template: require('./template.html')
+    template: require('./template.html'),
 })
 export class GeoMapComponent extends AbstractUiComponent {
 
-    public componentName: string = "Map";
-    public componentDescription: string = "Component on which we can see the current map"
-    public componentTagName: string = "geo-map";
+    public componentName: string = 'Map';
+    public componentDescription: string = 'Component on which we can see the current map';
+    public componentTagName: string = 'geo-map';
 
     public clients: Clients;
     public $store: MainStore;
@@ -97,18 +97,18 @@ export class GeoMapComponent extends AbstractUiComponent {
                 polyline: {
                     shapeOptions: {
                         color: '#f357a1',
-                        weight: 10
-                    }
+                        weight: 10,
+                    },
                 },
                 polygon: {
                     allowIntersection: false, // Restricts shapes to simple polygons
                     drawError: {
                         color: '#e1e100', // Color the shape will turn when intersects
-                        message: '<strong>Oh snap!<strong> you can\'t draw that!' // Message that will show when intersect
+                        message: '<strong>Oh snap!<strong> you can\'t draw that!', // Message that will show when intersect
                     },
                     shapeOptions: {
-                        color: '#bada55'
-                    }
+                        color: '#bada55',
+                    },
                 },
                 circle: {},
                 rectangle: {},
@@ -116,8 +116,8 @@ export class GeoMapComponent extends AbstractUiComponent {
             },
             edit: {
                 featureGroup: this.editableLayersGroup, //REQUIRED!!
-                remove: true
-            }
+                remove: true,
+            },
         };
 
         // add toolbar on tob of map

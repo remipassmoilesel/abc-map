@@ -2,14 +2,14 @@ import * as _ from 'lodash';
 import {Logger} from '../dev/Logger';
 import {DefaultTileLayers} from '../entities/layers/DefaultTileLayers';
 import {TileLayer} from '../entities/layers/TileLayer';
-import {AbstractService} from "./AbstractService";
-import {Ipc} from "../ipc/Ipc";
-import {IpcEvent} from "../ipc/IpcEvent";
-import {IpcEventBus, IpcSubject, MapSubjects} from "../ipc/IpcSubject";
-import {DataImporterFinder} from "../import/DataImporterFinder";
-import {NominatimGeocoder} from "../geocoder/NominatimGeocoder";
-import {GeocodingResult} from "../entities/GeocodingResult";
-import {IImportedFile} from "../import/AbstractDataImporter";
+import {AbstractService} from './AbstractService';
+import {Ipc} from '../ipc/Ipc';
+import {IpcEvent} from '../ipc/IpcEvent';
+import {IpcEventBus, IpcSubject, MapSubjects} from '../ipc/IpcSubject';
+import {DataImporterFinder} from '../import/DataImporterFinder';
+import {NominatimGeocoder} from '../geocoder/NominatimGeocoder';
+import {GeocodingResult} from '../entities/GeocodingResult';
+import {IImportedFile} from '../import/AbstractDataImporter';
 
 const logger = Logger.getLogger('MapService');
 
@@ -38,13 +38,13 @@ export class MapService extends AbstractService {
     }
 
     public importFiles(files: string[]): Promise<IImportedFile[]> {
-        const promises: Promise<IImportedFile>[] = [];
+        const promises: Array<Promise<IImportedFile>> = [];
 
         _.forEach(files, (file: string) => {
 
             const importer = this.dataImporterFinder.getInstanceForFile(file);
             if (!importer) {
-                throw new Error(`Unsupported file: ${JSON.stringify(file)}`)
+                throw new Error(`Unsupported file: ${JSON.stringify(file)}`);
             }
 
             const p: Promise<IImportedFile> = importer.getGeoJson(file);

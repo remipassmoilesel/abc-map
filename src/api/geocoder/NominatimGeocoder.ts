@@ -1,5 +1,5 @@
-import {AbstractGeocoder} from "./AbstractGeocoder";
-import {GeocodingResult} from "../entities/GeocodingResult";
+import {AbstractGeocoder} from './AbstractGeocoder';
+import {GeocodingResult} from '../entities/GeocodingResult';
 import * as request from 'request-promise';
 import * as _ from 'lodash';
 
@@ -21,7 +21,7 @@ export interface INominatimResult {
 export class NominatimGeocoder extends AbstractGeocoder {
 
     private resultsLimit = 10;
-    private baseUrl = "http://nominatim.openstreetmap.org/search?format=json&limit=:limit&q=:query";
+    private baseUrl = 'http://nominatim.openstreetmap.org/search?format=json&limit=:limit&q=:query';
 
     public geocode(query: string): Promise<GeocodingResult[]> {
         return this.requestRaw(query).then((data: INominatimResult[]) => {

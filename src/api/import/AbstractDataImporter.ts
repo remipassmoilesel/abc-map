@@ -1,4 +1,4 @@
-import {IGeoJsonFeatureCollection} from "../entities/geojson/IGeoJsonFeatureCollection";
+import {IGeoJsonFeatureCollection} from '../entities/geojson/IGeoJsonFeatureCollection';
 
 export abstract class AbstractDataImporter {
     public abstract getSupportedExtensions(): string[];

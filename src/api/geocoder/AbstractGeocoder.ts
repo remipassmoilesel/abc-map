@@ -1,4 +1,4 @@
-import {GeocodingResult} from "../entities/GeocodingResult";
+import {GeocodingResult} from '../entities/GeocodingResult';
 
 export abstract class AbstractGeocoder {
 

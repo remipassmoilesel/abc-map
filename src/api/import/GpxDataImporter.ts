@@ -1,9 +1,9 @@
 import * as tgj from 'togeojson';
 import * as fs from 'fs-extra-promise';
 import {Document, DOMParser} from 'xmldom';
-import {AbstractDataImporter, IImportedFile} from "./AbstractDataImporter";
-import {IGeoJsonFeature} from "../entities/geojson/IGeoJsonFeature";
-import {IGeoJsonFeatureCollection} from "../entities/geojson/IGeoJsonFeatureCollection";
+import {AbstractDataImporter, IImportedFile} from './AbstractDataImporter';
+import {IGeoJsonFeature} from '../entities/geojson/IGeoJsonFeature';
+import {IGeoJsonFeatureCollection} from '../entities/geojson/IGeoJsonFeatureCollection';
 
 export class GpxDataImporter extends AbstractDataImporter {
 
@@ -18,7 +18,7 @@ export class GpxDataImporter extends AbstractDataImporter {
 
                 return {
                     filepath: pathToSourceFile,
-                    data: this.convertToGeoJson(gpxDom)
+                    data: this.convertToGeoJson(gpxDom),
                 };
 
             });

@@ -1,7 +1,7 @@
-import Vue from "vue";
+import Vue from 'vue';
 
 const vueInstance = new Vue();
-export type ToastType = 'success' | 'warning' | 'info' | 'error'
+export type ToastType = 'success' | 'warning' | 'info' | 'error';
 
 export class Toaster {
 

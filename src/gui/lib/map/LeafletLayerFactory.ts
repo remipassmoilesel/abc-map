@@ -1,8 +1,8 @@
 import * as L from 'leaflet';
-import {AbstractMapLayer} from "../../../api/entities/layers/AbstractMapLayer";
-import {TileLayer} from "../../../api/entities/layers/TileLayer";
-import {GeoJsonLayer} from "../../../api/entities/layers/GeoJsonLayer";
-import {Clients} from "../clients/Clients";
+import {AbstractMapLayer} from '../../../api/entities/layers/AbstractMapLayer';
+import {TileLayer} from '../../../api/entities/layers/TileLayer';
+import {GeoJsonLayer} from '../../../api/entities/layers/GeoJsonLayer';
+import {Clients} from '../clients/Clients';
 
 export class LeafletLayerFactory {
 
@@ -16,9 +16,7 @@ export class LeafletLayerFactory {
 
         if (layer instanceof TileLayer) {
             return this.getTileLayer((layer as TileLayer));
-        }
-
-        else if (layer instanceof GeoJsonLayer) {
+        } else if (layer instanceof GeoJsonLayer) {
             return this.getGeojsonLayer(layer);
         } else {
             throw new Error(`Unknown layer type: ${JSON.stringify(layer)}`);

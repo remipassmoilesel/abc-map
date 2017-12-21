@@ -1,10 +1,10 @@
 import * as chai from 'chai';
 import * as _ from 'lodash';
-import {TestUtils} from "../TestUtils";
-import {MapService} from "../../services/MapService";
-import {GeocodingResult} from "../../entities/GeocodingResult";
-import {INominatimResult, NominatimGeocoder} from "../../geocoder/NominatimGeocoder";
-import {TestData} from "../TestData";
+import {TestUtils} from '../TestUtils';
+import {MapService} from '../../services/MapService';
+import {GeocodingResult} from '../../entities/GeocodingResult';
+import {INominatimResult, NominatimGeocoder} from '../../geocoder/NominatimGeocoder';
+import {TestData} from '../TestData';
 
 const assert = chai.assert;
 

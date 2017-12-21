@@ -2,11 +2,11 @@ import * as _ from 'lodash';
 import * as path from 'path';
 import {Ipc, IpcHandler} from '../../../api/ipc/Ipc';
 import {TileLayer} from '../../../api/entities/layers/TileLayer';
-import {DbSubjects, IpcEventBus, MapSubjects} from "../../../api/ipc/IpcSubject";
-import {handleRejection} from "./clientUtils";
-import {GeocodingResult} from "../../../api/entities/GeocodingResult";
-import {AbstractMapLayer} from "../../../api/entities/layers/AbstractMapLayer";
-import {Toaster} from "../Toaster";
+import {DbSubjects, IpcEventBus, MapSubjects} from '../../../api/ipc/IpcSubject';
+import {handleRejection} from './clientUtils';
+import {GeocodingResult} from '../../../api/entities/GeocodingResult';
+import {AbstractMapLayer} from '../../../api/entities/layers/AbstractMapLayer';
+import {Toaster} from '../Toaster';
 
 
 const authorizedImportExtensions = ['.shp', '.gpx', '.kml'];
@@ -54,10 +54,9 @@ export class MapClient {
         });
 
         if (validFiles.length < 1) {
-            Toaster.error(`No valid files found in selection`);
-        }
-        else if (filesToCheck.length > validFiles.length) {
-            Toaster.error(`Some files where not imported because they are invalid`);
+            Toaster.error('No valid files found in selection');
+        } else if (filesToCheck.length > validFiles.length) {
+            Toaster.error('Some files where not imported because they are invalid');
         }
 
         return validFiles;

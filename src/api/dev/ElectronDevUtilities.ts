@@ -1,5 +1,5 @@
 import installExtension, {VUEJS_DEVTOOLS} from 'electron-devtools-installer';
-import {Logger} from "./Logger";
+import {Logger} from './Logger';
 
 export class ElectronUtilities {
 

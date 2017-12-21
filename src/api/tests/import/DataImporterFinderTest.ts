@@ -1,7 +1,7 @@
 import * as chai from 'chai';
-import {GpxDataImporter} from "../../import/GpxDataImporter";
-import {DataImporterFinder} from "../../import/DataImporterFinder";
-import {KmlDataImporter} from "../../import/KmlDataImporter";
+import {GpxDataImporter} from '../../import/GpxDataImporter';
+import {DataImporterFinder} from '../../import/DataImporterFinder';
+import {KmlDataImporter} from '../../import/KmlDataImporter';
 
 const assert = chai.assert;
 

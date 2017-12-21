@@ -1,7 +1,7 @@
 import {Ipc, IpcHandler} from '../../../api/ipc/Ipc';
-import {IpcEventBus} from "../../../api/ipc/IpcSubject";
-import {EventType} from "../../../api/ipc/IpcEventTypes";
-import {IpcEvent} from "../../../api/ipc/IpcEvent";
+import {IpcEventBus} from '../../../api/ipc/IpcSubject';
+import {EventType} from '../../../api/ipc/IpcEventTypes';
+import {IpcEvent} from '../../../api/ipc/IpcEvent';
 
 export class GlobalShortcutsClient {
 

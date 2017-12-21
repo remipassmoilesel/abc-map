@@ -1,7 +1,7 @@
 import Vue from 'vue';
-import {Clients} from "./clients/Clients";
-import {StoreWrapper} from "./store/StoreWrapper";
-import {UiShortcuts} from "./UiShortcuts";
+import {Clients} from './clients/Clients';
+import {StoreWrapper} from './store/StoreWrapper';
+import {UiShortcuts} from './UiShortcuts';
 
 export const clients = new Clients();
 const storeWrapper = new StoreWrapper();

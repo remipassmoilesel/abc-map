@@ -1,4 +1,4 @@
-import {AbstractTest} from "./AbstractTest";
+import {AbstractTest} from './AbstractTest';
 
 export class TestManTest extends AbstractTest {
 
@@ -12,7 +12,7 @@ export class TestManTest extends AbstractTest {
     public registerTests(): any[] {
         return [
             this.firstTest,
-            this.secondTest
+            this.secondTest,
         ];
     }
 

@@ -18,7 +18,7 @@ export class DefaultTileLayers {
         // template layers should not have id
         _.forEach(this._layers, (lay) => {
             lay.id = '';
-        })
+        });
     }
 
     public getLayers(): TileLayer[] {

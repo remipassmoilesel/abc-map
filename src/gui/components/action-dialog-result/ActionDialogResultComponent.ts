@@ -1,7 +1,7 @@
 import Component from 'vue-class-component';
-import {IUxSearchResult} from "../UiSearchableComponents";
+import {IUxSearchResult} from '../UiSearchableComponents';
 import './style.scss';
-import {AbstractUiComponent} from "../AbstractUiComponent";
+import {AbstractUiComponent} from '../AbstractUiComponent';
 
 @Component({
     template: require('./template.html'),
@@ -9,9 +9,9 @@ import {AbstractUiComponent} from "../AbstractUiComponent";
 })
 export class ActionDialogResultComponent extends AbstractUiComponent {
 
-    public componentName: string = "Action dialog result";
-    public componentDescription: string = "Display a result of Action dialog search.";
-    public componentTagName: string = "action-dialog-result";
+    public componentName: string = 'Action dialog result';
+    public componentDescription: string = 'Display a result of Action dialog search.';
+    public componentTagName: string = 'action-dialog-result';
 
     public result: IUxSearchResult;
 

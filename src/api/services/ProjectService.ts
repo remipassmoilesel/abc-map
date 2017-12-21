@@ -1,13 +1,13 @@
-import * as _ from "lodash";
-import {IProjectCreationOptions, Project} from "../entities/Project";
-import {Logger} from "../dev/Logger";
-import {Utils} from "../utils/Utils";
-import {Ipc} from "../ipc/Ipc";
-import {IpcEventBus, IpcSubject} from "../ipc/IpcSubject";
-import {EventType} from "../ipc/IpcEventTypes";
-import {IpcEvent} from "../ipc/IpcEvent";
-import {AbstractService} from "./AbstractService";
-import {AbstractMapLayer} from "../entities/layers/AbstractMapLayer";
+import * as _ from 'lodash';
+import {IProjectCreationOptions, Project} from '../entities/Project';
+import {Logger} from '../dev/Logger';
+import {Utils} from '../utils/Utils';
+import {Ipc} from '../ipc/Ipc';
+import {IpcEventBus, IpcSubject} from '../ipc/IpcSubject';
+import {EventType} from '../ipc/IpcEventTypes';
+import {IpcEvent} from '../ipc/IpcEvent';
+import {AbstractService} from './AbstractService';
+import {AbstractMapLayer} from '../entities/layers/AbstractMapLayer';
 
 const logger = Logger.getLogger('ProjectService');
 
@@ -21,7 +21,7 @@ export class ProjectService extends AbstractService {
     }
 
     public newProject(parameters?: IProjectCreationOptions): Project {
-        logger.info(`Create new project`, parameters);
+        logger.info('Create new project', parameters);
 
         const params = Utils.withDefaultValues(parameters, {name: 'New project'});
         this.currentProject = new Project(params.name);
@@ -46,7 +46,7 @@ export class ProjectService extends AbstractService {
 
         this.sendProjectEvent({
             type: EventType.PROJECT_NEW_LAYER_ADDED,
-            data: this.currentProject
+            data: this.currentProject,
         });
     }
 
@@ -69,7 +69,7 @@ export class ProjectService extends AbstractService {
 
         this.sendProjectEvent({
             type: EventType.PROJECT_UPDATED,
-            data: this.currentProject
+            data: this.currentProject,
         });
 
     }

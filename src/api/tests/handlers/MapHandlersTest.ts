@@ -1,9 +1,9 @@
 import * as chai from 'chai';
-import {ProjectSubjects} from "../../ipc/IpcSubject";
-import {Ipc} from "../../ipc/Ipc";
-import {Logger} from "../../dev/Logger";
-import {Application} from "spectron";
-import {TestUtils} from "../TestUtils";
+import {ProjectSubjects} from '../../ipc/IpcSubject';
+import {Ipc} from '../../ipc/Ipc';
+import {Logger} from '../../dev/Logger';
+import {Application} from 'spectron';
+import {TestUtils} from '../TestUtils';
 
 const logger = Logger.getLogger('MapHandlersTest');
 const assert = chai.assert;
@@ -42,6 +42,6 @@ describe.skip('Map handlers', function () {
         return ipc.send(ProjectSubjects.GET_CURRENT).then((data) => {
             logger.info(data);
         });
-    })
+    });
 
 });

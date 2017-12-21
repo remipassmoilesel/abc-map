@@ -1,4 +1,4 @@
-import {Db} from "mongodb";
+import {Db} from 'mongodb';
 
 export abstract class AbstractDao {
 

@@ -1,7 +1,7 @@
 import Component from 'vue-class-component';
-import {Clients} from "../../lib/clients/Clients";
-import {Toaster} from "../../lib/Toaster";
-import {AbstractUiComponent} from "../AbstractUiComponent";
+import {Clients} from '../../lib/clients/Clients';
+import {Toaster} from '../../lib/Toaster';
+import {AbstractUiComponent} from '../AbstractUiComponent';
 import './style.scss';
 
 @Component({
@@ -9,9 +9,9 @@ import './style.scss';
 })
 export class DataImporterComponent extends AbstractUiComponent {
 
-    public componentName: string = "Data importer";
-    public componentDescription: string = "Allow to import data from various sources.";
-    public componentTagName: string = "data-importer";
+    public componentName: string = 'Data importer';
+    public componentDescription: string = 'Allow to import data from various sources.';
+    public componentTagName: string = 'data-importer';
     public componentIsSearchable: boolean = true;
 
     public clients: Clients;

@@ -1,10 +1,10 @@
 import * as Resurrect from 'resurrect-js';
-import {Project} from "./Project";
-import {TileLayer} from "./layers/TileLayer";
-import {IpcEvent, IpcEventImpl} from "../ipc/IpcEvent";
-import {EventType} from "../ipc/IpcEventTypes";
-import {GeoJsonLayer} from "./layers/GeoJsonLayer";
-import {GeocodingResult} from "./GeocodingResult";
+import {Project} from './Project';
+import {TileLayer} from './layers/TileLayer';
+import {IpcEvent, IpcEventImpl} from '../ipc/IpcEvent';
+import {EventType} from '../ipc/IpcEventTypes';
+import {GeoJsonLayer} from './layers/GeoJsonLayer';
+import {GeocodingResult} from './GeocodingResult';
 
 // WARNING
 // All constructors declared here are imported in browser

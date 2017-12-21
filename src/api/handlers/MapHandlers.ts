@@ -1,13 +1,13 @@
-import * as _ from "lodash";
-import * as path from "path";
-import {Ipc} from "../ipc/Ipc";
-import {MapSubjects} from "../ipc/IpcSubject";
-import {IpcEvent} from "../ipc/IpcEvent";
-import {AbstractHandlersGroup, IServicesMap} from "./AbstractHandlersGroup";
-import {GeocodingResult} from "../entities/GeocodingResult";
-import {GeoJsonLayer} from "../entities/layers/GeoJsonLayer";
-import {AbstractMapLayer} from "../entities/layers/AbstractMapLayer";
-import {Logger} from "../dev/Logger";
+import * as _ from 'lodash';
+import * as path from 'path';
+import {Ipc} from '../ipc/Ipc';
+import {MapSubjects} from '../ipc/IpcSubject';
+import {IpcEvent} from '../ipc/IpcEvent';
+import {AbstractHandlersGroup, IServicesMap} from './AbstractHandlersGroup';
+import {GeocodingResult} from '../entities/GeocodingResult';
+import {GeoJsonLayer} from '../entities/layers/GeoJsonLayer';
+import {AbstractMapLayer} from '../entities/layers/AbstractMapLayer';
+import {Logger} from '../dev/Logger';
 
 const logger = Logger.getLogger('MapHandlers');
 
@@ -30,7 +30,7 @@ export class MapHandlers extends AbstractHandlersGroup {
 
             const layers: AbstractMapLayer[] = [];
             const dao = this.services.db.getGeoJsonDao();
-            const promises: Promise<any>[] = [];
+            const promises: Array<Promise<any>> = [];
 
             _.forEach(importedFiles, (f) => {
 
@@ -48,7 +48,7 @@ export class MapHandlers extends AbstractHandlersGroup {
                 .catch((e) => {
                     logger.error(`Error while importing data: ${e}`);
                     throw e;
-                })
+                });
         });
     }
 

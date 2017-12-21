@@ -2,9 +2,9 @@ import * as chai from 'chai';
 import * as _ from 'lodash';
 import {TileLayer} from '../../entities/layers/TileLayer';
 import {EntitySerializer} from '../../entities/EntitySerializer';
-import {Project} from "../../entities/Project";
-import {IpcEventImpl} from "../../ipc/IpcEvent";
-import {EventType} from "../../ipc/IpcEventTypes";
+import {Project} from '../../entities/Project';
+import {IpcEventImpl} from '../../ipc/IpcEvent';
+import {EventType} from '../../ipc/IpcEventTypes';
 
 const assert = chai.assert;
 
@@ -17,7 +17,7 @@ describe('EntitiesUtils', () => {
     toTest.push(new TileLayer('name', 'http://url'));
 
     const project = new Project('name-name');
-    project.layers = [new TileLayer('name', 'http://url'), new TileLayer('name2', 'http://url2')]
+    project.layers = [new TileLayer('name', 'http://url'), new TileLayer('name2', 'http://url2')];
     toTest.push(project);
 
     toTest.push(new IpcEventImpl(EventType.PROJECT_NEW_CREATED, project));

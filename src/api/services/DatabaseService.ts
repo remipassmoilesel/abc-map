@@ -1,15 +1,15 @@
-import {Ipc} from "../ipc/Ipc";
+import {Ipc} from '../ipc/Ipc';
 import {ChildProcess, exec, execSync} from 'child_process';
-import {Logger} from "../dev/Logger";
-import * as path from "path";
-import * as fs from "fs-extra";
-import * as assert from "assert";
-import * as mongodb from "mongodb";
-import {Db} from "mongodb";
-import {Utils} from "../utils/Utils";
-import {GeoJsonDao} from "../database/GeoJsonDao";
-import {AbstractService} from "./AbstractService";
-import {ProjectDao} from "../database/ProjectDao";
+import {Logger} from '../dev/Logger';
+import * as path from 'path';
+import * as fs from 'fs-extra';
+import * as assert from 'assert';
+import * as mongodb from 'mongodb';
+import {Db} from 'mongodb';
+import {Utils} from '../utils/Utils';
+import {GeoJsonDao} from '../database/GeoJsonDao';
+import {AbstractService} from './AbstractService';
+import {ProjectDao} from '../database/ProjectDao';
 
 const projectRoot: string = path.resolve(__dirname, '..', '..', '..');
 assert.ok(fs.existsSync(projectRoot), 'Project root must exist');

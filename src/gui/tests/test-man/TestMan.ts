@@ -1,7 +1,7 @@
-import {AbstractTest} from "./AbstractTest";
-import {AssertionError} from "chai";
-import * as _ from "lodash";
-import * as $ from "jquery";
+import {AbstractTest} from './AbstractTest';
+import {AssertionError} from 'chai';
+import * as _ from 'lodash';
+import * as $ from 'jquery';
 
 export class TestMan {
 
@@ -117,12 +117,10 @@ export class TestMan {
             logFunc('- Actual: ' + error.actual);
             logFunc('- Expected: ' + error.expected);
             logFunc('- Stack: ' + error.stack);
-        }
-        else if (data && data instanceof Error) {
+        } else if (data && data instanceof Error) {
             logFunc(data.message);
             logFunc(data.stack);
-        }
-        else if (data) {
+        } else if (data) {
             logFunc(JSON.stringify(data, null, 2));
         }
 

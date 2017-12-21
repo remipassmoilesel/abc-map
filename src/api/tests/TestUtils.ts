@@ -1,10 +1,10 @@
 import * as sinon from 'sinon';
 import * as mongodb from 'mongodb';
 import * as path from 'path';
-import {Ipc} from "../ipc/Ipc";
-import {Utils} from "../utils/Utils";
-import {DatabaseService} from "../services/DatabaseService";
-import {Logger} from "../dev/Logger";
+import {Ipc} from '../ipc/Ipc';
+import {Utils} from '../utils/Utils';
+import {DatabaseService} from '../services/DatabaseService';
+import {Logger} from '../dev/Logger';
 import * as electron from 'electron';
 import {Application} from 'spectron';
 
@@ -17,8 +17,8 @@ export class TestUtils {
         return {
             listenStub: sinon.stub(ipc, 'listen'),
             sendStub: sinon.stub(ipc, 'send'),
-            ipc
-        }
+            ipc,
+        };
     }
 
     public static getMongodbConnection(): Promise<mongodb.Db> {
@@ -36,7 +36,7 @@ export class TestUtils {
         logger.info('Starting application');
         const app = new Application({
             path: electron as any,
-            args: [path.resolve('./dist/electron-main.js')]
+            args: [path.resolve('./dist/electron-main.js')],
         });
 
         return app.start().then(() => {
@@ -46,13 +46,13 @@ export class TestUtils {
             app.client.getMainProcessLogs().then(function (logs) {
                 logs.forEach(function (log) {
                     logger.info(`[main] ${log}`);
-                })
+                });
             });
 
             app.client.getRenderProcessLogs().then(function (logs) {
                 logs.forEach(function (log) {
-                    logger.info(`[renderer] ${log}`)
-                })
+                    logger.info(`[renderer] ${log}`);
+                });
             });
 
             return app;

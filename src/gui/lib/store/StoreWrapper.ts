@@ -1,6 +1,6 @@
-import {MainStore} from "./store";
-import {Actions} from "./modules/mutationsAndActions";
-import {MapViewPayload} from "./modules/payloads";
+import {MainStore} from './store';
+import {Actions} from './modules/mutationsAndActions';
+import {MapViewPayload} from './modules/payloads';
 
 export class StoreWrapper {
 

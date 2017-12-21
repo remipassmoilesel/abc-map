@@ -1,13 +1,13 @@
 import * as _ from 'lodash';
 import Component from 'vue-class-component';
-import {navbarMenusList} from "../../lib/menus/navbarMenusList";
-import {NavbarMenu} from "../../lib/menus/NavbarMenu";
-import {Toaster} from "../../lib/Toaster";
-import {MenuItem} from "../../lib/menus/MenuItem";
-import {AbstractUiComponent} from "../AbstractUiComponent";
+import {navbarMenusList} from '../../lib/menus/navbarMenusList';
+import {NavbarMenu} from '../../lib/menus/NavbarMenu';
+import {Toaster} from '../../lib/Toaster';
+import {MenuItem} from '../../lib/menus/MenuItem';
+import {AbstractUiComponent} from '../AbstractUiComponent';
 import './style.scss';
-import {MainStore} from "../../lib/store/store";
-import {StoreWrapper} from "../../lib/store/StoreWrapper";
+import {MainStore} from '../../lib/store/store';
+import {StoreWrapper} from '../../lib/store/StoreWrapper';
 
 @Component({
     template: require('./template.html'),

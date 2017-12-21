@@ -1,10 +1,10 @@
 import * as chai from 'chai';
-import {Db} from "mongodb";
-import {GeoJsonDao} from "../../database/GeoJsonDao";
-import {TestUtils} from "../TestUtils";
-import {IGeoJsonFeature} from "../../entities/geojson/IGeoJsonFeature";
-import {TestData} from "../TestData";
-import {IGeoJsonFeatureCollection} from "../../entities/geojson/IGeoJsonFeatureCollection";
+import {Db} from 'mongodb';
+import {GeoJsonDao} from '../../database/GeoJsonDao';
+import {TestUtils} from '../TestUtils';
+import {IGeoJsonFeature} from '../../entities/geojson/IGeoJsonFeature';
+import {TestData} from '../TestData';
+import {IGeoJsonFeatureCollection} from '../../entities/geojson/IGeoJsonFeatureCollection';
 
 const uuid = require('uuid');
 
@@ -29,14 +29,14 @@ describe.only('GeoJsonDao', () => {
         const feature: IGeoJsonFeature = {
             type: 'Feature',
             geometry: {
-                type: "Polygon",
+                type: 'Polygon',
                 coordinates: [[
                     [-73.99, 40.75],
                     [-73.98, 40.76],
-                    [-73.99, 40.75]
-                ]]
+                    [-73.99, 40.75],
+                ]],
             },
-            properties: {variable: 'value'}
+            properties: {variable: 'value'},
         };
 
         feature.geometry.coordinates = [[coordinates(), coordinates()]];
@@ -63,7 +63,7 @@ describe.only('GeoJsonDao', () => {
         await dao.insertMany(collectionId, [
             getGeoJsonFeature(),
             getGeoJsonFeature(),
-            getGeoJsonFeature()
+            getGeoJsonFeature(),
         ]);
 
         const cursor = await dao.queryAll(collectionId);

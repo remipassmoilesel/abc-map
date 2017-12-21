@@ -1,7 +1,7 @@
-import {Ipc} from "../ipc/Ipc";
-import * as _ from "lodash";
-import {globalShortcut} from "electron";
-import {Logger} from "../dev/Logger";
+import {Ipc} from '../ipc/Ipc';
+import * as _ from 'lodash';
+import {globalShortcut} from 'electron';
+import {Logger} from '../dev/Logger';
 
 const logger = Logger.getLogger('Shortcuts');
 
@@ -31,7 +31,7 @@ export class Shortcuts {
             const ret = globalShortcut.register(shortcut.keys, shortcut.action);
 
             if (!ret) {
-                logger.error(`Failed to map shortcut: ${shortcut.keys}`)
+                logger.error(`Failed to map shortcut: ${shortcut.keys}`);
             }
         });
     }

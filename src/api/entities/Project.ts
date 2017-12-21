@@ -1,7 +1,7 @@
-import * as uuid from "uuid";
-import * as _ from "lodash";
-import {AbstractMapLayer} from "./layers/AbstractMapLayer";
-import {IDbSerializable} from "./IDbSerializable";
+import * as uuid from 'uuid';
+import * as _ from 'lodash';
+import {AbstractMapLayer} from './layers/AbstractMapLayer';
+import {IDbSerializable} from './IDbSerializable';
 
 export interface IProjectCreationOptions {
     name?: string;

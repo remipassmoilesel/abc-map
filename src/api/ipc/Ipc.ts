@@ -1,7 +1,7 @@
 import promiseIpc from 'electron-promise-ipc';
-import {IpcSubject} from "./IpcSubject";
-import {IpcEvent} from "./IpcEvent";
-import {EntitySerializer} from "../entities/EntitySerializer";
+import {IpcSubject} from './IpcSubject';
+import {IpcEvent} from './IpcEvent';
+import {EntitySerializer} from '../entities/EntitySerializer';
 
 const eu = new EntitySerializer();
 
@@ -63,9 +63,7 @@ export class Ipc {
                 .then((message: IpcInternalMessage) => {
                     return this.deserializeIpcMessage(message);
                 });
-        }
-        // send event from renderer process
-        else {
+        } else {
             return promiseIpc.send(subject.id, serialized)
                 .then((message: IpcInternalMessage) => {
                     return this.deserializeIpcMessage(message);
@@ -85,10 +83,7 @@ export class Ipc {
             return data.then((result) => {
                 return {serializedData: eu.serialize(result)};
             });
-        }
-
-        // response is a plain response
-        else {
+        } else {
             return {serializedData: eu.serialize(data)};
         }
 

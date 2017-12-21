@@ -1,4 +1,4 @@
-import {EventType} from "./IpcEventTypes";
+import {EventType} from './IpcEventTypes';
 
 export interface IpcEvent {
     type?: EventType;

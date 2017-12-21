@@ -1,4 +1,4 @@
-import {Ipc} from "../ipc/Ipc";
+import {Ipc} from '../ipc/Ipc';
 
 export abstract class AbstractService {
     protected ipc: Ipc;

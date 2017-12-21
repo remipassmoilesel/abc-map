@@ -1,10 +1,10 @@
-import {AbstractTest} from "../test-man/AbstractTest";
-import {MapClient} from "../../lib/clients/MapClient";
-import {Ipc} from "../../../api/ipc/Ipc";
-import {AbstractMapLayer} from "../../../api/entities/layers/AbstractMapLayer";
+import {AbstractTest} from '../test-man/AbstractTest';
+import {MapClient} from '../../lib/clients/MapClient';
+import {Ipc} from '../../../api/ipc/Ipc';
+import {AbstractMapLayer} from '../../../api/entities/layers/AbstractMapLayer';
 
 export class MapClientTest extends AbstractTest {
-    public name: string = "MapCLientTest";
+    public name: string = 'MapCLientTest';
 
     public mapClient: MapClient;
 

@@ -12,7 +12,7 @@ export abstract class AbstractTest {
 
     public tests: any[] = [];
 
-    constructor(){
+    constructor() {
         this.tests = this.registerTests();
     }
 

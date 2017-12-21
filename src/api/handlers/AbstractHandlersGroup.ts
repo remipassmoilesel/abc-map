@@ -1,8 +1,8 @@
-import {Ipc, IpcHandler} from "../ipc/Ipc";
-import {ProjectService} from "../services/ProjectService";
-import {MapService} from "../services/MapService";
-import {DatabaseService} from "../services/DatabaseService";
-import {IpcSubject} from "../ipc/IpcSubject";
+import {Ipc, IpcHandler} from '../ipc/Ipc';
+import {ProjectService} from '../services/ProjectService';
+import {MapService} from '../services/MapService';
+import {DatabaseService} from '../services/DatabaseService';
+import {IpcSubject} from '../ipc/IpcSubject';
 
 export interface IServicesMap {
     project: ProjectService;

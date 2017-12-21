@@ -1,7 +1,7 @@
 import * as chai from 'chai';
-import {KmlDataImporter} from "../../../api/import/KmlDataImporter";
-import {TestData} from "../TestData";
-import {IImportedFile} from "../../../api/import/AbstractDataImporter";
+import {KmlDataImporter} from '../../../api/import/KmlDataImporter';
+import {TestData} from '../TestData';
+import {IImportedFile} from '../../../api/import/AbstractDataImporter';
 
 const assert = chai.assert;
 

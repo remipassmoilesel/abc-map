@@ -1,4 +1,4 @@
-import {Utils} from "../utils/Utils";
+import {Utils} from '../utils/Utils';
 
 export class Logger {
 

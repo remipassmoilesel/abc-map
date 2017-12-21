@@ -1,8 +1,8 @@
 import {Ipc, IpcHandler} from '../../../api/ipc/Ipc';
-import {Project} from "../../../api/entities/Project";
-import {handleRejection} from "./clientUtils";
-import {AbstractMapLayer} from "../../../api/entities/layers/AbstractMapLayer";
-import {IpcEventBus, ProjectSubjects} from "../../../api/ipc/IpcSubject";
+import {Project} from '../../../api/entities/Project';
+import {handleRejection} from './clientUtils';
+import {AbstractMapLayer} from '../../../api/entities/layers/AbstractMapLayer';
+import {IpcEventBus, ProjectSubjects} from '../../../api/ipc/IpcSubject';
 
 export class ProjectClient {
 

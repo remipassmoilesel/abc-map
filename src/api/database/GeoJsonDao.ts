@@ -1,14 +1,14 @@
-import * as turf from "turf";
-import {IGeoJsonFeature} from "../entities/geojson/IGeoJsonFeature";
-import {Cursor, InsertWriteOpResult} from "mongodb";
-import {IGeoJsonGeometry} from "../entities/geojson/IGeoJsonGeometry";
-import {GeoJsonLayer} from "../entities/layers/GeoJsonLayer";
-import {AbstractDao} from "./AbstractDao";
+import * as turf from 'turf';
+import {IGeoJsonFeature} from '../entities/geojson/IGeoJsonFeature';
+import {Cursor, InsertWriteOpResult} from 'mongodb';
+import {IGeoJsonGeometry} from '../entities/geojson/IGeoJsonGeometry';
+import {GeoJsonLayer} from '../entities/layers/GeoJsonLayer';
+import {AbstractDao} from './AbstractDao';
 
 export class GeoJsonDao extends AbstractDao {
 
     public createGeoIndex(collectionId: string, field?: any): Promise<string> {
-        return this.db.collection(collectionId).createIndex(field || {geometry: "2dsphere"});
+        return this.db.collection(collectionId).createIndex(field || {geometry: '2dsphere'});
     }
 
     public insert(collectionId: string, document: IGeoJsonFeature): Promise<InsertWriteOpResult> {
@@ -28,8 +28,8 @@ export class GeoJsonDao extends AbstractDao {
             geometry: {
                 $geoWithin: {
                     $geometry: geometry,
-                }
-            }
+                },
+            },
         });
     }
 

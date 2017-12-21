@@ -1,8 +1,8 @@
-import {Ipc} from "../ipc/Ipc";
-import {ProjectSubjects} from "../ipc/IpcSubject";
-import {IpcEvent} from "../ipc/IpcEvent";
-import {AbstractHandlersGroup, IServicesMap} from "./AbstractHandlersGroup";
-import {Logger} from "../dev/Logger";
+import {Ipc} from '../ipc/Ipc';
+import {ProjectSubjects} from '../ipc/IpcSubject';
+import {IpcEvent} from '../ipc/IpcEvent';
+import {AbstractHandlersGroup, IServicesMap} from './AbstractHandlersGroup';
+import {Logger} from '../dev/Logger';
 
 const logger = Logger.getLogger('ProjectHandlers');
 
@@ -44,7 +44,7 @@ export class ProjectHandlers extends AbstractHandlersGroup {
         return this.services.project.deleteLayers(event.data);
     }
 
-    public saveProjectAs(event: IpcEvent){
+    public saveProjectAs(event: IpcEvent) {
         return this.services.db.getProjectDao().exportProjectAs(event.data);
     }
 

@@ -1,7 +1,7 @@
 import * as chai from 'chai';
-import {TestData} from "../TestData";
-import {GpxDataImporter} from "../../../api/import/GpxDataImporter";
-import {IImportedFile} from "../../../api/import/AbstractDataImporter";
+import {TestData} from '../TestData';
+import {GpxDataImporter} from '../../../api/import/GpxDataImporter';
+import {IImportedFile} from '../../../api/import/AbstractDataImporter';
 
 const assert = chai.assert;
 

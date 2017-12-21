@@ -1,4 +1,4 @@
-import {Toaster} from "../Toaster";
+import {Toaster} from '../Toaster';
 
 export function handleRejection(error): Promise<any> {
     let msg = 'Internal error';

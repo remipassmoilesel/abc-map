@@ -21,7 +21,7 @@ export class Utils {
                         tryWrapper(remainingTries - 1);
                     }, retryIntervalMs);
                 } else {
-                    reject(new Error(`No remaining retries: ${JSON.stringify(error)}`))
+                    reject(new Error(`No remaining retries: ${JSON.stringify(error)}`));
                 }
             };
 

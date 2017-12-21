@@ -1,8 +1,8 @@
 import * as chai from 'chai';
-import {TestUtils} from "../TestUtils";
-import {Db} from "mongodb";
-import {ProjectDao} from "../../database/ProjectDao";
-import {Project} from "../../entities/Project";
+import {TestUtils} from '../TestUtils';
+import {Db} from 'mongodb';
+import {ProjectDao} from '../../database/ProjectDao';
+import {Project} from '../../entities/Project';
 
 const uuid = require('uuid');
 

@@ -1,11 +1,11 @@
 import Vue from 'vue';
 import Vuex, {Store} from 'vuex';
 import {Logger} from '../../../api/dev/Logger';
-import {ProjectState, ProjectStoreModule} from "./modules/ProjectStoreModule";
-import {MapState, MapStoreModule} from "./modules/MapStoreModule";
-import {AbstractMapLayer} from "../../../api/entities/layers/AbstractMapLayer";
-import {MapView} from "../map/MapView";
-import {GuiState, GuiStoreModule} from "./modules/GuiStoreModule";
+import {ProjectState, ProjectStoreModule} from './modules/ProjectStoreModule';
+import {MapState, MapStoreModule} from './modules/MapStoreModule';
+import {AbstractMapLayer} from '../../../api/entities/layers/AbstractMapLayer';
+import {MapView} from '../map/MapView';
+import {GuiState, GuiStoreModule} from './modules/GuiStoreModule';
 
 
 const logger = Logger.getLogger('store.ts');
@@ -18,8 +18,8 @@ export const store = new Vuex.Store({
     modules: {
         project: new ProjectStoreModule(),
         map: new MapStoreModule(),
-        gui: new GuiStoreModule()
-    }
+        gui: new GuiStoreModule(),
+    },
 });
 
 // Type classes
@@ -29,9 +29,9 @@ export class MainStore extends Store<any> {
 }
 
 export class MainStoreState {
-    project: ProjectState;
-    map: MapState;
-    gui: GuiState;
+    public project: ProjectState;
+    public map: MapState;
+    public gui: GuiState;
 }
 
 export class MainStoreGetters {

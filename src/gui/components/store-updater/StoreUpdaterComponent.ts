@@ -1,12 +1,12 @@
 import Component from 'vue-class-component';
 import * as _ from 'lodash';
-import {MainStore} from "../../lib/store/store";
-import {IpcEvent} from "../../../api/ipc/IpcEvent";
-import {EventType} from "../../../api/ipc/IpcEventTypes";
-import {Logger} from "../../../api/dev/Logger";
-import {Clients} from "../../lib/clients/Clients";
-import {StoreWrapper} from "../../lib/store/StoreWrapper";
-import {AbstractUiComponent} from "../AbstractUiComponent";
+import {MainStore} from '../../lib/store/store';
+import {IpcEvent} from '../../../api/ipc/IpcEvent';
+import {EventType} from '../../../api/ipc/IpcEventTypes';
+import {Logger} from '../../../api/dev/Logger';
+import {Clients} from '../../lib/clients/Clients';
+import {StoreWrapper} from '../../lib/store/StoreWrapper';
+import {AbstractUiComponent} from '../AbstractUiComponent';
 
 const logger = Logger.getLogger('StoreUpdaterComponent');
 
@@ -21,8 +21,8 @@ const updateEventsType = [
 })
 export class StoreUpdaterComponent extends AbstractUiComponent {
 
-    public componentName: string = "Vuex store updater";
-    public componentDescription: string = "Component which update Vuex store from main process IPC messages";
+    public componentName: string = 'Vuex store updater';
+    public componentDescription: string = 'Component which update Vuex store from main process IPC messages';
     public componentTagName: string = 'store-updater';
 
     public $store: MainStore;
@@ -42,9 +42,7 @@ export class StoreUpdaterComponent extends AbstractUiComponent {
             // event should update project
             if (this.isEventShouldUpdateProject(event)) {
                 this.storeWrapper.project.updateProject(this.$store);
-            }
-            // unknown event
-            else {
+            } else {
                 logger.warning('Unknown event', event);
             }
 

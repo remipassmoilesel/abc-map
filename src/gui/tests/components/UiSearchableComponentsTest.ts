@@ -1,12 +1,12 @@
-import {AbstractUiComponent} from "../../components/AbstractUiComponent";
-import {UiSearchableComponents} from "../../components/UiSearchableComponents";
-import {AbstractTest} from "../test-man/AbstractTest";
+import {AbstractUiComponent} from '../../components/AbstractUiComponent';
+import {UiSearchableComponents} from '../../components/UiSearchableComponents';
+import {AbstractTest} from '../test-man/AbstractTest';
 
 
 class TestComponent extends AbstractUiComponent {
-    componentName: string;
-    componentDescription: string;
-    componentTagName: string;
+    public componentName: string;
+    public componentDescription: string;
+    public componentTagName: string;
 
     constructor(name: string, description: string) {
         super();
@@ -17,7 +17,7 @@ class TestComponent extends AbstractUiComponent {
 }
 
 export class UiSearchableComponentsTest extends AbstractTest {
-    public name: string = "UiSearchableComponentsTest";
+    public name: string = 'UiSearchableComponentsTest';
 
     public registerTests(): any[] {
         return [

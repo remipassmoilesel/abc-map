@@ -1,14 +1,14 @@
-import {globalShortcut} from "electron";
-import {MapService} from "./services/MapService";
-import {Ipc} from "./ipc/Ipc";
-import {Logger} from "./dev/Logger";
-import {ProjectService} from "./services/ProjectService";
-import {DatabaseService} from "./services/DatabaseService";
-import {IServicesMap} from "./handlers/AbstractHandlersGroup";
-import {ProjectHandlers} from "./handlers/ProjectHandlers";
-import {MapHandlers} from "./handlers/MapHandlers";
-import {DatabaseHandlers} from "./handlers/DatabaseHandlers";
-import {Shortcuts} from "./utils/GlobalShortcuts";
+import {globalShortcut} from 'electron';
+import {MapService} from './services/MapService';
+import {Ipc} from './ipc/Ipc';
+import {Logger} from './dev/Logger';
+import {ProjectService} from './services/ProjectService';
+import {DatabaseService} from './services/DatabaseService';
+import {IServicesMap} from './handlers/AbstractHandlersGroup';
+import {ProjectHandlers} from './handlers/ProjectHandlers';
+import {MapHandlers} from './handlers/MapHandlers';
+import {DatabaseHandlers} from './handlers/DatabaseHandlers';
+import {Shortcuts} from './utils/GlobalShortcuts';
 
 const logger = Logger.getLogger('api/main.ts');
 let databaseService: DatabaseService;

@@ -1,9 +1,9 @@
 import * as _ from 'lodash';
 import * as path from 'path';
-import {GpxDataImporter} from "./GpxDataImporter";
-import {KmlDataImporter} from "./KmlDataImporter";
-import {AbstractDataImporter} from "./AbstractDataImporter";
-import {ShapefileImporter} from "./ShapefileImporter";
+import {GpxDataImporter} from './GpxDataImporter';
+import {KmlDataImporter} from './KmlDataImporter';
+import {AbstractDataImporter} from './AbstractDataImporter';
+import {ShapefileImporter} from './ShapefileImporter';
 
 export class DataImporterFinder {
 
@@ -14,7 +14,7 @@ export class DataImporterFinder {
             new GpxDataImporter(),
             new KmlDataImporter(),
             new ShapefileImporter(),
-        ]
+        ];
     }
 
     public getInstanceForFile(filePath: string): AbstractDataImporter | undefined {

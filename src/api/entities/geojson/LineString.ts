@@ -1,7 +1,7 @@
 import * as gj from 'geojson';
-import {IGeoJsonGeometry} from "./IGeoJsonGeometry";
+import {IGeoJsonGeometry} from './IGeoJsonGeometry';
 
 export class LineString implements gj.LineString, IGeoJsonGeometry {
-    type;
-    coordinates: gj.Position[];
+    public type;
+    public coordinates: gj.Position[];
 }

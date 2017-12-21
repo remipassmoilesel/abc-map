@@ -1,4 +1,4 @@
-import {Toaster} from "./lib/Toaster";
+import {Toaster} from './lib/Toaster';
 import Vue from 'vue';
 import {ElectronUtilities} from '../api/dev/ElectronDevUtilities';
 import {Logger} from '../api/dev/Logger';

@@ -2,7 +2,7 @@ import * as http from 'http';
 
 // RECEPTION SERVER FOR FRONT TESTS
 
-console.log("Starting test server on port 5555");
+console.log('Starting test server on port 5555');
 
 function exitLater(exitCode: number) {
     setTimeout(() => {
@@ -16,10 +16,8 @@ function processExit(bodyStr: string) {
 
     if (rawStats.length < 2) {
         console.error('Invalid output');
-        exitLater(1)
-    }
-
-    else {
+        exitLater(1);
+    } else {
         const stats = JSON.parse(rawStats[1]);
         if (stats.failed > 0) {
             console.error('Some tests failed.');

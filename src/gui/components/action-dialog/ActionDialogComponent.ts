@@ -1,12 +1,12 @@
 import * as _ from 'lodash';
 import Component from 'vue-class-component';
 import {Clients} from '../../lib/clients/Clients';
-import {uxSearchableComponents} from "../components";
-import {IUxSearchResult} from "../UiSearchableComponents";
-import {UiShortcuts} from "../../lib/UiShortcuts";
-import {AbstractUiComponent} from "../AbstractUiComponent";
-import {MainStore} from "../../lib/store/store";
-import {StoreWrapper} from "../../lib/store/StoreWrapper";
+import {uxSearchableComponents} from '../components';
+import {IUxSearchResult} from '../UiSearchableComponents';
+import {UiShortcuts} from '../../lib/UiShortcuts';
+import {AbstractUiComponent} from '../AbstractUiComponent';
+import {MainStore} from '../../lib/store/store';
+import {StoreWrapper} from '../../lib/store/StoreWrapper';
 import './style.scss';
 
 @Component({
@@ -14,17 +14,17 @@ import './style.scss';
 })
 export class ActionDialogComponent extends AbstractUiComponent {
 
-    public componentName: string = "Action dialog";
-    public componentDescription: string = "Allow to search in component and actions.";
-    public componentTagName: string = "action-dialog";
+    public componentName: string = 'Action dialog';
+    public componentDescription: string = 'Allow to search in component and actions.';
+    public componentTagName: string = 'action-dialog';
 
     public shortcuts: UiShortcuts;
     public clients: Clients;
     public $store: MainStore;
     public storeWrapper: StoreWrapper;
 
-    public query: string = "";
-    public searchMessage: string = "";
+    public query: string = '';
+    public searchMessage: string = '';
     public results: IUxSearchResult[] = [];
     public debouncedSearch: Function;
 
@@ -55,9 +55,7 @@ export class ActionDialogComponent extends AbstractUiComponent {
 
         if (this.results.length < 1) {
             this.searchMessage = 'No results found';
-        }
-
-        else {
+        } else {
             this.searchMessage = '';
         }
 

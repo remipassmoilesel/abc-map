@@ -1,5 +1,5 @@
-import * as _ from "lodash";
-import {AbstractUiComponent} from "./AbstractUiComponent";
+import * as _ from 'lodash';
+import {AbstractUiComponent} from './AbstractUiComponent';
 
 export interface IUxSearchResult {
     name: string;
@@ -24,14 +24,14 @@ export class UiSearchableComponents {
     // TODO: suggest better queries, improve word search
     public search(query: string, max = 5): IUxSearchResult[] {
 
-        const words = query.trim().split(" ");
+        const words = query.trim().split(' ');
         if (words.length < 1) {
             return [];
         }
 
         // remove non-significants words, and pass them in lower case
         const significantWords: string[] = _.chain(words)
-            .remove((w) => _.findIndex(this.nonSignificantWords, nsw => nsw === w))
+            .remove((w) => _.findIndex(this.nonSignificantWords, (nsw) => nsw === w))
             .map((w) => w.toLocaleLowerCase())
             .value();
 
@@ -61,7 +61,7 @@ export class UiSearchableComponents {
     private addToScore(matchingComponents: IUxSearchResult[], component: AbstractUiComponent, scoreToAdd: number) {
 
         // search if element was already added
-        const previous = _.filter(matchingComponents, m => m.name === component.componentName);
+        const previous = _.filter(matchingComponents, (m) => m.name === component.componentName);
 
         if (previous.length < 1) {
             matchingComponents.push({
@@ -75,9 +75,9 @@ export class UiSearchableComponents {
     }
 
     private checkIfNameIsUnique(instance: AbstractUiComponent) {
-        const sameNames = _.filter(this.components, i => i.componentName === instance.componentName);
+        const sameNames = _.filter(this.components, (i) => i.componentName === instance.componentName);
         if (sameNames.length > 0) {
-            throw new Error(`Name '${instance.componentName}' is not unique. Number found: ${sameNames.length}`)
+            throw new Error(`Name '${instance.componentName}' is not unique. Number found: ${sameNames.length}`);
         }
     }
 }

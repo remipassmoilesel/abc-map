@@ -1,8 +1,8 @@
 import * as tgj from 'togeojson';
 import * as fs from 'fs-extra-promise';
 import {Document, DOMParser} from 'xmldom';
-import {AbstractDataImporter, IImportedFile} from "./AbstractDataImporter";
-import {IGeoJsonFeatureCollection} from "../entities/geojson/IGeoJsonFeatureCollection";
+import {AbstractDataImporter, IImportedFile} from './AbstractDataImporter';
+import {IGeoJsonFeatureCollection} from '../entities/geojson/IGeoJsonFeatureCollection';
 
 export class KmlDataImporter extends AbstractDataImporter {
 
@@ -17,7 +17,7 @@ export class KmlDataImporter extends AbstractDataImporter {
 
                 return {
                     filepath: pathToSourceFile,
-                    data: this.convertToGeoJson(kmlDom)
+                    data: this.convertToGeoJson(kmlDom),
                 };
 
             });
