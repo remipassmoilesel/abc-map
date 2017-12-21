@@ -23,7 +23,7 @@ export class TestUtils {
 
     public static getMongodbConnection(): Promise<mongodb.Db> {
 
-        const dbId = `abcmap-test`;
+        const dbId = `abcmap-test-${new Date().getTime()}`;
         const connectUri = `mongodb://localhost:${DatabaseService.SERVER_PORT}/${dbId}`;
 
         return Utils.retryUntilSuccess(() => {
