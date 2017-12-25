@@ -4,6 +4,7 @@ let layerCount = 0;
 export abstract class AbstractMapLayer {
 
     protected _id: string;
+
     protected _name: string;
 
     constructor(name?: string) {

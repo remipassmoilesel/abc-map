@@ -1,4 +1,5 @@
 import {AbstractMapLayer} from './AbstractMapLayer';
+import {SerializeProperty} from 'ts-serializer';
 
 // TODO: restore credits
 export class TileLayer extends AbstractMapLayer {

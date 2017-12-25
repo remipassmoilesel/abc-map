@@ -8,7 +8,7 @@ const uuid = require('uuid');
 
 const assert = chai.assert;
 
-describe.only('ProjectDao', () => {
+describe('ProjectDao', () => {
 
     let db: Db;
 

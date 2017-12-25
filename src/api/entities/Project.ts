@@ -1,13 +1,13 @@
 import * as uuid from 'uuid';
 import * as _ from 'lodash';
 import {AbstractMapLayer} from './layers/AbstractMapLayer';
-import {IDbSerializable} from './IDbSerializable';
 
 export interface IProjectCreationOptions {
     name?: string;
 }
 
-export class Project implements IDbSerializable {
+
+export class Project {
 
     public _id: string;
     private _name: string;

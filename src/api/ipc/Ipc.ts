@@ -1,9 +1,9 @@
 import promiseIpc from 'electron-promise-ipc';
 import {IpcSubject} from './IpcSubject';
 import {IpcEvent} from './IpcEvent';
-import {EntitySerializer} from '../entities/EntitySerializer';
+import {EntitySerializer} from '../entities/serializer/EntitySerializer';
 
-const eu = new EntitySerializer();
+const eu = EntitySerializer.newInstance();
 
 export declare type IpcHandler = (event: IpcEvent) => any;
 
