@@ -48,19 +48,34 @@ export class EntitySerializer {
         // object has a constructor
         const constructorName = data[MARK];
         if (constructorName) {
-            const constructor = this.constructorMap[constructorName];
-            const newObj = new constructor();
-            _.assign(newObj, data);
-            this.unmarkObject(newObj);
-            return newObj;
+            const inst = this.createInstance(data);
+
+            for (let propertyName in data) {
+
+                const propConstructorName = data[propertyName][MARK];
+                if (propConstructorName) {
+                    inst[propertyName] = this.plainToClass(inst[propertyName]);
+                }
+
+            }
+
+            this.unmarkObject(inst);
+            return inst;
         }
 
+        // object is plain
         return data;
     }
 
     public classToPlain(data: any) {
+
+        // mark object and nested objects with constructor name
         this.markObject(data);
+
+        // clone object
         const plain = _.cloneDeep(data);
+
+        // then unmark original object
         this.unmarkObject(data);
         return plain;
     }
@@ -79,6 +94,19 @@ export class EntitySerializer {
 
     public deserializeIpcEvent(data: string): IpcEvent {
         return this.deserialize(data);
+    }
+
+    private createInstance(data: any) {
+        const constructorName = data[MARK];
+        const constructor = this.constructorMap[constructorName];
+
+        if (!constructor){
+            throw new Error(`Unknown constructor: ${constructorName}`);
+        }
+
+        const newObj = new constructor();
+        _.assign(newObj, data);
+        return newObj;
     }
 
     private markObject(data: any) {

@@ -5,16 +5,17 @@ import {EntitySerializer} from '../../entities/serializer/EntitySerializer';
 import {Project} from '../../entities/Project';
 import {IpcEventImpl} from '../../ipc/IpcEvent';
 import {EventType} from '../../ipc/IpcEventTypes';
-import {SimpleTestClass} from './SimpleTestClass';
+import {NestedTestClass, SimpleTestClass} from './SimpleTestClass';
 
 const assert = chai.assert;
 
 const constructors: any = {};
 constructors.SimpleTestClass = SimpleTestClass;
+constructors.NestedTestClass = NestedTestClass;
 
 describe.only('EntitySerializer', () => {
 
-    it.only('Serialize then deserialize simple object should be correct', () => {
+    it('Serialize then deserialize simple object should be correct', () => {
 
         const eu = new EntitySerializer(constructors);
 
@@ -28,12 +29,12 @@ describe.only('EntitySerializer', () => {
         assert.instanceOf(deserialized, SimpleTestClass);
     });
 
-    it.only('Serialize then deserialize simple object with nested object should be correct', () => {
+    it('Serialize then deserialize simple object with nested object should be correct', () => {
 
         const eu = new EntitySerializer(constructors);
 
         const origin = new SimpleTestClass('value1');
-        origin.field2 = new SimpleTestClass('value2');
+        origin.field2 = new NestedTestClass('value2');
 
         const serialized = eu.serialize(origin);
 
@@ -42,10 +43,10 @@ describe.only('EntitySerializer', () => {
         assert.isTrue(serialized.length > 0);
         assert.deepEqual(origin, deserialized);
         assert.instanceOf(deserialized, SimpleTestClass);
-        assert.instanceOf(deserialized.field2, SimpleTestClass);
+        assert.instanceOf(deserialized.field2, NestedTestClass);
     });
 
-    it.only('Serialize then deserialize array of simple objects should be correct', () => {
+    it('Serialize then deserialize array of simple objects should be correct', () => {
 
         const eu = new EntitySerializer(constructors);
 
