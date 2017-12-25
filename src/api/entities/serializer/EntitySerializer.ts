@@ -37,10 +37,12 @@ export class EntitySerializer {
     public plainToClass(data: any) {
 
         const constructorName = data[MARK];
+
         if (constructorName) {
             const constructor = this.constructorMap[constructorName];
             const newObj = new constructor();
             _.assign(newObj, data);
+            this.unmarkObject(newObj);
             return newObj;
         }
 
@@ -51,7 +53,6 @@ export class EntitySerializer {
         this.markObject(data);
         const plain = _.clone(data);
         this.unmarkObject(data);
-        this.unmarkObject(plain);
         return plain;
     }
 
