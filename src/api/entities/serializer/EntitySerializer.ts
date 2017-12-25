@@ -36,8 +36,17 @@ export class EntitySerializer {
 
     public plainToClass(data: any) {
 
-        const constructorName = data[MARK];
+        // object is an array
+        if (data.constructor === Array) {
+            const result: any[] = [];
+            for (const elmt of data) {
+                result.push(this.plainToClass(elmt));
+            }
+            return result;
+        }
 
+        // object has a constructor
+        const constructorName = data[MARK];
         if (constructorName) {
             const constructor = this.constructorMap[constructorName];
             const newObj = new constructor();
@@ -51,7 +60,7 @@ export class EntitySerializer {
 
     public classToPlain(data: any) {
         this.markObject(data);
-        const plain = _.clone(data);
+        const plain = _.cloneDeep(data);
         this.unmarkObject(data);
         return plain;
     }
@@ -74,7 +83,15 @@ export class EntitySerializer {
 
     private markObject(data: any) {
 
-        if (excludedConstructors.indexOf(data.constructor.name) === -1) {
+        // object is an array
+        if (data.constructor === Array) {
+            for (const elmt of data) {
+                this.markObject(elmt);
+            }
+        }
+
+        // object had a constructor not ignored
+        else if (excludedConstructors.indexOf(data.constructor.name) === -1) {
             data[MARK] = data.constructor.name;
 
             for (let propertyName in data) {
@@ -84,6 +101,7 @@ export class EntitySerializer {
                 }
             }
         }
+
     }
 
     private unmarkObject(data: any) {

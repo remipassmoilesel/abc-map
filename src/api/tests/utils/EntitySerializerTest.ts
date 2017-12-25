@@ -5,16 +5,9 @@ import {EntitySerializer} from '../../entities/serializer/EntitySerializer';
 import {Project} from '../../entities/Project';
 import {IpcEventImpl} from '../../ipc/IpcEvent';
 import {EventType} from '../../ipc/IpcEventTypes';
+import {SimpleTestClass} from './SimpleTestClass';
 
 const assert = chai.assert;
-
-class SimpleTestClass {
-    private field1: string;
-
-    constructor(value1: string) {
-        this.field1 = value1;
-    }
-}
 
 const constructors: any = {};
 constructors.SimpleTestClass = SimpleTestClass;
@@ -32,6 +25,44 @@ describe.only('EntitySerializer', () => {
 
         assert.isTrue(serialized.length > 0);
         assert.deepEqual(origin, deserialized);
+        assert.instanceOf(deserialized, SimpleTestClass);
+    });
+
+    it.only('Serialize then deserialize simple object with nested object should be correct', () => {
+
+        const eu = new EntitySerializer(constructors);
+
+        const origin = new SimpleTestClass('value1');
+        origin.field2 = new SimpleTestClass('value2');
+
+        const serialized = eu.serialize(origin);
+
+        const deserialized = eu.deserialize(serialized);
+
+        assert.isTrue(serialized.length > 0);
+        assert.deepEqual(origin, deserialized);
+        assert.instanceOf(deserialized, SimpleTestClass);
+        assert.instanceOf(deserialized.field2, SimpleTestClass);
+    });
+
+    it.only('Serialize then deserialize array of simple objects should be correct', () => {
+
+        const eu = new EntitySerializer(constructors);
+
+        const origin = [
+            new SimpleTestClass('value1'),
+            new SimpleTestClass('value2'),
+            new SimpleTestClass('value3'),
+        ];
+
+        const serialized = eu.serialize(origin);
+        const deserialized = eu.deserialize(serialized);
+
+        assert.isTrue(serialized.length > 0);
+        assert.deepEqual(origin, deserialized);
+        assert.instanceOf(deserialized[0], SimpleTestClass);
+        assert.instanceOf(deserialized[1], SimpleTestClass);
+        assert.instanceOf(deserialized[2], SimpleTestClass);
     });
 
     const eu = EntitySerializer.newInstance();

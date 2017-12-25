@@ -17,6 +17,7 @@
     "quotemark": [true, "single", "avoid-escape", "avoid-template"],
     "ordered-imports": false,
     "variable-name": false,
+    "one-line": false,
     "member-ordering": false
   },
   "rulesDirectory": []
