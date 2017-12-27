@@ -5,6 +5,7 @@ import {IpcEventImpl} from '../../ipc/IpcEvent';
 import {GeocodingResult} from '../GeocodingResult';
 import {GeoJsonLayer} from '../layers/GeoJsonLayer';
 import {EntitySerializer} from './EntitySerializer';
+import {DefaultTileLayers} from '../layers/DefaultTileLayers';
 
 
 // WARNING
@@ -19,6 +20,7 @@ defaultConstructors.IpcEventImpl = IpcEventImpl;
 defaultConstructors.EventType = EventType;
 defaultConstructors.GeoJsonLayer = GeoJsonLayer;
 defaultConstructors.GeocodingResult = GeocodingResult;
+defaultConstructors.DefaultTileLayers = DefaultTileLayers;
 
 export class EntitySerializerFactory {
 
