@@ -1,28 +1,12 @@
 import {Project} from '../Project';
-import {TileLayer} from '../layers/TileLayer';
-import {IpcEvent, IpcEventImpl} from '../../ipc/IpcEvent';
-import {EventType} from '../../ipc/IpcEventTypes';
-import {GeoJsonLayer} from './../layers/GeoJsonLayer';
-import {GeocodingResult} from './../GeocodingResult';
+import {IpcEvent} from '../../ipc/IpcEvent';
 import * as _ from 'lodash';
 
-// WARNING
-// All constructors declared here are imported in browser
-
-// List of constructors used to deserialize objects
-const constructors: any = {};
-constructors.TileLayer = TileLayer;
-constructors.Project = Project;
-constructors.IpcEventImpl = IpcEventImpl;
-constructors.EventType = EventType;
-constructors.GeoJsonLayer = GeoJsonLayer;
-constructors.GeocodingResult = GeocodingResult;
-
-const ignoredConstructors = [
+const defaultIgnoredConstructors = [
     'String', 'Number', 'Boolean',
 ];
 
-const forbiddenConstructors = [
+const defaultForbiddenConstructors = [
     'Date',
 ];
 
@@ -30,14 +14,14 @@ const MARK = '$$constructor';
 
 export class EntitySerializer {
 
-    public static newInstance(): EntitySerializer {
-        return new EntitySerializer(constructors);
-    }
-
     private constructorMap: any;
+    private ignoredConstructors: any;
+    private forbiddenConstructors: any;
 
-    constructor(constructorMap: any) {
+    constructor(constructorMap: any, ignoredConstructors?: any, forbiddenConstructors?: any) {
         this.constructorMap = constructorMap;
+        this.ignoredConstructors = ignoredConstructors || defaultIgnoredConstructors;
+        this.forbiddenConstructors = forbiddenConstructors || defaultForbiddenConstructors;
     }
 
     public plainToClass(data: any) {
@@ -198,11 +182,11 @@ export class EntitySerializer {
     }
 
     private isConstructorIgnored(data: any) {
-        return ignoredConstructors.indexOf(data.constructor.name) !== -1;
+        return this.ignoredConstructors.indexOf(data.constructor.name) !== -1;
     }
 
     private isConstructorForbidden(data: any) {
-        return forbiddenConstructors.indexOf(data.constructor.name) !== -1;
+        return this.forbiddenConstructors.indexOf(data.constructor.name) !== -1;
     }
 }
 
