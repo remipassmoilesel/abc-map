@@ -12,13 +12,14 @@ const assert = chai.assert;
 const eu = EntitySerializerFactory.newInstance();
 
 // these objects will be serialized then unserialized
-const toTest: any[] = [];
-toTest.push(new TileLayer('name', 'http://url'));
+const entitiesToTest: any[] = [];
+entitiesToTest.push(new TileLayer('name', 'http://url'));
 
 const project = new Project('name-name');
 project.layers = [new TileLayer('name', 'http://url'), new TileLayer('name2', 'http://url2')];
-toTest.push(project);
-toTest.push(new IpcEventImpl(EventType.PROJECT_NEW_CREATED, project));
+entitiesToTest.push(project);
+entitiesToTest.push(new IpcEventImpl(EventType.PROJECT_NEW_CREATED, project));
+entitiesToTest.push({data: new TileLayer('name', 'http://url')});
 
 export class EntitySerializerTest extends AbstractTest {
 
@@ -32,7 +33,7 @@ export class EntitySerializerTest extends AbstractTest {
     }
 
     public serializationShouldSucceed() {
-        _.forEach(toTest, (obj, index) => {
+        _.forEach(entitiesToTest, (obj, index) => {
             const raw = eu.serialize(obj);
 
             assert.isString(raw);
@@ -44,13 +45,13 @@ export class EntitySerializerTest extends AbstractTest {
 
     public methodShouldBeCallable() {
 
-            const lay = new TileLayer('tile-layer-1', 'http://url2');
-            assert.doesNotThrow(lay.generateId.bind(lay));
+        const lay = new TileLayer('tile-layer-1', 'http://url2');
+        assert.doesNotThrow(lay.generateId.bind(lay));
 
-            const serialized = eu.serialize(lay);
-            const deserialized = eu.deserialize(serialized);
+        const serialized = eu.serialize(lay);
+        const deserialized = eu.deserialize(serialized);
 
-            assert.doesNotThrow(deserialized.generateId.bind(deserialized));
+        assert.doesNotThrow(deserialized.generateId.bind(deserialized));
     }
 
 }

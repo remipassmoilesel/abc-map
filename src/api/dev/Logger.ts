@@ -3,12 +3,27 @@ import {Utils} from '../utils/Utils';
 // TODO: add default log level,
 // TODO: add ability to set level on logger
 
+export class LogLevel {
+
+    public static DEBUG = new LogLevel('DEBUG', 0);
+    public static INFO = new LogLevel('INFO', 1);
+    public static WARNING = new LogLevel('WARNING', 2);
+    public static ERROR = new LogLevel('ERROR', 3);
+
+    public level: string;
+    public weight: number;
+
+    constructor(level: string, levelNbr: number) {
+        this.level = level;
+        this.weight = levelNbr;
+    }
+}
+
+const defaultLogLevel = LogLevel.WARNING;
+
 export class Logger {
 
-    public static INFO: string = 'INFO';
-    public static WARNING: string = 'WARNING';
-    public static ERROR: string = 'ERROR';
-
+    private level: LogLevel = defaultLogLevel;
     private namespace: string;
 
     public static getLogger(namespace: string) {
@@ -20,21 +35,28 @@ export class Logger {
     }
 
     public info(message: string, data?: any) {
-        this.print(message, Logger.INFO, data);
+        this.print(message, LogLevel.INFO, data);
     }
 
     public warning(message: string, data?: any) {
-        this.print(message, Logger.WARNING, data);
+        this.print(message, LogLevel.WARNING, data);
     }
 
     public error(message: string, data?: any) {
-        this.print(message, Logger.ERROR, data);
+        this.print(message, LogLevel.ERROR, data);
     }
 
-    private print(msg: string, level: string = Logger.INFO, data?: any) {
-        const stringifiedData = data ? Utils.safeStringify(data, 2) : '';
-        const date = new Date().toString().substr(16, 8);
-        console.log(`[${date}] [${level}] [${this.namespace}] ${msg} ${stringifiedData}`);
+    public setLevel (level: LogLevel){
+        this.level = level;
+    }
+
+    private print(msg: string, level: LogLevel, data?: any) {
+
+        if (level.weight >= this.level.weight){
+            const stringifiedData = data ? Utils.safeStringify(data, 2) : '';
+            const date = new Date().toString().substr(16, 8);
+            console.log(`[${date}] [${level}] [${this.namespace}] ${msg} ${stringifiedData}`);
+        }
     }
 
 }

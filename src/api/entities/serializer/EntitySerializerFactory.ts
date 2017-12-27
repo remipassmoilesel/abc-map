@@ -14,6 +14,7 @@ import {DefaultTileLayers} from '../layers/DefaultTileLayers';
 // List of constructors used to deserialize objects
 
 const defaultConstructors: any = {};
+defaultConstructors.Object = Object;
 defaultConstructors.TileLayer = TileLayer;
 defaultConstructors.Project = Project;
 defaultConstructors.IpcEventImpl = IpcEventImpl;

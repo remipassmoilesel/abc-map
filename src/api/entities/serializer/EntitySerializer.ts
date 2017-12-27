@@ -1,10 +1,10 @@
 import {Project} from '../Project';
 import {IpcEvent} from '../../ipc/IpcEvent';
 import * as _ from 'lodash';
-import {Logger} from '../../dev/Logger';
+import {Logger, LogLevel} from '../../dev/Logger';
 
 const defaultIgnoredConstructors = [
-    'String', 'Number', 'Boolean', 'Object',
+    'String', 'Number', 'Boolean',
 ];
 
 const defaultForbiddenConstructors = [
@@ -14,6 +14,7 @@ const defaultForbiddenConstructors = [
 const MARK = '$$constructor';
 
 const logger = Logger.getLogger('EntitySerializer');
+// logger.setLevel(LogLevel.INFO);
 
 export class EntitySerializer {
 
@@ -140,7 +141,7 @@ export class EntitySerializer {
         }
 
         // object had a constructor not ignored
-        else if (this.isConstructorIgnored(data) === false) {
+        else if (this.isConstructorIgnored(data) !== true) {
 
             try {
                 data[MARK] = data.constructor.name;
@@ -150,6 +151,7 @@ export class EntitySerializer {
             }
 
             for (let propertyName in data) {
+
                 if (data.hasOwnProperty(propertyName)) {
                     const property = data[propertyName];
                     if (property && propertyName !== MARK && data.constructor && data.constructor.name) {

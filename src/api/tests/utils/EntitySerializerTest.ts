@@ -9,7 +9,7 @@ constructors.SimpleTestClass = SimpleTestClass;
 constructors.SimpleTestClass2 = SimpleTestClass2;
 constructors.NestedTestClass = NestedTestClass;
 
-describe.only('EntitySerializer', () => {
+describe('EntitySerializer', () => {
 
     it('Serialize then deserialize empty object should succeed', () => {
 
@@ -24,7 +24,7 @@ describe.only('EntitySerializer', () => {
         assert.deepEqual(deserialized, origin);
     });
 
-    it.only('Serialize then deserialize object with undefined properties should succeed', () => {
+    it('Serialize then deserialize object with undefined properties should succeed', () => {
 
         const eu = new EntitySerializer(constructors);
 
@@ -55,7 +55,7 @@ describe.only('EntitySerializer', () => {
         assert.isDefined(deserialized.generateDate());
     });
 
-    it('Serialize forbiddent constructor should throw', () => {
+    it('Serialize forbidden constructor should throw', () => {
 
         const eu = new EntitySerializer(constructors);
 

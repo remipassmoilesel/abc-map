@@ -11,7 +11,7 @@ import {GeocodingResult} from '../../entities/GeocodingResult';
 
 const assert = chai.assert;
 
-describe.only('AbcmapEntitiesTest', () => {
+describe('AbcmapEntitiesTest', () => {
 
     const eu = EntitySerializerFactory.newInstance();
 
@@ -29,17 +29,26 @@ describe.only('AbcmapEntitiesTest', () => {
     entitiesToTest.push(new DefaultTileLayers());
     entitiesToTest.push(EventType.PROJECT_ROOT);
     entitiesToTest.push(new GeocodingResult('resolvedName', 5, 5));
+    entitiesToTest.push({data: new TileLayer('name', 'http://url')});
 
     it('Serialize then deserialize should succeed', () => {
 
-        _.forEach(entitiesToTest, (obj) => {
-            const raw = eu.serialize(obj);
+        const serializedArray: any[] = [];
 
-            assert.isString(raw);
+        _.forEach(entitiesToTest, (origin) => {
+            const serialized = eu.serialize(origin);
 
-            const newObj = eu.deserialize(raw);
-            assert.deepEqual(obj, newObj, `Serialization failed for: ${obj}, ${newObj}`);
+            assert.isString(serialized);
+
+            const deserialized = eu.deserialize(serialized);
+            serializedArray.push(deserialized);
+
+            assert.deepEqual(origin, deserialized, `Serialization failed for: ${JSON.stringify(origin)},`
+                + ` ${JSON.stringify(deserialized)}`);
         });
+
+        assert.instanceOf(serializedArray[5].data, TileLayer);
+
     });
 
     it('Serialize layer then deserialize should succeed', () => {

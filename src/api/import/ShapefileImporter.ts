@@ -2,7 +2,7 @@ import * as shapefile from 'shapefile';
 import {AbstractDataImporter, IImportedFile} from './AbstractDataImporter';
 
 
-//TODO Refactor in order directly data in database
+// TODO: Refactor in order directly data in database
 
 export class ShapefileImporter extends AbstractDataImporter {
 
@@ -16,7 +16,6 @@ export class ShapefileImporter extends AbstractDataImporter {
             .then((source) => source.read()
                 .then(function log(result) {
                     if (result.done) { return; }
-                    console.log(result.value);
                     return source.read();
                 }))
             .catch((error) => console.error(error.stack));

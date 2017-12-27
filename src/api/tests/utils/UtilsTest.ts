@@ -79,8 +79,6 @@ describe('UtilsTest', () => {
                 assert.equal(promiseStub.callCount, 2);
             })
             .catch(() => {
-                console.log('promiseStub.callCount');
-                console.log(promiseStub.callCount);
                 throw new Error('Should resolve');
             });
     });
