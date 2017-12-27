@@ -37,7 +37,7 @@ export class EntitySerializer {
     public plainToClass(data: any) {
 
         // object is an array
-        if (data.constructor === Array) {
+        if (this.isArray(data)) {
             const result: any[] = [];
             for (const elmt of data) {
                 result.push(this.plainToClass(elmt));
@@ -51,12 +51,25 @@ export class EntitySerializer {
             const inst = this.createInstance(data);
 
             for (let propertyName in data) {
+                if (data.hasOwnProperty(propertyName)) {
 
-                const propConstructorName = data[propertyName][MARK];
-                if (propConstructorName) {
-                    inst[propertyName] = this.plainToClass(inst[propertyName]);
+                    // object has a constructor
+                    const propConstructorName = data[propertyName][MARK];
+                    if (propConstructorName) {
+                        inst[propertyName] = this.plainToClass(inst[propertyName]);
+                    }
+
+                    // object is an array
+                    if (this.isArray(inst[propertyName])) {
+                        const result: any[] = [];
+                        const property = inst[propertyName];
+                        for (const item of property) {
+                            result.push(this.plainToClass(item));
+                        }
+                        inst[propertyName] = result;
+                    }
+
                 }
-
             }
 
             this.unmarkObject(inst);
@@ -100,7 +113,7 @@ export class EntitySerializer {
         const constructorName = data[MARK];
         const constructor = this.constructorMap[constructorName];
 
-        if (!constructor){
+        if (!constructor) {
             throw new Error(`Unknown constructor: ${constructorName}`);
         }
 
@@ -123,9 +136,11 @@ export class EntitySerializer {
             data[MARK] = data.constructor.name;
 
             for (let propertyName in data) {
-                const property = data[propertyName];
-                if (property && propertyName !== MARK && data.constructor && data.constructor.name) {
-                    this.markObject(property);
+                if (data.hasOwnProperty(propertyName)) {
+                    const property = data[propertyName];
+                    if (property && propertyName !== MARK && data.constructor && data.constructor.name) {
+                        this.markObject(property);
+                    }
                 }
             }
         }
@@ -140,11 +155,23 @@ export class EntitySerializer {
 
         for (let propertyName in data) {
             const property = data[propertyName];
+
+            // object has a constructor
             if (property[MARK]) {
                 this.unmarkObject(property);
+            }
+
+            // object is an array
+            if (this.isArray(property)) {
+                for (const elmt of property) {
+                    this.unmarkObject(elmt);
+                }
             }
         }
     }
 
+    private isArray(data: any) {
+        return data.constructor === Array;
+    }
 }
 

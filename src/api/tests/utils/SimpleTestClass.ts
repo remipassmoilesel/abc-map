@@ -11,6 +11,15 @@ export class SimpleTestClass {
     }
 }
 
+export class SimpleTestClass2 {
+    public field1: string;
+    public field2: NestedTestClass[];
+
+    constructor(value1: string) {
+        this.field1 = value1;
+    }
+}
+
 export class NestedTestClass {
     public field3: string;
     public field4: NestedTestClass;
