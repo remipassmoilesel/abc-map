@@ -27,6 +27,7 @@ export class EntitySerializerTest extends AbstractTest {
     public registerTests(): any[] {
         return [
             this.serializationShouldSucceed,
+            this.methodShouldBeCallable,
         ];
     }
 
@@ -39,6 +40,17 @@ export class EntitySerializerTest extends AbstractTest {
             const newObj = eu.deserialize(raw);
             assert.deepEqual(obj, newObj, `Serialization failed for: ${obj}, ${newObj}`);
         });
+    }
+
+    public methodShouldBeCallable() {
+
+            const lay = new TileLayer('tile-layer-1', 'http://url2');
+            assert.doesNotThrow(lay.generateId.bind(lay));
+
+            const serialized = eu.serialize(lay);
+            const deserialized = eu.deserialize(serialized);
+
+            assert.doesNotThrow(deserialized.generateId.bind(deserialized));
     }
 
 }

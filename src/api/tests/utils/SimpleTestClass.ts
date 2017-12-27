@@ -11,6 +11,10 @@ export class SimpleTestClass {
     constructor(value1: string) {
         this.field1 = value1;
     }
+
+    public generateDate(){
+        return new Date();
+    }
 }
 
 export class SimpleTestClass2 {

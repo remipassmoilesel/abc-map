@@ -24,6 +24,8 @@ describe.only('EntitySerializer', () => {
         assert.deepEqual(deserialized, origin);
         assert.instanceOf(deserialized, SimpleTestClass);
         assert.equal(deserialized.field1, 'value1');
+
+        assert.isDefined(deserialized.generateDate());
     });
 
     it('Serialize forbiddent constructor should throw', () => {

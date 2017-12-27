@@ -7,7 +7,7 @@ import {EventType} from '../../ipc/IpcEventTypes';
 import {EntitySerializerFactory} from '../../entities/serializer/EntitySerializerFactory';
 import {GeoJsonLayer} from '../../entities/layers/GeoJsonLayer';
 import {DefaultTileLayers} from '../../entities/layers/DefaultTileLayers';
-import {GeocodingResult} from "../../entities/GeocodingResult";
+import {GeocodingResult} from '../../entities/GeocodingResult';
 
 const assert = chai.assert;
 
@@ -30,9 +30,9 @@ describe.only('AbcmapEntitiesTest', () => {
     entitiesToTest.push(EventType.PROJECT_ROOT);
     entitiesToTest.push(new GeocodingResult('resolvedName', 5, 5));
 
-    it('Serialize then deserialize should be correct', () => {
+    it('Serialize then deserialize should succeed', () => {
 
-        _.forEach(entitiesToTest, (obj, index) => {
+        _.forEach(entitiesToTest, (obj) => {
             const raw = eu.serialize(obj);
 
             assert.isString(raw);
@@ -40,6 +40,17 @@ describe.only('AbcmapEntitiesTest', () => {
             const newObj = eu.deserialize(raw);
             assert.deepEqual(obj, newObj, `Serialization failed for: ${obj}, ${newObj}`);
         });
+    });
+
+    it('Serialize layer then deserialize should succeed', () => {
+
+        const lay = new TileLayer('tile-layer-1', 'http://url2');
+        assert.doesNotThrow(lay.generateId.bind(lay));
+
+        const serialized = eu.serialize(lay);
+        const deserialized = eu.deserialize(serialized);
+
+        assert.doesNotThrow(deserialized.generateId.bind(deserialized));
     });
 
 });

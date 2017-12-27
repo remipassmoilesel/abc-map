@@ -1,5 +1,8 @@
 import {Utils} from '../utils/Utils';
 
+// TODO: add default log level,
+// TODO: add ability to set level on logger
+
 export class Logger {
 
     public static INFO: string = 'INFO';

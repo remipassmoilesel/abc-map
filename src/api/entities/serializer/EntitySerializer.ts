@@ -1,9 +1,10 @@
 import {Project} from '../Project';
 import {IpcEvent} from '../../ipc/IpcEvent';
 import * as _ from 'lodash';
+import {Logger} from '../../dev/Logger';
 
 const defaultIgnoredConstructors = [
-    'String', 'Number', 'Boolean',
+    'String', 'Number', 'Boolean', 'Object',
 ];
 
 const defaultForbiddenConstructors = [
@@ -11,6 +12,8 @@ const defaultForbiddenConstructors = [
 ];
 
 const MARK = '$$constructor';
+
+const logger = Logger.getLogger('EntitySerializer');
 
 export class EntitySerializer {
 
@@ -25,6 +28,8 @@ export class EntitySerializer {
     }
 
     public plainToClass(data: any) {
+
+        logger.info('plainToClass', data);
 
         // object is an array
         if (this.isArray(data)) {
@@ -72,6 +77,8 @@ export class EntitySerializer {
 
     public classToPlain(data: any) {
 
+        logger.info('classToPlain', data);
+
         // mark object and nested objects with constructor name
         this.markObject(data);
 
@@ -100,11 +107,14 @@ export class EntitySerializer {
     }
 
     private createInstance(data: any) {
+
+        logger.info('createInstance', data);
+
         const constructorName = data[MARK];
         const constructor = this.constructorMap[constructorName];
 
         if (!constructor) {
-            throw new Error(`Unknown constructor: ${constructorName}`);
+            throw new Error(`Unknown constructor: '${constructorName}' in ${JSON.stringify(data)}`);
         }
 
         const newObj = new constructor();
