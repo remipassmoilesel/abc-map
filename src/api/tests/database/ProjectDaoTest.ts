@@ -8,7 +8,7 @@ import {GeoJsonLayer} from '../../entities/layers/GeoJsonLayer';
 
 const assert = chai.assert;
 
-describe('ProjectDao', () => {
+describe.only('ProjectDao', () => {
 
     let db: Db;
 
@@ -25,8 +25,12 @@ describe('ProjectDao', () => {
 
         // create a fake project and insert it
         const project = new Project('test project');
-        project.layers.push(new TileLayer());
-        project.layers.push(new GeoJsonLayer());
+
+        const tileLayer = new TileLayer('Tile-Layer-1', null);
+        project.layers.push(tileLayer);
+
+        const geojLayer = new GeoJsonLayer('Geojson-Layer-1');
+        project.layers.push(geojLayer);
 
         await dao.insert(project);
 

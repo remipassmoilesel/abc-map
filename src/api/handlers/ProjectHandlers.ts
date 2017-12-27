@@ -28,7 +28,7 @@ export class ProjectHandlers extends AbstractHandlersGroup {
         // drop previous one in database, add new
         // TODO: do not drop previous project if not existing
         const projectDao = this.services.db.getProjectDao();
-        projectDao.clear();
+        const previousProject = projectDao.query();
         projectDao.insert(project);
     }
 
@@ -45,7 +45,7 @@ export class ProjectHandlers extends AbstractHandlersGroup {
     }
 
     public saveProjectAs(event: IpcEvent) {
-        return this.services.db.getProjectDao().exportProjectAs(event.data);
+        return Promise.resolve();
     }
 
     public persistProject() {

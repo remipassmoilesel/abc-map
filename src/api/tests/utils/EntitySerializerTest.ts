@@ -10,7 +10,7 @@ constructors.SimpleTestClass = SimpleTestClass;
 constructors.SimpleTestClass2 = SimpleTestClass2;
 constructors.NestedTestClass = NestedTestClass;
 
-describe.only('EntitySerializer', () => {
+describe('EntitySerializer', () => {
 
     it('Serialize then deserialize empty object should succeed', () => {
 
