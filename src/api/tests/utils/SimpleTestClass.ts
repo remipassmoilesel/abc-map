@@ -4,6 +4,7 @@
 
 export class SimpleTestClass {
     public field1: string;
+    public field3: number = 5;
     public field2: NestedTestClass;
 
     constructor(value1: string) {

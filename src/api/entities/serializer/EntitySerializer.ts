@@ -18,7 +18,9 @@ constructors.EventType = EventType;
 constructors.GeoJsonLayer = GeoJsonLayer;
 constructors.GeocodingResult = GeocodingResult;
 
-const excludedConstructors = ['String'];
+const excludedConstructors = [
+    'String', 'Number',
+];
 
 const MARK = '$$constructor';
 
@@ -133,7 +135,13 @@ export class EntitySerializer {
 
         // object had a constructor not ignored
         else if (excludedConstructors.indexOf(data.constructor.name) === -1) {
-            data[MARK] = data.constructor.name;
+
+            try {
+                data[MARK] = data.constructor.name;
+            } catch (e) {
+                throw new Error(`Cannot serialize property '${data}' with `
+                    + `constructor '${data.constructor.name}'`);
+            }
 
             for (let propertyName in data) {
                 if (data.hasOwnProperty(propertyName)) {
@@ -143,6 +151,7 @@ export class EntitySerializer {
                     }
                 }
             }
+
         }
 
     }
