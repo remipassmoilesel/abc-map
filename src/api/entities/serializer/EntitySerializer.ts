@@ -124,6 +124,10 @@ export class EntitySerializer {
 
     private markObject(data: any) {
 
+        if (!data){
+            return;
+        }
+
         if (this.isConstructorForbidden(data)) {
             throw new Error(`Forbidden constructor: '${data.constructor.name}' in '${data}'`);
         }
@@ -161,6 +165,10 @@ export class EntitySerializer {
 
     private unmarkObject(data: any) {
 
+        if (!data){
+            return;
+        }
+
         if (data[MARK]) {
             delete data[MARK];
         }
@@ -170,6 +178,10 @@ export class EntitySerializer {
             if (data.hasOwnProperty(propertyName)) {
 
                 const property = data[propertyName];
+
+                if (!property){
+                    continue;
+                }
 
                 // object has a constructor
                 if (property[MARK]) {

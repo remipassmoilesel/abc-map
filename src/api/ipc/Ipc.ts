@@ -56,6 +56,10 @@ export class Ipc {
 
     public send(subject: IpcSubject, event: IpcEvent = {}): Promise<any> {
 
+        console.log('eu.serialize(event)');
+        console.log(eu.serialize(event));
+        console.log(eu.serialize(event.data));
+
         const serialized: IpcInternalMessage = {serializedData: eu.serialize(event)};
 
         // send event from main process

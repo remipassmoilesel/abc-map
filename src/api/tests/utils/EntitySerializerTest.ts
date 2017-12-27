@@ -11,6 +11,33 @@ constructors.NestedTestClass = NestedTestClass;
 
 describe.only('EntitySerializer', () => {
 
+    it('Serialize then deserialize empty object should succeed', () => {
+
+        const eu = new EntitySerializer(constructors);
+
+        const origin = {};
+        const serialized = eu.serialize(origin);
+
+        const deserialized = eu.deserialize(serialized);
+
+        assert.isTrue(serialized.length > 0);
+        assert.deepEqual(deserialized, origin);
+    });
+
+    it.only('Serialize then deserialize object with undefined properties should succeed', () => {
+
+        const eu = new EntitySerializer(constructors);
+
+        const origin = new SimpleTestClass('test');
+        origin.field1 = undefined;
+        const serialized = eu.serialize(origin);
+
+        const deserialized = eu.deserialize(serialized);
+
+        assert.isTrue(serialized.length > 0);
+        assert.deepEqual(deserialized, origin);
+    });
+
     it('Serialize then deserialize simple object should be correct', () => {
 
         const eu = new EntitySerializer(constructors);

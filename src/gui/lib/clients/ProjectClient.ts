@@ -25,6 +25,8 @@ export class ProjectClient {
     }
 
     public addLayer(layer: AbstractMapLayer) {
+        console.log('addLayer');
+        console.log(layer);
         return this.ipc.send(ProjectSubjects.ADD_LAYER, {data: layer}).catch(handleRejection);
     }
 

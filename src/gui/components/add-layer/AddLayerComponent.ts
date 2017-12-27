@@ -30,9 +30,9 @@ export class AddLayerComponent extends AbstractUiComponent {
             });
     }
 
-    public addLayers() {
+    public async addLayers() {
         for (const lay of this.layersToAdd) {
-            this.clients.project.addLayer(lay);
+            await this.clients.project.addLayer(lay);
         }
         this.layersToAdd = [];
     }

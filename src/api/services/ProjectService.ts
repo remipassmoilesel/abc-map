@@ -45,8 +45,8 @@ export class ProjectService extends AbstractService {
         this.currentProject.layers.push(layer);
 
         this.sendProjectEvent({
-            type: EventType.PROJECT_NEW_LAYER_ADDED,
             data: this.currentProject,
+            type: EventType.PROJECT_NEW_LAYER_ADDED,
         });
     }
 
