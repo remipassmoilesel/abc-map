@@ -11,10 +11,10 @@ const defaultForbiddenConstructors = [
     'Date',
 ];
 
-const MARK = '$$constructor';
+const MARK = '#constructor';
 
 const logger = Logger.getLogger('EntitySerializer');
-// logger.setLevel(LogLevel.INFO);
+// logger.setLevel(LogLevel.DEBUG);
 
 export class EntitySerializer {
 
@@ -28,9 +28,13 @@ export class EntitySerializer {
         this.forbiddenConstructors = forbiddenConstructors || defaultForbiddenConstructors;
     }
 
-    public plainToClass(data: any) {
+    public plainToClass(data: any): any {
 
-        logger.info('plainToClass', data);
+        logger.debug('plainToClass', data);
+
+        if (!data) {
+            return data;
+        }
 
         // object is an array
         if (this.isArray(data)) {
@@ -49,20 +53,26 @@ export class EntitySerializer {
             for (let propertyName in data) {
                 if (data.hasOwnProperty(propertyName)) {
 
-                    // object has a constructor
-                    const propConstructorName = data[propertyName][MARK];
-                    if (propConstructorName) {
-                        inst[propertyName] = this.plainToClass(inst[propertyName]);
+                    const property = data[propertyName];
+
+                    // object is null or undefined
+                    if (!property) {
+                        inst[propertyName] = property;
                     }
 
                     // object is an array
-                    if (this.isArray(inst[propertyName])) {
+                    else if (this.isArray(inst[propertyName])) {
                         const result: any[] = [];
                         const property = inst[propertyName];
                         for (const item of property) {
                             result.push(this.plainToClass(item));
                         }
                         inst[propertyName] = result;
+                    }
+
+                    // object has a constructor
+                    else if (property && property[MARK]) {
+                        inst[propertyName] = this.plainToClass(inst[propertyName]);
                     }
 
                 }
@@ -78,7 +88,7 @@ export class EntitySerializer {
 
     public classToPlain(data: any) {
 
-        logger.info('classToPlain', data);
+        logger.debug('classToPlain', data);
 
         // mark object and nested objects with constructor name
         this.markObject(data);
@@ -109,7 +119,7 @@ export class EntitySerializer {
 
     private createInstance(data: any) {
 
-        logger.info('createInstance', data);
+        logger.debug('createInstance', data);
 
         const constructorName = data[MARK];
         const constructor = this.constructorMap[constructorName];
@@ -123,18 +133,20 @@ export class EntitySerializer {
         return newObj;
     }
 
-    private markObject(data: any) {
+    private markObject(data: any): any {
 
-        if (!data){
+        // object is undefined or null
+        if (!data) {
             return;
         }
 
-        if (this.isConstructorForbidden(data)) {
+        // constructor is forbiddent
+        else if (this.isConstructorForbidden(data)) {
             throw new Error(`Forbidden constructor: '${data.constructor.name}' in '${data}'`);
         }
 
         // object is an array
-        if (data.constructor === Array) {
+        else if (data.constructor === Array) {
             for (const elmt of data) {
                 this.markObject(elmt);
             }
@@ -167,7 +179,7 @@ export class EntitySerializer {
 
     private unmarkObject(data: any) {
 
-        if (!data){
+        if (!data) {
             return;
         }
 
@@ -181,17 +193,18 @@ export class EntitySerializer {
 
                 const property = data[propertyName];
 
-                if (!property){
+                // object is undefined or null
+                if (!property) {
                     continue;
                 }
 
                 // object has a constructor
-                if (property[MARK]) {
+                else if (property[MARK]) {
                     this.unmarkObject(property);
                 }
 
                 // object is an array
-                if (this.isArray(property)) {
+                else if (this.isArray(property)) {
                     for (const elmt of property) {
                         this.unmarkObject(elmt);
                     }

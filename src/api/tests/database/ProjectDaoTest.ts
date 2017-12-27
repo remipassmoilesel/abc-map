@@ -3,8 +3,8 @@ import {TestUtils} from '../TestUtils';
 import {Db} from 'mongodb';
 import {ProjectDao} from '../../database/ProjectDao';
 import {Project} from '../../entities/Project';
-
-const uuid = require('uuid');
+import {TileLayer} from '../../entities/layers/TileLayer';
+import {GeoJsonLayer} from '../../entities/layers/GeoJsonLayer';
 
 const assert = chai.assert;
 
@@ -25,7 +25,8 @@ describe('ProjectDao', () => {
 
         // create a fake project and insert it
         const project = new Project('test project');
-        // project.layers.push(new TileLayer());
+        project.layers.push(new TileLayer());
+        project.layers.push(new GeoJsonLayer());
 
         await dao.insert(project);
 
@@ -34,6 +35,8 @@ describe('ProjectDao', () => {
 
         assert.deepEqual(project, queriedProject);
         assert.instanceOf(queriedProject, Project);
+        assert.instanceOf(queriedProject.layers[0], TileLayer);
+        assert.instanceOf(queriedProject.layers[1], GeoJsonLayer);
 
         await dao.clear();
     });

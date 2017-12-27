@@ -10,7 +10,7 @@ constructors.SimpleTestClass = SimpleTestClass;
 constructors.SimpleTestClass2 = SimpleTestClass2;
 constructors.NestedTestClass = NestedTestClass;
 
-describe('EntitySerializer', () => {
+describe.only('EntitySerializer', () => {
 
     it('Serialize then deserialize empty object should succeed', () => {
 
@@ -31,6 +31,20 @@ describe('EntitySerializer', () => {
 
         const origin = new SimpleTestClass('test');
         origin.field1 = undefined;
+        const serialized = eu.serialize(origin);
+
+        const deserialized = eu.deserialize(serialized);
+
+        assert.isTrue(serialized.length > 0);
+        assert.deepEqual(deserialized, origin);
+    });
+
+    it('Serialize then deserialize object with null properties should succeed', () => {
+
+        const eu = new EntitySerializer(constructors);
+
+        const origin = new SimpleTestClass('test');
+        origin.field1 = null;
         const serialized = eu.serialize(origin);
 
         const deserialized = eu.deserialize(serialized);
@@ -83,7 +97,7 @@ describe('EntitySerializer', () => {
         assert.instanceOf(deserialized.field2, NestedTestClass);
     });
 
-    it('Serialize then deserialize simple object with nested array of objects should be correct', () => {
+    it('Serialize then deserialize simple object with array of objects should be correct', () => {
 
         const eu = new EntitySerializer(constructors);
 

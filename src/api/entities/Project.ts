@@ -35,8 +35,4 @@ export class Project {
         this._layers = value;
     }
 
-    public fromRaw(data: any) {
-        _.assign(this, data);
-    }
-
 }

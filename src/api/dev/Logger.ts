@@ -34,6 +34,10 @@ export class Logger {
         this.namespace = namespace;
     }
 
+    public debug(message: string, data?: any) {
+        this.print(message, LogLevel.DEBUG, data);
+    }
+
     public info(message: string, data?: any) {
         this.print(message, LogLevel.INFO, data);
     }
