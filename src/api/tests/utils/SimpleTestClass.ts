@@ -4,8 +4,9 @@
 
 export class SimpleTestClass {
     public field1: string;
-    public field3: number = 5;
     public field2: NestedTestClass;
+    public field3: number = 5;
+    public field4: boolean = false;
 
     constructor(value1: string) {
         this.field1 = value1;
@@ -15,6 +16,15 @@ export class SimpleTestClass {
 export class SimpleTestClass2 {
     public field1: string;
     public field2: NestedTestClass[];
+
+    constructor(value1: string) {
+        this.field1 = value1;
+    }
+}
+
+export class SimpleTestClass3 {
+    public field1: string;
+    public field2: Date = new Date();
 
     constructor(value1: string) {
         this.field1 = value1;

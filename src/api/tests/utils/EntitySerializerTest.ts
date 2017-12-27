@@ -1,6 +1,6 @@
 import * as chai from 'chai';
 import {EntitySerializer} from '../../entities/serializer/EntitySerializer';
-import {NestedTestClass, SimpleTestClass, SimpleTestClass2} from './SimpleTestClass';
+import {NestedTestClass, SimpleTestClass, SimpleTestClass2, SimpleTestClass3} from './SimpleTestClass';
 
 const assert = chai.assert;
 
@@ -18,11 +18,22 @@ describe.only('EntitySerializer', () => {
         const origin = new SimpleTestClass('value1');
         const serialized = eu.serialize(origin);
 
-        const deserialized = eu.deserialize(serialized);
+        const deserialized: SimpleTestClass = eu.deserialize(serialized);
 
         assert.isTrue(serialized.length > 0);
-        assert.deepEqual(origin, deserialized);
+        assert.deepEqual(deserialized, origin);
         assert.instanceOf(deserialized, SimpleTestClass);
+        assert.equal(deserialized.field1, 'value1');
+    });
+
+    it('Serialize forbiddent constructor should throw', () => {
+
+        const eu = new EntitySerializer(constructors);
+
+        const origin = new SimpleTestClass3('value1');
+        assert.throws(() => {
+            eu.serialize(origin);
+        });
     });
 
     it('Serialize then deserialize simple object with nested object should be correct', () => {
@@ -34,7 +45,7 @@ describe.only('EntitySerializer', () => {
 
         const serialized = eu.serialize(origin);
 
-        const deserialized = eu.deserialize(serialized);
+        const deserialized: SimpleTestClass = eu.deserialize(serialized);
 
         assert.isTrue(serialized.length > 0);
         assert.deepEqual(origin, deserialized);
@@ -55,7 +66,7 @@ describe.only('EntitySerializer', () => {
 
         const serialized = eu.serialize(origin);
 
-        const deserialized = eu.deserialize(serialized);
+        const deserialized: SimpleTestClass2 = eu.deserialize(serialized);
 
         assert.isTrue(serialized.length > 0);
         assert.deepEqual(origin, deserialized);
@@ -65,9 +76,9 @@ describe.only('EntitySerializer', () => {
         assert.instanceOf(deserialized.field2[1], NestedTestClass);
         assert.instanceOf(deserialized.field2[2], NestedTestClass);
 
-        assert.equal(deserialized.field2[0].field3, 'value2');
-        assert.equal(deserialized.field2[1].field3, 'value3');
-        assert.equal(deserialized.field2[2].field3, 'value4');
+        assert.equal('value2', deserialized.field2[0].field3);
+        assert.equal('value3', deserialized.field2[1].field3);
+        assert.equal('value4', deserialized.field2[2].field3);
     });
 
     it('Serialize then deserialize array of simple objects should be correct', () => {

@@ -18,8 +18,12 @@ constructors.EventType = EventType;
 constructors.GeoJsonLayer = GeoJsonLayer;
 constructors.GeocodingResult = GeocodingResult;
 
-const excludedConstructors = [
-    'String', 'Number',
+const ignoredConstructors = [
+    'String', 'Number', 'Boolean',
+];
+
+const forbiddenConstructors = [
+    'Date',
 ];
 
 const MARK = '$$constructor';
@@ -126,6 +130,10 @@ export class EntitySerializer {
 
     private markObject(data: any) {
 
+        if (this.isConstructorForbidden(data)) {
+            throw new Error(`Forbidden constructor: '${data.constructor.name}' in '${data}'`);
+        }
+
         // object is an array
         if (data.constructor === Array) {
             for (const elmt of data) {
@@ -134,7 +142,7 @@ export class EntitySerializer {
         }
 
         // object had a constructor not ignored
-        else if (excludedConstructors.indexOf(data.constructor.name) === -1) {
+        else if (this.isConstructorIgnored(data) === false) {
 
             try {
                 data[MARK] = data.constructor.name;
@@ -154,6 +162,7 @@ export class EntitySerializer {
 
         }
 
+
     }
 
     private unmarkObject(data: any) {
@@ -163,24 +172,37 @@ export class EntitySerializer {
         }
 
         for (let propertyName in data) {
-            const property = data[propertyName];
 
-            // object has a constructor
-            if (property[MARK]) {
-                this.unmarkObject(property);
-            }
+            if (data.hasOwnProperty(propertyName)) {
 
-            // object is an array
-            if (this.isArray(property)) {
-                for (const elmt of property) {
-                    this.unmarkObject(elmt);
+                const property = data[propertyName];
+
+                // object has a constructor
+                if (property[MARK]) {
+                    this.unmarkObject(property);
+                }
+
+                // object is an array
+                if (this.isArray(property)) {
+                    for (const elmt of property) {
+                        this.unmarkObject(elmt);
+                    }
                 }
             }
+
         }
     }
 
     private isArray(data: any) {
         return data.constructor === Array;
+    }
+
+    private isConstructorIgnored(data: any) {
+        return ignoredConstructors.indexOf(data.constructor.name) !== -1;
+    }
+
+    private isConstructorForbidden(data: any) {
+        return forbiddenConstructors.indexOf(data.constructor.name) !== -1;
     }
 }
 
