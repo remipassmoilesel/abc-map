@@ -5,6 +5,7 @@ import {NestedTestClass, SimpleTestClass, SimpleTestClass2, SimpleTestClass3} fr
 const assert = chai.assert;
 
 const constructors: any = {};
+constructors.Object = Object;
 constructors.SimpleTestClass = SimpleTestClass;
 constructors.SimpleTestClass2 = SimpleTestClass2;
 constructors.NestedTestClass = NestedTestClass;
