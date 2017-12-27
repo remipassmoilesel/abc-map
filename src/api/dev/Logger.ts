@@ -1,8 +1,5 @@
 import {Utils} from '../utils/Utils';
 
-// TODO: add default log level,
-// TODO: add ability to set level on logger
-
 export class LogLevel {
 
     public static DEBUG = new LogLevel('DEBUG', 0);
@@ -19,7 +16,8 @@ export class LogLevel {
     }
 }
 
-const defaultLogLevel = LogLevel.WARNING;
+// TODO: add environment variable for log level ?
+const defaultLogLevel = LogLevel.INFO;
 
 export class Logger {
 
@@ -50,13 +48,13 @@ export class Logger {
         this.print(message, LogLevel.ERROR, data);
     }
 
-    public setLevel (level: LogLevel){
+    public setLevel(level: LogLevel) {
         this.level = level;
     }
 
     private print(msg: string, level: LogLevel, data?: any) {
 
-        if (level.weight >= this.level.weight){
+        if (level.weight >= this.level.weight) {
             const stringifiedData = data ? Utils.safeStringify(data, 2) : '';
             const date = new Date().toString().substr(16, 8);
             console.log(`[${date}] [${level}] [${this.namespace}] ${msg} ${stringifiedData}`);

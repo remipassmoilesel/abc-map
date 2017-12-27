@@ -13,37 +13,37 @@ import {Shortcuts} from './utils/GlobalShortcuts';
 const logger = Logger.getLogger('api/main.ts');
 let databaseService: DatabaseService;
 
-export function initApplication(ipc: Ipc) {
+export async function initApplication(ipc: Ipc) {
 
     logger.info('Initialize main application');
 
     databaseService = new DatabaseService(ipc, 'abc-map');
     databaseService.startDatabase();
 
-    databaseService.connect()
+    try{
+        const db = await databaseService.connect();
 
-        .then((db) => {
-            logger.info('Connected to database');
+        logger.info('Connected to database');
 
-            const projectService = new ProjectService(ipc);
-            const mapService = new MapService(ipc);
+        const projectService = new ProjectService(ipc);
+        const mapService = new MapService(ipc);
 
-            const services: IServicesMap = {
-                project: projectService,
-                map: mapService,
-                db: databaseService,
-            };
+        const services: IServicesMap = {
+            db: databaseService,
+            map: mapService,
+            project: projectService,
+        };
 
-            const projectHandlers = new ProjectHandlers(ipc, services);
-            const mapHandlers = new MapHandlers(ipc, services);
-            const dbHandlers = new DatabaseHandlers(ipc, services);
+        const projectHandlers = new ProjectHandlers(ipc, services);
+        const mapHandlers = new MapHandlers(ipc, services);
+        const dbHandlers = new DatabaseHandlers(ipc, services);
 
-            projectHandlers.createNewProject();
-        })
-        .catch((e) => {
-            console.error('Error while connecting to database: ', e);
-            process.exit(1);
-        });
+        await projectHandlers.createNewProject();
+
+    } catch (e){
+        console.error('Error while connecting to database: ', e);
+        process.exit(1);
+    }
 
 }
 
