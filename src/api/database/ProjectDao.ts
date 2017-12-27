@@ -1,6 +1,9 @@
 import {Db, InsertOneWriteOpResult} from 'mongodb';
 import {Project} from '../entities/Project';
 import {AbstractDao} from './AbstractDao';
+import {Logger} from "../dev/Logger";
+
+const logger = Logger.getLogger('ProjectDao');
 
 export class ProjectDao extends AbstractDao {
 
@@ -21,16 +24,24 @@ export class ProjectDao extends AbstractDao {
 
     public async query(): Promise<Project | null> {
 
-        const rawProject: any[] = await this.db.collection(this.projectCollectionId).find({}).toArray();
-        if (rawProject.length > 1) {
-            throw new Error('Invalid number of projects: ' + rawProject.length);
-        }
+        try {
+            const rawProjects: any[] = await this.db.collection(this.projectCollectionId).find({}).toArray();
 
-        if (rawProject.length === 1) {
-            return this.entitySerializer.plainToClass(rawProject[0]);
-        } else {
+            if (rawProjects.length > 1) {
+                logger.warning(`Invalid number of project found: ${JSON.stringify(rawProjects)}`);
+            }
+
+            if (rawProjects.length > 0) {
+                return this.entitySerializer.plainToClass(rawProjects[0]);
+            } else {
+                return null;
+            }
+
+        } catch (e) {
+            logger.error('Error while fetching projects', e);
             return null;
         }
+
     }
 
     public update(project: Project) {

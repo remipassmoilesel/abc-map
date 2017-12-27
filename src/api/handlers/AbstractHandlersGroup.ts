@@ -3,11 +3,13 @@ import {ProjectService} from '../services/ProjectService';
 import {MapService} from '../services/MapService';
 import {DatabaseService} from '../services/DatabaseService';
 import {IpcSubject} from '../ipc/IpcSubject';
+import {GlobalShortcutsService} from "../utils/GlobalShortcutsService";
 
 export interface IServicesMap {
     project: ProjectService;
     map: MapService;
     db: DatabaseService;
+    shortcuts: GlobalShortcutsService;
 }
 
 export abstract class AbstractHandlersGroup {

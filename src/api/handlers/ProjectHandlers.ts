@@ -3,6 +3,7 @@ import {ProjectSubjects} from '../ipc/IpcSubject';
 import {IpcEvent} from '../ipc/IpcEvent';
 import {AbstractHandlersGroup, IServicesMap} from './AbstractHandlersGroup';
 import {Logger} from '../dev/Logger';
+import {Project} from "../entities/Project";
 
 const logger = Logger.getLogger('ProjectHandlers');
 
@@ -19,17 +20,21 @@ export class ProjectHandlers extends AbstractHandlersGroup {
         setInterval(this.persistProject.bind(this), 3 * 60 * 1000);
     }
 
-    public createNewProject() {
+    public async createNewProject() {
 
-        // create a new project
+        const projectDao = this.services.db.getProjectDao();
+
+        // TODO: do not drop previous project if not existing
+        const previousProject: Project | null = await projectDao.query();
+        if (previousProject) {
+            await projectDao.clear();
+        }
+
+        // create a new project with a default layer
         const project = this.services.project.newProject();
         this.services.project.addLayer(this.services.map.getDefaultWmsLayers()[0]);
 
-        // drop previous one in database, add new
-        // TODO: do not drop previous project if not existing
-        const projectDao = this.services.db.getProjectDao();
-        const previousProject = projectDao.query();
-        projectDao.insert(project);
+        await projectDao.insert(project);
     }
 
     public getCurrentProject() {

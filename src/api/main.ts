@@ -8,30 +8,32 @@ import {IServicesMap} from './handlers/AbstractHandlersGroup';
 import {ProjectHandlers} from './handlers/ProjectHandlers';
 import {MapHandlers} from './handlers/MapHandlers';
 import {DatabaseHandlers} from './handlers/DatabaseHandlers';
-import {Shortcuts} from './utils/GlobalShortcuts';
+import {GlobalShortcutsService} from './utils/GlobalShortcutsService';
 
 const logger = Logger.getLogger('api/main.ts');
 let databaseService: DatabaseService;
 
-export async function initApplication(ipc: Ipc) {
+export async function initApplication(ipc: Ipc): Promise<IServicesMap> {
 
     logger.info('Initialize main application');
 
     databaseService = new DatabaseService(ipc, 'abc-map');
     databaseService.startDatabase();
 
-    try{
+    try {
         const db = await databaseService.connect();
 
         logger.info('Connected to database');
 
         const projectService = new ProjectService(ipc);
         const mapService = new MapService(ipc);
+        const shortcutsService = new GlobalShortcutsService(ipc);
 
         const services: IServicesMap = {
             db: databaseService,
             map: mapService,
             project: projectService,
+            shortcuts: shortcutsService,
         };
 
         const projectHandlers = new ProjectHandlers(ipc, services);
@@ -40,22 +42,16 @@ export async function initApplication(ipc: Ipc) {
 
         await projectHandlers.createNewProject();
 
-    } catch (e){
+        return services;
+
+    } catch (e) {
         console.error('Error while connecting to database: ', e);
         process.exit(1);
     }
 
 }
 
-export function closeApplication(): Promise<any> {
+export async function stopApplication(): Promise<any> {
     logger.info('Closing main application');
-
-    return new Promise((resolve, reject) => {
-        databaseService.stopDatabase();
-        resolve();
-    });
-}
-
-export function initShortcuts(ipc: Ipc) {
-    const shortcuts = new Shortcuts(ipc);
+    await databaseService.stopDatabase();
 }

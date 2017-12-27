@@ -8,7 +8,7 @@ import {GeoJsonLayer} from '../../entities/layers/GeoJsonLayer';
 
 const assert = chai.assert;
 
-describe.only('ProjectDao', () => {
+describe('ProjectDao', () => {
 
     let db: Db;
 

@@ -7,14 +7,14 @@ const logger = Logger.getLogger('Shortcuts');
 
 interface IShortcutDescription {
     keys: string;
-    action: Function;
+    action: () => void;
 }
 
 /**
  * Here we can define shortcuts that are available everywhere when program is up,
  * Even if program is reduced.
  */
-export class Shortcuts {
+export class GlobalShortcutsService {
     private ipc: Ipc;
 
     constructor(ipc: Ipc) {

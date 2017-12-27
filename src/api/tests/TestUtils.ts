@@ -15,9 +15,9 @@ export class TestUtils {
     public static getStubbedIpc() {
         const ipc = new Ipc();
         return {
+            ipc,
             listenStub: sinon.stub(ipc, 'listen'),
             sendStub: sinon.stub(ipc, 'send'),
-            ipc,
         };
     }
 

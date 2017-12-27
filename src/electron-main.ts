@@ -2,12 +2,13 @@ import {app, BrowserWindow, globalShortcut} from 'electron';
 import * as url from 'url';
 import {ElectronUtilities} from './api/dev/ElectronDevUtilities';
 import {Logger} from './api/dev/Logger';
-import {closeApplication, initApplication, initShortcuts} from './api/main';
+import {initApplication, stopApplication} from './api/main';
 import {Ipc} from './api/ipc/Ipc';
+import * as sourceMapSupport from 'source-map-support';
+import * as paths from '../config/paths';
 
-require('source-map-support').install();
+sourceMapSupport.install();
 
-const paths = require('../config/paths');
 const logger = Logger.getLogger('electron-main.ts');
 
 logger.info('');
@@ -23,15 +24,15 @@ logger.info('');
 // be closed automatically when the JavaScript object is garbage collected.
 let win: BrowserWindow | null;
 
-function createWindow() {
+async function createWindow() {
 
     // Create the browser window.
     win = new BrowserWindow({
-        width: 1024,
         height: 768,
         webPreferences: {
             nodeIntegration: true,
         },
+        width: 1024,
     });
     win.setMenu(null);
     win.maximize();
@@ -64,8 +65,7 @@ function createWindow() {
     // init api application
     const ipc = new Ipc(win.webContents);
 
-    initApplication(ipc);
-    initShortcuts(ipc);
+    await initApplication(ipc);
 
 }
 
@@ -75,19 +75,18 @@ function createWindow() {
 app.on('ready', createWindow);
 
 // Quit when all windows are closed.
-app.on('window-all-closed', () => {
+app.on('window-all-closed', async () => {
 
     logger.info('All windows are closed, shutting down app ...');
 
-    closeApplication()
-        .then(() => {
-            logger.info('Database closed, quitting app');
-            app.exit(0);
-        })
-        .catch((error) => {
-            logger.error('Error while closing app, quitting app. Error: ', error);
-            app.exit(1);
-        });
+    try {
+        await stopApplication();
+        logger.info('Database closed, quitting app');
+        app.exit(0);
+    } catch (error) {
+        logger.error('Error while closing app, quitting app. Error: ', error);
+        app.exit(1);
+    }
 
 });
 
