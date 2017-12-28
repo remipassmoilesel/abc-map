@@ -7,10 +7,9 @@ import {IServicesMap} from '../../handlers/AbstractHandlersGroup';
 import {ProjectHandlers} from '../../handlers/ProjectHandlers';
 import {Project} from '../../entities/Project';
 
-const logger = Logger.getLogger('MapHandlersTest');
 const assert = chai.assert;
 
-describe.only('ProjectHandlers', function () {
+describe('ProjectHandlers', function () {
 
     let ipcStub;
     let services: IServicesMap;

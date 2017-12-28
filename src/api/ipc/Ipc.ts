@@ -65,7 +65,10 @@ export class Ipc {
             const response = handler(event);
             if (response) {
                 return await this.serializeIpcMessage(response);
-            } else {
+            }
+
+            // no response returned
+            else {
                 return {serializedData: '{}'};
             }
         });
