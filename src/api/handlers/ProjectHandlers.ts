@@ -34,7 +34,7 @@ export class ProjectHandlers extends AbstractHandlersGroup {
         }
 
         // create a new project with a default layer
-        const project = await this.services.project.newProject();
+        const project: Project = await this.services.project.newProject();
         await this.services.project.addLayer(this.services.map.getDefaultWmsLayers()[0]);
 
         await projectDao.insert(project);

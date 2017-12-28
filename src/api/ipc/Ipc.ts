@@ -2,6 +2,10 @@ import promiseIpc from 'electron-promise-ipc';
 import {IpcSubject} from './IpcSubject';
 import {IpcEvent} from './IpcEvent';
 import {EntitySerializerFactory} from '../entities/serializer/EntitySerializerFactory';
+import {Logger, LogLevel} from '../dev/Logger';
+
+const logger = Logger.getLogger('Ipc');
+logger.setLevel(LogLevel.WARNING);
 
 const eu = EntitySerializerFactory.newInstance();
 
@@ -30,6 +34,7 @@ export class Ipc {
      * @param webContent
      */
     constructor(webContent?: any) {
+        logger.debug('New instance created');
         this.webContent = webContent;
     }
 
@@ -40,13 +45,19 @@ export class Ipc {
      * @param {IpcHandler} handler
      */
     public listen(subject: IpcSubject, handler: IpcHandler): void {
-        promiseIpc.on(subject.id, (message: IpcInternalMessage): IpcInternalMessage => {
-            this.throwIfMessageIsInvalid(message);
+
+        logger.debug(`Listening: subject=${JSON.stringify(subject)} handler=${JSON.stringify(handler)}`);
+
+        promiseIpc.on(subject.id, async (message: IpcInternalMessage): Promise<IpcInternalMessage> => {
+
+            logger.debug(`Message received: subject=${JSON.stringify(subject)} event=${JSON.stringify(message)}`);
+
+            this.throwIfMessageIsInvalid(subject, message);
             const event = eu.deserializeIpcEvent(message.serializedData);
 
             const response = handler(event);
             if (response) {
-                return this.serializeResponse(response);
+                return await this.serializeIpcMessage(response);
             } else {
                 return {serializedData: '{}'};
             }
@@ -57,43 +68,44 @@ export class Ipc {
 
         const serialized: IpcInternalMessage = {serializedData: eu.serialize(event)};
 
+        logger.debug(`Send message: subject=${JSON.stringify(subject)} event=${JSON.stringify(event)}`);
+
         // send event from main process
         if (this.webContent) {
             return promiseIpc.send(subject.id, this.webContent, serialized)
                 .then((message: IpcInternalMessage) => {
-                    return this.deserializeIpcMessage(message);
+                    return this.deserializeIpcMessage(subject, message);
                 });
         }
         // send event from renderer process
         else {
             return promiseIpc.send(subject.id, serialized)
                 .then((message: IpcInternalMessage) => {
-                    return this.deserializeIpcMessage(message);
+                    return this.deserializeIpcMessage(subject, message);
                 });
         }
     }
 
-    private deserializeIpcMessage(message: IpcInternalMessage) {
-        this.throwIfMessageIsInvalid(message);
+    private deserializeIpcMessage(subject: IpcSubject, message: IpcInternalMessage) {
+        this.throwIfMessageIsInvalid(subject, message);
         return eu.deserialize(message.serializedData);
     }
 
-    private serializeResponse(data: any): IpcInternalMessage {
+    private async serializeIpcMessage(data: any): Promise<IpcInternalMessage> {
 
         // response is a promise
         if (data.then) {
-            return data.then((result) => {
-                return {serializedData: eu.serialize(result)};
-            });
+            const response = await data;
+            return {serializedData: eu.serialize(response || {})};
         } else {
-            return {serializedData: eu.serialize(data)};
+            return {serializedData: eu.serialize(data || {})};
         }
 
     }
 
-    private throwIfMessageIsInvalid(message: IpcInternalMessage) {
+    private throwIfMessageIsInvalid(subject: IpcSubject, message: IpcInternalMessage) {
         if (!message || !message.serializedData) {
-            throw new Error(`Invalid message: ${JSON.stringify(message)}`);
+            throw new Error(`Invalid message: ${JSON.stringify(message)} on subject: ${JSON.stringify(subject)}`);
         }
     }
 }
