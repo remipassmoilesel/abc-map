@@ -93,7 +93,7 @@ export class Ipc {
 
     private throwIfMessageIsInvalid(message: IpcInternalMessage) {
         if (!message || !message.serializedData) {
-            throw new Error(`Invalid message: ${message}`);
+            throw new Error(`Invalid message: ${JSON.stringify(message)}`);
         }
     }
 }

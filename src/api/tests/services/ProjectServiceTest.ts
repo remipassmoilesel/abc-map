@@ -14,8 +14,8 @@ describe('ProjectService', () => {
         const {ipc, sendStub} = TestUtils.getStubbedIpc();
         const ps = new ProjectService(ipc);
 
-        assert.doesNotThrow(() => {
-            ps.newProject();
+        assert.doesNotThrow(async () => {
+            await ps.newProject();
         });
 
         assert.lengthOf(sendStub.getCalls(), 1);

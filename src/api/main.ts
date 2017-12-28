@@ -4,20 +4,23 @@ import {Ipc} from './ipc/Ipc';
 import {Logger} from './dev/Logger';
 import {ProjectService} from './services/ProjectService';
 import {DatabaseService} from './services/DatabaseService';
-import {IServicesMap} from './handlers/AbstractHandlersGroup';
+import {AbstractHandlersGroup, IHandlersMap, IServicesMap} from './handlers/AbstractHandlersGroup';
 import {ProjectHandlers} from './handlers/ProjectHandlers';
 import {MapHandlers} from './handlers/MapHandlers';
 import {DatabaseHandlers} from './handlers/DatabaseHandlers';
 import {GlobalShortcutsService} from './utils/GlobalShortcutsService';
+import {AbstractService} from './services/AbstractService';
 
 const logger = Logger.getLogger('api/main.ts');
-let databaseService: DatabaseService;
+
+let services: IServicesMap;
+let handlers: IHandlersMap;
 
 export async function initApplication(ipc: Ipc): Promise<IServicesMap> {
 
     logger.info('Initialize main application');
 
-    databaseService = new DatabaseService(ipc, 'abc-map');
+    const databaseService = new DatabaseService(ipc, 'abc-map');
     databaseService.startDatabase();
 
     try {
@@ -29,7 +32,7 @@ export async function initApplication(ipc: Ipc): Promise<IServicesMap> {
         const mapService = new MapService(ipc);
         const shortcutsService = new GlobalShortcutsService(ipc);
 
-        const services: IServicesMap = {
+        services = {
             db: databaseService,
             map: mapService,
             project: projectService,
@@ -38,7 +41,13 @@ export async function initApplication(ipc: Ipc): Promise<IServicesMap> {
 
         const projectHandlers = new ProjectHandlers(ipc, services);
         const mapHandlers = new MapHandlers(ipc, services);
-        const dbHandlers = new DatabaseHandlers(ipc, services);
+        const databaseHandlers = new DatabaseHandlers(ipc, services);
+
+        handlers = {
+            db: databaseHandlers,
+            map: mapHandlers,
+            project: projectHandlers,
+        };
 
         await projectHandlers.createNewProject();
 
@@ -53,5 +62,21 @@ export async function initApplication(ipc: Ipc): Promise<IServicesMap> {
 
 export async function stopApplication(): Promise<any> {
     logger.info('Closing main application');
-    await databaseService.stopDatabase();
+
+    logger.info('Stopping handlers');
+    for (const propName in handlers) {
+        if (handlers.hasOwnProperty(propName)) {
+            const handlerGroup: AbstractHandlersGroup = handlers[propName];
+            await handlerGroup.onAppExit();
+        }
+    }
+
+    logger.info('Stopping services');
+    for (const propName in services) {
+        if (services.hasOwnProperty(propName)) {
+            const service: AbstractService = services[propName];
+            await service.onAppExit();
+        }
+    }
+
 }

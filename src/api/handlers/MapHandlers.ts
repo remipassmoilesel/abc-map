@@ -55,4 +55,9 @@ export class MapHandlers extends AbstractHandlersGroup {
     public geocode(ev: IpcEvent): Promise<GeocodingResult[]> {
         return this.services.map.geocode(ev.data);
     }
+
+    public onAppExit(): Promise<void> {
+        return Promise.resolve();
+    }
+
 }

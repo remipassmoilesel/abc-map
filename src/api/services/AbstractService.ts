@@ -7,4 +7,5 @@ export abstract class AbstractService {
         this.ipc = ipc;
     }
 
+    public abstract onAppExit(): Promise<void>;
 }

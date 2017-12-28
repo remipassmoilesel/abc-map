@@ -3,11 +3,13 @@ import {ProjectSubjects} from '../ipc/IpcSubject';
 import {IpcEvent} from '../ipc/IpcEvent';
 import {AbstractHandlersGroup, IServicesMap} from './AbstractHandlersGroup';
 import {Logger} from '../dev/Logger';
-import {Project} from "../entities/Project";
+import {Project} from '../entities/Project';
 
 const logger = Logger.getLogger('ProjectHandlers');
 
 export class ProjectHandlers extends AbstractHandlersGroup {
+
+    private saveInterval: number;
 
     constructor(ipc: Ipc, services: IServicesMap) {
         super(ipc, services);
@@ -17,7 +19,8 @@ export class ProjectHandlers extends AbstractHandlersGroup {
         this.registerHandler(ProjectSubjects.ADD_LAYER, this.addLayer.bind(this));
         this.registerHandler(ProjectSubjects.DELETE_LAYERS, this.deleteLayer.bind(this));
 
-        setInterval(this.persistProject.bind(this), 3 * 60 * 1000);
+        // TODO: clear interval when stop application
+        this.saveInterval = setInterval(this.persistProject.bind(this), 3 * 60 * 1000);
     }
 
     public async createNewProject() {
@@ -31,8 +34,8 @@ export class ProjectHandlers extends AbstractHandlersGroup {
         }
 
         // create a new project with a default layer
-        const project = this.services.project.newProject();
-        this.services.project.addLayer(this.services.map.getDefaultWmsLayers()[0]);
+        const project = await this.services.project.newProject();
+        await this.services.project.addLayer(this.services.map.getDefaultWmsLayers()[0]);
 
         await projectDao.insert(project);
     }
@@ -60,5 +63,9 @@ export class ProjectHandlers extends AbstractHandlersGroup {
         projectDao.update(project);
     }
 
+    public onAppExit(): Promise<void> {
+        clearInterval(this.saveInterval);
+        return Promise.resolve();
+    }
 
 }

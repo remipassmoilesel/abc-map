@@ -42,6 +42,10 @@ export class DatabaseHandlers extends AbstractHandlersGroup {
         });
     }
 
+    public onAppExit(): Promise<void> {
+        return Promise.resolve();
+    }
+
     /**
      * We need to delete id of entities because we can not import MongoDB ObjectID in browser
      * TODO: find a way to serialize ids
@@ -54,8 +58,7 @@ export class DatabaseHandlers extends AbstractHandlersGroup {
             .then((data: any[]) => {
 
                 const res = [];
-                for (let i = 0; i < data.length; i++) {
-                    const entity = data[i];
+                for (const entity of data) {
                     this.deleteIdForEntity(entity);
                     res.push(entity);
                 }

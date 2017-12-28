@@ -79,6 +79,11 @@ export class DatabaseService extends AbstractService {
         return this.projectDao;
     }
 
+    public onAppExit(): Promise<void> {
+        this.stopDatabase();
+        return Promise.resolve();
+    }
+
     private spawnDatabaseProcess() {
         this.child = exec('./mongodb/bin/mongod -f config/mongodb-config.yaml', {cwd: projectRoot});
         this.child.on('exit', this.handleDatabaseProcessExit.bind(this));

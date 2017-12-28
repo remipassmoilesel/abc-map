@@ -57,7 +57,7 @@ export class Logger {
         if (level.weight >= this.level.weight) {
             const stringifiedData = data ? Utils.safeStringify(data, 2) : '';
             const date = new Date().toString().substr(16, 8);
-            console.log(`[${date}] [${level}] [${this.namespace}] ${msg} ${stringifiedData}`);
+            console.log(`[${date}] [${level.level}] [${this.namespace}] ${msg} ${stringifiedData}`);
         }
     }
 

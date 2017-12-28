@@ -54,6 +54,10 @@ export class MapService extends AbstractService {
         return Promise.all(promises);
     }
 
+    public onAppExit(): Promise<void> {
+        return Promise.resolve();
+    }
+
     private sendMapEvent(data: IpcEvent) {
         return this.ipc.send(IpcEventBus.MAP, data);
     }
