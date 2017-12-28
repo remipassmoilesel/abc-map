@@ -10,7 +10,7 @@ export class Clients {
     private _shortcuts: GlobalShortcutsClient;
 
     constructor() {
-        this.ipc = new Ipc();
+        this.ipc = Ipc.newInstance();
         this._map = new MapClient(this.ipc);
         this._project = new ProjectClient(this.ipc);
         this._shortcuts = new GlobalShortcutsClient(this.ipc);

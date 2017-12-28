@@ -13,7 +13,7 @@ const logger = Logger.getLogger('TestUtils');
 export class TestUtils {
 
     public static getStubbedIpc() {
-        const ipc = new Ipc();
+        const ipc = Ipc.newInstance();
         return {
             ipc,
             listenStub: sinon.stub(ipc, 'listen'),

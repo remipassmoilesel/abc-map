@@ -63,7 +63,7 @@ async function createWindow() {
     });
 
     // init api application
-    const ipc = new Ipc(win.webContents);
+    const ipc = Ipc.newInstance(win.webContents);
 
     await initApplication(ipc);
 

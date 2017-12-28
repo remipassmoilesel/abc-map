@@ -25,7 +25,13 @@ interface IpcInternalMessage {
  * and renderer process.
  */
 export class Ipc {
+
+    public static newInstance(webContent?: any): Ipc {
+        return new Ipc(promiseIpc, webContent);
+    }
+
     private webContent: any;
+    private promiseIpc: any;
 
     /**
      * Web content is mandatory if you want to use IPC from
@@ -33,9 +39,10 @@ export class Ipc {
      *
      * @param webContent
      */
-    constructor(webContent?: any) {
+    constructor(promiseIpc: any, webContent?: any) {
         logger.debug('New instance created');
         this.webContent = webContent;
+        this.promiseIpc = promiseIpc;
     }
 
     /**
@@ -48,7 +55,7 @@ export class Ipc {
 
         logger.debug(`Listening: subject=${JSON.stringify(subject)} handler=${JSON.stringify(handler)}`);
 
-        promiseIpc.on(subject.id, async (message: IpcInternalMessage): Promise<IpcInternalMessage> => {
+        this.promiseIpc.on(subject.id, async (message: IpcInternalMessage): Promise<IpcInternalMessage> => {
 
             logger.debug(`Message received: subject=${JSON.stringify(subject)} event=${JSON.stringify(message)}`);
 
@@ -72,14 +79,14 @@ export class Ipc {
 
         // send event from main process
         if (this.webContent) {
-            return promiseIpc.send(subject.id, this.webContent, serialized)
+            return this.promiseIpc.send(subject.id, this.webContent, serialized)
                 .then((message: IpcInternalMessage) => {
                     return this.deserializeIpcMessage(subject, message);
                 });
         }
         // send event from renderer process
         else {
-            return promiseIpc.send(subject.id, serialized)
+            return this.promiseIpc.send(subject.id, serialized)
                 .then((message: IpcInternalMessage) => {
                     return this.deserializeIpcMessage(subject, message);
                 });

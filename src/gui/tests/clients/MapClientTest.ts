@@ -4,7 +4,7 @@ import {Ipc} from '../../../api/ipc/Ipc';
 import {AbstractMapLayer} from '../../../api/entities/layers/AbstractMapLayer';
 
 export class MapClientTest extends AbstractTest {
-    public name: string = 'MapCLientTest';
+    public name: string = 'MapClientTest';
 
     public mapClient: MapClient;
 
@@ -15,7 +15,7 @@ export class MapClientTest extends AbstractTest {
     }
 
     public before() {
-        this.mapClient = new MapClient(new Ipc());
+        this.mapClient = new MapClient(Ipc.newInstance());
     }
 
     public getDefaultTileLayerShouldWork() {
