@@ -1,8 +1,6 @@
-import * as _ from 'lodash';
+import * as $ from 'jquery';
 import Component from 'vue-class-component';
 import {Clients} from '../../lib/clients/Clients';
-import {uxSearchableComponents} from '../components';
-import {IUxSearchResult} from '../UiSearchableComponents';
 import {UiShortcuts} from '../../lib/UiShortcuts';
 import {AbstractUiComponent} from '../AbstractUiComponent';
 import {MainStore} from '../../lib/store/store';
@@ -23,12 +21,17 @@ export class WarningAreaComponent extends AbstractUiComponent {
     public $store: MainStore;
     public storeWrapper: StoreWrapper;
 
+    public warningMessage: string = '';
+
     constructor() {
         super();
     }
 
     public mounted() {
-
+        $.get('http://abc-map.fr')
+            .catch((error) => {
+                this.warningMessage = 'You are not connected to Internet, many features will be unavailable.';
+            });
     }
 
 }

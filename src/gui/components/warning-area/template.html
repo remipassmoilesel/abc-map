@@ -1,3 +1,6 @@
 <div class="warning-area-component">
-
+    <div class="warning-message" v-if="warningMessage.length >0">
+        <span class="el-icon-warning"></span>
+        {{ warningMessage }}
+    </div>
 </div>
