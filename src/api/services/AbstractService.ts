@@ -4,7 +4,7 @@ import {IServicesMap} from '../handlers/AbstractHandlersGroup';
 export abstract class AbstractService {
 
     protected ipc: Ipc;
-    protected servicesMap: IServicesMap;
+    protected services: IServicesMap;
 
     constructor(ipc: Ipc) {
         this.ipc = ipc;
@@ -13,6 +13,6 @@ export abstract class AbstractService {
     public abstract onAppExit(): Promise<void>;
 
     public setServiceMap(services: IServicesMap) {
-        this.servicesMap = services;
+        this.services = services;
     }
 }

@@ -10,6 +10,7 @@ import {MapHandlers} from './handlers/MapHandlers';
 import {DatabaseHandlers} from './handlers/DatabaseHandlers';
 import {GlobalShortcutsService} from './utils/GlobalShortcutsService';
 import {AbstractService} from './services/AbstractService';
+import {ElectronUtilities} from './dev/ElectronDevUtilities';
 
 const logger = Logger.getLogger('api/main.ts');
 
@@ -59,10 +60,15 @@ export async function initApplication(ipc: Ipc): Promise<IServicesMap> {
 
         await projectHandlers.createNewProject();
 
+        if (ElectronUtilities.isDevMode()) {
+            logger.info('Setting up dev project.');
+            await projectHandlers.setupDevProject();
+        }
+
         return services;
 
     } catch (e) {
-        console.error('Error while connecting to database: ', e);
+        logger.error('Error while connecting to database: ', e);
         process.exit(1);
     }
 

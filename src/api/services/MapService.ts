@@ -5,11 +5,14 @@ import {TileLayer} from '../entities/layers/TileLayer';
 import {AbstractService} from './AbstractService';
 import {Ipc} from '../ipc/Ipc';
 import {IpcEvent} from '../ipc/IpcEvent';
-import {IpcEventBus, IpcSubject, MapSubjects} from '../ipc/IpcSubject';
+import {IpcEventBus} from '../ipc/IpcSubject';
 import {DataImporterFinder} from '../import/DataImporterFinder';
 import {NominatimGeocoder} from '../geocoder/NominatimGeocoder';
 import {GeocodingResult} from '../entities/GeocodingResult';
 import {IImportedFile} from '../import/AbstractDataImporter';
+import {GeoJsonLayer} from '../entities/layers/GeoJsonLayer';
+import * as path from 'path';
+import {AbstractMapLayer} from '../entities/layers/AbstractMapLayer';
 
 const logger = Logger.getLogger('MapService');
 
@@ -52,6 +55,30 @@ export class MapService extends AbstractService {
         });
 
         return Promise.all(promises);
+    }
+
+
+    public async importFilesAsLayers(filePaths: string[]) {
+
+        const importedFiles = await this.services.map.importFiles(filePaths);
+
+        const layers: AbstractMapLayer[] = [];
+        const dao = this.services.db.getGeoJsonDao();
+
+        try {
+            for (const f of importedFiles) {
+                const layer = new GeoJsonLayer();
+                layer.name = path.basename(f.filepath);
+                await dao.saveLayer(layer, f.data.features);
+                layers.push(layer);
+            }
+
+            await this.services.project.addLayers(layers);
+
+        } catch (e) {
+            logger.error(`Error while importing data: ${e}`);
+            throw e;
+        }
     }
 
     public onAppExit(): Promise<void> {

@@ -4,6 +4,7 @@ import {IpcEvent} from '../ipc/IpcEvent';
 import {AbstractHandlersGroup, IServicesMap} from './AbstractHandlersGroup';
 import {Logger} from '../dev/Logger';
 import {Project} from '../entities/Project';
+import {TestData} from '../tests/TestData';
 
 const logger = Logger.getLogger('ProjectHandlers');
 
@@ -38,6 +39,14 @@ export class ProjectHandlers extends AbstractHandlersGroup {
         await this.services.project.addLayer(this.services.map.getDefaultWmsLayers()[0]);
 
         await projectDao.insert(project);
+    }
+
+    public async setupDevProject() {
+        await this.services.map.importFilesAsLayers([
+            TestData.KML_GRENOBLE_SHAPES,
+            TestData.KML_GRENOBLE_SHAPES_FILTER1,
+        ]);
+
     }
 
     public getCurrentProject() {

@@ -1,4 +1,5 @@
 import * as _ from 'lodash';
+import * as path from 'path';
 import {IProjectCreationOptions, Project} from '../entities/Project';
 import {Logger} from '../dev/Logger';
 import {Utils} from '../utils/Utils';
@@ -8,6 +9,7 @@ import {EventType} from '../ipc/IpcEventTypes';
 import {IpcEvent} from '../ipc/IpcEvent';
 import {AbstractService} from './AbstractService';
 import {AbstractMapLayer} from '../entities/layers/AbstractMapLayer';
+import {GeoJsonLayer} from '../entities/layers/GeoJsonLayer';
 
 const logger = Logger.getLogger('ProjectService');
 

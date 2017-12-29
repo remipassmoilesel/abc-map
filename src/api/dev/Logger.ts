@@ -1,5 +1,3 @@
-import {Utils} from '../utils/Utils';
-
 export class LogLevel {
 
     public static DEBUG = new LogLevel('DEBUG', 0);
@@ -55,9 +53,9 @@ export class Logger {
     private print(msg: string, level: LogLevel, data?: any) {
 
         if (level.weight >= this.level.weight) {
-            const stringifiedData = data ? Utils.safeStringify(data, 2) : '';
+            // const stringifiedData = data ? Utils.safeStringify(data, 2) : '';
             const date = new Date().toString().substr(16, 8);
-            console.log(`[${date}] [${level.level}] [${this.namespace}] ${msg} ${stringifiedData}`);
+            console.log(`[${date}] [${level.level}] [${this.namespace}] ${msg}`, data);
         }
     }
 
