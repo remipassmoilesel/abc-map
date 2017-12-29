@@ -16,7 +16,7 @@ export declare type IpcHandler = (event: IpcEvent) => any;
  * This kind of message allow to restore true objects
  * (with class types) when receiving them
  */
-interface IpcInternalMessage {
+export interface IpcInternalMessage {
     serializedData: string;
 }
 
@@ -103,6 +103,8 @@ export class Ipc {
     }
 
     private async serializeIpcMessage(data: any): Promise<IpcInternalMessage> {
+
+        // all responses, even undefined, should return at least an empty object
 
         // response is a promise
         if (data.then) {

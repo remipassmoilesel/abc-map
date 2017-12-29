@@ -1,6 +1,6 @@
 import * as chai from 'chai';
 import * as sinon from 'sinon';
-import {Ipc} from '../../ipc/Ipc';
+import {Ipc, IpcInternalMessage} from '../../ipc/Ipc';
 import promiseIpc from 'electron-promise-ipc';
 import {IpcSubject} from '../../ipc/IpcSubject';
 import {IpcEvent} from '../../ipc/IpcEvent';
@@ -11,6 +11,7 @@ describe.only('IpcTests', () => {
 
     const testSubject = new IpcSubject('test-subject');
     const promiseIpcOnStub = sinon.stub(promiseIpc, 'on');
+    const promiseIpcSendStub = sinon.stub(promiseIpc, 'send');
 
     it('Responses returned from handler should be serialized', async () => {
 
@@ -27,8 +28,8 @@ describe.only('IpcTests', () => {
 
         assert.deepEqual(subject, 'test-subject');
 
-        const response = await handler({serializedData: '{"data": "test-arg"}'});
-        assert.deepEqual(response, {serializedData: '"test-response"'});
+        const response = await handler({serializedData: '{"data": "test-arg"}'} as IpcInternalMessage);
+        assert.deepEqual(response, {serializedData: '"test-response"'} as IpcInternalMessage);
 
     });
 
@@ -50,8 +51,8 @@ describe.only('IpcTests', () => {
 
         assert.deepEqual(subject, 'test-subject');
 
-        const response = await handler({serializedData: '{"data": "test-arg"}'});
-        assert.deepEqual(response, {serializedData: '"test-response"'});
+        const response = await handler({serializedData: '{"data": "test-arg"}'} as IpcInternalMessage);
+        assert.deepEqual(response, {serializedData: '"test-response"'} as IpcInternalMessage);
 
     });
 
@@ -71,8 +72,26 @@ describe.only('IpcTests', () => {
 
         assert.deepEqual(subject, 'test-subject');
 
-        const response = await handler({serializedData: '{"data": "test-arg"}'});
-        assert.deepEqual(response, {serializedData: '{}'});
+        const response = await handler({serializedData: '{"data": "test-arg"}'} as IpcInternalMessage);
+        assert.deepEqual(response, {serializedData: '{}'} as IpcInternalMessage);
+
+    });
+
+    it('On send, should serialize emitted object and response', async () => {
+
+        promiseIpcSendStub.resetBehavior();
+        promiseIpcSendStub.resetHistory();
+
+        promiseIpcSendStub.onFirstCall()
+            .returns(Promise.resolve({serializedData: '{"data":"test-response"}'} as IpcInternalMessage));
+
+        const ipc = new Ipc(promiseIpc);
+        const response = await ipc.send(testSubject, {data: 'test-data'} as IpcEvent);
+
+        assert.deepEqual(promiseIpcSendStub.getCall(0).args[0], testSubject.id);
+        assert.deepEqual(promiseIpcSendStub.getCall(0).args[1],
+            {serializedData: '{"data":"test-data","#constructor":"Object"}'});
+        assert.deepEqual(response, {data: 'test-response'} as IpcEvent);
 
     });
 
