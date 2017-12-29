@@ -12,6 +12,7 @@ import {AddLayerComponent} from './add-layer/AddLayerComponent';
 import {UiSearchableComponents} from './UiSearchableComponents';
 import {ActionDialogResultComponent} from './action-dialog-result/ActionDialogResultComponent';
 import {AbstractUiComponent} from './AbstractUiComponent';
+import {WarningAreaComponent} from './warning-area/WarningAreaComponent';
 import * as _ from 'lodash';
 import * as assert from 'assert';
 
@@ -29,6 +30,7 @@ const components: AbstractUiComponent [] = [
     new GeoSearchComponent(),
     new ActionDialogComponent(),
     new ActionDialogResultComponent(),
+    new WarningAreaComponent(),
 ];
 
 const checkInstance = (inst: AbstractUiComponent) => {
