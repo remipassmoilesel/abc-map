@@ -7,7 +7,7 @@ import {IpcEvent} from '../../ipc/IpcEvent';
 
 const assert = chai.assert;
 
-describe.only('IpcTests', () => {
+describe('IpcTest', () => {
 
     const testSubject = new IpcSubject('test-subject');
     const promiseIpcOnStub = sinon.stub(promiseIpc, 'on');
@@ -77,7 +77,7 @@ describe.only('IpcTests', () => {
 
     });
 
-    it('On send, should serialize emitted object and response', async () => {
+    it('On message sent, should serialize emitted object and response', async () => {
 
         promiseIpcSendStub.resetBehavior();
         promiseIpcSendStub.resetHistory();
@@ -92,6 +92,22 @@ describe.only('IpcTests', () => {
         assert.deepEqual(promiseIpcSendStub.getCall(0).args[1],
             {serializedData: '{"data":"test-data","#constructor":"Object"}'});
         assert.deepEqual(response, {data: 'test-response'} as IpcEvent);
+
+    });
+
+    it('On message sent, should serialize emitted object even if message is empty', async () => {
+
+        promiseIpcSendStub.resetBehavior();
+        promiseIpcSendStub.resetHistory();
+
+        promiseIpcSendStub.onFirstCall().returns(Promise.resolve());
+
+        const ipc = new Ipc(promiseIpc);
+        const response = await ipc.send(testSubject);
+
+        assert.deepEqual(promiseIpcSendStub.getCall(0).args[0], testSubject.id);
+        assert.deepEqual(promiseIpcSendStub.getCall(0).args[1], {serializedData: '{"#constructor":"Object"}'});
+        assert.deepEqual(response, {} as IpcEvent);
 
     });
 

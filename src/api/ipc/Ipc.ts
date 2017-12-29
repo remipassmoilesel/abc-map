@@ -60,8 +60,7 @@ export class Ipc {
 
             logger.debug(`Message received: subject=${JSON.stringify(subject)} event=${JSON.stringify(message)}`);
 
-            this.throwIfMessageIsInvalid(subject, message);
-            const event = eu.deserializeIpcEvent(message.serializedData);
+            const event = eu.deserializeIpcEvent(message.serializedData || '{}');
 
             const response = handler(event);
             if (response) {
@@ -77,7 +76,7 @@ export class Ipc {
 
     public send(subject: IpcSubject, event: IpcEvent = {}): Promise<any> {
 
-        const serialized: IpcInternalMessage = {serializedData: eu.serialize(event)};
+        const serialized: IpcInternalMessage = {serializedData: eu.serialize(event || {})};
 
         logger.debug(`Send message: subject=${JSON.stringify(subject)} event=${JSON.stringify(event)}`);
 
@@ -85,21 +84,20 @@ export class Ipc {
         if (this.webContent) {
             return this.promiseIpc.send(subject.id, this.webContent, serialized)
                 .then((message: IpcInternalMessage) => {
-                    return this.deserializeIpcMessage(subject, message);
+                    return this.deserializeIpcMessage(message);
                 });
         }
         // send event from renderer process
         else {
             return this.promiseIpc.send(subject.id, serialized)
                 .then((message: IpcInternalMessage) => {
-                    return this.deserializeIpcMessage(subject, message);
+                    return this.deserializeIpcMessage(message);
                 });
         }
     }
 
-    private deserializeIpcMessage(subject: IpcSubject, message: IpcInternalMessage) {
-        this.throwIfMessageIsInvalid(subject, message);
-        return eu.deserialize(message.serializedData);
+    private deserializeIpcMessage(message: IpcInternalMessage) {
+        return eu.deserialize(message && message.serializedData || '{}');
     }
 
     private async serializeIpcMessage(data: any): Promise<IpcInternalMessage> {
@@ -116,10 +114,5 @@ export class Ipc {
 
     }
 
-    private throwIfMessageIsInvalid(subject: IpcSubject, message: IpcInternalMessage) {
-        if (!message || !message.serializedData) {
-            throw new Error(`Invalid message: ${JSON.stringify(message)} on subject: ${JSON.stringify(subject)}`);
-        }
-    }
 }
 
