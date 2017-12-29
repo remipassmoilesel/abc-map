@@ -1,7 +1,8 @@
 import {Project} from '../Project';
 import {IpcEvent} from '../../ipc/IpcEvent';
 import * as _ from 'lodash';
-import {Logger, LogLevel} from '../../dev/Logger';
+import * as assert from 'assert';
+import {Logger} from '../../dev/Logger';
 
 const defaultIgnoredConstructors = [
     'String', 'Number', 'Boolean',
@@ -14,6 +15,7 @@ const defaultForbiddenConstructors = [
 const MARK = '#constructor';
 
 const logger = Logger.getLogger('EntitySerializer');
+
 // logger.setLevel(LogLevel.DEBUG);
 
 export class EntitySerializer {
@@ -102,10 +104,12 @@ export class EntitySerializer {
     }
 
     public serialize(data: any): string {
+        assert.ok(data);
         return JSON.stringify(this.classToPlain(data));
     }
 
     public deserialize(serialized: string): any {
+        assert.ok(serialized);
         return this.plainToClass(JSON.parse(serialized));
     }
 

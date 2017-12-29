@@ -12,6 +12,18 @@ constructors.NestedTestClass = NestedTestClass;
 
 describe('EntitySerializer', () => {
 
+    it('Serialize or deserialize undefined object should throw', () => {
+
+        const eu = new EntitySerializer(constructors);
+
+        assert.throws(() => {
+            eu.serialize(undefined);
+        });
+        assert.throws(() => {
+            eu.deserialize(undefined);
+        });
+    });
+
     it('Serialize then deserialize empty object should succeed', () => {
 
         const eu = new EntitySerializer(constructors);
