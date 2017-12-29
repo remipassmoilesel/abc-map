@@ -17,10 +17,12 @@ correspondant à mes besoins.
 
 ## Fonctionnalités
 
+- Edition de GeoJSON avec tableur
 - ~~Recherche Nominatim~~
 
 ## Structure
 
+- Instance Jenkins avec build pour toutes plateformes
 - Procédure de test avec: api, gui, build et lancement
 - Tests avec ipc mock
 - Filtrer sur le main process les collections geojson pour éviter des surcharges. Utiliser l'aire des objets pour 
