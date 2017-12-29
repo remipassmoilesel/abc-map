@@ -17,7 +17,7 @@
 
         <div class="search-message">{{ searchMessage }}</div>
 
-        <div class="result-area">
+        <div class="result-area" v-if="results.length > 0">
             <action-dialog-result
                     v-for='(res, index) in results'
                     :result="res"
