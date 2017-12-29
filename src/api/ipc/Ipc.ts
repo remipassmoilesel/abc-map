@@ -37,6 +37,7 @@ export class Ipc {
      * Web content is mandatory if you want to use IPC from
      * main process
      *
+     * @param promiseIpc
      * @param webContent
      */
     constructor(promiseIpc: any, webContent?: any) {
