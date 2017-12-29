@@ -39,6 +39,14 @@ export async function initApplication(ipc: Ipc): Promise<IServicesMap> {
             shortcuts: shortcutsService,
         };
 
+        // inject service map in each service
+        for (const propName in services) {
+            if (services.hasOwnProperty(propName)) {
+                const service: AbstractService = services[propName];
+                service.setServiceMap(services);
+            }
+        }
+
         const projectHandlers = new ProjectHandlers(ipc, services);
         const mapHandlers = new MapHandlers(ipc, services);
         const databaseHandlers = new DatabaseHandlers(ipc, services);
