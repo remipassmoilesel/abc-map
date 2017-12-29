@@ -43,11 +43,11 @@ export class DataImporterComponent extends AbstractUiComponent {
         this.files = this.clients.map.checkFilesForImport(filesToCheck);
     }
 
-    public importFiles() {
+    public async importFiles() {
         if (this.files.length < 1) {
             Toaster.warning('You must select valid files before');
         } else {
-            this.clients.map.importFiles(this.files);
+            await this.clients.map.importFiles(this.files);
             this.files = [];
         }
     }

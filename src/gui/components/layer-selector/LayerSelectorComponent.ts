@@ -1,11 +1,13 @@
 import Component from 'vue-class-component';
 import {AbstractMapLayer} from '../../../api/entities/layers/AbstractMapLayer';
 import {Clients} from '../../lib/clients/Clients';
-import './style.scss';
 import {MainStore} from '../../lib/store/store';
 import {StoreWrapper} from '../../lib/store/StoreWrapper';
 import {AbstractUiComponent} from '../AbstractUiComponent';
-import {Toaster} from "../../lib/Toaster";
+import {Toaster} from '../../lib/Toaster';
+import * as _ from 'lodash';
+import './style.scss';
+import {GeoJsonLayer} from "../../../api/entities/layers/GeoJsonLayer";
 
 @Component({
     template: require('./template.html'),
@@ -23,15 +25,15 @@ export class LayerSelectorComponent extends AbstractUiComponent {
     public $store: MainStore;
     public storeWrapper: StoreWrapper;
 
-    public selectedLayers: string[] = [];
+    public selectedLayersIds: string[] = [];
 
     public getLayers(): AbstractMapLayer[] {
         return this.storeWrapper.project.getProjectLayers(this.$store);
     }
 
     public deleteSelection() {
-        if (this.selectedLayers.length > 0) {
-            this.clients.project.deleteLayers(this.selectedLayers);
+        if (this.selectedLayersIds.length > 0) {
+            this.clients.project.deleteLayers(this.selectedLayersIds);
         }
     }
 
@@ -39,9 +41,23 @@ export class LayerSelectorComponent extends AbstractUiComponent {
         this.editDialogIsVisible = !this.editDialogIsVisible;
     }
 
-    public openLayerAsSpreadsheet() {
+    public async openLayerAsSpreadsheet() {
         this.toggleEditDialog();
-        Toaster.warning('Coming soon !');
+
+        if (this.selectedLayersIds.length !== 1) {
+            Toaster.error('You must select exactly one layer before');
+            return;
+        }
+
+        const project = await this.clients.project.getCurrentProject();
+        const lay = _.filter(project.layers, (lay: AbstractMapLayer) => lay.id);
+        if (!(lay instanceof GeoJsonLayer)) {
+            Toaster.error('Layer must be a GeoJson layer');
+            return;
+        }
+
+        await this.clients.map.editLayerAsSpreadsheet(this.selectedLayersIds[0]);
+        this.selectedLayersIds = [];
     }
 
 }

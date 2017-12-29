@@ -6,7 +6,7 @@
 
         <div class="select-area">
 
-            <select v-model="selectedLayers" multiple>
+            <select v-model="selectedLayersIds" multiple>
                 <option v-for="(layer, index) in getLayers()"
                         :key="index"
                         :value="layer.id">

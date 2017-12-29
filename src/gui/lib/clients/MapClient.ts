@@ -64,6 +64,10 @@ export class MapClient {
 
     public checkAndImportFiles(files: File[]) {
         const validFiles = this.checkFilesForImport(files);
-        this.importFiles(validFiles);
+        return this.importFiles(validFiles);
+    }
+
+    public editLayerAsSpreadsheet(layerId: string) {
+        Toaster.info('Coming soon !');
     }
 }
