@@ -1,0 +1,14 @@
+version: '3'
+services:
+  jenkins:
+    container_name: jenkins-ci
+    image: jenkins/jenkins:lts
+    ports:
+     - "8080:8080"
+    restart: always
+  mongodb:
+    container_name: mongodb-ci
+    image: mongo:3.0.15-wheezy
+    ports:
+     - "27017:2707"
+    restart: always
