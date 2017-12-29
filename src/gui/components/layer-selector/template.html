@@ -17,6 +17,7 @@
             <!-- Action buttons -->
 
             <el-button @click="deleteSelection" type="primary" icon="el-icon-close"></el-button>
+            <el-button @click="toggleEditDialog" type="primary" icon="el-icon-edit"></el-button>
 
         </div>
 
@@ -25,5 +26,24 @@
     <!-- No layers found in project -->
 
     <div class="h3" v-else><i>No layers yet</i></div>
+
+    <!-- Edit dialog -->
+    <div class="edit-dialog">
+        <el-dialog title="Edit a layer as a spreadsheet"
+                   :visible.sync="editDialogIsVisible"
+                   width="50%">
+
+            <span>
+                This layer will be opened as a spreadsheet. You can modify the spreadsheet, and see
+                modifications on map each time you will save your modifications.
+            </span>
+
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="toggleEditDialog">Cancel</el-button>
+                <el-button type="primary" @click="openLayerAsSpreadsheet">Confirm</el-button>
+            </span>
+
+        </el-dialog>
+    </div>
 
 </div>
