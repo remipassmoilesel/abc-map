@@ -5,9 +5,9 @@ import {MainStore} from '../../lib/store/store';
 import {StoreWrapper} from '../../lib/store/StoreWrapper';
 import {AbstractUiComponent} from '../AbstractUiComponent';
 import {Toaster} from '../../lib/Toaster';
+import {GeoJsonLayer} from '../../../api/entities/layers/GeoJsonLayer';
 import * as _ from 'lodash';
 import './style.scss';
-import {GeoJsonLayer} from "../../../api/entities/layers/GeoJsonLayer";
 
 @Component({
     template: require('./template.html'),
@@ -49,8 +49,10 @@ export class LayerSelectorComponent extends AbstractUiComponent {
             return;
         }
 
+        const layId = this.selectedLayersIds[0];
         const project = await this.clients.project.getCurrentProject();
-        const lay = _.filter(project.layers, (lay: AbstractMapLayer) => lay.id);
+        const lay = _.filter(project.layers, (lay: AbstractMapLayer) => lay.id === layId)[0];
+
         if (!(lay instanceof GeoJsonLayer)) {
             Toaster.error('Layer must be a GeoJson layer');
             return;
