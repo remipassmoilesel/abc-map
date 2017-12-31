@@ -10,7 +10,7 @@
                 <option v-for="(layer, index) in getLayers()"
                         :key="index"
                         :value="layer.id">
-                    {{ layer.name }}
+                    {{ layer.name || layer.id }}
                 </option>
             </select>
 
