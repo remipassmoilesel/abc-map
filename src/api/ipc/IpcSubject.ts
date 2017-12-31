@@ -25,6 +25,7 @@ export class MapSubjects extends IpcSubject {
     public static GET_WMS_DEFAULT_LAYERS = new MapSubjects('/get-default-layers');
     public static IMPORT_FILES = new MapSubjects('/kml/import-as-layer');
     public static GEOCODE = new MapSubjects('/geocode');
+    public static EDIT_LAYER_AS_SPREADSHEET: IpcSubject = new MapSubjects('/edit-layer-as-spreadsheet');
 
     constructor(id: string) {
         super(MapSubjects.ROOT + id);

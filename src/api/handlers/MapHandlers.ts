@@ -15,6 +15,7 @@ export class MapHandlers extends AbstractHandlersGroup {
         this.registerHandler(MapSubjects.GET_WMS_DEFAULT_LAYERS, this.getDefaultWmsLayers.bind(this));
         this.registerHandler(MapSubjects.IMPORT_FILES, this.importDataFiles.bind(this));
         this.registerHandler(MapSubjects.GEOCODE, this.geocode.bind(this));
+        this.registerHandler(MapSubjects.EDIT_LAYER_AS_SPREADSHEET, this.editLayerAsSpreadsheet.bind(this));
     }
 
     public getDefaultWmsLayers() {
@@ -27,6 +28,10 @@ export class MapHandlers extends AbstractHandlersGroup {
 
     public geocode(ev: IpcEvent): Promise<GeocodingResult[]> {
         return this.services.map.geocode(ev.data);
+    }
+
+    public editLayerAsSpreadsheet(ev: IpcEvent): Promise<GeocodingResult[]> {
+        return this.services.map.editLayerAsSpreadsheet(ev.data);
     }
 
     public onAppExit(): Promise<void> {

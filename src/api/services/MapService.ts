@@ -13,6 +13,7 @@ import {IImportedFile} from '../import/AbstractDataImporter';
 import {GeoJsonLayer} from '../entities/layers/GeoJsonLayer';
 import * as path from 'path';
 import {AbstractMapLayer} from '../entities/layers/AbstractMapLayer';
+import {LayerEditionManager} from '../layer-edit/LayerEditionManager';
 
 const logger = Logger.getLogger('MapService');
 
@@ -21,6 +22,7 @@ export class MapService extends AbstractService {
     private defaultLayers: DefaultTileLayers;
     private dataImporterFinder: DataImporterFinder;
     private geocoder: NominatimGeocoder;
+    private layerEditionManager: LayerEditionManager;
 
     constructor(ipc: Ipc) {
         super(ipc);
@@ -30,6 +32,7 @@ export class MapService extends AbstractService {
         this.defaultLayers = new DefaultTileLayers();
         this.dataImporterFinder = new DataImporterFinder();
         this.geocoder = new NominatimGeocoder();
+        this.layerEditionManager = new LayerEditionManager();
     }
 
     public geocode(query: string): Promise<GeocodingResult[]> {
@@ -57,7 +60,6 @@ export class MapService extends AbstractService {
         return Promise.all(promises);
     }
 
-
     public async importFilesAsLayers(filePaths: string[]) {
 
         const importedFiles = await this.services.map.importFiles(filePaths);
@@ -79,6 +81,17 @@ export class MapService extends AbstractService {
             logger.error(`Error while importing data: ${e}`);
             throw e;
         }
+    }
+
+    public async editLayerAsSpreadsheet(layerId: string) {
+
+        // TODO:
+        // check if layer is already edited
+        // export layer as a spreadsheet in tmp dir
+        // open it with default application
+        // watch spreadsheet and import modification
+        // REMINDER: several layers can be modified at the same time
+
     }
 
     public onAppExit(): Promise<void> {

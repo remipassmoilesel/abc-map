@@ -68,6 +68,6 @@ export class MapClient {
     }
 
     public editLayerAsSpreadsheet(layerId: string) {
-        Toaster.info('Coming soon !');
+        return this.ipc.send(MapSubjects.EDIT_LAYER_AS_SPREADSHEET, {data: layerId});
     }
 }
