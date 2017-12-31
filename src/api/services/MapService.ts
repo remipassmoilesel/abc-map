@@ -13,7 +13,8 @@ import {IImportedFile} from '../import/AbstractDataImporter';
 import {GeoJsonLayer} from '../entities/layers/GeoJsonLayer';
 import * as path from 'path';
 import {AbstractMapLayer} from '../entities/layers/AbstractMapLayer';
-import {LayerEditionManager} from '../layer-edit/LayerEditionManager';
+import {LayerEditionManager} from '../layer-editor/LayerEditionManager';
+import {LayerExportFormat} from "../layer-editor/LayerExportFormat";
 
 const logger = Logger.getLogger('MapService');
 
@@ -83,14 +84,14 @@ export class MapService extends AbstractService {
         }
     }
 
-    public async editLayerAsSpreadsheet(layerId: string) {
+    public async editLayerAsSpreadsheet(layerId: string, exportFormat?: LayerExportFormat) {
 
-        // TODO:
         // check if layer is already edited
-        // export layer as a spreadsheet in tmp dir
-        // open it with default application
-        // watch spreadsheet and import modification
-        // REMINDER: several layers can be modified at the same time
+        if (this.layerEditionManager.isEdited(layerId)){
+            throw new Error('Layer is already edited');
+        }
+
+        await this.layerEditionManager.edit(layerId, exportFormat || LayerExportFormat.XLSX);
 
     }
 

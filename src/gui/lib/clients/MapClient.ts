@@ -68,6 +68,10 @@ export class MapClient {
     }
 
     public editLayerAsSpreadsheet(layerId: string) {
-        return this.ipc.send(MapSubjects.EDIT_LAYER_AS_SPREADSHEET, {data: layerId});
+        return this.ipc.send(MapSubjects.EDIT_LAYER_AS_SPREADSHEET, {
+            data: {
+                layerId,
+            },
+        });
     }
 }

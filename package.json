@@ -40,6 +40,7 @@
     "leaflet-draw": "^0.4.13",
     "mongodb": "^2.2.33",
     "mousetrap": "^1.6.1",
+    "node-xlsx": "^0.11.2",
     "path": "^0.12.7",
     "request-promise": "^4.2.2",
     "resurrect-js": "^1.0.1",

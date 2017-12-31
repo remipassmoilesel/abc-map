@@ -30,8 +30,8 @@ export class MapHandlers extends AbstractHandlersGroup {
         return this.services.map.geocode(ev.data);
     }
 
-    public editLayerAsSpreadsheet(ev: IpcEvent): Promise<GeocodingResult[]> {
-        return this.services.map.editLayerAsSpreadsheet(ev.data);
+    public editLayerAsSpreadsheet(ev: IpcEvent): Promise<void> {
+        return this.services.map.editLayerAsSpreadsheet(ev.data.layerId, ev.data.exportFormat);
     }
 
     public onAppExit(): Promise<void> {
