@@ -4,8 +4,8 @@ import './style.scss';
 import {AbstractUiComponent} from '../AbstractUiComponent';
 
 @Component({
-    template: require('./template.html'),
     props: ['result'],
+    template: require('./template.html'),
 })
 export class ActionDialogResultComponent extends AbstractUiComponent {
 

@@ -1,9 +1,6 @@
 import * as _ from 'lodash';
 import Component from 'vue-class-component';
-import {ClientGroup} from '../../lib/clients/ClientGroup';
 import {GeocodingResult} from '../../../api/entities/GeocodingResult';
-import {MainStore} from '../../lib/store/store';
-import {StoreWrapper} from '../../lib/store/StoreWrapper';
 import {AbstractUiComponent} from '../AbstractUiComponent';
 import './style.scss';
 
@@ -17,18 +14,7 @@ export class GeoSearchComponent extends AbstractUiComponent {
     public componentTagName: string = 'geo-search';
     public componentIsSearchable: boolean = true;
 
-    public clients: ClientGroup;
-    public $store: MainStore;
-    public storeWrapper: StoreWrapper;
-
-    /**
-     * Triggered when component is displayed
-     */
-    public mounted() {
-
-    }
-
-    public querySearch(query: string, cb: Function) {
+    public querySearch(query: string, cb: (autocompleteDisplay: any[]) => any) {
 
         if (query.length < 3) {
             cb([{value: 'Please type at least 3 characters'}]);

@@ -16,8 +16,6 @@ export class AddLayerComponent extends AbstractUiComponent {
     public componentIsSearchable: boolean = true;
 
     public layersToAdd: TileLayer[] = [];
-
-    public clients: ClientGroup;
     public layers: AbstractMapLayer[] = [];
 
     public beforeMount() {

@@ -13,13 +13,6 @@ export class LeftMenuComponent extends AbstractUiComponent {
 
     public isCollapse = false;
 
-    /**
-     * Triggered when component is displayed
-     */
-    public mounted() {
-
-    }
-
     public handleOpen() {
 
     }

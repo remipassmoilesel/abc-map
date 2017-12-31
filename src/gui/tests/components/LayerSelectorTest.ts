@@ -20,10 +20,6 @@ export class LayerSelectorTest extends AbstractTest {
         const selector: LayerSelectorComponent = TestUtils.newVueComponent(LayerSelectorComponent);
         const originalLayer = new GeoJsonLayer();
 
-        console.log(selector);
-        this.assert.isDefined(selector.clients);
-        this.assert.isDefined(selector.$store);
-
         await this.clients.project.addLayer(originalLayer);
         const addedLayer: AbstractMapLayer = _.filter(selector.getLayers(),
             (lay: AbstractMapLayer) => lay.id === originalLayer.id)[0];

@@ -25,10 +25,6 @@ export class StoreUpdaterComponent extends AbstractUiComponent {
     public componentDescription: string = 'Component which update Vuex store from main process IPC messages';
     public componentTagName: string = 'store-updater';
 
-    public $store: MainStore;
-    public storeWrapper: StoreWrapper;
-    public clients: ClientGroup;
-
     public mounted() {
         this.registerHandlers();
         this.initializeStore();

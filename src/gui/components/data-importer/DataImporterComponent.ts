@@ -14,11 +14,7 @@ export class DataImporterComponent extends AbstractUiComponent {
     public componentTagName: string = 'data-importer';
     public componentIsSearchable: boolean = true;
 
-    public clients: ClientGroup;
     public files: File[] = [];
-
-    public mounted() {
-    }
 
     public onDragOver(event) {
         event.stopPropagation();

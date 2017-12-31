@@ -13,9 +13,6 @@ export class StatusBarComponent extends AbstractUiComponent {
     public componentDescription: string = 'Bar at the bottom of window which display informations';
     public componentTagName: string = 'status-bar';
 
-    public $store: MainStore;
-    public storeWrapper: StoreWrapper;
-
     public getProjectName() {
         return this.storeWrapper.project.getProjectName(this.$store);
     }

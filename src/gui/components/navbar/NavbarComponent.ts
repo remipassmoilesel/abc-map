@@ -18,9 +18,6 @@ export class NavbarComponent extends AbstractUiComponent {
     public componentDescription: string = 'Top navigation bar';
     public componentTagName: string = 'navbar';
 
-    public $store: MainStore;
-    public storeWrapper: StoreWrapper;
-
     public menus: NavbarMenu[] = navbarMenusList;
 
     public handleMenuClick(id) {

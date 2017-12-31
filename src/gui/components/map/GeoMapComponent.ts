@@ -29,10 +29,6 @@ export class GeoMapComponent extends AbstractUiComponent {
     public componentDescription: string = 'Component on which we can see the current map';
     public componentTagName: string = 'geo-map';
 
-    public clients: ClientGroup;
-    public $store: MainStore;
-    public storeWrapper: StoreWrapper;
-
     public mapId = `map-${mapIdCounter++}`;
     public height: number = 500;
     private map: L.Map;
@@ -115,7 +111,7 @@ export class GeoMapComponent extends AbstractUiComponent {
                 marker: {},
             },
             edit: {
-                featureGroup: this.editableLayersGroup, //REQUIRED!!
+                featureGroup: this.editableLayersGroup, // REQUIRED!!
                 remove: true,
             },
         };

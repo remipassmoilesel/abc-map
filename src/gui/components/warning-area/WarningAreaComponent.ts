@@ -20,11 +20,6 @@ export class WarningAreaComponent extends AbstractUiComponent {
     public componentDescription: string = 'Allow to display warning on top of window.';
     public componentTagName: string = 'warning-area';
 
-    public shortcuts: UiShortcuts;
-    public clients: ClientGroup;
-    public $store: MainStore;
-    public storeWrapper: StoreWrapper;
-
     public warningMessage: string = '';
     private connectionTestInterval: number;
 
@@ -40,6 +35,9 @@ export class WarningAreaComponent extends AbstractUiComponent {
     public testConnectivity() {
         logger.debug('Testing connectivity');
         $.get('http://abc-map.fr')
+            .then(() => {
+                this.warningMessage = '';
+            })
             .catch((error) => {
                 this.warningMessage = 'You are not connected to Internet, many features will be unavailable.';
                 logger.debug('Error while connecting to internet: ', error);

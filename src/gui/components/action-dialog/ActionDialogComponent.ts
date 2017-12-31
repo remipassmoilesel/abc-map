@@ -18,15 +18,10 @@ export class ActionDialogComponent extends AbstractUiComponent {
     public componentDescription: string = 'Allow to search in component and actions.';
     public componentTagName: string = 'action-dialog';
 
-    public shortcuts: UiShortcuts;
-    public clients: ClientGroup;
-    public $store: MainStore;
-    public storeWrapper: StoreWrapper;
-
     public query: string = '';
     public searchMessage: string = '';
     public results: IUxSearchResult[] = [];
-    public debouncedSearch: Function;
+    public debouncedSearch: () => any;
 
     constructor() {
         super();

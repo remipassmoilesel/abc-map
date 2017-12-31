@@ -21,10 +21,6 @@ export class LayerSelectorComponent extends AbstractUiComponent {
 
     public editDialogIsVisible: boolean = false;
 
-    public clients: ClientGroup;
-    public $store: MainStore;
-    public storeWrapper: StoreWrapper;
-
     public selectedLayersIds: string[] = [];
 
     public getLayers(): AbstractMapLayer[] {
