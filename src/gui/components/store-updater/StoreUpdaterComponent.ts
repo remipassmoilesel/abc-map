@@ -4,7 +4,7 @@ import {MainStore} from '../../lib/store/store';
 import {IpcEvent} from '../../../api/ipc/IpcEvent';
 import {EventType} from '../../../api/ipc/IpcEventTypes';
 import {Logger} from '../../../api/dev/Logger';
-import {Clients} from '../../lib/clients/Clients';
+import {ClientGroup} from '../../lib/clients/ClientGroup';
 import {StoreWrapper} from '../../lib/store/StoreWrapper';
 import {AbstractUiComponent} from '../AbstractUiComponent';
 
@@ -27,7 +27,7 @@ export class StoreUpdaterComponent extends AbstractUiComponent {
 
     public $store: MainStore;
     public storeWrapper: StoreWrapper;
-    public clients: Clients;
+    public clients: ClientGroup;
 
     public mounted() {
         this.registerHandlers();

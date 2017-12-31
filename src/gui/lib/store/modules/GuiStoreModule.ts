@@ -1,10 +1,10 @@
 import {Actions, Mutations} from './mutationsAndActions';
-import {Clients} from '../../clients/Clients';
+import {ClientGroup} from '../../clients/ClientGroup';
 import {Logger} from '../../../../api/dev/Logger';
 import {ActionDialogPayload, MapViewPayload} from './payloads';
 
 const logger = Logger.getLogger('GuiStateStoreModule');
-const clients = new Clients();
+const clients = new ClientGroup();
 
 export class GuiState {
     public actionDialogVisible: boolean = false;

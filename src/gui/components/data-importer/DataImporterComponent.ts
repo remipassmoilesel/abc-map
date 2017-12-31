@@ -1,5 +1,5 @@
 import Component from 'vue-class-component';
-import {Clients} from '../../lib/clients/Clients';
+import {ClientGroup} from '../../lib/clients/ClientGroup';
 import {Toaster} from '../../lib/Toaster';
 import {AbstractUiComponent} from '../AbstractUiComponent';
 import './style.scss';
@@ -14,7 +14,7 @@ export class DataImporterComponent extends AbstractUiComponent {
     public componentTagName: string = 'data-importer';
     public componentIsSearchable: boolean = true;
 
-    public clients: Clients;
+    public clients: ClientGroup;
     public files: File[] = [];
 
     public mounted() {

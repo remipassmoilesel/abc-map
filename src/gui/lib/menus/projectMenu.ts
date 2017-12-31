@@ -1,8 +1,8 @@
 import {NavbarMenu} from './NavbarMenu';
 import {MenuItem} from './MenuItem';
-import {Clients} from '../clients/Clients';
+import {ClientGroup} from '../clients/ClientGroup';
 
-const clients = new Clients();
+const clients = new ClientGroup();
 
 export const projectMenu = new NavbarMenu('Project');
 

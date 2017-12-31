@@ -16,9 +16,9 @@ Vue.use(Vuex);
 // Create a main vuex store
 export const store = new Vuex.Store({
     modules: {
-        project: new ProjectStoreModule(),
-        map: new MapStoreModule(),
         gui: new GuiStoreModule(),
+        map: new MapStoreModule(),
+        project: new ProjectStoreModule(),
     },
 });
 

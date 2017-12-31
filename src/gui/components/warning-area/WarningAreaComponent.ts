@@ -1,6 +1,6 @@
 import * as $ from 'jquery';
 import Component from 'vue-class-component';
-import {Clients} from '../../lib/clients/Clients';
+import {ClientGroup} from '../../lib/clients/ClientGroup';
 import {UiShortcuts} from '../../lib/UiShortcuts';
 import {AbstractUiComponent} from '../AbstractUiComponent';
 import {MainStore} from '../../lib/store/store';
@@ -21,7 +21,7 @@ export class WarningAreaComponent extends AbstractUiComponent {
     public componentTagName: string = 'warning-area';
 
     public shortcuts: UiShortcuts;
-    public clients: Clients;
+    public clients: ClientGroup;
     public $store: MainStore;
     public storeWrapper: StoreWrapper;
 

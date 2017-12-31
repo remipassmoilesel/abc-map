@@ -1,5 +1,5 @@
 import Component from 'vue-class-component';
-import {Clients} from '../../lib/clients/Clients';
+import {ClientGroup} from '../../lib/clients/ClientGroup';
 import {AbstractMapLayer} from '../../../api/entities/layers/AbstractMapLayer';
 import {AbstractUiComponent} from '../AbstractUiComponent';
 import {TileLayer} from '../../../api/entities/layers/TileLayer';
@@ -17,7 +17,7 @@ export class AddLayerComponent extends AbstractUiComponent {
 
     public layersToAdd: TileLayer[] = [];
 
-    public clients: Clients;
+    public clients: ClientGroup;
     public layers: AbstractMapLayer[] = [];
 
     public beforeMount() {

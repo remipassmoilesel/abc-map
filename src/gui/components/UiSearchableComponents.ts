@@ -65,8 +65,8 @@ export class UiSearchableComponents {
 
         if (previous.length < 1) {
             matchingComponents.push({
-                name: component.componentName,
                 component,
+                name: component.componentName,
                 score: scoreToAdd,
             });
         } else {

@@ -1,11 +1,11 @@
 import {Actions, Mutations} from './mutationsAndActions';
-import {Clients} from '../../clients/Clients';
+import {ClientGroup} from '../../clients/ClientGroup';
 import {Logger} from '../../../../api/dev/Logger';
 import {Project} from '../../../../api/entities/Project';
 import {ProjectPayload} from './payloads';
 
 const logger = Logger.getLogger('ProjectStoreModule');
-const clients = new Clients();
+const clients = new ClientGroup();
 
 export class ProjectState {
     public currentProject: Project = null;

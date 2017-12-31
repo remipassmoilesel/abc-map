@@ -10,7 +10,7 @@ import {Logger} from '../../../api/dev/Logger';
 import {StoreWrapper} from '../../lib/store/StoreWrapper';
 import {clients} from '../../lib/mixins';
 import {AbstractUiComponent} from '../AbstractUiComponent';
-import {Clients} from '../../lib/clients/Clients';
+import {ClientGroup} from '../../lib/clients/ClientGroup';
 // Import style
 import './style.scss';
 // Import plugins
@@ -29,7 +29,7 @@ export class GeoMapComponent extends AbstractUiComponent {
     public componentDescription: string = 'Component on which we can see the current map';
     public componentTagName: string = 'geo-map';
 
-    public clients: Clients;
+    public clients: ClientGroup;
     public $store: MainStore;
     public storeWrapper: StoreWrapper;
 

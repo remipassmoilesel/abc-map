@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 import Component from 'vue-class-component';
-import {Clients} from '../../lib/clients/Clients';
+import {ClientGroup} from '../../lib/clients/ClientGroup';
 import {uxSearchableComponents} from '../components';
 import {IUxSearchResult} from '../UiSearchableComponents';
 import {UiShortcuts} from '../../lib/UiShortcuts';
@@ -19,7 +19,7 @@ export class ActionDialogComponent extends AbstractUiComponent {
     public componentTagName: string = 'action-dialog';
 
     public shortcuts: UiShortcuts;
-    public clients: Clients;
+    public clients: ClientGroup;
     public $store: MainStore;
     public storeWrapper: StoreWrapper;
 

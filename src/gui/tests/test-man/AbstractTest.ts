@@ -1,5 +1,7 @@
+/** tslint:disable:no-empty */
 import * as chai from 'chai';
 import * as sinon from 'sinon';
+import {ClientGroup} from '../../lib/clients/ClientGroup';
 
 export abstract class AbstractTest {
 
@@ -9,6 +11,8 @@ export abstract class AbstractTest {
     public chai = chai;
     public sinon = sinon;
     public assert = chai.assert;
+
+    public clients = new ClientGroup();
 
     public tests: any[] = [];
 

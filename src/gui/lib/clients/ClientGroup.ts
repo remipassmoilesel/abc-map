@@ -3,7 +3,7 @@ import {ProjectClient} from './ProjectClient';
 import {Ipc} from '../../../api/ipc/Ipc';
 import {GlobalShortcutsClient} from './GlobalShortcutsClient';
 
-export class Clients {
+export class ClientGroup {
     private _map: MapClient;
     private _project: ProjectClient;
     private ipc: Ipc;

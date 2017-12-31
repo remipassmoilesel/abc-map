@@ -2,13 +2,13 @@ import * as L from 'leaflet';
 import {AbstractMapLayer} from '../../../api/entities/layers/AbstractMapLayer';
 import {TileLayer} from '../../../api/entities/layers/TileLayer';
 import {GeoJsonLayer} from '../../../api/entities/layers/GeoJsonLayer';
-import {Clients} from '../clients/Clients';
+import {ClientGroup} from '../clients/ClientGroup';
 
 export class LeafletLayerFactory {
 
-    private clients: Clients;
+    private clients: ClientGroup;
 
-    constructor(clients: Clients) {
+    constructor(clients: ClientGroup) {
         this.clients = clients;
     }
 

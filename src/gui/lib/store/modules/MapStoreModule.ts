@@ -1,11 +1,11 @@
 import {Actions, Mutations} from './mutationsAndActions';
-import {Clients} from '../../clients/Clients';
+import {ClientGroup} from '../../clients/ClientGroup';
 import {Logger} from '../../../../api/dev/Logger';
 import {MapView} from '../../map/MapView';
 import {MapViewPayload} from './payloads';
 
 const logger = Logger.getLogger('MapStoreModule');
-const clients = new Clients();
+const clients = new ClientGroup();
 
 export class MapState {
     public currentMapView: MapView = null;
