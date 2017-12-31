@@ -11,6 +11,7 @@
 
 * {
   font-family: MainFont;
+  font-size: 14px;
 }
 
 html {
@@ -34,12 +35,12 @@ select[multiple]{
   border-radius: 4px;
   border: 1px solid #dcdfe6;
   box-sizing: border-box;
-  color: #606266;
   display: inline-block;
-  font-size: inherit;
+  padding: 0.7em;
+
+  color: #606266;
   line-height: 1;
   outline: none;
-  padding: 0.7em;
 
   margin-top: 0.7em;
   margin-bottom: 0.7em;
