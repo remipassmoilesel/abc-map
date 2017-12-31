@@ -1,8 +1,5 @@
 import Component from 'vue-class-component';
 import {AbstractMapLayer} from '../../../api/entities/layers/AbstractMapLayer';
-import {ClientGroup} from '../../lib/clients/ClientGroup';
-import {MainStore} from '../../lib/store/store';
-import {StoreWrapper} from '../../lib/store/StoreWrapper';
 import {AbstractUiComponent} from '../AbstractUiComponent';
 import {Toaster} from '../../lib/Toaster';
 import {GeoJsonLayer} from '../../../api/entities/layers/GeoJsonLayer';
@@ -27,9 +24,11 @@ export class LayerSelectorComponent extends AbstractUiComponent {
         return this.storeWrapper.project.getProjectLayers(this.$store);
     }
 
-    public deleteSelection() {
+    public async deleteSelection() {
         if (this.selectedLayersIds.length > 0) {
-            this.clients.project.deleteLayers(this.selectedLayersIds);
+            await this.clients.project.deleteLayers(this.selectedLayersIds);
+        } else {
+            Toaster.info('You must select at least one layer first.');
         }
     }
 

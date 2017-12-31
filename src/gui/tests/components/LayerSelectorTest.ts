@@ -12,11 +12,11 @@ export class LayerSelectorTest extends AbstractTest {
     public registerTests(): any[] {
         return [
             this.addLayerShouldUpdateComponent,
+            this.deleteLayerShouldSucceed,
         ];
     }
 
     public async addLayerShouldUpdateComponent() {
-
         const selector: LayerSelectorComponent = TestUtils.newVueComponent(LayerSelectorComponent);
         const originalLayer = new GeoJsonLayer();
 
@@ -25,6 +25,21 @@ export class LayerSelectorTest extends AbstractTest {
             (lay: AbstractMapLayer) => lay.id === originalLayer.id)[0];
 
         this.assert.deepEqual(addedLayer, originalLayer);
+    }
+
+    public async deleteLayerShouldSucceed() {
+        const selector: LayerSelectorComponent = TestUtils.newVueComponent(LayerSelectorComponent);
+        const originalLayer = new GeoJsonLayer();
+
+        await this.clients.project.addLayer(originalLayer);
+        selector.selectedLayersIds = [originalLayer.id];
+
+        await selector.deleteSelection();
+
+        const foundLayers: AbstractMapLayer[] = _.filter(selector.getLayers(),
+            (lay: AbstractMapLayer) => lay.id === originalLayer.id);
+
+        this.assert.lengthOf(foundLayers, 0);
     }
 
 }
