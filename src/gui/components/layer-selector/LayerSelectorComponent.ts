@@ -36,12 +36,12 @@ export class LayerSelectorComponent extends AbstractUiComponent {
         this.editDialogIsVisible = !this.editDialogIsVisible;
     }
 
-    public async openLayerAsSpreadsheet() {
+    public async openLayerAsSpreadsheet(): Promise<boolean> {
         this.toggleEditDialog();
 
         if (this.selectedLayersIds.length !== 1) {
             Toaster.error('You must select exactly one layer before');
-            return;
+            return false;
         }
 
         const layId = this.selectedLayersIds[0];
@@ -49,11 +49,13 @@ export class LayerSelectorComponent extends AbstractUiComponent {
 
         if (!(lay instanceof GeoJsonLayer)) {
             Toaster.error('Layer must be a GeoJson layer');
-            return;
+            return false;
         }
 
         await this.clients.map.editLayerAsSpreadsheet(this.selectedLayersIds[0]);
         this.selectedLayersIds = [];
+
+        return true;
     }
 
 }
