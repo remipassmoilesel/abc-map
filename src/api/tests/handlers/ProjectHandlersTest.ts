@@ -9,7 +9,7 @@ import {Project} from '../../entities/Project';
 
 const assert = chai.assert;
 
-describe.only('ProjectHandlers', function () {
+describe('ProjectHandlers', function () {
 
     let ipcStub;
     let services: IServicesMap;
