@@ -2,6 +2,7 @@
 
 ## Comportement
 
+- Je veux afficher ma position, ma vitesse et ma direction à l'aide d'un capteur (antenne gps, telephone portable)
 - Je veux exporter ma carte sous forme de fichier HTML + JS + données JSON
 - Je veux exprimer mon projet sous forme de phrase simple, voir des propositions et afficher des assistants 
 correspondant à mes besoins.
