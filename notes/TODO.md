@@ -22,7 +22,8 @@ correspondant à mes besoins.
 
 ## Structure
 
-- Instance Jenkins avec build pour toutes plateformes
+- Composant séparé pour édition de couche en tant que classeur
+- Instance Jenkins avec builds pour toutes plateformes
 - Procédure de test avec: api, gui, build et lancement
 - Tests avec ipc mock
 - Filtrer sur le main process les collections geojson pour éviter des surcharges. Utiliser l'aire des objets pour 
