@@ -47,9 +47,11 @@ describe.only('DataExporterTest', () => {
         const layerId: string = _.find(project.layers, (lay) => lay instanceof GeoJsonLayer).id;
         assert.isDefined(layerId);
 
-        await exporter.exportCollection(layerId,
-            LayerEditionService.getTempPath(layerId, ExportFormat.XLSX),
-            ExportFormat.XLSX);
+        const tempPath = LayerEditionService.getTempPath(layerId, ExportFormat.XLSX);
+        await exporter.exportCollection(layerId, tempPath, ExportFormat.XLSX);
+
+        console.log('tempPath');
+        console.log(tempPath);
     });
 
 
