@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 import {AbstractLayerExporter} from './AbstractLayerExporter';
-import {IServicesMap} from '../handlers/AbstractHandlersGroup';
+import {IServicesMap} from '../services/IServiceMap';
 import {XlsxLayerExporter} from './XlsxLayerExporter';
 import {ExportFormat} from './ExportFormat';
 
@@ -27,7 +27,7 @@ export class LayerExporterFinder {
             new XlsxLayerExporter(),
         ];
         _.forEach(this.instances, (inst) => {
-            inst.setServiceMap(this.services);
+            inst.setServicesMap(this.services);
         });
     }
 

@@ -1,5 +1,4 @@
 import {AbstractLayerExporter} from './AbstractLayerExporter';
-import {IServicesMap} from '../handlers/AbstractHandlersGroup';
 import xlsx from 'node-xlsx';
 import {ExportFormat} from './ExportFormat';
 

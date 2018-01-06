@@ -4,13 +4,14 @@ import {Ipc} from './ipc/Ipc';
 import {Logger} from './dev/Logger';
 import {ProjectService} from './services/ProjectService';
 import {DatabaseService} from './services/DatabaseService';
-import {AbstractHandlersGroup, IHandlersMap, IServicesMap} from './handlers/AbstractHandlersGroup';
+import {AbstractHandlersGroup, IHandlersMap} from './handlers/AbstractHandlersGroup';
 import {ProjectHandlers} from './handlers/ProjectHandlers';
 import {MapHandlers} from './handlers/MapHandlers';
 import {DatabaseHandlers} from './handlers/DatabaseHandlers';
 import {GlobalShortcutsService} from './utils/GlobalShortcutsService';
 import {AbstractService} from './services/AbstractService';
 import {ElectronUtilities} from './dev/ElectronDevUtilities';
+import {IServicesMap} from './services/IServiceMap';
 
 const logger = Logger.getLogger('api/main.ts');
 
@@ -44,7 +45,7 @@ export async function initApplication(ipc: Ipc): Promise<IServicesMap> {
         for (const propName in services) {
             if (services.hasOwnProperty(propName)) {
                 const service: AbstractService = services[propName];
-                service.setServiceMap(services);
+                service.setServicesMap(services);
             }
         }
 

@@ -1,8 +1,9 @@
 import {Ipc} from '../ipc/Ipc';
 import {DbSubjects} from '../ipc/IpcSubject';
-import {AbstractHandlersGroup, IServicesMap} from './AbstractHandlersGroup';
+import {AbstractHandlersGroup} from './AbstractHandlersGroup';
 import {IpcEvent} from '../ipc/IpcEvent';
 import {Cursor} from 'mongodb';
+import {IServicesMap} from '../services/IServiceMap';
 
 export class DatabaseHandlers extends AbstractHandlersGroup {
 

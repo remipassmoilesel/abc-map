@@ -1,10 +1,11 @@
 import {Ipc} from '../ipc/Ipc';
 import {ProjectSubjects} from '../ipc/IpcSubject';
 import {IpcEvent} from '../ipc/IpcEvent';
-import {AbstractHandlersGroup, IServicesMap} from './AbstractHandlersGroup';
+import {AbstractHandlersGroup} from './AbstractHandlersGroup';
 import {Logger} from '../dev/Logger';
 import {Project} from '../entities/Project';
 import {TestData} from '../tests/TestData';
+import {IServicesMap} from '../services/IServiceMap';
 
 const logger = Logger.getLogger('ProjectHandlers');
 

@@ -2,7 +2,7 @@ import * as os from 'os';
 import * as uuid from 'uuid';
 import * as path from 'path';
 import {Logger} from '../dev/Logger';
-import {IServicesMap} from '../handlers/AbstractHandlersGroup';
+import {IServicesMap} from '../services/IServiceMap';
 import {ExportFormat} from '../export/ExportFormat';
 import {LayerExporterFinder} from '../export/LayerExporterFinder';
 

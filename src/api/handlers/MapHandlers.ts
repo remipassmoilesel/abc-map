@@ -1,9 +1,10 @@
 import {Ipc} from '../ipc/Ipc';
 import {MapSubjects} from '../ipc/IpcSubject';
 import {IpcEvent} from '../ipc/IpcEvent';
-import {AbstractHandlersGroup, IServicesMap} from './AbstractHandlersGroup';
+import {AbstractHandlersGroup} from './AbstractHandlersGroup';
 import {GeocodingResult} from '../entities/GeocodingResult';
 import {Logger} from '../dev/Logger';
+import {IServicesMap} from '../services/IServiceMap';
 
 const logger = Logger.getLogger('MapHandlers');
 

@@ -2,7 +2,7 @@ import * as chai from 'chai';
 import * as _ from 'lodash';
 import {ProjectHandlers} from '../../handlers/ProjectHandlers';
 import {initApplication, stopApplication} from '../../main';
-import {IServicesMap} from '../../handlers/AbstractHandlersGroup';
+import {IServicesMap} from '../../services/IServiceMap';
 import {TestUtils} from '../TestUtils';
 import {AbstractMapLayer} from '../../entities/layers/AbstractMapLayer';
 import {GeoJsonLayer} from '../../entities/layers/GeoJsonLayer';

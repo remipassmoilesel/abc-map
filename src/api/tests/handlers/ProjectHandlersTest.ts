@@ -3,7 +3,7 @@ import {Logger} from '../../dev/Logger';
 import {Application} from 'spectron';
 import {TestUtils} from '../TestUtils';
 import {initApplication, stopApplication} from '../../main';
-import {IServicesMap} from '../../handlers/AbstractHandlersGroup';
+import {IServicesMap} from '../../services/IServiceMap';
 import {ProjectHandlers} from '../../handlers/ProjectHandlers';
 import {Project} from '../../entities/Project';
 

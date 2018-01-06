@@ -1,18 +1,15 @@
 import {Ipc} from '../ipc/Ipc';
-import {IServicesMap} from '../handlers/AbstractHandlersGroup';
+import {AbstractServiceConsumer} from '../common/AbstractServiceConsumer';
 
-export abstract class AbstractService {
+export abstract class AbstractService extends AbstractServiceConsumer {
 
     protected ipc: Ipc;
-    protected services: IServicesMap;
 
     constructor(ipc: Ipc) {
+        super();
         this.ipc = ipc;
     }
 
     public abstract onAppExit(): Promise<void>;
 
-    public setServiceMap(services: IServicesMap) {
-        this.services = services;
-    }
 }

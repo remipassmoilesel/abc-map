@@ -1,7 +1,7 @@
 import {Db, InsertOneWriteOpResult} from 'mongodb';
 import {Project} from '../entities/Project';
 import {AbstractDao} from './AbstractDao';
-import {Logger} from "../dev/Logger";
+import {Logger} from '../dev/Logger';
 
 const logger = Logger.getLogger('ProjectDao');
 

@@ -1,15 +1,11 @@
-import {IServicesMap} from '../handlers/AbstractHandlersGroup';
+import {IServicesMap} from '../services/IServiceMap';
 import {ExportFormat} from './ExportFormat';
+import {AbstractServiceConsumer} from '../common/AbstractServiceConsumer';
 
-export abstract class AbstractLayerExporter {
-
-    protected services: IServicesMap;
+export abstract class AbstractLayerExporter extends AbstractServiceConsumer{
 
     public abstract getSupportedFormats(): ExportFormat[];
 
     public abstract exportLayer(layerId: string, path: string, exportFormat: ExportFormat);
 
-    public setServiceMap(services: IServicesMap){
-        this.services = services;
-    }
 }

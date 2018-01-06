@@ -10,7 +10,7 @@ import {IpcEvent} from '../ipc/IpcEvent';
 import {AbstractService} from './AbstractService';
 import {AbstractMapLayer} from '../entities/layers/AbstractMapLayer';
 import {GeoJsonLayer} from '../entities/layers/GeoJsonLayer';
-import {TestData} from "../tests/TestData";
+import {TestData} from '../tests/TestData';
 
 const logger = Logger.getLogger('ProjectService');
 

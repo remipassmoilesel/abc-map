@@ -1,19 +1,10 @@
 import {Ipc, IpcHandler} from '../ipc/Ipc';
-import {ProjectService} from '../services/ProjectService';
-import {MapService} from '../services/MapService';
-import {DatabaseService} from '../services/DatabaseService';
 import {IpcSubject} from '../ipc/IpcSubject';
-import {GlobalShortcutsService} from '../utils/GlobalShortcutsService';
 import {ProjectHandlers} from './ProjectHandlers';
 import {MapHandlers} from './MapHandlers';
 import {DatabaseHandlers} from './DatabaseHandlers';
-
-export interface IServicesMap {
-    project: ProjectService;
-    map: MapService;
-    db: DatabaseService;
-    shortcuts: GlobalShortcutsService;
-}
+import {AbstractServiceConsumer} from '../common/AbstractServiceConsumer';
+import {IServicesMap} from '../services/IServiceMap';
 
 export interface IHandlersMap{
     project: ProjectHandlers;
@@ -21,13 +12,12 @@ export interface IHandlersMap{
     db: DatabaseHandlers;
 }
 
-export abstract class AbstractHandlersGroup {
+export abstract class AbstractHandlersGroup extends AbstractServiceConsumer {
     protected ipc: Ipc;
-    protected services: IServicesMap;
 
     constructor(ipc: Ipc, services: IServicesMap) {
+        super(services);
         this.ipc = ipc;
-        this.services = services;
     }
 
     protected registerHandler(subject: IpcSubject, handler: IpcHandler) {

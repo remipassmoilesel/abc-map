@@ -14,8 +14,8 @@ import {GeoJsonLayer} from '../entities/layers/GeoJsonLayer';
 import * as path from 'path';
 import {AbstractMapLayer} from '../entities/layers/AbstractMapLayer';
 import {LayerEditionService} from '../layer-editor/LayerEditor';
-import {IServicesMap} from '../handlers/AbstractHandlersGroup';
-import {ExportFormat} from "../export/ExportFormat";
+import {IServicesMap} from './IServiceMap';
+import {ExportFormat} from '../export/ExportFormat';
 
 const logger = Logger.getLogger('MapService');
 
@@ -38,7 +38,7 @@ export class MapService extends AbstractService {
     }
 
     public setServiceMap(services: IServicesMap){
-        super.setServiceMap(services);
+        super.setServicesMap(services);
         this.layerEditionManager.setServiceMap(services);
     }
 
