@@ -4,19 +4,23 @@ import * as path from 'path';
 import {Logger} from '../dev/Logger';
 import {IServicesMap} from '../services/IServiceMap';
 import {ExportFormat} from '../export/ExportFormat';
-import {LayerExporterFinder} from '../export/LayerExporterFinder';
+import {DataExporterFinder} from '../export/DataExporterFinder';
 
 const logger = Logger.getLogger('LayerEditionManager');
 
 export class LayerEditionService {
 
+    public static getTempPath(prefix: string, exportFormat: ExportFormat): string {
+        return path.join(os.tmpdir(), `${prefix}_${uuid.v4()}.${exportFormat.extension}`);
+    }
+
     public editedLayerIds: string[] = [];
     private services: IServicesMap;
-    private exporterFinder: LayerExporterFinder;
+    private exporterFinder: DataExporterFinder;
 
     public setServiceMap(services: IServicesMap) {
         this.services = services;
-        this.exporterFinder = new LayerExporterFinder();
+        this.exporterFinder = new DataExporterFinder();
         this.exporterFinder.setServiceMap(services);
     }
 
@@ -31,13 +35,15 @@ export class LayerEditionService {
 
         const exportFormat = targetFormat || ExportFormat.XLSX;
 
-        const spreadsheetPath = path.join(os.tmpdir(), `${layerId + uuid.v4()}.${exportFormat.extension}`);
+        const spreadsheetPath = LayerEditionService.getTempPath(layerId, exportFormat);
         const workbookExporter = this.exporterFinder.getInstanceForFormat(exportFormat);
-        await workbookExporter.exportLayer(layerId, spreadsheetPath, exportFormat);
+        await workbookExporter.exportCollection(layerId, spreadsheetPath, exportFormat);
 
         // open it with default application
         // watch spreadsheet and import modification
         // REMINDER: several layers can be modified at the same time
 
     }
+
+
 }

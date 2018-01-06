@@ -1,12 +1,12 @@
 import * as _ from 'lodash';
-import {AbstractLayerExporter} from './AbstractLayerExporter';
+import {AbstractDataExporter} from './AbstractDataExporter';
 import {IServicesMap} from '../services/IServiceMap';
-import {XlsxLayerExporter} from './XlsxLayerExporter';
+import {XlsxDataExporter} from './XlsxDataExporter';
 import {ExportFormat} from './ExportFormat';
 
-export class LayerExporterFinder {
+export class DataExporterFinder {
 
-    private instances: AbstractLayerExporter[];
+    private instances: AbstractDataExporter[];
     private services: IServicesMap;
 
     public setServiceMap(services: IServicesMap) {
@@ -14,8 +14,8 @@ export class LayerExporterFinder {
         this.buildInstances();
     }
 
-    public getInstanceForFormat(format: ExportFormat): AbstractLayerExporter | undefined {
-        const importers = _.filter(this.instances, (inst: AbstractLayerExporter) => {
+    public getInstanceForFormat(format: ExportFormat): AbstractDataExporter | undefined {
+        const importers = _.filter(this.instances, (inst: AbstractDataExporter) => {
             return _.includes(inst.getSupportedFormats(), format);
         });
 
@@ -24,7 +24,7 @@ export class LayerExporterFinder {
 
     private buildInstances() {
         this.instances = [
-            new XlsxLayerExporter(),
+            new XlsxDataExporter(),
         ];
         _.forEach(this.instances, (inst) => {
             inst.setServicesMap(this.services);

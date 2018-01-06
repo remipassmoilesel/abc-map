@@ -1,5 +1,6 @@
-import {AbstractLayerExporter} from './AbstractLayerExporter';
+import {AbstractDataExporter} from './AbstractDataExporter';
 import xlsx from 'node-xlsx';
+import * as fs from 'fs-extra';
 import {ExportFormat} from './ExportFormat';
 
 export interface ISheet {
@@ -8,14 +9,14 @@ export interface ISheet {
 }
 
 
-export class XlsxLayerExporter extends AbstractLayerExporter {
+export class XlsxDataExporter extends AbstractDataExporter {
 
     public getSupportedFormats(): ExportFormat[] {
         return [ExportFormat.XLSX];
     }
 
-    public async exportLayer(layerId: string, destinationPath: string, format: ExportFormat) {
-        const dataCursor = await this.services.db.getGeoJsonDao().queryAll(layerId);
+    public async exportCollection(collectionId: string, destinationPath: string, format: ExportFormat) {
+        const dataCursor = await this.services.db.getGeoJsonDao().queryAll(collectionId);
 
         const workbook: ISheet[] = [];
         workbook.push({
@@ -23,15 +24,17 @@ export class XlsxLayerExporter extends AbstractLayerExporter {
             name: 'Help',
         });
 
-        const dataSheet: ISheet = {name: layerId, data: []};
+        const dataSheet: ISheet = {name: collectionId, data: []};
         workbook.push(dataSheet);
-        while (dataCursor.hasNext()) {
+        while (await dataCursor.hasNext()) {
             const rowData = await dataCursor.next();
             dataSheet.data.push([JSON.stringify(rowData)]);
         }
 
         const buffer = xlsx.build(workbook);
-        console.log(buffer.toString());
+        const wstream = fs.createWriteStream(destinationPath);
+        wstream.write(buffer);
+        wstream.close();
     }
 
 }
