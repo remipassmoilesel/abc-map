@@ -1,12 +1,13 @@
 import * as chai from 'chai';
+import * as uuid from 'uuid';
 import {Db} from 'mongodb';
 import {GeoJsonDao} from '../../database/GeoJsonDao';
 import {TestUtils} from '../TestUtils';
 import {IGeoJsonFeature} from '../../entities/geojson/IGeoJsonFeature';
 import {TestData} from '../TestData';
 import {IGeoJsonFeatureCollection} from '../../entities/geojson/IGeoJsonFeatureCollection';
-
-const uuid = require('uuid');
+import {initApplication, stopApplication} from '../../main';
+import {IServicesMap} from '../../services/IServiceMap';
 
 const assert = chai.assert;
 
@@ -14,12 +15,17 @@ describe('GeoJsonDao', () => {
 
     let db: Db;
 
+    let ipcStub;
+    let services: IServicesMap;
+
     before(async () => {
+        ipcStub = TestUtils.getStubbedIpc();
+        services = await initApplication(ipcStub.ipc);
         db = await TestUtils.getMongodbConnection();
     });
 
     after(async () => {
-        await db.close();
+        await stopApplication();
     });
 
     const coordinates = () => [Math.random() * 80, Math.random() * 50];
@@ -27,16 +33,16 @@ describe('GeoJsonDao', () => {
     const getGeoJsonFeature = () => {
 
         const feature: IGeoJsonFeature = {
-            type: 'Feature',
             geometry: {
-                type: 'Polygon',
                 coordinates: [[
                     [-73.99, 40.75],
                     [-73.98, 40.76],
                     [-73.99, 40.75],
                 ]],
+                type: 'Polygon',
             },
             properties: {variable: 'value'},
+            type: 'Feature',
         };
 
         feature.geometry.coordinates = [[coordinates(), coordinates()]];
