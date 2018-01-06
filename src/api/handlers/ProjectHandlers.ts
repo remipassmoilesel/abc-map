@@ -41,14 +41,6 @@ export class ProjectHandlers extends AbstractHandlersGroup {
         await projectDao.insert(project);
     }
 
-    public async setupDevProject() {
-        await this.services.map.importFilesAsLayers([
-            TestData.KML_GRENOBLE_SHAPES,
-            TestData.KML_GRENOBLE_SHAPES_FILTER1,
-        ]);
-
-    }
-
     public getCurrentProject() {
         return this.services.project.getCurrentProject();
     }

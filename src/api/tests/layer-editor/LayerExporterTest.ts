@@ -1,13 +1,16 @@
 import * as chai from 'chai';
+import * as _ from 'lodash';
 import {ProjectHandlers} from '../../handlers/ProjectHandlers';
 import {initApplication, stopApplication} from '../../main';
 import {IServicesMap} from '../../handlers/AbstractHandlersGroup';
 import {TestUtils} from '../TestUtils';
+import {AbstractMapLayer} from '../../entities/layers/AbstractMapLayer';
+import {GeoJsonLayer} from '../../entities/layers/GeoJsonLayer';
+import {ExportFormat} from '../../export/ExportFormat';
 
 const assert = chai.assert;
 
 describe('LayerExporterTest', () => {
-
 
     let ipcStub;
     let services: IServicesMap;
@@ -23,8 +26,12 @@ describe('LayerExporterTest', () => {
         await stopApplication();
     });
 
-    it('Responses returned from handler should be serialized', async () => {
+    it('Layer should be exported correctly', async () => {
+        await services.project.setupDevProject();
+        const layerId = _.find(services.project.getCurrentProject().layers,
+            (lay: AbstractMapLayer) => lay instanceof GeoJsonLayer).id;
 
+        await services.map.editLayerAsSpreadsheet(layerId, ExportFormat.XLSX);
     });
 
 });

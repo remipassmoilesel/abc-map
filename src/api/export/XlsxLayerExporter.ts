@@ -1,20 +1,21 @@
-import {LayerExportFormat} from './LayerExportFormat';
+import {AbstractLayerExporter} from './AbstractLayerExporter';
 import {IServicesMap} from '../handlers/AbstractHandlersGroup';
 import xlsx from 'node-xlsx';
+import {ExportFormat} from './ExportFormat';
 
-interface ISheet {
+export interface ISheet {
     name: string;
     data: string[][];
 }
 
-export class LayerExporter {
-    private services: IServicesMap;
 
-    constructor(servicesMap: IServicesMap) {
-        this.services = servicesMap;
+export class XlsxLayerExporter extends AbstractLayerExporter {
+
+    public getSupportedFormats(): ExportFormat[] {
+        return [ExportFormat.XLSX];
     }
 
-    public async exportLayer(layerId: string, destinationPath: string, format: LayerExportFormat) {
+    public async exportLayer(layerId: string, destinationPath: string, format: ExportFormat) {
         const dataCursor = await this.services.db.getGeoJsonDao().queryAll(layerId);
 
         const workbook: ISheet[] = [];

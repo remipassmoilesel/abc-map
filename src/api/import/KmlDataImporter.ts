@@ -16,8 +16,8 @@ export class KmlDataImporter extends AbstractDataImporter {
             .then((kmlDom: Document) => {
 
                 return {
-                    filepath: pathToSourceFile,
                     data: this.convertToGeoJson(kmlDom),
+                    filepath: pathToSourceFile,
                 };
 
             });

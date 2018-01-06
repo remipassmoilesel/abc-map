@@ -10,6 +10,7 @@ import {IpcEvent} from '../ipc/IpcEvent';
 import {AbstractService} from './AbstractService';
 import {AbstractMapLayer} from '../entities/layers/AbstractMapLayer';
 import {GeoJsonLayer} from '../entities/layers/GeoJsonLayer';
+import {TestData} from "../tests/TestData";
 
 const logger = Logger.getLogger('ProjectService');
 
@@ -56,6 +57,14 @@ export class ProjectService extends AbstractService {
         for (const lay of layers) {
             await this.addLayer(lay);
         }
+    }
+
+    public async setupDevProject() {
+        await this.services.map.importFilesAsLayers([
+            TestData.KML_GRENOBLE_SHAPES,
+            TestData.KML_GRENOBLE_SHAPES_FILTER1,
+        ]);
+
     }
 
     public getCurrentProject(): Project {

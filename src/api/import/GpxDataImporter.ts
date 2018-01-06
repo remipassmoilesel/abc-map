@@ -17,8 +17,8 @@ export class GpxDataImporter extends AbstractDataImporter {
             .then((gpxDom: Document) => {
 
                 return {
-                    filepath: pathToSourceFile,
                     data: this.convertToGeoJson(gpxDom),
+                    filepath: pathToSourceFile,
                 };
 
             });

@@ -13,8 +13,9 @@ import {IImportedFile} from '../import/AbstractDataImporter';
 import {GeoJsonLayer} from '../entities/layers/GeoJsonLayer';
 import * as path from 'path';
 import {AbstractMapLayer} from '../entities/layers/AbstractMapLayer';
-import {LayerEditionManager} from '../layer-editor/LayerEditionManager';
-import {LayerExportFormat} from "../layer-editor/LayerExportFormat";
+import {LayerEditionService} from '../layer-editor/LayerEditor';
+import {IServicesMap} from '../handlers/AbstractHandlersGroup';
+import {ExportFormat} from "../export/ExportFormat";
 
 const logger = Logger.getLogger('MapService');
 
@@ -23,7 +24,7 @@ export class MapService extends AbstractService {
     private defaultLayers: DefaultTileLayers;
     private dataImporterFinder: DataImporterFinder;
     private geocoder: NominatimGeocoder;
-    private layerEditionManager: LayerEditionManager;
+    private layerEditionManager: LayerEditionService;
 
     constructor(ipc: Ipc) {
         super(ipc);
@@ -33,7 +34,12 @@ export class MapService extends AbstractService {
         this.defaultLayers = new DefaultTileLayers();
         this.dataImporterFinder = new DataImporterFinder();
         this.geocoder = new NominatimGeocoder();
-        this.layerEditionManager = new LayerEditionManager();
+        this.layerEditionManager = new LayerEditionService();
+    }
+
+    public setServiceMap(services: IServicesMap){
+        super.setServiceMap(services);
+        this.layerEditionManager.setServiceMap(services);
     }
 
     public geocode(query: string): Promise<GeocodingResult[]> {
@@ -84,14 +90,14 @@ export class MapService extends AbstractService {
         }
     }
 
-    public async editLayerAsSpreadsheet(layerId: string, exportFormat?: LayerExportFormat) {
+    public async editLayerAsSpreadsheet(layerId: string, exportFormat?: ExportFormat) {
 
         // check if layer is already edited
-        if (this.layerEditionManager.isEdited(layerId)){
+        if (this.layerEditionManager.isEdited(layerId)) {
             throw new Error('Layer is already edited');
         }
 
-        await this.layerEditionManager.edit(layerId, exportFormat || LayerExportFormat.XLSX);
+        await this.layerEditionManager.edit(layerId, exportFormat || ExportFormat.XLSX);
 
     }
 
@@ -102,6 +108,5 @@ export class MapService extends AbstractService {
     private sendMapEvent(data: IpcEvent) {
         return this.ipc.send(IpcEventBus.MAP, data);
     }
-
 
 }

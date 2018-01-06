@@ -62,7 +62,7 @@ export async function initApplication(ipc: Ipc): Promise<IServicesMap> {
 
         if (ElectronUtilities.isDevMode()) {
             logger.info('Setting up dev project.');
-            await projectHandlers.setupDevProject();
+            await services.project.setupDevProject();
         }
 
         return services;
