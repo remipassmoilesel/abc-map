@@ -4,6 +4,7 @@ import * as fs from 'fs-extra';
 import {ExportFormat} from './ExportFormat';
 import {IGeoJsonFeature} from '../entities/geojson/IGeoJsonFeature';
 import * as _ from 'lodash';
+import {FeatureUtils} from '../entities/geojson/FeatureUtils';
 
 export interface ISheet {
     name: string;
@@ -11,10 +12,10 @@ export interface ISheet {
 }
 
 const headers = {
-    'Geometry type': 'Type of geometry',
-    'Properties': 'Properties attached to feature',
-    'Coordinates': 'Coordinates of geometry',
     'ID': 'Unique identifier of geometry. This should never change.',
+    'Geometry type': 'Type of geometry',
+    'Coordinates': 'Coordinates of geometry',
+    'Properties': 'Properties attached to feature',
 };
 
 export class XlsxDataExporter extends AbstractDataExporter {
@@ -65,12 +66,15 @@ export class XlsxDataExporter extends AbstractDataExporter {
     }
 
     private addFeatureRow(feature: IGeoJsonFeature, dataSheet: ISheet) {
-        dataSheet.data.push([
-            feature.geometry.type,
-            JSON.stringify(feature.properties),
-            JSON.stringify(feature.geometry.coordinates),
-            feature._id,
-        ]);
+
+        let row: string[] = [];
+
+        row.push(feature._id);
+        row.push(feature.geometry.type);
+        row.push(JSON.stringify(feature.geometry.coordinates));
+        row = row.concat(this.processProperties(feature));
+
+        dataSheet.data.push(row);
     }
 
     private addHeadersDescription(headers: any, helpPage: ISheet) {
@@ -79,5 +83,15 @@ export class XlsxDataExporter extends AbstractDataExporter {
         _.forEach(Object.keys(headers), (head) => {
             helpPage.data.push([head, headers[head]]);
         });
+    }
+
+    private processProperties(feature: IGeoJsonFeature): string[] {
+        FeatureUtils.ensureAbcmapPropertiesExists(feature);
+        const properties = [];
+        _.forEach(Object.keys(feature.properties), (key) => {
+            properties.push(JSON.stringify(feature.properties[key]));
+        });
+
+        return properties;
     }
 }
