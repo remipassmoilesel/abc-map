@@ -5,6 +5,8 @@ import {ProjectDao} from '../../database/ProjectDao';
 import {Project} from '../../entities/Project';
 import {TileLayer} from '../../entities/layers/TileLayer';
 import {GeoJsonLayer} from '../../entities/layers/GeoJsonLayer';
+import {IServicesMap} from '../../services/IServiceMap';
+import {initApplication, stopApplication} from '../../main';
 
 const assert = chai.assert;
 
@@ -12,12 +14,17 @@ describe('ProjectDao', () => {
 
     let db: Db;
 
+    let ipcStub;
+    let services: IServicesMap;
+
     before(async () => {
+        ipcStub = TestUtils.getStubbedIpc();
+        services = await initApplication(ipcStub.ipc);
         db = await TestUtils.getMongodbConnection();
     });
 
     after(async () => {
-        await db.close();
+        await stopApplication();
     });
 
     it('> Insert, read and delete a project should succeed', async () => {

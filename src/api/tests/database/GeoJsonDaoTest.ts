@@ -14,7 +14,6 @@ const assert = chai.assert;
 describe('GeoJsonDao', () => {
 
     let db: Db;
-
     let ipcStub;
     let services: IServicesMap;
 
