@@ -1,5 +1,4 @@
 import * as chai from 'chai';
-import {Logger} from '../../dev/Logger';
 import {Application} from 'spectron';
 import {TestUtils} from '../TestUtils';
 import {initApplication, stopApplication} from '../../main';

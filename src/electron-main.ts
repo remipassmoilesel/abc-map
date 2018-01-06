@@ -65,7 +65,12 @@ async function createWindow() {
     // init api application
     const ipc = Ipc.newInstance(win.webContents);
 
-    await initApplication(ipc);
+    const services = await initApplication(ipc);
+
+    if (ElectronUtilities.isDevMode()) {
+        logger.info('Setting up dev project.');
+        await services.project.setupDevProject();
+    }
 
 }
 

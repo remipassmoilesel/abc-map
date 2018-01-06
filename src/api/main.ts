@@ -10,7 +10,6 @@ import {MapHandlers} from './handlers/MapHandlers';
 import {DatabaseHandlers} from './handlers/DatabaseHandlers';
 import {GlobalShortcutsService} from './utils/GlobalShortcutsService';
 import {AbstractService} from './services/AbstractService';
-import {ElectronUtilities} from './dev/ElectronDevUtilities';
 import {IServicesMap} from './services/IServiceMap';
 
 const logger = Logger.getLogger('api/main.ts');
@@ -18,6 +17,14 @@ const logger = Logger.getLogger('api/main.ts');
 let services: IServicesMap;
 let handlers: IHandlersMap;
 
+/**
+ * WARN: DO NOT IMPORT ELECTRON DEPENDENCIES HERE
+ *
+ * These methods are used in tests, without Electron stack.
+ *
+ * @param {Ipc} ipc
+ * @returns {Promise<IServicesMap>}
+ */
 export async function initApplication(ipc: Ipc): Promise<IServicesMap> {
 
     logger.info('Initialize main application');
@@ -60,11 +67,6 @@ export async function initApplication(ipc: Ipc): Promise<IServicesMap> {
         };
 
         await projectHandlers.createNewProject();
-
-        if (ElectronUtilities.isDevMode()) {
-            logger.info('Setting up dev project.');
-            await services.project.setupDevProject();
-        }
 
         return services;
 
