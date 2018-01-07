@@ -1,9 +1,10 @@
 import * as shapefile from 'shapefile';
-import {AbstractDataImporter, IImportedFile} from './AbstractDataImporter';
-import {FileFormat} from "../export/FileFormat";
+import * as path from 'path';
+import {AbstractDataImporter} from './AbstractDataImporter';
+import {FileFormat} from '../export/FileFormat';
 
 
-// TODO: Refactor in order directly data in database
+// TODO: Refactor in order to stream data in database
 
 export class ShapefileImporter extends AbstractDataImporter {
 
@@ -11,18 +12,18 @@ export class ShapefileImporter extends AbstractDataImporter {
         return FileFormat.KML;
     }
 
-    public getGeoJson(pathToSourceFile: string): Promise<IImportedFile> {
+    public async fileToCollection(pathToSourceFile: string, collectionName?: string): Promise<string> {
 
-        return shapefile.open('example.shp')
-            .then((source) => source.read()
-                .then(function log(result) {
-                    if (result.done) {
-                        return;
-                    }
-                    return source.read();
-                }))
-            .catch((error) => console.error(error.stack));
+        const source = await shapefile.open('example.shp');
+        const geojson = await source.read();
 
+        const collectionId = collectionName || path.basename(pathToSourceFile);
+        await this.services.db.getGeoJsonDao().insertMany(
+            collectionId,
+            geojson.features,
+        );
+
+        return collectionId;
     }
 
 }

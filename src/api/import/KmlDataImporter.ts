@@ -1,9 +1,10 @@
 import * as tgj from 'togeojson';
 import * as fs from 'fs-extra-promise';
+import * as path from 'path';
 import {Document, DOMParser} from 'xmldom';
-import {AbstractDataImporter, IImportedFile} from './AbstractDataImporter';
+import {AbstractDataImporter} from './AbstractDataImporter';
 import {IGeoJsonFeatureCollection} from '../entities/geojson/IGeoJsonFeatureCollection';
-import {FileFormat} from "../export/FileFormat";
+import {FileFormat} from '../export/FileFormat';
 
 export class KmlDataImporter extends AbstractDataImporter {
 
@@ -11,27 +12,28 @@ export class KmlDataImporter extends AbstractDataImporter {
         return FileFormat.KML;
     }
 
-    public getGeoJson(pathToSourceFile: string): Promise<IImportedFile> {
+    public async fileToCollection(pathToSourceFile: string, collectionName?: string): Promise<string> {
 
-        return this.getSourceFileAsDom(pathToSourceFile)
-            .then((kmlDom: Document) => {
+        const kmlDom = await this.getSourceFileAsDom(pathToSourceFile);
+        const geojson = this.convertToGeoJson(kmlDom);
 
-                return {
-                    data: this.convertToGeoJson(kmlDom),
-                    filepath: pathToSourceFile,
-                };
+        const collectionId = collectionName || path.basename(pathToSourceFile);
+        await this.services.db.getGeoJsonDao().insertMany(
+            collectionId,
+            geojson.features,
+        );
 
-            });
-
+        return collectionId;
     }
 
-    private getSourceFileAsDom(path: string): Promise<Document> {
-        return (fs.readFileAsync(path).then((data: Buffer) => {
-            return new DOMParser().parseFromString(data.toString());
-        }) as any);
+    private async getSourceFileAsDom(path: string): Promise<Document> {
+        const buffer: Buffer = await fs.readFileAsync(path);
+        return new DOMParser().parseFromString(buffer.toString());
     }
 
     private convertToGeoJson(kmlDom: Document): IGeoJsonFeatureCollection {
         return tgj.kml(kmlDom, {styles: true});
     }
 }
+
+

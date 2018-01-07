@@ -1,4 +1,3 @@
-import * as _ from 'lodash';
 import {Logger} from '../dev/Logger';
 import {DefaultTileLayers} from '../entities/layers/DefaultTileLayers';
 import {TileLayer} from '../entities/layers/TileLayer';
@@ -9,7 +8,6 @@ import {IpcEventBus} from '../ipc/IpcSubject';
 import {DataImporterFinder} from '../import/DataImporterFinder';
 import {NominatimGeocoder} from '../geocoder/NominatimGeocoder';
 import {GeocodingResult} from '../entities/GeocodingResult';
-import {IImportedFile} from '../import/AbstractDataImporter';
 import {GeoJsonLayer} from '../entities/layers/GeoJsonLayer';
 import * as path from 'path';
 import {AbstractMapLayer} from '../entities/layers/AbstractMapLayer';
@@ -49,40 +47,36 @@ export class MapService extends AbstractService {
         return this.defaultLayers.getLayers();
     }
 
-    public importFiles(files: string[]): Promise<IImportedFile[]> {
-        const promises: Array<Promise<IImportedFile>> = [];
+    public async importFiles(files: string[], collectionName?: string): Promise<string[]> {
 
-        _.forEach(files, (file: string) => {
-
+        const importedCollectionIds = [];
+        for (const file of files) {
             const importer = this.dataImporterFinder.getInstanceForFile(file);
             if (!importer) {
                 throw new Error(`Unsupported file: ${JSON.stringify(file)}`);
             }
+            const collectionId: string = await importer.fileToCollection(file, collectionName);
+            importedCollectionIds.push(collectionId);
+        }
 
-            const p: Promise<IImportedFile> = importer.getGeoJson(file);
-            promises.push(p);
-        });
-
-        return Promise.all(promises);
+        return importedCollectionIds;
     }
 
     public async importFilesAsLayers(filePaths: string[],
                                      layerIds: string[] = []): Promise<AbstractMapLayer[]> {
 
-        const importedFiles = await this.services.map.importFiles(filePaths);
-
         const layers: AbstractMapLayer[] = [];
-        const dao = this.services.db.getGeoJsonDao();
 
         try {
             let i = 0;
-            for (const f of importedFiles) {
+            for (const fPath of filePaths) {
 
                 const layer = new GeoJsonLayer();
-                layer.name = layerIds[i] ? layerIds[i] : path.basename(f.filepath);
                 layer.id = layerIds[i] ? layerIds[i] : layer.id;
+                layer.name = layerIds[i] ? layerIds[i] : path.basename(fPath);
 
-                await dao.saveLayer(layer, f.data.features);
+                await this.services.map.importFiles([fPath], layer.id);
+
                 layers.push(layer);
 
                 i++;
@@ -95,6 +89,7 @@ export class MapService extends AbstractService {
             logger.error(`Error while importing data: ${e}`);
             throw e;
         }
+
     }
 
     public async editLayerAsSpreadsheet(layerId: string, exportFormat?: FileFormat) {

@@ -1,7 +1,8 @@
 import * as tgj from 'togeojson';
 import * as fs from 'fs-extra-promise';
+import * as path from 'path';
 import {Document, DOMParser} from 'xmldom';
-import {AbstractDataImporter, IImportedFile} from './AbstractDataImporter';
+import {AbstractDataImporter} from './AbstractDataImporter';
 import {IGeoJsonFeatureCollection} from '../entities/geojson/IGeoJsonFeatureCollection';
 import {FileFormat} from '../export/FileFormat';
 
@@ -11,24 +12,24 @@ export class GpxDataImporter extends AbstractDataImporter {
         return FileFormat.GPX;
     }
 
-    public getGeoJson(pathToSourceFile: string): Promise<IImportedFile> {
+    public async fileToCollection(pathToSourceFile: string, collectionName?: string): Promise<string> {
 
-        return this.getSourceFileAsDom(pathToSourceFile)
-            .then((gpxDom: Document) => {
+        const gpxDom = await this.getSourceFileAsDom(pathToSourceFile);
+        const geojson = this.convertToGeoJson(gpxDom);
 
-                return {
-                    data: this.convertToGeoJson(gpxDom),
-                    filepath: pathToSourceFile,
-                };
+        const collectionId = collectionName || path.basename(pathToSourceFile);
+        await this.services.db.getGeoJsonDao().insertMany(
+            collectionId,
+            geojson.features,
+        );
 
-            });
+        return collectionId;
 
     }
 
-    private getSourceFileAsDom(path: string): Promise<Document> {
-        return (fs.readFileAsync(path).then((data: Buffer) => {
-            return new DOMParser().parseFromString(data.toString());
-        }) as any);
+    private async getSourceFileAsDom(path: string): Promise<Document> {
+        const buffer: Buffer = await fs.readFileAsync(path);
+        return new DOMParser().parseFromString(buffer.toString());
     }
 
     private convertToGeoJson(gpxDom: Document): IGeoJsonFeatureCollection {
