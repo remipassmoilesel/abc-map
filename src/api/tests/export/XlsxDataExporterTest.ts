@@ -12,8 +12,11 @@ import {AbstractDataExporter} from '../../export/AbstractDataExporter';
 import {LayerEditionService} from '../../layer-editor/LayerEditor';
 import {XlsxDataExporter} from '../../export/XlsxDataExporter';
 import {DevUtilities} from '../../dev/DevUtilities';
+import {Logger} from '../../dev/Logger';
 
 const assert = chai.assert;
+
+const logger = Logger.getLogger('XlsxDataExporterTest');
 
 describe.only('XlsxDataExporterTest', () => {
 
@@ -74,6 +77,7 @@ describe.only('XlsxDataExporterTest', () => {
         const layerId: string = testLayer.id;
 
         const tempPath = LayerEditionService.getTempPath(layerId, ExportFormat.XLSX);
+        logger.info(`Layer exported at location: ${tempPath}`);
 
         await exporter.exportCollection(layerId, tempPath, ExportFormat.XLSX);
 

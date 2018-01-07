@@ -1,9 +1,9 @@
 // tslint:disable:object-literal-sort-keys
+import * as _ from 'lodash';
 import {AbstractDataExporter} from './AbstractDataExporter';
 import {Workbook, Worksheet} from 'exceljs';
 import {ExportFormat} from './ExportFormat';
 import {IGeoJsonFeature} from '../entities/geojson/IGeoJsonFeature';
-import * as _ from 'lodash';
 import {FeatureUtils} from '../entities/geojson/FeatureUtils';
 
 export class XlsxDataExporter extends AbstractDataExporter {
@@ -29,11 +29,13 @@ export class XlsxDataExporter extends AbstractDataExporter {
         this.setupHelpSheet(helpSheet);
 
         const dataSheet: Worksheet = workbook.addWorksheet('Data');
+        this.setupDataSheet(dataSheet);
 
         if (await dataCursor.hasNext()) {
 
             // add headers
-            dataSheet.addRow(Object.keys(XlsxDataExporter.XLSX_HEADERS));
+            this.addHeadersToDataSheet(dataSheet);
+
             this.addHeadersDescription(XlsxDataExporter.XLSX_HEADERS, helpSheet);
 
             while (await dataCursor.hasNext()) {
@@ -54,6 +56,7 @@ export class XlsxDataExporter extends AbstractDataExporter {
             ['Modify data in this workbook and see modifications on map !'],
             ['All data is available on the second sheet.'],
         ]);
+        helpSheet.getRow(1).font = {name: 'Comic Sans MS', family: 4, size: 12, bold: true};
     }
 
     private addFeatureRow(feature: IGeoJsonFeature, dataSheet: Worksheet) {
@@ -68,12 +71,16 @@ export class XlsxDataExporter extends AbstractDataExporter {
         dataSheet.addRow(row);
     }
 
-    private addHeadersDescription(headers: any, helpPage: Worksheet) {
-        helpPage.addRow([]);
-        helpPage.addRow(['Field descriptions: ']);
+    private addHeadersDescription(headers: any, helpSheet: Worksheet) {
+        helpSheet.addRow([]);
+        helpSheet.addRow(['Field descriptions: ']);
         _.forEach(Object.keys(headers), (head) => {
-            helpPage.addRow([head, headers[head]]);
+            helpSheet.addRow(['', head, headers[head]]);
         });
+
+        helpSheet.getRow(4).font = {name: 'Comic Sans MS', family: 4, size: 12, bold: true};
+        const fieldNameCol = helpSheet.getColumn(2);
+        fieldNameCol.width = 20;
     }
 
     private processProperties(feature: IGeoJsonFeature): string[] {
@@ -92,4 +99,17 @@ export class XlsxDataExporter extends AbstractDataExporter {
     }
 
 
+    private addHeadersToDataSheet(dataSheet: Worksheet) {
+        dataSheet.addRow(Object.keys(XlsxDataExporter.XLSX_HEADERS));
+        dataSheet.getRow(1).font = {name: 'Comic Sans MS', family: 4, size: 12, bold: true};
+    }
+
+    private setupDataSheet(dataSheet: Worksheet) {
+        const geometryTypeCol = dataSheet.getColumn(2);
+        geometryTypeCol.width = 20;
+        const coordinatesCol = dataSheet.getColumn(3);
+        coordinatesCol.width = 30;
+        const propertiesCol = dataSheet.getColumn(4);
+        propertiesCol.width = 30;
+    }
 }

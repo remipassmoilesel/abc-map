@@ -1,7 +1,7 @@
 export class ExportFormat {
 
     public static CSV = new ExportFormat('csv');
-    public static XLSX = new ExportFormat('xslx');
+    public static XLSX = new ExportFormat('xlsx');
 
     public extension: string;
 
