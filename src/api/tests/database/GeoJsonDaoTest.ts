@@ -12,7 +12,7 @@ import * as _ from 'lodash';
 
 const assert = chai.assert;
 
-describe.only('GeoJsonDao', () => {
+describe('GeoJsonDao', () => {
 
     let db: Db;
     let ipcStub;
@@ -71,6 +71,21 @@ describe.only('GeoJsonDao', () => {
 
         await cursor.close();
     });
+
+    it('> Insert a geojson document from external source in a new collection should succeed', async () => {
+
+        const dao = new GeoJsonDao(db);
+        const collectionId = uuid.v4();
+
+        const feature = require(TestData.SAMPLE_GEOJSON).features[0];
+        await dao.insert(collectionId, feature);
+
+        const cursor = await dao.queryAll(collectionId);
+        const count = await cursor.count();
+        assert.equal(count, 1);
+        assert.deepEqual(feature, await cursor.next());
+    });
+
 
     it('> Insert a geojson document without specified id in a new collection should succeed', async () => {
 
