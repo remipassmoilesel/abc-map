@@ -18,6 +18,7 @@ export class ProjectDao extends AbstractDao {
     }
 
     public insert(project: Project): Promise<InsertOneWriteOpResult> {
+        this.generateIdIfNecessary(project);
         const serializedProject = this.entitySerializer.classToPlain(project);
         return this.db.collection(this.projectCollectionId).insertOne(serializedProject);
     }

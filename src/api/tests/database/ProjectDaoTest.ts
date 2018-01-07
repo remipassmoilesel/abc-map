@@ -10,7 +10,7 @@ import {initApplication, stopApplication} from '../../main';
 
 const assert = chai.assert;
 
-describe('ProjectDao', () => {
+describe.only('ProjectDao', () => {
 
     let db: Db;
 
@@ -45,6 +45,7 @@ describe('ProjectDao', () => {
         const queriedProject: Project = await dao.query();
 
         assert.deepEqual(project, queriedProject);
+        assert.typeOf(queriedProject._id, 'string');
         assert.instanceOf(queriedProject, Project);
         assert.instanceOf(queriedProject.layers[0], TileLayer);
         assert.instanceOf(queriedProject.layers[1], GeoJsonLayer);

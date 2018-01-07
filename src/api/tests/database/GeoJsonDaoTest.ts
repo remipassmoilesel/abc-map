@@ -8,10 +8,11 @@ import {TestData} from '../TestData';
 import {IGeoJsonFeatureCollection} from '../../entities/geojson/IGeoJsonFeatureCollection';
 import {initApplication, stopApplication} from '../../main';
 import {IServicesMap} from '../../services/IServiceMap';
+import * as _ from 'lodash';
 
 const assert = chai.assert;
 
-describe('GeoJsonDao', () => {
+describe.only('GeoJsonDao', () => {
 
     let db: Db;
     let ipcStub;
@@ -32,6 +33,7 @@ describe('GeoJsonDao', () => {
     const getGeoJsonFeature = () => {
 
         const feature: IGeoJsonFeature = {
+            _id: `test-id-${uuid.v4()}`,
             geometry: {
                 coordinates: [[
                     [-73.99, 40.75],
@@ -49,32 +51,100 @@ describe('GeoJsonDao', () => {
         return feature;
     };
 
-    it('> Insert a geojson document in a new collection should succeed', async () => {
+    it('> Insert a geojson document with specified id in a new collection should succeed', async () => {
 
         const dao = new GeoJsonDao(db);
         const collectionId = uuid.v4();
 
-        await dao.insertMany(collectionId, require(TestData.SAMPLE_GEOJSON).features);
+        const feature = getGeoJsonFeature();
+        const featureId = feature._id;
+
+        await dao.insert(collectionId, feature);
 
         const cursor = await dao.queryAll(collectionId);
         const count = await cursor.count();
         assert.equal(count, 1);
+
+        const expectedFeature = await cursor.next();
+        assert.deepEqual(feature, expectedFeature);
+        assert.deepEqual(feature._id, featureId);
+
+        await cursor.close();
     });
 
-    it('> Insert many documents in a new collection should succeed', async () => {
+    it('> Insert a geojson document without specified id in a new collection should succeed', async () => {
+
         const dao = new GeoJsonDao(db);
         const collectionId = uuid.v4();
 
-        await dao.insertMany(collectionId, [
+        const feature = getGeoJsonFeature();
+        feature._id = undefined;
+
+        await dao.insert(collectionId, feature);
+
+        const cursor = await dao.queryAll(collectionId);
+        const count = await cursor.count();
+        assert.equal(count, 1);
+
+        const expectedFeature = await cursor.next();
+        assert.deepEqual(feature, expectedFeature);
+        assert.isDefined(feature._id);
+        assert.typeOf(feature._id, 'string');
+
+        await cursor.close();
+    });
+
+    it('> Insert many documents with ids in a new collection should succeed', async () => {
+        const dao = new GeoJsonDao(db);
+        const collectionId = uuid.v4();
+
+        const collection = [
             getGeoJsonFeature(),
             getGeoJsonFeature(),
             getGeoJsonFeature(),
-        ]);
+        ];
+        const featureIds: string[] = _.map(collection, (feat) => feat._id);
+
+        await dao.insertMany(collectionId, collection);
 
         const cursor = await dao.queryAll(collectionId);
         const count = await cursor.count();
         assert.equal(count, 3);
 
+        const expectedCollection = await cursor.toArray();
+        _.forEach(expectedCollection, (feature) => {
+            assert.isDefined(feature._id);
+            assert.typeOf(feature._id, 'string');
+            assert.isDefined(_.find(featureIds, (id) => id === feature._id));
+        });
+
+        assert.deepEqual(collection, expectedCollection);
+    });
+
+    it('> Insert many documents without ids in a new collection should succeed', async () => {
+        const dao = new GeoJsonDao(db);
+        const collectionId = uuid.v4();
+
+        const collection = [
+            getGeoJsonFeature(),
+            getGeoJsonFeature(),
+            getGeoJsonFeature(),
+        ];
+        _.forEach(collection, (feat) => delete feat._id);
+
+        await dao.insertMany(collectionId, collection);
+
+        const cursor = await dao.queryAll(collectionId);
+        const count = await cursor.count();
+        assert.equal(count, 3);
+
+        const expectedCollection = await cursor.toArray();
+        _.forEach(expectedCollection, (feature) => {
+            assert.isDefined(feature._id);
+            assert.typeOf(feature._id, 'string');
+        });
+
+        assert.deepEqual(collection, expectedCollection);
     });
 
     it('> Create a geoindex should succeed', async () => {

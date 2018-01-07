@@ -12,10 +12,14 @@ export class GeoJsonDao extends AbstractDao {
     }
 
     public insert(collectionId: string, document: IGeoJsonFeature): Promise<InsertWriteOpResult> {
+        this.generateIdIfNecessary(document);
         return this.insertMany(collectionId, [document]);
     }
 
     public insertMany(collectionId: string, geoJsonFeatures: IGeoJsonFeature[]): Promise<InsertWriteOpResult> {
+        for (const feature of geoJsonFeatures) {
+            this.generateIdIfNecessary(feature);
+        }
         return this.db.collection(collectionId).insertMany(geoJsonFeatures);
     }
 
@@ -33,27 +37,24 @@ export class GeoJsonDao extends AbstractDao {
         });
     }
 
-    public queryForAreaAndFilter(collectionId: string,
-                                 geometry: IGeoJsonGeometry, minArea: number): Promise<IGeoJsonFeature[]> {
+    public async queryForAreaAndFilter(collectionId: string,
+                                       geometry: IGeoJsonGeometry, minArea: number): Promise<IGeoJsonFeature[]> {
 
-        return new Promise(async (resolve, reject) => {
-
-            const result = [];
-            const cursor = this.queryForArea(collectionId, geometry);
-            while (cursor.hasNext()) {
-                await cursor.next().then((feature) => {
-                    const area = turf.area(feature);
-                    if (area > minArea) {
-                        result.push(feature);
-                    }
-                });
+        const result = [];
+        const cursor = this.queryForArea(collectionId, geometry);
+        while (cursor.hasNext()) {
+            const feature = await cursor.next();
+            const area = turf.area(feature);
+            if (area > minArea) {
+                result.push(feature);
             }
+        }
 
-        });
-
+        return result;
     }
 
     public saveLayer(layer: GeoJsonLayer, data: IGeoJsonFeature[]): Promise<InsertWriteOpResult> {
         return this.insertMany(layer.id, data);
     }
+
 }
