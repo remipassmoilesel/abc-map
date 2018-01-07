@@ -16,7 +16,7 @@
     "watch": "gulp watch",
     "test": "npm run clean && npm run test-api && npm run test-gui",
     "test-api": "npm run clean && gulp build-api && gulp test-api",
-    "test-gui": "npm run clean && npm run build && NODE_ENV=test gulp start",
+    "test-gui": "npm run clean && NODE_ENV=test gulp start",
     "start-db": "./mongodb/bin/mongod -f config/mongodb-config.yaml",
     "stop-db": "./mongodb/bin/mongod -f config/mongodb-config.yaml --shutdown",
     "clean-db": "rm -rf ./mongodb-data && mkdir ./mongodb-data",
