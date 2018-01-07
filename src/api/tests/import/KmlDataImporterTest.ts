@@ -12,7 +12,7 @@ import {IGeoJsonFeature} from '../../entities/geojson/IGeoJsonFeature';
 
 const assert = chai.assert;
 
-describe.only('KmlDataImporter', () => {
+describe('KmlDataImporter', () => {
 
     let db: Db;
 

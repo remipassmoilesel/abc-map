@@ -12,7 +12,7 @@ import {IGeoJsonFeature} from '../../entities/geojson/IGeoJsonFeature';
 
 const assert = chai.assert;
 
-describe.only('GpxDataImporter', () => {
+describe('GpxDataImporter', () => {
 
     let db: Db;
 
