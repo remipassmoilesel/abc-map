@@ -37,7 +37,7 @@ export class MapService extends AbstractService {
         this.layerEditionManager = new LayerEditionService();
     }
 
-    public setServiceMap(services: IServicesMap){
+    public setServiceMap(services: IServicesMap) {
         super.setServicesMap(services);
         this.layerEditionManager.setServiceMap(services);
     }
@@ -67,7 +67,8 @@ export class MapService extends AbstractService {
         return Promise.all(promises);
     }
 
-    public async importFilesAsLayers(filePaths: string[]) {
+    public async importFilesAsLayers(filePaths: string[],
+                                     layerIds: string[] = []): Promise<AbstractMapLayer[]> {
 
         const importedFiles = await this.services.map.importFiles(filePaths);
 
@@ -75,15 +76,22 @@ export class MapService extends AbstractService {
         const dao = this.services.db.getGeoJsonDao();
 
         try {
+            let i = 0;
             for (const f of importedFiles) {
+
                 const layer = new GeoJsonLayer();
-                layer.name = path.basename(f.filepath);
+                layer.name = layerIds[i] ? layerIds[i] : path.basename(f.filepath);
+                layer.id = layerIds[i] ? layerIds[i] : layer.id;
+
                 await dao.saveLayer(layer, f.data.features);
                 layers.push(layer);
+
+                i++;
             }
 
             await this.services.project.addLayers(layers);
 
+            return layers;
         } catch (e) {
             logger.error(`Error while importing data: ${e}`);
             throw e;

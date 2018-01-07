@@ -23,6 +23,7 @@ correspondant à mes besoins.
 
 ## Structure
 
+- Supprimer un projet supprime toutes les couches de données associées
 - Réduire les node_modules avec https://www.npmjs.com/package/modclean
 - Composant séparé pour édition de couche en tant que classeur
 - Instance Jenkins avec builds pour toutes plateformes

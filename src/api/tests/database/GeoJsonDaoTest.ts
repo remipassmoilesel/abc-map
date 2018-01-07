@@ -12,7 +12,7 @@ import * as _ from 'lodash';
 
 const assert = chai.assert;
 
-describe.only('GeoJsonDao', () => {
+describe('GeoJsonDao', () => {
 
     let db: Db;
     let ipcStub;

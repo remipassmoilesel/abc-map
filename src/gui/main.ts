@@ -1,6 +1,6 @@
 import {Toaster} from './lib/Toaster';
 import Vue from 'vue';
-import {ElectronUtilities} from '../api/dev/ElectronDevUtilities';
+import {ElectronUtilities} from '../api/dev/ElectronUtilities';
 import {Logger} from '../api/dev/Logger';
 
 import * as sourceMapSupport from 'source-map-support';

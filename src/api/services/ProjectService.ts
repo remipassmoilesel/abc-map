@@ -59,14 +59,6 @@ export class ProjectService extends AbstractService {
         }
     }
 
-    public async setupDevProject() {
-        await this.services.map.importFilesAsLayers([
-            TestData.KML_GRENOBLE_SHAPES,
-            TestData.KML_GRENOBLE_SHAPES_FILTER1,
-        ]);
-
-    }
-
     public getCurrentProject(): Project {
         return this.currentProject;
     }

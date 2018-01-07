@@ -1,11 +1,12 @@
 import {app, BrowserWindow, globalShortcut} from 'electron';
 import * as url from 'url';
-import {ElectronUtilities} from './api/dev/ElectronDevUtilities';
+import {ElectronUtilities} from './api/dev/ElectronUtilities';
 import {Logger} from './api/dev/Logger';
 import {initApplication, stopApplication} from './api/main';
 import {Ipc} from './api/ipc/Ipc';
 import * as sourceMapSupport from 'source-map-support';
 import * as paths from '../config/paths';
+import {DevUtilities} from "./api/dev/DevUtilities";
 
 sourceMapSupport.install();
 
@@ -69,7 +70,7 @@ async function createWindow() {
 
     if (ElectronUtilities.isDevMode()) {
         logger.info('Setting up dev project.');
-        await services.project.setupDevProject();
+        await DevUtilities.setupDevProject(services);
     }
 
 }
