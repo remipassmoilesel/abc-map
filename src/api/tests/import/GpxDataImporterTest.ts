@@ -40,6 +40,7 @@ describe.only('GpxDataImporter', () => {
         const collId = await importer.fileToCollection(TestData.SAMPLE_GPX, `test-gpx-${uuid.v4()}`);
 
         const features: IGeoJsonFeature[] = await services.db.getGeoJsonDao().queryAll(collId).toArray();
+
         assert.lengthOf(features, 1);
         assert.equal(features[0].geometry.type, 'LineString');
 
