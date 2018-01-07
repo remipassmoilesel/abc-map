@@ -7,20 +7,16 @@ import {AbstractDao} from './AbstractDao';
 
 export class GeoJsonDao extends AbstractDao {
 
+    public insert(collectionId: string, document: IGeoJsonFeature): Promise<InsertWriteOpResult> {
+        return super.insertRaw(collectionId, document);
+    }
+
+    public insertMany(collectionId: string, dataArray: IGeoJsonFeature[]): Promise<InsertWriteOpResult> {
+        return super.insertManyRaw(collectionId, dataArray);
+    }
+
     public createGeoIndex(collectionId: string, field?: any): Promise<string> {
         return this.db.collection(collectionId).createIndex(field || {geometry: '2dsphere'});
-    }
-
-    public insert(collectionId: string, document: IGeoJsonFeature): Promise<InsertWriteOpResult> {
-        this.generateIdIfNecessary(document);
-        return this.insertMany(collectionId, [document]);
-    }
-
-    public insertMany(collectionId: string, geoJsonFeatures: IGeoJsonFeature[]): Promise<InsertWriteOpResult> {
-        for (const feature of geoJsonFeatures) {
-            this.generateIdIfNecessary(feature);
-        }
-        return this.db.collection(collectionId).insertMany(geoJsonFeatures);
     }
 
     public queryAll(collectionId: string) {

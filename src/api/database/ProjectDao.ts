@@ -1,4 +1,4 @@
-import {Db, InsertOneWriteOpResult} from 'mongodb';
+import {Db, InsertWriteOpResult} from 'mongodb';
 import {Project} from '../entities/Project';
 import {AbstractDao} from './AbstractDao';
 import {Logger} from '../dev/Logger';
@@ -17,10 +17,9 @@ export class ProjectDao extends AbstractDao {
         return this.db.dropCollection(this.projectCollectionId);
     }
 
-    public insert(project: Project): Promise<InsertOneWriteOpResult> {
-        this.generateIdIfNecessary(project);
+    public insert(project: Project): Promise<InsertWriteOpResult> {
         const serializedProject = this.entitySerializer.classToPlain(project);
-        return this.db.collection(this.projectCollectionId).insertOne(serializedProject);
+        return super.insertRaw(this.projectCollectionId, serializedProject);
     }
 
     public async query(): Promise<Project | null> {

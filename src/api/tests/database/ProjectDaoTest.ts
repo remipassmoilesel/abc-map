@@ -10,7 +10,7 @@ import {initApplication, stopApplication} from '../../main';
 
 const assert = chai.assert;
 
-describe('ProjectDao', () => {
+describe.only('ProjectDao', () => {
 
     let db: Db;
 
