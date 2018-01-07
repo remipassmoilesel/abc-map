@@ -20,11 +20,11 @@ export class DataExporterFinder extends AbstractServiceConsumer {
     }
 
     public getInstanceForFormat(format: ExportFormat): AbstractDataExporter | undefined {
-        const importers = _.filter(this.instances, (inst: AbstractDataExporter) => {
-            return _.includes(inst.getSupportedFormats(), format);
+        const exporters = _.filter(this.instances, (inst: AbstractDataExporter) => {
+            return inst.isSupported(format);
         });
 
-        return importers.length > 0 ? importers[0] : undefined;
+        return exporters.length > 0 ? exporters[0] : undefined;
     }
 
     private buildInstances() {

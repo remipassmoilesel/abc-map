@@ -5,7 +5,7 @@ import {XlsxDataExporter} from '../../export/XlsxDataExporter';
 
 const assert = chai.assert;
 
-describe('ExporterFinderTest', () => {
+describe('DataExporterFinderTest', () => {
 
     it('Finder should find XLSX exporter', async () => {
         const finder = new DataExporterFinder({} as any);
@@ -17,7 +17,7 @@ describe('ExporterFinderTest', () => {
 
     it('Finder should return undefined if format is unknown', async () => {
         const finder = new DataExporterFinder({} as any);
-        const exporter = finder.getInstanceForFormat(new ExportFormat('xyz'));
+        const exporter = finder.getInstanceForFormat(new ExportFormat(['xyz']));
 
         assert.isUndefined(exporter);
     });
