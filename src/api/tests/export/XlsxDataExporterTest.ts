@@ -1,6 +1,6 @@
 import * as chai from 'chai';
 import * as _ from 'lodash';
-import {Row, Workbook, Worksheet} from 'exceljs';
+import {Workbook, Worksheet} from 'exceljs';
 import {TestUtils} from '../TestUtils';
 import {Db} from 'mongodb';
 import {GeoJsonLayer} from '../../entities/layers/GeoJsonLayer';
@@ -8,11 +8,11 @@ import {IServicesMap} from '../../services/IServiceMap';
 import {initApplication, stopApplication} from '../../main';
 import {DataExporterFinder} from '../../export/DataExporterFinder';
 import {FileFormat} from '../../export/FileFormat';
-import {AbstractDataExporter} from '../../export/AbstractDataExporter';
 import {LayerEditor} from '../../layer-editor/LayerEditor';
 import {XlsxDataExporter} from '../../export/XlsxDataExporter';
 import {DevUtilities} from '../../dev/DevUtilities';
 import {Logger} from '../../dev/Logger';
+import {getAllIds} from './common';
 
 const assert = chai.assert;
 
@@ -40,37 +40,9 @@ describe('XlsxDataExporterTest', () => {
         await stopApplication();
     });
 
-    function getExporter(services, exportFormat: FileFormat): AbstractDataExporter {
-        return exporterFinder.getInstanceForFormat(exportFormat);
-    }
-
-    function getAllIds(dataSheet: Worksheet): Promise<string[]> {
-        const idHeader = Object.keys(XlsxDataExporter.XLSX_HEADERS)[0];
-        const sheetFeatureIds: string[] = [];
-
-        let i = 1;
-        const end = dataSheet.rowCount - 1;
-
-        return new Promise((resolve, reject) => {
-            dataSheet.eachRow((row: Row) => {
-                const id = row.getCell(1).value.toString();
-
-                if (id === idHeader) {
-                    return;
-                }
-
-                sheetFeatureIds.push(id);
-                if (i >= end - 1) {
-                    resolve(sheetFeatureIds);
-                }
-                i++;
-            });
-        });
-    }
-
     it('> Export layer as xlsx should succeed', async () => {
 
-        const exporter = getExporter(services, FileFormat.XLSX);
+        const exporter = exporterFinder.getInstanceForFormat(FileFormat.XLSX);
         assert.instanceOf(exporter, XlsxDataExporter);
 
         const testLayer: GeoJsonLayer = await DevUtilities.createGeojsonTestLayer(services);
