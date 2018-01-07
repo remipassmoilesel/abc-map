@@ -1,13 +1,14 @@
 import * as shapefile from 'shapefile';
 import {AbstractDataImporter, IImportedFile} from './AbstractDataImporter';
+import {FileFormat} from "../export/FileFormat";
 
 
 // TODO: Refactor in order directly data in database
 
 export class ShapefileImporter extends AbstractDataImporter {
 
-    public getSupportedExtensions(): string[] {
-        return ['.shp'];
+    public getSupportedFormat(): FileFormat {
+        return FileFormat.KML;
     }
 
     public getGeoJson(pathToSourceFile: string): Promise<IImportedFile> {
@@ -15,7 +16,9 @@ export class ShapefileImporter extends AbstractDataImporter {
         return shapefile.open('example.shp')
             .then((source) => source.read()
                 .then(function log(result) {
-                    if (result.done) { return; }
+                    if (result.done) {
+                        return;
+                    }
                     return source.read();
                 }))
             .catch((error) => console.error(error.stack));

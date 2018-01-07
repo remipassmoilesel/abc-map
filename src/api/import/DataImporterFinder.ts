@@ -1,5 +1,4 @@
 import * as _ from 'lodash';
-import * as path from 'path';
 import {GpxDataImporter} from './GpxDataImporter';
 import {KmlDataImporter} from './KmlDataImporter';
 import {AbstractDataImporter} from './AbstractDataImporter';
@@ -18,18 +17,18 @@ export class DataImporterFinder extends AbstractServiceConsumer {
 
     public setServicesMap(services: IServicesMap): void {
         super.setServicesMap(services);
-        this.buildInstances(services);
+        this.buildInstances();
     }
 
     public getInstanceForFile(filePath: string): AbstractDataImporter | undefined {
         const importers = _.filter(this.instances, (inst: AbstractDataImporter) => {
-            return _.includes(inst.getSupportedExtensions(), path.extname(filePath));
+            return inst.getSupportedFormat().isFileSupported(filePath);
         });
 
         return importers.length > 0 ? importers[0] : undefined;
     }
 
-    private buildInstances(services: IServicesMap) {
+    private buildInstances() {
         this.instances = [
             new GpxDataImporter(),
             new KmlDataImporter(),

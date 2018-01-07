@@ -3,11 +3,12 @@ import * as fs from 'fs-extra-promise';
 import {Document, DOMParser} from 'xmldom';
 import {AbstractDataImporter, IImportedFile} from './AbstractDataImporter';
 import {IGeoJsonFeatureCollection} from '../entities/geojson/IGeoJsonFeatureCollection';
+import {FileFormat} from "../export/FileFormat";
 
 export class KmlDataImporter extends AbstractDataImporter {
 
-    public getSupportedExtensions(): string[] {
-        return ['.kml'];
+    public getSupportedFormat(): FileFormat {
+        return FileFormat.KML;
     }
 
     public getGeoJson(pathToSourceFile: string): Promise<IImportedFile> {

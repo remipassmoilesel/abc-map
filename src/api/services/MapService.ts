@@ -15,7 +15,7 @@ import * as path from 'path';
 import {AbstractMapLayer} from '../entities/layers/AbstractMapLayer';
 import {LayerEditor} from '../layer-editor/LayerEditor';
 import {IServicesMap} from './IServiceMap';
-import {ExportFormat} from '../export/ExportFormat';
+import {FileFormat} from '../export/FileFormat';
 
 const logger = Logger.getLogger('MapService');
 
@@ -97,14 +97,14 @@ export class MapService extends AbstractService {
         }
     }
 
-    public async editLayerAsSpreadsheet(layerId: string, exportFormat?: ExportFormat) {
+    public async editLayerAsSpreadsheet(layerId: string, exportFormat?: FileFormat) {
 
         // check if layer is already edited
         if (this.layerEditor.isEdited(layerId)) {
             throw new Error('Layer is already edited');
         }
 
-        await this.layerEditor.edit(layerId, exportFormat || ExportFormat.XLSX);
+        await this.layerEditor.edit(layerId, exportFormat || FileFormat.XLSX);
 
     }
 

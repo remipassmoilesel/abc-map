@@ -2,7 +2,7 @@ import * as _ from 'lodash';
 import {AbstractDataExporter} from './AbstractDataExporter';
 import {IServicesMap} from '../services/IServiceMap';
 import {XlsxDataExporter} from './XlsxDataExporter';
-import {ExportFormat} from './ExportFormat';
+import {FileFormat} from './FileFormat';
 import {AbstractServiceConsumer} from '../common/AbstractServiceConsumer';
 
 export class DataExporterFinder extends AbstractServiceConsumer {
@@ -19,9 +19,9 @@ export class DataExporterFinder extends AbstractServiceConsumer {
         this.buildInstances();
     }
 
-    public getInstanceForFormat(format: ExportFormat): AbstractDataExporter | undefined {
+    public getInstanceForFormat(format: FileFormat): AbstractDataExporter | undefined {
         const exporters = _.filter(this.instances, (inst: AbstractDataExporter) => {
-            return inst.isSupported(format);
+            return inst.getSupportedFormat().isSupported(format);
         });
 
         return exporters.length > 0 ? exporters[0] : undefined;

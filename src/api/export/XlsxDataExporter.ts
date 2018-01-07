@@ -2,7 +2,7 @@
 import * as _ from 'lodash';
 import {AbstractDataExporter} from './AbstractDataExporter';
 import {Workbook, Worksheet} from 'exceljs';
-import {ExportFormat} from './ExportFormat';
+import {FileFormat} from './FileFormat';
 import {IGeoJsonFeature} from '../entities/geojson/IGeoJsonFeature';
 import {FeatureUtils} from '../entities/geojson/FeatureUtils';
 
@@ -15,11 +15,11 @@ export class XlsxDataExporter extends AbstractDataExporter {
         'Properties': 'Properties attached to feature',
     };
 
-    public getSupportedFormats(): ExportFormat[] {
-        return [ExportFormat.XLSX];
+    public getSupportedFormat(): FileFormat {
+        return FileFormat.XLSX;
     }
 
-    public async exportCollection(collectionId: string, destinationPath: string, format: ExportFormat) {
+    public async exportCollection(collectionId: string, destinationPath: string, format: FileFormat) {
         const dataCursor = await this.services.db.getGeoJsonDao().queryAll(collectionId);
 
         const workbook = new Workbook();

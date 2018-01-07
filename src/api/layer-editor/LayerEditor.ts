@@ -5,7 +5,7 @@ import * as path from 'path';
 import * as fs from 'fs-extra';
 import {Logger} from '../dev/Logger';
 import {IServicesMap} from '../services/IServiceMap';
-import {ExportFormat} from '../export/ExportFormat';
+import {FileFormat} from '../export/FileFormat';
 import {DataExporterFinder} from '../export/DataExporterFinder';
 import {DataImporterFinder} from '../import/DataImporterFinder';
 import {AbstractServiceConsumer} from '../common/AbstractServiceConsumer';
@@ -20,8 +20,8 @@ interface IWatchedFile {
 
 export class LayerEditor extends AbstractServiceConsumer {
 
-    public static getTempPath(prefix: string, exportFormat: ExportFormat): string {
-        return path.join(os.tmpdir(), `${prefix}_${uuid.v4()}.${exportFormat.extension}`);
+    public static getTempPath(prefix: string, exportFormat: FileFormat): string {
+        return path.join(os.tmpdir(), `${prefix}_${uuid.v4()}.${exportFormat.extensions}`);
     }
 
     private importerFinder: DataImporterFinder;
@@ -44,9 +44,9 @@ export class LayerEditor extends AbstractServiceConsumer {
         return this.editedLayerIds.indexOf(layerId) !== -1;
     }
 
-    public async edit(layerId: string, targetFormat: ExportFormat): Promise<void> {
+    public async edit(layerId: string, targetFormat: FileFormat): Promise<void> {
 
-        const exportFormat = targetFormat || ExportFormat.XLSX;
+        const exportFormat = targetFormat || FileFormat.XLSX;
 
         const workbookPath = LayerEditor.getTempPath(layerId, exportFormat);
         const workbookExporter = this.exporterFinder.getInstanceForFormat(exportFormat);

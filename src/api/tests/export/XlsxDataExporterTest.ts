@@ -7,7 +7,7 @@ import {GeoJsonLayer} from '../../entities/layers/GeoJsonLayer';
 import {IServicesMap} from '../../services/IServiceMap';
 import {initApplication, stopApplication} from '../../main';
 import {DataExporterFinder} from '../../export/DataExporterFinder';
-import {ExportFormat} from '../../export/ExportFormat';
+import {FileFormat} from '../../export/FileFormat';
 import {AbstractDataExporter} from '../../export/AbstractDataExporter';
 import {LayerEditor} from '../../layer-editor/LayerEditor';
 import {XlsxDataExporter} from '../../export/XlsxDataExporter';
@@ -40,7 +40,7 @@ describe('XlsxDataExporterTest', () => {
         await stopApplication();
     });
 
-    function getExporter(services, exportFormat: ExportFormat): AbstractDataExporter {
+    function getExporter(services, exportFormat: FileFormat): AbstractDataExporter {
         return exporterFinder.getInstanceForFormat(exportFormat);
     }
 
@@ -70,16 +70,16 @@ describe('XlsxDataExporterTest', () => {
 
     it('> Export layer as xlsx should succeed', async () => {
 
-        const exporter = getExporter(services, ExportFormat.XLSX);
+        const exporter = getExporter(services, FileFormat.XLSX);
         assert.instanceOf(exporter, XlsxDataExporter);
 
         const testLayer: GeoJsonLayer = await DevUtilities.createGeojsonTestLayer(services);
         const layerId: string = testLayer.id;
 
-        const tempPath = LayerEditor.getTempPath(layerId, ExportFormat.XLSX);
+        const tempPath = LayerEditor.getTempPath(layerId, FileFormat.XLSX);
         logger.info(`Layer exported at location: ${tempPath}`);
 
-        await exporter.exportCollection(layerId, tempPath, ExportFormat.XLSX);
+        await exporter.exportCollection(layerId, tempPath, FileFormat.XLSX);
 
         const workbook = new Workbook();
         await workbook.xlsx.readFile(tempPath);

@@ -2,13 +2,13 @@ import * as tgj from 'togeojson';
 import * as fs from 'fs-extra-promise';
 import {Document, DOMParser} from 'xmldom';
 import {AbstractDataImporter, IImportedFile} from './AbstractDataImporter';
-import {IGeoJsonFeature} from '../entities/geojson/IGeoJsonFeature';
 import {IGeoJsonFeatureCollection} from '../entities/geojson/IGeoJsonFeatureCollection';
+import {FileFormat} from '../export/FileFormat';
 
 export class GpxDataImporter extends AbstractDataImporter {
 
-    public getSupportedExtensions(): string[] {
-        return ['.gpx'];
+    public getSupportedFormat(): FileFormat {
+        return FileFormat.GPX;
     }
 
     public getGeoJson(pathToSourceFile: string): Promise<IImportedFile> {
