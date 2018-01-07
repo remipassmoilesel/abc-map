@@ -3,11 +3,16 @@ import {AbstractDataExporter} from './AbstractDataExporter';
 import {IServicesMap} from '../services/IServiceMap';
 import {XlsxDataExporter} from './XlsxDataExporter';
 import {ExportFormat} from './ExportFormat';
+import {AbstractServiceConsumer} from '../common/AbstractServiceConsumer';
 
-export class DataExporterFinder {
+export class DataExporterFinder extends AbstractServiceConsumer {
 
     private instances: AbstractDataExporter[];
-    private services: IServicesMap;
+
+    constructor(services: IServicesMap) {
+        super();
+        this.setServiceMap(services);
+    }
 
     public setServiceMap(services: IServicesMap) {
         this.services = services;

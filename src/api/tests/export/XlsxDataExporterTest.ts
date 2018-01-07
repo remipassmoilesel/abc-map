@@ -9,7 +9,7 @@ import {initApplication, stopApplication} from '../../main';
 import {DataExporterFinder} from '../../export/DataExporterFinder';
 import {ExportFormat} from '../../export/ExportFormat';
 import {AbstractDataExporter} from '../../export/AbstractDataExporter';
-import {LayerEditionService} from '../../layer-editor/LayerEditor';
+import {LayerEditor} from '../../layer-editor/LayerEditor';
 import {XlsxDataExporter} from '../../export/XlsxDataExporter';
 import {DevUtilities} from '../../dev/DevUtilities';
 import {Logger} from '../../dev/Logger';
@@ -18,7 +18,7 @@ const assert = chai.assert;
 
 const logger = Logger.getLogger('XlsxDataExporterTest');
 
-describe.only('XlsxDataExporterTest', () => {
+describe('XlsxDataExporterTest', () => {
 
     let db: Db;
 
@@ -31,8 +31,7 @@ describe.only('XlsxDataExporterTest', () => {
         services = await initApplication(ipcStub.ipc);
         db = await TestUtils.getMongodbConnection();
 
-        exporterFinder = new DataExporterFinder();
-        exporterFinder.setServiceMap(services);
+        exporterFinder = new DataExporterFinder(services);
 
         await DevUtilities.setupDevProject(services);
     });
@@ -72,11 +71,12 @@ describe.only('XlsxDataExporterTest', () => {
     it('> Export layer as xlsx should succeed', async () => {
 
         const exporter = getExporter(services, ExportFormat.XLSX);
+        assert.instanceOf(exporter, XlsxDataExporter);
 
         const testLayer: GeoJsonLayer = await DevUtilities.createGeojsonTestLayer(services);
         const layerId: string = testLayer.id;
 
-        const tempPath = LayerEditionService.getTempPath(layerId, ExportFormat.XLSX);
+        const tempPath = LayerEditor.getTempPath(layerId, ExportFormat.XLSX);
         logger.info(`Layer exported at location: ${tempPath}`);
 
         await exporter.exportCollection(layerId, tempPath, ExportFormat.XLSX);

@@ -32,48 +32,47 @@ export async function initApplication(ipc: Ipc): Promise<IServicesMap> {
     const databaseService = new DatabaseService(ipc, 'abc-map');
     databaseService.startDatabase();
 
+    let db;
     try {
-        const db = await databaseService.connect();
-
-        logger.info('Connected to database');
-
-        const projectService = new ProjectService(ipc);
-        const mapService = new MapService(ipc);
-        const shortcutsService = new GlobalShortcutsService(ipc);
-
-        services = {
-            db: databaseService,
-            map: mapService,
-            project: projectService,
-            shortcuts: shortcutsService,
-        };
-
-        // inject service map in each service
-        for (const propName in services) {
-            if (services.hasOwnProperty(propName)) {
-                const service: AbstractService = services[propName];
-                service.setServicesMap(services);
-            }
-        }
-
-        const projectHandlers = new ProjectHandlers(ipc, services);
-        const mapHandlers = new MapHandlers(ipc, services);
-        const databaseHandlers = new DatabaseHandlers(ipc, services);
-
-        handlers = {
-            db: databaseHandlers,
-            map: mapHandlers,
-            project: projectHandlers,
-        };
-
-        await projectHandlers.createNewProject();
-
-        return services;
-
+        db = await databaseService.connect();
     } catch (e) {
         logger.error('Error while connecting to database: ', e);
         process.exit(1);
     }
+    logger.info('Connected to database');
+
+    const projectService = new ProjectService(ipc);
+    const mapService = new MapService(ipc);
+    const shortcutsService = new GlobalShortcutsService(ipc);
+
+    services = {
+        db: databaseService,
+        map: mapService,
+        project: projectService,
+        shortcuts: shortcutsService,
+    };
+
+    // inject service map in each service
+    for (const propName in services) {
+        if (services.hasOwnProperty(propName)) {
+            const service: AbstractService = services[propName];
+            service.setServicesMap(services);
+        }
+    }
+
+    const projectHandlers = new ProjectHandlers(ipc, services);
+    const mapHandlers = new MapHandlers(ipc, services);
+    const databaseHandlers = new DatabaseHandlers(ipc, services);
+
+    handlers = {
+        db: databaseHandlers,
+        map: mapHandlers,
+        project: projectHandlers,
+    };
+
+    await projectHandlers.createNewProject();
+
+    return services;
 
 }
 

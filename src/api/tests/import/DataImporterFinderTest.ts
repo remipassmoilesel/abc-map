@@ -10,7 +10,7 @@ describe('DataImporterFinder', () => {
     it('Should find an importer for GPX data', () => {
 
         const file = 'test.gpx';
-        const importerFinder = new DataImporterFinder();
+        const importerFinder = new DataImporterFinder({} as any);
 
         const importer = importerFinder.getInstanceForFile(file);
         assert.instanceOf(importer, GpxDataImporter);
@@ -20,7 +20,7 @@ describe('DataImporterFinder', () => {
     it('Should find an importer for KML data', () => {
 
         const file = 'test.kml';
-        const importerFinder = new DataImporterFinder();
+        const importerFinder = new DataImporterFinder({} as any);
 
         const importer = importerFinder.getInstanceForFile(file);
         assert.instanceOf(importer, KmlDataImporter);
@@ -30,7 +30,7 @@ describe('DataImporterFinder', () => {
     it('Should return undefined if extension is unknown', () => {
 
         const file = 'test.xyza';
-        const importerFinder = new DataImporterFinder();
+        const importerFinder = new DataImporterFinder({} as any);
 
         const importer = importerFinder.getInstanceForFile(file);
         assert.isUndefined(importer);

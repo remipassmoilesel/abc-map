@@ -1,27 +1,43 @@
+// tslint:disable:no-var-requires
 import * as os from 'os';
 import * as uuid from 'uuid';
 import * as path from 'path';
+import * as fs from 'fs-extra';
 import {Logger} from '../dev/Logger';
 import {IServicesMap} from '../services/IServiceMap';
 import {ExportFormat} from '../export/ExportFormat';
 import {DataExporterFinder} from '../export/DataExporterFinder';
+import {DataImporterFinder} from '../import/DataImporterFinder';
+import {AbstractServiceConsumer} from '../common/AbstractServiceConsumer';
 
+const opn = require('opn');
 const logger = Logger.getLogger('LayerEditionManager');
 
-export class LayerEditionService {
+interface IWatchedFile {
+    path: string;
+    watcher: any;
+}
+
+export class LayerEditor extends AbstractServiceConsumer {
 
     public static getTempPath(prefix: string, exportFormat: ExportFormat): string {
         return path.join(os.tmpdir(), `${prefix}_${uuid.v4()}.${exportFormat.extension}`);
     }
 
-    public editedLayerIds: string[] = [];
-    private services: IServicesMap;
+    private importerFinder: DataImporterFinder;
+    private editedLayerIds: string[] = [];
+    private watchers: IWatchedFile[] = [];
     private exporterFinder: DataExporterFinder;
 
-    public setServiceMap(services: IServicesMap) {
-        this.services = services;
-        this.exporterFinder = new DataExporterFinder();
-        this.exporterFinder.setServiceMap(services);
+    constructor(services: IServicesMap){
+        super();
+        this.setServicesMap(services);
+    }
+
+    public setServicesMap(services: IServicesMap) {
+        super.setServicesMap(services);
+        this.exporterFinder = new DataExporterFinder(services);
+        this.importerFinder = new DataImporterFinder(services);
     }
 
     public isEdited(layerId: string) {
@@ -30,20 +46,34 @@ export class LayerEditionService {
 
     public async edit(layerId: string, targetFormat: ExportFormat): Promise<void> {
 
-        // TODO:
-        // export layer as a spreadsheet in tmp dir
-
         const exportFormat = targetFormat || ExportFormat.XLSX;
 
-        const spreadsheetPath = LayerEditionService.getTempPath(layerId, exportFormat);
+        const workbookPath = LayerEditor.getTempPath(layerId, exportFormat);
         const workbookExporter = this.exporterFinder.getInstanceForFormat(exportFormat);
-        await workbookExporter.exportCollection(layerId, spreadsheetPath, exportFormat);
+
+        await workbookExporter.exportCollection(layerId, workbookPath, exportFormat);
+        this.editedLayerIds.push(layerId);
 
         // open it with default application
-        // watch spreadsheet and import modification
-        // REMINDER: several layers can be modified at the same time
+        try {
+            await opn(workbookPath);
+        } catch (e) {
+            // TODO: send a message to gui
+            logger.error(e);
+        }
 
+        // watch spreadsheet and import modification
+        this.watchFile(workbookPath);
     }
 
+    private watchFile(workbookPath: string) {
+        const watcher = fs.watchFile(workbookPath, (eventType, filename) => {
+            console.log('eventType');
+            console.log(eventType);
+            console.log('filename');
+            console.log(filename);
+        });
 
+        this.watchers.push({path: workbookPath, watcher});
+    }
 }

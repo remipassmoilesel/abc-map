@@ -13,7 +13,7 @@ import {IImportedFile} from '../import/AbstractDataImporter';
 import {GeoJsonLayer} from '../entities/layers/GeoJsonLayer';
 import * as path from 'path';
 import {AbstractMapLayer} from '../entities/layers/AbstractMapLayer';
-import {LayerEditionService} from '../layer-editor/LayerEditor';
+import {LayerEditor} from '../layer-editor/LayerEditor';
 import {IServicesMap} from './IServiceMap';
 import {ExportFormat} from '../export/ExportFormat';
 
@@ -24,7 +24,7 @@ export class MapService extends AbstractService {
     private defaultLayers: DefaultTileLayers;
     private dataImporterFinder: DataImporterFinder;
     private geocoder: NominatimGeocoder;
-    private layerEditionManager: LayerEditionService;
+    private layerEditor: LayerEditor;
 
     constructor(ipc: Ipc) {
         super(ipc);
@@ -32,14 +32,13 @@ export class MapService extends AbstractService {
         logger.info('Initialize MapService');
 
         this.defaultLayers = new DefaultTileLayers();
-        this.dataImporterFinder = new DataImporterFinder();
         this.geocoder = new NominatimGeocoder();
-        this.layerEditionManager = new LayerEditionService();
     }
 
-    public setServiceMap(services: IServicesMap) {
+    public setServicesMap(services: IServicesMap) {
         super.setServicesMap(services);
-        this.layerEditionManager.setServiceMap(services);
+        this.layerEditor = new LayerEditor(services);
+        this.dataImporterFinder = new DataImporterFinder(services);
     }
 
     public geocode(query: string): Promise<GeocodingResult[]> {
@@ -101,11 +100,11 @@ export class MapService extends AbstractService {
     public async editLayerAsSpreadsheet(layerId: string, exportFormat?: ExportFormat) {
 
         // check if layer is already edited
-        if (this.layerEditionManager.isEdited(layerId)) {
+        if (this.layerEditor.isEdited(layerId)) {
             throw new Error('Layer is already edited');
         }
 
-        await this.layerEditionManager.edit(layerId, exportFormat || ExportFormat.XLSX);
+        await this.layerEditor.edit(layerId, exportFormat || ExportFormat.XLSX);
 
     }
 
