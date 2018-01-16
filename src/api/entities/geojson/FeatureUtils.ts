@@ -16,4 +16,8 @@ export class FeatureUtils {
         feature.properties.abcmap.style = {color: '#000000'};
     }
 
+    public static asAbcmapProperties(data: any){
+        return {abcmap: data};
+    }
+
 }

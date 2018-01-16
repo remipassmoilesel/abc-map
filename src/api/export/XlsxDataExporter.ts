@@ -5,6 +5,7 @@ import {Workbook, Worksheet} from 'exceljs';
 import {FileFormat} from './FileFormat';
 import {IGeoJsonFeature} from '../entities/geojson/IGeoJsonFeature';
 import {FeatureUtils} from '../entities/geojson/FeatureUtils';
+import {XlsxHelper} from './XlsxHelper';
 
 export class XlsxDataExporter extends AbstractDataExporter {
 
@@ -14,6 +15,8 @@ export class XlsxDataExporter extends AbstractDataExporter {
         'Coordinates': 'Coordinates of geometry',
         'Properties': 'Properties attached to feature',
     };
+
+    private xlsxHelper = new XlsxHelper();
 
     public getSupportedFormat(): FileFormat {
         return FileFormat.XLSX;
@@ -40,7 +43,8 @@ export class XlsxDataExporter extends AbstractDataExporter {
 
             while (await dataCursor.hasNext()) {
                 const rowData = await dataCursor.next();
-                this.addFeatureRow(rowData, dataSheet);
+                const row = this.xlsxHelper.featureToRow(rowData);
+                dataSheet.addRow(row);
             }
 
         } else {
@@ -59,17 +63,6 @@ export class XlsxDataExporter extends AbstractDataExporter {
         helpSheet.getRow(1).font = {name: 'Comic Sans MS', family: 4, size: 12, bold: true};
     }
 
-    private addFeatureRow(feature: IGeoJsonFeature, dataSheet: Worksheet) {
-
-        let row: string[] = [];
-
-        row.push(feature._id);
-        row.push(feature.geometry.type);
-        row.push(JSON.stringify(feature.geometry.coordinates));
-        row = row.concat(this.processProperties(feature));
-
-        dataSheet.addRow(row);
-    }
 
     private addHeadersDescription(headers: any, helpSheet: Worksheet) {
         helpSheet.addRow([]);
@@ -81,16 +74,6 @@ export class XlsxDataExporter extends AbstractDataExporter {
         helpSheet.getRow(4).font = {name: 'Comic Sans MS', family: 4, size: 12, bold: true};
         const fieldNameCol = helpSheet.getColumn(2);
         fieldNameCol.width = 20;
-    }
-
-    private processProperties(feature: IGeoJsonFeature): string[] {
-        FeatureUtils.ensureAbcmapPropertiesExists(feature);
-        const properties = [];
-        _.forEach(Object.keys(feature.properties), (key) => {
-            properties.push(JSON.stringify(feature.properties[key]));
-        });
-
-        return properties;
     }
 
     private setMetadata(workbook: Workbook) {
