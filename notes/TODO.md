@@ -2,6 +2,10 @@
 
 ## Comportement
 
+- Je veux pouvoir exploiter les données météo du réseau AROME ?
+
+    https://donneespubliques.meteofrance.fr/?fond=geoservices&id_dossier=14
+
 - Je veux afficher ma position, ma vitesse et ma direction à l'aide d'un capteur (antenne gps, telephone portable)
 - Je veux exporter ma carte sous forme de fichier HTML + JS + données JSON
 - Je veux exprimer mon projet sous forme de phrase simple, voir des propositions et afficher des assistants 

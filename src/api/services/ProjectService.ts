@@ -1,5 +1,4 @@
 import * as _ from 'lodash';
-import * as path from 'path';
 import {IProjectCreationOptions, Project} from '../entities/Project';
 import {Logger} from '../dev/Logger';
 import {Utils} from '../utils/Utils';
@@ -9,22 +8,47 @@ import {EventType} from '../ipc/IpcEventTypes';
 import {IpcEvent} from '../ipc/IpcEvent';
 import {AbstractService} from './AbstractService';
 import {AbstractMapLayer} from '../entities/layers/AbstractMapLayer';
-import {GeoJsonLayer} from '../entities/layers/GeoJsonLayer';
-import {TestData} from '../tests/TestData';
 
 const logger = Logger.getLogger('ProjectService');
 
 export class ProjectService extends AbstractService {
 
+    private saveInterval: number;
     private currentProject: Project;
 
     constructor(ipc: Ipc) {
         super(ipc);
         logger.info('Initialize project service');
+
+        this.saveInterval = setInterval(this.persistProject.bind(this), 3 * 60 * 1000);
     }
 
-    public async newProject(parameters?: IProjectCreationOptions): Promise<Project> {
-        logger.info('Create new project', parameters);
+    public persistProject() {
+        logger.info('Automatic update of project in database ...');
+        const projectDao = this.services.db.getProjectDao();
+        const project = this.services.project.getCurrentProject();
+        projectDao.update(project);
+    }
+
+    public async createNewProject() {
+        logger.info('Create new project');
+
+        const projectDao = this.services.db.getProjectDao();
+
+        // TODO: do not drop previous project if not existing
+        const previousProject: Project | null = await projectDao.query();
+        if (previousProject) {
+            await projectDao.clear();
+        }
+
+        // create a new project with a default layer
+        const project: Project = await this.instantiateProject();
+        await this.addLayer(this.services.map.getDefaultWmsLayers()[0]);
+
+        await projectDao.insert(project);
+    }
+
+    private async instantiateProject(parameters?: IProjectCreationOptions): Promise<Project> {
 
         const params = Utils.withDefaultValues(parameters, {name: 'New project'});
         this.currentProject = new Project(params.name);
@@ -78,6 +102,7 @@ export class ProjectService extends AbstractService {
     }
 
     public onAppExit(): Promise<void> {
+        clearInterval(this.saveInterval);
         return Promise.resolve();
     }
 

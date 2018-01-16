@@ -11,8 +11,6 @@ const logger = Logger.getLogger('ProjectHandlers');
 
 export class ProjectHandlers extends AbstractHandlersGroup {
 
-    private saveInterval: number;
-
     constructor(ipc: Ipc, services: IServicesMap) {
         super(ipc, services);
 
@@ -20,26 +18,10 @@ export class ProjectHandlers extends AbstractHandlersGroup {
         this.registerHandler(ProjectSubjects.GET_CURRENT, this.getCurrentProject.bind(this));
         this.registerHandler(ProjectSubjects.ADD_LAYER, this.addLayer.bind(this));
         this.registerHandler(ProjectSubjects.DELETE_LAYERS, this.deleteLayer.bind(this));
-
-        // TODO: clear interval when stop application
-        this.saveInterval = setInterval(this.persistProject.bind(this), 3 * 60 * 1000);
-    }
+   }
 
     public async createNewProject() {
-
-        const projectDao = this.services.db.getProjectDao();
-
-        // TODO: do not drop previous project if not existing
-        const previousProject: Project | null = await projectDao.query();
-        if (previousProject) {
-            await projectDao.clear();
-        }
-
-        // create a new project with a default layer
-        const project: Project = await this.services.project.newProject();
-        await this.services.project.addLayer(this.services.map.getDefaultWmsLayers()[0]);
-
-        await projectDao.insert(project);
+        this.services.project.createNewProject();
     }
 
     public getCurrentProject() {
@@ -58,15 +40,7 @@ export class ProjectHandlers extends AbstractHandlersGroup {
         return Promise.resolve();
     }
 
-    public persistProject() {
-        logger.info('Automatic update of project in database ...');
-        const projectDao = this.services.db.getProjectDao();
-        const project = this.services.project.getCurrentProject();
-        projectDao.update(project);
-    }
-
     public onAppExit(): Promise<void> {
-        clearInterval(this.saveInterval);
         return Promise.resolve();
     }
 
