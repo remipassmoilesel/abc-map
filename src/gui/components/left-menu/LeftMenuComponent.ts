@@ -1,6 +1,6 @@
 import Component from 'vue-class-component';
-import './style.scss';
 import {AbstractUiComponent} from '../AbstractUiComponent';
+import './style.scss';
 
 @Component({
     template: require('./template.html'),

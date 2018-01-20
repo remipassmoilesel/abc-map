@@ -5,6 +5,7 @@ import {AbstractDataImporter} from './AbstractDataImporter';
 import {ShapefileImporter} from './ShapefileImporter';
 import {AbstractServiceConsumer} from '../common/AbstractServiceConsumer';
 import {IServicesMap} from '../services/IServiceMap';
+import {XlsxDataImporter} from './XlsxDataImporter';
 
 export class DataImporterFinder extends AbstractServiceConsumer {
 
@@ -33,6 +34,7 @@ export class DataImporterFinder extends AbstractServiceConsumer {
             new GpxDataImporter(),
             new KmlDataImporter(),
             new ShapefileImporter(),
+            new XlsxDataImporter(),
         ];
         _.forEach(this.instances, (inst) => {
             inst.setServicesMap(this.services);

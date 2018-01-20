@@ -6,7 +6,7 @@ import {initApplication, stopApplication} from './api/main';
 import {Ipc} from './api/ipc/Ipc';
 import * as sourceMapSupport from 'source-map-support';
 import * as paths from '../config/paths';
-import {DevUtilities} from "./api/dev/DevUtilities";
+import {DevUtilities} from './api/dev/DevUtilities';
 
 sourceMapSupport.install();
 

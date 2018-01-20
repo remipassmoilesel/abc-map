@@ -2,10 +2,11 @@ import * as chai from 'chai';
 import {GpxDataImporter} from '../../import/GpxDataImporter';
 import {DataImporterFinder} from '../../import/DataImporterFinder';
 import {KmlDataImporter} from '../../import/KmlDataImporter';
+import {XlsxDataImporter} from '../../import/XlsxDataImporter';
 
 const assert = chai.assert;
 
-describe('DataImporterFinder', () => {
+describe.only('DataImporterFinder', () => {
 
     it('Should find an importer for GPX data', () => {
 
@@ -24,6 +25,16 @@ describe('DataImporterFinder', () => {
 
         const importer = importerFinder.getInstanceForFile(file);
         assert.instanceOf(importer, KmlDataImporter);
+
+    });
+
+    it('Should find an importer for XLSX data', () => {
+
+        const file = 'test.xlsx';
+        const importerFinder = new DataImporterFinder({} as any);
+
+        const importer = importerFinder.getInstanceForFile(file);
+        assert.instanceOf(importer, XlsxDataImporter);
 
     });
 

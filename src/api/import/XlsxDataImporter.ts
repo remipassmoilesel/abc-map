@@ -12,7 +12,7 @@ export class XlsxDataImporter extends AbstractDataImporter {
     private xlsxHelper = new XlsxHelper();
 
     public getSupportedFormat(): FileFormat {
-        return FileFormat.GPX;
+        return FileFormat.XLSX;
     }
 
     public async fileToCollection(pathToSourceFile: string, collectionName?: string): Promise<string> {
