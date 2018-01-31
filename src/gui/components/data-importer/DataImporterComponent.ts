@@ -1,7 +1,7 @@
 import Component from 'vue-class-component';
-import {ClientGroup} from '../../lib/clients/ClientGroup';
 import {Toaster} from '../../lib/Toaster';
 import {AbstractUiComponent} from '../AbstractUiComponent';
+import * as $ from 'jquery';
 import './style.scss';
 
 @Component({
@@ -42,6 +42,7 @@ export class DataImporterComponent extends AbstractUiComponent {
     public async importFiles() {
         if (this.files.length < 1) {
             Toaster.warning('You must select valid files before');
+            $('#data-importer-file').click();
         } else {
             await this.clients.map.importFiles(this.files);
             this.files = [];
