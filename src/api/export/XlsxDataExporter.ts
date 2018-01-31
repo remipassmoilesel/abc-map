@@ -3,8 +3,6 @@ import * as _ from 'lodash';
 import {AbstractDataExporter} from './AbstractDataExporter';
 import {Workbook, Worksheet} from 'exceljs';
 import {FileFormat} from './FileFormat';
-import {IGeoJsonFeature} from '../entities/geojson/IGeoJsonFeature';
-import {FeatureUtils} from '../entities/geojson/FeatureUtils';
 import {XlsxHelper} from './XlsxHelper';
 
 export class XlsxDataExporter extends AbstractDataExporter {
@@ -36,18 +34,27 @@ export class XlsxDataExporter extends AbstractDataExporter {
 
         if (await dataCursor.hasNext()) {
 
-            // add headers
-            this.addHeadersToDataSheet(dataSheet);
+            // empty row for headers
+            dataSheet.addRow([]);
 
             this.addHeadersDescription(XlsxDataExporter.XLSX_HEADERS, helpSheet);
 
+            let propertiesHeaders;
+
             while (await dataCursor.hasNext()) {
-                const rowData = await dataCursor.next();
-                const row = this.xlsxHelper.featureToRow(rowData);
+                const feature = await dataCursor.next();
+                const row = this.xlsxHelper.featureToRow(feature);
                 dataSheet.addRow(row);
+
+                if (!propertiesHeaders) {
+                    propertiesHeaders = this.xlsxHelper.getPropertiesHeadersFromFeature(feature);
+                }
             }
 
+            this.addRowHeaders(dataSheet, propertiesHeaders);
+
         } else {
+            this.addRowHeaders(dataSheet, []);
             dataSheet.addRow(['No data found in this collection']);
         }
 
@@ -81,10 +88,17 @@ export class XlsxDataExporter extends AbstractDataExporter {
         workbook.created = new Date();
     }
 
+    private addRowHeaders(dataSheet: Worksheet, propertiesHeaders: any) {
 
-    private addHeadersToDataSheet(dataSheet: Worksheet) {
-        dataSheet.addRow(Object.keys(XlsxDataExporter.XLSX_HEADERS));
+        let headers: string[] = [];
+
+        headers = headers.concat(Object.keys(XlsxDataExporter.XLSX_HEADERS))
+            .concat(propertiesHeaders);
+
+        dataSheet.getRow(1).values = headers;
+
         dataSheet.getRow(1).font = {name: 'Comic Sans MS', family: 4, size: 12, bold: true};
+
     }
 
     private setupDataSheet(dataSheet: Worksheet) {
@@ -95,4 +109,5 @@ export class XlsxDataExporter extends AbstractDataExporter {
         const propertiesCol = dataSheet.getColumn(4);
         propertiesCol.width = 30;
     }
+
 }

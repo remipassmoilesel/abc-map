@@ -1,5 +1,4 @@
 import * as chai from 'chai';
-import {KmlDataImporter} from '../../../api/import/KmlDataImporter';
 import {TestData} from '../TestData';
 import * as uuid from 'uuid';
 import {Db} from 'mongodb';
@@ -9,6 +8,7 @@ import {initApplication, stopApplication} from '../../main';
 import {TestUtils} from '../TestUtils';
 import {DataImporterFinder} from '../../import/DataImporterFinder';
 import {IGeoJsonFeature} from '../../entities/geojson/IGeoJsonFeature';
+import {XlsxDataImporter} from '../../import/XlsxDataImporter';
 
 const assert = chai.assert;
 
@@ -37,6 +37,8 @@ describe('XlsxDataImporter', () => {
     it('Import should not fail', async () => {
 
         const importer = importerFinder.getInstanceForFile(TestData.SAMPLE_XLSX);
+        assert.instanceOf(importer, XlsxDataImporter);
+
         const collId = await importer.fileToCollection(TestData.SAMPLE_XLSX, `test-xlsx-${uuid.v4()}`);
 
         const features: IGeoJsonFeature[] = await services.db.getGeoJsonDao().queryAll(collId).toArray();

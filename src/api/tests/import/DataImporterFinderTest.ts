@@ -6,7 +6,7 @@ import {XlsxDataImporter} from '../../import/XlsxDataImporter';
 
 const assert = chai.assert;
 
-describe.only('DataImporterFinder', () => {
+describe('DataImporterFinder', () => {
 
     it('Should find an importer for GPX data', () => {
 

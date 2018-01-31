@@ -25,7 +25,6 @@
   "author": "remipassmoilesel",
   "license": "GPL-2.0",
   "dependencies": {
-    "@types/exceljs": "^0.5.2",
     "animate": "^1.0.0",
     "animate.css": "^3.5.2",
     "bluebird": "^3.5.1",
@@ -58,6 +57,7 @@
     "xmldom": "^0.1.27"
   },
   "devDependencies": {
+    "@types/exceljs": "^0.5.2",
     "@types/chai": "^4.0.10",
     "@types/electron": "^1.6.10",
     "@types/electron-devtools-installer": "^2.0.2",

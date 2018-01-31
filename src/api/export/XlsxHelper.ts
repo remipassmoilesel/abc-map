@@ -5,6 +5,17 @@ import {IGeoJsonGeometry} from '../entities/geojson/IGeoJsonGeometry';
 
 export class XlsxHelper {
 
+    public getPropertiesHeadersFromFeature(feature: IGeoJsonFeature): string[] {
+        FeatureUtils.ensureAbcmapPropertiesExists(feature.properties);
+
+        const headers = [];
+        _.forEach(Object.keys(feature.properties), (key) => {
+            headers.push(key);
+        });
+
+        return headers;
+    }
+
     public featureToRow(feature: IGeoJsonFeature): string[] {
 
         let row: string[] = [];
