@@ -18,7 +18,7 @@ describe('MapService', () => {
         return ngeo.requestRaw('cournonterral').then((results: INominatimResult[]) => {
             assert.lengthOf(results, 2);
             _.forEach(results, (res) => {
-                assert.deepEqual(_.keys(res), interfaceKeys);
+                assert.sameMembers(_.keys(res), interfaceKeys);
             });
         });
 
