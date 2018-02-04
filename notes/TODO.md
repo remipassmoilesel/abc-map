@@ -44,4 +44,5 @@ déterminer si leur affichage est pertinent
 
 ## Ressources
 
+- Voir https://github.com/electron/electron/issues/10905 pour passage à electron 1.8
 - https://github.com/mbloch/mapshaper: simplification et transformation de shapefiles
