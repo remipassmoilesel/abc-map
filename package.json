@@ -30,7 +30,7 @@
     "bluebird": "^3.5.1",
     "chalk": "^2.3.0",
     "circular-json": "^0.4.0",
-    "electron": "^1.7.9",
+    "electron": "^1.7.11",
     "electron-mocha": "^5.0.0",
     "electron-promise-ipc": "0.0.4",
     "element-ui": "^2.0.5",
