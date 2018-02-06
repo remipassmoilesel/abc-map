@@ -1,3 +1,4 @@
+/* tslint:disable object-literal-sort-keys */
 import Component from 'vue-class-component';
 import * as L from 'leaflet';
 import {FeatureGroup} from 'leaflet';
@@ -97,10 +98,13 @@ export class GeoMapComponent extends AbstractUiComponent {
                     },
                 },
                 polygon: {
-                    allowIntersection: false, // Restricts shapes to simple polygons
+                    // Restricts shapes to simple polygons
+                    allowIntersection: false,
                     drawError: {
-                        color: '#e1e100', // Color the shape will turn when intersects
-                        message: '<strong>Oh snap!<strong> you can\'t draw that!', // Message that will show when intersect
+                        // Color the shape will turn when intersects
+                        color: '#e1e100',
+                        // Message that will show when intersect
+                        message: '<strong>Oh snap!<strong> you can\'t draw that!',
                     },
                     shapeOptions: {
                         color: '#bada55',
