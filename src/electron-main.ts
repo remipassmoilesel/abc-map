@@ -39,11 +39,15 @@ async function createWindow() {
     win.maximize();
 
     // and load the index.html of the app.
-    win.loadURL(url.format({
+    let indexUrl = url.format({
         pathname: paths.INDEX_DEST,
         protocol: 'file:',
         slashes: true,
-    }));
+    });
+    if (ElectronUtilities.isDevMode()){
+        indexUrl = url.format('http://localhost:9090');
+    }
+    win.loadURL(indexUrl);
 
     if (ElectronUtilities.isDevMode()) {
         logger.info(' ** Dev mode enabled, installing dev tools ** ');

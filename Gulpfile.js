@@ -4,22 +4,55 @@ const clean = require('gulp-clean');
 const runElectron = require('gulp-run-electron');
 const gulpSync = require('gulp-sync')(gulp);
 const webpackStream = require('webpack-stream');
-const webpack2 = require('webpack');
+const webpack = require('webpack');
 const chalk = require('chalk');
 const shell = require('gulp-shell');
 const sourcemaps = require('gulp-sourcemaps');
 const path = require('path');
+const WebpackDevServer = require('webpack-dev-server');
 
 const log = (prefix, message, color) => {
     color = color || 'blue';
     console.log(chalk[color](`[ ${prefix} ] ${message}`));
 };
 
-const webpackGuiConfig = require('./config/webpack.config.gui');
+const webpackProdConfig = require('./config/webpack.config.prod');
+const webpackDevConfig = require('./config/webpack.config.dev');
 const tsProject = ts.createProject('./tsconfig.json');
 
-gulp.task('clean', () => {
-    return gulp.src('dist/', {read: false}).pipe(clean());
+gulp.task('default', ['start']);
+
+gulp.task('start', gulpSync.sync([
+    'build',
+    'run',
+]));
+
+gulp.task('start-dev', gulpSync.sync([
+    'build-api',
+    'dev-server',
+    'run',
+]));
+
+gulp.task('build', gulpSync.sync([
+    'clean',
+    'build-api',
+    'build-gui',
+]));
+
+gulp.task('run', () => {
+    // see https://www.npmjs.com/package/gulp-run-electron for more options
+    let failed = false;
+    return gulp.src('.')
+        .pipe(runElectron())
+        .on('error', (e) => {
+            failed = true;
+        })
+        .on('finish', () => {
+            if (failed) {
+                log('ELECTRON', `Some errors where found during launch.`, 'red');
+                // process.exit(1);
+            }
+        });
 });
 
 gulp.task('build-api', () => {
@@ -27,10 +60,10 @@ gulp.task('build-api', () => {
     return tsProject.src()
         .pipe(sourcemaps.init())
         .pipe(tsProject())
-        .on("error", () => {
+        .on('error', () => {
             failed = true;
         })
-        .on("finish", () => {
+        .on('finish', () => {
             if (failed) {
                 log('BUILD-API', 'Some errors where found during build.', 'red');
                 // process.exit(1);
@@ -41,14 +74,18 @@ gulp.task('build-api', () => {
         .pipe(gulp.dest('dist'));
 });
 
+gulp.task('watch-api', ['build'], () => {
+    return gulp.watch('src/api/**/*', ['build-api']);
+});
+
 gulp.task('build-gui', () => {
     let failed = false;
     return gulp.src('src/gui/index.ts')
-        .pipe(webpackStream(webpackGuiConfig, webpack2))
-        .on("error", () => {
+        .pipe(webpackStream(webpackProdConfig, webpack))
+        .on('error', () => {
             failed = true;
         })
-        .on("finish", () => {
+        .on('finish', () => {
             if (failed) {
                 log('BUILD-GUI', 'Some errors where found during build.', 'red');
                 // process.exit(1);
@@ -57,20 +94,8 @@ gulp.task('build-gui', () => {
         .pipe(gulp.dest('dist/gui'));
 });
 
-gulp.task('run', () => {
-    // see https://www.npmjs.com/package/gulp-run-electron for more options
-    let failed = false;
-    return gulp.src('.')
-        .pipe(runElectron())
-        .on("error", (e) => {
-            failed = true;
-        })
-        .on("finish", () => {
-            if (failed) {
-                log('ELECTRON', `Some errors where found during launch.`, 'red');
-                // process.exit(1);
-            }
-        });
+gulp.task('clean', () => {
+    return gulp.src('dist/', {read: false}).pipe(clean());
 });
 
 gulp.task('test-api',
@@ -79,24 +104,29 @@ gulp.task('test-api',
     ], {ignoreErrors: true})
 );
 
-gulp.task('build', gulpSync.sync([
-    'clean',
-    'build-api',
-    'build-gui',
-]));
+gulp.task('dev-server', () => {
 
-gulp.task('start', gulpSync.sync([
-    'build',
-    'run',
-]));
+    const compiler = webpack(webpackDevConfig);
+    const devServer = new WebpackDevServer(compiler, webpackDevConfig.devServer);
+    const host = webpackDevConfig.devServer.host;
+    const port = webpackDevConfig.devServer.port;
 
-gulp.task('watch-api', ['build'], () => {
-    return gulp.watch('src/api/**/*', ['build-api']);
+    return new Promise((resolve, reject) => {
+
+        devServer.listen(port, host, (err) => {
+            if (err) throw err;
+        });
+
+        compiler.plugin('done', (stats) => {
+            stats = stats.toJson();
+
+            if (stats.errors && stats.errors.length > 0) {
+                reject(new Error(stats.errors));
+                return;
+            }
+
+            resolve();
+        });
+    });
 });
 
-gulp.task('watch-gui', ['build'], () => {
-    return gulp.watch('src/gui/**/*', ['build-gui']);
-});
-
-gulp.task('watch', ['watch-gui', 'watch-api']);
-gulp.task('default', ['start']);

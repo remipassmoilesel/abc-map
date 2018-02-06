@@ -8,19 +8,20 @@
   },
   "main": "./dist/electron-main.js",
   "scripts": {
-    "lint": "tslint -c tslint.json 'src/**/*.ts'",
-    "lint-fix": "tslint -c tslint.json 'src/**/*.ts' --fix",
-    "clean": "gulp clean",
-    "build": "gulp build",
     "start": "gulp start",
-    "watch": "gulp watch",
+    "start-dev": "gulp start-dev",
+    "build": "gulp build",
+    "watch-api": "gulp watch-api",
+    "clean": "gulp clean",
     "test": "npm run clean && npm run test-api && npm run test-gui",
     "test-api": "npm run clean && gulp build-api && gulp test-api",
     "test-gui": "npm run clean && NODE_ENV=test gulp start",
     "start-db": "./mongodb/bin/mongod -f config/mongodb-config.yaml",
     "stop-db": "./mongodb/bin/mongod -f config/mongodb-config.yaml --shutdown",
     "clean-db": "rm -rf ./mongodb-data && mkdir ./mongodb-data",
-    "package": "./node_modules/electron-packager/cli.js . abcmap2 --all --out packaged "
+    "package": "./node_modules/electron-packager/cli.js . abcmap2 --all --out packaged ",
+    "lint": "tslint -c tslint.json 'src/**/*.ts'",
+    "lint-fix": "tslint -c tslint.json 'src/**/*.ts' --fix"
   },
   "author": "remipassmoilesel",
   "license": "GPL-2.0",
@@ -57,11 +58,11 @@
     "xmldom": "^0.1.27"
   },
   "devDependencies": {
-    "@types/exceljs": "^0.5.2",
     "@types/chai": "^4.0.10",
     "@types/electron": "^1.6.10",
     "@types/electron-devtools-installer": "^2.0.2",
     "@types/es6-promise": "0.0.33",
+    "@types/exceljs": "^0.5.2",
     "@types/fs-extra": "^5.0.0",
     "@types/fs-extra-promise": "^1.0.3",
     "@types/jquery": "^3.2.17",
@@ -86,7 +87,7 @@
     "electron-devtools-installer": "^2.2.1",
     "electron-hot": "^0.2.0",
     "electron-packager": "^9.1.0",
-    "extract-text-webpack-plugin": "^3.0.1",
+    "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^1.1.5",
     "gulp": "^3.9.1",
     "gulp-clean": "^0.3.2",
@@ -114,7 +115,7 @@
     "vue-loader": "^13.3.0",
     "vue-template-compiler": "^2.2.1",
     "webpack": "^3.10.0",
-    "webpack-dev-server": "^2.9.3",
+    "webpack-dev-server": "^2.11.1",
     "webpack-node-externals": "^1.6.0",
     "webpack-stream": "^4.0.0"
   }
