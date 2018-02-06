@@ -47,5 +47,5 @@ let v = new Vue({
     el: '#app',
     router,
     store,
-    template: require('./views/app/app.html'),
+    template: require('./public/app.html'),
 });

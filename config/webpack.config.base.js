@@ -5,12 +5,7 @@ const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
-    entry: paths.MAIN_TS_PATH,
-    output: {
-        path: paths.GUI_BUILD_ROOT,
-        publicPath: paths.PUBLIC_PATH,
-        filename: 'build.js'
-    },
+    entry: paths.GUI_MAIN_PATH,
     resolve: {
         extensions: ['.ts', '.js', '.vue', '.json'],
         alias: {
@@ -76,22 +71,6 @@ module.exports = {
         new ExtractTextPlugin({ // define where to save the file
             filename: '[name].bundle.css',
             allChunks: true
-        }),
-
-        // Workaround for devtron in webpack
-        new CopyWebpackPlugin([
-            {
-                from: paths.INDEX_SRC,
-                to: paths.GUI_BUILD_ROOT
-            },
-            {
-                from: path.resolve(paths.NODE_MODULES_ROOT, 'devtron/manifest.json'),
-                to: paths.GUI_BUILD_ROOT
-            },
-            {
-                from: path.resolve(paths.NODE_MODULES_ROOT, 'devtron/out/browser-globals.js'),
-                to: path.join(paths.GUI_BUILD_ROOT, 'out')
-            }
-        ])
+        })
     ]
 };

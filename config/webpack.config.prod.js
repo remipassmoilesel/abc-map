@@ -1,4 +1,5 @@
 const _ = require('lodash');
+const paths = require('./paths');
 const webpack = require('webpack');
 const baseConfig = _.cloneDeep(require('./webpack.config.base'));
 
@@ -21,5 +22,11 @@ baseConfig.plugins = (module.exports.plugins || []).concat([
         minimize: true
     })
 ]);
+
+baseConfig.output = {
+    path: paths.GUI_BUILD_ROOT,
+    publicPath: paths.PUBLIC_PATH,
+    filename: paths.JS_BUILD_NAME
+};
 
 module.exports = baseConfig;
