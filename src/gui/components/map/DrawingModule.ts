@@ -1,6 +1,18 @@
 /* tslint:disable object-literal-sort-keys */
 import * as L from 'leaflet';
 import {FeatureGroup, Map} from 'leaflet';
+import {Logger, LogLevel} from '../../../api/dev/Logger';
+import {ClientGroup} from '../../lib/clients/ClientGroup';
+import {StoreWrapper} from '../../lib/store/StoreWrapper';
+import {MainStore, store} from '../../lib/store/store';
+import {GeoJsonLayer} from '../../../api/entities/layers/GeoJsonLayer';
+import {Toaster} from '../../lib/Toaster';
+
+const logger = Logger.getLogger('DrawingModule');
+logger.setLevel(LogLevel.DEBUG);
+
+const clients = new ClientGroup();
+const storeWrapper = new StoreWrapper();
 
 export class DrawingModule {
     private map: Map;
@@ -52,10 +64,41 @@ export class DrawingModule {
 
         // listen for creation events
         this.map.on(L.Draw.Event.CREATED, this.onDrawCreated.bind(this));
+        this.map.on(L.Draw.Event.DRAWSTART, this.onDrawStarted.bind(this));
+        this.map.on(L.Draw.Event.EDITSTART, this.onEditStarted.bind(this));
+
+    }
+
+    public onMapComponentUpdated() {
+        // re-add editable group on top
+        this.map.addLayer(this.editableLayersGroup);
+    }
+
+    private onEditStarted(e: L.DrawEvents.DrawStart) {
+        logger.debug('onDrawStarted: ', e);
+        this.checkLayerTypeBeforeDraw();
+    }
+
+    private onDrawStarted(e: L.DrawEvents.DrawStart) {
+        logger.debug('onDrawStarted: ', e);
+        this.checkLayerTypeBeforeDraw();
+    }
+
+    private checkLayerTypeBeforeDraw() {
+
+        // users are allowed to draw only on a geojson layer
+        // FIXME: find a better type for store
+        const project = storeWrapper.project.getCurrentProject(store as MainStore);
+        if (!project.activeLayer || project.activeLayer instanceof GeoJsonLayer === false) {
+            Toaster.error('You must select a feature layer in order to draw features.');
+            // TODO: prevent drawing
+        }
 
     }
 
     private onDrawCreated(e: L.DrawEvents.Created) {
+        logger.debug('onDrawCreated: ', e);
+
         const type = e.layerType;
         const layer = e.layer;
 
@@ -69,9 +112,4 @@ export class DrawingModule {
         // console.log(e);
     }
 
-
-    public onMapComponentUpdated() {
-        // re-add editable group on top
-        this.map.addLayer(this.editableLayersGroup);
-    }
 }

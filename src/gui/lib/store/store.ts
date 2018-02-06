@@ -7,7 +7,6 @@ import {AbstractMapLayer} from '../../../api/entities/layers/AbstractMapLayer';
 import {MapView} from '../map/MapView';
 import {GuiState, GuiStoreModule} from './modules/GuiStoreModule';
 
-
 const logger = Logger.getLogger('store.ts');
 logger.info('Initializing Vuex store');
 
@@ -35,7 +34,7 @@ export class MainStoreState {
 }
 
 export class MainStoreGetters {
-    public projectName: String;
+    public projectName: string;
     public projectLayers: AbstractMapLayer[];
     public currentMapView: MapView;
 }

@@ -1,5 +1,4 @@
 import * as uuid from 'uuid';
-import * as _ from 'lodash';
 import {AbstractMapLayer} from './layers/AbstractMapLayer';
 
 export interface IProjectCreationOptions {
@@ -8,10 +7,10 @@ export interface IProjectCreationOptions {
 
 
 export class Project {
-
     public _id: string;
     private _name: string;
     private _layers: AbstractMapLayer[];
+    private _activeLayer: AbstractMapLayer | null;
 
     constructor(name?: string) {
         this._id = uuid.v4();
@@ -33,6 +32,14 @@ export class Project {
 
     set layers(value: AbstractMapLayer[]) {
         this._layers = value;
+    }
+
+    get activeLayer(): AbstractMapLayer {
+        return this._activeLayer;
+    }
+
+    set activeLayer(value: AbstractMapLayer) {
+        this._activeLayer = value;
     }
 
 }
