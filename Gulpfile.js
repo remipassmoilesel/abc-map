@@ -111,12 +111,12 @@ gulp.task('dev-server', () => {
     const host = webpackDevConfig.devServer.host;
     const port = webpackDevConfig.devServer.port;
 
+    devServer.listen(port, host, (err) => {
+        if (err) throw err;
+    });
+
+    // wait until compilation is done before resolve
     return new Promise((resolve, reject) => {
-
-        devServer.listen(port, host, (err) => {
-            if (err) throw err;
-        });
-
         compiler.plugin('done', (stats) => {
             stats = stats.toJson();
 
@@ -128,5 +128,7 @@ gulp.task('dev-server', () => {
             resolve();
         });
     });
+
+
 });
 
