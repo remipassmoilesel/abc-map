@@ -1,8 +1,7 @@
 import {Toaster} from './lib/Toaster';
 import Vue from 'vue';
-import {ElectronUtilities} from '../api/dev/ElectronUtilities';
 import {Logger} from '../api/dev/Logger';
-
+import {GuiDevUtilities} from './lib/GuiDevUtilities';
 import * as sourceMapSupport from 'source-map-support';
 // create vuex store
 import {store} from './lib/store/store';
@@ -22,7 +21,6 @@ import './tests/tests.ts';
 
 sourceMapSupport.install();
 
-
 const logger = Logger.getLogger('gui/main.ts');
 logger.info('Starting main app');
 
@@ -38,8 +36,12 @@ Vue.config.errorHandler = (err, vm, info) => {
 Vue.use(ElementUI, {locale});
 
 // install dev tools
-if (ElectronUtilities.isDevMode()) {
-    logger.info('You can have devtron using command: require("devtron").install()');
+if (GuiDevUtilities.isDevMode()) {
+    // FIXME: not working anymore
+    // logger.info('Setting up devtron ...');
+    // GuiDevUtilities.setupDevtron();
+
+    logger.info('You can install devtron using command: require("devtron").install()');
 }
 
 // declare main vue app

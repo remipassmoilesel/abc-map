@@ -1,12 +1,11 @@
 import {app, BrowserWindow, globalShortcut} from 'electron';
 import * as url from 'url';
-import {ElectronUtilities} from './api/dev/ElectronUtilities';
 import {Logger} from './api/dev/Logger';
 import {initApplication, stopApplication} from './api/main';
 import {Ipc} from './api/ipc/Ipc';
 import * as sourceMapSupport from 'source-map-support';
 import * as paths from '../config/paths';
-import {DevUtilities} from './api/dev/DevUtilities';
+import {ApiDevUtilities} from './api/dev/ApiDevUtilities';
 
 sourceMapSupport.install();
 
@@ -18,7 +17,7 @@ logger.info('');
 logger.info('=============================');
 logger.info('Starting Abc-Map application');
 logger.info(`NODE_ENV=${process.env.NODE_ENV}`);
-logger.info(`DEV_MODE=${ElectronUtilities.isDevMode()}`);
+logger.info(`DEV_MODE=${ApiDevUtilities.isDevMode()}`);
 logger.info(`User data can be found at: ${userDataDir}`);
 logger.info('=============================');
 logger.info('');
@@ -47,16 +46,13 @@ async function createWindow() {
         protocol: 'file:',
         slashes: true,
     });
-    if (ElectronUtilities.isDevMode()) {
+    if (ApiDevUtilities.isDevMode()) {
+        logger.info(' ** Dev mode enabled, installing dev tools ** ');
         indexUrl = url.format('http://localhost:9090');
+        ApiDevUtilities.setupDevTools();
     }
     logger.info(`Using URL for index: ${indexUrl}`);
     win.loadURL(indexUrl);
-
-    if (ElectronUtilities.isDevMode()) {
-        logger.info(' ** Dev mode enabled, installing dev tools ** ');
-        ElectronUtilities.setupDevTools();
-    }
 
     // Open the DevTools.
     setTimeout(() => {
@@ -76,9 +72,9 @@ async function createWindow() {
 
     const services = await initApplication(ipc);
 
-    if (ElectronUtilities.isDevMode()) {
+    if (ApiDevUtilities.isDevMode()) {
         logger.info('Setting up dev project.');
-        await DevUtilities.setupDevProject(services);
+        await ApiDevUtilities.setupDevProject(services);
     }
 
 }

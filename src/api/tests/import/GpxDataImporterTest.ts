@@ -4,7 +4,7 @@ import {Db} from 'mongodb';
 import {TestData} from '../TestData';
 import {GpxDataImporter} from '../../../api/import/GpxDataImporter';
 import {IServicesMap} from '../../services/IServiceMap';
-import {DevUtilities} from '../../dev/DevUtilities';
+import {ApiDevUtilities} from '../../dev/ApiDevUtilities';
 import {initApplication, stopApplication} from '../../main';
 import {TestUtils} from '../TestUtils';
 import {DataImporterFinder} from '../../import/DataImporterFinder';
@@ -27,7 +27,7 @@ describe('GpxDataImporter', () => {
 
         importerFinder = new DataImporterFinder(services);
 
-        await DevUtilities.setupDevProject(services);
+        await ApiDevUtilities.setupDevProject(services);
     });
 
     after(async () => {

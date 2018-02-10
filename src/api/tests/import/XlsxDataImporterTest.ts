@@ -3,7 +3,7 @@ import {TestData} from '../TestData';
 import * as uuid from 'uuid';
 import {Db} from 'mongodb';
 import {IServicesMap} from '../../services/IServiceMap';
-import {DevUtilities} from '../../dev/DevUtilities';
+import {ApiDevUtilities} from '../../dev/ApiDevUtilities';
 import {initApplication, stopApplication} from '../../main';
 import {TestUtils} from '../TestUtils';
 import {DataImporterFinder} from '../../import/DataImporterFinder';
@@ -27,7 +27,7 @@ describe('XlsxDataImporter', () => {
 
         importerFinder = new DataImporterFinder(services);
 
-        await DevUtilities.setupDevProject(services);
+        await ApiDevUtilities.setupDevProject(services);
     });
 
     after(async () => {

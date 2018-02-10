@@ -10,7 +10,7 @@ import {DataExporterFinder} from '../../export/DataExporterFinder';
 import {FileFormat} from '../../export/FileFormat';
 import {LayerEditor} from '../../layer-editor/LayerEditor';
 import {XlsxDataExporter} from '../../export/XlsxDataExporter';
-import {DevUtilities} from '../../dev/DevUtilities';
+import {ApiDevUtilities} from '../../dev/ApiDevUtilities';
 import {Logger} from '../../dev/Logger';
 import {getAllIds} from './common';
 
@@ -33,7 +33,7 @@ describe('XlsxDataExporterTest', () => {
 
         exporterFinder = new DataExporterFinder(services);
 
-        await DevUtilities.setupDevProject(services);
+        await ApiDevUtilities.setupDevProject(services);
     });
 
     after(async () => {
@@ -45,7 +45,7 @@ describe('XlsxDataExporterTest', () => {
         const exporter = exporterFinder.getInstanceForFormat(FileFormat.XLSX);
         assert.instanceOf(exporter, XlsxDataExporter);
 
-        const testLayer: GeoJsonLayer = await DevUtilities.createGeojsonTestLayer(services);
+        const testLayer: GeoJsonLayer = await ApiDevUtilities.createGeojsonTestLayer(services);
         const layerId: string = testLayer.id;
 
         const tempPath = LayerEditor.getTempPath(layerId, FileFormat.XLSX);
