@@ -5,22 +5,29 @@ const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const baseConfig = _.cloneDeep(require('./webpack.config.base'));
 
-baseConfig.devServer = {
-    host: '127.0.0.1',
-    port: 9090,
-    stats: {
-        colors: true
+_.assign(baseConfig, {
+    watch: true,
+    watchOptions: {
+        aggregateTimeout: 500,
+        poll: 700
     },
-    contentBase: paths.PUBLIC_DIR,
-    publicPath: 'http://localhost:9090/'
-};
-
-baseConfig.output = {
-    filename: paths.JS_BUILD_NAME,
-    publicPath: 'http://localhost:9090/'
-};
-
-const projectRoot = path.resolve(__dirname, '..');
+    output: {
+        filename: paths.JS_BUILD_NAME,
+        publicPath: 'http://localhost:9090/'
+    },
+    devServer: {
+        host: '127.0.0.1',
+        port: 9090,
+        stats: {
+            colors: true
+        },
+        watchOptions: {
+            poll: true
+        },
+        contentBase: paths.PUBLIC_DIR,
+        publicPath: 'http://localhost:9090/'
+    }
+});
 
 // Workaround for devtron, not functionnal naymore
 // baseConfig.plugins.push(
