@@ -13,6 +13,7 @@ logger.setLevel(LogLevel.DEBUG);
 
 const clients = new ClientGroup();
 const storeWrapper = new StoreWrapper();
+const mainStore = store as MainStore;
 
 export class DrawingModule {
     private map: Map;
@@ -87,11 +88,9 @@ export class DrawingModule {
     private checkLayerTypeBeforeDraw() {
 
         // users are allowed to draw only on a geojson layer
-        // FIXME: find a better type for store
-        const project = storeWrapper.project.getCurrentProject(store as MainStore);
+        const project = storeWrapper.project.getCurrentProject(mainStore);
         if (!project.activeLayer || project.activeLayer instanceof GeoJsonLayer === false) {
             Toaster.error('You must select a feature layer in order to draw features.');
-            // TODO: prevent drawing
         }
 
     }
