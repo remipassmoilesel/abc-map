@@ -13,22 +13,9 @@ export class ElectronUtilities {
     }
 
     public static setupDevTools() {
-
         // install VueJS dev tools
         installExtension(VUEJS_DEVTOOLS)
             .then((name) => ElectronUtilities.logger.info(`Added Extension:  ${name}`))
             .catch((err) => ElectronUtilities.logger.error('An error occurred: ', err));
-
-        // setup hot reloading
-        // TODO: FIXME
-        // require('electron-hot')();
-
-    }
-
-    /**
-     * Use only on renderer process
-     */
-    public static setupDevtron() {
-        require('devtron').install();
     }
 }

@@ -1,8 +1,5 @@
-const path = require('path');
-const webpack = require('webpack');
 const paths = require('./paths');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
     entry: paths.GUI_MAIN_PATH,

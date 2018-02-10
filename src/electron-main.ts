@@ -12,11 +12,14 @@ sourceMapSupport.install();
 
 const logger = Logger.getLogger('electron-main.ts');
 
+const userDataDir = app.getPath('userData');
 logger.info('');
 logger.info('');
 logger.info('=============================');
 logger.info('Starting Abc-Map application');
 logger.info(`NODE_ENV=${process.env.NODE_ENV}`);
+logger.info(`DEV_MODE=${ElectronUtilities.isDevMode()}`);
+logger.info(`User data can be found at: ${userDataDir}`);
 logger.info('=============================');
 logger.info('');
 logger.info('');
@@ -44,9 +47,10 @@ async function createWindow() {
         protocol: 'file:',
         slashes: true,
     });
-    if (ElectronUtilities.isDevMode()){
+    if (ElectronUtilities.isDevMode()) {
         indexUrl = url.format('http://localhost:9090');
     }
+    logger.info(`Using URL for index: ${indexUrl}`);
     win.loadURL(indexUrl);
 
     if (ElectronUtilities.isDevMode()) {
@@ -97,6 +101,14 @@ app.on('window-all-closed', async () => {
         logger.error('Error while closing app, quitting app. Error: ', error);
         app.exit(1);
     }
+
+});
+
+process.on('SIGINT', async () => {
+    console.log('Caught interrupt signal');
+
+    await stopApplication();
+    process.exit();
 
 });
 

@@ -4,8 +4,6 @@ import {ElectronUtilities} from '../api/dev/ElectronUtilities';
 import {Logger} from '../api/dev/Logger';
 
 import * as sourceMapSupport from 'source-map-support';
-sourceMapSupport.install();
-
 // create vuex store
 import {store} from './lib/store/store';
 // import router
@@ -21,6 +19,9 @@ import './views/style/main.scss';
 import './lib/mixins';
 // Import tests
 import './tests/tests.ts';
+
+sourceMapSupport.install();
+
 
 const logger = Logger.getLogger('gui/main.ts');
 logger.info('Starting main app');
@@ -38,8 +39,7 @@ Vue.use(ElementUI, {locale});
 
 // install dev tools
 if (ElectronUtilities.isDevMode()) {
-    logger.info('Development mode enabled');
-    ElectronUtilities.setupDevtron();
+    logger.info('You can have devtron using command: require("devtron").install()');
 }
 
 // declare main vue app

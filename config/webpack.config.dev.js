@@ -1,6 +1,8 @@
 const _ = require('lodash');
+const path = require('path');
 const paths = require('./paths');
 const webpack = require('webpack');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const baseConfig = _.cloneDeep(require('./webpack.config.base'));
 
 baseConfig.devServer = {
@@ -18,13 +20,12 @@ baseConfig.output = {
     publicPath: 'http://localhost:9090/'
 };
 
+const projectRoot = path.resolve(__dirname, '..');
+
+// Workaround for devtron, not functionnal naymore
 // baseConfig.plugins.push(
 //     // Workaround for devtron in webpack
 //     new CopyWebpackPlugin([
-//         {
-//             from: paths.INDEX_SRC,
-//             to: paths.GUI_BUILD_ROOT
-//         },
 //         {
 //             from: path.resolve(paths.NODE_MODULES_ROOT, 'devtron/manifest.json'),
 //             to: paths.GUI_BUILD_ROOT
