@@ -2,7 +2,7 @@ import {Actions, Mutations} from './mutationsAndActions';
 import {ClientGroup} from '../../clients/ClientGroup';
 import {Logger} from '../../../../api/dev/Logger';
 import {Project} from '../../../../api/entities/Project';
-import {ProjectPayload} from './payloads';
+import {IProjectPayload} from './payloads';
 
 const logger = Logger.getLogger('ProjectStoreModule');
 const clients = new ClientGroup();
@@ -17,7 +17,7 @@ export class ProjectStoreModule {
 
     // Warning: all mutations must be synchronous !
     public mutations = {
-        [Mutations.PROJECT_UPDATE]: (state: ProjectState, payload: ProjectPayload) => {
+        [Mutations.PROJECT_UPDATE]: (state: ProjectState, payload: IProjectPayload) => {
             state.currentProject = payload.project;
         },
     };

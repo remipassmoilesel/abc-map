@@ -2,14 +2,14 @@
 import {MapView} from '../../map/MapView';
 import {Project} from '../../../../api/entities/Project';
 
-export interface MapViewPayload {
+export interface IMapViewPayload {
     view: MapView;
 }
 
-export interface ProjectPayload {
+export interface IProjectPayload {
     project: Project;
 }
 
-export interface ActionDialogPayload {
+export interface IActionDialogPayload {
     dialogIsVisible: boolean;
 }

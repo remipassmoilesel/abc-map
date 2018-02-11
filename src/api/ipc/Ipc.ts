@@ -54,7 +54,6 @@ export class Ipc {
      * @param {IpcHandler} handler
      */
     public listen(subject: IpcSubject, handler: IpcHandler): void {
-
         logger.debug(`Listening: subject=${JSON.stringify(subject)} handler=${JSON.stringify(handler)}`);
 
         this.promiseIpc.on(subject.id, async (message: IpcInternalMessage): Promise<IpcInternalMessage> => {
@@ -75,25 +74,21 @@ export class Ipc {
         });
     }
 
-    public send(subject: IpcSubject, event: IpcEvent = {}): Promise<any> {
+    public async send(subject: IpcSubject, event: IpcEvent = {}): Promise<any> {
+        logger.debug(`Send message: subject=${JSON.stringify(subject)} event=${JSON.stringify(event)}`);
 
         const serialized: IpcInternalMessage = {serializedData: eu.serialize(event || {})};
 
-        logger.debug(`Send message: subject=${JSON.stringify(subject)} event=${JSON.stringify(event)}`);
-
         // send event from main process
         if (this.webContent) {
-            return this.promiseIpc.send(subject.id, this.webContent, serialized)
-                .then((message: IpcInternalMessage) => {
-                    return this.deserializeIpcMessage(message);
-                });
+            const serializedResp: IpcInternalMessage = await this.promiseIpc.send(
+                subject.id, this.webContent, serialized);
+            return this.deserializeIpcMessage(serializedResp);
         }
         // send event from renderer process
         else {
-            return this.promiseIpc.send(subject.id, serialized)
-                .then((message: IpcInternalMessage) => {
-                    return this.deserializeIpcMessage(message);
-                });
+            const serializedResp: IpcInternalMessage = await this.promiseIpc.send(subject.id, serialized);
+            return this.deserializeIpcMessage(serializedResp);
         }
     }
 

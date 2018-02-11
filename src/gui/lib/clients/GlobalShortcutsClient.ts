@@ -3,21 +3,15 @@ import {IpcEventBus} from '../../../api/ipc/IpcSubject';
 import {EventType} from '../../../api/ipc/IpcEventTypes';
 import {IpcEvent} from '../../../api/ipc/IpcEvent';
 
+/**
+ * Allow to use global shortcuts in GUI, which can be triggered even if app is minimized or not displayed.
+ */
 export class GlobalShortcutsClient {
 
     private ipc: Ipc;
 
     constructor(ipc: Ipc) {
         this.ipc = ipc;
-
-        // this.onEvent(EventType.SC_QUIT, () => {
-        //     window.close();
-        // });
-        //
-        // this.onEvent(EventType.SC_REFRESH, () => {
-        //     location.reload();
-        // });
-
     }
 
     public onEvents(handler: IpcHandler): void {

@@ -1,6 +1,6 @@
 import {MainStore} from './store';
 import {Actions} from './modules/mutationsAndActions';
-import {MapViewPayload} from './modules/payloads';
+import {IMapViewPayload} from './modules/payloads';
 
 export class StoreWrapper {
 
@@ -31,7 +31,7 @@ export class ProjectStoreWrapper {
 
 export class MapStoreWrapper {
 
-    public updateMapView($store: MainStore, payload: MapViewPayload) {
+    public updateMapView($store: MainStore, payload: IMapViewPayload) {
         $store.dispatch(Actions.MAP_VIEW_UPDATE, payload);
     }
 

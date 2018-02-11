@@ -89,11 +89,11 @@ export class GeoMapComponent extends AbstractUiComponent {
         // console.log(event)
     }
 
-    public onDrop(event: any) {
+    public async onDrop(event: any) {
         event.stopPropagation();
         event.preventDefault();
 
-        this.clients.map.checkAndImportFiles(event.dataTransfer.files);
+        await this.clients.map.checkAndImportFiles(event.dataTransfer.files);
     }
 
 }

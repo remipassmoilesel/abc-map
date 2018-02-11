@@ -32,7 +32,6 @@ export class StoreUpdaterComponent extends AbstractUiComponent {
 
     private registerHandlers() {
         this.clients.project.onProjectEvent((event: IpcEvent) => {
-
             logger.info('Receiving project event', event);
 
             // event should update project
@@ -46,7 +45,6 @@ export class StoreUpdaterComponent extends AbstractUiComponent {
         });
 
         this.clients.map.onMapEvent((event: IpcEvent) => {
-
             logger.info('Receiving map event', event);
 
             return Promise.resolve();

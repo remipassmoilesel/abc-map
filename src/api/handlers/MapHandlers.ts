@@ -6,6 +6,7 @@ import {GeocodingResult} from '../entities/GeocodingResult';
 import {Logger} from '../dev/Logger';
 import {IServicesMap} from '../services/IServiceMap';
 import {AbstractMapLayer} from '../entities/layers/AbstractMapLayer';
+import {TileLayer} from "../entities/layers/TileLayer";
 
 const logger = Logger.getLogger('MapHandlers');
 
@@ -20,8 +21,12 @@ export class MapHandlers extends AbstractHandlersGroup {
         this.registerHandler(MapSubjects.EDIT_LAYER_AS_SPREADSHEET, this.editLayerAsSpreadsheet.bind(this));
     }
 
-    public getDefaultWmsLayers() {
-        return this.services.map.getDefaultWmsLayers();
+    public getDefaultWmsLayers(): TileLayer[] {
+        console.log('getDefaultWmsLayers(');
+        const res = this.services.map.getDefaultWmsLayers();
+        console.log('res')
+        console.log(res)
+        return res;
     }
 
     public async importDataFiles(event: IpcEvent): Promise<AbstractMapLayer[]> {
