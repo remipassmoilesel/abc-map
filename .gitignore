@@ -11,3 +11,4 @@ mongodb-data
 logs/*
 !logs/.gitkeep
 abcmap2*
+.~lock*
