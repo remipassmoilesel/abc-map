@@ -82,14 +82,14 @@ export class GeoMapComponent extends AbstractUiComponent {
         return window.innerHeight / 100 * 82;
     }
 
-    public onDragOver(event) {
+    public onDragOver(event: any) {
         event.stopPropagation();
         event.preventDefault();
 
         // console.log(event)
     }
 
-    public onDrop(event) {
+    public onDrop(event: any) {
         event.stopPropagation();
         event.preventDefault();
 

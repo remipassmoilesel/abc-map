@@ -6,7 +6,7 @@ import * as $ from 'jquery';
 export class TestMan {
 
     private testClasses: AbstractTest[] = [];
-    private finalHandler: Function;
+    private finalHandler: () => void;
     private logStack: any[] = [];
 
     public addTestClass(test: AbstractTest) {
@@ -93,7 +93,7 @@ export class TestMan {
         }
     }
 
-    public setFinalHandler(finalHandler: Function) {
+    public setFinalHandler(finalHandler: () => void) {
         this.finalHandler = finalHandler;
     }
 
@@ -126,12 +126,12 @@ export class TestMan {
 
     }
 
-    private stdout(messageOrData) {
+    private stdout(messageOrData: any) {
         console.info(messageOrData);
         this.logStack.push(messageOrData);
     }
 
-    private stderr(messageOrData) {
+    private stderr(messageOrData: any) {
         console.error(messageOrData);
         this.logStack.push(messageOrData);
     }

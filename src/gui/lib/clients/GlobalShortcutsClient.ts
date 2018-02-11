@@ -26,7 +26,7 @@ export class GlobalShortcutsClient {
 
     public onEvent(type: EventType, handler: IpcHandler): void {
         return this.ipc.listen(IpcEventBus.SHORTCUTS, (event: IpcEvent) => {
-            if (event.type.id === type.id) {
+            if (event.type && event.type.id === type.id) {
                 handler(event);
             }
         });

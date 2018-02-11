@@ -8,7 +8,7 @@ const logger = Logger.getLogger('ProjectStoreModule');
 const clients = new ClientGroup();
 
 export class ProjectState {
-    public currentProject: Project = null;
+    public currentProject: Project;
 }
 
 export class ProjectStoreModule {
@@ -23,7 +23,7 @@ export class ProjectStoreModule {
     };
 
     public actions = {
-        [Actions.PROJECT_UPDATE]: (context) => {
+        [Actions.PROJECT_UPDATE]: (context: any) => {
             logger.info(`Dispatching action ${Actions.PROJECT_UPDATE}`);
             clients.project.getCurrentProject().then((project) => {
                 context.commit(Mutations.PROJECT_UPDATE, {project});

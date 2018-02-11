@@ -1,6 +1,6 @@
 import {Toaster} from '../Toaster';
 
-export function handleRejection(error): Promise<any> {
+export function handleRejection(error: Error): Promise<any> {
     let msg = 'Internal error';
     if (error) {
         msg += `: ${error.message}`;

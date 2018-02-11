@@ -70,7 +70,7 @@
     "@types/jquery": "^3.2.17",
     "@types/leaflet": "^1.2.2",
     "@types/leaflet-draw": "^0.4.10",
-    "@types/lodash": "^4.14.85",
+    "@types/lodash": "^4.14.102",
     "@types/mocha": "^2.2.44",
     "@types/mongodb": "^2.2.16",
     "@types/mousetrap": "^1.5.34",

@@ -24,7 +24,7 @@ export class UiSearchableComponents {
     // TODO: suggest better queries, improve word search
     public search(query: string, max = 5): IUxSearchResult[] {
 
-        const words = query.trim().split(' ');
+        const words: string[] = query.trim().split(' ');
         if (words.length < 1) {
             return [];
         }

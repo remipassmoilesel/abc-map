@@ -30,7 +30,7 @@ export class GeoSearchComponent extends AbstractUiComponent {
 
     }
 
-    public handleSelect(selectedObject) {
+    public handleSelect(selectedObject: any) {
         const res = selectedObject.completeResult;
         this.storeWrapper.map.updateMapView(this.$store,
             {

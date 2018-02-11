@@ -4,8 +4,7 @@
     "strict": true,
     "moduleResolution": "node",
     "experimentalDecorators": true,
-    "target": "es2015",
-    "no-var-requires": false
+    "target": "es2015"
   },
   "include": [
     "./**/*.ts"

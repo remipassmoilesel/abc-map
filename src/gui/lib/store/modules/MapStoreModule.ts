@@ -8,7 +8,7 @@ const logger = Logger.getLogger('MapStoreModule');
 const clients = new ClientGroup();
 
 export class MapState {
-    public currentMapView: MapView = null;
+    public currentMapView: MapView;
 }
 
 export class MapStoreModule {
@@ -24,7 +24,7 @@ export class MapStoreModule {
     };
 
     public actions = {
-        [Actions.MAP_VIEW_UPDATE]: (context, payload: MapViewPayload) => {
+        [Actions.MAP_VIEW_UPDATE]: (context: any, payload: MapViewPayload) => {
             logger.info(`Dispatching action ${Actions.MAP_VIEW_UPDATE}`);
             context.commit(Mutations.MAP_VIEW_UPDATE, payload);
         },

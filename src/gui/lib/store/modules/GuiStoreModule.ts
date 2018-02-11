@@ -23,7 +23,7 @@ export class GuiStoreModule {
     };
 
     public actions = {
-        [Actions.ACTION_DIALOG]: (context, payload: ActionDialogPayload) => {
+        [Actions.ACTION_DIALOG]: (context: any, payload: ActionDialogPayload) => {
             logger.info(`Dispatching action ${Actions.ACTION_DIALOG}`);
             context.commit(Mutations.ACTION_DIALOG, payload);
         },

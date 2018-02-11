@@ -16,21 +16,21 @@ export class DataImporterComponent extends AbstractUiComponent {
 
     public files: File[] = [];
 
-    public onDragOver(event) {
+    public onDragOver(event: any) {
         event.stopPropagation();
         event.preventDefault();
 
         // console.log(event)
     }
 
-    public onDrop(event) {
+    public onDrop(event: any) {
         event.stopPropagation();
         event.preventDefault();
 
         this.checkAndRegisterFiles(event.dataTransfer.files);
     }
 
-    public selectFiles(event) {
+    public selectFiles(event: any) {
         const filesToCheck: File[] = event.target.files;
         this.checkAndRegisterFiles(filesToCheck);
     }

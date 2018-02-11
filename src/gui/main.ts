@@ -1,15 +1,17 @@
+const sourceMapSupport = require('source-map-support');
+sourceMapSupport.install();
+
 import {Toaster} from './lib/Toaster';
 import Vue from 'vue';
 import {Logger} from '../api/dev/Logger';
 import {GuiDevUtilities} from './lib/GuiDevUtilities';
-import * as sourceMapSupport from 'source-map-support';
 // create vuex store
 import {store} from './lib/store/store';
 // import router
 import {router} from './lib/router/router';
 // import ui lib
 import * as ElementUI from 'element-ui';
-import locale from 'element-ui/lib/locale/lang/en';
+const elementUiLocale = require('element-ui/lib/locale/lang/en');
 // import components
 import './components/components';
 // Import style
@@ -18,8 +20,6 @@ import './views/style/main.scss';
 import './lib/mixins';
 // Import tests
 import './tests/tests.ts';
-
-sourceMapSupport.install();
 
 const logger = Logger.getLogger('gui/main.ts');
 logger.info('Starting main app');
@@ -33,7 +33,7 @@ Vue.config.errorHandler = (err, vm, info) => {
 };
 
 // initialize plugins
-Vue.use(ElementUI, {locale});
+Vue.use(ElementUI, {elementUiLocale});
 
 // install dev tools
 if (GuiDevUtilities.isDevMode()) {

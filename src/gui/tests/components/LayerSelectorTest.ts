@@ -21,7 +21,7 @@ export class LayerSelectorTest extends AbstractTest {
 
     public async addLayerShouldUpdateComponent() {
         const selector: LayerSelectorComponent = TestUtils.newVueComponent(LayerSelectorComponent);
-        const originalLayer = new GeoJsonLayer();
+        const originalLayer = new GeoJsonLayer('');
 
         await this.clients.project.addLayer(originalLayer);
         const addedLayer: AbstractMapLayer = _.filter(selector.getLayers(),
@@ -32,7 +32,7 @@ export class LayerSelectorTest extends AbstractTest {
 
     public async deleteLayerShouldSucceed() {
         const selector: LayerSelectorComponent = TestUtils.newVueComponent(LayerSelectorComponent);
-        const originalLayer = new GeoJsonLayer();
+        const originalLayer = new GeoJsonLayer('');
 
         await this.clients.project.addLayer(originalLayer);
         selector.selectedLayersIds = [originalLayer.id];
@@ -63,7 +63,7 @@ export class LayerSelectorTest extends AbstractTest {
         const selector: LayerSelectorComponent = TestUtils.newVueComponent(LayerSelectorComponent);
         this.sinon.stub(selector, 'toggleEditDialog');
 
-        const layers = [new GeoJsonLayer(), new GeoJsonLayer()];
+        const layers = [new GeoJsonLayer(''), new GeoJsonLayer('')];
 
         await this.clients.project.addLayer(layers[0]);
         await this.clients.project.addLayer(layers[1]);
@@ -78,7 +78,7 @@ export class LayerSelectorTest extends AbstractTest {
         const selector: LayerSelectorComponent = TestUtils.newVueComponent(LayerSelectorComponent);
         this.sinon.stub(selector, 'toggleEditDialog');
 
-        const layer = new GeoJsonLayer();
+        const layer = new GeoJsonLayer('');
 
         await this.clients.project.addLayer(layer);
 

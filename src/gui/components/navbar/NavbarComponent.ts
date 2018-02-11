@@ -6,8 +6,6 @@ import {Toaster} from '../../lib/Toaster';
 import {MenuItem} from '../../lib/menus/MenuItem';
 import {AbstractUiComponent} from '../AbstractUiComponent';
 import './style.scss';
-import {MainStore} from '../../lib/store/store';
-import {StoreWrapper} from '../../lib/store/StoreWrapper';
 
 @Component({
     template: require('./template.html'),
@@ -20,7 +18,7 @@ export class NavbarComponent extends AbstractUiComponent {
 
     public menus: NavbarMenu[] = navbarMenusList;
 
-    public handleMenuClick(id) {
+    public handleMenuClick(id: string) {
 
         const menuItem = this.getMenuItemById(id);
 
