@@ -3,8 +3,7 @@ import {IpcEvent} from './IpcEvent';
 import {EntitySerializerFactory} from '../entities/serializer/EntitySerializerFactory';
 import {Logger, LogLevel} from '../dev/Logger';
 
-const promiseIpc = require('electron-promise-ipc');
-
+const {PromiseIpc} = require('electron-promise-ipc');
 
 const logger = Logger.getLogger('Ipc');
 logger.setLevel(LogLevel.WARNING);
@@ -29,7 +28,7 @@ export interface IpcInternalMessage {
 export class Ipc {
 
     public static newInstance(webContent?: any): Ipc {
-        return new Ipc(promiseIpc, webContent);
+        return new Ipc(new PromiseIpc(), webContent);
     }
 
     private webContent: any;
