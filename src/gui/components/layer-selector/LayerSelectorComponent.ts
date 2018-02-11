@@ -32,6 +32,9 @@ export class LayerSelectorComponent extends AbstractUiComponent {
 
     public getActiveLayer(): AbstractMapLayer | null {
         const project = this.storeWrapper.project.getCurrentProject(this.$store);
+        if (!project) {
+            return null;
+        }
         return project.activeLayer;
     }
 

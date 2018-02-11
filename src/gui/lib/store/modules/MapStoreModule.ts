@@ -7,6 +7,7 @@ import {IMapViewPayload} from './payloads';
 const logger = Logger.getLogger('MapStoreModule');
 const clients = new ClientGroup();
 
+// /!\ All variables must be initialized
 export class MapState {
     public currentMapView: MapView;
 }

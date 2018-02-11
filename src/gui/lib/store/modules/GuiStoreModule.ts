@@ -6,6 +6,7 @@ import {IActionDialogPayload, IMapViewPayload} from './payloads';
 const logger = Logger.getLogger('GuiStateStoreModule');
 const clients = new ClientGroup();
 
+// /!\ All variables must be initialized
 export class GuiState {
     public actionDialogVisible: boolean = false;
 }

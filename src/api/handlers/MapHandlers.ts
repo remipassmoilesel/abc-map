@@ -6,7 +6,7 @@ import {GeocodingResult} from '../entities/GeocodingResult';
 import {Logger} from '../dev/Logger';
 import {IServicesMap} from '../services/IServiceMap';
 import {AbstractMapLayer} from '../entities/layers/AbstractMapLayer';
-import {TileLayer} from "../entities/layers/TileLayer";
+import {TileLayer} from '../entities/layers/TileLayer';
 
 const logger = Logger.getLogger('MapHandlers');
 
@@ -22,11 +22,7 @@ export class MapHandlers extends AbstractHandlersGroup {
     }
 
     public getDefaultWmsLayers(): TileLayer[] {
-        console.log('getDefaultWmsLayers(');
-        const res = this.services.map.getDefaultWmsLayers();
-        console.log('res')
-        console.log(res)
-        return res;
+        return this.services.map.getDefaultWmsLayers();
     }
 
     public async importDataFiles(event: IpcEvent): Promise<AbstractMapLayer[]> {

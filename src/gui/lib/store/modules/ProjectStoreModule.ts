@@ -7,8 +7,9 @@ import {IProjectPayload} from './payloads';
 const logger = Logger.getLogger('ProjectStoreModule');
 const clients = new ClientGroup();
 
+// /!\ All variables must be initialized
 export class ProjectState {
-    public currentProject: Project;
+    public currentProject: Project | null = null;
 }
 
 export class ProjectStoreModule {

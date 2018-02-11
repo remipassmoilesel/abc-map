@@ -89,7 +89,7 @@ export class DrawingModule {
 
         // users are allowed to draw only on a geojson layer
         const project = storeWrapper.project.getCurrentProject(mainStore);
-        if (!project.activeLayer || project.activeLayer instanceof GeoJsonLayer === false) {
+        if (!project || !project.activeLayer || project.activeLayer instanceof GeoJsonLayer === false) {
             Toaster.error('You must select a feature layer in order to draw features.');
         }
 

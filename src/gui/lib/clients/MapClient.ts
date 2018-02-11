@@ -25,10 +25,7 @@ export class MapClient {
     }
 
     public getDefaultTileLayers(): Promise<TileLayer[]> {
-        const res = this.ipc.send(MapSubjects.GET_WMS_DEFAULT_LAYERS).catch(handleRejection);
-        console.log('res');
-        console.log(res);
-        return res;
+        return this.ipc.send(MapSubjects.GET_WMS_DEFAULT_LAYERS).catch(handleRejection);
     }
 
     public geocode(query: string): Promise<GeocodingResult[]> {
