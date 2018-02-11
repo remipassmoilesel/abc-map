@@ -34,7 +34,7 @@ export class Project {
         this._layers = value;
     }
 
-    get activeLayer(): AbstractMapLayer {
+    get activeLayer(): AbstractMapLayer | null {
         return this._activeLayer;
     }
 

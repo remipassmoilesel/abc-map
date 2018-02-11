@@ -101,6 +101,19 @@ export class ProjectService extends AbstractService {
 
     }
 
+    public async setActiveLayer(layerId: string) {
+        const layer = _.find(this.currentProject.layers, (lay) => layerId === lay.id);
+        if (!layer) {
+            throw new Error(`Unknown id: ${layerId}`);
+        }
+        this.currentProject.activeLayer = layer;
+
+        await this.sendProjectEvent({
+            data: this.currentProject,
+            type: EventType.PROJECT_UPDATED,
+        });
+    }
+
     public onAppExit(): Promise<void> {
         clearInterval(this.saveInterval);
         return Promise.resolve();

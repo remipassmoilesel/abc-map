@@ -20,6 +20,26 @@ export class LayerSelectorComponent extends AbstractUiComponent {
 
     public selectedLayersIds: string[] = [];
 
+    public async setActiveLayer() {
+        console.log('setActiveLayer')
+        const first: string | null = _.first(this.selectedLayersIds);
+        if (!first) {
+            console.error('No layer found');
+            return;
+        }
+        await this.clients.project.setActiveLayer(first);
+    }
+
+    public getActiveLayer(): AbstractMapLayer | null {
+        const project = this.storeWrapper.project.getCurrentProject(this.$store);
+        return project.activeLayer;
+    }
+
+    public getActiveLayerName(): string {
+        const activeLayer = this.getActiveLayer();
+        return activeLayer ? activeLayer.name : 'No active layer yet';
+    }
+
     public getLayers(): AbstractMapLayer[] {
         return this.storeWrapper.project.getProjectLayers(this.$store);
     }

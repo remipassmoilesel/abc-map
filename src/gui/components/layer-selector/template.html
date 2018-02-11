@@ -1,12 +1,16 @@
 <div class="layer-selector-component component">
 
+    <div style="display: none">
+        getActiveLayer()
+    </div>
+
     <div v-if="getLayers().length > 0">
 
-        <div class="h3">Select layers below ...</div>
+        <div>Active layer: {{ getActiveLayerName() }} </div>
 
         <div class="select-area">
 
-            <select v-model="selectedLayersIds" multiple>
+            <select v-model="selectedLayersIds" multiple @change="setActiveLayer">
                 <option v-for="(layer, index) in getLayers()"
                         :key="index"
                         :value="layer.id">
@@ -17,7 +21,7 @@
             <!-- Action buttons -->
 
             <el-button @click="deleteSelection" type="primary" icon="el-icon-close"></el-button>
-            <el-button @click="toggleEditDialog" type="primary" icon="el-icon-edit"></el-button>
+            <el-button @click="toggleEditDialog" type="primary" icon="el-icon-document"></el-button>
 
         </div>
 

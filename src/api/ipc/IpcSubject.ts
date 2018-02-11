@@ -39,6 +39,7 @@ export class ProjectSubjects extends IpcSubject {
     public static GET_CURRENT = new ProjectSubjects('/get-current');
     public static ADD_LAYER = new ProjectSubjects('/add-layer');
     public static DELETE_LAYERS = new ProjectSubjects('/delete-layers');
+    public static ACTIVE_LAYER = new ProjectSubjects('/active-layer');
 
     constructor(id: string) {
         super(ProjectSubjects.ROOT + id);

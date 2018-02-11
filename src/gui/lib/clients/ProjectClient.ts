@@ -31,4 +31,8 @@ export class ProjectClient {
     public deleteLayers(layerIds: string[]) {
         return this.ipc.send(ProjectSubjects.DELETE_LAYERS, {data: layerIds}).catch(handleRejection);
     }
+
+    public setActiveLayer(layerId: string) {
+        return this.ipc.send(ProjectSubjects.ACTIVE_LAYER, {data: layerId}).catch(handleRejection);
+    }
 }

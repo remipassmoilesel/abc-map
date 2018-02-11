@@ -18,6 +18,7 @@ export class ProjectHandlers extends AbstractHandlersGroup {
         this.registerHandler(ProjectSubjects.GET_CURRENT, this.getCurrentProject.bind(this));
         this.registerHandler(ProjectSubjects.ADD_LAYER, this.addLayer.bind(this));
         this.registerHandler(ProjectSubjects.DELETE_LAYERS, this.deleteLayer.bind(this));
+        this.registerHandler(ProjectSubjects.ACTIVE_LAYER, this.setActiveLayer.bind(this));
    }
 
     public async createNewProject() {
@@ -26,6 +27,10 @@ export class ProjectHandlers extends AbstractHandlersGroup {
 
     public getCurrentProject() {
         return this.services.project.getCurrentProject();
+    }
+
+    public setActiveLayer(event: IpcEvent) {
+        return this.services.project.setActiveLayer(event.data);
     }
 
     public addLayer(event: IpcEvent) {

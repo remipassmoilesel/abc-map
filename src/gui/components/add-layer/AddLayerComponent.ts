@@ -31,7 +31,6 @@ export class AddLayerComponent extends AbstractUiComponent {
         this.layerOptions = this.layerOptions.concat(_.map(layers, (lay) => {
             return {name: lay.name, layer: lay};
         }));
-        console.log(this.layerOptions);
     }
 
     public async addLayers() {
