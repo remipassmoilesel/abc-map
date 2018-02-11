@@ -28,7 +28,7 @@ export class DefaultTileLayers {
     }
 
     public getLayer(index: number) {
-        return _.assign(new TileLayer(), this._layers[index]);
+        return _.assign(new TileLayer('', ''), this._layers[index]);
     }
 
 }

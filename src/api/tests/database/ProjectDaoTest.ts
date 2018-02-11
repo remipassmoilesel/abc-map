@@ -33,7 +33,7 @@ describe('ProjectDao', () => {
         // create a fake project and insert it
         const project = new Project('test project');
 
-        const tileLayer = new TileLayer('Tile-Layer-1');
+        const tileLayer = new TileLayer('Tile-Layer-1', 'http://');
         project.layers.push(tileLayer);
 
         const geojLayer = new GeoJsonLayer('Geojson-Layer-1');

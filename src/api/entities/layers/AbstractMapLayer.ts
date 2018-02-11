@@ -7,7 +7,7 @@ export abstract class AbstractMapLayer {
 
     protected _name: string;
 
-    constructor(name?: string) {
+    constructor(name: string) {
         this.generateId();
         this._name = name;
     }

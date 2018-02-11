@@ -2,7 +2,7 @@ import {AbstractMapLayer} from './AbstractMapLayer';
 
 export class GeoJsonLayer extends AbstractMapLayer {
 
-    constructor(name?: string) {
+    constructor(name: string) {
         super(name);
     }
 

@@ -7,6 +7,7 @@ import {AbstractServiceConsumer} from '../common/AbstractServiceConsumer';
 import {IServicesMap} from '../services/IServiceMap';
 import {XlsxDataImporter} from './XlsxDataImporter';
 
+// TODO: use file format instead of file path
 export class DataImporterFinder extends AbstractServiceConsumer {
 
     private instances: AbstractDataImporter[];
@@ -27,6 +28,14 @@ export class DataImporterFinder extends AbstractServiceConsumer {
         });
 
         return importers.length > 0 ? importers[0] : undefined;
+    }
+
+    public getInstanceForFileOrThrow(filePath: string): AbstractDataImporter {
+        const importer = this.getInstanceForFile(filePath);
+        if (!importer) {
+            throw new Error('Unknown format: ' + filePath);
+        }
+        return importer;
     }
 
     private buildInstances() {

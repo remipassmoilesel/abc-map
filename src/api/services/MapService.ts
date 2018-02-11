@@ -71,9 +71,9 @@ export class MapService extends AbstractService {
             let i = 0;
             for (const fPath of filePaths) {
 
-                const layer = new GeoJsonLayer();
+                const layerName = layerIds[i] ? layerIds[i] : path.basename(fPath);
+                const layer = new GeoJsonLayer(layerName);
                 layer.id = layerIds[i] ? layerIds[i] : layer.id;
-                layer.name = layerIds[i] ? layerIds[i] : path.basename(fPath);
 
                 await this.services.map.importFiles([fPath], layer.id);
 

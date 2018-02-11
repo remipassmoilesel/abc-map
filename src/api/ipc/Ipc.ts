@@ -1,8 +1,10 @@
-import promiseIpc from 'electron-promise-ipc';
 import {IpcSubject} from './IpcSubject';
 import {IpcEvent} from './IpcEvent';
 import {EntitySerializerFactory} from '../entities/serializer/EntitySerializerFactory';
 import {Logger, LogLevel} from '../dev/Logger';
+
+const promiseIpc = require('electron-promise-ipc');
+
 
 const logger = Logger.getLogger('Ipc');
 logger.setLevel(LogLevel.WARNING);

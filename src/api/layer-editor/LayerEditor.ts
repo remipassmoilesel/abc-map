@@ -49,7 +49,7 @@ export class LayerEditor extends AbstractServiceConsumer {
         const exportFormat = targetFormat || FileFormat.XLSX;
 
         const workbookPath = LayerEditor.getTempPath(layerId, exportFormat);
-        const workbookExporter = this.exporterFinder.getInstanceForFormat(exportFormat);
+        const workbookExporter = this.exporterFinder.getInstanceForFormatOrThrow(exportFormat);
 
         await workbookExporter.exportCollection(layerId, workbookPath, exportFormat);
         this.editedLayerIds.push(layerId);

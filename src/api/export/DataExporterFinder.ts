@@ -27,6 +27,14 @@ export class DataExporterFinder extends AbstractServiceConsumer {
         return exporters.length > 0 ? exporters[0] : undefined;
     }
 
+    public getInstanceForFormatOrThrow(exportFormat: FileFormat): AbstractDataExporter {
+        const exporter = this.getInstanceForFormat(exportFormat);
+        if (!exporter) {
+            throw new Error('Unknown format: ' + exportFormat);
+        }
+        return exporter;
+    }
+
     private buildInstances() {
         this.instances = [
             new XlsxDataExporter(),

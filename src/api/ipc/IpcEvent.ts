@@ -9,7 +9,7 @@ export class IpcEventImpl implements IpcEvent {
     public type: EventType;
     public data: any;
 
-    constructor(type, data?) {
+    constructor(type: EventType, data?: any) {
         this.type = type;
         this.data = data;
     }

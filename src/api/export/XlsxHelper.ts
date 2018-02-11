@@ -8,7 +8,7 @@ export class XlsxHelper {
     public getPropertiesHeadersFromFeature(feature: IGeoJsonFeature): string[] {
         FeatureUtils.ensureAbcmapPropertiesExists(feature.properties);
 
-        const headers = [];
+        const headers: string[] = [];
         _.forEach(Object.keys(feature.properties), (key) => {
             headers.push(key);
         });
@@ -31,7 +31,7 @@ export class XlsxHelper {
     private geojsonPropertiesToRow(feature: IGeoJsonFeature): string[] {
         FeatureUtils.ensureAbcmapPropertiesExists(feature);
 
-        const properties = [];
+        const properties: string[] = [];
         _.forEach(Object.keys(feature.properties), (key) => {
             properties.push(JSON.stringify(feature.properties[key]));
         });

@@ -7,6 +7,8 @@ import {AbstractServiceConsumer} from '../common/AbstractServiceConsumer';
 import {IServicesMap} from '../services/IServiceMap';
 
 export interface IHandlersMap{
+    [key: string]: AbstractHandlersGroup;
+
     project: ProjectHandlers;
     map: MapHandlers;
     db: DatabaseHandlers;

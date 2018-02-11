@@ -1,10 +1,9 @@
 import * as path from 'path';
-import {Document, DOMParser} from 'xmldom';
+import * as _ from 'lodash';
 import {AbstractDataImporter} from './AbstractDataImporter';
 import {FileFormat} from '../export/FileFormat';
 import {Workbook} from 'exceljs';
 import {XlsxHelper} from '../export/XlsxHelper';
-import * as _ from 'lodash';
 import {IGeoJsonFeature} from '../entities/geojson/IGeoJsonFeature';
 
 export class XlsxDataImporter extends AbstractDataImporter {

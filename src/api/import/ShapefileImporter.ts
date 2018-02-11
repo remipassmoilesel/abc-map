@@ -14,13 +14,12 @@ export class ShapefileImporter extends AbstractDataImporter {
 
     public async fileToCollection(pathToSourceFile: string, collectionName?: string): Promise<string> {
 
-        const source = await shapefile.open('example.shp');
-        const geojson = await source.read();
+        const featureColl = await shapefile.read(pathToSourceFile);
 
         const collectionId = collectionName || path.basename(pathToSourceFile);
         await this.services.db.getGeoJsonDao().insertMany(
             collectionId,
-            geojson.features,
+            featureColl.features,
         );
 
         return collectionId;

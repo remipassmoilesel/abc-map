@@ -1,10 +1,11 @@
-import * as tgj from 'togeojson';
 import * as fs from 'fs-extra-promise';
 import * as path from 'path';
-import {Document, DOMParser} from 'xmldom';
 import {AbstractDataImporter} from './AbstractDataImporter';
 import {IGeoJsonFeatureCollection} from '../entities/geojson/IGeoJsonFeatureCollection';
 import {FileFormat} from '../export/FileFormat';
+
+const tgj = require('togeojson');
+const {Document, DOMParser} = require('xmldom');
 
 export class GpxDataImporter extends AbstractDataImporter {
 
