@@ -5,7 +5,7 @@ import {GeoJsonLayer} from '../../../api/entities/layers/GeoJsonLayer';
 import {ClientGroup} from '../clients/ClientGroup';
 
 export interface IExtendedLeafletLayer extends L.Layer {
-    _abcmapId: string;
+    _abcmapId?: string;
 }
 
 export class LeafletLayerFactory {
