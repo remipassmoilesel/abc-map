@@ -1,5 +1,4 @@
 import * as path from 'path';
-import * as _ from 'lodash';
 import {AbstractDataImporter} from './AbstractDataImporter';
 import {FileFormat} from '../export/FileFormat';
 import {Workbook} from 'exceljs';
@@ -19,14 +18,16 @@ export class XlsxDataImporter extends AbstractDataImporter {
         const workbook = new Workbook();
         await workbook.xlsx.readFile(pathToSourceFile);
 
-        const dataSheet = workbook.getWorksheet(1);
+        const dataSheet = workbook.getWorksheet(2);
 
         const count = dataSheet.rowCount;
         const features: IGeoJsonFeature[] = [];
-        _.times(count, (n) => {
-            const feat = this.xlsxHelper.rowToFeature(dataSheet.getRow(n).values);
-            features.push(feat);
-        });
+        for (let i = 2; i <= count; i++) {
+            const feat = this.xlsxHelper.rowToFeature(dataSheet.getRow(i).values);
+            if (feat) {
+                features.push(feat);
+            }
+        }
 
         const collectionId = collectionName || path.basename(pathToSourceFile);
         await this.services.db.getGeoJsonDao().insertMany(

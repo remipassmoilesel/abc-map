@@ -12,7 +12,7 @@ import {XlsxDataImporter} from '../../import/XlsxDataImporter';
 
 const assert = chai.assert;
 
-describe('XlsxDataImporter', () => {
+describe.only('XlsxDataImporter', () => {
 
     let db: Db;
 
@@ -43,9 +43,13 @@ describe('XlsxDataImporter', () => {
 
         const features: IGeoJsonFeature[] = await services.db.getGeoJsonDao().queryAll(collId).toArray();
 
-        assert.lengthOf(features, 2);
-        assert.equal(features[0].geometry.type, 'Point');
-        assert.equal(features[1].geometry.type, 'LineString');
+        assert.lengthOf(features, 6);
+        assert.equal(features[0].geometry.type, 'Polygon');
+        assert.equal(features[1].geometry.type, 'Polygon');
+        assert.equal(features[2].geometry.type, 'Polygon');
+        assert.equal(features[3].geometry.type, 'LineString');
+        assert.equal(features[4].geometry.type, 'Polygon');
+        assert.equal(features[5].geometry.type, 'LineString');
 
     });
 

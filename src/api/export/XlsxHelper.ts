@@ -39,12 +39,16 @@ export class XlsxHelper {
         return properties;
     }
 
-    public rowToFeature(data: string[]): IGeoJsonFeature {
+    public rowToFeature(data: string[]): IGeoJsonFeature | null {
 
-        const id = data[0];
-        const geometryType = data[1];
-        const geometry: IGeoJsonGeometry = JSON.parse(data[2]);
-        const properties = this.rowToGeojsonProperties(data.slice(2));
+        if (!data || data.length < 4){
+            return null;
+        }
+
+        const id = data[1];
+        const geometryType = data[2];
+        const geometry: IGeoJsonGeometry = JSON.parse(data[3]);
+        const properties = this.rowToGeojsonProperties(data.slice(3));
 
         return {
             _id: id,
