@@ -4,7 +4,8 @@ import {Ipc, IpcInternalMessage} from '../../ipc/Ipc';
 import {IpcSubject} from '../../ipc/IpcSubject';
 import {IpcEvent} from '../../ipc/IpcEvent';
 
-const promiseIpc = require('electron-promise-ipc');
+const {PromiseIpc} = require('electron-promise-ipc');
+const promiseIpc = new PromiseIpc();
 const assert = chai.assert;
 
 describe('IpcTest', () => {

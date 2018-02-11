@@ -1,3 +1,4 @@
+import installExtension, {VUEJS_DEVTOOLS} from 'electron-devtools-installer';
 import {app, BrowserWindow, globalShortcut} from 'electron';
 import * as url from 'url';
 import {Logger} from './api/dev/Logger';
@@ -48,7 +49,7 @@ async function createWindow() {
     if (ApiDevUtilities.isDevMode()) {
         logger.info(' ** Dev mode enabled, installing dev tools ** ');
         indexUrl = url.format('http://localhost:9090');
-        ApiDevUtilities.setupDevTools();
+        setupDevTools();
     }
     logger.info(`Using URL for index: ${indexUrl}`);
     win.loadURL(indexUrl);
@@ -119,3 +120,10 @@ process.on('unhandledRejection', (reason, p) => {
 process.on('uncaughtException', (err) => {
     logger.error('[UNCAUGHT ERROR]', {error: err});
 });
+
+function setupDevTools() {
+    // install VueJS dev tools
+    installExtension(VUEJS_DEVTOOLS)
+        .then((name) => logger.info(`Added Extension:  ${name}`))
+        .catch((err) => logger.error('An error occurred: ', err));
+}
