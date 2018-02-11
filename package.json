@@ -8,8 +8,7 @@
   },
   "main": "./dist/electron-main.js",
   "scripts": {
-    "start": "gulp start",
-    "start-dev": "gulp start-dev",
+    "start": "gulp start-dev",
     "build": "gulp build",
     "watch-api": "gulp watch-api",
     "clean": "gulp clean",
