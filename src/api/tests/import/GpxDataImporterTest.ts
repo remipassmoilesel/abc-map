@@ -36,7 +36,9 @@ describe('GpxDataImporter', () => {
 
     it('Import should not fail', async () => {
 
-        const importer = importerFinder.getInstanceForFile(TestData.SAMPLE_GPX);
+        const importer = importerFinder.getInstanceForFile(TestData.SAMPLE_GPX) as GpxDataImporter;
+        assert.instanceOf(importer, GpxDataImporter);
+
         const collId = await importer.fileToCollection(TestData.SAMPLE_GPX, `test-gpx-${uuid.v4()}`);
 
         const features: IGeoJsonFeature[] = await services.db.getGeoJsonDao().queryAll(collId).toArray();

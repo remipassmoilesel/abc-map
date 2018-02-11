@@ -20,7 +20,7 @@ describe('EntitySerializer', () => {
             eu.serialize(undefined);
         });
         assert.throws(() => {
-            eu.deserialize(undefined);
+            eu.deserialize(undefined as any);
         });
     });
 
@@ -42,7 +42,7 @@ describe('EntitySerializer', () => {
         const eu = new EntitySerializer(constructors);
 
         const origin = new SimpleTestClass('test');
-        origin.field1 = undefined;
+        origin.field1 = undefined as any;
         const serialized = eu.serialize(origin);
 
         const deserialized = eu.deserialize(serialized);
@@ -56,7 +56,7 @@ describe('EntitySerializer', () => {
         const eu = new EntitySerializer(constructors);
 
         const origin = new SimpleTestClass('test');
-        origin.field1 = null;
+        origin.field1 = null as any;
         const serialized = eu.serialize(origin);
 
         const deserialized = eu.deserialize(serialized);

@@ -6,7 +6,7 @@
       "ES2015",
       "dom"
     ],
-    "strict": false,
+    "strict": true,
     "moduleResolution": "node",
     "experimentalDecorators": true,
     "types": [

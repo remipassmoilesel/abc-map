@@ -60,6 +60,7 @@
   },
   "devDependencies": {
     "@types/chai": "^4.0.10",
+    "@types/circular-json": "^0.4.0",
     "@types/electron": "^1.6.10",
     "@types/electron-devtools-installer": "^2.0.2",
     "@types/es6-promise": "0.0.33",

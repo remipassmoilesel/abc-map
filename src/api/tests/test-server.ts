@@ -12,9 +12,9 @@ function exitLater(exitCode: number) {
 
 function processExit(bodyStr: string) {
 
-    const rawStats = bodyStr.match('test-stats=(.+)');
+    const rawStats: string[] | null = bodyStr.match('test-stats=(.+)');
 
-    if (rawStats.length < 2) {
+    if (!rawStats || rawStats.length < 2) {
         console.error('Invalid output');
         exitLater(1);
     } else {
@@ -32,7 +32,7 @@ function processExit(bodyStr: string) {
 
 const srv = http.createServer((request, response) => {
     const {headers, method, url} = request;
-    let body = [];
+    let body: any[] = [];
     request.on('error', (err) => {
         console.error(err);
     }).on('data', (chunk) => {

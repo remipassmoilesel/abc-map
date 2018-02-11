@@ -1,10 +1,10 @@
 import * as chai from 'chai';
 import * as sinon from 'sinon';
 import {Ipc, IpcInternalMessage} from '../../ipc/Ipc';
-import promiseIpc from 'electron-promise-ipc';
 import {IpcSubject} from '../../ipc/IpcSubject';
 import {IpcEvent} from '../../ipc/IpcEvent';
 
+const promiseIpc = require('electron-promise-ipc');
 const assert = chai.assert;
 
 describe('IpcTest', () => {

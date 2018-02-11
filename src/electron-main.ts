@@ -3,12 +3,11 @@ import * as url from 'url';
 import {Logger} from './api/dev/Logger';
 import {initApplication, stopApplication} from './api/main';
 import {Ipc} from './api/ipc/Ipc';
-import * as sourceMapSupport from 'source-map-support';
-import * as paths from '../config/paths';
 import {ApiDevUtilities} from './api/dev/ApiDevUtilities';
 
+const paths = require('../config/paths');
+const sourceMapSupport = require('source-map-support');
 sourceMapSupport.install();
-
 const logger = Logger.getLogger('electron-main.ts');
 
 const userDataDir = app.getPath('userData');
@@ -25,7 +24,7 @@ logger.info('');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let win: BrowserWindow | null;
+let win: BrowserWindow;
 
 async function createWindow() {
 
@@ -64,7 +63,7 @@ async function createWindow() {
         // Dereference the window object, usually you would store windows
         // in an array if your app supports multi windows, this is the time
         // when you should delete the corresponding element.
-        win = null;
+        (win as any) = null;
     });
 
     // init api application

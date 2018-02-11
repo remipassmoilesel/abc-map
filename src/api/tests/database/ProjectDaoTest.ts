@@ -33,7 +33,7 @@ describe('ProjectDao', () => {
         // create a fake project and insert it
         const project = new Project('test project');
 
-        const tileLayer = new TileLayer('Tile-Layer-1', null);
+        const tileLayer = new TileLayer('Tile-Layer-1');
         project.layers.push(tileLayer);
 
         const geojLayer = new GeoJsonLayer('Geojson-Layer-1');
@@ -42,8 +42,9 @@ describe('ProjectDao', () => {
         await dao.insert(project);
 
         // query project and compare it
-        const queriedProject: Project = await dao.query();
+        const queriedProject: Project = await dao.query() as Project;
 
+        assert.isNotNull(queriedProject);
         assert.deepEqual(project, queriedProject);
         assert.typeOf(queriedProject._id, 'string');
         assert.instanceOf(queriedProject, Project);

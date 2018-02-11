@@ -42,7 +42,7 @@ describe('XlsxDataExporterTest', () => {
 
     it('> Export layer as xlsx should succeed', async () => {
 
-        const exporter = exporterFinder.getInstanceForFormat(FileFormat.XLSX);
+        const exporter = exporterFinder.getInstanceForFormat(FileFormat.XLSX) as XlsxDataExporter;
         assert.instanceOf(exporter, XlsxDataExporter);
 
         const testLayer: GeoJsonLayer = await ApiDevUtilities.createGeojsonTestLayer(services);

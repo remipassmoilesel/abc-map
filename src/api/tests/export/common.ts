@@ -10,13 +10,19 @@ export function getAllIds(dataSheet: Worksheet): Promise<string[]> {
 
     return new Promise((resolve, reject) => {
         dataSheet.eachRow((row: Row) => {
-            const id = row.getCell(1).value.toString();
+            const cellValue = row.getCell(1).value;
+            if (!cellValue){
+                sheetFeatureIds.push('');
+                return;
+            }
 
+            const id =  cellValue.toString();
             if (id === idHeader) {
                 return;
             }
 
             sheetFeatureIds.push(id);
+
             if (i >= end - 1) {
                 resolve(sheetFeatureIds);
             }

@@ -4,7 +4,9 @@ export class AbstractServiceConsumer {
     protected services: IServicesMap;
 
     constructor(services?: IServicesMap) {
-        this.setServicesMap(services);
+        if (services) {
+            this.setServicesMap(services);
+        }
     }
 
     public setServicesMap(services: IServicesMap) {

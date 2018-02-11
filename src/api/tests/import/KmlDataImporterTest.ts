@@ -36,7 +36,9 @@ describe('KmlDataImporter', () => {
 
     it('Import should not fail', async () => {
 
-        const importer = importerFinder.getInstanceForFile(TestData.SAMPLE_KML);
+        const importer = importerFinder.getInstanceForFile(TestData.SAMPLE_KML) as KmlDataImporter;
+        assert.instanceOf(importer, KmlDataImporter);
+
         const collId = await importer.fileToCollection(TestData.SAMPLE_KML, `test-gpx-${uuid.v4()}`);
 
         const features: IGeoJsonFeature[] = await services.db.getGeoJsonDao().queryAll(collId).toArray();

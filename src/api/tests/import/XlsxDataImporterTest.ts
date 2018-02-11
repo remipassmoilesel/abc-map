@@ -36,7 +36,7 @@ describe('XlsxDataImporter', () => {
 
     it('Import should not fail', async () => {
 
-        const importer = importerFinder.getInstanceForFile(TestData.SAMPLE_XLSX);
+        const importer = importerFinder.getInstanceForFile(TestData.SAMPLE_XLSX) as XlsxDataImporter;
         assert.instanceOf(importer, XlsxDataImporter);
 
         const collId = await importer.fileToCollection(TestData.SAMPLE_XLSX, `test-xlsx-${uuid.v4()}`);

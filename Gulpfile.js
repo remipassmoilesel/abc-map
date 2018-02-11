@@ -74,7 +74,7 @@ gulp.task('build-api', () => {
         .pipe(gulp.dest('dist'));
 });
 
-gulp.task('watch-api', ['build'], () => {
+gulp.task('watch-api', ['build-api'], () => {
     return gulp.watch('src/api/**/*', ['build-api']);
 });
 

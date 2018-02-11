@@ -1,9 +1,9 @@
-import * as CircularJSON from 'circular-json';
 import * as _ from 'lodash';
+const CircularJSON = require('circular-json');
 
 export class Utils {
 
-    public static withDefaultValues(parameters, defaults) {
+    public static withDefaultValues(parameters: any, defaults: any) {
         return _.assign({}, defaults, parameters);
     }
 
@@ -15,7 +15,7 @@ export class Utils {
 
         return new Promise((resolve, reject) => {
 
-            const onError = (remainingTries, error) => {
+            const onError = (remainingTries: number, error: Error) => {
                 if (remainingTries > 0) {
                     setTimeout(() => {
                         tryWrapper(remainingTries - 1);
@@ -25,8 +25,7 @@ export class Utils {
                 }
             };
 
-            const tryWrapper = (remainingTries) => {
-
+            const tryWrapper = (remainingTries: number) => {
                 try {
                     toRetry()
                         .then(resolve)
