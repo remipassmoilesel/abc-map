@@ -21,7 +21,6 @@ export class LayerSelectorComponent extends AbstractUiComponent {
     public selectedLayersIds: string[] = [];
 
     public async setActiveLayer() {
-        console.log('setActiveLayer')
         const first: string | undefined = _.first(this.selectedLayersIds);
         if (!first) {
             console.error('No layer found');

@@ -12,9 +12,9 @@ import {DrawingModule} from './DrawingModule';
 import './style.scss';
 // Import plugins
 import 'leaflet-draw';
+import {LayerUpdater} from "./LayerUpdater";
 
 let mapIdCounter = 0;
-const layerFactory = new LeafletLayerFactory(clients);
 const logger = Logger.getLogger('GeoMapComponent');
 
 @Component({
@@ -28,8 +28,10 @@ export class GeoMapComponent extends AbstractUiComponent {
 
     public mapId = `map-${mapIdCounter++}`;
     public height: number = 500;
-    private map: L.Map;
+
+    private layerUpdater: LayerUpdater;
     private drawingModule: DrawingModule;
+    private map: L.Map;
 
     public beforeMount() {
         // fix height before in order to prevent troubles on map size
@@ -39,10 +41,11 @@ export class GeoMapComponent extends AbstractUiComponent {
     public mounted() {
         this.map = L.map(this.mapId).setView([45.18, 5.72], 13);
         this.drawingModule = new DrawingModule(this.map);
+        this.layerUpdater = new LayerUpdater(this.map, this);
     }
 
     public updated() {
-        this.updateMapLayers();
+        this.layerUpdater.onMapComponentUpdated();
         this.drawingModule.onMapComponentUpdated();
         this.updateView();
     }
@@ -53,21 +56,6 @@ export class GeoMapComponent extends AbstractUiComponent {
             logger.info('Updating view: ' + view);
             this.map.flyTo([view.latitude, view.longitude], 14, {animate: true});
         }
-    }
-
-    private updateMapLayers() {
-        const layers = this.getLayers();
-
-        // TODO do not remove layers already present
-        this.map.eachLayer((layer) => {
-            this.map.removeLayer(layer);
-        });
-
-        _.forEach(layers, async (layer) => {
-            await layerFactory.getLeafletLayer(layer).then((leafletLayer) => {
-                this.map.addLayer(leafletLayer);
-            });
-        });
     }
 
     public getCurrentMapView(): MapView {
