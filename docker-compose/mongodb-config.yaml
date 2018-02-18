@@ -1,0 +1,11 @@
+storage:
+   dbPath: /mongodb/data/
+   journal:
+      enabled: true
+processManagement:
+   fork: false
+net:
+   bindIp: 127.0.0.1
+   port: 30001
+setParameter:
+   enableLocalhostAuthBypass: true
