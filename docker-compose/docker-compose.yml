@@ -1,11 +1,13 @@
 version: '2'
+
 services:
+
     mongodb:
         image: mvertes/alpine-mongo:3.4.3-0
         container_name: "mongodb"
         volumes:
           - .:/mongodb/config/
-          - /srv/mongodb/data/db:/mongodb/data/
+          - /srv/mongodb/data/db:/data/db:rw
         ports:
-            - 30001:30001
+            - 127.0.0.1:30001:30001
         command: mongod -f /mongodb/config/mongodb-config.yaml
