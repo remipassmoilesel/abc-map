@@ -4,6 +4,7 @@
     "strict": true,
     "moduleResolution": "node",
     "experimentalDecorators": true,
+    "strictPropertyInitialization": false,
     "target": "es2015"
   },
   "include": [
