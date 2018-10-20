@@ -16,6 +16,14 @@ const log = (prefix, message, color) => {
     console.log(chalk[color](`[ ${prefix} ] ${message}`));
 };
 
+const checkNodeVersion = () => {
+    if (!process.version.match("8.+")){
+      throw new Error("Only NodeJS 8 is supported");
+    }
+}
+
+checkNodeVersion();
+
 const webpackProdConfig = require('./config/webpack.config.prod');
 const webpackDevConfig = require('./config/webpack.config.dev');
 const tsProject = ts.createProject('./tsconfig.json');
@@ -131,4 +139,3 @@ gulp.task('dev-server', () => {
 
 
 });
-
