@@ -1,5 +1,5 @@
 {
-  "name": "frontend",
+  "name": "abcmap-frontend",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -27,7 +27,7 @@
     "chai": "^4.1.2",
     "node-sass": "^4.9.0",
     "sass-loader": "^7.1.0",
-    "typescript": "^3.2.1",
+    "typescript": "^3.4.1",
     "vue-template-compiler": "^2.5.21"
   }
 }
