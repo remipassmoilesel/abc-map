@@ -7,7 +7,7 @@
 <script lang="ts">
     import * as ol from 'openlayers';
     import {Component, Vue} from 'vue-property-decorator';
-    import {Routes} from "../../../shared/dist/src/routes/Routes";
+    import {Routes} from "../../../shared/dist";
 
     @Component({
         components: {},

@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "watch": "tsc -w",
+    "watch": "npm run clean && tsc -w",
     "build": "tsc --pretty",
     "clean": "rm -rf dist",
     "test": "echo \"Error: no test specified\" && exit 1"

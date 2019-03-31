@@ -1,7 +1,7 @@
 import express = require("express");
 import {AbstractRouter} from "./AbstractRouter";
-import {Routes} from "../../../../shared/dist/src/routes/Routes";
-import {IProject} from "../../../../shared/dist/src/project/IProject";
+import {Routes} from "../../../../shared/dist";
+import {IProject} from "../../../../shared/dist";
 
 export class ProjectRouter extends AbstractRouter {
 

@@ -7,12 +7,13 @@
     "module": "commonjs",
     "sourceMap": true,
     "outDir": "dist/",
+    "rootDir": "src/",
     "strict": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true
   },
   "include": [
-    "src/**/*"
+    "src/**/*.ts"
   ]
 }

@@ -7,7 +7,7 @@
     "start-electron": "electron ./dist/electron-main.js",
     "start-server": "node ./dist/api-main.js",
     "lint-fix": "tslint -c tslint.json --fix src/**/*.ts",
-    "watch": "tsc -w",
+    "watch": "npm run clean && tsc -w",
     "clean": "rm -rf dist",
     "build": "tsc --pretty",
     "test": "echo \"Error: no test specified\" && exit 1"

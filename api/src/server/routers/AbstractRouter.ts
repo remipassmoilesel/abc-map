@@ -1,5 +1,5 @@
 import express = require("express");
-import {Route} from "../../../../shared/dist/src/routes/Route";
+import {Route} from "../../../../shared/dist";
 
 export abstract class AbstractRouter {
 
