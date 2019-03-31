@@ -2,7 +2,7 @@
     <div id="app">
         <abc-navbar></abc-navbar>
         <router-view/>
-        <store-updater></store-updater>
+        <abc-project-updater></abc-project-updater>
     </div>
 </template>
 
@@ -24,10 +24,10 @@
     import Vue from "vue";
     import Component from "vue-class-component";
     import AbcNavbar from "@/components/AbcNavbar.vue";
-    import StoreUpdater from "@/components/StoreUpdater.vue";
+    import AbcProjectUpdater from "@/components/AbcProjectUpdater.vue";
 
     @Component({
-        components: {StoreUpdater, AbcNavbar}
+        components: {AbcProjectUpdater, AbcNavbar}
     })
     export default class App extends Vue {
     }

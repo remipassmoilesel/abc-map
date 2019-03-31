@@ -1,5 +1,5 @@
 <template>
-    <div class="store-updater"></div>
+    <div class="abc-project-updater"></div>
 </template>
 
 <script lang="ts">
@@ -7,7 +7,7 @@
     import {ExtendedVue} from "@/lib/ExtendedVue";
 
     @Component({})
-    export default class StoreUpdater extends ExtendedVue {
+    export default class AbcProjectUpdater extends ExtendedVue {
 
         mounted() {
             if (this.storew.project.getCurrentProject() === null) {

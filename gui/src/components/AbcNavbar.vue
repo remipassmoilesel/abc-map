@@ -25,7 +25,7 @@
     import {ExtendedVue} from "@/lib/ExtendedVue";
 
     @Component
-    export default class Navbar extends ExtendedVue {
+    export default class AbcNavbar extends ExtendedVue {
 
         projectName(): string {
             return this.storew.project.getProjectName();
