@@ -1,7 +1,5 @@
 import Vue from 'vue';
-import {ServiceMap} from "@/lib/ServiceMap";
-
-const services = new ServiceMap();
+import {services} from "@/lib/ServiceMap";
 
 Vue.mixin({
     data: () => {

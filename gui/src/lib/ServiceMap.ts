@@ -8,3 +8,5 @@ export class ServiceMap {
     project = new ProjectService(axios);
 
 }
+
+export const services = new ServiceMap();
