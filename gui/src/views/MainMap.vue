@@ -7,17 +7,23 @@
 <script lang="ts">
     import * as ol from 'openlayers';
     import {Component, Vue} from 'vue-property-decorator';
-    import {Routes} from "../../../shared/dist";
+    import {ExtendedVue} from "@/lib/ExtendedVue";
 
     @Component({
         components: {},
     })
-    export default class MainMap extends Vue {
+    export default class MainMap extends ExtendedVue {
 
         private map?: ol.Map;
 
         mounted() {
-            console.log(Routes.PROJECT_CURRENT);
+            this.services.project.findProjectById("eeeee")
+                .then(pr => console.log(pr))
+                .catch(pr => console.log(pr));
+            this.setupDefaultMap();
+        }
+
+        setupDefaultMap() {
             this.map = new ol.Map({
                 target: 'openlayers-map',
                 layers: [
@@ -30,6 +36,7 @@
                     zoom: 4
                 })
             });
+
         }
 
     }
