@@ -1,7 +1,7 @@
 import express = require("express");
 import {Route} from "../../../../shared/dist";
 
-export abstract class AbstractRouter {
+export abstract class AbstractController {
 
     public abstract route: Route;
 

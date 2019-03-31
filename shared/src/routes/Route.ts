@@ -10,10 +10,6 @@ export class Route {
 
     }
 
-    public withRoot(): Route {
-        return new Route('/' + this.path);
-    }
-
     public withArgs(args: IArgMap): Route {
         const newPath = this.replaceArguments(args, this.path);
         return new Route(newPath);
