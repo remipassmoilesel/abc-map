@@ -5,10 +5,13 @@ import BootstrapVue from 'bootstrap-vue';
 import {mainStore} from "@/lib/store/store";
 import "@/mixins";
 import './style.scss';
+import {setDebugTools} from "@/lib/debugTools";
 
 Vue.use(BootstrapVue);
 
 Vue.config.productionTip = false;
+
+setDebugTools();
 
 new Vue({
     router,
