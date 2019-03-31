@@ -1,6 +1,6 @@
 import * as loglevel from "loglevel";
 import {AbcApiConfig} from "./AbcApiConfig";
-import {AbcHttpServer} from "./lib/server/AbcHttpServer";
+import {ApiServer} from "./lib/server/ApiServer";
 import {getDaoMap} from "./lib/database/IDaoMap";
 import {getServices} from "./lib/IServiceMap";
 import {getControllers} from "./lib/server/IControllerMap";
@@ -15,5 +15,5 @@ const serviceMap = getServices(daoMap);
 const controllerMap = getControllers(serviceMap);
 
 const config = new AbcApiConfig();
-const httpServer = new AbcHttpServer(config, controllerMap);
+const httpServer = new ApiServer(config, controllerMap);
 httpServer.start();
