@@ -1,7 +1,7 @@
 import express = require("express");
-import {AbstractHandlerGroup} from "./AbstractHandlerGroup";
+import {AbstractRouter} from "./AbstractRouter";
 
-export class HelloWorldRouter extends AbstractHandlerGroup {
+export class HelloWorldRouter extends AbstractRouter {
 
     public basePath = "/hello";
 

@@ -3,6 +3,7 @@ import * as _ from 'lodash';
 import * as loglevel from 'loglevel';
 import {AbcApiConfig} from '../AbcApiConfig';
 import {HelloWorldRouter} from './handlers/HelloWorldRouter';
+import {ProjectRouter} from "./handlers/ProjectRouter";
 
 export class AbcHttpServer {
 
@@ -11,6 +12,7 @@ export class AbcHttpServer {
     private app: express.Application;
     private handlerGroups = [
         new HelloWorldRouter(),
+        new ProjectRouter(),
     ];
 
     constructor(private config: AbcApiConfig) {

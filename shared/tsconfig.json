@@ -1,6 +1,7 @@
 {
   "compileOnSave": true,
   "compilerOptions": {
+    "composite": true,
     "target": "es5",
     "module": "commonjs",
     "sourceMap": true,
@@ -12,10 +13,5 @@
   },
   "include": [
     "src/**/*"
-  ],
-  "references": [
-    {
-      "path": "../shared"
-    }
   ]
 }
