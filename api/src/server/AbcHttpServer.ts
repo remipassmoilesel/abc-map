@@ -1,12 +1,12 @@
-import express = require("express");
-import * as _ from "lodash";
-import * as loglevel from "loglevel";
-import {AbcApiConfig} from "../AbcApiConfig";
-import {HelloWorldRouter} from "./handlers/HelloWorldRouter";
+import express = require('express');
+import * as _ from 'lodash';
+import * as loglevel from 'loglevel';
+import {AbcApiConfig} from '../AbcApiConfig';
+import {HelloWorldRouter} from './handlers/HelloWorldRouter';
 
 export class AbcHttpServer {
 
-    private logger = loglevel.getLogger("AbcHttpServer");
+    private logger = loglevel.getLogger('AbcHttpServer');
 
     private app: express.Application;
     private handlerGroups = [
