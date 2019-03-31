@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <abc-navbar></abc-navbar>
     <div id="nav">
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link>
@@ -27,3 +28,15 @@
   }
 }
 </style>
+
+<script lang="ts">
+  import Vue from "vue";
+  import Component from "vue-class-component";
+  import AbcNavbar from "@/components/AbcNavbar.vue";
+
+  @Component({
+    components: {AbcNavbar}
+  })
+  export default class App extends Vue {
+  }
+</script>
