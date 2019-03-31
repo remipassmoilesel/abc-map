@@ -1,7 +1,7 @@
 import {AxiosStatic} from "axios";
 import {IProject, Routes} from "../../../../shared/dist";
 
-export class ProjectService {
+export class ProjectClient {
 
     constructor(private httpClient: AxiosStatic) {
 

@@ -11,8 +11,10 @@
 
         mounted() {
             if (this.storew.project.getCurrentProject() === null) {
-                this.services.project.createNewProject("Nouveau projet")
-                    .then(project => this.storew.project.setCurrentProject(project));
+                this.clients.project.createNewProject("Nouveau projet")
+                    .then(project => {
+                        return this.storew.project.setCurrentProject(project).then(res => project);
+                    });
             }
         }
 
