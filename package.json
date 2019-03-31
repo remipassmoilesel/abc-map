@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "start": "./node_modules/.bin/electron ./api/build/electron-main.js",
+    "start": "cd api && npm run start-electron",
     "build": "npm run build-api && npm run build-gui",
     "build-api": "cd api && npm run build",
     "build-gui": "cd gui && npm run build",
@@ -11,7 +11,5 @@
   },
   "author": "",
   "license": "ISC",
-  "devDependencies": {
-    "electron": "^4.1.3"
-  }
+  "devDependencies": {}
 }
