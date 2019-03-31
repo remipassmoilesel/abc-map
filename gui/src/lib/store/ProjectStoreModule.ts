@@ -23,7 +23,7 @@ export const projectModule: Module<IProjectState, IRootState> = {
             if (state.currentProject) {
                 return state.currentProject.name;
             } else {
-                return 'No current project';
+                return 'Pas de projet courant';
             }
         },
         projectLayers: (state: IProjectState) => {
@@ -35,10 +35,8 @@ export const projectModule: Module<IProjectState, IRootState> = {
         }
     },
     actions: {
-        [ProjectActions.PROJECT_UPDATE]: (context: any) => {
-            services.project.findProjectById("fake-project-id").then(project => {
-                context.commit(ProjectMutations.PROJECT_UPDATE, {project});
-            })
+        [ProjectActions.PROJECT_UPDATE]: (context: any, project: IProject) => {
+            context.commit(ProjectMutations.PROJECT_UPDATE, {project});
         },
     },
     mutations: {

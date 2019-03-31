@@ -12,6 +12,10 @@ export class ProjectStoreWrapper {
         return mainStore.dispatch(ProjectActions.PROJECT_UPDATE);
     }
 
+    public setCurrentProject(project: IProject) {
+        return mainStore.dispatch(ProjectActions.PROJECT_UPDATE, project);
+    }
+
     public getCurrentProject(): IProject | null {
         return mainStore.state.project.currentProject;
     }

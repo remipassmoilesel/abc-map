@@ -12,4 +12,9 @@ export class ProjectService {
         return this.httpClient.get(url).then(resp => resp.data);
     }
 
+    public createNewProject(projectName: string): Promise<IProject> {
+        const url = `${Routes.PROJECT_CREATE_NEW.path}?name=${projectName}`;
+        return this.httpClient.get(url).then(resp => resp.data);
+    }
+
 }

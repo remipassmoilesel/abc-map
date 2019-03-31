@@ -1,32 +1,34 @@
 <template>
-  <div id="app">
-    <abc-navbar></abc-navbar>
-    <router-view/>
-  </div>
+    <div id="app">
+        <abc-navbar></abc-navbar>
+        <router-view/>
+        <store-updater></store-updater>
+    </div>
 </template>
 
 <style lang="scss">
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    #app {
+        font-family: 'Avenir', Helvetica, Arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
 
-  display: flex;
-  flex-direction: column;
+        display: flex;
+        flex-direction: column;
 
-  height: 100%;
-  min-height: 100%;
-}
+        height: 100%;
+        min-height: 100%;
+    }
 </style>
 
 <script lang="ts">
-  import Vue from "vue";
-  import Component from "vue-class-component";
-  import AbcNavbar from "@/components/AbcNavbar.vue";
+    import Vue from "vue";
+    import Component from "vue-class-component";
+    import AbcNavbar from "@/components/AbcNavbar.vue";
+    import StoreUpdater from "@/components/StoreUpdater.vue";
 
-  @Component({
-    components: {AbcNavbar}
-  })
-  export default class App extends Vue {
-  }
+    @Component({
+        components: {StoreUpdater, AbcNavbar}
+    })
+    export default class App extends Vue {
+    }
 </script>

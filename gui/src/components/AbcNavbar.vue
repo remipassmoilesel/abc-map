@@ -14,21 +14,28 @@
                 <b-dropdown-item @click="goToAbout()">A propos</b-dropdown-item>
             </b-nav-item-dropdown>
 
+            <b-nav-item>Projet: {{ projectName() }}</b-nav-item>
+
         </b-navbar-nav>
     </b-navbar>
 </template>
 
 <script lang="ts">
     import {Component, Vue} from 'vue-property-decorator';
+    import {ExtendedVue} from "@/lib/ExtendedVue";
 
     @Component
-    export default class Navbar extends Vue {
+    export default class Navbar extends ExtendedVue {
 
-        goToMap() {
+        projectName(): string {
+            return this.storew.project.getProjectName();
+        }
+
+        goToMap(): void {
             this.$router.push('/map');
         }
 
-        goToAbout() {
+        goToAbout(): void {
             this.$router.push('/about');
         }
 

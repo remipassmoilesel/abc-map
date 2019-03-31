@@ -17,9 +17,6 @@
         private map?: ol.Map;
 
         mounted() {
-            this.services.project.findProjectById("eeeee")
-                .then(pr => console.log(pr))
-                .catch(pr => console.log(pr));
             this.setupDefaultMap();
         }
 
