@@ -1,15 +1,16 @@
 import express = require("express");
 import {AbstractRouter} from "./AbstractRouter";
-import {IProject} from "../../../../shared/src/IProject";
+import {Routes} from "../../../../shared/dist/src/routes/Routes";
+import {IProject} from "../../../../shared/dist/src/project/IProject";
 
 export class ProjectRouter extends AbstractRouter {
 
-    public basePath = "/project";
+    public route = Routes.PROJECT;
 
     public getRouter(): express.Router {
         const router = express.Router();
 
-        router.get("/current", this.getCurrentProject);
+        router.get(Routes.PROJECT_CURRENT.path, this.getCurrentProject);
 
         return router;
     }

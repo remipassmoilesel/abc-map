@@ -2,10 +2,11 @@
   "compileOnSave": true,
   "compilerOptions": {
     "composite": true,
+    "declaration": true,
     "target": "es5",
     "module": "commonjs",
     "sourceMap": true,
-    "outDir": "build/",
+    "outDir": "dist/",
     "strict": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,

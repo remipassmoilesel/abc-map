@@ -2,22 +2,21 @@ import express = require('express');
 import * as _ from 'lodash';
 import * as loglevel from 'loglevel';
 import {AbcApiConfig} from '../AbcApiConfig';
-import {HelloWorldRouter} from './handlers/HelloWorldRouter';
-import {ProjectRouter} from "./handlers/ProjectRouter";
+import {ProjectRouter} from "./routers/ProjectRouter";
 
 export class AbcHttpServer {
 
     private logger = loglevel.getLogger('AbcHttpServer');
 
-    private app: express.Application;
-    private handlerGroups = [
-        new HelloWorldRouter(),
+    private routers = [
         new ProjectRouter(),
     ];
 
+    private app: express.Application;
+
     constructor(private config: AbcApiConfig) {
         this.app = express();
-        this.setupHandlers();
+        this.setupRouters();
     }
 
     public start() {
@@ -26,9 +25,9 @@ export class AbcHttpServer {
         });
     }
 
-    private setupHandlers() {
-        _.forEach(this.handlerGroups, (gr) => {
-            this.app.use(gr.basePath, gr.getRouter());
+    private setupRouters() {
+        _.forEach(this.routers, (gr) => {
+            this.app.use(gr.getRouter());
         });
     }
 }
