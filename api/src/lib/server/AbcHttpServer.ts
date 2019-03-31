@@ -14,6 +14,7 @@ export class AbcHttpServer {
                 private controllers: IControllerMap) {
         this.app = express();
         this.setupControllers();
+        this.setupGuiService();
     }
 
     public start() {
@@ -24,5 +25,9 @@ export class AbcHttpServer {
 
     private setupControllers() {
         _.forEach(_.values(this.controllers), (gr) => this.app.use(gr.getRouter()));
+    }
+
+    private setupGuiService() {
+        this.app.use(express.static('gui-dist'));
     }
 }
