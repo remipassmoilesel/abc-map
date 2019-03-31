@@ -1,10 +1,10 @@
-import {AbcHttpServer} from "./server/AbcHttpServer";
-import {AbcApiConfig} from "./AbcApiConfig";
 import * as loglevel from "loglevel";
+import {AbcApiConfig} from "./AbcApiConfig";
+import {AbcHttpServer} from "./server/AbcHttpServer";
 
-loglevel.setDefaultLevel('info');
+loglevel.setDefaultLevel("info");
 
-const logger = loglevel.getLogger("api-main.ts")
+const logger = loglevel.getLogger("api-main.ts");
 logger.info("Starting Abc-Map API ...");
 
 const config = new AbcApiConfig();

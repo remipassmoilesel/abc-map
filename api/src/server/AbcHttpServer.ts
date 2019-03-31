@@ -1,8 +1,8 @@
-import express = require('express');
-import {AbcApiConfig} from "../AbcApiConfig";
-import * as loglevel from 'loglevel';
-import {HelloWorldRouter} from "./handlers/HelloWorldRouter";
+import express = require("express");
 import * as _ from "lodash";
+import * as loglevel from "loglevel";
+import {AbcApiConfig} from "../AbcApiConfig";
+import {HelloWorldRouter} from "./handlers/HelloWorldRouter";
 
 export class AbcHttpServer {
 
@@ -20,12 +20,12 @@ export class AbcHttpServer {
 
     public start() {
         this.app.listen(this.config.PORT, () => {
-            this.logger.info(`Server started on port ${this.config.PORT}`)
-        })
+            this.logger.info(`Server started on port ${this.config.PORT}`);
+        });
     }
 
     private setupHandlers() {
-        _.forEach(this.handlerGroups, gr => {
+        _.forEach(this.handlerGroups, (gr) => {
             this.app.use(gr.basePath, gr.getRouter());
         });
     }
