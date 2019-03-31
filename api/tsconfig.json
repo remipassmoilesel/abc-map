@@ -9,7 +9,10 @@
     "strict": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "lib": [
+      "es2015"
+    ]
   },
   "include": [
     "src/**/*"

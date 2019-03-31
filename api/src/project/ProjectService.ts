@@ -1,9 +1,8 @@
 import {ProjectDao} from "./ProjectDao";
-import {IProject} from "../../../shared/dist";
+import {IProject, IProjectEventContent, ProjectEvent} from "../../../shared/dist";
 import * as uuid from 'uuid';
 import * as loglevel from "loglevel";
-import {IProjectEventContent, ProjectEvent} from "../../../shared/src";
-import EventEmitter = NodeJS.EventEmitter;
+import EventEmitter = require('events');
 
 export class ProjectService {
 
@@ -26,6 +25,9 @@ export class ProjectService {
     }
 
     public createEmptyProject(projectName: string): Promise<IProject> {
+        if(!projectName){
+            return Promise.reject("Project name is mandatory");
+        }
         const newProject: IProject = {
             id: uuid.v4().toString(),
             name: projectName,
@@ -44,4 +46,5 @@ export class ProjectService {
     public getEmitter(): NodeJS.EventEmitter {
         return this._emitter;
     }
+
 }

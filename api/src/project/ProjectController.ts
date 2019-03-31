@@ -15,9 +15,9 @@ export class ProjectController extends AbstractController {
     public getRouter(): express.Router {
         const router = express.Router();
 
+        router.get(Routes.PROJECT_CREATE_NEW.path, this.createNewProject);
         router.ws(Routes.PROJECT_WEBSOCKET.path, this.projectWebsocket);
         router.get(Routes.PROJECT_GET_BY_ID.path, this.getProject);
-        router.get(Routes.PROJECT_CREATE_NEW.path, this.createNewProject);
 
         return router;
     }
