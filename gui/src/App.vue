@@ -1,12 +1,15 @@
 <template>
     <div id="app">
+
         <abc-navbar></abc-navbar>
         <router-view/>
+
         <abc-project-not-found-modal></abc-project-not-found-modal>
+
     </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
     #app {
         font-family: 'Avenir', Helvetica, Arial, sans-serif;
         -webkit-font-smoothing: antialiased;
