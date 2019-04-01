@@ -3,7 +3,7 @@ import {NextFunction} from 'express';
 import {AbstractController} from '../server/AbstractController';
 import {IProjectEventContent, ProjectEvent, Routes} from '../../../shared/dist';
 import {ProjectService} from './ProjectService';
-import * as ws from 'ws';
+import WebSocket from 'ws';
 
 export class ProjectController extends AbstractController {
 
@@ -21,7 +21,7 @@ export class ProjectController extends AbstractController {
         return router;
     }
 
-    private projectWebsocket = async (ws: ws, req: express.Request, next: NextFunction) => {
+    private projectWebsocket = async (ws: WebSocket, req: express.Request, next: NextFunction) => {
         const projectId = req.params.id;
         this.projectService.getEmitter()
             .on(ProjectEvent.PROJECT_UPDATED, (event: IProjectEventContent) => {

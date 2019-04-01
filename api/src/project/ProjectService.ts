@@ -7,7 +7,7 @@ import EventEmitter = require('events');
 export class ProjectService {
 
     private logger = loglevel.getLogger('ProjectService');
-    private _emitter = new EventEmitter();
+    private emitter = new EventEmitter();
 
     constructor(private projectDao: ProjectDao) {
         this.projectDao.connect().catch((err) => this.logger.error(err));
@@ -44,11 +44,11 @@ export class ProjectService {
 
     public notifyProjectUpdated(projectId: string) {
         const eventContent: IProjectEventContent = {name: ProjectEvent.PROJECT_UPDATED, projectId};
-        this._emitter.emit(ProjectEvent.PROJECT_UPDATED, eventContent);
+        this.emitter.emit(ProjectEvent.PROJECT_UPDATED, eventContent);
     }
 
     public getEmitter(): NodeJS.EventEmitter {
-        return this._emitter;
+        return this.emitter;
     }
 
     private generateProjectId(): string {

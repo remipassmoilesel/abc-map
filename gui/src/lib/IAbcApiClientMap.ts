@@ -1,6 +1,5 @@
 import {ProjectClient} from '@/lib/project/ProjectClient';
-
-const axios = require('axios');
+import axios from 'axios';
 
 export interface IAbcApiClientMap {
     project: ProjectClient;
