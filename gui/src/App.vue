@@ -23,7 +23,7 @@
 <script lang="ts">
     import Vue from "vue";
     import Component from "vue-class-component";
-    import AbcNavbar from "@/components/AbcNavbar.vue";
+    import AbcNavbar from "@/components/navbar/AbcNavbar.vue";
     import AbcProjectUpdater from "@/components/AbcProjectUpdater.vue";
 
     @Component({

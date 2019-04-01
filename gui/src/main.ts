@@ -3,8 +3,8 @@ import App from './App.vue';
 import router from './router';
 import BootstrapVue from 'bootstrap-vue';
 import {mainStore} from "@/lib/store/store";
+import {setDebugToolsInWindow} from "@/lib/utils/abcDebugTools";
 import "@/mixins";
-import {setDebugToolsInWindow} from "@/lib/debugTools";
 import './style.scss';
 
 Vue.use(BootstrapVue);

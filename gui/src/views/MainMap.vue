@@ -7,12 +7,12 @@
 <script lang="ts">
     import * as ol from 'openlayers';
     import {Component} from 'vue-property-decorator';
-    import {ExtendedVue} from "@/lib/ExtendedVue";
+    import {AbcExtendedVue} from "@/lib/utils/AbcExtendedVue";
 
     @Component({
         components: {},
     })
-    export default class MainMap extends ExtendedVue {
+    export default class MainMap extends AbcExtendedVue {
 
         map?: ol.Map;
 

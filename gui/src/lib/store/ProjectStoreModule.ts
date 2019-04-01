@@ -1,7 +1,7 @@
 import {IProject} from "../../../../shared/dist";
 import {Module, ModuleTree} from "vuex";
 import {IRootState} from "@/lib/store/store";
-import {clients} from "@/lib/IClientsMap";
+import {abcApiClients} from "@/lib/IAbcApiClientMap";
 
 export enum ProjectMutations {
     PROJECT_UPDATE = 'PROJECT_UPDATE'

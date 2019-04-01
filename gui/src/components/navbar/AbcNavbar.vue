@@ -4,7 +4,7 @@
             <b-nav-item @click="goToMap()">Carte</b-nav-item>
 
             <b-nav-item-dropdown text="Projet" left>
-                <b-dropdown-item>Nouveau</b-dropdown-item>
+                <abc-new-project></abc-new-project>
                 <b-dropdown-item>Enregistrer</b-dropdown-item>
                 <b-dropdown-item>Enregistrer sous ...</b-dropdown-item>
                 <b-dropdown-item>Quitter</b-dropdown-item>
@@ -22,13 +22,15 @@
 
 <script lang="ts">
     import {Component, Vue} from 'vue-property-decorator';
-    import {ExtendedVue} from "@/lib/ExtendedVue";
-
-    @Component
-    export default class AbcNavbar extends ExtendedVue {
+    import {AbcExtendedVue} from "@/lib/utils/AbcExtendedVue";
+    import AbcNewProject from "@/components/navbar/items/AbcNewProject.vue";
+    @Component({
+        components: {AbcNewProject}
+    })
+    export default class AbcNavbar extends AbcExtendedVue {
 
         projectName(): string {
-            return this.storew.project.getProjectName();
+            return this.abcStorew.project.getProjectName();
         }
 
         goToMap(): void {

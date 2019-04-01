@@ -11,12 +11,12 @@
 
 <script lang="ts">
     import {Component} from 'vue-property-decorator';
-    import {ExtendedVue} from "@/lib/ExtendedVue";
-    import {LSKey} from "@/lib/LocalStorageHelper";
+    import {AbcExtendedVue} from "@/lib/utils/AbcExtendedVue";
+    import {LSKey} from "@/lib/utils/AbcLocalStorageHelper";
 
     // TODO: create a dedicated service ?
     @Component({})
-    export default class AbcProjectUpdater extends ExtendedVue {
+    export default class AbcProjectUpdater extends AbcExtendedVue {
 
         projectNotFoundModal = false;
 
@@ -29,7 +29,7 @@
         }
 
         initProject(): Promise<any> {
-            const storedProjectId = this.localst.get(LSKey.CURRENT_PROJECT_ID);
+            const storedProjectId = this.abcLocalst.get(LSKey.CURRENT_PROJECT_ID);
             if (!storedProjectId) {
                 return this.createNewProject();
             } else {
@@ -38,18 +38,18 @@
         }
 
         createNewProject(): Promise<any> {
-            return this.clients.project.createNewProject("Nouveau projet")
+            return this.abcApiClients.project.createNewProject("Nouveau projet")
                 .then(project => {
-                    this.localst.save(LSKey.CURRENT_PROJECT_ID, project.id);
-                    return this.storew.project.setCurrentProject(project).then(res => project);
+                    this.abcLocalst.save(LSKey.CURRENT_PROJECT_ID, project.id);
+                    return this.abcStorew.project.setCurrentProject(project).then(res => project);
                 });
         }
 
         openProject(projectId: string): Promise<any> {
-            return this.clients.project.findProjectById(projectId)
+            return this.abcApiClients.project.findProjectById(projectId)
                 .then(project => {
-                    this.localst.save(LSKey.CURRENT_PROJECT_ID, project.id);
-                    return this.storew.project.setCurrentProject(project).then(res => project);
+                    this.abcLocalst.save(LSKey.CURRENT_PROJECT_ID, project.id);
+                    return this.abcStorew.project.setCurrentProject(project).then(res => project);
                 })
                 .catch(err => {
                     this.setProjectNotFoundModalVisible(true);

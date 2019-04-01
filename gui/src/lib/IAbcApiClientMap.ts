@@ -2,10 +2,10 @@ import {ProjectClient} from "@/lib/project/ProjectClient";
 
 const axios = require('axios');
 
-export interface IClientsMap {
+export interface IAbcApiClientMap {
     project: ProjectClient;
 }
 
-export const clients = {
+export const abcApiClients: IAbcApiClientMap = {
     project: new ProjectClient(axios)
 };

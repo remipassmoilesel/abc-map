@@ -2,7 +2,7 @@ import {mainStore} from "@/lib/store/store";
 import {ProjectActions} from "@/lib/store/ProjectStoreModule";
 import {IMapLayer, IProject} from "../../../../shared/dist";
 
-export class StoreWrapper {
+export class AbcStoreWrapper {
     public project = new ProjectStoreWrapper();
 }
 
@@ -29,3 +29,5 @@ export class ProjectStoreWrapper {
     }
 
 }
+
+export const abcStorew = new AbcStoreWrapper();

@@ -1,14 +1,16 @@
 import Vue from 'vue';
-import {clients} from "@/lib/IClientsMap";
-import {StoreWrapper} from "@/lib/store/StoreWrapper";
-import {LocalStorageHelper} from "@/lib/LocalStorageHelper";
+import {abcApiClients} from "@/lib/IAbcApiClientMap";
+import {abcStorew} from "@/lib/store/AbcStoreWrapper";
+import {abcLocalst} from "@/lib/utils/AbcLocalStorageHelper";
+import {abcServices} from "@/lib/IAbcServiceMap";
 
 Vue.mixin({
     data: () => {
         return {
-            storew: new StoreWrapper(),
-            clients,
-            localst: new LocalStorageHelper()
+            abcStorew,
+            abcServices,
+            abcApiClients,
+            abcLocalst
         };
     },
 });

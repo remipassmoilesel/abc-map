@@ -3,7 +3,7 @@ export enum LSKey {
     CURRENT_PROJECT_ID = "ABC_CURRENT_PROJECT"
 }
 
-export class LocalStorageHelper {
+export class AbcLocalStorageHelper {
 
     public save(key: LSKey, value: string): void {
         localStorage.setItem(key, value);
@@ -14,3 +14,5 @@ export class LocalStorageHelper {
     }
 
 }
+
+export const abcLocalst = new AbcLocalStorageHelper();
