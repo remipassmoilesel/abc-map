@@ -6,6 +6,7 @@
   "scripts": {
     "start": "npm run watch",
     "watch": "tsc -w",
+    "lint": "tslint -c tslint.json --fix src/**/*.ts",
     "build": "tsc --pretty",
     "clean": "rm -rf dist",
     "test": "echo \"Error: no test specified\" && exit 1"

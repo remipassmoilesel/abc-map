@@ -1,4 +1,4 @@
-import {IMapLayer} from "./IMapLayer";
+import {IMapLayer} from './IMapLayer';
 
 
 export interface IProject {

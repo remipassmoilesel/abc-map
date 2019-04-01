@@ -6,7 +6,7 @@
   "scripts": {
     "start": "nodemon ./dist/api-main.js",
     "start-electron": "electron ./dist/electron-main.js",
-    "lint-fix": "tslint -c tslint.json --fix src/**/*.ts",
+    "lint": "tslint -c tslint.json --fix src/**/*.ts",
     "watch": "tsc -w",
     "clean": "rm -rf dist",
     "build": "tsc --pretty",

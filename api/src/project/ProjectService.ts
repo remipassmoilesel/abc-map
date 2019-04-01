@@ -1,16 +1,16 @@
-import {ProjectDao} from "./ProjectDao";
-import {IProject, IProjectEventContent, MapLayerType, ProjectEvent} from "../../../shared/dist";
+import {ProjectDao} from './ProjectDao';
+import {IProject, IProjectEventContent, MapLayerType, ProjectEvent} from '../../../shared/dist';
 import * as uuid from 'uuid';
-import * as loglevel from "loglevel";
+import * as loglevel from 'loglevel';
 import EventEmitter = require('events');
 
 export class ProjectService {
 
-    private logger = loglevel.getLogger("ProjectService");
+    private logger = loglevel.getLogger('ProjectService');
     private _emitter = new EventEmitter();
 
     constructor(private projectDao: ProjectDao) {
-        this.projectDao.connect().catch(err => this.logger.error(err))
+        this.projectDao.connect().catch((err) => this.logger.error(err));
     }
 
     public findProject(projectId: string): Promise<IProject> {
@@ -18,15 +18,15 @@ export class ProjectService {
     }
 
     public saveProject(project: IProject): Promise<IProject> {
-        return this.projectDao.save(project).then(insertResult => {
+        return this.projectDao.save(project).then((insertResult) => {
             this.notifyProjectUpdated(project.id);
             return project;
-        })
+        });
     }
 
     public createNewProject(projectName: string): Promise<IProject> {
         if (!projectName) {
-            return Promise.reject("Project name is mandatory");
+            return Promise.reject('Project name is mandatory');
         }
         const newProject: IProject = {
             id: this.generateProjectId(),
@@ -34,9 +34,9 @@ export class ProjectService {
             activeLayer: null,
             layers: [{
                 id: this.generateLayerId(MapLayerType.RasterOsm),
-                name: "Couche OpenStreetMap",
-                type: MapLayerType.RasterOsm
-            }]
+                name: 'Couche OpenStreetMap',
+                type: MapLayerType.RasterOsm,
+            }],
         };
         return this.projectDao.save(newProject)
             .then(() => newProject);
@@ -44,7 +44,7 @@ export class ProjectService {
 
     public notifyProjectUpdated(projectId: string) {
         const eventContent: IProjectEventContent = {name: ProjectEvent.PROJECT_UPDATED, projectId};
-        this._emitter.emit(ProjectEvent.PROJECT_UPDATED, eventContent)
+        this._emitter.emit(ProjectEvent.PROJECT_UPDATED, eventContent);
     }
 
     public getEmitter(): NodeJS.EventEmitter {

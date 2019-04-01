@@ -1,21 +1,21 @@
 import {Logger} from 'loglevel';
-import {IProject} from "../../../shared/dist";
-import {AbstractMongodbDao} from "../lib/database/AbstractMongodbDao";
-import loglevel = require("loglevel");
+import {IProject} from '../../../shared/dist';
+import {AbstractMongodbDao} from '../lib/database/AbstractMongodbDao';
+import loglevel = require('loglevel');
 
 export class ProjectDao extends AbstractMongodbDao<IProject> {
 
-    protected logger: Logger = loglevel.getLogger("ProjectDao");
-    protected collectionName = "projects";
+    protected logger: Logger = loglevel.getLogger('ProjectDao');
+    protected collectionName = 'projects';
 
-    findById(objectid: string): Promise<IProject> {
+    public findById(objectid: string): Promise<IProject> {
         if (!this.client) {
-            return Promise.reject("Not connected");
+            return Promise.reject('Not connected');
         }
         return this.client.db(this.databasename).collection(this.collectionName).findOne({id: objectid})
-            .then(result => {
+            .then((result) => {
                 if (!result) {
-                    return Promise.reject(new Error("Not found"));
+                    return Promise.reject(new Error('Not found'));
                 }
                 return result;
             });

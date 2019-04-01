@@ -1,12 +1,12 @@
-import {ProjectController} from "../project/ProjectController";
-import {IServiceMap} from "../lib/IServiceMap";
+import {ProjectController} from '../project/ProjectController';
+import {IServiceMap} from '../lib/IServiceMap';
 
 export interface IControllerMap {
-    project: ProjectController
+    project: ProjectController;
 }
 
 export function getControllers(services: IServiceMap): IControllerMap {
     return {
-        project: new ProjectController(services.project)
-    }
+        project: new ProjectController(services.project),
+    };
 }

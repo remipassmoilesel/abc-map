@@ -1,4 +1,4 @@
-import express = require("express");
+import express = require('express');
 
 export abstract class AbstractController {
 

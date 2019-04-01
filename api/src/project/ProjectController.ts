@@ -1,8 +1,8 @@
-import express = require("express");
-import {NextFunction} from "express";
-import {AbstractController} from "../server/AbstractController";
-import {IProjectEventContent, ProjectEvent, Routes} from "../../../shared/dist";
-import {ProjectService} from "./ProjectService";
+import express = require('express');
+import {NextFunction} from 'express';
+import {AbstractController} from '../server/AbstractController';
+import {IProjectEventContent, ProjectEvent, Routes} from '../../../shared/dist';
+import {ProjectService} from './ProjectService';
 import * as ws from 'ws';
 
 export class ProjectController extends AbstractController {
@@ -26,27 +26,27 @@ export class ProjectController extends AbstractController {
         this.projectService.getEmitter()
             .on(ProjectEvent.PROJECT_UPDATED, (event: IProjectEventContent) => {
                 if (event.projectId === projectId) {
-                    ws.send(event)
+                    ws.send(event);
                 }
-            })
+            });
     }
 
     private getProject = async (req: express.Request, res: express.Response, next: NextFunction) => {
         const projectId = req.params.id;
         this.projectService.findProject(projectId)
-            .then(project => {
+            .then((project) => {
                 res.json(project);
             })
             .catch(next);
-    };
+    }
 
     private createNewProject = async (req: express.Request, res: express.Response, next: NextFunction) => {
         const projectName = req.query.name;
         this.projectService.createNewProject(projectName)
-            .then(project => {
+            .then((project) => {
                 res.json(project);
             })
             .catch(next);
-    };
+    }
 
 }

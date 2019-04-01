@@ -1,4 +1,4 @@
-import * as _ from "lodash";
+import * as _ from 'lodash';
 
 declare interface IArgMap {
     [k: string]: string;

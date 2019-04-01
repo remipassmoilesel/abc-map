@@ -1,6 +1,6 @@
 
 export enum MapLayerType {
-    RasterOsm = "RasterOsm",
+    RasterOsm = 'RasterOsm',
 }
 
 export interface IMapLayer {

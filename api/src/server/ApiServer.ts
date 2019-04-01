@@ -4,7 +4,7 @@ import expressWebsocket = require('express-ws');
 import * as _ from 'lodash';
 import * as loglevel from 'loglevel';
 import {AbcApiConfig} from '../AbcApiConfig';
-import {IControllerMap} from "./IControllerMap";
+import {IControllerMap} from './IControllerMap';
 
 export class ApiServer {
 
