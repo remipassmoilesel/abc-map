@@ -1,12 +1,11 @@
 import express = require("express");
-import {AbstractController} from "../lib/server/AbstractController";
+import {NextFunction} from "express";
+import {AbstractController} from "../server/AbstractController";
 import {IProjectEventContent, ProjectEvent, Routes} from "../../../shared/dist";
 import {ProjectService} from "./ProjectService";
 import * as ws from 'ws';
 
 export class ProjectController extends AbstractController {
-
-    public route = Routes.PROJECT;
 
     constructor(private projectService: ProjectService) {
         super();
@@ -22,7 +21,7 @@ export class ProjectController extends AbstractController {
         return router;
     }
 
-    private projectWebsocket = async (ws: ws, req: express.Request) => {
+    private projectWebsocket = async (ws: ws, req: express.Request, next: NextFunction) => {
         const projectId = req.params.id;
         this.projectService.getEmitter()
             .on(ProjectEvent.PROJECT_UPDATED, (event: IProjectEventContent) => {
@@ -32,26 +31,22 @@ export class ProjectController extends AbstractController {
             })
     }
 
-    private getProject = async (req: express.Request, res: express.Response) => {
+    private getProject = async (req: express.Request, res: express.Response, next: NextFunction) => {
         const projectId = req.params.id;
         this.projectService.findProject(projectId)
             .then(project => {
                 res.json(project);
             })
-            .catch(err => {
-                res.status(500).json(err);
-            })
+            .catch(next);
     };
 
-    private createNewProject = async (req: express.Request, res: express.Response) => {
+    private createNewProject = async (req: express.Request, res: express.Response, next: NextFunction) => {
         const projectName = req.query.name;
         this.projectService.createEmptyProject(projectName)
             .then(project => {
                 res.json(project);
             })
-            .catch(err => {
-                res.status(500).json(err);
-            });
+            .catch(next);
     };
 
 }

@@ -3,7 +3,7 @@ import morgan = require('morgan');
 import expressWebsocket = require('express-ws');
 import * as _ from 'lodash';
 import * as loglevel from 'loglevel';
-import {AbcApiConfig} from '../../AbcApiConfig';
+import {AbcApiConfig} from '../AbcApiConfig';
 import {IControllerMap} from "./IControllerMap";
 
 export class ApiServer {
@@ -15,9 +15,9 @@ export class ApiServer {
     constructor(private config: AbcApiConfig,
                 private controllers: IControllerMap) {
         this.app = express();
-        expressWebsocket(this.app);
 
         this.setupMorgan(this.app);
+        expressWebsocket(this.app);
         this.setupControllers(this.app);
         this.setupGuiService(this.app);
     }
@@ -36,14 +36,8 @@ export class ApiServer {
         app.use(express.static('gui-dist'));
     }
 
-    private setupErrorHandler(app: express.Application) {
-        app.use((err: Error, req: express.Request, res: express.Response, next: any) => {
-            this.logger.error(err);
-            next();
-        });
+    private setupMorgan(app: express.Application) {
+        app.use(morgan('dev'));
     }
 
-    private setupMorgan(app: express.Application) {
-        app.use(morgan('tiny'));
-    }
 }

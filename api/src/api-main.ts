@@ -1,9 +1,9 @@
 import * as loglevel from "loglevel";
 import {AbcApiConfig} from "./AbcApiConfig";
-import {ApiServer} from "./lib/server/ApiServer";
+import {ApiServer} from "./server/ApiServer";
 import {getDaoMap} from "./lib/database/IDaoMap";
 import {getServices} from "./lib/IServiceMap";
-import {getControllers} from "./lib/server/IControllerMap";
+import {getControllers} from "./server/IControllerMap";
 
 loglevel.setDefaultLevel("info");
 

@@ -1,6 +1,5 @@
-import {ProjectController} from "../../project/ProjectController";
-import {IDaoMap} from "../database/IDaoMap";
-import {IServiceMap} from "../IServiceMap";
+import {ProjectController} from "../project/ProjectController";
+import {IServiceMap} from "../lib/IServiceMap";
 
 export interface IControllerMap {
     project: ProjectController
