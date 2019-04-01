@@ -15,7 +15,7 @@ export class ProjectDao extends AbstractMongodbDao<IProject> {
         return this.client.db(this.databasename).collection(this.collectionName).findOne({id: objectid})
             .then(result => {
                 if (!result) {
-                    return Promise.reject("Not found");
+                    return Promise.reject(new Error("Not found"));
                 }
                 return result;
             });

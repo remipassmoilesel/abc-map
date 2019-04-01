@@ -4,10 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node ./dist/api-main.js",
     "start-electron": "electron ./dist/electron-main.js",
-    "start-server": "node ./dist/api-main.js",
     "lint-fix": "tslint -c tslint.json --fix src/**/*.ts",
-    "watch": "npm run clean && tsc -w",
+    "watch": "tsc -w",
     "clean": "rm -rf dist",
     "build": "tsc --pretty",
     "test": "echo \"Error: no test specified\" && exit 1"
