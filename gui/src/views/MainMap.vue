@@ -6,7 +6,7 @@
 
 <script lang="ts">
     import * as ol from 'openlayers';
-    import {Component, Vue} from 'vue-property-decorator';
+    import {Component} from 'vue-property-decorator';
     import {ExtendedVue} from "@/lib/ExtendedVue";
 
     @Component({
@@ -14,7 +14,7 @@
     })
     export default class MainMap extends ExtendedVue {
 
-        private map?: ol.Map;
+        map?: ol.Map;
 
         mounted() {
             this.setupDefaultMap();

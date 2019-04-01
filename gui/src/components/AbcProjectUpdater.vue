@@ -14,7 +14,7 @@
     import {ExtendedVue} from "@/lib/ExtendedVue";
     import {LSKey} from "@/lib/LocalStorageHelper";
 
-    // TODO: move to a dedicated service ?
+    // TODO: create a dedicated service ?
     @Component({})
     export default class AbcProjectUpdater extends ExtendedVue {
 

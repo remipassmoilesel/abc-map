@@ -1,5 +1,5 @@
 import {ProjectDao} from "./ProjectDao";
-import {IProject, IProjectEventContent, ProjectEvent} from "../../../shared/dist";
+import {IProject, IProjectEventContent, MapLayerType, ProjectEvent} from "../../../shared/dist";
 import * as uuid from 'uuid';
 import * as loglevel from "loglevel";
 import EventEmitter = require('events');
@@ -24,15 +24,19 @@ export class ProjectService {
         })
     }
 
-    public createEmptyProject(projectName: string): Promise<IProject> {
-        if(!projectName){
+    public createNewProject(projectName: string): Promise<IProject> {
+        if (!projectName) {
             return Promise.reject("Project name is mandatory");
         }
         const newProject: IProject = {
-            id: uuid.v4().toString(),
+            id: this.generateProjectId(),
             name: projectName,
             activeLayer: null,
-            layers: []
+            layers: [{
+                id: this.generateLayerId(MapLayerType.RasterOsm),
+                name: "Couche OpenStreetMap",
+                type: MapLayerType.RasterOsm
+            }]
         };
         return this.projectDao.save(newProject)
             .then(() => newProject);
@@ -47,4 +51,11 @@ export class ProjectService {
         return this._emitter;
     }
 
+    private generateProjectId(): string {
+        return `project-${uuid.v4()}`.toLocaleLowerCase();
+    }
+
+    private generateLayerId(layer: MapLayerType): string {
+        return `${layer}-${uuid.v4()}`.toLocaleLowerCase();
+    }
 }

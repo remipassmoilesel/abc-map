@@ -42,7 +42,7 @@ export class ProjectController extends AbstractController {
 
     private createNewProject = async (req: express.Request, res: express.Response, next: NextFunction) => {
         const projectName = req.query.name;
-        this.projectService.createEmptyProject(projectName)
+        this.projectService.createNewProject(projectName)
             .then(project => {
                 res.json(project);
             })
