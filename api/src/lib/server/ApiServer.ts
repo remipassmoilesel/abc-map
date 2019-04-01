@@ -1,9 +1,10 @@
 import express = require('express');
+import morgan = require('morgan');
+import expressWebsocket = require('express-ws');
 import * as _ from 'lodash';
 import * as loglevel from 'loglevel';
 import {AbcApiConfig} from '../../AbcApiConfig';
 import {IControllerMap} from "./IControllerMap";
-import expressWebsocket = require('express-ws');
 
 export class ApiServer {
 
@@ -16,8 +17,9 @@ export class ApiServer {
         this.app = express();
         expressWebsocket(this.app);
 
-        this.setupControllers();
-        this.setupGuiService();
+        this.setupMorgan(this.app);
+        this.setupControllers(this.app);
+        this.setupGuiService(this.app);
     }
 
     public start() {
@@ -26,11 +28,22 @@ export class ApiServer {
         });
     }
 
-    private setupControllers() {
-        _.forEach(_.values(this.controllers), (gr) => this.app.use(gr.getRouter()));
+    private setupControllers(app: express.Application) {
+        _.forEach(_.values(this.controllers), (gr) => app.use(gr.getRouter()));
     }
 
-    private setupGuiService() {
-        this.app.use(express.static('gui-dist'));
+    private setupGuiService(app: express.Application) {
+        app.use(express.static('gui-dist'));
+    }
+
+    private setupErrorHandler(app: express.Application) {
+        app.use((err: Error, req: express.Request, res: express.Response, next: any) => {
+            this.logger.error(err);
+            next();
+        });
+    }
+
+    private setupMorgan(app: express.Application) {
+        app.use(morgan('tiny'));
     }
 }
