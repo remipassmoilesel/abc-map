@@ -25,6 +25,7 @@
   "devDependencies": {
     "@types/axios": "^0.14.0",
     "@types/chai": "^4.1.0",
+    "@types/loglevel": "^1.5.4",
     "@types/mocha": "^5.2.4",
     "@types/openlayers": "^4.6.16",
     "@vue/cli-plugin-e2e-cypress": "^3.5.0",
@@ -33,6 +34,7 @@
     "@vue/cli-service": "^3.5.0",
     "@vue/test-utils": "1.0.0-beta.29",
     "chai": "^4.1.2",
+    "loglevel": "^1.6.1",
     "node-sass": "^4.9.0",
     "sass-loader": "^7.1.0",
     "typescript": "^3.4.1",

@@ -1,12 +1,14 @@
 import {mainStore} from "@/lib/store/store";
-import {ProjectActions} from "@/lib/store/ProjectStoreModule";
+import {ProjectActions} from "@/lib/store/AbcProjectStoreModule";
 import {IMapLayer, IProject} from "../../../../shared/dist";
+import {GuiActions} from "@/lib/store/AbcGuiStoreModule";
 
 export class AbcStoreWrapper {
     public project = new ProjectStoreWrapper();
+    public gui = new GuiStoreWrapper();
 }
 
-export class ProjectStoreWrapper {
+class ProjectStoreWrapper {
 
     public updateProject(): Promise<void> {
         return mainStore.dispatch(ProjectActions.PROJECT_UPDATE);
@@ -28,6 +30,17 @@ export class ProjectStoreWrapper {
         return mainStore.getters.projectName;
     }
 
+}
+
+class GuiStoreWrapper {
+
+    public setProjectNotFoundModalVisible(value: boolean): Promise<void> {
+        return mainStore.dispatch(GuiActions.PROJECT_NOT_FOUND_MODAL_VISIBLE, value);
+    }
+
+    public getProjectNotFoundModalState(): boolean {
+        return mainStore.state.gui.modals.projectNotFound;
+    }
 }
 
 export const abcStorew = new AbcStoreWrapper();

@@ -2,7 +2,7 @@
     <div id="app">
         <abc-navbar></abc-navbar>
         <router-view/>
-        <abc-project-updater></abc-project-updater>
+        <abc-project-not-found-modal></abc-project-not-found-modal>
     </div>
 </template>
 
@@ -24,10 +24,10 @@
     import Vue from "vue";
     import Component from "vue-class-component";
     import AbcNavbar from "@/components/navbar/AbcNavbar.vue";
-    import AbcProjectUpdater from "@/components/AbcProjectUpdater.vue";
+    import AbcProjectNotFoundModal from "@/components/modals/AbcProjectNotFoundModal.vue";
 
     @Component({
-        components: {AbcProjectUpdater, AbcNavbar}
+        components: {AbcProjectNotFoundModal, AbcNavbar}
     })
     export default class App extends Vue {
     }

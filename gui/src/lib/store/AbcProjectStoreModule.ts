@@ -3,6 +3,10 @@ import {Module, ModuleTree} from "vuex";
 import {IRootState} from "@/lib/store/store";
 import {abcApiClients} from "@/lib/IAbcApiClientMap";
 
+export interface IProjectState {
+    currentProject: IProject | null;
+}
+
 export enum ProjectMutations {
     PROJECT_UPDATE = 'PROJECT_UPDATE'
 }
@@ -11,7 +15,7 @@ export enum ProjectActions {
     PROJECT_UPDATE = 'PROJECT_UPDATE'
 }
 
-export const projectModule: Module<IProjectState, IRootState> = {
+export const abcProjectStoreModule: Module<IProjectState, IRootState> = {
     state: {
         currentProject: null,
     },
@@ -45,7 +49,3 @@ export const projectModule: Module<IProjectState, IRootState> = {
         },
     },
 };
-
-export interface IProjectState {
-    currentProject: IProject | null;
-}
