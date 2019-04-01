@@ -1,0 +1,25 @@
+
+version: 2
+jobs:
+  build:
+    docker:
+      - image: remipassmoilesel/nodejs-build:0.1
+
+    working_directory: ~/repo
+
+    environment:
+      JVM_OPTS: -Xmx512m
+      SPRING_PROFILES_ACTIVE: test
+
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - main-dependencies
+
+      - run: ./.circleci/test.sh
+
+      - save_cache:
+          paths:
+            - ~/.npm
+          key: main-dependencies
