@@ -1,6 +1,6 @@
 
 export enum LSKey {
-    CURRENT_PROJECT_ID = "ABC_CURRENT_PROJECT"
+    CURRENT_PROJECT_ID = 'ABC_CURRENT_PROJECT',
 }
 
 export class AbcLocalStorageHelper {

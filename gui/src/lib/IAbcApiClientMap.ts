@@ -1,4 +1,4 @@
-import {ProjectClient} from "@/lib/project/ProjectClient";
+import {ProjectClient} from '@/lib/project/ProjectClient';
 
 const axios = require('axios');
 
@@ -7,5 +7,5 @@ export interface IAbcApiClientMap {
 }
 
 export const abcApiClients: IAbcApiClientMap = {
-    project: new ProjectClient(axios)
+    project: new ProjectClient(axios),
 };

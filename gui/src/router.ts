@@ -10,12 +10,12 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: '/map'
+      redirect: '/map',
     },
     {
       path: '/map',
       name: 'map',
-      component: MainMap
+      component: MainMap,
     },
     {
       path: '/about',

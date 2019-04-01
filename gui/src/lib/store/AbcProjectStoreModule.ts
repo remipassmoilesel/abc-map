@@ -1,18 +1,18 @@
-import {IProject} from "../../../../shared/dist";
-import {Module, ModuleTree} from "vuex";
-import {IRootState} from "@/lib/store/store";
-import {abcApiClients} from "@/lib/IAbcApiClientMap";
+import {IProject} from '../../../../shared/dist';
+import {Module, ModuleTree} from 'vuex';
+import {IRootState} from '@/lib/store/store';
+import {abcApiClients} from '@/lib/IAbcApiClientMap';
 
 export interface IProjectState {
     currentProject: IProject | null;
 }
 
 export enum ProjectMutations {
-    PROJECT_UPDATE = 'PROJECT_UPDATE'
+    PROJECT_UPDATE = 'PROJECT_UPDATE',
 }
 
 export enum ProjectActions {
-    PROJECT_UPDATE = 'PROJECT_UPDATE'
+    PROJECT_UPDATE = 'PROJECT_UPDATE',
 }
 
 export const abcProjectStoreModule: Module<IProjectState, IRootState> = {
@@ -36,7 +36,7 @@ export const abcProjectStoreModule: Module<IProjectState, IRootState> = {
             } else {
                 return [];
             }
-        }
+        },
     },
     actions: {
         [ProjectActions.PROJECT_UPDATE]: (context: any, project: IProject) => {

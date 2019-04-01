@@ -5,38 +5,38 @@
 </template>
 
 <script lang="ts">
-    import * as ol from 'openlayers';
-    import {Component} from 'vue-property-decorator';
-    import {AbcExtendedVue} from "@/lib/utils/AbcExtendedVue";
+import * as ol from 'openlayers';
+import {Component} from 'vue-property-decorator';
+import {AbcExtendedVue} from '@/lib/utils/AbcExtendedVue';
 
-    @Component({
-        components: {},
-    })
-    export default class MainMap extends AbcExtendedVue {
+@Component({
+    components: {},
+})
+export default class MainMap extends AbcExtendedVue {
 
-        map?: ol.Map;
+    public map?: ol.Map;
 
-        mounted() {
-            this.setupDefaultMap();
-        }
+    public mounted() {
+        this.setupDefaultMap();
+    }
 
-        setupDefaultMap() {
-            this.map = new ol.Map({
-                target: 'openlayers-map',
-                layers: [
-                    new ol.layer.Tile({
-                        source: new ol.source.OSM()
-                    })
-                ],
-                view: new ol.View({
-                    center: ol.proj.fromLonLat([37.41, 8.82]),
-                    zoom: 4
-                })
-            });
-
-        }
+    public setupDefaultMap() {
+        this.map = new ol.Map({
+            target: 'openlayers-map',
+            layers: [
+                new ol.layer.Tile({
+                    source: new ol.source.OSM(),
+                }),
+            ],
+            view: new ol.View({
+                center: ol.proj.fromLonLat([37.41, 8.82]),
+                zoom: 4,
+            }),
+        });
 
     }
+
+}
 </script>
 
 <style lang="scss">

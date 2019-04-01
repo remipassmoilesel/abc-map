@@ -24,14 +24,14 @@
 </style>
 
 <script lang="ts">
-    import Vue from "vue";
-    import Component from "vue-class-component";
-    import AbcNavbar from "@/components/navbar/AbcNavbar.vue";
-    import AbcProjectNotFoundModal from "@/components/modals/AbcProjectNotFoundModal.vue";
+import Vue from 'vue';
+import Component from 'vue-class-component';
+import AbcNavbar from '@/components/navbar/AbcNavbar.vue';
+import AbcProjectNotFoundModal from '@/components/modals/AbcProjectNotFoundModal.vue';
 
-    @Component({
-        components: {AbcProjectNotFoundModal, AbcNavbar}
-    })
-    export default class App extends Vue {
-    }
+@Component({
+    components: {AbcProjectNotFoundModal, AbcNavbar},
+})
+export default class App extends Vue {
+}
 </script>

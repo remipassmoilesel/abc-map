@@ -1,11 +1,11 @@
-import {AbcLocalStorageHelper, LSKey} from "@/lib/utils/AbcLocalStorageHelper";
-import {AbcStoreWrapper} from "@/lib/store/AbcStoreWrapper";
-import {IAbcApiClientMap} from "@/lib/IAbcApiClientMap";
+import {AbcLocalStorageHelper, LSKey} from '@/lib/utils/AbcLocalStorageHelper';
+import {AbcStoreWrapper} from '@/lib/store/AbcStoreWrapper';
+import {IAbcApiClientMap} from '@/lib/IAbcApiClientMap';
 import * as loglevel from 'loglevel';
 
 export class ProjectService {
 
-    private logger = loglevel.getLogger("ProjectService");
+    private logger = loglevel.getLogger('ProjectService');
 
     constructor(private clients: IAbcApiClientMap,
                 private storew: AbcStoreWrapper,
@@ -14,34 +14,34 @@ export class ProjectService {
         this.listenDocumentReady();
     }
 
-    listenDocumentReady() {
-        document.addEventListener("DOMContentLoaded", (event) => {
+    public listenDocumentReady() {
+        document.addEventListener('DOMContentLoaded', (event) => {
             this.initProject();
         });
     }
 
-    initProject(): Promise<any> {
-        this.logger.info("Initializing project ...");
+    public initProject(): Promise<any> {
+        this.logger.info('Initializing project ...');
 
         const storedProjectId = this.abcLocalst.get(LSKey.CURRENT_PROJECT_ID);
         if (!storedProjectId) {
             return this.createNewProject();
         } else {
             return this.openProject(storedProjectId)
-                .catch(err => this.storew.gui.setProjectNotFoundModalVisible(true));
+                .catch((err) => this.storew.gui.setProjectNotFoundModalVisible(true));
         }
     }
 
-    async createNewProject(): Promise<any> {
-        const project = await this.clients.project.createNewProject("Nouveau projet");
+    public async createNewProject(): Promise<any> {
+        const project = await this.clients.project.createNewProject('Nouveau projet');
         this.abcLocalst.save(LSKey.CURRENT_PROJECT_ID, project.id);
-        return this.storew.project.setCurrentProject(project).then(res => project);
+        return this.storew.project.setCurrentProject(project).then((res) => project);
     }
 
-    async openProject(projectId: string): Promise<any> {
+    public async openProject(projectId: string): Promise<any> {
         const project = await this.clients.project.findProjectById(projectId);
         this.abcLocalst.save(LSKey.CURRENT_PROJECT_ID, project.id);
-        return this.storew.project.setCurrentProject(project).then(res => project);
+        return this.storew.project.setCurrentProject(project).then((res) => project);
     }
 
 }

@@ -3,17 +3,17 @@
 </template>
 
 <script lang="ts">
-    import {Component} from 'vue-property-decorator';
-    import {AbcExtendedVue} from "@/lib/utils/AbcExtendedVue";
+import {Component} from 'vue-property-decorator';
+import {AbcExtendedVue} from '@/lib/utils/AbcExtendedVue';
 
-    @Component
-    export default class AbcNewProject extends AbcExtendedVue {
+@Component
+export default class AbcNewProject extends AbcExtendedVue {
 
-        newProject(){
-            return this.abcServices.project.createNewProject();
-        }
-
+    public newProject() {
+        return this.abcServices.project.createNewProject();
     }
+
+}
 </script>
 
 <style scoped lang="scss">

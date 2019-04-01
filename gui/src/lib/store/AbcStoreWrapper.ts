@@ -1,7 +1,7 @@
-import {mainStore} from "@/lib/store/store";
-import {ProjectActions} from "@/lib/store/AbcProjectStoreModule";
-import {IMapLayer, IProject} from "../../../../shared/dist";
-import {GuiActions} from "@/lib/store/AbcGuiStoreModule";
+import {mainStore} from '@/lib/store/store';
+import {ProjectActions} from '@/lib/store/AbcProjectStoreModule';
+import {IMapLayer, IProject} from '../../../../shared/dist';
+import {GuiActions} from '@/lib/store/AbcGuiStoreModule';
 
 export class AbcStoreWrapper {
     public project = new ProjectStoreWrapper();

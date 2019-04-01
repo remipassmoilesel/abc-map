@@ -1,5 +1,5 @@
-import {AxiosStatic} from "axios";
-import {IProject, Routes} from "../../../../shared/dist";
+import {AxiosStatic} from 'axios';
+import {IProject, Routes} from '../../../../shared/dist';
 
 export class ProjectClient {
 
@@ -9,12 +9,12 @@ export class ProjectClient {
 
     public findProjectById(projectId: string): Promise<IProject> {
         const url = Routes.PROJECT_GET_BY_ID.withArgs({id: projectId}).path;
-        return this.httpClient.get(url).then(resp => resp.data);
+        return this.httpClient.get(url).then((resp) => resp.data);
     }
 
     public createNewProject(projectName: string): Promise<IProject> {
         const url = `${Routes.PROJECT_CREATE_NEW.path}?name=${projectName}`;
-        return this.httpClient.get(url).then(resp => resp.data);
+        return this.httpClient.get(url).then((resp) => resp.data);
     }
 
 }

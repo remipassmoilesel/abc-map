@@ -10,23 +10,23 @@
 </template>
 
 <script lang="ts">
-    import {Component} from 'vue-property-decorator';
-    import {AbcExtendedVue} from "@/lib/utils/AbcExtendedVue";
+import {Component} from 'vue-property-decorator';
+import {AbcExtendedVue} from '@/lib/utils/AbcExtendedVue';
 
-    @Component({})
-    export default class AbcProjectNotFoundModal extends AbcExtendedVue {
+@Component({})
+export default class AbcProjectNotFoundModal extends AbcExtendedVue {
 
-        get modalVisible(): boolean {
-            return this.abcStorew.gui.getProjectNotFoundModalState();
-        }
-
-        set modalVisible(value: boolean) {
-            this.abcStorew.gui.setProjectNotFoundModalVisible(value);
-        }
-
-        closeProjectNotFoundModal() {
-            return this.abcServices.project.createNewProject()
-                .then(res => this.modalVisible = false);
-        }
+    get modalVisible(): boolean {
+        return this.abcStorew.gui.getProjectNotFoundModalState();
     }
+
+    set modalVisible(value: boolean) {
+        this.abcStorew.gui.setProjectNotFoundModalVisible(value);
+    }
+
+    public closeProjectNotFoundModal() {
+        return this.abcServices.project.createNewProject()
+            .then((res) => this.modalVisible = false);
+    }
+}
 </script>

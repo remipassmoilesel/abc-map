@@ -1,6 +1,6 @@
-import {abcStorew} from "../store/AbcStoreWrapper";
-import {abcApiClients} from "../IAbcApiClientMap";
-import {AbcLocalStorageHelper, LSKey} from "@/lib/utils/AbcLocalStorageHelper";
+import {abcStorew} from '../store/AbcStoreWrapper';
+import {abcApiClients} from '../IAbcApiClientMap';
+import {AbcLocalStorageHelper, LSKey} from '@/lib/utils/AbcLocalStorageHelper';
 
 export function setDebugToolsInWindow() {
 
@@ -8,7 +8,7 @@ export function setDebugToolsInWindow() {
         abcStorew,
         abcApiClients,
         abcLocalst: new AbcLocalStorageHelper(),
-        LSKey: LSKey
+        LSKey,
     };
 
 }

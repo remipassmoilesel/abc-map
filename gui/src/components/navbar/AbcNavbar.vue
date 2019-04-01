@@ -21,27 +21,27 @@
 </template>
 
 <script lang="ts">
-    import {Component, Vue} from 'vue-property-decorator';
-    import {AbcExtendedVue} from "@/lib/utils/AbcExtendedVue";
-    import AbcNewProject from "@/components/navbar/items/AbcNewProject.vue";
-    @Component({
-        components: {AbcNewProject}
-    })
-    export default class AbcNavbar extends AbcExtendedVue {
+import {Component, Vue} from 'vue-property-decorator';
+import {AbcExtendedVue} from '@/lib/utils/AbcExtendedVue';
+import AbcNewProject from '@/components/navbar/items/AbcNewProject.vue';
+@Component({
+    components: {AbcNewProject},
+})
+export default class AbcNavbar extends AbcExtendedVue {
 
-        projectName(): string {
-            return this.abcStorew.project.getProjectName();
-        }
-
-        goToMap(): void {
-            this.$router.push('/map');
-        }
-
-        goToAbout(): void {
-            this.$router.push('/about');
-        }
-
+    public projectName(): string {
+        return this.abcStorew.project.getProjectName();
     }
+
+    public goToMap(): void {
+        this.$router.push('/map');
+    }
+
+    public goToAbout(): void {
+        this.$router.push('/about');
+    }
+
+}
 </script>
 
 <style scoped lang="scss">
