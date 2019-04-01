@@ -4,8 +4,8 @@ import router from './router';
 import BootstrapVue from 'bootstrap-vue';
 import {mainStore} from "@/lib/store/store";
 import "@/mixins";
-import './style.scss';
 import {setDebugToolsInWindow} from "@/lib/debugTools";
+import './style.scss';
 
 Vue.use(BootstrapVue);
 

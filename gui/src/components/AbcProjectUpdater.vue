@@ -1,7 +1,12 @@
-import {LSKey} from "../lib/LocalStorageHelper";
-import {LSKey} from "../lib/LocalStorageHelper";
 <template>
-    <div class="abc-project-updater"></div>
+    <div class="abc-project-updater">
+        <b-modal v-model="projectNotFoundModal" hide-footer title="Projet non trouvé !">
+            Le project précedemment ouvert n'a pas été trouvé.<br/>Un nouveau project sera créé.
+            <b-button class="mt-3" variant="outline-danger" block @click="closeProjectNotFoundModal">
+                Compris !
+            </b-button>
+        </b-modal>
+    </div>
 </template>
 
 <script lang="ts">
@@ -13,33 +18,48 @@ import {LSKey} from "../lib/LocalStorageHelper";
     @Component({})
     export default class AbcProjectUpdater extends ExtendedVue {
 
+        projectNotFoundModal = false;
+
         mounted() {
-            this.initProject();
+            return this.initProject();
         }
 
-        private initProject() {
+        setProjectNotFoundModalVisible(state: boolean) {
+            this.projectNotFoundModal = state;
+        }
+
+        initProject(): Promise<any> {
             const storedProjectId = this.localst.get(LSKey.CURRENT_PROJECT_ID);
             if (!storedProjectId) {
-                this.createNewProject();
+                return this.createNewProject();
             } else {
-                this.openProject(storedProjectId)
+                return this.openProject(storedProjectId)
             }
         }
 
-        private createNewProject() {
-            this.clients.project.createNewProject("Nouveau projet")
+        createNewProject(): Promise<any> {
+            return this.clients.project.createNewProject("Nouveau projet")
                 .then(project => {
                     this.localst.save(LSKey.CURRENT_PROJECT_ID, project.id);
                     return this.storew.project.setCurrentProject(project).then(res => project);
                 });
         }
 
-        private openProject(projectId: string) {
-            this.clients.project.findProjectById(projectId)
+        openProject(projectId: string): Promise<any> {
+            return this.clients.project.findProjectById(projectId)
                 .then(project => {
                     this.localst.save(LSKey.CURRENT_PROJECT_ID, project.id);
                     return this.storew.project.setCurrentProject(project).then(res => project);
-                });
+                })
+                .catch(err => {
+                    this.setProjectNotFoundModalVisible(true);
+                })
+        }
+
+        closeProjectNotFoundModal() {
+            this.createNewProject().then(() => {
+                this.setProjectNotFoundModalVisible(false);
+            });
         }
     }
 </script>
