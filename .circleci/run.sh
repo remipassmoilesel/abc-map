@@ -5,4 +5,4 @@ set -e
 
 mkdir -p /data/db && /usr/bin/mongod &
 
-./build.sh
+npm run build

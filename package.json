@@ -4,9 +4,15 @@
   "description": "",
   "scripts": {
     "start": "cd api && npm run start-electron",
-    "build": "npm run build-api && npm run build-gui",
+    "clean": "npm run clean-shared && npm run clean-api && npm run clean-gui",
+    "build": "npm run build-shared && npm run build-api && npm run build-gui",
+    "clean-build": "npm run clean && npm run build",
     "build-api": "cd api && npm run build",
+    "clean-api": "cd api && npm run clean",
     "build-gui": "cd gui && npm run build",
+    "clean-gui": "cd gui && npm run clean",
+    "build-shared": "cd shared && npm run build",
+    "clean-shared": "cd shared && npm run clean",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
