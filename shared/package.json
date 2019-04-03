@@ -20,6 +20,6 @@
     "@types/lodash": "^4.14.123",
     "@types/node": "^11.12.2",
     "tslint": "^5.14.0",
-    "typescript": "^3.4.1"
+    "typescript": "3.3.4000"
   }
 }
