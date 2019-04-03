@@ -11,10 +11,10 @@ export class ProjectService {
                 private storew: AbcStoreWrapper,
                 private abcLocalst: AbcLocalStorageHelper) {
 
-        this.listenDocumentReady();
+        this.initProjectWhenAppReady();
     }
 
-    public listenDocumentReady() {
+    private initProjectWhenAppReady() {
         document.addEventListener('DOMContentLoaded', (event) => {
             this.initProject();
         });
@@ -28,7 +28,10 @@ export class ProjectService {
             return this.createNewProject();
         } else {
             return this.openProject(storedProjectId)
-                .catch((err) => this.storew.gui.setProjectNotFoundModalVisible(true));
+                .catch((err) => {
+                    this.logger.error(err);
+                    return this.storew.gui.setProjectNotFoundModalVisible(true);
+                });
         }
     }
 
