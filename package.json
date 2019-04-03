@@ -14,7 +14,7 @@
     "install-gui": "cd gui && npm install",
     "build-gui": "cd gui && npm run build",
     "clean-gui": "cd gui && npm run clean",
-    "link-shared": "ln -sfn $(pwd)/shared api/node_modules/abcmap-shared && ln -sfn $(pwd)/shared gui/node_modules/abcmap-shared",
+    "link-shared": "cd api && npm install ../shared && cd ../gui && npm install ../shared",
     "install-shared": "cd shared && npm install",
     "build-shared": "cd shared && npm run build",
     "clean-shared": "cd shared && npm run clean",
