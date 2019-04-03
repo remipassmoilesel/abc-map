@@ -5,12 +5,13 @@
   "scripts": {
     "start": "cd api && npm run start-electron",
     "clean": "npm run clean-shared && npm run clean-api && npm run clean-gui",
-    "build": "npm run build-shared && npm run build-api && npm run build-gui",
+    "build": "npm run link-shared && npm run build-shared && npm run build-api && npm run build-gui",
     "clean-build": "npm run clean && npm run build",
     "build-api": "cd api && npm run build",
     "clean-api": "cd api && npm run clean",
     "build-gui": "cd gui && npm run build",
     "clean-gui": "cd gui && npm run clean",
+    "link-shared": "ln -sf $(pwd)/shared api/node_modules/abcmap-shared && ln -sf $(pwd)/shared gui/node_modules/abcmap-shared",
     "build-shared": "cd shared && npm run build",
     "clean-shared": "cd shared && npm run clean",
     "test": "echo \"Error: no test specified\" && exit 1"

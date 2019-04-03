@@ -36,11 +36,7 @@
     "tests/**/*.tsx"
   ],
   "exclude": [
-    "node_modules"
-  ],
-  "references": [
-    {
-      "path": "../shared"
-    }
+    "node_modules",
+    "dist"
   ]
 }

@@ -10,7 +10,7 @@ import * as ol from 'openlayers';
 import * as _ from 'lodash';
 import {Component} from 'vue-property-decorator';
 import {AbcExtendedVue} from '@/lib/utils/AbcExtendedVue';
-import {IProject} from "../../../shared/dist";
+import {IProject} from "abcmap-shared/dist";
 
 @Component({
     components: {},

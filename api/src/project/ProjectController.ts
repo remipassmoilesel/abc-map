@@ -3,8 +3,8 @@ import {NextFunction} from 'express';
 import {AbstractController} from '../server/AbstractController';
 import {ProjectService} from './ProjectService';
 import WebSocket from 'ws';
-import {IProjectEventContent, ProjectEvent} from "../../../shared/dist";
-import {Routes} from "../../../shared/dist";
+import {IProjectEventContent, ProjectEvent} from "abcmap-shared/dist";
+import {Routes} from "abcmap-shared/dist";
 
 export class ProjectController extends AbstractController {
 

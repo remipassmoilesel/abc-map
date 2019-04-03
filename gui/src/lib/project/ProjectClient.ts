@@ -1,6 +1,6 @@
 import {AxiosStatic} from 'axios';
-import {Routes} from "../../../../shared/dist";
-import {IProject} from "../../../../shared/dist";
+import {Routes} from "abcmap-shared/dist";
+import {IProject} from "abcmap-shared/dist";
 
 export class ProjectClient {
 

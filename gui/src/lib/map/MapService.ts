@@ -1,8 +1,8 @@
 import {AbcLocalStorageHelper} from '@/lib/utils/AbcLocalStorageHelper';
 import {AbcStoreWrapper} from '@/lib/store/AbcStoreWrapper';
 import {IAbcApiClientMap} from '@/lib/IAbcApiClientMap';
-import {IProject} from "../../../../shared/dist";
-import {IPredefinedLayer, IRasterLayer, MapLayerType, PredefinedLayerPreset} from "../../../../shared/dist";
+import {IProject} from "abcmap-shared/dist";
+import {IPredefinedLayer, IRasterLayer, MapLayerType, PredefinedLayerPreset} from "abcmap-shared/dist";
 import * as ol from 'openlayers';
 import * as _ from 'lodash';
 import * as loglevel from 'loglevel';

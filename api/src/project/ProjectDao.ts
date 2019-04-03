@@ -1,5 +1,5 @@
 import {Logger} from 'loglevel';
-import {IProject} from '../../../shared/dist';
+import {IProject} from 'abcmap-shared/dist';
 import {AbstractMongodbDao} from '../lib/database/AbstractMongodbDao';
 import loglevel = require('loglevel');
 

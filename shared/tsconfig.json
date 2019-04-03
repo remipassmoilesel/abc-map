@@ -1,7 +1,6 @@
 {
   "compileOnSave": true,
   "compilerOptions": {
-    "composite": true,
     "declaration": true,
     "declarationMap": true,
     "target": "es5",
@@ -18,7 +17,7 @@
     "src/**/*.ts"
   ],
   "exclude": [
-    "node_modules/**/*",
-    "dist/**/*"
+    "node_modules",
+    "dist"
   ]
 }

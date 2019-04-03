@@ -1,4 +1,4 @@
-import {IProject} from '../../../../shared/dist';
+import {IProject} from 'abcmap-shared/dist';
 import {Module} from 'vuex';
 import {IRootState} from '@/lib/store/store';
 
