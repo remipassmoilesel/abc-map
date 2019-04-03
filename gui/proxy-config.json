@@ -1,0 +1,6 @@
+{
+  "/fleet-api": {
+    "target": "http://localhost:32158",
+    "secure": false
+  }
+}
