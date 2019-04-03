@@ -1,5 +1,6 @@
 import {AxiosStatic} from 'axios';
-import {IProject, Routes} from '../../../../shared/dist';
+import {Routes} from "../../../../shared/dist";
+import {IProject} from "../../../../shared/dist";
 
 export class ProjectClient {
 

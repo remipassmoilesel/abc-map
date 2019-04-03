@@ -1,7 +1,6 @@
 import {IProject} from '../../../../shared/dist';
-import {Module, ModuleTree} from 'vuex';
+import {Module} from 'vuex';
 import {IRootState} from '@/lib/store/store';
-import {abcApiClients} from '@/lib/IAbcApiClientMap';
 
 export interface IProjectState {
     currentProject: IProject | null;
@@ -44,7 +43,7 @@ export const abcProjectStoreModule: Module<IProjectState, IRootState> = {
         },
     },
     mutations: {
-        [ProjectMutations.PROJECT_UPDATE]: (state: IProjectState, payload: {project: IProject}) => {
+        [ProjectMutations.PROJECT_UPDATE]: (state: IProjectState, payload: { project: IProject }) => {
             state.currentProject = payload.project;
         },
     },

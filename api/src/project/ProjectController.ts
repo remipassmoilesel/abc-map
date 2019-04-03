@@ -1,9 +1,10 @@
 import express = require('express');
 import {NextFunction} from 'express';
 import {AbstractController} from '../server/AbstractController';
-import {IProjectEventContent, ProjectEvent, Routes} from '../../../shared/dist';
 import {ProjectService} from './ProjectService';
 import WebSocket from 'ws';
+import {IProjectEventContent, ProjectEvent} from "../../../shared/dist";
+import {Routes} from "../../../shared/dist";
 
 export class ProjectController extends AbstractController {
 
