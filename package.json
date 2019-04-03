@@ -11,7 +11,7 @@
     "clean-api": "cd api && npm run clean",
     "build-gui": "cd gui && npm run build",
     "clean-gui": "cd gui && npm run clean",
-    "link-shared": "ln -sf $(pwd)/shared api/node_modules/abcmap-shared && ln -sf $(pwd)/shared gui/node_modules/abcmap-shared",
+    "link-shared": "ln -sfn $(pwd)/shared api/node_modules/abcmap-shared && ln -sfn $(pwd)/shared gui/node_modules/abcmap-shared",
     "build-shared": "cd shared && npm run build",
     "clean-shared": "cd shared && npm run clean",
     "test": "echo \"Error: no test specified\" && exit 1"
