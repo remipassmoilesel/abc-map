@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "start": "cd api && npm run start-electron",
+    "start-electron": "cd api && npm run start-electron",
+    "start-databases": "cd database && docker-compose up -d",
     "clean": "np  },m run clean-shared && npm run clean-api && npm run clean-gui",
     "install-all": "npm run install-shared && npm run install-api && npm run install-gui",
     "build": "npm run link-shared && npm run build-shared && npm run build-api && npm run build-gui",
