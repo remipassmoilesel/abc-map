@@ -1,7 +1,6 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {HttpClientModule} from "@angular/common/http";
-import {ProjectService} from "./project/project.service";
 
 @NgModule({
   declarations: [],
@@ -9,9 +8,7 @@ import {ProjectService} from "./project/project.service";
     HttpClientModule,
     CommonModule
   ],
-  providers: [
-    ProjectService
-  ]
+  providers: []
 })
 export class LibModule {
 }
