@@ -7,7 +7,7 @@ export interface State {
   project: IProjectState
 }
 
-export const reducers: ActionReducerMap<State> = {
+export const reducers: any = { // TODO: fix any
   project: projectReducer
 };
 

@@ -8,7 +8,7 @@ export class ProjectEffects {
 
   constructor(private actions$: Actions) {}
 
-  @Effect() ProjectUpdated$: Observable<ProjectModule.Actions> = this.actions$
+  @Effect() ProjectUpdated$: Observable<ProjectModule.ActionsUnion> = this.actions$
     .pipe(
       ofType<ProjectModule.ProjectUpdated>(ProjectModule.ActionTypes.PROJECT_UPDATED)
     );
