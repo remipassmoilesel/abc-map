@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {AllRoutes} from "../../routing/AllRoutes";
 
 @Component({
   selector: 'abc-top-bar',
@@ -6,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./top-bar.component.scss']
 })
 export class TopBarComponent implements OnInit {
+
+  routes = AllRoutes;
 
   constructor() { }
 

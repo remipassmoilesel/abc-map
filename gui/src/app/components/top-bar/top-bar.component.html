@@ -3,14 +3,23 @@
 
   <ul class="navbar-nav mr-auto">
     <li class="nav-item">
+
       <div ngbDropdown class="d-inline-block">
-        <a class="btn cursor-pointer" id="dropdownBasic1" ngbDropdownToggle>Fichier</a>
-        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+        <a class="btn cursor-pointer" ngbDropdownToggle>Fichier</a>
+        <div ngbDropdownMenu>
           <button ngbDropdownItem>Nouveau</button>
           <button ngbDropdownItem>Ouvrir</button>
           <button ngbDropdownItem>Quitter</button>
         </div>
       </div>
+
+      <div ngbDropdown class="d-inline-block">
+        <a class="btn cursor-pointer" ngbDropdownToggle>Vue</a>
+        <div ngbDropdownMenu>
+          <button ngbDropdownItem [routerLink]="routes.MAP.link()">Carte</button>
+        </div>
+      </div>
+
     </li>
   </ul>
 </nav>
