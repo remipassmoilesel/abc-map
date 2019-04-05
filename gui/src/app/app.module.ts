@@ -8,9 +8,9 @@ import {LibModule} from "./lib/lib.module";
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
 import { StoreModule } from '@ngrx/store';
-import { reducers, metaReducers } from './store/reducers';
+import { reducers, metaReducers } from './store';
 import { EffectsModule } from '@ngrx/effects';
-import { ProjectEffects } from './store/effects/project-effects.service';
+import { ProjectEffects } from './store/project/project-effects.service';
 
 @NgModule({
   declarations: [
