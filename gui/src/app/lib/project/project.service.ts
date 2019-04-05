@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {ProjectClient} from "./ProjectClient";
 import {LocalStorageService, LSKey} from "../local-storage/local-storage.service";
 import * as loglevel from 'loglevel';
-import {Observable} from "rxjs";
+import {Observable, of} from "rxjs";
 import {tap} from "rxjs/internal/operators/tap";
 import {IProject} from "abcmap-shared";
 import {catchError} from "rxjs/operators";
@@ -35,7 +35,9 @@ export class ProjectService {
       return this.openProject(storedProjectId)
         .pipe(catchError(error => {
           this.logger.error(error);
-          return this.storew.gui.setProjectNotFoundModalVisible(true);
+          // TODO: restore
+          // return this.storew.gui.setProjectNotFoundModalVisible(true);
+          return of();
         }));
     }
   }
@@ -44,7 +46,8 @@ export class ProjectService {
     return this.projectClient.createNewProject('Nouveau projet')
       .pipe(tap(project => {
         this.localst.save(LSKey.CURRENT_PROJECT_ID, project.id);
-        this.storew.project.setCurrentProject(project).then((res) => project);
+        // TODO: restore
+        // this.storew.project.setCurrentProject(project).then((res) => project);
       }));
   }
 
@@ -52,7 +55,8 @@ export class ProjectService {
     return this.projectClient.findProjectById(projectId)
       .pipe(tap(project => {
         this.localst.save(LSKey.CURRENT_PROJECT_ID, project.id);
-        return this.storew.project.setCurrentProject(project).then((res) => project);
+        // TODO: restore
+        // return this.storew.project.setCurrentProject(project).then((res) => project);
       }));
     }
 
