@@ -13,7 +13,7 @@ export function projectReducer(state = projectInitialState, action: ProjectModul
 
     default: {
       // TODO: replace by logger
-      console.log("Unknown action: " + action);
+      console.log("Unknown action: " + JSON.stringify(action));
       return state;
     }
 
