@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {DrawingTool} from "../../lib/DrawingTool";
+import {MapService} from "../../lib/map/map.service";
 
 @Component({
   selector: 'abc-drawing-toolbox',
@@ -7,9 +9,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DrawingToolboxComponent implements OnInit {
 
-  constructor() { }
+  tools = DrawingTool;
+
+  constructor(private mapService: MapService) { }
 
   ngOnInit() {
   }
 
+  setTool(param: DrawingTool) {
+    this.mapService.setDrawingTool(param);
+  }
 }

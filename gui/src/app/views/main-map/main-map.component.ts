@@ -5,10 +5,9 @@ import {MapService} from '../../lib/map/map.service';
 import {Subscription} from 'rxjs';
 import {RxUtils} from '../../lib/utils/RxUtils';
 import {IProject} from 'abcmap-shared';
-import {IMainState} from '../../store';
-import {Store} from '@ngrx/store';
 import {LoggerFactory} from '../../lib/LoggerFactory';
 import {ProjectService} from "../../lib/project/project.service";
+import {DrawingTool} from "../../lib/DrawingTool";
 
 @Component({
   selector: 'abc-main-map',
@@ -20,7 +19,9 @@ export class MainMapComponent implements OnInit, OnDestroy {
   private logger = LoggerFactory.new('MainMapComponent');
 
   map?: ol.Map;
+
   project$?: Subscription;
+  drawingTool$?: Subscription;
 
   constructor(private mapService: MapService,
               private projectService: ProjectService) {
@@ -30,6 +31,9 @@ export class MainMapComponent implements OnInit, OnDestroy {
     this.setupMap();
     this.project$ = this.projectService.listenProjectUpdates()
       .subscribe(project => this.updateLayers(project));
+
+    this.drawingTool$ = this.mapService.listenDrawingToolChanged()
+      .subscribe(tool => this.setDrawingTool(tool))
   }
 
   ngOnDestroy() {
@@ -61,4 +65,7 @@ export class MainMapComponent implements OnInit, OnDestroy {
     });
   }
 
+  private setDrawingTool(tool: DrawingTool) {
+
+  }
 }
