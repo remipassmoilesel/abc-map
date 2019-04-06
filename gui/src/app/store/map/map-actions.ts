@@ -1,5 +1,5 @@
 import {Action} from '@ngrx/store';
-import {DrawingTool} from "../../lib/DrawingTool";
+import {DrawingTool} from "../../lib/map/DrawingTool";
 
 // Actions are events
 

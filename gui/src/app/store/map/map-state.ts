@@ -1,4 +1,4 @@
-import {DrawingTool, DrawingTools} from "../../lib/DrawingTool";
+import {DrawingTool, DrawingTools} from "../../lib/map/DrawingTool";
 
 export interface IMapState {
   drawingTool: DrawingTool;

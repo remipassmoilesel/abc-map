@@ -1,4 +1,4 @@
-import {DrawingTool, DrawingTools} from "../DrawingTool";
+import {DrawingTool, DrawingTools} from "./DrawingTool";
 import {geom} from "openlayers";
 import GeometryType = geom.GeometryType;
 

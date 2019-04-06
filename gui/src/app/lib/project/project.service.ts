@@ -9,6 +9,7 @@ import {catchError, map} from 'rxjs/operators';
 import {ProjectModule} from '../../store/project/project-actions';
 import {Store} from '@ngrx/store';
 import {IMainState} from '../../store';
+import {ToastService} from "../notifications/toast.service";
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +20,7 @@ export class ProjectService {
 
   constructor(private projectClient: ProjectClient,
               private store: Store<IMainState>,
+              private toasts: ToastService,
               private localst: LocalStorageService) {
     this.initProjectWhenAppReady();
   }
@@ -49,6 +51,7 @@ export class ProjectService {
       .pipe(tap(project => {
         this.localst.save(LSKey.CURRENT_PROJECT_ID, project.id);
         this.store.dispatch(new ProjectModule.ProjectUpdated(project));
+        this.toasts.info("Nouveau projet créé !")
       }));
   }
 

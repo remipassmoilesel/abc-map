@@ -11,6 +11,8 @@ import {metaReducers, reducers} from './store';
 import {EffectsModule} from '@ngrx/effects';
 import {ComponentsModule} from './components/components.module';
 import {ViewsModule} from './views/views.module';
+import {ToastrModule} from "ngx-toastr";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
 @NgModule({
   declarations: [
@@ -21,6 +23,8 @@ import {ViewsModule} from './views/views.module';
     BrowserModule,
     AppRoutingModule,
     LibModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot(),
     StoreModule.forRoot(reducers, {metaReducers}),
     StoreDevtoolsModule.instrument({maxAge: 25, logOnly: false}),
     EffectsModule.forRoot([]),

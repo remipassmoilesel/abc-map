@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {DrawingTool, DrawingTools} from "../../lib/DrawingTool";
+import {DrawingTool, DrawingTools} from "../../lib/map/DrawingTool";
 import {MapService} from "../../lib/map/map.service";
 
 @Component({

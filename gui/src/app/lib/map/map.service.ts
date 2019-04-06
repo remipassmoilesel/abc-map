@@ -5,7 +5,7 @@ import * as ol from 'openlayers';
 import {OpenLayersLayerFactory} from "./OpenLayersLayerFactory";
 import {IMainState} from "../../store";
 import {Store} from "@ngrx/store";
-import {DrawingTool} from "../DrawingTool";
+import {DrawingTool} from "./DrawingTool";
 import {Observable} from "rxjs";
 import {MapModule} from "../../store/map/map-actions";
 import DrawingToolChanged = MapModule.DrawingToolChanged;

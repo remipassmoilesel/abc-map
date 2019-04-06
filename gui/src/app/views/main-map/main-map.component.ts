@@ -5,9 +5,9 @@ import {MapService} from '../../lib/map/map.service';
 import {Subscription} from 'rxjs';
 import {RxUtils} from '../../lib/utils/RxUtils';
 import {IProject} from 'abcmap-shared';
-import {LoggerFactory} from '../../lib/LoggerFactory';
+import {LoggerFactory} from '../../lib/utils/LoggerFactory';
 import {ProjectService} from "../../lib/project/project.service";
-import {DrawingTool, DrawingTools} from "../../lib/DrawingTool";
+import {DrawingTool, DrawingTools} from "../../lib/map/DrawingTool";
 import {OpenLayersHelper} from "../../lib/map/OpenLayersHelper";
 
 @Component({
