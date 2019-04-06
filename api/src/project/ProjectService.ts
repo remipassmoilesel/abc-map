@@ -34,8 +34,8 @@ export class ProjectService {
             name: projectName,
             activeLayer: null,
             layers: [
-                LayerHelper.newVectorLayer(),
                 LayerHelper.newPredefinedLayer(DefaultLayers.OSM_LAYER),
+                LayerHelper.newVectorLayer(),
             ],
         };
         return this.projectDao.save(newProject)

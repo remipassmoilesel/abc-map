@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {IProject} from 'abcmap-shared';
 import * as _ from 'lodash';
 import * as ol from 'openlayers';
-import {OpenLayerFactory} from "./OpenLayerFactory";
+import {OpenLayersLayerFactory} from "./OpenLayersLayerFactory";
 import {IMainState} from "../../store";
 import {Store} from "@ngrx/store";
 import {DrawingTool} from "../DrawingTool";
@@ -20,7 +20,7 @@ export class MapService {
 
   public generateLayersFromProject(project: IProject): ol.layer.Base[] {
     return _.map(project.layers, abcLayer => {
-      return OpenLayerFactory.toOlLayer(abcLayer);
+      return OpenLayersLayerFactory.toOlLayer(abcLayer);
     });
   }
 

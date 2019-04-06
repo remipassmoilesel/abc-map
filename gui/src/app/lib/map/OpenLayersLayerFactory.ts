@@ -8,7 +8,7 @@ import {
 } from 'abcmap-shared';
 import * as ol from "openlayers";
 
-export class OpenLayerFactory {
+export class OpenLayersLayerFactory {
 
   public static toOlLayer(abcLayer: IMapLayer) {
     switch (abcLayer.type) {

@@ -8,6 +8,7 @@ import {IProject} from 'abcmap-shared';
 import {LoggerFactory} from '../../lib/LoggerFactory';
 import {ProjectService} from "../../lib/project/project.service";
 import {DrawingTool} from "../../lib/DrawingTool";
+import {OpenLayersHelper} from "../../lib/map/OpenLayersHelper";
 
 @Component({
   selector: 'abc-main-map',
@@ -29,29 +30,13 @@ export class MainMapComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.setupMap();
-    this.project$ = this.projectService.listenProjectUpdates()
-      .subscribe(project => this.updateLayers(project));
-
-    this.drawingTool$ = this.mapService.listenDrawingToolChanged()
-      .subscribe(tool => this.setDrawingTool(tool))
+    this.listenProjectState();
+    this.listenMapState();
   }
 
   ngOnDestroy() {
     RxUtils.unsubscribe(this.project$);
-  }
-
-  updateLayers(project?: IProject) {
-    if (!this.map || !project) {
-      return;
-    }
-    this.logger.info('Updating layers ...');
-
-    const _map = this.map;
-    const olLayers = this.mapService.generateLayersFromProject(project);
-
-    // TODO: remove/add only if layers change
-    _map.getLayers().forEach(lay => _map.removeLayer(lay));
-    _.forEach(olLayers, lay => _map.addLayer(lay));
+    RxUtils.unsubscribe(this.drawingTool$);
   }
 
   setupMap() {
@@ -65,7 +50,61 @@ export class MainMapComponent implements OnInit, OnDestroy {
     });
   }
 
-  private setDrawingTool(tool: DrawingTool) {
+  listenProjectState() {
+    this.project$ = this.projectService.listenProjectUpdates()
+      .subscribe(project => {
+        if (!this.map || !project) {
+          return;
+        }
+        this.updateLayers(project, this.map);
+      });
+  }
 
+  listenMapState() {
+    this.drawingTool$ = this.mapService.listenDrawingToolChanged()
+      .subscribe(tool => {
+        if (!this.map) {
+          return;
+        }
+        this.setDrawingTool(tool, this.map)
+      })
+  }
+
+  updateLayers(project: IProject, map: ol.Map) {
+    this.logger.info('Updating layers ...');
+    const olLayers = this.mapService.generateLayersFromProject(project);
+
+    // TODO: remove/add only if layers change
+    const currentLayers = map.getLayers().getArray();
+    _.forEach(currentLayers, lay => map.removeLayer(lay));
+    _.forEach(olLayers, lay => map.addLayer(lay));
+  }
+
+  setDrawingTool(tool: DrawingTool, map: ol.Map) {
+    this.removeAllDrawInteractions(map);
+
+    if (tool === DrawingTool.None) {
+      return;
+    }
+
+    const firstVector: ol.layer.Vector | undefined = _.find(map.getLayers().getArray(),
+      lay => lay instanceof ol.layer.Vector) as ol.layer.Vector | undefined;
+
+    if (!firstVector) {
+      throw new Error("Vector layer not found")
+    }
+
+    map.addInteraction(
+      new ol.interaction.Draw({
+        source: firstVector.getSource(),
+        type: OpenLayersHelper.toolToGeometryType(tool),
+      })
+    )
+  }
+
+  removeAllDrawInteractions(map: ol.Map) {
+    const allInteractions = map.getInteractions().getArray();
+    const drawInter = _.filter(allInteractions, inter => inter instanceof ol.interaction.Draw);
+    _.forEach(drawInter, inter => map.removeInteraction(inter));
   }
 }
