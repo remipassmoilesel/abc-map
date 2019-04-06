@@ -33,7 +33,10 @@ export class ProjectService {
             id: ProjectHelper.generateProjectId(),
             name: projectName,
             activeLayer: null,
-            layers: [LayerHelper.newPredefinedLayer(DefaultLayers.OSM_LAYER)],
+            layers: [
+                LayerHelper.newVectorLayer(),
+                LayerHelper.newPredefinedLayer(DefaultLayers.OSM_LAYER),
+            ],
         };
         return this.projectDao.save(newProject)
             .then(() => newProject);
