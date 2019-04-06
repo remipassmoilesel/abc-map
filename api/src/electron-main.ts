@@ -1,3 +1,6 @@
+
+require('source-map-support').install();
+
 import { app, BrowserWindow } from "electron";
 
 let win: BrowserWindow | null;

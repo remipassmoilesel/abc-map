@@ -38,6 +38,7 @@
     "@types/ws": "^6.0.1",
     "concurrently": "^4.1.0",
     "nodemon": "^1.18.10",
+    "source-map-support": "^0.5.11",
     "tslint": "^5.14.0",
     "typescript": "3.3.4000"
   }
