@@ -21,7 +21,7 @@ export interface IRasterLayer extends IMapLayer {
 }
 
 export enum PredefinedLayerPreset {
-    OSM = 'OSM'
+    OSM = 'OSM',
 }
 
 export interface IPredefinedLayer extends IMapLayer {

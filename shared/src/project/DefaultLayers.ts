@@ -1,4 +1,4 @@
-import {IPredefinedLayer, MapLayerType, PredefinedLayerPreset} from "./IMapLayer";
+import {IPredefinedLayer, MapLayerType, PredefinedLayerPreset} from './IMapLayer';
 
 export class DefaultLayers {
 
@@ -6,7 +6,7 @@ export class DefaultLayers {
         id: 'change-me',
         name: 'Couche OpenStreetMap',
         type: MapLayerType.Predefined,
-        preset: PredefinedLayerPreset.OSM
-    }
+        preset: PredefinedLayerPreset.OSM,
+    };
 
 }
