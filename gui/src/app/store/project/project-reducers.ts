@@ -10,7 +10,7 @@ export function projectReducer(state = projectInitialState, action: ProjectModul
     case ProjectModule.ActionTypes.PROJECT_UPDATED: {
       return {
         ...state,
-        project: _.cloneDeep(action.payload),
+        currentProject: _.cloneDeep(action.payload),
       };
     }
 

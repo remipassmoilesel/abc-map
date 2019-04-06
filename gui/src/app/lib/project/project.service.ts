@@ -62,7 +62,7 @@ export class ProjectService {
 
   public listenProjectUpdates(): Observable<IProject | undefined> {
     return this.store.select(state => state.project)
-      .pipe(map(projectState => projectState.project));
+      .pipe(map(projectState => projectState.currentProject));
   }
 
 }
