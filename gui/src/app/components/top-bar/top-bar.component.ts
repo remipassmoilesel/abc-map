@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {AllRoutes} from "../../routing/AllRoutes";
+import {GuiRoutes} from "../../routing/GuiRoutes";
 import {ProjectService} from "../../lib/project/project.service";
 
 @Component({
@@ -9,7 +9,7 @@ import {ProjectService} from "../../lib/project/project.service";
 })
 export class TopBarComponent implements OnInit {
 
-  routes = AllRoutes;
+  routes = GuiRoutes;
 
   constructor(private projectService: ProjectService) {}
 

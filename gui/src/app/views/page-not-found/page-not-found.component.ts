@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {AllRoutes} from "../../routing/AllRoutes";
+import {GuiRoutes} from "../../routing/GuiRoutes";
 
 @Component({
   selector: 'abc-page-not-found',
