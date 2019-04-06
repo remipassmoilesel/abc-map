@@ -8,6 +8,7 @@ import {IProject} from 'abcmap-shared';
 import {IMainState} from '../../store';
 import {Store} from '@ngrx/store';
 import {LoggerFactory} from '../../lib/LoggerFactory';
+import {ProjectService} from "../../lib/project/project.service";
 
 @Component({
   selector: 'abc-main-map',
@@ -22,22 +23,17 @@ export class MainMapComponent implements OnInit, OnDestroy {
   project$?: Subscription;
 
   constructor(private mapService: MapService,
-              private store: Store<IMainState>) {
+              private projectService: ProjectService) {
   }
 
   ngOnInit() {
     this.setupMap();
-    this.listenProject();
+    this.project$ = this.projectService.listenProjectUpdates()
+      .subscribe(project => this.updateLayers(project));
   }
 
   ngOnDestroy() {
     RxUtils.unsubscribe(this.project$);
-  }
-
-  listenProject() {
-    this.project$ = this.store
-      .select(state => state.project)
-      .subscribe(state => this.updateLayers(state.project));
   }
 
   updateLayers(project?: IProject) {

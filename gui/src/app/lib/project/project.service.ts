@@ -2,10 +2,10 @@ import {Injectable} from '@angular/core';
 import {ProjectClient} from './ProjectClient';
 import {LocalStorageService, LSKey} from '../local-storage/local-storage.service';
 import * as loglevel from 'loglevel';
-import {Observable, of} from 'rxjs';
+import {Observable} from 'rxjs';
 import {tap} from 'rxjs/internal/operators/tap';
 import {IProject} from 'abcmap-shared';
-import {catchError} from 'rxjs/operators';
+import {catchError, map} from 'rxjs/operators';
 import {ProjectModule} from '../../store/project/project-actions';
 import {Store} from '@ngrx/store';
 import {IMainState} from '../../store';
@@ -39,9 +39,7 @@ export class ProjectService {
       return this.openProject(storedProjectId)
         .pipe(catchError(error => {
           this.logger.error(error);
-          // TODO: restore
-          // return this.storew.gui.setProjectNotFoundModalVisible(true);
-          return of();
+          return this.createNewProject();
         }));
     }
   }
@@ -60,6 +58,11 @@ export class ProjectService {
         this.localst.save(LSKey.CURRENT_PROJECT_ID, project.id);
         this.store.dispatch(new ProjectModule.ProjectUpdated(project));
       }));
+  }
+
+  public listenProjectUpdates(): Observable<IProject | undefined> {
+    return this.store.select(state => state.project)
+      .pipe(map(projectState => projectState.project));
   }
 
 }
