@@ -1,4 +1,4 @@
-import * as loglevel from "loglevel";
+import * as loglevel from 'loglevel';
 
 loglevel.setDefaultLevel('info');
 

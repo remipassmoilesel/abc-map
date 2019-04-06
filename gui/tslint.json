@@ -4,6 +4,9 @@
     "codelyzer"
   ],
   "rules": {
+    "variable-name": false,
+    "no-namespace": false,
+    "only-arrow-functions": false,
     "array-type": false,
     "arrow-parens": false,
     "deprecation": {

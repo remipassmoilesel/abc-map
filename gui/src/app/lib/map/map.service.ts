@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {IPredefinedLayer, IProject, IRasterLayer, MapLayerType, PredefinedLayerPreset} from "abcmap-shared";
+import {IPredefinedLayer, IProject, IRasterLayer, MapLayerType, PredefinedLayerPreset} from 'abcmap-shared';
 import * as _ from 'lodash';
 import * as ol from 'openlayers';
 
@@ -18,9 +18,9 @@ export class MapService {
         case MapLayerType.Raster:
           return this.toRasterLayer(abcLayer as IRasterLayer);
         default:
-          throw new Error("Unknown: " + abcLayer);
+          throw new Error('Unknown: ' + abcLayer);
       }
-    })
+    });
   }
 
   private toRasterLayer(abcLayer: IRasterLayer): ol.layer.Base {
@@ -39,7 +39,7 @@ export class MapService {
           source: new ol.source.OSM()
         });
       default:
-        throw new Error("Unknown: " + abcLayer);
+        throw new Error('Unknown: ' + abcLayer);
     }
   }
 }

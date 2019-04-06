@@ -1,14 +1,14 @@
 import {Injectable} from '@angular/core';
-import {ProjectClient} from "./ProjectClient";
-import {LocalStorageService, LSKey} from "../local-storage/local-storage.service";
+import {ProjectClient} from './ProjectClient';
+import {LocalStorageService, LSKey} from '../local-storage/local-storage.service';
 import * as loglevel from 'loglevel';
-import {Observable, of} from "rxjs";
-import {tap} from "rxjs/internal/operators/tap";
-import {IProject} from "abcmap-shared";
-import {catchError} from "rxjs/operators";
-import {ProjectModule} from "../../store/project/project-actions";
-import {Store} from "@ngrx/store";
-import {IMainState} from "../../store";
+import {Observable, of} from 'rxjs';
+import {tap} from 'rxjs/internal/operators/tap';
+import {IProject} from 'abcmap-shared';
+import {catchError} from 'rxjs/operators';
+import {ProjectModule} from '../../store/project/project-actions';
+import {Store} from '@ngrx/store';
+import {IMainState} from '../../store';
 
 @Injectable({
   providedIn: 'root'

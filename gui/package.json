@@ -6,7 +6,7 @@
     "start": "ng serve  --proxy-config proxy-config.json",
     "build": "ng build",
     "test": "ng test",
-    "lint": "ng lint",
+    "lint": "ng lint --fix",
     "e2e": "exit 1"
   },
   "private": true,

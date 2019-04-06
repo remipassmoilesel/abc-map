@@ -1,5 +1,5 @@
-import {IProjectState, projectInitialState} from "./project-state";
-import {ProjectModule} from "./project-actions";
+import {IProjectState, projectInitialState} from './project-state';
+import {ProjectModule} from './project-actions';
 import * as loglevel from 'loglevel';
 
 const logger = loglevel.getLogger('projectReducer');

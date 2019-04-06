@@ -1,5 +1,5 @@
-import {IProject} from "abcmap-shared";
-import {Action} from "@ngrx/store";
+import {IProject} from 'abcmap-shared';
+import {Action} from '@ngrx/store';
 
 // Actions are events
 

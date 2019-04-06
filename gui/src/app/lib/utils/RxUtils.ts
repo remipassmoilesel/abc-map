@@ -1,9 +1,9 @@
-import {Subscription} from "rxjs";
+import {Subscription} from 'rxjs';
 
 export class RxUtils {
 
-  public static unsubscribe(sub$?: Subscription){
-    if(sub$){
+  public static unsubscribe(sub$?: Subscription) {
+    if (sub$) {
       sub$.unsubscribe();
     }
   }

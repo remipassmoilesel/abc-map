@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {GuiRoutes} from "../../routing/GuiRoutes";
-import {ProjectService} from "../../lib/project/project.service";
+import {GuiRoutes} from '../../routing/GuiRoutes';
+import {ProjectService} from '../../lib/project/project.service';
 
 @Component({
   selector: 'abc-top-bar',
