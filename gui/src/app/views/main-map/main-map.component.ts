@@ -51,6 +51,8 @@ export class MainMapComponent implements OnInit, OnDestroy {
     const _map = this.map;
     const olLayers = this.mapService.generateLayersFromProject(project);
 
+    console.log(olLayers);
+
     // TODO: remove/add only if layers change
     _map.getLayers().forEach(lay => _map.removeLayer(lay));
     _.forEach(olLayers, lay => _map.addLayer(lay));
@@ -58,7 +60,7 @@ export class MainMapComponent implements OnInit, OnDestroy {
 
   setupMap() {
     this.map = new ol.Map({
-      target: 'openlayers-map',
+      target: 'main-openlayers-map',
       layers: [],
       view: new ol.View({
         center: ol.proj.fromLonLat([37.41, 8.82]),
