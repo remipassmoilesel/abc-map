@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {ProjectClient} from "./ProjectClient";
 import {LocalStorageService, LSKey} from "../local-storage/local-storage.service";
 import * as loglevel from 'loglevel';
@@ -6,6 +6,9 @@ import {Observable, of} from "rxjs";
 import {tap} from "rxjs/internal/operators/tap";
 import {IProject} from "abcmap-shared";
 import {catchError} from "rxjs/operators";
+import {ProjectModule} from "../../store/project/project-actions";
+import {Store} from "@ngrx/store";
+import {IMainState} from "../../store";
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +18,7 @@ export class ProjectService {
   private logger = loglevel.getLogger('ProjectService');
 
   constructor(private projectClient: ProjectClient,
+              private store: Store<IMainState>,
               private localst: LocalStorageService) {
     this.initProjectWhenAppReady();
   }
@@ -46,8 +50,7 @@ export class ProjectService {
     return this.projectClient.createNewProject('Nouveau projet')
       .pipe(tap(project => {
         this.localst.save(LSKey.CURRENT_PROJECT_ID, project.id);
-        // TODO: restore
-        // this.storew.project.setCurrentProject(project).then((res) => project);
+        this.store.dispatch(new ProjectModule.ProjectUpdated(project));
       }));
   }
 
@@ -55,9 +58,8 @@ export class ProjectService {
     return this.projectClient.findProjectById(projectId)
       .pipe(tap(project => {
         this.localst.save(LSKey.CURRENT_PROJECT_ID, project.id);
-        // TODO: restore
-        // return this.storew.project.setCurrentProject(project).then((res) => project);
+        this.store.dispatch(new ProjectModule.ProjectUpdated(project));
       }));
-    }
+  }
 
 }

@@ -3,11 +3,11 @@ import {environment} from '../../environments/environment';
 import {projectReducer} from "./project/project-reducers";
 import {IProjectState} from "./project/project-state";
 
-export interface State {
+export interface IMainState {
   project: IProjectState
 }
 
-export const reducers: any = { // TODO: fix any
+export const reducers: any = { // TODO: fix any, normally ActionReducerMap<State>  ?
   project: projectReducer
 };
 
@@ -20,4 +20,4 @@ export function debug(reducer: ActionReducer<any>): ActionReducer<any> {
   };
 }
 
-export const metaReducers: MetaReducer<State>[] = !environment.production ? [] : [debug];
+export const metaReducers: MetaReducer<IMainState>[] = !environment.production ? [] : []; // [debug]

@@ -6,11 +6,9 @@ import {AppComponent} from './app.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {LibModule} from "./lib/lib.module";
 import {StoreDevtoolsModule} from '@ngrx/store-devtools';
-import {environment} from '../environments/environment';
 import {StoreModule} from '@ngrx/store';
 import {metaReducers, reducers} from './store';
 import {EffectsModule} from '@ngrx/effects';
-import {ProjectEffects} from './store/project/project-effects.service';
 import {ComponentsModule} from "./components/components.module";
 import {ViewsModule} from "./views/views.module";
 
@@ -24,8 +22,8 @@ import {ViewsModule} from "./views/views.module";
     AppRoutingModule,
     LibModule,
     StoreModule.forRoot(reducers, {metaReducers}),
-    StoreDevtoolsModule.instrument({maxAge: 25, logOnly: environment.production}),
-    EffectsModule.forRoot([ProjectEffects]),
+    StoreDevtoolsModule.instrument({maxAge: 25, logOnly: false}),
+    EffectsModule.forRoot([]),
     ViewsModule,
     ComponentsModule
   ],

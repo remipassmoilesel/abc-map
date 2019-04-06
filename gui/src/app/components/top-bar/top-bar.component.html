@@ -5,11 +5,11 @@
     <li class="nav-item">
 
       <div ngbDropdown class="d-inline-block">
-        <a class="btn cursor-pointer" ngbDropdownToggle>Fichier</a>
+        <a class="btn cursor-pointer" ngbDropdownToggle>Projet</a>
         <div ngbDropdownMenu>
-          <button ngbDropdownItem>Nouveau</button>
+          <button ngbDropdownItem (click)="newProject()">Nouveau</button>
           <button ngbDropdownItem>Ouvrir</button>
-          <button ngbDropdownItem>Quitter</button>
+          <button ngbDropdownItem (click)="closeProject()">Fermer</button>
         </div>
       </div>
 

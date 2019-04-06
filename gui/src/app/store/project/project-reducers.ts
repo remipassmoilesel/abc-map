@@ -1,5 +1,8 @@
 import {IProjectState, projectInitialState} from "./project-state";
 import {ProjectModule} from "./project-actions";
+import * as loglevel from 'loglevel';
+
+const logger = loglevel.getLogger('projectReducer');
 
 export function projectReducer(state = projectInitialState, action: ProjectModule.ActionsUnion): IProjectState {
 
@@ -12,8 +15,6 @@ export function projectReducer(state = projectInitialState, action: ProjectModul
     }
 
     default: {
-      // TODO: replace by logger
-      console.log("Unknown action: " + JSON.stringify(action));
       return state;
     }
 
