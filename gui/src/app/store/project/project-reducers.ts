@@ -1,8 +1,8 @@
 import {IProjectState, projectInitialState} from './project-state';
 import {ProjectModule} from './project-actions';
-import * as loglevel from 'loglevel';
+import * as _ from 'lodash';
 
-const logger = loglevel.getLogger('projectReducer');
+// All objects must be deep cloned
 
 export function projectReducer(state = projectInitialState, action: ProjectModule.ActionsUnion): IProjectState {
 
@@ -10,7 +10,7 @@ export function projectReducer(state = projectInitialState, action: ProjectModul
     case ProjectModule.ActionTypes.PROJECT_UPDATED: {
       return {
         ...state,
-        project: action.payload,
+        currentProject: _.cloneDeep(action.payload),
       };
     }
 

@@ -1,8 +1,8 @@
 import {ProjectDao} from './ProjectDao';
 import * as loglevel from 'loglevel';
-import {IProject, IProjectEventContent, MapLayerType, ProjectEvent} from 'abcmap-shared/dist';
+import {DefaultLayers, IProject, IProjectEventContent, ProjectEvent} from 'abcmap-shared';
 import {ProjectHelper} from './ProjectHelper';
-import {DefaultLayers} from 'abcmap-shared/dist';
+import {LayerHelper} from "./LayerHelper";
 import EventEmitter = require('events');
 
 export class ProjectService {
@@ -30,10 +30,13 @@ export class ProjectService {
             return Promise.reject('Project name is mandatory');
         }
         const newProject: IProject = {
-            id: ProjectHelper.generateLayerId(MapLayerType.Raster),
+            id: ProjectHelper.generateProjectId(),
             name: projectName,
             activeLayer: null,
-            layers: [DefaultLayers.OSM_LAYER],
+            layers: [
+                LayerHelper.newPredefinedLayer(DefaultLayers.OSM_LAYER),
+                LayerHelper.newVectorLayer(),
+            ],
         };
         return this.projectDao.save(newProject)
             .then(() => newProject);

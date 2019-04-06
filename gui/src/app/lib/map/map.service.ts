@@ -1,45 +1,35 @@
-import { Injectable } from '@angular/core';
-import {IPredefinedLayer, IProject, IRasterLayer, MapLayerType, PredefinedLayerPreset} from 'abcmap-shared';
+import {Injectable} from '@angular/core';
+import {IProject} from 'abcmap-shared';
 import * as _ from 'lodash';
 import * as ol from 'openlayers';
+import {OpenLayersLayerFactory} from "./OpenLayersLayerFactory";
+import {IMainState} from "../../store";
+import {Store} from "@ngrx/store";
+import {DrawingTool} from "../DrawingTool";
+import {Observable} from "rxjs";
+import {MapModule} from "../../store/map/map-actions";
+import DrawingToolChanged = MapModule.DrawingToolChanged;
 
 @Injectable({
   providedIn: 'root'
 })
 export class MapService {
 
-  constructor() { }
+  constructor(private store: Store<IMainState>) {
+  }
 
   public generateLayersFromProject(project: IProject): ol.layer.Base[] {
     return _.map(project.layers, abcLayer => {
-      switch (abcLayer.type) {
-        case MapLayerType.Predefined:
-          return this.toPredefinedLayer(abcLayer as IPredefinedLayer);
-        case MapLayerType.Raster:
-          return this.toRasterLayer(abcLayer as IRasterLayer);
-        default:
-          throw new Error('Unknown: ' + abcLayer);
-      }
+      return OpenLayersLayerFactory.toOlLayer(abcLayer);
     });
   }
 
-  private toRasterLayer(abcLayer: IRasterLayer): ol.layer.Base {
-    return new ol.layer.Tile({
-      source: new ol.source.TileWMS({
-        url: abcLayer.url,
-        params: {}
-      })
-    });
+  public listenDrawingToolChanged(): Observable<DrawingTool> {
+    return this.store.select(state => state.map.drawingTool);
   }
 
-  private toPredefinedLayer(abcLayer: IPredefinedLayer): ol.layer.Base {
-    switch (abcLayer.preset) {
-      case PredefinedLayerPreset.OSM:
-        return new ol.layer.Tile({
-          source: new ol.source.OSM()
-        });
-      default:
-        throw new Error('Unknown: ' + abcLayer);
-    }
+  public setDrawingTool(tool: DrawingTool): void {
+    this.store.dispatch(new DrawingToolChanged(tool));
   }
+
 }

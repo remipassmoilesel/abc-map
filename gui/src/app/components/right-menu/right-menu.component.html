@@ -1,0 +1,25 @@
+<div class="abc-right-menu border-left">
+
+  <ngb-accordion [closeOthers]="false" activeIds="ngb-panel-1, ngb-panel-2">
+
+    <ngb-panel id="ngb-panel-1">
+      <ng-template ngbPanelTitle>
+        <span class="abc-accordion-title">Couches</span>
+      </ng-template>
+      <ng-template ngbPanelContent>
+        <abc-layer-selector></abc-layer-selector>
+      </ng-template>
+    </ngb-panel>
+
+    <ngb-panel id="ngb-panel-2">
+      <ng-template ngbPanelTitle>
+        <span class="abc-accordion-title">Dessin</span>
+      </ng-template>
+      <ng-template ngbPanelContent>
+        <abc-drawing-toolbox></abc-drawing-toolbox>
+      </ng-template>
+    </ngb-panel>
+
+  </ngb-accordion>
+
+</div>

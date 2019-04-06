@@ -1,9 +1,9 @@
 import {IProject} from 'abcmap-shared';
 
 export interface IProjectState {
-  project?: IProject;
+  currentProject?: IProject;
 }
 
 export const projectInitialState: IProjectState = {
-  project: undefined
+  currentProject: undefined
 };
