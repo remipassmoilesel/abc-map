@@ -4,7 +4,7 @@ import {AbstractController} from '../server/AbstractController';
 import {ProjectService} from './ProjectService';
 import WebSocket from 'ws';
 import {IProjectEventContent, ProjectEvent} from "abcmap-shared/dist";
-import {Routes} from "abcmap-shared/dist";
+import {ApiRoutes} from "abcmap-shared/dist";
 
 export class ProjectController extends AbstractController {
 
@@ -15,9 +15,9 @@ export class ProjectController extends AbstractController {
     public getRouter(): express.Router {
         const router = express.Router();
 
-        router.get(Routes.PROJECT_CREATE_NEW.path, this.createNewProject);
-        router.ws(Routes.PROJECT_WEBSOCKET.path, this.projectWebsocket);
-        router.get(Routes.PROJECT_GET_BY_ID.path, this.getProject);
+        router.get(ApiRoutes.PROJECT_CREATE_NEW.path, this.createNewProject);
+        router.ws(ApiRoutes.PROJECT_WEBSOCKET.path, this.projectWebsocket);
+        router.get(ApiRoutes.PROJECT_GET_BY_ID.path, this.getProject);
 
         return router;
     }

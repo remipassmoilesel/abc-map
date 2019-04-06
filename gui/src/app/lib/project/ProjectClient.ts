@@ -1,4 +1,4 @@
-import {Routes} from "abcmap-shared";
+import {ApiRoutes} from "abcmap-shared";
 import {IProject} from "abcmap-shared";
 import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
@@ -15,12 +15,12 @@ export class ProjectClient {
     }
 
     public findProjectById(projectId: string): Observable<IProject> {
-        const url = Routes.PROJECT_GET_BY_ID.withArgs({id: projectId}).path;
+        const url = ApiRoutes.PROJECT_GET_BY_ID.withArgs({id: projectId}).path;
         return this.httpClient.get<IProject>(url);
     }
 
     public createNewProject(projectName: string): Observable<IProject> {
-        const url = `${Routes.PROJECT_CREATE_NEW.path}?name=${projectName}`;
+        const url = `${ApiRoutes.PROJECT_CREATE_NEW.path}?name=${projectName}`;
         return this.httpClient.get<IProject>(url);
     }
 

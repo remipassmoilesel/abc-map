@@ -4,15 +4,15 @@ declare interface IArgMap {
     [k: string]: string;
 }
 
-export class Route {
+export class ApiRoute {
 
     constructor(public readonly path: string) {
 
     }
 
-    public withArgs(args: IArgMap): Route {
+    public withArgs(args: IArgMap): ApiRoute {
         const newPath = this.replaceArguments(args, this.path);
-        return new Route(newPath);
+        return new ApiRoute(newPath);
     }
 
     public toString() {

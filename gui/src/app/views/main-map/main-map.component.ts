@@ -35,8 +35,6 @@ export class MainMapComponent implements OnInit, OnDestroy {
   }
 
   listenProject() {
-    this.store.subscribe(state => console.log(state));
-
     this.project$ = this.store
       .select(state => state.project)
       .subscribe(state => this.updateLayers(state.project))
@@ -50,8 +48,6 @@ export class MainMapComponent implements OnInit, OnDestroy {
 
     const _map = this.map;
     const olLayers = this.mapService.generateLayersFromProject(project);
-
-    console.log(olLayers);
 
     // TODO: remove/add only if layers change
     _map.getLayers().forEach(lay => _map.removeLayer(lay));
