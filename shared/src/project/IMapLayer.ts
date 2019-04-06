@@ -12,7 +12,6 @@ export interface IMapLayer {
 
 export interface IVectorLayer extends IMapLayer {
     type: MapLayerType.Vector;
-    featureCollection: string;
 }
 
 export interface IRasterLayer extends IMapLayer {
