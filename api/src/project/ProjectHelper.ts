@@ -1,5 +1,5 @@
 import * as uuid from 'uuid';
-import {MapLayerType} from 'abcmap-shared/dist';
+import {MapLayerType} from 'abcmap-shared';
 
 export class ProjectHelper {
 
