@@ -1,25 +1,34 @@
-<nav class="abc-topbar navbar navbar-light bg-light border-bottom">
+<nav class="abc-topbar navbar navbar-expand navbar-light bg-light border-bottom">
   <a class="navbar-brand" href="#">Abc-Map</a>
 
-  <ul class="navbar-nav mr-auto">
-    <li class="nav-item">
+  <div class="collapse navbar-collapse">
+    <ul class="navbar-nav">
 
-      <div ngbDropdown class="d-inline-block">
-        <a class="btn cursor-pointer" ngbDropdownToggle>Projet</a>
-        <div ngbDropdownMenu>
-          <button ngbDropdownItem (click)="newProject()">Nouveau</button>
-          <button ngbDropdownItem>Ouvrir</button>
-          <button ngbDropdownItem (click)="closeProject()">Fermer</button>
+      <li class="nav-item">
+        <div ngbDropdown class="d-inline-block">
+          <a class="btn cursor-pointer" ngbDropdownToggle>Projet</a>
+          <div ngbDropdownMenu>
+            <button ngbDropdownItem (click)="newProject()">Nouveau</button>
+            <button ngbDropdownItem>Ouvrir</button>
+            <button ngbDropdownItem (click)="closeProject()">Fermer</button>
+          </div>
         </div>
-      </div>
+      </li>
 
-      <div ngbDropdown class="d-inline-block">
-        <a class="btn cursor-pointer" ngbDropdownToggle>Vue</a>
-        <div ngbDropdownMenu>
-          <button ngbDropdownItem [routerLink]="routes.MAP.link()">Carte</button>
+      <li class="nav-item">
+        <div ngbDropdown class="d-inline-block">
+          <a class="btn cursor-pointer" ngbDropdownToggle>Vue</a>
+          <div ngbDropdownMenu>
+            <button ngbDropdownItem [routerLink]="routes.MAP.link()">Carte</button>
+          </div>
         </div>
-      </div>
+      </li>
 
-    </li>
-  </ul>
+      <li class="nav-item" *ngIf="projectName">
+        <span class="nav-link">Project actuel: {{ projectName }}</span>
+      </li>
+
+    </ul>
+  </div>
+
 </nav>

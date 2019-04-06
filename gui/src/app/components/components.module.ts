@@ -6,9 +6,10 @@ import {RouterModule} from '@angular/router';
 import {RightMenuComponent} from './right-menu/right-menu.component';
 import { LayerSelectorComponent } from './layer-selector/layer-selector.component';
 import {FormsModule} from "@angular/forms";
+import { DrawingToolboxComponent } from './drawing-toolbox/drawing-toolbox.component';
 
 @NgModule({
-  declarations: [TopBarComponent, RightMenuComponent, LayerSelectorComponent],
+  declarations: [TopBarComponent, RightMenuComponent, LayerSelectorComponent, DrawingToolboxComponent],
   imports: [
     CommonModule,
     NgbModule,
