@@ -1,8 +1,7 @@
-<div>
+<div class="abc-drawing-toolbox">
 
-  <button (click)="setTool(tools.Point)">Point</button>
-  <button (click)="setTool(tools.Circle)">Cercle</button>
-  <button (click)="setTool(tools.LineString)">Ligne</button>
-  <button (click)="setTool(tools.Polygon)">Polygon</button>
+  <button *ngFor="let tool of tools" (click)="setTool(tool)" class='btn btn-secondary'>
+    <span [class]="'fa ' + tool.icon"></span> {{ tool.name }}
+  </button>
 
 </div>

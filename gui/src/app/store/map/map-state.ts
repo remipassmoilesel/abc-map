@@ -1,9 +1,9 @@
-import {DrawingTool} from "../../lib/DrawingTool";
+import {DrawingTool, DrawingTools} from "../../lib/DrawingTool";
 
 export interface IMapState {
   drawingTool: DrawingTool;
 }
 
 export const mapInitialState: IMapState = {
-  drawingTool: DrawingTool.None
+  drawingTool: DrawingTools.None
 };

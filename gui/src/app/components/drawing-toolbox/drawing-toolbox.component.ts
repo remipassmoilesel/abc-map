@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import {DrawingTool} from "../../lib/DrawingTool";
+import {Component, OnInit} from '@angular/core';
+import {DrawingTool, DrawingTools} from "../../lib/DrawingTool";
 import {MapService} from "../../lib/map/map.service";
 
 @Component({
@@ -9,9 +9,9 @@ import {MapService} from "../../lib/map/map.service";
 })
 export class DrawingToolboxComponent implements OnInit {
 
-  tools = DrawingTool;
+  tools = DrawingTools.All;
 
-  constructor(private mapService: MapService) { }
+  constructor(private mapService: MapService) {}
 
   ngOnInit() {
   }

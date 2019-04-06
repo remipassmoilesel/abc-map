@@ -7,7 +7,7 @@ import {RxUtils} from '../../lib/utils/RxUtils';
 import {IProject} from 'abcmap-shared';
 import {LoggerFactory} from '../../lib/LoggerFactory';
 import {ProjectService} from "../../lib/project/project.service";
-import {DrawingTool} from "../../lib/DrawingTool";
+import {DrawingTool, DrawingTools} from "../../lib/DrawingTool";
 import {OpenLayersHelper} from "../../lib/map/OpenLayersHelper";
 
 @Component({
@@ -83,7 +83,7 @@ export class MainMapComponent implements OnInit, OnDestroy {
   setDrawingTool(tool: DrawingTool, map: ol.Map) {
     this.removeAllDrawInteractions(map);
 
-    if (tool === DrawingTool.None) {
+    if (tool.id === DrawingTools.None.id) {
       return;
     }
 

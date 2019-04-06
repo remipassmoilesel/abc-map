@@ -1,18 +1,18 @@
-import {DrawingTool} from "../DrawingTool";
+import {DrawingTool, DrawingTools} from "../DrawingTool";
 import {geom} from "openlayers";
 import GeometryType = geom.GeometryType;
 
 export class OpenLayersHelper {
 
   static toolToGeometryType(tool: DrawingTool): GeometryType {
-    switch (tool) {
-      case DrawingTool.Circle:
+    switch (tool.id) {
+      case DrawingTools.Circle.id:
         return 'Circle';
-      case DrawingTool.Polygon:
+      case DrawingTools.Polygon.id:
         return 'Polygon';
-      case DrawingTool.LineString:
+      case DrawingTools.LineString.id:
         return 'LineString';
-      case DrawingTool.Point:
+      case DrawingTools.Point.id:
         return 'Point';
       default:
         throw new Error("Cannot convert: " + tool)
