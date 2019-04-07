@@ -36,21 +36,18 @@ export class MapService {
     this.store.dispatch(new DrawingToolChanged(tool));
   }
 
+  // TODO: remove/add only if layers change
   public updateLayers(project: IProject, map: Map) {
-    const layers = this.generateLayersFromProject(project);
+    map.getLayers().clear();
 
-    // TODO: remove/add only if layers change
-    this.removeAllLayers(map);
+    const layers = this.generateLayersFromProject(project);
     this.addAllLayers(map, layers);
   }
 
   public addAllLayers(map: ol.Map, layers: ol.layer.Layer[]) {
-    _.forEach(layers, lay => map.addLayer(lay));
-  }
-
-  public removeAllLayers(map: ol.Map) {
-    const layers = map.getLayers().getArray();
-    _.forEach(layers, lay => map.removeLayer(lay));
+    _.forEach(layers, lay => {
+      map.addLayer(lay)
+    });
   }
 
   public addLayerSourceChangedListener(map: ol.Map, listener: ol.EventsListenerFunctionType): void {

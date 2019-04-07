@@ -58,8 +58,6 @@ export class MainMapComponent implements OnInit, OnDestroy {
         }
         this.logger.info('Updating layers ...');
 
-        console.log(this.map.getLayers().getArray());
-
         this.mapService.removeLayerSourceChangedListener(this.map, this.layersChanged);
         this.mapService.updateLayers(project, this.map);
         this.mapService.addLayerSourceChangedListener(this.map, this.layersChanged);
