@@ -24,8 +24,7 @@ export class MapService {
 
   private geoJson = new GeoJSON();
 
-  constructor(private store: Store<IMainState>) {
-  }
+  constructor(private store: Store<IMainState>) {}
 
   public generateLayersFromProject(project: IProject): Layer[] {
     return _.map(project.layers, abcLayer => {

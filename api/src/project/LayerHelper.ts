@@ -19,6 +19,10 @@ export class LayerHelper {
             id: this.generateLayerId(MapLayerType.Vector),
             type: MapLayerType.Vector,
             name: 'Couche de dessin',
+            featureCollection: {
+                type: 'FeatureCollection',
+                features: []
+            }
         };
     }
 }

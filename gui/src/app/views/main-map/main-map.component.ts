@@ -5,6 +5,7 @@ import {RxUtils} from '../../lib/utils/RxUtils';
 import {LoggerFactory} from '../../lib/utils/LoggerFactory';
 import {ProjectService} from '../../lib/project/project.service';
 import {OlEvent, olFromLonLat, OlMap, OlVectorSource, OlView} from '../../lib/OpenLayers';
+import {OpenLayersHelper} from '../../lib/map/OpenLayersHelper';
 
 
 @Component({
@@ -48,7 +49,7 @@ export class MainMapComponent implements OnInit, OnDestroy {
   }
 
   listenProjectState() {
-    this.project$ = this.projectService.listenProjectUpdatesFromStore()
+    this.project$ = this.projectService.listenProjectState()
       .subscribe(project => {
         if (!this.map || !project) {
           return;
@@ -75,7 +76,9 @@ export class MainMapComponent implements OnInit, OnDestroy {
     if (event.target instanceof OlVectorSource) {
       const source: OlVectorSource = event.target;
       const geojsonFeatures = this.mapService.featuresToGeojson(source.getFeatures());
-      console.log(geojsonFeatures);
+      const layerId = OpenLayersHelper.getLayerId(source);
+
+      this.projectService.updateVectorLayer(layerId, geojsonFeatures);
     }
   };
 

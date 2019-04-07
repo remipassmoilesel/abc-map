@@ -18,7 +18,7 @@ export class TopBarComponent implements OnInit, OnDestroy {
   constructor(private projectService: ProjectService) {}
 
   ngOnInit() {
-    this.project$ = this.projectService.listenProjectUpdatesFromStore()
+    this.project$ = this.projectService.listenProjectState()
       .subscribe(project => this.projectName = project ? project.name : '');
   }
 

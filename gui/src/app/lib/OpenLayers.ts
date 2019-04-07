@@ -8,6 +8,7 @@ import OSM from 'ol/source/OSM';
 import TileWMS from 'ol/source/TileWMS';
 import VectorLayer from 'ol/layer/Vector';
 import Layer from 'ol/layer/Layer';
+import Source from 'ol/source/Source';
 
 const {fromLonLat} = require('ol/proj');
 
@@ -21,5 +22,6 @@ export {
   OSM as OlOSM,
   TileWMS as OlTileWMS,
   VectorLayer as OlVectorLayer,
-  Layer as OlLayer
+  Layer as OlLayer,
+  Source as OlSource
 }

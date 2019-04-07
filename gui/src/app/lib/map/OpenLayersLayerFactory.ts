@@ -7,9 +7,13 @@ import {
   PredefinedLayerPreset
 } from 'abcmap-shared';
 import {OlLayer, OlOSM, OlTile, OlTileWMS, OlVectorLayer, OlVectorSource} from '../OpenLayers';
+import {OpenLayersHelper} from './OpenLayersHelper';
+import GeoJSON from 'ol/format/GeoJSON';
 
 
 export class OpenLayersLayerFactory {
+
+  private static geoJson = new GeoJSON();
 
   public static toOlLayer(abcLayer: IMapLayer): OlLayer {
     switch (abcLayer.type) {
@@ -45,8 +49,14 @@ export class OpenLayersLayerFactory {
   }
 
   private static toVectorLayer(abcLayer: IVectorLayer): OlVectorLayer {
+    const source = new OlVectorSource({wrapX: false});
+    OpenLayersHelper.setLayerId(source, abcLayer.id);
+    if(abcLayer.featureCollection && abcLayer.featureCollection.type){
+      source.addFeatures(this.geoJson.readFeatures(abcLayer.featureCollection));
+    }
+
     return new OlVectorLayer({
-      source: new OlVectorSource({wrapX: false})
+      source
     });
   }
 
