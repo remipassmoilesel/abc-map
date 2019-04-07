@@ -17,14 +17,13 @@ export class ProjectService {
 
     public async findProject(projectId: string): Promise<IProject> {
         const project = await this.projectDao.findById(projectId);
-        MongodbHelper.removeMongoId(project);
-        return project;
+        return MongodbHelper.withoutMongoId(project);
     }
 
     public updateProject(project: IProject): Promise<IProject> {
         return this.projectDao.update(project).then((insertResult) => {
             this.notifyProjectUpdated(project.id);
-            return project;
+            return MongodbHelper.withoutMongoId(project);
         });
     }
 
@@ -42,7 +41,7 @@ export class ProjectService {
             ],
         };
         await this.projectDao.insert(newProject);
-        return newProject;
+        return MongodbHelper.withoutMongoId(newProject);
     }
 
     public notifyProjectUpdated(projectId: string) {
