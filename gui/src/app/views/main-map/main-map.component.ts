@@ -49,7 +49,7 @@ export class MainMapComponent implements OnInit, OnDestroy {
   }
 
   listenProjectState() {
-    this.project$ = this.projectService.listenProjectState()
+    this.project$ = this.projectService.listenProjectLoaded()
       .subscribe(project => {
         if (!this.map || !project) {
           return;

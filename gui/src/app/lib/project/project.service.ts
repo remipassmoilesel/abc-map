@@ -11,8 +11,10 @@ import {State, Store} from '@ngrx/store';
 import {IMainState} from '../../store';
 import {ToastService} from '../notifications/toast.service';
 import {FeatureCollection} from 'geojson';
+import {Actions, Effect, ofType} from '@ngrx/effects';
 import VectorLayerUpdated = ProjectModule.VectorLayerUpdated;
 import ProjectLoaded = ProjectModule.ProjectLoaded;
+import ActionTypes = ProjectModule.ActionTypes;
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +25,7 @@ export class ProjectService {
 
   constructor(private projectClient: ProjectClient,
               private store: Store<IMainState>,
-              private dispatcher: Store<IMainState>,
+              private actions$: Actions,
               private state: State<IMainState>,
               private toasts: ToastService,
               private localst: LocalStorageService) {
@@ -71,6 +73,13 @@ export class ProjectService {
   public listenProjectState(): Observable<IProject | undefined> {
     return this.store.select(state => state.project)
       .pipe(map(projectState => projectState.currentProject));
+  }
+
+  public listenProjectLoaded(): Observable<IProject | undefined> {
+    return this.actions$.pipe(
+      ofType(ActionTypes.PROJECT_LOADED),
+      map((action: ProjectLoaded) => action.payload)
+    );
   }
 
   public saveProject(): Observable<IProject> {
