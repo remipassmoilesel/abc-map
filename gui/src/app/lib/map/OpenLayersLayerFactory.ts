@@ -6,16 +6,12 @@ import {
   MapLayerType,
   PredefinedLayerPreset
 } from 'abcmap-shared';
-import Tile from 'ol/layer/Tile';
-import OSM from 'ol/source/OSM';
-import TileWMS from 'ol/source/TileWMS';
-import VectorLayer from 'ol/layer/Vector';
-import VectorSource from 'ol/source/Vector';
-import Layer from 'ol/layer/Layer';
+import {OlLayer, OlOSM, OlTile, OlTileWMS, OlVectorLayer, OlVectorSource} from '../OpenLayers';
+
 
 export class OpenLayersLayerFactory {
 
-  public static toOlLayer(abcLayer: IMapLayer): Layer {
+  public static toOlLayer(abcLayer: IMapLayer): OlLayer {
     switch (abcLayer.type) {
       case MapLayerType.Predefined:
         return this.toPredefinedLayer(abcLayer as IPredefinedLayer);
@@ -28,29 +24,29 @@ export class OpenLayersLayerFactory {
     }
   }
 
-  private static toPredefinedLayer(abcLayer: IPredefinedLayer): Tile {
+  private static toPredefinedLayer(abcLayer: IPredefinedLayer): OlTile {
     switch (abcLayer.preset) {
       case PredefinedLayerPreset.OSM:
-        return new Tile({
-          source: new OSM()
+        return new OlTile({
+          source: new OlOSM()
         });
       default:
         throw new Error('Unknown: ' + abcLayer);
     }
   }
 
-  private static toRasterLayer(abcLayer: IRasterLayer): Tile {
-    return new Tile({
-      source: new TileWMS({
+  private static toRasterLayer(abcLayer: IRasterLayer): OlTile {
+    return new OlTile({
+      source: new OlTileWMS({
         url: abcLayer.url,
         params: {}
       })
     });
   }
 
-  private static toVectorLayer(abcLayer: IVectorLayer): VectorLayer {
-    return new VectorLayer({
-      source: new VectorSource({wrapX: false})
+  private static toVectorLayer(abcLayer: IVectorLayer): OlVectorLayer {
+    return new OlVectorLayer({
+      source: new OlVectorSource({wrapX: false})
     });
   }
 
