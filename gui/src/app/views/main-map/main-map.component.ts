@@ -4,13 +4,8 @@ import {Subscription} from 'rxjs';
 import {RxUtils} from '../../lib/utils/RxUtils';
 import {LoggerFactory} from '../../lib/utils/LoggerFactory';
 import {ProjectService} from '../../lib/project/project.service';
-import Map from 'ol/Map';
-import View from 'ol/View';
-import Event from 'ol/events/Event';
-import VectorSource from 'ol/source/Vector';
-import GeoJSON from 'ol/format/GeoJSON';
+import {OlEvent, olFromLonLat, OlMap, OlVectorSource, OlView} from '../../lib/OpenLayers';
 
-const {fromLonLat} = require('ol/proj');
 
 @Component({
   selector: 'abc-main-map',
@@ -21,7 +16,7 @@ export class MainMapComponent implements OnInit, OnDestroy {
 
   private logger = LoggerFactory.new('MainMapComponent');
 
-  map?: Map;
+  map?: OlMap;
 
   project$?: Subscription;
   drawingTool$?: Subscription;
@@ -42,11 +37,11 @@ export class MainMapComponent implements OnInit, OnDestroy {
   }
 
   setupMap() {
-    this.map = new Map({
+    this.map = new OlMap({
       target: 'main-openlayers-map',
       layers: [],
-      view: new View({
-        center: fromLonLat([37.41, 8.82]),
+      view: new OlView({
+        center: olFromLonLat([37.41, 8.82]),
         zoom: 4,
       }),
     });
@@ -76,11 +71,11 @@ export class MainMapComponent implements OnInit, OnDestroy {
       });
   }
 
-  layerSourceChanged = (event: Event) => {
-    if(event.target instanceof VectorSource){
-      const source: VectorSource = event.target;
+  layerSourceChanged = (event: OlEvent) => {
+    if (event.target instanceof OlVectorSource) {
+      const source: OlVectorSource = event.target;
       const geojsonFeatures = this.mapService.featuresToGeojson(source.getFeatures());
-      console.log(geojsonFeatures)
+      console.log(geojsonFeatures);
     }
   };
 
