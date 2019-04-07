@@ -18,7 +18,7 @@ export class LayerSelectorComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.project$ = this.projectService.listenProjectUpdates()
+    this.project$ = this.projectService.listenProjectUpdatesFromStore()
       .subscribe(project => {
         this.layers = project ? project.layers : [];
       })

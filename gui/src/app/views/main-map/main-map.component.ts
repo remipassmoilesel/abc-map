@@ -51,7 +51,7 @@ export class MainMapComponent implements OnInit, OnDestroy {
   }
 
   listenProjectState() {
-    this.project$ = this.projectService.listenProjectUpdates()
+    this.project$ = this.projectService.listenProjectUpdatesFromStore()
       .subscribe(project => {
         if (!this.map || !project) {
           return;

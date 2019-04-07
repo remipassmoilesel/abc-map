@@ -18,7 +18,7 @@ export class TopBarComponent implements OnInit, OnDestroy {
   constructor(private projectService: ProjectService) {}
 
   ngOnInit() {
-    this.project$ = this.projectService.listenProjectUpdates()
+    this.project$ = this.projectService.listenProjectUpdatesFromStore()
       .subscribe(project => this.projectName = project ? project.name : '');
   }
 
@@ -34,4 +34,7 @@ export class TopBarComponent implements OnInit, OnDestroy {
     throw new Error("Implement me")
   }
 
+  saveProject() {
+    this.projectService.saveProject().subscribe();
+  }
 }
