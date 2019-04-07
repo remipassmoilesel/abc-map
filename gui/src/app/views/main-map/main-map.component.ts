@@ -1,14 +1,14 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import * as _ from 'lodash';
-import * as ol from 'openlayers';
 import {MapService} from '../../lib/map/map.service';
 import {Subscription} from 'rxjs';
 import {RxUtils} from '../../lib/utils/RxUtils';
-import {IProject} from 'abcmap-shared';
 import {LoggerFactory} from '../../lib/utils/LoggerFactory';
 import {ProjectService} from '../../lib/project/project.service';
-import {DrawingTool, DrawingTools} from '../../lib/map/DrawingTool';
-import {OpenLayersHelper} from '../../lib/map/OpenLayersHelper';
+import Map from 'ol/Map';
+import View from 'ol/View';
+import Event from 'ol/events/Event';
+
+const {fromLonLat} = require('ol/proj');
 
 @Component({
   selector: 'abc-main-map',
@@ -19,7 +19,7 @@ export class MainMapComponent implements OnInit, OnDestroy {
 
   private logger = LoggerFactory.new('MainMapComponent');
 
-  map?: ol.Map;
+  map?: Map;
 
   project$?: Subscription;
   drawingTool$?: Subscription;
@@ -40,11 +40,11 @@ export class MainMapComponent implements OnInit, OnDestroy {
   }
 
   setupMap() {
-    this.map = new ol.Map({
+    this.map = new Map({
       target: 'main-openlayers-map',
       layers: [],
-      view: new ol.View({
-        center: ol.proj.fromLonLat([37.41, 8.82]),
+      view: new View({
+        center: fromLonLat([37.41, 8.82]),
         zoom: 4,
       }),
     });
@@ -58,7 +58,7 @@ export class MainMapComponent implements OnInit, OnDestroy {
         }
         this.logger.info('Updating layers ...');
 
-        console.log(this.map.getLayers().getArray())
+        console.log(this.map.getLayers().getArray());
 
         this.mapService.removeLayerSourceChangedListener(this.map, this.layersChanged);
         this.mapService.updateLayers(project, this.map);
@@ -76,8 +76,8 @@ export class MainMapComponent implements OnInit, OnDestroy {
       });
   }
 
-  layersChanged = (event: ol.events.Event) => {
+  layersChanged = (event: Event) => {
     console.log(event);
-  }
+  };
 
 }

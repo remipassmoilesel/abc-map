@@ -2,7 +2,7 @@ import {ProjectDao} from './ProjectDao';
 import * as loglevel from 'loglevel';
 import {DefaultLayers, IProject, IProjectEventContent, ProjectEvent} from 'abcmap-shared';
 import {ProjectHelper} from './ProjectHelper';
-import {LayerHelper} from "./LayerHelper";
+import {LayerHelper} from './LayerHelper';
 import EventEmitter = require('events');
 
 export class ProjectService {
