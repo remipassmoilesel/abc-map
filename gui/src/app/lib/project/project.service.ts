@@ -5,9 +5,9 @@ import * as loglevel from 'loglevel';
 import {Observable, throwError} from 'rxjs';
 import {tap} from 'rxjs/internal/operators/tap';
 import {IProject} from 'abcmap-shared';
-import {catchError, map} from 'rxjs/operators';
+import {catchError, flatMap, map} from 'rxjs/operators';
 import {ProjectModule} from '../../store/project/project-actions';
-import {State, Store} from '@ngrx/store';
+import {Store} from '@ngrx/store';
 import {IMainState} from '../../store';
 import {ToastService} from '../notifications/toast.service';
 import {FeatureCollection} from 'geojson';
@@ -26,7 +26,6 @@ export class ProjectService {
   constructor(private projectClient: ProjectClient,
               private store: Store<IMainState>,
               private actions$: Actions,
-              private state: State<IMainState>,
               private toasts: ToastService,
               private localst: LocalStorageService) {
     this.initProjectWhenAppReady();
@@ -83,14 +82,15 @@ export class ProjectService {
   }
 
   public saveProject(): Observable<IProject> {
-    const project = (this.state.value as IMainState).project.currentProject;
-    if (!project) {
-      this.toasts.error('Vous devez d\'abord créer un projet');
-      return throwError(new Error('Project is undefined'));
-    }
-
-    return this.projectClient.saveProject(project)
+    return this.store.select(state => state.project.currentProject)
       .pipe(
+        flatMap(project => {
+          if (!project) {
+            this.toasts.error('Vous devez d\'abord créer un projet');
+            return throwError(new Error('Project is undefined'));
+          }
+          return this.projectClient.saveProject(project)
+        }),
         tap(project => {
           this.toasts.info('Projet enregistré !');
         }),

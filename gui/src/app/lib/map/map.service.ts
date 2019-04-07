@@ -8,7 +8,6 @@ import {DrawingTool, DrawingTools} from './DrawingTool';
 import {Observable} from 'rxjs';
 import {MapModule} from '../../store/map/map-actions';
 import {OpenLayersHelper} from './OpenLayersHelper';
-import DrawingToolChanged = MapModule.DrawingToolChanged;
 import Layer from 'ol/layer/Layer';
 import Map from 'ol/Map';
 import Vector from 'ol/layer/Vector';
@@ -16,6 +15,10 @@ import Draw from 'ol/interaction/Draw';
 import Feature from 'ol/Feature';
 import GeoJSON from 'ol/format/GeoJSON';
 import {FeatureCollection} from 'geojson';
+import {Actions, ofType} from '@ngrx/effects';
+import {map} from 'rxjs/operators';
+import DrawingToolChanged = MapModule.DrawingToolChanged;
+import ActionTypes = MapModule.ActionTypes;
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +27,9 @@ export class MapService {
 
   private geoJson = new GeoJSON();
 
-  constructor(private store: Store<IMainState>) {}
+  constructor(private store: Store<IMainState>,
+              private actions$: Actions) {
+  }
 
   public generateLayersFromProject(project: IProject): Layer[] {
     return _.map(project.layers, abcLayer => {
@@ -33,7 +38,10 @@ export class MapService {
   }
 
   public listenDrawingToolChanged(): Observable<DrawingTool> {
-    return this.store.select(state => state.map.drawingTool);
+    return this.actions$.pipe(
+      ofType(ActionTypes.DRAWING_TOOL_CHANGED),
+      map((action: DrawingToolChanged) => action.tool)
+    );
   }
 
   public setDrawingTool(tool: DrawingTool): void {
@@ -50,7 +58,7 @@ export class MapService {
 
   public addAllLayers(map: ol.Map, layers: ol.layer.Layer[]) {
     _.forEach(layers, lay => {
-      map.addLayer(lay)
+      map.addLayer(lay);
     });
   }
 
@@ -101,6 +109,6 @@ export class MapService {
   }
 
   public featuresToGeojson(features: Feature[]): FeatureCollection {
-      return this.geoJson.writeFeaturesObject(features) as any;
+    return this.geoJson.writeFeaturesObject(features) as any;
   }
 }

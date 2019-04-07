@@ -6,6 +6,7 @@ import {LoggerFactory} from '../../lib/utils/LoggerFactory';
 import {ProjectService} from '../../lib/project/project.service';
 import {OlEvent, olFromLonLat, OlMap, OlVectorSource, OlView} from '../../lib/OpenLayers';
 import {OpenLayersHelper} from '../../lib/map/OpenLayersHelper';
+import {DrawingTools} from '../../lib/map/DrawingTool';
 
 
 @Component({
@@ -58,6 +59,7 @@ export class MainMapComponent implements OnInit, OnDestroy {
 
         this.mapService.removeLayerSourceChangedListener(this.map, this.layerSourceChanged);
         this.mapService.updateLayers(project, this.map);
+        this.mapService.setDrawingTool(DrawingTools.None);
         this.mapService.addLayerSourceChangedListener(this.map, this.layerSourceChanged);
       });
   }
@@ -68,6 +70,8 @@ export class MainMapComponent implements OnInit, OnDestroy {
         if (!this.map) {
           return;
         }
+
+        this.logger.info('Updating drawing tool ...');
         this.mapService.setDrawInteractionOnMap(tool, this.map);
       });
   }
