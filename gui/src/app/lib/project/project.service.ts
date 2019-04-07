@@ -5,7 +5,7 @@ import * as loglevel from 'loglevel';
 import {Observable, throwError} from 'rxjs';
 import {tap} from 'rxjs/internal/operators/tap';
 import {IProject} from 'abcmap-shared';
-import {catchError, flatMap, map} from 'rxjs/operators';
+import {catchError, first, flatMap, map} from 'rxjs/operators';
 import {ProjectModule} from '../../store/project/project-actions';
 import {Store} from '@ngrx/store';
 import {IMainState} from '../../store';
@@ -84,6 +84,7 @@ export class ProjectService {
   public saveProject(): Observable<IProject> {
     return this.store.select(state => state.project.currentProject)
       .pipe(
+        first(),
         flatMap(project => {
           if (!project) {
             this.toasts.error('Vous devez d\'abord créer un projet');

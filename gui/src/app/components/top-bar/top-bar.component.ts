@@ -35,6 +35,6 @@ export class TopBarComponent implements OnInit, OnDestroy {
   }
 
   saveProject() {
-    this.projectService.saveProject().subscribe();
+    this.projectService.saveProject();
   }
 }
