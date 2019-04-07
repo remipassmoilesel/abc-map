@@ -2,9 +2,8 @@ import express = require('express');
 import {NextFunction} from 'express';
 import {AbstractController} from '../server/AbstractController';
 import {ProjectService} from './ProjectService';
+import {ApiRoutes, IProject, IProjectEventContent, ProjectEvent} from 'abcmap-shared';
 import WebSocket from 'ws';
-import {IProjectEventContent, ProjectEvent} from 'abcmap-shared';
-import {ApiRoutes} from 'abcmap-shared';
 
 export class ProjectController extends AbstractController {
 
@@ -18,6 +17,7 @@ export class ProjectController extends AbstractController {
         router.get(ApiRoutes.PROJECT_CREATE_NEW.path, this.createNewProject);
         router.ws(ApiRoutes.PROJECT_WEBSOCKET.path, this.projectWebsocket);
         router.get(ApiRoutes.PROJECT_GET_BY_ID.path, this.getProject);
+        router.post(ApiRoutes.PROJECT.path, this.saveProject);
 
         return router;
     }
@@ -30,7 +30,7 @@ export class ProjectController extends AbstractController {
                     ws.send(event);
                 }
             });
-    }
+    };
 
     private getProject = async (req: express.Request, res: express.Response, next: NextFunction) => {
         const projectId = req.params.id;
@@ -39,7 +39,7 @@ export class ProjectController extends AbstractController {
                 res.json(project);
             })
             .catch(next);
-    }
+    };
 
     private createNewProject = async (req: express.Request, res: express.Response, next: NextFunction) => {
         const projectName = req.query.name;
@@ -48,6 +48,18 @@ export class ProjectController extends AbstractController {
                 res.json(project);
             })
             .catch(next);
-    }
+    };
+
+    private saveProject = async (req: express.Request, res: express.Response, next: NextFunction) => {
+        const toSave: IProject = req.body;
+        if(!toSave){
+            return next("Project must be defined");
+        }
+        this.projectService.updateProject(toSave)
+            .then((project) => {
+                res.json(project);
+            })
+            .catch(next);
+    };
 
 }

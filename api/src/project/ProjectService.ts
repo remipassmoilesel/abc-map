@@ -4,6 +4,7 @@ import {DefaultLayers, IProject, IProjectEventContent, ProjectEvent} from 'abcma
 import {ProjectHelper} from './ProjectHelper';
 import {LayerHelper} from './LayerHelper';
 import EventEmitter = require('events');
+import {MongodbHelper} from '../lib/database/MongodbHelper';
 
 export class ProjectService {
 
@@ -14,18 +15,20 @@ export class ProjectService {
         this.projectDao.connect().catch((err) => this.logger.error(err));
     }
 
-    public findProject(projectId: string): Promise<IProject> {
-        return this.projectDao.findById(projectId);
+    public async findProject(projectId: string): Promise<IProject> {
+        const project = await this.projectDao.findById(projectId);
+        MongodbHelper.removeMongoId(project);
+        return project;
     }
 
-    public saveProject(project: IProject): Promise<IProject> {
-        return this.projectDao.save(project).then((insertResult) => {
+    public updateProject(project: IProject): Promise<IProject> {
+        return this.projectDao.update(project).then((insertResult) => {
             this.notifyProjectUpdated(project.id);
             return project;
         });
     }
 
-    public createNewProject(projectName: string): Promise<IProject> {
+    public async createNewProject(projectName: string): Promise<IProject> {
         if (!projectName) {
             return Promise.reject('Project name is mandatory');
         }
@@ -38,8 +41,8 @@ export class ProjectService {
                 LayerHelper.newVectorLayer(),
             ],
         };
-        return this.projectDao.save(newProject)
-            .then(() => newProject);
+        await this.projectDao.insert(newProject);
+        return newProject;
     }
 
     public notifyProjectUpdated(projectId: string) {
