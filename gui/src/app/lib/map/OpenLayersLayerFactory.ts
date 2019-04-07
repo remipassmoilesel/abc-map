@@ -10,7 +10,7 @@ import * as ol from "openlayers";
 
 export class OpenLayersLayerFactory {
 
-  public static toOlLayer(abcLayer: IMapLayer) {
+  public static toOlLayer(abcLayer: IMapLayer): ol.layer.Layer {
     switch (abcLayer.type) {
       case MapLayerType.Predefined:
         return this.toPredefinedLayer(abcLayer as IPredefinedLayer);
@@ -23,7 +23,7 @@ export class OpenLayersLayerFactory {
     }
   }
 
-  private static toPredefinedLayer(abcLayer: IPredefinedLayer): ol.layer.Base {
+  private static toPredefinedLayer(abcLayer: IPredefinedLayer): ol.layer.Tile {
     switch (abcLayer.preset) {
       case PredefinedLayerPreset.OSM:
         return new ol.layer.Tile({
@@ -34,7 +34,7 @@ export class OpenLayersLayerFactory {
     }
   }
 
-  private static toRasterLayer(abcLayer: IRasterLayer): ol.layer.Base {
+  private static toRasterLayer(abcLayer: IRasterLayer): ol.layer.Tile {
     return new ol.layer.Tile({
       source: new ol.source.TileWMS({
         url: abcLayer.url,
