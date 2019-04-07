@@ -7,6 +7,8 @@ import {ProjectService} from '../../lib/project/project.service';
 import Map from 'ol/Map';
 import View from 'ol/View';
 import Event from 'ol/events/Event';
+import VectorSource from 'ol/source/Vector';
+import GeoJSON from 'ol/format/GeoJSON';
 
 const {fromLonLat} = require('ol/proj');
 
@@ -58,9 +60,9 @@ export class MainMapComponent implements OnInit, OnDestroy {
         }
         this.logger.info('Updating layers ...');
 
-        this.mapService.removeLayerSourceChangedListener(this.map, this.layersChanged);
+        this.mapService.removeLayerSourceChangedListener(this.map, this.layerSourceChanged);
         this.mapService.updateLayers(project, this.map);
-        this.mapService.addLayerSourceChangedListener(this.map, this.layersChanged);
+        this.mapService.addLayerSourceChangedListener(this.map, this.layerSourceChanged);
       });
   }
 
@@ -74,8 +76,12 @@ export class MainMapComponent implements OnInit, OnDestroy {
       });
   }
 
-  layersChanged = (event: Event) => {
-    console.log(event);
+  layerSourceChanged = (event: Event) => {
+    if(event.target instanceof VectorSource){
+      const source: VectorSource = event.target;
+      const geojsonFeatures = this.mapService.featuresToGeojson(source.getFeatures());
+      console.log(geojsonFeatures)
+    }
   };
 
 }

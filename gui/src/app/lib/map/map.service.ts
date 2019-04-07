@@ -13,11 +13,16 @@ import Layer from 'ol/layer/Layer';
 import Map from 'ol/Map';
 import Vector from 'ol/layer/Vector';
 import Draw from 'ol/interaction/Draw';
+import Feature from 'ol/Feature';
+import GeoJSON from 'ol/format/GeoJSON';
+import {FeatureCollection} from 'geojson';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MapService {
+
+  private geoJson = new GeoJSON();
 
   constructor(private store: Store<IMainState>) {
   }
@@ -96,4 +101,7 @@ export class MapService {
     _.forEach(drawInter, inter => map.removeInteraction(inter));
   }
 
+  public featuresToGeojson(features: Feature[]): FeatureCollection {
+      return this.geoJson.writeFeaturesObject(features) as any;
+  }
 }
