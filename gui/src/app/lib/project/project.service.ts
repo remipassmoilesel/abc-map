@@ -11,7 +11,7 @@ import {State, Store} from '@ngrx/store';
 import {IMainState} from '../../store';
 import {ToastService} from '../notifications/toast.service';
 import {FeatureCollection} from 'geojson';
-import {Actions, Effect, ofType} from '@ngrx/effects';
+import {Actions, ofType} from '@ngrx/effects';
 import VectorLayerUpdated = ProjectModule.VectorLayerUpdated;
 import ProjectLoaded = ProjectModule.ProjectLoaded;
 import ActionTypes = ProjectModule.ActionTypes;
@@ -90,10 +90,15 @@ export class ProjectService {
     }
 
     return this.projectClient.saveProject(project)
-      .pipe(catchError(err => {
-        this.toasts.error('Erreur lors de la sauvegarde, veuillez réessayer plus tard');
-        return throwError(err);
-      }));
+      .pipe(
+        tap(project => {
+          this.toasts.info('Projet enregistré !');
+        }),
+        catchError(err => {
+          this.toasts.error('Erreur lors de la sauvegarde, veuillez réessayer plus tard');
+          return throwError(err);
+        })
+      );
   }
 
   public updateVectorLayer(layerId: string, featureCollection: FeatureCollection) {
