@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {color} from 'openlayers';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'abc-color-picker',
@@ -7,7 +9,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ColorPickerComponent implements OnInit {
 
-  public colorPresets = [
+  colorHistory: string[] = [];
+
+  colorPresets = [
     'rgb(255,7,20)',
     'rgb(255,157,36)',
     'rgb(255,245,0)',
@@ -21,11 +25,16 @@ export class ColorPickerComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    _.times(this.colorPresets.length, i => this.colorHistory.push('rgb(255,255,255'));
   }
 
-  onPresetClick(color: string){
-    console.log(color)
+  onColorCellClick(color: string){
     this.selectedColor = color;
+    this.addToHistory(color);
   }
 
+  addToHistory(color: string) {
+    this.colorHistory.unshift(color);
+    this.colorHistory.pop();
+  }
 }

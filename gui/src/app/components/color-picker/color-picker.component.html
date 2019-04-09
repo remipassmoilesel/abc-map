@@ -8,9 +8,17 @@
 
   <div class="d-flex flex-column ml-2">
 
-    <div class="preset mt-2" *ngFor="let color of colorPresets"
+    <div class="color-cell mt-2" *ngFor="let color of colorPresets"
       [style.background]="color"
-      (click)="onPresetClick(color)"></div>
+      (click)="onColorCellClick(color)"></div>
+
+  </div>
+
+  <div class="color-history flex-column ml-2">
+
+    <div class="color-cell mt-2" *ngFor="let color of colorHistory"
+      [style.background]="color"
+      (click)="onColorCellClick(color)"></div>
 
   </div>
 
