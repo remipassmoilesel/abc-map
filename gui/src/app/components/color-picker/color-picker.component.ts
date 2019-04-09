@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import {color} from 'openlayers';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import * as _ from 'lodash';
 
 @Component({
@@ -8,6 +7,11 @@ import * as _ from 'lodash';
   styleUrls: ['./color-picker.component.scss']
 })
 export class ColorPickerComponent implements OnInit {
+
+  @Output()
+  color = new EventEmitter<string>();
+
+  selectedColor: string = 'black';
 
   colorHistory: string[] = [];
 
@@ -20,20 +24,22 @@ export class ColorPickerComponent implements OnInit {
     'rgb(142,10,208)'
   ];
 
-  public selectedColor: string = 'black';
-
   constructor() { }
 
   ngOnInit() {
     _.times(this.colorPresets.length, i => this.colorHistory.push('rgb(255,255,255'));
   }
 
-  onColorCellClick(color: string){
+  onPresetSelected(color: string){
     this.selectedColor = color;
-    this.addToHistory(color);
+    this.emitColor(this.selectedColor);
   }
 
-  addToHistory(color: string) {
+  onColorChanged(color: string){
+    this.emitColor(color);
+  }
+
+  emitColor(color: string) {
     this.colorHistory.unshift(color);
     this.colorHistory.pop();
   }
