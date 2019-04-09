@@ -1,0 +1,17 @@
+<div class="d-flex">
+
+  <span [style.background]="selectedColor"
+    [cpToggle]="true"
+    [cpDialogDisplay]="'inline'"
+    [cpOutputFormat]="'rgba'"
+    [(colorPicker)]="selectedColor"></span>
+
+  <div class="d-flex flex-column ml-2">
+
+    <div class="preset mt-2" *ngFor="let color of colorPresets"
+      [style.background]="color"
+      (click)="onPresetClick(color)"></div>
+
+  </div>
+
+</div>

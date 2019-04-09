@@ -11,8 +11,8 @@ import {metaReducers, reducers} from './store';
 import {EffectsModule} from '@ngrx/effects';
 import {ComponentsModule} from './components/components.module';
 import {ViewsModule} from './views/views.module';
-import {ToastrModule} from "ngx-toastr";
-import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {ToastrModule} from 'ngx-toastr';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
