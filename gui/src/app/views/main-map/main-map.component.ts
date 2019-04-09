@@ -1,14 +1,13 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import * as _ from 'lodash';
-import * as ol from 'openlayers';
 import {MapService} from '../../lib/map/map.service';
 import {Subscription} from 'rxjs';
 import {RxUtils} from '../../lib/utils/RxUtils';
-import {IProject} from 'abcmap-shared';
-import {LoggerFactory} from '../../lib/LoggerFactory';
-import {ProjectService} from "../../lib/project/project.service";
-import {DrawingTool, DrawingTools} from "../../lib/DrawingTool";
-import {OpenLayersHelper} from "../../lib/map/OpenLayersHelper";
+import {LoggerFactory} from '../../lib/utils/LoggerFactory';
+import {ProjectService} from '../../lib/project/project.service';
+import {OlEvent, olFromLonLat, OlMap, OlVectorSource, OlView} from '../../lib/OpenLayers';
+import {OpenLayersHelper} from '../../lib/map/OpenLayersHelper';
+import {DrawingTools} from '../../lib/map/DrawingTool';
+
 
 @Component({
   selector: 'abc-main-map',
@@ -19,7 +18,7 @@ export class MainMapComponent implements OnInit, OnDestroy {
 
   private logger = LoggerFactory.new('MainMapComponent');
 
-  map?: ol.Map;
+  map?: OlMap;
 
   project$?: Subscription;
   drawingTool$?: Subscription;
@@ -40,23 +39,28 @@ export class MainMapComponent implements OnInit, OnDestroy {
   }
 
   setupMap() {
-    this.map = new ol.Map({
+    this.map = new OlMap({
       target: 'main-openlayers-map',
       layers: [],
-      view: new ol.View({
-        center: ol.proj.fromLonLat([37.41, 8.82]),
+      view: new OlView({
+        center: olFromLonLat([37.41, 8.82]),
         zoom: 4,
       }),
     });
   }
 
   listenProjectState() {
-    this.project$ = this.projectService.listenProjectUpdates()
+    this.project$ = this.projectService.listenProjectLoaded()
       .subscribe(project => {
         if (!this.map || !project) {
           return;
         }
-        this.updateLayers(project, this.map);
+        this.logger.info('Updating layers ...');
+
+        this.mapService.removeLayerSourceChangedListener(this.map, this.layerSourceChanged);
+        this.mapService.updateLayers(project, this.map);
+        this.mapService.setDrawingTool(DrawingTools.None);
+        this.mapService.addLayerSourceChangedListener(this.map, this.layerSourceChanged);
       });
   }
 
@@ -66,45 +70,20 @@ export class MainMapComponent implements OnInit, OnDestroy {
         if (!this.map) {
           return;
         }
-        this.setDrawingTool(tool, this.map)
-      })
+
+        this.logger.info('Updating drawing tool ...');
+        this.mapService.setDrawInteractionOnMap(tool, this.map);
+      });
   }
 
-  updateLayers(project: IProject, map: ol.Map) {
-    this.logger.info('Updating layers ...');
-    const olLayers = this.mapService.generateLayersFromProject(project);
+  layerSourceChanged = (event: OlEvent) => {
+    if (event.target instanceof OlVectorSource) {
+      const source: OlVectorSource = event.target;
+      const geojsonFeatures = this.mapService.featuresToGeojson(source.getFeatures());
+      const layerId = OpenLayersHelper.getLayerId(source);
 
-    // TODO: remove/add only if layers change
-    const currentLayers = map.getLayers().getArray();
-    _.forEach(currentLayers, lay => map.removeLayer(lay));
-    _.forEach(olLayers, lay => map.addLayer(lay));
-  }
-
-  setDrawingTool(tool: DrawingTool, map: ol.Map) {
-    this.removeAllDrawInteractions(map);
-
-    if (tool.id === DrawingTools.None.id) {
-      return;
+      this.projectService.updateVectorLayer(layerId, geojsonFeatures);
     }
+  };
 
-    const firstVector: ol.layer.Vector | undefined = _.find(map.getLayers().getArray(),
-      lay => lay instanceof ol.layer.Vector) as ol.layer.Vector | undefined;
-
-    if (!firstVector) {
-      throw new Error("Vector layer not found")
-    }
-
-    map.addInteraction(
-      new ol.interaction.Draw({
-        source: firstVector.getSource(),
-        type: OpenLayersHelper.toolToGeometryType(tool),
-      })
-    )
-  }
-
-  removeAllDrawInteractions(map: ol.Map) {
-    const allInteractions = map.getInteractions().getArray();
-    const drawInter = _.filter(allInteractions, inter => inter instanceof ol.interaction.Draw);
-    _.forEach(drawInter, inter => map.removeInteraction(inter));
-  }
 }

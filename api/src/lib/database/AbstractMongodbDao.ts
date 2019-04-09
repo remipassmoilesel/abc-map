@@ -1,5 +1,5 @@
 import * as mongodb from "mongodb";
-import {InsertOneWriteOpResult, MongoClient} from "mongodb";
+import {InsertOneWriteOpResult, MongoClient, UpdateWriteOpResult} from 'mongodb';
 import {Logger} from 'loglevel';
 import {AbcApiConfig} from "../../AbcApiConfig";
 
@@ -29,11 +29,14 @@ export abstract class AbstractMongodbDao<T> {
         return Promise.resolve(this.client);
     }
 
-    public async save(object: T): Promise<InsertOneWriteOpResult> {
+    public async insert(object: T): Promise<InsertOneWriteOpResult> {
         if (!this.client) {
             return Promise.reject("Not connected");
         }
-        return this.client.db(this.databasename).collection(this.collectionName).insertOne(object);
+        return this.client
+            .db(this.databasename)
+            .collection(this.collectionName)
+            .insertOne(object);
     }
 
 }

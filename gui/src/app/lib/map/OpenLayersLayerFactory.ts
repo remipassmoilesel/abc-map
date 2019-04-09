@@ -6,11 +6,16 @@ import {
   MapLayerType,
   PredefinedLayerPreset
 } from 'abcmap-shared';
-import * as ol from "openlayers";
+import {OlLayer, OlOSM, OlTile, OlTileWMS, OlVectorLayer, OlVectorSource} from '../OpenLayers';
+import {OpenLayersHelper} from './OpenLayersHelper';
+import GeoJSON from 'ol/format/GeoJSON';
+
 
 export class OpenLayersLayerFactory {
 
-  public static toOlLayer(abcLayer: IMapLayer) {
+  private static geoJson = new GeoJSON();
+
+  public static toOlLayer(abcLayer: IMapLayer): OlLayer {
     switch (abcLayer.type) {
       case MapLayerType.Predefined:
         return this.toPredefinedLayer(abcLayer as IPredefinedLayer);
@@ -23,29 +28,35 @@ export class OpenLayersLayerFactory {
     }
   }
 
-  private static toPredefinedLayer(abcLayer: IPredefinedLayer): ol.layer.Base {
+  private static toPredefinedLayer(abcLayer: IPredefinedLayer): OlTile {
     switch (abcLayer.preset) {
       case PredefinedLayerPreset.OSM:
-        return new ol.layer.Tile({
-          source: new ol.source.OSM()
+        return new OlTile({
+          source: new OlOSM()
         });
       default:
         throw new Error('Unknown: ' + abcLayer);
     }
   }
 
-  private static toRasterLayer(abcLayer: IRasterLayer): ol.layer.Base {
-    return new ol.layer.Tile({
-      source: new ol.source.TileWMS({
+  private static toRasterLayer(abcLayer: IRasterLayer): OlTile {
+    return new OlTile({
+      source: new OlTileWMS({
         url: abcLayer.url,
         params: {}
       })
     });
   }
 
-  private static toVectorLayer(abcLayer: IVectorLayer): ol.layer.Vector {
-    return new ol.layer.Vector({
-      source: new ol.source.Vector({wrapX: false})
+  private static toVectorLayer(abcLayer: IVectorLayer): OlVectorLayer {
+    const source = new OlVectorSource({wrapX: false});
+    OpenLayersHelper.setLayerId(source, abcLayer.id);
+    if(abcLayer.featureCollection && abcLayer.featureCollection.type){
+      source.addFeatures(this.geoJson.readFeatures(abcLayer.featureCollection));
+    }
+
+    return new OlVectorLayer({
+      source
     });
   }
 

@@ -5,6 +5,7 @@ import * as _ from 'lodash';
 import * as loglevel from 'loglevel';
 import {AbcApiConfig} from '../AbcApiConfig';
 import {IControllerMap} from './IControllerMap';
+import bodyParser = require('body-parser');
 
 export class ApiServer {
 
@@ -16,6 +17,7 @@ export class ApiServer {
                 private controllers: IControllerMap) {
         this.app = express();
 
+        this.app.use(bodyParser.json());
         this.setupMorgan(this.app);
         expressWebsocket(this.app);
         this.setupControllers(this.app);

@@ -1,10 +1,11 @@
-import {DrawingTool, DrawingTools} from "../DrawingTool";
-import {geom} from "openlayers";
+import {DrawingTool, DrawingTools} from './DrawingTool';
+import {geom} from 'openlayers';
+import {OlSource} from '../OpenLayers';
 import GeometryType = geom.GeometryType;
 
 export class OpenLayersHelper {
 
-  static toolToGeometryType(tool: DrawingTool): GeometryType {
+  public static toolToGeometryType(tool: DrawingTool): GeometryType {
     switch (tool.id) {
       case DrawingTools.Circle.id:
         return 'Circle';
@@ -15,8 +16,18 @@ export class OpenLayersHelper {
       case DrawingTools.Point.id:
         return 'Point';
       default:
-        throw new Error("Cannot convert: " + tool)
+        throw new Error('Cannot convert: ' + tool);
     }
+  }
+
+  private static readonly layerId = 'abcLayerId';
+
+  public static getLayerId(source: OlSource): string {
+    return source.get(this.layerId);
+  }
+
+  public static setLayerId(source: OlSource, layerId: string): void {
+    source.set(this.layerId, layerId, true);
   }
 
 }

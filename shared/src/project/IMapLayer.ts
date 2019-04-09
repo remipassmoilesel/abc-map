@@ -1,3 +1,5 @@
+import {FeatureCollection} from 'geojson';
+
 export enum MapLayerType {
     Raster = 'Raster',
     Vector = 'Vector',
@@ -12,6 +14,7 @@ export interface IMapLayer {
 
 export interface IVectorLayer extends IMapLayer {
     type: MapLayerType.Vector;
+    featureCollection: FeatureCollection
 }
 
 export interface IRasterLayer extends IMapLayer {
