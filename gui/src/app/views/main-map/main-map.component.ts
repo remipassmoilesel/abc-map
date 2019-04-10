@@ -4,9 +4,16 @@ import {Subscription} from 'rxjs';
 import {RxUtils} from '../../lib/utils/RxUtils';
 import {LoggerFactory} from '../../lib/utils/LoggerFactory';
 import {ProjectService} from '../../lib/project/project.service';
-import {OlEvent, olFromLonLat, OlMap, OlVectorSource, OlView} from '../../lib/OpenLayers';
+import {DrawEvent, OlEvent, olFromLonLat, OlMap, OlVectorSource, OlView} from '../../lib/OpenLayers';
 import {OpenLayersHelper} from '../../lib/map/OpenLayersHelper';
 import {DrawingTools} from '../../lib/map/DrawingTool';
+import {Actions, ofType} from '@ngrx/effects';
+import {MapModule} from '../../store/map/map-actions';
+import ActionTypes = MapModule.ActionTypes;
+import ActiveForegroundColorChanged = MapModule.ActiveForegroundColorChanged;
+import ActiveBackgroundColorChanged = MapModule.ActiveBackgroundColorChanged;
+import {IAbcStyle} from '../../lib/map/IAbcStyle';
+import * as _ from 'lodash';
 
 
 @Component({
@@ -22,20 +29,29 @@ export class MainMapComponent implements OnInit, OnDestroy {
 
   project$?: Subscription;
   drawingTool$?: Subscription;
+  colorChanged$?: Subscription;
+
+  currentStyle: IAbcStyle = {
+    foreground: 'rgb(0,0,0)',
+    background: 'rgb(0,0,0)',
+  };
 
   constructor(private mapService: MapService,
+              private actions$: Actions,
               private projectService: ProjectService) {
   }
 
   ngOnInit() {
     this.setupMap();
     this.listenProjectState();
-    this.listenMapState();
+    this.listenDrawingToolState();
+    this.listenStyleState();
   }
 
   ngOnDestroy() {
     RxUtils.unsubscribe(this.project$);
     RxUtils.unsubscribe(this.drawingTool$);
+    RxUtils.unsubscribe(this.colorChanged$);
   }
 
   setupMap() {
@@ -57,14 +73,14 @@ export class MainMapComponent implements OnInit, OnDestroy {
         }
         this.logger.info('Updating layers ...');
 
-        this.mapService.removeLayerSourceChangedListener(this.map, this.layerSourceChanged);
+        this.mapService.removeLayerSourceChangedListener(this.map, this.onLayerSourceChange);
         this.mapService.updateLayers(project, this.map);
         this.mapService.setDrawingTool(DrawingTools.None);
-        this.mapService.addLayerSourceChangedListener(this.map, this.layerSourceChanged);
+        this.mapService.addLayerSourceChangedListener(this.map, this.onLayerSourceChange);
       });
   }
 
-  listenMapState() {
+  listenDrawingToolState() {
     this.drawingTool$ = this.mapService.listenDrawingToolChanged()
       .subscribe(tool => {
         if (!this.map) {
@@ -72,11 +88,15 @@ export class MainMapComponent implements OnInit, OnDestroy {
         }
 
         this.logger.info('Updating drawing tool ...');
-        this.mapService.setDrawInteractionOnMap(tool, this.map);
+        this.mapService.setDrawInteractionOnMap(tool, this.map, this.onDrawEnd);
       });
   }
 
-  layerSourceChanged = (event: OlEvent) => {
+  onDrawEnd = (event: DrawEvent) => {
+    this.mapService.setStyle(event.feature, _.cloneDeep(this.currentStyle));
+  };
+
+  onLayerSourceChange = (event: OlEvent) => {
     if (event.target instanceof OlVectorSource) {
       const source: OlVectorSource = event.target;
       const geojsonFeatures = this.mapService.featuresToGeojson(source.getFeatures());
@@ -86,4 +106,20 @@ export class MainMapComponent implements OnInit, OnDestroy {
     }
   };
 
+  listenStyleState() {
+    this.colorChanged$ = this.actions$
+      .pipe(
+        ofType(
+          ActionTypes.ACTIVE_FOREGROUND_COLOR_CHANGED,
+          ActionTypes.ACTIVE_BACKGROUND_COLOR_CHANGED,
+        ),
+      )
+      .subscribe((action: ActiveForegroundColorChanged | ActiveBackgroundColorChanged) => {
+        if (action.type === ActionTypes.ACTIVE_FOREGROUND_COLOR_CHANGED) {
+          this.currentStyle.foreground = action.color;
+        } else {
+          this.currentStyle.background = action.color;
+        }
+      });
+  }
 }

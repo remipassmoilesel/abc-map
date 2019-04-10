@@ -4,7 +4,6 @@ import {IMainState} from '../../store';
 import {Store} from '@ngrx/store';
 import {MapModule} from '../../store/map/map-actions';
 import {Actions, ofType} from '@ngrx/effects';
-import {map} from 'rxjs/operators';
 import {Subscription} from 'rxjs';
 import {RxUtils} from '../../lib/utils/RxUtils';
 import ActiveForegroundColorChanged = MapModule.ActiveForegroundColorChanged;
@@ -36,8 +35,7 @@ export class DrawColorPickerComponent implements OnInit, OnDestroy {
     'rgb(142,10,208)'
   ];
 
-  foregroundColorChanged$?: Subscription;
-  backgroundColorChanged$?: Subscription;
+  colorChanged$?: Subscription;
 
   constructor(private store: Store<IMainState>,
               private actions$: Actions) {
@@ -49,8 +47,7 @@ export class DrawColorPickerComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    RxUtils.unsubscribe(this.foregroundColorChanged$);
-    RxUtils.unsubscribe(this.backgroundColorChanged$);
+    RxUtils.unsubscribe(this.colorChanged$);
   }
 
   onPresetSelected(color: string) {
@@ -73,31 +70,32 @@ export class DrawColorPickerComponent implements OnInit, OnDestroy {
     }
   }
 
-  private setForegroundColor(color: string) {
+  setForegroundColor(color: string) {
     this.store.dispatch(new ActiveForegroundColorChanged(color));
   }
 
-  private setBackgroundColor(color: string) {
+  setBackgroundColor(color: string) {
     this.store.dispatch(new ActiveBackgroundColorChanged(color));
   }
 
-  private fillColorHistory() {
+  fillColorHistory() {
     _.times(this.colorPresets.length, i => this.colorHistory.push('rgb(255,255,255'));
   }
 
-  private listenColorChanges() {
-    this.foregroundColorChanged$ = this.actions$
+  listenColorChanges() {
+    this.colorChanged$ = this.actions$
       .pipe(
-        ofType(ActionTypes.ACTIVE_FOREGROUND_COLOR_CHANGED),
-        map((action: ActiveForegroundColorChanged) => action.color)
+        ofType(
+          ActionTypes.ACTIVE_FOREGROUND_COLOR_CHANGED,
+          ActionTypes.ACTIVE_BACKGROUND_COLOR_CHANGED,
+        ),
       )
-      .subscribe(color => this.activeForegroundColor = color);
-
-    this.backgroundColorChanged$ = this.actions$
-      .pipe(
-        ofType(ActionTypes.ACTIVE_BACKGROUND_COLOR_CHANGED),
-        map((action: ActiveBackgroundColorChanged) => action.color)
-      )
-      .subscribe(color => this.activeBackgroundColor = color);
+      .subscribe((action: ActiveForegroundColorChanged | ActiveBackgroundColorChanged) => {
+        if (action.type === ActionTypes.ACTIVE_FOREGROUND_COLOR_CHANGED) {
+          this.activeForegroundColor = action.color;
+        } else {
+          this.activeBackgroundColor = action.color;
+        }
+      });
   }
 }

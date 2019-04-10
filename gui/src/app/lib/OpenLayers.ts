@@ -9,6 +9,7 @@ import TileWMS from 'ol/source/TileWMS';
 import VectorLayer from 'ol/layer/Vector';
 import Layer from 'ol/layer/Layer';
 import Source from 'ol/source/Source';
+import Object from 'ol/Object';
 
 const {fromLonLat} = require('ol/proj');
 
@@ -23,5 +24,11 @@ export {
   TileWMS as OlTileWMS,
   VectorLayer as OlVectorLayer,
   Layer as OlLayer,
-  Source as OlSource
+  Source as OlSource,
+  Object as OlObject
+}
+
+export interface DrawEvent {
+  target: any;
+  feature: Object
 }

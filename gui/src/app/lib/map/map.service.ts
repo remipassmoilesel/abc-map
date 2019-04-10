@@ -80,7 +80,7 @@ export class MapService {
     });
   }
 
-  public setDrawInteractionOnMap(tool: DrawingTool, map: Map) {
+  public setDrawInteractionOnMap(tool: DrawingTool, map: Map, listener: (event: any) => any) {
     this.removeAllDrawInteractions(map);
 
     if (tool.id === DrawingTools.None.id) {
@@ -94,12 +94,14 @@ export class MapService {
       throw new Error('Vector layer not found');
     }
 
-    map.addInteraction(
-      new Draw({
-        source: firstVector.getSource(),
-        type: OpenLayersHelper.toolToGeometryType(tool),
-      })
-    );
+    const draw = new Draw({
+      source: firstVector.getSource(),
+      type: OpenLayersHelper.toolToGeometryType(tool),
+    });
+
+    draw.on('drawend', listener);
+
+    map.addInteraction(draw);
   }
 
   private removeAllDrawInteractions(map: ol.Map) {
@@ -111,4 +113,5 @@ export class MapService {
   public featuresToGeojson(features: Feature[]): FeatureCollection {
     return this.geoJson.writeFeaturesObject(features) as any;
   }
+
 }

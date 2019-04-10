@@ -1,6 +1,7 @@
 import {DrawingTool, DrawingTools} from './DrawingTool';
 import {geom} from 'openlayers';
-import {OlSource} from '../OpenLayers';
+import {OlObject, OlSource} from '../OpenLayers';
+import {IAbcStyle} from './IAbcStyle';
 import GeometryType = geom.GeometryType;
 
 export class OpenLayersHelper {
@@ -21,6 +22,7 @@ export class OpenLayersHelper {
   }
 
   private static readonly layerId = 'abcLayerId';
+  private static readonly styleId = 'abcStyle';
 
   public static getLayerId(source: OlSource): string {
     return source.get(this.layerId);
@@ -30,4 +32,11 @@ export class OpenLayersHelper {
     source.set(this.layerId, layerId, true);
   }
 
+  public static setStyle(feature: OlObject, style: IAbcStyle): void {
+    feature.set(this.styleId, style);
+  }
+
+  public static getStyle(feature: OlObject): IAbcStyle | undefined {
+    return feature.get(this.styleId);
+  }
 }
