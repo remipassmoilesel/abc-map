@@ -5,14 +5,19 @@ import {ProjectHelper} from './ProjectHelper';
 import {LayerHelper} from './LayerHelper';
 import EventEmitter = require('events');
 import {MongodbHelper} from '../lib/database/MongodbHelper';
+import {AbstractService} from '../lib/AbstractService';
 
-export class ProjectService {
+export class ProjectService extends AbstractService {
 
     private logger = loglevel.getLogger('ProjectService');
     private emitter = new EventEmitter();
 
     constructor(private projectDao: ProjectDao) {
-        this.projectDao.connect().catch((err) => this.logger.error(err));
+        super();
+    }
+
+    public postConstruct(): Promise<any> {
+        return this.projectDao.connect();
     }
 
     public async findProject(projectId: string): Promise<IProject> {
