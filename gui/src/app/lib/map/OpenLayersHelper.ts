@@ -1,6 +1,6 @@
 import {DrawingTool, DrawingTools} from './DrawingTool';
 import {geom} from 'openlayers';
-import {OlObject, OlSource} from '../OpenLayersImports';
+import {OlObject, OlObjectReadOnly, OlSource} from '../OpenLayersImports';
 import {IAbcStyleContainer} from './AbcStyles';
 import GeometryType = geom.GeometryType;
 
@@ -36,7 +36,7 @@ export class OpenLayersHelper {
     feature.set(this.styleId, style);
   }
 
-  public static getStyle(feature: OlObject): IAbcStyleContainer | undefined {
+  public static getStyle(feature: OlObjectReadOnly): IAbcStyleContainer | undefined {
     return feature.get(this.styleId);
   }
 }

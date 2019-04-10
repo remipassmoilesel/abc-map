@@ -1,4 +1,3 @@
-
 import Map from 'ol/Map';
 import View from 'ol/View';
 import Event from 'ol/events/Event';
@@ -13,6 +12,8 @@ import Object from 'ol/Object';
 import Style from 'ol/style/Style';
 import Fill from 'ol/style/Fill';
 import Stroke from 'ol/style/Stroke';
+import Feature from 'ol/Feature';
+import RenderFeature from 'ol/render/Feature';
 
 const {fromLonLat} = require('ol/proj');
 
@@ -32,9 +33,15 @@ export {
   Style as OlStyle,
   Fill as OlFill,
   Stroke as OlStroke,
-}
+  Feature as OlFeature,
+  RenderFeature as OlRenderFeature,
+};
 
 export interface DrawEvent {
   target: any;
   feature: Object
+}
+
+export interface OlObjectReadOnly {
+  get(key: string): any;
 }

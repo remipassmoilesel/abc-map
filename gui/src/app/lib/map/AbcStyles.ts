@@ -1,4 +1,4 @@
-import {OlFill, OlObject, OlStroke, OlStyle} from '../OpenLayersImports';
+import {OlFeature, OlFill, OlRenderFeature, OlStroke, OlStyle} from '../OpenLayersImports';
 import {OpenLayersHelper} from './OpenLayersHelper';
 
 export interface IAbcStyleContainer {
@@ -13,7 +13,7 @@ const defaultStyle = new OlStyle({
   stroke: new OlStroke({color: 'black', width: 1})
 });
 
-export function abcStyleToOlStyle(feature: OlObject, resolution: number): (OlStyle | OlStyle[] | null) {
+export function abcStyleToOlStyle(feature: (OlFeature | OlRenderFeature), resolution: number): (OlStyle | OlStyle[] | null) {
 
   const abcStyle = OpenLayersHelper.getStyle(feature);
   if (!abcStyle) {
