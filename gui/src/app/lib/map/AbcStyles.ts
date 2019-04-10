@@ -1,6 +1,8 @@
 import {OlFeature, OlFill, OlRenderFeature, OlStroke, OlStyle} from '../OpenLayersImports';
 import {OpenLayersHelper} from './OpenLayersHelper';
 
+// TODO: improve style
+
 export interface IAbcStyleContainer {
   foreground: string;
   background: string;
