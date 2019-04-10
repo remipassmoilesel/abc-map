@@ -7,11 +7,11 @@ import {RightMenuComponent} from './right-menu/right-menu.component';
 import {LayerSelectorComponent} from './layer-selector/layer-selector.component';
 import {FormsModule} from "@angular/forms";
 import {DrawingToolboxComponent} from './drawing-toolbox/drawing-toolbox.component';
-import { ColorPickerComponent } from './color-picker/color-picker.component';
+import { DrawColorPickerComponent } from './color-picker/draw-color-picker.component';
 import {ColorPickerModule} from 'ngx-color-picker';
 
 @NgModule({
-  declarations: [TopBarComponent, RightMenuComponent, LayerSelectorComponent, DrawingToolboxComponent, ColorPickerComponent],
+  declarations: [TopBarComponent, RightMenuComponent, LayerSelectorComponent, DrawingToolboxComponent, DrawColorPickerComponent],
   imports: [
     CommonModule,
     NgbModule,

@@ -16,8 +16,10 @@
         <span class="abc-accordion-title">Dessin</span>
       </ng-template>
       <ng-template ngbPanelContent>
-        <abc-drawing-toolbox></abc-drawing-toolbox>
-        <abc-color-picker></abc-color-picker>
+        <div class="mb-3">
+          <abc-drawing-toolbox></abc-drawing-toolbox>
+        </div>
+        <abc-draw-color-picker (color)="onColorChanged($event)"></abc-draw-color-picker>
       </ng-template>
     </ngb-panel>
 

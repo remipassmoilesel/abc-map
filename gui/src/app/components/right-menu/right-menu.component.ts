@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {Store} from '@ngrx/store';
+import {IMainState} from '../../store';
 
 @Component({
   selector: 'abc-right-menu',
@@ -7,10 +9,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RightMenuComponent implements OnInit {
 
-  constructor() { }
+  constructor(private store: Store<IMainState>) { }
 
   ngOnInit() {
 
   }
 
+  onColorChanged($event: string) {
+    console.log($event);
+  }
 }
