@@ -10,6 +10,9 @@ import VectorLayer from 'ol/layer/Vector';
 import Layer from 'ol/layer/Layer';
 import Source from 'ol/source/Source';
 import Object from 'ol/Object';
+import Style from 'ol/style/Style';
+import Fill from 'ol/style/Fill';
+import Stroke from 'ol/style/Stroke';
 
 const {fromLonLat} = require('ol/proj');
 
@@ -25,7 +28,10 @@ export {
   VectorLayer as OlVectorLayer,
   Layer as OlLayer,
   Source as OlSource,
-  Object as OlObject
+  Object as OlObject,
+  Style as OlStyle,
+  Fill as OlFill,
+  Stroke as OlStroke,
 }
 
 export interface DrawEvent {

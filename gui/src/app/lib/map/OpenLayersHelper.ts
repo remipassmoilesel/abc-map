@@ -1,7 +1,7 @@
 import {DrawingTool, DrawingTools} from './DrawingTool';
 import {geom} from 'openlayers';
-import {OlObject, OlSource} from '../OpenLayers';
-import {IAbcStyle} from './IAbcStyle';
+import {OlObject, OlSource} from '../OpenLayersImports';
+import {IAbcStyleContainer} from './AbcStyles';
 import GeometryType = geom.GeometryType;
 
 export class OpenLayersHelper {
@@ -32,11 +32,11 @@ export class OpenLayersHelper {
     source.set(this.layerId, layerId, true);
   }
 
-  public static setStyle(feature: OlObject, style: IAbcStyle): void {
+  public static setStyle(feature: OlObject, style: IAbcStyleContainer): void {
     feature.set(this.styleId, style);
   }
 
-  public static getStyle(feature: OlObject): IAbcStyle | undefined {
+  public static getStyle(feature: OlObject): IAbcStyleContainer | undefined {
     return feature.get(this.styleId);
   }
 }

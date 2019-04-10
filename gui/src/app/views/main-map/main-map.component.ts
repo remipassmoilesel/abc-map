@@ -4,7 +4,7 @@ import {Subscription} from 'rxjs';
 import {RxUtils} from '../../lib/utils/RxUtils';
 import {LoggerFactory} from '../../lib/utils/LoggerFactory';
 import {ProjectService} from '../../lib/project/project.service';
-import {DrawEvent, OlEvent, olFromLonLat, OlMap, OlVectorSource, OlView} from '../../lib/OpenLayers';
+import {DrawEvent, OlEvent, olFromLonLat, OlMap, OlVectorSource, OlView} from '../../lib/OpenLayersImports';
 import {OpenLayersHelper} from '../../lib/map/OpenLayersHelper';
 import {DrawingTools} from '../../lib/map/DrawingTool';
 import {Actions, ofType} from '@ngrx/effects';
@@ -12,7 +12,7 @@ import {MapModule} from '../../store/map/map-actions';
 import ActionTypes = MapModule.ActionTypes;
 import ActiveForegroundColorChanged = MapModule.ActiveForegroundColorChanged;
 import ActiveBackgroundColorChanged = MapModule.ActiveBackgroundColorChanged;
-import {IAbcStyle} from '../../lib/map/IAbcStyle';
+import {IAbcStyleContainer} from '../../lib/map/AbcStyles';
 import * as _ from 'lodash';
 
 
@@ -31,7 +31,7 @@ export class MainMapComponent implements OnInit, OnDestroy {
   drawingTool$?: Subscription;
   colorChanged$?: Subscription;
 
-  currentStyle: IAbcStyle = {
+  currentStyle: IAbcStyleContainer = {
     foreground: 'rgb(0,0,0)',
     background: 'rgb(0,0,0)',
   };
@@ -93,7 +93,7 @@ export class MainMapComponent implements OnInit, OnDestroy {
   }
 
   onDrawEnd = (event: DrawEvent) => {
-    this.mapService.setStyle(event.feature, _.cloneDeep(this.currentStyle));
+    OpenLayersHelper.setStyle(event.feature, _.cloneDeep(this.currentStyle));
   };
 
   onLayerSourceChange = (event: OlEvent) => {
