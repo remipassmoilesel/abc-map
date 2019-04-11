@@ -28,11 +28,12 @@ export class DrawColorPickerComponent implements OnInit, OnDestroy {
 
   colorPresets = [
     'rgb(255,7,20)',
+    'rgb(255,123,0)',
     'rgb(255,157,36)',
     'rgb(255,245,0)',
-    'rgb(65,255,73)',
+    'rgb(0,179,14)',
+    'rgb(85,154,236)',
     'rgb(37,33,236)',
-    'rgb(142,10,208)'
   ];
 
   colorChanged$?: Subscription;
@@ -79,7 +80,7 @@ export class DrawColorPickerComponent implements OnInit, OnDestroy {
   }
 
   fillColorHistory() {
-    _.times(this.colorPresets.length, i => this.colorHistory.push('rgb(255,255,255'));
+    _.times(6, i => this.colorHistory.push('rgb(255,255,255'));
   }
 
   listenColorChanges() {

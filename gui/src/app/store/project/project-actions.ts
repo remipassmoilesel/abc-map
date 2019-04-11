@@ -1,4 +1,4 @@
-import {IProject} from 'abcmap-shared';
+import {IProject, MapLayerType} from 'abcmap-shared';
 import {Action} from '@ngrx/store';
 import {FeatureCollection} from 'geojson';
 
@@ -9,11 +9,14 @@ export namespace ProjectModule {
   export enum ActionTypes {
     PROJECT_LOADED = '[project] Project updated',
     PROJECT_CLOSED = '[project] Project closed',
-    VECTOR_LAYER_UPDATED = '[project] Vector layer updated'
+    VECTOR_LAYER_UPDATED = '[project] Vector layer updated',
+    LAYER_ADDED = '[project] Layer updated',
+    LAYER_REMOVED = '[project] Layer removed'
   }
 
   export class ProjectLoaded implements Action {
     readonly type = ActionTypes.PROJECT_LOADED;
+
     constructor(public payload: IProject) {}
   }
 
@@ -23,9 +26,26 @@ export namespace ProjectModule {
 
   export class VectorLayerUpdated implements Action {
     readonly type = ActionTypes.VECTOR_LAYER_UPDATED;
-    constructor(public payload: {layerId: string, featureCollection: FeatureCollection}){}
+
+    constructor(public payload: { layerId: string, featureCollection: FeatureCollection }) {}
   }
 
-  export type ActionsUnion = ProjectLoaded | ProjectClosed | VectorLayerUpdated;
+  export class LayerAdded implements Action {
+    readonly type = ActionTypes.LAYER_ADDED;
+
+    constructor(public payload: { layerType: MapLayerType }) {}
+  }
+
+  export class LayerRemoved implements Action {
+    readonly type = ActionTypes.LAYER_ADDED;
+
+    constructor(public payload: { layerId: string }) {}
+  }
+
+  export type ActionsUnion = ProjectLoaded
+    | ProjectClosed
+    | LayerAdded
+    | LayerRemoved
+    | VectorLayerUpdated;
 
 }

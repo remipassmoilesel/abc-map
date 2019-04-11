@@ -3,7 +3,7 @@
     <option *ngFor="let layer of layers">{{ layer.name }} ({{ layer.type }})</option>
   </select>
   <div class="d-flex">
-    <a class="btn btn-outline-secondary mr-2"><img src="../../../assets/icons/plus_circle_1427.svg"/></a>
-    <a class="btn btn-outline-secondary mr-2"><img src="../../../assets/icons/minus_circle_1442.svg"/></a>
+    <a class="btn btn-outline-secondary mr-2" (click)="addLayer($event)"><img src="../../../assets/icons/plus_circle_1427.svg"/></a>
+    <a class="btn btn-outline-secondary mr-2" (click)="removeLayer($event)"><img src="../../../assets/icons/minus_circle_1442.svg"/></a>
   </div>
 </div>
