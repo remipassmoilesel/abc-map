@@ -20,8 +20,8 @@ declare type ColorType = 'foreground' | 'background';
 export class DrawColorPickerComponent implements OnInit, OnDestroy {
 
   activeColorType: ColorType = 'foreground';
-  activeForegroundColor = 'rgb(255,255,255)';
-  activeBackgroundColor = 'rgb(255,255,255)';
+  activeForegroundColor = 'rgb(220,220,220)';
+  activeBackgroundColor = 'rgb(220,220,220)';
 
   selectedColor: string = 'black';
   colorHistory: string[] = [];
@@ -80,7 +80,7 @@ export class DrawColorPickerComponent implements OnInit, OnDestroy {
   }
 
   fillColorHistory() {
-    _.times(6, i => this.colorHistory.push('rgb(255,255,255'));
+    _.times(6, i => this.colorHistory.push('rgb(220,220,220)'));
   }
 
   listenColorChanges() {
