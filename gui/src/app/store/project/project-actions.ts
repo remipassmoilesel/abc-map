@@ -10,7 +10,7 @@ export namespace ProjectModule {
     PROJECT_LOADED = '[project] Project updated',
     PROJECT_CLOSED = '[project] Project closed',
     VECTOR_LAYER_UPDATED = '[project] Vector layer updated',
-    LAYER_ADDED = '[project] Layer updated',
+    LAYER_ADDED = '[project] Layer added',
     LAYER_REMOVED = '[project] Layer removed'
   }
 
@@ -37,7 +37,7 @@ export namespace ProjectModule {
   }
 
   export class LayerRemoved implements Action {
-    readonly type = ActionTypes.LAYER_ADDED;
+    readonly type = ActionTypes.LAYER_REMOVED;
 
     constructor(public payload: { layerId: string }) {}
   }
