@@ -9,6 +9,7 @@ import {RxUtils} from '../../lib/utils/RxUtils';
 import ActiveForegroundColorChanged = MapModule.ActiveForegroundColorChanged;
 import ActiveBackgroundColorChanged = MapModule.ActiveBackgroundColorChanged;
 import ActionTypes = MapModule.ActionTypes;
+import {take} from 'rxjs/operators';
 
 declare type ColorType = 'foreground' | 'background';
 
@@ -45,6 +46,7 @@ export class DrawColorPickerComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.fillColorHistory();
     this.listenColorChanges();
+    this.initColors();
   }
 
   ngOnDestroy(): void {
@@ -98,5 +100,14 @@ export class DrawColorPickerComponent implements OnInit, OnDestroy {
           this.activeBackgroundColor = action.color;
         }
       });
+  }
+
+  private initColors() {
+    this.store.select(state => state.map)
+      .pipe(take(1))
+      .subscribe(mapState => {
+        this.activeBackgroundColor = mapState.style.activeBackgroundColor;
+        this.activeForegroundColor = mapState.style.activeForegroundColor;
+      })
   }
 }

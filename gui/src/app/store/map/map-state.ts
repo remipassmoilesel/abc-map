@@ -11,7 +11,7 @@ export interface IMapState {
 export const mapInitialState: IMapState = {
   drawingTool: DrawingTools.None,
   style: {
-    activeForegroundColor: 'rgb(0,0,0)',
-    activeBackgroundColor: 'rgb(0,0,0)'
+    activeForegroundColor: 'rgb(37,33,236)',
+    activeBackgroundColor: 'rgba(0,0,0,0)'
   }
 };
