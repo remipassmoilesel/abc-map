@@ -14,6 +14,9 @@ import ActiveForegroundColorChanged = MapModule.ActiveForegroundColorChanged;
 import ActiveBackgroundColorChanged = MapModule.ActiveBackgroundColorChanged;
 import {IAbcStyleContainer} from '../../lib/map/AbcStyles';
 import * as _ from 'lodash';
+import {IMainState} from '../../store';
+import {Store} from '@ngrx/store';
+import {take} from 'rxjs/operators';
 
 
 @Component({
@@ -32,13 +35,14 @@ export class MainMapComponent implements OnInit, OnDestroy {
   colorChanged$?: Subscription;
 
   currentStyle: IAbcStyleContainer = {
-    foreground: 'rgba(38,33,249,0.61)',
-    background: 'rgba(65,255,73,0.16)',
-    width: 7,
+    foreground: 'rgba(0,0,0)',
+    background: 'rgba(0,0,0)',
+    strokeWidth: 7,
   };
 
   constructor(private mapService: MapService,
               private actions$: Actions,
+              private store: Store<IMainState>,
               private projectService: ProjectService) {
   }
 
@@ -47,6 +51,7 @@ export class MainMapComponent implements OnInit, OnDestroy {
     this.listenProjectState();
     this.listenDrawingToolState();
     this.listenStyleState();
+    this.initStyle();
   }
 
   ngOnDestroy() {
@@ -122,5 +127,14 @@ export class MainMapComponent implements OnInit, OnDestroy {
           this.currentStyle.background = action.color;
         }
       });
+  }
+
+  initStyle() {
+    this.store
+      .select(state => state.map.activeStyle)
+      .pipe(take(1))
+      .subscribe(style => {
+        this.currentStyle = style;
+      })
   }
 }

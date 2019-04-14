@@ -10,7 +10,7 @@ import {OpenLayersHelper} from './OpenLayersHelper';
 export interface IAbcStyleContainer {
   foreground: string;
   background: string;
-  width: number;
+  strokeWidth: number;
 }
 
 const defaultStyle = new OlStyle({
@@ -34,7 +34,7 @@ export function abcStyleToOlStyle(feature: (OlFeature | OlRenderFeature), resolu
 
   const stroke = new OlStroke({
     color: abcStyle.foreground,
-    width: abcStyle.width,
+    width: abcStyle.strokeWidth,
   });
 
   const fill = new OlFill({
@@ -45,7 +45,7 @@ export function abcStyleToOlStyle(feature: (OlFeature | OlRenderFeature), resolu
     fill,
     stroke,
     image: new OlCircle({
-      radius: 7, fill, stroke,
+      radius: abcStyle.strokeWidth, fill, stroke,
     })
   });
 

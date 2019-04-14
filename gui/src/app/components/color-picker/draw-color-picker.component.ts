@@ -102,12 +102,12 @@ export class DrawColorPickerComponent implements OnInit, OnDestroy {
       });
   }
 
-  private initColors() {
+  initColors() {
     this.store.select(state => state.map)
       .pipe(take(1))
       .subscribe(mapState => {
-        this.activeBackgroundColor = mapState.style.activeBackgroundColor;
-        this.activeForegroundColor = mapState.style.activeForegroundColor;
+        this.activeForegroundColor = mapState.activeStyle.foreground;
+        this.activeBackgroundColor = mapState.activeStyle.background;
       })
   }
 }

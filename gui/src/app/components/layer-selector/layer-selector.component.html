@@ -1,6 +1,8 @@
 <div class="abc-layer-selector">
-  <select multiple class="form-control mb-2">
-    <option *ngFor="let layer of layers">{{ layer.name }} ({{ layer.type }})</option>
+  <select size="5" class="form-control mb-2" (change)="onActiveLayerChanged($event)" [ngModel]="activeLayerId">
+    <option *ngFor="let layer of layers"
+            [value]="layer.id"
+            [selected]="layer.id === activeLayerId">{{ layer.name }} ({{ layer.type }})</option>
   </select>
   <div class="d-flex">
     <a class="btn btn-outline-secondary mr-2" (click)="addLayer($event)"><img src="../../../assets/icons/plus_circle_1427.svg"/></a>

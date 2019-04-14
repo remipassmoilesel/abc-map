@@ -39,7 +39,7 @@ export class ProjectService extends AbstractService {
         const newProject: IProject = {
             id: ProjectHelper.generateProjectId(),
             name: projectName,
-            activeLayer: null,
+            activeLayerId: null,
             layers: [
                 LayerHelper.newPredefinedLayer(DefaultLayers.OSM_LAYER),
                 LayerHelper.newVectorLayer(),

@@ -9,26 +9,32 @@ export function projectReducer(state = projectInitialState, action: ProjectModul
 
   switch (action.type) {
     case ProjectModule.ActionTypes.PROJECT_LOADED: {
-      return {
-        ...state,
-        currentProject: _.cloneDeep(action.payload),
-      };
+      const newState = _.cloneDeep(state);
+      newState.currentProject = _.cloneDeep(action.payload);
+      return newState;
     }
 
     case ProjectModule.ActionTypes.VECTOR_LAYER_UPDATED: {
-      if(!state.currentProject){
-        return state;
+      const newState = _.cloneDeep(state);
+      if(!newState.currentProject){
+        return newState;
       }
-      const currentProject: IProject = _.cloneDeep(state.currentProject);
-      const layer: IMapLayer | undefined = _.find(currentProject.layers, lay => lay.id === action.payload.layerId);
+      const layer: IMapLayer | undefined = _.find(newState.currentProject.layers, lay => lay.id === action.payload.layerId);
       if(!layer || layer.type !== MapLayerType.Vector){
-        return state;
+        return newState;
       }
-      (layer as IVectorLayer).featureCollection = action.payload.featureCollection
-      return {
-        ...state,
-        currentProject,
+      (layer as IVectorLayer).featureCollection = action.payload.featureCollection;
+      return newState;
+    }
+
+    case ProjectModule.ActionTypes.ACTIVE_LAYER_CHANGED: {
+      const newState = _.cloneDeep(state);
+      if(!newState.currentProject){
+        return newState;
       }
+
+      newState.currentProject.activeLayerId = action.payload.layerId;
+      return newState;
     }
 
     default: {
