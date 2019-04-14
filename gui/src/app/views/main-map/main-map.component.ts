@@ -32,8 +32,9 @@ export class MainMapComponent implements OnInit, OnDestroy {
   colorChanged$?: Subscription;
 
   currentStyle: IAbcStyleContainer = {
-    foreground: 'rgb(0,0,0)',
-    background: 'rgb(0,0,0)',
+    foreground: 'rgba(38,33,249,0.61)',
+    background: 'rgba(65,255,73,0.16)',
+    width: 7,
   };
 
   constructor(private mapService: MapService,

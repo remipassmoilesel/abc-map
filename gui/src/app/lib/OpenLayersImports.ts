@@ -13,6 +13,7 @@ import Style from 'ol/style/Style';
 import Fill from 'ol/style/Fill';
 import Stroke from 'ol/style/Stroke';
 import Feature from 'ol/Feature';
+import Circle from 'ol/style/Circle';
 import RenderFeature from 'ol/render/Feature';
 
 const {fromLonLat} = require('ol/proj');
@@ -35,6 +36,7 @@ export {
   Stroke as OlStroke,
   Feature as OlFeature,
   RenderFeature as OlRenderFeature,
+  Circle as OlCircle,
 };
 
 export interface DrawEvent {
