@@ -1,7 +1,7 @@
 <div class="abc-drawing-toolbox">
 
-  <button *ngFor="let tool of tools" (click)="setTool(tool)" class='btn btn-secondary'>
-    <span [class]="'fa ' + tool.icon"></span> {{ tool.name }}
+  <button *ngFor="let tool of tools" (click)="setTool(tool)" class='btn btn-secondary' [title]="tool.name">
+    <span [class]="'fa ' + tool.icon"></span>
   </button>
 
 </div>

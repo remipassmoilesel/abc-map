@@ -1,15 +1,17 @@
 import {OlCircle, OlFeature, OlFill, OlRenderFeature, OlStroke, OlStyle} from '../OpenLayersImports';
 import {OpenLayersHelper} from './OpenLayersHelper';
 
-// TODO: improve style
+
+// TODO: improve style structure
+// TODO: add stroke width
+// TODO: add icons for points
+// TODO: add text style
 
 export interface IAbcStyleContainer {
   foreground: string;
   background: string;
   width: number;
 }
-
-// TODO: USE CACHE EVERYWHERE !!!
 
 const defaultStyle = new OlStyle({
   fill: new OlFill({color: 'navy'}),
@@ -21,6 +23,7 @@ const defaultStyle = new OlStyle({
   })
 });
 
+// TODO: use cache ?
 export function abcStyleToOlStyle(feature: (OlFeature | OlRenderFeature), resolution: number): (OlStyle | OlStyle[] | null) {
 
   const abcStyle = OpenLayersHelper.getStyle(feature);
