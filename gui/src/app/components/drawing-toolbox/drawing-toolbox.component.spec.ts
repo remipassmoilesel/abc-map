@@ -1,6 +1,7 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { DrawingToolboxComponent } from './drawing-toolbox.component';
+import {DrawingToolboxComponent} from './drawing-toolbox.component';
+import {AppModule} from '../../app.module';
 
 describe('DrawingToolboxComponent', () => {
   let component: DrawingToolboxComponent;
@@ -8,9 +9,9 @@ describe('DrawingToolboxComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DrawingToolboxComponent ]
+      imports: [AppModule]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

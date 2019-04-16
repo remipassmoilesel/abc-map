@@ -1,6 +1,7 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { LeftMenuComponent } from './left-menu.component';
+import {LeftMenuComponent} from './left-menu.component';
+import {AppModule} from '../../app.module';
 
 describe('LeftMenuComponent', () => {
   let component: LeftMenuComponent;
@@ -8,9 +9,9 @@ describe('LeftMenuComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ LeftMenuComponent ]
+      imports: [AppModule]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
