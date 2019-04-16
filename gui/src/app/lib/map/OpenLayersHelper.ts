@@ -1,6 +1,6 @@
 import {DrawingTool, DrawingTools} from './DrawingTool';
 import {geom} from 'openlayers';
-import {OlMap, OlObject, OlObjectReadOnly, OlSource} from '../OpenLayersImports';
+import {OlMap, OlObject, OlObjectReadOnly, OlSource, OlVector} from '../OpenLayersImports';
 import {IAbcStyleContainer} from './AbcStyles';
 import * as _ from 'lodash';
 import Vector from 'ol/layer/Vector';
@@ -44,6 +44,6 @@ export class OpenLayersHelper {
 
   public static findVectorLayer(map: OlMap, layerId: string): Vector | undefined {
     return _.find(map.getLayers().getArray(),
-      lay => lay instanceof Vector && OpenLayersHelper.getLayerId(lay.getSource()) === layerId) as Vector | undefined;
+      lay => lay instanceof OlVector && OpenLayersHelper.getLayerId(lay.getSource()) === layerId) as Vector | undefined;
   }
 }
