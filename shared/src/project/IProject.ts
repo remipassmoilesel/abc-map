@@ -3,7 +3,7 @@ import {IMapLayer} from './IMapLayer';
 
 export interface IProject {
     id: string;
-    activeLayerId: string | null;
+    activeLayerId: string;
     name: string;
     layers: IMapLayer[];
 }

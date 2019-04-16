@@ -35,14 +35,15 @@ export class ProjectService extends AbstractService {
         if (!projectName) {
             return Promise.reject('Project name is mandatory');
         }
+        const vectorLayer = LayerHelper.newVectorLayer();
         const newProject: IProject = {
             id: ProjectHelper.generateProjectId(),
             name: projectName,
-            activeLayerId: null,
             layers: [
                 LayerHelper.newPredefinedLayer(DefaultLayers.OSM_LAYER),
-                LayerHelper.newVectorLayer(),
+                vectorLayer,
             ],
+            activeLayerId: vectorLayer.id,
         };
         await this.projectDao.insert(newProject);
         return MongodbHelper.withoutMongoId(newProject);

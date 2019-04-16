@@ -67,12 +67,12 @@ export class LayerSelectorComponent implements OnInit, OnDestroy {
 
   setProjectLayers(project: IProject) {
     this.layers = project.layers;
-    this.activeLayerId = project.activeLayerId ? project.activeLayerId : project.layers[0].id;
+    this.activeLayerId = project.activeLayerId;
   }
 
   setEmptyLayers() {
     this.layers = [];
-    this.activeLayerId = undefined;
+    this.activeLayerId = '';
   }
 
 }
