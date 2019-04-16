@@ -54,11 +54,6 @@ export class LayerSelectorComponent implements OnInit, OnDestroy {
           this.toasts.errorForNonExisitingProject();
           return;
         }
-        if (project.layers.length < 2) {
-          this.toasts.error('Vous ne pouvez pas supprimer la dernière couche');
-          return;
-        }
-
         this.store.dispatch(new LayerRemoved({layerId: activeLayerId}));
       });
   }

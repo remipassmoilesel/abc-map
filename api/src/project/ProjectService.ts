@@ -1,7 +1,7 @@
 import {ProjectDao} from './ProjectDao';
 import * as loglevel from 'loglevel';
 import {DefaultLayers, IProject, IProjectEventContent, ProjectEvent, ProjectHelper} from 'abcmap-shared';
-import {LayerHelper} from './LayerHelper';
+import {LayerHelper} from 'abcmap-shared';
 import {MongodbHelper} from '../lib/database/MongodbHelper';
 import {AbstractService} from '../lib/AbstractService';
 import EventEmitter = require('events');

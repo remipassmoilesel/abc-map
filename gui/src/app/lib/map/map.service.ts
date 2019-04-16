@@ -33,11 +33,8 @@ export class MapService {
     });
   }
 
-  public listenDrawingToolChanged(): Observable<DrawingTool> {
-    return this.actions$.pipe(
-      ofType(ActionTypes.DRAWING_TOOL_CHANGED),
-      map((action: DrawingToolChanged) => action.tool)
-    );
+  public listenDrawingToolState(): Observable<DrawingTool> {
+    return this.store.select(state => state.map.drawingTool);
   }
 
   public listenMapState(): Observable<IMapState> {
@@ -48,8 +45,8 @@ export class MapService {
     this.store.dispatch(new DrawingToolChanged(tool));
   }
 
-  // TODO: remove/add only if layers change
-  public updateLayers(project: IProject, map: OlMap) {
+  public updateMapFromProject(project: IProject, map: OlMap) {
+    // TODO: make diff changes
     map.getLayers().clear();
 
     const layers = this.generateLayersFromProject(project);

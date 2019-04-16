@@ -1,7 +1,7 @@
 import {IProjectState, projectInitialState} from './project-state';
 import {ProjectModule} from './project-actions';
+import {IMapLayer, IVectorLayer, MapLayerType, LayerHelper} from 'abcmap-shared';
 import * as _ from 'lodash';
-import {IMapLayer, IVectorLayer, MapLayerType} from 'abcmap-shared';
 
 // All objects must be deep cloned
 
@@ -39,11 +39,14 @@ export function projectReducer(state = projectInitialState, action: ProjectModul
 
     case ProjectModule.ActionTypes.LAYER_REMOVED: {
       const newState = _.cloneDeep(state);
-      if (!newState.currentProject || newState.currentProject.layers.length < 2) {
+      if (!newState.currentProject) {
         return newState;
       }
 
       _.remove(newState.currentProject.layers, lay => lay.id === action.payload.layerId);
+      if(newState.currentProject.layers.length === 0){
+        newState.currentProject.layers = [LayerHelper.newVectorLayer()]
+      }
 
       if (newState.currentProject.activeLayerId === action.payload.layerId) {
         newState.currentProject.activeLayerId = newState.currentProject.layers[0].id;

@@ -1,6 +1,6 @@
-import {IPredefinedLayer, IVectorLayer, MapLayerType} from 'abcmap-shared';
 import * as uuid from 'uuid';
 import * as _ from 'lodash';
+import {IPredefinedLayer, IVectorLayer, MapLayerType} from './IMapLayer';
 
 export class LayerHelper {
 
