@@ -29,7 +29,7 @@ export class DrawingToolboxComponent implements OnInit {
       .pipe(take(1))
       .subscribe((project: IProject | undefined) => {
         if (!project) {
-          this.toasts.error('Vous devez d\'abord créer ou ouvrir un projet');
+          this.toasts.errorForNonExisitingProject();
           return;
         }
 

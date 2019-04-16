@@ -7,6 +7,7 @@ import {Store} from '@ngrx/store';
 import {IMainState} from '../../store';
 import {ProjectModule} from '../../store/project/project-actions';
 import {ToastService} from '../../lib/notifications/toast.service';
+import {take} from 'rxjs/operators';
 import LayerRemoved = ProjectModule.LayerRemoved;
 import LayerAdded = ProjectModule.LayerAdded;
 import ActiveLayerChanged = ProjectModule.ActiveLayerChanged;
@@ -42,11 +43,24 @@ export class LayerSelectorComponent implements OnInit, OnDestroy {
   }
 
   removeLayer($event: MouseEvent) {
-    if (this.activeLayerId) {
-      this.store.dispatch(new LayerRemoved({layerId: this.activeLayerId}));
-    } else {
-      this.toasts.error('Vous devez sélectionner une couche');
+    if (!this.activeLayerId) {
+      throw new Error('Active layer not set');
     }
+    const activeLayerId = this.activeLayerId;
+    this.projectService.listenProjectState()
+      .pipe(take(1))
+      .subscribe(project => {
+        if (!project) {
+          this.toasts.errorForNonExisitingProject();
+          return;
+        }
+        if (project.layers.length < 2) {
+          this.toasts.error('Vous ne pouvez pas supprimer la dernière couche');
+          return;
+        }
+
+        this.store.dispatch(new LayerRemoved({layerId: activeLayerId}));
+      });
   }
 
   addLayer($event: MouseEvent) {
@@ -61,7 +75,6 @@ export class LayerSelectorComponent implements OnInit, OnDestroy {
         } else {
           this.setEmptyLayers();
         }
-
       });
   }
 
