@@ -10,6 +10,7 @@ import ActiveForegroundColorChanged = MapModule.ActiveForegroundColorChanged;
 import ActiveBackgroundColorChanged = MapModule.ActiveBackgroundColorChanged;
 import ActionTypes = MapModule.ActionTypes;
 import {take} from 'rxjs/operators';
+import {MapService} from '../../lib/map/map.service';
 
 declare type ColorType = 'foreground' | 'background';
 
@@ -40,6 +41,7 @@ export class DrawColorPickerComponent implements OnInit, OnDestroy {
   colorChanged$?: Subscription;
 
   constructor(private store: Store<IMainState>,
+              private mapService: MapService,
               private actions$: Actions) {
   }
 
@@ -103,7 +105,7 @@ export class DrawColorPickerComponent implements OnInit, OnDestroy {
   }
 
   initColors() {
-    this.store.select(state => state.map)
+    this.mapService.listenMapState()
       .pipe(take(1))
       .subscribe(mapState => {
         this.activeForegroundColor = mapState.activeStyle.foreground;

@@ -6,17 +6,20 @@ import {LoggerFactory} from '../../lib/utils/LoggerFactory';
 import {ProjectService} from '../../lib/project/project.service';
 import {DrawEvent, OlEvent, olFromLonLat, OlMap, OlVectorSource, OlView} from '../../lib/OpenLayersImports';
 import {OpenLayersHelper} from '../../lib/map/OpenLayersHelper';
-import {DrawingTools} from '../../lib/map/DrawingTool';
+import {DrawingTool, DrawingTools} from '../../lib/map/DrawingTool';
 import {Actions, ofType} from '@ngrx/effects';
 import {MapModule} from '../../store/map/map-actions';
-import ActionTypes = MapModule.ActionTypes;
-import ActiveForegroundColorChanged = MapModule.ActiveForegroundColorChanged;
-import ActiveBackgroundColorChanged = MapModule.ActiveBackgroundColorChanged;
 import {IAbcStyleContainer} from '../../lib/map/AbcStyles';
 import * as _ from 'lodash';
 import {IMainState} from '../../store';
 import {Store} from '@ngrx/store';
-import {take} from 'rxjs/operators';
+import {flatMap, map, take} from 'rxjs/operators';
+import {zip} from 'rxjs/internal/observable/zip';
+import {of} from 'rxjs/internal/observable/of';
+import {IProject} from 'abcmap-shared';
+import ActionTypes = MapModule.ActionTypes;
+import ActiveForegroundColorChanged = MapModule.ActiveForegroundColorChanged;
+import ActiveBackgroundColorChanged = MapModule.ActiveBackgroundColorChanged;
 
 
 @Component({
@@ -48,7 +51,8 @@ export class MainMapComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.setupMap();
-    this.listenProjectState();
+    this.updateLayersWhenProjectLoaded();
+    this.updateDrawingInteractionWhenActiveLayerChange();
     this.listenDrawingToolState();
     this.listenStyleState();
     this.initStyle();
@@ -71,7 +75,7 @@ export class MainMapComponent implements OnInit, OnDestroy {
     });
   }
 
-  listenProjectState() {
+  updateLayersWhenProjectLoaded() {
     this.project$ = this.projectService.listenProjectLoaded()
       .subscribe(project => {
         if (!this.map || !project) {
@@ -86,15 +90,32 @@ export class MainMapComponent implements OnInit, OnDestroy {
       });
   }
 
+  updateDrawingInteractionWhenActiveLayerChange() {
+    this.projectService.listenProjectState()
+      .pipe(
+        flatMap(tool =>
+          zip(
+            this.mapService.listenMapState().pipe(take(1), map(mapState => mapState.drawingTool)),
+            of(tool)
+          ))
+      )
+      .subscribe(([tool, project]) => {
+        this.setDrawingTool(tool, project);
+      });
+
+  }
+
   listenDrawingToolState() {
     this.drawingTool$ = this.mapService.listenDrawingToolChanged()
-      .subscribe(tool => {
-        if (!this.map) {
-          return;
-        }
-
-        this.logger.info('Updating drawing tool ...');
-        this.mapService.setDrawInteractionOnMap(tool, this.map, this.onDrawEnd);
+      .pipe(
+        flatMap(tool =>
+          zip(
+            of(tool),
+            this.projectService.listenProjectState().pipe(take(1))
+          ))
+      )
+      .subscribe(([tool, project]) => {
+        this.setDrawingTool(tool, project);
       });
   }
 
@@ -135,6 +156,21 @@ export class MainMapComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe(style => {
         this.currentStyle = style;
-      })
+      });
+  }
+
+  setDrawingTool(tool: DrawingTool, project: IProject | undefined) {
+    if (!this.map || !project || !project.activeLayerId) {
+      return;
+    }
+
+    this.logger.info('Updating drawing tool ...');
+
+    const layer = OpenLayersHelper.findVectorLayer(this.map, project.activeLayerId);
+    if (!layer) {
+      this.mapService.removeAllDrawInteractions(this.map);
+    } else {
+      this.mapService.setDrawInteractionOnMap(tool, this.map, layer, this.onDrawEnd);
+    }
   }
 }

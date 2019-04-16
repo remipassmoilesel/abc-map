@@ -8,30 +8,26 @@ import {DrawingTool, DrawingTools} from './DrawingTool';
 import {Observable} from 'rxjs';
 import {MapModule} from '../../store/map/map-actions';
 import {OpenLayersHelper} from './OpenLayersHelper';
-import Layer from 'ol/layer/Layer';
-import Map from 'ol/Map';
-import Vector from 'ol/layer/Vector';
-import Draw from 'ol/interaction/Draw';
-import Feature from 'ol/Feature';
-import GeoJSON from 'ol/format/GeoJSON';
 import {FeatureCollection} from 'geojson';
 import {Actions, ofType} from '@ngrx/effects';
 import {map} from 'rxjs/operators';
 import DrawingToolChanged = MapModule.DrawingToolChanged;
 import ActionTypes = MapModule.ActionTypes;
+import {IMapState} from '../../store/map/map-state';
+import {OlDraw, OlFeature, OlGeoJSON, OlLayer, OlMap, OlVector} from '../OpenLayersImports';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MapService {
 
-  private geoJson = new GeoJSON();
+  private geoJson = new OlGeoJSON();
 
   constructor(private store: Store<IMainState>,
               private actions$: Actions) {
   }
 
-  public generateLayersFromProject(project: IProject): Layer[] {
+  public generateLayersFromProject(project: IProject): OlLayer[] {
     return _.map(project.layers, abcLayer => {
       return OpenLayersLayerFactory.toOlLayer(abcLayer);
     });
@@ -44,12 +40,16 @@ export class MapService {
     );
   }
 
+  public listenMapState(): Observable<IMapState> {
+    return this.store.select(state => state.map);
+  }
+
   public setDrawingTool(tool: DrawingTool): void {
     this.store.dispatch(new DrawingToolChanged(tool));
   }
 
   // TODO: remove/add only if layers change
-  public updateLayers(project: IProject, map: Map) {
+  public updateLayers(project: IProject, map: OlMap) {
     map.getLayers().clear();
 
     const layers = this.generateLayersFromProject(project);
@@ -65,7 +65,7 @@ export class MapService {
   public addLayerSourceChangedListener(map: ol.Map, listener: ol.EventsListenerFunctionType): void {
     const layers = map.getLayers().getArray();
     _.forEach(layers, lay => {
-      if (lay instanceof Layer) {
+      if (lay instanceof OlLayer) {
         lay.getSource().on('change', listener);
       }
     });
@@ -74,28 +74,21 @@ export class MapService {
   public removeLayerSourceChangedListener(map: ol.Map, listener: ol.EventsListenerFunctionType) {
     const layers = map.getLayers().getArray();
     _.forEach(layers, lay => {
-      if (lay instanceof Layer) {
+      if (lay instanceof OlLayer) {
         lay.un('change', listener);
       }
     });
   }
 
-  public setDrawInteractionOnMap(tool: DrawingTool, map: Map, listener: (event: any) => any) {
+  public setDrawInteractionOnMap(tool: DrawingTool, map: OlMap, vectorLayer: OlVector, listener: (event: any) => any) {
     this.removeAllDrawInteractions(map);
 
     if (tool.id === DrawingTools.None.id) {
       return;
     }
 
-    const firstVector: Vector | undefined = _.find(map.getLayers().getArray(),
-      lay => lay instanceof Vector) as Vector | undefined;
-
-    if (!firstVector) {
-      throw new Error('Vector layer not found');
-    }
-
-    const draw = new Draw({
-      source: firstVector.getSource(),
+    const draw = new OlDraw({
+      source: vectorLayer.getSource(),
       type: OpenLayersHelper.toolToGeometryType(tool),
     });
 
@@ -104,13 +97,13 @@ export class MapService {
     map.addInteraction(draw);
   }
 
-  private removeAllDrawInteractions(map: ol.Map) {
+  public removeAllDrawInteractions(map: ol.Map) {
     const allInteractions = map.getInteractions().getArray();
-    const drawInter = _.filter(allInteractions, inter => inter instanceof Draw);
+    const drawInter = _.filter(allInteractions, inter => inter instanceof OlDraw);
     _.forEach(drawInter, inter => map.removeInteraction(inter));
   }
 
-  public featuresToGeojson(features: Feature[]): FeatureCollection {
+  public featuresToGeojson(features: OlFeature[]): FeatureCollection {
     return this.geoJson.writeFeaturesObject(features) as any;
   }
 

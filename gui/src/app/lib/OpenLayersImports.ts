@@ -15,6 +15,9 @@ import Stroke from 'ol/style/Stroke';
 import Feature from 'ol/Feature';
 import Circle from 'ol/style/Circle';
 import RenderFeature from 'ol/render/Feature';
+import Vector from 'ol/layer/Vector';
+import Draw from 'ol/interaction/Draw';
+import GeoJSON from 'ol/format/GeoJSON';
 
 const {fromLonLat} = require('ol/proj');
 
@@ -37,6 +40,9 @@ export {
   Feature as OlFeature,
   RenderFeature as OlRenderFeature,
   Circle as OlCircle,
+  GeoJSON as OlGeoJSON,
+  Vector as OlVector,
+  Draw as OlDraw
 };
 
 export interface DrawEvent {
