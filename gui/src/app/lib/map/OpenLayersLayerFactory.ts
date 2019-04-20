@@ -1,5 +1,5 @@
-import {IMapLayer, IPredefinedLayer, IRasterLayer, IVectorLayer, MapLayerType, PredefinedLayerPreset} from 'abcmap-shared';
-import {OlLayer, OlOSM, OlTile, OlTileWMS, OlVectorLayer, OlVectorSource} from '../OpenLayersImports';
+import {IMapLayer, IPredefinedLayer, IVectorLayer, IWmsLayer, MapLayerType, PredefinedLayerPreset} from 'abcmap-shared';
+import {OlLayer, OlOSM, OlTileLayer, OlTileWMS, OlVectorLayer, OlVectorSource} from '../OpenLayersImports';
 import GeoJSON from 'ol/format/GeoJSON';
 import {abcStyleToOlStyle} from './AbcStyles';
 import {OpenLayersHelper} from './OpenLayersHelper';
@@ -16,7 +16,7 @@ export class OpenLayersLayerFactory {
         olLayer = this.toPredefinedLayer(abcLayer as IPredefinedLayer);
         break;
       case MapLayerType.Raster:
-        olLayer = this.toRasterLayer(abcLayer as IRasterLayer);
+        olLayer = this.toRasterLayer(abcLayer as IWmsLayer);
         break;
       case MapLayerType.Vector:
         olLayer = this.toVectorLayer(abcLayer as IVectorLayer);
@@ -29,10 +29,10 @@ export class OpenLayersLayerFactory {
     return olLayer;
   }
 
-  private static toPredefinedLayer(abcLayer: IPredefinedLayer): OlTile {
+  private static toPredefinedLayer(abcLayer: IPredefinedLayer): OlTileLayer {
     switch (abcLayer.preset) {
       case PredefinedLayerPreset.OSM:
-        return new OlTile({
+        return new OlTileLayer({
           source: new OlOSM()
         });
       default:
@@ -40,11 +40,11 @@ export class OpenLayersLayerFactory {
     }
   }
 
-  private static toRasterLayer(abcLayer: IRasterLayer): OlTile {
-    return new OlTile({
+  private static toRasterLayer(abcLayer: IWmsLayer): OlTileLayer {
+    return new OlTileLayer({
       source: new OlTileWMS({
         url: abcLayer.url,
-        params: {}
+        params: abcLayer.wmsParams
       })
     });
   }

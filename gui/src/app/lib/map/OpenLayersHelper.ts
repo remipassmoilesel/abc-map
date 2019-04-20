@@ -1,6 +1,6 @@
 import {DrawingTool, DrawingTools} from './DrawingTool';
 import {geom} from 'openlayers';
-import {OlBase, OlMap, OlObject, OlObjectReadOnly, OlVector, OlVectorSource} from '../OpenLayersImports';
+import {OlBase, OlMap, OlObject, OlObjectReadOnly, OlTileLoadFunctionType, OlVector, OlVectorSource} from '../OpenLayersImports';
 import {IAbcStyleContainer} from './AbcStyles';
 import * as _ from 'lodash';
 import Vector from 'ol/layer/Vector';
@@ -46,4 +46,17 @@ export class OpenLayersHelper {
     return _.find(map.getLayers().getArray(),
       lay => lay instanceof OlVector && OpenLayersHelper.getLayerId(lay) === layerId) as Vector | undefined;
   }
+
+  public static createWmsLoaderWithAuthentication(username: string, password: string): OlTileLoadFunctionType {
+    return (tile: any, src: string) => {
+      const client = new XMLHttpRequest();
+      client.open('GET', src);
+      client.setRequestHeader('Authorization', 'Basic ' + window.btoa(username + ':' + password));
+      client.onload = function() {
+        tile.getImage().src = src;
+      };
+      client.send();
+    };
+  }
+
 }

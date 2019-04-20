@@ -17,9 +17,10 @@ export interface IVectorLayer extends IMapLayer {
     featureCollection: FeatureCollection
 }
 
-export interface IRasterLayer extends IMapLayer {
+export interface IWmsLayer extends IMapLayer {
     type: MapLayerType.Raster;
     url: string;
+    wmsParams: { [k: string]: string };
 }
 
 export enum PredefinedLayerPreset {

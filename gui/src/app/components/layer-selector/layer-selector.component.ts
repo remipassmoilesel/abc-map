@@ -11,6 +11,7 @@ import {take} from 'rxjs/operators';
 import LayerRemoved = ProjectModule.LayerRemoved;
 import LayerAdded = ProjectModule.LayerAdded;
 import ActiveLayerChanged = ProjectModule.ActiveLayerChanged;
+import {HttpClient} from '@angular/common/http';
 
 @Component({
   selector: 'abc-layer-selector',
@@ -26,6 +27,7 @@ export class LayerSelectorComponent implements OnInit, OnDestroy {
 
   constructor(private store: Store<IMainState>,
               private toasts: ToastService,
+              private httpClient: HttpClient,
               private projectService: ProjectService) {
   }
 

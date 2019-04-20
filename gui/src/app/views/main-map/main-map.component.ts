@@ -4,7 +4,7 @@ import {Subscription} from 'rxjs';
 import {RxUtils} from '../../lib/utils/RxUtils';
 import {LoggerFactory} from '../../lib/utils/LoggerFactory';
 import {ProjectService} from '../../lib/project/project.service';
-import {DrawEvent, OlEvent, olFromLonLat, OlMap, OlVectorSource, OlView} from '../../lib/OpenLayersImports';
+import {DrawEvent, OlEvent, olFromLonLat, OlMap, OlTileLayer, OlTileWMS, OlVectorSource, OlView} from '../../lib/OpenLayersImports';
 import {OpenLayersHelper} from '../../lib/map/OpenLayersHelper';
 import {DrawingTool, DrawingTools} from '../../lib/map/DrawingTool';
 import {Actions, ofType} from '@ngrx/effects';
@@ -88,6 +88,7 @@ export class MainMapComponent implements OnInit, OnDestroy {
           OlMapHelper.removeLayerSourceChangedListener(this.map, this.onLayerSourceChange);
           OlMapHelper.updateMapFromProject(project, this.map);
           OlMapHelper.addLayerSourceChangedListener(this.map, this.onLayerSourceChange);
+
           this.setDrawingInteraction(tool, project);
         }
       });
