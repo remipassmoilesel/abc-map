@@ -20,6 +20,7 @@ import {IProject} from 'abcmap-shared';
 import ActionTypes = MapModule.ActionTypes;
 import ActiveForegroundColorChanged = MapModule.ActiveForegroundColorChanged;
 import ActiveBackgroundColorChanged = MapModule.ActiveBackgroundColorChanged;
+import {OlMapHelper} from './OlMapHelper';
 
 
 @Component({
@@ -84,9 +85,9 @@ export class MainMapComponent implements OnInit, OnDestroy {
       )))
       .subscribe(([project, tool]) => {
         if (project && this.map) {
-          this.mapService.removeLayerSourceChangedListener(this.map, this.onLayerSourceChange);
-          this.mapService.updateMapFromProject(project, this.map);
-          this.mapService.addLayerSourceChangedListener(this.map, this.onLayerSourceChange);
+          OlMapHelper.removeLayerSourceChangedListener(this.map, this.onLayerSourceChange);
+          OlMapHelper.updateMapFromProject(project, this.map);
+          OlMapHelper.addLayerSourceChangedListener(this.map, this.onLayerSourceChange);
           this.setDrawingInteraction(tool, project);
         }
       });
@@ -114,9 +115,9 @@ export class MainMapComponent implements OnInit, OnDestroy {
 
     const layer = OpenLayersHelper.findVectorLayer(this.map, project.activeLayerId);
     if (!layer) {
-      this.mapService.removeAllDrawInteractions(this.map);
+      OlMapHelper.removeAllDrawInteractions(this.map);
     } else {
-      this.mapService.setDrawInteractionOnMap(tool, this.map, layer, this.onDrawEnd);
+      OlMapHelper.setDrawInteractionOnMap(tool, this.map, layer, this.onDrawEnd);
     }
 
   }
@@ -154,7 +155,7 @@ export class MainMapComponent implements OnInit, OnDestroy {
   onLayerSourceChange = (event: OlEvent) => {
     if (event.target instanceof OlVectorSource) {
       const source: OlVectorSource = event.target;
-      const geojsonFeatures = this.mapService.featuresToGeojson(source.getFeatures());
+      const geojsonFeatures = OlMapHelper.featuresToGeojson(source.getFeatures());
       const layerId = OpenLayersHelper.getLayerId(source);
 
       this.projectService.updateVectorLayer(layerId, geojsonFeatures);
