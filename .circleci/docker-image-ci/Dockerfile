@@ -5,7 +5,7 @@ USER root
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && apt-get install -y software-properties-common \
-    && apt-get install -y nodejs npm curl tzdata locales mongodb libxss1 \
+    && apt-get install -y nodejs npm curl tzdata locales mongodb chromium-browser \
     && npm i -g npm
 
 RUN locale-gen fr_FR.UTF-8
