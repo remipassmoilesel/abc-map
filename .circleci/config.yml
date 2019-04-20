@@ -3,7 +3,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: remipassmoilesel/nodejs-build:0.1
+      - image: remipassmoilesel/nodejs-build:0.2
 
     working_directory: ~/repo
 
