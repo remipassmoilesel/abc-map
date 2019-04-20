@@ -4,7 +4,7 @@ import {LocalStorageService, LSKey} from '../local-storage/local-storage.service
 import * as loglevel from 'loglevel';
 import {Observable, throwError} from 'rxjs';
 import {tap} from 'rxjs/internal/operators/tap';
-import {IProject} from 'abcmap-shared';
+import {IMapLayer, IProject} from 'abcmap-shared';
 import {catchError, first, flatMap, map} from 'rxjs/operators';
 import {ProjectModule} from '../../store/project/project-actions';
 import {Store} from '@ngrx/store';
@@ -74,6 +74,11 @@ export class ProjectService {
       .pipe(map(projectState => projectState.currentProject));
   }
 
+  public listenLayersState(): Observable<IMapLayer[]> {
+    return this.store
+      .select(state => state.project.currentProject ? state.project.currentProject.layers : []);
+  }
+
   public listenProjectLoaded(): Observable<IProject | undefined> {
     return this.actions$.pipe(
       ofType(ActionTypes.PROJECT_LOADED),
@@ -87,10 +92,10 @@ export class ProjectService {
         first(),
         flatMap(project => {
           if (!project) {
-            this.toasts.error('Vous devez d\'abord créer un projet');
+            this.toasts.errorForNonExisitingProject();
             return throwError(new Error('Project is undefined'));
           }
-          return this.projectClient.saveProject(project)
+          return this.projectClient.saveProject(project);
         }),
         tap(project => {
           this.toasts.info('Projet enregistré !');

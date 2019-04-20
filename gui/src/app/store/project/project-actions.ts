@@ -10,8 +10,9 @@ export namespace ProjectModule {
     PROJECT_LOADED = '[project] Project updated',
     PROJECT_CLOSED = '[project] Project closed',
     VECTOR_LAYER_UPDATED = '[project] Vector layer updated',
+    ACTIVE_LAYER_CHANGED = '[project] Active layer changed',
     LAYER_ADDED = '[project] Layer added',
-    LAYER_REMOVED = '[project] Layer removed'
+    LAYER_REMOVED = '[project] Layer removed',
   }
 
   export class ProjectLoaded implements Action {
@@ -30,6 +31,12 @@ export namespace ProjectModule {
     constructor(public payload: { layerId: string, featureCollection: FeatureCollection }) {}
   }
 
+  export class ActiveLayerChanged implements Action {
+    readonly type = ActionTypes.ACTIVE_LAYER_CHANGED;
+
+    constructor(public payload: { layerId: string }) {}
+  }
+
   export class LayerAdded implements Action {
     readonly type = ActionTypes.LAYER_ADDED;
 
@@ -44,6 +51,7 @@ export namespace ProjectModule {
 
   export type ActionsUnion = ProjectLoaded
     | ProjectClosed
+    | ActiveLayerChanged
     | LayerAdded
     | LayerRemoved
     | VectorLayerUpdated;

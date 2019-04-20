@@ -9,6 +9,8 @@ import {RxUtils} from '../../lib/utils/RxUtils';
 import ActiveForegroundColorChanged = MapModule.ActiveForegroundColorChanged;
 import ActiveBackgroundColorChanged = MapModule.ActiveBackgroundColorChanged;
 import ActionTypes = MapModule.ActionTypes;
+import {take} from 'rxjs/operators';
+import {MapService} from '../../lib/map/map.service';
 
 declare type ColorType = 'foreground' | 'background';
 
@@ -20,8 +22,8 @@ declare type ColorType = 'foreground' | 'background';
 export class DrawColorPickerComponent implements OnInit, OnDestroy {
 
   activeColorType: ColorType = 'foreground';
-  activeForegroundColor = 'rgb(255,255,255)';
-  activeBackgroundColor = 'rgb(255,255,255)';
+  activeForegroundColor = 'rgb(220,220,220)';
+  activeBackgroundColor = 'rgb(220,220,220)';
 
   selectedColor: string = 'black';
   colorHistory: string[] = [];
@@ -39,12 +41,14 @@ export class DrawColorPickerComponent implements OnInit, OnDestroy {
   colorChanged$?: Subscription;
 
   constructor(private store: Store<IMainState>,
+              private mapService: MapService,
               private actions$: Actions) {
   }
 
   ngOnInit() {
     this.fillColorHistory();
     this.listenColorChanges();
+    this.initColors();
   }
 
   ngOnDestroy(): void {
@@ -80,7 +84,7 @@ export class DrawColorPickerComponent implements OnInit, OnDestroy {
   }
 
   fillColorHistory() {
-    _.times(6, i => this.colorHistory.push('rgb(255,255,255'));
+    _.times(6, i => this.colorHistory.push('rgb(220,220,220)'));
   }
 
   listenColorChanges() {
@@ -98,5 +102,14 @@ export class DrawColorPickerComponent implements OnInit, OnDestroy {
           this.activeBackgroundColor = action.color;
         }
       });
+  }
+
+  initColors() {
+    this.mapService.listenMapState()
+      .pipe(take(1))
+      .subscribe(mapState => {
+        this.activeForegroundColor = mapState.activeStyle.foreground;
+        this.activeBackgroundColor = mapState.activeStyle.background;
+      })
   }
 }

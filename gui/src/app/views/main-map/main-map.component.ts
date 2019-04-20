@@ -6,14 +6,20 @@ import {LoggerFactory} from '../../lib/utils/LoggerFactory';
 import {ProjectService} from '../../lib/project/project.service';
 import {DrawEvent, OlEvent, olFromLonLat, OlMap, OlVectorSource, OlView} from '../../lib/OpenLayersImports';
 import {OpenLayersHelper} from '../../lib/map/OpenLayersHelper';
-import {DrawingTools} from '../../lib/map/DrawingTool';
+import {DrawingTool, DrawingTools} from '../../lib/map/DrawingTool';
 import {Actions, ofType} from '@ngrx/effects';
 import {MapModule} from '../../store/map/map-actions';
+import {IAbcStyleContainer} from '../../lib/map/AbcStyles';
+import * as _ from 'lodash';
+import {IMainState} from '../../store';
+import {Store} from '@ngrx/store';
+import {flatMap, take} from 'rxjs/operators';
+import {zip} from 'rxjs/internal/observable/zip';
+import {of} from 'rxjs/internal/observable/of';
+import {IProject} from 'abcmap-shared';
 import ActionTypes = MapModule.ActionTypes;
 import ActiveForegroundColorChanged = MapModule.ActiveForegroundColorChanged;
 import ActiveBackgroundColorChanged = MapModule.ActiveBackgroundColorChanged;
-import {IAbcStyleContainer} from '../../lib/map/AbcStyles';
-import * as _ from 'lodash';
 
 
 @Component({
@@ -27,24 +33,27 @@ export class MainMapComponent implements OnInit, OnDestroy {
 
   map?: OlMap;
 
-  project$?: Subscription;
+  currentStyle: IAbcStyleContainer = {
+    foreground: 'rgba(0,0,0)',
+    background: 'rgba(0,0,0)',
+    strokeWidth: 7,
+  };
+
   drawingTool$?: Subscription;
   colorChanged$?: Subscription;
-
-  currentStyle: IAbcStyleContainer = {
-    foreground: 'rgb(0,0,0)',
-    background: 'rgb(0,0,0)',
-  };
+  project$?: Subscription;
 
   constructor(private mapService: MapService,
               private actions$: Actions,
+              private store: Store<IMainState>,
               private projectService: ProjectService) {
   }
 
   ngOnInit() {
-    this.setupMap();
-    this.listenProjectState();
-    this.listenDrawingToolState();
+    this.initMap();
+    this.updateMapOnProjectChange();
+    this.updateDrawingInteractionOnToolChange();
+    this.initStyle();
     this.listenStyleState();
   }
 
@@ -54,7 +63,7 @@ export class MainMapComponent implements OnInit, OnDestroy {
     RxUtils.unsubscribe(this.colorChanged$);
   }
 
-  setupMap() {
+  initMap() {
     this.map = new OlMap({
       target: 'main-openlayers-map',
       layers: [],
@@ -65,46 +74,59 @@ export class MainMapComponent implements OnInit, OnDestroy {
     });
   }
 
-  listenProjectState() {
-    this.project$ = this.projectService.listenProjectLoaded()
-      .subscribe(project => {
-        if (!this.map || !project) {
-          return;
+  updateMapOnProjectChange(){
+    this.project$ = this.projectService.listenProjectState()
+      .pipe(flatMap(project => zip(
+        of(project),
+        this.mapService.listenDrawingToolState().pipe(take(1))
+      )))
+      .subscribe(([project, tool]) => {
+        if(project && this.map){
+          this.mapService.removeLayerSourceChangedListener(this.map, this.onLayerSourceChange);
+          this.mapService.updateMapFromProject(project, this.map);
+          this.mapService.addLayerSourceChangedListener(this.map, this.onLayerSourceChange);
+          this.setDrawingInteraction(tool, project);
         }
-        this.logger.info('Updating layers ...');
+      })
+  }
 
-        this.mapService.removeLayerSourceChangedListener(this.map, this.onLayerSourceChange);
-        this.mapService.updateLayers(project, this.map);
-        this.mapService.setDrawingTool(DrawingTools.None);
-        this.mapService.addLayerSourceChangedListener(this.map, this.onLayerSourceChange);
+  updateDrawingInteractionOnToolChange(){
+    this.drawingTool$ = this.mapService.listenDrawingToolState()
+      .pipe(
+        flatMap(tool =>
+          zip(
+            of(tool),
+            this.projectService.listenProjectState().pipe(take(1))
+          ))
+      )
+      .subscribe(([tool, project]) => {
+        this.setDrawingInteraction(tool, project);
       });
   }
 
-  listenDrawingToolState() {
-    this.drawingTool$ = this.mapService.listenDrawingToolChanged()
-      .subscribe(tool => {
-        if (!this.map) {
-          return;
-        }
-
-        this.logger.info('Updating drawing tool ...');
-        this.mapService.setDrawInteractionOnMap(tool, this.map, this.onDrawEnd);
-      });
-  }
-
-  onDrawEnd = (event: DrawEvent) => {
-    OpenLayersHelper.setStyle(event.feature, _.cloneDeep(this.currentStyle));
-  };
-
-  onLayerSourceChange = (event: OlEvent) => {
-    if (event.target instanceof OlVectorSource) {
-      const source: OlVectorSource = event.target;
-      const geojsonFeatures = this.mapService.featuresToGeojson(source.getFeatures());
-      const layerId = OpenLayersHelper.getLayerId(source);
-
-      this.projectService.updateVectorLayer(layerId, geojsonFeatures);
+  setDrawingInteraction(tool: DrawingTool, project: IProject | undefined) {
+    if (!this.map || !project || !project.activeLayerId) {
+      return;
     }
-  };
+    this.logger.info('Updating drawing tool ...');
+
+    const layer = OpenLayersHelper.findVectorLayer(this.map, project.activeLayerId);
+    if (!layer) {
+      this.mapService.removeAllDrawInteractions(this.map);
+    } else {
+      this.mapService.setDrawInteractionOnMap(tool, this.map, layer, this.onDrawEnd);
+    }
+
+  }
+
+  initStyle() {
+    this.store
+      .select(state => state.map.activeStyle)
+      .pipe(take(1))
+      .subscribe(style => {
+        this.currentStyle = style;
+      });
+  }
 
   listenStyleState() {
     this.colorChanged$ = this.actions$
@@ -122,4 +144,19 @@ export class MainMapComponent implements OnInit, OnDestroy {
         }
       });
   }
+
+  onDrawEnd = (event: DrawEvent) => {
+    OpenLayersHelper.setStyle(event.feature, _.cloneDeep(this.currentStyle));
+  };
+
+  onLayerSourceChange = (event: OlEvent) => {
+    if (event.target instanceof OlVectorSource) {
+      const source: OlVectorSource = event.target;
+      const geojsonFeatures = this.mapService.featuresToGeojson(source.getFeatures());
+      const layerId = OpenLayersHelper.getLayerId(source);
+
+      this.projectService.updateVectorLayer(layerId, geojsonFeatures);
+    }
+  };
+
 }

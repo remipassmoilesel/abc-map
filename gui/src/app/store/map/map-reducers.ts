@@ -15,13 +15,13 @@ export function mapReducer(state = mapInitialState, action: MapModule.ActionsUni
 
     case MapModule.ActionTypes.ACTIVE_FOREGROUND_COLOR_CHANGED: {
       const newState = _.cloneDeep(state);
-      state.style.activeForegroundColor = action.color;
+      state.activeStyle.foreground = action.color;
       return newState;
     }
 
     case MapModule.ActionTypes.ACTIVE_BACKGROUND_COLOR_CHANGED: {
       const newState = _.cloneDeep(state);
-      state.style.activeBackgroundColor = action.color;
+      state.activeStyle.background = action.color;
       return newState;
     }
 

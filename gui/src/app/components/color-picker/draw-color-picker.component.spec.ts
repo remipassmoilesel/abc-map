@@ -1,6 +1,7 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { DrawColorPickerComponent } from './draw-color-picker.component';
+import {DrawColorPickerComponent} from './draw-color-picker.component';
+import {AppModule} from '../../app.module';
 
 describe('DrawColorPickerComponent', () => {
   let component: DrawColorPickerComponent;
@@ -8,9 +9,9 @@ describe('DrawColorPickerComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DrawColorPickerComponent ]
+      imports: [AppModule]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

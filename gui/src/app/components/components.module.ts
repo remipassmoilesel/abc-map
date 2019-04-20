@@ -9,9 +9,10 @@ import {FormsModule} from "@angular/forms";
 import {DrawingToolboxComponent} from './drawing-toolbox/drawing-toolbox.component';
 import { DrawColorPickerComponent } from './color-picker/draw-color-picker.component';
 import {ColorPickerModule} from 'ngx-color-picker';
+import { LeftMenuComponent } from './left-menu/left-menu.component';
 
 @NgModule({
-  declarations: [TopBarComponent, RightMenuComponent, LayerSelectorComponent, DrawingToolboxComponent, DrawColorPickerComponent],
+  declarations: [TopBarComponent, RightMenuComponent, LayerSelectorComponent, DrawingToolboxComponent, DrawColorPickerComponent, LeftMenuComponent],
   imports: [
     CommonModule,
     NgbModule,
@@ -22,7 +23,8 @@ import {ColorPickerModule} from 'ngx-color-picker';
   exports: [
     TopBarComponent,
     RightMenuComponent,
-    LayerSelectorComponent
+    LeftMenuComponent,
+    LayerSelectorComponent,
   ]
 })
 export class ComponentsModule {

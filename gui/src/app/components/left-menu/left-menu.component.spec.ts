@@ -1,13 +1,11 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import {MainMapComponent} from './main-map.component';
-import {StoreModule} from '@ngrx/store';
-import {metaReducers, reducers} from '../../store';
+import {LeftMenuComponent} from './left-menu.component';
 import {AppModule} from '../../app.module';
 
-describe('MainMapComponent', () => {
-  let component: MainMapComponent;
-  let fixture: ComponentFixture<MainMapComponent>;
+describe('LeftMenuComponent', () => {
+  let component: LeftMenuComponent;
+  let fixture: ComponentFixture<LeftMenuComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -17,7 +15,7 @@ describe('MainMapComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MainMapComponent);
+    fixture = TestBed.createComponent(LeftMenuComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

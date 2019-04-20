@@ -1,7 +1,4 @@
 
-$top-bar-height: 55px;
-$right-menu-with: 500px;
-
 .abc-main-app-container {
   position: fixed;
   bottom: 0;
@@ -23,9 +20,9 @@ $right-menu-with: 500px;
   align-content: stretch;
 
   .abc-topbar-wrapper {
-    height: $top-bar-height;
-    min-height: $top-bar-height;
-    max-height: $top-bar-height;
+    height: 55px;
+    min-height: 55px;
+    max-height: 55px;
   }
 
   .abc-center-panel {
@@ -41,13 +38,22 @@ $right-menu-with: 500px;
       max-width: 100%;
     }
 
+    .left-menu-wrapper {
+      min-height: 100%;
+      max-height: 100%;
+
+      width: 50px;
+      min-width: 50px;
+      max-width: 50px;
+    }
+
     .right-menu-wrapper {
       min-height: 100%;
       max-height: 100%;
 
-      width: $right-menu-with;
-      min-width: $right-menu-with;
-      max-width: $right-menu-with;
+      width: 400px;
+      min-width: 400px;
+      max-width: 400px;
     }
 
   }

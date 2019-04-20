@@ -1,11 +1,10 @@
 import {ProjectDao} from './ProjectDao';
 import * as loglevel from 'loglevel';
-import {DefaultLayers, IProject, IProjectEventContent, ProjectEvent} from 'abcmap-shared';
-import {ProjectHelper} from './ProjectHelper';
-import {LayerHelper} from './LayerHelper';
-import EventEmitter = require('events');
+import {DefaultLayers, IProject, IProjectEventContent, ProjectEvent, ProjectHelper} from 'abcmap-shared';
+import {LayerHelper} from 'abcmap-shared';
 import {MongodbHelper} from '../lib/database/MongodbHelper';
 import {AbstractService} from '../lib/AbstractService';
+import EventEmitter = require('events');
 
 export class ProjectService extends AbstractService {
 
@@ -36,14 +35,15 @@ export class ProjectService extends AbstractService {
         if (!projectName) {
             return Promise.reject('Project name is mandatory');
         }
+        const vectorLayer = LayerHelper.newVectorLayer();
         const newProject: IProject = {
             id: ProjectHelper.generateProjectId(),
             name: projectName,
-            activeLayer: null,
             layers: [
                 LayerHelper.newPredefinedLayer(DefaultLayers.OSM_LAYER),
-                LayerHelper.newVectorLayer(),
+                vectorLayer,
             ],
+            activeLayerId: vectorLayer.id,
         };
         await this.projectDao.insert(newProject);
         return MongodbHelper.withoutMongoId(newProject);

@@ -16,4 +16,7 @@ export class ToastService {
     this.toastr.error(message);
   }
 
+  errorForNonExisitingProject() {
+    this.error('Vous devez d\'abord créer ou ouvrir un projet');
+  }
 }

@@ -9,6 +9,9 @@
   </div>
 
   <div class="d-flex mb-2">
+
+    <!-- Main color picker -->
+
     <span [style.background]="selectedColor"
       [cpToggle]="true"
       [cpDialogDisplay]="'inline'"
@@ -18,33 +21,29 @@
 
 
     <div class="d-flex flex-column">
-
-      <div class="ml-2 d-flex flex-column flex-grow-1">
-
-        <div class="d-flex justify-content-between align-items-center p-2">
-          <input type="radio" value="foreground" [(ngModel)]="activeColorType" class="mr-1">
-          Premier plan
-          <a [ngStyle]="{background: activeForegroundColor}" class="btn btn-outline-secondary color-cell ml-2"></a>
-        </div>
-
-        <div class="d-flex justify-content-between align-items-center p-2">
-          <input type="radio" value="background" [(ngModel)]="activeColorType" class="mr-1">
-          Second plan
-          <a [ngStyle]="{background: activeBackgroundColor}" class="btn btn-outline-secondary color-cell ml-2"></a>
-        </div>
-      </div>
-
       <div class="d-flex">
-
         <div class="d-flex color-history flex-column ml-2">
-
           <div class="btn btn-outline-secondary color-cell mt-2" *ngFor="let color of colorHistory"
             [style.background]="color"
             (click)="onPresetSelected(color)"></div>
-
         </div>
       </div>
+    </div>
 
+  </div>
+
+  <div class="d-flex flex-row align-items-center p-2">
+    <div class="d-flex align-items-center p-2">
+      <input type="radio" value="foreground" [(ngModel)]="activeColorType" class="mr-1">
+      Premier plan
+      <a [ngStyle]="{background: activeForegroundColor}" class="btn btn-outline-secondary color-cell ml-2"></a>
+    </div>
+
+    <div class="d-flex align-items-center p-2">
+      <input type="radio" value="background" [(ngModel)]="activeColorType" class="mr-1">
+      Second plan
+      <a [ngStyle]="{background: activeBackgroundColor}" class="btn btn-outline-secondary color-cell ml-2"></a>
     </div>
   </div>
+
 </div>

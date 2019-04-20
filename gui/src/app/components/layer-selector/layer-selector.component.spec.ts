@@ -1,6 +1,7 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { LayerSelectorComponent } from './layer-selector.component';
+import {LayerSelectorComponent} from './layer-selector.component';
+import {AppModule} from '../../app.module';
 
 describe('LayerSelectorComponent', () => {
   let component: LayerSelectorComponent;
@@ -8,9 +9,9 @@ describe('LayerSelectorComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ LayerSelectorComponent ]
+      imports: [AppModule]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

@@ -1,0 +1,12 @@
+@import "~src/assets/bootstrap_theme";
+
+.left-menu-bar {
+  background: $light;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+
+}
