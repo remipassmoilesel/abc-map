@@ -24,7 +24,9 @@ import ActiveBackgroundColorChanged = MapModule.ActiveBackgroundColorChanged;
 
 @Component({
   selector: 'abc-main-map',
-  templateUrl: './main-map.component.html',
+  template: `
+    <div id="main-openlayers-map"></div>
+  `,
   styleUrls: ['./main-map.component.scss']
 })
 export class MainMapComponent implements OnInit, OnDestroy {
@@ -74,23 +76,23 @@ export class MainMapComponent implements OnInit, OnDestroy {
     });
   }
 
-  updateMapOnProjectChange(){
+  updateMapOnProjectChange() {
     this.project$ = this.projectService.listenProjectState()
       .pipe(flatMap(project => zip(
         of(project),
         this.mapService.listenDrawingToolState().pipe(take(1))
       )))
       .subscribe(([project, tool]) => {
-        if(project && this.map){
+        if (project && this.map) {
           this.mapService.removeLayerSourceChangedListener(this.map, this.onLayerSourceChange);
           this.mapService.updateMapFromProject(project, this.map);
           this.mapService.addLayerSourceChangedListener(this.map, this.onLayerSourceChange);
           this.setDrawingInteraction(tool, project);
         }
-      })
+      });
   }
 
-  updateDrawingInteractionOnToolChange(){
+  updateDrawingInteractionOnToolChange() {
     this.drawingTool$ = this.mapService.listenDrawingToolState()
       .pipe(
         flatMap(tool =>
