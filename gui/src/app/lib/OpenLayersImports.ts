@@ -18,6 +18,7 @@ import RenderFeature from 'ol/render/Feature';
 import Vector from 'ol/layer/Vector';
 import Draw from 'ol/interaction/Draw';
 import GeoJSON from 'ol/format/GeoJSON';
+import Base from 'ol/layer/Base';
 
 const {fromLonLat} = require('ol/proj');
 
@@ -42,7 +43,8 @@ export {
   Circle as OlCircle,
   GeoJSON as OlGeoJSON,
   Vector as OlVector,
-  Draw as OlDraw
+  Draw as OlDraw,
+  Base as OlBase
 };
 
 export interface DrawEvent {

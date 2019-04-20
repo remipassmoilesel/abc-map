@@ -157,7 +157,9 @@ export class MainMapComponent implements OnInit, OnDestroy {
       const source: OlVectorSource = event.target;
       const geojsonFeatures = OlMapHelper.featuresToGeojson(source.getFeatures());
       const layerId = OpenLayersHelper.getLayerId(source);
-
+      if(!layerId){
+        throw new Error('Layer id is undefined');
+      }
       this.projectService.updateVectorLayer(layerId, geojsonFeatures);
     }
   };

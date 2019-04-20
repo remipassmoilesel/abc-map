@@ -11,23 +11,35 @@ export class OlMapHelper {
   private static geoJson = new OlGeoJSON();
 
   public static updateMapFromProject(project: IProject, map: OlMap) {
-    // TODO: make diff changes
-    map.getLayers().clear();
+    const layerGroup = map.getLayerGroup();
+    const currentLayers = layerGroup.getLayers().getArray();
 
-    const layers = this.generateLayersFromProject(project);
-    this.addAllLayers(map, layers);
-  }
+    _.forEach(project.layers, (abcLayer, index) => {
 
-  public static generateLayersFromProject(project: IProject): OlLayer[] {
-    return _.map(project.layers, abcLayer => {
-      return OpenLayersLayerFactory.toOlLayer(abcLayer);
+      if (currentLayers.length <= index) {
+        const newOlLayer = OpenLayersLayerFactory.toOlLayer(abcLayer);
+        currentLayers.push(newOlLayer);
+        return true;
+      }
+
+      const existingLayer = currentLayers[index];
+      const layerId = OpenLayersHelper.getLayerId(existingLayer);
+      if (!layerId) {
+        throw new Error('Layer does not have an id');
+      }
+
+      if (layerId !== abcLayer.id) {
+        currentLayers[index] = OpenLayersLayerFactory.toOlLayer(abcLayer);
+        return true;
+      }
+
     });
-  }
 
-  public static addAllLayers(map: ol.Map, layers: ol.layer.Layer[]) {
-    _.forEach(layers, lay => {
-      map.addLayer(lay);
-    });
+    while (currentLayers.length > project.layers.length) {
+      currentLayers.pop();
+    }
+
+    layerGroup.changed();
   }
 
   public static addLayerSourceChangedListener(map: ol.Map, listener: ol.EventsListenerFunctionType): void {
