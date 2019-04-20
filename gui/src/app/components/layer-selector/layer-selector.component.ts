@@ -19,8 +19,8 @@ import ActiveLayerChanged = ProjectModule.ActiveLayerChanged;
 })
 export class LayerSelectorComponent implements OnInit, OnDestroy {
 
-  private layers: IMapLayer[] = [];
-  private activeLayerId?: string;
+  layers: IMapLayer[] = [];
+  activeLayerId?: string;
 
   private project$?: Subscription;
 
