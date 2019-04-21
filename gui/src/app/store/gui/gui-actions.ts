@@ -5,7 +5,7 @@ import {Action} from '@ngrx/store';
 export namespace GuiModule {
 
   export enum ActionTypes {
-    DIALOG_SELECT_NEW_LAYER_SHOWED = '[gui] Dialog: Select new layer showed',
+    DIALOG_SELECT_NEW_LAYER_SHOWED = '[gui] Dialog: Show new layer dialog',
   }
 
   export class SelectNewLayerDialogChanged implements Action {

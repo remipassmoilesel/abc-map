@@ -12,24 +12,12 @@
       <div class="form-group">
         <label for="selectLayerType">Type de couche: </label>
         <select name="selectLayerType" id="selectLayerType" class="form-control" [(ngModel)]="selectedLayerType">
-          <option [value]="types.VECTOR">Couche vectorielle (de dessin)</option>
-          <option [value]="types.FROM_CATALOG">Couche du catalogue</option>
-          <option [value]="types.WMS">Couche WMS</option>
+          <option [value]="types.Vector">Couche de dessin (vectorielle)</option>
+          <option [value]="types.Wms">Fond de carte (WMS)</option>
         </select>
       </div>
 
-      <div class="form-group" *ngIf="selectedLayerType === types.FROM_CATALOG">
-        <label for="layerFromCatalog">
-          Couches disponibles dans le catalogue:
-        </label>
-        <select id="layerFromCatalog" name="layerFromCatalog" size="10" class="form-control">
-          <option>a</option>
-          <option>b</option>
-          <option>c</option>
-        </select>
-      </div>
-
-      <div *ngIf="selectedLayerType === types.WMS">
+      <div *ngIf="selectedLayerType === types.Wms">
         Paramètres WMS:
 
         <div class="form-group">
@@ -42,6 +30,10 @@
           <input id="wmsLayerName" name="wmsUrl" type="text" class="form-control"/>
         </div>
 
+      </div>
+
+      <div class="alert alert-primary" role="alert" (click)="openCatalogDialog($event)">
+        Vous pouvez également importer des données à partir du catalogue !
       </div>
 
     </form>

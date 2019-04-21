@@ -3,13 +3,11 @@ import {Store} from '@ngrx/store';
 import {IMainState} from '../../store';
 import {NgbModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
 import {GuiModule} from '../../store/gui/gui-actions';
+import {ProjectModule} from '../../store/project/project-actions';
+import {MapLayerType} from 'abcmap-shared';
 import SelectNewLayerDialogChanged = GuiModule.SelectNewLayerDialogChanged;
-
-enum LayerType {
-  VECTOR = 'VECTOR',
-  FROM_CATALOG = 'FROM_CATALOG',
-  WMS = 'WMS',
-}
+import VectorLayerAdded = ProjectModule.VectorLayerAdded;
+import WmsLayerAdded = ProjectModule.WmsLayerAdded;
 
 @Component({
   selector: 'abc-new-layer-dialog',
@@ -18,8 +16,8 @@ enum LayerType {
 })
 export class NewLayerDialogComponent implements OnInit {
 
-  selectedLayerType = LayerType.VECTOR;
-  types = LayerType;
+  selectedLayerType = MapLayerType.Vector;
+  types = MapLayerType;
 
   @ViewChild('dialogContent')
   dialogContent!: TemplateRef<any>;
@@ -45,6 +43,34 @@ export class NewLayerDialogComponent implements OnInit {
       });
   }
 
+  onUserConfirmation($event: MouseEvent) {
+    switch (this.selectedLayerType) {
+      case MapLayerType.Vector:
+        this.store.dispatch(new VectorLayerAdded());
+        break;
+      case MapLayerType.Wms:
+        this.store.dispatch(new WmsLayerAdded({url: '', params: {}}));
+        break;
+      default:
+        throw new Error('Unknown: ' + this.selectedLayerType);
+    }
+
+    this.dispatchCloseModalEvent();
+  }
+
+  onUserCancel($event: MouseEvent) {
+    this.dispatchCloseModalEvent();
+  }
+
+  openCatalogDialog($event: MouseEvent) {
+    // TODO: open catalog dialog
+    this.dispatchCloseModalEvent();
+  }
+
+  dispatchCloseModalEvent() {
+    this.store.dispatch(new SelectNewLayerDialogChanged({state: false}));
+  }
+
   openModal() {
     this.currentModalRef = this.modalService.open(this.dialogContent);
   }
@@ -53,14 +79,6 @@ export class NewLayerDialogComponent implements OnInit {
     if (this.currentModalRef) {
       this.currentModalRef.close();
     }
-  }
-
-  onUserConfirmation($event: MouseEvent) {
-    console.log($event);
-  }
-
-  onUserCancel($event: MouseEvent) {
-    this.store.dispatch(new SelectNewLayerDialogChanged({state: false}));
   }
 
 }

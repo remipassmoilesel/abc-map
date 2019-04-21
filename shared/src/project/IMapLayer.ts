@@ -1,7 +1,7 @@
 import {FeatureCollection} from 'geojson';
 
 export enum MapLayerType {
-    Raster = 'Raster',
+    Wms = 'Raster',
     Vector = 'Vector',
     Predefined = 'Predefined',
 }
@@ -17,10 +17,12 @@ export interface IVectorLayer extends IMapLayer {
     featureCollection: FeatureCollection
 }
 
+export type WmsParams = { [k: string]: string };
+
 export interface IWmsLayer extends IMapLayer {
-    type: MapLayerType.Raster;
+    type: MapLayerType.Wms;
     url: string;
-    wmsParams: { [k: string]: string };
+    wmsParams: WmsParams;
 }
 
 export enum PredefinedLayerPreset {

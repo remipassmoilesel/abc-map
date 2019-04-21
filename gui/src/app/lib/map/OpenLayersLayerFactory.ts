@@ -15,8 +15,8 @@ export class OpenLayersLayerFactory {
       case MapLayerType.Predefined:
         olLayer = this.toPredefinedLayer(abcLayer as IPredefinedLayer);
         break;
-      case MapLayerType.Raster:
-        olLayer = this.toRasterLayer(abcLayer as IWmsLayer);
+      case MapLayerType.Wms:
+        olLayer = this.toWmsLayer(abcLayer as IWmsLayer);
         break;
       case MapLayerType.Vector:
         olLayer = this.toVectorLayer(abcLayer as IVectorLayer);
@@ -40,7 +40,7 @@ export class OpenLayersLayerFactory {
     }
   }
 
-  private static toRasterLayer(abcLayer: IWmsLayer): OlTileLayer {
+  private static toWmsLayer(abcLayer: IWmsLayer): OlTileLayer {
     return new OlTileLayer({
       source: new OlTileWMS({
         url: abcLayer.url,

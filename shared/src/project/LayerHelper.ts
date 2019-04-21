@@ -1,17 +1,18 @@
 import * as uuid from 'uuid';
 import * as _ from 'lodash';
-import {IPredefinedLayer, IVectorLayer, MapLayerType} from './IMapLayer';
+import {IPredefinedLayer, IVectorLayer, IWmsLayer, MapLayerType, PredefinedLayerPreset, WmsParams} from './IMapLayer';
+import {PredefinedLayers} from './PredefinedLayers';
 
 export class LayerHelper {
 
-    public static newPredefinedLayer(layer: IPredefinedLayer) {
+    public static newPredefinedLayer(preset: PredefinedLayerPreset) {
+        const layer = _.find(PredefinedLayers.ALL, value => value.preset === preset);
+        if (!layer) {
+            throw new Error(`Not found: ${preset}`);
+        }
         const newLayer: IPredefinedLayer = _.cloneDeep(layer);
         newLayer.id = this.generateLayerId(layer.type);
         return newLayer;
-    }
-
-    public static generateLayerId(layerType: MapLayerType): string {
-        return `${layerType}-${uuid.v4()}`.toLocaleLowerCase();
     }
 
     public static newVectorLayer(): IVectorLayer {
@@ -25,4 +26,19 @@ export class LayerHelper {
             }
         };
     }
+
+    public static newWmsLayer(url: string, wmsParams: WmsParams): IWmsLayer {
+        return {
+            id: this.generateLayerId(MapLayerType.Wms),
+            name: 'Fond de carte ' + url,
+            type: MapLayerType.Wms,
+            url,
+            wmsParams
+        };
+    }
+
+    public static generateLayerId(layerType: MapLayerType): string {
+        return `${layerType}-${uuid.v4()}`.toLocaleLowerCase();
+    }
+
 }
