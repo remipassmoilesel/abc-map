@@ -10,9 +10,10 @@ import {DrawingToolboxComponent} from './drawing-toolbox/drawing-toolbox.compone
 import { DrawColorPickerComponent } from './color-picker/draw-color-picker.component';
 import {ColorPickerModule} from 'ngx-color-picker';
 import { LeftMenuComponent } from './left-menu/left-menu.component';
+import { NewLayerDialogComponent } from './new-layer-dialog/new-layer-dialog.component';
 
 @NgModule({
-  declarations: [TopBarComponent, RightMenuComponent, LayerSelectorComponent, DrawingToolboxComponent, DrawColorPickerComponent, LeftMenuComponent],
+  declarations: [TopBarComponent, RightMenuComponent, LayerSelectorComponent, DrawingToolboxComponent, DrawColorPickerComponent, LeftMenuComponent, NewLayerDialogComponent],
   imports: [
     CommonModule,
     NgbModule,
@@ -25,6 +26,7 @@ import { LeftMenuComponent } from './left-menu/left-menu.component';
     RightMenuComponent,
     LeftMenuComponent,
     LayerSelectorComponent,
+    NewLayerDialogComponent,
   ]
 })
 export class ComponentsModule {
