@@ -10,13 +10,40 @@
   <div class="modal-body">
     <form>
       <div class="form-group">
-        <label for="selectLayer">Source de données: </label>
-        <select id="selectLayer" class="form-control">
-          <option>Couche vectorielle (de dessin)</option>
-          <option>Couche du catalogue</option>
-          <option>Couche WMS</option>
+        <label for="selectLayerType">Type de couche: </label>
+        <select name="selectLayerType" id="selectLayerType" class="form-control" [(ngModel)]="selectedLayerType">
+          <option [value]="types.VECTOR">Couche vectorielle (de dessin)</option>
+          <option [value]="types.FROM_CATALOG">Couche du catalogue</option>
+          <option [value]="types.WMS">Couche WMS</option>
         </select>
       </div>
+
+      <div class="form-group" *ngIf="selectedLayerType === types.FROM_CATALOG">
+        <label for="layerFromCatalog">
+          Couches disponibles dans le catalogue:
+        </label>
+        <select id="layerFromCatalog" name="layerFromCatalog" size="10" class="form-control">
+          <option>a</option>
+          <option>b</option>
+          <option>c</option>
+        </select>
+      </div>
+
+      <div *ngIf="selectedLayerType === types.WMS">
+        Paramètres WMS:
+
+        <div class="form-group">
+          <label for="wmsUrl">URL:</label>
+          <input id="wmsUrl" name="wmsUrl" type="text" class="form-control"/>
+        </div>
+
+        <div class="form-group">
+          <label for="wmsLayerName">Nom de la couche:</label>
+          <input id="wmsLayerName" name="wmsUrl" type="text" class="form-control"/>
+        </div>
+
+      </div>
+
     </form>
   </div>
 

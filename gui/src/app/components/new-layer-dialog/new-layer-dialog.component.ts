@@ -5,12 +5,21 @@ import {NgbModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
 import {GuiModule} from '../../store/gui/gui-actions';
 import SelectNewLayerDialogChanged = GuiModule.SelectNewLayerDialogChanged;
 
+enum LayerType {
+  VECTOR = 'VECTOR',
+  FROM_CATALOG = 'FROM_CATALOG',
+  WMS = 'WMS',
+}
+
 @Component({
   selector: 'abc-new-layer-dialog',
   templateUrl: './new-layer-dialog.component.html',
   styleUrls: ['./new-layer-dialog.component.scss']
 })
 export class NewLayerDialogComponent implements OnInit {
+
+  selectedLayerType = LayerType.VECTOR;
+  types = LayerType;
 
   @ViewChild('dialogContent')
   dialogContent!: TemplateRef<any>;
@@ -47,7 +56,7 @@ export class NewLayerDialogComponent implements OnInit {
   }
 
   onUserConfirmation($event: MouseEvent) {
-    console.log($event)
+    console.log($event);
   }
 
   onUserCancel($event: MouseEvent) {
