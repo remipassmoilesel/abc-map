@@ -1,6 +1,8 @@
 import {IPredefinedLayer, MapLayerType, PredefinedLayerPreset} from './IMapLayer';
 
-export class DefaultLayers {
+// TODO: add bing and others
+
+export class PredefinedLayers {
 
     public static readonly OSM_LAYER: IPredefinedLayer = {
         id: 'change-me',
@@ -8,5 +10,9 @@ export class DefaultLayers {
         type: MapLayerType.Predefined,
         preset: PredefinedLayerPreset.OSM,
     };
+
+    public static ALL = [
+        PredefinedLayers.OSM_LAYER,
+    ];
 
 }

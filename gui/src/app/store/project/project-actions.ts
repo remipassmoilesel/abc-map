@@ -1,4 +1,4 @@
-import {IProject, MapLayerType} from 'abcmap-shared';
+import {IProject, WmsParams, PredefinedLayerPreset} from 'abcmap-shared';
 import {Action} from '@ngrx/store';
 import {FeatureCollection} from 'geojson';
 
@@ -11,7 +11,9 @@ export namespace ProjectModule {
     PROJECT_CLOSED = '[project] Project closed',
     VECTOR_LAYER_UPDATED = '[project] Vector layer updated',
     ACTIVE_LAYER_CHANGED = '[project] Active layer changed',
-    LAYER_ADDED = '[project] Layer added',
+    VECTOR_LAYER_ADDED = '[project] Vector layer added',
+    PREDEFINED_LAYER_ADDED = '[project] Predefined layer added',
+    WMS_LAYER_ADDED = '[project] Wms layer added',
     LAYER_REMOVED = '[project] Layer removed',
   }
 
@@ -37,10 +39,22 @@ export namespace ProjectModule {
     constructor(public payload: { layerId: string }) {}
   }
 
-  export class LayerAdded implements Action {
-    readonly type = ActionTypes.LAYER_ADDED;
+  export class VectorLayerAdded implements Action {
+    readonly type = ActionTypes.VECTOR_LAYER_ADDED;
 
-    constructor(public payload: { layerType: MapLayerType }) {}
+    constructor() {}
+  }
+
+  export class PredefinedLayerAdded implements Action {
+    readonly type = ActionTypes.PREDEFINED_LAYER_ADDED;
+
+    constructor(public payload: {preset: PredefinedLayerPreset}) {}
+  }
+
+  export class WmsLayerAdded implements Action {
+    readonly type = ActionTypes.WMS_LAYER_ADDED;
+
+    constructor(public payload: { url: string, params: WmsParams}) {}
   }
 
   export class LayerRemoved implements Action {
@@ -52,7 +66,9 @@ export namespace ProjectModule {
   export type ActionsUnion = ProjectLoaded
     | ProjectClosed
     | ActiveLayerChanged
-    | LayerAdded
+    | VectorLayerAdded
+    | PredefinedLayerAdded
+    | WmsLayerAdded
     | LayerRemoved
     | VectorLayerUpdated;
 

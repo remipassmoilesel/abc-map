@@ -4,15 +4,19 @@ import {projectReducer} from './project/project-reducers';
 import {IProjectState} from './project/project-state';
 import {IMapState} from "./map/map-state";
 import {mapReducer} from "./map/map-reducers";
+import {IGuiState} from './gui/gui-state';
+import {guiReducer} from './gui/gui-reducers';
 
 export interface IMainState {
   project: IProjectState;
   map: IMapState;
+  gui: IGuiState;
 }
 
 export const reducers: any = { // TODO: fix any, normally ActionReducerMap<State>  ?
   project: projectReducer,
-  map: mapReducer
+  map: mapReducer,
+  gui: guiReducer
 };
 
 export function debug(reducer: ActionReducer<any>): ActionReducer<any> {

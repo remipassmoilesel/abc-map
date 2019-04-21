@@ -3,27 +3,32 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "start-electron": "cd api && npm run start-electron",
+    "start:api": "concurrently --kill-others 'npm run watch:shared' 'npm run watch:api' 'cd api && npm run start:nodemon'",
+    "start:electron": "cd api && npm run start-electron",
     "start:databases": "cd database && docker-compose up -d",
     "stop:databases": "cd database && docker-compose down",
-    "clean:all": "npm run clean:shared && npm run clean:api && npm run clean:gui",
-    "install:all": "npm run install:shared && npm run install:api && npm run install:gui",
-    "build:all": "npm run link:shared && npm run build:shared && npm run build:api && npm run build:gui",
-    "clean-build": "npm run clean && npm run build",
-    "install:api": "cd api && npm install",
-    "build:api": "cd api && npm run build",
-    "clean:api": "cd api && npm run clean",
-    "install:gui": "cd gui && npm install",
-    "build:gui": "cd gui && npm run build",
-    "clean:gui": "cd gui && npm run clean",
     "link:shared": "cd api && npm install ../shared && cd ../gui && npm install ../shared",
-    "install:shared": "cd shared && npm install",
-    "build:shared": "cd shared && npm run build",
-    "clean:shared": "cd shared && npm run clean",
     "test:all:ci": "npm run test:gui:ci",
-    "test:gui:ci": "cd gui && npm run test:ci"
+    "test:gui:ci": "cd gui && npm run test:ci",
+    "install:all": "npm run install:shared && npm run install:api && npm run install:gui",
+    "install:api": "cd api && npm install",
+    "install:gui": "cd gui && npm install",
+    "install:shared": "cd shared && npm install",
+    "build:all": "npm run link:shared && npm run build:shared && npm run build:api && npm run build:gui",
+    "build:api": "cd api && npm run build",
+    "build:gui": "cd gui && npm run build",
+    "build:shared": "cd shared && npm run build",
+    "clean:all": "npm run clean:shared && npm run clean:api && npm run clean:gui",
+    "clean:api": "cd api && npm run clean",
+    "clean:gui": "cd gui && npm run clean",
+    "clean:shared": "cd shared && npm run clean",
+    "start:gui": "cd gui && npm run start",
+    "watch:shared": "cd shared && npm run watch",
+    "watch:api": "cd api && npm run watch"
   },
   "author": "",
   "license": "ISC",
-  "devDependencies": {}
+  "devDependencies": {
+    "concurrently": "^4.1.0"
+  }
 }

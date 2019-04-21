@@ -1,7 +1,6 @@
 import {ProjectDao} from './ProjectDao';
 import * as loglevel from 'loglevel';
-import {DefaultLayers, IProject, IProjectEventContent, ProjectEvent, ProjectHelper} from 'abcmap-shared';
-import {LayerHelper} from 'abcmap-shared';
+import {IProject, IProjectEventContent, LayerHelper, PredefinedLayerPreset, ProjectEvent, ProjectHelper} from 'abcmap-shared';
 import {MongodbHelper} from '../lib/database/MongodbHelper';
 import {AbstractService} from '../lib/AbstractService';
 import EventEmitter = require('events');
@@ -40,7 +39,7 @@ export class ProjectService extends AbstractService {
             id: ProjectHelper.generateProjectId(),
             name: projectName,
             layers: [
-                LayerHelper.newPredefinedLayer(DefaultLayers.OSM_LAYER),
+                LayerHelper.newPredefinedLayer(PredefinedLayerPreset.OSM),
                 vectorLayer,
             ],
             activeLayerId: vectorLayer.id,

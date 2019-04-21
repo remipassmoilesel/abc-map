@@ -1,0 +1,49 @@
+<ng-template #dialogContent let-modal>
+
+  <div class="modal-header">
+    <h4 class="modal-title">Ajouter une couche</h4>
+    <a (click)="onUserCancel($event)">
+      <i class="fas fa-times"></i>
+    </a>
+  </div>
+
+  <div class="modal-body">
+    <form>
+      <div class="form-group">
+        <label for="selectLayerType">Type de couche: </label>
+        <select name="selectLayerType" id="selectLayerType" class="form-control" [(ngModel)]="selectedLayerType">
+          <option [value]="types.Vector">Couche de dessin (vectorielle)</option>
+          <option [value]="types.Wms">Fond de carte (WMS)</option>
+        </select>
+      </div>
+
+      <div *ngIf="selectedLayerType === types.Wms">
+        Paramètres WMS:
+
+        <form [formGroup]="wmsForm">
+          <div class="form-group">
+            <label for="wmsUrl">URL:</label>
+            <input id="wmsUrl" name="wmsUrl" type="text" class="form-control" formControlName="wmsUrl"/>
+          </div>
+
+          <div class="form-group">
+            <label for="wmsLayerName">Nom de la couche:</label>
+            <input id="wmsLayerName" name="wmsLayerName" type="text" class="form-control" formControlName="wmsLayerName"/>
+          </div>
+
+        </form>
+      </div>
+
+      <div class="alert alert-primary" role="alert" (click)="openCatalogDialog($event)">
+        Vous pouvez également importer des données à partir du catalogue !
+      </div>
+
+    </form>
+  </div>
+
+  <div class="modal-footer">
+    <a class="btn btn-outline-secondary" (click)="onUserCancel($event)">Annuler</a>
+    <a class="btn btn-outline-dark" (click)="onUserConfirmation($event)">Ajouter</a>
+  </div>
+
+</ng-template>

@@ -4,7 +4,7 @@ import {Subscription} from 'rxjs';
 import {RxUtils} from '../../lib/utils/RxUtils';
 import {LoggerFactory} from '../../lib/utils/LoggerFactory';
 import {ProjectService} from '../../lib/project/project.service';
-import {DrawEvent, OlEvent, olFromLonLat, OlMap, OlVectorSource, OlView} from '../../lib/OpenLayersImports';
+import {DrawEvent, OlEvent, olFromLonLat, OlMap, OlTileLayer, OlTileWMS, OlVectorSource, OlView} from '../../lib/OpenLayersImports';
 import {OpenLayersHelper} from '../../lib/map/OpenLayersHelper';
 import {DrawingTool, DrawingTools} from '../../lib/map/DrawingTool';
 import {Actions, ofType} from '@ngrx/effects';
@@ -20,11 +20,14 @@ import {IProject} from 'abcmap-shared';
 import ActionTypes = MapModule.ActionTypes;
 import ActiveForegroundColorChanged = MapModule.ActiveForegroundColorChanged;
 import ActiveBackgroundColorChanged = MapModule.ActiveBackgroundColorChanged;
+import {OlMapHelper} from './OlMapHelper';
 
 
 @Component({
   selector: 'abc-main-map',
-  templateUrl: './main-map.component.html',
+  template: `
+    <div id="main-openlayers-map"></div>
+  `,
   styleUrls: ['./main-map.component.scss']
 })
 export class MainMapComponent implements OnInit, OnDestroy {
@@ -74,23 +77,24 @@ export class MainMapComponent implements OnInit, OnDestroy {
     });
   }
 
-  updateMapOnProjectChange(){
+  updateMapOnProjectChange() {
     this.project$ = this.projectService.listenProjectState()
       .pipe(flatMap(project => zip(
         of(project),
         this.mapService.listenDrawingToolState().pipe(take(1))
       )))
       .subscribe(([project, tool]) => {
-        if(project && this.map){
-          this.mapService.removeLayerSourceChangedListener(this.map, this.onLayerSourceChange);
-          this.mapService.updateMapFromProject(project, this.map);
-          this.mapService.addLayerSourceChangedListener(this.map, this.onLayerSourceChange);
+        if (project && this.map) {
+          OlMapHelper.removeLayerSourceChangedListener(this.map, this.onLayerSourceChange);
+          OlMapHelper.updateMapFromProject(project, this.map);
+          OlMapHelper.addLayerSourceChangedListener(this.map, this.onLayerSourceChange);
+
           this.setDrawingInteraction(tool, project);
         }
-      })
+      });
   }
 
-  updateDrawingInteractionOnToolChange(){
+  updateDrawingInteractionOnToolChange() {
     this.drawingTool$ = this.mapService.listenDrawingToolState()
       .pipe(
         flatMap(tool =>
@@ -108,13 +112,13 @@ export class MainMapComponent implements OnInit, OnDestroy {
     if (!this.map || !project || !project.activeLayerId) {
       return;
     }
-    this.logger.info('Updating drawing tool ...');
+    this.logger.debug('Updating drawing tool ...');
 
     const layer = OpenLayersHelper.findVectorLayer(this.map, project.activeLayerId);
     if (!layer) {
-      this.mapService.removeAllDrawInteractions(this.map);
+      OlMapHelper.removeAllDrawInteractions(this.map);
     } else {
-      this.mapService.setDrawInteractionOnMap(tool, this.map, layer, this.onDrawEnd);
+      OlMapHelper.setDrawInteractionOnMap(tool, this.map, layer, this.onDrawEnd);
     }
 
   }
@@ -152,9 +156,11 @@ export class MainMapComponent implements OnInit, OnDestroy {
   onLayerSourceChange = (event: OlEvent) => {
     if (event.target instanceof OlVectorSource) {
       const source: OlVectorSource = event.target;
-      const geojsonFeatures = this.mapService.featuresToGeojson(source.getFeatures());
+      const geojsonFeatures = OlMapHelper.featuresToGeojson(source.getFeatures());
       const layerId = OpenLayersHelper.getLayerId(source);
-
+      if(!layerId){
+        throw new Error('Layer id is undefined');
+      }
       this.projectService.updateVectorLayer(layerId, geojsonFeatures);
     }
   };

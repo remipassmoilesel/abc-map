@@ -13,6 +13,7 @@ import {ComponentsModule} from './components/components.module';
 import {ViewsModule} from './views/views.module';
 import {ToastrModule} from 'ngx-toastr';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {ReactiveFormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
     LibModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
+    ReactiveFormsModule,
     StoreModule.forRoot(reducers, {metaReducers}),
     StoreDevtoolsModule.instrument({maxAge: 25, logOnly: false}),
     EffectsModule.forRoot([]),

@@ -1,6 +1,6 @@
 import {DrawingTool, DrawingTools} from './DrawingTool';
 import {geom} from 'openlayers';
-import {OlMap, OlObject, OlObjectReadOnly, OlSource, OlVector} from '../OpenLayersImports';
+import {OlBase, OlMap, OlObject, OlObjectReadOnly, OlTileLoadFunctionType, OlVector, OlVectorSource} from '../OpenLayersImports';
 import {IAbcStyleContainer} from './AbcStyles';
 import * as _ from 'lodash';
 import Vector from 'ol/layer/Vector';
@@ -10,8 +10,6 @@ export class OpenLayersHelper {
 
   public static toolToGeometryType(tool: DrawingTool): GeometryType {
     switch (tool.id) {
-      case DrawingTools.Circle.id:
-        return 'Circle';
       case DrawingTools.Polygon.id:
         return 'Polygon';
       case DrawingTools.LineString.id:
@@ -26,12 +24,12 @@ export class OpenLayersHelper {
   private static readonly layerId = 'abcLayerId';
   private static readonly styleId = 'abcStyle';
 
-  public static getLayerId(source: OlSource): string {
-    return source.get(this.layerId);
+  public static getLayerId(layer: OlBase | OlVectorSource): string | undefined {
+    return layer.get(this.layerId);
   }
 
-  public static setLayerId(source: OlSource, layerId: string): void {
-    source.set(this.layerId, layerId, true);
+  public static setLayerId(layer: OlBase | OlVectorSource, layerId: string): void {
+    layer.set(this.layerId, layerId, true);
   }
 
   public static setStyle(feature: OlObject, style: IAbcStyleContainer): void {
@@ -44,6 +42,19 @@ export class OpenLayersHelper {
 
   public static findVectorLayer(map: OlMap, layerId: string): Vector | undefined {
     return _.find(map.getLayers().getArray(),
-      lay => lay instanceof OlVector && OpenLayersHelper.getLayerId(lay.getSource()) === layerId) as Vector | undefined;
+      lay => lay instanceof OlVector && OpenLayersHelper.getLayerId(lay) === layerId) as Vector | undefined;
   }
+
+  public static createWmsLoaderWithAuthentication(username: string, password: string): OlTileLoadFunctionType {
+    return (tile: any, src: string) => {
+      const client = new XMLHttpRequest();
+      client.open('GET', src);
+      client.setRequestHeader('Authorization', 'Basic ' + window.btoa(username + ':' + password));
+      client.onload = function() {
+        tile.getImage().src = src;
+      };
+      client.send();
+    };
+  }
+
 }

@@ -1,6 +1,6 @@
 import {IProjectState, projectInitialState} from './project-state';
 import {ProjectModule} from './project-actions';
-import {IMapLayer, IVectorLayer, MapLayerType, LayerHelper} from 'abcmap-shared';
+import {IMapLayer, IVectorLayer, LayerHelper, MapLayerType} from 'abcmap-shared';
 import * as _ from 'lodash';
 
 // All objects must be deep cloned
@@ -44,15 +44,48 @@ export function projectReducer(state = projectInitialState, action: ProjectModul
       }
 
       _.remove(newState.currentProject.layers, lay => lay.id === action.payload.layerId);
-      if(newState.currentProject.layers.length === 0){
-        newState.currentProject.layers = [LayerHelper.newVectorLayer()]
+      if (newState.currentProject.layers.length === 0) {
+        newState.currentProject.layers = [LayerHelper.newVectorLayer()];
       }
 
       if (newState.currentProject.activeLayerId === action.payload.layerId) {
-        newState.currentProject.activeLayerId = newState.currentProject.layers[0].id;
+        const lastLayerIndex = newState.currentProject.layers.length - 1;
+        newState.currentProject.activeLayerId = newState.currentProject.layers[lastLayerIndex].id;
       }
 
       return newState;
+    }
+
+    case ProjectModule.ActionTypes.VECTOR_LAYER_ADDED: {
+      const newState = _.cloneDeep(state);
+      if (!newState.currentProject) {
+        return newState;
+      }
+
+      newState.currentProject.layers.push(LayerHelper.newVectorLayer());
+      return newState;
+    }
+
+    case ProjectModule.ActionTypes.PREDEFINED_LAYER_ADDED: {
+      const newState = _.cloneDeep(state);
+      if (!newState.currentProject) {
+        return newState;
+      }
+
+      newState.currentProject.layers.push(LayerHelper.newPredefinedLayer(action.payload.preset));
+      return newState;
+
+    }
+
+    case ProjectModule.ActionTypes.WMS_LAYER_ADDED: {
+      const newState = _.cloneDeep(state);
+      if (!newState.currentProject) {
+        return newState;
+      }
+
+      newState.currentProject.layers.push(LayerHelper.newWmsLayer(action.payload.url, action.payload.params));
+      return newState;
+
     }
 
     default: {
