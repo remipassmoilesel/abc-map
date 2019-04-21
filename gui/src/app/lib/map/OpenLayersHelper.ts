@@ -10,8 +10,6 @@ export class OpenLayersHelper {
 
   public static toolToGeometryType(tool: DrawingTool): GeometryType {
     switch (tool.id) {
-      case DrawingTools.Circle.id:
-        return 'Circle';
       case DrawingTools.Polygon.id:
         return 'Polygon';
       case DrawingTools.LineString.id:

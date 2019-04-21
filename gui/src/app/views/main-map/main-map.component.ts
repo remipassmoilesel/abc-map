@@ -112,7 +112,7 @@ export class MainMapComponent implements OnInit, OnDestroy {
     if (!this.map || !project || !project.activeLayerId) {
       return;
     }
-    this.logger.info('Updating drawing tool ...');
+    this.logger.debug('Updating drawing tool ...');
 
     const layer = OpenLayersHelper.findVectorLayer(this.map, project.activeLayerId);
     if (!layer) {
