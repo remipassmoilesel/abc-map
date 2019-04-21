@@ -5,12 +5,12 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {RouterModule} from '@angular/router';
 import {RightMenuComponent} from './right-menu/right-menu.component';
 import {LayerSelectorComponent} from './layer-selector/layer-selector.component';
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {DrawingToolboxComponent} from './drawing-toolbox/drawing-toolbox.component';
-import { DrawColorPickerComponent } from './color-picker/draw-color-picker.component';
+import {DrawColorPickerComponent} from './color-picker/draw-color-picker.component';
 import {ColorPickerModule} from 'ngx-color-picker';
-import { LeftMenuComponent } from './left-menu/left-menu.component';
-import { NewLayerDialogComponent } from './new-layer-dialog/new-layer-dialog.component';
+import {LeftMenuComponent} from './left-menu/left-menu.component';
+import {NewLayerDialogComponent} from './new-layer-dialog/new-layer-dialog.component';
 
 @NgModule({
   declarations: [TopBarComponent, RightMenuComponent, LayerSelectorComponent, DrawingToolboxComponent, DrawColorPickerComponent, LeftMenuComponent, NewLayerDialogComponent],
@@ -19,6 +19,7 @@ import { NewLayerDialogComponent } from './new-layer-dialog/new-layer-dialog.com
     NgbModule,
     RouterModule,
     FormsModule,
+    ReactiveFormsModule,
     ColorPickerModule,
   ],
   exports: [

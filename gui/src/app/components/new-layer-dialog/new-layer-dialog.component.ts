@@ -5,9 +5,15 @@ import {NgbModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
 import {GuiModule} from '../../store/gui/gui-actions';
 import {ProjectModule} from '../../store/project/project-actions';
 import {MapLayerType} from 'abcmap-shared';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import SelectNewLayerDialogChanged = GuiModule.SelectNewLayerDialogChanged;
 import VectorLayerAdded = ProjectModule.VectorLayerAdded;
 import WmsLayerAdded = ProjectModule.WmsLayerAdded;
+
+interface IWmsFormValue {
+  wmsUrl: string;
+  wmsLayerName: string;
+}
 
 @Component({
   selector: 'abc-new-layer-dialog',
@@ -18,10 +24,13 @@ export class NewLayerDialogComponent implements OnInit {
 
   selectedLayerType = MapLayerType.Vector;
   types = MapLayerType;
+  wmsForm = new FormGroup({
+    wmsUrl: new FormControl('', Validators.required),
+    wmsLayerName: new FormControl('', Validators.required)
+  });
 
   @ViewChild('dialogContent')
   dialogContent!: TemplateRef<any>;
-
   currentModalRef?: NgbModalRef;
 
   constructor(private store: Store<IMainState>,
@@ -49,7 +58,8 @@ export class NewLayerDialogComponent implements OnInit {
         this.store.dispatch(new VectorLayerAdded());
         break;
       case MapLayerType.Wms:
-        this.store.dispatch(new WmsLayerAdded({url: '', params: {}}));
+        const values: IWmsFormValue = this.wmsForm.value;
+        this.store.dispatch(new WmsLayerAdded({url: values.wmsUrl, params: {LAYERS: values.wmsLayerName, TILED: true}}));
         break;
       default:
         throw new Error('Unknown: ' + this.selectedLayerType);

@@ -17,7 +17,7 @@ export interface IVectorLayer extends IMapLayer {
     featureCollection: FeatureCollection
 }
 
-export type WmsParams = { [k: string]: string };
+export type WmsParams = { [k: string]: string | boolean };
 
 export interface IWmsLayer extends IMapLayer {
     type: MapLayerType.Wms;

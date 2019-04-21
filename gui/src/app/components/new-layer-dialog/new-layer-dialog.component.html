@@ -20,16 +20,18 @@
       <div *ngIf="selectedLayerType === types.Wms">
         Paramètres WMS:
 
-        <div class="form-group">
-          <label for="wmsUrl">URL:</label>
-          <input id="wmsUrl" name="wmsUrl" type="text" class="form-control"/>
-        </div>
+        <form [formGroup]="wmsForm">
+          <div class="form-group">
+            <label for="wmsUrl">URL:</label>
+            <input id="wmsUrl" name="wmsUrl" type="text" class="form-control" formControlName="wmsUrl"/>
+          </div>
 
-        <div class="form-group">
-          <label for="wmsLayerName">Nom de la couche:</label>
-          <input id="wmsLayerName" name="wmsUrl" type="text" class="form-control"/>
-        </div>
+          <div class="form-group">
+            <label for="wmsLayerName">Nom de la couche:</label>
+            <input id="wmsLayerName" name="wmsLayerName" type="text" class="form-control" formControlName="wmsLayerName"/>
+          </div>
 
+        </form>
       </div>
 
       <div class="alert alert-primary" role="alert" (click)="openCatalogDialog($event)">
