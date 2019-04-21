@@ -1,7 +1,7 @@
 import {FeatureCollection} from 'geojson';
 
 export enum MapLayerType {
-    Wms = 'Raster',
+    Wms = 'Wms',
     Vector = 'Vector',
     Predefined = 'Predefined',
 }
