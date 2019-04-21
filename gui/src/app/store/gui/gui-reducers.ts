@@ -10,7 +10,7 @@ export function guiReducer(state = guiInitialState, action: GuiModule.ActionsUni
   switch (action.type) {
     case ActionTypes.DIALOG_SELECT_NEW_LAYER_SHOWED: {
       const newState = _.cloneDeep(state);
-      newState.dialogs.selectNewLayerShowed = true;
+      newState.dialogs.selectNewLayer = action.payload.state;
       return newState;
     }
 

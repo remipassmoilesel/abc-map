@@ -1,11 +1,11 @@
 export interface IGuiState {
   dialogs: {
-    selectNewLayerShowed: boolean
+    selectNewLayer: boolean
   }
 }
 
 export const guiInitialState: IGuiState = {
   dialogs: {
-    selectNewLayerShowed: false
+    selectNewLayer: false
   }
 };

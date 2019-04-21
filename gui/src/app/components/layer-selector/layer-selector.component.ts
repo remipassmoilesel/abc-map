@@ -12,7 +12,7 @@ import {HttpClient} from '@angular/common/http';
 import {GuiModule} from '../../store/gui/gui-actions';
 import LayerRemoved = ProjectModule.LayerRemoved;
 import ActiveLayerChanged = ProjectModule.ActiveLayerChanged;
-import DialogSelectNewLayerShowed = GuiModule.DialogSelectNewLayerShowed;
+import DialogSelectNewLayerShowed = GuiModule.SelectNewLayerDialogChanged;
 
 @Component({
   selector: 'abc-layer-selector',
@@ -62,7 +62,7 @@ export class LayerSelectorComponent implements OnInit, OnDestroy {
   }
 
   addLayer($event: MouseEvent) {
-    this.store.dispatch(new DialogSelectNewLayerShowed());
+    this.store.dispatch(new DialogSelectNewLayerShowed({state: true}));
   }
 
   listenProjectChanges() {

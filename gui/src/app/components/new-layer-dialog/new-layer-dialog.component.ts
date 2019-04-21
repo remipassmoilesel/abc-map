@@ -1,7 +1,9 @@
 import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {Store} from '@ngrx/store';
 import {IMainState} from '../../store';
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {NgbModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
+import {GuiModule} from '../../store/gui/gui-actions';
+import SelectNewLayerDialogChanged = GuiModule.SelectNewLayerDialogChanged;
 
 @Component({
   selector: 'abc-new-layer-dialog',
@@ -13,6 +15,8 @@ export class NewLayerDialogComponent implements OnInit {
   @ViewChild('dialogContent')
   dialogContent!: TemplateRef<any>;
 
+  currentModalRef?: NgbModalRef;
+
   constructor(private store: Store<IMainState>,
               private modalService: NgbModal) {
   }
@@ -22,11 +26,32 @@ export class NewLayerDialogComponent implements OnInit {
   }
 
   listenDialogState() {
-    this.store.select(state => state.gui.dialogs.selectNewLayerShowed)
+    this.store.select(state => state.gui.dialogs.selectNewLayer)
       .subscribe(dialogState => {
         if (dialogState) {
-          this.modalService.open(this.dialogContent);
+          this.openModal();
+        } else {
+          this.closeModal();
         }
       });
   }
+
+  openModal() {
+    this.currentModalRef = this.modalService.open(this.dialogContent);
+  }
+
+  closeModal() {
+    if (this.currentModalRef) {
+      this.currentModalRef.close();
+    }
+  }
+
+  onUserConfirmation($event: MouseEvent) {
+    console.log($event)
+  }
+
+  onUserCancel($event: MouseEvent) {
+    this.store.dispatch(new SelectNewLayerDialogChanged({state: false}));
+  }
+
 }

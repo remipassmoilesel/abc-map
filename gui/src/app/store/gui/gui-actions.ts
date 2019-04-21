@@ -8,11 +8,11 @@ export namespace GuiModule {
     DIALOG_SELECT_NEW_LAYER_SHOWED = '[gui] Dialog: Select new layer showed',
   }
 
-  export class DialogSelectNewLayerShowed implements Action {
+  export class SelectNewLayerDialogChanged implements Action {
     readonly type = ActionTypes.DIALOG_SELECT_NEW_LAYER_SHOWED;
 
-    constructor() {}
+    constructor(public payload: { state: boolean }) {}
   }
 
-  export type ActionsUnion = DialogSelectNewLayerShowed;
+  export type ActionsUnion = SelectNewLayerDialogChanged;
 }

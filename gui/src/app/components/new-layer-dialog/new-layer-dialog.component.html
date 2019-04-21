@@ -1,24 +1,28 @@
 <ng-template #dialogContent let-modal>
+
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Profile update</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-      <span aria-hidden="true">&times;</span>
-    </button>
+    <h4 class="modal-title">Ajouter une couche</h4>
+    <a (click)="onUserCancel($event)">
+      <i class="fas fa-times"></i>
+    </a>
   </div>
+
   <div class="modal-body">
     <form>
       <div class="form-group">
-        <label for="dateOfBirth">Date of birth</label>
-        <div class="input-group">
-          <input id="dateOfBirth" class="form-control" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #dp="ngbDatepicker">
-          <div class="input-group-append">
-            <button class="btn btn-outline-secondary calendar" (click)="dp.toggle()" type="button"></button>
-          </div>
-        </div>
+        <label for="selectLayer">Source de données: </label>
+        <select id="selectLayer" class="form-control">
+          <option>Couche vectorielle (de dessin)</option>
+          <option>Couche du catalogue</option>
+          <option>Couche WMS</option>
+        </select>
       </div>
     </form>
   </div>
+
   <div class="modal-footer">
-    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button>
+    <a class="btn btn-outline-secondary" (click)="onUserCancel($event)">Annuler</a>
+    <a class="btn btn-outline-dark" (click)="onUserConfirmation($event)">Ajouter</a>
   </div>
+
 </ng-template>
