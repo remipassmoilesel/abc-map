@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "start": "concurrently --kill-others 'npm run watch:shared' 'npm run watch:api' 'npm run start:api' 'npm run start:gui'",
+    "start:api": "concurrently --kill-others 'npm run watch:shared' 'npm run watch:api' 'cd api && npm run start:nodemon'",
     "start:electron": "cd api && npm run start-electron",
     "start:databases": "cd database && docker-compose up -d",
     "stop:databases": "cd database && docker-compose down",
@@ -22,7 +22,6 @@
     "clean:api": "cd api && npm run clean",
     "clean:gui": "cd gui && npm run clean",
     "clean:shared": "cd shared && npm run clean",
-    "start:api": "cd api && npm run start:nodemon",
     "start:gui": "cd gui && npm run start",
     "watch:shared": "cd shared && npm run watch",
     "watch:api": "cd api && npm run watch"
