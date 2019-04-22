@@ -1,6 +1,10 @@
 .idea
+*.iml
+
+*.tsbuildinfo
 node_modules
 dist
+
 mongodb-data
-*.tsbuildinfo
-*.iml
+minio-data
+
