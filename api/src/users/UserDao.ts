@@ -9,7 +9,7 @@ export class UserDao extends AbstractMongodbDao<IDbUser> {
     protected collectionName = 'users';
 
     public async createCollection(): Promise<any> {
-        await this.db().createCollection(this.collectionName);
+        await super.createCollection();
         await this.db().collection(this.collectionName).createIndex({username: 1, email: 1}, {unique: true});
     }
 

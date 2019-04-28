@@ -15,7 +15,7 @@ logger.info('Starting Abc-Map API ...');
 const main = async function(): Promise<any> {
 
 
-    const daoMap = getDaoMap();
+    const daoMap = await getDaoMap();
     const serviceMap = await getServices(daoMap);
     const controllerMap = getControllers(serviceMap);
 

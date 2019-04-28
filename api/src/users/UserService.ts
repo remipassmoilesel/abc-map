@@ -11,11 +11,6 @@ export class UserService extends AbstractService {
         super();
     }
 
-    public async postConstruct(): Promise<any> {
-        await this.userDao.connect();
-        await this.userDao.createCollection();
-    }
-
     public createUser(request: IUserCreationRequest): Promise<any> {
         const passwordSalt = crypto.randomBytes(256).toString('hex');
         const encryptedPassword = this.encryptPassword(request.password, passwordSalt);

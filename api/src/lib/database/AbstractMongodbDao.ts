@@ -16,6 +16,15 @@ export abstract class AbstractMongodbDao<T> {
 
     }
 
+    public async postConstruct(): Promise<any> {
+        await this.connect();
+        await this.createCollection();
+    }
+
+    public async createCollection(): Promise<any> {
+        await this.db().createCollection(this.collectionName);
+    }
+
     public async connect(): Promise<MongoClient> {
         const username = this.config.mongodb.username;
         const password = this.config.mongodb.password;
