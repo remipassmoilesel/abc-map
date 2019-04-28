@@ -1,7 +1,7 @@
 require('source-map-support').install();
 
 import * as loglevel from 'loglevel';
-import {AbcApiConfig} from './AbcApiConfig';
+import {ApiConfigHelper, IApiConfig} from './IApiConfig';
 import {ApiServer} from './server/ApiServer';
 import {getDaoMap} from './lib/database/IDaoMap';
 import {getServices} from './lib/IServiceMap';
@@ -19,7 +19,7 @@ const main = async function(): Promise<any> {
     const serviceMap = await getServices(daoMap);
     const controllerMap = getControllers(serviceMap);
 
-    const config = new AbcApiConfig();
+    const config = ApiConfigHelper.load();
     const httpServer = new ApiServer(config, controllerMap);
     httpServer.start();
 

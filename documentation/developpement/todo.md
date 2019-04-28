@@ -1,5 +1,6 @@
 # TODO, or not TODO
 
+- Index mongodb
 - Améliorer le projet playground avec les exemples du store
 - Faire passer les tests en CI
 - Rapatrier tous les TODOs des 158,4 précédents échecs
