@@ -5,8 +5,9 @@
   "scripts": {
     "start:api": "concurrently --kill-others 'npm run watch:shared' 'npm run watch:api' 'cd api && npm run start:nodemon'",
     "start:electron": "cd api && npm run start-electron",
-    "start:databases": "cd database && docker-compose up -d",
-    "stop:databases": "cd database && docker-compose down",
+    "start:databases": "cd databases && docker-compose up -d",
+    "clean:databases": "cd databases && docker-compose down -v",
+    "stop:databases": "cd databases && docker-compose down",
     "link:shared": "cd api && npm install ../shared && cd ../gui && npm install ../shared",
     "test:all:ci": "npm run test:gui:ci",
     "test:gui:ci": "cd gui && npm run test:ci",
@@ -29,6 +30,10 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/jsonwebtoken": "^8.3.2",
     "concurrently": "^4.1.0"
+  },
+  "dependencies": {
+    "jsonwebtoken": "^8.5.1"
   }
 }

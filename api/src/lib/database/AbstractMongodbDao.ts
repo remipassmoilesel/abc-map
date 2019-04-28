@@ -26,11 +26,8 @@ export abstract class AbstractMongodbDao<T> {
     }
 
     public async connect(): Promise<MongoClient> {
-        const username = this.config.mongodb.username;
-        const password = this.config.mongodb.password;
         const port = this.config.mongodb.port;
-
-        const databaseUri = `mongodb://${username}:${password}@localhost:${port}`;
+        const databaseUri = `mongodb://localhost:${port}`;
         this._client = await mongodb.connect(databaseUri, {
             useNewUrlParser: true,
         });

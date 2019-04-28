@@ -1,9 +1,10 @@
 import {UserDao} from './UserDao';
 import {IUserCreationRequest} from './IUserCreationRequest';
 import {IDbUser} from './IDbUser';
-import {IAuthenticationRequest} from './IAuthenticationRequest';
 import {AbstractService} from '../lib/AbstractService';
+import {PasswordHelper} from './PasswordHelper';
 import crypto from 'crypto';
+import uuid = require('uuid');
 
 export class UserService extends AbstractService {
 
@@ -13,8 +14,9 @@ export class UserService extends AbstractService {
 
     public createUser(request: IUserCreationRequest): Promise<any> {
         const passwordSalt = crypto.randomBytes(256).toString('hex');
-        const encryptedPassword = this.encryptPassword(request.password, passwordSalt);
+        const encryptedPassword = PasswordHelper.encryptPassword(request.password, passwordSalt);
         const user: IDbUser = {
+            id: uuid.v4(),
             username: request.username,
             email: request.email,
             passwordSalt,
@@ -23,11 +25,4 @@ export class UserService extends AbstractService {
         return this.userDao.insert(user);
     }
 
-    public authenticateUser(request: IAuthenticationRequest) {
-
-    }
-
-    private encryptPassword(password: string, salt: string) {
-        return crypto.pbkdf2Sync(password, salt, 10000, 512, 'sha512').toString('hex');
-    }
 }

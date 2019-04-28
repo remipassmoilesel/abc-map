@@ -14,12 +14,11 @@ logger.info('Starting Abc-Map API ...');
 
 const main = async function(): Promise<any> {
 
-
-    const daoMap = await getDaoMap();
-    const serviceMap = await getServices(daoMap);
+    const config = ApiConfigHelper.load();
+    const daoMap = await getDaoMap(config);
+    const serviceMap = await getServices(daoMap, config);
     const controllerMap = getControllers(serviceMap);
 
-    const config = ApiConfigHelper.load();
     const httpServer = new ApiServer(config, controllerMap);
     httpServer.start();
 

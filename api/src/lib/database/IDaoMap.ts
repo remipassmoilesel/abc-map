@@ -1,9 +1,7 @@
 import {ProjectDao} from '../../project/ProjectDao';
-import {ApiConfigHelper} from '../../IApiConfig';
+import {IApiConfig} from '../../IApiConfig';
 import {UserDao} from '../../users/UserDao';
 import {AbstractMongodbDao} from './AbstractMongodbDao';
-
-const config = ApiConfigHelper.load();
 
 export interface IDaoMap {
     [k: string]: AbstractMongodbDao<any>;
@@ -12,7 +10,7 @@ export interface IDaoMap {
     user: UserDao;
 }
 
-export async function getDaoMap(): Promise<IDaoMap> {
+export async function getDaoMap(config: IApiConfig): Promise<IDaoMap> {
     const daoMap: IDaoMap = {
         project: new ProjectDao(config),
         user: new UserDao(config)
