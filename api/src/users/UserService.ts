@@ -1,6 +1,6 @@
 import {UserDao} from './UserDao';
 import {IUserCreationRequest} from './IUserCreationRequest';
-import {IDbUser} from './IDbUser';
+import {IDbUser, UserMapper} from './IDbUser';
 import {AbstractService} from '../lib/AbstractService';
 import {PasswordHelper} from './PasswordHelper';
 import crypto from 'crypto';
@@ -22,7 +22,8 @@ export class UserService extends AbstractService {
             passwordSalt,
             encryptedPassword
         };
-        return this.userDao.insert(user);
+        return this.userDao.insert(user)
+            .then(res => UserMapper.dbToDto(user));
     }
 
 }

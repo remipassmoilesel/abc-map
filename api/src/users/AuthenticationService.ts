@@ -1,9 +1,11 @@
 import {UserDao} from './UserDao';
-import {IAuthenticationRequest} from './IAuthenticationRequest';
+import {IAuthenticationRequest, IAuthenticationResult} from './IAuthenticationRequest';
 import {AbstractService} from '../lib/AbstractService';
 import {PasswordHelper} from './PasswordHelper';
 import * as jwt from 'jsonwebtoken';
 import {IApiConfig} from '../IApiConfig';
+import {IUserDto} from './IUserDto';
+import {UserMapper} from './IDbUser';
 
 export class AuthenticationService extends AbstractService {
 
@@ -11,23 +13,33 @@ export class AuthenticationService extends AbstractService {
         super();
     }
 
-    public async authenticateUser(request: IAuthenticationRequest): Promise<boolean> {
-        const user = await this.userDao.findByUsername(request.username);
-        const requestPassword = PasswordHelper.encryptPassword(request.password, user.passwordSalt);
-        return requestPassword === user.encryptedPassword;
+    public async authenticateUser(request: IAuthenticationRequest): Promise<IAuthenticationResult> {
+        const authFailed: IAuthenticationResult = {authenticated: false};
+        return this.userDao.findByUsername(request.username)
+            .then((user) => {
+                const requestPassword = PasswordHelper.encryptPassword(request.password, user.passwordSalt);
+                if (requestPassword === user.encryptedPassword) {
+                    return {authenticated: true, user: UserMapper.dbToDto(user)};
+                }
+                return authFailed;
+            })
+            .catch(() => {
+                return authFailed;
+            });
     }
 
-    public async generateToken(username: string) {
-        const user = await this.userDao.findByUsername(username);
+    public generateToken(user: IUserDto): string {
         const today = new Date();
         const expirationDate = new Date(today);
         expirationDate.setDate(today.getDate() + 60);
 
-        return jwt.sign({
+        const tokenPayload = {
             id: user.id,
             email: user.email,
             exp: Math.round(expirationDate.getTime() / 1000),
-        }, this.config.jwtSecret);
+        };
+
+        return jwt.sign(tokenPayload, this.config.jwtSecret);
     }
 
 }
