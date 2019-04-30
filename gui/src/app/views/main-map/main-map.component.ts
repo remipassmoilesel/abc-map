@@ -66,7 +66,7 @@ export class MainMapComponent implements OnInit, OnDestroy {
 
   initMap() {
     this.map = new OlMap({
-      target: 'openlayers-map',
+      target: 'abc-openlayers-map',
       layers: [],
       view: new OlView({
         center: olFromLonLat([37.41, 8.82]),
