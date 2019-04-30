@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 
 import * as _ from 'lodash';
 import {Router} from '@angular/router';
-import {AbcRoute} from '../../app-routing.module';
+import {GuiRoute} from '../../app-routing.module';
 
 
 export interface IArgMap {
@@ -17,7 +17,7 @@ export class RoutingService {
   constructor(private router: Router) {
   }
 
-  public navigate(route: AbcRoute, args?: IArgMap) {
+  public navigate(route: GuiRoute, args?: IArgMap) {
     const path = args ? this.replaceArguments(args, route) : route;
     if (path.match(':')) {
       throw new Error(`Some path variables are missing: ${path}`);

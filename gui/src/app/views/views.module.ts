@@ -7,13 +7,15 @@ import {PageNotFoundComponent} from './page-not-found/page-not-found.component';
 import {RouterModule} from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
+import {ReactiveFormsModule} from '@angular/forms';
 
 @NgModule({
   imports: [
     CommonModule,
     NgbModule,
     ComponentsModule,
-    RouterModule
+    RouterModule,
+    ReactiveFormsModule
   ],
   declarations: [
     MainMapComponent,

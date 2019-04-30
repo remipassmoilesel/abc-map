@@ -5,25 +5,25 @@ import {PageNotFoundComponent} from './views/page-not-found/page-not-found.compo
 import {LoginComponent} from './views/login/login.component';
 import {RegisterComponent} from './views/register/register.component';
 
-export declare type AbcRoute = string;
+export declare type GuiRoute = string;
 
-export namespace AbcRoutes {
-  export const MAP: AbcRoute = 'map';
-  export const REGISTER: AbcRoute = 'register';
-  export const LOGIN: AbcRoute = 'login';
+export namespace GuiRoutes {
+  export const MAP: GuiRoute = 'map';
+  export const REGISTER: GuiRoute = 'register';
+  export const LOGIN: GuiRoute = 'login';
 }
 
 const routes: Routes = [
   {
-    path: AbcRoutes.MAP,
+    path: GuiRoutes.MAP,
     component: MainMapComponent
   },
   {
-    path: AbcRoutes.LOGIN,
+    path: GuiRoutes.LOGIN,
     component: LoginComponent
   },
   {
-    path: AbcRoutes.REGISTER,
+    path: GuiRoutes.REGISTER,
     component: RegisterComponent
   },
   {

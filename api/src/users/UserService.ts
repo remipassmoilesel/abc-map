@@ -1,5 +1,5 @@
 import {UserDao} from './UserDao';
-import {IUserCreationRequest} from './IUserCreationRequest';
+import {IUserCreationRequest} from 'abcmap-shared/dist/users/IUserCreationRequest';
 import {IDbUser, UserMapper} from './IDbUser';
 import {AbstractService} from '../lib/AbstractService';
 import {PasswordHelper} from './PasswordHelper';

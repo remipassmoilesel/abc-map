@@ -1,7 +1,7 @@
 import {AbstractController} from '../server/AbstractController';
 import {AuthenticationService} from './AuthenticationService';
 import {ApiRoutes} from 'abcmap-shared';
-import {IUserCreationRequest} from './IUserCreationRequest';
+import {IUserCreationRequest} from 'abcmap-shared';
 import {UserService} from './UserService';
 import passport from 'passport';
 import * as express from 'express';
@@ -25,14 +25,15 @@ export class UserController extends AbstractController {
         return router;
     }
 
-    public register = async (req: express.Request, res: express.Response) => {
+    public register = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
         const request: IUserCreationRequest = req.body;
         assert(request.username);
         assert(request.password);
         assert(request.email);
 
-        const user: IUserDto = await this.user.createUser(request);
-        res.send(user);
+        this.user.createUser(request)
+            .then(user => res.send(user))
+            .catch(next);
     };
 
     public myProfile = async (req: express.Request, res: express.Response) => {

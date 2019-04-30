@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ProjectService} from '../../lib/project/project.service';
 import {RxUtils} from "../../lib/utils/RxUtils";
 import {Subscription} from "rxjs";
-import {AbcRoutes} from '../../app-routing.module';
+import {GuiRoutes} from '../../app-routing.module';
 
 @Component({
   selector: 'abc-top-bar',
@@ -12,7 +12,7 @@ import {AbcRoutes} from '../../app-routing.module';
 export class TopBarComponent implements OnInit, OnDestroy {
 
   project$?: Subscription;
-  routes = AbcRoutes;
+  routes = GuiRoutes;
   projectName = '';
 
   constructor(private projectService: ProjectService) {}
