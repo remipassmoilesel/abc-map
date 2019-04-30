@@ -2,6 +2,8 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {MainMapComponent} from './views/main-map/main-map.component';
 import {PageNotFoundComponent} from './views/page-not-found/page-not-found.component';
+import {LoginComponent} from './views/login/login.component';
+import {RegisterComponent} from './views/register/register.component';
 
 export declare type AbcRoute = string;
 
@@ -15,6 +17,14 @@ const routes: Routes = [
   {
     path: AbcRoutes.MAP,
     component: MainMapComponent
+  },
+  {
+    path: AbcRoutes.LOGIN,
+    component: LoginComponent
+  },
+  {
+    path: AbcRoutes.REGISTER,
+    component: RegisterComponent
   },
   {
     path: '',

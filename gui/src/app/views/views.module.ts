@@ -5,6 +5,8 @@ import {ComponentsModule} from '../components/components.module';
 import {MainMapComponent} from './main-map/main-map.component';
 import {PageNotFoundComponent} from './page-not-found/page-not-found.component';
 import {RouterModule} from '@angular/router';
+import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
 
 @NgModule({
   imports: [
@@ -15,7 +17,9 @@ import {RouterModule} from '@angular/router';
   ],
   declarations: [
     MainMapComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    LoginComponent,
+    RegisterComponent
   ],
 })
 export class ViewsModule {
