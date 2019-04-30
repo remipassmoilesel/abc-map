@@ -3,11 +3,11 @@ import morgan = require('morgan');
 import expressWebsocket = require('express-ws');
 import bodyParser = require('body-parser');
 import passport = require('passport');
-import {IApiConfig} from '../IApiConfig';
 import {IControllerMap} from './IControllerMap';
-import {JwtStrategy} from '../users/JwtStrategy';
 import * as _ from 'lodash';
 import * as loglevel from 'loglevel';
+import {JwtStrategy} from './JwtStrategy';
+import {IApiConfig} from '../../IApiConfig';
 
 export class ApiServer {
 

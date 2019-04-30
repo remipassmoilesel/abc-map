@@ -1,7 +1,7 @@
-import {AbstractController} from '../server/AbstractController';
+import {AbstractController} from '../lib/server/AbstractController';
 import {AuthenticationService} from './AuthenticationService';
 import {ApiRoutes} from 'abcmap-shared';
-import {UserService} from './UserService';
+import {UserService} from '../users/UserService';
 import * as express from 'express';
 
 export class AuthenticationController extends AbstractController {

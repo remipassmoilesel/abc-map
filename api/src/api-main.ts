@@ -2,10 +2,10 @@ require('source-map-support').install();
 
 import * as loglevel from 'loglevel';
 import {ApiConfigHelper, IApiConfig} from './IApiConfig';
-import {ApiServer} from './server/ApiServer';
+import {ApiServer} from './lib/server/ApiServer';
 import {getDaoMap} from './lib/database/IDaoMap';
 import {getServices} from './lib/IServiceMap';
-import {getControllers} from './server/IControllerMap';
+import {getControllers} from './lib/server/IControllerMap';
 
 loglevel.setDefaultLevel('info');
 

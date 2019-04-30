@@ -1,6 +1,6 @@
 import express = require('express');
 import {NextFunction} from 'express';
-import {AbstractController} from '../server/AbstractController';
+import {AbstractController} from '../lib/server/AbstractController';
 import {ProjectService} from './ProjectService';
 import {ApiRoutes, IProject, IProjectEventContent, ProjectEvent} from 'abcmap-shared';
 import WebSocket from 'ws';

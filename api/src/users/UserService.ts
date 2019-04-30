@@ -2,7 +2,7 @@ import {UserDao} from './UserDao';
 import {IUserCreationRequest} from 'abcmap-shared/dist/users/IUserCreationRequest';
 import {IDbUser, UserMapper} from './IDbUser';
 import {AbstractService} from '../lib/AbstractService';
-import {PasswordHelper} from './PasswordHelper';
+import {PasswordHelper} from '../authentication/PasswordHelper';
 import crypto from 'crypto';
 import uuid = require('uuid');
 

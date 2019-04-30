@@ -1,5 +1,5 @@
 import {ExtractJwt, Strategy} from 'passport-jwt';
-import {ApiConfigHelper} from '../IApiConfig';
+import {ApiConfigHelper} from '../../IApiConfig';
 
 const apiConfig = ApiConfigHelper.load();
 

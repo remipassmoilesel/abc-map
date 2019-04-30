@@ -1,4 +1,4 @@
-import {IUserDto} from './IUserDto';
+import {IUserDto} from '../users/IUserDto';
 
 export interface IAuthenticationRequest {
     username: string;

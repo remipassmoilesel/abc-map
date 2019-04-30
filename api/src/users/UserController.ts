@@ -1,12 +1,10 @@
-import {AbstractController} from '../server/AbstractController';
-import {AuthenticationService} from './AuthenticationService';
-import {ApiRoutes} from 'abcmap-shared';
-import {IUserCreationRequest} from 'abcmap-shared';
+import {AbstractController} from '../lib/server/AbstractController';
+import {AuthenticationService} from '../authentication/AuthenticationService';
+import {ApiRoutes, IUserCreationRequest} from 'abcmap-shared';
 import {UserService} from './UserService';
 import passport from 'passport';
 import * as express from 'express';
 import assert from 'assert';
-import {IUserDto} from './IUserDto';
 
 const authenticated = passport.authenticate('jwt', {session: false});
 

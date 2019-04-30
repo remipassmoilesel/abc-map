@@ -1,8 +1,8 @@
-import {ProjectController} from '../project/ProjectController';
-import {IServiceMap} from '../lib/IServiceMap';
-import {AuthenticationController} from '../users/AuthenticationController';
 import {AbstractController} from './AbstractController';
-import {UserController} from '../users/UserController';
+import {ProjectController} from '../../project/ProjectController';
+import {AuthenticationController} from '../../authentication/AuthenticationController';
+import {UserController} from '../../users/UserController';
+import {IServiceMap} from '../IServiceMap';
 
 export interface IControllerMap {
     [k: string]: AbstractController;

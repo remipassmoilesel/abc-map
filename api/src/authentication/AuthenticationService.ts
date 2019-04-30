@@ -1,11 +1,11 @@
-import {UserDao} from './UserDao';
+import {UserDao} from '../users/UserDao';
 import {IAuthenticationRequest, IAuthenticationResult} from './IAuthenticationRequest';
 import {AbstractService} from '../lib/AbstractService';
 import {PasswordHelper} from './PasswordHelper';
 import * as jwt from 'jsonwebtoken';
 import {IApiConfig} from '../IApiConfig';
-import {IUserDto} from './IUserDto';
-import {UserMapper} from './IDbUser';
+import {IUserDto} from '../users/IUserDto';
+import {UserMapper} from '../users/IDbUser';
 
 export class AuthenticationService extends AbstractService {
 

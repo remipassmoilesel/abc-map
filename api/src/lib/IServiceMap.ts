@@ -2,7 +2,7 @@ import {ProjectService} from '../project/ProjectService';
 import {IDaoMap} from './database/IDaoMap';
 import {AbstractService} from './AbstractService';
 import {UserService} from '../users/UserService';
-import {AuthenticationService} from '../users/AuthenticationService';
+import {AuthenticationService} from '../authentication/AuthenticationService';
 import {IApiConfig} from '../IApiConfig';
 
 export interface IServiceMap {
