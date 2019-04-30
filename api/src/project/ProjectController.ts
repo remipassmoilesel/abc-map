@@ -4,6 +4,7 @@ import {AbstractController} from '../lib/server/AbstractController';
 import {ProjectService} from './ProjectService';
 import {ApiRoutes, IProject, IProjectEventContent, ProjectEvent} from 'abcmap-shared';
 import WebSocket from 'ws';
+import {asyncHandler} from '../lib/server/asyncExpressHandler';
 
 export class ProjectController extends AbstractController {
 
@@ -14,10 +15,10 @@ export class ProjectController extends AbstractController {
     public getRouter(): express.Router {
         const router = express.Router();
 
-        router.get(ApiRoutes.PROJECT_CREATE_NEW.path, this.createNewProject);
         router.ws(ApiRoutes.PROJECT_WEBSOCKET.path, this.projectWebsocket);
-        router.get(ApiRoutes.PROJECT_GET_BY_ID.path, this.getProject);
-        router.post(ApiRoutes.PROJECT.path, this.saveProject);
+        router.get(ApiRoutes.PROJECT_CREATE_NEW.path, asyncHandler(this.createNewProject));
+        router.get(ApiRoutes.PROJECT_GET_BY_ID.path, asyncHandler(this.getProject));
+        router.post(ApiRoutes.PROJECT.path, asyncHandler(this.saveProject));
 
         return router;
     }
@@ -34,20 +35,18 @@ export class ProjectController extends AbstractController {
 
     private getProject = async (req: express.Request, res: express.Response, next: NextFunction) => {
         const projectId = req.params.id;
-        this.projectService.findProject(projectId)
+        return this.projectService.findProject(projectId)
             .then((project) => {
                 res.json(project);
-            })
-            .catch(next);
+            });
     };
 
     private createNewProject = async (req: express.Request, res: express.Response, next: NextFunction) => {
         const projectName = req.query.name;
-        this.projectService.createNewProject(projectName)
+        return this.projectService.createNewProject(projectName)
             .then((project) => {
                 res.json(project);
-            })
-            .catch(next);
+            });
     };
 
     private saveProject = async (req: express.Request, res: express.Response, next: NextFunction) => {
@@ -55,11 +54,10 @@ export class ProjectController extends AbstractController {
         if(!toSave){
             return next("Project must be defined");
         }
-        this.projectService.updateProject(toSave)
+        return this.projectService.updateProject(toSave)
             .then((project) => {
                 res.json(project);
-            })
-            .catch(next);
+            });
     };
 
 }

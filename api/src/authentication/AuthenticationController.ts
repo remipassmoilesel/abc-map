@@ -29,6 +29,7 @@ export class AuthenticationController extends AbstractController {
                 token
             });
         }
+
         return res.sendStatus(403);
     };
 

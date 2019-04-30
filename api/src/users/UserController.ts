@@ -5,6 +5,7 @@ import {UserService} from './UserService';
 import passport from 'passport';
 import * as express from 'express';
 import assert from 'assert';
+import {asyncHandler} from '../lib/server/asyncExpressHandler';
 
 const authenticated = passport.authenticate('jwt', {session: false});
 
@@ -17,8 +18,8 @@ export class UserController extends AbstractController {
 
     public getRouter(): express.Router {
         const router = express.Router();
-        router.post(ApiRoutes.REGISTER.path, this.register);
-        router.post(ApiRoutes.MY_PROFILE.path, authenticated, this.myProfile);
+        router.post(ApiRoutes.REGISTER.path, asyncHandler(this.register));
+        router.post(ApiRoutes.MY_PROFILE.path, authenticated, asyncHandler(this.myProfile));
 
         return router;
     }
@@ -29,9 +30,8 @@ export class UserController extends AbstractController {
         assert(request.password);
         assert(request.email);
 
-        this.user.createUser(request)
-            .then(user => res.send(user))
-            .catch(next);
+        const user = await this.user.createUser(request);
+        res.send(user);
     };
 
     public myProfile = async (req: express.Request, res: express.Response) => {
