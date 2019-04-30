@@ -1,8 +1,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {GuiRoutes} from '../../routing/GuiRoutes';
 import {ProjectService} from '../../lib/project/project.service';
 import {RxUtils} from "../../lib/utils/RxUtils";
 import {Subscription} from "rxjs";
+import {AbcRoutes} from '../../app-routing.module';
 
 @Component({
   selector: 'abc-top-bar',
@@ -12,7 +12,7 @@ import {Subscription} from "rxjs";
 export class TopBarComponent implements OnInit, OnDestroy {
 
   project$?: Subscription;
-  routes = GuiRoutes;
+  routes = AbcRoutes;
   projectName = '';
 
   constructor(private projectService: ProjectService) {}
@@ -37,4 +37,5 @@ export class TopBarComponent implements OnInit, OnDestroy {
   saveProject() {
     this.projectService.saveProject().subscribe();
   }
+
 }
