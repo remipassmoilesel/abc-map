@@ -1,4 +1,4 @@
-import {ApiRoutes, ILoginRequest, IUserCreationRequest} from 'abcmap-shared';
+import {ApiRoutes, ILoginRequest, ILoginResponse, IUserCreationRequest} from 'abcmap-shared';
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
@@ -12,11 +12,11 @@ export class AuthenticationClient {
 
   }
 
-  public registerUser(request: IUserCreationRequest): Observable<any> {
-    return this.httpClient.post<any>(ApiRoutes.REGISTER.path, request);
+  public registerUser(request: IUserCreationRequest): Observable<void> {
+    return this.httpClient.post<void>(ApiRoutes.REGISTER.path, request);
   }
 
   public login(request: ILoginRequest) {
-    return this.httpClient.post<any>(ApiRoutes.LOGIN.path, request);
+    return this.httpClient.post<ILoginResponse>(ApiRoutes.LOGIN.path, request);
   }
 }

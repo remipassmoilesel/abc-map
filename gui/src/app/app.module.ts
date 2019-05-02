@@ -14,6 +14,8 @@ import {ViewsModule} from './views/views.module';
 import {ToastrModule} from 'ngx-toastr';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ReactiveFormsModule} from '@angular/forms';
+import {HTTP_INTERCEPTORS} from '@angular/common/http';
+import {TokenInterceptor} from './lib/authentication/TokenInterceptor';
 
 @NgModule({
   declarations: [
@@ -33,8 +35,14 @@ import {ReactiveFormsModule} from '@angular/forms';
     ViewsModule,
     ComponentsModule
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true
+    }
+  ]
 })
 export class AppModule {
 }

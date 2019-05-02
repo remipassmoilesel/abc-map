@@ -3,6 +3,7 @@ import {AuthenticationService} from './AuthenticationService';
 import {ApiRoutes} from 'abcmap-shared';
 import {UserService} from '../users/UserService';
 import * as express from 'express';
+import {asyncHandler} from '../lib/server/asyncExpressHandler';
 
 export class AuthenticationController extends AbstractController {
 
@@ -13,7 +14,7 @@ export class AuthenticationController extends AbstractController {
 
     public getRouter(): express.Router {
         const router = express.Router();
-        router.post(ApiRoutes.LOGIN.path, this.login);
+        router.post(ApiRoutes.LOGIN.path, asyncHandler(this.login));
 
         return router;
     }
@@ -24,10 +25,7 @@ export class AuthenticationController extends AbstractController {
         const authenticationResult = await this.authentication.authenticateUser({username, password});
         if (authenticationResult.authenticated && authenticationResult.user) {
             const token = this.authentication.generateToken(authenticationResult.user);
-            return res.status(200).json({
-                message: 'Authorized',
-                token
-            });
+            return res.send({message: 'Authorized', token});
         }
 
         return res.sendStatus(403);

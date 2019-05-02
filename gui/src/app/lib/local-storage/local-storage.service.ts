@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 
 export enum LSKey {
   CURRENT_PROJECT_ID = 'ABC_CURRENT_PROJECT',
+  USER_TOKEN = 'ABC_USER_TOKEN',
 }
 
 @Injectable({

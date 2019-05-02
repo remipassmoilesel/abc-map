@@ -1,8 +1,9 @@
 import {Injectable} from '@angular/core';
 import {AuthenticationClient} from './AuthenticationClient';
-import {IUserCreationRequest, ILoginRequest} from 'abcmap-shared';
+import {ILoginRequest, IUserCreationRequest} from 'abcmap-shared';
 import {ToastService} from '../notifications/toast.service';
 import {tap} from 'rxjs/operators';
+import {LocalStorageService, LSKey} from '../local-storage/local-storage.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,16 @@ import {tap} from 'rxjs/operators';
 export class AuthenticationService {
 
   constructor(private client: AuthenticationClient,
+              private localStorage: LocalStorageService,
               private toasts: ToastService) {
+  }
+
+  public getToken(): string | null {
+    return this.localStorage.get(LSKey.USER_TOKEN);
+  }
+
+  public setToken(token: string): void {
+    this.localStorage.save(LSKey.USER_TOKEN, token);
   }
 
   public registerUser(request: IUserCreationRequest) {
@@ -24,7 +34,10 @@ export class AuthenticationService {
   public login(request: ILoginRequest) {
     return this.client.login(request)
       .pipe(
-        tap(res => this.toasts.info('Vous êtes connecté !'),
+        tap(res => {
+            this.toasts.info('Vous êtes connecté !');
+            this.setToken(res.token);
+          },
           err => this.toasts.error('Identifiants incorrects !'))
       );
   }
