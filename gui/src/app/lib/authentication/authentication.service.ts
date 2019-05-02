@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {AuthenticationClient} from './AuthenticationClient';
-import {IUserCreationRequest} from 'abcmap-shared';
+import {IUserCreationRequest, ILoginRequest} from 'abcmap-shared';
 import {ToastService} from '../notifications/toast.service';
 import {tap} from 'rxjs/operators';
 
@@ -18,6 +18,14 @@ export class AuthenticationService {
       .pipe(
         tap(res => this.toasts.info('Vous êtes inscrit !'),
           err => this.toasts.error('Erreur lors de l\'inscription, veuillez réessayer plus tard !'))
+      );
+  }
+
+  public login(request: ILoginRequest) {
+    return this.client.login(request)
+      .pipe(
+        tap(res => this.toasts.info('Vous êtes connecté !'),
+          err => this.toasts.error('Identifiants incorrects !'))
       );
   }
 }

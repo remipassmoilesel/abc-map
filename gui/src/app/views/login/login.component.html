@@ -1,3 +1,28 @@
-<p>
-  login works!
-</p>
+
+<div class="abc-login-view abc-view">
+
+  <h1>Identification</h1>
+
+  <form class="abc-login-form" [formGroup]="loginForm" *ngIf="loginForm" (ngSubmit)="login()">
+
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text">@</span>
+      </div>
+      <input type="text" class="form-control" placeholder="Nom d'utilisateur" formControlName="username">
+    </div>
+
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text">@</span>
+      </div>
+      <input type="password" class="form-control" placeholder="Mot de passe" formControlName="password">
+    </div>
+
+    <div>
+      <button class="btn btn-primary" [disabled]="loginForm.invalid">S'inscrire</button>
+    </div>
+
+  </form>
+
+</div>

@@ -1,9 +1,8 @@
-import {ApiRoutes, IUserCreationRequest} from 'abcmap-shared';
+import {ApiRoutes, ILoginRequest, IUserCreationRequest} from 'abcmap-shared';
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 
-// TODO: handle errors
 @Injectable({
   providedIn: 'root'
 })
@@ -14,8 +13,10 @@ export class AuthenticationClient {
   }
 
   public registerUser(request: IUserCreationRequest): Observable<any> {
-    const url = ApiRoutes.REGISTER.path;
-    return this.httpClient.post<any>(url, request);
+    return this.httpClient.post<any>(ApiRoutes.REGISTER.path, request);
   }
 
+  public login(request: ILoginRequest) {
+    return this.httpClient.post<any>(ApiRoutes.LOGIN.path, request);
+  }
 }
