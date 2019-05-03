@@ -6,12 +6,12 @@ export type AsyncRequestHandler = (req: Request, res: Response, next: NextFuncti
 export const asyncHandler = (handler: AsyncRequestHandler) =>
     (request: express.Request, response: express.Response, next: express.NextFunction) => {
         handler(request, response, next)
-            .then(result => {
+            .then((result: any) => {
                 if (result) {
-                    response.send(result);
+                    response.json(result);
                 }
             })
-            .catch(err => {
+            .catch((err) => {
                 next(err);
             });
     };
