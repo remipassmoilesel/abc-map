@@ -15,7 +15,7 @@ export interface IControllerMap {
 export function getControllers(services: IServiceMap): IControllerMap {
     return {
         project: new ProjectController(services.project),
-        authentication: new AuthenticationController(services.authentication, services.user),
+        authentication: new AuthenticationController(services.authentication),
         user: new UserController(services.authentication, services.user)
     };
 }

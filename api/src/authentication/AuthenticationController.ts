@@ -1,14 +1,12 @@
 import {AbstractController} from '../lib/server/AbstractController';
 import {AuthenticationService} from './AuthenticationService';
-import {ApiRoutes} from 'abcmap-shared';
-import {UserService} from '../users/UserService';
+import {ApiRoutes, ILoginResponse} from 'abcmap-shared';
 import * as express from 'express';
 import {asyncHandler} from '../lib/server/asyncExpressHandler';
 
 export class AuthenticationController extends AbstractController {
 
-    constructor(private authentication: AuthenticationService,
-                private user: UserService) {
+    constructor(private authentication: AuthenticationService) {
         super();
     }
 
@@ -19,16 +17,16 @@ export class AuthenticationController extends AbstractController {
         return router;
     }
 
-    public login = async (req: express.Request, res: express.Response) => {
+    public login = async (req: express.Request, res: express.Response): Promise<ILoginResponse> => {
         const {username, password} = req.body;
 
         const authenticationResult = await this.authentication.authenticateUser({username, password});
         if (authenticationResult.authenticated && authenticationResult.user) {
             const token = this.authentication.generateToken(authenticationResult.user);
-            return res.send({message: 'Authorized', token});
+            return {message: 'Authorized', token};
         }
 
-        return res.sendStatus(403);
+        return Promise.reject(new Error('Forbidden'));
     };
 
 }
