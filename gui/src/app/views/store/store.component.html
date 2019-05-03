@@ -1,19 +1,13 @@
 
-<div class="abc-login-view abc-view">
+<div class="abc-store-view abc-view mt-5 pb-3">
 
-  <h1>Magasin de données</h1>
+  <h1 class="mb-2">Magasin de données</h1>
 
-  <form class="abc-login-form" [formGroup]="searchForm" *ngIf="searchForm" (ngSubmit)="search()">
+  <form class="abc-search-form" [formGroup]="searchForm" *ngIf="searchForm" (ngSubmit)="search()">
 
-    <div class="input-group mb-3">
-      <div class="input-group-prepend">
-        <span class="input-group-text"><i class="fa fa-search"></i> </span>
-      </div>
-      <input type="password" class="form-control" placeholder="Mot de passe" formControlName="password">
-    </div>
-
-    <div>
-      <button class="btn btn-primary" [disabled]="searchForm.invalid">Connexion</button>
+    <div class="d-flex justify-content-start align-items-center mt-3">
+      <input type="text" class="form-control" placeholder="Que cherchez vous ?" formControlName="query">
+      <button class="btn btn-primary ml-3" [disabled]="searchForm.invalid">Rechercher</button>
     </div>
 
   </form>
