@@ -4,6 +4,7 @@ import {MainMapComponent} from './views/main-map/main-map.component';
 import {PageNotFoundComponent} from './views/page-not-found/page-not-found.component';
 import {LoginComponent} from './views/login/login.component';
 import {RegisterComponent} from './views/register/register.component';
+import {StoreComponent} from './views/store/store.component';
 
 export declare type GuiRoute = string;
 
@@ -11,6 +12,7 @@ export namespace GuiRoutes {
   export const MAP: GuiRoute = 'map';
   export const REGISTER: GuiRoute = 'register';
   export const LOGIN: GuiRoute = 'login';
+  export const STORE: GuiRoute = 'store';
 }
 
 const routes: Routes = [
@@ -25,6 +27,10 @@ const routes: Routes = [
   {
     path: GuiRoutes.REGISTER,
     component: RegisterComponent
+  },
+  {
+    path: GuiRoutes.STORE,
+    component: StoreComponent
   },
   {
     path: '',

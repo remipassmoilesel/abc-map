@@ -8,6 +8,7 @@ import {RouterModule} from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import {ReactiveFormsModule} from '@angular/forms';
+import { StoreComponent } from './store/store.component';
 
 @NgModule({
   imports: [
@@ -21,7 +22,8 @@ import {ReactiveFormsModule} from '@angular/forms';
     MainMapComponent,
     PageNotFoundComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    StoreComponent
   ],
 })
 export class ViewsModule {
