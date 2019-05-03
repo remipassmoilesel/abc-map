@@ -8,10 +8,10 @@ export const asyncHandler = (handler: AsyncRequestHandler) =>
         handler(request, response, next)
             .then((result: any) => {
                 if (result) {
-                    response.json(result);
+                    return response.json(result);
                 }
             })
             .catch((err) => {
-                next(err);
+                return next(err || new Error('Interval server error'));
             });
     };
