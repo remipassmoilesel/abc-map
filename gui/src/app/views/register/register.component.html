@@ -1,7 +1,7 @@
 
-<div class="abc-register-view abc-view">
+<div class="abc-register-view abc-view mt-5 pb-3">
 
-  <h1>Inscription</h1>
+  <h1 class="mb-2">Inscription</h1>
 
   <form class="abc-register-form" [formGroup]="registerForm" *ngIf="registerForm" (ngSubmit)="register()">
 
@@ -26,9 +26,10 @@
       <input type="password" class="form-control" placeholder="Mot de passe" formControlName="password">
     </div>
 
-    <div>
+    <div class="d-flex justify-content-end align-items-end mt-3">
       <button class="btn btn-primary" [disabled]="registerForm.invalid">S'inscrire</button>
     </div>
+
 
   </form>
 

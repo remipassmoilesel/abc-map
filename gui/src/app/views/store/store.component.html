@@ -1,3 +1,21 @@
-<p>
-  store works!
-</p>
+
+<div class="abc-login-view abc-view">
+
+  <h1>Magasin de données</h1>
+
+  <form class="abc-login-form" [formGroup]="searchForm" *ngIf="searchForm" (ngSubmit)="search()">
+
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text"><i class="fa fa-search"></i> </span>
+      </div>
+      <input type="password" class="form-control" placeholder="Mot de passe" formControlName="password">
+    </div>
+
+    <div>
+      <button class="btn btn-primary" [disabled]="searchForm.invalid">Connexion</button>
+    </div>
+
+  </form>
+
+</div>
