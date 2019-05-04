@@ -1,6 +1,6 @@
 import * as uuid from 'uuid';
 import * as _ from 'lodash';
-import {IPredefinedLayer, IVectorLayer, IWmsLayer, MapLayerType, PredefinedLayerPreset, WmsParams} from './IMapLayer';
+import {IPredefinedLayer, IVectorLayer, IWmsLayer, MapLayerType, PredefinedLayerPreset, IWmsParams} from './IMapLayer';
 import {PredefinedLayers} from './PredefinedLayers';
 
 export class LayerHelper {
@@ -27,7 +27,7 @@ export class LayerHelper {
         };
     }
 
-    public static newWmsLayer(url: string, wmsParams: WmsParams): IWmsLayer {
+    public static newWmsLayer(url: string, wmsParams: IWmsParams): IWmsLayer {
         return {
             id: this.generateLayerId(MapLayerType.Wms),
             name: 'Fond de carte ' + url,
