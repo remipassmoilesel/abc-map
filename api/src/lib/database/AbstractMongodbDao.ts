@@ -1,42 +1,59 @@
-import * as mongodb from "mongodb";
-import {InsertOneWriteOpResult, MongoClient, UpdateWriteOpResult} from 'mongodb';
+import * as mongodb from 'mongodb';
+import {Db, InsertOneWriteOpResult, MongoClient} from 'mongodb';
 import {Logger} from 'loglevel';
-import {AbcApiConfig} from "../../AbcApiConfig";
+import {IApiConfig} from '../../IApiConfig';
 
 export abstract class AbstractMongodbDao<T> {
 
     protected abstract logger: Logger;
 
-    protected databasename = "abcmap";
+    protected databasename = 'abcmap';
     protected abstract collectionName: string;
 
-    protected client?: MongoClient;
+    protected _client?: MongoClient;
 
-    constructor(private config: AbcApiConfig){
+    constructor(private config: IApiConfig) {
 
+    }
+
+    public async postConstruct(): Promise<any> {
+        await this.connect();
+        await this.createCollection();
+    }
+
+    public async createCollection(): Promise<any> {
+        await this.db().createCollection(this.collectionName);
     }
 
     public async connect(): Promise<MongoClient> {
-        const username = this.config.MONGODB.username;
-        const password = this.config.MONGODB.password;
-        const port = this.config.MONGODB.port;
-
-        const databaseUri = `mongodb://${username}:${password}@localhost:${port}`;
-        this.client = await mongodb.connect(databaseUri, {
+        const port = this.config.mongodb.port;
+        const databaseUri = `mongodb://localhost:${port}`;
+        this._client = await mongodb.connect(databaseUri, {
             useNewUrlParser: true,
         });
 
-        return Promise.resolve(this.client);
+        return Promise.resolve(this._client);
     }
 
     public async insert(object: T): Promise<InsertOneWriteOpResult> {
-        if (!this.client) {
-            return Promise.reject("Not connected");
+        if (!this._client) {
+            return Promise.reject('Not connected');
         }
-        return this.client
+        return this._client
             .db(this.databasename)
             .collection(this.collectionName)
             .insertOne(object);
+    }
+
+    protected client(): MongoClient {
+        if (!this._client) {
+            throw new Error('Not connected');
+        }
+        return this._client;
+    }
+
+    protected db(): Db {
+        return this.client().db(this.databasename);
     }
 
 }

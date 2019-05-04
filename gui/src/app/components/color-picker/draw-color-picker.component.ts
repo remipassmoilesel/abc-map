@@ -25,7 +25,7 @@ export class DrawColorPickerComponent implements OnInit, OnDestroy {
   activeForegroundColor = 'rgb(220,220,220)';
   activeBackgroundColor = 'rgb(220,220,220)';
 
-  selectedColor: string = 'black';
+  selectedColor = 'black';
   colorHistory: string[] = [];
 
   colorPresets = [
@@ -110,6 +110,6 @@ export class DrawColorPickerComponent implements OnInit, OnDestroy {
       .subscribe(mapState => {
         this.activeForegroundColor = mapState.activeStyle.foreground;
         this.activeBackgroundColor = mapState.activeStyle.background;
-      })
+      });
   }
 }

@@ -1,0 +1,33 @@
+version: '3.1'
+
+services:
+
+  mongo:
+    image: mongo:4-xenial
+    container_name: abcmap-mongodb
+    restart: always
+    networks:
+      - abcmap-databases
+    ports:
+      - "127.0.0.1:27017:27017"
+    volumes:
+      - './mongodb-data:/data/db'
+    command: mongod
+
+  minio1:
+    image: minio/minio:RELEASE.2019-04-18T21-44-59Z
+    container_name: abcmap-minio
+    restart: always
+    volumes:
+      - './minio-data/data1:/data'
+    networks:
+      - abcmap-databases
+    ports:
+      - "127.0.0.1:9001:9000"
+    environment:
+      MINIO_ACCESS_KEY: minio
+      MINIO_SECRET_KEY: "fbdbff136c51976ee004d5c5896992d4"
+    command: server /data
+
+networks:
+  abcmap-databases:

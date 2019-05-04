@@ -1,30 +1,28 @@
+import {Injectable} from '@angular/core';
+
 import * as _ from 'lodash';
+import {Router} from '@angular/router';
+import {GuiRoute} from '../../app-routing.module';
+
 
 export interface IArgMap {
   [k: string]: string;
 }
 
-export class AbcRoute {
+@Injectable({
+  providedIn: 'root'
+})
+export class RoutingService {
 
-  constructor(public readonly path: string) {
-
+  constructor(private router: Router) {
   }
 
-  public link(): string {
-    return this.withRoot().toString();
-  }
-
-  public withRoot(): AbcRoute {
-    return new AbcRoute('/' + this.path);
-  }
-
-  public withArgs(args: IArgMap): AbcRoute {
-    const newPath = this.replaceArguments(args, this.path);
-    return new AbcRoute(newPath);
-  }
-
-  public toString() {
-    return this.path;
+  public navigate(route: GuiRoute, args?: IArgMap) {
+    const path = args ? this.replaceArguments(args, route) : route;
+    if (path.match(':')) {
+      throw new Error(`Some path variables are missing: ${path}`);
+    }
+    return this.router.navigateByUrl('/' + path);
   }
 
   private replaceArguments(args: IArgMap, oldPath: string): string {
@@ -43,3 +41,4 @@ export class AbcRoute {
   }
 
 }
+

@@ -1,8 +1,12 @@
 <nav class="abc-topbar navbar navbar-expand navbar-light bg-light border-bottom">
   <a class="navbar-brand" href="#">Abc-Map</a>
 
-  <div class="collapse navbar-collapse">
+  <div class="collapse navbar-collapse justify-content-between">
     <ul class="navbar-nav">
+
+      <li class="nav-item active">
+        <a class="nav-link" [routerLink]="routes.MAP"> Carte</a>
+      </li>
 
       <li class="nav-item">
         <div ngbDropdown class="d-inline-block">
@@ -20,16 +24,32 @@
         <div ngbDropdown class="d-inline-block">
           <a class="btn cursor-pointer" ngbDropdownToggle>Vue</a>
           <div ngbDropdownMenu>
-            <button ngbDropdownItem [routerLink]="routes.MAP.link()">Carte</button>
+            <button ngbDropdownItem [routerLink]="routes.STORE">Magasin de données</button>
           </div>
         </div>
       </li>
+
+    </ul>
+
+    <ul class="navbar-nav">
 
       <li class="nav-item" *ngIf="projectName">
         <span class="nav-link">Project actuel: {{ projectName }}</span>
       </li>
 
+      <li class="nav-item">
+        <div ngbDropdown class="d-inline-block">
+          <a class="btn cursor-pointer" ngbDropdownToggle>
+            <i class="far fa-user"></i></a>
+          <div ngbDropdownMenu>
+            <button ngbDropdownItem [routerLink]="routes.REGISTER">Inscription</button>
+            <button ngbDropdownItem [routerLink]="routes.LOGIN">Connexion</button>
+          </div>
+        </div>
+      </li>
+
     </ul>
+
   </div>
 
 </nav>

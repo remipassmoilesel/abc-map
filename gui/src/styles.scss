@@ -1,9 +1,10 @@
 @import "~@fortawesome/fontawesome-free/css/all.css";
-@import 'assets/bootstrap_theme';
+@import 'assets/style/bootstrap_theme';
 @import '~bootstrap/scss/bootstrap';
 @import "~ol/ol.css";
 @import '~ngx-toastr/toastr.css';
-@import 'assets/global';
+@import 'assets/style/global';
+@import 'assets/style/layout';
 
 html, body {
   height: 100%;

@@ -3,7 +3,7 @@ import {IAbcStyleContainer} from '../../lib/map/AbcStyles';
 
 export interface IMapState {
   drawingTool: DrawingTool;
-  activeStyle: IAbcStyleContainer
+  activeStyle: IAbcStyleContainer;
 }
 
 export const mapInitialState: IMapState = {

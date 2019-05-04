@@ -5,11 +5,13 @@
   "scripts": {
     "start:api": "concurrently --kill-others 'npm run watch:shared' 'npm run watch:api' 'cd api && npm run start:nodemon'",
     "start:electron": "cd api && npm run start-electron",
-    "start:databases": "cd database && docker-compose up -d",
-    "stop:databases": "cd database && docker-compose down",
+    "start:databases": "cd databases && docker-compose up -d",
+    "clean:databases": "cd databases && docker-compose down -v",
+    "stop:databases": "cd databases && docker-compose down",
     "link:shared": "cd api && npm install ../shared && cd ../gui && npm install ../shared",
-    "test:all:ci": "npm run test:gui:ci",
+    "test:all:ci": "npm run test:api && npm run test:gui:ci",
     "test:gui:ci": "cd gui && npm run test:ci",
+    "test:api": "cd api && npm run test",
     "install:all": "npm run install:shared && npm run install:api && npm run install:gui",
     "install:api": "cd api && npm install",
     "install:gui": "cd gui && npm install",
@@ -29,6 +31,16 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/jsonwebtoken": "^8.3.2",
+    "@types/passport": "^1.0.0",
+    "@types/passport-jwt": "^3.0.1",
+    "@types/passport-local": "^1.0.33",
     "concurrently": "^4.1.0"
+  },
+  "dependencies": {
+    "jsonwebtoken": "^8.5.1",
+    "passport": "^0.4.0",
+    "passport-jwt": "^4.0.0",
+    "passport-local": "^1.0.0"
   }
 }

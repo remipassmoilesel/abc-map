@@ -1,5 +1,7 @@
 export abstract class AbstractService {
 
-    public abstract postConstruct(): Promise<any>;
+    public postConstruct(): Promise<any> {
+        return Promise.resolve();
+    }
 
 }

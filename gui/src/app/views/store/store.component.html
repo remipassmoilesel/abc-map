@@ -1,0 +1,15 @@
+
+<div class="abc-store-view abc-view mt-5 pb-3">
+
+  <h1 class="mb-2">Magasin de données</h1>
+
+  <form class="abc-search-form" [formGroup]="searchForm" *ngIf="searchForm" (ngSubmit)="search()">
+
+    <div class="d-flex justify-content-start align-items-center mt-3">
+      <input type="text" class="form-control" placeholder="Que cherchez vous ?" formControlName="query">
+      <button class="btn btn-primary ml-3" [disabled]="searchForm.invalid">Rechercher</button>
+    </div>
+
+  </form>
+
+</div>

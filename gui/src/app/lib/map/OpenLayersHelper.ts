@@ -8,6 +8,9 @@ import GeometryType = geom.GeometryType;
 
 export class OpenLayersHelper {
 
+  private static readonly layerId = 'abcLayerId';
+  private static readonly styleId = 'abcStyle';
+
   public static toolToGeometryType(tool: DrawingTool): GeometryType {
     switch (tool.id) {
       case DrawingTools.Polygon.id:
@@ -20,9 +23,6 @@ export class OpenLayersHelper {
         throw new Error('Cannot convert: ' + tool);
     }
   }
-
-  private static readonly layerId = 'abcLayerId';
-  private static readonly styleId = 'abcStyle';
 
   public static getLayerId(layer: OlBase | OlVectorSource): string | undefined {
     return layer.get(this.layerId);

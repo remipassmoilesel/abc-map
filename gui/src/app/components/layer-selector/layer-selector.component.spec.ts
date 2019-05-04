@@ -2,6 +2,7 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {LayerSelectorComponent} from './layer-selector.component';
 import {AppModule} from '../../app.module';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
 
 describe('LayerSelectorComponent', () => {
   let component: LayerSelectorComponent;
@@ -9,7 +10,7 @@ describe('LayerSelectorComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [AppModule]
+      imports: [AppModule, HttpClientTestingModule]
     })
       .compileComponents();
   }));

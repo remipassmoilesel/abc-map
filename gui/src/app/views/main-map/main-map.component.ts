@@ -4,9 +4,9 @@ import {Subscription} from 'rxjs';
 import {RxUtils} from '../../lib/utils/RxUtils';
 import {LoggerFactory} from '../../lib/utils/LoggerFactory';
 import {ProjectService} from '../../lib/project/project.service';
-import {DrawEvent, OlEvent, olFromLonLat, OlMap, OlTileLayer, OlTileWMS, OlVectorSource, OlView} from '../../lib/OpenLayersImports';
+import {DrawEvent, OlEvent, olFromLonLat, OlMap, OlVectorSource, OlView} from '../../lib/OpenLayersImports';
 import {OpenLayersHelper} from '../../lib/map/OpenLayersHelper';
-import {DrawingTool, DrawingTools} from '../../lib/map/DrawingTool';
+import {DrawingTool} from '../../lib/map/DrawingTool';
 import {Actions, ofType} from '@ngrx/effects';
 import {MapModule} from '../../store/map/map-actions';
 import {IAbcStyleContainer} from '../../lib/map/AbcStyles';
@@ -17,17 +17,15 @@ import {flatMap, take} from 'rxjs/operators';
 import {zip} from 'rxjs/internal/observable/zip';
 import {of} from 'rxjs/internal/observable/of';
 import {IProject} from 'abcmap-shared';
+import {OlMapHelper} from './OlMapHelper';
 import ActionTypes = MapModule.ActionTypes;
 import ActiveForegroundColorChanged = MapModule.ActiveForegroundColorChanged;
 import ActiveBackgroundColorChanged = MapModule.ActiveBackgroundColorChanged;
-import {OlMapHelper} from './OlMapHelper';
 
 
 @Component({
   selector: 'abc-main-map',
-  template: `
-    <div id="main-openlayers-map"></div>
-  `,
+  templateUrl: './main-map.component.html',
   styleUrls: ['./main-map.component.scss']
 })
 export class MainMapComponent implements OnInit, OnDestroy {
@@ -68,7 +66,7 @@ export class MainMapComponent implements OnInit, OnDestroy {
 
   initMap() {
     this.map = new OlMap({
-      target: 'main-openlayers-map',
+      target: 'abc-openlayers-map',
       layers: [],
       view: new OlView({
         center: olFromLonLat([37.41, 8.82]),
@@ -151,18 +149,18 @@ export class MainMapComponent implements OnInit, OnDestroy {
 
   onDrawEnd = (event: DrawEvent) => {
     OpenLayersHelper.setStyle(event.feature, _.cloneDeep(this.currentStyle));
-  };
+  }
 
   onLayerSourceChange = (event: OlEvent) => {
     if (event.target instanceof OlVectorSource) {
       const source: OlVectorSource = event.target;
       const geojsonFeatures = OlMapHelper.featuresToGeojson(source.getFeatures());
       const layerId = OpenLayersHelper.getLayerId(source);
-      if(!layerId){
+      if (!layerId) {
         throw new Error('Layer id is undefined');
       }
       this.projectService.updateVectorLayer(layerId, geojsonFeatures);
     }
-  };
+  }
 
 }
