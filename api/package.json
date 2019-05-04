@@ -18,6 +18,7 @@
   "dependencies": {
     "@types/exceljs": "^0.5.3",
     "abcmap-shared": "file:../shared",
+    "axios": "^0.18.0",
     "body-parser": "^1.18.3",
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
