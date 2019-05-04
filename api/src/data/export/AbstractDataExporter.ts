@@ -1,5 +1,4 @@
 import {FileFormat} from './FileFormat';
-import {IServiceMap} from '../../lib/IServiceMap';
 import {IAbcGeojsonFeatureCollection} from '../AbcGeojson';
 
 export abstract class AbstractDataExporter {

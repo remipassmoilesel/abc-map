@@ -1,6 +1,7 @@
 import * as _ from 'lodash';
 import {FeatureHelper} from '../FeatureUtils';
 import {IAbcGeojsonFeature} from '../AbcGeojson';
+import {CellValue, Row} from 'exceljs';
 
 export class XlsxHelper {
 
@@ -38,22 +39,20 @@ export class XlsxHelper {
         return properties;
     }
 
-    public rowToFeature(data: string[]): IAbcGeojsonFeature | null {
+    public rowToFeature(rowData: Row): IAbcGeojsonFeature | null {
 
-        if (!data || data.length < 4) {
-            return null;
-        }
+        const cells: CellValue[] = rowData.values as CellValue[];
 
-        const id = data[1];
-        const geometryType = data[2];
-        const geometry: IAbcGeojsonFeature = JSON.parse(data[3]);
-        const properties = this.rowToGeojsonProperties(data.slice(3));
+        const id = cells[1] as string;
+        const geometryType = cells[2] as string;
+        const geometry: IAbcGeojsonFeature = JSON.parse(cells[3] as string);
+        const properties = this.rowToGeojsonProperties(cells.slice(3).map(cell => cell as string));
 
         return {
             id,
+            type: 'Feature',
             geometry,
             properties,
-            type: 'Feature',
         };
     }
 

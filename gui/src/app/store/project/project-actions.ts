@@ -1,4 +1,4 @@
-import {IProject, WmsParams, PredefinedLayerPreset} from 'abcmap-shared';
+import {IProject, IWmsParams, PredefinedLayerPreset} from 'abcmap-shared';
 import {Action} from '@ngrx/store';
 import {FeatureCollection} from 'geojson';
 

@@ -16,6 +16,7 @@
         "object-literal-sort-keys": false,
         "no-consecutive-blank-lines": false,
         "member-ordering": false,
-        "only-arrow-functions": false
+        "only-arrow-functions": false,
+        "arrow-parens": false
     }
 }

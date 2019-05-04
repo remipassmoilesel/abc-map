@@ -16,7 +16,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@mapbox/togeojson": "^0.16.0",
     "@types/exceljs": "^0.5.3",
+    "@types/shapefile": "^0.6.0",
     "abcmap-shared": "file:../shared",
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",
@@ -34,6 +36,7 @@
     "ms": "^2.1.1",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
+    "shapefile": "^0.6.6",
     "sinon": "^7.3.2",
     "uuid": "^3.3.2",
     "ws": "^6.2.1"
