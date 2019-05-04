@@ -2,9 +2,7 @@ import {asyncHandler} from '../lib/server/asyncExpressHandler';
 import {AbstractController} from '../lib/server/AbstractController';
 import {ApiRoutes} from 'abcmap-shared';
 import {DatastoreService} from './DatastoreService';
-import Minio from 'minio';
 import express = require('express');
-import {IPostConstruct} from '../lib/IPostConstruct';
 
 export class DataStoreController extends AbstractController {
 
@@ -14,12 +12,19 @@ export class DataStoreController extends AbstractController {
 
     public getRouter(): express.Router {
         const router = express.Router();
-        router.get(ApiRoutes.DATASTORE.path, asyncHandler(this.uploadDocument));
+        router.post(ApiRoutes.DATASTORE.path, asyncHandler(this.uploadDocument));
         return router;
     }
 
     public uploadDocument = async (req: express.Request, res: express.Response): Promise<any> => {
-
+        const client = this.datastore.connect();
+        await client.makeBucket('uploads', 'hey');
+        client.presignedPutObject('uploads', req.params.name, (err, url) => {
+            if (err) {
+                throw err;
+            }
+            res.end(url);
+        });
     }
 
 }

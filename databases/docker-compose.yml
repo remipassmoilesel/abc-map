@@ -25,8 +25,8 @@ services:
     ports:
       - "127.0.0.1:9001:9000"
     environment:
-      MINIO_ACCESS_KEY: minio
-      MINIO_SECRET_KEY: "fbdbff136c51976ee004d5c5896992d4"
+      MINIO_ACCESS_KEY: fb37ca0b53f49587c534be53281a9f94a865d6cedb1e205c1f057810
+      MINIO_SECRET_KEY: ea6dd22b3cd0c3908b0e59c4e769a0abff1c4d0081585fa5ea6dd22b3cd0c3908b0e59c4e769a0abff1c4d0081585fa5
     command: server /data
 
 networks:

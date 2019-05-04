@@ -1,7 +1,7 @@
 import {AbstractService} from '../lib/AbstractService';
 import {IPostConstruct} from '../lib/IPostConstruct';
 import {IApiConfig} from '../IApiConfig';
-import Minio from 'minio';
+import * as Minio from 'minio';
 
 export class DatastoreService extends AbstractService implements IPostConstruct {
 

@@ -28,8 +28,8 @@ export class ApiConfigHelper {
             },
             minio: {
                 endPoint: 'localhost',
-                port: 9000,
-                useSSL: true,
+                port: 9001,
+                useSSL: false,
                 accessKey: 'fb37ca0b53f49587c534be53281a9f94a865d6cedb1e205c1f057810',
                 secretKey: 'ea6dd22b3cd0c3908b0e59c4e769a0abff1c4d0081585fa5ea6dd22b3cd0c3908b0e59c4e769a0abff1c4d0081585fa5',
             },
