@@ -2,9 +2,9 @@ import * as _ from 'lodash';
 import {AbstractDataExporter} from './AbstractDataExporter';
 import {XlsxDataExporter} from './XlsxDataExporter';
 import {FileFormat} from './FileFormat';
-import {IOnConstruct} from '../../lib/IOnConstruct';
+import {IPostConstruct} from '../../lib/IPostConstruct';
 
-export class DataExporterFinder implements IOnConstruct {
+export class DataExporterFinder implements IPostConstruct {
 
     private instances?: AbstractDataExporter[];
 

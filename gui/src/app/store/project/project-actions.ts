@@ -54,7 +54,7 @@ export namespace ProjectModule {
   export class WmsLayerAdded implements Action {
     readonly type = ActionTypes.WMS_LAYER_ADDED;
 
-    constructor(public payload: { url: string, params: WmsParams}) {}
+    constructor(public payload: { url: string, params: IWmsParams}) {}
   }
 
   export class LayerRemoved implements Action {

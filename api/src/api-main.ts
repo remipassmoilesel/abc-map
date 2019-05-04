@@ -5,7 +5,7 @@ import {ApiConfigHelper} from './IApiConfig';
 import {ApiServer} from './lib/server/ApiServer';
 import {getDaoMap} from './lib/database/IDaoMap';
 import {getServices} from './lib/IServiceMap';
-import {getControllers} from './lib/server/IControllerMap';
+import {getControllers} from './lib/IControllerMap';
 
 loglevel.setDefaultLevel('info');
 

@@ -1,3 +1,3 @@
-export interface IOnConstruct {
+export interface IPostConstruct {
     postConstruct(): Promise<any>;
 }

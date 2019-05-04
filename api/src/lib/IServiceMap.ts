@@ -4,6 +4,7 @@ import {AbstractService} from './AbstractService';
 import {UserService} from '../users/UserService';
 import {AuthenticationService} from '../authentication/AuthenticationService';
 import {IApiConfig} from '../IApiConfig';
+import {DatastoreService} from '../data/DatastoreService';
 
 export interface IServiceMap {
     [k: string]: AbstractService;
@@ -11,6 +12,7 @@ export interface IServiceMap {
     project: ProjectService;
     user: UserService;
     authentication: AuthenticationService;
+    datastore: DatastoreService;
 }
 
 export async function getServices(daos: IDaoMap, config: IApiConfig): Promise<IServiceMap> {
@@ -18,9 +20,10 @@ export async function getServices(daos: IDaoMap, config: IApiConfig): Promise<IS
         project: new ProjectService(daos.project),
         user: new UserService(daos.user),
         authentication: new AuthenticationService(daos.user, config),
+        datastore: new DatastoreService(config),
     };
 
-    for (let serviceName in services) {
+    for (const serviceName in services) {
         await services[serviceName].postConstruct();
     }
 
