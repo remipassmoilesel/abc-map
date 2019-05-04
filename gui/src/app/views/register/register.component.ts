@@ -11,7 +11,7 @@ import {IUserCreationRequest} from 'abcmap-shared';
 })
 export class RegisterComponent implements OnInit {
 
-  private registerForm?: FormGroup;
+  registerForm?: FormGroup;
 
   constructor(private formBuilder: FormBuilder,
               private authentication: AuthenticationService) {
