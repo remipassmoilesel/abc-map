@@ -6,6 +6,7 @@ import * as jwt from 'jsonwebtoken';
 import {IApiConfig} from '../IApiConfig';
 import {IUserDto} from '../users/IUserDto';
 import {UserMapper} from '../users/IDbUser';
+import ms from 'ms';
 
 export class AuthenticationService extends AbstractService {
 
@@ -28,18 +29,19 @@ export class AuthenticationService extends AbstractService {
             });
     }
 
+    // TODO: add better expiration time (1/2 hour) and renew tokens
     public generateToken(user: IUserDto): string {
-        const today = new Date();
-        const expirationDate = new Date(today);
-        expirationDate.setDate(today.getDate() + 60);
+        const expirationTime = '1d';
+        const expirationDate = new Date();
+        expirationDate.setTime(expirationDate.getTime() + ms(expirationTime));
 
         const tokenPayload = {
             id: user.id,
             email: user.email,
-            exp: Math.round(expirationDate.getTime() / 1000),
+            exp: Math.round(expirationDate.getTime()),
         };
 
-        return jwt.sign(tokenPayload, this.config.jwtSecret);
+        return jwt.sign(tokenPayload, this.config.jwtSecret, {expiresIn: expirationTime});
     }
 
 }
