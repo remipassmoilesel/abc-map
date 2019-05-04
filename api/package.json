@@ -17,6 +17,8 @@
   "license": "ISC",
   "dependencies": {
     "@types/chai-http": "^4.2.0",
+    "@types/passport": "^1.0.0",
+    "@types/passport-jwt": "^3.0.1",
     "abcmap-shared": "file:../shared",
     "body-parser": "^1.18.3",
     "chai": "^4.2.0",
@@ -29,6 +31,8 @@
     "mocha": "^6.1.4",
     "mongodb": "^3.2.2",
     "morgan": "^1.9.1",
+    "passport": "^0.4.0",
+    "passport-jwt": "^4.0.0",
     "sinon": "^7.3.2",
     "uuid": "^3.3.2",
     "ws": "^6.2.1"
