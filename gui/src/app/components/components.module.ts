@@ -13,7 +13,15 @@ import {LeftMenuComponent} from './left-menu/left-menu.component';
 import {NewLayerDialogComponent} from './new-layer-dialog/new-layer-dialog.component';
 
 @NgModule({
-  declarations: [TopBarComponent, RightMenuComponent, LayerSelectorComponent, DrawingToolboxComponent, DrawColorPickerComponent, LeftMenuComponent, NewLayerDialogComponent],
+  declarations: [
+    TopBarComponent,
+    RightMenuComponent,
+    LayerSelectorComponent,
+    DrawingToolboxComponent,
+    DrawColorPickerComponent,
+    LeftMenuComponent,
+    NewLayerDialogComponent
+  ],
   imports: [
     CommonModule,
     NgbModule,

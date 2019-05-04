@@ -9,7 +9,7 @@ import VectorLayer from 'ol/layer/Vector';
 import Vector from 'ol/layer/Vector';
 import Layer from 'ol/layer/Layer';
 import Source from 'ol/source/Source';
-import Object from 'ol/Object';
+import OlObject from 'ol/Object';
 import Style from 'ol/style/Style';
 import Fill from 'ol/style/Fill';
 import Stroke from 'ol/style/Stroke';
@@ -36,7 +36,7 @@ export {
   VectorLayer as OlVectorLayer,
   Layer as OlLayer,
   Source as OlSource,
-  Object as OlObject,
+  OlObject,
   Style as OlStyle,
   Fill as OlFill,
   Stroke as OlStroke,
@@ -52,7 +52,7 @@ export {
 
 export interface DrawEvent {
   target: any;
-  feature: Object
+  feature: OlObject;
 }
 
 export interface OlObjectReadOnly {

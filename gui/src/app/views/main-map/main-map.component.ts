@@ -149,7 +149,7 @@ export class MainMapComponent implements OnInit, OnDestroy {
 
   onDrawEnd = (event: DrawEvent) => {
     OpenLayersHelper.setStyle(event.feature, _.cloneDeep(this.currentStyle));
-  };
+  }
 
   onLayerSourceChange = (event: OlEvent) => {
     if (event.target instanceof OlVectorSource) {
@@ -161,6 +161,6 @@ export class MainMapComponent implements OnInit, OnDestroy {
       }
       this.projectService.updateVectorLayer(layerId, geojsonFeatures);
     }
-  };
+  }
 
 }

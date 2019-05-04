@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ProjectService} from '../../lib/project/project.service';
-import {RxUtils} from "../../lib/utils/RxUtils";
-import {Subscription} from "rxjs";
+import {RxUtils} from '../../lib/utils/RxUtils';
+import {Subscription} from 'rxjs';
 import {GuiRoutes} from '../../app-routing.module';
 
 @Component({
@@ -23,7 +23,7 @@ export class TopBarComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    RxUtils.unsubscribe(this.project$)
+    RxUtils.unsubscribe(this.project$);
   }
 
   newProject() {
@@ -31,7 +31,7 @@ export class TopBarComponent implements OnInit, OnDestroy {
   }
 
   closeProject() {
-    throw new Error("Implement me")
+    throw new Error('Implement me');
   }
 
   saveProject() {
