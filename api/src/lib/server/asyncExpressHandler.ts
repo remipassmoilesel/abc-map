@@ -7,6 +7,9 @@ export const asyncHandler = (handler: AsyncRequestHandler) =>
     (request: express.Request, response: express.Response, next: express.NextFunction) => {
         handler(request, response, next)
             .then((result: any) => {
+                if (result instanceof Error) {
+                    return next(result);
+                }
                 if (result) {
                     return response.json(result);
                 }

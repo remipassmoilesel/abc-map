@@ -70,4 +70,19 @@ describe('asyncHandler', () => {
             });
     });
 
+    it('should return error on promise rejected', function(done: any) {
+
+        const app = express();
+        app.post('/', asyncHandler(async (req, res) => {
+            return new Error('Test error');
+        }));
+
+        chai.request(app)
+            .post('/')
+            .end((err, res) => {
+                assert.deepStrictEqual(res.status, 500);
+                done();
+            });
+    });
+
 });
