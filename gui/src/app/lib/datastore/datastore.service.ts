@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {DatastoreClient} from './DatastoreClient';
-import {forkJoin, Observable, Observer} from 'rxjs';
+import {forkJoin, Observable} from 'rxjs';
 import {Store} from '@ngrx/store';
 import {IMainState} from '../../store';
 import {mergeMap, take} from 'rxjs/operators';
@@ -12,6 +12,16 @@ export class DatastoreService {
 
   constructor(private client: DatastoreClient,
               private store: Store<IMainState>) {
+  }
+
+  public listDocuments(): Observable<any> {
+    return this.store.select(state => state.user.username)
+      .pipe(
+        take(1),
+        mergeMap(username => {
+          return this.client.listDocuments(username);
+        })
+      );
   }
 
   public uploadDocuments(files: FileList): Observable<any> {
@@ -27,45 +37,15 @@ export class DatastoreService {
   }
 
   private uploadDocument(name: string, file: File): Observable<any> {
-    return Observable.create((observer: Observer<any>) => {
-
-      this.store.select(state => state.user.username)
-        .pipe(
-          take(1),
-          mergeMap(username => {
-            const content: FormData = new FormData();
-            content.append('file-content', file);
-            return this.client.postDocument(username, `upload/${name}`, content);
-          })
-        )
-        .subscribe(
-          (res) => {
-            observer.next(res);
-            observer.complete();
-          },
-          (error: Error) => observer.error(error),
-        );
-    });
-  }
-
-  private readDocument(file: File): Observable<Buffer> {
-    return Observable.create((observer: Observer<any>) => {
-      const fileReader = new FileReader();
-
-      fileReader.onload = () => {
-        if (!fileReader.result) {
-          return observer.error(new Error('File is empty'));
-        }
-        observer.next(fileReader.result as ArrayBuffer);
-        observer.complete();
-      };
-
-      fileReader.onerror = (error) => {
-        observer.error(error);
-      };
-
-      fileReader.readAsArrayBuffer(file);
-    });
+    return this.store.select(state => state.user.username)
+      .pipe(
+        take(1),
+        mergeMap(username => {
+          const content: FormData = new FormData();
+          content.append('file-content', file);
+          return this.client.postDocument(username, `upload/${name}`, content);
+        })
+      );
   }
 
 }
