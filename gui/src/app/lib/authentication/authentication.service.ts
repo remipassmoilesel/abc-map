@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {Injectable, OnInit} from '@angular/core';
 import {AuthenticationClient} from './AuthenticationClient';
 import {ILoginRequest, IUserCreationRequest} from 'abcmap-shared';
 import {ToastService} from '../notifications/toast.service';
@@ -20,11 +20,21 @@ export class AuthenticationService {
               private toasts: ToastService) {
   }
 
+  public checkIfUserWasConnected(): void {
+    const storedUsername = localStorage.getItem(LSKey.USERNAME);
+    const storedToken = localStorage.getItem(LSKey.USER_TOKEN);
+    if (storedUsername && storedToken) {
+      console.warn('User was already logged in');
+      this.store.dispatch(new UserLogin({username: storedUsername, token: storedToken}));
+    }
+  }
+
   public getToken(): string | null {
     return this.localStorage.get(LSKey.USER_TOKEN);
   }
 
-  public setToken(token: string): void {
+  private storeUser(username: string, token: string): void {
+    this.localStorage.save(LSKey.USERNAME, username);
     this.localStorage.save(LSKey.USER_TOKEN, token);
   }
 
@@ -41,7 +51,7 @@ export class AuthenticationService {
       .pipe(
         tap(res => {
             this.toasts.info('Vous êtes connecté !');
-            this.setToken(res.token);
+            this.storeUser(request.username, res.token);
             this.store.dispatch(new UserLogin({username: request.username, token: res.token}));
           },
           err => this.toasts.error('Identifiants incorrects !'))

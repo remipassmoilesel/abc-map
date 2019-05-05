@@ -3,7 +3,7 @@ import {DatastoreClient} from './DatastoreClient';
 import {forkJoin, Observable, Observer} from 'rxjs';
 import {Store} from '@ngrx/store';
 import {IMainState} from '../../store';
-import {take} from 'rxjs/operators';
+import {map, mergeMap, take} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -28,21 +28,34 @@ export class DatastoreService {
 
   private uploadDocument(name: string, file: File): Observable<any> {
     return Observable.create((observer: Observer<any>) => {
+
+      this.store.select(state => state.user.username)
+        .pipe(
+          take(1),
+        )
+        .subscribe((username) => {
+          const content: FormData = new FormData();
+          content.append('file-content', file);
+
+          this.client.postDocument(username, `/upload/${name}`, content)
+            .subscribe(
+              () => observer.complete(),
+              (error: Error) => observer.error(error),
+            );
+        });
+    });
+  }
+
+  private readDocument(file: File): Observable<Buffer> {
+    return Observable.create((observer: Observer<any>) => {
       const fileReader = new FileReader();
 
       fileReader.onload = () => {
         if (!fileReader.result) {
           return observer.error(new Error('File is empty'));
         }
-        this.store.select(state => state.user.username)
-          .pipe(take(1))
-          .subscribe(username => {
-            this.client.postDocument(name, username, fileReader.result as ArrayBuffer)
-              .subscribe(
-                () => observer.complete(),
-                (error) => observer.error(error),
-              );
-          });
+        observer.next(fileReader.result as ArrayBuffer);
+        observer.complete();
       };
 
       fileReader.onerror = (error) => {
@@ -52,4 +65,5 @@ export class DatastoreService {
       fileReader.readAsArrayBuffer(file);
     });
   }
+
 }

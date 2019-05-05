@@ -12,9 +12,9 @@ export class DatastoreClient {
 
   }
 
-  // TODO: set correct url
-  public postDocument(username: string, fileName: string, content: ArrayBuffer): Observable<any> {
-    const url = ApiRoutes.DATASTORE.withArgs({username, name: fileName}).toString();
+  public postDocument(username: string, path: string, content: FormData): Observable<any> {
+    const encodedPath = btoa(path);
+    const url = ApiRoutes.DATASTORE.withArgs({username, path: encodedPath}).toString();
     return this.client.post(url, content);
   }
 
