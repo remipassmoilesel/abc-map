@@ -35,7 +35,7 @@ export class DatastoreService {
           mergeMap(username => {
             const content: FormData = new FormData();
             content.append('file-content', file);
-            return this.client.postDocument(username, `/upload/${name}`, content);
+            return this.client.postDocument(username, `upload/${name}`, content);
           })
         )
         .subscribe(

@@ -24,9 +24,15 @@ export class DatastoreService extends AbstractService implements IPostConstruct 
             await this.client.makeBucket(username, DatastoreService.REGION);
         }
 
-        const cleanPath = Buffer.from(path).toString('base64');
-
         const metadata = {createdAt: new Date()};
-        return this.client.putObject(username, cleanPath, content, content.length, metadata);
+        return this.client.putObject(username, path, content, content.length, metadata);
+    }
+
+    private bucketNameFromUsername(username: string): string {
+        return `user.${username}`;
+    }
+
+    private cleanPath(username: string): string {
+        return `user.${username}`;
     }
 }
