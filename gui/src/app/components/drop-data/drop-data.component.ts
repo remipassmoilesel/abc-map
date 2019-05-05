@@ -1,6 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {ToastService} from '../../lib/notifications/toast.service';
 import {DatastoreService} from '../../lib/datastore/datastore.service';
+import {IMainState} from '../../store';
+import {Store} from '@ngrx/store';
+import {mergeMap, take} from 'rxjs/operators';
+import {of, throwError} from 'rxjs';
 
 @Component({
   selector: 'abc-drop-data',
@@ -12,6 +16,7 @@ export class DropDataComponent implements OnInit {
   visible = false;
 
   constructor(private toast: ToastService,
+              private store: Store<IMainState>,
               private datastore: DatastoreService) {
   }
 
@@ -38,12 +43,21 @@ export class DropDataComponent implements OnInit {
         return this.toast.error('Vous devez déposer des fichiers valides');
       }
 
-      this.datastore.uploadDocuments(files)
+      this.store.select(state => state.user.loggedIn)
+        .pipe(
+          take(1),
+          mergeMap(isLoggedIn => {
+            return isLoggedIn ? of(true) : throwError(new Error('Vous devez vous connecter'));
+          }),
+          mergeMap(res => {
+            return this.datastore.uploadDocuments(files);
+          })
+        )
         .subscribe((res: any) => {
           this.toast.info('Documents téléversés !');
           this.visible = false;
         }, err => {
-          this.toast.error('Erreur lors du téléversement !');
+          this.toast.error(`Erreur lors du téléversement: ${err.message}`);
           this.visible = false;
         });
     }

@@ -13,8 +13,9 @@ export class DatastoreClient {
   }
 
   // TODO: set correct url
-  public postFile(fileName: string, content: ArrayBuffer): Observable<any> {
-    return this.client.post(ApiRoutes.DATASTORE.path, content);
+  public postDocument(username: string, fileName: string, content: ArrayBuffer): Observable<any> {
+    const url = ApiRoutes.DATASTORE.withArgs({username, name: fileName}).toString();
+    return this.client.post(url, content);
   }
 
 }

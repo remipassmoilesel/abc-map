@@ -31,17 +31,12 @@ export class AuthenticationService extends AbstractService {
 
     // TODO: add better expiration time (1/2 hour) and renew tokens
     public generateToken(user: IUserDto): string {
-        const expirationTime = '1d';
-        const expirationDate = new Date();
-        expirationDate.setTime(expirationDate.getTime() + ms(expirationTime));
-
         const tokenPayload = {
             id: user.id,
             email: user.email,
-            exp: Math.round(expirationDate.getTime()),
         };
 
-        return jwt.sign(tokenPayload, this.config.jwtSecret, {expiresIn: expirationTime});
+        return jwt.sign(tokenPayload, this.config.jwtSecret, {expiresIn: '1d'});
     }
 
 }

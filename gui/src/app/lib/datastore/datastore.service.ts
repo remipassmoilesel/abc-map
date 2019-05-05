@@ -1,13 +1,17 @@
 import {Injectable} from '@angular/core';
 import {DatastoreClient} from './DatastoreClient';
 import {forkJoin, Observable, Observer} from 'rxjs';
+import {Store} from '@ngrx/store';
+import {IMainState} from '../../store';
+import {take} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DatastoreService {
 
-  constructor(private client: DatastoreClient) {
+  constructor(private client: DatastoreClient,
+              private store: Store<IMainState>) {
   }
 
   public uploadDocuments(files: FileList): Observable<any> {
@@ -30,11 +34,15 @@ export class DatastoreService {
         if (!fileReader.result) {
           return observer.error(new Error('File is empty'));
         }
-        this.client.postFile(name, fileReader.result as ArrayBuffer)
-          .subscribe(
-            () => observer.complete(),
-            (error) => observer.error(error),
-            );
+        this.store.select(state => state.user.username)
+          .pipe(take(1))
+          .subscribe(username => {
+            this.client.postDocument(name, username, fileReader.result as ArrayBuffer)
+              .subscribe(
+                () => observer.complete(),
+                (error) => observer.error(error),
+              );
+          });
       };
 
       fileReader.onerror = (error) => {
