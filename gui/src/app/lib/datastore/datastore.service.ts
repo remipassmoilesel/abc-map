@@ -3,7 +3,7 @@ import {DatastoreClient} from './DatastoreClient';
 import {forkJoin, Observable, Observer} from 'rxjs';
 import {Store} from '@ngrx/store';
 import {IMainState} from '../../store';
-import {map, mergeMap, take} from 'rxjs/operators';
+import {mergeMap, take} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -32,17 +32,19 @@ export class DatastoreService {
       this.store.select(state => state.user.username)
         .pipe(
           take(1),
+          mergeMap(username => {
+            const content: FormData = new FormData();
+            content.append('file-content', file);
+            return this.client.postDocument(username, `/upload/${name}`, content);
+          })
         )
-        .subscribe((username) => {
-          const content: FormData = new FormData();
-          content.append('file-content', file);
-
-          this.client.postDocument(username, `/upload/${name}`, content)
-            .subscribe(
-              () => observer.complete(),
-              (error: Error) => observer.error(error),
-            );
-        });
+        .subscribe(
+          (res) => {
+            observer.next(res);
+            observer.complete();
+          },
+          (error: Error) => observer.error(error),
+        );
     });
   }
 

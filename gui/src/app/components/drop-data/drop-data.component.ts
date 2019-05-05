@@ -62,7 +62,7 @@ export class DropDataComponent implements OnInit {
         });
     }
 
-  };
+  }
 
   private getFilesFromDropEvent(event: DragEvent): FileList | null {
     return event.dataTransfer && event.dataTransfer.files;
