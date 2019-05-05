@@ -15,4 +15,4 @@ export class ApiRoutes {
 
     public static readonly DATASTORE = new ApiRoute('/api/datastore/:username/:name');
 
-    }
+}
