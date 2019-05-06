@@ -1,5 +1,4 @@
-
-<div class="abc-store-view abc-view mt-5 pb-3">
+<div class="abc-store-view abc-view pt-5 pb-3">
 
   <h1 class="mb-2">Magasin de données</h1>
 
@@ -11,5 +10,15 @@
     </div>
 
   </form>
+
+  <div class="abc-result-list">
+    <div  *ngFor="let item of items" class="card mb-3">
+      <div class="card-body">
+        <li>{{ item.name }}</li>
+        <li>{{ item.lastModified }}</li>
+        <li>{{ item.size }}</li>
+      </div>
+    </div>
+  </div>
 
 </div>

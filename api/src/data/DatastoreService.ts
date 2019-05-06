@@ -3,6 +3,7 @@ import {IPostConstruct} from '../lib/IPostConstruct';
 import {IApiConfig} from '../IApiConfig';
 import * as Minio from 'minio';
 import {BucketItem} from 'minio';
+import {IDocument} from 'abcmap-shared';
 
 // TODO: create a dedicated bucket for user's data
 export class DatastoreService extends AbstractService implements IPostConstruct {
@@ -34,7 +35,7 @@ export class DatastoreService extends AbstractService implements IPostConstruct 
         return this.client.putObject(bucketName, path, content, content.length, metadata);
     }
 
-    public getDocuments(username: string): Promise<BucketItem[]> {
+    public getDocuments(username: string): Promise<IDocument[]> {
         return new Promise((resolve, reject) => {
             const data: BucketItem[] = [];
             const stream = this.client.listObjectsV2(this.bucketNameFromUsername(username), '', true)

@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
-import {AuthenticationService} from '../../lib/authentication/authentication.service';
 import {DatastoreService} from '../../lib/datastore/datastore.service';
+import {IDocument} from 'abcmap-shared';
 
 @Component({
   selector: 'abc-store',
@@ -11,6 +11,7 @@ import {DatastoreService} from '../../lib/datastore/datastore.service';
 export class StoreComponent implements OnInit {
 
   searchForm?: FormGroup;
+  items: IDocument[] = [];
 
   constructor(private formBuilder: FormBuilder,
               private datastore: DatastoreService) {
@@ -18,13 +19,18 @@ export class StoreComponent implements OnInit {
 
   ngOnInit() {
     this.initForm();
-    this.datastore.listDocuments().subscribe(res => console.log(res));
+    this.initList();
   }
 
   private initForm() {
     this.searchForm = this.formBuilder.group({
       query: [''],
     });
+  }
+
+  private initList() {
+    this.datastore.listMyDocuments()
+      .subscribe(res => this.items = res);
   }
 
   register() {
@@ -38,4 +44,5 @@ export class StoreComponent implements OnInit {
   search() {
     // TODO
   }
+
 }

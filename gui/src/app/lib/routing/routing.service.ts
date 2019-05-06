@@ -32,7 +32,9 @@ export class RoutingService implements OnDestroy {
   private redirectAfterLogin() {
     this.logout$ = this.store.select(state => state.user.loggedIn)
       .subscribe(res => {
-        this.navigate(GuiRoutes.MAP);
+        if (res && document.location.href.endsWith(GuiRoutes.LOGIN)) {
+          this.navigate(GuiRoutes.MAP);
+        }
       });
   }
 

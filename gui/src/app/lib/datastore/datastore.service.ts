@@ -4,6 +4,7 @@ import {forkJoin, Observable} from 'rxjs';
 import {Store} from '@ngrx/store';
 import {IMainState} from '../../store';
 import {mergeMap, take} from 'rxjs/operators';
+import {IDocument} from 'abcmap-shared';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,7 @@ export class DatastoreService {
               private store: Store<IMainState>) {
   }
 
-  public listDocuments(): Observable<any> {
+  public listMyDocuments(): Observable<IDocument[]> {
     return this.store.select(state => state.user.username)
       .pipe(
         take(1),
