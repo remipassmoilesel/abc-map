@@ -15,6 +15,14 @@ export function userReducer(state = userState, action: UserModule.ActionsUnion):
       return newState;
     }
 
+    case UserModule.ActionTypes.USER_LOGOUT: {
+      const newState = _.cloneDeep(state);
+      newState.username = '';
+      newState.token = '';
+      newState.loggedIn = false;
+      return newState;
+    }
+
     default: {
       return state;
     }

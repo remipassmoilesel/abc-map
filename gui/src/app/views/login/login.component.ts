@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {AuthenticationService} from '../../lib/authentication/authentication.service';
 import {AbcValidators} from '../../lib/utils/AbcValidators';
@@ -35,7 +35,8 @@ export class LoginComponent implements OnInit {
 
     const formValue: ILoginRequest = this.loginForm.value;
 
-    this.authentication.login(formValue).subscribe();
+    this.authentication.login(formValue)
+      .subscribe();
 
   }
 }

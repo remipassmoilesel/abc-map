@@ -1,3 +1,11 @@
 .abc-topbar {
   height: 100%;
 }
+
+.abc-right-side {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  min-width: 500px;
+}

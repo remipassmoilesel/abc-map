@@ -1,8 +1,12 @@
-import {Injectable} from '@angular/core';
+import {Injectable, OnDestroy} from '@angular/core';
 
 import * as _ from 'lodash';
 import {Router} from '@angular/router';
-import {GuiRoute} from '../../app-routing.module';
+import {GuiRoute, GuiRoutes} from '../../app-routing.module';
+import {IMainState} from '../../store';
+import {Store} from '@ngrx/store';
+import {Subscription} from 'rxjs';
+import {RxUtils} from '../utils/RxUtils';
 
 
 export interface IArgMap {
@@ -12,9 +16,24 @@ export interface IArgMap {
 @Injectable({
   providedIn: 'root'
 })
-export class RoutingService {
+export class RoutingService implements OnDestroy {
 
-  constructor(private router: Router) {
+  private logout$?: Subscription;
+
+  constructor(private router: Router,
+              private store: Store<IMainState>) {
+    this.redirectAfterLogin();
+  }
+
+  ngOnDestroy(): void {
+    RxUtils.unsubscribe(this.logout$);
+  }
+
+  private redirectAfterLogin() {
+    this.logout$ = this.store.select(state => state.user.loggedIn)
+      .subscribe(res => {
+        this.navigate(GuiRoutes.MAP);
+      });
   }
 
   public navigate(route: GuiRoute, args?: IArgMap) {
