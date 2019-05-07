@@ -4,6 +4,7 @@ import {IApiConfig} from '../IApiConfig';
 import * as Minio from 'minio';
 import {BucketItem} from 'minio';
 import {IDocument} from 'abcmap-shared';
+import {Magic} from 'mmmagic';
 
 // TODO: create a dedicated bucket for user's data
 export class DatastoreService extends AbstractService implements IPostConstruct {
@@ -25,6 +26,8 @@ export class DatastoreService extends AbstractService implements IPostConstruct 
     }
 
     public async storeDocument(username: string, path: string, content: Buffer) {
+        this.checkFileFormat(content);
+
         const bucketName = this.bucketNameFromUsername(username);
         const bucketExists = await this.client.bucketExists(bucketName);
         if (!bucketExists) {
@@ -55,4 +58,15 @@ export class DatastoreService extends AbstractService implements IPostConstruct 
         return `user-data.${username}`;
     }
 
+    private checkFileFormat(data: Buffer) {
+        const magic = new Magic();
+        magic.detect(data, function(err, result) {
+            if (err) {
+                throw err;
+            }
+            console.log(result);
+            // output on Windows with 32-bit node:
+            //    PE32 executable (DLL) (GUI) Intel 80386, for MS Windows
+        });
+    }
 }
