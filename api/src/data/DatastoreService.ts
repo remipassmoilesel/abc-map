@@ -26,7 +26,10 @@ export class DatastoreService extends AbstractService implements IPostConstruct 
     }
 
     public async storeDocument(username: string, path: string, content: Buffer) {
-        console.log(await DataFormatHelper.getDataFormat(content));
+        const formatIsAllowed = await DataFormatHelper.isDataFormatAllowed(content);
+        if (!formatIsAllowed) {
+            return Promise.reject(new Error('Forbidden format'));
+        }
 
         const bucketName = this.bucketNameFromUsername(username);
         const bucketExists = await this.client.bucketExists(bucketName);

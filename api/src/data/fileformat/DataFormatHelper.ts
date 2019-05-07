@@ -1,18 +1,23 @@
 import * as _ from 'lodash';
 import {Magic} from 'mmmagic';
 import * as path from 'path';
-import {IDataFormat} from './DataFormat';
+import {DATA_FORMAT_WHITELIST, IDataFormat} from './DataFormat';
 
 export class DataFormatHelper {
 
-    public static getDataFormat(data: Buffer): Promise<IDataFormat> {
+    public static async isDataFormatAllowed(data: Buffer): Promise<boolean> {
+        const detectedFormat: string = await this.getDataFormat(data);
+        return !!_.find(DATA_FORMAT_WHITELIST, format => detectedFormat.startsWith(format));
+    }
+
+    public static getDataFormat(data: Buffer): Promise<string> {
         return new Promise((resolve, reject) => {
             const magic = new Magic();
             magic.detect(data, (err, result) => {
                 if (err) {
                     return reject(err);
                 }
-                return resolve(this.magicOutputToDataFormat(result));
+                return resolve(result);
             });
         });
     }
