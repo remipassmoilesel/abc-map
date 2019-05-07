@@ -1,18 +1,18 @@
 import {AbstractDataImporter} from './AbstractDataImporter';
-import {FileFormat} from '../export/FileFormat';
 import {Workbook} from 'exceljs';
 import {XlsxHelper} from '../export/XlsxHelper';
 import {FeatureHelper} from '../FeatureUtils';
 import {IAbcGeojsonFeature, IAbcGeojsonFeatureCollection} from '../AbcGeojson';
 import * as _ from 'lodash';
+import {DataFormats, IDataFormat} from '../fileformat/DataFormat';
 import uuid = require('uuid');
 
 export class XlsxDataImporter extends AbstractDataImporter {
 
     private xlsxHelper = new XlsxHelper();
 
-    public getSupportedFormat(): FileFormat {
-        return FileFormat.XLSX;
+    public getSupportedFormat(): IDataFormat {
+        return DataFormats.XLSX;
     }
 
     public async toCollection(source: Buffer): Promise<IAbcGeojsonFeatureCollection> {

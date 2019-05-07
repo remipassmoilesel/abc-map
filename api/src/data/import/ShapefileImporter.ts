@@ -1,15 +1,15 @@
 import * as shapefile from 'shapefile';
 import * as _ from 'lodash';
 import {AbstractDataImporter} from './AbstractDataImporter';
-import {FileFormat} from '../export/FileFormat';
 import {IAbcGeojsonFeatureCollection} from '../AbcGeojson';
 import {FeatureHelper} from '../FeatureUtils';
 import uuid = require('uuid');
+import {DataFormats, IDataFormat} from '../fileformat/DataFormat';
 
 export class ShapefileImporter extends AbstractDataImporter {
 
-    public getSupportedFormat(): FileFormat {
-        return FileFormat.KML;
+    public getSupportedFormat(): IDataFormat {
+        return DataFormats.KML;
     }
 
     public async toCollection(source: Buffer): Promise<IAbcGeojsonFeatureCollection> {

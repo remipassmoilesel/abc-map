@@ -2,9 +2,9 @@
 import * as _ from 'lodash';
 import {AbstractDataExporter} from './AbstractDataExporter';
 import {Workbook, Worksheet} from 'exceljs';
-import {FileFormat} from './FileFormat';
 import {XlsxHelper} from './XlsxHelper';
 import {IAbcGeojsonFeature, IAbcGeojsonFeatureCollection} from '../AbcGeojson';
+import {DataFormats, IDataFormat} from '../fileformat/DataFormat';
 
 export class XlsxDataExporter extends AbstractDataExporter {
 
@@ -17,12 +17,12 @@ export class XlsxDataExporter extends AbstractDataExporter {
 
     private xlsxHelper = new XlsxHelper();
 
-    public getSupportedFormat(): FileFormat {
-        return FileFormat.XLSX;
+    public getSupportedFormat(): IDataFormat {
+        return DataFormats.XLSX;
     }
 
     public async exportCollection(collection: IAbcGeojsonFeatureCollection,
-                                  format: FileFormat): Promise<ArrayBuffer> {
+                                  format: IDataFormat): Promise<ArrayBuffer> {
 
         const workbook = new Workbook();
         this.setMetadata(workbook);

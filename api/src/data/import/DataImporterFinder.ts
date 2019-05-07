@@ -4,6 +4,7 @@ import {KmlDataImporter} from './KmlDataImporter';
 import {AbstractDataImporter} from './AbstractDataImporter';
 import {ShapefileImporter} from './ShapefileImporter';
 import {XlsxDataImporter} from './XlsxDataImporter';
+import {DataFormatHelper} from '../fileformat/DataFormatHelper';
 
 export class DataImporterFinder {
 
@@ -15,7 +16,7 @@ export class DataImporterFinder {
 
     public getInstanceForFile(filePath: string): AbstractDataImporter | undefined {
         const importers = _.filter(this.instances, (inst: AbstractDataImporter) => {
-            return inst.getSupportedFormat().isFileSupported(filePath);
+            return DataFormatHelper.isFileSupported(inst.getSupportedFormat(), filePath);
         });
 
         return importers.length > 0 ? importers[0] : undefined;

@@ -1,8 +1,9 @@
 import * as _ from 'lodash';
 import {AbstractDataExporter} from './AbstractDataExporter';
 import {XlsxDataExporter} from './XlsxDataExporter';
-import {FileFormat} from './FileFormat';
 import {IPostConstruct} from '../../lib/IPostConstruct';
+import {DataFormatHelper} from '../fileformat/DataFormatHelper';
+import {IDataFormat} from '../fileformat/DataFormat';
 
 export class DataExporterFinder implements IPostConstruct {
 
@@ -12,15 +13,15 @@ export class DataExporterFinder implements IPostConstruct {
         this.buildInstances();
     }
 
-    public getInstanceForFormat(format: FileFormat): AbstractDataExporter | undefined {
+    public getInstanceForFormat(format: IDataFormat): AbstractDataExporter | undefined {
         const exporters = _.filter(this.instances, (inst: AbstractDataExporter) => {
-            return inst.getSupportedFormat().isSupported(format);
+            return DataFormatHelper.isSupported(inst.getSupportedFormat(), format);
         });
 
         return exporters.length > 0 ? exporters[0] : undefined;
     }
 
-    public getInstanceForFormatOrThrow(exportFormat: FileFormat): AbstractDataExporter {
+    public getInstanceForFormatOrThrow(exportFormat: IDataFormat): AbstractDataExporter {
         const exporter = this.getInstanceForFormat(exportFormat);
         if (!exporter) {
             throw new Error('Unknown format: ' + exportFormat);

@@ -1,11 +1,11 @@
-import {FileFormat} from './FileFormat';
+import {IDataFormat} from '../fileformat/DataFormat';
 import {IAbcGeojsonFeatureCollection} from '../AbcGeojson';
 
 export abstract class AbstractDataExporter {
 
-    public abstract getSupportedFormat(): FileFormat;
+    public abstract getSupportedFormat(): IDataFormat;
 
     public abstract exportCollection(featureCollection: IAbcGeojsonFeatureCollection,
-                                     exportFormat: FileFormat): Promise<ArrayBuffer>;
+                                     exportFormat: IDataFormat): Promise<ArrayBuffer>;
 
 }
