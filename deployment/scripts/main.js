@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+const {databaseStart, databaseStop, databaseClean} = require("./lib/database");
+
 const {startGui, startApi} = require("./lib/start");
 const {build} = require("./lib/build");
 const {deploy} = require("./lib/deploy");
@@ -18,11 +20,20 @@ function main() {
         case 'build': {
             return build(args, config);
         }
+        case 'start:gui': {
+            return startGui(args, config);
+        }
         case 'start:api': {
             return startApi(args, config);
         }
-        case 'start:gui': {
-            return startGui(args, config);
+        case 'database:start': {
+            return databaseStart(args, config);
+        }
+        case 'database:stop': {
+            return databaseStop(args, config);
+        }
+        case 'database:clean': {
+            return databaseClean(args, config);
         }
         case 'deploy': {
             return deploy(args, config);
