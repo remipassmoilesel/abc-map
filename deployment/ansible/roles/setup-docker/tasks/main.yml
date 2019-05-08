@@ -1,0 +1,23 @@
+
+- name: "Prepare docker installation"
+  apt: name={{item}} state=present
+  with_items:
+    - apt-transport-https
+    - ca-certificates
+    - software-properties-common
+
+- name: "Add docker repository key"
+  apt_key:
+    url: "https://download.docker.com/linux/ubuntu/gpg"
+
+- name: "Add Docker repository"
+  apt_repository:
+    repo: "{{ item }}"
+    state: present
+  with_items:
+    - deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable
+
+- name: "Install docker"
+  apt:
+    update_cache: "yes"
+    name: docker-ce

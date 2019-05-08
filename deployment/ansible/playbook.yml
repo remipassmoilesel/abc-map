@@ -1,0 +1,8 @@
+
+- host: all
+  roles:
+    - setup-docker
+    - setup-docker-compose
+    - deploy-databases
+    - synchronize-sources
+    - restart-application

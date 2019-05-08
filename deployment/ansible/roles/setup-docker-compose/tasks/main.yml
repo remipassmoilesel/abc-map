@@ -1,0 +1,15 @@
+
+- name: "Ensure pip is installed"
+  apt:
+    name: python-pip
+    state: present
+    update_cache: yes
+
+- name: "Ensure pip is up to date"
+  pip:
+    name: pip
+    state: latest
+
+- name: "Install docker-compose"
+  pip:
+    name: docker-compose
