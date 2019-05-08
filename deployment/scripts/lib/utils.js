@@ -6,7 +6,7 @@ function commandAsync(command, options) {
 
     const subprocess = exec(command, {
         cwd: options.cwd,
-        stdio: "inherit"
+        stdio: options.stdio || 'inherit'
     });
 
     const wait = setInterval(function () {
@@ -21,13 +21,18 @@ function commandAsync(command, options) {
 }
 
 function commandSync(command, options) {
-    execSync(command, {
+    return execSync(command, {
         cwd: options.cwd,
-        stdio: 'inherit'
+        stdio: options.stdio || 'inherit'
     });
+}
+
+function getCurrentGitSha(path) {
+    return execSync("git rev-parse HEAD", {cwd: path}).toString().substring(0,20);
 }
 
 module.exports = {
     commandAsync,
-    commandSync
+    commandSync,
+    getCurrentGitSha
 };

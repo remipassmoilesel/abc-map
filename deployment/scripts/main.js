@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
 const {startGui, startApi} = require("./lib/start");
-
 const {build} = require("./lib/build");
+const {deploy} = require("./lib/deploy");
 const {test} = require("./lib/test");
 const {config} = require("./config");
 
@@ -25,7 +25,7 @@ function main() {
             return startGui(args, config);
         }
         case 'deploy': {
-            return startDev(args, config);
+            return deploy(args, config);
         }
     }
 
