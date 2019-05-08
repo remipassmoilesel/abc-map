@@ -8,3 +8,6 @@ dist
 mongodb-data
 minio-data
 
+*.log
+.vagrant
+

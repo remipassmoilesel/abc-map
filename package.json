@@ -4,10 +4,10 @@
   "description": "",
   "scripts": {
     "start:api": "concurrently --kill-others 'npm run watch:shared' 'npm run watch:api' 'cd api && npm run start:nodemon'",
-    "start:databases": "cd databases && docker-compose up -d",
-    "clean:databases": "cd databases && docker-compose down -v && sudo rm -rf minio-data mongodb-data",
+    "start:databases": "cd deployment/databases && docker-compose up -d",
+    "clean:databases": "cd deployment/databases && docker-compose down -v && sudo rm -rf minio-data mongodb-data",
     "clean-restart:databases": "npm run clean:databases && npm run start:databases",
-    "stop:databases": "cd databases && docker-compose down",
+    "stop:databases": "cd deployment/databases && docker-compose down",
     "link:shared": "cd api && npm install ../shared && cd ../gui && npm install ../shared",
     "test:all:ci": "npm run test:api && npm run test:gui:ci",
     "test:gui:ci": "cd gui && npm run test:ci",
