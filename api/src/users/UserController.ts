@@ -6,13 +6,16 @@ import passport from 'passport';
 import * as express from 'express';
 import assert from 'assert';
 import {asyncHandler} from '../lib/server/asyncExpressHandler';
+import {DataStoreController} from '../data/DataStoreController';
+import {DatastoreService} from '../data/DatastoreService';
 
 const authenticated = passport.authenticate('jwt', {session: false});
 
 export class UserController extends AbstractController {
 
     constructor(private authentication: AuthenticationService,
-                private user: UserService) {
+                private user: UserService,
+                private datastore: DatastoreService) {
         super();
     }
 
@@ -32,6 +35,8 @@ export class UserController extends AbstractController {
 
         const user = await this.user.createUser(request);
         const token = this.authentication.generateToken(user);
+
+        await this.datastore.createStorageForUsername(request.username);
 
         return {message: 'Registered', token, username: request.username};
     }

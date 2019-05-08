@@ -31,16 +31,17 @@ export class DatastoreService extends AbstractService implements IPostConstruct 
             return Promise.reject(new Error('Forbidden format'));
         }
 
-        const bucketName = await this.checkBucketForUsername(username);
+        const bucketName = this.bucketNameFromUsername(username);
 
         const metadata = {createdAt: new Date()};
         return this.client.putObject(bucketName, path, content, content.length, metadata);
     }
 
     public async storeCache(username: string, originalPath: string, content: Buffer): Promise<any> {
-        const bucketName = await this.checkBucketForUsername(username);
+        const bucketName = this.bucketNameFromUsername(username);
         const path = this.cachePathForPath(originalPath);
         const metadata = {createdAt: new Date()};
+
         return this.client.putObject(bucketName, path, content, content.length, metadata);
     }
 
@@ -60,12 +61,9 @@ export class DatastoreService extends AbstractService implements IPostConstruct 
         });
     }
 
-    private async checkBucketForUsername(username: string): Promise<string> {
+    public async createStorageForUsername(username: string): Promise<string> {
         const bucketName = this.bucketNameFromUsername(username);
-        const bucketExists = await this.client.bucketExists(bucketName);
-        if (!bucketExists) {
-            await this.client.makeBucket(bucketName, DatastoreService.REGION);
-        }
+        await this.client.makeBucket(bucketName, DatastoreService.REGION);
         return bucketName;
     }
 
@@ -73,8 +71,8 @@ export class DatastoreService extends AbstractService implements IPostConstruct 
         return `user-data.${username}`;
     }
 
-
     private cachePathForPath(originalPath: string): string {
         return originalPath + '.cache';
     }
+
 }
