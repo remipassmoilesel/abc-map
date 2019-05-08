@@ -35,29 +35,20 @@ export class ProjectController extends AbstractController {
 
     private getProject = async (req: express.Request, res: express.Response, next: NextFunction) => {
         const projectId = req.params.id;
-        return this.projectService.findProject(projectId)
-            .then((project) => {
-                res.json(project);
-            });
+        return this.projectService.findProject(projectId);
     }
 
     private createNewProject = async (req: express.Request, res: express.Response, next: NextFunction) => {
         const projectName = req.query.name;
-        return this.projectService.createNewProject(projectName)
-            .then((project) => {
-                res.json(project);
-            });
+        return this.projectService.createNewProject(projectName);
     }
 
     private saveProject = async (req: express.Request, res: express.Response, next: NextFunction) => {
         const toSave: IProject = req.body;
         if (!toSave) {
-            return next('Project must be defined');
+            return new Error('Project must be defined');
         }
-        return this.projectService.updateProject(toSave)
-            .then((project) => {
-                res.json(project);
-            });
+        return this.projectService.updateProject(toSave);
     }
 
 }

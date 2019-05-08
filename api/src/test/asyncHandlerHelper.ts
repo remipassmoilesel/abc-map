@@ -3,13 +3,12 @@ import chai from 'chai';
 import chaiHttp from 'chai-http';
 import * as assert from 'assert';
 
+// tslint:disable-next-line:no-var-requires
 require('source-map-support').install();
 
 import express = require('express');
 
 chai.use(chaiHttp);
-
-// TODO: complete
 
 describe('asyncHandler', () => {
 
@@ -60,6 +59,7 @@ describe('asyncHandler', () => {
         const app = express();
         app.post('/', asyncHandler(async (req, res) => {
             await Promise.reject();
+            return undefined as any;
         }));
 
         chai.request(app)
@@ -89,7 +89,7 @@ describe('asyncHandler', () => {
 
         const app = express();
         app.post('/', asyncHandler(async (req, res) => {
-
+            return undefined as any;
         }));
 
         chai.request(app)
