@@ -8,7 +8,7 @@ import {RouterModule} from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import {ReactiveFormsModule} from '@angular/forms';
-import { StoreComponent } from './store/store.component';
+import { DataStoreComponent } from './datastore/data-store.component';
 
 @NgModule({
   imports: [
@@ -23,7 +23,7 @@ import { StoreComponent } from './store/store.component';
     PageNotFoundComponent,
     LoginComponent,
     RegisterComponent,
-    StoreComponent
+    DataStoreComponent
   ],
 })
 export class ViewsModule {

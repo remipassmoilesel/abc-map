@@ -1,12 +1,12 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { StoreComponent } from './store.component';
+import { DataStoreComponent } from './data-store.component';
 import {AppModule} from '../../app.module';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 
-describe('StoreComponent', () => {
-  let component: StoreComponent;
-  let fixture: ComponentFixture<StoreComponent>;
+describe('DataStoreComponent', () => {
+  let component: DataStoreComponent;
+  let fixture: ComponentFixture<DataStoreComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -16,7 +16,7 @@ describe('StoreComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(StoreComponent);
+    fixture = TestBed.createComponent(DataStoreComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

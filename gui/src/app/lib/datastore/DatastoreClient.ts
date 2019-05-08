@@ -1,6 +1,6 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {ApiRoutes, IDocument} from 'abcmap-shared';
+import {ApiRoutes, IDocument, IUploadResponse} from 'abcmap-shared';
 import {Observable, Observer} from 'rxjs';
 
 @Injectable({
@@ -15,7 +15,7 @@ export class DatastoreClient {
   public postDocument(username: string, path: string, content: FormData): Observable<any> {
     const encodedPath = btoa(path);
     const url = ApiRoutes.DATASTORE_CREATE.withArgs({username, path: encodedPath}).toString();
-    return this.client.post(url, content);
+    return this.client.post<IUploadResponse>(url, content);
   }
 
   public listDocuments(username: string): Observable<IDocument[]> {

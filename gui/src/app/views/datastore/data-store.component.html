@@ -1,0 +1,50 @@
+<div class="abc-store-view abc-view pt-5 pb-3">
+
+  <h1 class="mb-2">Magasin de données</h1>
+
+  <form class="abc-search-form" [formGroup]="searchForm" *ngIf="searchForm" (ngSubmit)="search()">
+
+    <div class="d-flex justify-content-start align-items-center mt-3">
+      <input type="text" class="form-control" placeholder="Que cherchez vous ?" formControlName="query">
+      <button class="btn btn-primary ml-3" [disabled]="searchForm.invalid">Rechercher</button>
+    </div>
+
+  </form>
+
+  <div class="abc-documents-list">
+
+    <div *ngIf="lastUploadedDocuments.length">
+
+      <h2>Dernier téléversements</h2>
+
+      <div *ngFor="let item of lastUploadedDocuments" class="card mb-3">
+        <div class="card-body">
+          <li>{{ item.name }}</li>
+          <li>{{ item.lastModified }}</li>
+          <li>{{ item.size }}</li>
+        </div>
+      </div>
+
+    </div>
+
+    <div *ngIf="documents.length">
+
+      <h2>Tous les documents</h2>
+
+      <div *ngFor="let item of documents" class="card mb-3">
+        <div class="card-body">
+          <li>{{ item.name }}</li>
+          <li>{{ item.lastModified }}</li>
+          <li>{{ item.size }}</li>
+        </div>
+      </div>
+
+    </div>
+    
+    <div *ngIf="!documents.length">
+      <h2>Aucun document présent</h2>
+    </div>
+
+  </div>
+
+</div>

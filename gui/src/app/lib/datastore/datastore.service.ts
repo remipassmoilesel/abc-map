@@ -4,7 +4,9 @@ import {forkJoin, Observable} from 'rxjs';
 import {Store} from '@ngrx/store';
 import {IMainState} from '../../store';
 import {mergeMap, take, tap} from 'rxjs/operators';
-import {IDocument} from 'abcmap-shared';
+import {IDocument, IUploadResponse} from 'abcmap-shared';
+import {GuiModule} from '../../store/gui/gui-actions';
+import DocumentsUploaded = GuiModule.DocumentsUploaded;
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +27,7 @@ export class DatastoreService {
       );
   }
 
-  public uploadDocuments(files: FileList): Observable<any> {
+  public uploadDocuments(files: FileList): Observable<IUploadResponse[]> {
 
     const uploadObservables = [];
     // tslint:disable-next-line:prefer-for-of
@@ -34,10 +36,11 @@ export class DatastoreService {
       uploadObservables.push(this.uploadDocument(file.name, file));
     }
 
-    return forkJoin(uploadObservables);
+    return forkJoin(uploadObservables)
+      .pipe(tap(res => this.store.dispatch(new DocumentsUploaded({documents: res}))));
   }
 
-  private uploadDocument(name: string, file: File): Observable<any> {
+  private uploadDocument(name: string, file: File): Observable<IUploadResponse> {
     return this.store.select(state => state.user.username)
       .pipe(
         take(1),

@@ -14,6 +14,12 @@ export function guiReducer(state = guiInitialState, action: GuiModule.ActionsUni
       return newState;
     }
 
+    case ActionTypes.DOCUMENTS_UPLOADED: {
+      const newState = _.cloneDeep(state);
+      newState.lastDocumentsUploaded = action.payload.documents;
+      return newState;
+    }
+
     default: {
       return state;
     }
