@@ -5,11 +5,11 @@ import * as filesize from 'filesize';
 import {DatetimeHelper} from '../../lib/utils/DatetimeHelper';
 
 @Component({
-  selector: 'abc-document',
-  templateUrl: './document.component.html',
-  styleUrls: ['./document.component.scss']
+  selector: 'abc-document-list-item',
+  templateUrl: './document-list-item.component.html',
+  styleUrls: ['./document-list-item.component.scss']
 })
-export class DocumentComponent implements OnInit {
+export class DocumentListItemComponent implements OnInit {
 
   dhelper = DatetimeHelper;
   filesize = filesize;

@@ -12,7 +12,7 @@ import {ColorPickerModule} from 'ngx-color-picker';
 import {LeftMenuComponent} from './left-menu/left-menu.component';
 import {NewLayerDialogComponent} from './new-layer-dialog/new-layer-dialog.component';
 import { DropDataComponent } from './drop-data/drop-data.component';
-import { DocumentComponent } from './document/document.component';
+import { DocumentListItemComponent } from './document-list-item/document-list-item.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +24,7 @@ import { DocumentComponent } from './document/document.component';
     LeftMenuComponent,
     NewLayerDialogComponent,
     DropDataComponent,
-    DocumentComponent
+    DocumentListItemComponent
   ],
   imports: [
     CommonModule,
@@ -41,7 +41,7 @@ import { DocumentComponent } from './document/document.component';
     LayerSelectorComponent,
     NewLayerDialogComponent,
     DropDataComponent,
-    DocumentComponent
+    DocumentListItemComponent
   ]
 })
 export class ComponentsModule {
