@@ -13,6 +13,9 @@ export const asyncHandler = (handler: AsyncRequestHandler) =>
                 if (result) {
                     return response.json(result);
                 }
+                if (!result) {
+                    throw new Error('Async handlers must return a result !');
+                }
             })
             .catch((err) => {
                 return next(err || new Error('Interval server error'));

@@ -3,7 +3,7 @@ import {DatastoreClient} from './DatastoreClient';
 import {forkJoin, Observable} from 'rxjs';
 import {Store} from '@ngrx/store';
 import {IMainState} from '../../store';
-import {mergeMap, take} from 'rxjs/operators';
+import {mergeMap, take, tap} from 'rxjs/operators';
 import {IDocument} from 'abcmap-shared';
 
 @Injectable({

@@ -5,11 +5,11 @@ import {Action} from '@ngrx/store';
 export namespace GuiModule {
 
   export enum ActionTypes {
-    DIALOG_SELECT_NEW_LAYER_SHOWED = '[gui] Dialog: Show new layer dialog',
+    DIALOG_SELECT_NEW_LAYER_STATE_CHANGED = '[gui] New layer dialog state changed',
   }
 
   export class SelectNewLayerDialogChanged implements Action {
-    readonly type = ActionTypes.DIALOG_SELECT_NEW_LAYER_SHOWED;
+    readonly type = ActionTypes.DIALOG_SELECT_NEW_LAYER_STATE_CHANGED;
 
     constructor(public payload: { state: boolean }) {}
   }

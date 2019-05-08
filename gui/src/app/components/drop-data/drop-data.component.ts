@@ -5,6 +5,8 @@ import {IMainState} from '../../store';
 import {Store} from '@ngrx/store';
 import {mergeMap, take} from 'rxjs/operators';
 import {of, throwError} from 'rxjs';
+import {RoutingService} from '../../lib/routing/routing.service';
+import {GuiRoutes} from '../../app-routing.module';
 
 @Component({
   selector: 'abc-drop-data',
@@ -17,6 +19,7 @@ export class DropDataComponent implements OnInit {
 
   constructor(private toast: ToastService,
               private store: Store<IMainState>,
+              private router: RoutingService,
               private datastore: DatastoreService) {
   }
 
@@ -46,23 +49,20 @@ export class DropDataComponent implements OnInit {
       this.store.select(state => state.user.loggedIn)
         .pipe(
           take(1),
-          mergeMap(isLoggedIn => {
-            return isLoggedIn ? of(true) : throwError(new Error('Vous devez vous connecter'));
-          }),
-          mergeMap(res => {
-            return this.datastore.uploadDocuments(files);
-          })
+          mergeMap(isLoggedIn => isLoggedIn ? of(true) : throwError(new Error('Vous devez vous connecter'))),
+          mergeMap(res => this.datastore.uploadDocuments(files))
         )
         .subscribe((res: any) => {
           this.toast.info('Documents téléversés !');
           this.visible = false;
+          this.router.navigate(GuiRoutes.STORE);
         }, err => {
           this.toast.error(`Erreur lors du téléversement: ${err.message}`);
           this.visible = false;
         });
     }
 
-  }
+  };
 
   private getFilesFromDropEvent(event: DragEvent): FileList | null {
     return event.dataTransfer && event.dataTransfer.files;

@@ -1,6 +1,6 @@
 import {asyncHandler} from '../lib/server/asyncExpressHandler';
 import {AbstractController} from '../lib/server/AbstractController';
-import {ApiRoutes} from 'abcmap-shared';
+import {ApiRoutes, IUploadResponse} from 'abcmap-shared';
 import {DatastoreService} from './DatastoreService';
 import {DataTransformationService} from './DataTransformationService';
 import express = require('express');
@@ -24,7 +24,7 @@ export class DataStoreController extends AbstractController {
     }
 
     // TODO: ensure authentication and username
-    public uploadDocument = async (req: express.Request, res: express.Response): Promise<any> => {
+    public uploadDocument = async (req: express.Request, res: express.Response): Promise<IUploadResponse> => {
         const username = req.params.username;
         const path = Buffer.from(req.params.path, 'base64').toString();
         const content = req.file;
@@ -32,6 +32,7 @@ export class DataStoreController extends AbstractController {
         await this.datastore.storeDocument(username, path, content.buffer);
         const cache = await this.dataTransformation.toGeojson(content.buffer, path);
         await this.datastore.storeCache(username, path, Buffer.from(JSON.stringify(cache)));
+        return {message: 'Uploaded', username, path};
     }
 
     public getDocumentList = async (req: express.Request, res: express.Response): Promise<any> => {
