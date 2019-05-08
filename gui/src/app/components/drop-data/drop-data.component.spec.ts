@@ -1,6 +1,8 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { DropDataComponent } from './drop-data.component';
+import {DropDataComponent} from './drop-data.component';
+import {AppModule} from '../../app.module';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
 
 describe('DropDataComponent', () => {
   let component: DropDataComponent;
@@ -8,9 +10,9 @@ describe('DropDataComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DropDataComponent ]
+      imports: [AppModule, HttpClientTestingModule]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
