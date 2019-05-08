@@ -31,8 +31,8 @@ export class RoutingService implements OnDestroy {
 
   private redirectAfterLogin() {
     this.loginState$ = this.store.select(state => state.user.loggedIn)
-      .subscribe(res => {
-        if (this.shouldRedirectAfterLoginAction()) {
+      .subscribe(isConnected => {
+        if (!isConnected || this.shouldRedirectAfterLoginAction()) {
           this.navigate(GuiRoutes.MAP);
         }
       });
