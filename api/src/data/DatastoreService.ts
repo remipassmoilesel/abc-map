@@ -25,23 +25,26 @@ export class DatastoreService extends AbstractService implements IPostConstruct 
         return new Minio.Client(this.config.minio);
     }
 
-    public async storeDocument(username: string, path: string, content: Buffer) {
+    public async storeDocument(username: string, path: string, content: Buffer): Promise<any> {
         const formatIsAllowed = await DataFormatHelper.isDataFormatAllowed(content, path);
         if (!formatIsAllowed) {
             return Promise.reject(new Error('Forbidden format'));
         }
 
-        const bucketName = this.bucketNameFromUsername(username);
-        const bucketExists = await this.client.bucketExists(bucketName);
-        if (!bucketExists) {
-            await this.client.makeBucket(bucketName, DatastoreService.REGION);
-        }
+        const bucketName = await this.checkBucketForUsername(username);
 
         const metadata = {createdAt: new Date()};
         return this.client.putObject(bucketName, path, content, content.length, metadata);
     }
 
-    public getDocuments(username: string): Promise<IDocument[]> {
+    public async storeCache(username: string, originalPath: string, content: Buffer): Promise<any> {
+        const bucketName = await this.checkBucketForUsername(username);
+        const path = this.cachePathForPath(originalPath);
+        const metadata = {createdAt: new Date()};
+        return this.client.putObject(bucketName, path, content, content.length, metadata);
+    }
+
+    public listDocuments(username: string): Promise<IDocument[]> {
         return new Promise((resolve, reject) => {
             const data: BucketItem[] = [];
             const stream = this.client.listObjectsV2(this.bucketNameFromUsername(username), '', true)
@@ -57,8 +60,21 @@ export class DatastoreService extends AbstractService implements IPostConstruct 
         });
     }
 
+    private async checkBucketForUsername(username: string): Promise<string> {
+        const bucketName = this.bucketNameFromUsername(username);
+        const bucketExists = await this.client.bucketExists(bucketName);
+        if (!bucketExists) {
+            await this.client.makeBucket(bucketName, DatastoreService.REGION);
+        }
+        return bucketName;
+    }
+
     private bucketNameFromUsername(username: string): string {
         return `user-data.${username}`;
     }
 
+
+    private cachePathForPath(originalPath: string): string {
+        return originalPath + '.cache';
+    }
 }

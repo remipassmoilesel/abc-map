@@ -5,7 +5,7 @@ import {DataImporterHelper} from './DataImporterHelper';
 import {DataFormats, IDataFormat} from '../fileformat/DataFormat';
 
 // tslint:disable:no-var-requires
-const togeojson = require('togeojson');
+const togeojson = require('@mapbox/togeojson');
 
 export class GpxDataImporter extends AbstractDataImporter {
 

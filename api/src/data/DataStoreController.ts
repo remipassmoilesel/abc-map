@@ -2,6 +2,7 @@ import {asyncHandler} from '../lib/server/asyncExpressHandler';
 import {AbstractController} from '../lib/server/AbstractController';
 import {ApiRoutes} from 'abcmap-shared';
 import {DatastoreService} from './DatastoreService';
+import {DataTransformationService} from './DataTransformationService';
 import express = require('express');
 import multer = require('multer');
 
@@ -10,7 +11,8 @@ const upload = multer({storage});
 
 export class DataStoreController extends AbstractController {
 
-    constructor(private datastore: DatastoreService) {
+    constructor(private datastore: DatastoreService,
+                private dataTransformation: DataTransformationService) {
         super();
     }
 
@@ -27,13 +29,15 @@ export class DataStoreController extends AbstractController {
         const path = Buffer.from(req.params.path, 'base64').toString();
         const content = req.file;
 
-        return this.datastore.storeDocument(username, path, content.buffer);
+        await this.datastore.storeDocument(username, path, content.buffer);
+        const cache = await this.dataTransformation.toGeojson(content.buffer, path);
+        await this.datastore.storeCache(username, path, Buffer.from(JSON.stringify(cache)));
     }
 
     public getDocumentList = async (req: express.Request, res: express.Response): Promise<any> => {
         const username = req.params.username;
 
-        return this.datastore.getDocuments(username);
+        return this.datastore.listDocuments(username);
     }
 
 }

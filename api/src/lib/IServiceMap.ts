@@ -5,6 +5,7 @@ import {UserService} from '../users/UserService';
 import {AuthenticationService} from '../authentication/AuthenticationService';
 import {IApiConfig} from '../IApiConfig';
 import {DatastoreService} from '../data/DatastoreService';
+import {DataTransformationService} from '../data/DataTransformationService';
 
 export interface IServiceMap {
     [k: string]: AbstractService;
@@ -13,6 +14,7 @@ export interface IServiceMap {
     user: UserService;
     authentication: AuthenticationService;
     datastore: DatastoreService;
+    dataTransformation: DataTransformationService;
 }
 
 export async function getServices(daos: IDaoMap, config: IApiConfig): Promise<IServiceMap> {
@@ -21,6 +23,7 @@ export async function getServices(daos: IDaoMap, config: IApiConfig): Promise<IS
         user: new UserService(daos.user),
         authentication: new AuthenticationService(daos.user, config),
         datastore: new DatastoreService(config),
+        dataTransformation: new DataTransformationService(),
     };
 
     for (const serviceName in services) {

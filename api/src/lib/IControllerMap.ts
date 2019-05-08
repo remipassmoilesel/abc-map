@@ -19,6 +19,6 @@ export function getControllers(services: IServiceMap): IControllerMap {
         project: new ProjectController(services.project),
         authentication: new AuthenticationController(services.authentication),
         user: new UserController(services.authentication, services.user),
-        datastore: new DataStoreController(services.datastore),
+        datastore: new DataStoreController(services.datastore, services.dataTransformation),
     };
 }

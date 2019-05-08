@@ -1,10 +1,10 @@
 import * as shapefile from 'shapefile';
-import * as _ from 'lodash';
 import {AbstractDataImporter} from './AbstractDataImporter';
 import {IAbcGeojsonFeatureCollection} from '../../AbcGeojson';
 import {FeatureHelper} from '../FeatureUtils';
-import uuid = require('uuid');
 import {DataFormats, IDataFormat} from '../fileformat/DataFormat';
+import * as _ from 'lodash';
+import uuid = require('uuid');
 
 export class ShapefileImporter extends AbstractDataImporter {
 

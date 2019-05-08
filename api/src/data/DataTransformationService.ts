@@ -1,9 +1,17 @@
 import {IAbcGeojsonFeatureCollection} from './AbcGeojson';
+import {TransformationTools} from './transform/TransformationTools';
+import {AbstractService} from '../lib/AbstractService';
 
-export class DataTransformationService {
+export class DataTransformationService extends AbstractService {
 
-    public toGeojson(buffer: Buffer, path: string): IAbcGeojsonFeatureCollection {
-        throw new Error('Implement me');
+    private transformTools = new TransformationTools();
+
+    public async toGeojson(buffer: Buffer, path: string): Promise<IAbcGeojsonFeatureCollection> {
+        const importer = this.transformTools.getImporterForPath(path);
+        if (!importer) {
+            return Promise.reject(`Invalid format: ${path}`);
+        }
+        return importer.toCollection(buffer);
     }
 
 }
