@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "concurrently --kill-others 'npm run watch' 'nodemon ./dist/api-main.js'",
-    "start:nodemon": "nodemon ./dist/api-main.js",
+    "start:nodemon": "nodemon --inspect ./dist/api-main.js",
     "test": "./node_modules/.bin/mocha dist/test",
     "test:watch": "./node_modules/.bin/mocha --source-map-support -w dist/test",
     "lint": "tslint -c tslint.json --fix src/**/*.ts",
