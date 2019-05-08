@@ -3,3 +3,7 @@
   synchronize:
     src: "{{ abcmap.rootDir }}"
     dest: "{{ abcmap.destination }}"
+    delete: yes
+    rsync_opts:
+      - --exclude '{{ abcmap.rootDir }}/data'
+      - --exclude '{{ abcmap.rootDir }}/deployment/dev-databases'
