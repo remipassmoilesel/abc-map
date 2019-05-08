@@ -1,4 +1,4 @@
-import {IProject, WmsParams, PredefinedLayerPreset} from 'abcmap-shared';
+import {IProject, IWmsParams, PredefinedLayerPreset} from 'abcmap-shared';
 import {Action} from '@ngrx/store';
 import {FeatureCollection} from 'geojson';
 
@@ -54,7 +54,7 @@ export namespace ProjectModule {
   export class WmsLayerAdded implements Action {
     readonly type = ActionTypes.WMS_LAYER_ADDED;
 
-    constructor(public payload: { url: string, params: WmsParams}) {}
+    constructor(public payload: { url: string, params: IWmsParams}) {}
   }
 
   export class LayerRemoved implements Action {

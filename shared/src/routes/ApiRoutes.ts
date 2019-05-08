@@ -13,4 +13,7 @@ export class ApiRoutes {
     public static readonly MY_PROFILE = new ApiRoute('/api/user/my-profile');
     public static readonly REGISTER = new ApiRoute('/api/user/register');
 
+    public static readonly DATASTORE = new ApiRoute('/api/datastore/:username');
+    public static readonly DATASTORE_CREATE = new ApiRoute('/api/datastore/:username/:path');
+
 }

@@ -9,7 +9,7 @@ export class AbcValidators {
 
   public static readonly USERNAME = Validators.compose([
     Validators.required,
-    Validators.minLength(6),
+    Validators.minLength(4),
   ]);
 
   public static readonly EMAIL = Validators.compose([

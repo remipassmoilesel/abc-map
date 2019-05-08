@@ -8,9 +8,15 @@ import ActionTypes = GuiModule.ActionTypes;
 export function guiReducer(state = guiInitialState, action: GuiModule.ActionsUnion): IGuiState {
 
   switch (action.type) {
-    case ActionTypes.DIALOG_SELECT_NEW_LAYER_SHOWED: {
+    case ActionTypes.DIALOG_SELECT_NEW_LAYER_STATE_CHANGED: {
       const newState = _.cloneDeep(state);
       newState.dialogs.selectNewLayer = action.payload.state;
+      return newState;
+    }
+
+    case ActionTypes.DOCUMENTS_UPLOADED: {
+      const newState = _.cloneDeep(state);
+      newState.lastDocumentsUploaded = action.payload.documents;
       return newState;
     }
 

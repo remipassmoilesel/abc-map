@@ -2,6 +2,8 @@ import {OlCircle, OlFeature, OlFill, OlRenderFeature, OlStroke, OlStyle} from '.
 import {OpenLayersHelper} from './OpenLayersHelper';
 
 
+// TODO: check relations to geojson properties
+
 // TODO: improve style structure
 // TODO: add stroke width
 // TODO: add icons for points

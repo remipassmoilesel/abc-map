@@ -3,6 +3,10 @@ import {ProjectService} from '../../lib/project/project.service';
 import {RxUtils} from '../../lib/utils/RxUtils';
 import {Subscription} from 'rxjs';
 import {GuiRoutes} from '../../app-routing.module';
+import {AuthenticationService} from '../../lib/authentication/authentication.service';
+import {Store} from '@ngrx/store';
+import {IMainState} from '../../store';
+import {RoutingService} from '../../lib/routing/routing.service';
 
 @Component({
   selector: 'abc-top-bar',
@@ -14,12 +18,19 @@ export class TopBarComponent implements OnInit, OnDestroy {
   project$?: Subscription;
   routes = GuiRoutes;
   projectName = '';
+  loggedIn = false;
 
-  constructor(private projectService: ProjectService) {}
+  constructor(private project: ProjectService,
+              private routing: RoutingService,
+              private store: Store<IMainState>,
+              private authentication: AuthenticationService) {
+  }
 
   ngOnInit() {
-    this.project$ = this.projectService.listenProjectState()
+    this.project$ = this.project.listenProjectState()
       .subscribe(project => this.projectName = project ? project.name : '');
+    this.store.select(state => state.user.loggedIn)
+      .subscribe(loggedId => this.loggedIn = loggedId);
   }
 
   ngOnDestroy() {
@@ -27,7 +38,7 @@ export class TopBarComponent implements OnInit, OnDestroy {
   }
 
   newProject() {
-    this.projectService.createNewProject().subscribe();
+    this.project.createNewProject().subscribe();
   }
 
   closeProject() {
@@ -35,7 +46,10 @@ export class TopBarComponent implements OnInit, OnDestroy {
   }
 
   saveProject() {
-    this.projectService.saveProject().subscribe();
+    this.project.saveProject().subscribe();
   }
 
+  logout() {
+    this.authentication.logout();
+  }
 }

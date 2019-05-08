@@ -23,10 +23,10 @@ export class AuthenticationController extends AbstractController {
         const authenticationResult = await this.authentication.authenticateUser({username, password});
         if (authenticationResult.authenticated && authenticationResult.user) {
             const token = this.authentication.generateToken(authenticationResult.user);
-            return {message: 'Authorized', token};
+            return {message: 'Authorized', token, username};
         }
 
         return Promise.reject(new Error('Forbidden'));
-    };
+    }
 
 }

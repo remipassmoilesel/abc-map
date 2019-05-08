@@ -14,15 +14,15 @@ export interface IMapLayer {
 
 export interface IVectorLayer extends IMapLayer {
     type: MapLayerType.Vector;
-    featureCollection: FeatureCollection
+    featureCollection: FeatureCollection;
 }
 
-export type WmsParams = { [k: string]: string | boolean };
+export interface IWmsParams { [k: string]: string | boolean; }
 
 export interface IWmsLayer extends IMapLayer {
     type: MapLayerType.Wms;
     url: string;
-    wmsParams: WmsParams;
+    wmsParams: IWmsParams;
 }
 
 export enum PredefinedLayerPreset {

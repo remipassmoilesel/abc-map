@@ -6,17 +6,21 @@ import {IMapState} from './map/map-state';
 import {mapReducer} from './map/map-reducers';
 import {IGuiState} from './gui/gui-state';
 import {guiReducer} from './gui/gui-reducers';
+import {IUserState} from './user/user-state';
+import {userReducer} from './user/user-reducers';
 
 export interface IMainState {
   project: IProjectState;
   map: IMapState;
   gui: IGuiState;
+  user: IUserState;
 }
 
 export const reducers: any = { // TODO: fix any, normally ActionReducerMap<State>  ?
   project: projectReducer,
   map: mapReducer,
-  gui: guiReducer
+  gui: guiReducer,
+  user: userReducer,
 };
 
 export function debug(reducer: ActionReducer<any>): ActionReducer<any> {

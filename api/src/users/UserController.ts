@@ -1,18 +1,21 @@
 import {AbstractController} from '../lib/server/AbstractController';
 import {AuthenticationService} from '../authentication/AuthenticationService';
-import {ApiRoutes, IUserCreationRequest} from 'abcmap-shared';
+import {ApiRoutes, ILoginResponse, IUserCreationRequest} from 'abcmap-shared';
 import {UserService} from './UserService';
 import passport from 'passport';
 import * as express from 'express';
 import assert from 'assert';
 import {asyncHandler} from '../lib/server/asyncExpressHandler';
+import {DataStoreController} from '../data/DataStoreController';
+import {DatastoreService} from '../data/DatastoreService';
 
 const authenticated = passport.authenticate('jwt', {session: false});
 
 export class UserController extends AbstractController {
 
     constructor(private authentication: AuthenticationService,
-                private user: UserService) {
+                private user: UserService,
+                private datastore: DatastoreService) {
         super();
     }
 
@@ -24,18 +27,22 @@ export class UserController extends AbstractController {
         return router;
     }
 
-    public register = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    public register = async (req: express.Request, res: express.Response): Promise<ILoginResponse> => {
         const request: IUserCreationRequest = req.body;
         assert(request.username);
         assert(request.password);
         assert(request.email);
 
         const user = await this.user.createUser(request);
-        res.send(user);
-    };
+        const token = this.authentication.generateToken(user);
+
+        await this.datastore.createStorageForUsername(request.username);
+
+        return {message: 'Registered', token, username: request.username};
+    }
 
     public myProfile = async (req: express.Request, res: express.Response) => {
-        console.log(req.header);
-    };
+        throw new Error('Implement me');
+    }
 
 }

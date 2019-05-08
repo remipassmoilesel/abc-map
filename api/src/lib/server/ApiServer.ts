@@ -3,7 +3,7 @@ import morgan = require('morgan');
 import expressWebsocket = require('express-ws');
 import bodyParser = require('body-parser');
 import passport = require('passport');
-import {IControllerMap} from './IControllerMap';
+import {IControllerMap} from '../IControllerMap';
 import * as _ from 'lodash';
 import * as loglevel from 'loglevel';
 import {JwtStrategy} from './JwtStrategy';

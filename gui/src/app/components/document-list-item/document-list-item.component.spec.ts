@@ -1,22 +1,22 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { StoreComponent } from './store.component';
-import {AppModule} from '../../app.module';
+import { DocumentListItemComponent } from './document-list-item.component';
+import {AppComponent} from '../../app.component';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 
-describe('StoreComponent', () => {
-  let component: StoreComponent;
-  let fixture: ComponentFixture<StoreComponent>;
+describe('DocumentListItemComponent', () => {
+  let component: DocumentListItemComponent;
+  let fixture: ComponentFixture<DocumentListItemComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [AppModule, HttpClientTestingModule],
+      imports: [ AppComponent, HttpClientTestingModule ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(StoreComponent);
+    fixture = TestBed.createComponent(DocumentListItemComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

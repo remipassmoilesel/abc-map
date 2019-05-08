@@ -5,6 +5,13 @@ export interface IApiConfig {
     mongodb: {
         port: number;
     };
+    minio: {
+        endPoint: string,
+        port: number,
+        useSSL: boolean,
+        accessKey: string,
+        secretKey: string,
+    };
 }
 
 export class ApiConfigHelper {
@@ -18,6 +25,13 @@ export class ApiConfigHelper {
             jwtSecret: env('ABC_JWT_SECRET', 'f5098e123bf45e762473e6761c990f5598c4c57241cd1bc099aa110a51dfb013b8e'),
             mongodb: {
                 port: env('ABC_MONGODB_PORT', 27017),
+            },
+            minio: {
+                endPoint: 'localhost',
+                port: 9001,
+                useSSL: false,
+                accessKey: 'fb37ca0b53f49587c534be53281a9f94a865d6cedb1e205c1f057810',
+                secretKey: 'ea6dd22b3cd0c3908b0e59c4e769a0abff1c4d0081585fa5ea6dd22b3cd0c3908b0e59c4e769a0abff1c4d0081585fa5',
             },
         };
         // tslint:enable:max-line-length

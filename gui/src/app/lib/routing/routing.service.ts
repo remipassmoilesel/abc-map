@@ -1,8 +1,12 @@
-import {Injectable} from '@angular/core';
+import {Injectable, OnDestroy} from '@angular/core';
 
 import * as _ from 'lodash';
 import {Router} from '@angular/router';
-import {GuiRoute} from '../../app-routing.module';
+import {GuiRoute, GuiRoutes} from '../../app-routing.module';
+import {IMainState} from '../../store';
+import {Store} from '@ngrx/store';
+import {Subscription} from 'rxjs';
+import {RxUtils} from '../utils/RxUtils';
 
 
 export interface IArgMap {
@@ -12,9 +16,26 @@ export interface IArgMap {
 @Injectable({
   providedIn: 'root'
 })
-export class RoutingService {
+export class RoutingService implements OnDestroy {
 
-  constructor(private router: Router) {
+  private loginState$?: Subscription;
+
+  constructor(private router: Router,
+              private store: Store<IMainState>) {
+    this.redirectAfterLogin();
+  }
+
+  ngOnDestroy(): void {
+    RxUtils.unsubscribe(this.loginState$);
+  }
+
+  private redirectAfterLogin() {
+    this.loginState$ = this.store.select(state => state.user.loggedIn)
+      .subscribe(isConnected => {
+        if (!isConnected || this.shouldRedirectAfterLoginAction()) {
+          this.navigate(GuiRoutes.MAP);
+        }
+      });
   }
 
   public navigate(route: GuiRoute, args?: IArgMap) {
@@ -40,5 +61,9 @@ export class RoutingService {
     }
   }
 
+  private shouldRedirectAfterLoginAction(): boolean {
+    const currentRoute = document.location.href;
+    return currentRoute.endsWith(GuiRoutes.LOGIN) || currentRoute.endsWith(GuiRoutes.REGISTER);
+  }
 }
 
