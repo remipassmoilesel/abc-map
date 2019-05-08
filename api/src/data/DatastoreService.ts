@@ -22,7 +22,7 @@ export class DatastoreService extends AbstractService implements IPostConstruct 
         this.client = this.connect();
     }
 
-    public connect() {
+    private connect() {
         return new Minio.Client(this.config.minio);
     }
 

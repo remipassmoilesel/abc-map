@@ -6,13 +6,13 @@ import {DATA_FORMAT_WHITELIST, DataFormats, IDataFormat} from './DataFormat';
 export class DataFormatHelper {
 
     public static async isDataFormatAllowed(data: Buffer, filePath: string): Promise<boolean> {
-        const contentFormat: string = await this.getDataFormat(data);
+        const contentFormat: string = await this.inspectContentFormat(data);
         const isContentAllowed: boolean = !!_.find(DATA_FORMAT_WHITELIST, format => contentFormat.startsWith(format));
         const isExtensionAllowed = !!_.find(DataFormats.ALL, format => this.isFileSupported(format, filePath));
         return isContentAllowed && isExtensionAllowed;
     }
 
-    public static getDataFormat(data: Buffer): Promise<string> {
+    public static inspectContentFormat(data: Buffer): Promise<string> {
         return new Promise((resolve, reject) => {
             const magic = new Magic();
             magic.detect(data, (err, result) => {
