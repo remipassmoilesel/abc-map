@@ -11,3 +11,4 @@ minio-data
 *.log
 .vagrant
 
+*.retry

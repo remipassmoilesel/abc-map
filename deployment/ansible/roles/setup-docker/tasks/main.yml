@@ -1,23 +1,17 @@
 
-- name: "Prepare docker installation"
-  apt: name={{item}} state=present
-  with_items:
-    - apt-transport-https
-    - ca-certificates
-    - software-properties-common
+- set_fact:
+    packages:
+      - docker.io
+      - python-pip
 
-- name: "Add docker repository key"
-  apt_key:
-    url: "https://download.docker.com/linux/ubuntu/gpg"
+- name: "Install Docker"
+  apt: name={{ packages }} state=present
 
-- name: "Add Docker repository"
-  apt_repository:
-    repo: "{{ item }}"
-    state: present
-  with_items:
-    - deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable
+- name: "Ensure pip is up to date"
+  pip:
+    name: pip
+    state: latest
 
-- name: "Install docker"
-  apt:
-    update_cache: "yes"
-    name: docker-ce
+- name: "Install docker-compose"
+  pip:
+    name: docker-compose

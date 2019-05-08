@@ -4,6 +4,5 @@
     - variables.yml
   roles:
     - setup-docker
-    - setup-docker-compose
     - synchronize-sources
     - restart-application
