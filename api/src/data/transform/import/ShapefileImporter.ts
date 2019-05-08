@@ -2,7 +2,7 @@ import * as shapefile from 'shapefile';
 import {AbstractDataImporter} from './AbstractDataImporter';
 import {IAbcGeojsonFeatureCollection} from '../../AbcGeojson';
 import {FeatureHelper} from '../FeatureUtils';
-import {DataFormats, IDataFormat} from '../fileformat/DataFormat';
+import {DataFormats, IDataFormat} from '../dataformat/DataFormat';
 import * as _ from 'lodash';
 import uuid = require('uuid');
 

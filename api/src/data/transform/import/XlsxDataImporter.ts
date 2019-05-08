@@ -3,7 +3,7 @@ import {Workbook} from 'exceljs';
 import {XlsxHelper} from '../export/XlsxHelper';
 import {FeatureHelper} from '../FeatureUtils';
 import {IAbcGeojsonFeature, IAbcGeojsonFeatureCollection} from '../../AbcGeojson';
-import {DataFormats, IDataFormat} from '../fileformat/DataFormat';
+import {DataFormats, IDataFormat} from '../dataformat/DataFormat';
 import * as _ from 'lodash';
 import uuid = require('uuid');
 

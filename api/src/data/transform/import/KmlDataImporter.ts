@@ -1,7 +1,7 @@
 import {AbstractDataImporter} from './AbstractDataImporter';
 import {IAbcGeojsonFeatureCollection} from '../../AbcGeojson';
 import {DataImporterHelper} from './DataImporterHelper';
-import {DataFormats, IDataFormat} from '../fileformat/DataFormat';
+import {DataFormats, IDataFormat} from '../dataformat/DataFormat';
 
 // tslint:disable:no-var-requires
 const togeojson = require('@mapbox/togeojson');

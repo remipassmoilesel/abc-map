@@ -4,7 +4,7 @@ import {IApiConfig} from '../IApiConfig';
 import * as Minio from 'minio';
 import {BucketItem} from 'minio';
 import {IDocument} from 'abcmap-shared';
-import {DataFormatHelper} from './transform/fileformat/DataFormatHelper';
+import {DataFormatHelper} from './transform/dataformat/DataFormatHelper';
 
 // TODO: create a dedicated bucket for user's data
 export class DatastoreService extends AbstractService implements IPostConstruct {

@@ -1,6 +1,6 @@
 import {AbstractDataImporter} from './import/AbstractDataImporter';
 import * as _ from 'lodash';
-import {DataFormatHelper} from './fileformat/DataFormatHelper';
+import {DataFormatHelper} from './dataformat/DataFormatHelper';
 import {GpxDataImporter} from './import/GpxDataImporter';
 import {KmlDataImporter} from './import/KmlDataImporter';
 import {ShapefileImporter} from './import/ShapefileImporter';
