@@ -1,0 +1,6 @@
+
+- name: "Restart application"
+  shell: "docker-compose up -d --remove-orphans --force-recreate"
+  args:
+    executable: /bin/bash
+    chdir: "{{ abcmap.destination }}"

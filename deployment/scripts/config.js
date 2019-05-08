@@ -5,6 +5,7 @@ const gui = path.join(root, 'gui');
 const api = path.join(root, 'api');
 const shared = path.join(root, 'shared');
 const databases = path.join(root, 'deployment/databases');
+const ansible = path.join(root, 'deployment/ansible');
 
 const config = {
     paths: {
@@ -12,7 +13,8 @@ const config = {
         gui,
         api,
         shared,
-        databases
+        databases,
+        ansible
     }
 };
 

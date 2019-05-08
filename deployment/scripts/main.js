@@ -38,6 +38,9 @@ function main() {
         case 'deploy': {
             return deploy(args, config);
         }
+        default: {
+            throw new Error(`Invalid command: ${args.join(' ')}`)
+        }
     }
 
 }

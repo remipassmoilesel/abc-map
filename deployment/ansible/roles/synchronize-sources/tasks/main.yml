@@ -1,0 +1,5 @@
+
+- name: "Copy source directory"
+  synchronize:
+    src: "{{ abcmap.rootDir }}"
+    dest: "{{ abcmap.destination }}"

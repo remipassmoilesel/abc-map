@@ -1,8 +1,9 @@
 
-- host: all
+- hosts: all
+  vars_files:
+    - variables.yml
   roles:
     - setup-docker
     - setup-docker-compose
-    - deploy-databases
     - synchronize-sources
     - restart-application
