@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 const {build} = require("./lib/build");
+const {test} = require("./lib/test");
 const {config} = require("./config");
 
 function main() {

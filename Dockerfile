@@ -1,3 +1,6 @@
+
+# Build sources
+
 FROM node:10-stretch AS builder
 
 RUN apt-get update && apt-get install python && npm install -g npm
@@ -7,8 +10,11 @@ WORKDIR /app
 
 COPY . .
 
+RUN ls /app
 RUN npm install && npm run build
 
+
+# Production image
 
 FROM node:10-alpine
 

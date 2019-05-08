@@ -1,0 +1,10 @@
+.vagrant
+.idea
+.circleci
+
+node_modules
+api/node_modules
+gui/node_modules
+shared/node_modules
+
+
