@@ -5,6 +5,7 @@ import * as Minio from 'minio';
 import {BucketItem} from 'minio';
 import {IDocument} from 'abcmap-shared';
 import {DataFormatHelper} from './transform/dataformat/DataFormatHelper';
+import * as _ from 'lodash';
 
 // TODO: create a dedicated bucket for user's data
 export class DatastoreService extends AbstractService implements IPostConstruct {
@@ -53,12 +54,22 @@ export class DatastoreService extends AbstractService implements IPostConstruct 
                     data.push(obj);
                 })
                 .on('end' as any, (obj: BucketItem) => { // no end event in TS typings
-                    resolve(data);
+                    resolve(this.bucketItemsToDocuments(data));
                 })
                 .on('error', (err) => {
                     reject(err);
                 });
         });
+    }
+
+    private bucketItemsToDocuments(data: BucketItem[]): IDocument[] {
+        return _.map(data, bitem => ({
+            name: bitem.name,
+            prefix: bitem.prefix,
+            size: bitem.size,
+            etag: bitem.etag,
+            lastModified: bitem.lastModified.toString(),
+        }));
     }
 
     public async createStorageForUsername(username: string): Promise<string> {

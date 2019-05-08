@@ -18,11 +18,7 @@
       <h2>Dernier téléversements</h2>
 
       <div *ngFor="let item of lastUploadedDocuments" class="card mb-3">
-        <div class="card-body">
-          <li>{{ item.name }}</li>
-          <li>{{ item.lastModified }}</li>
-          <li>{{ item.size }}</li>
-        </div>
+        <abc-document [document]="item"></abc-document>
       </div>
 
     </div>
@@ -31,16 +27,12 @@
 
       <h2>Tous les documents</h2>
 
-      <div *ngFor="let item of documents" class="card mb-3">
-        <div class="card-body">
-          <li>{{ item.name }}</li>
-          <li>{{ item.lastModified }}</li>
-          <li>{{ item.size }}</li>
-        </div>
+      <div *ngFor="let item of documents" class="mb-3">
+        <abc-document [document]="item"></abc-document>
       </div>
 
     </div>
-    
+
     <div *ngIf="!documents.length">
       <h2>Aucun document présent</h2>
     </div>

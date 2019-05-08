@@ -40,7 +40,8 @@ import { DocumentComponent } from './document/document.component';
     LeftMenuComponent,
     LayerSelectorComponent,
     NewLayerDialogComponent,
-    DropDataComponent
+    DropDataComponent,
+    DocumentComponent
   ]
 })
 export class ComponentsModule {
