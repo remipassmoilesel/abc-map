@@ -1,14 +1,14 @@
 const {commandSync} = require("./utils");
 
 
-function buildTest(path) {
+function testModule(path) {
     commandSync("npm run test:ci", {cwd: path});
 }
 
 function test(args, config) {
-    buildTest(config.paths.shared);
-    buildTest(config.paths.gui);
-    buildTest(config.paths.api);
+    testModule(config.paths.shared);
+    testModule(config.paths.gui);
+    testModule(config.paths.api);
 }
 
 module.exports = {
