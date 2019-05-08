@@ -18,7 +18,7 @@ export interface IArgMap {
 })
 export class RoutingService implements OnDestroy {
 
-  private logout$?: Subscription;
+  private loginState$?: Subscription;
 
   constructor(private router: Router,
               private store: Store<IMainState>) {
@@ -26,13 +26,13 @@ export class RoutingService implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    RxUtils.unsubscribe(this.logout$);
+    RxUtils.unsubscribe(this.loginState$);
   }
 
   private redirectAfterLogin() {
-    this.logout$ = this.store.select(state => state.user.loggedIn)
+    this.loginState$ = this.store.select(state => state.user.loggedIn)
       .subscribe(res => {
-        if (res && document.location.href.endsWith(GuiRoutes.LOGIN)) {
+        if (this.shouldRedirectAfterLoginAction()) {
           this.navigate(GuiRoutes.MAP);
         }
       });
@@ -61,5 +61,9 @@ export class RoutingService implements OnDestroy {
     }
   }
 
+  private shouldRedirectAfterLoginAction(): boolean {
+    const currentRoute = document.location.href;
+    return currentRoute.endsWith(GuiRoutes.LOGIN) || currentRoute.endsWith(GuiRoutes.REGISTER);
+  }
 }
 

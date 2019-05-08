@@ -1,6 +1,6 @@
 import {Injectable, OnDestroy} from '@angular/core';
 import {AuthenticationClient} from './AuthenticationClient';
-import {ILoginRequest, IUserCreationRequest} from 'abcmap-shared';
+import {ILoginRequest, ILoginResponse, IUserCreationRequest} from 'abcmap-shared';
 import {ToastService} from '../notifications/toast.service';
 import {tap} from 'rxjs/operators';
 import {LocalStorageService, LSKey} from '../local-storage/local-storage.service';
@@ -61,7 +61,10 @@ export class AuthenticationService implements OnDestroy {
   public registerUser(request: IUserCreationRequest) {
     return this.client.registerUser(request)
       .pipe(
-        tap(res => this.toasts.info('Vous êtes inscrit !'),
+        tap(res => {
+            this.toasts.info('Vous êtes inscrit !');
+            this.processLoginResponse(res);
+          },
           err => this.toasts.error('Erreur lors de l\'inscription, veuillez réessayer plus tard !'))
       );
   }
@@ -71,8 +74,7 @@ export class AuthenticationService implements OnDestroy {
       .pipe(
         tap(res => {
             this.toasts.info('Vous êtes connecté !');
-            this.storeUserInformations(request.username, res.token);
-            this.store.dispatch(new UserLogin({username: request.username, token: res.token}));
+            this.processLoginResponse(res);
           },
           err => this.toasts.error('Identifiants incorrects !'))
       );
@@ -80,5 +82,10 @@ export class AuthenticationService implements OnDestroy {
 
   public logout() {
     this.store.dispatch(new UserLogout());
+  }
+
+  private processLoginResponse(response: ILoginResponse): void {
+    this.storeUserInformations(response.username, response.token);
+    this.store.dispatch(new UserLogin({username: response.username, token: response.token}));
   }
 }

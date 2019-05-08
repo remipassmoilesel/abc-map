@@ -3,6 +3,8 @@ import {FormBuilder, FormGroup} from '@angular/forms';
 import {AbcValidators} from '../../lib/utils/AbcValidators';
 import {AuthenticationService} from '../../lib/authentication/authentication.service';
 import {IUserCreationRequest} from 'abcmap-shared';
+import {Store} from '@ngrx/store';
+import {IMainState} from '../../store';
 
 @Component({
   selector: 'abc-register',
@@ -14,6 +16,7 @@ export class RegisterComponent implements OnInit {
   registerForm?: FormGroup;
 
   constructor(private formBuilder: FormBuilder,
+              private store: Store<IMainState>,
               private authentication: AuthenticationService) {
   }
 

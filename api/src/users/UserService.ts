@@ -20,7 +20,7 @@ export class UserService extends AbstractService {
             username: request.username,
             email: request.email,
             passwordSalt,
-            encryptedPassword
+            encryptedPassword,
         };
         return this.userDao.insert(user)
             .then(res => UserMapper.dbToDto(user));

@@ -12,8 +12,8 @@ export class AuthenticationClient {
 
   }
 
-  public registerUser(request: IUserCreationRequest): Observable<void> {
-    return this.httpClient.post<void>(ApiRoutes.REGISTER.path, request);
+  public registerUser(request: IUserCreationRequest): Observable<ILoginResponse> {
+    return this.httpClient.post<ILoginResponse>(ApiRoutes.REGISTER.path, request);
   }
 
   public login(request: ILoginRequest) {
