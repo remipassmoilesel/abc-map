@@ -13,5 +13,5 @@ RUN ./abc build
 RUN useradd --no-create-home abcmap
 USER abcmap
 
-CMD node /app/dist/api-main.js
+CMD node /app/api/dist/api-main.js
 
