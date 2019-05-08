@@ -1,5 +1,5 @@
 import * as _ from 'lodash';
-import {IAbcFeatureProperties, IAbcGeojsonFeature} from './AbcGeojson';
+import {IAbcFeatureProperties, IAbcGeojsonFeature} from '../AbcGeojson';
 import {Feature} from 'geojson';
 import uuid = require('uuid');
 

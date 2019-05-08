@@ -3,7 +3,7 @@ import * as _ from 'lodash';
 import {AbstractDataExporter} from './AbstractDataExporter';
 import {Workbook, Worksheet} from 'exceljs';
 import {XlsxHelper} from './XlsxHelper';
-import {IAbcGeojsonFeature, IAbcGeojsonFeatureCollection} from '../AbcGeojson';
+import {IAbcGeojsonFeature, IAbcGeojsonFeatureCollection} from '../../AbcGeojson';
 import {DataFormats, IDataFormat} from '../fileformat/DataFormat';
 
 export class XlsxDataExporter extends AbstractDataExporter {

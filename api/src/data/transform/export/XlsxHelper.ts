@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 import {FeatureHelper} from '../FeatureUtils';
-import {IAbcGeojsonFeature} from '../AbcGeojson';
+import {IAbcGeojsonFeature} from '../../AbcGeojson';
 import {CellValue, Row} from 'exceljs';
 
 export class XlsxHelper {

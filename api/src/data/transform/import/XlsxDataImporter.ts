@@ -2,9 +2,9 @@ import {AbstractDataImporter} from './AbstractDataImporter';
 import {Workbook} from 'exceljs';
 import {XlsxHelper} from '../export/XlsxHelper';
 import {FeatureHelper} from '../FeatureUtils';
-import {IAbcGeojsonFeature, IAbcGeojsonFeatureCollection} from '../AbcGeojson';
-import * as _ from 'lodash';
+import {IAbcGeojsonFeature, IAbcGeojsonFeatureCollection} from '../../AbcGeojson';
 import {DataFormats, IDataFormat} from '../fileformat/DataFormat';
+import * as _ from 'lodash';
 import uuid = require('uuid');
 
 export class XlsxDataImporter extends AbstractDataImporter {

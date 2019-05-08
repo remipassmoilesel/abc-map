@@ -1,4 +1,4 @@
-import {IAbcGeojsonFeatureCollection} from '../AbcGeojson';
+import {IAbcGeojsonFeatureCollection} from '../../AbcGeojson';
 import {IDataFormat} from '../fileformat/DataFormat';
 
 export abstract class AbstractDataImporter {

@@ -1,25 +1,24 @@
 import {AbstractDataImporter} from './AbstractDataImporter';
-import {IAbcGeojsonFeatureCollection} from '../AbcGeojson';
+
+import {IAbcGeojsonFeatureCollection} from '../../AbcGeojson';
 import {DataImporterHelper} from './DataImporterHelper';
 import {DataFormats, IDataFormat} from '../fileformat/DataFormat';
 
 // tslint:disable:no-var-requires
 const togeojson = require('togeojson');
 
-export class KmlDataImporter extends AbstractDataImporter {
+export class GpxDataImporter extends AbstractDataImporter {
 
     public getSupportedFormat(): IDataFormat {
-        return DataFormats.KML;
+        return DataFormats.GPX;
     }
 
     public async toCollection(source: Buffer): Promise<IAbcGeojsonFeatureCollection> {
-        const kmlDom = DataImporterHelper.getBufferAsDom(source);
-        return this.convertToGeoJson(kmlDom);
+        const gpxDom = DataImporterHelper.getBufferAsDom(source);
+        return this.convertToGeoJson(gpxDom);
     }
 
-    private convertToGeoJson(kmlDom: Document): IAbcGeojsonFeatureCollection {
-        return togeojson.kml(kmlDom, {styles: true});
+    private convertToGeoJson(gpxDom: Document): IAbcGeojsonFeatureCollection {
+        return togeojson.gpx(gpxDom, {styles: true});
     }
 }
-
-

@@ -4,7 +4,7 @@ import {IApiConfig} from '../IApiConfig';
 import * as Minio from 'minio';
 import {BucketItem} from 'minio';
 import {IDocument} from 'abcmap-shared';
-import {DataFormatHelper} from './fileformat/DataFormatHelper';
+import {DataFormatHelper} from './transform/fileformat/DataFormatHelper';
 
 // TODO: create a dedicated bucket for user's data
 export class DatastoreService extends AbstractService implements IPostConstruct {
@@ -26,7 +26,7 @@ export class DatastoreService extends AbstractService implements IPostConstruct 
     }
 
     public async storeDocument(username: string, path: string, content: Buffer) {
-        const formatIsAllowed = await DataFormatHelper.isDataFormatAllowed(content);
+        const formatIsAllowed = await DataFormatHelper.isDataFormatAllowed(content, path);
         if (!formatIsAllowed) {
             return Promise.reject(new Error('Forbidden format'));
         }

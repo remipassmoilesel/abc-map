@@ -1,13 +1,15 @@
 import * as _ from 'lodash';
 import {Magic} from 'mmmagic';
 import * as path from 'path';
-import {DATA_FORMAT_WHITELIST, IDataFormat} from './DataFormat';
+import {DATA_FORMAT_WHITELIST, DataFormats, IDataFormat} from './DataFormat';
 
 export class DataFormatHelper {
 
-    public static async isDataFormatAllowed(data: Buffer): Promise<boolean> {
-        const detectedFormat: string = await this.getDataFormat(data);
-        return !!_.find(DATA_FORMAT_WHITELIST, format => detectedFormat.startsWith(format));
+    public static async isDataFormatAllowed(data: Buffer, filePath: string): Promise<boolean> {
+        const contentFormat: string = await this.getDataFormat(data);
+        const isContentAllowed: boolean = !!_.find(DATA_FORMAT_WHITELIST, format => contentFormat.startsWith(format));
+        const isExtensionAllowed = !!_.find(DataFormats.ALL, format => this.isFileSupported(format, filePath));
+        return isContentAllowed && isExtensionAllowed;
     }
 
     public static getDataFormat(data: Buffer): Promise<string> {
@@ -31,7 +33,4 @@ export class DataFormatHelper {
         return _.includes(format.extensions, normalizedExtension);
     }
 
-    private static magicOutputToDataFormat(result: string) {
-        return undefined;
-    }
 }
