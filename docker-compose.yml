@@ -9,13 +9,16 @@ version: '3.1'
 
 services:
 
-  main-app:
+  abcmap-mainapp:
     container_name: abcmap-mainapp
     restart: always
     network_mode: host
     build: .
+    environment:
+      ABC_MONGODB_HOST: mongo
+      ABC_MINIO_HOST: minio
 
-  mongo:
+  abcmap-mongodb:
     image: mongo:4-xenial
     container_name: abcmap-mongodb
     restart: always
@@ -27,7 +30,7 @@ services:
       - './data/mongodb-data:/data/db'
     command: mongod
 
-  minio1:
+  abcmap-minio:
     image: minio/minio:RELEASE.2019-04-18T21-44-59Z
     container_name: abcmap-minio
     restart: always

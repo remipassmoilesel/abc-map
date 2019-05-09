@@ -1,8 +1,36 @@
 
 - set_fact:
-    packages:
-      - docker.io
-      - docker-compose
+    prerequisites:
+      - curl
+      - python3
+      - python3-pip
+      - apt-transport-https
+      - ca-certificates
+      - software-properties-common
+
+- name: "Prepare docker install"
+  apt: name={{ prerequisites }} state=present
+
+- name: "Add docker repository key"
+  shell:  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+  args:
+    executable: /bin/bash
+    warnings: False
+    
+- name: "Add Docker repository"
+  apt_repository:
+    repo: "{{ item }}"
+    state: present
+  with_items:
+    - deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable
 
 - name: "Install Docker"
-  apt: name={{ packages }} state=present
+  apt: name=docker-ce state=present update_cache=yes
+
+- pip:
+    name: pip
+    state: latest
+
+- name: "Install docker-compose"
+  pip:
+    name: docker-compose
