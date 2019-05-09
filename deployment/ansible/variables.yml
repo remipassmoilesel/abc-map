@@ -1,4 +1,4 @@
 
 abcmap:
-  rootDir: '{{ playbook_dir }}/../..'
+  rootDir: "{{ playbook_dir }}/../.."
   destination: /opt/abc-map

@@ -1,7 +1,11 @@
 
 - set_fact:
-    source: "{{ abcmap.rootDir }}"
-    destination: "{{ ansible_user }}@{{ ansible_host }}:{{ abcmap.destination }}"
+    source: '{{ abcmap.rootDir }}'
+    destination: '{{ ansible_user }}@{{ ansible_host }}:{{ abcmap.destination }}'
+    exclude: "--exclude={'data/*','deployment/dev-databases/*','api/node_modules/*','gui/node_modules/*','shared/node_modules/*'}"
 
-- name: "Copy source directory"
-  shell: rsync -avzd --exclude={"data/*","deployment/dev-databases/*"} {{ source }} {{ destination }}
+- name: 'Copy source directory'
+  shell: rsync -azd {{ exclude }} {{ source | realpath }} {{ destination }}
+  args:
+    executable: /bin/bash
+  delegate_to: localhost

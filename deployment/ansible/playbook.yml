@@ -6,3 +6,4 @@
     - setup-docker
     - synchronize-sources
     - restart-application
+    - setup-proxy
