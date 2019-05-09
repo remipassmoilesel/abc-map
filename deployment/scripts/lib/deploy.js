@@ -4,8 +4,9 @@ function buildDockerImage(config){
     commandSync("docker build . -t abc-map:" + getCurrentGitSha(config.paths.root), {cwd: config.paths.root});
 }
 
-function ansiblePlaybook(config) {
-    commandSync("ansible-playbook -i inventory.cfg playbook.yml", {cwd: config.paths.ansible});
+function ansiblePlaybook(args, config) {
+    const ansibleArgs = args.slice(1).join(" ");
+    commandSync("ansible-playbook -i inventory.cfg playbook.yml " + ansibleArgs, {cwd: config.paths.ansible});
 }
 
 function deploy(args, config) {
@@ -13,7 +14,7 @@ function deploy(args, config) {
         buildDockerImage(config)
     }
 
-    ansiblePlaybook(config)
+    ansiblePlaybook(args, config)
 }
 
 module.exports = {
