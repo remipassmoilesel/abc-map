@@ -1,9 +1,7 @@
 
+- set_fact:
+    source: "{{ abcmap.rootDir }}"
+    destination: "{{ ansible_user }}@{{ ansible_host }}:{{ abcmap.destination }}"
+
 - name: "Copy source directory"
-  synchronize:
-    src: "{{ abcmap.rootDir }}"
-    dest: "{{ abcmap.destination }}"
-    delete: yes
-    rsync_opts:
-      - "--exclude='/data/**/*'"
-      - "--exclude='/deployment/dev-databases/**/*'"
+  shell: rsync -avzd --exclude={"data/*","deployment/dev-databases/*"} {{ source }} {{ destination }}
