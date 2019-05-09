@@ -2,16 +2,7 @@
 - set_fact:
     packages:
       - docker.io
-      - python-pip
+      - docker-compose
 
 - name: "Install Docker"
   apt: name={{ packages }} state=present
-
-- name: "Ensure pip is up to date"
-  pip:
-    name: pip
-    state: latest
-
-- name: "Install docker-compose"
-  pip:
-    name: docker-compose

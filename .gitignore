@@ -5,6 +5,7 @@
 node_modules
 dist
 
+data
 mongodb-data
 minio-data
 
@@ -12,3 +13,4 @@ minio-data
 .vagrant
 
 *.retry
+

@@ -5,5 +5,5 @@
     dest: "{{ abcmap.destination }}"
     delete: yes
     rsync_opts:
-      - --exclude '{{ abcmap.rootDir }}/data'
-      - --exclude '{{ abcmap.rootDir }}/deployment/dev-databases'
+      - "--exclude='/data/**/*'"
+      - "--exclude='/deployment/dev-databases/**/*'"
