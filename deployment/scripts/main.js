@@ -33,6 +33,7 @@ function main() {
             return databaseStop(args, config);
         }
         case 'database:clean': {
+            databaseStop(args, config);
             return databaseClean(args, config);
         }
         case 'deploy': {

@@ -12,11 +12,12 @@ services:
   abcmap-mainapp:
     container_name: abcmap-mainapp
     restart: always
-    network_mode: host
     build: .
+    networks:
+      - abcmap
     environment:
-      ABC_MONGODB_HOST: mongo
-      ABC_MINIO_HOST: minio
+      ABC_MONGODB_HOST: abcmap-mongodb
+      ABC_MINIO_HOST: abcmap-minio
 
   abcmap-mongodb:
     image: mongo:4-xenial
