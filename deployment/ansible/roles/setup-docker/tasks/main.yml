@@ -16,7 +16,7 @@
   args:
     executable: /bin/bash
     warnings: False
-    
+
 - name: "Add Docker repository"
   apt_repository:
     repo: "{{ item }}"

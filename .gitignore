@@ -5,12 +5,9 @@
 node_modules
 dist
 
-data
-mongodb-data
-minio-data
+data/*
 
 *.log
 .vagrant
-
 *.retry
 
