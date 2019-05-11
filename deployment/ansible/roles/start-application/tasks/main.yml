@@ -1,0 +1,6 @@
+
+- name: "Build and start Docker containers"
+  shell: "time docker-compose up -d --remove-orphans --force-recreate --build | tee -a /var/log/abcmap.start.log"
+  args:
+    executable: /bin/bash
+    chdir: "{{ abcmap.destination }}"

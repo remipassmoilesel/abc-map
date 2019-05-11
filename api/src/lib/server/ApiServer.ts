@@ -25,11 +25,14 @@ export class ApiServer {
         this.setupWebsockets(this.app);
         this.setupControllers(this.app);
         this.setupGuiService(this.app);
+        this.setupRedirection(this.app);
     }
 
     public start(): void {
         this.app.listen(this.config.httpPort, () => {
             this.logger.info(`Server started on port ${this.config.httpPort}`);
+            this.logger.info(`Configuration:`);
+            this.logger.info(JSON.stringify(this.config, null, 2));
         });
     }
 
@@ -56,7 +59,20 @@ export class ApiServer {
     }
 
     private setupGuiService(app: express.Application): void {
-        app.use(express.static('gui-dist'));
+        app.use(express.static(this.config.frontend.rootPath));
     }
 
+    private setupRedirection(app: express.Application) {
+        app.use((req, res, next) => {
+            if (req.originalUrl.startsWith('/api')) {
+                this.logger.info(`Api route not found: ${req.originalUrl}`);
+                return res.status(404).send({message: 'Not found'});
+            }
+            if (req.originalUrl !== '/') {
+                this.logger.info(`Redirecting: ${req.originalUrl}`);
+                return res.redirect('/');
+            }
+            res.status(500).send({message: 'Root handler not found'});
+        });
+    }
 }

@@ -1,0 +1,74 @@
+version: '3.4'
+
+##
+## TODO: Variabilize passwords with env vars
+##
+
+services:
+
+  abcmap-mainapp:
+    container_name: abcmap-mainapp
+    restart: always
+    build: .
+    networks:
+      - abcmap
+    ports:
+      - "80:32158"
+    environment:
+      ABC_MONGODB_HOST: abcmap-mongodb
+      ABC_MINIO_HOST: abcmap-minio
+      NODE_ENV: production
+    healthcheck:
+      test: "curl --silent --show-error --fail http://localhost:32158/health"
+      interval: 1m
+      timeout: 5s
+      retries: 3
+      start_period: 1m
+
+  abcmap-mongodb:
+    image: mongo:4-xenial
+    container_name: abcmap-mongodb
+    restart: always
+    networks:
+      - abcmap
+    ports:
+      - "127.0.0.1:27017:27017"
+    volumes:
+      - './data/mongodb-data:/data/db'
+    command: mongod
+    healthcheck:
+      test: "mongo --eval 'db.runCommand( { serverStatus: 1 } )'"
+      interval: 1m
+      timeout: 5s
+      retries: 3
+      start_period: 1m
+
+  abcmap-minio:
+    image: minio/minio:RELEASE.2019-04-18T21-44-59Z
+    container_name: abcmap-minio
+    restart: always
+    volumes:
+      - './data/minio-data/data1:/data'
+    networks:
+      - abcmap
+    ports:
+      - "127.0.0.1:9001:9000"
+    environment:
+      MINIO_ACCESS_KEY: fb37ca0b53f49587c534be53281a9f94a865d6cedb1e205c1f057810
+      MINIO_SECRET_KEY: ea6dd22b3cd0c3908b0e59c4e769a0abff1c4d0081585fa5ea6dd22b3cd0c3908b0e59c4e769a0abff1c4d0081585fa5
+    command: server /data
+
+  abcmap-autoheal:
+    image: willfarrell/autoheal
+    container_name: abcmap-autoheal
+    restart: always
+    networks:
+      - abcmap
+    environment:
+      - AUTOHEAL_CONTAINER_LABEL=all
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+
+networks:
+  abcmap:

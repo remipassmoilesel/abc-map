@@ -1,0 +1,5 @@
+
+abcmap:
+  rootDir: "{{ playbook_dir }}/../.."
+  destination: /opt/abc-map
+  healthCheckRoute: http://localhost:80/health

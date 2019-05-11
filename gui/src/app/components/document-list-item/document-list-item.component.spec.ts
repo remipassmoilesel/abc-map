@@ -1,8 +1,8 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { DocumentListItemComponent } from './document-list-item.component';
-import {AppComponent} from '../../app.component';
+import {DocumentListItemComponent} from './document-list-item.component';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {AppModule} from '../../app.module';
 
 describe('DocumentListItemComponent', () => {
   let component: DocumentListItemComponent;
@@ -10,9 +10,9 @@ describe('DocumentListItemComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [ AppComponent, HttpClientTestingModule ]
+      imports: [AppModule, HttpClientTestingModule]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
