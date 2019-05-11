@@ -6,9 +6,12 @@ RUN apt-get update && apt-get install python && npm install -g npm
 RUN mkdir /app
 WORKDIR /app
 
-COPY . .
+COPY shared shared
+COPY api api
+COPY gui gui
+COPY deployment deployment
 
-RUN ./abc build
+RUN /app/deployment/scripts/builder.js build
 
 RUN useradd --no-create-home abcmap
 USER abcmap

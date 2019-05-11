@@ -3,6 +3,8 @@ import {ApiRoute} from './ApiRoute';
 
 export class ApiRoutes {
 
+    public static readonly HEALTH_CHECK = new ApiRoute('/health');
+
     public static readonly PROJECT = new ApiRoute('/api/project');
     public static readonly PROJECT_CREATE_NEW = new ApiRoute('/api/project/new');
     public static readonly PROJECT_WEBSOCKET = new ApiRoute('/api/project/:id/websocket');

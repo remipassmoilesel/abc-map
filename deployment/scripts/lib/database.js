@@ -1,7 +1,7 @@
-const {commandSync, getCurrentGitSha} = require("./utils");
+const {commandSync} = require("./utils");
 
 function databaseStart(args, config) {
-    commandSync("docker-compose restart abcmap-mongodb abcmap-minio", {cwd: config.paths.databases});
+    commandSync("docker-compose up -d abcmap-mongodb abcmap-minio", {cwd: config.paths.databases});
 }
 
 function databaseStop(args, config) {

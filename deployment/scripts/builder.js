@@ -26,13 +26,13 @@ function main() {
         case 'start:api': {
             return startApi(args, config);
         }
-        case 'database:start': {
+        case 'start:databases': {
             return databaseStart(args, config);
         }
-        case 'database:stop': {
+        case 'stop:databases': {
             return databaseStop(args, config);
         }
-        case 'database:clean': {
+        case 'clean:databases': {
             databaseStop(args, config);
             return databaseClean(args, config);
         }

@@ -1,4 +1,4 @@
-version: '3.1'
+version: '3.4'
 
 ##
 ## TODO: Add autoheal
@@ -19,6 +19,12 @@ services:
     environment:
       ABC_MONGODB_HOST: abcmap-mongodb
       ABC_MINIO_HOST: abcmap-minio
+    healthcheck:
+      test: "curl --silent --show-error --fail http://localhost:32158/health"
+      interval: 1m
+      timeout: 5s
+      retries: 3
+      start_period: 1m
 
   abcmap-mongodb:
     image: mongo:4-xenial
@@ -46,6 +52,18 @@ services:
       MINIO_ACCESS_KEY: fb37ca0b53f49587c534be53281a9f94a865d6cedb1e205c1f057810
       MINIO_SECRET_KEY: ea6dd22b3cd0c3908b0e59c4e769a0abff1c4d0081585fa5ea6dd22b3cd0c3908b0e59c4e769a0abff1c4d0081585fa5
     command: server /data
+
+  abcmap-autoheal:
+    image: willfarrell/autoheal
+    container_name: abcmap-autoheal
+    restart: always
+    networks:
+      - abcmap
+    environment:
+      - AUTOHEAL_CONTAINER_LABEL=all
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
 
 networks:
   abcmap:
