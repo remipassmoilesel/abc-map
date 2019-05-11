@@ -2,8 +2,6 @@ const {execSync, exec} = require('child_process');
 
 function commandAsync(command, options) {
 
-    console.debug(command, JSON.stringify(options));
-
     const subprocess = exec(command, {
         cwd: options.cwd,
         stdio: options.stdio || 'inherit'
