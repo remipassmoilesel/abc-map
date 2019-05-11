@@ -15,7 +15,7 @@
   shell:  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
   args:
     executable: /bin/bash
-    warnings: False
+    warn: False
 
 - name: "Add Docker repository"
   apt_repository:
@@ -30,6 +30,7 @@
 - pip:
     name: pip
     state: latest
+    executable: pip3
 
 - name: "Install docker-compose"
   pip:

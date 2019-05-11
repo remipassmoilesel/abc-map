@@ -1,7 +1,9 @@
-.vagrant
 .idea
-.circleci
+*.iml
 
 data/*
 
+*.log
+.vagrant
+*.retry
 

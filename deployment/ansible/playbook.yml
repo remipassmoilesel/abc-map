@@ -7,3 +7,4 @@
     - synchronize-sources
     - restart-application
     - setup-proxy
+    - check-application-health

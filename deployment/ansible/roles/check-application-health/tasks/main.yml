@@ -1,0 +1,7 @@
+
+- name: "Wait for API server ready"
+  command: "curl http://localhost:32158"
+  register: cmd_res
+  retries: 20
+  delay: 1
+  until: cmd_res.rc == 0
