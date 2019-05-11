@@ -15,7 +15,7 @@ services:
     networks:
       - abcmap
     ports:
-      - "127.0.0.1:32158:32158"
+      - "80:32158"
     environment:
       ABC_MONGODB_HOST: abcmap-mongodb
       ABC_MINIO_HOST: abcmap-minio
@@ -43,7 +43,6 @@ services:
       timeout: 5s
       retries: 3
       start_period: 1m
-
 
   abcmap-minio:
     image: minio/minio:RELEASE.2019-04-18T21-44-59Z

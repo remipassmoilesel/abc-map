@@ -5,3 +5,5 @@
   retries: 20
   delay: 1
   until: cmd_res.rc == 0
+  args:
+    warn: False
