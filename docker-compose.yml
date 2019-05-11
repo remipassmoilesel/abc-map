@@ -1,9 +1,7 @@
 version: '3.4'
 
 ##
-## TODO: Add autoheal
 ## TODO: Variabilize passwords with env vars
-##
 ##
 
 services:
@@ -19,6 +17,7 @@ services:
     environment:
       ABC_MONGODB_HOST: abcmap-mongodb
       ABC_MINIO_HOST: abcmap-minio
+      NODE_ENV: production
     healthcheck:
       test: "curl --silent --show-error --fail http://localhost:32158/health"
       interval: 1m
