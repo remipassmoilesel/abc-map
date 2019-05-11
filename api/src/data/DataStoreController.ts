@@ -3,13 +3,17 @@ import {AbstractController} from '../lib/server/AbstractController';
 import {ApiRoutes, IUploadResponse} from 'abcmap-shared';
 import {DatastoreService} from './DatastoreService';
 import {DataTransformationService} from './DataTransformationService';
+import {Logger} from 'loglevel';
 import express = require('express');
 import multer = require('multer');
+import loglevel = require('loglevel');
 
 const storage = multer.memoryStorage();
 const upload = multer({storage});
 
 export class DataStoreController extends AbstractController {
+
+    protected logger: Logger = loglevel.getLogger('ProjectDao');
 
     constructor(private datastore: DatastoreService,
                 private dataTransformation: DataTransformationService) {
@@ -29,16 +33,21 @@ export class DataStoreController extends AbstractController {
         const path = Buffer.from(req.params.path, 'base64').toString();
         const content = req.file;
 
-        await this.datastore.storeDocument(username, path, content.buffer);
-        const cache = await this.dataTransformation.toGeojson(content.buffer, path);
-        await this.datastore.storeCache(username, path, Buffer.from(JSON.stringify(cache)));
+        this.datastore.storeDocument(username, path, content.buffer)
+            .catch(err => this.datastore.storeDocument(username, path, content.buffer))
+            .catch(err => this.logger.error(err));
+
+        this.dataTransformation.toGeojson(content.buffer, path)
+            .then(cache => this.datastore.storeCache(username, path, Buffer.from(JSON.stringify(cache))))
+            .catch(err => this.logger.error(err));
+
         return {message: 'Uploaded', username, path};
-    }
+    };
 
     public getDocumentList = async (req: express.Request, res: express.Response): Promise<any> => {
         const username = req.params.username;
 
         return this.datastore.listDocuments(username);
-    }
+    };
 
 }

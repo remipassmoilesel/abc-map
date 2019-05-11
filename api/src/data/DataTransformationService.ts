@@ -9,7 +9,7 @@ export class DataTransformationService extends AbstractService {
     public async toGeojson(buffer: Buffer, path: string): Promise<IAbcGeojsonFeatureCollection> {
         const importer = this.transformTools.getImporterForPath(path);
         if (!importer) {
-            return Promise.reject(`Invalid format: ${path}`);
+            return Promise.reject(`Not supported: ${path}`);
         }
         return importer.toCollection(buffer);
     }

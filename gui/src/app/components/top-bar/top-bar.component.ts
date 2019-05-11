@@ -38,7 +38,8 @@ export class TopBarComponent implements OnInit, OnDestroy {
   }
 
   newProject() {
-    this.project.createNewProject().subscribe();
+    this.project.createNewProject()
+      .subscribe(res => this.routing.navigate(GuiRoutes.MAP));
   }
 
   closeProject() {
