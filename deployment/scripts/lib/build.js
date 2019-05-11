@@ -7,8 +7,8 @@ function buildModule(path) {
 
 function build(args, config) {
     buildModule(config.paths.shared);
-    buildModule(config.paths.gui);
     buildModule(config.paths.api);
+    buildModule(config.paths.gui);
 }
 
 module.exports = {

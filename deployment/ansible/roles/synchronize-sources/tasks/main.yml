@@ -2,7 +2,7 @@
 - set_fact:
     source: '{{ abcmap.rootDir }}/'
     destination: '{{ ansible_user }}@{{ ansible_host }}:{{ abcmap.destination }}'
-    exclude: "--exclude={'data/*','deployment/dev-databases/*','api/node_modules/*','gui/node_modules/*','shared/node_modules/*'}"
+    exclude: "--exclude={'/data/*','/deployment/dev-databases/*','/api/node_modules/*','/gui/node_modules/*','/shared/node_modules/*'}"
 
 - name: 'Send source directory to remote'
   shell: rsync -azd {{ exclude }} {{ source }} {{ destination }}
