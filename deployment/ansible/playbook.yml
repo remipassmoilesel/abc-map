@@ -1,10 +1,8 @@
-
 - hosts: all
   vars_files:
     - variables.yml
   roles:
-    - setup-docker
-    - synchronize-sources
-    - restart-application
-    - setup-proxy
-    - check-application-health
+    - {name: setup-docker,              tags: [ prerequisites ]}
+    - {name: synchronize-sources,       tags: [ fast-update ]}
+    - {name: start-application,         tags: [ fast-update ]}
+    - {name: check-application-health,  tags: [ fast-update ]}

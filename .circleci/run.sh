@@ -5,5 +5,5 @@ set -e
 
 mkdir -p /data/db && /usr/bin/mongod &
 
-./abc build
-./abc test
+./builder build
+./builder test

@@ -15,7 +15,7 @@ services:
     networks:
       - abcmap
     ports:
-      - "80:32158"
+      - "127.0.0.1:32158:32158"
     environment:
       ABC_MONGODB_HOST: abcmap-mongodb
       ABC_MINIO_HOST: abcmap-minio

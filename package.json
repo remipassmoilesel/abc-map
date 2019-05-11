@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "start": "./abc build && ./abc test"
+    "start": "./builder build && ./builder test"
   },
   "author": "",
   "license": "ISC",
