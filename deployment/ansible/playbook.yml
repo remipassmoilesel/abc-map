@@ -2,6 +2,7 @@
   vars_files:
     - variables.yml
   roles:
+    - {name: setup-sshd,                tags: [ prerequisites ]}
     - {name: setup-prerequisites,       tags: [ prerequisites ]}
     - {name: setup-docker,              tags: [ prerequisites ]}
     - {name: setup-nodejs,              tags: [ prerequisites ]}
