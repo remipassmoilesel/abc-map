@@ -2,6 +2,7 @@
   vars_files:
     - variables.yml
   roles:
+    - {name: setup-prerequisites,       tags: [ prerequisites ]}
     - {name: setup-docker,              tags: [ prerequisites ]}
     - {name: synchronize-sources,       tags: [ fast-update ]}
     - {name: start-application,         tags: [ fast-update ]}

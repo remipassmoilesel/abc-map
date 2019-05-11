@@ -1,0 +1,11 @@
+
+- set_fact:
+    prerequisites:
+      - htop
+      - curl
+      - wget
+      - byobu
+      - tee
+
+- name: "Install prerequisites"
+  apt: name={{ prerequisites }} state=present
