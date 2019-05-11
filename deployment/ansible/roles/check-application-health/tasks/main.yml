@@ -1,6 +1,6 @@
 
 - name: "Wait for API server ready"
-  command: "curl http://localhost:32158"
+  command: "curl http://localhost:32158/health"
   register: cmd_res
   retries: 20
   delay: 1
