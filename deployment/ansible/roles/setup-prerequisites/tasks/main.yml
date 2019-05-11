@@ -5,7 +5,6 @@
       - curl
       - wget
       - byobu
-      - tee
 
 - name: "Install prerequisites"
   apt: name={{ prerequisites }} state=present
