@@ -25,6 +25,7 @@ export class ApiServer {
         this.setupWebsockets(this.app);
         this.setupControllers(this.app);
         this.setupGuiService(this.app);
+        this.setupRedirection(this.app);
     }
 
     public start(): void {
@@ -59,4 +60,12 @@ export class ApiServer {
         app.use(express.static('gui-dist'));
     }
 
+    private setupRedirection(app: express.Application) {
+        app.use((req, res, next) => {
+            if (!req.originalUrl || !req.originalUrl.startsWith('/api')) {
+                this.logger.error(`Bad route: ${req.originalUrl}`);
+                return res.redirect('/');
+            }
+        });
+    }
 }
