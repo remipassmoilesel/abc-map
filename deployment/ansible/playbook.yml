@@ -4,6 +4,8 @@
   roles:
     - {name: setup-prerequisites,       tags: [ prerequisites ]}
     - {name: setup-docker,              tags: [ prerequisites ]}
+    - {name: setup-nodejs,              tags: [ prerequisites ]}
     - {name: synchronize-sources,       tags: [ fast-update ]}
+    - {name: build-application,         tags: [ fast-update ]}
     - {name: start-application,         tags: [ fast-update ]}
     - {name: check-application-health,  tags: [ fast-update ]}

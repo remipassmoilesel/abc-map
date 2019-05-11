@@ -12,17 +12,16 @@
   apt: name={{ prerequisites }} state=present
 
 - name: "Add docker repository key"
-  shell:  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
-  args:
-    executable: /bin/bash
-    warn: False
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
 
 - name: "Add Docker repository"
   apt_repository:
     repo: "{{ item }}"
     state: present
   with_items:
-    - deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable
+    - deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable
 
 - name: "Install Docker"
   apt: name=docker-ce state=present update_cache=yes

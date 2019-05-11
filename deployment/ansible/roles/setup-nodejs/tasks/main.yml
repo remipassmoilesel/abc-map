@@ -1,0 +1,19 @@
+
+- name: "Add NodeJS repository key"
+  apt_key:
+    url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+    state: present
+
+- name: "Add NodeJS 10 repository"
+  apt_repository:
+    repo: "{{ item }}"
+    state: present
+  with_items:
+    - deb https://deb.nodesource.com/node_10.x bionic main
+
+- name: "Install NodeJS"
+  apt: name=nodejs state=present update_cache=yes
+
+- name: "Install docker-compose"
+  pip:
+    name: docker-compose

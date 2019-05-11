@@ -11,8 +11,6 @@ COPY shared shared
 COPY api api
 COPY gui gui
 
-RUN /app/deployment/scripts/builder.js build
-
 RUN useradd --no-create-home abcmap
 USER abcmap
 

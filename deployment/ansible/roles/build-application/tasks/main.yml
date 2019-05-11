@@ -1,0 +1,6 @@
+
+- name: "Build application"
+  shell: "/opt/abc-map/deployment/scripts/builder.js build"
+  args:
+    executable: /bin/bash
+

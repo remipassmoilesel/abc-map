@@ -1,6 +1,6 @@
 
 - name: "Wait for API server ready"
-  command: "curl {{ abcmap.health-check-route }}"
+  command: "curl {{ abcmap.healthCheckRoute }}"
   register: cmd_res
   retries: 20
   delay: 1

@@ -5,6 +5,7 @@
       - curl
       - wget
       - byobu
+      - build-essential
 
 - name: "Install prerequisites"
   apt: name={{ prerequisites }} state=present
