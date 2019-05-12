@@ -28,7 +28,11 @@
       <h2>Mes documents</h2>
 
       <div *ngFor="let item of documents" class="mb-3">
-        <abc-document-list-item [document]="item"></abc-document-list-item>
+        <abc-document-list-item [document]="item"
+                                (addToMap)="onAddDocumentToMap($event)"
+                                (delete)="onDeleteDocument($event)"
+                                (download)="onDownloadDocument($event)">
+        </abc-document-list-item>
       </div>
 
     </div>

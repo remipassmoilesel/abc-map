@@ -8,6 +8,10 @@
         <a class="nav-link" [routerLink]="routes.MAP">Carte</a>
       </li>
 
+      <li class="nav-item active">
+        <a class="nav-link" [routerLink]="routes.STORE">Magasin de données</a>
+      </li>
+      
       <li class="nav-item">
         <div ngbDropdown class="d-inline-block">
           <a class="btn cursor-pointer" ngbDropdownToggle>Projet</a>
@@ -18,11 +22,6 @@
             <button ngbDropdownItem (click)="closeProject()">Fermer</button>
           </div>
         </div>
-      </li>
-
-
-      <li class="nav-item active">
-        <a class="nav-link" [routerLink]="routes.STORE">Magasin de données</a>
       </li>
 
     </ul>

@@ -1,4 +1,20 @@
+@import "~src/assets/style/bootstrap_theme";
 
-.filename {
+.abc-filename {
   font-weight: bolder;
+}
+
+.abc-action {
+  margin-left: 10px;
+  cursor: pointer;
+
+  .fa {
+    color: $gray-600;
+  }
+
+  &:hover {
+    .fa {
+      color: $gray-900;
+    }
+  }
 }

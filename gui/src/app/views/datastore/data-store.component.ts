@@ -73,4 +73,15 @@ export class DataStoreComponent implements OnInit, OnDestroy {
     // TODO
   }
 
+  onDeleteDocument($event: IDocument) {
+
+  }
+
+  onAddDocumentToMap($event: IDocument) {
+
+  }
+
+  onDownloadDocument($event: IDocument) {
+
+  }
 }
