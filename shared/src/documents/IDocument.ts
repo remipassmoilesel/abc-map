@@ -1,5 +1,5 @@
 export interface IDocument {
-    name: string;
+    path: string;
     prefix: string;
     size: number;
     etag: string;

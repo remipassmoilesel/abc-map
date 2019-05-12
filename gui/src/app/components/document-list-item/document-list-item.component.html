@@ -1,7 +1,7 @@
 <div *ngIf="document" class="card">
 
   <div class="card-body">
-    <div class="filename">{{ document.name }}</div>
+    <div class="filename">{{ document.path }}</div>
     <div>Taille: {{ filesize(document.size) }}</div>
     <div>Dernière modification: {{ dhelper.documentDateToText(document.lastModified) }}</div>
   </div>

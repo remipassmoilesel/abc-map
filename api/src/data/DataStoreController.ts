@@ -28,6 +28,7 @@ export class DataStoreController extends AbstractController {
     }
 
     // TODO: ensure authentication and username
+    // TODO: emits uploaded response later on websocket or SSE
     public uploadDocument = async (req: express.Request, res: express.Response): Promise<IUploadResponse> => {
         const username = req.params.username;
         const path = Buffer.from(req.params.path, 'base64').toString();
@@ -42,12 +43,12 @@ export class DataStoreController extends AbstractController {
             .catch(err => this.logger.error(err));
 
         return {message: 'Uploaded', username, path};
-    };
+    }
 
     public getDocumentList = async (req: express.Request, res: express.Response): Promise<any> => {
         const username = req.params.username;
 
         return this.datastore.listDocuments(username);
-    };
+    }
 
 }

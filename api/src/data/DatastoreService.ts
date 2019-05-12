@@ -49,7 +49,7 @@ export class DatastoreService extends AbstractService implements IPostConstruct 
     public listDocuments(username: string): Promise<IDocument[]> {
         return new Promise((resolve, reject) => {
             const data: BucketItem[] = [];
-            const stream = this.client.listObjectsV2(this.bucketNameFromUsername(username), '', true)
+            this.client.listObjectsV2(this.bucketNameFromUsername(username), '', true)
                 .on('data', (obj: BucketItem) => {
                     data.push(obj);
                 })
@@ -63,13 +63,15 @@ export class DatastoreService extends AbstractService implements IPostConstruct 
     }
 
     private bucketItemsToDocuments(data: BucketItem[]): IDocument[] {
-        return _.map(data, bitem => ({
-            name: bitem.name,
-            prefix: bitem.prefix,
-            size: bitem.size,
-            etag: bitem.etag,
-            lastModified: bitem.lastModified.toString(),
-        }));
+        return _.chain(data)
+            .map(bitem => ({
+                path: bitem.name,
+                prefix: bitem.prefix,
+                size: bitem.size,
+                etag: bitem.etag,
+                lastModified: bitem.lastModified.toISOString(),
+            }))
+            .value();
     }
 
     public async createStorageForUsername(username: string): Promise<string> {

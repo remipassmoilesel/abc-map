@@ -8,6 +8,7 @@ import {forkJoin, Subscription} from 'rxjs';
 import {take} from 'rxjs/operators';
 import * as _ from 'lodash';
 import {RxUtils} from '../../lib/utils/RxUtils';
+import {DocumentHelper} from '../../lib/datastore/DocumentHelper';
 
 @Component({
   selector: 'abc-store',
@@ -55,8 +56,8 @@ export class DataStoreComponent implements OnInit, OnDestroy {
       this.store.select(state => state.gui.lastDocumentsUploaded).pipe(take(1))
     )
       .subscribe(([documents, uploads]) => {
-        this.lastUploadedDocuments = _.filter(documents, doc => !!_.find(uploads, up => up.path === doc.name));
-        this.documents = documents;
+        this.lastUploadedDocuments = DocumentHelper.filterDocumentsByPath(documents, uploads.map(up => up.path));
+        this.documents = DocumentHelper.filterCache(documents);
       });
   }
 
