@@ -1,7 +1,7 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-$hostname = "ubuntu18lts"
+$hostname = "abcmap"
 
 Vagrant.configure("2") do |config|
 
