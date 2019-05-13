@@ -17,4 +17,5 @@ export class DocumentDao extends AbstractMongodbDao<IDocument> {
     public listDocuments(start: number, size: number): Promise<IDocument[]> {
         return this.collection().find().skip(start).limit(size).toArray();
     }
+
 }

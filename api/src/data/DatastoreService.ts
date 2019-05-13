@@ -45,7 +45,7 @@ export class DatastoreService extends AbstractService implements IPostConstruct 
             createdAt: new Date().toISOString(),
         };
 
-        await this.documentDao.insert(document);
+        await this.documentDao.upsertOne({path: document.path}, document);
     }
 
     public async storeCache(username: string, originalPath: string, content: Buffer): Promise<any> {

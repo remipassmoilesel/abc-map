@@ -37,10 +37,11 @@ export abstract class AbstractMongodbDao<T> {
     }
 
     public async insert(object: T): Promise<InsertOneWriteOpResult> {
-        return this.client()
-            .db(this.databaseName)
-            .collection(this.collectionName)
-            .insertOne(object);
+        return this.collection().insertOne(object);
+    }
+
+    public upsertOne(filter: any, object: T) {
+        return this.collection().replaceOne(filter, object, {upsert: true});
     }
 
     protected client(): MongoClient {
