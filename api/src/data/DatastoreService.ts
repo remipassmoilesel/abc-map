@@ -7,6 +7,7 @@ import {DataFormatHelper} from './transform/dataformat/DataFormatHelper';
 import {Logger} from 'loglevel';
 import {DocumentDao} from './DocumentDao';
 import loglevel = require('loglevel');
+import * as Stream from 'stream';
 
 export class DatastoreService extends AbstractService implements IPostConstruct {
 
@@ -61,6 +62,10 @@ export class DatastoreService extends AbstractService implements IPostConstruct 
     public async deleteDocument(path: string): Promise<void> {
         await this.documentDao.deleteWithPath(path);
         await this.minio.removeObject(this.getUsersBucketName(), path);
+    }
+
+    public downloadDocument(path: string): Promise<Stream> {
+        return this.minio.getObject(this.getUsersBucketName(), path);
     }
 
     private async createBucketIfNecessary() {

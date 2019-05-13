@@ -1,4 +1,4 @@
-import {IDocument} from 'abcmap-shared';
+import {ApiRoutes, IDocument} from 'abcmap-shared';
 import * as _ from 'lodash';
 
 export class DocumentHelper {
@@ -11,4 +11,7 @@ export class DocumentHelper {
     return _.filter(documents, doc => !!_.find(paths, name => name === doc.path));
   }
 
+  public static downloadLink(document: IDocument): string {
+    return ApiRoutes.DOCUMENTS_PATH.withArgs({path: btoa(document.path)}).toString();
+  }
 }

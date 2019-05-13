@@ -3,6 +3,7 @@ import {IDocument} from 'abcmap-shared';
 
 import * as filesize from 'filesize';
 import {DatetimeHelper} from '../../lib/utils/DatetimeHelper';
+import {DocumentHelper} from '../../lib/datastore/DocumentHelper';
 
 @Component({
   selector: 'abc-document-list-item',
@@ -23,9 +24,6 @@ export class DocumentListItemComponent implements OnInit {
   @Output()
   delete = new EventEmitter<IDocument>();
 
-  @Output()
-  download = new EventEmitter<IDocument>();
-
   constructor() {
   }
 
@@ -41,6 +39,9 @@ export class DocumentListItemComponent implements OnInit {
   }
 
   onDownloadClick($event: MouseEvent) {
-    this.download.emit(this.document);
+    if (!this.document) {
+      return;
+    }
+    window.location.href = DocumentHelper.downloadLink(this.document);
   }
 }

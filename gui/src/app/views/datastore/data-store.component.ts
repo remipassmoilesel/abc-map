@@ -75,10 +75,6 @@ export class DataStoreComponent implements OnInit, OnDestroy {
 
   }
 
-  onDownloadDocument($event: IDocument) {
-    this.datastore.downloadDocument($event.path).subscribe();
-  }
-
   register() {
     if (!this.searchForm) {
       return;

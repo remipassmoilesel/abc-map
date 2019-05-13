@@ -3,7 +3,7 @@ import {ProjectController} from '../project/ProjectController';
 import {AuthenticationController} from '../authentication/AuthenticationController';
 import {UserController} from '../users/UserController';
 import {IServiceMap} from './IServiceMap';
-import {DataStoreController} from '../data/DataStoreController';
+import {DatastoreController} from '../data/DatastoreController';
 import {HealthController} from './server/HealthController';
 
 export interface IControllerMap {
@@ -13,7 +13,7 @@ export interface IControllerMap {
     project: ProjectController;
     authentication: AuthenticationController;
     user: UserController;
-    datastore: DataStoreController;
+    datastore: DatastoreController;
 }
 
 export function getControllers(services: IServiceMap): IControllerMap {
@@ -22,6 +22,6 @@ export function getControllers(services: IServiceMap): IControllerMap {
         project: new ProjectController(services.project),
         authentication: new AuthenticationController(services.authentication),
         user: new UserController(services.authentication, services.user, services.datastore),
-        datastore: new DataStoreController(services.datastore, services.dataTransformation),
+        datastore: new DatastoreController(services.datastore, services.dataTransformation),
     };
 }
