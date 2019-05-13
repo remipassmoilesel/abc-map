@@ -2,14 +2,11 @@ import {AbstractController} from '../lib/server/AbstractController';
 import {AuthenticationService} from '../authentication/AuthenticationService';
 import {ApiRoutes, ILoginResponse, IUserCreationRequest} from 'abcmap-shared';
 import {UserService} from './UserService';
-import passport from 'passport';
 import * as express from 'express';
 import assert from 'assert';
 import {asyncHandler} from '../lib/server/asyncExpressHandler';
-import {DataStoreController} from '../data/DataStoreController';
 import {DatastoreService} from '../data/DatastoreService';
-
-const authenticated = passport.authenticate('jwt', {session: false});
+import {authenticated, AuthenticationHelper} from '../authentication/AuthenticationHelper';
 
 export class UserController extends AbstractController {
 
@@ -22,7 +19,7 @@ export class UserController extends AbstractController {
     public getRouter(): express.Router {
         const router = express.Router();
         router.post(ApiRoutes.REGISTER.path, asyncHandler(this.register));
-        router.post(ApiRoutes.MY_PROFILE.path, authenticated, asyncHandler(this.myProfile));
+        router.post(ApiRoutes.MY_PROFILE.path, authenticated(), asyncHandler(this.myProfile));
 
         return router;
     }
@@ -35,8 +32,6 @@ export class UserController extends AbstractController {
 
         const user = await this.user.createUser(request);
         const token = this.authentication.generateToken(user);
-
-        await this.datastore.createStorageForUsername(request.username);
 
         return {message: 'Registered', token, username: request.username};
     }

@@ -22,7 +22,7 @@ export class DatastoreService {
       .pipe(
         take(1),
         mergeMap(username => {
-          return this.client.listDocuments(username);
+          return this.client.listDocuments();
         })
       );
   }
@@ -41,15 +41,12 @@ export class DatastoreService {
   }
 
   private uploadDocument(name: string, file: File): Observable<IUploadResponse> {
-    return this.store.select(state => state.user.username)
-      .pipe(
-        take(1),
-        mergeMap(username => {
-          const content: FormData = new FormData();
-          content.append('file-content', file);
-          return this.client.postDocument(username, `upload/${name}`, content);
-        })
-      );
+    const content: FormData = new FormData();
+    content.append('file-content', file);
+    return this.client.postDocument(`upload/${name}`, content);
   }
 
+  downloadDocument(path: string) {
+    return this.client.downloadDocument(path);
+  }
 }

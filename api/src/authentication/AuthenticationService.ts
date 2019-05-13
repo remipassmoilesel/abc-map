@@ -6,7 +6,7 @@ import * as jwt from 'jsonwebtoken';
 import {IApiConfig} from '../IApiConfig';
 import {IUserDto} from '../users/IUserDto';
 import {UserMapper} from '../users/IDbUser';
-import ms from 'ms';
+import {ITokenPayload} from './AuthenticationHelper';
 
 export class AuthenticationService extends AbstractService {
 
@@ -31,8 +31,9 @@ export class AuthenticationService extends AbstractService {
 
     // TODO: add better expiration time (1/2 hour) and renew tokens
     public generateToken(user: IUserDto): string {
-        const tokenPayload = {
+        const tokenPayload: ITokenPayload = {
             id: user.id,
+            username: user.username,
             email: user.email,
         };
 

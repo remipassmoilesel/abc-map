@@ -5,9 +5,9 @@ const apiConfig = ApiConfigHelper.load();
 
 const opts = {
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-    secretOrKey: apiConfig.jwtSecret
+    secretOrKey: apiConfig.jwtSecret,
 };
 
-export const JwtStrategy = new Strategy(opts, (jwt_payload, done) => {
+export const JwtStrategy = new Strategy(opts, (jwtPayload, done) => {
     return done(null, true);
 });

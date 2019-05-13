@@ -13,6 +13,7 @@
         "indent": [true, "spaces", 2],
         "interface-name": false,
         "ordered-imports": false,
+        "variable-name": false,
         "object-literal-sort-keys": false,
         "no-consecutive-blank-lines": false,
         "member-ordering": false,

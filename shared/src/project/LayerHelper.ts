@@ -6,7 +6,7 @@ import {PredefinedLayers} from './PredefinedLayers';
 export class LayerHelper {
 
     public static newPredefinedLayer(preset: PredefinedLayerPreset) {
-        const layer = _.find(PredefinedLayers.ALL, value => value.preset === preset);
+        const layer = _.find(PredefinedLayers.ALL, (value) => value.preset === preset);
         if (!layer) {
             throw new Error(`Not found: ${preset}`);
         }
@@ -22,8 +22,8 @@ export class LayerHelper {
             name: 'Couche de dessin',
             featureCollection: {
                 type: 'FeatureCollection',
-                features: []
-            }
+                features: [],
+            },
         };
     }
 
@@ -33,7 +33,7 @@ export class LayerHelper {
             name: 'Fond de carte ' + url,
             type: MapLayerType.Wms,
             url,
-            wmsParams
+            wmsParams,
         };
     }
 

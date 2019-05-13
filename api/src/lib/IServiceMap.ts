@@ -22,12 +22,14 @@ export async function getServices(daos: IDaoMap, config: IApiConfig): Promise<IS
         project: new ProjectService(daos.project),
         user: new UserService(daos.user),
         authentication: new AuthenticationService(daos.user, config),
-        datastore: new DatastoreService(config),
+        datastore: new DatastoreService(config, daos.documents),
         dataTransformation: new DataTransformationService(),
     };
 
     for (const serviceName in services) {
-        await services[serviceName].postConstruct();
+        if (serviceName in services) {
+            await services[serviceName].postConstruct();
+        }
     }
 
     return services;

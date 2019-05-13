@@ -25,6 +25,7 @@ services:
       retries: 3
       start_period: 1m
 
+
   abcmap-mongodb:
     image: mongo:4-xenial
     container_name: abcmap-mongodb
@@ -34,7 +35,7 @@ services:
     ports:
       - "127.0.0.1:27017:27017"
     volumes:
-      - './data/mongodb-data:/data/db'
+      - './data/mongodb:/data/db'
     command: mongod
     healthcheck:
       test: "mongo --eval 'db.runCommand( { serverStatus: 1 } )'"
@@ -43,12 +44,13 @@ services:
       retries: 3
       start_period: 1m
 
+
   abcmap-minio:
     image: minio/minio:RELEASE.2019-04-18T21-44-59Z
     container_name: abcmap-minio
     restart: always
     volumes:
-      - './data/minio-data/data1:/data'
+      - './data/minio/data1:/data'
     networks:
       - abcmap
     ports:
@@ -57,6 +59,7 @@ services:
       MINIO_ACCESS_KEY: fb37ca0b53f49587c534be53281a9f94a865d6cedb1e205c1f057810
       MINIO_SECRET_KEY: ea6dd22b3cd0c3908b0e59c4e769a0abff1c4d0081585fa5ea6dd22b3cd0c3908b0e59c4e769a0abff1c4d0081585fa5
     command: server /data
+
 
   abcmap-autoheal:
     image: willfarrell/autoheal

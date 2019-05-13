@@ -2,27 +2,29 @@ import {AbstractService} from '../lib/AbstractService';
 import {IPostConstruct} from '../lib/IPostConstruct';
 import {IApiConfig} from '../IApiConfig';
 import * as Minio from 'minio';
-import {BucketItem} from 'minio';
 import {IDocument} from 'abcmap-shared';
 import {DataFormatHelper} from './transform/dataformat/DataFormatHelper';
-import * as _ from 'lodash';
+import {Logger} from 'loglevel';
+import {DocumentDao} from './DocumentDao';
+import loglevel = require('loglevel');
 
-// TODO: create a dedicated bucket for user's data
 export class DatastoreService extends AbstractService implements IPostConstruct {
 
-    private static readonly REGION = 'region1';
+    protected logger: Logger = loglevel.getLogger('UserDao');
+    private minio!: Minio.Client;
 
-    private client!: Minio.Client;
-
-    constructor(private config: IApiConfig) {
+    constructor(private config: IApiConfig,
+                private documentDao: DocumentDao) {
         super();
     }
 
     public async postConstruct(): Promise<any> {
-        this.client = this.connect();
+        this.minio = this.minioConnection();
+        this.createBucketIfNecessary()
+            .catch(err => this.logger.error(err));
     }
 
-    private connect() {
+    private minioConnection() {
         return new Minio.Client(this.config.minio);
     }
 
@@ -32,60 +34,55 @@ export class DatastoreService extends AbstractService implements IPostConstruct 
             return Promise.reject(new Error('Forbidden format'));
         }
 
-        const bucketName = this.bucketNameFromUsername(username);
+        const prefixedPath = this.prefixWithUsername(username, path);
 
-        const metadata = {createdAt: new Date()};
-        return this.client.putObject(bucketName, path, content, content.length, metadata);
+        await this.minio.putObject(this.getUsersBucketName(), prefixedPath, content, content.length);
+
+        const document: IDocument = {
+            path: prefixedPath,
+            size: content.byteLength,
+            description: '',
+            createdAt: new Date().toISOString(),
+        };
+
+        await this.documentDao.insert(document);
     }
 
     public async storeCache(username: string, originalPath: string, content: Buffer): Promise<any> {
-        const bucketName = this.bucketNameFromUsername(username);
-        const path = this.cachePathForPath(originalPath);
-        const metadata = {createdAt: new Date()};
-
-        return this.client.putObject(bucketName, path, content, content.length, metadata);
+        const path = this.prefixWithUsername(username, this.getCachePath(originalPath));
+        return this.minio.putObject(this.getUsersBucketName(), path, content, content.length);
     }
 
-    public listDocuments(username: string): Promise<IDocument[]> {
-        return new Promise((resolve, reject) => {
-            const data: BucketItem[] = [];
-            this.client.listObjectsV2(this.bucketNameFromUsername(username), '', true)
-                .on('data', (obj: BucketItem) => {
-                    data.push(obj);
-                })
-                .on('end' as any, (obj: BucketItem) => { // no end event in TS typings
-                    resolve(this.bucketItemsToDocuments(data));
-                })
-                .on('error', (err) => {
-                    reject(err);
-                });
-        });
+    // TODO: paginate using a pagination request
+    public listDocuments(): Promise<IDocument[]> {
+        return this.documentDao.listDocuments(0, 100);
     }
 
-    private bucketItemsToDocuments(data: BucketItem[]): IDocument[] {
-        return _.chain(data)
-            .map(bitem => ({
-                path: bitem.name,
-                prefix: bitem.prefix,
-                size: bitem.size,
-                etag: bitem.etag,
-                lastModified: bitem.lastModified.toISOString(),
-            }))
-            .value();
+    private async createBucketIfNecessary() {
+        const bucketExists = await this.minio.bucketExists(this.getUsersBucketName());
+        if (!bucketExists) {
+            await this.minio.makeBucket(this.getUsersBucketName(), this.getRegion());
+        }
     }
 
-    public async createStorageForUsername(username: string): Promise<string> {
-        const bucketName = this.bucketNameFromUsername(username);
-        await this.client.makeBucket(bucketName, DatastoreService.REGION);
-        return bucketName;
-    }
-
-    private bucketNameFromUsername(username: string): string {
-        return `user-data.${username}`;
-    }
-
-    private cachePathForPath(originalPath: string): string {
+    private getCachePath(originalPath: string): string {
         return originalPath + '.cache';
+    }
+
+    private getRegion(): string {
+        return `${this.getBucketPrefix()}.region-1`;
+    }
+
+    private getUsersBucketName(): string {
+        return `${this.getBucketPrefix()}.user-data`;
+    }
+
+    private getBucketPrefix(): string {
+        return `abcmap.${this.config.environmentName}`;
+    }
+
+    private prefixWithUsername(username: string, path: string): string {
+        return `${username}/${path}`;
     }
 
 }

@@ -5,11 +5,9 @@ import {DatastoreService} from './DatastoreService';
 import {DataTransformationService} from './DataTransformationService';
 import {Logger} from 'loglevel';
 import express = require('express');
-import multer = require('multer');
 import loglevel = require('loglevel');
-
-const storage = multer.memoryStorage();
-const upload = multer({storage});
+import {authenticated, AuthenticationHelper} from '../authentication/AuthenticationHelper';
+import {upload} from './UploadConfiguration';
 
 export class DataStoreController extends AbstractController {
 
@@ -21,20 +19,23 @@ export class DataStoreController extends AbstractController {
     }
 
     public getRouter(): express.Router {
+        // tslint:disable:max-line-length
         const router = express.Router();
-        router.post(ApiRoutes.DATASTORE_CREATE.path, upload.single('file-content'), asyncHandler(this.uploadDocument));
-        router.get(ApiRoutes.DATASTORE.path, asyncHandler(this.getDocumentList));
+        router.post(ApiRoutes.DOCUMENTS_PATH.path, authenticated(), upload(), asyncHandler(this.uploadDocument));
+        router.get(ApiRoutes.DOCUMENTS.path, asyncHandler(this.getDocuments));
+        router.get(ApiRoutes.DOCUMENTS_PATH.path, asyncHandler(this.getDocument));
+        router.get(ApiRoutes.DOCUMENTS_USERNAME.path, asyncHandler(this.getUserDocuments));
+        // tslint:enable:max-line-length
         return router;
     }
 
-    // TODO: ensure authentication and username
     // TODO: emits uploaded response later on websocket or SSE
     public uploadDocument = async (req: express.Request, res: express.Response): Promise<IUploadResponse> => {
-        const username = req.params.username;
-        const path = Buffer.from(req.params.path, 'base64').toString();
+        const username: string = AuthenticationHelper.tokenFromRequest(req).username;
+        const path: string = Buffer.from(req.params.path, 'base64').toString();
         const content = req.file;
 
-        this.datastore.storeDocument(username, path, content.buffer)
+        await this.datastore.storeDocument(username, path, content.buffer)
             .catch(err => this.datastore.storeDocument(username, path, content.buffer))
             .catch(err => this.logger.error(err));
 
@@ -42,13 +43,22 @@ export class DataStoreController extends AbstractController {
             .then(cache => this.datastore.storeCache(username, path, Buffer.from(JSON.stringify(cache))))
             .catch(err => this.logger.error(err));
 
-        return {message: 'Uploaded', username, path};
+        return {message: 'Uploaded', path};
     }
 
-    public getDocumentList = async (req: express.Request, res: express.Response): Promise<any> => {
-        const username = req.params.username;
+    public getDocuments = async (req: express.Request, res: express.Response): Promise<any> => {
+        return this.datastore.listDocuments();
+    }
 
-        return this.datastore.listDocuments(username);
+    public getUserDocuments = async (req: express.Request, res: express.Response): Promise<any> => {
+        const username = req.params.username;
+        return this.datastore.listDocuments();
+    }
+
+    public getDocument = async (req: express.Request, res: express.Response): Promise<any> => {
+        const username: string = req.params.username;
+        const path: string = req.params.path;
+        // TODO: implement
     }
 
 }
