@@ -16,7 +16,7 @@ function main() {
         case 'test': {
             lint(args, config);
             build(args, config);
-            test(args, config);
+            return test(args, config);
         }
         case 'build': {
             return build(args, config);
