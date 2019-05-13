@@ -9,6 +9,7 @@ import {take} from 'rxjs/operators';
 import * as _ from 'lodash';
 import {RxUtils} from '../../lib/utils/RxUtils';
 import {DocumentHelper} from '../../lib/datastore/DocumentHelper';
+import {ToastService} from '../../lib/notifications/toast.service';
 
 @Component({
   selector: 'abc-store',
@@ -23,6 +24,7 @@ export class DataStoreComponent implements OnInit, OnDestroy {
   private uploads$?: Subscription;
 
   constructor(private formBuilder: FormBuilder,
+              private toast: ToastService,
               private store: Store<IMainState>,
               private datastore: DatastoreService) {
   }
@@ -61,6 +63,22 @@ export class DataStoreComponent implements OnInit, OnDestroy {
       });
   }
 
+  onDeleteDocument($event: IDocument) {
+    this.datastore.deleteDocument($event.path)
+      .subscribe(res => {
+        this.toast.info('Documents supprimés !');
+        this.loadDocumentList();
+      });
+  }
+
+  onAddDocumentToMap($event: IDocument) {
+
+  }
+
+  onDownloadDocument($event: IDocument) {
+    this.datastore.downloadDocument($event.path).subscribe();
+  }
+
   register() {
     if (!this.searchForm) {
       return;
@@ -73,15 +91,4 @@ export class DataStoreComponent implements OnInit, OnDestroy {
     // TODO
   }
 
-  onDeleteDocument($event: IDocument) {
-
-  }
-
-  onAddDocumentToMap($event: IDocument) {
-
-  }
-
-  onDownloadDocument($event: IDocument) {
-    this.datastore.downloadDocument($event.path).subscribe();
-  }
 }

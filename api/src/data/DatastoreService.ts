@@ -58,6 +58,11 @@ export class DatastoreService extends AbstractService implements IPostConstruct 
         return this.documentDao.listDocuments(0, 100);
     }
 
+    public async deleteDocument(path: string): Promise<void> {
+        await this.documentDao.deleteWithPath(path);
+        await this.minio.removeObject(this.getUsersBucketName(), path);
+    }
+
     private async createBucketIfNecessary() {
         const bucketExists = await this.minio.bucketExists(this.getUsersBucketName());
         if (!bucketExists) {

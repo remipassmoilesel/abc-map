@@ -18,4 +18,7 @@ export class DocumentDao extends AbstractMongodbDao<IDocument> {
         return this.collection().find().skip(start).limit(size).toArray();
     }
 
+    public deleteWithPath(path: string): Promise<any> {
+        return this.collection().deleteOne({path});
+    }
 }

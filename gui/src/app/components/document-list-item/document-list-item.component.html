@@ -4,7 +4,7 @@
 
     <div class="abc-filename">{{ document.path }}</div>
     <div>Taille: {{ filesize(document.size) }}</div>
-    <div>Dernière modification: {{ dhelper.documentDateToText(document.lastModified) }}</div>
+    <div>Dernière modification: {{ dhelper.documentDateToText(document.createdAt) }}</div>
 
     <div class="d-flex flex-row justify-content-end">
       <a (click)="onAddToMapClick($event)" title="Ajouter à la carte" class="abc-action"><i class="fa fa-plus"></i></a>

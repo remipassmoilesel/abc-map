@@ -7,6 +7,7 @@ import {mergeMap, take, tap} from 'rxjs/operators';
 import {IDocument, IUploadResponse} from 'abcmap-shared';
 import {GuiModule} from '../../store/gui/gui-actions';
 import DocumentsUploaded = GuiModule.DocumentsUploaded;
+import {ToastService} from '../notifications/toast.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +15,7 @@ import DocumentsUploaded = GuiModule.DocumentsUploaded;
 export class DatastoreService {
 
   constructor(private client: DatastoreClient,
+              private toasts: ToastService,
               private store: Store<IMainState>) {
   }
 
@@ -46,7 +48,12 @@ export class DatastoreService {
     return this.client.postDocument(`upload/${name}`, content);
   }
 
-  downloadDocument(path: string) {
+  public downloadDocument(path: string) {
     return this.client.downloadDocument(path);
+  }
+
+  public deleteDocument(path: string): Observable<any> {
+    return this.client.deleteDocument(path)
+      .pipe(tap(undefined, err => this.toasts.error('Oups, il y a eu une erreur !')));
   }
 }

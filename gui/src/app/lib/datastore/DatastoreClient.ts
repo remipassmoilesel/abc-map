@@ -27,7 +27,13 @@ export class DatastoreClient {
     return this.client.get<any>(url);
   }
 
+  public deleteDocument(path: string) {
+    const url = ApiRoutes.DOCUMENTS_PATH.withArgs({path: this.encodeDocumentName(path)}).toString();
+    return this.client.delete<any>(url);
+  }
+
   private encodeDocumentName(path: string): string {
     return btoa(path);
   }
+
 }
