@@ -29,7 +29,7 @@ export class DatastoreService extends AbstractService implements IPostConstruct 
         return new Minio.Client(this.config.minio);
     }
 
-    public async storeDocument(username: string, path: string, content: Buffer): Promise<any> {
+    public async storeDocument(username: string, path: string, content: Buffer): Promise<IDocument> {
         const formatIsAllowed = await DataFormatHelper.isDataFormatAllowed(content, path);
         if (!formatIsAllowed) {
             return Promise.reject(new Error('Forbidden format'));
@@ -47,6 +47,7 @@ export class DatastoreService extends AbstractService implements IPostConstruct 
         };
 
         await this.documentDao.upsertOne({path: document.path}, document);
+        return document;
     }
 
     public async storeCache(username: string, originalPath: string, content: Buffer): Promise<any> {
@@ -66,6 +67,10 @@ export class DatastoreService extends AbstractService implements IPostConstruct 
 
     public downloadDocument(path: string): Promise<Stream> {
         return this.minio.getObject(this.getUsersBucketName(), path);
+    }
+
+    public findDocumentsByPath(paths: string[]): Promise<IDocument[]> {
+        return this.documentDao.findDocumentsByPath(paths);
     }
 
     private async createBucketIfNecessary() {

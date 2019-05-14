@@ -4,12 +4,16 @@ import {DatastoreService} from '../../lib/datastore/datastore.service';
 import {IDocument} from 'abcmap-shared';
 import {IMainState} from '../../store';
 import {Store} from '@ngrx/store';
-import {forkJoin, Subscription} from 'rxjs';
-import {take} from 'rxjs/operators';
-import * as _ from 'lodash';
+import {Subscription} from 'rxjs';
+import {debounceTime, mergeMap} from 'rxjs/operators';
 import {RxUtils} from '../../lib/utils/RxUtils';
 import {DocumentHelper} from '../../lib/datastore/DocumentHelper';
 import {ToastService} from '../../lib/notifications/toast.service';
+import * as _ from 'lodash';
+
+interface ISearchForm {
+  query: string;
+}
 
 @Component({
   selector: 'abc-store',
@@ -21,7 +25,9 @@ export class DataStoreComponent implements OnInit, OnDestroy {
   searchForm?: FormGroup;
   documents: IDocument[] = [];
   lastUploadedDocuments: IDocument[] = [];
+
   private uploads$?: Subscription;
+  private search$?: Subscription;
 
   constructor(private formBuilder: FormBuilder,
               private toast: ToastService,
@@ -30,40 +36,37 @@ export class DataStoreComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.initForm();
-    this.loadDocumentList();
+    this.initSearchForm();
     this.listenUploads();
+    this.loadDocumentList();
   }
 
   ngOnDestroy(): void {
     RxUtils.unsubscribe(this.uploads$);
   }
 
-  private initForm() {
+  private initSearchForm() {
     this.searchForm = this.formBuilder.group({
       query: [''],
     });
-  }
 
-  private listenUploads(): void {
-    this.uploads$ = this.store.select(state => state.gui.lastDocumentsUploaded)
-      .subscribe(res => {
-        this.loadDocumentList();
-      });
-  }
-
-  private loadDocumentList() {
-    forkJoin(
-      this.datastore.listMyDocuments(),
-      this.store.select(state => state.gui.lastDocumentsUploaded).pipe(take(1))
-    )
-      .subscribe(([documents, uploads]) => {
-        this.lastUploadedDocuments = DocumentHelper.filterDocumentsByPath(documents, uploads.map(up => up.path));
+    this.search$ = this.searchForm.valueChanges
+      .pipe(
+        debounceTime(300),
+        mergeMap((form: ISearchForm) => {
+          if (form.query) {
+            return this.datastore.search(form.query);
+          } else {
+            return this.datastore.listDocuments();
+          }
+        }),
+      )
+      .subscribe((documents) => {
         this.documents = DocumentHelper.filterCache(documents);
       });
   }
 
-  onDeleteDocument($event: IDocument) {
+  public onDeleteDocument($event: IDocument) {
     this.datastore.deleteDocument($event.path)
       .subscribe(res => {
         this.toast.info('Documents supprimés !');
@@ -71,20 +74,28 @@ export class DataStoreComponent implements OnInit, OnDestroy {
       });
   }
 
-  onAddDocumentToMap($event: IDocument) {
+  public onAddDocumentToMap($event: IDocument) {
 
   }
 
-  register() {
-    if (!this.searchForm) {
-      return;
-    }
-
-    // TODO
+  public onDownloadDocument(document: IDocument) {
+    this.datastore.downloadDocument(document);
   }
 
-  search() {
-    // TODO
+  private listenUploads(): void {
+    this.uploads$ = this.store.select(state => state.gui.lastDocumentsUploaded)
+      .pipe(
+        mergeMap(uploads => {
+          const docPaths = _.map(uploads, up => up.path);
+          return this.datastore.fetchDocuments(docPaths);
+        })
+      )
+      .subscribe(documents => {
+        this.lastUploadedDocuments = documents;
+      });
   }
 
+  private loadDocumentList() {
+    this.datastore.listDocuments().subscribe(documents => this.documents = DocumentHelper.filterCache(documents));
+  }
 }

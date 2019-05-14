@@ -21,4 +21,8 @@ export class DocumentDao extends AbstractMongodbDao<IDocument> {
     public deleteWithPath(path: string): Promise<any> {
         return this.collection().deleteOne({path});
     }
+
+    public findDocumentsByPath(paths: string[]): Promise<IDocument[]> {
+        return this.collection().find({path: {$in: paths}}).toArray();
+    }
 }

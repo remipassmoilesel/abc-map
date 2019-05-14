@@ -54,7 +54,7 @@ export class LayerSelectorComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe(project => {
         if (!project) {
-          this.toasts.errorForNonExisitingProject();
+          this.toasts.errorForNonExistingProject();
           return;
         }
         this.store.dispatch(new LayerRemoved({layerId: activeLayerId}));

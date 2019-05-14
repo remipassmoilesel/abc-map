@@ -24,6 +24,9 @@ export class DocumentListItemComponent implements OnInit {
   @Output()
   delete = new EventEmitter<IDocument>();
 
+  @Output()
+  download = new EventEmitter<IDocument>();
+
   constructor() {
   }
 
@@ -39,9 +42,6 @@ export class DocumentListItemComponent implements OnInit {
   }
 
   onDownloadClick($event: MouseEvent) {
-    if (!this.document) {
-      return;
-    }
-    window.location.href = DocumentHelper.downloadLink(this.document);
+    this.download.emit(this.document);
   }
 }

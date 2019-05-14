@@ -1,7 +1,8 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {ApiRoutes, IDocument, IUploadResponse} from 'abcmap-shared';
-import {Observable} from 'rxjs';
+import {ApiRoutes, IDocument, IFetchDocumentsRequest, IUploadResponse} from 'abcmap-shared';
+import {Observable, of} from 'rxjs';
+import {DocumentHelper} from './DocumentHelper';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ export class DatastoreClient {
 
   }
 
-  public postDocument(path: string, content: FormData): Observable<any> {
+  public uploadDocument(path: string, content: FormData): Observable<any> {
     const url = ApiRoutes.DOCUMENTS_PATH.withArgs({path: this.encodeDocumentName(path)}).toString();
     return this.client.post<IUploadResponse>(url, content);
   }
@@ -22,9 +23,18 @@ export class DatastoreClient {
     return this.client.get<IDocument[]>(url);
   }
 
-  public downloadDocument(path: string) {
-    const url = ApiRoutes.DOCUMENTS_PATH.withArgs({path: this.encodeDocumentName(path)}).toString();
-    return this.client.get<any>(url);
+  public search(query: string): Observable<IDocument[]> {
+    return of([]);
+  }
+
+  public fetchDocuments(documentPaths: string[]): Observable<IDocument[]> {
+    const url = ApiRoutes.DOCUMENTS.toString();
+    const request: IFetchDocumentsRequest = {paths: documentPaths};
+    return this.client.post<IDocument[]>(url, request);
+  }
+
+  public downloadDocument(document: IDocument) {
+    window.location.href = DocumentHelper.downloadLink(document);
   }
 
   public deleteDocument(path: string) {
