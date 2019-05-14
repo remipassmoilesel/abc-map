@@ -14,17 +14,21 @@
 
     <div *ngIf="lastUploadedDocuments.length">
 
-      <h2>Dernier téléversements</h2>
+      <h2>Derniers téléversements</h2>
 
       <div *ngFor="let item of lastUploadedDocuments" class="card mb-3">
-        <abc-document-list-item [document]="item"></abc-document-list-item>
+        <abc-document-list-item [document]="item"
+                                (addToMap)="onAddDocumentToMap($event)"
+                                (delete)="onDeleteDocument($event)"
+                                (download)="onDownloadDocument($event)">
+        </abc-document-list-item>
       </div>
 
     </div>
 
     <div *ngIf="documents.length">
 
-      <h2>Mes documents</h2>
+      <h2>Documents</h2>
 
       <div *ngFor="let item of documents" class="mb-3">
         <abc-document-list-item [document]="item"

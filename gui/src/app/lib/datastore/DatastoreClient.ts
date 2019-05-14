@@ -1,7 +1,7 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {ApiRoutes, IDocument, IFetchDocumentsRequest, IUploadResponse} from 'abcmap-shared';
-import {Observable, of} from 'rxjs';
+import {ApiRoutes, IDocument, ISearchDocumentsRequest, IFetchDocumentsRequest, IUploadResponse} from 'abcmap-shared';
+import {Observable} from 'rxjs';
 import {DocumentHelper} from './DocumentHelper';
 
 @Injectable({
@@ -24,7 +24,9 @@ export class DatastoreClient {
   }
 
   public search(query: string): Observable<IDocument[]> {
-    return of([]);
+    const url = ApiRoutes.DOCUMENTS_SEARCH.toString();
+    const request: ISearchDocumentsRequest = {query};
+    return this.client.post<IDocument[]>(url, request);
   }
 
   public fetchDocuments(documentPaths: string[]): Observable<IDocument[]> {

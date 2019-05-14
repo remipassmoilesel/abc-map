@@ -73,6 +73,10 @@ export class DatastoreService extends AbstractService implements IPostConstruct 
         return this.documentDao.findDocumentsByPath(paths);
     }
 
+    public searchDocuments(query: any): Promise<IDocument[]> {
+        return this.documentDao.search(query);
+    }
+
     private async createBucketIfNecessary() {
         const bucketExists = await this.minio.bucketExists(this.getUsersBucketName());
         if (!bucketExists) {

@@ -10,7 +10,7 @@ export class DocumentDao extends AbstractMongodbDao<IDocument> {
 
     public async createCollection(): Promise<any> {
         await super.createCollection();
-        await this.collection().createIndex({description: 'text'});
+        await this.collection().createIndex({description: 'text', path: 'text'});
         await this.collection().createIndex({path: 1}, {unique: true});
     }
 
@@ -24,5 +24,13 @@ export class DocumentDao extends AbstractMongodbDao<IDocument> {
 
     public findDocumentsByPath(paths: string[]): Promise<IDocument[]> {
         return this.collection().find({path: {$in: paths}}).toArray();
+    }
+
+    public search(query: any): Promise<IDocument[]> {
+        return this.collection()
+            .find({$text: {$search: query}})
+            .project({score: {$meta: 'textScore'}})
+            .sort({score: {$meta: 'textScore'}})
+            .toArray();
     }
 }

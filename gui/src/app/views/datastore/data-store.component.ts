@@ -5,7 +5,7 @@ import {IDocument} from 'abcmap-shared';
 import {IMainState} from '../../store';
 import {Store} from '@ngrx/store';
 import {Subscription} from 'rxjs';
-import {debounceTime, mergeMap} from 'rxjs/operators';
+import {catchError, debounceTime, mergeMap} from 'rxjs/operators';
 import {RxUtils} from '../../lib/utils/RxUtils';
 import {DocumentHelper} from '../../lib/datastore/DocumentHelper';
 import {ToastService} from '../../lib/notifications/toast.service';
@@ -60,8 +60,10 @@ export class DataStoreComponent implements OnInit, OnDestroy {
             return this.datastore.listDocuments();
           }
         }),
+        catchError(err => [])
       )
       .subscribe((documents) => {
+        this.lastUploadedDocuments = [];
         this.documents = DocumentHelper.filterCache(documents);
       });
   }
@@ -71,6 +73,7 @@ export class DataStoreComponent implements OnInit, OnDestroy {
       .subscribe(res => {
         this.toast.info('Documents supprimés !');
         this.loadDocumentList();
+        this.lastUploadedDocuments = [];
       });
   }
 
@@ -92,10 +95,12 @@ export class DataStoreComponent implements OnInit, OnDestroy {
       )
       .subscribe(documents => {
         this.lastUploadedDocuments = documents;
+        this.loadDocumentList();
       });
   }
 
   private loadDocumentList() {
-    this.datastore.listDocuments().subscribe(documents => this.documents = DocumentHelper.filterCache(documents));
+    this.datastore.listDocuments()
+      .subscribe(documents => this.documents = DocumentHelper.filterCache(documents));
   }
 }

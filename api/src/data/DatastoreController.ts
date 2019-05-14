@@ -1,6 +1,6 @@
 import {asyncHandler} from '../lib/server/asyncExpressHandler';
 import {AbstractController} from '../lib/server/AbstractController';
-import {ApiRoutes, IDocument, IFetchDocumentsRequest, IResponse, IUploadResponse} from 'abcmap-shared';
+import {ApiRoutes, IDocument, IFetchDocumentsRequest, ISearchDocumentsRequest, IResponse, IUploadResponse} from 'abcmap-shared';
 import {DatastoreService} from './DatastoreService';
 import {DataTransformationService} from './DataTransformationService';
 import {Logger} from 'loglevel';
@@ -22,6 +22,7 @@ export class DatastoreController extends AbstractController {
     public getRouter(): express.Router {
         // tslint:disable:max-line-length
         const router = express.Router();
+        router.post(ApiRoutes.DOCUMENTS_SEARCH.path, asyncHandler(this.searchDocuments));
         router.post(ApiRoutes.DOCUMENTS_PATH.path, authenticated(), upload(), asyncHandler(this.uploadDocument));
         router.delete(ApiRoutes.DOCUMENTS_PATH.path, authenticated(), asyncHandler(this.deleteDocument));
         router.get(ApiRoutes.DOCUMENTS.path, asyncHandler(this.listDocuments));
@@ -29,6 +30,11 @@ export class DatastoreController extends AbstractController {
         router.get(ApiRoutes.DOCUMENTS_PATH.path, this.downloadDocument);
         // tslint:enable:max-line-length
         return router;
+    }
+
+    private searchDocuments = async (req: express.Request, res: express.Response): Promise<IDocument[]> => {
+        const searchRequest: ISearchDocumentsRequest = req.body;
+        return this.datastore.searchDocuments(searchRequest.query);
     }
 
     private downloadDocument = async (req: express.Request, res: express.Response): Promise<any> => {
