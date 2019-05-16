@@ -1,12 +1,20 @@
 import {asyncHandler} from '../lib/server/asyncExpressHandler';
 import {AbstractController} from '../lib/server/AbstractController';
-import {ApiRoutes, IDocument, IFetchDocumentsRequest, ISearchDocumentsRequest, IResponse, IUploadResponse} from 'abcmap-shared';
+import {
+    ApiRoutes,
+    IDocument,
+    IFetchDocumentsRequest,
+    IResponse,
+    ISearchDocumentsRequest,
+    IUploadResponse,
+} from 'abcmap-shared';
 import {DatastoreService} from './DatastoreService';
 import {DataTransformationService} from './DataTransformationService';
 import {Logger} from 'loglevel';
 import {authenticated, AuthenticationHelper} from '../authentication/AuthenticationHelper';
 import {upload} from './UploadConfiguration';
 import * as path from 'path';
+import {HttpError} from '../lib/server/HttpError';
 import express = require('express');
 import loglevel = require('loglevel');
 
@@ -54,8 +62,7 @@ export class DatastoreController extends AbstractController {
         const docPath: string = this.decodePath(req.params.path);
         const content = req.file;
 
-        const document = await this.datastore.storeDocument(username, docPath, content.buffer)
-            .catch(err => this.datastore.storeDocument(username, docPath, content.buffer));
+        const document = await this.datastore.storeDocument(username, docPath, content.buffer);
 
         this.dataTransformation.toGeojson(content.buffer, docPath)
             .then(cache => this.datastore.storeCache(username, docPath, Buffer.from(JSON.stringify(cache))))
@@ -78,7 +85,7 @@ export class DatastoreController extends AbstractController {
         const docPath: string = this.decodePath(req.params.path);
 
         if (!docPath.startsWith(username)) {
-            return new Error('Forbidden');
+            return new HttpError('Forbidden', 403);
         }
 
         await this.datastore.deleteDocument(docPath);
