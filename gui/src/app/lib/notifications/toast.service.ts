@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {IndividualConfig, ToastrService} from 'ngx-toastr';
+import {HttpErrorResponse} from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -28,4 +29,17 @@ export class ToastService {
   genericError() {
     this.error('Oups, il y a eu une erreur !');
   }
+
+  forbiddenError() {
+    this.error('Vous n\'avez pas la permission d\'effectuer cette opération');
+  }
+
+  httpError(err: HttpErrorResponse) {
+    if (err.status === 403) {
+      this.forbiddenError();
+    } else {
+      this.genericError();
+    }
+  }
+
 }

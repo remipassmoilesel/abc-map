@@ -58,7 +58,7 @@ export class DatastoreService {
 
   public deleteDocument(path: string): Observable<any> {
     return this.client.deleteDocument(path)
-      .pipe(tap(undefined, err => this.toasts.genericError()));
+      .pipe(tap(undefined, err => this.toasts.httpError(err)));
   }
 
   public fetchDocuments(paths: string[]): Observable<IDocument[]> {
