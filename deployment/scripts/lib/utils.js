@@ -1,6 +1,8 @@
+const {printDim} = require("./logger");
 const {execSync, exec} = require('child_process');
 
 function commandAsync(command, options) {
+    printDim(`\n${command} cwd=${options.cwd || process.cwd}\n`);
 
     const subprocess = exec(command, {
         cwd: options.cwd,
@@ -19,6 +21,7 @@ function commandAsync(command, options) {
 }
 
 function commandSync(command, options) {
+    printDim(`\n${command} cwd=${options.cwd || process.cwd}\n`);
     return execSync(command, {
         cwd: options.cwd,
         stdio: options.stdio || 'inherit'
@@ -26,7 +29,7 @@ function commandSync(command, options) {
 }
 
 function getCurrentGitSha(path) {
-    return execSync("git rev-parse HEAD", {cwd: path}).toString().substring(0,20);
+    return execSync("git rev-parse HEAD", {cwd: path}).toString().substring(0, 20);
 }
 
 module.exports = {

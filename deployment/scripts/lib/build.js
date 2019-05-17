@@ -2,7 +2,7 @@ const {commandSync} = require("./utils");
 
 
 function buildModule(path) {
-    commandSync("npm install && npm run build", {cwd: path});
+    commandSync("npm install && npm run clean && npm run build", {cwd: path});
 }
 
 function lintModule(path) {
