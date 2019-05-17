@@ -6,6 +6,7 @@ export interface IDataFormat {
 
 export const DATA_FORMAT_WHITELIST = [
     'ASCII text',
+    'ASCII text, with no line terminators',
     'XML 1.0 document',
     'ESRI Shapefile',
     'FoxBase+/dBase III DBF',
@@ -38,12 +39,18 @@ export class DataFormats {
         extensions: ['gpx'],
     };
 
+    public static SHP: IDataFormat = {
+        name: 'SHP',
+        extensions: ['shp', 'shx', 'prj', 'dbf', 'cpg'],
+    };
+
     public static ALL = [
         DataFormats.CSV,
         DataFormats.XLSX,
         DataFormats.KML,
         DataFormats.JSON,
         DataFormats.GPX,
+        DataFormats.SHP,
     ];
 
 }

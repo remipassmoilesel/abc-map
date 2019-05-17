@@ -33,7 +33,7 @@ export class DatastoreService extends AbstractService implements IPostConstruct 
         const formatIsAllowed = await DataFormatHelper.isDataFormatAllowed(content, path);
         const mimeType = await DataFormatHelper.getMimeType(content);
         if (!formatIsAllowed) {
-            return Promise.reject(new Error('Unsupported format'));
+            return Promise.reject(new Error(`Unsupported format: ${path}`));
         }
 
         const prefixedPath = this.prefixWithUsername(username, path);

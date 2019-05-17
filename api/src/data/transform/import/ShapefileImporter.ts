@@ -9,7 +9,7 @@ import uuid = require('uuid');
 export class ShapefileImporter extends AbstractDataImporter {
 
     public getSupportedFormat(): IDataFormat {
-        return DataFormats.KML;
+        return DataFormats.SHP;
     }
 
     public async toCollection(source: Buffer): Promise<IAbcGeojsonFeatureCollection> {
