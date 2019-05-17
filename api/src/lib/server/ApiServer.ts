@@ -8,6 +8,9 @@ import * as _ from 'lodash';
 import * as loglevel from 'loglevel';
 import {JwtStrategy} from './JwtStrategy';
 import {IApiConfig} from '../../IApiConfig';
+import {AuthenticationHelper} from '../../authentication/AuthenticationHelper';
+import {HttpError} from './HttpError';
+import {NextFunction} from 'express';
 
 export class ApiServer {
 
@@ -21,11 +24,12 @@ export class ApiServer {
 
         this.setupMorgan(this.app);
         this.setupBodyParser(this.app);
-        this.setupPassport(this.app);
+        this.setupAuthentication(this.app);
         this.setupWebsockets(this.app);
         this.setupControllers(this.app);
         this.setupGuiService(this.app);
         this.setupRedirection(this.app);
+        this.setupErrorHandler(this.app);
     }
 
     public start(): void {
@@ -40,9 +44,10 @@ export class ApiServer {
         app.use(morgan('dev'));
     }
 
-    private setupPassport(app: express.Application): void {
+    private setupAuthentication(app: express.Application): void {
         passport.use(JwtStrategy);
         app.use(passport.initialize());
+        app.use(AuthenticationHelper.tokenInjector());
     }
 
     private setupBodyParser(app: express.Application): void {
@@ -72,7 +77,16 @@ export class ApiServer {
                 this.logger.info(`Redirecting: ${req.originalUrl}`);
                 return res.redirect('/');
             }
-            res.status(500).send({message: 'Root handler not found'});
+            res.status(500).send({message: 'Root handler not working'});
         });
     }
+
+    private setupErrorHandler(app: express.Application) {
+        app.use((err: Error | HttpError, req: express.Request, res: express.Response, next: NextFunction) => {
+            this.logger.error('Error: ' + err.message, err.stack);
+            const errorCode = err instanceof HttpError ? err.code : 500;
+            res.status(errorCode).send({message: err.message});
+        });
+    }
+
 }

@@ -1,19 +1,19 @@
 import * as mongodb from 'mongodb';
-import {Db, InsertOneWriteOpResult, MongoClient} from 'mongodb';
+import {Collection, Db, InsertOneWriteOpResult, MongoClient, ReplaceWriteOpResult} from 'mongodb';
 import {Logger} from 'loglevel';
 import {IApiConfig} from '../../IApiConfig';
+
 
 export abstract class AbstractMongodbDao<T> {
 
     protected abstract logger: Logger;
-
-    protected databasename = 'abcmap';
     protected abstract collectionName: string;
 
+    protected databaseName: string;
     protected _client?: MongoClient;
 
     constructor(private config: IApiConfig) {
-
+        this.databaseName = `abcmap-${config.environmentName}`;
     }
 
     public async postConstruct(): Promise<any> {
@@ -28,7 +28,7 @@ export abstract class AbstractMongodbDao<T> {
     public async connect(): Promise<MongoClient> {
         const port = this.config.mongodb.port;
         const host = this.config.mongodb.host;
-        const databaseUri = `mongodb://${host}:${port}`;
+        const databaseUri = `mongodb://${host}:${port}/${this.databaseName}`;
         this._client = await mongodb.connect(databaseUri, {
             useNewUrlParser: true,
         });
@@ -37,13 +37,11 @@ export abstract class AbstractMongodbDao<T> {
     }
 
     public async insert(object: T): Promise<InsertOneWriteOpResult> {
-        if (!this._client) {
-            return Promise.reject('Not connected');
-        }
-        return this._client
-            .db(this.databasename)
-            .collection(this.collectionName)
-            .insertOne(object);
+        return this.collection().insertOne(object);
+    }
+
+    public upsertOne(filter: any, object: T): Promise<ReplaceWriteOpResult> {
+        return this.collection().replaceOne(filter, object, {upsert: true});
     }
 
     protected client(): MongoClient {
@@ -54,7 +52,11 @@ export abstract class AbstractMongodbDao<T> {
     }
 
     protected db(): Db {
-        return this.client().db(this.databasename);
+        return this.client().db(this.databaseName);
+    }
+
+    protected collection(): Collection<T> {
+        return this.db().collection<T>(this.collectionName);
     }
 
 }

@@ -92,7 +92,7 @@ export class ProjectService {
         first(),
         flatMap(project => {
           if (!project) {
-            this.toasts.errorForNonExisitingProject();
+            this.toasts.errorForNonExistingProject();
             return throwError(new Error('Project is undefined'));
           }
           return this.projectClient.saveProject(project);

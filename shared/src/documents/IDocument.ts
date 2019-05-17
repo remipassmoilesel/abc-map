@@ -1,7 +1,7 @@
 export interface IDocument {
-    name: string;
-    prefix: string;
+    path: string;
     size: number;
-    etag: string;
-    lastModified: string;
+    description: string;
+    createdAt: string;
+    mimeType: string;
 }

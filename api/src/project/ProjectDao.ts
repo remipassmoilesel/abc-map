@@ -10,7 +10,7 @@ export class ProjectDao extends AbstractMongodbDao<IProject> {
     protected collectionName = 'projects';
 
     public async findById(projectId: string): Promise<IProject> {
-        const result = await this.client().db(this.databasename).collection(this.collectionName).findOne({id: projectId});
+        const result = await this.collection().findOne({id: projectId});
         if (!result) {
             return Promise.reject(new Error('Not found'));
         }
@@ -18,7 +18,7 @@ export class ProjectDao extends AbstractMongodbDao<IProject> {
     }
 
     public async update(project: IProject): Promise<UpdateWriteOpResult> {
-        return this.client().db(this.databasename)
+        return this.client().db(this.databaseName)
             .collection(this.collectionName)
             .replaceOne({id: {$eq: project.id}}, project);
     }

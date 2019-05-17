@@ -1,9 +1,17 @@
 <div *ngIf="document" class="card">
 
-  <div class="card-body">
-    <div class="filename">{{ document.name }}</div>
+  <div class="card-body d-flex flex-column">
+
+    <div class="abc-filename">{{ document.path }}</div>
     <div>Taille: {{ filesize(document.size) }}</div>
-    <div>Dernière modification: {{ dhelper.documentDateToText(document.lastModified) }}</div>
+    <div>Dernière modification: {{ dhelper.documentDateToText(document.createdAt) }}</div>
+
+    <div class="d-flex flex-row justify-content-end">
+      <a (click)="onAddToMapClick($event)" title="Ajouter à la carte" class="abc-action"><i class="fa fa-plus"></i></a>
+      <a (click)="onDeleteClick($event)" title="Supprimer" class="abc-action"><i class="fa fa-trash"></i></a>
+      <a (click)="onDownloadClick($event)" title="Télécharger" class="abc-action"><i class="fa fa-download"></i></a>
+    </div>
+
   </div>
 
 </div>

@@ -2,11 +2,10 @@
 
   <h1 class="mb-2">Magasin de données</h1>
 
-  <form class="abc-search-form" [formGroup]="searchForm" *ngIf="searchForm" (ngSubmit)="search()">
+  <form class="abc-search-form" [formGroup]="searchForm" *ngIf="searchForm">
 
     <div class="d-flex justify-content-start align-items-center mt-3">
       <input type="text" class="form-control" placeholder="Que cherchez vous ?" formControlName="query">
-      <button class="btn btn-primary ml-3" [disabled]="searchForm.invalid">Rechercher</button>
     </div>
 
   </form>
@@ -15,26 +14,34 @@
 
     <div *ngIf="lastUploadedDocuments.length">
 
-      <h2>Dernier téléversements</h2>
+      <h2>Derniers téléversements</h2>
 
       <div *ngFor="let item of lastUploadedDocuments" class="card mb-3">
-        <abc-document-list-item [document]="item"></abc-document-list-item>
+        <abc-document-list-item [document]="item"
+                                (addToMap)="onAddDocumentToMap($event)"
+                                (delete)="onDeleteDocument($event)"
+                                (download)="onDownloadDocument($event)">
+        </abc-document-list-item>
       </div>
 
     </div>
 
     <div *ngIf="documents.length">
 
-      <h2>Mes documents</h2>
+      <h2>Documents</h2>
 
       <div *ngFor="let item of documents" class="mb-3">
-        <abc-document-list-item [document]="item"></abc-document-list-item>
+        <abc-document-list-item [document]="item"
+                                (addToMap)="onAddDocumentToMap($event)"
+                                (delete)="onDeleteDocument($event)"
+                                (download)="onDownloadDocument($event)">
+        </abc-document-list-item>
       </div>
 
     </div>
 
     <div *ngIf="!documents.length">
-      <h2>Aucun document présent</h2>
+      <h3>Vraiment rien ?</h3>
     </div>
 
   </div>

@@ -3,7 +3,7 @@
 const {databaseStart, databaseStop, databaseClean} = require("./lib/database");
 
 const {startGui, startApi} = require("./lib/start");
-const {build} = require("./lib/build");
+const {build, lint} = require("./lib/build");
 const {deploy} = require("./lib/deploy");
 const {test} = require("./lib/test");
 const {config} = require("./config");
@@ -14,8 +14,9 @@ function main() {
 
     switch (args[0]) {
         case 'test': {
-            return build(args, config)
-                && test(args, config);
+            lint(args, config);
+            build(args, config);
+            return test(args, config);
         }
         case 'build': {
             return build(args, config);
@@ -35,6 +36,11 @@ function main() {
         case 'clean:databases': {
             databaseStop(args, config);
             return databaseClean(args, config);
+        }
+        case 'clean-restart:databases': {
+            databaseStop(args, config);
+            databaseClean(args, config);
+            return databaseStart(args, config);
         }
         case 'deploy': {
             return deploy(args, config);
