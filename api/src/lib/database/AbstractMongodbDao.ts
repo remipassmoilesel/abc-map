@@ -1,5 +1,5 @@
 import * as mongodb from 'mongodb';
-import {Collection, Db, InsertOneWriteOpResult, MongoClient} from 'mongodb';
+import {Collection, Db, InsertOneWriteOpResult, MongoClient, ReplaceWriteOpResult} from 'mongodb';
 import {Logger} from 'loglevel';
 import {IApiConfig} from '../../IApiConfig';
 
@@ -40,7 +40,7 @@ export abstract class AbstractMongodbDao<T> {
         return this.collection().insertOne(object);
     }
 
-    public upsertOne(filter: any, object: T) {
+    public upsertOne(filter: any, object: T): Promise<ReplaceWriteOpResult> {
         return this.collection().replaceOne(filter, object, {upsert: true});
     }
 

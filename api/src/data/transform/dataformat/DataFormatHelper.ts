@@ -1,5 +1,5 @@
 import * as _ from 'lodash';
-import {Magic} from 'mmmagic';
+import {Magic, MAGIC_MIME_TYPE} from 'mmmagic';
 import * as path from 'path';
 import {DATA_FORMAT_WHITELIST, DataFormats, IDataFormat} from './DataFormat';
 
@@ -15,6 +15,18 @@ export class DataFormatHelper {
     public static inspectContentFormat(data: Buffer): Promise<string> {
         return new Promise((resolve, reject) => {
             const magic = new Magic();
+            magic.detect(data, (err, result) => {
+                if (err) {
+                    return reject(err);
+                }
+                return resolve(result);
+            });
+        });
+    }
+
+    public static getMimeType(data: Buffer): Promise<string> {
+        return new Promise((resolve, reject) => {
+            const magic = new Magic(MAGIC_MIME_TYPE);
             magic.detect(data, (err, result) => {
                 if (err) {
                     return reject(err);

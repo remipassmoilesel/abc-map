@@ -11,7 +11,7 @@ import * as Stream from 'stream';
 
 export class DatastoreService extends AbstractService implements IPostConstruct {
 
-    protected logger: Logger = loglevel.getLogger('UserDao');
+    protected logger: Logger = loglevel.getLogger('DatastoreService');
     private minio!: Minio.Client;
 
     constructor(private config: IApiConfig,
@@ -31,12 +31,12 @@ export class DatastoreService extends AbstractService implements IPostConstruct 
 
     public async storeDocument(username: string, path: string, content: Buffer): Promise<IDocument> {
         const formatIsAllowed = await DataFormatHelper.isDataFormatAllowed(content, path);
+        const mimeType = await DataFormatHelper.getMimeType(content);
         if (!formatIsAllowed) {
-            return Promise.reject(new Error('Forbidden format'));
+            return Promise.reject(new Error('Unsupported format'));
         }
 
         const prefixedPath = this.prefixWithUsername(username, path);
-
         await this.minio.putObject(this.getUsersBucketName(), prefixedPath, content, content.length);
 
         const document: IDocument = {
@@ -44,10 +44,15 @@ export class DatastoreService extends AbstractService implements IPostConstruct 
             size: content.byteLength,
             description: '',
             createdAt: new Date().toISOString(),
+            mimeType,
         };
 
         await this.documentDao.upsertOne({path: document.path}, document);
         return document;
+    }
+
+    public getDocument(docPath: string): Promise<IDocument> {
+        return this.documentDao.findByPath(docPath);
     }
 
     public async storeCache(username: string, originalPath: string, content: Buffer): Promise<any> {
@@ -57,11 +62,11 @@ export class DatastoreService extends AbstractService implements IPostConstruct 
 
     // TODO: paginate using a pagination request
     public listDocuments(): Promise<IDocument[]> {
-        return this.documentDao.listDocuments(0, 100);
+        return this.documentDao.list(0, 100);
     }
 
     public async deleteDocument(path: string): Promise<void> {
-        await this.documentDao.deleteWithPath(path);
+        await this.documentDao.deleteByPath(path);
         await this.minio.removeObject(this.getUsersBucketName(), path);
     }
 
@@ -70,7 +75,7 @@ export class DatastoreService extends AbstractService implements IPostConstruct 
     }
 
     public findDocumentsByPath(paths: string[]): Promise<IDocument[]> {
-        return this.documentDao.findDocumentsByPath(paths);
+        return this.documentDao.findManyByPath(paths);
     }
 
     public searchDocuments(query: any): Promise<IDocument[]> {

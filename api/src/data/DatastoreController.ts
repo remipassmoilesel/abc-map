@@ -17,6 +17,7 @@ import * as path from 'path';
 import {HttpError} from '../lib/server/HttpError';
 import express = require('express');
 import loglevel = require('loglevel');
+import {DataFormatHelper} from './transform/dataformat/DataFormatHelper';
 
 export class DatastoreController extends AbstractController {
 
@@ -47,10 +48,11 @@ export class DatastoreController extends AbstractController {
 
     private downloadDocument = async (req: express.Request, res: express.Response): Promise<any> => {
         const docPath: string = this.decodePath(req.params.path);
+        const fileMetadata: IDocument = await this.datastore.getDocument(docPath);
         const fileStream = await this.datastore.downloadDocument(docPath);
         const fileName = path.basename(docPath);
 
-        res.setHeader('Content-Type', 'some/type');
+        res.setHeader('Content-Type', fileMetadata.mimeType);
         res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
 
         fileStream.pipe(res);

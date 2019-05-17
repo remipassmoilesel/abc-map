@@ -3,4 +3,5 @@ export interface IDocument {
     size: number;
     description: string;
     createdAt: string;
+    mimeType: string;
 }
