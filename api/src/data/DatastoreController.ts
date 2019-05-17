@@ -1,6 +1,7 @@
 import {asyncHandler} from '../lib/server/asyncExpressHandler';
 import {AbstractController} from '../lib/server/AbstractController';
-import {ApiRoutes, IDatabaseDocument, IFetchDocumentsRequest, IResponse, ISearchDocumentsRequest, IUploadResponse} from 'abcmap-shared';
+import {ApiRoutes, IDatabaseDocument, IFetchDocumentsRequest, IResponse,
+    ISearchDocumentsRequest, IUploadResponse} from 'abcmap-shared';
 import {DatastoreService} from './DatastoreService';
 import {DataTransformationService} from './DataTransformationService';
 import {Logger} from 'loglevel';

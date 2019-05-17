@@ -13,7 +13,7 @@ const ogr2ogr = require('ogr2ogr');
 
 export class ShapefileImporter extends AbstractDataImporter {
 
-    protected logger: Logger = loglevel.getLogger('ProjectDao');
+    protected logger: Logger = loglevel.getLogger('ShapefileImporter');
 
     public getSupportedFormat(): IDataFormat {
         return DataFormats.SHP;
@@ -34,10 +34,4 @@ export class ShapefileImporter extends AbstractDataImporter {
         };
     }
 
-    private bufferToStream(buffer: Buffer): Readable {
-        const stream = new Readable();
-        stream.push(buffer);
-        stream.push(null);
-        return stream;
-    }
 }

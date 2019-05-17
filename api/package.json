@@ -17,7 +17,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@mapbox/togeojson": "^0.16.0",
     "abcmap-shared": "file:../shared",
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",

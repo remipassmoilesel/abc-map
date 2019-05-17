@@ -4,7 +4,6 @@ import {DataFormatHelper} from './dataformat/DataFormatHelper';
 import {GpxDataImporter} from './import/GpxDataImporter';
 import {KmlDataImporter} from './import/KmlDataImporter';
 import {ShapefileImporter} from './import/ShapefileImporter';
-import {XlsxDataImporter} from './import/XlsxDataImporter';
 import {XlsxDataExporter} from './export/XlsxDataExporter';
 import {AbstractDataExporter} from './export/AbstractDataExporter';
 
@@ -14,7 +13,6 @@ export class TransformationTools {
         new GpxDataImporter(),
         new KmlDataImporter(),
         new ShapefileImporter(),
-        new XlsxDataImporter(),
     ];
 
     private exporters: AbstractDataExporter[] = [
