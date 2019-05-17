@@ -1,13 +1,14 @@
 import {Injectable} from '@angular/core';
 import {DatastoreClient} from './DatastoreClient';
-import {forkJoin, Observable} from 'rxjs';
+import {forkJoin, Observable, throwError} from 'rxjs';
 import {Store} from '@ngrx/store';
 import {IMainState} from '../../store';
 import {mergeMap, take, tap} from 'rxjs/operators';
-import {IDocument, IUploadResponse} from 'abcmap-shared';
+import {IDocument, IUploadResponse, DocumentConstants} from 'abcmap-shared';
 import {GuiModule} from '../../store/gui/gui-actions';
 import {ToastService} from '../notifications/toast.service';
 import DocumentsUploaded = GuiModule.DocumentsUploaded;
+import * as _ from 'lodash';
 
 @Injectable({
   providedIn: 'root'
@@ -35,6 +36,12 @@ export class DatastoreService {
   }
 
   public uploadDocuments(files: FileList): Observable<IUploadResponse[]> {
+
+    const error = this.checkUploadRequest(files);
+    if (error) {
+      return error;
+    }
+
     const uploadObservables = [];
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < files.length; i++) {
@@ -64,5 +71,20 @@ export class DatastoreService {
   public fetchDocuments(paths: string[]): Observable<IDocument[]> {
     return this.client.fetchDocuments(paths)
       .pipe(tap(undefined, err => this.toasts.genericError()));
+  }
+
+  private checkUploadRequest(files: FileList): Observable<IUploadResponse[]> | undefined {
+    if (files.length > DocumentConstants.MAX_NUMBER_PER_UPLOAD) {
+      return throwError(new Error(`Vous ne pouvez pas téléverser plus de ${DocumentConstants.MAX_NUMBER_PER_UPLOAD} documents à la fois`));
+    }
+
+    const invalidFiles: ArrayLike<string> = _.chain(files)
+      .filter(file => file.size > DocumentConstants.MAX_SIZE_PER_FILE)
+      .map(file => file.name)
+      .value();
+
+    if (invalidFiles.length > 0) {
+      return throwError(new Error('Les fichiers suivants sont trop volumineux: ' + _.join(invalidFiles, ', ')));
+    }
   }
 }

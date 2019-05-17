@@ -1,10 +1,12 @@
+import {DocumentConstants} from 'abcmap-shared';
 import multer = require('multer');
 
 const storage = multer.memoryStorage();
 const uploader = multer({
     storage,
     limits: {
-        fileSize: 1e+7, // 10 mb
+        files: DocumentConstants.MAX_NUMBER_PER_UPLOAD,
+        fileSize: DocumentConstants.MAX_SIZE_PER_FILE,
     },
 });
 
