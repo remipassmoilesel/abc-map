@@ -85,19 +85,4 @@ describe('asyncHandler', () => {
             });
     });
 
-    it('should throw if nothing was returned from handler', function(done: any) {
-
-        const app = express();
-        app.post('/', asyncHandler(async (req, res) => {
-            return undefined as any;
-        }));
-
-        chai.request(app)
-            .post('/')
-            .end((err, res) => {
-                assert.deepStrictEqual(res.status, 500);
-                done();
-            });
-    });
-
 });
