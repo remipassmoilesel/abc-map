@@ -29,7 +29,7 @@ export class DatastoreController extends AbstractController {
         router.delete(ApiRoutes.DOCUMENTS_PATH.path, authenticated(), asyncHandler(this.deleteDocument));
         router.get(ApiRoutes.DOCUMENTS.path, asyncHandler(this.listDocuments));
         router.post(ApiRoutes.DOCUMENTS.path, asyncHandler(this.fetchDocuments));
-        router.get(ApiRoutes.DOCUMENTS_PATH.path, this.downloadDocument);
+        router.get(ApiRoutes.DOCUMENTS_PATH.path, asyncHandler(this.downloadDocument));
         // tslint:enable:max-line-length
         return router;
     }
