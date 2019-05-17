@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {DatastoreService} from '../../lib/datastore/datastore.service';
-import {IDocument} from 'abcmap-shared';
+import {IDatabaseDocument} from 'abcmap-shared';
 import {IMainState} from '../../store';
 import {Store} from '@ngrx/store';
 import {of, Subscription} from 'rxjs';
@@ -23,8 +23,8 @@ interface ISearchForm {
 export class DataStoreComponent implements OnInit, OnDestroy {
 
   searchForm?: FormGroup;
-  documents: IDocument[] = [];
-  lastUploadedDocuments: IDocument[] = [];
+  documents: IDatabaseDocument[] = [];
+  lastUploadedDocuments: IDatabaseDocument[] = [];
 
   private uploads$?: Subscription;
   private search$?: Subscription;
@@ -68,7 +68,7 @@ export class DataStoreComponent implements OnInit, OnDestroy {
       });
   }
 
-  public onDeleteDocument($event: IDocument) {
+  public onDeleteDocument($event: IDatabaseDocument) {
     this.datastore.deleteDocument($event.path)
       .subscribe(res => {
         this.toast.info('Documents supprimés !');
@@ -77,11 +77,11 @@ export class DataStoreComponent implements OnInit, OnDestroy {
       });
   }
 
-  public onAddDocumentToMap($event: IDocument) {
+  public onAddDocumentToMap($event: IDatabaseDocument) {
 
   }
 
-  public onDownloadDocument(document: IDocument) {
+  public onDownloadDocument(document: IDatabaseDocument) {
     this.datastore.downloadDocument(document);
   }
 

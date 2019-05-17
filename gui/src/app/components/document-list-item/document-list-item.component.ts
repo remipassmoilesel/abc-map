@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {IDocument} from 'abcmap-shared';
+import {IDatabaseDocument} from 'abcmap-shared';
 
 import * as filesize from 'filesize';
 import {DatetimeHelper} from '../../lib/utils/DatetimeHelper';
@@ -16,16 +16,16 @@ export class DocumentListItemComponent implements OnInit {
   filesize = filesize;
 
   @Input()
-  document?: IDocument;
+  document?: IDatabaseDocument;
 
   @Output()
-  addToMap = new EventEmitter<IDocument>();
+  addToMap = new EventEmitter<IDatabaseDocument>();
 
   @Output()
-  delete = new EventEmitter<IDocument>();
+  delete = new EventEmitter<IDatabaseDocument>();
 
   @Output()
-  download = new EventEmitter<IDocument>();
+  download = new EventEmitter<IDatabaseDocument>();
 
   constructor() {
   }

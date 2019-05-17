@@ -4,7 +4,7 @@ import {Observable, Observer, throwError} from 'rxjs';
 import {Store} from '@ngrx/store';
 import {IMainState} from '../../store';
 import {mergeMap, take, tap} from 'rxjs/operators';
-import {DocumentConstants, IDocument, IUploadResponse} from 'abcmap-shared';
+import {DocumentConstants, IDatabaseDocument, IUploadResponse} from 'abcmap-shared';
 import {GuiModule} from '../../store/gui/gui-actions';
 import {ToastService} from '../notifications/toast.service';
 import * as _ from 'lodash';
@@ -21,7 +21,7 @@ export class DatastoreService {
               private store: Store<IMainState>) {
   }
 
-  public listDocuments(): Observable<IDocument[]> {
+  public listDocuments(): Observable<IDatabaseDocument[]> {
     return this.store.select(state => state.user.username)
       .pipe(
         take(1),
@@ -60,7 +60,7 @@ export class DatastoreService {
       .pipe(tap((res: IUploadResponse) => this.store.dispatch(new DocumentsUploaded({documents: res}))));
   }
 
-  public downloadDocument(document: IDocument) {
+  public downloadDocument(document: IDatabaseDocument) {
     return this.client.downloadDocument(document);
   }
 
@@ -69,7 +69,7 @@ export class DatastoreService {
       .pipe(tap(undefined, err => this.toasts.httpError(err)));
   }
 
-  public fetchDocuments(paths: string[]): Observable<IDocument[]> {
+  public fetchDocuments(paths: string[]): Observable<IDatabaseDocument[]> {
     return this.client.fetchDocuments(paths)
       .pipe(tap(undefined, err => this.toasts.genericError()));
   }

@@ -1,6 +1,6 @@
 import {asyncHandler} from '../lib/server/asyncExpressHandler';
 import {AbstractController} from '../lib/server/AbstractController';
-import {ApiRoutes, IDocument, IFetchDocumentsRequest, IResponse,
+import {ApiRoutes, IDatabaseDocument, IFetchDocumentsRequest, IResponse,
     ISearchDocumentsRequest, IUploadResponse} from 'abcmap-shared';
 import {DatastoreService} from './DatastoreService';
 import {DataTransformationService} from './DataTransformationService';
@@ -34,14 +34,14 @@ export class DatastoreController extends AbstractController {
         return router;
     }
 
-    private searchDocuments = async (req: express.Request, res: express.Response): Promise<IDocument[]> => {
+    private searchDocuments = async (req: express.Request, res: express.Response): Promise<IDatabaseDocument[]> => {
         const searchRequest: ISearchDocumentsRequest = req.body;
         return this.datastore.searchDocuments(searchRequest.query);
     }
 
     private downloadDocument = async (req: express.Request, res: express.Response): Promise<any> => {
         const docPath: string = this.decodePath(req.params.path);
-        const fileMetadata: IDocument = await this.datastore.getDocument(docPath);
+        const fileMetadata: IDatabaseDocument = await this.datastore.getDocument(docPath);
         const fileStream = await this.datastore.downloadDocument(docPath);
         const fileName = path.basename(docPath);
 
@@ -56,7 +56,7 @@ export class DatastoreController extends AbstractController {
         const username: string = AuthenticationHelper.tokenFromRequest(req).username;
         const files: Express.Multer.File[] = req.files as Express.Multer.File[];
 
-        const documents: IDocument[] = [];
+        const documents: IDatabaseDocument[] = [];
 
         for (const file of files) {
             const docPath = 'uploads/' + file.originalname;
@@ -72,11 +72,11 @@ export class DatastoreController extends AbstractController {
         return {message: 'Uploaded', documents};
     }
 
-    private listDocuments = async (req: express.Request, res: express.Response): Promise<IDocument[]> => {
+    private listDocuments = async (req: express.Request, res: express.Response): Promise<IDatabaseDocument[]> => {
         return this.datastore.listDocuments();
     }
 
-    private fetchDocuments = async (req: express.Request, res: express.Response): Promise<IDocument[]> => {
+    private fetchDocuments = async (req: express.Request, res: express.Response): Promise<IDatabaseDocument[]> => {
         const docRequest: IFetchDocumentsRequest = req.body;
         return this.datastore.findDocumentsByPath(docRequest.paths);
     }

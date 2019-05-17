@@ -1,9 +1,9 @@
 import {AbstractMongodbDao} from '../lib/database/AbstractMongodbDao';
 import {Logger} from 'loglevel';
-import {IDocument} from 'abcmap-shared';
+import {IDatabaseDocument} from 'abcmap-shared';
 import loglevel = require('loglevel');
 
-export class DocumentDao extends AbstractMongodbDao<IDocument> {
+export class DocumentDao extends AbstractMongodbDao<IDatabaseDocument> {
 
     protected logger: Logger = loglevel.getLogger('ProjectDao');
     protected collectionName: string = 'documents';
@@ -14,7 +14,7 @@ export class DocumentDao extends AbstractMongodbDao<IDocument> {
         await this.collection().createIndex({path: 1}, {unique: true});
     }
 
-    public list(start: number, size: number): Promise<IDocument[]> {
+    public list(start: number, size: number): Promise<IDatabaseDocument[]> {
         return this.collection().find().skip(start).limit(size).toArray();
     }
 
@@ -22,11 +22,11 @@ export class DocumentDao extends AbstractMongodbDao<IDocument> {
         return this.collection().deleteOne({path});
     }
 
-    public findManyByPath(paths: string[]): Promise<IDocument[]> {
+    public findManyByPath(paths: string[]): Promise<IDatabaseDocument[]> {
         return this.collection().find({path: {$in: paths}}).toArray();
     }
 
-    public async findByPath(path: string): Promise<IDocument> {
+    public async findByPath(path: string): Promise<IDatabaseDocument> {
         const result = await this.collection().findOne({path: {$eq: path}});
         if (!result) {
             return Promise.reject(new Error('Document not found: ' + path));
@@ -34,7 +34,7 @@ export class DocumentDao extends AbstractMongodbDao<IDocument> {
         return result;
     }
 
-    public search(query: any): Promise<IDocument[]> {
+    public search(query: any): Promise<IDatabaseDocument[]> {
         return this.collection()
             .find({$text: {$search: query}})
             .project({score: {$meta: 'textScore'}})

@@ -1,7 +1,7 @@
 import {IResponse} from '../http';
-import {IDocument} from './IDocument';
+import {IDatabaseDocument} from './IDatabaseDocument';
 
 export interface IUploadResponse extends IResponse {
     message: string;
-    documents: IDocument[];
+    documents: IDatabaseDocument[];
 }
