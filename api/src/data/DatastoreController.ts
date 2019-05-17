@@ -1,13 +1,7 @@
 import {asyncHandler} from '../lib/server/asyncExpressHandler';
 import {AbstractController} from '../lib/server/AbstractController';
-import {
-    ApiRoutes,
-    IDocument,
-    IFetchDocumentsRequest,
-    IResponse,
-    ISearchDocumentsRequest,
-    IUploadResponse,
-} from 'abcmap-shared';
+import {ApiRoutes, IDocument, IFetchDocumentsRequest, IResponse,
+    ISearchDocumentsRequest, IUploadResponse} from 'abcmap-shared';
 import {DatastoreService} from './DatastoreService';
 import {DataTransformationService} from './DataTransformationService';
 import {Logger} from 'loglevel';
@@ -17,7 +11,6 @@ import * as path from 'path';
 import {HttpError} from '../lib/server/HttpError';
 import express = require('express');
 import loglevel = require('loglevel');
-import {DataFormatHelper} from './transform/dataformat/DataFormatHelper';
 
 export class DatastoreController extends AbstractController {
 
@@ -32,7 +25,7 @@ export class DatastoreController extends AbstractController {
         // tslint:disable:max-line-length
         const router = express.Router();
         router.post(ApiRoutes.DOCUMENTS_SEARCH.path, asyncHandler(this.searchDocuments));
-        router.post(ApiRoutes.DOCUMENTS_PATH.path, authenticated(), upload(), asyncHandler(this.uploadDocument));
+        router.post(ApiRoutes.DOCUMENTS_UPLOAD.path, authenticated(), upload(), asyncHandler(this.uploadDocuments));
         router.delete(ApiRoutes.DOCUMENTS_PATH.path, authenticated(), asyncHandler(this.deleteDocument));
         router.get(ApiRoutes.DOCUMENTS.path, asyncHandler(this.listDocuments));
         router.post(ApiRoutes.DOCUMENTS.path, asyncHandler(this.fetchDocuments));
@@ -59,18 +52,24 @@ export class DatastoreController extends AbstractController {
     }
 
     // TODO: emits uploaded response later on websocket or SSE
-    private uploadDocument = async (req: express.Request, res: express.Response): Promise<IUploadResponse> => {
+    private uploadDocuments = async (req: express.Request, res: express.Response): Promise<IUploadResponse> => {
         const username: string = AuthenticationHelper.tokenFromRequest(req).username;
-        const docPath: string = this.decodePath(req.params.path);
-        const content = req.file;
+        const files: Express.Multer.File[] = req.files as Express.Multer.File[];
 
-        const document = await this.datastore.storeDocument(username, docPath, content.buffer);
+        const documents: IDocument[] = [];
 
-        this.dataTransformation.toGeojson(content.buffer, docPath)
-            .then(cache => this.datastore.storeCache(username, docPath, Buffer.from(JSON.stringify(cache))))
-            .catch(err => this.logger.error(err));
+        for (const file of files) {
+            const docPath = 'uploads/' + file.originalname;
+            const document = await this.datastore.storeDocument(username, docPath, file.buffer);
+            documents.push(document);
 
-        return {message: 'Uploaded', path: document.path};
+            this.dataTransformation.toGeojson(file.buffer, docPath)
+                .then(cache => this.datastore.storeCache(username, docPath, Buffer.from(JSON.stringify(cache))))
+                .catch(err => this.logger.error(err));
+        }
+
+        // return {message: 'Uploaded', path: document.path};
+        return {message: 'Uploaded', documents};
     }
 
     private listDocuments = async (req: express.Request, res: express.Response): Promise<IDocument[]> => {
