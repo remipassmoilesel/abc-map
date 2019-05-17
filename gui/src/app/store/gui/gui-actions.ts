@@ -20,7 +20,7 @@ export namespace GuiModule {
   export class DocumentsUploaded implements Action {
     readonly type = ActionTypes.DOCUMENTS_UPLOADED;
 
-    constructor(public payload: { documents: IUploadResponse[] }) {
+    constructor(public payload: { documents: IUploadResponse }) {
     }
   }
 

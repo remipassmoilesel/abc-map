@@ -4,7 +4,7 @@ import {DatastoreService} from '../../lib/datastore/datastore.service';
 import {IDocument} from 'abcmap-shared';
 import {IMainState} from '../../store';
 import {Store} from '@ngrx/store';
-import {Subscription} from 'rxjs';
+import {of, Subscription} from 'rxjs';
 import {catchError, debounceTime, mergeMap} from 'rxjs/operators';
 import {RxUtils} from '../../lib/utils/RxUtils';
 import {DocumentHelper} from '../../lib/datastore/DocumentHelper';
@@ -86,10 +86,13 @@ export class DataStoreComponent implements OnInit, OnDestroy {
   }
 
   private listenUploads(): void {
-    this.uploads$ = this.store.select(state => state.gui.lastDocumentsUploaded)
+    this.uploads$ = this.store.select(state => state.gui.lastUploadResponse)
       .pipe(
         mergeMap(uploads => {
-          const docPaths = _.map(uploads, up => up.path);
+          if (!uploads) {
+            return of([]);
+          }
+          const docPaths = _.map(uploads.documents, up => up.path);
           return this.datastore.fetchDocuments(docPaths);
         })
       )

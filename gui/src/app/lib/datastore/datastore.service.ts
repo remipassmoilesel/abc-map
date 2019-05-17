@@ -1,14 +1,15 @@
 import {Injectable} from '@angular/core';
 import {DatastoreClient} from './DatastoreClient';
-import {forkJoin, Observable, throwError} from 'rxjs';
+import {Observable, Observer, throwError} from 'rxjs';
 import {Store} from '@ngrx/store';
 import {IMainState} from '../../store';
 import {mergeMap, take, tap} from 'rxjs/operators';
-import {IDocument, IUploadResponse, DocumentConstants} from 'abcmap-shared';
+import {DocumentConstants, IDocument, IUploadResponse} from 'abcmap-shared';
 import {GuiModule} from '../../store/gui/gui-actions';
 import {ToastService} from '../notifications/toast.service';
-import DocumentsUploaded = GuiModule.DocumentsUploaded;
 import * as _ from 'lodash';
+import {HttpHeaderResponse, HttpResponse} from '@angular/common/http';
+import DocumentsUploaded = GuiModule.DocumentsUploaded;
 
 @Injectable({
   providedIn: 'root'
@@ -35,28 +36,28 @@ export class DatastoreService {
       .pipe(tap(undefined, err => this.toasts.genericError()));
   }
 
-  public uploadDocuments(files: FileList): Observable<IUploadResponse[]> {
-
+  public uploadDocuments(files: FileList): Observable<IUploadResponse> {
     const error = this.checkUploadRequest(files);
     if (error) {
       return error;
     }
 
-    const uploadObservables = [];
-    // tslint:disable-next-line:prefer-for-of
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
-      uploadObservables.push(this.uploadDocument(file.name, file));
-    }
-
-    return forkJoin(uploadObservables)
-      .pipe(tap(res => this.store.dispatch(new DocumentsUploaded({documents: res}))));
-  }
-
-  private uploadDocument(name: string, file: File): Observable<IUploadResponse> {
     const content: FormData = new FormData();
-    content.append('file-content', file);
-    return this.client.uploadDocument(`upload/${name}`, content);
+    _.forEach(files, file => content.append('file', file, file.name));
+
+    return Observable
+      .create((observer: Observer<IUploadResponse>) => {
+        this.client.uploadDocuments(content).subscribe(event => {
+          // TODO: emit events for upload progress
+          if (event instanceof HttpResponse) {
+            observer.next(event.body);
+            observer.complete();
+          } else if (event instanceof HttpHeaderResponse && event.status !== 200) {
+            observer.error(new Error(`${event.status} ${event.statusText}`));
+          }
+        });
+      })
+      .pipe(tap((res: IUploadResponse) => this.store.dispatch(new DocumentsUploaded({documents: res}))));
   }
 
   public downloadDocument(document: IDocument) {
@@ -73,9 +74,9 @@ export class DatastoreService {
       .pipe(tap(undefined, err => this.toasts.genericError()));
   }
 
-  private checkUploadRequest(files: FileList): Observable<IUploadResponse[]> | undefined {
-    if (files.length > DocumentConstants.MAX_NUMBER_PER_UPLOAD) {
-      return throwError(new Error(`Vous ne pouvez pas téléverser plus de ${DocumentConstants.MAX_NUMBER_PER_UPLOAD} documents à la fois`));
+  private checkUploadRequest(files: FileList): Observable<IUploadResponse> | undefined {
+    if (files.length > DocumentConstants.MAX_FILES_PER_UPLOAD) {
+      return throwError(new Error(`Vous ne pouvez pas téléverser plus de ${DocumentConstants.MAX_FILES_PER_UPLOAD} documents à la fois`));
     }
 
     const invalidFiles: ArrayLike<string> = _.chain(files)
