@@ -1,7 +1,6 @@
 import {asyncHandler} from '../lib/server/asyncExpressHandler';
 import {AbstractController} from '../lib/server/AbstractController';
-import {ApiRoutes, IDatabaseDocument, IFetchDocumentsRequest, IResponse,
-    ISearchDocumentsRequest, IUploadResponse} from 'abcmap-shared';
+import {ApiRoutes, IDatabaseDocument, IFetchDocumentsRequest, IResponse, ISearchDocumentsRequest, IUploadResponse} from 'abcmap-shared';
 import {DatastoreService} from './DatastoreService';
 import {DataTransformationService} from './DataTransformationService';
 import {Logger} from 'loglevel';
@@ -63,9 +62,8 @@ export class DatastoreController extends AbstractController {
             const document = await this.datastore.storeDocument(username, docPath, file.buffer);
             documents.push(document);
 
-            this.dataTransformation.toGeojson(file.buffer, docPath)
-                .then(cache => this.datastore.storeCache(username, docPath, Buffer.from(JSON.stringify(cache))))
-                .catch(err => this.logger.error(err));
+            this.cacheDocumentAsGeojson(document, file.buffer)
+                .catch(err => this.logger.error(`Error while caching file. document=${document.path}`, err));
         }
 
         // return {message: 'Uploaded', path: document.path};
@@ -95,5 +93,10 @@ export class DatastoreController extends AbstractController {
 
     private decodePath(documentPath: string): string {
         return Buffer.from(documentPath, 'base64').toString();
+    }
+
+    private cacheDocumentAsGeojson(document: IDatabaseDocument, buffer: Buffer) {
+        return this.dataTransformation.toGeojson(buffer, document.path)
+            .then(cache => this.datastore.storeCache(document.path, Buffer.from(JSON.stringify(cache))));
     }
 }

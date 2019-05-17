@@ -6,10 +6,8 @@ export interface IDataFormat {
 
 export const DATA_FORMAT_WHITELIST = [
     'ASCII text',
-    'ASCII text, with no line terminators',
     'XML 1.0 document',
-    'ESRI Shapefile',
-    'FoxBase+/dBase III DBF',
+    'Zip archive data',
 ];
 
 export class DataFormats {
@@ -41,7 +39,7 @@ export class DataFormats {
 
     public static SHP: IDataFormat = {
         name: 'SHP',
-        extensions: ['shp', 'shx', 'prj', 'dbf', 'cpg'],
+        extensions: ['zip'],
     };
 
     public static ALL = [

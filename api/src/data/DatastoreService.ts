@@ -55,8 +55,8 @@ export class DatastoreService extends AbstractService implements IPostConstruct 
         return this.documentDao.findByPath(docPath);
     }
 
-    public async storeCache(username: string, originalPath: string, content: Buffer): Promise<any> {
-        const path = this.prefixWithUsername(username, this.getCachePath(originalPath));
+    public async storeCache(originalPath: string, content: Buffer): Promise<any> {
+        const path = this.getCachePath(originalPath);
         return this.minio.putObject(this.getUsersBucketName(), path, content, content.length);
     }
 
