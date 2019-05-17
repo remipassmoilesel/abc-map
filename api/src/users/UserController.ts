@@ -6,7 +6,7 @@ import * as express from 'express';
 import assert from 'assert';
 import {asyncHandler} from '../lib/server/asyncExpressHandler';
 import {DatastoreService} from '../data/DatastoreService';
-import {authenticated, AuthenticationHelper} from '../authentication/AuthenticationHelper';
+import {authenticated} from '../authentication/AuthenticationHelper';
 
 export class UserController extends AbstractController {
 
