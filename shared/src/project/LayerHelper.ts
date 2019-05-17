@@ -2,6 +2,7 @@ import * as uuid from 'uuid';
 import * as _ from 'lodash';
 import {IPredefinedLayer, IVectorLayer, IWmsLayer, MapLayerType, PredefinedLayerPreset, IWmsParams} from './IMapLayer';
 import {PredefinedLayers} from './PredefinedLayers';
+import {FeatureCollection} from 'geojson';
 
 export class LayerHelper {
 
@@ -15,15 +16,23 @@ export class LayerHelper {
         return newLayer;
     }
 
-    public static newVectorLayer(): IVectorLayer {
+    public static newVectorLayer(layerName?: string, featureCollection?: FeatureCollection): IVectorLayer {
+        if (!layerName) {
+            layerName = 'Couche de dessin';
+        }
+
+        if (!featureCollection) {
+            featureCollection = {
+                type: 'FeatureCollection',
+                features: [],
+            };
+        }
+
         return {
             id: this.generateLayerId(MapLayerType.Vector),
             type: MapLayerType.Vector,
-            name: 'Couche de dessin',
-            featureCollection: {
-                type: 'FeatureCollection',
-                features: [],
-            },
+            name: layerName,
+            featureCollection,
         };
     }
 

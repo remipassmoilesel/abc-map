@@ -3,7 +3,6 @@ import {IDatabaseDocument} from 'abcmap-shared';
 
 import * as filesize from 'filesize';
 import {DatetimeHelper} from '../../lib/utils/DatetimeHelper';
-import {DocumentHelper} from '../../lib/datastore/DocumentHelper';
 
 @Component({
   selector: 'abc-document-list-item',

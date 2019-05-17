@@ -1,13 +1,12 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {DatastoreService} from '../../lib/datastore/datastore.service';
-import {IDatabaseDocument} from 'abcmap-shared';
+import {IDatabaseDocument, DocumentHelper} from 'abcmap-shared';
 import {IMainState} from '../../store';
 import {Store} from '@ngrx/store';
 import {of, Subscription} from 'rxjs';
 import {catchError, debounceTime, mergeMap} from 'rxjs/operators';
 import {RxUtils} from '../../lib/utils/RxUtils';
-import {DocumentHelper} from '../../lib/datastore/DocumentHelper';
 import {ToastService} from '../../lib/notifications/toast.service';
 import * as _ from 'lodash';
 
@@ -77,12 +76,12 @@ export class DataStoreComponent implements OnInit, OnDestroy {
       });
   }
 
-  public onAddDocumentToMap($event: IDatabaseDocument) {
-
+  public onAddDocumentToMap(document: IDatabaseDocument) {
+    this.datastore.loadDocumentAsLayer(document).subscribe();
   }
 
   public onDownloadDocument(document: IDatabaseDocument) {
-    this.datastore.downloadDocument(document);
+    this.datastore.userDownloadDocument(document);
   }
 
   private listenUploads(): void {
@@ -93,7 +92,7 @@ export class DataStoreComponent implements OnInit, OnDestroy {
             return of([]);
           }
           const docPaths = _.map(uploads.documents, up => up.path);
-          return this.datastore.fetchDocuments(docPaths);
+          return this.datastore.getDatabaseDocuments(docPaths);
         })
       )
       .subscribe(documents => {

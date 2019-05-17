@@ -1,8 +1,9 @@
 import {HttpClient, HttpEvent, HttpRequest} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {ApiRoutes, IDatabaseDocument, IFetchDocumentsRequest, ISearchDocumentsRequest, IUploadResponse} from 'abcmap-shared';
+import {DocumentHelper, ApiRoutes, IDatabaseDocument, IFetchDocumentsRequest, ISearchDocumentsRequest, IUploadResponse} from 'abcmap-shared';
 import {Observable} from 'rxjs';
-import {DocumentHelper} from './DocumentHelper';
+import {} from 'abcmap-shared';
+import {FeatureCollection} from 'geojson';
 
 @Injectable({
   providedIn: 'root'
@@ -30,22 +31,27 @@ export class DatastoreClient {
     return this.client.post<IDatabaseDocument[]>(url, request);
   }
 
-  public fetchDocuments(documentPaths: string[]): Observable<IDatabaseDocument[]> {
+  public getDatabaseDocuments(documentPaths: string[]): Observable<IDatabaseDocument[]> {
     const url = ApiRoutes.DOCUMENTS.toString();
     const request: IFetchDocumentsRequest = {paths: documentPaths};
     return this.client.post<IDatabaseDocument[]>(url, request);
   }
 
-  public downloadDocument(document: IDatabaseDocument) {
+  public getDocumentContent(path: string): Observable<FeatureCollection> {
+    const url = ApiRoutes.DOCUMENTS_PATH.withArgs({path: this.encodeDocumentPath(path)}).toString();
+    return this.client.get<FeatureCollection>(url);
+  }
+
+  public redirectToDownloadDocument(document: IDatabaseDocument): void {
     window.location.href = DocumentHelper.downloadLink(document);
   }
 
-  public deleteDocument(path: string) {
-    const url = ApiRoutes.DOCUMENTS_PATH.withArgs({path: this.encodeDocumentName(path)}).toString();
+  public deleteDocument(path: string): Observable<any> {
+    const url = ApiRoutes.DOCUMENTS_PATH.withArgs({path: this.encodeDocumentPath(path)}).toString();
     return this.client.delete<any>(url);
   }
 
-  private encodeDocumentName(path: string): string {
+  private encodeDocumentPath(path: string): string {
     return btoa(path);
   }
 

@@ -2,7 +2,7 @@ import {AbstractService} from '../lib/AbstractService';
 import {IPostConstruct} from '../lib/IPostConstruct';
 import {IApiConfig} from '../IApiConfig';
 import * as Minio from 'minio';
-import {IDatabaseDocument} from 'abcmap-shared';
+import {IDatabaseDocument, DocumentHelper} from 'abcmap-shared';
 import {DataFormatHelper} from './transform/dataformat/DataFormatHelper';
 import {Logger} from 'loglevel';
 import {DocumentDao} from './DocumentDao';
@@ -56,7 +56,7 @@ export class DatastoreService extends AbstractService implements IPostConstruct 
     }
 
     public async storeCache(originalPath: string, content: Buffer): Promise<any> {
-        const path = this.getCachePath(originalPath);
+        const path = DocumentHelper.geojsonCachePath(originalPath);
         return this.minio.putObject(this.getUsersBucketName(), path, content, content.length);
     }
 
@@ -87,10 +87,6 @@ export class DatastoreService extends AbstractService implements IPostConstruct 
         if (!bucketExists) {
             await this.minio.makeBucket(this.getUsersBucketName(), this.getRegion());
         }
-    }
-
-    private getCachePath(originalPath: string): string {
-        return originalPath + '.cache';
     }
 
     private getRegion(): string {

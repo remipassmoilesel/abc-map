@@ -4,12 +4,14 @@ import {Observable, Observer, throwError} from 'rxjs';
 import {Store} from '@ngrx/store';
 import {IMainState} from '../../store';
 import {mergeMap, take, tap} from 'rxjs/operators';
-import {DocumentConstants, IDatabaseDocument, IUploadResponse} from 'abcmap-shared';
+import {DocumentConstants, DocumentHelper, IDatabaseDocument, IUploadResponse} from 'abcmap-shared';
 import {GuiModule} from '../../store/gui/gui-actions';
 import {ToastService} from '../notifications/toast.service';
 import * as _ from 'lodash';
 import {HttpHeaderResponse, HttpResponse} from '@angular/common/http';
+import {ProjectModule} from '../../store/project/project-actions';
 import DocumentsUploaded = GuiModule.DocumentsUploaded;
+import DataImportedAsLayer = ProjectModule.DataImportedAsLayer;
 
 @Injectable({
   providedIn: 'root'
@@ -60,8 +62,8 @@ export class DatastoreService {
       .pipe(tap((res: IUploadResponse) => this.store.dispatch(new DocumentsUploaded({documents: res}))));
   }
 
-  public downloadDocument(document: IDatabaseDocument) {
-    return this.client.downloadDocument(document);
+  public userDownloadDocument(document: IDatabaseDocument) {
+    return this.client.redirectToDownloadDocument(document);
   }
 
   public deleteDocument(path: string): Observable<any> {
@@ -69,8 +71,8 @@ export class DatastoreService {
       .pipe(tap(undefined, err => this.toasts.httpError(err)));
   }
 
-  public fetchDocuments(paths: string[]): Observable<IDatabaseDocument[]> {
-    return this.client.fetchDocuments(paths)
+  public getDatabaseDocuments(paths: string[]): Observable<IDatabaseDocument[]> {
+    return this.client.getDatabaseDocuments(paths)
       .pipe(tap(undefined, err => this.toasts.genericError()));
   }
 
@@ -87,5 +89,18 @@ export class DatastoreService {
     if (invalidFiles.length > 0) {
       return throwError(new Error('Les fichiers suivants sont trop volumineux: ' + _.join(invalidFiles, ', ')));
     }
+  }
+
+  public loadDocumentAsLayer(document: IDatabaseDocument): Observable<any> {
+    const cachePath = DocumentHelper.geojsonCachePath(document.path);
+    return this.client.getDocumentContent(cachePath)
+      .pipe(
+        tap(collection => {
+          this.store.dispatch(new DataImportedAsLayer({
+            name: document.path,
+            collection
+          }));
+        }, err => this.toasts.genericError())
+      );
   }
 }

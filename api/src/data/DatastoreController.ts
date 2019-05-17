@@ -28,8 +28,9 @@ export class DatastoreController extends AbstractController {
         router.post(ApiRoutes.DOCUMENTS_UPLOAD.path, authenticated(), upload(), asyncHandler(this.uploadDocuments));
         router.delete(ApiRoutes.DOCUMENTS_PATH.path, authenticated(), asyncHandler(this.deleteDocument));
         router.get(ApiRoutes.DOCUMENTS.path, asyncHandler(this.listDocuments));
-        router.post(ApiRoutes.DOCUMENTS.path, asyncHandler(this.fetchDocuments));
-        router.get(ApiRoutes.DOCUMENTS_PATH.path, asyncHandler(this.downloadDocument));
+        router.post(ApiRoutes.DOCUMENTS.path, asyncHandler(this.getDatabaseDocuments));
+        router.get(ApiRoutes.DOCUMENTS_DOWNLOAD_PATH.path, asyncHandler(this.downloadDocument));
+        router.get(ApiRoutes.DOCUMENTS_PATH.path, asyncHandler(this.getDocument));
         // tslint:enable:max-line-length
         return router;
     }
@@ -48,6 +49,14 @@ export class DatastoreController extends AbstractController {
         res.setHeader('Content-Type', fileMetadata.mimeType);
         res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
 
+        fileStream.pipe(res);
+    }
+
+    private getDocument = async (req: express.Request, res: express.Response): Promise<any> => {
+        const docPath: string = this.decodePath(req.params.path);
+        const fileStream = await this.datastore.downloadDocument(docPath);
+
+        res.setHeader('Content-Type', 'application/json');
         fileStream.pipe(res);
     }
 
@@ -75,7 +84,8 @@ export class DatastoreController extends AbstractController {
         return this.datastore.listDocuments();
     }
 
-    private fetchDocuments = async (req: express.Request, res: express.Response): Promise<IDatabaseDocument[]> => {
+    private getDatabaseDocuments = async (req: express.Request,
+                                          res: express.Response): Promise<IDatabaseDocument[]> => {
         const docRequest: IFetchDocumentsRequest = req.body;
         return this.datastore.findDocumentsByPath(docRequest.paths);
     }
