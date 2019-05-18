@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {DatastoreService} from '../../lib/datastore/datastore.service';
-import {DocumentHelper, IDatabaseDocument} from 'abcmap-shared';
+import {DocumentHelper, IDocument} from 'abcmap-shared';
 import {IMainState} from '../../store';
 import {Store} from '@ngrx/store';
 import {of, Subscription} from 'rxjs';
@@ -24,8 +24,8 @@ interface ISearchForm {
 export class DataStoreComponent implements OnInit, OnDestroy {
 
   searchForm?: FormGroup;
-  documents: IDatabaseDocument[] = [];
-  lastUploadedDocuments: IDatabaseDocument[] = [];
+  documents: IDocument[] = [];
+  lastUploadedDocuments: IDocument[] = [];
   map?: OlMap;
 
   private uploads$?: Subscription;
@@ -71,7 +71,7 @@ export class DataStoreComponent implements OnInit, OnDestroy {
       });
   }
 
-  public onDeleteDocument($event: IDatabaseDocument) {
+  public onDeleteDocument($event: IDocument) {
     this.datastore.deleteDocument($event.path)
       .subscribe(res => {
         this.toast.info('Documents supprimés !');
@@ -80,15 +80,15 @@ export class DataStoreComponent implements OnInit, OnDestroy {
       });
   }
 
-  public onAddDocumentToMap(document: IDatabaseDocument) {
+  public onAddDocumentToMap(document: IDocument) {
     this.datastore.addDocumentToProject(document).subscribe();
   }
 
-  public onDownloadDocument(document: IDatabaseDocument) {
+  public onDownloadDocument(document: IDocument) {
     this.datastore.userDownloadDocument(document);
   }
 
-  public onPreviewDocument(document: IDatabaseDocument) {
+  public onPreviewDocument(document: IDocument) {
     const cachePath = DocumentHelper.geojsonCachePath(document.path);
     this.datastore.getFullDocument(cachePath)
       .subscribe(document => {

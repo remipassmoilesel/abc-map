@@ -1,6 +1,6 @@
 import {HttpClient, HttpEvent, HttpRequest} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {DocumentHelper, ApiRoutes, IDatabaseDocument, IFetchDocumentsRequest, ISearchDocumentsRequest, IUploadResponse} from 'abcmap-shared';
+import {DocumentHelper, ApiRoutes, IDocument, IFetchDocumentsRequest, ISearchDocumentsRequest, IUploadResponse} from 'abcmap-shared';
 import {Observable} from 'rxjs';
 import {} from 'abcmap-shared';
 import {FeatureCollection} from 'geojson';
@@ -20,21 +20,21 @@ export class DatastoreClient {
     return this.client.request(req);
   }
 
-  public listDocuments(): Observable<IDatabaseDocument[]> {
+  public listDocuments(): Observable<IDocument[]> {
     const url = ApiRoutes.DOCUMENTS.toString();
-    return this.client.get<IDatabaseDocument[]>(url);
+    return this.client.get<IDocument[]>(url);
   }
 
-  public search(query: string): Observable<IDatabaseDocument[]> {
+  public search(query: string): Observable<IDocument[]> {
     const url = ApiRoutes.DOCUMENTS_SEARCH.toString();
     const request: ISearchDocumentsRequest = {query};
-    return this.client.post<IDatabaseDocument[]>(url, request);
+    return this.client.post<IDocument[]>(url, request);
   }
 
-  public getDatabaseDocuments(documentPaths: string[]): Observable<IDatabaseDocument[]> {
+  public getDatabaseDocuments(documentPaths: string[]): Observable<IDocument[]> {
     const url = ApiRoutes.DOCUMENTS.toString();
     const request: IFetchDocumentsRequest = {paths: documentPaths};
-    return this.client.post<IDatabaseDocument[]>(url, request);
+    return this.client.post<IDocument[]>(url, request);
   }
 
   public getDocumentContent(path: string): Observable<FeatureCollection> {
@@ -42,7 +42,7 @@ export class DatastoreClient {
     return this.client.get<FeatureCollection>(url);
   }
 
-  public redirectToDownloadDocument(document: IDatabaseDocument): void {
+  public redirectToDownloadDocument(document: IDocument): void {
     window.location.href = DocumentHelper.downloadLink(document);
   }
 

@@ -1,5 +1,5 @@
 
-export interface IDatabaseDocument {
+export interface IDocument {
     path: string;
     size: number;
     description: string;

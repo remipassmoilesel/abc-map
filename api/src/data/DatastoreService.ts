@@ -2,7 +2,7 @@ import {AbstractService} from '../lib/AbstractService';
 import {IPostConstruct} from '../lib/IPostConstruct';
 import {IApiConfig} from '../IApiConfig';
 import * as Minio from 'minio';
-import {IDatabaseDocument, DocumentHelper} from 'abcmap-shared';
+import {IDocument, DocumentHelper} from 'abcmap-shared';
 import {DataFormatHelper} from './transform/dataformat/DataFormatHelper';
 import {Logger} from 'loglevel';
 import {DocumentDao} from './DocumentDao';
@@ -29,7 +29,7 @@ export class DatastoreService extends AbstractService implements IPostConstruct 
         return new Minio.Client(this.config.minio);
     }
 
-    public async storeDocument(username: string, path: string, content: Buffer): Promise<IDatabaseDocument> {
+    public async storeDocument(username: string, path: string, content: Buffer): Promise<IDocument> {
         const formatIsAllowed = await DataFormatHelper.isDataFormatAllowed(content, path);
         const mimeType = await DataFormatHelper.getMimeType(content);
         if (!formatIsAllowed) {
@@ -39,7 +39,7 @@ export class DatastoreService extends AbstractService implements IPostConstruct 
         const prefixedPath = this.prefixWithUsername(username, path);
         await this.minio.putObject(this.getUsersBucketName(), prefixedPath, content, content.length);
 
-        const document: IDatabaseDocument = {
+        const document: IDocument = {
             path: prefixedPath,
             size: content.byteLength,
             description: '',
@@ -51,7 +51,7 @@ export class DatastoreService extends AbstractService implements IPostConstruct 
         return document;
     }
 
-    public getDocument(docPath: string): Promise<IDatabaseDocument> {
+    public getDocument(docPath: string): Promise<IDocument> {
         return this.documentDao.findByPath(docPath);
     }
 
@@ -61,7 +61,7 @@ export class DatastoreService extends AbstractService implements IPostConstruct 
     }
 
     // TODO: paginate using a pagination request
-    public listDocuments(): Promise<IDatabaseDocument[]> {
+    public listDocuments(): Promise<IDocument[]> {
         return this.documentDao.list(0, 100);
     }
 
@@ -74,11 +74,11 @@ export class DatastoreService extends AbstractService implements IPostConstruct 
         return this.minio.getObject(this.getUsersBucketName(), path);
     }
 
-    public findDocumentsByPath(paths: string[]): Promise<IDatabaseDocument[]> {
+    public findDocumentsByPath(paths: string[]): Promise<IDocument[]> {
         return this.documentDao.findManyByPath(paths);
     }
 
-    public searchDocuments(query: any): Promise<IDatabaseDocument[]> {
+    public searchDocuments(query: any): Promise<IDocument[]> {
         return this.documentDao.search(query);
     }
 

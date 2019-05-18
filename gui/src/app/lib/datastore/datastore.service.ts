@@ -4,7 +4,7 @@ import {Observable, Observer, of, throwError} from 'rxjs';
 import {Store} from '@ngrx/store';
 import {IMainState} from '../../store';
 import {mergeMap, take, tap} from 'rxjs/operators';
-import {DocumentConstants, DocumentHelper, IDatabaseDocument, IUploadResponse} from 'abcmap-shared';
+import {DocumentConstants, DocumentHelper, IDocument, IUploadResponse} from 'abcmap-shared';
 import {GuiModule} from '../../store/gui/gui-actions';
 import {ToastService} from '../notifications/toast.service';
 import * as _ from 'lodash';
@@ -23,7 +23,7 @@ export class DatastoreService {
               private store: Store<IMainState>) {
   }
 
-  public listDocuments(): Observable<IDatabaseDocument[]> {
+  public listDocuments(): Observable<IDocument[]> {
     return this.store.select(state => state.user.username)
       .pipe(
         take(1),
@@ -62,7 +62,7 @@ export class DatastoreService {
       .pipe(tap((res: IUploadResponse) => this.store.dispatch(new DocumentsUploaded({documents: res}))));
   }
 
-  public userDownloadDocument(document: IDatabaseDocument) {
+  public userDownloadDocument(document: IDocument) {
     return this.client.redirectToDownloadDocument(document);
   }
 
@@ -71,7 +71,7 @@ export class DatastoreService {
       .pipe(tap(undefined, err => this.toasts.httpError(err)));
   }
 
-  public getDatabaseDocuments(paths: string[]): Observable<IDatabaseDocument[]> {
+  public getDatabaseDocuments(paths: string[]): Observable<IDocument[]> {
     return this.client.getDatabaseDocuments(paths)
       .pipe(tap(undefined, err => this.toasts.genericError()));
   }
@@ -91,11 +91,11 @@ export class DatastoreService {
     }
   }
 
-  public getFullDocument(cachePath: string): Observable<IDatabaseDocument> {
+  public getFullDocument(cachePath: string): Observable<IDocument> {
     return of({} as any);
   }
 
-  public addDocumentToProject(document: IDatabaseDocument): Observable<any> {
+  public addDocumentToProject(document: IDocument): Observable<any> {
     const cachePath = DocumentHelper.geojsonCachePath(document.path);
     return this.client.getDocumentContent(cachePath)
       .pipe(
