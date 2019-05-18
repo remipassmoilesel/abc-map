@@ -51,8 +51,9 @@ export class ApiServer {
     }
 
     private setupBodyParser(app: express.Application): void {
-        app.use(bodyParser.urlencoded({extended: false}));
-        app.use(bodyParser.json());
+        app.use(bodyParser.urlencoded({extended: false, limit: '30mb'}));
+        app.use(bodyParser.json({limit: '30mb'}));
+
     }
 
     private setupWebsockets(app: express.Application): void {
