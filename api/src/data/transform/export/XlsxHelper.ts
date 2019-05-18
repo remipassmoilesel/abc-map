@@ -1,6 +1,5 @@
 import * as _ from 'lodash';
-import {FeatureHelper} from '../FeatureUtils';
-import {IAbcGeojsonFeature} from 'abcmap-shared';
+import {FeatureHelper, IAbcGeojsonFeature} from 'abcmap-shared';
 
 export class XlsxHelper {
 

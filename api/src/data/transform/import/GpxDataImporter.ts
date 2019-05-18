@@ -4,8 +4,7 @@ import {IAbcGeojsonFeatureCollection} from 'abcmap-shared';
 import {DataFormats, IDataFormat} from '../dataformat/DataFormat';
 import * as loglevel from 'loglevel';
 import {Logger} from 'loglevel';
-import * as _ from 'lodash';
-import {FeatureHelper} from '../FeatureUtils';
+import {FeatureCollection} from 'geojson';
 import uuid = require('uuid');
 
 // tslint:disable:no-var-requires
@@ -21,18 +20,18 @@ export class GpxDataImporter extends AbstractDataImporter {
 
     public async toCollection(source: Buffer): Promise<IAbcGeojsonFeatureCollection> {
 
-        const featureColl = await ogr2ogr(this.bufferToStream(source), 'GPX')
+        const featureColl: FeatureCollection = await ogr2ogr(this.bufferToStream(source), 'GPX')
             .format('GeoJSON')
             .skipfailures()
             .onStderr((data: any) => this.logger.error(data))
             .promise();
 
+
         return {
             id: uuid.v4(),
             type: featureColl.type,
-            features: _.map(featureColl.features, (feature) => FeatureHelper.toAbcFeature(feature)),
+            features: this.featuresToAbcFeatures(featureColl.features),
         };
-
     }
 
 }
