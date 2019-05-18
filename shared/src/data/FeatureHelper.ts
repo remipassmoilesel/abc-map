@@ -5,6 +5,8 @@ import {DEFAULT_STYLE, IAbcGeojsonFeature} from './AbcGeoJSON';
 
 export class FeatureHelper {
 
+    public static readonly ABCMAP_PROP = 'abcmap';
+
     public static toAbcFeature(feature: Feature<any, any>): IAbcGeojsonFeature {
         const newFeature = _.cloneDeep(feature);
         this.ensureAbcmapPropertiesExists(newFeature);
@@ -13,10 +15,10 @@ export class FeatureHelper {
 
     public static ensureAbcmapPropertiesExists(feature: any): void {
         if (!feature.properties) {
-            feature.properties = {abcmap: {style: DEFAULT_STYLE}};
+            feature.properties = {};
         }
-        if (!feature.properties.abcmap) {
-            feature.properties.abcmap = {style: DEFAULT_STYLE};
+        if (!feature.properties[this.ABCMAP_PROP]) {
+            feature.properties[this.ABCMAP_PROP] = {style: DEFAULT_STYLE};
         }
     }
 

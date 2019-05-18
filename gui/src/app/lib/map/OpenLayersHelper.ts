@@ -1,10 +1,18 @@
 import {DrawingTool, DrawingTools} from './DrawingTool';
 import {geom} from 'openlayers';
-import {OlBase, OlMap, OlObject, OlObjectReadOnly, OlTileLoadFunctionType, OlVector, OlVectorSource} from '../OpenLayersImports';
+import {
+  OlBase,
+  OlMap,
+  OlObject,
+  OlObjectReadOnly,
+  OlTileLoadFunctionType,
+  OlVector,
+  OlVectorSource
+} from '../OpenLayersImports';
 import * as _ from 'lodash';
 import Vector from 'ol/layer/Vector';
+import {FeatureHelper, IAbcFeatureProperties, IAbcStyleContainer} from 'abcmap-shared';
 import GeometryType = geom.GeometryType;
-import {IAbcStyleContainer} from 'abcmap-shared';
 
 export class OpenLayersHelper {
 
@@ -33,11 +41,12 @@ export class OpenLayersHelper {
   }
 
   public static setStyle(feature: OlObject, style: IAbcStyleContainer): void {
-    feature.set(this.styleId, style);
+    feature.set(FeatureHelper.ABCMAP_PROP, {style});
   }
 
   public static getStyle(feature: OlObjectReadOnly): IAbcStyleContainer | undefined {
-    return feature.get(this.styleId);
+    const properties = this.getAbcmapProperties(feature);
+    return properties ? properties.style : properties;
   }
 
   public static findVectorLayer(map: OlMap, layerId: string): Vector | undefined {
@@ -57,4 +66,7 @@ export class OpenLayersHelper {
     };
   }
 
+  public static getAbcmapProperties(feature: OlObjectReadOnly): IAbcFeatureProperties | undefined {
+    return feature.get(FeatureHelper.ABCMAP_PROP);
+  }
 }

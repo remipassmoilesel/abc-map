@@ -1,5 +1,5 @@
 import {IMapLayer, IPredefinedLayer, IVectorLayer, IWmsLayer, MapLayerType, PredefinedLayerPreset} from 'abcmap-shared';
-import {OlLayer, OlOSM, OlTileLayer, OlTileWMS, OlVectorLayer, OlVectorSource} from '../OpenLayersImports';
+import {OlGeoJSON, OlLayer, OlOSM, OlTileLayer, OlTileWMS, OlVectorLayer, OlVectorSource} from '../OpenLayersImports';
 import GeoJSON from 'ol/format/GeoJSON';
 import {abcStyleRendering} from './abcStyleRendering';
 import {OpenLayersHelper} from './OpenLayersHelper';
@@ -50,7 +50,11 @@ export class OpenLayersLayerFactory {
   }
 
   private static toVectorLayer(abcLayer: IVectorLayer): OlVectorLayer {
-    const source = new OlVectorSource({wrapX: false});
+    const source = new OlVectorSource({
+      wrapX: false,
+      format: new OlGeoJSON()
+    });
+
     if (abcLayer.featureCollection && abcLayer.featureCollection.type) {
       source.addFeatures(this.geoJson.readFeatures(abcLayer.featureCollection));
     }
