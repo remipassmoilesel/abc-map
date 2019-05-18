@@ -1,10 +1,9 @@
 import {AbstractDataImporter} from './AbstractDataImporter';
-import {IAbcGeojsonFeatureCollection} from '../../AbcGeojson';
+import {IAbcGeojsonFeatureCollection} from 'abcmap-shared';
 import {FeatureHelper} from '../FeatureUtils';
 import {DataFormats, IDataFormat} from '../dataformat/DataFormat';
 import * as _ from 'lodash';
 import {Logger} from 'loglevel';
-import {Readable} from 'stream';
 import uuid = require('uuid');
 import loglevel = require('loglevel');
 

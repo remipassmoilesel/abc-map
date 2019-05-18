@@ -1,5 +1,5 @@
 import {AbstractDataImporter} from './AbstractDataImporter';
-import {IAbcGeojsonFeatureCollection} from '../../AbcGeojson';
+import {IAbcGeojsonFeatureCollection} from 'abcmap-shared';
 import {DataFormats, IDataFormat} from '../dataformat/DataFormat';
 import * as _ from 'lodash';
 import {FeatureHelper} from '../FeatureUtils';

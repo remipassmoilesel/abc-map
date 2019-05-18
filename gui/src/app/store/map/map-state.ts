@@ -1,5 +1,5 @@
 import {DrawingTool, DrawingTools} from '../../lib/map/DrawingTool';
-import {IAbcStyleContainer} from '../../lib/map/AbcStyles';
+import {IAbcStyleContainer} from '../../lib/map/abcStyleRendering';
 
 export interface IMapState {
   drawingTool: DrawingTool;

@@ -1,7 +1,7 @@
 import {IMapLayer, IPredefinedLayer, IVectorLayer, IWmsLayer, MapLayerType, PredefinedLayerPreset} from 'abcmap-shared';
 import {OlLayer, OlOSM, OlTileLayer, OlTileWMS, OlVectorLayer, OlVectorSource} from '../OpenLayersImports';
 import GeoJSON from 'ol/format/GeoJSON';
-import {abcStyleToOlStyle} from './AbcStyles';
+import {abcStyleRendering} from './abcStyleRendering';
 import {OpenLayersHelper} from './OpenLayersHelper';
 
 
@@ -59,7 +59,7 @@ export class OpenLayersLayerFactory {
 
     return new OlVectorLayer({
       source,
-      style: abcStyleToOlStyle
+      style: abcStyleRendering
     });
   }
 

@@ -1,6 +1,6 @@
 import {AbstractDataImporter} from './AbstractDataImporter';
 
-import {IAbcGeojsonFeatureCollection} from '../../AbcGeojson';
+import {IAbcGeojsonFeatureCollection} from 'abcmap-shared';
 import {DataFormats, IDataFormat} from '../dataformat/DataFormat';
 import * as loglevel from 'loglevel';
 import {Logger} from 'loglevel';

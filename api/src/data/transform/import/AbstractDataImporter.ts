@@ -1,4 +1,4 @@
-import {IAbcGeojsonFeatureCollection} from '../../AbcGeojson';
+import {IAbcGeojsonFeatureCollection} from 'abcmap-shared';
 import {IDataFormat} from '../dataformat/DataFormat';
 import {Readable} from 'stream';
 

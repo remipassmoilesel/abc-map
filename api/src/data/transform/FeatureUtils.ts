@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
-import {IAbcFeatureProperties, IAbcGeojsonFeature} from '../AbcGeojson';
 import {Feature} from 'geojson';
+import {DEFAULT_STYLE, IAbcFeatureProperties, IAbcGeojsonFeature} from 'abcmap-shared';
 import uuid = require('uuid');
 
 export class FeatureHelper {
@@ -23,16 +23,11 @@ export class FeatureHelper {
 
     public static ensureAbcmapPropertiesExists(feature: IAbcGeojsonFeature): void {
         if (!feature.properties) {
-            feature.properties = {abcmap: {style: {}}};
+            feature.properties = {abcmap: {style: DEFAULT_STYLE}};
         }
         if (!feature.properties.abcmap) {
-            feature.properties.abcmap = {style: {}};
+            feature.properties.abcmap = {style: DEFAULT_STYLE};
         }
-    }
-
-    public static setDefaultStyle(feature: IAbcGeojsonFeature) {
-        FeatureHelper.ensureAbcmapPropertiesExists(feature);
-        feature.properties.abcmap.style = {color: '#000000'};
     }
 
     public static asAbcmapProperties(data: any): IAbcFeatureProperties {

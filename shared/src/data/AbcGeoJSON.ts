@@ -2,12 +2,23 @@
 
 import * as gj from 'geojson';
 
-// TODO: merge with frontend style properties and remove anys
+export interface IAbcStyleContainer {
+    foreground: string;
+    background: string;
+    strokeWidth: number;
+}
+
+export const DEFAULT_STYLE = {
+    foreground: 'black',
+    background: '',
+    strokeWidth: 3,
+}
+
 export interface IAbcFeatureProperties {
     [k: string]: any;
 
     abcmap: {
-        style: any;
+        style: IAbcStyleContainer;
     };
 }
 

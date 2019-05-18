@@ -1,7 +1,7 @@
 import {DrawingTool, DrawingTools} from './DrawingTool';
 import {geom} from 'openlayers';
 import {OlBase, OlMap, OlObject, OlObjectReadOnly, OlTileLoadFunctionType, OlVector, OlVectorSource} from '../OpenLayersImports';
-import {IAbcStyleContainer} from './AbcStyles';
+import {IAbcStyleContainer} from './abcStyleRendering';
 import * as _ from 'lodash';
 import Vector from 'ol/layer/Vector';
 import GeometryType = geom.GeometryType;

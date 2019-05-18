@@ -9,7 +9,7 @@ import {OpenLayersHelper} from '../../lib/map/OpenLayersHelper';
 import {DrawingTool} from '../../lib/map/DrawingTool';
 import {Actions, ofType} from '@ngrx/effects';
 import {MapModule} from '../../store/map/map-actions';
-import {IAbcStyleContainer} from '../../lib/map/AbcStyles';
+import {IAbcStyleContainer} from '../../lib/map/abcStyleRendering';
 import * as _ from 'lodash';
 import {IMainState} from '../../store';
 import {Store} from '@ngrx/store';
