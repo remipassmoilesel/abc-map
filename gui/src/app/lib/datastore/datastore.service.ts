@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {DatastoreClient} from './DatastoreClient';
-import {Observable, Observer, throwError} from 'rxjs';
+import {Observable, Observer, of, throwError} from 'rxjs';
 import {Store} from '@ngrx/store';
 import {IMainState} from '../../store';
 import {mergeMap, take, tap} from 'rxjs/operators';
@@ -91,7 +91,11 @@ export class DatastoreService {
     }
   }
 
-  public loadDocumentAsLayer(document: IDatabaseDocument): Observable<any> {
+  public getFullDocument(cachePath: string): Observable<IDatabaseDocument> {
+    return of({} as any);
+  }
+
+  public addDocumentToProject(document: IDatabaseDocument): Observable<any> {
     const cachePath = DocumentHelper.geojsonCachePath(document.path);
     return this.client.getDocumentContent(cachePath)
       .pipe(

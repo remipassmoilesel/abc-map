@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {DatastoreService} from '../../lib/datastore/datastore.service';
-import {IDatabaseDocument, DocumentHelper} from 'abcmap-shared';
+import {DocumentHelper, IDatabaseDocument} from 'abcmap-shared';
 import {IMainState} from '../../store';
 import {Store} from '@ngrx/store';
 import {of, Subscription} from 'rxjs';
@@ -9,6 +9,8 @@ import {catchError, debounceTime, mergeMap} from 'rxjs/operators';
 import {RxUtils} from '../../lib/utils/RxUtils';
 import {ToastService} from '../../lib/notifications/toast.service';
 import * as _ from 'lodash';
+import {olFromLonLat, OlMap, OlView} from '../../lib/OpenLayersImports';
+import {OlLayerFactory} from '../../lib/map/OlLayerFactory';
 
 interface ISearchForm {
   query: string;
@@ -24,6 +26,7 @@ export class DataStoreComponent implements OnInit, OnDestroy {
   searchForm?: FormGroup;
   documents: IDatabaseDocument[] = [];
   lastUploadedDocuments: IDatabaseDocument[] = [];
+  map?: OlMap;
 
   private uploads$?: Subscription;
   private search$?: Subscription;
@@ -38,6 +41,7 @@ export class DataStoreComponent implements OnInit, OnDestroy {
     this.initSearchForm();
     this.listenUploads();
     this.loadDocumentList();
+    this.setupPreviewMap();
   }
 
   ngOnDestroy(): void {
@@ -77,11 +81,19 @@ export class DataStoreComponent implements OnInit, OnDestroy {
   }
 
   public onAddDocumentToMap(document: IDatabaseDocument) {
-    this.datastore.loadDocumentAsLayer(document).subscribe();
+    this.datastore.addDocumentToProject(document).subscribe();
   }
 
   public onDownloadDocument(document: IDatabaseDocument) {
     this.datastore.userDownloadDocument(document);
+  }
+
+  public onPreviewDocument(document: IDatabaseDocument) {
+    const cachePath = DocumentHelper.geojsonCachePath(document.path);
+    this.datastore.getFullDocument(cachePath)
+      .subscribe(document => {
+
+      });
   }
 
   private listenUploads(): void {
@@ -104,5 +116,17 @@ export class DataStoreComponent implements OnInit, OnDestroy {
   private loadDocumentList() {
     this.datastore.listDocuments()
       .subscribe(documents => this.documents = DocumentHelper.filterCache(documents));
+  }
+
+  private setupPreviewMap() {
+    this.map = new OlMap({
+        target: 'preview-map',
+        layers: [OlLayerFactory.newOsmLayer()],
+        view: new OlView({
+          center: olFromLonLat([37.41, 8.82]),
+          zoom: 4,
+        }),
+      }
+    );
   }
 }

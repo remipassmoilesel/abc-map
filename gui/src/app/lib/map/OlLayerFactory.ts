@@ -5,7 +5,7 @@ import {abcStyleRendering} from './abcStyleRendering';
 import {OpenLayersHelper} from './OpenLayersHelper';
 
 
-export class OpenLayersLayerFactory {
+export class OlLayerFactory {
 
   private static geoJson = new GeoJSON();
 
@@ -27,6 +27,12 @@ export class OpenLayersLayerFactory {
 
     OpenLayersHelper.setLayerId(olLayer, abcLayer.id);
     return olLayer;
+  }
+
+  public static newOsmLayer(): OlTileLayer {
+    return new OlTileLayer({
+      source: new OlOSM()
+    });
   }
 
   private static toPredefinedLayer(abcLayer: IPredefinedLayer): OlTileLayer {

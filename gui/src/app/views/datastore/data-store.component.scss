@@ -1,18 +1,39 @@
 
 .abc-store-view {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  overflow: auto;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: stretch;
+  overflow: hidden;
 
   .abc-search-form {
-    width: 500px;
+    padding: 10px;
   }
 
-  .abc-documents-list {
-    flex-grow: 70;
-    min-width: 500px;
-    margin-top: 30px;
-    max-height: 400px;
+  .search-panel {
+    display: flex;
+    flex-direction: column;
+    width: 500px;
+
+    .abc-result-list {
+      flex-grow: 1;
+      margin-top: 30px;
+      padding: 10px;
+
+      max-height: 100%;
+      overflow: auto;
+    }
+
   }
+
+  .abc-document-preview {
+    flex-grow: 1;
+    border-left: solid 1px silver;
+
+    .abc-map-preview {
+
+    }
+
+  }
+
 }

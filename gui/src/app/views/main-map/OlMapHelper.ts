@@ -4,7 +4,7 @@ import {DrawingTool, DrawingTools} from '../../lib/map/DrawingTool';
 import {OpenLayersHelper} from '../../lib/map/OpenLayersHelper';
 import {FeatureCollection} from 'geojson';
 import {IProject} from 'abcmap-shared';
-import {OpenLayersLayerFactory} from '../../lib/map/OpenLayersLayerFactory';
+import {OlLayerFactory} from '../../lib/map/OlLayerFactory';
 
 export class OlMapHelper {
 
@@ -17,7 +17,7 @@ export class OlMapHelper {
     _.forEach(project.layers, (abcLayer, index) => {
 
       if (currentLayers.length <= index) {
-        const newOlLayer = OpenLayersLayerFactory.toOlLayer(abcLayer);
+        const newOlLayer = OlLayerFactory.toOlLayer(abcLayer);
         currentLayers.push(newOlLayer);
         return true;
       }
@@ -29,7 +29,7 @@ export class OlMapHelper {
       }
 
       if (layerId !== abcLayer.id) {
-        currentLayers[index] = OpenLayersLayerFactory.toOlLayer(abcLayer);
+        currentLayers[index] = OlLayerFactory.toOlLayer(abcLayer);
         return true;
       }
 

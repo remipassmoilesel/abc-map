@@ -24,6 +24,9 @@ export class DocumentListItemComponent implements OnInit {
   delete = new EventEmitter<IDatabaseDocument>();
 
   @Output()
+  preview = new EventEmitter<IDatabaseDocument>();
+
+  @Output()
   download = new EventEmitter<IDatabaseDocument>();
 
   constructor() {
@@ -42,5 +45,9 @@ export class DocumentListItemComponent implements OnInit {
 
   onDownloadClick($event: MouseEvent) {
     this.download.emit(this.document);
+  }
+
+  onPreviewClick($event: MouseEvent) {
+    this.preview.emit(this.document);
   }
 }
