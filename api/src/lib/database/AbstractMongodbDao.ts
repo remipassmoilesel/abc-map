@@ -13,7 +13,7 @@ export abstract class AbstractMongodbDao<T> {
     protected _client?: MongoClient;
 
     constructor(private config: IApiConfig) {
-        this.databaseName = `abcmap-${config.environmentName}`;
+        this.databaseName = config.mongodb.databaseName;
     }
 
     public async postConstruct(): Promise<any> {
