@@ -41,6 +41,7 @@ export class DatastoreService extends AbstractService implements IPostConstruct 
         await this.minio.putObject(this.getUsersBucketName(), prefixedPath, content, content.length);
 
         const document: IDocument = {
+            owner: username,
             path: prefixedPath,
             size: content.byteLength,
             description: '',

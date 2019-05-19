@@ -16,7 +16,7 @@
           <abc-document-list-item [document]="item"
                                   (addToMap)="onAddDocumentToMap($event)"
                                   (delete)="onDeleteDocument($event)"
-                                  (preview)="onPreviewDocument($event)"
+                                  (preview)="setCurrentPreview($event)"
                                   (download)="onDownloadDocument($event)">
           </abc-document-list-item>
         </div>
@@ -28,32 +28,42 @@
           <abc-document-list-item [document]="item"
                                   (addToMap)="onAddDocumentToMap($event)"
                                   (delete)="onDeleteDocument($event)"
-                                  (preview)="onPreviewDocument($event)"
+                                  (preview)="setCurrentPreview($event)"
                                   (download)="onDownloadDocument($event)"></abc-document-list-item>
         </div>
       </div>
 
       <div *ngIf="!documents.length">
-        <h3>Vraiment rien ?</h3>
+        <h3>Pas de chance !</h3>
       </div>
 
     </div>
   </div>
 
-  <div class="abc-document-preview p-4">
+  <div class="abc-document-preview p-4" *ngIf="documentOnPreview">
 
-    <div *ngIf="documentOnPreview">
+    <h3>{{ documentOnPreview.path }}</h3>
 
-      <h3>{{ documentOnPreview.path }}</h3>
+    <div class="d-flex flex-column">
 
-      <div>Description: {{ documentOnPreview.description }}</div>
+      <div class="card m-3">
+        <div class="card-body">
+          <div>Propriétaire: {{ documentOnPreview.owner }}</div>
+          <div>Description: {{ documentOnPreview.description }}</div>
+          <div>Type: {{ documentOnPreview.mimeType }}</div>
+          <div>Taille: {{ filesize(documentOnPreview.size) }}</div>
+          <div>Dernière modification: {{ dhelper.documentDateToText(documentOnPreview.createdAt) }}</div>
+        </div>
+      </div>
 
-    </div>
-
-    <div id="preview-map" class="abc-preview-map flex-grow-1">
+      <div class="card m-3 flex-grow-1">
+        <div class="card-body">
+          <div id="abc-preview-map" class="abc-preview-map flex-grow-1">
+          </div>
+        </div>
+      </div>
 
     </div>
 
   </div>
-
 </div>

@@ -1,6 +1,7 @@
 import {Stream} from 'stream';
 
 export interface IDocument {
+    owner: string;
     path: string;
     size: number;
     description: string;

@@ -4,16 +4,21 @@
   flex-direction: row;
   align-items: stretch;
   justify-content: stretch;
-  overflow: hidden;
 
-  .abc-search-form {
-    padding: 10px;
-  }
+  overflow: hidden;
+  border-right: solid 1px silver;
 
   .search-panel {
     display: flex;
     flex-direction: column;
     width: 500px;
+
+    margin-top: 2vmin;
+    padding: 2vmin;
+
+    .abc-search-form {
+      padding: 10px;
+    }
 
     .abc-result-list {
       flex-grow: 1;
@@ -28,7 +33,13 @@
 
   .abc-document-preview {
     flex-grow: 1;
-    border-left: solid 1px silver;
+    max-width: 100vmin;
+    margin: auto;
+    margin-top: 2vmin;
+
+    #abc-preview-map {
+      max-height: 30vmin;
+    }
 
   }
 

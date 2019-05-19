@@ -1,5 +1,6 @@
 # TODO, or not TODO
 
+- Zipper les shapefile coté front ?
 - Datastore: carte de previsualisation. Voir: https://www.utagawavtt.com/search?city=&w=[-12.10693,39.85915,15.27100,52.68304]&q=[1,2,3,4]&k=0&l=all&u=1&aa=10
 - VM à démarrer avec curl
 - QR code de points vers différentes plateformes (osm, bing, etc ...)

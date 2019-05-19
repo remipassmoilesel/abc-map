@@ -12,6 +12,8 @@ import * as _ from 'lodash';
 import {olFromLonLat, OlMap, OlStroke, OlStyle, OlView} from '../../lib/OpenLayersImports';
 import {OlLayerFactory} from '../../lib/map/OlLayerFactory';
 import {FeatureCollection} from 'geojson';
+import {DatetimeHelper} from '../../lib/utils/DatetimeHelper';
+import * as filesize from 'filesize';
 
 interface ISearchForm {
   query: string;
@@ -28,6 +30,9 @@ export class DataStoreComponent implements OnInit, OnDestroy {
   documents: IDocument[] = [];
   lastUploadedDocuments: IDocument[] = [];
   map?: OlMap;
+
+  dhelper = DatetimeHelper;
+  filesize = filesize;
 
   private uploads$?: Subscription;
   private search$?: Subscription;
@@ -69,6 +74,9 @@ export class DataStoreComponent implements OnInit, OnDestroy {
       .subscribe((documents) => {
         this.lastUploadedDocuments = [];
         this.documents = DocumentHelper.filterCache(documents);
+        if (documents.length) {
+          this.setCurrentPreview(this.documents[0]);
+        }
       });
   }
 
@@ -89,7 +97,7 @@ export class DataStoreComponent implements OnInit, OnDestroy {
     this.datastore.userDownloadDocument(document);
   }
 
-  public onPreviewDocument(document: IDocument) {
+  public setCurrentPreview(document: IDocument) {
     this.datastore.getDocumentContentAsGeoJson(document)
       .subscribe(documentContent => {
         this.documentOnPreview = document;
@@ -116,7 +124,12 @@ export class DataStoreComponent implements OnInit, OnDestroy {
 
   private loadDocumentList() {
     this.datastore.listDocuments()
-      .subscribe(documents => this.documents = DocumentHelper.filterCache(documents));
+      .subscribe(documents => {
+        this.documents = DocumentHelper.filterCache(documents);
+        if (documents.length) {
+          this.setCurrentPreview(this.documents[0]);
+        }
+      });
   }
 
   private setupPreviewMap(document: IDocument, documentContent: FeatureCollection<any, any>) {
@@ -125,18 +138,19 @@ export class DataStoreComponent implements OnInit, OnDestroy {
       stroke: new OlStroke({color: 'red', width: 2})
     });
 
-    if (!this.map) {
-      this.map = new OlMap({
-          target: 'preview-map',
-          layers: [OlLayerFactory.newOsmLayer()],
-          view: new OlView({
-            center: olFromLonLat([37.41, 8.82]),
-            zoom: 4,
-            projection: 'EPSG:3857'
-          }),
-        }
-      );
+    if (this.map) {
+      this.map.setTarget(null as any);
     }
+    this.map = new OlMap({
+        target: 'abc-preview-map',
+        layers: [OlLayerFactory.newOsmLayer()],
+        view: new OlView({
+          center: olFromLonLat([37.41, 8.82]),
+          zoom: 4,
+          projection: 'EPSG:3857'
+        }),
+      }
+    );
 
     const previewLayer = OlLayerFactory.newVectorLayer(document.path, documentContent, previewMapStyle);
     this.map.addLayer(previewLayer);
