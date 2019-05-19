@@ -9,8 +9,9 @@ import {catchError, debounceTime, mergeMap} from 'rxjs/operators';
 import {RxUtils} from '../../lib/utils/RxUtils';
 import {ToastService} from '../../lib/notifications/toast.service';
 import * as _ from 'lodash';
-import {olFromLonLat, OlMap, OlView} from '../../lib/OpenLayersImports';
+import {olFromLonLat, OlMap, OlStroke, OlStyle, OlView} from '../../lib/OpenLayersImports';
 import {OlLayerFactory} from '../../lib/map/OlLayerFactory';
+import {FeatureCollection} from 'geojson';
 
 interface ISearchForm {
   query: string;
@@ -30,6 +31,7 @@ export class DataStoreComponent implements OnInit, OnDestroy {
 
   private uploads$?: Subscription;
   private search$?: Subscription;
+  private documentOnPreview?: IDocument;
 
   constructor(private formBuilder: FormBuilder,
               private toast: ToastService,
@@ -41,7 +43,6 @@ export class DataStoreComponent implements OnInit, OnDestroy {
     this.initSearchForm();
     this.listenUploads();
     this.loadDocumentList();
-    this.setupPreviewMap();
   }
 
   ngOnDestroy(): void {
@@ -81,7 +82,7 @@ export class DataStoreComponent implements OnInit, OnDestroy {
   }
 
   public onAddDocumentToMap(document: IDocument) {
-    this.datastore.addDocumentToProject(document).subscribe();
+    this.datastore.addGeojsonContentToProject(document).subscribe();
   }
 
   public onDownloadDocument(document: IDocument) {
@@ -89,10 +90,10 @@ export class DataStoreComponent implements OnInit, OnDestroy {
   }
 
   public onPreviewDocument(document: IDocument) {
-    const cachePath = DocumentHelper.geojsonCachePath(document.path);
-    this.datastore.getFullDocument(cachePath)
-      .subscribe(document => {
-
+    this.datastore.getDocumentContentAsGeoJson(document)
+      .subscribe(documentContent => {
+        this.documentOnPreview = document;
+        this.setupPreviewMap(document, documentContent);
       });
   }
 
@@ -104,7 +105,7 @@ export class DataStoreComponent implements OnInit, OnDestroy {
             return of([]);
           }
           const docPaths = _.map(uploads.documents, up => up.path);
-          return this.datastore.getDatabaseDocuments(docPaths);
+          return this.datastore.getDocuments(docPaths);
         })
       )
       .subscribe(documents => {
@@ -118,15 +119,30 @@ export class DataStoreComponent implements OnInit, OnDestroy {
       .subscribe(documents => this.documents = DocumentHelper.filterCache(documents));
   }
 
-  private setupPreviewMap() {
-    this.map = new OlMap({
-        target: 'preview-map',
-        layers: [OlLayerFactory.newOsmLayer()],
-        view: new OlView({
-          center: olFromLonLat([37.41, 8.82]),
-          zoom: 4,
-        }),
-      }
-    );
+  private setupPreviewMap(document: IDocument, documentContent: FeatureCollection<any, any>) {
+
+    const previewMapStyle = new OlStyle({
+      stroke: new OlStroke({color: 'red', width: 2})
+    });
+
+    if (!this.map) {
+      this.map = new OlMap({
+          target: 'preview-map',
+          layers: [OlLayerFactory.newOsmLayer()],
+          view: new OlView({
+            center: olFromLonLat([37.41, 8.82]),
+            zoom: 4,
+            projection: 'EPSG:3857'
+          }),
+        }
+      );
+    }
+
+    const previewLayer = OlLayerFactory.newVectorLayer(document.path, documentContent, previewMapStyle);
+    this.map.addLayer(previewLayer);
+
+    const extent = previewLayer.getSource().getExtent();
+    this.map.getView().fit(extent);
   }
+
 }

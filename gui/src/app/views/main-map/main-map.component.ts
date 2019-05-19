@@ -70,6 +70,7 @@ export class MainMapComponent implements OnInit, OnDestroy {
       view: new OlView({
         center: olFromLonLat([37.41, 8.82]),
         zoom: 4,
+        projection: 'EPSG:3857'
       }),
     });
   }

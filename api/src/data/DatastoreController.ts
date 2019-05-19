@@ -1,7 +1,14 @@
 import {asyncHandler} from '../lib/server/asyncExpressHandler';
 import {AbstractController} from '../lib/server/AbstractController';
-import {ApiRoutes, IDocument, IFetchDocumentsRequest, IResponse,
-    ISearchDocumentsRequest, IUploadResponse} from 'abcmap-shared';
+import {
+    ApiRoutes,
+    CacheTypes,
+    IDocument,
+    IFetchDocumentsRequest,
+    IResponse,
+    ISearchDocumentsRequest,
+    IUploadResponse,
+} from 'abcmap-shared';
 import {DatastoreService} from './DatastoreService';
 import {DataTransformationService} from './DataTransformationService';
 import {Logger} from 'loglevel';
@@ -24,13 +31,14 @@ export class DatastoreController extends AbstractController {
     public getRouter(): express.Router {
         // tslint:disable:max-line-length
         const router = express.Router();
+        router.get(ApiRoutes.DOCUMENTS.path, asyncHandler(this.listDocuments));
+        router.get(ApiRoutes.DOCUMENTS_DOWNLOAD_PATH.path, asyncHandler(this.downloadDocumentRaw));
+        router.get(ApiRoutes.DOCUMENTS_PATH.path, asyncHandler(this.getDocumentContentAsStream));
+        router.get(ApiRoutes.DOCUMENTS_GEOJSON_PATH.path, asyncHandler(this.getDocumentGeojsonContentAsStream));
+        router.post(ApiRoutes.DOCUMENTS.path, asyncHandler(this.getDocuments));
         router.post(ApiRoutes.DOCUMENTS_SEARCH.path, asyncHandler(this.searchDocuments));
         router.post(ApiRoutes.DOCUMENTS_UPLOAD.path, authenticated(), upload(), asyncHandler(this.uploadDocuments));
         router.delete(ApiRoutes.DOCUMENTS_PATH.path, authenticated(), asyncHandler(this.deleteDocument));
-        router.get(ApiRoutes.DOCUMENTS.path, asyncHandler(this.listDocuments));
-        router.post(ApiRoutes.DOCUMENTS.path, asyncHandler(this.getDatabaseDocuments));
-        router.get(ApiRoutes.DOCUMENTS_DOWNLOAD_PATH.path, asyncHandler(this.downloadDocument));
-        router.get(ApiRoutes.DOCUMENTS_PATH.path, asyncHandler(this.getDocument));
         // tslint:enable:max-line-length
         return router;
     }
@@ -40,24 +48,31 @@ export class DatastoreController extends AbstractController {
         return this.datastore.searchDocuments(searchRequest.query);
     }
 
-    private downloadDocument = async (req: express.Request, res: express.Response): Promise<any> => {
+    private downloadDocumentRaw = async (req: express.Request, res: express.Response): Promise<any> => {
         const docPath: string = this.decodePath(req.params.path);
-        const fileMetadata: IDocument = await this.datastore.getDocument(docPath);
-        const fileStream = await this.datastore.downloadDocument(docPath);
+        const downloadable = await this.datastore.downloadDocument(docPath);
         const fileName = path.basename(docPath);
 
-        res.setHeader('Content-Type', fileMetadata.mimeType);
+        res.setHeader('Content-Type', downloadable.mimeType);
         res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
 
-        fileStream.pipe(res);
+        downloadable.content.pipe(res);
     }
 
-    private getDocument = async (req: express.Request, res: express.Response): Promise<any> => {
+    private getDocumentContentAsStream = async (req: express.Request, res: express.Response): Promise<any> => {
         const docPath: string = this.decodePath(req.params.path);
-        const fileStream = await this.datastore.downloadDocument(docPath);
+        const downloadable = await this.datastore.downloadDocument(docPath);
 
-        res.setHeader('Content-Type', 'application/json');
-        fileStream.pipe(res);
+        res.setHeader('Content-Type', downloadable.mimeType);
+        downloadable.content.pipe(res);
+    }
+
+    private getDocumentGeojsonContentAsStream = async (req: express.Request, res: express.Response): Promise<any> => {
+        const docPath: string = this.decodePath(req.params.path);
+        const downloadable = await this.datastore.downloadDocument(docPath, CacheTypes.GEOJSON);
+
+        res.setHeader('Content-Type', downloadable.mimeType);
+        downloadable.content.pipe(res);
     }
 
     // TODO: emits uploaded response later on websocket or SSE
@@ -81,11 +96,12 @@ export class DatastoreController extends AbstractController {
     }
 
     private listDocuments = async (req: express.Request, res: express.Response): Promise<IDocument[]> => {
-        return this.datastore.listDocuments();
+        const start = req.query.start || 0;
+        const size = req.query.start || 100;
+        return this.datastore.listDocuments(start, size);
     }
 
-    private getDatabaseDocuments = async (req: express.Request,
-                                          res: express.Response): Promise<IDocument[]> => {
+    private getDocuments = async (req: express.Request, res: express.Response): Promise<IDocument[]> => {
         const docRequest: IFetchDocumentsRequest = req.body;
         return this.datastore.findDocumentsByPath(docRequest.paths);
     }

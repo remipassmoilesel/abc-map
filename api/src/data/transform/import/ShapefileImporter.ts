@@ -23,8 +23,8 @@ export class ShapefileImporter extends AbstractDataImporter {
             .format('GeoJSON')
             .skipfailures()
             .onStderr((data: any) => this.logger.error(data))
+            .options(['--config', 'CPL_DEBUG', 'ON', '-t_srs', 'EPSG:3857'])
             .promise();
-
 
         return {
             id: uuid.v4(),

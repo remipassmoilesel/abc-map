@@ -18,8 +18,4 @@ export class DocumentHelper {
     return ApiRoutes.DOCUMENTS_DOWNLOAD_PATH.withArgs({path: btoa(document.path)}).toString();
   }
 
-  public static geojsonCachePath(originalPath: string): string {
-    return originalPath + this.GEOJSON_CACHE_EXT;
-  }
-
 }

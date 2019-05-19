@@ -40,10 +40,20 @@
     </div>
   </div>
 
-  <div class="abc-document-preview">
+  <div class="abc-document-preview p-4">
+
+    <div *ngIf="documentOnPreview">
+
+      <h3>{{ documentOnPreview.path }}</h3>
+
+      <div>Description: {{ documentOnPreview.description }}</div>
+
+    </div>
+
     <div id="preview-map" class="abc-preview-map flex-grow-1">
 
     </div>
+
   </div>
 
 </div>

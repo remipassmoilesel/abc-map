@@ -3,11 +3,18 @@ import {OlGeoJSON, OlLayer, OlOSM, OlTileLayer, OlTileWMS, OlVectorLayer, OlVect
 import GeoJSON from 'ol/format/GeoJSON';
 import {abcStyleRendering} from './abcStyleRendering';
 import {OpenLayersHelper} from './OpenLayersHelper';
+import {FeatureCollection} from 'geojson';
 
 
 export class OlLayerFactory {
 
   private static geoJson = new GeoJSON();
+
+  public static newOsmLayer(): OlTileLayer {
+    return new OlTileLayer({
+      source: new OlOSM()
+    });
+  }
 
   public static toOlLayer(abcLayer: IMapLayer): OlLayer {
     let olLayer: OlLayer;
@@ -27,12 +34,6 @@ export class OlLayerFactory {
 
     OpenLayersHelper.setLayerId(olLayer, abcLayer.id);
     return olLayer;
-  }
-
-  public static newOsmLayer(): OlTileLayer {
-    return new OlTileLayer({
-      source: new OlOSM()
-    });
   }
 
   private static toPredefinedLayer(abcLayer: IPredefinedLayer): OlTileLayer {
@@ -56,20 +57,24 @@ export class OlLayerFactory {
   }
 
   private static toVectorLayer(abcLayer: IVectorLayer): OlVectorLayer {
+    return this.newVectorLayer(abcLayer.id, abcLayer.featureCollection, abcStyleRendering);
+  }
+
+  public static newVectorLayer(layerId: string, featureCollection: FeatureCollection, style: any) {
     const source = new OlVectorSource({
       wrapX: false,
       format: new OlGeoJSON()
     });
 
-    if (abcLayer.featureCollection && abcLayer.featureCollection.type) {
-      source.addFeatures(this.geoJson.readFeatures(abcLayer.featureCollection));
+    if (featureCollection && featureCollection.type) {
+      source.addFeatures(this.geoJson.readFeatures(featureCollection));
     }
 
-    OpenLayersHelper.setLayerId(source, abcLayer.id); // layer id is set here for sourceChangedListeners
+    OpenLayersHelper.setLayerId(source, layerId); // layer id is set here for sourceChangedListeners
 
     return new OlVectorLayer({
       source,
-      style: abcStyleRendering
+      style,
     });
   }
 

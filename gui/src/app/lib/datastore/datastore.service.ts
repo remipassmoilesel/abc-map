@@ -4,12 +4,13 @@ import {Observable, Observer, of, throwError} from 'rxjs';
 import {Store} from '@ngrx/store';
 import {IMainState} from '../../store';
 import {mergeMap, take, tap} from 'rxjs/operators';
-import {DocumentConstants, DocumentHelper, IDocument, IUploadResponse} from 'abcmap-shared';
+import {CacheHelper, DocumentConstants, IDocument, IUploadResponse} from 'abcmap-shared';
 import {GuiModule} from '../../store/gui/gui-actions';
 import {ToastService} from '../notifications/toast.service';
 import * as _ from 'lodash';
 import {HttpHeaderResponse, HttpResponse} from '@angular/common/http';
 import {ProjectModule} from '../../store/project/project-actions';
+import {FeatureCollection} from 'geojson';
 import DocumentsUploaded = GuiModule.DocumentsUploaded;
 import DataImportedAsLayer = ProjectModule.DataImportedAsLayer;
 
@@ -71,8 +72,19 @@ export class DatastoreService {
       .pipe(tap(undefined, err => this.toasts.httpError(err)));
   }
 
-  public getDatabaseDocuments(paths: string[]): Observable<IDocument[]> {
-    return this.client.getDatabaseDocuments(paths)
+  public getDocument(path: string) {
+    return this.client.getDocuments([path])
+      .pipe(mergeMap(documents => {
+          if (documents.length > 0) {
+            return of(documents[0]);
+          }
+          return throwError(new Error(`Not found: ${path}`));
+        })
+      );
+  }
+
+  public getDocuments(paths: string[]): Observable<IDocument[]> {
+    return this.client.getDocuments(paths)
       .pipe(tap(undefined, err => this.toasts.genericError()));
   }
 
@@ -91,13 +103,8 @@ export class DatastoreService {
     }
   }
 
-  public getFullDocument(cachePath: string): Observable<IDocument> {
-    return of({} as any);
-  }
-
-  public addDocumentToProject(document: IDocument): Observable<any> {
-    const cachePath = DocumentHelper.geojsonCachePath(document.path);
-    return this.client.getDocumentContent(cachePath)
+  public addGeojsonContentToProject(document: IDocument): Observable<any> {
+    return this.getDocumentContentAsGeoJson(document)
       .pipe(
         tap(collection => {
           this.store.dispatch(new DataImportedAsLayer({
@@ -106,5 +113,9 @@ export class DatastoreService {
           }));
         }, err => this.toasts.genericError())
       );
+  }
+
+  public getDocumentContentAsGeoJson(document: IDocument): Observable<FeatureCollection> {
+    return this.client.getDocumentContentAsGeojson(document.path);
   }
 }

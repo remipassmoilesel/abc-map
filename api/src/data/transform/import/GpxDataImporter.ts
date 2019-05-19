@@ -24,9 +24,8 @@ export class GpxDataImporter extends AbstractDataImporter {
             .format('GeoJSON')
             .skipfailures()
             .onStderr((data: any) => this.logger.error(data))
-            .options('-fieldTypeToString DateTime')
+            .options(['--config', 'CPL_DEBUG', 'ON', '-t_srs', 'EPSG:3857'])
             .promise();
-
 
         return {
             id: uuid.v4(),

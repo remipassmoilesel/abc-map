@@ -6,3 +6,4 @@ export * from './ISearchDocumentsRequest';
 export * from './DocumentHelper';
 export * from './AbcGeoJSON';
 export * from './FeatureHelper';
+export * from './CacheType';

@@ -1,8 +1,7 @@
 import {HttpClient, HttpEvent, HttpRequest} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {DocumentHelper, ApiRoutes, IDocument, IFetchDocumentsRequest, ISearchDocumentsRequest, IUploadResponse} from 'abcmap-shared';
-import {Observable} from 'rxjs';
-import {} from 'abcmap-shared';
+import {ApiRoutes, DocumentHelper, IDocument, IFetchDocumentsRequest, ISearchDocumentsRequest} from 'abcmap-shared';
+import {Observable, throwError} from 'rxjs';
 import {FeatureCollection} from 'geojson';
 
 @Injectable({
@@ -31,14 +30,14 @@ export class DatastoreClient {
     return this.client.post<IDocument[]>(url, request);
   }
 
-  public getDatabaseDocuments(documentPaths: string[]): Observable<IDocument[]> {
+  public getDocuments(documentPaths: string[]): Observable<IDocument[]> {
     const url = ApiRoutes.DOCUMENTS.toString();
     const request: IFetchDocumentsRequest = {paths: documentPaths};
     return this.client.post<IDocument[]>(url, request);
   }
 
-  public getDocumentContent(path: string): Observable<FeatureCollection> {
-    const url = ApiRoutes.DOCUMENTS_PATH.withArgs({path: this.encodeDocumentPath(path)}).toString();
+  public getDocumentContentAsGeojson(path: string): Observable<FeatureCollection> {
+    const url = ApiRoutes.DOCUMENTS_GEOJSON_PATH.withArgs({path: this.encodeDocumentPath(path)}).toString();
     return this.client.get<FeatureCollection>(url);
   }
 
