@@ -47,7 +47,7 @@ export class DataStoreComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.initSearchForm();
     this.listenUploads();
-    this.loadDocumentList();
+    this.loadDocumentList(true);
   }
 
   ngOnDestroy(): void {
@@ -84,7 +84,7 @@ export class DataStoreComponent implements OnInit, OnDestroy {
     this.datastore.deleteDocument($event.path)
       .subscribe(res => {
         this.toast.info('Documents supprimés !');
-        this.loadDocumentList();
+        this.loadDocumentList(true);
         this.lastUploadedDocuments = [];
       });
   }
@@ -98,9 +98,10 @@ export class DataStoreComponent implements OnInit, OnDestroy {
   }
 
   public setCurrentPreview(document: IDocument) {
+    this.documentOnPreview = document;
+    
     this.datastore.getDocumentContentAsGeoJson(document)
       .subscribe(documentContent => {
-        this.documentOnPreview = document;
         this.setupPreviewMap(document, documentContent);
       });
   }
@@ -116,17 +117,20 @@ export class DataStoreComponent implements OnInit, OnDestroy {
           return this.datastore.getDocuments(docPaths);
         })
       )
-      .subscribe(documents => {
-        this.lastUploadedDocuments = documents;
-        this.loadDocumentList();
+      .subscribe(lastUploads => {
+        this.lastUploadedDocuments = lastUploads;
+        this.loadDocumentList(false);
+        if (lastUploads.length) {
+          this.setCurrentPreview(lastUploads[0]);
+        }
       });
   }
 
-  private loadDocumentList() {
+  private loadDocumentList(updatePreview: boolean) {
     this.datastore.listDocuments()
       .subscribe(documents => {
         this.documents = DocumentHelper.filterCache(documents);
-        if (documents.length) {
+        if (updatePreview && this.documents.length) {
           this.setCurrentPreview(this.documents[0]);
         }
       });
