@@ -7,7 +7,7 @@ import {DataFormatHelper} from './transform/dataformat/DataFormatHelper';
 import {Logger} from 'loglevel';
 import {DocumentDao} from './DocumentDao';
 import * as _ from 'lodash';
-import {CacheHelper, CacheType} from 'abcmap-shared/dist/data/CahceType';
+import {CacheHelper, CacheType} from 'abcmap-shared/dist/data/CacheType';
 import loglevel = require('loglevel');
 
 export class DatastoreService extends AbstractService implements IPostConstruct {

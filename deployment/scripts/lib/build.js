@@ -1,8 +1,16 @@
 const {commandSync} = require("./utils");
 
 
+function install(path) {
+    commandSync("npm install", {cwd: path});
+}
+
+function installShared(path) {
+    commandSync("npm install ../shared", {cwd: path});
+}
+
 function buildModule(path) {
-    commandSync("npm install && npm run clean && npm run build", {cwd: path});
+    commandSync("npm run clean && npm run build", {cwd: path});
 }
 
 function lintModule(path) {
@@ -10,8 +18,15 @@ function lintModule(path) {
 }
 
 function build(args, config) {
+    install(config.paths.shared);
     buildModule(config.paths.shared);
+
+    installShared(config.paths.api);
+    install(config.paths.api);
     buildModule(config.paths.api);
+
+    installShared(config.paths.api);
+    install(config.paths.api);
     buildModule(config.paths.gui);
 }
 

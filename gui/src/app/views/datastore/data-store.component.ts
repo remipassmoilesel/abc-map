@@ -99,7 +99,7 @@ export class DataStoreComponent implements OnInit, OnDestroy {
 
   public setCurrentPreview(document: IDocument) {
     this.documentOnPreview = document;
-    
+
     this.datastore.getDocumentContentAsGeoJson(document)
       .subscribe(documentContent => {
         this.setupPreviewMap(document, documentContent);

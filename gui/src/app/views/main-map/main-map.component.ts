@@ -68,8 +68,8 @@ export class MainMapComponent implements OnInit, OnDestroy {
       target: 'abc-openlayers-map',
       layers: [],
       view: new OlView({
-        center: olFromLonLat([37.41, 8.82]),
-        zoom: 4,
+        center: olFromLonLat([43.608461, 3.879524]),
+        zoom: 3,
         projection: 'EPSG:3857'
       }),
     });
