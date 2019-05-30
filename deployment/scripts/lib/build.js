@@ -25,8 +25,8 @@ function build(args, config) {
     install(config.paths.api);
     buildModule(config.paths.api);
 
-    installShared(config.paths.api);
-    install(config.paths.api);
+    installShared(config.paths.gui);
+    install(config.paths.gui);
     buildModule(config.paths.gui);
 }
 
