@@ -5,7 +5,8 @@
 node_modules
 dist
 
-data/*
+data/minio
+data/mongodb
 
 *.log
 .vagrant
