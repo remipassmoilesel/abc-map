@@ -8,6 +8,10 @@ export interface IApiConfig {
     frontend: {
         rootPath: string;
     };
+    fileUpload: {
+        maxFilesPerUpload: number;
+        maxSizePerFile: number;
+    };
     mongodb: {
         host: string;
         port: number;
@@ -37,6 +41,10 @@ export class ApiConfigHelper {
             jwtSecret: env('ABC_JWT_SECRET', 'f5098e123bf45e762473e6761c990f5598c4c57241cd1bc099aa110a51dfb013b8e'),
             frontend: {
                 rootPath: path.resolve(__dirname, '..', 'gui-dist'),
+            },
+            fileUpload: {
+                maxFilesPerUpload: parseInt(env('ABC_MAX_FILES_PER_UPLOAD', 10), 10),
+                maxSizePerFile: parseInt(env('ABC_MAX_SIZE_PER_FILE', 1e+7), 10),
             },
             mongodb: {
                 host: env('ABC_MONGODB_HOST', 'localhost'),

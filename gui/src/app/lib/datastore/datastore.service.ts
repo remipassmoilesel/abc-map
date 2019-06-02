@@ -4,7 +4,7 @@ import {Observable, Observer, of, throwError} from 'rxjs';
 import {Store} from '@ngrx/store';
 import {IMainState} from '../../store';
 import {mergeMap, take, tap} from 'rxjs/operators';
-import {CacheHelper, DocumentConstants, IDocument, IUploadResponse} from 'abcmap-shared';
+import {CacheHelper, IDocument, IUploadResponse} from 'abcmap-shared';
 import {GuiModule} from '../../store/gui/gui-actions';
 import {ToastService} from '../notifications/toast.service';
 import * as _ from 'lodash';
@@ -13,6 +13,7 @@ import {ProjectModule} from '../../store/project/project-actions';
 import {FeatureCollection} from 'geojson';
 import DocumentsUploaded = GuiModule.DocumentsUploaded;
 import DataImportedAsLayer = ProjectModule.DataImportedAsLayer;
+import {DocumentConstants} from './DocumentConstants';
 
 @Injectable({
   providedIn: 'root'

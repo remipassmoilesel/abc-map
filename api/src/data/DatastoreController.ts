@@ -17,12 +17,14 @@ import * as path from 'path';
 import {HttpError} from '../lib/server/HttpError';
 import express = require('express');
 import loglevel = require('loglevel');
+import {IApiConfig} from '../IApiConfig';
 
 export class DatastoreController extends AbstractController {
 
     protected logger: Logger = loglevel.getLogger('ProjectDao');
 
-    constructor(private datastore: DatastoreService) {
+    constructor(private datastore: DatastoreService,
+                private config: IApiConfig) {
         super();
     }
 
@@ -35,7 +37,7 @@ export class DatastoreController extends AbstractController {
         router.get(ApiRoutes.DOCUMENTS_GEOJSON_PATH.path, asyncHandler(this.getDocumentGeojsonContentAsStream));
         router.post(ApiRoutes.DOCUMENTS.path, asyncHandler(this.getDocuments));
         router.post(ApiRoutes.DOCUMENTS_SEARCH.path, asyncHandler(this.searchDocuments));
-        router.post(ApiRoutes.DOCUMENTS_UPLOAD.path, authenticated(), upload(), asyncHandler(this.uploadDocuments));
+        router.post(ApiRoutes.DOCUMENTS_UPLOAD.path, authenticated(), upload(this.config), asyncHandler(this.uploadDocuments));
         router.delete(ApiRoutes.DOCUMENTS_PATH.path, authenticated(), asyncHandler(this.deleteDocument));
         // tslint:enable:max-line-length
         return router;

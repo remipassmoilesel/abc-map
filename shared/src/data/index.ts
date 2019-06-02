@@ -1,4 +1,3 @@
-export * from './DocumentConstants';
 export * from './IDocument';
 export * from './IUploadResponse';
 export * from './IFetchDocumentsRequest';

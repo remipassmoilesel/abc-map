@@ -1,15 +1,17 @@
-import {DocumentConstants} from 'abcmap-shared';
 import multer = require('multer');
+import {IApiConfig} from '../IApiConfig';
 
-const storage = multer.memoryStorage();
-const uploader = multer({
-    storage,
-    limits: {
-        files: DocumentConstants.MAX_FILES_PER_UPLOAD,
-        fileSize: DocumentConstants.MAX_SIZE_PER_FILE,
-    },
-});
+export function upload(config: IApiConfig) {
 
-export function upload() {
-    return uploader.array('file', DocumentConstants.MAX_FILES_PER_UPLOAD);
+    const storage = multer.memoryStorage();
+    const uploader = multer({
+        storage,
+        limits: {
+            files: config.fileUpload.maxFilesPerUpload,
+            fileSize: config.fileUpload.maxSizePerFile,
+        },
+    });
+
+    return uploader.array('file', config.fileUpload.maxFilesPerUpload);
+
 }

@@ -1,4 +1,6 @@
 
+// TODO: use variables from backend
+
 export class DocumentConstants {
 
     public static readonly MAX_FILES_PER_UPLOAD = 10;
