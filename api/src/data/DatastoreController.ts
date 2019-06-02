@@ -23,8 +23,7 @@ export class DatastoreController extends AbstractController {
 
     protected logger: Logger = loglevel.getLogger('ProjectDao');
 
-    constructor(private datastore: DatastoreService,
-                private dataTransformation: DataTransformationService) {
+    constructor(private datastore: DatastoreService) {
         super();
     }
 
@@ -80,19 +79,26 @@ export class DatastoreController extends AbstractController {
         const username: string = AuthenticationHelper.tokenFromRequest(req).username;
         const files: Express.Multer.File[] = req.files as Express.Multer.File[];
 
-        const documents: IDocument[] = [];
+        const documents: Array<Promise<IDocument>> = [];
+        const caches: Array<Promise<any>> = [];
 
         for (const file of files) {
             const docPath = 'uploads/' + file.originalname;
-            const document = await this.datastore.storeDocument(username, docPath, file.buffer);
-            documents.push(document);
+            documents.push(
+                this.datastore.storeDocument(username, docPath, file.buffer),
+            );
 
-            this.cacheDocumentAsGeojson(document, file.buffer)
-                .catch(err => this.logger.error(`Error while caching file. document=${document.path}`, err));
+            caches.push(
+                this.datastore.cacheDocumentAsGeojson(username, docPath, file.buffer)
+                    .catch(err => this.logger.error(`Error while caching file. document=${docPath}`, err)),
+            );
         }
 
         // return {message: 'Uploaded', path: document.path};
-        return {message: 'Uploaded', documents};
+        return Promise.all(documents)
+            .then((docs: IDocument[]) => {
+                return {message: 'Uploaded', documents: docs};
+            });
     }
 
     private listDocuments = async (req: express.Request, res: express.Response): Promise<IDocument[]> => {
@@ -122,8 +128,4 @@ export class DatastoreController extends AbstractController {
         return Buffer.from(documentPath, 'base64').toString();
     }
 
-    private cacheDocumentAsGeojson(document: IDocument, buffer: Buffer) {
-        return this.dataTransformation.toGeojson(buffer, document.path)
-            .then(cache => this.datastore.storeCache(document.path, Buffer.from(JSON.stringify(cache))));
-    }
 }

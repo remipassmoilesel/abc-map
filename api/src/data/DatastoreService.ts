@@ -8,6 +8,7 @@ import {Logger} from 'loglevel';
 import {DocumentDao} from './DocumentDao';
 import * as _ from 'lodash';
 import {CacheHelper, CacheType} from 'abcmap-shared/dist/data/CacheType';
+import {DataTransformationService} from './DataTransformationService';
 import loglevel = require('loglevel');
 
 export class DatastoreService extends AbstractService implements IPostConstruct {
@@ -16,7 +17,8 @@ export class DatastoreService extends AbstractService implements IPostConstruct 
     private minio!: Minio.Client;
 
     constructor(private config: IApiConfig,
-                private documentDao: DocumentDao) {
+                private documentDao: DocumentDao,
+                private dataTransformation: DataTransformationService) {
         super();
     }
 
@@ -57,8 +59,10 @@ export class DatastoreService extends AbstractService implements IPostConstruct 
         return this.documentDao.findByPath(docPath);
     }
 
-    public async storeCache(originalPath: string, content: Buffer): Promise<any> {
-        const path = CacheHelper.getGeojsonCachePath(originalPath);
+    public async cacheDocumentAsGeojson(username: string, filePath: string, buffer: Buffer) {
+        const geojsonContent = await this.dataTransformation.toGeojson(buffer, filePath);
+        const content = Buffer.from(JSON.stringify(geojsonContent));
+        const path = CacheHelper.getGeojsonCachePath(this.prefixWithUsername(username, filePath));
         return this.minio.putObject(this.getUsersBucketName(), path, content, content.length);
     }
 
