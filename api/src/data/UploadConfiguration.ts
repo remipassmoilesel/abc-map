@@ -1,13 +1,17 @@
 import multer = require('multer');
+import {IApiConfig} from '../IApiConfig';
 
-const storage = multer.memoryStorage();
-const uploader = multer({
-    storage,
-    limits: {
-        fileSize: 1e+7, // 10 mb
-    },
-});
+export function upload(config: IApiConfig) {
 
-export function upload() {
-    return uploader.single('file-content');
+    const storage = multer.memoryStorage();
+    const uploader = multer({
+        storage,
+        limits: {
+            files: config.fileUpload.maxFilesPerUpload,
+            fileSize: config.fileUpload.maxSizePerFile,
+        },
+    });
+
+    return uploader.array('file', config.fileUpload.maxFilesPerUpload);
+
 }

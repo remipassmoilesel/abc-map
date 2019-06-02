@@ -1,7 +1,7 @@
 
 FROM node:10-stretch
 
-RUN apt-get update && apt-get install python && npm install -g npm
+RUN apt-get update && apt-get install -y python gdal-bin && npm install -g npm
 
 RUN mkdir /app
 WORKDIR /app

@@ -2,18 +2,12 @@ import {OlCircle, OlFeature, OlFill, OlRenderFeature, OlStroke, OlStyle} from '.
 import {OpenLayersHelper} from './OpenLayersHelper';
 
 
-// TODO: check relations to geojson properties
+// Use default AbcStyleContainer
 
 // TODO: improve style structure
 // TODO: add stroke width
 // TODO: add icons for points
 // TODO: add text style
-
-export interface IAbcStyleContainer {
-  foreground: string;
-  background: string;
-  strokeWidth: number;
-}
 
 const defaultStyle = new OlStyle({
   fill: new OlFill({color: 'navy'}),
@@ -26,7 +20,8 @@ const defaultStyle = new OlStyle({
 });
 
 // TODO: use cache ?
-export function abcStyleToOlStyle(feature: (OlFeature | OlRenderFeature), resolution: number): (OlStyle | OlStyle[] | null) {
+// WARNING: this function is called to render features on map, it MUST be very fast
+export function abcStyleRendering(feature: (OlFeature | OlRenderFeature), resolution: number): (OlStyle | OlStyle[] | null) {
 
   const abcStyle = OpenLayersHelper.getStyle(feature);
 

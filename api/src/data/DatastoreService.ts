@@ -2,12 +2,14 @@ import {AbstractService} from '../lib/AbstractService';
 import {IPostConstruct} from '../lib/IPostConstruct';
 import {IApiConfig} from '../IApiConfig';
 import * as Minio from 'minio';
-import {IDocument} from 'abcmap-shared';
+import {IDocument, IDocumentStream} from 'abcmap-shared';
 import {DataFormatHelper} from './transform/dataformat/DataFormatHelper';
 import {Logger} from 'loglevel';
 import {DocumentDao} from './DocumentDao';
+import * as _ from 'lodash';
+import {CacheHelper, CacheType} from 'abcmap-shared/dist/data/CacheType';
+import {DataTransformationService} from './DataTransformationService';
 import loglevel = require('loglevel');
-import * as Stream from 'stream';
 
 export class DatastoreService extends AbstractService implements IPostConstruct {
 
@@ -15,7 +17,8 @@ export class DatastoreService extends AbstractService implements IPostConstruct 
     private minio!: Minio.Client;
 
     constructor(private config: IApiConfig,
-                private documentDao: DocumentDao) {
+                private documentDao: DocumentDao,
+                private dataTransformation: DataTransformationService) {
         super();
     }
 
@@ -31,16 +34,16 @@ export class DatastoreService extends AbstractService implements IPostConstruct 
 
     public async storeDocument(username: string, path: string, content: Buffer): Promise<IDocument> {
         const formatIsAllowed = await DataFormatHelper.isDataFormatAllowed(content, path);
-        const mimeType = await DataFormatHelper.getMimeType(content);
+        const mimeType = await DataFormatHelper.inspectMimeType(content);
         if (!formatIsAllowed) {
-            return Promise.reject(new Error('Unsupported format'));
+            return Promise.reject(new Error(`Unsupported format: ${path}`));
         }
 
-        const prefixedPath = this.prefixWithUsername(username, path);
-        await this.minio.putObject(this.getUsersBucketName(), prefixedPath, content, content.length);
+        await this.minio.putObject(this.getUsersBucketName(), path, content, content.length);
 
         const document: IDocument = {
-            path: prefixedPath,
+            owner: username,
+            path,
             size: content.byteLength,
             description: '',
             createdAt: new Date().toISOString(),
@@ -55,23 +58,38 @@ export class DatastoreService extends AbstractService implements IPostConstruct 
         return this.documentDao.findByPath(docPath);
     }
 
-    public async storeCache(username: string, originalPath: string, content: Buffer): Promise<any> {
-        const path = this.prefixWithUsername(username, this.getCachePath(originalPath));
+    public async cacheDocumentAsGeojson(filePath: string, buffer: Buffer) {
+        const geojsonContent = await this.dataTransformation.toGeojson(buffer, filePath);
+        const content = Buffer.from(JSON.stringify(geojsonContent));
+        const path = CacheHelper.getGeojsonCachePath(filePath);
         return this.minio.putObject(this.getUsersBucketName(), path, content, content.length);
     }
 
     // TODO: paginate using a pagination request
-    public listDocuments(): Promise<IDocument[]> {
-        return this.documentDao.list(0, 100);
+    public listDocuments(start: number, size: number): Promise<IDocument[]> {
+        return this.documentDao.list(start, size);
     }
 
+    // TODO: find by pattern then delete in order to remove all cache. E.g: /paul/upload/regions.shp**
     public async deleteDocument(path: string): Promise<void> {
         await this.documentDao.deleteByPath(path);
         await this.minio.removeObject(this.getUsersBucketName(), path);
+        await this.minio.removeObject(this.getUsersBucketName(), CacheHelper.getGeojsonCachePath(path));
     }
 
-    public downloadDocument(path: string): Promise<Stream> {
-        return this.minio.getObject(this.getUsersBucketName(), path);
+    public downloadDocument(path: string, cacheType?: CacheType): Promise<IDocumentStream> {
+        let documentObjectPath = path;
+        if (cacheType) {
+            documentObjectPath = CacheHelper.getCachePath(path, cacheType);
+        }
+        return Promise
+            .all([
+                this.documentDao.findByPath(path),
+                this.minio.getObject(this.getUsersBucketName(), documentObjectPath),
+            ])
+            .then(results => {
+                return _.merge({}, results[0], {content: results[1]});
+            });
     }
 
     public findDocumentsByPath(paths: string[]): Promise<IDocument[]> {
@@ -89,10 +107,6 @@ export class DatastoreService extends AbstractService implements IPostConstruct 
         }
     }
 
-    private getCachePath(originalPath: string): string {
-        return originalPath + '.cache';
-    }
-
     private getRegion(): string {
         return `${this.getBucketPrefix()}.region-1`;
     }
@@ -103,10 +117,6 @@ export class DatastoreService extends AbstractService implements IPostConstruct 
 
     private getBucketPrefix(): string {
         return `abcmap.${this.config.environmentName}`;
-    }
-
-    private prefixWithUsername(username: string, path: string): string {
-        return `${username}/${path}`;
     }
 
 }

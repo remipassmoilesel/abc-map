@@ -24,7 +24,7 @@ export class DataFormatHelper {
         });
     }
 
-    public static getMimeType(data: Buffer): Promise<string> {
+    public static inspectMimeType(data: Buffer): Promise<string> {
         return new Promise((resolve, reject) => {
             const magic = new Magic(MAGIC_MIME_TYPE);
             magic.detect(data, (err, result) => {

@@ -88,6 +88,18 @@ export function projectReducer(state = projectInitialState, action: ProjectModul
 
     }
 
+    case ProjectModule.ActionTypes.DATA_IMPORTED_AS_LAYER: {
+      const newState = _.cloneDeep(state);
+      if (!newState.currentProject) {
+        return newState;
+      }
+
+      newState.currentProject.layers.push(
+        LayerHelper.newVectorLayer(action.payload.name, action.payload.collection)
+      );
+      return newState;
+    }
+
     default: {
       return state;
     }

@@ -1,6 +1,6 @@
-import {IAbcGeojsonFeatureCollection} from './AbcGeojson';
 import {TransformationTools} from './transform/TransformationTools';
 import {AbstractService} from '../lib/AbstractService';
+import {IAbcGeojsonFeatureCollection} from 'abcmap-shared';
 
 export class DataTransformationService extends AbstractService {
 

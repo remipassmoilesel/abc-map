@@ -1,8 +1,8 @@
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpEvent, HttpRequest} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {ApiRoutes, IDocument, ISearchDocumentsRequest, IFetchDocumentsRequest, IUploadResponse} from 'abcmap-shared';
-import {Observable} from 'rxjs';
-import {DocumentHelper} from './DocumentHelper';
+import {ApiRoutes, DocumentHelper, IDocument, IFetchDocumentsRequest, ISearchDocumentsRequest} from 'abcmap-shared';
+import {Observable, throwError} from 'rxjs';
+import {FeatureCollection} from 'geojson';
 
 @Injectable({
   providedIn: 'root'
@@ -13,9 +13,10 @@ export class DatastoreClient {
 
   }
 
-  public uploadDocument(path: string, content: FormData): Observable<any> {
-    const url = ApiRoutes.DOCUMENTS_PATH.withArgs({path: this.encodeDocumentName(path)}).toString();
-    return this.client.post<IUploadResponse>(url, content);
+  public uploadDocuments(formData: FormData): Observable<HttpEvent<any>> {
+    const url = ApiRoutes.DOCUMENTS_UPLOAD.toString();
+    const req = new HttpRequest('POST', url, formData, {reportProgress: true});
+    return this.client.request(req);
   }
 
   public listDocuments(): Observable<IDocument[]> {
@@ -29,22 +30,27 @@ export class DatastoreClient {
     return this.client.post<IDocument[]>(url, request);
   }
 
-  public fetchDocuments(documentPaths: string[]): Observable<IDocument[]> {
+  public getDocuments(documentPaths: string[]): Observable<IDocument[]> {
     const url = ApiRoutes.DOCUMENTS.toString();
     const request: IFetchDocumentsRequest = {paths: documentPaths};
     return this.client.post<IDocument[]>(url, request);
   }
 
-  public downloadDocument(document: IDocument) {
+  public getDocumentContentAsGeojson(path: string): Observable<FeatureCollection> {
+    const url = ApiRoutes.DOCUMENTS_GEOJSON_PATH.withArgs({path: this.encodeDocumentPath(path)}).toString();
+    return this.client.get<FeatureCollection>(url);
+  }
+
+  public redirectToDownloadDocument(document: IDocument): void {
     window.location.href = DocumentHelper.downloadLink(document);
   }
 
-  public deleteDocument(path: string) {
-    const url = ApiRoutes.DOCUMENTS_PATH.withArgs({path: this.encodeDocumentName(path)}).toString();
+  public deleteDocument(path: string): Observable<any> {
+    const url = ApiRoutes.DOCUMENTS_PATH.withArgs({path: this.encodeDocumentPath(path)}).toString();
     return this.client.delete<any>(url);
   }
 
-  private encodeDocumentName(path: string): string {
+  private encodeDocumentPath(path: string): string {
     return btoa(path);
   }
 

@@ -13,7 +13,7 @@ function commandAsync(command, options) {
     }, 1000);
 
     subprocess.stdout.on('data', (data) => process.stdout.write(data));
-    subprocess.stderr.on('error', (err) => process.stderr.write(data));
+    subprocess.stderr.on('data', (data) => process.stderr.write(data));
     subprocess.on('exit', (data) => {
         console.log("Exit code: " + data);
         clearInterval(wait);

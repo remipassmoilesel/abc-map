@@ -16,8 +16,11 @@ export class ApiRoutes {
     public static readonly REGISTER = new ApiRoute('/api/users/register');
 
     public static readonly DOCUMENTS = new ApiRoute('/api/documents');
+    public static readonly DOCUMENTS_UPLOAD = new ApiRoute('/api/documents/upload');
     public static readonly DOCUMENTS_SEARCH = new ApiRoute('/api/documents/search');
     public static readonly DOCUMENTS_PATH = new ApiRoute('/api/documents/:path');
+    public static readonly DOCUMENTS_GEOJSON_PATH = new ApiRoute('/api/documents/geojson/:path');
+    public static readonly DOCUMENTS_DOWNLOAD_PATH = new ApiRoute('/api/documents/download/:path');
     public static readonly DOCUMENTS_USERNAME = new ApiRoute('/api/documents/:username');
     public static readonly DOCUMENTS_USERNAME_PATH = new ApiRoute('/api/documents/:username/:path');
 

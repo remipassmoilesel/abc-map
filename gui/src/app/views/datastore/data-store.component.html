@@ -1,49 +1,69 @@
-<div class="abc-store-view abc-view pt-5 pb-3">
+<div class="abc-store-view abc-view">
 
-  <h1 class="mb-2">Magasin de données</h1>
+  <div class="search-panel">
+    <form class="abc-search-form" [formGroup]="searchForm" *ngIf="searchForm">
+      <h1 class="mb-2">Magasin de données</h1>
 
-  <form class="abc-search-form" [formGroup]="searchForm" *ngIf="searchForm">
+      <div class="d-flex justify-content-start align-items-center mt-3">
+        <input type="text" class="form-control" placeholder="Que cherchez vous ?" formControlName="query">
+      </div>
+    </form>
 
-    <div class="d-flex justify-content-start align-items-center mt-3">
-      <input type="text" class="form-control" placeholder="Que cherchez vous ?" formControlName="query">
-    </div>
+    <div class="abc-result-list">
+      <div *ngIf="lastUploadedDocuments.length">
+        <h2>Derniers téléversements</h2>
+        <div *ngFor="let item of lastUploadedDocuments" class="card mb-3">
+          <abc-document-list-item [document]="item"
+                                  (addToMap)="onAddDocumentToMap($event)"
+                                  (delete)="onDeleteDocument($event)"
+                                  (preview)="setCurrentPreview($event)"
+                                  (download)="onDownloadDocument($event)">
+          </abc-document-list-item>
+        </div>
+      </div>
 
-  </form>
+      <div *ngIf="documents.length">
+        <h2>Documents</h2>
+        <div *ngFor="let item of documents" class="mb-3">
+          <abc-document-list-item [document]="item"
+                                  (addToMap)="onAddDocumentToMap($event)"
+                                  (delete)="onDeleteDocument($event)"
+                                  (preview)="setCurrentPreview($event)"
+                                  (download)="onDownloadDocument($event)"></abc-document-list-item>
+        </div>
+      </div>
 
-  <div class="abc-documents-list">
-
-    <div *ngIf="lastUploadedDocuments.length">
-
-      <h2>Derniers téléversements</h2>
-
-      <div *ngFor="let item of lastUploadedDocuments" class="card mb-3">
-        <abc-document-list-item [document]="item"
-                                (addToMap)="onAddDocumentToMap($event)"
-                                (delete)="onDeleteDocument($event)"
-                                (download)="onDownloadDocument($event)">
-        </abc-document-list-item>
+      <div *ngIf="!documents.length">
+        <h3>Pas de chance !</h3>
       </div>
 
     </div>
+  </div>
 
-    <div *ngIf="documents.length">
+  <div class="abc-document-preview p-4" *ngIf="documentOnPreview">
 
-      <h2>Documents</h2>
+    <h3>{{ documentOnPreview.path }}</h3>
 
-      <div *ngFor="let item of documents" class="mb-3">
-        <abc-document-list-item [document]="item"
-                                (addToMap)="onAddDocumentToMap($event)"
-                                (delete)="onDeleteDocument($event)"
-                                (download)="onDownloadDocument($event)">
-        </abc-document-list-item>
+    <div class="d-flex flex-column">
+
+      <div class="card m-3">
+        <div class="card-body">
+          <div>Propriétaire: {{ documentOnPreview.owner }}</div>
+          <div>Description: {{ documentOnPreview.description }}</div>
+          <div>Type: {{ documentOnPreview.mimeType }}</div>
+          <div>Taille: {{ filesize(documentOnPreview.size) }}</div>
+          <div>Dernière modification: {{ dhelper.documentDateToText(documentOnPreview.createdAt) }}</div>
+        </div>
       </div>
 
-    </div>
+      <div class="card m-3 flex-grow-1">
+        <div class="card-body">
+          <div id="abc-preview-map" class="abc-preview-map flex-grow-1">
+          </div>
+        </div>
+      </div>
 
-    <div *ngIf="!documents.length">
-      <h3>Vraiment rien ?</h3>
     </div>
 
   </div>
-
 </div>

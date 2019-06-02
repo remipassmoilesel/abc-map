@@ -1,5 +1,5 @@
 import {IDataFormat} from '../dataformat/DataFormat';
-import {IAbcGeojsonFeatureCollection} from '../../AbcGeojson';
+import {IAbcGeojsonFeatureCollection} from 'abcmap-shared';
 
 export abstract class AbstractDataExporter {
 

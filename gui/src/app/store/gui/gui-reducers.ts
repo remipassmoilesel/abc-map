@@ -16,7 +16,7 @@ export function guiReducer(state = guiInitialState, action: GuiModule.ActionsUni
 
     case ActionTypes.DOCUMENTS_UPLOADED: {
       const newState = _.cloneDeep(state);
-      newState.lastDocumentsUploaded = action.payload.documents;
+      newState.lastUploadResponse = action.payload.documents;
       return newState;
     }
 

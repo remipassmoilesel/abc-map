@@ -1,13 +1,19 @@
 import {Injectable} from '@angular/core';
 import {DatastoreClient} from './DatastoreClient';
-import {forkJoin, Observable} from 'rxjs';
+import {Observable, Observer, of, throwError} from 'rxjs';
 import {Store} from '@ngrx/store';
 import {IMainState} from '../../store';
 import {mergeMap, take, tap} from 'rxjs/operators';
-import {IDocument, IUploadResponse} from 'abcmap-shared';
+import {CacheHelper, IDocument, IUploadResponse} from 'abcmap-shared';
 import {GuiModule} from '../../store/gui/gui-actions';
 import {ToastService} from '../notifications/toast.service';
+import * as _ from 'lodash';
+import {HttpHeaderResponse, HttpResponse} from '@angular/common/http';
+import {ProjectModule} from '../../store/project/project-actions';
+import {FeatureCollection} from 'geojson';
 import DocumentsUploaded = GuiModule.DocumentsUploaded;
+import DataImportedAsLayer = ProjectModule.DataImportedAsLayer;
+import {DocumentConstants} from './DocumentConstants';
 
 @Injectable({
   providedIn: 'root'
@@ -34,26 +40,32 @@ export class DatastoreService {
       .pipe(tap(undefined, err => this.toasts.genericError()));
   }
 
-  public uploadDocuments(files: FileList): Observable<IUploadResponse[]> {
-    const uploadObservables = [];
-    // tslint:disable-next-line:prefer-for-of
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
-      uploadObservables.push(this.uploadDocument(file.name, file));
+  public uploadDocuments(files: FileList): Observable<IUploadResponse> {
+    const error = this.checkUploadRequest(files);
+    if (error) {
+      return error;
     }
 
-    return forkJoin(uploadObservables)
-      .pipe(tap(res => this.store.dispatch(new DocumentsUploaded({documents: res}))));
-  }
-
-  private uploadDocument(name: string, file: File): Observable<IUploadResponse> {
     const content: FormData = new FormData();
-    content.append('file-content', file);
-    return this.client.uploadDocument(`upload/${name}`, content);
+    _.forEach(files, file => content.append('file', file, file.name));
+
+    return Observable
+      .create((observer: Observer<IUploadResponse>) => {
+        this.client.uploadDocuments(content).subscribe(event => {
+          // TODO: emit events for upload progress
+          if (event instanceof HttpResponse) {
+            observer.next(event.body);
+            observer.complete();
+          } else if (event instanceof HttpHeaderResponse && event.status !== 200) {
+            observer.error(new Error(`${event.status} ${event.statusText}`));
+          }
+        });
+      })
+      .pipe(tap((res: IUploadResponse) => this.store.dispatch(new DocumentsUploaded({documents: res}))));
   }
 
-  public downloadDocument(document: IDocument) {
-    return this.client.downloadDocument(document);
+  public userDownloadDocument(document: IDocument) {
+    return this.client.redirectToDownloadDocument(document);
   }
 
   public deleteDocument(path: string): Observable<any> {
@@ -61,8 +73,50 @@ export class DatastoreService {
       .pipe(tap(undefined, err => this.toasts.httpError(err)));
   }
 
-  public fetchDocuments(paths: string[]): Observable<IDocument[]> {
-    return this.client.fetchDocuments(paths)
+  public getDocument(path: string) {
+    return this.client.getDocuments([path])
+      .pipe(mergeMap(documents => {
+          if (documents.length > 0) {
+            return of(documents[0]);
+          }
+          return throwError(new Error(`Not found: ${path}`));
+        })
+      );
+  }
+
+  public getDocuments(paths: string[]): Observable<IDocument[]> {
+    return this.client.getDocuments(paths)
       .pipe(tap(undefined, err => this.toasts.genericError()));
+  }
+
+  private checkUploadRequest(files: FileList): Observable<IUploadResponse> | undefined {
+    if (files.length > DocumentConstants.MAX_FILES_PER_UPLOAD) {
+      return throwError(new Error(`Vous ne pouvez pas téléverser plus de ${DocumentConstants.MAX_FILES_PER_UPLOAD} documents à la fois`));
+    }
+
+    const invalidFiles: ArrayLike<string> = _.chain(files)
+      .filter(file => file.size > DocumentConstants.MAX_SIZE_PER_FILE)
+      .map(file => file.name)
+      .value();
+
+    if (invalidFiles.length > 0) {
+      return throwError(new Error('Les fichiers suivants sont trop volumineux: ' + _.join(invalidFiles, ', ')));
+    }
+  }
+
+  public addGeojsonContentToProject(document: IDocument): Observable<any> {
+    return this.getDocumentContentAsGeoJson(document)
+      .pipe(
+        tap(collection => {
+          this.store.dispatch(new DataImportedAsLayer({
+            name: document.path,
+            collection
+          }));
+        }, err => this.toasts.genericError())
+      );
+  }
+
+  public getDocumentContentAsGeoJson(document: IDocument): Observable<FeatureCollection> {
+    return this.client.getDocumentContentAsGeojson(document.path);
   }
 }

@@ -13,6 +13,7 @@ export namespace ProjectModule {
     ACTIVE_LAYER_CHANGED = '[project] Active layer changed',
     VECTOR_LAYER_ADDED = '[project] Vector layer added',
     PREDEFINED_LAYER_ADDED = '[project] Predefined layer added',
+    DATA_IMPORTED_AS_LAYER = '[project] Data imported as layer',
     WMS_LAYER_ADDED = '[project] Wms layer added',
     LAYER_REMOVED = '[project] Layer removed',
   }
@@ -57,6 +58,12 @@ export namespace ProjectModule {
     constructor(public payload: { url: string, params: IWmsParams}) {}
   }
 
+  export class DataImportedAsLayer implements Action {
+    readonly type = ActionTypes.DATA_IMPORTED_AS_LAYER;
+
+    constructor(public payload: { name: string, collection: FeatureCollection}) {}
+  }
+
   export class LayerRemoved implements Action {
     readonly type = ActionTypes.LAYER_REMOVED;
 
@@ -69,6 +76,7 @@ export namespace ProjectModule {
     | VectorLayerAdded
     | PredefinedLayerAdded
     | WmsLayerAdded
+    | DataImportedAsLayer
     | LayerRemoved
     | VectorLayerUpdated;
 

@@ -18,12 +18,13 @@ export interface IServiceMap {
 }
 
 export async function getServices(daos: IDaoMap, config: IApiConfig): Promise<IServiceMap> {
+    const dataTransformation = new DataTransformationService();
     const services: IServiceMap = {
         project: new ProjectService(daos.project),
         user: new UserService(daos.user),
         authentication: new AuthenticationService(daos.user, config),
-        datastore: new DatastoreService(config, daos.documents),
-        dataTransformation: new DataTransformationService(),
+        datastore: new DatastoreService(config, daos.documents, dataTransformation),
+        dataTransformation,
     };
 
     for (const serviceName in services) {

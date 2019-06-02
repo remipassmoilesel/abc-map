@@ -9,14 +9,13 @@ import {OpenLayersHelper} from '../../lib/map/OpenLayersHelper';
 import {DrawingTool} from '../../lib/map/DrawingTool';
 import {Actions, ofType} from '@ngrx/effects';
 import {MapModule} from '../../store/map/map-actions';
-import {IAbcStyleContainer} from '../../lib/map/AbcStyles';
 import * as _ from 'lodash';
 import {IMainState} from '../../store';
 import {Store} from '@ngrx/store';
 import {flatMap, take} from 'rxjs/operators';
 import {zip} from 'rxjs/internal/observable/zip';
 import {of} from 'rxjs/internal/observable/of';
-import {IProject} from 'abcmap-shared';
+import {IAbcStyleContainer, IProject} from 'abcmap-shared';
 import {OlMapHelper} from './OlMapHelper';
 import ActionTypes = MapModule.ActionTypes;
 import ActiveForegroundColorChanged = MapModule.ActiveForegroundColorChanged;
@@ -69,8 +68,9 @@ export class MainMapComponent implements OnInit, OnDestroy {
       target: 'abc-openlayers-map',
       layers: [],
       view: new OlView({
-        center: olFromLonLat([37.41, 8.82]),
-        zoom: 4,
+        center: olFromLonLat([43.608461, 3.879524]),
+        zoom: 3,
+        projection: 'EPSG:3857'
       }),
     });
   }

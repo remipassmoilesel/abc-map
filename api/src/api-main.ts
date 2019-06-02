@@ -18,7 +18,7 @@ export const mainStartup = async function(): Promise<any> {
     const config = ApiConfigHelper.load();
     const daoMap = await getDaoMap(config);
     const serviceMap = await getServices(daoMap, config);
-    const controllerMap = getControllers(serviceMap);
+    const controllerMap = getControllers(serviceMap, config);
 
     const httpServer = new ApiServer(config, controllerMap);
     httpServer.start();
