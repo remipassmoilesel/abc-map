@@ -1,7 +1,8 @@
 .idea
 *.iml
 
-data/*
+data/minio
+data/mongodb
 
 *.log
 .vagrant
