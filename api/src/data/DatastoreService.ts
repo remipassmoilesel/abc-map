@@ -58,6 +58,12 @@ export class DatastoreService extends AbstractService implements IPostConstruct 
         return this.documentDao.findByPath(docPath);
     }
 
+    public documentExists(docPath: string): Promise<boolean> {
+        return this.documentDao.findByPath(docPath)
+            .then(res => true)
+            .catch(err => false);
+    }
+
     public async cacheDocumentAsGeojson(filePath: string, buffer: Buffer) {
         const geojsonContent = await this.dataTransformation.toGeojson(buffer, filePath);
         const content = Buffer.from(JSON.stringify(geojsonContent));

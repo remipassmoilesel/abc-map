@@ -2,9 +2,9 @@ import {DatastoreService} from './DatastoreService';
 import * as fs from 'fs';
 import {IApiConfig} from '../IApiConfig';
 import {Logger} from 'loglevel';
+import * as path from 'path';
 import glob = require('glob');
 import loglevel = require('loglevel');
-import * as path from "path";
 
 export class DatastoreInit {
 
@@ -25,21 +25,29 @@ export class DatastoreInit {
             cwd: this.basePath,
         });
 
-        files.forEach(filePath => {
+        files.forEach(async filePath => {
             const fullPath = path.resolve(this.basePath, filePath);
             if (fs.statSync(fullPath).isDirectory()) {
                 return true;
             }
-
-            const content = fs.readFileSync(fullPath);
-            const docPath = 'public/' + filePath;
-
-            this.logger.info(`Importing: ${docPath}`);
-
-            this.datastore.storeDocument('public', docPath, content)
-                .catch(err => this.logger.error(`Error while storing file. document=${docPath}`, err));
-            this.datastore.cacheDocumentAsGeojson(docPath, content)
-                .catch(err => this.logger.error(`Error while caching file. document=${docPath}`, err));
+            const publicPath = 'public/' + filePath;
+            const documentExists = await this.datastore.documentExists(publicPath);
+            if (!documentExists) {
+                this.uploadFile(fullPath, publicPath);
+            } else {
+                this.logger.info(`Document already exists, and will not be imported again: ${publicPath}`);
+            }
         });
+    }
+
+    private uploadFile(localPath: string, publicPath: string) {
+        const content = fs.readFileSync(localPath);
+
+        this.logger.info(`Importing: ${publicPath}`);
+
+        this.datastore.storeDocument('public', publicPath, content)
+            .catch(err => this.logger.error(`Error while storing file. document=${publicPath}`, err));
+        this.datastore.cacheDocumentAsGeojson(publicPath, content)
+            .catch(err => this.logger.error(`Error while caching file. document=${publicPath}`, err));
     }
 }
