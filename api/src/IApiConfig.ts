@@ -9,6 +9,7 @@ export interface IApiConfig {
         rootPath: string;
     };
     fileUpload: {
+        maxJsonBody: number;
         maxFilesPerUpload: number;
         maxSizePerFile: number;
     };
@@ -43,8 +44,9 @@ export class ApiConfigHelper {
                 rootPath: path.resolve(__dirname, '..', 'gui-dist'),
             },
             fileUpload: {
+                maxJsonBody: parseInt(env('ABC_MAX_JSON_BODY_MB', 20), 10),
                 maxFilesPerUpload: parseInt(env('ABC_MAX_FILES_PER_UPLOAD', 10), 10),
-                maxSizePerFile: parseInt(env('ABC_MAX_SIZE_PER_FILE', 1e+7), 10),
+                maxSizePerFile: parseInt(env('ABC_MAX_SIZE_PER_FILE_B', 1e+7), 10),
             },
             mongodb: {
                 host: env('ABC_MONGODB_HOST', 'localhost'),

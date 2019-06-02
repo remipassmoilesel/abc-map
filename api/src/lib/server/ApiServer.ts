@@ -23,7 +23,7 @@ export class ApiServer {
         this.app = express();
 
         this.setupMorgan(this.app);
-        this.setupBodyParser(this.app);
+        this.setupBodyParser(this.app, this.config);
         this.setupAuthentication(this.app);
         this.setupWebsockets(this.app);
         this.setupControllers(this.app);
@@ -50,10 +50,9 @@ export class ApiServer {
         app.use(AuthenticationHelper.tokenInjector());
     }
 
-    private setupBodyParser(app: express.Application): void {
-        app.use(bodyParser.urlencoded({extended: false, limit: '30mb'}));
-        app.use(bodyParser.json({limit: '30mb'}));
-
+    private setupBodyParser(app: express.Application, apiConfig: IApiConfig): void {
+        app.use(bodyParser.urlencoded({extended: false, limit: '10mb'}));
+        app.use(bodyParser.json({limit: apiConfig.fileUpload.maxJsonBody}));
     }
 
     private setupWebsockets(app: express.Application): void {
