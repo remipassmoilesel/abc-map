@@ -10,7 +10,6 @@ import {
     IUploadResponse,
 } from 'abcmap-shared';
 import {DatastoreService} from './DatastoreService';
-import {DataTransformationService} from './DataTransformationService';
 import {Logger} from 'loglevel';
 import {authenticated, AuthenticationHelper} from '../authentication/AuthenticationHelper';
 import {upload} from './UploadConfiguration';
@@ -80,21 +79,17 @@ export class DatastoreController extends AbstractController {
         const files: Express.Multer.File[] = req.files as Express.Multer.File[];
 
         const documents: Array<Promise<IDocument>> = [];
-        const caches: Array<Promise<any>> = [];
 
         for (const file of files) {
-            const docPath = 'uploads/' + file.originalname;
+            const docPath = username + '/uploads/' + file.originalname;
             documents.push(
                 this.datastore.storeDocument(username, docPath, file.buffer),
             );
 
-            caches.push(
-                this.datastore.cacheDocumentAsGeojson(username, docPath, file.buffer)
-                    .catch(err => this.logger.error(`Error while caching file. document=${docPath}`, err)),
-            );
+            this.datastore.cacheDocumentAsGeojson(docPath, file.buffer)
+                .catch(err => this.logger.error(`Error while caching file. document=${docPath}`, err));
         }
 
-        // return {message: 'Uploaded', path: document.path};
         return Promise.all(documents)
             .then((docs: IDocument[]) => {
                 return {message: 'Uploaded', documents: docs};

@@ -39,12 +39,11 @@ export class DatastoreService extends AbstractService implements IPostConstruct 
             return Promise.reject(new Error(`Unsupported format: ${path}`));
         }
 
-        const prefixedPath = this.prefixWithUsername(username, path);
-        await this.minio.putObject(this.getUsersBucketName(), prefixedPath, content, content.length);
+        await this.minio.putObject(this.getUsersBucketName(), path, content, content.length);
 
         const document: IDocument = {
             owner: username,
-            path: prefixedPath,
+            path,
             size: content.byteLength,
             description: '',
             createdAt: new Date().toISOString(),
@@ -59,10 +58,10 @@ export class DatastoreService extends AbstractService implements IPostConstruct 
         return this.documentDao.findByPath(docPath);
     }
 
-    public async cacheDocumentAsGeojson(username: string, filePath: string, buffer: Buffer) {
+    public async cacheDocumentAsGeojson(filePath: string, buffer: Buffer) {
         const geojsonContent = await this.dataTransformation.toGeojson(buffer, filePath);
         const content = Buffer.from(JSON.stringify(geojsonContent));
-        const path = CacheHelper.getGeojsonCachePath(this.prefixWithUsername(username, filePath));
+        const path = CacheHelper.getGeojsonCachePath(filePath);
         return this.minio.putObject(this.getUsersBucketName(), path, content, content.length);
     }
 
@@ -71,11 +70,10 @@ export class DatastoreService extends AbstractService implements IPostConstruct 
         return this.documentDao.list(start, size);
     }
 
+    // TODO: find by pattern then delete in order to remove all cache. E.g: /paul/upload/regions.shp**
     public async deleteDocument(path: string): Promise<void> {
         await this.documentDao.deleteByPath(path);
         await this.minio.removeObject(this.getUsersBucketName(), path);
-
-        // TODO: find by pattern then delete in order to remove all cache. E.g: /paul/upload/regions.shp**
         await this.minio.removeObject(this.getUsersBucketName(), CacheHelper.getGeojsonCachePath(path));
     }
 
@@ -119,10 +117,6 @@ export class DatastoreService extends AbstractService implements IPostConstruct 
 
     private getBucketPrefix(): string {
         return `abcmap.${this.config.environmentName}`;
-    }
-
-    private prefixWithUsername(username: string, path: string): string {
-        return `${username}/${path}`;
     }
 
 }
