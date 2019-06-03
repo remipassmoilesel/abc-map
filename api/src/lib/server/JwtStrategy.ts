@@ -1,13 +1,15 @@
 import {ExtractJwt, Strategy} from 'passport-jwt';
-import {ApiConfigHelper} from '../../IApiConfig';
+import {IApiConfig} from '../../IApiConfig';
 
-const apiConfig = ApiConfigHelper.load();
+export function jwtStrategy(apiConfig: IApiConfig) {
 
-const opts = {
-    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-    secretOrKey: apiConfig.jwtSecret,
-};
+    const opts = {
+        jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+        secretOrKey: apiConfig.jwtSecret,
+    };
 
-export const JwtStrategy = new Strategy(opts, (jwtPayload, done) => {
-    return done(null, true);
-});
+    return new Strategy(opts, (jwtPayload, done) => {
+        return done(null, true);
+    });
+
+}

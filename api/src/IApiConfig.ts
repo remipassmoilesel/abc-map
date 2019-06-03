@@ -1,4 +1,5 @@
 import * as path from 'path';
+import * as fs from 'fs';
 
 export interface IApiConfig {
     environmentName: string;
@@ -9,9 +10,12 @@ export interface IApiConfig {
         rootPath: string;
     };
     fileUpload: {
-        maxJsonBody: number;
+        maxJsonBody: string;
         maxFilesPerUpload: number;
         maxSizePerFile: number;
+    };
+    publicDir: {
+        rootPath: string;
     };
     mongodb: {
         host: string;
@@ -31,11 +35,11 @@ export interface IApiConfig {
 
 export class ApiConfigHelper {
 
-    public static load(): IApiConfig {
+    public static async load(): Promise<IApiConfig> {
         const env = this.getEnvVariableOrDefault;
         const envName = env('ABC_ENVIRONMENT', 'production');
         // tslint:disable:max-line-length
-        return {
+        const result: IApiConfig = {
             environmentName: envName,
             httpPort: env('ABC_HTTP_PORT', 32158),
             sessionSecret: env('ABC_SESSION_SECRET', '2b3e0e5143b9c1bfcd7bde91051b16b6a07c19467a53991095226e993462a6431b'),
@@ -44,9 +48,12 @@ export class ApiConfigHelper {
                 rootPath: path.resolve(__dirname, '..', 'gui-dist'),
             },
             fileUpload: {
-                maxJsonBody: parseInt(env('ABC_MAX_JSON_BODY_MB', 20), 10),
+                maxJsonBody: env('ABC_MAX_JSON_BODY', '20mb'),
                 maxFilesPerUpload: parseInt(env('ABC_MAX_FILES_PER_UPLOAD', 10), 10),
                 maxSizePerFile: parseInt(env('ABC_MAX_SIZE_PER_FILE_B', 1e+7), 10),
+            },
+            publicDir: {
+                rootPath: path.resolve(__dirname, '..', '..', 'data/public'),
             },
             mongodb: {
                 host: env('ABC_MONGODB_HOST', 'localhost'),
@@ -55,13 +62,19 @@ export class ApiConfigHelper {
             },
             minio: {
                 endPoint: env('ABC_MINIO_HOST', 'localhost'),
-                port: 9001,
+                port: 9000,
                 useSSL: false,
                 accessKey: env('ABC_MINIO_ACCESS_KEY', 'fb37ca0b53f49587c534be53281a9f94a865d6cedb1e205c1f057810'),
                 secretKey: env('ABC_MINIO_ACCESS_KEY', 'ea6dd22b3cd0c3908b0e59c4e769a0abff1c4d0081585fa5ea6dd22b3cd0c3908b0e59c4e769a0abff1c4d0081585fa5'),
             },
         };
         // tslint:enable:max-line-length
+
+        if (!fs.existsSync(result.publicDir.rootPath)) {
+            return Promise.reject(`Not a directory: ${result.publicDir.rootPath}`);
+        }
+
+        return result;
     }
 
     private static getEnvVariableOrDefault(envVarName: string, defaultValue: any): any {

@@ -6,11 +6,11 @@ import passport = require('passport');
 import {IControllerMap} from '../IControllerMap';
 import * as _ from 'lodash';
 import * as loglevel from 'loglevel';
-import {JwtStrategy} from './JwtStrategy';
 import {IApiConfig} from '../../IApiConfig';
 import {AuthenticationHelper} from '../../authentication/AuthenticationHelper';
 import {HttpError} from './HttpError';
 import {NextFunction} from 'express';
+import {jwtStrategy} from './JwtStrategy';
 
 export class ApiServer {
 
@@ -24,7 +24,7 @@ export class ApiServer {
 
         this.setupMorgan(this.app);
         this.setupBodyParser(this.app, this.config);
-        this.setupAuthentication(this.app);
+        this.setupAuthentication(this.app, this.config);
         this.setupWebsockets(this.app);
         this.setupControllers(this.app);
         this.setupGuiService(this.app);
@@ -44,8 +44,8 @@ export class ApiServer {
         app.use(morgan('dev'));
     }
 
-    private setupAuthentication(app: express.Application): void {
-        passport.use(JwtStrategy);
+    private setupAuthentication(app: express.Application, apiConfig: IApiConfig): void {
+        passport.use(jwtStrategy(apiConfig));
         app.use(passport.initialize());
         app.use(AuthenticationHelper.tokenInjector());
     }
