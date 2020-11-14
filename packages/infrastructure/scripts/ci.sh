@@ -2,7 +2,6 @@
 
 # This script is designed to be run from the root directory
 
-set -x
 set -e
 
 export CI=true
