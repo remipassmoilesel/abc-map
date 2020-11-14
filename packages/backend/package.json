@@ -6,7 +6,6 @@
   "scripts": {
     "start": "node --trace-warnings ./build/main.js",
     "start:watch": "nodemon --trace-warnings --watch build ./build/main.js",
-    "init": "node --trace-warnings ./build/main.js init",
     "clean": "rm -rf build",
     "build": "tsc",
     "watch": "tsc --watch | sed -u 's/\\x1Bc//g'",
