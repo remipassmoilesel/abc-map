@@ -2,7 +2,7 @@
   "name": "@abc-map/backend",
   "version": "0.0.1",
   "main": "build/index.js",
-  "license": "GNU GPL v3",
+  "license": "GPL-3.0-or-later",
   "scripts": {
     "start": "node --trace-warnings ./build/main.js",
     "start:watch": "nodemon --trace-warnings --watch build ./build/main.js",
