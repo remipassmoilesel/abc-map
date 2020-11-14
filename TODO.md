@@ -1,8 +1,8 @@
 # TODO
 
-- Utiliser le state pour passer des services
+- Distribution binaire avec pkg ?
 
 
 ## Long terme
 
-- plugins python, voir: https://github.com/PyO3/pyo3
+- Plugins python ? Voir: https://github.com/PyO3/pyo3

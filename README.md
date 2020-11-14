@@ -15,10 +15,5 @@
 - Partage de cartes via des dépôts
 
 
-## Technos
-
-- Backend en Rust
-- Front react
-- BDD Mongo ou postgres ?
 
 
