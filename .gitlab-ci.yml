@@ -2,8 +2,8 @@ image: registry.gitlab.com/remipassmoilesel/abc-map-2/build-image:0.1
 
 cache:
   paths:
-    - backend/node_modules/
-    - frontend/node_modules/
+    - packages/backend/node_modules/
+    - packages/frontend/node_modules/
 
 test:
   script:
