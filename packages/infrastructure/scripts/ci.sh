@@ -5,7 +5,11 @@
 set -x
 set -e
 
+export CI=true
+
 lerna bootstrap
 lerna run lint
 lerna run clean-build
-#lerna run test
+lerna run test
+
+echo "Oh yeah 💪"
