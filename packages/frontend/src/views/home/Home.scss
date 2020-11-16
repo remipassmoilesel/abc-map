@@ -1,0 +1,45 @@
+@import "src/style/variables";
+
+$menu-width: 250px;
+
+.abc-home {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  .content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: row;
+
+    .left-menu {
+      width: $menu-width;
+    }
+
+    .map {
+      flex-grow: 1;
+      height: 100%;
+      border: solid 1px black;
+    }
+
+    .right-menu {
+      width: $menu-width;
+    }
+
+    .menu-group {
+      padding: 6px;
+      margin: 20px 10px;
+      border: solid lightgray 1px;
+      border-radius: 0.5em;
+    }
+
+    .menu-item {
+      padding: 6px;
+      margin-bottom: 6px;
+    }
+  }
+
+  .task-bar {
+    height: 20px;
+  }
+}

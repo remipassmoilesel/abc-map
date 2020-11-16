@@ -1,19 +1,19 @@
 # Abc-Map 2, réécriture 265
 
-## Objectif
+## Objectifs
 
-- Logiciel de création de cartes simples à comprendre et utiliser
+- Logiciel de création de cartes, simple à comprendre et utiliser
+- 90% du temps de développement investi sur les fonctionnalités minimales
 - Fonctionne sur un poste de travail Windows, GNU/Linux, Mac
 - Fonctionne sur serveur en multi utilisateur, avec optimisations
 
 
-## Premières fonctionnalités
+## Fonctionnalités minimales
 
 - Affichage de couches WMS
 - Dessin de formes GeoJSON
 - Mise en page pour impression
-- Partage de cartes via des dépôts
-
-
+- Ouverture des anciens formats (abm)
+- Annuler / Refaire
 
 

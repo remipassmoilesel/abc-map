@@ -1,5 +1,8 @@
 image: registry.gitlab.com/remipassmoilesel/abc-map-2/build-image:0.1
 
+variables:
+  CI: "true"
+
 cache:
   paths:
     - packages/backend/node_modules/
@@ -7,4 +10,4 @@ cache:
 
 test:
   script:
-    - ./packages/infrastructure/scripts/ci.sh
+    - packages/infrastructure/cli/main.js ci

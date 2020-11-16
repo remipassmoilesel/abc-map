@@ -1,7 +1,8 @@
 {
-  "name": "@abc-map/backend",
+  "name": "@abc-map/shared-entities",
   "version": "0.0.1",
-  "main": "build/main.js",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
   "license": "GPL-3.0-or-later",
   "scripts": {
     "start": "node --trace-warnings ./build/main.js",
@@ -11,11 +12,12 @@
     "watch": "tsc --watch | sed -u 's/\\x1Bc//g'",
     "clean-build": "npm run clean && npm run build",
     "lint": "eslint './src/**/*.ts' --fix --max-warnings=0",
-    "test": "mocha --trace-warnings 'build/**/*.test.js'",
+    "test:disabled": "mocha --trace-warnings 'build/**/*.test.js'",
     "coverage": "nyc npm run test"
   },
   "devDependencies": {
     "@types/chai": "^4.2.14",
+    "@types/geojson": "^7946.0.7",
     "@types/mocha": "^8.0.4",
     "@types/sinon": "^9.0.8",
     "@typescript-eslint/eslint-plugin": "^4.7.0",
