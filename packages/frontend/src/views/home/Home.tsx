@@ -1,32 +1,41 @@
 import React, { Component, ReactNode } from 'react';
-import MainMap from './map/MainMap';
+import MainMap from './main-map/MainMap';
+import { Map } from 'ol';
 import { services } from '../../core/Services';
 import LayerSelector from '../../components/layer-selector/LayerSelector';
 import ProjectStatus from '../../components/project-status/ProjectStatus';
 import { RootState } from '../../store';
 import { connect, ConnectedProps } from 'react-redux';
+import { Logger } from '../../core/utils/Logger';
+import BaseLayer from 'ol/layer/Base';
 import './Home.scss';
+
+const logger = Logger.get('Home.ts', 'debug');
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface LocalProps {}
+
+interface State {
+  layers: BaseLayer[];
+}
 
 const mapStateToProps = (state: RootState) => ({
   project: state.project.current,
 });
 
-const mapDispatchToProps = {};
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
+const connector = connect(mapStateToProps);
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
 type Props = PropsFromRedux & LocalProps;
 
-class Home extends Component<Props, {}> {
+class Home extends Component<Props, State> {
   private services = services();
 
   constructor(props: Props) {
     super(props);
-    this.state = {};
+    this.state = {
+      layers: [],
+    };
   }
 
   public render(): ReactNode {
@@ -48,7 +57,7 @@ class Home extends Component<Props, {}> {
               <div className={'menu-item'}>Aide en ligne</div>
             </div>
           </div>
-          <MainMap />
+          <MainMap project={project} onMapCreated={this.onMapCreated} />
           <div className="right-menu">
             <div className={'menu-group'}>
               <ProjectStatus project={project} />
@@ -59,7 +68,7 @@ class Home extends Component<Props, {}> {
             <div className={'menu-group'}>
               <div className={'menu-item'}>Outils de dessin</div>
               <div className={'menu-item'}>
-                <LayerSelector project={project} />
+                <LayerSelector layers={this.state.layers} />
               </div>
             </div>
             <div className={'menu-group'}>
@@ -68,10 +77,44 @@ class Home extends Component<Props, {}> {
             </div>
           </div>
         </div>
-        <div className="taskbar">Tasks in progress ...</div>
+        <div className="taskbar">Tâches en cours ...</div>
       </div>
     );
   }
+
+  public componentDidMount() {
+    window.addEventListener('beforeunload', this.warnBeforeUnload);
+    window.addEventListener('unload', this.warnBeforeUnload);
+  }
+
+  public componentWillUnmount() {
+    window.removeEventListener('beforeunload', this.warnBeforeUnload);
+    window.removeEventListener('unload', this.warnBeforeUnload);
+  }
+
+  /**
+   * Display warning if tab reload or is closing, in order to prevent modifications loss
+   * @param ev
+   * @private
+   */
+  private warnBeforeUnload = (ev: BeforeUnloadEvent | undefined): string => {
+    const message = 'Les modifications seront perdues, êtes vous sûr ?';
+    if (ev) {
+      ev.returnValue = message;
+    }
+    return message;
+  };
+
+  private onMapCreated = (map: Map) => {
+    map.getLayers().on('propertychange', (ev) => {
+      logger.debug('Map event: ', ev);
+      const layers = this.services.map.getLayers(map);
+      this.setState((st) => ({ ...st, layers }));
+    });
+
+    const layers = this.services.map.getLayers(map);
+    this.setState((st) => ({ ...st, layers }));
+  };
 
   private newProject = () => {
     this.services.project.newProject();

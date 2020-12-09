@@ -2,29 +2,42 @@
 
 const {execSync} = require("child_process");
 
+const Commands = {
+  BOOSTRAP : "bootstrap",
+  LINT : "lint",
+  CLEAN_BUILD : "clean-build",
+  TEST : "test",
+  WATCH : "watch",
+  CI : "ci",
+}
+
+const arguments = process.argv;
+main(arguments);
 
 function main(args) {
-  if (args.indexOf("bootstrap") !== -1) {
+  if (args.indexOf(Commands.BOOSTRAP) !== -1) {
     bootstrap();
-  } else if (args.indexOf("lint") !== -1) {
+  } else if (args.indexOf(Commands.LINT) !== -1) {
     lint();
-  } else if (args.indexOf("clean-build") !== -1) {
+  } else if (args.indexOf(Commands.CLEAN_BUILD) !== -1) {
     cleanBuild();
-  } else if (args.indexOf("test") !== -1) {
+  } else if (args.indexOf(Commands.TEST) !== -1) {
     test();
-  } else if (args.indexOf("watch") !== -1) {
+  } else if (args.indexOf(Commands.WATCH) !== -1) {
     watch();
-  } else if (args.indexOf("ci") !== -1) {
+  } else if (args.indexOf(Commands.CI) !== -1) {
     bootstrap();
     lint();
     cleanBuild();
     test();
     console.log("Oh yeah 💪");
+  } else {
+    console.error(`Invalid command: ${args.slice(2).join(" ")}`);
+    console.error(`Try: ${Object.values(Commands).join(", ")}`);
+
+    process.exit(1);
   }
 }
-
-const arguments = process.argv;
-main(arguments);
 
 function exec(cmd) {
   execSync(cmd, {

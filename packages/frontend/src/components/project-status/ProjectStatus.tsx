@@ -1,8 +1,8 @@
 import React, { Component, ReactNode } from 'react';
-import { Project } from '@abc-map/shared-entities';
+import { AbcProject } from '@abc-map/shared-entities';
 
 interface Props {
-  project?: Project;
+  project?: AbcProject;
 }
 
 class ProjectStatus extends Component<Props, {}> {
@@ -19,7 +19,7 @@ class ProjectStatus extends Component<Props, {}> {
     }
     return (
       <div className={'d-flex flex-column'}>
-        <small>Project courant</small>
+        <small>Projet courant</small>
         <div>{projectName}</div>
         <div>{message}</div>
       </div>

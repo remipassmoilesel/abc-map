@@ -1,35 +1,58 @@
-import { Feature } from 'geojson';
+import { FeatureCollection } from 'geojson';
 
-export interface Project {
+export interface AbcProject {
   id: string;
   name: string;
-  layers: Layer[];
+  projection: AbcProjection;
+  view: AbcView;
+  layers: AbcLayer[];
   createdAt: string;
 }
 
-export enum LayerType {
-  VECTOR = 'VECTOR',
-  TILE = 'TILE',
+export interface AbcProjection {
+  name: string;
 }
 
-export interface Layer {
+export const DEFAULT_PROJECTION: AbcProjection = {
+  name: 'EPSG:3857',
+};
+
+export interface AbcView {
+  center: [number, number];
+  resolution: number;
+  rotation: number;
+  minResolution: number;
+  maxResolution: number;
+}
+
+export enum LayerType {
+  Vector = 'Vector',
+  Predefined = 'PREDEFINED',
+}
+
+export interface AbcLayerMetadata {
   id: string;
   name: string;
+  type: LayerType;
   opacity: number;
   visible: boolean;
-  type: LayerType;
 }
 
-export interface VectorLayer {
-  type: LayerType.VECTOR;
-  features: Feature[];
+export interface AbcBaseLayer {
+  metadata: AbcLayerMetadata;
 }
 
-export interface TileLayer {
-  type: LayerType.TILE;
-  sourceUrl?: string;
-  authentication?: {
-    username: string;
-    password: string;
-  };
+export interface AbcVectorLayer extends AbcBaseLayer {
+  features: FeatureCollection;
 }
+
+export enum PredefinedLayerModel {
+  OSM = 'OSM',
+}
+
+export interface AbcPredefinedLayer extends AbcBaseLayer {
+  type: LayerType.Predefined;
+  model: PredefinedLayerModel;
+}
+
+export type AbcLayer = AbcVectorLayer | AbcPredefinedLayer;
