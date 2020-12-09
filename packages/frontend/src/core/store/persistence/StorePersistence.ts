@@ -1,6 +1,6 @@
-import { LocalStorageService, StorageKey } from '../../core/utils/LocalStorageService';
+import { LocalStorageService, StorageKey } from '../../utils/LocalStorageService';
 import { RootState } from '../index';
-import { Logger } from '../../core/utils/Logger';
+import { Logger } from '../../utils/Logger';
 import _ from 'lodash';
 
 const logger = Logger.get('StorePersistence', 'warn');

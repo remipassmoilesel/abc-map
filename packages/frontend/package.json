@@ -26,7 +26,8 @@
     "sinon": "^9.2.1",
     "web-vitals": "^0.2.4",
     "uuid": "8.3.1",
-    "luxon": "^1.25.0"
+    "luxon": "^1.25.0",
+    "react-toastify": "6.2.0"
   },
   "devDependencies": {
     "@types/uuid": "8.3.0",

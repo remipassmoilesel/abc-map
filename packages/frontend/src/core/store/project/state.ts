@@ -1,5 +1,5 @@
 import { AbcProject } from '@abc-map/shared-entities';
-import { ProjectHelper } from '../../core/project/ProjectHelper';
+import { ProjectHelper } from '../../project/ProjectHelper';
 
 export interface ProjectState {
   /**

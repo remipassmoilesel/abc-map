@@ -1,5 +1,5 @@
-import { MainStore } from '../../store';
-import { ProjectActions } from '../../store/project/actions';
+import { MainStore } from '../store';
+import { ProjectActions } from '../store/project/actions';
 import { Logger } from '../utils/Logger';
 import { AbcProject } from '@abc-map/shared-entities';
 

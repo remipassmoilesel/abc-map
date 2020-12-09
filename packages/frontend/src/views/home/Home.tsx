@@ -4,7 +4,7 @@ import { Map } from 'ol';
 import { services } from '../../core/Services';
 import LayerSelector from '../../components/layer-selector/LayerSelector';
 import ProjectStatus from '../../components/project-status/ProjectStatus';
-import { RootState } from '../../store';
+import { RootState } from '../../core/store';
 import { connect, ConnectedProps } from 'react-redux';
 import { Logger } from '../../core/utils/Logger';
 import BaseLayer from 'ol/layer/Base';

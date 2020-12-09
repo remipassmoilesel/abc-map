@@ -4,7 +4,8 @@ import { FrontendRoutes } from '../FrontendRoutes';
 import Home from './home/Home';
 import Settings from './settings/Settings';
 import { Provider } from 'react-redux';
-import mainStore from '../store';
+import { ToastContainer } from 'react-toastify';
+import mainStore from '../core/store';
 
 class App extends Component<{}, {}> {
   public render(): ReactNode {
@@ -15,6 +16,7 @@ class App extends Component<{}, {}> {
             <Route exact path={FrontendRoutes.Home} component={Home} />
             <Route exact path={FrontendRoutes.Settings} component={Settings} />
           </Switch>
+          <ToastContainer />
         </BrowserRouter>
       </Provider>
     );
