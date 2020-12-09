@@ -1,0 +1,28 @@
+
+$list-height: 140px;
+
+.abc-layer-selector {
+
+  .layer-list {
+    height: $list-height;
+    max-height: $list-height;
+    overflow-y: scroll;
+    margin: 10px 5px 10px 5px;
+    padding: 5px;
+    border: solid silver 1px;
+  }
+
+  .list-item {
+    cursor: pointer;
+    user-select: none;
+
+    &.selected {
+      background: darkblue;
+      color: white;
+    }
+  }
+
+  .controls button {
+    margin-bottom: 6px;
+  }
+}

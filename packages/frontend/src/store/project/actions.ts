@@ -1,9 +1,9 @@
 export enum ActionType {
-  NEW_PROJECT = 'NEW_PROJECT',
+  NewProject = 'NewProject',
 }
 
 export interface NewProject {
-  type: ActionType.NEW_PROJECT;
+  type: ActionType.NewProject;
 }
 
 export type ProjectAction = NewProject;
@@ -11,7 +11,7 @@ export type ProjectAction = NewProject;
 export class ProjectActions {
   public static newProject(): ProjectAction {
     return {
-      type: ActionType.NEW_PROJECT,
+      type: ActionType.NewProject,
     };
   }
 }

@@ -1,5 +1,4 @@
 import { combineReducers, createStore } from 'redux';
-
 import _ from 'lodash';
 import { StorePersistence } from './persistence/StorePersistence';
 import { projectStateReducer } from './project/reducer';
