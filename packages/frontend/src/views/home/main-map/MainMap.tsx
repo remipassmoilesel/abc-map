@@ -60,6 +60,7 @@ class MainMap extends Component<Props, State> {
     const layer = this.services.map.newOsmLayer();
     map.addLayer(layer);
 
+    // TODO: create custom drag and drop in order to handle errors
     const dragAndDrop = new DragAndDrop({
       // FIXME: OL typing is broken
       formatConstructors: ([GPX, GeoJSON, IGC, KML, TopoJSON] as any) as FeatureFormat[],

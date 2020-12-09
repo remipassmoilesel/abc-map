@@ -74,6 +74,7 @@ class LayerSelector extends Component<Props, State> {
   private zoomToSelectedLayer = () => {
     const selected = this.state.selected;
     if (!selected) {
+      this.services.toasts.info("Vous devez d'abord sélectionner une couche");
       return logger.error('No layer selected');
     }
 
@@ -88,6 +89,7 @@ class LayerSelector extends Component<Props, State> {
     }
 
     if (!extent) {
+      this.services.toasts.info('Impossible de zoomer sur cette couche');
       return logger.error('Layer does not have an extent');
     }
 

@@ -1,6 +1,6 @@
 import { ActionType, ProjectAction } from './actions';
 import { projectInitialState, ProjectState } from './state';
-import { ProjectHelper } from '../../core/project/ProjectHelper';
+import { ProjectHelper } from '../../project/ProjectHelper';
 
 // TODO: test immutability of state in all branches
 

@@ -1,5 +1,5 @@
 import { StorePersistence } from './StorePersistence';
-import { LocalStorageService, StorageKey } from '../../core/utils/LocalStorageService';
+import { LocalStorageService, StorageKey } from '../../utils/LocalStorageService';
 import { RootState } from '../index';
 import { SinonStub } from 'sinon';
 import sinon from 'sinon';
