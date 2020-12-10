@@ -4,9 +4,7 @@ export interface AbcProject {
   id: string;
   name: string;
   projection: AbcProjection;
-  view: AbcView;
   layers: AbcLayer[];
-  createdAt: string;
 }
 
 export interface AbcProjection {
@@ -17,42 +15,35 @@ export const DEFAULT_PROJECTION: AbcProjection = {
   name: 'EPSG:3857',
 };
 
-export interface AbcView {
-  center: [number, number];
-  resolution: number;
-  rotation: number;
-  minResolution: number;
-  maxResolution: number;
+export interface AbcBaseLayer {
+  type: LayerType;
+  metadata: AbcLayerMetadata;
 }
 
 export enum LayerType {
   Vector = 'Vector',
-  Predefined = 'PREDEFINED',
+  Predefined = 'Predefined',
 }
 
 export interface AbcLayerMetadata {
   id: string;
   name: string;
-  type: LayerType;
   opacity: number;
   visible: boolean;
 }
 
-export interface AbcBaseLayer {
-  metadata: AbcLayerMetadata;
-}
-
 export interface AbcVectorLayer extends AbcBaseLayer {
+  type: LayerType.Vector;
   features: FeatureCollection;
-}
-
-export enum PredefinedLayerModel {
-  OSM = 'OSM',
 }
 
 export interface AbcPredefinedLayer extends AbcBaseLayer {
   type: LayerType.Predefined;
   model: PredefinedLayerModel;
+}
+
+export enum PredefinedLayerModel {
+  OSM = 'OSM',
 }
 
 export type AbcLayer = AbcVectorLayer | AbcPredefinedLayer;

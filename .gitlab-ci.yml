@@ -2,6 +2,12 @@ image: registry.gitlab.com/remipassmoilesel/abc-map-2/build-image:0.1
 
 variables:
   CI: "true"
+  MONGO_INITDB_ROOT_USERNAME: admin
+  MONGO_INITDB_ROOT_PASSWORD: admin
+  ABC_CONFIGURATION: "resources/test/config"
+
+services:
+  - mongo:4.2-bionic
 
 cache:
   paths:
@@ -10,4 +16,4 @@ cache:
 
 test:
   script:
-    - packages/infrastructure/cli/main.js ci
+    - ./abc-cli ci

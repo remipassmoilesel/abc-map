@@ -5,15 +5,13 @@
   "types": "build/index.d.ts",
   "license": "GPL-3.0-or-later",
   "scripts": {
-    "start": "node --trace-warnings ./build/main.js",
-    "start:watch": "nodemon --trace-warnings --watch build ./build/main.js",
     "clean": "rm -rf build",
     "build": "tsc",
     "watch": "tsc --watch | sed -u 's/\\x1Bc//g'",
-    "clean-build": "npm run clean && npm run build",
+    "clean-build": "yarn run clean && yarn run build",
     "lint": "eslint './src/**/*.ts' --fix --max-warnings=0",
     "test:disabled": "mocha --trace-warnings 'build/**/*.test.js'",
-    "coverage": "nyc npm run test"
+    "coverage": "nyc yarn run test"
   },
   "devDependencies": {
     "@types/chai": "^4.2.14",

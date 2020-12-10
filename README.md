@@ -1,5 +1,10 @@
 # Abc-Map 2, réécriture 265
 
+<a href="https://gitlab.com/remipassmoilesel/abc-map-2/-/commits/master">
+<img alt="pipeline status" src="https://gitlab.com/remipassmoilesel/abc-map-2/badges/master/pipeline.svg" />
+</a>     
+
+
 ## Objectifs
 
 - Logiciel de création de cartes, simple à comprendre et utiliser
@@ -23,6 +28,7 @@
 - Dessin de formes
 - Mise en page pour impression
 - Annuler / Refaire
+- Français / anglais
 - Ouverture des anciens formats (abm) ?
 
 

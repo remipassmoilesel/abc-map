@@ -4,19 +4,34 @@
   "main": "build/main.js",
   "license": "GPL-3.0-or-later",
   "scripts": {
-    "start": "node --trace-warnings ./build/main.js",
-    "start:watch": "nodemon --trace-warnings --watch build ./build/main.js",
+    "start": "nodemon --trace-warnings --watch build ./build/main.js",
     "clean": "rm -rf build",
     "build": "tsc",
     "watch": "tsc --watch | sed -u 's/\\x1Bc//g'",
-    "clean-build": "npm run clean && npm run build",
+    "clean-build": "yarn run clean && yarn run build",
     "lint": "eslint './src/**/*.ts' --fix --max-warnings=0",
     "test": "mocha --trace-warnings 'build/**/*.test.js'",
-    "coverage": "nyc npm run test"
+    "coverage": "nyc yarn run test"
+  },
+  "dependencies": {
+    "@abc-map/shared-entities": "0.0.1",
+    "express": "^4.17.1",
+    "body-parser": "^1.19.0",
+    "loglevel": "^1.7.1",
+    "mongodb": "^3.6.3",
+    "lodash": "^4.17.20",
+    "uuid": "^8.3.2",
+    "source-map-support": "^0.5.19"
   },
   "devDependencies": {
+    "@types/geojson": "^7946.0.7",
+    "@types/uuid": "^8.3.0",
+    "@types/lodash": "^4.14.165",
+    "@types/mongodb": "^3.6.3",
     "@types/chai": "^4.2.14",
+    "@types/express": "^4.17.9",
     "@types/mocha": "^8.0.4",
+    "@types/node": "^14.14.11",
     "@types/sinon": "^9.0.8",
     "@typescript-eslint/eslint-plugin": "^4.7.0",
     "@typescript-eslint/parser": "^4.7.0",
@@ -32,8 +47,5 @@
     "sinon": "^9.2.1",
     "source-map-support": "^0.5.19",
     "typescript": "^4.0.5"
-  },
-  "dependencies": {
-    "sinon": "^9.2.1"
   }
 }

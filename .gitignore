@@ -1,3 +1,5 @@
 .idea
 backend/target
 notes/
+*.log
+
