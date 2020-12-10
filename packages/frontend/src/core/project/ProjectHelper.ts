@@ -12,8 +12,6 @@ export class ProjectHelper {
       projection: DEFAULT_PROJECTION,
       name: `Projet du ${DateTime.local().toLocaleString()}`,
       layers: [],
-      createdAt: DateTime.utc().toISO(),
-      view: {} as any, // FIXME: set correct view
     };
   }
 }

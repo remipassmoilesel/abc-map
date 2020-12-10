@@ -80,11 +80,9 @@ export class MapService {
   public getMetadataFromLayer(layer: BaseLayer): AbcLayerMetadata {
     const id = layer.get(AbcProperties.LayerId);
     const name = layer.get(AbcProperties.LayerName);
-    const type = layer.get(AbcProperties.LayerType);
     return {
       id,
       name,
-      type,
       opacity: layer.getOpacity(),
       visible: layer.getVisible(),
     };
