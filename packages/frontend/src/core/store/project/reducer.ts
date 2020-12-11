@@ -1,6 +1,5 @@
 import { ActionType, ProjectAction } from './actions';
 import { projectInitialState, ProjectState } from './state';
-import { ProjectHelper } from '../../project/ProjectHelper';
 
 // TODO: test immutability of state in all branches
 
@@ -17,7 +16,7 @@ export function projectStateReducer(state = projectInitialState, action: Project
   switch (action.type) {
     case ActionType.NewProject: {
       const newState: ProjectState = { ...state };
-      newState.current = ProjectHelper.newProject();
+      newState.current = action.project;
       return newState;
     }
 

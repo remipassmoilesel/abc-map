@@ -25,15 +25,20 @@ class LayerSelector extends Component<Props, State> {
   }
 
   public render(): ReactNode {
-    const items = this.props.layers.map((layer) => {
-      const metadata = this.services.map.getMetadataFromLayer(layer);
-      const selectedClass = this.state.selected === layer ? 'selected' : '';
-      return (
-        <div key={metadata.id} onClick={() => this.onLayerSelected(layer)} className={`list-item ${selectedClass}`}>
-          - {metadata.name}
-        </div>
-      );
-    });
+    const items = this.props.layers
+      .map((layer) => {
+        const metadata = this.services.map.getMetadataFromLayer(layer);
+        if (!metadata) {
+          return undefined;
+        }
+        const selectedClass = this.state.selected === layer ? 'selected' : '';
+        return (
+          <div key={metadata.id} onClick={() => this.onLayerSelected(layer)} className={`list-item ${selectedClass}`}>
+            - {metadata.name}
+          </div>
+        );
+      })
+      .filter((elem) => !!elem);
 
     let message: string | undefined;
     if (!items || !items.length) {

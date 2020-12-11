@@ -10,8 +10,8 @@ import VectorSource from 'ol/source/Vector';
 import FeatureFormat from 'ol/format/Feature';
 import Feature from 'ol/Feature';
 import Geometry from 'ol/geom/Geometry';
+import { LayerProperties } from '../../../core/map/AbcProperties';
 import './MainMap.scss';
-import { AbcProperties } from '../../../core/map/AbcProperties';
 
 const logger = Logger.get('MainMap.ts');
 
@@ -57,8 +57,6 @@ class MainMap extends Component<Props, State> {
 
   private initializeMap(currentDiv: HTMLDivElement): Map {
     const map = this.services.map.newDefaultMap(currentDiv);
-    const layer = this.services.map.newOsmLayer();
-    map.addLayer(layer);
 
     // TODO: create custom drag and drop in order to handle errors
     const dragAndDrop = new DragAndDrop({
@@ -82,7 +80,7 @@ class MainMap extends Component<Props, State> {
     });
 
     const layer = this.services.map.newVectorLayer(source);
-    layer.set(AbcProperties.LayerName, ev.file.name);
+    layer.set(LayerProperties.Name, ev.file.name);
 
     map.addLayer(layer);
     map.getView().fit(source.getExtent());

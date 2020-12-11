@@ -1,11 +1,22 @@
 import { FeatureCollection } from 'geojson';
 
+//
+//  WARNING: modifying entities here needs a data migration for the moment
+//
+
 export interface AbcProject {
-  id: string;
-  name: string;
-  projection: AbcProjection;
+  metadata: AbcProjectMetadata;
   layers: AbcLayer[];
 }
+
+export interface AbcProjectMetadata {
+  id: string;
+  version: string;
+  name: string;
+  projection: AbcProjection;
+}
+
+export const CURRENT_VERSION = '0.1';
 
 export interface AbcProjection {
   name: string;
@@ -30,6 +41,7 @@ export interface AbcLayerMetadata {
   name: string;
   opacity: number;
   visible: boolean;
+  type: LayerType;
 }
 
 export interface AbcVectorLayer extends AbcBaseLayer {

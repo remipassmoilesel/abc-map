@@ -1,5 +1,5 @@
 import * as express from 'express';
-import { Logger } from './Logger';
+import { Logger } from '../utils/Logger';
 
 const logger = Logger.get('asyncHandler.ts');
 
@@ -13,6 +13,16 @@ export function asyncHandler(handler: AsyncHandler) {
           res.status(200).json(result);
         }
       })
-      .catch((err) => res.status(500).json({ error: err }));
+      .catch((err: Error | undefined) => {
+        logger.error('Async HTTP handler error: ', err);
+        const message = err?.message || 'Unknwon error';
+        const stack = err?.stack || new Error().stack;
+        res.status(500).json({
+          error: {
+            message,
+            stack,
+          },
+        });
+      });
   };
 }

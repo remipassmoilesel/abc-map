@@ -1,7 +1,21 @@
+import Feature from 'ol/Feature';
+import Geometry from 'ol/geom/Geometry';
+import { Point } from 'ol/geom';
 import { AbcProject, CURRENT_VERSION, DEFAULT_PROJECTION, LayerType, PredefinedLayerModel } from '@abc-map/shared-entities';
 import * as uuid from 'uuid';
 
 export class TestHelper {
+  public static samplePointFeature(): Feature<Geometry> {
+    const feature = new Feature<Geometry>();
+    feature.setGeometry(new Point([1, 2]));
+    feature.setProperties({ prop1: 'value1', prop2: 'value2' });
+    return feature;
+  }
+
+  public static sampleFeatures(): Feature<Geometry>[] {
+    return [this.samplePointFeature(), this.samplePointFeature(), this.samplePointFeature()];
+  }
+
   public static sampleProject(): AbcProject {
     return {
       metadata: {
