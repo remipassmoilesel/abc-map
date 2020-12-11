@@ -7,6 +7,11 @@ import { ConfigLoader } from './config/ConfigLoader';
 
 const logger = Logger.get('main.ts', 'info');
 
+main().catch((err) => {
+  logger.error(err);
+  process.exit(1);
+});
+
 async function main() {
   logger.info('Starting Abc-Map ...');
   const config = await ConfigLoader.load();
@@ -15,8 +20,3 @@ async function main() {
   const server = HttpServer.create(config, controllers);
   return server.listen().finally(() => services.shutdown());
 }
-
-main().catch((err) => {
-  logger.error(err);
-  process.exit(1);
-});

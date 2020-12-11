@@ -25,13 +25,24 @@ describe('ProjectService', () => {
   it('save() then findById()', async () => {
     const sampleProject: AbcProject = TestHelper.sampleProject();
     await service.save(sampleProject);
-    const dbProject = await service.findById(sampleProject.id);
+    const dbProject = await service.findById(sampleProject.metadata.id);
     assert.isDefined(dbProject);
-    assert.isDefined(dbProject?.id);
-    assert.isDefined(dbProject?.name);
+    assert.isDefined(dbProject?.metadata.id);
+    assert.isDefined(dbProject?.metadata.name);
+    assert.isDefined(dbProject?.metadata.projection);
     assert.isDefined(dbProject?.layers);
-    assert.isDefined(dbProject?.projection);
     assert.deepEqual(dbProject, sampleProject);
+  });
+
+  it('save() should replace', async () => {
+    const sampleProject: AbcProject = TestHelper.sampleProject();
+    await service.save(sampleProject);
+
+    sampleProject.metadata.name = 'Updated name';
+    await service.save(sampleProject);
+
+    const dbProject = await service.findById(sampleProject.metadata.id);
+    assert.equal(dbProject?.metadata.name, sampleProject.metadata.name);
   });
 
   it('list() then findById()', async () => {
@@ -44,10 +55,10 @@ describe('ProjectService', () => {
     assert.isAtLeast(dbProjects.length, 2);
     dbProjects.forEach((project) => {
       assert.isDefined(project);
-      assert.isDefined(project?.id);
-      assert.isDefined(project?.name);
+      assert.isDefined(project?.metadata.id);
+      assert.isDefined(project?.metadata.name);
+      assert.isDefined(project?.metadata.projection);
       assert.isDefined(project?.layers);
-      assert.isDefined(project?.projection);
     });
   });
 });

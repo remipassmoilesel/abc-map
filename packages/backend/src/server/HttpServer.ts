@@ -43,7 +43,7 @@ export class HttpServer {
   }
 
   private setupHttpServer(): void {
-    this.app.use(bodyParser.json());
+    this.app.use(bodyParser.json({ limit: '20mb' }));
     this.app.disable('x-powered-by');
   }
 }

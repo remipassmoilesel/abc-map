@@ -3,7 +3,8 @@ import { Router } from 'express';
 import { Controller } from '../server/Controller';
 import { Services } from '../services';
 import { AbcProject } from '@abc-map/shared-entities';
-import { asyncHandler } from '../utils/asyncHandler';
+import { asyncHandler } from '../server/asyncHandler';
+import { Status } from '../server/Status';
 
 // TODO: partition resources per user
 export class ProjectController extends Controller {
@@ -23,13 +24,13 @@ export class ProjectController extends Controller {
     return app;
   }
 
-  public save = (req: express.Request): Promise<void> => {
+  public save = (req: express.Request): Promise<Status> => {
     const project: AbcProject = req.body;
     if (!project) {
       return Promise.reject(new Error('Project is mandatory'));
     }
 
-    return this.services.project.save(project);
+    return this.services.project.save(project).then(() => ({ status: 'saved' }));
   };
 
   // TODO: do not fetch features from database

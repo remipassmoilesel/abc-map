@@ -12,7 +12,7 @@ class ProjectStatus extends Component<Props, {}> {
   }
 
   public render(): ReactNode {
-    const projectName = this.props.project?.name;
+    const projectName = this.props.project?.metadata.name;
     let message: string | undefined;
     if (!projectName) {
       message = 'Pas de projet actif';

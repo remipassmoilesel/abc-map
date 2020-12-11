@@ -8,9 +8,10 @@ import { RootState } from '../../core/store';
 import { connect, ConnectedProps } from 'react-redux';
 import { Logger } from '../../core/utils/Logger';
 import BaseLayer from 'ol/layer/Base';
+import ProjectControls from '../../components/project-controls/ProjectControls';
 import './Home.scss';
 
-const logger = Logger.get('Home.ts', 'debug');
+const logger = Logger.get('Home.ts', 'info');
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface LocalProps {}
@@ -46,12 +47,7 @@ class Home extends Component<Props, State> {
           <div className="left-menu">
             <h3 className={'text-center mt-2'}>Abc-Map</h3>
             <div className={'menu-group'}>
-              <button type={'button'} className={'btn btn-link menu-item'} onClick={this.newProject}>
-                Nouveau projet
-              </button>
-              <div className={'menu-item'}>Ouvrir un projet</div>
-              <div className={'menu-item'}>Enregistrer le projet</div>
-              <div className={'menu-item'}>Exporter le projet</div>
+              <ProjectControls />
             </div>
             <div className={'menu-group'}>
               <div className={'menu-item'}>Aide en ligne</div>
@@ -108,16 +104,12 @@ class Home extends Component<Props, State> {
   private onMapCreated = (map: Map) => {
     map.getLayers().on('propertychange', (ev) => {
       logger.debug('Map event: ', ev);
-      const layers = this.services.map.getLayers(map);
+      const layers = this.services.map.getManagedLayers(map);
       this.setState((st) => ({ ...st, layers }));
     });
 
-    const layers = this.services.map.getLayers(map);
+    const layers = this.services.map.getManagedLayers(map);
     this.setState((st) => ({ ...st, layers }));
-  };
-
-  private newProject = () => {
-    this.services.project.newProject();
   };
 }
 

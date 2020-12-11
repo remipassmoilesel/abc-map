@@ -2,6 +2,7 @@ import { ProjectService } from './project/ProjectService';
 import mainStore from './store';
 import { MapService } from './map/MapService';
 import { ToastService } from './ui/ToastService';
+import { httpApiClient } from './utils/HttpApiClient';
 
 export interface Services {
   project: ProjectService;
@@ -12,11 +13,21 @@ export interface Services {
 let instance: Services | undefined;
 export function services(): Services {
   if (!instance) {
-    instance = {
-      project: new ProjectService(mainStore),
-      map: new MapService(),
-      toasts: new ToastService(),
-    };
+    instance = serviceFactory();
   }
   return instance;
+}
+
+function serviceFactory(): Services {
+  const httpClient = httpApiClient(5_000);
+
+  const toasts = new ToastService();
+  const mapService = new MapService();
+  const projectService = new ProjectService(httpClient, mainStore, mapService);
+
+  return {
+    project: projectService,
+    map: mapService,
+    toasts,
+  };
 }

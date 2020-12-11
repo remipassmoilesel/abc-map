@@ -20,4 +20,8 @@ export class ToastService {
     options.toastId = message;
     toast.error(message, options);
   }
+
+  public genericError(): void {
+    this.error('Une erreur est survenue, veuillez réessayer plus tard.');
+  }
 }

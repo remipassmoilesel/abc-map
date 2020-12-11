@@ -1,15 +1,15 @@
 import { AbcProject } from '@abc-map/shared-entities';
-import { ProjectHelper } from '../../project/ProjectHelper';
+import { ProjectFactory } from '../../project/ProjectFactory';
 
 export interface ProjectState {
   /**
    * <p>Current opened project.</p>
    *
-   * <p>As Openlayers objects are mutables, we do not
+   * <p>This objects is not necessarily up to date</p>
    */
   current?: AbcProject;
 }
 
 export const projectInitialState: ProjectState = {
-  current: ProjectHelper.newProject(),
+  current: ProjectFactory.newProject(),
 };
