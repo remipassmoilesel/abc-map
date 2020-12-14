@@ -6,7 +6,8 @@
   "scripts": {
     "start": "react-scripts start",
     "lint": "eslint './src/**/{*.tsx,*.ts}' --fix --max-warnings=0",
-    "build": "CI=true EXTEND_ESLINT=true react-scripts build",
+    "build": "CI=true EXTEND_ESLINT=true react-scripts build && yarn run build:check",
+    "build:check": "./scripts/check-build.js",
     "clean": "rm -rf build",
     "clean-build": "yarn run clean && yarn run build",
     "test": "yarn run typecheck && CI=true react-scripts test",

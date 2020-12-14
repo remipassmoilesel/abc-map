@@ -2,28 +2,21 @@ import React, { Component, ReactNode } from 'react';
 import { services } from '../../core/Services';
 import { AbcProject } from '@abc-map/shared-entities';
 import { Logger } from '../../core/utils/Logger';
-import { RootState } from '../../core/store';
-import { connect, ConnectedProps } from 'react-redux';
 import { Constants } from '../../core/Constants';
+import { Map } from 'ol';
 import './ProjectControls.scss';
 
 const logger = Logger.get('ProjectControls.tsx');
 
 interface State {
-  projects: AbcProject[];
+  recentProjects: AbcProject[];
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface LocalProps {}
-
-const mapStateToProps = (state: RootState) => ({
-  project: state.project.current,
-});
-
-const connector = connect(mapStateToProps);
-
-type PropsFromRedux = ConnectedProps<typeof connector>;
-type Props = PropsFromRedux & LocalProps;
+interface Props {
+  project?: AbcProject;
+  map: Map;
+}
 
 class ProjectControls extends Component<Props, State> {
   private services = services();
@@ -31,12 +24,12 @@ class ProjectControls extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      projects: [],
+      recentProjects: [],
     };
   }
 
   public render(): ReactNode {
-    const projects = this.state.projects;
+    const projects = this.state.recentProjects;
     return (
       <div className={'project-controls'}>
         <div className={'control-item'}>
@@ -81,7 +74,7 @@ class ProjectControls extends Component<Props, State> {
   private updateRecentProjects(): void {
     this.services.project
       .list()
-      .then((projects) => this.setState({ projects }))
+      .then((projects) => this.setState({ recentProjects: projects }))
       .catch((err) => {
         logger.error(err);
         this.services.toasts.genericError();
@@ -94,15 +87,14 @@ class ProjectControls extends Component<Props, State> {
   };
 
   private saveProject = () => {
-    const map = this.services.map.getMainMap();
     let project = this.props.project;
-    if (!map || !project) {
+    if (!project) {
       return this.services.toasts.genericError();
     }
 
     this.services.toasts.info('Enregistrement en cours ...');
 
-    const layers = this.services.map.exportLayers(map);
+    const layers = this.services.map.exportLayers(this.props.map);
     project = {
       ...project,
       layers,
@@ -120,24 +112,18 @@ class ProjectControls extends Component<Props, State> {
   };
 
   private openProject(id: string): void {
-    const map = this.services.map.getMainMap();
-    if (!map) {
-      return this.services.toasts.genericError();
-    }
-
     this.services.project.loadRemoteProject(id).then(() => this.services.toasts.info('Projet ouvert !'));
   }
 
   private exportProject = () => {
-    const map = this.services.map.getMainMap();
     let project = this.props.project;
-    if (!map || !project) {
+    if (!project) {
       return this.services.toasts.genericError();
     }
 
     this.services.toasts.info('Export en cours ...');
 
-    const layers = this.services.map.exportLayers(map);
+    const layers = this.services.map.exportLayers(this.props.map);
     project = {
       ...project,
       layers,
@@ -192,4 +178,4 @@ class ProjectControls extends Component<Props, State> {
   }
 }
 
-export default connector(ProjectControls);
+export default ProjectControls;

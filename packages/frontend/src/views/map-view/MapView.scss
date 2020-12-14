@@ -1,0 +1,30 @@
+@import "src/style/variables";
+
+$menu-width: 250px;
+
+.abc-map-view {
+  height: 95vh;
+  display: flex;
+  flex-direction: row;
+
+  .left-menu {
+    width: $menu-width;
+  }
+
+  .right-menu {
+    width: $menu-width;
+  }
+
+  .menu-group {
+    padding: 6px;
+    margin: 20px 10px;
+    border: solid lightgray 1px;
+    border-radius: 0.5em;
+  }
+
+  .menu-item {
+    padding: 6px;
+    margin-bottom: 6px;
+  }
+
+}

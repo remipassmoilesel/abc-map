@@ -12,6 +12,8 @@ import Geometry from 'ol/geom/Geometry';
 import { AbcProperties, LayerProperties } from '../../../core/map/AbcProperties';
 import { DrawingTool, DrawingTools } from '../../../core/map/DrawingTools';
 import BaseLayer from 'ol/layer/Base';
+import { EventsKey } from 'ol/events';
+import BaseEvent from 'ol/events/Event';
 import './MainMap.scss';
 
 export const logger = Logger.get('MainMap.ts', 'debug');
@@ -19,15 +21,17 @@ export const logger = Logger.get('MainMap.ts', 'debug');
 export declare type LayerChangedHandler = (layers: BaseLayer[]) => void;
 
 interface Props {
+  map: Map;
   onLayersChanged?: LayerChangedHandler;
   drawingTool: DrawingTool;
 }
 
 interface State {
-  map?: Map;
-  drawInteraction?: Interaction;
+  dropData?: Interaction;
+  draw?: Interaction;
   layers: BaseLayer[];
   activeLayer?: BaseLayer;
+  layerChangedHandler?: EventsKey;
 }
 
 class MainMap extends Component<Props, State> {
@@ -46,65 +50,82 @@ class MainMap extends Component<Props, State> {
   }
 
   public componentDidMount() {
-    const currentDiv = this.mapRef.current;
-    if (!currentDiv) {
+    const div = this.mapRef.current;
+    if (!div) {
       return logger.error('Cannot mount map, div reference not ready');
     }
 
-    const map = this.initializeMap(currentDiv);
-
-    this.setState({ map });
-    this.services.map.setMainMap(map);
+    this.initializeMap(div);
+    this.updateInteractions(this.props.drawingTool);
   }
 
   public componentWillUnmount() {
-    this.state.map?.dispose();
-    this.services.map.setMainMap(undefined);
+    this.cleanupMap();
   }
 
   public componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<State>) {
-    if (!this.state.map) {
-      return;
-    }
-
     // Warning: we can not compare layers properties here between them, because we work with references
     // so previous objects get updated
     const drawingToolChanged = prevProps.drawingTool !== this.props.drawingTool;
     const layersChanged = !this.services.map.layersEquals(prevState.layers, this.state.layers);
     const activeLayerChanged = this.state.activeLayer !== prevState.activeLayer;
     if (drawingToolChanged || layersChanged || activeLayerChanged) {
-      this.updateInteractions(this.state.map, this.props.drawingTool);
+      this.updateInteractions(this.props.drawingTool);
     }
   }
 
-  private initializeMap(currentDiv: HTMLDivElement): Map {
+  private initializeMap(div: HTMLDivElement): void {
     logger.info('Initializing map');
-    const map = this.services.map.newDefaultMap(currentDiv);
+    const map = this.props.map;
+
+    // Attach to target
+    map.setTarget(div);
+
+    // Add default layer if needed
+    if (!map.getLayers().getLength()) {
+      const layer = this.services.map.newOsmLayer();
+      map.addLayer(layer);
+      this.services.map.setActiveLayer(map, layer);
+    }
 
     // TODO: create custom drag and drop in order to handle errors and support abm2 format
-    const dragAndDrop = new DragAndDrop({
+    const dropData = new DragAndDrop({
       formatConstructors: ([GPX, GeoJSON, IGC, KML, TopoJSON] as any) as FeatureFormat[], // OL typing is broken
     });
-    dragAndDrop.on('addfeatures', this.onFeaturesDropped);
-    map.addInteraction(dragAndDrop);
+    dropData.on('addfeatures', this.onFeaturesDropped);
+    map.addInteraction(dropData);
+    this.setState({ dropData: dropData });
 
     // Here we trigger a component update when layers change for interactions
-    map.getLayers().on('propertychange', (ev) => {
-      logger.debug('Layers event: ', ev);
-      const layers = this.services.map.getManagedLayers(map);
-      const activeLayer = this.services.map.getActiveLayer(map);
-      this.setState({ layers, activeLayer });
-      this.props.onLayersChanged && this.props.onLayersChanged(layers);
-    });
+    map.getLayers().on('propertychange', this.onLayersChanged);
 
     // First trigger for layer setup
     const layers = this.services.map.getManagedLayers(map);
     this.props.onLayersChanged && this.props.onLayersChanged(layers);
-    return map;
   }
 
+  private cleanupMap() {
+    const map = this.props.map;
+    map.setTarget(undefined);
+    this.state.dropData && map.removeInteraction(this.state.dropData);
+    this.state.draw && map.removeInteraction(this.state.draw);
+    map.getLayers().removeEventListener('propertychange', this.onLayersChanged);
+  }
+
+  private onLayersChanged = (ev: BaseEvent): boolean => {
+    logger.debug('Layers event: ', ev);
+    const map = this.props.map;
+    const layers = this.services.map.getManagedLayers(map);
+    const activeLayer = this.services.map.getActiveLayer(map);
+
+    this.setState({ layers, activeLayer });
+
+    this.props.onLayersChanged && this.props.onLayersChanged(layers);
+    return true;
+  };
+
   private onFeaturesDropped = (ev: DragAndDropEvent): void => {
-    const map = this.state.map;
+    const map = this.props.map;
     if (!map) {
       return logger.error('Map is not ready');
     }
@@ -120,25 +141,27 @@ class MainMap extends Component<Props, State> {
     map.getView().fit(source.getExtent());
   };
 
-  private updateInteractions(map: Map, tool: DrawingTool): void {
-    if (this.state.drawInteraction) {
-      map.removeInteraction(this.state.drawInteraction);
+  private updateInteractions(tool: DrawingTool): void {
+    const map = this.props.map;
+
+    if (this.state.draw) {
+      map.removeInteraction(this.state.draw);
     }
 
     const activeLayer = this.services.map.getActiveVectorLayer(map);
     if (!activeLayer || tool.geometryType === 'None') {
-      this.setState({ drawInteraction: undefined });
+      this.setState({ draw: undefined });
       map.set(AbcProperties.CurrentTool, DrawingTools.None);
       return;
     }
 
-    const drawInteraction = new Draw({
+    const draw = new Draw({
       source: activeLayer.getSource(),
       type: tool.geometryType,
     });
-    map.addInteraction(drawInteraction);
+    map.addInteraction(draw);
     map.set(AbcProperties.CurrentTool, tool);
-    this.setState({ drawInteraction });
+    this.setState({ draw });
 
     logger.debug(`Activated tool '${tool.label}'`);
   }

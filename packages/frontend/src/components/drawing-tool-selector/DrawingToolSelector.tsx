@@ -8,7 +8,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { MapActions } from '../../core/store/map/actions';
 import './DrawingToolSelector.scss';
 
-const logger = Logger.get('DrawingTools.tsx', 'info');
+const logger = Logger.get('DrawingToolSelector.tsx', 'info');
 
 interface LocalProps {
   layers: BaseLayer[];

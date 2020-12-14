@@ -11,7 +11,7 @@ const rootReducer = combineReducers({
   map: mapStateReducer,
 });
 
-const emptyState: RootState = {
+const initialState: RootState = {
   project: projectInitialState,
   map: mapInitialState,
 };
@@ -23,7 +23,7 @@ const _window = window as any;
 const reduxExtension = _window.__REDUX_DEVTOOLS_EXTENSION__ && _window.__REDUX_DEVTOOLS_EXTENSION__();
 
 const persistence = StorePersistence.newPersistence();
-const preLoadedState = _.defaultsDeep(persistence.loadState(), emptyState);
+const preLoadedState = _.defaultsDeep(persistence.loadState(), initialState);
 
 const mainStore = createStore(rootReducer, preLoadedState, reduxExtension);
 
