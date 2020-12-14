@@ -1,27 +1,33 @@
 import React, { Component, ReactNode } from 'react';
 import { Map } from 'ol';
-import { AbcProject } from '@abc-map/shared-entities';
 import { Logger } from '../../../core/utils/Logger';
 import { services } from '../../../core/Services';
 import { GeoJSON, GPX, IGC, KML, TopoJSON } from 'ol/format';
-import { DragAndDrop } from 'ol/interaction';
+import { DragAndDrop, Draw, Interaction } from 'ol/interaction';
 import { DragAndDropEvent } from 'ol/interaction/DragAndDrop';
 import VectorSource from 'ol/source/Vector';
 import FeatureFormat from 'ol/format/Feature';
 import Feature from 'ol/Feature';
 import Geometry from 'ol/geom/Geometry';
-import { LayerProperties } from '../../../core/map/AbcProperties';
+import { AbcProperties, LayerProperties } from '../../../core/map/AbcProperties';
+import { DrawingTool, DrawingTools } from '../../../core/map/DrawingTools';
+import BaseLayer from 'ol/layer/Base';
 import './MainMap.scss';
 
-const logger = Logger.get('MainMap.ts');
+export const logger = Logger.get('MainMap.ts', 'debug');
+
+export declare type LayerChangedHandler = (layers: BaseLayer[]) => void;
 
 interface Props {
-  project?: AbcProject;
-  onMapCreated?: (map: Map) => void;
+  onLayersChanged?: LayerChangedHandler;
+  drawingTool: DrawingTool;
 }
 
 interface State {
   map?: Map;
+  drawInteraction?: Interaction;
+  layers: BaseLayer[];
+  activeLayer?: BaseLayer;
 }
 
 class MainMap extends Component<Props, State> {
@@ -30,7 +36,9 @@ class MainMap extends Component<Props, State> {
 
   constructor(props: Props) {
     super(props);
-    this.state = {};
+    this.state = {
+      layers: [],
+    };
   }
 
   public render(): ReactNode {
@@ -47,7 +55,6 @@ class MainMap extends Component<Props, State> {
 
     this.setState({ map });
     this.services.map.setMainMap(map);
-    this.props.onMapCreated && this.props.onMapCreated(map);
   }
 
   public componentWillUnmount() {
@@ -55,17 +62,44 @@ class MainMap extends Component<Props, State> {
     this.services.map.setMainMap(undefined);
   }
 
+  public componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<State>) {
+    if (!this.state.map) {
+      return;
+    }
+
+    // Warning: we can not compare layers properties here between them, because we work with references
+    // so previous objects get updated
+    const drawingToolChanged = prevProps.drawingTool !== this.props.drawingTool;
+    const layersChanged = !this.services.map.layersEquals(prevState.layers, this.state.layers);
+    const activeLayerChanged = this.state.activeLayer !== prevState.activeLayer;
+    if (drawingToolChanged || layersChanged || activeLayerChanged) {
+      this.updateInteractions(this.state.map, this.props.drawingTool);
+    }
+  }
+
   private initializeMap(currentDiv: HTMLDivElement): Map {
+    logger.info('Initializing map');
     const map = this.services.map.newDefaultMap(currentDiv);
 
-    // TODO: create custom drag and drop in order to handle errors
+    // TODO: create custom drag and drop in order to handle errors and support abm2 format
     const dragAndDrop = new DragAndDrop({
-      // FIXME: OL typing is broken
-      formatConstructors: ([GPX, GeoJSON, IGC, KML, TopoJSON] as any) as FeatureFormat[],
+      formatConstructors: ([GPX, GeoJSON, IGC, KML, TopoJSON] as any) as FeatureFormat[], // OL typing is broken
     });
     dragAndDrop.on('addfeatures', this.onFeaturesDropped);
-
     map.addInteraction(dragAndDrop);
+
+    // Here we trigger a component update when layers change for interactions
+    map.getLayers().on('propertychange', (ev) => {
+      logger.debug('Layers event: ', ev);
+      const layers = this.services.map.getManagedLayers(map);
+      const activeLayer = this.services.map.getActiveLayer(map);
+      this.setState({ layers, activeLayer });
+      this.props.onLayersChanged && this.props.onLayersChanged(layers);
+    });
+
+    // First trigger for layer setup
+    const layers = this.services.map.getManagedLayers(map);
+    this.props.onLayersChanged && this.props.onLayersChanged(layers);
     return map;
   }
 
@@ -85,6 +119,29 @@ class MainMap extends Component<Props, State> {
     map.addLayer(layer);
     map.getView().fit(source.getExtent());
   };
+
+  private updateInteractions(map: Map, tool: DrawingTool): void {
+    if (this.state.drawInteraction) {
+      map.removeInteraction(this.state.drawInteraction);
+    }
+
+    const activeLayer = this.services.map.getActiveVectorLayer(map);
+    if (!activeLayer || tool.geometryType === 'None') {
+      this.setState({ drawInteraction: undefined });
+      map.set(AbcProperties.CurrentTool, DrawingTools.None);
+      return;
+    }
+
+    const drawInteraction = new Draw({
+      source: activeLayer.getSource(),
+      type: tool.geometryType,
+    });
+    map.addInteraction(drawInteraction);
+    map.set(AbcProperties.CurrentTool, tool);
+    this.setState({ drawInteraction });
+
+    logger.debug(`Activated tool '${tool.label}'`);
+  }
 }
 
 export default MainMap;

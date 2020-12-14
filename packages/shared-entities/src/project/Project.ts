@@ -41,6 +41,7 @@ export interface AbcLayerMetadata {
   name: string;
   opacity: number;
   visible: boolean;
+  active: boolean;
   type: LayerType;
 }
 

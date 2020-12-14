@@ -45,7 +45,7 @@ describe('ProjectService', () => {
     assert.equal(dbProject?.metadata.name, sampleProject.metadata.name);
   });
 
-  it('list() then findById()', async () => {
+  it('list()', async () => {
     const p1: AbcProject = TestHelper.sampleProject();
     const p2: AbcProject = TestHelper.sampleProject();
     await service.save(p1);

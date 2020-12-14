@@ -1,15 +1,19 @@
 import { combineReducers, createStore } from 'redux';
-import _ from 'lodash';
 import { StorePersistence } from './persistence/StorePersistence';
 import { projectStateReducer } from './project/reducer';
 import { projectInitialState } from './project/state';
+import { mapStateReducer } from './map/reducer';
+import { mapInitialState } from './map/state';
+import _ from 'lodash';
 
 const rootReducer = combineReducers({
   project: projectStateReducer,
+  map: mapStateReducer,
 });
 
 const emptyState: RootState = {
   project: projectInitialState,
+  map: mapInitialState,
 };
 
 export type RootState = ReturnType<typeof rootReducer>;

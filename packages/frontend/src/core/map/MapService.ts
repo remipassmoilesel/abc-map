@@ -3,7 +3,7 @@ import View from 'ol/View';
 import { fromLonLat } from 'ol/proj';
 import { Map } from 'ol';
 import { Logger } from '../utils/Logger';
-import { AbcProperties } from './AbcProperties';
+import { AbcProperties, LayerProperties } from './AbcProperties';
 import BaseLayer from 'ol/layer/Base';
 import TileLayer from 'ol/layer/Tile';
 import * as E from 'fp-ts/Either';
@@ -11,6 +11,7 @@ import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import { LayerFactory } from './LayerFactory';
 import { AbcWindow } from '../AbcWindow';
+import * as _ from 'lodash';
 
 const logger = Logger.get('MapService.ts');
 
@@ -18,15 +19,19 @@ export class MapService {
   private mainMap?: Map;
 
   public newDefaultMap(target: HTMLDivElement): Map {
-    return new Map({
+    const layer = this.newOsmLayer();
+    const map = new Map({
       target,
-      layers: [this.newOsmLayer()],
+      layers: [],
       view: new View({
         center: fromLonLat([37.41, 8.82]),
         zoom: 4,
         projection: DEFAULT_PROJECTION.name,
       }),
     });
+    map.addLayer(layer);
+    this.setActiveLayer(map, layer);
+    return map;
   }
 
   public resetMap(map: Map): void {
@@ -106,5 +111,44 @@ export class MapService {
       })
       .filter((lay) => !!lay)
       .forEach((lay) => map.addLayer(lay as BaseLayer));
+  }
+
+  public setActiveLayer(map: Map, layer: BaseLayer): void {
+    const id = layer.get(LayerProperties.Id);
+    this.setActiveLayerById(map, id);
+  }
+
+  public setActiveLayerById(map: Map, layerId: string): void {
+    const layers = this.getManagedLayers(map);
+    layers.forEach((lay) => {
+      const id = lay.get(LayerProperties.Id);
+      lay.set(LayerProperties.Active, id === layerId);
+    });
+
+    // Here we set a property to trigger change
+    map.getLayers().set(AbcProperties.LastLayerActive, layerId);
+  }
+
+  public getActiveLayer(map: Map): BaseLayer | undefined {
+    const layers = map.getLayers().getArray();
+    return layers.find((lay) => lay.get(LayerProperties.Active));
+  }
+
+  public getActiveVectorLayer(map: Map): VectorLayer | undefined {
+    const layer = this.getActiveLayer(map);
+    if (!layer || !(layer instanceof VectorLayer)) {
+      return;
+    }
+
+    return layer as VectorLayer;
+  }
+
+  public layersEquals(previous: BaseLayer[], current: BaseLayer[]) {
+    const previousIds: string[] = previous.map((lay) => lay.get(LayerProperties.Id));
+    const currentIds: string[] = current.map((lay) => lay.get(LayerProperties.Id));
+    const previousActive = previous.find((lay) => lay.get(LayerProperties.Active))?.get(LayerProperties.Id);
+    const currentActive = current.find((lay) => lay.get(LayerProperties.Active))?.get(LayerProperties.Id);
+
+    return previousActive === currentActive && _.isEqual(previousIds, currentIds);
   }
 }

@@ -3,7 +3,7 @@ import { services } from '../../core/Services';
 import { Logger } from '../../core/utils/Logger';
 import BaseLayer from 'ol/layer/Base';
 import VectorLayer from 'ol/layer/Vector';
-import { Extent } from 'ol/extent';
+import { Extent, getArea } from 'ol/extent';
 import './LayerSelector.scss';
 
 const logger = Logger.get('LayerSelector.tsx', 'debug');
@@ -12,11 +12,7 @@ interface Props {
   layers: BaseLayer[];
 }
 
-interface State {
-  selected?: BaseLayer;
-}
-
-class LayerSelector extends Component<Props, State> {
+class LayerSelector extends Component<Props, {}> {
   private services = services();
 
   constructor(props: Props) {
@@ -31,9 +27,9 @@ class LayerSelector extends Component<Props, State> {
         if (!metadata) {
           return undefined;
         }
-        const selectedClass = this.state.selected === layer ? 'selected' : '';
+        const selectedClass = metadata.active ? 'selected' : '';
         return (
-          <div key={metadata.id} onClick={() => this.onLayerSelected(layer)} className={`list-item ${selectedClass}`}>
+          <div key={metadata.id} onClick={() => this.onLayerSelected(metadata.id)} className={`list-item ${selectedClass}`}>
             - {metadata.name}
           </div>
         );
@@ -59,7 +55,7 @@ class LayerSelector extends Component<Props, State> {
             + Couche OSM
           </button>
           <button onClick={this.newVectorLayer} className={'btn btn-outline-primary'}>
-            + Couche vectorielle
+            + Couche formes
           </button>
           <button onClick={this.resetLayers} className={'btn btn-outline-primary'}>
             Tout supprimer
@@ -72,20 +68,25 @@ class LayerSelector extends Component<Props, State> {
     );
   }
 
-  private onLayerSelected = (layer: BaseLayer) => {
-    this.setState((st) => ({ ...st, selected: layer }));
-  };
-
-  private zoomToSelectedLayer = () => {
-    const selected = this.state.selected;
-    if (!selected) {
-      this.services.toasts.info("Vous devez d'abord sélectionner une couche");
-      return logger.error('No layer selected');
-    }
-
+  private onLayerSelected = (layerId: string) => {
     const map = this.services.map.getMainMap();
     if (!map) {
       return logger.error('Map not ready');
+    }
+
+    this.services.map.setActiveLayerById(map, layerId);
+  };
+
+  private zoomToSelectedLayer = () => {
+    const map = this.services.map.getMainMap();
+    if (!map) {
+      return logger.error('Map not ready');
+    }
+
+    const selected = this.services.map.getActiveLayer(map);
+    if (!selected) {
+      this.services.toasts.info("Vous devez d'abord sélectionner une couche");
+      return logger.error('No layer selected');
     }
 
     let extent: Extent | undefined;
@@ -93,9 +94,9 @@ class LayerSelector extends Component<Props, State> {
       extent = selected.getSource().getExtent();
     }
 
-    if (!extent) {
+    if (!extent || !getArea(extent)) {
       this.services.toasts.info('Impossible de zoomer sur cette couche');
-      return logger.error('Layer does not have an extent');
+      return logger.error('Layer does not have an extent, or extent is invalid');
     }
 
     map.getView().fit(extent);
@@ -109,6 +110,7 @@ class LayerSelector extends Component<Props, State> {
 
     const layer = this.services.map.newOsmLayer();
     map.addLayer(layer);
+    this.services.map.setActiveLayer(map, layer);
   };
 
   private newVectorLayer = () => {
@@ -119,6 +121,7 @@ class LayerSelector extends Component<Props, State> {
 
     const layer = this.services.map.newVectorLayer();
     map.addLayer(layer);
+    this.services.map.setActiveLayer(map, layer);
   };
 
   private resetLayers = () => {
@@ -131,8 +134,14 @@ class LayerSelector extends Component<Props, State> {
   };
 
   private toggleLayerVisibility = () => {
-    const selected = this.state.selected;
+    const map = this.services.map.getMainMap();
+    if (!map) {
+      return logger.error('Map not ready');
+    }
+
+    const selected = this.services.map.getActiveLayer(map);
     if (!selected) {
+      this.services.toasts.info("Vous devez d'abord sélectionner une couche");
       return logger.error('No layer selected');
     }
 
