@@ -1,6 +1,5 @@
 import React, { Component, ReactNode } from 'react';
 import MainMap from './main-map/MainMap';
-import { Map } from 'ol';
 import { services } from '../../core/Services';
 import LayerSelector from '../../components/layer-selector/LayerSelector';
 import ProjectStatus from '../../components/project-status/ProjectStatus';
@@ -9,6 +8,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { Logger } from '../../core/utils/Logger';
 import BaseLayer from 'ol/layer/Base';
 import ProjectControls from '../../components/project-controls/ProjectControls';
+import DrawingToolSelector from '../../components/drawing-tool-selector/DrawingToolSelector';
 import './Home.scss';
 
 const logger = Logger.get('Home.ts', 'info');
@@ -22,6 +22,7 @@ interface State {
 
 const mapStateToProps = (state: RootState) => ({
   project: state.project.current,
+  drawingTool: state.map.drawingTool,
 });
 
 const connector = connect(mapStateToProps);
@@ -29,6 +30,9 @@ const connector = connect(mapStateToProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 type Props = PropsFromRedux & LocalProps;
 
+/**
+ * Map layers are passed as props from here in order to update components "in a react way".
+ */
 class Home extends Component<Props, State> {
   private services = services();
 
@@ -53,7 +57,7 @@ class Home extends Component<Props, State> {
               <div className={'menu-item'}>Aide en ligne</div>
             </div>
           </div>
-          <MainMap project={project} onMapCreated={this.onMapCreated} />
+          <MainMap drawingTool={this.props.drawingTool} onLayersChanged={this.onLayerChange} />
           <div className="right-menu">
             <div className={'menu-group'}>
               <ProjectStatus project={project} />
@@ -62,7 +66,9 @@ class Home extends Component<Props, State> {
               <div className={'menu-item'}>Rechercher sur la carte</div>
             </div>
             <div className={'menu-group'}>
-              <div className={'menu-item'}>Outils de dessin</div>
+              <div className={'menu-item'}>
+                <DrawingToolSelector layers={this.state.layers} />
+              </div>
               <div className={'menu-item'}>
                 <LayerSelector layers={this.state.layers} />
               </div>
@@ -101,15 +107,8 @@ class Home extends Component<Props, State> {
     return message;
   };
 
-  private onMapCreated = (map: Map) => {
-    map.getLayers().on('propertychange', (ev) => {
-      logger.debug('Map event: ', ev);
-      const layers = this.services.map.getManagedLayers(map);
-      this.setState((st) => ({ ...st, layers }));
-    });
-
-    const layers = this.services.map.getManagedLayers(map);
-    this.setState((st) => ({ ...st, layers }));
+  private onLayerChange = (layers: BaseLayer[]) => {
+    this.setState({ layers });
   };
 }
 

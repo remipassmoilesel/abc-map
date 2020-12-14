@@ -81,7 +81,7 @@ class ProjectControls extends Component<Props, State> {
   private updateRecentProjects(): void {
     this.services.project
       .list()
-      .then((projects) => this.setState((st) => ({ ...st, projects })))
+      .then((projects) => this.setState({ projects }))
       .catch((err) => {
         logger.error(err);
         this.services.toasts.genericError();

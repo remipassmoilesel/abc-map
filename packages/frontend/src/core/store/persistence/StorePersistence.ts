@@ -2,6 +2,7 @@ import { LocalStorageService, StorageKey } from '../../utils/LocalStorageService
 import { RootState } from '../index';
 import { Logger } from '../../utils/Logger';
 import _ from 'lodash';
+import { DrawingTools } from '../../map/DrawingTools';
 
 const logger = Logger.get('StorePersistence', 'warn');
 
@@ -35,8 +36,7 @@ export class StorePersistence {
 
   public saveState(state: RootState): void {
     const cleanState = _.cloneDeep(state);
-    // We can not persist projects above 5MB in local storage
-    cleanState.project.current = undefined;
+    cleanState.map.drawingTool = DrawingTools.None;
     try {
       const serializedState = JSON.stringify(cleanState);
       this.storage.set(StorageKey.REDUX_STATE, serializedState);

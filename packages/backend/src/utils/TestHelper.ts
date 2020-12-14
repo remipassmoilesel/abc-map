@@ -15,9 +15,10 @@ export class TestHelper {
           type: LayerType.Predefined,
           metadata: {
             id: uuid.v4(),
-            name: 'OSM Layer',
-            type: LayerType.Vector,
+            name: 'OpenStreetMap',
+            type: LayerType.Predefined,
             visible: true,
+            active: false,
             opacity: 1,
           },
           model: PredefinedLayerModel.OSM,
@@ -26,9 +27,10 @@ export class TestHelper {
           type: LayerType.Vector,
           metadata: {
             id: uuid.v4(),
-            name: 'OSM Layer',
+            name: 'Vecteurs',
             type: LayerType.Vector,
             visible: true,
+            active: true,
             opacity: 1,
           },
           features: {

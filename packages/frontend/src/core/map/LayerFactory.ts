@@ -18,24 +18,28 @@ export class LayerFactory {
     layer.set(LayerProperties.Id, uuid.v4());
     layer.set(LayerProperties.Name, 'OpenStreetMap');
     layer.set(LayerProperties.Type, LayerType.Predefined);
+    layer.set(LayerProperties.Active, false);
     layer.set(PredefinedLayerProperties.Model, PredefinedLayerModel.OSM);
     return layer;
   }
 
   public static newVectorLayer(source?: VectorSource): VectorLayer {
-    const layer = new VectorLayer({ source });
+    const _source = source || new VectorSource();
+    const layer = new VectorLayer({ source: _source });
     layer.set(AbcProperties.Managed, true);
     layer.set(LayerProperties.Id, uuid.v4());
-    layer.set(LayerProperties.Name, 'Vecteurs');
+    layer.set(LayerProperties.Name, 'Formes');
     layer.set(LayerProperties.Type, LayerType.Vector);
+    layer.set(LayerProperties.Active, false);
     return layer;
   }
 
   public static getMetadataFromLayer(layer: BaseLayer): AbcLayerMetadata | undefined {
-    const id: string = layer.get(LayerProperties.Id);
-    const name: string = layer.get(LayerProperties.Name);
+    const id: string | undefined = layer.get(LayerProperties.Id);
+    const name: string = layer.get(LayerProperties.Name) || '';
+    const active: boolean = layer.get(LayerProperties.Active) || false;
     const type: LayerType = layer.get(LayerProperties.Type);
-    if (!type) {
+    if (!type || !id || !name) {
       return;
     }
 
@@ -45,6 +49,7 @@ export class LayerFactory {
       type,
       opacity: layer.getOpacity(),
       visible: layer.getVisible(),
+      active,
     };
   }
 
@@ -79,28 +84,41 @@ export class LayerFactory {
     return E.left(new Error(`Unhandled layer type: ${metadata.type}`));
   }
 
-  public static abcLayerToOlLayer(layer: AbcLayer): E.Either<Error, BaseLayer> {
+  public static abcLayerToOlLayer(abcLayer: AbcLayer): E.Either<Error, BaseLayer> {
+    let layer: BaseLayer | undefined;
+    let error: Error | undefined;
     // Predefined layer
-    if (LayerType.Predefined === layer.type) {
-      if (PredefinedLayerModel.OSM === layer.model) {
-        const result = this.newOsmLayer();
-        result.set(LayerProperties.Id, layer.metadata.id);
-        result.set(LayerProperties.Name, layer.metadata.name);
-        result.setOpacity(layer.metadata.opacity);
-        result.setVisible(layer.metadata.visible);
-        return E.right(result);
+    if (LayerType.Predefined === abcLayer.type) {
+      if (PredefinedLayerModel.OSM === abcLayer.model) {
+        layer = this.newOsmLayer();
+      } else {
+        error = new Error(`Unhandled predefined layer type: ${abcLayer.type}`);
       }
-      return E.left(new Error(`Unhandled predefined layer type: ${layer.type}`));
     }
     // Vector layer
-    else if (LayerType.Vector === layer.type) {
+    else if (LayerType.Vector === abcLayer.type) {
       const geoJson = new GeoJSON();
       const source = new VectorSource({
-        features: geoJson.readFeatures(layer.features),
+        features: geoJson.readFeatures(abcLayer.features),
       });
-      return E.right(this.newVectorLayer(source));
+      layer = this.newVectorLayer(source);
     }
 
-    return E.left(new Error(`Unhandled layer type: ${(layer as AbcLayer).type}`));
+    if (!layer) {
+      return E.left(new Error(`Unhandled layer type: ${(abcLayer as AbcLayer).type}`));
+    }
+
+    if (error) {
+      return E.left(error);
+    }
+
+    layer.set(LayerProperties.Id, abcLayer.metadata.id);
+    layer.set(LayerProperties.Name, abcLayer.metadata.name);
+    layer.set(LayerProperties.Active, abcLayer.metadata.active);
+    layer.set(LayerProperties.Type, abcLayer.metadata.type);
+    layer.setOpacity(abcLayer.metadata.opacity);
+    layer.setVisible(abcLayer.metadata.visible);
+
+    return E.right(layer);
   }
 }

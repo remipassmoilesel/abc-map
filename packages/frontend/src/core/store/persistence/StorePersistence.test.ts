@@ -2,6 +2,7 @@ import { StorePersistence } from './StorePersistence';
 import { LocalStorageService, StorageKey } from '../../utils/LocalStorageService';
 import { RootState } from '../index';
 import { SinonStub } from 'sinon';
+import { DrawingTools } from '../../map/DrawingTools';
 import sinon from 'sinon';
 
 describe('StorePersistence', () => {
@@ -20,10 +21,18 @@ describe('StorePersistence', () => {
       project: {
         current: { name: 'test-project' } as any,
       },
+      map: {
+        drawingTool: DrawingTools.Point,
+      },
     };
 
     const expectedState: RootState = {
-      project: {},
+      project: {
+        current: { name: 'test-project' } as any,
+      },
+      map: {
+        drawingTool: DrawingTools.None,
+      },
     };
 
     persistence.saveState(sampleState);
