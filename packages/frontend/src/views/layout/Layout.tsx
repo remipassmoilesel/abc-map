@@ -3,9 +3,9 @@ import { services } from '../../core/Services';
 import { RootState } from '../../core/store';
 import { connect, ConnectedProps } from 'react-redux';
 import { Logger } from '../../core/utils/Logger';
-import './Settings.scss';
+import './Layout.scss';
 
-const logger = Logger.get('Landing.tsx', 'info');
+const logger = Logger.get('Layout.tsx', 'info');
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface LocalProps {}
@@ -21,7 +21,7 @@ const connector = connect(mapStateToProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 type Props = PropsFromRedux & LocalProps;
 
-class Settings extends Component<Props, State> {
+class Layout extends Component<Props, State> {
   private services = services();
 
   constructor(props: Props) {
@@ -34,4 +34,4 @@ class Settings extends Component<Props, State> {
   }
 }
 
-export default connector(Settings);
+export default connector(Layout);

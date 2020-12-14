@@ -25,39 +25,69 @@ describe('MainMap', () => {
     container.remove();
   });
 
-  it('First render should initialize map correctly', () => {
-    let component: MainMap | undefined;
-    act(() => {
-      component = renderMap(DrawingTools.None, container);
+  describe('Initialization', () => {
+    it('should initialize map correctly', () => {
+      const map = new Map({});
+      let component: MainMap | undefined;
+      act(() => {
+        component = renderMap(map, DrawingTools.None, container);
+      });
+
+      expect(map.getTarget()).toBeInstanceOf(HTMLDivElement);
+      expect(map.getLayers().getListeners('propertychange')).toHaveLength(1);
+      expect(getLayersFromMap(map)).toEqual(['TileLayer']);
+      expect(component?.state.draw).toBeUndefined();
+      expect(getInteractionCountFromMap(map, 'Draw')).toEqual(0);
+      expect(getInteractionCountFromMap(map, 'DragAndDrop')).toEqual(1);
     });
 
-    const map = component?.state.map as Map;
-    expect(map).toBeInstanceOf(Map);
-    expect(getLayersFromMap(map)).toEqual(['TileLayer']);
-    expect(component?.state.drawInteraction).toBeUndefined();
-    expect(getInteractionCountFromMap(map, 'Draw')).toEqual(0);
+    it('should trigger onLayerChanged()', () => {
+      const map = new Map({});
+
+      const handler = jest.fn();
+      act(() => {
+        renderMap(map, DrawingTools.None, container, handler);
+      });
+
+      expect(handler.mock.calls.length).toBe(1);
+      expect(handler.mock.calls[0][0]).toBeInstanceOf(Array);
+      expect(handler.mock.calls[0][0]).toHaveLength(1);
+      expect(handler.mock.calls[0][0][0]).toBeInstanceOf(TileLayer);
+    });
   });
 
-  it('First render should trigger onLayerChanged()', () => {
-    const handler = jest.fn();
-    act(() => {
-      renderMap(DrawingTools.None, container, handler);
-    });
+  describe('Cleanup', () => {
+    it('should remove listeners and interactions', () => {
+      const map = new Map({});
+      const vector = mapService.newVectorLayer();
+      map.addLayer(vector);
+      mapService.setActiveLayer(map, vector);
 
-    expect(handler.mock.calls.length).toBe(1);
-    expect(handler.mock.calls[0][0]).toBeInstanceOf(Array);
-    expect(handler.mock.calls[0][0]).toHaveLength(1);
-    expect(handler.mock.calls[0][0][0]).toBeInstanceOf(TileLayer);
+      act(() => {
+        renderMap(map, DrawingTools.Point, container);
+      });
+
+      expect(getInteractionCountFromMap(map, 'Draw')).toEqual(1);
+
+      act(() => {
+        unmountComponentAtNode(container);
+      });
+
+      expect(map.getTarget()).toBeUndefined();
+      expect(map.getLayers().getListeners('propertychange')).toBeUndefined();
+      expect(getInteractionCountFromMap(map, 'Draw')).toEqual(0);
+      expect(getInteractionCountFromMap(map, 'DragAndDrop')).toEqual(0);
+    });
   });
 
   it('Layer update should trigger onLayerChanged()', () => {
+    const map = new Map({});
+
     const handler = jest.fn();
-    let component: MainMap | undefined;
     act(() => {
-      component = renderMap(DrawingTools.None, container, handler);
+      renderMap(map, DrawingTools.None, container, handler);
     });
 
-    const map = component?.state.map as Map;
     const vectorLayer = mapService.newVectorLayer();
     act(() => {
       map.addLayer(vectorLayer);
@@ -79,12 +109,13 @@ describe('MainMap', () => {
   });
 
   it('Update layers of map should update component', () => {
+    const map = new Map({});
+
     let component: MainMap | undefined;
     act(() => {
-      component = renderMap(DrawingTools.None, container);
+      component = renderMap(map, DrawingTools.None, container);
     });
 
-    const map = component?.state.map as Map;
     act(() => {
       map.addLayer(mapService.newVectorLayer());
     });
@@ -93,13 +124,27 @@ describe('MainMap', () => {
   });
 
   describe('Tool handling', () => {
-    it('Update tool when active layer is vector should enable interaction', () => {
-      let component: MainMap | undefined;
+    it('should enable interaction on instantiation', () => {
+      const map = new Map({});
+      const vector = mapService.newVectorLayer();
+      map.addLayer(vector);
+      mapService.setActiveLayer(map, vector);
+
       act(() => {
-        component = renderMap(DrawingTools.None, container);
+        renderMap(map, DrawingTools.Point, container);
       });
 
-      const map = component?.state.map as Map;
+      expect(getInteractionCountFromMap(map, 'Draw')).toEqual(1);
+    });
+
+    it('Update tool when active layer is vector should enable interaction', () => {
+      const map = new Map({});
+
+      let component: MainMap | undefined;
+      act(() => {
+        component = renderMap(map, DrawingTools.None, container);
+      });
+
       act(() => {
         const layer = mapService.newVectorLayer();
         map.addLayer(layer);
@@ -107,21 +152,22 @@ describe('MainMap', () => {
       });
 
       act(() => {
-        renderMap(DrawingTools.Point, container);
+        renderMap(map, DrawingTools.Point, container);
       });
 
-      expect(component?.state.drawInteraction).toBeInstanceOf(Draw);
+      expect(component?.state.draw).toBeInstanceOf(Draw);
       expect(map.get(AbcProperties.CurrentTool)).toEqual(DrawingTools.Point);
       expect(getInteractionCountFromMap(map, 'Draw')).toEqual(1);
     });
 
     it('Update tool to NONE should disable interaction', () => {
+      const map = new Map({});
+
       let component: MainMap | undefined;
       act(() => {
-        component = renderMap(DrawingTools.None, container);
+        component = renderMap(map, DrawingTools.None, container);
       });
 
-      const map = component?.state.map as Map;
       act(() => {
         const layer = mapService.newVectorLayer();
         map.addLayer(layer);
@@ -129,25 +175,26 @@ describe('MainMap', () => {
       });
 
       act(() => {
-        renderMap(DrawingTools.Point, container);
+        renderMap(map, DrawingTools.Point, container);
       });
 
       act(() => {
-        renderMap(DrawingTools.None, container);
+        renderMap(map, DrawingTools.None, container);
       });
 
-      expect(component?.state.drawInteraction).toBeUndefined();
+      expect(component?.state.draw).toBeUndefined();
       expect(getInteractionCountFromMap(map, 'Draw')).toEqual(0);
       expect(map.get(AbcProperties.CurrentTool)).toEqual(DrawingTools.None);
     });
 
     it('Update active layer should disable interaction (Vector -> Predefined)', () => {
+      const map = new Map({});
+
       let component: MainMap | undefined;
       act(() => {
-        component = renderMap(DrawingTools.None, container);
+        component = renderMap(map, DrawingTools.None, container);
       });
 
-      const map = component?.state.map as Map;
       act(() => {
         const layer = mapService.newVectorLayer();
         map.addLayer(layer);
@@ -155,7 +202,7 @@ describe('MainMap', () => {
       });
 
       act(() => {
-        renderMap(DrawingTools.Point, container);
+        renderMap(map, DrawingTools.Point, container);
       });
 
       act(() => {
@@ -163,18 +210,19 @@ describe('MainMap', () => {
         mapService.setActiveLayer(map, layers[0]);
       });
 
-      expect(component?.state.drawInteraction).toBeUndefined();
+      expect(component?.state.draw).toBeUndefined();
       expect(getInteractionCountFromMap(map, 'Draw')).toEqual(0);
       expect(map.get(AbcProperties.CurrentTool)).toEqual(DrawingTools.None);
     });
 
     it('Update active layer should enable interaction (Predefined -> Vector)', () => {
+      const map = new Map({});
+
       let component: MainMap | undefined;
       act(() => {
-        component = renderMap(DrawingTools.Point, container);
+        component = renderMap(map, DrawingTools.Point, container);
       });
 
-      const map = component?.state.map as Map;
       act(() => {
         const layer = mapService.newVectorLayer();
         map.addLayer(layer);
@@ -182,7 +230,7 @@ describe('MainMap', () => {
         mapService.setActiveLayer(map, layers[0]);
       });
 
-      expect(component?.state.drawInteraction).toBeUndefined();
+      expect(component?.state.draw).toBeUndefined();
       expect(getInteractionsFromMap(map)).not.toContain('Draw');
 
       act(() => {
@@ -190,7 +238,7 @@ describe('MainMap', () => {
         mapService.setActiveLayer(map, layers[1]);
       });
 
-      expect(component?.state.drawInteraction).toBeDefined();
+      expect(component?.state.draw).toBeDefined();
       expect(getInteractionCountFromMap(map, 'Draw')).toEqual(1);
       expect(map.get(AbcProperties.CurrentTool)).toEqual(DrawingTools.Point);
     });
@@ -201,9 +249,9 @@ describe('MainMap', () => {
  * Render map with specified parameters then return a reference to component.
  *
  */
-function renderMap(tool: DrawingTool, container: HTMLElement, layerHandler?: LayerChangedHandler): MainMap {
+function renderMap(map: Map, tool: DrawingTool, container: HTMLElement, layerHandler?: LayerChangedHandler): MainMap {
   // Note: render() function signature is broken
-  return ReactDOM.render(<MainMap drawingTool={tool} onLayersChanged={layerHandler} />, container) as any;
+  return ReactDOM.render(<MainMap map={map} drawingTool={tool} onLayersChanged={layerHandler} />, container) as any;
 }
 
 function getLayersFromMap(map?: Map): string[] {

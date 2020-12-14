@@ -3,9 +3,11 @@ import { services } from '../../core/Services';
 import { RootState } from '../../core/store';
 import { connect, ConnectedProps } from 'react-redux';
 import { Logger } from '../../core/utils/Logger';
-import './Settings.scss';
+import { Link } from 'react-router-dom';
+import { FrontendRoutes } from '../../FrontendRoutes';
+import './NotFound.scss';
 
-const logger = Logger.get('Landing.tsx', 'info');
+const logger = Logger.get('DataStore.tsx', 'info');
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface LocalProps {}
@@ -21,7 +23,7 @@ const connector = connect(mapStateToProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 type Props = PropsFromRedux & LocalProps;
 
-class Settings extends Component<Props, State> {
+class NotFound extends Component<Props, State> {
   private services = services();
 
   constructor(props: Props) {
@@ -30,8 +32,13 @@ class Settings extends Component<Props, State> {
   }
 
   public render(): ReactNode {
-    return <div>Cette page n&apos;est pas terminée !</div>;
+    return (
+      <div className={'abc-not-found'}>
+        <h3>Cette page n&apos;existe pas</h3>
+        <Link to={FrontendRoutes.Landing}>Retourner à l&apos;accueil</Link>
+      </div>
+    );
   }
 }
 
-export default connector(Settings);
+export default connector(NotFound);

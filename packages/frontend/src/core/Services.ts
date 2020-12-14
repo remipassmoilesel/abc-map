@@ -22,7 +22,7 @@ function serviceFactory(): Services {
   const httpClient = httpApiClient(5_000);
 
   const toasts = new ToastService();
-  const mapService = new MapService();
+  const mapService = new MapService(mainStore);
   const projectService = new ProjectService(httpClient, mainStore, mapService);
 
   return {

@@ -36,6 +36,7 @@ export class StorePersistence {
 
   public saveState(state: RootState): void {
     const cleanState = _.cloneDeep(state);
+    cleanState.map.mainMap = undefined as any; // Map will be instantiated at startup
     cleanState.map.drawingTool = DrawingTools.None;
     try {
       const serializedState = JSON.stringify(cleanState);

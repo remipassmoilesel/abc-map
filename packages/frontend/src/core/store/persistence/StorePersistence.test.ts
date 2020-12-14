@@ -3,6 +3,7 @@ import { LocalStorageService, StorageKey } from '../../utils/LocalStorageService
 import { RootState } from '../index';
 import { SinonStub } from 'sinon';
 import { DrawingTools } from '../../map/DrawingTools';
+import { Map } from 'ol';
 import sinon from 'sinon';
 
 describe('StorePersistence', () => {
@@ -22,6 +23,7 @@ describe('StorePersistence', () => {
         current: { name: 'test-project' } as any,
       },
       map: {
+        mainMap: new Map({}),
         drawingTool: DrawingTools.Point,
       },
     };
@@ -31,6 +33,7 @@ describe('StorePersistence', () => {
         current: { name: 'test-project' } as any,
       },
       map: {
+        mainMap: undefined as any,
         drawingTool: DrawingTools.None,
       },
     };

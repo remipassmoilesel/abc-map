@@ -4,11 +4,20 @@ import { Logger } from '../../core/utils/Logger';
 import BaseLayer from 'ol/layer/Base';
 import VectorLayer from 'ol/layer/Vector';
 import { Extent, getArea } from 'ol/extent';
+import { Map } from 'ol';
 import './LayerSelector.scss';
 
 const logger = Logger.get('LayerSelector.tsx', 'debug');
 
 interface Props {
+  /**
+   * Reference to the map to control, for side effects
+   */
+  map: Map;
+
+  /**
+   * Layers are passed here in order to trigger changes on layers changes
+   */
   layers: BaseLayer[];
 }
 
@@ -69,21 +78,11 @@ class LayerSelector extends Component<Props, {}> {
   }
 
   private onLayerSelected = (layerId: string) => {
-    const map = this.services.map.getMainMap();
-    if (!map) {
-      return logger.error('Map not ready');
-    }
-
-    this.services.map.setActiveLayerById(map, layerId);
+    this.services.map.setActiveLayerById(this.props.map, layerId);
   };
 
   private zoomToSelectedLayer = () => {
-    const map = this.services.map.getMainMap();
-    if (!map) {
-      return logger.error('Map not ready');
-    }
-
-    const selected = this.services.map.getActiveLayer(map);
+    const selected = this.services.map.getActiveLayer(this.props.map);
     if (!selected) {
       this.services.toasts.info("Vous devez d'abord sélectionner une couche");
       return logger.error('No layer selected');
@@ -99,47 +98,27 @@ class LayerSelector extends Component<Props, {}> {
       return logger.error('Layer does not have an extent, or extent is invalid');
     }
 
-    map.getView().fit(extent);
+    this.props.map.getView().fit(extent);
   };
 
   private newOsmLayer = () => {
-    const map = this.services.map.getMainMap();
-    if (!map) {
-      return logger.error('Map not ready');
-    }
-
     const layer = this.services.map.newOsmLayer();
-    map.addLayer(layer);
-    this.services.map.setActiveLayer(map, layer);
+    this.props.map.addLayer(layer);
+    this.services.map.setActiveLayer(this.props.map, layer);
   };
 
   private newVectorLayer = () => {
-    const map = this.services.map.getMainMap();
-    if (!map) {
-      return logger.error('Map not ready');
-    }
-
     const layer = this.services.map.newVectorLayer();
-    map.addLayer(layer);
-    this.services.map.setActiveLayer(map, layer);
+    this.props.map.addLayer(layer);
+    this.services.map.setActiveLayer(this.props.map, layer);
   };
 
   private resetLayers = () => {
-    const map = this.services.map.getMainMap();
-    if (!map) {
-      return logger.error('Map not ready');
-    }
-
-    map.getLayers().clear();
+    this.props.map.getLayers().clear();
   };
 
   private toggleLayerVisibility = () => {
-    const map = this.services.map.getMainMap();
-    if (!map) {
-      return logger.error('Map not ready');
-    }
-
-    const selected = this.services.map.getActiveLayer(map);
+    const selected = this.services.map.getActiveLayer(this.props.map);
     if (!selected) {
       this.services.toasts.info("Vous devez d'abord sélectionner une couche");
       return logger.error('No layer selected');
