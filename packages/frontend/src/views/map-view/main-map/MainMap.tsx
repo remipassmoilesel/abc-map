@@ -15,6 +15,8 @@ import BaseLayer from 'ol/layer/Base';
 import { EventsKey } from 'ol/events';
 import BaseEvent from 'ol/events/Event';
 import './MainMap.scss';
+import _ from 'lodash';
+import { ResizeObserverFactory } from '../../../core/utils/ResizeObserverFactory';
 
 export const logger = Logger.get('MainMap.ts', 'debug');
 
@@ -32,6 +34,7 @@ interface State {
   layers: BaseLayer[];
   activeLayer?: BaseLayer;
   layerChangedHandler?: EventsKey;
+  sizeObserver?: ResizeObserver;
 }
 
 class MainMap extends Component<Props, State> {
@@ -81,27 +84,26 @@ class MainMap extends Component<Props, State> {
     // Attach to target
     map.setTarget(div);
 
-    // Add default layer if needed
-    if (!map.getLayers().getLength()) {
-      const layer = this.services.map.newOsmLayer();
-      map.addLayer(layer);
-      this.services.map.setActiveLayer(map, layer);
-    }
-
     // TODO: create custom drag and drop in order to handle errors and support abm2 format
     const dropData = new DragAndDrop({
       formatConstructors: ([GPX, GeoJSON, IGC, KML, TopoJSON] as any) as FeatureFormat[], // OL typing is broken
     });
     dropData.on('addfeatures', this.onFeaturesDropped);
     map.addInteraction(dropData);
-    this.setState({ dropData: dropData });
 
     // Here we trigger a component update when layers change for interactions
     map.getLayers().on('propertychange', this.onLayersChanged);
 
+    // Here we listen to div support size change
+    const resizeThrottled = _.throttle(() => map.updateSize(), 300, { trailing: true });
+    const sizeObserver = ResizeObserverFactory.create(() => resizeThrottled());
+    sizeObserver.observe(div);
+
     // First trigger for layer setup
     const layers = this.services.map.getManagedLayers(map);
     this.props.onLayersChanged && this.props.onLayersChanged(layers);
+
+    this.setState({ dropData, sizeObserver });
   }
 
   private cleanupMap() {
@@ -109,6 +111,7 @@ class MainMap extends Component<Props, State> {
     map.setTarget(undefined);
     this.state.dropData && map.removeInteraction(this.state.dropData);
     this.state.draw && map.removeInteraction(this.state.draw);
+    this.state.sizeObserver && this.state.sizeObserver.disconnect();
     map.getLayers().removeEventListener('propertychange', this.onLayersChanged);
   }
 

@@ -1,0 +1,15 @@
+
+.abc-layout-view {
+  max-height: 95vh;
+  overflow: hidden;
+
+  .content  {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .control-bar {
+    display: flex;
+    flex-direction: column;
+  }
+}

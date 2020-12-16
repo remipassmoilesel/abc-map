@@ -14,4 +14,16 @@ export class MapFactory {
       }),
     });
   }
+
+  public static newNakedMap() {
+    return new Map({
+      layers: [],
+      view: new View({
+        center: fromLonLat([37.41, 8.82]),
+        zoom: 4,
+        projection: DEFAULT_PROJECTION.name,
+      }),
+      controls: [],
+    });
+  }
 }

@@ -1,31 +1,5 @@
 import { FeatureCollection } from 'geojson';
 
-//
-//  WARNING: modifying entities here needs a data migration for the moment
-//
-
-export interface AbcProject {
-  metadata: AbcProjectMetadata;
-  layers: AbcLayer[];
-}
-
-export interface AbcProjectMetadata {
-  id: string;
-  version: string;
-  name: string;
-  projection: AbcProjection;
-}
-
-export const CURRENT_VERSION = '0.1';
-
-export interface AbcProjection {
-  name: string;
-}
-
-export const DEFAULT_PROJECTION: AbcProjection = {
-  name: 'EPSG:3857',
-};
-
 export interface AbcBaseLayer {
   type: LayerType;
   metadata: AbcLayerMetadata;

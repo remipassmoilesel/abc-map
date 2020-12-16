@@ -5,7 +5,8 @@ export interface ProjectState {
   /**
    * <p>Current opened project.</p>
    *
-   * <p>This objects is not necessarily up to date</p>
+   * <p>This objects is not necessarily up to date, and it will never contains layers and data.
+   * Layers and data are managed in main map state.</p>
    */
   current?: AbcProject;
 }

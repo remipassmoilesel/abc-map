@@ -9,12 +9,21 @@ import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import { LayerFactory } from './LayerFactory';
 import { MainStore } from '../store';
+import { MapFactory } from './MapFactory';
 import * as _ from 'lodash';
 
-const logger = Logger.get('MapService.ts');
+export const logger = Logger.get('MapService.ts');
 
 export class MapService {
   constructor(private mainStore: MainStore) {}
+
+  public newDefaultMap(): Map {
+    return MapFactory.newDefaultMap();
+  }
+
+  public newNakedMap(): Map {
+    return MapFactory.newNakedMap();
+  }
 
   public getMainMap(): Map {
     return this.mainStore.getState().map.mainMap;
@@ -119,5 +128,30 @@ export class MapService {
     const currentActive = current.find((lay) => lay.get(LayerProperties.Active))?.get(LayerProperties.Id);
 
     return previousActive === currentActive && _.isEqual(previousIds, currentIds);
+  }
+
+  public cloneLayer(layer: BaseLayer): BaseLayer | undefined {
+    if (layer instanceof TileLayer) {
+      return new TileLayer({ source: layer.getSource() });
+    } else if (layer instanceof VectorLayer) {
+      return new VectorLayer({ source: layer.getSource() });
+    } else {
+      logger.error(`Unknown layer: ${layer.constructor.name}`);
+    }
+  }
+
+  /**
+   * "Clone" all layers present in source map and add them to destMap
+   */
+  public cloneLayers(sourceMap: Map, destMap: Map) {
+    destMap.getLayers().clear();
+    const projectLayers = this.getManagedLayers(sourceMap);
+    projectLayers.forEach((lay) => {
+      const previewLayer = this.cloneLayer(lay);
+      if (!previewLayer) {
+        return logger.warn(`Layer will not be displayed, format is unknown: ${lay.constructor.name}`);
+      }
+      destMap.addLayer(previewLayer);
+    });
   }
 }

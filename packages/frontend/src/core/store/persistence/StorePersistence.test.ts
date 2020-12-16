@@ -30,7 +30,7 @@ describe('StorePersistence', () => {
 
     const expectedState: RootState = {
       project: {
-        current: { name: 'test-project' } as any,
+        current: undefined,
       },
       map: {
         mainMap: undefined as any,

@@ -26,7 +26,7 @@ class TopBar extends Component<{}, {}> {
           Magasin de données
         </Link>
         <Link to={FrontendRoutes.Layout} className={'link'}>
-          Impression
+          Mise en page
         </Link>
         <Link to={FrontendRoutes.Settings} className={'link'}>
           Paramètres
