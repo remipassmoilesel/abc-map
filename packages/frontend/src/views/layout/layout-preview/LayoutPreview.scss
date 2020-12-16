@@ -1,0 +1,19 @@
+.abc-layout-preview {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+
+  .preview-container {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    .preview-frame {
+      border: solid 1px black;
+    }
+
+  }
+
+}

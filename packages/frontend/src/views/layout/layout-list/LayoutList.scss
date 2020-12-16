@@ -1,0 +1,19 @@
+
+.abc-layout-list {
+  width: 15vw;
+  height: 80vh;
+
+  .item {
+    border: solid 1px lightgrey;
+    margin: 5px;
+    padding: 5px;
+    cursor: pointer;
+    user-select: none;
+
+    &.active {
+      color: white;
+      background-color: darkblue;
+    }
+  }
+
+}

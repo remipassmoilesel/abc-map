@@ -25,6 +25,7 @@ export class TestHelper {
         projection: DEFAULT_PROJECTION,
       },
       layers: [this.sampleOsmLayer(), this.sampleVectorLayer()],
+      layouts: [],
     };
   }
 

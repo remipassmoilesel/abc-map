@@ -6,9 +6,9 @@ import ReactDOM, { unmountComponentAtNode } from 'react-dom';
 import { act } from 'react-dom/test-utils';
 import { services } from '../../../core/Services';
 import { Draw } from 'ol/interaction';
-import { AbcProperties } from '../../../core/map/AbcProperties';
+import { AbcProperties, LayerProperties } from '../../../core/map/AbcProperties';
 import TileLayer from 'ol/layer/Tile';
-import VectorLayer from 'ol/layer/Vector';
+import BaseLayer from 'ol/layer/Base';
 
 logger.disable();
 
@@ -35,7 +35,7 @@ describe('MainMap', () => {
 
       expect(map.getTarget()).toBeInstanceOf(HTMLDivElement);
       expect(map.getLayers().getListeners('propertychange')).toHaveLength(1);
-      expect(getLayersFromMap(map)).toEqual(['TileLayer']);
+      expect(getLayersFromMap(map)).toEqual([]);
       expect(component?.state.draw).toBeUndefined();
       expect(getInteractionCountFromMap(map, 'Draw')).toEqual(0);
       expect(getInteractionCountFromMap(map, 'DragAndDrop')).toEqual(1);
@@ -51,8 +51,7 @@ describe('MainMap', () => {
 
       expect(handler.mock.calls.length).toBe(1);
       expect(handler.mock.calls[0][0]).toBeInstanceOf(Array);
-      expect(handler.mock.calls[0][0]).toHaveLength(1);
-      expect(handler.mock.calls[0][0][0]).toBeInstanceOf(TileLayer);
+      expect(handler.mock.calls[0][0]).toHaveLength(0);
     });
   });
 
@@ -88,24 +87,22 @@ describe('MainMap', () => {
       renderMap(map, DrawingTools.None, container, handler);
     });
 
-    const vectorLayer = mapService.newVectorLayer();
+    const tileLayer = mapService.newOsmLayer();
     act(() => {
-      map.addLayer(vectorLayer);
+      map.addLayer(tileLayer);
     });
 
     expect(handler.mock.calls.length).toBe(2);
-    expect(handler.mock.calls[1][0]).toHaveLength(2);
+    expect(handler.mock.calls[1][0]).toHaveLength(1);
     expect(handler.mock.calls[1][0][0]).toBeInstanceOf(TileLayer);
-    expect(handler.mock.calls[1][0][1]).toBeInstanceOf(VectorLayer);
 
     act(() => {
-      mapService.setActiveLayer(map, vectorLayer);
+      mapService.setActiveLayer(map, tileLayer);
     });
 
     expect(handler.mock.calls.length).toBe(3);
-    expect(handler.mock.calls[2][0]).toHaveLength(2);
+    expect(handler.mock.calls[2][0]).toHaveLength(1);
     expect(handler.mock.calls[2][0][0]).toBeInstanceOf(TileLayer);
-    expect(handler.mock.calls[2][0][1]).toBeInstanceOf(VectorLayer);
   });
 
   it('Update layers of map should update component', () => {
@@ -116,11 +113,13 @@ describe('MainMap', () => {
       component = renderMap(map, DrawingTools.None, container);
     });
 
+    const osmLayer = mapService.newOsmLayer();
     act(() => {
-      map.addLayer(mapService.newVectorLayer());
+      map.addLayer(osmLayer);
     });
 
-    expect(getLayersFromComponent(component)).toEqual(['TileLayer', 'VectorLayer']);
+    expect(getLayerNamesFromState(component)).toEqual(['TileLayer']);
+    expect(getLayersFromState(component).map((lay) => lay.get(LayerProperties.Id))).toEqual([osmLayer.get(LayerProperties.Id)]);
   });
 
   describe('Tool handling', () => {
@@ -196,9 +195,10 @@ describe('MainMap', () => {
       });
 
       act(() => {
-        const layer = mapService.newVectorLayer();
-        map.addLayer(layer);
-        mapService.setActiveLayer(map, layer);
+        map.addLayer(mapService.newOsmLayer());
+        const vector = mapService.newVectorLayer();
+        map.addLayer(vector);
+        mapService.setActiveLayer(map, vector);
       });
 
       act(() => {
@@ -224,14 +224,15 @@ describe('MainMap', () => {
       });
 
       act(() => {
-        const layer = mapService.newVectorLayer();
-        map.addLayer(layer);
+        map.addLayer(mapService.newOsmLayer());
+        const vector = mapService.newVectorLayer();
+        map.addLayer(vector);
         const layers = mapService.getManagedLayers(map);
         mapService.setActiveLayer(map, layers[0]);
       });
 
       expect(component?.state.draw).toBeUndefined();
-      expect(getInteractionsFromMap(map)).not.toContain('Draw');
+      expect(getInteractionNamesFromMap(map)).not.toContain('Draw');
 
       act(() => {
         const layers = mapService.getManagedLayers(map);
@@ -250,7 +251,7 @@ describe('MainMap', () => {
  *
  */
 function renderMap(map: Map, tool: DrawingTool, container: HTMLElement, layerHandler?: LayerChangedHandler): MainMap {
-  // Note: render() function signature is broken
+  // Note: ReactDOM.render() function signature is broken
   return ReactDOM.render(<MainMap map={map} drawingTool={tool} onLayersChanged={layerHandler} />, container) as any;
 }
 
@@ -262,7 +263,7 @@ function getLayersFromMap(map?: Map): string[] {
     .map((lay) => lay.constructor.name);
 }
 
-function getInteractionsFromMap(map?: Map): string[] {
+function getInteractionNamesFromMap(map?: Map): string[] {
   expect(map).toBeDefined();
   return (map as Map)
     .getInteractions()
@@ -278,7 +279,12 @@ function getInteractionCountFromMap(map: Map, name: string): number {
     .filter((inter) => inter.constructor.name === name).length;
 }
 
-function getLayersFromComponent(map?: MainMap): string[] {
+function getLayersFromState(map?: MainMap): BaseLayer[] {
+  expect(map).toBeDefined();
+  return (map as MainMap).state.layers;
+}
+
+function getLayerNamesFromState(map?: MainMap): string[] {
   expect(map).toBeDefined();
   return (map as MainMap).state.layers.map((lay) => lay.constructor.name);
 }

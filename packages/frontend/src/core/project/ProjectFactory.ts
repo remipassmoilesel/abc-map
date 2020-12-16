@@ -15,6 +15,7 @@ export class ProjectFactory {
         name: `Projet du ${DateTime.local().toLocaleString()}`,
       },
       layers: [],
+      layouts: [],
     };
   }
 }

@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
 import mainStore from './core/store';
 import Landing from './views/landing/Landing';
-import Layout from './views/layout/Layout';
+import LayoutView from './views/layout/LayoutView';
 import TopBar from './components/top-bar/TopBar';
 import DataStore from './views/datastore/DataStore';
 import NotFound from './views/not-found/NotFound';
@@ -23,7 +23,7 @@ class App extends Component<{}, {}> {
             <Route exact path={FrontendRoutes.Landing} component={Landing} />
             <Route exact path={FrontendRoutes.Map} component={MapView} />
             <Route exact path={FrontendRoutes.DataStore} component={DataStore} />
-            <Route exact path={FrontendRoutes.Layout} component={Layout} />
+            <Route exact path={FrontendRoutes.Layout} component={LayoutView} />
             <Route exact path={FrontendRoutes.Settings} component={Settings} />
             <Route exact path={FrontendRoutes.Help} component={Help} />
             <Route path={'*'} component={NotFound} />

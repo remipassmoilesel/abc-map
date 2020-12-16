@@ -52,6 +52,7 @@ export class TestHelper {
           },
         },
       ],
+      layouts: [],
     };
   }
 }

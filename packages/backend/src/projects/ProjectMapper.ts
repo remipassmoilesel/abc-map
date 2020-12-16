@@ -7,6 +7,7 @@ export class ProjectMapper {
       _id: dto.metadata.id,
       metadata: dto.metadata,
       layers: dto.layers,
+      layouts: dto.layouts,
     };
   }
 
@@ -14,6 +15,7 @@ export class ProjectMapper {
     return {
       metadata: doc.metadata,
       layers: doc.layers,
+      layouts: doc.layouts,
     };
   }
 }

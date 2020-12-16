@@ -1,4 +1,4 @@
-import { MapService } from './MapService';
+import { logger, MapService } from './MapService';
 import { AbcPredefinedLayer, AbcProject, AbcVectorLayer, LayerType, PredefinedLayerModel } from '@abc-map/shared-entities';
 import { AbcProperties, LayerProperties } from './AbcProperties';
 import { TestHelper } from '../utils/TestHelper';
@@ -8,6 +8,8 @@ import VectorLayer from 'ol/layer/Vector';
 import * as uuid from 'uuid';
 import { MainStore } from '../store';
 import { MapFactory } from './MapFactory';
+
+logger.disable();
 
 describe('MapService', () => {
   let service: MapService;
@@ -151,6 +153,58 @@ describe('MapService', () => {
 
       const result = service.layersEquals([layer1], [layer2]);
       expect(result).toBeFalsy();
+    });
+  });
+
+  describe('cloneLayer()', () => {
+    it('with tile layer', () => {
+      const layer = service.newOsmLayer();
+      const clone: TileLayer = service.cloneLayer(layer) as TileLayer;
+      expect(clone).toBeDefined();
+      expect(clone).toBeInstanceOf(TileLayer);
+      expect(clone.getSource() === layer.getSource()).toBeTruthy();
+      expect(clone === layer).toBeFalsy();
+    });
+
+    it('with vector layer', () => {
+      const layer = service.newVectorLayer();
+      const clone: VectorLayer = service.cloneLayer(layer) as VectorLayer;
+      expect(clone).toBeDefined();
+      expect(clone).toBeInstanceOf(VectorLayer);
+      expect(clone.getSource() === layer.getSource()).toBeTruthy();
+      expect(clone === layer).toBeFalsy();
+    });
+
+    it('with wrong layer', () => {
+      const layer: any = { notALayer: true };
+      const clone = service.cloneLayer(layer);
+      expect(clone).toBeUndefined();
+    });
+  });
+
+  it('cloneLayers()', () => {
+    const source = service.newDefaultMap();
+    source.addLayer(service.newOsmLayer());
+    source.addLayer(service.newVectorLayer());
+
+    const dest = service.newDefaultMap();
+    service.cloneLayers(source, dest);
+
+    const sourceLayers: string[] = source
+      .getLayers()
+      .getArray()
+      .map((lay) => lay.get(LayerProperties.Id));
+    const destLayers: string[] = source
+      .getLayers()
+      .getArray()
+      .map((lay) => lay.get(LayerProperties.Id));
+
+    expect(destLayers).toHaveLength(2);
+    expect(destLayers).toEqual(sourceLayers);
+
+    source.getLayers().forEach((layA, idx) => {
+      const layB = dest.getLayers().getArray()[idx];
+      expect(layA === layB).toBeFalsy();
     });
   });
 });
