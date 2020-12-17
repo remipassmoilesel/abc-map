@@ -30,7 +30,13 @@ class Help extends Component<Props, State> {
   }
 
   public render(): ReactNode {
-    return <div>Cette page n&apos;est pas terminée !</div>;
+    return (
+      <div className={'abc-help'}>
+        <h1>Aide</h1>
+        <p>Sur cette page, vous trouverez des tutoriels et le manuel d&apos;Abc-Map.</p>
+        <p>Cette page n&apos;est pas terminée !</p>
+      </div>
+    );
   }
 }
 

@@ -2,4 +2,9 @@
 .abc-drawing-tool-selector {
   display: flex;
   flex-direction: column;
+
+  .btn {
+    margin: 3px;
+    flex-grow: 1;
+  }
 }

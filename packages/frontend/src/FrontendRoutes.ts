@@ -5,4 +5,5 @@ export class FrontendRoutes {
   public static readonly Layout = '/layout';
   public static readonly Settings = '/settings';
   public static readonly Help = '/help';
+  public static readonly About = '/about';
 }

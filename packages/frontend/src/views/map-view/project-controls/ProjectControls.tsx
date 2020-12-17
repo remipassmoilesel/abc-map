@@ -1,8 +1,8 @@
 import React, { Component, ReactNode } from 'react';
-import { services } from '../../core/Services';
+import { services } from '../../../core/Services';
 import { AbcProject } from '@abc-map/shared-entities';
-import { Logger } from '../../core/utils/Logger';
-import { Constants } from '../../core/Constants';
+import { Logger } from '../../../core/utils/Logger';
+import { Constants } from '../../../core/Constants';
 import { Map } from 'ol';
 import './ProjectControls.scss';
 
@@ -31,14 +31,12 @@ class ProjectControls extends Component<Props, State> {
   public render(): ReactNode {
     const projects = this.state.recentProjects;
     return (
-      <div className={'project-controls'}>
-        <div className={'control-item'}>
-          <button onClick={this.newProject} type={'button'} className={'btn btn-link'}>
-            Nouveau projet
-          </button>
+      <div className={'project-controls control-block'}>
+        <div className={'mb-2'}>
+          <i className={'fa fa-clock mr-2'} />
+          Projets récents:
         </div>
         <div className={'control-item'}>
-          Projects récents:
           <div className={'recent-projects'}>
             {projects.map((pr) => (
               <div key={pr.metadata.id} className={'item'} onClick={() => this.openProject(pr.metadata.id)}>
@@ -49,17 +47,25 @@ class ProjectControls extends Component<Props, State> {
           </div>
         </div>
         <div className={'control-item'}>
+          <button onClick={this.newProject} type={'button'} className={'btn btn-link'}>
+            <i className={'fa fa-file mr-2'} /> Nouveau projet
+          </button>
+        </div>
+        <div className={'control-item'}>
           <button onClick={this.saveProject} type={'button'} className={'btn btn-link'}>
-            Enregistrer
+            <i className={'fa fa-pen-alt mr-2'} />
+            Enregistrer en ligne
           </button>
         </div>
         <div className={'control-item'}>
           <button onClick={this.exportProject} type={'button'} className={'btn btn-link'}>
+            <i className={'fa fa-download mr-2'} />
             Exporter le projet
           </button>
         </div>
         <div className={'control-item'}>
           <button onClick={this.importProject} type={'button'} className={'btn btn-link'}>
+            <i className={'fa fa-upload mr-2'} />
             Importer un projet
           </button>
         </div>
@@ -93,12 +99,12 @@ class ProjectControls extends Component<Props, State> {
     }
 
     this.services.toasts.info('Enregistrement en cours ...');
-
     const layers = this.services.map.exportLayers(this.props.map);
     project = {
       ...project,
       layers,
     };
+
     return this.services.project
       .save(project)
       .then(() => {
@@ -122,13 +128,13 @@ class ProjectControls extends Component<Props, State> {
     }
 
     this.services.toasts.info('Export en cours ...');
-
     const layers = this.services.map.exportLayers(this.props.map);
     project = {
       ...project,
       layers,
     };
 
+    this.services.toasts.info('Export terminé !');
     this.downloadProject(project);
   };
 
@@ -158,6 +164,10 @@ class ProjectControls extends Component<Props, State> {
           fileNode.remove();
         });
     };
+
+    fileNode.oncancel = () => {
+      fileNode.remove();
+    };
   };
 
   private downloadProject(project: AbcProject) {
@@ -174,6 +184,7 @@ class ProjectControls extends Component<Props, State> {
     const fileNode = document.createElement('input');
     fileNode.setAttribute('type', 'file');
     document.body.appendChild(fileNode);
+    fileNode.style.display = 'none';
     return fileNode;
   }
 }

@@ -1,0 +1,24 @@
+
+.control-block {
+  padding: 10px;
+  margin: 20px 10px;
+  border: solid lightgray 1px;
+  border-radius: 0.5rem;
+
+  .control-item {
+    margin: 0 0 10px 0 ;
+    padding: 0;
+
+    .btn-link {
+      padding: 0;
+
+      &:hover {
+        text-decoration: none;
+      }
+
+      &:focus {
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.20);
+      }
+    }
+  }
+}

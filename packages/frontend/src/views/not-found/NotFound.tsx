@@ -34,7 +34,7 @@ class NotFound extends Component<Props, State> {
   public render(): ReactNode {
     return (
       <div className={'abc-not-found'}>
-        <h3>Cette page n&apos;existe pas</h3>
+        <h3>Cette page n&apos;existe pas !</h3>
         <Link to={FrontendRoutes.Landing}>Retourner à l&apos;accueil</Link>
       </div>
     );

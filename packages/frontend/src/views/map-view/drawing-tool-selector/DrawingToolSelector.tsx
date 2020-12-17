@@ -1,11 +1,11 @@
 import React, { Component, ReactNode } from 'react';
-import { services } from '../../core/Services';
-import { Logger } from '../../core/utils/Logger';
+import { services } from '../../../core/Services';
+import { Logger } from '../../../core/utils/Logger';
 import BaseLayer from 'ol/layer/Base';
-import { DrawingTool, DrawingTools } from '../../core/map/DrawingTools';
-import { RootState } from '../../core/store';
+import { DrawingTool, DrawingTools } from '../../../core/map/DrawingTools';
+import { RootState } from '../../../core/store';
 import { connect, ConnectedProps } from 'react-redux';
-import { MapActions } from '../../core/store/map/actions';
+import { MapActions } from '../../../core/store/map/actions';
 import './DrawingToolSelector.scss';
 
 const logger = Logger.get('DrawingToolSelector.tsx', 'info');
@@ -45,9 +45,9 @@ class DrawingToolSelector extends Component<Props, {}> {
       );
     });
     return (
-      <div className={'abc-drawing-tool-selector'}>
+      <div className={'control-block abc-drawing-tool-selector'}>
         <div>Outils de dessin</div>
-        <div>{buttons}</div>
+        {buttons}
       </div>
     );
   }
