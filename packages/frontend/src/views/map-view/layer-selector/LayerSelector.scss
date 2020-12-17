@@ -7,7 +7,6 @@ $list-height: 140px;
     height: $list-height;
     max-height: $list-height;
     overflow-y: scroll;
-    margin: 10px 5px 10px 5px;
     padding: 5px;
     border: solid silver 1px;
   }
@@ -17,12 +16,17 @@ $list-height: 140px;
     user-select: none;
 
     &.selected {
-      background: darkblue;
+      background: #007bff;
       color: white;
     }
   }
 
-  .controls button {
-    margin-bottom: 6px;
+  .controls{
+    display: flex;
+    flex-direction: column;
+
+    button {
+      margin: 3px;
+    }
   }
 }

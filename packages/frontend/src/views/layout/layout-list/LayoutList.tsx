@@ -27,10 +27,6 @@ class LayoutList extends Component<Props, {}> {
         <div key={lay.id} className={classes} onClick={() => this.onLayoutSelected(lay)}>
           <div>{lay.name}</div>
           <div>Format: {lay.format.name}</div>
-          <div>
-            Centre: {Math.round(lay.view.center[0])} {Math.round(lay.view.center[1])}
-          </div>
-          <div>1px = {Math.round(lay.view.resolution * 100) / 100}</div>
         </div>
       );
     });
@@ -42,7 +38,7 @@ class LayoutList extends Component<Props, {}> {
 
     return (
       <div className={'abc-layout-list'}>
-        <h3>Pages</h3>
+        <div className={'mt-3 mb-3'}>Pages du projet</div>
         {items}
         {message}
       </div>

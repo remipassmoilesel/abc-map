@@ -1,6 +1,6 @@
 import React, { Component, ReactNode } from 'react';
-import { services } from '../../core/Services';
-import { Logger } from '../../core/utils/Logger';
+import { services } from '../../../core/Services';
+import { Logger } from '../../../core/utils/Logger';
 import BaseLayer from 'ol/layer/Base';
 import VectorLayer from 'ol/layer/Vector';
 import { Extent, getArea } from 'ol/extent';
@@ -50,13 +50,13 @@ class LayerSelector extends Component<Props, {}> {
       message = 'Aucune couche';
     }
     return (
-      <div className={'abc-layer-selector d-flex flex-column'}>
-        <div>Couches:</div>
-        <div className={'layer-list'}>
+      <div className={'control-block abc-layer-selector d-flex flex-column'}>
+        <div className={'control-item'}>Couches</div>
+        <div className={'control-item layer-list'}>
           {items}
           {message}
         </div>
-        <div className={'controls d-flex flex-column'}>
+        <div className={'control-item controls'}>
           <button onClick={this.zoomToSelectedLayer} className={'btn btn-outline-primary'}>
             Zoom
           </button>

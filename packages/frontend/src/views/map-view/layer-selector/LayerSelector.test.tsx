@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import LayerSelector from './LayerSelector';
 import { Map } from 'ol';
 
-jest.mock('../../core/Services', () => {
+jest.mock('../../../core/Services', () => {
   return { services: () => ({}) };
 });
 

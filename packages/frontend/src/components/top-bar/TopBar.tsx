@@ -15,15 +15,17 @@ class TopBar extends Component<{}, {}> {
   public render(): ReactNode {
     return (
       <div className={'abc-top-bar'}>
-        <h3 className={'text-center mt-2'}>Abc-Map</h3>
-        <Link to={FrontendRoutes.Landing} className={'link'}>
-          Accueil
-        </Link>
+        <h1>
+          <Link to={FrontendRoutes.Landing}>
+            <i className={'fa fa-map-marked-alt mr-2'} />
+            Abc-Map
+          </Link>
+        </h1>
         <Link to={FrontendRoutes.Map} className={'link'}>
           Carte
         </Link>
         <Link to={FrontendRoutes.DataStore} className={'link'}>
-          Magasin de données
+          Catalogue de données
         </Link>
         <Link to={FrontendRoutes.Layout} className={'link'}>
           Mise en page
@@ -33,6 +35,9 @@ class TopBar extends Component<{}, {}> {
         </Link>
         <Link to={FrontendRoutes.Help} className={'link'}>
           Aide
+        </Link>
+        <Link to={FrontendRoutes.About} className={'link'}>
+          A propos
         </Link>
       </div>
     );

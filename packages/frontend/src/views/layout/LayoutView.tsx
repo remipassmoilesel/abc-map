@@ -53,18 +53,41 @@ class LayoutView extends Component<Props, State> {
     ));
     return (
       <div className={'abc-layout-view'}>
-        <h1>Mise en page</h1>
         <div className={'content'}>
-          <LayoutList layouts={layouts} activeLayout={activeLayout} onLayoutSelected={this.onLayoutSelected} />
+          <div className={'left-panel'}>
+            <LayoutList layouts={layouts} activeLayout={activeLayout} onLayoutSelected={this.onLayoutSelected} />
+          </div>
           <LayoutPreview layout={activeLayout} mainMap={this.props.mainMap} onLayoutChanged={this.onLayoutChanged} />
-          <div className={'control-bar'}>
-            <select onChange={this.onFormatChange} value={this.state.format.name}>
-              {formatOptions}
-            </select>
-            <button onClick={this.newLayout}>Nouvelle page</button>
-            <button onClick={this.clearAll}>Supprimer toutes les pages</button>
-            <button onClick={this.exportOneLayout}>Exporter la page courante</button>
-            <button onClick={this.exportAllLayouts}>Exporter tout</button>
+          <div className={'right-panel'}>
+            <div className={'control-block form-group'}>
+              <button onClick={this.newLayout} className={'btn btn-link'}>
+                <i className={'fa fa-file mr-2'} />
+                Nouvelle page
+              </button>
+              <select className={'form-control'} onChange={this.onFormatChange} value={this.state.format.name}>
+                {formatOptions}
+              </select>
+            </div>
+            <div className={'control-block'}>
+              <div className={'control-item'}>
+                <button onClick={this.clearAll} className={'btn btn-link'}>
+                  <i className={'fa fa-trash-alt mr-2'} />
+                  Supprimer tout
+                </button>
+              </div>
+              <div className={'control-item'}>
+                <button onClick={this.exportOneLayout} className={'btn btn-link'}>
+                  <i className={'fa fa-download mr-2'} />
+                  Exporter la page
+                </button>
+              </div>
+              <div className={'control-item'}>
+                <button onClick={this.exportAllLayouts} className={'btn btn-link'}>
+                  <i className={'fa fa-download mr-2'} />
+                  Exporter tout
+                </button>
+              </div>
+            </div>
           </div>
         </div>
         <div ref={this.exportMapRef} />
@@ -124,13 +147,17 @@ class LayoutView extends Component<Props, State> {
   };
 
   public exportOneLayout = () => {
-    this.services.toasts.info("Début de l'export ...");
     const layout = this.state.activeLayout;
     const support = this.exportMapRef.current;
-    if (!support || !layout) {
+    if (!layout) {
+      return this.services.toasts.error('Vous devez créer une mise en page');
+    }
+    if (!support) {
+      this.services.toasts.genericError();
       return logger.error('Support or layout not ready');
     }
 
+    this.services.toasts.info("Début de l'export ...");
     const pdf = new jsPDF();
     const exportMap = this.services.map.newNakedMap();
     exportMap.setTarget(support);
@@ -148,8 +175,12 @@ class LayoutView extends Component<Props, State> {
     this.services.toasts.info("Début de l'export ...");
     const layouts = this.props.layouts;
     const support = this.exportMapRef.current;
-    if (!support || !layouts.length) {
+    if (!support) {
+      this.services.toasts.genericError();
       return logger.error('Support or layouts not ready');
+    }
+    if (!layouts.length) {
+      return this.services.toasts.error('Vous devez créer une mise en page');
     }
 
     const pdf = new jsPDF();

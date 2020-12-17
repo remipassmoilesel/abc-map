@@ -12,6 +12,7 @@ import TopBar from './components/top-bar/TopBar';
 import DataStore from './views/datastore/DataStore';
 import NotFound from './views/not-found/NotFound';
 import Help from './views/help/Help';
+import About from './views/about/About';
 
 class App extends Component<{}, {}> {
   public render(): ReactNode {
@@ -26,6 +27,7 @@ class App extends Component<{}, {}> {
             <Route exact path={FrontendRoutes.Layout} component={LayoutView} />
             <Route exact path={FrontendRoutes.Settings} component={Settings} />
             <Route exact path={FrontendRoutes.Help} component={Help} />
+            <Route exact path={FrontendRoutes.About} component={About} />
             <Route path={'*'} component={NotFound} />
           </Switch>
           <ToastContainer />

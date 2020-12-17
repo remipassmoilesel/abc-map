@@ -2,6 +2,7 @@
 @import "~bootstrap/scss/bootstrap";
 @import "~ol/ol.css";
 @import '~react-toastify/dist/ReactToastify.css';
+@import '~@fortawesome/fontawesome-free/css/all.css';
 
 html, body {
   height: 100vh;
@@ -22,6 +23,59 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
+// Start scrollbar style
+$scrollbar_bg: #e5e5e5;
+$scrollbar_fg: #8f8f8f;
+$scrollbar_width: 8px;
+
+::-webkit-scrollbar {
+  width: $scrollbar_width;
+  height: $scrollbar_width;
+}
+
+::-webkit-scrollbar-button {
+  width: 0;
+  height: 0;
+}
+
+::-webkit-scrollbar-thumb {
+  background: $scrollbar_fg;
+  border: 0 none #ffffff;
+  border-radius: 50px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: $scrollbar_fg;
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: $scrollbar_fg;
+}
+
+::-webkit-scrollbar-track {
+  background: $scrollbar_bg;
+  border: 0 none #ffffff;
+  border-radius: 50px;
+}
+
+::-webkit-scrollbar-track:hover {
+  background: $scrollbar_bg;
+}
+
+::-webkit-scrollbar-track:active {
+  background: $scrollbar_bg;
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+// End scrollbar style
+
 .cursor-pointer {
   cursor: pointer;
+}
+
+.fa {
+  color: darkgrey;
 }

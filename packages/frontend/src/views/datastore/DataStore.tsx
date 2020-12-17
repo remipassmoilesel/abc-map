@@ -30,7 +30,14 @@ class DataStore extends Component<Props, State> {
   }
 
   public render(): ReactNode {
-    return <div>Cette page n&apos;est pas terminée !</div>;
+    return (
+      <div className={'abc-datastore'}>
+        <h1>Catalogue de données</h1>
+        <p>Sur cette page vous pouvez sélectionner et importer des données dans votre carte.</p>
+        <p>Rappelez-vous: vous pouvez aussi importer des donnés en sélectionnant un fichier et en le déposant sur la carte !</p>
+        <p>Cette page n&apos;est pas terminée !</p>
+      </div>
+    );
   }
 }
 

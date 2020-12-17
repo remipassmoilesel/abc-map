@@ -18,10 +18,12 @@ class ProjectStatus extends Component<Props, {}> {
       message = 'Pas de projet actif';
     }
     return (
-      <div className={'d-flex flex-column'}>
-        <small>Projet courant</small>
-        <div>{projectName}</div>
-        <div>{message}</div>
+      <div className={'control-block d-flex flex-column'}>
+        <div className={'control-item'}>
+          Projet courant:
+          <div>{projectName}</div>
+          <div>{message}</div>
+        </div>
       </div>
     );
   }

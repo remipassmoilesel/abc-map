@@ -14,9 +14,9 @@ import { DrawingTool, DrawingTools } from '../../../core/map/DrawingTools';
 import BaseLayer from 'ol/layer/Base';
 import { EventsKey } from 'ol/events';
 import BaseEvent from 'ol/events/Event';
-import './MainMap.scss';
 import _ from 'lodash';
 import { ResizeObserverFactory } from '../../../core/utils/ResizeObserverFactory';
+import './MainMap.scss';
 
 export const logger = Logger.get('MainMap.ts', 'debug');
 

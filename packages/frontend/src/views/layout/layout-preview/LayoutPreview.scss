@@ -2,6 +2,12 @@
   flex-grow: 1;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  h3 {
+    margin: 2rem 0 0 1rem;
+  }
 
   .preview-container {
     flex-grow: 1;
@@ -11,7 +17,8 @@
     justify-content: center;
 
     .preview-frame {
-      border: solid 1px black;
+      border: solid 1px darkgrey;
+      box-shadow: 6px 6px 5px 0 rgba(0,0,0,0.15);
     }
 
   }
