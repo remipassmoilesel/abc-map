@@ -16,27 +16,27 @@ class TopBar extends Component<{}, {}> {
     return (
       <div className={'abc-top-bar'}>
         <h1>
-          <Link to={FrontendRoutes.Landing}>
+          <Link to={FrontendRoutes.landing()}>
             <i className={'fa fa-map-marked-alt mr-2'} />
             Abc-Map
           </Link>
         </h1>
-        <Link to={FrontendRoutes.Map} className={'link'}>
+        <Link to={FrontendRoutes.map()} className={'link'}>
           Carte
         </Link>
-        <Link to={FrontendRoutes.DataStore} className={'link'}>
+        <Link to={FrontendRoutes.dataStore()} className={'link'}>
           Catalogue de données
         </Link>
-        <Link to={FrontendRoutes.Layout} className={'link'}>
+        <Link to={FrontendRoutes.layout()} className={'link'}>
           Mise en page
         </Link>
-        <Link to={FrontendRoutes.Settings} className={'link'}>
+        <Link to={FrontendRoutes.settings()} className={'link'}>
           Paramètres
         </Link>
-        <Link to={FrontendRoutes.Help} className={'link'}>
+        <Link to={FrontendRoutes.help()} className={'link'}>
           Aide
         </Link>
-        <Link to={FrontendRoutes.About} className={'link'}>
+        <Link to={FrontendRoutes.about()} className={'link'}>
           A propos
         </Link>
       </div>

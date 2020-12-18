@@ -1,7 +1,7 @@
 import * as express from 'express';
 import { Router } from 'express';
 import { Controller } from '../server/Controller';
-import { Services } from '../services';
+import { Services } from '../services/services';
 import { AbcProject } from '@abc-map/shared-entities';
 import { asyncHandler } from '../server/asyncHandler';
 import { Status } from '../server/Status';

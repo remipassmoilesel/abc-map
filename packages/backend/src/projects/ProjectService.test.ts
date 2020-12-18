@@ -1,6 +1,5 @@
 import { ProjectService } from './ProjectService';
 import { MongodbClient } from '../mongodb/MongodbClient';
-import { ProjectDao } from './ProjectDao';
 import { AbcProject } from '@abc-map/shared-entities';
 import { ConfigLoader } from '../config/ConfigLoader';
 import { TestHelper } from '../utils/TestHelper';
@@ -15,7 +14,7 @@ describe('ProjectService', () => {
     client = new MongodbClient(config);
     await client.connect();
 
-    service = new ProjectService(config, new ProjectDao(config, client));
+    service = ProjectService.create(config, client);
   });
 
   after(async () => {

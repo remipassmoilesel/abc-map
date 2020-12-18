@@ -9,7 +9,7 @@ import { ResizeObserverFactory } from '../../../core/utils/ResizeObserverFactory
 import View from 'ol/View';
 import './LayoutPreview.scss';
 
-const logger = Logger.get('LayoutPreview.tsx', 'info');
+const logger = Logger.get('LayoutPreview.tsx', 'warn');
 
 interface Props {
   layout?: AbcLayout;

@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import { FrontendRoutes } from '../../FrontendRoutes';
 import './NotFound.scss';
 
-const logger = Logger.get('DataStore.tsx', 'info');
+const logger = Logger.get('NotFound.tsx', 'info');
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface LocalProps {}
@@ -35,7 +35,7 @@ class NotFound extends Component<Props, State> {
     return (
       <div className={'abc-not-found'}>
         <h3>Cette page n&apos;existe pas !</h3>
-        <Link to={FrontendRoutes.Landing}>Retourner à l&apos;accueil</Link>
+        <Link to={FrontendRoutes.landing()}>Retourner à l&apos;accueil</Link>
       </div>
     );
   }

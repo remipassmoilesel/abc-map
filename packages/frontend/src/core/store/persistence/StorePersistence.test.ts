@@ -1,10 +1,10 @@
 import { StorePersistence } from './StorePersistence';
 import { LocalStorageService, StorageKey } from '../../utils/LocalStorageService';
 import { RootState } from '../index';
-import { SinonStub } from 'sinon';
+import sinon, { SinonStub } from 'sinon';
 import { DrawingTools } from '../../map/DrawingTools';
 import { Map } from 'ol';
-import sinon from 'sinon';
+import { UserStatus } from '@abc-map/shared-entities';
 
 describe('StorePersistence', () => {
   let storage: LocalStorageService;
@@ -26,6 +26,13 @@ describe('StorePersistence', () => {
         mainMap: new Map({}),
         drawingTool: DrawingTools.Point,
       },
+      authentication: {
+        tokenString: 'abcd',
+        userStatus: UserStatus.AUTHENTICATED,
+        user: {
+          id: 'test-user-id',
+        } as any,
+      },
     };
 
     const expectedState: RootState = {
@@ -35,6 +42,13 @@ describe('StorePersistence', () => {
       map: {
         mainMap: undefined as any,
         drawingTool: DrawingTools.None,
+      },
+      authentication: {
+        tokenString: 'abcd',
+        userStatus: UserStatus.AUTHENTICATED,
+        user: {
+          id: 'test-user-id',
+        } as any,
       },
     };
 

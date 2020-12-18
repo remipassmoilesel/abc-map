@@ -1,5 +1,5 @@
-import { AbcLayer } from './layer';
-import { AbcLayout } from './layout';
+import { AbcLayer } from './AbcLayer';
+import { AbcLayout } from './AbcLayout';
 
 export interface AbcProject {
   metadata: AbcProjectMetadata;

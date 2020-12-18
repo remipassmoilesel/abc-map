@@ -7,6 +7,7 @@ import { ProjectFactory } from './ProjectFactory';
 import { MapService } from '../map/MapService';
 import { Abm2Reader } from './Abm2Reader';
 import * as uuid from 'uuid';
+import { ProjectRoutes as Api } from '../utils/ApiRoutes';
 
 const logger = Logger.get('ProjectService.ts', 'info');
 
@@ -27,15 +28,15 @@ export class ProjectService {
   }
 
   public save(project: AbcProject): Promise<void> {
-    return this.httpClient.post(`/project`, project).then(() => undefined);
+    return this.httpClient.post(Api.saveProject(), project).then(() => undefined);
   }
 
   public list(): Promise<AbcProject[]> {
-    return this.httpClient.get(`/project/list`).then((res) => res.data);
+    return this.httpClient.get(Api.listProject()).then((res) => res.data);
   }
 
   public findById(id: string): Promise<AbcProject | undefined> {
-    return this.httpClient.get(`/project/${id}`).then((res) => res.data);
+    return this.httpClient.get(Api.findById(id)).then((res) => res.data);
   }
 
   public loadRemoteProject(id: string): Promise<void> {
