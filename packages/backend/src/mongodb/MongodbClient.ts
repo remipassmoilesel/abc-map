@@ -27,6 +27,9 @@ export class MongodbClient {
   constructor(private config: Config) {
     const options: MongoClientOptions = {
       useUnifiedTopology: true,
+      connectTimeoutMS: 5_000,
+      socketTimeoutMS: 5_000,
+      serverSelectionTimeoutMS: 5_000,
       auth: {
         user: config.database.username,
         password: config.database.password,
@@ -43,6 +46,10 @@ export class MongodbClient {
 
     await this.client.connect();
     this.dbRef = this.client.db(this.databaseName());
+  }
+
+  public isConnected(): boolean {
+    return this.client.isConnected();
   }
 
   public async disconnect(): Promise<void> {

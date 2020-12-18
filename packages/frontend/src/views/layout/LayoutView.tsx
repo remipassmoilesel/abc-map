@@ -12,7 +12,7 @@ import View from 'ol/View';
 import { Map } from 'ol';
 import './LayoutView.scss';
 
-const logger = Logger.get('LayoutView.tsx', 'info');
+const logger = Logger.get('LayoutView.tsx', 'warn');
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface LocalProps {}

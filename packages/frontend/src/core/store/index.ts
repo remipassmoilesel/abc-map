@@ -4,16 +4,20 @@ import { projectStateReducer } from './project/reducer';
 import { projectInitialState } from './project/state';
 import { mapStateReducer } from './map/reducer';
 import { mapInitialState } from './map/state';
+import { authenticationStateReducer } from './authentication/reducer';
+import { authenticationInitialState } from './authentication/state';
 import _ from 'lodash';
 
 const rootReducer = combineReducers({
   project: projectStateReducer,
   map: mapStateReducer,
+  authentication: authenticationStateReducer,
 });
 
 const initialState: RootState = {
   project: projectInitialState,
   map: mapInitialState,
+  authentication: authenticationInitialState,
 };
 
 export type RootState = ReturnType<typeof rootReducer>;

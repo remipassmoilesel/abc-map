@@ -4,7 +4,7 @@ import { Logger } from '../../../core/utils/Logger';
 import { AbcLayout } from '@abc-map/shared-entities';
 import './LayoutList.scss';
 
-const logger = Logger.get('LayoutList.tsx', 'info');
+const logger = Logger.get('LayoutList.tsx', 'warn');
 
 interface Props {
   activeLayout?: AbcLayout;

@@ -3,13 +3,16 @@ import { ProjectDao } from './ProjectDao';
 import { MongodbClient } from '../mongodb/MongodbClient';
 import { AbcProject } from '@abc-map/shared-entities';
 import { ProjectMapper } from './ProjectMapper';
+import { AbstractService } from '../services/AbstractService';
 
-export class ProjectService {
+export class ProjectService extends AbstractService {
   public static create(config: Config, client: MongodbClient): ProjectService {
     return new ProjectService(config, new ProjectDao(config, client));
   }
 
-  constructor(private config: Config, private dao: ProjectDao) {}
+  constructor(private config: Config, private dao: ProjectDao) {
+    super();
+  }
 
   public async save(project: AbcProject): Promise<void> {
     if (!project.metadata.id) {

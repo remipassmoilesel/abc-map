@@ -1,5 +1,6 @@
 import { AbcProject, CURRENT_VERSION, DEFAULT_PROJECTION, LayerType, PredefinedLayerModel } from '@abc-map/shared-entities';
 import * as uuid from 'uuid';
+import { AbcUser } from '@abc-map/shared-entities';
 
 export class TestHelper {
   public static sampleProject(): AbcProject {
@@ -53,6 +54,15 @@ export class TestHelper {
         },
       ],
       layouts: [],
+    };
+  }
+
+  public static sampleUser(): AbcUser {
+    return {
+      id: uuid.v4(),
+      email: `user-${uuid.v4()}@test.ts`,
+      password: 'what is wr0ng passW0rd ????',
+      enabled: true,
     };
   }
 }

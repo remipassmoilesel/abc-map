@@ -13,21 +13,26 @@ import DataStore from './views/datastore/DataStore';
 import NotFound from './views/not-found/NotFound';
 import Help from './views/help/Help';
 import About from './views/about/About';
+import { services } from './core/Services';
+import ConfirmAccount from './views/confirm-account/ConfirmAccount';
 
 class App extends Component<{}, {}> {
+  private services = services();
+
   public render(): ReactNode {
     return (
       <Provider store={mainStore}>
         <BrowserRouter>
           <TopBar />
           <Switch>
-            <Route exact path={FrontendRoutes.Landing} component={Landing} />
-            <Route exact path={FrontendRoutes.Map} component={MapView} />
-            <Route exact path={FrontendRoutes.DataStore} component={DataStore} />
-            <Route exact path={FrontendRoutes.Layout} component={LayoutView} />
-            <Route exact path={FrontendRoutes.Settings} component={Settings} />
-            <Route exact path={FrontendRoutes.Help} component={Help} />
-            <Route exact path={FrontendRoutes.About} component={About} />
+            <Route exact path={FrontendRoutes.landing()} component={Landing} />
+            <Route exact path={FrontendRoutes.map()} component={MapView} />
+            <Route exact path={FrontendRoutes.dataStore()} component={DataStore} />
+            <Route exact path={FrontendRoutes.layout()} component={LayoutView} />
+            <Route exact path={FrontendRoutes.settings()} component={Settings} />
+            <Route exact path={FrontendRoutes.help()} component={Help} />
+            <Route exact path={FrontendRoutes.about()} component={About} />
+            <Route exact path={FrontendRoutes.confirmAccount()} component={ConfirmAccount} />
             <Route path={'*'} component={NotFound} />
           </Switch>
           <ToastContainer />

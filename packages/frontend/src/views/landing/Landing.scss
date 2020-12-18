@@ -5,4 +5,34 @@
   p {
     margin: 1em 0;
   }
+
+  .login-form {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    input {
+      margin: 1rem;
+      max-width: 20rem;
+    }
+
+    button {
+      margin: 1rem;
+    }
+  }
+
+  .registration-form {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    input {
+      margin: 1rem;
+      max-width: 20rem;
+    }
+
+    button {
+      margin: 1rem;
+    }
+  }
 }

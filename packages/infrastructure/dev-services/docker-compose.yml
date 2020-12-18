@@ -23,7 +23,16 @@ services:
       ME_CONFIG_MONGODB_SERVER: abc-mongodb
       ME_CONFIG_MONGODB_ADMINUSERNAME: admin
       ME_CONFIG_MONGODB_ADMINPASSWORD: admin
-      ME_CONFIG_MONGODB_PORT: 27019
+      ME_CONFIG_MONGODB_PORT: 27017
+
+  abc-smtp:
+    image: 'namshi/smtp:latest'
+    container_name: abc-smtp
+    restart: always
+    ports:
+      - '587:587'
+    environment:
+      PORT: 587
 
 volumes:
   mongodb_data:
