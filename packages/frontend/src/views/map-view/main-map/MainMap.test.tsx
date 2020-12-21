@@ -6,9 +6,10 @@ import ReactDOM, { unmountComponentAtNode } from 'react-dom';
 import { act } from 'react-dom/test-utils';
 import { services } from '../../../core/Services';
 import { Draw } from 'ol/interaction';
-import { AbcProperties, LayerProperties } from '../../../core/map/AbcProperties';
+import { AbcProperties, LayerProperties } from '@abc-map/shared-entities';
 import TileLayer from 'ol/layer/Tile';
 import BaseLayer from 'ol/layer/Base';
+import { TestHelper } from '../../../core/utils/TestHelper';
 
 logger.disable();
 
@@ -36,7 +37,7 @@ describe('MainMap', () => {
       expect(map.getTarget()).toBeInstanceOf(HTMLDivElement);
       expect(map.getLayers().getListeners('propertychange')).toHaveLength(1);
       expect(getLayersFromMap(map)).toEqual([]);
-      expect(component?.state.draw).toBeUndefined();
+      expect(component?.state.drawInteractions).toEqual([]);
       expect(getInteractionCountFromMap(map, 'Draw')).toEqual(0);
       expect(getInteractionCountFromMap(map, 'DragAndDrop')).toEqual(1);
     });
@@ -154,7 +155,7 @@ describe('MainMap', () => {
         renderMap(map, DrawingTools.Point, container);
       });
 
-      expect(component?.state.draw).toBeInstanceOf(Draw);
+      expect(component?.state.drawInteractions[0]).toBeInstanceOf(Draw);
       expect(map.get(AbcProperties.CurrentTool)).toEqual(DrawingTools.Point);
       expect(getInteractionCountFromMap(map, 'Draw')).toEqual(1);
     });
@@ -181,7 +182,7 @@ describe('MainMap', () => {
         renderMap(map, DrawingTools.None, container);
       });
 
-      expect(component?.state.draw).toBeUndefined();
+      expect(component?.state.drawInteractions).toEqual([]);
       expect(getInteractionCountFromMap(map, 'Draw')).toEqual(0);
       expect(map.get(AbcProperties.CurrentTool)).toEqual(DrawingTools.None);
     });
@@ -210,7 +211,7 @@ describe('MainMap', () => {
         mapService.setActiveLayer(map, layers[0]);
       });
 
-      expect(component?.state.draw).toBeUndefined();
+      expect(component?.state.drawInteractions).toEqual([]);
       expect(getInteractionCountFromMap(map, 'Draw')).toEqual(0);
       expect(map.get(AbcProperties.CurrentTool)).toEqual(DrawingTools.None);
     });
@@ -231,7 +232,7 @@ describe('MainMap', () => {
         mapService.setActiveLayer(map, layers[0]);
       });
 
-      expect(component?.state.draw).toBeUndefined();
+      expect(component?.state.drawInteractions).toEqual([]);
       expect(getInteractionNamesFromMap(map)).not.toContain('Draw');
 
       act(() => {
@@ -239,7 +240,7 @@ describe('MainMap', () => {
         mapService.setActiveLayer(map, layers[1]);
       });
 
-      expect(component?.state.draw).toBeDefined();
+      expect(component?.state.drawInteractions).toBeDefined();
       expect(getInteractionCountFromMap(map, 'Draw')).toEqual(1);
       expect(map.get(AbcProperties.CurrentTool)).toEqual(DrawingTools.Point);
     });
@@ -252,7 +253,7 @@ describe('MainMap', () => {
  */
 function renderMap(map: Map, tool: DrawingTool, container: HTMLElement, layerHandler?: LayerChangedHandler): MainMap {
   // Note: ReactDOM.render() function signature is broken
-  return ReactDOM.render(<MainMap map={map} drawingTool={tool} onLayersChanged={layerHandler} />, container) as any;
+  return ReactDOM.render(<MainMap map={map} drawingTool={tool} onLayersChanged={layerHandler} currentStyle={TestHelper.sampleStyles()} />, container) as any;
 }
 
 function getLayersFromMap(map?: Map): string[] {

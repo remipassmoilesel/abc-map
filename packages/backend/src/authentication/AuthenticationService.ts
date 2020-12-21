@@ -37,7 +37,7 @@ export class AuthenticationService extends AbstractService {
     super();
   }
 
-  public async register(request: RegistrationRequest): Promise<RegistrationStatus> {
+  public async register(request: RegistrationRequest, sendMail = true): Promise<RegistrationStatus> {
     if (isEmailAnonymous(request.email)) {
       return RegistrationStatus.EmailAlreadyExists;
     }
@@ -59,18 +59,21 @@ export class AuthenticationService extends AbstractService {
       return Promise.reject(err);
     }
 
-    const hmac = crypto.createHmac('sha512', this.config.registration.confirmationSalt);
-    const secret = hmac.update(user.id).digest('hex');
-    const confirmationEmail = `
-      <p>Bonjour !</p>
-      <a>Pour activer votre compte Abc-Map, veuillez <a href="${this.config.externalUrl}/confirm-account/${user.id}?secret=${secret}">
-      cliquer sur ce lien.</a></p>
-      <p>A bientôt !</p>
-      <p>&nbsp;</p>
-      <small>Ceci est un message automatique, envoyé par la plateforme <a href="${this.config.externalUrl}">${this.config.externalUrl}</a>.
-      Vous ne pouvez pas répondre à ce message.</small>
-    `;
-    await this.smtp.sendMail(user.email, 'Activation de votre compte Abc-Map', confirmationEmail);
+    if (sendMail) {
+      const hmac = crypto.createHmac('sha512', this.config.registration.confirmationSalt);
+      const secret = hmac.update(user.id).digest('hex');
+      const subject = 'Activation de votre compte Abc-Map';
+      const content = `
+        <p>Bonjour !</p>
+        <a>Pour activer votre compte Abc-Map, veuillez <a href="${this.config.externalUrl}/confirm-account/${user.id}?secret=${secret}">
+        cliquer sur ce lien.</a></p>
+        <p>A bientôt !</p>
+        <p>&nbsp;</p>
+        <small>Ceci est un message automatique, envoyé par la plateforme <a href="${this.config.externalUrl}">${this.config.externalUrl}</a>.
+        Vous ne pouvez pas répondre à ce message.</small>
+      `;
+      await this.smtp.sendMail(user.email, subject, content);
+    }
     return RegistrationStatus.Successful;
   }
 

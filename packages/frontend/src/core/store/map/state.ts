@@ -3,12 +3,13 @@ import { Map } from 'ol';
 import { MapFactory } from '../../map/MapFactory';
 import { AbcWindow } from '../../AbcWindow';
 import { LayerFactory } from '../../map/LayerFactory';
+import { AbcStyle } from '../../map/AbcStyle';
 
 export interface MapState {
   /**
    * Current drawing tool selected
    */
-  drawingTool: DrawingTool;
+  drawingTool?: DrawingTool;
   /**
    * <p>Reference to the main map, containing present project layers and features.</p>
    *
@@ -17,16 +18,29 @@ export interface MapState {
    * <p>Warning: Map and layers ara mutable, so no notifications should be expected from this state</p>
    */
   mainMap: Map;
+
+  currentStyle: AbcStyle;
 }
 
 export const mapInitialState: MapState = {
   drawingTool: DrawingTools.None,
   mainMap: newMap(),
+  currentStyle: {
+    fill: {
+      color: '#ffffff',
+    },
+    stroke: {
+      color: '#005cc1',
+      width: 5,
+    },
+  },
 };
 
+// TODO: better place for init, activate vector on startup
 function newMap(): Map {
   const map = MapFactory.newDefaultMap();
   map.addLayer(LayerFactory.newOsmLayer());
+  map.addLayer(LayerFactory.newVectorLayer());
   return map;
 }
 

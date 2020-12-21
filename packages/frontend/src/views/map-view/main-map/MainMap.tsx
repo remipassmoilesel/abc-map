@@ -3,19 +3,20 @@ import { Map } from 'ol';
 import { Logger } from '../../../core/utils/Logger';
 import { services } from '../../../core/Services';
 import { GeoJSON, GPX, IGC, KML, TopoJSON } from 'ol/format';
-import { DragAndDrop, Draw, Interaction } from 'ol/interaction';
+import { DragAndDrop, Interaction } from 'ol/interaction';
 import { DragAndDropEvent } from 'ol/interaction/DragAndDrop';
 import VectorSource from 'ol/source/Vector';
 import FeatureFormat from 'ol/format/Feature';
 import Feature from 'ol/Feature';
 import Geometry from 'ol/geom/Geometry';
-import { AbcProperties, LayerProperties } from '../../../core/map/AbcProperties';
+import { AbcProperties, LayerProperties } from '@abc-map/shared-entities';
 import { DrawingTool, DrawingTools } from '../../../core/map/DrawingTools';
 import BaseLayer from 'ol/layer/Base';
 import { EventsKey } from 'ol/events';
 import BaseEvent from 'ol/events/Event';
 import _ from 'lodash';
 import { ResizeObserverFactory } from '../../../core/utils/ResizeObserverFactory';
+import { AbcStyle } from '../../../core/map/AbcStyle';
 import './MainMap.scss';
 
 export const logger = Logger.get('MainMap.ts', 'debug');
@@ -24,13 +25,14 @@ export declare type LayerChangedHandler = (layers: BaseLayer[]) => void;
 
 interface Props {
   map: Map;
+  currentStyle: AbcStyle;
   onLayersChanged?: LayerChangedHandler;
   drawingTool: DrawingTool;
 }
 
 interface State {
   dropData?: Interaction;
-  draw?: Interaction;
+  drawInteractions: Interaction[];
   layers: BaseLayer[];
   activeLayer?: BaseLayer;
   layerChangedHandler?: EventsKey;
@@ -45,6 +47,7 @@ class MainMap extends Component<Props, State> {
     super(props);
     this.state = {
       layers: [],
+      drawInteractions: [],
     };
   }
 
@@ -109,8 +112,16 @@ class MainMap extends Component<Props, State> {
   private cleanupMap() {
     const map = this.props.map;
     map.setTarget(undefined);
-    this.state.dropData && map.removeInteraction(this.state.dropData);
-    this.state.draw && map.removeInteraction(this.state.draw);
+    if (this.state.dropData) {
+      map.removeInteraction(this.state.dropData);
+      this.state.dropData.dispose();
+    }
+
+    this.state.drawInteractions.forEach((inter) => {
+      map.removeInteraction(inter);
+      inter.dispose();
+    });
+
     this.state.sizeObserver && this.state.sizeObserver.disconnect();
     map.getLayers().removeEventListener('propertychange', this.onLayersChanged);
   }
@@ -147,24 +158,20 @@ class MainMap extends Component<Props, State> {
   private updateInteractions(tool: DrawingTool): void {
     const map = this.props.map;
 
-    if (this.state.draw) {
-      map.removeInteraction(this.state.draw);
-    }
+    this.state.drawInteractions.forEach((inter) => map.removeInteraction(inter));
 
     const activeLayer = this.services.map.getActiveVectorLayer(map);
-    if (!activeLayer || tool.geometryType === 'None') {
-      this.setState({ draw: undefined });
+    if (!activeLayer || tool.id === DrawingTools.None.id) {
+      this.setState({ drawInteractions: [] });
       map.set(AbcProperties.CurrentTool, DrawingTools.None);
       return;
     }
 
-    const draw = new Draw({
-      source: activeLayer.getSource(),
-      type: tool.geometryType,
-    });
-    map.addInteraction(draw);
+    const drawInter = tool.factory(activeLayer.getSource(), map, () => this.props.currentStyle);
+    drawInter.forEach((inter) => map.addInteraction(inter));
+
     map.set(AbcProperties.CurrentTool, tool);
-    this.setState({ draw });
+    this.setState({ drawInteractions: drawInter });
 
     logger.debug(`Activated tool '${tool.label}'`);
   }

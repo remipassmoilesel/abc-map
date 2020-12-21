@@ -1,6 +1,6 @@
 import BaseLayer from 'ol/layer/Base';
 import { AbcLayer, AbcLayerMetadata, LayerType, PredefinedLayerModel } from '@abc-map/shared-entities';
-import { AbcProperties, LayerProperties, PredefinedLayerProperties } from './AbcProperties';
+import { AbcProperties, LayerProperties, PredefinedLayerProperties } from '@abc-map/shared-entities';
 import { GeoJSON } from 'ol/format';
 import VectorLayer from 'ol/layer/Vector';
 import * as E from 'fp-ts/Either';
@@ -8,6 +8,7 @@ import VectorSource from 'ol/source/Vector';
 import TileLayer from 'ol/layer/Tile';
 import { OSM } from 'ol/source';
 import * as uuid from 'uuid';
+import { VectorStyles } from './VectorStyles';
 
 export class LayerFactory {
   public static newOsmLayer(): TileLayer {
@@ -24,8 +25,9 @@ export class LayerFactory {
   }
 
   public static newVectorLayer(source?: VectorSource): VectorLayer {
+    const styleFunc = VectorStyles.cachingStyleFunc();
     const _source = source || new VectorSource();
-    const layer = new VectorLayer({ source: _source });
+    const layer = new VectorLayer({ source: _source, style: styleFunc });
     layer.set(AbcProperties.Managed, true);
     layer.set(LayerProperties.Id, uuid.v4());
     layer.set(LayerProperties.Name, 'Formes');

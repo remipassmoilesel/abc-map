@@ -1,5 +1,5 @@
 import { LayerFactory } from './LayerFactory';
-import { AbcProperties, LayerProperties, PredefinedLayerProperties } from './AbcProperties';
+import { AbcProperties, LayerProperties, PredefinedLayerProperties } from '@abc-map/shared-entities';
 import { AbcLayer, AbcLayerMetadata, AbcPredefinedLayer, AbcVectorLayer, LayerType, PredefinedLayerModel } from '@abc-map/shared-entities';
 import VectorSource from 'ol/source/Vector';
 import VectorLayer from 'ol/layer/Vector';

@@ -1,6 +1,6 @@
 module.exports = {
   environmentName: 'test',
-  development: true,
+  development: false,
   externalUrl: 'http://localhost:3000/',
   server: {
     host: '127.0.0.1',

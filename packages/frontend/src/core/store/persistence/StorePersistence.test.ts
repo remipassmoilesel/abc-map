@@ -25,6 +25,15 @@ describe('StorePersistence', () => {
       map: {
         mainMap: new Map({}),
         drawingTool: DrawingTools.Point,
+        currentStyle: {
+          fill: {
+            color: '#789ABC',
+          },
+          stroke: {
+            width: 5,
+            color: '#123456',
+          },
+        },
       },
       authentication: {
         tokenString: 'abcd',
@@ -41,7 +50,16 @@ describe('StorePersistence', () => {
       },
       map: {
         mainMap: undefined as any,
-        drawingTool: DrawingTools.None,
+        drawingTool: undefined,
+        currentStyle: {
+          fill: {
+            color: '#789ABC',
+          },
+          stroke: {
+            width: 5,
+            color: '#123456',
+          },
+        },
       },
       authentication: {
         tokenString: 'abcd',

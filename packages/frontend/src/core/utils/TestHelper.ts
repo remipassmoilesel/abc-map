@@ -3,6 +3,7 @@ import Geometry from 'ol/geom/Geometry';
 import { Point } from 'ol/geom';
 import { AbcPredefinedLayer, AbcProject, AbcVectorLayer, CURRENT_VERSION, DEFAULT_PROJECTION, LayerType, PredefinedLayerModel } from '@abc-map/shared-entities';
 import * as uuid from 'uuid';
+import { AbcStyle } from '../map/AbcStyle';
 
 export class TestHelper {
   public static samplePointFeature(): Feature<Geometry> {
@@ -72,6 +73,18 @@ export class TestHelper {
         opacity: 1,
       },
       model: PredefinedLayerModel.OSM,
+    };
+  }
+
+  public static sampleStyles(): AbcStyle {
+    return {
+      fill: {
+        color: '#ffffff',
+      },
+      stroke: {
+        color: '#000000',
+        width: 5,
+      },
     };
   }
 }

@@ -10,11 +10,17 @@ $panel-width: 250px;
 
   .left-panel {
     width: $panel-width;
+    height: 95vh;
     border-right: solid 1px lightgrey;
+    overflow-x: hidden;
+    overflow-y: auto;
   }
 
   .right-panel {
     width: $panel-width;
+    height: 95vh;
     border-left: solid 1px lightgrey;
+    overflow-x: hidden;
+    overflow-y: auto;
   }
 }
