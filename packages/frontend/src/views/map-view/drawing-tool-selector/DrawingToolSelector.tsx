@@ -8,6 +8,8 @@ import { connect, ConnectedProps } from 'react-redux';
 import { MapActions } from '../../../core/store/map/actions';
 import './DrawingToolSelector.scss';
 
+// TODO: add help for tools
+
 const logger = Logger.get('DrawingToolSelector.tsx', 'info');
 
 interface LocalProps {
@@ -37,17 +39,18 @@ class DrawingToolSelector extends Component<Props, {}> {
 
   public render(): ReactNode {
     const buttons = DrawingTools.All.map((tool) => {
-      const classes = tool.geometryType === this.props.currentTool.geometryType ? 'btn btn-primary' : 'btn btn-outline-primary';
+      const classes = tool.id === this.props.currentTool?.id ? 'btn btn-primary' : 'btn btn-outline-primary';
       return (
-        <button key={tool.geometryType} className={classes} onClick={() => this.onToolSelected(tool)}>
-          {tool.label}
+        <button key={tool.id} className={classes} onClick={() => this.onToolSelected(tool)} title={tool.label}>
+          {/*TODO: create and use icons*/}
+          {tool.icon}
         </button>
       );
     });
     return (
       <div className={'control-block abc-drawing-tool-selector'}>
         <div>Outils de dessin</div>
-        {buttons}
+        <div className={'tool-selector'}>{buttons}</div>
       </div>
     );
   }

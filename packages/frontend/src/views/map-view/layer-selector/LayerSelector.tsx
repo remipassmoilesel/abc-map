@@ -57,20 +57,20 @@ class LayerSelector extends Component<Props, {}> {
           {message}
         </div>
         <div className={'control-item controls'}>
-          <button onClick={this.zoomToSelectedLayer} className={'btn btn-outline-primary'}>
-            Zoom
+          <button onClick={this.zoomToSelectedLayer} className={'btn btn-outline-primary'} title={'Zoom'}>
+            ZO
           </button>
-          <button onClick={this.newOsmLayer} className={'btn btn-outline-primary'}>
-            + Couche OSM
+          <button onClick={this.newOsmLayer} className={'btn btn-outline-primary'} title={'Ajouter une couche OSM'}>
+            OSM
           </button>
-          <button onClick={this.newVectorLayer} className={'btn btn-outline-primary'}>
-            + Couche formes
+          <button onClick={this.newVectorLayer} className={'btn btn-outline-primary'} title={'Ajouter une couche de formes'}>
+            FOR
           </button>
-          <button onClick={this.resetLayers} className={'btn btn-outline-primary'}>
-            Tout supprimer
+          <button onClick={this.resetLayers} className={'btn btn-outline-primary'} title={'Tout supprimer'}>
+            SUPPR
           </button>
-          <button onClick={this.toggleLayerVisibility} className={'btn btn-outline-primary'}>
-            Visibilité
+          <button onClick={this.toggleLayerVisibility} className={'btn btn-outline-primary'} title={'Changer la visibilité'}>
+            VIS
           </button>
         </div>
       </div>

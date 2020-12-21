@@ -9,6 +9,8 @@ import { Logger } from '../../core/utils/Logger';
 import BaseLayer from 'ol/layer/Base';
 import ProjectControls from './project-controls/ProjectControls';
 import DrawingToolSelector from './drawing-tool-selector/DrawingToolSelector';
+import StyleSelector from './style-selector/StyleSelector';
+import { DrawingTools } from '../../core/map/DrawingTools';
 import './MapView.scss';
 
 const logger = Logger.get('MapView.tsx', 'info');
@@ -23,7 +25,8 @@ interface State {
 const mapStateToProps = (state: RootState) => ({
   project: state.project.current,
   map: state.map.mainMap,
-  drawingTool: state.map.drawingTool,
+  drawingTool: state.map.drawingTool || DrawingTools.None,
+  currentStyle: state.map.currentStyle,
 });
 
 const connector = connect(mapStateToProps);
@@ -77,9 +80,10 @@ class MapView extends Component<Props, State> {
         </div>
 
         {/*Main map*/}
-        <MainMap map={this.props.map} drawingTool={this.props.drawingTool} onLayersChanged={this.onLayerChange} />
+        <MainMap map={this.props.map} onLayersChanged={this.onLayerChange} drawingTool={this.props.drawingTool} currentStyle={this.props.currentStyle} />
 
         {/*Right menu*/}
+        {/*TODO: Color picker, see https://developer.mozilla.org/fr/docs/Web/HTML/Element/Input/color*/}
         <div className="right-panel">
           <div className={'control-block'}>
             <div className={'control-item'}>
@@ -87,14 +91,20 @@ class MapView extends Component<Props, State> {
               <input type={'text'} className={'d-block mt-2'} onKeyPress={this.onSearch} />
             </div>
           </div>
-          <DrawingToolSelector layers={this.state.layers} />
+
           <LayerSelector map={this.props.map} layers={this.state.layers} />
+          <DrawingToolSelector layers={this.state.layers} />
+          <StyleSelector />
         </div>
       </div>
     );
   }
 
   private onLayerChange = (layers: BaseLayer[]) => {
+    this.setState({ layers });
+  };
+
+  private onColorSelected = (layers: BaseLayer[]) => {
     this.setState({ layers });
   };
 

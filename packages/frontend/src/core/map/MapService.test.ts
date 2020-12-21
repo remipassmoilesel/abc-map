@@ -1,6 +1,6 @@
 import { logger, MapService } from './MapService';
 import { AbcPredefinedLayer, AbcProject, AbcVectorLayer, LayerType, PredefinedLayerModel } from '@abc-map/shared-entities';
-import { AbcProperties, LayerProperties } from './AbcProperties';
+import { AbcProperties, LayerProperties } from '@abc-map/shared-entities';
 import { TestHelper } from '../utils/TestHelper';
 import VectorSource from 'ol/source/Vector';
 import TileLayer from 'ol/layer/Tile';

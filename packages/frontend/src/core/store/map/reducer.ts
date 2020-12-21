@@ -17,6 +17,30 @@ export function mapStateReducer(state = mapInitialState, action: MapAction): Map
       return newState;
     }
 
+    case ActionType.SetFillColor: {
+      const newState: MapState = { ...state };
+      newState.currentStyle = { ...newState.currentStyle };
+      newState.currentStyle.fill = { ...newState.currentStyle.fill };
+      newState.currentStyle.fill.color = action.color;
+      return newState;
+    }
+
+    case ActionType.SetStrokeColor: {
+      const newState: MapState = { ...state };
+      newState.currentStyle = { ...newState.currentStyle };
+      newState.currentStyle.stroke = { ...newState.currentStyle.stroke };
+      newState.currentStyle.stroke.color = action.color;
+      return newState;
+    }
+
+    case ActionType.SetStrokeWidth: {
+      const newState: MapState = { ...state };
+      newState.currentStyle = { ...newState.currentStyle };
+      newState.currentStyle.stroke = { ...newState.currentStyle.stroke };
+      newState.currentStyle.stroke.width = action.width;
+      return newState;
+    }
+
     default:
       return state;
   }

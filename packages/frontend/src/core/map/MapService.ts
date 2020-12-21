@@ -1,7 +1,7 @@
 import { AbcLayer, AbcLayerMetadata, AbcProject } from '@abc-map/shared-entities';
 import { Map } from 'ol';
 import { Logger } from '../utils/Logger';
-import { AbcProperties, LayerProperties } from './AbcProperties';
+import { AbcProperties, LayerProperties } from '@abc-map/shared-entities';
 import BaseLayer from 'ol/layer/Base';
 import TileLayer from 'ol/layer/Tile';
 import * as E from 'fp-ts/Either';
@@ -11,6 +11,9 @@ import { LayerFactory } from './LayerFactory';
 import { MainStore } from '../store';
 import { MapFactory } from './MapFactory';
 import * as _ from 'lodash';
+import { FeatureHelper } from './FeatureHelper';
+import Geometry from 'ol/geom/Geometry';
+import Feature from 'ol/Feature';
 
 export const logger = Logger.get('MapService.ts');
 
@@ -152,6 +155,18 @@ export class MapService {
         return logger.warn(`Layer will not be displayed, format is unknown: ${lay.constructor.name}`);
       }
       destMap.addLayer(previewLayer);
+    });
+  }
+
+  public forEachFeatureSelected(map: Map, callback: (feat: Feature<Geometry>) => void) {
+    const layer = this.getActiveVectorLayer(map);
+    if (!layer) {
+      return;
+    }
+    layer.getSource().forEachFeature((feat) => {
+      if (FeatureHelper.isSelected(feat)) {
+        callback(feat);
+      }
     });
   }
 }

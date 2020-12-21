@@ -1,7 +1,6 @@
 import { LocalStorageService, StorageKey } from '../../utils/LocalStorageService';
 import { RootState } from '../index';
 import { Logger } from '../../utils/Logger';
-import { DrawingTools } from '../../map/DrawingTools';
 import _ from 'lodash';
 
 const logger = Logger.get('StorePersistence', 'warn');
@@ -38,7 +37,7 @@ export class StorePersistence {
     const cleanState = _.cloneDeep(state);
     cleanState.project.current = undefined;
     cleanState.map.mainMap = undefined as any; // Map will be instantiated at startup
-    cleanState.map.drawingTool = DrawingTools.None;
+    cleanState.map.drawingTool = undefined;
     try {
       const serializedState = JSON.stringify(cleanState);
       this.storage.set(StorageKey.REDUX_STATE, serializedState);
