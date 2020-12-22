@@ -7,7 +7,7 @@ import * as _ from 'lodash';
 const logger = Logger.get('ConfigLoader.ts', 'info');
 
 export class ConfigLoader {
-  public static readonly DEFAULT_CONFIG = 'resources/local/config';
+  public static readonly DEFAULT_CONFIG = 'resources/configuration/local.js';
   private static _cache?: Config;
 
   public static create(): ConfigLoader {

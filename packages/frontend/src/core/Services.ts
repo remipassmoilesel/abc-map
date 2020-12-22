@@ -4,12 +4,14 @@ import { MapService } from './map/MapService';
 import { ToastService } from './ui/ToastService';
 import { httpApiClient } from './utils/HttpApiClient';
 import { AuthenticationService } from './authentication/AuthenticationService';
+import { HistoryService } from './history/HistoryService';
 
 export interface Services {
   project: ProjectService;
   map: MapService;
   toasts: ToastService;
   authentication: AuthenticationService;
+  history: HistoryService;
 }
 
 let instance: Services | undefined;
@@ -27,11 +29,13 @@ function serviceFactory(): Services {
   const mapService = new MapService(mainStore);
   const projectService = new ProjectService(httpClient, mainStore, mapService);
   const authenticationService = new AuthenticationService(httpClient, mainStore);
+  const historyService = HistoryService.create();
 
   return {
     project: projectService,
     map: mapService,
     toasts: toastsService,
     authentication: authenticationService,
+    history: historyService,
   };
 }

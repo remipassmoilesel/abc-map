@@ -7,20 +7,24 @@ import { mapInitialState } from './map/state';
 import { authenticationStateReducer } from './authentication/reducer';
 import { authenticationInitialState } from './authentication/state';
 import _ from 'lodash';
+import { uiStateReducer } from './ui/reducer';
+import { uiInitialState } from './ui/state';
 
 const rootReducer = combineReducers({
   project: projectStateReducer,
   map: mapStateReducer,
   authentication: authenticationStateReducer,
+  ui: uiStateReducer,
 });
+
+export type RootState = ReturnType<typeof rootReducer>;
 
 const initialState: RootState = {
   project: projectInitialState,
   map: mapInitialState,
   authentication: authenticationInitialState,
+  ui: uiInitialState,
 };
-
-export type RootState = ReturnType<typeof rootReducer>;
 
 // TODO: FIXME: make conditional, do not enable in production
 const _window = window as any;

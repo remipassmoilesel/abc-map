@@ -8,6 +8,7 @@ export interface ProjectState {
    * <p>This objects is not necessarily up to date, and it will never contains layers and data.
    * Layers and data are managed in main map state.</p>
    */
+  // FIXME: TODO: change type to project metadata here
   current?: AbcProject;
 }
 

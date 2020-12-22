@@ -1,0 +1,19 @@
+version: 0.1
+artefacts:
+  - name:
+      fr: Hydrographie du monde
+      en: World hydrography
+    files:
+      - world-hydrography.zip
+    keywords:
+      fr:
+        - monde
+        - hydrographie
+      en:
+        - world
+        - hydrography
+    license:
+      - README.txt
+    links:
+      - http://tapiquen-sig.jimdo.com
+

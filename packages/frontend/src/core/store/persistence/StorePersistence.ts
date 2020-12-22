@@ -38,6 +38,7 @@ export class StorePersistence {
     cleanState.project.current = undefined;
     cleanState.map.mainMap = undefined as any; // Map will be instantiated at startup
     cleanState.map.drawingTool = undefined;
+    cleanState.ui.historyCapabilities = {};
     try {
       const serializedState = JSON.stringify(cleanState);
       this.storage.set(StorageKey.REDUX_STATE, serializedState);

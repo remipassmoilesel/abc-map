@@ -10,6 +10,8 @@ import { jsPDF } from 'jspdf';
 import { LayoutHelper } from './LayoutHelper';
 import View from 'ol/View';
 import { Map } from 'ol';
+import HistoryControls from '../../components/history-controls/HistoryControls';
+import { HistoryKey } from '../../core/history/HistoryKey';
 import './LayoutView.scss';
 
 const logger = Logger.get('LayoutView.tsx', 'warn');
@@ -88,6 +90,7 @@ class LayoutView extends Component<Props, State> {
                 </button>
               </div>
             </div>
+            <HistoryControls historyKey={HistoryKey.Layout} />
           </div>
         </div>
         <div ref={this.exportMapRef} />
