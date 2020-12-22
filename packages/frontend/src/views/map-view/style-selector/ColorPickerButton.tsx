@@ -46,7 +46,6 @@ const colors = [
 class ColorPickerButton extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    logger.info('', this.props.initialValue);
     this.state = {
       popupVisible: false,
       value: this.props.initialValue || '#fffff',

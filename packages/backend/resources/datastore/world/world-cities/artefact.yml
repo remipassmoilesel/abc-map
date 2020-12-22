@@ -1,0 +1,19 @@
+version: 0.1
+artefacts:
+  - name:
+      fr: Villes du monde
+      en: World cities
+    files:
+      - world-cities.zip
+    keywords:
+      fr:
+        - monde
+        - villes
+      en:
+        - world
+        - cities
+    license:
+      - README.txt
+    links:
+      - http://tapiquen-sig.jimdo.com
+

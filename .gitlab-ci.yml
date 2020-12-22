@@ -4,7 +4,7 @@ variables:
   CI: "true"
   MONGO_INITDB_ROOT_USERNAME: admin
   MONGO_INITDB_ROOT_PASSWORD: admin
-  ABC_CONFIGURATION: "resources/test/config"
+  ABC_CONFIGURATION: "resources/configuration/test.js"
 
 services:
   - mongo:4.2-bionic

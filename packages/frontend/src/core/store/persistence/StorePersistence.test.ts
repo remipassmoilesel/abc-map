@@ -42,6 +42,14 @@ describe('StorePersistence', () => {
           id: 'test-user-id',
         } as any,
       },
+      ui: {
+        historyCapabilities: {
+          TestHistoryKey: {
+            canUndo: true,
+            canRedo: true,
+          },
+        },
+      },
     };
 
     const expectedState: RootState = {
@@ -67,6 +75,9 @@ describe('StorePersistence', () => {
         user: {
           id: 'test-user-id',
         } as any,
+      },
+      ui: {
+        historyCapabilities: {},
       },
     };
 

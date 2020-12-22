@@ -9,11 +9,14 @@ import { DrawEvent } from 'ol/interaction/Draw';
 import { VectorStyles } from './VectorStyles';
 import { AbcStyle } from './AbcStyle';
 import { FeatureHelper } from './FeatureHelper';
+import { Task } from '../history/Task';
+import { AddFeatureTask } from '../history/AddFeatureTask';
 
 const logger = Logger.get('DrawingTools.ts', 'info');
 
 export declare type GetStyleFunc = () => AbcStyle;
-export declare type DrawingToolFactoryFunc = (source: VectorSource<Geometry>, map: Map, style: GetStyleFunc) => Interaction[];
+export declare type RegisterTaskFunc = (task: Task) => void;
+export declare type DrawingToolFactoryFunc = (source: VectorSource<Geometry>, map: Map, style: GetStyleFunc, registerTask: RegisterTaskFunc) => Interaction[];
 
 export interface DrawingTool {
   id: string;
@@ -35,7 +38,7 @@ export class DrawingTools {
     id: 'point',
     label: 'Point',
     icon: 'PT',
-    factory: (source, map, style) => {
+    factory: (source, map, style, registerTask) => {
       const draw = new Draw({
         source,
         type: GeometryType.POINT,
@@ -43,6 +46,7 @@ export class DrawingTools {
         finishCondition: onlyMainButton,
       });
       applyStyleAfterDraw(draw, style);
+      registerTaskOnDraw(draw, source, registerTask);
       return [draw, ...commonModifyInteractions(source)];
     },
   };
@@ -51,7 +55,7 @@ export class DrawingTools {
     id: 'line',
     label: 'Ligne',
     icon: 'LI',
-    factory: (source, map, style) => {
+    factory: (source, map, style, registerTask) => {
       const draw = new Draw({
         source,
         type: GeometryType.LINE_STRING,
@@ -59,6 +63,7 @@ export class DrawingTools {
         finishCondition: onlyMainButton,
       });
       applyStyleAfterDraw(draw, style);
+      registerTaskOnDraw(draw, source, registerTask);
       return [draw, ...commonModifyInteractions(source)];
     },
   };
@@ -67,7 +72,7 @@ export class DrawingTools {
     id: 'polygon',
     label: 'Polygone',
     icon: 'PL',
-    factory: (source, map, style) => {
+    factory: (source, map, style, registerTask) => {
       const draw = new Draw({
         source,
         type: GeometryType.POLYGON,
@@ -75,6 +80,7 @@ export class DrawingTools {
         finishCondition: onlyMainButton,
       });
       applyStyleAfterDraw(draw, style);
+      registerTaskOnDraw(draw, source, registerTask);
       return [draw, ...commonModifyInteractions(source)];
     },
   };
@@ -83,7 +89,7 @@ export class DrawingTools {
     id: 'circle',
     label: 'Cercle',
     icon: 'CE',
-    factory: (source, map, style) => {
+    factory: (source, map, style, registerTask) => {
       const draw = new Draw({
         source,
         type: GeometryType.CIRCLE,
@@ -91,6 +97,7 @@ export class DrawingTools {
         finishCondition: onlyMainButton,
       });
       applyStyleAfterDraw(draw, style);
+      registerTaskOnDraw(draw, source, registerTask);
       return [draw, ...commonModifyInteractions(source)];
     },
   };
@@ -155,6 +162,13 @@ function applyStyleAfterDraw(draw: Draw, style: GetStyleFunc): void {
   draw.on('drawend', (ev: DrawEvent) => {
     const feature = ev.feature;
     VectorStyles.setProperties(feature, style());
+  });
+}
+
+function registerTaskOnDraw(draw: Draw, source: VectorSource, registerTask: RegisterTaskFunc): void {
+  draw.on('drawend', (ev: DrawEvent) => {
+    const feature = ev.feature;
+    registerTask(new AddFeatureTask(source, feature));
   });
 }
 

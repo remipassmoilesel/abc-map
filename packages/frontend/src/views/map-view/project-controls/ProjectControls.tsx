@@ -12,7 +12,6 @@ interface State {
   recentProjects: AbcProject[];
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface Props {
   project?: AbcProject;
   map: Map;
@@ -89,6 +88,7 @@ class ProjectControls extends Component<Props, State> {
 
   private newProject = () => {
     this.services.project.newProject();
+    this.services.history.clean();
     this.services.toasts.info('Nouveau projet créé');
   };
 
@@ -118,7 +118,10 @@ class ProjectControls extends Component<Props, State> {
   };
 
   private openProject(id: string): void {
-    this.services.project.loadRemoteProject(id).then(() => this.services.toasts.info('Projet ouvert !'));
+    this.services.project.loadRemoteProject(id).then(() => {
+      this.services.history.clean();
+      this.services.toasts.info('Projet ouvert !');
+    });
   }
 
   private exportProject = () => {
@@ -156,7 +159,10 @@ class ProjectControls extends Component<Props, State> {
       this.services.toasts.info('Chargement ...');
       this.services.project
         .loadProjectFromFile(file)
-        .then(() => this.services.toasts.info('Project importé !'))
+        .then(() => {
+          this.services.history.clean();
+          this.services.toasts.info('Project importé !');
+        })
         .catch((err) => {
           this.services.toasts.error(err.message);
         })

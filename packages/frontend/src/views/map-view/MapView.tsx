@@ -11,6 +11,8 @@ import ProjectControls from './project-controls/ProjectControls';
 import DrawingToolSelector from './drawing-tool-selector/DrawingToolSelector';
 import StyleSelector from './style-selector/StyleSelector';
 import { DrawingTools } from '../../core/map/DrawingTools';
+import HistoryControls from '../../components/history-controls/HistoryControls';
+import { HistoryKey } from '../../core/history/HistoryKey';
 import './MapView.scss';
 
 const logger = Logger.get('MapView.tsx', 'info');
@@ -65,18 +67,7 @@ class MapView extends Component<Props, State> {
               <i>Vous pouvez importer des données en sélectionnant un fichier et en le déposant sur la carte</i>
             </div>
           </div>
-          <div className={'control-block'}>
-            <div className={'control-item'}>
-              <button onClick={this.onCancel} type={'button'} className={'btn btn-link'}>
-                <i className={'fa fa-undo mr-2'} /> Annuler
-              </button>
-            </div>
-            <div className={'control-item'}>
-              <button onClick={this.onRedo} type={'button'} className={'btn btn-link'}>
-                <i className={'fa fa-redo mr-2'} /> Refaire
-              </button>
-            </div>
-          </div>
+          <HistoryControls historyKey={HistoryKey.Map} />
         </div>
 
         {/*Main map*/}
@@ -104,23 +95,11 @@ class MapView extends Component<Props, State> {
     this.setState({ layers });
   };
 
-  private onColorSelected = (layers: BaseLayer[]) => {
-    this.setState({ layers });
-  };
-
   private importFile = () => {
     this.services.toasts.info("Cette fonctionnalité n'est pas encore disponible");
   };
 
   private onSearch = () => {
-    this.services.toasts.info("Cette fonctionnalité n'est pas encore disponible");
-  };
-
-  private onCancel = () => {
-    this.services.toasts.info("Cette fonctionnalité n'est pas encore disponible");
-  };
-
-  private onRedo = () => {
     this.services.toasts.info("Cette fonctionnalité n'est pas encore disponible");
   };
 }

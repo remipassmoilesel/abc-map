@@ -18,6 +18,8 @@ import _ from 'lodash';
 import { ResizeObserverFactory } from '../../../core/utils/ResizeObserverFactory';
 import { AbcStyle } from '../../../core/map/AbcStyle';
 import './MainMap.scss';
+import { Task } from '../../../core/history/Task';
+import { HistoryKey } from '../../../core/history/HistoryKey';
 
 export const logger = Logger.get('MainMap.ts', 'debug');
 
@@ -167,7 +169,9 @@ class MainMap extends Component<Props, State> {
       return;
     }
 
-    const drawInter = tool.factory(activeLayer.getSource(), map, () => this.props.currentStyle);
+    const getStyle = () => this.props.currentStyle;
+    const registerTask = (task: Task) => this.services.history.register(HistoryKey.Map, task);
+    const drawInter = tool.factory(activeLayer.getSource(), map, getStyle, registerTask);
     drawInter.forEach((inter) => map.addInteraction(inter));
 
     map.set(AbcProperties.CurrentTool, tool);
