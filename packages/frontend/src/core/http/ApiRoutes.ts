@@ -25,3 +25,12 @@ export class AuthenticationRoutes {
     return '/authentication/confirm-account';
   }
 }
+
+export class DatastoreRoutes {
+  public static list(): string {
+    return '/datastore/list';
+  }
+  public static search(): string {
+    return `/datastore/search`;
+  }
+}

@@ -1,0 +1,12 @@
+version: 0.1
+artefact:
+  name: Pays du monde
+  license: README.txt
+  keywords:
+    - monde
+    - pays
+  links:
+    - http://tapiquen-sig.jimdo.com
+  files:
+    - world-countries.zip
+

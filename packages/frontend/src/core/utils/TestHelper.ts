@@ -1,7 +1,16 @@
 import Feature from 'ol/Feature';
 import Geometry from 'ol/geom/Geometry';
 import { Point } from 'ol/geom';
-import { AbcPredefinedLayer, AbcProject, AbcVectorLayer, CURRENT_VERSION, DEFAULT_PROJECTION, LayerType, PredefinedLayerModel } from '@abc-map/shared-entities';
+import {
+  AbcArtefact,
+  AbcPredefinedLayer,
+  AbcProject,
+  AbcVectorLayer,
+  CURRENT_VERSION,
+  DEFAULT_PROJECTION,
+  LayerType,
+  PredefinedLayerModel,
+} from '@abc-map/shared-entities';
 import * as uuid from 'uuid';
 import { AbcStyle } from '../map/AbcStyle';
 
@@ -85,6 +94,19 @@ export class TestHelper {
         color: '#000000',
         width: 5,
       },
+    };
+  }
+
+  public static sampleArtefact(): AbcArtefact {
+    return {
+      id: uuid.v4(),
+      path: '/sample/manifest.yaml',
+      name: 'Sample artefact',
+      files: ['file/1.gpx', 'file/2.kml'],
+      links: ['http://somewhere'],
+      license: 'LICENSE.txt',
+      keywords: ['gpx', 'kml'],
+      description: 'A sample artefact',
     };
   }
 }

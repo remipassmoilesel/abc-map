@@ -179,6 +179,7 @@ class ProjectControls extends Component<Props, State> {
   private downloadProject(project: AbcProject) {
     const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(project));
     const anchorNode = document.createElement('a');
+    anchorNode.style.display = 'none';
     anchorNode.setAttribute('href', dataStr);
     anchorNode.setAttribute('download', `project.${Constants.EXTENSION}`);
     document.body.appendChild(anchorNode);

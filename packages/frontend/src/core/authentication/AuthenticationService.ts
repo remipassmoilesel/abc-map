@@ -1,6 +1,6 @@
 import { AxiosInstance } from 'axios';
 import { MainStore } from '../store';
-import { AuthenticationRoutes as Api } from '../utils/ApiRoutes';
+import { AuthenticationRoutes as Api } from '../http/ApiRoutes';
 import {
   AccountConfirmationRequest,
   AccountConfirmationResponse,

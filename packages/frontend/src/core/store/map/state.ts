@@ -37,6 +37,7 @@ export const mapInitialState: MapState = {
 };
 
 // TODO: better place for init, activate vector on startup
+// TODO: see map refactoring, create a map wrapper
 function newMap(): Map {
   const map = MapFactory.newDefaultMap();
   map.addLayer(LayerFactory.newOsmLayer());

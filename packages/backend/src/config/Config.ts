@@ -11,6 +11,7 @@ export interface Config {
   authentication: AuthenticationConfig;
   registration: RegistrationConfig;
   smtp: SmtpConfig;
+  datastore: DatastoreConfig;
 }
 
 export interface ServerConfig {
@@ -44,4 +45,8 @@ export interface SmtpConfig {
     user: string;
     pass: string;
   };
+}
+
+export interface DatastoreConfig {
+  path: string;
 }
