@@ -7,7 +7,7 @@ import { ProjectFactory } from './ProjectFactory';
 import { MapService } from '../map/MapService';
 import { Abm2Reader } from './Abm2Reader';
 import * as uuid from 'uuid';
-import { ProjectRoutes as Api } from '../utils/ApiRoutes';
+import { ProjectRoutes as Api } from '../http/ApiRoutes';
 
 const logger = Logger.get('ProjectService.ts', 'info');
 

@@ -28,4 +28,7 @@ module.exports = {
       pass: '63rntn3G4DU3uue2MJ',
     },
   },
+  datastore: {
+    path: 'resources/datastore',
+  },
 };

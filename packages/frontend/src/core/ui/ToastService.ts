@@ -24,4 +24,8 @@ export class ToastService {
   public genericError(): void {
     this.error('Une erreur est survenue, veuillez réessayer plus tard.');
   }
+
+  public featureNotReady(): void {
+    this.info("Cette fonctionnalité n'est pas encore disponible");
+  }
 }

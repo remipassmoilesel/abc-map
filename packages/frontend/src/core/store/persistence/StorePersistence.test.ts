@@ -51,6 +51,7 @@ describe('StorePersistence', () => {
         },
       },
     };
+    const snapshot = stateSnapshot(sampleState);
 
     const expectedState: RootState = {
       project: {
@@ -89,5 +90,19 @@ describe('StorePersistence', () => {
 
     const actualState = JSON.parse(call.args[1]);
     expect(actualState).toEqual(expectedState);
+
+    expect(stateSnapshot(sampleState)).toEqual(snapshot);
   });
 });
+
+function stateSnapshot(state: RootState): string {
+  const withoutCircular: RootState = {
+    ...state,
+    map: {
+      ...state.map,
+    },
+  };
+
+  delete (withoutCircular as any).map.mainMap;
+  return JSON.stringify(withoutCircular);
+}

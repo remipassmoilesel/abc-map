@@ -33,7 +33,7 @@ export class ProjectController extends Controller {
     return this.services.project.save(project).then(() => ({ status: 'saved' }));
   };
 
-  // TODO: do not fetch features from database
+  // TODO: FIXME: featch and return only metadata
   public list = (): Promise<AbcProject[]> => {
     return this.services.project.list(0, 50);
   };

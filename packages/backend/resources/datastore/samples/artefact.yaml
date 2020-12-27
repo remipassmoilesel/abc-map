@@ -1,0 +1,9 @@
+version: 0.1
+artefact:
+  name: Exemples
+  license: README.md
+  description: Divers fichiers exemple
+  files:
+    - campings-bretagne.gpx
+    - KML_Samples.kml
+    - stations.geojson

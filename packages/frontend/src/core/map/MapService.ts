@@ -1,4 +1,4 @@
-import { AbcLayer, AbcLayerMetadata, AbcProject } from '@abc-map/shared-entities';
+import { AbcLayer, AbcLayerMetadata, AbcProject, AbcProjection } from '@abc-map/shared-entities';
 import { Map } from 'ol';
 import { Logger } from '../utils/Logger';
 import { AbcProperties, LayerProperties } from '@abc-map/shared-entities';
@@ -168,5 +168,11 @@ export class MapService {
         callback(feat);
       }
     });
+  }
+
+  public getProjection(map: Map): AbcProjection {
+    return {
+      name: map.getView().getProjection().getCode(),
+    };
   }
 }

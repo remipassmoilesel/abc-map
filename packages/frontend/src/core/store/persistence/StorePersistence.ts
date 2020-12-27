@@ -1,7 +1,6 @@
 import { LocalStorageService, StorageKey } from '../../utils/LocalStorageService';
 import { RootState } from '../index';
 import { Logger } from '../../utils/Logger';
-import _ from 'lodash';
 
 const logger = Logger.get('StorePersistence', 'warn');
 
@@ -33,8 +32,25 @@ export class StorePersistence {
     }
   }
 
+  /**
+   * Clone state then store it in local storage.
+   *
+   * WARNING: this method can cause performance issues, beware of the map reference
+   * @param state
+   */
   public saveState(state: RootState): void {
-    const cleanState = _.cloneDeep(state);
+    const cleanState: RootState = {
+      ...state,
+      project: {
+        ...state.project,
+      },
+      map: {
+        ...state.map,
+      },
+      ui: {
+        ...state.ui,
+      },
+    };
     cleanState.project.current = undefined;
     cleanState.map.mainMap = undefined as any; // Map will be instantiated at startup
     cleanState.map.drawingTool = undefined;

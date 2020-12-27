@@ -1,34 +1,33 @@
 import { Env, EnvKey } from './Env';
 import { Config } from './Config';
 import { Logger } from '../utils/Logger';
-import { resolve } from 'path';
+import * as path from 'path';
 import * as _ from 'lodash';
+import { promises as fs } from 'fs';
 
 const logger = Logger.get('ConfigLoader.ts', 'info');
 
 export class ConfigLoader {
   public static readonly DEFAULT_CONFIG = 'resources/configuration/local.js';
-  private static _cache?: Config;
-
-  public static create(): ConfigLoader {
-    return new ConfigLoader(new Env());
-  }
+  private static _cache: { [k: string]: Config } = {};
 
   public static async load(): Promise<Config> {
-    if (!this._cache) {
-      this._cache = await new ConfigLoader(new Env()).load();
+    const env = new Env();
+    const configPath = env.get(EnvKey.CONFIG) || ConfigLoader.DEFAULT_CONFIG;
+    if (!this._cache[configPath]) {
+      this._cache[configPath] = await new ConfigLoader().load(configPath);
     }
-    return this._cache;
+    return this._cache[configPath];
   }
 
-  constructor(private env: Env) {}
-
-  public async load(): Promise<Config> {
-    const path = resolve(this.env.get(EnvKey.CONFIG) || ConfigLoader.DEFAULT_CONFIG);
-    logger.info(`Loading configuration: ${path}`);
+  public async load(configPath: string): Promise<Config> {
+    if (!path.isAbsolute(configPath)) {
+      configPath = path.resolve(configPath);
+    }
+    logger.info(`Loading configuration: ${configPath}`);
 
     // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const config: Config = _.cloneDeep(require(path));
+    const config: Config = _.cloneDeep(require(configPath));
 
     const parameters: string[] = [
       'environmentName',
@@ -50,6 +49,8 @@ export class ConfigLoader {
       'smtp',
       'smtp.host',
       'smtp.port',
+      'datastore',
+      'datastore.path',
     ];
 
     parameters.forEach((param) => {
@@ -58,6 +59,10 @@ export class ConfigLoader {
         throw new Error(`Missing parameter ${param} in configuration`);
       }
     });
+
+    if (!(await fs.stat(config.datastore.path)).isDirectory()) {
+      throw new Error(`Datastore root '${config.datastore.path}' must be a directory`);
+    }
 
     // We remove trailing slash if present
     config.externalUrl = config.externalUrl.trim();

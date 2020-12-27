@@ -19,6 +19,6 @@ export class ProjectDao {
 
   public async list(offset: number, limit: number): Promise<ProjectDocument[]> {
     const coll = await this.client.collection<ProjectDocument>(MongoCollection.Projects);
-    return await coll.find({}).skip(offset).limit(limit).toArray();
+    return coll.find({}).skip(offset).limit(limit).toArray();
   }
 }

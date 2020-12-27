@@ -6,6 +6,7 @@ import { UserService } from '../users/UserService';
 import { AuthenticationService } from '../authentication/AuthenticationService';
 import { HealthCheckService } from '../server/HealthCheckService';
 import { AbstractService } from './AbstractService';
+import { DataStoreService } from '../datastore/DataStoreService';
 
 const logger = Logger.get('services.ts');
 
@@ -17,6 +18,7 @@ export interface Services {
   user: UserService;
   authentication: AuthenticationService;
   health: HealthCheckService;
+  datastore: DataStoreService;
   shutdown: ShutdownFunc;
 }
 
@@ -26,6 +28,7 @@ export async function servicesFactory(config: Config): Promise<Services> {
   const user = UserService.create(config, mongodbClient);
   const authentication = AuthenticationService.create(config, user);
   const health = HealthCheckService.create(mongodbClient);
+  const datastore = DataStoreService.create(config, mongodbClient);
   const shutdown: ShutdownFunc = () => {
     mongodbClient.disconnect().catch((err) => logger.error(err));
   };
@@ -35,6 +38,7 @@ export async function servicesFactory(config: Config): Promise<Services> {
     user,
     authentication,
     health,
+    datastore,
     shutdown,
   };
 

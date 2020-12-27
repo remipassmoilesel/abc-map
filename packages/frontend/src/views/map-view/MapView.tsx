@@ -79,7 +79,7 @@ class MapView extends Component<Props, State> {
           <div className={'control-block'}>
             <div className={'control-item'}>
               Rechercher sur la carte
-              <input type={'text'} className={'d-block mt-2'} onKeyPress={this.onSearch} />
+              <input type={'text'} className={'mt-2'} onKeyPress={this.onSearch} />
             </div>
           </div>
 
@@ -96,11 +96,11 @@ class MapView extends Component<Props, State> {
   };
 
   private importFile = () => {
-    this.services.toasts.info("Cette fonctionnalité n'est pas encore disponible");
+    this.services.toasts.featureNotReady();
   };
 
   private onSearch = () => {
-    this.services.toasts.info("Cette fonctionnalité n'est pas encore disponible");
+    this.services.toasts.featureNotReady();
   };
 }
 
