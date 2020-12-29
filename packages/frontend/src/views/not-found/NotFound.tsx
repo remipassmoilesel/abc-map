@@ -4,7 +4,7 @@ import { RootState } from '../../core/store';
 import { connect, ConnectedProps } from 'react-redux';
 import { Logger } from '../../core/utils/Logger';
 import { Link } from 'react-router-dom';
-import { FrontendRoutes } from '../../FrontendRoutes';
+import { FrontendRoutes } from '@abc-map/shared-entities';
 import './NotFound.scss';
 
 const logger = Logger.get('NotFound.tsx', 'info');

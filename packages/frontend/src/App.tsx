@@ -1,6 +1,6 @@
 import React, { Component, ReactNode } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { FrontendRoutes } from './FrontendRoutes';
+import { FrontendRoutes } from '@abc-map/shared-entities';
 import MapView from './views/map-view/MapView';
 import Settings from './views/settings/Settings';
 import { Provider } from 'react-redux';
@@ -35,7 +35,7 @@ class App extends Component<{}, {}> {
             <Route exact path={FrontendRoutes.confirmAccount()} component={ConfirmAccount} />
             <Route path={'*'} component={NotFound} />
           </Switch>
-          <ToastContainer />
+          <ToastContainer className={'toast-container'} />
         </BrowserRouter>
       </Provider>
     );

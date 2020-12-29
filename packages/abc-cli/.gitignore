@@ -1,0 +1,5 @@
+node_modules
+build
+.nyc_output
+coverage
+.last-build-date.json

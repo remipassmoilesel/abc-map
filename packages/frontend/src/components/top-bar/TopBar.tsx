@@ -1,6 +1,6 @@
 import React, { Component, ReactNode } from 'react';
 import { Logger } from '../../core/utils/Logger';
-import { FrontendRoutes } from '../../FrontendRoutes';
+import { FrontendRoutes } from '@abc-map/shared-entities';
 import { Link } from 'react-router-dom';
 import './TopBar.scss';
 

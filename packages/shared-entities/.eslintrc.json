@@ -44,12 +44,7 @@
       }
     ],
     "prefer-promise-reject-errors": "error",
-    "no-unused-vars": [
-      "error",
-      {
-        "varsIgnorePattern": "logger"
-      }
-    ],
+    "no-unused-vars": "off",
     "@typescript-eslint/no-unused-vars": [
       "error",
       {

@@ -4,6 +4,12 @@
 <img alt="pipeline status" src="https://gitlab.com/remipassmoilesel/abc-map-2/badges/master/pipeline.svg" />
 </a>     
 
+## Installation de développement
+
+    $ sudo apt install docker.io docker-compose nodejs npm
+    $ npm i -g yarn lerna
+    $ abc ci
+
 
 ## Objectifs
 
