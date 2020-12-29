@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "target": "es5",
+    "lib": ["es5", "es6", "dom"],
+    "types": ["cypress"],
+    "outDir": "build",
+    "baseUrl": "src"
+  },
+  "include": [
+    "src/**/*.ts"
+  ],
+  "exclude": ["node_modules"]
+}

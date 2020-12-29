@@ -1,1 +1,62 @@
-packages/infrastructure/cli/main.js
+#!/usr/bin/env node
+
+/*
+
+This script is an helper redirecting commands to packages/abc-cli/build/main.js
+
+ */
+
+const path = require("path");
+const fs = require("fs");
+const child_process = require("child_process");
+
+const projectRoot = path.resolve(__dirname);
+const cliRoot = path.resolve(projectRoot, 'packages/abc-cli');
+const cliMain = path.resolve(cliRoot, 'build', 'main.js');
+const nodeModules = path.resolve(cliRoot, 'node_modules');
+const lastBuildDateFile = path.resolve(cliRoot, '.last-build-date.json');
+
+if (require.main === module) {
+  main(process.argv)
+    .then(() => process.exit(0))
+    .catch(err => {
+      // console.error(err); // Debug only
+      process.exit(1);
+    });
+}
+
+async function main(args) {
+  if (!isCliUpToDate()) {
+    updateCli();
+  }
+  cliCommand(args);
+}
+
+function isCliUpToDate() {
+  if(process.env.CI && process.env.CI === "true"){
+    return false;
+  }
+  const nodeModulesExists = fs.existsSync(nodeModules);
+  const cliMainExists = fs.existsSync(cliMain);
+  const lastBuildDateExists = fs.existsSync(lastBuildDateFile);
+  if (!nodeModulesExists || !cliMainExists || !lastBuildDateExists) {
+    return false;
+  }
+  const lastModification = new Date(child_process.execSync(`git log -1 --pretty="format:%ci" ${cliRoot}`, {cwd: cliRoot}).toString())
+  const lastBuildDate = new Date(require(lastBuildDateFile).date);
+  return lastModification <= lastBuildDate;
+}
+
+function updateCli() {
+  console.log("\n🔨 Abc CLI must be initialized, it may take a few minutes ... 🔧\n");
+  child_process.execSync("yarn install", {cwd: cliRoot, stdio: 'inherit'});
+  child_process.execSync("yarn run clean-build", {cwd: cliRoot, stdio: 'inherit'});
+  fs.writeFileSync(lastBuildDateFile, JSON.stringify({date: new Date()}));
+  console.log("\n🔨 Initialized ! 🔧\n");
+}
+
+function cliCommand(args) {
+  const argsStr = args.slice(2).join(" ");
+  child_process.execSync(`node ${cliMain} ${argsStr}`, {cwd: process.cwd(), stdio: 'inherit'});
+}
+

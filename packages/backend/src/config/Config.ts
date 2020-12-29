@@ -1,6 +1,7 @@
 import { Algorithm } from 'jsonwebtoken';
 
 export const LOCAL_ENVIRONMENT = 'local';
+export const TEST_ENVIRONMENT = 'test';
 
 export interface Config {
   environmentName: string;

@@ -63,15 +63,18 @@ export class AuthenticationService extends AbstractService {
       const hmac = crypto.createHmac('sha512', this.config.registration.confirmationSalt);
       const secret = hmac.update(user.id).digest('hex');
       const subject = 'Activation de votre compte Abc-Map';
+      const href = `${this.config.externalUrl}/confirm-account/${user.id}?secret=${secret}`;
+      /* eslint-disable max-len */
       const content = `
         <p>Bonjour !</p>
-        <a>Pour activer votre compte Abc-Map, veuillez <a href="${this.config.externalUrl}/confirm-account/${user.id}?secret=${secret}">
-        cliquer sur ce lien.</a></p>
+        <p><a>Pour activer votre compte Abc-Map, veuillez <a href="${href}" data-cy="enable-account-link">cliquer sur ce lien.</a></p>
         <p>A bientôt !</p>
         <p>&nbsp;</p>
         <small>Ceci est un message automatique, envoyé par la plateforme <a href="${this.config.externalUrl}">${this.config.externalUrl}</a>.
         Vous ne pouvez pas répondre à ce message.</small>
       `;
+      /* eslint-enable max-len */
+
       await this.smtp.sendMail(user.email, subject, content);
     }
     return RegistrationStatus.Successful;

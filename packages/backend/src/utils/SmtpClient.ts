@@ -2,6 +2,8 @@ import { Config } from '../config/Config';
 import * as nodemailer from 'nodemailer';
 import { Transporter } from 'nodemailer';
 import { Logger } from './Logger';
+import * as fs from 'fs';
+import * as path from 'path';
 
 const logger = Logger.get('SmtpClient.ts', 'info');
 
@@ -19,22 +21,49 @@ export class SmtpClient {
 
   public async sendMail(to: string, subject: string, body: string): Promise<void> {
     logger.info(`Sending mail to ${to}`);
+    const html = this.htmlTemplate(subject, body);
+
+    if (!this.config.development) {
+      await this.transporter.sendMail({
+        to,
+        subject,
+        html,
+      });
+    } else {
+      this.fakeSending(to, html);
+    }
+  }
+
+  private htmlTemplate(subject: string, body: string): string {
     /* eslint-disable max-len */
-    const html = `
-      <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;">
+    return `
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <title>${subject}</title>
+        <style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;";
+            }
+        </style>
+      </head>
+      <body>
           ${body}
-      </div>
+      </body>
+      </html>
     `;
     /* eslint-enable max-len */
+  }
 
-    const sending = await this.transporter.sendMail({
-      to,
-      subject,
-      html,
-    });
+  private fakeSending(email: string, body: string): void {
+    const mailDir = path.resolve(__dirname, '..', '..', '..', 'e2e-tests', 'emails');
+    const mailPath = path.resolve(mailDir, `${email}.html`);
 
-    if (this.config.development) {
-      logger.info(`Mail preview available at: ${nodemailer.getTestMessageUrl(sending)}`);
+    logger.warn(`Mail will not be sent, you can see it at: ${mailPath}`);
+    if (!fs.existsSync(mailDir)) {
+      fs.mkdirSync(mailDir);
     }
+    fs.writeFileSync(mailPath, body);
   }
 }

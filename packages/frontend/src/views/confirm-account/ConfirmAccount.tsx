@@ -4,7 +4,7 @@ import { RootState } from '../../core/store';
 import { connect, ConnectedProps } from 'react-redux';
 import { Logger } from '../../core/utils/Logger';
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
-import { ConfirmAccountParams, FrontendRoutes } from '../../FrontendRoutes';
+import { ConfirmAccountParams, FrontendRoutes } from '@abc-map/shared-entities';
 import { AccountConfirmationStatus } from '@abc-map/shared-entities';
 import * as qs from 'query-string';
 import './ConfirmAccount.scss';
@@ -47,7 +47,7 @@ class ConfirmAccount extends Component<Props, State> {
             <div>La confirmation a échoué, vous pouvez rafraichir cette page ou réessayer plus tard.</div>
           )}
           {AccountConfirmationStatus.Succeed === this.state.status && (
-            <div>
+            <div data-cy={'account-enabled'}>
               Votre compte est activé. <Link to={FrontendRoutes.map()}>Direction: la carte !</Link>
             </div>
           )}

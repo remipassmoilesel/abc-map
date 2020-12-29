@@ -1,0 +1,21 @@
+{
+  "include": [
+    "src"
+  ],
+  "compilerOptions": {
+    "target": "es2015",
+    "module": "commonjs",
+    "outDir": "build",
+    "strict": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "declaration": true,
+    "sourceMap": true,
+    "lib": [
+      "es2019"
+    ]
+  },
+  "exclude": [
+    "node_modules"
+  ]
+}

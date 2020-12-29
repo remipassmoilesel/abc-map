@@ -4,7 +4,7 @@ import { RootState } from '../../core/store';
 import { connect, ConnectedProps } from 'react-redux';
 import { Logger } from '../../core/utils/Logger';
 import { Link } from 'react-router-dom';
-import { FrontendRoutes } from '../../FrontendRoutes';
+import { FrontendRoutes } from '@abc-map/shared-entities';
 import './Landing.scss';
 import { AuthenticationStatus, RegistrationStatus } from '@abc-map/shared-entities';
 
@@ -75,15 +75,23 @@ class Landing extends Component<Props, State> {
         <p>La connexion est facultative, elle permet de sauvegarder ses cartes en ligne et de les partager.</p>
         <p>Pour vous connecter, renseignez votre adresse email et votre mot de passe ci-dessous:</p>
         <div className={'form-group login-form'}>
-          <input type={'email'} value={this.state.loginEmail} onChange={this.onLoginEmailChanged} placeholder={'Adresse email'} className={'form-control'} />
+          <input
+            type={'email'}
+            value={this.state.loginEmail}
+            onChange={this.onLoginEmailChanged}
+            placeholder={'Adresse email'}
+            className={'form-control'}
+            data-cy={'login-email'}
+          />
           <input
             type={'password'}
             value={this.state.loginPassword}
             onChange={this.onLoginPasswordChanged}
             placeholder={'Mot de passe'}
             className={'form-control'}
+            data-cy={'login-password'}
           />
-          <button type={'button'} onClick={this.authentication} className={'btn btn-primary'}>
+          <button type={'button'} onClick={this.authentication} className={'btn btn-primary'} data-cy={'login-button'}>
             Connexion
           </button>
         </div>
@@ -99,6 +107,7 @@ class Landing extends Component<Props, State> {
             onChange={this.onRegistrationEmailChanged}
             placeholder={'Adresse email'}
             className={'form-control'}
+            data-cy={'registration-email'}
           />
           <input
             type={'password'}
@@ -106,8 +115,9 @@ class Landing extends Component<Props, State> {
             onChange={this.onRegistrationPasswordChanged}
             placeholder={'Mot de passe'}
             className={'form-control'}
+            data-cy={'registration-password'}
           />
-          <button type={'button'} onClick={this.registration} className={'btn btn-primary'}>
+          <button type={'button'} onClick={this.registration} className={'btn btn-primary'} data-cy={'registration-submit'}>
             Inscription
           </button>
         </div>
@@ -152,7 +162,7 @@ class Landing extends Component<Props, State> {
           return this.services.toasts.info('Cette adresse email est déjà prise');
         }
         if (res.status === RegistrationStatus.Successful) {
-          return this.services.toasts.info('Un email vient de vous être envoyé pour activer votre compte');
+          return this.services.toasts.info('Un email vient de vous être envoyé, vous devez activer votre compte');
         }
         this.services.toasts.genericError();
       })

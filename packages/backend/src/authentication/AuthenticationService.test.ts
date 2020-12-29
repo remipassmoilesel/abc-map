@@ -26,6 +26,7 @@ describe('AuthenticationService', () => {
 
   before(async () => {
     config = await ConfigLoader.load();
+    config.development = false; // We can disable this option because we mock smtp client
     client = new MongodbClient(config);
     await client.connect();
   });
@@ -103,7 +104,7 @@ describe('AuthenticationService', () => {
       assert.equal(sendMailMock.getCall(0).args[1], 'Activation de votre compte Abc-Map');
 
       const mailContent = sendMailMock.getCall(0).args[2];
-      const secret: string = (mailContent.match(/secret=(.+)"/i) as RegExpMatchArray)[1];
+      const secret: string = (mailContent.match(/secret=([^"]+)"/i) as RegExpMatchArray)[1];
       assert.isAtLeast(secret.length, 50);
 
       const hmac = crypto.createHmac('sha512', config.registration.confirmationSalt);

@@ -1,4 +1,4 @@
-image: registry.gitlab.com/remipassmoilesel/abc-map-2/build-image:0.1
+image: registry.gitlab.com/remipassmoilesel/abc-map-2/build-image:0.2
 
 variables:
   CI: "true"

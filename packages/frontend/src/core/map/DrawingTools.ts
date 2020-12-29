@@ -172,6 +172,8 @@ function registerTaskOnDraw(draw: Draw, source: VectorSource, registerTask: Regi
   });
 }
 
+// FIXME: TODO: Modify cause a performance issue if we pass too many features
+// FIXME: TODO: Here we should pass only features that are next to mouse, using throttled function
 function commonModifyInteractions(source: VectorSource): Interaction[] {
   const modify = new Modify({ source });
   const snap = new Snap({ source });
