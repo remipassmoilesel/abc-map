@@ -20,7 +20,11 @@ const logger = Logger.get('AuthenticationService.ts');
 export class AuthenticationService {
   constructor(private httpClient: AxiosInstance, private store: MainStore) {}
 
-  public loginAsAnonymous(): Promise<AuthenticationResponse> {
+  public logout(): Promise<AuthenticationResponse> {
+    return this.anonymousLogin();
+  }
+
+  public anonymousLogin(): Promise<AuthenticationResponse> {
     return this.login(AnonymousUser.email, AnonymousUser.password);
   }
 

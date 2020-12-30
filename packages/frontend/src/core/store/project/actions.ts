@@ -1,15 +1,22 @@
-import { AbcLayout, AbcProject } from '@abc-map/shared-entities';
+import { AbcLayout, AbcProject, AbcProjectMetadata } from '@abc-map/shared-entities';
 
 export enum ActionType {
   NewProject = 'NewProject',
+  RenameProject = 'RenameProject',
   NewLayout = 'NewLayout',
   UpdateLayout = 'UpdateLayout',
   ClearLayouts = 'ClearLayouts',
+  LoadProject = 'LoadProject',
 }
 
 export interface NewProject {
   type: ActionType.NewProject;
-  project: AbcProject;
+  metadata: AbcProjectMetadata;
+}
+
+export interface RenameProject {
+  type: ActionType.RenameProject;
+  name: string;
 }
 
 export interface NewLayout {
@@ -26,13 +33,25 @@ export interface ClearLayouts {
   type: ActionType.ClearLayouts;
 }
 
-export type ProjectAction = NewProject | NewLayout | UpdateLayout | ClearLayouts;
+export interface LoadProject {
+  type: ActionType.LoadProject;
+  project: AbcProject;
+}
+
+export type ProjectAction = NewProject | RenameProject | NewLayout | UpdateLayout | ClearLayouts | LoadProject;
 
 export class ProjectActions {
-  public static newProject(project: AbcProject): ProjectAction {
+  public static newProject(metadata: AbcProjectMetadata): ProjectAction {
     return {
       type: ActionType.NewProject,
-      project,
+      metadata,
+    };
+  }
+
+  public static renameProject(name: string): ProjectAction {
+    return {
+      type: ActionType.RenameProject,
+      name,
     };
   }
 
@@ -53,6 +72,13 @@ export class ProjectActions {
   public static clearLayouts(): ProjectAction {
     return {
       type: ActionType.ClearLayouts,
+    };
+  }
+
+  public static loadProject(project: AbcProject): ProjectAction {
+    return {
+      type: ActionType.LoadProject,
+      project,
     };
   }
 }

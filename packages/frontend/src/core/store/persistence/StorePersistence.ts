@@ -1,5 +1,5 @@
 import { LocalStorageService, StorageKey } from '../../utils/LocalStorageService';
-import { RootState } from '../index';
+import { MainState } from '../index';
 import { Logger } from '../../utils/Logger';
 
 const logger = Logger.get('StorePersistence', 'warn');
@@ -17,7 +17,7 @@ export class StorePersistence {
 
   constructor(private storage: LocalStorageService) {}
 
-  public loadState(): RootState | undefined {
+  public loadState(): MainState | undefined {
     try {
       const serializedState = this.storage.get(StorageKey.REDUX_STATE);
       if (!serializedState) {
@@ -38,8 +38,8 @@ export class StorePersistence {
    * WARNING: this method can cause performance issues, beware of the map reference
    * @param state
    */
-  public saveState(state: RootState): void {
-    const cleanState: RootState = {
+  public saveState(state: MainState): void {
+    const cleanState: MainState = {
       ...state,
       project: {
         ...state.project,
@@ -51,8 +51,8 @@ export class StorePersistence {
         ...state.ui,
       },
     };
-    cleanState.project.current = undefined;
-    cleanState.map.mainMap = undefined as any; // Map will be instantiated at startup
+    cleanState.project.metadata = undefined as any; // New project will be set at store bootstrap
+    cleanState.map.mainMap = undefined as any; // Map will be instantiated at store bootstrap
     cleanState.map.drawingTool = undefined;
     cleanState.ui.historyCapabilities = {};
     try {

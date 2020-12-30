@@ -2,7 +2,6 @@ import { Token } from '@abc-map/shared-entities';
 
 export enum ActionType {
   Login = 'Login',
-  Logout = 'Logout',
 }
 
 export interface Login {
@@ -11,11 +10,7 @@ export interface Login {
   tokenString: string;
 }
 
-export interface Logout {
-  type: ActionType.Logout;
-}
-
-export type AuthenticationAction = Login | Logout;
+export type AuthenticationAction = Login;
 
 export class AuthenticationActions {
   public static login(token: Token, tokenString: string): AuthenticationAction {
@@ -23,12 +18,6 @@ export class AuthenticationActions {
       type: ActionType.Login,
       token,
       tokenString,
-    };
-  }
-
-  public static logout(): AuthenticationAction {
-    return {
-      type: ActionType.Logout,
     };
   }
 }

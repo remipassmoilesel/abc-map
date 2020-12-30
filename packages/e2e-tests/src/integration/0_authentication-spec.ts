@@ -4,18 +4,25 @@ import { FrontendRoutes } from '@abc-map/shared-entities';
 import { Toasts } from '../helpers/Toasts';
 import { Login } from '../helpers/Login';
 
-describe('Registration and login', function () {
+describe('Authentication', function () {
   beforeEach(() => {
     TestHelper.init();
   });
 
-  it('User can register and enable account', function () {
+  it('Visitor can register and enable account', function () {
     Registration.newUser();
   });
 
   it('User can login if account is enabled', function () {
     const user = Registration.newUser();
     Login.login(user);
+
+    cy.get('[data-cy=user-menu]')
+      .click()
+      .get('[data-cy=user-label]')
+      .should((elem) => {
+        expect(elem.text()).equal(user.email);
+      });
   });
 
   it('User can not login if account is not enabled', function () {
@@ -29,5 +36,21 @@ describe('Registration and login', function () {
       .click();
 
     Toasts.assertText('Vous devez activer votre compte avant de vous connecter');
+  });
+
+  it('User can logout', function () {
+    const user = Registration.newUser();
+    Login.login(user);
+
+    cy.get('[data-cy=user-menu]').click().get('[data-cy=logout]').click();
+
+    Toasts.assertText("Vous n'êtes plus connecté !");
+
+    cy.get('[data-cy=user-menu]')
+      .click()
+      .get('[data-cy=user-label]')
+      .should((elem) => {
+        expect(elem.text()).equal('Visiteur');
+      });
   });
 });

@@ -32,7 +32,7 @@ class LayerSelector extends Component<Props, {}> {
   public render(): ReactNode {
     const items = this.props.layers
       .map((layer) => {
-        const metadata = this.services.map.getMetadataFromLayer(layer);
+        const metadata = this.services.geo.getMetadataFromLayer(layer);
         if (!metadata) {
           return undefined;
         }
@@ -78,11 +78,11 @@ class LayerSelector extends Component<Props, {}> {
   }
 
   private onLayerSelected = (layerId: string) => {
-    this.services.map.setActiveLayerById(this.props.map, layerId);
+    this.services.geo.setActiveLayerById(this.props.map, layerId);
   };
 
   private zoomToSelectedLayer = () => {
-    const selected = this.services.map.getActiveLayer(this.props.map);
+    const selected = this.services.geo.getActiveLayer(this.props.map);
     if (!selected) {
       this.services.toasts.info("Vous devez d'abord sélectionner une couche");
       return logger.error('No layer selected');
@@ -102,15 +102,15 @@ class LayerSelector extends Component<Props, {}> {
   };
 
   private newOsmLayer = () => {
-    const layer = this.services.map.newOsmLayer();
+    const layer = this.services.geo.newOsmLayer();
     this.props.map.addLayer(layer);
-    this.services.map.setActiveLayer(this.props.map, layer);
+    this.services.geo.setActiveLayer(this.props.map, layer);
   };
 
   private newVectorLayer = () => {
-    const layer = this.services.map.newVectorLayer();
+    const layer = this.services.geo.newVectorLayer();
     this.props.map.addLayer(layer);
-    this.services.map.setActiveLayer(this.props.map, layer);
+    this.services.geo.setActiveLayer(this.props.map, layer);
   };
 
   private resetLayers = () => {
@@ -118,7 +118,7 @@ class LayerSelector extends Component<Props, {}> {
   };
 
   private toggleLayerVisibility = () => {
-    const selected = this.services.map.getActiveLayer(this.props.map);
+    const selected = this.services.geo.getActiveLayer(this.props.map);
     if (!selected) {
       this.services.toasts.info("Vous devez d'abord sélectionner une couche");
       return logger.error('No layer selected');

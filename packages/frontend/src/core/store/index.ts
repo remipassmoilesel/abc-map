@@ -1,39 +1,46 @@
 import { combineReducers, createStore } from 'redux';
 import { StorePersistence } from './persistence/StorePersistence';
-import { projectStateReducer } from './project/reducer';
+import { projectReducer } from './project/reducer';
 import { projectInitialState } from './project/state';
-import { mapStateReducer } from './map/reducer';
+import { mapReducer } from './map/reducer';
 import { mapInitialState } from './map/state';
-import { authenticationStateReducer } from './authentication/reducer';
+import { authenticationReducer } from './authentication/reducer';
 import { authenticationInitialState } from './authentication/state';
 import _ from 'lodash';
-import { uiStateReducer } from './ui/reducer';
+import { uiReducer } from './ui/reducer';
 import { uiInitialState } from './ui/state';
+import { getAbcWindow } from '../AbcWindow';
 
 const rootReducer = combineReducers({
-  project: projectStateReducer,
-  map: mapStateReducer,
-  authentication: authenticationStateReducer,
-  ui: uiStateReducer,
+  project: projectReducer,
+  map: mapReducer,
+  authentication: authenticationReducer,
+  ui: uiReducer,
 });
 
-export type RootState = ReturnType<typeof rootReducer>;
+export type MainState = ReturnType<typeof rootReducer>;
 
-const initialState: RootState = {
-  project: projectInitialState,
-  map: mapInitialState,
-  authentication: authenticationInitialState,
-  ui: uiInitialState,
-};
+export function initialState(): MainState {
+  return {
+    project: projectInitialState,
+    map: mapInitialState,
+    authentication: authenticationInitialState,
+    ui: uiInitialState,
+  };
+}
 
-// TODO: FIXME: make conditional, do not enable in production
-const _window = window as any;
+const _window = getAbcWindow();
+// TODO: make conditional, do not enable in production
 const reduxExtension = _window.__REDUX_DEVTOOLS_EXTENSION__ && _window.__REDUX_DEVTOOLS_EXTENSION__();
 
 const persistence = StorePersistence.newPersistence();
-const preLoadedState = _.defaultsDeep(persistence.loadState(), initialState);
+const preLoadedState = _.defaultsDeep(persistence.loadState(), initialState());
 
-const mainStore = createStore(rootReducer, preLoadedState, reduxExtension);
+export function storeFactory() {
+  return createStore(rootReducer, preLoadedState, reduxExtension);
+}
+
+const mainStore = storeFactory();
 
 // At every store change, we persist store state in localstorage, but at most 1 time per second
 mainStore.subscribe(
@@ -41,6 +48,9 @@ mainStore.subscribe(
     persistence.saveState(mainStore.getState());
   }, 1000)
 );
+
+// For tests and debug purposes
+_window.abc.store = mainStore;
 
 export type MainStore = typeof mainStore;
 

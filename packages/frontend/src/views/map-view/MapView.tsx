@@ -3,7 +3,7 @@ import MainMap from './main-map/MainMap';
 import { services } from '../../core/Services';
 import LayerSelector from './layer-selector/LayerSelector';
 import ProjectStatus from './project-status/ProjectStatus';
-import { RootState } from '../../core/store';
+import { MainState } from '../../core/store';
 import { connect, ConnectedProps } from 'react-redux';
 import { Logger } from '../../core/utils/Logger';
 import BaseLayer from 'ol/layer/Base';
@@ -24,11 +24,12 @@ interface State {
   layers: BaseLayer[];
 }
 
-const mapStateToProps = (state: RootState) => ({
-  project: state.project.current,
+const mapStateToProps = (state: MainState) => ({
+  project: state.project.metadata,
   map: state.map.mainMap,
   drawingTool: state.map.drawingTool || DrawingTools.None,
   currentStyle: state.map.currentStyle,
+  userStatus: state.authentication.userStatus,
 });
 
 const connector = connect(mapStateToProps);
@@ -50,13 +51,12 @@ class MapView extends Component<Props, State> {
   }
 
   public render(): ReactNode {
-    const project = this.props.project;
     return (
       <div className="abc-map-view">
         {/*Left menu*/}
         <div className="left-panel">
-          <ProjectStatus project={project} />
-          <ProjectControls project={this.props.project} map={this.props.map} />
+          <ProjectStatus project={this.props.project} />
+          <ProjectControls />
           <div className={'control-block'}>
             <div className={'control-item'}>
               <button onClick={this.importFile} type={'button'} className={'btn btn-link'}>

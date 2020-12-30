@@ -1,6 +1,6 @@
 import React, { ChangeEvent, Component, ReactNode } from 'react';
 import { Logger } from '../../../core/utils/Logger';
-import { RootState } from '../../../core/store';
+import { MainState } from '../../../core/store';
 import { connect, ConnectedProps } from 'react-redux';
 import { MapActions } from '../../../core/store/map/actions';
 import ColorPickerButton from './ColorPickerButton';
@@ -14,7 +14,7 @@ const logger = Logger.get('ColorPicker.tsx', 'info');
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface LocalProps {}
 
-const mapStateToProps = (state: RootState) => ({
+const mapStateToProps = (state: MainState) => ({
   map: state.map.mainMap,
   fill: state.map.currentStyle.fill,
   stroke: state.map.currentStyle.stroke,
@@ -65,7 +65,7 @@ class StyleSelector extends Component<Props, {}> {
   private onFillColorSelected = (color: string): void => {
     this.props.setFillColor(color);
     if (this.props.map) {
-      this.services.map.forEachFeatureSelected(this.props.map, (feat) => {
+      this.services.geo.forEachFeatureSelected(this.props.map, (feat) => {
         feat.set(StyleProperties.FillColor, color);
       });
     }
@@ -74,7 +74,7 @@ class StyleSelector extends Component<Props, {}> {
   private onStrokeColorSelected = (color: string): void => {
     this.props.setStrokeColor(color);
     if (this.props.map) {
-      this.services.map.forEachFeatureSelected(this.props.map, (feat) => {
+      this.services.geo.forEachFeatureSelected(this.props.map, (feat) => {
         feat.set(StyleProperties.StrokeColor, color);
       });
     }
@@ -84,7 +84,7 @@ class StyleSelector extends Component<Props, {}> {
     const width = Number(ev.target.value);
     this.props.setStrokeWidth(width);
     if (this.props.map) {
-      this.services.map.forEachFeatureSelected(this.props.map, (feat) => {
+      this.services.geo.forEachFeatureSelected(this.props.map, (feat) => {
         feat.set(StyleProperties.StrokeWidth, width);
       });
     }

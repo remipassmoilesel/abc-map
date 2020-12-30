@@ -1,10 +1,10 @@
 import React, { ChangeEvent, Component, ReactNode } from 'react';
 import { services } from '../../core/Services';
-import { RootState } from '../../core/store';
+import { MainState } from '../../core/store';
 import { connect, ConnectedProps } from 'react-redux';
 import { Logger } from '../../core/utils/Logger';
 import LayoutList from './layout-list/LayoutList';
-import { AbcLayout, LayoutFormat, LayoutFormats } from '@abc-map/shared-entities';
+import { AbcLayout, AbcProjection, LayoutFormat, LayoutFormats } from '@abc-map/shared-entities';
 import LayoutPreview from './layout-preview/LayoutPreview';
 import { jsPDF } from 'jspdf';
 import { LayoutHelper } from './LayoutHelper';
@@ -24,8 +24,8 @@ interface State {
   format: LayoutFormat;
 }
 
-const mapStateToProps = (state: RootState) => ({
-  layouts: state.project.current?.layouts || [],
+const mapStateToProps = (state: MainState) => ({
+  layouts: state.project.layouts,
   mainMap: state.map.mainMap,
 });
 
@@ -120,7 +120,8 @@ class LayoutView extends Component<Props, State> {
 
     // Here we make an estimation of resolution as we can't know main map size
     const layoutRes = Math.round(resolution - resolution * 0.2);
-    const layout = this.services.project.newLayout(name, this.state.format, center, layoutRes, view.getProjection().getCode());
+    const projection: AbcProjection = { name: view.getProjection().getCode() };
+    const layout = this.services.project.newLayout(name, this.state.format, center, layoutRes, projection);
     this.setState({ activeLayout: layout });
   };
 
@@ -162,7 +163,7 @@ class LayoutView extends Component<Props, State> {
 
     this.services.toasts.info("Début de l'export ...");
     const pdf = new jsPDF();
-    const exportMap = this.services.map.newNakedMap();
+    const exportMap = this.services.geo.newNakedMap();
     exportMap.setTarget(support);
 
     this.exportLayout(layout, pdf, support, this.props.mainMap, exportMap)
@@ -187,7 +188,7 @@ class LayoutView extends Component<Props, State> {
     }
 
     const pdf = new jsPDF();
-    const exportMap = this.services.map.newNakedMap();
+    const exportMap = this.services.geo.newNakedMap();
     exportMap.setTarget(support);
 
     (async () => {
@@ -227,7 +228,7 @@ class LayoutView extends Component<Props, State> {
       exportMap.updateSize();
 
       // We copy layers from sourceMap to exporMap
-      this.services.map.cloneLayers(this.props.mainMap, exportMap);
+      this.services.geo.cloneLayers(this.props.mainMap, exportMap);
 
       const viewResolution = exportMap.getView().getResolution();
       if (!viewResolution) {
@@ -282,7 +283,7 @@ class LayoutView extends Component<Props, State> {
         new View({
           center: layout.view.center,
           resolution: layout.view.resolution,
-          projection: layout.view.projection,
+          projection: layout.view.projection.name,
         })
       );
     });

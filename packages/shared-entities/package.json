@@ -10,8 +10,7 @@
     "watch": "tsc --watch | sed -u 's/\\x1Bc//g'",
     "clean-build": "yarn run clean && yarn run build",
     "lint": "eslint './src/**/*.ts' --fix --max-warnings=0",
-    "test:disabled": "mocha --trace-warnings 'build/**/*.test.js'",
-    "coverage": "nyc yarn run test"
+    "test": "nyc mocha --trace-warnings 'build/**/*.test.js'"
   },
   "devDependencies": {
     "@types/chai": "^4.2.14",

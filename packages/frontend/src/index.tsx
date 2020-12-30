@@ -8,7 +8,7 @@ import './index.scss';
 const svc = services();
 
 svc.authentication
-  .loginAsAnonymous()
+  .anonymousLogin()
   .then(() => {
     ReactDOM.render(
       <React.StrictMode>

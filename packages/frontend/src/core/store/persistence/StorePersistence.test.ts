@@ -1,6 +1,6 @@
 import { StorePersistence } from './StorePersistence';
 import { LocalStorageService, StorageKey } from '../../utils/LocalStorageService';
-import { RootState } from '../index';
+import { MainState } from '../index';
 import sinon, { SinonStub } from 'sinon';
 import { DrawingTools } from '../../map/DrawingTools';
 import { Map } from 'ol';
@@ -18,9 +18,10 @@ describe('StorePersistence', () => {
   });
 
   it('persist should clean state, without undesirable state fields', () => {
-    const sampleState: RootState = {
+    const sampleState: MainState = {
       project: {
-        current: { name: 'test-project' } as any,
+        metadata: { name: 'test-project' } as any,
+        layouts: [],
       },
       map: {
         mainMap: new Map({}),
@@ -53,10 +54,11 @@ describe('StorePersistence', () => {
     };
     const snapshot = stateSnapshot(sampleState);
 
-    const expectedState: RootState = {
+    const expectedState: MainState = {
       project: {
-        current: undefined,
-      },
+        metadata: undefined,
+        layouts: [],
+      } as any,
       map: {
         mainMap: undefined as any,
         drawingTool: undefined,
@@ -95,14 +97,14 @@ describe('StorePersistence', () => {
   });
 });
 
-function stateSnapshot(state: RootState): string {
-  const withoutCircular: RootState = {
+function stateSnapshot(state: MainState): string {
+  const withoutCircularRef: MainState = {
     ...state,
     map: {
       ...state.map,
     },
   };
 
-  delete (withoutCircular as any).map.mainMap;
-  return JSON.stringify(withoutCircular);
+  delete (withoutCircularRef as any).map.mainMap;
+  return JSON.stringify(withoutCircularRef);
 }

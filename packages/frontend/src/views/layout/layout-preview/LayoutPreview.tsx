@@ -72,7 +72,7 @@ class LayoutPreview extends Component<Props, State> {
 
   private initializeMap(div: HTMLDivElement): Map {
     logger.info('Initializing preview map');
-    const preview = services().map.newNakedMap();
+    const preview = services().geo.newNakedMap();
     preview.setTarget(div);
 
     // We listen for view changes, in order to persist them in layout
@@ -100,7 +100,7 @@ class LayoutPreview extends Component<Props, State> {
     div.style.height = divSize.height;
     preview.updateSize();
 
-    this.services.map.cloneLayers(mainMap, preview);
+    this.services.geo.cloneLayers(mainMap, preview);
 
     const format = layout?.format;
     const view = layout?.view;
@@ -115,7 +115,7 @@ class LayoutPreview extends Component<Props, State> {
       new View({
         center: view.center,
         resolution: view.resolution * scaling,
-        projection: view.projection,
+        projection: view.projection.name,
       })
     );
   }
@@ -178,7 +178,7 @@ class LayoutPreview extends Component<Props, State> {
       },
       view: {
         center,
-        projection: projection.getCode(),
+        projection: { name: projection.getCode() },
         resolution: resolution / scaling,
       },
     };

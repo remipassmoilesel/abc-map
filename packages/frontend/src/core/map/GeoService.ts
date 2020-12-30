@@ -17,7 +17,7 @@ import Feature from 'ol/Feature';
 
 export const logger = Logger.get('MapService.ts');
 
-export class MapService {
+export class GeoService {
   constructor(private mainStore: MainStore) {}
 
   public newDefaultMap(): Map {

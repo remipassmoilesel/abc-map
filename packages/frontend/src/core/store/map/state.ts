@@ -1,7 +1,7 @@
 import { DrawingTool, DrawingTools } from '../../map/DrawingTools';
 import { Map } from 'ol';
 import { MapFactory } from '../../map/MapFactory';
-import { AbcWindow } from '../../AbcWindow';
+import { getAbcWindow } from '../../AbcWindow';
 import { LayerFactory } from '../../map/LayerFactory';
 import { AbcStyle } from '../../map/AbcStyle';
 
@@ -48,11 +48,5 @@ function newMap(): Map {
 /**
  * Store reference to main map in window object, for debug purposes only
  */
-function initMapRef() {
-  const _window: AbcWindow = window as any;
-  _window.abc = {
-    ..._window.abc,
-    mainMap: mapInitialState.mainMap,
-  };
-}
-initMapRef();
+const _window = getAbcWindow();
+_window.abc.mainMap = mapInitialState.mainMap;
