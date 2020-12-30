@@ -7,6 +7,7 @@ import { asyncHandler } from '../server/asyncHandler';
 import { Status } from '../server/Status';
 
 // TODO: partition resources per user
+// TODO: ensure users are not anonymous
 export class ProjectController extends Controller {
   constructor(private services: Services) {
     super();

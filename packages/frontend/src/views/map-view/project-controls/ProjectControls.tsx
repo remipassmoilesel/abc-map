@@ -1,21 +1,33 @@
 import React, { Component, ReactNode } from 'react';
 import { services } from '../../../core/Services';
-import { AbcProject } from '@abc-map/shared-entities';
+import { AbcProject, UserStatus } from '@abc-map/shared-entities';
 import { Logger } from '../../../core/utils/Logger';
 import { Constants } from '../../../core/Constants';
-import { Map } from 'ol';
+import { MainState } from '../../../core/store';
+import { connect, ConnectedProps } from 'react-redux';
+import { Env } from '../../../core/utils/Env';
 import './ProjectControls.scss';
 
 const logger = Logger.get('ProjectControls.tsx');
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+interface LocalProps {}
 
 interface State {
   recentProjects: AbcProject[];
 }
 
-interface Props {
-  project?: AbcProject;
-  map: Map;
-}
+const mapStateToProps = (state: MainState) => ({
+  project: state.project.metadata,
+  map: state.map.mainMap,
+  user: state.authentication.user,
+  userStatus: state.authentication.userStatus,
+});
+
+const connector = connect(mapStateToProps);
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+type Props = PropsFromRedux & LocalProps;
 
 class ProjectControls extends Component<Props, State> {
   private services = services();
@@ -29,6 +41,7 @@ class ProjectControls extends Component<Props, State> {
 
   public render(): ReactNode {
     const projects = this.state.recentProjects;
+    const userAuthenticated = this.props.userStatus === UserStatus.AUTHENTICATED;
     return (
       <div className={'project-controls control-block'}>
         <div className={'mb-2'}>
@@ -36,34 +49,36 @@ class ProjectControls extends Component<Props, State> {
           Projets récents:
         </div>
         <div className={'control-item'}>
-          <div className={'recent-projects'}>
-            {projects.map((pr) => (
-              <div key={pr.metadata.id} className={'item'} onClick={() => this.openProject(pr.metadata.id)}>
-                {pr.metadata.name}
-              </div>
-            ))}
-            {projects.length < 1 && <div>Aucun projet récent</div>}
+          <div className={'recent-projects'} data-cy={'recent-projects'}>
+            {userAuthenticated &&
+              projects.map((pr) => (
+                <div key={pr.metadata.id} className={'item'} onClick={() => this.openProject(pr.metadata.id)}>
+                  {pr.metadata.name}
+                </div>
+              ))}
+            {userAuthenticated && projects.length < 1 && <div>Aucun projet récent</div>}
+            {!userAuthenticated && <div>Vous n&apos;êtes pas connecté</div>}
           </div>
         </div>
         <div className={'control-item'}>
-          <button onClick={this.newProject} type={'button'} className={'btn btn-link'}>
+          <button onClick={this.newProject} type={'button'} className={'btn btn-link'} data-cy={'new-project'}>
             <i className={'fa fa-file mr-2'} /> Nouveau projet
           </button>
         </div>
         <div className={'control-item'}>
-          <button onClick={this.saveProject} type={'button'} className={'btn btn-link'}>
+          <button onClick={this.saveProject} type={'button'} className={'btn btn-link'} data-cy={'save-project'}>
             <i className={'fa fa-pen-alt mr-2'} />
             Enregistrer en ligne
           </button>
         </div>
         <div className={'control-item'}>
-          <button onClick={this.exportProject} type={'button'} className={'btn btn-link'}>
+          <button onClick={this.exportProject} type={'button'} className={'btn btn-link'} data-cy={'export-project'}>
             <i className={'fa fa-download mr-2'} />
             Exporter le projet
           </button>
         </div>
         <div className={'control-item'}>
-          <button onClick={this.importProject} type={'button'} className={'btn btn-link'}>
+          <button onClick={this.importProject} type={'button'} className={'btn btn-link'} data-cy={'import-project'}>
             <i className={'fa fa-upload mr-2'} />
             Importer un projet
           </button>
@@ -93,22 +108,16 @@ class ProjectControls extends Component<Props, State> {
   };
 
   private saveProject = () => {
-    let project = this.props.project;
-    if (!project) {
-      return this.services.toasts.genericError();
+    if (this.props.userStatus !== UserStatus.AUTHENTICATED) {
+      return this.services.toasts.info('Vous devez être connecté pour enregistrer votre projet');
     }
 
     this.services.toasts.info('Enregistrement en cours ...');
-    const layers = this.services.map.exportLayers(this.props.map);
-    project = {
-      ...project,
-      layers,
-    };
-
-    return this.services.project
-      .save(project)
+    this.services.project
+      .exportCurrentProject()
+      .then((project) => this.services.project.save(project))
       .then(() => {
-        this.services.toasts.info('Project enregistré !');
+        this.services.toasts.info('Projet enregistré !');
         this.updateRecentProjects();
       })
       .catch((err) => {
@@ -125,28 +134,15 @@ class ProjectControls extends Component<Props, State> {
   }
 
   private exportProject = () => {
-    let project = this.props.project;
-    if (!project) {
-      return this.services.toasts.genericError();
-    }
-
     this.services.toasts.info('Export en cours ...');
-    const layers = this.services.map.exportLayers(this.props.map);
-    project = {
-      ...project,
-      layers,
-    };
-
-    this.services.toasts.info('Export terminé !');
-    this.downloadProject(project);
+    this.services.project.exportCurrentProject().then((project) => {
+      this.services.toasts.info('Export terminé !');
+      this.downloadProject(project);
+    });
   };
 
   private importProject = () => {
-    const fileNode = this.createInputFile();
-    fileNode.click();
-
-    fileNode.onchange = () => {
-      const files = fileNode.files;
+    this.openFileInput(async (files) => {
       if (!files || !files.length) {
         return this.services.toasts.error('Vous devez sélectionner un fichier');
       }
@@ -157,43 +153,51 @@ class ProjectControls extends Component<Props, State> {
       }
 
       this.services.toasts.info('Chargement ...');
-      this.services.project
+      return this.services.project
         .loadProjectFromFile(file)
         .then(() => {
           this.services.history.clean();
-          this.services.toasts.info('Project importé !');
+          this.services.toasts.info('Projet importé !');
         })
         .catch((err) => {
           this.services.toasts.error(err.message);
-        })
-        .finally(() => {
-          fileNode.remove();
         });
-    };
-
-    fileNode.oncancel = () => {
-      fileNode.remove();
-    };
+    });
   };
 
   private downloadProject(project: AbcProject) {
-    const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(project));
-    const anchorNode = document.createElement('a');
-    anchorNode.style.display = 'none';
-    anchorNode.setAttribute('href', dataStr);
-    anchorNode.setAttribute('download', `project.${Constants.EXTENSION}`);
-    document.body.appendChild(anchorNode);
-    anchorNode.click();
-    anchorNode.remove();
+    const dataStr = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(project))}`;
+    const anchor = document.createElement('a');
+    anchor.style.display = 'none';
+    anchor.setAttribute('href', dataStr);
+    anchor.setAttribute('download', `project.${Constants.EXTENSION}`);
+    anchor.dataset.cy = 'export-project-output';
+
+    document.body.appendChild(anchor);
+    if (!Env.isE2e()) {
+      anchor.click();
+      anchor.remove();
+    }
   }
 
-  private createInputFile(): HTMLInputElement {
+  private openFileInput(onChange: (files: FileList | null) => Promise<void>): void {
     const fileNode = document.createElement('input');
     fileNode.setAttribute('type', 'file');
-    document.body.appendChild(fileNode);
     fileNode.style.display = 'none';
-    return fileNode;
+    fileNode.dataset.cy = 'import-project-input';
+    fileNode.onchange = () => {
+      const files = fileNode.files;
+      onChange(files).finally(() => fileNode.remove());
+    };
+    fileNode.oncancel = () => {
+      fileNode.remove();
+    };
+
+    document.body.appendChild(fileNode);
+    if (!Env.isE2e()) {
+      fileNode.click();
+    }
   }
 }
 
-export default ProjectControls;
+export default connector(ProjectControls);

@@ -1,7 +1,5 @@
 import React, { Component, ReactNode } from 'react';
 import { services } from '../../core/Services';
-import { RootState } from '../../core/store';
-import { connect, ConnectedProps } from 'react-redux';
 import { Logger } from '../../core/utils/Logger';
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
 import { ConfirmAccountParams, FrontendRoutes } from '@abc-map/shared-entities';
@@ -11,20 +9,11 @@ import './ConfirmAccount.scss';
 
 const logger = Logger.get('ConfirmAccount.tsx', 'info');
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface LocalProps {}
-
 interface State {
   status: AccountConfirmationStatus;
 }
 
-// eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
-const mapStateToProps = (state: RootState) => ({});
-
-const connector = connect(mapStateToProps);
-
-type PropsFromRedux = ConnectedProps<typeof connector>;
-type Props = PropsFromRedux & LocalProps & RouteComponentProps<ConfirmAccountParams>;
+type Props = RouteComponentProps<ConfirmAccountParams>;
 
 class ConfirmAccount extends Component<Props, State> {
   private services = services();
@@ -78,4 +67,4 @@ class ConfirmAccount extends Component<Props, State> {
   }
 }
 
-export default withRouter(connector(ConfirmAccount));
+export default withRouter(ConfirmAccount);

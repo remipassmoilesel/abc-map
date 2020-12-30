@@ -3,12 +3,14 @@ import Geometry from 'ol/geom/Geometry';
 import { Point } from 'ol/geom';
 import {
   AbcArtefact,
+  AbcLayout,
   AbcPredefinedLayer,
   AbcProject,
   AbcVectorLayer,
   CURRENT_VERSION,
   DEFAULT_PROJECTION,
   LayerType,
+  LayoutFormats,
   PredefinedLayerModel,
 } from '@abc-map/shared-entities';
 import * as uuid from 'uuid';
@@ -107,6 +109,19 @@ export class TestHelper {
       license: 'LICENSE.txt',
       keywords: ['gpx', 'kml'],
       description: 'A sample artefact',
+    };
+  }
+
+  public static sampleLayout(): AbcLayout {
+    return {
+      id: uuid.v4(),
+      name: 'Sample layout',
+      format: LayoutFormats.A4_PORTRAIT,
+      view: {
+        center: [1.5, 45.4],
+        resolution: 1000,
+        projection: DEFAULT_PROJECTION,
+      },
     };
   }
 }

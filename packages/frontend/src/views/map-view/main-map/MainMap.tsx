@@ -75,7 +75,7 @@ class MainMap extends Component<Props, State> {
     // Warning: we can not compare layers properties here between them, because we work with references
     // so previous objects get updated
     const drawingToolChanged = prevProps.drawingTool !== this.props.drawingTool;
-    const layersChanged = !this.services.map.layersEquals(prevState.layers, this.state.layers);
+    const layersChanged = !this.services.geo.layersEquals(prevState.layers, this.state.layers);
     const activeLayerChanged = this.state.activeLayer !== prevState.activeLayer;
     if (drawingToolChanged || layersChanged || activeLayerChanged) {
       this.updateInteractions(this.props.drawingTool);
@@ -105,7 +105,7 @@ class MainMap extends Component<Props, State> {
     sizeObserver.observe(div);
 
     // First trigger for layer setup
-    const layers = this.services.map.getManagedLayers(map);
+    const layers = this.services.geo.getManagedLayers(map);
     this.props.onLayersChanged && this.props.onLayersChanged(layers);
 
     this.setState({ dropData, sizeObserver });
@@ -131,8 +131,8 @@ class MainMap extends Component<Props, State> {
   private onLayersChanged = (ev: BaseEvent): boolean => {
     logger.debug('Layers event: ', ev);
     const map = this.props.map;
-    const layers = this.services.map.getManagedLayers(map);
-    const activeLayer = this.services.map.getActiveLayer(map);
+    const layers = this.services.geo.getManagedLayers(map);
+    const activeLayer = this.services.geo.getActiveLayer(map);
 
     this.setState({ layers, activeLayer });
 
@@ -150,7 +150,7 @@ class MainMap extends Component<Props, State> {
       features: ev.features as Feature<Geometry>[],
     });
 
-    const layer = this.services.map.newVectorLayer(source);
+    const layer = this.services.geo.newVectorLayer(source);
     layer.set(LayerProperties.Name, ev.file.name);
 
     map.addLayer(layer);
@@ -162,7 +162,7 @@ class MainMap extends Component<Props, State> {
 
     this.state.drawInteractions.forEach((inter) => map.removeInteraction(inter));
 
-    const activeLayer = this.services.map.getActiveVectorLayer(map);
+    const activeLayer = this.services.geo.getActiveVectorLayer(map);
     if (!activeLayer || tool.id === DrawingTools.None.id) {
       this.setState({ drawInteractions: [] });
       map.set(AbcProperties.CurrentTool, DrawingTools.None);

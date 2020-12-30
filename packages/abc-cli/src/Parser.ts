@@ -23,6 +23,8 @@ export class Parser {
       return Command.STOP_SERVICES;
     } else if (args.indexOf(Command.CLEAN_RESTART_SERVICES) !== -1) {
       return Command.CLEAN_RESTART_SERVICES;
+    } else if (args.indexOf(Command.CLEAN) !== -1) {
+      return Command.CLEAN;
     } else {
       return Promise.reject(new Error('Invalid command'));
     }

@@ -1,4 +1,4 @@
-import { logger, MapService } from './MapService';
+import { logger, GeoService } from './GeoService';
 import { AbcPredefinedLayer, AbcProject, AbcVectorLayer, LayerType, PredefinedLayerModel } from '@abc-map/shared-entities';
 import { AbcProperties, LayerProperties } from '@abc-map/shared-entities';
 import { TestHelper } from '../utils/TestHelper';
@@ -11,12 +11,13 @@ import { MapFactory } from './MapFactory';
 
 logger.disable();
 
-describe('MapService', () => {
-  let service: MapService;
+// TODO: improve tests
+describe('GeoService', () => {
+  let service: GeoService;
 
   beforeEach(() => {
     const storeMock: MainStore = {} as any;
-    service = new MapService(storeMock);
+    service = new GeoService(storeMock);
   });
 
   it('resetMap()', () => {
@@ -29,7 +30,6 @@ describe('MapService', () => {
     expect(layers[0].get(LayerProperties.Type)).toEqual(LayerType.Predefined);
   });
 
-  // TODO: improve tests
   it('exportLayers()', () => {
     const map = MapFactory.newDefaultMap();
     const osm = service.newOsmLayer();
@@ -50,7 +50,6 @@ describe('MapService', () => {
     expect((layers[1] as AbcVectorLayer).features.features).toHaveLength(3);
   });
 
-  // TODO: improve tests
   it('importProject()', () => {
     const project: AbcProject = TestHelper.sampleProject();
 

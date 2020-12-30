@@ -52,7 +52,7 @@ function updateCli() {
   child_process.execSync("yarn install", {cwd: cliRoot, stdio: 'inherit'});
   child_process.execSync("yarn run clean-build", {cwd: cliRoot, stdio: 'inherit'});
   fs.writeFileSync(lastBuildDateFile, JSON.stringify({date: new Date()}));
-  console.log("\n🔨 Initialized ! 🔧\n");
+  console.log('\n')
 }
 
 function cliCommand(args) {

@@ -1,5 +1,6 @@
 import { AbcLayer } from './AbcLayer';
 import { AbcLayout } from './AbcLayout';
+import { AbcProjection } from './AbcProjection';
 
 export interface AbcProject {
   metadata: AbcProjectMetadata;
@@ -15,11 +16,3 @@ export interface AbcProjectMetadata {
 }
 
 export const CURRENT_VERSION = '0.1';
-
-export interface AbcProjection {
-  name: string;
-}
-
-export const DEFAULT_PROJECTION: AbcProjection = {
-  name: 'EPSG:3857',
-};

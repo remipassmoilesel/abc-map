@@ -1,7 +1,5 @@
 import React, { ChangeEvent, Component, ReactNode } from 'react';
 import { services } from '../../core/Services';
-import { RootState } from '../../core/store';
-import { connect, ConnectedProps } from 'react-redux';
 import { Logger } from '../../core/utils/Logger';
 import { Link } from 'react-router-dom';
 import { FrontendRoutes } from '@abc-map/shared-entities';
@@ -10,9 +8,6 @@ import { AuthenticationStatus, RegistrationStatus } from '@abc-map/shared-entiti
 
 const logger = Logger.get('Landing.tsx', 'info');
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface LocalProps {}
-
 interface State {
   loginEmail: string;
   loginPassword: string;
@@ -20,18 +15,10 @@ interface State {
   registrationPassword: string;
 }
 
-// eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
-const mapStateToProps = (state: RootState) => ({});
-
-const connector = connect(mapStateToProps);
-
-type PropsFromRedux = ConnectedProps<typeof connector>;
-type Props = PropsFromRedux & LocalProps;
-
-class Landing extends Component<Props, State> {
+class Landing extends Component<{}, State> {
   private services = services();
 
-  constructor(props: Props) {
+  constructor(props: {}) {
     super(props);
     this.state = {
       loginEmail: '',
@@ -133,7 +120,8 @@ class Landing extends Component<Props, State> {
     this.services.authentication
       .login(this.state.loginEmail, this.state.loginPassword)
       .then((response) => {
-        logger.error('', response);
+        this.setState({ registrationEmail: '', registrationPassword: '' });
+
         if (AuthenticationStatus.Successful === response.status) {
           return this.services.toasts.info('Vous êtes connecté !');
         }
@@ -162,6 +150,7 @@ class Landing extends Component<Props, State> {
           return this.services.toasts.info('Cette adresse email est déjà prise');
         }
         if (res.status === RegistrationStatus.Successful) {
+          this.setState({ registrationEmail: '', registrationPassword: '' });
           return this.services.toasts.info('Un email vient de vous être envoyé, vous devez activer votre compte');
         }
         this.services.toasts.genericError();
@@ -186,4 +175,4 @@ class Landing extends Component<Props, State> {
   };
 }
 
-export default connector(Landing);
+export default Landing;

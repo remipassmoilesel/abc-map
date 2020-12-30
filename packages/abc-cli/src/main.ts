@@ -49,7 +49,9 @@ async function main(args: string[]) {
   } else if (Command.STOP_SERVICES === command) {
     service.stopServices();
   } else if (Command.CLEAN_RESTART_SERVICES === command) {
-    service.cleanRestart();
+    service.cleanRestartServices();
+  } else if (Command.CLEAN === command) {
+    service.clean();
   } else {
     const message = `Invalid command: ${args.slice(2).join(' ')}\nTry: ${Object.values(Command).join(', ')}`;
     return Promise.reject(new Error(message));

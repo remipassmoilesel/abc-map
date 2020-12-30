@@ -61,9 +61,9 @@ class ArtefactCard extends Component<Props, {}> {
 
   public addArtefact = () => {
     this.services.toasts.info('Import en cours ...');
-    const map = this.services.map.getMainMap();
+    const map = this.services.geo.getMainMap();
     this.services.dataStore
-      .getLayersFrom(this.props.artefact, this.services.map.getProjection(map))
+      .getLayersFrom(this.props.artefact, this.services.geo.getProjection(map))
       .then((layers) =>
         layers.forEach((l) => {
           l.set(AbcProperties.Managed, true);

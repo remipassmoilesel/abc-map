@@ -1,18 +1,41 @@
 import React, { Component, ReactNode } from 'react';
 import { Logger } from '../../core/utils/Logger';
-import { FrontendRoutes } from '@abc-map/shared-entities';
-import { Link } from 'react-router-dom';
+import { FrontendRoutes, UserStatus } from '@abc-map/shared-entities';
+import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
+import { MainState } from '../../core/store';
+import { connect, ConnectedProps } from 'react-redux';
+import { Dropdown } from 'react-bootstrap';
+import { services } from '../../core/Services';
 import './TopBar.scss';
 
 const logger = Logger.get('TopBar.tsx', 'info');
 
-class TopBar extends Component<{}, {}> {
-  constructor(props: {}) {
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+interface LocalProps {}
+
+const mapStateToProps = (state: MainState) => ({
+  userStatus: state.authentication.userStatus,
+  user: state.authentication.user,
+});
+
+const connector = connect(mapStateToProps);
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+type Props = PropsFromRedux & LocalProps & RouteComponentProps<any>;
+
+class TopBar extends Component<Props, {}> {
+  private services = services();
+
+  constructor(props: Props) {
     super(props);
     this.state = {};
   }
 
   public render(): ReactNode {
+    const userAuthenticated = this.props.userStatus === UserStatus.AUTHENTICATED;
+    const user = this.props.user;
+    const label = user && userAuthenticated ? user.email : 'Visiteur';
+
     return (
       <div className={'abc-top-bar'}>
         <h1>
@@ -39,9 +62,41 @@ class TopBar extends Component<{}, {}> {
         <Link to={FrontendRoutes.about()} className={'link'}>
           A propos
         </Link>
+        <div className={'flex-grow-1'} />
+        <div className={'ml-3'}>
+          <Dropdown data-cy={'user-menu'}>
+            <Dropdown.Toggle variant="light">
+              <i className={'fa fa-user'} />
+            </Dropdown.Toggle>
+            <Dropdown.Menu>
+              <Dropdown.ItemText data-cy={'user-label'}>{label}</Dropdown.ItemText>
+              {!userAuthenticated && <Dropdown.Item onClick={this.login}>Se connecter</Dropdown.Item>}
+              <Dropdown.Item onClick={this.logout} disabled={!userAuthenticated} data-cy={'logout'}>
+                <i className={'fa fa-lock mr-2'} /> Se déconnecter
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+        </div>
       </div>
     );
   }
+
+  private login = () => {
+    this.props.history.push(FrontendRoutes.landing());
+  };
+
+  private logout = () => {
+    this.services.project.newProject();
+    this.services.authentication
+      .logout()
+      .then(() => {
+        this.services.toasts.info("Vous n'êtes plus connecté !");
+      })
+      .catch((err) => {
+        this.services.toasts.genericError();
+        logger.error(err);
+      });
+  };
 }
 
-export default TopBar;
+export default connector(withRouter(TopBar));

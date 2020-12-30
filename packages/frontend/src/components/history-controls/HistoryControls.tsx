@@ -3,7 +3,7 @@ import { Logger } from '../../core/utils/Logger';
 import { HistoryKey } from '../../core/history/HistoryKey';
 import { services } from '../../core/Services';
 import { connect, ConnectedProps } from 'react-redux';
-import { RootState } from '../../core/store';
+import { MainState } from '../../core/store';
 import './HistoryControls.scss';
 
 const logger = Logger.get('HistoryControls.tsx', 'info');
@@ -12,7 +12,7 @@ interface LocalProps {
   historyKey: HistoryKey;
 }
 
-const mapStateToProps = (state: RootState) => ({
+const mapStateToProps = (state: MainState) => ({
   capabilities: state.ui.historyCapabilities,
 });
 

@@ -9,4 +9,5 @@ export enum Command {
   START = 'start',
   STOP_SERVICES = 'stop-services',
   CLEAN_RESTART_SERVICES = 'clean-restart-services',
+  CLEAN = 'clean',
 }

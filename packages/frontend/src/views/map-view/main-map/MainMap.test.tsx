@@ -15,7 +15,7 @@ logger.disable();
 
 describe('MainMap', () => {
   let container: HTMLDivElement;
-  const mapService = services().map;
+  const mapService = services().geo;
   beforeEach(() => {
     container = document.createElement('div');
     document.body.appendChild(container);

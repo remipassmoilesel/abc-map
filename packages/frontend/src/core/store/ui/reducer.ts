@@ -5,7 +5,7 @@ import { uiInitialState, UiState } from './state';
  * Warning: this function MUST be fast, and we MUST clone state to return a new state object
  *
  */
-export function uiStateReducer(state = uiInitialState, action: UiAction): UiState {
+export function uiReducer(state = uiInitialState, action: UiAction): UiState {
   if (!Object.values(ActionType).includes(action.type)) {
     return state;
   }

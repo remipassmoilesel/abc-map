@@ -1,30 +1,40 @@
 import { MainStore } from '../store';
 import { ProjectActions } from '../store/project/actions';
 import { Logger } from '../utils/Logger';
-import { AbcLayout, AbcProject, LayoutFormat } from '@abc-map/shared-entities';
+import { AbcLayout, AbcProject, AbcProjection, AbcProjectMetadata, LayoutFormat } from '@abc-map/shared-entities';
 import { AxiosInstance } from 'axios';
 import { ProjectFactory } from './ProjectFactory';
-import { MapService } from '../map/MapService';
+import { GeoService } from '../map/GeoService';
 import { Abm2Reader } from './Abm2Reader';
-import * as uuid from 'uuid';
 import { ProjectRoutes as Api } from '../http/ApiRoutes';
+import * as uuid from 'uuid';
 
-const logger = Logger.get('ProjectService.ts', 'info');
+export const logger = Logger.get('ProjectService.ts', 'info');
 
 export class ProjectService {
-  constructor(private httpClient: AxiosInstance, private store: MainStore, private mapService: MapService) {}
-
-  public getCurrent(): AbcProject | undefined {
-    return this.store.getState().project.current;
-  }
+  constructor(private httpClient: AxiosInstance, private store: MainStore, private geoService: GeoService) {}
 
   public newProject(): void {
-    const map = this.mapService.getMainMap();
-    if (map) {
-      this.mapService.resetMap(map);
-    }
-    this.store.dispatch(ProjectActions.newProject(ProjectFactory.newProject()));
+    const map = this.geoService.getMainMap();
+    this.geoService.resetMap(map);
+    this.store.dispatch(ProjectActions.newProject(ProjectFactory.newProjectMetadata()));
     logger.info('New project created');
+  }
+
+  public getCurrentMetadata(): AbcProjectMetadata {
+    return this.store.getState().project.metadata;
+  }
+
+  public async exportCurrentProject(): Promise<AbcProject> {
+    const metadata = this.store.getState().project.metadata;
+    const map = this.geoService.getMainMap();
+    const layers = this.geoService.exportLayers(map);
+    const layouts = this.store.getState().project.layouts;
+    return {
+      metadata,
+      layers,
+      layouts,
+    };
   }
 
   public save(project: AbcProject): Promise<void> {
@@ -49,17 +59,16 @@ export class ProjectService {
   }
 
   public loadProject(project: AbcProject): void {
-    const map = this.mapService.getMainMap();
-    if (map) {
-      this.mapService.importProject(project, map);
-    }
+    const map = this.geoService.getMainMap();
+    this.geoService.importProject(project, map);
+    this.store.dispatch(ProjectActions.loadProject(project));
   }
 
   public loadProjectFromFile(file: File): Promise<void> {
     return Abm2Reader.fromFile(file).then((pr) => this.loadProject(pr));
   }
 
-  public newLayout(name: string, format: LayoutFormat, center: number[], resolution: number, projection: string): AbcLayout {
+  public newLayout(name: string, format: LayoutFormat, center: number[], resolution: number, projection: AbcProjection): AbcLayout {
     const layout: AbcLayout = {
       id: uuid.v4(),
       name,
@@ -83,5 +92,9 @@ export class ProjectService {
 
   public clearLayouts(): void {
     this.store.dispatch(ProjectActions.clearLayouts());
+  }
+
+  public renameProject(name: string) {
+    this.store.dispatch(ProjectActions.renameProject(name));
   }
 }

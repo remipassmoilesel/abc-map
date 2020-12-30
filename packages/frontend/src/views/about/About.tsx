@@ -1,6 +1,6 @@
 import React, { Component, ReactNode } from 'react';
 import { services } from '../../core/Services';
-import { RootState } from '../../core/store';
+import { MainState } from '../../core/store';
 import { connect, ConnectedProps } from 'react-redux';
 import { Logger } from '../../core/utils/Logger';
 import './About.scss';
@@ -14,7 +14,7 @@ interface LocalProps {}
 interface State {}
 
 // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
-const mapStateToProps = (state: RootState) => ({});
+const mapStateToProps = (state: MainState) => ({});
 
 const connector = connect(mapStateToProps);
 

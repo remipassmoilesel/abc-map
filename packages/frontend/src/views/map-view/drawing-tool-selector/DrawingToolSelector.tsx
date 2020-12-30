@@ -3,7 +3,7 @@ import { services } from '../../../core/Services';
 import { Logger } from '../../../core/utils/Logger';
 import BaseLayer from 'ol/layer/Base';
 import { DrawingTool, DrawingTools } from '../../../core/map/DrawingTools';
-import { RootState } from '../../../core/store';
+import { MainState } from '../../../core/store';
 import { connect, ConnectedProps } from 'react-redux';
 import { MapActions } from '../../../core/store/map/actions';
 import './DrawingToolSelector.scss';
@@ -16,7 +16,7 @@ interface LocalProps {
   layers: BaseLayer[];
 }
 
-const mapStateToProps = (state: RootState) => ({
+const mapStateToProps = (state: MainState) => ({
   currentTool: state.map.drawingTool,
 });
 

@@ -1,6 +1,5 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios';
 import mainStore from '../store';
-import { AuthenticationActions } from '../store/authentication/actions';
 import { Logger } from '../utils/Logger';
 
 const logger = Logger.get('HttpClients.ts');
@@ -54,7 +53,7 @@ function requestInterceptor(config: AxiosRequestConfig): AxiosRequestConfig {
 
 function responseInterceptor(error: AxiosError): Promise<any> {
   if (error.response?.status === 401) {
-    mainStore.dispatch(AuthenticationActions.logout());
+    // TODO: handle expired token
   }
   return Promise.reject(error);
 }

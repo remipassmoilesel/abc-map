@@ -5,7 +5,7 @@ import { mapInitialState, MapState } from './state';
  * Warning: this function MUST be fast, and we MUST clone state to return a new state object
  *
  */
-export function mapStateReducer(state = mapInitialState, action: MapAction): MapState {
+export function mapReducer(state = mapInitialState, action: MapAction): MapState {
   if (!Object.values(ActionType).includes(action.type)) {
     return state;
   }

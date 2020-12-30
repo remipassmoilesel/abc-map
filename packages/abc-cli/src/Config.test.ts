@@ -10,6 +10,6 @@ describe('Config', () => {
     assert.isTrue(fs.existsSync(path.resolve(config.getCliRoot(), 'src/Parser.ts')));
     assert.isTrue(fs.existsSync(path.resolve(config.getDevServicesRoot(), 'docker-compose.yml')));
     assert.isTrue(fs.existsSync(path.resolve(config.getBackendRoot(), 'src/server/HttpServer.ts')));
-    assert.isTrue(fs.existsSync(path.resolve(config.getE2eRoot(), 'src/integration/0_registration-login-spec.ts')));
+    assert.isTrue(fs.existsSync(path.resolve(config.getE2eRoot(), 'src/plugins/index.js')));
   });
 });

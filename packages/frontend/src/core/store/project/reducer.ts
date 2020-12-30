@@ -8,7 +8,7 @@ import { projectInitialState, ProjectState } from './state';
  *
  * Also, project objet can be very heavy so please avoid deep clone
  */
-export function projectStateReducer(state = projectInitialState, action: ProjectAction): ProjectState {
+export function projectReducer(state = projectInitialState, action: ProjectAction): ProjectState {
   if (!Object.values(ActionType).includes(action.type)) {
     return state;
   }
@@ -16,24 +16,26 @@ export function projectStateReducer(state = projectInitialState, action: Project
   switch (action.type) {
     case ActionType.NewProject: {
       const newState: ProjectState = { ...state };
-      newState.current = action.project;
+      newState.metadata = action.metadata;
+      newState.layouts = [];
       return newState;
     }
-    case ActionType.NewLayout: {
-      if (!state.current) {
-        return state;
-      }
 
+    case ActionType.RenameProject: {
       const newState: ProjectState = { ...state };
-      newState.current = { ...state.current, layouts: [...state.current.layouts, action.layout] };
+      newState.metadata = { ...state.metadata };
+      newState.metadata.name = action.name;
       return newState;
     }
-    case ActionType.UpdateLayout: {
-      if (!state.current) {
-        return state;
-      }
 
-      const layouts = state.current.layouts.map((lay) => {
+    case ActionType.NewLayout: {
+      const newState: ProjectState = { ...state };
+      newState.layouts = [...state.layouts, action.layout];
+      return newState;
+    }
+
+    case ActionType.UpdateLayout: {
+      const layouts = state.layouts.map((lay) => {
         if (lay.id === action.layout.id) {
           return action.layout;
         }
@@ -41,16 +43,20 @@ export function projectStateReducer(state = projectInitialState, action: Project
       });
 
       const newState: ProjectState = { ...state };
-      newState.current = { ...state.current, layouts };
+      newState.layouts = layouts;
       return newState;
     }
-    case ActionType.ClearLayouts: {
-      if (!state.current) {
-        return state;
-      }
 
+    case ActionType.ClearLayouts: {
       const newState: ProjectState = { ...state };
-      newState.current = { ...state.current, layouts: [] };
+      newState.layouts = [];
+      return newState;
+    }
+
+    case ActionType.LoadProject: {
+      const newState: ProjectState = { ...state };
+      newState.metadata = action.project.metadata;
+      newState.layouts = action.project.layouts;
       return newState;
     }
 

@@ -1,3 +1,5 @@
+import { AbcProjection } from './AbcProjection';
+
 export interface AbcLayout {
   id: string;
   name: string;
@@ -53,5 +55,5 @@ export class LayoutFormats {
 export interface AbcLayoutView {
   center: number[];
   resolution: number;
-  projection: string;
+  projection: AbcProjection;
 }

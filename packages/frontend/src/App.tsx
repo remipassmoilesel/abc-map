@@ -15,6 +15,7 @@ import Help from './views/help/Help';
 import About from './views/about/About';
 import { services } from './core/Services';
 import ConfirmAccount from './views/confirm-account/ConfirmAccount';
+import { Env } from './core/utils/Env';
 
 class App extends Component<{}, {}> {
   private services = services();
@@ -42,8 +43,10 @@ class App extends Component<{}, {}> {
   }
 
   public componentDidMount() {
-    window.addEventListener('beforeunload', this.warnBeforeUnload);
-    window.addEventListener('unload', this.warnBeforeUnload);
+    if (!Env.isE2e()) {
+      window.addEventListener('beforeunload', this.warnBeforeUnload);
+      window.addEventListener('unload', this.warnBeforeUnload);
+    }
   }
 
   public componentWillUnmount() {

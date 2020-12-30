@@ -45,7 +45,7 @@ export class Service {
       waitOn(options)
         .then(() => {
           logger.info('Servers ready !');
-          this.shell.sync('yarn run e2e:test', { cwd: this.config.getE2eRoot() });
+          this.shell.sync('yarn run e2e-test', { cwd: this.config.getE2eRoot() });
         })
         .catch(reject)
         .finally(() => startCmd.kill('SIGTERM'));
@@ -65,7 +65,12 @@ export class Service {
     this.shell.sync('docker-compose down', { cwd: this.config.getDevServicesRoot() });
   }
 
-  public cleanRestart(): void {
+  public cleanRestartServices(): void {
     this.shell.sync('docker-compose down -v && docker-compose up -d', { cwd: this.config.getDevServicesRoot() });
+  }
+
+  public clean(): void {
+    this.shell.sync('lerna exec "rm -rf node_modules"');
+    this.shell.sync('lerna exec "rm -rf build"');
   }
 }
