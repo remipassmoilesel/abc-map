@@ -15,7 +15,8 @@
     "typecheck": "tsc --noEmit",
     "watch": "tsc --noEmit --watch | sed -u 's/\\x1Bc//g'",
     "test:interactive": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "dep-check": "depcruise -c .dependency-cruiser.js src"
   },
   "dependencies": {
     "@abc-map/shared-entities": "0.0.1",
@@ -42,7 +43,8 @@
     "jwt-decode": "^3.1.2",
     "query-string": "^6.13.7",
     "jszip": "^3.5.0",
-    "shapefile": "^0.6.6"
+    "shapefile": "^0.6.6",
+    "loglevel": "^1.7.1"
   },
   "devDependencies": {
     "redux-mock-store": "^1.5.4",
@@ -79,7 +81,8 @@
     "canvas": "2.6.1",
     "react-test-renderer": "^17.0.1",
     "express": "^4.17.1",
-    "express-http-proxy": "^1.6.2"
+    "express-http-proxy": "^1.6.2",
+    "dependency-cruiser": "9.19.1"
   },
   "browserslist": {
     "production": [

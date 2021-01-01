@@ -25,6 +25,8 @@ export class Parser {
       return Command.CLEAN_RESTART_SERVICES;
     } else if (args.indexOf(Command.CLEAN) !== -1) {
       return Command.CLEAN;
+    } else if (args.indexOf(Command.DEPENDENCY_CHECK) !== -1) {
+      return Command.DEPENDENCY_CHECK;
     } else {
       return Promise.reject(new Error('Invalid command'));
     }

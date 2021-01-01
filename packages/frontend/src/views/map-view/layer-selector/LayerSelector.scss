@@ -15,7 +15,7 @@ $list-height: 140px;
     cursor: pointer;
     user-select: none;
 
-    &.selected {
+    &.active {
       background: #007bff;
       color: white;
     }

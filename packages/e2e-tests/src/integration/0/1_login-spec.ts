@@ -1,8 +1,8 @@
-import { TestHelper } from '../helpers/TestHelper';
-import { Registration } from '../helpers/Registration';
+import { TestHelper } from '../../helpers/TestHelper';
+import { Registration } from '../../helpers/Registration';
 import { FrontendRoutes } from '@abc-map/shared-entities';
-import { Toasts } from '../helpers/Toasts';
-import { Login } from '../helpers/Login';
+import { Toasts } from '../../helpers/Toasts';
+import { Login } from '../../helpers/Login';
 
 describe('Login', function () {
   beforeEach(() => {

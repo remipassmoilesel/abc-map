@@ -4,7 +4,7 @@ import { Logger } from '../../../core/utils/Logger';
 import BaseLayer from 'ol/layer/Base';
 import VectorLayer from 'ol/layer/Vector';
 import { Extent, getArea } from 'ol/extent';
-import { Map } from 'ol';
+import { ManagedMap } from '../../../core/map/ManagedMap';
 import './LayerSelector.scss';
 
 const logger = Logger.get('LayerSelector.tsx', 'debug');
@@ -13,7 +13,7 @@ interface Props {
   /**
    * Reference to the map to control, for side effects
    */
-  map: Map;
+  map: ManagedMap;
 
   /**
    * Layers are passed here in order to trigger changes on layers changes
@@ -36,7 +36,7 @@ class LayerSelector extends Component<Props, {}> {
         if (!metadata) {
           return undefined;
         }
-        const selectedClass = metadata.active ? 'selected' : '';
+        const selectedClass = metadata.active ? 'active' : '';
         return (
           <div key={metadata.id} onClick={() => this.onLayerSelected(metadata.id)} className={`list-item ${selectedClass}`}>
             - {metadata.name}
@@ -52,7 +52,7 @@ class LayerSelector extends Component<Props, {}> {
     return (
       <div className={'control-block abc-layer-selector d-flex flex-column'}>
         <div className={'control-item'}>Couches</div>
-        <div className={'control-item layer-list'}>
+        <div className={'control-item layer-list'} data-cy="layers-list">
           {items}
           {message}
         </div>
@@ -78,11 +78,11 @@ class LayerSelector extends Component<Props, {}> {
   }
 
   private onLayerSelected = (layerId: string) => {
-    this.services.geo.setActiveLayerById(this.props.map, layerId);
+    this.props.map.setActiveLayerById(layerId);
   };
 
   private zoomToSelectedLayer = () => {
-    const selected = this.services.geo.getActiveLayer(this.props.map);
+    const selected = this.props.map.getActiveLayer();
     if (!selected) {
       this.services.toasts.info("Vous devez d'abord sélectionner une couche");
       return logger.error('No layer selected');
@@ -98,27 +98,27 @@ class LayerSelector extends Component<Props, {}> {
       return logger.error('Layer does not have an extent, or extent is invalid');
     }
 
-    this.props.map.getView().fit(extent);
+    this.props.map.getInternal().getView().fit(extent);
   };
 
   private newOsmLayer = () => {
     const layer = this.services.geo.newOsmLayer();
     this.props.map.addLayer(layer);
-    this.services.geo.setActiveLayer(this.props.map, layer);
+    this.props.map.setActiveLayer(layer);
   };
 
   private newVectorLayer = () => {
     const layer = this.services.geo.newVectorLayer();
     this.props.map.addLayer(layer);
-    this.services.geo.setActiveLayer(this.props.map, layer);
+    this.props.map.setActiveLayer(layer);
   };
 
   private resetLayers = () => {
-    this.props.map.getLayers().clear();
+    this.props.map.reset();
   };
 
   private toggleLayerVisibility = () => {
-    const selected = this.services.geo.getActiveLayer(this.props.map);
+    const selected = this.props.map.getActiveLayer();
     if (!selected) {
       this.services.toasts.info("Vous devez d'abord sélectionner une couche");
       return logger.error('No layer selected');

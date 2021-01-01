@@ -10,4 +10,5 @@ export enum Command {
   STOP_SERVICES = 'stop-services',
   CLEAN_RESTART_SERVICES = 'clean-restart-services',
   CLEAN = 'clean',
+  DEPENDENCY_CHECK = 'dep-check',
 }

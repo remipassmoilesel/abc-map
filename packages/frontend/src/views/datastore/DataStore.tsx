@@ -1,7 +1,5 @@
 import React, { ChangeEvent, Component, ReactNode } from 'react';
 import { services } from '../../core/Services';
-import { MainState } from '../../core/store';
-import { connect, ConnectedProps } from 'react-redux';
 import { Logger } from '../../core/utils/Logger';
 import { AbcArtefact } from '@abc-map/shared-entities';
 import ArtefactCard from './ArtefactCard';
@@ -9,26 +7,15 @@ import './DataStore.scss';
 
 const logger = Logger.get('DataStore.tsx', 'info');
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface LocalProps {}
-
 interface State {
   artefacts: AbcArtefact[];
   searchQuery: string;
 }
 
-// eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
-const mapStateToProps = (state: MainState) => ({});
-
-const connector = connect(mapStateToProps);
-
-type PropsFromRedux = ConnectedProps<typeof connector>;
-type Props = PropsFromRedux & LocalProps;
-
-class DataStore extends Component<Props, State> {
+class DataStore extends Component<{}, State> {
   private services = services();
 
-  constructor(props: Props) {
+  constructor(props: {}) {
     super(props);
     this.state = {
       artefacts: [],
@@ -92,4 +79,4 @@ class DataStore extends Component<Props, State> {
   }
 }
 
-export default connector(DataStore);
+export default DataStore;

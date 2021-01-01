@@ -1,6 +1,7 @@
 import { LocalStorageService, StorageKey } from '../../utils/LocalStorageService';
-import { MainState } from '../index';
 import { Logger } from '../../utils/Logger';
+import { MainState } from '../reducer';
+import { MapTool } from '@abc-map/shared-entities';
 
 const logger = Logger.get('StorePersistence', 'warn');
 
@@ -52,8 +53,7 @@ export class StorePersistence {
       },
     };
     cleanState.project.metadata = undefined as any; // New project will be set at store bootstrap
-    cleanState.map.mainMap = undefined as any; // Map will be instantiated at store bootstrap
-    cleanState.map.drawingTool = undefined;
+    cleanState.map.tool = MapTool.None;
     cleanState.ui.historyCapabilities = {};
     try {
       const serializedState = JSON.stringify(cleanState);

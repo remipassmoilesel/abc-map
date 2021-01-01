@@ -2,10 +2,10 @@ import React, { Component, ReactNode } from 'react';
 import { Logger } from '../../core/utils/Logger';
 import { FrontendRoutes, UserStatus } from '@abc-map/shared-entities';
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
-import { MainState } from '../../core/store';
 import { connect, ConnectedProps } from 'react-redux';
 import { Dropdown } from 'react-bootstrap';
 import { services } from '../../core/Services';
+import { MainState } from '../../core/store/reducer';
 import './TopBar.scss';
 
 const logger = Logger.get('TopBar.tsx', 'info');

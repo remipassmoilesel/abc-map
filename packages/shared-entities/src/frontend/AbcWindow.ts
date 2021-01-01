@@ -1,13 +1,10 @@
-import { Map } from 'ol';
-import { MainStore } from './store';
-import { StoreEnhancer } from 'redux';
+import { E2eMap } from './E2eMap';
 
 export interface AbcWindow extends Window {
   abc: {
-    mainMap?: Map;
-    store?: MainStore;
+    mainMap?: E2eMap;
   };
-  __REDUX_DEVTOOLS_EXTENSION__?: () => StoreEnhancer<any, any>;
+  __REDUX_DEVTOOLS_EXTENSION__?: () => any;
   Cypress?: any;
 }
 

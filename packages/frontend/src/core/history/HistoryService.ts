@@ -1,8 +1,8 @@
 import { HistoryKey } from './HistoryKey';
 import { Task } from './Task';
 import { Logger } from '../utils/Logger';
-import mainStore, { MainStore } from '../store';
 import { UiActions } from '../store/ui/actions';
+import { MainStore, mainStore } from '../store/store';
 
 const logger = Logger.get('HistoryService.ts');
 

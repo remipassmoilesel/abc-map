@@ -4,8 +4,8 @@ import { Logger } from '../../core/utils/Logger';
 import { AbcArtefact, AbcProperties, LayerProperties, LayerType } from '@abc-map/shared-entities';
 import { FileFormat, FileFormats } from '../../core/datastore/FileFormats';
 import { Zipper } from '../../core/datastore/Zipper';
-import './DataStore.scss';
 import * as uuid from 'uuid';
+import './DataStore.scss';
 
 const logger = Logger.get('ArtefactCard.tsx', 'info');
 
@@ -63,7 +63,7 @@ class ArtefactCard extends Component<Props, {}> {
     this.services.toasts.info('Import en cours ...');
     const map = this.services.geo.getMainMap();
     this.services.dataStore
-      .getLayersFrom(this.props.artefact, this.services.geo.getProjection(map))
+      .getLayersFrom(this.props.artefact, map.getProjection())
       .then((layers) =>
         layers.forEach((l) => {
           l.set(AbcProperties.Managed, true);

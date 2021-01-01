@@ -1,4 +1,4 @@
-import { DrawingTool } from '../../map/DrawingTools';
+import { MapTool } from '@abc-map/shared-entities';
 
 export enum ActionType {
   SetTool = 'SetTool',
@@ -9,7 +9,7 @@ export enum ActionType {
 
 export interface SetTool {
   type: ActionType.SetTool;
-  tool: DrawingTool;
+  tool: MapTool;
 }
 
 export interface SetFillColor {
@@ -30,7 +30,7 @@ export interface SetStrokeWidth {
 export type MapAction = SetTool | SetStrokeColor | SetFillColor | SetStrokeWidth;
 
 export class MapActions {
-  public static setTool(tool: DrawingTool): MapAction {
+  public static setTool(tool: MapTool): MapAction {
     return {
       type: ActionType.SetTool,
       tool,

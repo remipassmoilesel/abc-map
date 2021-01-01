@@ -1,30 +1,17 @@
-import { DrawingTool, DrawingTools } from '../../map/DrawingTools';
-import { Map } from 'ol';
-import { MapFactory } from '../../map/MapFactory';
-import { getAbcWindow } from '../../AbcWindow';
-import { LayerFactory } from '../../map/LayerFactory';
 import { AbcStyle } from '../../map/AbcStyle';
+import { MapTool } from '@abc-map/shared-entities';
 
 export interface MapState {
   /**
-   * Current drawing tool selected
+   * Current tool selected
    */
-  drawingTool?: DrawingTool;
-  /**
-   * <p>Reference to the main map, containing present project layers and features.</p>
-   *
-   * <p>This reference will be set with a new map at store startup.</p>
-   *
-   * <p>Warning: Map and layers ara mutable, so no notifications should be expected from this state</p>
-   */
-  mainMap: Map;
+  tool: MapTool;
 
   currentStyle: AbcStyle;
 }
 
 export const mapInitialState: MapState = {
-  drawingTool: DrawingTools.None,
-  mainMap: newMap(),
+  tool: MapTool.None,
   currentStyle: {
     fill: {
       color: '#ffffff',
@@ -35,18 +22,3 @@ export const mapInitialState: MapState = {
     },
   },
 };
-
-// TODO: better place for init, activate vector on startup
-// TODO: see map refactoring, create a map wrapper
-function newMap(): Map {
-  const map = MapFactory.newDefaultMap();
-  map.addLayer(LayerFactory.newOsmLayer());
-  map.addLayer(LayerFactory.newVectorLayer());
-  return map;
-}
-
-/**
- * Store reference to main map in window object, for debug purposes only
- */
-const _window = getAbcWindow();
-_window.abc.mainMap = mapInitialState.mainMap;

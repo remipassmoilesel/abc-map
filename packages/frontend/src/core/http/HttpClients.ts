@@ -1,6 +1,6 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios';
-import mainStore from '../store';
 import { Logger } from '../utils/Logger';
+import { mainStore } from '../store/store';
 
 const logger = Logger.get('HttpClients.ts');
 

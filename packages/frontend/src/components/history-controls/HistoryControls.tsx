@@ -3,7 +3,7 @@ import { Logger } from '../../core/utils/Logger';
 import { HistoryKey } from '../../core/history/HistoryKey';
 import { services } from '../../core/Services';
 import { connect, ConnectedProps } from 'react-redux';
-import { MainState } from '../../core/store';
+import { MainState } from '../../core/store/reducer';
 import './HistoryControls.scss';
 
 const logger = Logger.get('HistoryControls.tsx', 'info');

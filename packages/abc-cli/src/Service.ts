@@ -9,7 +9,7 @@ export class Service {
   constructor(private config: Config, private shell: Shell) {}
 
   public bootstrap(): void {
-    this.shell.sync('lerna bootstrap');
+    this.shell.sync('lerna bootstrap --force-local');
   }
 
   public lint(): void {
@@ -72,5 +72,17 @@ export class Service {
   public clean(): void {
     this.shell.sync('lerna exec "rm -rf node_modules"');
     this.shell.sync('lerna exec "rm -rf build"');
+  }
+
+  public dependencyCheck(): void {
+    this.shell.sync('lerna run dep-check');
+  }
+
+  public async continuousIntegration(): Promise<void> {
+    this.bootstrap();
+    this.lint();
+    this.cleanBuild();
+    this.dependencyCheck(); // Dependency check must be launched AFTER build for local dependencies
+    this.test();
   }
 }

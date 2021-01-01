@@ -1,23 +1,24 @@
 import { logger, ProjectService } from './ProjectService';
-import { MainStore, storeFactory } from '../store';
 import { GeoService } from '../map/GeoService';
 import { ProjectFactory } from './ProjectFactory';
 import { ProjectActions } from '../store/project/actions';
 import { AbcLayer } from '@abc-map/shared-entities';
 import { TestHelper } from '../utils/TestHelper';
+import { MapFactory } from '../map/MapFactory';
+import { MainStore, storeFactory } from '../store/store';
 jest.mock('../map/GeoService');
 
 logger.disable();
 
 describe('ProjectService', function () {
   let store: MainStore;
-  let geoService: GeoService;
+  let geoServiceMock: GeoService;
   let projectService: ProjectService;
 
   beforeEach(() => {
     store = storeFactory();
-    geoService = new GeoService({} as any);
-    projectService = new ProjectService({} as any, store, geoService);
+    geoServiceMock = new GeoService();
+    projectService = new ProjectService({} as any, store, geoServiceMock);
   });
 
   it('exportCurrentProject() should export project', async function () {
@@ -29,7 +30,7 @@ describe('ProjectService', function () {
     store.dispatch(ProjectActions.newLayout(layouts[1]));
 
     const layers: AbcLayer[] = [TestHelper.sampleOsmLayer(), TestHelper.sampleVectorLayer()];
-    geoService.exportLayers = () => layers;
+    geoServiceMock.exportLayers = () => layers;
 
     const project = await projectService.exportCurrentProject();
     expect(project.metadata).toEqual(metadata);
@@ -40,17 +41,17 @@ describe('ProjectService', function () {
   it('newProject() should reset main map then dispatch', async function () {
     const originalId = store.getState().project.metadata.id;
 
-    const fakeMap = {};
-    const getMainMapMock = jest.fn(() => fakeMap as any);
-    geoService.getMainMap = getMainMapMock;
+    const map = MapFactory.createNaked();
+    const getMainMapMock = jest.fn(() => map);
+    geoServiceMock.getMainMap = getMainMapMock;
 
-    const resetMapMock = jest.fn(() => fakeMap);
-    geoService.resetMap = resetMapMock;
+    const resetMapMock = jest.fn(() => undefined);
+    map.reset = resetMapMock;
 
     projectService.newProject();
 
     expect(getMainMapMock).toBeCalled();
-    expect(resetMapMock).toBeCalledWith(fakeMap);
+    expect(resetMapMock).toBeCalled();
 
     const current = store.getState().project;
     expect(current.metadata.id).toBeDefined();

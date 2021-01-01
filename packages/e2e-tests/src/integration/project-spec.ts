@@ -54,7 +54,7 @@ describe('Project', function () {
         .then((downloaded) => {
           return cy.fixture(Fixtures.projects.TEST_1).then((witness) => ({ downloaded, witness }));
         })
-        .then(({ downloaded, witness }) => {
+        .should(({ downloaded, witness }) => {
           const projectA: AbcProject = JSON.parse(downloaded);
           const projectB: AbcProject = JSON.parse(witness);
           expect(projectA.metadata.projection).deep.equals(projectB.metadata.projection);

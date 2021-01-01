@@ -3,16 +3,16 @@ import MainMap from './main-map/MainMap';
 import { services } from '../../core/Services';
 import LayerSelector from './layer-selector/LayerSelector';
 import ProjectStatus from './project-status/ProjectStatus';
-import { MainState } from '../../core/store';
 import { connect, ConnectedProps } from 'react-redux';
 import { Logger } from '../../core/utils/Logger';
 import BaseLayer from 'ol/layer/Base';
 import ProjectControls from './project-controls/ProjectControls';
-import DrawingToolSelector from './drawing-tool-selector/DrawingToolSelector';
+import ToolSelector from './tool-selector/ToolSelector';
 import StyleSelector from './style-selector/StyleSelector';
-import { DrawingTools } from '../../core/map/DrawingTools';
 import HistoryControls from '../../components/history-controls/HistoryControls';
 import { HistoryKey } from '../../core/history/HistoryKey';
+import { ManagedMap } from '../../core/map/ManagedMap';
+import { MainState } from '../../core/store/reducer';
 import './MapView.scss';
 
 const logger = Logger.get('MapView.tsx', 'info');
@@ -22,12 +22,12 @@ interface LocalProps {}
 
 interface State {
   layers: BaseLayer[];
+  map: ManagedMap;
 }
 
 const mapStateToProps = (state: MainState) => ({
   project: state.project.metadata,
-  map: state.map.mainMap,
-  drawingTool: state.map.drawingTool || DrawingTools.None,
+  tool: state.map.tool,
   currentStyle: state.map.currentStyle,
   userStatus: state.authentication.userStatus,
 });
@@ -47,6 +47,7 @@ class MapView extends Component<Props, State> {
     super(props);
     this.state = {
       layers: [],
+      map: this.services.geo.getMainMap(),
     };
   }
 
@@ -71,10 +72,9 @@ class MapView extends Component<Props, State> {
         </div>
 
         {/*Main map*/}
-        <MainMap map={this.props.map} onLayersChanged={this.onLayerChange} drawingTool={this.props.drawingTool} currentStyle={this.props.currentStyle} />
+        <MainMap map={this.state.map} />
 
         {/*Right menu*/}
-        {/*TODO: Color picker, see https://developer.mozilla.org/fr/docs/Web/HTML/Element/Input/color*/}
         <div className="right-panel">
           <div className={'control-block'}>
             <div className={'control-item'}>
@@ -83,16 +83,27 @@ class MapView extends Component<Props, State> {
             </div>
           </div>
 
-          <LayerSelector map={this.props.map} layers={this.state.layers} />
-          <DrawingToolSelector layers={this.state.layers} />
+          <LayerSelector map={this.state.map} layers={this.state.layers} />
+          <ToolSelector />
           <StyleSelector />
         </div>
       </div>
     );
   }
 
-  private onLayerChange = (layers: BaseLayer[]) => {
+  public componentDidMount() {
+    this.state.map.addLayerChangeListener(this.onLayerChange);
+    this.onLayerChange(); // We trigger manually the first event for setup
+  }
+
+  public componentWillUnmount() {
+    this.state.map.removeLayerChangeListener(this.onLayerChange);
+  }
+
+  private onLayerChange = (): boolean => {
+    const layers = this.state.map.getLayers();
     this.setState({ layers });
+    return true;
   };
 
   private importFile = () => {

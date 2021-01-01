@@ -2,24 +2,22 @@ import React, { Component, ReactNode } from 'react';
 import { services } from '../../../core/Services';
 import { Logger } from '../../../core/utils/Logger';
 import { AbcLayout } from '@abc-map/shared-entities';
-import { Map } from 'ol';
-import _ from 'lodash';
 import { LayoutHelper } from '../LayoutHelper';
-import { ResizeObserverFactory } from '../../../core/utils/ResizeObserverFactory';
 import View from 'ol/View';
+import { ManagedMap } from '../../../core/map/ManagedMap';
 import './LayoutPreview.scss';
+import { MapFactory } from '../../../core/map/MapFactory';
 
 const logger = Logger.get('LayoutPreview.tsx', 'warn');
 
 interface Props {
   layout?: AbcLayout;
-  mainMap: Map;
+  mainMap: ManagedMap;
   onLayoutChanged: (lay: AbcLayout) => void;
 }
 
 interface State {
-  preview?: Map;
-  sizeObserver?: ResizeObserver;
+  preview?: ManagedMap;
 }
 
 interface MapSupportDimensions {
@@ -70,20 +68,15 @@ class LayoutPreview extends Component<Props, State> {
     this.cleanupMap();
   }
 
-  private initializeMap(div: HTMLDivElement): Map {
+  private initializeMap(div: HTMLDivElement): ManagedMap {
     logger.info('Initializing preview map');
-    const preview = services().geo.newNakedMap();
+    const preview = MapFactory.createNaked();
     preview.setTarget(div);
 
     // We listen for view changes, in order to persist them in layout
-    preview.on('moveend', this.onPreviewChanged);
+    preview.getInternal().on('moveend', this.onPreviewChanged);
 
-    // Here we listen to div support size change
-    const resizeThrottled = _.throttle(() => preview.updateSize(), 300, { trailing: true });
-    const sizeObserver = ResizeObserverFactory.create(() => resizeThrottled());
-    sizeObserver.observe(div);
-
-    this.setState({ preview, sizeObserver });
+    this.setState({ preview });
     return preview;
   }
 
@@ -98,20 +91,20 @@ class LayoutPreview extends Component<Props, State> {
     const divSize = this.getPreviewDimensionsFor(layout);
     div.style.width = divSize.width;
     div.style.height = divSize.height;
-    preview.updateSize();
+    preview.getInternal().updateSize();
 
     this.services.geo.cloneLayers(mainMap, preview);
 
     const format = layout?.format;
     const view = layout?.view;
-    const mapSize = preview.getSize();
+    const mapSize = preview.getInternal().getSize();
     if (!format || !view || !mapSize) {
       return;
     }
     const dimension = LayoutHelper.formatToPixel(format);
     const scaling = Math.min(dimension.width / mapSize[0], dimension.height / mapSize[1]);
 
-    preview.setView(
+    preview.getInternal().setView(
       new View({
         center: view.center,
         resolution: view.resolution * scaling,
@@ -158,8 +151,8 @@ class LayoutPreview extends Component<Props, State> {
       return;
     }
     const format = layout.format;
-    const mapSize = map.getSize();
-    const view = map.getView();
+    const mapSize = map.getInternal().getSize();
+    const view = map.getInternal().getView();
     const center = view.getCenter();
     const resolution = view.getResolution();
     const projection = view.getProjection();
@@ -189,7 +182,6 @@ class LayoutPreview extends Component<Props, State> {
   private cleanupMap(): void {
     logger.info('Cleaning preview map');
     this.state.preview && this.state.preview.dispose();
-    this.state.sizeObserver && this.state.sizeObserver.disconnect();
   }
 }
 
