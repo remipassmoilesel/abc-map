@@ -13,7 +13,7 @@ export function mapReducer(state = mapInitialState, action: MapAction): MapState
   switch (action.type) {
     case ActionType.SetTool: {
       const newState: MapState = { ...state };
-      newState.drawingTool = action.tool;
+      newState.tool = action.tool;
       return newState;
     }
 

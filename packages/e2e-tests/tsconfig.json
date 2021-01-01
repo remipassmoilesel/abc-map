@@ -2,7 +2,7 @@
   "compilerOptions": {
     "strict": true,
     "target": "es5",
-    "lib": ["es5", "es6", "dom"],
+    "lib": ["es5", "es6", "dom", "es2019"],
     "types": ["cypress"],
     "outDir": "build",
     "baseUrl": "src"

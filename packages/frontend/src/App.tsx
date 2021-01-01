@@ -5,7 +5,6 @@ import MapView from './views/map-view/MapView';
 import Settings from './views/settings/Settings';
 import { Provider } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
-import mainStore from './core/store';
 import Landing from './views/landing/Landing';
 import LayoutView from './views/layout/LayoutView';
 import TopBar from './components/top-bar/TopBar';
@@ -16,6 +15,7 @@ import About from './views/about/About';
 import { services } from './core/Services';
 import ConfirmAccount from './views/confirm-account/ConfirmAccount';
 import { Env } from './core/utils/Env';
+import { mainStore } from './core/store/store';
 
 class App extends Component<{}, {}> {
   private services = services();

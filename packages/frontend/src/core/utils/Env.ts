@@ -1,4 +1,4 @@
-import { getAbcWindow } from '../AbcWindow';
+import { getAbcWindow } from './getWindow';
 
 export class Env {
   public static isE2e(): boolean {

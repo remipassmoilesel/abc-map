@@ -1,4 +1,3 @@
-import { MainStore } from '../store';
 import { ProjectActions } from '../store/project/actions';
 import { Logger } from '../utils/Logger';
 import { AbcLayout, AbcProject, AbcProjection, AbcProjectMetadata, LayoutFormat } from '@abc-map/shared-entities';
@@ -8,6 +7,7 @@ import { GeoService } from '../map/GeoService';
 import { Abm2Reader } from './Abm2Reader';
 import { ProjectRoutes as Api } from '../http/ApiRoutes';
 import * as uuid from 'uuid';
+import { MainStore } from '../store/store';
 
 export const logger = Logger.get('ProjectService.ts', 'info');
 
@@ -16,7 +16,7 @@ export class ProjectService {
 
   public newProject(): void {
     const map = this.geoService.getMainMap();
-    this.geoService.resetMap(map);
+    map.reset();
     this.store.dispatch(ProjectActions.newProject(ProjectFactory.newProjectMetadata()));
     logger.info('New project created');
   }
@@ -60,7 +60,7 @@ export class ProjectService {
 
   public loadProject(project: AbcProject): void {
     const map = this.geoService.getMainMap();
-    this.geoService.importProject(project, map);
+    this.geoService.importProject(map, project);
     this.store.dispatch(ProjectActions.loadProject(project));
   }
 

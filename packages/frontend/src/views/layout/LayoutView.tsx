@@ -1,6 +1,5 @@
 import React, { ChangeEvent, Component, ReactNode } from 'react';
 import { services } from '../../core/Services';
-import { MainState } from '../../core/store';
 import { connect, ConnectedProps } from 'react-redux';
 import { Logger } from '../../core/utils/Logger';
 import LayoutList from './layout-list/LayoutList';
@@ -9,9 +8,11 @@ import LayoutPreview from './layout-preview/LayoutPreview';
 import { jsPDF } from 'jspdf';
 import { LayoutHelper } from './LayoutHelper';
 import View from 'ol/View';
-import { Map } from 'ol';
 import HistoryControls from '../../components/history-controls/HistoryControls';
 import { HistoryKey } from '../../core/history/HistoryKey';
+import { ManagedMap } from '../../core/map/ManagedMap';
+import { MapFactory } from '../../core/map/MapFactory';
+import { MainState } from '../../core/store/reducer';
 import './LayoutView.scss';
 
 const logger = Logger.get('LayoutView.tsx', 'warn');
@@ -20,13 +21,13 @@ const logger = Logger.get('LayoutView.tsx', 'warn');
 interface LocalProps {}
 
 interface State {
-  activeLayout?: AbcLayout;
+  map: ManagedMap;
   format: LayoutFormat;
+  activeLayout?: AbcLayout;
 }
 
 const mapStateToProps = (state: MainState) => ({
   layouts: state.project.layouts,
-  mainMap: state.map.mainMap,
 });
 
 const connector = connect(mapStateToProps);
@@ -42,6 +43,7 @@ class LayoutView extends Component<Props, State> {
     super(props);
     this.state = {
       format: LayoutFormats.A4_PORTRAIT,
+      map: this.services.geo.getMainMap(),
     };
   }
 
@@ -59,7 +61,7 @@ class LayoutView extends Component<Props, State> {
           <div className={'left-panel'}>
             <LayoutList layouts={layouts} activeLayout={activeLayout} onLayoutSelected={this.onLayoutSelected} />
           </div>
-          <LayoutPreview layout={activeLayout} mainMap={this.props.mainMap} onLayoutChanged={this.onLayoutChanged} />
+          <LayoutPreview layout={activeLayout} mainMap={this.state.map} onLayoutChanged={this.onLayoutChanged} />
           <div className={'right-panel'}>
             <div className={'control-block form-group'}>
               <button onClick={this.newLayout} className={'btn btn-link'}>
@@ -111,7 +113,7 @@ class LayoutView extends Component<Props, State> {
     logger.info('Adding new layout');
     const pageNbr = this.props.layouts.length + 1;
     const name = `Page ${pageNbr}`;
-    const view = this.props.mainMap.getView();
+    const view = this.state.map.getInternal().getView();
     const center = view.getCenter();
     const resolution = view.getResolution();
     if (!center || !resolution) {
@@ -163,10 +165,10 @@ class LayoutView extends Component<Props, State> {
 
     this.services.toasts.info("Début de l'export ...");
     const pdf = new jsPDF();
-    const exportMap = this.services.geo.newNakedMap();
+    const exportMap = MapFactory.createNaked();
     exportMap.setTarget(support);
 
-    this.exportLayout(layout, pdf, support, this.props.mainMap, exportMap)
+    this.exportLayout(layout, pdf, support, this.state.map, exportMap)
       .then(() => {
         pdf.save('map.pdf');
         exportMap.dispose();
@@ -188,7 +190,7 @@ class LayoutView extends Component<Props, State> {
     }
 
     const pdf = new jsPDF();
-    const exportMap = this.services.geo.newNakedMap();
+    const exportMap = MapFactory.createNaked();
     exportMap.setTarget(support);
 
     (async () => {
@@ -199,7 +201,7 @@ class LayoutView extends Component<Props, State> {
         if (index !== 0) {
           pdf.addPage([format.width, format.height], format.orientation);
         }
-        await this.exportLayout(layout, pdf, support, this.props.mainMap, exportMap);
+        await this.exportLayout(layout, pdf, support, this.state.map, exportMap);
       }
     })()
       .then(() => {
@@ -215,7 +217,7 @@ class LayoutView extends Component<Props, State> {
       });
   };
 
-  private exportLayout = (layout: AbcLayout, pdf: jsPDF, support: HTMLDivElement, sourceMap: Map, exportMap: Map): Promise<void> => {
+  private exportLayout = (layout: AbcLayout, pdf: jsPDF, support: HTMLDivElement, sourceMap: ManagedMap, exportMap: ManagedMap): Promise<void> => {
     logger.info('Exporting layout: ', layout);
     return new Promise<void>((resolve, reject) => {
       const format = layout.format;
@@ -225,18 +227,18 @@ class LayoutView extends Component<Props, State> {
       support.style.marginTop = '200px';
       support.style.width = `${dimension.width}px`;
       support.style.height = `${dimension.height}px`;
-      exportMap.updateSize();
+      exportMap.getInternal().updateSize();
 
       // We copy layers from sourceMap to exporMap
-      this.services.geo.cloneLayers(this.props.mainMap, exportMap);
+      this.services.geo.cloneLayers(this.state.map, exportMap);
 
-      const viewResolution = exportMap.getView().getResolution();
+      const viewResolution = exportMap.getInternal().getView().getResolution();
       if (!viewResolution) {
         return reject(new Error('ViewResolution not available'));
       }
 
       // Then we export layers on render complete
-      exportMap.once('rendercomplete', () => {
+      exportMap.getInternal().once('rendercomplete', () => {
         logger.info('Rendering layout: ', layout);
         const mapCanvas = document.createElement('canvas');
         mapCanvas.width = dimension.width;
@@ -279,7 +281,7 @@ class LayoutView extends Component<Props, State> {
       });
 
       // We set view and trigger render
-      exportMap.setView(
+      exportMap.getInternal().setView(
         new View({
           center: layout.view.center,
           resolution: layout.view.resolution,

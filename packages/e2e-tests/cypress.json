@@ -3,7 +3,7 @@
   "fixturesFolder": "src/fixtures",
   "integrationFolder": "src/integration",
   "pluginsFile": "src/plugins/index.js",
-  "screenshotsFolder": "src/screenshots",
+  "screenshotsFolder": "screenshots",
   "videosFolder": "videos",
   "supportFile": "src/support/index.js",
   "video": false

@@ -17,3 +17,8 @@ cache:
 test:
   script:
     - ./abc-cli ci
+  artifacts:
+    expire_in: 1 week
+    when: always
+    paths:
+      - "packages/e2e-tests/screenshots"

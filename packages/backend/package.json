@@ -11,7 +11,8 @@
     "watch": "tsc --watch | sed -u 's/\\x1Bc//g'",
     "clean-build": "yarn run clean && yarn run build",
     "lint": "eslint './src/**/*.ts' --fix --max-warnings=0",
-    "test": "nyc mocha --trace-warnings 'build/**/*.test.js'"
+    "test": "nyc mocha --trace-warnings 'build/**/*.test.js'",
+    "dep-check": "depcruise -c .dependency-cruiser.js src"
   },
   "dependencies": {
     "@abc-map/shared-entities": "0.0.1",
@@ -59,7 +60,7 @@
     "nyc": "^15.1.0",
     "prettier": "^2.1.2",
     "sinon": "^9.2.1",
-    "source-map-support": "^0.5.19",
-    "typescript": "^4.0.5"
+    "typescript": "^4.0.5",
+    "dependency-cruiser": "9.19.1"
   }
 }

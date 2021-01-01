@@ -39,11 +39,7 @@ async function main(args: string[]) {
   } else if (Command.WATCH === command) {
     service.watch();
   } else if (Command.CI === command) {
-    service.bootstrap();
-    service.lint();
-    service.cleanBuild();
-    service.test();
-    await service.e2e();
+    await service.continuousIntegration();
   } else if (Command.START === command) {
     service.start();
   } else if (Command.STOP_SERVICES === command) {
@@ -52,6 +48,8 @@ async function main(args: string[]) {
     service.cleanRestartServices();
   } else if (Command.CLEAN === command) {
     service.clean();
+  } else if (Command.DEPENDENCY_CHECK === command) {
+    service.dependencyCheck();
   } else {
     const message = `Invalid command: ${args.slice(2).join(' ')}\nTry: ${Object.values(Command).join(', ')}`;
     return Promise.reject(new Error(message));

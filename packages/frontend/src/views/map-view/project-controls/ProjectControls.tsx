@@ -3,9 +3,9 @@ import { services } from '../../../core/Services';
 import { AbcProject, UserStatus } from '@abc-map/shared-entities';
 import { Logger } from '../../../core/utils/Logger';
 import { Constants } from '../../../core/Constants';
-import { MainState } from '../../../core/store';
 import { connect, ConnectedProps } from 'react-redux';
 import { Env } from '../../../core/utils/Env';
+import { MainState } from '../../../core/store/reducer';
 import './ProjectControls.scss';
 
 const logger = Logger.get('ProjectControls.tsx');
@@ -19,7 +19,6 @@ interface State {
 
 const mapStateToProps = (state: MainState) => ({
   project: state.project.metadata,
-  map: state.map.mainMap,
   user: state.authentication.user,
   userStatus: state.authentication.userStatus,
 });

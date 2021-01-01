@@ -1,10 +1,9 @@
 import { StorePersistence } from './StorePersistence';
 import { LocalStorageService, StorageKey } from '../../utils/LocalStorageService';
-import { MainState } from '../index';
 import sinon, { SinonStub } from 'sinon';
-import { DrawingTools } from '../../map/DrawingTools';
-import { Map } from 'ol';
 import { UserStatus } from '@abc-map/shared-entities';
+import { MapTool } from '@abc-map/shared-entities';
+import { MainState } from '../reducer';
 
 describe('StorePersistence', () => {
   let storage: LocalStorageService;
@@ -24,8 +23,7 @@ describe('StorePersistence', () => {
         layouts: [],
       },
       map: {
-        mainMap: new Map({}),
-        drawingTool: DrawingTools.Point,
+        tool: MapTool.Point,
         currentStyle: {
           fill: {
             color: '#789ABC',
@@ -60,8 +58,7 @@ describe('StorePersistence', () => {
         layouts: [],
       } as any,
       map: {
-        mainMap: undefined as any,
-        drawingTool: undefined,
+        tool: MapTool.None,
         currentStyle: {
           fill: {
             color: '#789ABC',
@@ -98,13 +95,5 @@ describe('StorePersistence', () => {
 });
 
 function stateSnapshot(state: MainState): string {
-  const withoutCircularRef: MainState = {
-    ...state,
-    map: {
-      ...state.map,
-    },
-  };
-
-  delete (withoutCircularRef as any).map.mainMap;
-  return JSON.stringify(withoutCircularRef);
+  return JSON.stringify(state);
 }

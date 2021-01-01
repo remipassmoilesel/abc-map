@@ -1,5 +1,4 @@
 import { AxiosInstance } from 'axios';
-import { MainStore } from '../store';
 import { AuthenticationRoutes as Api } from '../http/ApiRoutes';
 import {
   AccountConfirmationRequest,
@@ -14,6 +13,7 @@ import { RegistrationRequest } from '@abc-map/shared-entities';
 import { AuthenticationActions } from '../store/authentication/actions';
 import jwtDecode from 'jwt-decode';
 import { Logger } from '../utils/Logger';
+import { MainStore } from '../store/store';
 
 const logger = Logger.get('AuthenticationService.ts');
 
