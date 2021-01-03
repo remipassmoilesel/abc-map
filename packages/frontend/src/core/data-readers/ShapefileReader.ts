@@ -31,6 +31,7 @@ export class ShapefileReader extends AbstractDataReader {
 
     const format = new GeoJSON();
     const features = format.readFeatures(geojson, { featureProjection: projection.name });
+    this.generateIdsIfAbsents(features);
     const layer = new VectorLayer({
       source: new VectorSource({
         features,

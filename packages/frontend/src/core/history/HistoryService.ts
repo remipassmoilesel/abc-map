@@ -88,6 +88,10 @@ export class HistoryService {
     return len > 0;
   }
 
+  public getHistory() {
+    return this.history;
+  }
+
   private ensureHistory(key: HistoryKey): void {
     if (!this.history[key]) {
       this.history[key] = {

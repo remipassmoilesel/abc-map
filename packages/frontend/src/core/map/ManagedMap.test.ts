@@ -227,17 +227,34 @@ describe('ManagedMap', function () {
   });
 
   describe('Tool handling', () => {
-    it('Set tool should enable interaction', () => {
+    it('Set tool should dispose previous tool', () => {
       const map = MapFactory.createNaked();
       const layer = service.newVectorLayer();
       map.addLayer(layer);
       map.setActiveLayer(layer);
 
-      map.setTool(ToolRegistry.getById(MapTool.Circle));
+      const previous = ToolRegistry.getById(MapTool.Circle);
+      previous.dispose = jest.fn();
+      map.setTool(previous);
 
-      expect(map.getCurrentTool()).toBeInstanceOf(Circle);
-      expect(OlTestHelper.getInteractionCountFromMap(map.getInternal(), 'Draw')).toEqual(1);
-      expect(OlTestHelper.getInteractionCountFromMap(map.getInternal(), 'Modify')).toEqual(1);
+      const tool = ToolRegistry.getById(MapTool.Circle);
+      map.setTool(tool);
+
+      expect(previous.dispose).toHaveBeenCalledTimes(1);
+    });
+
+    it('Set tool should setup tool', () => {
+      const map = MapFactory.createNaked();
+      const layer = service.newVectorLayer();
+      map.addLayer(layer);
+      map.setActiveLayer(layer);
+
+      const tool = ToolRegistry.getById(MapTool.Circle);
+      tool.setup = jest.fn();
+      map.setTool(tool);
+
+      expect(tool.setup).toHaveBeenCalled();
+      expect(map.getCurrentTool()).toStrictEqual(tool);
     });
 
     it('Set tool to NONE should disable interaction', () => {
@@ -250,8 +267,8 @@ describe('ManagedMap', function () {
       map.setTool(ToolRegistry.getById(MapTool.None));
 
       expect(map.getCurrentTool()).toBeInstanceOf(None);
-      expect(OlTestHelper.getInteractionCountFromMap(map.getInternal(), 'Draw')).toEqual(0);
-      expect(OlTestHelper.getInteractionCountFromMap(map.getInternal(), 'Modify')).toEqual(0);
+      expect(OlTestHelper.getInteractionCount(map.getInternal(), 'Draw')).toEqual(0);
+      expect(OlTestHelper.getInteractionCount(map.getInternal(), 'Modify')).toEqual(0);
     });
 
     it('Set active layer should disable interaction (Vector -> Tile)', () => {
@@ -266,8 +283,8 @@ describe('ManagedMap', function () {
       map.setActiveLayer(tile);
 
       expect(map.getCurrentTool()).toBeInstanceOf(Circle);
-      expect(OlTestHelper.getInteractionCountFromMap(map.getInternal(), 'Draw')).toEqual(0);
-      expect(OlTestHelper.getInteractionCountFromMap(map.getInternal(), 'Modify')).toEqual(0);
+      expect(OlTestHelper.getInteractionCount(map.getInternal(), 'Draw')).toEqual(0);
+      expect(OlTestHelper.getInteractionCount(map.getInternal(), 'Modify')).toEqual(0);
     });
 
     it('Set active layer should enable interaction (Tile -> Vector)', () => {
@@ -282,8 +299,8 @@ describe('ManagedMap', function () {
       map.setActiveLayer(vector);
 
       expect(map.getCurrentTool()).toBeInstanceOf(Circle);
-      expect(OlTestHelper.getInteractionCountFromMap(map.getInternal(), 'Draw')).toEqual(1);
-      expect(OlTestHelper.getInteractionCountFromMap(map.getInternal(), 'Modify')).toEqual(1);
+      expect(OlTestHelper.getInteractionCount(map.getInternal(), 'Draw')).toEqual(1);
+      expect(OlTestHelper.getInteractionCount(map.getInternal(), 'Modify')).toEqual(1);
     });
   });
 });

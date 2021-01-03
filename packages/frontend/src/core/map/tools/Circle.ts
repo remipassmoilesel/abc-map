@@ -1,6 +1,7 @@
 import { AbstractTool } from './AbstractTool';
 import { MapTool } from '@abc-map/shared-entities';
-import { Draw, Interaction } from 'ol/interaction';
+import { Draw } from 'ol/interaction';
+import { Map } from 'ol';
 import GeometryType from 'ol/geom/GeometryType';
 import { onlyMainButton } from './common-conditions';
 import VectorSource from 'ol/source/Vector';
@@ -19,15 +20,21 @@ export class Circle extends AbstractTool {
     return 'Cercles';
   }
 
-  public getMapInteractions(source: VectorSource<Geometry>): Interaction[] {
+  public setup(map: Map, source: VectorSource<Geometry>): void {
+    super.setup(map, source);
+
     const draw = new Draw({
       source,
       type: GeometryType.CIRCLE,
       condition: onlyMainButton,
       finishCondition: onlyMainButton,
     });
+
     this.applyStyleAfterDraw(draw);
-    this.registerTaskOnDraw(draw, source);
-    return [draw, ...this.commonModifyInteractions(source)];
+    this.setIdAndHistoryOnEnd(draw, source);
+    this.commonModifyInteractions(map, GeometryType.CIRCLE);
+
+    map.addInteraction(draw);
+    this.interactions.push(draw);
   }
 }

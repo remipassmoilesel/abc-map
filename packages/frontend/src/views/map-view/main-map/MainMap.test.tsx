@@ -31,7 +31,7 @@ describe('MainMap', () => {
       });
 
       expect(internal.getTarget()).toBeInstanceOf(HTMLDivElement);
-      expect(OlTestHelper.getInteractionCountFromMap(map.getInternal(), 'DragAndDrop')).toEqual(1);
+      expect(OlTestHelper.getInteractionCount(map.getInternal(), 'DragAndDrop')).toEqual(1);
     });
   });
 
@@ -47,14 +47,14 @@ describe('MainMap', () => {
         renderMap(map, container);
       });
 
-      expect(OlTestHelper.getInteractionCountFromMap(map.getInternal(), 'DragAndDrop')).toEqual(1);
+      expect(OlTestHelper.getInteractionCount(map.getInternal(), 'DragAndDrop')).toEqual(1);
 
       act(() => {
         unmountComponentAtNode(container);
       });
 
       expect(internal.getTarget()).toBeUndefined();
-      expect(OlTestHelper.getInteractionCountFromMap(map.getInternal(), 'DragAndDrop')).toEqual(0);
+      expect(OlTestHelper.getInteractionCount(map.getInternal(), 'DragAndDrop')).toEqual(0);
     });
   });
 });
