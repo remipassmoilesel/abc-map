@@ -35,12 +35,12 @@ class HistoryControls extends Component<Props, {}> {
     return (
       <div className={'control-block abc-history-controls'}>
         <div className={'control-item'}>
-          <button onClick={this.onCancel} type={'button'} className={'btn btn-link'} disabled={!canUndo}>
+          <button onClick={this.onCancel} type={'button'} className={'btn btn-link'} disabled={!canUndo} data-cy={'map-undo'}>
             <i className={'fa fa-undo mr-2'} /> Annuler
           </button>
         </div>
         <div className={'control-item'}>
-          <button onClick={this.onRedo} type={'button'} className={'btn btn-link'} disabled={!canRedo}>
+          <button onClick={this.onRedo} type={'button'} className={'btn btn-link'} disabled={!canRedo} data-cy={'map-redo'}>
             <i className={'fa fa-redo mr-2'} /> Refaire
           </button>
         </div>

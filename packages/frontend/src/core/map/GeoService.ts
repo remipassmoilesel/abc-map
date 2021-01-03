@@ -92,7 +92,7 @@ export class GeoService {
     });
   }
 
-  public setTool(tool: AbstractTool): void {
+  public setMainTool(tool: AbstractTool): void {
     this.getMainMap().setTool(tool);
     mainStore.dispatch(MapActions.setTool(tool.getId()));
   }

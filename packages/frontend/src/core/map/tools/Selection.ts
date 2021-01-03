@@ -1,10 +1,11 @@
 import { AbstractTool } from './AbstractTool';
 import { MapTool } from '@abc-map/shared-entities';
-import { DragBox, Interaction } from 'ol/interaction';
+import { DragBox } from 'ol/interaction';
 import { onlyMainButton } from './common-conditions';
 import VectorSource from 'ol/source/Vector';
 import Geometry from 'ol/geom/Geometry';
 import { FeatureHelper } from '../FeatureHelper';
+import { Map } from 'ol';
 
 export class Selection extends AbstractTool {
   public getId(): MapTool {
@@ -19,7 +20,9 @@ export class Selection extends AbstractTool {
     return 'Sélection';
   }
 
-  public getMapInteractions(source: VectorSource<Geometry>): Interaction[] {
+  public setup(map: Map, source: VectorSource<Geometry>): void {
+    super.setup(map, source);
+
     const dragBox = new DragBox({
       condition: onlyMainButton,
     });
@@ -37,6 +40,7 @@ export class Selection extends AbstractTool {
       });
     });
 
-    return [dragBox];
+    map.addInteraction(dragBox);
+    this.interactions.push(dragBox);
   }
 }

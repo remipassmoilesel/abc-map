@@ -57,7 +57,7 @@ class ToolSelector extends Component<Props, {}> {
 
   private onToolSelected(toolId: MapTool): void {
     const tool = ToolRegistry.getById(toolId);
-    this.services.geo.setTool(tool);
+    this.services.geo.setMainTool(tool);
   }
 }
 

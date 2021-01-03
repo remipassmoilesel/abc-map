@@ -8,7 +8,6 @@ import Geometry from 'ol/geom/Geometry';
 import { FeatureHelper } from './FeatureHelper';
 import { ResizeObserverFactory } from '../utils/ResizeObserverFactory';
 import BaseEvent from 'ol/events/Event';
-import { Interaction } from 'ol/interaction';
 import { Logger } from '../utils/Logger';
 import { AbstractTool } from './tools/AbstractTool';
 
@@ -21,7 +20,6 @@ export const logger = Logger.get('ManagedMap.ts', 'debug');
 export class ManagedMap {
   private sizeObserver?: ResizeObserver;
   private currentTool?: AbstractTool;
-  private drawInteractions: Interaction[] = [];
 
   constructor(private readonly internal: Map) {
     this.addLayerChangeListener(() => this.updateToolInteractions());
@@ -33,7 +31,6 @@ export class ManagedMap {
     this.sizeObserver = undefined;
   }
 
-  // TODO: test
   public setTarget(node: HTMLDivElement | undefined) {
     this.internal.setTarget(node);
 
@@ -141,24 +138,19 @@ export class ManagedMap {
   }
 
   public setTool(tool: AbstractTool): void {
+    this.currentTool?.dispose();
     this.currentTool = tool;
     this.updateToolInteractions();
   }
 
   private updateToolInteractions(): boolean {
-    const map = this.internal;
-
-    // Remove previous interactions
-    this.drawInteractions.forEach((inter) => map.removeInteraction(inter));
-    this.drawInteractions = [];
-
-    const activeLayer = this.getActiveVectorLayer();
-    if (!activeLayer || !this.currentTool || this.currentTool.getId() === MapTool.None) {
+    const vectorLayer = this.getActiveVectorLayer();
+    if (!vectorLayer || !this.currentTool || this.currentTool.getId() === MapTool.None) {
+      this.currentTool?.dispose();
       return true;
     }
 
-    this.drawInteractions = this.currentTool.getMapInteractions(activeLayer.getSource());
-    this.drawInteractions.forEach((inter) => map.addInteraction(inter));
+    this.currentTool.setup(this.internal, vectorLayer.getSource());
 
     logger.debug(`Activated tool '${this.currentTool.getLabel()}'`);
     return true;

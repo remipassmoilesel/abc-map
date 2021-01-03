@@ -1,7 +1,9 @@
 import { MainMap } from './MainMap';
 
-const waitTimeMs = 600;
+const waitTimeBeforeMs = 200;
+const waitTimeAfterMs = 400;
 const drawReference = { x: 100, y: 100 };
+const mouseEvent = { button: 0, pointerId: 1 };
 
 export class Draw {
   /**
@@ -13,8 +15,10 @@ export class Draw {
     const coords = this.coords(x, y);
     return cy
       .get(MainMap.getSelector())
+      .trigger('pointermove', x, y, mouseEvent)
+      .wait(waitTimeBeforeMs)
       .click(...coords)
-      .wait(waitTimeMs);
+      .wait(waitTimeAfterMs);
   }
 
   /**
@@ -26,8 +30,10 @@ export class Draw {
     const coords = this.coords(x, y);
     return cy
       .get(MainMap.getSelector())
+      .trigger('pointermove', x, y, mouseEvent)
+      .wait(waitTimeBeforeMs)
       .dblclick(...coords)
-      .wait(waitTimeMs);
+      .wait(waitTimeAfterMs);
   }
 
   /**
@@ -47,17 +53,18 @@ export class Draw {
    * @param toY
    */
   public static drag(fromX: number, fromY: number, toX: number, toY: number): Cypress.Chainable<any> {
-    const options = { button: 0, pointerId: 1 };
     const from = this.coords(fromX, fromY);
     const to = this.coords(toX, toY);
     // moves are arbitrary, but it does not impact result
     return cy
       .get(MainMap.getSelector())
-      .trigger('pointerdown', from[0], from[1], options)
-      .trigger('pointermove', from[0] + 10, from[1] + 10, options)
-      .trigger('pointermove', from[0] + 20, from[1] + 20, options)
-      .trigger('pointermove', to[0], to[1], options)
-      .trigger('pointerup', to[0], to[1], options)
-      .wait(waitTimeMs);
+      .trigger('pointermove', from[0], from[1], mouseEvent)
+      .wait(waitTimeBeforeMs)
+      .trigger('pointerdown', from[0], from[1], mouseEvent)
+      .trigger('pointermove', from[0] + 10, from[1] + 10, mouseEvent)
+      .trigger('pointermove', from[0] + 20, from[1] + 20, mouseEvent)
+      .trigger('pointermove', to[0], to[1], mouseEvent)
+      .trigger('pointerup', to[0], to[1], mouseEvent)
+      .wait(waitTimeAfterMs);
   }
 }

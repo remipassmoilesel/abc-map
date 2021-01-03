@@ -1,4 +1,3 @@
-// FIXME: use do() instead of redo ?
 export abstract class Task {
   public abstract undo(): Promise<void>;
   public abstract redo(): Promise<void>;

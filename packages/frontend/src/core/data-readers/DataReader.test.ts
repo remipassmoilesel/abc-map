@@ -69,7 +69,9 @@ describe('ArtefactReader.test.ts', function () {
       expect(layer[0]).toBeInstanceOf(VectorLayer);
 
       const vectorLayer: VectorLayer = layer[0] as VectorLayer;
-      expect(vectorLayer.getSource().getFeatures()).toHaveLength(189);
+      const features = vectorLayer.getSource().getFeatures();
+      expect(features).toHaveLength(189);
+      features.forEach((f) => expect(f.getId()).toBeDefined());
     });
   });
 
@@ -88,7 +90,9 @@ describe('ArtefactReader.test.ts', function () {
       expect(layer[0]).toBeInstanceOf(VectorLayer);
 
       const vectorLayer: VectorLayer = layer[0] as VectorLayer;
-      expect(vectorLayer.getSource().getFeatures()).toHaveLength(20);
+      const features = vectorLayer.getSource().getFeatures();
+      expect(features).toHaveLength(20);
+      features.forEach((f) => expect(f.getId()).toBeDefined());
     });
   });
 
@@ -107,7 +111,9 @@ describe('ArtefactReader.test.ts', function () {
       expect(layer[0]).toBeInstanceOf(VectorLayer);
 
       const vectorLayer: VectorLayer = layer[0] as VectorLayer;
-      expect(vectorLayer.getSource().getFeatures()).toHaveLength(91);
+      const features = vectorLayer.getSource().getFeatures();
+      expect(features).toHaveLength(91);
+      features.forEach((f) => expect(f.getId()).toBeDefined());
     });
   });
 
@@ -126,7 +132,9 @@ describe('ArtefactReader.test.ts', function () {
       expect(layer[0]).toBeInstanceOf(VectorLayer);
 
       const vectorLayer: VectorLayer = layer[0] as VectorLayer;
-      expect(vectorLayer.getSource().getFeatures()).toHaveLength(610);
+      const features = vectorLayer.getSource().getFeatures();
+      expect(features).toHaveLength(610);
+      features.forEach((f) => expect(f.getId()).toBeDefined());
     });
 
     it('should read unzipped', async () => {
@@ -139,7 +147,9 @@ describe('ArtefactReader.test.ts', function () {
       expect(layer[0]).toBeInstanceOf(VectorLayer);
 
       const vectorLayer: VectorLayer = layer[0] as VectorLayer;
-      expect(vectorLayer.getSource().getFeatures()).toHaveLength(610);
+      const features = vectorLayer.getSource().getFeatures();
+      expect(features).toHaveLength(610);
+      features.forEach((f) => expect(f.getId()).toBeDefined());
     });
   });
 });

@@ -1,10 +1,11 @@
 import { AbstractTool } from './AbstractTool';
 import { MapTool } from '@abc-map/shared-entities';
-import { Draw, Interaction } from 'ol/interaction';
+import { Draw } from 'ol/interaction';
 import GeometryType from 'ol/geom/GeometryType';
 import { onlyMainButton } from './common-conditions';
 import VectorSource from 'ol/source/Vector';
 import Geometry from 'ol/geom/Geometry';
+import { Map } from 'ol';
 
 export class LineString extends AbstractTool {
   public getId(): MapTool {
@@ -19,15 +20,21 @@ export class LineString extends AbstractTool {
     return 'Lignes';
   }
 
-  public getMapInteractions(source: VectorSource<Geometry>): Interaction[] {
+  public setup(map: Map, source: VectorSource<Geometry>): void {
+    super.setup(map, source);
+
     const draw = new Draw({
       source,
       type: GeometryType.LINE_STRING,
       condition: onlyMainButton,
       finishCondition: onlyMainButton,
     });
+
     this.applyStyleAfterDraw(draw);
-    this.registerTaskOnDraw(draw, source);
-    return [draw, ...this.commonModifyInteractions(source)];
+    this.setIdAndHistoryOnEnd(draw, source);
+    this.commonModifyInteractions(map, GeometryType.LINE_STRING);
+
+    map.addInteraction(draw);
+    this.interactions.push(draw);
   }
 }

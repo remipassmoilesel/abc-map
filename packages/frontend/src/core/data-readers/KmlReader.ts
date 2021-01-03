@@ -20,6 +20,7 @@ export class KmlReader extends AbstractDataReader {
     for (const file of _files) {
       const content = await BlobReader.asString(file.content);
       const features = await format.readFeatures(content, { featureProjection: projection.name });
+      this.generateIdsIfAbsents(features);
       const layer = new VectorLayer({
         source: new VectorSource({ features }),
       });

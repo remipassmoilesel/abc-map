@@ -4,7 +4,6 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { services } from './core/Services';
 import { getAbcWindow } from './core/utils/getWindow';
-import { Env } from './core/utils/Env';
 import { E2eMapWrapper } from './core/map/E2eMapWrapper';
 import './index.scss';
 
@@ -14,9 +13,8 @@ svc.authentication
   .anonymousLogin()
   .then(() => {
     // For tests and debug purposes
-    if (Env.isE2e()) {
-      getAbcWindow().abc.mainMap = new E2eMapWrapper(svc.geo.getMainMap());
-    }
+    getAbcWindow().abc.mainMap = new E2eMapWrapper(svc.geo.getMainMap());
+    getAbcWindow().abc.services = svc;
 
     ReactDOM.render(
       <React.StrictMode>
