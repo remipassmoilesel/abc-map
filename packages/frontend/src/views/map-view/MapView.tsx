@@ -15,7 +15,7 @@ import { ManagedMap } from '../../core/map/ManagedMap';
 import { MainState } from '../../core/store/reducer';
 import './MapView.scss';
 
-const logger = Logger.get('MapView.tsx', 'info');
+const logger = Logger.get('MapView.tsx', 'debug');
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface LocalProps {}
@@ -83,7 +83,7 @@ class MapView extends Component<Props, State> {
             </div>
           </div>
 
-          <LayerSelector map={this.state.map} layers={this.state.layers} />
+          <LayerSelector layers={this.state.layers} />
           <ToolSelector />
           <StyleSelector />
         </div>
@@ -101,17 +101,18 @@ class MapView extends Component<Props, State> {
   }
 
   private onLayerChange = (): boolean => {
+    logger.debug('Layers changed');
     const layers = this.state.map.getLayers();
     this.setState({ layers });
     return true;
   };
 
   private importFile = () => {
-    this.services.toasts.featureNotReady();
+    this.services.ui.toasts.featureNotReady();
   };
 
   private onSearch = () => {
-    this.services.toasts.featureNotReady();
+    this.services.ui.toasts.featureNotReady();
   };
 }
 

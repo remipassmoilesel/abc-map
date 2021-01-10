@@ -1,4 +1,4 @@
-import { Task } from './Task';
+import { Task } from '../Task';
 import Geometry from 'ol/geom/Geometry';
 import Feature from 'ol/Feature';
 

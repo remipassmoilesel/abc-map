@@ -96,46 +96,46 @@ class ProjectControls extends Component<Props, State> {
       .then((projects) => this.setState({ recentProjects: projects }))
       .catch((err) => {
         logger.error(err);
-        this.services.toasts.genericError();
+        this.services.ui.toasts.genericError();
       });
   }
 
   private newProject = () => {
     this.services.project.newProject();
     this.services.history.clean();
-    this.services.toasts.info('Nouveau projet créé');
+    this.services.ui.toasts.info('Nouveau projet créé');
   };
 
   private saveProject = () => {
     if (this.props.userStatus !== UserStatus.AUTHENTICATED) {
-      return this.services.toasts.info('Vous devez être connecté pour enregistrer votre projet');
+      return this.services.ui.toasts.info('Vous devez être connecté pour enregistrer votre projet');
     }
 
-    this.services.toasts.info('Enregistrement en cours ...');
+    this.services.ui.toasts.info('Enregistrement en cours ...');
     this.services.project
       .exportCurrentProject()
       .then((project) => this.services.project.save(project))
       .then(() => {
-        this.services.toasts.info('Projet enregistré !');
+        this.services.ui.toasts.info('Projet enregistré !');
         this.updateRecentProjects();
       })
       .catch((err) => {
         logger.error(err);
-        this.services.toasts.genericError();
+        this.services.ui.toasts.genericError();
       });
   };
 
   private openProject(id: string): void {
     this.services.project.loadRemoteProject(id).then(() => {
       this.services.history.clean();
-      this.services.toasts.info('Projet ouvert !');
+      this.services.ui.toasts.info('Projet ouvert !');
     });
   }
 
   private exportProject = () => {
-    this.services.toasts.info('Export en cours ...');
+    this.services.ui.toasts.info('Export en cours ...');
     this.services.project.exportCurrentProject().then((project) => {
-      this.services.toasts.info('Export terminé !');
+      this.services.ui.toasts.info('Export terminé !');
       this.downloadProject(project);
     });
   };
@@ -143,23 +143,23 @@ class ProjectControls extends Component<Props, State> {
   private importProject = () => {
     this.openFileInput(async (files) => {
       if (!files || !files.length) {
-        return this.services.toasts.error('Vous devez sélectionner un fichier');
+        return this.services.ui.toasts.error('Vous devez sélectionner un fichier');
       }
 
       const file = files[0];
       if (!file.name.endsWith(Constants.EXTENSION)) {
-        return this.services.toasts.error('Vous devez sélectionner un fichier au format abm2');
+        return this.services.ui.toasts.error('Vous devez sélectionner un fichier au format abm2');
       }
 
-      this.services.toasts.info('Chargement ...');
+      this.services.ui.toasts.info('Chargement ...');
       return this.services.project
         .loadProjectFromFile(file)
         .then(() => {
           this.services.history.clean();
-          this.services.toasts.info('Projet importé !');
+          this.services.ui.toasts.info('Projet importé !');
         })
         .catch((err) => {
-          this.services.toasts.error(err.message);
+          this.services.ui.toasts.error(err.message);
         });
     });
   };

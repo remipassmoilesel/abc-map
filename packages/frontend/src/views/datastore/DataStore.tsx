@@ -61,7 +61,7 @@ class DataStore extends Component<{}, State> {
         })
         .catch((err) => {
           logger.error(err);
-          this.services.toasts.genericError();
+          this.services.ui.toasts.genericError();
         });
     }
   };
@@ -74,7 +74,7 @@ class DataStore extends Component<{}, State> {
       })
       .catch((err) => {
         logger.error(err);
-        this.services.toasts.genericError();
+        this.services.ui.toasts.genericError();
       });
   }
 }

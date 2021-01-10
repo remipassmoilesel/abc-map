@@ -1,5 +1,5 @@
 import { Map } from 'ol';
-import { AbcProjection, AbcProperties, LayerProperties, MapTool } from '@abc-map/shared-entities';
+import { AbcLayerMetadata, AbcProjection, AbcProperties, LayerProperties } from '@abc-map/shared-entities';
 import BaseLayer from 'ol/layer/Base';
 import VectorLayer from 'ol/layer/Vector';
 import * as _ from 'lodash';
@@ -10,6 +10,7 @@ import { ResizeObserverFactory } from '../utils/ResizeObserverFactory';
 import BaseEvent from 'ol/events/Event';
 import { Logger } from '../utils/Logger';
 import { AbstractTool } from './tools/AbstractTool';
+import { LayerFactory } from './LayerFactory';
 
 export const logger = Logger.get('ManagedMap.ts', 'debug');
 
@@ -22,7 +23,10 @@ export class ManagedMap {
   private currentTool?: AbstractTool;
 
   constructor(private readonly internal: Map) {
-    this.addLayerChangeListener(() => this.updateToolInteractions());
+    this.addLayerChangeListener(() => {
+      this.updateToolInteractions();
+      return true;
+    });
   }
 
   public dispose() {
@@ -67,7 +71,11 @@ export class ManagedMap {
   }
 
   public setActiveLayer(layer: BaseLayer): void {
-    const id = layer.get(LayerProperties.Id);
+    const id: string | undefined = layer.get(LayerProperties.Id);
+    if (!id) {
+      throw new Error('Layer is not managed');
+    }
+
     this.setActiveLayerById(id);
   }
 
@@ -83,13 +91,28 @@ export class ManagedMap {
       lay.set(LayerProperties.Active, id === layerId);
     });
 
-    // Here we set a property to trigger change
-    this.internal.getLayers().set(AbcProperties.LastLayerActive, layerId);
+    this.triggerLayerChange();
+  }
+
+  public renameLayer(layer: BaseLayer, name: string): void {
+    LayerFactory.setLayerName(layer, name);
+    this.triggerLayerChange();
   }
 
   public getActiveLayer(): BaseLayer | undefined {
     const layers = this.internal.getLayers().getArray();
     return layers.find((lay) => lay.get(LayerProperties.Active));
+  }
+
+  public getActiveLayerMetadata(): AbcLayerMetadata | undefined {
+    const active = this.getActiveLayer();
+    if (active) {
+      return LayerFactory.getMetadataFromLayer(active);
+    }
+  }
+
+  public removeLayer(layer: BaseLayer): void {
+    this.internal.getLayers().remove(layer);
   }
 
   public getActiveVectorLayer(): VectorLayer | undefined {
@@ -138,22 +161,26 @@ export class ManagedMap {
   }
 
   public setTool(tool: AbstractTool): void {
+    // We dispose previous tool before reference overwrite
     this.currentTool?.dispose();
     this.currentTool = tool;
     this.updateToolInteractions();
   }
 
-  private updateToolInteractions(): boolean {
+  private updateToolInteractions(): void {
+    if (!this.currentTool) {
+      return;
+    }
+    this.currentTool.dispose();
+
     const vectorLayer = this.getActiveVectorLayer();
-    if (!vectorLayer || !this.currentTool || this.currentTool.getId() === MapTool.None) {
-      this.currentTool?.dispose();
-      return true;
+    if (!vectorLayer) {
+      return;
     }
 
     this.currentTool.setup(this.internal, vectorLayer.getSource());
-
     logger.debug(`Activated tool '${this.currentTool.getLabel()}'`);
-    return true;
+    return;
   }
 
   public getCurrentTool(): AbstractTool | undefined {
@@ -166,5 +193,19 @@ export class ManagedMap {
 
   public getSizeObserver(): ResizeObserver | undefined {
     return this.sizeObserver;
+  }
+
+  public setLayerVisible(layer: BaseLayer, value: boolean) {
+    layer.setVisible(value);
+    this.triggerLayerChange();
+  }
+
+  /**
+   * This method is used to trigger changes for operations that does not trigger changes normally,
+   * like rename layer, or change active layer.
+   * @private
+   */
+  private triggerLayerChange(): void {
+    this.internal.getLayers().set(AbcProperties.LastLayerChange, performance.now());
   }
 }

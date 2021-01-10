@@ -156,14 +156,14 @@ class LayoutView extends Component<Props, State> {
     const layout = this.state.activeLayout;
     const support = this.exportMapRef.current;
     if (!layout) {
-      return this.services.toasts.error('Vous devez créer une mise en page');
+      return this.services.ui.toasts.error('Vous devez créer une mise en page');
     }
     if (!support) {
-      this.services.toasts.genericError();
+      this.services.ui.toasts.genericError();
       return logger.error('Support or layout not ready');
     }
 
-    this.services.toasts.info("Début de l'export ...");
+    this.services.ui.toasts.info("Début de l'export ...");
     const pdf = new jsPDF();
     const exportMap = MapFactory.createNaked();
     exportMap.setTarget(support);
@@ -172,21 +172,21 @@ class LayoutView extends Component<Props, State> {
       .then(() => {
         pdf.save('map.pdf');
         exportMap.dispose();
-        this.services.toasts.info('Export terminé !');
+        this.services.ui.toasts.info('Export terminé !');
       })
       .catch((err) => logger.error(err));
   };
 
   public exportAllLayouts = () => {
-    this.services.toasts.info("Début de l'export ...");
+    this.services.ui.toasts.info("Début de l'export ...");
     const layouts = this.props.layouts;
     const support = this.exportMapRef.current;
     if (!support) {
-      this.services.toasts.genericError();
+      this.services.ui.toasts.genericError();
       return logger.error('Support or layouts not ready');
     }
     if (!layouts.length) {
-      return this.services.toasts.error('Vous devez créer une mise en page');
+      return this.services.ui.toasts.error('Vous devez créer une mise en page');
     }
 
     const pdf = new jsPDF();
@@ -206,10 +206,10 @@ class LayoutView extends Component<Props, State> {
     })()
       .then(() => {
         pdf.save('map.pdf');
-        this.services.toasts.info('Export terminé !');
+        this.services.ui.toasts.info('Export terminé !');
       })
       .catch((err) => {
-        this.services.toasts.genericError();
+        this.services.ui.toasts.genericError();
         logger.error(err);
       })
       .finally(() => {

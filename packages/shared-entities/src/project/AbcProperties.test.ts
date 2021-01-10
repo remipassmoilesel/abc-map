@@ -7,7 +7,7 @@ import { AbcProperties } from './AbcProperties';
 describe('AbcProperties', () => {
   it('should not change without migration', () => {
     /* eslint-disable */
-    const witness = '{"Managed":"abc:managed","LastLayerActive":"abc:layers:active","CurrentTool":"abc:map:current-tool"}';
+    const witness = '{"Managed":"abc:managed","LastLayerChange":"abc:layers:last-change","CurrentTool":"abc:map:current-tool"}';
     /* eslint-enable */
 
     assert.equal(JSON.stringify(AbcProperties), witness);

@@ -90,10 +90,10 @@ class TopBar extends Component<Props, {}> {
     this.services.authentication
       .logout()
       .then(() => {
-        this.services.toasts.info("Vous n'êtes plus connecté !");
+        this.services.ui.toasts.info("Vous n'êtes plus connecté !");
       })
       .catch((err) => {
-        this.services.toasts.genericError();
+        this.services.ui.toasts.genericError();
         logger.error(err);
       });
   };

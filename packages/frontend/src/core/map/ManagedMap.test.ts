@@ -111,7 +111,7 @@ describe('ManagedMap', function () {
       map.setActiveLayer(layer2);
       const layers = map.getLayers();
       expect(layers).toHaveLength(3);
-      expect(map.getInternal().getLayers().get(AbcProperties.LastLayerActive)).toEqual(layer2.get(LayerProperties.Id));
+      expect(map.getInternal().getLayers().get(AbcProperties.LastLayerChange)).toBeDefined();
       expect(layers[0].get(LayerProperties.Active)).toEqual(false);
       expect(layers[1].get(LayerProperties.Active)).toEqual(true);
       expect(layers[2].get(LayerProperties.Active)).toEqual(false);
@@ -130,7 +130,7 @@ describe('ManagedMap', function () {
       map.setActiveLayer(layer3);
       const layers = map.getLayers();
       expect(layers).toHaveLength(3);
-      expect(map.getInternal().getLayers().get(AbcProperties.LastLayerActive)).toEqual(layer3.get(LayerProperties.Id));
+      expect(map.getInternal().getLayers().get(AbcProperties.LastLayerChange)).toBeDefined();
       expect(layers[0].get(LayerProperties.Active)).toEqual(false);
       expect(layers[1].get(LayerProperties.Active)).toEqual(false);
       expect(layers[2].get(LayerProperties.Active)).toEqual(true);
@@ -234,13 +234,16 @@ describe('ManagedMap', function () {
       map.setActiveLayer(layer);
 
       const previous = ToolRegistry.getById(MapTool.Circle);
-      previous.dispose = jest.fn();
+      const disposeMock = jest.fn();
+      previous.dispose = disposeMock;
+
       map.setTool(previous);
+      disposeMock.mockReset();
 
       const tool = ToolRegistry.getById(MapTool.Circle);
       map.setTool(tool);
 
-      expect(previous.dispose).toHaveBeenCalledTimes(1);
+      expect(disposeMock).toHaveBeenCalledTimes(1);
     });
 
     it('Set tool should setup tool', () => {
@@ -291,6 +294,7 @@ describe('ManagedMap', function () {
       const map = MapFactory.createNaked();
       const vector = service.newVectorLayer();
       const tile = service.newOsmLayer();
+
       map.addLayer(vector);
       map.addLayer(tile);
       map.setActiveLayer(tile);
