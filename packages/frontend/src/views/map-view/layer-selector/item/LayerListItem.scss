@@ -1,0 +1,17 @@
+.abc-layer-item {
+  cursor: pointer;
+  user-select: none;
+
+  .fa {
+    margin: 0 7px;
+  }
+
+  &.active {
+    background: #007bff;
+    color: white;
+
+    .fa {
+      color: white;
+    }
+  }
+}

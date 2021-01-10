@@ -11,16 +11,6 @@ $list-height: 140px;
     border: solid silver 1px;
   }
 
-  .list-item {
-    cursor: pointer;
-    user-select: none;
-
-    &.active {
-      background: #007bff;
-      color: white;
-    }
-  }
-
   .controls {
     display: flex;
     flex-direction: row;
@@ -28,6 +18,12 @@ $list-height: 140px;
 
     button {
       margin: 3px;
+      width: 45px;
     }
+  }
+
+  .btn-outline-primary:hover {
+    background-color: inherit;
+    color: black;
   }
 }

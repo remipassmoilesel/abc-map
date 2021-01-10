@@ -1,6 +1,6 @@
 import { ProjectService } from './project/ProjectService';
 import { GeoService } from './map/GeoService';
-import { ToastService } from './ui/ToastService';
+import { UiService } from './ui/UiService';
 import { httpApiClient, httpDownloadClient } from './http/HttpClients';
 import { AuthenticationService } from './authentication/AuthenticationService';
 import { HistoryService } from './history/HistoryService';
@@ -10,7 +10,7 @@ import { mainStore } from './store/store';
 export interface Services {
   project: ProjectService;
   geo: GeoService;
-  toasts: ToastService;
+  ui: UiService;
   authentication: AuthenticationService;
   history: HistoryService;
   dataStore: DatastoreService;
@@ -28,7 +28,7 @@ function serviceFactory(): Services {
   const apiClient = httpApiClient(5_000);
   const downloadClient = httpDownloadClient(5_000);
 
-  const toastsService = new ToastService();
+  const uiService = new UiService();
   const geoService = new GeoService();
   const projectService = new ProjectService(apiClient, mainStore, geoService);
   const authenticationService = new AuthenticationService(apiClient, mainStore);
@@ -38,7 +38,7 @@ function serviceFactory(): Services {
   return {
     project: projectService,
     geo: geoService,
-    toasts: toastsService,
+    ui: uiService,
     authentication: authenticationService,
     history: historyService,
     dataStore: dataStoreService,

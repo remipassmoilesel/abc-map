@@ -42,7 +42,7 @@ class Help extends Component<{}, State> {
       .then((res) => {
         this.setState({ documentation: res.content });
       })
-      .catch(() => this.services.toasts.genericError());
+      .catch(() => this.services.ui.toasts.genericError());
   }
 }
 

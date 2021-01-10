@@ -8,7 +8,7 @@ const defaultOptions: ToastOptions = {
   hideProgressBar: true,
 };
 
-export class ToastService {
+export class Toasts {
   public info(message: string): void {
     const options = { ...defaultOptions };
     options.toastId = message;

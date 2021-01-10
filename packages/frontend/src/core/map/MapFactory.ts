@@ -16,9 +16,12 @@ export class MapFactory {
       }),
     });
     const map = new ManagedMap(internal);
-    map.addLayer(LayerFactory.newOsmLayer());
-    map.addLayer(LayerFactory.newVectorLayer());
-    map.setActiveLayer(map.getLayers()[1]);
+    const osm = LayerFactory.newOsmLayer();
+    map.addLayer(osm);
+
+    const vector = LayerFactory.newVectorLayer();
+    map.addLayer(vector);
+    map.setActiveLayer(vector);
     return map;
   }
 

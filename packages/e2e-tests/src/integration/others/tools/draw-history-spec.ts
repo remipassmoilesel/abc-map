@@ -1,8 +1,8 @@
-import { ToolSelector } from '../helpers/ToolSelector';
+import { ToolSelector } from '../../../helpers/ToolSelector';
 import { FrontendRoutes, MapTool } from '@abc-map/shared-entities';
-import { TestHelper } from '../helpers/TestHelper';
-import { MainMap } from '../helpers/MainMap';
-import { Draw } from '../helpers/Draw';
+import { TestHelper } from '../../../helpers/TestHelper';
+import { MainMap } from '../../../helpers/MainMap';
+import { Draw } from '../../../helpers/Draw';
 
 describe('Map history', function () {
   beforeEach(() => {

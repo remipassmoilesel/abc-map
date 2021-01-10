@@ -16,6 +16,7 @@ import { services } from './core/Services';
 import ConfirmAccount from './views/confirm-account/ConfirmAccount';
 import { Env } from './core/utils/Env';
 import { mainStore } from './core/store/store';
+import RenameModal from './components/rename-modal/RenameModal';
 
 class App extends Component<{}, {}> {
   private services = services();
@@ -37,6 +38,7 @@ class App extends Component<{}, {}> {
             <Route path={'*'} component={NotFound} />
           </Switch>
           <ToastContainer className={'toast-container'} />
+          <RenameModal />
         </BrowserRouter>
       </Provider>
     );

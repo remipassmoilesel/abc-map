@@ -1,8 +1,8 @@
 import { FeatureProperties, FrontendRoutes, MapTool } from '@abc-map/shared-entities';
-import { TestHelper } from '../../helpers/TestHelper';
-import { ToolSelector } from '../../helpers/ToolSelector';
-import { Draw } from '../../helpers/Draw';
-import { MainMap } from '../../helpers/MainMap';
+import { TestHelper } from '../../../helpers/TestHelper';
+import { ToolSelector } from '../../../helpers/ToolSelector';
+import { Draw } from '../../../helpers/Draw';
+import { MainMap } from '../../../helpers/MainMap';
 
 describe('Tool Selection', function () {
   beforeEach(() => {

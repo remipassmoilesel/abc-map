@@ -51,14 +51,14 @@ class HistoryControls extends Component<Props, {}> {
   private onCancel = () => {
     this.services.history.undo(this.props.historyKey).catch((err) => {
       logger.error(err);
-      this.services.toasts.genericError();
+      this.services.ui.toasts.genericError();
     });
   };
 
   private onRedo = () => {
     this.services.history.redo(this.props.historyKey).catch((err) => {
       logger.error(err);
-      this.services.toasts.genericError();
+      this.services.ui.toasts.genericError();
     });
   };
 

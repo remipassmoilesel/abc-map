@@ -26,7 +26,7 @@ export class Service {
 
   public async e2e(): Promise<void> {
     return new Promise((resolve, reject) => {
-      const startCmd = this.shell.async('lerna run start:e2e --parallel --no-bail');
+      const startCmd = this.shell.async('lerna run start:e2e --parallel');
       startCmd.on('error', reject);
       startCmd.on('exit', (code) => {
         if (!code) {
@@ -45,7 +45,7 @@ export class Service {
       waitOn(options)
         .then(() => {
           logger.info('Servers ready !');
-          this.shell.sync('yarn run e2e-test:interactive', { cwd: this.config.getE2eRoot() });
+          this.shell.sync('yarn run e2e-test:ci', { cwd: this.config.getE2eRoot() });
         })
         .catch(reject)
         .finally(() => startCmd.kill('SIGTERM'));
@@ -84,5 +84,6 @@ export class Service {
     this.cleanBuild();
     this.dependencyCheck(); // Dependency check must be launched AFTER build for local dependencies
     this.test();
+    await this.e2e();
   }
 }

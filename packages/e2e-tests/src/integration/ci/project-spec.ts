@@ -1,8 +1,8 @@
 import { AbcProject, FrontendRoutes } from '@abc-map/shared-entities';
-import { Toasts } from '../helpers/Toasts';
-import { TestHelper } from '../helpers/TestHelper';
-import { Download } from '../helpers/Download';
-import { Fixtures } from '../helpers/Fixtures';
+import { Toasts } from '../../helpers/Toasts';
+import { TestHelper } from '../../helpers/TestHelper';
+import { Download } from '../../helpers/Download';
+import { Fixtures } from '../../helpers/Fixtures';
 import 'cypress-file-upload';
 
 // TODO: same test as connected user
@@ -34,10 +34,10 @@ describe('Project', function () {
       cy.visit(FrontendRoutes.map())
         .get('[data-cy=rename-project]')
         .click()
-        .get('[data-cy=project-name-input]')
+        .get('[data-cy=modal-rename-input]')
         .clear()
         .type('My awesome project')
-        .get('[data-cy=confirm-rename]')
+        .get('[data-cy=modal-rename-confirm]')
         .click()
         .get('[data-cy=project-name]')
         .should((elem) => {

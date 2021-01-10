@@ -3,8 +3,8 @@ import { services } from '../../core/Services';
 import { Logger } from '../../core/utils/Logger';
 import { Link } from 'react-router-dom';
 import { FrontendRoutes } from '@abc-map/shared-entities';
-import './Landing.scss';
 import { AuthenticationStatus, RegistrationStatus } from '@abc-map/shared-entities';
+import './Landing.scss';
 
 const logger = Logger.get('Landing.tsx', 'info');
 
@@ -114,7 +114,7 @@ class Landing extends Component<{}, State> {
 
   private authentication = () => {
     if (!this.state.loginEmail || !this.state.loginPassword) {
-      return this.services.toasts.info("Vous devez d'abord saisir votre email et votre mot de passe");
+      return this.services.ui.toasts.info("Vous devez d'abord saisir votre email et votre mot de passe");
     }
 
     this.services.authentication
@@ -123,22 +123,22 @@ class Landing extends Component<{}, State> {
         this.setState({ registrationEmail: '', registrationPassword: '' });
 
         if (AuthenticationStatus.Successful === response.status) {
-          return this.services.toasts.info('Vous êtes connecté !');
+          return this.services.ui.toasts.info('Vous êtes connecté !');
         }
         if (AuthenticationStatus.DisabledUser === response.status) {
-          return this.services.toasts.error('Vous devez activer votre compte avant de vous connecter. Vérifiez votre boite mail et vos spam.');
+          return this.services.ui.toasts.error('Vous devez activer votre compte avant de vous connecter. Vérifiez vos e-mails et vos spams.');
         }
         if (AuthenticationStatus.Refused === response.status) {
-          return this.services.toasts.error('Vos identifiants sont incorrects.');
+          return this.services.ui.toasts.error('Vos identifiants sont incorrects.');
         }
         if (AuthenticationStatus.UnknownUser === response.status) {
-          return this.services.toasts.error("Cette adresse email n'est pas enregistrée.");
+          return this.services.ui.toasts.error("Cette adresse email n'est pas enregistrée.");
         }
-        return this.services.toasts.genericError();
+        return this.services.ui.toasts.genericError();
       })
       .catch((err) => {
         logger.error(err);
-        this.services.toasts.genericError();
+        this.services.ui.toasts.genericError();
       });
   };
 
@@ -147,15 +147,15 @@ class Landing extends Component<{}, State> {
       .register(this.state.registrationEmail, this.state.registrationPassword)
       .then((res) => {
         if (res.status === RegistrationStatus.EmailAlreadyExists) {
-          return this.services.toasts.info('Cette adresse email est déjà prise');
+          return this.services.ui.toasts.info('Cette adresse email est déjà prise');
         }
         if (res.status === RegistrationStatus.Successful) {
           this.setState({ registrationEmail: '', registrationPassword: '' });
-          return this.services.toasts.info('Un email vient de vous être envoyé, vous devez activer votre compte');
+          return this.services.ui.toasts.info('Un email vient de vous être envoyé, vous devez activer votre compte');
         }
-        this.services.toasts.genericError();
+        this.services.ui.toasts.genericError();
       })
-      .catch(() => this.services.toasts.genericError());
+      .catch(() => this.services.ui.toasts.genericError());
   };
 
   private onLoginEmailChanged = (ev: ChangeEvent<HTMLInputElement>) => {

@@ -56,11 +56,11 @@ class ArtefactCard extends Component<Props, {}> {
   }
 
   public showLicense = () => {
-    this.services.toasts.featureNotReady();
+    this.services.ui.toasts.featureNotReady();
   };
 
   public addArtefact = () => {
-    this.services.toasts.info('Import en cours ...');
+    this.services.ui.toasts.info('Import en cours ...');
     const map = this.services.geo.getMainMap();
     this.services.dataStore
       .getLayersFrom(this.props.artefact, map.getProjection())
@@ -72,12 +72,12 @@ class ArtefactCard extends Component<Props, {}> {
           l.set(LayerProperties.Type, LayerType.Vector);
           l.set(LayerProperties.Active, false);
           map.addLayer(l);
-          this.services.toasts.info('Import terminé !');
+          this.services.ui.toasts.info('Import terminé !');
         })
       )
       .catch((err) => {
         logger.error(err);
-        this.services.toasts.genericError();
+        this.services.ui.toasts.genericError();
       });
   };
 
@@ -94,7 +94,7 @@ class ArtefactCard extends Component<Props, {}> {
       })
       .catch((err) => {
         logger.error(err);
-        this.services.toasts.genericError();
+        this.services.ui.toasts.genericError();
       });
   };
 

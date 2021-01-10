@@ -123,4 +123,8 @@ export class LayerFactory {
 
     return E.right(layer);
   }
+
+  public static setLayerName(layer: BaseLayer, value: string): void {
+    layer.set(LayerProperties.Name, value);
+  }
 }

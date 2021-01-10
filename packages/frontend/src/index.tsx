@@ -5,8 +5,10 @@ import reportWebVitals from './reportWebVitals';
 import { services } from './core/Services';
 import { getAbcWindow } from './core/utils/getWindow';
 import { E2eMapWrapper } from './core/map/E2eMapWrapper';
+import { Logger } from './core/utils/Logger';
 import './index.scss';
 
+const logger = Logger.get('index.tsx');
 const svc = services();
 
 svc.authentication
@@ -23,7 +25,10 @@ svc.authentication
       document.getElementById('root')
     );
   })
-  .catch(() => svc.toasts.genericError());
+  .catch((err) => {
+    logger.error(err);
+    svc.ui.toasts.genericError();
+  });
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

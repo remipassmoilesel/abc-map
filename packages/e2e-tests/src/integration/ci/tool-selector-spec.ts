@@ -1,6 +1,6 @@
-import { ToolSelector } from '../helpers/ToolSelector';
+import { ToolSelector } from '../../helpers/ToolSelector';
 import { FrontendRoutes, MapTool } from '@abc-map/shared-entities';
-import { TestHelper } from '../helpers/TestHelper';
+import { TestHelper } from '../../helpers/TestHelper';
 
 describe('ToolSelector', function () {
   beforeEach(() => {

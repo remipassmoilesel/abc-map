@@ -8,16 +8,9 @@ export enum AbcProperties {
   Managed = 'abc:managed',
 
   /**
-   * <p>
-   * This property is set on layer collection, with the ID of the last layer selected.
-   * </p>
-   *
-   * <p>
-   * It is used in order to trigger changes after selection, to find the current active layer
-   * please use instead LayerProperties.Active.
-   * </p>
+   * This property is set on layer collection in order to trigger changes
    */
-  LastLayerActive = 'abc:layers:active',
+  LastLayerChange = 'abc:layers:last-change',
 
   CurrentTool = 'abc:map:current-tool',
 }
