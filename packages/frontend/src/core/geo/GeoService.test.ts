@@ -1,12 +1,13 @@
 import { logger as geoLogger, GeoService } from './GeoService';
-import { logger as mapLogger } from './ManagedMap';
-import { AbcPredefinedLayer, AbcProject, AbcVectorLayer, LayerType, PredefinedLayerModel } from '@abc-map/shared-entities';
+import { logger as mapLogger } from './map/ManagedMap';
+import { AbcProject, AbcVectorLayer, LayerType, PredefinedLayerModel, PredefinedMetadata } from '@abc-map/shared-entities';
 import { LayerProperties } from '@abc-map/shared-entities';
 import { TestHelper } from '../utils/TestHelper';
 import VectorSource from 'ol/source/Vector';
 import TileLayer from 'ol/layer/Tile';
 import VectorLayer from 'ol/layer/Vector';
-import { MapFactory } from './MapFactory';
+import { MapFactory } from './map/MapFactory';
+import { httpExternalClient } from '../http/HttpClients';
 
 geoLogger.disable();
 mapLogger.disable();
@@ -16,7 +17,7 @@ describe('GeoService', () => {
   let service: GeoService;
 
   beforeEach(() => {
-    service = new GeoService();
+    service = new GeoService(httpExternalClient(5_000));
   });
 
   it('exportLayers()', () => {
@@ -32,7 +33,7 @@ describe('GeoService', () => {
 
     expect(layers[0].metadata.type).toEqual(LayerType.Predefined);
     expect(layers[0].metadata.active).toEqual(false);
-    expect((layers[0] as AbcPredefinedLayer).model).toEqual(PredefinedLayerModel.OSM);
+    expect((layers[0].metadata as PredefinedMetadata).model).toEqual(PredefinedLayerModel.OSM);
 
     expect(layers[1].metadata.type).toEqual(LayerType.Vector);
     expect(layers[1].metadata.active).toEqual(true);

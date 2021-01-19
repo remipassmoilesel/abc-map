@@ -57,3 +57,9 @@ function responseInterceptor(error: AxiosError): Promise<any> {
   }
   return Promise.reject(error);
 }
+
+export function httpExternalClient(timeout: number): AxiosInstance {
+  return axios.create({
+    timeout,
+  });
+}

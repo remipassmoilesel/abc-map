@@ -1,0 +1,10 @@
+version: 0.1
+artefact:
+  name: Etats-Unis
+  license: README.md
+  description: States of the United States of America, including the District of Columbia and Puerto Rico. Data taken from the 2010 Census.
+  keywords:
+    - America
+    - United States
+  files:
+    - definition.wms

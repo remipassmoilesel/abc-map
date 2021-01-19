@@ -22,7 +22,7 @@ describe('Map', function () {
 
   it('user can add layer', function () {
     cy.visit(FrontendRoutes.map())
-      .then(() => LayerSelector.addLayer('Osm'))
+      .then(() => LayerSelector.addOsmLayer())
       .then(() => LayerSelector.getNames())
       .should((names) => {
         expect(names).deep.equals(['OpenStreetMap', 'Formes', 'OpenStreetMap']);
@@ -36,7 +36,7 @@ describe('Map', function () {
 
   it('user can add layer then undo and redo', function () {
     cy.visit(FrontendRoutes.map())
-      .then(() => LayerSelector.addLayer('Osm'))
+      .then(() => LayerSelector.addOsmLayer())
       .then(() => LayerSelector.getNames())
       .should((names) => {
         expect(names).deep.equals(['OpenStreetMap', 'Formes', 'OpenStreetMap']);

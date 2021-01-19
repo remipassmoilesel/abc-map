@@ -4,9 +4,9 @@ import { Logger } from '../../../core/utils/Logger';
 import { AbcLayout } from '@abc-map/shared-entities';
 import { LayoutHelper } from '../LayoutHelper';
 import View from 'ol/View';
-import { ManagedMap } from '../../../core/map/ManagedMap';
+import { ManagedMap } from '../../../core/geo/map/ManagedMap';
 import './LayoutPreview.scss';
-import { MapFactory } from '../../../core/map/MapFactory';
+import { MapFactory } from '../../../core/geo/map/MapFactory';
 
 const logger = Logger.get('LayoutPreview.tsx', 'warn');
 

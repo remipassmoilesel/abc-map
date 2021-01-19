@@ -3,7 +3,7 @@ import BaseLayer from 'ol/layer/Base';
 import { AbcFile } from './AbcFile';
 import Feature from 'ol/Feature';
 import { Geometry } from 'ol/geom';
-import { FeatureHelper } from '../map/FeatureHelper';
+import { FeatureHelper } from '../geo/features/FeatureHelper';
 
 export abstract class AbstractDataReader {
   public abstract isSupported(files: AbcFile[]): Promise<boolean>;

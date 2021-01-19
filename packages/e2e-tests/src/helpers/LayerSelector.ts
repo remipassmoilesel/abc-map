@@ -9,15 +9,32 @@ export class LayerSelector {
     return cy.get('[data-cy=layers-list] .abc-layer-item.active');
   }
 
-  public static addLayer(type: 'Osm' | 'Vector'): Cypress.Chainable<any> {
-    let option: string;
-    if (type === 'Osm') {
-      option = 'Couche OpenStreetMap';
-    } else if (type === 'Vector') {
-      option = 'Couche de formes';
-    } else {
-      throw new Error(`Unknown type: ${type}`);
-    }
+  public static addOsmLayer(): Cypress.Chainable<any> {
+    const option = 'Couche OpenStreetMap';
     return cy.get('[data-cy=add-layer]').click().get('[data-cy=add-layer-type]').select(option).get('[data-cy=add-layer-confirm]').click();
+  }
+
+  public static addVectorLayer(): Cypress.Chainable<any> {
+    const option = 'Couche de formes';
+    return cy.get('[data-cy=add-layer]').click().get('[data-cy=add-layer-type]').select(option).get('[data-cy=add-layer-confirm]').click();
+  }
+
+  public static addWmsLayer(): Cypress.Chainable<any> {
+    return cy
+      .get('[data-cy=add-layer]')
+      .click()
+      .get('[data-cy=add-layer-type]')
+      .select('Couche distante (WMS)')
+      .get('[data-cy=add-layer-confirm]')
+      .get('[data-cy=wms-settings-url]')
+      .clear()
+      .type('https://ahocevar.com/geoserver/wms')
+      .get('[data-cy=wms-settings-capabilities]')
+      .click()
+      .get('[data-cy=wms-layer-item]')
+      .eq(2)
+      .click()
+      .get('[data-cy=add-layer-confirm]')
+      .click();
   }
 }

@@ -2,7 +2,6 @@ import { Map } from 'ol';
 import View from 'ol/View';
 import { fromLonLat } from 'ol/proj';
 import { DEFAULT_PROJECTION } from '@abc-map/shared-entities';
-import { LayerFactory } from './LayerFactory';
 import { ManagedMap } from './ManagedMap';
 
 export class MapFactory {
@@ -16,12 +15,7 @@ export class MapFactory {
       }),
     });
     const map = new ManagedMap(internal);
-    const osm = LayerFactory.newOsmLayer();
-    map.addLayer(osm);
-
-    const vector = LayerFactory.newVectorLayer();
-    map.addLayer(vector);
-    map.setActiveLayer(vector);
+    map.resetLayers();
     return map;
   }
 

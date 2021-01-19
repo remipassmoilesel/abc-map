@@ -14,7 +14,7 @@ import {
   PredefinedLayerModel,
 } from '@abc-map/shared-entities';
 import * as uuid from 'uuid';
-import { AbcStyle } from '../map/AbcStyle';
+import { AbcStyle } from '../geo/features/AbcStyle';
 
 export class TestHelper {
   public static samplePointFeature(): Feature<Geometry> {
@@ -82,8 +82,8 @@ export class TestHelper {
         visible: true,
         active: false,
         opacity: 1,
+        model: PredefinedLayerModel.OSM,
       },
-      model: PredefinedLayerModel.OSM,
     };
   }
 
@@ -123,5 +123,14 @@ export class TestHelper {
         projection: DEFAULT_PROJECTION,
       },
     };
+  }
+
+  /**
+   * Warning: use this is generally a very bad idea
+   */
+  public static wait(timeMs: number): Promise<void> {
+    return new Promise((resolve) => {
+      setTimeout(resolve, timeMs);
+    });
   }
 }

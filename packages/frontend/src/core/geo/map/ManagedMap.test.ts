@@ -1,14 +1,16 @@
 import { MapFactory } from './MapFactory';
 import { AbcProperties, LayerProperties, MapTool } from '@abc-map/shared-entities';
-import { GeoService } from './GeoService';
+import { GeoService } from '../GeoService';
 import { Map } from 'ol';
 import * as uuid from 'uuid';
 import { logger, ManagedMap } from './ManagedMap';
 import VectorLayer from 'ol/layer/Vector';
-import { ToolRegistry } from './tools/ToolRegistry';
-import { OlTestHelper } from '../utils/OlTestHelper';
-import { Circle } from './tools/Circle';
-import { None } from './tools/None';
+import { ToolRegistry } from '../tools/ToolRegistry';
+import { OlTestHelper } from '../../utils/OlTestHelper';
+import { Circle } from '../tools/Circle';
+import { None } from '../tools/None';
+import { httpExternalClient } from '../../http/HttpClients';
+import TileLayer from 'ol/layer/Tile';
 
 logger.disable();
 
@@ -16,16 +18,20 @@ describe('ManagedMap', function () {
   let service: GeoService;
 
   beforeEach(() => {
-    service = new GeoService();
+    service = new GeoService(httpExternalClient(5_000));
   });
 
-  it('reset() should remove all layers', () => {
+  it('reset() should setup default map', () => {
     const map = MapFactory.createNaked();
     map.addLayer(service.newVectorLayer());
 
-    map.reset();
+    map.resetLayers();
     const layers = map.getLayers();
-    expect(layers).toHaveLength(0);
+    expect(layers).toHaveLength(2);
+    expect(layers[0]).toBeInstanceOf(TileLayer);
+    expect(layers[1]).toBeInstanceOf(VectorLayer);
+    expect(layers[0].get(LayerProperties.Active)).toBe(false);
+    expect(layers[1].get(LayerProperties.Active)).toBe(true);
   });
 
   describe('setTarget(), dispose()', () => {

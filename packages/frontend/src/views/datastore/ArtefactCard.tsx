@@ -1,10 +1,9 @@
 import React, { Component, ReactNode } from 'react';
 import { services } from '../../core/Services';
 import { Logger } from '../../core/utils/Logger';
-import { AbcArtefact, AbcProperties, LayerProperties, LayerType } from '@abc-map/shared-entities';
+import { AbcArtefact, LayerProperties } from '@abc-map/shared-entities';
 import { FileFormat, FileFormats } from '../../core/datastore/FileFormats';
 import { Zipper } from '../../core/datastore/Zipper';
-import * as uuid from 'uuid';
 import './DataStore.scss';
 
 const logger = Logger.get('ArtefactCard.tsx', 'info');
@@ -64,17 +63,21 @@ class ArtefactCard extends Component<Props, {}> {
     const map = this.services.geo.getMainMap();
     this.services.dataStore
       .getLayersFrom(this.props.artefact, map.getProjection())
-      .then((layers) =>
-        layers.forEach((l) => {
-          l.set(AbcProperties.Managed, true);
-          l.set(LayerProperties.Id, uuid.v4());
-          l.set(LayerProperties.Name, 'Données du catalogue');
-          l.set(LayerProperties.Type, LayerType.Vector);
-          l.set(LayerProperties.Active, false);
-          map.addLayer(l);
-          this.services.ui.toasts.info('Import terminé !');
-        })
-      )
+      .then((layers) => {
+        if (!layers.length) {
+          this.services.ui.toasts.error('Cet artefact ne contient pas de couches !');
+          return;
+        }
+
+        layers.forEach((lay, i) => {
+          lay.set(LayerProperties.Name, `${this.props.artefact.name} (${i + 1})`);
+          map.addLayer(lay);
+        });
+
+        const last = layers[layers.length - 1];
+        map.setActiveLayer(last);
+        this.services.ui.toasts.info('Import terminé !');
+      })
       .catch((err) => {
         logger.error(err);
         this.services.ui.toasts.genericError();

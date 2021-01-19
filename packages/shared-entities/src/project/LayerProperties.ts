@@ -32,3 +32,12 @@ export enum PredefinedLayerProperties {
    */
   Model = 'abc:layer:predefined:model',
 }
+
+export enum WmsLayerProperties {
+  Url = 'abc:layer:wms:url',
+  LayerName = 'abc:layer:wms:layer-name',
+  Username = 'abc:layer:wms:username',
+  Password = 'abc:layer:wms:password',
+  Projection = 'abc:layer:wms:projection',
+  Extent = 'abc:layer:wms:extent',
+}

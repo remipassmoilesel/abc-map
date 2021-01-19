@@ -7,9 +7,9 @@ import { Extent, getArea } from 'ol/extent';
 import { RemoveLayerTask } from '../../../core/history/tasks/RemoveLayerTask';
 import { HistoryKey } from '../../../core/history/HistoryKey';
 import { ModalStatus } from '../../../core/ui/Modals.types';
-import { LayerFactory } from '../../../core/map/LayerFactory';
 import LayerListItem from './item/LayerListItem';
-import NewLayerModal from './new-layer-modal/NewLayerModal';
+import AddLayerModal from './add-layer-modal/AddLayerModal';
+import { LayerMetadataHelper } from '../../../core/geo/map/LayerMetadataHelper';
 import './LayerSelector.scss';
 
 const logger = Logger.get('LayerSelector.tsx', 'debug');
@@ -37,10 +37,11 @@ class LayerSelector extends Component<Props, State> {
 
   public render(): ReactNode {
     const items = this.getItems();
-    let message: string | undefined;
+    let message: ReactNode | undefined;
     if (!items || !items.length) {
-      message = 'Aucune couche';
+      message = <div className={'no-layers'}>Aucune couche</div>;
     }
+
     return (
       <div className={'control-block abc-layer-selector d-flex flex-column'}>
         <div className={'control-item'}>Couches</div>
@@ -65,7 +66,7 @@ class LayerSelector extends Component<Props, State> {
             <i className={'fa fa-eye'} />
           </button>
         </div>
-        <NewLayerModal visible={this.state.addModalVisible} onHide={this.hideAddModal} />
+        <AddLayerModal visible={this.state.addModalVisible} onHide={this.hideAddModal} />
       </div>
     );
   }
@@ -87,15 +88,17 @@ class LayerSelector extends Component<Props, State> {
   };
 
   private zoomToSelectedLayer = () => {
-    const selected = this.services.geo.getMainMap().getActiveLayer();
-    if (!selected) {
+    const layer = this.services.geo.getMainMap().getActiveLayer();
+    if (!layer) {
       this.services.ui.toasts.info("Vous devez d'abord sélectionner une couche");
       return logger.error('No layer selected');
     }
 
     let extent: Extent | undefined;
-    if (selected instanceof VectorLayer) {
-      extent = selected.getSource().getExtent();
+    if (layer instanceof VectorLayer) {
+      extent = layer.getSource().getExtent();
+    } else {
+      extent = layer.getExtent();
     }
 
     if (!extent || !getArea(extent)) {
@@ -117,7 +120,7 @@ class LayerSelector extends Component<Props, State> {
   private renameLayerModal = () => {
     const map = this.services.geo.getMainMap();
     const active = map.getActiveLayer();
-    const metadata = active && LayerFactory.getMetadataFromLayer(active);
+    const metadata = active && LayerMetadataHelper.getCommons(active);
     if (!active || !metadata) {
       return this.services.ui.toasts.info("Vous devez d'abord sélectionner une couche");
     }

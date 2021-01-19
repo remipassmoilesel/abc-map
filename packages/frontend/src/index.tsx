@@ -4,7 +4,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { services } from './core/Services';
 import { getAbcWindow } from './core/utils/getWindow';
-import { E2eMapWrapper } from './core/map/E2eMapWrapper';
+import { E2eMapWrapper } from './core/geo/map/E2eMapWrapper';
 import { Logger } from './core/utils/Logger';
 import './index.scss';
 

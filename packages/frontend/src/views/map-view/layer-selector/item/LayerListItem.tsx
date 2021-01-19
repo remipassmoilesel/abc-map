@@ -1,12 +1,12 @@
 import React, { Component, ReactNode } from 'react';
 import { Logger } from '../../../../core/utils/Logger';
-import { AbcLayerMetadata } from '@abc-map/shared-entities';
+import { BaseMetadata } from '@abc-map/shared-entities';
 import './LayerListItem.scss';
 
 const logger = Logger.get('LayerListItem.tsx', 'info');
 
 interface Props {
-  metadata: AbcLayerMetadata;
+  metadata: BaseMetadata;
   onClick: (id: string) => void;
 }
 

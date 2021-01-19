@@ -134,10 +134,16 @@ class ProjectControls extends Component<Props, State> {
 
   private exportProject = () => {
     this.services.ui.toasts.info('Export en cours ...');
-    this.services.project.exportCurrentProject().then((project) => {
-      this.services.ui.toasts.info('Export terminé !');
-      this.downloadProject(project);
-    });
+    this.services.project
+      .exportCurrentProject()
+      .then((project) => {
+        this.services.ui.toasts.info('Export terminé !');
+        this.downloadProject(project);
+      })
+      .catch((err) => {
+        logger.error(err);
+        this.services.ui.toasts.genericError();
+      });
   };
 
   private importProject = () => {

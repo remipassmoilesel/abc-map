@@ -3,8 +3,8 @@ import MainMap, { logger } from './MainMap';
 import ReactDOM, { unmountComponentAtNode } from 'react-dom';
 import { act } from 'react-dom/test-utils';
 import { services } from '../../../core/Services';
-import { ManagedMap } from '../../../core/map/ManagedMap';
-import { MapFactory } from '../../../core/map/MapFactory';
+import { ManagedMap } from '../../../core/geo/map/ManagedMap';
+import { MapFactory } from '../../../core/geo/map/MapFactory';
 import { OlTestHelper } from '../../../core/utils/OlTestHelper';
 
 logger.disable();

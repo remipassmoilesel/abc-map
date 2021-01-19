@@ -1,5 +1,5 @@
 import { AbstractDataReader } from './AbstractDataReader';
-import { AbcProjection } from '@abc-map/shared-entities';
+import { AbcProjection, LayerType, VectorMetadata } from '@abc-map/shared-entities';
 import BaseLayer from 'ol/layer/Base';
 import { FileFormat, FileFormats } from '../datastore/FileFormats';
 import { AbcFile } from './AbcFile';
@@ -8,6 +8,8 @@ import { GeoJSON } from 'ol/format';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import { BlobReader } from '../utils/BlobReader';
+import * as uuid from 'uuid';
+import { LayerMetadataHelper } from '../geo/map/LayerMetadataHelper';
 
 export class ShapefileReader extends AbstractDataReader {
   public async isSupported(files: AbcFile[]): Promise<boolean> {
@@ -37,6 +39,16 @@ export class ShapefileReader extends AbstractDataReader {
         features,
       }),
     });
+
+    const metadata: VectorMetadata = {
+      id: uuid.v4(),
+      name: 'Couche Shapefile',
+      type: LayerType.Vector,
+      active: false,
+      opacity: 1,
+      visible: true,
+    };
+    LayerMetadataHelper.setVectorMetadata(layer, metadata);
 
     return [layer];
   }

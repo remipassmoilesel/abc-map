@@ -4,8 +4,8 @@ import { DragBox } from 'ol/interaction';
 import { onlyMainButton } from './common-conditions';
 import VectorSource from 'ol/source/Vector';
 import Geometry from 'ol/geom/Geometry';
-import { FeatureHelper } from '../FeatureHelper';
 import { Map } from 'ol';
+import { FeatureHelper } from '../features/FeatureHelper';
 
 export class Selection extends AbstractTool {
   public getId(): MapTool {
