@@ -10,8 +10,8 @@ import { LayoutHelper } from './LayoutHelper';
 import View from 'ol/View';
 import HistoryControls from '../../components/history-controls/HistoryControls';
 import { HistoryKey } from '../../core/history/HistoryKey';
-import { ManagedMap } from '../../core/map/ManagedMap';
-import { MapFactory } from '../../core/map/MapFactory';
+import { ManagedMap } from '../../core/geo/map/ManagedMap';
+import { MapFactory } from '../../core/geo/map/MapFactory';
 import { MainState } from '../../core/store/reducer';
 import './LayoutView.scss';
 

@@ -1,12 +1,12 @@
 import { logger, ProjectService } from './ProjectService';
-import { GeoService } from '../map/GeoService';
+import { GeoService } from '../geo/GeoService';
 import { ProjectFactory } from './ProjectFactory';
 import { ProjectActions } from '../store/project/actions';
 import { AbcLayer } from '@abc-map/shared-entities';
 import { TestHelper } from '../utils/TestHelper';
-import { MapFactory } from '../map/MapFactory';
+import { MapFactory } from '../geo/map/MapFactory';
 import { MainStore, storeFactory } from '../store/store';
-jest.mock('../map/GeoService');
+jest.mock('../geo/GeoService');
 
 logger.disable();
 
@@ -17,7 +17,7 @@ describe('ProjectService', function () {
 
   beforeEach(() => {
     store = storeFactory();
-    geoServiceMock = new GeoService();
+    geoServiceMock = new GeoService({} as any);
     projectService = new ProjectService({} as any, store, geoServiceMock);
   });
 
@@ -46,7 +46,7 @@ describe('ProjectService', function () {
     geoServiceMock.getMainMap = getMainMapMock;
 
     const resetMapMock = jest.fn(() => undefined);
-    map.reset = resetMapMock;
+    map.resetLayers = resetMapMock;
 
     projectService.newProject();
 

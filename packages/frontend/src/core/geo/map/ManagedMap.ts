@@ -1,16 +1,17 @@
 import { Map } from 'ol';
-import { AbcLayerMetadata, AbcProjection, AbcProperties, LayerProperties } from '@abc-map/shared-entities';
+import { AbcProjection, AbcProperties, LayerProperties, BaseMetadata } from '@abc-map/shared-entities';
 import BaseLayer from 'ol/layer/Base';
 import VectorLayer from 'ol/layer/Vector';
 import * as _ from 'lodash';
 import Feature from 'ol/Feature';
 import Geometry from 'ol/geom/Geometry';
-import { FeatureHelper } from './FeatureHelper';
-import { ResizeObserverFactory } from '../utils/ResizeObserverFactory';
+import { FeatureHelper } from '../features/FeatureHelper';
+import { ResizeObserverFactory } from '../../utils/ResizeObserverFactory';
 import BaseEvent from 'ol/events/Event';
-import { Logger } from '../utils/Logger';
-import { AbstractTool } from './tools/AbstractTool';
+import { Logger } from '../../utils/Logger';
+import { AbstractTool } from '../tools/AbstractTool';
 import { LayerFactory } from './LayerFactory';
+import { LayerMetadataHelper } from './LayerMetadataHelper';
 
 export const logger = Logger.get('ManagedMap.ts', 'debug');
 
@@ -49,8 +50,14 @@ export class ManagedMap {
     }
   }
 
-  public reset(): void {
+  public resetLayers(): void {
     this.internal.getLayers().clear();
+    const osm = LayerFactory.newOsmLayer();
+    this.addLayer(osm);
+
+    const vector = LayerFactory.newVectorLayer();
+    this.addLayer(vector);
+    this.setActiveLayer(vector);
   }
 
   public addLayer(layer: BaseLayer): void {
@@ -104,10 +111,10 @@ export class ManagedMap {
     return layers.find((lay) => lay.get(LayerProperties.Active));
   }
 
-  public getActiveLayerMetadata(): AbcLayerMetadata | undefined {
+  public getActiveLayerMetadata(): BaseMetadata | undefined {
     const active = this.getActiveLayer();
     if (active) {
-      return LayerFactory.getMetadataFromLayer(active);
+      return LayerMetadataHelper.getCommons(active);
     }
   }
 

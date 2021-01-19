@@ -1,6 +1,6 @@
 version: 0.1
 artefact:
-  name: Exemples
+  name: Exemples d'artefact multi-format
   license: README.md
   description: Divers fichiers exemple
   files:

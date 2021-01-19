@@ -4,7 +4,7 @@ import { Fill, Stroke } from 'ol/style';
 import CircleStyle from 'ol/style/Circle';
 import Geometry from 'ol/geom/Geometry';
 import Feature from 'ol/Feature';
-import { Logger } from '../utils/Logger';
+import { Logger } from '../../utils/Logger';
 
 const logger = Logger.get('SelectionStyle.ts');
 

@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "id": "b108683c-0fa7-48b4-b12a-bddc2a7a05c1",
+    "id": "11d6c8af-0604-42bb-aa4c-309632938fca",
     "version": "0.1",
     "projection": {
       "name": "EPSG:3857"
@@ -11,24 +11,24 @@
     {
       "type": "Predefined",
       "metadata": {
-        "id": "a2fb59a9-0f79-43ec-9908-056194785662",
+        "id": "f634b911-7e77-47f8-bd52-ed1f277b5b9a",
         "name": "OpenStreetMap",
         "type": "Predefined",
         "opacity": 1,
+        "active": false,
         "visible": true,
-        "active": false
-      },
-      "model": "OSM"
+        "model": "OSM"
+      }
     },
     {
       "type": "Vector",
       "metadata": {
-        "id": "e0acd8cd-0b6c-48d5-ab77-bac240ba4c52",
+        "id": "31dd62cd-ec2a-4076-857b-a3a46cf1a9be",
         "name": "Formes",
         "type": "Vector",
         "opacity": 1,
-        "visible": true,
-        "active": true
+        "active": false,
+        "visible": true
       },
       "features": {
         "type": "FeatureCollection",
@@ -177,6 +177,28 @@
               "abc:style:stroke:width": 5
             }
           }
+        ]
+      }
+    },
+    {
+      "type": "Wms",
+      "metadata": {
+        "id": "78446efd-cd80-4286-9667-05abd2b9afaa",
+        "name": "opengeo:countries",
+        "type": "Wms",
+        "opacity": 1,
+        "active": true,
+        "visible": true,
+        "url": "https://ahocevar.com/geoserver/wms",
+        "layerName": "opengeo:countries",
+        "projection": {
+          "name": "CRS:84"
+        },
+        "extent": [
+          -180,
+          -89.99892578124998,
+          180.00000000000003,
+          83.59960937500006
         ]
       }
     }

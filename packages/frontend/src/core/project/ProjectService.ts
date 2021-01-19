@@ -3,7 +3,7 @@ import { Logger } from '../utils/Logger';
 import { AbcLayout, AbcProject, AbcProjection, AbcProjectMetadata, LayoutFormat } from '@abc-map/shared-entities';
 import { AxiosInstance } from 'axios';
 import { ProjectFactory } from './ProjectFactory';
-import { GeoService } from '../map/GeoService';
+import { GeoService } from '../geo/GeoService';
 import { Abm2Reader } from './Abm2Reader';
 import { ProjectRoutes as Api } from '../http/ApiRoutes';
 import * as uuid from 'uuid';
@@ -16,7 +16,7 @@ export class ProjectService {
 
   public newProject(): void {
     const map = this.geoService.getMainMap();
-    map.reset();
+    map.resetLayers();
     this.store.dispatch(ProjectActions.newProject(ProjectFactory.newProjectMetadata()));
     logger.info('New project created');
   }

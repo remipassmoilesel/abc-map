@@ -45,20 +45,20 @@ describe('AbcLayer', () => {
 
   it('PredefinedLayer should not change without migration', () => {
     /* eslint-disable */
-    const layerWitness = '{"type":"Predefined","metadata":{"id":"test-layer-id","name":"Test vector layer","active":true,"visible":true,"opacity":0.5,"type":"Vector"},"model":"OSM"}';
+    const layerWitness = '{"type":"Predefined","metadata":{"id":"test-layer-id","name":"Test predefined layer","active":true,"visible":true,"opacity":0.5,"type":"Predefined","model":"OSM"}}';
     /* eslint-enable */
 
     const currentLayer: AbcPredefinedLayer = {
       type: LayerType.Predefined,
       metadata: {
         id: 'test-layer-id',
-        name: 'Test vector layer',
+        name: 'Test predefined layer',
         active: true,
         visible: true,
         opacity: 0.5,
-        type: LayerType.Vector,
+        type: LayerType.Predefined,
+        model: PredefinedLayerModel.OSM,
       },
-      model: PredefinedLayerModel.OSM,
     };
 
     assert.equal(JSON.stringify(currentLayer), layerWitness);

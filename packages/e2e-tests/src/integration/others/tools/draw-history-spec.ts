@@ -4,7 +4,7 @@ import { TestHelper } from '../../../helpers/TestHelper';
 import { MainMap } from '../../../helpers/MainMap';
 import { Draw } from '../../../helpers/Draw';
 
-describe('Map history', function () {
+describe('Draw features history', function () {
   beforeEach(() => {
     TestHelper.init();
   });

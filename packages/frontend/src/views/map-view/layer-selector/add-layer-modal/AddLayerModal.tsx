@@ -4,6 +4,12 @@ import { services } from '../../../../core/Services';
 import { HistoryKey } from '../../../../core/history/HistoryKey';
 import { AddLayerTask } from '../../../../core/history/tasks/AddLayerTask';
 import { AddLayerType, AddLayerTypes } from './AddLayerType';
+import WmsSettingsPanel from './wms/WmsSettingsPanel';
+import { Logger } from '../../../../core/utils/Logger';
+import { Link } from 'react-router-dom';
+import { FrontendRoutes, WmsDefinition } from '@abc-map/shared-entities';
+
+const logger = Logger.get('NewLayerModal.tsx');
 
 interface Props {
   visible: boolean;
@@ -12,9 +18,10 @@ interface Props {
 
 interface State {
   layerType: AddLayerType;
+  wms?: WmsDefinition;
 }
 
-class NewLayerModal extends Component<Props, State> {
+class AddLayerModal extends Component<Props, State> {
   private services = services();
 
   constructor(props: Props) {
@@ -30,23 +37,31 @@ class NewLayerModal extends Component<Props, State> {
     }
 
     const options = this.getOptions();
+    const wmsSelected = this.state.layerType.id === AddLayerTypes.Wms.id;
     return (
       <Modal show={this.props.visible} onHide={this.props.onHide}>
         <Modal.Header closeButton>
           <Modal.Title>Ajouter une couche</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div>Sélectionnez la couche que vous souhaitez ajouter : </div>
+          <div className={'mb-2'}>Sélectionnez le type de couche que vous souhaitez ajouter : </div>
           <div className={'form-group'}>
-            <select value={this.state.layerType.id} onChange={this.onLayerTypeChanged} className={'form-control'} data-cy={'add-layer-type'}>
+            <select value={this.state.layerType.id} onChange={this.handleLayerTypeChanged} className={'form-control'} data-cy={'add-layer-type'}>
               {options}
             </select>
           </div>
-          <div className={'d-flex justify-content-end'}>
+          <div className={'mb-2 mt-2'}>
+            <i className={'fa fa-info ml-2 mr-2'} /> Vous pouvez aussi ajouter des couches à partir du&nbsp;
+            <Link to={FrontendRoutes.dataStore()}>Catalogue de données.</Link>
+          </div>
+
+          {wmsSelected && <WmsSettingsPanel onChange={this.handleWmsSettingsChanged} />}
+
+          <div className={'d-flex justify-content-end mt-3'}>
             <button className={'btn btn-secondary mr-3'} onClick={this.props.onHide}>
               Annuler
             </button>
-            <button className={'btn btn-primary'} onClick={this.onAdd} data-cy={'add-layer-confirm'}>
+            <button disabled={!this.isAddAllowed()} className={'btn btn-primary'} onClick={this.handleAdd} data-cy={'add-layer-confirm'}>
               Ajouter
             </button>
           </div>
@@ -55,12 +70,14 @@ class NewLayerModal extends Component<Props, State> {
     );
   }
 
-  private onAdd = () => {
+  private handleAdd = () => {
     const selected = this.state.layerType;
     if (AddLayerTypes.Vector.id === selected.id) {
       this.newVectorLayer();
     } else if (AddLayerTypes.Osm.id === selected.id) {
       this.newOsmLayer();
+    } else if (AddLayerTypes.Wms.id === selected.id) {
+      this.newWmsLayer();
     } else {
       this.services.ui.toasts.featureNotReady();
     }
@@ -77,7 +94,7 @@ class NewLayerModal extends Component<Props, State> {
     });
   }
 
-  private onLayerTypeChanged = (ev: ChangeEvent<HTMLSelectElement>) => {
+  private handleLayerTypeChanged = (ev: ChangeEvent<HTMLSelectElement>) => {
     const value = ev.target.value;
     const layerType = AddLayerTypes.find(value);
     if (!layerType) {
@@ -101,6 +118,34 @@ class NewLayerModal extends Component<Props, State> {
     map.setActiveLayer(layer);
     this.services.history.register(HistoryKey.Map, new AddLayerTask(map, layer));
   };
+
+  private newWmsLayer = () => {
+    const wms = this.state.wms;
+    if (!wms) {
+      return this.services.ui.toasts.info("Vous devez d'abord paramétrer votre couche");
+    }
+
+    const map = this.services.geo.getMainMap();
+    const layer = this.services.geo.newWmsLayer(wms);
+    map.addLayer(layer);
+    map.setActiveLayer(layer);
+    this.services.history.register(HistoryKey.Map, new AddLayerTask(map, layer));
+  };
+
+  private handleWmsSettingsChanged = (wms: WmsDefinition) => {
+    logger.info('Settings changed: ', wms);
+    this.setState({ wms });
+  };
+
+  // TODO: we should return an explanation and display it
+  private isAddAllowed(): boolean {
+    if (this.state.layerType !== AddLayerTypes.Wms) {
+      return true;
+    }
+    const urlIsDefined = !!this.state.wms?.url;
+    const layerIsDefined = !!this.state.wms?.layerName;
+    return urlIsDefined && layerIsDefined;
+  }
 }
 
-export default NewLayerModal;
+export default AddLayerModal;

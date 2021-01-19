@@ -21,8 +21,8 @@ export class TestHelper {
             visible: true,
             active: false,
             opacity: 1,
+            model: PredefinedLayerModel.OSM,
           },
-          model: PredefinedLayerModel.OSM,
         },
         {
           type: LayerType.Vector,

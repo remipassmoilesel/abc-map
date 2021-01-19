@@ -57,8 +57,12 @@ export class Service {
   }
 
   public start(): void {
-    this.shell.sync('docker-compose up -d', { cwd: this.config.getDevServicesRoot() });
+    this.startServices();
     this.shell.sync('lerna run start:watch --parallel --no-bail');
+  }
+
+  public startServices(): void {
+    this.shell.sync('docker-compose up -d', { cwd: this.config.getDevServicesRoot() });
   }
 
   public stopServices(): void {
@@ -79,11 +83,42 @@ export class Service {
   }
 
   public async continuousIntegration(): Promise<void> {
+    const start = new Date().getTime();
     this.bootstrap();
     this.lint();
     this.cleanBuild();
     this.dependencyCheck(); // Dependency check must be launched AFTER build for local dependencies
     this.test();
     await this.e2e();
+    const tookSec = Math.round((new Date().getTime() - start) / 1000);
+    logger.info(`CI took ${tookSec} seconds`);
+  }
+
+  public help() {
+    logger.info(`
+Abc-CLI helps to build and deploy Abc-Map.
+
+Common commands are:
+
+  $ ./abc-cli bootstrap                  Init project and install dependencies.
+  $ ./abc-cli watch                      Watch source code of all packages and compile on change.
+  $ ./abc-cli start                      Start project and associated services (database, mail server, ...).
+  $ ./abc-cli clean-restart-services     Stop services, clean data, then start services.
+
+
+Other commands:
+
+  $ ./abc-cli build             Build all packages.
+  $ ./abc-cli lint              Analyse code with ESLint and fix things that can be fixed.
+  $ ./abc-cli test              Test all packages.
+  $ ./abc-cli e2e               Launch E2E tests.
+  $ ./abc-cli start-services    Start associated services.
+  $ ./abc-cli stop-services     Stop associated services.
+  $ ./abc-cli clean             Clean all build directories and dependencies.
+  $ ./abc-cli dep-check         Check dependencies and source code with Dependency Cruiser.
+  $ ./abc-cli ci                Execute continuous integration: lint, dep-check, build, test, ...
+  $ ./abc-cli help              Show this help.
+
+    `);
   }
 }

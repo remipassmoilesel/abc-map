@@ -1,7 +1,9 @@
-import { AbcLayerMetadata } from '../project';
+import { BaseMetadata, LayerMetadata } from '../project';
 
 export interface E2eMap {
-  getLayersMetadata(): AbcLayerMetadata[];
+  getLayersMetadata(): LayerMetadata[];
+
+  getActiveLayerMetadata(): BaseMetadata | undefined;
 
   getActiveLayerFeatures(): E2eFeature[];
 }

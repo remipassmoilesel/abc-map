@@ -11,7 +11,7 @@ import ToolSelector from './tool-selector/ToolSelector';
 import StyleSelector from './style-selector/StyleSelector';
 import HistoryControls from '../../components/history-controls/HistoryControls';
 import { HistoryKey } from '../../core/history/HistoryKey';
-import { ManagedMap } from '../../core/map/ManagedMap';
+import { ManagedMap } from '../../core/geo/map/ManagedMap';
 import { MainState } from '../../core/store/reducer';
 import './MapView.scss';
 

@@ -24,13 +24,13 @@ async function main(args: string[]) {
   process.env.PATH = `${process.env.PATH}:${config.getCliRoot()}/node_modules/.bin/`;
 
   banners.cli();
-  const command = await parser.parse(process.argv);
+  const command = await parser.parse(args);
 
   if (Command.BOOSTRAP === command) {
     service.bootstrap();
   } else if (Command.LINT === command) {
     service.lint();
-  } else if (Command.CLEAN_BUILD === command) {
+  } else if (Command.BUILD === command) {
     service.cleanBuild();
   } else if (Command.TEST === command) {
     service.test();
@@ -42,6 +42,8 @@ async function main(args: string[]) {
     await service.continuousIntegration();
   } else if (Command.START === command) {
     service.start();
+  } else if (Command.START_SERVICES === command) {
+    service.startServices();
   } else if (Command.STOP_SERVICES === command) {
     service.stopServices();
   } else if (Command.CLEAN_RESTART_SERVICES === command) {
@@ -50,9 +52,9 @@ async function main(args: string[]) {
     service.clean();
   } else if (Command.DEPENDENCY_CHECK === command) {
     service.dependencyCheck();
-  } else {
-    const message = `Invalid command: ${args.slice(2).join(' ')}\nTry: ${Object.values(Command).join(', ')}`;
-    return Promise.reject(new Error(message));
+  } else if (Command.HELP === command) {
+    banners.big();
+    service.help();
   }
 
   banners.done();

@@ -5,7 +5,6 @@ import VectorLayer from 'ol/layer/Vector';
 import TileLayer from 'ol/layer/Tile';
 
 describe('MapFactory', () => {
-  // TODO: check that vector layer is enabled
   it('createDefault()', () => {
     const managed = MapFactory.createDefault();
     const internal = managed.getInternal();

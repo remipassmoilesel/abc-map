@@ -1,4 +1,4 @@
-import { AbcStyle } from '../../map/AbcStyle';
+import { AbcStyle } from '../../geo/features/AbcStyle';
 import { MapTool } from '@abc-map/shared-entities';
 
 export interface MapState {

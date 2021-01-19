@@ -2,7 +2,7 @@ import Feature, { FeatureLike } from 'ol/Feature';
 import Style, { StyleFunction } from 'ol/style/Style';
 import { Circle, Fill, Stroke } from 'ol/style';
 import { StyleProperties } from '@abc-map/shared-entities';
-import { Logger } from '../utils/Logger';
+import { Logger } from '../../utils/Logger';
 import { AbcStyle } from './AbcStyle';
 import _ from 'lodash';
 import Geometry from 'ol/geom/Geometry';

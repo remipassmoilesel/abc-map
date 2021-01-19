@@ -8,10 +8,11 @@ import { AbcFile } from './AbcFile';
 import { FileFormat, FileFormats } from '../datastore/FileFormats';
 import { Zipper } from '../datastore/Zipper';
 import { GeoJsonReader } from './GeoJsonReader';
+import { WmsDefinitionReader } from './WmsDefinitionReader';
 
 export class DataReader {
   public static create(): DataReader {
-    const readers = [new GpxReader(), new KmlReader(), new ShapefileReader(), new GeoJsonReader()];
+    const readers = [new GpxReader(), new KmlReader(), new ShapefileReader(), new GeoJsonReader(), new WmsDefinitionReader()];
     return new DataReader(readers);
   }
 

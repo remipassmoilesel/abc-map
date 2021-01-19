@@ -2,7 +2,7 @@ import React, { Component, ReactNode } from 'react';
 import { services } from '../../../core/Services';
 import { Logger } from '../../../core/utils/Logger';
 import { connect, ConnectedProps } from 'react-redux';
-import { ToolRegistry } from '../../../core/map/tools/ToolRegistry';
+import { ToolRegistry } from '../../../core/geo/tools/ToolRegistry';
 import { MapTool } from '@abc-map/shared-entities';
 import { MainState } from '../../../core/store/reducer';
 import './ToolSelector.scss';

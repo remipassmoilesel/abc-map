@@ -1,5 +1,5 @@
 import { Task } from '../Task';
-import { ManagedMap } from '../../map/ManagedMap';
+import { ManagedMap } from '../../geo/map/ManagedMap';
 import BaseLayer from 'ol/layer/Base';
 
 export class RemoveLayerTask extends Task {

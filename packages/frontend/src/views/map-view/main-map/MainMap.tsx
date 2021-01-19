@@ -9,7 +9,7 @@ import FeatureFormat from 'ol/format/Feature';
 import Feature from 'ol/Feature';
 import Geometry from 'ol/geom/Geometry';
 import { LayerProperties } from '@abc-map/shared-entities';
-import { ManagedMap } from '../../../core/map/ManagedMap';
+import { ManagedMap } from '../../../core/geo/map/ManagedMap';
 import './MainMap.scss';
 
 export const logger = Logger.get('MainMap.ts', 'debug');
@@ -89,6 +89,7 @@ class MainMap extends Component<Props, State> {
     layer.set(LayerProperties.Name, ev.file.name);
 
     map.addLayer(layer);
+    map.setActiveLayer(layer);
     map.getInternal().getView().fit(source.getExtent());
   };
 }
