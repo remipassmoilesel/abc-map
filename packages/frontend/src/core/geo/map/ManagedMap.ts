@@ -1,5 +1,5 @@
 import { Map } from 'ol';
-import { AbcProjection, AbcProperties, LayerProperties, BaseMetadata } from '@abc-map/shared-entities';
+import { AbcProjection, AbcProperties, LayerProperties, BaseMetadata, LayerType } from '@abc-map/shared-entities';
 import BaseLayer from 'ol/layer/Base';
 import VectorLayer from 'ol/layer/Vector';
 import * as _ from 'lodash';
@@ -12,6 +12,7 @@ import { Logger } from '../../utils/Logger';
 import { AbstractTool } from '../tools/AbstractTool';
 import { LayerFactory } from './LayerFactory';
 import { LayerMetadataHelper } from './LayerMetadataHelper';
+import TileLayer from 'ol/layer/Tile';
 
 export const logger = Logger.get('ManagedMap.ts', 'debug');
 
@@ -200,6 +201,18 @@ export class ManagedMap {
 
   public getSizeObserver(): ResizeObserver | undefined {
     return this.sizeObserver;
+  }
+
+  public containsCredentials(): boolean {
+    const withCredentials = this.internal
+      .getLayers()
+      .getArray()
+      .filter((lay) => LayerMetadataHelper.getCommons(lay)?.type === LayerType.Wms)
+      .find((lay) => {
+        const meta = LayerMetadataHelper.getWmsMetadata(lay as TileLayer);
+        return meta?.auth?.username && meta?.auth?.password;
+      });
+    return !!withCredentials;
   }
 
   public setLayerVisible(layer: BaseLayer, value: boolean) {

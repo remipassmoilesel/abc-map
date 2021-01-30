@@ -11,9 +11,15 @@ export class Env {
     return this.getVar('WMS_PASSWORD');
   }
 
+  public static projectPassword(): string {
+    return this.getVar('PROJECT_PASSWORD');
+  }
+
   private static getVar(name: string): string {
     const value = Cypress.env(name);
-    expect(value, name + ' variable must be defined, please check README.md').not.undefined;
+    const message = `${name} variable must be defined, please check README.md`;
+    expect(value, message).not.undefined;
+    expect(value, message).not.empty;
     return value;
   }
 }

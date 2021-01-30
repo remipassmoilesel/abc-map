@@ -31,7 +31,7 @@ function serviceFactory(): Services {
 
   const uiService = new UiService();
   const geoService = new GeoService(externalClient);
-  const projectService = new ProjectService(apiClient, mainStore, geoService);
+  const projectService = new ProjectService(apiClient, mainStore, geoService, uiService);
   const authenticationService = new AuthenticationService(apiClient, mainStore);
   const historyService = HistoryService.create();
   const dataStoreService = new DatastoreService(apiClient, downloadClient);

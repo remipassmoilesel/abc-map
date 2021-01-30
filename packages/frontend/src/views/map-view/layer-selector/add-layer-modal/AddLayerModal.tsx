@@ -3,7 +3,7 @@ import { Modal } from 'react-bootstrap';
 import { services } from '../../../../core/Services';
 import { HistoryKey } from '../../../../core/history/HistoryKey';
 import { AddLayerTask } from '../../../../core/history/tasks/AddLayerTask';
-import { AddLayerType, AddLayerTypes } from './AddLayerType';
+import { LabelledLayerTypes, LabelledLayerType } from './LabelledLayerTypes';
 import WmsSettingsPanel from './wms/WmsSettingsPanel';
 import { Logger } from '../../../../core/utils/Logger';
 import { Link } from 'react-router-dom';
@@ -17,7 +17,7 @@ interface Props {
 }
 
 interface State {
-  layerType: AddLayerType;
+  layerType: LabelledLayerType;
   wms?: WmsDefinition;
 }
 
@@ -27,7 +27,7 @@ class AddLayerModal extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      layerType: AddLayerTypes.Vector,
+      layerType: LabelledLayerTypes.Vector,
     };
   }
 
@@ -37,9 +37,9 @@ class AddLayerModal extends Component<Props, State> {
     }
 
     const options = this.getOptions();
-    const wmsSelected = this.state.layerType.id === AddLayerTypes.Wms.id;
+    const wmsSelected = this.state.layerType.id === LabelledLayerTypes.Wms.id;
     return (
-      <Modal show={this.props.visible} onHide={this.props.onHide}>
+      <Modal show={this.props.visible} onHide={this.props.onHide} backdrop={'static'}>
         <Modal.Header closeButton>
           <Modal.Title>Ajouter une couche</Modal.Title>
         </Modal.Header>
@@ -58,10 +58,10 @@ class AddLayerModal extends Component<Props, State> {
           {wmsSelected && <WmsSettingsPanel onChange={this.handleWmsSettingsChanged} />}
 
           <div className={'d-flex justify-content-end mt-3'}>
-            <button className={'btn btn-secondary mr-3'} onClick={this.props.onHide}>
+            <button className={'btn btn-secondary mr-3'} onClick={this.handleCancel}>
               Annuler
             </button>
-            <button disabled={!this.isAddAllowed()} className={'btn btn-primary'} onClick={this.handleAdd} data-cy={'add-layer-confirm'}>
+            <button disabled={!this.isAddAllowed()} className={'btn btn-primary'} onClick={this.handleConfirm} data-cy={'add-layer-confirm'}>
               Ajouter
             </button>
           </div>
@@ -70,22 +70,29 @@ class AddLayerModal extends Component<Props, State> {
     );
   }
 
-  private handleAdd = () => {
+  private handleConfirm = () => {
     const selected = this.state.layerType;
-    if (AddLayerTypes.Vector.id === selected.id) {
+    if (LabelledLayerTypes.Vector.id === selected.id) {
       this.newVectorLayer();
-    } else if (AddLayerTypes.Osm.id === selected.id) {
+    } else if (LabelledLayerTypes.Osm.id === selected.id) {
       this.newOsmLayer();
-    } else if (AddLayerTypes.Wms.id === selected.id) {
+    } else if (LabelledLayerTypes.Wms.id === selected.id) {
       this.newWmsLayer();
     } else {
-      this.services.ui.toasts.featureNotReady();
+      this.services.ui.toasts.genericError();
     }
+
+    this.setState({ layerType: LabelledLayerTypes.Vector, wms: undefined });
+    this.props.onHide();
+  };
+
+  private handleCancel = () => {
+    this.setState({ layerType: LabelledLayerTypes.Vector, wms: undefined });
     this.props.onHide();
   };
 
   private getOptions(): ReactNode[] {
-    return AddLayerTypes.All.map((type) => {
+    return LabelledLayerTypes.All.map((type) => {
       return (
         <option key={type.id} value={type.id}>
           {type.label}
@@ -96,7 +103,7 @@ class AddLayerModal extends Component<Props, State> {
 
   private handleLayerTypeChanged = (ev: ChangeEvent<HTMLSelectElement>) => {
     const value = ev.target.value;
-    const layerType = AddLayerTypes.find(value);
+    const layerType = LabelledLayerTypes.find(value);
     if (!layerType) {
       return this.services.ui.toasts.genericError();
     }
@@ -139,7 +146,7 @@ class AddLayerModal extends Component<Props, State> {
 
   // TODO: we should return an explanation and display it
   private isAddAllowed(): boolean {
-    if (this.state.layerType !== AddLayerTypes.Wms) {
+    if (this.state.layerType !== LabelledLayerTypes.Wms) {
       return true;
     }
     const urlIsDefined = !!this.state.wms?.url;

@@ -1,5 +1,5 @@
 import { Logger } from '../utils/Logger';
-import { InternalEvent, ModalEvent, ModalEventListener, ModalEventType, RenameModalClosedEvent } from './Modals.types';
+import { InternalEvent, ModalEvent, ModalEventListener, ModalEventType, PasswordModalClosedEvent, RenameModalClosedEvent } from './Modals.types';
 
 const logger = Logger.get('Modals.ts', 'warn');
 
@@ -22,6 +22,20 @@ export class Modals {
 
       this.addListener(ModalEventType.RenameClosed, listener);
       this.dispatch({ type: ModalEventType.ShowRename, title, message, value });
+    });
+  }
+
+  public passwordModal(title: string, message: string): Promise<PasswordModalClosedEvent> {
+    return new Promise((resolve) => {
+      const listener: ModalEventListener = (ev) => {
+        if (ev.type === ModalEventType.PasswordClosed) {
+          this.removeListener(ModalEventType.PasswordClosed, listener);
+          resolve(ev);
+        }
+      };
+
+      this.addListener(ModalEventType.PasswordClosed, listener);
+      this.dispatch({ type: ModalEventType.ShowPassword, title, message });
     });
   }
 

@@ -1,3 +1,5 @@
+import { Env } from './Env';
+
 export class LayerSelector {
   public static getNames(): Cypress.Chainable<string[]> {
     return cy.get('[data-cy=layers-list] .abc-layer-item').then((elem) => {
@@ -36,5 +38,33 @@ export class LayerSelector {
       .click()
       .get('[data-cy=add-layer-confirm]')
       .click();
+  }
+
+  public static addWmsLayerWithCredentials(): Cypress.Chainable<any> {
+    return (
+      cy
+        .get('[data-cy=add-layer]')
+        .click()
+        .get('[data-cy=add-layer-type]')
+        .select('Couche distante (WMS)')
+        .get('[data-cy=add-layer-confirm]')
+        .get('[data-cy=wms-settings-url]')
+        .clear()
+        .type(Env.wmsUrl())
+        .get('[data-cy=wms-settings-username]')
+        .clear()
+        .type(Env.wmsUsername())
+        .get('[data-cy=wms-settings-password]')
+        .clear()
+        .type(Env.wmsPassword())
+        // Get capabilities, select remote layer then add
+        .get('[data-cy=wms-settings-capabilities]')
+        .click()
+        .get('[data-cy=wms-layer-item]')
+        .eq(2)
+        .click()
+        .get('[data-cy=add-layer-confirm]')
+        .click()
+    );
   }
 }

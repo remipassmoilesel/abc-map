@@ -71,7 +71,7 @@ class ProjectControls extends Component<Props, State> {
           </button>
         </div>
         <div className={'control-item'}>
-          <button onClick={this.exportProject} type={'button'} className={'btn btn-link'} data-cy={'export-project'}>
+          <button onClick={this.exportAndDownloadProject} type={'button'} className={'btn btn-link'} data-cy={'export-project'}>
             <i className={'fa fa-download mr-2'} />
             Exporter le projet
           </button>
@@ -112,9 +112,13 @@ class ProjectControls extends Component<Props, State> {
     }
 
     this.services.ui.toasts.info('Enregistrement en cours ...');
-    this.services.project
+    return this.services.project
       .exportCurrentProject()
-      .then((project) => this.services.project.save(project))
+      .then((project) => {
+        if (project) {
+          return this.services.project.save(project);
+        }
+      })
       .then(() => {
         this.services.ui.toasts.info('Projet enregistré !');
         this.updateRecentProjects();
@@ -132,13 +136,15 @@ class ProjectControls extends Component<Props, State> {
     });
   }
 
-  private exportProject = () => {
+  private exportAndDownloadProject = () => {
     this.services.ui.toasts.info('Export en cours ...');
-    this.services.project
+    return this.services.project
       .exportCurrentProject()
       .then((project) => {
-        this.services.ui.toasts.info('Export terminé !');
-        this.downloadProject(project);
+        if (project) {
+          this.services.ui.toasts.info('Export terminé !');
+          this.downloadProject(project);
+        }
       })
       .catch((err) => {
         logger.error(err);
