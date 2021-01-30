@@ -6,6 +6,7 @@ import VectorSource from 'ol/source/Vector';
 import Geometry from 'ol/geom/Geometry';
 import { Map } from 'ol';
 import { FeatureHelper } from '../features/FeatureHelper';
+import Icon from '../../../assets/tool-icons/selection.svg';
 
 export class Selection extends AbstractTool {
   public getId(): MapTool {
@@ -13,7 +14,7 @@ export class Selection extends AbstractTool {
   }
 
   public getIcon(): string {
-    return 'SL';
+    return Icon;
   }
 
   public getLabel(): string {

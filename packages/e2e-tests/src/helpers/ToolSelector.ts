@@ -6,7 +6,7 @@ export class ToolSelector {
   }
 
   public static getActive(): Cypress.Chainable<MapTool | undefined> {
-    return cy.get('[data-cy=tool-selector] .btn-primary').then((elem) => {
+    return cy.get('[data-cy=tool-selector] .active').then((elem) => {
       const name = (elem.data()['cy'] || '').substr('tool-'.length);
       return Object.values(MapTool).find((t) => t.toLocaleLowerCase() === name) as MapTool;
     });
