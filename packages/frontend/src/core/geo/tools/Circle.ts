@@ -6,6 +6,7 @@ import GeometryType from 'ol/geom/GeometryType';
 import { onlyMainButton } from './common-conditions';
 import VectorSource from 'ol/source/Vector';
 import Geometry from 'ol/geom/Geometry';
+import Icon from '../../../assets/tool-icons/circle.svg';
 
 export class Circle extends AbstractTool {
   public getId(): MapTool {
@@ -13,7 +14,7 @@ export class Circle extends AbstractTool {
   }
 
   public getIcon(): string {
-    return 'CL';
+    return Icon;
   }
 
   public getLabel(): string {

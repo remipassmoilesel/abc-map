@@ -32,8 +32,20 @@ class ToolSelector extends Component<Props, {}> {
   }
 
   public render(): ReactNode {
-    const buttons = ToolRegistry.getAll().map((tool) => {
-      const classes = tool.getId() === this.props.currentTool ? 'btn btn-primary' : 'btn btn-outline-primary';
+    const buttons = this.getToolButtons();
+
+    return (
+      <div className={'control-block abc-tool-selector'} data-cy={'tool-selector'}>
+        <div className={'mb-2 text-bold'}>Outils de dessin</div>
+        <div className={'tool-selector'}>{buttons}</div>
+      </div>
+    );
+  }
+
+  private getToolButtons(): ReactNode[] {
+    return ToolRegistry.getAll().map((tool) => {
+      const isActive = tool.getId() === this.props.currentTool;
+      const classes = isActive ? 'tool-button active' : 'tool-button';
       return (
         <button
           key={tool.getId()}
@@ -42,17 +54,10 @@ class ToolSelector extends Component<Props, {}> {
           className={classes}
           data-cy={`tool-${tool.getId().toLocaleLowerCase()}`}
         >
-          {/*TODO: create and use icons*/}
-          {tool.getIcon()}
+          <img src={tool.getIcon()} alt={tool.getLabel()} title={tool.getLabel()} />
         </button>
       );
     });
-    return (
-      <div className={'control-block abc-tool-selector'} data-cy={'tool-selector'}>
-        <div>Outils de dessin</div>
-        <div className={'tool-selector'}>{buttons}</div>
-      </div>
-    );
   }
 
   private onToolSelected(toolId: MapTool): void {

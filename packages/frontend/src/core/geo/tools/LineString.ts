@@ -5,6 +5,7 @@ import GeometryType from 'ol/geom/GeometryType';
 import { onlyMainButton } from './common-conditions';
 import VectorSource from 'ol/source/Vector';
 import Geometry from 'ol/geom/Geometry';
+import Icon from '../../../assets/tool-icons/line.svg';
 import { Map } from 'ol';
 
 export class LineString extends AbstractTool {
@@ -13,7 +14,7 @@ export class LineString extends AbstractTool {
   }
 
   public getIcon(): string {
-    return 'LG';
+    return Icon;
   }
 
   public getLabel(): string {

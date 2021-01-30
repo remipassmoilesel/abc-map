@@ -1,7 +1,7 @@
 import { FrontendRoutes } from '@abc-map/shared-entities';
 
 describe('Display', function () {
-  it('Mobile display should warn', function () {
+  it('Too small display should warn', function () {
     cy.viewport(500, 500)
       .visit(FrontendRoutes.map())
       .get('[data-cy=device-warning]')
@@ -12,7 +12,7 @@ describe('Display', function () {
       .should('not.exist');
   });
 
-  it('Desktop display should warn', function () {
+  it('Correct display should warn', function () {
     cy.viewport(1980, 1080)
       .visit(FrontendRoutes.map())
       .wait(1000) // We must wait here in order to let appear modal

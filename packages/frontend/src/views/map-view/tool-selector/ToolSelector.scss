@@ -1,3 +1,4 @@
+@import "src/style/variables";
 
 .abc-tool-selector {
   display: flex;
@@ -8,8 +9,17 @@
     flex-direction: row;
     flex-wrap: wrap;
 
-    .btn {
+    .tool-button {
       margin: 3px;
+      padding: 6px;
+
+      border: solid 1px $primary;
+      background-color: inherit;
+      border-radius: 5px;
+
+      &.active{
+        background-color: $primary;
+      }
     }
   }
 

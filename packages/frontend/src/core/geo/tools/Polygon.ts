@@ -6,6 +6,7 @@ import { onlyMainButton } from './common-conditions';
 import VectorSource from 'ol/source/Vector';
 import Geometry from 'ol/geom/Geometry';
 import { Map } from 'ol';
+import Icon from '../../../assets/tool-icons/polygon.svg';
 
 export class Polygon extends AbstractTool {
   public getId(): MapTool {
@@ -13,7 +14,7 @@ export class Polygon extends AbstractTool {
   }
 
   public getIcon(): string {
-    return 'PL';
+    return Icon;
   }
 
   public getLabel(): string {
