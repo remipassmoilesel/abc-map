@@ -43,17 +43,14 @@ export class GeoService {
     return LayerMetadataHelper.getCommons(layer);
   }
 
-  public exportLayers(map: ManagedMap): AbcLayer[] {
-    return map
-      .getLayers()
-      .map((lay) => {
-        const res = LayerFactory.olLayerToAbcLayer(lay);
-        if (E.isLeft(res)) {
-          throw res.left;
-        }
-        return res.right;
-      })
-      .filter((lay) => !!lay) as AbcLayer[];
+  public async exportLayers(map: ManagedMap, password?: string): Promise<AbcLayer[]> {
+    const result: AbcLayer[] = [];
+    const layers = map.getLayers();
+    for (const layer of layers) {
+      const lay = await LayerFactory.olLayerToAbcLayer(layer, password);
+      result.push(lay);
+    }
+    return result;
   }
 
   public importProject(map: ManagedMap, project: AbcProject): void {

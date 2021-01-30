@@ -1,5 +1,14 @@
 import BaseLayer from 'ol/layer/Base';
-import { AbcLayer, LayerType, PredefinedLayerModel, PredefinedMetadata, VectorMetadata, WmsDefinition, WmsMetadata } from '@abc-map/shared-entities';
+import {
+  AbcLayer,
+  AbcWmsLayer,
+  LayerType,
+  PredefinedLayerModel,
+  PredefinedMetadata,
+  VectorMetadata,
+  WmsDefinition,
+  WmsMetadata,
+} from '@abc-map/shared-entities';
 import { LayerProperties } from '@abc-map/shared-entities';
 import { GeoJSON } from 'ol/format';
 import VectorLayer from 'ol/layer/Vector';
@@ -12,6 +21,7 @@ import { VectorStyles } from '../features/VectorStyles';
 import { tileLoadAuthenticated } from './tileLoadAuthenticated';
 import { Logger } from '../../utils/Logger';
 import { LayerMetadataHelper } from './LayerMetadataHelper';
+import { Encryption } from '../../utils/Encryption';
 
 const logger = Logger.get('LayerFactory.ts');
 
@@ -84,50 +94,57 @@ export class LayerFactory {
   }
 
   // TODO: refactor
-  public static olLayerToAbcLayer(lay: BaseLayer): E.Either<Error, AbcLayer> {
+  public static async olLayerToAbcLayer(lay: BaseLayer, password?: string): Promise<AbcLayer> {
     const commonMeta = LayerMetadataHelper.getCommons(lay);
     if (!commonMeta) {
-      return E.left(new Error('Invalid layer'));
+      return Promise.reject(new Error('Invalid layer'));
     }
     // Predefined layer
     if (LayerType.Predefined === commonMeta.type) {
       const meta = LayerMetadataHelper.getPredefinedMetadata(lay);
       if (!meta) {
-        return E.left(new Error('Invalid predefined layer'));
+        return Promise.reject(new Error('Invalid predefined layer'));
       }
-      return E.right({
+      return {
         type: LayerType.Predefined,
         metadata: meta,
-      });
+      };
     }
     // Vector layer
     else if (LayerType.Vector === commonMeta.type) {
       const meta = LayerMetadataHelper.getVectorMetadata(lay);
       if (!meta) {
-        return E.left(new Error('Invalid vector layer'));
+        return Promise.reject(new Error('Invalid vector layer'));
       }
       const geoJson = new GeoJSON();
       const features = geoJson.writeFeaturesObject((lay as VectorLayer).getSource().getFeatures());
-      return E.right({
+      return {
         type: LayerType.Vector,
         metadata: meta,
         features,
-      });
+      };
     }
 
     // Wms Layer
     else if (LayerType.Wms === commonMeta.type) {
       const meta = LayerMetadataHelper.getWmsMetadata(lay);
       if (!meta) {
-        return E.left(new Error('Invalid wms layer'));
+        return Promise.reject(new Error('Invalid wms layer'));
       }
-      return E.right({
+      const result: AbcWmsLayer = {
         type: LayerType.Wms,
         metadata: meta,
-      });
+      };
+      if (result.metadata.auth?.username && result.metadata.auth?.password) {
+        if (!password) {
+          throw new Error('Master password is require when using credentials');
+        }
+        result.metadata = await Encryption.encryptWmsMetadata(result.metadata, password);
+      }
+      return result;
     }
 
-    return E.left(new Error(`Unhandled layer type: ${commonMeta.type}`));
+    return Promise.reject(new Error(`Unhandled layer type: ${commonMeta.type}`));
   }
 
   // TODO: refactor

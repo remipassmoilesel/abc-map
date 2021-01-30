@@ -1,6 +1,6 @@
 import { LayerFactory } from './LayerFactory';
 import { AbcProperties, LayerProperties, PredefinedLayerProperties, WmsDefinition } from '@abc-map/shared-entities';
-import { AbcLayer, LayerMetadata, AbcPredefinedLayer, AbcVectorLayer, LayerType, PredefinedLayerModel } from '@abc-map/shared-entities';
+import { LayerMetadata, AbcVectorLayer, LayerType, PredefinedLayerModel } from '@abc-map/shared-entities';
 import VectorSource from 'ol/source/Vector';
 import VectorLayer from 'ol/layer/Vector';
 import * as E from 'fp-ts/Either';
@@ -97,16 +97,13 @@ describe('LayerFactory', () => {
   });
 
   describe('olLayerToAbcLayer()', () => {
-    it('with OSM layer', () => {
+    it('with OSM layer', async () => {
       const layer = LayerFactory.newOsmLayer();
       layer.setVisible(false);
       layer.setOpacity(0.5);
       layer.set(LayerProperties.Active, true);
 
-      const abcLayer = LayerFactory.olLayerToAbcLayer(layer);
-      expect(E.isRight(abcLayer)).toBeTruthy();
-
-      const value: AbcPredefinedLayer = (abcLayer as E.Right<AbcLayer>).right as AbcPredefinedLayer;
+      const value = await LayerFactory.olLayerToAbcLayer(layer);
       expect(value.type).toEqual(LayerType.Predefined);
 
       const expectedMetadata: LayerMetadata = {
@@ -121,17 +118,14 @@ describe('LayerFactory', () => {
       expect(value.metadata).toEqual(expectedMetadata);
     });
 
-    it('with vector layer', () => {
+    it('with vector layer', async () => {
       const vectorSource = new VectorSource({ features: TestHelper.sampleFeatures() });
       const layer = LayerFactory.newVectorLayer(vectorSource);
       layer.setVisible(false);
       layer.setOpacity(0.5);
       layer.set(LayerProperties.Active, true);
 
-      const abcLayer = LayerFactory.olLayerToAbcLayer(layer);
-      expect(E.isRight(abcLayer)).toBeTruthy();
-
-      const value: AbcVectorLayer = (abcLayer as E.Right<AbcLayer>).right as AbcVectorLayer;
+      const value: AbcVectorLayer = (await LayerFactory.olLayerToAbcLayer(layer)) as AbcVectorLayer;
       expect(value.type).toEqual(LayerType.Vector);
 
       const expectedMetadata: LayerMetadata = {

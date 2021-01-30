@@ -20,7 +20,7 @@ describe('GeoService', () => {
     service = new GeoService(httpExternalClient(5_000));
   });
 
-  it('exportLayers()', () => {
+  it('exportLayers()', async () => {
     const map = MapFactory.createNaked();
     const osm = service.newOsmLayer();
     const features = service.newVectorLayer(new VectorSource({ features: TestHelper.sampleFeatures() }));
@@ -28,7 +28,7 @@ describe('GeoService', () => {
     map.addLayer(features);
     map.setActiveLayer(features);
 
-    const layers = service.exportLayers(map);
+    const layers = await service.exportLayers(map);
     expect(layers).toHaveLength(2);
 
     expect(layers[0].metadata.type).toEqual(LayerType.Predefined);

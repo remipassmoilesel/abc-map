@@ -1,18 +1,22 @@
-import { AbcProject, FrontendRoutes, LayerType } from '@abc-map/shared-entities';
+import { AbcProject, FrontendRoutes, LayerType, WmsMetadata } from '@abc-map/shared-entities';
 import { Toasts } from '../../helpers/Toasts';
 import { TestHelper } from '../../helpers/TestHelper';
 import { Download } from '../../helpers/Download';
 import { Fixtures } from '../../helpers/Fixtures';
-import 'cypress-file-upload';
 import { MainMap } from '../../helpers/MainMap';
 import { LayerSelector } from '../../helpers/LayerSelector';
+import { Env } from '../../helpers/Env';
+import 'cypress-file-upload';
+
+// TODO: better assertions on project and layers
+// TODO: systematically add features
 
 describe('Project', function () {
   beforeEach(() => {
     TestHelper.init();
   });
 
-  describe('Visitor', function () {
+  describe('As a Visitor', function () {
     it('can create new project', function () {
       cy.visit(FrontendRoutes.map())
         .get('[data-cy=new-project]')
@@ -36,7 +40,7 @@ describe('Project', function () {
         });
     });
 
-    it('cannot save project', function () {
+    it('cannot save project online', function () {
       cy.visit(FrontendRoutes.map()).get('[data-cy=save-project]').click();
       Toasts.assertText('Vous devez être connecté pour enregistrer votre projet');
     });
@@ -56,8 +60,6 @@ describe('Project', function () {
         });
     });
 
-    // TODO: better assertions on project and layers
-    // TODO: add features
     it('can export project', function () {
       cy.visit(FrontendRoutes.map())
         .then(() => LayerSelector.addWmsLayer())
@@ -67,7 +69,7 @@ describe('Project', function () {
         .then(() => Toasts.assertText('Export terminé !'))
         .then(() => Download.textFile('[data-cy=export-project-output]'))
         .then((downloaded) => {
-          return cy.fixture(Fixtures.projects.TEST_1).then((witness) => ({ downloaded, witness }));
+          return cy.fixture(Fixtures.projects.SAMPLE_1).then((witness) => ({ downloaded, witness }));
         })
         .should(({ downloaded, witness }) => {
           const projectA: AbcProject = JSON.parse(downloaded);
@@ -81,19 +83,44 @@ describe('Project', function () {
         });
     });
 
-    // TODO: better assertions on project and layers
+    it('can export project with credentials', function () {
+      cy.visit(FrontendRoutes.map())
+        .then(() => LayerSelector.addWmsLayerWithCredentials())
+        .get('[data-cy=export-project]')
+        .click()
+        .then(() => Toasts.assertText('Export en cours ...'))
+        .get('[data-cy=modal-password-input]')
+        .should('be.empty')
+        .clear()
+        .type(Env.projectPassword())
+        .get('[data-cy=modal-password-confirm]')
+        .click()
+        .then(() => Download.textFile('[data-cy=export-project-output]'))
+        .should((downloaded) => {
+          const projectA: AbcProject = JSON.parse(downloaded);
+          expect(projectA.layers[2].type).equals(LayerType.Wms);
+          expect((projectA.layers[2].metadata as WmsMetadata).url).not.equal(Env.wmsUrl());
+          expect((projectA.layers[2].metadata as WmsMetadata).url).contains('encrypted:');
+          expect((projectA.layers[2].metadata as WmsMetadata).auth?.username).contains('encrypted:');
+          expect((projectA.layers[2].metadata as WmsMetadata).auth?.username).not.equal(Env.wmsUsername());
+          expect((projectA.layers[2].metadata as WmsMetadata).auth?.username).contains('encrypted:');
+          expect((projectA.layers[2].metadata as WmsMetadata).auth?.password).not.equal(Env.wmsPassword());
+          expect((projectA.layers[2].metadata as WmsMetadata).auth?.password).contains('encrypted:');
+        });
+    });
+
     it('can import project', function () {
       cy.visit(FrontendRoutes.map())
         .get('[data-cy=import-project]')
         .click()
         .get('[data-cy=import-project-input]')
-        .attachFile(Fixtures.projects.TEST_1)
+        .attachFile(Fixtures.projects.SAMPLE_1)
         .then(() => Toasts.assertText('Chargement ...'))
         .then(() => Toasts.assertText('Projet importé !'))
         // Check project name
         .get('[data-cy=project-name]')
         .should((elem) => {
-          expect(elem.text()).equal('Projet de test du 28/12/2020');
+          expect(elem.text()).equal('Test project made on 28/12/2020');
         })
         .then(() => MainMap.getReference())
         .should((map) => {
@@ -103,6 +130,53 @@ describe('Project', function () {
           expect(layers[1].type).equal(LayerType.Vector);
           expect(layers[2].type).equal(LayerType.Wms);
         });
+    });
+
+    it('can import project with credentials', function () {
+      cy.visit(FrontendRoutes.map())
+        .get('[data-cy=import-project]')
+        .click()
+        .get('[data-cy=import-project-input]')
+        .attachFile(Fixtures.projects.SAMPLE_2)
+        .then(() => Toasts.assertText('Chargement ...'))
+        .get('[data-cy=modal-password-input]')
+        .should('be.empty')
+        .type(Env.projectPassword())
+        .get('[data-cy=modal-password-confirm]')
+        .click()
+        .then(() => Toasts.assertText('Projet importé !'))
+        // Check project name
+        .get('[data-cy=project-name]')
+        .should((elem) => {
+          expect(elem.text()).equal('Test project with credentials made on 30/01/2021');
+        })
+        .then(() => MainMap.getReference())
+        .should((map) => {
+          const layers = map.getLayersMetadata();
+          expect(layers).length(1);
+          expect(layers[0].type).equal(LayerType.Wms);
+        });
+    });
+
+    it('password modal do not keep password in state', function () {
+      cy.visit(FrontendRoutes.map())
+        .get('[data-cy=import-project]')
+        .click()
+        .get('[data-cy=import-project-input]')
+        .attachFile(Fixtures.projects.SAMPLE_2)
+        .then(() => Toasts.assertText('Chargement ...'))
+        .get('[data-cy=modal-password-input]')
+        .should('be.empty')
+        .type(Env.projectPassword())
+        .get('[data-cy=modal-password-cancel]')
+        .click()
+        .get('[data-cy=import-project]')
+        .click()
+        .get('[data-cy=import-project-input]')
+        .attachFile(Fixtures.projects.SAMPLE_2)
+        .then(() => Toasts.assertText('Chargement ...'))
+        .get('[data-cy=modal-password-input]')
+        .should('be.empty');
     });
   });
 });

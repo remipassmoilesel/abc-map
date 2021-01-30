@@ -2,23 +2,28 @@ import { logger, ProjectService } from './ProjectService';
 import { GeoService } from '../geo/GeoService';
 import { ProjectFactory } from './ProjectFactory';
 import { ProjectActions } from '../store/project/actions';
-import { AbcLayer } from '@abc-map/shared-entities';
+import { AbcLayer, AbcProject } from '@abc-map/shared-entities';
 import { TestHelper } from '../utils/TestHelper';
 import { MapFactory } from '../geo/map/MapFactory';
 import { MainStore, storeFactory } from '../store/store';
+import { UiService } from '../ui/UiService';
+import { ManagedMap } from '../geo/map/ManagedMap';
 jest.mock('../geo/GeoService');
+jest.mock('../ui/UiService');
 
 logger.disable();
 
 describe('ProjectService', function () {
   let store: MainStore;
   let geoServiceMock: GeoService;
+  let uiServiceMock: UiService;
   let projectService: ProjectService;
 
   beforeEach(() => {
     store = storeFactory();
     geoServiceMock = new GeoService({} as any);
-    projectService = new ProjectService({} as any, store, geoServiceMock);
+    uiServiceMock = new UiService();
+    projectService = new ProjectService({} as any, store, geoServiceMock, uiServiceMock);
   });
 
   it('exportCurrentProject() should export project', async function () {
@@ -30,9 +35,14 @@ describe('ProjectService', function () {
     store.dispatch(ProjectActions.newLayout(layouts[1]));
 
     const layers: AbcLayer[] = [TestHelper.sampleOsmLayer(), TestHelper.sampleVectorLayer()];
-    geoServiceMock.exportLayers = () => layers;
+    geoServiceMock.getMainMap = () =>
+      ({
+        containsCredentials: () => false,
+      } as ManagedMap);
+    geoServiceMock.exportLayers = () => Promise.resolve(layers);
 
-    const project = await projectService.exportCurrentProject();
+    const project = (await projectService.exportCurrentProject()) as AbcProject;
+    expect(project).toBeDefined();
     expect(project.metadata).toEqual(metadata);
     expect(project.layers).toEqual(layers);
     expect(project.layouts).toEqual(layouts);

@@ -14,7 +14,7 @@ import { Logger } from '../../utils/Logger';
 import VectorLayer from 'ol/layer/Vector';
 import TileLayer from 'ol/layer/Tile';
 
-export const logger = Logger.get('LayerMetadata.ts');
+export const logger = Logger.get('LayerMetadataHelper.ts');
 
 export class LayerMetadataHelper {
   public static setCommons(layer: BaseLayer, props: BaseMetadata): void {

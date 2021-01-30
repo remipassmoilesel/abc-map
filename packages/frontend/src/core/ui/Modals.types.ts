@@ -1,6 +1,8 @@
 export enum ModalEventType {
   ShowRename = 'ShowRename',
   RenameClosed = 'RenameClosed',
+  ShowPassword = 'ShowPassword',
+  PasswordClosed = 'PasswordClosed',
 }
 
 export enum ModalStatus {
@@ -21,7 +23,19 @@ export interface RenameModalClosedEvent {
   status: ModalStatus;
 }
 
-export declare type ModalEvent = ShowRenameModalEvent | RenameModalClosedEvent;
+export interface ShowPasswordModalEvent {
+  type: ModalEventType.ShowPassword;
+  title: string;
+  message: string;
+}
+
+export interface PasswordModalClosedEvent {
+  type: ModalEventType.PasswordClosed;
+  value: string;
+  status: ModalStatus;
+}
+
+export declare type ModalEvent = ShowRenameModalEvent | RenameModalClosedEvent | ShowPasswordModalEvent | PasswordModalClosedEvent;
 
 export class InternalEvent extends Event {
   constructor(type: ModalEventType, public readonly payload: ModalEvent) {

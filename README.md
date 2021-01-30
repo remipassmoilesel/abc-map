@@ -1,40 +1,43 @@
-# Abc-Map 2, réécriture 265
+# Abc-Map 2
+
+Official rewrite, attempt 265 👨‍💻.
 
 <a href="https://gitlab.com/remipassmoilesel/abc-map-2/-/commits/master">
 <img alt="pipeline status" src="https://gitlab.com/remipassmoilesel/abc-map-2/badges/master/pipeline.svg" />
 </a>     
 
-## Installation de développement
 
-    $ sudo apt install docker.io docker-compose nodejs npm
-    $ npm i -g yarn lerna
-    $ abc ci
+## Goals
 
+Abc-Map is a tool for processing geographic information that is easy to understand and use.
 
-## Objectifs
+Use cases:             
 
-- Logiciel de création de cartes, simple à comprendre et utiliser
-- 90% du temps de développement investi sur les fonctionnalités minimales
-- Fonctionne sur un poste de travail Windows, GNU/Linux, Mac
-- Fonctionne sur serveur en multi utilisateur, avec optimisations
-- Support de données de taille limitées dans un premier temps
+- Education
+- Professional uses: tourism, deliveries, etc. 
+- Sports and leisure: hiking, hunting, treasure hunts, ...
+
+More information [here](https://abc-map.fr).
 
 
-## Cas d'utilisation
+## Development installation
 
-- Enseignement des bases de la géo / carto
-- Professionnels: tourisme, itinéraires de livraisons, etc ... 
-- Sports et loisirs: rando, balades, chasse, pêche, vacances, chasses au trésor, ...
+For Debian like and Ubuntu:       
 
+    # Install git, docker and docker-compose
+    $ sudo apt install git docker.io docker-compose
 
-## Fonctionnalités minimales
+    # Install NodeJS and yarn
+    $ curl -L https://git.io/n-install | bash
+    $ npm i -g yarn
 
-- Affichage de couches WMS
-- Import de format courants
-- Dessin de formes
-- Mise en page pour impression
-- Annuler / Refaire
-- Français / anglais
-- Ouverture des anciens formats (abm) ?
+    # Clone source code
+    $ git clone https://gitlab.com/remipassmoilesel/abc-map-2.git
+    $ cd abc-map-2
 
 
+Build then start:      
+
+    $ ./abc-cli bootstrap   # Install all dependencies
+    $ ./abc-cli build       # Build all packages
+    $ ./abc-cli start       # Start application, for development purposes

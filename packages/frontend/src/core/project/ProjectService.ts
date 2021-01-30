@@ -1,6 +1,6 @@
 import { ProjectActions } from '../store/project/actions';
 import { Logger } from '../utils/Logger';
-import { AbcLayout, AbcProject, AbcProjection, AbcProjectMetadata, LayoutFormat } from '@abc-map/shared-entities';
+import { AbcLayout, AbcProject, AbcProjection, AbcProjectMetadata, LayerType, LayoutFormat, WmsMetadata } from '@abc-map/shared-entities';
 import { AxiosInstance } from 'axios';
 import { ProjectFactory } from './ProjectFactory';
 import { GeoService } from '../geo/GeoService';
@@ -8,11 +8,14 @@ import { Abm2Reader } from './Abm2Reader';
 import { ProjectRoutes as Api } from '../http/ApiRoutes';
 import * as uuid from 'uuid';
 import { MainStore } from '../store/store';
+import { UiService } from '../ui/UiService';
+import { ModalStatus } from '../ui/Modals.types';
+import { Encryption } from '../utils/Encryption';
 
 export const logger = Logger.get('ProjectService.ts', 'info');
 
 export class ProjectService {
-  constructor(private httpClient: AxiosInstance, private store: MainStore, private geoService: GeoService) {}
+  constructor(private httpClient: AxiosInstance, private store: MainStore, private geoService: GeoService, private uiService: UiService) {}
 
   public newProject(): void {
     const map = this.geoService.getMainMap();
@@ -25,16 +28,29 @@ export class ProjectService {
     return this.store.getState().project.metadata;
   }
 
-  public async exportCurrentProject(): Promise<AbcProject> {
-    const metadata = this.store.getState().project.metadata;
-    const map = this.geoService.getMainMap();
-    const layers = this.geoService.exportLayers(map);
-    const layouts = this.store.getState().project.layouts;
-    return {
-      metadata,
-      layers,
-      layouts,
+  public async exportCurrentProject(): Promise<AbcProject | undefined> {
+    const exportProject = async (password?: string) => {
+      const metadata = this.store.getState().project.metadata;
+      const map = this.geoService.getMainMap();
+      const layers = await this.geoService.exportLayers(map, password);
+      const layouts = this.store.getState().project.layouts;
+      return {
+        metadata,
+        layers,
+        layouts,
+      };
     };
+
+    if (this.geoService.getMainMap().containsCredentials()) {
+      const message = 'Votre projet contient des identifiants, vous devez choisir un mot de passe pour les protéger.';
+      return this.uiService.modals.passwordModal('Mot de passe principal', message).then((ev) => {
+        if (ModalStatus.Confirmed === ev.status) {
+          return exportProject(ev.value);
+        }
+      });
+    } else {
+      return exportProject();
+    }
   }
 
   public save(project: AbcProject): Promise<void> {
@@ -58,14 +74,31 @@ export class ProjectService {
     });
   }
 
-  public loadProject(project: AbcProject): void {
-    const map = this.geoService.getMainMap();
-    this.geoService.importProject(map, project);
-    this.store.dispatch(ProjectActions.loadProject(project));
-  }
-
   public loadProjectFromFile(file: File): Promise<void> {
     return Abm2Reader.fromFile(file).then((pr) => this.loadProject(pr));
+  }
+
+  public async loadProject(project: AbcProject): Promise<void> {
+    const load = async (password?: string) => {
+      const map = this.geoService.getMainMap();
+      let _project = project;
+      if (password) {
+        _project = await Encryption.decryptProject(project, password);
+      }
+      this.geoService.importProject(map, _project);
+      this.store.dispatch(ProjectActions.loadProject(_project));
+    };
+
+    if (this.containsCredentials(project)) {
+      const title = 'Mot de passe';
+      const message = 'Ce projet contient des identifiants, veuillez saisir le mot de passe maitre du projet';
+      return this.uiService.modals.passwordModal(title, message).then((ev) => {
+        if (ModalStatus.Confirmed === ev.status) {
+          return load(ev.value);
+        }
+      });
+    }
+    return load();
   }
 
   public newLayout(name: string, format: LayoutFormat, center: number[], resolution: number, projection: AbcProjection): AbcLayout {
@@ -96,5 +129,14 @@ export class ProjectService {
 
   public renameProject(name: string) {
     this.store.dispatch(ProjectActions.renameProject(name));
+  }
+
+  private containsCredentials(project: AbcProject): boolean {
+    const wmsLayers = project.layers.filter((lay) => LayerType.Wms === lay.type);
+    const layerWithAuth = wmsLayers.find((lay) => {
+      const metadata: WmsMetadata = lay.metadata as WmsMetadata;
+      return metadata.auth?.username && metadata.auth?.password;
+    });
+    return !!layerWithAuth;
   }
 }

@@ -16,7 +16,8 @@ import { services } from './core/Services';
 import ConfirmAccount from './views/confirm-account/ConfirmAccount';
 import { Env } from './core/utils/Env';
 import { mainStore } from './core/store/store';
-import RenameModal from './components/rename-modal/RenameModal';
+import RenameModal from './components/modals/RenameModal';
+import PasswordModal from './components/modals/PasswordModal';
 
 class App extends Component<{}, {}> {
   private services = services();
@@ -39,6 +40,7 @@ class App extends Component<{}, {}> {
           </Switch>
           <ToastContainer className={'toast-container'} />
           <RenameModal />
+          <PasswordModal />
         </BrowserRouter>
       </Provider>
     );
