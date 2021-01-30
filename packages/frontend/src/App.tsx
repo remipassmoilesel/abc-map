@@ -16,8 +16,9 @@ import { services } from './core/Services';
 import ConfirmAccount from './views/confirm-account/ConfirmAccount';
 import { Env } from './core/utils/Env';
 import { mainStore } from './core/store/store';
-import RenameModal from './components/modals/RenameModal';
-import PasswordModal from './components/modals/PasswordModal';
+import RenameModal from './components/rename-modal/RenameModal';
+import PasswordModal from './components/password-modal/PasswordModal';
+import DeviceWarningModal from './components/device-warning-modal/DeviceWarningModal';
 
 class App extends Component<{}, {}> {
   private services = services();
@@ -41,6 +42,7 @@ class App extends Component<{}, {}> {
           <ToastContainer className={'toast-container'} />
           <RenameModal />
           <PasswordModal />
+          <DeviceWarningModal />
         </BrowserRouter>
       </Provider>
     );
