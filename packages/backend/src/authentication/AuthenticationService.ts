@@ -1,4 +1,5 @@
 import * as jwt from 'jsonwebtoken';
+import * as express from 'express';
 import { PasswordHasher } from './PasswordHasher';
 import {
   AbcUser,
@@ -20,6 +21,15 @@ import { SmtpClient } from '../utils/SmtpClient';
 import { AbstractService } from '../services/AbstractService';
 import { MongoError } from 'mongodb';
 import { ErrorCodes } from '../mongodb/ErrorCodes';
+import * as passportLocal from 'passport-local';
+import * as passport from 'passport';
+import { Logger } from '../utils/Logger';
+import * as passportJWT from 'passport-jwt';
+const JWTStrategy = passportJWT.Strategy;
+const ExtractJWT = passportJWT.ExtractJwt;
+const LocalStrategy = passportLocal.Strategy;
+
+const logger = Logger.get('AuthenticationService');
 
 export interface Authentication {
   status: AuthenticationStatus;
@@ -163,5 +173,44 @@ export class AuthenticationService extends AbstractService {
         return resolve(true);
       });
     });
+  }
+
+  public initAuthentication(router: express.Router): void {
+    router.use(passport.initialize());
+
+    passport.use(
+      new JWTStrategy(
+        {
+          jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+          secretOrKey: this.config.authentication.jwtSecret,
+          jsonWebTokenOptions: {
+            algorithms: [this.config.authentication.jwtAlgorithm],
+          },
+        },
+        // Token check is done before this method, see: https://github.com/mikenicholson/passport-jwt
+        (jwtPayload: Token, done) => done(null, jwtPayload.user)
+      )
+    );
+
+    passport.use(
+      new LocalStrategy({ usernameField: 'email', passwordField: 'password' }, async (email, password, done) => {
+        this.authenticate(email, password)
+          .then((result) => {
+            if (AuthenticationStatus.Successful === result.status) {
+              return done(null, result.user);
+            } else {
+              return done(null, result.user, { message: result.status });
+            }
+          })
+          .catch((err) => {
+            logger.error('Error while authenticating user: ', err);
+            return done(err, false);
+          });
+      })
+    );
+  }
+
+  public authenticationMiddleware(router: express.Router): void {
+    router.use(passport.authenticate('jwt', { session: false }));
   }
 }

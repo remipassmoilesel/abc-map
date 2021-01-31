@@ -2,11 +2,14 @@ import { MongodbClient } from '../mongodb/MongodbClient';
 import { MongoCollection } from '../mongodb/MongoCollection';
 import { AbcProject } from '@abc-map/shared-entities';
 import { AbstractService } from '../services/AbstractService';
+import { Logger } from '../utils/Logger';
 
 export enum HealthStatus {
   HEALTHY = 'HEALTHY',
   UNHEALTHY = 'UNHEALTHY',
 }
+
+const logger = Logger.get('HealthCheckService.ts');
 
 export class HealthCheckService extends AbstractService {
   public static create(client: MongodbClient): HealthCheckService {
@@ -35,6 +38,9 @@ export class HealthCheckService extends AbstractService {
       .maxTimeMS(5_000)
       .toArray()
       .then(() => true)
-      .catch(() => false);
+      .catch((err) => {
+        logger.error('Health check error: ', err);
+        return false;
+      });
   }
 }
