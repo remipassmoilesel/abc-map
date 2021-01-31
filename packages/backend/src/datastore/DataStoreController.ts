@@ -23,23 +23,28 @@ export class DataStoreController extends Controller {
     return app;
   }
 
-  public list = (): Promise<AbcArtefact[]> => {
-    return this.services.datastore.list(0, 50);
+  public list = async (req: express.Request, res: express.Response): Promise<void> => {
+    const result: AbcArtefact[] = await this.services.datastore.list(0, 50);
+    res.status(200).json(result);
   };
 
-  public search = (req: express.Request): Promise<AbcArtefact[]> => {
+  public search = async (req: express.Request, res: express.Response): Promise<void> => {
     const query: string = req.query.query as string;
     if (!query) {
       return Promise.reject(new Error('Query is mandatory'));
     }
-    return this.services.datastore.search(query, 0, 50);
+
+    const result: AbcArtefact[] = await this.services.datastore.search(query, 0, 50);
+    res.status(200).json(result);
   };
 
-  public getById = (req: express.Request): Promise<AbcArtefact | undefined> => {
+  public getById = async (req: express.Request, res: express.Response): Promise<void> => {
     const id = req.params.artefactId;
     if (!id) {
       return Promise.reject(new Error('Artefact id is mandatory'));
     }
-    return this.services.datastore.findById(id);
+
+    const result: AbcArtefact | undefined = await this.services.datastore.findById(id);
+    res.status(200).json(result);
   };
 }

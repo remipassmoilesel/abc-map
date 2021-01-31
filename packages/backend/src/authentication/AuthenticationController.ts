@@ -10,13 +10,12 @@ import {
   AuthenticationResponse,
   AuthenticationStatus,
   RegistrationRequest,
-  RegistrationResponse,
 } from '@abc-map/shared-entities';
 import { asyncHandler } from '../server/asyncHandler';
 import * as passport from 'passport';
-import * as passportLocal from 'passport-local';
 import { Logger } from '../utils/Logger';
 import { IVerifyOptions } from 'passport-local';
+import { Status } from '../server/Status';
 
 const logger = Logger.get('AuthenticationController.ts');
 
@@ -31,31 +30,30 @@ export class AuthenticationController extends Controller {
 
   public getRouter(): Router {
     const app = express();
-    this.setupLocalStrategy();
-
     app.post('/register', asyncHandler(this.register));
     app.post('/confirm-account', asyncHandler(this.confirmAccount));
     app.post('/login', this.login);
     return app;
   }
 
-  public register = (req: express.Request): Promise<RegistrationResponse> => {
+  public register = async (req: express.Request, res: express.Response): Promise<void> => {
     const request: RegistrationRequest = req.body;
     if (!request || !request.email || !request.password) {
       return Promise.reject(new Error('Invalid request'));
     }
 
-    return this.services.authentication.register(request).then((status) => ({ status: status }));
+    const result: Status = await this.services.authentication.register(request).then((status) => ({ status: status }));
+    res.status(200).json(result);
   };
 
   // FIXME: here we should not return http code 200 in case of error
-  public confirmAccount = (req: express.Request): Promise<AccountConfirmationResponse> => {
+  public confirmAccount = async (req: express.Request, res: express.Response): Promise<void> => {
     const request: AccountConfirmationRequest = req.body;
     if (!request) {
       return Promise.reject(new Error('Invalid request'));
     }
 
-    return this.services.authentication
+    const result: AccountConfirmationResponse = await this.services.authentication
       .confirmAccount(request.userId, request.secret)
       .then(async (status) => {
         const user = await this.services.user.findById(request.userId);
@@ -66,6 +64,8 @@ export class AuthenticationController extends Controller {
         return { status, token };
       })
       .catch((error) => ({ status: AccountConfirmationStatus.Failed, error: error.getMessage() || 'Error during confirmation' }));
+
+    res.status(200).json(result);
   };
 
   public login = (req: express.Request, res: express.Response, next: NextFunction): void => {
@@ -84,25 +84,4 @@ export class AuthenticationController extends Controller {
       }
     })(req, res, next);
   };
-
-  private setupLocalStrategy(): void {
-    const LocalStrategy = passportLocal.Strategy;
-    passport.use(
-      new LocalStrategy({ usernameField: 'email', passwordField: 'password' }, async (email, password, done) => {
-        this.services.authentication
-          .authenticate(email, password)
-          .then((result) => {
-            if (AuthenticationStatus.Successful === result.status) {
-              return done(null, result.user);
-            } else {
-              return done(null, result.user, { message: result.status });
-            }
-          })
-          .catch((err) => {
-            logger.error('Error while authenticating user: ', err);
-            return done(err, false);
-          });
-      })
-    );
-  }
 }

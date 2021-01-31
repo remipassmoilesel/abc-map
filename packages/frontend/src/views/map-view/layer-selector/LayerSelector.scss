@@ -1,3 +1,4 @@
+@import "src/style/variables";
 
 $list-height: 140px;
 
@@ -19,6 +20,11 @@ $list-height: 140px;
     button {
       margin: 3px;
       width: 45px;
+      outline: 0;
+    }
+
+    .fa {
+      color: $icon-color;
     }
   }
 

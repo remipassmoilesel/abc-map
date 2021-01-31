@@ -3,7 +3,6 @@ import { Router } from 'express';
 import { Controller } from '../server/Controller';
 import { Services } from '../services/services';
 import { asyncHandler } from '../server/asyncHandler';
-import { Status } from '../server/Status';
 
 export class UserController extends Controller {
   constructor(private services: Services) {
@@ -21,7 +20,7 @@ export class UserController extends Controller {
   }
 
   // TODO: implement
-  public async updateUser(): Promise<Status> {
+  public async updateUser(): Promise<void> {
     return Promise.reject(new Error('Not implemented'));
   }
 }

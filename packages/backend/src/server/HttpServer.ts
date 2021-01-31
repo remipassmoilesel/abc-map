@@ -4,23 +4,23 @@ import * as bodyParser from 'body-parser';
 import { Logger } from '../utils/Logger';
 import { HttpHandlers } from './HttpHandlers';
 import { Config } from '../config/Config';
-import { Controller } from './Controller';
 import { Services } from '../services/services';
 
 const logger = Logger.get('HttpServer.ts', 'info');
 
 export class HttpServer {
-  public static create(config: Config, publicControllers: Controller[], privateControllers: Controller[], services: Services): HttpServer {
-    const handlers = new HttpHandlers(config, services, publicControllers, privateControllers);
-    return new HttpServer(config, handlers, services);
+  public static create(config: Config, services: Services): HttpServer {
+    const handlers = HttpHandlers.create(config, services);
+    return new HttpServer(config, services, handlers);
   }
 
   private app: Express;
 
-  constructor(private config: Config, private httpHandlers: HttpHandlers, private services: Services) {
+  constructor(private config: Config, private services: Services, private httpHandlers: HttpHandlers) {
     this.app = express();
+    this.app.use(bodyParser.json({ limit: '20mb' }));
+    this.app.disable('x-powered-by');
 
-    this.setupHttpServer();
     const router = this.httpHandlers.getRouter();
 
     this.app.use('/api', router);
@@ -42,10 +42,5 @@ export class HttpServer {
       this.app.on('error', reject);
       this.app.on('close', () => resolve());
     });
-  }
-
-  private setupHttpServer(): void {
-    this.app.use(bodyParser.json({ limit: '20mb' }));
-    this.app.disable('x-powered-by');
   }
 }

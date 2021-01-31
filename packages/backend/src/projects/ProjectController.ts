@@ -25,25 +25,29 @@ export class ProjectController extends Controller {
     return app;
   }
 
-  public save = (req: express.Request): Promise<Status> => {
+  public save = async (req: express.Request, res: express.Response): Promise<void> => {
     const project: AbcProject = req.body;
     if (!project) {
       return Promise.reject(new Error('Project is mandatory'));
     }
 
-    return this.services.project.save(project).then(() => ({ status: 'saved' }));
+    const result: Status = await this.services.project.save(project).then(() => ({ status: 'saved' }));
+    res.status(200).json(result);
   };
 
-  // TODO: FIXME: featch and return only metadata
-  public list = (): Promise<AbcProject[]> => {
-    return this.services.project.list(0, 50);
+  // TODO: FIXME: fetch and return only metadata
+  public list = async (req: express.Request, res: express.Response): Promise<void> => {
+    const result: AbcProject[] = await this.services.project.list(0, 50);
+    res.status(200).json(result);
   };
 
-  public getById = (req: express.Request): Promise<AbcProject | undefined> => {
+  public getById = async (req: express.Request, res: express.Response): Promise<void> => {
     const id = req.params.projectId;
     if (!id) {
       return Promise.reject(new Error('Project id is mandatory'));
     }
-    return this.services.project.findById(id);
+
+    const result: AbcProject | undefined = await this.services.project.findById(id);
+    res.status(200).json(result);
   };
 }
