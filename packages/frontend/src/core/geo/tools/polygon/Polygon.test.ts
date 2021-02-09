@@ -1,8 +1,8 @@
-import { MainStore } from '../../store/store';
-import { HistoryService } from '../../history/HistoryService';
+import { MainStore } from '../../../store/store';
+import { HistoryService } from '../../../history/HistoryService';
 import { Map } from 'ol';
 import VectorSource from 'ol/source/Vector';
-import { OlTestHelper } from '../../utils/OlTestHelper';
+import { OlTestHelper } from '../../../utils/OlTestHelper';
 import { Polygon } from './Polygon';
 
 describe('Polygon', () => {

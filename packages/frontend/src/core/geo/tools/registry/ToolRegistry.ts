@@ -1,13 +1,13 @@
-import { AbstractTool } from './AbstractTool';
-import { None } from './None';
-import { Point } from './Point';
+import { AbstractTool } from '../AbstractTool';
+import { None } from '../common/None';
+import { Point } from '../point/Point';
 import { MapTool } from '@abc-map/shared-entities';
-import { mainStore } from '../../store/store';
-import { services } from '../../Services';
-import { Circle } from './Circle';
-import { LineString } from './LineString';
-import { Polygon } from './Polygon';
-import { Selection } from './Selection';
+import { mainStore } from '../../../store/store';
+import { services } from '../../../Services';
+import { Circle } from '../circle/Circle';
+import { LineString } from '../line-string/LineString';
+import { Polygon } from '../polygon/Polygon';
+import { Selection } from '../selection/Selection';
 
 export class ToolRegistry {
   public static getAll(): AbstractTool[] {

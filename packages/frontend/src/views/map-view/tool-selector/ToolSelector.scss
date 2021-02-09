@@ -4,18 +4,22 @@
   display: flex;
   flex-direction: column;
 
-  .tool-selector {
+  .tool-list {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0.5em 1em;
 
     .tool-button {
-      margin: 3px;
+      margin: 2px;
       padding: 6px;
 
-      border: solid 1px $secondary;
+      border: solid 2px $secondary;
       background-color: inherit;
-      border-radius: 5px;
+      border-radius: 7px;
 
       outline: 0;
 
@@ -23,6 +27,12 @@
         border: solid 2px $primary;
       }
     }
+  }
+
+  .tool-panel {
+    margin-top: 0.5em;
+    padding-top: 0.5em;
+    border-top: solid silver 1px;
   }
 
 }

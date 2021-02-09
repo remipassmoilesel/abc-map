@@ -1,16 +1,16 @@
-import { AbstractTool } from './AbstractTool';
+import { AbstractTool } from '../AbstractTool';
 import { MapTool } from '@abc-map/shared-entities';
 import { Draw } from 'ol/interaction';
-import { Map } from 'ol';
 import GeometryType from 'ol/geom/GeometryType';
-import { onlyMainButton } from './common-conditions';
+import { onlyMainButton } from '../common/common-conditions';
 import VectorSource from 'ol/source/Vector';
 import Geometry from 'ol/geom/Geometry';
-import Icon from '../../../assets/tool-icons/circle.svg';
+import Icon from '../../../../assets/tool-icons/point.svg';
+import { Map } from 'ol';
 
-export class Circle extends AbstractTool {
+export class Point extends AbstractTool {
   public getId(): MapTool {
-    return MapTool.Circle;
+    return MapTool.Point;
   }
 
   public getIcon(): string {
@@ -18,7 +18,7 @@ export class Circle extends AbstractTool {
   }
 
   public getLabel(): string {
-    return 'Cercles';
+    return 'Point';
   }
 
   public setup(map: Map, source: VectorSource<Geometry>): void {
@@ -26,14 +26,14 @@ export class Circle extends AbstractTool {
 
     const draw = new Draw({
       source,
-      type: GeometryType.CIRCLE,
+      type: GeometryType.POINT,
       condition: onlyMainButton,
       finishCondition: onlyMainButton,
     });
 
-    this.applyStyleAfterDraw(draw);
-    this.setIdAndHistoryOnEnd(draw, source);
-    this.commonModifyInteractions(map, GeometryType.CIRCLE);
+    this.applyStyleOnDrawEnd(draw);
+    this.finalizeOnDrawEnd(draw, source);
+    this.commonModifyInteractions(map, GeometryType.POINT);
 
     map.addInteraction(draw);
     this.interactions.push(draw);

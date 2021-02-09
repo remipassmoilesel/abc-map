@@ -4,10 +4,10 @@ import { Circle, Fill, Stroke } from 'ol/style';
 import { StyleProperties } from '@abc-map/shared-entities';
 import { Logger } from '../../utils/Logger';
 import { AbcStyle } from './AbcStyle';
-import _ from 'lodash';
 import Geometry from 'ol/geom/Geometry';
 import { SelectionStyle } from './SelectionStyle';
 import { FeatureHelper } from './FeatureHelper';
+import { StyleCache } from './StyleCache';
 
 const logger = Logger.get('VectorStyles.ts', 'debug');
 
@@ -21,8 +21,11 @@ const defaults = {
   },
 };
 
-// TODO: test all
 export class VectorStyles {
+  /**
+   * Extract style properties from feature
+   * @param feature
+   */
   public static getProperties(feature: FeatureLike): AbcStyle {
     return {
       fill: {
@@ -35,16 +38,18 @@ export class VectorStyles {
     };
   }
 
+  /**
+   * Set style properties on feature
+   * @param feature
+   * @param style
+   */
   public static setProperties(feature: Feature<Geometry>, style: AbcStyle): void {
     feature.set(StyleProperties.FillColor, style.fill.color);
     feature.set(StyleProperties.StrokeColor, style.stroke.color);
     feature.set(StyleProperties.StrokeWidth, style.stroke.width);
   }
 
-  // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
-  public static styleFactory(feature: FeatureLike, resolution: number): Style | Style[] {
-    const properties = VectorStyles.getProperties(feature);
-
+  public static createStyle(properties: AbcStyle): Style | Style[] {
     const fill = new Fill({ color: properties.fill.color || defaults.fill.color });
     const stroke = new Stroke({
       width: properties.stroke.width || defaults.stroke.width,
@@ -57,30 +62,21 @@ export class VectorStyles {
       radius: 5,
     });
 
-    const olStyle = new Style({ fill, stroke, image });
-
-    logger.debug('Created style: ', { style: olStyle, feature });
-    return olStyle;
+    return new Style({ fill, stroke, image });
   }
 
-  public static cachingStyleFunc(): StyleFunction {
-    const cache: [AbcStyle, Style | Style[]][] = [];
-    const styleFromCache = (properties: AbcStyle): Style | Style[] | undefined => {
-      // TODO: Use composite id instead of equal
-      const found = cache.find((tupl) => _.isEqual(properties, tupl[0]));
-      return found ? found[1] : undefined;
-    };
-
-    return (feature: FeatureLike, resolution: number): Style | Style[] => {
+  public static openLayersStyleFunction(): StyleFunction {
+    const cache: StyleCache = new StyleCache();
+    return (feature: FeatureLike): Style | Style[] => {
       if (feature instanceof Feature && FeatureHelper.isSelected(feature)) {
         return SelectionStyle.getForFeature(feature);
       }
 
-      const styleProperties = VectorStyles.getProperties(feature);
-      let style = styleFromCache(styleProperties);
+      const properties = VectorStyles.getProperties(feature);
+      let style = cache.get(properties);
       if (!style) {
-        style = VectorStyles.styleFactory(feature, resolution);
-        cache.push([styleProperties, style]);
+        style = VectorStyles.createStyle(properties);
+        cache.put(properties, style);
       }
 
       return style;

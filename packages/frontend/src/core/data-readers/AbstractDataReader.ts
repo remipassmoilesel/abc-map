@@ -10,9 +10,9 @@ export abstract class AbstractDataReader {
   public abstract read(files: AbcFile[], projection: AbcProjection): Promise<BaseLayer[]>;
 
   protected generateIdsIfAbsents(features: Feature<Geometry>[]) {
-    features.forEach((feat) => {
-      if (!feat.getId()) {
-        feat.setId(FeatureHelper.generateId());
+    features.forEach((feature) => {
+      if (!feature.getId()) {
+        FeatureHelper.setId(feature);
       }
     });
   }

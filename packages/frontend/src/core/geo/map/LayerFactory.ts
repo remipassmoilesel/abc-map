@@ -46,7 +46,7 @@ export class LayerFactory {
   }
 
   public static newVectorLayer(source?: VectorSource): VectorLayer {
-    const styleFunc = VectorStyles.cachingStyleFunc();
+    const styleFunc = VectorStyles.openLayersStyleFunction();
     const _source = source || new VectorSource();
     const layer = new VectorLayer({ source: _source, style: styleFunc });
 

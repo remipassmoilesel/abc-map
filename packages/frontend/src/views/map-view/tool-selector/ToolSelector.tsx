@@ -2,10 +2,11 @@ import React, { Component, ReactNode } from 'react';
 import { services } from '../../../core/Services';
 import { Logger } from '../../../core/utils/Logger';
 import { connect, ConnectedProps } from 'react-redux';
-import { ToolRegistry } from '../../../core/geo/tools/ToolRegistry';
+import { ToolRegistry } from '../../../core/geo/tools/registry/ToolRegistry';
 import { MapTool } from '@abc-map/shared-entities';
 import { MainState } from '../../../core/store/reducer';
 import './ToolSelector.scss';
+import SelectionPanel from './SelectionPanel';
 
 // TODO: add help for tools
 
@@ -33,11 +34,13 @@ class ToolSelector extends Component<Props, {}> {
 
   public render(): ReactNode {
     const buttons = this.getToolButtons();
+    const toolPanel = this.getToolPanel();
 
     return (
       <div className={'control-block abc-tool-selector'} data-cy={'tool-selector'}>
         <div className={'mb-2 text-bold'}>Outils de dessin</div>
-        <div className={'tool-selector'}>{buttons}</div>
+        <div className={'tool-list'}>{buttons}</div>
+        {toolPanel && <div className={'tool-panel'}>{toolPanel}</div>}
       </div>
     );
   }
@@ -58,6 +61,12 @@ class ToolSelector extends Component<Props, {}> {
         </button>
       );
     });
+  }
+
+  private getToolPanel(): ReactNode | undefined {
+    if (this.props.currentTool === MapTool.Selection) {
+      return <SelectionPanel />;
+    }
   }
 
   private onToolSelected(toolId: MapTool): void {

@@ -87,18 +87,6 @@ export class TestHelper {
     };
   }
 
-  public static sampleStyles(): AbcStyle {
-    return {
-      fill: {
-        color: '#ffffff',
-      },
-      stroke: {
-        color: '#000000',
-        width: 5,
-      },
-    };
-  }
-
   public static sampleArtefact(): AbcArtefact {
     return {
       id: uuid.v4(),
@@ -132,5 +120,17 @@ export class TestHelper {
     return new Promise((resolve) => {
       setTimeout(resolve, timeMs);
     });
+  }
+
+  public static sampleStyleProperties(): AbcStyle {
+    return {
+      stroke: {
+        width: 5,
+        color: 'black',
+      },
+      fill: {
+        color: 'white',
+      },
+    };
   }
 }

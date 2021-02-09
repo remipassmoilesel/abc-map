@@ -5,10 +5,10 @@ import { Map } from 'ol';
 import * as uuid from 'uuid';
 import { logger, ManagedMap } from './ManagedMap';
 import VectorLayer from 'ol/layer/Vector';
-import { ToolRegistry } from '../tools/ToolRegistry';
+import { ToolRegistry } from '../tools/registry/ToolRegistry';
 import { OlTestHelper } from '../../utils/OlTestHelper';
-import { Circle } from '../tools/Circle';
-import { None } from '../tools/None';
+import { Circle } from '../tools/circle/Circle';
+import { None } from '../tools/common/None';
 import { httpExternalClient } from '../../http/HttpClients';
 import TileLayer from 'ol/layer/Tile';
 

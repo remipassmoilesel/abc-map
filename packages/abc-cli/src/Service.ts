@@ -58,7 +58,7 @@ export class Service {
 
   public start(): void {
     this.startServices();
-    this.shell.sync('lerna run start:watch --parallel --no-bail');
+    this.shell.sync('lerna run start:watch --parallel');
   }
 
   public startServices(): void {

@@ -187,7 +187,7 @@ export class ManagedMap {
     }
 
     this.currentTool.setup(this.internal, vectorLayer.getSource());
-    logger.debug(`Activated tool '${this.currentTool.getLabel()}'`);
+    logger.debug(`Activated tool '${this.currentTool.getId()}'`);
     return;
   }
 
@@ -227,5 +227,17 @@ export class ManagedMap {
    */
   private triggerLayerChange(): void {
     this.internal.getLayers().set(AbcProperties.LastLayerChange, performance.now());
+  }
+
+  public getSelectedFeatures(): Feature<Geometry>[] {
+    const layer = this.getActiveVectorLayer();
+    if (!layer) {
+      return [];
+    }
+
+    return layer
+      .getSource()
+      .getFeatures()
+      .filter((feat) => FeatureHelper.isSelected(feat));
   }
 }
