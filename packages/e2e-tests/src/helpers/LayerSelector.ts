@@ -33,6 +33,7 @@ export class LayerSelector {
       .type('https://ahocevar.com/geoserver/wms')
       .get('[data-cy=wms-settings-capabilities]')
       .click()
+      .wait(1000)
       .get('[data-cy=wms-layer-item]')
       .eq(2)
       .click()
@@ -60,6 +61,7 @@ export class LayerSelector {
         // Get capabilities, select remote layer then add
         .get('[data-cy=wms-settings-capabilities]')
         .click()
+        .wait(1000)
         .get('[data-cy=wms-layer-item]')
         .eq(2)
         .click()

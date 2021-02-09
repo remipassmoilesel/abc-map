@@ -1,16 +1,16 @@
-import { AbstractTool } from './AbstractTool';
+import { AbstractTool } from '../AbstractTool';
 import { MapTool } from '@abc-map/shared-entities';
 import { Draw } from 'ol/interaction';
 import GeometryType from 'ol/geom/GeometryType';
-import { onlyMainButton } from './common-conditions';
+import { onlyMainButton } from '../common/common-conditions';
 import VectorSource from 'ol/source/Vector';
 import Geometry from 'ol/geom/Geometry';
-import Icon from '../../../assets/tool-icons/point.svg';
 import { Map } from 'ol';
+import Icon from '../../../../assets/tool-icons/polygon.svg';
 
-export class Point extends AbstractTool {
+export class Polygon extends AbstractTool {
   public getId(): MapTool {
-    return MapTool.Point;
+    return MapTool.Polygon;
   }
 
   public getIcon(): string {
@@ -18,7 +18,7 @@ export class Point extends AbstractTool {
   }
 
   public getLabel(): string {
-    return 'Point';
+    return 'Polygones';
   }
 
   public setup(map: Map, source: VectorSource<Geometry>): void {
@@ -26,14 +26,13 @@ export class Point extends AbstractTool {
 
     const draw = new Draw({
       source,
-      type: GeometryType.POINT,
+      type: GeometryType.POLYGON,
       condition: onlyMainButton,
       finishCondition: onlyMainButton,
     });
-
-    this.applyStyleAfterDraw(draw);
-    this.setIdAndHistoryOnEnd(draw, source);
-    this.commonModifyInteractions(map, GeometryType.POINT);
+    this.applyStyleOnDrawEnd(draw);
+    this.finalizeOnDrawEnd(draw, source);
+    this.commonModifyInteractions(map, GeometryType.POLYGON);
 
     map.addInteraction(draw);
     this.interactions.push(draw);

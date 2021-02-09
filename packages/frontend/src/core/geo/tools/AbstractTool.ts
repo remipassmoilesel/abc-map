@@ -8,13 +8,13 @@ import { HistoryService } from '../../history/HistoryService';
 import { DrawEvent } from 'ol/interaction/Draw';
 import { VectorStyles } from '../features/VectorStyles';
 import { HistoryKey } from '../../history/HistoryKey';
-import { AddFeatureTask } from '../../history/tasks/AddFeatureTask';
-import { onlyMainButton } from './common-conditions';
+import { AddFeaturesTask } from '../../history/tasks/AddFeaturesTask';
+import { onlyMainButton } from './common/common-conditions';
 import Feature, { FeatureLike } from 'ol/Feature';
 import { ModifyEvent } from 'ol/interaction/Modify';
 import { Logger } from '../../utils/Logger';
 import { FeatureHelper } from '../features/FeatureHelper';
-import { ModifyGeometryTask } from '../../history/tasks/ModifyGeometryTask';
+import { ModificationItem, ModifyGeometriesTask } from '../../history/tasks/ModifyGeometriesTask';
 import BaseLayer from 'ol/layer/Base';
 import GeometryType from 'ol/geom/GeometryType';
 import * as _ from 'lodash';
@@ -60,20 +60,20 @@ export abstract class AbstractTool {
    * Setup a listener on tool to apply current style after draw
    * @param draw
    */
-  protected applyStyleAfterDraw(draw: Draw): void {
+  protected applyStyleOnDrawEnd(draw: Draw): void {
     draw.on('drawend', (ev: DrawEvent) => {
       const feature = ev.feature;
       VectorStyles.setProperties(feature, this.store.getState().map.currentStyle);
     });
   }
 
-  protected setIdAndHistoryOnEnd(draw: Draw, source: VectorSource): void {
+  protected finalizeOnDrawEnd(draw: Draw, source: VectorSource): void {
     draw.on('drawend', (ev: DrawEvent) => {
       const feature = ev.feature;
       if (!feature.getId()) {
-        feature.setId(FeatureHelper.generateId());
+        FeatureHelper.setId(feature);
       }
-      this.history.register(HistoryKey.Map, new AddFeatureTask(source, feature));
+      this.history.register(HistoryKey.Map, new AddFeaturesTask(source, [feature]));
     });
   }
 
@@ -140,8 +140,7 @@ export abstract class AbstractTool {
     modify.on('modifystart', (ev: ModifyEvent) => {
       const features = ev.features.getArray();
       features.forEach((feat) => {
-        const cloned = feat.clone();
-        cloned.setId(feat.getId());
+        const cloned = FeatureHelper.clone(feat);
         modified.push(cloned);
       });
     });
@@ -149,22 +148,26 @@ export abstract class AbstractTool {
     // Every time a modification ends we create an history task
     modify.on('modifyend', (ev: ModifyEvent) => {
       const features = ev.features.getArray();
-      features.forEach((feature) => {
-        if (!feature.getId()) {
-          logger.error('Cannot register modify task, feature does not have an id');
-          return;
-        }
+      const items = features
+        .map((feature) => {
+          if (!feature.getId()) {
+            logger.error('Cannot register modify task, feature does not have an id');
+            return null;
+          }
 
-        const before = modified.find((f) => f.getId() === feature.getId());
-        const geomBefore = before?.getGeometry();
-        const geomAfter = feature?.getGeometry()?.clone(); // As geometries are mutated, here we must clone it
-        if (!geomBefore || !geomAfter) {
-          logger.error(`Cannot register modify task, 'before' feature not found with id ${feature.getId()}`);
-          return;
-        }
+          const before = modified.find((f) => f.getId() === feature.getId());
+          const geomBefore = before?.getGeometry();
+          const geomAfter = feature?.getGeometry()?.clone(); // As geometries are mutated, here we must clone it
+          if (!geomBefore || !geomAfter) {
+            logger.error(`Cannot register modify task, 'before' feature not found with id ${feature.getId()}`);
+            return null;
+          }
 
-        this.history.register(HistoryKey.Map, new ModifyGeometryTask(feature, geomBefore, geomAfter));
-      });
+          return { feature, before: geomBefore, after: geomAfter };
+        })
+        .filter((item) => !!item) as ModificationItem[];
+
+      this.history.register(HistoryKey.Map, new ModifyGeometriesTask(items));
       modified = [];
     });
 

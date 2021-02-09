@@ -6,11 +6,11 @@ import Geometry from 'ol/geom/Geometry';
 import Feature from 'ol/Feature';
 import { Logger } from '../../utils/Logger';
 
-const logger = Logger.get('SelectionStyle.ts');
+export const logger = Logger.get('SelectionStyle.ts');
 
 const fillColor = '#ffc9c9';
 const strokeColor = '#ff0000';
-const width = 3;
+const width = 2;
 
 const stroke = new Stroke({
   color: strokeColor,
@@ -78,7 +78,7 @@ export class SelectionStyle {
       return circle;
     }
 
-    logger.error(`Style not found for feature: ${feature.getGeometry()?.getType()}`);
+    logger.error(`Selection style not found for: ${feature.getGeometry()?.getType()}`);
     return [];
   }
 }

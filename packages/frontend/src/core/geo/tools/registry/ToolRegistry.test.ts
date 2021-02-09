@@ -1,6 +1,6 @@
 import { MapTool } from '@abc-map/shared-entities';
 import { ToolRegistry } from './ToolRegistry';
-import { Selection } from './Selection';
+import { Selection } from '../selection/Selection';
 
 describe('ToolRegistry', () => {
   it('All tool should be registered', () => {
