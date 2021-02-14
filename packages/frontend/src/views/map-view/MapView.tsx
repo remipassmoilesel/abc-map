@@ -8,7 +8,6 @@ import { Logger } from '../../core/utils/Logger';
 import BaseLayer from 'ol/layer/Base';
 import ProjectControls from './project-controls/ProjectControls';
 import ToolSelector from './tool-selector/ToolSelector';
-import StyleSelector from './style-selector/StyleSelector';
 import HistoryControls from '../../components/history-controls/HistoryControls';
 import { HistoryKey } from '../../core/history/HistoryKey';
 import { ManagedMap } from '../../core/geo/map/ManagedMap';
@@ -16,9 +15,6 @@ import { MainState } from '../../core/store/reducer';
 import './MapView.scss';
 
 const logger = Logger.get('MapView.tsx', 'debug');
-
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface LocalProps {}
 
 interface State {
   layers: BaseLayer[];
@@ -35,7 +31,7 @@ const mapStateToProps = (state: MainState) => ({
 const connector = connect(mapStateToProps);
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
-type Props = PropsFromRedux & LocalProps;
+type Props = PropsFromRedux;
 
 /**
  * Map layers are passed as props from here in order to update components "in a react way".
@@ -57,6 +53,12 @@ class MapView extends Component<Props, State> {
         {/*Left menu*/}
         <div className="left-panel">
           <ProjectStatus project={this.props.project} />
+          <div className={'control-block'}>
+            <div className={'control-item'}>
+              Rechercher sur la carte
+              <input type={'text'} className={'mt-2'} onKeyPress={this.onSearch} />
+            </div>
+          </div>
           <ProjectControls />
           <div className={'control-block'}>
             <div className={'control-item'}>
@@ -68,7 +70,6 @@ class MapView extends Component<Props, State> {
               <i>Vous pouvez importer des données en sélectionnant un fichier et en le déposant sur la carte</i>
             </div>
           </div>
-          <HistoryControls historyKey={HistoryKey.Map} />
         </div>
 
         {/*Main map*/}
@@ -76,16 +77,9 @@ class MapView extends Component<Props, State> {
 
         {/*Right menu*/}
         <div className="right-panel">
-          <div className={'control-block'}>
-            <div className={'control-item'}>
-              Rechercher sur la carte
-              <input type={'text'} className={'mt-2'} onKeyPress={this.onSearch} />
-            </div>
-          </div>
-
+          <HistoryControls historyKey={HistoryKey.Map} />
           <LayerSelector layers={this.state.layers} />
           <ToolSelector />
-          <StyleSelector />
         </div>
       </div>
     );
@@ -94,10 +88,12 @@ class MapView extends Component<Props, State> {
   public componentDidMount() {
     this.state.map.addLayerChangeListener(this.onLayerChange);
     this.onLayerChange(); // We trigger manually the first event for setup
+    this.state.map.getInternal().on('rendercomplete', this.onRenderComplete);
   }
 
   public componentWillUnmount() {
     this.state.map.removeLayerChangeListener(this.onLayerChange);
+    this.state.map.getInternal().un('rendercomplete', this.onRenderComplete);
   }
 
   private onLayerChange = (): boolean => {
@@ -113,6 +109,10 @@ class MapView extends Component<Props, State> {
 
   private onSearch = () => {
     this.services.ui.toasts.featureNotReady();
+  };
+
+  private onRenderComplete = () => {
+    logger.debug('Map rendering complete');
   };
 }
 

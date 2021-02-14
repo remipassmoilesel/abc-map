@@ -1,4 +1,4 @@
-import { FeatureProperties, FrontendRoutes, MapTool } from '@abc-map/shared-entities';
+import { FeatureProperties, FrontendRoutes, MapTool, StyleProperties } from '@abc-map/shared-entities';
 import { TestHelper } from '../../../helpers/TestHelper';
 import { ToolSelector } from '../../../helpers/ToolSelector';
 import { Draw } from '../../../helpers/Draw';
@@ -137,6 +137,78 @@ describe('Tool Selection', function () {
         expect(features).length(2);
         expect(features[0].getGeometry()?.getExtent()).deep.equals([3283907.584731134, -354660.93141685706, 3283907.584731134, -354660.93141685706]);
         expect(features[1].getGeometry()?.getExtent()).deep.equals([3773104.565756262, -843857.9124419848, 3773104.565756262, -843857.9124419848]);
+      });
+  });
+
+  it('user change stroke style then undo', function () {
+    cy.visit(FrontendRoutes.map())
+      .then(() => MainMap.getComponent())
+      .then(() => ToolSelector.enable(MapTool.Circle))
+      // Draw feature then select
+      .then(() => Draw.click(150, 150))
+      .then(() => Draw.click(200, 200))
+      .then(() => ToolSelector.enable(MapTool.Selection))
+      .then(() => Draw.drag(50, 50, 400, 400))
+      .get('[data-cy=stroke-color] button')
+      .eq(0)
+      .click()
+      .get('[data-cy=stroke-color] button')
+      .eq(5)
+      .click()
+      .get('[data-cy=color-picker-backdrop]')
+      .click()
+      .then(() => MainMap.getReference())
+      .should((map) => {
+        const features = map.getActiveLayerFeatures();
+        expect(features[0].getProperties()[StyleProperties.StrokeColor]).equal('#F72585');
+      })
+      .then(() => MapHistory.undo())
+      .then(() => MainMap.getReference())
+      .should((map) => {
+        const features = map.getActiveLayerFeatures();
+        expect(features[0].getProperties()[StyleProperties.StrokeColor]).equal('#3F37C9');
+      })
+      .then(() => MapHistory.redo())
+      .then(() => MainMap.getReference())
+      .should((map) => {
+        const features = map.getActiveLayerFeatures();
+        expect(features[0].getProperties()[StyleProperties.StrokeColor]).equal('#F72585');
+      });
+  });
+
+  it('user change fill style then undo', function () {
+    cy.visit(FrontendRoutes.map())
+      .then(() => MainMap.getComponent())
+      .then(() => ToolSelector.enable(MapTool.Circle))
+      // Draw feature then select
+      .then(() => Draw.click(150, 150))
+      .then(() => Draw.click(200, 200))
+      .then(() => ToolSelector.enable(MapTool.Selection))
+      .then(() => Draw.drag(50, 50, 400, 400))
+      .get('[data-cy=fill-color1] button')
+      .eq(0)
+      .click()
+      .get('[data-cy=fill-color1] button')
+      .eq(5)
+      .click()
+      .get('[data-cy=color-picker-backdrop]')
+      .click()
+      .then(() => MainMap.getReference())
+      .should((map) => {
+        const features = map.getActiveLayerFeatures();
+        expect(features[0].getProperties()[StyleProperties.FillColor1]).equal('#F72585');
+      })
+      .then(() => MapHistory.undo())
+      .then(() => MainMap.getReference())
+      .should((map) => {
+        const features = map.getActiveLayerFeatures();
+        expect(features[0].getProperties()[StyleProperties.FillColor1]).equal('#FFFFFF');
+      })
+      .then(() => MapHistory.redo())
+      .then(() => MainMap.getReference())
+      .should((map) => {
+        const features = map.getActiveLayerFeatures();
+        expect(features[0].getProperties()[StyleProperties.FillColor1]).equal('#F72585');
       });
   });
 });

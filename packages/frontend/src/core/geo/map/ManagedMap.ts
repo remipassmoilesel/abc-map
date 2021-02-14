@@ -142,14 +142,14 @@ export class ManagedMap {
     return previousActive === currentActive && _.isEqual(previousIds, currentIds);
   }
 
-  public forEachFeatureSelected(callback: (feat: Feature<Geometry>) => void) {
+  public forEachFeatureSelected(callback: (feat: Feature<Geometry>, layer: VectorLayer) => void) {
     const layer = this.getActiveVectorLayer();
     if (!layer) {
       return;
     }
     layer.getSource().forEachFeature((feat) => {
       if (FeatureHelper.isSelected(feat)) {
-        callback(feat);
+        callback(feat, layer);
       }
     });
   }

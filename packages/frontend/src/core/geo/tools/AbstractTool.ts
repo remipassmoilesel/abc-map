@@ -6,7 +6,7 @@ import { LayerProperties, MapTool } from '@abc-map/shared-entities';
 import { MainStore } from '../../store/store';
 import { HistoryService } from '../../history/HistoryService';
 import { DrawEvent } from 'ol/interaction/Draw';
-import { VectorStyles } from '../features/VectorStyles';
+import { VectorStyles } from '../style/VectorStyles';
 import { HistoryKey } from '../../history/HistoryKey';
 import { AddFeaturesTask } from '../../history/tasks/AddFeaturesTask';
 import { onlyMainButton } from './common/common-conditions';

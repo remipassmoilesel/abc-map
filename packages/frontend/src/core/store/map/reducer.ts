@@ -17,11 +17,19 @@ export function mapReducer(state = mapInitialState, action: MapAction): MapState
       return newState;
     }
 
-    case ActionType.SetFillColor: {
+    case ActionType.SetFillColor1: {
       const newState: MapState = { ...state };
       newState.currentStyle = { ...newState.currentStyle };
       newState.currentStyle.fill = { ...newState.currentStyle.fill };
-      newState.currentStyle.fill.color = action.color;
+      newState.currentStyle.fill.color1 = action.color;
+      return newState;
+    }
+
+    case ActionType.SetFillColor2: {
+      const newState: MapState = { ...state };
+      newState.currentStyle = { ...newState.currentStyle };
+      newState.currentStyle.fill = { ...newState.currentStyle.fill };
+      newState.currentStyle.fill.color2 = action.color;
       return newState;
     }
 
@@ -38,6 +46,14 @@ export function mapReducer(state = mapInitialState, action: MapAction): MapState
       newState.currentStyle = { ...newState.currentStyle };
       newState.currentStyle.stroke = { ...newState.currentStyle.stroke };
       newState.currentStyle.stroke.width = action.width;
+      return newState;
+    }
+
+    case ActionType.SetFillPattern: {
+      const newState: MapState = { ...state };
+      newState.currentStyle = { ...newState.currentStyle };
+      newState.currentStyle.fill = { ...newState.currentStyle.fill };
+      newState.currentStyle.fill.pattern = action.pattern;
       return newState;
     }
 

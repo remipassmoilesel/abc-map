@@ -9,12 +9,13 @@ import {
   AbcVectorLayer,
   CURRENT_VERSION,
   DEFAULT_PROJECTION,
+  FillPatterns,
   LayerType,
   LayoutFormats,
   PredefinedLayerModel,
 } from '@abc-map/shared-entities';
 import * as uuid from 'uuid';
-import { AbcStyle } from '../geo/features/AbcStyle';
+import { AbcStyleProperties } from '../geo/style/AbcStyleProperties';
 
 export class TestHelper {
   public static samplePointFeature(): Feature<Geometry> {
@@ -122,14 +123,16 @@ export class TestHelper {
     });
   }
 
-  public static sampleStyleProperties(): AbcStyle {
+  public static sampleStyleProperties(): AbcStyleProperties {
     return {
       stroke: {
         width: 5,
         color: 'black',
       },
       fill: {
-        color: 'white',
+        color1: 'white',
+        color2: 'blue',
+        pattern: FillPatterns.HatchingObliqueLeft,
       },
     };
   }

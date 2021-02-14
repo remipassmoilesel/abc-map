@@ -28,14 +28,14 @@ describe('Map reducer', function () {
         },
       },
     };
-    initialState.currentStyle.fill.color = '#000';
+    initialState.currentStyle.fill.color1 = '#000';
     const snapshot = JSON.stringify(initialState);
 
-    const action = MapActions.setFillColor('#111');
+    const action = MapActions.setFillColor1('#111');
     const state = mapReducer(initialState, action);
 
     expect(JSON.stringify(initialState)).toEqual(snapshot);
-    expect(state.currentStyle.fill.color).toEqual('#111');
+    expect(state.currentStyle.fill.color1).toEqual('#111');
   });
 
   it('SetStrokeColor', function () {

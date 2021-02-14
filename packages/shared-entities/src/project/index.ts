@@ -4,5 +4,6 @@ export * from './AbcProject';
 export * from './AbcProjection';
 export * from './AbcProperties';
 export * from './FeatureProperties';
+export * from './FillPatterns';
 export * from './LayerProperties';
 export * from './StyleProperties';

@@ -1,7 +1,7 @@
 import { StyleCache } from './StyleCache';
 import { TestHelper } from '../../utils/TestHelper';
 import { Style } from 'ol/style';
-import { AbcStyle } from './AbcStyle';
+import { AbcStyleProperties } from './AbcStyleProperties';
 
 describe('StyleCache', function () {
   it('should return style', function () {
@@ -20,33 +20,15 @@ describe('StyleCache', function () {
     const props = TestHelper.sampleStyleProperties();
     const style = new Style();
     cache.put(props, style);
-    const otherProps: AbcStyle = {
+    const otherProps: AbcStyleProperties = {
       ...props,
       fill: {
-        color: 'other-color',
+        color1: 'other-color',
       },
     };
 
     const fromCache = cache.get(otherProps);
 
     expect(fromCache).toBeUndefined();
-  });
-
-  /**
-   * If this test fail, you must adapt cache keys
-   */
-  it('depends on AbcStyle structure', function () {
-    const witness = '{"stroke":{"color":"stroke-color","width":5},"fill":{"color":"fill-color"}}';
-    const props: AbcStyle = {
-      stroke: {
-        color: 'stroke-color',
-        width: 5,
-      },
-      fill: {
-        color: 'fill-color',
-      },
-    };
-
-    expect(JSON.stringify(props)).toEqual(witness);
   });
 });

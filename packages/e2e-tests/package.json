@@ -4,7 +4,7 @@
   "license": "GPL-3.0-or-later",
   "scripts": {
     "e2e-test": "cypress run",
-    "e2e-test:ci": "cypress run --spec src/integration/ci/**/*",
+    "e2e-test:before-merge": "cypress run --spec 'src/integration/before-merge/**/*'",
     "e2e-test:interactive": "cypress open",
     "clean": "rm -rf build",
     "build": "tsc",
