@@ -45,7 +45,7 @@ export class Service {
       waitOn(options)
         .then(() => {
           logger.info('Servers ready !');
-          this.shell.sync('yarn run e2e-test:ci', { cwd: this.config.getE2eRoot() });
+          this.shell.sync('yarn run e2e-test:before-merge', { cwd: this.config.getE2eRoot() });
         })
         .catch(reject)
         .finally(() => startCmd.kill('SIGTERM'));

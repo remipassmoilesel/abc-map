@@ -1,15 +1,18 @@
 import React, { Component, ReactNode } from 'react';
-import { services } from '../../../core/Services';
-import { HistoryKey } from '../../../core/history/HistoryKey';
-import { RemoveFeatureTask } from '../../../core/history/tasks/RemoveFeatureTask';
-import { FeatureHelper } from '../../../core/geo/features/FeatureHelper';
-import { AddFeaturesTask } from '../../../core/history/tasks/AddFeaturesTask';
+import { services } from '../../../../core/Services';
+import { HistoryKey } from '../../../../core/history/HistoryKey';
+import { RemoveFeatureTask } from '../../../../core/history/tasks/RemoveFeatureTask';
+import { FeatureHelper } from '../../../../core/geo/features/FeatureHelper';
+import { AddFeaturesTask } from '../../../../core/history/tasks/AddFeaturesTask';
 import { Geometry } from 'ol/geom';
 import { Feature } from 'ol';
-import { Logger } from '../../../core/utils/Logger';
+import { Logger } from '../../../../core/utils/Logger';
+import StrokeWidthSelector from '../_common/StrokeWidthSelector';
+import ColorSelector from '../_common/color-selector/ColorSelector';
+import FillPatternSelector from '../_common/pattern-selector/FillPatternSelector';
 import './SelectionPanel.scss';
 
-const logger = Logger.get('SelectionPanel');
+const logger = Logger.get('SelectionPanel.tsx');
 
 class SelectionPanel extends Component<{}, {}> {
   private services = services();
@@ -17,6 +20,9 @@ class SelectionPanel extends Component<{}, {}> {
   public render(): ReactNode {
     return (
       <div className={'abc-selection-panel'}>
+        <StrokeWidthSelector />
+        <ColorSelector withFillColors={true} />
+        <FillPatternSelector />
         <button className={'btn btn-outline-secondary'} onClick={this.handleDelete} data-cy={'delete-selection'}>
           <i className={'fa fa-trash'} />
           Supprimer

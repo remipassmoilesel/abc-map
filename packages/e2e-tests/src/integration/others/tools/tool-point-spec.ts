@@ -24,13 +24,13 @@ describe('Tool Point', function () {
         expect(features[0].getGeometry()?.getExtent()).deep.equals([-1118865.2444950184, 4048111.8978092954, -1118865.2444950184, 4048111.8978092954]);
         expect(features[0].get(StyleProperties.StrokeWidth)).not.undefined;
         expect(features[0].get(StyleProperties.StrokeColor)).not.undefined;
-        expect(features[0].get(StyleProperties.FillColor)).not.undefined;
+        expect(features[0].get(StyleProperties.FillColor1)).not.undefined;
 
         expect(features[1].getGeometry()?.getType()).equal('Point');
         expect(features[1].getGeometry()?.getExtent()).deep.equals([-629668.2634698902, 3558914.9167841673, -629668.2634698902, 3558914.9167841673]);
         expect(features[1].get(StyleProperties.StrokeWidth)).not.undefined;
         expect(features[1].get(StyleProperties.StrokeColor)).not.undefined;
-        expect(features[1].get(StyleProperties.FillColor)).not.undefined;
+        expect(features[1].get(StyleProperties.FillColor1)).not.undefined;
       });
   });
 

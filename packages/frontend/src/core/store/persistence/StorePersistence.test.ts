@@ -26,7 +26,8 @@ describe('StorePersistence', () => {
         tool: MapTool.Point,
         currentStyle: {
           fill: {
-            color: '#789ABC',
+            color1: '#789ABC',
+            color2: '#789DEF',
           },
           stroke: {
             width: 5,
@@ -61,7 +62,8 @@ describe('StorePersistence', () => {
         tool: MapTool.None,
         currentStyle: {
           fill: {
-            color: '#789ABC',
+            color1: '#789ABC',
+            color2: '#789DEF',
           },
           stroke: {
             width: 5,

@@ -28,13 +28,13 @@ describe('Tool Circle', function () {
         expect(features[0].getGeometry()?.getExtent()).deep.equals([-1810694.249732728, 3356282.8925715857, -427036.23925730854, 4739940.903047006]);
         expect(features[0].get(StyleProperties.StrokeWidth)).not.undefined;
         expect(features[0].get(StyleProperties.StrokeColor)).not.undefined;
-        expect(features[0].get(StyleProperties.FillColor)).not.undefined;
+        expect(features[0].get(StyleProperties.FillColor1)).not.undefined;
 
         expect(features[1].getGeometry()?.getType()).equal('Circle');
         expect(features[1].getGeometry()?.getExtent()).deep.equals([-832300.2876824724, 2377888.93052133, 551357.7227929473, 3761546.9409967493]);
         expect(features[1].get(StyleProperties.StrokeWidth)).not.undefined;
         expect(features[1].get(StyleProperties.StrokeColor)).not.undefined;
-        expect(features[1].get(StyleProperties.FillColor)).not.undefined;
+        expect(features[1].get(StyleProperties.FillColor1)).not.undefined;
       });
   });
 

@@ -32,13 +32,13 @@ describe('Tool Polygon', function () {
         expect(features[0].getGeometry()?.getExtent()).deep.equals([-1118865.2444950184, 3558914.9167841673, -629668.2634698902, 4048111.8978092954]);
         expect(features[0].get(StyleProperties.StrokeWidth)).not.undefined;
         expect(features[0].get(StyleProperties.StrokeColor)).not.undefined;
-        expect(features[0].get(StyleProperties.FillColor)).not.undefined;
+        expect(features[0].get(StyleProperties.FillColor1)).not.undefined;
 
         expect(features[1].getGeometry()?.getType()).equal('Polygon');
         expect(features[1].getGeometry()?.getExtent()).deep.equals([837922.6796054938, 1602126.9926836556, 1327119.6606306215, 2091323.9737087833]);
         expect(features[1].get(StyleProperties.StrokeWidth)).not.undefined;
         expect(features[1].get(StyleProperties.StrokeColor)).not.undefined;
-        expect(features[1].get(StyleProperties.FillColor)).not.undefined;
+        expect(features[1].get(StyleProperties.FillColor1)).not.undefined;
       });
   });
 

@@ -11,7 +11,7 @@
     align-items: center;
     justify-content: center;
 
-    padding: 0.5em 1em;
+    padding: 0.2em 0.5em;
 
     .tool-button {
       margin: 2px;
@@ -22,6 +22,10 @@
       border-radius: 7px;
 
       outline: 0;
+
+      img {
+        width: 25px;
+      }
 
       &.active{
         border: solid 2px $primary;

@@ -17,7 +17,7 @@ import VectorSource from 'ol/source/Vector';
 import TileLayer from 'ol/layer/Tile';
 import { OSM, TileWMS } from 'ol/source';
 import * as uuid from 'uuid';
-import { VectorStyles } from '../features/VectorStyles';
+import { VectorStyles } from '../style/VectorStyles';
 import { tileLoadAuthenticated } from './tileLoadAuthenticated';
 import { Logger } from '../../utils/Logger';
 import { LayerMetadataHelper } from './LayerMetadataHelper';

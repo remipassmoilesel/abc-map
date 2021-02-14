@@ -1,6 +1,6 @@
 @import "src/style/variables";
 
-$list-height: 140px;
+$list-height: 90px;
 
 .abc-layer-selector {
 
@@ -19,7 +19,8 @@ $list-height: 140px;
 
     button {
       margin: 3px;
-      width: 45px;
+      padding: 3px;
+      width: 40px;
       outline: 0;
     }
 

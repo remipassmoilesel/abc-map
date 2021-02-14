@@ -8,12 +8,15 @@ $panel-width: 250px;
   display: flex;
   flex-direction: row;
 
+  overflow-x: hidden;
+  overflow-y: hidden;
+
   .left-panel {
     width: $panel-width;
     height: 95vh;
     border-right: solid 1px lightgrey;
     overflow-x: hidden;
-    overflow-y: auto;
+    overflow-y: scroll;
   }
 
   .right-panel {
@@ -21,6 +24,6 @@ $panel-width: 250px;
     height: 95vh;
     border-left: solid 1px lightgrey;
     overflow-x: hidden;
-    overflow-y: auto;
+    overflow-y: scroll;
   }
 }

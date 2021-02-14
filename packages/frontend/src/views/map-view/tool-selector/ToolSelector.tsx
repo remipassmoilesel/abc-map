@@ -5,15 +5,14 @@ import { connect, ConnectedProps } from 'react-redux';
 import { ToolRegistry } from '../../../core/geo/tools/registry/ToolRegistry';
 import { MapTool } from '@abc-map/shared-entities';
 import { MainState } from '../../../core/store/reducer';
+import SelectionPanel from './selection/SelectionPanel';
+import CirclePanel from './circle/CirclePanel';
+import LineStringPanel from './line-string/LineStringPanel';
+import PointPanel from './point/PointPanel';
+import PolygonPanel from './polygon/PolygonPanel';
 import './ToolSelector.scss';
-import SelectionPanel from './SelectionPanel';
-
-// TODO: add help for tools
 
 const logger = Logger.get('ToolSelector.tsx', 'info');
-
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface LocalProps {}
 
 const mapStateToProps = (state: MainState) => ({
   currentTool: state.map.tool,
@@ -22,7 +21,7 @@ const mapStateToProps = (state: MainState) => ({
 const connector = connect(mapStateToProps);
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
-type Props = PropsFromRedux & LocalProps;
+type Props = PropsFromRedux;
 
 class ToolSelector extends Component<Props, {}> {
   private services = services();
@@ -64,8 +63,16 @@ class ToolSelector extends Component<Props, {}> {
   }
 
   private getToolPanel(): ReactNode | undefined {
-    if (this.props.currentTool === MapTool.Selection) {
+    if (MapTool.Selection === this.props.currentTool) {
       return <SelectionPanel />;
+    } else if (MapTool.Circle === this.props.currentTool) {
+      return <CirclePanel />;
+    } else if (MapTool.LineString === this.props.currentTool) {
+      return <LineStringPanel />;
+    } else if (MapTool.Point === this.props.currentTool) {
+      return <PointPanel />;
+    } else if (MapTool.Polygon === this.props.currentTool) {
+      return <PolygonPanel />;
     }
   }
 
