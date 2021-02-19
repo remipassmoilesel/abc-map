@@ -2,10 +2,10 @@ import { Map } from 'ol';
 import View from 'ol/View';
 import { fromLonLat } from 'ol/proj';
 import { DEFAULT_PROJECTION } from '@abc-map/shared-entities';
-import { ManagedMap } from './ManagedMap';
+import { MapWrapper } from './MapWrapper';
 
 export class MapFactory {
-  public static createDefault(): ManagedMap {
+  public static createDefault(): MapWrapper {
     const internal = new Map({
       layers: [],
       view: new View({
@@ -14,12 +14,12 @@ export class MapFactory {
         projection: DEFAULT_PROJECTION.name,
       }),
     });
-    const map = new ManagedMap(internal);
+    const map = new MapWrapper(internal);
     map.resetLayers();
     return map;
   }
 
-  public static createNaked(): ManagedMap {
+  public static createNaked(): MapWrapper {
     const internal = new Map({
       layers: [],
       view: new View({
@@ -29,6 +29,6 @@ export class MapFactory {
       }),
       controls: [],
     });
-    return new ManagedMap(internal);
+    return new MapWrapper(internal);
   }
 }

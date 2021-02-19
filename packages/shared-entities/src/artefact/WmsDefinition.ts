@@ -1,8 +1,8 @@
 import { AbcProjection } from '../project';
 
 export interface WmsDefinition {
-  url: string;
-  layerName: string;
+  remoteUrl: string;
+  remoteLayerName: string;
   projection?: AbcProjection;
   extent?: [number, number, number, number];
   auth?: WmsAuthentication;

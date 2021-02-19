@@ -5,20 +5,20 @@ import LayerSelector from './layer-selector/LayerSelector';
 import ProjectStatus from './project-status/ProjectStatus';
 import { connect, ConnectedProps } from 'react-redux';
 import { Logger } from '../../core/utils/Logger';
-import BaseLayer from 'ol/layer/Base';
 import ProjectControls from './project-controls/ProjectControls';
 import ToolSelector from './tool-selector/ToolSelector';
 import HistoryControls from '../../components/history-controls/HistoryControls';
 import { HistoryKey } from '../../core/history/HistoryKey';
-import { ManagedMap } from '../../core/geo/map/ManagedMap';
+import { MapWrapper } from '../../core/geo/map/MapWrapper';
 import { MainState } from '../../core/store/reducer';
+import { LayerWrapper } from '../../core/geo/layers/LayerWrapper';
 import './MapView.scss';
 
 const logger = Logger.get('MapView.tsx', 'debug');
 
 interface State {
-  layers: BaseLayer[];
-  map: ManagedMap;
+  layers: LayerWrapper[];
+  map: MapWrapper;
 }
 
 const mapStateToProps = (state: MainState) => ({
@@ -88,12 +88,12 @@ class MapView extends Component<Props, State> {
   public componentDidMount() {
     this.state.map.addLayerChangeListener(this.onLayerChange);
     this.onLayerChange(); // We trigger manually the first event for setup
-    this.state.map.getInternal().on('rendercomplete', this.onRenderComplete);
+    this.state.map.unwrap().on('rendercomplete', this.onRenderComplete);
   }
 
   public componentWillUnmount() {
     this.state.map.removeLayerChangeListener(this.onLayerChange);
-    this.state.map.getInternal().un('rendercomplete', this.onRenderComplete);
+    this.state.map.unwrap().un('rendercomplete', this.onRenderComplete);
   }
 
   private onLayerChange = (): boolean => {

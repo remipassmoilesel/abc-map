@@ -7,7 +7,7 @@ import TileLayer from 'ol/layer/Tile';
 describe('MapFactory', () => {
   it('createDefault()', () => {
     const managed = MapFactory.createDefault();
-    const internal = managed.getInternal();
+    const internal = managed.unwrap();
     const layers = internal.getLayers().getArray();
     expect(layers).toHaveLength(2);
     expect(layers[0]).toBeInstanceOf(TileLayer);
@@ -20,7 +20,7 @@ describe('MapFactory', () => {
 
   it('createNaked()', () => {
     const managed = MapFactory.createNaked();
-    const internal = managed.getInternal();
+    const internal = managed.unwrap();
     const layers = internal.getLayers().getArray();
     expect(layers).toHaveLength(0);
     expect(internal.getView().getProjection().getCode()).toEqual(DEFAULT_PROJECTION.name);

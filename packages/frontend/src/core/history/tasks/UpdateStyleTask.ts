@@ -1,13 +1,11 @@
 import { Task } from '../Task';
-import Geometry from 'ol/geom/Geometry';
-import Feature from 'ol/Feature';
-import { VectorStyles } from '../../geo/style/VectorStyles';
 import { AbcStyleProperties } from '../../geo/style/AbcStyleProperties';
+import { FeatureWrapper } from '../../geo/features/FeatureWrapper';
 
 export interface UpdateStyleItem {
   before: AbcStyleProperties;
   after: AbcStyleProperties;
-  feature: Feature<Geometry>;
+  feature: FeatureWrapper;
 }
 
 export class UpdateStyleTask extends Task {
@@ -17,13 +15,13 @@ export class UpdateStyleTask extends Task {
 
   public async undo(): Promise<void> {
     this.items.forEach((item) => {
-      VectorStyles.setProperties(item.feature, item.before);
+      item.feature.setStyle(item.before);
     });
   }
 
   public async redo(): Promise<void> {
     this.items.forEach((item) => {
-      VectorStyles.setProperties(item.feature, item.after);
+      item.feature.setStyle(item.after);
     });
   }
 }

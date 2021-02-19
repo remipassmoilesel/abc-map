@@ -1,21 +1,21 @@
 import { AbcProject, CURRENT_VERSION, DEFAULT_PROJECTION, LayerType, PredefinedLayerModel } from '@abc-map/shared-entities';
-import * as uuid from 'uuid';
+import * as uuid from 'uuid-random';
 import { AbcUser } from '@abc-map/shared-entities';
 
 export class TestHelper {
   public static sampleProject(): AbcProject {
     return {
       metadata: {
-        id: uuid.v4(),
+        id: uuid(),
         version: CURRENT_VERSION,
-        name: `Test project ${uuid.v4()}`,
+        name: `Test project ${uuid()}`,
         projection: DEFAULT_PROJECTION,
       },
       layers: [
         {
           type: LayerType.Predefined,
           metadata: {
-            id: uuid.v4(),
+            id: uuid(),
             name: 'OpenStreetMap',
             type: LayerType.Predefined,
             visible: true,
@@ -27,7 +27,7 @@ export class TestHelper {
         {
           type: LayerType.Vector,
           metadata: {
-            id: uuid.v4(),
+            id: uuid(),
             name: 'Vecteurs',
             type: LayerType.Vector,
             visible: true,
@@ -38,7 +38,7 @@ export class TestHelper {
             type: 'FeatureCollection',
             features: [
               {
-                id: uuid.v4(),
+                id: uuid(),
                 bbox: [1, 2, 3, 4],
                 type: 'Feature',
                 properties: {
@@ -59,8 +59,8 @@ export class TestHelper {
 
   public static sampleUser(): AbcUser {
     return {
-      id: uuid.v4(),
-      email: `user-${uuid.v4()}@test.ts`,
+      id: uuid(),
+      email: `user-${uuid()}@test.ts`,
       password: 'what is wr0ng passW0rd ????',
       enabled: true,
     };

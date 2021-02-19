@@ -1,7 +1,6 @@
-import { ManagedMap } from './ManagedMap';
+import { MapWrapper } from './MapWrapper';
 import { Logger } from '../../utils/Logger';
 import { LayerMetadata, E2eFeature, E2eMap, BaseMetadata } from '@abc-map/shared-entities';
-import { LayerMetadataHelper } from './LayerMetadataHelper';
 
 export const logger = Logger.get('E2eMapWrapper.ts', 'debug');
 
@@ -14,12 +13,12 @@ export const logger = Logger.get('E2eMapWrapper.ts', 'debug');
  * - it is cheap
  */
 export class E2eMapWrapper implements E2eMap {
-  constructor(private readonly internal: ManagedMap) {}
+  constructor(private readonly internal: MapWrapper) {}
 
   public getLayersMetadata(): LayerMetadata[] {
     return this.internal
       .getLayers()
-      .map((lay) => LayerMetadataHelper.getCommons(lay))
+      .map((lay) => lay.getMetadata())
       .filter((meta) => !!meta) as LayerMetadata[];
   }
 
@@ -29,7 +28,7 @@ export class E2eMapWrapper implements E2eMap {
       return;
     }
 
-    return LayerMetadataHelper.getCommons(layer);
+    return layer.getMetadata();
   }
 
   public getActiveLayerFeatures(): E2eFeature[] {
@@ -38,10 +37,10 @@ export class E2eMapWrapper implements E2eMap {
       return [];
     }
 
-    return layer.getSource().getFeatures();
+    return layer.unwrap().getSource().getFeatures();
   }
 
-  public getInternal(): ManagedMap {
+  public getInternal(): MapWrapper {
     return this.internal;
   }
 }

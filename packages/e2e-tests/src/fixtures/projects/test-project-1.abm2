@@ -177,8 +177,8 @@
         "opacity": 1,
         "active": true,
         "visible": true,
-        "url": "https://ahocevar.com/geoserver/wms",
-        "layerName": "opengeo:countries",
+        "remoteUrl": "https://ahocevar.com/geoserver/wms",
+        "remoteLayerName": "opengeo:countries",
         "projection": {
           "name": "CRS:84"
         },

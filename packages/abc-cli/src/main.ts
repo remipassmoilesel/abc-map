@@ -22,6 +22,10 @@ async function main(args: string[]) {
   const service = new Service(config, shell);
 
   process.env.PATH = `${process.env.PATH}:${config.getCliRoot()}/node_modules/.bin/`;
+  if (process.env.CI === 'true') {
+    process.env.YARN_CACHE_FOLDER = `${config.getProjectRoot()}/.yarn-cache`;
+    process.env.CYPRESS_CACHE_FOLDER = `${config.getProjectRoot()}/.cypress-cache`;
+  }
 
   banners.cli();
   const command = await parser.parse(args);

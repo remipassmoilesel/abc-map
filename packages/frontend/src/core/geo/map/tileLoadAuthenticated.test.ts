@@ -20,7 +20,7 @@ describe('tileLoadAuthenticated', () => {
     expect(factoryStub.callCount).toEqual(1);
     expect(factoryStub.getCalls()[0].args).toEqual([
       {
-        timeout: 5_000,
+        timeout: 10_000,
         responseType: 'blob',
         auth: {
           username: 'test-username',

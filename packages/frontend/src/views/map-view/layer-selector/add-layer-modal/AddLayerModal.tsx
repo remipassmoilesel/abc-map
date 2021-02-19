@@ -8,6 +8,7 @@ import WmsSettingsPanel from './wms/WmsSettingsPanel';
 import { Logger } from '../../../../core/utils/Logger';
 import { Link } from 'react-router-dom';
 import { FrontendRoutes, WmsDefinition } from '@abc-map/shared-entities';
+import { LayerFactory } from '../../../../core/geo/layers/LayerFactory';
 
 const logger = Logger.get('NewLayerModal.tsx');
 
@@ -112,7 +113,7 @@ class AddLayerModal extends Component<Props, State> {
 
   private newOsmLayer = () => {
     const map = this.services.geo.getMainMap();
-    const layer = this.services.geo.newOsmLayer();
+    const layer = LayerFactory.newOsmLayer();
     map.addLayer(layer);
     map.setActiveLayer(layer);
     this.services.history.register(HistoryKey.Map, new AddLayerTask(map, layer));
@@ -120,7 +121,7 @@ class AddLayerModal extends Component<Props, State> {
 
   private newVectorLayer = () => {
     const map = this.services.geo.getMainMap();
-    const layer = this.services.geo.newVectorLayer();
+    const layer = LayerFactory.newVectorLayer();
     map.addLayer(layer);
     map.setActiveLayer(layer);
     this.services.history.register(HistoryKey.Map, new AddLayerTask(map, layer));
@@ -133,7 +134,7 @@ class AddLayerModal extends Component<Props, State> {
     }
 
     const map = this.services.geo.getMainMap();
-    const layer = this.services.geo.newWmsLayer(wms);
+    const layer = LayerFactory.newWmsLayer(wms);
     map.addLayer(layer);
     map.setActiveLayer(layer);
     this.services.history.register(HistoryKey.Map, new AddLayerTask(map, layer));
@@ -149,8 +150,8 @@ class AddLayerModal extends Component<Props, State> {
     if (this.state.layerType !== LabelledLayerTypes.Wms) {
       return true;
     }
-    const urlIsDefined = !!this.state.wms?.url;
-    const layerIsDefined = !!this.state.wms?.layerName;
+    const urlIsDefined = !!this.state.wms?.remoteUrl;
+    const layerIsDefined = !!this.state.wms?.remoteLayerName;
     return urlIsDefined && layerIsDefined;
   }
 }

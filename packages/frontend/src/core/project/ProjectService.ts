@@ -6,7 +6,7 @@ import { ProjectFactory } from './ProjectFactory';
 import { GeoService } from '../geo/GeoService';
 import { Abm2Reader } from './Abm2Reader';
 import { ProjectRoutes as Api } from '../http/ApiRoutes';
-import * as uuid from 'uuid';
+import uuid from 'uuid-random';
 import { MainStore } from '../store/store';
 import { UiService } from '../ui/UiService';
 import { ModalStatus } from '../ui/Modals.types';
@@ -78,6 +78,7 @@ export class ProjectService {
     return Abm2Reader.fromFile(file).then((pr) => this.loadProject(pr));
   }
 
+  // FIXME: here we should clean user actions history
   public async loadProject(project: AbcProject): Promise<void> {
     const load = async (password?: string) => {
       const map = this.geoService.getMainMap();
@@ -85,7 +86,7 @@ export class ProjectService {
       if (password) {
         _project = await Encryption.decryptProject(project, password);
       }
-      this.geoService.importProject(map, _project);
+      await this.geoService.importProject(map, _project);
       this.store.dispatch(ProjectActions.loadProject(_project));
     };
 
@@ -103,7 +104,7 @@ export class ProjectService {
 
   public newLayout(name: string, format: LayoutFormat, center: number[], resolution: number, projection: AbcProjection): AbcLayout {
     const layout: AbcLayout = {
-      id: uuid.v4(),
+      id: uuid(),
       name,
       format,
       view: {

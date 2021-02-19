@@ -1,10 +1,10 @@
-import { Geometry, Point } from 'ol/geom';
-import Feature from 'ol/Feature';
+import { Point } from 'ol/geom';
 import { ModifyGeometriesTask } from './ModifyGeometriesTask';
+import { FeatureWrapper } from '../../geo/features/FeatureWrapper';
 
 describe('ModifyGeometryTask', function () {
   it('geometries should be cloned', function () {
-    const feature = new Feature<Geometry>();
+    const feature = FeatureWrapper.create();
     const before = new Point([16, 48]);
     const after = new Point([12, 12]);
     const item = {

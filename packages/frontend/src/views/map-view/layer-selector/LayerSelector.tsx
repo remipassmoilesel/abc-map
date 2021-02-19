@@ -1,15 +1,13 @@
 import React, { Component, ReactNode } from 'react';
 import { services } from '../../../core/Services';
 import { Logger } from '../../../core/utils/Logger';
-import BaseLayer from 'ol/layer/Base';
-import VectorLayer from 'ol/layer/Vector';
 import { Extent, getArea } from 'ol/extent';
 import { RemoveLayerTask } from '../../../core/history/tasks/RemoveLayerTask';
 import { HistoryKey } from '../../../core/history/HistoryKey';
 import { ModalStatus } from '../../../core/ui/Modals.types';
 import LayerListItem from './item/LayerListItem';
 import AddLayerModal from './add-layer-modal/AddLayerModal';
-import { LayerMetadataHelper } from '../../../core/geo/map/LayerMetadataHelper';
+import { LayerWrapper } from '../../../core/geo/layers/LayerWrapper';
 import './LayerSelector.scss';
 
 const logger = Logger.get('LayerSelector.tsx', 'debug');
@@ -18,7 +16,7 @@ interface Props {
   /**
    * Layers are passed here in order to trigger changes on layers changes
    */
-  layers: BaseLayer[];
+  layers: LayerWrapper[];
 }
 
 interface State {
@@ -74,7 +72,7 @@ class LayerSelector extends Component<Props, State> {
   private getItems(): ReactNode[] {
     return this.props.layers
       .map((layer) => {
-        const metadata = this.services.geo.getMetadataFromLayer(layer);
+        const metadata = layer.getMetadata();
         if (!metadata) {
           return undefined;
         }
@@ -95,10 +93,10 @@ class LayerSelector extends Component<Props, State> {
     }
 
     let extent: Extent | undefined;
-    if (layer instanceof VectorLayer) {
-      extent = layer.getSource().getExtent();
+    if (layer.isVector()) {
+      extent = layer.unwrap().getSource().getExtent();
     } else {
-      extent = layer.getExtent();
+      extent = layer.unwrap().getExtent();
     }
 
     if (!extent || !getArea(extent)) {
@@ -106,7 +104,7 @@ class LayerSelector extends Component<Props, State> {
       return logger.error('Layer does not have an extent, or extent is invalid');
     }
 
-    this.services.geo.getMainMap().getInternal().getView().fit(extent);
+    this.services.geo.getMainMap().unwrap().getView().fit(extent);
   };
 
   private addLayerModal = () => {
@@ -120,13 +118,12 @@ class LayerSelector extends Component<Props, State> {
   private renameLayerModal = () => {
     const map = this.services.geo.getMainMap();
     const active = map.getActiveLayer();
-    const metadata = active && LayerMetadataHelper.getCommons(active);
-    if (!active || !metadata) {
+    if (!active) {
       return this.services.ui.toasts.info("Vous devez d'abord sélectionner une couche");
     }
 
     this.services.ui.modals
-      .renameModal('Renommer', 'Renommer la couche', metadata.name)
+      .renameModal('Renommer', 'Renommer la couche', active.getMetadata()?.name || 'Couche')
       .then((res) => {
         if (ModalStatus.Confirmed) {
           map.renameLayer(active, res.value);
@@ -165,7 +162,7 @@ class LayerSelector extends Component<Props, State> {
       return logger.error('No layer selected');
     }
 
-    map.setLayerVisible(active, !active.getVisible());
+    map.setLayerVisible(active, !active.isVisible());
   };
 }
 

@@ -1,4 +1,4 @@
-import * as uuid from 'uuid';
+import * as uuid from 'uuid-random';
 import * as jwt from 'jsonwebtoken';
 import { assert } from 'chai';
 import { TestHelper } from '../utils/TestHelper';
@@ -159,7 +159,7 @@ describe('AuthenticationService', () => {
 
   describe('authenticate()', () => {
     it('should return UnknownUser status', async () => {
-      const res = await service.authenticate(uuid.v4(), uuid.v4());
+      const res = await service.authenticate(uuid(), uuid());
       assert.equal(res.status, AuthenticationStatus.UnknownUser);
     });
 
@@ -167,7 +167,7 @@ describe('AuthenticationService', () => {
       const user = TestHelper.sampleUser();
       await userService.save(user);
 
-      const res = await service.authenticate(user.email, uuid.v4());
+      const res = await service.authenticate(user.email, uuid());
       assert.equal(res.status, AuthenticationStatus.Refused);
     });
 

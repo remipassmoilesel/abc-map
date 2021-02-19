@@ -1,5 +1,5 @@
 import { FrontendRoutes } from '@abc-map/shared-entities';
-import * as uuid from 'uuid';
+import * as uuid from 'uuid-random';
 import { Toasts } from './Toasts';
 import { RegisteredUser } from './RegisteredUser';
 
@@ -7,7 +7,7 @@ const defaultPassword = 'azerty1234';
 
 export class Registration {
   public static newUser(enableAccount = true): RegisteredUser {
-    const email = `e2e-${uuid.v4()}@abcmap.fr`;
+    const email = `e2e-${uuid()}@abcmap.fr`;
 
     // We register user
     cy.visit(FrontendRoutes.landing())

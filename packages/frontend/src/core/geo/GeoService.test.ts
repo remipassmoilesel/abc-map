@@ -1,13 +1,14 @@
 import { logger as geoLogger, GeoService } from './GeoService';
-import { logger as mapLogger } from './map/ManagedMap';
+import { logger as mapLogger } from './map/MapWrapper';
 import { AbcProject, AbcVectorLayer, LayerType, PredefinedLayerModel, PredefinedMetadata } from '@abc-map/shared-entities';
-import { LayerProperties } from '@abc-map/shared-entities';
 import { TestHelper } from '../utils/TestHelper';
 import VectorSource from 'ol/source/Vector';
 import TileLayer from 'ol/layer/Tile';
 import VectorLayer from 'ol/layer/Vector';
 import { MapFactory } from './map/MapFactory';
 import { httpExternalClient } from '../http/HttpClients';
+import { HistoryService } from '../history/HistoryService';
+import { LayerFactory } from './layers/LayerFactory';
 
 geoLogger.disable();
 mapLogger.disable();
@@ -17,13 +18,13 @@ describe('GeoService', () => {
   let service: GeoService;
 
   beforeEach(() => {
-    service = new GeoService(httpExternalClient(5_000));
+    service = new GeoService(httpExternalClient(5_000), HistoryService.create());
   });
 
   it('exportLayers()', async () => {
     const map = MapFactory.createNaked();
-    const osm = service.newOsmLayer();
-    const features = service.newVectorLayer(new VectorSource({ features: TestHelper.sampleFeatures() }));
+    const osm = LayerFactory.newOsmLayer();
+    const features = LayerFactory.newVectorLayer(new VectorSource({ features: TestHelper.sampleFeatures() }));
     map.addLayer(osm);
     map.addLayer(features);
     map.setActiveLayer(features);
@@ -40,62 +41,17 @@ describe('GeoService', () => {
     expect((layers[1] as AbcVectorLayer).features.features).toHaveLength(3);
   });
 
-  it('importProject()', () => {
+  it('importProject()', async () => {
     const project: AbcProject = TestHelper.sampleProject();
     const map = MapFactory.createNaked();
 
-    service.importProject(map, project);
+    await service.importProject(map, project);
 
     const layers = map.getLayers();
-    expect(layers[0]).toBeInstanceOf(TileLayer);
-    expect(layers[1]).toBeInstanceOf(VectorLayer);
-    expect((layers[1] as VectorLayer).getSource().getFeatures()).toHaveLength(1);
-    expect((layers[1] as VectorLayer).getSource().getFeatures()[0].getGeometry()?.getType()).toEqual('Point');
-  });
-
-  describe('cloneLayer()', () => {
-    it('with tile layer', () => {
-      const layer = service.newOsmLayer();
-      const clone: TileLayer = service.cloneLayer(layer) as TileLayer;
-      expect(clone).toBeDefined();
-      expect(clone).toBeInstanceOf(TileLayer);
-      expect(clone.getSource() === layer.getSource()).toBeTruthy();
-      expect(clone === layer).toBeFalsy();
-    });
-
-    it('with vector layer', () => {
-      const layer = service.newVectorLayer();
-      const clone: VectorLayer = service.cloneLayer(layer) as VectorLayer;
-      expect(clone).toBeDefined();
-      expect(clone).toBeInstanceOf(VectorLayer);
-      expect(clone.getSource() === layer.getSource()).toBeTruthy();
-      expect(clone === layer).toBeFalsy();
-    });
-
-    it('with wrong layer', () => {
-      const layer: any = { notALayer: true };
-      const clone = service.cloneLayer(layer);
-      expect(clone).toBeUndefined();
-    });
-  });
-
-  it('cloneLayers()', () => {
-    const source = MapFactory.createNaked();
-    source.addLayer(service.newOsmLayer());
-    source.addLayer(service.newVectorLayer());
-
-    const dest = MapFactory.createNaked();
-    service.cloneLayers(source, dest);
-
-    const sourceLayers: string[] = source.getLayers().map((lay) => lay.get(LayerProperties.Id));
-    const destLayers: string[] = source.getLayers().map((lay) => lay.get(LayerProperties.Id));
-
-    expect(destLayers).toHaveLength(2);
-    expect(destLayers).toEqual(sourceLayers);
-
-    source.getLayers().forEach((layA, idx) => {
-      const layB = dest.getLayers()[idx];
-      expect(layA === layB).toBeFalsy();
-    });
+    expect(layers[0].unwrap()).toBeInstanceOf(TileLayer);
+    expect(layers[1].unwrap()).toBeInstanceOf(VectorLayer);
+    const features = (layers[1].unwrap() as VectorLayer).getSource().getFeatures();
+    expect(features).toHaveLength(1);
+    expect(features[0].getGeometry()?.getType()).toEqual('Point');
   });
 });

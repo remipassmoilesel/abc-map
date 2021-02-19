@@ -2,14 +2,12 @@ import React, { Component, ReactNode } from 'react';
 import { services } from '../../../../core/Services';
 import { HistoryKey } from '../../../../core/history/HistoryKey';
 import { RemoveFeatureTask } from '../../../../core/history/tasks/RemoveFeatureTask';
-import { FeatureHelper } from '../../../../core/geo/features/FeatureHelper';
 import { AddFeaturesTask } from '../../../../core/history/tasks/AddFeaturesTask';
-import { Geometry } from 'ol/geom';
-import { Feature } from 'ol';
 import { Logger } from '../../../../core/utils/Logger';
 import StrokeWidthSelector from '../_common/StrokeWidthSelector';
 import ColorSelector from '../_common/color-selector/ColorSelector';
 import FillPatternSelector from '../_common/pattern-selector/FillPatternSelector';
+import { FeatureWrapper } from '../../../../core/geo/features/FeatureWrapper';
 import './SelectionPanel.scss';
 
 const logger = Logger.get('SelectionPanel.tsx');
@@ -48,8 +46,8 @@ class SelectionPanel extends Component<{}, {}> {
       return;
     }
 
-    features.forEach((feat) => layer.getSource().removeFeature(feat));
-    this.services.history.register(HistoryKey.Map, new RemoveFeatureTask(layer.getSource(), features));
+    features.forEach((feat) => layer.unwrap().getSource().removeFeature(feat.unwrap()));
+    this.services.history.register(HistoryKey.Map, new RemoveFeatureTask(layer.unwrap().getSource(), features));
   };
 
   private handleDuplicate = () => {
@@ -65,30 +63,32 @@ class SelectionPanel extends Component<{}, {}> {
       return;
     }
 
-    features.forEach((feat) => FeatureHelper.setSelected(feat, false));
+    features.forEach((feat) => feat.setSelected(false));
 
     const clones = features
       .map((feat) => {
-        const clone = FeatureHelper.clone(feat);
+        const clone = feat.clone();
         const geom = clone.getGeometry();
         if (!geom) {
           return null;
         }
 
-        FeatureHelper.setId(clone); // We generate a new id
-        FeatureHelper.setSelected(clone, true);
+        // We generate a new id
+        clone.setId();
+        clone.setSelected(true);
 
-        const resolution = map.getInternal().getView().getResolution() || 1;
-        const dx = resolution * 10;
-        const dy = resolution * 10;
+        // We translate new geometries
+        const resolution = map.unwrap().getView().getResolution() || 1;
+        const dx = resolution * 30;
+        const dy = resolution * 30;
         clone.getGeometry()?.translate(dx, -dy);
 
         return clone;
       })
-      .filter((feat) => !!feat) as Feature<Geometry>[];
+      .filter((feat) => !!feat) as FeatureWrapper[];
 
-    clones.forEach((clone) => layer.getSource().addFeature(clone));
-    this.services.history.register(HistoryKey.Map, new AddFeaturesTask(layer.getSource(), clones));
+    clones.forEach((clone) => layer.unwrap().getSource().addFeature(clone.unwrap()));
+    this.services.history.register(HistoryKey.Map, new AddFeaturesTask(layer.unwrap().getSource(), clones));
   };
 }
 

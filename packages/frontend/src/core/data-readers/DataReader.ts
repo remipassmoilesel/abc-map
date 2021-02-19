@@ -1,6 +1,5 @@
 import { AbstractDataReader } from './AbstractDataReader';
 import { AbcProjection } from '@abc-map/shared-entities';
-import BaseLayer from 'ol/layer/Base';
 import { GpxReader } from './GpxReader';
 import { KmlReader } from './KmlReader';
 import { ShapefileReader } from './ShapefileReader';
@@ -9,6 +8,7 @@ import { FileFormat, FileFormats } from '../datastore/FileFormats';
 import { Zipper } from '../datastore/Zipper';
 import { GeoJsonReader } from './GeoJsonReader';
 import { WmsDefinitionReader } from './WmsDefinitionReader';
+import { LayerWrapper } from '../geo/layers/LayerWrapper';
 
 export class DataReader {
   public static create(): DataReader {
@@ -18,7 +18,7 @@ export class DataReader {
 
   constructor(private readers: AbstractDataReader[]) {}
 
-  public async read(files: AbcFile[], projection: AbcProjection): Promise<BaseLayer[]> {
+  public async read(files: AbcFile[], projection: AbcProjection): Promise<LayerWrapper[]> {
     if (!files.length) {
       return [];
     }
@@ -35,7 +35,7 @@ export class DataReader {
     }
 
     // Then we create layers from data
-    const result: BaseLayer[] = [];
+    const result: LayerWrapper[] = [];
     for (const r of this.readers) {
       if (await r.isSupported(_files)) {
         const layers = await r.read(_files, projection);

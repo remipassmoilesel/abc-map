@@ -2,9 +2,9 @@ import { AxiosInstance } from 'axios';
 import { AbcArtefact, AbcProjection } from '@abc-map/shared-entities';
 import { DatastoreRoutes } from '../http/ApiRoutes';
 import { Logger } from '../utils/Logger';
-import BaseLayer from 'ol/layer/Base';
 import { DataReader } from '../data-readers/DataReader';
 import { AbcFile } from '../data-readers/AbcFile';
+import { LayerWrapper } from '../geo/layers/LayerWrapper';
 
 const logger = Logger.get('DatastoreService.ts');
 
@@ -25,7 +25,7 @@ export class DatastoreService {
     return Promise.all(files);
   }
 
-  public async getLayersFrom(artefact: AbcArtefact, projection: AbcProjection): Promise<BaseLayer[]> {
+  public async getLayersFrom(artefact: AbcArtefact, projection: AbcProjection): Promise<LayerWrapper[]> {
     const files = await this.downloadFiles(artefact);
     return DataReader.create().read(files, projection);
   }

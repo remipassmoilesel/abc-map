@@ -30,10 +30,10 @@ export interface PredefinedMetadata extends BaseMetadata {
 
 export interface WmsMetadata extends BaseMetadata {
   type: LayerType.Wms;
-  url: string;
-  layerName: string;
   projection?: AbcProjection;
   extent?: [number, number, number, number];
+  remoteUrl: string;
+  remoteLayerName: string;
   auth?: {
     username: string;
     password: string;

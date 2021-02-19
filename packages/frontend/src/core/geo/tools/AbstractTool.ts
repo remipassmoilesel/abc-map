@@ -6,28 +6,24 @@ import { LayerProperties, MapTool } from '@abc-map/shared-entities';
 import { MainStore } from '../../store/store';
 import { HistoryService } from '../../history/HistoryService';
 import { DrawEvent } from 'ol/interaction/Draw';
-import { VectorStyles } from '../style/VectorStyles';
 import { HistoryKey } from '../../history/HistoryKey';
 import { AddFeaturesTask } from '../../history/tasks/AddFeaturesTask';
 import { onlyMainButton } from './common/common-conditions';
 import Feature, { FeatureLike } from 'ol/Feature';
 import { ModifyEvent } from 'ol/interaction/Modify';
 import { Logger } from '../../utils/Logger';
-import { FeatureHelper } from '../features/FeatureHelper';
 import { ModificationItem, ModifyGeometriesTask } from '../../history/tasks/ModifyGeometriesTask';
 import BaseLayer from 'ol/layer/Base';
 import GeometryType from 'ol/geom/GeometryType';
 import * as _ from 'lodash';
+import { FeatureWrapper } from '../features/FeatureWrapper';
+import { EventsKey } from 'ol/events';
 
 const logger = Logger.get('AbstractTool.ts');
 
-export interface MapListener {
-  type: string;
-  listener: (ev: MapBrowserEvent) => any;
-}
-
 export abstract class AbstractTool {
-  protected mapListeners: MapListener[] = [];
+  protected mapListeners: EventsKey[] = [];
+  protected sourceListeners: EventsKey[] = [];
   protected interactions: Interaction[] = [];
   protected vectorSource?: VectorSource;
   protected map?: Map;
@@ -62,16 +58,15 @@ export abstract class AbstractTool {
    */
   protected applyStyleOnDrawEnd(draw: Draw): void {
     draw.on('drawend', (ev: DrawEvent) => {
-      const feature = ev.feature;
-      VectorStyles.setProperties(feature, this.store.getState().map.currentStyle);
+      FeatureWrapper.from(ev.feature).setStyle(this.store.getState().map.currentStyle);
     });
   }
 
   protected finalizeOnDrawEnd(draw: Draw, source: VectorSource): void {
     draw.on('drawend', (ev: DrawEvent) => {
-      const feature = ev.feature;
+      const feature = FeatureWrapper.from(ev.feature);
       if (!feature.getId()) {
-        FeatureHelper.setId(feature);
+        feature.setId();
       }
       this.history.register(HistoryKey.Map, new AddFeaturesTask(source, [feature]));
     });
@@ -90,20 +85,22 @@ export abstract class AbstractTool {
     const modify = new Modify({ features: modifiableFeatures, condition: onlyMainButton });
     const snap = new Snap({ features: modifiableFeatures });
 
-    const setFeatureModifiable = (feature: FeatureLike): boolean => {
-      const hasId = feature.getId();
-      const modifiable = feature instanceof Feature && feature.getGeometry() instanceof Geometry;
-      const correctType = feature.getGeometry()?.getType() === type;
-      if (!hasId || !modifiable || !correctType) {
+    const setFeatureModifiable = (feat: FeatureLike): boolean => {
+      const feature = FeatureWrapper.fromFeatureLike(feat);
+      if (!feature) {
+        return false; // Continue iteration
+      }
+
+      if (feature.getGeometry()?.getType() !== type) {
         return false;
       }
 
-      const alreadySelected = !!modifiableFeatures.getArray().find((f) => feature.getId() === f.getId());
-      if (alreadySelected) {
-        return true;
+      const alreadyRegisted = !!modifiableFeatures.getArray().find((f) => feature.getId() === f.getId());
+      if (alreadyRegisted) {
+        return true; // Stop iteration
       }
 
-      modifiableFeatures.push(feature as Feature<Geometry>);
+      modifiableFeatures.push(feature.unwrap());
       return true;
     };
 
@@ -132,16 +129,16 @@ export abstract class AbstractTool {
       200,
       { trailing: true }
     );
-    map.on('pointermove', listener);
-    this.mapListeners.push({ type: 'pointermove', listener });
+
+    const mapListener = map.on('pointermove', listener);
+    this.mapListeners.push(mapListener);
 
     // Every time a modification starts we snapshot geometry in order to create an history task
-    let modified: Feature<Geometry>[] = [];
+    let modified: FeatureWrapper[] = [];
     modify.on('modifystart', (ev: ModifyEvent) => {
       const features = ev.features.getArray();
       features.forEach((feat) => {
-        const cloned = FeatureHelper.clone(feat);
-        modified.push(cloned);
+        modified.push(FeatureWrapper.from(feat).clone());
       });
     });
 
@@ -149,7 +146,8 @@ export abstract class AbstractTool {
     modify.on('modifyend', (ev: ModifyEvent) => {
       const features = ev.features.getArray();
       const items = features
-        .map((feature) => {
+        .map((feat) => {
+          const feature = FeatureWrapper.from(feat);
           if (!feature.getId()) {
             logger.error('Cannot register modify task, feature does not have an id');
             return null;
@@ -188,7 +186,7 @@ export abstract class AbstractTool {
     return this.interactions;
   }
 
-  public getMapListeners(): MapListener[] {
+  public getMapListeners(): EventsKey[] {
     return this.mapListeners;
   }
 }
