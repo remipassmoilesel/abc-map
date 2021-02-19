@@ -2,7 +2,7 @@ import { HistoryKey } from './HistoryKey';
 import { HistoryService, HistoryStack } from './HistoryService';
 import { Task } from './Task';
 import * as sinon from 'sinon';
-import * as uuid from 'uuid';
+import uuid from 'uuid-random';
 import { SinonStub } from 'sinon';
 
 // TODO: assert on store.dispatch() calls
@@ -47,7 +47,7 @@ describe('HistoryService', () => {
 
   describe('register()', () => {
     it('should create history stack for unknown key', async () => {
-      const key = uuid.v4() as HistoryKey;
+      const key = uuid() as HistoryKey;
       await service.register(key, new FakeTask(7));
 
       expect(fakeHistory[key]).toBeDefined();
@@ -56,7 +56,7 @@ describe('HistoryService', () => {
     });
 
     it('should stack task', async () => {
-      const key = uuid.v4() as HistoryKey;
+      const key = uuid() as HistoryKey;
       await service.register(key, new FakeTask(8));
       await service.register(key, new FakeTask(9));
 
@@ -81,7 +81,7 @@ describe('HistoryService', () => {
     it('should fail if nothing to undo', async () => {
       expect.assertions(1);
 
-      const key = uuid.v4() as HistoryKey;
+      const key = uuid() as HistoryKey;
       await service.undo(key).catch((err) => expect(err.message).toEqual('Nothing to undo'));
     });
 
@@ -112,7 +112,7 @@ describe('HistoryService', () => {
     it('should fail if nothing to redo', async () => {
       expect.assertions(1);
 
-      const key = uuid.v4() as HistoryKey;
+      const key = uuid() as HistoryKey;
       await service.redo(key).catch((err) => expect(err.message).toEqual('Nothing to redo'));
     });
 
@@ -140,7 +140,7 @@ describe('HistoryService', () => {
 
   describe('canUndo()', () => {
     it('should return false', () => {
-      const key = uuid.v4() as HistoryKey;
+      const key = uuid() as HistoryKey;
       expect(service.canUndo(key)).toEqual(false);
     });
 
@@ -151,7 +151,7 @@ describe('HistoryService', () => {
 
   describe('canRedo()', () => {
     it('should return false', () => {
-      const key = uuid.v4() as HistoryKey;
+      const key = uuid() as HistoryKey;
       expect(service.canRedo(key)).toEqual(false);
     });
 

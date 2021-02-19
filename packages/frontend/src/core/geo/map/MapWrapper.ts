@@ -1,26 +1,25 @@
 import { Map } from 'ol';
-import { AbcProjection, AbcProperties, LayerProperties, BaseMetadata, LayerType } from '@abc-map/shared-entities';
-import BaseLayer from 'ol/layer/Base';
+import { AbcProjection, AbcProperties, VectorMetadata } from '@abc-map/shared-entities';
 import VectorLayer from 'ol/layer/Vector';
 import * as _ from 'lodash';
-import Feature from 'ol/Feature';
-import Geometry from 'ol/geom/Geometry';
-import { FeatureHelper } from '../features/FeatureHelper';
 import { ResizeObserverFactory } from '../../utils/ResizeObserverFactory';
 import BaseEvent from 'ol/events/Event';
 import { Logger } from '../../utils/Logger';
 import { AbstractTool } from '../tools/AbstractTool';
-import { LayerFactory } from './LayerFactory';
-import { LayerMetadataHelper } from './LayerMetadataHelper';
 import TileLayer from 'ol/layer/Tile';
+import { FeatureWrapper } from '../features/FeatureWrapper';
+import { LayerFactory } from '../layers/LayerFactory';
+import { LayerWrapper } from '../layers/LayerWrapper';
 
 export const logger = Logger.get('ManagedMap.ts', 'debug');
+
+export declare type FeatureCallback = (feat: FeatureWrapper, layer: LayerWrapper<VectorLayer, VectorMetadata>) => void;
 
 /**
  * This class wrap OpenLayers map. The goal is not to replace all methods, but to ensure
  * that critical operations are well done (set active layer, etc ...)
  */
-export class ManagedMap {
+export class MapWrapper {
   private sizeObserver?: ResizeObserver;
   private currentTool?: AbstractTool;
 
@@ -61,25 +60,23 @@ export class ManagedMap {
     this.setActiveLayer(vector);
   }
 
-  public addLayer(layer: BaseLayer): void {
-    if (!layer.get(AbcProperties.Managed)) {
-      throw new Error('You must add custom properties to layers');
-    }
-    this.internal.addLayer(layer);
+  public addLayer(layer: LayerWrapper): void {
+    this.internal.addLayer(layer.unwrap());
   }
 
   /**
    * Return layers managed layers
    */
-  public getLayers(): BaseLayer[] {
+  public getLayers(): LayerWrapper[] {
     return this.internal
       .getLayers()
       .getArray()
-      .filter((lay) => !!lay.get(AbcProperties.Managed));
+      .filter((lay) => LayerWrapper.isManaged(lay))
+      .map((lay) => LayerWrapper.from(lay as TileLayer | VectorLayer));
   }
 
-  public setActiveLayer(layer: BaseLayer): void {
-    const id: string | undefined = layer.get(LayerProperties.Id);
+  public setActiveLayer(layer: LayerWrapper): void {
+    const id: string | undefined = layer.getId();
     if (!id) {
       throw new Error('Layer is not managed');
     }
@@ -89,69 +86,54 @@ export class ManagedMap {
 
   public setActiveLayerById(layerId: string): void {
     const layers = this.getLayers();
-    const targetLayers = layers.find((lay) => lay.get(LayerProperties.Id) === layerId);
+    const targetLayers = layers.find((lay) => lay.getId() === layerId);
     if (!targetLayers) {
       throw new Error('Layer does not belong to map');
     }
 
     layers.forEach((lay) => {
-      const id = lay.get(LayerProperties.Id);
-      lay.set(LayerProperties.Active, id === layerId);
+      const id = lay.getId();
+      lay.setActive(id === layerId);
     });
 
     this.triggerLayerChange();
   }
 
-  public renameLayer(layer: BaseLayer, name: string): void {
-    LayerFactory.setLayerName(layer, name);
+  public renameLayer(layer: LayerWrapper, name: string): void {
+    layer.setName(name);
     this.triggerLayerChange();
   }
 
-  public getActiveLayer(): BaseLayer | undefined {
-    const layers = this.internal.getLayers().getArray();
-    return layers.find((lay) => lay.get(LayerProperties.Active));
+  public getActiveLayer(): LayerWrapper | undefined {
+    const layers = this.getLayers();
+    return layers.find((lay) => lay.isActive());
   }
 
-  public getActiveLayerMetadata(): BaseMetadata | undefined {
-    const active = this.getActiveLayer();
-    if (active) {
-      return LayerMetadataHelper.getCommons(active);
-    }
+  public removeLayer(layer: LayerWrapper): void {
+    this.internal.getLayers().remove(layer.unwrap());
   }
 
-  public removeLayer(layer: BaseLayer): void {
-    this.internal.getLayers().remove(layer);
-  }
-
-  public getActiveVectorLayer(): VectorLayer | undefined {
+  public getActiveVectorLayer(): LayerWrapper<VectorLayer, VectorMetadata> | undefined {
     const layer = this.getActiveLayer();
-    if (!layer || !(layer instanceof VectorLayer)) {
-      return;
+    if (layer && layer.isVector()) {
+      return layer;
     }
-
-    return layer as VectorLayer;
   }
 
-  public layersEquals(others: BaseLayer[]) {
-    const layers = this.internal.getLayers().getArray();
-    const previousIds: string[] = layers.map((lay) => lay.get(LayerProperties.Id));
-    const currentIds: string[] = others.map((lay) => lay.get(LayerProperties.Id));
-    const previousActive = layers.find((lay) => lay.get(LayerProperties.Active))?.get(LayerProperties.Id);
-    const currentActive = others.find((lay) => lay.get(LayerProperties.Active))?.get(LayerProperties.Id);
-
-    return previousActive === currentActive && _.isEqual(previousIds, currentIds);
-  }
-
-  public forEachFeatureSelected(callback: (feat: Feature<Geometry>, layer: VectorLayer) => void) {
+  public forEachFeatureSelected(callback: FeatureCallback) {
     const layer = this.getActiveVectorLayer();
     if (!layer) {
       return;
     }
-    layer.getSource().forEachFeature((feat) => {
-      if (FeatureHelper.isSelected(feat)) {
-        callback(feat, layer);
-      }
-    });
+    layer
+      .unwrap()
+      .getSource()
+      .forEachFeature((feat) => {
+        const feature = FeatureWrapper.from(feat);
+        if (feature.isSelected()) {
+          callback(feature, layer);
+        }
+      });
   }
 
   public getProjection(): AbcProjection {
@@ -181,12 +163,12 @@ export class ManagedMap {
     }
     this.currentTool.dispose();
 
-    const vectorLayer = this.getActiveVectorLayer();
-    if (!vectorLayer) {
+    const layer = this.getActiveVectorLayer();
+    if (!layer) {
       return;
     }
 
-    this.currentTool.setup(this.internal, vectorLayer.getSource());
+    this.currentTool.setup(this.internal, layer.unwrap().getSource());
     logger.debug(`Activated tool '${this.currentTool.getId()}'`);
     return;
   }
@@ -195,7 +177,7 @@ export class ManagedMap {
     return this.currentTool;
   }
 
-  public getInternal(): Map {
+  public unwrap(): Map {
     return this.internal;
   }
 
@@ -204,18 +186,18 @@ export class ManagedMap {
   }
 
   public containsCredentials(): boolean {
-    const withCredentials = this.internal
-      .getLayers()
-      .getArray()
-      .filter((lay) => LayerMetadataHelper.getCommons(lay)?.type === LayerType.Wms)
-      .find((lay) => {
-        const meta = LayerMetadataHelper.getWmsMetadata(lay as TileLayer);
+    const withCredentials = this.getLayers().find((lay) => {
+      if (lay.isWms()) {
+        const meta = lay.getMetadata();
         return meta?.auth?.username && meta?.auth?.password;
-      });
+      }
+      return false;
+    });
+
     return !!withCredentials;
   }
 
-  public setLayerVisible(layer: BaseLayer, value: boolean) {
+  public setLayerVisible(layer: LayerWrapper, value: boolean) {
     layer.setVisible(value);
     this.triggerLayerChange();
   }
@@ -229,15 +211,20 @@ export class ManagedMap {
     this.internal.getLayers().set(AbcProperties.LastLayerChange, performance.now());
   }
 
-  public getSelectedFeatures(): Feature<Geometry>[] {
+  public getSelectedFeatures(): FeatureWrapper[] {
     const layer = this.getActiveVectorLayer();
     if (!layer) {
       return [];
     }
 
     return layer
+      .unwrap()
       .getSource()
       .getFeatures()
-      .filter((feat) => FeatureHelper.isSelected(feat));
+      .map((feat) => {
+        const feature = FeatureWrapper.from(feat);
+        return feature.isSelected() ? feature : null;
+      })
+      .filter((feat) => !!feat) as FeatureWrapper[];
   }
 }

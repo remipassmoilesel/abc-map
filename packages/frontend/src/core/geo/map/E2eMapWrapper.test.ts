@@ -1,8 +1,7 @@
 import { MapFactory } from './MapFactory';
-import { LayerFactory } from './LayerFactory';
 import { E2eMapWrapper } from './E2eMapWrapper';
 import { TestHelper } from '../../utils/TestHelper';
-import { LayerMetadataHelper } from './LayerMetadataHelper';
+import { LayerFactory } from '../layers/LayerFactory';
 
 describe('E2eMapWrapper', function () {
   it('getLayersMetadata()', function () {
@@ -14,7 +13,7 @@ describe('E2eMapWrapper', function () {
     map.addLayer(layer2);
 
     const metadata = e2e.getLayersMetadata();
-    expect(metadata).toEqual([LayerMetadataHelper.getCommons(layer1), LayerMetadataHelper.getCommons(layer2)]);
+    expect(metadata).toEqual([layer1.getMetadata(), layer2.getMetadata()]);
   });
 
   it('getActiveLayerFeatures()', function () {
@@ -26,7 +25,7 @@ describe('E2eMapWrapper', function () {
     map.addLayer(layer1);
     map.addLayer(layer2);
 
-    layer1.getSource().addFeatures(features);
+    layer1.unwrap().getSource().addFeatures(features);
 
     map.setActiveLayer(layer1);
     expect(e2e.getActiveLayerFeatures()).toEqual(features);

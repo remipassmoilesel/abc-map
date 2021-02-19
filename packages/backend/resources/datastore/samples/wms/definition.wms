@@ -1,2 +1,2 @@
-url: 'https://ahocevar.com/geoserver/wms'
-layerName: 'usa:states'
+remoteUrl: 'https://ahocevar.com/geoserver/wms'
+remoteLayerName: 'usa:states'

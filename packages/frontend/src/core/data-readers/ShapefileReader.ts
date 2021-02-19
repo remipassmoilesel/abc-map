@@ -1,22 +1,21 @@
 import { AbstractDataReader } from './AbstractDataReader';
 import { AbcProjection, LayerType, VectorMetadata } from '@abc-map/shared-entities';
-import BaseLayer from 'ol/layer/Base';
 import { FileFormat, FileFormats } from '../datastore/FileFormats';
 import { AbcFile } from './AbcFile';
 import * as shapefile from 'shapefile';
 import { GeoJSON } from 'ol/format';
-import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import { BlobReader } from '../utils/BlobReader';
-import * as uuid from 'uuid';
-import { LayerMetadataHelper } from '../geo/map/LayerMetadataHelper';
+import uuid from 'uuid-random';
+import { LayerWrapper } from '../geo/layers/LayerWrapper';
+import { LayerFactory } from '../geo/layers/LayerFactory';
 
 export class ShapefileReader extends AbstractDataReader {
   public async isSupported(files: AbcFile[]): Promise<boolean> {
     return files.filter((f) => FileFormats.fromPath(f.path) === FileFormat.SHAPEFILE).length > 0;
   }
 
-  public async read(files: AbcFile[], projection: AbcProjection): Promise<BaseLayer[]> {
+  public async read(files: AbcFile[], projection: AbcProjection): Promise<LayerWrapper[]> {
     const _files = files.filter((f) => FileFormats.fromPath(f.path) === FileFormat.SHAPEFILE);
     if (_files.length > 2) {
       return Promise.reject(new Error('Cannot parse more than one shapefile at once'));
@@ -34,21 +33,17 @@ export class ShapefileReader extends AbstractDataReader {
     const format = new GeoJSON();
     const features = format.readFeatures(geojson, { featureProjection: projection.name });
     this.generateIdsIfAbsents(features);
-    const layer = new VectorLayer({
-      source: new VectorSource({
-        features,
-      }),
-    });
 
+    const layer = LayerFactory.newVectorLayer(new VectorSource({ features }));
     const metadata: VectorMetadata = {
-      id: uuid.v4(),
+      id: uuid(),
       name: 'Couche Shapefile',
       type: LayerType.Vector,
       active: false,
       opacity: 1,
       visible: true,
     };
-    LayerMetadataHelper.setVectorMetadata(layer, metadata);
+    layer.setMetadata(metadata);
 
     return [layer];
   }

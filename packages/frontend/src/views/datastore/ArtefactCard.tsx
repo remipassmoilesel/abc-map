@@ -1,7 +1,7 @@
 import React, { Component, ReactNode } from 'react';
 import { services } from '../../core/Services';
 import { Logger } from '../../core/utils/Logger';
-import { AbcArtefact, LayerProperties } from '@abc-map/shared-entities';
+import { AbcArtefact } from '@abc-map/shared-entities';
 import { FileFormat, FileFormats } from '../../core/datastore/FileFormats';
 import { Zipper } from '../../core/datastore/Zipper';
 import './DataStore.scss';
@@ -70,7 +70,7 @@ class ArtefactCard extends Component<Props, {}> {
         }
 
         layers.forEach((lay, i) => {
-          lay.set(LayerProperties.Name, `${this.props.artefact.name} (${i + 1})`);
+          lay.setName(`${this.props.artefact.name} (${i + 1})`);
           map.addLayer(lay);
         });
 

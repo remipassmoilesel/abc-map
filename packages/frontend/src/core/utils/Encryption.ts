@@ -28,7 +28,7 @@ export class Encryption {
       return Promise.reject(new Error('Cannot encrypt wms metadata, invalid credentials'));
     }
 
-    result.url = await Encryption.encrypt(result.url, password);
+    result.remoteUrl = await Encryption.encrypt(result.remoteUrl, password);
     result.auth.username = await Encryption.encrypt(result.auth.username, password);
     result.auth.password = await Encryption.encrypt(result.auth.password, password);
     return result;
@@ -42,7 +42,7 @@ export class Encryption {
       return Promise.reject(new Error('Cannot encrypt wms metadata, invalid credentials'));
     }
 
-    result.url = await Encryption.decrypt(result.url, password);
+    result.remoteUrl = await Encryption.decrypt(result.remoteUrl, password);
     result.auth.username = await Encryption.decrypt(result.auth.username, password);
     result.auth.password = await Encryption.decrypt(result.auth.password, password);
     return result;

@@ -4,10 +4,6 @@ import { MainState } from '../../../../../core/store/reducer';
 import { MapActions } from '../../../../../core/store/map/actions';
 import { services } from '../../../../../core/Services';
 import ColorPickerButton from './ColorPickerButton';
-import { UpdateStyleItem, UpdateStyleTask } from '../../../../../core/history/tasks/UpdateStyleTask';
-import { VectorStyles } from '../../../../../core/geo/style/VectorStyles';
-import { HistoryKey } from '../../../../../core/history/HistoryKey';
-import { AbcStyleProperties } from '../../../../../core/geo/style/AbcStyleProperties';
 
 export interface LocalProps {
   withFillColors: boolean;
@@ -55,7 +51,7 @@ class ColorSelector extends Component<Props, {}> {
 
   private handleStrokeColorSelected = (color: string): void => {
     this.props.setStrokeColor(color);
-    this.updateFeatures((style) => {
+    this.services.geo.updateSelectedFeatures((style) => {
       style.stroke.color = color;
       return style;
     });
@@ -63,7 +59,7 @@ class ColorSelector extends Component<Props, {}> {
 
   private handleFillColor1Selected = (color: string): void => {
     this.props.setFillColor1(color);
-    this.updateFeatures((style) => {
+    this.services.geo.updateSelectedFeatures((style) => {
       style.fill.color1 = color;
       return style;
     });
@@ -71,30 +67,11 @@ class ColorSelector extends Component<Props, {}> {
 
   private handleFillColor2Selected = (color: string): void => {
     this.props.setFillColor2(color);
-    this.updateFeatures((style) => {
+    this.services.geo.updateSelectedFeatures((style) => {
       style.fill.color2 = color;
       return style;
     });
   };
-
-  private updateFeatures(transform: (x: AbcStyleProperties) => AbcStyleProperties) {
-    const historyItems: UpdateStyleItem[] = [];
-    this.services.geo.getMainMap().forEachFeatureSelected((feat) => {
-      const newStyle = transform(VectorStyles.getProperties(feat));
-
-      historyItems.push({
-        feature: feat,
-        before: VectorStyles.getProperties(feat),
-        after: newStyle,
-      });
-
-      VectorStyles.setProperties(feat, newStyle);
-    });
-
-    if (historyItems.length) {
-      this.services.history.register(HistoryKey.Map, new UpdateStyleTask(historyItems));
-    }
-  }
 }
 
 export default connector(ColorSelector);

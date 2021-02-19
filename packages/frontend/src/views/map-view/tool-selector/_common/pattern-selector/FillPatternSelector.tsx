@@ -7,9 +7,6 @@ import { MainState } from '../../../../../core/store/reducer';
 import { MapActions } from '../../../../../core/store/map/actions';
 import { connect, ConnectedProps } from 'react-redux';
 import { services } from '../../../../../core/Services';
-import { UpdateStyleItem, UpdateStyleTask } from '../../../../../core/history/tasks/UpdateStyleTask';
-import { VectorStyles } from '../../../../../core/geo/style/VectorStyles';
-import { HistoryKey } from '../../../../../core/history/HistoryKey';
 import './FillPatternSelector.scss';
 
 const logger = Logger.get('FillPatternSelector.tsx', 'info');
@@ -58,23 +55,10 @@ class FillPatternSelector extends Component<Props, {}> {
     const pattern = ev.target.value as FillPatterns;
     this.props.setPattern(pattern);
 
-    const historyItems: UpdateStyleItem[] = [];
-    this.services.geo.getMainMap().forEachFeatureSelected((feat) => {
-      const newStyle = VectorStyles.getProperties(feat);
-      newStyle.fill.pattern = pattern;
-
-      historyItems.push({
-        feature: feat,
-        before: VectorStyles.getProperties(feat),
-        after: newStyle,
-      });
-
-      VectorStyles.setProperties(feat, newStyle);
+    this.services.geo.updateSelectedFeatures((style) => {
+      style.fill.pattern = pattern;
+      return style;
     });
-
-    if (historyItems.length) {
-      this.services.history.register(HistoryKey.Map, new UpdateStyleTask(historyItems));
-    }
   };
 
   private getOptions() {

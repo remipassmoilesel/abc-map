@@ -1,9 +1,9 @@
 import { Task } from '../Task';
-import { ManagedMap } from '../../geo/map/ManagedMap';
-import BaseLayer from 'ol/layer/Base';
+import { MapWrapper } from '../../geo/map/MapWrapper';
+import { LayerWrapper } from '../../geo/layers/LayerWrapper';
 
 export class AddLayerTask extends Task {
-  constructor(private map: ManagedMap, private layer: BaseLayer) {
+  constructor(private map: MapWrapper, private layer: LayerWrapper) {
     super();
   }
 

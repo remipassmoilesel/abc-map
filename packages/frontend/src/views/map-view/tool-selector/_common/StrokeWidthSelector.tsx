@@ -4,9 +4,6 @@ import { MainState } from '../../../../core/store/reducer';
 import { MapActions } from '../../../../core/store/map/actions';
 import { services } from '../../../../core/Services';
 import _ from 'lodash';
-import { UpdateStyleItem, UpdateStyleTask } from '../../../../core/history/tasks/UpdateStyleTask';
-import { VectorStyles } from '../../../../core/geo/style/VectorStyles';
-import { HistoryKey } from '../../../../core/history/HistoryKey';
 
 const mapStateToProps = (state: MainState) => ({
   fill: state.map.currentStyle.fill,
@@ -50,23 +47,10 @@ class StrokeWidthSelector extends Component<Props, {}> {
     const width = Number(ev.target.value);
     this.props.setStrokeWidth(width);
 
-    const historyItems: UpdateStyleItem[] = [];
-    this.services.geo.getMainMap().forEachFeatureSelected((feat) => {
-      const newStyle = VectorStyles.getProperties(feat);
-      newStyle.stroke.width = width;
-
-      historyItems.push({
-        feature: feat,
-        before: VectorStyles.getProperties(feat),
-        after: newStyle,
-      });
-
-      VectorStyles.setProperties(feat, newStyle);
+    this.services.geo.updateSelectedFeatures((style) => {
+      style.stroke.width = width;
+      return style;
     });
-
-    if (historyItems.length) {
-      this.services.history.register(HistoryKey.Map, new UpdateStyleTask(historyItems));
-    }
   };
 }
 

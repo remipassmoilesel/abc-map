@@ -10,7 +10,7 @@ import { LayoutHelper } from './LayoutHelper';
 import View from 'ol/View';
 import HistoryControls from '../../components/history-controls/HistoryControls';
 import { HistoryKey } from '../../core/history/HistoryKey';
-import { ManagedMap } from '../../core/geo/map/ManagedMap';
+import { MapWrapper } from '../../core/geo/map/MapWrapper';
 import { MapFactory } from '../../core/geo/map/MapFactory';
 import { MainState } from '../../core/store/reducer';
 import './LayoutView.scss';
@@ -21,7 +21,7 @@ const logger = Logger.get('LayoutView.tsx', 'warn');
 interface LocalProps {}
 
 interface State {
-  map: ManagedMap;
+  map: MapWrapper;
   format: LayoutFormat;
   activeLayout?: AbcLayout;
 }
@@ -113,7 +113,7 @@ class LayoutView extends Component<Props, State> {
     logger.info('Adding new layout');
     const pageNbr = this.props.layouts.length + 1;
     const name = `Page ${pageNbr}`;
-    const view = this.state.map.getInternal().getView();
+    const view = this.state.map.unwrap().getView();
     const center = view.getCenter();
     const resolution = view.getResolution();
     if (!center || !resolution) {
@@ -217,7 +217,7 @@ class LayoutView extends Component<Props, State> {
       });
   };
 
-  private exportLayout = (layout: AbcLayout, pdf: jsPDF, support: HTMLDivElement, sourceMap: ManagedMap, exportMap: ManagedMap): Promise<void> => {
+  private exportLayout = (layout: AbcLayout, pdf: jsPDF, support: HTMLDivElement, sourceMap: MapWrapper, exportMap: MapWrapper): Promise<void> => {
     logger.info('Exporting layout: ', layout);
     return new Promise<void>((resolve, reject) => {
       const format = layout.format;
@@ -227,18 +227,21 @@ class LayoutView extends Component<Props, State> {
       support.style.marginTop = '200px';
       support.style.width = `${dimension.width}px`;
       support.style.height = `${dimension.height}px`;
-      exportMap.getInternal().updateSize();
+      exportMap.unwrap().updateSize();
 
       // We copy layers from sourceMap to exporMap
-      this.services.geo.cloneLayers(this.state.map, exportMap);
+      exportMap.unwrap().getLayers().clear();
+      sourceMap.getLayers().forEach((lay) => {
+        exportMap.addLayer(lay);
+      });
 
-      const viewResolution = exportMap.getInternal().getView().getResolution();
+      const viewResolution = exportMap.unwrap().getView().getResolution();
       if (!viewResolution) {
         return reject(new Error('ViewResolution not available'));
       }
 
       // Then we export layers on render complete
-      exportMap.getInternal().once('rendercomplete', () => {
+      exportMap.unwrap().once('rendercomplete', () => {
         logger.info('Rendering layout: ', layout);
         const mapCanvas = document.createElement('canvas');
         mapCanvas.width = dimension.width;
@@ -281,7 +284,7 @@ class LayoutView extends Component<Props, State> {
       });
 
       // We set view and trigger render
-      exportMap.getInternal().setView(
+      exportMap.unwrap().setView(
         new View({
           center: layout.view.center,
           resolution: layout.view.resolution,

@@ -15,7 +15,7 @@ import {
 } from '@abc-map/shared-entities';
 import { Config } from '../config/Config';
 import { UserService } from '../users/UserService';
-import * as uuid from 'uuid';
+import * as uuid from 'uuid-random';
 import * as crypto from 'crypto';
 import { SmtpClient } from '../utils/SmtpClient';
 import { AbstractService } from '../services/AbstractService';
@@ -53,7 +53,7 @@ export class AuthenticationService extends AbstractService {
     }
 
     const user: AbcUser = {
-      id: uuid.v4(),
+      id: uuid(),
       email: request.email,
       password: '',
       enabled: false,

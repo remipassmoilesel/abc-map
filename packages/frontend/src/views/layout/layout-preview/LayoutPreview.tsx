@@ -4,20 +4,20 @@ import { Logger } from '../../../core/utils/Logger';
 import { AbcLayout } from '@abc-map/shared-entities';
 import { LayoutHelper } from '../LayoutHelper';
 import View from 'ol/View';
-import { ManagedMap } from '../../../core/geo/map/ManagedMap';
-import './LayoutPreview.scss';
+import { MapWrapper } from '../../../core/geo/map/MapWrapper';
 import { MapFactory } from '../../../core/geo/map/MapFactory';
+import './LayoutPreview.scss';
 
 const logger = Logger.get('LayoutPreview.tsx', 'warn');
 
 interface Props {
   layout?: AbcLayout;
-  mainMap: ManagedMap;
+  mainMap: MapWrapper;
   onLayoutChanged: (lay: AbcLayout) => void;
 }
 
 interface State {
-  preview?: ManagedMap;
+  preview?: MapWrapper;
 }
 
 interface MapSupportDimensions {
@@ -68,13 +68,13 @@ class LayoutPreview extends Component<Props, State> {
     this.cleanupMap();
   }
 
-  private initializeMap(div: HTMLDivElement): ManagedMap {
+  private initializeMap(div: HTMLDivElement): MapWrapper {
     logger.info('Initializing preview map');
     const preview = MapFactory.createNaked();
     preview.setTarget(div);
 
     // We listen for view changes, in order to persist them in layout
-    preview.getInternal().on('moveend', this.onPreviewChanged);
+    preview.unwrap().on('moveend', this.onPreviewChanged);
 
     this.setState({ preview });
     return preview;
@@ -91,20 +91,24 @@ class LayoutPreview extends Component<Props, State> {
     const divSize = this.getPreviewDimensionsFor(layout);
     div.style.width = divSize.width;
     div.style.height = divSize.height;
-    preview.getInternal().updateSize();
+    preview.unwrap().updateSize();
 
-    this.services.geo.cloneLayers(mainMap, preview);
+    preview.unwrap().getLayers().clear();
+    mainMap.getLayers().forEach((lay) => {
+      const clone = lay.shallowClone();
+      preview.addLayer(clone);
+    });
 
     const format = layout?.format;
     const view = layout?.view;
-    const mapSize = preview.getInternal().getSize();
+    const mapSize = preview.unwrap().getSize();
     if (!format || !view || !mapSize) {
       return;
     }
     const dimension = LayoutHelper.formatToPixel(format);
     const scaling = Math.min(dimension.width / mapSize[0], dimension.height / mapSize[1]);
 
-    preview.getInternal().setView(
+    preview.unwrap().setView(
       new View({
         center: view.center,
         resolution: view.resolution * scaling,
@@ -151,8 +155,8 @@ class LayoutPreview extends Component<Props, State> {
       return;
     }
     const format = layout.format;
-    const mapSize = map.getInternal().getSize();
-    const view = map.getInternal().getView();
+    const mapSize = map.unwrap().getSize();
+    const view = map.unwrap().getView();
     const center = view.getCenter();
     const resolution = view.getResolution();
     const projection = view.getProjection();

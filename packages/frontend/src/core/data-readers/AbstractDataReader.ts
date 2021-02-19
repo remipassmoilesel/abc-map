@@ -1,18 +1,19 @@
 import { AbcProjection } from '@abc-map/shared-entities';
-import BaseLayer from 'ol/layer/Base';
 import { AbcFile } from './AbcFile';
 import Feature from 'ol/Feature';
 import { Geometry } from 'ol/geom';
-import { FeatureHelper } from '../geo/features/FeatureHelper';
+import { FeatureWrapper } from '../geo/features/FeatureWrapper';
+import { LayerWrapper } from '../geo/layers/LayerWrapper';
 
 export abstract class AbstractDataReader {
   public abstract isSupported(files: AbcFile[]): Promise<boolean>;
-  public abstract read(files: AbcFile[], projection: AbcProjection): Promise<BaseLayer[]>;
+  public abstract read(files: AbcFile[], projection: AbcProjection): Promise<LayerWrapper[]>;
 
   protected generateIdsIfAbsents(features: Feature<Geometry>[]) {
-    features.forEach((feature) => {
+    features.forEach((feat) => {
+      const feature = FeatureWrapper.from(feat);
       if (!feature.getId()) {
-        FeatureHelper.setId(feature);
+        feature.setId();
       }
     });
   }

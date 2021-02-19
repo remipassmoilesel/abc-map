@@ -99,8 +99,8 @@ describe('Project', function () {
         .should((downloaded) => {
           const projectA: AbcProject = JSON.parse(downloaded);
           expect(projectA.layers[2].type).equals(LayerType.Wms);
-          expect((projectA.layers[2].metadata as WmsMetadata).url).not.equal(Env.wmsUrl());
-          expect((projectA.layers[2].metadata as WmsMetadata).url).contains('encrypted:');
+          expect((projectA.layers[2].metadata as WmsMetadata).remoteUrl).not.equal(Env.wmsUrl());
+          expect((projectA.layers[2].metadata as WmsMetadata).remoteUrl).contains('encrypted:');
           expect((projectA.layers[2].metadata as WmsMetadata).auth?.username).contains('encrypted:');
           expect((projectA.layers[2].metadata as WmsMetadata).auth?.username).not.equal(Env.wmsUsername());
           expect((projectA.layers[2].metadata as WmsMetadata).auth?.username).contains('encrypted:');

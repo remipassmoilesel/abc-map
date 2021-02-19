@@ -1,16 +1,15 @@
 import Feature, { FeatureLike } from 'ol/Feature';
 import Style, { StyleFunction } from 'ol/style/Style';
 import { Circle, Fill, Stroke } from 'ol/style';
-import { FillPatterns, StyleProperties } from '@abc-map/shared-entities';
+import { FillPatterns } from '@abc-map/shared-entities';
 import { Logger } from '../../utils/Logger';
 import { AbcStyleProperties } from './AbcStyleProperties';
-import Geometry from 'ol/geom/Geometry';
 import { SelectionStyle } from './SelectionStyle';
-import { FeatureHelper } from '../features/FeatureHelper';
 import { StyleCache } from './StyleCache';
 import { FillPatternFactory } from './FillPatternFactory';
+import { FeatureWrapper } from '../features/FeatureWrapper';
 
-const logger = Logger.get('VectorStyles.ts', 'debug');
+const logger = Logger.get('VectorStyles.ts');
 
 const defaults: AbcStyleProperties = {
   stroke: {
@@ -25,37 +24,6 @@ const defaults: AbcStyleProperties = {
 };
 
 export class VectorStyles {
-  /**
-   * Extract style properties from feature
-   * @param feature
-   */
-  public static getProperties(feature: FeatureLike): AbcStyleProperties {
-    return {
-      fill: {
-        color1: feature.get(StyleProperties.FillColor1),
-        color2: feature.get(StyleProperties.FillColor2),
-        pattern: feature.get(StyleProperties.FillPattern),
-      },
-      stroke: {
-        color: feature.get(StyleProperties.StrokeColor),
-        width: feature.get(StyleProperties.StrokeWidth),
-      },
-    };
-  }
-
-  /**
-   * Set style properties on feature
-   * @param feature
-   * @param style
-   */
-  public static setProperties(feature: Feature<Geometry>, style: AbcStyleProperties): void {
-    feature.set(StyleProperties.StrokeColor, style.stroke.color);
-    feature.set(StyleProperties.StrokeWidth, style.stroke.width);
-    feature.set(StyleProperties.FillColor1, style.fill.color1);
-    feature.set(StyleProperties.FillColor2, style.fill.color2);
-    feature.set(StyleProperties.FillPattern, style.fill.pattern);
-  }
-
   public static createStyle(properties: AbcStyleProperties): Style | Style[] {
     let fill: Fill;
     if (!properties.fill.pattern) {
@@ -81,18 +49,22 @@ export class VectorStyles {
 
   public static openLayersStyleFunction(): StyleFunction {
     const cache: StyleCache = new StyleCache();
-    return (feature: FeatureLike): Style | Style[] => {
-      if (feature instanceof Feature && FeatureHelper.isSelected(feature)) {
-        return SelectionStyle.getForFeature(feature);
+    return (feat: FeatureLike): Style | Style[] => {
+      if (!(feat instanceof Feature)) {
+        return [];
       }
 
-      const properties = VectorStyles.getProperties(feature);
+      const feature = FeatureWrapper.from(feat);
+      if (feature.isSelected()) {
+        return SelectionStyle.getForFeature(feat);
+      }
+
+      const properties = feature.getStyle();
       let style = cache.get(properties);
       if (!style) {
         style = VectorStyles.createStyle(properties);
         cache.put(properties, style);
       }
-
       return style;
     };
   }

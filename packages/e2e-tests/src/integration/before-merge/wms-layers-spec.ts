@@ -9,9 +9,7 @@ describe('Wms layers', function () {
   });
 
   it('User can add WMS layers without authentication', () => {
-    cy.intercept('GET', '**REQUEST=GetMap*')
-      .as('wms')
-      .visit(FrontendRoutes.map())
+    cy.visit(FrontendRoutes.map())
       // Open add layer dialog
       .get('[data-cy=add-layer]')
       .click()
@@ -33,8 +31,13 @@ describe('Wms layers', function () {
       .get('[data-cy=add-layer-confirm]')
       .click()
       // Ensure requests return correct code
+      .intercept('GET', '**REQUEST=GetMap*')
+      .as('wms')
       .wait('@wms')
-      .should((req) => expect(req.response?.statusCode).equal(200))
+      .should((req) => {
+        const requestOk = req.response?.statusCode === 200 || req.response?.statusCode === 204;
+        expect(requestOk).true;
+      })
       .then(() => MainMap.getReference())
       .should((map) => {
         const layers = map.getLayersMetadata();
@@ -44,9 +47,7 @@ describe('Wms layers', function () {
   });
 
   it('User can add WMS layers with authentication', () => {
-    cy.intercept('GET', '**REQUEST=GetMap*')
-      .as('wms')
-      .visit(FrontendRoutes.map())
+    cy.visit(FrontendRoutes.map())
       // Open add layer dialog
       .get('[data-cy=add-layer]')
       .click()
@@ -73,8 +74,13 @@ describe('Wms layers', function () {
       .click()
       .get('[data-cy=add-layer-confirm]')
       .click()
+      .intercept('GET', '**REQUEST=GetMap*')
+      .as('wms')
       .wait('@wms')
-      .should((req) => expect(req.response?.statusCode).equal(200))
+      .should((req) => {
+        const requestOk = req.response?.statusCode === 200 || req.response?.statusCode === 204;
+        expect(requestOk).true;
+      })
       .then(() => MainMap.getReference())
       .should((map) => {
         const layers = map.getLayersMetadata();

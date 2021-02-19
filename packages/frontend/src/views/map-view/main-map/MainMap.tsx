@@ -8,14 +8,14 @@ import VectorSource from 'ol/source/Vector';
 import FeatureFormat from 'ol/format/Feature';
 import Feature from 'ol/Feature';
 import Geometry from 'ol/geom/Geometry';
-import { LayerProperties } from '@abc-map/shared-entities';
-import { ManagedMap } from '../../../core/geo/map/ManagedMap';
+import { MapWrapper } from '../../../core/geo/map/MapWrapper';
+import { LayerFactory } from '../../../core/geo/layers/LayerFactory';
 import './MainMap.scss';
 
 export const logger = Logger.get('MainMap.ts', 'debug');
 
 interface Props {
-  map: ManagedMap;
+  map: MapWrapper;
 }
 
 interface State {
@@ -61,7 +61,7 @@ class MainMap extends Component<Props, State> {
       formatConstructors: ([GPX, GeoJSON, IGC, KML, TopoJSON] as any) as FeatureFormat[], // OL typing is broken
     });
     dropData.on('addfeatures', this.onFeaturesDropped);
-    map.getInternal().addInteraction(dropData);
+    map.unwrap().addInteraction(dropData);
 
     this.setState({ dropData });
   }
@@ -70,7 +70,7 @@ class MainMap extends Component<Props, State> {
     const map = this.props.map;
     map.setTarget(undefined);
     if (this.state.dropData) {
-      map.getInternal().removeInteraction(this.state.dropData);
+      map.unwrap().removeInteraction(this.state.dropData);
       this.state.dropData.dispose();
     }
   }
@@ -85,12 +85,12 @@ class MainMap extends Component<Props, State> {
       features: ev.features as Feature<Geometry>[],
     });
 
-    const layer = this.services.geo.newVectorLayer(source);
-    layer.set(LayerProperties.Name, ev.file.name);
+    const layer = LayerFactory.newVectorLayer(source);
+    layer.setName(ev.file.name);
 
     map.addLayer(layer);
     map.setActiveLayer(layer);
-    map.getInternal().getView().fit(source.getExtent());
+    map.unwrap().getView().fit(source.getExtent());
   };
 }
 

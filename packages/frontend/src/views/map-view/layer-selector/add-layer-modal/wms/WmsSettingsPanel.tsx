@@ -145,8 +145,8 @@ class WmsSettingsPanel extends Component<Props, State> {
       };
     }
     return {
-      url: this.state.url,
-      layerName: this.state.selectedLayer?.Name || '',
+      remoteUrl: this.state.url,
+      remoteLayerName: this.state.selectedLayer?.Name || '',
       projection,
       extent,
       auth,

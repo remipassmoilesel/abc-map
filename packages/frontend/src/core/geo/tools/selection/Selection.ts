@@ -5,13 +5,13 @@ import { onlyMainButton } from '../common/common-conditions';
 import VectorSource from 'ol/source/Vector';
 import Geometry from 'ol/geom/Geometry';
 import { Collection, Map } from 'ol';
-import { FeatureHelper } from '../../features/FeatureHelper';
 import Icon from '../../../../assets/tool-icons/selection.svg';
 import { containsXY, Extent } from 'ol/extent';
 import Feature from 'ol/Feature';
 import { HistoryKey } from '../../../history/HistoryKey';
 import { ModificationItem, ModifyGeometriesTask } from '../../../history/tasks/ModifyGeometriesTask';
 import { Logger } from '../../../utils/Logger';
+import { FeatureWrapper } from '../../features/FeatureWrapper';
 
 const logger = Logger.get('Selection.ts');
 
@@ -31,50 +31,69 @@ export class Selection extends AbstractTool {
   public setup(map: Map, source: VectorSource<Geometry>): void {
     super.setup(map, source);
 
+    const selection = new Collection<Feature<Geometry>>();
+
     const dragBox = new DragBox({
       condition: onlyMainButton,
       className: 'abc-selection-box',
     });
 
-    const features = new Collection<Feature<Geometry>>();
+    const sourceListener = source.on('addfeature', (evt) => {
+      if (FeatureWrapper.from(evt.feature).isSelected()) {
+        selection.push(evt.feature);
+
+        // If one feature were added, others can be deselected. So we remove them
+        selection
+          .getArray()
+          .slice()
+          .forEach((feat) => {
+            if (!FeatureWrapper.from(feat).isSelected()) {
+              selection.remove(feat);
+            }
+          });
+      }
+    });
+    this.sourceListeners.push(sourceListener);
 
     dragBox.on('boxstart', () => {
-      features.clear();
-      // Warning: this can become a performance issue
-      source.forEachFeature((feature) => {
-        FeatureHelper.setSelected(feature, false);
+      selection.clear();
+      // WARNING: this can lead to poor performances
+      source.forEachFeature((feat) => {
+        const feature = FeatureWrapper.from(feat);
+        if (feature.isSelected()) {
+          feature.setSelected(false);
+        }
       });
     });
 
     dragBox.on('boxend', () => {
-      const selection = dragBox.getGeometry().getExtent();
-      source.forEachFeatureInExtent(selection, (feature) => {
+      const extent = dragBox.getGeometry().getExtent();
+      source.forEachFeatureInExtent(extent, (feature) => {
         const geomExtent = feature.getGeometry()?.getExtent();
-        if (isWithinExtent(selection, geomExtent)) {
-          FeatureHelper.setSelected(feature, true);
-          features.push(feature);
+        if (isWithinExtent(extent, geomExtent)) {
+          FeatureWrapper.from(feature).setSelected(true);
+          selection.push(feature);
         }
       });
     });
 
     const translate = new Translate({
-      features,
+      features: selection,
     });
 
-    let translated: Feature<Geometry>[] = [];
+    let translated: FeatureWrapper[] = [];
     translate.on('translatestart', () => {
-      features.forEach((feature) => {
-        if (FeatureHelper.isSelected(feature)) {
-          const clone = FeatureHelper.clone(feature);
-          translated.push(clone);
-        }
+      selection.forEach((feat) => {
+        const clone = FeatureWrapper.from(feat).clone();
+        translated.push(clone);
       });
     });
 
     translate.on('translateend', () => {
-      const items = features
+      const items = selection
         .getArray()
-        .map((feature) => {
+        .map((feat) => {
+          const feature = FeatureWrapper.from(feat);
           if (!feature.getId()) {
             logger.error('Cannot register modify task, feature does not have an id');
             return null;

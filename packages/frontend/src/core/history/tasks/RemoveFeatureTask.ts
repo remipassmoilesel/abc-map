@@ -1,18 +1,17 @@
 import { Task } from '../Task';
 import VectorSource from 'ol/source/Vector';
-import Geometry from 'ol/geom/Geometry';
-import Feature from 'ol/Feature';
+import { FeatureWrapper } from '../../geo/features/FeatureWrapper';
 
 export class RemoveFeatureTask extends Task {
-  constructor(private source: VectorSource, private features: Feature<Geometry>[]) {
+  constructor(private source: VectorSource, private features: FeatureWrapper[]) {
     super();
   }
 
   public async undo(): Promise<void> {
-    this.features.forEach((feat) => this.source.addFeature(feat));
+    this.features.forEach((feat) => this.source.addFeature(feat.unwrap()));
   }
 
   public async redo(): Promise<void> {
-    this.features.forEach((feat) => this.source.removeFeature(feat));
+    this.features.forEach((feat) => this.source.removeFeature(feat.unwrap()));
   }
 }

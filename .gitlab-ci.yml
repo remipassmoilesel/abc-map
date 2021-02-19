@@ -12,8 +12,14 @@ services:
 cache:
   key: main
   paths:
+    - .yarn-cache
+    - .cypress-cache
+    - packages/abc-cli/node_modules
     - packages/backend/node_modules/
+    - packages/documentation/node_modules/
+    - packages/e2e-tests/node_modules/
     - packages/frontend/node_modules/
+    - packages/shared-entities/node_modules/
 
 test:
   # WARNING: do not release cypress screenshots as artifacts, otherwise test credentials can be leaked

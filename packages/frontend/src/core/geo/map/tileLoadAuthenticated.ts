@@ -14,8 +14,8 @@ function defaultHttpClientFactory(config: AxiosRequestConfig): AxiosInstance {
 }
 
 export function tileLoadAuthenticated(auth: WmsAuthentication, factory: HttpClientFactory = defaultHttpClientFactory): LoadFunction {
-  const client = factory({
-    timeout: 5_000,
+  const authClient = factory({
+    timeout: 10_000,
     responseType: 'blob',
     auth: {
       username: auth.username,
@@ -25,7 +25,7 @@ export function tileLoadAuthenticated(auth: WmsAuthentication, factory: HttpClie
 
   return function (_tile, src) {
     const tile: ImageTile = _tile as ImageTile;
-    client
+    authClient
       .get(src)
       .then((res) => {
         const blob = res.data as Blob;

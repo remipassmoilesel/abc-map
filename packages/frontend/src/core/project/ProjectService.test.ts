@@ -7,7 +7,7 @@ import { TestHelper } from '../utils/TestHelper';
 import { MapFactory } from '../geo/map/MapFactory';
 import { MainStore, storeFactory } from '../store/store';
 import { UiService } from '../ui/UiService';
-import { ManagedMap } from '../geo/map/ManagedMap';
+import { MapWrapper } from '../geo/map/MapWrapper';
 jest.mock('../geo/GeoService');
 jest.mock('../ui/UiService');
 
@@ -19,9 +19,10 @@ describe('ProjectService', function () {
   let uiServiceMock: UiService;
   let projectService: ProjectService;
 
+  // TODO: refactor mocks
   beforeEach(() => {
     store = storeFactory();
-    geoServiceMock = new GeoService({} as any);
+    geoServiceMock = new GeoService({} as any, {} as any);
     uiServiceMock = new UiService();
     projectService = new ProjectService({} as any, store, geoServiceMock, uiServiceMock);
   });
@@ -38,7 +39,7 @@ describe('ProjectService', function () {
     geoServiceMock.getMainMap = () =>
       ({
         containsCredentials: () => false,
-      } as ManagedMap);
+      } as MapWrapper);
     geoServiceMock.exportLayers = () => Promise.resolve(layers);
 
     const project = (await projectService.exportCurrentProject()) as AbcProject;
@@ -80,7 +81,7 @@ describe('ProjectService', function () {
     store.dispatch(ProjectActions.newProject(metadata));
 
     const newProject = TestHelper.sampleProject();
-    projectService.loadProject(newProject);
+    await projectService.loadProject(newProject);
 
     expect(store.getState().project.metadata.id).toEqual(newProject.metadata.id);
   });

@@ -3,7 +3,7 @@ import { MongodbClient } from '../mongodb/MongodbClient';
 import { ConfigLoader } from '../config/ConfigLoader';
 import { TestHelper } from '../utils/TestHelper';
 import { assert } from 'chai';
-import * as uuid from 'uuid';
+import * as uuid from 'uuid-random';
 import { AnonymousUser } from '@abc-map/shared-entities';
 
 describe('UserService', () => {
@@ -57,7 +57,7 @@ describe('UserService', () => {
     });
 
     it('should return undefined()', async () => {
-      const res = await service.findByEmail(uuid.v4());
+      const res = await service.findByEmail(uuid());
       assert.isUndefined(res);
     });
   });
