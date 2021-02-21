@@ -30,8 +30,8 @@ async function main(args: string[]) {
   banners.cli();
   const command = await parser.parse(args);
 
-  if (Command.BOOSTRAP === command) {
-    service.bootstrap();
+  if (Command.INSTALL === command) {
+    service.install();
   } else if (Command.LINT === command) {
     service.lint();
   } else if (Command.BUILD === command) {

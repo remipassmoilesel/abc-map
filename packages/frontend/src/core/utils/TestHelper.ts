@@ -168,6 +168,9 @@ export class TestHelper {
         offsetY: 30,
         alignment: 'left',
       },
+      point: {
+        size: 5,
+      },
     };
   }
 }

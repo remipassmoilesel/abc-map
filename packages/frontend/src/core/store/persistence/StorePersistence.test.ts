@@ -38,6 +38,9 @@ describe('StorePersistence', () => {
             size: 30,
             font: 'sans-serif',
           },
+          point: {
+            size: 5,
+          },
         },
       },
       authentication: {
@@ -78,6 +81,9 @@ describe('StorePersistence', () => {
             color: '#123456',
             size: 30,
             font: 'sans-serif',
+          },
+          point: {
+            size: 5,
           },
         },
       },

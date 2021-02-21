@@ -73,6 +73,14 @@ export function mapReducer(state = mapInitialState, action: MapAction): MapState
       return newState;
     }
 
+    case ActionType.SetPointSize: {
+      const newState: MapState = { ...state };
+      newState.currentStyle = { ...newState.currentStyle };
+      newState.currentStyle.point = { ...newState.currentStyle.point };
+      newState.currentStyle.point.size = action.size;
+      return newState;
+    }
+
     default:
       return state;
   }

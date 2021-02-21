@@ -24,11 +24,6 @@ type Props = PropsFromRedux & LocalProps;
 class HistoryControls extends Component<Props, {}> {
   private services = services();
 
-  constructor(props: Props) {
-    super(props);
-    this.state = {};
-  }
-
   public render(): ReactNode {
     const canUndo = this.canUndo();
     const canRedo = this.canRedo();

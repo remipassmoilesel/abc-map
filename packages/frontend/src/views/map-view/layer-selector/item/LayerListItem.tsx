@@ -11,11 +11,6 @@ interface Props {
 }
 
 class LayerListItem extends Component<Props, {}> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {};
-  }
-
   public render(): ReactNode {
     const meta = this.props.metadata;
     const selectedClass = meta.active ? 'active' : '';

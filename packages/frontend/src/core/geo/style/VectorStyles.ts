@@ -11,7 +11,7 @@ import { FeatureWrapper } from '../features/FeatureWrapper';
 
 const logger = Logger.get('VectorStyles.ts');
 
-const defaults: AbcStyleProperties = {
+const defaults = {
   stroke: {
     color: '#000',
     width: 2,
@@ -43,11 +43,14 @@ export class VectorStyles {
       color: properties.stroke.color || defaults.stroke.color,
     });
 
-    const image = new Circle({
-      fill: fill,
-      stroke: stroke,
-      radius: 5,
-    });
+    let pointStyle: Circle | undefined;
+    if (properties.point.size) {
+      pointStyle = new Circle({
+        fill: fill,
+        stroke: stroke,
+        radius: properties.point.size,
+      });
+    }
 
     let textStyle: Text | undefined;
     if (properties.text.value) {
@@ -65,7 +68,7 @@ export class VectorStyles {
       });
     }
 
-    return [new Style({ fill, stroke, image, text: textStyle })];
+    return [new Style({ fill, stroke, image: pointStyle, text: textStyle })];
   }
 
   public static openLayersStyleFunction(): StyleFunction {

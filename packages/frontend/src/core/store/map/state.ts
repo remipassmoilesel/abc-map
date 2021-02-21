@@ -26,5 +26,8 @@ export const mapInitialState: MapState = {
       font: 'sans-serif',
       size: 30,
     },
+    point: {
+      size: 5,
+    },
   },
 };

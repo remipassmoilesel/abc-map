@@ -108,10 +108,12 @@ export class TextInteraction extends PointerInteraction {
     const box = document.createElement('input');
     box.type = 'text';
     box.value = value;
+    box.dataset['cy'] = 'text-box';
+    box.className = 'form-control';
     box.style.position = 'absolute';
     box.style.left = x + 'px';
     box.style.top = y - 30 + 'px';
-    box.dataset['cy'] = 'text-box';
+    box.style.width = `200px`;
     body.append(box);
 
     backdrop.addEventListener('click', () => {

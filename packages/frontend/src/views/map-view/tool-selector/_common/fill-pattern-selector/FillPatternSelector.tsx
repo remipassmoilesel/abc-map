@@ -7,7 +7,7 @@ import { MainState } from '../../../../../core/store/reducer';
 import { MapActions } from '../../../../../core/store/map/actions';
 import { connect, ConnectedProps } from 'react-redux';
 import { services } from '../../../../../core/Services';
-import './FillPatternSelector.scss';
+import Cls from './FillPatternSelector.module.scss';
 
 const logger = Logger.get('FillPatternSelector.tsx', 'info');
 
@@ -31,14 +31,11 @@ class FillPatternSelector extends Component<Props, {}> {
   public render(): ReactNode {
     const options = this.getOptions();
     return (
-      <div className={'abc-fill-pattern-selector'}>
-        <div className={'d-flex align-items-start justify-content-between'}>
-          <div className={'mb-2'}>Texture:</div>
-          <canvas ref={this.canvas} width={80} height={50} />
-        </div>
-        <select onChange={this.handleSelectChange} value={this.props.fill.pattern}>
+      <div className={'control-item d-flex justify-content-between align-items-center'}>
+        <select onChange={this.handleSelection} value={this.props.fill.pattern} className={`form-control form-control-sm ${Cls.select}`}>
           {options}
         </select>
+        <canvas ref={this.canvas} width={40} height={40} />
       </div>
     );
   }
@@ -51,7 +48,7 @@ class FillPatternSelector extends Component<Props, {}> {
     this.preview();
   }
 
-  private handleSelectChange = (ev: ChangeEvent<HTMLSelectElement>) => {
+  private handleSelection = (ev: ChangeEvent<HTMLSelectElement>) => {
     const pattern = ev.target.value as FillPatterns;
     this.props.setPattern(pattern);
 
@@ -83,7 +80,7 @@ class FillPatternSelector extends Component<Props, {}> {
     }
 
     if (FillPatterns.Flat === pattern) {
-      ctx.fillStyle = 'white';
+      ctx.fillStyle = this.props.fill.color1 || 'white';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       return;
     }

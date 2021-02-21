@@ -4,14 +4,14 @@ import { MainState } from '../../../../core/store/reducer';
 import { MapActions } from '../../../../core/store/map/actions';
 import { services } from '../../../../core/Services';
 import _ from 'lodash';
+import Cls from './PointSizeSelector.module.scss';
 
 const mapStateToProps = (state: MainState) => ({
-  fill: state.map.currentStyle.fill,
-  stroke: state.map.currentStyle.stroke,
+  point: state.map.currentStyle.point,
 });
 
 const mapDispatchToProps = {
-  setStrokeWidth: MapActions.setStrokeWidth,
+  setPointSize: MapActions.setPointSize,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
@@ -22,33 +22,27 @@ type Props = PropsFromRedux;
 class StrokeWidthSelector extends Component<Props, {}> {
   private services = services();
 
-  constructor(props: Props) {
-    super(props);
-    this.state = {};
-  }
-
   public render(): ReactNode {
-    const widthOptions = _.range(1, 25).map((value) => (
-      <option key={value} value={value}>
-        {value}
-      </option>
-    ));
     return (
-      <div className={'control-item'}>
-        <div>Trait:</div>
-        <select value={this.props.stroke.width} onChange={this.handleWidthSelected} className={'form-control'}>
-          {widthOptions}
+      <div className={'control-item d-flex align-items-center justify-content-between'}>
+        <div className={'mr-2'}>Taille:</div>
+        <select value={this.props.point.size} onChange={this.handleSelection} className={`form-control form-control-sm ${Cls.select}`}>
+          {_.range(1, 51).map((value) => (
+            <option key={value} value={value}>
+              {value}
+            </option>
+          ))}
         </select>
       </div>
     );
   }
 
-  private handleWidthSelected = (ev: ChangeEvent<HTMLSelectElement>): void => {
-    const width = Number(ev.target.value);
-    this.props.setStrokeWidth(width);
+  private handleSelection = (ev: ChangeEvent<HTMLSelectElement>): void => {
+    const size = Number(ev.target.value);
+    this.props.setPointSize(size);
 
     this.services.geo.updateSelectedFeatures((style) => {
-      style.stroke.width = width;
+      style.point.size = size;
       return style;
     });
   };

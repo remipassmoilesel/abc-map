@@ -4,12 +4,12 @@ import { HistoryKey } from '../../../../core/history/HistoryKey';
 import { RemoveFeatureTask } from '../../../../core/history/tasks/RemoveFeatureTask';
 import { AddFeaturesTask } from '../../../../core/history/tasks/AddFeaturesTask';
 import { Logger } from '../../../../core/utils/Logger';
-import StrokeWidthSelector from '../_common/StrokeWidthSelector';
+import StrokeWidthSelector from '../_common/stroke-width-selector/StrokeWidthSelector';
 import ColorSelector from '../_common/color-selector/ColorSelector';
-import FillPatternSelector from '../_common/pattern-selector/FillPatternSelector';
+import FillPatternSelector from '../_common/fill-pattern-selector/FillPatternSelector';
 import { FeatureWrapper } from '../../../../core/geo/features/FeatureWrapper';
 import TextFormat from '../_common/text-format/TextFormat';
-import './SelectionPanel.scss';
+import Cls from './SelectionPanel.module.scss';
 
 const logger = Logger.get('SelectionPanel.tsx');
 
@@ -18,19 +18,19 @@ class SelectionPanel extends Component<{}, {}> {
 
   public render(): ReactNode {
     return (
-      <div className={'abc-selection-panel'}>
+      <div className={Cls.selectionPanel}>
+        <button className={`btn btn-outline-secondary ${Cls.button}`} onClick={this.handleDelete} data-cy={'delete-selection'}>
+          <i className={'fa fa-trash'} />
+          Supprimer
+        </button>
+        <button className={`btn btn-outline-secondary ${Cls.button}`} onClick={this.handleDuplicate} data-cy={'duplicate-selection'}>
+          <i className={'fa fa-copy'} />
+          Dupliquer
+        </button>
         <StrokeWidthSelector />
         <ColorSelector fillColors={true} />
         <FillPatternSelector />
         <TextFormat />
-        <button className={'btn btn-outline-secondary'} onClick={this.handleDelete} data-cy={'delete-selection'}>
-          <i className={'fa fa-trash'} />
-          Supprimer
-        </button>
-        <button className={'btn btn-outline-secondary'} onClick={this.handleDuplicate} data-cy={'duplicate-selection'}>
-          <i className={'fa fa-copy'} />
-          Dupliquer
-        </button>
       </div>
     );
   }

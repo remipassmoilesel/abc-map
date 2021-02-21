@@ -1,0 +1,40 @@
+@import "src/style/variables";
+
+.toolSelector {
+  display: flex;
+  flex-direction: column;
+}
+
+.toolList {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0.2em 0.5em;
+}
+
+.toolButton {
+  margin: 2px;
+  padding: 6px;
+
+  border: solid 2px $secondary;
+  background-color: inherit;
+  border-radius: 7px;
+
+  outline: 0;
+
+  img {
+    width: 25px;
+  }
+
+  &.active {
+    border: solid 2px $primary;
+  }
+}
+
+.toolPanel {
+  margin-top: 0.5em;
+  padding-top: 0.5em;
+}

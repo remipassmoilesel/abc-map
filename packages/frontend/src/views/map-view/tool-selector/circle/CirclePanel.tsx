@@ -1,16 +1,16 @@
 import React, { Component, ReactNode } from 'react';
 import { Logger } from '../../../../core/utils/Logger';
-import WidthSelector from '../_common/StrokeWidthSelector';
+import WidthSelector from '../_common/stroke-width-selector/StrokeWidthSelector';
 import ColorSelector from '../_common/color-selector/ColorSelector';
-import FillPatternSelector from '../_common/pattern-selector/FillPatternSelector';
-import './CirclePanel.scss';
+import FillPatternSelector from '../_common/fill-pattern-selector/FillPatternSelector';
+import Cls from './CirclePanel.module.scss';
 
 const logger = Logger.get('CirclePanel.tsx');
 
 class CirclePanel extends Component<{}, {}> {
   public render(): ReactNode {
     return (
-      <div className={'abc-circle-panel'}>
+      <div className={Cls.circlePanel}>
         <WidthSelector />
         <ColorSelector fillColors={true} />
         <FillPatternSelector />

@@ -89,6 +89,9 @@ export class FeatureWrapper {
         offsetY: this.feature.get(StyleProperties.TextOffsetY),
         alignment: this.feature.get(StyleProperties.TextAlignment),
       },
+      point: {
+        size: this.feature.get(StyleProperties.PointSize),
+      },
     };
   }
 
@@ -109,6 +112,7 @@ export class FeatureWrapper {
     this.feature.set(StyleProperties.TextOffsetX, style.text.offsetX);
     this.feature.set(StyleProperties.TextOffsetY, style.text.offsetY);
     this.feature.set(StyleProperties.TextAlignment, style.text.alignment);
+    this.feature.set(StyleProperties.PointSize, style.point.size);
     return this;
   }
 

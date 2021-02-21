@@ -13,11 +13,6 @@ interface Props {
 class ProjectStatus extends Component<Props, {}> {
   private services = services();
 
-  constructor(props: Props) {
-    super(props);
-    this.state = {};
-  }
-
   public render(): ReactNode {
     const metadata = this.props.project;
     return (

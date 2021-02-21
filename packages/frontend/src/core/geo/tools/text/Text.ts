@@ -69,6 +69,10 @@ export class Text extends AbstractTool {
       }
 
       const after = FeatureWrapper.from(ev.feature).getStyle();
+      if (before.text.value === after.text.value) {
+        return;
+      }
+
       const feature = FeatureWrapper.from(ev.feature);
       this.history.register(HistoryKey.Map, new UpdateStyleTask([{ before, after, feature }]));
     });
