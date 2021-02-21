@@ -1,7 +1,7 @@
 import React, { Component, ReactNode } from 'react';
 import { Logger } from '../../../../../core/utils/Logger';
 import { Colors } from './colors';
-import './ColorPickerButton.scss';
+import './ColorPicker.scss';
 
 const logger = Logger.get('ColorPickerButton.tsx', 'info');
 
@@ -17,7 +17,7 @@ interface State {
   value: string;
 }
 
-class ColorPickerButton extends Component<Props, State> {
+class ColorPicker extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -61,4 +61,4 @@ class ColorPickerButton extends Component<Props, State> {
   };
 }
 
-export default ColorPickerButton;
+export default ColorPicker;

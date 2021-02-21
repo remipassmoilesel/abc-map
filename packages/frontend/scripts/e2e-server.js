@@ -2,6 +2,7 @@ const express = require('express');
 const proxy = require('express-http-proxy');
 const path = require('path');
 
+const port = 3005;
 const appRoot = path.resolve(__dirname, '..', 'build');
 const app = express();
 
@@ -13,6 +14,6 @@ app.get('*', function (req, res) {
 
 app.use(proxy('localhost:10082'));
 
-app.listen(3000, 'localhost', () => {
-  console.log('Server listening on localhost:3000');
+app.listen(port, 'localhost', () => {
+  console.log(`Server listening on localhost:${port}`);
 });

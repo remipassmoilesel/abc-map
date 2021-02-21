@@ -3,7 +3,7 @@ import { AbcProperties, MapTool } from '@abc-map/shared-entities';
 import { Map } from 'ol';
 import { logger, MapWrapper } from './MapWrapper';
 import VectorLayer from 'ol/layer/Vector';
-import { ToolRegistry } from '../tools/registry/ToolRegistry';
+import { ToolRegistry } from '../tools/ToolRegistry';
 import { OlTestHelper } from '../../utils/OlTestHelper';
 import { Circle } from '../tools/circle/Circle';
 import { None } from '../tools/common/None';

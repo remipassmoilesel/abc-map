@@ -24,7 +24,7 @@ export class Registration {
       cy.readFile(`emails/${email}.html`)
         .then((content) => {
           const activationLink = Cypress.$(content).find('a[data-cy=enable-account-link]').attr('href') || '';
-          expect(activationLink).to.contains('http://localhost:3000/confirm-account/');
+          expect(activationLink).to.contains('http://localhost:3005/confirm-account/');
           return cy.visit(activationLink);
         })
         .get('div[data-cy=account-enabled]')

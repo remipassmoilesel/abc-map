@@ -8,9 +8,9 @@ import { Logger } from '../../utils/Logger';
 
 export const logger = Logger.get('SelectionStyle.ts');
 
-const fillColor = '#ffc9c9';
+const fillColor = '#ffc9c955';
 const strokeColor = '#ff0000';
-const width = 2;
+const width = 3;
 
 const stroke = new Stroke({
   color: strokeColor,

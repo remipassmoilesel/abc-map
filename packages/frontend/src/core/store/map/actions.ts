@@ -7,6 +7,8 @@ export enum ActionType {
   SetStrokeColor = 'SetStrokeColor',
   SetStrokeWidth = 'SetStrokeWidth',
   SetFillPattern = 'SetFillPattern',
+  SetTextColor = 'SetTextColor',
+  SetTextSize = 'SetTextSize',
 }
 
 export interface SetTool {
@@ -39,7 +41,17 @@ export interface SetFillPattern {
   pattern: FillPatterns;
 }
 
-export type MapAction = SetTool | SetStrokeColor | SetFillColor1 | SetFillColor2 | SetStrokeWidth | SetFillPattern;
+export interface SetTextColor {
+  type: ActionType.SetTextColor;
+  color: string;
+}
+
+export interface SetTextSize {
+  type: ActionType.SetTextSize;
+  size: number;
+}
+
+export type MapAction = SetTool | SetStrokeColor | SetFillColor1 | SetFillColor2 | SetStrokeWidth | SetFillPattern | SetTextColor | SetTextSize;
 
 export class MapActions {
   public static setTool(tool: MapTool): MapAction {
@@ -81,6 +93,20 @@ export class MapActions {
     return {
       type: ActionType.SetFillPattern,
       pattern,
+    };
+  }
+
+  public static setTextColor(color: string): MapAction {
+    return {
+      type: ActionType.SetTextColor,
+      color,
+    };
+  }
+
+  public static setTextSize(size: number): MapAction {
+    return {
+      type: ActionType.SetTextSize,
+      size,
     };
   }
 }

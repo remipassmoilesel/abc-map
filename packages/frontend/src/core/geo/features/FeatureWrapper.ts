@@ -80,6 +80,15 @@ export class FeatureWrapper {
         color2: this.feature.get(StyleProperties.FillColor2),
         pattern: this.feature.get(StyleProperties.FillPattern),
       },
+      text: {
+        value: this.feature.get(StyleProperties.TextValue),
+        color: this.feature.get(StyleProperties.TextColor),
+        size: this.feature.get(StyleProperties.TextSize),
+        font: this.feature.get(StyleProperties.TextFont),
+        offsetX: this.feature.get(StyleProperties.TextOffsetX),
+        offsetY: this.feature.get(StyleProperties.TextOffsetY),
+        alignment: this.feature.get(StyleProperties.TextAlignment),
+      },
     };
   }
 
@@ -93,10 +102,33 @@ export class FeatureWrapper {
     this.feature.set(StyleProperties.FillColor1, style.fill.color1);
     this.feature.set(StyleProperties.FillColor2, style.fill.color2);
     this.feature.set(StyleProperties.FillPattern, style.fill.pattern);
+    this.feature.set(StyleProperties.TextValue, style.text.value);
+    this.feature.set(StyleProperties.TextColor, style.text.color);
+    this.feature.set(StyleProperties.TextSize, style.text.size);
+    this.feature.set(StyleProperties.TextFont, style.text.font);
+    this.feature.set(StyleProperties.TextOffsetX, style.text.offsetX);
+    this.feature.set(StyleProperties.TextOffsetY, style.text.offsetY);
+    this.feature.set(StyleProperties.TextAlignment, style.text.alignment);
     return this;
   }
 
   public getGeometry(): Geometry | undefined {
     return this.feature.getGeometry();
+  }
+
+  public setText(text: string): FeatureWrapper {
+    const style = this.getStyle();
+    this.setStyle({
+      ...style,
+      text: {
+        ...style.text,
+        value: text,
+      },
+    });
+    return this;
+  }
+
+  public getText(): string | undefined {
+    return this.getStyle().text.value;
   }
 }

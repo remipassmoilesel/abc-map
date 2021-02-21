@@ -5,14 +5,14 @@ import ColorSelector from '../_common/color-selector/ColorSelector';
 import FillPatternSelector from '../_common/pattern-selector/FillPatternSelector';
 import './CirclePanel.scss';
 
-const logger = Logger.get('CirclePanel');
+const logger = Logger.get('CirclePanel.tsx');
 
 class CirclePanel extends Component<{}, {}> {
   public render(): ReactNode {
     return (
       <div className={'abc-circle-panel'}>
         <WidthSelector />
-        <ColorSelector withFillColors={true} />
+        <ColorSelector fillColors={true} />
         <FillPatternSelector />
       </div>
     );

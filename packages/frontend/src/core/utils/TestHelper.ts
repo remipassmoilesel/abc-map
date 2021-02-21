@@ -159,6 +159,15 @@ export class TestHelper {
         color2: 'blue',
         pattern: FillPatterns.HatchingObliqueLeft,
       },
+      text: {
+        value: 'Test text value',
+        color: '#00f',
+        size: 30,
+        font: 'sans-serif',
+        offsetX: 20,
+        offsetY: 30,
+        alignment: 'left',
+      },
     };
   }
 }

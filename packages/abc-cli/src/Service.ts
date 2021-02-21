@@ -39,7 +39,7 @@ export class Service {
       logger.info('Waiting for development servers ...');
 
       const options = {
-        resources: [this.config.getBackendHealthUrl(), this.config.getFrontendHealthUrl()],
+        resources: [this.config.getBackendE2eUrl(), this.config.getFrontendE2eUrl()],
         timeout: 30_000,
       };
       waitOn(options)

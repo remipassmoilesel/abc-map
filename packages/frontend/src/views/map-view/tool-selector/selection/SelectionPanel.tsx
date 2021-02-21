@@ -8,6 +8,7 @@ import StrokeWidthSelector from '../_common/StrokeWidthSelector';
 import ColorSelector from '../_common/color-selector/ColorSelector';
 import FillPatternSelector from '../_common/pattern-selector/FillPatternSelector';
 import { FeatureWrapper } from '../../../../core/geo/features/FeatureWrapper';
+import TextFormat from '../_common/text-format/TextFormat';
 import './SelectionPanel.scss';
 
 const logger = Logger.get('SelectionPanel.tsx');
@@ -19,8 +20,9 @@ class SelectionPanel extends Component<{}, {}> {
     return (
       <div className={'abc-selection-panel'}>
         <StrokeWidthSelector />
-        <ColorSelector withFillColors={true} />
+        <ColorSelector fillColors={true} />
         <FillPatternSelector />
+        <TextFormat />
         <button className={'btn btn-outline-secondary'} onClick={this.handleDelete} data-cy={'delete-selection'}>
           <i className={'fa fa-trash'} />
           Supprimer

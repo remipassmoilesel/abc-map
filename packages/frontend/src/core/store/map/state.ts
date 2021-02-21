@@ -21,5 +21,10 @@ export const mapInitialState: MapState = {
       color: '#3F37C9',
       width: 5,
     },
+    text: {
+      color: '#3F37C9',
+      font: 'sans-serif',
+      size: 30,
+    },
   },
 };

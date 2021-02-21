@@ -11,7 +11,7 @@ class LineStringPanel extends Component<{}, {}> {
     return (
       <div className={'abc-line-panel'}>
         <StrokeWidthSelector />
-        <ColorSelector withFillColors={false} />
+        <ColorSelector fillColors={false} />
       </div>
     );
   }
