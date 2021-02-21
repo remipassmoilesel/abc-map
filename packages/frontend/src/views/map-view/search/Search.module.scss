@@ -1,0 +1,20 @@
+.dropdown {
+  position: absolute;
+  width: 400px;
+  max-height: 500px;
+  z-index: 5;
+
+  padding: 0.5em;
+
+  background-color: white;
+  border: 1px solid lightgrey;
+  overflow-x: hidden;
+  overflow-y: scroll;
+
+  box-shadow: 5px 5px 10px 0 rgba(170,170,170,1);
+  border-radius: 5px;
+}
+
+.message {
+  padding: 1em;
+}

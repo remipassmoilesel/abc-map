@@ -12,7 +12,8 @@ import { HistoryKey } from '../../core/history/HistoryKey';
 import { MapWrapper } from '../../core/geo/map/MapWrapper';
 import { MainState } from '../../core/store/reducer';
 import { LayerWrapper } from '../../core/geo/layers/LayerWrapper';
-import './MapView.scss';
+import Search from './search/Search';
+import Cls from './MapView.module.scss';
 
 const logger = Logger.get('MapView.tsx', 'debug');
 
@@ -33,9 +34,6 @@ const connector = connect(mapStateToProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 type Props = PropsFromRedux;
 
-/**
- * Map layers are passed as props from here in order to update components "in a react way".
- */
 class MapView extends Component<Props, State> {
   private services = services();
 
@@ -49,16 +47,11 @@ class MapView extends Component<Props, State> {
 
   public render(): ReactNode {
     return (
-      <div className="abc-map-view">
+      <div className={Cls.mapView}>
         {/*Left menu*/}
-        <div className="left-panel">
+        <div className={Cls.leftPanel}>
           <ProjectStatus project={this.props.project} />
-          <div className={'control-block'}>
-            <div className={'control-item'}>
-              Rechercher sur la carte
-              <input type={'text'} className={'mt-2'} onKeyPress={this.onSearch} />
-            </div>
-          </div>
+          <Search map={this.state.map} />
           <ProjectControls />
           <div className={'control-block'}>
             <div className={'control-item'}>
@@ -76,7 +69,7 @@ class MapView extends Component<Props, State> {
         <MainMap map={this.state.map} />
 
         {/*Right menu*/}
-        <div className="right-panel">
+        <div className={Cls.rightPanel}>
           <HistoryControls historyKey={HistoryKey.Map} />
           <LayerSelector layers={this.state.layers} />
           <ToolSelector />
@@ -104,10 +97,6 @@ class MapView extends Component<Props, State> {
   };
 
   private importFile = () => {
-    this.services.ui.toasts.featureNotReady();
-  };
-
-  private onSearch = () => {
     this.services.ui.toasts.featureNotReady();
   };
 

@@ -13,9 +13,6 @@ import './LayerSelector.scss';
 const logger = Logger.get('LayerSelector.tsx', 'debug');
 
 interface Props {
-  /**
-   * Layers are passed here in order to trigger changes on layers changes
-   */
   layers: LayerWrapper[];
 }
 

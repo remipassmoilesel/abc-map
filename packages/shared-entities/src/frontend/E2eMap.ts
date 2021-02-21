@@ -6,6 +6,8 @@ export interface E2eMap {
   getActiveLayerMetadata(): BaseMetadata | undefined;
 
   getActiveLayerFeatures(): E2eFeature[];
+
+  getViewExtent(): [number, number, number, number];
 }
 
 export interface E2eFeature {
