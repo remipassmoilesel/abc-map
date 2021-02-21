@@ -3,10 +3,10 @@ import { connect, ConnectedProps } from 'react-redux';
 import { MainState } from '../../../../../core/store/reducer';
 import { MapActions } from '../../../../../core/store/map/actions';
 import { services } from '../../../../../core/Services';
-import ColorPickerButton from './ColorPickerButton';
+import ColorPicker from './ColorPicker';
 
 export interface LocalProps {
-  withFillColors: boolean;
+  fillColors: boolean;
 }
 
 const mapStateToProps = (state: MainState) => ({
@@ -34,15 +34,15 @@ class ColorSelector extends Component<Props, {}> {
   }
 
   public render(): ReactNode {
-    const withFill = this.props.withFillColors;
+    const withFill = this.props.fillColors;
     return (
       <div className={'control-item mb-3'}>
         <div className={'mb-1'}>Couleurs:</div>
-        <ColorPickerButton label={'Trait'} initialValue={this.props.stroke.color} onChange={this.handleStrokeColorSelected} data-cy={'stroke-color'} />
+        <ColorPicker label={'Trait'} initialValue={this.props.stroke.color} onChange={this.handleStrokeColorSelected} data-cy={'stroke-color'} />
         {withFill && (
           <>
-            <ColorPickerButton label={'Remplissage'} initialValue={this.props.fill.color1} onChange={this.handleFillColor1Selected} data-cy={'fill-color1'} />
-            <ColorPickerButton label={'Texture'} initialValue={this.props.fill.color2} onChange={this.handleFillColor2Selected} data-cy={'fill-color2'} />
+            <ColorPicker label={'Remplissage'} initialValue={this.props.fill.color1} onChange={this.handleFillColor1Selected} data-cy={'fill-color1'} />
+            <ColorPicker label={'Texture'} initialValue={this.props.fill.color2} onChange={this.handleFillColor2Selected} data-cy={'fill-color2'} />
           </>
         )}
       </div>

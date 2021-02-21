@@ -21,11 +21,11 @@ export class Config {
     return path.resolve(this.getProjectRoot(), 'packages/e2e-tests');
   }
 
-  public getFrontendHealthUrl(): string {
-    return 'http://localhost:3000';
+  public getFrontendE2eUrl(): string {
+    return 'http://localhost:3005';
   }
 
-  public getBackendHealthUrl(): string {
+  public getBackendE2eUrl(): string {
     return 'http://localhost:10082/api/health';
   }
 }

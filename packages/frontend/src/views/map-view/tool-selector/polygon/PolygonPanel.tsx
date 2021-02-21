@@ -5,14 +5,14 @@ import ColorSelector from '../_common/color-selector/ColorSelector';
 import FillPatternSelector from '../_common/pattern-selector/FillPatternSelector';
 import './PolygonPanel.scss';
 
-const logger = Logger.get('PolygonPanel');
+const logger = Logger.get('PolygonPanel.tsx');
 
 class PolygonPanel extends Component<{}, {}> {
   public render(): ReactNode {
     return (
       <div className={'abc-polygon-panel'}>
         <WidthSelector />
-        <ColorSelector withFillColors={true} />
+        <ColorSelector fillColors={true} />
         <FillPatternSelector />
       </div>
     );

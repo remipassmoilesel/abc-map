@@ -7,7 +7,7 @@
     "start:e2e": "node scripts/e2e-server.js",
     "start:watch": "react-scripts start",
     "lint": "eslint './src/**/{*.tsx,*.ts}' --fix --max-warnings=0",
-    "build": "CI=true EXTEND_ESLINT=true react-scripts build && yarn run build:check",
+    "build": "CI=true react-scripts build && yarn run build:check",
     "build:check": "./scripts/check-build.js",
     "clean": "rm -rf build",
     "clean-build": "yarn run clean && yarn run build",

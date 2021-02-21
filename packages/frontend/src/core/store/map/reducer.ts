@@ -57,6 +57,22 @@ export function mapReducer(state = mapInitialState, action: MapAction): MapState
       return newState;
     }
 
+    case ActionType.SetTextColor: {
+      const newState: MapState = { ...state };
+      newState.currentStyle = { ...newState.currentStyle };
+      newState.currentStyle.text = { ...newState.currentStyle.text };
+      newState.currentStyle.text.color = action.color;
+      return newState;
+    }
+
+    case ActionType.SetTextSize: {
+      const newState: MapState = { ...state };
+      newState.currentStyle = { ...newState.currentStyle };
+      newState.currentStyle.text = { ...newState.currentStyle.text };
+      newState.currentStyle.text.size = action.size;
+      return newState;
+    }
+
     default:
       return state;
   }

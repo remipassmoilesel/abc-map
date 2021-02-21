@@ -48,6 +48,24 @@ describe('FeatureWrapper', () => {
     expect(feature.isSelected()).toEqual(true);
   });
 
+  it('setStyle()', () => {
+    const feature = FeatureWrapper.create();
+    feature.setStyle(TestHelper.sampleStyleProperties());
+
+    const ol = feature.unwrap();
+    expect(ol.get(StyleProperties.StrokeColor)).toEqual('black');
+    expect(ol.get(StyleProperties.StrokeWidth)).toEqual(5);
+    expect(ol.get(StyleProperties.FillColor1)).toEqual('white');
+    expect(ol.get(StyleProperties.FillColor2)).toEqual('blue');
+    expect(ol.get(StyleProperties.FillPattern)).toEqual(FillPatterns.HatchingObliqueLeft);
+    expect(ol.get(StyleProperties.TextValue)).toEqual('Test text value');
+    expect(ol.get(StyleProperties.TextColor)).toEqual('#00f');
+    expect(ol.get(StyleProperties.TextSize)).toEqual(30);
+    expect(ol.get(StyleProperties.TextFont)).toEqual('sans-serif');
+    expect(ol.get(StyleProperties.TextOffsetX)).toEqual(20);
+    expect(ol.get(StyleProperties.TextOffsetY)).toEqual(30);
+  });
+
   it('getStyle()', () => {
     const feature = FeatureWrapper.create();
     feature.unwrap().set(StyleProperties.StrokeWidth, 5);
@@ -55,6 +73,13 @@ describe('FeatureWrapper', () => {
     feature.unwrap().set(StyleProperties.FillColor1, 'white');
     feature.unwrap().set(StyleProperties.FillColor2, 'blue');
     feature.unwrap().set(StyleProperties.FillPattern, FillPatterns.HatchingObliqueLeft);
+    feature.unwrap().set(StyleProperties.TextValue, 'Test text value');
+    feature.unwrap().set(StyleProperties.TextColor, '#00f');
+    feature.unwrap().set(StyleProperties.TextSize, 30);
+    feature.unwrap().set(StyleProperties.TextFont, 'sans-serif');
+    feature.unwrap().set(StyleProperties.TextOffsetX, 20);
+    feature.unwrap().set(StyleProperties.TextOffsetY, 30);
+    feature.unwrap().set(StyleProperties.TextAlignment, 'left');
 
     const properties = feature.getStyle();
 
@@ -62,11 +87,10 @@ describe('FeatureWrapper', () => {
     expect(properties).toEqual(expected);
   });
 
-  it('setProperties()', () => {
+  it('setText()', () => {
     const feature = FeatureWrapper.create();
-    const style: AbcStyleProperties = TestHelper.sampleStyleProperties();
-
-    feature.setStyle(style);
+    feature.setStyle(TestHelper.sampleStyleProperties());
+    feature.setText('Sample text');
 
     expect(feature.unwrap().get(StyleProperties.StrokeWidth)).toEqual(5);
     expect(feature.unwrap().get(StyleProperties.StrokeColor)).toEqual('black');

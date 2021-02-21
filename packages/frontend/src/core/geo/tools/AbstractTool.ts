@@ -81,9 +81,9 @@ export abstract class AbstractTool {
    * @protected
    */
   protected commonModifyInteractions(map: Map, type: GeometryType): void {
-    const modifiableFeatures = new Collection<Feature<Geometry>>();
-    const modify = new Modify({ features: modifiableFeatures, condition: onlyMainButton });
-    const snap = new Snap({ features: modifiableFeatures });
+    const features = new Collection<Feature<Geometry>>();
+    const modify = new Modify({ features: features, condition: onlyMainButton });
+    const snap = new Snap({ features: features });
 
     const setFeatureModifiable = (feat: FeatureLike): boolean => {
       const feature = FeatureWrapper.fromFeatureLike(feat);
@@ -95,22 +95,22 @@ export abstract class AbstractTool {
         return false;
       }
 
-      const alreadyRegisted = !!modifiableFeatures.getArray().find((f) => feature.getId() === f.getId());
-      if (alreadyRegisted) {
+      const alreadyRegistered = !!features.getArray().find((f) => feature.getId() === f.getId());
+      if (alreadyRegistered) {
         return true; // Stop iteration
       }
 
-      modifiableFeatures.push(feature.unwrap());
+      features.push(feature.unwrap());
       return true;
     };
 
     const limitModifiableList = () => {
-      modifiableFeatures
+      features
         .getArray()
         .slice()
         .forEach((feature) => {
-          if (modifiableFeatures.getLength() > 1) {
-            modifiableFeatures.remove(feature);
+          if (features.getLength() > 1) {
+            features.remove(feature);
           }
         });
     };

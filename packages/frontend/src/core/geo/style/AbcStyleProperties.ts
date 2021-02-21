@@ -3,6 +3,7 @@ import { FillPatterns } from '@abc-map/shared-entities';
 export interface AbcStyleProperties {
   stroke: StrokeProperties;
   fill: FillProperties;
+  text: TextProperties;
 }
 
 export interface StrokeProperties {
@@ -23,4 +24,35 @@ export interface FillProperties {
    * Type of pattern, Flat by default
    */
   pattern?: FillPatterns;
+}
+
+export interface TextProperties {
+  /**
+   * Text
+   */
+  value?: string;
+  /**
+   * Color of text
+   */
+  color?: string;
+  /**
+   * Size of text
+   */
+  size?: number;
+  /**
+   * Font of text
+   */
+  font?: string;
+  /**
+   * Horizontal text offset in pixels. A positive will shift the text right.
+   */
+  offsetX?: number;
+  /**
+   * Vertical text offset in pixels. A positive will shift the text down.
+   */
+  offsetY?: number;
+  /**
+   * Vertical text offset in pixels. A positive will shift the text down.
+   */
+  alignment?: 'left' | 'right' | 'center' | 'end' | 'start' | undefined;
 }

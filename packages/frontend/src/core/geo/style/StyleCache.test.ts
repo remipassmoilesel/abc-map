@@ -7,7 +7,7 @@ describe('StyleCache', function () {
   it('should return style', function () {
     const cache = new StyleCache();
     const props = TestHelper.sampleStyleProperties();
-    const style = new Style();
+    const style = [new Style()];
     cache.put(props, style);
 
     const fromCache = cache.get(props);
@@ -18,7 +18,7 @@ describe('StyleCache', function () {
   it('should return nothing', function () {
     const cache = new StyleCache();
     const props = TestHelper.sampleStyleProperties();
-    const style = new Style();
+    const style = [new Style()];
     cache.put(props, style);
     const otherProps: AbcStyleProperties = {
       ...props,

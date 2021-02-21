@@ -4,5 +4,7 @@ export enum MapTool {
   LineString = 'LineString',
   Polygon = 'Polygon',
   Circle = 'Circle',
+  Rectangle = 'Rectangle',
+  Text = 'Text',
   Selection = 'Selection',
 }

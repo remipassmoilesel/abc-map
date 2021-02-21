@@ -33,6 +33,11 @@ describe('StorePersistence', () => {
             width: 5,
             color: '#123456',
           },
+          text: {
+            color: '#123456',
+            size: 30,
+            font: 'sans-serif',
+          },
         },
       },
       authentication: {
@@ -68,6 +73,11 @@ describe('StorePersistence', () => {
           stroke: {
             width: 5,
             color: '#123456',
+          },
+          text: {
+            color: '#123456',
+            size: 30,
+            font: 'sans-serif',
           },
         },
       },

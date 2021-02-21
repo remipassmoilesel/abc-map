@@ -11,7 +11,7 @@ class PointPanel extends Component<{}, {}> {
     return (
       <div className={'abc-point-panel'}>
         <StrokeWidthSelector />
-        <ColorSelector withFillColors={false} />
+        <ColorSelector fillColors={false} />
       </div>
     );
   }

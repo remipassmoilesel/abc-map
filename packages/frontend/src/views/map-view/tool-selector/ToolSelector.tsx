@@ -2,7 +2,7 @@ import React, { Component, ReactNode } from 'react';
 import { services } from '../../../core/Services';
 import { Logger } from '../../../core/utils/Logger';
 import { connect, ConnectedProps } from 'react-redux';
-import { ToolRegistry } from '../../../core/geo/tools/registry/ToolRegistry';
+import { ToolRegistry } from '../../../core/geo/tools/ToolRegistry';
 import { MapTool } from '@abc-map/shared-entities';
 import { MainState } from '../../../core/store/reducer';
 import SelectionPanel from './selection/SelectionPanel';
@@ -10,6 +10,7 @@ import CirclePanel from './circle/CirclePanel';
 import LineStringPanel from './line-string/LineStringPanel';
 import PointPanel from './point/PointPanel';
 import PolygonPanel from './polygon/PolygonPanel';
+import TextPanel from './text/TextPanel';
 import './ToolSelector.scss';
 
 const logger = Logger.get('ToolSelector.tsx', 'info');
@@ -73,6 +74,8 @@ class ToolSelector extends Component<Props, {}> {
       return <PointPanel />;
     } else if (MapTool.Polygon === this.props.currentTool) {
       return <PolygonPanel />;
+    } else if (MapTool.Text === this.props.currentTool) {
+      return <TextPanel />;
     }
   }
 
