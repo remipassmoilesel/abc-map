@@ -4,6 +4,7 @@ export interface AbcStyleProperties {
   stroke: StrokeProperties;
   fill: FillProperties;
   text: TextProperties;
+  point: PointProperties;
 }
 
 export interface StrokeProperties {
@@ -55,4 +56,8 @@ export interface TextProperties {
    * Vertical text offset in pixels. A positive will shift the text down.
    */
   alignment?: 'left' | 'right' | 'center' | 'end' | 'start' | undefined;
+}
+
+export interface PointProperties {
+  size?: number;
 }

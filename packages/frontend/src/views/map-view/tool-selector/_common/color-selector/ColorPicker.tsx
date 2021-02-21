@@ -1,19 +1,20 @@
 import React, { Component, ReactNode } from 'react';
 import { Logger } from '../../../../../core/utils/Logger';
-import { Colors } from './colors';
-import './ColorPicker.scss';
+import { ColorResult, SketchPicker } from 'react-color';
+import { Modal } from 'react-bootstrap';
+import Cls from './ColorPicker.module.scss';
 
 const logger = Logger.get('ColorPickerButton.tsx', 'info');
 
 interface Props {
   label: string;
   initialValue?: string;
-  onChange: (value: string) => void;
+  onClose: (value: string) => void;
   'data-cy'?: string;
 }
 
 interface State {
-  popupVisible: boolean;
+  modalVisible: boolean;
   value: string;
 }
 
@@ -21,43 +22,44 @@ class ColorPicker extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      popupVisible: false,
+      modalVisible: false,
       value: this.props.initialValue || '#fffff',
     };
   }
 
   public render(): ReactNode {
     return (
-      <div className={'abc-color-picker-button'} data-cy={this.props['data-cy']}>
-        <button onClick={this.onClick} className={'picker-button'} type={'button'} style={{ backgroundColor: this.state.value }} />
-        {this.props.label}
-        {this.state.popupVisible && (
-          <>
-            <div className={'picker-backdrop'} onClick={this.onClose} data-cy={'color-picker-backdrop'} />
-            <div className={'picker-popover'}>
-              <div className={'color-buttons'}>
-                {Colors.map((color) => (
-                  <button key={color} onClick={() => this.onChange(color)} style={{ backgroundColor: color }} />
-                ))}
-              </div>
-            </div>
-          </>
-        )}
-      </div>
+      <>
+        <div className={'control-item d-flex align-item-center justify-content-between my-2'} data-cy={this.props['data-cy']}>
+          <div>{this.props.label}:</div>
+          <button onClick={this.handleClick} className={Cls.button} type={'button'} style={{ backgroundColor: this.state.value }} />
+        </div>
+        <Modal show={this.state.modalVisible} onHide={this.handleModalClose} size={'sm'}>
+          <Modal.Header closeButton>{this.props.label}</Modal.Header>
+          <Modal.Body className={'d-flex justify-content-center'}>
+            <SketchPicker color={this.state.value} onChange={this.handleChange} width={'300px'} />
+          </Modal.Body>
+          <Modal.Footer>
+            <button className={'btn btn-outline-secondary'} onClick={this.handleModalClose} data-cy={'close-modal'}>
+              Fermer
+            </button>
+          </Modal.Footer>
+        </Modal>
+      </>
     );
   }
 
-  private onClick = () => {
-    this.setState((st) => ({ popupVisible: !st.popupVisible }));
+  private handleChange = (color: ColorResult) => {
+    this.setState({ value: color.hex });
   };
 
-  private onChange = (ev: string) => {
-    this.setState({ value: ev });
-    this.props.onChange(ev);
+  private handleClick = () => {
+    this.setState({ modalVisible: true });
   };
 
-  private onClose = () => {
-    this.setState({ popupVisible: false });
+  private handleModalClose = () => {
+    this.setState({ modalVisible: false });
+    this.props.onClose(this.state.value);
   };
 }
 

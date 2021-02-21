@@ -1,12 +1,12 @@
-.abc-selection-panel {
+.selectionPanel {
   display: flex;
   flex-direction: column;
+}
 
-  .btn {
-    margin: 0.5em;
-  }
+.button {
+  margin: 0 0 0.8em 0;
 
-  .fa {
+  :global(.fa) {
     margin-right: 0.5em;
   }
 }

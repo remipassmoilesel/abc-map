@@ -8,11 +8,6 @@ const logger = Logger.get('Help.tsx', 'info');
 class About extends Component<{}, {}> {
   private services = services();
 
-  constructor(props: {}) {
-    super(props);
-    this.state = {};
-  }
-
   public render(): ReactNode {
     return (
       <div className={'abc-about'}>

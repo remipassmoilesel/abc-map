@@ -28,21 +28,15 @@ type Props = PropsFromRedux & LocalProps;
 class ColorSelector extends Component<Props, {}> {
   private services = services();
 
-  constructor(props: Props) {
-    super(props);
-    this.state = {};
-  }
-
   public render(): ReactNode {
     const withFill = this.props.fillColors;
     return (
-      <div className={'control-item mb-3'}>
-        <div className={'mb-1'}>Couleurs:</div>
-        <ColorPicker label={'Trait'} initialValue={this.props.stroke.color} onChange={this.handleStrokeColorSelected} data-cy={'stroke-color'} />
+      <div className={'control-item'}>
+        <ColorPicker label={'Trait'} initialValue={this.props.stroke.color} onClose={this.handleStrokeColorSelected} data-cy={'stroke-color'} />
         {withFill && (
           <>
-            <ColorPicker label={'Remplissage'} initialValue={this.props.fill.color1} onChange={this.handleFillColor1Selected} data-cy={'fill-color1'} />
-            <ColorPicker label={'Texture'} initialValue={this.props.fill.color2} onChange={this.handleFillColor2Selected} data-cy={'fill-color2'} />
+            <ColorPicker label={'Remplissage'} initialValue={this.props.fill.color1} onClose={this.handleFillColor1Selected} data-cy={'fill-color1'} />
+            <ColorPicker label={'Texture'} initialValue={this.props.fill.color2} onClose={this.handleFillColor2Selected} data-cy={'fill-color2'} />
           </>
         )}
       </div>

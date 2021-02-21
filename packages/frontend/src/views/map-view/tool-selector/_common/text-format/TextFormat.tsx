@@ -5,6 +5,7 @@ import { MapActions } from '../../../../../core/store/map/actions';
 import { services } from '../../../../../core/Services';
 import ColorPicker from '../color-selector/ColorPicker';
 import * as _ from 'lodash';
+import Cls from './TextFormat.module.scss';
 
 const mapStateToProps = (state: MainState) => ({
   color: state.map.currentStyle.text.color,
@@ -24,25 +25,20 @@ type Props = PropsFromRedux;
 class TextFormat extends Component<Props, {}> {
   private services = services();
 
-  constructor(props: Props) {
-    super(props);
-    this.state = {};
-  }
-
   public render(): ReactNode {
     return (
-      <div className={'control-item mb-3'}>
-        <div className={'mb-1'}>Texte:</div>
-        <ColorPicker label={'Texte'} initialValue={this.props.color} onChange={this.handleColorSelected} />
-        <select onChange={this.handleSizeChange} value={this.props.size}>
-          {_.chain(_.range(5, 50))
-            .map((val) => (
+      <div className={'control-item'}>
+        <ColorPicker label={'Texte'} initialValue={this.props.color} onClose={this.handleColorSelected} />
+        <div className={'d-flex justify-content-between align-items-center'}>
+          <div>Taille:</div>
+          <select onChange={this.handleSizeChange} value={this.props.size} className={`form-control form-control-sm ${Cls.select}`}>
+            {_.range(5, 51).map((val) => (
               <option key={val} value={val}>
                 {val}
               </option>
-            ))
-            .value()}
-        </select>
+            ))}
+          </select>
+        </div>
       </div>
     );
   }

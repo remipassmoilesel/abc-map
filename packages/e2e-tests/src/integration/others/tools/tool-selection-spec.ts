@@ -178,17 +178,15 @@ describe('Tool Selection', function () {
       .then(() => ToolSelector.enable(MapTool.Selection))
       .then(() => Draw.drag(50, 50, 400, 400))
       .get('[data-cy=stroke-color] button')
-      .eq(0)
       .click()
-      .get('[data-cy=stroke-color] button')
-      .eq(5)
+      .get('div[title="#D0021B"]')
       .click()
-      .get('[data-cy=color-picker-backdrop]')
+      .get('[data-cy=close-modal]')
       .click()
       .then(() => MainMap.getReference())
       .should((map) => {
         const features = map.getActiveLayerFeatures();
-        expect(features[0].getProperties()[StyleProperties.StrokeColor]).equal('#F72585');
+        expect(features[0].getProperties()[StyleProperties.StrokeColor]).equal('#d0021b');
       })
       .then(() => MapHistory.undo())
       .then(() => MainMap.getReference())
@@ -200,7 +198,7 @@ describe('Tool Selection', function () {
       .then(() => MainMap.getReference())
       .should((map) => {
         const features = map.getActiveLayerFeatures();
-        expect(features[0].getProperties()[StyleProperties.StrokeColor]).equal('#F72585');
+        expect(features[0].getProperties()[StyleProperties.StrokeColor]).equal('#d0021b');
       });
   });
 
@@ -214,17 +212,15 @@ describe('Tool Selection', function () {
       .then(() => ToolSelector.enable(MapTool.Selection))
       .then(() => Draw.drag(50, 50, 400, 400))
       .get('[data-cy=fill-color1] button')
-      .eq(0)
       .click()
-      .get('[data-cy=fill-color1] button')
-      .eq(5)
+      .get('div[title="#D0021B"]')
       .click()
-      .get('[data-cy=color-picker-backdrop]')
+      .get('[data-cy=close-modal]')
       .click()
       .then(() => MainMap.getReference())
       .should((map) => {
         const features = map.getActiveLayerFeatures();
-        expect(features[0].getProperties()[StyleProperties.FillColor1]).equal('#F72585');
+        expect(features[0].getProperties()[StyleProperties.FillColor1]).equal('#d0021b');
       })
       .then(() => MapHistory.undo())
       .then(() => MainMap.getReference())
@@ -236,7 +232,7 @@ describe('Tool Selection', function () {
       .then(() => MainMap.getReference())
       .should((map) => {
         const features = map.getActiveLayerFeatures();
-        expect(features[0].getProperties()[StyleProperties.FillColor1]).equal('#F72585');
+        expect(features[0].getProperties()[StyleProperties.FillColor1]).equal('#d0021b');
       });
   });
 });

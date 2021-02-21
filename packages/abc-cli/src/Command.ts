@@ -1,5 +1,5 @@
 export enum Command {
-  BOOSTRAP = 'bootstrap',
+  INSTALL = 'install',
   LINT = 'lint',
   BUILD = 'build',
   TEST = 'test',

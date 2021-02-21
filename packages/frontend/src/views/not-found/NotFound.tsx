@@ -1,20 +1,12 @@
 import React, { Component, ReactNode } from 'react';
-import { services } from '../../core/Services';
 import { Logger } from '../../core/utils/Logger';
 import { Link } from 'react-router-dom';
 import { FrontendRoutes } from '@abc-map/shared-entities';
 import './NotFound.scss';
 
-const logger = Logger.get('NotFound.tsx', 'info');
+const logger = Logger.get('NotFound.tsx');
 
 class NotFound extends Component<{}, {}> {
-  private services = services();
-
-  constructor(props: {}) {
-    super(props);
-    this.state = {};
-  }
-
   public render(): ReactNode {
     return (
       <div className={'abc-not-found'}>

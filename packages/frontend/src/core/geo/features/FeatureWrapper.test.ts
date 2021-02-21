@@ -80,6 +80,7 @@ describe('FeatureWrapper', () => {
     feature.unwrap().set(StyleProperties.TextOffsetX, 20);
     feature.unwrap().set(StyleProperties.TextOffsetY, 30);
     feature.unwrap().set(StyleProperties.TextAlignment, 'left');
+    feature.unwrap().set(StyleProperties.PointSize, 5);
 
     const properties = feature.getStyle();
 

@@ -8,7 +8,7 @@ const logger = Logger.get('Service.ts', 'info');
 export class Service {
   constructor(private config: Config, private shell: Shell) {}
 
-  public bootstrap(): void {
+  public install(): void {
     this.shell.sync('lerna bootstrap --force-local');
   }
 
@@ -84,7 +84,7 @@ export class Service {
 
   public async continuousIntegration(): Promise<void> {
     const start = new Date().getTime();
-    this.bootstrap();
+    this.install();
     this.lint();
     this.cleanBuild();
     this.dependencyCheck(); // Dependency check must be launched AFTER build for local dependencies
@@ -100,7 +100,7 @@ Abc-CLI helps to build and deploy Abc-Map.
 
 Common commands are:
 
-  $ ./abc-cli bootstrap                  Init project and install dependencies.
+  $ ./abc-cli install                    Init project and install dependencies.
   $ ./abc-cli watch                      Watch source code of all packages and compile on change.
   $ ./abc-cli start                      Start project and associated services (database, mail server, ...).
   $ ./abc-cli clean-restart-services     Stop services, clean data, then start services.

@@ -12,11 +12,6 @@ interface Props {
 }
 
 class WmsLayerItem extends Component<Props, {}> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {};
-  }
-
   public render(): ReactNode {
     const layer = this.props.layer;
     const classes = this.props.selected ? 'abc-wms-layer-item selected' : 'abc-wms-layer-item';

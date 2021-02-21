@@ -15,11 +15,6 @@ interface Props {
 class ArtefactCard extends Component<Props, {}> {
   private services = services();
 
-  constructor(props: Props) {
-    super(props);
-    this.state = {};
-  }
-
   public render(): ReactNode {
     const artefact = this.props.artefact;
     return (

@@ -11,7 +11,8 @@ import LineStringPanel from './line-string/LineStringPanel';
 import PointPanel from './point/PointPanel';
 import PolygonPanel from './polygon/PolygonPanel';
 import TextPanel from './text/TextPanel';
-import './ToolSelector.scss';
+import RectanglePanel from './rectangle/RectanglePanel';
+import Cls from './ToolSelector.module.scss';
 
 const logger = Logger.get('ToolSelector.tsx', 'info');
 
@@ -27,20 +28,15 @@ type Props = PropsFromRedux;
 class ToolSelector extends Component<Props, {}> {
   private services = services();
 
-  constructor(props: Props) {
-    super(props);
-    this.state = {};
-  }
-
   public render(): ReactNode {
     const buttons = this.getToolButtons();
     const toolPanel = this.getToolPanel();
 
     return (
-      <div className={'control-block abc-tool-selector'} data-cy={'tool-selector'}>
+      <div className={`control-block ${Cls.toolSelector}`} data-cy={'tool-selector'}>
         <div className={'mb-2 text-bold'}>Outils de dessin</div>
-        <div className={'tool-list'}>{buttons}</div>
-        {toolPanel && <div className={'tool-panel'}>{toolPanel}</div>}
+        <div className={Cls.toolList}>{buttons}</div>
+        {toolPanel && <div className={Cls.toolPanel}>{toolPanel}</div>}
       </div>
     );
   }
@@ -48,14 +44,15 @@ class ToolSelector extends Component<Props, {}> {
   private getToolButtons(): ReactNode[] {
     return ToolRegistry.getAll().map((tool) => {
       const isActive = tool.getId() === this.props.currentTool;
-      const classes = isActive ? 'tool-button active' : 'tool-button';
+      const classes = isActive ? `${Cls.toolButton} ${Cls.active}` : Cls.toolButton;
       return (
         <button
           key={tool.getId()}
-          onClick={() => this.onToolSelected(tool.getId())}
+          onClick={() => this.handleSelection(tool.getId())}
           title={tool.getLabel()}
           className={classes}
           data-cy={`tool-${tool.getId().toLocaleLowerCase()}`}
+          data-active={isActive}
         >
           <img src={tool.getIcon()} alt={tool.getLabel()} title={tool.getLabel()} />
         </button>
@@ -64,22 +61,24 @@ class ToolSelector extends Component<Props, {}> {
   }
 
   private getToolPanel(): ReactNode | undefined {
-    if (MapTool.Selection === this.props.currentTool) {
-      return <SelectionPanel />;
-    } else if (MapTool.Circle === this.props.currentTool) {
-      return <CirclePanel />;
+    if (MapTool.Point === this.props.currentTool) {
+      return <PointPanel />;
     } else if (MapTool.LineString === this.props.currentTool) {
       return <LineStringPanel />;
-    } else if (MapTool.Point === this.props.currentTool) {
-      return <PointPanel />;
     } else if (MapTool.Polygon === this.props.currentTool) {
       return <PolygonPanel />;
+    } else if (MapTool.Circle === this.props.currentTool) {
+      return <CirclePanel />;
+    } else if (MapTool.Rectangle === this.props.currentTool) {
+      return <RectanglePanel />;
     } else if (MapTool.Text === this.props.currentTool) {
       return <TextPanel />;
+    } else if (MapTool.Selection === this.props.currentTool) {
+      return <SelectionPanel />;
     }
   }
 
-  private onToolSelected(toolId: MapTool): void {
+  private handleSelection(toolId: MapTool): void {
     const tool = ToolRegistry.getById(toolId);
     this.services.geo.setMainTool(tool);
   }

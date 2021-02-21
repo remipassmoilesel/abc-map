@@ -15,11 +15,6 @@ interface Props {
 class LayoutList extends Component<Props, {}> {
   private services = services();
 
-  constructor(props: Props) {
-    super(props);
-    this.state = {};
-  }
-
   public render(): ReactNode {
     const items = this.props.layouts.map((lay) => {
       const classes = this.props.activeLayout?.id === lay.id ? 'item active' : 'item';

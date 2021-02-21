@@ -26,11 +26,6 @@ type Props = PropsFromRedux & LocalProps & RouteComponentProps<any>;
 class TopBar extends Component<Props, {}> {
   private services = services();
 
-  constructor(props: Props) {
-    super(props);
-    this.state = {};
-  }
-
   public render(): ReactNode {
     const userAuthenticated = this.props.userStatus === UserStatus.AUTHENTICATED;
     const user = this.props.user;

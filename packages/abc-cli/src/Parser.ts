@@ -2,8 +2,8 @@ import { Command } from './Command';
 
 export class Parser {
   public async parse(args: string[]): Promise<Command> {
-    if (args.indexOf(Command.BOOSTRAP) !== -1) {
-      return Command.BOOSTRAP;
+    if (args.indexOf(Command.INSTALL) !== -1) {
+      return Command.INSTALL;
     } else if (args.indexOf(Command.LINT) !== -1) {
       return Command.LINT;
     } else if (args.indexOf(Command.BUILD) !== -1) {

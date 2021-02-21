@@ -1,19 +1,17 @@
 import React, { Component, ReactNode } from 'react';
 import { Logger } from '../../../../core/utils/Logger';
+import WidthSelector from '../_common/stroke-width-selector/StrokeWidthSelector';
 import ColorSelector from '../_common/color-selector/ColorSelector';
-import StrokeWidthSelector from '../_common/stroke-width-selector/StrokeWidthSelector';
-import Cls from './PointPanel.module.scss';
-import PointSizeSelector from './PointSizeSelector';
 import FillPatternSelector from '../_common/fill-pattern-selector/FillPatternSelector';
+import Cls from './Rectangle.module.scss';
 
-const logger = Logger.get('PointPanel.tsx');
+const logger = Logger.get('RectanglePanel.tsx');
 
-class PointPanel extends Component<{}, {}> {
+class RectanglePanel extends Component<{}, {}> {
   public render(): ReactNode {
     return (
-      <div className={Cls.pointPanel}>
-        <PointSizeSelector />
-        <StrokeWidthSelector />
+      <div className={Cls.rectanglePanel}>
+        <WidthSelector />
         <ColorSelector fillColors={true} />
         <FillPatternSelector />
       </div>
@@ -21,4 +19,4 @@ class PointPanel extends Component<{}, {}> {
   }
 }
 
-export default PointPanel;
+export default RectanglePanel;
