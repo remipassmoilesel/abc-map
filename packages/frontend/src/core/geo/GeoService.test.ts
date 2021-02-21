@@ -54,4 +54,21 @@ describe('GeoService', () => {
     expect(features).toHaveLength(1);
     expect(features[0].getGeometry()?.getType()).toEqual('Point');
   });
+
+  it('geocode()', async () => {
+    const res = await service.geocode('Montpellier');
+    expect(res.length).toBeGreaterThan(1);
+    expect(res[0].boundingbox).toBeDefined();
+    expect(res[0].class).toBeDefined();
+    expect(res[0].display_name).toBeDefined();
+    expect(res[0].icon).toBeDefined();
+    expect(res[0].importance).toBeDefined();
+    expect(res[0].lat).toBeDefined();
+    expect(res[0].lon).toBeDefined();
+    expect(res[0].licence).toBeDefined();
+    expect(res[0].osm_id).toBeDefined();
+    expect(res[0].osm_type).toBeDefined();
+    expect(res[0].place_id).toBeDefined();
+    expect(res[0].type).toBeDefined();
+  });
 });

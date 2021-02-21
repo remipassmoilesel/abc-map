@@ -13,6 +13,7 @@ import { UpdateStyleItem, UpdateStyleTask } from '../history/tasks/UpdateStyleTa
 import { HistoryKey } from '../history/HistoryKey';
 import { HistoryService } from '../history/HistoryService';
 import { LayerFactory } from './layers/LayerFactory';
+import { NominatimResult } from './NominatimResult';
 
 export const logger = Logger.get('MapService.ts');
 
@@ -77,5 +78,19 @@ export class GeoService {
     if (historyItems.length) {
       this.history.register(HistoryKey.Map, new UpdateStyleTask(historyItems));
     }
+  }
+
+  public async geocode(query: string): Promise<NominatimResult[]> {
+    const url = 'https://nominatim.openstreetmap.org/search';
+    return this.httpClient
+      .get(url, {
+        params: {
+          q: query,
+          format: 'json',
+        },
+      })
+      .then((res) => {
+        return res.data;
+      });
   }
 }

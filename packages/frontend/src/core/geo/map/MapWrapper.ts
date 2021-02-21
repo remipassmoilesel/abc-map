@@ -177,10 +177,6 @@ export class MapWrapper {
     return this.currentTool;
   }
 
-  public unwrap(): Map {
-    return this.internal;
-  }
-
   public getSizeObserver(): ResizeObserver | undefined {
     return this.sizeObserver;
   }
@@ -226,5 +222,18 @@ export class MapWrapper {
         return feature.isSelected() ? feature : null;
       })
       .filter((feat) => !!feat) as FeatureWrapper[];
+  }
+
+  /**
+   * Move to specified extent. Numbers are: minX, minY, maxX, maxY.
+   */
+  public moveTo(extent: [number, number, number, number]): void {
+    const duration = 1500;
+    const view = this.internal.getView();
+    view.fit(extent, { duration });
+  }
+
+  public unwrap(): Map {
+    return this.internal;
   }
 }

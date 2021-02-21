@@ -1,0 +1,27 @@
+@import "src/style/variables";
+
+$panel-width: 250px;
+
+.mapView {
+  height: 95vh;
+  display: flex;
+  flex-direction: row;
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+
+.leftPanel {
+  width: $panel-width;
+  height: 95vh;
+  border-right: solid 1px lightgrey;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+.rightPanel {
+  width: $panel-width;
+  height: 95vh;
+  border-left: solid 1px lightgrey;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}

@@ -8,7 +8,7 @@ export const logger = Logger.get('E2eMapWrapper.ts', 'debug');
  * This class wrap managed maps to offer an interface for E2E tests.
  *
  * OK this is a bit hacky, but:
- * - it worth it, in order to get a good coverage for complex scenarios like drawing
+ * - it worth it, in order to get tests for complex scenarios like drawing
  * - it is type safe
  * - it is cheap
  */
@@ -38,6 +38,10 @@ export class E2eMapWrapper implements E2eMap {
     }
 
     return layer.unwrap().getSource().getFeatures();
+  }
+
+  public getViewExtent() {
+    return this.internal.unwrap().getView().calculateExtent();
   }
 
   public getInternal(): MapWrapper {
