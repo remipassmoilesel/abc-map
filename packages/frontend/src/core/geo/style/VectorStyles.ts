@@ -71,6 +71,9 @@ export class VectorStyles {
     return [new Style({ fill, stroke, image: pointStyle, text: textStyle })];
   }
 
+  // FIXME: refactor
+  // FIXME: this function is too slow
+  // FIXME: try set style on features
   public static openLayersStyleFunction(): StyleFunction {
     const cache: StyleCache = new StyleCache();
     return (feat: FeatureLike): Style[] => {

@@ -1,4 +1,4 @@
-.abc-top-bar {
+.topBar {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -22,17 +22,13 @@
       }
     }
 
-    .fa {
+    :global(.fa) {
       color: black;
     }
   }
 
-  .link {
-    display: block;
-    margin: 10px 20px;
-  }
-
-  .dropdown-toggle {
+  :global(.dropdown-toggle) {
     background-color: white;
   }
+
 }

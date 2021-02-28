@@ -4,14 +4,11 @@ import { AbcProject, UserStatus } from '@abc-map/shared-entities';
 import { Logger } from '../../../core/utils/Logger';
 import { Constants } from '../../../core/Constants';
 import { connect, ConnectedProps } from 'react-redux';
-import { Env } from '../../../core/utils/Env';
 import { MainState } from '../../../core/store/reducer';
-import './ProjectControls.scss';
+import { FileIO, FileInputType } from '../../../core/utils/FileIO';
+import Cls from './ProjectControls.module.scss';
 
 const logger = Logger.get('ProjectControls.tsx');
-
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface LocalProps {}
 
 interface State {
   recentProjects: AbcProject[];
@@ -25,8 +22,7 @@ const mapStateToProps = (state: MainState) => ({
 
 const connector = connect(mapStateToProps);
 
-type PropsFromRedux = ConnectedProps<typeof connector>;
-type Props = PropsFromRedux & LocalProps;
+type Props = ConnectedProps<typeof connector>;
 
 class ProjectControls extends Component<Props, State> {
   private services = services();
@@ -42,21 +38,21 @@ class ProjectControls extends Component<Props, State> {
     const projects = this.state.recentProjects;
     const userAuthenticated = this.props.userStatus === UserStatus.AUTHENTICATED;
     return (
-      <div className={'project-controls control-block'}>
+      <div className={'control-block'}>
         <div className={'mb-2'}>
           <i className={'fa fa-clock mr-2'} />
           Projets récents:
         </div>
         <div className={'control-item'}>
-          <div className={'recent-projects'} data-cy={'recent-projects'}>
+          <div className={Cls.recentProjects} data-cy={'recent-projects'}>
             {userAuthenticated &&
               projects.map((pr) => (
-                <div key={pr.metadata.id} className={'item'} onClick={() => this.openProject(pr.metadata.id)}>
+                <div key={pr.metadata.id} className={Cls.item} onClick={() => this.openProject(pr.metadata.id)}>
                   {pr.metadata.name}
                 </div>
               ))}
-            {userAuthenticated && projects.length < 1 && <div>Aucun projet récent</div>}
-            {!userAuthenticated && <div>Vous n&apos;êtes pas connecté</div>}
+            {userAuthenticated && projects.length < 1 && <div className={Cls.item}>Aucun projet récent</div>}
+            {!userAuthenticated && <div className={Cls.item}>Vous n&apos;êtes pas connecté</div>}
           </div>
         </div>
         <div className={'control-item'}>
@@ -143,7 +139,9 @@ class ProjectControls extends Component<Props, State> {
       .then((project) => {
         if (project) {
           this.services.ui.toasts.info('Export terminé !');
-          this.downloadProject(project);
+          const dataStr = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(project))}`;
+          const name = `project.${Constants.EXTENSION}`;
+          FileIO.output(dataStr, name);
         }
       })
       .catch((err) => {
@@ -153,12 +151,16 @@ class ProjectControls extends Component<Props, State> {
   };
 
   private importProject = () => {
-    this.openFileInput(async (files) => {
-      if (!files || !files.length) {
+    FileIO.openInput().then(async (result) => {
+      if (FileInputType.Canceled === result.type) {
+        return;
+      }
+
+      if (result.files.length !== 1) {
         return this.services.ui.toasts.error('Vous devez sélectionner un fichier');
       }
 
-      const file = files[0];
+      const file = result.files[0];
       if (!file.name.endsWith(Constants.EXTENSION)) {
         return this.services.ui.toasts.error('Vous devez sélectionner un fichier au format abm2');
       }
@@ -175,40 +177,6 @@ class ProjectControls extends Component<Props, State> {
         });
     });
   };
-
-  private downloadProject(project: AbcProject) {
-    const dataStr = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(project))}`;
-    const anchor = document.createElement('a');
-    anchor.style.display = 'none';
-    anchor.setAttribute('href', dataStr);
-    anchor.setAttribute('download', `project.${Constants.EXTENSION}`);
-    anchor.dataset.cy = 'export-project-output';
-
-    document.body.appendChild(anchor);
-    if (!Env.isE2e()) {
-      anchor.click();
-      anchor.remove();
-    }
-  }
-
-  private openFileInput(onChange: (files: FileList | null) => Promise<void>): void {
-    const fileNode = document.createElement('input');
-    fileNode.setAttribute('type', 'file');
-    fileNode.style.display = 'none';
-    fileNode.dataset.cy = 'import-project-input';
-    fileNode.onchange = () => {
-      const files = fileNode.files;
-      onChange(files).finally(() => fileNode.remove());
-    };
-    fileNode.oncancel = () => {
-      fileNode.remove();
-    };
-
-    document.body.appendChild(fileNode);
-    if (!Env.isE2e()) {
-      fileNode.click();
-    }
-  }
 }
 
 export default connector(ProjectControls);

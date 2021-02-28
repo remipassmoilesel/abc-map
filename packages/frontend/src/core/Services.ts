@@ -4,7 +4,7 @@ import { UiService } from './ui/UiService';
 import { httpExternalClient, httpApiClient, httpDownloadClient } from './http/HttpClients';
 import { AuthenticationService } from './authentication/AuthenticationService';
 import { HistoryService } from './history/HistoryService';
-import { DatastoreService } from './datastore/DatastoreService';
+import { DataService } from './data/DataService';
 import { mainStore } from './store/store';
 
 export interface Services {
@@ -13,7 +13,7 @@ export interface Services {
   ui: UiService;
   authentication: AuthenticationService;
   history: HistoryService;
-  dataStore: DatastoreService;
+  data: DataService;
 }
 
 let instance: Services | undefined;
@@ -34,7 +34,7 @@ function serviceFactory(): Services {
   const geoService = new GeoService(externalClient, historyService);
   const projectService = new ProjectService(apiClient, mainStore, geoService, uiService);
   const authenticationService = new AuthenticationService(apiClient, mainStore);
-  const dataStoreService = new DatastoreService(apiClient, downloadClient);
+  const dataService = new DataService(apiClient, downloadClient, geoService);
 
   return {
     project: projectService,
@@ -42,6 +42,6 @@ function serviceFactory(): Services {
     ui: uiService,
     authentication: authenticationService,
     history: historyService,
-    dataStore: dataStoreService,
+    data: dataService,
   };
 }

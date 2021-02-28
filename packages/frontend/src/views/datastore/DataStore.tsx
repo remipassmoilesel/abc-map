@@ -54,8 +54,8 @@ class DataStore extends Component<{}, State> {
     if (!this.state.searchQuery) {
       this.listArtefacts();
     } else {
-      this.services.dataStore
-        .search(this.state.searchQuery)
+      this.services.data
+        .searchArtefacts(this.state.searchQuery)
         .then((artefacts) => {
           this.setState({ artefacts });
         })
@@ -67,8 +67,8 @@ class DataStore extends Component<{}, State> {
   };
 
   private listArtefacts() {
-    this.services.dataStore
-      .list()
+    this.services.data
+      .listArtefacts()
       .then((artefacts) => {
         this.setState({ artefacts });
       })

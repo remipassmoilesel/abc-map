@@ -2,7 +2,7 @@ import React, { ChangeEvent, Component, ReactNode } from 'react';
 import { Modal } from 'react-bootstrap';
 import { services } from '../../../../core/Services';
 import { HistoryKey } from '../../../../core/history/HistoryKey';
-import { AddLayerTask } from '../../../../core/history/tasks/AddLayerTask';
+import { AddLayersTask } from '../../../../core/history/tasks/AddLayersTask';
 import { LabelledLayerTypes, LabelledLayerType } from './LabelledLayerTypes';
 import WmsSettingsPanel from './wms/WmsSettingsPanel';
 import { Logger } from '../../../../core/utils/Logger';
@@ -116,7 +116,7 @@ class AddLayerModal extends Component<Props, State> {
     const layer = LayerFactory.newOsmLayer();
     map.addLayer(layer);
     map.setActiveLayer(layer);
-    this.services.history.register(HistoryKey.Map, new AddLayerTask(map, layer));
+    this.services.history.register(HistoryKey.Map, new AddLayersTask(map, [layer]));
   };
 
   private newVectorLayer = () => {
@@ -124,7 +124,7 @@ class AddLayerModal extends Component<Props, State> {
     const layer = LayerFactory.newVectorLayer();
     map.addLayer(layer);
     map.setActiveLayer(layer);
-    this.services.history.register(HistoryKey.Map, new AddLayerTask(map, layer));
+    this.services.history.register(HistoryKey.Map, new AddLayersTask(map, [layer]));
   };
 
   private newWmsLayer = () => {
@@ -137,7 +137,7 @@ class AddLayerModal extends Component<Props, State> {
     const layer = LayerFactory.newWmsLayer(wms);
     map.addLayer(layer);
     map.setActiveLayer(layer);
-    this.services.history.register(HistoryKey.Map, new AddLayerTask(map, layer));
+    this.services.history.register(HistoryKey.Map, new AddLayersTask(map, [layer]));
   };
 
   private handleWmsSettingsChanged = (wms: WmsDefinition) => {

@@ -13,6 +13,11 @@ interface State {
 class Help extends Component<{}, State> {
   private services = services();
 
+  constructor(props: {}) {
+    super(props);
+    this.state = {};
+  }
+
   public render(): ReactNode {
     const doc = this.state.documentation;
     return (

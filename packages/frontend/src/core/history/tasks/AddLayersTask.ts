@@ -2,13 +2,13 @@ import { Task } from '../Task';
 import { MapWrapper } from '../../geo/map/MapWrapper';
 import { LayerWrapper } from '../../geo/layers/LayerWrapper';
 
-export class AddLayerTask extends Task {
-  constructor(private map: MapWrapper, private layer: LayerWrapper) {
+export class AddLayersTask extends Task {
+  constructor(private map: MapWrapper, private layers: LayerWrapper[]) {
     super();
   }
 
   public async undo(): Promise<void> {
-    this.map.removeLayer(this.layer);
+    this.layers.forEach((lay) => this.map.removeLayer(lay));
 
     // We activate the last layer
     const layers = this.map.getLayers();
@@ -18,7 +18,12 @@ export class AddLayerTask extends Task {
   }
 
   public async redo(): Promise<void> {
-    this.map.addLayer(this.layer);
-    this.map.setActiveLayer(this.layer);
+    this.layers.forEach((lay) => this.map.addLayer(lay));
+
+    // We activate the last layer
+    const layers = this.map.getLayers();
+    if (layers.length) {
+      this.map.setActiveLayer(layers[layers.length - 1]);
+    }
   }
 }

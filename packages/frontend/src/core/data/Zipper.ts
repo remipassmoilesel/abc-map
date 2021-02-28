@@ -1,6 +1,6 @@
 import JSZip from 'jszip';
 import { Logger } from '../utils/Logger';
-import { AbcFile } from '../data-readers/AbcFile';
+import { AbcFile } from './readers/AbcFile';
 
 const logger = Logger.get('Zipper.ts');
 

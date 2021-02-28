@@ -12,9 +12,14 @@ import PointPanel from './point/PointPanel';
 import PolygonPanel from './polygon/PolygonPanel';
 import TextPanel from './text/TextPanel';
 import RectanglePanel from './rectangle/RectanglePanel';
+import { LayerWrapper } from '../../../core/geo/layers/LayerWrapper';
 import Cls from './ToolSelector.module.scss';
 
 const logger = Logger.get('ToolSelector.tsx', 'info');
+
+interface LocalProps {
+  activeLayer?: LayerWrapper;
+}
 
 const mapStateToProps = (state: MainState) => ({
   currentTool: state.map.tool,
@@ -23,20 +28,26 @@ const mapStateToProps = (state: MainState) => ({
 const connector = connect(mapStateToProps);
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
-type Props = PropsFromRedux;
+type Props = LocalProps & PropsFromRedux;
 
 class ToolSelector extends Component<Props, {}> {
   private services = services();
 
   public render(): ReactNode {
-    const buttons = this.getToolButtons();
-    const toolPanel = this.getToolPanel();
+    const toolsActive = (this.props.activeLayer && this.props.activeLayer.isVector()) || false;
+    const buttons = toolsActive && this.getToolButtons();
+    const toolPanel = toolsActive && this.getToolPanel();
 
     return (
       <div className={`control-block ${Cls.toolSelector}`} data-cy={'tool-selector'}>
         <div className={'mb-2 text-bold'}>Outils de dessin</div>
-        <div className={Cls.toolList}>{buttons}</div>
-        {toolPanel && <div className={Cls.toolPanel}>{toolPanel}</div>}
+        {toolsActive && (
+          <>
+            <div className={Cls.toolList}>{buttons}</div>
+            {toolPanel && <div className={Cls.toolPanel}>{toolPanel}</div>}
+          </>
+        )}
+        {!toolsActive && <div className={Cls.message}>Vous devez sélectionner une couche de formes pour utiliser les outils.</div>}
       </div>
     );
   }

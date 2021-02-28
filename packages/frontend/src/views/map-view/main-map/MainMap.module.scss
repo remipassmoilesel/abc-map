@@ -1,0 +1,55 @@
+
+.mapContainer {
+  flex-grow: 1;
+
+  position: relative;
+  height: 95vh;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.map {
+  flex-grow: 1;
+  height: 95vh;
+}
+
+.dropOverlay1 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  background-color: #00000066;
+
+  h1 {
+    color: white;
+  }
+
+  :global(.fa) {
+    font-size: 5rem;
+    color: white;
+    margin-bottom: 2rem;
+  }
+}
+
+.dropOverlay2 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  background-color: transparent;
+}

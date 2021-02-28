@@ -8,7 +8,7 @@ export class ProjectRoutes {
   }
 
   public static findById(id: string): string {
-    return '/project/:id'.replace(':id', id);
+    return `/project/${id}`;
   }
 }
 
@@ -30,7 +30,12 @@ export class DatastoreRoutes {
   public static list(): string {
     return '/datastore/list';
   }
+
   public static search(): string {
     return `/datastore/search`;
+  }
+
+  public static download(path: string): string {
+    return `/datastore/download/${path}`;
   }
 }

@@ -3,7 +3,7 @@ import { TestData } from './test-data/TestData';
 import { DEFAULT_PROJECTION } from '@abc-map/shared-entities';
 import VectorLayer from 'ol/layer/Vector';
 import { AbcFile } from './AbcFile';
-import { Zipper } from '../datastore/Zipper';
+import { Zipper } from '../Zipper';
 
 describe('ArtefactReader.test.ts', function () {
   const data = new TestData();
