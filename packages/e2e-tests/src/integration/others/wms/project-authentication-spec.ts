@@ -29,7 +29,7 @@ describe('Project', function () {
         .type(Env.projectPassword())
         .get('[data-cy=modal-password-confirm]')
         .click()
-        .then(() => Download.textFile('[data-cy=export-project-output]'))
+        .then(() => Download.textFile('[data-cy=file-output]'))
         .should((downloaded) => {
           const projectA: AbcProject = JSON.parse(downloaded);
           expect(projectA.layers[2].type).equals(LayerType.Wms);
@@ -47,8 +47,8 @@ describe('Project', function () {
       cy.visit(FrontendRoutes.map())
         .get('[data-cy=import-project]')
         .click()
-        .get('[data-cy=import-project-input]')
-        .attachFile(Fixtures.projects.SAMPLE_2)
+        .get('[data-cy=file-input]')
+        .attachFile(Fixtures.ProjectSample2)
         .then(() => Toasts.assertText('Chargement ...'))
         .get('[data-cy=modal-password-input]')
         .should('be.empty')
@@ -74,8 +74,8 @@ describe('Project', function () {
       cy.visit(FrontendRoutes.map())
         .get('[data-cy=import-project]')
         .click()
-        .get('[data-cy=import-project-input]')
-        .attachFile(Fixtures.projects.SAMPLE_2)
+        .get('[data-cy=file-input]')
+        .attachFile(Fixtures.ProjectSample2)
         .then(() => Toasts.assertText('Chargement ...'))
         .get('[data-cy=modal-password-input]')
         .should('be.empty')
@@ -84,8 +84,8 @@ describe('Project', function () {
         .click()
         .get('[data-cy=import-project]')
         .click()
-        .get('[data-cy=import-project-input]')
-        .attachFile(Fixtures.projects.SAMPLE_2)
+        .get('[data-cy=file-input]')
+        .attachFile(Fixtures.ProjectSample2)
         .then(() => Toasts.assertText('Chargement ...'))
         .get('[data-cy=modal-password-input]')
         .should('be.empty');

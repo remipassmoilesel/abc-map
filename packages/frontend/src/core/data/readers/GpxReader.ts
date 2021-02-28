@@ -1,13 +1,13 @@
 import { AbstractDataReader } from './AbstractDataReader';
 import { AbcProjection, LayerType, VectorMetadata } from '@abc-map/shared-entities';
-import { FileFormat, FileFormats } from '../datastore/FileFormats';
+import { FileFormat, FileFormats } from '../FileFormats';
 import { GPX } from 'ol/format';
-import { BlobReader } from '../utils/BlobReader';
+import { BlobReader } from '../../utils/BlobReader';
 import VectorSource from 'ol/source/Vector';
 import { AbcFile } from './AbcFile';
 import uuid from 'uuid-random';
-import { LayerWrapper } from '../geo/layers/LayerWrapper';
-import { LayerFactory } from '../geo/layers/LayerFactory';
+import { LayerWrapper } from '../../geo/layers/LayerWrapper';
+import { LayerFactory } from '../../geo/layers/LayerFactory';
 
 export class GpxReader extends AbstractDataReader {
   public async isSupported(files: AbcFile[]): Promise<boolean> {

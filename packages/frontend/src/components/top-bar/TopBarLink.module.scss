@@ -1,0 +1,19 @@
+@import "src/style/variables";
+
+.topBarLink {
+  display: block;
+  margin: 10px;
+
+  color: $gray-600 !important;
+
+  &:hover {
+    text-decoration: none !important;
+  }
+}
+
+.active {
+  font-weight: bolder !important;
+  text-decoration: none !important;
+  color: $primary !important;
+  outline: 0;
+}

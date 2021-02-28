@@ -2,7 +2,6 @@ import React, { Component, ReactNode } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { FrontendRoutes } from '@abc-map/shared-entities';
 import MapView from './views/map-view/MapView';
-import Settings from './views/settings/Settings';
 import { Provider } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
 import Landing from './views/landing/Landing';
@@ -33,7 +32,6 @@ class App extends Component<{}, {}> {
             <Route exact path={FrontendRoutes.map()} component={MapView} />
             <Route exact path={FrontendRoutes.dataStore()} component={DataStore} />
             <Route exact path={FrontendRoutes.layout()} component={LayoutView} />
-            <Route exact path={FrontendRoutes.settings()} component={Settings} />
             <Route exact path={FrontendRoutes.help()} component={Help} />
             <Route exact path={FrontendRoutes.about()} component={About} />
             <Route exact path={FrontendRoutes.confirmAccount()} component={ConfirmAccount} />

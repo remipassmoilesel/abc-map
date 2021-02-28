@@ -4,11 +4,11 @@ import { GpxReader } from './GpxReader';
 import { KmlReader } from './KmlReader';
 import { ShapefileReader } from './ShapefileReader';
 import { AbcFile } from './AbcFile';
-import { FileFormat, FileFormats } from '../datastore/FileFormats';
-import { Zipper } from '../datastore/Zipper';
+import { FileFormat, FileFormats } from '../FileFormats';
+import { Zipper } from '../Zipper';
 import { GeoJsonReader } from './GeoJsonReader';
 import { WmsDefinitionReader } from './WmsDefinitionReader';
-import { LayerWrapper } from '../geo/layers/LayerWrapper';
+import { LayerWrapper } from '../../geo/layers/LayerWrapper';
 
 export class DataReader {
   public static create(): DataReader {

@@ -1,16 +1,11 @@
-import React, { Component, ReactNode } from 'react';
+import React, { Component, DragEvent, ReactNode } from 'react';
 import { Logger } from '../../../core/utils/Logger';
 import { services } from '../../../core/Services';
-import { GeoJSON, GPX, IGC, KML, TopoJSON } from 'ol/format';
-import { DragAndDrop, Interaction } from 'ol/interaction';
-import { DragAndDropEvent } from 'ol/interaction/DragAndDrop';
-import VectorSource from 'ol/source/Vector';
-import FeatureFormat from 'ol/format/Feature';
-import Feature from 'ol/Feature';
-import Geometry from 'ol/geom/Geometry';
 import { MapWrapper } from '../../../core/geo/map/MapWrapper';
-import { LayerFactory } from '../../../core/geo/layers/LayerFactory';
-import './MainMap.scss';
+import Cls from './MainMap.module.scss';
+import { AbcFile } from '../../../core/data/readers/AbcFile';
+import { HistoryKey } from '../../../core/history/HistoryKey';
+import { AddLayersTask } from '../../../core/history/tasks/AddLayersTask';
 
 export const logger = Logger.get('MainMap.ts', 'debug');
 
@@ -19,7 +14,7 @@ interface Props {
 }
 
 interface State {
-  dropData?: Interaction;
+  dragOverlay: boolean;
 }
 
 class MainMap extends Component<Props, State> {
@@ -28,11 +23,28 @@ class MainMap extends Component<Props, State> {
 
   constructor(props: Props) {
     super(props);
-    this.state = {};
+    this.state = {
+      dragOverlay: false,
+    };
   }
 
   public render(): ReactNode {
-    return <div ref={this.mapRef} data-cy={'main-map'} className="abc-main-map" />;
+    const dragOverlay = this.state.dragOverlay;
+
+    return (
+      <div className={Cls.mapContainer}>
+        <div ref={this.mapRef} data-cy={'main-map'} className={Cls.map} onDragOver={this.handleDragOver} />
+        {dragOverlay && (
+          <>
+            <div className={Cls.dropOverlay1}>
+              <i className={'fa fa-file'} />
+              <h1>Déposez vos fichiers pour les importer</h1>
+            </div>
+            <div className={Cls.dropOverlay2} onDrop={this.handleDrop} onDragOver={this.handleDragOver} onDragLeave={this.handleDragLeave} />
+          </>
+        )}
+      </div>
+    );
   }
 
   public componentDidMount() {
@@ -50,47 +62,46 @@ class MainMap extends Component<Props, State> {
 
   private initializeMap(div: HTMLDivElement): void {
     logger.info('Initializing map');
-    const map = this.props.map;
-
-    // Attach to target
-    map.setTarget(div);
-
-    // Add drop data interaction
-    // TODO: create custom drag and drop in order to handle errors and support abm2 format
-    const dropData = new DragAndDrop({
-      formatConstructors: ([GPX, GeoJSON, IGC, KML, TopoJSON] as any) as FeatureFormat[], // OL typing is broken
-    });
-    dropData.on('addfeatures', this.onFeaturesDropped);
-    map.unwrap().addInteraction(dropData);
-
-    this.setState({ dropData });
+    this.props.map.setTarget(div);
   }
 
   private cleanupMap() {
-    const map = this.props.map;
-    map.setTarget(undefined);
-    if (this.state.dropData) {
-      map.unwrap().removeInteraction(this.state.dropData);
-      this.state.dropData.dispose();
-    }
+    this.props.map.setTarget(undefined);
   }
 
-  private onFeaturesDropped = (ev: DragAndDropEvent): void => {
-    const map = this.props.map;
-    if (!map) {
-      return logger.error('Map is not ready');
+  private handleDrop = (ev: DragEvent<HTMLDivElement>) => {
+    ev.preventDefault();
+
+    const files: AbcFile[] = Array.from(ev.dataTransfer.files).map((f) => ({ path: f.name, content: f }));
+    if (!files.length) {
+      this.services.ui.toasts.info('Vous devez sélectionner un ou plusieurs fichiers');
+      return;
     }
 
-    const source = new VectorSource({
-      features: ev.features as Feature<Geometry>[],
-    });
+    this.services.ui.toasts.info('Import en cours ...');
+    this.services.data
+      .importFiles(files)
+      .then((res) => {
+        const map = this.services.geo.getMainMap();
+        this.services.history.register(HistoryKey.Map, new AddLayersTask(map, res.layers));
+        this.services.ui.toasts.info('Import terminé !');
+      })
+      .catch((err) => {
+        logger.error(err);
+        this.services.ui.toasts.genericError();
+      });
 
-    const layer = LayerFactory.newVectorLayer(source);
-    layer.setName(ev.file.name);
+    this.setState({ dragOverlay: false });
+  };
 
-    map.addLayer(layer);
-    map.setActiveLayer(layer);
-    map.unwrap().getView().fit(source.getExtent());
+  private handleDragOver = (ev: DragEvent<HTMLDivElement>) => {
+    ev.preventDefault();
+    this.setState({ dragOverlay: true });
+  };
+
+  private handleDragLeave = (ev: DragEvent<HTMLDivElement>) => {
+    ev.preventDefault();
+    this.setState({ dragOverlay: false });
   };
 }
 

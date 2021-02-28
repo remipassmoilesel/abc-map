@@ -89,8 +89,6 @@ export class GeoService {
           format: 'json',
         },
       })
-      .then((res) => {
-        return res.data;
-      });
+      .then((res) => res.data);
   }
 }

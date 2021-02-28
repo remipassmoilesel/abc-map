@@ -14,6 +14,7 @@ import { MainState } from '../../core/store/reducer';
 import { LayerWrapper } from '../../core/geo/layers/LayerWrapper';
 import Search from './search/Search';
 import Cls from './MapView.module.scss';
+import ImportData from './import-data/ImportData';
 
 const logger = Logger.get('MapView.tsx', 'debug');
 
@@ -46,6 +47,8 @@ class MapView extends Component<Props, State> {
   }
 
   public render(): ReactNode {
+    const activeLayer = this.state.layers.find((lay) => lay.isActive());
+
     return (
       <div className={Cls.mapView}>
         {/*Left menu*/}
@@ -53,16 +56,7 @@ class MapView extends Component<Props, State> {
           <ProjectStatus project={this.props.project} />
           <Search map={this.state.map} />
           <ProjectControls />
-          <div className={'control-block'}>
-            <div className={'control-item'}>
-              <button onClick={this.importFile} type={'button'} className={'btn btn-link'}>
-                <i className={'fa fa-table mr-2'} /> Importer des données
-              </button>
-            </div>
-            <div>
-              <i>Vous pouvez importer des données en sélectionnant un fichier et en le déposant sur la carte</i>
-            </div>
-          </div>
+          <ImportData />
         </div>
 
         {/*Main map*/}
@@ -72,7 +66,7 @@ class MapView extends Component<Props, State> {
         <div className={Cls.rightPanel}>
           <HistoryControls historyKey={HistoryKey.Map} />
           <LayerSelector layers={this.state.layers} />
-          <ToolSelector />
+          <ToolSelector activeLayer={activeLayer} />
         </div>
       </div>
     );
@@ -94,10 +88,6 @@ class MapView extends Component<Props, State> {
     const layers = this.state.map.getLayers();
     this.setState({ layers });
     return true;
-  };
-
-  private importFile = () => {
-    this.services.ui.toasts.featureNotReady();
   };
 
   private onRenderComplete = () => {

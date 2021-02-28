@@ -2,8 +2,8 @@ import { AbcProjection } from '@abc-map/shared-entities';
 import { AbcFile } from './AbcFile';
 import Feature from 'ol/Feature';
 import { Geometry } from 'ol/geom';
-import { FeatureWrapper } from '../geo/features/FeatureWrapper';
-import { LayerWrapper } from '../geo/layers/LayerWrapper';
+import { FeatureWrapper } from '../../geo/features/FeatureWrapper';
+import { LayerWrapper } from '../../geo/layers/LayerWrapper';
 
 export abstract class AbstractDataReader {
   public abstract isSupported(files: AbcFile[]): Promise<boolean>;

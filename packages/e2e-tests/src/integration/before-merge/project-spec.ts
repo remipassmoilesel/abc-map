@@ -66,9 +66,9 @@ describe('Project', function () {
         .click()
         .then(() => Toasts.assertText('Export en cours ...'))
         .then(() => Toasts.assertText('Export terminé !'))
-        .then(() => Download.textFile('[data-cy=export-project-output]'))
+        .then(() => Download.textFile('[data-cy=file-output]'))
         .then((downloaded) => {
-          return cy.fixture(Fixtures.projects.SAMPLE_1).then((witness) => ({ downloaded, witness }));
+          return cy.fixture(Fixtures.ProjectSample1).then((witness) => ({ downloaded, witness }));
         })
         .should(({ downloaded, witness }) => {
           const projectA: AbcProject = JSON.parse(downloaded);
@@ -86,8 +86,8 @@ describe('Project', function () {
       cy.visit(FrontendRoutes.map())
         .get('[data-cy=import-project]')
         .click()
-        .get('[data-cy=import-project-input]')
-        .attachFile(Fixtures.projects.SAMPLE_1)
+        .get('[data-cy=file-input]')
+        .attachFile(Fixtures.ProjectSample1)
         .then(() => Toasts.assertText('Chargement ...'))
         .then(() => Toasts.assertText('Projet importé !'))
         // Check project name

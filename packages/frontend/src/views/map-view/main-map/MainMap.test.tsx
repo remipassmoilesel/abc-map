@@ -4,7 +4,6 @@ import ReactDOM, { unmountComponentAtNode } from 'react-dom';
 import { act } from 'react-dom/test-utils';
 import { MapWrapper } from '../../../core/geo/map/MapWrapper';
 import { MapFactory } from '../../../core/geo/map/MapFactory';
-import { OlTestHelper } from '../../../core/utils/OlTestHelper';
 import { LayerFactory } from '../../../core/geo/layers/LayerFactory';
 
 logger.disable();
@@ -25,17 +24,19 @@ describe('MainMap', () => {
     it('should initialize map correctly', () => {
       const map = MapFactory.createNaked();
       const internal = map.unwrap();
+
+      expect(internal.getTarget()).toBeUndefined();
+
       act(() => {
         renderMap(map, container);
       });
 
       expect(internal.getTarget()).toBeInstanceOf(HTMLDivElement);
-      expect(OlTestHelper.getInteractionCount(map.unwrap(), 'DragAndDrop')).toEqual(1);
     });
   });
 
   describe('Cleanup', () => {
-    it('should remove listeners and interactions', () => {
+    it('should remove target', () => {
       const map = MapFactory.createNaked();
       const internal = map.unwrap();
       const vector = LayerFactory.newVectorLayer();
@@ -46,14 +47,11 @@ describe('MainMap', () => {
         renderMap(map, container);
       });
 
-      expect(OlTestHelper.getInteractionCount(map.unwrap(), 'DragAndDrop')).toEqual(1);
-
       act(() => {
         unmountComponentAtNode(container);
       });
 
       expect(internal.getTarget()).toBeUndefined();
-      expect(OlTestHelper.getInteractionCount(map.unwrap(), 'DragAndDrop')).toEqual(0);
     });
   });
 });

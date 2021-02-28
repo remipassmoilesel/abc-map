@@ -15,10 +15,6 @@ export class FrontendRoutes {
     return '/layout';
   }
 
-  public static settings(): string {
-    return '/settings';
-  }
-
   public static help(): string {
     return '/help';
   }
