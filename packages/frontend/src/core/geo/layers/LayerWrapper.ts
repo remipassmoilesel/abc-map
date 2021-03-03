@@ -1,4 +1,3 @@
-import VectorLayer from 'ol/layer/Vector';
 import TileLayer from 'ol/layer/Tile';
 import { Logger } from '../../utils/Logger';
 import {
@@ -24,19 +23,25 @@ import BaseLayer from 'ol/layer/Base';
 import TileSource from 'ol/source/Tile';
 import VectorSource from 'ol/source/Vector';
 import Geometry from 'ol/geom/Geometry';
+import VectorImageLayer from 'ol/layer/VectorImage';
 
 export const logger = Logger.get('LayerWrapper');
 
-export declare type OlLayers = VectorLayer | TileLayer;
+export declare type OlLayers = VectorImageLayer | TileLayer;
+export declare type OlSources = VectorSource<Geometry> | TileSource;
 
-export class LayerWrapper<Layer extends OlLayers = OlLayers, Meta extends LayerMetadata = LayerMetadata> {
-  public static from<Layer extends OlLayers = OlLayers, Meta extends LayerMetadata = LayerMetadata>(layer: Layer): LayerWrapper<Layer, Meta> {
-    return new LayerWrapper(layer);
+export declare type VectorLayerWrapper = LayerWrapper<VectorImageLayer, VectorSource<Geometry>, VectorMetadata>;
+export declare type PredefinedLayerWrapper = LayerWrapper<TileLayer, TileSource, PredefinedMetadata>;
+export declare type WmsLayerWrapper = LayerWrapper<TileLayer, TileSource, WmsMetadata>;
+
+export class LayerWrapper<Layer extends OlLayers = OlLayers, Source extends OlSources = OlSources, Meta extends LayerMetadata = LayerMetadata> {
+  public static from<L extends OlLayers, S extends OlSources, M extends LayerMetadata>(layer: L): LayerWrapper<L, S, M> {
+    return new LayerWrapper<L, S, M>(layer);
   }
 
   public static isManaged(layer: BaseLayer): boolean {
     const hasProperty = !!layer.get(AbcProperties.Managed);
-    const isSupported = layer instanceof TileLayer || layer instanceof VectorLayer;
+    const isSupported = layer instanceof TileLayer || layer instanceof VectorImageLayer;
     return hasProperty && isSupported;
   }
 
@@ -44,6 +49,15 @@ export class LayerWrapper<Layer extends OlLayers = OlLayers, Meta extends LayerM
 
   public unwrap(): Layer {
     return this.layer;
+  }
+
+  /**
+   * This method is a workaround for borked types for VectorImageLayer. Used with isVector(), it provide a good typing.
+   * VectorImageLayer should extends BaseLayer<VectorSource> but it does not.
+   */
+  public getSource(): Source {
+    // Typing is broken here
+    return this.layer.getSource() as Source;
   }
 
   public setId(value?: string): LayerWrapper {
@@ -103,38 +117,38 @@ export class LayerWrapper<Layer extends OlLayers = OlLayers, Meta extends LayerM
     return this.layer.get(LayerProperties.Type);
   }
 
-  public isPredefined(): this is LayerWrapper<TileLayer, PredefinedMetadata> {
+  public isPredefined(): this is PredefinedLayerWrapper {
     return this.getType() === LayerType.Predefined;
   }
 
-  public isVector(): this is LayerWrapper<VectorLayer, VectorMetadata> {
+  public isVector(): this is VectorLayerWrapper {
     return this.getType() === LayerType.Vector;
   }
 
-  public isWms(): this is LayerWrapper<TileLayer, WmsMetadata> {
+  public isWms(): this is WmsLayerWrapper {
     return this.getType() === LayerType.Wms;
   }
 
   /**
    * Shallow clone layer
    */
-  public shallowClone(): LayerWrapper<Layer, Meta> {
+  public shallowClone(): LayerWrapper<Layer, Source, Meta> {
     // Typings are broken here
-    let layer: TileLayer | VectorLayer;
+    let layer: TileLayer | VectorImageLayer;
     if (this.isPredefined()) {
       layer = new TileLayer({ source: this.layer.getSource() as TileSource });
     } else if (this.isWms()) {
       layer = new TileLayer({ source: this.layer.getSource() as TileSource });
     } else if (this.isVector()) {
-      layer = new VectorLayer({ source: this.layer.getSource() as VectorSource<Geometry> });
+      layer = new VectorImageLayer({ source: this.layer.getSource() as VectorSource<Geometry> });
     } else {
       throw new Error('Unsupported layer type');
     }
 
-    return LayerWrapper.from<Layer, Meta>(layer as Layer).setMetadata(this.getMetadata() as Meta);
+    return LayerWrapper.from<Layer, Source, Meta>(layer as Layer).setMetadata(this.getMetadata() as Meta);
   }
 
-  public setMetadata(props: Meta): LayerWrapper<Layer, Meta> {
+  public setMetadata(props: Meta): LayerWrapper<Layer, Source, Meta> {
     this.layer.set(AbcProperties.Managed, true);
     this.layer.set(LayerProperties.Id, props.id);
     this.layer.set(LayerProperties.Name, props.name);
@@ -288,8 +302,8 @@ export class LayerWrapper<Layer extends OlLayers = OlLayers, Meta extends LayerM
         return Promise.reject(new Error('Invalid vector layer'));
       }
       const geoJson = new GeoJSON();
-      const layer = this.unwrap() as VectorLayer; // Typing is buggy here
-      const features = geoJson.writeFeaturesObject(layer.getSource().getFeatures());
+      const source = this.getSource() as VectorSource<Geometry>; // Typing is buggy here
+      const features = geoJson.writeFeaturesObject(source.getFeatures());
       return {
         type: LayerType.Vector,
         metadata: meta,

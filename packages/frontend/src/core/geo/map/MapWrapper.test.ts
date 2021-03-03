@@ -2,13 +2,13 @@ import { MapFactory } from './MapFactory';
 import { AbcProperties, MapTool } from '@abc-map/shared-entities';
 import { Map } from 'ol';
 import { logger, MapWrapper } from './MapWrapper';
-import VectorLayer from 'ol/layer/Vector';
 import { ToolRegistry } from '../tools/ToolRegistry';
 import { OlTestHelper } from '../../utils/OlTestHelper';
 import { Circle } from '../tools/circle/Circle';
 import { None } from '../tools/common/None';
 import TileLayer from 'ol/layer/Tile';
 import { LayerFactory } from '../layers/LayerFactory';
+import VectorImageLayer from 'ol/layer/VectorImage';
 
 logger.disable();
 
@@ -21,7 +21,7 @@ describe('MapWrapper', function () {
     const layers = map.getLayers();
     expect(layers).toHaveLength(2);
     expect(layers[0].unwrap()).toBeInstanceOf(TileLayer);
-    expect(layers[1].unwrap()).toBeInstanceOf(VectorLayer);
+    expect(layers[1].unwrap()).toBeInstanceOf(VectorImageLayer);
     expect(layers[0].isActive()).toBe(false);
     expect(layers[1].isActive()).toBe(true);
   });
@@ -75,7 +75,7 @@ describe('MapWrapper', function () {
       map.addLayer(LayerFactory.newVectorLayer());
 
       expect(map.unwrap().getLayers().getLength()).toEqual(1);
-      expect(map.unwrap().getLayers().getArray()[0]).toBeInstanceOf(VectorLayer);
+      expect(map.unwrap().getLayers().getArray()[0]).toBeInstanceOf(VectorImageLayer);
     });
   });
 

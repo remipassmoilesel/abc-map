@@ -14,6 +14,9 @@ import TextPanel from './text/TextPanel';
 import RectanglePanel from './rectangle/RectanglePanel';
 import { LayerWrapper } from '../../../core/geo/layers/LayerWrapper';
 import Cls from './ToolSelector.module.scss';
+import { LayerFactory } from '../../../core/geo/layers/LayerFactory';
+import { HistoryKey } from '../../../core/history/HistoryKey';
+import { AddLayersTask } from '../../../core/history/tasks/AddLayersTask';
 
 const logger = Logger.get('ToolSelector.tsx', 'info');
 
@@ -47,7 +50,14 @@ class ToolSelector extends Component<Props, {}> {
             {toolPanel && <div className={Cls.toolPanel}>{toolPanel}</div>}
           </>
         )}
-        {!toolsActive && <div className={Cls.message}>Vous devez sélectionner une couche de formes pour utiliser les outils.</div>}
+        {!toolsActive && (
+          <div className={Cls.message}>
+            Vous devez sélectionner une couche de formes pour utiliser les outils.
+            <button onClick={this.createVectorLayer} className={'btn btn-outline-secondary my-3'}>
+              Créer une couche
+            </button>
+          </div>
+        )}
       </div>
     );
   }
@@ -93,6 +103,15 @@ class ToolSelector extends Component<Props, {}> {
     const tool = ToolRegistry.getById(toolId);
     this.services.geo.setMainTool(tool);
   }
+
+  private createVectorLayer = () => {
+    const map = this.services.geo.getMainMap();
+    const layer = LayerFactory.newVectorLayer();
+    map.addLayer(layer);
+    map.setActiveLayer(layer);
+
+    this.services.history.register(HistoryKey.Map, new AddLayersTask(map, [layer]));
+  };
 }
 
 export default connector(ToolSelector);

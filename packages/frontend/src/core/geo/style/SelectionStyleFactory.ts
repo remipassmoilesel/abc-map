@@ -19,11 +19,11 @@ const stroke = new Stroke({
   lineDash: [5, 10],
 });
 
+const fill = new Fill({ color: fillColor });
+
 const polygon = [
   new Style({
-    fill: new Fill({
-      color: fillColor,
-    }),
+    fill,
     stroke,
   }),
 ];
@@ -40,9 +40,7 @@ const point = [
   new Style({
     image: new CircleStyle({
       radius: width * 2,
-      fill: new Fill({
-        color: strokeColor,
-      }),
+      fill,
       stroke,
     }),
     zIndex: Infinity,
@@ -51,8 +49,8 @@ const point = [
 
 const geometryCollection = polygon.concat(lineString, point);
 
-export class SelectionStyle {
-  public static getForFeature(feature: Feature<Geometry>): Style[] {
+export class SelectionStyleFactory {
+  public getForFeature(feature: Feature<Geometry>): Style[] {
     const geometry = feature.getGeometry()?.getType();
     if (!geometry) {
       return [];

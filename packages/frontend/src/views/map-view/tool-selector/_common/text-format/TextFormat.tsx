@@ -8,8 +8,8 @@ import * as _ from 'lodash';
 import Cls from './TextFormat.module.scss';
 
 const mapStateToProps = (state: MainState) => ({
-  color: state.map.currentStyle.text.color,
-  size: state.map.currentStyle.text.size,
+  color: state.map.currentStyle.text?.color,
+  size: state.map.currentStyle.text?.size,
 });
 
 const mapDispatchToProps = {
@@ -46,7 +46,10 @@ class TextFormat extends Component<Props, {}> {
   private handleColorSelected = (color: string): void => {
     this.props.setColor(color);
     this.services.geo.updateSelectedFeatures((style) => {
-      style.text.color = color;
+      style.text = {
+        ...style.text,
+        color,
+      };
       return style;
     });
   };
@@ -55,7 +58,10 @@ class TextFormat extends Component<Props, {}> {
     const size = parseInt(ev.target.value);
     this.props.setSize(size);
     this.services.geo.updateSelectedFeatures((style) => {
-      style.text.size = size;
+      style.text = {
+        ...style.text,
+        size,
+      };
       return style;
     });
   };

@@ -1,6 +1,5 @@
 import { Map } from 'ol';
 import { AbcProjection, AbcProperties, VectorMetadata } from '@abc-map/shared-entities';
-import VectorLayer from 'ol/layer/Vector';
 import * as _ from 'lodash';
 import { ResizeObserverFactory } from '../../utils/ResizeObserverFactory';
 import BaseEvent from 'ol/events/Event';
@@ -9,11 +8,14 @@ import { AbstractTool } from '../tools/AbstractTool';
 import TileLayer from 'ol/layer/Tile';
 import { FeatureWrapper } from '../features/FeatureWrapper';
 import { LayerFactory } from '../layers/LayerFactory';
-import { LayerWrapper } from '../layers/LayerWrapper';
+import { LayerWrapper, VectorLayerWrapper } from '../layers/LayerWrapper';
+import VectorImageLayer from 'ol/layer/VectorImage';
+import VectorSource from 'ol/source/Vector';
+import Geometry from 'ol/geom/Geometry';
 
 export const logger = Logger.get('ManagedMap.ts', 'debug');
 
-export declare type FeatureCallback = (feat: FeatureWrapper, layer: LayerWrapper<VectorLayer, VectorMetadata>) => void;
+export declare type FeatureCallback = (feat: FeatureWrapper, layer: LayerWrapper<VectorImageLayer, VectorSource<Geometry>, VectorMetadata>) => void;
 
 /**
  * This class wrap OpenLayers map. The goal is not to replace all methods, but to ensure
@@ -72,7 +74,7 @@ export class MapWrapper {
       .getLayers()
       .getArray()
       .filter((lay) => LayerWrapper.isManaged(lay))
-      .map((lay) => LayerWrapper.from(lay as TileLayer | VectorLayer));
+      .map((lay) => LayerWrapper.from(lay as TileLayer | VectorImageLayer));
   }
 
   public setActiveLayer(layer: LayerWrapper): void {
@@ -113,7 +115,7 @@ export class MapWrapper {
     this.internal.getLayers().remove(layer.unwrap());
   }
 
-  public getActiveVectorLayer(): LayerWrapper<VectorLayer, VectorMetadata> | undefined {
+  public getActiveVectorLayer(): VectorLayerWrapper | undefined {
     const layer = this.getActiveLayer();
     if (layer && layer.isVector()) {
       return layer;
@@ -125,15 +127,12 @@ export class MapWrapper {
     if (!layer) {
       return;
     }
-    layer
-      .unwrap()
-      .getSource()
-      .forEachFeature((feat) => {
-        const feature = FeatureWrapper.from(feat);
-        if (feature.isSelected()) {
-          callback(feature, layer);
-        }
-      });
+    layer.getSource().forEachFeature((feat) => {
+      const feature = FeatureWrapper.from(feat);
+      if (feature.isSelected()) {
+        callback(feature, layer);
+      }
+    });
   }
 
   public getProjection(): AbcProjection {
@@ -168,7 +167,7 @@ export class MapWrapper {
       return;
     }
 
-    this.currentTool.setup(this.internal, layer.unwrap().getSource());
+    this.currentTool.setup(this.internal, layer.getSource());
     logger.debug(`Activated tool '${this.currentTool.getId()}'`);
     return;
   }
@@ -214,7 +213,6 @@ export class MapWrapper {
     }
 
     return layer
-      .unwrap()
       .getSource()
       .getFeatures()
       .map((feat) => {

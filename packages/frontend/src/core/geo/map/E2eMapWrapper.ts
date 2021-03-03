@@ -37,7 +37,7 @@ export class E2eMapWrapper implements E2eMap {
       return [];
     }
 
-    return layer.unwrap().getSource().getFeatures();
+    return layer.getSource().getFeatures();
   }
 
   public getViewExtent() {

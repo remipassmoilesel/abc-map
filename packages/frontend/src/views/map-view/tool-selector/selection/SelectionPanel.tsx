@@ -48,8 +48,8 @@ class SelectionPanel extends Component<{}, {}> {
       return;
     }
 
-    features.forEach((feat) => layer.unwrap().getSource().removeFeature(feat.unwrap()));
-    this.services.history.register(HistoryKey.Map, new RemoveFeatureTask(layer.unwrap().getSource(), features));
+    features.forEach((feat) => layer.getSource().removeFeature(feat.unwrap()));
+    this.services.history.register(HistoryKey.Map, new RemoveFeatureTask(layer.getSource(), features));
   };
 
   private handleDuplicate = () => {
@@ -89,8 +89,8 @@ class SelectionPanel extends Component<{}, {}> {
       })
       .filter((feat) => !!feat) as FeatureWrapper[];
 
-    clones.forEach((clone) => layer.unwrap().getSource().addFeature(clone.unwrap()));
-    this.services.history.register(HistoryKey.Map, new AddFeaturesTask(layer.unwrap().getSource(), clones));
+    clones.forEach((clone) => layer.getSource().addFeature(clone.unwrap()));
+    this.services.history.register(HistoryKey.Map, new AddFeaturesTask(layer.getSource(), clones));
   };
 }
 

@@ -30,13 +30,15 @@ class ColorSelector extends Component<Props, {}> {
 
   public render(): ReactNode {
     const withFill = this.props.fillColors;
+    const stroke = this.props.stroke;
+    const fill = this.props.fill;
     return (
       <div className={'control-item'}>
-        <ColorPicker label={'Trait'} initialValue={this.props.stroke.color} onClose={this.handleStrokeColorSelected} data-cy={'stroke-color'} />
+        <ColorPicker label={'Trait'} initialValue={stroke?.color} onClose={this.handleStrokeColorSelected} data-cy={'stroke-color'} />
         {withFill && (
           <>
-            <ColorPicker label={'Remplissage'} initialValue={this.props.fill.color1} onClose={this.handleFillColor1Selected} data-cy={'fill-color1'} />
-            <ColorPicker label={'Texture'} initialValue={this.props.fill.color2} onClose={this.handleFillColor2Selected} data-cy={'fill-color2'} />
+            <ColorPicker label={'Remplissage'} initialValue={fill?.color1} onClose={this.handleFillColor1Selected} data-cy={'fill-color1'} />
+            <ColorPicker label={'Texture'} initialValue={fill?.color2} onClose={this.handleFillColor2Selected} data-cy={'fill-color2'} />
           </>
         )}
       </div>
@@ -46,7 +48,10 @@ class ColorSelector extends Component<Props, {}> {
   private handleStrokeColorSelected = (color: string): void => {
     this.props.setStrokeColor(color);
     this.services.geo.updateSelectedFeatures((style) => {
-      style.stroke.color = color;
+      style.stroke = {
+        ...style.stroke,
+        color,
+      };
       return style;
     });
   };
@@ -54,7 +59,10 @@ class ColorSelector extends Component<Props, {}> {
   private handleFillColor1Selected = (color: string): void => {
     this.props.setFillColor1(color);
     this.services.geo.updateSelectedFeatures((style) => {
-      style.fill.color1 = color;
+      style.fill = {
+        ...style.fill,
+        color1: color,
+      };
       return style;
     });
   };
@@ -62,7 +70,10 @@ class ColorSelector extends Component<Props, {}> {
   private handleFillColor2Selected = (color: string): void => {
     this.props.setFillColor2(color);
     this.services.geo.updateSelectedFeatures((style) => {
-      style.fill.color2 = color;
+      style.fill = {
+        ...style.fill,
+        color2: color,
+      };
       return style;
     });
   };

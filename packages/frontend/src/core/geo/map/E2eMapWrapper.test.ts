@@ -25,7 +25,7 @@ describe('E2eMapWrapper', function () {
     map.addLayer(layer1);
     map.addLayer(layer2);
 
-    layer1.unwrap().getSource().addFeatures(features);
+    layer1.getSource().addFeatures(features);
 
     map.setActiveLayer(layer1);
     expect(e2e.getActiveLayerFeatures()).toEqual(features);

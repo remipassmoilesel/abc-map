@@ -13,3 +13,13 @@ export enum StyleProperties {
   TextAlignment = 'abc:style:text:alignment',
   PointSize = 'abc:style:point:size',
 }
+
+export enum FillPatterns {
+  Flat = 'abc:style:fill:flat',
+  Circles = 'abc:style:fill:circles',
+  Squares = 'abc:style:fill:squares',
+  HatchingVertical = 'abc:style:fill:hatching:vertical',
+  HatchingHorizontal = 'abc:style:fill:hatching:horizontal',
+  HatchingObliqueRight = 'abc:style:fill:hatching:oblique:right',
+  HatchingObliqueLeft = 'abc:style:fill:hatching:oblique:left',
+}

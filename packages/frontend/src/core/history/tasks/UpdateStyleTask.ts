@@ -1,10 +1,10 @@
 import { Task } from '../Task';
-import { AbcStyleProperties } from '../../geo/style/AbcStyleProperties';
+import { FeatureStyle } from '../../geo/style/FeatureStyle';
 import { FeatureWrapper } from '../../geo/features/FeatureWrapper';
 
 export interface UpdateStyleItem {
-  before: AbcStyleProperties;
-  after: AbcStyleProperties;
+  before: FeatureStyle;
+  after: FeatureStyle;
   feature: FeatureWrapper;
 }
 
@@ -15,13 +15,13 @@ export class UpdateStyleTask extends Task {
 
   public async undo(): Promise<void> {
     this.items.forEach((item) => {
-      item.feature.setStyle(item.before);
+      item.feature.setStyleProperties(item.before);
     });
   }
 
   public async redo(): Promise<void> {
     this.items.forEach((item) => {
-      item.feature.setStyle(item.after);
+      item.feature.setStyleProperties(item.after);
     });
   }
 }
