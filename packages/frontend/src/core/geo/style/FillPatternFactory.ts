@@ -1,5 +1,5 @@
 import { DEVICE_PIXEL_RATIO } from 'ol/has';
-import { FillProperties } from './AbcStyleProperties';
+import { FillProperties } from './FeatureStyle';
 import { FillPatterns } from '@abc-map/shared-entities';
 
 const ratio = DEVICE_PIXEL_RATIO;
@@ -7,9 +7,9 @@ const ratio = DEVICE_PIXEL_RATIO;
 declare type CanvasContext = { canvas: HTMLCanvasElement; ctx: CanvasRenderingContext2D };
 
 export class FillPatternFactory {
-  private static canvasContext?: CanvasContext;
+  private canvasContext?: CanvasContext;
 
-  public static create(properties: FillProperties): CanvasPattern | undefined {
+  public create(properties: FillProperties): CanvasPattern | undefined {
     if (FillPatterns.Circles === properties.pattern) {
       return this.createCircles(properties);
     } else if (FillPatterns.Squares === properties.pattern) {
@@ -25,7 +25,7 @@ export class FillPatternFactory {
     }
   }
 
-  public static createCircles(properties: FillProperties): CanvasPattern {
+  public createCircles(properties: FillProperties): CanvasPattern {
     const { canvas, ctx } = this.getCanvas();
     canvas.width = 16 * ratio;
     canvas.height = 16 * ratio;
@@ -43,7 +43,7 @@ export class FillPatternFactory {
     return ctx.createPattern(canvas, 'repeat') as CanvasPattern;
   }
 
-  public static createSquares(properties: FillProperties): CanvasPattern {
+  public createSquares(properties: FillProperties): CanvasPattern {
     const { canvas, ctx } = this.getCanvas();
     canvas.width = 16 * ratio;
     canvas.height = 16 * ratio;
@@ -63,7 +63,7 @@ export class FillPatternFactory {
     return ctx.createPattern(canvas, 'repeat') as CanvasPattern;
   }
 
-  public static createVerticalHatching(properties: FillProperties): CanvasPattern {
+  public createVerticalHatching(properties: FillProperties): CanvasPattern {
     const { canvas, ctx } = this.getCanvas();
     canvas.width = 16 * ratio;
     canvas.height = 16 * ratio;
@@ -84,7 +84,7 @@ export class FillPatternFactory {
     return ctx.createPattern(canvas, 'repeat') as CanvasPattern;
   }
 
-  public static createHorizontalHatching(properties: FillProperties): CanvasPattern {
+  public createHorizontalHatching(properties: FillProperties): CanvasPattern {
     const { canvas, ctx } = this.getCanvas();
     canvas.width = 16 * ratio;
     canvas.height = 16 * ratio;
@@ -105,7 +105,7 @@ export class FillPatternFactory {
     return ctx.createPattern(canvas, 'repeat') as CanvasPattern;
   }
 
-  public static createObliqueHatchingRight(properties: FillProperties): CanvasPattern {
+  public createObliqueHatchingRight(properties: FillProperties): CanvasPattern {
     const { canvas, ctx } = this.getCanvas();
     canvas.width = 16 * ratio;
     canvas.height = 16 * ratio;
@@ -142,7 +142,7 @@ export class FillPatternFactory {
     return ctx.createPattern(canvas, 'repeat') as CanvasPattern;
   }
 
-  public static createObliqueHatchingLeft(properties: FillProperties): CanvasPattern {
+  public createObliqueHatchingLeft(properties: FillProperties): CanvasPattern {
     const { canvas, ctx } = this.getCanvas();
     canvas.width = 16 * ratio;
     canvas.height = 16 * ratio;
@@ -179,7 +179,7 @@ export class FillPatternFactory {
     return ctx.createPattern(canvas, 'repeat') as CanvasPattern;
   }
 
-  private static getCanvas() {
+  private getCanvas() {
     if (!this.canvasContext) {
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');

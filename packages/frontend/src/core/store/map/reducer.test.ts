@@ -5,57 +5,57 @@ import { mapReducer } from './reducer';
 
 describe('Map reducer', function () {
   it('SetTool', function () {
-    const initialState: MapState = {
+    const initial: MapState = {
       ...mapInitialState,
       tool: MapTool.Circle,
     };
-    const snapshot = JSON.stringify(initialState);
+    const snapshot = JSON.stringify(initial);
 
     const action = MapActions.setTool(MapTool.LineString);
-    const state = mapReducer(initialState, action);
+    const state = mapReducer(initial, action);
 
-    expect(JSON.stringify(initialState)).toEqual(snapshot);
+    expect(JSON.stringify(initial)).toEqual(snapshot);
     expect(state.tool).toEqual(MapTool.LineString);
   });
 
   it('SetFillColor', function () {
-    const initialState: MapState = {
+    const initial: MapState = {
       ...mapInitialState,
       currentStyle: {
         ...mapInitialState.currentStyle,
         fill: {
           ...mapInitialState.currentStyle.fill,
+          color1: '#000',
         },
       },
     };
-    initialState.currentStyle.fill.color1 = '#000';
-    const snapshot = JSON.stringify(initialState);
+    const snapshot = JSON.stringify(initial);
 
     const action = MapActions.setFillColor1('#111');
-    const state = mapReducer(initialState, action);
+    const state = mapReducer(initial, action);
 
-    expect(JSON.stringify(initialState)).toEqual(snapshot);
-    expect(state.currentStyle.fill.color1).toEqual('#111');
+    expect(JSON.stringify(initial)).toEqual(snapshot);
+    expect(state.currentStyle.fill?.color1).toEqual('#111');
   });
 
   it('SetStrokeColor', function () {
-    const initialState: MapState = {
+    const initial: MapState = {
       ...mapInitialState,
       currentStyle: {
         ...mapInitialState.currentStyle,
         stroke: {
           ...mapInitialState.currentStyle.stroke,
+          color: '#000',
         },
       },
     };
-    initialState.currentStyle.stroke.color = '#000';
-    const snapshot = JSON.stringify(initialState);
+    const snapshot = JSON.stringify(initial);
 
     const action = MapActions.setStrokeColor('#111');
-    const state = mapReducer(initialState, action);
+    const state = mapReducer(initial, action);
 
-    expect(JSON.stringify(initialState)).toEqual(snapshot);
-    expect(state.currentStyle.stroke.color).toEqual('#111');
+    expect(JSON.stringify(initial)).toEqual(snapshot);
+    expect(state.currentStyle.stroke?.color).toEqual('#111');
   });
 
   it('SetStrokeWidth', function () {
@@ -65,16 +65,16 @@ describe('Map reducer', function () {
         ...mapInitialState.currentStyle,
         stroke: {
           ...mapInitialState.currentStyle.stroke,
+          width: 5,
         },
       },
     };
-    initialState.currentStyle.stroke.width = 5;
     const snapshot = JSON.stringify(initialState);
 
     const action = MapActions.setStrokeWidth(10);
     const state = mapReducer(initialState, action);
 
     expect(JSON.stringify(initialState)).toEqual(snapshot);
-    expect(state.currentStyle.stroke.width).toEqual(10);
+    expect(state.currentStyle.stroke?.width).toEqual(10);
   });
 });

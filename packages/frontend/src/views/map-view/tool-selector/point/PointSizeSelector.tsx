@@ -26,7 +26,7 @@ class StrokeWidthSelector extends Component<Props, {}> {
     return (
       <div className={'control-item d-flex align-items-center justify-content-between'}>
         <div className={'mr-2'}>Taille:</div>
-        <select value={this.props.point.size} onChange={this.handleSelection} className={`form-control form-control-sm ${Cls.select}`}>
+        <select value={this.props.point?.size} onChange={this.handleSelection} className={`form-control form-control-sm ${Cls.select}`}>
           {_.range(1, 51).map((value) => (
             <option key={value} value={value}>
               {value}
@@ -42,7 +42,10 @@ class StrokeWidthSelector extends Component<Props, {}> {
     this.props.setPointSize(size);
 
     this.services.geo.updateSelectedFeatures((style) => {
-      style.point.size = size;
+      style.point = {
+        ...style.point,
+        size,
+      };
       return style;
     });
   };

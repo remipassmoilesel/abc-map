@@ -40,6 +40,9 @@
 }
 
 .message {
+  display: flex;
+  flex-direction: column;
+
   text-align: center;
   font-style: italic;
   color: $gray-600;

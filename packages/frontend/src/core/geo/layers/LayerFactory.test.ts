@@ -1,11 +1,11 @@
 import { LayerFactory } from './LayerFactory';
 import VectorSource from 'ol/source/Vector';
 import { TileWMS } from 'ol/source';
-import { AbcProperties, LayerType, PredefinedLayerModel, WmsDefinition, WmsMetadata } from '@abc-map/shared-entities';
+import { AbcProperties, LayerType, PredefinedLayerModel, WmsDefinition } from '@abc-map/shared-entities';
 import { TestHelper } from '../../utils/TestHelper';
 import TileLayer from 'ol/layer/Tile';
-import VectorLayer from 'ol/layer/Vector';
-import { LayerWrapper } from './LayerWrapper';
+import { VectorLayerWrapper, WmsLayerWrapper } from './LayerWrapper';
+import VectorImageLayer from 'ol/layer/VectorImage';
 
 describe('LayerFactory', () => {
   it('newOsmLayer()', () => {
@@ -35,7 +35,7 @@ describe('LayerFactory', () => {
       expect(metadata?.active).toEqual(false);
       expect(metadata?.type).toEqual(LayerType.Vector);
       expect(layer.unwrap().get(AbcProperties.Managed)).toBe(true);
-      expect(layer.unwrap()).toBeInstanceOf(VectorLayer);
+      expect(layer.unwrap()).toBeInstanceOf(VectorImageLayer);
     });
 
     it('with source', () => {
@@ -50,7 +50,7 @@ describe('LayerFactory', () => {
       expect(metadata?.active).toEqual(false);
       expect(metadata?.type).toEqual(LayerType.Vector);
       expect(layer.unwrap().get(AbcProperties.Managed)).toBe(true);
-      expect(layer.unwrap()).toBeInstanceOf(VectorLayer);
+      expect(layer.unwrap()).toBeInstanceOf(VectorImageLayer);
       expect(layer.unwrap().getSource()).toStrictEqual(source);
     });
   });
@@ -134,13 +134,14 @@ describe('LayerFactory', () => {
 
     it('with vector layer', async () => {
       const abcLayer = TestHelper.sampleVectorLayer();
+      abcLayer.features.features = [TestHelper.sampleGeojsonFeature(), TestHelper.sampleGeojsonFeature()];
       abcLayer.metadata.name = 'Formes';
       abcLayer.metadata.opacity = 0.5;
       abcLayer.metadata.active = true;
       abcLayer.metadata.visible = false;
 
-      const layer = await LayerFactory.fromAbcLayer(abcLayer);
-      expect(layer.unwrap()).toBeInstanceOf(VectorLayer);
+      const layer = (await LayerFactory.fromAbcLayer(abcLayer)) as VectorLayerWrapper;
+      expect(layer.unwrap()).toBeInstanceOf(VectorImageLayer);
       const metadata = layer.getMetadata();
       expect(metadata).toBeDefined();
       expect(metadata?.id).toBeDefined();
@@ -151,7 +152,11 @@ describe('LayerFactory', () => {
       expect(metadata?.active).toEqual(true);
       expect(metadata?.type).toEqual(LayerType.Vector);
       expect(layer.unwrap().get(AbcProperties.Managed)).toBe(true);
-      expect(layer.unwrap()).toBeInstanceOf(VectorLayer);
+      expect(layer.unwrap()).toBeInstanceOf(VectorImageLayer);
+
+      const features = layer.getSource().getFeatures();
+      expect(features).toHaveLength(2);
+      features.forEach((f) => expect(f.getStyle()).not.toBeNull());
     });
 
     it('with wms layer, without authentication', async () => {
@@ -161,7 +166,7 @@ describe('LayerFactory', () => {
       abcLayer.metadata.active = true;
       abcLayer.metadata.visible = false;
 
-      const layer = (await LayerFactory.fromAbcLayer(abcLayer)) as LayerWrapper<TileLayer, WmsMetadata>;
+      const layer = (await LayerFactory.fromAbcLayer(abcLayer)) as WmsLayerWrapper;
 
       expect(layer.unwrap()).toBeInstanceOf(TileLayer);
       const metadata = layer.getMetadata();
@@ -187,7 +192,7 @@ describe('LayerFactory', () => {
       abcLayer.metadata.active = true;
       abcLayer.metadata.visible = false;
 
-      const layer = (await LayerFactory.fromAbcLayer(abcLayer)) as LayerWrapper<TileLayer, WmsMetadata>;
+      const layer = (await LayerFactory.fromAbcLayer(abcLayer)) as WmsLayerWrapper;
 
       expect(layer.unwrap()).toBeInstanceOf(TileLayer);
       const metadata = layer.getMetadata();

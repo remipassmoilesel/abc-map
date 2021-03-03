@@ -2,7 +2,10 @@ import Feature, { FeatureLike } from 'ol/Feature';
 import Geometry from 'ol/geom/Geometry';
 import uuid from 'uuid-random';
 import { FeatureProperties, StyleProperties } from '@abc-map/shared-entities';
-import { AbcStyleProperties } from '../style/AbcStyleProperties';
+import { FeatureStyle, DefaultStyle } from '../style/FeatureStyle';
+import { StyleFactory } from '../style/StyleFactory';
+
+const styles = new StyleFactory();
 
 /**
  * This class is a thin wrapper around Openlayers features, used to ensure that critical operations
@@ -63,13 +66,14 @@ export class FeatureWrapper {
 
   public setSelected(value: boolean): FeatureWrapper {
     this.feature.set(FeatureProperties.Selected, value);
+    this.applyStyle();
     return this;
   }
 
   /**
    * Extract style properties from feature
    */
-  public getStyle(): AbcStyleProperties {
+  public getStyleProperties(): FeatureStyle {
     return {
       stroke: {
         color: this.feature.get(StyleProperties.StrokeColor),
@@ -97,22 +101,38 @@ export class FeatureWrapper {
 
   /**
    * Set style properties on feature
-   * @param style
+   * @param properties
    */
-  public setStyle(style: AbcStyleProperties): FeatureWrapper {
-    this.feature.set(StyleProperties.StrokeColor, style.stroke.color);
-    this.feature.set(StyleProperties.StrokeWidth, style.stroke.width);
-    this.feature.set(StyleProperties.FillColor1, style.fill.color1);
-    this.feature.set(StyleProperties.FillColor2, style.fill.color2);
-    this.feature.set(StyleProperties.FillPattern, style.fill.pattern);
-    this.feature.set(StyleProperties.TextValue, style.text.value);
-    this.feature.set(StyleProperties.TextColor, style.text.color);
-    this.feature.set(StyleProperties.TextSize, style.text.size);
-    this.feature.set(StyleProperties.TextFont, style.text.font);
-    this.feature.set(StyleProperties.TextOffsetX, style.text.offsetX);
-    this.feature.set(StyleProperties.TextOffsetY, style.text.offsetY);
-    this.feature.set(StyleProperties.TextAlignment, style.text.alignment);
-    this.feature.set(StyleProperties.PointSize, style.point.size);
+  public setStyleProperties(properties: FeatureStyle): FeatureWrapper {
+    this.feature.set(StyleProperties.StrokeColor, properties.stroke?.color);
+    this.feature.set(StyleProperties.StrokeWidth, properties.stroke?.width);
+    this.feature.set(StyleProperties.FillColor1, properties.fill?.color1);
+    this.feature.set(StyleProperties.FillColor2, properties.fill?.color2);
+    this.feature.set(StyleProperties.FillPattern, properties.fill?.pattern);
+    this.feature.set(StyleProperties.TextValue, properties.text?.value);
+    this.feature.set(StyleProperties.TextColor, properties.text?.color);
+    this.feature.set(StyleProperties.TextSize, properties.text?.size);
+    this.feature.set(StyleProperties.TextFont, properties.text?.font);
+    this.feature.set(StyleProperties.TextOffsetX, properties.text?.offsetX);
+    this.feature.set(StyleProperties.TextOffsetY, properties.text?.offsetY);
+    this.feature.set(StyleProperties.TextAlignment, properties.text?.alignment);
+    this.feature.set(StyleProperties.PointSize, properties.point?.size);
+
+    this.applyStyle();
+
+    return this;
+  }
+
+  public setDefaultStyle(): FeatureWrapper {
+    this.setStyleProperties(DefaultStyle);
+    this.applyStyle();
+    return this;
+  }
+
+  public applyStyle(): FeatureWrapper {
+    const properties = this.getStyleProperties();
+    const style = styles.getFor(this.feature, properties, this.isSelected());
+    this.feature.setStyle(style);
     return this;
   }
 
@@ -121,18 +141,19 @@ export class FeatureWrapper {
   }
 
   public setText(text: string): FeatureWrapper {
-    const style = this.getStyle();
-    this.setStyle({
+    const style = this.getStyleProperties();
+    this.setStyleProperties({
       ...style,
       text: {
         ...style.text,
         value: text,
       },
     });
+    this.applyStyle();
     return this;
   }
 
   public getText(): string | undefined {
-    return this.getStyle().text.value;
+    return this.getStyleProperties().text?.value;
   }
 }

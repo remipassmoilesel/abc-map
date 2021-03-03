@@ -58,7 +58,7 @@ export abstract class AbstractTool {
    */
   protected applyStyleOnDrawEnd(draw: Draw): void {
     draw.on('drawend', (ev: DrawEvent) => {
-      FeatureWrapper.from(ev.feature).setStyle(this.store.getState().map.currentStyle);
+      FeatureWrapper.from(ev.feature).setStyleProperties(this.store.getState().map.currentStyle);
     });
   }
 

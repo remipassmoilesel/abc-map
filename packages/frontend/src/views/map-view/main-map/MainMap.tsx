@@ -40,7 +40,13 @@ class MainMap extends Component<Props, State> {
               <i className={'fa fa-file'} />
               <h1>Déposez vos fichiers pour les importer</h1>
             </div>
-            <div className={Cls.dropOverlay2} onDrop={this.handleDrop} onDragOver={this.handleDragOver} onDragLeave={this.handleDragLeave} />
+            <div
+              className={Cls.dropOverlay2}
+              data-cy={'drag-overlay'}
+              onDrop={this.handleDrop}
+              onDragOver={this.handleDragOver}
+              onDragLeave={this.handleDragLeave}
+            />
           </>
         )}
       </div>
@@ -82,6 +88,11 @@ class MainMap extends Component<Props, State> {
     this.services.data
       .importFiles(files)
       .then((res) => {
+        if (!res.layers.length) {
+          this.services.ui.toasts.error("Ces formats de fichiers ne sont pas supportés, aucune donnée n'a été importée");
+          return;
+        }
+
         const map = this.services.geo.getMainMap();
         this.services.history.register(HistoryKey.Map, new AddLayersTask(map, res.layers));
         this.services.ui.toasts.info('Import terminé !');

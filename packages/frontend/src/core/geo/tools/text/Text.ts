@@ -9,7 +9,7 @@ import { TextChanged, TextEnd, TextEvent, TextInteraction, TextStart } from './T
 import { FeatureWrapper } from '../../features/FeatureWrapper';
 import { HistoryKey } from '../../../history/HistoryKey';
 import { UpdateStyleTask } from '../../../history/tasks/UpdateStyleTask';
-import { AbcStyleProperties } from '../../style/AbcStyleProperties';
+import { FeatureStyle } from '../../style/FeatureStyle';
 import GeometryType from 'ol/geom/GeometryType';
 
 const logger = Logger.get('Text.ts');
@@ -34,14 +34,17 @@ export class Text extends AbstractTool {
     const features = source.getFeatures();
     const text = new TextInteraction({ features });
 
-    let before: AbcStyleProperties | undefined;
+    let before: FeatureStyle | undefined;
 
     text.on(TextEvent.Start, (ev: TextStart) => {
       const feature = FeatureWrapper.from(ev.feature);
 
-      const style = feature.getStyle();
-      style.text.color = this.store.getState().map.currentStyle.text.color;
-      style.text.size = this.store.getState().map.currentStyle.text.size;
+      const style = feature.getStyleProperties();
+      style.text = {
+        ...style.text,
+        color: this.store.getState().map.currentStyle.text?.color,
+        size: this.store.getState().map.currentStyle.text?.size,
+      };
 
       if (feature.getGeometry()?.getType() === GeometryType.POINT) {
         style.text.offsetX = 20;
@@ -53,7 +56,7 @@ export class Text extends AbstractTool {
         style.text.alignment = 'center';
       }
 
-      feature.setStyle(style);
+      feature.setStyleProperties(style);
       before = style;
     });
 
@@ -68,8 +71,8 @@ export class Text extends AbstractTool {
         return;
       }
 
-      const after = FeatureWrapper.from(ev.feature).getStyle();
-      if (before.text.value === after.text.value) {
+      const after = FeatureWrapper.from(ev.feature).getStyleProperties();
+      if (before.text?.value === after.text?.value) {
         return;
       }
 

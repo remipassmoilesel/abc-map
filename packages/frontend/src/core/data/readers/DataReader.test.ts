@@ -1,12 +1,13 @@
 import { DataReader } from './DataReader';
 import { TestData } from './test-data/TestData';
 import { DEFAULT_PROJECTION } from '@abc-map/shared-entities';
-import VectorLayer from 'ol/layer/Vector';
 import { AbcFile } from './AbcFile';
 import { Zipper } from '../Zipper';
+import VectorImageLayer from 'ol/layer/VectorImage';
+import { VectorLayerWrapper } from '../../geo/layers/LayerWrapper';
 
-describe('ArtefactReader.test.ts', function () {
-  const data = new TestData();
+describe('DataReader', function () {
+  const testData = new TestData();
   const projection = DEFAULT_PROJECTION;
   let reader: DataReader;
 
@@ -29,7 +30,7 @@ describe('ArtefactReader.test.ts', function () {
     });
 
     it('should read multiple files with multiple formats', async function () {
-      const content = await data.getSampleArchive();
+      const content = await testData.getSampleArchive();
       const files: AbcFile[] = [
         {
           path: 'test.zip',
@@ -39,24 +40,24 @@ describe('ArtefactReader.test.ts', function () {
       const layer = await reader.read(files, projection);
       expect(layer).toBeInstanceOf(Array);
       expect(layer).toHaveLength(3);
-      expect(layer[0].unwrap()).toBeInstanceOf(VectorLayer);
-      expect(layer[1].unwrap()).toBeInstanceOf(VectorLayer);
-      expect(layer[2].unwrap()).toBeInstanceOf(VectorLayer);
+      expect(layer[0].unwrap()).toBeInstanceOf(VectorImageLayer);
+      expect(layer[1].unwrap()).toBeInstanceOf(VectorImageLayer);
+      expect(layer[2].unwrap()).toBeInstanceOf(VectorImageLayer);
 
-      const vectorLayer1: VectorLayer = layer[0].unwrap() as VectorLayer;
+      const vectorLayer1 = layer[0] as VectorLayerWrapper;
       expect(vectorLayer1.getSource().getFeatures()).toHaveLength(189);
 
-      const vectorLayer2: VectorLayer = layer[1].unwrap() as VectorLayer;
+      const vectorLayer2 = layer[1] as VectorLayerWrapper;
       expect(vectorLayer2.getSource().getFeatures()).toHaveLength(20);
 
-      const vectorLayer3: VectorLayer = layer[2].unwrap() as VectorLayer;
+      const vectorLayer3 = layer[2] as VectorLayerWrapper;
       expect(vectorLayer3.getSource().getFeatures()).toHaveLength(91);
     });
   });
 
   describe('GPX', () => {
     it('should read', async () => {
-      const content = await data.getSampleGpx();
+      const content = await testData.getSampleGpx();
       const files: AbcFile[] = [
         {
           path: 'test.gpx',
@@ -66,18 +67,21 @@ describe('ArtefactReader.test.ts', function () {
       const layer = await reader.read(files, projection);
       expect(layer).toBeInstanceOf(Array);
       expect(layer).toHaveLength(1);
-      expect(layer[0].unwrap()).toBeInstanceOf(VectorLayer);
+      expect(layer[0].unwrap()).toBeInstanceOf(VectorImageLayer);
 
-      const vectorLayer: VectorLayer = layer[0].unwrap() as VectorLayer;
+      const vectorLayer = layer[0] as VectorLayerWrapper;
       const features = vectorLayer.getSource().getFeatures();
       expect(features).toHaveLength(189);
-      features.forEach((f) => expect(f.getId()).toBeDefined());
+      features.forEach((f) => {
+        expect(f.getId()).toBeDefined();
+        expect(f.getStyle()).not.toBeNull();
+      });
     });
   });
 
   describe('KML', () => {
     it('should read', async () => {
-      const content = await data.getSampleKml();
+      const content = await testData.getSampleKml();
       const files: AbcFile[] = [
         {
           path: 'test.kml',
@@ -87,18 +91,21 @@ describe('ArtefactReader.test.ts', function () {
       const layer = await reader.read(files, projection);
       expect(layer).toBeInstanceOf(Array);
       expect(layer).toHaveLength(1);
-      expect(layer[0].unwrap()).toBeInstanceOf(VectorLayer);
+      expect(layer[0].unwrap()).toBeInstanceOf(VectorImageLayer);
 
-      const vectorLayer: VectorLayer = layer[0].unwrap() as VectorLayer;
+      const vectorLayer = layer[0] as VectorLayerWrapper;
       const features = vectorLayer.getSource().getFeatures();
       expect(features).toHaveLength(20);
-      features.forEach((f) => expect(f.getId()).toBeDefined());
+      features.forEach((f) => {
+        expect(f.getId()).toBeDefined();
+        expect(f.getStyle()).not.toBeNull();
+      });
     });
   });
 
   describe('GeoJSON', () => {
     it('should read', async () => {
-      const content = await data.getSampleGeojson();
+      const content = await testData.getSampleGeojson();
       const files: AbcFile[] = [
         {
           path: 'test.geojson',
@@ -108,18 +115,21 @@ describe('ArtefactReader.test.ts', function () {
       const layer = await reader.read(files, projection);
       expect(layer).toBeInstanceOf(Array);
       expect(layer).toHaveLength(1);
-      expect(layer[0].unwrap()).toBeInstanceOf(VectorLayer);
+      expect(layer[0].unwrap()).toBeInstanceOf(VectorImageLayer);
 
-      const vectorLayer: VectorLayer = layer[0].unwrap() as VectorLayer;
+      const vectorLayer = layer[0] as VectorLayerWrapper;
       const features = vectorLayer.getSource().getFeatures();
       expect(features).toHaveLength(91);
-      features.forEach((f) => expect(f.getId()).toBeDefined());
+      features.forEach((f) => {
+        expect(f.getId()).toBeDefined();
+        expect(f.getStyle()).not.toBeNull();
+      });
     });
   });
 
   describe('Shapefile', () => {
     it('should read zipped', async () => {
-      const content = await data.getSampleShapefile();
+      const content = await testData.getSampleShapefile();
       const files: AbcFile[] = [
         {
           path: 'test.zip',
@@ -129,27 +139,33 @@ describe('ArtefactReader.test.ts', function () {
       const layer = await reader.read(files, projection);
       expect(layer).toBeInstanceOf(Array);
       expect(layer).toHaveLength(1);
-      expect(layer[0].unwrap()).toBeInstanceOf(VectorLayer);
+      expect(layer[0].unwrap()).toBeInstanceOf(VectorImageLayer);
 
-      const vectorLayer: VectorLayer = layer[0].unwrap() as VectorLayer;
+      const vectorLayer = layer[0] as VectorLayerWrapper;
       const features = vectorLayer.getSource().getFeatures();
       expect(features).toHaveLength(610);
-      features.forEach((f) => expect(f.getId()).toBeDefined());
+      features.forEach((f) => {
+        expect(f.getId()).toBeDefined();
+        expect(f.getStyle()).not.toBeNull();
+      });
     });
 
     it('should read unzipped', async () => {
-      const content = await data.getSampleShapefile();
+      const content = await testData.getSampleShapefile();
       const files = await Zipper.unzip(content);
 
       const layer = await reader.read(files, projection);
       expect(layer).toBeInstanceOf(Array);
       expect(layer).toHaveLength(1);
-      expect(layer[0].unwrap()).toBeInstanceOf(VectorLayer);
+      expect(layer[0].unwrap()).toBeInstanceOf(VectorImageLayer);
 
-      const vectorLayer: VectorLayer = layer[0].unwrap() as VectorLayer;
+      const vectorLayer = layer[0] as VectorLayerWrapper;
       const features = vectorLayer.getSource().getFeatures();
       expect(features).toHaveLength(610);
-      features.forEach((f) => expect(f.getId()).toBeDefined());
+      features.forEach((f) => {
+        expect(f.getId()).toBeDefined();
+        expect(f.getStyle()).not.toBeNull();
+      });
     });
   });
 });

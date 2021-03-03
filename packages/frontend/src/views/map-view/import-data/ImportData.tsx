@@ -39,13 +39,12 @@ class ImportData extends Component<{}, {}> {
 
         return this.services.data.importFiles(files).then((res) => {
           if (!res.layers.length) {
-            this.services.ui.toasts.error('Ces fichiers ne sont pas supportés');
+            this.services.ui.toasts.error("Ces formats de fichiers ne sont pas supportés, aucune donnée n'a été importée");
             return;
           }
 
           const map = this.services.geo.getMainMap();
           this.services.history.register(HistoryKey.Map, new AddLayersTask(map, res.layers));
-
           this.services.ui.toasts.info('Import terminé !');
         });
       })

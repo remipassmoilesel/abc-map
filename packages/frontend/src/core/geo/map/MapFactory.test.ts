@@ -1,8 +1,8 @@
 import { DEFAULT_PROJECTION, LayerProperties } from '@abc-map/shared-entities';
 import { Map } from 'ol';
 import { MapFactory } from './MapFactory';
-import VectorLayer from 'ol/layer/Vector';
 import TileLayer from 'ol/layer/Tile';
+import VectorImageLayer from 'ol/layer/VectorImage';
 
 describe('MapFactory', () => {
   it('createDefault()', () => {
@@ -11,7 +11,7 @@ describe('MapFactory', () => {
     const layers = internal.getLayers().getArray();
     expect(layers).toHaveLength(2);
     expect(layers[0]).toBeInstanceOf(TileLayer);
-    expect(layers[1]).toBeInstanceOf(VectorLayer);
+    expect(layers[1]).toBeInstanceOf(VectorImageLayer);
     expect(layers[0].get(LayerProperties.Active)).toBeFalsy();
     expect(layers[1].get(LayerProperties.Active)).toBeTruthy();
     expect(internal.getView().getProjection().getCode()).toEqual(DEFAULT_PROJECTION.name);

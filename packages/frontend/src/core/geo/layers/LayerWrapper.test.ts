@@ -10,18 +10,18 @@ import {
   WmsDefinition,
 } from '@abc-map/shared-entities';
 import VectorSource from 'ol/source/Vector';
-import VectorLayer from 'ol/layer/Vector';
 import { LayerWrapper, logger as wrapperLogger } from './LayerWrapper';
 import { TestHelper } from '../../utils/TestHelper';
 import { LayerFactory } from './LayerFactory';
 import TileLayer from 'ol/layer/Tile';
+import VectorImageLayer from 'ol/layer/VectorImage';
 
 wrapperLogger.disable();
 
 describe('LayerWrapper', () => {
   describe('is', () => {
     it('predefined()', () => {
-      const layer = new VectorLayer();
+      const layer = new VectorImageLayer();
       layer.set(LayerProperties.Type, LayerType.Predefined);
       expect(LayerWrapper.from(layer).isPredefined()).toBe(true);
       expect(LayerWrapper.from(layer).isVector()).toBe(false);
@@ -29,7 +29,7 @@ describe('LayerWrapper', () => {
     });
 
     it('vector()', () => {
-      const layer = new VectorLayer();
+      const layer = new VectorImageLayer();
       layer.set(LayerProperties.Type, LayerType.Vector);
       expect(LayerWrapper.from(layer).isVector()).toBe(true);
       expect(LayerWrapper.from(layer).isPredefined()).toBe(false);
@@ -37,7 +37,7 @@ describe('LayerWrapper', () => {
     });
 
     it('wms()', () => {
-      const layer = new VectorLayer();
+      const layer = new VectorImageLayer();
       layer.set(LayerProperties.Type, LayerType.Wms);
       expect(LayerWrapper.from(layer).isWms()).toBe(true);
       expect(LayerWrapper.from(layer).isPredefined()).toBe(false);
@@ -97,7 +97,7 @@ describe('LayerWrapper', () => {
 
   describe('getMetadata()', () => {
     it('on non managed layer should return undefined', () => {
-      const layer = LayerWrapper.from(new VectorLayer());
+      const layer = LayerWrapper.from(new VectorImageLayer());
       expect(layer.getMetadata()).toBeUndefined();
     });
 
@@ -249,7 +249,7 @@ describe('LayerWrapper', () => {
       const layer = LayerFactory.newVectorLayer();
       const clone = layer.shallowClone();
       expect(clone).toBeDefined();
-      expect(clone.unwrap()).toBeInstanceOf(VectorLayer);
+      expect(clone.unwrap()).toBeInstanceOf(VectorImageLayer);
       expect(clone.unwrap().getSource()).toStrictEqual(layer.unwrap().getSource());
       expect(clone.unwrap()).not.toStrictEqual(layer.unwrap());
       expect(clone.getMetadata()).toEqual(layer.getMetadata());

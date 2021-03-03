@@ -1,4 +1,4 @@
-import { AbcStyleProperties } from '../../geo/style/AbcStyleProperties';
+import { FeatureStyle } from '../../geo/style/FeatureStyle';
 import { MapTool } from '@abc-map/shared-entities';
 
 export interface MapState {
@@ -7,7 +7,7 @@ export interface MapState {
    */
   tool: MapTool;
 
-  currentStyle: AbcStyleProperties;
+  currentStyle: FeatureStyle;
 }
 
 export const mapInitialState: MapState = {

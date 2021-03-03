@@ -1,3 +1,4 @@
+import { Feature as GeoJsonFeature, GeoJsonProperties, Geometry as GeoJsonGeometry } from 'geojson';
 import Feature from 'ol/Feature';
 import Geometry from 'ol/geom/Geometry';
 import { Point } from 'ol/geom';
@@ -16,7 +17,7 @@ import {
   PredefinedLayerModel,
 } from '@abc-map/shared-entities';
 import uuid from 'uuid-random';
-import { AbcStyleProperties } from '../geo/style/AbcStyleProperties';
+import { FeatureStyle } from '../geo/style/FeatureStyle';
 
 export class TestHelper {
   public static samplePointFeature(): Feature<Geometry> {
@@ -70,6 +71,21 @@ export class TestHelper {
             },
           },
         ],
+      },
+    };
+  }
+
+  public static sampleGeojsonFeature(): GeoJsonFeature<GeoJsonGeometry, GeoJsonProperties> {
+    return {
+      id: uuid(),
+      bbox: [1, 2, 3, 4],
+      type: 'Feature',
+      properties: {
+        val: 'var',
+      },
+      geometry: {
+        type: 'Point',
+        coordinates: [1, 5],
       },
     };
   }
@@ -148,7 +164,7 @@ export class TestHelper {
     });
   }
 
-  public static sampleStyleProperties(): AbcStyleProperties {
+  public static sampleStyleProperties(): FeatureStyle {
     return {
       stroke: {
         width: 5,

@@ -2,15 +2,17 @@ import TileLayer from 'ol/layer/Tile';
 import { OSM, TileWMS } from 'ol/source';
 import uuid from 'uuid-random';
 import VectorSource from 'ol/source/Vector';
-import VectorLayer from 'ol/layer/Vector';
-import { VectorStyles } from '../style/VectorStyles';
 import { tileLoadAuthenticated } from '../map/tileLoadAuthenticated';
 import { GeoJSON } from 'ol/format';
 import { AbcLayer, LayerType, PredefinedLayerModel, PredefinedMetadata, VectorMetadata, WmsDefinition, WmsMetadata } from '@abc-map/shared-entities';
-import { LayerWrapper } from './LayerWrapper';
+import { LayerWrapper, PredefinedLayerWrapper, VectorLayerWrapper, WmsLayerWrapper } from './LayerWrapper';
+import VectorImageLayer from 'ol/layer/VectorImage';
+import Geometry from 'ol/geom/Geometry';
+import TileSource from 'ol/source/Tile';
+import { FeatureWrapper } from '../features/FeatureWrapper';
 
 export class LayerFactory {
-  public static newOsmLayer(): LayerWrapper<TileLayer, PredefinedMetadata> {
+  public static newOsmLayer(): PredefinedLayerWrapper {
     const layer = new TileLayer({
       source: new OSM(),
     });
@@ -25,13 +27,12 @@ export class LayerFactory {
       model: PredefinedLayerModel.OSM,
     };
 
-    return LayerWrapper.from<TileLayer, PredefinedMetadata>(layer).setMetadata(metadata);
+    return LayerWrapper.from<TileLayer, TileSource, PredefinedMetadata>(layer).setMetadata(metadata);
   }
 
-  public static newVectorLayer(source?: VectorSource): LayerWrapper<VectorLayer, VectorMetadata> {
-    const styleFunc = VectorStyles.openLayersStyleFunction();
+  public static newVectorLayer(source?: VectorSource): VectorLayerWrapper {
     const _source = source || new VectorSource();
-    const layer = new VectorLayer({ source: _source, style: styleFunc });
+    const layer = new VectorImageLayer({ source: _source });
 
     const metadata: VectorMetadata = {
       id: uuid(),
@@ -42,10 +43,10 @@ export class LayerFactory {
       visible: true,
     };
 
-    return LayerWrapper.from<VectorLayer, VectorMetadata>(layer).setMetadata(metadata);
+    return LayerWrapper.from<VectorImageLayer, VectorSource<Geometry>, VectorMetadata>(layer).setMetadata(metadata);
   }
 
-  public static newWmsLayer(def: WmsDefinition): LayerWrapper<TileLayer, WmsMetadata> {
+  public static newWmsLayer(def: WmsDefinition): WmsLayerWrapper {
     const tileLoadFunction = def.auth?.username && def.auth?.password ? tileLoadAuthenticated(def.auth) : undefined;
 
     // TODO: FIXME: which extent should we set ?
@@ -72,7 +73,7 @@ export class LayerFactory {
       auth: def.auth,
     };
 
-    return LayerWrapper.from<TileLayer, WmsMetadata>(layer).setMetadata(metadata);
+    return LayerWrapper.from<TileLayer, TileSource, WmsMetadata>(layer).setMetadata(metadata);
   }
 
   public static async fromAbcLayer(abcLayer: AbcLayer): Promise<LayerWrapper> {
@@ -94,8 +95,10 @@ export class LayerFactory {
       const source = new VectorSource({
         features: geoJson.readFeatures(abcLayer.features),
       });
+
       layer = this.newVectorLayer(source);
       layer.setMetadata(abcLayer.metadata);
+      source.getFeatures().forEach((f) => FeatureWrapper.from(f).applyStyle());
     }
 
     // Wms layer

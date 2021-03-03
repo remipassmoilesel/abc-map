@@ -9,12 +9,19 @@ export abstract class AbstractDataReader {
   public abstract isSupported(files: AbcFile[]): Promise<boolean>;
   public abstract read(files: AbcFile[], projection: AbcProjection): Promise<LayerWrapper[]>;
 
-  protected generateIdsIfAbsents(features: Feature<Geometry>[]) {
+  /**
+   * This methods add an id if absent and set default style
+   * @param features
+   * @protected
+   */
+  protected prepareFeatures(features: Feature<Geometry>[]) {
     features.forEach((feat) => {
       const feature = FeatureWrapper.from(feat);
       if (!feature.getId()) {
         feature.setId();
       }
+
+      feature.setDefaultStyle();
     });
   }
 }

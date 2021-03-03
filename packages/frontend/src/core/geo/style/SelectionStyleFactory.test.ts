@@ -1,34 +1,40 @@
 import { Feature } from 'ol';
 import GeometryType from 'ol/geom/GeometryType';
-import { logger, SelectionStyle } from './SelectionStyle';
+import { logger, SelectionStyleFactory } from './SelectionStyleFactory';
 
 logger.disable();
 
-describe('SelectionStyle', function () {
+describe('SelectionStyleFactory', function () {
+  let factory: SelectionStyleFactory;
+
+  beforeEach(() => {
+    factory = new SelectionStyleFactory();
+  });
+
   describe('getForFeature()', function () {
     it('Point', function () {
       const feature = fakeFeature(GeometryType.POINT);
-      expect(SelectionStyle.getForFeature(feature)).toHaveLength(1);
+      expect(factory.getForFeature(feature)).toHaveLength(1);
     });
 
     it('LineString', function () {
       const feature = fakeFeature(GeometryType.LINE_STRING);
-      expect(SelectionStyle.getForFeature(feature)).toHaveLength(1);
+      expect(factory.getForFeature(feature)).toHaveLength(1);
     });
 
     it('Polygon', function () {
       const feature = fakeFeature(GeometryType.POLYGON);
-      expect(SelectionStyle.getForFeature(feature)).toHaveLength(1);
+      expect(factory.getForFeature(feature)).toHaveLength(1);
     });
 
     it('Circle', function () {
       const feature = fakeFeature(GeometryType.CIRCLE);
-      expect(SelectionStyle.getForFeature(feature)).toHaveLength(2);
+      expect(factory.getForFeature(feature)).toHaveLength(2);
     });
 
     it('Non supported type', function () {
       const feature = fakeFeature('non supported' as GeometryType);
-      expect(SelectionStyle.getForFeature(feature)).toHaveLength(0);
+      expect(factory.getForFeature(feature)).toHaveLength(0);
     });
   });
 });

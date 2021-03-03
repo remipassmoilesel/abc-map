@@ -11,6 +11,8 @@ export interface E2eMap {
 }
 
 export interface E2eFeature {
+  getId(): string | number | undefined;
+  getStyle(): any;
   getGeometryName(): string;
   getGeometry(): E2eGeometry | undefined;
   getProperties(): { [key: string]: any };

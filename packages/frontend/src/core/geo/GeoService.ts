@@ -8,14 +8,14 @@ import { MapActions } from '../store/map/actions';
 import { AxiosInstance } from 'axios';
 import { WMSCapabilities as WMSCapabilitiesParser } from 'ol/format';
 import { WmsCapabilities } from './WmsCapabilities';
-import { AbcStyleProperties } from './style/AbcStyleProperties';
+import { FeatureStyle } from './style/FeatureStyle';
 import { UpdateStyleItem, UpdateStyleTask } from '../history/tasks/UpdateStyleTask';
 import { HistoryKey } from '../history/HistoryKey';
 import { HistoryService } from '../history/HistoryService';
 import { LayerFactory } from './layers/LayerFactory';
 import { NominatimResult } from './NominatimResult';
 
-export const logger = Logger.get('MapService.ts');
+export const logger = Logger.get('GeoService.ts');
 
 export class GeoService {
   private mainMap = MapFactory.createDefault();
@@ -61,18 +61,18 @@ export class GeoService {
     });
   }
 
-  public updateSelectedFeatures(transform: (x: AbcStyleProperties) => AbcStyleProperties) {
+  public updateSelectedFeatures(transform: (x: FeatureStyle) => FeatureStyle) {
     const historyItems: UpdateStyleItem[] = [];
     this.getMainMap().forEachFeatureSelected((feat) => {
-      const newStyle = transform(feat.getStyle());
+      const newStyle = transform(feat.getStyleProperties());
 
       historyItems.push({
         feature: feat,
-        before: feat.getStyle(),
+        before: feat.getStyleProperties(),
         after: newStyle,
       });
 
-      feat.setStyle(newStyle);
+      feat.setStyleProperties(newStyle);
     });
 
     if (historyItems.length) {

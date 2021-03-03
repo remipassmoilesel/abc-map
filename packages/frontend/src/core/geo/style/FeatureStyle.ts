@@ -1,10 +1,10 @@
 import { FillPatterns } from '@abc-map/shared-entities';
 
-export interface AbcStyleProperties {
-  stroke: StrokeProperties;
-  fill: FillProperties;
-  text: TextProperties;
-  point: PointProperties;
+export interface FeatureStyle {
+  stroke?: StrokeProperties;
+  fill?: FillProperties;
+  text?: TextProperties;
+  point?: PointProperties;
 }
 
 export interface StrokeProperties {
@@ -61,3 +61,21 @@ export interface TextProperties {
 export interface PointProperties {
   size?: number;
 }
+
+export const DefaultStyle: FeatureStyle = {
+  stroke: {
+    color: '#000',
+    width: 2,
+  },
+  fill: {
+    color1: '#fff',
+  },
+  text: {
+    color: '#00f',
+    font: 'sans-serif',
+    size: 600,
+  },
+  point: {
+    size: 15,
+  },
+};

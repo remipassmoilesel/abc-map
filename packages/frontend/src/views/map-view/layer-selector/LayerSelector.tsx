@@ -91,7 +91,7 @@ class LayerSelector extends Component<Props, State> {
 
     let extent: Extent | undefined;
     if (layer.isVector()) {
-      extent = layer.unwrap().getSource().getExtent();
+      extent = layer.getSource().getExtent();
     } else {
       extent = layer.unwrap().getExtent();
     }

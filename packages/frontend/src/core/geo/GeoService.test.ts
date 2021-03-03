@@ -4,11 +4,12 @@ import { AbcProject, AbcVectorLayer, LayerType, PredefinedLayerModel, Predefined
 import { TestHelper } from '../utils/TestHelper';
 import VectorSource from 'ol/source/Vector';
 import TileLayer from 'ol/layer/Tile';
-import VectorLayer from 'ol/layer/Vector';
 import { MapFactory } from './map/MapFactory';
 import { httpExternalClient } from '../http/HttpClients';
 import { HistoryService } from '../history/HistoryService';
 import { LayerFactory } from './layers/LayerFactory';
+import VectorImageLayer from 'ol/layer/VectorImage';
+import { VectorLayerWrapper } from './layers/LayerWrapper';
 
 geoLogger.disable();
 mapLogger.disable();
@@ -49,8 +50,8 @@ describe('GeoService', () => {
 
     const layers = map.getLayers();
     expect(layers[0].unwrap()).toBeInstanceOf(TileLayer);
-    expect(layers[1].unwrap()).toBeInstanceOf(VectorLayer);
-    const features = (layers[1].unwrap() as VectorLayer).getSource().getFeatures();
+    expect(layers[1].unwrap()).toBeInstanceOf(VectorImageLayer);
+    const features = (layers[1] as VectorLayerWrapper).getSource().getFeatures();
     expect(features).toHaveLength(1);
     expect(features[0].getGeometry()?.getType()).toEqual('Point');
   });

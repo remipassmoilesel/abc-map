@@ -22,7 +22,7 @@ export class GpxReader extends AbstractDataReader {
     for (const file of gpxFiles) {
       const content = await BlobReader.asString(file.content);
       const features = await format.readFeatures(content, { featureProjection: projection.name });
-      this.generateIdsIfAbsents(features);
+      this.prepareFeatures(features);
 
       const layer = LayerFactory.newVectorLayer(new VectorSource({ features }));
       const metadata: VectorMetadata = {
