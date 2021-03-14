@@ -6,28 +6,86 @@ import { AbcLayer, AbcProject } from '@abc-map/shared-entities';
 import { TestHelper } from '../utils/TestHelper';
 import { MapFactory } from '../geo/map/MapFactory';
 import { MainStore, storeFactory } from '../store/store';
-import { UiService } from '../ui/UiService';
 import { MapWrapper } from '../geo/map/MapWrapper';
-jest.mock('../geo/GeoService');
-jest.mock('../ui/UiService');
+import * as sinon from 'sinon';
+import { SinonStubbedInstance } from 'sinon';
+import { HistoryService } from '../history/HistoryService';
+import { ModalService } from '../ui/ModalService';
+import { CompressedProject } from './CompressedProject';
+import { ProjectHelper } from '@abc-map/frontend-shared';
 
 logger.disable();
 
 describe('ProjectService', function () {
   let store: MainStore;
-  let geoServiceMock: GeoService;
-  let uiServiceMock: UiService;
+  let geoMock: SinonStubbedInstance<GeoService>;
+  let modalsMock: SinonStubbedInstance<ModalService>;
+  let historyMock: SinonStubbedInstance<HistoryService>;
+
   let projectService: ProjectService;
 
-  // TODO: refactor mocks
   beforeEach(() => {
     store = storeFactory();
-    geoServiceMock = new GeoService({} as any, {} as any);
-    uiServiceMock = new UiService();
-    projectService = new ProjectService({} as any, store, geoServiceMock, uiServiceMock);
+    geoMock = sinon.createStubInstance(GeoService);
+    modalsMock = sinon.createStubInstance(ModalService);
+    historyMock = sinon.createStubInstance(HistoryService);
+    projectService = new ProjectService(
+      {} as any,
+      {} as any,
+      store,
+      (geoMock as unknown) as GeoService,
+      (modalsMock as unknown) as ModalService,
+      (historyMock as unknown) as HistoryService
+    );
   });
 
-  it('exportCurrentProject() should export project', async function () {
+  describe('newProject()', () => {
+    it('newProject() should reset main map', async function () {
+      // Prepare
+      const mapMock = sinon.createStubInstance(MapWrapper);
+      geoMock.getMainMap.returns((mapMock as unknown) as MapWrapper);
+
+      // Act
+      projectService.newProject();
+
+      // Assert
+      expect(geoMock.getMainMap.callCount).toEqual(1);
+      expect(mapMock.resetLayers.callCount).toEqual(1);
+    });
+
+    it('newProject() should dispatch', async function () {
+      // Prepare
+      const originalId = store.getState().project.metadata.id;
+      store.dispatch(ProjectActions.newLayout(TestHelper.sampleLayout()));
+
+      const map = MapFactory.createNaked();
+      geoMock.getMainMap.returns(map);
+
+      // Act
+      projectService.newProject();
+
+      // Assert
+      const current = store.getState().project;
+      expect(current.metadata.id).toBeDefined();
+      expect(current.metadata.id).not.toEqual(originalId);
+      expect(current.layouts).toEqual([]);
+    });
+
+    it('newProject() should clean history', async function () {
+      // Prepare
+      const map = MapFactory.createNaked();
+      geoMock.getMainMap.returns(map);
+
+      // Act
+      projectService.newProject();
+
+      // Assert
+      expect(historyMock.clean.callCount).toEqual(1);
+    });
+  });
+
+  it('exportCurrentProject()', async function () {
+    // Prepare
     const metadata = ProjectFactory.newProjectMetadata();
     store.dispatch(ProjectActions.newProject(metadata));
 
@@ -36,38 +94,20 @@ describe('ProjectService', function () {
     store.dispatch(ProjectActions.newLayout(layouts[1]));
 
     const layers: AbcLayer[] = [TestHelper.sampleOsmLayer(), TestHelper.sampleVectorLayer()];
-    geoServiceMock.getMainMap = () =>
-      ({
-        containsCredentials: () => false,
-      } as MapWrapper);
-    geoServiceMock.exportLayers = () => Promise.resolve(layers);
+    geoMock.getMainMap.returns({ containsCredentials: () => false } as MapWrapper);
+    geoMock.exportLayers.resolves(layers);
 
-    const project = (await projectService.exportCurrentProject()) as AbcProject;
-    expect(project).toBeDefined();
-    expect(project.metadata).toEqual(metadata);
-    expect(project.layers).toEqual(layers);
-    expect(project.layouts).toEqual(layouts);
-  });
+    // Act
+    const exported = (await projectService.exportCurrentProject()) as CompressedProject;
 
-  it('newProject() should reset main map then dispatch', async function () {
-    const originalId = store.getState().project.metadata.id;
+    // Assert
+    expect(exported).toBeDefined();
+    expect(exported.metadata).toEqual(metadata);
 
-    const map = MapFactory.createNaked();
-    const getMainMapMock = jest.fn(() => map);
-    geoServiceMock.getMainMap = getMainMapMock;
-
-    const resetMapMock = jest.fn(() => undefined);
-    map.resetLayers = resetMapMock;
-
-    projectService.newProject();
-
-    expect(getMainMapMock).toBeCalled();
-    expect(resetMapMock).toBeCalled();
-
-    const current = store.getState().project;
-    expect(current.metadata.id).toBeDefined();
-    expect(current.metadata.id).not.toEqual(originalId);
-    expect(current.layouts).toEqual([]);
+    const manifest: AbcProject = await ProjectHelper.extractManifest(exported.project);
+    expect(manifest.metadata).toEqual(metadata);
+    expect(manifest.layouts).toEqual(layouts);
+    expect(manifest.layers).toEqual(layers);
   });
 
   it('renameProject() should work', async function () {
@@ -77,12 +117,16 @@ describe('ProjectService', function () {
   });
 
   it('loadProject() should work', async function () {
+    const map = MapFactory.createNaked();
+    geoMock.getMainMap.resolves(map);
+
     const metadata = ProjectFactory.newProjectMetadata();
     store.dispatch(ProjectActions.newProject(metadata));
 
-    const newProject = TestHelper.sampleProject();
-    await projectService.loadProject(newProject);
+    const newProject = await TestHelper.sampleCompressedProject();
+    await projectService.loadProject(newProject.project);
 
     expect(store.getState().project.metadata.id).toEqual(newProject.metadata.id);
+    expect(geoMock.importProject.callCount).toEqual(1);
   });
 });

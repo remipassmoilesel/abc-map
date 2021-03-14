@@ -58,13 +58,13 @@ class PasswordModal extends Component<{}, State> {
         this.setState({ visible: true, title: ev.title, message: ev.message });
       }
     };
-    this.services.ui.modals.addListener(ModalEventType.ShowPassword, listener);
+    this.services.modals.addListener(ModalEventType.ShowPassword, listener);
     this.setState({ listener });
   }
 
   public componentWillUnmount() {
     if (this.state.listener) {
-      this.services.ui.modals.removeListener(ModalEventType.ShowPassword, this.state.listener);
+      this.services.modals.removeListener(ModalEventType.ShowPassword, this.state.listener);
     }
   }
 
@@ -73,7 +73,7 @@ class PasswordModal extends Component<{}, State> {
   };
 
   private handleCancel = () => {
-    this.services.ui.modals.dispatch({
+    this.services.modals.dispatch({
       type: ModalEventType.PasswordClosed,
       value: this.state.value,
       status: ModalStatus.Canceled,
@@ -82,7 +82,7 @@ class PasswordModal extends Component<{}, State> {
   };
 
   private handleConfirm = () => {
-    this.services.ui.modals.dispatch({
+    this.services.modals.dispatch({
       type: ModalEventType.PasswordClosed,
       value: this.state.value,
       status: ModalStatus.Confirmed,

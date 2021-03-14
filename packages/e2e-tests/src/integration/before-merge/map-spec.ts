@@ -1,4 +1,4 @@
-import { FrontendRoutes } from '@abc-map/shared-entities';
+import { FrontendRoutes } from '@abc-map/frontend-shared';
 import { TestHelper } from '../../helpers/TestHelper';
 import { LayerSelector } from '../../helpers/LayerSelector';
 

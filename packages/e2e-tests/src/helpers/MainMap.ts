@@ -1,13 +1,9 @@
-import { AbcWindow, E2eMap } from '@abc-map/shared-entities';
+import { AbcWindow, E2eMap } from '@abc-map/frontend-shared';
 import Chainable = Cypress.Chainable;
 
 export class MainMap {
-  public static getSelector(): string {
-    return `[data-cy=main-map]`;
-  }
-
-  public static getComponent(): Cypress.Chainable<JQuery<HTMLElement>> {
-    return cy.get(this.getSelector());
+  public static getComponent() {
+    return cy.get(`[data-cy=main-map]`);
   }
 
   public static getReference(): Chainable<E2eMap> {

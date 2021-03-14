@@ -2,7 +2,7 @@ import { StorePersistence } from './StorePersistence';
 import { LocalStorageService, StorageKey } from '../../utils/LocalStorageService';
 import sinon, { SinonStub } from 'sinon';
 import { UserStatus } from '@abc-map/shared-entities';
-import { MapTool } from '@abc-map/shared-entities';
+import { MapTool } from '@abc-map/frontend-shared';
 import { MainState } from '../reducer';
 
 describe('StorePersistence', () => {
@@ -45,7 +45,7 @@ describe('StorePersistence', () => {
       },
       authentication: {
         tokenString: 'abcd',
-        userStatus: UserStatus.AUTHENTICATED,
+        userStatus: UserStatus.Authenticated,
         user: {
           id: 'test-user-id',
         } as any,
@@ -89,7 +89,7 @@ describe('StorePersistence', () => {
       },
       authentication: {
         tokenString: 'abcd',
-        userStatus: UserStatus.AUTHENTICATED,
+        userStatus: UserStatus.Authenticated,
         user: {
           id: 'test-user-id',
         } as any,

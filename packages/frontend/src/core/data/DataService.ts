@@ -1,9 +1,9 @@
 import { AxiosInstance } from 'axios';
 import { AbcArtefact } from '@abc-map/shared-entities';
 import { DatastoreRoutes as Api } from '../http/ApiRoutes';
-import { Logger } from '../utils/Logger';
+import { Logger } from '@abc-map/frontend-shared';
 import { DataReader } from './readers/DataReader';
-import { AbcFile } from './readers/AbcFile';
+import { AbcFile } from '@abc-map/frontend-shared';
 import { LayerWrapper } from '../geo/layers/LayerWrapper';
 import { GeoService } from '../geo/GeoService';
 import { getArea } from 'ol/extent';

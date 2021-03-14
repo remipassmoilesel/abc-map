@@ -1,5 +1,6 @@
 import { MapFactory } from './MapFactory';
-import { AbcProperties, MapTool } from '@abc-map/shared-entities';
+import { AbcProperties } from '@abc-map/shared-entities';
+import { MapTool } from '@abc-map/frontend-shared';
 import { Map } from 'ol';
 import { logger, MapWrapper } from './MapWrapper';
 import { ToolRegistry } from '../tools/ToolRegistry';

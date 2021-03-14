@@ -18,9 +18,9 @@ export class DevInit {
     }
 
     const user = UserInit.create(this.services);
-    await user.init();
+    const users = await user.init();
 
     const project = ProjectInit.create(this.services);
-    await project.init();
+    await project.init(users);
   }
 }

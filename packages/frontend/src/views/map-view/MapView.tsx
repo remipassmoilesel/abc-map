@@ -4,7 +4,7 @@ import { services } from '../../core/Services';
 import LayerSelector from './layer-selector/LayerSelector';
 import ProjectStatus from './project-status/ProjectStatus';
 import { connect, ConnectedProps } from 'react-redux';
-import { Logger } from '../../core/utils/Logger';
+import { Logger } from '@abc-map/frontend-shared';
 import ProjectControls from './project-controls/ProjectControls';
 import ToolSelector from './tool-selector/ToolSelector';
 import HistoryControls from '../../components/history-controls/HistoryControls';
@@ -56,6 +56,7 @@ class MapView extends Component<Props, State> {
           <ProjectStatus project={this.props.project} />
           <Search map={this.state.map} />
           <ProjectControls />
+          <HistoryControls historyKey={HistoryKey.Map} />
           <ImportData />
         </div>
 
@@ -64,7 +65,6 @@ class MapView extends Component<Props, State> {
 
         {/*Right menu*/}
         <div className={Cls.rightPanel}>
-          <HistoryControls historyKey={HistoryKey.Map} />
           <LayerSelector layers={this.state.layers} />
           <ToolSelector activeLayer={activeLayer} />
         </div>

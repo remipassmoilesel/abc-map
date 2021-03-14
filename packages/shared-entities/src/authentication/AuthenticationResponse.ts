@@ -3,6 +3,10 @@ export interface AuthenticationResponse {
   token?: string;
 }
 
+export interface RenewResponse {
+  token: string;
+}
+
 export enum AuthenticationStatus {
   Successful = 'Successful',
   Refused = 'Refused',

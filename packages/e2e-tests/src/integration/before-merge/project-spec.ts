@@ -1,14 +1,15 @@
-import { AbcProject, FrontendRoutes, LayerType } from '@abc-map/shared-entities';
+import { LayerType } from '@abc-map/shared-entities';
+import { FrontendRoutes, ProjectHelper } from '@abc-map/frontend-shared';
 import { Toasts } from '../../helpers/Toasts';
 import { TestHelper } from '../../helpers/TestHelper';
 import { Download } from '../../helpers/Download';
-import { Fixtures } from '../../helpers/Fixtures';
+import { TestData } from '../../test-data/TestData';
 import { MainMap } from '../../helpers/MainMap';
 import { LayerSelector } from '../../helpers/LayerSelector';
 import 'cypress-file-upload';
 
 // TODO: better assertions on project and layers
-// TODO: systematically add features
+// TODO: test features and style
 
 describe('Project', function () {
   beforeEach(() => {
@@ -29,19 +30,6 @@ describe('Project', function () {
           expect(layers[1].type).equal(LayerType.Vector);
           expect(map.getActiveLayerMetadata()?.type).equal(LayerType.Vector);
         });
-    });
-
-    it('cannot view recent projects', function () {
-      cy.visit(FrontendRoutes.map())
-        .get('[data-cy=recent-projects] div')
-        .should((elem) => {
-          expect(elem.text()).equal("Vous n'êtes pas connecté");
-        });
-    });
-
-    it('cannot save project online', function () {
-      cy.visit(FrontendRoutes.map()).get('[data-cy=save-project]').click();
-      Toasts.assertText('Vous devez être connecté pour enregistrer votre projet');
     });
 
     it('can rename project', function () {
@@ -66,18 +54,17 @@ describe('Project', function () {
         .click()
         .then(() => Toasts.assertText('Export en cours ...'))
         .then(() => Toasts.assertText('Export terminé !'))
-        .then(() => Download.textFile('[data-cy=file-output]'))
-        .then((downloaded) => {
-          return cy.fixture(Fixtures.ProjectSample1).then((witness) => ({ downloaded, witness }));
-        })
-        .should(({ downloaded, witness }) => {
-          const projectA: AbcProject = JSON.parse(downloaded);
-          const projectB: AbcProject = JSON.parse(witness);
+        .then(() => Download.file('[data-cy=file-output]'))
+        .then((downloaded) => TestData.projectSample1().then((witness) => ({ downloaded, witness })))
+        .should(async ({ downloaded, witness }) => {
+          const projectA = await ProjectHelper.extractManifest(downloaded);
+          const projectB = await ProjectHelper.extractManifest(witness);
           expect(projectA.metadata.projection).deep.equals(projectB.metadata.projection);
           expect(projectA.metadata.version).equals(projectB.metadata.version);
           expect(projectA.layers).length(projectB.layers.length);
           expect(projectA.layers[0].type).equals(projectB.layers[0].type);
           expect(projectA.layers[1].type).equals(projectB.layers[1].type);
+          expect(projectA.layers[2].type).equals(projectB.layers[2].type);
           expect(projectA.layouts).deep.equals(projectB.layouts);
         });
     });
@@ -86,8 +73,10 @@ describe('Project', function () {
       cy.visit(FrontendRoutes.map())
         .get('[data-cy=import-project]')
         .click()
-        .get('[data-cy=file-input]')
-        .attachFile(Fixtures.ProjectSample1)
+        .then(() => TestData.projectSample1())
+        .then((project) => {
+          return cy.get('[data-cy=file-input]').attachFile({ filePath: 'project.abm2', fileContent: project });
+        })
         .then(() => Toasts.assertText('Chargement ...'))
         .then(() => Toasts.assertText('Projet importé !'))
         // Check project name

@@ -1,7 +1,7 @@
 import { AbstractTool } from './AbstractTool';
 import { None } from './common/None';
 import { Point } from './point/Point';
-import { MapTool } from '@abc-map/shared-entities';
+import { MapTool } from '@abc-map/frontend-shared';
 import { mainStore } from '../../store/store';
 import { services } from '../../Services';
 import { Circle } from './circle/Circle';

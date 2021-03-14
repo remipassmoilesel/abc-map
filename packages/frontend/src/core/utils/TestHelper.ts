@@ -9,15 +9,18 @@ import {
   AbcProject,
   AbcVectorLayer,
   AbcWmsLayer,
-  CURRENT_VERSION,
+  CurrentVersion,
   DEFAULT_PROJECTION,
   FillPatterns,
   LayerType,
   LayoutFormats,
+  ManifestName,
   PredefinedLayerModel,
 } from '@abc-map/shared-entities';
 import uuid from 'uuid-random';
 import { FeatureStyle } from '../geo/style/FeatureStyle';
+import { CompressedProject } from '../project/CompressedProject';
+import { Zipper } from '@abc-map/frontend-shared';
 
 export class TestHelper {
   public static samplePointFeature(): Feature<Geometry> {
@@ -35,12 +38,22 @@ export class TestHelper {
     return {
       metadata: {
         id: uuid(),
-        version: CURRENT_VERSION,
+        version: CurrentVersion,
         name: `Test project ${uuid()}`,
         projection: DEFAULT_PROJECTION,
       },
       layers: [this.sampleOsmLayer(), this.sampleVectorLayer()],
       layouts: [],
+    };
+  }
+
+  public static async sampleCompressedProject(): Promise<CompressedProject> {
+    const project = this.sampleProject();
+    const metadata = project.metadata;
+    const zip = await Zipper.zipFiles([{ path: ManifestName, content: new Blob([JSON.stringify(project)]) }]);
+    return {
+      metadata: metadata,
+      project: zip,
     };
   }
 

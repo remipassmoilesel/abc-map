@@ -3,7 +3,7 @@ import { services } from '../../../../core/Services';
 import { HistoryKey } from '../../../../core/history/HistoryKey';
 import { RemoveFeatureTask } from '../../../../core/history/tasks/RemoveFeatureTask';
 import { AddFeaturesTask } from '../../../../core/history/tasks/AddFeaturesTask';
-import { Logger } from '../../../../core/utils/Logger';
+import { Logger } from '@abc-map/frontend-shared';
 import StrokeWidthSelector from '../_common/stroke-width-selector/StrokeWidthSelector';
 import ColorSelector from '../_common/color-selector/ColorSelector';
 import FillPatternSelector from '../_common/fill-pattern-selector/FillPatternSelector';
@@ -44,7 +44,7 @@ class SelectionPanel extends Component<{}, {}> {
 
     const features = map.getSelectedFeatures();
     if (!features.length) {
-      this.services.ui.toasts.info("Vous devez d'abord sélectionner des objets");
+      this.services.toasts.info("Vous devez d'abord sélectionner des objets");
       return;
     }
 
@@ -61,7 +61,7 @@ class SelectionPanel extends Component<{}, {}> {
 
     const features = map.getSelectedFeatures();
     if (!features.length) {
-      this.services.ui.toasts.info("Vous devez d'abord sélectionner des objets");
+      this.services.toasts.info("Vous devez d'abord sélectionner des objets");
       return;
     }
 

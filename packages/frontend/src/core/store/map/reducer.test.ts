@@ -1,5 +1,5 @@
 import { mapInitialState, MapState } from './state';
-import { MapTool } from '@abc-map/shared-entities';
+import { MapTool } from '@abc-map/frontend-shared';
 import { MapActions } from './actions';
 import { mapReducer } from './reducer';
 

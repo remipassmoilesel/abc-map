@@ -1,4 +1,4 @@
-import { Logger } from '../../../utils/Logger';
+import { Logger } from '@abc-map/frontend-shared';
 import PointerInteraction from 'ol/interaction/Pointer';
 import MapBrowserEvent from 'ol/MapBrowserEvent';
 import Feature from 'ol/Feature';

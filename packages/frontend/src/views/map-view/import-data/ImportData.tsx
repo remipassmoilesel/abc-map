@@ -1,8 +1,7 @@
 import React, { Component, ReactNode } from 'react';
 import { services } from '../../../core/Services';
-import { Logger } from '../../../core/utils/Logger';
-import { FileInputType, FileIO } from '../../../core/utils/FileIO';
-import { AbcFile } from '../../../core/data/readers/AbcFile';
+import { AbcFile, Logger } from '@abc-map/frontend-shared';
+import { FileIO, InputResultType, InputType } from '../../../core/utils/FileIO';
 import { AddLayersTask } from '../../../core/history/tasks/AddLayersTask';
 import { HistoryKey } from '../../../core/history/HistoryKey';
 import './ImportData.module.scss';
@@ -28,29 +27,29 @@ class ImportData extends Component<{}, {}> {
   }
 
   private importFile = () => {
-    FileIO.openInput(true)
+    FileIO.openInput(InputType.Multiple)
       .then((result) => {
-        if (FileInputType.Canceled === result.type) {
+        if (InputResultType.Canceled === result.type) {
           return;
         }
 
-        this.services.ui.toasts.info('Import en cours ...');
+        this.services.toasts.info('Import en cours ...');
         const files: AbcFile[] = result.files.map((f) => ({ path: f.name, content: f }));
 
         return this.services.data.importFiles(files).then((res) => {
           if (!res.layers.length) {
-            this.services.ui.toasts.error("Ces formats de fichiers ne sont pas supportés, aucune donnée n'a été importée");
+            this.services.toasts.error("Ces formats de fichiers ne sont pas supportés, aucune donnée n'a été importée");
             return;
           }
 
           const map = this.services.geo.getMainMap();
           this.services.history.register(HistoryKey.Map, new AddLayersTask(map, res.layers));
-          this.services.ui.toasts.info('Import terminé !');
+          this.services.toasts.info('Import terminé !');
         });
       })
       .catch((err) => {
         logger.error(err);
-        this.services.ui.toasts.genericError();
+        this.services.toasts.genericError();
       });
   };
 }

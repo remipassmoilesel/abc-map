@@ -1,6 +1,8 @@
 import { MapWrapper } from './MapWrapper';
-import { Logger } from '../../utils/Logger';
-import { LayerMetadata, E2eFeature, E2eMap, BaseMetadata } from '@abc-map/shared-entities';
+import { Logger, E2eMap } from '@abc-map/frontend-shared';
+import { LayerMetadata, BaseMetadata } from '@abc-map/shared-entities';
+import Feature from 'ol/Feature';
+import Geometry from 'ol/geom/Geometry';
 
 export const logger = Logger.get('E2eMapWrapper.ts', 'debug');
 
@@ -31,7 +33,7 @@ export class E2eMapWrapper implements E2eMap {
     return layer.getMetadata();
   }
 
-  public getActiveLayerFeatures(): E2eFeature[] {
+  public getActiveLayerFeatures(): Feature<Geometry>[] {
     const layer = this.internal.getActiveVectorLayer();
     if (!layer) {
       return [];

@@ -58,13 +58,13 @@ class RenameModal extends Component<{}, State> {
         this.setState({ visible: true, title: ev.title, message: ev.message, value: ev.value });
       }
     };
-    this.services.ui.modals.addListener(ModalEventType.ShowRename, listener);
+    this.services.modals.addListener(ModalEventType.ShowRename, listener);
     this.setState({ listener });
   }
 
   public componentWillUnmount() {
     if (this.state.listener) {
-      this.services.ui.modals.removeListener(ModalEventType.ShowRename, this.state.listener);
+      this.services.modals.removeListener(ModalEventType.ShowRename, this.state.listener);
     }
   }
 
@@ -73,7 +73,7 @@ class RenameModal extends Component<{}, State> {
   };
 
   private onCancel = () => {
-    this.services.ui.modals.dispatch({
+    this.services.modals.dispatch({
       type: ModalEventType.RenameClosed,
       value: this.state.value,
       status: ModalStatus.Canceled,
@@ -82,7 +82,7 @@ class RenameModal extends Component<{}, State> {
   };
 
   private onRename = () => {
-    this.services.ui.modals.dispatch({
+    this.services.modals.dispatch({
       type: ModalEventType.RenameClosed,
       value: this.state.value,
       status: ModalStatus.Confirmed,

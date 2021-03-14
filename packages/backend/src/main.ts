@@ -7,8 +7,8 @@ import { DevInit } from './dev-init/DevInit';
 
 const logger = Logger.get('main.ts', 'info');
 
-main().catch((err) => {
-  logger.error(err);
+main().catch((err: Error) => {
+  logger.error('Server crashed: ', err);
   process.exit(1);
 });
 
@@ -18,7 +18,7 @@ async function main() {
   const services = await servicesFactory(config);
 
   if (config.development) {
-    logger.warn('WARNING, development users will be created and sample projects will be loaded');
+    logger.warn('/!\\ WARNING, development data will be created');
     await DevInit.create(config, services).init();
   }
 

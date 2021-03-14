@@ -1,5 +1,5 @@
 import React, { Component, ReactNode } from 'react';
-import { Logger } from '../../../../core/utils/Logger';
+import { Logger } from '@abc-map/frontend-shared';
 import ColorSelector from '../_common/color-selector/ColorSelector';
 import StrokeWidthSelector from '../_common/stroke-width-selector/StrokeWidthSelector';
 import Cls from './LineStringPanel.module.scss';

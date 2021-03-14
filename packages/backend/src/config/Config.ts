@@ -23,7 +23,7 @@ export interface ServerConfig {
 export interface DatabaseConfig {
   url: string;
   username: string;
-  // TODO: encrypt passwords
+  // TODO: encrypt passwords ?
   password: string;
 }
 

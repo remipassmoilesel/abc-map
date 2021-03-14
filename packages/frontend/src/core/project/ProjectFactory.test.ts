@@ -1,5 +1,5 @@
 import { ProjectFactory } from './ProjectFactory';
-import { CURRENT_VERSION, DEFAULT_PROJECTION } from '@abc-map/shared-entities';
+import { CurrentVersion, DEFAULT_PROJECTION } from '@abc-map/shared-entities';
 
 describe('ProjectFactory', () => {
   it('newProjectMetadata()', () => {
@@ -7,7 +7,7 @@ describe('ProjectFactory', () => {
     expect(a.id).toBeDefined();
     expect(a.name).toContain('Projet du');
     expect(a.projection).toEqual(DEFAULT_PROJECTION);
-    expect(a.version).toBe(CURRENT_VERSION);
+    expect(a.version).toBe(CurrentVersion);
   });
 
   it('newProject()', () => {

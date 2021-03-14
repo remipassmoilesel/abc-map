@@ -1,5 +1,5 @@
 import React, { Component, ReactNode } from 'react';
-import { Logger } from '../../../../core/utils/Logger';
+import { Logger } from '@abc-map/frontend-shared';
 import { BaseMetadata } from '@abc-map/shared-entities';
 import './LayerListItem.scss';
 

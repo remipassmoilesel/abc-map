@@ -1,6 +1,6 @@
 import React, { Component, ReactNode } from 'react';
 import { services } from '../../core/Services';
-import { Logger } from '../../core/utils/Logger';
+import { Logger } from '@abc-map/frontend-shared';
 import './About.scss';
 
 const logger = Logger.get('Help.tsx', 'info');

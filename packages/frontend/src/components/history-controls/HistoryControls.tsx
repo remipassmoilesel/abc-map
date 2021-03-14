@@ -1,5 +1,5 @@
 import React, { Component, ReactNode } from 'react';
-import { Logger } from '../../core/utils/Logger';
+import { Logger } from '@abc-map/frontend-shared';
 import { HistoryKey } from '../../core/history/HistoryKey';
 import { services } from '../../core/Services';
 import { connect, ConnectedProps } from 'react-redux';
@@ -46,14 +46,14 @@ class HistoryControls extends Component<Props, {}> {
   private onCancel = () => {
     this.services.history.undo(this.props.historyKey).catch((err) => {
       logger.error(err);
-      this.services.ui.toasts.genericError();
+      this.services.toasts.genericError();
     });
   };
 
   private onRedo = () => {
     this.services.history.redo(this.props.historyKey).catch((err) => {
       logger.error(err);
-      this.services.ui.toasts.genericError();
+      this.services.toasts.genericError();
     });
   };
 

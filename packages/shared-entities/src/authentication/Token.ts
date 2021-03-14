@@ -6,6 +6,6 @@ export interface Token {
 }
 
 export enum UserStatus {
-  AUTHENTICATED = 'AUTHENTICATED',
-  ANONYMOUS = 'ANONYMOUS',
+  Authenticated = 'Authenticated',
+  Anonymous = 'Anonymous',
 }

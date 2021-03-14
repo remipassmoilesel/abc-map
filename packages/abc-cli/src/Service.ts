@@ -21,7 +21,7 @@ export class Service {
   }
 
   public test(): void {
-    this.shell.sync('lerna run test');
+    this.shell.sync('lerna run coverage');
   }
 
   public async e2e(): Promise<void> {

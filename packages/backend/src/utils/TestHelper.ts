@@ -1,13 +1,23 @@
-import { AbcProject, CURRENT_VERSION, DEFAULT_PROJECTION, LayerType, PredefinedLayerModel } from '@abc-map/shared-entities';
+import { AbcProject, AbcUser, CurrentVersion, DEFAULT_PROJECTION, LayerType, ManifestName, PredefinedLayerModel } from '@abc-map/shared-entities';
 import * as uuid from 'uuid-random';
-import { AbcUser } from '@abc-map/shared-entities';
+import { Zipper } from './Zipper';
+import { CompressedProject } from '../projects/CompressedProject';
 
 export class TestHelper {
+  public static sampleUser(): AbcUser {
+    return {
+      id: uuid(),
+      email: `user-${uuid()}@test.ts`,
+      password: 'what is wr0ng passW0rd ????',
+      enabled: true,
+    };
+  }
+
   public static sampleProject(): AbcProject {
     return {
       metadata: {
         id: uuid(),
-        version: CURRENT_VERSION,
+        version: CurrentVersion,
         name: `Test project ${uuid()}`,
         projection: DEFAULT_PROJECTION,
       },
@@ -57,12 +67,13 @@ export class TestHelper {
     };
   }
 
-  public static sampleUser(): AbcUser {
+  public static async sampleCompressedProject(): Promise<CompressedProject> {
+    const project = this.sampleProject();
+    const metadata = project.metadata;
+    const zip = await Zipper.zipFiles([{ path: ManifestName, content: Buffer.from(JSON.stringify(project), 'utf-8') }]);
     return {
-      id: uuid(),
-      email: `user-${uuid()}@test.ts`,
-      password: 'what is wr0ng passW0rd ????',
-      enabled: true,
+      metadata: metadata,
+      project: zip,
     };
   }
 }

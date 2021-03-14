@@ -1,5 +1,5 @@
 import { TestHelper } from '../../helpers/TestHelper';
-import { FrontendRoutes } from '@abc-map/shared-entities';
+import { FrontendRoutes } from '@abc-map/frontend-shared';
 import { MainMap } from '../../helpers/MainMap';
 
 describe('Search on map', function () {

@@ -1,4 +1,4 @@
-import { FrontendRoutes } from '@abc-map/shared-entities';
+import { FrontendRoutes } from '@abc-map/frontend-shared';
 
 describe('Display', function () {
   it('Too small display should warn', function () {

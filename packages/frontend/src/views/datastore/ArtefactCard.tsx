@@ -1,9 +1,8 @@
 import React, { Component, ReactNode } from 'react';
 import { services } from '../../core/Services';
-import { Logger } from '../../core/utils/Logger';
+import { Logger, Zipper } from '@abc-map/frontend-shared';
 import { AbcArtefact } from '@abc-map/shared-entities';
 import { FileFormat, FileFormats } from '../../core/data/FileFormats';
-import { Zipper } from '../../core/data/Zipper';
 import { FileIO } from '../../core/utils/FileIO';
 import { HistoryKey } from '../../core/history/HistoryKey';
 import { AddLayersTask } from '../../core/history/tasks/AddLayersTask';
@@ -53,32 +52,32 @@ class ArtefactCard extends Component<Props, {}> {
   }
 
   public handleShowLicense = () => {
-    this.services.ui.toasts.featureNotReady();
+    this.services.toasts.featureNotReady();
   };
 
   public handleImportArtefact = () => {
-    this.services.ui.toasts.info('Import en cours ...');
+    this.services.toasts.info('Import en cours ...');
     this.services.data
       .importArtefact(this.props.artefact)
       .then((res) => {
         if (!res.layers.length) {
-          this.services.ui.toasts.error('Ces fichiers ne sont pas supportés');
+          this.services.toasts.error('Ces fichiers ne sont pas supportés');
           return;
         }
 
         const map = this.services.geo.getMainMap();
         this.services.history.register(HistoryKey.Map, new AddLayersTask(map, res.layers));
 
-        this.services.ui.toasts.info('Import terminé !');
+        this.services.toasts.info('Import terminé !');
       })
       .catch((err) => {
         logger.error(err);
-        this.services.ui.toasts.genericError();
+        this.services.toasts.genericError();
       });
   };
 
   public handleDownloadArtefact = () => {
-    this.services.ui.toasts.info('Téléchargement en cours ...');
+    this.services.toasts.info('Téléchargement en cours ...');
     this.services.data
       .downloadFilesFrom(this.props.artefact)
       .then(async (res) => {
@@ -86,14 +85,14 @@ class ArtefactCard extends Component<Props, {}> {
         if (res.length === 1 && FileFormat.ZIP === FileFormats.fromPath(res[0].path)) {
           content = res[0].content;
         } else {
-          content = await Zipper.zip(res);
+          content = await Zipper.zipFiles(res);
         }
 
         FileIO.output(URL.createObjectURL(content), 'artefact.zip');
       })
       .catch((err) => {
         logger.error(err);
-        this.services.ui.toasts.genericError();
+        this.services.toasts.genericError();
       });
   };
 }

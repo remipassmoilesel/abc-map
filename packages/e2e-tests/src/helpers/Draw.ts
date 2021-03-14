@@ -14,7 +14,7 @@ export class Draw {
   public static click(x: number, y: number): Cypress.Chainable<any> {
     const coords = this.coords(x, y);
     return cy
-      .get(MainMap.getSelector())
+      .then(() => MainMap.getComponent())
       .trigger('pointermove', x, y, mouseEvent)
       .wait(waitTimeBeforeMs)
       .click(...coords)
@@ -29,7 +29,7 @@ export class Draw {
   public static dblclick(x: number, y: number): Cypress.Chainable<any> {
     const coords = this.coords(x, y);
     return cy
-      .get(MainMap.getSelector())
+      .then(() => MainMap.getComponent())
       .trigger('pointermove', x, y, mouseEvent)
       .wait(waitTimeBeforeMs)
       .dblclick(...coords)
@@ -57,7 +57,7 @@ export class Draw {
     const to = this.coords(toX, toY);
     // moves are arbitrary, but it does not impact result
     return cy
-      .get(MainMap.getSelector())
+      .then(() => MainMap.getComponent())
       .trigger('pointermove', from[0], from[1], mouseEvent)
       .wait(waitTimeBeforeMs)
       .trigger('pointerdown', from[0], from[1], mouseEvent)

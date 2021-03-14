@@ -5,39 +5,60 @@ import {
   AccountConfirmationResponse,
   AnonymousUser,
   AuthenticationResponse,
+  AuthenticationStatus,
   LoginRequest,
   RegistrationResponse,
+  RenewResponse,
   Token,
+  UserStatus,
 } from '@abc-map/shared-entities';
 import { RegistrationRequest } from '@abc-map/shared-entities';
 import { AuthenticationActions } from '../store/authentication/actions';
 import jwtDecode from 'jwt-decode';
-import { Logger } from '../utils/Logger';
+import { Logger } from '@abc-map/frontend-shared';
 import { MainStore } from '../store/store';
+import { ToastService } from '../ui/ToastService';
 
-const logger = Logger.get('AuthenticationService.ts');
+const logger = Logger.get('AuthenticationService.ts', 'info');
 
 export class AuthenticationService {
-  constructor(private httpClient: AxiosInstance, private store: MainStore) {}
+  private tokenInterval: any;
 
-  public logout(): Promise<AuthenticationResponse> {
+  constructor(private httpClient: AxiosInstance, private store: MainStore, private toasts: ToastService) {}
+
+  public watchToken() {
+    this.tokenInterval = setInterval(() => {
+      logger.info('Token renewed');
+      this.renew().catch((err) => logger.error(err));
+    }, 20 * 60 * 1000);
+  }
+
+  public unwatchToken() {
+    clearInterval(this.tokenInterval);
+  }
+
+  public getUserStatus(): UserStatus | undefined {
+    return this.store.getState().authentication.userStatus;
+  }
+
+  public logout(): Promise<void> {
     return this.anonymousLogin();
   }
 
-  public anonymousLogin(): Promise<AuthenticationResponse> {
+  public anonymousLogin(): Promise<void> {
     return this.login(AnonymousUser.email, AnonymousUser.password);
   }
 
   /**
    * This method authenticate user.
    *
-   * It returns a promise which resolve if credentials are correct or not.
+   * This methods return a promise which resolve if
    *
    * Promise will reject if an error occurs.
    * @param email
    * @param password
    */
-  public login(email: string, password: string): Promise<AuthenticationResponse> {
+  public login(email: string, password: string): Promise<void> {
     const request: LoginRequest = { email, password };
     return this.httpClient
       .post<AuthenticationResponse>(Api.login(), request)
@@ -53,7 +74,37 @@ export class AuthenticationService {
           return err?.response.data;
         }
         return Promise.reject(err);
+      })
+      .then((res) => {
+        const isAuthenticated = this.store.getState().authentication.userStatus === UserStatus.Authenticated;
+
+        if (AuthenticationStatus.Successful === res.status) {
+          isAuthenticated && this.toasts.info('Vous êtes connecté !');
+          return Promise.resolve();
+        }
+        if (AuthenticationStatus.DisabledUser === res.status) {
+          this.toasts.error('Vous devez activer votre compte avant de vous connecter. Vérifiez vos e-mails et vos spams.');
+          return Promise.reject(new Error(AuthenticationStatus.DisabledUser));
+        }
+        if (AuthenticationStatus.Refused === res.status) {
+          this.toasts.error('Vos identifiants sont incorrects.');
+          return Promise.reject(new Error(AuthenticationStatus.Refused));
+        }
+        if (AuthenticationStatus.UnknownUser === res.status) {
+          this.toasts.error("Cette adresse email n'est pas enregistrée.");
+          return Promise.reject(new Error(AuthenticationStatus.UnknownUser));
+        }
+
+        logger.error('Invalid login status: ', res);
+        this.toasts.genericError();
+        return Promise.reject(new Error('Invalid login status'));
       });
+  }
+
+  public renew(): Promise<void> {
+    return this.httpClient.get<RenewResponse>(Api.renew()).then((result) => {
+      this.dispatchToken(result.data.token);
+    });
   }
 
   public register(email: string, password: string): Promise<RegistrationResponse> {

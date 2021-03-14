@@ -1,6 +1,6 @@
 import React, { ChangeEvent, Component, ReactNode } from 'react';
 import { services } from '../../../../../core/Services';
-import { Logger } from '../../../../../core/utils/Logger';
+import { Logger } from '@abc-map/frontend-shared';
 import { WmsBoundingBox, WmsCapabilities, WmsLayer } from '../../../../../core/geo/WmsCapabilities';
 import WmsLayerItem from './WmsLayerItem';
 import { AbcProjection, WmsAuthentication, WmsDefinition } from '@abc-map/shared-entities';
@@ -127,7 +127,7 @@ class WmsSettingsPanel extends Component<Props, State> {
         this.setState({ capabilities: res });
       })
       .catch((err) => {
-        this.services.ui.toasts.error("Impossible d'obtenir les capacités du serveur, vérifiez l'url");
+        this.services.toasts.error("Impossible d'obtenir les capacités du serveur, vérifiez l'url");
         logger.error(err);
       });
   };

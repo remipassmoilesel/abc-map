@@ -1,5 +1,5 @@
 import { AbstractTool } from '../AbstractTool';
-import { MapTool } from '@abc-map/shared-entities';
+import { MapTool } from '@abc-map/frontend-shared';
 import Icon from '../../../../assets/tool-icons/none.svg';
 
 export class None extends AbstractTool {

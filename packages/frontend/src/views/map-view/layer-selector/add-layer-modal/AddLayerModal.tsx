@@ -5,9 +5,10 @@ import { HistoryKey } from '../../../../core/history/HistoryKey';
 import { AddLayersTask } from '../../../../core/history/tasks/AddLayersTask';
 import { LabelledLayerTypes, LabelledLayerType } from './LabelledLayerTypes';
 import WmsSettingsPanel from './wms/WmsSettingsPanel';
-import { Logger } from '../../../../core/utils/Logger';
+import { Logger } from '@abc-map/frontend-shared';
 import { Link } from 'react-router-dom';
-import { FrontendRoutes, WmsDefinition } from '@abc-map/shared-entities';
+import { WmsDefinition } from '@abc-map/shared-entities';
+import { FrontendRoutes } from '@abc-map/frontend-shared';
 import { LayerFactory } from '../../../../core/geo/layers/LayerFactory';
 
 const logger = Logger.get('NewLayerModal.tsx');
@@ -80,7 +81,7 @@ class AddLayerModal extends Component<Props, State> {
     } else if (LabelledLayerTypes.Wms.id === selected.id) {
       this.newWmsLayer();
     } else {
-      this.services.ui.toasts.genericError();
+      this.services.toasts.genericError();
     }
 
     this.setState({ layerType: LabelledLayerTypes.Vector, wms: undefined });
@@ -106,7 +107,7 @@ class AddLayerModal extends Component<Props, State> {
     const value = ev.target.value;
     const layerType = LabelledLayerTypes.find(value);
     if (!layerType) {
-      return this.services.ui.toasts.genericError();
+      return this.services.toasts.genericError();
     }
     this.setState({ layerType });
   };
@@ -130,7 +131,7 @@ class AddLayerModal extends Component<Props, State> {
   private newWmsLayer = () => {
     const wms = this.state.wms;
     if (!wms) {
-      return this.services.ui.toasts.info("Vous devez d'abord paramétrer votre couche");
+      return this.services.toasts.info("Vous devez d'abord paramétrer votre couche");
     }
 
     const map = this.services.geo.getMainMap();

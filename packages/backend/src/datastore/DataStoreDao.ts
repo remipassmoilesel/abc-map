@@ -1,14 +1,14 @@
 import { Config } from '../config/Config';
 import { MongodbClient } from '../mongodb/MongodbClient';
 import { ArtefactDocument } from './ArtefactDocument';
-import { MongoCollection } from '../mongodb/MongoCollection';
+import { MongodbCollection } from '../mongodb/MongodbCollection';
 
 export class DataStoreDao {
   constructor(private config: Config, private client: MongodbClient) {}
 
   // TODO: add weights
   public async createIndexes() {
-    const coll = await this.client.collection<ArtefactDocument>(MongoCollection.Artefacts);
+    const coll = await this.client.collection<ArtefactDocument>(MongodbCollection.Artefacts);
     await coll.createIndex(
       {
         name: 'text',
@@ -22,7 +22,7 @@ export class DataStoreDao {
   }
 
   public async save(artefact: ArtefactDocument): Promise<void> {
-    const coll = await this.client.collection<ArtefactDocument>(MongoCollection.Artefacts);
+    const coll = await this.client.collection<ArtefactDocument>(MongodbCollection.Artefacts);
     await coll.replaceOne({ _id: artefact._id }, artefact, { upsert: true });
   }
 
@@ -37,23 +37,23 @@ export class DataStoreDao {
       },
     }));
 
-    const coll = await this.client.collection<ArtefactDocument>(MongoCollection.Artefacts);
+    const coll = await this.client.collection<ArtefactDocument>(MongodbCollection.Artefacts);
     await coll.bulkWrite(operations);
   }
 
   public async findById(id: string): Promise<ArtefactDocument | undefined> {
-    const coll = await this.client.collection<ArtefactDocument>(MongoCollection.Artefacts);
+    const coll = await this.client.collection<ArtefactDocument>(MongodbCollection.Artefacts);
     const res = await coll.findOne({ _id: id });
     return res || undefined;
   }
 
   public async list(offset: number, limit: number): Promise<ArtefactDocument[]> {
-    const coll = await this.client.collection<ArtefactDocument>(MongoCollection.Artefacts);
+    const coll = await this.client.collection<ArtefactDocument>(MongodbCollection.Artefacts);
     return coll.find({}).skip(offset).limit(limit).toArray();
   }
 
   public async search(query: string, offset: number, limit: number): Promise<ArtefactDocument[]> {
-    const coll = await this.client.collection<ArtefactDocument>(MongoCollection.Artefacts);
+    const coll = await this.client.collection<ArtefactDocument>(MongodbCollection.Artefacts);
     return coll
       .find({ $text: { $search: query } })
       .skip(offset)
@@ -62,7 +62,7 @@ export class DataStoreDao {
   }
 
   public async deleteAll(): Promise<void> {
-    const coll = await this.client.collection<ArtefactDocument>(MongoCollection.Artefacts);
+    const coll = await this.client.collection<ArtefactDocument>(MongodbCollection.Artefacts);
     return coll.deleteMany({}).then(() => undefined);
   }
 }

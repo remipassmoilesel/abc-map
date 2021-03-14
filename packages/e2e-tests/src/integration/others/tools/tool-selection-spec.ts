@@ -1,4 +1,5 @@
-import { FeatureProperties, FrontendRoutes, MapTool, StyleProperties } from '@abc-map/shared-entities';
+import { FeatureProperties, StyleProperties } from '@abc-map/shared-entities';
+import { FrontendRoutes, MapTool } from '@abc-map/frontend-shared';
 import { TestHelper } from '../../../helpers/TestHelper';
 import { ToolSelector } from '../../../helpers/ToolSelector';
 import { Draw } from '../../../helpers/Draw';

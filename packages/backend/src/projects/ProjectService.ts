@@ -1,9 +1,10 @@
 import { Config } from '../config/Config';
 import { ProjectDao } from './ProjectDao';
 import { MongodbClient } from '../mongodb/MongodbClient';
-import { AbcProject } from '@abc-map/shared-entities';
+import { AbcProjectMetadata } from '@abc-map/shared-entities';
 import { ProjectMapper } from './ProjectMapper';
 import { AbstractService } from '../services/AbstractService';
+import { CompressedProject } from './CompressedProject';
 
 export class ProjectService extends AbstractService {
   public static create(config: Config, client: MongodbClient): ProjectService {
@@ -14,20 +15,29 @@ export class ProjectService extends AbstractService {
     super();
   }
 
-  public async save(project: AbcProject): Promise<void> {
-    if (!project.metadata.id) {
-      return Promise.reject(new Error('Id is mandatory'));
+  public async save(userId: string, project: CompressedProject): Promise<void> {
+    if (!userId) {
+      throw new Error('User id is mandatory');
     }
-    const doc = ProjectMapper.dtoToDoc(project);
-    return this.dao.save(doc);
+    const doc = ProjectMapper.dtoToDoc(project.metadata, userId);
+    return Promise.all([this.dao.saveMetadata(doc), this.dao.saveCompressedFile(project.metadata.id, project.project)]).then(() => undefined);
   }
 
-  public async findById(id: string): Promise<AbcProject | undefined> {
-    return this.dao.findById(id).then((res) => (res ? ProjectMapper.docToDto(res) : undefined));
+  public async findById(id: string): Promise<CompressedProject | undefined> {
+    return Promise.all([this.dao.findMetadataById(id), this.dao.findCompressedFileById(id)]).then(([metadata, project]) => {
+      if (!metadata || !project) {
+        return;
+      }
+
+      return {
+        metadata: ProjectMapper.docToDto(metadata),
+        project,
+      };
+    });
   }
 
-  public async list(offset: number, limit: number): Promise<AbcProject[]> {
-    const docs = await this.dao.list(offset, limit);
+  public async list(userId: string, offset: number, limit: number): Promise<AbcProjectMetadata[]> {
+    const docs = await this.dao.list(userId, offset, limit);
     return docs.map((doc) => ProjectMapper.docToDto(doc));
   }
 }

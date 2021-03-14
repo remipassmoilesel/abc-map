@@ -16,26 +16,29 @@ export class UserInit {
 
   constructor(private services: Services) {}
 
-  public async init(): Promise<void> {
-    if (await this.alreadyDone(devUsers[0].email)) {
-      return;
-    }
+  public async init(): Promise<AbcUser[]> {
+    const users: AbcUser[] = [];
 
-    // We register dev users
+    // We register users
     for (const request of devUsers) {
+      let user = await this.services.user.findByEmail(request.email);
+      if (user) {
+        users.push(user);
+        continue;
+      }
+
       await this.services.authentication.register(request, false);
+      user = (await this.services.user.findByEmail(request.email)) as AbcUser;
+      users.push(user);
     }
 
     // We enable only half of them
     for (let i = 0; i < devUsers.length / 2; i++) {
-      const user = (await this.services.user.findByEmail(devUsers[i].email)) as AbcUser;
+      const user = users[i];
       user.enabled = true;
       await this.services.user.save(user);
     }
-  }
 
-  private async alreadyDone(witnessEmail: string): Promise<boolean> {
-    const user = await this.services.user.findByEmail(witnessEmail);
-    return !!user;
+    return users;
   }
 }

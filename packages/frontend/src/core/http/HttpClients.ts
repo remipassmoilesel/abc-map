@@ -1,5 +1,5 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios';
-import { Logger } from '../utils/Logger';
+import { Logger } from '@abc-map/frontend-shared';
 import { mainStore } from '../store/store';
 
 const logger = Logger.get('HttpClients.ts');

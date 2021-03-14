@@ -1,9 +1,9 @@
 import React, { ChangeEvent, Component, ReactNode } from 'react';
 import { services } from '../../core/Services';
-import { Logger } from '../../core/utils/Logger';
-import { Link } from 'react-router-dom';
-import { FrontendRoutes } from '@abc-map/shared-entities';
-import { AuthenticationStatus, RegistrationStatus } from '@abc-map/shared-entities';
+import { Logger } from '@abc-map/frontend-shared';
+import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
+import { FrontendRoutes } from '@abc-map/frontend-shared';
+import { RegistrationStatus } from '@abc-map/shared-entities';
 import './Landing.scss';
 
 const logger = Logger.get('Landing.tsx', 'info');
@@ -15,10 +15,12 @@ interface State {
   registrationPassword: string;
 }
 
-class Landing extends Component<{}, State> {
+declare type Props = RouteComponentProps<any, any>;
+
+class Landing extends Component<Props, State> {
   private services = services();
 
-  constructor(props: {}) {
+  constructor(props: Props) {
     super(props);
     this.state = {
       loginEmail: '',
@@ -114,32 +116,16 @@ class Landing extends Component<{}, State> {
 
   private authentication = () => {
     if (!this.state.loginEmail || !this.state.loginPassword) {
-      return this.services.ui.toasts.info("Vous devez d'abord saisir votre email et votre mot de passe");
+      return this.services.toasts.info("Vous devez d'abord saisir votre email et votre mot de passe");
     }
 
     this.services.authentication
       .login(this.state.loginEmail, this.state.loginPassword)
-      .then((response) => {
+      .then(() => {
         this.setState({ registrationEmail: '', registrationPassword: '' });
-
-        if (AuthenticationStatus.Successful === response.status) {
-          return this.services.ui.toasts.info('Vous êtes connecté !');
-        }
-        if (AuthenticationStatus.DisabledUser === response.status) {
-          return this.services.ui.toasts.error('Vous devez activer votre compte avant de vous connecter. Vérifiez vos e-mails et vos spams.');
-        }
-        if (AuthenticationStatus.Refused === response.status) {
-          return this.services.ui.toasts.error('Vos identifiants sont incorrects.');
-        }
-        if (AuthenticationStatus.UnknownUser === response.status) {
-          return this.services.ui.toasts.error("Cette adresse email n'est pas enregistrée.");
-        }
-        return this.services.ui.toasts.genericError();
+        return this.props.history.push(FrontendRoutes.map());
       })
-      .catch((err) => {
-        logger.error(err);
-        this.services.ui.toasts.genericError();
-      });
+      .catch((err) => logger.error(err));
   };
 
   private registration = () => {
@@ -147,15 +133,15 @@ class Landing extends Component<{}, State> {
       .register(this.state.registrationEmail, this.state.registrationPassword)
       .then((res) => {
         if (res.status === RegistrationStatus.EmailAlreadyExists) {
-          return this.services.ui.toasts.info('Cette adresse email est déjà prise');
+          return this.services.toasts.info('Cette adresse email est déjà prise');
         }
         if (res.status === RegistrationStatus.Successful) {
           this.setState({ registrationEmail: '', registrationPassword: '' });
-          return this.services.ui.toasts.info('Un email vient de vous être envoyé, vous devez activer votre compte');
+          return this.services.toasts.info('Un email vient de vous être envoyé, vous devez activer votre compte');
         }
-        this.services.ui.toasts.genericError();
+        this.services.toasts.genericError();
       })
-      .catch(() => this.services.ui.toasts.genericError());
+      .catch(() => this.services.toasts.genericError());
   };
 
   private onLoginEmailChanged = (ev: ChangeEvent<HTMLInputElement>) => {
@@ -175,4 +161,4 @@ class Landing extends Component<{}, State> {
   };
 }
 
-export default Landing;
+export default withRouter(Landing);

@@ -154,7 +154,7 @@ export class AuthenticationService extends AbstractService {
     };
 
     const payload: Token = {
-      userStatus: isUserAnonymous(user) ? UserStatus.ANONYMOUS : UserStatus.AUTHENTICATED,
+      userStatus: isUserAnonymous(user) ? UserStatus.Anonymous : UserStatus.Authenticated,
       user: safeUser,
     };
 
