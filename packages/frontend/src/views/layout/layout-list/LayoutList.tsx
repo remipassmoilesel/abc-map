@@ -1,6 +1,6 @@
 import React, { Component, ReactNode } from 'react';
 import { services } from '../../../core/Services';
-import { Logger } from '../../../core/utils/Logger';
+import { Logger } from '@abc-map/frontend-shared';
 import { AbcLayout } from '@abc-map/shared-entities';
 import './LayoutList.scss';
 

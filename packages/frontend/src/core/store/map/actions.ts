@@ -1,4 +1,5 @@
-import { FillPatterns, MapTool } from '@abc-map/shared-entities';
+import { FillPatterns } from '@abc-map/shared-entities';
+import { MapTool } from '@abc-map/frontend-shared';
 
 export enum ActionType {
   SetTool = 'SetTool',

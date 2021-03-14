@@ -1,9 +1,9 @@
 import React, { Component, ReactNode } from 'react';
 import { services } from '../../../core/Services';
-import { Logger } from '../../../core/utils/Logger';
+import { Logger } from '@abc-map/frontend-shared';
 import { connect, ConnectedProps } from 'react-redux';
 import { ToolRegistry } from '../../../core/geo/tools/ToolRegistry';
-import { MapTool } from '@abc-map/shared-entities';
+import { MapTool } from '@abc-map/frontend-shared';
 import { MainState } from '../../../core/store/reducer';
 import SelectionPanel from './selection/SelectionPanel';
 import CirclePanel from './circle/CirclePanel';

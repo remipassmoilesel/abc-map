@@ -10,12 +10,14 @@ import {
   AuthenticationResponse,
   AuthenticationStatus,
   RegistrationRequest,
+  RenewResponse,
 } from '@abc-map/shared-entities';
 import { asyncHandler } from '../server/asyncHandler';
 import * as passport from 'passport';
 import { Logger } from '../utils/Logger';
 import { IVerifyOptions } from 'passport-local';
 import { Status } from '../server/Status';
+import { Authentication } from './Authentication';
 
 const logger = Logger.get('AuthenticationController.ts');
 
@@ -33,6 +35,10 @@ export class AuthenticationController extends Controller {
     app.post('/register', asyncHandler(this.register));
     app.post('/confirm-account', asyncHandler(this.confirmAccount));
     app.post('/login', this.login);
+
+    this.services.authentication.authenticationMiddleware(app);
+
+    app.get('/renew', this.renew);
     return app;
   }
 
@@ -83,5 +89,16 @@ export class AuthenticationController extends Controller {
         return res.status(200).json(response);
       }
     })(req, res, next);
+  };
+
+  public renew = (req: express.Request, res: express.Response): void => {
+    const user = Authentication.from(req);
+    if (!user) {
+      res.status(500).json({ status: 'unexpected error' });
+      return;
+    }
+
+    const response: RenewResponse = { token: this.services.authentication.signToken(user) };
+    res.json(response);
   };
 }

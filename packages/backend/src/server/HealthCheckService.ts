@@ -1,5 +1,5 @@
 import { MongodbClient } from '../mongodb/MongodbClient';
-import { MongoCollection } from '../mongodb/MongoCollection';
+import { MongodbCollection } from '../mongodb/MongodbCollection';
 import { AbcProject } from '@abc-map/shared-entities';
 import { AbstractService } from '../services/AbstractService';
 import { Logger } from '../utils/Logger';
@@ -31,7 +31,7 @@ export class HealthCheckService extends AbstractService {
   }
 
   private async isMongodbUp(): Promise<boolean> {
-    const collection = await this.mongodbClient.collection<AbcProject>(MongoCollection.Projects);
+    const collection = await this.mongodbClient.collection<AbcProject>(MongodbCollection.Projects);
     return collection
       .find({})
       .limit(1)

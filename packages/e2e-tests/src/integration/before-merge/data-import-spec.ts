@@ -1,5 +1,5 @@
-import { FrontendRoutes } from '@abc-map/shared-entities';
-import { Fixtures } from '../../helpers/Fixtures';
+import { FrontendRoutes } from '@abc-map/frontend-shared';
+import { TestData } from '../../test-data/TestData';
 import { MainMap } from '../../helpers/MainMap';
 import { TestHelper } from '../../helpers/TestHelper';
 import { MapHistory } from '../../helpers/History';
@@ -13,8 +13,10 @@ describe('Data import', () => {
     cy.visit(FrontendRoutes.map())
       .get('[data-cy=import-data]')
       .click()
-      .get('[data-cy=file-input]')
-      .attachFile(Fixtures.SampleGpx)
+      .then(() => TestData.sampleGpx())
+      .then((gpx) => {
+        return cy.get('[data-cy=file-input]').attachFile({ filePath: 'sample.gpx', fileContent: gpx });
+      })
       .wait(1_000)
       .then(() => MainMap.getReference())
       .should((map) => {
@@ -46,11 +48,10 @@ describe('Data import', () => {
 
   it('User can import data via drag and drop, then undo', () => {
     cy.visit(FrontendRoutes.map())
-      .fixture(Fixtures.SampleGpx, 'utf-8')
-      .then((fixture) => {
+      .then(() => TestData.sampleGpx())
+      .then((gpx) => {
         return cy.window().then((win) => {
-          const blob = new win.Blob([fixture]);
-          const file = new win.File([blob], 'sample.gpx');
+          const file = new win.File([gpx], 'sample.gpx');
           const dataTransfer = new win.DataTransfer();
           dataTransfer.items.add(file);
           return dataTransfer;

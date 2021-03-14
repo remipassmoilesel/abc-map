@@ -1,10 +1,10 @@
 import { AbstractDataReader } from './AbstractDataReader';
 import { LayerType, WmsDefinition, WmsMetadata } from '@abc-map/shared-entities';
 import { FileFormat, FileFormats } from '../FileFormats';
-import { AbcFile } from './AbcFile';
+import { AbcFile } from '@abc-map/frontend-shared';
 import * as yaml from 'js-yaml';
-import { BlobReader } from '../../utils/BlobReader';
-import { Logger } from '../../utils/Logger';
+import { BlobReader } from '@abc-map/frontend-shared';
+import { Logger } from '@abc-map/frontend-shared';
 import uuid from 'uuid-random';
 import { LayerWrapper } from '../../geo/layers/LayerWrapper';
 import { LayerFactory } from '../../geo/layers/LayerFactory';

@@ -1,5 +1,5 @@
 import { AbstractTool } from '../AbstractTool';
-import { MapTool } from '@abc-map/shared-entities';
+import { MapTool } from '@abc-map/frontend-shared';
 import { Draw } from 'ol/interaction';
 import GeometryType from 'ol/geom/GeometryType';
 import { onlyMainButton } from '../common/common-conditions';

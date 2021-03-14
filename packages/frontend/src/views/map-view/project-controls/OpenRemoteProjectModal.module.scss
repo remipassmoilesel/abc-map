@@ -1,0 +1,21 @@
+@import "src/style/variables";
+
+.recentProjects {
+  padding: 10px;
+  height: 200px;
+
+  overflow-x: hidden;
+  overflow-y: scroll;
+
+  border: solid 1px darkgray;
+}
+
+.item {
+  margin: 5px 0;
+  cursor: pointer;
+}
+
+.selected {
+  color: white;
+  background-color: $primary;
+}

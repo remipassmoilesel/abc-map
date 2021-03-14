@@ -1,6 +1,7 @@
 import React, { Component, ReactNode } from 'react';
-import { Logger } from '../../core/utils/Logger';
-import { FrontendRoutes, UserStatus } from '@abc-map/shared-entities';
+import { Logger } from '@abc-map/frontend-shared';
+import { UserStatus } from '@abc-map/shared-entities';
+import { FrontendRoutes } from '@abc-map/frontend-shared';
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
 import { connect, ConnectedProps } from 'react-redux';
 import { Dropdown } from 'react-bootstrap';
@@ -36,7 +37,7 @@ class TopBar extends Component<Props, State> {
   }
 
   public render(): ReactNode {
-    const userAuthenticated = this.props.userStatus === UserStatus.AUTHENTICATED;
+    const userAuthenticated = this.props.userStatus === UserStatus.Authenticated;
     const user = this.props.user;
     const label = user && userAuthenticated ? user.email : 'Visiteur';
 
@@ -83,10 +84,10 @@ class TopBar extends Component<Props, State> {
     this.services.authentication
       .logout()
       .then(() => {
-        this.services.ui.toasts.info("Vous n'êtes plus connecté !");
+        this.services.toasts.info("Vous n'êtes plus connecté !");
       })
       .catch((err) => {
-        this.services.ui.toasts.genericError();
+        this.services.toasts.genericError();
         logger.error(err);
       });
   };

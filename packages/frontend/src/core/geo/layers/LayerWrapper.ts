@@ -1,5 +1,5 @@
 import TileLayer from 'ol/layer/Tile';
-import { Logger } from '../../utils/Logger';
+import { Logger } from '@abc-map/frontend-shared';
 import {
   AbcLayer,
   AbcProjection,

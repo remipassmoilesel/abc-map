@@ -1,5 +1,5 @@
 import { FeatureStyle } from '../../geo/style/FeatureStyle';
-import { MapTool } from '@abc-map/shared-entities';
+import { MapTool } from '@abc-map/frontend-shared';
 
 export interface MapState {
   /**

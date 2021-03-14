@@ -1,8 +1,8 @@
 import React, { Component, ReactNode } from 'react';
 import { services } from '../../core/Services';
-import { Logger } from '../../core/utils/Logger';
+import { Logger } from '@abc-map/frontend-shared';
 import { Documentation } from '@abc-map/documentation';
-import './Help.scss';
+import Cls from './Help.module.scss';
 
 const logger = Logger.get('Help.tsx', 'info');
 
@@ -21,7 +21,7 @@ class Help extends Component<{}, State> {
   public render(): ReactNode {
     const doc = this.state.documentation;
     return (
-      <div className={'abc-help'}>
+      <div className={Cls.help}>
         <h1>Aide</h1>
         <p>Sur cette page, vous trouverez des tutoriels et le manuel d&apos;Abc-Map.</p>
         <p>L&apos;aide est en cours de rédaction.</p>
@@ -29,7 +29,7 @@ class Help extends Component<{}, State> {
           <>
             <div className={'toc'} dangerouslySetInnerHTML={{ __html: doc.toc }} />
             {doc.modules.map((mod, i) => (
-              <div key={i} className={'module'} dangerouslySetInnerHTML={{ __html: mod }} />
+              <div key={i} className={Cls.module} dangerouslySetInnerHTML={{ __html: mod }} />
             ))}
           </>
         )}
@@ -42,7 +42,7 @@ class Help extends Component<{}, State> {
       .then((res) => {
         this.setState({ documentation: res.content });
       })
-      .catch(() => this.services.ui.toasts.genericError());
+      .catch(() => this.services.toasts.genericError());
   }
 }
 

@@ -1,6 +1,6 @@
 import { HistoryKey } from './HistoryKey';
 import { Task } from './Task';
-import { Logger } from '../utils/Logger';
+import { Logger } from '@abc-map/frontend-shared';
 import { UiActions } from '../store/ui/actions';
 import { MainStore, mainStore } from '../store/store';
 

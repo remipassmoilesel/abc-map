@@ -53,7 +53,7 @@ describe('AuthenticationService', () => {
       assert.match(token, /^eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9\./i);
 
       const decoded = jwtDecode<Token>(token);
-      assert.equal(decoded.userStatus, UserStatus.AUTHENTICATED);
+      assert.equal(decoded.userStatus, UserStatus.Authenticated);
       assert.equal(decoded.user.id, user.id);
       assert.equal(decoded.user.password, '');
       assert.notEqual(decoded.user.password, user.password);

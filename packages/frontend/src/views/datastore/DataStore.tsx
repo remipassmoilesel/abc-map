@@ -1,6 +1,6 @@
 import React, { ChangeEvent, Component, ReactNode } from 'react';
 import { services } from '../../core/Services';
-import { Logger } from '../../core/utils/Logger';
+import { Logger } from '@abc-map/frontend-shared';
 import { AbcArtefact } from '@abc-map/shared-entities';
 import ArtefactCard from './ArtefactCard';
 import './DataStore.scss';
@@ -61,7 +61,7 @@ class DataStore extends Component<{}, State> {
         })
         .catch((err) => {
           logger.error(err);
-          this.services.ui.toasts.genericError();
+          this.services.toasts.genericError();
         });
     }
   };
@@ -74,7 +74,7 @@ class DataStore extends Component<{}, State> {
       })
       .catch((err) => {
         logger.error(err);
-        this.services.ui.toasts.genericError();
+        this.services.toasts.genericError();
       });
   }
 }

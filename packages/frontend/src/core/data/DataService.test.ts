@@ -3,9 +3,9 @@ import { SinonStub, SinonStubbedInstance } from 'sinon';
 import * as sinon from 'sinon';
 import { GeoService } from '../geo/GeoService';
 import { AxiosInstance } from 'axios';
-import { AbcFile } from './readers/AbcFile';
 import { LayerFactory } from '../geo/layers/LayerFactory';
 import { MapFactory } from '../geo/map/MapFactory';
+import { AbcFile } from '@abc-map/frontend-shared';
 
 describe('DataService', () => {
   let apiClient: { get: SinonStub };

@@ -2,7 +2,7 @@ import React, { Component, ReactNode } from 'react';
 import { AbcProjectMetadata } from '@abc-map/shared-entities';
 import { services } from '../../../core/Services';
 import { ModalStatus } from '../../../core/ui/Modals.types';
-import { Logger } from '../../../core/utils/Logger';
+import { Logger } from '@abc-map/frontend-shared';
 
 const logger = Logger.get('ProjectStatus.tsx');
 
@@ -31,7 +31,7 @@ class ProjectStatus extends Component<Props, {}> {
   }
 
   private onRename = () => {
-    this.services.ui.modals
+    this.services.modals
       .renameModal('Renommer', 'Renommer le project', this.props.project.name)
       .then((event) => {
         if (event.status === ModalStatus.Confirmed) {
@@ -40,7 +40,7 @@ class ProjectStatus extends Component<Props, {}> {
       })
       .catch((err) => {
         logger.error(err);
-        this.services.ui.toasts.genericError();
+        this.services.toasts.genericError();
       });
   };
 }

@@ -7,7 +7,7 @@ export class LayerSelector {
     });
   }
 
-  public static getActiveItem(): Cypress.Chainable<JQuery<HTMLElement>> {
+  public static getActiveItem() {
     return cy.get('[data-cy=layers-list] .abc-layer-item.active');
   }
 

@@ -1,8 +1,7 @@
 import { DataReader } from './DataReader';
-import { TestData } from './test-data/TestData';
+import { TestData } from '../../test-data/TestData';
 import { DEFAULT_PROJECTION } from '@abc-map/shared-entities';
-import { AbcFile } from './AbcFile';
-import { Zipper } from '../Zipper';
+import { AbcFile, Zipper } from '@abc-map/frontend-shared';
 import VectorImageLayer from 'ol/layer/VectorImage';
 import { VectorLayerWrapper } from '../../geo/layers/LayerWrapper';
 

@@ -1,4 +1,4 @@
-import { MapTool } from '@abc-map/shared-entities';
+import { MapTool } from '@abc-map/frontend-shared';
 import { ToolRegistry } from './ToolRegistry';
 import { Selection } from './selection/Selection';
 

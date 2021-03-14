@@ -1,8 +1,7 @@
 import React, { Component, ReactNode } from 'react';
 import { services } from '../../core/Services';
-import { Logger } from '../../core/utils/Logger';
+import { Logger, ConfirmAccountParams, FrontendRoutes } from '@abc-map/frontend-shared';
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
-import { ConfirmAccountParams, FrontendRoutes } from '@abc-map/shared-entities';
 import { AccountConfirmationStatus } from '@abc-map/shared-entities';
 import * as qs from 'query-string';
 import './ConfirmAccount.scss';

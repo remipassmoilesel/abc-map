@@ -1,5 +1,5 @@
 import React, { ChangeEvent, Component, ReactNode } from 'react';
-import { Logger } from '../../../core/utils/Logger';
+import { Logger } from '@abc-map/frontend-shared';
 import { MapWrapper } from '../../../core/geo/map/MapWrapper';
 import { services } from '../../../core/Services';
 import * as _ from 'lodash';
@@ -77,7 +77,7 @@ class Search extends Component<Props, State> {
       })
       .catch((err) => {
         logger.error('Error while geocoding: ', err);
-        this.services.ui.toasts.genericError();
+        this.services.toasts.genericError();
       })
       .finally(() => this.setState({ loading: false }));
   }, 500);

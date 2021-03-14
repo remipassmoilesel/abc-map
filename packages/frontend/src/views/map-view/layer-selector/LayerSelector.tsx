@@ -1,6 +1,6 @@
 import React, { Component, ReactNode } from 'react';
 import { services } from '../../../core/Services';
-import { Logger } from '../../../core/utils/Logger';
+import { Logger } from '@abc-map/frontend-shared';
 import { Extent, getArea } from 'ol/extent';
 import { RemoveLayerTask } from '../../../core/history/tasks/RemoveLayerTask';
 import { HistoryKey } from '../../../core/history/HistoryKey';
@@ -85,7 +85,7 @@ class LayerSelector extends Component<Props, State> {
   private zoomToSelectedLayer = () => {
     const layer = this.services.geo.getMainMap().getActiveLayer();
     if (!layer) {
-      this.services.ui.toasts.info("Vous devez d'abord sélectionner une couche");
+      this.services.toasts.info("Vous devez d'abord sélectionner une couche");
       return logger.error('No layer selected');
     }
 
@@ -97,7 +97,7 @@ class LayerSelector extends Component<Props, State> {
     }
 
     if (!extent || !getArea(extent)) {
-      this.services.ui.toasts.info('Impossible de zoomer sur cette couche');
+      this.services.toasts.info('Impossible de zoomer sur cette couche');
       return logger.error('Layer does not have an extent, or extent is invalid');
     }
 
@@ -116,10 +116,10 @@ class LayerSelector extends Component<Props, State> {
     const map = this.services.geo.getMainMap();
     const active = map.getActiveLayer();
     if (!active) {
-      return this.services.ui.toasts.info("Vous devez d'abord sélectionner une couche");
+      return this.services.toasts.info("Vous devez d'abord sélectionner une couche");
     }
 
-    this.services.ui.modals
+    this.services.modals
       .renameModal('Renommer', 'Renommer la couche', active.getMetadata()?.name || 'Couche')
       .then((res) => {
         if (ModalStatus.Confirmed) {
@@ -128,7 +128,7 @@ class LayerSelector extends Component<Props, State> {
       })
       .catch((err) => {
         logger.error(err);
-        this.services.ui.toasts.genericError();
+        this.services.toasts.genericError();
       });
   };
 
@@ -136,7 +136,7 @@ class LayerSelector extends Component<Props, State> {
     const map = this.services.geo.getMainMap();
     const layer = map.getActiveLayer();
     if (!layer) {
-      this.services.ui.toasts.info("Vous devez d'abord sélectionner une couche");
+      this.services.toasts.info("Vous devez d'abord sélectionner une couche");
       return;
     }
 
@@ -155,7 +155,7 @@ class LayerSelector extends Component<Props, State> {
     const map = this.services.geo.getMainMap();
     const active = map.getActiveLayer();
     if (!active) {
-      this.services.ui.toasts.info("Vous devez d'abord sélectionner une couche");
+      this.services.toasts.info("Vous devez d'abord sélectionner une couche");
       return logger.error('No layer selected');
     }
 

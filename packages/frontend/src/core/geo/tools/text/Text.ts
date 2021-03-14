@@ -1,10 +1,10 @@
 import { AbstractTool } from '../AbstractTool';
-import { MapTool } from '@abc-map/shared-entities';
+import { MapTool } from '@abc-map/frontend-shared';
 import VectorSource from 'ol/source/Vector';
 import Geometry from 'ol/geom/Geometry';
 import { Map } from 'ol';
 import Icon from '../../../../assets/tool-icons/text.svg';
-import { Logger } from '../../../utils/Logger';
+import { Logger } from '@abc-map/frontend-shared';
 import { TextChanged, TextEnd, TextEvent, TextInteraction, TextStart } from './TextInteraction';
 import { FeatureWrapper } from '../../features/FeatureWrapper';
 import { HistoryKey } from '../../../history/HistoryKey';

@@ -1,43 +1,51 @@
 import { Env } from './Env';
-import { Logger } from './Logger';
+import { Logger } from '@abc-map/frontend-shared';
 
 const logger = Logger.get('FileIO.ts');
 
-export enum FileInputType {
+export enum InputType {
+  Multiple = 'Multiple',
+  Single = 'Single',
+}
+
+export enum InputResultType {
   FilesSelected = 'FilesSelected',
   Canceled = 'Canceled',
 }
 
 export interface FilesSelected {
-  type: FileInputType.FilesSelected;
+  type: InputResultType.FilesSelected;
   files: File[];
 }
 
 export interface Canceled {
-  type: FileInputType.Canceled;
+  type: InputResultType.Canceled;
 }
 
 export declare type FileInputResult = FilesSelected | Canceled;
 
 export class FileIO {
-  public static openInput(multiple = false): Promise<FileInputResult> {
+  public static openInput(type = InputType.Single, accept?: string): Promise<FileInputResult> {
     const fileNode = document.createElement('input');
     fileNode.setAttribute('type', 'file');
-    fileNode.multiple = multiple;
+    fileNode.multiple = type === InputType.Multiple;
     fileNode.style.display = 'none';
     fileNode.dataset.cy = 'file-input';
+    if (accept) {
+      fileNode.accept = accept;
+    }
     document.body.appendChild(fileNode);
 
     return new Promise<FileInputResult>((resolve, reject) => {
       fileNode.onchange = () => {
         const files = fileNode.files ? Array.from(fileNode.files) : [];
         fileNode.remove();
-        resolve({ type: FileInputType.FilesSelected, files: files || [] });
+        resolve({ type: InputResultType.FilesSelected, files: files || [] });
       };
 
       fileNode.oncancel = () => {
         fileNode.remove();
-        resolve({ type: FileInputType.Canceled });
+        resolve({ type: InputResultType.Canceled });
       };
 
       fileNode.onerror = (err) => {

@@ -1,6 +1,6 @@
 import React, { Component, ReactNode } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { FrontendRoutes } from '@abc-map/shared-entities';
+import { FrontendRoutes } from '@abc-map/frontend-shared';
 import MapView from './views/map-view/MapView';
 import { Provider } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
@@ -50,12 +50,14 @@ class App extends Component<{}, {}> {
     if (!Env.isE2e()) {
       window.addEventListener('beforeunload', this.warnBeforeUnload);
       window.addEventListener('unload', this.warnBeforeUnload);
+      this.services.authentication.watchToken();
     }
   }
 
   public componentWillUnmount() {
     window.removeEventListener('beforeunload', this.warnBeforeUnload);
     window.removeEventListener('unload', this.warnBeforeUnload);
+    this.services.authentication.unwatchToken();
   }
 
   /**

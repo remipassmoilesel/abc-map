@@ -1,9 +1,9 @@
 import React, { Component, DragEvent, ReactNode } from 'react';
-import { Logger } from '../../../core/utils/Logger';
+import { Logger } from '@abc-map/frontend-shared';
 import { services } from '../../../core/Services';
 import { MapWrapper } from '../../../core/geo/map/MapWrapper';
 import Cls from './MainMap.module.scss';
-import { AbcFile } from '../../../core/data/readers/AbcFile';
+import { AbcFile } from '@abc-map/frontend-shared';
 import { HistoryKey } from '../../../core/history/HistoryKey';
 import { AddLayersTask } from '../../../core/history/tasks/AddLayersTask';
 
@@ -80,26 +80,26 @@ class MainMap extends Component<Props, State> {
 
     const files: AbcFile[] = Array.from(ev.dataTransfer.files).map((f) => ({ path: f.name, content: f }));
     if (!files.length) {
-      this.services.ui.toasts.info('Vous devez sélectionner un ou plusieurs fichiers');
+      this.services.toasts.info('Vous devez sélectionner un ou plusieurs fichiers');
       return;
     }
 
-    this.services.ui.toasts.info('Import en cours ...');
+    this.services.toasts.info('Import en cours ...');
     this.services.data
       .importFiles(files)
       .then((res) => {
         if (!res.layers.length) {
-          this.services.ui.toasts.error("Ces formats de fichiers ne sont pas supportés, aucune donnée n'a été importée");
+          this.services.toasts.error("Ces formats de fichiers ne sont pas supportés, aucune donnée n'a été importée");
           return;
         }
 
         const map = this.services.geo.getMainMap();
         this.services.history.register(HistoryKey.Map, new AddLayersTask(map, res.layers));
-        this.services.ui.toasts.info('Import terminé !');
+        this.services.toasts.info('Import terminé !');
       })
       .catch((err) => {
         logger.error(err);
-        this.services.ui.toasts.genericError();
+        this.services.toasts.genericError();
       });
 
     this.setState({ dragOverlay: false });

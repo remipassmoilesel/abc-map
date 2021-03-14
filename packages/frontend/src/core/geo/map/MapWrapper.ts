@@ -3,7 +3,7 @@ import { AbcProjection, AbcProperties, VectorMetadata } from '@abc-map/shared-en
 import * as _ from 'lodash';
 import { ResizeObserverFactory } from '../../utils/ResizeObserverFactory';
 import BaseEvent from 'ol/events/Event';
-import { Logger } from '../../utils/Logger';
+import { Logger } from '@abc-map/frontend-shared';
 import { AbstractTool } from '../tools/AbstractTool';
 import TileLayer from 'ol/layer/Tile';
 import { FeatureWrapper } from '../features/FeatureWrapper';

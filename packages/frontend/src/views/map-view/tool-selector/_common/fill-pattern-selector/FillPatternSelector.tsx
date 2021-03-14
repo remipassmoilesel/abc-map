@@ -1,5 +1,5 @@
 import React, { ChangeEvent, Component, ReactNode } from 'react';
-import { Logger } from '../../../../../core/utils/Logger';
+import { Logger } from '@abc-map/frontend-shared';
 import { FillPatterns } from '@abc-map/shared-entities';
 import { LabelledFillPatterns } from './LabelledFillPatterns';
 import { FillPatternFactory } from '../../../../../core/geo/style/FillPatternFactory';

@@ -1,5 +1,5 @@
 import { ToolSelector } from '../../../helpers/ToolSelector';
-import { FrontendRoutes, MapTool } from '@abc-map/shared-entities';
+import { FrontendRoutes, MapTool } from '@abc-map/frontend-shared';
 import { TestHelper } from '../../../helpers/TestHelper';
 import { MainMap } from '../../../helpers/MainMap';
 import { Draw } from '../../../helpers/Draw';

@@ -1,5 +1,5 @@
 import React, { Component, ReactNode } from 'react';
-import { Logger } from '../../core/utils/Logger';
+import { Logger } from '@abc-map/frontend-shared';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import Cls from './TopBarLink.module.scss';
 
