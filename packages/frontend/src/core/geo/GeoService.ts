@@ -26,11 +26,11 @@ export class GeoService {
     return this.mainMap;
   }
 
-  public async exportLayers(map: MapWrapper, password?: string): Promise<AbcLayer[]> {
+  public async exportLayers(map: MapWrapper): Promise<AbcLayer[]> {
     const result: AbcLayer[] = [];
     const layers = map.getLayers();
     for (const layer of layers) {
-      const lay = await layer.toAbcLayer(password);
+      const lay = await layer.toAbcLayer();
       result.push(lay);
     }
     return result;

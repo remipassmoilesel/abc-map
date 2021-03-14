@@ -12,11 +12,11 @@ import 'cypress-file-upload';
 // TODO: test features and style
 
 describe('Project', function () {
-  beforeEach(() => {
-    TestHelper.init();
-  });
+  describe('As a visitor', function () {
+    beforeEach(() => {
+      TestHelper.init();
+    });
 
-  describe('As a Visitor', function () {
     it('can create new project', function () {
       cy.visit(FrontendRoutes.map())
         .get('[data-cy=new-project]')

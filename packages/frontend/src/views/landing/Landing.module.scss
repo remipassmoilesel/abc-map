@@ -1,0 +1,38 @@
+
+.landing {
+  margin: 3rem 10rem;
+
+  p {
+    margin: 1em 0;
+  }
+}
+
+.loginForm {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  input {
+    margin: 1rem;
+    max-width: 20rem;
+  }
+
+  button {
+    margin: 1rem;
+  }
+}
+
+.registrationForm {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  input {
+    margin: 1rem;
+    max-width: 20rem;
+  }
+
+  button {
+    margin: 1rem;
+  }
+}

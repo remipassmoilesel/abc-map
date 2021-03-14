@@ -4,7 +4,6 @@ import {
   AbcLayer,
   AbcProjection,
   AbcProperties,
-  AbcWmsLayer,
   BaseMetadata,
   LayerMetadata,
   LayerProperties,
@@ -18,7 +17,6 @@ import {
 } from '@abc-map/shared-entities';
 import uuid from 'uuid-random';
 import { GeoJSON } from 'ol/format';
-import { Encryption } from '../../utils/Encryption';
 import BaseLayer from 'ol/layer/Base';
 import TileSource from 'ol/source/Tile';
 import VectorSource from 'ol/source/Vector';
@@ -276,8 +274,7 @@ export class LayerWrapper<Layer extends OlLayers = OlLayers, Source extends OlSo
     };
   }
 
-  // FIXME: remove usage of password from here, decrypt project before
-  public async toAbcLayer(password?: string): Promise<AbcLayer> {
+  public async toAbcLayer(): Promise<AbcLayer> {
     const commonMeta = this.getMetadata();
     if (!commonMeta) {
       return Promise.reject(new Error('Invalid layer'));
@@ -317,17 +314,10 @@ export class LayerWrapper<Layer extends OlLayers = OlLayers, Source extends OlSo
       if (!meta) {
         return Promise.reject(new Error('Invalid wms layer'));
       }
-      const result: AbcWmsLayer = {
+      return {
         type: LayerType.Wms,
         metadata: meta,
       };
-      if (result.metadata.auth?.username && result.metadata.auth?.password) {
-        if (!password) {
-          throw new Error('Master password is required, a layer contains credentials');
-        }
-        result.metadata = await Encryption.encryptWmsMetadata(result.metadata, password);
-      }
-      return result;
     }
 
     return Promise.reject(new Error(`Unhandled layer type: ${commonMeta.type}`));

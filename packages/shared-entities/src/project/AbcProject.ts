@@ -23,4 +23,5 @@ export interface AbcProjectMetadata {
   version: string;
   name: string;
   projection: AbcProjection;
+  containsCredentials: boolean;
 }

@@ -1,9 +1,9 @@
 import { FrontendRoutes } from '@abc-map/frontend-shared';
-import { RegisteredUser } from './RegisteredUser';
+import { E2eUser } from './E2eUser';
 import Chainable = Cypress.Chainable;
 
 export class Login {
-  public static login(user: RegisteredUser): Chainable<any> {
+  public static login(user: E2eUser): Chainable<any> {
     return cy
       .visit(FrontendRoutes.landing())
       .get('input[data-cy=login-email]')

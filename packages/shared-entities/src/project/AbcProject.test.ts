@@ -7,7 +7,7 @@ import { assert } from 'chai';
 describe('AbcProject', () => {
   it('should not change without migration', () => {
     /* eslint-disable */
-    const witness = '{"metadata":{"id":"test-project-id","version":"0.1","name":"Test project","projection":{"name":"EPSG:4326"}},"layers":[],"layouts":[]}';
+    const witness = '{"metadata":{"id":"test-project-id","version":"0.1","name":"Test project","projection":{"name":"EPSG:4326"},"containsCredentials":false},"layers":[],"layouts":[]}';
     /* eslint-enable */
 
     const current: AbcProject = {
@@ -18,6 +18,7 @@ describe('AbcProject', () => {
         projection: {
           name: 'EPSG:4326',
         },
+        containsCredentials: false,
       },
       layers: [],
       layouts: [],

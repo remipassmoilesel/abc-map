@@ -9,6 +9,7 @@ export class ProjectFactory {
       version: CurrentVersion,
       projection: DEFAULT_PROJECTION,
       name: `Projet du ${DateTime.local().toLocaleString()}`,
+      containsCredentials: false,
     };
   }
 
