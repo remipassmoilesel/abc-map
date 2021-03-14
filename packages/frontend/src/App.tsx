@@ -1,18 +1,18 @@
 import React, { Component, ReactNode } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { FrontendRoutes } from '@abc-map/frontend-shared';
-import MapView from './views/map-view/MapView';
+import MapView from './views/map/MapView';
 import { Provider } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
-import Landing from './views/landing/Landing';
+import LandingView from './views/landing/LandingView';
 import LayoutView from './views/layout/LayoutView';
 import TopBar from './components/top-bar/TopBar';
-import DataStore from './views/datastore/DataStore';
-import NotFound from './views/not-found/NotFound';
-import Help from './views/help/Help';
-import About from './views/about/About';
+import DataStoreView from './views/datastore/DataStoreView';
+import NotFoundView from './views/not-found/NotFoundView';
+import HelpView from './views/help/HelpView';
+import AboutView from './views/about/AboutView';
 import { services } from './core/Services';
-import ConfirmAccount from './views/confirm-account/ConfirmAccount';
+import ConfirmAccountView from './views/confirm-account/ConfirmAccountView';
 import { Env } from './core/utils/Env';
 import { mainStore } from './core/store/store';
 import RenameModal from './components/rename-modal/RenameModal';
@@ -28,14 +28,14 @@ class App extends Component<{}, {}> {
         <BrowserRouter>
           <TopBar />
           <Switch>
-            <Route exact path={FrontendRoutes.landing()} component={Landing} />
+            <Route exact path={FrontendRoutes.landing()} component={LandingView} />
             <Route exact path={FrontendRoutes.map()} component={MapView} />
-            <Route exact path={FrontendRoutes.dataStore()} component={DataStore} />
+            <Route exact path={FrontendRoutes.dataStore()} component={DataStoreView} />
             <Route exact path={FrontendRoutes.layout()} component={LayoutView} />
-            <Route exact path={FrontendRoutes.help()} component={Help} />
-            <Route exact path={FrontendRoutes.about()} component={About} />
-            <Route exact path={FrontendRoutes.confirmAccount()} component={ConfirmAccount} />
-            <Route path={'*'} component={NotFound} />
+            <Route exact path={FrontendRoutes.help()} component={HelpView} />
+            <Route exact path={FrontendRoutes.about()} component={AboutView} />
+            <Route exact path={FrontendRoutes.confirmAccount()} component={ConfirmAccountView} />
+            <Route path={'*'} component={NotFoundView} />
           </Switch>
           <ToastContainer className={'toast-container'} />
           <RenameModal />

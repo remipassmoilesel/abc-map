@@ -6,13 +6,13 @@ import { FrontendRoutes } from '@abc-map/frontend-shared';
 import { RegistrationStatus } from '@abc-map/shared-entities';
 import LoginForm from './login/LoginForm';
 import RegistrationForm from './registration/RegistrationForm';
-import Cls from './Landing.module.scss';
+import Cls from './LandingView.module.scss';
 
 const logger = Logger.get('Landing.tsx', 'info');
 
 declare type Props = RouteComponentProps<any, any>;
 
-class Landing extends Component<Props, {}> {
+class LandingView extends Component<Props, {}> {
   private services = services();
 
   public render(): ReactNode {
@@ -95,4 +95,4 @@ class Landing extends Component<Props, {}> {
   };
 }
 
-export default withRouter(Landing);
+export default withRouter(LandingView);

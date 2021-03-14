@@ -1,11 +1,11 @@
 import React, { Component, ReactNode } from 'react';
 import { services } from '../../core/Services';
 import { Logger } from '@abc-map/frontend-shared';
-import './About.scss';
+import './AboutView.scss';
 
 const logger = Logger.get('Help.tsx', 'info');
 
-class About extends Component<{}, {}> {
+class AboutView extends Component<{}, {}> {
   private services = services();
 
   public render(): ReactNode {
@@ -19,4 +19,4 @@ class About extends Component<{}, {}> {
   }
 }
 
-export default About;
+export default AboutView;
