@@ -4,7 +4,7 @@ import { Logger, ConfirmAccountParams, FrontendRoutes } from '@abc-map/frontend-
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
 import { AccountConfirmationStatus } from '@abc-map/shared-entities';
 import * as qs from 'query-string';
-import './ConfirmAccount.scss';
+import './ConfirmAccountView.scss';
 
 const logger = Logger.get('ConfirmAccount.tsx', 'info');
 
@@ -14,7 +14,7 @@ interface State {
 
 type Props = RouteComponentProps<ConfirmAccountParams>;
 
-class ConfirmAccount extends Component<Props, State> {
+class ConfirmAccountView extends Component<Props, State> {
   private services = services();
 
   constructor(props: Props) {
@@ -66,4 +66,4 @@ class ConfirmAccount extends Component<Props, State> {
   }
 }
 
-export default withRouter(ConfirmAccount);
+export default withRouter(ConfirmAccountView);

@@ -44,6 +44,7 @@ async function main(args: string[]) {
     service.watch();
   } else if (Command.CI === command) {
     await service.continuousIntegration();
+    banners.done();
   } else if (Command.START === command) {
     service.start();
   } else if (Command.START_SERVICES === command) {
@@ -60,6 +61,4 @@ async function main(args: string[]) {
     banners.big();
     service.help();
   }
-
-  banners.done();
 }

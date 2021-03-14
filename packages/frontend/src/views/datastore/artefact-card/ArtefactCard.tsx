@@ -1,12 +1,12 @@
 import React, { Component, ReactNode } from 'react';
-import { services } from '../../core/Services';
+import { services } from '../../../core/Services';
 import { Logger, Zipper } from '@abc-map/frontend-shared';
 import { AbcArtefact } from '@abc-map/shared-entities';
-import { FileFormat, FileFormats } from '../../core/data/FileFormats';
-import { FileIO } from '../../core/utils/FileIO';
-import { HistoryKey } from '../../core/history/HistoryKey';
-import { AddLayersTask } from '../../core/history/tasks/AddLayersTask';
-import './DataStore.scss';
+import { FileFormat, FileFormats } from '../../../core/data/FileFormats';
+import { FileIO } from '../../../core/utils/FileIO';
+import { HistoryKey } from '../../../core/history/HistoryKey';
+import { AddLayersTask } from '../../../core/history/tasks/AddLayersTask';
+import '../DataStoreView.scss';
 
 const logger = Logger.get('ArtefactCard.tsx', 'info');
 

@@ -2,11 +2,11 @@ import React, { Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/frontend-shared';
 import { Link } from 'react-router-dom';
 import { FrontendRoutes } from '@abc-map/frontend-shared';
-import './NotFound.scss';
+import './NotFoundView.scss';
 
 const logger = Logger.get('NotFound.tsx');
 
-class NotFound extends Component<{}, {}> {
+class NotFoundView extends Component<{}, {}> {
   public render(): ReactNode {
     return (
       <div className={'abc-not-found'}>
@@ -17,4 +17,4 @@ class NotFound extends Component<{}, {}> {
   }
 }
 
-export default NotFound;
+export default NotFoundView;

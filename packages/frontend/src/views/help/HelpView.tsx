@@ -2,7 +2,7 @@ import React, { Component, ReactNode } from 'react';
 import { services } from '../../core/Services';
 import { Logger } from '@abc-map/frontend-shared';
 import { Documentation } from '@abc-map/documentation';
-import Cls from './Help.module.scss';
+import Cls from './HelpView.module.scss';
 
 const logger = Logger.get('Help.tsx', 'info');
 
@@ -10,7 +10,7 @@ interface State {
   documentation?: Documentation;
 }
 
-class Help extends Component<{}, State> {
+class HelpView extends Component<{}, State> {
   private services = services();
 
   constructor(props: {}) {
@@ -46,4 +46,4 @@ class Help extends Component<{}, State> {
   }
 }
 
-export default Help;
+export default HelpView;

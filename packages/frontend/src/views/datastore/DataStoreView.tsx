@@ -2,8 +2,8 @@ import React, { ChangeEvent, Component, ReactNode } from 'react';
 import { services } from '../../core/Services';
 import { Logger } from '@abc-map/frontend-shared';
 import { AbcArtefact } from '@abc-map/shared-entities';
-import ArtefactCard from './ArtefactCard';
-import './DataStore.scss';
+import ArtefactCard from './artefact-card/ArtefactCard';
+import './DataStoreView.scss';
 
 const logger = Logger.get('DataStore.tsx', 'info');
 
@@ -12,7 +12,7 @@ interface State {
   searchQuery: string;
 }
 
-class DataStore extends Component<{}, State> {
+class DataStoreView extends Component<{}, State> {
   private services = services();
 
   constructor(props: {}) {
@@ -79,4 +79,4 @@ class DataStore extends Component<{}, State> {
   }
 }
 
-export default DataStore;
+export default DataStoreView;
