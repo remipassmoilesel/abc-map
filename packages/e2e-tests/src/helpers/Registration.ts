@@ -1,14 +1,14 @@
 import { FrontendRoutes } from '@abc-map/frontend-shared';
 import * as uuid from 'uuid-random';
 import { Toasts } from './Toasts';
-import { RegisteredUser } from './RegisteredUser';
+import { E2eUser } from './E2eUser';
 import Chainable = Cypress.Chainable;
 
 const defaultPassword = 'azerty1234';
 
 export class Registration {
-  public static newUser(enableAccount = true): Chainable<RegisteredUser> {
-    const email = `e2e-${uuid()}@abcmap.fr`;
+  public static newUser(enableAccount = true): Chainable<E2eUser> {
+    const email = `e2e-${uuid().substr(24)}@abcmap.fr`;
 
     // We register user
     return cy

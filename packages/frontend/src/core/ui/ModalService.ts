@@ -25,6 +25,12 @@ export class ModalService {
     });
   }
 
+  public projectPasswordModal(): Promise<PasswordModalClosedEvent> {
+    const message = 'Votre projet contient des identifiants, vous devez choisir un mot de passe pour les protéger.';
+    const title = 'Mot de passe du projet';
+    return this.passwordModal(title, message);
+  }
+
   public passwordModal(title: string, message: string): Promise<PasswordModalClosedEvent> {
     return new Promise((resolve) => {
       const listener: ModalEventListener = (ev) => {

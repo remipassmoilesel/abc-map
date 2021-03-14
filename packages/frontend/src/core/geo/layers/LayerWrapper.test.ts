@@ -1,7 +1,6 @@
 import {
   AbcPredefinedLayer,
   AbcVectorLayer,
-  AbcWmsLayer,
   LayerProperties,
   LayerType,
   PredefinedLayerModel,
@@ -199,38 +198,6 @@ describe('LayerWrapper', () => {
       };
       expect(abcLayer.metadata.id).toBeDefined();
       expect(abcLayer.metadata).toEqual(expectedMetadata);
-    });
-
-    it('with WMS layer, with credentials', async () => {
-      const def: WmsDefinition = {
-        remoteUrl: 'http://test-url',
-        remoteLayerName: 'test-layer-name',
-        projection: { name: 'EPSG:4326' },
-        auth: {
-          username: 'test-username',
-          password: 'test-password',
-        },
-      };
-      const layer = LayerFactory.newWmsLayer(def).setName('WMS');
-
-      const abcLayer = (await layer.toAbcLayer('test-master-password')) as AbcWmsLayer;
-
-      expect(abcLayer.type).toEqual(LayerType.Wms);
-      expect(abcLayer.metadata.id).toBeDefined();
-      expect(abcLayer.metadata.id).toEqual(layer.getId());
-      expect(abcLayer.metadata.type).toEqual(LayerType.Wms);
-      expect(abcLayer.metadata.name).toEqual('WMS');
-      expect(abcLayer.metadata.active).toEqual(false);
-      expect(abcLayer.metadata.opacity).toEqual(1);
-      expect(abcLayer.metadata.visible).toEqual(true);
-      expect(abcLayer.metadata.projection).toEqual({ name: 'EPSG:4326' });
-      expect(abcLayer.metadata.remoteLayerName).toEqual('test-layer-name');
-      expect(abcLayer.metadata.remoteUrl).toBeDefined();
-      expect(abcLayer.metadata.remoteUrl).not.toMatch(def.remoteUrl);
-      expect(abcLayer.metadata.auth?.username).toBeDefined();
-      expect(abcLayer.metadata.auth?.username).not.toMatch(def.auth?.username as string);
-      expect(abcLayer.metadata.auth?.password).toBeDefined();
-      expect(abcLayer.metadata.auth?.password).not.toMatch(def.auth?.password as string);
     });
   });
 

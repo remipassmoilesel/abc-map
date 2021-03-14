@@ -41,6 +41,7 @@ export class TestHelper {
         version: CurrentVersion,
         name: `Test project ${uuid()}`,
         projection: DEFAULT_PROJECTION,
+        containsCredentials: false,
       },
       layers: [this.sampleOsmLayer(), this.sampleVectorLayer()],
       layouts: [],

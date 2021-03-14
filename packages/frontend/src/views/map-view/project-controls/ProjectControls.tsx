@@ -7,6 +7,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { MainState } from '../../../core/store/reducer';
 import { FileIO, InputResultType, InputType } from '../../../core/utils/FileIO';
 import OpenRemoteProjectModal from './OpenRemoteProjectModal';
+import { ModalStatus } from '../../../core/ui/Modals.types';
 
 const logger = Logger.get('ProjectControls.tsx');
 
@@ -40,33 +41,33 @@ class ProjectControls extends Component<Props, State> {
     return (
       <div className={'control-block'}>
         <div className={'control-item'}>
-          <button onClick={this.importProject} type={'button'} className={'btn btn-link'} data-cy={'import-project'}>
+          <button onClick={this.handleImportProject} type={'button'} className={'btn btn-link'} data-cy={'import-project'}>
             <i className={'fa fa-upload mr-2'} />
             Importer un projet
           </button>
         </div>
         {userAuthenticated && (
           <div className={'control-item'}>
-            <button onClick={this.openRemoteModal} type={'button'} className={'btn btn-link'} data-cy={'open-remote-project'}>
+            <button onClick={this.handleOpenProject} type={'button'} className={'btn btn-link'} data-cy={'open-remote-project'}>
               <i className={'fa fa-globe-europe mr-2'} /> Ouvrir un projet
             </button>
           </div>
         )}
         <div className={'control-item'}>
-          <button onClick={this.newProject} type={'button'} className={'btn btn-link'} data-cy={'new-project'}>
+          <button onClick={this.handleNewProject} type={'button'} className={'btn btn-link'} data-cy={'new-project'}>
             <i className={'fa fa-file mr-2'} /> Nouveau projet
           </button>
         </div>
         {userAuthenticated && (
           <div className={'control-item'}>
-            <button onClick={this.saveProject} type={'button'} className={'btn btn-link'} data-cy={'save-project'}>
+            <button onClick={this.handleSaveProject} type={'button'} className={'btn btn-link'} data-cy={'save-project'}>
               <i className={'fa fa-pen-alt mr-2'} />
               Enregistrer en ligne
             </button>
           </div>
         )}
         <div className={'control-item'}>
-          <button onClick={this.exportAndDownloadProject} type={'button'} className={'btn btn-link'} data-cy={'export-project'}>
+          <button onClick={this.handleExportProject} type={'button'} className={'btn btn-link'} data-cy={'export-project'}>
             <i className={'fa fa-download mr-2'} />
             Exporter le projet
           </button>
@@ -77,34 +78,40 @@ class ProjectControls extends Component<Props, State> {
     );
   }
 
-  private newProject = () => {
-    this.services.project.newProject();
-    this.services.toasts.info('Nouveau projet créé');
+  private handleNewProject = () => {
+    const { toasts, project } = this.services;
+
+    project.newProject();
+    toasts.info('Nouveau projet créé');
   };
 
-  private saveProject = () => {
-    if (this.props.userStatus !== UserStatus.Authenticated) {
-      return this.services.toasts.info('Vous devez être connecté pour enregistrer votre projet');
-    }
+  private handleSaveProject = () => {
+    const { toasts, project, geo, modals } = this.services;
 
-    this.services.toasts.info('Enregistrement en cours ...');
-    return this.services.project
-      .exportCurrentProject()
-      .then((project) => {
-        if (project) {
-          return this.services.project.save(project);
+    const save = async () => {
+      let password: string | undefined;
+      if (geo.getMainMap().containsCredentials()) {
+        const event = await modals.projectPasswordModal();
+        if (event.status === ModalStatus.Canceled) {
+          return;
         }
-      })
-      .then(() => {
-        this.services.toasts.info('Projet enregistré !');
-      })
-      .catch((err) => {
-        logger.error(err);
-        this.services.toasts.genericError();
-      });
+        password = event.value;
+      }
+
+      toasts.info('Enregistrement en cours ...');
+      const compressed = await project.exportCurrentProject(password);
+      toasts.info('Projet enregistré !');
+
+      return project.save(compressed);
+    };
+
+    save().catch((err) => {
+      logger.error(err);
+      toasts.genericError();
+    });
   };
 
-  private openRemoteModal = () => {
+  private handleOpenProject = () => {
     this.setState({ remoteProjectModal: true });
   };
 
@@ -112,49 +119,67 @@ class ProjectControls extends Component<Props, State> {
     this.setState({ remoteProjectModal: false });
   };
 
-  private exportAndDownloadProject = () => {
-    this.services.toasts.info('Export en cours ...');
-    return this.services.project
-      .exportCurrentProject()
-      .then((project) => {
-        if (project) {
-          this.services.toasts.info('Export terminé !');
-          const name = `project.${Constants.EXTENSION}`;
-          FileIO.output(URL.createObjectURL(project.project), name);
+  private handleExportProject = () => {
+    const { toasts, project, geo, modals } = this.services;
+
+    const exportProject = async () => {
+      let password: string | undefined;
+      if (geo.getMainMap().containsCredentials()) {
+        const event = await modals.projectPasswordModal();
+        if (event.status === ModalStatus.Canceled) {
+          return;
         }
+        password = event.value;
+      }
+
+      toasts.info('Export en cours ...');
+      const compressed = await project.exportCurrentProject(password);
+      FileIO.output(URL.createObjectURL(compressed.project), `project.${Constants.EXTENSION}`);
+      toasts.info('Export terminé !');
+    };
+
+    exportProject().catch((err) => {
+      logger.error(err);
+      toasts.genericError();
+    });
+  };
+
+  private handleImportProject = () => {
+    const { toasts, modals, project } = this.services;
+    FileIO.openInput(InputType.Single, '.abm2')
+      .then(async (result) => {
+        if (InputResultType.Canceled === result.type) {
+          return;
+        }
+
+        if (result.files.length !== 1) {
+          return toasts.error('Vous devez sélectionner un fichier');
+        }
+
+        const file = result.files[0];
+        if (!file.name.endsWith(Constants.EXTENSION)) {
+          return toasts.error('Vous devez sélectionner un fichier au format abm2');
+        }
+
+        let password: string | undefined;
+        if (await project.compressedContainsCredentials(file)) {
+          const ev = await modals.projectPasswordModal();
+          if (ev.status === ModalStatus.Canceled) {
+            return;
+          }
+          password = ev.value;
+        }
+
+        this.services.toasts.info('Chargement ...');
+        return project.loadProject(file, password).then(() => {
+          this.services.history.clean();
+          this.services.toasts.info('Projet importé !');
+        });
       })
       .catch((err) => {
         logger.error(err);
         this.services.toasts.genericError();
       });
-  };
-
-  private importProject = () => {
-    FileIO.openInput(InputType.Single, '.abm2').then(async (result) => {
-      if (InputResultType.Canceled === result.type) {
-        return;
-      }
-
-      if (result.files.length !== 1) {
-        return this.services.toasts.error('Vous devez sélectionner un fichier');
-      }
-
-      const file = result.files[0];
-      if (!file.name.endsWith(Constants.EXTENSION)) {
-        return this.services.toasts.error('Vous devez sélectionner un fichier au format abm2');
-      }
-
-      this.services.toasts.info('Chargement ...');
-      return this.services.project
-        .loadProject(file)
-        .then(() => {
-          this.services.history.clean();
-          this.services.toasts.info('Projet importé !');
-        })
-        .catch((err) => {
-          this.services.toasts.error(err.message);
-        });
-    });
   };
 }
 
