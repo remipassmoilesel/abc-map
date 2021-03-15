@@ -1,5 +1,4 @@
 import React, { Component, ReactNode } from 'react';
-import { services } from '../../../core/Services';
 import { Logger } from '@abc-map/frontend-shared';
 import { AbcLayout } from '@abc-map/shared-entities';
 import { LayoutHelper } from '../LayoutHelper';
@@ -10,7 +9,7 @@ import './LayoutPreview.scss';
 
 const logger = Logger.get('LayoutPreview.tsx', 'warn');
 
-interface Props {
+interface LocalProps {
   layout?: AbcLayout;
   mainMap: MapWrapper;
   onLayoutChanged: (lay: AbcLayout) => void;
@@ -25,8 +24,9 @@ interface MapSupportDimensions {
   height: string;
 }
 
+declare type Props = LocalProps;
+
 class LayoutPreview extends Component<Props, State> {
-  private services = services();
   private mapRef = React.createRef<HTMLDivElement>();
 
   constructor(props: Props) {

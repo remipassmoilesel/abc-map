@@ -1,14 +1,14 @@
 import React, { ChangeEvent, Component, ReactNode } from 'react';
-import { services } from '../../../../../core/Services';
 import { Logger } from '@abc-map/frontend-shared';
 import { WmsBoundingBox, WmsCapabilities, WmsLayer } from '../../../../../core/geo/WmsCapabilities';
 import WmsLayerItem from './WmsLayerItem';
 import { AbcProjection, WmsAuthentication, WmsDefinition } from '@abc-map/shared-entities';
+import { ServiceProps, withServices } from '../../../../../core/withServices';
 import './WmsSettingsPanel.scss';
 
 const logger = Logger.get('WmsSettingsPanel.tsx', 'debug');
 
-interface Props {
+interface LocalProps {
   onChange: (wms: WmsDefinition) => void;
 }
 
@@ -20,9 +20,9 @@ interface State {
   password: string;
 }
 
-class WmsSettingsPanel extends Component<Props, State> {
-  private services = services();
+declare type Props = LocalProps & ServiceProps;
 
+class WmsSettingsPanel extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -115,19 +115,21 @@ class WmsSettingsPanel extends Component<Props, State> {
   };
 
   private getCapabilities = () => {
+    const { geo, toasts } = this.props.services;
+
     let auth: WmsAuthentication | undefined;
     if (this.state.username && this.state.password) {
       auth = { username: this.state.username, password: this.state.password };
     }
 
-    this.services.geo
+    geo
       .getWmsCapabilities(this.state.url, auth)
       .then((res) => {
         logger.debug('Capabilities: ', res);
         this.setState({ capabilities: res });
       })
       .catch((err) => {
-        this.services.toasts.error("Impossible d'obtenir les capacités du serveur, vérifiez l'url");
+        toasts.error("Impossible d'obtenir les capacités du serveur, vérifiez l'url");
         logger.error(err);
       });
   };
@@ -154,4 +156,4 @@ class WmsSettingsPanel extends Component<Props, State> {
   }
 }
 
-export default WmsSettingsPanel;
+export default withServices(WmsSettingsPanel);

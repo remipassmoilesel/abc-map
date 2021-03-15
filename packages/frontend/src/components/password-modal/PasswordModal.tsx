@@ -1,7 +1,7 @@
 import React, { ChangeEvent, Component, ReactNode } from 'react';
 import { Modal } from 'react-bootstrap';
 import { ModalEventListener, ModalEventType, ModalStatus } from '../../core/ui/Modals.types';
-import { services } from '../../core/Services';
+import { ServiceProps, withServices } from '../../core/withServices';
 
 interface State {
   visible: boolean;
@@ -11,10 +11,8 @@ interface State {
   listener?: ModalEventListener;
 }
 
-class PasswordModal extends Component<{}, State> {
-  private services = services();
-
-  constructor(props: {}) {
+class PasswordModal extends Component<ServiceProps, State> {
+  constructor(props: ServiceProps) {
     super(props);
     this.state = {
       visible: false,
@@ -53,18 +51,23 @@ class PasswordModal extends Component<{}, State> {
   }
 
   public componentDidMount() {
+    const { modals } = this.props.services;
+
     const listener: ModalEventListener = (ev) => {
       if (ev.type === ModalEventType.ShowPassword) {
         this.setState({ visible: true, title: ev.title, message: ev.message });
       }
     };
-    this.services.modals.addListener(ModalEventType.ShowPassword, listener);
+    modals.addListener(ModalEventType.ShowPassword, listener);
+
     this.setState({ listener });
   }
 
   public componentWillUnmount() {
+    const { modals } = this.props.services;
+
     if (this.state.listener) {
-      this.services.modals.removeListener(ModalEventType.ShowPassword, this.state.listener);
+      modals.removeListener(ModalEventType.ShowPassword, this.state.listener);
     }
   }
 
@@ -73,22 +76,28 @@ class PasswordModal extends Component<{}, State> {
   };
 
   private handleCancel = () => {
-    this.services.modals.dispatch({
+    const { modals } = this.props.services;
+
+    modals.dispatch({
       type: ModalEventType.PasswordClosed,
       value: this.state.value,
       status: ModalStatus.Canceled,
     });
+
     this.setState({ visible: false, value: '' });
   };
 
   private handleConfirm = () => {
-    this.services.modals.dispatch({
+    const { modals } = this.props.services;
+
+    modals.dispatch({
       type: ModalEventType.PasswordClosed,
       value: this.state.value,
       status: ModalStatus.Confirmed,
     });
+
     this.setState({ visible: false, value: '' });
   };
 }
 
-export default PasswordModal;
+export default withServices(PasswordModal);

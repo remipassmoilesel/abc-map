@@ -2,9 +2,9 @@ import React, { ChangeEvent, Component, ReactNode } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { MainState } from '../../../../../core/store/reducer';
 import { MapActions } from '../../../../../core/store/map/actions';
-import { services } from '../../../../../core/Services';
 import ColorPicker from '../color-selector/ColorPicker';
 import * as _ from 'lodash';
+import { ServiceProps, withServices } from '../../../../../core/withServices';
 import Cls from './TextFormat.module.scss';
 
 const mapStateToProps = (state: MainState) => ({
@@ -19,12 +19,9 @@ const mapDispatchToProps = {
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
-type PropsFromRedux = ConnectedProps<typeof connector>;
-type Props = PropsFromRedux;
+type Props = ConnectedProps<typeof connector> & ServiceProps;
 
 class TextFormat extends Component<Props, {}> {
-  private services = services();
-
   public render(): ReactNode {
     return (
       <div className={'control-item'}>
@@ -44,8 +41,10 @@ class TextFormat extends Component<Props, {}> {
   }
 
   private handleColorSelected = (color: string): void => {
+    const { geo } = this.props.services;
+
     this.props.setColor(color);
-    this.services.geo.updateSelectedFeatures((style) => {
+    geo.updateSelectedFeatures((style) => {
       style.text = {
         ...style.text,
         color,
@@ -55,9 +54,11 @@ class TextFormat extends Component<Props, {}> {
   };
 
   private handleSizeChange = (ev: ChangeEvent<HTMLSelectElement>): void => {
+    const { geo } = this.props.services;
+
     const size = parseInt(ev.target.value);
     this.props.setSize(size);
-    this.services.geo.updateSelectedFeatures((style) => {
+    geo.updateSelectedFeatures((style) => {
       style.text = {
         ...style.text,
         size,
@@ -67,4 +68,4 @@ class TextFormat extends Component<Props, {}> {
   };
 }
 
-export default connector(TextFormat);
+export default connector(withServices(TextFormat));

@@ -1,5 +1,4 @@
 import React, { ChangeEvent, Component, ReactNode } from 'react';
-import { services } from '../../core/Services';
 import { connect, ConnectedProps } from 'react-redux';
 import { Logger } from '@abc-map/frontend-shared';
 import LayoutList from './layout-list/LayoutList';
@@ -13,12 +12,10 @@ import { HistoryKey } from '../../core/history/HistoryKey';
 import { MapWrapper } from '../../core/geo/map/MapWrapper';
 import { MapFactory } from '../../core/geo/map/MapFactory';
 import { MainState } from '../../core/store/reducer';
+import { ServiceProps, withServices } from '../../core/withServices';
 import './LayoutView.scss';
 
 const logger = Logger.get('LayoutView.tsx', 'warn');
-
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface LocalProps {}
 
 interface State {
   map: MapWrapper;
@@ -32,18 +29,16 @@ const mapStateToProps = (state: MainState) => ({
 
 const connector = connect(mapStateToProps);
 
-type PropsFromRedux = ConnectedProps<typeof connector>;
-type Props = PropsFromRedux & LocalProps;
+type Props = ConnectedProps<typeof connector> & ServiceProps;
 
 class LayoutView extends Component<Props, State> {
-  private services = services();
   private exportMapRef = React.createRef<HTMLDivElement>();
 
   constructor(props: Props) {
     super(props);
     this.state = {
       format: LayoutFormats.A4_PORTRAIT,
-      map: this.services.geo.getMainMap(),
+      map: this.props.services.geo.getMainMap(),
     };
   }
 
@@ -110,6 +105,8 @@ class LayoutView extends Component<Props, State> {
   }
 
   public newLayout = () => {
+    const { project } = this.props.services;
+
     logger.info('Adding new layout');
     const pageNbr = this.props.layouts.length + 1;
     const name = `Page ${pageNbr}`;
@@ -123,12 +120,14 @@ class LayoutView extends Component<Props, State> {
     // Here we make an estimation of resolution as we can't know main map size
     const layoutRes = Math.round(resolution - resolution * 0.2);
     const projection: AbcProjection = { name: view.getProjection().getCode() };
-    const layout = this.services.project.newLayout(name, this.state.format, center, layoutRes, projection);
+    const layout = project.newLayout(name, this.state.format, center, layoutRes, projection);
     this.setState({ activeLayout: layout });
   };
 
   public clearAll = () => {
-    this.services.project.clearLayouts();
+    const { project } = this.props.services;
+
+    project.clearLayouts();
     this.setState({ activeLayout: undefined });
   };
 
@@ -146,24 +145,29 @@ class LayoutView extends Component<Props, State> {
   };
 
   public onLayoutChanged = (layout: AbcLayout) => {
-    this.services.project.updateLayout(layout);
+    const { project } = this.props.services;
+
+    project.updateLayout(layout);
     if (layout.id === this.state.activeLayout?.id) {
       this.setState({ activeLayout: layout });
     }
   };
 
   public exportOneLayout = () => {
+    const { toasts } = this.props.services;
+
     const layout = this.state.activeLayout;
     const support = this.exportMapRef.current;
     if (!layout) {
-      return this.services.toasts.error('Vous devez créer une mise en page');
+      return toasts.error('Vous devez créer une mise en page');
     }
     if (!support) {
-      this.services.toasts.genericError();
-      return logger.error('Support or layout not ready');
+      toasts.genericError();
+      logger.error('Support or layout not ready');
+      return;
     }
 
-    this.services.toasts.info("Début de l'export ...");
+    toasts.info("Début de l'export ...");
     const pdf = new jsPDF();
     const exportMap = MapFactory.createNaked();
     exportMap.setTarget(support);
@@ -172,21 +176,28 @@ class LayoutView extends Component<Props, State> {
       .then(() => {
         pdf.save('map.pdf');
         exportMap.dispose();
-        this.services.toasts.info('Export terminé !');
+        toasts.info('Export terminé !');
       })
-      .catch((err) => logger.error(err));
+      .catch((err) => {
+        toasts.genericError();
+        logger.error(err);
+      });
   };
 
   public exportAllLayouts = () => {
-    this.services.toasts.info("Début de l'export ...");
+    const { toasts } = this.props.services;
+
+    toasts.info("Début de l'export ...");
     const layouts = this.props.layouts;
     const support = this.exportMapRef.current;
     if (!support) {
-      this.services.toasts.genericError();
-      return logger.error('Support or layouts not ready');
+      toasts.genericError();
+      logger.error('Support or layouts not ready');
+      return;
     }
     if (!layouts.length) {
-      return this.services.toasts.error('Vous devez créer une mise en page');
+      toasts.error('Vous devez créer une mise en page');
+      return;
     }
 
     const pdf = new jsPDF();
@@ -206,10 +217,10 @@ class LayoutView extends Component<Props, State> {
     })()
       .then(() => {
         pdf.save('map.pdf');
-        this.services.toasts.info('Export terminé !');
+        toasts.info('Export terminé !');
       })
       .catch((err) => {
-        this.services.toasts.genericError();
+        toasts.genericError();
         logger.error(err);
       })
       .finally(() => {
@@ -295,4 +306,4 @@ class LayoutView extends Component<Props, State> {
   };
 }
 
-export default connector(LayoutView);
+export default connector(withServices(LayoutView));

@@ -1,7 +1,7 @@
 import React, { ChangeEvent, Component, ReactNode } from 'react';
 import { Modal } from 'react-bootstrap';
 import { ModalEventListener, ModalEventType, ModalStatus } from '../../core/ui/Modals.types';
-import { services } from '../../core/Services';
+import { ServiceProps, withServices } from '../../core/withServices';
 
 interface State {
   visible: boolean;
@@ -11,10 +11,8 @@ interface State {
   listener?: ModalEventListener;
 }
 
-class RenameModal extends Component<{}, State> {
-  private services = services();
-
-  constructor(props: {}) {
+class RenameModal extends Component<ServiceProps, State> {
+  constructor(props: ServiceProps) {
     super(props);
     this.state = {
       visible: false,
@@ -53,18 +51,22 @@ class RenameModal extends Component<{}, State> {
   }
 
   public componentDidMount() {
+    const { modals } = this.props.services;
+
     const listener: ModalEventListener = (ev) => {
       if (ev.type === ModalEventType.ShowRename) {
         this.setState({ visible: true, title: ev.title, message: ev.message, value: ev.value });
       }
     };
-    this.services.modals.addListener(ModalEventType.ShowRename, listener);
+    modals.addListener(ModalEventType.ShowRename, listener);
     this.setState({ listener });
   }
 
   public componentWillUnmount() {
+    const { modals } = this.props.services;
+
     if (this.state.listener) {
-      this.services.modals.removeListener(ModalEventType.ShowRename, this.state.listener);
+      modals.removeListener(ModalEventType.ShowRename, this.state.listener);
     }
   }
 
@@ -73,22 +75,28 @@ class RenameModal extends Component<{}, State> {
   };
 
   private onCancel = () => {
-    this.services.modals.dispatch({
+    const { modals } = this.props.services;
+
+    modals.dispatch({
       type: ModalEventType.RenameClosed,
       value: this.state.value,
       status: ModalStatus.Canceled,
     });
+
     this.setState({ visible: false });
   };
 
   private onRename = () => {
-    this.services.modals.dispatch({
+    const { modals } = this.props.services;
+
+    modals.dispatch({
       type: ModalEventType.RenameClosed,
       value: this.state.value,
       status: ModalStatus.Confirmed,
     });
+
     this.setState({ visible: false });
   };
 }
 
-export default RenameModal;
+export default withServices(RenameModal);

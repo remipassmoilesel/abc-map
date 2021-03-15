@@ -11,17 +11,15 @@ import DataStoreView from './views/datastore/DataStoreView';
 import NotFoundView from './views/not-found/NotFoundView';
 import HelpView from './views/help/HelpView';
 import AboutView from './views/about/AboutView';
-import { services } from './core/Services';
 import ConfirmAccountView from './views/confirm-account/ConfirmAccountView';
 import { Env } from './core/utils/Env';
 import { mainStore } from './core/store/store';
 import RenameModal from './components/rename-modal/RenameModal';
 import PasswordModal from './components/password-modal/PasswordModal';
 import DeviceWarningModal from './components/device-warning-modal/DeviceWarningModal';
+import { ServiceProps, withServices } from './core/withServices';
 
-class App extends Component<{}, {}> {
-  private services = services();
-
+class App extends Component<ServiceProps, {}> {
   public render(): ReactNode {
     return (
       <Provider store={mainStore}>
@@ -47,17 +45,23 @@ class App extends Component<{}, {}> {
   }
 
   public componentDidMount() {
+    const { authentication } = this.props.services;
+
     if (!Env.isE2e()) {
       window.addEventListener('beforeunload', this.warnBeforeUnload);
       window.addEventListener('unload', this.warnBeforeUnload);
-      this.services.authentication.watchToken();
+      authentication.watchToken();
     }
   }
 
   public componentWillUnmount() {
-    window.removeEventListener('beforeunload', this.warnBeforeUnload);
-    window.removeEventListener('unload', this.warnBeforeUnload);
-    this.services.authentication.unwatchToken();
+    const { authentication } = this.props.services;
+
+    if (!Env.isE2e()) {
+      window.removeEventListener('beforeunload', this.warnBeforeUnload);
+      window.removeEventListener('unload', this.warnBeforeUnload);
+      authentication.unwatchToken();
+    }
   }
 
   /**
@@ -66,7 +70,7 @@ class App extends Component<{}, {}> {
    * @private
    */
   private warnBeforeUnload = (ev: BeforeUnloadEvent | undefined): string => {
-    const message = 'Les modifications seront perdues, êtes vous sûr ?';
+    const message = 'Les modifications en cours seront perdues, êtes vous sûr ?';
     if (ev) {
       ev.returnValue = message;
     }
@@ -74,4 +78,4 @@ class App extends Component<{}, {}> {
   };
 }
 
-export default App;
+export default withServices(App);

@@ -1,5 +1,4 @@
 import React, { Component, ReactNode } from 'react';
-import { services } from '../../../core/Services';
 import { UserStatus } from '@abc-map/shared-entities';
 import { Logger } from '@abc-map/frontend-shared';
 import { Constants } from '../../../core/Constants';
@@ -8,6 +7,7 @@ import { MainState } from '../../../core/store/reducer';
 import { FileIO, InputResultType, InputType } from '../../../core/utils/FileIO';
 import OpenRemoteProjectModal from './OpenRemoteProjectModal';
 import { ModalStatus } from '../../../core/ui/Modals.types';
+import { ServiceProps, withServices } from '../../../core/withServices';
 
 const logger = Logger.get('ProjectControls.tsx');
 
@@ -23,11 +23,9 @@ const mapStateToProps = (state: MainState) => ({
 
 const connector = connect(mapStateToProps);
 
-type Props = ConnectedProps<typeof connector>;
+type Props = ConnectedProps<typeof connector> & ServiceProps;
 
 class ProjectControls extends Component<Props, State> {
-  private services = services();
-
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -79,14 +77,14 @@ class ProjectControls extends Component<Props, State> {
   }
 
   private handleNewProject = () => {
-    const { toasts, project } = this.services;
+    const { toasts, project } = this.props.services;
 
     project.newProject();
     toasts.info('Nouveau projet créé');
   };
 
   private handleSaveProject = () => {
-    const { toasts, project, geo, modals } = this.services;
+    const { toasts, project, geo, modals } = this.props.services;
 
     const save = async () => {
       let password: string | undefined;
@@ -120,7 +118,7 @@ class ProjectControls extends Component<Props, State> {
   };
 
   private handleExportProject = () => {
-    const { toasts, project, geo, modals } = this.services;
+    const { toasts, project, geo, modals } = this.props.services;
 
     const exportProject = async () => {
       let password: string | undefined;
@@ -145,7 +143,8 @@ class ProjectControls extends Component<Props, State> {
   };
 
   private handleImportProject = () => {
-    const { toasts, modals, project } = this.services;
+    const { toasts, modals, project, history } = this.props.services;
+
     FileIO.openInput(InputType.Single, '.abm2')
       .then(async (result) => {
         if (InputResultType.Canceled === result.type) {
@@ -170,17 +169,17 @@ class ProjectControls extends Component<Props, State> {
           password = ev.value;
         }
 
-        this.services.toasts.info('Chargement ...');
+        toasts.info('Chargement ...');
         return project.loadProject(file, password).then(() => {
-          this.services.history.clean();
-          this.services.toasts.info('Projet importé !');
+          history.clean();
+          toasts.info('Projet importé !');
         });
       })
       .catch((err) => {
         logger.error(err);
-        this.services.toasts.genericError();
+        toasts.genericError();
       });
   };
 }
 
-export default connector(ProjectControls);
+export default connector(withServices(ProjectControls));

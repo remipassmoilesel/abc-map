@@ -1,18 +1,18 @@
 import React, { Component, ReactNode } from 'react';
 import { AbcProjectMetadata } from '@abc-map/shared-entities';
-import { services } from '../../../core/Services';
 import { ModalStatus } from '../../../core/ui/Modals.types';
 import { Logger } from '@abc-map/frontend-shared';
+import { ServiceProps, withServices } from '../../../core/withServices';
 
 const logger = Logger.get('ProjectStatus.tsx');
 
-interface Props {
+interface LocalProps {
   project: AbcProjectMetadata;
 }
 
-class ProjectStatus extends Component<Props, {}> {
-  private services = services();
+declare type Props = LocalProps & ServiceProps;
 
+class ProjectStatus extends Component<Props, {}> {
   public render(): ReactNode {
     const metadata = this.props.project;
     return (
@@ -31,18 +31,20 @@ class ProjectStatus extends Component<Props, {}> {
   }
 
   private onRename = () => {
-    this.services.modals
+    const { modals, project, toasts } = this.props.services;
+
+    modals
       .renameModal('Renommer', 'Renommer le project', this.props.project.name)
       .then((event) => {
         if (event.status === ModalStatus.Confirmed) {
-          this.services.project.renameProject(event.value);
+          project.renameProject(event.value);
         }
       })
       .catch((err) => {
         logger.error(err);
-        this.services.toasts.genericError();
+        toasts.genericError();
       });
   };
 }
 
-export default ProjectStatus;
+export default withServices(ProjectStatus);

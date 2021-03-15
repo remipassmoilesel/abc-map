@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { services } from './core/Services';
+import { getServices } from './core/Services';
 import { getAbcWindow } from './core/utils/getWindow';
 import { E2eMapWrapper } from './core/geo/map/E2eMapWrapper';
 import { Logger } from '@abc-map/frontend-shared';
@@ -10,7 +10,7 @@ import { UserStatus } from '@abc-map/shared-entities';
 import './index.scss';
 
 const logger = Logger.get('index.tsx');
-const svc = services();
+const svc = getServices();
 
 authenticate()
   .then(() => load())
@@ -19,6 +19,7 @@ authenticate()
     svc.toasts.genericError();
   });
 
+// TODO: test
 async function authenticate(): Promise<void> {
   const isAuthenticated = svc.authentication.getUserStatus() === UserStatus.Authenticated;
   if (isAuthenticated) {

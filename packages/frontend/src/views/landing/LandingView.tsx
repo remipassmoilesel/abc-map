@@ -1,20 +1,18 @@
 import React, { Component, ReactNode } from 'react';
-import { services } from '../../core/Services';
 import { Logger } from '@abc-map/frontend-shared';
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
 import { FrontendRoutes } from '@abc-map/frontend-shared';
 import { RegistrationStatus } from '@abc-map/shared-entities';
 import LoginForm from './login/LoginForm';
 import RegistrationForm from './registration/RegistrationForm';
+import { ServiceProps, withServices } from '../../core/withServices';
 import Cls from './LandingView.module.scss';
 
 const logger = Logger.get('Landing.tsx', 'info');
 
-declare type Props = RouteComponentProps<any, any>;
+declare type Props = RouteComponentProps<any, any> & ServiceProps;
 
 class LandingView extends Component<Props, {}> {
-  private services = services();
-
   public render(): ReactNode {
     return (
       <div className={Cls.landing}>
@@ -55,7 +53,7 @@ class LandingView extends Component<Props, {}> {
   }
 
   private authentication = (email: string, password: string) => {
-    const { toasts, authentication } = this.services;
+    const { toasts, authentication } = this.props.services;
     if (!email || !password) {
       toasts.info("Vous devez d'abord saisir votre email et votre mot de passe");
       return;
@@ -74,7 +72,7 @@ class LandingView extends Component<Props, {}> {
   };
 
   private registration = (email: string, password: string) => {
-    const { toasts, authentication } = this.services;
+    const { toasts, authentication } = this.props.services;
 
     authentication
       .register(email, password)
@@ -95,4 +93,4 @@ class LandingView extends Component<Props, {}> {
   };
 }
 
-export default withRouter(LandingView);
+export default withRouter(withServices(LandingView));

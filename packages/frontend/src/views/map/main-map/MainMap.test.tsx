@@ -1,5 +1,5 @@
 import React from 'react';
-import MainMap, { logger } from './MainMap';
+import { logger, MainMap } from './MainMap';
 import ReactDOM, { unmountComponentAtNode } from 'react-dom';
 import { act } from 'react-dom/test-utils';
 import { MapWrapper } from '../../../core/geo/map/MapWrapper';
@@ -62,5 +62,5 @@ describe('MainMap', () => {
  */
 function renderMap(map: MapWrapper, container: HTMLElement): MainMap {
   // Note: ReactDOM.render() function signature is broken
-  return ReactDOM.render(<MainMap map={map} />, container) as any;
+  return ReactDOM.render(<MainMap map={map} services={{} as any} />, container) as any;
 }

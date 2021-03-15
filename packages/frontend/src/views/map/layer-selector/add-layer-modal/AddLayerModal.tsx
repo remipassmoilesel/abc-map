@@ -1,6 +1,5 @@
 import React, { ChangeEvent, Component, ReactNode } from 'react';
 import { Modal } from 'react-bootstrap';
-import { services } from '../../../../core/Services';
 import { HistoryKey } from '../../../../core/history/HistoryKey';
 import { AddLayersTask } from '../../../../core/history/tasks/AddLayersTask';
 import { LabelledLayerTypes, LabelledLayerType } from './LabelledLayerTypes';
@@ -10,10 +9,11 @@ import { Link } from 'react-router-dom';
 import { WmsDefinition } from '@abc-map/shared-entities';
 import { FrontendRoutes } from '@abc-map/frontend-shared';
 import { LayerFactory } from '../../../../core/geo/layers/LayerFactory';
+import { ServiceProps, withServices } from '../../../../core/withServices';
 
 const logger = Logger.get('NewLayerModal.tsx');
 
-interface Props {
+interface LocalProps {
   visible: boolean;
   onHide: () => void;
 }
@@ -23,9 +23,9 @@ interface State {
   wms?: WmsDefinition;
 }
 
-class AddLayerModal extends Component<Props, State> {
-  private services = services();
+declare type Props = LocalProps & ServiceProps;
 
+class AddLayerModal extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -73,6 +73,8 @@ class AddLayerModal extends Component<Props, State> {
   }
 
   private handleConfirm = () => {
+    const { toasts } = this.props.services;
+
     const selected = this.state.layerType;
     if (LabelledLayerTypes.Vector.id === selected.id) {
       this.newVectorLayer();
@@ -81,7 +83,7 @@ class AddLayerModal extends Component<Props, State> {
     } else if (LabelledLayerTypes.Wms.id === selected.id) {
       this.newWmsLayer();
     } else {
-      this.services.toasts.genericError();
+      toasts.genericError();
     }
 
     this.setState({ layerType: LabelledLayerTypes.Vector, wms: undefined });
@@ -104,41 +106,49 @@ class AddLayerModal extends Component<Props, State> {
   }
 
   private handleLayerTypeChanged = (ev: ChangeEvent<HTMLSelectElement>) => {
+    const { toasts } = this.props.services;
+
     const value = ev.target.value;
     const layerType = LabelledLayerTypes.find(value);
     if (!layerType) {
-      return this.services.toasts.genericError();
+      return toasts.genericError();
     }
     this.setState({ layerType });
   };
 
   private newOsmLayer = () => {
-    const map = this.services.geo.getMainMap();
+    const { history, geo } = this.props.services;
+
+    const map = geo.getMainMap();
     const layer = LayerFactory.newOsmLayer();
     map.addLayer(layer);
     map.setActiveLayer(layer);
-    this.services.history.register(HistoryKey.Map, new AddLayersTask(map, [layer]));
+    history.register(HistoryKey.Map, new AddLayersTask(map, [layer]));
   };
 
   private newVectorLayer = () => {
-    const map = this.services.geo.getMainMap();
+    const { history, geo } = this.props.services;
+
+    const map = geo.getMainMap();
     const layer = LayerFactory.newVectorLayer();
     map.addLayer(layer);
     map.setActiveLayer(layer);
-    this.services.history.register(HistoryKey.Map, new AddLayersTask(map, [layer]));
+    history.register(HistoryKey.Map, new AddLayersTask(map, [layer]));
   };
 
   private newWmsLayer = () => {
+    const { history, geo, toasts } = this.props.services;
+
     const wms = this.state.wms;
     if (!wms) {
-      return this.services.toasts.info("Vous devez d'abord paramétrer votre couche");
+      return toasts.info("Vous devez d'abord paramétrer votre couche");
     }
 
-    const map = this.services.geo.getMainMap();
+    const map = geo.getMainMap();
     const layer = LayerFactory.newWmsLayer(wms);
     map.addLayer(layer);
     map.setActiveLayer(layer);
-    this.services.history.register(HistoryKey.Map, new AddLayersTask(map, [layer]));
+    history.register(HistoryKey.Map, new AddLayersTask(map, [layer]));
   };
 
   private handleWmsSettingsChanged = (wms: WmsDefinition) => {
@@ -157,4 +167,4 @@ class AddLayerModal extends Component<Props, State> {
   }
 }
 
-export default AddLayerModal;
+export default withServices(AddLayerModal);

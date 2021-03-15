@@ -6,7 +6,7 @@ import { FillPatternFactory } from '../../../../../core/geo/style/FillPatternFac
 import { MainState } from '../../../../../core/store/reducer';
 import { MapActions } from '../../../../../core/store/map/actions';
 import { connect, ConnectedProps } from 'react-redux';
-import { services } from '../../../../../core/Services';
+import { ServiceProps, withServices } from '../../../../../core/withServices';
 import Cls from './FillPatternSelector.module.scss';
 
 const logger = Logger.get('FillPatternSelector.tsx', 'info');
@@ -21,15 +21,13 @@ const mapDispatchToProps = {
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
-type PropsFromRedux = ConnectedProps<typeof connector>;
-type Props = PropsFromRedux;
+type Props = ConnectedProps<typeof connector> & ServiceProps;
 
 interface State {
   patternFactory: FillPatternFactory;
 }
 
 class FillPatternSelector extends Component<Props, State> {
-  private services = services();
   private canvas = React.createRef<HTMLCanvasElement>();
 
   constructor(props: Props) {
@@ -60,10 +58,12 @@ class FillPatternSelector extends Component<Props, State> {
   }
 
   private handleSelection = (ev: ChangeEvent<HTMLSelectElement>) => {
+    const { geo } = this.props.services;
+
     const pattern = ev.target.value as FillPatterns;
     this.props.setPattern(pattern);
 
-    this.services.geo.updateSelectedFeatures((style) => {
+    geo.updateSelectedFeatures((style) => {
       style.fill = {
         ...style.fill,
         pattern,
@@ -115,4 +115,4 @@ class FillPatternSelector extends Component<Props, State> {
   }
 }
 
-export default connector(FillPatternSelector);
+export default connector(withServices(FillPatternSelector));

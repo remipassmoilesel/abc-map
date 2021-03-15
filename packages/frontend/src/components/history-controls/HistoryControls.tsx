@@ -1,9 +1,9 @@
 import React, { Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/frontend-shared';
 import { HistoryKey } from '../../core/history/HistoryKey';
-import { services } from '../../core/Services';
 import { connect, ConnectedProps } from 'react-redux';
 import { MainState } from '../../core/store/reducer';
+import { ServiceProps, withServices } from '../../core/withServices';
 import './HistoryControls.scss';
 
 const logger = Logger.get('HistoryControls.tsx', 'info');
@@ -18,12 +18,9 @@ const mapStateToProps = (state: MainState) => ({
 
 const connector = connect(mapStateToProps);
 
-type PropsFromRedux = ConnectedProps<typeof connector>;
-type Props = PropsFromRedux & LocalProps;
+type Props = ConnectedProps<typeof connector> & LocalProps & ServiceProps;
 
 class HistoryControls extends Component<Props, {}> {
-  private services = services();
-
   public render(): ReactNode {
     const canUndo = this.canUndo();
     const canRedo = this.canRedo();
@@ -44,16 +41,20 @@ class HistoryControls extends Component<Props, {}> {
   }
 
   private onCancel = () => {
-    this.services.history.undo(this.props.historyKey).catch((err) => {
+    const { history, toasts } = this.props.services;
+
+    history.undo(this.props.historyKey).catch((err) => {
       logger.error(err);
-      this.services.toasts.genericError();
+      toasts.genericError();
     });
   };
 
   private onRedo = () => {
-    this.services.history.redo(this.props.historyKey).catch((err) => {
+    const { history, toasts } = this.props.services;
+
+    history.redo(this.props.historyKey).catch((err) => {
       logger.error(err);
-      this.services.toasts.genericError();
+      toasts.genericError();
     });
   };
 
@@ -74,4 +75,4 @@ class HistoryControls extends Component<Props, {}> {
   };
 }
 
-export default connector(HistoryControls);
+export default connector(withServices(HistoryControls));

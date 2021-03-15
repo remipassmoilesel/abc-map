@@ -1,8 +1,8 @@
 import React, { ChangeEvent, Component, ReactNode } from 'react';
-import { services } from '../../core/Services';
 import { Logger } from '@abc-map/frontend-shared';
 import { AbcArtefact } from '@abc-map/shared-entities';
 import ArtefactCard from './artefact-card/ArtefactCard';
+import { ServiceProps, withServices } from '../../core/withServices';
 import './DataStoreView.scss';
 
 const logger = Logger.get('DataStore.tsx', 'info');
@@ -12,10 +12,8 @@ interface State {
   searchQuery: string;
 }
 
-class DataStoreView extends Component<{}, State> {
-  private services = services();
-
-  constructor(props: {}) {
+class DataStoreView extends Component<ServiceProps, State> {
+  constructor(props: ServiceProps) {
     super(props);
     this.state = {
       artefacts: [],
@@ -51,32 +49,36 @@ class DataStoreView extends Component<{}, State> {
   };
 
   private onSearch = () => {
+    const { toasts, data } = this.props.services;
+
     if (!this.state.searchQuery) {
       this.listArtefacts();
     } else {
-      this.services.data
+      data
         .searchArtefacts(this.state.searchQuery)
         .then((artefacts) => {
           this.setState({ artefacts });
         })
         .catch((err) => {
           logger.error(err);
-          this.services.toasts.genericError();
+          toasts.genericError();
         });
     }
   };
 
   private listArtefacts() {
-    this.services.data
+    const { toasts, data } = this.props.services;
+
+    data
       .listArtefacts()
       .then((artefacts) => {
         this.setState({ artefacts });
       })
       .catch((err) => {
         logger.error(err);
-        this.services.toasts.genericError();
+        toasts.genericError();
       });
   }
 }
 
-export default DataStoreView;
+export default withServices(DataStoreView);

@@ -1,6 +1,5 @@
 import React, { Component, ReactNode } from 'react';
 import MainMap from './main-map/MainMap';
-import { services } from '../../core/Services';
 import LayerSelector from './layer-selector/LayerSelector';
 import ProjectStatus from './project-status/ProjectStatus';
 import { connect, ConnectedProps } from 'react-redux';
@@ -13,8 +12,9 @@ import { MapWrapper } from '../../core/geo/map/MapWrapper';
 import { MainState } from '../../core/store/reducer';
 import { LayerWrapper } from '../../core/geo/layers/LayerWrapper';
 import Search from './search/Search';
-import Cls from './MapView.module.scss';
 import ImportData from './import-data/ImportData';
+import { ServiceProps, withServices } from '../../core/withServices';
+import Cls from './MapView.module.scss';
 
 const logger = Logger.get('MapView.tsx', 'debug');
 
@@ -32,17 +32,14 @@ const mapStateToProps = (state: MainState) => ({
 
 const connector = connect(mapStateToProps);
 
-type PropsFromRedux = ConnectedProps<typeof connector>;
-type Props = PropsFromRedux;
+type Props = ConnectedProps<typeof connector> & ServiceProps;
 
 class MapView extends Component<Props, State> {
-  private services = services();
-
   constructor(props: Props) {
     super(props);
     this.state = {
       layers: [],
-      map: this.services.geo.getMainMap(),
+      map: this.props.services.geo.getMainMap(),
     };
   }
 
@@ -95,4 +92,4 @@ class MapView extends Component<Props, State> {
   };
 }
 
-export default connector(MapView);
+export default connector(withServices(MapView));

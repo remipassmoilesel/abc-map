@@ -1,7 +1,7 @@
 import React, { Component, ReactNode } from 'react';
-import { services } from '../../core/Services';
 import { Logger } from '@abc-map/frontend-shared';
 import { Documentation } from '@abc-map/documentation';
+import { ServiceProps, withServices } from '../../core/withServices';
 import Cls from './HelpView.module.scss';
 
 const logger = Logger.get('Help.tsx', 'info');
@@ -10,10 +10,8 @@ interface State {
   documentation?: Documentation;
 }
 
-class HelpView extends Component<{}, State> {
-  private services = services();
-
-  constructor(props: {}) {
+class HelpView extends Component<ServiceProps, State> {
+  constructor(props: ServiceProps) {
     super(props);
     this.state = {};
   }
@@ -38,12 +36,14 @@ class HelpView extends Component<{}, State> {
   }
 
   public componentDidMount() {
+    const { toasts } = this.props.services;
+
     import('@abc-map/documentation')
       .then((res) => {
         this.setState({ documentation: res.content });
       })
-      .catch(() => this.services.toasts.genericError());
+      .catch(() => toasts.genericError());
   }
 }
 
-export default HelpView;
+export default withServices(HelpView);
