@@ -1,15 +1,15 @@
 import React, { Component, DragEvent, ReactNode } from 'react';
 import { Logger } from '@abc-map/frontend-shared';
-import { services } from '../../../core/Services';
 import { MapWrapper } from '../../../core/geo/map/MapWrapper';
-import Cls from './MainMap.module.scss';
 import { AbcFile } from '@abc-map/frontend-shared';
 import { HistoryKey } from '../../../core/history/HistoryKey';
 import { AddLayersTask } from '../../../core/history/tasks/AddLayersTask';
+import { ServiceProps, withServices } from '../../../core/withServices';
+import Cls from './MainMap.module.scss';
 
 export const logger = Logger.get('MainMap.ts', 'debug');
 
-interface Props {
+interface LocalProps {
   map: MapWrapper;
 }
 
@@ -17,8 +17,9 @@ interface State {
   dragOverlay: boolean;
 }
 
-class MainMap extends Component<Props, State> {
-  private services = services();
+declare type Props = LocalProps & ServiceProps;
+
+export class MainMap extends Component<Props, State> {
   private mapRef = React.createRef<HTMLDivElement>();
 
   constructor(props: Props) {
@@ -76,30 +77,30 @@ class MainMap extends Component<Props, State> {
   }
 
   private handleDrop = (ev: DragEvent<HTMLDivElement>) => {
+    const { data, history, toasts } = this.props.services;
     ev.preventDefault();
 
     const files: AbcFile[] = Array.from(ev.dataTransfer.files).map((f) => ({ path: f.name, content: f }));
     if (!files.length) {
-      this.services.toasts.info('Vous devez sélectionner un ou plusieurs fichiers');
+      toasts.info('Vous devez sélectionner un ou plusieurs fichiers');
       return;
     }
 
-    this.services.toasts.info('Import en cours ...');
-    this.services.data
+    toasts.info('Import en cours ...');
+    data
       .importFiles(files)
       .then((res) => {
         if (!res.layers.length) {
-          this.services.toasts.error("Ces formats de fichiers ne sont pas supportés, aucune donnée n'a été importée");
+          toasts.error("Ces formats de fichiers ne sont pas supportés, aucune donnée n'a été importée");
           return;
         }
 
-        const map = this.services.geo.getMainMap();
-        this.services.history.register(HistoryKey.Map, new AddLayersTask(map, res.layers));
-        this.services.toasts.info('Import terminé !');
+        history.register(HistoryKey.Map, new AddLayersTask(this.props.map, res.layers));
+        toasts.info('Import terminé !');
       })
       .catch((err) => {
         logger.error(err);
-        this.services.toasts.genericError();
+        toasts.genericError();
       });
 
     this.setState({ dragOverlay: false });
@@ -116,4 +117,4 @@ class MainMap extends Component<Props, State> {
   };
 }
 
-export default MainMap;
+export default withServices(MainMap);

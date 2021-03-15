@@ -1,8 +1,8 @@
 import React, { ChangeEvent, Component, ReactNode } from 'react';
-import { services } from '../../../core/Services';
 import { AbcProjectMetadata } from '@abc-map/shared-entities';
 import { Logger } from '@abc-map/frontend-shared';
 import { Modal } from 'react-bootstrap';
+import { ServiceProps, withServices } from '../../../core/withServices';
 import Cls from './OpenRemoteProjectModal.module.scss';
 
 const logger = Logger.get('OpenRemoteModal.tsx');
@@ -13,13 +13,13 @@ interface State {
   passwordValue: string;
 }
 
-export interface Props {
+export interface LocalProps {
   onHide: () => void;
 }
 
-class OpenRemoteProjectModal extends Component<Props, State> {
-  private services = services();
+declare type Props = LocalProps & ServiceProps;
 
+class OpenRemoteProjectModal extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -75,12 +75,14 @@ class OpenRemoteProjectModal extends Component<Props, State> {
   }
 
   public componentDidMount() {
-    this.services.project
+    const { project, toasts } = this.props.services;
+
+    project
       .list()
       .then((projects) => this.setState({ projects }))
       .catch((err) => {
         logger.error(err);
-        this.services.toasts.genericError();
+        toasts.genericError();
       });
   }
 
@@ -98,30 +100,32 @@ class OpenRemoteProjectModal extends Component<Props, State> {
   };
 
   public handleConfirm = () => {
+    const { project, toasts, history } = this.props.services;
+
     const selected = this.state.selected;
     if (!selected) {
-      this.services.toasts.info('Vous devez sélectionner un projet.');
+      toasts.info('Vous devez sélectionner un projet.');
       return;
     }
 
     const passwordValue = this.state.passwordValue;
     if (selected.containsCredentials && !passwordValue) {
-      this.services.toasts.info('Vous devez entrer un mot de passe');
+      toasts.info('Vous devez entrer un mot de passe');
       return;
     }
 
-    this.services.project
+    project
       .loadRemoteProject(selected.id, passwordValue)
       .then(() => {
-        this.services.history.clean();
-        this.services.toasts.info('Projet ouvert !');
+        history.clean();
+        toasts.info('Projet ouvert !');
         this.props.onHide();
       })
       .catch((err) => {
-        this.services.toasts.genericError();
+        toasts.genericError();
         logger.error(err);
       });
   };
 }
 
-export default OpenRemoteProjectModal;
+export default withServices(OpenRemoteProjectModal);

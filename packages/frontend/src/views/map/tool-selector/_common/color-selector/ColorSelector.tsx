@@ -2,8 +2,8 @@ import React, { Component, ReactNode } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { MainState } from '../../../../../core/store/reducer';
 import { MapActions } from '../../../../../core/store/map/actions';
-import { services } from '../../../../../core/Services';
 import ColorPicker from './ColorPicker';
+import { ServiceProps, withServices } from '../../../../../core/withServices';
 
 export interface LocalProps {
   fillColors: boolean;
@@ -22,12 +22,9 @@ const mapDispatchToProps = {
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
-type PropsFromRedux = ConnectedProps<typeof connector>;
-type Props = PropsFromRedux & LocalProps;
+type Props = ConnectedProps<typeof connector> & LocalProps & ServiceProps;
 
 class ColorSelector extends Component<Props, {}> {
-  private services = services();
-
   public render(): ReactNode {
     const withFill = this.props.fillColors;
     const stroke = this.props.stroke;
@@ -46,8 +43,10 @@ class ColorSelector extends Component<Props, {}> {
   }
 
   private handleStrokeColorSelected = (color: string): void => {
+    const { geo } = this.props.services;
+
     this.props.setStrokeColor(color);
-    this.services.geo.updateSelectedFeatures((style) => {
+    geo.updateSelectedFeatures((style) => {
       style.stroke = {
         ...style.stroke,
         color,
@@ -57,8 +56,10 @@ class ColorSelector extends Component<Props, {}> {
   };
 
   private handleFillColor1Selected = (color: string): void => {
+    const { geo } = this.props.services;
+
     this.props.setFillColor1(color);
-    this.services.geo.updateSelectedFeatures((style) => {
+    geo.updateSelectedFeatures((style) => {
       style.fill = {
         ...style.fill,
         color1: color,
@@ -68,8 +69,10 @@ class ColorSelector extends Component<Props, {}> {
   };
 
   private handleFillColor2Selected = (color: string): void => {
+    const { geo } = this.props.services;
+
     this.props.setFillColor2(color);
-    this.services.geo.updateSelectedFeatures((style) => {
+    geo.updateSelectedFeatures((style) => {
       style.fill = {
         ...style.fill,
         color2: color,
@@ -79,4 +82,4 @@ class ColorSelector extends Component<Props, {}> {
   };
 }
 
-export default connector(ColorSelector);
+export default connector(withServices(ColorSelector));

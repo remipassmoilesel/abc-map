@@ -1,5 +1,4 @@
 import React, { Component, ReactNode } from 'react';
-import { services } from '../../../core/Services';
 import { Logger } from '@abc-map/frontend-shared';
 import { connect, ConnectedProps } from 'react-redux';
 import { ToolRegistry } from '../../../core/geo/tools/ToolRegistry';
@@ -13,10 +12,11 @@ import PolygonPanel from './polygon/PolygonPanel';
 import TextPanel from './text/TextPanel';
 import RectanglePanel from './rectangle/RectanglePanel';
 import { LayerWrapper } from '../../../core/geo/layers/LayerWrapper';
-import Cls from './ToolSelector.module.scss';
 import { LayerFactory } from '../../../core/geo/layers/LayerFactory';
 import { HistoryKey } from '../../../core/history/HistoryKey';
 import { AddLayersTask } from '../../../core/history/tasks/AddLayersTask';
+import { ServiceProps, withServices } from '../../../core/withServices';
+import Cls from './ToolSelector.module.scss';
 
 const logger = Logger.get('ToolSelector.tsx', 'info');
 
@@ -30,12 +30,9 @@ const mapStateToProps = (state: MainState) => ({
 
 const connector = connect(mapStateToProps);
 
-type PropsFromRedux = ConnectedProps<typeof connector>;
-type Props = LocalProps & PropsFromRedux;
+type Props = ConnectedProps<typeof connector> & LocalProps & ServiceProps;
 
 class ToolSelector extends Component<Props, {}> {
-  private services = services();
-
   public render(): ReactNode {
     const toolsActive = (this.props.activeLayer && this.props.activeLayer.isVector()) || false;
     const buttons = toolsActive && this.getToolButtons();
@@ -100,18 +97,22 @@ class ToolSelector extends Component<Props, {}> {
   }
 
   private handleSelection(toolId: MapTool): void {
+    const { geo } = this.props.services;
+
     const tool = ToolRegistry.getById(toolId);
-    this.services.geo.setMainTool(tool);
+    geo.setMainTool(tool);
   }
 
   private createVectorLayer = () => {
-    const map = this.services.geo.getMainMap();
+    const { geo, history } = this.props.services;
+
+    const map = geo.getMainMap();
     const layer = LayerFactory.newVectorLayer();
     map.addLayer(layer);
     map.setActiveLayer(layer);
 
-    this.services.history.register(HistoryKey.Map, new AddLayersTask(map, [layer]));
+    history.register(HistoryKey.Map, new AddLayersTask(map, [layer]));
   };
 }
 
-export default connector(ToolSelector);
+export default connector(withServices(ToolSelector));

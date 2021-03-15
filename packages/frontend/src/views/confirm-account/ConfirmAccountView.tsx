@@ -1,9 +1,9 @@
 import React, { Component, ReactNode } from 'react';
-import { services } from '../../core/Services';
 import { Logger, ConfirmAccountParams, FrontendRoutes } from '@abc-map/frontend-shared';
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
 import { AccountConfirmationStatus } from '@abc-map/shared-entities';
 import * as qs from 'query-string';
+import { ServiceProps, withServices } from '../../core/withServices';
 import './ConfirmAccountView.scss';
 
 const logger = Logger.get('ConfirmAccount.tsx', 'info');
@@ -12,11 +12,9 @@ interface State {
   status: AccountConfirmationStatus;
 }
 
-type Props = RouteComponentProps<ConfirmAccountParams>;
+type Props = RouteComponentProps<ConfirmAccountParams> & ServiceProps;
 
 class ConfirmAccountView extends Component<Props, State> {
-  private services = services();
-
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -45,12 +43,14 @@ class ConfirmAccountView extends Component<Props, State> {
   }
 
   public componentDidMount() {
+    const { authentication } = this.props.services;
+
     const userId = this.props.match.params.userId;
     const secret = qs.parse(this.props.location.search).secret as string;
     if (!userId || !secret) {
       this.setState({ status: AccountConfirmationStatus.Failed });
     } else {
-      this.services.authentication
+      authentication
         .confirmAccount(userId, secret)
         .then((res) => {
           if (res.error) {
@@ -66,4 +66,4 @@ class ConfirmAccountView extends Component<Props, State> {
   }
 }
 
-export default withRouter(ConfirmAccountView);
+export default withRouter(withServices(ConfirmAccountView));

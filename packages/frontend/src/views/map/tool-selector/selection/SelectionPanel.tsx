@@ -1,5 +1,4 @@
 import React, { Component, ReactNode } from 'react';
-import { services } from '../../../../core/Services';
 import { HistoryKey } from '../../../../core/history/HistoryKey';
 import { RemoveFeatureTask } from '../../../../core/history/tasks/RemoveFeatureTask';
 import { AddFeaturesTask } from '../../../../core/history/tasks/AddFeaturesTask';
@@ -9,13 +8,12 @@ import ColorSelector from '../_common/color-selector/ColorSelector';
 import FillPatternSelector from '../_common/fill-pattern-selector/FillPatternSelector';
 import { FeatureWrapper } from '../../../../core/geo/features/FeatureWrapper';
 import TextFormat from '../_common/text-format/TextFormat';
+import { ServiceProps, withServices } from '../../../../core/withServices';
 import Cls from './SelectionPanel.module.scss';
 
 const logger = Logger.get('SelectionPanel.tsx');
 
-class SelectionPanel extends Component<{}, {}> {
-  private services = services();
-
+class SelectionPanel extends Component<ServiceProps, {}> {
   public render(): ReactNode {
     return (
       <div className={Cls.selectionPanel}>
@@ -36,7 +34,8 @@ class SelectionPanel extends Component<{}, {}> {
   }
 
   private handleDelete = () => {
-    const map = this.services.geo.getMainMap();
+    const { geo, toasts, history } = this.props.services;
+    const map = geo.getMainMap();
     const layer = map.getActiveVectorLayer();
     if (!layer) {
       return;
@@ -44,16 +43,17 @@ class SelectionPanel extends Component<{}, {}> {
 
     const features = map.getSelectedFeatures();
     if (!features.length) {
-      this.services.toasts.info("Vous devez d'abord sélectionner des objets");
+      toasts.info("Vous devez d'abord sélectionner des objets");
       return;
     }
 
     features.forEach((feat) => layer.getSource().removeFeature(feat.unwrap()));
-    this.services.history.register(HistoryKey.Map, new RemoveFeatureTask(layer.getSource(), features));
+    history.register(HistoryKey.Map, new RemoveFeatureTask(layer.getSource(), features));
   };
 
   private handleDuplicate = () => {
-    const map = this.services.geo.getMainMap();
+    const { geo, toasts, history } = this.props.services;
+    const map = geo.getMainMap();
     const layer = map.getActiveVectorLayer();
     if (!layer) {
       return;
@@ -61,7 +61,7 @@ class SelectionPanel extends Component<{}, {}> {
 
     const features = map.getSelectedFeatures();
     if (!features.length) {
-      this.services.toasts.info("Vous devez d'abord sélectionner des objets");
+      toasts.info("Vous devez d'abord sélectionner des objets");
       return;
     }
 
@@ -90,8 +90,8 @@ class SelectionPanel extends Component<{}, {}> {
       .filter((feat) => !!feat) as FeatureWrapper[];
 
     clones.forEach((clone) => layer.getSource().addFeature(clone.unwrap()));
-    this.services.history.register(HistoryKey.Map, new AddFeaturesTask(layer.getSource(), clones));
+    history.register(HistoryKey.Map, new AddFeaturesTask(layer.getSource(), clones));
   };
 }
 
-export default SelectionPanel;
+export default withServices(SelectionPanel);

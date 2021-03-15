@@ -1,12 +1,12 @@
 import React, { ChangeEvent, Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/frontend-shared';
 import { MapWrapper } from '../../../core/geo/map/MapWrapper';
-import { services } from '../../../core/Services';
 import * as _ from 'lodash';
 import { NominatimResult } from '../../../core/geo/NominatimResult';
 import SearchResult from './SearchResult';
-import Cls from './Search.module.scss';
+import { ServiceProps, withServices } from '../../../core/withServices';
 import { fromLonLat } from 'ol/proj';
+import Cls from './Search.module.scss';
 
 const logger = Logger.get('Search.tsx');
 
@@ -16,13 +16,13 @@ export interface State {
   loading: boolean;
 }
 
-export interface Props {
+export interface LocalProps {
   map: MapWrapper;
 }
 
-class Search extends Component<Props, State> {
-  private services = services();
+declare type Props = LocalProps & ServiceProps;
 
+class Search extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -67,8 +67,10 @@ class Search extends Component<Props, State> {
   };
 
   private search = _.throttle((query) => {
+    const { geo, toasts } = this.props.services;
+
     this.setState({ loading: true });
-    this.services.geo
+    geo
       .geocode(query)
       .then((results) => {
         results.sort((res) => res.importance);
@@ -77,20 +79,20 @@ class Search extends Component<Props, State> {
       })
       .catch((err) => {
         logger.error('Error while geocoding: ', err);
-        this.services.toasts.genericError();
+        toasts.genericError();
       })
       .finally(() => this.setState({ loading: false }));
   }, 500);
 
   private handleResultSelected = (res: NominatimResult) => {
+    const { geo } = this.props.services;
+
     this.setState({ query: '' });
 
     const coords = res.boundingbox.map((n) => parseFloat(n)) as [number, number, number, number];
-
-    const projection = this.services.geo.getMainMap().unwrap().getView().getProjection();
+    const projection = geo.getMainMap().unwrap().getView().getProjection();
     const min = fromLonLat([coords[2], coords[0]], projection);
     const max = fromLonLat([coords[3], coords[1]], projection);
-
     const extent = [...min, ...max] as [number, number, number, number];
 
     this.props.map.moveTo(extent);
@@ -101,4 +103,4 @@ class Search extends Component<Props, State> {
   };
 }
 
-export default Search;
+export default withServices(Search);

@@ -1,26 +1,25 @@
 import React, { Component, ReactNode } from 'react';
-import { services } from '../../../core/Services';
 import { Logger, Zipper } from '@abc-map/frontend-shared';
 import { AbcArtefact } from '@abc-map/shared-entities';
 import { FileFormat, FileFormats } from '../../../core/data/FileFormats';
 import { FileIO } from '../../../core/utils/FileIO';
 import { HistoryKey } from '../../../core/history/HistoryKey';
 import { AddLayersTask } from '../../../core/history/tasks/AddLayersTask';
-import '../DataStoreView.scss';
+import { ServiceProps, withServices } from '../../../core/withServices';
 
 const logger = Logger.get('ArtefactCard.tsx', 'info');
 
-interface Props {
+interface LocalProps {
   artefact: AbcArtefact;
 }
 
-class ArtefactCard extends Component<Props, {}> {
-  private services = services();
+declare type Props = LocalProps & ServiceProps;
 
+class ArtefactCard extends Component<Props, {}> {
   public render(): ReactNode {
     const artefact = this.props.artefact;
     return (
-      <div className={'abc-artefact-card card card-body mb-2'}>
+      <div className={'card card-body mb-2'}>
         <h4>{artefact.name}</h4>
         <div>Description: {artefact.description}</div>
         <div onClick={this.handleShowLicense}>Voir la license</div>
@@ -52,33 +51,37 @@ class ArtefactCard extends Component<Props, {}> {
   }
 
   public handleShowLicense = () => {
-    this.services.toasts.featureNotReady();
+    this.props.services.toasts.featureNotReady();
   };
 
   public handleImportArtefact = () => {
-    this.services.toasts.info('Import en cours ...');
-    this.services.data
+    const { toasts, data, geo, history } = this.props.services;
+
+    toasts.info('Import en cours ...');
+    data
       .importArtefact(this.props.artefact)
       .then((res) => {
         if (!res.layers.length) {
-          this.services.toasts.error('Ces fichiers ne sont pas supportés');
+          toasts.error('Ces fichiers ne sont pas supportés');
           return;
         }
 
-        const map = this.services.geo.getMainMap();
-        this.services.history.register(HistoryKey.Map, new AddLayersTask(map, res.layers));
+        const map = geo.getMainMap();
+        history.register(HistoryKey.Map, new AddLayersTask(map, res.layers));
 
-        this.services.toasts.info('Import terminé !');
+        toasts.info('Import terminé !');
       })
       .catch((err) => {
         logger.error(err);
-        this.services.toasts.genericError();
+        toasts.genericError();
       });
   };
 
   public handleDownloadArtefact = () => {
-    this.services.toasts.info('Téléchargement en cours ...');
-    this.services.data
+    const { toasts, data } = this.props.services;
+
+    toasts.info('Téléchargement en cours ...');
+    data
       .downloadFilesFrom(this.props.artefact)
       .then(async (res) => {
         let content: Blob;
@@ -92,9 +95,9 @@ class ArtefactCard extends Component<Props, {}> {
       })
       .catch((err) => {
         logger.error(err);
-        this.services.toasts.genericError();
+        toasts.genericError();
       });
   };
 }
 
-export default ArtefactCard;
+export default withServices(ArtefactCard);

@@ -19,7 +19,7 @@ export interface Services {
 }
 
 let instance: Services | undefined;
-export function services(): Services {
+export function getServices(): Services {
   if (!instance) {
     instance = serviceFactory();
   }

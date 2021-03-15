@@ -3,25 +3,26 @@ import { None } from './common/None';
 import { Point } from './point/Point';
 import { MapTool } from '@abc-map/frontend-shared';
 import { mainStore } from '../../store/store';
-import { services } from '../../Services';
 import { Circle } from './circle/Circle';
 import { LineString } from './line-string/LineString';
 import { Polygon } from './polygon/Polygon';
 import { Selection } from './selection/Selection';
 import { Rectangle } from './rectangle/Rectangle';
 import { Text } from './text/Text';
+import { getServices } from '../../Services';
 
 export class ToolRegistry {
   public static getAll(): AbstractTool[] {
+    const history = getServices().history;
     return [
-      new None(mainStore, services().history),
-      new Point(mainStore, services().history),
-      new LineString(mainStore, services().history),
-      new Polygon(mainStore, services().history),
-      new Circle(mainStore, services().history),
-      new Rectangle(mainStore, services().history),
-      new Text(mainStore, services().history),
-      new Selection(mainStore, services().history),
+      new None(mainStore, history),
+      new Point(mainStore, history),
+      new LineString(mainStore, history),
+      new Polygon(mainStore, history),
+      new Circle(mainStore, history),
+      new Rectangle(mainStore, history),
+      new Text(mainStore, history),
+      new Selection(mainStore, history),
     ];
   }
 

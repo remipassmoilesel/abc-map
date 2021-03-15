@@ -5,10 +5,10 @@ import { FrontendRoutes } from '@abc-map/frontend-shared';
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
 import { connect, ConnectedProps } from 'react-redux';
 import { Dropdown } from 'react-bootstrap';
-import { services } from '../../core/Services';
 import { MainState } from '../../core/store/reducer';
-import Cls from './TopBar.module.scss';
+import { ServiceProps, withServices } from '../../core/withServices';
 import TopBarLink from './TopBarLink';
+import Cls from './TopBar.module.scss';
 
 const logger = Logger.get('TopBar.tsx', 'info');
 
@@ -19,16 +19,13 @@ const mapStateToProps = (state: MainState) => ({
 
 const connector = connect(mapStateToProps);
 
-type PropsFromRedux = ConnectedProps<typeof connector>;
-type Props = PropsFromRedux & RouteComponentProps<any>;
+type Props = ConnectedProps<typeof connector> & RouteComponentProps<any> & ServiceProps;
 
 interface State {
   linkActive: string;
 }
 
 class TopBar extends Component<Props, State> {
-  private services = services();
-
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -80,17 +77,17 @@ class TopBar extends Component<Props, State> {
   };
 
   private handleLogout = () => {
-    this.services.project.newProject();
-    this.services.authentication
+    const { project, authentication, toasts } = this.props.services;
+
+    project.newProject();
+    authentication
       .logout()
-      .then(() => {
-        this.services.toasts.info("Vous n'êtes plus connecté !");
-      })
+      .then(() => toasts.info("Vous n'êtes plus connecté !"))
       .catch((err) => {
-        this.services.toasts.genericError();
+        toasts.genericError();
         logger.error(err);
       });
   };
 }
 
-export default connector(withRouter(TopBar));
+export default connector(withRouter(withServices(TopBar)));

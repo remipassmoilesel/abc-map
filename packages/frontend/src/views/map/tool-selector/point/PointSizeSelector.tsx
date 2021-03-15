@@ -2,8 +2,8 @@ import React, { ChangeEvent, Component, ReactNode } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { MainState } from '../../../../core/store/reducer';
 import { MapActions } from '../../../../core/store/map/actions';
-import { services } from '../../../../core/Services';
 import _ from 'lodash';
+import { ServiceProps, withServices } from '../../../../core/withServices';
 import Cls from './PointSizeSelector.module.scss';
 
 const mapStateToProps = (state: MainState) => ({
@@ -16,12 +16,9 @@ const mapDispatchToProps = {
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
-type PropsFromRedux = ConnectedProps<typeof connector>;
-type Props = PropsFromRedux;
+type Props = ConnectedProps<typeof connector> & ServiceProps;
 
 class StrokeWidthSelector extends Component<Props, {}> {
-  private services = services();
-
   public render(): ReactNode {
     return (
       <div className={'control-item d-flex align-items-center justify-content-between'}>
@@ -38,10 +35,12 @@ class StrokeWidthSelector extends Component<Props, {}> {
   }
 
   private handleSelection = (ev: ChangeEvent<HTMLSelectElement>): void => {
+    const { geo } = this.props.services;
+
     const size = Number(ev.target.value);
     this.props.setPointSize(size);
 
-    this.services.geo.updateSelectedFeatures((style) => {
+    geo.updateSelectedFeatures((style) => {
       style.point = {
         ...style.point,
         size,
@@ -51,4 +50,4 @@ class StrokeWidthSelector extends Component<Props, {}> {
   };
 }
 
-export default connector(StrokeWidthSelector);
+export default connector(withServices(StrokeWidthSelector));

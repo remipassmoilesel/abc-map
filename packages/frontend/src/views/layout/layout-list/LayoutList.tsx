@@ -1,5 +1,4 @@
 import React, { Component, ReactNode } from 'react';
-import { services } from '../../../core/Services';
 import { Logger } from '@abc-map/frontend-shared';
 import { AbcLayout } from '@abc-map/shared-entities';
 import './LayoutList.scss';
@@ -13,8 +12,6 @@ interface Props {
 }
 
 class LayoutList extends Component<Props, {}> {
-  private services = services();
-
   public render(): ReactNode {
     const items = this.props.layouts.map((lay) => {
       const classes = this.props.activeLayout?.id === lay.id ? 'item active' : 'item';

@@ -1,16 +1,14 @@
 import React, { Component, ReactNode } from 'react';
-import { services } from '../../../core/Services';
 import { AbcFile, Logger } from '@abc-map/frontend-shared';
 import { FileIO, InputResultType, InputType } from '../../../core/utils/FileIO';
 import { AddLayersTask } from '../../../core/history/tasks/AddLayersTask';
 import { HistoryKey } from '../../../core/history/HistoryKey';
+import { ServiceProps, withServices } from '../../../core/withServices';
 import './ImportData.module.scss';
 
 const logger = Logger.get('ImportData.tsx', 'debug');
 
-class ImportData extends Component<{}, {}> {
-  private services = services();
-
+class ImportData extends Component<ServiceProps, {}> {
   public render(): ReactNode {
     return (
       <div className={'control-block'}>
@@ -27,31 +25,33 @@ class ImportData extends Component<{}, {}> {
   }
 
   private importFile = () => {
+    const { toasts, data, geo, history } = this.props.services;
+
     FileIO.openInput(InputType.Multiple)
       .then((result) => {
         if (InputResultType.Canceled === result.type) {
           return;
         }
 
-        this.services.toasts.info('Import en cours ...');
+        toasts.info('Import en cours ...');
         const files: AbcFile[] = result.files.map((f) => ({ path: f.name, content: f }));
 
-        return this.services.data.importFiles(files).then((res) => {
+        return data.importFiles(files).then((res) => {
           if (!res.layers.length) {
-            this.services.toasts.error("Ces formats de fichiers ne sont pas supportés, aucune donnée n'a été importée");
+            toasts.error("Ces formats de fichiers ne sont pas supportés, aucune donnée n'a été importée");
             return;
           }
 
-          const map = this.services.geo.getMainMap();
-          this.services.history.register(HistoryKey.Map, new AddLayersTask(map, res.layers));
-          this.services.toasts.info('Import terminé !');
+          const map = geo.getMainMap();
+          history.register(HistoryKey.Map, new AddLayersTask(map, res.layers));
+          toasts.info('Import terminé !');
         });
       })
       .catch((err) => {
         logger.error(err);
-        this.services.toasts.genericError();
+        toasts.genericError();
       });
   };
 }
 
-export default ImportData;
+export default withServices(ImportData);

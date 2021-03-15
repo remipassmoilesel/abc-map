@@ -1,5 +1,4 @@
 import React, { Component, ReactNode } from 'react';
-import { services } from '../../../core/Services';
 import { Logger } from '@abc-map/frontend-shared';
 import { Extent, getArea } from 'ol/extent';
 import { RemoveLayerTask } from '../../../core/history/tasks/RemoveLayerTask';
@@ -8,11 +7,12 @@ import { ModalStatus } from '../../../core/ui/Modals.types';
 import LayerListItem from './item/LayerListItem';
 import AddLayerModal from './add-layer-modal/AddLayerModal';
 import { LayerWrapper } from '../../../core/geo/layers/LayerWrapper';
+import { ServiceProps, withServices } from '../../../core/withServices';
 import './LayerSelector.scss';
 
 const logger = Logger.get('LayerSelector.tsx', 'debug');
 
-interface Props {
+interface LocalProps {
   layers: LayerWrapper[];
 }
 
@@ -20,9 +20,9 @@ interface State {
   addModalVisible: boolean;
 }
 
-class LayerSelector extends Component<Props, State> {
-  private services = services();
+declare type Props = LocalProps & ServiceProps;
 
+export class LayerSelector extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -79,13 +79,17 @@ class LayerSelector extends Component<Props, State> {
   }
 
   private onLayerSelected = (layerId: string) => {
-    this.services.geo.getMainMap().setActiveLayerById(layerId);
+    const { geo } = this.props.services;
+
+    geo.getMainMap().setActiveLayerById(layerId);
   };
 
   private zoomToSelectedLayer = () => {
-    const layer = this.services.geo.getMainMap().getActiveLayer();
+    const { toasts, geo } = this.props.services;
+
+    const layer = geo.getMainMap().getActiveLayer();
     if (!layer) {
-      this.services.toasts.info("Vous devez d'abord sélectionner une couche");
+      toasts.info("Vous devez d'abord sélectionner une couche");
       return logger.error('No layer selected');
     }
 
@@ -97,11 +101,11 @@ class LayerSelector extends Component<Props, State> {
     }
 
     if (!extent || !getArea(extent)) {
-      this.services.toasts.info('Impossible de zoomer sur cette couche');
+      toasts.info('Impossible de zoomer sur cette couche');
       return logger.error('Layer does not have an extent, or extent is invalid');
     }
 
-    this.services.geo.getMainMap().unwrap().getView().fit(extent);
+    geo.getMainMap().unwrap().getView().fit(extent);
   };
 
   private addLayerModal = () => {
@@ -113,13 +117,15 @@ class LayerSelector extends Component<Props, State> {
   };
 
   private renameLayerModal = () => {
-    const map = this.services.geo.getMainMap();
+    const { toasts, modals, geo } = this.props.services;
+
+    const map = geo.getMainMap();
     const active = map.getActiveLayer();
     if (!active) {
-      return this.services.toasts.info("Vous devez d'abord sélectionner une couche");
+      return toasts.info("Vous devez d'abord sélectionner une couche");
     }
 
-    this.services.modals
+    modals
       .renameModal('Renommer', 'Renommer la couche', active.getMetadata()?.name || 'Couche')
       .then((res) => {
         if (ModalStatus.Confirmed) {
@@ -128,21 +134,23 @@ class LayerSelector extends Component<Props, State> {
       })
       .catch((err) => {
         logger.error(err);
-        this.services.toasts.genericError();
+        toasts.genericError();
       });
   };
 
   private removeActiveLayer = () => {
-    const map = this.services.geo.getMainMap();
+    const { toasts, geo, history } = this.props.services;
+
+    const map = geo.getMainMap();
     const layer = map.getActiveLayer();
     if (!layer) {
-      this.services.toasts.info("Vous devez d'abord sélectionner une couche");
+      toasts.info("Vous devez d'abord sélectionner une couche");
       return;
     }
 
     // We remove active layer
     map.removeLayer(layer);
-    this.services.history.register(HistoryKey.Map, new RemoveLayerTask(map, layer));
+    history.register(HistoryKey.Map, new RemoveLayerTask(map, layer));
 
     // We activate last layer if any
     const layers = map.getLayers();
@@ -152,15 +160,18 @@ class LayerSelector extends Component<Props, State> {
   };
 
   private toggleLayerVisibility = () => {
-    const map = this.services.geo.getMainMap();
+    const { toasts, geo } = this.props.services;
+
+    const map = geo.getMainMap();
     const active = map.getActiveLayer();
     if (!active) {
-      this.services.toasts.info("Vous devez d'abord sélectionner une couche");
-      return logger.error('No layer selected');
+      toasts.info("Vous devez d'abord sélectionner une couche");
+      logger.error('No layer selected');
+      return;
     }
 
     map.setLayerVisible(active, !active.isVisible());
   };
 }
 
-export default LayerSelector;
+export default withServices(LayerSelector);
