@@ -1,7 +1,7 @@
 import React, { Component, ReactNode } from 'react';
 import { HistoryKey } from '../../../../core/history/HistoryKey';
-import { RemoveFeatureTask } from '../../../../core/history/tasks/RemoveFeatureTask';
-import { AddFeaturesTask } from '../../../../core/history/tasks/AddFeaturesTask';
+import { RemoveFeatureTask } from '../../../../core/history/tasks/features/RemoveFeatureTask';
+import { AddFeaturesTask } from '../../../../core/history/tasks/features/AddFeaturesTask';
 import { Logger } from '@abc-map/frontend-shared';
 import StrokeWidthSelector from '../_common/stroke-width-selector/StrokeWidthSelector';
 import ColorSelector from '../_common/color-selector/ColorSelector';

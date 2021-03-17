@@ -8,6 +8,7 @@ const logger = Logger.get('TopBarSection.tsx', 'info');
 export interface LocalProps {
   to: string;
   label: string;
+  'data-cy'?: string;
 }
 
 export declare type Props = LocalProps & RouteComponentProps<any, any>;
@@ -16,9 +17,10 @@ class TopBarLink extends Component<Props, {}> {
   public render(): ReactNode {
     const active = this.props.location.pathname.match(this.props.to);
     const classes = active ? `${Cls.topBarLink} ${Cls.active}` : Cls.topBarLink;
+    const dataCy = this.props['data-cy'];
 
     return (
-      <button onClick={this.handleClick} className={`btn btn-link ${classes}`}>
+      <button onClick={this.handleClick} className={`btn btn-link ${classes}`} data-cy={dataCy}>
         {this.props.label}
       </button>
     );

@@ -1,0 +1,38 @@
+.layoutPreview {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  h3 {
+    margin: 2rem 0 0 1rem;
+  }
+}
+
+.noLayout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+
+  font-size: 1.3rem;
+
+  :global(.fa) {
+    font-size: 5rem;
+    margin-bottom: 2rem;
+  }
+}
+
+.previewContainer {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.previewFrame {
+  border: solid 1px darkgrey;
+  box-shadow: 6px 6px 5px 0 rgba(0,0,0,0.15);
+}

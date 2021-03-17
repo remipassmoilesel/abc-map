@@ -1,0 +1,18 @@
+
+.item {
+  margin: 10px;
+  padding: 10px;
+  border: solid 1px lightgrey;
+  border-radius: 0.5rem;
+  user-select: none;
+
+  &.active {
+    color: white;
+    background: #007bff;
+
+    :global(.fa) {
+      color: white;
+    }
+  }
+}
+

@@ -17,6 +17,7 @@ import { mainStore } from './core/store/store';
 import RenameModal from './components/rename-modal/RenameModal';
 import PasswordModal from './components/password-modal/PasswordModal';
 import DeviceWarningModal from './components/device-warning-modal/DeviceWarningModal';
+import MessageBanner from './components/message-banner/MessageBanner';
 import { ServiceProps, withServices } from './core/withServices';
 
 class App extends Component<ServiceProps, {}> {
@@ -35,6 +36,7 @@ class App extends Component<ServiceProps, {}> {
             <Route exact path={FrontendRoutes.confirmAccount()} component={ConfirmAccountView} />
             <Route path={'*'} component={NotFoundView} />
           </Switch>
+          <MessageBanner />
           <ToastContainer className={'toast-container'} />
           <RenameModal />
           <PasswordModal />

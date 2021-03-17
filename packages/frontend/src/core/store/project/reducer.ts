@@ -28,9 +28,9 @@ export function projectReducer(state = projectInitialState, action: ProjectActio
       return newState;
     }
 
-    case ActionType.NewLayout: {
+    case ActionType.AddLayouts: {
       const newState: ProjectState = { ...state };
-      newState.layouts = [...state.layouts, action.layout];
+      newState.layouts = [...state.layouts, ...action.layouts];
       return newState;
     }
 
@@ -42,6 +42,21 @@ export function projectReducer(state = projectInitialState, action: ProjectActio
         return lay;
       });
 
+      const newState: ProjectState = { ...state };
+      newState.layouts = layouts;
+      return newState;
+    }
+
+    case ActionType.SetLayoutIndex: {
+      const layouts = state.layouts.filter((lay) => lay.id !== action.layout.id);
+      layouts.splice(action.index, 0, action.layout);
+      const newState: ProjectState = { ...state };
+      newState.layouts = layouts;
+      return newState;
+    }
+
+    case ActionType.RemoveLayouts: {
+      const layouts = state.layouts.filter((lay) => !action.ids.find((i) => lay.id === i));
       const newState: ProjectState = { ...state };
       newState.layouts = layouts;
       return newState;

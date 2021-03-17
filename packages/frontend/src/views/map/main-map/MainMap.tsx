@@ -3,7 +3,7 @@ import { Logger } from '@abc-map/frontend-shared';
 import { MapWrapper } from '../../../core/geo/map/MapWrapper';
 import { AbcFile } from '@abc-map/frontend-shared';
 import { HistoryKey } from '../../../core/history/HistoryKey';
-import { AddLayersTask } from '../../../core/history/tasks/AddLayersTask';
+import { AddLayersTask } from '../../../core/history/tasks/layers/AddLayersTask';
 import { ServiceProps, withServices } from '../../../core/withServices';
 import Cls from './MainMap.module.scss';
 

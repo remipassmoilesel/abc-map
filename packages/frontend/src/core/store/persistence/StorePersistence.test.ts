@@ -4,6 +4,7 @@ import sinon, { SinonStub } from 'sinon';
 import { UserStatus } from '@abc-map/shared-entities';
 import { MapTool } from '@abc-map/frontend-shared';
 import { MainState } from '../reducer';
+import { TestHelper } from '../../utils/TestHelper';
 
 describe('StorePersistence', () => {
   let storage: LocalStorageService;
@@ -20,7 +21,7 @@ describe('StorePersistence', () => {
     const sampleState: MainState = {
       project: {
         metadata: { name: 'test-project' } as any,
-        layouts: [],
+        layouts: [TestHelper.sampleLayout()],
       },
       map: {
         tool: MapTool.Point,
@@ -62,10 +63,7 @@ describe('StorePersistence', () => {
     const snapshot = stateSnapshot(sampleState);
 
     const expectedState: MainState = {
-      project: {
-        metadata: undefined,
-        layouts: [],
-      } as any,
+      project: undefined as any,
       map: {
         tool: MapTool.None,
         currentStyle: {

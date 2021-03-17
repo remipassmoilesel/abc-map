@@ -6,10 +6,12 @@ import { MainMap } from '../../helpers/MainMap';
 import { LayerSelector } from '../../helpers/LayerSelector';
 import { Registration } from '../../helpers/Registration';
 import { Login } from '../../helpers/Login';
-import { Env } from '../../helpers/Env';
+import { WmsConstants } from '../../helpers/WmsConstants';
 import { Download } from '../../helpers/Download';
 import { TestData } from '../../test-data/TestData';
 import 'cypress-file-upload';
+
+const PROJECT_PASSWORD = 'azerty1234';
 
 // TODO: better assertions on project and layers
 // TODO: test features and style
@@ -28,20 +30,20 @@ describe('Project', function () {
         .get('[data-cy=modal-password-input]')
         .should('be.empty')
         .clear()
-        .type(Env.projectPassword())
+        .type(PROJECT_PASSWORD)
         .get('[data-cy=modal-password-confirm]')
         .click()
-        .then(() => Download.file('[data-cy=file-output]'))
+        .then(() => Download.fileAsBlob())
         .should(async (downloaded) => {
           const project = await ProjectHelper.extractManifest(downloaded);
 
           expect(project.layers[2].type).equals(LayerType.Wms);
-          expect((project.layers[2].metadata as WmsMetadata).remoteUrl).not.equal(Env.wmsUrl());
+          expect((project.layers[2].metadata as WmsMetadata).remoteUrl).not.equal(WmsConstants.AUTHENTICATED_URL);
           expect((project.layers[2].metadata as WmsMetadata).remoteUrl).contains('encrypted:');
           expect((project.layers[2].metadata as WmsMetadata).auth?.username).contains('encrypted:');
-          expect((project.layers[2].metadata as WmsMetadata).auth?.username).not.equal(Env.wmsUsername());
+          expect((project.layers[2].metadata as WmsMetadata).auth?.username).not.equal(WmsConstants.USERNAME);
           expect((project.layers[2].metadata as WmsMetadata).auth?.username).contains('encrypted:');
-          expect((project.layers[2].metadata as WmsMetadata).auth?.password).not.equal(Env.wmsPassword());
+          expect((project.layers[2].metadata as WmsMetadata).auth?.password).not.equal(WmsConstants.PASSWORD);
           expect((project.layers[2].metadata as WmsMetadata).auth?.password).contains('encrypted:');
         });
     });
@@ -56,7 +58,7 @@ describe('Project', function () {
         })
         .get('[data-cy=modal-password-input]')
         .should('be.empty')
-        .type(Env.projectPassword())
+        .type(PROJECT_PASSWORD)
         .get('[data-cy=modal-password-confirm]')
         .click()
         .then(() => Toasts.assertText('Projet importé !'))
@@ -84,7 +86,7 @@ describe('Project', function () {
         })
         .get('[data-cy=modal-password-input]')
         .should('be.empty')
-        .type(Env.projectPassword())
+        .type(PROJECT_PASSWORD)
         .get('[data-cy=modal-password-cancel]')
         .click()
         .get('[data-cy=import-project]')

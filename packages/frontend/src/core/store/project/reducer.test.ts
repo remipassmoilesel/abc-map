@@ -34,7 +34,7 @@ describe('Project reducer', function () {
     expect(state.metadata.name).toEqual('New name');
   });
 
-  it('NewLayout', function () {
+  it('AddLayouts', function () {
     const initialState: ProjectState = {
       ...projectInitialState,
       layouts: [TestHelper.sampleLayout()],
@@ -42,7 +42,7 @@ describe('Project reducer', function () {
     const snapshot = JSON.stringify(initialState);
 
     const layout = TestHelper.sampleLayout();
-    const action = ProjectActions.newLayout(layout);
+    const action = ProjectActions.addLayouts([layout]);
     const state = projectReducer(initialState, action);
 
     expect(JSON.stringify(initialState)).toEqual(snapshot);
@@ -71,6 +71,38 @@ describe('Project reducer', function () {
     expect(JSON.stringify(initialState)).toEqual(snapshot);
     expect(state.layouts[0].id).toEqual(originalLayout.id);
     expect(state.layouts[0].view.resolution).toEqual(99999);
+  });
+
+  it('SetLayoutIndex', function () {
+    const originalLayouts = [TestHelper.sampleLayout(), TestHelper.sampleLayout(), TestHelper.sampleLayout()];
+    const initialState: ProjectState = {
+      ...projectInitialState,
+      layouts: originalLayouts,
+    };
+    const snapshot = JSON.stringify(initialState);
+
+    const action = ProjectActions.setLayoutIndex(originalLayouts[2], 1);
+    const state = projectReducer(initialState, action);
+
+    expect(JSON.stringify(initialState)).toEqual(snapshot);
+    expect(state.layouts.length).toEqual(3);
+    expect(state.layouts.map((l) => l.id)).toEqual([originalLayouts[0].id, originalLayouts[2].id, originalLayouts[1].id]);
+  });
+
+  it('RemoveLayouts', function () {
+    const originalLayouts = [TestHelper.sampleLayout(), TestHelper.sampleLayout()];
+    const initialState: ProjectState = {
+      ...projectInitialState,
+      layouts: originalLayouts,
+    };
+    const snapshot = JSON.stringify(initialState);
+
+    const action = ProjectActions.removeLayouts([originalLayouts[1].id]);
+    const state = projectReducer(initialState, action);
+
+    expect(JSON.stringify(initialState)).toEqual(snapshot);
+    expect(state.layouts.length).toEqual(1);
+    expect(state.layouts[0].id).toEqual(originalLayouts[0].id);
   });
 
   it('ClearLayouts', function () {

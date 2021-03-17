@@ -21,6 +21,20 @@ export interface LayoutFormat {
 }
 
 export class LayoutFormats {
+  public static readonly A5_PORTRAIT: LayoutFormat = {
+    name: 'A5 Portrait',
+    width: 148,
+    height: 210,
+    orientation: 'portrait',
+  };
+
+  public static readonly A5_LANDSCAPE: LayoutFormat = {
+    name: 'A5 Paysage',
+    width: 210,
+    height: 148,
+    orientation: 'landscape',
+  };
+
   public static readonly A4_PORTRAIT: LayoutFormat = {
     name: 'A4 Portrait',
     width: 210,
@@ -49,7 +63,14 @@ export class LayoutFormats {
     orientation: 'landscape',
   };
 
-  public static ALL: LayoutFormat[] = [LayoutFormats.A4_PORTRAIT, LayoutFormats.A4_LANDSCAPE, LayoutFormats.A3_PORTRAIT, LayoutFormats.A3_LANDSCAPE];
+  public static ALL: LayoutFormat[] = [
+    LayoutFormats.A5_PORTRAIT,
+    LayoutFormats.A5_LANDSCAPE,
+    LayoutFormats.A4_PORTRAIT,
+    LayoutFormats.A4_LANDSCAPE,
+    LayoutFormats.A3_PORTRAIT,
+    LayoutFormats.A3_LANDSCAPE,
+  ];
 }
 
 export interface AbcLayoutView {

@@ -77,9 +77,10 @@ class ProjectControls extends Component<Props, State> {
   }
 
   private handleNewProject = () => {
-    const { toasts, project } = this.props.services;
+    const { toasts, project, history } = this.props.services;
 
     project.newProject();
+    history.clean();
     toasts.info('Nouveau projet créé');
   };
 
@@ -145,40 +146,41 @@ class ProjectControls extends Component<Props, State> {
   private handleImportProject = () => {
     const { toasts, modals, project, history } = this.props.services;
 
-    FileIO.openInput(InputType.Single, '.abm2')
-      .then(async (result) => {
-        if (InputResultType.Canceled === result.type) {
+    const importProject = async () => {
+      const result = await FileIO.openInput(InputType.Single, '.abm2');
+
+      if (InputResultType.Canceled === result.type) {
+        return;
+      }
+
+      if (result.files.length !== 1) {
+        return toasts.error('Vous devez sélectionner un fichier');
+      }
+
+      const file = result.files[0];
+      if (!file.name.endsWith(Constants.EXTENSION)) {
+        return toasts.error('Vous devez sélectionner un fichier au format abm2');
+      }
+
+      let password: string | undefined;
+      if (await project.compressedContainsCredentials(file)) {
+        const ev = await modals.projectPasswordModal();
+        if (ev.status === ModalStatus.Canceled) {
           return;
         }
+        password = ev.value;
+      }
 
-        if (result.files.length !== 1) {
-          return toasts.error('Vous devez sélectionner un fichier');
-        }
+      toasts.info('Chargement ...');
+      await project.loadProject(file, password);
+      history.clean();
+      toasts.info('Projet importé !');
+    };
 
-        const file = result.files[0];
-        if (!file.name.endsWith(Constants.EXTENSION)) {
-          return toasts.error('Vous devez sélectionner un fichier au format abm2');
-        }
-
-        let password: string | undefined;
-        if (await project.compressedContainsCredentials(file)) {
-          const ev = await modals.projectPasswordModal();
-          if (ev.status === ModalStatus.Canceled) {
-            return;
-          }
-          password = ev.value;
-        }
-
-        toasts.info('Chargement ...');
-        return project.loadProject(file, password).then(() => {
-          history.clean();
-          toasts.info('Projet importé !');
-        });
-      })
-      .catch((err) => {
-        logger.error(err);
-        toasts.genericError();
-      });
+    importProject().catch((err) => {
+      logger.error(err);
+      toasts.genericError();
+    });
   };
 }
 

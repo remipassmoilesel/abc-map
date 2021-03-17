@@ -1,7 +1,7 @@
 import React, { Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/frontend-shared';
 import { Extent, getArea } from 'ol/extent';
-import { RemoveLayerTask } from '../../../core/history/tasks/RemoveLayerTask';
+import { RemoveLayerTask } from '../../../core/history/tasks/layers/RemoveLayerTask';
 import { HistoryKey } from '../../../core/history/HistoryKey';
 import { ModalStatus } from '../../../core/ui/Modals.types';
 import LayerListItem from './item/LayerListItem';

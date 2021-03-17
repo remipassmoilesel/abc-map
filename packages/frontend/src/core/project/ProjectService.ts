@@ -1,5 +1,5 @@
 import { ProjectActions } from '../store/project/actions';
-import { BlobReader, Logger, ProjectHelper } from '@abc-map/frontend-shared';
+import { BlobIO, Logger, ProjectHelper } from '@abc-map/frontend-shared';
 import { AbcLayout, AbcProject, AbcProjection, AbcProjectMetadata, LayerType, LayoutFormat, ManifestName, WmsMetadata } from '@abc-map/shared-entities';
 import { AxiosInstance } from 'axios';
 import { ProjectFactory } from './ProjectFactory';
@@ -8,24 +8,16 @@ import { ProjectRoutes as Api } from '../http/ApiRoutes';
 import uuid from 'uuid-random';
 import { MainStore } from '../store/store';
 import { Encryption } from '../utils/Encryption';
-import { HistoryService } from '../history/HistoryService';
 import { Zipper } from '@abc-map/frontend-shared';
 import { CompressedProject } from './CompressedProject';
 
 export const logger = Logger.get('ProjectService.ts', 'info');
 
 export class ProjectService {
-  constructor(
-    private jsonClient: AxiosInstance,
-    private downloadClient: AxiosInstance,
-    private store: MainStore,
-    private geoService: GeoService,
-    private history: HistoryService
-  ) {}
+  constructor(private jsonClient: AxiosInstance, private downloadClient: AxiosInstance, private store: MainStore, private geoService: GeoService) {}
 
   public newProject(): void {
     this.geoService.getMainMap().resetLayers();
-    this.history.clean();
     this.store.dispatch(ProjectActions.newProject(ProjectFactory.newProjectMetadata()));
     logger.info('New project created');
   }
@@ -98,7 +90,7 @@ export class ProjectService {
       return Promise.reject(new Error('Invalid project'));
     }
 
-    const project = JSON.parse(await BlobReader.asString(manifestFile.content));
+    const project = JSON.parse(await BlobIO.asString(manifestFile.content));
     if (this.manifestContainsCredentials(project) && !password) {
       throw new Error('Password is mandatory when project contains credentials');
     }
@@ -110,7 +102,6 @@ export class ProjectService {
     }
     await this.geoService.importProject(map, _project);
     this.store.dispatch(ProjectActions.loadProject(_project));
-    this.history.clean();
   }
 
   public newLayout(name: string, format: LayoutFormat, center: number[], resolution: number, projection: AbcProjection): AbcLayout {
@@ -124,8 +115,16 @@ export class ProjectService {
         projection,
       },
     };
-    this.store.dispatch(ProjectActions.newLayout(layout));
+    this.addLayouts([layout]);
     return layout;
+  }
+
+  public addLayouts(layouts: AbcLayout[]): void {
+    this.store.dispatch(ProjectActions.addLayouts(layouts));
+  }
+
+  public setLayoutIndex(layout: AbcLayout, index: number): void {
+    this.store.dispatch(ProjectActions.setLayoutIndex(layout, index));
   }
 
   public updateLayout(layout: AbcLayout) {
@@ -137,6 +136,14 @@ export class ProjectService {
 
   public clearLayouts(): void {
     this.store.dispatch(ProjectActions.clearLayouts());
+  }
+
+  public removeLayout(id: string): void {
+    this.store.dispatch(ProjectActions.removeLayouts([id]));
+  }
+
+  public removeLayouts(ids: string[]): void {
+    this.store.dispatch(ProjectActions.removeLayouts(ids));
   }
 
   public renameProject(name: string) {

@@ -3,10 +3,10 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { getServices } from './core/Services';
-import { getAbcWindow } from './core/utils/getWindow';
 import { E2eMapWrapper } from './core/geo/map/E2eMapWrapper';
-import { Logger } from '@abc-map/frontend-shared';
+import { getAbcWindow, Logger } from '@abc-map/frontend-shared';
 import { UserStatus } from '@abc-map/shared-entities';
+import { mainStore } from './core/store/store';
 import './index.scss';
 
 const logger = Logger.get('index.tsx');
@@ -35,8 +35,10 @@ async function authenticate(): Promise<void> {
 
 function load() {
   // For tests and debug purposes
-  getAbcWindow().abc.mainMap = new E2eMapWrapper(svc.geo.getMainMap());
-  getAbcWindow().abc.services = svc;
+  const _window = getAbcWindow();
+  _window.abc.mainMap = new E2eMapWrapper(svc.geo.getMainMap());
+  _window.abc.services = svc;
+  _window.abc.store = mainStore;
 
   ReactDOM.render(
     <React.StrictMode>

@@ -1,6 +1,7 @@
 import { FrontendRoutes } from '@abc-map/frontend-shared';
 import { TestHelper } from '../../helpers/TestHelper';
 import { LayerSelector } from '../../helpers/LayerSelector';
+import { History } from '../../helpers/History';
 
 describe('Map', function () {
   beforeEach(() => {
@@ -42,8 +43,7 @@ describe('Map', function () {
         expect(names).deep.equals(['OpenStreetMap', 'Formes', 'OpenStreetMap']);
       })
       // Undo
-      .get('[data-cy=map-undo')
-      .click()
+      .then(() => History.undo())
       .then(() => LayerSelector.getNames())
       .should((names) => {
         expect(names).deep.equals(['OpenStreetMap', 'Formes']);
@@ -54,8 +54,7 @@ describe('Map', function () {
         expect(elem.text()).equals('Formes');
       })
       // Redo
-      .get('[data-cy=map-redo')
-      .click()
+      .then(() => History.redo())
       .then(() => LayerSelector.getNames())
       .should((names) => {
         expect(names).deep.equals(['OpenStreetMap', 'Formes', 'OpenStreetMap']);

@@ -3,7 +3,9 @@ import { E2eMap } from '../map/E2eMap';
 export interface AbcWindow extends Window {
   abc: {
     mainMap?: E2eMap;
+    layoutPreview?: E2eMap;
     services?: any;
+    store?: any;
   };
   __REDUX_DEVTOOLS_EXTENSION__?: () => any;
   Cypress?: any;

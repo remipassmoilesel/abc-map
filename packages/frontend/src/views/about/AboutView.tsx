@@ -11,9 +11,10 @@ class AboutView extends Component<Props, {}> {
   public render(): ReactNode {
     return (
       <div className={Cls.about}>
-        <h1>A propos d&apos;Abc-Map</h1>
-        <p>Sur cette page vous en apprendrez plus sur ce projet, sur son développement et sur les outils utilisés pour créer ce logiciel.</p>
-        <p>Cette page n&apos;est pas terminée !</p>
+        <h2 data-cy={'punchline'} className={'text-uppercase text-center'}>
+          Une entreprise vous vendrait ce logiciel 60 000€
+        </h2>
+        <h4 className={'text-center'}>(et à ce prix là il marcherait à peine)</h4>
       </div>
     );
   }

@@ -8,7 +8,7 @@ import { Logger } from '@abc-map/frontend-shared';
 import { TextChanged, TextEnd, TextEvent, TextInteraction, TextStart } from './TextInteraction';
 import { FeatureWrapper } from '../../features/FeatureWrapper';
 import { HistoryKey } from '../../../history/HistoryKey';
-import { UpdateStyleTask } from '../../../history/tasks/UpdateStyleTask';
+import { UpdateStyleTask } from '../../../history/tasks/features/UpdateStyleTask';
 import { FeatureStyle } from '../../style/FeatureStyle';
 import GeometryType from 'ol/geom/GeometryType';
 

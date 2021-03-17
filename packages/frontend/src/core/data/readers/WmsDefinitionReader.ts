@@ -3,7 +3,7 @@ import { LayerType, WmsDefinition, WmsMetadata } from '@abc-map/shared-entities'
 import { FileFormat, FileFormats } from '../FileFormats';
 import { AbcFile } from '@abc-map/frontend-shared';
 import * as yaml from 'js-yaml';
-import { BlobReader } from '@abc-map/frontend-shared';
+import { BlobIO } from '@abc-map/frontend-shared';
 import { Logger } from '@abc-map/frontend-shared';
 import uuid from 'uuid-random';
 import { LayerWrapper } from '../../geo/layers/LayerWrapper';
@@ -20,7 +20,7 @@ export class WmsDefinitionReader extends AbstractDataReader {
     const definitions = files.filter((f) => FileFormats.fromPath(f.path) === FileFormat.WMS_DEFINITION);
     const layers: LayerWrapper[] = [];
     for (const file of definitions) {
-      const fileContent = await BlobReader.asString(file.content);
+      const fileContent = await BlobIO.asString(file.content);
       const definition = yaml.safeLoad(fileContent) as WmsDefinition | undefined;
       if (!definition || !definition.remoteUrl || !definition.remoteLayerName) {
         // TODO: we should fail here

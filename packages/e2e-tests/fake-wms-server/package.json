@@ -1,0 +1,13 @@
+{
+  "name": "@abc-map/fake-wms-server",
+  "version": "0.0.1",
+  "license": "GPL-3.0-or-later",
+  "scripts": {
+    "start:watch": "node main.js",
+    "start:e2e": "node main.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "cors": "^2.8.5"
+  }
+}

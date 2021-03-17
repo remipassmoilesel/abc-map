@@ -1,11 +1,11 @@
 import Chainable = Cypress.Chainable;
 
-export class MapHistory {
+export class History {
   public static undo(): Chainable<any> {
-    return cy.get('[data-cy=map-undo').click();
+    return cy.get('[data-cy=undo').click();
   }
 
   public static redo(): Chainable<any> {
-    return cy.get('[data-cy=map-redo').click();
+    return cy.get('[data-cy=redo').click();
   }
 }

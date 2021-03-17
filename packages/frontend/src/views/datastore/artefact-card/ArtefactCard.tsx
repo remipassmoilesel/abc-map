@@ -4,7 +4,7 @@ import { AbcArtefact } from '@abc-map/shared-entities';
 import { FileFormat, FileFormats } from '../../../core/data/FileFormats';
 import { FileIO } from '../../../core/utils/FileIO';
 import { HistoryKey } from '../../../core/history/HistoryKey';
-import { AddLayersTask } from '../../../core/history/tasks/AddLayersTask';
+import { AddLayersTask } from '../../../core/history/tasks/layers/AddLayersTask';
 import { ServiceProps, withServices } from '../../../core/withServices';
 
 const logger = Logger.get('ArtefactCard.tsx', 'info');

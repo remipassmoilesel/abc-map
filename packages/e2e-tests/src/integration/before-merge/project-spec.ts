@@ -54,7 +54,7 @@ describe('Project', function () {
         .click()
         .then(() => Toasts.assertText('Export en cours ...'))
         .then(() => Toasts.assertText('Export terminé !'))
-        .then(() => Download.file('[data-cy=file-output]'))
+        .then(() => Download.fileAsBlob())
         .then((downloaded) => TestData.projectSample1().then((witness) => ({ downloaded, witness })))
         .should(async ({ downloaded, witness }) => {
           const projectA = await ProjectHelper.extractManifest(downloaded);
