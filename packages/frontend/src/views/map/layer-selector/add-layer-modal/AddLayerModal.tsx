@@ -1,7 +1,7 @@
 import React, { ChangeEvent, Component, ReactNode } from 'react';
 import { Modal } from 'react-bootstrap';
 import { HistoryKey } from '../../../../core/history/HistoryKey';
-import { AddLayersTask } from '../../../../core/history/tasks/AddLayersTask';
+import { AddLayersTask } from '../../../../core/history/tasks/layers/AddLayersTask';
 import { LabelledLayerTypes, LabelledLayerType } from './LabelledLayerTypes';
 import WmsSettingsPanel from './wms/WmsSettingsPanel';
 import { Logger } from '@abc-map/frontend-shared';

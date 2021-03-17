@@ -1,6 +1,6 @@
 export class Download {
-  public static file(selector: string): Cypress.Chainable<Blob> {
-    return cy.get(selector).then(
+  public static fileAsBlob(): Cypress.Chainable<Blob> {
+    return cy.get('[data-cy=file-output]').then(
       (anchor) =>
         new Cypress.Promise<Blob>((resolve, reject) => {
           const xhr = new XMLHttpRequest();

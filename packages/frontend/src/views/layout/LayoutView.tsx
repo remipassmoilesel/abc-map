@@ -4,23 +4,35 @@ import { Logger } from '@abc-map/frontend-shared';
 import LayoutList from './layout-list/LayoutList';
 import { AbcLayout, AbcProjection, LayoutFormat, LayoutFormats } from '@abc-map/shared-entities';
 import LayoutPreview from './layout-preview/LayoutPreview';
-import { jsPDF } from 'jspdf';
-import { LayoutHelper } from './LayoutHelper';
-import View from 'ol/View';
 import HistoryControls from '../../components/history-controls/HistoryControls';
 import { HistoryKey } from '../../core/history/HistoryKey';
 import { MapWrapper } from '../../core/geo/map/MapWrapper';
-import { MapFactory } from '../../core/geo/map/MapFactory';
 import { MainState } from '../../core/store/reducer';
 import { ServiceProps, withServices } from '../../core/withServices';
-import './LayoutView.scss';
+import { AddLayoutsTask } from '../../core/history/tasks/layouts/AddLayoutsTask';
+import { RemoveLayoutsTask } from '../../core/history/tasks/layouts/RemoveLayoutsTask';
+import { SetLayoutIndexTask } from '../../core/history/tasks/layouts/SetLayoutIndexTask';
+import { LayoutRenderer } from '../../core/project/LayoutRenderer';
+import { UpdateLayoutTask } from '../../core/history/tasks/layouts/UpdateLayoutTask';
+import { FileIO } from '../../core/utils/FileIO';
+import * as _ from 'lodash';
+import Cls from './LayoutView.module.scss';
 
 const logger = Logger.get('LayoutView.tsx', 'warn');
 
 interface State {
+  /**
+   * Reference to the main map
+   */
   map: MapWrapper;
+  /**
+   * Current format selected
+   */
   format: LayoutFormat;
-  activeLayout?: AbcLayout;
+  /**
+   * Id of active layout. We must not store layout here in order to get consistent updates.
+   */
+  activeLayoutId?: string;
 }
 
 const mapStateToProps = (state: MainState) => ({
@@ -32,7 +44,7 @@ const connector = connect(mapStateToProps);
 type Props = ConnectedProps<typeof connector> & ServiceProps;
 
 class LayoutView extends Component<Props, State> {
-  private exportMapRef = React.createRef<HTMLDivElement>();
+  private exportSupport = React.createRef<HTMLDivElement>();
 
   constructor(props: Props) {
     super(props);
@@ -44,53 +56,77 @@ class LayoutView extends Component<Props, State> {
 
   public render(): ReactNode {
     const layouts = this.props.layouts;
-    const activeLayout = this.state.activeLayout;
+    const activeLayout = this.getActiveLayout();
+    const format = this.state.format.name;
+
     const formatOptions = LayoutFormats.ALL.map((fmt) => (
       <option key={fmt.name} value={fmt.name}>
         {fmt.name}
       </option>
     ));
+
     return (
-      <div className={'abc-layout-view'}>
-        <div className={'content'}>
-          <div className={'left-panel'}>
-            <LayoutList layouts={layouts} activeLayout={activeLayout} onLayoutSelected={this.onLayoutSelected} />
+      <div className={Cls.layoutView}>
+        <div className={Cls.content}>
+          {/* Layout list on left */}
+          <div className={Cls.leftPanel}>
+            <LayoutList layouts={layouts} active={activeLayout} onSelected={this.handleSelected} onDeleted={this.handleDeleted} />
           </div>
-          <LayoutPreview layout={activeLayout} mainMap={this.state.map} onLayoutChanged={this.onLayoutChanged} />
-          <div className={'right-panel'}>
+
+          {/* Layout preview on center */}
+          <LayoutPreview layout={activeLayout} mainMap={this.state.map} onLayoutChanged={this.handleLayoutChanged} onNewLayout={this.handleNewLayout} />
+
+          {/* Controls on right */}
+          <div className={Cls.rightPanel} data-cy={'layout-controls'}>
             <div className={'control-block form-group'}>
-              <button onClick={this.newLayout} className={'btn btn-link'}>
-                <i className={'fa fa-file mr-2'} />
-                Nouvelle page
-              </button>
-              <select className={'form-control'} onChange={this.onFormatChange} value={this.state.format.name}>
+              <select className={'form-control'} onChange={this.handleFormatChanged} value={format} data-cy={'format-select'}>
                 {formatOptions}
               </select>
+              <button onClick={this.handleNewLayout} className={'btn btn-link'} data-cy={'new-layout'}>
+                <i className={'fa fa-plus mr-2'} />
+                Nouvelle page
+              </button>
             </div>
+
             <div className={'control-block'}>
               <div className={'control-item'}>
-                <button onClick={this.clearAll} className={'btn btn-link'}>
+                <button onClick={this.handleLayoutUp} className={'btn btn-link'} data-cy={'layout-up'}>
+                  <i className={'fa fa-arrow-up mr-2'} />
+                  Monter
+                </button>
+              </div>
+              <div className={'control-item'}>
+                <button onClick={this.handleLayoutDown} className={'btn btn-link'} data-cy={'layout-down'}>
+                  <i className={'fa fa-arrow-down mr-2'} />
+                  Descendre
+                </button>
+              </div>
+              <div className={'control-item'}>
+                <button onClick={this.handleClearAll} className={'btn btn-link'} data-cy={'clear-all'}>
                   <i className={'fa fa-trash-alt mr-2'} />
                   Supprimer tout
                 </button>
               </div>
+            </div>
+
+            <div className={'control-block form-group'}>
               <div className={'control-item'}>
-                <button onClick={this.exportOneLayout} className={'btn btn-link'}>
+                <button onClick={() => this.handleExport('pdf')} className={'btn btn-link'} data-cy={'pdf-export'}>
                   <i className={'fa fa-download mr-2'} />
-                  Exporter la page
+                  Export PDF
                 </button>
               </div>
               <div className={'control-item'}>
-                <button onClick={this.exportAllLayouts} className={'btn btn-link'}>
+                <button onClick={() => this.handleExport('png')} className={'btn btn-link'} data-cy={'png-export'}>
                   <i className={'fa fa-download mr-2'} />
-                  Exporter tout
+                  Export PNG
                 </button>
               </div>
             </div>
             <HistoryControls historyKey={HistoryKey.Layout} />
           </div>
         </div>
-        <div ref={this.exportMapRef} />
+        <div ref={this.exportSupport} />
       </div>
     );
   }
@@ -98,212 +134,174 @@ class LayoutView extends Component<Props, State> {
   public componentDidMount() {
     const layouts = this.props.layouts;
     if (layouts.length) {
-      this.setState({ activeLayout: layouts[0] });
-    } else {
-      this.newLayout();
+      this.setState({ activeLayoutId: layouts[0].id });
     }
   }
 
-  public newLayout = () => {
-    const { project } = this.props.services;
+  public componentDidUpdate() {
+    const layouts = this.props.layouts;
+    const activeId = this.state.activeLayoutId;
+    const activeExists = layouts.find((lay) => lay.id === activeId);
 
-    logger.info('Adding new layout');
-    const pageNbr = this.props.layouts.length + 1;
-    const name = `Page ${pageNbr}`;
+    if (!activeExists && layouts.length) {
+      this.setState({ activeLayoutId: layouts[layouts.length - 1].id });
+    }
+  }
+
+  private handleSelected = (lay: AbcLayout) => {
+    this.setState({ activeLayoutId: lay.id });
+  };
+
+  private handleNewLayout = () => {
+    const { project, history } = this.props.services;
+
+    const name = `Page ${this.props.layouts.length + 1}`;
     const view = this.state.map.unwrap().getView();
     const center = view.getCenter();
     const resolution = view.getResolution();
     if (!center || !resolution) {
-      return logger.error('Resolution or center not found');
+      logger.error('Cannot create new layout: ', { center, resolution });
+      return;
     }
 
     // Here we make an estimation of resolution as we can't know main map size
     const layoutRes = Math.round(resolution - resolution * 0.2);
     const projection: AbcProjection = { name: view.getProjection().getCode() };
+
     const layout = project.newLayout(name, this.state.format, center, layoutRes, projection);
-    this.setState({ activeLayout: layout });
+    history.register(HistoryKey.Layout, AddLayoutsTask.create([layout]));
+
+    this.setState({ activeLayoutId: layout.id });
   };
 
-  public clearAll = () => {
-    const { project } = this.props.services;
+  private handleLayoutUp = () => {
+    this.updateLayoutIndex(-1);
+  };
+
+  private handleLayoutDown = () => {
+    this.updateLayoutIndex(+1);
+  };
+
+  private updateLayoutIndex = (diff: number) => {
+    const { project, history, toasts } = this.props.services;
+    const active = this.getActiveLayout();
+    const layouts = this.props.layouts;
+
+    if (!active) {
+      toasts.info("Vous devez d'abord sélectionner une page");
+      return;
+    }
+
+    const oldIndex = layouts.findIndex((lay) => lay.id === active.id);
+    let newIndex = oldIndex + diff;
+    if (newIndex < 0) {
+      newIndex = 0;
+    }
+    if (newIndex > layouts.length - 1) {
+      newIndex = layouts.length - 1;
+    }
+
+    if (newIndex !== oldIndex) {
+      project.setLayoutIndex(active, newIndex);
+      history.register(HistoryKey.Layout, SetLayoutIndexTask.create(active, oldIndex, newIndex));
+    }
+  };
+
+  private handleClearAll = () => {
+    const { project, history } = this.props.services;
+    const layouts = this.props.layouts;
 
     project.clearLayouts();
-    this.setState({ activeLayout: undefined });
+    history.register(HistoryKey.Layout, RemoveLayoutsTask.create(layouts));
   };
 
-  public onLayoutSelected = (lay: AbcLayout) => {
-    this.setState({ activeLayout: lay });
+  private handleDeleted = (lay: AbcLayout) => {
+    const { project, history } = this.props.services;
+
+    project.removeLayout(lay.id);
+    history.register(HistoryKey.Layout, RemoveLayoutsTask.create([lay]));
   };
 
-  public onFormatChange = (ev: ChangeEvent<HTMLSelectElement>) => {
+  private handleFormatChanged = (ev: ChangeEvent<HTMLSelectElement>) => {
+    const { project, history } = this.props.services;
+
     const value = ev.target.value;
     const format = LayoutFormats.ALL.find((fmt) => fmt.name === value);
     if (!format) {
       return logger.error(`Format not found: ${value}`);
     }
+
     this.setState({ format });
+
+    const active = this.getActiveLayout();
+    const formatChanged = !_.isEqual(active?.format, format);
+    if (active && formatChanged) {
+      const update: AbcLayout = {
+        ...active,
+        format,
+      };
+
+      project.updateLayout(update);
+      history.register(HistoryKey.Layout, UpdateLayoutTask.create(active, update));
+    }
   };
 
-  public onLayoutChanged = (layout: AbcLayout) => {
-    const { project } = this.props.services;
+  private handleLayoutChanged = (layout: AbcLayout) => {
+    const { project, history } = this.props.services;
 
+    const before = this.props.layouts.find((lay) => lay.id === layout.id);
     project.updateLayout(layout);
-    if (layout.id === this.state.activeLayout?.id) {
-      this.setState({ activeLayout: layout });
+
+    if (before) {
+      history.register(HistoryKey.Layout, UpdateLayoutTask.create(before, layout));
+    } else {
+      logger.error('Cannot register history task', { before, layout });
     }
   };
 
-  public exportOneLayout = () => {
+  private handleExport = (format: 'pdf' | 'png') => {
     const { toasts } = this.props.services;
-
-    const layout = this.state.activeLayout;
-    const support = this.exportMapRef.current;
-    if (!layout) {
-      return toasts.error('Vous devez créer une mise en page');
-    }
+    const support = this.exportSupport.current;
     if (!support) {
       toasts.genericError();
-      logger.error('Support or layout not ready');
+      logger.error('DOM not ready');
       return;
     }
 
-    toasts.info("Début de l'export ...");
-    const pdf = new jsPDF();
-    const exportMap = MapFactory.createNaked();
-    exportMap.setTarget(support);
+    const renderer = new LayoutRenderer();
+    renderer.init();
 
-    this.exportLayout(layout, pdf, support, this.state.map, exportMap)
-      .then(() => {
-        pdf.save('map.pdf');
-        exportMap.dispose();
-        toasts.info('Export terminé !');
-      })
-      .catch((err) => {
-        toasts.genericError();
-        logger.error(err);
-      });
-  };
+    const exportLayouts = async () => {
+      toasts.info("Début de l'export ...");
+      const layouts = this.props.layouts;
+      const map = this.state.map;
 
-  public exportAllLayouts = () => {
-    const { toasts } = this.props.services;
-
-    toasts.info("Début de l'export ...");
-    const layouts = this.props.layouts;
-    const support = this.exportMapRef.current;
-    if (!support) {
-      toasts.genericError();
-      logger.error('Support or layouts not ready');
-      return;
-    }
-    if (!layouts.length) {
-      toasts.error('Vous devez créer une mise en page');
-      return;
-    }
-
-    const pdf = new jsPDF();
-    const exportMap = MapFactory.createNaked();
-    exportMap.setTarget(support);
-
-    (async () => {
-      for (const layout of layouts) {
-        const format = layout.format;
-        const index = layouts.indexOf(layout);
-        logger.warn('index', index);
-        if (index !== 0) {
-          pdf.addPage([format.width, format.height], format.orientation);
-        }
-        await this.exportLayout(layout, pdf, support, this.state.map, exportMap);
+      if (format === 'pdf') {
+        const result = await renderer.renderLayoutsAsPdf(layouts, map, support);
+        FileIO.output(URL.createObjectURL(result), 'map.pdf');
+      } else {
+        const result = await renderer.renderLayoutsAsPng(layouts, map, support);
+        FileIO.output(URL.createObjectURL(result), 'map.zip');
       }
-    })()
-      .then(() => {
-        pdf.save('map.pdf');
-        toasts.info('Export terminé !');
-      })
+
+      toasts.info('Export terminé !');
+    };
+
+    exportLayouts()
       .catch((err) => {
         toasts.genericError();
         logger.error(err);
       })
-      .finally(() => {
-        exportMap.dispose();
-      });
+      .finally(() => renderer.dispose());
   };
 
-  private exportLayout = (layout: AbcLayout, pdf: jsPDF, support: HTMLDivElement, sourceMap: MapWrapper, exportMap: MapWrapper): Promise<void> => {
-    logger.info('Exporting layout: ', layout);
-    return new Promise<void>((resolve, reject) => {
-      const format = layout.format;
-      const dimension = LayoutHelper.layoutToPixel(layout);
-
-      // We adapt size of map to layout
-      support.style.marginTop = '200px';
-      support.style.width = `${dimension.width}px`;
-      support.style.height = `${dimension.height}px`;
-      exportMap.unwrap().updateSize();
-
-      // We copy layers from sourceMap to exporMap
-      exportMap.unwrap().getLayers().clear();
-      sourceMap.getLayers().forEach((lay) => {
-        exportMap.addLayer(lay);
-      });
-
-      const viewResolution = exportMap.unwrap().getView().getResolution();
-      if (!viewResolution) {
-        return reject(new Error('ViewResolution not available'));
-      }
-
-      // Then we export layers on render complete
-      exportMap.unwrap().once('rendercomplete', () => {
-        logger.info('Rendering layout: ', layout);
-        const mapCanvas = document.createElement('canvas');
-        mapCanvas.width = dimension.width;
-        mapCanvas.height = dimension.height;
-        const ctx = mapCanvas.getContext('2d');
-        if (!ctx) {
-          return reject(new Error('ViewResolution not available'));
-        }
-
-        // We paint a white rectangle as background
-        ctx.fillStyle = 'white';
-        ctx.fillRect(0, 0, dimension.width, dimension.height);
-
-        const layers = support.querySelectorAll('.ol-layer canvas');
-        layers.forEach((layer) => {
-          if (!(layer instanceof HTMLCanvasElement)) {
-            return reject(new Error(`Bad element selected: ${layer.constructor.name}`));
-          }
-          if (!ctx) {
-            return reject(new Error('Canvas context not available'));
-          }
-
-          if (layer.width > 0) {
-            const opacity = (layer.parentNode as HTMLElement)?.style.opacity || '';
-            ctx.globalAlpha = opacity === '' ? 1 : Number(opacity);
-
-            // Get the transform parameters from the style's transform matrix
-            const transform = layer.style.transform.match(/^matrix\(([^(]*)\)$/);
-            if (transform) {
-              const args = transform[1].split(',').map(Number) as number[];
-              ctx.setTransform(args[0], args[1], args[2], args[3], args[4], args[5]);
-            }
-
-            ctx.drawImage(layer, 0, 0);
-          }
-        });
-
-        pdf.addImage(mapCanvas.toDataURL('image/jpeg'), 'JPEG', 0, 0, format.width, format.height);
-        resolve();
-      });
-
-      // We set view and trigger render
-      exportMap.unwrap().setView(
-        new View({
-          center: layout.view.center,
-          resolution: layout.view.resolution,
-          projection: layout.view.projection.name,
-        })
-      );
-    });
-  };
+  private getActiveLayout(): AbcLayout | undefined {
+    const activeId = this.state.activeLayoutId;
+    if (!activeId) {
+      return;
+    }
+    return this.props.layouts.find((lay) => lay.id === activeId);
+  }
 }
 
 export default connector(withServices(LayoutView));

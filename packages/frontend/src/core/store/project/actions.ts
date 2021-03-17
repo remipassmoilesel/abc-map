@@ -3,10 +3,12 @@ import { AbcLayout, AbcProject, AbcProjectMetadata } from '@abc-map/shared-entit
 export enum ActionType {
   NewProject = 'NewProject',
   RenameProject = 'RenameProject',
-  NewLayout = 'NewLayout',
+  AddLayouts = 'AddLayouts',
   UpdateLayout = 'UpdateLayout',
+  SetLayoutIndex = 'SetLayoutIndex',
   ClearLayouts = 'ClearLayouts',
   LoadProject = 'LoadProject',
+  RemoveLayouts = 'RemoveLayouts',
 }
 
 export interface NewProject {
@@ -19,14 +21,25 @@ export interface RenameProject {
   name: string;
 }
 
-export interface NewLayout {
-  type: ActionType.NewLayout;
-  layout: AbcLayout;
+export interface AddLayouts {
+  type: ActionType.AddLayouts;
+  layouts: AbcLayout[];
 }
 
 export interface UpdateLayout {
   type: ActionType.UpdateLayout;
   layout: AbcLayout;
+}
+
+export interface SetLayoutIndex {
+  type: ActionType.SetLayoutIndex;
+  layout: AbcLayout;
+  index: number;
+}
+
+export interface RemoveLayouts {
+  type: ActionType.RemoveLayouts;
+  ids: string[];
 }
 
 export interface ClearLayouts {
@@ -38,7 +51,7 @@ export interface LoadProject {
   project: AbcProject;
 }
 
-export type ProjectAction = NewProject | RenameProject | NewLayout | UpdateLayout | ClearLayouts | LoadProject;
+export type ProjectAction = NewProject | RenameProject | AddLayouts | RemoveLayouts | UpdateLayout | SetLayoutIndex | ClearLayouts | LoadProject;
 
 export class ProjectActions {
   public static newProject(metadata: AbcProjectMetadata): ProjectAction {
@@ -55,10 +68,18 @@ export class ProjectActions {
     };
   }
 
-  public static newLayout(layout: AbcLayout): ProjectAction {
+  public static addLayouts(layouts: AbcLayout[]): ProjectAction {
     return {
-      type: ActionType.NewLayout,
+      type: ActionType.AddLayouts,
+      layouts,
+    };
+  }
+
+  public static setLayoutIndex(layout: AbcLayout, index: number): ProjectAction {
+    return {
+      type: ActionType.SetLayoutIndex,
       layout,
+      index,
     };
   }
 
@@ -66,6 +87,13 @@ export class ProjectActions {
     return {
       type: ActionType.UpdateLayout,
       layout,
+    };
+  }
+
+  public static removeLayouts(ids: string[]): ProjectAction {
+    return {
+      type: ActionType.RemoveLayouts,
+      ids,
     };
   }
 

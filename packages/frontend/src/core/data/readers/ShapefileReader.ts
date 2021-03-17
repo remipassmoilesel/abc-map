@@ -5,7 +5,7 @@ import { AbcFile } from '@abc-map/frontend-shared';
 import * as shapefile from 'shapefile';
 import { GeoJSON } from 'ol/format';
 import VectorSource from 'ol/source/Vector';
-import { BlobReader } from '@abc-map/frontend-shared';
+import { BlobIO } from '@abc-map/frontend-shared';
 import uuid from 'uuid-random';
 import { LayerWrapper } from '../../geo/layers/LayerWrapper';
 import { LayerFactory } from '../../geo/layers/LayerFactory';
@@ -26,8 +26,8 @@ export class ShapefileReader extends AbstractDataReader {
       return Promise.reject(new Error('Shapefile not found'));
     }
 
-    const shpBuffer = await BlobReader.asArrayBuffer(shp.content);
-    const dbfBuffer = dbf ? await BlobReader.asArrayBuffer(dbf.content) : undefined;
+    const shpBuffer = await BlobIO.asArrayBuffer(shp.content);
+    const dbfBuffer = dbf ? await BlobIO.asArrayBuffer(dbf.content) : undefined;
     const geojson = await shapefile.read(shpBuffer, dbfBuffer);
 
     const format = new GeoJSON();

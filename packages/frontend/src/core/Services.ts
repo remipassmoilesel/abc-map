@@ -35,7 +35,7 @@ function serviceFactory(): Services {
   const toasts = new ToastService();
   const history = HistoryService.create();
   const geo = new GeoService(externalClient, history);
-  const project = new ProjectService(jsonClient, downloadClient, mainStore, geo, history);
+  const project = new ProjectService(jsonClient, downloadClient, mainStore, geo);
   const authentication = new AuthenticationService(jsonClient, mainStore, toasts);
   const data = new DataService(jsonClient, downloadClient, geo);
 

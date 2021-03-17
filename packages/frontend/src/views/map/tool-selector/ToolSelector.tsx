@@ -14,7 +14,7 @@ import RectanglePanel from './rectangle/RectanglePanel';
 import { LayerWrapper } from '../../../core/geo/layers/LayerWrapper';
 import { LayerFactory } from '../../../core/geo/layers/LayerFactory';
 import { HistoryKey } from '../../../core/history/HistoryKey';
-import { AddLayersTask } from '../../../core/history/tasks/AddLayersTask';
+import { AddLayersTask } from '../../../core/history/tasks/layers/AddLayersTask';
 import { ServiceProps, withServices } from '../../../core/withServices';
 import Cls from './ToolSelector.module.scss';
 

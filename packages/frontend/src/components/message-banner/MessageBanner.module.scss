@@ -1,0 +1,35 @@
+@import "src/style/variables";
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 100%;
+  }
+}
+
+.messageBanner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3vh;
+
+  padding: 0 0.5rem;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  color: white;
+  background-color: $primary;
+  font-weight: bold;
+
+  :global(.fa) {
+    color: white;
+  }
+
+  animation: fadeIn 3s;
+}
+

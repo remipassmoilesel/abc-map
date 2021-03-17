@@ -1,9 +1,9 @@
 import _ from 'lodash';
 import { StorePersistence } from './persistence/StorePersistence';
-import { getAbcWindow } from '../utils/getWindow';
 import { initialState } from './state';
 import { MainState, mainReducer } from './reducer';
 import { createStore, Store } from 'redux';
+import { getAbcWindow } from '@abc-map/frontend-shared';
 
 const persistence = StorePersistence.newPersistence();
 const preLoadedState = _.defaultsDeep(persistence.loadState(), initialState());

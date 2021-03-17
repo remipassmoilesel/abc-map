@@ -1,30 +1,27 @@
 import React, { Component, ReactNode } from 'react';
-import { Logger } from '@abc-map/frontend-shared';
+import { getAbcWindow, Logger } from '@abc-map/frontend-shared';
 import { AbcLayout } from '@abc-map/shared-entities';
-import { LayoutHelper } from '../LayoutHelper';
+import { LayoutHelper } from '../../../core/project/LayoutHelper';
 import View from 'ol/View';
 import { MapWrapper } from '../../../core/geo/map/MapWrapper';
 import { MapFactory } from '../../../core/geo/map/MapFactory';
-import './LayoutPreview.scss';
+import { PreviewDimensions } from './PreviewDimensions';
+import * as _ from 'lodash';
+import { E2eMapWrapper } from '../../../core/geo/map/E2eMapWrapper';
+import Cls from './LayoutPreview.module.scss';
 
 const logger = Logger.get('LayoutPreview.tsx', 'warn');
 
-interface LocalProps {
+interface Props {
   layout?: AbcLayout;
   mainMap: MapWrapper;
   onLayoutChanged: (lay: AbcLayout) => void;
+  onNewLayout: () => void;
 }
 
 interface State {
-  preview?: MapWrapper;
+  previewMap?: MapWrapper;
 }
-
-interface MapSupportDimensions {
-  width: string;
-  height: string;
-}
-
-declare type Props = LocalProps;
 
 class LayoutPreview extends Component<Props, State> {
   private mapRef = React.createRef<HTMLDivElement>();
@@ -36,79 +33,97 @@ class LayoutPreview extends Component<Props, State> {
 
   public render(): ReactNode {
     const layout = this.props.layout;
+    const handleNewLayout = this.props.onNewLayout;
+
     return (
-      <div className={'abc-layout-preview'}>
+      <div className={Cls.layoutPreview} data-cy={'layout-preview'}>
         <h3>{layout?.name}</h3>
-        <div className={'preview-container'}>
-          <div className={'preview-frame'} ref={this.mapRef} />
-        </div>
+        {layout && (
+          <div className={Cls.previewContainer}>
+            <div className={Cls.previewFrame} ref={this.mapRef} data-cy={'layout-preview-map'} />
+          </div>
+        )}
+        {!layout && (
+          <div className={Cls.noLayout}>
+            <i className={'fa fa-print'} />
+            <div>Exportez ou imprimez votre carte en créant une page.</div>
+            <button onClick={handleNewLayout} className={'btn btn-primary mt-3'} data-cy={'new-layout'}>
+              Créer une page A4
+            </button>
+          </div>
+        )}
       </div>
     );
   }
 
   public componentDidMount() {
-    if (!this.mapRef.current) {
-      return logger.error('Cannot setup preview, ref is not ready');
-    }
-    this.initializeMap(this.mapRef.current);
-
-    // After init, we trigger a render later because map may not be ready just after init
     if (this.props.layout) {
       this.updateMap(this.props.layout);
     }
   }
 
   public componentDidUpdate(prevProps: Readonly<Props>) {
-    if (prevProps.layout?.id !== this.props.layout?.id) {
+    if (!_.isEqual(prevProps.layout, this.props.layout)) {
       this.updateMap(this.props.layout);
     }
   }
 
   public componentWillUnmount() {
-    this.cleanupMap();
-  }
-
-  private initializeMap(div: HTMLDivElement): MapWrapper {
-    logger.info('Initializing preview map');
-    const preview = MapFactory.createNaked();
-    preview.setTarget(div);
-
-    // We listen for view changes, in order to persist them in layout
-    preview.unwrap().on('moveend', this.onPreviewChanged);
-
-    this.setState({ preview });
-    return preview;
+    this.state.previewMap?.dispose();
   }
 
   private updateMap(layout?: AbcLayout): void {
     logger.info('Updating preview map', layout);
-    const div = this.mapRef.current;
-    const mainMap = this.props.mainMap;
-    const preview = this.state.preview;
-    if (!div || !preview) {
+
+    if (!layout) {
+      this.state.previewMap?.dispose();
+      this.setState({ previewMap: undefined });
       return;
     }
+
+    const div = this.mapRef.current;
+    if (!div) {
+      logger.error('Cannot update map: ', { div });
+      return;
+    }
+
+    // Map iniotialization
+    const mainMap = this.props.mainMap;
+    const previewMap = this.state.previewMap || this.initializePreviewMap(div);
+
     const divSize = this.getPreviewDimensionsFor(layout);
     div.style.width = divSize.width;
     div.style.height = divSize.height;
-    preview.unwrap().updateSize();
+    previewMap.unwrap().updateSize();
 
-    preview.unwrap().getLayers().clear();
-    mainMap.getLayers().forEach((lay) => {
-      const clone = lay.shallowClone();
-      preview.addLayer(clone);
-    });
+    // Layer update if needed
+    const previousLayers = previewMap.getLayers();
+    const newLayers = mainMap.getLayers();
+    const layersChanged = !_.isEqual(
+      previousLayers.map((lay) => lay.getId()),
+      newLayers.map((lay) => lay.getId())
+    );
+    if (layersChanged) {
+      previewMap.unwrap().getLayers().clear();
+      newLayers.forEach((lay) => {
+        const clone = lay.shallowClone();
+        previewMap.addLayer(clone);
+      });
+    }
 
-    const format = layout?.format;
-    const view = layout?.view;
-    const mapSize = preview.unwrap().getSize();
-    if (!format || !view || !mapSize) {
+    // View update
+    const format = layout.format;
+    const view = layout.view;
+    const mapSize = previewMap.unwrap().getSize();
+    if (!mapSize) {
+      logger.error('Cannot update map: ', { mapSize });
       return;
     }
+
     const dimension = LayoutHelper.formatToPixel(format);
     const scaling = Math.min(dimension.width / mapSize[0], dimension.height / mapSize[1]);
 
-    preview.unwrap().setView(
+    previewMap.unwrap().setView(
       new View({
         center: view.center,
         resolution: view.resolution * scaling,
@@ -117,11 +132,25 @@ class LayoutPreview extends Component<Props, State> {
     );
   }
 
-  private getPreviewDimensionsFor(layout?: AbcLayout): MapSupportDimensions {
-    if (!layout) {
-      return { width: '0', height: '0' };
-    }
+  private initializePreviewMap(div: HTMLDivElement): MapWrapper {
+    logger.info('Initializing preview map');
+    const preview = MapFactory.createNaked();
+    preview.setTarget(div);
 
+    // We listen for view changes, in order to persist them in layout
+    preview.unwrap().on('moveend', this.handlePreviewChanged);
+
+    getAbcWindow().abc.layoutPreview = new E2eMapWrapper(preview);
+
+    this.setState({ previewMap: preview });
+    return preview;
+  }
+
+  /**
+   * Compute preview map dimensions from layout. The main goal of this function is to create
+   * a map that fit both layout and user screen.
+   */
+  private getPreviewDimensionsFor(layout: AbcLayout): PreviewDimensions {
     const format = layout.format;
     const unit = 'vmin';
     const maxHeight = 80;
@@ -129,8 +158,8 @@ class LayoutPreview extends Component<Props, State> {
 
     // Portrait format
     if (format.height > format.width) {
-      const height = maxHeight;
-      const width = (format.width * height) / format.height;
+      const height = Math.round(maxHeight);
+      const width = Math.round((format.width * height) / format.height);
       return {
         width: `${width}${unit}`,
         height: `${height}${unit}`,
@@ -138,8 +167,8 @@ class LayoutPreview extends Component<Props, State> {
     }
     // Landscape format
     else {
-      const width = maxWidth;
-      const height = (format.height * width) / format.width;
+      const width = Math.round(maxWidth);
+      const height = Math.round((format.height * width) / format.width);
       return {
         width: `${width}${unit}`,
         height: `${height}${unit}`,
@@ -147,13 +176,17 @@ class LayoutPreview extends Component<Props, State> {
     }
   }
 
-  // TODO: test, test references to layout (-> immutability)
-  private onPreviewChanged = () => {
-    const map = this.state.preview;
+  /**
+   * Notify parent component when preview map has been changed
+   */
+  private handlePreviewChanged = () => {
+    const map = this.state.previewMap;
     const layout = this.props.layout;
     if (!map || !layout) {
+      logger.error('Cannot handle preview changes: ', { map, layout });
       return;
     }
+
     const format = layout.format;
     const mapSize = map.unwrap().getSize();
     const view = map.unwrap().getView();
@@ -162,6 +195,7 @@ class LayoutPreview extends Component<Props, State> {
     const projection = view.getProjection();
 
     if (!mapSize || !center || !resolution) {
+      logger.error('Cannot handle preview changes: ', { mapSize, center, resolution });
       return;
     }
 
@@ -170,9 +204,6 @@ class LayoutPreview extends Component<Props, State> {
 
     const updated: AbcLayout = {
       ...layout,
-      format: {
-        ...layout.format,
-      },
       view: {
         center,
         projection: { name: projection.getCode() },
@@ -180,13 +211,10 @@ class LayoutPreview extends Component<Props, State> {
       },
     };
 
-    this.props.onLayoutChanged(updated);
+    if (!_.isEqual(layout, updated)) {
+      this.props.onLayoutChanged(updated);
+    }
   };
-
-  private cleanupMap(): void {
-    logger.info('Cleaning preview map');
-    this.state.preview && this.state.preview.dispose();
-  }
 }
 
 export default LayoutPreview;

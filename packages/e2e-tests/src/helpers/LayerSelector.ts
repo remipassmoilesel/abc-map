@@ -1,4 +1,4 @@
-import { Env } from './Env';
+import { WmsConstants } from './WmsConstants';
 
 export class LayerSelector {
   public static getNames(): Cypress.Chainable<string[]> {
@@ -33,14 +33,14 @@ export class LayerSelector {
         .get('[data-cy=add-layer-confirm]')
         .get('[data-cy=wms-settings-url]')
         .clear()
-        .type('https://ahocevar.com/geoserver/wms')
+        .type(WmsConstants.PUBLIC_URL)
         // Get capabilities
         .get('[data-cy=wms-settings-capabilities]')
         .click()
         .wait(1000)
         // Select WMS layer
         .get('[data-cy=wms-layer-item]')
-        .eq(2)
+        .eq(1)
         .click()
         // Add layer
         .get('[data-cy=add-layer-confirm]')
@@ -59,20 +59,20 @@ export class LayerSelector {
         // Fill WMS layer form
         .get('[data-cy=wms-settings-url]')
         .clear()
-        .type(Env.wmsUrl())
+        .type(WmsConstants.AUTHENTICATED_URL)
         .get('[data-cy=wms-settings-username]')
         .clear()
-        .type(Env.wmsUsername())
+        .type(WmsConstants.USERNAME)
         .get('[data-cy=wms-settings-password]')
         .clear()
-        .type(Env.wmsPassword())
+        .type(WmsConstants.PASSWORD)
         // Get capabilities
         .get('[data-cy=wms-settings-capabilities]')
         .click()
         .wait(1000)
         // Select remote layer then add
         .get('[data-cy=wms-layer-item]')
-        .eq(2)
+        .eq(1)
         .click()
         .get('[data-cy=add-layer-confirm]')
         .click()

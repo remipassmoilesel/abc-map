@@ -2,7 +2,7 @@ import { AbstractDataReader } from './AbstractDataReader';
 import { AbcProjection, LayerType, VectorMetadata } from '@abc-map/shared-entities';
 import { FileFormat, FileFormats } from '../FileFormats';
 import { GeoJSON } from 'ol/format';
-import { BlobReader } from '@abc-map/frontend-shared';
+import { BlobIO } from '@abc-map/frontend-shared';
 import VectorSource from 'ol/source/Vector';
 import { AbcFile } from '@abc-map/frontend-shared';
 import uuid from 'uuid-random';
@@ -19,7 +19,7 @@ export class GeoJsonReader extends AbstractDataReader {
     const format = new GeoJSON();
     const _files = files.filter((f) => FileFormats.fromPath(f.path) === FileFormat.GEOJSON);
     for (const file of _files) {
-      const content = await BlobReader.asString(file.content);
+      const content = await BlobIO.asString(file.content);
       const features = await format.readFeatures(content, { featureProjection: projection.name });
       this.prepareFeatures(features);
 

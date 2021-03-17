@@ -1,44 +1,43 @@
 import React, { Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/frontend-shared';
 import { AbcLayout } from '@abc-map/shared-entities';
-import './LayoutList.scss';
+import Cls from './LayoutList.module.scss';
+import LayoutListItem from './LayoutListItem';
 
 const logger = Logger.get('LayoutList.tsx', 'warn');
 
 interface Props {
-  activeLayout?: AbcLayout;
+  active?: AbcLayout;
   layouts: AbcLayout[];
-  onLayoutSelected?: (lay: AbcLayout) => void;
+  onSelected: (lay: AbcLayout) => void;
+  onDeleted: (lay: AbcLayout) => void;
 }
 
 class LayoutList extends Component<Props, {}> {
   public render(): ReactNode {
+    const handleSelected = this.props.onSelected;
+    const handleDeleted = this.props.onDeleted;
     const items = this.props.layouts.map((lay) => {
-      const classes = this.props.activeLayout?.id === lay.id ? 'item active' : 'item';
-      return (
-        <div key={lay.id} className={classes} onClick={() => this.onLayoutSelected(lay)}>
-          <div>{lay.name}</div>
-          <div>Format: {lay.format.name}</div>
-        </div>
-      );
+      const active = this.props.active?.id === lay.id;
+      return <LayoutListItem key={lay.id} active={active} layout={lay} onSelected={handleSelected} onDeleted={handleDeleted} />;
     });
 
     let message: ReactNode | undefined;
     if (!items.length) {
-      message = 'Aucune page';
+      message = 'Les pages sont affichées ici.';
     }
 
     return (
-      <div className={'abc-layout-list'}>
-        <div className={'mt-3 mb-3'}>Pages du projet</div>
+      <div className={Cls.layoutList} data-cy={'layout-list'}>
+        <div className={'mx-4 font-weight-bold'}>Pages</div>
         {items}
-        {message}
+        {message && (
+          <div className={'m-4'} data-cy={'no-layout'}>
+            {message}
+          </div>
+        )}
       </div>
     );
-  }
-
-  private onLayoutSelected(layout: AbcLayout): void {
-    this.props.onLayoutSelected && this.props.onLayoutSelected(layout);
   }
 }
 

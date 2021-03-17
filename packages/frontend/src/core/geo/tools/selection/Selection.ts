@@ -9,7 +9,7 @@ import Icon from '../../../../assets/tool-icons/selection.svg';
 import { containsXY, Extent } from 'ol/extent';
 import Feature from 'ol/Feature';
 import { HistoryKey } from '../../../history/HistoryKey';
-import { ModificationItem, ModifyGeometriesTask } from '../../../history/tasks/ModifyGeometriesTask';
+import { ModificationItem, ModifyGeometriesTask } from '../../../history/tasks/features/ModifyGeometriesTask';
 import { Logger } from '@abc-map/frontend-shared';
 import { FeatureWrapper } from '../../features/FeatureWrapper';
 

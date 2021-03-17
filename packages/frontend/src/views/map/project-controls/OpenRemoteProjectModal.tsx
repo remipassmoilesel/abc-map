@@ -102,29 +102,29 @@ class OpenRemoteProjectModal extends Component<Props, State> {
   public handleConfirm = () => {
     const { project, toasts, history } = this.props.services;
 
-    const selected = this.state.selected;
-    if (!selected) {
-      toasts.info('Vous devez sélectionner un projet.');
-      return;
-    }
+    const loadProject = async () => {
+      const selected = this.state.selected;
+      if (!selected) {
+        toasts.info('Vous devez sélectionner un projet.');
+        return;
+      }
 
-    const passwordValue = this.state.passwordValue;
-    if (selected.containsCredentials && !passwordValue) {
-      toasts.info('Vous devez entrer un mot de passe');
-      return;
-    }
+      const passwordValue = this.state.passwordValue;
+      if (selected.containsCredentials && !passwordValue) {
+        toasts.info('Vous devez entrer un mot de passe');
+        return;
+      }
 
-    project
-      .loadRemoteProject(selected.id, passwordValue)
-      .then(() => {
-        history.clean();
-        toasts.info('Projet ouvert !');
-        this.props.onHide();
-      })
-      .catch((err) => {
-        toasts.genericError();
-        logger.error(err);
-      });
+      await project.loadRemoteProject(selected.id, passwordValue);
+      history.clean();
+      toasts.info('Projet ouvert !');
+      this.props.onHide();
+    };
+
+    loadProject().catch((err) => {
+      toasts.genericError();
+      logger.error(err);
+    });
   };
 }
 

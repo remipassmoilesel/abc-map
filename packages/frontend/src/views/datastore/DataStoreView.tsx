@@ -24,11 +24,10 @@ class DataStoreView extends Component<ServiceProps, State> {
   public render(): ReactNode {
     return (
       <div className={'abc-datastore'}>
-        <h1>Catalogue de données</h1>
         <p>Sur cette page vous pouvez sélectionner et importer des données dans votre carte.</p>
         <p>Rappelez-vous: vous pouvez aussi importer des donnés en sélectionnant un fichier et en le déposant sur la carte !</p>
         <div className={'mb-2 d-flex flex-row'}>
-          <input type={'text'} value={this.state.searchQuery} onChange={this.onQueryChange} className={'form-control mr-2'} />
+          <input type={'text'} value={this.state.searchQuery} onChange={this.onQueryChange} className={'form-control mr-2'} data-cy={'data-store-search'} />
           <button onClick={this.onSearch} className={'btn btn-primary'}>
             Rechercher
           </button>

@@ -4,7 +4,6 @@ import { HistoryKey } from '../../core/history/HistoryKey';
 import { connect, ConnectedProps } from 'react-redux';
 import { MainState } from '../../core/store/reducer';
 import { ServiceProps, withServices } from '../../core/withServices';
-import './HistoryControls.scss';
 
 const logger = Logger.get('HistoryControls.tsx', 'info');
 
@@ -25,14 +24,14 @@ class HistoryControls extends Component<Props, {}> {
     const canUndo = this.canUndo();
     const canRedo = this.canRedo();
     return (
-      <div className={'control-block abc-history-controls'}>
+      <div className={'control-block'}>
         <div className={'control-item'}>
-          <button onClick={this.onCancel} type={'button'} className={'btn btn-link'} disabled={!canUndo} data-cy={'map-undo'}>
+          <button onClick={this.onCancel} type={'button'} className={'btn btn-link'} disabled={!canUndo} data-cy={'undo'}>
             <i className={'fa fa-undo mr-2'} /> Annuler
           </button>
         </div>
         <div className={'control-item'}>
-          <button onClick={this.onRedo} type={'button'} className={'btn btn-link'} disabled={!canRedo} data-cy={'map-redo'}>
+          <button onClick={this.onRedo} type={'button'} className={'btn btn-link'} disabled={!canRedo} data-cy={'redo'}>
             <i className={'fa fa-redo mr-2'} /> Refaire
           </button>
         </div>

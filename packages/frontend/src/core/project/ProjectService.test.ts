@@ -9,7 +9,6 @@ import { MainStore, storeFactory } from '../store/store';
 import { MapWrapper } from '../geo/map/MapWrapper';
 import * as sinon from 'sinon';
 import { SinonStubbedInstance } from 'sinon';
-import { HistoryService } from '../history/HistoryService';
 import { ProjectHelper } from '@abc-map/frontend-shared';
 
 logger.disable();
@@ -17,15 +16,12 @@ logger.disable();
 describe('ProjectService', function () {
   let store: MainStore;
   let geoMock: SinonStubbedInstance<GeoService>;
-  let historyMock: SinonStubbedInstance<HistoryService>;
-
   let projectService: ProjectService;
 
   beforeEach(() => {
     store = storeFactory();
     geoMock = sinon.createStubInstance(GeoService);
-    historyMock = sinon.createStubInstance(HistoryService);
-    projectService = new ProjectService({} as any, {} as any, store, (geoMock as unknown) as GeoService, (historyMock as unknown) as HistoryService);
+    projectService = new ProjectService({} as any, {} as any, store, (geoMock as unknown) as GeoService);
   });
 
   describe('newProject()', () => {
@@ -45,7 +41,7 @@ describe('ProjectService', function () {
     it('newProject() should dispatch', async function () {
       // Prepare
       const originalId = store.getState().project.metadata.id;
-      store.dispatch(ProjectActions.newLayout(TestHelper.sampleLayout()));
+      store.dispatch(ProjectActions.addLayouts([TestHelper.sampleLayout()]));
 
       const map = MapFactory.createNaked();
       geoMock.getMainMap.returns(map);
@@ -59,18 +55,6 @@ describe('ProjectService', function () {
       expect(current.metadata.id).not.toEqual(originalId);
       expect(current.layouts).toEqual([]);
     });
-
-    it('newProject() should clean history', async function () {
-      // Prepare
-      const map = MapFactory.createNaked();
-      geoMock.getMainMap.returns(map);
-
-      // Act
-      projectService.newProject();
-
-      // Assert
-      expect(historyMock.clean.callCount).toEqual(1);
-    });
   });
 
   describe('exportCurrentProject()', () => {
@@ -80,8 +64,7 @@ describe('ProjectService', function () {
       store.dispatch(ProjectActions.newProject(metadata));
 
       const layouts = [TestHelper.sampleLayout(), TestHelper.sampleLayout()];
-      store.dispatch(ProjectActions.newLayout(layouts[0]));
-      store.dispatch(ProjectActions.newLayout(layouts[1]));
+      store.dispatch(ProjectActions.addLayouts(layouts));
 
       const layers: AbcLayer[] = [TestHelper.sampleOsmLayer(), TestHelper.sampleVectorLayer()];
       geoMock.getMainMap.returns({ containsCredentials: () => false } as MapWrapper);
@@ -118,8 +101,7 @@ describe('ProjectService', function () {
       store.dispatch(ProjectActions.newProject(metadata));
 
       const layouts = [TestHelper.sampleLayout(), TestHelper.sampleLayout()];
-      store.dispatch(ProjectActions.newLayout(layouts[0]));
-      store.dispatch(ProjectActions.newLayout(layouts[1]));
+      store.dispatch(ProjectActions.addLayouts(layouts));
 
       const layers: AbcLayer[] = [TestHelper.sampleOsmLayer(), TestHelper.sampleVectorLayer(), TestHelper.sampleWmsLayer()];
       geoMock.getMainMap.returns({ containsCredentials: () => true } as MapWrapper);

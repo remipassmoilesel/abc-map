@@ -2,7 +2,7 @@ import { FrontendRoutes } from '@abc-map/frontend-shared';
 import { TestData } from '../../test-data/TestData';
 import { MainMap } from '../../helpers/MainMap';
 import { TestHelper } from '../../helpers/TestHelper';
-import { MapHistory } from '../../helpers/History';
+import { History } from '../../helpers/History';
 
 describe('Data import', () => {
   beforeEach(() => {
@@ -32,13 +32,13 @@ describe('Data import', () => {
           expect(f.getStyle()).length(1);
         });
       })
-      .then(() => MapHistory.undo())
+      .then(() => History.undo())
       .then(() => MainMap.getReference())
       .should((map) => {
         const layerNames = map.getLayersMetadata().map((l) => l.name);
         expect(layerNames).length(2);
       })
-      .then(() => MapHistory.redo())
+      .then(() => History.redo())
       .then(() => MainMap.getReference())
       .should((map) => {
         const layerNames = map.getLayersMetadata().map((l) => l.name);
@@ -75,13 +75,13 @@ describe('Data import', () => {
           expect(f.getStyle()).length(1);
         });
       })
-      .then(() => MapHistory.undo())
+      .then(() => History.undo())
       .then(() => MainMap.getReference())
       .should((map) => {
         const layerNames = map.getLayersMetadata().map((l) => l.name);
         expect(layerNames).length(2);
       })
-      .then(() => MapHistory.redo())
+      .then(() => History.redo())
       .then(() => MainMap.getReference())
       .should((map) => {
         const layerNames = map.getLayersMetadata().map((l) => l.name);

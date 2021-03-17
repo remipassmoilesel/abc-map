@@ -3,7 +3,7 @@ import { FrontendRoutes, MapTool } from '@abc-map/frontend-shared';
 import { TestHelper } from '../../../helpers/TestHelper';
 import { MainMap } from '../../../helpers/MainMap';
 import { Draw } from '../../../helpers/Draw';
-import { MapHistory } from '../../../helpers/History';
+import { History } from '../../../helpers/History';
 
 describe('Draw features history', function () {
   beforeEach(() => {
@@ -21,7 +21,7 @@ describe('Draw features history', function () {
       .then(() => Draw.click(200, 200))
       .then(() => Draw.click(250, 250))
       // First undo
-      .then(() => MapHistory.undo())
+      .then(() => History.undo())
       .wait(800)
       .then(() => MainMap.getReference())
       .should((map) => {
@@ -30,7 +30,7 @@ describe('Draw features history', function () {
         expect(features[0].getGeometry()?.getExtent()).deep.equals([-1810694.249732728, 3356282.8925715857, -427036.23925730854, 4739940.903047006]);
       })
       // Second undo
-      .then(() => MapHistory.undo())
+      .then(() => History.undo())
       .wait(800)
       .then(() => MainMap.getReference())
       .should((map) => {
@@ -38,7 +38,7 @@ describe('Draw features history', function () {
         expect(features).length(0);
       })
       // First redo
-      .then(() => MapHistory.redo())
+      .then(() => History.redo())
       .wait(800)
       .then(() => MainMap.getReference())
       .should((map) => {
@@ -47,7 +47,7 @@ describe('Draw features history', function () {
         expect(features[0].getGeometry()?.getExtent()).deep.equals([-1810694.249732728, 3356282.8925715857, -427036.23925730854, 4739940.903047006]);
       })
       // Second redo
-      .then(() => MapHistory.redo())
+      .then(() => History.redo())
       .wait(800)
       .then(() => MainMap.getReference())
       .should((map) => {
@@ -70,7 +70,7 @@ describe('Draw features history', function () {
       // Second modification
       .then(() => Draw.drag(100, 100, 400, 400))
       // First undo
-      .then(() => MapHistory.undo())
+      .then(() => History.undo())
       .wait(800)
       .then(() => MainMap.getReference())
       .should((map) => {
@@ -79,7 +79,7 @@ describe('Draw features history', function () {
         expect(features[0].getGeometry()?.getExtent()).deep.equals([-2502523.2549704374, 2664453.8873338765, 264792.7659804006, 5431769.908284714]);
       })
       // Second undo
-      .then(() => MapHistory.undo())
+      .then(() => History.undo())
       .wait(800)
       .then(() => MainMap.getReference())
       .should((map) => {
@@ -88,7 +88,7 @@ describe('Draw features history', function () {
         expect(features[0].getGeometry()?.getExtent()).deep.equals([-1810694.249732728, 3356282.8925715857, -427036.23925730854, 4739940.903047006]);
       })
       // First redo
-      .then(() => MapHistory.redo())
+      .then(() => History.redo())
       .wait(800)
       .then(() => MainMap.getReference())
       .should((map) => {
@@ -97,7 +97,7 @@ describe('Draw features history', function () {
         expect(features[0].getGeometry()?.getExtent()).deep.equals([-2502523.2549704374, 2664453.8873338765, 264792.7659804006, 5431769.908284714]);
       })
       // Second redo
-      .then(() => MapHistory.redo())
+      .then(() => History.redo())
       .wait(800)
       .then(() => MainMap.getReference())
       .should((map) => {

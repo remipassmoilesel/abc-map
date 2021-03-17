@@ -39,19 +39,19 @@ class TopBar extends Component<Props, State> {
     const label = user && userAuthenticated ? user.email : 'Visiteur';
 
     return (
-      <div className={Cls.topBar}>
+      <div className={Cls.topBar} data-cy={'top-bar'}>
         <h1>
-          <Link to={FrontendRoutes.landing()}>
+          <Link to={FrontendRoutes.landing()} data-cy={'landing'}>
             <i className={'fa fa-map-marked-alt mr-2'} />
             Abc-Map
           </Link>
         </h1>
 
-        <TopBarLink label={'Carte'} to={FrontendRoutes.map()} />
-        <TopBarLink label={'Catalogue de données'} to={FrontendRoutes.dataStore()} />
-        <TopBarLink label={'Mise en page'} to={FrontendRoutes.layout()} />
-        <TopBarLink label={'Aide'} to={FrontendRoutes.help()} />
-        <TopBarLink label={'A propos'} to={FrontendRoutes.about()} />
+        <TopBarLink label={'Carte'} to={FrontendRoutes.map()} data-cy={'map'} />
+        <TopBarLink label={'Catalogue de données'} to={FrontendRoutes.dataStore()} data-cy={'data-store'} />
+        <TopBarLink label={'Mise en page'} to={FrontendRoutes.layout()} data-cy={'layout'} />
+        <TopBarLink label={'Aide'} to={FrontendRoutes.help()} data-cy={'help'} />
+        <TopBarLink label={'A propos'} to={FrontendRoutes.about()} data-cy={'about'} />
 
         <div className={'flex-grow-1'} />
         <div className={'ml-3'}>
@@ -77,9 +77,10 @@ class TopBar extends Component<Props, State> {
   };
 
   private handleLogout = () => {
-    const { project, authentication, toasts } = this.props.services;
+    const { project, authentication, toasts, history } = this.props.services;
 
     project.newProject();
+    history.clean();
     authentication
       .logout()
       .then(() => toasts.info("Vous n'êtes plus connecté !"))

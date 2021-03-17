@@ -1,0 +1,28 @@
+
+$panel-width: 250px;
+
+.layoutView {
+  max-height: 95vh;
+  overflow: hidden;
+}
+
+.content {
+  display: flex;
+  flex-direction: row;
+}
+
+.leftPanel {
+  width: $panel-width;
+  border-right: solid 1px lightgrey;
+
+  padding-top: 1rem;
+}
+
+.rightPanel {
+  display: flex;
+  flex-direction: column;
+  width: $panel-width;
+  border-left: solid 1px lightgrey;
+
+  padding-top: 1rem;
+}
