@@ -5,7 +5,7 @@ export class ProjectMapper {
   public static dtoToDoc(dto: AbcProjectMetadata, userId: string): ProjectDocument {
     return {
       _id: dto.id,
-      userId,
+      ownerId: userId,
       name: dto.name,
       projection: {
         name: dto.projection.name,

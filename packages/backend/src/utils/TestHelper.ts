@@ -2,6 +2,7 @@ import { AbcProject, AbcUser, CurrentVersion, DEFAULT_PROJECTION, LayerType, Man
 import * as uuid from 'uuid-random';
 import { Zipper } from './Zipper';
 import { CompressedProject } from '../projects/CompressedProject';
+import { ProjectDocument } from '../projects/ProjectDocument';
 
 export class TestHelper {
   public static sampleUser(): AbcUser {
@@ -75,6 +76,17 @@ export class TestHelper {
     return {
       metadata: metadata,
       project: zip,
+    };
+  }
+
+  public static sampleProjectDocument(): ProjectDocument {
+    return {
+      _id: uuid(),
+      ownerId: uuid(),
+      containsCredentials: false,
+      name: 'Fake project',
+      projection: { name: 'EPSG:4326' },
+      version: '0.1',
     };
   }
 }

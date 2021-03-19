@@ -12,8 +12,7 @@ describe('UserService', () => {
 
   before(async () => {
     const config = await ConfigLoader.load();
-    client = new MongodbClient(config);
-    await client.connect();
+    client = await MongodbClient.createAndConnect(config);
 
     service = UserService.create(config, client);
     await service.init();

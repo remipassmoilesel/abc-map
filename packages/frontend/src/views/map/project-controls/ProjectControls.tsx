@@ -5,7 +5,7 @@ import { Constants } from '../../../core/Constants';
 import { connect, ConnectedProps } from 'react-redux';
 import { MainState } from '../../../core/store/reducer';
 import { FileIO, InputResultType, InputType } from '../../../core/utils/FileIO';
-import OpenRemoteProjectModal from './OpenRemoteProjectModal';
+import RemoteProjectModal from './RemoteProjectModal';
 import { ModalStatus } from '../../../core/ui/Modals.types';
 import { ServiceProps, withServices } from '../../../core/withServices';
 
@@ -38,32 +38,34 @@ class ProjectControls extends Component<Props, State> {
     const userAuthenticated = this.props.userStatus === UserStatus.Authenticated;
     return (
       <div className={'control-block'}>
+        {userAuthenticated && (
+          <>
+            <div className={'control-item'}>
+              <button onClick={this.handleOpenProject} type={'button'} className={'btn btn-link'} data-cy={'remote-projects'}>
+                <i className={'fa fa-globe-europe mr-2'} /> Ouvrir un projet
+              </button>
+            </div>
+            <div className={'control-item'}>
+              <button onClick={this.handleSaveProject} type={'button'} className={'btn btn-link'} data-cy={'save-project'}>
+                <i className={'fa fa-pen-alt mr-2'} />
+                Enregistrer en ligne
+              </button>
+            </div>
+            <hr />
+          </>
+        )}
+
+        <div className={'control-item'}>
+          <button onClick={this.handleNewProject} type={'button'} className={'btn btn-link'} data-cy={'new-project'}>
+            <i className={'fa fa-file mr-2'} /> Nouveau projet
+          </button>
+        </div>
         <div className={'control-item'}>
           <button onClick={this.handleImportProject} type={'button'} className={'btn btn-link'} data-cy={'import-project'}>
             <i className={'fa fa-upload mr-2'} />
             Importer un projet
           </button>
         </div>
-        {userAuthenticated && (
-          <div className={'control-item'}>
-            <button onClick={this.handleOpenProject} type={'button'} className={'btn btn-link'} data-cy={'open-remote-project'}>
-              <i className={'fa fa-globe-europe mr-2'} /> Ouvrir un projet
-            </button>
-          </div>
-        )}
-        <div className={'control-item'}>
-          <button onClick={this.handleNewProject} type={'button'} className={'btn btn-link'} data-cy={'new-project'}>
-            <i className={'fa fa-file mr-2'} /> Nouveau projet
-          </button>
-        </div>
-        {userAuthenticated && (
-          <div className={'control-item'}>
-            <button onClick={this.handleSaveProject} type={'button'} className={'btn btn-link'} data-cy={'save-project'}>
-              <i className={'fa fa-pen-alt mr-2'} />
-              Enregistrer en ligne
-            </button>
-          </div>
-        )}
         <div className={'control-item'}>
           <button onClick={this.handleExportProject} type={'button'} className={'btn btn-link'} data-cy={'export-project'}>
             <i className={'fa fa-download mr-2'} />
@@ -71,7 +73,7 @@ class ProjectControls extends Component<Props, State> {
           </button>
         </div>
 
-        {remoteProjectModal && <OpenRemoteProjectModal onHide={this.handleRemoteProjectModalHide} />}
+        {remoteProjectModal && <RemoteProjectModal onHide={this.handleRemoteProjectModalHide} />}
       </div>
     );
   }

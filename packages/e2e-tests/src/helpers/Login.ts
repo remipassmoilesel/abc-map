@@ -1,6 +1,7 @@
 import { FrontendRoutes } from '@abc-map/frontend-shared';
 import { E2eUser } from './E2eUser';
 import Chainable = Cypress.Chainable;
+import { Toasts } from './Toasts';
 
 export class Login {
   public static login(user: E2eUser): Chainable<any> {
@@ -11,6 +12,7 @@ export class Login {
       .get('input[data-cy=login-password]')
       .type(user.password)
       .get('button[data-cy=login-button]')
-      .click();
+      .click()
+      .then(() => Toasts.assertText('Vous êtes connecté !'));
   }
 }

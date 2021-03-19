@@ -7,6 +7,7 @@ import { AuthenticationService } from '../authentication/AuthenticationService';
 import { HealthCheckService } from '../server/HealthCheckService';
 import { AbstractService } from './AbstractService';
 import { DataStoreService } from '../datastore/DataStoreService';
+import { AuthorizationService } from '../authorization/AuthorizationService';
 
 const logger = Logger.get('services.ts');
 
@@ -19,19 +20,20 @@ export interface Services {
   authentication: AuthenticationService;
   health: HealthCheckService;
   datastore: DataStoreService;
+  authorization: AuthorizationService;
   shutdown: ShutdownFunc;
 }
 
 export async function servicesFactory(config: Config): Promise<Services> {
-  const mongodbClient = await MongodbClient.createAndConnect(config);
-  const project = ProjectService.create(config, mongodbClient);
-  const user = UserService.create(config, mongodbClient);
+  const mongodb = await MongodbClient.createAndConnect(config);
+  const project = ProjectService.create(config, mongodb);
+  const user = UserService.create(config, mongodb);
   const authentication = AuthenticationService.create(config, user);
-  const health = HealthCheckService.create(mongodbClient);
-  const datastore = DataStoreService.create(config, mongodbClient);
-  const shutdown: ShutdownFunc = () => {
-    mongodbClient.disconnect().catch((err) => logger.error(err));
-  };
+  const health = HealthCheckService.create(mongodb);
+  const datastore = DataStoreService.create(config, mongodb);
+  const authorization = AuthorizationService.create(mongodb);
+
+  const shutdown: ShutdownFunc = () => mongodb.disconnect().catch((err) => logger.error(err));
 
   const services: Services = {
     project,
@@ -39,6 +41,7 @@ export async function servicesFactory(config: Config): Promise<Services> {
     authentication,
     health,
     datastore,
+    authorization,
     shutdown,
   };
 

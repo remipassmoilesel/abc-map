@@ -15,8 +15,7 @@ describe('DatastoreService', () => {
   before(async () => {
     const config = await ConfigLoader.load();
     config.datastore.path = ressources.getResourcePath('test/datastore');
-    client = new MongodbClient(config);
-    await client.connect();
+    client = await MongodbClient.createAndConnect(config);
 
     service = DataStoreService.create(config, client);
     await service.init();

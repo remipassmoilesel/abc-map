@@ -1,5 +1,5 @@
 import * as express from 'express';
-import { Express } from 'express';
+import { Application, Express } from 'express';
 import * as bodyParser from 'body-parser';
 import { Logger } from '../utils/Logger';
 import { HttpHandlers } from './HttpHandlers';
@@ -27,7 +27,7 @@ export class HttpServer {
   }
 
   /**
-   * Start server.
+   * Start HTTP server.
    *
    * Returned promise resolve when server is closed.
    */
@@ -42,5 +42,9 @@ export class HttpServer {
       this.app.on('error', reject);
       this.app.on('close', () => resolve());
     });
+  }
+
+  public getApp(): Application {
+    return this.app;
   }
 }

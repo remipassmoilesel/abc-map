@@ -11,6 +11,10 @@
 }
 
 .item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
   margin: 5px 0;
   cursor: pointer;
 }
@@ -18,6 +22,9 @@
 .selected {
   color: white;
   background-color: $primary;
+  :global(.fa){
+    color: white;
+  }
 }
 
 .passwordInput {
@@ -26,4 +33,8 @@
   input {
     margin: 1rem 0;
   }
+}
+
+.deleteConfirmation {
+  margin: 1rem 0;
 }

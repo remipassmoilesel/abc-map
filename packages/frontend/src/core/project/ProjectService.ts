@@ -34,6 +34,10 @@ export class ProjectService {
     return this.downloadClient.get(Api.findById(id)).then((res) => res.data);
   }
 
+  public deleteById(id: string): Promise<void> {
+    return this.jsonClient.delete(Api.findById(id)).then(() => undefined);
+  }
+
   public async exportCurrentProject(password?: string): Promise<CompressedProject> {
     const containsCredentials = this.geoService.getMainMap().containsCredentials();
     if (containsCredentials && !password) {
