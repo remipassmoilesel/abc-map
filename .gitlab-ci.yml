@@ -22,7 +22,10 @@ cache:
     - packages/shared-entities/node_modules/
 
 test:
-  # WARNING: do not release cypress screenshots as artifacts, otherwise test credentials can be leaked
   script:
     - ./abc-cli ci
-
+  artifacts:
+    expire_in: 1 week
+    when: always
+    paths:
+      - "packages/e2e-tests/screenshots"

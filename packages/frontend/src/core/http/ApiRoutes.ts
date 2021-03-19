@@ -1,14 +1,18 @@
 export class ProjectRoutes {
   public static saveProject(): string {
-    return '/project';
+    return '/projects/';
   }
 
   public static listProject(): string {
-    return '/project/list';
+    return '/projects/';
   }
 
   public static findById(id: string): string {
-    return `/project/${id}`;
+    return `/projects/${id}`;
+  }
+
+  public static delete(id: string): string {
+    return `/projects/${id}`;
   }
 }
 

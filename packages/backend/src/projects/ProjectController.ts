@@ -3,80 +3,110 @@ import * as multer from 'multer';
 import { Router } from 'express';
 import { Controller } from '../server/Controller';
 import { Services } from '../services/services';
-import { AbcProjectMetadata } from '@abc-map/shared-entities';
+import { AbcProjectMetadata, AbcUser } from '@abc-map/shared-entities';
 import { asyncHandler } from '../server/asyncHandler';
 import { Status } from '../server/Status';
 import { Authentication } from '../authentication/Authentication';
 import { CompressedProject } from './CompressedProject';
+import { AuthorizationService } from '../authorization/AuthorizationService';
+import { HttpResponse } from '../server/HttpResponse';
 
-const upload = multer({
-  // WARNING: memory storage can cause issues in case of high concurrency
-  // TODO: check multer-gridfs-storage
-  storage: multer.memoryStorage(),
-  limits: {
-    headerPairs: 2,
-    files: 1,
-    fileSize: 3e7, // 30 MB
-  },
-});
-
-// TODO: ensure users are not anonymous
 export class ProjectController extends Controller {
+  private authz: AuthorizationService;
+
   constructor(private services: Services) {
     super();
+    this.authz = this.services.authorization;
   }
 
   public getRoot(): string {
-    return '/project';
+    return '/projects';
   }
 
   public getRouter(): Router {
+    // WARNING: memory storage can cause issues in case of high concurrency
+    const upload = multer({
+      storage: multer.memoryStorage(),
+      limits: {
+        headerPairs: 2,
+        files: 1,
+        fileSize: 3e7, // 30 MB
+      },
+    });
+
     const app = express();
     app.post('/', upload.single('project'), asyncHandler(this.save));
-    app.get('/list', asyncHandler(this.list));
+    app.get('/', asyncHandler(this.list));
     app.get('/:projectId', asyncHandler(this.findById));
+    app.delete('/:projectId', asyncHandler(this.deleteById));
     return app;
   }
 
   public save = async (req: express.Request, res: express.Response): Promise<void> => {
-    const user = Authentication.from(req);
-    const metadata: AbcProjectMetadata | any = JSON.parse(req.body.metadata);
-    const file = req.file.buffer;
-    if (!user?.id || !metadata || !metadata.id || !file) {
-      return Promise.reject(new Error('Invalid request'));
+    const metadata: AbcProjectMetadata | undefined = JSON.parse(req.body.metadata);
+    if (!metadata?.id) {
+      HttpResponse.badRequest(res, 'Project id is mandatory');
+      return;
     }
 
-    const project: CompressedProject = {
-      metadata,
-      project: file,
-    };
+    if (!(await this.authz.canWriteProject(req, metadata.id))) {
+      HttpResponse.forbidden(res);
+      return;
+    }
+
+    const user = Authentication.from(req) as AbcUser;
+    const file = req.file.buffer;
+    const project: CompressedProject = { metadata, project: file };
 
     const result: Status = await this.services.project.save(user.id, project).then(() => ({ status: 'saved' }));
     res.status(200).json(result);
   };
 
   public list = async (req: express.Request, res: express.Response): Promise<void> => {
-    const user = Authentication.from(req);
-    if (!user?.id) {
-      return Promise.reject(new Error('Invalid request'));
+    if (!(await this.authz.canListProjects(req))) {
+      HttpResponse.forbidden(res);
+      return;
     }
 
+    const user = Authentication.from(req) as AbcUser;
     const result: AbcProjectMetadata[] = await this.services.project.list(user.id, 0, 50);
     res.status(200).json(result);
   };
 
   public findById = async (req: express.Request, res: express.Response): Promise<void> => {
-    const id = req.params.projectId;
-    if (!id) {
-      return Promise.reject(new Error('Project id is mandatory'));
+    const projectId = req.params.projectId;
+    if (!projectId) {
+      HttpResponse.badRequest(res, 'Project id is mandatory');
+      return;
     }
 
-    const result = await this.services.project.findById(id);
+    if (!(await this.authz.canReadProject(req, projectId))) {
+      HttpResponse.forbidden(res);
+      return;
+    }
+
+    const result = await this.services.project.findById(projectId);
     if (!result) {
       res.status(404).send();
       return;
     }
 
-    res.status(200).contentType('application/zip').send(result.project);
+    res.status(200).contentType('application/zip').end(result.project, 'binary');
+  };
+
+  public deleteById = async (req: express.Request, res: express.Response): Promise<void> => {
+    const projectId = req.params.projectId;
+    if (!projectId) {
+      HttpResponse.badRequest(res, 'Project id is mandatory');
+      return;
+    }
+
+    if (!(await this.authz.canDeleteProject(req, projectId))) {
+      HttpResponse.forbidden(res);
+      return;
+    }
+
+    await this.services.project.deleteById(projectId);
+    res.status(200).json({ status: 'deleted' });
   };
 }
