@@ -1,18 +1,16 @@
 import * as React from 'react';
-import { Services, getServices } from './Services';
+import { getServices, Services } from './Services';
 
 export interface ServiceProps {
   services: Services;
 }
 
-type OmitServices<T> = {
-  [L in Exclude<keyof T, keyof ServiceProps>]: T[L];
-};
+declare type WrappedComponent<P> = React.ComponentClass<Omit<P, keyof ServiceProps>>;
 
-export function withServices<T extends ServiceProps>(WrappedComponent: React.ComponentType<T>): React.ComponentType<OmitServices<T>> {
+export function withServices<P extends ServiceProps>(Component: React.ComponentType<P>): WrappedComponent<P> {
   class ServiceWrapper extends React.Component<any, any> {
     public render() {
-      return <WrappedComponent {...(this.props as T)} services={getServices()} />;
+      return <Component {...(this.props as P)} services={getServices()} />;
     }
   }
 
