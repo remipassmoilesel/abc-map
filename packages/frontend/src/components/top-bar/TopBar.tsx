@@ -21,18 +21,7 @@ const connector = connect(mapStateToProps);
 
 type Props = ConnectedProps<typeof connector> & RouteComponentProps<any> & ServiceProps;
 
-interface State {
-  linkActive: string;
-}
-
-class TopBar extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      linkActive: FrontendRoutes.landing(),
-    };
-  }
-
+class TopBar extends Component<Props, {}> {
   public render(): ReactNode {
     const userAuthenticated = this.props.userStatus === UserStatus.Authenticated;
     const user = this.props.user;
@@ -47,8 +36,10 @@ class TopBar extends Component<Props, State> {
           </Link>
         </h1>
 
+        <TopBarLink label={'Accueil'} to={FrontendRoutes.landing()} activeMatch={/^\/$/} data-cy={'landing'} />
         <TopBarLink label={'Carte'} to={FrontendRoutes.map()} data-cy={'map'} />
         <TopBarLink label={'Catalogue de données'} to={FrontendRoutes.dataStore()} data-cy={'data-store'} />
+        <TopBarLink label={'Traitement de données'} to={FrontendRoutes.dataProcessing('')} data-cy={'data-processing'} />
         <TopBarLink label={'Mise en page'} to={FrontendRoutes.layout()} data-cy={'layout'} />
         <TopBarLink label={'Aide'} to={FrontendRoutes.help()} data-cy={'help'} />
         <TopBarLink label={'A propos'} to={FrontendRoutes.about()} data-cy={'about'} />

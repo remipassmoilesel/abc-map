@@ -15,6 +15,8 @@ import Geometry from 'ol/geom/Geometry';
 
 export const logger = Logger.get('ManagedMap.ts', 'debug');
 
+export declare type LayerChangeHandler = (ev: BaseEvent) => void;
+
 export declare type FeatureCallback = (feat: FeatureWrapper, layer: LayerWrapper<VectorImageLayer, VectorSource<Geometry>, VectorMetadata>) => void;
 
 /**
@@ -141,12 +143,12 @@ export class MapWrapper {
     };
   }
 
-  public addLayerChangeListener(handler: (ev: BaseEvent) => boolean) {
+  public addLayerChangeListener(handler: LayerChangeHandler) {
     this.internal.getLayers().on('propertychange', handler);
   }
 
-  public removeLayerChangeListener(handler: (ev: BaseEvent) => boolean) {
-    this.internal.getLayers().removeEventListener('propertychange', handler);
+  public removeLayerChangeListener(handler: LayerChangeHandler) {
+    this.internal.getLayers().un('propertychange', handler);
   }
 
   public setTool(tool: AbstractTool): void {

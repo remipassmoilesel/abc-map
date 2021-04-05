@@ -1,11 +1,11 @@
-@import "src/style/variables";
+@import "assets/styles/variables";
 @import "~bootstrap/scss/bootstrap";
 @import "~ol/ol.css";
 @import '~react-toastify/dist/ReactToastify.css';
 @import '~@fortawesome/fontawesome-free/css/all.css';
-@import "src/style/scrollbar";
-@import "src/style/globals";
-@import 'src/style/controls';
+@import "assets/styles/scrollbar";
+@import "assets/styles/globals";
+@import 'assets/styles/controls';
 
 html, body {
   height: 100vh;

@@ -1,0 +1,47 @@
+.dataProcessingView {
+  height: 95vh;
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+}
+
+.leftMenu {
+  display: flex;
+  flex-direction: column;
+
+  height: 100%;
+  width: 270px;
+  min-width: 270px;
+  max-width: 270px;
+
+  padding: 1rem;
+  border-right: solid 1px lightgrey;
+
+  :global(.btn) {
+    text-align: left;
+  }
+}
+
+.viewPort {
+  flex-grow: 1;
+  padding: 1rem;
+  overflow-y: scroll;
+}
+
+.welcome {
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  h4 {
+    text-align: center;
+  }
+
+  :global(.fa) {
+    font-size: 5rem;
+    margin-bottom: 2rem;
+  }
+}

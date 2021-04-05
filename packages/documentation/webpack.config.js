@@ -1,5 +1,5 @@
 const path = require('path');
-const marked = require("marked");
+const marked = require('marked');
 const renderer = new marked.Renderer();
 
 module.exports = {
@@ -17,36 +17,31 @@ module.exports = {
         test: /\.md$/,
         use: [
           {
-            loader: "html-loader"
+            loader: 'html-loader',
           },
           {
-            loader: "markdown-loader",
+            loader: 'markdown-loader',
             options: {
-              renderer
-            }
-          }
-        ]
-      },
-      {
-        test: /\.(png|jpe?g|gif)$/i,
-        use: [
-          {
-            loader: 'url-loader',
-            options: {
-              limit: 8192,
+              renderer,
             },
           },
         ],
+      },
+      {
+        test: /\.(png|jpe?g|gif)$/i,
+        type: 'asset/inline',
       },
       {
         test: /\.tsx?$/,
         use: 'ts-loader',
         exclude: /node_modules/,
       },
-    ]
+    ],
   },
   resolve: {
-    extensions: ['.tsx', '.ts', '.js'],
+    extensions: ['.tsx', '.ts'],
+  },
+  watchOptions: {
+    ignored: /node_modules/,
   },
 };
-

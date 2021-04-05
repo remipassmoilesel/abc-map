@@ -1,4 +1,4 @@
-@import "src/style/variables";
+@import "src/assets/styles/variables";
 
 $panel-width: 250px;
 
@@ -6,8 +6,7 @@ $panel-width: 250px;
   height: 95vh;
   display: flex;
   flex-direction: row;
-  overflow-x: hidden;
-  overflow-y: hidden;
+  overflow: hidden;
 }
 
 .leftPanel {

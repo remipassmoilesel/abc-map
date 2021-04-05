@@ -1,0 +1,15 @@
+.dataTable {
+  overflow-x: auto;
+  overflow-y: auto;
+
+  border: solid 1px silver;
+
+  td, th {
+    white-space: nowrap;
+  }
+}
+
+.numberColumn {
+  width: 3rem;
+  max-width: 3rem;
+}

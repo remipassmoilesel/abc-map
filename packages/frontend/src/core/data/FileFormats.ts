@@ -13,7 +13,7 @@ const extensionMap: ExtensionMap = {
   [FileFormat.ZIP]: ['.zip'],
   [FileFormat.GPX]: ['.gpx'],
   [FileFormat.KML]: ['.kml'],
-  [FileFormat.SHAPEFILE]: ['.shp', '.dbx'],
+  [FileFormat.SHAPEFILE]: ['.shp', '.dbf'],
   [FileFormat.ABM2]: ['.abm2'],
   [FileFormat.GEOJSON]: ['.geojson', '.json'],
   [FileFormat.WMS_DEFINITION]: ['.wms'],

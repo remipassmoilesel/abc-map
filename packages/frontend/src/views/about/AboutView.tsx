@@ -12,9 +12,8 @@ class AboutView extends Component<Props, {}> {
     return (
       <div className={Cls.about}>
         <h2 data-cy={'punchline'} className={'text-uppercase text-center'}>
-          Une entreprise vous vendrait ce logiciel 60 000€
+          A propos
         </h2>
-        <h4 className={'text-center'}>(et à ce prix là il marcherait à peine)</h4>
       </div>
     );
   }

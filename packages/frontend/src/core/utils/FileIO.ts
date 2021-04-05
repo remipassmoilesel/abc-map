@@ -9,12 +9,12 @@ export enum InputType {
 }
 
 export enum InputResultType {
-  FilesSelected = 'FilesSelected',
+  Confirmed = 'Confirmed',
   Canceled = 'Canceled',
 }
 
 export interface FilesSelected {
-  type: InputResultType.FilesSelected;
+  type: InputResultType.Confirmed;
   files: File[];
 }
 
@@ -31,16 +31,14 @@ export class FileIO {
     fileNode.multiple = type === InputType.Multiple;
     fileNode.style.display = 'none';
     fileNode.dataset.cy = 'file-input';
-    if (accept) {
-      fileNode.accept = accept;
-    }
+    fileNode.accept = accept || '';
     document.body.appendChild(fileNode);
 
     return new Promise<FileInputResult>((resolve, reject) => {
       fileNode.onchange = () => {
         const files = fileNode.files ? Array.from(fileNode.files) : [];
         fileNode.remove();
-        resolve({ type: InputResultType.FilesSelected, files: files || [] });
+        resolve({ type: InputResultType.Confirmed, files: files || [] });
       };
 
       fileNode.oncancel = () => {
@@ -59,7 +57,11 @@ export class FileIO {
     });
   }
 
-  public static output(dataStr: string, name: string): void {
+  public static outputBlob(blob: Blob, name: string): void {
+    this.outputString(URL.createObjectURL(blob), name);
+  }
+
+  public static outputString(dataStr: string, name: string): void {
     const anchor = document.createElement('a');
     anchor.style.display = 'none';
     anchor.setAttribute('href', dataStr);

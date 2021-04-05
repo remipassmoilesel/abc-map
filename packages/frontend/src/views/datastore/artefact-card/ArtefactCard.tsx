@@ -91,7 +91,7 @@ class ArtefactCard extends Component<Props, {}> {
           content = await Zipper.zipFiles(res);
         }
 
-        FileIO.output(URL.createObjectURL(content), 'artefact.zip');
+        FileIO.outputBlob(content, 'artefact.zip');
       })
       .catch((err) => {
         logger.error(err);

@@ -30,6 +30,28 @@ describe('FeatureWrapper', () => {
     expect(feature.isSelected()).toEqual(true);
   });
 
+  describe('setId()', () => {
+    it('should generate id', () => {
+      const feature = FeatureWrapper.create();
+      const id1 = feature.setId().getId();
+      const id2 = feature.setId().getId();
+
+      expect(id1).toHaveLength(10);
+      expect(id1).not.toEqual(id2);
+    });
+
+    it('should set id', () => {
+      const feature = FeatureWrapper.create();
+      expect(feature.setId(1234).getId()).toEqual(1234);
+      expect(feature.setId('abcd').getId()).toEqual('abcd');
+    });
+
+    it('should set id even if id is zero', () => {
+      const feature = FeatureWrapper.create();
+      expect(feature.setId(0).getId()).toEqual(0);
+    });
+  });
+
   describe('setSelected(), isSelected()', () => {
     it('setSelected() should set property', () => {
       const feature = FeatureWrapper.create();
