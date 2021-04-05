@@ -19,6 +19,7 @@ import PasswordModal from './components/password-modal/PasswordModal';
 import DeviceWarningModal from './components/device-warning-modal/DeviceWarningModal';
 import MessageBanner from './components/message-banner/MessageBanner';
 import { ServiceProps, withServices } from './core/withServices';
+import DataProcessingView from './views/data-processing/DataProcessingView';
 
 class App extends Component<ServiceProps, {}> {
   public render(): ReactNode {
@@ -34,6 +35,7 @@ class App extends Component<ServiceProps, {}> {
             <Route exact path={FrontendRoutes.help()} component={HelpView} />
             <Route exact path={FrontendRoutes.about()} component={AboutView} />
             <Route exact path={FrontendRoutes.confirmAccount()} component={ConfirmAccountView} />
+            <Route exact path={FrontendRoutes.dataProcessing()} component={DataProcessingView} />
             <Route path={'*'} component={NotFoundView} />
           </Switch>
           <MessageBanner />

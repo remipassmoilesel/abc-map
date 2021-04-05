@@ -135,7 +135,7 @@ class ProjectControls extends Component<Props, State> {
 
       toasts.info('Export en cours ...');
       const compressed = await project.exportCurrentProject(password);
-      FileIO.output(URL.createObjectURL(compressed.project), `project.${Constants.EXTENSION}`);
+      FileIO.outputBlob(compressed.project, `project.${Constants.EXTENSION}`);
       toasts.info('Export terminé !');
     };
 

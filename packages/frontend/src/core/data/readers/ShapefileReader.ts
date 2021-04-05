@@ -1,7 +1,7 @@
 import { AbstractDataReader } from './AbstractDataReader';
 import { AbcProjection, LayerType, VectorMetadata } from '@abc-map/shared-entities';
 import { FileFormat, FileFormats } from '../FileFormats';
-import { AbcFile } from '@abc-map/frontend-shared';
+import { AbcFile, Logger } from '@abc-map/frontend-shared';
 import * as shapefile from 'shapefile';
 import { GeoJSON } from 'ol/format';
 import VectorSource from 'ol/source/Vector';
@@ -9,6 +9,8 @@ import { BlobIO } from '@abc-map/frontend-shared';
 import uuid from 'uuid-random';
 import { LayerWrapper } from '../../geo/layers/LayerWrapper';
 import { LayerFactory } from '../../geo/layers/LayerFactory';
+
+const logger = Logger.get('ShapefileReader.ts');
 
 export class ShapefileReader extends AbstractDataReader {
   public async isSupported(files: AbcFile[]): Promise<boolean> {
@@ -28,7 +30,7 @@ export class ShapefileReader extends AbstractDataReader {
 
     const shpBuffer = await BlobIO.asArrayBuffer(shp.content);
     const dbfBuffer = dbf ? await BlobIO.asArrayBuffer(dbf.content) : undefined;
-    const geojson = await shapefile.read(shpBuffer, dbfBuffer);
+    const geojson = await shapefile.read(shpBuffer, dbfBuffer, { encoding: 'utf-8' });
 
     const format = new GeoJSON();
     const features = format.readFeatures(geojson, { featureProjection: projection.name });

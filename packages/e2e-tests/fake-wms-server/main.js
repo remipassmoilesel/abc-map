@@ -26,7 +26,7 @@ wms.get('/authenticated', function (req, res) {
 });
 
 wms.listen(PORT, 'localhost', () => {
-  console.log(`Fake authenticated WMS server listening on localhost:${PORT}`);
+  console.log(`Fake WMS server listening on localhost:${PORT}`);
 });
 
 function handleWmsRequest(req, res) {

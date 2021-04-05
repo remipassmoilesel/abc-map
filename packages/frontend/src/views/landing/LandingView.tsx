@@ -19,7 +19,7 @@ class LandingView extends Component<Props, {}> {
         {/* Introduction */}
 
         <h1>Bienvenue !</h1>
-        <p>
+        <p className={Cls.intro}>
           Abc-Map est un logiciel libre de cartographie.
           <br />
           Abc-Map vous permet de créer des cartes simplement, sans connaissances techniques.
@@ -32,6 +32,9 @@ class LandingView extends Component<Props, {}> {
           <li>
             Commencez à créer sur la page <Link to={FrontendRoutes.map()}>la page Carte</Link>, importez des données à partir de votre navigateur ou{' '}
             <Link to={FrontendRoutes.dataStore()}>sur la page Catalogue de données</Link>
+          </li>
+          <li>
+            Si vous le souhaitez, appliquez un traitement de données sur <Link to={FrontendRoutes.dataProcessing('')}>la page traitement de données</Link>
           </li>
           <li>
             Mettez en page et exportez votre carte sur <Link to={FrontendRoutes.layout()}>la page Mise en page</Link>

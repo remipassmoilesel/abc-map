@@ -1,6 +1,6 @@
 import React, { Component, ReactNode } from 'react';
 import MainMap from './main-map/MainMap';
-import LayerSelector from './layer-selector/LayerSelector';
+import LayerControls from './layer-controls/LayerControls';
 import ProjectStatus from './project-status/ProjectStatus';
 import { connect, ConnectedProps } from 'react-redux';
 import { Logger } from '@abc-map/frontend-shared';
@@ -62,7 +62,7 @@ class MapView extends Component<Props, State> {
 
         {/*Right menu*/}
         <div className={Cls.rightPanel}>
-          <LayerSelector layers={this.state.layers} />
+          <LayerControls layers={this.state.layers} />
           <ToolSelector activeLayer={activeLayer} />
         </div>
       </div>
@@ -80,11 +80,10 @@ class MapView extends Component<Props, State> {
     this.state.map.unwrap().un('rendercomplete', this.onRenderComplete);
   }
 
-  private onLayerChange = (): boolean => {
+  private onLayerChange = (): void => {
     logger.debug('Layers changed');
     const layers = this.state.map.getLayers();
     this.setState({ layers });
-    return true;
   };
 
   private onRenderComplete = () => {

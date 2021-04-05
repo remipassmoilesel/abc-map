@@ -1,23 +1,18 @@
 import React, { Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/frontend-shared';
-import { Documentation } from '@abc-map/documentation';
+import { content as doc } from '@abc-map/documentation';
 import { ServiceProps, withServices } from '../../core/withServices';
 import Cls from './HelpView.module.scss';
 
 const logger = Logger.get('Help.tsx', 'info');
 
-interface State {
-  documentation?: Documentation;
-}
-
-class HelpView extends Component<ServiceProps, State> {
+class HelpView extends Component<ServiceProps, {}> {
   constructor(props: ServiceProps) {
     super(props);
     this.state = {};
   }
 
   public render(): ReactNode {
-    const doc = this.state.documentation;
     return (
       <div className={Cls.help}>
         <h1>Aide</h1>
@@ -33,16 +28,6 @@ class HelpView extends Component<ServiceProps, State> {
         )}
       </div>
     );
-  }
-
-  public componentDidMount() {
-    const { toasts } = this.props.services;
-
-    import('@abc-map/documentation')
-      .then((res) => {
-        this.setState({ documentation: res.content });
-      })
-      .catch(() => toasts.genericError());
   }
 }
 

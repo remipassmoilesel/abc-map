@@ -1,4 +1,4 @@
-@import "src/style/variables";
+@import "src/assets/styles/variables";
 
 @keyframes fadeIn {
   0% {
@@ -30,6 +30,6 @@
     color: white;
   }
 
-  animation: fadeIn 3s;
+  animation: fadeIn 1.5s;
 }
 

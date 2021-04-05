@@ -9,6 +9,6 @@ describe('FileFormats.ts', function () {
     expect(FileFormats.fromPath('test.gpx')).toEqual(FileFormat.GPX);
     expect(FileFormats.fromPath('test.SHP')).toEqual(FileFormat.SHAPEFILE);
     expect(FileFormats.fromPath('test.shp')).toEqual(FileFormat.SHAPEFILE);
-    expect(FileFormats.fromPath('test.dbx')).toEqual(FileFormat.SHAPEFILE);
+    expect(FileFormats.fromPath('test.dbf')).toEqual(FileFormat.SHAPEFILE);
   });
 });

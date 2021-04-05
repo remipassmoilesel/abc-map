@@ -1,9 +1,9 @@
 import Feature, { FeatureLike } from 'ol/Feature';
 import Geometry from 'ol/geom/Geometry';
-import uuid from 'uuid-random';
 import { FeatureProperties, StyleProperties } from '@abc-map/shared-entities';
 import { FeatureStyle, DefaultStyle } from '../style/FeatureStyle';
 import { StyleFactory } from '../style/StyleFactory';
+import { nanoid } from 'nanoid';
 
 const styles = new StyleFactory();
 
@@ -43,7 +43,7 @@ export class FeatureWrapper {
    * @param id
    */
   public setId(id?: string | number): FeatureWrapper {
-    this.feature.setId(id || uuid());
+    this.feature.setId(id ?? nanoid(10));
     return this;
   }
 
@@ -103,6 +103,8 @@ export class FeatureWrapper {
    * Set style properties on feature
    * @param properties
    */
+  // TODO: here we should set only required properties, otherwise lot of objects will have lot of properties undefined
+  // TODO: but we should find a way to erase old properties, e.g. for setDefaultStyle()
   public setStyleProperties(properties: FeatureStyle): FeatureWrapper {
     this.feature.set(StyleProperties.StrokeColor, properties.stroke?.color);
     this.feature.set(StyleProperties.StrokeWidth, properties.stroke?.width);

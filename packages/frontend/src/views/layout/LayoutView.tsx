@@ -278,10 +278,10 @@ class LayoutView extends Component<Props, State> {
 
       if (format === 'pdf') {
         const result = await renderer.renderLayoutsAsPdf(layouts, map, support);
-        FileIO.output(URL.createObjectURL(result), 'map.pdf');
+        FileIO.outputBlob(result, 'map.pdf');
       } else {
         const result = await renderer.renderLayoutsAsPng(layouts, map, support);
-        FileIO.output(URL.createObjectURL(result), 'map.zip');
+        FileIO.outputBlob(result, 'map.zip');
       }
 
       toasts.info('Export terminé !');

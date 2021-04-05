@@ -1,0 +1,10 @@
+@import "src/assets/styles/variables";
+
+.bubble {
+  cursor: pointer;
+
+  :global(.fa) {
+    margin: 0.3rem 1rem;
+    color: $primary !important;
+  }
+}

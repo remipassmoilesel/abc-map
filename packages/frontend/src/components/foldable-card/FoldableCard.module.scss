@@ -1,0 +1,16 @@
+.foldableCard {
+  :global(.card-body) {
+    padding-top: 0;
+  }
+}
+
+.title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+
+  padding: 1rem;
+
+  font-size: 1.2rem;
+}

@@ -1,0 +1,44 @@
+@import "src/assets/styles/variables";
+
+$list-height: 90px;
+
+.layerControls {
+  display: flex;
+  flex-direction: column;
+}
+
+.layerList {
+  height: $list-height;
+  max-height: $list-height;
+  overflow-y: scroll;
+  padding: 5px;
+  border: solid silver 1px;
+}
+
+.controls {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  button {
+    margin: 3px;
+    padding: 3px;
+    width: 40px;
+    outline: 0;
+  }
+
+  :global(.fa) {
+    color: $icon-color;
+  }
+
+  :global(.btn-outline-primary:hover) {
+    background-color: inherit;
+    color: black;
+  }
+}
+
+.noLayers {
+  text-align: center;
+  padding: 10px;
+}
+

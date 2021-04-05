@@ -2,6 +2,7 @@ import { LayerType } from '@abc-map/shared-entities';
 import { FrontendRoutes } from '@abc-map/frontend-shared';
 import { TestHelper } from '../../helpers/TestHelper';
 import { MainMap } from '../../helpers/MainMap';
+import { WmsConstants } from '../../helpers/WmsConstants';
 
 describe('Wms layers', function () {
   beforeEach(() => {
@@ -20,13 +21,13 @@ describe('Wms layers', function () {
       // Enter URL, get capabilities
       .get('[data-cy=wms-settings-url]')
       .clear()
-      .type('https://ahocevar.com/geoserver/wms')
+      .type(WmsConstants.PUBLIC_URL)
       .get('[data-cy=wms-settings-capabilities]')
       .click()
       .wait(1000)
       // Select remote layer then add
       .get('[data-cy=wms-layer-item]')
-      .eq(2)
+      .eq(1)
       .click()
       .get('[data-cy=add-layer-confirm]')
       .click()

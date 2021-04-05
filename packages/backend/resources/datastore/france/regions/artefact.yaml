@@ -1,0 +1,13 @@
+version: 0.1
+artefact:
+  name: Régions de France
+  license: LICENCE.txt
+  description: Régions de France 2016, avec noms et surfaces
+  keywords:
+    - régions
+    - France
+  links:
+    - https://www.data.gouv.fr/fr/datasets/contours-des-regions-francaises-sur-openstreetmap/
+  files:
+    - regions-20161121-shp.zip
+
