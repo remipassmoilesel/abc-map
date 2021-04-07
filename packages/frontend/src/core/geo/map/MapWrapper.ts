@@ -28,13 +28,11 @@ export class MapWrapper {
   private currentTool?: AbstractTool;
 
   constructor(private readonly internal: Map) {
-    this.addLayerChangeListener(() => {
-      this.updateToolInteractions();
-      return true;
-    });
+    this.addLayerChangeListener(this.handleLayerChange);
   }
 
   public dispose() {
+    this.removeLayerChangeListener(this.handleLayerChange);
     this.internal.dispose();
     this.sizeObserver?.disconnect();
     this.sizeObserver = undefined;
@@ -45,8 +43,8 @@ export class MapWrapper {
 
     if (node) {
       // Here we listen to div support size change
-      const resizeThrottled = _.throttle(() => this.internal.updateSize(), 300, { trailing: true });
-      this.sizeObserver = ResizeObserverFactory.create(() => resizeThrottled());
+      const resize = _.throttle(() => this.internal.updateSize(), 300, { trailing: true });
+      this.sizeObserver = ResizeObserverFactory.create(resize);
       this.sizeObserver.observe(node);
     } else {
       this.sizeObserver?.disconnect();
@@ -236,4 +234,8 @@ export class MapWrapper {
   public unwrap(): Map {
     return this.internal;
   }
+
+  private handleLayerChange = () => {
+    this.updateToolInteractions();
+  };
 }

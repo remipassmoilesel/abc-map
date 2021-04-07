@@ -14,13 +14,19 @@ import { LayerWrapper } from '../../core/geo/layers/LayerWrapper';
 import Search from './search/Search';
 import ImportData from './import-data/ImportData';
 import { ServiceProps, withServices } from '../../core/withServices';
+import * as _ from 'lodash';
+import MapBrowserEvent from 'ol/MapBrowserEvent';
 import Cls from './MapView.module.scss';
+import { toLonLat } from 'ol/proj';
+import CursorPosition from './cursor-position/CursorPosition';
+import { Coordinate } from 'ol/coordinate';
 
 const logger = Logger.get('MapView.tsx', 'debug');
 
 interface State {
   layers: LayerWrapper[];
   map: MapWrapper;
+  position?: Coordinate;
 }
 
 const mapStateToProps = (state: MainState) => ({
@@ -45,6 +51,7 @@ class MapView extends Component<Props, State> {
 
   public render(): ReactNode {
     const activeLayer = this.state.layers.find((lay) => lay.isActive());
+    const position = this.state.position;
 
     return (
       <div className={Cls.mapView}>
@@ -55,6 +62,7 @@ class MapView extends Component<Props, State> {
           <ProjectControls />
           <HistoryControls historyKey={HistoryKey.Map} />
           <ImportData />
+          <CursorPosition position={position} />
         </div>
 
         {/*Main map*/}
@@ -70,25 +78,41 @@ class MapView extends Component<Props, State> {
   }
 
   public componentDidMount() {
-    this.state.map.addLayerChangeListener(this.onLayerChange);
-    this.onLayerChange(); // We trigger manually the first event for setup
-    this.state.map.unwrap().on('rendercomplete', this.onRenderComplete);
+    const map = this.state.map;
+
+    map.addLayerChangeListener(this.handleLayerChange);
+    this.handleLayerChange(); // We trigger manually the first event for setup
+
+    map.unwrap().on('rendercomplete', this.handleRenderComplete);
+    map.unwrap().on('pointermove', this.handlePointerMove);
   }
 
   public componentWillUnmount() {
-    this.state.map.removeLayerChangeListener(this.onLayerChange);
-    this.state.map.unwrap().un('rendercomplete', this.onRenderComplete);
+    const map = this.state.map;
+
+    map.removeLayerChangeListener(this.handleLayerChange);
+    map.unwrap().un('rendercomplete', this.handleRenderComplete);
+    map.unwrap().un('pointermove', this.handlePointerMove);
   }
 
-  private onLayerChange = (): void => {
+  private handleLayerChange = (): void => {
     logger.debug('Layers changed');
     const layers = this.state.map.getLayers();
     this.setState({ layers });
   };
 
-  private onRenderComplete = () => {
+  private handleRenderComplete = () => {
     logger.debug('Map rendering complete');
   };
+
+  private handlePointerMove = _.throttle(
+    (ev: MapBrowserEvent) => {
+      const position = toLonLat(ev.coordinate, ev.map.getView().getProjection());
+      this.setState({ position });
+    },
+    200,
+    { trailing: true }
+  );
 }
 
 export default connector(withServices(MapView));

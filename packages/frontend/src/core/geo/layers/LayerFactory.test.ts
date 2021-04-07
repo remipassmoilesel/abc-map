@@ -29,28 +29,19 @@ describe('LayerFactory', () => {
       const metadata = layer.getMetadata();
       expect(metadata).toBeDefined();
       expect(metadata?.id).toBeDefined();
-      expect(metadata?.name).toEqual('Formes');
+      expect(metadata?.name).toEqual('Géométries');
       expect(metadata?.opacity).toEqual(1);
       expect(metadata?.visible).toEqual(true);
       expect(metadata?.active).toEqual(false);
       expect(metadata?.type).toEqual(LayerType.Vector);
       expect(layer.unwrap().get(AbcProperties.Managed)).toBe(true);
       expect(layer.unwrap()).toBeInstanceOf(VectorImageLayer);
+      expect(layer.unwrap().getSource()).toBeDefined();
     });
 
     it('with source', () => {
       const source = new VectorSource();
       const layer = LayerFactory.newVectorLayer(source);
-      const metadata = layer.getMetadata();
-      expect(metadata).toBeDefined();
-      expect(metadata?.id).toBeDefined();
-      expect(metadata?.name).toEqual('Formes');
-      expect(metadata?.opacity).toEqual(1);
-      expect(metadata?.visible).toEqual(true);
-      expect(metadata?.active).toEqual(false);
-      expect(metadata?.type).toEqual(LayerType.Vector);
-      expect(layer.unwrap().get(AbcProperties.Managed)).toBe(true);
-      expect(layer.unwrap()).toBeInstanceOf(VectorImageLayer);
       expect(layer.unwrap().getSource()).toStrictEqual(source);
     });
   });
@@ -135,7 +126,7 @@ describe('LayerFactory', () => {
     it('with vector layer', async () => {
       const abcLayer = TestHelper.sampleVectorLayer();
       abcLayer.features.features = [TestHelper.sampleGeojsonFeature(), TestHelper.sampleGeojsonFeature()];
-      abcLayer.metadata.name = 'Formes';
+      abcLayer.metadata.name = 'What a beautiful layer';
       abcLayer.metadata.opacity = 0.5;
       abcLayer.metadata.active = true;
       abcLayer.metadata.visible = false;
@@ -146,7 +137,7 @@ describe('LayerFactory', () => {
       expect(metadata).toBeDefined();
       expect(metadata?.id).toBeDefined();
       expect(metadata?.id).toEqual(abcLayer.metadata.id);
-      expect(metadata?.name).toEqual('Formes');
+      expect(metadata?.name).toEqual('What a beautiful layer');
       expect(metadata?.opacity).toEqual(0.5);
       expect(metadata?.visible).toEqual(false);
       expect(metadata?.active).toEqual(true);
