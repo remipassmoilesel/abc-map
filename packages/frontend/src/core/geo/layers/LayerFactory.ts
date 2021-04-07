@@ -36,7 +36,7 @@ export class LayerFactory {
 
     const metadata: VectorMetadata = {
       id: uuid(),
-      name: 'Formes',
+      name: 'Géométries',
       type: LayerType.Vector,
       active: false,
       opacity: 1,

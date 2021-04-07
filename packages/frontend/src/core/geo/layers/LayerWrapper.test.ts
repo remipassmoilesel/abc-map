@@ -191,7 +191,7 @@ describe('LayerWrapper', () => {
       const expectedMetadata: VectorMetadata = {
         id: layer.getId() as string,
         type: LayerType.Vector,
-        name: 'Formes',
+        name: 'Géométries',
         active: true,
         opacity: 0.5,
         visible: false,

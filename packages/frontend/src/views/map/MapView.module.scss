@@ -14,7 +14,7 @@ $panel-width: 250px;
   height: 95vh;
   border-right: solid 1px lightgrey;
   overflow-x: hidden;
-  overflow-y: scroll;
+  overflow-y: hidden;
 
   padding-top: 1rem;
 }
@@ -24,7 +24,7 @@ $panel-width: 250px;
   height: 95vh;
   border-left: solid 1px lightgrey;
   overflow-x: hidden;
-  overflow-y: scroll;
+  overflow-y: auto;
 
   padding-top: 1rem;
 }

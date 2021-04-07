@@ -11,7 +11,7 @@ export class LabelledLayerTypes {
 
   public static readonly Vector: LabelledLayerType = {
     id: 'Vector',
-    label: 'Couche de formes',
+    label: 'Couche de géométries',
   };
 
   public static readonly Wms: LabelledLayerType = {

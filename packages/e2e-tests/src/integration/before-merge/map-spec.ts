@@ -12,12 +12,12 @@ describe('Map', function () {
     cy.visit(FrontendRoutes.map())
       .then(() => LayerSelector.getNames())
       .should((names) => {
-        expect(names).deep.equals(['OpenStreetMap', 'Formes']);
+        expect(names).deep.equals(['OpenStreetMap', 'Géométries']);
       })
       .then(() => LayerSelector.getActiveItem())
       .should((elem) => {
         expect(elem.length).equals(1);
-        expect(elem.text()).equals('Formes');
+        expect(elem.text()).equals('Géométries');
       });
   });
 
@@ -26,7 +26,7 @@ describe('Map', function () {
       .then(() => LayerSelector.addOsmLayer())
       .then(() => LayerSelector.getNames())
       .should((names) => {
-        expect(names).deep.equals(['OpenStreetMap', 'Formes', 'OpenStreetMap']);
+        expect(names).deep.equals(['OpenStreetMap', 'Géométries', 'OpenStreetMap']);
       })
       .then(() => LayerSelector.getActiveItem())
       .should((elem) => {
@@ -40,24 +40,24 @@ describe('Map', function () {
       .then(() => LayerSelector.addOsmLayer())
       .then(() => LayerSelector.getNames())
       .should((names) => {
-        expect(names).deep.equals(['OpenStreetMap', 'Formes', 'OpenStreetMap']);
+        expect(names).deep.equals(['OpenStreetMap', 'Géométries', 'OpenStreetMap']);
       })
       // Undo
       .then(() => History.undo())
       .then(() => LayerSelector.getNames())
       .should((names) => {
-        expect(names).deep.equals(['OpenStreetMap', 'Formes']);
+        expect(names).deep.equals(['OpenStreetMap', 'Géométries']);
       })
       .then(() => LayerSelector.getActiveItem())
       .should((elem) => {
         expect(elem.length).equals(1);
-        expect(elem.text()).equals('Formes');
+        expect(elem.text()).equals('Géométries');
       })
       // Redo
       .then(() => History.redo())
       .then(() => LayerSelector.getNames())
       .should((names) => {
-        expect(names).deep.equals(['OpenStreetMap', 'Formes', 'OpenStreetMap']);
+        expect(names).deep.equals(['OpenStreetMap', 'Géométries', 'OpenStreetMap']);
       })
       .then(() => LayerSelector.getActiveItem())
       .should((elem) => {

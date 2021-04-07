@@ -66,7 +66,7 @@ class Search extends Component<Props, State> {
     this.search(query);
   };
 
-  private search = _.throttle((query) => {
+  private search = _.debounce((query) => {
     const { geo, toasts } = this.props.services;
 
     this.setState({ loading: true });
