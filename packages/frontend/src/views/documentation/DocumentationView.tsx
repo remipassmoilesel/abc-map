@@ -2,11 +2,11 @@ import React, { Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/frontend-shared';
 import { content as doc } from '@abc-map/documentation';
 import { ServiceProps, withServices } from '../../core/withServices';
-import Cls from './HelpView.module.scss';
+import Cls from './DocumentationView.module.scss';
 
 const logger = Logger.get('Help.tsx', 'info');
 
-class HelpView extends Component<ServiceProps, {}> {
+class DocumentationView extends Component<ServiceProps, {}> {
   constructor(props: ServiceProps) {
     super(props);
     this.state = {};
@@ -14,7 +14,7 @@ class HelpView extends Component<ServiceProps, {}> {
 
   public render(): ReactNode {
     return (
-      <div className={Cls.help}>
+      <div className={Cls.documentation}>
         <h1>Aide</h1>
         <p>Sur cette page, vous trouverez des tutoriels et le manuel d&apos;Abc-Map.</p>
         <p>L&apos;aide est en cours de rédaction.</p>
@@ -31,4 +31,4 @@ class HelpView extends Component<ServiceProps, {}> {
   }
 }
 
-export default withServices(HelpView);
+export default withServices(DocumentationView);

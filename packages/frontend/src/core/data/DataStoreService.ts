@@ -8,6 +8,8 @@ import { LayerWrapper } from '../geo/layers/LayerWrapper';
 import { GeoService } from '../geo/GeoService';
 import { getArea } from 'ol/extent';
 import { DateTime } from 'luxon';
+import { BlobIO } from '@abc-map/frontend-shared';
+import { PaginatedResponse } from '@abc-map/shared-entities';
 
 const logger = Logger.get('DataService.ts');
 
@@ -19,21 +21,26 @@ export declare type DataReaderFactory = () => DataReader;
 
 const defaultReaderFactory: DataReaderFactory = () => DataReader.create();
 
-export class DataService {
+export class DataStoreService {
   constructor(private apiClient: AxiosInstance, private downloadClient: AxiosInstance, private geo: GeoService, private readerFactory = defaultReaderFactory) {}
 
-  public listArtefacts(): Promise<AbcArtefact[]> {
-    return this.apiClient.get(Api.list()).then((res) => res.data);
+  public listArtefacts(limit = 50, offset = 0): Promise<PaginatedResponse<AbcArtefact>> {
+    const params = { limit, offset };
+    return this.apiClient.get(Api.list(), { params }).then((res) => res.data);
   }
 
-  public searchArtefacts(query: string): Promise<AbcArtefact[]> {
-    const params = { query: encodeURI(query) };
+  public searchArtefacts(query: string, limit = 50, offset = 0): Promise<PaginatedResponse<AbcArtefact>> {
+    const params = { query: encodeURI(query), limit, offset };
     return this.apiClient.get(Api.search(), { params }).then((res) => res.data);
   }
 
   public downloadFilesFrom(artefact: AbcArtefact): Promise<AbcFile[]> {
     const files = artefact.files.map((file) => this.downloadClient.get(Api.download(file)).then((res) => ({ path: file, content: res.data })));
     return Promise.all(files);
+  }
+
+  public downloadLicense(artefact: AbcArtefact): Promise<string> {
+    return this.downloadClient.get(Api.download(artefact.license)).then((res) => BlobIO.asString(res.data));
   }
 
   public async importArtefact(artefact: AbcArtefact): Promise<ImportResult> {

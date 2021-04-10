@@ -1,0 +1,21 @@
+.panel {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+}
+
+.message {
+  font-weight: bolder;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  flex-grow: 1;
+}
+
+.output {
+  margin-top: 1rem;
+  pre {
+    padding: 1rem;
+    margin-top: 1rem;
+    border: solid 1px #ced4da;
+  }
+}

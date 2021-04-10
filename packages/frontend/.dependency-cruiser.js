@@ -27,7 +27,8 @@ module.exports = {
           '(^|/)\\.[^/]+\\.(js|cjs|mjs|ts|tsx|json)$', // dot files
           '\\.d\\.ts$',                            // TypeScript declaration files
           '(^|/)tsconfig\\.json$',                 // TypeScript config
-          '(^|/)(babel|webpack)\\.config\\.(js|cjs|mjs|ts|tsx|json)$' // other configs
+          '(^|/)(babel|webpack)\\.config\\.(js|cjs|mjs|ts|tsx|json)$', // other configs
+          'src/assets/styles/mocks/style.js$'
         ]
       },
       to: {},

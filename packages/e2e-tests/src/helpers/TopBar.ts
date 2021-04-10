@@ -13,15 +13,15 @@ export class TopBar {
     return cy.get('[data-cy=top-bar] [data-cy=data-store]').click();
   }
 
+  public static dataProcessing(): Chainable<any> {
+    return cy.get('[data-cy=top-bar] [data-cy=data-processing]').click();
+  }
+
   public static layout(): Chainable<any> {
     return cy.get('[data-cy=top-bar] [data-cy=layout]').click();
   }
 
-  public static help(): Chainable<any> {
+  public static documentation(): Chainable<any> {
     return cy.get('[data-cy=top-bar] [data-cy=help]').click();
-  }
-
-  public static about(): Chainable<any> {
-    return cy.get('[data-cy=top-bar] [data-cy=about]').click();
   }
 }

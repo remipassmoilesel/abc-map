@@ -77,7 +77,7 @@ export class MainMap extends Component<Props, State> {
   }
 
   private handleDrop = (ev: DragEvent<HTMLDivElement>) => {
-    const { data, history, toasts } = this.props.services;
+    const { dataStore, history, toasts } = this.props.services;
     ev.preventDefault();
 
     const files: AbcFile[] = Array.from(ev.dataTransfer.files).map((f) => ({ path: f.name, content: f }));
@@ -87,7 +87,7 @@ export class MainMap extends Component<Props, State> {
     }
 
     toasts.info('Import en cours ...');
-    data
+    dataStore
       .importFiles(files)
       .then((res) => {
         if (!res.layers.length) {

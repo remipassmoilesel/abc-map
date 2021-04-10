@@ -9,8 +9,7 @@ import LayoutView from './views/layout/LayoutView';
 import TopBar from './components/top-bar/TopBar';
 import DataStoreView from './views/datastore/DataStoreView';
 import NotFoundView from './views/not-found/NotFoundView';
-import HelpView from './views/help/HelpView';
-import AboutView from './views/about/AboutView';
+import DocumentationView from './views/documentation/DocumentationView';
 import ConfirmAccountView from './views/confirm-account/ConfirmAccountView';
 import { Env } from './core/utils/Env';
 import { mainStore } from './core/store/store';
@@ -32,8 +31,7 @@ class App extends Component<ServiceProps, {}> {
             <Route exact path={FrontendRoutes.map()} component={MapView} />
             <Route exact path={FrontendRoutes.dataStore()} component={DataStoreView} />
             <Route exact path={FrontendRoutes.layout()} component={LayoutView} />
-            <Route exact path={FrontendRoutes.help()} component={HelpView} />
-            <Route exact path={FrontendRoutes.about()} component={AboutView} />
+            <Route exact path={FrontendRoutes.documentation()} component={DocumentationView} />
             <Route exact path={FrontendRoutes.confirmAccount()} component={ConfirmAccountView} />
             <Route exact path={FrontendRoutes.dataProcessing()} component={DataProcessingView} />
             <Route path={'*'} component={NotFoundView} />

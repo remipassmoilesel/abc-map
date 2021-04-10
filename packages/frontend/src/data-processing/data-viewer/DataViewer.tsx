@@ -9,7 +9,7 @@ export class DataViewer extends Module {
   }
 
   public getReadableName(): string {
-    return 'Données de couches';
+    return 'Tableaux de données';
   }
 
   public getUserInterface(): ReactNode {

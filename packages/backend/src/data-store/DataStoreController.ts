@@ -3,7 +3,7 @@ import { Router } from 'express';
 import { Controller } from '../server/Controller';
 import { Services } from '../services/services';
 import { asyncHandler } from '../server/asyncHandler';
-import { AbcArtefact } from '@abc-map/shared-entities';
+import { AbcArtefact, PaginatedResponse } from '@abc-map/shared-entities';
 
 export class DataStoreController extends Controller {
   constructor(private services: Services) {
@@ -19,12 +19,22 @@ export class DataStoreController extends Controller {
     app.get('/list', asyncHandler(this.list));
     app.get('/search', asyncHandler(this.search));
     app.get('/:artefactId', asyncHandler(this.getById));
-    app.use('/download', express.static(this.services.datastore.getDatastorePath()));
+    app.use('/download', express.static(this.services.datastore.getRoot()));
     return app;
   }
 
   public list = async (req: express.Request, res: express.Response): Promise<void> => {
-    const result: AbcArtefact[] = await this.services.datastore.list(0, 50);
+    const limit = parseInt(req.query.limit as string) || 50;
+    const offset = parseInt(req.query.offset as string) || 0;
+
+    const content = await this.services.datastore.list(limit, offset);
+    const total = await this.services.datastore.countArtefacts();
+    const result: PaginatedResponse<AbcArtefact> = {
+      content,
+      limit,
+      offset,
+      total,
+    };
     res.status(200).json(result);
   };
 
@@ -34,7 +44,17 @@ export class DataStoreController extends Controller {
       return Promise.reject(new Error('Query is mandatory'));
     }
 
-    const result: AbcArtefact[] = await this.services.datastore.search(query, 0, 50);
+    const limit = parseInt(req.query.limit as string) || 50;
+    const offset = parseInt(req.query.offset as string) || 0;
+
+    const content = await this.services.datastore.search(query, limit, offset);
+    const total = await this.services.datastore.countArtefacts();
+    const result: PaginatedResponse<AbcArtefact> = {
+      content,
+      limit,
+      offset,
+      total,
+    };
     res.status(200).json(result);
   };
 

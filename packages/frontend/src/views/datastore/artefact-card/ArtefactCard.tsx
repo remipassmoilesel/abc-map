@@ -1,102 +1,114 @@
 import React, { Component, ReactNode } from 'react';
-import { Logger, Zipper } from '@abc-map/frontend-shared';
+import { Logger } from '@abc-map/frontend-shared';
 import { AbcArtefact } from '@abc-map/shared-entities';
-import { FileFormat, FileFormats } from '../../../core/data/FileFormats';
-import { FileIO } from '../../../core/utils/FileIO';
-import { HistoryKey } from '../../../core/history/HistoryKey';
-import { AddLayersTask } from '../../../core/history/tasks/layers/AddLayersTask';
 import { ServiceProps, withServices } from '../../../core/withServices';
+import { Modal } from 'react-bootstrap';
+import Cls from './ArtefactCard.module.scss';
 
 const logger = Logger.get('ArtefactCard.tsx', 'info');
 
 interface LocalProps {
   artefact: AbcArtefact;
+  onImport: (artefact: AbcArtefact) => void;
+  onDownload: (artefact: AbcArtefact) => void;
 }
 
 declare type Props = LocalProps & ServiceProps;
 
-class ArtefactCard extends Component<Props, {}> {
+interface State {
+  licenseModal: boolean;
+  license?: string;
+}
+
+class ArtefactCard extends Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      licenseModal: false,
+    };
+  }
+
   public render(): ReactNode {
-    const artefact = this.props.artefact;
+    const name = this.props.artefact.name;
+    const link = this.props.artefact.link;
+    const description = this.props.artefact.description;
+    const keywords = this.props.artefact.keywords;
+    const licenseModal = this.state.licenseModal;
+    const license = this.state.license;
+
     return (
-      <div className={'card card-body mb-2'}>
-        <h4>{artefact.name}</h4>
-        <div>Description: {artefact.description}</div>
-        <div onClick={this.handleShowLicense}>Voir la license</div>
-        <div>Mots clés: {artefact.keywords.length ? artefact.keywords.join(', ') : 'Pas de mots clés'}</div>
-        <div>
-          Liens:
-          <ul>
-            {artefact.links.map((link, i) => {
-              return (
-                <li key={i}>
-                  <a href={link} rel="noreferrer" target={'_blank'}>
-                    {link}
-                  </a>
-                </li>
-              );
-            })}
-          </ul>
+      <>
+        <div className={`card card-body ${Cls.artefact}`}>
+          {/* Meta */}
+
+          <h5 data-cy={'artefact-name'}>{name}</h5>
+          {keywords && <small className={'mb-2'}>Mots clés: {keywords.join(', ')}</small>}
+          {description && <div className={'mb-3'}>{description}</div>}
+          {!!link && (
+            <div>
+              Lien:&nbsp;
+              <a href={link} rel="noreferrer" target={'_blank'}>
+                {link}
+              </a>
+            </div>
+          )}
+
+          <div className={'flex-grow-1'} />
+
+          {/* Actions */}
+
+          <div className={'d-flex flex-row justify-content-end'}>
+            <button className={'btn btn-link mr-2'} onClick={this.handleShowLicense} data-cy={'show-license'}>
+              License d&apos;utilisation
+            </button>
+            <button className={'btn btn-link mr-2'} onClick={this.handleDownloadArtefact} data-cy={'download-artefact'}>
+              Télécharger
+            </button>
+            <button className={'btn btn-outline-primary'} onClick={this.handleImportArtefact} data-cy={'import-artefact'}>
+              Ajouter au projet
+            </button>
+          </div>
         </div>
-        <div className={'d-flex flex-row'}>
-          <button className={'btn btn-link'} onClick={this.handleImportArtefact}>
-            Ajouter au projet
-          </button>
-          <button className={'btn btn-link'} onClick={this.handleDownloadArtefact}>
-            Télécharger
-          </button>
-        </div>
-      </div>
+
+        {/* License modal */}
+
+        <Modal show={licenseModal} onHide={this.handleModalClose} size={'lg'}>
+          <Modal.Header closeButton data-cy={'license-header'}>
+            {name} : License d&apos;utilisation
+          </Modal.Header>
+          <Modal.Body className={'d-flex justify-content-center'}>
+            <pre className={Cls.licenseView}>{license}</pre>
+          </Modal.Body>
+          <Modal.Footer>
+            <button className={'btn btn-outline-secondary'} onClick={this.handleModalClose} data-cy={'close-modal'}>
+              Fermer
+            </button>
+          </Modal.Footer>
+        </Modal>
+      </>
     );
   }
 
-  public handleShowLicense = () => {
-    this.props.services.toasts.featureNotReady();
+  private handleShowLicense = () => {
+    const { dataStore } = this.props.services;
+    const artefact = this.props.artefact;
+
+    dataStore
+      .downloadLicense(artefact)
+      .then((license) => this.setState({ licenseModal: true, license }))
+      .catch((err) => logger.error(err));
   };
 
-  public handleImportArtefact = () => {
-    const { toasts, data, geo, history } = this.props.services;
-
-    toasts.info('Import en cours ...');
-    data
-      .importArtefact(this.props.artefact)
-      .then((res) => {
-        if (!res.layers.length) {
-          toasts.error('Ces fichiers ne sont pas supportés');
-          return;
-        }
-
-        const map = geo.getMainMap();
-        history.register(HistoryKey.Map, new AddLayersTask(map, res.layers));
-
-        toasts.info('Import terminé !');
-      })
-      .catch((err) => {
-        logger.error(err);
-        toasts.genericError();
-      });
+  private handleImportArtefact = () => {
+    this.props.onImport(this.props.artefact);
   };
 
-  public handleDownloadArtefact = () => {
-    const { toasts, data } = this.props.services;
+  private handleDownloadArtefact = () => {
+    this.props.onDownload(this.props.artefact);
+  };
 
-    toasts.info('Téléchargement en cours ...');
-    data
-      .downloadFilesFrom(this.props.artefact)
-      .then(async (res) => {
-        let content: Blob;
-        if (res.length === 1 && FileFormat.ZIP === FileFormats.fromPath(res[0].path)) {
-          content = res[0].content;
-        } else {
-          content = await Zipper.zipFiles(res);
-        }
-
-        FileIO.outputBlob(content, 'artefact.zip');
-      })
-      .catch((err) => {
-        logger.error(err);
-        toasts.genericError();
-      });
+  private handleModalClose = () => {
+    this.setState({ licenseModal: false });
   };
 }
 

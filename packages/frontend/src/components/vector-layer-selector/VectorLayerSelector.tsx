@@ -15,6 +15,8 @@ interface Props extends ServiceProps {
    * Triggered on layer selected
    */
   onSelected: (lay: VectorLayerWrapper | undefined) => void;
+
+  'data-cy'?: string;
 }
 
 interface State {
@@ -33,9 +35,10 @@ class VectorLayerSelector extends Component<Props, State> {
   public render(): ReactNode {
     const value = this.props.value || None;
     const layers = this.state.layers;
+    const dataCy = this.props['data-cy'];
 
     return (
-      <select onChange={this.handleSelection} value={value} className={'form-control'}>
+      <select onChange={this.handleSelection} value={value} className={'form-control'} data-cy={dataCy}>
         <option value={None}>Sélectionnez une couche</option>
         {layers.map((lay) => (
           <option key={lay.getId()} value={lay.getId()}>

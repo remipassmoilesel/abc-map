@@ -6,8 +6,7 @@ artefact:
   keywords:
     - régions
     - France
-  links:
-    - https://www.data.gouv.fr/fr/datasets/contours-des-regions-francaises-sur-openstreetmap/
+  link: https://www.data.gouv.fr/fr/datasets/contours-des-regions-francaises-sur-openstreetmap/
   files:
     - regions-20161121-shp.zip
 

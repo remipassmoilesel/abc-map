@@ -1,3 +1,9 @@
+/*
+
+This file serve frontend build folder for end to end tests.
+
+*/
+
 const express = require('express');
 const proxy = require('express-http-proxy');
 const path = require('path');

@@ -28,11 +28,11 @@ describe('DatastoreService', () => {
   it('index() should work', async () => {
     await service.index();
 
-    const artefacts = (await service.list(0, 10)).sort((a, b) => a.name.localeCompare(b.name));
+    const artefacts = (await service.list(10)).sort((a, b) => a.name.localeCompare(b.name));
     artefacts.forEach((art) => {
       assert.isDefined(art.id);
       assert.isDefined(art.name);
-      assert.isDefined(art.links);
+      assert.isDefined(art.link);
       assert.isDefined(art.license);
     });
     assert.deepEqual(
@@ -43,13 +43,17 @@ describe('DatastoreService', () => {
       artefacts.map((art) => art.path),
       ['world/world-hydrography/artefact.yml', 'world/world-lakes/artefact.yml', 'world/world-countries/artefact.YAML', 'world/world-cities/artefact.yaml']
     );
+    assert.deepEqual(
+      artefacts.map((art) => art.license),
+      ['world/world-hydrography/README.txt', 'world/world-lakes/README.txt', 'world/world-countries/README.txt', 'world/world-cities/README.txt']
+    );
   });
 
   it('index() should produce correct result even if called twice', async () => {
     await service.index();
     await service.index();
 
-    const artefacts = (await service.list(0, 10)).sort((a, b) => a.name.localeCompare(b.name));
+    const artefacts = (await service.list(10)).sort((a, b) => a.name.localeCompare(b.name));
     assert.deepEqual(
       artefacts.map((art) => art.name),
       ['Hydrographie du monde', 'Lacs du monde', 'Pays du monde', 'Villes du monde']

@@ -9,6 +9,7 @@ const logger = Logger.get('DataSourceSelector.tsx');
 interface Props extends ServiceProps {
   rows: DataRow[];
   className?: string;
+  'data-cy'?: string;
 }
 
 class DataTable extends Component<Props, {}> {
@@ -19,9 +20,10 @@ class DataTable extends Component<Props, {}> {
       return <div className={`${Cls.dataTable} ${className}`}>Pas de données</div>;
     }
 
+    const dataCy = this.props['data-cy'];
     const keys = getFields(rows[0]);
     return (
-      <div className={`${Cls.dataTable} ${className}`}>
+      <div className={`${Cls.dataTable} ${className}`} data-cy={dataCy}>
         <table className={'table'}>
           <thead>
             <tr>
@@ -29,7 +31,7 @@ class DataTable extends Component<Props, {}> {
                 #
               </th>
               {keys.map((key, i) => (
-                <th scope="col" key={key + i}>
+                <th scope="col" key={key + i} data-cy={'header'}>
                   {key}
                 </th>
               ))}
@@ -42,7 +44,7 @@ class DataTable extends Component<Props, {}> {
                   {i + 1}
                 </th>
                 {keys.map((key) => (
-                  <td key={key + i} title={row[key]?.toString()}>
+                  <td key={key + i} title={row[key]?.toString()} data-cy={'cell'}>
                     {this.normalize(row[key])}
                   </td>
                 ))}

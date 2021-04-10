@@ -16,7 +16,7 @@ authenticate()
   .then(() => load())
   .catch((err) => {
     logger.error(err);
-    svc.toasts.genericError();
+    loadingError();
   });
 
 // TODO: test
@@ -46,6 +46,16 @@ function load() {
     </React.StrictMode>,
     document.getElementById('root')
   );
+}
+
+function loadingError(): void {
+  const message = 'Une erreur est survenue, veuillez réessayer plus tard.';
+  const root = document.querySelector('#root');
+  if (!root) {
+    alert(message);
+    return;
+  }
+  root.innerHTML = `<h5 class='text-center my-5'>${message}</h5>`;
 }
 
 // If you want to start measuring performance in your app, pass a function

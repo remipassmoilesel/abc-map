@@ -2,8 +2,7 @@ version: 0.1
 artefact:
   name: Hydrographie du monde
   license: README.txt
-  links:
-    - http://tapiquen-sig.jimdo.com
+  link: http://tapiquen-sig.jimdo.com
   keywords:
     - monde
     - hydrographie

@@ -27,7 +27,7 @@ class LandingView extends Component<Props, {}> {
         <p>Pour créer votre première carte efficacement:</p>
         <ul>
           <li>
-            Prenez le temps de consulter <Link to={FrontendRoutes.help()}>la page Aide</Link>
+            Prenez le temps de consulter <Link to={FrontendRoutes.documentation()}>la page Documentation</Link>
           </li>
           <li>
             Commencez à créer sur la page <Link to={FrontendRoutes.map()}>la page Carte</Link>, importez des données à partir de votre navigateur ou{' '}
@@ -40,9 +40,6 @@ class LandingView extends Component<Props, {}> {
             Mettez en page et exportez votre carte sur <Link to={FrontendRoutes.layout()}>la page Mise en page</Link>
           </li>
         </ul>
-        <p>
-          Si vous souhaitez en savoir plus sur ce logiciel, <Link to={FrontendRoutes.about()}>c&apos;est par ici.</Link>
-        </p>
 
         {/* Authentication */}
 

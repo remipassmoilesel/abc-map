@@ -3,14 +3,14 @@ import { Logger } from '@abc-map/frontend-shared';
 import { DataRow } from '../../../core/data/data-source/DataSource';
 import VectorLayerSelector from '../../../components/vector-layer-selector/VectorLayerSelector';
 import { VectorLayerWrapper } from '../../../core/geo/layers/LayerWrapper';
-import Cls from './DataViewerUi.module.scss';
 import DataTable from '../../../components/data-table/DataTable';
 import { LayerDataSource } from '../../../core/data/data-source/LayerDataSource';
 import { ServiceProps, withServices } from '../../../core/withServices';
 import { CsvParser } from '../../../core/data/csv-parser/CsvParser';
 import { FileIO } from '../../../core/utils/FileIO';
+import Cls from './DataViewerUi.module.scss';
 
-const logger = Logger.get('DataProcessingView.tsx');
+const logger = Logger.get('DataViewerUi.tsx');
 
 interface State {
   data: DataRow[];
@@ -38,9 +38,9 @@ class DataViewerUi extends Component<ServiceProps, State> {
           <div className={'my-3'}>Sélectionnez une couche pour visualiser ses données.</div>
           <div className={'d-flex flex-row'}>
             <div className={Cls.vectorSelection}>
-              <VectorLayerSelector value={layer?.getId()} onSelected={this.handleSelected} />
+              <VectorLayerSelector value={layer?.getId()} onSelected={this.handleSelected} data-cy={'layer-selector'} />
             </div>
-            <button className={'mx-3 btn btn-secondary'} disabled={disableDownload} onClick={this.handleDownload}>
+            <button className={'mx-3 btn btn-secondary'} disabled={disableDownload} onClick={this.handleDownload} data-cy={'download'}>
               Télécharger au format CSV
             </button>
           </div>
@@ -50,7 +50,7 @@ class DataViewerUi extends Component<ServiceProps, State> {
             <div className={'my-3'}>
               <b>{data.length}</b> entrées affichées
             </div>
-            <DataTable rows={data} className={Cls.dataTable} />
+            <DataTable rows={data} className={Cls.dataTable} data-cy={'data-table'} />
           </>
         )}
         {layer && !data.length && <div className={'my-3'}>Pas de données à afficher</div>}
@@ -84,7 +84,10 @@ class DataViewerUi extends Component<ServiceProps, State> {
     }
 
     const fileName = `${layer.getName()}.csv`;
-    CsvParser.unparse(rows, fileName)
+    const toDownload: Partial<DataRow>[] = rows.map((r) => ({ ...r }));
+    toDownload.forEach((r) => delete r._id);
+
+    CsvParser.unparse(toDownload, fileName)
       .then((file) => FileIO.outputBlob(file, fileName))
       .catch((err) => {
         logger.error(err);

@@ -30,7 +30,7 @@ export class ProportionalSymbols extends Module {
   }
 
   public getUserInterface(): ReactNode {
-    return <Panel initialValue={this.params} onChange={(params) => (this.params = params)} onProcess={() => this.process(this.params)} />;
+    return <Panel initialValue={this.params} onChange={this.handleParamsChange} onProcess={() => this.process(this.params)} />;
   }
 
   public async process(params: Parameters): Promise<void> {
@@ -118,7 +118,9 @@ export class ProportionalSymbols extends Module {
     newLayer.setName(newLayerName);
     newLayer.getSource().addFeatures(newFeatures);
 
-    this.services.geo.getMainMap().addLayer(newLayer);
+    const map = this.services.geo.getMainMap();
+    map.addLayer(newLayer);
+    map.setActiveLayer(newLayer);
   }
 
   private pointSize(algorithm: ScaleAlgorithm, value: number, valueMin: number, valueMax: number, sizeMin: number, sizeMax: number): number {
@@ -144,4 +146,8 @@ export class ProportionalSymbols extends Module {
     }
     return size;
   }
+
+  private handleParamsChange = (params: Parameters) => {
+    this.params = params;
+  };
 }

@@ -8,7 +8,7 @@ import DataSourceForm, { DataSourceFormValues } from './DataSourceForm';
 import Cls from './ProportionalSymbolsUi.module.scss';
 import GeometryLayerForm, { GeometryLayerFormValues } from './GeometryLayerForm';
 
-const logger = Logger.get('DataProcessingView.tsx');
+const logger = Logger.get('ProportionalSymbolsUi.tsx');
 
 interface Props extends ServiceProps {
   initialValue: Parameters;
@@ -126,7 +126,7 @@ class ProportionalSymbolsUi extends Component<Props, State> {
           <button className={'btn btn-secondary mr-3'} onClick={this.handleCancel}>
             Réinitialiser
           </button>
-          <button className={'btn btn-primary mr-3'} onClick={this.handleSubmit}>
+          <button className={'btn btn-primary mr-3'} onClick={this.handleSubmit} data-cy={'process'}>
             Lancer le traitement
           </button>
         </div>

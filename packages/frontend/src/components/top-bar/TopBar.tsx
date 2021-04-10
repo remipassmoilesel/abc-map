@@ -41,8 +41,7 @@ class TopBar extends Component<Props, {}> {
         <TopBarLink label={'Catalogue de données'} to={FrontendRoutes.dataStore()} data-cy={'data-store'} />
         <TopBarLink label={'Traitement de données'} to={FrontendRoutes.dataProcessing('')} data-cy={'data-processing'} />
         <TopBarLink label={'Mise en page'} to={FrontendRoutes.layout()} data-cy={'layout'} />
-        <TopBarLink label={'Aide'} to={FrontendRoutes.help()} data-cy={'help'} />
-        <TopBarLink label={'A propos'} to={FrontendRoutes.about()} data-cy={'about'} />
+        <TopBarLink label={'Documentation'} to={FrontendRoutes.documentation()} data-cy={'help'} />
 
         <div className={'flex-grow-1'} />
         <div className={'ml-3'}>

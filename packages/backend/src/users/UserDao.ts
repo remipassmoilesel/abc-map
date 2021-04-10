@@ -6,7 +6,7 @@ import { MongodbCollection } from '../mongodb/MongodbCollection';
 export class UserDao {
   constructor(private config: Config, private client: MongodbClient) {}
 
-  public async createIndexes(): Promise<void> {
+  public async init(): Promise<void> {
     const coll = await this.client.collection<UserDocument>(MongodbCollection.Users);
     return coll.createIndex('email', { unique: true }).then(() => undefined);
   }

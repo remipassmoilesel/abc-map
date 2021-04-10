@@ -49,7 +49,7 @@ class GeometryLayerForm extends Component<Props, State> {
     return (
       <>
         <div className={'form-line my-3'}>
-          <VectorLayerSelector value={layer?.getId()} onSelected={this.handleGeometryLayerSelected} />
+          <VectorLayerSelector value={layer?.getId()} onSelected={this.handleGeometryLayerSelected} data-cy={'geometry-layer'} />
         </div>
 
         <div className={'my-3'}>
@@ -59,7 +59,7 @@ class GeometryLayerForm extends Component<Props, State> {
 
         <div className={'form-line my-3'}>
           <label htmlFor="geometries-join-by">Champ de jointure</label>
-          <select className={'form-control'} id={'geometries-join-by'} value={joinBy} onChange={this.handleJoinByChanged}>
+          <select className={'form-control'} id={'geometries-join-by'} value={joinBy} onChange={this.handleJoinByChanged} data-cy={'geometry-joinby-field'}>
             {!featureFields.length && <option>Sélectionnez une source</option>}
             {!!featureFields.length &&
               [<option key={0}>Sélectionnez un champ</option>].concat(
