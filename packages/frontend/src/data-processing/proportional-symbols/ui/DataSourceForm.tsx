@@ -49,7 +49,7 @@ class DataSourceForm extends Component<Props, State> {
 
         <div className={'form-line my-3'}>
           <label htmlFor="size-field">Champ de taille</label>
-          <select className={'form-control'} id={'size-field'} value={sizeField} onChange={this.handleSourceFieldChange}>
+          <select className={'form-control'} id={'size-field'} value={sizeField} onChange={this.handleSourceFieldChange} data-cy={'size-field'}>
             {!dataFields.length && <option>Sélectionnez une source de données</option>}
             {!!dataFields.length &&
               [<option key={0}>Sélectionnez un champ</option>].concat(
@@ -65,7 +65,7 @@ class DataSourceForm extends Component<Props, State> {
 
         <div className={'form-line my-3'}>
           <label htmlFor="data-join-by">Champ de jointure</label>
-          <select className={'form-control'} id={'data-join-by'} value={joinBy} onChange={this.handleJoinByChange}>
+          <select className={'form-control'} id={'data-join-by'} value={joinBy} onChange={this.handleJoinByChange} data-cy={'data-joinby-field'}>
             {!dataFields.length && <option>Sélectionnez une source de données</option>}
             {!!dataFields.length &&
               [<option key={0}>Sélectionnez un champ</option>].concat(

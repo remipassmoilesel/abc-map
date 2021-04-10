@@ -17,7 +17,7 @@ export class UserService extends AbstractService {
   }
 
   public async init(): Promise<void> {
-    return this.dao.createIndexes();
+    return this.dao.init();
   }
 
   /**

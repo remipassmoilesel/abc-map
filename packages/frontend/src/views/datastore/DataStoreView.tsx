@@ -1,15 +1,27 @@
-import React, { ChangeEvent, Component, ReactNode } from 'react';
-import { Logger } from '@abc-map/frontend-shared';
+import React, { ChangeEvent, KeyboardEvent, Component, ReactNode } from 'react';
+import { Logger, Zipper } from '@abc-map/frontend-shared';
 import { AbcArtefact } from '@abc-map/shared-entities';
 import ArtefactCard from './artefact-card/ArtefactCard';
 import { ServiceProps, withServices } from '../../core/withServices';
-import './DataStoreView.scss';
+import NavigationBar from './NavigationBar';
+import { HistoryKey } from '../../core/history/HistoryKey';
+import { AddLayersTask } from '../../core/history/tasks/layers/AddLayersTask';
+import { FileFormat, FileFormats } from '../../core/data/FileFormats';
+import { FileIO } from '../../core/utils/FileIO';
+import Cls from './DataStoreView.module.scss';
 
 const logger = Logger.get('DataStore.tsx', 'info');
 
+const PageSize = 6;
+
 interface State {
   artefacts: AbcArtefact[];
+  limit: number;
+  offset: number;
+  total: number;
+  activePage: number;
   searchQuery: string;
+  downloading: boolean;
 }
 
 class DataStoreView extends Component<ServiceProps, State> {
@@ -17,67 +29,155 @@ class DataStoreView extends Component<ServiceProps, State> {
     super(props);
     this.state = {
       artefacts: [],
+      limit: PageSize,
+      offset: 0,
+      total: 0,
+      activePage: 1,
       searchQuery: '',
+      downloading: false,
     };
   }
 
   public render(): ReactNode {
+    const query = this.state.searchQuery;
+    const artefacts = this.state.artefacts;
+    const offset = this.state.offset;
+    const total = this.state.total;
+    const activePage = this.state.activePage;
+    const downloading = this.state.downloading;
+
     return (
-      <div className={'abc-datastore'}>
-        <p>Sur cette page vous pouvez sélectionner et importer des données dans votre carte.</p>
-        <p>Rappelez-vous: vous pouvez aussi importer des donnés en sélectionnant un fichier et en le déposant sur la carte !</p>
-        <div className={'mb-2 d-flex flex-row'}>
-          <input type={'text'} value={this.state.searchQuery} onChange={this.onQueryChange} className={'form-control mr-2'} data-cy={'data-store-search'} />
-          <button onClick={this.onSearch} className={'btn btn-primary'}>
-            Rechercher
-          </button>
+      <div className={Cls.datastore}>
+        {/* Search and navigation bars */}
+
+        <div className={Cls.header}>
+          <div className={Cls.searchBar}>
+            <input
+              type={'text'}
+              value={query}
+              onChange={this.handleQueryChange}
+              onKeyUp={this.handleKeyUp}
+              placeholder={'France, régions, monde ...'}
+              className={'form-control mr-2'}
+              data-cy={'data-store-search'}
+            />
+            <button onClick={this.handleSearch} className={'btn btn-primary'}>
+              Rechercher
+            </button>
+          </div>
+          <div className={Cls.navigationBar}>
+            {!query && <NavigationBar activePage={activePage} offset={offset} total={total} pageSize={PageSize} onClick={this.handlePageChange} />}
+          </div>
         </div>
-        {this.state.artefacts.map((art, i) => (
-          <ArtefactCard artefact={art} key={i} />
-        ))}
+
+        {/* Artefacts list */}
+
+        {downloading && <h4 className={'my-3 mx-2'}>Veuillez patienter pendant le téléchargement ...</h4>}
+
+        {!downloading && (
+          <div className={Cls.artefactList}>
+            {artefacts.map((art, i) => (
+              <ArtefactCard artefact={art} key={i} onImport={this.handleImportArtefact} onDownload={this.handleDownloadArtefact} />
+            ))}
+            {!artefacts.length && query && <div>Aucun résultat</div>}
+          </div>
+        )}
       </div>
     );
   }
 
   public componentDidMount() {
-    this.listArtefacts();
+    this.loadArtefacts();
   }
 
-  private onQueryChange = (ev: ChangeEvent<HTMLInputElement>) => {
-    this.setState({ searchQuery: ev.target.value });
+  private handleQueryChange = (ev: ChangeEvent<HTMLInputElement>) => {
+    // We set query and we reset offset and limit parameters
+    this.setState({ searchQuery: ev.target.value, limit: PageSize, offset: 0 });
   };
 
-  private onSearch = () => {
-    const { toasts, data } = this.props.services;
+  private handleKeyUp = (ev: KeyboardEvent<HTMLInputElement>) => {
+    if (ev.key === 'Enter') {
+      this.handleSearch();
+    }
+  };
 
-    if (!this.state.searchQuery) {
-      this.listArtefacts();
+  private handlePageChange = (activePage: number, limit: number, offset: number) => {
+    this.setState({ activePage, limit, offset }, () => this.loadArtefacts());
+  };
+
+  private handleSearch = () => {
+    this.loadArtefacts();
+  };
+
+  private loadArtefacts() {
+    const { toasts, dataStore } = this.props.services;
+    const { limit, offset, searchQuery } = this.state;
+
+    if (searchQuery) {
+      dataStore
+        .searchArtefacts(searchQuery, limit, offset)
+        .then((res) => this.setState({ artefacts: res.content, limit: res.limit, offset: res.offset, total: res.total, activePage: 1 }))
+        .catch((err) => {
+          logger.error(err);
+          toasts.genericError();
+        });
     } else {
-      data
-        .searchArtefacts(this.state.searchQuery)
-        .then((artefacts) => {
-          this.setState({ artefacts });
-        })
+      dataStore
+        .listArtefacts(limit, offset)
+        .then((res) => this.setState({ artefacts: res.content, limit: res.limit, offset: res.offset, total: res.total }))
         .catch((err) => {
           logger.error(err);
           toasts.genericError();
         });
     }
-  };
+  }
 
-  private listArtefacts() {
-    const { toasts, data } = this.props.services;
+  private handleImportArtefact = (artefact: AbcArtefact) => {
+    const { toasts, dataStore, geo, history } = this.props.services;
 
-    data
-      .listArtefacts()
-      .then((artefacts) => {
-        this.setState({ artefacts });
+    this.setState({ downloading: true });
+    dataStore
+      .importArtefact(artefact)
+      .then((res) => {
+        if (!res.layers.length) {
+          toasts.error('Ces fichiers ne sont pas supportés');
+          return;
+        }
+
+        const map = geo.getMainMap();
+        history.register(HistoryKey.Map, new AddLayersTask(map, res.layers));
+
+        toasts.info('Import terminé !');
       })
       .catch((err) => {
         logger.error(err);
         toasts.genericError();
-      });
-  }
+      })
+      .finally(() => this.setState({ downloading: false }));
+  };
+
+  private handleDownloadArtefact = (artefact: AbcArtefact) => {
+    const { toasts, dataStore } = this.props.services;
+
+    this.setState({ downloading: true });
+    dataStore
+      .downloadFilesFrom(artefact)
+      .then(async (res) => {
+        let content: Blob;
+        if (res.length === 1 && FileFormat.ZIP === FileFormats.fromPath(res[0].path)) {
+          content = res[0].content;
+        } else {
+          content = await Zipper.zipFiles(res);
+        }
+
+        FileIO.outputBlob(content, 'artefact.zip');
+      })
+      .catch((err) => {
+        logger.error(err);
+        toasts.genericError();
+      })
+      .finally(() => this.setState({ downloading: false }));
+  };
 }
 
 export default withServices(DataStoreView);

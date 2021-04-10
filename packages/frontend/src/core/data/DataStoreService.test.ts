@@ -1,4 +1,4 @@
-import { DataReaderFactory, DataService } from './DataService';
+import { DataReaderFactory, DataStoreService } from './DataStoreService';
 import { SinonStub, SinonStubbedInstance } from 'sinon';
 import * as sinon from 'sinon';
 import { GeoService } from '../geo/GeoService';
@@ -7,12 +7,12 @@ import { LayerFactory } from '../geo/layers/LayerFactory';
 import { MapFactory } from '../geo/map/MapFactory';
 import { AbcFile } from '@abc-map/frontend-shared';
 
-describe('DataService', () => {
+describe('DataStoreService', () => {
   let apiClient: { get: SinonStub };
   let downloadClient: { get: SinonStub };
   let geoService: SinonStubbedInstance<GeoService>;
   let dataReader: SinonStub;
-  let service: DataService;
+  let service: DataStoreService;
 
   beforeEach(() => {
     apiClient = {
@@ -25,7 +25,7 @@ describe('DataService', () => {
     dataReader = sinon.stub();
     const readerFactory = sinon.stub().returns({ read: dataReader });
 
-    service = new DataService(
+    service = new DataStoreService(
       (apiClient as unknown) as AxiosInstance,
       (downloadClient as unknown) as AxiosInstance,
       (geoService as unknown) as GeoService,

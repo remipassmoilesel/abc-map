@@ -25,7 +25,7 @@ class ImportData extends Component<ServiceProps, {}> {
   }
 
   private importFile = () => {
-    const { toasts, data, geo, history } = this.props.services;
+    const { toasts, dataStore, geo, history } = this.props.services;
 
     FileIO.openInput(InputType.Multiple)
       .then((result) => {
@@ -36,7 +36,7 @@ class ImportData extends Component<ServiceProps, {}> {
         toasts.info('Import en cours ...');
         const files: AbcFile[] = result.files.map((f) => ({ path: f.name, content: f }));
 
-        return data.importFiles(files).then((res) => {
+        return dataStore.importFiles(files).then((res) => {
           if (!res.layers.length) {
             toasts.error("Ces formats de fichiers ne sont pas supportés, aucune donnée n'a été importée");
             return;

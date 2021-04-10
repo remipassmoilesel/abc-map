@@ -1,0 +1,23 @@
+.editor {
+  counter-reset: line;
+  border: 1px solid #ced4da;
+
+  pre {
+    padding-left: 60px !important;
+  }
+}
+
+.textarea {
+  outline: none;
+  padding-left: 60px !important;
+  background: red;
+}
+
+.lineNumber {
+  position: absolute;
+  left: 0;
+  color: #cccccc;
+  text-align: right;
+  width: 40px;
+  font-weight: 100;
+}

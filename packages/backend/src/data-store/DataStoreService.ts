@@ -24,7 +24,7 @@ export class DataStoreService extends AbstractService {
   }
 
   public init(): Promise<void> {
-    return this.dao.createIndexes();
+    return this.dao.init();
   }
 
   public async save(artefact: AbcArtefact): Promise<void> {
@@ -48,16 +48,20 @@ export class DataStoreService extends AbstractService {
     return this.dao.findById(id).then((res) => (res ? ArtefactMapper.docToDto(res) : undefined));
   }
 
-  public async list(offset: number, limit: number): Promise<AbcArtefact[]> {
-    const docs = await this.dao.list(offset, limit);
+  public async list(limit: number, offset = 0): Promise<AbcArtefact[]> {
+    const docs = await this.dao.list(limit, offset);
     return docs.map((doc) => ArtefactMapper.docToDto(doc));
   }
 
-  public async search(query: string, limit: number, offset: number): Promise<AbcArtefact[]> {
+  public async search(query: string, limit: number, offset = 0): Promise<AbcArtefact[]> {
     return this.dao.search(query, limit, offset).then((res) => res.map(ArtefactMapper.docToDto));
   }
 
-  public getDatastorePath(): string {
+  public async countArtefacts(): Promise<number> {
+    return this.dao.count();
+  }
+
+  public getRoot(): string {
     let result = this.config.datastore.path;
     if (!path.isAbsolute(result)) {
       result = path.resolve(result);
@@ -66,7 +70,7 @@ export class DataStoreService extends AbstractService {
   }
 
   public async index(): Promise<void> {
-    const root = this.getDatastorePath();
+    const root = this.getRoot();
     logger.info(`Indexing datastore path: ${root}`);
 
     const manifestPaths = await globPromise(`{${root}/**/artefact.yml,${root}/**/artefact.yaml}`, {
@@ -78,25 +82,29 @@ export class DataStoreService extends AbstractService {
       return hasher.update(path).digest('hex');
     }
 
+    const datastorePath = this.config.datastore.path;
+    function relativePath(manifestPath: string, filePath: string): string {
+      const absolute = path.resolve(path.dirname(manifestPath), filePath);
+      return path.relative(datastorePath, absolute);
+    }
+
     const documents: AbcArtefact[] = [];
     for (const manifestPath of manifestPaths) {
       const manifest = await ManifestReader.read(manifestPath);
       const artefact = manifest.artefact;
-      const relativePath = path.relative(this.config.datastore.path, manifest.path);
-      const relativeFiles = manifest.artefact.files.map((file) => {
-        const absolute = path.resolve(path.dirname(manifest.path), file);
-        return path.relative(this.config.datastore.path, absolute);
-      });
+      const artefactPath = path.relative(datastorePath, manifest.path);
+      const files = manifest.artefact.files.map((file) => relativePath(manifest.path, file));
+      const license = relativePath(manifest.path, manifest.artefact.license);
 
       const doc: AbcArtefact = {
-        id: hash(relativePath),
+        id: hash(artefactPath),
         name: artefact.name,
-        path: relativePath,
         description: artefact.description,
         keywords: artefact.keywords || [],
-        links: artefact.links || [],
-        license: artefact.license,
-        files: relativeFiles,
+        link: artefact.link,
+        license,
+        path: artefactPath,
+        files,
       };
 
       documents.push(doc);

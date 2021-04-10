@@ -149,7 +149,7 @@ export class TestHelper {
       path: '/sample/manifest.yaml',
       name: 'Sample artefact',
       files: ['file/1.gpx', 'file/2.kml'],
-      links: ['http://somewhere'],
+      link: 'http://somewhere',
       license: 'LICENSE.txt',
       keywords: ['gpx', 'kml'],
       description: 'A sample artefact',

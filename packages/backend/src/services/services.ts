@@ -6,7 +6,7 @@ import { UserService } from '../users/UserService';
 import { AuthenticationService } from '../authentication/AuthenticationService';
 import { HealthCheckService } from '../server/HealthCheckService';
 import { AbstractService } from './AbstractService';
-import { DataStoreService } from '../datastore/DataStoreService';
+import { DataStoreService } from '../data-store/DataStoreService';
 import { AuthorizationService } from '../authorization/AuthorizationService';
 
 const logger = Logger.get('services.ts');

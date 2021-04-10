@@ -17,7 +17,8 @@
     "typecheck": "tsc --noEmit",
     "watch": "tsc --noEmit --watch | sed -u 's/\\x1Bc//g'",
     "eject": "react-scripts eject",
-    "dep-check": "depcruise -c .dependency-cruiser.js src"
+    "dep-check": "depcruise -c .dependency-cruiser.js src",
+    "bundle-analyze": "node scripts/bundle-analyze.js"
   },
   "dependencies": {
     "@abc-map/shared-entities": "0.0.1",
@@ -51,7 +52,9 @@
     "object-hash": "^2.1.1",
     "react-color": "^2.19.3",
     "papaparse": "^5.3.0",
-    "nanoid": "^3.1.22"
+    "nanoid": "^3.1.22",
+    "react-simple-code-editor": "^0.11.0",
+    "prismjs": "1.23.0"
   },
   "devDependencies": {
     "@types/js-yaml": "^3.12.5",
@@ -81,6 +84,7 @@
     "@types/sjcl": "^1.0.29",
     "@types/react-color": "^3.0.4",
     "@types/papaparse": "^5.2.5",
+    "@types/prismjs": "^1.16.4",
     "redux-mock-store": "^1.5.4",
     "eslint": "^7.21.0",
     "eslint-config-prettier": "^8.1.0",
@@ -93,7 +97,8 @@
     "react-test-renderer": "^17.0.1",
     "express": "^4.17.1",
     "express-http-proxy": "^1.6.2",
-    "dependency-cruiser": "9.19.1"
+    "dependency-cruiser": "9.19.1",
+    "webpack-bundle-analyzer": "^4.4.0"
   },
   "browserslist": {
     "production": [
@@ -111,6 +116,7 @@
     "transformIgnorePatterns": [
       "node_modules/(?!(ol)/)"
     ],
-    "coverageReporters": ["text", "html"]
+    "coverageReporters": ["text", "html"],
+    "moduleNameMapper": { "\\.css$": "<rootDir>/src/assets/styles/mocks/style.js" }
   }
 }

@@ -11,7 +11,7 @@ export class ArtefactMapper {
       files: dto.files,
       keywords: dto.keywords,
       license: dto.license,
-      links: dto.links,
+      link: dto.link,
     };
   }
 
@@ -24,7 +24,7 @@ export class ArtefactMapper {
       files: doc.files,
       keywords: doc.keywords,
       license: doc.license,
-      links: doc.links,
+      link: doc.link,
     };
   }
 }

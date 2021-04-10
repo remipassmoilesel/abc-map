@@ -1,0 +1,51 @@
+
+.datastore {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+
+  padding: 1rem;
+
+  height: 95vh;
+  max-height: 95vh;
+
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  p {
+    margin: 1em 0;
+  }
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+
+  margin: 1rem 0 2rem 0;
+}
+
+.searchBar {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+
+  width: 35vw;
+}
+
+.navigationBar {
+  margin-left: 3rem;
+}
+
+.artefactList {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-wrap: wrap;
+
+  margin-bottom: 1rem;
+}

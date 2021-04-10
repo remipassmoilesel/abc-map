@@ -23,4 +23,8 @@ export class TestData {
   public static sampleGpx(): Chainable<Blob> {
     return cy.readFile(`${root}/campings-bretagne.gpx`, 'base64').then((str) => Cypress.Blob.base64StringToBlob(str));
   }
+
+  public static countriesCsv(): Chainable<Blob> {
+    return cy.readFile(`${root}/countries.csv`, 'base64').then((str) => Cypress.Blob.base64StringToBlob(str));
+  }
 }

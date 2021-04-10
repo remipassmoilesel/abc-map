@@ -43,11 +43,11 @@ class DataSourceSelector extends Component<Props, State> {
     return (
       <div className={Cls.dataSourceSelector}>
         <div className={'d-flex mb-3'}>
-          <div className={Cls.displayControl} onClick={() => this.handleDisplayClick(Display.Layers)}>
+          <div className={Cls.displayControl} onClick={() => this.handleDisplayClick(Display.Layers)} data-cy={'data-source-layer'}>
             <input type={'radio'} name={'display'} value={Display.Layers} checked={display === Display.Layers} readOnly />
             Choisir une couche
           </div>
-          <div className={Cls.displayControl} onClick={() => this.handleDisplayClick(Display.File)}>
+          <div className={Cls.displayControl} onClick={() => this.handleDisplayClick(Display.File)} data-cy={'data-source-file'}>
             <input type={'radio'} name={'display'} value={Display.File} checked={display === Display.File} readOnly />
             Importer un fichier CSV
           </div>
@@ -70,7 +70,7 @@ class DataSourceSelector extends Component<Props, State> {
                 </ul>
               </div>
               <div className={'d-flex'}>
-                <button onClick={this.handleImportFile} className={'btn btn-primary'}>
+                <button onClick={this.handleImportFile} className={'btn btn-primary'} data-cy={'data-source-import-file'}>
                   Importer un fichier CSV
                 </button>
               </div>

@@ -17,12 +17,8 @@ export class FrontendRoutes {
     return '/layout';
   }
 
-  public static help(): string {
-    return '/help';
-  }
-
-  public static about(): string {
-    return '/about';
+  public static documentation(): string {
+    return '/documentation';
   }
 
   public static confirmAccount(userId?: string) {

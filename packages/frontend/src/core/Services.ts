@@ -3,7 +3,7 @@ import { GeoService } from './geo/GeoService';
 import { httpExternalClient, httpApiClient, httpDownloadClient } from './http/HttpClients';
 import { AuthenticationService } from './authentication/AuthenticationService';
 import { HistoryService } from './history/HistoryService';
-import { DataService } from './data/DataService';
+import { DataStoreService } from './data/DataStoreService';
 import { mainStore } from './store/store';
 import { ToastService } from './ui/ToastService';
 import { ModalService } from './ui/ModalService';
@@ -15,7 +15,7 @@ export interface Services {
   modals: ModalService;
   authentication: AuthenticationService;
   history: HistoryService;
-  data: DataService;
+  dataStore: DataStoreService;
 }
 
 let instance: Services | undefined;
@@ -37,7 +37,7 @@ function serviceFactory(): Services {
   const geo = new GeoService(externalClient, history);
   const project = new ProjectService(jsonClient, downloadClient, mainStore, geo);
   const authentication = new AuthenticationService(jsonClient, mainStore, toasts);
-  const data = new DataService(jsonClient, downloadClient, geo);
+  const data = new DataStoreService(jsonClient, downloadClient, geo);
 
   return {
     project,
@@ -46,6 +46,6 @@ function serviceFactory(): Services {
     toasts,
     authentication,
     history,
-    data,
+    dataStore: data,
   };
 }

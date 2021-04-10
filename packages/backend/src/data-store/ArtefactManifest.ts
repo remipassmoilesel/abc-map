@@ -12,7 +12,7 @@ export interface ArtefactManifest {
      * Path to the license file
      */
     license: string;
-    links?: string[];
+    link?: string;
     /**
      * List of files that will be downloaded
      */

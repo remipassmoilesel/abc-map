@@ -1,6 +1,10 @@
 
-.help {
-  margin: 3rem 10rem;
+.documentation {
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  height: 95vh;
+  padding: 3rem 10rem;
 
   p {
     margin: 1em 0;

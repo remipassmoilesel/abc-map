@@ -1,19 +1,25 @@
 export interface AbcArtefact {
   id: string;
   name: string;
-  /**
-   * Relative path to the manifest file
-   */
-  path: string;
   description?: string;
   /**
-   * Relative paths to artefact's files
+   * Keywords used for search and filter
    */
-  files: string[];
   keywords: string[];
   /**
    * Path to the license file
    */
   license: string;
-  links: string[];
+  /**
+   * Link to the source of data
+   */
+  link?: string;
+  /**
+   * Path to the manifest file relative to the datastore
+   */
+  path: string;
+  /**
+   * Paths to artefact's files relative to the manifest
+   */
+  files: string[];
 }

@@ -8,7 +8,7 @@ import { HealthCheckController } from './HealthCheckController';
 import { AuthenticationController } from '../authentication/AuthenticationController';
 import { ProjectController } from '../projects/ProjectController';
 import { UserController } from '../users/UserController';
-import { DataStoreController } from '../datastore/DataStoreController';
+import { DataStoreController } from '../data-store/DataStoreController';
 
 const logger = Logger.get('HttpHandlers.ts', 'info');
 
