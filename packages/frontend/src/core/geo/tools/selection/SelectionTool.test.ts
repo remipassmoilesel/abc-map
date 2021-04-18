@@ -3,7 +3,7 @@ import { HistoryService } from '../../../history/HistoryService';
 import { Map } from 'ol';
 import VectorSource from 'ol/source/Vector';
 import { OlTestHelper } from '../../../utils/OlTestHelper';
-import { Text } from './Text';
+import { SelectionTool } from './SelectionTool';
 
 describe('Selection', () => {
   it('setup()', () => {
@@ -12,13 +12,13 @@ describe('Selection', () => {
     const map = new Map({});
     const source = new VectorSource();
 
-    const text = new Text(store, history);
-    text.setup(map, source);
+    const tool = new SelectionTool(store, history);
+    tool.setup(map, source);
 
-    expect(text.getMap()).toStrictEqual(map);
-    expect(text.getSource()).toStrictEqual(source);
+    expect(tool.getMap()).toStrictEqual(map);
+    expect(tool.getSource()).toStrictEqual(source);
     const interactions = OlTestHelper.getInteractionNames(map);
-    expect(interactions).toContain('TextInteraction');
+    expect(interactions).toContain('DragBox');
   });
 
   it('dispose()', () => {
@@ -27,11 +27,11 @@ describe('Selection', () => {
     const map = new Map({});
     const source = new VectorSource();
 
-    const text = new Text(store, history);
-    text.setup(map, source);
-    text.dispose();
+    const tool = new SelectionTool(store, history);
+    tool.setup(map, source);
+    tool.dispose();
 
     const interactions = OlTestHelper.getInteractionNames(map);
-    expect(interactions).not.toContain('TextInteraction');
+    expect(interactions).not.toContain('DragBox');
   });
 });

@@ -134,7 +134,7 @@ class LayoutPreview extends Component<Props, State> {
 
   private initializePreviewMap(div: HTMLDivElement): MapWrapper {
     logger.info('Initializing preview map');
-    const preview = MapFactory.createNaked();
+    const preview = MapFactory.createLayout();
     preview.setTarget(div);
 
     // We listen for view changes, in order to persist them in layout

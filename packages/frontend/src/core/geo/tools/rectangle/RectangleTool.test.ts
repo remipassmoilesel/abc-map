@@ -3,7 +3,7 @@ import { HistoryService } from '../../../history/HistoryService';
 import { Map } from 'ol';
 import VectorSource from 'ol/source/Vector';
 import { OlTestHelper } from '../../../utils/OlTestHelper';
-import { Rectangle } from './Rectangle';
+import { RectangleTool } from './RectangleTool';
 
 describe('Rectangle', () => {
   it('setup()', () => {
@@ -12,7 +12,7 @@ describe('Rectangle', () => {
     const map = new Map({});
     const source = new VectorSource();
 
-    const rect = new Rectangle(store, history);
+    const rect = new RectangleTool(store, history);
     rect.setup(map, source);
 
     expect(rect.getMap()).toStrictEqual(map);
@@ -27,7 +27,7 @@ describe('Rectangle', () => {
     const map = new Map({});
     const source = new VectorSource();
 
-    const rect = new Rectangle(store, history);
+    const rect = new RectangleTool(store, history);
     rect.setup(map, source);
     rect.dispose();
 

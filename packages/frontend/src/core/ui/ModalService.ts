@@ -1,7 +1,16 @@
 import { Logger } from '@abc-map/frontend-shared';
-import { InternalEvent, ModalEvent, ModalEventListener, ModalEventType, PasswordModalClosedEvent, RenameModalClosedEvent } from './Modals.types';
+import {
+  FeaturePropertiesClosedEvent,
+  InternalEvent,
+  ModalEvent,
+  ModalEventListener,
+  ModalEventType,
+  PasswordModalClosedEvent,
+  RenameModalClosedEvent,
+} from './Modals.types';
+import { SimplePropertiesMap } from '../geo/features/FeatureWrapper';
 
-const logger = Logger.get('Modals.ts', 'warn');
+const logger = Logger.get('ModalService.ts', 'warn');
 
 export class ModalService {
   private eventTarget: EventTarget;
@@ -45,6 +54,20 @@ export class ModalService {
     });
   }
 
+  public featurePropertiesModal(properties: SimplePropertiesMap): Promise<FeaturePropertiesClosedEvent> {
+    return new Promise((resolve) => {
+      const listener: ModalEventListener = (ev) => {
+        if (ev.type === ModalEventType.FeaturePropertiesClosed) {
+          this.removeListener(ModalEventType.FeaturePropertiesClosed, listener);
+          resolve(ev);
+        }
+      };
+
+      this.addListener(ModalEventType.FeaturePropertiesClosed, listener);
+      this.dispatch({ type: ModalEventType.ShowFeatureProperties, properties });
+    });
+  }
+
   public addListener(type: ModalEventType, listener: ModalEventListener) {
     const _listener: EventListener = (ev) => {
       if (!(ev instanceof InternalEvent)) {
@@ -59,6 +82,7 @@ export class ModalService {
 
   public removeListener(type: ModalEventType, listener: ModalEventListener) {
     const _listener = this.listeners.get(listener);
+    this.listeners.delete(listener);
     if (!_listener) {
       throw new Error(`Unknown listener`);
     }
@@ -68,5 +92,9 @@ export class ModalService {
   public dispatch(event: ModalEvent): void {
     logger.debug('Dispatch event: ', event);
     this.eventTarget.dispatchEvent(new InternalEvent(event.type, event));
+  }
+
+  public getListeners() {
+    return this.listeners;
   }
 }

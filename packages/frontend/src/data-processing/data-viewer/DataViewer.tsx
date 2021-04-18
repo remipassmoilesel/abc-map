@@ -4,6 +4,8 @@ import { ModuleId } from '../ModuleId';
 import React, { ReactNode } from 'react';
 
 export class DataViewer extends Module {
+  private layerId: string | undefined;
+
   public getId(): ModuleId {
     return ModuleId.DataViewer;
   }
@@ -13,6 +15,10 @@ export class DataViewer extends Module {
   }
 
   public getUserInterface(): ReactNode {
-    return <DataViewerUi />;
+    return <DataViewerUi initialValue={this.layerId} onChange={this.handleLayerChange} />;
   }
+
+  private handleLayerChange = (layerId?: string) => {
+    this.layerId = layerId;
+  };
 }

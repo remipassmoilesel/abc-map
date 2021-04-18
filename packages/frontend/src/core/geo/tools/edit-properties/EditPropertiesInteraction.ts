@@ -1,0 +1,45 @@
+import { Logger } from '@abc-map/frontend-shared';
+import MapBrowserEvent from 'ol/MapBrowserEvent';
+import VectorSource from 'ol/source/Vector';
+import { FeatureSelected } from './EditPropertiesEvent';
+import { Interaction } from 'ol/interaction';
+import MapBrowserEventType from 'ol/MapBrowserEventType';
+import { notShiftKey } from '../../map/interactions';
+import { findFeatureUnderCursor } from '../common/findFeatureUnderCursor';
+
+const logger = Logger.get('EditPropertiesInteraction.ts', 'debug');
+
+export interface Options {
+  source: VectorSource;
+}
+
+export class EditPropertiesInteraction extends Interaction {
+  private readonly source: VectorSource;
+
+  constructor(private options: Options) {
+    super();
+    this.source = options.source;
+  }
+
+  /**
+   * Return true to continue event dispatch
+   * @param event
+   */
+  public handleEvent(event: MapBrowserEvent<UIEvent>): boolean {
+    if (MapBrowserEventType.POINTERDOWN === event.type && notShiftKey(event)) {
+      return this.handlePointerDown(event);
+    }
+    return true;
+  }
+
+  protected handlePointerDown(event: MapBrowserEvent<UIEvent>): boolean {
+    const feature = findFeatureUnderCursor(event, this.source);
+    if (!feature) {
+      logger.debug('No feature found');
+      return true;
+    }
+
+    this.dispatchEvent(new FeatureSelected(feature));
+    return false;
+  }
+}

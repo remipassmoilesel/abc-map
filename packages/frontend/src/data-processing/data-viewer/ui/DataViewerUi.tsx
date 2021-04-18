@@ -12,14 +12,19 @@ import Cls from './DataViewerUi.module.scss';
 
 const logger = Logger.get('DataViewerUi.tsx');
 
+interface Props extends ServiceProps {
+  initialValue?: string;
+  onChange: (layerId?: string) => void;
+}
+
 interface State {
   data: DataRow[];
   layer?: VectorLayerWrapper;
   disableDownload: boolean;
 }
 
-class DataViewerUi extends Component<ServiceProps, State> {
-  constructor(props: ServiceProps) {
+class DataViewerUi extends Component<Props, State> {
+  constructor(props: Props) {
     super(props);
     this.state = {
       data: [],
@@ -58,7 +63,21 @@ class DataViewerUi extends Component<ServiceProps, State> {
     );
   }
 
+  public componentDidMount() {
+    const layerId = this.props.initialValue;
+    if (layerId) {
+      const map = this.props.services.geo.getMainMap();
+      const layer = map.getLayers().find((lay) => lay.getId() === layerId);
+      layer && layer.isVector() && this.showData(layer);
+    }
+  }
+
   private handleSelected = (layer: VectorLayerWrapper | undefined) => {
+    this.props.onChange(layer?.getId());
+    this.showData(layer);
+  };
+
+  private showData(layer: VectorLayerWrapper | undefined) {
     if (!layer) {
       this.setState({ data: [], layer, disableDownload: true });
       return;
@@ -66,12 +85,14 @@ class DataViewerUi extends Component<ServiceProps, State> {
 
     new LayerDataSource(layer)
       .getRows()
-      .then((data) => this.setState({ data, layer, disableDownload: data.length < 1 }))
+      .then((data) => {
+        this.setState({ data, layer, disableDownload: data.length < 1 });
+      })
       .catch((err) => {
         this.setState({ data: [], layer, disableDownload: true });
         logger.error(err);
       });
-  };
+  }
 
   private handleDownload = () => {
     const { toasts } = this.props.services;

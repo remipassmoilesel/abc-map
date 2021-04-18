@@ -12,8 +12,9 @@ import { LayerWrapper, VectorLayerWrapper } from '../layers/LayerWrapper';
 import VectorImageLayer from 'ol/layer/VectorImage';
 import VectorSource from 'ol/source/Vector';
 import Geometry from 'ol/geom/Geometry';
+import { defaultInteractions } from './interactions';
 
-export const logger = Logger.get('ManagedMap.ts', 'debug');
+export const logger = Logger.get('MapWrapper.ts', 'debug');
 
 export declare type LayerChangeHandler = (ev: BaseEvent) => void;
 
@@ -52,7 +53,7 @@ export class MapWrapper {
     }
   }
 
-  public resetLayers(): void {
+  public defaultLayers(): void {
     this.internal.getLayers().clear();
     const osm = LayerFactory.newOsmLayer();
     this.addLayer(osm);
@@ -150,26 +151,44 @@ export class MapWrapper {
   }
 
   public setTool(tool: AbstractTool): void {
-    // We dispose previous tool before reference overwrite
     this.currentTool?.dispose();
     this.currentTool = tool;
-    this.updateToolInteractions();
+    this.updateInteractions();
   }
 
-  private updateToolInteractions(): void {
+  private handleLayerChange = () => {
     if (!this.currentTool) {
+      this.setDefaultInteractions();
       return;
     }
-    this.currentTool.dispose();
 
+    this.currentTool.dispose();
+    this.updateInteractions();
+  };
+
+  private updateInteractions() {
     const layer = this.getActiveVectorLayer();
     if (!layer) {
+      this.setDefaultInteractions();
       return;
     }
 
-    this.currentTool.setup(this.internal, layer.getSource());
-    logger.debug(`Activated tool '${this.currentTool.getId()}'`);
+    this.cleanInteractions();
+
+    this.currentTool?.setup(this.internal, layer.getSource());
+    logger.debug(`Activated tool '${this.currentTool?.getId()}'`);
     return;
+  }
+
+  public setDefaultInteractions() {
+    this.cleanInteractions();
+
+    defaultInteractions().forEach((i) => this.internal.addInteraction(i));
+  }
+
+  public cleanInteractions() {
+    const mapInteractions = this.internal.getInteractions().getArray();
+    mapInteractions.forEach((i) => this.internal.removeInteraction(i));
   }
 
   public getCurrentTool(): AbstractTool | undefined {
@@ -234,8 +253,4 @@ export class MapWrapper {
   public unwrap(): Map {
     return this.internal;
   }
-
-  private handleLayerChange = () => {
-    this.updateToolInteractions();
-  };
 }

@@ -7,6 +7,7 @@ export class DataStore {
       .get('[data-cy=data-store-search]')
       .type(name)
       .type('{enter}')
+      .wait(800) // We must wait a little for search because cards may already exists
       .get('[data-cy=artefact-name]')
       .contains(name)
       .get('[data-cy=import-artefact]')

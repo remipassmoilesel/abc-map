@@ -7,6 +7,9 @@ import { nanoid } from 'nanoid';
 
 const styles = new StyleFactory();
 
+export declare type PropertiesMap = { [key: string]: any };
+export declare type SimplePropertiesMap = { [key: string]: string | number | undefined };
+
 /**
  * This class is a thin wrapper around Openlayers features, used to ensure that critical operations
  * on features are well done
@@ -157,5 +160,48 @@ export class FeatureWrapper {
 
   public getText(): string | undefined {
     return this.getStyleProperties().text?.value;
+  }
+
+  public getAllProperties(): PropertiesMap {
+    return this.feature.getProperties();
+  }
+
+  /**
+   * Return properties of feature:
+   * - that are not internal
+   * - that are numbers or strings
+   */
+  public getSimpleProperties(): SimplePropertiesMap {
+    const result: SimplePropertiesMap = {};
+    const properties = this.feature.getProperties();
+
+    for (const key in properties) {
+      const property = properties[key];
+      const typeIsCorrect = typeof property === 'string' || typeof property === 'number';
+      const notAbcProperty = key.indexOf('abc:') === -1;
+      if (typeIsCorrect && notAbcProperty) {
+        result[key] = property;
+      }
+    }
+
+    return result;
+  }
+
+  public setProperties(properties: SimplePropertiesMap): FeatureWrapper {
+    this.feature.setProperties(properties);
+    return this;
+  }
+
+  public overwriteSimpleProperties(properties: SimplePropertiesMap): FeatureWrapper {
+    const original = this.getSimpleProperties();
+    const propertyKeys = Object.keys(properties);
+
+    // First we remove properties
+    const toRemove = Object.keys(original).filter((k) => !propertyKeys.find((k2) => k === k2));
+    toRemove.forEach((k) => this.feature.unset(k));
+
+    // Then we set
+    this.feature.setProperties(properties);
+    return this;
   }
 }

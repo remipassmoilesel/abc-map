@@ -9,13 +9,13 @@ import Icon from '../../../../assets/tool-icons/selection.svg';
 import { containsXY, Extent } from 'ol/extent';
 import Feature from 'ol/Feature';
 import { HistoryKey } from '../../../history/HistoryKey';
-import { ModificationItem, ModifyGeometriesTask } from '../../../history/tasks/features/ModifyGeometriesTask';
+import { UpdateItem, UpdateGeometriesTask } from '../../../history/tasks/features/UpdateGeometriesTask';
 import { Logger } from '@abc-map/frontend-shared';
 import { FeatureWrapper } from '../../features/FeatureWrapper';
 
-const logger = Logger.get('Selection.ts');
+const logger = Logger.get('SelectionTool.ts');
 
-export class Selection extends AbstractTool {
+export class SelectionTool extends AbstractTool {
   public getId(): MapTool {
     return MapTool.Selection;
   }
@@ -109,9 +109,9 @@ export class Selection extends AbstractTool {
 
           return { feature, before: geomBefore, after: geomAfter };
         })
-        .filter((item) => !!item) as ModificationItem[];
+        .filter((item) => !!item) as UpdateItem[];
 
-      this.history.register(HistoryKey.Map, new ModifyGeometriesTask(items));
+      this.history.register(HistoryKey.Map, new UpdateGeometriesTask(items));
       translated = [];
     });
 

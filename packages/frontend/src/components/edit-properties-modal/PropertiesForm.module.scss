@@ -1,0 +1,33 @@
+@import "src/assets/styles/variables";
+
+.form {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+
+  flex-grow: 1;
+  height: 40vh;
+  overflow-x: hidden;
+  overflow-y: scroll;
+
+  margin-bottom: 1rem;
+
+  border: solid 1px lightgrey;
+  padding: 1rem;
+}
+
+.label {
+  min-width: 10vw;
+}
+
+.value {
+  width: 40vw;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+
+  input {
+    width: 60% !important;
+  }
+}

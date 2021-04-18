@@ -7,7 +7,7 @@ import { Logger } from '@abc-map/frontend-shared';
 import { AsyncFunction, ChromiumErrorRegexp, ErrorPosition, Example, FirefoxErrorRegexp, ScriptArguments, ScriptError } from './typings';
 import { ScriptMap } from './api/ScriptMap';
 
-const logger = Logger.get('Scripts.tsx', 'info');
+export const logger = Logger.get('Scripts.tsx', 'info');
 
 export class Scripts extends Module {
   private scriptContent = Example;

@@ -1,6 +1,7 @@
 import * as Papa from 'papaparse';
 import { BlobIO, Logger } from '@abc-map/frontend-shared';
 import { CsvParsingError, CsvRow } from './typings';
+import { asNumberOrString } from '../../utils/numbers';
 
 const logger = Logger.get('CsvParser.ts');
 
@@ -44,14 +45,8 @@ export class CsvParser {
   private static normalize(rows: CsvRow[]): CsvRow[] {
     for (const row of rows) {
       for (const property in row) {
-        let value = row[property] as string;
-        // We normalize float separator
-        if (value.indexOf(',')) {
-          value = value.replace(',', '.');
-        }
-        if (isNumeric(value)) {
-          row[property] = parseFloat(value);
-        }
+        const value = row[property] as string;
+        row[property] = asNumberOrString(value);
       }
     }
     return rows;
@@ -69,9 +64,4 @@ export class CsvParser {
     });
     return new File([content], name, { type: 'text/csv' });
   }
-}
-
-// Ha ha Javascript ...
-function isNumeric(str: string) {
-  return !isNaN(str as any) && !isNaN(parseFloat(str));
 }

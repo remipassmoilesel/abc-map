@@ -3,6 +3,7 @@ import { DataRow, DataSource, DataSourceType } from './DataSource';
 import { Logger } from '@abc-map/frontend-shared';
 import Geometry from 'ol/geom/Geometry';
 import Feature from 'ol/Feature';
+import { FeatureWrapper } from '../../geo/features/FeatureWrapper';
 
 const logger = Logger.get('LayerDataSource.ts');
 
@@ -43,19 +44,9 @@ export class LayerDataSource implements DataSource {
       return;
     }
 
-    const result: Partial<DataRow> = {};
-    const properties = feature.getProperties();
-    for (const key in properties) {
-      const property = properties[key];
-      const typeIsCorrect = typeof property === 'string' || typeof property === 'number';
-      const notAbcProperty = key.indexOf('abc:') === -1;
-      if (typeIsCorrect && notAbcProperty) {
-        result[key] = property;
-      }
-    }
-
+    const properties = FeatureWrapper.from(feature).getSimpleProperties();
     return {
-      ...result,
+      ...properties,
       _id: id,
     };
   }

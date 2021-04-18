@@ -54,7 +54,7 @@ export class StorePersistence {
 
     // We can not store project as most of informations are only present in map
     cleanState.project = undefined as any; // New project will be set at store bootstrap
-    cleanState.map.tool = MapTool.None;
+    cleanState.map.tool = MapTool.Move;
     cleanState.ui.historyCapabilities = {};
     try {
       const serializedState = JSON.stringify(cleanState);

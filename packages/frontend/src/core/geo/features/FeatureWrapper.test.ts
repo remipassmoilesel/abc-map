@@ -4,6 +4,8 @@ import { FeatureWrapper } from './FeatureWrapper';
 import { DefaultStyle, FeatureStyle } from '../style/FeatureStyle';
 import { TestHelper } from '../../utils/TestHelper';
 import { Style } from 'ol/style';
+import Feature from 'ol/Feature';
+import Geometry from 'ol/geom/Geometry';
 
 describe('FeatureWrapper', () => {
   it('create()', () => {
@@ -184,6 +186,61 @@ describe('FeatureWrapper', () => {
       feature.setText('Sample text');
 
       expect(feature.unwrap().getStyle()).not.toBeNull();
+    });
+  });
+
+  it('getAllProperties()', () => {
+    const feature = new Feature<Geometry>();
+    feature.set(StyleProperties.FillColor2, 'black');
+    feature.setGeometry(new Point([1, 2]));
+
+    const properties = FeatureWrapper.from(feature).getAllProperties();
+    expect(properties).toEqual({
+      [StyleProperties.FillColor2]: 'black',
+      geometry: feature.getGeometry(),
+    });
+  });
+
+  it('getSimpleProperties()', () => {
+    const feature = new Feature<Geometry>();
+    feature.set(StyleProperties.FillColor2, 'black');
+    feature.set('name', 'Amsterdam');
+    feature.set('population', 12345);
+    feature.setGeometry(new Point([1, 2]));
+
+    const properties = FeatureWrapper.from(feature).getSimpleProperties();
+    expect(properties).toEqual({
+      name: 'Amsterdam',
+      population: 12345,
+    });
+  });
+
+  it('setProperties()', () => {
+    const feature = FeatureWrapper.create(new Point([1, 1]));
+    feature.unwrap().set('code', '#abcd');
+    feature.unwrap().set('population', 123);
+
+    feature.setProperties({ population: 123 });
+
+    const properties = feature.getAllProperties();
+    expect(properties).toEqual({
+      code: '#abcd',
+      population: 123,
+      geometry: feature.getGeometry(),
+    });
+  });
+
+  it('overwriteSimpleProperties()', () => {
+    const feature = FeatureWrapper.create(new Point([1, 1]));
+    feature.unwrap().set('code', '#abcd');
+    feature.unwrap().set('population', 123);
+
+    feature.overwriteSimpleProperties({ population: 123 });
+
+    const properties = feature.getAllProperties();
+    expect(properties).toEqual({
+      population: 123,
+      geometry: feature.getGeometry(),
     });
   });
 });

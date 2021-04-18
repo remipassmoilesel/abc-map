@@ -1,6 +1,6 @@
 import { MapTool } from '@abc-map/frontend-shared';
 import { ToolRegistry } from './ToolRegistry';
-import { Selection } from './selection/Selection';
+import { SelectionTool } from './selection/SelectionTool';
 
 describe('ToolRegistry', () => {
   it('All tool should be registered', () => {
@@ -13,7 +13,7 @@ describe('ToolRegistry', () => {
 
   it('get tool should work', () => {
     const tool = ToolRegistry.getById(MapTool.Selection);
-    expect(tool).toBeInstanceOf(Selection);
+    expect(tool).toBeInstanceOf(SelectionTool);
   });
 
   it('get tool should throw', () => {
