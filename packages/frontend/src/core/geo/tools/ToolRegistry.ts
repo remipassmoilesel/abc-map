@@ -1,28 +1,31 @@
 import { AbstractTool } from './AbstractTool';
-import { None } from './common/None';
-import { Point } from './point/Point';
+import { MoveTool } from './move/MoveTool';
+import { PointTool } from './point/PointTool';
 import { MapTool } from '@abc-map/frontend-shared';
 import { mainStore } from '../../store/store';
-import { Circle } from './circle/Circle';
-import { LineString } from './line-string/LineString';
-import { Polygon } from './polygon/Polygon';
-import { Selection } from './selection/Selection';
-import { Rectangle } from './rectangle/Rectangle';
-import { Text } from './text/Text';
+import { CircleTool } from './circle/CircleTool';
+import { LineStringTool } from './line-string/LineStringTool';
+import { PolygonTool } from './polygon/PolygonTool';
+import { SelectionTool } from './selection/SelectionTool';
+import { RectangleTool } from './rectangle/RectangleTool';
+import { TextTool } from './text/TextTool';
 import { getServices } from '../../Services';
+import { EditPropertiesTool } from './edit-properties/EditPropertiesTool';
 
 export class ToolRegistry {
   public static getAll(): AbstractTool[] {
     const history = getServices().history;
+    const modals = getServices().modals;
     return [
-      new None(mainStore, history),
-      new Point(mainStore, history),
-      new LineString(mainStore, history),
-      new Polygon(mainStore, history),
-      new Circle(mainStore, history),
-      new Rectangle(mainStore, history),
-      new Text(mainStore, history),
-      new Selection(mainStore, history),
+      new MoveTool(mainStore, history),
+      new PointTool(mainStore, history),
+      new LineStringTool(mainStore, history),
+      new PolygonTool(mainStore, history),
+      new CircleTool(mainStore, history),
+      new RectangleTool(mainStore, history),
+      new TextTool(mainStore, history),
+      new SelectionTool(mainStore, history),
+      new EditPropertiesTool(mainStore, history, modals),
     ];
   }
 

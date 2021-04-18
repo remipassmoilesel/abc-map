@@ -1,9 +1,11 @@
-import { parseError, Scripts } from './Scripts';
+import { logger, parseError, Scripts } from './Scripts';
 import { ChromiumStack, FirefoxStack } from './Script.test.data';
 import sinon, { SinonStubbedInstance } from 'sinon';
 import { GeoService } from '../../core/geo/GeoService';
 import { Services } from '../../core/Services';
 import { ScriptError } from './typings';
+
+logger.disable();
 
 describe('Scripts', function () {
   describe('process()', () => {

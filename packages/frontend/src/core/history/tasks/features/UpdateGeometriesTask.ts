@@ -2,14 +2,14 @@ import { Task } from '../../Task';
 import Geometry from 'ol/geom/Geometry';
 import { FeatureWrapper } from '../../../geo/features/FeatureWrapper';
 
-export interface ModificationItem {
+export interface UpdateItem {
   feature: FeatureWrapper;
   before: Geometry;
   after: Geometry;
 }
 
-export class ModifyGeometriesTask extends Task {
-  constructor(private items: ModificationItem[]) {
+export class UpdateGeometriesTask extends Task {
+  constructor(private items: UpdateItem[]) {
     super();
   }
 

@@ -19,6 +19,7 @@ import DeviceWarningModal from './components/device-warning-modal/DeviceWarningM
 import MessageBanner from './components/message-banner/MessageBanner';
 import { ServiceProps, withServices } from './core/withServices';
 import DataProcessingView from './views/data-processing/DataProcessingView';
+import EditPropertiesModal from './components/edit-properties-modal/EditPropertiesModal';
 
 class App extends Component<ServiceProps, {}> {
   public render(): ReactNode {
@@ -41,6 +42,7 @@ class App extends Component<ServiceProps, {}> {
           <RenameModal />
           <PasswordModal />
           <DeviceWarningModal />
+          <EditPropertiesModal />
         </BrowserRouter>
       </Provider>
     );

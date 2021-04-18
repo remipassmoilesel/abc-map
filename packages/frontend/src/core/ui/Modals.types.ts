@@ -1,8 +1,12 @@
+import { SimplePropertiesMap } from '../geo/features/FeatureWrapper';
+
 export enum ModalEventType {
   ShowRename = 'ShowRename',
   RenameClosed = 'RenameClosed',
   ShowPassword = 'ShowPassword',
   PasswordClosed = 'PasswordClosed',
+  ShowFeatureProperties = 'ShowFeatureProperties',
+  FeaturePropertiesClosed = 'FeaturePropertiesClosed',
 }
 
 export enum ModalStatus {
@@ -35,7 +39,24 @@ export interface PasswordModalClosedEvent {
   status: ModalStatus;
 }
 
-export declare type ModalEvent = ShowRenameModalEvent | RenameModalClosedEvent | ShowPasswordModalEvent | PasswordModalClosedEvent;
+export interface ShowFeaturePropertiesEvent {
+  type: ModalEventType.ShowFeatureProperties;
+  properties: SimplePropertiesMap;
+}
+
+export interface FeaturePropertiesClosedEvent {
+  type: ModalEventType.FeaturePropertiesClosed;
+  status: ModalStatus;
+  properties: SimplePropertiesMap;
+}
+
+export declare type ModalEvent =
+  | ShowRenameModalEvent
+  | RenameModalClosedEvent
+  | ShowPasswordModalEvent
+  | PasswordModalClosedEvent
+  | ShowFeaturePropertiesEvent
+  | FeaturePropertiesClosedEvent;
 
 export class InternalEvent extends Event {
   constructor(type: ModalEventType, public readonly payload: ModalEvent) {

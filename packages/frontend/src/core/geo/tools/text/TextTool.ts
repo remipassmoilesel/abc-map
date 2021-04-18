@@ -5,16 +5,17 @@ import Geometry from 'ol/geom/Geometry';
 import { Map } from 'ol';
 import Icon from '../../../../assets/tool-icons/text.svg';
 import { Logger } from '@abc-map/frontend-shared';
-import { TextChanged, TextEnd, TextEvent, TextInteraction, TextStart } from './TextInteraction';
+import { TextInteraction } from './TextInteraction';
 import { FeatureWrapper } from '../../features/FeatureWrapper';
 import { HistoryKey } from '../../../history/HistoryKey';
 import { UpdateStyleTask } from '../../../history/tasks/features/UpdateStyleTask';
 import { FeatureStyle } from '../../style/FeatureStyle';
 import GeometryType from 'ol/geom/GeometryType';
+import { TextEvent, TextChanged, TextEnd, TextStart } from './TextInteractionEvents';
 
-const logger = Logger.get('Text.ts');
+const logger = Logger.get('TextTool.ts');
 
-export class Text extends AbstractTool {
+export class TextTool extends AbstractTool {
   public getId(): MapTool {
     return MapTool.Text;
   }
@@ -30,9 +31,7 @@ export class Text extends AbstractTool {
   public setup(map: Map, source: VectorSource<Geometry>): void {
     super.setup(map, source);
 
-    // FIXME: seek features around cursor
-    const features = source.getFeatures();
-    const text = new TextInteraction({ features });
+    const text = new TextInteraction({ source });
 
     let before: FeatureStyle | undefined;
 

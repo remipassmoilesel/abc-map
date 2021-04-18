@@ -5,20 +5,22 @@ import { Map } from 'ol';
 import { logger, MapWrapper } from './MapWrapper';
 import { ToolRegistry } from '../tools/ToolRegistry';
 import { OlTestHelper } from '../../utils/OlTestHelper';
-import { Circle } from '../tools/circle/Circle';
-import { None } from '../tools/common/None';
+import { CircleTool } from '../tools/circle/CircleTool';
 import TileLayer from 'ol/layer/Tile';
 import { LayerFactory } from '../layers/LayerFactory';
 import VectorImageLayer from 'ol/layer/VectorImage';
+import { MoveTool } from '../tools/move/MoveTool';
+import { DragRotateAndZoom } from 'ol/interaction';
 
 logger.disable();
 
 describe('MapWrapper', function () {
-  it('reset() should setup default map', () => {
+  it('defaultLayers()', () => {
     const map = MapFactory.createNaked();
     map.addLayer(LayerFactory.newVectorLayer());
 
-    map.resetLayers();
+    map.defaultLayers();
+
     const layers = map.getLayers();
     expect(layers).toHaveLength(2);
     expect(layers[0].unwrap()).toBeInstanceOf(TileLayer);
@@ -169,6 +171,30 @@ describe('MapWrapper', function () {
     });
   });
 
+  describe('Interaction handling', () => {
+    it('setDefaultInteractions', () => {
+      const map = MapFactory.createNaked();
+      map.unwrap().addInteraction(new DragRotateAndZoom());
+
+      map.setDefaultInteractions();
+
+      expect(OlTestHelper.getInteractionNames(map.unwrap())).toEqual(['DragPan', 'MouseWheelZoom']);
+    });
+
+    it('set', () => {
+      const map = MapFactory.createNaked();
+      map.unwrap().addInteraction(new DragRotateAndZoom());
+
+      map.cleanInteractions();
+
+      expect(OlTestHelper.getInteractionNames(map.unwrap())).toEqual([]);
+    });
+  });
+
+  // TODO: refactor test after tool refacto
+  // TODO: refactor test after tool refacto
+  // TODO: refactor test after tool refacto
+  // TODO: refactor test after tool refacto
   describe('Tool handling', () => {
     it('Set tool should dispose previous tool', () => {
       const map = MapFactory.createNaked();
@@ -203,16 +229,16 @@ describe('MapWrapper', function () {
       expect(map.getCurrentTool()).toStrictEqual(tool);
     });
 
-    it('Set tool to NONE should disable interaction', () => {
+    it('Set tool to Move should disable interaction', () => {
       const map = MapFactory.createNaked();
       const layer = LayerFactory.newVectorLayer();
       map.addLayer(layer);
       map.setActiveLayer(layer);
 
       map.setTool(ToolRegistry.getById(MapTool.Circle));
-      map.setTool(ToolRegistry.getById(MapTool.None));
+      map.setTool(ToolRegistry.getById(MapTool.Move));
 
-      expect(map.getCurrentTool()).toBeInstanceOf(None);
+      expect(map.getCurrentTool()).toBeInstanceOf(MoveTool);
       expect(OlTestHelper.getInteractionCount(map.unwrap(), 'Draw')).toEqual(0);
       expect(OlTestHelper.getInteractionCount(map.unwrap(), 'Modify')).toEqual(0);
     });
@@ -228,7 +254,7 @@ describe('MapWrapper', function () {
       map.setTool(ToolRegistry.getById(MapTool.Circle));
       map.setActiveLayer(tile);
 
-      expect(map.getCurrentTool()).toBeInstanceOf(Circle);
+      expect(map.getCurrentTool()).toBeInstanceOf(CircleTool);
       expect(OlTestHelper.getInteractionCount(map.unwrap(), 'Draw')).toEqual(0);
       expect(OlTestHelper.getInteractionCount(map.unwrap(), 'Modify')).toEqual(0);
     });
@@ -245,7 +271,7 @@ describe('MapWrapper', function () {
       map.setTool(ToolRegistry.getById(MapTool.Circle));
       map.setActiveLayer(vector);
 
-      expect(map.getCurrentTool()).toBeInstanceOf(Circle);
+      expect(map.getCurrentTool()).toBeInstanceOf(CircleTool);
       expect(OlTestHelper.getInteractionCount(map.unwrap(), 'Draw')).toEqual(1);
       expect(OlTestHelper.getInteractionCount(map.unwrap(), 'Modify')).toEqual(1);
     });

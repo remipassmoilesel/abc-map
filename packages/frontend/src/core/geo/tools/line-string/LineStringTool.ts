@@ -8,7 +8,7 @@ import Geometry from 'ol/geom/Geometry';
 import Icon from '../../../../assets/tool-icons/line.svg';
 import { Map } from 'ol';
 
-export class LineString extends AbstractTool {
+export class LineStringTool extends AbstractTool {
   public getId(): MapTool {
     return MapTool.LineString;
   }

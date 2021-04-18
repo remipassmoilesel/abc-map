@@ -11,7 +11,7 @@ export interface MapState {
 }
 
 export const mapInitialState: MapState = {
-  tool: MapTool.None,
+  tool: MapTool.Move,
   currentStyle: {
     fill: {
       color1: '#FFFFFF',

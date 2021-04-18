@@ -1,18 +1,18 @@
+import { CircleTool } from './CircleTool';
 import { MainStore } from '../../../store/store';
 import { HistoryService } from '../../../history/HistoryService';
 import { Map } from 'ol';
 import VectorSource from 'ol/source/Vector';
 import { OlTestHelper } from '../../../utils/OlTestHelper';
-import { Point } from './Point';
 
-describe('Point', () => {
+describe('Circle', () => {
   it('setup()', () => {
     const store = {} as MainStore;
     const history = {} as HistoryService;
     const map = new Map({});
     const source = new VectorSource();
 
-    const circle = new Point(store, history);
+    const circle = new CircleTool(store, history);
     circle.setup(map, source);
 
     expect(circle.getMap()).toStrictEqual(map);
@@ -30,7 +30,7 @@ describe('Point', () => {
     const map = new Map({});
     const source = new VectorSource();
 
-    const circle = new Point(store, history);
+    const circle = new CircleTool(store, history);
     circle.setup(map, source);
     circle.dispose();
 

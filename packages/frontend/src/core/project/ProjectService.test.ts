@@ -35,7 +35,7 @@ describe('ProjectService', function () {
 
       // Assert
       expect(geoMock.getMainMap.callCount).toEqual(1);
-      expect(mapMock.resetLayers.callCount).toEqual(1);
+      expect(mapMock.defaultLayers.callCount).toEqual(1);
     });
 
     it('newProject() should dispatch', async function () {

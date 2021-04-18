@@ -23,25 +23,29 @@ class RenameModal extends Component<ServiceProps, State> {
   }
 
   public render(): ReactNode {
-    if (!this.state.visible) {
+    const visible = this.state.visible;
+    const title = this.state.title;
+    const message = this.state.message;
+    const value = this.state.value;
+    if (!visible) {
       return <div />;
     }
 
     return (
-      <Modal show={this.state.visible} onHide={this.onCancel}>
+      <Modal show={visible} onHide={this.handleCancel}>
         <Modal.Header closeButton>
-          <Modal.Title>{this.state.title}</Modal.Title>
+          <Modal.Title>{title}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div>{this.state.message}</div>
+          <div>{message}</div>
           <div className={'m-3'}>
-            <input className={'form-control'} type={'text'} value={this.state.value} onChange={this.onInputChanged} data-cy="modal-rename-input" />
+            <input className={'form-control'} type={'text'} value={value} onChange={this.handleInputChanged} data-cy="modal-rename-input" />
           </div>
           <div className={'d-flex justify-content-end'}>
-            <button className={'btn btn-secondary mr-3'} onClick={this.onCancel}>
+            <button className={'btn btn-secondary mr-3'} onClick={this.handleCancel}>
               Annuler
             </button>
-            <button className={'btn btn-primary'} onClick={this.onRename} data-cy="modal-rename-confirm">
+            <button className={'btn btn-primary'} onClick={this.handleConfirm} data-cy="rename-modal-confirm">
               Renommer
             </button>
           </div>
@@ -70,11 +74,11 @@ class RenameModal extends Component<ServiceProps, State> {
     }
   }
 
-  private onInputChanged = (ev: ChangeEvent<HTMLInputElement>) => {
+  private handleInputChanged = (ev: ChangeEvent<HTMLInputElement>) => {
     this.setState({ value: ev.target.value });
   };
 
-  private onCancel = () => {
+  private handleCancel = () => {
     const { modals } = this.props.services;
 
     modals.dispatch({
@@ -86,7 +90,7 @@ class RenameModal extends Component<ServiceProps, State> {
     this.setState({ visible: false });
   };
 
-  private onRename = () => {
+  private handleConfirm = () => {
     const { modals } = this.props.services;
 
     modals.dispatch({

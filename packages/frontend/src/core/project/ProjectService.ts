@@ -17,7 +17,7 @@ export class ProjectService {
   constructor(private jsonClient: AxiosInstance, private downloadClient: AxiosInstance, private store: MainStore, private geoService: GeoService) {}
 
   public newProject(): void {
-    this.geoService.getMainMap().resetLayers();
+    this.geoService.getMainMap().defaultLayers();
     this.store.dispatch(ProjectActions.newProject(ProjectFactory.newProjectMetadata()));
     logger.info('New project created');
   }

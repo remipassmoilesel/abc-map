@@ -45,7 +45,7 @@ describe('Project', function () {
         .get('[data-cy=modal-rename-input]')
         .clear()
         .type('My awesome project')
-        .get('[data-cy=modal-rename-confirm]')
+        .get('[data-cy=rename-modal-confirm]')
         .click()
         .get('[data-cy=project-name]')
         .should((elem) => {
@@ -283,7 +283,7 @@ describe('Project', function () {
         .get('[data-cy=modal-rename-input]')
         .clear()
         .type(projectName)
-        .get('[data-cy=modal-rename-confirm]')
+        .get('[data-cy=rename-modal-confirm]')
         .click()
         .get('[data-cy=project-name]')
         // Save project

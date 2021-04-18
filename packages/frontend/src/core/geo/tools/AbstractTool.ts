@@ -13,12 +13,13 @@ import { onlyMainButton } from './common/common-conditions';
 import Feature, { FeatureLike } from 'ol/Feature';
 import { ModifyEvent } from 'ol/interaction/Modify';
 import { Logger } from '@abc-map/frontend-shared';
-import { ModificationItem, ModifyGeometriesTask } from '../../history/tasks/features/ModifyGeometriesTask';
+import { UpdateItem, UpdateGeometriesTask } from '../../history/tasks/features/UpdateGeometriesTask';
 import BaseLayer from 'ol/layer/Base';
 import GeometryType from 'ol/geom/GeometryType';
 import * as _ from 'lodash';
 import { FeatureWrapper } from '../features/FeatureWrapper';
 import { EventsKey } from 'ol/events';
+import { drawingInteractions } from '../map/interactions';
 
 const logger = Logger.get('AbstractTool.ts');
 
@@ -36,8 +37,14 @@ export abstract class AbstractTool {
   public abstract getIcon(): string;
 
   public setup(map: Map, source: VectorSource<Geometry>): void {
+    // Set references
     this.map = map;
     this.vectorSource = source;
+
+    // Add drawing interactions
+    const interactions = drawingInteractions();
+    interactions.forEach((i) => map.addInteraction(i));
+    this.interactions.push(...interactions);
   }
 
   public dispose() {
@@ -164,9 +171,9 @@ export abstract class AbstractTool {
 
           return { feature, before: geomBefore, after: geomAfter };
         })
-        .filter((item) => !!item) as ModificationItem[];
+        .filter((item) => !!item) as UpdateItem[];
 
-      this.history.register(HistoryKey.Map, new ModifyGeometriesTask(items));
+      this.history.register(HistoryKey.Map, new UpdateGeometriesTask(items));
       modified = [];
     });
 

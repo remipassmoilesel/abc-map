@@ -1,4 +1,4 @@
-import { LayerFactory } from '../../../core/geo/layers/LayerFactory';
+import { LayerFactory } from '../../geo/layers/LayerFactory';
 import { LayerDataSource } from './LayerDataSource';
 import { DataSourceType } from './DataSource';
 import VectorSource from 'ol/source/Vector';

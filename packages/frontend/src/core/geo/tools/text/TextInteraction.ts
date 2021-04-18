@@ -1,68 +1,40 @@
 import { Logger } from '@abc-map/frontend-shared';
-import PointerInteraction from 'ol/interaction/Pointer';
 import MapBrowserEvent from 'ol/MapBrowserEvent';
-import Feature from 'ol/Feature';
-import Geometry from 'ol/geom/Geometry';
-import { containsCoordinate } from 'ol/extent';
 import { FeatureWrapper } from '../../features/FeatureWrapper';
-import BaseEvent from 'ol/events/Event';
+import { TextChanged, TextEnd, TextStart } from './TextInteractionEvents';
+import VectorSource from 'ol/source/Vector';
+import { findFeatureUnderCursor } from '../common/findFeatureUnderCursor';
+import { Interaction } from 'ol/interaction';
+import MapBrowserEventType from 'ol/MapBrowserEventType';
+import { notShiftKey } from '../../map/interactions';
 
 const logger = Logger.get('TextInteraction.ts');
 
 export interface Options {
-  features: Feature<Geometry>[];
+  source: VectorSource;
 }
 
-export enum TextEvent {
-  Start = 'text-start',
-  Changed = 'text-changed',
-  End = 'text-end',
-}
-
-export class TextStart extends BaseEvent {
-  constructor(public readonly feature: Feature<Geometry>, public readonly text: string) {
-    super(TextEvent.Start);
-  }
-}
-
-export class TextChanged extends BaseEvent {
-  constructor(public readonly feature: Feature<Geometry>, public readonly text: string) {
-    super(TextEvent.Changed);
-  }
-}
-
-export class TextEnd extends BaseEvent {
-  constructor(public readonly feature: Feature<Geometry>, public readonly text: string) {
-    super(TextEvent.End);
-  }
-}
-
-export class TextInteraction extends PointerInteraction {
-  private readonly features: Feature<Geometry>[];
-  private tolerance = 10;
+export class TextInteraction extends Interaction {
+  private readonly source: VectorSource;
 
   constructor(private options: Options) {
     super();
-    this.features = options.features;
+    this.source = options.source;
   }
 
-  protected handleDownEvent(event: MapBrowserEvent<UIEvent>): boolean {
-    const coord = event.coordinate;
-    const resolution = event.map.getView().getResolution() || 1;
-    const tolerance = this.tolerance * resolution;
+  /**
+   * Return true to continue event dispatch
+   * @param event
+   */
+  public handleEvent(event: MapBrowserEvent<UIEvent>): boolean {
+    if (MapBrowserEventType.POINTERDOWN === event.type && notShiftKey(event)) {
+      return this.handlePointerDown(event);
+    }
+    return true;
+  }
 
-    // we try to find a feature close to event
-    const feature = this.features.find((feat) => {
-      const extent = feat.getGeometry()?.getExtent();
-      if (!extent) {
-        return false;
-      }
-      const inExtent = containsCoordinate(extent, coord);
-      const closestPoint = feat.getGeometry()?.getClosestPoint(coord);
-      const closeTo = closestPoint && Math.abs(closestPoint[0] - coord[0]) < tolerance && Math.abs(closestPoint[1] - coord[1]) < tolerance;
-      return inExtent || closeTo;
-    });
-
+  protected handlePointerDown(event: MapBrowserEvent<UIEvent>): boolean {
+    const feature = findFeatureUnderCursor(event, this.source);
     if (!feature) {
       return false;
     }

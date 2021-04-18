@@ -3,16 +3,16 @@ import { HistoryService } from '../../../history/HistoryService';
 import { Map } from 'ol';
 import VectorSource from 'ol/source/Vector';
 import { OlTestHelper } from '../../../utils/OlTestHelper';
-import { Polygon } from './Polygon';
+import { LineStringTool } from './LineStringTool';
 
-describe('Polygon', () => {
+describe('LineString', () => {
   it('setup()', () => {
     const store = {} as MainStore;
     const history = {} as HistoryService;
     const map = new Map({});
     const source = new VectorSource();
 
-    const circle = new Polygon(store, history);
+    const circle = new LineStringTool(store, history);
     circle.setup(map, source);
 
     expect(circle.getMap()).toStrictEqual(map);
@@ -30,7 +30,7 @@ describe('Polygon', () => {
     const map = new Map({});
     const source = new VectorSource();
 
-    const circle = new Polygon(store, history);
+    const circle = new LineStringTool(store, history);
     circle.setup(map, source);
     circle.dispose();
 

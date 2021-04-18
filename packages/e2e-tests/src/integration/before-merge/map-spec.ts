@@ -73,7 +73,7 @@ describe('Map', function () {
       .get('[data-cy=modal-rename-input]')
       .clear()
       .type('Awesome layer')
-      .get('[data-cy=modal-rename-confirm]')
+      .get('[data-cy=rename-modal-confirm]')
       .click()
       .then(() => LayerSelector.getNames())
       .should((names) => {
