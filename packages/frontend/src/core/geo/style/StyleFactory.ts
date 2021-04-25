@@ -1,13 +1,15 @@
 import Feature from 'ol/Feature';
 import Style from 'ol/style/Style';
-import { Circle, Fill, Stroke, Text } from 'ol/style';
+import { Fill, Icon, Stroke, Text } from 'ol/style';
 import { Logger } from '@abc-map/frontend-shared';
-import { FeatureStyle, DefaultStyle } from './FeatureStyle';
+import { DefaultStyle, FeatureStyle } from './FeatureStyle';
 import { SelectionStyleFactory } from './SelectionStyleFactory';
 import { StyleCache } from './StyleCache';
 import { FillPatternFactory } from './FillPatternFactory';
 import Geometry from 'ol/geom/Geometry';
 import GeometryType from 'ol/geom/GeometryType';
+import { IconProcessor } from './IconProcessor';
+import { safeGetIcon, PointIcons } from './PointIcons';
 
 const logger = Logger.get('VectorStyles.ts');
 
@@ -44,22 +46,17 @@ export class StyleFactory {
     }
 
     // Points
-    if (GeometryType.POINT === type) {
-      const fill = this.createFill(properties);
-      const stroke = this.createStroke(properties);
-      let pointStyle: Circle | undefined;
-      if (properties.point?.size) {
-        pointStyle = new Circle({
-          fill: fill,
-          stroke: stroke,
-          radius: properties.point?.size,
-        });
-      }
-      return [new Style({ fill, stroke, image: pointStyle, text: textStyle })];
+    if (GeometryType.POINT === type || GeometryType.MULTI_POINT === type) {
+      const size = properties.point?.size || 10;
+      const name = (properties.point?.icon as PointIcons) || PointIcons.Square;
+      const color = properties.fill?.color1 || '#000000';
+      const icon = IconProcessor.prepare(safeGetIcon(name), size, color);
+      const pointStyle = new Icon({ img: icon, imgSize: [size, size] });
+      return [new Style({ image: pointStyle, text: textStyle })];
     }
 
     // Line strings
-    else if (GeometryType.LINE_STRING === type) {
+    else if (GeometryType.LINE_STRING === type || GeometryType.MULTI_LINE_STRING === type || GeometryType.LINEAR_RING === type) {
       const stroke = this.createStroke(properties);
       return [new Style({ stroke, text: textStyle })];
     }

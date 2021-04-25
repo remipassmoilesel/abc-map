@@ -1,4 +1,5 @@
 import { FillPatterns } from '@abc-map/shared-entities';
+import { DefaultIcon } from './PointIcons';
 
 export interface FeatureStyle {
   stroke?: StrokeProperties;
@@ -59,10 +60,11 @@ export interface TextProperties {
 }
 
 export interface PointProperties {
+  icon?: string;
   size?: number;
 }
 
-export const DefaultStyle: FeatureStyle = {
+export const DefaultStyle: Required<FeatureStyle> = {
   stroke: {
     color: '#000',
     width: 2,
@@ -76,6 +78,7 @@ export const DefaultStyle: FeatureStyle = {
     size: 600,
   },
   point: {
+    icon: DefaultIcon.name,
     size: 15,
   },
 };

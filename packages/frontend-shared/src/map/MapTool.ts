@@ -1,5 +1,5 @@
 export enum MapTool {
-  Move = 'Move',
+  None = 'None',
   Point = 'Point',
   LineString = 'LineString',
   Polygon = 'Polygon',

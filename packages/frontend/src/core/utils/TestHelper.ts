@@ -21,6 +21,7 @@ import uuid from 'uuid-random';
 import { FeatureStyle } from '../geo/style/FeatureStyle';
 import { CompressedProject } from '../project/CompressedProject';
 import { Zipper } from '@abc-map/frontend-shared';
+import { PointIcons } from '../geo/style/PointIcons';
 
 export class TestHelper {
   public static samplePointFeature(): Feature<Geometry> {
@@ -199,6 +200,7 @@ export class TestHelper {
         alignment: 'left',
       },
       point: {
+        icon: PointIcons.Star,
         size: 5,
       },
     };

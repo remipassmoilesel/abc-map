@@ -10,6 +10,7 @@ export class MapFactory {
   public static createDefault(): MapWrapper {
     const scale = new ScaleLine({ units: 'metric' });
     const internal = new Map({
+      layers: [],
       controls: defaultControls().extend([scale]),
       interactions: [],
       view: new View({
@@ -17,11 +18,12 @@ export class MapFactory {
         zoom: 4,
         projection: DEFAULT_PROJECTION.name,
       }),
-      layers: [],
     });
 
     const map = new MapWrapper(internal);
     map.defaultLayers();
+    map.setDefaultInteractions();
+
     return map;
   }
 

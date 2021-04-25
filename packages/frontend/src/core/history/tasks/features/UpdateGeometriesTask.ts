@@ -9,7 +9,7 @@ export interface UpdateItem {
 }
 
 export class UpdateGeometriesTask extends Task {
-  constructor(private items: UpdateItem[]) {
+  constructor(public readonly items: UpdateItem[]) {
     super();
   }
 

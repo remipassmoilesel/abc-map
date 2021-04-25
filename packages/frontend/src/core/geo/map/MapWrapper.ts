@@ -136,6 +136,19 @@ export class MapWrapper {
     });
   }
 
+  public getSelectedFeatures(): FeatureWrapper[] {
+    const layer = this.getActiveVectorLayer();
+    if (!layer) {
+      return [];
+    }
+
+    return layer
+      .getSource()
+      .getFeatures()
+      .map((f) => FeatureWrapper.from(f))
+      .filter((f) => f.isSelected());
+  }
+
   public getProjection(): AbcProjection {
     return {
       name: this.internal.getView().getProjection().getCode(),
@@ -187,8 +200,8 @@ export class MapWrapper {
   }
 
   public cleanInteractions() {
-    const mapInteractions = this.internal.getInteractions().getArray();
-    mapInteractions.forEach((i) => this.internal.removeInteraction(i));
+    this.internal.getInteractions().forEach((i) => i.dispose());
+    this.internal.getInteractions().clear();
   }
 
   public getCurrentTool(): AbstractTool | undefined {
@@ -223,22 +236,6 @@ export class MapWrapper {
    */
   private triggerLayerChange(): void {
     this.internal.getLayers().set(AbcProperties.LastLayerChange, performance.now());
-  }
-
-  public getSelectedFeatures(): FeatureWrapper[] {
-    const layer = this.getActiveVectorLayer();
-    if (!layer) {
-      return [];
-    }
-
-    return layer
-      .getSource()
-      .getFeatures()
-      .map((feat) => {
-        const feature = FeatureWrapper.from(feat);
-        return feature.isSelected() ? feature : null;
-      })
-      .filter((feat) => !!feat) as FeatureWrapper[];
   }
 
   /**

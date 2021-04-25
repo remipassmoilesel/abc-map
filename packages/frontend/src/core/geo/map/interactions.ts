@@ -1,5 +1,4 @@
 import { DragPan, DragRotate, Interaction, MouseWheelZoom } from 'ol/interaction';
-import MapBrowserEvent from 'ol/MapBrowserEvent';
 import { shiftKeyOnly } from 'ol/events/condition';
 
 export function defaultInteractions(): Interaction[] {
@@ -12,8 +11,4 @@ export function drawingInteractions(): Interaction[] {
 
 export function layoutMapInteractions(): Interaction[] {
   return [new DragRotate(), new DragPan(), new MouseWheelZoom()];
-}
-
-export function notShiftKey(ev: MapBrowserEvent): boolean {
-  return !shiftKeyOnly(ev);
 }

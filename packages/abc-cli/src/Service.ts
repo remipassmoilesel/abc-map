@@ -101,6 +101,7 @@ Abc-CLI helps to build and deploy Abc-Map.
 Common commands are:
 
   $ ./abc-cli install                    Init project and install dependencies.
+  $ ./abc-cli build                      Build all packages. Generally needed once only.
   $ ./abc-cli watch                      Watch source code of all packages and compile on change.
   $ ./abc-cli start                      Start project and associated services (database, mail server, ...).
   $ ./abc-cli clean-restart-services     Stop services, clean data, then start services.
@@ -108,16 +109,18 @@ Common commands are:
 
 Other commands:
 
-  $ ./abc-cli build             Build all packages.
-  $ ./abc-cli lint              Analyse code with ESLint and fix things that can be fixed.
-  $ ./abc-cli test              Test all packages.
-  $ ./abc-cli e2e               Launch E2E tests.
-  $ ./abc-cli start-services    Start associated services.
-  $ ./abc-cli stop-services     Stop associated services.
-  $ ./abc-cli clean             Clean all build directories and dependencies.
-  $ ./abc-cli dep-check         Check dependencies and source code with Dependency Cruiser.
-  $ ./abc-cli ci                Execute continuous integration: lint, dep-check, build, test, ...
-  $ ./abc-cli help              Show this help.
+  $ ./abc-cli install                     Init project and install dependencies.
+  $ ./abc-cli lint                        Analyse code with ESLint and fix things that can be fixed.
+  $ ./abc-cli dep-check                   Check dependencies and source code with Dependency Cruiser.
+  $ ./abc-cli build                       Build all packages.
+  $ ./abc-cli test                        Test all packages.
+  $ ./abc-cli e2e                         Launch E2E tests.
+  $ ./abc-cli start-services              Start associated services.
+  $ ./abc-cli stop-services               Stop associated services.
+  $ ./abc-cli clean-restart-services      Stop associated services.
+  $ ./abc-cli clean                       Clean all build directories and dependencies.
+  $ ./abc-cli ci                          Execute continuous integration: lint, dep-check, build, test, ...
+  $ ./abc-cli help                        Show this help.
 
     `);
   }

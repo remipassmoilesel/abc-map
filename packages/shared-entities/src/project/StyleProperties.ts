@@ -11,6 +11,7 @@ export enum StyleProperties {
   TextOffsetX = 'abc:style:text:offset-x',
   TextOffsetY = 'abc:style:text:offset-y',
   TextAlignment = 'abc:style:text:alignment',
+  PointIcon = 'abc:style:point:icon',
   PointSize = 'abc:style:point:size',
 }
 

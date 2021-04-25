@@ -1,10 +1,9 @@
 import React, { Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/frontend-shared';
 import ColorSelector from '../_common/color-selector/ColorSelector';
-import StrokeWidthSelector from '../_common/stroke-width-selector/StrokeWidthSelector';
-import Cls from './PointPanel.module.scss';
 import PointSizeSelector from './PointSizeSelector';
-import FillPatternSelector from '../_common/fill-pattern-selector/FillPatternSelector';
+import PointIconSelector from './PointIconSelector';
+import Cls from './PointPanel.module.scss';
 
 const logger = Logger.get('PointPanel.tsx');
 
@@ -13,9 +12,8 @@ class PointPanel extends Component<{}, {}> {
     return (
       <div className={Cls.pointPanel}>
         <PointSizeSelector />
-        <StrokeWidthSelector />
-        <ColorSelector fillColors={true} />
-        <FillPatternSelector />
+        <ColorSelector stroke={false} fillColor1={true} fillColor2={false} />
+        <PointIconSelector />
       </div>
     );
   }

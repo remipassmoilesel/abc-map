@@ -7,6 +7,7 @@ import { DataStoreService } from './data/DataStoreService';
 import { mainStore } from './store/store';
 import { ToastService } from './ui/ToastService';
 import { ModalService } from './ui/ModalService';
+import { AxiosError } from 'axios';
 
 export interface Services {
   project: ProjectService;
@@ -27,12 +28,13 @@ export function getServices(): Services {
 }
 
 function serviceFactory(): Services {
-  const jsonClient = httpApiClient(5_000);
-  const downloadClient = httpDownloadClient(5_000);
+  const toasts = new ToastService();
+
+  const jsonClient = httpApiClient(5_000, (err) => httpErrorHandler(err, toasts));
+  const downloadClient = httpDownloadClient(5_000, (err) => httpErrorHandler(err, toasts));
   const externalClient = httpExternalClient(5_000);
 
   const modals = new ModalService();
-  const toasts = new ToastService();
   const history = HistoryService.create();
   const geo = new GeoService(externalClient, history);
   const project = new ProjectService(jsonClient, downloadClient, mainStore, geo);
@@ -48,4 +50,15 @@ function serviceFactory(): Services {
     history,
     dataStore: data,
   };
+}
+
+function httpErrorHandler(e: AxiosError, toasts: ToastService) {
+  if (e.code === '401') {
+    toasts.error('Vous devez vous reconnecter.');
+  }
+  if (e.code === '403') {
+    toasts.error('Cette opération est interdite.');
+  }
+
+  return Promise.reject(e);
 }

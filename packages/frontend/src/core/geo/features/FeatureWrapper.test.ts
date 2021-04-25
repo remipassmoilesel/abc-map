@@ -1,16 +1,30 @@
 import { FeatureProperties, FillPatterns, StyleProperties } from '@abc-map/shared-entities';
-import { Circle, Point } from 'ol/geom';
+import { Circle, LineString, Point, Polygon } from 'ol/geom';
 import { FeatureWrapper } from './FeatureWrapper';
-import { DefaultStyle, FeatureStyle } from '../style/FeatureStyle';
+import { FeatureStyle } from '../style/FeatureStyle';
 import { TestHelper } from '../../utils/TestHelper';
 import { Style } from 'ol/style';
 import Feature from 'ol/Feature';
 import Geometry from 'ol/geom/Geometry';
+import { PointIcons } from '../style/PointIcons';
 
 describe('FeatureWrapper', () => {
-  it('create()', () => {
+  it('create() should create and set id', () => {
     const feature = FeatureWrapper.create();
     expect(feature.unwrap().getId()).toBeDefined();
+  });
+
+  it('from() should not mutate feature', () => {
+    const feature = new Feature(new Point([1, 1]));
+    const properties = JSON.stringify(feature.getProperties());
+    const style = new Style();
+    feature.setStyle(style);
+
+    FeatureWrapper.from(feature);
+
+    expect(feature.getId()).toBeUndefined();
+    expect(feature.getStyle()).toStrictEqual(style);
+    expect(JSON.stringify(feature.getProperties())).toEqual(properties);
   });
 
   it('clone() should clone feature and geometry', () => {
@@ -89,20 +103,68 @@ describe('FeatureWrapper', () => {
   });
 
   describe('Style', () => {
-    it('setDefaultStyle()', () => {
-      const original = TestHelper.sampleStyleProperties();
-      original.fill = {
-        color1: '#ccc',
-      };
-      const feature = FeatureWrapper.create(new Point([4, 5]));
-      feature.setStyleProperties(original);
-      expect(feature.getStyleProperties()).toEqual(original);
-      expect((feature.unwrap().getStyle() as Style[])[0].getFill().getColor()).toEqual(original.fill?.color1);
+    describe('setDefaultStyle()', () => {
+      it('On polygon', () => {
+        // Prepare
+        const feature = FeatureWrapper.create(
+          new Polygon([
+            [
+              [1, 1],
+              [2, 2],
+              [1, 1],
+            ],
+          ])
+        );
 
-      feature.setDefaultStyle();
+        // Act
+        feature.setDefaultStyle();
 
-      expect(feature.getStyleProperties()).toEqual(DefaultStyle);
-      expect((feature.unwrap().getStyle() as Style[])[0].getFill().getColor()).toEqual(DefaultStyle.fill?.color1);
+        // Assert
+        expect(feature.getStyleProperties()).toEqual({
+          fill: { color1: '#fff', color2: undefined, pattern: undefined },
+          stroke: { color: '#000', width: 2 },
+          point: { icon: undefined, size: undefined },
+          text: { alignment: undefined, color: undefined, font: undefined, offsetX: undefined, offsetY: undefined, size: undefined, value: undefined },
+        });
+      });
+
+      it('On point', () => {
+        // Prepare
+        const feature = FeatureWrapper.create(new Point([1, 1]));
+
+        // Act
+        feature.setDefaultStyle();
+
+        // Assert
+        expect(feature.getStyleProperties()).toEqual({
+          point: { icon: PointIcons.Square, size: 15 },
+          fill: { color1: undefined, color2: undefined, pattern: undefined },
+          stroke: { color: undefined, width: undefined },
+          text: { alignment: undefined, color: undefined, font: undefined, offsetX: undefined, offsetY: undefined, size: undefined, value: undefined },
+        });
+      });
+
+      it('On line string', () => {
+        // Prepare
+        const feature = FeatureWrapper.create(
+          new LineString([
+            [1, 1],
+            [2, 2],
+            [1, 1],
+          ])
+        );
+
+        // Act
+        feature.setDefaultStyle();
+
+        // Assert
+        expect(feature.getStyleProperties()).toEqual({
+          stroke: { color: '#000', width: 2 },
+          fill: { color1: undefined, color2: undefined, pattern: undefined },
+          point: { icon: undefined, size: undefined },
+          text: { alignment: undefined, color: undefined, font: undefined, offsetX: undefined, offsetY: undefined, size: undefined, value: undefined },
+        });
+      });
     });
 
     it('applyStyle()', () => {
@@ -114,32 +176,45 @@ describe('FeatureWrapper', () => {
       expect(feature.unwrap().getStyle()).not.toBeNull();
     });
 
-    it('setStyleProperties()', () => {
-      const feature = FeatureWrapper.create();
+    describe('setStyleProperties()', () => {
+      it('should set all properties', () => {
+        const feature = FeatureWrapper.create();
 
-      feature.setStyleProperties(TestHelper.sampleStyleProperties());
+        feature.setStyleProperties(TestHelper.sampleStyleProperties());
 
-      const ol = feature.unwrap();
-      expect(ol.get(StyleProperties.StrokeColor)).toEqual('black');
-      expect(ol.get(StyleProperties.StrokeWidth)).toEqual(5);
-      expect(ol.get(StyleProperties.FillColor1)).toEqual('white');
-      expect(ol.get(StyleProperties.FillColor2)).toEqual('blue');
-      expect(ol.get(StyleProperties.FillPattern)).toEqual(FillPatterns.HatchingObliqueLeft);
-      expect(ol.get(StyleProperties.TextValue)).toEqual('Test text value');
-      expect(ol.get(StyleProperties.TextColor)).toEqual('#00f');
-      expect(ol.get(StyleProperties.TextSize)).toEqual(30);
-      expect(ol.get(StyleProperties.TextFont)).toEqual('sans-serif');
-      expect(ol.get(StyleProperties.TextOffsetX)).toEqual(20);
-      expect(ol.get(StyleProperties.TextOffsetY)).toEqual(30);
-    });
+        const ol = feature.unwrap();
+        expect(ol.get(StyleProperties.StrokeColor)).toEqual('black');
+        expect(ol.get(StyleProperties.StrokeWidth)).toEqual(5);
+        expect(ol.get(StyleProperties.FillColor1)).toEqual('white');
+        expect(ol.get(StyleProperties.FillColor2)).toEqual('blue');
+        expect(ol.get(StyleProperties.FillPattern)).toEqual(FillPatterns.HatchingObliqueLeft);
+        expect(ol.get(StyleProperties.TextValue)).toEqual('Test text value');
+        expect(ol.get(StyleProperties.TextColor)).toEqual('#00f');
+        expect(ol.get(StyleProperties.TextSize)).toEqual(30);
+        expect(ol.get(StyleProperties.TextFont)).toEqual('sans-serif');
+        expect(ol.get(StyleProperties.TextOffsetX)).toEqual(20);
+        expect(ol.get(StyleProperties.TextOffsetY)).toEqual(30);
+        expect(ol.get(StyleProperties.TextAlignment)).toEqual('left');
+        expect(ol.get(StyleProperties.PointIcon)).toEqual('star');
+        expect(ol.get(StyleProperties.PointSize)).toEqual(5);
+      });
 
-    it('setStyleProperties() should apply style', () => {
-      const feature = FeatureWrapper.create();
-      expect(feature.unwrap().getStyle()).toBeNull();
+      it('setStyleProperties() should not set undefined properties', () => {
+        const feature = FeatureWrapper.create();
 
-      feature.setStyleProperties(TestHelper.sampleStyleProperties());
+        feature.setStyleProperties({ point: { icon: 'test-icon' } });
 
-      expect(feature.unwrap().getStyle()).not.toBeNull();
+        expect(feature.getAllProperties()).toEqual({ 'abc:style:point:icon': 'test-icon' });
+      });
+
+      it('setStyleProperties() should apply style', () => {
+        const feature = FeatureWrapper.create();
+        expect(feature.unwrap().getStyle()).toBeNull();
+
+        feature.setStyleProperties(TestHelper.sampleStyleProperties());
+
+        expect(feature.unwrap().getStyle()).not.toBeNull();
+      });
     });
 
     it('getStyleProperties()', () => {
@@ -156,6 +231,7 @@ describe('FeatureWrapper', () => {
       feature.unwrap().set(StyleProperties.TextOffsetX, 20);
       feature.unwrap().set(StyleProperties.TextOffsetY, 30);
       feature.unwrap().set(StyleProperties.TextAlignment, 'left');
+      feature.unwrap().set(StyleProperties.PointIcon, PointIcons.Star);
       feature.unwrap().set(StyleProperties.PointSize, 5);
 
       const properties = feature.getStyleProperties();

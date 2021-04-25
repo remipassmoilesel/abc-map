@@ -2,7 +2,7 @@ import { Task } from '../../Task';
 import VectorSource from 'ol/source/Vector';
 import { FeatureWrapper } from '../../../geo/features/FeatureWrapper';
 
-export class RemoveFeatureTask extends Task {
+export class RemoveFeaturesTask extends Task {
   constructor(private source: VectorSource, private features: FeatureWrapper[]) {
     super();
   }

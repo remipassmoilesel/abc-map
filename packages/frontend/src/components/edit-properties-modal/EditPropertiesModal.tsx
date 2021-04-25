@@ -4,7 +4,6 @@ import { ModalEventListener, ModalEventType, ModalStatus } from '../../core/ui/M
 import { ServiceProps, withServices } from '../../core/withServices';
 import { SimplePropertiesMap } from '../../core/geo/features/FeatureWrapper';
 import PropertiesForm from './PropertiesForm';
-import Cls from './EditPropertiesModal.module.scss';
 
 interface State {
   visible: boolean;
@@ -27,7 +26,7 @@ class EditPropertiesModal extends Component<ServiceProps, State> {
     }
 
     return (
-      <Modal show={visible} onHide={this.handleCancel} size={'lg'} className={Cls.modal}>
+      <Modal show={visible} onHide={this.handleCancel} size={'lg'}>
         <Modal.Header closeButton>
           <Modal.Title>Propriétés</Modal.Title>
         </Modal.Header>

@@ -65,7 +65,7 @@ describe('StorePersistence', () => {
     const expectedState: MainState = {
       project: undefined as any,
       map: {
-        tool: MapTool.Move,
+        tool: MapTool.None,
         currentStyle: {
           fill: {
             color1: '#789ABC',
