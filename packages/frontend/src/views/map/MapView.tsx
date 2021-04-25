@@ -20,6 +20,7 @@ import Cls from './MapView.module.scss';
 import { toLonLat } from 'ol/proj';
 import CursorPosition from './cursor-position/CursorPosition';
 import { Coordinate } from 'ol/coordinate';
+import { MapKeyboardListener } from './keyboard-listener/MapKeyboardListener';
 
 const logger = Logger.get('MapView.tsx', 'debug');
 
@@ -27,6 +28,7 @@ interface State {
   layers: LayerWrapper[];
   map: MapWrapper;
   position?: Coordinate;
+  keyboardListener?: MapKeyboardListener;
 }
 
 const mapStateToProps = (state: MainState) => ({
@@ -40,7 +42,7 @@ const connector = connect(mapStateToProps);
 
 type Props = ConnectedProps<typeof connector> & ServiceProps;
 
-class MapView extends Component<Props, State> {
+export class MapView extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -85,6 +87,10 @@ class MapView extends Component<Props, State> {
 
     map.unwrap().on('rendercomplete', this.handleRenderComplete);
     map.unwrap().on('pointermove', this.handlePointerMove);
+
+    const keyboardListener = MapKeyboardListener.create();
+    keyboardListener.initialize();
+    this.setState({ keyboardListener });
   }
 
   public componentWillUnmount() {
@@ -93,6 +99,8 @@ class MapView extends Component<Props, State> {
     map.removeLayerChangeListener(this.handleLayerChange);
     map.unwrap().un('rendercomplete', this.handleRenderComplete);
     map.unwrap().un('pointermove', this.handlePointerMove);
+
+    this.state.keyboardListener?.destroy();
   }
 
   private handleLayerChange = (): void => {

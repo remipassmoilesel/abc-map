@@ -1,5 +1,6 @@
 import { FeatureStyle } from '../../geo/style/FeatureStyle';
 import { MapTool } from '@abc-map/frontend-shared';
+import { PointIcons } from '../../geo/style/PointIcons';
 
 export interface MapState {
   /**
@@ -11,7 +12,7 @@ export interface MapState {
 }
 
 export const mapInitialState: MapState = {
-  tool: MapTool.Move,
+  tool: MapTool.None,
   currentStyle: {
     fill: {
       color1: '#FFFFFF',
@@ -27,6 +28,7 @@ export const mapInitialState: MapState = {
       size: 30,
     },
     point: {
+      icon: PointIcons.Circle,
       size: 5,
     },
   },

@@ -12,7 +12,7 @@ class RectanglePanel extends Component<{}, {}> {
     return (
       <div className={Cls.rectanglePanel}>
         <WidthSelector />
-        <ColorSelector fillColors={true} />
+        <ColorSelector stroke={true} fillColor1={true} fillColor2={true} />
         <FillPatternSelector />
       </div>
     );

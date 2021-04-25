@@ -29,8 +29,8 @@ describe('EditPropertiesTool', () => {
     source = sinon.createStubInstance(VectorSource);
     interaction = new EditPropertiesInteraction({ source: (source as unknown) as VectorSource });
     const factory = () => interaction;
-    tool = new EditPropertiesTool({} as any, (history as unknown) as HistoryService, (modals as unknown) as ModalService, factory as any);
 
+    tool = new EditPropertiesTool({} as any, (history as unknown) as HistoryService, (modals as unknown) as ModalService, factory);
     tool.setup((map as unknown) as Map, (source as unknown) as VectorSource);
   });
 
@@ -77,5 +77,12 @@ describe('EditPropertiesTool', () => {
     const task = history.register.args[0][1] as SetFeatureProperties;
     expect(task.before).toEqual({ abcd: 12345 });
     expect(task.after).toEqual({ abcd: 4567 });
+  });
+
+  it('dispose()', () => {
+    tool.dispose();
+
+    expect(map.removeInteraction.callCount).toBeGreaterThan(1);
+    expect(map.removeInteraction.args.map((f) => f[0].constructor.name)).toContain('EditPropertiesInteraction');
   });
 });

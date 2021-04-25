@@ -11,7 +11,7 @@ class LineStringPanel extends Component<{}, {}> {
     return (
       <div className={Cls.linePanel}>
         <StrokeWidthSelector />
-        <ColorSelector fillColors={false} />
+        <ColorSelector stroke={true} />
       </div>
     );
   }

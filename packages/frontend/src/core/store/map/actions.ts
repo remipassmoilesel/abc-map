@@ -1,5 +1,6 @@
 import { FillPatterns } from '@abc-map/shared-entities';
 import { MapTool } from '@abc-map/frontend-shared';
+import { PointIcons } from '../../geo/style/PointIcons';
 
 export enum ActionType {
   SetTool = 'SetTool',
@@ -10,6 +11,7 @@ export enum ActionType {
   SetFillPattern = 'SetFillPattern',
   SetTextColor = 'SetTextColor',
   SetTextSize = 'SetTextSize',
+  SetPointIcon = 'SetPointIcon',
   SetPointSize = 'SetPointSize',
 }
 
@@ -53,12 +55,27 @@ export interface SetTextSize {
   size: number;
 }
 
+export interface SetPointIcon {
+  type: ActionType.SetPointIcon;
+  icon: PointIcons;
+}
+
 export interface SetPointSize {
   type: ActionType.SetPointSize;
   size: number;
 }
 
-export type MapAction = SetTool | SetStrokeColor | SetFillColor1 | SetFillColor2 | SetStrokeWidth | SetFillPattern | SetTextColor | SetTextSize | SetPointSize;
+export type MapAction =
+  | SetTool
+  | SetStrokeColor
+  | SetFillColor1
+  | SetFillColor2
+  | SetStrokeWidth
+  | SetFillPattern
+  | SetTextColor
+  | SetTextSize
+  | SetPointIcon
+  | SetPointSize;
 
 export class MapActions {
   public static setTool(tool: MapTool): MapAction {
@@ -114,6 +131,13 @@ export class MapActions {
     return {
       type: ActionType.SetTextSize,
       size,
+    };
+  }
+
+  public static setPointIcon(icon: PointIcons): MapAction {
+    return {
+      type: ActionType.SetPointIcon,
+      icon,
     };
   }
 

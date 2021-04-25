@@ -3,10 +3,10 @@ import MapBrowserEvent from 'ol/MapBrowserEvent';
 import { FeatureWrapper } from '../../features/FeatureWrapper';
 import { TextChanged, TextEnd, TextStart } from './TextInteractionEvents';
 import VectorSource from 'ol/source/Vector';
-import { findFeatureUnderCursor } from '../common/findFeatureUnderCursor';
+import { findFeatureNearCursor } from '../common/findFeatureNearCursor';
 import { Interaction } from 'ol/interaction';
 import MapBrowserEventType from 'ol/MapBrowserEventType';
-import { notShiftKey } from '../../map/interactions';
+import { withMainButton, withShiftKey } from '../common/key-helpers';
 
 const logger = Logger.get('TextInteraction.ts');
 
@@ -27,14 +27,18 @@ export class TextInteraction extends Interaction {
    * @param event
    */
   public handleEvent(event: MapBrowserEvent<UIEvent>): boolean {
-    if (MapBrowserEventType.POINTERDOWN === event.type && notShiftKey(event)) {
+    if (withShiftKey(event) || !withMainButton(event)) {
+      return true;
+    }
+
+    if (MapBrowserEventType.POINTERDOWN === event.type) {
       return this.handlePointerDown(event);
     }
     return true;
   }
 
   protected handlePointerDown(event: MapBrowserEvent<UIEvent>): boolean {
-    const feature = findFeatureUnderCursor(event, this.source);
+    const feature = findFeatureNearCursor(event, this.source);
     if (!feature) {
       return false;
     }

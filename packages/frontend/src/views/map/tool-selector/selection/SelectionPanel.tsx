@@ -1,6 +1,6 @@
 import React, { Component, ReactNode } from 'react';
 import { HistoryKey } from '../../../../core/history/HistoryKey';
-import { RemoveFeatureTask } from '../../../../core/history/tasks/features/RemoveFeatureTask';
+import { RemoveFeaturesTask } from '../../../../core/history/tasks/features/RemoveFeaturesTask';
 import { AddFeaturesTask } from '../../../../core/history/tasks/features/AddFeaturesTask';
 import { Logger } from '@abc-map/frontend-shared';
 import StrokeWidthSelector from '../_common/stroke-width-selector/StrokeWidthSelector';
@@ -26,7 +26,7 @@ class SelectionPanel extends Component<ServiceProps, {}> {
           Dupliquer
         </button>
         <StrokeWidthSelector />
-        <ColorSelector fillColors={true} />
+        <ColorSelector stroke={true} fillColor1={true} fillColor2={true} />
         <FillPatternSelector />
         <TextFormat />
       </div>
@@ -48,7 +48,7 @@ class SelectionPanel extends Component<ServiceProps, {}> {
     }
 
     features.forEach((feat) => layer.getSource().removeFeature(feat.unwrap()));
-    history.register(HistoryKey.Map, new RemoveFeatureTask(layer.getSource(), features));
+    history.register(HistoryKey.Map, new RemoveFeaturesTask(layer.getSource(), features));
   };
 
   private handleDuplicate = () => {

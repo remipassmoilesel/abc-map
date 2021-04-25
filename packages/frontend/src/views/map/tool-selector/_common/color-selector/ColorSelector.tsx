@@ -6,12 +6,23 @@ import ColorPicker from './ColorPicker';
 import { ServiceProps, withServices } from '../../../../../core/withServices';
 
 export interface LocalProps {
-  fillColors: boolean;
+  /**
+   * Display stroke color selection.
+   */
+  stroke?: boolean;
+  /**
+   * Display fill color selection.
+   */
+  fillColor1?: boolean;
+  /**
+   * Display texture color selection.
+   */
+  fillColor2?: boolean;
 }
 
 const mapStateToProps = (state: MainState) => ({
-  fill: state.map.currentStyle.fill,
-  stroke: state.map.currentStyle.stroke,
+  fillProps: state.map.currentStyle.fill,
+  strokeProps: state.map.currentStyle.stroke,
 });
 
 const mapDispatchToProps = {
@@ -26,23 +37,22 @@ type Props = ConnectedProps<typeof connector> & LocalProps & ServiceProps;
 
 class ColorSelector extends Component<Props, {}> {
   public render(): ReactNode {
-    const withFill = this.props.fillColors;
     const stroke = this.props.stroke;
-    const fill = this.props.fill;
+    const fillColor1 = this.props.fillColor1;
+    const fillColor2 = this.props.fillColor2;
+    const strokeProps = this.props.strokeProps;
+    const fillProps = this.props.fillProps;
+
     return (
       <div className={'control-item'}>
-        <ColorPicker label={'Trait'} initialValue={stroke?.color} onClose={this.handleStrokeColorSelected} data-cy={'stroke-color'} />
-        {withFill && (
-          <>
-            <ColorPicker label={'Remplissage'} initialValue={fill?.color1} onClose={this.handleFillColor1Selected} data-cy={'fill-color1'} />
-            <ColorPicker label={'Texture'} initialValue={fill?.color2} onClose={this.handleFillColor2Selected} data-cy={'fill-color2'} />
-          </>
-        )}
+        {stroke && <ColorPicker label={'Trait'} initialValue={strokeProps?.color} onClose={this.handleStrokeColor} data-cy={'stroke-color'} />}
+        {fillColor1 && <ColorPicker label={'Remplissage'} initialValue={fillProps?.color1} onClose={this.handleFillColor1} data-cy={'fill-color1'} />}
+        {fillColor2 && <ColorPicker label={'Texture'} initialValue={fillProps?.color2} onClose={this.handleFillColor2} data-cy={'fill-color2'} />}
       </div>
     );
   }
 
-  private handleStrokeColorSelected = (color: string): void => {
+  private handleStrokeColor = (color: string): void => {
     const { geo } = this.props.services;
 
     this.props.setStrokeColor(color);
@@ -55,7 +65,7 @@ class ColorSelector extends Component<Props, {}> {
     });
   };
 
-  private handleFillColor1Selected = (color: string): void => {
+  private handleFillColor1 = (color: string): void => {
     const { geo } = this.props.services;
 
     this.props.setFillColor1(color);
@@ -68,7 +78,7 @@ class ColorSelector extends Component<Props, {}> {
     });
   };
 
-  private handleFillColor2Selected = (color: string): void => {
+  private handleFillColor2 = (color: string): void => {
     const { geo } = this.props.services;
 
     this.props.setFillColor2(color);

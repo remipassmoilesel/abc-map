@@ -6,9 +6,9 @@ import { Map } from 'ol';
 import { defaultInteractions } from '../../map/interactions';
 import { MapTool } from '@abc-map/frontend-shared';
 
-export class MoveTool extends AbstractTool {
+export class NoneTool extends AbstractTool {
   public getId(): MapTool {
-    return MapTool.Move;
+    return MapTool.None;
   }
 
   public getIcon(): string {

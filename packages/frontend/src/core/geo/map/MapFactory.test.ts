@@ -3,10 +3,14 @@ import { Map } from 'ol';
 import { MapFactory } from './MapFactory';
 import TileLayer from 'ol/layer/Tile';
 import VectorImageLayer from 'ol/layer/VectorImage';
+import { OlTestHelper } from '../../utils/OlTestHelper';
 
 describe('MapFactory', () => {
   it('createDefault()', () => {
+    // Act
     const managed = MapFactory.createDefault();
+
+    // Assert
     const internal = managed.unwrap();
     const layers = internal.getLayers().getArray();
     expect(layers).toHaveLength(2);
@@ -16,6 +20,7 @@ describe('MapFactory', () => {
     expect(layers[1].get(LayerProperties.Active)).toBeTruthy();
     expect(internal.getView().getProjection().getCode()).toEqual(DEFAULT_PROJECTION.name);
     expect(getControlNames(internal)).toEqual(['Attribution', 'Rotate', 'ScaleLine', 'Zoom']);
+    expect(OlTestHelper.getInteractionNames(internal)).toEqual(['DragPan', 'MouseWheelZoom']);
   });
 
   it('createNaked()', () => {

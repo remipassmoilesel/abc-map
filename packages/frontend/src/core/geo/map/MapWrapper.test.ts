@@ -9,7 +9,7 @@ import { CircleTool } from '../tools/circle/CircleTool';
 import TileLayer from 'ol/layer/Tile';
 import { LayerFactory } from '../layers/LayerFactory';
 import VectorImageLayer from 'ol/layer/VectorImage';
-import { MoveTool } from '../tools/move/MoveTool';
+import { NoneTool } from '../tools/none/NoneTool';
 import { DragRotateAndZoom } from 'ol/interaction';
 
 logger.disable();
@@ -236,9 +236,9 @@ describe('MapWrapper', function () {
       map.setActiveLayer(layer);
 
       map.setTool(ToolRegistry.getById(MapTool.Circle));
-      map.setTool(ToolRegistry.getById(MapTool.Move));
+      map.setTool(ToolRegistry.getById(MapTool.None));
 
-      expect(map.getCurrentTool()).toBeInstanceOf(MoveTool);
+      expect(map.getCurrentTool()).toBeInstanceOf(NoneTool);
       expect(OlTestHelper.getInteractionCount(map.unwrap(), 'Draw')).toEqual(0);
       expect(OlTestHelper.getInteractionCount(map.unwrap(), 'Modify')).toEqual(0);
     });

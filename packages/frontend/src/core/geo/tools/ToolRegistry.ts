@@ -1,5 +1,5 @@
 import { AbstractTool } from './AbstractTool';
-import { MoveTool } from './move/MoveTool';
+import { NoneTool } from './none/NoneTool';
 import { PointTool } from './point/PointTool';
 import { MapTool } from '@abc-map/frontend-shared';
 import { mainStore } from '../../store/store';
@@ -17,7 +17,7 @@ export class ToolRegistry {
     const history = getServices().history;
     const modals = getServices().modals;
     return [
-      new MoveTool(mainStore, history),
+      new NoneTool(mainStore, history),
       new PointTool(mainStore, history),
       new LineStringTool(mainStore, history),
       new PolygonTool(mainStore, history),

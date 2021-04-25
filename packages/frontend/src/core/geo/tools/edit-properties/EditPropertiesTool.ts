@@ -7,7 +7,7 @@ import Icon from '../../../../assets/tool-icons/properties.svg';
 import { MainStore } from '../../../store/store';
 import { HistoryService } from '../../../history/HistoryService';
 import { ModalService } from '../../../ui/ModalService';
-import { EditPropertiesInteraction } from './EditPropertiesInteraction';
+import { EditPropertiesInteraction, Options } from './EditPropertiesInteraction';
 import { EditPropertiesEvent, FeatureSelected } from './EditPropertiesEvent';
 import { FeatureWrapper } from '../../features/FeatureWrapper';
 import { ModalStatus } from '../../../ui/Modals.types';
@@ -17,8 +17,8 @@ import * as _ from 'lodash';
 
 const logger = Logger.get('EditPropertiesTool.ts');
 
-function interactionFactory(source: VectorSource): EditPropertiesInteraction {
-  return new EditPropertiesInteraction({ source });
+function interactionFactory(options: Options): EditPropertiesInteraction {
+  return new EditPropertiesInteraction(options);
 }
 
 export class EditPropertiesTool extends AbstractTool {
@@ -41,7 +41,7 @@ export class EditPropertiesTool extends AbstractTool {
   public setup(map: Map, source: VectorSource<Geometry>): void {
     super.setup(map, source);
 
-    const edit = this.newInteraction(source);
+    const edit = this.newInteraction({ source });
 
     edit.on(EditPropertiesEvent.FeatureSelected, (ev: FeatureSelected) => {
       const feature = FeatureWrapper.from(ev.feature);

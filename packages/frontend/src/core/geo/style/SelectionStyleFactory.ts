@@ -6,17 +6,24 @@ import Geometry from 'ol/geom/Geometry';
 import Feature from 'ol/Feature';
 import { Logger } from '@abc-map/frontend-shared';
 
-export const logger = Logger.get('SelectionStyle.ts');
+export const logger = Logger.get('SelectionStyleFactory.ts');
+
+// TODO: test
 
 const fillColor = '#ffc9c955';
 const strokeColor = '#ff0000';
 const width = 3;
 
-const stroke = new Stroke({
+const strokeDash = new Stroke({
   color: strokeColor,
   width: width,
   lineCap: 'square',
   lineDash: [5, 10],
+});
+
+const strokePlain = new Stroke({
+  color: strokeColor,
+  width: width,
 });
 
 const fill = new Fill({ color: fillColor });
@@ -24,13 +31,13 @@ const fill = new Fill({ color: fillColor });
 const polygon = [
   new Style({
     fill,
-    stroke,
+    stroke: strokeDash,
   }),
 ];
 
 const lineString = [
   new Style({
-    stroke,
+    stroke: strokeDash,
   }),
 ];
 
@@ -41,7 +48,7 @@ const point = [
     image: new CircleStyle({
       radius: width * 2,
       fill,
-      stroke,
+      stroke: strokePlain,
     }),
     zIndex: Infinity,
   }),

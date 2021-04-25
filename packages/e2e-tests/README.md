@@ -6,3 +6,19 @@ Tests here are separated in two groupes:
 
 
 For the moment and despite several trials, some tests does not pass when using Cypress headless mode.      
+
+
+## Run all tests, the quick way
+
+    $ abc start
+    $ yarn run e2e-test:interactive
+
+
+## Run tests with production code
+
+    $ abc build
+    $ lerna run start:e2e --parallel
+    $ yarn run e2e-test:interactive
+
+
+
