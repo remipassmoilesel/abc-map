@@ -1,5 +1,5 @@
 import React, { ChangeEvent, KeyboardEvent, Component, ReactNode } from 'react';
-import { Logger, Zipper } from '@abc-map/frontend-shared';
+import { Logger, Zipper } from '@abc-map/frontend-commons';
 import { AbcArtefact } from '@abc-map/shared-entities';
 import ArtefactCard from './artefact-card/ArtefactCard';
 import { ServiceProps, withServices } from '../../core/withServices';

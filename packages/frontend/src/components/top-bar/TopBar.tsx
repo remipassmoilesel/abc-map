@@ -1,7 +1,7 @@
 import React, { Component, ReactNode } from 'react';
-import { Logger } from '@abc-map/frontend-shared';
+import { Logger } from '@abc-map/frontend-commons';
 import { UserStatus } from '@abc-map/shared-entities';
-import { FrontendRoutes } from '@abc-map/frontend-shared';
+import { FrontendRoutes } from '@abc-map/frontend-commons';
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
 import { connect, ConnectedProps } from 'react-redux';
 import { Dropdown } from 'react-bootstrap';

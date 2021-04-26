@@ -1,5 +1,5 @@
 import React, { ChangeEvent, Component, ReactNode } from 'react';
-import { Logger } from '@abc-map/frontend-shared';
+import { Logger } from '@abc-map/frontend-commons';
 import { WmsBoundingBox, WmsCapabilities, WmsLayer } from '../../../../../core/geo/WmsCapabilities';
 import WmsLayerItem from './WmsLayerItem';
 import { AbcProjection, WmsAuthentication, WmsDefinition } from '@abc-map/shared-entities';

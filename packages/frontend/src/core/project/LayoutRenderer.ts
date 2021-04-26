@@ -1,7 +1,7 @@
 import { MapWrapper } from '../geo/map/MapWrapper';
 import { LayoutHelper } from './LayoutHelper';
 import View from 'ol/View';
-import { AbcFile, BlobIO, Logger, Zipper } from '@abc-map/frontend-shared';
+import { AbcFile, BlobIO, Logger, Zipper } from '@abc-map/frontend-commons';
 import { AbcLayout } from '@abc-map/shared-entities';
 import { MapFactory } from '../geo/map/MapFactory';
 import { jsPDF } from 'jspdf';

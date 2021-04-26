@@ -2,7 +2,7 @@ import { Task } from '../../Task';
 import { ProjectService } from '../../../project/ProjectService';
 import { AbcLayout } from '@abc-map/shared-entities';
 import { getServices } from '../../../Services';
-import { Logger } from '@abc-map/frontend-shared';
+import { Logger } from '@abc-map/frontend-commons';
 
 const logger = Logger.get('SetLayoutIndexTask');
 

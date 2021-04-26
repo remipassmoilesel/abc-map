@@ -1,5 +1,5 @@
 import React, { Component, ReactNode } from 'react';
-import { Logger } from '@abc-map/frontend-shared';
+import { Logger } from '@abc-map/frontend-commons';
 import { Extent, getArea } from 'ol/extent';
 import { RemoveLayerTask } from '../../../core/history/tasks/layers/RemoveLayerTask';
 import { HistoryKey } from '../../../core/history/HistoryKey';

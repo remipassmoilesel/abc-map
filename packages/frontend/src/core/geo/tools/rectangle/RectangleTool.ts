@@ -1,12 +1,12 @@
 import { AbstractTool } from '../AbstractTool';
-import { MapTool } from '@abc-map/frontend-shared';
+import { MapTool } from '@abc-map/frontend-commons';
 import { Draw } from 'ol/interaction';
 import { onlyMainButton } from '../common/common-conditions';
 import VectorSource from 'ol/source/Vector';
 import Geometry from 'ol/geom/Geometry';
 import { Map } from 'ol';
 import Icon from '../../../../assets/tool-icons/rectangle.svg';
-import { Logger } from '@abc-map/frontend-shared';
+import { Logger } from '@abc-map/frontend-commons';
 import GeometryType from 'ol/geom/GeometryType';
 import { createBox } from 'ol/interaction/Draw';
 

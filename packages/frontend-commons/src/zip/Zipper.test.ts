@@ -1,6 +1,6 @@
-import { TestData } from '../test-data/TestData';
+import { TestData } from './test-data/TestData';
 import { Zipper } from './Zipper';
-import { AbcFile } from '../utils/AbcFile';
+import { AbcFile } from '../AbcFile';
 
 describe('Zipper', () => {
   const testData = new TestData();

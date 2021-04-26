@@ -1,5 +1,5 @@
 import React, { Component, ReactNode } from 'react';
-import { Logger } from '@abc-map/frontend-shared';
+import { Logger } from '@abc-map/frontend-commons';
 import { Modal } from 'react-bootstrap';
 import { AllTips } from '@abc-map/documentation';
 import Cls from './TipBubble.module.scss';

@@ -1,5 +1,5 @@
 import React, { ChangeEvent, Component, ReactNode } from 'react';
-import { Logger } from '@abc-map/frontend-shared';
+import { Logger } from '@abc-map/frontend-commons';
 import { MapWrapper } from '../../../core/geo/map/MapWrapper';
 import * as _ from 'lodash';
 import { NominatimResult } from '../../../core/geo/NominatimResult';

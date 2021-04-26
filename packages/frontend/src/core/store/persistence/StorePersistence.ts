@@ -1,5 +1,5 @@
 import { LocalStorageService, StorageKey } from '../../utils/LocalStorageService';
-import { Logger, MapTool } from '@abc-map/frontend-shared';
+import { Logger, MapTool } from '@abc-map/frontend-commons';
 import { MainState } from '../reducer';
 
 const logger = Logger.get('StorePersistence', 'warn');

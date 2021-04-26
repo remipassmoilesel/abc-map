@@ -1,9 +1,8 @@
 import TileLayer from 'ol/layer/Tile';
-import { Logger } from '@abc-map/frontend-shared';
+import { Logger } from '@abc-map/frontend-commons';
 import {
   AbcLayer,
   AbcProjection,
-  AbcProperties,
   BaseMetadata,
   LayerMetadata,
   LayerProperties,
@@ -38,7 +37,7 @@ export class LayerWrapper<Layer extends OlLayers = OlLayers, Source extends OlSo
   }
 
   public static isManaged(layer: BaseLayer): boolean {
-    const hasProperty = !!layer.get(AbcProperties.Managed);
+    const hasProperty = !!layer.get(LayerProperties.Managed);
     const isSupported = layer instanceof TileLayer || layer instanceof VectorImageLayer;
     return hasProperty && isSupported;
   }
@@ -147,7 +146,7 @@ export class LayerWrapper<Layer extends OlLayers = OlLayers, Source extends OlSo
   }
 
   public setMetadata(props: Meta): LayerWrapper<Layer, Source, Meta> {
-    this.layer.set(AbcProperties.Managed, true);
+    this.layer.set(LayerProperties.Managed, true);
     this.layer.set(LayerProperties.Id, props.id);
     this.layer.set(LayerProperties.Name, props.name);
     this.layer.set(LayerProperties.Type, props.type);

@@ -1,6 +1,6 @@
 import React, { ChangeEvent, Component, ReactNode } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
-import { Logger } from '@abc-map/frontend-shared';
+import { Logger } from '@abc-map/frontend-commons';
 import LayoutList from './layout-list/LayoutList';
 import { AbcLayout, AbcProjection, LayoutFormat, LayoutFormats } from '@abc-map/shared-entities';
 import LayoutPreview from './layout-preview/LayoutPreview';

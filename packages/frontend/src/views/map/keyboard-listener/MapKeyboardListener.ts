@@ -1,7 +1,7 @@
 import { getServices, Services } from '../../../core/Services';
 import { HistoryKey } from '../../../core/history/HistoryKey';
 import { RemoveFeaturesTask } from '../../../core/history/tasks/features/RemoveFeaturesTask';
-import { Logger } from '@abc-map/frontend-shared';
+import { Logger } from '@abc-map/frontend-commons';
 import { Shortcuts } from './Shortcuts';
 
 const logger = Logger.get('MapKeyboardListener.ts');

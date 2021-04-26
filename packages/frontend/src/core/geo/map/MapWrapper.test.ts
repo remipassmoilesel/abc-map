@@ -1,6 +1,6 @@
 import { MapFactory } from './MapFactory';
-import { AbcProperties } from '@abc-map/shared-entities';
-import { MapTool } from '@abc-map/frontend-shared';
+import { LayerProperties } from '@abc-map/shared-entities';
+import { MapTool } from '@abc-map/frontend-commons';
 import { Map } from 'ol';
 import { logger, MapWrapper } from './MapWrapper';
 import { ToolRegistry } from '../tools/ToolRegistry';
@@ -102,7 +102,7 @@ describe('MapWrapper', function () {
       map.setActiveLayer(layer2);
       const layers = map.getLayers();
       expect(layers).toHaveLength(3);
-      expect(map.unwrap().getLayers().get(AbcProperties.LastLayerChange)).toBeDefined();
+      expect(map.unwrap().getLayers().get(LayerProperties.LastLayerChange)).toBeDefined();
       expect(layers[0].isActive()).toEqual(false);
       expect(layers[1].isActive()).toEqual(true);
       expect(layers[2].isActive()).toEqual(false);
@@ -121,7 +121,7 @@ describe('MapWrapper', function () {
       map.setActiveLayer(layer3);
       const layers = map.getLayers();
       expect(layers).toHaveLength(3);
-      expect(map.unwrap().getLayers().get(AbcProperties.LastLayerChange)).toBeDefined();
+      expect(map.unwrap().getLayers().get(LayerProperties.LastLayerChange)).toBeDefined();
       expect(layers[0].isActive()).toEqual(false);
       expect(layers[1].isActive()).toEqual(false);
       expect(layers[2].isActive()).toEqual(true);

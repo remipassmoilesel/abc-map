@@ -1,5 +1,5 @@
 import { Env } from './Env';
-import { Logger } from '@abc-map/frontend-shared';
+import { Logger } from '@abc-map/frontend-commons';
 
 const logger = Logger.get('FileIO.ts');
 

@@ -1,5 +1,5 @@
 import { LayerType, WmsMetadata } from '@abc-map/shared-entities';
-import { FrontendRoutes, ProjectHelper } from '@abc-map/frontend-shared';
+import { FrontendRoutes, ProjectHelper } from '@abc-map/frontend-commons';
 import { Toasts } from '../../helpers/Toasts';
 import { TestHelper } from '../../helpers/TestHelper';
 import { Download } from '../../helpers/Download';

@@ -1,7 +1,7 @@
 import Feature from 'ol/Feature';
 import Style from 'ol/style/Style';
 import { Fill, Icon, Stroke, Text } from 'ol/style';
-import { Logger } from '@abc-map/frontend-shared';
+import { Logger } from '@abc-map/frontend-commons';
 import { DefaultStyle, FeatureStyle } from './FeatureStyle';
 import { SelectionStyleFactory } from './SelectionStyleFactory';
 import { StyleCache } from './StyleCache';

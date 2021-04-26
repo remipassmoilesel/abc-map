@@ -4,7 +4,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { getServices } from './core/Services';
 import { E2eMapWrapper } from './core/geo/map/E2eMapWrapper';
-import { getAbcWindow, Logger } from '@abc-map/frontend-shared';
+import { getAbcWindow, Logger } from '@abc-map/frontend-commons';
 import { UserStatus } from '@abc-map/shared-entities';
 import { mainStore } from './core/store/store';
 import './index.scss';

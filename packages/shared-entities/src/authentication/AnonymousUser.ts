@@ -1,4 +1,4 @@
-import { AbcUser } from '../user';
+import { AbcUser } from './AbcUser';
 
 /**
  * This a special user used for anonymous users.

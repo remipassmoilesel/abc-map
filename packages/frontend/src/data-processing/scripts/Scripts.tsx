@@ -3,7 +3,7 @@ import ScriptsUI from './ui/ScriptsUI';
 import { ModuleId } from '../ModuleId';
 import React, { ReactNode } from 'react';
 import { Services } from '../../core/Services';
-import { Logger } from '@abc-map/frontend-shared';
+import { Logger } from '@abc-map/frontend-commons';
 import { AsyncFunction, ChromiumErrorRegexp, ErrorPosition, Example, FirefoxErrorRegexp, ScriptArguments, ScriptError } from './typings';
 import { ScriptMap } from './api/ScriptMap';
 

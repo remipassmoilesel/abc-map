@@ -1,5 +1,5 @@
 import React, { ChangeEvent, Component, ReactNode } from 'react';
-import { Logger } from '@abc-map/frontend-shared';
+import { Logger } from '@abc-map/frontend-commons';
 import { PointType, ScaleAlgorithm } from '../Parameters';
 import TipBubble from '../../../components/tip-bubble/TipBubble';
 import { ProportionalSymbolsTips } from '@abc-map/documentation';

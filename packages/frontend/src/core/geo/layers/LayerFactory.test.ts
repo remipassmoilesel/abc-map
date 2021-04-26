@@ -1,7 +1,7 @@
 import { LayerFactory } from './LayerFactory';
 import VectorSource from 'ol/source/Vector';
 import { TileWMS } from 'ol/source';
-import { AbcProperties, LayerType, PredefinedLayerModel, WmsDefinition } from '@abc-map/shared-entities';
+import { LayerProperties, LayerType, PredefinedLayerModel, WmsDefinition } from '@abc-map/shared-entities';
 import { TestHelper } from '../../utils/TestHelper';
 import TileLayer from 'ol/layer/Tile';
 import { VectorLayerWrapper, WmsLayerWrapper } from './LayerWrapper';
@@ -19,7 +19,7 @@ describe('LayerFactory', () => {
     expect(metadata?.active).toEqual(false);
     expect(metadata?.type).toEqual(LayerType.Predefined);
     expect(metadata?.model).toEqual(PredefinedLayerModel.OSM);
-    expect(layer.unwrap().get(AbcProperties.Managed)).toBe(true);
+    expect(layer.unwrap().get(LayerProperties.Managed)).toBe(true);
     expect(layer.unwrap()).toBeInstanceOf(TileLayer);
   });
 
@@ -34,7 +34,7 @@ describe('LayerFactory', () => {
       expect(metadata?.visible).toEqual(true);
       expect(metadata?.active).toEqual(false);
       expect(metadata?.type).toEqual(LayerType.Vector);
-      expect(layer.unwrap().get(AbcProperties.Managed)).toBe(true);
+      expect(layer.unwrap().get(LayerProperties.Managed)).toBe(true);
       expect(layer.unwrap()).toBeInstanceOf(VectorImageLayer);
       expect(layer.unwrap().getSource()).toBeDefined();
     });
@@ -62,7 +62,7 @@ describe('LayerFactory', () => {
       expect(metadata?.visible).toEqual(true);
       expect(metadata?.active).toEqual(false);
       expect(metadata?.type).toEqual(LayerType.Wms);
-      expect(layer.unwrap().get(AbcProperties.Managed)).toBe(true);
+      expect(layer.unwrap().get(LayerProperties.Managed)).toBe(true);
       expect(layer.unwrap()).toBeInstanceOf(TileLayer);
       const source: TileWMS = layer.unwrap().getSource() as TileWMS;
       expect(source).toBeInstanceOf(TileWMS);
@@ -90,7 +90,7 @@ describe('LayerFactory', () => {
       expect(metadata?.visible).toEqual(true);
       expect(metadata?.active).toEqual(false);
       expect(metadata?.type).toEqual(LayerType.Wms);
-      expect(layer.unwrap().get(AbcProperties.Managed)).toBe(true);
+      expect(layer.unwrap().get(LayerProperties.Managed)).toBe(true);
       expect(layer.unwrap()).toBeInstanceOf(TileLayer);
       const source: TileWMS = layer.unwrap().getSource() as TileWMS;
       expect(source).toBeInstanceOf(TileWMS);
@@ -119,7 +119,7 @@ describe('LayerFactory', () => {
       expect(metadata?.visible).toEqual(false);
       expect(metadata?.active).toEqual(true);
       expect(metadata?.type).toEqual(LayerType.Predefined);
-      expect(layer.unwrap().get(AbcProperties.Managed)).toBe(true);
+      expect(layer.unwrap().get(LayerProperties.Managed)).toBe(true);
       expect(layer.unwrap()).toBeInstanceOf(TileLayer);
     });
 
@@ -142,7 +142,7 @@ describe('LayerFactory', () => {
       expect(metadata?.visible).toEqual(false);
       expect(metadata?.active).toEqual(true);
       expect(metadata?.type).toEqual(LayerType.Vector);
-      expect(layer.unwrap().get(AbcProperties.Managed)).toBe(true);
+      expect(layer.unwrap().get(LayerProperties.Managed)).toBe(true);
       expect(layer.unwrap()).toBeInstanceOf(VectorImageLayer);
 
       const features = layer.getSource().getFeatures();
@@ -173,7 +173,7 @@ describe('LayerFactory', () => {
       expect(metadata?.remoteLayerName).toEqual('test-layer-name');
       expect(metadata?.extent).toEqual([1, 2, 3, 4]);
       expect(metadata?.auth).toBeUndefined();
-      expect(layer.unwrap().get(AbcProperties.Managed)).toBe(true);
+      expect(layer.unwrap().get(LayerProperties.Managed)).toBe(true);
       expect(layer.unwrap()).toBeInstanceOf(TileLayer);
     });
 
@@ -193,7 +193,7 @@ describe('LayerFactory', () => {
       expect(metadata?.extent).toEqual([1, 2, 3, 4]);
       expect(metadata?.auth?.username).toEqual('test-username');
       expect(metadata?.auth?.password).toEqual('test-password');
-      expect(layer.unwrap().get(AbcProperties.Managed)).toBe(true);
+      expect(layer.unwrap().get(LayerProperties.Managed)).toBe(true);
       expect(layer.unwrap()).toBeInstanceOf(TileLayer);
     });
   });

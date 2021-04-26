@@ -1,5 +1,5 @@
 import React, { Component, ReactNode } from 'react';
-import { Logger } from '@abc-map/frontend-shared';
+import { Logger } from '@abc-map/frontend-commons';
 import { FileIO, InputResultType, InputType } from '../../core/utils/FileIO';
 import { ServiceProps, withServices } from '../../core/withServices';
 import { LayerChangeHandler } from '../../core/geo/map/MapWrapper';

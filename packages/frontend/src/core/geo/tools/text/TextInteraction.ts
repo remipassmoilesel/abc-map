@@ -1,4 +1,4 @@
-import { Logger } from '@abc-map/frontend-shared';
+import { Logger } from '@abc-map/frontend-commons';
 import MapBrowserEvent from 'ol/MapBrowserEvent';
 import { FeatureWrapper } from '../../features/FeatureWrapper';
 import { TextChanged, TextEnd, TextStart } from './TextInteractionEvents';

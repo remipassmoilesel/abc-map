@@ -1,4 +1,4 @@
-import { Logger } from '@abc-map/frontend-shared';
+import { Logger } from '@abc-map/frontend-commons';
 import MapBrowserEvent from 'ol/MapBrowserEvent';
 import VectorSource from 'ol/source/Vector';
 import { Interaction } from 'ol/interaction';

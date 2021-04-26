@@ -1,5 +1,5 @@
 import React, { Component, ReactNode } from 'react';
-import { Logger } from '@abc-map/frontend-shared';
+import { Logger } from '@abc-map/frontend-commons';
 import ColorSelector from '../_common/color-selector/ColorSelector';
 import PointSizeSelector from './PointSizeSelector';
 import PointIconSelector from './PointIconSelector';

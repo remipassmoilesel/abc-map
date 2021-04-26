@@ -1,5 +1,5 @@
-import { AbcLayer } from './AbcLayer';
-import { AbcLayout } from './AbcLayout';
+import { AbcLayer } from './layer/AbcLayer';
+import { AbcLayout } from './layout/AbcLayout';
 import { AbcProjection } from './AbcProjection';
 
 /**

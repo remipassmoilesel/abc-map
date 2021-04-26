@@ -1,5 +1,5 @@
 import React, { Component, ReactNode } from 'react';
-import { Logger } from '@abc-map/frontend-shared';
+import { Logger } from '@abc-map/frontend-commons';
 import { ColorResult, SketchPicker } from 'react-color';
 import { Modal } from 'react-bootstrap';
 import Cls from './ColorPicker.module.scss';

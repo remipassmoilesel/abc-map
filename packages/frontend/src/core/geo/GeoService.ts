@@ -1,5 +1,5 @@
 import { AbcLayer, AbcProject, WmsAuthentication } from '@abc-map/shared-entities';
-import { Logger } from '@abc-map/frontend-shared';
+import { Logger } from '@abc-map/frontend-commons';
 import { MapWrapper } from './map/MapWrapper';
 import { MapFactory } from './map/MapFactory';
 import { AbstractTool } from './tools/AbstractTool';

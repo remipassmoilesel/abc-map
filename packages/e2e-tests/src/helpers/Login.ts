@@ -1,4 +1,4 @@
-import { FrontendRoutes } from '@abc-map/frontend-shared';
+import { FrontendRoutes } from '@abc-map/frontend-commons';
 import { E2eUser } from './E2eUser';
 import Chainable = Cypress.Chainable;
 import { Toasts } from './Toasts';

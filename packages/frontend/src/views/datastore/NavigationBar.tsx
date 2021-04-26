@@ -1,5 +1,5 @@
 import React, { Component, ReactNode } from 'react';
-import { Logger } from '@abc-map/frontend-shared';
+import { Logger } from '@abc-map/frontend-commons';
 import * as _ from 'lodash';
 
 const logger = Logger.get('NavigationBar.tsx', 'info');

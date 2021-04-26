@@ -1,5 +1,5 @@
 import { AbstractTool } from '../AbstractTool';
-import { Logger, MapTool } from '@abc-map/frontend-shared';
+import { Logger, MapTool } from '@abc-map/frontend-commons';
 import VectorSource from 'ol/source/Vector';
 import Geometry from 'ol/geom/Geometry';
 import { Map } from 'ol';

@@ -1,5 +1,5 @@
 import { ProjectActions } from '../store/project/actions';
-import { BlobIO, Logger, ProjectHelper } from '@abc-map/frontend-shared';
+import { BlobIO, Logger, ProjectHelper } from '@abc-map/frontend-commons';
 import { AbcLayout, AbcProject, AbcProjection, AbcProjectMetadata, LayerType, LayoutFormat, ManifestName, WmsMetadata } from '@abc-map/shared-entities';
 import { AxiosInstance } from 'axios';
 import { ProjectFactory } from './ProjectFactory';
@@ -8,7 +8,7 @@ import { ProjectRoutes as Api } from '../http/ApiRoutes';
 import uuid from 'uuid-random';
 import { MainStore } from '../store/store';
 import { Encryption } from '../utils/Encryption';
-import { Zipper } from '@abc-map/frontend-shared';
+import { Zipper } from '@abc-map/frontend-commons';
 import { CompressedProject } from './CompressedProject';
 
 export const logger = Logger.get('ProjectService.ts', 'info');

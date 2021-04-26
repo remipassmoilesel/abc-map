@@ -1,5 +1,5 @@
 import { Zipper } from '../zip';
-import { AbcFile } from '../utils/AbcFile';
+import { AbcFile } from '../AbcFile';
 import { ManifestName } from '@abc-map/shared-entities';
 import { ProjectHelper } from './ProjectHelper';
 

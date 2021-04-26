@@ -1,4 +1,4 @@
-import { AbcProjection } from './AbcProjection';
+import { AbcProjection } from '../AbcProjection';
 
 export interface AbcLayout {
   id: string;

@@ -1,5 +1,5 @@
 import { FeatureCollection } from 'geojson';
-import { AbcProjection } from './AbcProjection';
+import { AbcProjection } from '../AbcProjection';
 
 export type AbcLayer = AbcVectorLayer | AbcPredefinedLayer | AbcWmsLayer;
 

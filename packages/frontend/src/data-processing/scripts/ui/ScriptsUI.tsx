@@ -1,5 +1,5 @@
 import React, { Component, ReactNode } from 'react';
-import { Logger } from '@abc-map/frontend-shared';
+import { Logger } from '@abc-map/frontend-commons';
 import CodeEditor from './CodeEditor';
 import Cls from './ScriptsUI.module.scss';
 import { ScriptError } from '../typings';

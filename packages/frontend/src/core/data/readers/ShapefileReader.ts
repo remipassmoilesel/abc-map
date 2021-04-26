@@ -1,11 +1,11 @@
 import { AbstractDataReader } from './AbstractDataReader';
 import { AbcProjection, LayerType, VectorMetadata } from '@abc-map/shared-entities';
 import { FileFormat, FileFormats } from '../FileFormats';
-import { AbcFile, Logger } from '@abc-map/frontend-shared';
+import { AbcFile, Logger } from '@abc-map/frontend-commons';
 import * as shapefile from 'shapefile';
 import { GeoJSON } from 'ol/format';
 import VectorSource from 'ol/source/Vector';
-import { BlobIO } from '@abc-map/frontend-shared';
+import { BlobIO } from '@abc-map/frontend-commons';
 import uuid from 'uuid-random';
 import { LayerWrapper } from '../../geo/layers/LayerWrapper';
 import { LayerFactory } from '../../geo/layers/LayerFactory';

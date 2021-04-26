@@ -15,7 +15,7 @@ export class Shell {
       ...options,
     };
 
-    logger.info(`Running '${cmd}' with options ${JSON.stringify(_options)}`);
+    logger.info(`Running '${cmd.replace(/\s+/gi, ' ')}' with options ${JSON.stringify(_options)}`);
     childProcess.execSync(cmd, _options);
   }
 
@@ -26,7 +26,7 @@ export class Shell {
       ...options,
     };
 
-    logger.info(`Spawning '${cmd}' with options ${JSON.stringify(_options)}`);
+    logger.info(`Spawning '${cmd.replace(/\s+/gi, ' ')}' with options ${JSON.stringify(_options)}`);
     return childProcess.spawn('bash', ['-c', cmd], _options);
   }
 }

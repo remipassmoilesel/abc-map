@@ -1,4 +1,4 @@
-import { E2eMap } from '../map/E2eMap';
+import { E2eMap } from './e2e/E2eMap';
 
 export interface AbcWindow extends Window {
   abc: {

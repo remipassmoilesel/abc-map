@@ -20,7 +20,7 @@ import {
 import uuid from 'uuid-random';
 import { FeatureStyle } from '../geo/style/FeatureStyle';
 import { CompressedProject } from '../project/CompressedProject';
-import { Zipper } from '@abc-map/frontend-shared';
+import { Zipper } from '@abc-map/frontend-commons';
 import { PointIcons } from '../geo/style/PointIcons';
 
 export class TestHelper {

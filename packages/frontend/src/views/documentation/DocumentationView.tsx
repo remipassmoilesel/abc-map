@@ -1,5 +1,5 @@
 import React, { Component, ReactNode } from 'react';
-import { Logger } from '@abc-map/frontend-shared';
+import { Logger } from '@abc-map/frontend-commons';
 import { content as doc } from '@abc-map/documentation';
 import { ServiceProps, withServices } from '../../core/withServices';
 import Cls from './DocumentationView.module.scss';

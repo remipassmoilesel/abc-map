@@ -1,4 +1,6 @@
-export * from './AccountConfirmation';
+export * from './AbcUser';
+export * from './AccountConfirmationRequest';
+export * from './AccountConfirmationResponse';
 export * from './AnonymousUser';
 export * from './AuthenticationResponse';
 export * from './LoginRequest';

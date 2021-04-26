@@ -1,7 +1,7 @@
 import React, { Component, ReactNode } from 'react';
-import { Logger } from '@abc-map/frontend-shared';
+import { Logger } from '@abc-map/frontend-commons';
 import { Link } from 'react-router-dom';
-import { FrontendRoutes } from '@abc-map/frontend-shared';
+import { FrontendRoutes } from '@abc-map/frontend-commons';
 import Cls from './NotFoundView.module.scss';
 
 const logger = Logger.get('NotFoundView.tsx');

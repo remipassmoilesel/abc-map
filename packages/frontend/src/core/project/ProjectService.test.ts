@@ -9,7 +9,7 @@ import { MainStore, storeFactory } from '../store/store';
 import { MapWrapper } from '../geo/map/MapWrapper';
 import * as sinon from 'sinon';
 import { SinonStubbedInstance } from 'sinon';
-import { ProjectHelper } from '@abc-map/frontend-shared';
+import { ProjectHelper } from '@abc-map/frontend-commons';
 
 logger.disable();
 

@@ -1,5 +1,5 @@
 import { AbcProjection } from '@abc-map/shared-entities';
-import { AbcFile } from '@abc-map/frontend-shared';
+import { AbcFile } from '@abc-map/frontend-commons';
 import Feature from 'ol/Feature';
 import { Geometry } from 'ol/geom';
 import { FeatureWrapper } from '../../geo/features/FeatureWrapper';

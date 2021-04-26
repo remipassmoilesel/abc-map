@@ -1,6 +1,6 @@
 import { VectorLayerWrapper } from '../../../core/geo/layers/LayerWrapper';
 import { DataRow, DataSource, DataSourceType } from './DataSource';
-import { Logger } from '@abc-map/frontend-shared';
+import { Logger } from '@abc-map/frontend-commons';
 import Geometry from 'ol/geom/Geometry';
 import Feature from 'ol/Feature';
 import { FeatureWrapper } from '../../geo/features/FeatureWrapper';

@@ -1,6 +1,6 @@
 import React, { Component, ReactNode } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { FrontendRoutes } from '@abc-map/frontend-shared';
+import { FrontendRoutes } from '@abc-map/frontend-commons';
 import MapView from './views/map/MapView';
 import { Provider } from 'react-redux';
 import { ToastContainer } from 'react-toastify';

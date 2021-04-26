@@ -1,5 +1,5 @@
 {
-  "name": "@abc-map/frontend-shared",
+  "name": "@abc-map/frontend-commons",
   "version": "0.0.1",
   "main": "build/index.js",
   "types": "build/index.d.ts",

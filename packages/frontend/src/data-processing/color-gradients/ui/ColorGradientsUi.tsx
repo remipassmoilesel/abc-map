@@ -1,5 +1,5 @@
 import React, { Component, ReactNode } from 'react';
-import { Logger } from '@abc-map/frontend-shared';
+import { Logger } from '@abc-map/frontend-commons';
 import Cls from './ColorGradientsUi.module.scss';
 
 const logger = Logger.get('Panel.tsx');

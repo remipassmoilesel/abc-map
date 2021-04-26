@@ -1,7 +1,7 @@
 import { AbstractTool } from './AbstractTool';
 import { NoneTool } from './none/NoneTool';
 import { PointTool } from './point/PointTool';
-import { MapTool } from '@abc-map/frontend-shared';
+import { MapTool } from '@abc-map/frontend-commons';
 import { mainStore } from '../../store/store';
 import { CircleTool } from './circle/CircleTool';
 import { LineStringTool } from './line-string/LineStringTool';

@@ -1,5 +1,5 @@
 import { AbstractTool } from '../AbstractTool';
-import { MapTool } from '@abc-map/frontend-shared';
+import { MapTool } from '@abc-map/frontend-commons';
 import { DragBox, Translate } from 'ol/interaction';
 import { onlyMainButton } from '../common/common-conditions';
 import VectorSource from 'ol/source/Vector';
@@ -10,7 +10,7 @@ import { containsXY, Extent } from 'ol/extent';
 import Feature from 'ol/Feature';
 import { HistoryKey } from '../../../history/HistoryKey';
 import { UpdateItem, UpdateGeometriesTask } from '../../../history/tasks/features/UpdateGeometriesTask';
-import { Logger } from '@abc-map/frontend-shared';
+import { Logger } from '@abc-map/frontend-commons';
 import { FeatureWrapper } from '../../features/FeatureWrapper';
 
 const logger = Logger.get('SelectionTool.ts');

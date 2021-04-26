@@ -1,5 +1,5 @@
 import React, { Component, ReactNode } from 'react';
-import { Logger } from '@abc-map/frontend-shared';
+import { Logger } from '@abc-map/frontend-commons';
 import { AbcArtefact } from '@abc-map/shared-entities';
 import { ServiceProps, withServices } from '../../../core/withServices';
 import { Modal } from 'react-bootstrap';

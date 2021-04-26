@@ -1,5 +1,5 @@
 import React, { Component, ReactNode } from 'react';
-import { Logger, ConfirmAccountParams, FrontendRoutes } from '@abc-map/frontend-shared';
+import { Logger, ConfirmAccountParams, FrontendRoutes } from '@abc-map/frontend-commons';
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
 import { AccountConfirmationStatus } from '@abc-map/shared-entities';
 import * as qs from 'query-string';

@@ -1,5 +1,5 @@
 import { AbstractTool } from '../AbstractTool';
-import { MapTool } from '@abc-map/frontend-shared';
+import { MapTool } from '@abc-map/frontend-commons';
 import { Draw } from 'ol/interaction';
 import { Map } from 'ol';
 import GeometryType from 'ol/geom/GeometryType';

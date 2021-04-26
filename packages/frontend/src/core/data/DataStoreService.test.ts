@@ -5,7 +5,7 @@ import { GeoService } from '../geo/GeoService';
 import { AxiosInstance } from 'axios';
 import { LayerFactory } from '../geo/layers/LayerFactory';
 import { MapFactory } from '../geo/map/MapFactory';
-import { AbcFile } from '@abc-map/frontend-shared';
+import { AbcFile } from '@abc-map/frontend-commons';
 
 describe('DataStoreService', () => {
   let apiClient: { get: SinonStub };
