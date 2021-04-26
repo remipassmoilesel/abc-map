@@ -1,4 +1,4 @@
-import { FrontendRoutes } from '@abc-map/frontend-shared';
+import { FrontendRoutes } from '@abc-map/frontend-commons';
 import { TestData } from '../../test-data/TestData';
 import { MainMap } from '../../helpers/MainMap';
 import { TestHelper } from '../../helpers/TestHelper';

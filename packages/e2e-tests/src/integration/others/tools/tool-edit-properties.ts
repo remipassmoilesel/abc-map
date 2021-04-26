@@ -1,4 +1,4 @@
-import { FrontendRoutes, MapTool } from '@abc-map/frontend-shared';
+import { FrontendRoutes, MapTool } from '@abc-map/frontend-commons';
 import { TestHelper } from '../../../helpers/TestHelper';
 import { ToolSelector } from '../../../helpers/ToolSelector';
 import { Draw } from '../../../helpers/Draw';

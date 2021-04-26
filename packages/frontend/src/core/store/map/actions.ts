@@ -1,5 +1,5 @@
 import { FillPatterns } from '@abc-map/shared-entities';
-import { MapTool } from '@abc-map/frontend-shared';
+import { MapTool } from '@abc-map/frontend-commons';
 import { PointIcons } from '../../geo/style/PointIcons';
 
 export enum ActionType {

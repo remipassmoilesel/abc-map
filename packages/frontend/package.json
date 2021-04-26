@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "@abc-map/shared-entities": "0.0.1",
-    "@abc-map/frontend-shared": "0.0.1",
+    "@abc-map/frontend-commons": "0.0.1",
     "@abc-map/documentation": "0.0.1",
     "lodash": "^4.17.20",
     "ol": "^6.5.0",

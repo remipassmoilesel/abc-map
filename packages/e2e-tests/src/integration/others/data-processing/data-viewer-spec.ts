@@ -1,5 +1,5 @@
 import { TestHelper } from '../../../helpers/TestHelper';
-import { FrontendRoutes } from '@abc-map/frontend-shared';
+import { FrontendRoutes } from '@abc-map/frontend-commons';
 import { DataStore } from '../../../helpers/DataStore';
 import { TopBar } from '../../../helpers/TopBar';
 import { Download } from '../../../helpers/Download';

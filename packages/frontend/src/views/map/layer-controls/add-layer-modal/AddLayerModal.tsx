@@ -4,10 +4,10 @@ import { HistoryKey } from '../../../../core/history/HistoryKey';
 import { AddLayersTask } from '../../../../core/history/tasks/layers/AddLayersTask';
 import { LabelledLayerTypes, LabelledLayerType } from './LabelledLayerTypes';
 import WmsSettingsPanel from './wms/WmsSettingsPanel';
-import { Logger } from '@abc-map/frontend-shared';
+import { Logger } from '@abc-map/frontend-commons';
 import { Link } from 'react-router-dom';
 import { WmsDefinition } from '@abc-map/shared-entities';
-import { FrontendRoutes } from '@abc-map/frontend-shared';
+import { FrontendRoutes } from '@abc-map/frontend-commons';
 import { LayerFactory } from '../../../../core/geo/layers/LayerFactory';
 import { ServiceProps, withServices } from '../../../../core/withServices';
 

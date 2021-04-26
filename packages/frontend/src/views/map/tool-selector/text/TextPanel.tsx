@@ -1,5 +1,5 @@
 import React, { Component, ReactNode } from 'react';
-import { Logger } from '@abc-map/frontend-shared';
+import { Logger } from '@abc-map/frontend-commons';
 import TextFormat from '../_common/text-format/TextFormat';
 import './TextPanel.scss';
 

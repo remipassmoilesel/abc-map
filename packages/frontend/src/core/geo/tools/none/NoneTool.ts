@@ -4,7 +4,7 @@ import VectorSource from 'ol/source/Vector';
 import { Geometry } from 'ol/geom';
 import { Map } from 'ol';
 import { defaultInteractions } from '../../map/interactions';
-import { MapTool } from '@abc-map/frontend-shared';
+import { MapTool } from '@abc-map/frontend-commons';
 
 export class NoneTool extends AbstractTool {
   public getId(): MapTool {

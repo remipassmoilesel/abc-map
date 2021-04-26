@@ -7,7 +7,7 @@ import { LayerProperties, PredefinedLayerProperties, WmsLayerProperties } from '
 describe('LayerProperties', () => {
   it('LayerProperties should not change without migration', () => {
     /* eslint-disable */
-    const witness = '{"Id":"abc:layer:id","Name":"abc:layer:name","Active":"abc:layer:active","Type":"abc:layer:type"}';
+    const witness = '{"Id":"abc:layer:id","Name":"abc:layer:name","Active":"abc:layer:active","Type":"abc:layer:type","Managed":"abc:layer:managed","LastLayerChange":"abc:layers:last-change"}';
     /* eslint-enable */
 
     assert.equal(JSON.stringify(LayerProperties), witness);

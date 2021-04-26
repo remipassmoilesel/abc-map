@@ -1,4 +1,4 @@
-import { FrontendRoutes } from '@abc-map/frontend-shared';
+import { FrontendRoutes } from '@abc-map/frontend-commons';
 import * as uuid from 'uuid-random';
 import { Toasts } from './Toasts';
 import { E2eUser } from './E2eUser';

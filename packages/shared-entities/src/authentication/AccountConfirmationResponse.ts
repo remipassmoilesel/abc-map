@@ -4,11 +4,6 @@ export interface AccountConfirmationResponse {
   token?: string;
 }
 
-export interface AccountConfirmationRequest {
-  userId: string;
-  secret: string;
-}
-
 export enum AccountConfirmationStatus {
   InProgress = 'InProgress',
   UserNotFound = 'UserNotFound',

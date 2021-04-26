@@ -1,5 +1,5 @@
 import { LayerType } from '@abc-map/shared-entities';
-import { FrontendRoutes } from '@abc-map/frontend-shared';
+import { FrontendRoutes } from '@abc-map/frontend-commons';
 import { WmsConstants } from 'helpers/WmsConstants';
 import { TestHelper } from '../../helpers/TestHelper';
 import { MainMap } from '../../helpers/MainMap';

@@ -3,7 +3,7 @@ import { AbcProjection } from '@abc-map/shared-entities';
 import { GpxReader } from './GpxReader';
 import { KmlReader } from './KmlReader';
 import { ShapefileReader } from './ShapefileReader';
-import { AbcFile, Zipper } from '@abc-map/frontend-shared';
+import { AbcFile, Zipper } from '@abc-map/frontend-commons';
 import { FileFormat, FileFormats } from '../FileFormats';
 import { GeoJsonReader } from './GeoJsonReader';
 import { WmsDefinitionReader } from './WmsDefinitionReader';

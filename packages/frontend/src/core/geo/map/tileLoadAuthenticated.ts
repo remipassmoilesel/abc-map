@@ -1,6 +1,6 @@
 import { LoadFunction } from 'ol/Tile';
 import { WmsAuthentication } from '@abc-map/shared-entities';
-import { Logger } from '@abc-map/frontend-shared';
+import { Logger } from '@abc-map/frontend-commons';
 import { ImageTile } from 'ol';
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import TileState from 'ol/TileState';

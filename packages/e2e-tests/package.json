@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@abc-map/shared-entities": "0.0.1",
-    "@abc-map/frontend-shared": "0.0.1",
+    "@abc-map/frontend-commons": "0.0.1",
     "@types/cypress": "^1.1.3",
     "cypress-file-upload": "^4.1.1",
     "uuid-random": "^1.3.2",

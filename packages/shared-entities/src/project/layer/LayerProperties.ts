@@ -21,6 +21,16 @@ export enum LayerProperties {
    * Type of layer
    */
   Type = 'abc:layer:type',
+
+  /**
+   * If set, this Openlayers layer is managed by Abc-Map
+   */
+  Managed = 'abc:layer:managed',
+
+  /**
+   * This property is set on layer collection in order to trigger changes
+   */
+  LastLayerChange = 'abc:layers:last-change',
 }
 
 /**

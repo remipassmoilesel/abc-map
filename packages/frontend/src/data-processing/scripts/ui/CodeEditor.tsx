@@ -5,7 +5,7 @@ import 'prismjs/components/prism-javascript';
 import 'prismjs/themes/prism.css';
 import Cls from './CodeEditor.module.scss';
 
-import { Logger } from '@abc-map/frontend-shared';
+import { Logger } from '@abc-map/frontend-commons';
 
 const logger = Logger.get('CodeEditor.tsx', 'info');
 

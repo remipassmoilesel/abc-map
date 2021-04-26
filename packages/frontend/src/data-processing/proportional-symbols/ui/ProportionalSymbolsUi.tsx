@@ -1,5 +1,5 @@
 import React, { Component, ReactNode } from 'react';
-import { Logger } from '@abc-map/frontend-shared';
+import { Logger } from '@abc-map/frontend-commons';
 import { newParameters, Parameters, PointType, ScaleAlgorithm } from '../Parameters';
 import FoldableCard from '../../../components/foldable-card/FoldableCard';
 import { ServiceProps, withServices } from '../../../core/withServices';

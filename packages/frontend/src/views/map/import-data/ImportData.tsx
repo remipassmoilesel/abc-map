@@ -1,5 +1,5 @@
 import React, { Component, ReactNode } from 'react';
-import { AbcFile, Logger } from '@abc-map/frontend-shared';
+import { AbcFile, Logger } from '@abc-map/frontend-commons';
 import { FileIO, InputResultType, InputType } from '../../../core/utils/FileIO';
 import { AddLayersTask } from '../../../core/history/tasks/layers/AddLayersTask';
 import { HistoryKey } from '../../../core/history/HistoryKey';

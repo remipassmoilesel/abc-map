@@ -1,5 +1,5 @@
 import React, { KeyboardEvent, ChangeEvent, Component, ReactNode } from 'react';
-import { Logger } from '@abc-map/frontend-shared';
+import { Logger } from '@abc-map/frontend-commons';
 import Cls from './RegistrationForm.module.scss';
 
 const logger = Logger.get('RegistrationForm.tsx', 'info');

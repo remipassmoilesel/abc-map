@@ -1,9 +1,9 @@
 import { Map } from 'ol';
-import { AbcProjection, AbcProperties, VectorMetadata } from '@abc-map/shared-entities';
+import { LayerProperties, AbcProjection, VectorMetadata } from '@abc-map/shared-entities';
 import * as _ from 'lodash';
 import { ResizeObserverFactory } from '../../utils/ResizeObserverFactory';
 import BaseEvent from 'ol/events/Event';
-import { Logger } from '@abc-map/frontend-shared';
+import { Logger } from '@abc-map/frontend-commons';
 import { AbstractTool } from '../tools/AbstractTool';
 import TileLayer from 'ol/layer/Tile';
 import { FeatureWrapper } from '../features/FeatureWrapper';
@@ -234,8 +234,9 @@ export class MapWrapper {
    * like rename layer, or change active layer.
    * @private
    */
+  // FIXME: find a better solution
   private triggerLayerChange(): void {
-    this.internal.getLayers().set(AbcProperties.LastLayerChange, performance.now());
+    this.internal.getLayers().set(LayerProperties.LastLayerChange, performance.now());
   }
 
   /**

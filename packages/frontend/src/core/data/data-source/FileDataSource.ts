@@ -1,5 +1,5 @@
 import { DataRow, DataSource, DataSourceType } from './DataSource';
-import { Logger } from '@abc-map/frontend-shared';
+import { Logger } from '@abc-map/frontend-commons';
 import { CsvParser } from '../csv-parser/CsvParser';
 import { nanoid } from 'nanoid';
 

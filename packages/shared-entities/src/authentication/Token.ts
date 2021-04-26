@@ -1,4 +1,4 @@
-import { AbcUser } from '../user';
+import { AbcUser } from './AbcUser';
 
 export interface Token {
   userStatus: UserStatus;

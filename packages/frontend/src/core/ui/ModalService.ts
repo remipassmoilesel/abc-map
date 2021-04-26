@@ -1,4 +1,4 @@
-import { Logger } from '@abc-map/frontend-shared';
+import { Logger } from '@abc-map/frontend-commons';
 import {
   FeaturePropertiesClosedEvent,
   InternalEvent,

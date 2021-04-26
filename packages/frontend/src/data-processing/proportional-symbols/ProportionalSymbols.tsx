@@ -10,7 +10,7 @@ import { FeatureWrapper } from '../../core/geo/features/FeatureWrapper';
 import { Point } from 'ol/geom';
 import Geometry from 'ol/geom/Geometry';
 import Feature from 'ol/Feature';
-import { Logger } from '@abc-map/frontend-shared';
+import { Logger } from '@abc-map/frontend-commons';
 
 export const logger = Logger.get('ProportionalSymbols.tsx');
 

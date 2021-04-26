@@ -1,5 +1,5 @@
 import { MapWrapper } from './MapWrapper';
-import { Logger, E2eMap } from '@abc-map/frontend-shared';
+import { Logger, E2eMap } from '@abc-map/frontend-commons';
 import { LayerMetadata, BaseMetadata } from '@abc-map/shared-entities';
 import Feature from 'ol/Feature';
 import Geometry from 'ol/geom/Geometry';

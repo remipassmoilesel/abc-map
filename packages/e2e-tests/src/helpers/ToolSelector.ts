@@ -1,4 +1,4 @@
-import { MapTool } from '@abc-map/frontend-shared';
+import { MapTool } from '@abc-map/frontend-commons';
 
 export class ToolSelector {
   public static enable(tool: MapTool): Cypress.Chainable<any> {

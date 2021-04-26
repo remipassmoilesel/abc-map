@@ -1,5 +1,5 @@
 import React, { Component, ReactNode } from 'react';
-import { Logger } from '@abc-map/frontend-shared';
+import { Logger } from '@abc-map/frontend-commons';
 import { WmsLayer } from '../../../../../core/geo/WmsCapabilities';
 import './WmsLayerItem.scss';
 

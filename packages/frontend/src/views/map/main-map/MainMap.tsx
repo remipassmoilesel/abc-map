@@ -1,7 +1,7 @@
 import React, { Component, DragEvent, ReactNode } from 'react';
-import { Logger } from '@abc-map/frontend-shared';
+import { Logger } from '@abc-map/frontend-commons';
 import { MapWrapper } from '../../../core/geo/map/MapWrapper';
-import { AbcFile } from '@abc-map/frontend-shared';
+import { AbcFile } from '@abc-map/frontend-commons';
 import { HistoryKey } from '../../../core/history/HistoryKey';
 import { AddLayersTask } from '../../../core/history/tasks/layers/AddLayersTask';
 import { ServiceProps, withServices } from '../../../core/withServices';

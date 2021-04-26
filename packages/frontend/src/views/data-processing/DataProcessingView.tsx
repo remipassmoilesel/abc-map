@@ -1,5 +1,5 @@
 import React, { Component, ReactNode } from 'react';
-import { DataProcessingParams, FrontendRoutes, Logger } from '@abc-map/frontend-shared';
+import { DataProcessingParams, FrontendRoutes, Logger } from '@abc-map/frontend-commons';
 import { getModules } from '../../data-processing';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import Cls from './DataProcessingView.module.scss';

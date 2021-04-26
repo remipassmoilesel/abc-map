@@ -1,5 +1,5 @@
 import React, { Component, ReactNode } from 'react';
-import { Logger } from '@abc-map/frontend-shared';
+import { Logger } from '@abc-map/frontend-commons';
 import { HistoryKey } from '../../core/history/HistoryKey';
 import { connect, ConnectedProps } from 'react-redux';
 import { MainState } from '../../core/store/reducer';

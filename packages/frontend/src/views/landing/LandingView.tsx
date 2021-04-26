@@ -1,7 +1,7 @@
 import React, { Component, ReactNode } from 'react';
-import { Logger } from '@abc-map/frontend-shared';
+import { Logger } from '@abc-map/frontend-commons';
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
-import { FrontendRoutes } from '@abc-map/frontend-shared';
+import { FrontendRoutes } from '@abc-map/frontend-commons';
 import { RegistrationStatus } from '@abc-map/shared-entities';
 import LoginForm from './login/LoginForm';
 import RegistrationForm from './registration/RegistrationForm';

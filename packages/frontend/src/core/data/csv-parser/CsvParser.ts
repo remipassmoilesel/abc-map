@@ -1,5 +1,5 @@
 import * as Papa from 'papaparse';
-import { BlobIO, Logger } from '@abc-map/frontend-shared';
+import { BlobIO, Logger } from '@abc-map/frontend-commons';
 import { CsvParsingError, CsvRow } from './typings';
 import { asNumberOrString } from '../../utils/numbers';
 

@@ -3,7 +3,7 @@ import { StorePersistence } from './persistence/StorePersistence';
 import { initialState } from './state';
 import { MainState, mainReducer } from './reducer';
 import { createStore, Store } from 'redux';
-import { getAbcWindow } from '@abc-map/frontend-shared';
+import { getAbcWindow } from '@abc-map/frontend-commons';
 
 const persistence = StorePersistence.newPersistence();
 const preLoadedState = _.defaultsDeep(persistence.loadState(), initialState());

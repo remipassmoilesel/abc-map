@@ -1,5 +1,5 @@
 import React, { Component, ReactNode } from 'react';
-import { Logger } from '@abc-map/frontend-shared';
+import { Logger } from '@abc-map/frontend-commons';
 import { DataRow } from '../../../core/data/data-source/DataSource';
 import VectorLayerSelector from '../../../components/vector-layer-selector/VectorLayerSelector';
 import { VectorLayerWrapper } from '../../../core/geo/layers/LayerWrapper';

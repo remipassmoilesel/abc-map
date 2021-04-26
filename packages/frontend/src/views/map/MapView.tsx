@@ -3,7 +3,7 @@ import MainMap from './main-map/MainMap';
 import LayerControls from './layer-controls/LayerControls';
 import ProjectStatus from './project-status/ProjectStatus';
 import { connect, ConnectedProps } from 'react-redux';
-import { Logger } from '@abc-map/frontend-shared';
+import { Logger } from '@abc-map/frontend-commons';
 import ProjectControls from './project-controls/ProjectControls';
 import ToolSelector from './tool-selector/ToolSelector';
 import HistoryControls from '../../components/history-controls/HistoryControls';

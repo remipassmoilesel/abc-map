@@ -1,8 +1,8 @@
 import React, { Component, ReactNode } from 'react';
-import { Logger } from '@abc-map/frontend-shared';
+import { Logger } from '@abc-map/frontend-commons';
 import { connect, ConnectedProps } from 'react-redux';
 import { ToolRegistry } from '../../../core/geo/tools/ToolRegistry';
-import { MapTool } from '@abc-map/frontend-shared';
+import { MapTool } from '@abc-map/frontend-commons';
 import { MainState } from '../../../core/store/reducer';
 import SelectionPanel from './selection/SelectionPanel';
 import CirclePanel from './circle/CirclePanel';

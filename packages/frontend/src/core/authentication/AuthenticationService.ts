@@ -15,7 +15,7 @@ import {
 import { RegistrationRequest } from '@abc-map/shared-entities';
 import { AuthenticationActions } from '../store/authentication/actions';
 import jwtDecode from 'jwt-decode';
-import { Logger } from '@abc-map/frontend-shared';
+import { Logger } from '@abc-map/frontend-commons';
 import { MainStore } from '../store/store';
 import { ToastService } from '../ui/ToastService';
 

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Logger } from '@abc-map/frontend-shared';
+import { Logger } from '@abc-map/frontend-commons';
 import Cls from './FoldableCard.module.scss';
 
 const logger = Logger.get('FoldableCard.tsx', 'info');

@@ -1,4 +1,4 @@
-import { AbcWindow, E2eMap } from '@abc-map/frontend-shared';
+import { AbcWindow, E2eMap } from '@abc-map/frontend-commons';
 import Chainable = Cypress.Chainable;
 
 export class MainMap {

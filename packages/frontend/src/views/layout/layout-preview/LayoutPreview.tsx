@@ -1,5 +1,5 @@
 import React, { Component, ReactNode } from 'react';
-import { getAbcWindow, Logger } from '@abc-map/frontend-shared';
+import { getAbcWindow, Logger } from '@abc-map/frontend-commons';
 import { AbcLayout } from '@abc-map/shared-entities';
 import { LayoutHelper } from '../../../core/project/LayoutHelper';
 import View from 'ol/View';
