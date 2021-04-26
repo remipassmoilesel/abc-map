@@ -1,6 +1,7 @@
 {
   "name": "@abc-map/fake-wms-server",
   "version": "0.0.1",
+  "private": true,
   "license": "GPL-3.0-or-later",
   "scripts": {
     "start:watch": "node main.js",

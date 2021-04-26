@@ -7,6 +7,7 @@ export interface Config {
   environmentName: string;
   development?: boolean;
   externalUrl: string;
+  frontendPath: string;
   server: ServerConfig;
   database: DatabaseConfig;
   authentication: AuthenticationConfig;
@@ -23,7 +24,6 @@ export interface ServerConfig {
 export interface DatabaseConfig {
   url: string;
   username: string;
-  // TODO: encrypt passwords ?
   password: string;
 }
 

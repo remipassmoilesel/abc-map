@@ -3,4 +3,4 @@ build
 .nyc_output
 coverage
 uploads
-
+public

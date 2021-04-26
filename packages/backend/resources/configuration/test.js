@@ -1,7 +1,7 @@
 module.exports = {
   environmentName: 'test',
   development: true,
-  externalUrl: 'http://localhost:3005/',
+  externalUrl: 'http://localhost:10082/',
   server: {
     host: '127.0.0.1',
     port: 10_082,

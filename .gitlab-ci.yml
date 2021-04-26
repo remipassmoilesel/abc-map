@@ -1,13 +1,12 @@
+---
 image: registry.gitlab.com/remipassmoilesel/abc-map-2/build-image:0.2
 
 variables:
   CI: "true"
-  MONGO_INITDB_ROOT_USERNAME: admin
-  MONGO_INITDB_ROOT_PASSWORD: admin
   ABC_CONFIGURATION: "resources/configuration/test.js"
-
-services:
-  - mongo:4.2-bionic
+  YARN_CACHE_FOLDER: "$CI_PROJECT_DIR/.yarn-cache"
+  CYPRESS_CACHE_FOLDER: "$CI_PROJECT_DIR/.cypress-cache"
+  NODE_OPTIONS: "--max-old-space-size=3500"
 
 cache:
   key: main
@@ -24,6 +23,12 @@ cache:
 test:
   script:
     - ./abc-cli ci
+  services:
+    - name: mongo:4.2-bionic
+      alias: mongodb
+  variables:
+    MONGO_INITDB_ROOT_USERNAME: admin
+    MONGO_INITDB_ROOT_PASSWORD: admin
   artifacts:
     expire_in: 1 week
     when: always

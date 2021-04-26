@@ -1,6 +1,7 @@
 {
   "name": "@abc-map/abc-cli",
   "version": "0.0.1",
+  "private": true,
   "license": "GPL-3.0-or-later",
   "scripts": {
     "clean": "rm -rf build",
@@ -13,10 +14,12 @@
     "dep-check": "depcruise -c .dependency-cruiser.js src"
   },
   "dependencies": {
-    "lerna": "^3.22.1",
+    "lerna": "^4.0.0",
     "loglevel": "^1.7.1",
     "wait-on": "^5.2.1",
-    "source-map-support": "^0.5.19"
+    "source-map-support": "^0.5.19",
+    "verdaccio": "^5.0.1",
+    "nanoid": "^3.1.22"
   },
   "devDependencies": {
     "@types/wait-on": "^5.2.0",
@@ -35,5 +38,8 @@
     "mocha": "^8.2.1",
     "chai": "^4.2.0",
     "dependency-cruiser": "9.19.1"
-  }
+  },
+  "files": [
+    "build"
+  ]
 }

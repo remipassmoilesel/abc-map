@@ -17,6 +17,8 @@ async function main() {
   const config = await ConfigLoader.load();
   const services = await servicesFactory(config);
 
+  logger.info('Using configuration: ', JSON.stringify(ConfigLoader.safeConfig(config), null, 2));
+
   if (config.development) {
     logger.warn('/!\\ WARNING, development data will be created');
     await DevInit.create(config, services).init();

@@ -10,9 +10,9 @@
     "watch": "tsc --watch | sed -u 's/\\x1Bc//g'",
     "clean-build": "yarn run clean && yarn run build",
     "lint": "eslint './src/**/*.ts' --fix --max-warnings=0",
-    "test": "tsc && CI=true jest src --coverage",
-    "test:interactive": "jest src --watch",
-    "coverage": "jest src --coverage"
+    "test": "tsc && CI=true jest src",
+    "coverage": "tsc && CI=true jest src --coverage",
+    "test:interactive": "jest src --watch"
   },
   "dependencies": {
     "@abc-map/shared-entities": "0.0.1",
@@ -42,5 +42,8 @@
     "source-map-support": "^0.5.19",
     "typescript": "4.1.5",
     "dependency-cruiser": "9.19.1"
-  }
+  },
+  "files": [
+    "build"
+  ]
 }

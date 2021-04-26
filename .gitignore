@@ -1,5 +1,4 @@
 .idea
-backend/target
-notes/
 *.log
-
+notes/
+node_modules/
