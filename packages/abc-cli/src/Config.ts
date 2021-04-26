@@ -9,8 +9,16 @@ export class Config {
     return path.resolve(this.getProjectRoot(), 'packages/backend');
   }
 
+  public getFrontendRoot(): string {
+    return path.resolve(this.getProjectRoot(), 'packages/frontend');
+  }
+
   public getCliRoot(): string {
     return path.resolve(this.getProjectRoot(), 'packages/abc-cli');
+  }
+
+  public getVerdaccioConfig(): string {
+    return path.resolve(this.getProjectRoot(), 'packages/infrastructure/verdaccio/config.yaml');
   }
 
   public getDevServicesRoot(): string {
@@ -22,10 +30,14 @@ export class Config {
   }
 
   public getFrontendE2eUrl(): string {
-    return 'http://localhost:3005';
+    return 'http://localhost:10082';
   }
 
   public getBackendE2eUrl(): string {
     return 'http://localhost:10082/api/health';
+  }
+
+  public registryUrl(): string {
+    return 'http://localhost:4873';
   }
 }

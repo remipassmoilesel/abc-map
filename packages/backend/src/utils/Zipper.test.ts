@@ -22,10 +22,10 @@ describe('Zipper', () => {
   });
 
   it('should zip', async () => {
-    const testFile: AbcFile = { path: 'test.json', content: Buffer.from([JSON.stringify({ a: 'b', c: 'd', e: 'f' })]) };
+    const testFile: AbcFile = { path: 'test.json', content: Buffer.from(JSON.stringify({ a: 'b', c: 'd', e: 'f' })) };
 
     const result = await Zipper.zipFiles([testFile]);
 
-    assert.deepEqual(result.length, 119);
+    assert.deepEqual(result.length, 139);
   });
 });

@@ -1,15 +1,52 @@
 import { Config } from './Config';
-import { Shell } from './Shell';
+import { Shell } from './tools/Shell';
 import * as waitOn from 'wait-on';
-import { Logger } from './Logger';
+import { Logger } from './tools/Logger';
+import { Registry } from './tools/Registry';
+import { customAlphabet } from 'nanoid';
+const versionId = customAlphabet('1234567890abcdefghijklmnopqrstuvwxyz', 10);
 
 const logger = Logger.get('Service.ts', 'info');
 
-export class Service {
-  constructor(private config: Config, private shell: Shell) {}
+export enum Dependencies {
+  Development = 'Development',
+  Production = 'Production',
+}
 
-  public install(): void {
-    this.shell.sync('lerna bootstrap --force-local');
+export class Service {
+  constructor(private config: Config, private registry: Registry, private shell: Shell) {}
+
+  public async install(dependencies = Dependencies.Development): Promise<void> {
+    // Local dependencies.
+    // For development purposes. We use default npm registry and local packages as symlinks.
+    if (Dependencies.Development === dependencies) {
+      this.shell.sync(`lerna bootstrap --force-local`);
+      return;
+    }
+
+    // Production dependencies.
+    // We use a local registry and we publish then install a canary version.
+    const registryUrl = this.config.registryUrl();
+    const registry = await this.registry.start();
+    return new Promise((resolve, reject) => {
+      registry.onError(reject);
+      try {
+        // Even if canary publish is supposed to use unique versions, it does not work in every cases. So we use a pre id.
+        this.shell.sync(`lerna publish --canary --yes \
+                                            --preid '${versionId()}' \
+                                            --no-git-tag-version --no-push --no-git-reset \
+                                            --registry ${registryUrl}`);
+
+        // Here we must limit concurrency to prevent bad use of Yarn cache
+        this.shell.sync(`lerna exec  --ignore e2e-tests --concurrency 1 'YARN_REGISTRY="${registryUrl}" yarn install --production'`);
+
+        resolve();
+      } catch (err) {
+        reject(err);
+      } finally {
+        registry.terminate();
+      }
+    });
   }
 
   public lint(): void {
@@ -18,10 +55,17 @@ export class Service {
 
   public cleanBuild(): void {
     this.shell.sync('lerna run clean-build');
+
+    // Here we copy frontend build to public backend dir.
+    // We could use frontend as a dependency but dependency management is messy afterwards (more than usual lol).
+    const sourceDir = `${this.config.getFrontendRoot()}/build`;
+    const publicDir = `${this.config.getBackendRoot()}/public`;
+    this.shell.sync(`rm -rf ${publicDir}`);
+    this.shell.sync(`cp -R ${sourceDir} ${publicDir}`);
   }
 
   public test(): void {
-    this.shell.sync('lerna run coverage');
+    this.shell.sync('lerna run test');
   }
 
   public async e2e(): Promise<void> {
@@ -32,7 +76,7 @@ export class Service {
         if (!code) {
           resolve();
         } else {
-          reject(new Error(`Command failed: ${JSON.stringify(startCmd.spawnargs)}`));
+          reject(new Error(`Command failed with code ${code}: ${JSON.stringify(startCmd.spawnargs)}`));
         }
       });
 
@@ -82,14 +126,25 @@ export class Service {
     this.shell.sync('lerna run dep-check');
   }
 
+  public async startRegistry(logOutput: boolean): Promise<void> {
+    const registry = await this.registry.start(logOutput);
+    process.on('SIGINT', function () {
+      logger.info('Stopping registry ...');
+      registry.terminate();
+    });
+  }
+
   public async continuousIntegration(): Promise<void> {
     const start = new Date().getTime();
-    this.install();
+    await this.install(Dependencies.Development);
     this.lint();
     this.cleanBuild();
     this.dependencyCheck(); // Dependency check must be launched AFTER build for local dependencies
     this.test();
+    await this.install(Dependencies.Production);
     await this.e2e();
+    await this.install(Dependencies.Development); // We reinstall for caching purposes
+
     const tookSec = Math.round((new Date().getTime() - start) / 1000);
     logger.info(`CI took ${tookSec} seconds`);
   }

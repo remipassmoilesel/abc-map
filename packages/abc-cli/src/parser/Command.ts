@@ -12,5 +12,6 @@ export enum Command {
   CLEAN_RESTART_SERVICES = 'clean-restart-services',
   CLEAN = 'clean',
   DEPENDENCY_CHECK = 'dep-check',
+  NPM_REGISTRY = 'npm-registry',
   HELP = 'help',
 }

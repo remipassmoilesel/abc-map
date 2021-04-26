@@ -1,7 +1,7 @@
 import { ConfigLoader } from './ConfigLoader';
 import { assert } from 'chai';
 
-// TODO: better test, we should not test the content of cache
+// TODO: better test
 
 describe('ConfigLoader', () => {
   it('load()', async () => {

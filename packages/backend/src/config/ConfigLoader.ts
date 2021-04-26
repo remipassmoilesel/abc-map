@@ -5,6 +5,8 @@ import * as path from 'path';
 import * as _ from 'lodash';
 import { promises as fs } from 'fs';
 
+/* eslint-disable @typescript-eslint/no-var-requires */
+
 const logger = Logger.get('ConfigLoader.ts', 'info');
 
 export class ConfigLoader {
@@ -20,15 +22,29 @@ export class ConfigLoader {
     return this._cache[configPath];
   }
 
+  public static safeConfig(config: Config): Config {
+    const safe: Config = _.cloneDeep(config);
+    const safeValue = '<value masked>';
+    safe.authentication.jwtSecret = safeValue;
+    safe.authentication.passwordSalt = safeValue;
+    safe.database.password = safeValue;
+    safe.registration.confirmationSalt = safeValue;
+    if (safe.smtp.auth?.pass) {
+      safe.smtp.auth.pass = safeValue;
+    }
+
+    return safe;
+  }
+
   public async load(configPath: string): Promise<Config> {
     if (!path.isAbsolute(configPath)) {
       configPath = path.resolve(configPath);
     }
     logger.info(`Loading configuration: ${configPath}`);
 
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
     const config: Config = _.cloneDeep(require(configPath));
 
+    // TODO: use better validation, see https://github.com/colinhacks/zod
     const parameters: string[] = [
       'environmentName',
       'externalUrl',
@@ -69,6 +85,9 @@ export class ConfigLoader {
     if (config.externalUrl.slice(-1) === '/') {
       config.externalUrl = config.externalUrl.slice(0, -1);
     }
+
+    // We set resolve and set frontend path
+    config.frontendPath = path.resolve(__dirname, '..', '..', 'public');
 
     logger.info(`Loaded !`);
     return config;

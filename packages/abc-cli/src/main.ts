@@ -1,11 +1,12 @@
 import 'source-map-support/register';
-import { Logger } from './Logger';
+import { Logger } from './tools/Logger';
 import { Config } from './Config';
-import { Shell } from './Shell';
-import { Parser } from './Parser';
-import { Service } from './Service';
-import { Command } from './Command';
-import { Banners } from './Banners';
+import { Shell } from './tools/Shell';
+import { Parser } from './parser/Parser';
+import { Dependencies, Service } from './Service';
+import { Command } from './parser/Command';
+import { Banners } from './tools/Banners';
+import { Registry } from './tools/Registry';
 
 const logger = Logger.get('main.ts', 'info');
 
@@ -18,20 +19,19 @@ async function main(args: string[]) {
   const banners = new Banners();
   const config = new Config();
   const shell = new Shell(config);
+  const registry = new Registry(config, shell);
   const parser = new Parser();
-  const service = new Service(config, shell);
+  const service = new Service(config, registry, shell);
 
+  // We use node_modules bin from command line
   process.env.PATH = `${process.env.PATH}:${config.getCliRoot()}/node_modules/.bin/`;
-  if (process.env.CI === 'true') {
-    process.env.YARN_CACHE_FOLDER = `${config.getProjectRoot()}/.yarn-cache`;
-    process.env.CYPRESS_CACHE_FOLDER = `${config.getProjectRoot()}/.cypress-cache`;
-  }
 
   banners.cli();
   const command = await parser.parse(args);
 
   if (Command.INSTALL === command) {
-    service.install();
+    const production = args.findIndex((a) => a === '--production') !== -1;
+    await service.install(production ? Dependencies.Production : Dependencies.Development);
   } else if (Command.LINT === command) {
     service.lint();
   } else if (Command.BUILD === command) {
@@ -39,6 +39,7 @@ async function main(args: string[]) {
   } else if (Command.TEST === command) {
     service.test();
   } else if (Command.E2E === command) {
+    await service.install(Dependencies.Production);
     await service.e2e();
   } else if (Command.WATCH === command) {
     service.watch();
@@ -57,6 +58,8 @@ async function main(args: string[]) {
     service.clean();
   } else if (Command.DEPENDENCY_CHECK === command) {
     service.dependencyCheck();
+  } else if (Command.NPM_REGISTRY === command) {
+    await service.startRegistry(true);
   } else if (Command.HELP === command) {
     banners.big();
     service.help();
