@@ -1,6 +1,6 @@
 import { FillPatterns } from '@abc-map/shared-entities';
 import { MapTool } from '@abc-map/frontend-commons';
-import { PointIcons } from '../../geo/style/PointIcons';
+import { PointIcons } from '@abc-map/shared-entities';
 
 export enum ActionType {
   SetTool = 'SetTool',

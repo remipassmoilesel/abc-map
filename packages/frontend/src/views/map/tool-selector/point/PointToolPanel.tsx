@@ -6,9 +6,11 @@ import PointIconSelector from './icon-selector/PointIconSelector';
 import { ServiceProps, withServices } from '../../../../core/withServices';
 import { MainState } from '../../../../core/store/reducer';
 import { connect, ConnectedProps } from 'react-redux';
-import Cls from './PointPanel.module.scss';
+import Cls from './PointToolPanel.module.scss';
+import TipBubble from '../../../../components/tip-bubble/TipBubble';
+import { ToolTips } from '@abc-map/documentation';
 
-const logger = Logger.get('PointPanel.tsx');
+const logger = Logger.get('PointToolPanel.tsx');
 
 const mapStateToProps = (state: MainState) => ({
   point: state.map.currentStyle.point,
@@ -18,10 +20,11 @@ const connector = connect(mapStateToProps);
 
 type Props = ConnectedProps<typeof connector> & ServiceProps;
 
-class PointPanel extends Component<Props, {}> {
+class PointToolPanel extends Component<Props, {}> {
   public render(): ReactNode {
     return (
       <div className={Cls.pointPanel}>
+        <TipBubble id={ToolTips.Point} label={'Aide'} className={'mx-3 mb-4'} />
         <PointSizeSelector />
         <ColorSelector point={true} />
         <PointIconSelector />
@@ -66,4 +69,4 @@ class PointPanel extends Component<Props, {}> {
   };
 }
 
-export default withServices(connector(PointPanel));
+export default withServices(connector(PointToolPanel));

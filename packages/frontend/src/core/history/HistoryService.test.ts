@@ -1,11 +1,9 @@
 import { HistoryKey } from './HistoryKey';
-import { HistoryService, HistoryStack } from './HistoryService';
+import { HistoryService, History } from './HistoryService';
 import { Task } from './Task';
 import * as sinon from 'sinon';
 import uuid from 'uuid-random';
 import { SinonStub } from 'sinon';
-
-// TODO: assert on store.dispatch() calls
 
 class FakeTask extends Task {
   constructor(public id: number) {
@@ -26,14 +24,14 @@ class FakeTask extends Task {
 
 describe('HistoryService', () => {
   let service: HistoryService;
-  let fakeHistory: HistoryStack;
+  let fakeHistory: History;
   let dispatchStub: SinonStub;
 
   beforeEach(() => {
     fakeHistory = {
       [HistoryKey.Map]: {
-        done: [new FakeTask(1), new FakeTask(2), new FakeTask(3)],
-        undone: [new FakeTask(4), new FakeTask(5), new FakeTask(6)],
+        undo: [new FakeTask(1), new FakeTask(2), new FakeTask(3)],
+        redo: [new FakeTask(4), new FakeTask(5), new FakeTask(6)],
       },
     };
 
@@ -45,14 +43,35 @@ describe('HistoryService', () => {
     service = new HistoryService(3, fakeHistory, fakeStore);
   });
 
+  it('clean() should remove all and call dispose() on each task', () => {
+    // Prepare
+    const disposeStub = sinon.stub();
+    disposeStub.returns(Promise.resolve());
+    fakeHistory[HistoryKey.Map]?.redo.forEach((t) => (t.dispose = disposeStub));
+    fakeHistory[HistoryKey.Map]?.undo.forEach((t) => (t.dispose = disposeStub));
+
+    // Act
+    service.clean();
+
+    // Assert
+    expect(service.getHistory()).toEqual({});
+    expect(disposeStub.callCount).toEqual(6);
+
+    expect(dispatchStub.callCount).toEqual(1);
+    expect(dispatchStub.args[0][0]).toEqual({ type: 'CleanHistoryCapabilities' });
+  });
+
   describe('register()', () => {
-    it('should create history stack for unknown key', async () => {
+    it('should create history stack for unknown key then dispatch', async () => {
       const key = uuid() as HistoryKey;
       await service.register(key, new FakeTask(7));
 
       expect(fakeHistory[key]).toBeDefined();
-      expect(getDoneIds(fakeHistory, key)).toEqual([7]);
-      expect(getUndoneIds(fakeHistory, key)).toEqual([]);
+      expect(getUndoStackIds(fakeHistory, key)).toEqual([7]);
+      expect(getRedoStackIds(fakeHistory, key)).toEqual([]);
+
+      expect(dispatchStub.callCount).toEqual(1);
+      expect(dispatchStub.args[0][0]).toEqual({ key, canRedo: false, canUndo: true, type: 'SetHistoryCapabilities' });
     });
 
     it('should stack task', async () => {
@@ -61,19 +80,31 @@ describe('HistoryService', () => {
       await service.register(key, new FakeTask(9));
 
       expect(fakeHistory[key]).toBeDefined();
-      expect(getDoneIds(fakeHistory, key)).toEqual([8, 9]);
-      expect(getUndoneIds(fakeHistory, key)).toEqual([]);
+      expect(getUndoStackIds(fakeHistory, key)).toEqual([8, 9]);
+      expect(getRedoStackIds(fakeHistory, key)).toEqual([]);
     });
 
-    it('should call dispose() on trashed tasks', async () => {
-      const trashedTask = fakeHistory[HistoryKey.Map]?.done[0] as Task;
+    it('should trash task out of limit, and call dispose() on each task', async () => {
+      const trashedTask = fakeHistory[HistoryKey.Map]?.undo[0] as Task;
       const disposeStub = sinon.stub(trashedTask, 'dispose');
       disposeStub.returns(Promise.resolve());
 
-      await service.register(HistoryKey.Map, new FakeTask(8));
+      service.register(HistoryKey.Map, new FakeTask(8));
 
       expect(disposeStub.callCount).toEqual(1);
-      expect(getDoneIds(fakeHistory, HistoryKey.Map)).toEqual([2, 3, 8]);
+      expect(getUndoStackIds(fakeHistory, HistoryKey.Map)).toEqual([2, 3, 8]);
+    });
+
+    it('should truncate redo tasks, and call dispose() on each task', async () => {
+      const disposeStub = sinon.stub();
+      disposeStub.returns(Promise.resolve());
+      fakeHistory[HistoryKey.Map]?.redo.forEach((t) => (t.dispose = disposeStub));
+
+      service.register(HistoryKey.Map, new FakeTask(8));
+
+      expect(disposeStub.callCount).toEqual(3);
+      expect(getUndoStackIds(fakeHistory, HistoryKey.Map)).toEqual([2, 3, 8]);
+      expect(getRedoStackIds(fakeHistory, HistoryKey.Map)).toEqual([]);
     });
   });
 
@@ -85,24 +116,27 @@ describe('HistoryService', () => {
       await service.undo(key).catch((err) => expect(err.message).toEqual('Nothing to undo'));
     });
 
-    it('should call undo() on last task', async () => {
-      const expectedTask = fakeHistory[HistoryKey.Map]?.done[2] as Task;
+    it('should call undo() on last task then dispatch', async () => {
+      const expectedTask = fakeHistory[HistoryKey.Map]?.undo[2] as Task;
       const undoStub = sinon.stub(expectedTask, 'undo');
 
       await service.undo(HistoryKey.Map);
 
       expect(undoStub.callCount).toEqual(1);
+
+      expect(dispatchStub.callCount).toEqual(1);
+      expect(dispatchStub.args[0][0]).toEqual({ key: HistoryKey.Map, canRedo: true, canUndo: true, type: 'SetHistoryCapabilities' });
     });
 
-    it('undo() should stack task on undone stack', async () => {
-      const trashedTask = fakeHistory[HistoryKey.Map]?.undone[0] as Task;
+    it('undo() should stack task on redo stack', async () => {
+      const trashedTask = fakeHistory[HistoryKey.Map]?.redo[0] as Task;
       const disposeStub = sinon.stub(trashedTask, 'dispose');
       disposeStub.returns(Promise.resolve());
 
       await service.undo(HistoryKey.Map);
 
-      expect(getDoneIds(fakeHistory, HistoryKey.Map)).toEqual([1, 2]);
-      expect(getUndoneIds(fakeHistory, HistoryKey.Map)).toEqual([5, 6, 3]);
+      expect(getUndoStackIds(fakeHistory, HistoryKey.Map)).toEqual([1, 2]);
+      expect(getRedoStackIds(fakeHistory, HistoryKey.Map)).toEqual([5, 6, 3]);
 
       expect(disposeStub.callCount).toEqual(1);
     });
@@ -116,24 +150,27 @@ describe('HistoryService', () => {
       await service.redo(key).catch((err) => expect(err.message).toEqual('Nothing to redo'));
     });
 
-    it('should call redo() on last task', async () => {
-      const expectedTask = fakeHistory[HistoryKey.Map]?.undone[2] as Task;
+    it('should call redo() on last task then dispatch', async () => {
+      const expectedTask = fakeHistory[HistoryKey.Map]?.redo[2] as Task;
       const undoStub = sinon.stub(expectedTask, 'redo');
 
       await service.redo(HistoryKey.Map);
 
       expect(undoStub.callCount).toEqual(1);
+
+      expect(dispatchStub.callCount).toEqual(1);
+      expect(dispatchStub.args[0][0]).toEqual({ key: HistoryKey.Map, canRedo: true, canUndo: true, type: 'SetHistoryCapabilities' });
     });
 
-    it('undo() should stack task on done stack', async () => {
-      const trashedTask = fakeHistory[HistoryKey.Map]?.done[0] as Task;
+    it('undo() should stack task on undo stack', async () => {
+      const trashedTask = fakeHistory[HistoryKey.Map]?.undo[0] as Task;
       const disposeStub = sinon.stub(trashedTask, 'dispose');
       disposeStub.returns(Promise.resolve());
 
       await service.redo(HistoryKey.Map);
 
-      expect(getDoneIds(fakeHistory, HistoryKey.Map)).toEqual([2, 3, 6]);
-      expect(getUndoneIds(fakeHistory, HistoryKey.Map)).toEqual([4, 5]);
+      expect(getUndoStackIds(fakeHistory, HistoryKey.Map)).toEqual([2, 3, 6]);
+      expect(getRedoStackIds(fakeHistory, HistoryKey.Map)).toEqual([4, 5]);
       expect(disposeStub.callCount).toEqual(1);
     });
   });
@@ -161,10 +198,10 @@ describe('HistoryService', () => {
   });
 });
 
-function getDoneIds(history: HistoryStack, key: HistoryKey): number[] {
-  return history[key]?.done.map((task) => (task as FakeTask).id) as number[];
+function getUndoStackIds(history: History, key: HistoryKey): number[] {
+  return history[key]?.undo.map((task) => (task as FakeTask).id) as number[];
 }
 
-function getUndoneIds(history: HistoryStack, key: HistoryKey): number[] {
-  return history[key]?.undone.map((task) => (task as FakeTask).id) as number[];
+function getRedoStackIds(history: History, key: HistoryKey): number[] {
+  return history[key]?.redo.map((task) => (task as FakeTask).id) as number[];
 }

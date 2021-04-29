@@ -7,7 +7,8 @@ import { StyleCache } from './StyleCache';
 import * as sinon from 'sinon';
 import Feature from 'ol/Feature';
 import Style from 'ol/style/Style';
-import { PointIcons, safeGetIcon } from './PointIcons';
+import { safeGetIcon } from './PointIcons';
+import { PointIcons } from '@abc-map/shared-entities';
 import { IconProcessor } from './IconProcessor';
 
 // TODO: test other geometries

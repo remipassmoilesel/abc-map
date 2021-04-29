@@ -9,7 +9,8 @@ import { FillPatternFactory } from './FillPatternFactory';
 import Geometry from 'ol/geom/Geometry';
 import GeometryType from 'ol/geom/GeometryType';
 import { IconProcessor } from './IconProcessor';
-import { safeGetIcon, PointIcons } from './PointIcons';
+import { safeGetIcon } from './PointIcons';
+import { PointIcons } from '@abc-map/shared-entities';
 
 const logger = Logger.get('VectorStyles.ts');
 

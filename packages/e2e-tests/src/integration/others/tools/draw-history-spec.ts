@@ -14,12 +14,19 @@ describe('Draw features history', function () {
     cy.visit(FrontendRoutes.map())
       .then(() => MainMap.getComponent())
       .then(() => ToolSelector.enable(MapTool.LineString))
-      // First circle
+      // First line
       .then(() => Draw.click(100, 100))
-      .then(() => Draw.click(150, 150))
-      // Second circle
+      .then(() => Draw.dblclick(150, 150))
+      // Second line
       .then(() => Draw.click(200, 200))
-      .then(() => Draw.click(250, 250))
+      .then(() => Draw.dblclick(250, 250))
+      .then(() => MainMap.getReference())
+      .should((map) => {
+        const features = map.getActiveLayerFeatures();
+        expect(features).length(2);
+        expect(features[0].getGeometry()?.getExtent()).deep.equals([-1118865.2444950184, 3558914.9167841673, -629668.2634698902, 4048111.8978092954]);
+        expect(features[1].getGeometry()?.getExtent()).deep.equals([-140471.28244476253, 2580520.9547339114, 348725.6985803656, 3069717.9357590396]);
+      })
       // First undo
       .then(() => History.undo())
       .wait(800)
@@ -27,7 +34,7 @@ describe('Draw features history', function () {
       .should((map) => {
         const features = map.getActiveLayerFeatures();
         expect(features).length(1);
-        expect(features[0].getGeometry()?.getExtent()).deep.equals([-1810694.249732728, 3356282.8925715857, -427036.23925730854, 4739940.903047006]);
+        expect(features[0].getGeometry()?.getExtent()).deep.equals([-1118865.2444950184, 3558914.9167841673, -629668.2634698902, 4048111.8978092954]);
       })
       // Second undo
       .then(() => History.undo())
@@ -44,7 +51,7 @@ describe('Draw features history', function () {
       .should((map) => {
         const features = map.getActiveLayerFeatures();
         expect(features).length(1);
-        expect(features[0].getGeometry()?.getExtent()).deep.equals([-1810694.249732728, 3356282.8925715857, -427036.23925730854, 4739940.903047006]);
+        expect(features[0].getGeometry()?.getExtent()).deep.equals([-1118865.2444950184, 3558914.9167841673, -629668.2634698902, 4048111.8978092954]);
       })
       // Second redo
       .then(() => History.redo())
@@ -53,8 +60,8 @@ describe('Draw features history', function () {
       .should((map) => {
         const features = map.getActiveLayerFeatures();
         expect(features).length(2);
-        expect(features[0].getGeometry()?.getExtent()).deep.equals([-1810694.249732728, 3356282.8925715857, -427036.23925730854, 4739940.903047006]);
-        expect(features[1].getGeometry()?.getExtent()).deep.equals([-832300.2876824724, 2377888.93052133, 551357.7227929473, 3761546.9409967493]);
+        expect(features[0].getGeometry()?.getExtent()).deep.equals([-1118865.2444950184, 3558914.9167841673, -629668.2634698902, 4048111.8978092954]);
+        expect(features[1].getGeometry()?.getExtent()).deep.equals([-140471.28244476253, 2580520.9547339114, 348725.6985803656, 3069717.9357590396]);
       });
   });
 
@@ -62,13 +69,21 @@ describe('Draw features history', function () {
     cy.visit(FrontendRoutes.map())
       .then(() => MainMap.getComponent())
       .then(() => ToolSelector.enable(MapTool.LineString))
-      // First circle
+      // Create line
       .then(() => Draw.click(100, 100))
-      .then(() => Draw.click(150, 150))
+      .then(() => Draw.dblclick(150, 150))
+      // Select it
+      .then(() => Draw.click(150, 150, { ctrlKey: true }))
       // First modification
       .then(() => Draw.drag(150, 150, 200, 200))
       // Second modification
       .then(() => Draw.drag(100, 100, 400, 400))
+      .then(() => MainMap.getReference())
+      .should((map) => {
+        const features = map.getActiveLayerFeatures();
+        expect(features).length(1);
+        expect(features[0].getGeometry()?.getExtent()).deep.equals([-140471.28244476253, 1112930.011658527, 1816316.64165575, 3069717.9357590396]);
+      })
       // First undo
       .then(() => History.undo())
       .wait(800)
@@ -76,7 +91,7 @@ describe('Draw features history', function () {
       .should((map) => {
         const features = map.getActiveLayerFeatures();
         expect(features).length(1);
-        expect(features[0].getGeometry()?.getExtent()).deep.equals([-2502523.2549704374, 2664453.8873338765, 264792.7659804006, 5431769.908284714]);
+        expect(features[0].getGeometry()?.getExtent()).deep.equals([-1118865.2444950184, 3069717.9357590396, -140471.28244476253, 4048111.8978092954]);
       })
       // Second undo
       .then(() => History.undo())
@@ -85,7 +100,7 @@ describe('Draw features history', function () {
       .should((map) => {
         const features = map.getActiveLayerFeatures();
         expect(features).length(1);
-        expect(features[0].getGeometry()?.getExtent()).deep.equals([-1810694.249732728, 3356282.8925715857, -427036.23925730854, 4739940.903047006]);
+        expect(features[0].getGeometry()?.getExtent()).deep.equals([-1118865.2444950184, 3558914.9167841673, -629668.2634698902, 4048111.8978092954]);
       })
       // First redo
       .then(() => History.redo())
@@ -94,7 +109,7 @@ describe('Draw features history', function () {
       .should((map) => {
         const features = map.getActiveLayerFeatures();
         expect(features).length(1);
-        expect(features[0].getGeometry()?.getExtent()).deep.equals([-2502523.2549704374, 2664453.8873338765, 264792.7659804006, 5431769.908284714]);
+        expect(features[0].getGeometry()?.getExtent()).deep.equals([-1118865.2444950184, 3069717.9357590396, -140471.28244476253, 4048111.8978092954]);
       })
       // Second redo
       .then(() => History.redo())
@@ -103,7 +118,7 @@ describe('Draw features history', function () {
       .should((map) => {
         const features = map.getActiveLayerFeatures();
         expect(features).length(1);
-        expect(features[0].getGeometry()?.getExtent()).deep.equals([432658.6311803311, -270727.99881689204, 3199974.652131169, 2496588.022133946]);
+        expect(features[0].getGeometry()?.getExtent()).deep.equals([-140471.28244476253, 1112930.011658527, 1816316.64165575, 3069717.9357590396]);
       });
   });
 });

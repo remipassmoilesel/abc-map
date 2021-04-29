@@ -4,17 +4,18 @@ import { connect, ConnectedProps } from 'react-redux';
 import { ToolRegistry } from '../../../core/geo/tools/ToolRegistry';
 import { MapTool } from '@abc-map/frontend-commons';
 import { MainState } from '../../../core/store/reducer';
-import SelectionPanel from './selection/SelectionPanel';
-import LineStringPanel from './line-string/LineStringPanel';
-import PointPanel from './point/PointPanel';
-import PolygonPanel from './polygon/PolygonPanel';
-import TextPanel from './text/TextPanel';
+import SelectionPanel from './selection/SelectionToolPanel';
+import LineStringPanel from './line-string/LineStringToolPanel';
+import PointPanel from './point/PointToolPanel';
+import PolygonPanel from './polygon/PolygonToolPanel';
+import TextToolPanel from './text/TextToolPanel';
 import { LayerWrapper } from '../../../core/geo/layers/LayerWrapper';
 import { LayerFactory } from '../../../core/geo/layers/LayerFactory';
 import { HistoryKey } from '../../../core/history/HistoryKey';
 import { AddLayersTask } from '../../../core/history/tasks/layers/AddLayersTask';
 import { ServiceProps, withServices } from '../../../core/withServices';
 import Cls from './ToolSelector.module.scss';
+import EditPropertiesToolPanel from './edit-properties/EditPropertiesToolPanel';
 
 const logger = Logger.get('ToolSelector.tsx', 'info');
 
@@ -84,9 +85,11 @@ class ToolSelector extends Component<Props, {}> {
     } else if (MapTool.Polygon === this.props.currentTool) {
       return <PolygonPanel />;
     } else if (MapTool.Text === this.props.currentTool) {
-      return <TextPanel />;
+      return <TextToolPanel />;
     } else if (MapTool.Selection === this.props.currentTool) {
       return <SelectionPanel />;
+    } else if (MapTool.EditProperties === this.props.currentTool) {
+      return <EditPropertiesToolPanel />;
     }
   }
 
