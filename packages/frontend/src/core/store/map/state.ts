@@ -30,6 +30,7 @@ export const mapInitialState: MapState = {
     point: {
       icon: PointIcons.Circle,
       size: 5,
+      color: '#3F37C9',
     },
   },
 };

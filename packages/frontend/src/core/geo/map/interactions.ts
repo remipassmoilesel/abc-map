@@ -1,14 +1,9 @@
-import { DragPan, DragRotate, Interaction, MouseWheelZoom } from 'ol/interaction';
-import { shiftKeyOnly } from 'ol/events/condition';
+import { DoubleClickZoom, DragPan, Interaction, KeyboardPan, MouseWheelZoom } from 'ol/interaction';
 
 export function defaultInteractions(): Interaction[] {
-  return [new DragPan(), new MouseWheelZoom()];
-}
-
-export function drawingInteractions(): Interaction[] {
-  return [new DragPan({ condition: shiftKeyOnly }), new MouseWheelZoom({ condition: shiftKeyOnly })];
+  return [new DoubleClickZoom(), new DragPan(), new KeyboardPan(), new MouseWheelZoom()];
 }
 
 export function layoutMapInteractions(): Interaction[] {
-  return [new DragRotate(), new DragPan(), new MouseWheelZoom()];
+  return [new DoubleClickZoom(), new DragPan(), new KeyboardPan(), new MouseWheelZoom()];
 }

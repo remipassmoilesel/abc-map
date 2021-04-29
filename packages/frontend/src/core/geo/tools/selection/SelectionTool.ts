@@ -1,7 +1,6 @@
 import { AbstractTool } from '../AbstractTool';
 import { MapTool } from '@abc-map/frontend-commons';
 import { DragBox, Translate } from 'ol/interaction';
-import { onlyMainButton } from '../common/common-conditions';
 import VectorSource from 'ol/source/Vector';
 import Geometry from 'ol/geom/Geometry';
 import { Collection, Map } from 'ol';
@@ -12,10 +11,14 @@ import { HistoryKey } from '../../../history/HistoryKey';
 import { UpdateItem, UpdateGeometriesTask } from '../../../history/tasks/features/UpdateGeometriesTask';
 import { Logger } from '@abc-map/frontend-commons';
 import { FeatureWrapper } from '../../features/FeatureWrapper';
+import { withMainButton } from '../common/common-conditions';
+import { defaultInteractions } from '../../map/interactions';
 
 const logger = Logger.get('SelectionTool.ts');
 
 export class SelectionTool extends AbstractTool {
+  private selection = new Collection<Feature<Geometry>>();
+
   public getId(): MapTool {
     return MapTool.Selection;
   }
@@ -28,27 +31,29 @@ export class SelectionTool extends AbstractTool {
     return 'Sélection';
   }
 
-  public setup(map: Map, source: VectorSource<Geometry>): void {
-    super.setup(map, source);
+  protected setupInternal(map: Map, source: VectorSource<Geometry>): void {
+    // Interactions for map view manipulation
+    const defaults = defaultInteractions();
+    defaults.forEach((i) => map.addInteraction(i));
+    this.interactions.push(...defaults);
 
-    const selection = new Collection<Feature<Geometry>>();
-
+    // Tool interactions
     const dragBox = new DragBox({
-      condition: onlyMainButton,
+      condition: withMainButton,
       className: 'abc-selection-box',
     });
 
     const sourceListener = source.on('addfeature', (evt) => {
       if (FeatureWrapper.from(evt.feature).isSelected()) {
-        selection.push(evt.feature);
+        this.selection.push(evt.feature);
 
         // If one feature were added, others can be deselected. So we remove them
-        selection
+        this.selection
           .getArray()
           .slice()
           .forEach((feat) => {
             if (!FeatureWrapper.from(feat).isSelected()) {
-              selection.remove(feat);
+              this.selection.remove(feat);
             }
           });
       }
@@ -56,14 +61,8 @@ export class SelectionTool extends AbstractTool {
     this.sourceListeners.push(sourceListener);
 
     dragBox.on('boxstart', () => {
-      selection.clear();
-      // WARNING: this can lead to poor performances
-      source.forEachFeature((feat) => {
-        const feature = FeatureWrapper.from(feat);
-        if (feature.isSelected()) {
-          feature.setSelected(false);
-        }
-      });
+      this.selection.forEach((f) => FeatureWrapper.from(f).setSelected(false));
+      this.selection.clear();
     });
 
     dragBox.on('boxend', () => {
@@ -72,25 +71,25 @@ export class SelectionTool extends AbstractTool {
         const geomExtent = feature.getGeometry()?.getExtent();
         if (isWithinExtent(extent, geomExtent)) {
           FeatureWrapper.from(feature).setSelected(true);
-          selection.push(feature);
+          this.selection.push(feature);
         }
       });
     });
 
     const translate = new Translate({
-      features: selection,
+      features: this.selection,
     });
 
     let translated: FeatureWrapper[] = [];
     translate.on('translatestart', () => {
-      selection.forEach((feat) => {
+      this.selection.forEach((feat) => {
         const clone = FeatureWrapper.from(feat).clone();
         translated.push(clone);
       });
     });
 
     translate.on('translateend', () => {
-      const items = selection
+      const items = this.selection
         .getArray()
         .map((feat) => {
           const feature = FeatureWrapper.from(feat);
@@ -119,6 +118,12 @@ export class SelectionTool extends AbstractTool {
     map.addInteraction(translate);
     this.interactions.push(dragBox);
     this.interactions.push(translate);
+  }
+
+  protected disposeInternal() {
+    super.disposeInternal();
+    this.selection.forEach((f) => FeatureWrapper.from(f).setSelected(false));
+    this.selection.clear();
   }
 }
 

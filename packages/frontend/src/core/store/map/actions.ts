@@ -13,6 +13,7 @@ export enum ActionType {
   SetTextSize = 'SetTextSize',
   SetPointIcon = 'SetPointIcon',
   SetPointSize = 'SetPointSize',
+  SetPointColor = 'SetPointColor',
 }
 
 export interface SetTool {
@@ -65,6 +66,11 @@ export interface SetPointSize {
   size: number;
 }
 
+export interface SetPointColor {
+  type: ActionType.SetPointColor;
+  color: string;
+}
+
 export type MapAction =
   | SetTool
   | SetStrokeColor
@@ -75,7 +81,8 @@ export type MapAction =
   | SetTextColor
   | SetTextSize
   | SetPointIcon
-  | SetPointSize;
+  | SetPointSize
+  | SetPointColor;
 
 export class MapActions {
   public static setTool(tool: MapTool): MapAction {
@@ -145,6 +152,13 @@ export class MapActions {
     return {
       type: ActionType.SetPointSize,
       size,
+    };
+  }
+
+  public static setPointColor(color: string): MapAction {
+    return {
+      type: ActionType.SetPointColor,
+      color,
     };
   }
 }

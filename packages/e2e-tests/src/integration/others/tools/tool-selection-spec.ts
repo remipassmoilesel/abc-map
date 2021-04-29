@@ -172,7 +172,7 @@ describe('Tool Selection', function () {
   it('user change stroke style then undo', function () {
     cy.visit(FrontendRoutes.map())
       .then(() => MainMap.getComponent())
-      .then(() => ToolSelector.enable(MapTool.Circle))
+      .then(() => ToolSelector.enable(MapTool.LineString))
       // Draw feature then select
       .then(() => Draw.click(150, 150))
       .then(() => Draw.click(200, 200))
@@ -206,7 +206,7 @@ describe('Tool Selection', function () {
   it('user change fill style then undo', function () {
     cy.visit(FrontendRoutes.map())
       .then(() => MainMap.getComponent())
-      .then(() => ToolSelector.enable(MapTool.Circle))
+      .then(() => ToolSelector.enable(MapTool.LineString))
       // Draw feature then select
       .then(() => Draw.click(150, 150))
       .then(() => Draw.click(200, 200))

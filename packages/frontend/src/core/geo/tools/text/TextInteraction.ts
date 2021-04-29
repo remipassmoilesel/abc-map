@@ -6,7 +6,7 @@ import VectorSource from 'ol/source/Vector';
 import { findFeatureNearCursor } from '../common/findFeatureNearCursor';
 import { Interaction } from 'ol/interaction';
 import MapBrowserEventType from 'ol/MapBrowserEventType';
-import { withMainButton, withShiftKey } from '../common/key-helpers';
+import { withMainButton, withShiftKey } from '../common/common-conditions';
 
 const logger = Logger.get('TextInteraction.ts');
 
@@ -66,12 +66,6 @@ export class TextInteraction extends Interaction {
   }
 
   private showTextBox(value: string, x: number, y: number, onChange: (text: string) => void, onClose: (text: string) => void) {
-    const body = document.querySelector('body');
-    if (!body) {
-      logger.error('Cannot show text box');
-      return;
-    }
-
     const backdrop = document.createElement('div');
     backdrop.style.position = 'fixed';
     backdrop.style.top = '0';
@@ -79,7 +73,7 @@ export class TextInteraction extends Interaction {
     backdrop.style.left = '0';
     backdrop.style.bottom = '0';
     backdrop.dataset['cy'] = 'text-box-backdrop';
-    body.append(backdrop);
+    document.body.append(backdrop);
 
     const box = document.createElement('input');
     box.type = 'text';
@@ -90,11 +84,11 @@ export class TextInteraction extends Interaction {
     box.style.left = x + 'px';
     box.style.top = y - 30 + 'px';
     box.style.width = `200px`;
-    body.append(box);
+    document.body.append(box);
 
     backdrop.addEventListener('click', () => {
-      body.removeChild(backdrop);
-      body.removeChild(box);
+      document.body.removeChild(backdrop);
+      document.body.removeChild(box);
       onClose(box.value);
     });
 

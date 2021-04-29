@@ -5,12 +5,10 @@ import { ToolRegistry } from '../../../core/geo/tools/ToolRegistry';
 import { MapTool } from '@abc-map/frontend-commons';
 import { MainState } from '../../../core/store/reducer';
 import SelectionPanel from './selection/SelectionPanel';
-import CirclePanel from './circle/CirclePanel';
 import LineStringPanel from './line-string/LineStringPanel';
 import PointPanel from './point/PointPanel';
 import PolygonPanel from './polygon/PolygonPanel';
 import TextPanel from './text/TextPanel';
-import RectanglePanel from './rectangle/RectanglePanel';
 import { LayerWrapper } from '../../../core/geo/layers/LayerWrapper';
 import { LayerFactory } from '../../../core/geo/layers/LayerFactory';
 import { HistoryKey } from '../../../core/history/HistoryKey';
@@ -85,10 +83,6 @@ class ToolSelector extends Component<Props, {}> {
       return <LineStringPanel />;
     } else if (MapTool.Polygon === this.props.currentTool) {
       return <PolygonPanel />;
-    } else if (MapTool.Circle === this.props.currentTool) {
-      return <CirclePanel />;
-    } else if (MapTool.Rectangle === this.props.currentTool) {
-      return <RectanglePanel />;
     } else if (MapTool.Text === this.props.currentTool) {
       return <TextPanel />;
     } else if (MapTool.Selection === this.props.currentTool) {

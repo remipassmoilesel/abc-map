@@ -21,11 +21,13 @@ import TileSource from 'ol/source/Tile';
 import VectorSource from 'ol/source/Vector';
 import Geometry from 'ol/geom/Geometry';
 import VectorImageLayer from 'ol/layer/VectorImage';
+import { Source } from 'ol/source';
+import { Layer } from 'ol/layer';
 
 export const logger = Logger.get('LayerWrapper');
 
-export declare type OlLayers = VectorImageLayer | TileLayer;
-export declare type OlSources = VectorSource<Geometry> | TileSource;
+export declare type OlLayers = Layer | VectorImageLayer | TileLayer;
+export declare type OlSources = Source | VectorSource<Geometry> | TileSource;
 
 export declare type VectorLayerWrapper = LayerWrapper<VectorImageLayer, VectorSource<Geometry>, VectorMetadata>;
 export declare type PredefinedLayerWrapper = LayerWrapper<TileLayer, TileSource, PredefinedMetadata>;
@@ -53,7 +55,6 @@ export class LayerWrapper<Layer extends OlLayers = OlLayers, Source extends OlSo
    * VectorImageLayer should extends BaseLayer<VectorSource> but it does not.
    */
   public getSource(): Source {
-    // Typing is broken here
     return this.layer.getSource() as Source;
   }
 
@@ -130,7 +131,6 @@ export class LayerWrapper<Layer extends OlLayers = OlLayers, Source extends OlSo
    * Shallow clone layer
    */
   public shallowClone(): LayerWrapper<Layer, Source, Meta> {
-    // Typings are broken here
     let layer: TileLayer | VectorImageLayer;
     if (this.isPredefined()) {
       layer = new TileLayer({ source: this.layer.getSource() as TileSource });
@@ -298,7 +298,7 @@ export class LayerWrapper<Layer extends OlLayers = OlLayers, Source extends OlSo
         return Promise.reject(new Error('Invalid vector layer'));
       }
       const geoJson = new GeoJSON();
-      const source = this.getSource() as VectorSource<Geometry>; // Typing is buggy here
+      const source = this.getSource() as VectorSource<Geometry>;
       const features = geoJson.writeFeaturesObject(source.getFeatures());
       return {
         type: LayerType.Vector,

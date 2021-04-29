@@ -7,7 +7,7 @@ describe('Map reducer', function () {
   it('SetTool', function () {
     const initial: MapState = {
       ...mapInitialState,
-      tool: MapTool.Circle,
+      tool: MapTool.LineString,
     };
     const snapshot = JSON.stringify(initial);
 

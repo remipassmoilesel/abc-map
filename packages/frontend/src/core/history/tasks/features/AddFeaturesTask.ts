@@ -3,7 +3,7 @@ import VectorSource from 'ol/source/Vector';
 import { FeatureWrapper } from '../../../geo/features/FeatureWrapper';
 
 export class AddFeaturesTask extends Task {
-  constructor(private source: VectorSource, private features: FeatureWrapper[]) {
+  constructor(public readonly source: VectorSource, public readonly features: FeatureWrapper[]) {
     super();
   }
 

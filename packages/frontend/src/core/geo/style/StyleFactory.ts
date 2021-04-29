@@ -49,7 +49,7 @@ export class StyleFactory {
     if (GeometryType.POINT === type || GeometryType.MULTI_POINT === type) {
       const size = properties.point?.size || 10;
       const name = (properties.point?.icon as PointIcons) || PointIcons.Square;
-      const color = properties.fill?.color1 || '#000000';
+      const color = properties.point?.color || '#000000';
       const icon = IconProcessor.prepare(safeGetIcon(name), size, color);
       const pointStyle = new Icon({ img: icon, imgSize: [size, size] });
       return [new Style({ image: pointStyle, text: textStyle })];

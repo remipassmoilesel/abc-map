@@ -1,9 +1,9 @@
 import React, { ChangeEvent, Component, ReactNode } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
-import { MainState } from '../../../../core/store/reducer';
-import { MapActions } from '../../../../core/store/map/actions';
+import { MainState } from '../../../../../core/store/reducer';
+import { MapActions } from '../../../../../core/store/map/actions';
 import * as _ from 'lodash';
-import { ServiceProps, withServices } from '../../../../core/withServices';
+import { ServiceProps, withServices } from '../../../../../core/withServices';
 import Cls from './PointSizeSelector.module.scss';
 
 const mapStateToProps = (state: MainState) => ({
@@ -43,11 +43,13 @@ class StrokeWidthSelector extends Component<Props, {}> {
     this.props.setPointSize(size);
 
     geo.updateSelectedFeatures((style) => {
-      style.point = {
-        ...style.point,
-        size,
+      return {
+        ...style,
+        point: {
+          ...style.point,
+          size,
+        },
       };
-      return style;
     });
   };
 }

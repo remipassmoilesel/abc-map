@@ -41,11 +41,13 @@ class StrokeWidthSelector extends Component<Props, {}> {
     this.props.setStrokeWidth(width);
 
     geo.updateSelectedFeatures((style) => {
-      style.stroke = {
-        ...style.stroke,
-        width,
+      return {
+        ...style,
+        stroke: {
+          ...style.stroke,
+          width,
+        },
       };
-      return style;
     });
   };
 }

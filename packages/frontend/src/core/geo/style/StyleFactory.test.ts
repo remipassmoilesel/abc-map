@@ -60,12 +60,10 @@ describe('StyleFactory', () => {
       const feature = new Feature<Geometry>(new Point([1, 1]));
       const properties = {
         ...TestHelper.sampleStyleProperties(),
-        fill: {
-          color1: '#ABCDEF',
-        },
         point: {
           icon: PointIcons.Square,
           size: 25,
+          color: '#ABCDEF',
         },
       };
 

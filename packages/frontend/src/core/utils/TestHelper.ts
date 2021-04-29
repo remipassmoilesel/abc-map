@@ -22,6 +22,9 @@ import { FeatureStyle } from '../geo/style/FeatureStyle';
 import { CompressedProject } from '../project/CompressedProject';
 import { Zipper } from '@abc-map/frontend-commons';
 import { PointIcons } from '../geo/style/PointIcons';
+import { Coordinate } from 'ol/coordinate';
+import MapBrowserEvent from 'ol/MapBrowserEvent';
+import { Map } from 'ol';
 
 export class TestHelper {
   public static samplePointFeature(): Feature<Geometry> {
@@ -183,16 +186,16 @@ export class TestHelper {
     return {
       stroke: {
         width: 5,
-        color: 'black',
+        color: '#000000',
       },
       fill: {
-        color1: 'white',
-        color2: 'blue',
+        color1: '#FFFFFF',
+        color2: '#FF0000',
         pattern: FillPatterns.HatchingObliqueLeft,
       },
       text: {
         value: 'Test text value',
-        color: '#00f',
+        color: '#0000FF',
         size: 30,
         font: 'sans-serif',
         offsetX: 20,
@@ -202,7 +205,37 @@ export class TestHelper {
       point: {
         icon: PointIcons.Star,
         size: 5,
+        color: '#00FF00',
       },
     };
+  }
+
+  public static mapBrowserEvent(coordinate: Coordinate, resolution = 2): MapBrowserEvent<UIEvent> {
+    return {
+      coordinate,
+      map: {
+        getView() {
+          return {
+            getResolution() {
+              return resolution;
+            },
+          };
+        },
+      },
+    } as any;
+  }
+
+  public static interactionCount(map: Map, name: string): number {
+    return map
+      .getInteractions()
+      .getArray()
+      .filter((inter) => inter.constructor.name === name).length;
+  }
+
+  public static interactionNames(map: Map): string[] {
+    return map
+      .getInteractions()
+      .getArray()
+      .map((inter) => inter.constructor.name);
   }
 }

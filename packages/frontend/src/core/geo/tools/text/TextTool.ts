@@ -28,9 +28,7 @@ export class TextTool extends AbstractTool {
     return 'Texte';
   }
 
-  public setup(map: Map, source: VectorSource<Geometry>): void {
-    super.setup(map, source);
-
+  protected setupInternal(map: Map, source: VectorSource<Geometry>): void {
     const text = new TextInteraction({ source });
 
     let before: FeatureStyle | undefined;

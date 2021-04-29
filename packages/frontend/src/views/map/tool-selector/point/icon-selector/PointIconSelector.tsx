@@ -1,11 +1,11 @@
 import React, { Component, ReactNode } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
-import { MainState } from '../../../../core/store/reducer';
-import { MapActions } from '../../../../core/store/map/actions';
-import { ServiceProps, withServices } from '../../../../core/withServices';
+import { MainState } from '../../../../../core/store/reducer';
+import { MapActions } from '../../../../../core/store/map/actions';
+import { ServiceProps, withServices } from '../../../../../core/withServices';
 import { Modal } from 'react-bootstrap';
-import { getAllIcons, safeGetIcon, PointIcon } from '../../../../core/geo/style/PointIcons';
-import { IconProcessor } from '../../../../core/geo/style/IconProcessor';
+import { getAllIcons, safeGetIcon, PointIcon } from '../../../../../core/geo/style/PointIcons';
+import { IconProcessor } from '../../../../../core/geo/style/IconProcessor';
 import Cls from './PointIconSelector.module.scss';
 
 interface IconPreview {
@@ -109,11 +109,13 @@ class PointIconSelector extends Component<Props, State> {
     this.props.setPointIcon(icon.name);
 
     geo.updateSelectedFeatures((style) => {
-      style.point = {
-        ...style.point,
-        icon: icon.name,
+      return {
+        ...style,
+        point: {
+          ...style.point,
+          icon: icon.name,
+        },
       };
-      return style;
     });
 
     this.setState({ modal: false });
