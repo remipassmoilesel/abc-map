@@ -89,6 +89,14 @@ export function mapReducer(state = mapInitialState, action: MapAction): MapState
       return newState;
     }
 
+    case ActionType.SetPointColor: {
+      const newState: MapState = { ...state };
+      newState.currentStyle = { ...newState.currentStyle };
+      newState.currentStyle.point = { ...newState.currentStyle.point };
+      newState.currentStyle.point.color = action.color;
+      return newState;
+    }
+
     default:
       return state;
   }

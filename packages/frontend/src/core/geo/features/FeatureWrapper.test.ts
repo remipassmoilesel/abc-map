@@ -183,13 +183,13 @@ describe('FeatureWrapper', () => {
         feature.setStyleProperties(TestHelper.sampleStyleProperties());
 
         const ol = feature.unwrap();
-        expect(ol.get(StyleProperties.StrokeColor)).toEqual('black');
+        expect(ol.get(StyleProperties.StrokeColor)).toEqual('#000000');
         expect(ol.get(StyleProperties.StrokeWidth)).toEqual(5);
-        expect(ol.get(StyleProperties.FillColor1)).toEqual('white');
-        expect(ol.get(StyleProperties.FillColor2)).toEqual('blue');
+        expect(ol.get(StyleProperties.FillColor1)).toEqual('#FFFFFF');
+        expect(ol.get(StyleProperties.FillColor2)).toEqual('#FF0000');
         expect(ol.get(StyleProperties.FillPattern)).toEqual(FillPatterns.HatchingObliqueLeft);
         expect(ol.get(StyleProperties.TextValue)).toEqual('Test text value');
-        expect(ol.get(StyleProperties.TextColor)).toEqual('#00f');
+        expect(ol.get(StyleProperties.TextColor)).toEqual('#0000FF');
         expect(ol.get(StyleProperties.TextSize)).toEqual(30);
         expect(ol.get(StyleProperties.TextFont)).toEqual('sans-serif');
         expect(ol.get(StyleProperties.TextOffsetX)).toEqual(20);
@@ -197,6 +197,7 @@ describe('FeatureWrapper', () => {
         expect(ol.get(StyleProperties.TextAlignment)).toEqual('left');
         expect(ol.get(StyleProperties.PointIcon)).toEqual('star');
         expect(ol.get(StyleProperties.PointSize)).toEqual(5);
+        expect(ol.get(StyleProperties.PointColor)).toEqual('#00FF00');
       });
 
       it('setStyleProperties() should not set undefined properties', () => {
@@ -220,12 +221,12 @@ describe('FeatureWrapper', () => {
     it('getStyleProperties()', () => {
       const feature = FeatureWrapper.create();
       feature.unwrap().set(StyleProperties.StrokeWidth, 5);
-      feature.unwrap().set(StyleProperties.StrokeColor, 'black');
-      feature.unwrap().set(StyleProperties.FillColor1, 'white');
-      feature.unwrap().set(StyleProperties.FillColor2, 'blue');
+      feature.unwrap().set(StyleProperties.StrokeColor, '#000000');
+      feature.unwrap().set(StyleProperties.FillColor1, '#FFFFFF');
+      feature.unwrap().set(StyleProperties.FillColor2, '#FF0000');
       feature.unwrap().set(StyleProperties.FillPattern, FillPatterns.HatchingObliqueLeft);
       feature.unwrap().set(StyleProperties.TextValue, 'Test text value');
-      feature.unwrap().set(StyleProperties.TextColor, '#00f');
+      feature.unwrap().set(StyleProperties.TextColor, '#0000FF');
       feature.unwrap().set(StyleProperties.TextSize, 30);
       feature.unwrap().set(StyleProperties.TextFont, 'sans-serif');
       feature.unwrap().set(StyleProperties.TextOffsetX, 20);
@@ -233,6 +234,7 @@ describe('FeatureWrapper', () => {
       feature.unwrap().set(StyleProperties.TextAlignment, 'left');
       feature.unwrap().set(StyleProperties.PointIcon, PointIcons.Star);
       feature.unwrap().set(StyleProperties.PointSize, 5);
+      feature.unwrap().set(StyleProperties.PointColor, '#00FF00');
 
       const properties = feature.getStyleProperties();
 
@@ -249,9 +251,9 @@ describe('FeatureWrapper', () => {
       feature.setText('Sample text');
 
       expect(feature.unwrap().get(StyleProperties.StrokeWidth)).toEqual(5);
-      expect(feature.unwrap().get(StyleProperties.StrokeColor)).toEqual('black');
-      expect(feature.unwrap().get(StyleProperties.FillColor1)).toEqual('white');
-      expect(feature.unwrap().get(StyleProperties.FillColor2)).toEqual('blue');
+      expect(feature.unwrap().get(StyleProperties.StrokeColor)).toEqual('#000000');
+      expect(feature.unwrap().get(StyleProperties.FillColor1)).toEqual('#FFFFFF');
+      expect(feature.unwrap().get(StyleProperties.FillColor2)).toEqual('#FF0000');
       expect(feature.unwrap().get(StyleProperties.FillPattern)).toEqual(FillPatterns.HatchingObliqueLeft);
     });
 

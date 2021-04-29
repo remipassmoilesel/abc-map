@@ -82,7 +82,7 @@ describe('EditPropertiesTool', () => {
   it('dispose()', () => {
     tool.dispose();
 
-    expect(map.removeInteraction.callCount).toBeGreaterThan(1);
-    expect(map.removeInteraction.args.map((f) => f[0].constructor.name)).toContain('EditPropertiesInteraction');
+    expect(map.removeInteraction.callCount).toEqual(1);
+    expect(map.removeInteraction.args[0][0].constructor.name).toEqual('EditPropertiesInteraction');
   });
 });

@@ -14,23 +14,11 @@ export class MapKeyboardListener {
   constructor(private services: Services) {}
 
   public initialize(): void {
-    const body = document.querySelector('body');
-    if (!body) {
-      logger.error('Body element not ready');
-      return;
-    }
-
-    body.addEventListener('keypress', this.handleKeyPress);
+    document.body.addEventListener('keypress', this.handleKeyPress);
   }
 
   public destroy(): void {
-    const body = document.querySelector('body');
-    if (!body) {
-      logger.error('Body element not ready');
-      return;
-    }
-
-    body.removeEventListener('keypress', this.handleKeyPress);
+    document.body.removeEventListener('keypress', this.handleKeyPress);
   }
 
   /**
@@ -45,15 +33,21 @@ export class MapKeyboardListener {
       return;
     }
 
-    ev.preventDefault();
-    ev.stopPropagation();
-
     if (Shortcuts.isDelete(ev)) {
       this.deleteSelectedFeatures();
+
+      ev.preventDefault();
+      ev.stopPropagation();
     } else if (Shortcuts.isRedo(ev)) {
       this.redo();
+
+      ev.preventDefault();
+      ev.stopPropagation();
     } else if (Shortcuts.isUndo(ev)) {
       this.undo();
+
+      ev.preventDefault();
+      ev.stopPropagation();
     }
   };
 

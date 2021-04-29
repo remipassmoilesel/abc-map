@@ -21,6 +21,7 @@ import { toLonLat } from 'ol/proj';
 import CursorPosition from './cursor-position/CursorPosition';
 import { Coordinate } from 'ol/coordinate';
 import { MapKeyboardListener } from './keyboard-listener/MapKeyboardListener';
+import { MapEvent } from 'ol';
 
 const logger = Logger.get('MapView.tsx', 'debug');
 
@@ -87,6 +88,7 @@ export class MapView extends Component<Props, State> {
 
     map.unwrap().on('rendercomplete', this.handleRenderComplete);
     map.unwrap().on('pointermove', this.handlePointerMove);
+    map.unwrap().on('error', this.handleMapError);
 
     const keyboardListener = MapKeyboardListener.create();
     keyboardListener.initialize();
@@ -121,6 +123,13 @@ export class MapView extends Component<Props, State> {
     200,
     { trailing: true }
   );
+
+  private handleMapError = (ev: MapEvent) => {
+    const { toasts } = this.props.services;
+
+    logger.error('Map error: ', ev);
+    toasts.genericError();
+  };
 }
 
 export default connector(withServices(MapView));

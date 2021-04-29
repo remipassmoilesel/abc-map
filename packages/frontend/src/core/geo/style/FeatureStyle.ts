@@ -61,6 +61,7 @@ export interface TextProperties {
 
 export interface PointProperties {
   icon?: string;
+  color?: string;
   size?: number;
 }
 

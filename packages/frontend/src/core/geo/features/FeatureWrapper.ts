@@ -5,23 +5,38 @@ import { FeatureStyle, DefaultStyle } from '../style/FeatureStyle';
 import { StyleFactory } from '../style/StyleFactory';
 import { nanoid } from 'nanoid';
 import GeometryType from 'ol/geom/GeometryType';
+import { Point, Circle, GeometryCollection, LinearRing, LineString, MultiLineString, MultiPoint, MultiPolygon, Polygon } from 'ol/geom';
+import { Logger } from '@abc-map/frontend-commons';
+
+const logger = Logger.get('FeatureWrapper.ts');
 
 const styles = new StyleFactory();
 
 export declare type PropertiesMap = { [key: string]: any };
 export declare type SimplePropertiesMap = { [key: string]: string | number | undefined };
+export declare type OlGeometry =
+  | Geometry
+  | Point
+  | LineString
+  | LinearRing
+  | Polygon
+  | MultiPoint
+  | MultiLineString
+  | MultiPolygon
+  | GeometryCollection
+  | Circle;
 
 /**
  * This class is a thin wrapper around Openlayers features, used to ensure that critical operations
  * on features are well done
  */
-export class FeatureWrapper {
+export class FeatureWrapper<Geom extends OlGeometry = OlGeometry> {
   public static create(geom?: Geometry): FeatureWrapper {
     return new FeatureWrapper(new Feature<Geometry>(geom)).setId();
   }
 
-  public static from(ol: Feature<Geometry>): FeatureWrapper {
-    return new FeatureWrapper(ol);
+  public static from<T extends OlGeometry = OlGeometry>(ol: Feature<T>): FeatureWrapper<T> {
+    return new FeatureWrapper<T>(ol);
   }
 
   public static fromFeatureLike(ol: FeatureLike): FeatureWrapper | undefined {
@@ -33,9 +48,9 @@ export class FeatureWrapper {
     }
   }
 
-  constructor(private feature: Feature<Geometry>) {}
+  constructor(private feature: Feature<Geom>) {}
 
-  public unwrap(): Feature<Geometry> {
+  public unwrap(): Feature<Geom> {
     return this.feature;
   }
 
@@ -100,6 +115,7 @@ export class FeatureWrapper {
       point: {
         icon: this.feature.get(StyleProperties.PointIcon),
         size: this.feature.get(StyleProperties.PointSize),
+        color: this.feature.get(StyleProperties.PointColor),
       },
     };
   }
@@ -129,6 +145,7 @@ export class FeatureWrapper {
     setIfDefined(StyleProperties.TextAlignment, properties.text?.alignment);
     setIfDefined(StyleProperties.PointIcon, properties.point?.icon);
     setIfDefined(StyleProperties.PointSize, properties.point?.size);
+    setIfDefined(StyleProperties.PointColor, properties.point?.color);
 
     this.applyStyle();
 
@@ -170,7 +187,7 @@ export class FeatureWrapper {
     return this;
   }
 
-  public getGeometry(): Geometry | undefined {
+  public getGeometry(): Geom | undefined {
     return this.feature.getGeometry();
   }
 

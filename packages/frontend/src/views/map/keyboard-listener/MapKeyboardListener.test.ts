@@ -54,7 +54,6 @@ describe('MapKeyboardListener', () => {
 
   it('should delete on Delete if features found', () => {
     // Prepare
-    const body = getBody();
     const event = new KeyboardEvent('keypress', { key: 'Delete' });
     const map = sinon.createStubInstance(MapWrapper);
     const vectorLayer = sinon.createStubInstance(LayerWrapper);
@@ -65,7 +64,7 @@ describe('MapKeyboardListener', () => {
     vectorLayer.getSource.returns(vectorSource);
 
     // Act
-    body.dispatchEvent(event);
+    document.body.dispatchEvent(event);
 
     expect(vectorSource.removeFeature.callCount).toEqual(1);
     expect(history.register.callCount).toEqual(1);
@@ -73,7 +72,6 @@ describe('MapKeyboardListener', () => {
 
   it('should not delete on Delete if features not found', () => {
     // Prepare
-    const body = getBody();
     const event = new KeyboardEvent('keypress', { key: 'Delete' });
     const map = sinon.createStubInstance(MapWrapper);
     const vectorLayer = sinon.createStubInstance(LayerWrapper);
@@ -84,44 +82,34 @@ describe('MapKeyboardListener', () => {
     vectorLayer.getSource.returns(vectorSource);
 
     // Act
-    body.dispatchEvent(event);
+    document.body.dispatchEvent(event);
 
     expect(vectorSource.removeFeature.callCount).toEqual(0);
     expect(history.register.callCount).toEqual(0);
   });
 
   it('should undo on CTRL + Z', () => {
-    const body = getBody();
     const event = new KeyboardEvent('keypress', { ctrlKey: true, key: 'z' });
     history.canUndo.returns(true);
     history.undo.resolves();
 
-    body.dispatchEvent(event);
+    document.body.dispatchEvent(event);
 
     expect(history.canUndo.callCount).toEqual(1);
     expect(history.undo.callCount).toEqual(1);
   });
 
   it('should redo on CTRL + MAJ + Z', () => {
-    const body = getBody();
     const event = new KeyboardEvent('keypress', { ctrlKey: true, shiftKey: true, key: 'Z' });
     history.canRedo.returns(true);
     history.redo.resolves();
 
-    body.dispatchEvent(event);
+    document.body.dispatchEvent(event);
 
     expect(history.canRedo.callCount).toEqual(1);
     expect(history.redo.callCount).toEqual(1);
   });
 });
-
-function getBody(): HTMLBodyElement {
-  const body = document.querySelector('body');
-  if (!body) {
-    throw new Error('Body not found');
-  }
-  return body;
-}
 
 function fakeEvent(target: Node, key: string, ctrlKey = false) {
   return {

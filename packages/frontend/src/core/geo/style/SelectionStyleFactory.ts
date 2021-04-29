@@ -10,8 +10,8 @@ export const logger = Logger.get('SelectionStyleFactory.ts');
 
 // TODO: test
 
-const fillColor = '#ffc9c955';
-const strokeColor = '#ff0000';
+const fillColor = 'rgba(201,211,255,0.33)';
+const strokeColor = '#4671ff';
 const width = 3;
 
 const strokeDash = new Stroke({

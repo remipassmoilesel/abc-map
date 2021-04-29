@@ -1,25 +1,31 @@
 import MapBrowserEvent from 'ol/MapBrowserEvent';
+import { FeatureLike } from 'ol/Feature';
+import GeometryType from 'ol/geom/GeometryType';
 
-/**
- * Originally we were checking if event was a PointerEvent, and it was handy and simple.
- * But, sometimes it does not !
- */
-interface MayContainsButton {
-  button?: number;
+export function withShiftKey(ev: MapBrowserEvent<UIEvent | KeyboardEvent | MouseEvent | TouchEvent>): boolean {
+  const original = ev.originalEvent;
+  return 'shiftKey' in original && original.shiftKey;
 }
 
-/**
- * Condition that return true if event is main mouse button click event.
- *
- * Used with openlayers interactions.
- *
- * @param ev
- */
-export function onlyMainButton(ev: MapBrowserEvent<UIEvent>): boolean {
-  const mainButton = 0;
-  const originalEvent: MayContainsButton = ev.originalEvent as any;
-  if (typeof originalEvent.button !== 'undefined') {
-    return originalEvent.button === mainButton;
-  }
-  return false;
+export function withControlKey(ev: MapBrowserEvent<UIEvent | KeyboardEvent | MouseEvent | TouchEvent>): boolean {
+  const original = ev.originalEvent;
+  return 'ctrlKey' in original && original.ctrlKey;
+}
+
+export function withControlKeyOnly(ev: MapBrowserEvent<UIEvent | KeyboardEvent | MouseEvent | TouchEvent>): boolean {
+  return withControlKey(ev) && !withShiftKey(ev) && !withAltKey(ev);
+}
+
+export function withAltKey(ev: MapBrowserEvent<UIEvent | KeyboardEvent | MouseEvent | TouchEvent>): boolean {
+  const original = ev.originalEvent;
+  return 'altKey' in original && original.altKey;
+}
+
+export function withMainButton(ev: MapBrowserEvent<UIEvent | KeyboardEvent | MouseEvent | TouchEvent>): boolean {
+  const original = ev.originalEvent;
+  return 'button' in original && original.button === 0;
+}
+
+export function withGeometry(feat: FeatureLike, type: GeometryType): boolean {
+  return feat && feat.getGeometry()?.getType() === type;
 }

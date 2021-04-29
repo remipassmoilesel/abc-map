@@ -2,8 +2,8 @@ import { MainStore } from '../../../store/store';
 import { HistoryService } from '../../../history/HistoryService';
 import { Map } from 'ol';
 import VectorSource from 'ol/source/Vector';
-import { OlTestHelper } from '../../../utils/OlTestHelper';
 import { TextTool } from './TextTool';
+import { TestHelper } from '../../../utils/TestHelper';
 
 describe('Text', () => {
   it('setup()', () => {
@@ -17,7 +17,7 @@ describe('Text', () => {
 
     expect(text.getMap()).toStrictEqual(map);
     expect(text.getSource()).toStrictEqual(source);
-    const interactions = OlTestHelper.getInteractionNames(map);
+    const interactions = TestHelper.interactionNames(map);
     expect(interactions).toContain('TextInteraction');
   });
 
@@ -31,7 +31,7 @@ describe('Text', () => {
     text.setup(map, source);
     text.dispose();
 
-    const interactions = OlTestHelper.getInteractionNames(map);
+    const interactions = TestHelper.interactionNames(map);
     expect(interactions).not.toContain('TextInteraction');
   });
 });

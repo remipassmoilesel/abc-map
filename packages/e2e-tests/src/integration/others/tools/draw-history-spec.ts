@@ -13,7 +13,7 @@ describe('Draw features history', function () {
   it('user can add feature then undo and redo', function () {
     cy.visit(FrontendRoutes.map())
       .then(() => MainMap.getComponent())
-      .then(() => ToolSelector.enable(MapTool.Circle))
+      .then(() => ToolSelector.enable(MapTool.LineString))
       // First circle
       .then(() => Draw.click(100, 100))
       .then(() => Draw.click(150, 150))
@@ -61,7 +61,7 @@ describe('Draw features history', function () {
   it('user can modify feature then undo', function () {
     cy.visit(FrontendRoutes.map())
       .then(() => MainMap.getComponent())
-      .then(() => ToolSelector.enable(MapTool.Circle))
+      .then(() => ToolSelector.enable(MapTool.LineString))
       // First circle
       .then(() => Draw.click(100, 100))
       .then(() => Draw.click(150, 150))

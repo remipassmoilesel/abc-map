@@ -13,6 +13,7 @@ export enum StyleProperties {
   TextAlignment = 'abc:style:text:alignment',
   PointIcon = 'abc:style:point:icon',
   PointSize = 'abc:style:point:size',
+  PointColor = 'abc:style:point:color',
 }
 
 export enum FillPatterns {

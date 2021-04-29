@@ -38,9 +38,7 @@ export class EditPropertiesTool extends AbstractTool {
     return 'Editer les propriétés';
   }
 
-  public setup(map: Map, source: VectorSource<Geometry>): void {
-    super.setup(map, source);
-
+  protected setupInternal(map: Map, source: VectorSource<Geometry>): void {
     const edit = this.newInteraction({ source });
 
     edit.on(EditPropertiesEvent.FeatureSelected, (ev: FeatureSelected) => {

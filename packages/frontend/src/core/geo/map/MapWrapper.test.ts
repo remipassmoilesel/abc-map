@@ -4,13 +4,13 @@ import { MapTool } from '@abc-map/frontend-commons';
 import { Map } from 'ol';
 import { logger, MapWrapper } from './MapWrapper';
 import { ToolRegistry } from '../tools/ToolRegistry';
-import { OlTestHelper } from '../../utils/OlTestHelper';
-import { CircleTool } from '../tools/circle/CircleTool';
 import TileLayer from 'ol/layer/Tile';
 import { LayerFactory } from '../layers/LayerFactory';
 import VectorImageLayer from 'ol/layer/VectorImage';
 import { NoneTool } from '../tools/none/NoneTool';
 import { DragRotateAndZoom } from 'ol/interaction';
+import { LineStringTool } from '../tools/line-string/LineStringTool';
+import { TestHelper } from '../../utils/TestHelper';
 
 logger.disable();
 
@@ -178,7 +178,7 @@ describe('MapWrapper', function () {
 
       map.setDefaultInteractions();
 
-      expect(OlTestHelper.getInteractionNames(map.unwrap())).toEqual(['DragPan', 'MouseWheelZoom']);
+      expect(TestHelper.interactionNames(map.unwrap())).toEqual(['DoubleClickZoom', 'DragPan', 'KeyboardPan', 'MouseWheelZoom']);
     });
 
     it('set', () => {
@@ -187,7 +187,7 @@ describe('MapWrapper', function () {
 
       map.cleanInteractions();
 
-      expect(OlTestHelper.getInteractionNames(map.unwrap())).toEqual([]);
+      expect(TestHelper.interactionNames(map.unwrap())).toEqual([]);
     });
   });
 
@@ -202,14 +202,14 @@ describe('MapWrapper', function () {
       map.addLayer(layer);
       map.setActiveLayer(layer);
 
-      const previous = ToolRegistry.getById(MapTool.Circle);
+      const previous = ToolRegistry.getById(MapTool.LineString);
       const disposeMock = jest.fn();
       previous.dispose = disposeMock;
 
       map.setTool(previous);
       disposeMock.mockReset();
 
-      const tool = ToolRegistry.getById(MapTool.Circle);
+      const tool = ToolRegistry.getById(MapTool.LineString);
       map.setTool(tool);
 
       expect(disposeMock).toHaveBeenCalledTimes(1);
@@ -221,7 +221,7 @@ describe('MapWrapper', function () {
       map.addLayer(layer);
       map.setActiveLayer(layer);
 
-      const tool = ToolRegistry.getById(MapTool.Circle);
+      const tool = ToolRegistry.getById(MapTool.LineString);
       tool.setup = jest.fn();
       map.setTool(tool);
 
@@ -235,12 +235,12 @@ describe('MapWrapper', function () {
       map.addLayer(layer);
       map.setActiveLayer(layer);
 
-      map.setTool(ToolRegistry.getById(MapTool.Circle));
+      map.setTool(ToolRegistry.getById(MapTool.LineString));
       map.setTool(ToolRegistry.getById(MapTool.None));
 
       expect(map.getCurrentTool()).toBeInstanceOf(NoneTool);
-      expect(OlTestHelper.getInteractionCount(map.unwrap(), 'Draw')).toEqual(0);
-      expect(OlTestHelper.getInteractionCount(map.unwrap(), 'Modify')).toEqual(0);
+      expect(TestHelper.interactionCount(map.unwrap(), 'Draw')).toEqual(0);
+      expect(TestHelper.interactionCount(map.unwrap(), 'Modify')).toEqual(0);
     });
 
     it('Set active layer should disable interaction (Vector -> Tile)', () => {
@@ -251,12 +251,12 @@ describe('MapWrapper', function () {
       map.addLayer(tile);
       map.setActiveLayer(vector);
 
-      map.setTool(ToolRegistry.getById(MapTool.Circle));
+      map.setTool(ToolRegistry.getById(MapTool.LineString));
       map.setActiveLayer(tile);
 
-      expect(map.getCurrentTool()).toBeInstanceOf(CircleTool);
-      expect(OlTestHelper.getInteractionCount(map.unwrap(), 'Draw')).toEqual(0);
-      expect(OlTestHelper.getInteractionCount(map.unwrap(), 'Modify')).toEqual(0);
+      expect(map.getCurrentTool()).toBeInstanceOf(LineStringTool);
+      expect(TestHelper.interactionCount(map.unwrap(), 'Draw')).toEqual(0);
+      expect(TestHelper.interactionCount(map.unwrap(), 'Modify')).toEqual(0);
     });
 
     it('Set active layer should enable interaction (Tile -> Vector)', () => {
@@ -268,12 +268,12 @@ describe('MapWrapper', function () {
       map.addLayer(tile);
       map.setActiveLayer(tile);
 
-      map.setTool(ToolRegistry.getById(MapTool.Circle));
+      map.setTool(ToolRegistry.getById(MapTool.LineString));
       map.setActiveLayer(vector);
 
-      expect(map.getCurrentTool()).toBeInstanceOf(CircleTool);
-      expect(OlTestHelper.getInteractionCount(map.unwrap(), 'Draw')).toEqual(1);
-      expect(OlTestHelper.getInteractionCount(map.unwrap(), 'Modify')).toEqual(1);
+      expect(map.getCurrentTool()).toBeInstanceOf(LineStringTool);
+      expect(TestHelper.interactionCount(map.unwrap(), 'Draw')).toEqual(1);
+      expect(TestHelper.interactionCount(map.unwrap(), 'Modify')).toEqual(1);
     });
   });
 });

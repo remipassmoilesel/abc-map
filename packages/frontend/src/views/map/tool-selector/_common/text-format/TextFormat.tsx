@@ -45,11 +45,13 @@ class TextFormat extends Component<Props, {}> {
 
     this.props.setColor(color);
     geo.updateSelectedFeatures((style) => {
-      style.text = {
-        ...style.text,
-        color,
+      return {
+        ...style,
+        text: {
+          ...style.text,
+          color,
+        },
       };
-      return style;
     });
   };
 
@@ -59,11 +61,13 @@ class TextFormat extends Component<Props, {}> {
     const size = parseInt(ev.target.value);
     this.props.setSize(size);
     geo.updateSelectedFeatures((style) => {
-      style.text = {
-        ...style.text,
-        size,
+      return {
+        ...style,
+        text: {
+          ...style.text,
+          size,
+        },
       };
-      return style;
     });
   };
 }

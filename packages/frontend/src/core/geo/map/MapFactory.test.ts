@@ -3,7 +3,7 @@ import { Map } from 'ol';
 import { MapFactory } from './MapFactory';
 import TileLayer from 'ol/layer/Tile';
 import VectorImageLayer from 'ol/layer/VectorImage';
-import { OlTestHelper } from '../../utils/OlTestHelper';
+import { TestHelper } from '../../utils/TestHelper';
 
 describe('MapFactory', () => {
   it('createDefault()', () => {
@@ -20,7 +20,7 @@ describe('MapFactory', () => {
     expect(layers[1].get(LayerProperties.Active)).toBeTruthy();
     expect(internal.getView().getProjection().getCode()).toEqual(DEFAULT_PROJECTION.name);
     expect(getControlNames(internal)).toEqual(['Attribution', 'Rotate', 'ScaleLine', 'Zoom']);
-    expect(OlTestHelper.getInteractionNames(internal)).toEqual(['DragPan', 'MouseWheelZoom']);
+    expect(TestHelper.interactionNames(internal)).toEqual(['DoubleClickZoom', 'DragPan', 'KeyboardPan', 'MouseWheelZoom']);
   });
 
   it('createNaked()', () => {

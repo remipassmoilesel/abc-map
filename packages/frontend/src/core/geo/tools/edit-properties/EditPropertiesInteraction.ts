@@ -5,7 +5,7 @@ import { FeatureSelected } from './EditPropertiesEvent';
 import { Interaction } from 'ol/interaction';
 import MapBrowserEventType from 'ol/MapBrowserEventType';
 import { findFeatureNearCursor } from '../common/findFeatureNearCursor';
-import { withMainButton, withShiftKey } from '../common/key-helpers';
+import { withMainButton, withShiftKey } from '../common/common-conditions';
 
 // TODO: test
 

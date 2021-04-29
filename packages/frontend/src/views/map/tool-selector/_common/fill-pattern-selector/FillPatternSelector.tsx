@@ -64,11 +64,13 @@ class FillPatternSelector extends Component<Props, State> {
     this.props.setPattern(pattern);
 
     geo.updateSelectedFeatures((style) => {
-      style.fill = {
-        ...style.fill,
-        pattern,
+      return {
+        ...style,
+        fill: {
+          ...style.fill,
+          pattern,
+        },
       };
-      return style;
     });
   };
 

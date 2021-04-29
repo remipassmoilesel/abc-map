@@ -2,7 +2,8 @@ import MapBrowserEvent from 'ol/MapBrowserEvent';
 import { Geometry } from 'ol/geom';
 import Feature from 'ol/Feature';
 import VectorSource from 'ol/source/Vector';
-import { FeatureWrapper } from '../../features/FeatureWrapper';
+import { toleranceFromStyle } from './toleranceFromStyle';
+import { isCloseTo } from './isCloseTo';
 
 const defaultTolerancePx = 5;
 
@@ -18,7 +19,7 @@ export const noopFilter: FeatureFilter = () => true;
  *
  */
 export function findFeatureNearCursor(
-  event: MapBrowserEvent<UIEvent>,
+  event: MapBrowserEvent,
   source: VectorSource,
   filter = noopFilter,
   tolerancePx = defaultTolerancePx
@@ -32,6 +33,7 @@ export function findFeatureNearCursor(
   }
 
   // If nothing found, we try to find a feature close to coordinates
+  // This code allow user to select small points
   const feature = source.getClosestFeatureToCoordinate(coord) as Feature<Geometry> | undefined; // getClosestFeatureToCoordinate typing is borked
   const closestPoint = feature?.getGeometry()?.getClosestPoint(coord);
   if (!feature || !closestPoint) {
@@ -39,12 +41,9 @@ export function findFeatureNearCursor(
   }
 
   const resolution = event.map.getView().getResolution() || 1;
-  const styleProps = FeatureWrapper.from(feature).getStyleProperties();
-  const pointSize = (styleProps.point?.size || 0) / 2;
-  const strokeWidth = (styleProps.stroke?.width || 0) / 2;
-  const tolerance = (tolerancePx + pointSize + strokeWidth) * resolution;
+  const tolerance = toleranceFromStyle(feature, resolution) + tolerancePx * resolution;
 
   const matchFilter = feature && filter(feature);
-  const closeTo = Math.abs(closestPoint[0] - coord[0]) <= tolerance && Math.abs(closestPoint[1] - coord[1]) <= tolerance;
+  const closeTo = isCloseTo(closestPoint, coord, tolerance);
   return (matchFilter && closeTo && feature) || undefined;
 }
