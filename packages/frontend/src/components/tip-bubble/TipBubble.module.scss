@@ -2,9 +2,15 @@
 
 .bubble {
   cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  margin: 0.3rem 1rem;
 
   :global(.fa) {
-    margin: 0.3rem 1rem;
     color: $primary !important;
+    font-size: 1.1rem;
   }
 }

@@ -318,7 +318,7 @@ describe('drawInteractionFactory.ts', () => {
       return;
     };
     event.pointerType = 'mouse';
-    event.pointerId = options?.button ?? 0;
+    event.pointerId = 1;
     event.button = options?.button ?? 0;
     const simulatedEvent = new MapBrowserEvent(type, map, event);
 

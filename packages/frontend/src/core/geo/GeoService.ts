@@ -14,6 +14,7 @@ import { HistoryKey } from '../history/HistoryKey';
 import { HistoryService } from '../history/HistoryService';
 import { LayerFactory } from './layers/LayerFactory';
 import { NominatimResult } from './NominatimResult';
+import { FeatureWrapper } from './features/FeatureWrapper';
 
 export const logger = Logger.get('GeoService.ts');
 
@@ -61,10 +62,10 @@ export class GeoService {
     });
   }
 
-  public updateSelectedFeatures(transform: (x: FeatureStyle) => FeatureStyle) {
+  public updateSelectedFeatures(transform: (x: FeatureStyle, f: FeatureWrapper) => FeatureStyle) {
     const historyItems: UpdateStyleItem[] = [];
     this.getMainMap().forEachFeatureSelected((feat) => {
-      const newStyle = transform(feat.getStyleProperties());
+      const newStyle = transform(feat.getStyleProperties(), feat);
 
       historyItems.push({
         feature: feat,

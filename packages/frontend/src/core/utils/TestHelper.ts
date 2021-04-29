@@ -21,7 +21,7 @@ import uuid from 'uuid-random';
 import { FeatureStyle } from '../geo/style/FeatureStyle';
 import { CompressedProject } from '../project/CompressedProject';
 import { Zipper } from '@abc-map/frontend-commons';
-import { PointIcons } from '../geo/style/PointIcons';
+import { PointIcons } from '@abc-map/shared-entities';
 import { Coordinate } from 'ol/coordinate';
 import MapBrowserEvent from 'ol/MapBrowserEvent';
 import { Map } from 'ol';

@@ -1,6 +1,5 @@
 import React, { Component, ReactNode } from 'react';
 import { HistoryKey } from '../../../../core/history/HistoryKey';
-import { RemoveFeaturesTask } from '../../../../core/history/tasks/features/RemoveFeaturesTask';
 import { AddFeaturesTask } from '../../../../core/history/tasks/features/AddFeaturesTask';
 import { Logger } from '@abc-map/frontend-commons';
 import StrokeWidthSelector from '../_common/stroke-width-selector/StrokeWidthSelector';
@@ -9,47 +8,28 @@ import FillPatternSelector from '../_common/fill-pattern-selector/FillPatternSel
 import { FeatureWrapper } from '../../../../core/geo/features/FeatureWrapper';
 import TextFormat from '../_common/text-format/TextFormat';
 import { ServiceProps, withServices } from '../../../../core/withServices';
-import Cls from './SelectionPanel.module.scss';
+import Cls from './SelectionToolPanel.module.scss';
+import TipBubble from '../../../../components/tip-bubble/TipBubble';
+import { ToolTips } from '@abc-map/documentation';
 
-const logger = Logger.get('SelectionPanel.tsx');
+const logger = Logger.get('SelectionToolPanel.tsx');
 
-class SelectionPanel extends Component<ServiceProps, {}> {
+class SelectionToolPanel extends Component<ServiceProps, {}> {
   public render(): ReactNode {
     return (
       <div className={Cls.selectionPanel}>
-        <button className={`btn btn-outline-secondary ${Cls.button}`} onClick={this.handleDelete} data-cy={'delete-selection'}>
-          <i className={'fa fa-trash'} />
-          Supprimer
-        </button>
+        <TipBubble id={ToolTips.Selection} label={'Aide'} className={'mx-3 mb-4'} />
         <button className={`btn btn-outline-secondary ${Cls.button}`} onClick={this.handleDuplicate} data-cy={'duplicate-selection'}>
           <i className={'fa fa-copy'} />
           Dupliquer
         </button>
         <StrokeWidthSelector />
-        <ColorSelector stroke={true} fillColor1={true} fillColor2={true} />
+        <ColorSelector point={true} stroke={true} fillColor1={true} fillColor2={true} />
         <FillPatternSelector />
         <TextFormat />
       </div>
     );
   }
-
-  private handleDelete = () => {
-    const { geo, toasts, history } = this.props.services;
-    const map = geo.getMainMap();
-    const layer = map.getActiveVectorLayer();
-    if (!layer) {
-      return;
-    }
-
-    const features = map.getSelectedFeatures();
-    if (!features.length) {
-      toasts.info("Vous devez d'abord sélectionner des objets");
-      return;
-    }
-
-    features.forEach((feat) => layer.getSource().removeFeature(feat.unwrap()));
-    history.register(HistoryKey.Map, new RemoveFeaturesTask(layer.getSource(), features));
-  };
 
   private handleDuplicate = () => {
     const { geo, toasts, history } = this.props.services;
@@ -94,4 +74,4 @@ class SelectionPanel extends Component<ServiceProps, {}> {
   };
 }
 
-export default withServices(SelectionPanel);
+export default withServices(SelectionToolPanel);

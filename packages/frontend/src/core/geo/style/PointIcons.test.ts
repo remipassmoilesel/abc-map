@@ -1,12 +1,8 @@
-import { getAllIcons, safeGetIcon, PointIcons } from './PointIcons';
+import { getAllIcons, safeGetIcon } from './PointIcons';
 import { mountSvg } from './IconProcessor';
+import { PointIcons } from '@abc-map/shared-entities';
 
 describe('PointIcons', () => {
-  it('Modifications needs data migration', () => {
-    const witness = '{"Square":"square","Circle":"circle","Star":"star"}';
-    expect(JSON.stringify(PointIcons)).toEqual(witness);
-  });
-
   it('safeGetIcon()', () => {
     const icon = safeGetIcon(PointIcons.Star);
     expect(icon.name).toEqual('star');

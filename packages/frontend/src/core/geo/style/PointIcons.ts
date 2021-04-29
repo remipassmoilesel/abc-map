@@ -1,15 +1,7 @@
 import squareIcon from '../../../assets/point-icons/square.inline.svg';
 import circleIcon from '../../../assets/point-icons/circle.inline.svg';
 import starIcon from '../../../assets/point-icons/star.inline.svg';
-
-/**
- * Warning: Modify this will require a data migration
- */
-export enum PointIcons {
-  Square = 'square',
-  Circle = 'circle',
-  Star = 'star',
-}
+import { PointIcons } from '@abc-map/shared-entities';
 
 export interface PointIcon {
   name: PointIcons;

@@ -7,7 +7,6 @@ import { ToolRegistry } from '../tools/ToolRegistry';
 import TileLayer from 'ol/layer/Tile';
 import { LayerFactory } from '../layers/LayerFactory';
 import VectorImageLayer from 'ol/layer/VectorImage';
-import { NoneTool } from '../tools/none/NoneTool';
 import { DragRotateAndZoom } from 'ol/interaction';
 import { LineStringTool } from '../tools/line-string/LineStringTool';
 import { TestHelper } from '../../utils/TestHelper';
@@ -181,7 +180,7 @@ describe('MapWrapper', function () {
       expect(TestHelper.interactionNames(map.unwrap())).toEqual(['DoubleClickZoom', 'DragPan', 'KeyboardPan', 'MouseWheelZoom']);
     });
 
-    it('set', () => {
+    it('cleanInteractions', () => {
       const map = MapFactory.createNaked();
       map.unwrap().addInteraction(new DragRotateAndZoom());
 
@@ -191,12 +190,9 @@ describe('MapWrapper', function () {
     });
   });
 
-  // TODO: refactor test after tool refacto
-  // TODO: refactor test after tool refacto
-  // TODO: refactor test after tool refacto
-  // TODO: refactor test after tool refacto
   describe('Tool handling', () => {
     it('Set tool should dispose previous tool', () => {
+      // Prepare
       const map = MapFactory.createNaked();
       const layer = LayerFactory.newVectorLayer();
       map.addLayer(layer);
@@ -205,13 +201,13 @@ describe('MapWrapper', function () {
       const previous = ToolRegistry.getById(MapTool.LineString);
       const disposeMock = jest.fn();
       previous.dispose = disposeMock;
-
       map.setTool(previous);
-      disposeMock.mockReset();
 
+      // Act
       const tool = ToolRegistry.getById(MapTool.LineString);
       map.setTool(tool);
 
+      // Assert
       expect(disposeMock).toHaveBeenCalledTimes(1);
     });
 
@@ -229,37 +225,29 @@ describe('MapWrapper', function () {
       expect(map.getCurrentTool()).toStrictEqual(tool);
     });
 
-    it('Set tool to Move should disable interaction', () => {
-      const map = MapFactory.createNaked();
-      const layer = LayerFactory.newVectorLayer();
-      map.addLayer(layer);
-      map.setActiveLayer(layer);
-
-      map.setTool(ToolRegistry.getById(MapTool.LineString));
-      map.setTool(ToolRegistry.getById(MapTool.None));
-
-      expect(map.getCurrentTool()).toBeInstanceOf(NoneTool);
-      expect(TestHelper.interactionCount(map.unwrap(), 'Draw')).toEqual(0);
-      expect(TestHelper.interactionCount(map.unwrap(), 'Modify')).toEqual(0);
-    });
-
-    it('Set active layer should disable interaction (Vector -> Tile)', () => {
+    it('Set active layer should set up default interactions (Vector -> Tile)', () => {
+      // Prepare
       const map = MapFactory.createNaked();
       const vector = LayerFactory.newVectorLayer();
       const tile = LayerFactory.newOsmLayer();
+
       map.addLayer(vector);
       map.addLayer(tile);
       map.setActiveLayer(vector);
-
       map.setTool(ToolRegistry.getById(MapTool.LineString));
+      expect(TestHelper.interactionCount(map.unwrap(), 'Draw')).toEqual(1);
+
+      // Act
       map.setActiveLayer(tile);
 
+      // Assert
       expect(map.getCurrentTool()).toBeInstanceOf(LineStringTool);
       expect(TestHelper.interactionCount(map.unwrap(), 'Draw')).toEqual(0);
-      expect(TestHelper.interactionCount(map.unwrap(), 'Modify')).toEqual(0);
+      expect(TestHelper.interactionNames(map.unwrap())).toEqual(['DoubleClickZoom', 'DragPan', 'KeyboardPan', 'MouseWheelZoom']);
     });
 
     it('Set active layer should enable interaction (Tile -> Vector)', () => {
+      // Prepare
       const map = MapFactory.createNaked();
       const vector = LayerFactory.newVectorLayer();
       const tile = LayerFactory.newOsmLayer();
@@ -267,13 +255,15 @@ describe('MapWrapper', function () {
       map.addLayer(vector);
       map.addLayer(tile);
       map.setActiveLayer(tile);
-
       map.setTool(ToolRegistry.getById(MapTool.LineString));
+      expect(TestHelper.interactionCount(map.unwrap(), 'Draw')).toEqual(0);
+
+      // Act
       map.setActiveLayer(vector);
 
+      // Assert
       expect(map.getCurrentTool()).toBeInstanceOf(LineStringTool);
       expect(TestHelper.interactionCount(map.unwrap(), 'Draw')).toEqual(1);
-      expect(TestHelper.interactionCount(map.unwrap(), 'Modify')).toEqual(1);
     });
   });
 });

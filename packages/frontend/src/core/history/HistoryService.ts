@@ -7,12 +7,12 @@ import { MainStore, mainStore } from '../store/store';
 const logger = Logger.get('HistoryService.ts');
 
 export declare type HistoryStack = {
-  [k: string]:
-    | {
-        done: Task[];
-        undone: Task[];
-      }
-    | undefined;
+  undo: Task[];
+  redo: Task[];
+};
+
+export declare type History = {
+  [k: string]: HistoryStack | undefined;
 };
 
 /**
@@ -26,97 +26,93 @@ export class HistoryService {
     return new HistoryService(50, {}, mainStore);
   }
 
-  constructor(private maxSize: number, private history: HistoryStack = {}, private store: MainStore) {}
+  constructor(private maxSize: number, private history: History = {}, private store: MainStore) {}
 
   public clean(): void {
     for (const key in this.history) {
-      const done = this.history[key]?.done || [];
-      const undone = this.history[key]?.done || [];
-      done.forEach((task) => task.dispose().catch((err) => logger.error(err)));
-      undone.forEach((task) => task.dispose().catch((err) => logger.error(err)));
+      const stack = this.getStack(key as HistoryKey);
+      stack.undo.forEach((task) => task.dispose().catch((err) => logger.error(err)));
+      stack.redo.forEach((task) => task.dispose().catch((err) => logger.error(err)));
     }
     this.history = {};
     this.store.dispatch(UiActions.cleanHistoryCapabilities());
   }
 
   public register(key: HistoryKey, task: Task): void {
-    this.ensureHistory(key);
-    this.history[key]?.done.push(task);
+    const stack = this.getStack(key);
+
+    stack.undo.push(task);
+    stack.redo.forEach((t) => t.dispose().catch((err) => logger.error(err)));
+    stack.redo = [];
+
     this.limitHistorySize(key);
     this.updateUiState(key);
   }
 
   public async undo(key: HistoryKey): Promise<void> {
-    this.ensureHistory(key);
+    const stack = this.getStack(key);
 
-    const task = this.history[key]?.done.pop();
+    const task = stack.undo.pop();
     if (!task) {
       return Promise.reject(new Error('Nothing to undo'));
     }
-
-    await task.undo();
-    this.history[key]?.undone.push(task);
-
+    stack.redo.push(task);
     this.limitHistorySize(key);
     this.updateUiState(key);
+
+    await task.undo();
   }
 
   public async redo(key: HistoryKey): Promise<void> {
-    this.ensureHistory(key);
+    const stack = this.getStack(key);
 
-    const task = this.history[key]?.undone.pop();
+    const task = stack.redo.pop();
     if (!task) {
       return Promise.reject(new Error('Nothing to redo'));
     }
-
-    await task.redo();
-    this.history[key]?.done.push(task);
-
+    stack.undo.push(task);
     this.limitHistorySize(key);
     this.updateUiState(key);
+
+    await task.redo();
   }
 
   public canUndo(key: HistoryKey): boolean {
-    this.ensureHistory(key);
-    const len = this.history[key]?.done.length ?? 0;
-    return len > 0;
+    const stack = this.getStack(key);
+    return stack.undo.length > 0;
   }
 
   public canRedo(key: HistoryKey): boolean {
-    this.ensureHistory(key);
-    const len = this.history[key]?.undone.length ?? 0;
-    return len > 0;
+    const stack = this.getStack(key);
+    return stack.redo.length > 0;
   }
 
-  public getHistory() {
+  public getHistory(): History {
     return this.history;
   }
 
-  private ensureHistory(key: HistoryKey): void {
+  private getStack(key: HistoryKey): HistoryStack {
     if (!this.history[key]) {
       this.history[key] = {
-        done: [],
-        undone: [],
+        undo: [],
+        redo: [],
       };
     }
+    return this.history[key] as HistoryStack;
   }
 
   private limitHistorySize(key: HistoryKey): void {
-    const history = this.history[key];
-    if (!history) {
-      return;
+    const stack = this.getStack(key);
+    if (stack.undo.length > this.maxSize) {
+      const trashed = stack.undo.slice(0, -this.maxSize);
+      trashed.forEach((task) => task.dispose().catch((err) => logger.error(err)));
+      stack.undo = stack.undo.slice(-this.maxSize);
     }
 
-    if (history.done.length > this.maxSize) {
-      const trashed = history.done.slice(0, -this.maxSize);
+    if (stack.redo.length > this.maxSize) {
+      const trashed = stack.redo.slice(0, -this.maxSize);
       trashed.forEach((task) => task.dispose().catch((err) => logger.error(err)));
-      history.done = history.done.slice(-this.maxSize);
-    }
-
-    if (history.undone.length > this.maxSize) {
-      const trashed = history.undone.slice(0, -this.maxSize);
-      trashed.forEach((task) => task.dispose().catch((err) => logger.error(err)));
-      history.undone = history.undone.slice(-this.maxSize);
+      stack.redo = stack.redo.slice(-this.maxSize);
     }
   }
 

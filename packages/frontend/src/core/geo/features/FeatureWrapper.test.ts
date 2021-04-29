@@ -6,7 +6,7 @@ import { TestHelper } from '../../utils/TestHelper';
 import { Style } from 'ol/style';
 import Feature from 'ol/Feature';
 import Geometry from 'ol/geom/Geometry';
-import { PointIcons } from '../style/PointIcons';
+import { PointIcons } from '@abc-map/shared-entities';
 
 describe('FeatureWrapper', () => {
   it('create() should create and set id', () => {

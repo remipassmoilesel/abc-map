@@ -15,10 +15,11 @@ describe('Tool Selection', function () {
     cy.visit(FrontendRoutes.map())
       .then(() => MainMap.getComponent())
       .then(() => ToolSelector.enable(MapTool.Point))
-      // First
+      // Create points
       .then(() => Draw.click(100, 100))
       .then(() => Draw.click(150, 150))
       .then(() => Draw.click(200, 200))
+      // Select them
       .then(() => ToolSelector.enable(MapTool.Selection))
       .then(() => Draw.drag(150, 150, 600, 600))
       .then(() => MainMap.getReference())
@@ -37,10 +38,11 @@ describe('Tool Selection', function () {
     cy.visit(FrontendRoutes.map())
       .then(() => MainMap.getComponent())
       .then(() => ToolSelector.enable(MapTool.Point))
-      // First
+      // Create points
       .then(() => Draw.click(100, 100))
       .then(() => Draw.click(150, 150))
       .then(() => Draw.click(200, 200))
+      // Select them
       .then(() => ToolSelector.enable(MapTool.Selection))
       .then(() => Draw.drag(150, 150, 600, 600))
       .get('[data-cy=delete-selection]')
@@ -70,10 +72,11 @@ describe('Tool Selection', function () {
     cy.visit(FrontendRoutes.map())
       .then(() => MainMap.getComponent())
       .then(() => ToolSelector.enable(MapTool.Point))
-      // First
+      // Create points
       .then(() => Draw.click(100, 100))
       .then(() => Draw.click(150, 150))
       .then(() => Draw.click(200, 200))
+      // Select them
       .then(() => ToolSelector.enable(MapTool.Selection))
       .then(() => Draw.drag(150, 150, 600, 600))
       .get('[data-cy=duplicate-selection]')
@@ -172,10 +175,13 @@ describe('Tool Selection', function () {
   it('user change stroke style then undo', function () {
     cy.visit(FrontendRoutes.map())
       .then(() => MainMap.getComponent())
-      .then(() => ToolSelector.enable(MapTool.LineString))
-      // Draw feature then select
+      .then(() => ToolSelector.enable(MapTool.Polygon))
+      // Draw feature
+      .then(() => Draw.click(100, 100))
       .then(() => Draw.click(150, 150))
-      .then(() => Draw.click(200, 200))
+      .then(() => Draw.click(100, 150))
+      .then(() => Draw.dblclick(150, 100))
+      // Select it
       .then(() => ToolSelector.enable(MapTool.Selection))
       .then(() => Draw.drag(50, 50, 400, 400))
       .get('[data-cy=stroke-color] button')
@@ -206,10 +212,12 @@ describe('Tool Selection', function () {
   it('user change fill style then undo', function () {
     cy.visit(FrontendRoutes.map())
       .then(() => MainMap.getComponent())
-      .then(() => ToolSelector.enable(MapTool.LineString))
+      .then(() => ToolSelector.enable(MapTool.Polygon))
       // Draw feature then select
+      .then(() => Draw.click(100, 100))
       .then(() => Draw.click(150, 150))
-      .then(() => Draw.click(200, 200))
+      .then(() => Draw.click(100, 150))
+      .then(() => Draw.dblclick(150, 100))
       .then(() => ToolSelector.enable(MapTool.Selection))
       .then(() => Draw.drag(50, 50, 400, 400))
       .get('[data-cy=fill-color1] button')

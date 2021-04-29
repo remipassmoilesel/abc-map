@@ -8,6 +8,8 @@ const logger = Logger.get('TipBubble.tsx', 'info');
 
 interface Props {
   id: string;
+  label?: string;
+  className?: string;
 }
 
 interface State {
@@ -21,11 +23,14 @@ class TipBubble extends Component<Props, State> {
   }
 
   public render(): ReactNode {
+    const label = this.props.label;
+    const className = this.props.className;
     const modal = this.state.open;
 
     return (
       <>
-        <div onClick={this.handleClick} className={Cls.bubble}>
+        <div onClick={this.handleClick} className={`${Cls.bubble} ${className}`}>
+          {label && <div className={'mr-2'}>{label}</div>}
           <i className={`fa fa-question`} />
         </div>
         <Modal show={modal} onHide={this.handleHide}>
