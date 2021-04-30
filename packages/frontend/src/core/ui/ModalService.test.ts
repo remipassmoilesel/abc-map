@@ -1,5 +1,5 @@
 import { ModalService } from './ModalService';
-import { ModalEvent, ModalEventType, ModalStatus } from './Modals.types';
+import { ModalEvent, ModalEventType, ModalStatus } from './typings';
 import * as sinon from 'sinon';
 
 describe('ModalService', function () {

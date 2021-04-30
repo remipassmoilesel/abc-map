@@ -207,7 +207,7 @@ class LayoutPreview extends Component<Props, State> {
       view: {
         center,
         projection: { name: projection.getCode() },
-        resolution: resolution / scaling,
+        resolution: Math.round(resolution / scaling), // We must round in order to prevent weird trigger
       },
     };
 

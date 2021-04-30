@@ -34,40 +34,6 @@ describe('Tool Selection', function () {
       });
   });
 
-  it('user can delete selection then undo', function () {
-    cy.visit(FrontendRoutes.map())
-      .then(() => MainMap.getComponent())
-      .then(() => ToolSelector.enable(MapTool.Point))
-      // Create points
-      .then(() => Draw.click(100, 100))
-      .then(() => Draw.click(150, 150))
-      .then(() => Draw.click(200, 200))
-      // Select them
-      .then(() => ToolSelector.enable(MapTool.Selection))
-      .then(() => Draw.drag(150, 150, 600, 600))
-      .get('[data-cy=delete-selection]')
-      .click()
-      .then(() => MainMap.getReference())
-      .should((map) => {
-        const features = map.getActiveLayerFeatures();
-
-        expect(features).length(1);
-        expect(features[0].getGeometry()?.getExtent()).deep.equals([-1118865.2444950184, 4048111.8978092954, -1118865.2444950184, 4048111.8978092954]);
-      })
-      .then(() => History.undo())
-      .then(() => MainMap.getReference())
-      .should((map) => {
-        const features = map.getActiveLayerFeatures();
-        expect(features).length(3);
-      })
-      .then(() => History.redo())
-      .then(() => MainMap.getReference())
-      .should((map) => {
-        const features = map.getActiveLayerFeatures();
-        expect(features).length(1);
-      });
-  });
-
   it('user can duplicate selection then undo', function () {
     cy.visit(FrontendRoutes.map())
       .then(() => MainMap.getComponent())

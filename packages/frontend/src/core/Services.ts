@@ -8,6 +8,7 @@ import { mainStore } from './store/store';
 import { ToastService } from './ui/ToastService';
 import { ModalService } from './ui/ModalService';
 import { AxiosError } from 'axios';
+import { VoteService } from './vote/VoteService';
 
 export interface Services {
   project: ProjectService;
@@ -17,6 +18,7 @@ export interface Services {
   authentication: AuthenticationService;
   history: HistoryService;
   dataStore: DataStoreService;
+  vote: VoteService;
 }
 
 let instance: Services | undefined;
@@ -39,7 +41,8 @@ function serviceFactory(): Services {
   const geo = new GeoService(externalClient, history);
   const project = new ProjectService(jsonClient, downloadClient, mainStore, geo);
   const authentication = new AuthenticationService(jsonClient, mainStore, toasts);
-  const data = new DataStoreService(jsonClient, downloadClient, geo);
+  const dataStore = new DataStoreService(jsonClient, downloadClient, geo);
+  const vote = new VoteService(jsonClient);
 
   return {
     project,
@@ -48,7 +51,8 @@ function serviceFactory(): Services {
     toasts,
     authentication,
     history,
-    dataStore: data,
+    dataStore,
+    vote,
   };
 }
 

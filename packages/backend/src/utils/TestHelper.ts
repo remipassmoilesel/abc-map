@@ -3,6 +3,7 @@ import * as uuid from 'uuid-random';
 import { Zipper } from './Zipper';
 import { CompressedProject } from '../projects/CompressedProject';
 import { ProjectDocument } from '../projects/ProjectDocument';
+import { DateTime } from 'luxon';
 
 export class TestHelper {
   public static sampleUser(): AbcUser {
@@ -88,5 +89,10 @@ export class TestHelper {
       projection: { name: 'EPSG:4326' },
       version: '0.1',
     };
+  }
+
+  public static randomDate(start: Date = new Date(1980, 1, 1, 0, 0, 0), end: Date = new Date(2020, 1, 1, 0, 0, 0)): DateTime {
+    const timestamp = start.getTime() + Math.random() * (end.getTime() - start.getTime());
+    return DateTime.fromMillis(timestamp);
   }
 }

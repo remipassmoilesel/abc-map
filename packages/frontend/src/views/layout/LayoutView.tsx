@@ -250,9 +250,8 @@ class LayoutView extends Component<Props, State> {
     const { project, history } = this.props.services;
 
     const before = this.props.layouts.find((lay) => lay.id === layout.id);
-    project.updateLayout(layout);
-
     if (before) {
+      project.updateLayout(layout);
       history.register(HistoryKey.Layout, UpdateLayoutTask.create(before, layout));
     } else {
       logger.error('Cannot register history task', { before, layout });
@@ -260,7 +259,7 @@ class LayoutView extends Component<Props, State> {
   };
 
   private handleExport = (format: 'pdf' | 'png') => {
-    const { toasts } = this.props.services;
+    const { toasts, modals } = this.props.services;
     const support = this.exportSupport.current;
     if (!support) {
       toasts.genericError();
@@ -287,7 +286,9 @@ class LayoutView extends Component<Props, State> {
       toasts.info('Export terminé !');
     };
 
-    exportLayouts()
+    modals
+      .solicitationModal()
+      .then(() => exportLayouts())
       .catch((err) => {
         toasts.genericError();
         logger.error(err);

@@ -6,7 +6,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { MainState } from '../../../core/store/reducer';
 import { FileIO, InputResultType, InputType } from '../../../core/utils/FileIO';
 import RemoteProjectModal from './RemoteProjectModal';
-import { ModalStatus } from '../../../core/ui/Modals.types';
+import { ModalStatus } from '../../../core/ui/typings';
 import { ServiceProps, withServices } from '../../../core/withServices';
 
 const logger = Logger.get('ProjectControls.tsx');
@@ -106,10 +106,13 @@ class ProjectControls extends Component<Props, State> {
       return project.save(compressed);
     };
 
-    save().catch((err) => {
-      logger.error(err);
-      toasts.genericError();
-    });
+    modals
+      .solicitationModal()
+      .then(() => save())
+      .catch((err) => {
+        logger.error(err);
+        toasts.genericError();
+      });
   };
 
   private handleOpenProject = () => {
@@ -139,10 +142,13 @@ class ProjectControls extends Component<Props, State> {
       toasts.info('Export terminé !');
     };
 
-    exportProject().catch((err) => {
-      logger.error(err);
-      toasts.genericError();
-    });
+    modals
+      .solicitationModal()
+      .then(() => exportProject())
+      .catch((err) => {
+        logger.error(err);
+        toasts.genericError();
+      });
   };
 
   private handleImportProject = () => {

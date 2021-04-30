@@ -7,7 +7,7 @@ import { HistoryService } from '../../../history/HistoryService';
 import { Map } from 'ol';
 import VectorSource from 'ol/source/Vector';
 import { FeatureSelected } from './EditPropertiesEvent';
-import { ModalEventType, ModalStatus } from '../../../ui/Modals.types';
+import { ModalEventType, ModalStatus } from '../../../ui/typings';
 import Feature from 'ol/Feature';
 import { Point } from 'ol/geom';
 import { Utils } from '../../../../../../backend/src/utils/Utils';

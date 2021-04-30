@@ -16,10 +16,10 @@ import { mainStore } from './core/store/store';
 import RenameModal from './components/rename-modal/RenameModal';
 import PasswordModal from './components/password-modal/PasswordModal';
 import DeviceWarningModal from './components/device-warning-modal/DeviceWarningModal';
-import MessageBanner from './components/message-banner/MessageBanner';
 import { ServiceProps, withServices } from './core/withServices';
 import DataProcessingView from './views/data-processing/DataProcessingView';
 import EditPropertiesModal from './components/edit-properties-modal/EditPropertiesModal';
+import SolicitationModal from './components/solicitation-modal/SolicitationModal';
 
 class App extends Component<ServiceProps, {}> {
   public render(): ReactNode {
@@ -37,12 +37,12 @@ class App extends Component<ServiceProps, {}> {
             <Route exact path={FrontendRoutes.dataProcessing()} component={DataProcessingView} />
             <Route path={'*'} component={NotFoundView} />
           </Switch>
-          <MessageBanner />
           <ToastContainer className={'toast-container'} />
           <RenameModal />
           <PasswordModal />
           <DeviceWarningModal />
           <EditPropertiesModal />
+          <SolicitationModal />
         </BrowserRouter>
       </Provider>
     );

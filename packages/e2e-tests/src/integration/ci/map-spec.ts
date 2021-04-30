@@ -1,6 +1,6 @@
 import { FrontendRoutes } from '@abc-map/frontend-commons';
 import { TestHelper } from '../../helpers/TestHelper';
-import { LayerSelector } from '../../helpers/LayerSelector';
+import { LayerControls } from '../../helpers/LayerControls';
 import { History } from '../../helpers/History';
 
 describe('Map', function () {
@@ -10,11 +10,11 @@ describe('Map', function () {
 
   it('default map should have two layers with one active', function () {
     cy.visit(FrontendRoutes.map())
-      .then(() => LayerSelector.getNames())
+      .then(() => LayerControls.getNames())
       .should((names) => {
         expect(names).deep.equals(['OpenStreetMap', 'Géométries']);
       })
-      .then(() => LayerSelector.getActiveItem())
+      .then(() => LayerControls.getActiveItem())
       .should((elem) => {
         expect(elem.length).equals(1);
         expect(elem.text()).equals('Géométries');
@@ -23,12 +23,12 @@ describe('Map', function () {
 
   it('user can add layer', function () {
     cy.visit(FrontendRoutes.map())
-      .then(() => LayerSelector.addOsmLayer())
-      .then(() => LayerSelector.getNames())
+      .then(() => LayerControls.addOsmLayer())
+      .then(() => LayerControls.getNames())
       .should((names) => {
         expect(names).deep.equals(['OpenStreetMap', 'Géométries', 'OpenStreetMap']);
       })
-      .then(() => LayerSelector.getActiveItem())
+      .then(() => LayerControls.getActiveItem())
       .should((elem) => {
         expect(elem.length).equals(1);
         expect(elem.text()).equals('OpenStreetMap');
@@ -37,29 +37,29 @@ describe('Map', function () {
 
   it('user can add layer then undo and redo', function () {
     cy.visit(FrontendRoutes.map())
-      .then(() => LayerSelector.addOsmLayer())
-      .then(() => LayerSelector.getNames())
+      .then(() => LayerControls.addOsmLayer())
+      .then(() => LayerControls.getNames())
       .should((names) => {
         expect(names).deep.equals(['OpenStreetMap', 'Géométries', 'OpenStreetMap']);
       })
       // Undo
       .then(() => History.undo())
-      .then(() => LayerSelector.getNames())
+      .then(() => LayerControls.getNames())
       .should((names) => {
         expect(names).deep.equals(['OpenStreetMap', 'Géométries']);
       })
-      .then(() => LayerSelector.getActiveItem())
+      .then(() => LayerControls.getActiveItem())
       .should((elem) => {
         expect(elem.length).equals(1);
         expect(elem.text()).equals('Géométries');
       })
       // Redo
       .then(() => History.redo())
-      .then(() => LayerSelector.getNames())
+      .then(() => LayerControls.getNames())
       .should((names) => {
         expect(names).deep.equals(['OpenStreetMap', 'Géométries', 'OpenStreetMap']);
       })
-      .then(() => LayerSelector.getActiveItem())
+      .then(() => LayerControls.getActiveItem())
       .should((elem) => {
         expect(elem.length).equals(1);
         expect(elem.text()).equals('OpenStreetMap');
@@ -75,7 +75,7 @@ describe('Map', function () {
       .type('Awesome layer')
       .get('[data-cy=rename-modal-confirm]')
       .click()
-      .then(() => LayerSelector.getNames())
+      .then(() => LayerControls.getNames())
       .should((names) => {
         expect(names).deep.equals(['OpenStreetMap', 'Awesome layer']);
       });
@@ -85,7 +85,7 @@ describe('Map', function () {
     cy.visit(FrontendRoutes.map())
       .get('[data-cy=delete-layer]')
       .click()
-      .then(() => LayerSelector.getNames())
+      .then(() => LayerControls.getNames())
       .should((names) => {
         expect(names).deep.equals(['OpenStreetMap']);
       });

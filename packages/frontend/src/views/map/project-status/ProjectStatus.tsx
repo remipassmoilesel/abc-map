@@ -1,6 +1,6 @@
 import React, { Component, ReactNode } from 'react';
 import { AbcProjectMetadata } from '@abc-map/shared-entities';
-import { ModalStatus } from '../../../core/ui/Modals.types';
+import { ModalStatus } from '../../../core/ui/typings';
 import { Logger } from '@abc-map/frontend-commons';
 import { ServiceProps, withServices } from '../../../core/withServices';
 
