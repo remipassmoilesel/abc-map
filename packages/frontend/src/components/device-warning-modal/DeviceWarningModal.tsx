@@ -2,7 +2,7 @@ import React, { Component, ReactNode } from 'react';
 import { Modal } from 'react-bootstrap';
 import * as Bowser from 'bowser';
 import { Logger } from '@abc-map/frontend-commons';
-import './DeviceWarningModal.scss';
+import Cls from './DeviceWarningModal.module.scss';
 
 const logger = Logger.get('DeviceWarningModal.tsx');
 
@@ -19,12 +19,13 @@ class DeviceWarningModal extends Component<{}, State> {
   }
 
   public render(): ReactNode {
-    if (!this.state.visible) {
+    const visible = this.state.visible;
+    if (!visible) {
       return <div />;
     }
 
     return (
-      <Modal show={this.state.visible} onHide={this.handleClose} backdrop={'static'} className={'abc-device-warning'}>
+      <Modal show={visible} onHide={this.handleClose} backdrop={'static'} className={Cls.deviceWarning}>
         <Modal.Header closeButton>
           <Modal.Title>Avertissement</Modal.Title>
         </Modal.Header>

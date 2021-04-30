@@ -27,7 +27,7 @@ class TextFormat extends Component<Props, {}> {
       <div className={'control-item'}>
         <ColorPicker label={'Texte'} initialValue={this.props.color} onClose={this.handleColorSelected} />
         <div className={'d-flex justify-content-between align-items-center'}>
-          <div>Taille:</div>
+          <div>Taille du texte:</div>
           <select onChange={this.handleSizeChange} value={this.props.size} className={`form-control form-control-sm ${Cls.select}`}>
             {_.range(5, 51).map((val) => (
               <option key={val} value={val}>

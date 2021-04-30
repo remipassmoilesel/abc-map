@@ -1,4 +1,4 @@
-import React, { ChangeEvent, Component, ReactNode } from 'react';
+import React, { Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/frontend-commons';
 import { FillPatterns } from '@abc-map/shared-entities';
 import { LabelledFillPatterns } from './LabelledFillPatterns';
@@ -7,6 +7,8 @@ import { MainState } from '../../../../../core/store/reducer';
 import { MapActions } from '../../../../../core/store/map/actions';
 import { connect, ConnectedProps } from 'react-redux';
 import { ServiceProps, withServices } from '../../../../../core/withServices';
+import { Modal } from 'react-bootstrap';
+import FillPatternButton from './FillPatternButton';
 import Cls from './FillPatternSelector.module.scss';
 
 const logger = Logger.get('FillPatternSelector.tsx', 'info');
@@ -25,6 +27,7 @@ type Props = ConnectedProps<typeof connector> & ServiceProps;
 
 interface State {
   patternFactory: FillPatternFactory;
+  modal: boolean;
 }
 
 class FillPatternSelector extends Component<Props, State> {
@@ -34,34 +37,58 @@ class FillPatternSelector extends Component<Props, State> {
     super(props);
     this.state = {
       patternFactory: new FillPatternFactory(),
+      modal: false,
     };
   }
 
   public render(): ReactNode {
-    const options = this.getOptions();
+    const pattern = this.props.fill?.pattern;
+    const color1 = this.props.fill?.color1;
+    const color2 = this.props.fill?.color2;
+    const modal = this.state.modal;
+
     return (
-      <div className={'control-item d-flex justify-content-between align-items-center'}>
-        <select onChange={this.handleSelection} value={this.props.fill?.pattern} className={`form-control form-control-sm ${Cls.select}`}>
-          {options}
-        </select>
-        <canvas ref={this.canvas} width={40} height={40} />
-      </div>
+      <>
+        <div className={`${Cls.fillPatternSelector} control-item`}>
+          <div>Style de texture:</div>
+          <FillPatternButton width={40} height={40} pattern={pattern} color1={color1} color2={color2} onClick={this.showModal} />
+        </div>
+        <Modal show={modal} onHide={this.closeModal}>
+          <Modal.Header closeButton>
+            <Modal.Title>Textures</Modal.Title>
+          </Modal.Header>
+          <Modal.Body className={'p-2'}>{this.getPatternButtons()}</Modal.Body>
+        </Modal>
+      </>
     );
   }
 
-  public componentDidMount() {
-    this.preview();
+  private showModal = () => {
+    this.setState({ modal: true });
+  };
+
+  private closeModal = () => {
+    this.setState({ modal: false });
+  };
+
+  private getPatternButtons(): ReactNode[] {
+    const color1 = this.props.fill?.color1;
+    const color2 = this.props.fill?.color2;
+    return LabelledFillPatterns.All.map((item) => {
+      return (
+        <div className={'d-flex align-items-center m-3'} key={item.value}>
+          <FillPatternButton onClick={this.handleSelection} pattern={item.value} color1={color1} color2={color2} width={65} height={65} />
+          <div className={'ml-3'}>{item.label}</div>
+        </div>
+      );
+    });
   }
 
-  public componentDidUpdate() {
-    this.preview();
-  }
-
-  private handleSelection = (ev: ChangeEvent<HTMLSelectElement>) => {
+  private handleSelection = (pattern: FillPatterns) => {
     const { geo } = this.props.services;
 
-    const pattern = ev.target.value as FillPatterns;
     this.props.setPattern(pattern);
+    this.setState({ modal: false });
 
     geo.updateSelectedFeatures((style) => {
       return {
@@ -73,48 +100,6 @@ class FillPatternSelector extends Component<Props, State> {
       };
     });
   };
-
-  private getOptions() {
-    return LabelledFillPatterns.All.map((item) => {
-      return (
-        <option key={item.value} value={item.value}>
-          {item.label}
-        </option>
-      );
-    });
-  }
-
-  private preview() {
-    const pattern = this.props.fill?.pattern;
-    const color1 = this.props.fill?.color1;
-    const color2 = this.props.fill?.color2;
-    const canvas = this.canvas.current;
-    const ctx = canvas?.getContext('2d');
-    if (!canvas || !ctx) {
-      logger.error('Canvas not ready');
-      return;
-    }
-
-    if (FillPatterns.Flat === pattern) {
-      ctx.fillStyle = this.props.fill?.color1 || 'white';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      return;
-    }
-
-    const canvasPattern = this.state.patternFactory.create({
-      pattern,
-      color1,
-      color2,
-    });
-
-    if (!canvasPattern) {
-      logger.error(`Invalid pattern: ${pattern}`);
-      return;
-    }
-
-    ctx.fillStyle = canvasPattern;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-  }
 }
 
 export default connector(withServices(FillPatternSelector));

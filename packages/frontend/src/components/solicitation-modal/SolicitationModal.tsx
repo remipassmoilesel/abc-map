@@ -7,6 +7,7 @@ import * as _ from 'lodash';
 import { Encouragements } from './encouragements';
 import { Logger } from '@abc-map/frontend-commons';
 import Cls from './SolicitationModal.module.scss';
+import { VoteValue } from '@abc-map/shared-entities';
 
 interface State {
   visible: boolean;
@@ -58,15 +59,15 @@ class SolicitationModal extends Component<ServiceProps, State> {
           </div>
 
           <div className={'d-flex flex-row justify-content-center mb-4'}>
-            <button onClick={() => this.handleVote(1)} className={`btn btn-outline-primary ${Cls.voteBtn}`}>
+            <button onClick={() => this.handleVote(VoteValue.NOT_SATISFIED)} className={`btn btn-outline-primary ${Cls.voteBtn}`}>
               <i className={'fa fa-frown'} />
               Pas bien
             </button>
-            <button onClick={() => this.handleVote(2)} className={`btn btn-outline-primary ${Cls.voteBtn}`}>
+            <button onClick={() => this.handleVote(VoteValue.BLAH)} className={`btn btn-outline-primary ${Cls.voteBtn}`}>
               <i className={'fa fa-meh'} />
               Bof ...
             </button>
-            <button onClick={() => this.handleVote(3)} className={`btn btn-outline-primary ${Cls.voteBtn}`}>
+            <button onClick={() => this.handleVote(VoteValue.SATISFIED)} className={`btn btn-outline-primary ${Cls.voteBtn}`}>
               <i className={'fa fa-smile-beam'} />
               Bien !
             </button>
@@ -105,7 +106,7 @@ class SolicitationModal extends Component<ServiceProps, State> {
     }
   }
 
-  private handleVote = (value: number) => {
+  private handleVote = (value: VoteValue) => {
     const { toasts, vote } = this.props.services;
     vote.vote(value).catch((err) => logger.error('Error while voting: ', err));
 
