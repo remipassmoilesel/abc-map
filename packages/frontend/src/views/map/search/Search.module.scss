@@ -1,17 +1,33 @@
+.input {
+  position: relative;
+  z-index: 2;
+}
+
+.backdrop {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 1;
+
+  background: transparent;
+}
+
 .dropdown {
   position: absolute;
   width: 400px;
   max-height: 500px;
-  z-index: 5;
+  z-index: 2;
 
   padding: 0.5em;
 
   background-color: white;
   border: 1px solid lightgrey;
   overflow-x: hidden;
-  overflow-y: scroll;
+  overflow-y: auto;
 
-  box-shadow: 5px 5px 10px 0 rgba(170,170,170,1);
+  box-shadow: 5px 5px 10px 0 rgba(170, 170, 170, 1);
   border-radius: 5px;
 }
 

@@ -37,17 +37,15 @@ class Search extends Component<Props, State> {
     const query = this.state.query;
     const loading = this.state.loading;
     return (
-      <div className={'control-block'}>
+      <div className={`control-block`}>
         <div className={'control-item'}>
           <div className={'my-2'}>Rechercher sur la carte</div>
-          <input type={'text'} className={'form-control'} value={this.state.query} onChange={this.handleSearch} data-cy={'search-on-map'} />
+          <input type={'text'} className={`form-control ${Cls.input}`} value={query} onChange={this.handleSearch} data-cy={'search-on-map'} />
         </div>
         {query && (
           <>
+            <div className={Cls.backdrop} onClick={this.handleClose} />
             <div className={Cls.dropdown}>
-              <div className={'d-flex justify-content-end mb-2'} onClick={this.handleClose}>
-                <i className={'fa fa-times cursor-pointer'} />
-              </div>
               {loading && <div className={Cls.message}>Chargement ...</div>}
               {!results.length && !loading && <div className={Cls.message}>Aucun résultat</div>}
               {results.map((res) => (

@@ -11,6 +11,8 @@ import { ServiceProps, withServices } from '../../../../core/withServices';
 import Cls from './SelectionToolPanel.module.scss';
 import TipBubble from '../../../../components/tip-bubble/TipBubble';
 import { ToolTips } from '@abc-map/documentation';
+import PointIconSelector from '../point/icon-selector/PointIconSelector';
+import PointSizeSelector from '../point/size-selector/PointSizeSelector';
 
 const logger = Logger.get('SelectionToolPanel.tsx');
 
@@ -18,11 +20,13 @@ class SelectionToolPanel extends Component<ServiceProps, {}> {
   public render(): ReactNode {
     return (
       <div className={Cls.selectionPanel}>
-        <TipBubble id={ToolTips.Selection} label={'Aide'} className={'mx-3 mb-4'} />
-        <button className={`btn btn-outline-secondary ${Cls.button}`} onClick={this.handleDuplicate} data-cy={'duplicate-selection'}>
-          <i className={'fa fa-copy'} />
+        <TipBubble id={ToolTips.Selection} label={'Aide'} className={'mx-3 mb-3'} />
+        <button className={`btn btn-outline-secondary mb-2`} onClick={this.handleDuplicate} data-cy={'duplicate-selection'}>
+          <i className={'fa fa-copy mr-3'} />
           Dupliquer
         </button>
+        <PointIconSelector />
+        <PointSizeSelector />
         <StrokeWidthSelector />
         <ColorSelector point={true} stroke={true} fillColor1={true} fillColor2={true} />
         <FillPatternSelector />

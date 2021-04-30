@@ -24,7 +24,7 @@ class StrokeWidthSelector extends Component<Props, {}> {
 
     return (
       <div className={'control-item d-flex align-items-center justify-content-between'}>
-        <div className={'mr-2'}>Taille:</div>
+        <div className={'mr-2'}>Taille d&apos;icone:</div>
         <select value={size} onChange={this.handleSelection} className={`form-control form-control-sm ${Cls.select}`}>
           {_.range(15, 101).map((value) => (
             <option key={value} value={value}>
