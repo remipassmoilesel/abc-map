@@ -1,6 +1,6 @@
 import React, { Component, ReactNode } from 'react';
 import { Modal } from 'react-bootstrap';
-import { ModalEventListener, ModalEventType, ModalStatus } from '../../core/ui/Modals.types';
+import { ModalEventListener, ModalEventType, ModalStatus } from '../../core/ui/typings';
 import { ServiceProps, withServices } from '../../core/withServices';
 import { SimplePropertiesMap } from '../../core/geo/features/FeatureWrapper';
 import PropertiesForm from './PropertiesForm';

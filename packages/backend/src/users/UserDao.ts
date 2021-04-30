@@ -8,7 +8,7 @@ export class UserDao {
 
   public async init(): Promise<void> {
     const coll = await this.client.collection<UserDocument>(MongodbCollection.Users);
-    return coll.createIndex('email', { unique: true }).then(() => undefined);
+    await coll.createIndex('email', { unique: true });
   }
 
   public async save(project: UserDocument): Promise<void> {

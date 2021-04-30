@@ -7,7 +7,8 @@ import {
   ModalEventType,
   PasswordModalClosedEvent,
   RenameModalClosedEvent,
-} from './Modals.types';
+  SolicitationClosedEvent,
+} from './typings';
 import { SimplePropertiesMap } from '../geo/features/FeatureWrapper';
 
 const logger = Logger.get('ModalService.ts', 'warn');
@@ -65,6 +66,20 @@ export class ModalService {
 
       this.addListener(ModalEventType.FeaturePropertiesClosed, listener);
       this.dispatch({ type: ModalEventType.ShowFeatureProperties, properties });
+    });
+  }
+
+  public solicitationModal(): Promise<SolicitationClosedEvent> {
+    return new Promise((resolve) => {
+      const listener: ModalEventListener = (ev) => {
+        if (ev.type === ModalEventType.SolicitationClosed) {
+          this.removeListener(ModalEventType.SolicitationClosed, listener);
+          resolve(ev);
+        }
+      };
+
+      this.addListener(ModalEventType.SolicitationClosed, listener);
+      this.dispatch({ type: ModalEventType.ShowSolicitation });
     });
   }
 

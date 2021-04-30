@@ -7,6 +7,8 @@ export enum ModalEventType {
   PasswordClosed = 'PasswordClosed',
   ShowFeatureProperties = 'ShowFeatureProperties',
   FeaturePropertiesClosed = 'FeaturePropertiesClosed',
+  ShowSolicitation = 'ShowSolicitation',
+  SolicitationClosed = 'SolicitationClosed',
 }
 
 export enum ModalStatus {
@@ -50,13 +52,24 @@ export interface FeaturePropertiesClosedEvent {
   properties: SimplePropertiesMap;
 }
 
+export interface ShowSolicitationEvent {
+  type: ModalEventType.ShowSolicitation;
+}
+
+export interface SolicitationClosedEvent {
+  type: ModalEventType.SolicitationClosed;
+  status: ModalStatus;
+}
+
 export declare type ModalEvent =
   | ShowRenameModalEvent
   | RenameModalClosedEvent
   | ShowPasswordModalEvent
   | PasswordModalClosedEvent
   | ShowFeaturePropertiesEvent
-  | FeaturePropertiesClosedEvent;
+  | FeaturePropertiesClosedEvent
+  | ShowSolicitationEvent
+  | SolicitationClosedEvent;
 
 export class InternalEvent extends Event {
   constructor(type: ModalEventType, public readonly payload: ModalEvent) {

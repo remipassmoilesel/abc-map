@@ -1,3 +1,5 @@
+import { DateTime } from 'luxon';
+
 export class ProjectRoutes {
   public static saveProject(): string {
     return '/projects/';
@@ -45,5 +47,15 @@ export class DatastoreRoutes {
 
   public static download(path: string): string {
     return `/datastore/download/${path}`;
+  }
+}
+
+export class VoteRoutes {
+  public static vote(): string {
+    return '/vote';
+  }
+
+  public static stats(from: DateTime, to: DateTime): string {
+    return `/vote/${from.toISODate()}/${to.toISODate()}`;
   }
 }

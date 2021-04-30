@@ -10,7 +10,7 @@ import { ModalService } from '../../../ui/ModalService';
 import { EditPropertiesInteraction, Options } from './EditPropertiesInteraction';
 import { EditPropertiesEvent, FeatureSelected } from './EditPropertiesEvent';
 import { FeatureWrapper } from '../../features/FeatureWrapper';
-import { ModalStatus } from '../../../ui/Modals.types';
+import { ModalStatus } from '../../../ui/typings';
 import { HistoryKey } from '../../../history/HistoryKey';
 import { SetFeatureProperties } from '../../../history/tasks/features/SetFeatureProperties';
 import * as _ from 'lodash';

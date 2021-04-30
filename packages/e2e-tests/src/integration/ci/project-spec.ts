@@ -5,7 +5,7 @@ import { TestHelper } from '../../helpers/TestHelper';
 import { Download } from '../../helpers/Download';
 import { TestData } from '../../test-data/TestData';
 import { MainMap } from '../../helpers/MainMap';
-import { LayerSelector } from '../../helpers/LayerSelector';
+import { LayerControls } from '../../helpers/LayerControls';
 import { WmsConstants } from '../../helpers/WmsConstants';
 import { Registration } from '../../helpers/Registration';
 import { Login } from '../../helpers/Login';
@@ -55,8 +55,10 @@ describe('Project', function () {
 
     it('can export project', function () {
       cy.visit(FrontendRoutes.map())
-        .then(() => LayerSelector.addWmsLayer())
+        .then(() => LayerControls.addWmsLayer())
         .get('[data-cy=export-project]')
+        .click()
+        .get('[data-cy=close-solicitation-modal]')
         .click()
         .then(() => Toasts.assertText('Export en cours ...'))
         .then(() => Toasts.assertText('Export terminé !'))
@@ -102,8 +104,10 @@ describe('Project', function () {
 
     it('can export project with credentials', function () {
       cy.visit(FrontendRoutes.map())
-        .then(() => LayerSelector.addWmsLayerWithCredentials())
+        .then(() => LayerControls.addWmsLayerWithCredentials())
         .get('[data-cy=export-project]')
+        .click()
+        .get('[data-cy=close-solicitation-modal]')
         .click()
         .get('[data-cy=modal-password-input]')
         .should('be.empty')
@@ -187,8 +191,10 @@ describe('Project', function () {
 
     it('can store project online without credentials', function () {
       cy.visit(FrontendRoutes.map())
-        .then(() => LayerSelector.addWmsLayer())
+        .then(() => LayerControls.addWmsLayer())
         .get('[data-cy=save-project]')
+        .click()
+        .get('[data-cy=close-solicitation-modal]')
         .click()
         .then(() => Toasts.assertText('Enregistrement en cours ...'))
         .then(() => Toasts.assertText('Projet enregistré !'));
@@ -197,8 +203,10 @@ describe('Project', function () {
     it('can store project online with credentials', function () {
       cy.visit(FrontendRoutes.map())
         // Create a project and store it online
-        .then(() => LayerSelector.addWmsLayerWithCredentials())
+        .then(() => LayerControls.addWmsLayerWithCredentials())
         .get('[data-cy=save-project]')
+        .click()
+        .get('[data-cy=close-solicitation-modal]')
         .click()
         .get('[data-cy=modal-password-input]')
         .clear()
@@ -211,8 +219,10 @@ describe('Project', function () {
     it('can load remote project', function () {
       cy.visit(FrontendRoutes.map())
         // Create a project and store it online
-        .then(() => LayerSelector.addWmsLayer())
+        .then(() => LayerControls.addWmsLayer())
         .get('[data-cy=save-project]')
+        .click()
+        .get('[data-cy=close-solicitation-modal]')
         .click()
         .then(() => Toasts.assertText('Projet enregistré !'))
         // Clean map
@@ -239,8 +249,10 @@ describe('Project', function () {
     it('can load remote remote project with credentials', function () {
       cy.visit(FrontendRoutes.map())
         // Create a project and store it online
-        .then(() => LayerSelector.addWmsLayerWithCredentials())
+        .then(() => LayerControls.addWmsLayerWithCredentials())
         .get('[data-cy=save-project]')
+        .click()
+        .get('[data-cy=close-solicitation-modal]')
         .click()
         .get('[data-cy=modal-password-input]')
         .clear()
@@ -272,11 +284,11 @@ describe('Project', function () {
         });
     });
 
-    it('delete project', function () {
+    it('can delete project', function () {
       const projectName = uuid();
       cy.visit(FrontendRoutes.map())
         // Create project
-        .then(() => LayerSelector.addWmsLayer())
+        .then(() => LayerControls.addWmsLayer())
         // Rename project
         .get('[data-cy=rename-project]')
         .click()
@@ -288,6 +300,8 @@ describe('Project', function () {
         .get('[data-cy=project-name]')
         // Save project
         .get('[data-cy=save-project]')
+        .click()
+        .get('[data-cy=close-solicitation-modal]')
         .click()
         .then(() => Toasts.assertText('Enregistrement en cours ...'))
         .then(() => Toasts.assertText('Projet enregistré !'))

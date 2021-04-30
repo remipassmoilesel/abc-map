@@ -1,14 +1,14 @@
 import { WmsConstants } from './WmsConstants';
 
-export class LayerSelector {
+export class LayerControls {
   public static getNames(): Cypress.Chainable<string[]> {
-    return cy.get('[data-cy=layers-list] .abc-layer-item').then((elem) => {
+    return cy.get('[data-cy=layers-list] [data-cy=list-item]').then((elem) => {
       return elem.toArray().map((node) => node.textContent || '');
     });
   }
 
   public static getActiveItem() {
-    return cy.get('[data-cy=layers-list] .abc-layer-item.active');
+    return cy.get('[data-cy=layers-list] [data-cy=list-item][data-layer=active]');
   }
 
   public static addOsmLayer(): Cypress.Chainable<any> {

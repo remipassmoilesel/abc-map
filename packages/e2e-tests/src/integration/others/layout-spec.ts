@@ -94,6 +94,8 @@ describe('Layout', function () {
         .click()
         .get('[data-cy=layout-controls] [data-cy=pdf-export]')
         .click()
+        .get('[data-cy=close-solicitation-modal]')
+        .click()
         .then(() => Toasts.assertText('Export terminé !'))
         .then(() => Download.fileAsBlob())
         .should((pdf) => {
@@ -107,6 +109,8 @@ describe('Layout', function () {
         .click()
         .click()
         .get('[data-cy=layout-controls] [data-cy=png-export]')
+        .click()
+        .get('[data-cy=close-solicitation-modal]')
         .click()
         .then(() => Toasts.assertText('Export terminé !'))
         .then(() => Download.fileAsBlob())

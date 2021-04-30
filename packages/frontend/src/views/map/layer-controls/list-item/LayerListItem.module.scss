@@ -1,4 +1,6 @@
-.abc-layer-item {
+@import "src/assets/styles/variables";
+
+.listItem {
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
@@ -6,15 +8,15 @@
   cursor: pointer;
   user-select: none;
 
-  .fa {
+  :global(.fa) {
     margin: 0 7px;
   }
 
   &.active {
-    background: #007bff;
+    background: $primary;
     color: white;
 
-    .fa {
+    :global(.fa) {
       color: white;
     }
   }
