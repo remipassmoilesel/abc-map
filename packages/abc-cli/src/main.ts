@@ -78,6 +78,8 @@ async function main(args: string[]) {
     service.dependencyCheck();
   } else if (Command.NPM_REGISTRY === command) {
     await service.startRegistry(true);
+  } else if (Command.APPLY_LICENSE === command) {
+    await service.applyLicense();
   } else if (Command.HELP === command) {
     banners.big();
     service.help();

@@ -144,6 +144,12 @@ export class Service {
     this.shell.sync('lerna run dep-check');
   }
 
+  public applyLicense(): void {
+    this.shell.sync(`addlicense -f ${this.config.getProjectRoot()}/license-header.txt \
+                              -skip 'js' -skip 'json' -skip 'yaml' -skip 'yml' -skip 'YAML' \
+                              packages`);
+  }
+
   public async startRegistry(logOutput: boolean): Promise<void> {
     const registry = await this.registry.start(logOutput);
     process.on('SIGINT', function () {
@@ -193,6 +199,8 @@ Other commands:
   $ ./abc-cli clean-restart-services      Stop associated services.
   $ ./abc-cli clean                       Clean all build directories and dependencies.
   $ ./abc-cli ci                          Execute continuous integration: lint, dep-check, build, test, ...
+  $ ./abc-cli npm-registry                Start a local NPM registry
+  $ ./abc-cli apply-license               Apply license to project files. Use: https://github.com/google/addlicense.
   $ ./abc-cli help                        Show this help.
 
     `);

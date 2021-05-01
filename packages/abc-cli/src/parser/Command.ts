@@ -31,5 +31,6 @@ export enum Command {
   CLEAN = 'clean',
   DEPENDENCY_CHECK = 'dep-check',
   NPM_REGISTRY = 'npm-registry',
+  APPLY_LICENSE = 'apply-license',
   HELP = 'help',
 }
