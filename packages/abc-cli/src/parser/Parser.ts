@@ -48,6 +48,8 @@ export class Parser {
       return Command.DEPENDENCY_CHECK;
     } else if (matchCommand(args, Command.NPM_REGISTRY)) {
       return Command.NPM_REGISTRY;
+    } else if (matchCommand(args, Command.APPLY_LICENSE)) {
+      return Command.APPLY_LICENSE;
     } else if (matchCommand(args, Command.HELP)) {
       return Command.HELP;
     } else {

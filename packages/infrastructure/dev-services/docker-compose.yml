@@ -13,6 +13,7 @@
 #
 # You should have received a copy of the GNU Affero General
 # Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
+---
 
 version: '3'
 
@@ -44,17 +45,6 @@ services:
       ME_CONFIG_MONGODB_ADMINUSERNAME: admin
       ME_CONFIG_MONGODB_ADMINPASSWORD: admin
       ME_CONFIG_MONGODB_PORT: 27017
-
-  abc-smtp:
-    image: 'namshi/smtp:latest'
-    container_name: abc-smtp
-    restart: always
-    ports:
-      - '587:587'
-    networks:
-      - abc-dev-services
-    environment:
-      PORT: 587
 
 volumes:
   mongodb_data:
