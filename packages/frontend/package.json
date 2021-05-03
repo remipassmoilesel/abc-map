@@ -1,7 +1,7 @@
 {
   "name": "@abc-map/frontend",
   "version": "0.0.1",
-  "license": "GPL-3.0-or-later",
+  "license": "AGPL-3.0-or-later",
   "proxy": "http://127.0.0.1:10082",
   "scripts": {
     "start:watch": "react-app-rewired start",

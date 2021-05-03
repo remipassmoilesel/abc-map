@@ -83,6 +83,7 @@ export class ProjectService {
     return { project, metadata: manifest.metadata };
   }
 
+  // TODO: we should check project size before save()
   public save(project: CompressedProject): Promise<void> {
     const formData = new FormData();
     formData.append('metadata', JSON.stringify(project.metadata));

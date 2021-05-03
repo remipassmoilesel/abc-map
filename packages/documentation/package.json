@@ -2,7 +2,7 @@
   "name": "@abc-map/documentation",
   "version": "0.0.1",
   "main": "build/index.js",
-  "license": "GPL-3.0-or-later",
+  "license": "AGPL-3.0-or-later",
   "types": "build/index.d.ts",
   "scripts": {
     "clean": "rm -rf build",

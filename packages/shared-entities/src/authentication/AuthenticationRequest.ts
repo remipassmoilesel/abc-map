@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-export interface LoginRequest {
+export interface AuthenticationRequest {
   email: string;
   password: string;
 }

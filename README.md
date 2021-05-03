@@ -72,6 +72,11 @@ A CLI tool builds and starts the project:
     $ ./abc-cli start       # Start application and watch sources, for development purposes
 
 
+See CLI help for more commands:     
+
+    $ ./abc-cli help
+
+
 Several services are launched on start:
 - A Mongodb instance on port 27019
 - A Mongo Express instance on port 27020

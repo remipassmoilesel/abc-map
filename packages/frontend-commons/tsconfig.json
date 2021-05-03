@@ -2,6 +2,9 @@
   "include": [
     "src"
   ],
+  "exclude": [
+    "node_modules"
+  ],
   "compilerOptions": {
     "target": "es6",
     "module": "commonjs",
@@ -14,8 +17,5 @@
     "forceConsistentCasingInFileNames": true,
     "declaration": true,
     "sourceMap": true
-  },
-  "exclude": [
-    "node_modules"
-  ]
+  }
 }
