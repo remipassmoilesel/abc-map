@@ -1,7 +1,7 @@
 {
   "name": "@abc-map/e2e-tests",
   "version": "0.0.1",
-  "license": "GPL-3.0-or-later",
+  "license": "AGPL-3.0-or-later",
   "scripts": {
     "e2e-test:before-merge": "cypress run --config-file ./config/ci.json --spec 'src/integration/ci/**/*'",
     "e2e-test:interactive": "cypress open --config-file ./config/development.json",

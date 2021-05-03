@@ -1,4 +1,10 @@
 {
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "node_modules"
+  ],
   "compilerOptions": {
     "strict": true,
     "target": "es5",
@@ -6,9 +12,5 @@
     "types": ["cypress"],
     "outDir": "build",
     "baseUrl": "src"
-  },
-  "include": [
-    "src/**/*.ts"
-  ],
-  "exclude": ["node_modules"]
+  }
 }

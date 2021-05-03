@@ -2,7 +2,7 @@
   "name": "@abc-map/abc-cli",
   "version": "0.0.1",
   "private": true,
-  "license": "GPL-3.0-or-later",
+  "license": "AGPL-3.0-or-later",
   "scripts": {
     "clean": "rm -rf build",
     "build": "tsc",

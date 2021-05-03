@@ -20,12 +20,13 @@ import { Services } from '../services/services';
 import { AbcUser, RegistrationRequest } from '@abc-map/shared-entities';
 
 const devPassword = 'azerty1234';
-const devUsers: RegistrationRequest[] = [
-  { email: 'user1@abcmap', password: devPassword },
-  { email: 'user2@abcmap', password: devPassword },
-  { email: 'user3@abcmap', password: devPassword },
-  { email: 'user4@abcmap', password: devPassword },
-];
+
+const numberOfUsers = 500;
+const enabledUsers = 450;
+
+function devUserEmail(id: number): string {
+  return 'user-' + id + '@abc-map.fr';
+}
 
 export class UserInit {
   public static create(services: Services) {
@@ -37,24 +38,30 @@ export class UserInit {
   public async init(): Promise<AbcUser[]> {
     const users: AbcUser[] = [];
 
-    // We register users
-    for (const request of devUsers) {
+    for (let i = 0; i < numberOfUsers; i++) {
+      const request: RegistrationRequest = {
+        email: devUserEmail(i),
+        password: devPassword,
+      };
+
+      // If user is already registered we do nothing
       let user = await this.services.user.findByEmail(request.email);
       if (user) {
         users.push(user);
         continue;
       }
 
+      // We create user
       await this.services.authentication.register(request, false);
       user = (await this.services.user.findByEmail(request.email)) as AbcUser;
-      users.push(user);
-    }
 
-    // We enable only half of them
-    for (let i = 0; i < devUsers.length / 2; i++) {
-      const user = users[i];
-      user.enabled = true;
-      await this.services.user.save(user);
+      // We enable user
+      if (i < enabledUsers) {
+        user.enabled = true;
+        await this.services.user.save(user);
+      }
+
+      users.push(user);
     }
 
     return users;

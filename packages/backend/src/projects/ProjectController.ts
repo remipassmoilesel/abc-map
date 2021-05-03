@@ -48,7 +48,7 @@ export class ProjectController extends Controller {
       limits: {
         headerPairs: 2,
         files: 1,
-        fileSize: 3e7, // 30 MB
+        fileSize: 1e7, // 10 MB
       },
     });
 

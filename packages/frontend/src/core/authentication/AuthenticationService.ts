@@ -24,7 +24,7 @@ import {
   AnonymousUser,
   AuthenticationResponse,
   AuthenticationStatus,
-  LoginRequest,
+  AuthenticationRequest,
   RegistrationResponse,
   RenewResponse,
   Token,
@@ -77,7 +77,7 @@ export class AuthenticationService {
    * @param password
    */
   public login(email: string, password: string): Promise<void> {
-    const request: LoginRequest = { email, password };
+    const request: AuthenticationRequest = { email, password };
     return this.httpClient
       .post<AuthenticationResponse>(Api.login(), request)
       .then(async (res) => {

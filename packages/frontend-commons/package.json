@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "main": "build/index.js",
   "types": "build/index.d.ts",
-  "license": "GPL-3.0-or-later",
+  "license": "AGPL-3.0-or-later",
   "scripts": {
     "clean": "rm -rf build",
     "build": "tsc",
