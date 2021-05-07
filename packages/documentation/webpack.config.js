@@ -5,6 +5,7 @@ const renderer = new marked.Renderer();
 module.exports = {
   mode: 'production',
   entry: './src/index.ts',
+  stats: 'errors-warnings',
   output: {
     path: path.resolve(__dirname, 'build'),
     filename: 'index.js',

@@ -110,7 +110,7 @@ class ProjectControls extends Component<Props, State> {
     const save = async () => {
       let password: string | undefined;
       if (geo.getMainMap().containsCredentials()) {
-        const event = await modals.projectPasswordModal();
+        const event = await modals.projectPassword();
         if (event.status === ModalStatus.Canceled) {
           return;
         }
@@ -125,7 +125,7 @@ class ProjectControls extends Component<Props, State> {
     };
 
     modals
-      .solicitationModal()
+      .solicitation()
       .then(() => save())
       .catch((err) => {
         logger.error(err);
@@ -147,7 +147,7 @@ class ProjectControls extends Component<Props, State> {
     const exportProject = async () => {
       let password: string | undefined;
       if (geo.getMainMap().containsCredentials()) {
-        const event = await modals.projectPasswordModal();
+        const event = await modals.projectPassword();
         if (event.status === ModalStatus.Canceled) {
           return;
         }
@@ -161,7 +161,7 @@ class ProjectControls extends Component<Props, State> {
     };
 
     modals
-      .solicitationModal()
+      .solicitation()
       .then(() => exportProject())
       .catch((err) => {
         logger.error(err);
@@ -190,7 +190,7 @@ class ProjectControls extends Component<Props, State> {
 
       let password: string | undefined;
       if (await project.compressedContainsCredentials(file)) {
-        const ev = await modals.projectPasswordModal();
+        const ev = await modals.projectPassword();
         if (ev.status === ModalStatus.Canceled) {
           return;
         }

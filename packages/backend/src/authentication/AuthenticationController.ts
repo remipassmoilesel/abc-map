@@ -93,15 +93,20 @@ export class AuthenticationController extends Controller {
   };
 
   public login = (req: express.Request, res: express.Response, next: NextFunction): void => {
+    const { metrics } = this.services;
+
     passport.authenticate('local', { session: false }, (err?: Error, user?: AbcUser, info?: IVerifyOptions) => {
       if (err) {
+        metrics.authenticationFailed();
         return next(err);
       }
       if (!user) {
+        metrics.authenticationFailed();
         const status: AuthenticationStatus = (info?.message || AuthenticationStatus.Refused) as AuthenticationStatus;
         const response: AuthenticationResponse = { status };
         return res.status(401).json(response);
       } else {
+        metrics.authenticationSucceeded();
         const token = this.services.authentication.signToken(user);
         const response: AuthenticationResponse = { token, status: AuthenticationStatus.Successful };
         return res.status(200).json(response);

@@ -18,7 +18,7 @@
 
 import React, { ChangeEvent, Component, ReactNode } from 'react';
 import { Modal } from 'react-bootstrap';
-import { ModalEventListener, ModalEventType, ModalStatus } from '../../core/ui/typings';
+import { ModalEventListener, ModalEventType, ModalStatus, ShowRenameModal } from '../../core/ui/typings';
 import { ServiceProps, withServices } from '../../core/withServices';
 
 interface State {
@@ -26,7 +26,7 @@ interface State {
   title: string;
   message: string;
   value: string;
-  listener?: ModalEventListener;
+  listener?: ModalEventListener<ShowRenameModal>;
 }
 
 class RenameModal extends Component<ServiceProps, State> {
@@ -75,11 +75,7 @@ class RenameModal extends Component<ServiceProps, State> {
   public componentDidMount() {
     const { modals } = this.props.services;
 
-    const listener: ModalEventListener = (ev) => {
-      if (ev.type === ModalEventType.ShowRename) {
-        this.setState({ visible: true, title: ev.title, message: ev.message, value: ev.value });
-      }
-    };
+    const listener: ModalEventListener<ShowRenameModal> = (ev) => this.setState({ visible: true, title: ev.title, message: ev.message, value: ev.value });
     modals.addListener(ModalEventType.ShowRename, listener);
     this.setState({ listener });
   }

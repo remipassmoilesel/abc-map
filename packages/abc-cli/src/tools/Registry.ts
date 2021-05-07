@@ -19,7 +19,7 @@
 import { ChildProcess } from 'child_process';
 import { Shell } from './Shell';
 import * as waitOn from 'wait-on';
-import { Config } from '../Config';
+import { Config } from '../config/Config';
 import { Logger } from './Logger';
 
 const logger = Logger.get('Registry');

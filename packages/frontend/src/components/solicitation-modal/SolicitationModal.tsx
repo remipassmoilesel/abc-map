@@ -104,12 +104,10 @@ class SolicitationModal extends Component<ServiceProps, State> {
   public componentDidMount() {
     const { modals } = this.props.services;
 
-    const listener: ModalEventListener = (ev) => {
-      if (ev.type === ModalEventType.ShowSolicitation) {
-        const title = _.sample(Titles);
-        const encouragement = _.sample(Encouragements);
-        this.setState({ visible: true, title, encouragement });
-      }
+    const listener: ModalEventListener = () => {
+      const title = _.sample(Titles);
+      const encouragement = _.sample(Encouragements);
+      this.setState({ visible: true, title, encouragement });
     };
 
     modals.addListener(ModalEventType.ShowSolicitation, listener);

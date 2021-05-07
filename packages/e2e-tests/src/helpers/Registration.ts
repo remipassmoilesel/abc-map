@@ -19,41 +19,47 @@
 import { FrontendRoutes } from '@abc-map/frontend-commons';
 import * as uuid from 'uuid-random';
 import { Toasts } from './Toasts';
-import { E2eUser } from './E2eUser';
 import Chainable = Cypress.Chainable;
 
 const defaultPassword = 'azerty1234';
 
 export class Registration {
-  public static newUser(enableAccount = true): Chainable<E2eUser> {
-    const email = `e2e-${uuid().substr(24)}@abcmap.fr`;
+  public static getPassword() {
+    return defaultPassword;
+  }
 
+  public static newEmail() {
+    return `e2e-${uuid().substr(24)}@abcmap.fr`;
+  }
+
+  public static newUser(email: string): Chainable<any> {
     // We register user
     return cy
       .visit(FrontendRoutes.landing())
-      .get('input[data-cy=registration-email]')
-      .type(email)
-      .get('input[data-cy=registration-password]')
-      .type(defaultPassword)
-      .get('button[data-cy=registration-submit]')
+      .get('[data-cy=open-registration]')
       .click()
-      .then(() => Toasts.assertText('Un email vient de vous être envoyé, vous devez activer votre compte'))
-      .then(() => {
-        // Then we enable account
-        if (enableAccount) {
-          return cy
-            .readFile(`emails/${email}.html`)
-            .then((content) => {
-              const activationLink = Cypress.$(content).find('a[data-cy=enable-account-link]').attr('href') || '';
-              expect(activationLink).to.match(/^http:\/\/localhost:[0-9]+\/confirm-account\//);
-              return cy.visit(activationLink);
-            })
-            .get('div[data-cy=account-enabled]')
-            .should((elem) => {
-              expect(elem.text()).to.contains('Votre compte est activé');
-            });
-        }
+      .get('input[data-cy=email]')
+      .type(email)
+      .get('input[data-cy=password]')
+      .type(defaultPassword)
+      .get('input[data-cy=password-confirmation]')
+      .type(defaultPassword)
+      .get('button[data-cy=confirm-registration]')
+      .click()
+      .then(() => Toasts.assertText('Un email vient de vous être envoyé, vous devez activer votre compte'));
+  }
+
+  public static enableAccount(email: string): Chainable<any> {
+    return cy
+      .readFile(`emails/${email}.html`)
+      .then((content) => {
+        const activationLink = Cypress.$(content).find('a[data-cy=enable-account-link]').attr('href') || '';
+        expect(activationLink).to.match(/^http:\/\/localhost:[0-9]+\/confirm-account\//);
+        return cy.visit(activationLink);
       })
-      .then(() => ({ email, password: defaultPassword }));
+      .get('div[data-cy=account-enabled]')
+      .should((elem) => {
+        expect(elem.text()).to.contains('Votre compte est activé');
+      });
   }
 }

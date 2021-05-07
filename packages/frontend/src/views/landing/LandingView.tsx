@@ -20,17 +20,20 @@ import React, { Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/frontend-commons';
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
 import { FrontendRoutes } from '@abc-map/frontend-commons';
-import { AbcVoteAggregation, RegistrationStatus } from '@abc-map/shared-entities';
-import LoginForm from './login/LoginForm';
-import RegistrationForm from './registration/RegistrationForm';
+import { AbcVoteAggregation } from '@abc-map/shared-entities';
 import { ServiceProps, withServices } from '../../core/withServices';
-import Cls from './LandingView.module.scss';
 import { DateTime } from 'luxon';
+import Illustration1Icon from '../../assets/illustrations/illustration-1.svg';
+import Illustration2Icon from '../../assets/illustrations/illustration-2.svg';
+import Illustration3Icon from '../../assets/illustrations/illustration-3.svg';
+import * as _ from 'lodash';
+import Cls from './LandingView.module.scss';
 
 const logger = Logger.get('Landing.tsx', 'info');
 
 interface State {
   voteAggregation?: AbcVoteAggregation;
+  illustration: string;
 }
 
 declare type Props = RouteComponentProps<any, any> & ServiceProps;
@@ -38,60 +41,81 @@ declare type Props = RouteComponentProps<any, any> & ServiceProps;
 class LandingView extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = {};
+    this.state = {
+      illustration: _.sample([Illustration1Icon, Illustration2Icon, Illustration3Icon]) as string,
+    };
   }
 
   public render(): ReactNode {
     const voteAggregation = this.state.voteAggregation;
     return (
       <div className={Cls.landing}>
-        {/* Introduction */}
+        <div className={'d-flex flex-column'}>
+          <div>
+            <h1>Bienvenue !</h1>
 
-        <h1>Bienvenue !</h1>
-        <p className={Cls.intro}>
-          Abc-Map est un logiciel libre de cartographie.
-          <br />
-          Abc-Map vous permet de créer des cartes simplement, sans connaissances techniques.
-        </p>
-        <p>Pour créer votre première carte efficacement:</p>
-        <ul>
-          <li>
-            Prenez le temps de consulter <Link to={FrontendRoutes.documentation()}>la page Documentation</Link>
-          </li>
-          <li>
-            Commencez à créer sur la page <Link to={FrontendRoutes.map()}>la page Carte</Link>, importez des données à partir de votre navigateur ou{' '}
-            <Link to={FrontendRoutes.dataStore()}>sur la page Catalogue de données</Link>
-          </li>
-          <li>
-            Si vous le souhaitez, appliquez un traitement de données sur <Link to={FrontendRoutes.dataProcessing('')}>la page Traitement de données</Link>
-          </li>
-          <li>
-            Mettez en page et exportez votre carte sur <Link to={FrontendRoutes.layout()}>la page Mise en page</Link>
-          </li>
-        </ul>
+            {/* Introduction */}
 
-        {/* Authentication */}
-
-        <LoginForm onSubmit={this.authentication} />
-
-        {/* Registration */}
-
-        <RegistrationForm onSubmit={this.registration} />
-
-        {/* Vote results */}
-
-        {!!voteAggregation?.total && (
-          <>
-            <p>
-              Sur les 7 derniers jours, {voteAggregation.satisfied} % des utilisateurs ont déclaré être satisfait !
+            <p className={Cls.intro}>
+              Abc-Map est un logiciel libre de cartographie.
               <br />
-              {voteAggregation.satisfied < 30 && "C'est pas top top, mais que font les développeurs ?"}
-              {voteAggregation.satisfied < 60 && 'Hmmm, va falloir faire mieux !'}
-              {voteAggregation.satisfied >= 60 && 'Pas mal non ?'}
-              &nbsp;({voteAggregation.total} participant(s))
+              Abc-Map vous permet de créer des cartes simplement, sans connaissances techniques.
             </p>
-          </>
-        )}
+            <ul>
+              <li>
+                Vous pouvez tout de suite vous lancer sur <Link to={FrontendRoutes.map()}>la page Carte</Link> !
+              </li>
+              <li>
+                ... mais vous feriez bien de prendre quelques minutes pour consulter <Link to={FrontendRoutes.documentation()}>la page Documentation</Link>
+              </li>
+              <li>
+                Importez des données de votre ordinateur ou <Link to={FrontendRoutes.dataStore()}>sur la page Catalogue de données</Link>
+              </li>
+              <li>
+                Si vous le souhaitez, appliquez un traitement de données sur <Link to={FrontendRoutes.dataProcessing('')}>la page Traitement de données</Link>
+              </li>
+              <li>
+                Mettez en page et exportez votre carte sur <Link to={FrontendRoutes.layout()}>la page Mise en page</Link>
+              </li>
+            </ul>
+
+            {/* Vote results */}
+
+            {!!voteAggregation?.total && (
+              <>
+                <p>
+                  Sur les 7 derniers jours, {voteAggregation.satisfied} % des utilisateurs ont déclaré être satisfait !
+                  <br />
+                  {voteAggregation.satisfied < 30 && "C'est pas top top, mais que font les développeurs ?"}
+                  {voteAggregation.satisfied < 60 && 'Hmmm, va falloir faire mieux !'}
+                  {voteAggregation.satisfied >= 60 && 'Pas mal non ?'}
+                </p>
+              </>
+            )}
+          </div>
+
+          <div>
+            {/* Login and registration */}
+
+            <h3 className={'mt-5'}>Inscription, connexion</h3>
+            <p className={'mt-4'}>
+              La connexion est <i>facultative</i>, mais elle permet de sauvegarder ses cartes en ligne.
+            </p>
+            <div className={'mt-5'}>
+              <button className={'btn btn-primary mr-3'} onClick={this.handleRegister} data-cy={'open-registration'}>
+                <i className={'fa fa-feather-alt'} />
+                S&apos;inscrire
+              </button>
+              <button className={'btn btn-primary mr-3'} onClick={this.handleLogin} data-cy={'open-login'}>
+                <i className={'fa fa-lock-open'} />
+                Se connecter
+              </button>
+            </div>
+          </div>
+        </div>
+        <div className={'mt-5'}>
+          <img src={this.state.illustration} alt={'Une belle illustration pour faire comme les vrais !'} className={Cls.illustration} />
+        </div>
       </div>
     );
   }
@@ -107,40 +131,22 @@ class LandingView extends Component<Props, State> {
       .catch((err) => logger.error(err));
   }
 
-  private authentication = (email: string, password: string) => {
-    const { toasts, authentication } = this.props.services;
-    if (!email || !password) {
-      toasts.info("Vous devez d'abord saisir votre email et votre mot de passe");
-      return;
-    }
+  private handleLogin = () => {
+    const { modals, toasts } = this.props.services;
 
-    authentication
-      .login(email, password)
-      .then(() => this.props.history.push(FrontendRoutes.map()))
-      .catch((err) => {
-        logger.error(err);
-        toasts.genericError();
-      });
+    modals.login().catch((err) => {
+      logger.error('Cannot open login modal', err);
+      toasts.genericError();
+    });
   };
 
-  private registration = (email: string, password: string) => {
-    const { toasts, authentication } = this.props.services;
+  private handleRegister = () => {
+    const { modals, toasts } = this.props.services;
 
-    authentication
-      .register(email, password)
-      .then((res) => {
-        if (res.status === RegistrationStatus.EmailAlreadyExists) {
-          return toasts.info('Cette adresse email est déjà prise');
-        }
-        if (res.status === RegistrationStatus.Successful) {
-          return toasts.info('Un email vient de vous être envoyé, vous devez activer votre compte');
-        }
-        toasts.genericError();
-      })
-      .catch((err) => {
-        toasts.genericError();
-        logger.error(err);
-      });
+    modals.registration().catch((err) => {
+      logger.error('Cannot open registration modal', err);
+      toasts.genericError();
+    });
   };
 }
 

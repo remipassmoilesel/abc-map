@@ -18,7 +18,7 @@
 
 import 'source-map-support/register';
 import { Logger } from './tools/Logger';
-import { Config } from './Config';
+import { Config } from './config/Config';
 import { Shell } from './tools/Shell';
 import { Parser } from './parser/Parser';
 import { Dependencies, Service } from './Service';

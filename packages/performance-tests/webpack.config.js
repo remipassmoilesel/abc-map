@@ -4,6 +4,9 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 module.exports = {
   mode: 'production',
   context: path.join(__dirname, 'src'),
+  target: 'web',
+  externals: /^k6(\/.*)?/,
+  stats: 'errors-warnings',
   entry: {
     index: './index.ts',
   },
@@ -23,11 +26,6 @@ module.exports = {
         exclude: /node_modules/,
       },
     ],
-  },
-  target: 'web',
-  externals: /^k6(\/.*)?/,
-  stats: {
-    colors: true,
   },
   plugins: [new CleanWebpackPlugin()],
 };

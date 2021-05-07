@@ -35,7 +35,8 @@
     "multer": "^1.4.2",
     "jszip": "^3.6.0",
     "compression": "^1.7.4",
-    "luxon": "^1.26.0"
+    "luxon": "^1.26.0",
+    "prom-client": "^13.1.0"
   },
   "devDependencies": {
     "@types/js-yaml": "^3.12.5",

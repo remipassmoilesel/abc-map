@@ -20,10 +20,12 @@ import { Logger } from '@abc-map/frontend-commons';
 import {
   FeaturePropertiesClosedEvent,
   InternalEvent,
+  LoginClosedEvent,
   ModalEvent,
   ModalEventListener,
   ModalEventType,
   PasswordModalClosedEvent,
+  RegistrationClosedEvent,
   RenameModalClosedEvent,
   SolicitationClosedEvent,
 } from './typings';
@@ -33,91 +35,80 @@ const logger = Logger.get('ModalService.ts', 'warn');
 
 export class ModalService {
   private eventTarget: EventTarget;
-  private listeners = new Map<ModalEventListener, EventListener>();
+  private listeners = new Map<ModalEventListener<any>, EventListener>();
 
   constructor() {
     this.eventTarget = document.createDocumentFragment();
   }
 
-  public renameModal(title: string, message: string, value: string): Promise<RenameModalClosedEvent> {
-    return new Promise((resolve) => {
-      const listener: ModalEventListener = (ev) => {
-        if (ev.type === ModalEventType.RenameClosed) {
-          this.removeListener(ModalEventType.RenameClosed, listener);
-          resolve(ev);
-        }
-      };
-
-      this.addListener(ModalEventType.RenameClosed, listener);
-      this.dispatch({ type: ModalEventType.ShowRename, title, message, value });
-    });
+  public rename(title: string, message: string, value: string): Promise<RenameModalClosedEvent> {
+    return this.modalPromise({ type: ModalEventType.ShowRename, title, message, value }, ModalEventType.RenameClosed);
   }
 
-  public projectPasswordModal(): Promise<PasswordModalClosedEvent> {
+  public projectPassword(): Promise<PasswordModalClosedEvent> {
     const message = 'Votre projet contient des identifiants, vous devez choisir un mot de passe pour les protéger.';
     const title = 'Mot de passe du projet';
     return this.passwordModal(title, message);
   }
 
   public passwordModal(title: string, message: string): Promise<PasswordModalClosedEvent> {
-    return new Promise((resolve) => {
-      const listener: ModalEventListener = (ev) => {
-        if (ev.type === ModalEventType.PasswordClosed) {
-          this.removeListener(ModalEventType.PasswordClosed, listener);
-          resolve(ev);
-        }
-      };
-
-      this.addListener(ModalEventType.PasswordClosed, listener);
-      this.dispatch({ type: ModalEventType.ShowPassword, title, message });
-    });
+    return this.modalPromise({ type: ModalEventType.ShowPassword, title, message }, ModalEventType.PasswordClosed);
   }
 
   public featurePropertiesModal(properties: SimplePropertiesMap): Promise<FeaturePropertiesClosedEvent> {
-    return new Promise((resolve) => {
+    return this.modalPromise({ type: ModalEventType.ShowFeatureProperties, properties }, ModalEventType.FeaturePropertiesClosed);
+  }
+
+  public solicitation(): Promise<SolicitationClosedEvent> {
+    return this.modalPromise({ type: ModalEventType.ShowSolicitation }, ModalEventType.SolicitationClosed);
+  }
+
+  public login(): Promise<LoginClosedEvent> {
+    return this.modalPromise({ type: ModalEventType.ShowLogin }, ModalEventType.LoginClosed);
+  }
+
+  public registration(): Promise<RegistrationClosedEvent> {
+    return this.modalPromise({ type: ModalEventType.ShowRegistration }, ModalEventType.RegistrationClosed);
+  }
+
+  public passwordLost(): Promise<RegistrationClosedEvent> {
+    return this.modalPromise({ type: ModalEventType.ShowPasswordLost }, ModalEventType.PasswordLostClosed);
+  }
+
+  private modalPromise<O extends ModalEvent>(input: ModalEvent, closeEventType: ModalEventType): Promise<O> {
+    return new Promise<O>((resolve) => {
       const listener: ModalEventListener = (ev) => {
-        if (ev.type === ModalEventType.FeaturePropertiesClosed) {
-          this.removeListener(ModalEventType.FeaturePropertiesClosed, listener);
-          resolve(ev);
+        if (ev.type === closeEventType) {
+          this.removeListener(closeEventType, listener);
+          resolve(ev as O);
+        } else {
+          logger.warn('Unhandled modal event: ', ev);
         }
       };
 
-      this.addListener(ModalEventType.FeaturePropertiesClosed, listener);
-      this.dispatch({ type: ModalEventType.ShowFeatureProperties, properties });
+      this.addListener(closeEventType, listener);
+      this.dispatch(input);
     });
   }
 
-  public solicitationModal(): Promise<SolicitationClosedEvent> {
-    return new Promise((resolve) => {
-      const listener: ModalEventListener = (ev) => {
-        if (ev.type === ModalEventType.SolicitationClosed) {
-          this.removeListener(ModalEventType.SolicitationClosed, listener);
-          resolve(ev);
-        }
-      };
-
-      this.addListener(ModalEventType.SolicitationClosed, listener);
-      this.dispatch({ type: ModalEventType.ShowSolicitation });
-    });
-  }
-
-  public addListener(type: ModalEventType, listener: ModalEventListener) {
+  public addListener<T extends ModalEvent = ModalEvent>(type: ModalEventType, listener: ModalEventListener<T>) {
     const _listener: EventListener = (ev) => {
-      if (!(ev instanceof InternalEvent)) {
+      if (!(ev instanceof InternalEvent) || ev.type !== type) {
         logger.error('Bad event received: ', ev);
         return;
       }
-      listener(ev.payload);
+      listener(ev.payload as T);
     };
     this.eventTarget.addEventListener(type, _listener);
     this.listeners.set(listener, _listener);
   }
 
-  public removeListener(type: ModalEventType, listener: ModalEventListener) {
+  public removeListener(type: ModalEventType, listener: ModalEventListener<any>) {
     const _listener = this.listeners.get(listener);
     this.listeners.delete(listener);
     if (!_listener) {
-      throw new Error(`Unknown listener`);
+      logger.warn('Listener was not registered: ', _listener);
+      return;
     }
     this.eventTarget.removeEventListener(type, _listener);
   }

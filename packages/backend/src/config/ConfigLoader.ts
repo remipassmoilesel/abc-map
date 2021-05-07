@@ -42,7 +42,7 @@ export class ConfigLoader {
 
   public static safeConfig(config: Config): Config {
     const safe: Config = _.cloneDeep(config);
-    const safeValue = '<value masked>';
+    const safeValue = '<value-masked>';
     safe.authentication.jwtSecret = safeValue;
     safe.authentication.passwordSalt = safeValue;
     safe.database.password = safeValue;
