@@ -305,7 +305,7 @@ class LayoutView extends Component<Props, State> {
     };
 
     modals
-      .solicitationModal()
+      .solicitation()
       .then(() => exportLayouts())
       .catch((err) => {
         toasts.genericError();

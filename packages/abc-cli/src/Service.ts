@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Config } from './Config';
+import { Config } from './config/Config';
 import { Shell } from './tools/Shell';
 import * as waitOn from 'wait-on';
 import { Logger } from './tools/Logger';
@@ -77,9 +77,9 @@ export class Service {
     // Here we copy frontend build to public backend dir.
     // We could use frontend as a dependency but dependency management is messy afterwards (more than usual lol).
     const sourceDir = `${this.config.getFrontendRoot()}/build`;
-    const publicDir = `${this.config.getBackendRoot()}/public`;
-    this.shell.sync(`rm -rf ${publicDir}`);
-    this.shell.sync(`cp -R ${sourceDir} ${publicDir}`);
+    const targetDir = this.config.getBackendPublicRoot();
+    this.shell.sync(`rm -rf ${targetDir}`);
+    this.shell.sync(`cp -R ${sourceDir} ${targetDir}`);
   }
 
   public test(): void {
@@ -138,6 +138,8 @@ export class Service {
   public clean(): void {
     this.shell.sync('lerna exec "rm -rf node_modules"');
     this.shell.sync('lerna exec "rm -rf build"');
+    this.shell.sync('lerna exec "rm -rf .nyc_output"');
+    this.shell.sync(`rm -rf ${this.config.getBackendPublicRoot()}`);
   }
 
   public dependencyCheck(): void {

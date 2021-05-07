@@ -22,18 +22,19 @@ import { Logger } from '../utils/Logger';
 import { Router } from 'express';
 import { Services } from '../services/services';
 import { Config } from '../config/Config';
-import { HealthCheckController } from './HealthCheckController';
+import { HealthCheckController } from './health/HealthCheckController';
 import { AuthenticationController } from '../authentication/AuthenticationController';
 import { ProjectController } from '../projects/ProjectController';
 import { UserController } from '../users/UserController';
 import { DataStoreController } from '../data-store/DataStoreController';
 import { VoteController } from '../votes/VoteController';
+import { MetricsController } from './metrics/MetricsController';
 
 const logger = Logger.get('HttpHandlers.ts', 'info');
 
 export class HttpHandlers {
   public static create(config: Config, services: Services): HttpHandlers {
-    const publicControllers = [new HealthCheckController(services), new AuthenticationController(services)];
+    const publicControllers = [new MetricsController(services), new HealthCheckController(services), new AuthenticationController(services)];
     const privateControllers = [new ProjectController(services), new UserController(services), new DataStoreController(services), new VoteController(services)];
     return new HttpHandlers(config, services, publicControllers, privateControllers);
   }

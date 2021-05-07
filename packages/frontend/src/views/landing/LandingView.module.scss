@@ -16,43 +16,42 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-
 .landing {
-  margin: 3rem 10rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  height: 95vh;
+  overflow: auto;
+
+  padding: 3rem 10rem;
+  font-size: 1.1em;
 
   p {
     margin: 1em 0;
   }
-}
 
-.loginForm {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
+  :global(.btn) {
+    width: 13rem;
 
-  input {
-    margin: 1rem;
-    max-width: 20rem;
+    :global(.fa) {
+      color: white;
+      margin-right: 1rem;
+    }
+  }
+
+  li {
+    margin-top: 1rem;
   }
 
   button {
-    margin: 1rem;
+    height: 3rem;
+    box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15);
   }
 }
 
-.registrationForm {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-
-  input {
-    margin: 1rem;
-    max-width: 20rem;
-  }
-
-  button {
-    margin: 1rem;
-  }
+.illustration {
+  width: 40vw;
 }
 
 .intro {

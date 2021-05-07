@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright © 2021 Rémi Pace.
  * This file is part of Abc-Map.
  *
@@ -14,17 +14,23 @@
  *
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
+ *
+ *
  */
 
 import * as path from 'path';
 
 export class Config {
   public getProjectRoot(): string {
-    return path.resolve(__dirname, '..', '..', '..');
+    return path.resolve(__dirname, '..', '..', '..', '..');
   }
 
   public getBackendRoot(): string {
     return path.resolve(this.getProjectRoot(), 'packages/backend');
+  }
+
+  public getBackendPublicRoot(): string {
+    return path.resolve(this.getBackendRoot(), 'public');
   }
 
   public getFrontendRoot(): string {

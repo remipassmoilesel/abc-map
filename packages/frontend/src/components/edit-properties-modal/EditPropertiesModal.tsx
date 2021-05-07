@@ -18,7 +18,7 @@
 
 import React, { Component, ReactNode } from 'react';
 import { Modal } from 'react-bootstrap';
-import { ModalEventListener, ModalEventType, ModalStatus } from '../../core/ui/typings';
+import { ModalEventListener, ModalEventType, ModalStatus, ShowFeaturePropertiesModal } from '../../core/ui/typings';
 import { ServiceProps, withServices } from '../../core/withServices';
 import { SimplePropertiesMap } from '../../core/geo/features/FeatureWrapper';
 import PropertiesForm from './PropertiesForm';
@@ -27,7 +27,7 @@ interface State {
   visible: boolean;
   properties?: SimplePropertiesMap;
   newProperties?: SimplePropertiesMap;
-  listener?: ModalEventListener;
+  listener?: ModalEventListener<ShowFeaturePropertiesModal>;
 }
 
 class EditPropertiesModal extends Component<ServiceProps, State> {
@@ -69,13 +69,8 @@ class EditPropertiesModal extends Component<ServiceProps, State> {
   public componentDidMount() {
     const { modals } = this.props.services;
 
-    const listener: ModalEventListener = (ev) => {
-      if (ev.type === ModalEventType.ShowFeatureProperties) {
-        this.setState({ visible: true, properties: ev.properties });
-      }
-    };
+    const listener: ModalEventListener<ShowFeaturePropertiesModal> = (ev) => this.setState({ visible: true, properties: ev.properties });
     modals.addListener(ModalEventType.ShowFeatureProperties, listener);
-
     this.setState({ listener });
   }
 

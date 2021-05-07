@@ -144,7 +144,7 @@ export class LayerControls extends Component<Props, State> {
     }
 
     modals
-      .renameModal('Renommer', 'Renommer la couche', active.getMetadata()?.name || 'Couche')
+      .rename('Renommer', 'Renommer la couche', active.getMetadata()?.name || 'Couche')
       .then((res) => {
         if (ModalStatus.Confirmed) {
           map.renameLayer(active, res.value);

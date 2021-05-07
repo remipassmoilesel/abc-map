@@ -18,7 +18,7 @@
 
 import React, { ChangeEvent, Component, ReactNode } from 'react';
 import { Modal } from 'react-bootstrap';
-import { ModalEventListener, ModalEventType, ModalStatus } from '../../core/ui/typings';
+import { ModalEventListener, ModalEventType, ModalStatus, ShowPasswordModal } from '../../core/ui/typings';
 import { ServiceProps, withServices } from '../../core/withServices';
 
 interface State {
@@ -26,7 +26,7 @@ interface State {
   title: string;
   message: string;
   value: string;
-  listener?: ModalEventListener;
+  listener?: ModalEventListener<ShowPasswordModal>;
 }
 
 class PasswordModal extends Component<ServiceProps, State> {
@@ -41,17 +41,20 @@ class PasswordModal extends Component<ServiceProps, State> {
   }
 
   public render(): ReactNode {
-    if (!this.state.visible) {
+    const visible = this.state.visible;
+    const title = this.state.title;
+    const message = this.state.message;
+    if (!visible) {
       return <div />;
     }
 
     return (
-      <Modal show={this.state.visible} onHide={this.handleCancel}>
+      <Modal show={visible} onHide={this.handleCancel}>
         <Modal.Header closeButton>
-          <Modal.Title>{this.state.title}</Modal.Title>
+          <Modal.Title>{title}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div>{this.state.message}</div>
+          <div>{message}</div>
           <div className={'m-3'}>
             <input className={'form-control'} type={'password'} value={this.state.value} onChange={this.handleInputChange} data-cy="modal-password-input" />
           </div>
@@ -71,13 +74,8 @@ class PasswordModal extends Component<ServiceProps, State> {
   public componentDidMount() {
     const { modals } = this.props.services;
 
-    const listener: ModalEventListener = (ev) => {
-      if (ev.type === ModalEventType.ShowPassword) {
-        this.setState({ visible: true, title: ev.title, message: ev.message });
-      }
-    };
+    const listener: ModalEventListener<ShowPasswordModal> = (ev) => this.setState({ visible: true, title: ev.title, message: ev.message });
     modals.addListener(ModalEventType.ShowPassword, listener);
-
     this.setState({ listener });
   }
 

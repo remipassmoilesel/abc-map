@@ -38,6 +38,9 @@ import { ServiceProps, withServices } from './core/withServices';
 import DataProcessingView from './views/data-processing/DataProcessingView';
 import EditPropertiesModal from './components/edit-properties-modal/EditPropertiesModal';
 import SolicitationModal from './components/solicitation-modal/SolicitationModal';
+import LoginModal from './components/login-modal/LoginModal';
+import RegistrationModal from './components/registration-modal/RegistrationModal';
+import PasswordLostModal from './components/password-lost-modal/PasswordLostModal';
 
 class App extends Component<ServiceProps, {}> {
   public render(): ReactNode {
@@ -61,6 +64,9 @@ class App extends Component<ServiceProps, {}> {
           <DeviceWarningModal />
           <EditPropertiesModal />
           <SolicitationModal />
+          <LoginModal />
+          <RegistrationModal />
+          <PasswordLostModal />
         </BrowserRouter>
       </Provider>
     );

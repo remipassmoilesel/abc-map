@@ -26,7 +26,7 @@ import { MainMap } from '../../helpers/MainMap';
 import { LayerControls } from '../../helpers/LayerControls';
 import { WmsConstants } from '../../helpers/WmsConstants';
 import { Registration } from '../../helpers/Registration';
-import { Login } from '../../helpers/Login';
+import { Authentication } from '../../helpers/Authentication';
 import * as uuid from 'uuid-random';
 import 'cypress-file-upload';
 
@@ -202,9 +202,13 @@ describe('Project', function () {
 
   describe('As a user', function () {
     beforeEach(() => {
+      const email = Registration.newEmail();
+      const password = Registration.getPassword();
+
       TestHelper.init()
-        .then(() => Registration.newUser())
-        .then((user) => Login.login(user));
+        .then(() => Registration.newUser(email))
+        .then(() => Registration.enableAccount(email))
+        .then(() => Authentication.login(email, password));
     });
 
     it('can store project online without credentials', function () {

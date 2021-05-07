@@ -17,7 +17,7 @@
  */
 
 import * as childProcess from 'child_process';
-import { Config } from '../Config';
+import { Config } from '../config/Config';
 import { Logger } from './Logger';
 import { ChildProcess, ExecSyncOptions, SpawnOptions } from 'child_process';
 

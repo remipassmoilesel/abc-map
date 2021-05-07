@@ -26,6 +26,7 @@ import { Dropdown } from 'react-bootstrap';
 import { MainState } from '../../core/store/reducer';
 import { ServiceProps, withServices } from '../../core/withServices';
 import TopBarLink from './TopBarLink';
+import MainIcon from '../../assets/main-icon.svg';
 import Cls from './TopBar.module.scss';
 
 const logger = Logger.get('TopBar.tsx', 'info');
@@ -43,16 +44,18 @@ class TopBar extends Component<Props, {}> {
   public render(): ReactNode {
     const userAuthenticated = this.props.userStatus === UserStatus.Authenticated;
     const user = this.props.user;
-    const label = user && userAuthenticated ? user.email : 'Visiteur';
+    const userLabel = user && userAuthenticated ? user.email : 'Bonjour visiteur !';
 
     return (
       <div className={Cls.topBar} data-cy={'top-bar'}>
         <h1>
-          <Link to={FrontendRoutes.landing()} data-cy={'landing'}>
-            <i className={'fa fa-map-marked-alt mr-2'} />
+          <Link to={FrontendRoutes.landing()} data-cy={'landing'} className={'d-flex align-items-ce'}>
+            <img src={MainIcon} alt={'Logo'} height={'25'} className={'mr-3'} />
             Abc-Map
           </Link>
         </h1>
+
+        <div className={'flex-grow-1'} />
 
         <TopBarLink label={'Accueil'} to={FrontendRoutes.landing()} activeMatch={/^\/$/} data-cy={'landing'} />
         <TopBarLink label={'Carte'} to={FrontendRoutes.map()} data-cy={'map'} />
@@ -61,15 +64,21 @@ class TopBar extends Component<Props, {}> {
         <TopBarLink label={'Mise en page'} to={FrontendRoutes.layout()} data-cy={'layout'} />
         <TopBarLink label={'Documentation'} to={FrontendRoutes.documentation()} data-cy={'help'} />
 
-        <div className={'flex-grow-1'} />
         <div className={'ml-3'}>
           <Dropdown data-cy={'user-menu'}>
             <Dropdown.Toggle variant="light">
               <i className={'fa fa-user'} />
             </Dropdown.Toggle>
-            <Dropdown.Menu>
-              <Dropdown.ItemText data-cy={'user-label'}>{label}</Dropdown.ItemText>
-              {!userAuthenticated && <Dropdown.Item onClick={this.handleLogin}>Se connecter</Dropdown.Item>}
+            <Dropdown.Menu className={Cls.dropDown}>
+              <Dropdown.ItemText data-cy={'user-label'}>{userLabel}</Dropdown.ItemText>
+              <Dropdown.Divider />
+              {!userAuthenticated && (
+                <>
+                  <Dropdown.Item onClick={this.handleRegister}>S&apos;inscrire</Dropdown.Item>
+                  <Dropdown.Item onClick={this.handleLogin}>Se connecter</Dropdown.Item>
+                  <Dropdown.Item onClick={this.handlePasswordLost}>Mot de passe perdu</Dropdown.Item>
+                </>
+              )}
               <Dropdown.Item onClick={this.handleLogout} disabled={!userAuthenticated} data-cy={'logout'}>
                 <i className={'fa fa-lock mr-2'} /> Se déconnecter
               </Dropdown.Item>
@@ -81,7 +90,30 @@ class TopBar extends Component<Props, {}> {
   }
 
   private handleLogin = () => {
-    this.props.history.push(FrontendRoutes.landing());
+    const { modals, toasts } = this.props.services;
+
+    modals.login().catch((err) => {
+      logger.error('Cannot open login modal', err);
+      toasts.genericError();
+    });
+  };
+
+  private handlePasswordLost = () => {
+    const { modals, toasts } = this.props.services;
+
+    modals.passwordLost().catch((err) => {
+      logger.error('Cannot open login modal', err);
+      toasts.genericError();
+    });
+  };
+
+  private handleRegister = () => {
+    const { modals, toasts } = this.props.services;
+
+    modals.registration().catch((err) => {
+      logger.error('Cannot open registration modal', err);
+      toasts.genericError();
+    });
   };
 
   private handleLogout = () => {

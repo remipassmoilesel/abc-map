@@ -16,11 +16,11 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FrontendRoutes } from '@abc-map/frontend-commons';
 import { TestHelper } from '../../helpers/TestHelper';
 import { Registration } from '../../helpers/Registration';
-import { Login } from '../../helpers/Login';
+import { Authentication } from '../../helpers/Authentication';
 import { Toasts } from '../../helpers/Toasts';
+import { FrontendRoutes } from '@abc-map/frontend-commons';
 
 describe('Authentication', function () {
   beforeEach(() => {
@@ -29,58 +29,57 @@ describe('Authentication', function () {
 
   describe('As a visitor', () => {
     it('can register and enable account', function () {
-      Registration.newUser();
+      const email = Registration.newEmail();
+      Registration.newUser(email).then(() => Registration.enableAccount(email));
     });
 
-    it('can login with correct password', function () {
-      Registration.newUser().then((user) => Login.login(user));
-    });
-
-    it('cannot login with incorrect password', function () {
-      Registration.newUser().then((user) => {
-        cy.visit(FrontendRoutes.landing())
-          .get('input[data-cy=login-email]')
-          .type(user.email)
-          .get('input[data-cy=login-password]')
-          .type('wrong-password')
-          .get('button[data-cy=login-button]')
-          .click()
-          .then(() => Toasts.assertText('Vos identifiants sont incorrects'));
-      });
-    });
-
-    it('can login if account is enabled', function () {
-      Registration.newUser().then((user) => {
-        return Login.login(user)
-          .then(() => Toasts.assertText('Vous êtes connecté'))
-          .get('[data-cy=user-menu]')
-          .click()
-          .get('[data-cy=user-label]')
-          .should((elem) => {
-            expect(elem.text()).equal(user.email);
-          });
-      });
+    it('can login on enabled account with correct password', function () {
+      const email = Registration.newEmail();
+      const password = Registration.getPassword();
+      Registration.newUser(email)
+        .then(() => Registration.enableAccount(email))
+        .then(() => Authentication.login(email, password));
     });
 
     it('cannot login if account is not enabled', function () {
-      Registration.newUser(false)
-        .then((user) => {
-          return cy
-            .visit(FrontendRoutes.landing())
-            .get('input[data-cy=login-email]')
-            .type(user.email)
-            .get('input[data-cy=login-password]')
-            .type(user.password)
-            .get('button[data-cy=login-button]')
-            .click();
-        })
+      const email = Registration.newEmail();
+      const password = Registration.getPassword();
+      Registration.newUser(email)
+        .get('[data-cy=open-login]')
+        .click()
+        .get('input[data-cy=email]')
+        .type(email)
+        .get('input[data-cy=password]')
+        .type(password)
+        .get('button[data-cy=confirm-login]')
+        .click()
         .then(() => Toasts.assertText('Vous devez activer votre compte avant de vous connecter'));
+    });
+
+    it('cannot login with incorrect password', function () {
+      const email = Registration.newEmail();
+      Registration.newUser(email)
+        .then(() => Registration.enableAccount(email))
+        .visit(FrontendRoutes.landing())
+        .get('[data-cy=open-login]')
+        .click()
+        .get('input[data-cy=email]')
+        .type(email)
+        .get('input[data-cy=password]')
+        .type('wrong-password-123')
+        .get('button[data-cy=confirm-login]')
+        .click()
+        .then(() => Toasts.assertText('Vos identifiants sont incorrects'));
     });
   });
 
   describe('As a user', function () {
     it('can logout', function () {
-      Registration.newUser()
+      const email = Registration.newEmail();
+      const password = Registration.getPassword();
+      Registration.newUser(email)
+        .then(() => Registration.enableAccount(email))
+        .then(() => Authentication.login(email, password))
         .get('[data-cy=user-menu]')
         .click()
         .get('[data-cy=logout]')
@@ -90,7 +89,7 @@ describe('Authentication', function () {
         .click()
         .get('[data-cy=user-label]')
         .should((elem) => {
-          expect(elem.text()).equal('Visiteur');
+          expect(elem.text()).equal('Bonjour visiteur !');
         });
     });
   });

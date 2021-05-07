@@ -17,19 +17,20 @@
  */
 
 import { FrontendRoutes } from '@abc-map/frontend-commons';
-import { E2eUser } from './E2eUser';
 import Chainable = Cypress.Chainable;
 import { Toasts } from './Toasts';
 
-export class Login {
-  public static login(user: E2eUser): Chainable<any> {
+export class Authentication {
+  public static login(email: string, password: string): Chainable<any> {
     return cy
       .visit(FrontendRoutes.landing())
-      .get('input[data-cy=login-email]')
-      .type(user.email)
-      .get('input[data-cy=login-password]')
-      .type(user.password)
-      .get('button[data-cy=login-button]')
+      .get('[data-cy=open-login]')
+      .click()
+      .get('input[data-cy=email]')
+      .type(email)
+      .get('input[data-cy=password]')
+      .type(password)
+      .get('button[data-cy=confirm-login]')
       .click()
       .then(() => Toasts.assertText('Vous êtes connecté !'));
   }

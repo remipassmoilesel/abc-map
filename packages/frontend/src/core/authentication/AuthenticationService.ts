@@ -70,7 +70,7 @@ export class AuthenticationService {
   /**
    * This method authenticate user.
    *
-   * This methods return a promise which resolve if
+   * This methods return a promise which resolve if authentication is successful
    *
    * Promise will reject if an error occurs.
    * @param email
@@ -117,6 +117,10 @@ export class AuthenticationService {
         this.toasts.genericError();
         return Promise.reject(new Error('Invalid login status'));
       });
+  }
+
+  public passwordLost(email: string): Promise<void> {
+    return Promise.reject(new Error(`TODO: implement ${email}`));
   }
 
   public renew(): Promise<void> {

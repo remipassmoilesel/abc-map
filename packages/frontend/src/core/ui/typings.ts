@@ -27,6 +27,12 @@ export enum ModalEventType {
   FeaturePropertiesClosed = 'FeaturePropertiesClosed',
   ShowSolicitation = 'ShowSolicitation',
   SolicitationClosed = 'SolicitationClosed',
+  ShowLogin = 'ShowLogin',
+  LoginClosed = 'LoginClosed',
+  ShowRegistration = 'ShowRegistration',
+  RegistrationClosed = 'RegistrationClosed',
+  ShowPasswordLost = 'ShowPasswordLost',
+  PasswordLostClosed = 'PasswordLostClosed',
 }
 
 export enum ModalStatus {
@@ -34,7 +40,7 @@ export enum ModalStatus {
   Canceled = 'Canceled',
 }
 
-export interface ShowRenameModalEvent {
+export interface ShowRenameModal {
   type: ModalEventType.ShowRename;
   title: string;
   message: string;
@@ -47,7 +53,7 @@ export interface RenameModalClosedEvent {
   status: ModalStatus;
 }
 
-export interface ShowPasswordModalEvent {
+export interface ShowPasswordModal {
   type: ModalEventType.ShowPassword;
   title: string;
   message: string;
@@ -59,7 +65,7 @@ export interface PasswordModalClosedEvent {
   status: ModalStatus;
 }
 
-export interface ShowFeaturePropertiesEvent {
+export interface ShowFeaturePropertiesModal {
   type: ModalEventType.ShowFeatureProperties;
   properties: SimplePropertiesMap;
 }
@@ -70,7 +76,7 @@ export interface FeaturePropertiesClosedEvent {
   properties: SimplePropertiesMap;
 }
 
-export interface ShowSolicitationEvent {
+export interface ShowSolicitationModal {
   type: ModalEventType.ShowSolicitation;
 }
 
@@ -79,15 +85,48 @@ export interface SolicitationClosedEvent {
   status: ModalStatus;
 }
 
+export interface ShowLoginModal {
+  type: ModalEventType.ShowLogin;
+}
+
+export interface LoginClosedEvent {
+  type: ModalEventType.LoginClosed;
+  status: ModalStatus;
+}
+
+export interface ShowRegistrationModal {
+  type: ModalEventType.ShowRegistration;
+}
+
+export interface RegistrationClosedEvent {
+  type: ModalEventType.RegistrationClosed;
+  status: ModalStatus;
+}
+
+export interface ShowPasswordLostModal {
+  type: ModalEventType.ShowPasswordLost;
+}
+
+export interface PasswordLostClosedEvent {
+  type: ModalEventType.PasswordLostClosed;
+  status: ModalStatus;
+}
+
 export declare type ModalEvent =
-  | ShowRenameModalEvent
+  | ShowRenameModal
   | RenameModalClosedEvent
-  | ShowPasswordModalEvent
+  | ShowPasswordModal
   | PasswordModalClosedEvent
-  | ShowFeaturePropertiesEvent
+  | ShowFeaturePropertiesModal
   | FeaturePropertiesClosedEvent
-  | ShowSolicitationEvent
-  | SolicitationClosedEvent;
+  | ShowSolicitationModal
+  | SolicitationClosedEvent
+  | ShowLoginModal
+  | LoginClosedEvent
+  | ShowRegistrationModal
+  | RegistrationClosedEvent
+  | ShowPasswordLostModal
+  | PasswordLostClosedEvent;
 
 export class InternalEvent extends Event {
   constructor(type: ModalEventType, public readonly payload: ModalEvent) {
@@ -95,4 +134,4 @@ export class InternalEvent extends Event {
   }
 }
 
-export declare type ModalEventListener = (ev: ModalEvent) => void;
+export declare type ModalEventListener<T extends ModalEvent = ModalEvent> = (ev: T) => void;
