@@ -18,7 +18,7 @@
   "dependencies": {
     "@types/geojson": "^7946.0.7",
     "@types/uuid": "^3.4.4",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.21",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
