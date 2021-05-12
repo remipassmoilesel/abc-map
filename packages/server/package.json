@@ -1,5 +1,5 @@
 {
-  "name": "@abc-map/backend",
+  "name": "@abc-map/server",
   "version": "0.1.0",
   "main": "build/main.js",
   "license": "AGPL-3.0-or-later",

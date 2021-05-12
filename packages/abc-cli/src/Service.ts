@@ -83,7 +83,7 @@ export class Service {
     // Here we copy frontend build to public backend dir.
     // We could use frontend as a dependency but dependency management is messy afterwards (more than usual lol).
     const sourceDir = `${this.config.getFrontendRoot()}/build`;
-    const targetDir = this.config.getBackendPublicRoot();
+    const targetDir = this.config.getServerPublicRoot();
     this.shell.sync(`rm -rf ${targetDir}`);
     this.shell.sync(`cp -R ${sourceDir} ${targetDir}`);
   }
@@ -145,7 +145,7 @@ export class Service {
     this.shell.sync('lerna exec "rm -rf node_modules"');
     this.shell.sync('lerna exec "rm -rf build"');
     this.shell.sync('lerna exec "rm -rf .nyc_output"');
-    this.shell.sync(`rm -rf ${this.config.getBackendPublicRoot()}`);
+    this.shell.sync(`rm -rf ${this.config.getServerPublicRoot()}`);
   }
 
   public dependencyCheck(): void {

@@ -32,9 +32,10 @@ main().catch((err: Error) => {
 
 async function main() {
   logger.info('Starting Abc-Map ...');
+  logger.info(`Loading configuration: ${ConfigLoader.getPathFromEnv()}`);
 
   const config = await ConfigLoader.load();
-  logger.info('Using configuration: ', JSON.stringify(ConfigLoader.safeConfig(config), null, 2));
+  logger.info('Configuration used: ', JSON.stringify(ConfigLoader.safeConfig(config), null, 2));
 
   const services = await servicesFactory(config);
 

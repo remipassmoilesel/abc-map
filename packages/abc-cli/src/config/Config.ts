@@ -25,12 +25,12 @@ export class Config {
     return path.resolve(__dirname, '..', '..', '..', '..');
   }
 
-  public getBackendRoot(): string {
-    return path.resolve(this.getProjectRoot(), 'packages/backend');
+  public getServerRoot(): string {
+    return path.resolve(this.getProjectRoot(), 'packages/server');
   }
 
-  public getBackendPublicRoot(): string {
-    return path.resolve(this.getBackendRoot(), 'public');
+  public getServerPublicRoot(): string {
+    return path.resolve(this.getServerRoot(), 'public');
   }
 
   public getFrontendRoot(): string {
