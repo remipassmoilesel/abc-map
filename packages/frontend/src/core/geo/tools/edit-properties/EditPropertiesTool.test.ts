@@ -28,9 +28,9 @@ import { FeatureSelected } from './EditPropertiesEvent';
 import { ModalEventType, ModalStatus } from '../../../ui/typings';
 import Feature from 'ol/Feature';
 import { Point } from 'ol/geom';
-import { Utils } from '../../../../../../backend/src/utils/Utils';
 import { HistoryKey } from '../../../history/HistoryKey';
 import { SetFeatureProperties } from '../../../history/tasks/features/SetFeatureProperties';
+import { Utils } from '../../../utils/Utils';
 
 describe('EditPropertiesTool', () => {
   let map: SinonStubbedInstance<Map>;

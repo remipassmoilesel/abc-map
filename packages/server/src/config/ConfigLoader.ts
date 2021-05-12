@@ -30,9 +30,13 @@ const logger = Logger.get('ConfigLoader.ts', 'info');
 export class ConfigLoader {
   public static readonly DEFAULT_CONFIG = 'resources/configuration/local.js';
 
-  public static async load(): Promise<Config> {
+  public static getPathFromEnv(): string {
     const env = new Env();
-    const configPath = env.get(EnvKey.CONFIG) || ConfigLoader.DEFAULT_CONFIG;
+    return env.get(EnvKey.CONFIG) || ConfigLoader.DEFAULT_CONFIG;
+  }
+
+  public static async load(): Promise<Config> {
+    const configPath = this.getPathFromEnv();
     return new ConfigLoader().load(configPath);
   }
 
@@ -52,8 +56,6 @@ export class ConfigLoader {
 
   public async load(configPath: string): Promise<Config> {
     const _configPath = path.resolve(configPath);
-    logger.info(`Loading configuration: ${_configPath}`);
-
     const config: Config = _.cloneDeep(require(_configPath));
 
     // TODO: use better validation
@@ -101,7 +103,6 @@ export class ConfigLoader {
     // We set resolve and set frontend path
     config.frontendPath = path.resolve(__dirname, '..', '..', 'public');
 
-    logger.info(`Loaded !`);
     return config;
   }
 }

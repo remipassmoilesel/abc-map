@@ -65,7 +65,7 @@ export class HttpServer {
     const port = this.config.server.port;
     const host = this.config.server.host;
     this.app.listen(port, host, () => {
-      logger.info(`Abc-Map backend server listening on http://${host}:${port}`);
+      logger.info(`Abc-Map server listening on http://${host}:${port}`);
     });
 
     return new Promise((resolve, reject) => {
