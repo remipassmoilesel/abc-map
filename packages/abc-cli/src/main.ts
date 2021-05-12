@@ -22,9 +22,10 @@ import { Config } from './config/Config';
 import { Shell } from './tools/Shell';
 import { Parser } from './parser/Parser';
 import { Dependencies, Service } from './Service';
-import { Command } from './parser/Command';
 import { Banners } from './tools/Banners';
 import { Registry } from './tools/Registry';
+import { CommandName } from './parser/Command';
+import { Help } from './Help';
 
 const logger = Logger.get('main.ts', 'info');
 
@@ -47,41 +48,83 @@ async function main(args: string[]) {
   banners.cli();
   const command = await parser.parse(args);
 
-  if (Command.INSTALL === command) {
-    const production = args.findIndex((a) => a === '--production') !== -1;
-    await service.install(production ? Dependencies.Production : Dependencies.Development);
-  } else if (Command.LINT === command) {
-    service.lint();
-  } else if (Command.BUILD === command) {
-    service.cleanBuild();
-  } else if (Command.TEST === command) {
-    service.test();
-  } else if (Command.E2E === command) {
-    await service.install(Dependencies.Production);
-    await service.e2e();
-  } else if (Command.WATCH === command) {
-    service.watch();
-  } else if (Command.CI === command) {
-    await service.continuousIntegration();
-    banners.done();
-  } else if (Command.START === command) {
-    service.start();
-  } else if (Command.START_SERVICES === command) {
-    service.startServices();
-  } else if (Command.STOP_SERVICES === command) {
-    service.stopServices();
-  } else if (Command.CLEAN_RESTART_SERVICES === command) {
-    service.cleanRestartServices();
-  } else if (Command.CLEAN === command) {
-    service.clean();
-  } else if (Command.DEPENDENCY_CHECK === command) {
-    service.dependencyCheck();
-  } else if (Command.NPM_REGISTRY === command) {
-    await service.startRegistry(true);
-  } else if (Command.APPLY_LICENSE === command) {
-    await service.applyLicense();
-  } else if (Command.HELP === command) {
-    banners.big();
-    service.help();
+  switch (command.name) {
+    case CommandName.INSTALL:
+      await service.install(command.production ? Dependencies.Production : Dependencies.Development);
+      break;
+
+    case CommandName.LINT:
+      service.lint();
+      break;
+
+    case CommandName.BUILD:
+      service.cleanBuild();
+      break;
+
+    case CommandName.WATCH:
+      service.watch();
+      break;
+
+    case CommandName.TEST:
+      service.test();
+      break;
+
+    case CommandName.E2E:
+      await service.e2e();
+      break;
+
+    case CommandName.CI:
+      await service.continuousIntegration();
+      banners.done();
+      break;
+
+    case CommandName.START:
+      service.start();
+      break;
+
+    case CommandName.START_SERVICES:
+      service.startServices();
+      break;
+
+    case CommandName.STOP_SERVICES:
+      service.stopServices();
+      break;
+
+    case CommandName.CLEAN_RESTART_SERVICES:
+      service.cleanRestartServices();
+      break;
+
+    case CommandName.CLEAN:
+      service.clean();
+      break;
+
+    case CommandName.DEPENDENCY_CHECK:
+      service.dependencyCheck();
+      break;
+
+    case CommandName.NPM_REGISTRY:
+      await service.startRegistry(true);
+      break;
+
+    case CommandName.APPLY_LICENSE:
+      await service.applyLicense();
+      break;
+
+    case CommandName.DOCKER_BUILD:
+      service.dockerBuild(command.repository, command.tag);
+      break;
+
+    case CommandName.DOCKER_PUSH:
+      service.dockerPush(command.repository, command.tag);
+      break;
+
+    case CommandName.DEPLOY:
+      await service.deploy(command.configPath);
+      break;
+
+    case CommandName.HELP:
+      banners.big();
+      Help.display();
+      break;
   }
 }

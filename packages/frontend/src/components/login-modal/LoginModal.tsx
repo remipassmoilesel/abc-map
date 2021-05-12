@@ -177,10 +177,13 @@ class LoginModal extends Component<ServiceProps, State> {
     const { modals, toasts } = this.props.services;
 
     this.close();
-    modals.passwordLost().catch((err) => {
-      toasts.genericError();
-      logger.error('Cannot open password lost modal', err);
-    });
+
+    setTimeout(() => {
+      modals.passwordLost().catch((err) => {
+        toasts.genericError();
+        logger.error('Cannot open password lost modal', err);
+      });
+    }, 400);
   };
 
   private handleSubmit = () => {

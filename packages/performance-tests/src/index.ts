@@ -47,7 +47,7 @@ import { FormData } from './FormDataPolyfill';
  *
  */
 
-const Root = 'http://192.168.1.12:10082';
+const Root = 'https://staging.abc-map.fr';
 
 const vus = 400;
 export const options: Options = {

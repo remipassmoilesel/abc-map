@@ -1,6 +1,6 @@
 {
   "name": "@abc-map/backend",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "main": "build/main.js",
   "license": "AGPL-3.0-or-later",
   "scripts": {
@@ -16,7 +16,7 @@
     "dep-check": "depcruise -c .dependency-cruiser.js src"
   },
   "dependencies": {
-    "@abc-map/shared-entities": "0.0.1",
+    "@abc-map/shared-entities": "0.1.0",
     "express": "^4.17.1",
     "body-parser": "^1.19.0",
     "loglevel": "^1.7.1",
@@ -72,6 +72,9 @@
     "dependency-cruiser": "9.19.1",
     "supertest": "^6.1.3",
     "@types/supertest": "^2.0.10"
+  },
+  "docker": {
+    "imageName": "server"
   },
   "files": [
     "build"

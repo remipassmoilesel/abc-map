@@ -30,5 +30,6 @@ describe('Config', () => {
     assert.isTrue(fs.existsSync(path.resolve(config.getBackendRoot(), 'src/server/HttpServer.ts')));
     assert.isTrue(fs.existsSync(path.resolve(config.getFrontendRoot(), 'src/App.tsx')));
     assert.isTrue(fs.existsSync(path.resolve(config.getE2eRoot(), 'src/plugins/index.js')));
+    assert.isTrue(fs.existsSync(path.resolve(config.getChartRoot(), 'Chart.yaml')));
   });
 });

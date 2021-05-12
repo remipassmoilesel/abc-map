@@ -29,15 +29,11 @@ const logger = Logger.get('ConfigLoader.ts', 'info');
 
 export class ConfigLoader {
   public static readonly DEFAULT_CONFIG = 'resources/configuration/local.js';
-  private static _cache: { [k: string]: Config } = {};
 
   public static async load(): Promise<Config> {
     const env = new Env();
     const configPath = env.get(EnvKey.CONFIG) || ConfigLoader.DEFAULT_CONFIG;
-    if (!this._cache[configPath]) {
-      this._cache[configPath] = await new ConfigLoader().load(configPath);
-    }
-    return this._cache[configPath];
+    return new ConfigLoader().load(configPath);
   }
 
   public static safeConfig(config: Config): Config {
@@ -55,14 +51,12 @@ export class ConfigLoader {
   }
 
   public async load(configPath: string): Promise<Config> {
-    if (!path.isAbsolute(configPath)) {
-      configPath = path.resolve(configPath);
-    }
-    logger.info(`Loading configuration: ${configPath}`);
+    const _configPath = path.resolve(configPath);
+    logger.info(`Loading configuration: ${_configPath}`);
 
-    const config: Config = _.cloneDeep(require(configPath));
+    const config: Config = _.cloneDeep(require(_configPath));
 
-    // TODO: use better validation, see https://github.com/colinhacks/zod
+    // TODO: use better validation
     const parameters: string[] = [
       'environmentName',
       'externalUrl',

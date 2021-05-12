@@ -15,7 +15,7 @@ module.exports = {
     passwordSalt: 'azerty1234',
     jwtSecret: 'azerty1234',
     jwtAlgorithm: 'HS512',
-    jwtExpiresIn: '45min', // This value allow developers to experiments logouts',
+    jwtExpiresIn: '45min',
   },
   registration: {
     confirmationSalt: 'azerty1234',

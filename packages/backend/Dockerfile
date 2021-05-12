@@ -14,15 +14,14 @@
 # You should have received a copy of the GNU Affero General
 # Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
 
-FROM node:14-buster
+FROM node:14-alpine
 
-# Cypress dependencies
-RUN apt-get update && \
-      apt-get install -y libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb
+RUN mkdir -p /srv
+WORKDIR /srv
 
-# NodeJS
-# TODO remove lerna, it is included in abc cli
-# TODO remove lerna, it is included in abc cli
-# TODO remove lerna, it is included in abc cli
-# TODO remove lerna, it is included in abc cli
-RUN npm i -g npm && npm install -g yarn --force && npm install -g lerna
+COPY build build
+COPY node_modules node_modules
+COPY public public
+COPY package.json package.json
+
+CMD node /srv/build/main.js

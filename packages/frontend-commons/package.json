@@ -1,6 +1,6 @@
 {
   "name": "@abc-map/frontend-commons",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "license": "AGPL-3.0-or-later",
@@ -15,7 +15,7 @@
     "test:interactive": "jest src --watch"
   },
   "dependencies": {
-    "@abc-map/shared-entities": "0.0.1",
+    "@abc-map/shared-entities": "0.1.0",
     "loglevel": "^1.7.1",
     "jszip": "^3.6.0",
     "ol": "^6.5.0"

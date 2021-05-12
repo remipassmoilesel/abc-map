@@ -32,10 +32,11 @@ main().catch((err: Error) => {
 
 async function main() {
   logger.info('Starting Abc-Map ...');
-  const config = await ConfigLoader.load();
-  const services = await servicesFactory(config);
 
+  const config = await ConfigLoader.load();
   logger.info('Using configuration: ', JSON.stringify(ConfigLoader.safeConfig(config), null, 2));
+
+  const services = await servicesFactory(config);
 
   if (config.development) {
     logger.warn('/!\\ WARNING, development data will be created');

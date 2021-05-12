@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "abc-map.fullname" . }}-server
+  labels:
+    {{- include "abc-map.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.abcMap.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "abc-map.name" . }}-server
+      app.kubernetes.io/instance: {{ .Release.Name }}-server
+  template:
+    metadata:
+      {{- with .Values.abcMap.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        app.kubernetes.io/name: {{ include "abc-map.name" . }}-server
+        app.kubernetes.io/instance: {{ .Release.Name }}-server
+    spec:
+      {{- with .Values.abcMap.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: abc-map-server
+          image: "{{ .Values.abcMap.image.repository }}:{{ .Values.abcMap.image.tag }}"
+          imagePullPolicy: {{ .Values.abcMap.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          env:
+            - name: ABC_CONFIGURATION
+              value: /srv/config/config.js
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          resources:
+            {{- toYaml .Values.abcMap.resources | nindent 12 }}
+          volumeMounts:
+            - name: config-map
+              mountPath: /srv/config
+            - name: datastore
+              mountPath: {{ .Values.abcMap.datastore.mountPath }}
+
+      volumes:
+        - name: config-map
+          configMap:
+            name: {{ include "abc-map.fullname" . }}-server-config
+        - name: datastore
+          persistentVolumeClaim:
+            claimName: {{ .Values.abcMap.datastore.existingClaim }}
+
+      {{- with .Values.abcMap.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      {{- with .Values.abcMap.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      {{- with .Values.abcMap.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
