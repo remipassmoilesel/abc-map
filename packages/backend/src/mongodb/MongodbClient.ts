@@ -89,6 +89,6 @@ export class MongodbClient {
   }
 
   private databaseName(): string {
-    return `abc-${this.config.environmentName}`;
+    return this.config.database.databaseName || `abc-${this.config.environmentName}`;
   }
 }

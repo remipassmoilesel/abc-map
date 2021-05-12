@@ -21,8 +21,10 @@ import { Shell } from './tools/Shell';
 import * as waitOn from 'wait-on';
 import { Logger } from './tools/Logger';
 import { Registry } from './tools/Registry';
-import { customAlphabet } from 'nanoid';
-const versionId = customAlphabet('1234567890abcdefghijklmnopqrstuvwxyz', 10);
+import * as glob from 'fast-glob';
+import * as path from 'path';
+import { DockerConfig } from './config/DockerConfig';
+import { DeployConfig } from './config/DeployConfig';
 
 const logger = Logger.get('Service.ts', 'info');
 
@@ -49,14 +51,16 @@ export class Service {
     return new Promise((resolve, reject) => {
       registry.onError(reject);
       try {
-        // Even if canary publish is supposed to use unique versions, it does not work in every cases. So we use a pre id.
+        const version = new Date().toISOString().replace(/[^a-z0-9]/gi, '-');
         this.shell.sync(`lerna publish --canary --yes \
-                                            --preid '${versionId()}' \
+                                            --preid '${version}' \
                                             --no-git-tag-version --no-push --no-git-reset \
-                                            --registry ${registryUrl}`);
+                                            --registry ${registryUrl} \
+                                            --force-publish`);
 
         // Here we must limit concurrency to prevent bad use of Yarn cache
-        this.shell.sync(`lerna exec  --ignore e2e-tests --concurrency 1 'YARN_REGISTRY="${registryUrl}" yarn install --production'`);
+        const installProduction = `YARN_REGISTRY="${registryUrl}" yarn install --production`;
+        this.shell.sync(`lerna exec  --ignore e2e-tests --concurrency 1 '${installProduction}'`);
 
         resolve();
       } catch (err) {
@@ -69,11 +73,13 @@ export class Service {
 
   public lint(): void {
     this.shell.sync('lerna run lint');
+    this.shell.sync(`helm lint ${this.config.getChartRoot()}`);
   }
 
   public cleanBuild(): void {
     this.shell.sync('lerna run clean-build');
 
+    logger.info('\nCopying frontend distribution to server ...\n');
     // Here we copy frontend build to public backend dir.
     // We could use frontend as a dependency but dependency management is messy afterwards (more than usual lol).
     const sourceDir = `${this.config.getFrontendRoot()}/build`;
@@ -147,9 +153,9 @@ export class Service {
   }
 
   public applyLicense(): void {
-    this.shell.sync(`addlicense -f ${this.config.getProjectRoot()}/license-header.txt \
-                              -skip 'js' -skip 'json' -skip 'yaml' -skip 'yml' -skip 'YAML' \
-                              packages`);
+    const header = `${this.config.getProjectRoot()}/license-header.txt`;
+    const skip = `-skip 'js' -skip 'json' -skip 'yaml' -skip 'yml' -skip 'YAML'`;
+    this.shell.sync(`addlicense -f ${header} ${skip} packages`);
   }
 
   public async startRegistry(logOutput: boolean): Promise<void> {
@@ -158,6 +164,57 @@ export class Service {
       logger.info('Stopping registry ...');
       registry.terminate();
     });
+  }
+
+  public dockerBuild(repository: string, tag: string): void {
+    const images = this.getDockerConfigs();
+    for (const image of images) {
+      const fullName = `${repository}/${image.imageName}:${tag}`;
+      this.shell.sync(`docker build ${image.root} -t ${fullName}`);
+    }
+  }
+
+  public dockerPush(repository: string, tag: string): void {
+    const images = this.getDockerConfigs();
+    for (const image of images) {
+      const fullName = `${repository}/${image.imageName}:${tag}`;
+      this.shell.sync(`docker push ${fullName}`);
+    }
+  }
+
+  public async deploy(configPath: string): Promise<void> {
+    const start = Date.now();
+    const config = this.loadDeployConfig(configPath);
+
+    // Build
+    logger.info('\n 🛠️  Building ... 🛠️\n');
+    await this.install(Dependencies.Development);
+    this.cleanBuild();
+
+    // Package and push
+    logger.info('\n 📦️ Packaging ... 🏋️‍♂️\n');
+    await this.install(Dependencies.Production);
+    this.dockerBuild(config.registry, config.tag);
+    this.dockerPush(config.registry, config.tag);
+
+    // Deploy
+    this.shell.sync(`helm upgrade ${config.releaseName} ${this.config.getChartRoot()} \
+                        --install \
+                        --namespace ${config.namespace} \
+                        --set abcMap.image.tag='${config.tag}' \
+                        --values ${config.valuesFile} \
+                        --wait`);
+
+    logger.info(`Waiting for services readiness ...`);
+
+    const options = {
+      resources: [config.healthCheckUrl],
+      timeout: 30_000,
+    };
+    await waitOn(options);
+
+    const tookMin = Math.round((Date.now() - start) / 1000 / 60);
+    logger.info(`Ready ! Deployment took ${tookMin} minutes,`);
   }
 
   public async continuousIntegration(): Promise<void> {
@@ -175,36 +232,56 @@ export class Service {
     logger.info(`CI took ${tookSec} seconds`);
   }
 
-  public help() {
-    logger.info(`
-Abc-CLI helps to build and deploy Abc-Map.
+  private getDockerConfigs(): DockerConfig[] {
+    const packages = glob.sync('**/package.json', { cwd: this.config.getProjectRoot(), ignore: ['**/node_modules/**'] });
+    return packages
+      .map((p) => path.resolve(this.config.getProjectRoot(), p))
+      .map((packagePath) => ({ packagePath, packageJson: require(packagePath) }))
+      .filter((p) => !!p.packageJson.docker)
+      .map((p) => {
+        const image: DockerConfig = p.packageJson.docker;
+        if (!image.imageName) {
+          throw new Error(`Image name is mandatory in Docker config of package.json, directory ${p.packagePath}`);
+        }
+        return {
+          ...image,
+          root: path.dirname(p.packagePath),
+        };
+      });
+  }
 
-Common commands are:
+  private loadDeployConfig(configPath: string): DeployConfig {
+    const _configPath = path.isAbsolute(configPath) ? configPath : path.resolve(process.cwd(), configPath);
+    logger.info(`Loading deployment configuration: ${_configPath}`);
 
-  $ ./abc-cli install                    Init project and install dependencies.
-  $ ./abc-cli build                      Build all packages. Generally needed once only.
-  $ ./abc-cli watch                      Watch source code of all packages and compile on change.
-  $ ./abc-cli start                      Start project and associated services (database, mail server, ...).
-  $ ./abc-cli clean-restart-services     Stop services, clean data, then start services.
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const config: DeployConfig = require(_configPath);
+    logger.info(JSON.stringify(config, null, 2));
 
+    if (!config.releaseName) {
+      throw new Error(`Release name is mandatory in configuration ${path}`);
+    }
 
-Other commands:
+    if (!config.registry) {
+      throw new Error(`Registry is mandatory in configuration ${path}`);
+    }
 
-  $ ./abc-cli install                     Init project and install dependencies.
-  $ ./abc-cli lint                        Analyse code with ESLint and fix things that can be fixed.
-  $ ./abc-cli dep-check                   Check dependencies and source code with Dependency Cruiser.
-  $ ./abc-cli build                       Build all packages.
-  $ ./abc-cli test                        Test all packages.
-  $ ./abc-cli e2e                         Launch E2E tests.
-  $ ./abc-cli start-services              Start associated services.
-  $ ./abc-cli stop-services               Stop associated services.
-  $ ./abc-cli clean-restart-services      Stop associated services.
-  $ ./abc-cli clean                       Clean all build directories and dependencies.
-  $ ./abc-cli ci                          Execute continuous integration: lint, dep-check, build, test, ...
-  $ ./abc-cli npm-registry                Start a local NPM registry
-  $ ./abc-cli apply-license               Apply license to project files. Use: https://github.com/google/addlicense.
-  $ ./abc-cli help                        Show this help.
+    if (!config.tag) {
+      throw new Error(`Tag is mandatory in configuration ${path}`);
+    }
 
-    `);
+    if (!config.namespace) {
+      throw new Error(`Namespace is mandatory in configuration ${path}`);
+    }
+
+    if (!config.valuesFile) {
+      throw new Error(`Values file is mandatory in configuration ${path}`);
+    }
+
+    if (!config.healthCheckUrl) {
+      throw new Error(`Health check URL is mandatory in configuration ${path}`);
+    }
+
+    return config;
   }
 }

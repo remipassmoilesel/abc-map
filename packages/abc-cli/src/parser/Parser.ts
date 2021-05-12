@@ -15,49 +15,99 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
-
-import { Command } from './Command';
+import { Command, CommandName } from './Command';
 
 export class Parser {
   public async parse(args: string[]): Promise<Command> {
-    if (matchCommand(args, Command.INSTALL)) {
-      return Command.INSTALL;
-    } else if (matchCommand(args, Command.LINT)) {
-      return Command.LINT;
-    } else if (matchCommand(args, Command.BUILD)) {
-      return Command.BUILD;
-    } else if (matchCommand(args, Command.TEST)) {
-      return Command.TEST;
-    } else if (matchCommand(args, Command.E2E)) {
-      return Command.E2E;
-    } else if (matchCommand(args, Command.WATCH)) {
-      return Command.WATCH;
-    } else if (matchCommand(args, Command.CI)) {
-      return Command.CI;
-    } else if (matchCommand(args, Command.START)) {
-      return Command.START;
-    } else if (matchCommand(args, Command.START_SERVICES)) {
-      return Command.START_SERVICES;
-    } else if (matchCommand(args, Command.STOP_SERVICES)) {
-      return Command.STOP_SERVICES;
-    } else if (matchCommand(args, Command.CLEAN_RESTART_SERVICES)) {
-      return Command.CLEAN_RESTART_SERVICES;
-    } else if (matchCommand(args, Command.CLEAN)) {
-      return Command.CLEAN;
-    } else if (matchCommand(args, Command.DEPENDENCY_CHECK)) {
-      return Command.DEPENDENCY_CHECK;
-    } else if (matchCommand(args, Command.NPM_REGISTRY)) {
-      return Command.NPM_REGISTRY;
-    } else if (matchCommand(args, Command.APPLY_LICENSE)) {
-      return Command.APPLY_LICENSE;
-    } else if (matchCommand(args, Command.HELP)) {
-      return Command.HELP;
-    } else {
-      return Promise.reject(new Error('Invalid command, try $ ./abc-cli help'));
+    const commandName = (args.length > 2 && args[2]) || undefined;
+    switch (commandName) {
+      case CommandName.INSTALL: {
+        const production = args.findIndex((a) => a === '--production') !== -1;
+        return { name: CommandName.INSTALL, production };
+      }
+      case CommandName.LINT: {
+        return { name: CommandName.LINT };
+      }
+      case CommandName.BUILD: {
+        return { name: CommandName.BUILD };
+      }
+      case CommandName.TEST: {
+        return { name: CommandName.TEST };
+      }
+      case CommandName.E2E: {
+        return { name: CommandName.E2E };
+      }
+      case CommandName.WATCH: {
+        return { name: CommandName.WATCH };
+      }
+      case CommandName.CI: {
+        return { name: CommandName.CI };
+      }
+      case CommandName.START: {
+        return { name: CommandName.START };
+      }
+      case CommandName.START_SERVICES: {
+        return { name: CommandName.START_SERVICES };
+      }
+      case CommandName.STOP_SERVICES: {
+        return { name: CommandName.STOP_SERVICES };
+      }
+      case CommandName.CLEAN_RESTART_SERVICES: {
+        return { name: CommandName.CLEAN_RESTART_SERVICES };
+      }
+      case CommandName.CLEAN: {
+        return { name: CommandName.CLEAN };
+      }
+      case CommandName.DEPENDENCY_CHECK: {
+        return { name: CommandName.DEPENDENCY_CHECK };
+      }
+      case CommandName.NPM_REGISTRY: {
+        return { name: CommandName.NPM_REGISTRY };
+      }
+      case CommandName.DOCKER_BUILD: {
+        const repository = getDockerRepository(args);
+        const tag = getDockerTag(args);
+        return { name: CommandName.DOCKER_BUILD, repository, tag };
+      }
+      case CommandName.DOCKER_PUSH: {
+        const repository = getDockerRepository(args);
+        const tag = getDockerTag(args);
+        return { name: CommandName.DOCKER_PUSH, repository, tag };
+      }
+      case CommandName.APPLY_LICENSE: {
+        return { name: CommandName.APPLY_LICENSE };
+      }
+      case CommandName.DEPLOY: {
+        const configPath = getConfigPath(args);
+        return { name: CommandName.DEPLOY, configPath };
+      }
+      case CommandName.HELP: {
+        return { name: CommandName.HELP };
+      }
+      default: {
+        return Promise.reject(new Error('Invalid command, try $ ./abc-cli help'));
+      }
     }
   }
 }
 
-function matchCommand(args: string[], command: Command): boolean {
-  return args.length > 2 && args[2] === command;
+function getDockerRepository(args: string[]): string {
+  if (args.length < 3 || !args[3]) {
+    throw new Error("Repository is mandatory, e.g: 'gitlab.registry.com/abc-map-2'. See help for more details.");
+  }
+  return args[3];
+}
+
+function getDockerTag(args: string[]): string {
+  if (args.length < 4 || !args[4]) {
+    throw new Error("Tag is mandatory, e.g: '0.0.1'. See help for more details.");
+  }
+  return args[4];
+}
+
+function getConfigPath(args: string[]): string {
+  if (args.length < 3 || !args[3]) {
+    throw new Error("Config path is mandatory, e.g: '/path/to/config.js'. See help for more details.");
+  }
+  return args[3];
 }

@@ -64,4 +64,8 @@ export class Config {
   public registryUrl(): string {
     return 'http://localhost:4873';
   }
+
+  public getChartRoot(): string {
+    return path.resolve(this.getProjectRoot(), 'packages/infrastructure/helm-chart/abc-map');
+  }
 }

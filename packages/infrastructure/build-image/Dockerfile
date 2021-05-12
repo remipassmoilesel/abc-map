@@ -1,4 +1,3 @@
-#!/usr/bin/env bash
 # Copyright © 2021 Rémi Pace.
 # This file is part of Abc-Map.
 #
@@ -15,8 +14,15 @@
 # You should have received a copy of the GNU Affero General
 # Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
 
+FROM node:14-buster
 
-IMAGE_NAME="registry.gitlab.com/remipassmoilesel/abc-map-2/build-image:0.2"
+# Cypress dependencies
+RUN apt-get update && \
+      apt-get install -y libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb
 
-docker build . -t $IMAGE_NAME
-docker push $IMAGE_NAME
+# NodeJS
+RUN npm i -g npm && npm install -g yarn --force
+
+# Helm
+RUN wget https://get.helm.sh/helm-v3.5.4-linux-amd64.tar.gz && tar -xf helm-v3.5.4-linux-amd64.tar.gz \
+      && mv linux-amd64/helm /usr/local/bin

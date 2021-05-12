@@ -20,6 +20,12 @@ Use cases:
 More information [here](https://abc-map.fr).
 
 
+## Status of project
+
+Abc-Map 2 is at a very early stage. Everything is done within the means available to make this project a lasting one, 
+but for now you should expect some breaking changes.     
+
+
 ## Architecture
 
 Abc-Map is designed to be scalable but to operate in an environment with limited resources.        

@@ -20,6 +20,7 @@ import { Algorithm } from 'jsonwebtoken';
 
 export const LOCAL_ENVIRONMENT = 'local';
 export const TEST_ENVIRONMENT = 'test';
+export const STAGING_ENVIRONMENT = 'staging';
 
 export interface Config {
   environmentName: string;
@@ -41,6 +42,7 @@ export interface ServerConfig {
 
 export interface DatabaseConfig {
   url: string;
+  databaseName?: string;
   username: string;
   password: string;
 }

@@ -1,0 +1,110 @@
+# Copyright © 2021 Rémi Pace.
+# This file is part of Abc-Map.
+#
+# Abc-Map is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as
+# published by the Free Software Foundation, either version 3 of
+# the License, or (at your option) any later version.
+#
+# Abc-Map is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General
+# Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
+
+# Default values for abc-map.
+
+nameOverride: ""
+fullnameOverride: ""
+
+abcMap:
+  replicaCount: 2
+  podAnnotations: { }
+
+  image:
+    repository: registry.gitlab.com/abc-map/abc-map-2/server
+    pullPolicy: IfNotPresent
+    tag: "0.1.0"
+
+  imagePullSecrets: [ ]
+
+  config: |
+    module.exports = {
+      environmentName: '<CHANGE_ME>',
+      development: false,
+      externalUrl: 'https://<CHANGE_ME>/',
+      server: {
+        host: '0.0.0.0',
+        port: 80,
+      },
+      database: {
+        url: 'mongodb://<CHANGE_ME>:27017',
+        username: '<CHANGE_ME>',
+        password: '<CHANGE_ME>',
+      },
+      authentication: {
+        passwordSalt: '<CHANGE_ME>',
+        jwtSecret: '<CHANGE_ME>',
+        jwtAlgorithm: 'HS512',
+        jwtExpiresIn: '45min',
+      },
+      registration: {
+        confirmationSalt: '<CHANGE_ME>',
+      },
+      smtp: {
+        host: '<CHANGE_ME>',
+        port: 587,
+        auth: {
+          user: '<CHANGE_ME>',
+          pass: '<CHANGE_ME>',
+        },
+      },
+      datastore: {
+        path: '/srv/datastore',
+      },
+    };
+
+  service:
+    port: 80
+
+  datastore:
+    existingClaim: '<CHANGE_ME>'
+    # This parameters should match configuration above
+    mountPath: /srv/datastore
+
+  ingress:
+    enabled: false
+    host: <CHANGE_ME>
+    annotations: { }
+    tls:
+      enabled: false
+      secretName: <CHANGE_ME>
+      host: <CHANGE_ME>
+
+  resources: { }
+
+  nodeSelector: { }
+
+  tolerations: [ ]
+
+  affinity: { }
+
+
+mongodb:
+  enabled: true
+  auth:
+    rootUsername: '<CHANGE_ME>'
+    rootPassword: '<CHANGE_ME>'
+  persistence:
+    existingClaim: <CHANGE_ME>
+
+  resources: { }
+
+  nodeSelector: { }
+
+  tolerations: [ ]
+
+  affinity: { }
+

@@ -16,16 +16,10 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as path from 'path';
-
-const root = path.resolve(__dirname, '..', '..', 'resources');
-
-export class Resources {
-  public getResourcePath(name: string): string {
-    return path.resolve(root, name);
-  }
-
-  public getSampleProject(): string {
-    return this.getResourcePath('sample-project.abm2');
-  }
+/**
+ * You can add "docker" entry in package.json to build images in CI.
+ */
+export interface DockerConfig {
+  root: string;
+  imageName: string;
 }

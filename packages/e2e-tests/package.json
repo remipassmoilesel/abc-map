@@ -1,6 +1,6 @@
 {
   "name": "@abc-map/e2e-tests",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "license": "AGPL-3.0-or-later",
   "scripts": {
     "e2e-test:before-merge": "cypress run --config-file ./config/ci.json --spec 'src/integration/ci/**/*'",
@@ -13,8 +13,8 @@
     "dep-check": "depcruise -c .dependency-cruiser.js src"
   },
   "dependencies": {
-    "@abc-map/shared-entities": "0.0.1",
-    "@abc-map/frontend-commons": "0.0.1",
+    "@abc-map/shared-entities": "0.1.0",
+    "@abc-map/frontend-commons": "0.1.0",
     "@types/cypress": "^1.1.3",
     "cypress-file-upload": "^5.0.6",
     "cypress": "^7.2.0",

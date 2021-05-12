@@ -16,16 +16,19 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as path from 'path';
+/*
 
-const root = path.resolve(__dirname, '..', '..', 'resources');
+If you want to deploy Helm chart with Abc-Cli, you must create a configuration file like this
+then pass it to deploy command:
 
-export class Resources {
-  public getResourcePath(name: string): string {
-    return path.resolve(root, name);
-  }
+    $ ./abc-cli deploy /path/to/config.js
 
-  public getSampleProject(): string {
-    return this.getResourcePath('sample-project.abm2');
-  }
+ */
+module.exports = {
+  releaseName: 'abc-map-production',
+  registry: 'my-registry.gitlab.com',
+  tag: 'my-tag',
+  namespace: 'my-kubernetes-namespace',
+  valuesFile: 'my-values-file',
+  healthCheckUrl: 'https://my-abc-map-instance.fr/'
 }

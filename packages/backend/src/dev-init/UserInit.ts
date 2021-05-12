@@ -21,8 +21,8 @@ import { AbcUser, RegistrationRequest } from '@abc-map/shared-entities';
 
 const devPassword = 'azerty1234';
 
-const numberOfUsers = 500;
-const enabledUsers = 450;
+const numberOfUsers = 1500;
+const enabledUsers = 1400;
 
 function devUserEmail(id: number): string {
   return 'user-' + id + '@abc-map.fr';

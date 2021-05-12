@@ -1,0 +1,31 @@
+{{- if .Values.abcMap.ingress.enabled -}}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "abc-map.fullname" . }}-server
+  labels:
+    {{- include "abc-map.labels" . | nindent 4 }}
+  {{- with .Values.abcMap.ingress.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if .Values.abcMap.ingress.tls.enabled }}
+  tls:
+    - secretName: {{ .Values.abcMap.ingress.tls.secretName }}
+      hosts:
+        - {{ .Values.abcMap.ingress.tls.host }}
+  {{- end }}
+  rules:
+    - host: {{ .Values.abcMap.ingress.host | quote }}
+      http:
+        paths:
+          - path: '/'
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "abc-map.fullname" . }}-server
+                port:
+                  number: {{ .Values.abcMap.service.port }}
+
+  {{- end }}

@@ -23,6 +23,9 @@ import { promises as fs } from 'fs';
 import { CompressedProject } from '../projects/CompressedProject';
 import { Zipper } from '../utils/Zipper';
 import * as uuid from 'uuid-random';
+import { Logger } from '../utils/Logger';
+
+const logger = Logger.get('ProjectInit');
 
 export class ProjectInit {
   public static create(services: Services) {
@@ -33,7 +36,13 @@ export class ProjectInit {
   constructor(private services: Services, private resources: Resources) {}
 
   public async init(users: AbcUser[]): Promise<void> {
-    const sampleProject = await this.loadSampleProject();
+    let sampleProject: CompressedProject | undefined;
+    try {
+      sampleProject = await this.loadSampleProject();
+    } catch (e) {
+      logger.warn('Cannot read sample project, no project will be created');
+      return;
+    }
 
     for (const user of users) {
       const prs = await this.services.project.list(user.id, 0, 1);
