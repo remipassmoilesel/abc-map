@@ -36,11 +36,11 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { MongodbClient } from '../../mongodb/MongodbClient';
-import { MongodbCollection } from '../../mongodb/MongodbCollection';
+import { MongodbClient } from '../mongodb/MongodbClient';
+import { MongodbCollection } from '../mongodb/MongodbCollection';
 import { AbcProject } from '@abc-map/shared-entities';
-import { AbstractService } from '../../services/AbstractService';
-import { Logger } from '../../utils/Logger';
+import { AbstractService } from '../services/AbstractService';
+import { Logger } from '../utils/Logger';
 
 export enum HealthStatus {
   HEALTHY = 'HEALTHY',

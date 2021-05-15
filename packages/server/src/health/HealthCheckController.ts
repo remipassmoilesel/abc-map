@@ -36,12 +36,11 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as express from 'express';
-import { Router } from 'express';
-import { Controller } from '../Controller';
-import { Services } from '../../services/services';
+import { Controller } from '../server/Controller';
+import { Services } from '../services/services';
 import { HealthStatus } from './HealthCheckService';
-import { Logger } from '../../utils/Logger';
+import { Logger } from '../utils/Logger';
+import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 
 const logger = Logger.get('HealthCheckController.ts');
 
@@ -54,22 +53,23 @@ export class HealthCheckController extends Controller {
     return '/health';
   }
 
-  public getRouter(): Router {
-    const app = express();
+  public setup = async (app: FastifyInstance): Promise<void> => {
+    app.head('/', this.head);
     app.get('/', this.healthCheck);
-    return app;
-  }
+  };
 
-  public healthCheck = (req: express.Request, res: express.Response): void => {
-    this.services.health
-      .getHealthStatus()
-      .then((status) => {
-        const code = status === HealthStatus.HEALTHY ? 200 : 500;
-        res.status(code).json({ status });
-      })
-      .catch((err) => {
-        logger.error('Health check error', err);
-        res.status(500).json({ status: HealthStatus.UNHEALTHY });
-      });
+  private head = async (req: FastifyRequest, res: FastifyReply) => {
+    res.status(200).send();
+  };
+
+  private healthCheck = async (req: FastifyRequest, reply: FastifyReply): Promise<void> => {
+    try {
+      const status = await this.services.health.getHealthStatus();
+      const code = status === HealthStatus.HEALTHY ? 200 : 500;
+      reply.status(code).send({ status });
+    } catch (err) {
+      logger.error('Health check error', err);
+      reply.status(500).send({ status: HealthStatus.UNHEALTHY });
+    }
   };
 }

@@ -25,6 +25,10 @@ import * as path from 'path';
 
 const logger = Logger.get('SmtpClient.ts', 'info');
 
+export function disableSmtpClientLogging() {
+  logger.disable();
+}
+
 export class SmtpClient {
   private transporter: Transporter;
 
@@ -74,6 +78,7 @@ export class SmtpClient {
     /* eslint-enable max-len */
   }
 
+  // TODO: promisify
   private fakeSending(email: string, body: string): void {
     const mailDir = path.resolve(__dirname, '..', '..', '..', 'e2e-tests', 'emails');
     const mailPath = path.resolve(mailDir, `${email}.html`);

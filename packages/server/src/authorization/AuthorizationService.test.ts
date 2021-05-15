@@ -21,12 +21,12 @@ import { ConfigLoader } from '../config/ConfigLoader';
 import { AuthorizationService } from './AuthorizationService';
 import { Config } from '../config/Config';
 import { ProjectDao } from '../projects/ProjectDao';
-import { Request } from 'express';
-import { AbcUser, AnonymousUser } from '@abc-map/shared-entities';
+import { AnonymousUser, Token, UserStatus } from '@abc-map/shared-entities';
 import * as uuid from 'uuid-random';
 import { assert } from 'chai';
 import { ProjectDocument } from '../projects/ProjectDocument';
 import { TestHelper } from '../utils/TestHelper';
+import { FastifyRequest } from 'fastify';
 
 // TODO: terminate tests
 // TODO: double-check tests
@@ -145,17 +145,21 @@ describe('AuthorizationService', () => {
   });
 });
 
-function authenticatedRequest(id?: string): Request {
-  const user: AbcUser = {
-    id: id || uuid(),
-    email: 'fake-user@test',
-    password: 'fake-password',
-    enabled: true,
+function authenticatedRequest(id?: string): FastifyRequest {
+  const token: Token = {
+    user: {
+      id: id || uuid(),
+      email: 'fake-user@test',
+      password: 'fake-password',
+      enabled: true,
+    },
+    userStatus: UserStatus.Authenticated,
   };
-  return ({ user } as unknown) as Request;
+
+  return ({ user: token } as unknown) as FastifyRequest;
 }
 
-function anonymousRequest(): Request {
-  const user: AbcUser = AnonymousUser;
-  return ({ user } as unknown) as Request;
+function anonymousRequest(): FastifyRequest {
+  const token: Token = { user: AnonymousUser, userStatus: UserStatus.Anonymous };
+  return ({ user: token } as unknown) as FastifyRequest;
 }

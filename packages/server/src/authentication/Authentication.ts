@@ -16,11 +16,12 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Request } from 'express';
-import { AbcUser } from '@abc-map/shared-entities';
+import { AbcUser, Token } from '@abc-map/shared-entities';
+import { FastifyRequest } from 'fastify';
 
 export class Authentication {
-  public static from(req: Request): AbcUser | undefined {
-    return (req.user as unknown) as AbcUser | undefined;
+  public static from(req: FastifyRequest): AbcUser | undefined {
+    const token = (req.user as unknown) as Token | undefined;
+    return token?.user;
   }
 }

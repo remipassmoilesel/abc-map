@@ -22,8 +22,9 @@ import http, { batch, ObjectBatchRequest } from 'k6/http';
 import { parseHTML } from 'k6/html';
 import { check, sleep } from 'k6';
 import { AuthenticationRequest } from '@abc-map/shared-entities';
-import { extractAuthentication, jsonGet, jsonPost, sampleProjectMetadata } from './helpers';
-import { FormData } from './FormDataPolyfill';
+import { extractAuthentication, jsonGet, jsonPost, sampleProjectMetadata } from './utils/helpers';
+import { FormData } from './utils/FormDataPolyfill';
+import { Config } from './utils/Config';
 
 /*
  *
@@ -43,16 +44,13 @@ import { FormData } from './FormDataPolyfill';
  * - We download a project
  * - We delete a project
  *
- * TODO: Pass tests in CI, a light version (less VU)
- *
  */
 
-const Root = 'https://staging.abc-map.fr';
+const fileOptions: Config = JSON.parse(open(__ENV.CONFIG_FILE));
 
-const vus = 400;
 export const options: Options = {
-  vus,
-  iterations: vus * 3,
+  vus: fileOptions.vus,
+  iterations: fileOptions.iterations,
 };
 
 // Simulate a project. This can cause memory issues, but shared array does not work as expected with binary files.
@@ -64,14 +62,14 @@ export default () => {
 
   // We try to connect with bad credentials
   const badCredentials: AuthenticationRequest = { email: 'bad email', password: 'bad password' };
-  const req1 = jsonPost(`${Root}/api/authentication/login`, badCredentials);
+  const req1 = jsonPost(`${fileOptions.host}/api/authentication/login`, badCredentials);
   check(req1, {
     'Bad authentication status is 403': (res) => res.status === 401,
   });
 
   // We login with correct credentials
   const goodCredentials: AuthenticationRequest = { email: 'user-' + __VU + '@abc-map.fr', password: 'azerty1234' };
-  const req2 = jsonPost(`${Root}/api/authentication/login`, goodCredentials);
+  const req2 = jsonPost(`${fileOptions.host}/api/authentication/login`, goodCredentials);
   const auth = extractAuthentication(req2.body);
   check(req2, {
     'Good authentication status is 200': (res) => res.status === 200,
@@ -80,26 +78,26 @@ export default () => {
   sleep(3);
 
   // We list artefacts
-  const req3 = jsonGet(`${Root}/api/datastore/list?limit=6&offset=0`, auth);
+  const req3 = jsonGet(`${fileOptions.host}/api/datastore/list?limit=6&offset=0`, auth);
   check(req3, {
     'List artefacts status is 200': (res) => res.status === 200,
   });
 
   // We search artefacts
-  const req4 = jsonGet(`${Root}/api/datastore/search?query=monde&limit=6&offset=0`, auth);
+  const req4 = jsonGet(`${fileOptions.host}/api/datastore/search?query=monde&limit=6&offset=0`, auth);
   check(req4, {
     'Search artefacts status is 200': (res) => res.status === 200,
   });
 
   // We download artefact 1
-  const req5 = jsonGet(`${Root}/api/datastore/download/world/world-cities/world-cities.zip`, auth);
+  const req5 = jsonGet(`${fileOptions.host}/api/datastore/download/world/world-cities/world-cities.zip`, auth);
   check(req5, {
     'Download artefact 1 status is 200': (res) => res.status === 200,
     'Artefact 1 is heavy': (res) => (res.body?.length || 0) > 10_000,
   });
 
   // We download artefact 2
-  const req6 = jsonGet(`${Root}/api/datastore/download/world/world-countries/world-countries.zip`, auth);
+  const req6 = jsonGet(`${fileOptions.host}/api/datastore/download/world/world-countries/world-countries.zip`, auth);
   check(req6, {
     'Download artefact 2 status is 200': (res) => res.status === 200,
     'Artefact 2 is heavy': (res) => (res.body?.length || 0) > 10_000,
@@ -113,7 +111,7 @@ export default () => {
   formData.append('metadata', JSON.stringify(projectMetadata));
   formData.append('project', http.file(fakeProject, 'project.abm2', 'application/zip'));
 
-  const req7 = http.post(`${Root}/api/projects`, formData.body(), {
+  const req7 = http.post(`${fileOptions.host}/api/projects`, formData.body(), {
     headers: { ...auth, 'Content-Type': `multipart/form-data; boundary=${formData.boundary}` },
   });
   check(req7, {
@@ -123,13 +121,13 @@ export default () => {
   sleep(3);
 
   // We list projects
-  const req8 = jsonGet(`${Root}/api/projects`, auth);
+  const req8 = jsonGet(`${fileOptions.host}/api/projects`, auth);
   check(req8, {
     'List projects status is 200': (res) => res.status === 200,
   });
 
   // We download project
-  const req9 = jsonGet(`${Root}/api/projects/${projectMetadata.id}`, auth);
+  const req9 = jsonGet(`${fileOptions.host}/api/projects/${projectMetadata.id}`, auth);
   check(req9, {
     'Get project status is 200': (res) => res.status === 200,
     // FIXME: Test setup freeze if size exceed few kb, probably due to k6 memory usage and FormDataPolyfill.ts
@@ -137,7 +135,7 @@ export default () => {
   });
 
   // We delete project
-  const req10 = http.del(`${Root}/api/projects/${projectMetadata.id}`, undefined, { headers: auth });
+  const req10 = http.del(`${fileOptions.host}/api/projects/${projectMetadata.id}`, undefined, { headers: auth });
   check(req10, {
     'Delete project status is 200': (res) => res.status === 200,
   });
@@ -145,7 +143,7 @@ export default () => {
 
 function fetchFrontend() {
   // Fetch index.html
-  const res = http.get(Root);
+  const res = http.get(fileOptions.host);
   if (!res.body || typeof res.body !== 'string') {
     throw new Error('Invalid request body');
   }
@@ -166,7 +164,7 @@ function fetchFrontend() {
   // Build requests
   const requests: ObjectBatchRequest[] = scripts.concat(assets).map((src) => ({
     method: 'GET',
-    url: Root + src,
+    url: fileOptions.host + src,
   }));
   check(requests, { 'At least 3 frontend ressources to fetch': (r) => r.length > 0 });
 

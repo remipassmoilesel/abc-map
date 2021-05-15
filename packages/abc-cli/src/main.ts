@@ -21,7 +21,7 @@ import { Logger } from './tools/Logger';
 import { Config } from './config/Config';
 import { Shell } from './tools/Shell';
 import { Parser } from './parser/Parser';
-import { Dependencies, Service } from './Service';
+import { Dependencies, BuildService } from './BuildService';
 import { Banners } from './tools/Banners';
 import { Registry } from './tools/Registry';
 import { CommandName } from './parser/Command';
@@ -40,7 +40,7 @@ async function main(args: string[]) {
   const shell = new Shell(config);
   const registry = new Registry(config, shell);
   const parser = new Parser();
-  const service = new Service(config, registry, shell);
+  const service = new BuildService(config, registry, shell);
 
   // We use node_modules bin from command line
   process.env.PATH = `${process.env.PATH}:${config.getCliRoot()}/node_modules/.bin/`;
@@ -49,6 +49,32 @@ async function main(args: string[]) {
   const command = await parser.parse(args);
 
   switch (command.name) {
+    case CommandName.CI: {
+      const start = new Date().getTime();
+
+      await service.install(Dependencies.Development);
+      service.lint();
+      service.cleanBuild();
+      service.dependencyCheck(); // Dependency check must be launched AFTER build for local dependencies
+      service.test();
+      await service.install(Dependencies.Production);
+
+      const servers = await service.startServersForE2e();
+      try {
+        await service.e2eTests();
+        await service.performanceTests();
+      } finally {
+        servers.kill('SIGTERM');
+      }
+
+      await service.install(Dependencies.Development); // We reinstall for caching purposes
+
+      const tookSec = Math.round((new Date().getTime() - start) / 1000);
+      logger.info(`CI took ${tookSec} seconds`);
+      banners.done();
+      break;
+    }
+
     case CommandName.INSTALL:
       await service.install(command.production ? Dependencies.Production : Dependencies.Development);
       break;
@@ -69,14 +95,15 @@ async function main(args: string[]) {
       service.test();
       break;
 
-    case CommandName.E2E:
-      await service.e2e();
+    case CommandName.E2E: {
+      const servers = await service.startServersForE2e();
+      try {
+        await service.e2eTests();
+      } finally {
+        servers.kill('SIGTERM');
+      }
       break;
-
-    case CommandName.CI:
-      await service.continuousIntegration();
-      banners.done();
-      break;
+    }
 
     case CommandName.START:
       service.start();

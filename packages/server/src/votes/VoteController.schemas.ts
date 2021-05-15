@@ -1,3 +1,6 @@
+import { FastifySchema } from 'fastify/types/schema';
+import { VoteValue } from '@abc-map/shared-entities';
+
 /**
  * Copyright © 2021 Rémi Pace.
  * This file is part of Abc-Map.
@@ -16,14 +19,18 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Response } from 'express';
-
-export class HttpResponse {
-  public static badRequest(res: Response, message: string): void {
-    res.status(400).send({ status: 'bad request', message });
-  }
-
-  public static forbidden(res: Response): void {
-    res.status(403).send({ status: 'forbidden' });
-  }
+export interface StatParams {
+  from: string;
+  to: string;
 }
+
+export const VoteSchema: FastifySchema = {
+  body: {
+    type: 'object',
+    required: ['value'],
+    additionalProperties: false,
+    properties: {
+      value: { type: 'number', enum: [VoteValue.NOT_SATISFIED, VoteValue.BLAH, VoteValue.SATISFIED] },
+    },
+  },
+};

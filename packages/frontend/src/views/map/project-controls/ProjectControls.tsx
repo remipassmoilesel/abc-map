@@ -119,9 +119,9 @@ class ProjectControls extends Component<Props, State> {
 
       toasts.info('Enregistrement en cours ...');
       const compressed = await project.exportCurrentProject(password);
-      toasts.info('Projet enregistré !');
+      await project.save(compressed);
 
-      return project.save(compressed);
+      toasts.info('Projet enregistré !');
     };
 
     modals

@@ -60,6 +60,7 @@ class ConfirmAccountView extends Component<Props, State> {
     );
   }
 
+  // TODO: refactor
   public componentDidMount() {
     const { authentication } = this.props.services;
 
@@ -69,7 +70,7 @@ class ConfirmAccountView extends Component<Props, State> {
       this.setState({ status: AccountConfirmationStatus.Failed });
     } else {
       authentication
-        .confirmAccount(userId, secret)
+        .confirmRegistration(userId, secret)
         .then((res) => {
           if (res.error) {
             return Promise.reject(new Error(res.error));

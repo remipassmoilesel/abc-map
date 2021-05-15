@@ -18,25 +18,29 @@
 
 import { Services } from '../services/services';
 import { AbcUser, RegistrationRequest } from '@abc-map/shared-entities';
+import { Config } from '../config/Config';
 
 const devPassword = 'azerty1234';
-
-const numberOfUsers = 1500;
-const enabledUsers = 1400;
 
 function devUserEmail(id: number): string {
   return 'user-' + id + '@abc-map.fr';
 }
 
 export class UserInit {
-  public static create(services: Services) {
-    return new UserInit(services);
+  public static create(config: Config, services: Services) {
+    return new UserInit(config, services);
   }
 
-  constructor(private services: Services) {}
+  constructor(private config: Config, private services: Services) {}
 
   public async init(): Promise<AbcUser[]> {
     const users: AbcUser[] = [];
+
+    const numberOfUsers = this.config.development?.users || 0;
+    const enabledUsers = this.config.development?.enabledUsers || 0;
+    if (!numberOfUsers) {
+      return [];
+    }
 
     for (let i = 0; i < numberOfUsers; i++) {
       const request: RegistrationRequest = {

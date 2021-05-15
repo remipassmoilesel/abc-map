@@ -18,11 +18,10 @@
  *
  */
 
-import * as express from 'express';
-import { Router } from 'express';
-import { Controller } from '../Controller';
-import { Logger } from '../../utils/Logger';
-import { Services } from '../../services/services';
+import { Controller } from '../server/Controller';
+import { Logger } from '../utils/Logger';
+import { Services } from '../services/services';
+import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 
 const logger = Logger.get('MetricsController.ts');
 
@@ -35,19 +34,12 @@ export class MetricsController extends Controller {
     return '/metrics';
   }
 
-  public getRouter(): Router {
-    const app = express();
+  public setup = async (app: FastifyInstance): Promise<void> => {
     app.get('/', this.getMetrics);
-    return app;
-  }
+  };
 
-  public getMetrics = (req: express.Request, res: express.Response): void => {
-    this.services.metrics
-      .getMetrics()
-      .then((metrics) => res.status(200).send(metrics))
-      .catch((err) => {
-        logger.error('Cannot serve metrics: ', err);
-        res.status(500).send();
-      });
+  private getMetrics = async (req: FastifyRequest, reply: FastifyReply): Promise<void> => {
+    const metrics = await this.services.metrics.getMetrics();
+    reply.status(200).send(metrics);
   };
 }

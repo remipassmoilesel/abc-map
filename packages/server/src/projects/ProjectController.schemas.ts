@@ -15,7 +15,36 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
+import { FastifySchema } from 'fastify/types/schema';
+import { MultipartFile, MultipartValue } from 'fastify-multipart';
 
-export interface Status {
-  status: string;
+export interface SaveRequest {
+  metadata: MultipartValue<string>;
+  project: MultipartFile;
 }
+
+export interface ByIdParams {
+  projectId: string;
+}
+
+export const ListSchema: FastifySchema = {
+  querystring: {
+    type: 'object',
+    additionalProperties: false,
+    properties: {
+      limit: { type: 'string' },
+      offset: { type: 'string' },
+    },
+  },
+};
+
+export const ByIdSchema: FastifySchema = {
+  params: {
+    type: 'object',
+    required: ['projectId'],
+    additionalProperties: false,
+    properties: {
+      projectId: { type: 'string' },
+    },
+  },
+};

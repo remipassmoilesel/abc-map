@@ -1,10 +1,17 @@
 module.exports = {
   environmentName: 'local',
-  development: true,
   externalUrl: 'http://localhost:3005/',
   server: {
     host: '127.0.0.1',
     port: 10_082,
+    log: {
+      requests: false,
+      errors: true,
+    },
+    rateLimit: {
+      max: 500,
+      timeWindow: '30m',
+    },
   },
   database: {
     url: 'mongodb://localhost:27019',
@@ -30,5 +37,10 @@ module.exports = {
   },
   datastore: {
     path: 'resources/datastore',
+  },
+  development: {
+    enabled: true,
+    users: 100,
+    enabledUsers: 50,
   },
 };

@@ -22,11 +22,13 @@ export const LOCAL_ENVIRONMENT = 'local';
 export const TEST_ENVIRONMENT = 'test';
 export const STAGING_ENVIRONMENT = 'staging';
 
-export interface Config {
+/**
+ * This config is supplied by users
+ */
+export interface ConfigInput {
   environmentName: string;
-  development?: boolean;
+  development?: DevelopmentDataConfig;
   externalUrl: string;
-  frontendPath: string;
   server: ServerConfig;
   database: DatabaseConfig;
   authentication: AuthenticationConfig;
@@ -35,9 +37,30 @@ export interface Config {
   datastore: DatastoreConfig;
 }
 
+/**
+ * This config is used in application
+ */
+export interface Config extends ConfigInput {
+  frontendPath: string;
+}
+
+export interface DevelopmentDataConfig {
+  enabled: boolean;
+  users: number;
+  enabledUsers: number;
+}
+
 export interface ServerConfig {
   host: string;
   port: number;
+  log: {
+    requests: boolean;
+    errors: boolean;
+  };
+  rateLimit: {
+    max: number;
+    timeWindow: string;
+  };
 }
 
 export interface DatabaseConfig {

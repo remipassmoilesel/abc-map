@@ -208,7 +208,7 @@ class RegistrationModal extends Component<ServiceProps, State> {
     }
 
     authentication
-      .register(email, password)
+      .registration(email, password)
       .then((res) => {
         if (res.status === RegistrationStatus.EmailAlreadyExists) {
           return toasts.info('Cette adresse email est déjà prise');

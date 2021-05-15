@@ -24,4 +24,5 @@ COPY node_modules node_modules
 COPY public public
 COPY package.json package.json
 
+ENV NODE_ENV=production
 CMD node /srv/build/main.js

@@ -32,12 +32,19 @@ abcMap:
 
   config: |
     module.exports = {
-      environmentName: '<CHANGE_ME>',
-      development: false,
-      externalUrl: 'https://<CHANGE_ME>/',
+      environmentName: 'production',
+      externalUrl: 'https://<CHANGE_ME>',
       server: {
         host: '0.0.0.0',
         port: 80,
+        log: {
+          requests: false,
+          errors: false,
+        },
+        rateLimit: {
+          max: 1000,
+          timeWindow: '30m',
+        },
       },
       database: {
         url: 'mongodb://<CHANGE_ME>:27017',
@@ -71,7 +78,6 @@ abcMap:
 
   datastore:
     existingClaim: '<CHANGE_ME>'
-    # This parameters should match configuration above
     mountPath: /srv/datastore
 
   ingress:

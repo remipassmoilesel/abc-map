@@ -16,7 +16,7 @@
 # Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
 
 
-IMAGE_NAME="registry.gitlab.com/abc-map/abc-map-2_private/build-image:v0.6"
+IMAGE_NAME="registry.gitlab.com/abc-map/abc-map-2_private/build-image:v0.7"
 
 docker build . -t $IMAGE_NAME
 docker push $IMAGE_NAME

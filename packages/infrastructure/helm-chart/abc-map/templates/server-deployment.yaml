@@ -37,11 +37,11 @@ spec:
               value: /srv/config/config.js
           livenessProbe:
             httpGet:
-              path: /
+              path: /api/health
               port: http
           readinessProbe:
             httpGet:
-              path: /
+              path: /api/health
               port: http
           resources:
             {{- toYaml .Values.abcMap.resources | nindent 12 }}

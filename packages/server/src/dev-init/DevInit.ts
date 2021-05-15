@@ -35,7 +35,7 @@ export class DevInit {
       return Promise.reject(new Error("WARNING: do not enable 'development' configuration on an environment other than 'local' or 'test'"));
     }
 
-    const user = UserInit.create(this.services);
+    const user = UserInit.create(this.config, this.services);
     const users = await user.init();
 
     const project = ProjectInit.create(this.services);

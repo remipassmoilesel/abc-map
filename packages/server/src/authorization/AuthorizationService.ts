@@ -20,9 +20,9 @@ import { AbstractService } from '../services/AbstractService';
 import { Logger } from '../utils/Logger';
 import { MongodbClient } from '../mongodb/MongodbClient';
 import { ProjectDao } from '../projects/ProjectDao';
-import { Request } from 'express';
 import { Authentication } from '../authentication/Authentication';
 import { isUserAnonymous } from '@abc-map/shared-entities';
+import { FastifyRequest } from 'fastify';
 
 const logger = Logger.get('AuthorizationService.ts');
 
@@ -35,7 +35,11 @@ export class AuthorizationService extends AbstractService {
     super();
   }
 
-  public async canListProjects(req: Request): Promise<boolean> {
+  /**
+   * Here we do not verify owner of project, user id will be used as filter.
+   * @param req
+   */
+  public async canListProjects(req: FastifyRequest): Promise<boolean> {
     const user = Authentication.from(req);
     if (!user) {
       return false;
@@ -44,7 +48,7 @@ export class AuthorizationService extends AbstractService {
     return !isUserAnonymous(user);
   }
 
-  public async canReadProject(req: Request, projectId: string): Promise<boolean> {
+  public async canReadProject(req: FastifyRequest, projectId: string): Promise<boolean> {
     const user = Authentication.from(req);
     if (!user) {
       return false;
@@ -62,7 +66,7 @@ export class AuthorizationService extends AbstractService {
     return project.ownerId === user.id;
   }
 
-  public async canWriteProject(req: Request, projectId: string): Promise<boolean> {
+  public async canWriteProject(req: FastifyRequest, projectId: string): Promise<boolean> {
     const user = Authentication.from(req);
     if (!user) {
       return false;
@@ -81,7 +85,7 @@ export class AuthorizationService extends AbstractService {
     return project.ownerId === user.id;
   }
 
-  public async canDeleteProject(req: Request, projectId: string): Promise<boolean> {
+  public async canDeleteProject(req: FastifyRequest, projectId: string): Promise<boolean> {
     const user = Authentication.from(req);
     if (!user) {
       return false;

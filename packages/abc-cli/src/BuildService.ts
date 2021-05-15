@@ -25,6 +25,7 @@ import * as glob from 'fast-glob';
 import * as path from 'path';
 import { DockerConfig } from './config/DockerConfig';
 import { DeployConfig } from './config/DeployConfig';
+import { ChildProcess } from 'child_process';
 
 const logger = Logger.get('Service.ts', 'info');
 
@@ -33,7 +34,7 @@ export enum Dependencies {
   Production = 'Production',
 }
 
-export class Service {
+export class BuildService {
   constructor(private config: Config, private registry: Registry, private shell: Shell) {}
 
   public async install(dependencies = Dependencies.Development): Promise<void> {
@@ -92,19 +93,23 @@ export class Service {
     this.shell.sync('lerna run test');
   }
 
-  public async e2e(): Promise<void> {
+  public async e2eTests(): Promise<void> {
+    this.shell.sync('yarn run test:e2e:before-merge', { cwd: this.config.getE2eRoot() });
+  }
+
+  public async performanceTests(): Promise<void> {
+    this.shell.sync('yarn run test:performance:ci', { cwd: this.config.getPerformanceTestsRoot() });
+  }
+
+  /**
+   * Start server and associated service for E2E testing
+   */
+  public async startServersForE2e(): Promise<ChildProcess> {
     return new Promise((resolve, reject) => {
       const startCmd = this.shell.async('lerna run start:e2e --parallel');
       startCmd.on('error', reject);
-      startCmd.on('exit', (code) => {
-        if (!code) {
-          resolve();
-        } else {
-          reject(new Error(`Command failed with code ${code}: ${JSON.stringify(startCmd.spawnargs)}`));
-        }
-      });
 
-      logger.info('Waiting for development servers ...');
+      logger.info('Waiting for services readiness ...');
 
       const options = {
         resources: [this.config.getBackendE2eUrl(), this.config.getFrontendE2eUrl()],
@@ -113,10 +118,9 @@ export class Service {
       waitOn(options)
         .then(() => {
           logger.info('Servers ready !');
-          this.shell.sync('yarn run e2e-test:before-merge', { cwd: this.config.getE2eRoot() });
+          resolve(startCmd);
         })
-        .catch(reject)
-        .finally(() => startCmd.kill('SIGTERM'));
+        .catch(reject);
     });
   }
 
@@ -215,21 +219,6 @@ export class Service {
 
     const tookMin = Math.round((Date.now() - start) / 1000 / 60);
     logger.info(`Ready ! Deployment took ${tookMin} minutes,`);
-  }
-
-  public async continuousIntegration(): Promise<void> {
-    const start = new Date().getTime();
-    await this.install(Dependencies.Development);
-    this.lint();
-    this.cleanBuild();
-    this.dependencyCheck(); // Dependency check must be launched AFTER build for local dependencies
-    this.test();
-    await this.install(Dependencies.Production);
-    await this.e2e();
-    await this.install(Dependencies.Development); // We reinstall for caching purposes
-
-    const tookSec = Math.round((new Date().getTime() - start) / 1000);
-    logger.info(`CI took ${tookSec} seconds`);
   }
 
   private getDockerConfigs(): DockerConfig[] {

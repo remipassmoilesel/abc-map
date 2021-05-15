@@ -45,12 +45,12 @@ export class AuthenticationRoutes {
     return '/authentication/renew';
   }
 
-  public static register(): string {
-    return '/authentication/register';
+  public static registration(): string {
+    return '/authentication/registration';
   }
 
-  public static confirmAccount(): string {
-    return '/authentication/confirm-account';
+  public static confirmRegistration(): string {
+    return '/authentication/registration/confirmation';
   }
 }
 
@@ -74,6 +74,6 @@ export class VoteRoutes {
   }
 
   public static stats(from: DateTime, to: DateTime): string {
-    return `/vote/${from.toISODate()}/${to.toISODate()}`;
+    return `/vote/statistics/${from.toISODate()}/${to.toISODate()}`;
   }
 }

@@ -22,6 +22,10 @@ import { ConfigLoader } from '../config/ConfigLoader';
 import { TestHelper } from '../utils/TestHelper';
 import { assert } from 'chai';
 import * as uuid from 'uuid-random';
+import { StreamReader } from '../utils/StreamReader';
+import ReadableStream = NodeJS.ReadableStream;
+import { CompressedProject } from './CompressedProject';
+import { Readable } from 'stream';
 
 describe('ProjectService', () => {
   let userId: string;
@@ -57,7 +61,39 @@ describe('ProjectService', () => {
       assert.equal(dbProject?.metadata.id, sampleProject.metadata.id);
       assert.equal(dbProject?.metadata.name, sampleProject.metadata.name);
       assert.deepEqual(dbProject?.metadata.projection, sampleProject.metadata.projection);
-      assert.deepEqual(dbProject?.project, sampleProject.project);
+      assert.isDefined(dbProject?.project);
+    });
+
+    it('save() buffer should work', async () => {
+      // Prepare
+      const sampleProject = await TestHelper.sampleCompressedProject();
+
+      // Act
+      await service.save(userId, sampleProject);
+
+      // Assert
+      const dbProject = await service.findById(sampleProject.metadata.id);
+      assert.isDefined(dbProject?.project);
+      const buffer = await StreamReader.read(dbProject?.project as ReadableStream);
+      assert.deepEqual(buffer, sampleProject.project);
+    });
+
+    it('save() stream should work', async () => {
+      // Prepare
+      const sampleProject = await TestHelper.sampleCompressedProject();
+      const streamProject: CompressedProject = {
+        ...sampleProject,
+        project: Readable.from(sampleProject.project),
+      };
+
+      // Act
+      await service.save(userId, streamProject);
+
+      // Assert
+      const dbProject = await service.findById(sampleProject.metadata.id);
+      assert.isDefined(dbProject?.project);
+      const buffer = await StreamReader.read(dbProject?.project as ReadableStream);
+      assert.deepEqual(buffer, sampleProject.project);
     });
 
     it('should fail without userId', async () => {
@@ -84,7 +120,8 @@ describe('ProjectService', () => {
       // Assert
       const dbProject = await service.findById(sampleProject.metadata.id);
       assert.equal(dbProject?.metadata.name, sampleProject.metadata.name);
-      assert.deepEqual(dbProject?.project, sampleProject.project);
+      const buffer = await StreamReader.read(dbProject?.project as ReadableStream);
+      assert.deepEqual(buffer, sampleProject.project);
     });
   });
 
@@ -102,7 +139,9 @@ describe('ProjectService', () => {
       assert.equal(dbProject?.metadata.id, project.metadata.id);
       assert.equal(dbProject?.metadata.name, project.metadata.name);
       assert.deepEqual(dbProject?.metadata.projection, project.metadata.projection);
-      assert.deepEqual(dbProject?.project, project.project);
+      assert.isDefined(dbProject?.project);
+      const buffer = await StreamReader.read(dbProject?.project as ReadableStream);
+      assert.deepEqual(buffer, project.project);
     });
 
     it('should return undefined', async () => {

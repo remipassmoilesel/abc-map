@@ -16,13 +16,12 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as express from 'express';
-import { Request, Response, Router } from 'express';
 import { Controller } from '../server/Controller';
 import { Services } from '../services/services';
-import { asyncHandler } from '../server/asyncHandler';
 import { AbcVote } from '@abc-map/shared-entities';
 import { DateTime } from 'luxon';
+import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
+import { StatParams, VoteSchema } from './VoteController.schemas';
 
 export class VoteController extends Controller {
   constructor(private services: Services) {
@@ -33,26 +32,27 @@ export class VoteController extends Controller {
     return '/vote';
   }
 
-  public getRouter(): Router {
-    const app = express();
-    app.post('/', asyncHandler(this.save));
-    app.get('/:from/:to', asyncHandler(this.stats));
-    return app;
-  }
+  public setup = async (app: FastifyInstance): Promise<void> => {
+    // We restrict vote by ip
+    const voteConfig = {
+      rateLimit: {
+        max: 10,
+        timeWindow: '1h',
+      },
+    };
 
-  public save = async (req: Request, res: Response): Promise<void> => {
-    const vote: AbcVote | undefined = req.body;
-    if (!vote || typeof vote.value === 'undefined') {
-      return Promise.reject(new Error(`Invalid vote`));
-    }
-
-    await this.services.vote.save(vote, DateTime.now());
-    res.status(200).send();
+    app.post('/', { config: voteConfig, schema: VoteSchema }, this.vote);
+    app.get('/statistics/:from/:to', this.stats);
   };
 
-  public stats = async (req: Request, res: Response): Promise<void> => {
-    const from: string | undefined = req.params.from;
-    const to: string | undefined = req.params.to;
+  private vote = async (req: FastifyRequest<{ Body: AbcVote }>, reply: FastifyReply): Promise<void> => {
+    await this.services.vote.save(req.body, DateTime.now());
+    reply.status(200).send();
+  };
+
+  private stats = async (req: FastifyRequest<{ Params: StatParams }>, reply: FastifyReply): Promise<void> => {
+    const from = req.params.from;
+    const to = req.params.to;
     if (!from || !to) {
       return Promise.reject(new Error(`Invalid request`));
     }
@@ -60,6 +60,6 @@ export class VoteController extends Controller {
     const fromDateTime = DateTime.fromISO(from).startOf('day');
     const toDateTime = DateTime.fromISO(to).endOf('day');
     const result = await this.services.vote.aggregate(fromDateTime, toDateTime);
-    res.json(result);
+    reply.send(result);
   };
 }

@@ -20,9 +20,9 @@ import { MongodbClient } from '../mongodb/MongodbClient';
 import { ProjectDocument } from './ProjectDocument';
 import { MongodbCollection } from '../mongodb/MongodbCollection';
 import { MongodbBucket } from '../mongodb/MongodbBucket';
-import { Readable } from 'stream';
-import { StreamReader } from '../utils/StreamReader';
 import { Collection, GridFSBucket } from 'mongodb';
+import ReadableStream = NodeJS.ReadableStream;
+import { Readable } from 'stream';
 
 export class ProjectDao {
   constructor(private client: MongodbClient) {}
@@ -32,17 +32,22 @@ export class ProjectDao {
     await coll.replaceOne({ _id: project._id }, project, { upsert: true });
   }
 
-  public async saveCompressedFile(projectId: string, file: Buffer): Promise<void> {
+  public async saveCompressedFile(projectId: string, file: Buffer | ReadableStream): Promise<void> {
     const bucket = await this.bucket();
     const upload = bucket.openUploadStream(projectId);
-    const fileStream = Readable.from(file);
 
     const res: Promise<void> = new Promise((resolve, reject) => {
       upload.on('finish', () => resolve());
       upload.on('error', (err) => reject(err));
     });
 
-    fileStream.pipe(upload);
+    if (file instanceof Buffer) {
+      const fileStream = Readable.from(file);
+      fileStream.pipe(upload);
+    } else {
+      file.pipe(upload);
+    }
+
     return res;
   }
 
@@ -52,11 +57,9 @@ export class ProjectDao {
     return res || undefined;
   }
 
-  // TODO: we should stream file to client
-  public async findCompressedFileById(projectId: string): Promise<Buffer> {
+  public async findCompressedFileById(projectId: string): Promise<Readable> {
     const bucket = await this.bucket();
-    const stream = bucket.openDownloadStreamByName(projectId);
-    return StreamReader.read(stream);
+    return bucket.openDownloadStreamByName(projectId);
   }
 
   public async list(userId: string, offset: number, limit: number): Promise<ProjectDocument[]> {

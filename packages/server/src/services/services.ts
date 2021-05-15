@@ -22,12 +22,12 @@ import { MongodbClient } from '../mongodb/MongodbClient';
 import { Logger } from '../utils/Logger';
 import { UserService } from '../users/UserService';
 import { AuthenticationService } from '../authentication/AuthenticationService';
-import { HealthCheckService } from '../server/health/HealthCheckService';
+import { HealthCheckService } from '../health/HealthCheckService';
 import { AbstractService } from './AbstractService';
 import { DataStoreService } from '../data-store/DataStoreService';
 import { AuthorizationService } from '../authorization/AuthorizationService';
 import { VoteService } from '../votes/VoteService';
-import { MetricsService } from '../server/metrics/MetricsService';
+import { MetricsService } from '../metrics/MetricsService';
 
 const logger = Logger.get('services.ts');
 

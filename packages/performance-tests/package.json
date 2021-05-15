@@ -5,7 +5,8 @@
   "types": "build/index.d.ts",
   "license": "AGPL-3.0-or-later",
   "scripts": {
-    "start": "yarn run init && k6 run build/index.js",
+    "test:performance:ci": "yarn run init && k6 run build/index.js -e CONFIG_FILE=$(pwd)/config/ci.json --summary-export=test-results.json && node scripts/check-results.js",
+    "test:performance:staging": "yarn run init && k6 run build/index.js -e CONFIG_FILE=$(pwd)/config/staging.json --summary-export=test-results.json && node scripts/check-results.js",
     "init": "node scripts/init.js",
     "clean": "rm -rf build",
     "build": "webpack",
