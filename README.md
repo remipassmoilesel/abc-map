@@ -7,7 +7,7 @@ Official rewrite, attempt n°265 👨‍💻.
 </a>     
 
 
-## Goals
+## Introduction
 
 Abc-Map is a tool for processing geographic information that is easy to understand and use.
 
@@ -17,7 +17,7 @@ Use cases:
 - Professional uses: tourism, deliveries, etc. 
 - Sports and leisure: hiking, hunting, treasure hunts, ...
 
-More information [here](https://abc-map.fr).
+More information [here](https://alpha.abc-map.fr/documentation).
 
 
 ## Status of project
@@ -38,24 +38,33 @@ For this purpose the number of processus for an instance is limited:
 Backend is stateless, so it can be horizontally scaled.       
 
 
-## Technologies 
+## Technologies used 
 
-**Backend**: 
-- Typescript 
-- Express 
-- Mongodb
-- JWT
+**Backend**:
+- [NodeJS](https://nodejs.org/en/)
+- [Typescript](https://www.typescriptlang.org/)
+- [Fastify](https://www.fastify.io/)
+- [Mongodb](https://www.mongodb.com/)
+- [K6](https://k6.io/) for load testing
+- [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/) for local development
+- [Helm](https://helm.sh/) and [Kubernetes](https://kubernetes.io/) for deployment
 
 **Frontend**: 
-- Typescript
-- React
-- Openlayers
-- Bootstrap
+- [Typescript](https://www.typescriptlang.org/)
+- [React](https://reactjs.org/)
+- [Openlayers](https://openlayers.org/)
+- [Bootstrap](https://getbootstrap.com)
 
 
 ## Development installation
 
-**The development environment has only been tested under GNU / Linux.**      
+**The development environment has only been tested under GNU / Linux, it will not work on Windows.**
+
+
+### Minimal setup
+
+With this setup, you can modify project but all tests will not pass and you can not deploy.    
+
 
 For Debian like and Ubuntu:       
 
@@ -94,3 +103,19 @@ You can clean local data by using command:
 
     $ ./abc-cli clean-restart-services
 
+
+### Additional tools
+
+With these tools, all tests should pass, and you can deploy your own instance of Abc-Map.     
+
+TODO:
+- K6
+- Kubectl
+- Helm
+
+
+## Deployment options
+
+TODO:
+- Docker simple example
+- Helm chart

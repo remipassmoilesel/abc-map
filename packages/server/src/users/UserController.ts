@@ -16,11 +16,13 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as express from 'express';
-import { Router } from 'express';
 import { Controller } from '../server/Controller';
 import { Services } from '../services/services';
-import { asyncHandler } from '../server/asyncHandler';
+import { FastifyInstance } from 'fastify';
+
+// TODO: test
+// TODO: change password
+// TODO: delete account
 
 export class UserController extends Controller {
   constructor(private services: Services) {
@@ -31,14 +33,12 @@ export class UserController extends Controller {
     return '/user';
   }
 
-  public getRouter(): Router {
-    const app = express();
-    app.post('/:id', asyncHandler(this.updateUser));
-    return app;
-  }
+  public setup = async (app: FastifyInstance): Promise<void> => {
+    app.post('/:id', this.updateUser);
+  };
 
   // TODO: implement
-  public async updateUser(): Promise<void> {
+  private updateUser = (): Promise<void> => {
     return Promise.reject(new Error('Not implemented'));
-  }
+  };
 }

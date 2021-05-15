@@ -24,7 +24,7 @@ import { MongodbClient } from '../mongodb/MongodbClient';
 import { ConfigLoader } from '../config/ConfigLoader';
 import { AuthenticationService } from './AuthenticationService';
 import { UserService } from '../users/UserService';
-import { Config } from '../config/Config';
+import { Config, DevelopmentDataConfig } from '../config/Config';
 import { AbcUser, AccountConfirmationStatus, AnonymousUser, AuthenticationStatus, RegistrationStatus, Token, UserStatus } from '@abc-map/shared-entities';
 import { PasswordHasher } from './PasswordHasher';
 import { SmtpClient } from '../utils/SmtpClient';
@@ -44,7 +44,8 @@ describe('AuthenticationService', () => {
 
   before(async () => {
     config = await ConfigLoader.load();
-    config.development = false; // We can disable this option because we mock smtp client
+    // We can disable this option because we mock smtp client
+    config.development = { enabled: false } as DevelopmentDataConfig;
     client = await MongodbClient.createAndConnect(config);
   });
 
@@ -63,32 +64,70 @@ describe('AuthenticationService', () => {
     return client.disconnect();
   });
 
-  describe('Token handling', () => {
-    it('signToken() should work', async () => {
+  describe('verifyToken()', () => {
+    it('for disabled user', async () => {
+      // Prepare
       const user = TestHelper.sampleUser();
-      const token = service.signToken(user);
-      assert.match(token, /^eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9\./i);
+      user.enabled = false;
 
+      // Act
+      try {
+        service.signToken(user);
+        assert.fail('Sign should fail');
+      } catch (e) {
+        // Assert
+        assert.match(e.message, /User is disabled/);
+      }
+    });
+
+    it('for authenticated user', async () => {
+      // Prepare
+      const user = TestHelper.sampleUser();
+
+      // Act
+      const token = service.signToken(user);
+
+      // Assert
+      assert.match(token, /^eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9\./i);
       const decoded = jwtDecode<Token>(token);
       assert.equal(decoded.userStatus, UserStatus.Authenticated);
       assert.equal(decoded.user.id, user.id);
-      assert.equal(decoded.user.password, '');
-      assert.notEqual(decoded.user.password, user.password);
+      assert.equal(decoded.user.password, '<password-was-erased>');
       assert.equal(decoded.user.email, user.email);
       assert.equal(decoded.user.enabled, user.enabled);
     });
 
+    it('for anonymous user', async () => {
+      // Act
+      const token = service.signToken(AnonymousUser);
+
+      // Assert
+      assert.match(token, /^eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9\./i);
+      const decoded = jwtDecode<Token>(token);
+      assert.equal(decoded.userStatus, UserStatus.Anonymous);
+      assert.equal(decoded.user.id, AnonymousUser.id);
+      assert.equal(decoded.user.password, '<password-was-erased>');
+      assert.equal(decoded.user.email, AnonymousUser.email);
+      assert.equal(decoded.user.enabled, AnonymousUser.enabled);
+    });
+  });
+
+  describe('verifyToken()', () => {
     it('verifyToken() should return true', async () => {
       const user = TestHelper.sampleUser();
       const token = service.signToken(user);
+
       const tokenIsValid = await service.verifyToken(token);
+
       assert.isTrue(tokenIsValid);
     });
 
     it('verifyToken() should return false if token contains wrong chars', async () => {
       const user = TestHelper.sampleUser();
       const token = service.signToken(user);
+
       const tokenIsValid = await service.verifyToken(`${token}-with-wrong-chars`);
+
       assert.isFalse(tokenIsValid);
     });
 
@@ -98,16 +137,22 @@ describe('AuthenticationService', () => {
         algorithm: config.authentication.jwtAlgorithm,
         expiresIn: config.authentication.jwtExpiresIn,
       });
+
       const tokenIsValid = await service.verifyToken(token);
+
       assert.isFalse(tokenIsValid);
     });
   });
 
   describe('register()', () => {
     it('should save user then send mail with secret', async () => {
+      // Prepare
       const user = TestHelper.sampleUser();
 
+      // Act
       const status = await service.register({ email: user.email, password: user.password });
+
+      // Assert
       assert.equal(status, RegistrationStatus.Successful);
 
       const dbUser = (await userService.findByEmail(user.email)) as AbcUser;
@@ -130,61 +175,83 @@ describe('AuthenticationService', () => {
     });
 
     it('should fail if mail already exists', async () => {
+      // Prepare
       const user = TestHelper.sampleUser();
       await userService.save(user);
 
+      // Act
       const status = await service.register({ email: user.email, password: 'azerty1234' });
+
+      // Assert
       assert.equal(status, RegistrationStatus.EmailAlreadyExists);
     });
 
     it('should fail if mail is reserved', async () => {
+      // Act
       const status = await service.register({ email: AnonymousUser.email, password: 'azerty1234' });
+
+      // Assert
       assert.equal(status, RegistrationStatus.EmailAlreadyExists);
     });
   });
 
   describe('confirmAccount()', () => {
     it('confirmAccount() should not enable user if user not found', async () => {
+      // Prepare
       const user = TestHelper.sampleUser();
       const hmac = crypto.createHmac('sha512', config.registration.confirmationSalt);
       const secret = hmac.update(user.id).digest('hex');
 
+      // Act
       const status = await service.confirmAccount(user.id, secret);
+
+      // Assert
       assert.equal(status, AccountConfirmationStatus.UserNotFound);
     });
 
     it('confirmAccount() should not enable user if secret is wrong', async () => {
+      // Prepare
       const user = TestHelper.sampleUser();
       user.enabled = false;
       await userService.save(user);
 
+      // Act
       const status = await service.confirmAccount(user.id, 'wrong-secret');
+
+      // Assert
       assert.equal(status, AccountConfirmationStatus.Failed);
     });
 
     it('confirmAccount() should enable user', async () => {
+      // Prepare
       const user = TestHelper.sampleUser();
       user.enabled = false;
       await userService.save(user);
 
       const hmac = crypto.createHmac('sha512', config.registration.confirmationSalt);
       const secret = hmac.update(user.id).digest('hex');
+
+      // Act
       const status = await service.confirmAccount(user.id, secret);
+
+      // Assert
       assert.equal(status, AccountConfirmationStatus.Succeed);
     });
   });
 
   describe('authenticate()', () => {
-    it('should return UnknownUser status', async () => {
+    it('should return Refused status if user is unknown', async () => {
       const res = await service.authenticate(uuid(), uuid());
-      assert.equal(res.status, AuthenticationStatus.UnknownUser);
+
+      assert.equal(res.status, AuthenticationStatus.Refused);
     });
 
-    it('should return Refused status', async () => {
+    it('should return Refused status if password is wrong', async () => {
       const user = TestHelper.sampleUser();
       await userService.save(user);
 
       const res = await service.authenticate(user.email, uuid());
+
       assert.equal(res.status, AuthenticationStatus.Refused);
     });
 
@@ -194,33 +261,48 @@ describe('AuthenticationService', () => {
       await userService.save(user);
 
       const res = await service.authenticate(user.email, user.password);
+
       assert.equal(res.status, AuthenticationStatus.DisabledUser);
       assert.isUndefined(res.user);
     });
 
     it('should return Successful status', async () => {
+      // Prepare
       const user = TestHelper.sampleUser();
       await service.register({ email: user.email, password: user.password });
       const dbUser = (await userService.findByEmail(user.email)) as AbcUser;
       dbUser.enabled = true;
       await userService.save(dbUser);
 
+      // Act
       const res = await service.authenticate(user.email, user.password);
+
+      // Assert
       assert.equal(res.status, AuthenticationStatus.Successful);
       assert.isDefined(res.user);
       assert.equal(res.user?.id, dbUser.id);
       assert.equal(res.user?.email, user.email);
       assert.isDefined(res.user?.password);
-      assert.equal(res.user?.password, '');
+      assert.equal(res.user?.password, '<password-was-erased>');
     });
 
     it('should return Successful status if user is anonymous', async () => {
       const res = await service.authenticate(AnonymousUser.email, '');
+
       assert.equal(res.status, AuthenticationStatus.Successful);
       assert.isDefined(res.user);
-      assert.equal(res.user?.id, AnonymousUser.id);
+      assert.isDefined(res.user?.id);
       assert.equal(res.user?.email, AnonymousUser.email);
       assert.equal(res.user?.password, AnonymousUser.password);
+    });
+
+    it('should generate ids for anonymous users', async () => {
+      const res1 = await service.authenticate(AnonymousUser.email, '');
+      const res2 = await service.authenticate(AnonymousUser.email, '');
+
+      assert.isDefined(res1.user?.id);
+      assert.isDefined(res2.user?.id);
+      assert.notEqual(res1.user?.id, res2.user?.id);
     });
   });
 });

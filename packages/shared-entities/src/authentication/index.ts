@@ -17,8 +17,8 @@
  */
 
 export * from './AbcUser';
-export * from './AccountConfirmationRequest';
-export * from './AccountConfirmationResponse';
+export * from './RegistrationConfirmationRequest';
+export * from './RegistrationConfirmationResponse';
 export * from './AnonymousUser';
 export * from './AuthenticationRequest';
 export * from './AuthenticationResponse';

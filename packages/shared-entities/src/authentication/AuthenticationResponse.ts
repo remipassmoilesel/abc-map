@@ -28,6 +28,5 @@ export interface RenewResponse {
 export enum AuthenticationStatus {
   Successful = 'Successful',
   Refused = 'Refused',
-  UnknownUser = 'UnknownUser',
   DisabledUser = 'DisabledUser',
 }

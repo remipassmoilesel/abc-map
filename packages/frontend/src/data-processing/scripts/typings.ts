@@ -18,9 +18,6 @@
 
 import { ScriptMap } from './api/ScriptMap';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-function
-export const AsyncFunction = Object.getPrototypeOf(async function () {}).constructor;
-
 export type LogFunction = (data: object | undefined) => void;
 
 export interface ScriptArguments {

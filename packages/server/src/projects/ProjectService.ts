@@ -34,9 +34,10 @@ export class ProjectService extends AbstractService {
   }
 
   public async save(ownerId: string, project: CompressedProject): Promise<void> {
-    if (!ownerId) {
+    if (!ownerId || typeof ownerId !== 'string') {
       throw new Error('Owner id is mandatory');
     }
+
     const doc = ProjectMapper.dtoToDoc(project.metadata, ownerId);
     return Promise.all([this.dao.saveMetadata(doc), this.dao.saveCompressedFile(project.metadata.id, project.project)]).then(() => undefined);
   }

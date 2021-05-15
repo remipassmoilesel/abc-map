@@ -17,11 +17,12 @@
  */
 
 import { Env, EnvKey } from './Env';
-import { Config } from './Config';
+import { Config, ConfigInput } from './Config';
 import { Logger } from '../utils/Logger';
 import * as path from 'path';
 import * as _ from 'lodash';
 import { promises as fs } from 'fs';
+import { Validation } from '../utils/Validation';
 
 /* eslint-disable @typescript-eslint/no-var-requires */
 
@@ -56,40 +57,24 @@ export class ConfigLoader {
 
   public async load(configPath: string): Promise<Config> {
     const _configPath = path.resolve(configPath);
-    const config: Config = _.cloneDeep(require(_configPath));
+    let input: ConfigInput;
+    try {
+      input = _.cloneDeep(require(_configPath));
+    } catch (e) {
+      return Promise.reject(new Error(`Cannot load configuration '${configPath}': '${e.message || 'No message'}'`));
+    }
 
-    // TODO: use better validation
-    const parameters: string[] = [
-      'environmentName',
-      'externalUrl',
-      'server',
-      'server.host',
-      'server.port',
-      'database',
-      'database.url',
-      'database.username',
-      'database.password',
-      'authentication',
-      'authentication.passwordSalt',
-      'authentication.jwtSecret',
-      'authentication.jwtAlgorithm',
-      'authentication.jwtExpiresIn',
-      'registration',
-      'registration.confirmationSalt',
-      'smtp',
-      'smtp.host',
-      'smtp.port',
-      'datastore',
-      'datastore.path',
-    ];
+    // We validate config input
+    if (!Validation.configInput(input)) {
+      return Promise.reject(new Error(`Invalid configuration: ${Validation.formatErrors(Validation.configInput)}`));
+    }
 
-    parameters.forEach((param) => {
-      const value = _.get(config, param);
-      if (typeof value === 'undefined') {
-        throw new Error(`Missing parameter ${param} in configuration`);
-      }
-    });
+    const config: Config = {
+      ...input,
+      frontendPath: path.resolve(__dirname, '..', '..', 'public'),
+    };
 
+    // We check if datastore is a directory
     if (!(await fs.stat(config.datastore.path)).isDirectory()) {
       throw new Error(`Datastore root '${config.datastore.path}' must be a directory`);
     }
@@ -100,8 +85,10 @@ export class ConfigLoader {
       config.externalUrl = config.externalUrl.slice(0, -1);
     }
 
-    // We set resolve and set frontend path
-    config.frontendPath = path.resolve(__dirname, '..', '..', 'public');
+    // We check if frontend path is a directory
+    if (!(await fs.stat(config.frontendPath)).isDirectory()) {
+      throw new Error(`Frontend root '${config.frontendPath}' must be a directory`);
+    }
 
     return config;
   }

@@ -17,11 +17,12 @@
  */
 
 import { AbcProjectMetadata } from '@abc-map/shared-entities';
+import ReadableStream = NodeJS.ReadableStream;
 
 /**
  * * This interface is duplicated in frontend
  */
 export interface CompressedProject {
   metadata: AbcProjectMetadata;
-  project: Buffer;
+  project: Buffer | ReadableStream;
 }

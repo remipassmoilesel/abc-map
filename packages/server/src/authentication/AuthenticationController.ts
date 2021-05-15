@@ -16,31 +16,32 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as express from 'express';
-import { NextFunction, Router } from 'express';
 import { Controller } from '../server/Controller';
 import { Services } from '../services/services';
 import {
-  AbcUser,
-  AccountConfirmationRequest,
-  AccountConfirmationResponse,
+  RegistrationConfirmationRequest,
+  RegistrationConfirmationResponse,
   AccountConfirmationStatus,
+  AuthenticationRequest,
   AuthenticationResponse,
   AuthenticationStatus,
   RegistrationRequest,
+  RegistrationResponse,
+  RegistrationStatus,
   RenewResponse,
+  isEmailAnonymous,
 } from '@abc-map/shared-entities';
-import { asyncHandler } from '../server/asyncHandler';
-import * as passport from 'passport';
 import { Logger } from '../utils/Logger';
-import { IVerifyOptions } from 'passport-local';
-import { Status } from '../server/Status';
 import { Authentication } from './Authentication';
+import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
+import { Config } from '../config/Config';
+import { LoginRequestSchema, RegistrationConfirmationRequestSchema, RegistrationRequestSchema } from './AuthenticationController.schemas';
+import { jwtPlugin } from '../server/jwtPlugin';
 
 const logger = Logger.get('AuthenticationController.ts');
 
 export class AuthenticationController extends Controller {
-  constructor(private services: Services) {
+  constructor(private config: Config, private services: Services) {
     super();
   }
 
@@ -48,80 +49,103 @@ export class AuthenticationController extends Controller {
     return '/authentication';
   }
 
-  public getRouter(): Router {
-    const app = express();
-    app.post('/register', asyncHandler(this.register));
-    app.post('/confirm-account', asyncHandler(this.confirmAccount));
-    app.post('/login', this.login);
+  /**
+   * WARNING: This controller is public, authentication is not verified before
+   * @param app
+   */
+  public setup = async (app: FastifyInstance): Promise<void> => {
+    jwtPlugin(this.config, app);
 
-    this.services.authentication.authenticationMiddleware(app);
-
-    app.get('/renew', this.renew);
-    return app;
-  }
-
-  public register = async (req: express.Request, res: express.Response): Promise<void> => {
-    const request: RegistrationRequest = req.body;
-    if (!request || !request.email || !request.password) {
-      return Promise.reject(new Error('Invalid request'));
-    }
-
-    const result: Status = await this.services.authentication.register(request).then((status) => ({ status: status }));
-    res.status(200).json(result);
+    app.post('/registration', { schema: RegistrationRequestSchema }, this.registration);
+    app.post('/registration/confirmation', { schema: RegistrationConfirmationRequestSchema }, this.confirmRegistration);
+    app.post('/login', { schema: LoginRequestSchema }, this.login);
+    app.post('/renew', this.renew);
   };
 
-  // FIXME: here we should not return http code 200 in case of error
-  public confirmAccount = async (req: express.Request, res: express.Response): Promise<void> => {
-    const request: AccountConfirmationRequest = req.body;
-    if (!request) {
-      return Promise.reject(new Error('Invalid request'));
+  private registration = async (req: FastifyRequest<{ Body: RegistrationRequest }>, reply: FastifyReply): Promise<void> => {
+    const { metrics, authentication } = this.services;
+
+    const status = await authentication.register(req.body);
+    const response: RegistrationResponse = { status };
+
+    if (RegistrationStatus.Successful === status) {
+      reply.status(200).send(response);
+      metrics.newRegistration();
+    } else if (RegistrationStatus.EmailAlreadyExists === status) {
+      reply.status(409).send(response);
+    } else {
+      reply.status(500).send(response);
+      metrics.registrationError();
     }
-
-    const result: AccountConfirmationResponse = await this.services.authentication
-      .confirmAccount(request.userId, request.secret)
-      .then(async (status) => {
-        const user = await this.services.user.findById(request.userId);
-        if (!user) {
-          return Promise.reject(new Error(`User not found: ${request.userId}`));
-        }
-        const token = this.services.authentication.signToken(user);
-        return { status, token };
-      })
-      .catch((error) => ({ status: AccountConfirmationStatus.Failed, error: error.getMessage() || 'Error during confirmation' }));
-
-    res.status(200).json(result);
   };
 
-  public login = (req: express.Request, res: express.Response, next: NextFunction): void => {
-    const { metrics } = this.services;
+  private confirmRegistration = async (req: FastifyRequest<{ Body: RegistrationConfirmationRequest }>, reply: FastifyReply): Promise<void> => {
+    const { metrics, authentication } = this.services;
 
-    passport.authenticate('local', { session: false }, (err?: Error, user?: AbcUser, info?: IVerifyOptions) => {
-      if (err) {
-        metrics.authenticationFailed();
-        return next(err);
-      }
+    const userId = req.body.userId;
+    const secret = req.body.secret;
+
+    try {
+      const status = await authentication.confirmAccount(userId, secret);
+      const user = await this.services.user.findById(userId);
       if (!user) {
-        metrics.authenticationFailed();
-        const status: AuthenticationStatus = (info?.message || AuthenticationStatus.Refused) as AuthenticationStatus;
-        const response: AuthenticationResponse = { status };
-        return res.status(401).json(response);
+        return Promise.reject(new Error(`User not found: ${userId}`));
+      }
+
+      const token = this.services.authentication.signToken(user);
+      const payload: RegistrationConfirmationResponse = { status, token };
+      reply.status(200).send(payload);
+
+      metrics.registrationConfirmed();
+    } catch (error) {
+      const payload: RegistrationConfirmationResponse = {
+        status: AccountConfirmationStatus.Failed,
+        error: error.getMessage() || 'Error during confirmation',
+      };
+      reply.status(500).send(payload);
+
+      metrics.registrationConfirmationFailed();
+    }
+  };
+
+  private login = async (req: FastifyRequest<{ Body: AuthenticationRequest }>, reply: FastifyReply): Promise<void> => {
+    const { metrics, authentication } = this.services;
+
+    const request = req.body;
+    const auth = await authentication.authenticate(request.email, request.password);
+
+    if (auth.user) {
+      const token = this.services.authentication.signToken(auth.user);
+      const response: AuthenticationResponse = { token, status: AuthenticationStatus.Successful };
+
+      if (isEmailAnonymous(request.email)) {
+        metrics.anonymousAuthenticationSucceeded();
       } else {
         metrics.authenticationSucceeded();
-        const token = this.services.authentication.signToken(user);
-        const response: AuthenticationResponse = { token, status: AuthenticationStatus.Successful };
-        return res.status(200).json(response);
       }
-    })(req, res, next);
+
+      return reply.status(200).send(response);
+    } else {
+      metrics.authenticationFailed();
+      const response: AuthenticationResponse = { status: auth.status };
+      return reply.status(401).send(response);
+    }
   };
 
-  public renew = (req: express.Request, res: express.Response): void => {
+  private renew = async (req: FastifyRequest, reply: FastifyReply): Promise<void> => {
+    try {
+      await req.jwtVerify();
+    } catch (err) {
+      reply.forbidden();
+    }
+
     const user = Authentication.from(req);
     if (!user) {
-      res.status(500).json({ status: 'unexpected error' });
+      reply.forbidden();
       return;
     }
 
     const response: RenewResponse = { token: this.services.authentication.signToken(user) };
-    res.json(response);
+    reply.status(200).send(response);
   };
 }

@@ -16,15 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-export interface AccountConfirmationResponse {
-  status: AccountConfirmationStatus;
-  error?: string;
-  token?: string;
-}
-
-export enum AccountConfirmationStatus {
-  InProgress = 'InProgress',
-  UserNotFound = 'UserNotFound',
-  Failed = 'Failed',
-  Succeed = 'Succeed',
+export interface RegistrationConfirmationRequest {
+  userId: string;
+  secret: string;
 }

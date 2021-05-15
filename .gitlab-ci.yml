@@ -1,5 +1,5 @@
 ---
-image: registry.gitlab.com/abc-map/abc-map-2_private/build-image:v0.6
+image: registry.gitlab.com/abc-map/abc-map-2_private/build-image:v0.7
 
 
 cache:

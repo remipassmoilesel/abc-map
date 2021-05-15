@@ -22,7 +22,7 @@ import { ModuleId } from '../ModuleId';
 import React, { ReactNode } from 'react';
 import { Services } from '../../core/Services';
 import { Logger } from '@abc-map/frontend-commons';
-import { AsyncFunction, ChromiumErrorRegexp, ErrorPosition, Example, FirefoxErrorRegexp, ScriptArguments, ScriptError } from './typings';
+import { ChromiumErrorRegexp, ErrorPosition, Example, FirefoxErrorRegexp, ScriptArguments, ScriptError } from './typings';
 import { ScriptMap } from './api/ScriptMap';
 
 export const logger = Logger.get('Scripts.tsx', 'info');
@@ -59,21 +59,23 @@ export class Scripts extends Module {
     };
 
     const script = createScript(args, content);
-    return script(...Object.values(args))
-      .then(() => output)
-      .catch((err: Error) => {
-        const position = parseError(err);
-        let message: string;
-        if (position) {
-          message = `Error line ${position.line}, column ${position.column}.`;
-        } else {
-          message = `Error at unknown position.`;
-        }
-        message += ` Message: ${err.message || '<no-message>'}`;
 
-        const error = new ScriptError(message, output);
-        return Promise.reject(error);
-      });
+    try {
+      script(...Object.values(args));
+      return output;
+    } catch (err) {
+      const position = parseError(err);
+      let message: string;
+      if (position) {
+        message = `Error line ${position.line}, column ${position.column}.`;
+      } else {
+        message = `Error at unknown position.`;
+      }
+      message += ` Message: ${err.message || '<no-message>'}`;
+
+      const error = new ScriptError(message, output);
+      return Promise.reject(error);
+    }
   }
 
   private handleScriptChange = (content: string) => {
@@ -81,9 +83,10 @@ export class Scripts extends Module {
   };
 }
 
-export function createScript(args: ScriptArguments, content: string): typeof AsyncFunction {
+export function createScript(args: ScriptArguments, content: string): Function {
   const header = `"use strict";\n`;
-  return new AsyncFunction(...Object.keys(args), header + content);
+  // eslint-disable-next-line no-new-func
+  return new Function(...Object.keys(args), header + content);
 }
 
 export function parseError(error: Error | any): ErrorPosition | undefined {

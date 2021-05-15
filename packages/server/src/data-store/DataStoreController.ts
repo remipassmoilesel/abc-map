@@ -16,12 +16,13 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as express from 'express';
-import { Router } from 'express';
 import { Controller } from '../server/Controller';
 import { Services } from '../services/services';
-import { asyncHandler } from '../server/asyncHandler';
 import { AbcArtefact, PaginatedResponse } from '@abc-map/shared-entities';
+import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
+import fastifyStatic from 'fastify-static';
+import { ByIdParams, GetByIdSchema, ListSchema, SearchQuery, SearchSchema } from './DataStoreController.schemas';
+import { PaginatedQuery, PaginationHelper } from '../server/PaginationHelper';
 
 export class DataStoreController extends Controller {
   constructor(private services: Services) {
@@ -32,18 +33,17 @@ export class DataStoreController extends Controller {
     return '/datastore';
   }
 
-  public getRouter(): Router {
-    const app = express();
-    app.get('/list', asyncHandler(this.list));
-    app.get('/search', asyncHandler(this.search));
-    app.get('/:artefactId', asyncHandler(this.getById));
-    app.use('/download', express.static(this.services.datastore.getRoot()));
-    return app;
-  }
+  public setup = async (app: FastifyInstance): Promise<void> => {
+    app.get('/list', { schema: ListSchema }, this.list);
+    app.get('/search', { schema: SearchSchema }, this.search);
+    app.get('/:artefactId', { schema: GetByIdSchema }, this.getById);
 
-  public list = async (req: express.Request, res: express.Response): Promise<void> => {
-    const limit = parseInt(req.query.limit as string) || 50;
-    const offset = parseInt(req.query.offset as string) || 0;
+    const root = this.services.datastore.getRoot();
+    app.register(fastifyStatic, { root, prefix: '/download' });
+  };
+
+  private list = async (req: FastifyRequest<{ Querystring: PaginatedQuery }>, reply: FastifyReply): Promise<void> => {
+    const { limit, offset } = PaginationHelper.fromQuery(req);
 
     const content = await this.services.datastore.list(limit, offset);
     const total = await this.services.datastore.countArtefacts();
@@ -53,17 +53,12 @@ export class DataStoreController extends Controller {
       offset,
       total,
     };
-    res.status(200).json(result);
+    reply.status(200).send(result);
   };
 
-  public search = async (req: express.Request, res: express.Response): Promise<void> => {
-    const query: string = req.query.query as string;
-    if (!query) {
-      return Promise.reject(new Error('Query is mandatory'));
-    }
-
-    const limit = parseInt(req.query.limit as string) || 50;
-    const offset = parseInt(req.query.offset as string) || 0;
+  private search = async (req: FastifyRequest<{ Querystring: SearchQuery }>, reply: FastifyReply): Promise<void> => {
+    const { limit, offset } = PaginationHelper.fromQuery(req);
+    const query = req.query.query;
 
     const content = await this.services.datastore.search(query, limit, offset);
     const total = await this.services.datastore.countArtefacts();
@@ -73,16 +68,16 @@ export class DataStoreController extends Controller {
       offset,
       total,
     };
-    res.status(200).json(result);
+    reply.status(200).send(result);
   };
 
-  public getById = async (req: express.Request, res: express.Response): Promise<void> => {
+  private getById = async (req: FastifyRequest<{ Params: ByIdParams }>, reply: FastifyReply): Promise<void> => {
     const id = req.params.artefactId;
-    if (!id) {
-      return Promise.reject(new Error('Artefact id is mandatory'));
+    const result = await this.services.datastore.findById(id);
+    if (result) {
+      reply.status(200).send(result);
+    } else {
+      reply.notFound();
     }
-
-    const result: AbcArtefact | undefined = await this.services.datastore.findById(id);
-    res.status(200).json(result);
   };
 }

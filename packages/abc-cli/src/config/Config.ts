@@ -53,12 +53,16 @@ export class Config {
     return path.resolve(this.getProjectRoot(), 'packages/e2e-tests');
   }
 
+  public getPerformanceTestsRoot(): string {
+    return path.resolve(this.getProjectRoot(), 'packages/performance-tests');
+  }
+
   public getFrontendE2eUrl(): string {
-    return 'http://localhost:10082';
+    return 'http://localhost:10082/';
   }
 
   public getBackendE2eUrl(): string {
-    return 'http://localhost:10082/api/health';
+    return 'http://localhost:10082/api/health/';
   }
 
   public registryUrl(): string {

@@ -19,11 +19,14 @@
 import 'source-map-support/register';
 import { Logger } from './utils/Logger';
 import { HttpServer } from './server/HttpServer';
-import { servicesFactory } from './services/services';
+import { Services, servicesFactory } from './services/services';
 import { ConfigLoader } from './config/ConfigLoader';
 import { DevInit } from './dev-init/DevInit';
 
 const logger = Logger.get('main.ts', 'info');
+
+let services: Services | undefined;
+let server: HttpServer | undefined;
 
 main().catch((err: Error) => {
   logger.error('Server crashed: ', err);
@@ -32,12 +35,13 @@ main().catch((err: Error) => {
 
 async function main() {
   logger.info('Starting Abc-Map ...');
-  logger.info(`Loading configuration: ${ConfigLoader.getPathFromEnv()}`);
+  setupProcessExitHandler();
 
+  logger.info(`Loading configuration: ${ConfigLoader.getPathFromEnv()}`);
   const config = await ConfigLoader.load();
   logger.info('Configuration used: ', JSON.stringify(ConfigLoader.safeConfig(config), null, 2));
 
-  const services = await servicesFactory(config);
+  services = await servicesFactory(config);
 
   if (config.development) {
     logger.warn('/!\\ WARNING, development data will be created');
@@ -46,6 +50,39 @@ async function main() {
 
   services.datastore.index().catch((err) => logger.error(err));
 
-  const server = HttpServer.create(config, services);
-  return server.listen().finally(() => services.shutdown());
+  server = HttpServer.create(config, services);
+  await server.initialize();
+
+  return server.listen().finally(() => terminate());
+}
+
+function terminate() {
+  return Promise.all([services?.shutdown(), server?.shutdown()]);
+}
+
+function setupProcessExitHandler(): void {
+  // Graceful shutdown
+  process.on('SIGTERM', async () => {
+    logger.warn('Received signal SIGTERM');
+    terminate()
+      .then(() => {
+        logger.info('Exiting !');
+        process.exit(0);
+      })
+      .catch((err) => {
+        logger.error('Error: ', err);
+        process.exit(1);
+      });
+  });
+
+  // Hurry shutdown
+  process.on('SIGINT', async () => {
+    logger.warn('Received signal SIGINT');
+    terminate()
+      .catch((err) => logger.error('Error: ', err))
+      .finally(() => {
+        logger.info('Exiting !');
+        process.exit(1);
+      });
+  });
 }

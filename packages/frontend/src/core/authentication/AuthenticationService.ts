@@ -16,11 +16,11 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AxiosInstance } from 'axios';
+import { AxiosError, AxiosInstance } from 'axios';
 import { AuthenticationRoutes as Api } from '../http/ApiRoutes';
 import {
-  AccountConfirmationRequest,
-  AccountConfirmationResponse,
+  RegistrationConfirmationRequest,
+  RegistrationConfirmationResponse,
   AnonymousUser,
   AuthenticationResponse,
   AuthenticationStatus,
@@ -108,10 +108,6 @@ export class AuthenticationService {
           this.toasts.error('Vos identifiants sont incorrects.');
           return Promise.reject(new Error(AuthenticationStatus.Refused));
         }
-        if (AuthenticationStatus.UnknownUser === res.status) {
-          this.toasts.error("Cette adresse email n'est pas enregistrée.");
-          return Promise.reject(new Error(AuthenticationStatus.UnknownUser));
-        }
 
         logger.error('Invalid login status: ', res);
         this.toasts.genericError();
@@ -124,25 +120,45 @@ export class AuthenticationService {
   }
 
   public renew(): Promise<void> {
-    return this.httpClient.get<RenewResponse>(Api.renew()).then((result) => {
+    return this.httpClient.post<RenewResponse>(Api.renew()).then((result) => {
       this.dispatchToken(result.data.token);
     });
   }
 
-  public register(email: string, password: string): Promise<RegistrationResponse> {
+  // TODO: refactor
+  public registration(email: string, password: string): Promise<RegistrationResponse> {
     const request: RegistrationRequest = { email, password };
-    return this.httpClient.post<RegistrationResponse>(Api.register(), request).then((res) => res.data);
+    return this.httpClient
+      .post<RegistrationResponse>(Api.registration(), request)
+      .then((res) => res.data)
+      .catch((err: AxiosError) => {
+        if (err.response?.data) {
+          return Promise.resolve(err.response?.data);
+        } else {
+          return Promise.reject(err);
+        }
+      });
   }
 
-  public confirmAccount(userId: string, secret: string): Promise<AccountConfirmationResponse> {
-    const request: AccountConfirmationRequest = { userId, secret };
-    return this.httpClient.post(Api.confirmAccount(), request).then((res) => {
-      const confirm: AccountConfirmationResponse = res.data;
-      if (confirm.token) {
-        this.dispatchToken(confirm.token);
-      }
-      return confirm;
-    });
+  // TODO: refactor
+  public confirmRegistration(userId: string, secret: string): Promise<RegistrationConfirmationResponse> {
+    const request: RegistrationConfirmationRequest = { userId, secret };
+    return this.httpClient
+      .post(Api.confirmRegistration(), request)
+      .then((res) => {
+        const response: RegistrationConfirmationResponse = res.data;
+        if (response.token) {
+          this.dispatchToken(response.token);
+        }
+        return response;
+      })
+      .catch((err: AxiosError) => {
+        if (err.response?.data) {
+          return Promise.resolve(err.response?.data);
+        } else {
+          return Promise.reject(err);
+        }
+      });
   }
 
   private dispatchToken(token: string): void {

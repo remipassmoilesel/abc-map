@@ -7172,7 +7172,7 @@ w3c-xmlserializer@^1.1.2:
     webidl-conversions "^4.0.2"
     xml-name-validator "^3.0.0"
 
-wait-on@^5.2.1:
+wait-on@^5.3.0:
   version "5.3.0"
   resolved "https://registry.yarnpkg.com/wait-on/-/wait-on-5.3.0.tgz#584e17d4b3fe7b46ac2b9f8e5e102c005c2776c7"
   integrity sha512-DwrHrnTK+/0QFaB9a8Ol5Lna3k7WvUR4jzSKmz0YaPBpuN2sACyiPVKVfj6ejnjcajAcvn3wlbTyMIn9AZouOg==

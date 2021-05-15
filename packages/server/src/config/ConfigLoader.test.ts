@@ -19,27 +19,31 @@
 import { ConfigLoader } from './ConfigLoader';
 import { assert } from 'chai';
 
-// TODO: better test
-
 describe('ConfigLoader', () => {
-  it('load()', async () => {
-    const config = await ConfigLoader.load();
+  let loader: ConfigLoader;
+  beforeEach(() => {
+    loader = new ConfigLoader();
+  });
+
+  it('load inexistant', async () => {
+    const err = await loader.load('not a config').catch((err) => err);
+    assert.match(err.message, /Cannot load configuration 'not a config'/);
+  });
+
+  it('load bad config', async () => {
+    const err = await loader.load('resources/test/wrong-config.js').catch((err) => err);
+    assert.match(err.message, /Invalid configuration: \{"keyword":"minProperties"/);
+  });
+
+  it('load local.js', async () => {
+    const config = await loader.load(ConfigLoader.DEFAULT_CONFIG);
     assert.isDefined(config.environmentName);
-    assert.isDefined(config.development);
+    assert.isDefined(config.frontendPath);
+  });
 
-    assert.isDefined(config.server);
-    assert.equal(config.server.host, '127.0.0.1');
-    assert.equal(config.server.port, 10_082);
-
-    assert.isDefined(config.database);
-    assert.isTrue(config.database.url.startsWith('mongodb://'));
-    assert.equal(config.database.username, 'admin');
-    assert.equal(config.database.password, 'admin');
-
-    assert.isDefined(config.authentication);
-    assert.equal(config.authentication.passwordSalt, 'azerty1234');
-    assert.equal(config.authentication.jwtSecret, 'azerty1234');
-    assert.equal(config.authentication.jwtAlgorithm, 'HS512');
-    assert.equal(config.authentication.jwtExpiresIn, '45min');
+  it('load continuous-integration.js', async () => {
+    const config = await loader.load('resources/configuration/continuous-integration.js');
+    assert.isDefined(config.environmentName);
+    assert.isDefined(config.frontendPath);
   });
 });

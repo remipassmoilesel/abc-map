@@ -16,13 +16,13 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Readable } from 'stream';
+import ReadableStream = NodeJS.ReadableStream;
 
 export class StreamReader {
-  public static async read(readable: Readable): Promise<Buffer> {
+  public static async read(readable: ReadableStream): Promise<Buffer> {
     const chunks: Buffer[] = [];
     for await (const chunk of readable) {
-      chunks.push(chunk);
+      chunks.push(chunk as Buffer);
     }
     return Buffer.concat(chunks);
   }

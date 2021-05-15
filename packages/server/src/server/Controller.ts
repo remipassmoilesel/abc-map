@@ -16,9 +16,9 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Router } from 'express';
+import { FastifyInstance } from 'fastify';
 
 export abstract class Controller {
   public abstract getRoot(): string;
-  public abstract getRouter(): Router;
+  public abstract setup: (app: FastifyInstance) => Promise<void>;
 }

@@ -11,14 +11,14 @@ For the moment and despite several trials, some tests does not pass when using C
 ## Run all tests, the quick way
 
     $ abc start
-    $ yarn run e2e-test:interactive
+    $ yarn run test:e2e:interactive
 
 
 ## Run tests with production code
 
     $ abc build
     $ lerna run start:e2e --parallel
-    $ yarn run e2e-test:interactive
+    $ yarn run test:e2e:interactive
 
 
 

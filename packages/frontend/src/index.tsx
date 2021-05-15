@@ -67,13 +67,16 @@ function load() {
 }
 
 function loadingError(): void {
-  const message = 'Une erreur est survenue, veuillez réessayer plus tard.';
+  const message = 'Une erreur empêche le chargement de la page 😭. Veuillez réessayer plus tard.';
   const root = document.querySelector('#root');
   if (!root) {
     alert(message);
     return;
   }
-  root.innerHTML = `<h5 class='text-center my-5'>${message}</h5>`;
+  root.innerHTML = `
+    <h1 class='text-center my-5'>Abc-Map</h1>
+    <h5 class='text-center my-5'>${message}</h5>
+  `;
 }
 
 // If you want to start measuring performance in your app, pass a function

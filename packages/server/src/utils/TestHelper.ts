@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcProject, AbcUser, CurrentVersion, DEFAULT_PROJECTION, LayerType, ManifestName, PredefinedLayerModel } from '@abc-map/shared-entities';
+import { AbcArtefact, AbcProject, AbcUser, CurrentVersion, DEFAULT_PROJECTION, LayerType, ManifestName, PredefinedLayerModel } from '@abc-map/shared-entities';
 import * as uuid from 'uuid-random';
 import { Zipper } from './Zipper';
 import { CompressedProject } from '../projects/CompressedProject';
@@ -106,6 +106,18 @@ export class TestHelper {
       name: 'Fake project',
       projection: { name: 'EPSG:4326' },
       version: '0.1',
+    };
+  }
+
+  public static sampleArtefact(): AbcArtefact {
+    return {
+      id: uuid(),
+      name: 'Burgers around the world',
+      license: 'AGPLv3',
+      description: 'A beautiful artefact',
+      files: ['file1.gpx', 'file2.shp'],
+      path: '/datastore/artefact',
+      keywords: ['beautiful', 'artifact'],
     };
   }
 
