@@ -23,7 +23,7 @@ import { DataRow, DataSource, getFields } from '../../../core/data/data-source/D
 import DataTable from '../../../components/data-table/DataTable';
 import { ServiceProps, withServices } from '../../../core/withServices';
 import TipBubble from '../../../components/tip-bubble/TipBubble';
-import { ProportionalSymbolsTips } from '@abc-map/documentation';
+import { ProportionalSymbolsTips } from '@abc-map/user-documentation';
 
 const logger = Logger.get('DataSourceForm.tsx');
 

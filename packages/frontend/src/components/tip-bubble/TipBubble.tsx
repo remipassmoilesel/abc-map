@@ -19,7 +19,7 @@
 import React, { Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/frontend-commons';
 import { Modal } from 'react-bootstrap';
-import { AllTips } from '@abc-map/documentation';
+import { AllTips } from '@abc-map/user-documentation';
 import Cls from './TipBubble.module.scss';
 
 const logger = Logger.get('TipBubble.tsx', 'info');

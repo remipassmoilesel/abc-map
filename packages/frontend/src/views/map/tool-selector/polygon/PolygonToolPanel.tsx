@@ -26,7 +26,7 @@ import { MainState } from '../../../../core/store/reducer';
 import { connect, ConnectedProps } from 'react-redux';
 import { ServiceProps, withServices } from '../../../../core/withServices';
 import TipBubble from '../../../../components/tip-bubble/TipBubble';
-import { ToolTips } from '@abc-map/documentation';
+import { ToolTips } from '@abc-map/user-documentation';
 
 const logger = Logger.get('PolygonToolPanel.tsx');
 

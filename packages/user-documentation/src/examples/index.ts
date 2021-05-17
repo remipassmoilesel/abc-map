@@ -16,20 +16,12 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import toc from './toc.md';
-import * as developer from './developer';
-import * as user from './user';
+import example1 from './0_itineraire-randonnee.md';
+import example2 from './1_itineraire-course-orientation.md';
+import example3 from './2_population-francaise-departement.md';
+import example4 from './3_densite-francaise-region.md';
+import example5 from './4_distribution-oiseaux-cherbourg.md';
 
-export * from './tips';
-
-export interface Documentation {
-  toc: string;
-  modules: string[];
-}
-
-const content: Documentation = {
-  toc,
-  modules: [...user.content, ...developer.content],
-};
+const content = [example1, example2, example3, example4, example5];
 
 export { content };

@@ -18,24 +18,40 @@
 
 import React, { Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/frontend-commons';
-import { content as doc } from '@abc-map/documentation';
+import { content as doc } from '@abc-map/user-documentation';
 import { ServiceProps, withServices } from '../../core/withServices';
 import Cls from './DocumentationView.module.scss';
+import { MainState } from '../../core/store/reducer';
+import { connect, ConnectedProps } from 'react-redux';
+import { UiActions } from '../../core/store/ui/actions';
+import * as _ from 'lodash';
 
-const logger = Logger.get('Help.tsx', 'info');
+const logger = Logger.get('DocumentationView.tsx', 'info');
 
-class DocumentationView extends Component<ServiceProps, {}> {
-  constructor(props: ServiceProps) {
+const mapStateToProps = (state: MainState) => ({
+  position: state.ui.documentation.scrollPosition,
+});
+
+const mapDispatchToProps = {
+  setPosition: UiActions.setDocumentationScrollPosition,
+};
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+type Props = ConnectedProps<typeof connector> & ServiceProps;
+
+class DocumentationView extends Component<Props, {}> {
+  private viewPortRef = React.createRef<HTMLDivElement>();
+
+  constructor(props: Props) {
     super(props);
     this.state = {};
   }
 
   public render(): ReactNode {
     return (
-      <div className={Cls.documentation}>
-        <h1>Aide</h1>
-        <p>Sur cette page, vous trouverez des tutoriels et le manuel d&apos;Abc-Map.</p>
-        <p>L&apos;aide est en cours de rédaction.</p>
+      <div className={Cls.documentation} ref={this.viewPortRef}>
+        <h1 className={'mb-4'}>Documentation</h1>
         {doc && (
           <>
             <div className={'toc'} dangerouslySetInnerHTML={{ __html: doc.toc }} />
@@ -47,6 +63,35 @@ class DocumentationView extends Component<ServiceProps, {}> {
       </div>
     );
   }
+
+  public componentDidMount() {
+    const current = this.viewPortRef.current;
+    if (!current) {
+      logger.error('Ref not ready');
+      return;
+    }
+    current.addEventListener('scroll', this.handleScroll);
+    current.scrollTop = this.props.position;
+  }
+
+  public componentWillUnmount() {
+    const current = this.viewPortRef.current;
+    if (!current) {
+      logger.error('Ref not ready');
+      return;
+    }
+    current.removeEventListener('scroll', this.handleScroll);
+  }
+
+  private handleScroll = _.debounce(() => {
+    const current = this.viewPortRef.current;
+    if (!current) {
+      logger.error('Ref not ready');
+      return;
+    }
+
+    this.props.setPosition(current.scrollTop);
+  }, 100);
 }
 
-export default withServices(DocumentationView);
+export default connector(withServices(DocumentationView));

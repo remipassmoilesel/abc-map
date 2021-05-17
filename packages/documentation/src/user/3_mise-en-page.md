@@ -1,3 +1,0 @@
-# Mise en page
-
-TBD

@@ -28,7 +28,7 @@ import TextFormat from '../_common/text-format/TextFormat';
 import { ServiceProps, withServices } from '../../../../core/withServices';
 import Cls from './SelectionToolPanel.module.scss';
 import TipBubble from '../../../../components/tip-bubble/TipBubble';
-import { ToolTips } from '@abc-map/documentation';
+import { ToolTips } from '@abc-map/user-documentation';
 import PointIconSelector from '../point/icon-selector/PointIconSelector';
 import PointSizeSelector from '../point/size-selector/PointSizeSelector';
 

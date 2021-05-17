@@ -16,13 +16,12 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import structure from './0_structure.md';
-import conventions from './1_conventions.md';
-import development from './2_developpement.md';
-import contributions from './3_contributions.md';
-import deployment from './4_deploiement.md';
-import FAQ from './5_FAQ.md';
+import faq from './0_faq.md';
+import map from './1_carte.md';
+import datastore from './2_catalogue.md';
+import dataProcessing from './3_traitement-donnees.md';
+import layout from './4_mise-en-page.md';
 
-const content = [structure, conventions, development, contributions, deployment, FAQ];
+const content = [faq, map, datastore, dataProcessing, layout];
 
 export { content };

@@ -25,8 +25,14 @@ export interface UiState {
         }
       | undefined;
   };
+  documentation: {
+    scrollPosition: number;
+  };
 }
 
 export const uiInitialState: UiState = {
   historyCapabilities: {},
+  documentation: {
+    scrollPosition: 0,
+  },
 };

@@ -19,7 +19,7 @@
 import React, { Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/frontend-commons';
 import TipBubble from '../../../../components/tip-bubble/TipBubble';
-import { ToolTips } from '@abc-map/documentation';
+import { ToolTips } from '@abc-map/user-documentation';
 import Cls from './EditPropertiesToolPanel.module.scss';
 
 const logger = Logger.get('EditPropertiesPanel.tsx');

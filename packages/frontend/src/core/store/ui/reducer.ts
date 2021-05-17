@@ -45,6 +45,13 @@ export function uiReducer(state = uiInitialState, action: UiAction): UiState {
       return newState;
     }
 
+    case ActionType.SetDocumentationScrollPosition: {
+      const newState: UiState = { ...state };
+      newState.documentation = { ...newState.documentation };
+      newState.documentation.scrollPosition = action.position;
+      return newState;
+    }
+
     default:
       return state;
   }
