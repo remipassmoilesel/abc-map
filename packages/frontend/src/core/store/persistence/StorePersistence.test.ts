@@ -76,6 +76,9 @@ describe('StorePersistence', () => {
             canRedo: true,
           },
         },
+        documentation: {
+          scrollPosition: 15,
+        },
       },
     };
     const snapshot = stateSnapshot(sampleState);
@@ -112,6 +115,9 @@ describe('StorePersistence', () => {
       },
       ui: {
         historyCapabilities: {},
+        documentation: {
+          scrollPosition: 15,
+        },
       },
     };
 

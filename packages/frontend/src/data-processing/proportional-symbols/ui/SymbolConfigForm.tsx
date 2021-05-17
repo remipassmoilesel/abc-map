@@ -20,7 +20,7 @@ import React, { ChangeEvent, Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/frontend-commons';
 import { PointType, ScaleAlgorithm } from '../Parameters';
 import TipBubble from '../../../components/tip-bubble/TipBubble';
-import { ProportionalSymbolsTips } from '@abc-map/documentation';
+import { ProportionalSymbolsTips } from '@abc-map/user-documentation';
 
 const logger = Logger.get('SymbolConfigForm.tsx');
 

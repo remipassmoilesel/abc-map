@@ -20,7 +20,7 @@ import React, { Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/frontend-commons';
 import TextFormat from '../_common/text-format/TextFormat';
 import TipBubble from '../../../../components/tip-bubble/TipBubble';
-import { ToolTips } from '@abc-map/documentation';
+import { ToolTips } from '@abc-map/user-documentation';
 import './TextToolPanel.scss';
 
 const logger = Logger.get('TextToolPanel.tsx');

@@ -1,3 +1,0 @@
-# Structure du projet
-
-TBD

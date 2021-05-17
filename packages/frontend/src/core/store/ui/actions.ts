@@ -21,6 +21,7 @@ import { HistoryKey } from '../../history/HistoryKey';
 export enum ActionType {
   SetHistoryCapabilities = 'SetHistoryCapabilities',
   CleanHistoryCapabilities = 'CleanHistoryCapabilities',
+  SetDocumentationScrollPosition = 'SetDocumentationScrollPosition',
 }
 
 export interface SetHistoryCapabilities {
@@ -34,7 +35,12 @@ export interface CleanHistoryCapabilities {
   type: ActionType.CleanHistoryCapabilities;
 }
 
-export type UiAction = SetHistoryCapabilities | CleanHistoryCapabilities;
+export interface SetDocumentationScrollPosition {
+  type: ActionType.SetDocumentationScrollPosition;
+  position: number;
+}
+
+export type UiAction = SetHistoryCapabilities | CleanHistoryCapabilities | SetDocumentationScrollPosition;
 
 export class UiActions {
   public static setHistoryCapabilities(key: HistoryKey, canUndo: boolean, canRedo: boolean): UiAction {
@@ -49,6 +55,13 @@ export class UiActions {
   public static cleanHistoryCapabilities(): UiAction {
     return {
       type: ActionType.CleanHistoryCapabilities,
+    };
+  }
+
+  public static setDocumentationScrollPosition(position: number): UiAction {
+    return {
+      type: ActionType.SetDocumentationScrollPosition,
+      position,
     };
   }
 }

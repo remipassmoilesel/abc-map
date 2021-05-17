@@ -25,7 +25,7 @@ import { VectorLayerWrapper } from '../../../core/geo/layers/LayerWrapper';
 import VectorLayerSelector from '../../../components/vector-layer-selector/VectorLayerSelector';
 import { LayerDataSource } from '../../../core/data/data-source/LayerDataSource';
 import TipBubble from '../../../components/tip-bubble/TipBubble';
-import { ProportionalSymbolsTips } from '@abc-map/documentation';
+import { ProportionalSymbolsTips } from '@abc-map/user-documentation';
 
 const logger = Logger.get('GeometryLayerForm.tsx');
 

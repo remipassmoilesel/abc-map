@@ -22,7 +22,7 @@
   "dependencies": {
     "@abc-map/shared-entities": "0.1.0",
     "@abc-map/frontend-commons": "0.1.0",
-    "@abc-map/documentation": "0.1.0",
+    "@abc-map/user-documentation": "0.1.0",
     "lodash": "^4.17.20",
     "ol": "^6.5.0",
     "react": "^17.0.1",
