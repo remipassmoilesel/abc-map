@@ -134,9 +134,10 @@ export class HttpServer {
     });
 
     // Rate limit
+    const globalRateLimit = this.config.server.globalRateLimit;
     this.app.register(fastifyRateLimit, {
-      max: this.config.server.rateLimit.max,
-      timeWindow: this.config.server.rateLimit.timeWindow,
+      max: globalRateLimit.max,
+      timeWindow: globalRateLimit.timeWindow,
     });
 
     // Public API controllers

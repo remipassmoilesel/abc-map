@@ -23,7 +23,7 @@ import { Config } from '../config/Config';
 describe('PasswordHasher', () => {
   it('hashPassword() should work', async () => {
     const config: Config = {
-      authentication: {
+      registration: {
         passwordSalt: 'ABCDFEG',
       },
     } as any;

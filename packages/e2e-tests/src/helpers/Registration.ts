@@ -29,7 +29,7 @@ export class Registration {
   }
 
   public static newEmail() {
-    return `e2e-${uuid().substr(24)}@abcmap.fr`;
+    return `e2e-${uuid().substr(24)}@abc-map.fr`;
   }
 
   public static newUser(email: string): Chainable<any> {

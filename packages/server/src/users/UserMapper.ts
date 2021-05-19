@@ -25,7 +25,6 @@ export class UserMapper {
       _id: dto.id,
       email: dto.email,
       password: dto.password,
-      enabled: dto.enabled,
     };
   }
 
@@ -34,7 +33,6 @@ export class UserMapper {
       id: doc._id,
       email: doc.email,
       password: doc.password,
-      enabled: doc.enabled,
     };
   }
 }

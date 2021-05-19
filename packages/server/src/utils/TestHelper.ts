@@ -28,8 +28,7 @@ export class TestHelper {
     return {
       id: uuid(),
       email: `user-${uuid()}@test.ts`,
-      password: 'what is wr0ng passW0rd ????',
-      enabled: true,
+      password: 'what is a wr0ng passW0rd ????',
     };
   }
 
@@ -124,5 +123,14 @@ export class TestHelper {
   public static randomDate(start: Date = new Date(1980, 1, 1, 0, 0, 0), end: Date = new Date(2020, 1, 1, 0, 0, 0)): DateTime {
     const timestamp = start.getTime() + Math.random() * (end.getTime() - start.getTime());
     return DateTime.fromMillis(timestamp);
+  }
+
+  /**
+   * Warning: use this is a very bad idea
+   */
+  public static wait(timeMs: number): Promise<void> {
+    return new Promise((resolve) => {
+      setTimeout(resolve, timeMs);
+    });
   }
 }

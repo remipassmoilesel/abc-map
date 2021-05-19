@@ -41,8 +41,13 @@ abcMap:
           requests: false,
           errors: false,
         },
-        rateLimit: {
+        // Beware of NATs, for examples in schools several clients share the same ip address
+        globalRateLimit: {
           max: 1000,
+          timeWindow: '30m',
+        },
+        authenticationRateLimit: {
+          max: 200,
           timeWindow: '30m',
         },
       },
@@ -51,14 +56,18 @@ abcMap:
         username: '<CHANGE_ME>',
         password: '<CHANGE_ME>',
       },
+      jwt: {
+        algorithm: 'HS512',
+      },
       authentication: {
-        passwordSalt: '<CHANGE_ME>',
-        jwtSecret: '<CHANGE_ME>',
-        jwtAlgorithm: 'HS512',
-        jwtExpiresIn: '45min',
+        secret: '<CHANGE_ME>',
+        tokenExpiresIn: '45min',
+        passwordLostExpiresIn: '30min',
       },
       registration: {
-        confirmationSalt: '<CHANGE_ME>',
+        passwordSalt: '<CHANGE_ME>',
+        secret: '<CHANGE_ME>',
+        confirmationExpiresIn: '24h',
       },
       smtp: {
         host: '<CHANGE_ME>',

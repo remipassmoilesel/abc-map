@@ -17,56 +17,53 @@
  */
 
 import { Services } from '../services/services';
-import { AbcUser, RegistrationRequest } from '@abc-map/shared-entities';
+import { AbcUser } from '@abc-map/shared-entities';
 import { Config } from '../config/Config';
+import * as uuid from 'uuid-random';
+import { PasswordHasher } from '../authentication/PasswordHasher';
+import { Logger } from '../utils/Logger';
+
+const logger = Logger.get('UserInit.ts', 'info');
 
 const devPassword = 'azerty1234';
 
 function devUserEmail(id: number): string {
-  return 'user-' + id + '@abc-map.fr';
+  return `user-${id}@abc-map.fr`;
 }
 
 export class UserInit {
   public static create(config: Config, services: Services) {
-    return new UserInit(config, services);
+    const hasher = new PasswordHasher(config);
+    return new UserInit(config, hasher, services);
   }
 
-  constructor(private config: Config, private services: Services) {}
+  constructor(private config: Config, private hasher: PasswordHasher, private services: Services) {}
 
   public async init(): Promise<AbcUser[]> {
     const users: AbcUser[] = [];
 
     const numberOfUsers = this.config.development?.users || 0;
-    const enabledUsers = this.config.development?.enabledUsers || 0;
     if (!numberOfUsers) {
       return [];
     }
 
-    for (let i = 0; i < numberOfUsers; i++) {
-      const request: RegistrationRequest = {
-        email: devUserEmail(i),
-        password: devPassword,
-      };
-
-      // If user is already registered we do nothing
-      let user = await this.services.user.findByEmail(request.email);
-      if (user) {
-        users.push(user);
-        continue;
-      }
-
-      // We create user
-      await this.services.authentication.register(request, false);
-      user = (await this.services.user.findByEmail(request.email)) as AbcUser;
-
-      // We enable user
-      if (i < enabledUsers) {
-        user.enabled = true;
-        await this.services.user.save(user);
-      }
-
-      users.push(user);
+    const existing = await this.services.user.count();
+    if (existing >= numberOfUsers) {
+      return [];
     }
+
+    for (let i = 0; i < numberOfUsers; i++) {
+      const user: AbcUser = {
+        id: uuid(),
+        email: devUserEmail(i),
+        password: '',
+      };
+      user.password = await this.hasher.hashPassword(devPassword, user.id);
+
+      await this.services.user.save(user);
+    }
+
+    logger.info(`${numberOfUsers} users created.`);
 
     return users;
   }

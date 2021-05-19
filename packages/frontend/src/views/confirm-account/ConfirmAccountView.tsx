@@ -19,15 +19,14 @@
 import React, { Component, ReactNode } from 'react';
 import { Logger, ConfirmAccountParams, FrontendRoutes } from '@abc-map/frontend-commons';
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
-import { AccountConfirmationStatus } from '@abc-map/shared-entities';
-import * as qs from 'query-string';
+import { ConfirmationStatus } from '@abc-map/shared-entities';
 import { ServiceProps, withServices } from '../../core/withServices';
-import './ConfirmAccountView.scss';
+import Cls from './ConfirmAccountView.module.scss';
 
 const logger = Logger.get('ConfirmAccount.tsx', 'info');
 
 interface State {
-  status: AccountConfirmationStatus;
+  status: ConfirmationStatus;
 }
 
 type Props = RouteComponentProps<ConfirmAccountParams> & ServiceProps;
@@ -36,50 +35,42 @@ class ConfirmAccountView extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      status: AccountConfirmationStatus.InProgress,
+      status: ConfirmationStatus.InProgress,
     };
   }
 
   public render(): ReactNode {
+    const status = this.state.status;
+
     return (
-      <div className={'abc-confirm-account'}>
+      <div className={Cls.confirmAccount}>
         <h3>Activation de votre compte</h3>
-        <div className={'message'}>
-          {AccountConfirmationStatus.InProgress === this.state.status && <div>Veuillez patienter ...</div>}
-          {AccountConfirmationStatus.UserNotFound === this.state.status && <div>Une erreur est survenue, essayez de vous inscrire à nouveau.</div>}
-          {AccountConfirmationStatus.Failed === this.state.status && (
-            <div>La confirmation a échoué, vous pouvez rafraichir cette page ou réessayer plus tard.</div>
-          )}
-          {AccountConfirmationStatus.Succeed === this.state.status && (
-            <div data-cy={'account-enabled'}>
-              Votre compte est activé. <Link to={FrontendRoutes.map()}>Direction: la carte !</Link>
-            </div>
-          )}
-        </div>
+        {ConfirmationStatus.InProgress === status && <div>Veuillez patienter ...</div>}
+        {ConfirmationStatus.Failed === status && (
+          <div>L&apos;activation de votre compte a échoué, vous pouvez rafraichir cette page ou réessayer plus tard.</div>
+        )}
+        {ConfirmationStatus.Succeed === status && (
+          <div data-cy={'account-enabled'}>
+            Votre compte est activé, vous êtes connecté. <Link to={FrontendRoutes.map()}>Direction: la carte !</Link>
+          </div>
+        )}
       </div>
     );
   }
 
-  // TODO: refactor
   public componentDidMount() {
     const { authentication } = this.props.services;
 
-    const userId = this.props.match.params.userId;
-    const secret = qs.parse(this.props.location.search).secret as string;
-    if (!userId || !secret) {
-      this.setState({ status: AccountConfirmationStatus.Failed });
+    const token = this.props.match.params.token;
+    if (!token) {
+      this.setState({ status: ConfirmationStatus.Failed });
     } else {
       authentication
-        .confirmRegistration(userId, secret)
-        .then((res) => {
-          if (res.error) {
-            return Promise.reject(new Error(res.error));
-          }
-          this.setState({ status: res.status });
-        })
+        .confirmRegistration(token)
+        .then((res) => this.setState({ status: res.status }))
         .catch((err) => {
-          logger.error(err);
-          this.setState({ status: AccountConfirmationStatus.Failed });
+          logger.error('Registration error: ', err);
+          this.setState({ status: ConfirmationStatus.Failed });
         });
     }
   }

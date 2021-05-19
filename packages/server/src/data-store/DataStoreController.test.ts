@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { disableSmtpClientLogging } from '../utils/SmtpClient';
+import { disableSmtpClientLogging } from '../email/SmtpClient';
 import { Config } from '../config/Config';
 import { Services, servicesFactory } from '../services/services';
 import { HttpServer } from '../server/HttpServer';

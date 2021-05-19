@@ -31,6 +31,7 @@ export interface ConfigInput {
   externalUrl: string;
   server: ServerConfig;
   database: DatabaseConfig;
+  jwt: JwtConfig;
   authentication: AuthenticationConfig;
   registration: RegistrationConfig;
   smtp: SmtpConfig;
@@ -47,7 +48,6 @@ export interface Config extends ConfigInput {
 export interface DevelopmentDataConfig {
   enabled: boolean;
   users: number;
-  enabledUsers: number;
 }
 
 export interface ServerConfig {
@@ -57,7 +57,11 @@ export interface ServerConfig {
     requests: boolean;
     errors: boolean;
   };
-  rateLimit: {
+  globalRateLimit: {
+    max: number;
+    timeWindow: string;
+  };
+  authenticationRateLimit: {
     max: number;
     timeWindow: string;
   };
@@ -70,15 +74,20 @@ export interface DatabaseConfig {
   password: string;
 }
 
+export interface JwtConfig {
+  algorithm: Algorithm;
+}
+
 export interface AuthenticationConfig {
-  passwordSalt: string;
-  jwtSecret: string;
-  jwtAlgorithm: Algorithm;
-  jwtExpiresIn: string;
+  secret: string;
+  tokenExpiresIn: '45min';
+  passwordLostExpiresIn: string;
 }
 
 export interface RegistrationConfig {
-  confirmationSalt: string;
+  passwordSalt: string;
+  secret: string;
+  confirmationExpiresIn: string;
 }
 
 export interface SmtpConfig {

@@ -17,11 +17,15 @@
  */
 
 export * from './AbcUser';
-export * from './RegistrationConfirmationRequest';
-export * from './RegistrationConfirmationResponse';
 export * from './AnonymousUser';
 export * from './AuthenticationRequest';
 export * from './AuthenticationResponse';
+export * from './AuthenticationToken';
+export * from './PasswordLostRequest';
+export * from './RegistrationConfirmationRequest';
+export * from './RegistrationConfirmationResponse';
 export * from './RegistrationRequest';
 export * from './RegistrationResponse';
-export * from './Token';
+export * from './RegistrationToken';
+export * from './ResetPasswordToken';
+export * from './ResetPasswordRequest';

@@ -32,11 +32,10 @@ export const RegistrationRequestSchema: FastifySchema = {
 export const RegistrationConfirmationRequestSchema: FastifySchema = {
   body: {
     type: 'object',
-    required: ['userId', 'secret'],
+    required: ['token'],
     additionalProperties: false,
     properties: {
-      userId: { type: 'string' },
-      secret: { type: 'string' },
+      token: { type: 'string' },
     },
   },
 };
@@ -48,6 +47,29 @@ export const LoginRequestSchema: FastifySchema = {
     additionalProperties: false,
     properties: {
       email: { type: 'string' },
+      password: { type: 'string' },
+    },
+  },
+};
+
+export const PasswordLostRequestSchema: FastifySchema = {
+  body: {
+    type: 'object',
+    required: ['email'],
+    additionalProperties: false,
+    properties: {
+      email: { type: 'string' },
+    },
+  },
+};
+
+export const ResetPasswordSchema: FastifySchema = {
+  body: {
+    type: 'object',
+    required: ['token', 'password'],
+    additionalProperties: false,
+    properties: {
+      token: { type: 'string' },
       password: { type: 'string' },
     },
   },

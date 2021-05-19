@@ -16,14 +16,14 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { KeyboardEvent, ChangeEvent, Component, ReactNode } from 'react';
+import React, { ChangeEvent, Component, KeyboardEvent, ReactNode } from 'react';
 import { Logger } from '@abc-map/frontend-commons';
 import { ModalEventListener, ModalEventType, ModalStatus } from '../../core/ui/typings';
 import { ServiceProps, withServices } from '../../core/withServices';
 import { Modal } from 'react-bootstrap';
-import { RegistrationStatus } from '@abc-map/shared-entities';
-import { passwordStrength } from 'check-password-strength';
 import { ValidationHelper } from '../../core/utils/ValidationHelper';
+import { PasswordStrength, Strength } from '../../core/utils/PasswordStrength';
+import FormValidationLabel, { FormState } from '../form-state-label/FormValidationLabel';
 import Cls from './RegistrationModal.module.scss';
 
 const logger = Logger.get('RegistrationModal.tsx', 'info');
@@ -35,14 +35,6 @@ interface State {
   confirmation: string;
   listener?: ModalEventListener;
   formState: FormState;
-}
-
-enum FormState {
-  InvalidEmail = 'InvalidEmail',
-  PasswordTooWeak = 'PasswordTooWeak',
-  PasswordNotConfirmed = 'PasswordNotConfirmed',
-  PasswordEqualEmail = 'PasswordEqualEmail',
-  Ok = 'Ok',
 }
 
 class RegistrationModal extends Component<ServiceProps, State> {
@@ -116,33 +108,7 @@ class RegistrationModal extends Component<ServiceProps, State> {
 
             {/* Form validation */}
 
-            <div className={Cls.validation}>
-              {FormState.InvalidEmail === formState && (
-                <>
-                  <i className={'fa fa-exclamation-circle'} /> L&apos;adresse email n&apos;est pas valide.
-                </>
-              )}
-              {FormState.PasswordTooWeak === formState && (
-                <>
-                  <i className={'fa fa-exclamation-circle'} /> Le mot de passe doit contenir 6 caractères minimum, une majuscule, un chiffre ou un symbole.
-                </>
-              )}
-              {FormState.PasswordNotConfirmed === formState && (
-                <>
-                  <i className={'fa fa-exclamation-circle'} /> Le mot de passe et la confirmation de mot de passe ne correspond pas.
-                </>
-              )}
-              {FormState.PasswordEqualEmail === formState && (
-                <>
-                  <i className={'fa fa-exclamation-circle'} /> Le mot de passe et l&apos;email doivent être différents !
-                </>
-              )}
-              {FormState.Ok === formState && (
-                <>
-                  <i className={'fa fa-rocket'} /> C&apos;est parti !
-                </>
-              )}
-            </div>
+            <FormValidationLabel state={formState} />
 
             {/* Action buttons */}
 
@@ -195,7 +161,7 @@ class RegistrationModal extends Component<ServiceProps, State> {
   };
 
   private handleSubmit = () => {
-    const { toasts, authentication, modals } = this.props.services;
+    const { authentication } = this.props.services;
 
     const email = this.state.email;
     const password = this.state.password;
@@ -209,26 +175,8 @@ class RegistrationModal extends Component<ServiceProps, State> {
 
     authentication
       .registration(email, password)
-      .then((res) => {
-        if (res.status === RegistrationStatus.EmailAlreadyExists) {
-          return toasts.info('Cette adresse email est déjà prise');
-        }
-        if (res.status === RegistrationStatus.Successful) {
-          this.close();
-          return toasts.info('Un email vient de vous être envoyé, vous devez activer votre compte');
-        }
-        toasts.genericError();
-      })
-      .catch((err) => {
-        toasts.genericError();
-        logger.error(err);
-      })
-      .finally(() => {
-        modals.dispatch({
-          type: ModalEventType.RegistrationClosed,
-          status: ModalStatus.Confirmed,
-        });
-      });
+      .then(() => this.close())
+      .catch((err) => logger.error('Registration error: ', err));
   };
 
   private handleEmailChange = (ev: ChangeEvent<HTMLInputElement>) => {
@@ -262,8 +210,7 @@ class RegistrationModal extends Component<ServiceProps, State> {
     }
 
     // Check password strength
-    const passwordValidation = passwordStrength(password);
-    if (passwordValidation.id < 1) {
+    if (PasswordStrength.check(password) !== Strength.Correct) {
       return FormState.PasswordTooWeak;
     }
 

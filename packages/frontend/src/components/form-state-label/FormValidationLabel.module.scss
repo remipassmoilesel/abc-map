@@ -1,4 +1,4 @@
-/**
+/*!
  * Copyright © 2021 Rémi Pace.
  * This file is part of Abc-Map.
  *
@@ -14,16 +14,14 @@
  *
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
+ *
+ *
  */
 
-import { AbcUser } from './AbcUser';
+.validation {
+  margin: 1rem;
 
-export interface Token {
-  userStatus: UserStatus;
-  user: AbcUser;
-}
-
-export enum UserStatus {
-  Authenticated = 'Authenticated',
-  Anonymous = 'Anonymous',
+  :global(.fa) {
+    margin-right: 0.6rem;
+  }
 }

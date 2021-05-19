@@ -21,7 +21,6 @@ import { Services } from '../services/services';
 import {
   RegistrationConfirmationRequest,
   RegistrationConfirmationResponse,
-  AccountConfirmationStatus,
   AuthenticationRequest,
   AuthenticationResponse,
   AuthenticationStatus,
@@ -30,12 +29,21 @@ import {
   RegistrationStatus,
   RenewResponse,
   isEmailAnonymous,
+  PasswordLostRequest,
+  ResetPasswordRequest,
+  ConfirmationStatus,
 } from '@abc-map/shared-entities';
 import { Logger } from '../utils/Logger';
 import { Authentication } from './Authentication';
 import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import { Config } from '../config/Config';
-import { LoginRequestSchema, RegistrationConfirmationRequestSchema, RegistrationRequestSchema } from './AuthenticationController.schemas';
+import {
+  LoginRequestSchema,
+  PasswordLostRequestSchema,
+  RegistrationConfirmationRequestSchema,
+  RegistrationRequestSchema,
+  ResetPasswordSchema,
+} from './AuthenticationController.schemas';
 import { jwtPlugin } from '../server/jwtPlugin';
 
 const logger = Logger.get('AuthenticationController.ts');
@@ -49,17 +57,22 @@ export class AuthenticationController extends Controller {
     return '/authentication';
   }
 
-  /**
-   * WARNING: This controller is public, authentication is not verified before
-   * @param app
-   */
   public setup = async (app: FastifyInstance): Promise<void> => {
+    // WARNING: This controller is public, authentication is not verified before
     jwtPlugin(this.config, app);
 
-    app.post('/registration', { schema: RegistrationRequestSchema }, this.registration);
-    app.post('/registration/confirmation', { schema: RegistrationConfirmationRequestSchema }, this.confirmRegistration);
-    app.post('/login', { schema: LoginRequestSchema }, this.login);
-    app.post('/renew', this.renew);
+    // We limit usage of these routes in order to prevent bruteforce
+    // FIXME We should use responses (200, 403, 401) to alter limits and ban for a larger period
+    const lowRateLimit = {
+      config: { rateLimit: { max: this.config.server.authenticationRateLimit.max, timeWindow: this.config.server.authenticationRateLimit.timeWindow } },
+    };
+
+    app.post('/registration', { schema: RegistrationRequestSchema, ...lowRateLimit }, this.registration);
+    app.post('/registration/confirmation', { schema: RegistrationConfirmationRequestSchema, ...lowRateLimit }, this.confirmRegistration);
+    app.post('/login', { schema: LoginRequestSchema, ...lowRateLimit }, this.login);
+    app.post('/renew', { ...lowRateLimit }, this.renew);
+    app.post('/password', { schema: PasswordLostRequestSchema, ...lowRateLimit }, this.passwordLost);
+    app.patch('/password', { schema: ResetPasswordSchema, ...lowRateLimit }, this.resetPassword);
   };
 
   private registration = async (req: FastifyRequest<{ Body: RegistrationRequest }>, reply: FastifyReply): Promise<void> => {
@@ -82,27 +95,29 @@ export class AuthenticationController extends Controller {
   private confirmRegistration = async (req: FastifyRequest<{ Body: RegistrationConfirmationRequest }>, reply: FastifyReply): Promise<void> => {
     const { metrics, authentication } = this.services;
 
-    const userId = req.body.userId;
-    const secret = req.body.secret;
+    // Verify token
+    const tokenContent = await authentication.verifyRegistrationToken(req.body.token);
+    if (!tokenContent) {
+      logger.warn('Bad registration token');
+      metrics.registrationConfirmationFailed();
+      reply.unauthorized();
+      return;
+    }
 
     try {
-      const status = await authentication.confirmAccount(userId, secret);
-      const user = await this.services.user.findById(userId);
-      if (!user) {
-        return Promise.reject(new Error(`User not found: ${userId}`));
-      }
+      // Confirm account then reply
+      const user = await authentication.confirmRegistration(tokenContent.registrationId);
+      const token = authentication.signAuthenticationToken(user);
 
-      const token = this.services.authentication.signToken(user);
-      const payload: RegistrationConfirmationResponse = { status, token };
-      reply.status(200).send(payload);
+      const response: RegistrationConfirmationResponse = { status: ConfirmationStatus.Succeed, token };
+      reply.status(200).send(response);
 
       metrics.registrationConfirmed();
-    } catch (error) {
-      const payload: RegistrationConfirmationResponse = {
-        status: AccountConfirmationStatus.Failed,
-        error: error.getMessage() || 'Error during confirmation',
-      };
-      reply.status(500).send(payload);
+    } catch (e) {
+      logger.error('Registration confirmation error: ', e);
+
+      const response: RegistrationConfirmationResponse = { status: ConfirmationStatus.Failed };
+      reply.status(401).send(response);
 
       metrics.registrationConfirmationFailed();
     }
@@ -115,20 +130,20 @@ export class AuthenticationController extends Controller {
     const auth = await authentication.authenticate(request.email, request.password);
 
     if (auth.user) {
-      const token = this.services.authentication.signToken(auth.user);
+      const token = this.services.authentication.signAuthenticationToken(auth.user);
       const response: AuthenticationResponse = { token, status: AuthenticationStatus.Successful };
+      reply.status(200).send(response);
 
       if (isEmailAnonymous(request.email)) {
         metrics.anonymousAuthenticationSucceeded();
       } else {
         metrics.authenticationSucceeded();
       }
-
-      return reply.status(200).send(response);
     } else {
-      metrics.authenticationFailed();
       const response: AuthenticationResponse = { status: auth.status };
-      return reply.status(401).send(response);
+      reply.status(401).send(response);
+
+      metrics.authenticationFailed();
     }
   };
 
@@ -145,7 +160,29 @@ export class AuthenticationController extends Controller {
       return;
     }
 
-    const response: RenewResponse = { token: this.services.authentication.signToken(user) };
+    const response: RenewResponse = { token: this.services.authentication.signAuthenticationToken(user) };
     reply.status(200).send(response);
+  };
+
+  private passwordLost = async (req: FastifyRequest<{ Body: PasswordLostRequest }>, reply: FastifyReply): Promise<void> => {
+    const { authentication } = this.services;
+
+    await authentication.passwordLost(req.body.email);
+
+    reply.status(200).send();
+  };
+
+  private resetPassword = async (req: FastifyRequest<{ Body: ResetPasswordRequest }>, reply: FastifyReply): Promise<void> => {
+    const { authentication } = this.services;
+
+    const tokenContent = await authentication.verifyResetPasswordToken(req.body.token);
+    if (!tokenContent) {
+      reply.unauthorized();
+      return;
+    }
+
+    // Here we MUST fetch email from token
+    await authentication.updatePassword(tokenContent.email, req.body.password);
+    reply.status(200).send();
   };
 }

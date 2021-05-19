@@ -23,6 +23,7 @@ import { ServiceProps, withServices } from '../../core/withServices';
 import { ModalEventListener, ModalEventType, ModalStatus, ShowPasswordLostModal } from '../../core/ui/typings';
 import { ValidationHelper } from '../../core/utils/ValidationHelper';
 import Cls from './PasswordLostModal.module.scss';
+import FormValidationLabel from '../form-state-label/FormValidationLabel';
 
 const logger = Logger.get('PasswordLostModal.tsx', 'info');
 
@@ -69,8 +70,8 @@ class PasswordLostModal extends Component<ServiceProps, State> {
             {/*Intro*/}
 
             <p>
-              Pour vous connecter, renseignez votre adresse email et votre mot de passe ci-dessous, vous recevrez un email pour réinitialiser votre mot de
-              passe:
+              Pour vous connecter, renseignez votre adresse email ci-dessous, si votre adresse est enregistrée vous recevrez un email pour réinitialiser votre
+              mot de passe:
             </p>
 
             {/* Email form */}
@@ -89,18 +90,7 @@ class PasswordLostModal extends Component<ServiceProps, State> {
 
             {/* Form validation */}
 
-            <div className={Cls.validation}>
-              {FormState.InvalidEmail === formState && (
-                <>
-                  <i className={'fa fa-exclamation-circle'} /> L&apos;adresse email n&apos;est pas valide.
-                </>
-              )}
-              {FormState.Ok === formState && (
-                <>
-                  <i className={'fa fa-rocket'} /> C&apos;est parti !
-                </>
-              )}
-            </div>
+            <FormValidationLabel state={formState} />
 
             {/* Action buttons */}
 
@@ -113,7 +103,7 @@ class PasswordLostModal extends Component<ServiceProps, State> {
                 disabled={formState !== FormState.Ok}
                 onClick={this.handleSubmit}
                 className={`btn btn-primary ${Cls.actionButton}`}
-                data-cy={'confirm-login'}
+                data-cy={'confirm-reset-password'}
               >
                 Connexion
               </button>
@@ -152,7 +142,7 @@ class PasswordLostModal extends Component<ServiceProps, State> {
   };
 
   private handleSubmit = () => {
-    const { toasts, authentication, modals } = this.props.services;
+    const { toasts, authentication } = this.props.services;
 
     const email = this.state.email;
     const formState = this.validateForm(email);
@@ -164,18 +154,12 @@ class PasswordLostModal extends Component<ServiceProps, State> {
     authentication
       .passwordLost(email)
       .then(() => {
-        toasts.info('Votre demande sera traitée !');
+        toasts.info('Si votre adresse est enregistrée, votre demande sera traitée !');
         this.close();
       })
       .catch((err) => {
         logger.error(err);
         toasts.genericError();
-      })
-      .finally(() => {
-        modals.dispatch({
-          type: ModalEventType.PasswordLostClosed,
-          status: ModalStatus.Confirmed,
-        });
       });
   };
 

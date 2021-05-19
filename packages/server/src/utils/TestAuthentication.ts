@@ -26,7 +26,7 @@ export class TestAuthentication {
   constructor(private services: Services) {}
 
   public anonymous(): IncomingHttpHeaders {
-    const token = this.services.authentication.signToken({
+    const token = this.services.authentication.signAuthenticationToken({
       ...AnonymousUser,
       id: uuid(),
     });
@@ -35,7 +35,7 @@ export class TestAuthentication {
 
   public connectedUser(): IncomingHttpHeaders {
     const user = TestHelper.sampleUser();
-    const token = this.services.authentication.signToken(user);
+    const token = this.services.authentication.signAuthenticationToken(user);
     return { Authorization: `Bearer ${token}` };
   }
 }

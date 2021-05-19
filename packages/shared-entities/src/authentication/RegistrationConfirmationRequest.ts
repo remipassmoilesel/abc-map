@@ -17,6 +17,5 @@
  */
 
 export interface RegistrationConfirmationRequest {
-  userId: string;
-  secret: string;
+  token: string;
 }

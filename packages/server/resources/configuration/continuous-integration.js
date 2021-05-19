@@ -6,9 +6,13 @@ module.exports = {
     port: 10_082,
     log: {
       requests: false,
-      errors: true,
+      errors: false,
     },
-    rateLimit: {
+    globalRateLimit: {
+      max: 1000,
+      timeWindow: '1m',
+    },
+    authenticationRateLimit: {
       max: 1000,
       timeWindow: '1m',
     },
@@ -18,14 +22,18 @@ module.exports = {
     username: 'admin',
     password: 'admin',
   },
+  jwt: {
+    algorithm: 'HS512',
+  },
   authentication: {
-    passwordSalt: 'azerty1234',
-    jwtSecret: 'azerty1234',
-    jwtAlgorithm: 'HS512',
-    jwtExpiresIn: '45min',
+    secret: 'azerty1234',
+    tokenExpiresIn: '45min',
+    passwordLostExpiresIn: '30min',
   },
   registration: {
-    confirmationSalt: 'azerty1234',
+    passwordSalt: 'azerty1234',
+    secret: 'azerty1234',
+    confirmationExpiresIn: '24h',
   },
   smtp: {
     host: 'smtp.ethereal.email',
@@ -41,6 +49,5 @@ module.exports = {
   development: {
     enabled: true,
     users: 100,
-    enabledUsers: 50,
   },
 };

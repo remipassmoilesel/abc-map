@@ -30,8 +30,8 @@ describe('HttpServer', () => {
     config = await ConfigLoader.load();
     config.server.log.requests = false;
     config.server.log.errors = false;
-    config.server.rateLimit.max = 2;
-    config.server.rateLimit.timeWindow = '1min';
+    config.server.globalRateLimit.max = 2;
+    config.server.globalRateLimit.timeWindow = '1min';
 
     services = await servicesFactory(config);
     server = HttpServer.create(config, services);
@@ -69,7 +69,7 @@ describe('HttpServer', () => {
   });
 
   it('should apply rate limit', async () => {
-    for (let i = 0; i <= config.server.rateLimit.max; i++) {
+    for (let i = 0; i <= config.server.globalRateLimit.max; i++) {
       await server.getApp().inject({
         method: 'GET',
         path: '/',

@@ -20,6 +20,9 @@ import { Services } from '../services/services';
 import { UserInit } from './UserInit';
 import { ProjectInit } from './ProjectInit';
 import { Config, LOCAL_ENVIRONMENT, STAGING_ENVIRONMENT, TEST_ENVIRONMENT } from '../config/Config';
+import { Logger } from '../utils/Logger';
+
+const logger = Logger.get('DevInit');
 
 export class DevInit {
   public static create(config: Config, services: Services) {
@@ -30,6 +33,8 @@ export class DevInit {
 
   // TODO: test
   public async init(): Promise<void> {
+    logger.warn(`/!\\ WARNING, development data will be created with parameters: ${JSON.stringify(this.config.development)}`);
+
     const authorizedEnvs = [LOCAL_ENVIRONMENT, TEST_ENVIRONMENT, STAGING_ENVIRONMENT];
     if (authorizedEnvs.indexOf(this.config.environmentName) === -1) {
       return Promise.reject(new Error("WARNING: do not enable 'development' configuration on an environment other than 'local' or 'test'"));

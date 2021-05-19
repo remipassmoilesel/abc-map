@@ -16,6 +16,6 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-export enum ErrorCodes {
-  DUPLICATE_KEY = 11_000,
+export interface PasswordLostRequest {
+  email: string;
 }

@@ -4,7 +4,7 @@
 
 Abc-Map is a tool for processing geographic information that is easy to understand and use.
 
-This project is not intended to replace good existing software like [QGis](https://www.qgis.org/), but to offer 
+This project is not intended to replace excellent software like [QGis](https://www.qgis.org/), but to offer 
 a more easy-to-use alternative.
 
 
