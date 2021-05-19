@@ -29,7 +29,11 @@ const sampleConfig: ConfigInput = {
       requests: false,
       errors: false,
     },
-    rateLimit: {
+    globalRateLimit: {
+      max: 1,
+      timeWindow: '10m',
+    },
+    authenticationRateLimit: {
       max: 1,
       timeWindow: '10m',
     },
@@ -39,14 +43,18 @@ const sampleConfig: ConfigInput = {
     username: 'admin',
     password: 'admin',
   },
+  jwt: {
+    algorithm: 'HS512',
+  },
   authentication: {
-    passwordSalt: 'azerty1234',
-    jwtSecret: 'azerty1234',
-    jwtAlgorithm: 'HS512',
-    jwtExpiresIn: '45min',
+    secret: 'azerty1234',
+    tokenExpiresIn: '45min',
+    passwordLostExpiresIn: '30min',
   },
   registration: {
-    confirmationSalt: 'azerty1234',
+    passwordSalt: 'azerty1234',
+    secret: 'azerty1234',
+    confirmationExpiresIn: '24h',
   },
   smtp: {
     host: 'smtp.ethereal.email',
@@ -62,7 +70,6 @@ const sampleConfig: ConfigInput = {
   development: {
     enabled: true,
     users: 10,
-    enabledUsers: 5,
   },
 };
 

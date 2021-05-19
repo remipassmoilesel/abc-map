@@ -22,11 +22,10 @@ import { mainStore } from '../store/store';
 
 const logger = Logger.get('HttpClients.ts');
 
-export declare type HttpErrorHandler = (e: AxiosError) => void;
+export declare type HttpErrorHandler = (e: AxiosError | undefined) => void;
 
 /**
  * This client is configured for JSON requests and responses
- * @param timeout
  */
 export function httpApiClient(timeout: number, errorHandler: HttpErrorHandler): AxiosInstance {
   const client = axios.create({
@@ -47,7 +46,6 @@ export function httpApiClient(timeout: number, errorHandler: HttpErrorHandler): 
 
 /**
  * This client is configured for raw responses
- * @param timeout
  */
 export function httpDownloadClient(timeout: number, errorHandler: HttpErrorHandler): AxiosInstance {
   const client = axios.create({

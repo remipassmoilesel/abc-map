@@ -41,6 +41,7 @@ import SolicitationModal from './components/solicitation-modal/SolicitationModal
 import LoginModal from './components/login-modal/LoginModal';
 import RegistrationModal from './components/registration-modal/RegistrationModal';
 import PasswordLostModal from './components/password-lost-modal/PasswordLostModal';
+import ResetPasswordView from './views/reset-password/ResetPasswordView';
 
 class App extends Component<ServiceProps, {}> {
   public render(): ReactNode {
@@ -56,6 +57,7 @@ class App extends Component<ServiceProps, {}> {
             <Route exact path={FrontendRoutes.documentation()} component={DocumentationView} />
             <Route exact path={FrontendRoutes.confirmAccount()} component={ConfirmAccountView} />
             <Route exact path={FrontendRoutes.dataProcessing()} component={DataProcessingView} />
+            <Route exact path={FrontendRoutes.resetPassword()} component={ResetPasswordView} />
             <Route path={'*'} component={NotFoundView} />
           </Switch>
           <ToastContainer className={'toast-container'} />

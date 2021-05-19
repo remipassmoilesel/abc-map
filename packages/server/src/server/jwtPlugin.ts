@@ -4,10 +4,10 @@ import { Config } from '../config/Config';
 
 export function jwtPlugin(config: Config, app: FastifyInstance) {
   app.register(fastifyJWT, {
-    secret: config.authentication.jwtSecret,
+    secret: config.authentication.secret,
     sign: {
-      algorithm: config.authentication.jwtAlgorithm,
-      expiresIn: config.authentication.jwtExpiresIn,
+      algorithm: config.jwt.algorithm,
+      expiresIn: config.authentication.tokenExpiresIn,
     },
   });
 }

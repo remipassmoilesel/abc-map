@@ -53,7 +53,7 @@ describe('Authentication', function () {
         .type(password)
         .get('button[data-cy=confirm-login]')
         .click()
-        .then(() => Toasts.assertText('Vous devez activer votre compte avant de vous connecter'));
+        .then(() => Toasts.assertText('Vos identifiants sont incorrects'));
     });
 
     it('cannot login with incorrect password', function () {

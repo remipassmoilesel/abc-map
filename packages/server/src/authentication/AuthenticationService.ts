@@ -20,27 +20,28 @@ import * as jwt from 'jsonwebtoken';
 import { PasswordHasher } from './PasswordHasher';
 import {
   AbcUser,
-  AccountConfirmationStatus,
   AnonymousUser,
   AuthenticationStatus,
   isEmailAnonymous,
   isUserAnonymous,
   RegistrationRequest,
   RegistrationStatus,
-  Token,
+  AuthenticationToken,
+  RegistrationToken,
   UserStatus,
+  ResetPasswordToken,
 } from '@abc-map/shared-entities';
 import { Config } from '../config/Config';
 import { UserService } from '../users/UserService';
 import * as uuid from 'uuid-random';
-import * as crypto from 'crypto';
-import { SmtpClient } from '../utils/SmtpClient';
 import { AbstractService } from '../services/AbstractService';
-import { MongoError } from 'mongodb';
-import { ErrorCodes } from '../mongodb/ErrorCodes';
 import { Logger } from '../utils/Logger';
+import { RegistrationDao } from './RegistrationDao';
+import { MongodbClient } from '../mongodb/MongodbClient';
+import { RegistrationDocument } from './RegistrationDocument';
+import { EmailService } from '../email/EmailService';
 
-const logger = Logger.get('AuthenticationService');
+export const logger = Logger.get('AuthenticationService');
 
 export interface Authentication {
   status: AuthenticationStatus;
@@ -48,103 +49,99 @@ export interface Authentication {
 }
 
 export class AuthenticationService extends AbstractService {
-  public static create(config: Config, userService: UserService): AuthenticationService {
+  public static create(config: Config, client: MongodbClient, users: UserService, emails: EmailService): AuthenticationService {
     const hasher = new PasswordHasher(config);
-    const smtp = new SmtpClient(config);
-    return new AuthenticationService(config, userService, hasher, smtp);
+    const registrations = new RegistrationDao(client);
+    return new AuthenticationService(config, registrations, users, hasher, emails);
   }
 
-  constructor(private config: Config, private userService: UserService, private hasher: PasswordHasher, private smtp: SmtpClient) {
+  constructor(
+    private config: Config,
+    private registrations: RegistrationDao,
+    private users: UserService,
+    private hasher: PasswordHasher,
+    private emails: EmailService
+  ) {
     super();
   }
 
-  public async register(request: RegistrationRequest, sendMail = true): Promise<RegistrationStatus> {
+  public init(): Promise<void> {
+    return this.registrations.init();
+  }
+
+  public async register(request: RegistrationRequest): Promise<RegistrationStatus> {
+    // Anonymous email cannot be used for account
     if (isEmailAnonymous(request.email)) {
       return RegistrationStatus.EmailAlreadyExists;
     }
 
-    const user: AbcUser = {
-      id: uuid(),
-      email: request.email,
+    // Check if email is already used
+    const emailAlreadyUsed = !!(await this.users.findByEmail(request.email));
+    if (emailAlreadyUsed) {
+      return RegistrationStatus.EmailAlreadyExists;
+    }
+
+    // Save registration request
+    const registration: RegistrationDocument = {
+      _id: uuid(),
+      email: request.email.toLocaleLowerCase().trim(),
       password: '',
-      enabled: false,
     };
-    user.password = await this.hasher.hashPassword(request.password.trim(), user.id);
+    registration.password = await this.hasher.hashPassword(request.password.trim(), registration._id);
+    await this.registrations.save(registration);
 
-    try {
-      await this.userService.save(user);
-    } catch (err) {
-      if (err instanceof MongoError && err.code === ErrorCodes.DUPLICATE_KEY) {
-        return RegistrationStatus.EmailAlreadyExists;
-      }
-      return Promise.reject(err);
-    }
+    // Send confirmation mail
+    const token = this.signRegistrationToken(registration._id);
+    this.emails.confirmRegistration(registration.email, token).catch((err) => logger.error('Mail failure: ', err));
 
-    if (sendMail) {
-      const hmac = crypto.createHmac('sha512', this.config.registration.confirmationSalt);
-      const secret = hmac.update(user.id).digest('hex');
-      const subject = 'Activation de votre compte Abc-Map';
-      const href = `${this.config.externalUrl}/confirm-account/${user.id}?secret=${secret}`;
-      /* eslint-disable max-len */
-      const content = `
-        <p>Bonjour !</p>
-        <p><a>Pour activer votre compte Abc-Map, veuillez <a href="${href}" data-cy="enable-account-link">cliquer sur ce lien.</a></p>
-        <p>A bientôt !</p>
-        <p>&nbsp;</p>
-        <small>Ceci est un message automatique, envoyé par la plateforme <a href="${this.config.externalUrl}">${this.config.externalUrl}</a>.
-        Vous ne pouvez pas répondre à ce message.</small>
-      `;
-      /* eslint-enable max-len */
-
-      await this.smtp.sendMail(user.email, subject, content);
-    }
     return RegistrationStatus.Successful;
   }
 
-  public async confirmAccount(userId: string, secret: string): Promise<AccountConfirmationStatus> {
-    const user = await this.userService.findById(userId);
-    if (!user) {
-      return AccountConfirmationStatus.UserNotFound;
+  /**
+   * Confirm user account, and return an authentication token
+   * @param registrationId
+   */
+  public async confirmRegistration(registrationId: string): Promise<AbcUser> {
+    // Get corresponding registration
+    const registration = await this.registrations.findById(registrationId);
+    if (!registration) {
+      return Promise.reject(new Error(`Registration not found with id: ${registrationId}`));
     }
 
-    const hmac = crypto.createHmac('sha512', this.config.registration.confirmationSalt);
-    const truth = hmac.update(user.id).digest('hex');
-    const secretIsValid = truth === secret;
-    if (secretIsValid) {
-      user.enabled = true;
-      await this.userService.save(user);
-      return AccountConfirmationStatus.Succeed;
-    } else {
-      return AccountConfirmationStatus.Failed;
-    }
+    // Save user
+    const user: AbcUser = {
+      id: registration._id,
+      email: registration.email,
+      password: registration.password,
+    };
+    await this.users.save(user);
+
+    // Delete registration, we do not wait for promise
+    this.registrations.deleteById(registration._id).catch((err) => logger.error('Cannot delete registration: ', err));
+
+    return user;
   }
 
   public async authenticate(email: string, password: string): Promise<Authentication> {
-    if (isEmailAnonymous(email)) {
+    if (isEmailAnonymous(email) && password === AnonymousUser.password) {
       return {
         status: AuthenticationStatus.Successful,
         user: {
           ...AnonymousUser,
-          id: uuid(), // Event anonymous users must be uniques for rate limits
+          id: uuid(),
         },
       };
     }
 
-    const user = await this.userService.findByEmail(email);
+    const user = await this.users.findByEmail(email);
     if (!user) {
       return {
         status: AuthenticationStatus.Refused,
       };
     }
 
-    if (!user.enabled) {
-      return {
-        status: AuthenticationStatus.DisabledUser,
-      };
-    }
+    const passwordIsCorrect = await this.hasher.verifyPassword(password.trim(), user.id, user.password);
 
-    const cleanPassword = password.trim();
-    const passwordIsCorrect = await this.hasher.verifyPassword(cleanPassword, user.id, user.password);
     if (passwordIsCorrect) {
       const safeUser = {
         ...user,
@@ -161,34 +158,108 @@ export class AuthenticationService extends AbstractService {
     }
   }
 
-  public signToken(user: AbcUser): string {
-    if (!user.enabled) {
-      throw new Error('User is disabled');
+  public async passwordLost(email: string): Promise<void> {
+    const user = await this.users.findByEmail(email);
+    if (!user) {
+      logger.warn(`User not found: ${user}`);
+      return;
     }
 
+    const token = this.signResetPasswordToken(email);
+    this.emails.passwordLost(email, token).catch((err) => logger.error('Mail failure: ', err));
+  }
+
+  public async updatePassword(email: string, newPassword: string): Promise<void> {
+    const user = await this.users.findByEmail(email);
+    if (!user) {
+      logger.warn(`User not found: ${user}`);
+      return;
+    }
+
+    user.password = await this.hasher.hashPassword(newPassword.trim(), user.id);
+
+    await this.users.save(user);
+  }
+
+  public signAuthenticationToken(user: AbcUser): string {
     const safeUser: AbcUser = {
       ...user,
       password: '<password-was-erased>',
     };
 
-    const payload: Token = {
+    const payload: AuthenticationToken = {
       userStatus: isUserAnonymous(user) ? UserStatus.Anonymous : UserStatus.Authenticated,
       user: safeUser,
     };
 
-    return jwt.sign(payload, this.config.authentication.jwtSecret, {
-      algorithm: this.config.authentication.jwtAlgorithm,
-      expiresIn: this.config.authentication.jwtExpiresIn,
+    return jwt.sign(payload, this.config.authentication.secret, {
+      algorithm: this.config.jwt.algorithm,
+      expiresIn: this.config.authentication.tokenExpiresIn,
     });
   }
 
-  public verifyToken(token: string): Promise<boolean> {
-    return new Promise<boolean>((resolve) => {
-      jwt.verify(token, this.config.authentication.jwtSecret, (err) => {
+  public signRegistrationToken(registrationId: string): string {
+    const payload: RegistrationToken = { registrationId };
+
+    return jwt.sign(payload, this.config.registration.secret, {
+      algorithm: this.config.jwt.algorithm,
+      expiresIn: this.config.registration.confirmationExpiresIn,
+    });
+  }
+
+  public signResetPasswordToken(email: string): string {
+    const payload: ResetPasswordToken = { email };
+
+    return jwt.sign(payload, this.config.authentication.secret, {
+      algorithm: this.config.jwt.algorithm,
+      expiresIn: this.config.authentication.passwordLostExpiresIn,
+    });
+  }
+
+  /**
+   * Return token content if token is valid or false otherwise
+   * @param token
+   */
+  public verifyAuthenticationToken(token: string): Promise<AuthenticationToken | false> {
+    return new Promise<AuthenticationToken | false>((resolve) => {
+      jwt.verify(token, this.config.authentication.secret, (err, payload) => {
         if (err) {
-          return resolve(false);
+          resolve(false);
+          return;
         }
-        return resolve(true);
+        resolve((payload as AuthenticationToken) || false);
+      });
+    });
+  }
+
+  /**
+   * Return token content if token is valid or false otherwise
+   * @param token
+   */
+  public verifyRegistrationToken(token: string): Promise<RegistrationToken | false> {
+    return new Promise<RegistrationToken | false>((resolve) => {
+      jwt.verify(token, this.config.registration.secret, (err, payload) => {
+        if (err) {
+          resolve(false);
+          return;
+        }
+        resolve((payload as RegistrationToken) || false);
+      });
+    });
+  }
+
+  /**
+   * Return token content if token is valid or false otherwise
+   * @param token
+   */
+  public verifyResetPasswordToken(token: string): Promise<ResetPasswordToken | false> {
+    return new Promise<ResetPasswordToken | false>((resolve) => {
+      jwt.verify(token, this.config.authentication.secret, (err, payload) => {
+        if (err) {
+          resolve(false);
+          return;
+        }
+        resolve((payload as ResetPasswordToken) || false);
       });
     });
   }

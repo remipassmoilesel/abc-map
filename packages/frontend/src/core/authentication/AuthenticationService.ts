@@ -19,23 +19,26 @@
 import { AxiosError, AxiosInstance } from 'axios';
 import { AuthenticationRoutes as Api } from '../http/ApiRoutes';
 import {
+  AnonymousUser,
+  AuthenticationRequest,
+  AuthenticationResponse,
+  AuthenticationToken,
+  PasswordLostRequest,
   RegistrationConfirmationRequest,
   RegistrationConfirmationResponse,
-  AnonymousUser,
-  AuthenticationResponse,
-  AuthenticationStatus,
-  AuthenticationRequest,
+  RegistrationRequest,
   RegistrationResponse,
+  RegistrationStatus,
   RenewResponse,
-  Token,
+  ResetPasswordRequest,
   UserStatus,
 } from '@abc-map/shared-entities';
-import { RegistrationRequest } from '@abc-map/shared-entities';
 import { AuthenticationActions } from '../store/authentication/actions';
 import jwtDecode from 'jwt-decode';
 import { Logger } from '@abc-map/frontend-commons';
 import { MainStore } from '../store/store';
 import { ToastService } from '../ui/ToastService';
+import { TokenHelper } from './TokenHelper';
 
 const logger = Logger.get('AuthenticationService.ts', 'info');
 
@@ -46,9 +49,17 @@ export class AuthenticationService {
 
   public watchToken() {
     this.tokenInterval = setInterval(() => {
-      logger.info('Token renewed');
-      this.renew().catch((err) => logger.error(err));
-    }, 20 * 60 * 1000);
+      const token = this.store.getState().authentication.tokenString;
+      if (!token) {
+        return;
+      }
+
+      if (TokenHelper.getRemainingSecBeforeExpiration(token) < 10 * 60) {
+        this.renewToken()
+          .then(() => logger.info('Token renewed'))
+          .catch((err) => logger.error('Cannot renew token: ', err));
+      }
+    }, 5 * 60 * 1000);
   }
 
   public unwatchToken() {
@@ -67,15 +78,6 @@ export class AuthenticationService {
     return this.login(AnonymousUser.email, AnonymousUser.password);
   }
 
-  /**
-   * This method authenticate user.
-   *
-   * This methods return a promise which resolve if authentication is successful
-   *
-   * Promise will reject if an error occurs.
-   * @param email
-   * @param password
-   */
   public login(email: string, password: string): Promise<void> {
     const request: AuthenticationRequest = { email, password };
     return this.httpClient
@@ -85,64 +87,71 @@ export class AuthenticationService {
         if (auth.token) {
           this.dispatchToken(auth.token);
         }
-        return auth;
+
+        if (UserStatus.Authenticated === this.store.getState().authentication.userStatus) {
+          this.toasts.info('Vous êtes connecté !');
+        }
+        return Promise.resolve();
       })
-      .catch((err?: any) => {
-        if (err?.response && err?.response.data?.status) {
-          return err?.response.data;
+      .catch((err: AxiosError | Error | undefined) => {
+        logger.error('Authentication error: ', err);
+        if (err && 'response' in err && err.response?.data?.status) {
+          logger.error(err.response?.data);
+          this.toasts.error('Vos identifiants sont incorrects');
         }
         return Promise.reject(err);
-      })
-      .then((res) => {
-        const isAuthenticated = this.store.getState().authentication.userStatus === UserStatus.Authenticated;
-
-        if (AuthenticationStatus.Successful === res.status) {
-          isAuthenticated && this.toasts.info('Vous êtes connecté !');
-          return Promise.resolve();
-        }
-        if (AuthenticationStatus.DisabledUser === res.status) {
-          this.toasts.error('Vous devez activer votre compte avant de vous connecter. Vérifiez vos e-mails et vos spams.');
-          return Promise.reject(new Error(AuthenticationStatus.DisabledUser));
-        }
-        if (AuthenticationStatus.Refused === res.status) {
-          this.toasts.error('Vos identifiants sont incorrects.');
-          return Promise.reject(new Error(AuthenticationStatus.Refused));
-        }
-
-        logger.error('Invalid login status: ', res);
-        this.toasts.genericError();
-        return Promise.reject(new Error('Invalid login status'));
       });
   }
 
   public passwordLost(email: string): Promise<void> {
-    return Promise.reject(new Error(`TODO: implement ${email}`));
+    const req: PasswordLostRequest = { email };
+    return this.httpClient.post(Api.password(), req);
   }
 
-  public renew(): Promise<void> {
+  public resetPassword(token: string, password: string): Promise<void> {
+    const req: ResetPasswordRequest = { token, password };
+    return this.httpClient
+      .patch(Api.password(), req)
+      .then(() => undefined)
+      .catch((err) => {
+        this.toasts.genericError();
+        return Promise.reject(err);
+      });
+  }
+
+  public renewToken(): Promise<void> {
     return this.httpClient.post<RenewResponse>(Api.renew()).then((result) => {
       this.dispatchToken(result.data.token);
     });
   }
 
-  // TODO: refactor
   public registration(email: string, password: string): Promise<RegistrationResponse> {
     const request: RegistrationRequest = { email, password };
     return this.httpClient
       .post<RegistrationResponse>(Api.registration(), request)
-      .then((res) => res.data)
-      .catch((err: AxiosError) => {
-        if (err.response?.data) {
-          return Promise.resolve(err.response?.data);
-        } else {
-          return Promise.reject(err);
+      .then((res) => {
+        const registration: RegistrationResponse = res.data;
+        if (res.data.status === RegistrationStatus.Successful) {
+          this.toasts.info('Un email vient de vous être envoyé, vous devez activer votre compte');
+          return registration;
         }
+
+        this.toasts.genericError();
+        return Promise.reject(new Error('Invalid registration status'));
+      })
+      .catch((err: AxiosError | Error | undefined) => {
+        logger.error('Registration error: ', err);
+        if (err && 'response' in err && err.response?.data?.status === RegistrationStatus.EmailAlreadyExists) {
+          this.toasts.info('Cette adresse email est déjà prise');
+        } else {
+          this.toasts.genericError();
+        }
+        return Promise.reject(err);
       });
   }
 
-  // TODO: refactor
-  public confirmRegistration(userId: string, secret: string): Promise<RegistrationConfirmationResponse> {
-    const request: RegistrationConfirmationRequest = { userId, secret };
+  public confirmRegistration(token: string): Promise<RegistrationConfirmationResponse> {
+    const request: RegistrationConfirmationRequest = { token };
     return this.httpClient
       .post(Api.confirmRegistration(), request)
       .then((res) => {
@@ -152,17 +161,14 @@ export class AuthenticationService {
         }
         return response;
       })
-      .catch((err: AxiosError) => {
-        if (err.response?.data) {
-          return Promise.resolve(err.response?.data);
-        } else {
-          return Promise.reject(err);
-        }
+      .catch((err) => {
+        this.toasts.genericError();
+        return Promise.reject(err);
       });
   }
 
   private dispatchToken(token: string): void {
-    const decoded = jwtDecode<Token>(token);
+    const decoded = jwtDecode<AuthenticationToken>(token);
     this.store.dispatch(AuthenticationActions.login(decoded, token));
   }
 }

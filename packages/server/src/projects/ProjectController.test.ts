@@ -65,7 +65,7 @@ describe('ProjectController', () => {
     await services.project.save(user1.id, project1);
     await services.project.save(user2.id, project2);
 
-    const token = services.authentication.signToken(user1);
+    const token = services.authentication.signAuthenticationToken(user1);
     user1Auth = {
       Authorization: `Bearer ${token}`,
     };

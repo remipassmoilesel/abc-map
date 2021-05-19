@@ -16,14 +16,15 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { KeyboardEvent, ChangeEvent, Component, ReactNode } from 'react';
+import React, { ChangeEvent, Component, KeyboardEvent, ReactNode } from 'react';
 import { Logger } from '@abc-map/frontend-commons';
 import { Modal } from 'react-bootstrap';
 import { ServiceProps, withServices } from '../../core/withServices';
 import { ModalEventListener, ModalEventType, ModalStatus } from '../../core/ui/typings';
 import { ValidationHelper } from '../../core/utils/ValidationHelper';
-import { passwordStrength } from 'check-password-strength';
+import { PasswordStrength, Strength } from '../../core/utils/PasswordStrength';
 import Cls from './LoginModal.module.scss';
+import FormValidationLabel, { FormState } from '../form-state-label/FormValidationLabel';
 
 const logger = Logger.get('LoginModal.tsx', 'info');
 
@@ -33,12 +34,6 @@ interface State {
   password: string;
   listener?: ModalEventListener;
   formState: FormState;
-}
-
-enum FormState {
-  InvalidEmail = 'InvalidEmail',
-  InvalidPassword = 'InvalidPassword',
-  Ok = 'Ok',
 }
 
 class LoginModal extends Component<ServiceProps, State> {
@@ -105,24 +100,7 @@ class LoginModal extends Component<ServiceProps, State> {
             </div>
 
             {/* Form validation */}
-
-            <div className={Cls.validation}>
-              {FormState.InvalidEmail === formState && (
-                <>
-                  <i className={'fa fa-exclamation-circle'} /> L&apos;adresse email n&apos;est pas valide.
-                </>
-              )}
-              {FormState.InvalidPassword === formState && (
-                <>
-                  <i className={'fa fa-exclamation-circle'} /> Le mot de passe n&apos;est pas valide.
-                </>
-              )}
-              {FormState.Ok === formState && (
-                <>
-                  <i className={'fa fa-rocket'} /> C&apos;est parti !
-                </>
-              )}
-            </div>
+            <FormValidationLabel state={formState} />
 
             {/* Action buttons */}
 
@@ -187,7 +165,7 @@ class LoginModal extends Component<ServiceProps, State> {
   };
 
   private handleSubmit = () => {
-    const { toasts, authentication, modals } = this.props.services;
+    const { authentication } = this.props.services;
 
     const email = this.state.email;
     const password = this.state.password;
@@ -201,16 +179,7 @@ class LoginModal extends Component<ServiceProps, State> {
     authentication
       .login(email, password)
       .then(() => this.close())
-      .catch((err) => {
-        logger.error(err);
-        toasts.genericError();
-      })
-      .finally(() => {
-        modals.dispatch({
-          type: ModalEventType.LoginClosed,
-          status: ModalStatus.Confirmed,
-        });
-      });
+      .catch((err) => logger.error(err));
   };
 
   private handleEmailChange = (ev: ChangeEvent<HTMLInputElement>) => {
@@ -238,8 +207,7 @@ class LoginModal extends Component<ServiceProps, State> {
     }
 
     // Check password strength
-    const passwordValidation = passwordStrength(password);
-    if (passwordValidation.id < 1) {
+    if (PasswordStrength.check(password) !== Strength.Correct) {
       return FormState.InvalidPassword;
     }
 

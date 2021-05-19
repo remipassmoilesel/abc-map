@@ -17,14 +17,12 @@
  */
 
 export interface RegistrationConfirmationResponse {
-  status: AccountConfirmationStatus;
-  error?: string;
+  status: ConfirmationStatus;
   token?: string;
 }
 
-export enum AccountConfirmationStatus {
+export enum ConfirmationStatus {
   InProgress = 'InProgress',
-  UserNotFound = 'UserNotFound',
   Failed = 'Failed',
   Succeed = 'Succeed',
 }

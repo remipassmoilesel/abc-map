@@ -16,12 +16,8 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-.abc-confirm-account {
-  display: flex;
-  flex-direction: column;
-
-  align-items: center;
-  justify-content: center;
-
-  padding: 100px;
+export interface ResetPasswordToken {
+  email: string;
+  exp?: number;
+  iat?: number;
 }

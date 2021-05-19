@@ -29,12 +29,12 @@ export class PasswordHasher {
   }
 
   public async hashPassword(password: string, userId: string): Promise<string> {
-    const hmac = crypto.createHmac(hashAlgorithm, this.config.authentication.passwordSalt);
+    const hmac = crypto.createHmac(hashAlgorithm, this.config.registration.passwordSalt);
     return hmac.update(password + userId).digest('hex');
   }
 
   public async verifyPassword(password: string, userId: string, hash: string): Promise<boolean> {
-    const hmac = crypto.createHmac(hashAlgorithm, this.config.authentication.passwordSalt);
+    const hmac = crypto.createHmac(hashAlgorithm, this.config.registration.passwordSalt);
     const digest = hmac.update(password + userId).digest('hex');
     return digest === hash;
   }

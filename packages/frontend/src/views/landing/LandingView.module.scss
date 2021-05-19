@@ -16,6 +16,8 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
+@import "src/assets/styles/variables";
+
 .landing {
   display: flex;
   flex-direction: row;
@@ -56,4 +58,11 @@
 
 .intro {
   font-size: 1.3rem;
+}
+
+.version {
+  margin-top: 2em;
+  font-size: 0.9em;
+  color: #ffffff;
+  text-align: right;
 }

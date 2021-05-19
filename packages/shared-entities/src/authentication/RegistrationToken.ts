@@ -16,13 +16,8 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-export class Utils {
-  /**
-   * Warning: use this is a very bad idea
-   */
-  public static wait(timeMs: number): Promise<void> {
-    return new Promise((resolve) => {
-      setTimeout(resolve, timeMs);
-    });
-  }
+export interface RegistrationToken {
+  registrationId: string;
+  exp?: number;
+  iat?: number;
 }

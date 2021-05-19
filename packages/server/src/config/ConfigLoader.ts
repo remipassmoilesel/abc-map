@@ -44,10 +44,10 @@ export class ConfigLoader {
   public static safeConfig(config: Config): Config {
     const safe: Config = _.cloneDeep(config);
     const safeValue = '<value-masked>';
-    safe.authentication.jwtSecret = safeValue;
-    safe.authentication.passwordSalt = safeValue;
+    safe.authentication.secret = safeValue;
     safe.database.password = safeValue;
-    safe.registration.confirmationSalt = safeValue;
+    safe.registration.passwordSalt = safeValue;
+    safe.registration.secret = safeValue;
     if (safe.smtp.auth?.pass) {
       safe.smtp.auth.pass = safeValue;
     }

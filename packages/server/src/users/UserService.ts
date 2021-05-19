@@ -69,4 +69,8 @@ export class UserService extends AbstractService {
       }
     });
   }
+
+  public async count(): Promise<number> {
+    return this.dao.count();
+  }
 }

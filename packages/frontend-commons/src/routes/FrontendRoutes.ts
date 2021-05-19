@@ -39,8 +39,12 @@ export class FrontendRoutes {
     return '/documentation';
   }
 
-  public static confirmAccount(userId?: string) {
-    return routeReplace('/confirm-account/:userId', { userId });
+  public static confirmAccount(token?: string) {
+    return routeReplace('/confirm-account/:token', { token });
+  }
+
+  public static resetPassword(token?: string) {
+    return routeReplace('/reset-password/:token', { token });
   }
 
   public static dataProcessing(moduleId?: string) {
@@ -49,9 +53,13 @@ export class FrontendRoutes {
 }
 
 export interface ConfirmAccountParams {
-  userId?: string;
+  token?: string;
 }
 
 export interface DataProcessingParams {
   moduleId?: string;
+}
+
+export interface PasswordLostParams {
+  token?: string;
 }

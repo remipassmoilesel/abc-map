@@ -76,7 +76,9 @@ class TopBar extends Component<Props, {}> {
                 <>
                   <Dropdown.Item onClick={this.handleRegister}>S&apos;inscrire</Dropdown.Item>
                   <Dropdown.Item onClick={this.handleLogin}>Se connecter</Dropdown.Item>
-                  <Dropdown.Item onClick={this.handlePasswordLost}>Mot de passe perdu</Dropdown.Item>
+                  <Dropdown.Item onClick={this.handlePasswordLost} data-cy={'reset-password'}>
+                    Mot de passe perdu
+                  </Dropdown.Item>
                 </>
               )}
               <Dropdown.Item onClick={this.handleLogout} disabled={!userAuthenticated} data-cy={'logout'}>

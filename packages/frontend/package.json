@@ -6,7 +6,8 @@
   "scripts": {
     "start:watch": "react-app-rewired start",
     "lint": "eslint './src/**/{*.tsx,*.ts}' --fix --max-warnings=0",
-    "build": "CI=true react-app-rewired build && yarn run build:check",
+    "build": "CI=true yarn run build:version && react-app-rewired build && yarn run build:check",
+    "build:version": "./scripts/build-version.js",
     "build:check": "./scripts/check-build.js",
     "clean": "rm -rf build",
     "clean-build": "yarn run clean && yarn run build",
@@ -99,7 +100,9 @@
     "dependency-cruiser": "9.19.1",
     "webpack-bundle-analyzer": "^4.4.0",
     "svg-inline-loader": "^0.8.2",
-    "react-scripts": "4.0.3"
+    "react-scripts": "4.0.3",
+    "jsonwebtoken": "^8.5.1",
+    "@types/jsonwebtoken": "^8.5.1"
   },
   "browserslist": {
     "production": [

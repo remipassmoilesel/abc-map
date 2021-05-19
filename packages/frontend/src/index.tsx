@@ -25,23 +25,28 @@ import { E2eMapWrapper } from './core/geo/map/E2eMapWrapper';
 import { getAbcWindow, Logger } from '@abc-map/frontend-commons';
 import { UserStatus } from '@abc-map/shared-entities';
 import { mainStore } from './core/store/store';
+import { AxiosError } from 'axios';
+import { HttpError } from './core/utils/HttpError';
 import './index.scss';
+import { BUILD_INFO } from './build-version';
 
-const logger = Logger.get('index.tsx');
+const logger = Logger.get('index.tsx', 'info');
 const svc = getServices();
+
+logger.info('Version: ', BUILD_INFO);
 
 authenticate()
   .then(() => load())
   .catch((err) => {
     logger.error(err);
-    loadingError();
+    loadingError(err);
   });
 
 // TODO: test
 async function authenticate(): Promise<void> {
   const isAuthenticated = svc.authentication.getUserStatus() === UserStatus.Authenticated;
   if (isAuthenticated) {
-    return svc.authentication.renew().catch((err) => {
+    return svc.authentication.renewToken().catch((err) => {
       svc.toasts.error('Vous devez vous reconnecter');
       logger.error(err);
       return svc.authentication.anonymousLogin();
@@ -66,13 +71,20 @@ function load() {
   );
 }
 
-function loadingError(): void {
-  const message = 'Une erreur empêche le chargement de la page 😭. Veuillez réessayer plus tard.';
+function loadingError(err: Error | AxiosError | undefined): void {
+  let message: string;
+  if (HttpError.isTooManyRequests(err)) {
+    message = 'Vous avez dépassé le nombre de demandes autorisés 😭. Veuillez réessayer plus tard.';
+  } else {
+    message = 'Une erreur empêche le chargement de la page 😭. Veuillez réessayer plus tard.';
+  }
+
   const root = document.querySelector('#root');
   if (!root) {
     alert(message);
     return;
   }
+
   root.innerHTML = `
     <h1 class='text-center my-5'>Abc-Map</h1>
     <h5 class='text-center my-5'>${message}</h5>

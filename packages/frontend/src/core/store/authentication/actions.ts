@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Token } from '@abc-map/shared-entities';
+import { AuthenticationToken } from '@abc-map/shared-entities';
 
 export enum ActionType {
   Login = 'Login',
@@ -24,14 +24,14 @@ export enum ActionType {
 
 export interface Login {
   type: ActionType.Login;
-  token: Token;
+  token: AuthenticationToken;
   tokenString: string;
 }
 
 export type AuthenticationAction = Login;
 
 export class AuthenticationActions {
-  public static login(token: Token, tokenString: string): AuthenticationAction {
+  public static login(token: AuthenticationToken, tokenString: string): AuthenticationAction {
     return {
       type: ActionType.Login,
       token,

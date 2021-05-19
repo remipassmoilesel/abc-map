@@ -28,6 +28,7 @@ import Illustration2Icon from '../../assets/illustrations/illustration-2.svg';
 import Illustration3Icon from '../../assets/illustrations/illustration-3.svg';
 import * as _ from 'lodash';
 import Cls from './LandingView.module.scss';
+import { BUILD_INFO } from '../../build-version';
 
 const logger = Logger.get('Landing.tsx', 'info');
 
@@ -114,7 +115,15 @@ class LandingView extends Component<Props, State> {
           </div>
         </div>
         <div className={'mt-5'}>
+          {/* Some bullshit illustration */}
+
           <img src={this.state.illustration} alt={'Une belle illustration pour faire comme les vrais !'} className={Cls.illustration} />
+
+          {/* Current version */}
+
+          <div className={Cls.version}>
+            Version {BUILD_INFO.hash} du {BUILD_INFO.date}. Bien vu !
+          </div>
         </div>
       </div>
     );

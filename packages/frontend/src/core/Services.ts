@@ -27,6 +27,7 @@ import { ToastService } from './ui/ToastService';
 import { ModalService } from './ui/ModalService';
 import { AxiosError } from 'axios';
 import { VoteService } from './vote/VoteService';
+import { HttpError } from './utils/HttpError';
 
 export interface Services {
   project: ProjectService;
@@ -74,13 +75,13 @@ function serviceFactory(): Services {
   };
 }
 
-function httpErrorHandler(e: AxiosError, toasts: ToastService) {
-  if (e.code === '401') {
-    toasts.error('Vous devez vous reconnecter.');
-  }
-  if (e.code === '403') {
+function httpErrorHandler(err: AxiosError | undefined, toasts: ToastService) {
+  if (HttpError.isForbidden(err)) {
     toasts.error('Cette opération est interdite.');
   }
+  if (HttpError.isTooManyRequests(err)) {
+    toasts.error('Vous avez dépassé le nombre de demandes autorisés, veuillez réessayer plus tard');
+  }
 
-  return Promise.reject(e);
+  return Promise.reject(err);
 }

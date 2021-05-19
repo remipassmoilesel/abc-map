@@ -44,7 +44,6 @@ async function main() {
   services = await servicesFactory(config);
 
   if (config.development) {
-    logger.warn('/!\\ WARNING, development data will be created');
     await DevInit.create(config, services).init();
   }
 

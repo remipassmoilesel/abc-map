@@ -45,6 +45,10 @@ export class AuthenticationRoutes {
     return '/authentication/renew';
   }
 
+  public static password(): string {
+    return '/authentication/password';
+  }
+
   public static registration(): string {
     return '/authentication/registration';
   }

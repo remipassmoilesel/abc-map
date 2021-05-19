@@ -45,4 +45,9 @@ export class UserDao {
     const res = await coll.findOne({ email });
     return res || undefined;
   }
+
+  public async count(): Promise<number> {
+    const coll = await this.client.collection<UserDocument>(MongodbCollection.Users);
+    return coll.countDocuments();
+  }
 }

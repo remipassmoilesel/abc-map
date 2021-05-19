@@ -28,6 +28,7 @@ import { DataStoreService } from '../data-store/DataStoreService';
 import { AuthorizationService } from '../authorization/AuthorizationService';
 import { VoteService } from '../votes/VoteService';
 import { MetricsService } from '../metrics/MetricsService';
+import { EmailService } from '../email/EmailService';
 
 const logger = Logger.get('services.ts');
 
@@ -43,6 +44,7 @@ export interface Services {
   authorization: AuthorizationService;
   vote: VoteService;
   metrics: MetricsService;
+  emails: EmailService;
   shutdown: ShutdownFunc;
 }
 
@@ -50,7 +52,8 @@ export async function servicesFactory(config: Config): Promise<Services> {
   const mongodb = await MongodbClient.createAndConnect(config);
   const project = ProjectService.create(config, mongodb);
   const user = UserService.create(config, mongodb);
-  const authentication = AuthenticationService.create(config, user);
+  const emails = EmailService.create(config);
+  const authentication = AuthenticationService.create(config, mongodb, user, emails);
   const health = HealthCheckService.create(mongodb);
   const datastore = DataStoreService.create(config, mongodb);
   const authorization = AuthorizationService.create(mongodb);
@@ -68,6 +71,7 @@ export async function servicesFactory(config: Config): Promise<Services> {
     authorization,
     vote,
     metrics,
+    emails,
     shutdown,
   };
 
