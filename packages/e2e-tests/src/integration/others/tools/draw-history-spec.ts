@@ -17,7 +17,7 @@
  */
 
 import { ToolSelector } from '../../../helpers/ToolSelector';
-import { FrontendRoutes, MapTool } from '@abc-map/frontend-commons';
+import { FrontendRoutes, MapTool } from '@abc-map/shared';
 import { TestHelper } from '../../../helpers/TestHelper';
 import { MainMap } from '../../../helpers/MainMap';
 import { Draw } from '../../../helpers/Draw';
@@ -29,7 +29,7 @@ describe('Draw features history', function () {
   });
 
   it('user can add feature then undo and redo', function () {
-    cy.visit(FrontendRoutes.map())
+    cy.visit(FrontendRoutes.map().raw())
       .then(() => MainMap.getComponent())
       .then(() => ToolSelector.enable(MapTool.LineString))
       // First line
@@ -84,7 +84,7 @@ describe('Draw features history', function () {
   });
 
   it('user can modify feature then undo', function () {
-    cy.visit(FrontendRoutes.map())
+    cy.visit(FrontendRoutes.map().raw())
       .then(() => MainMap.getComponent())
       .then(() => ToolSelector.enable(MapTool.LineString))
       // Create line

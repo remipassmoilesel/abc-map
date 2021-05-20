@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FrontendRoutes } from '@abc-map/frontend-commons';
+import { FrontendRoutes } from '@abc-map/shared';
 import { TestHelper } from '../../helpers/TestHelper';
 import { LayerControls } from '../../helpers/LayerControls';
 import { History } from '../../helpers/History';
@@ -27,7 +27,7 @@ describe('Map', function () {
   });
 
   it('default map should have two layers with one active', function () {
-    cy.visit(FrontendRoutes.map())
+    cy.visit(FrontendRoutes.map().raw())
       .then(() => LayerControls.getNames())
       .should((names) => {
         expect(names).deep.equals(['OpenStreetMap', 'Géométries']);
@@ -40,7 +40,7 @@ describe('Map', function () {
   });
 
   it('user can add layer', function () {
-    cy.visit(FrontendRoutes.map())
+    cy.visit(FrontendRoutes.map().raw())
       .then(() => LayerControls.addOsmLayer())
       .then(() => LayerControls.getNames())
       .should((names) => {
@@ -54,7 +54,7 @@ describe('Map', function () {
   });
 
   it('user can add layer then undo and redo', function () {
-    cy.visit(FrontendRoutes.map())
+    cy.visit(FrontendRoutes.map().raw())
       .then(() => LayerControls.addOsmLayer())
       .then(() => LayerControls.getNames())
       .should((names) => {
@@ -85,7 +85,7 @@ describe('Map', function () {
   });
 
   it('user can rename layer', function () {
-    cy.visit(FrontendRoutes.map())
+    cy.visit(FrontendRoutes.map().raw())
       .get('[data-cy=rename-layer]')
       .click()
       .get('[data-cy=modal-rename-input]')
@@ -100,7 +100,7 @@ describe('Map', function () {
   });
 
   it('user can delete layer', function () {
-    cy.visit(FrontendRoutes.map())
+    cy.visit(FrontendRoutes.map().raw())
       .get('[data-cy=delete-layer]')
       .click()
       .then(() => LayerControls.getNames())

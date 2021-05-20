@@ -22,7 +22,7 @@ import { ConfigLoader } from '../config/ConfigLoader';
 import { TestHelper } from '../utils/TestHelper';
 import { assert } from 'chai';
 import * as uuid from 'uuid-random';
-import { AnonymousUser } from '@abc-map/shared-entities';
+import { AnonymousUser } from '@abc-map/shared';
 
 describe('UserService', () => {
   let service: UserService;

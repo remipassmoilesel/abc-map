@@ -17,9 +17,9 @@
  */
 
 import React, { Component, ReactNode } from 'react';
-import { Logger } from '@abc-map/frontend-commons';
-import { UserStatus } from '@abc-map/shared-entities';
-import { FrontendRoutes } from '@abc-map/frontend-commons';
+import { Logger } from '@abc-map/shared';
+import { UserStatus } from '@abc-map/shared';
+import { FrontendRoutes } from '@abc-map/shared';
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
 import { connect, ConnectedProps } from 'react-redux';
 import { Dropdown } from 'react-bootstrap';
@@ -49,7 +49,7 @@ class TopBar extends Component<Props, {}> {
     return (
       <div className={Cls.topBar} data-cy={'top-bar'}>
         <h1>
-          <Link to={FrontendRoutes.landing()} data-cy={'landing'} className={'d-flex align-items-ce'}>
+          <Link to={FrontendRoutes.landing().raw()} data-cy={'landing'} className={'d-flex align-items-ce'}>
             <img src={MainIcon} alt={'Logo'} height={'25'} className={'mr-3'} />
             Abc-Map
           </Link>
@@ -57,12 +57,12 @@ class TopBar extends Component<Props, {}> {
 
         <div className={'flex-grow-1'} />
 
-        <TopBarLink label={'Accueil'} to={FrontendRoutes.landing()} activeMatch={/^\/$/} data-cy={'landing'} />
-        <TopBarLink label={'Carte'} to={FrontendRoutes.map()} data-cy={'map'} />
-        <TopBarLink label={'Catalogue de données'} to={FrontendRoutes.dataStore()} data-cy={'data-store'} />
-        <TopBarLink label={'Traitement de données'} to={FrontendRoutes.dataProcessing('')} data-cy={'data-processing'} />
-        <TopBarLink label={'Mise en page'} to={FrontendRoutes.layout()} data-cy={'layout'} />
-        <TopBarLink label={'Documentation'} to={FrontendRoutes.documentation()} data-cy={'help'} />
+        <TopBarLink label={'Accueil'} to={FrontendRoutes.landing().raw()} activeMatch={/^\/$/} data-cy={'landing'} />
+        <TopBarLink label={'Carte'} to={FrontendRoutes.map().raw()} data-cy={'map'} />
+        <TopBarLink label={'Catalogue de données'} to={FrontendRoutes.dataStore().raw()} data-cy={'data-store'} />
+        <TopBarLink label={'Traitement de données'} to={FrontendRoutes.dataProcessing().withoutOptionals()} data-cy={'data-processing'} />
+        <TopBarLink label={'Mise en page'} to={FrontendRoutes.layout().raw()} data-cy={'layout'} />
+        <TopBarLink label={'Documentation'} to={FrontendRoutes.documentation().raw()} data-cy={'help'} />
 
         <div className={'ml-3'}>
           <Dropdown data-cy={'user-menu'}>

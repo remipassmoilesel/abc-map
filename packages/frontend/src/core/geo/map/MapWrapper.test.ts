@@ -17,16 +17,16 @@
  */
 
 import { MapFactory } from './MapFactory';
-import { LayerProperties } from '@abc-map/shared-entities';
-import { MapTool } from '@abc-map/frontend-commons';
+import { LayerProperties } from '@abc-map/shared';
+import { MapTool } from '@abc-map/shared';
 import { Map } from 'ol';
 import { logger, MapWrapper } from './MapWrapper';
-import { ToolRegistry } from '../tools/ToolRegistry';
+import { ToolRegistry } from '../../tools/ToolRegistry';
 import TileLayer from 'ol/layer/Tile';
 import { LayerFactory } from '../layers/LayerFactory';
 import VectorImageLayer from 'ol/layer/VectorImage';
 import { DragRotateAndZoom } from 'ol/interaction';
-import { LineStringTool } from '../tools/line-string/LineStringTool';
+import { LineStringTool } from '../../tools/line-string/LineStringTool';
 import { TestHelper } from '../../utils/TestHelper';
 
 logger.disable();

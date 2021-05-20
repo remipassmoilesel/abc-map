@@ -25,7 +25,7 @@ export class ManifestReader {
   public static async read(manifestPath: string): Promise<ArtefactManifest> {
     const errorPrefix = ` Manifest error on ${manifestPath}:`;
     const file = await fs.readFile(manifestPath, 'utf8');
-    const manifest: ArtefactManifest | undefined = yaml.safeLoad(file) as ArtefactManifest | undefined;
+    const manifest: ArtefactManifest | undefined = yaml.load(file) as ArtefactManifest | undefined;
     if (!manifest) {
       return Promise.reject(new Error(`Invalid manifest: ${manifestPath}`));
     }

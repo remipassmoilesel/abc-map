@@ -17,8 +17,8 @@
  */
 
 import { ProjectActions } from '../store/project/actions';
-import { BlobIO, Logger, ProjectHelper } from '@abc-map/frontend-commons';
-import { AbcLayout, AbcProject, AbcProjection, AbcProjectMetadata, LayerType, LayoutFormat, ManifestName, WmsMetadata } from '@abc-map/shared-entities';
+import { CompressedProject, Logger, ProjectHelper } from '@abc-map/shared';
+import { AbcLayout, AbcProjectManifest, AbcProjection, AbcProjectMetadata, LayerType, LayoutFormat, ManifestName, WmsMetadata, Zipper } from '@abc-map/shared';
 import { AxiosInstance } from 'axios';
 import { ProjectFactory } from './ProjectFactory';
 import { GeoService } from '../geo/GeoService';
@@ -26,8 +26,7 @@ import { ProjectRoutes as Api } from '../http/ApiRoutes';
 import uuid from 'uuid-random';
 import { MainStore } from '../store/store';
 import { Encryption } from '../utils/Encryption';
-import { Zipper } from '@abc-map/frontend-commons';
-import { CompressedProject } from './CompressedProject';
+import { BlobIO } from '@abc-map/shared';
 
 export const logger = Logger.get('ProjectService.ts', 'info');
 
@@ -56,13 +55,13 @@ export class ProjectService {
     return this.jsonClient.delete(Api.findById(id)).then(() => undefined);
   }
 
-  public async exportCurrentProject(password?: string): Promise<CompressedProject> {
+  public async exportCurrentProject(password?: string): Promise<CompressedProject<Blob>> {
     const containsCredentials = this.geoService.getMainMap().containsCredentials();
     if (containsCredentials && !password) {
       throw new Error('Password is mandatory when project contains credentials');
     }
 
-    const manifest: AbcProject = {
+    const manifest: AbcProjectManifest = {
       metadata: {
         ...this.store.getState().project.metadata,
         containsCredentials,
@@ -79,12 +78,12 @@ export class ProjectService {
       }
     }
 
-    const project = await Zipper.zipFiles([{ path: ManifestName, content: new Blob([JSON.stringify(manifest)]) }]);
+    const project = await Zipper.forFrontend().zipFiles([{ path: ManifestName, content: new Blob([JSON.stringify(manifest)]) }]);
     return { project, metadata: manifest.metadata };
   }
 
   // TODO: we should check project size before save()
-  public save(project: CompressedProject): Promise<void> {
+  public save(project: CompressedProject<Blob>): Promise<void> {
     const formData = new FormData();
     formData.append('metadata', JSON.stringify(project.metadata));
     formData.append('project', project.project as Blob);
@@ -107,7 +106,7 @@ export class ProjectService {
   }
 
   public async loadProject(blob: Blob, password?: string): Promise<void> {
-    const unzipped = await Zipper.unzip(blob);
+    const unzipped = await Zipper.forFrontend().unzip(blob);
     const manifestFile = unzipped.find((f) => f.path.endsWith(ManifestName));
     if (!manifestFile) {
       return Promise.reject(new Error('Invalid project'));
@@ -174,11 +173,11 @@ export class ProjectService {
   }
 
   public async compressedContainsCredentials(blob: Blob): Promise<boolean> {
-    const manifest = await ProjectHelper.extractManifest(blob);
+    const manifest = await ProjectHelper.forFrontend().extractManifest(blob);
     return this.manifestContainsCredentials(manifest);
   }
 
-  public manifestContainsCredentials(project: AbcProject): boolean {
+  public manifestContainsCredentials(project: AbcProjectManifest): boolean {
     const wmsLayers = project.layers.filter((lay) => LayerType.Wms === lay.type);
     const withCredentials = wmsLayers.find((lay) => {
       const metadata: WmsMetadata = lay.metadata as WmsMetadata;

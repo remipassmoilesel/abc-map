@@ -17,8 +17,8 @@
  */
 
 import React, { Component, ReactNode } from 'react';
-import { Logger } from '@abc-map/frontend-commons';
-import { FillPatterns } from '@abc-map/shared-entities';
+import { Logger } from '@abc-map/shared';
+import { FillPatterns } from '@abc-map/shared';
 import { LabelledFillPatterns } from './LabelledFillPatterns';
 import { FillPatternFactory } from '../../../../../core/geo/style/FillPatternFactory';
 import { MainState } from '../../../../../core/store/reducer';

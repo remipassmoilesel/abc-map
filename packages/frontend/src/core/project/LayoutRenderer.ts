@@ -19,8 +19,8 @@
 import { MapWrapper } from '../geo/map/MapWrapper';
 import { LayoutHelper } from './LayoutHelper';
 import View from 'ol/View';
-import { AbcFile, BlobIO, Logger, Zipper } from '@abc-map/frontend-commons';
-import { AbcLayout } from '@abc-map/shared-entities';
+import { BlobIO, Logger } from '@abc-map/shared';
+import { AbcFile, AbcLayout, Zipper } from '@abc-map/shared';
 import { MapFactory } from '../geo/map/MapFactory';
 import { jsPDF } from 'jspdf';
 
@@ -54,14 +54,14 @@ export class LayoutRenderer {
   }
 
   public async renderLayoutsAsPng(layouts: AbcLayout[], sourceMap: MapWrapper, support: HTMLDivElement): Promise<Blob> {
-    const files: AbcFile[] = [];
+    const files: AbcFile<Blob>[] = [];
     for (const layout of layouts) {
       const canvas = await this.renderLayout(layout, sourceMap, support);
       const image = await BlobIO.canvasToPng(canvas);
       files.push({ path: layout.name, content: image });
     }
 
-    return Zipper.zipFiles(files);
+    return Zipper.forFrontend().zipFiles(files);
   }
 
   public renderLayout(layout: AbcLayout, sourceMap: MapWrapper, support: HTMLDivElement): Promise<HTMLCanvasElement> {

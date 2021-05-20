@@ -17,7 +17,7 @@
  */
 
 import React, { ChangeEvent, Component, ReactNode } from 'react';
-import { Logger } from '@abc-map/frontend-commons';
+import { Logger } from '@abc-map/shared';
 import { DataRow, getFields } from '../../../core/data/data-source/DataSource';
 import DataTable from '../../../components/data-table/DataTable';
 import { ServiceProps, withServices } from '../../../core/withServices';

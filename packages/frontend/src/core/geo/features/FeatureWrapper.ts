@@ -18,13 +18,13 @@
 
 import Feature, { FeatureLike } from 'ol/Feature';
 import Geometry from 'ol/geom/Geometry';
-import { FeatureProperties, StyleProperties } from '@abc-map/shared-entities';
+import { FeatureProperties, StyleProperties } from '@abc-map/shared';
 import { FeatureStyle, DefaultStyle } from '../style/FeatureStyle';
 import { StyleFactory } from '../style/StyleFactory';
 import { nanoid } from 'nanoid';
 import GeometryType from 'ol/geom/GeometryType';
 import { Point, Circle, GeometryCollection, LinearRing, LineString, MultiLineString, MultiPoint, MultiPolygon, Polygon } from 'ol/geom';
-import { Logger } from '@abc-map/frontend-commons';
+import { Logger } from '@abc-map/shared';
 
 const logger = Logger.get('FeatureWrapper.ts');
 

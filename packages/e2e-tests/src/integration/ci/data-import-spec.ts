@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FrontendRoutes } from '@abc-map/frontend-commons';
+import { FrontendRoutes } from '@abc-map/shared';
 import { TestData } from '../../test-data/TestData';
 import { MainMap } from '../../helpers/MainMap';
 import { TestHelper } from '../../helpers/TestHelper';
@@ -28,7 +28,7 @@ describe('Data import', () => {
   });
 
   it('User can import data via graphical control, then undo', () => {
-    cy.visit(FrontendRoutes.map())
+    cy.visit(FrontendRoutes.map().raw())
       .get('[data-cy=import-data]')
       .click()
       .then(() => TestData.sampleGpx())
@@ -65,7 +65,7 @@ describe('Data import', () => {
   });
 
   it('User can import data via drag and drop, then undo', () => {
-    cy.visit(FrontendRoutes.map())
+    cy.visit(FrontendRoutes.map().raw())
       .then(() => TestData.sampleGpx())
       .then((gpx) => {
         return cy.window().then((win) => {

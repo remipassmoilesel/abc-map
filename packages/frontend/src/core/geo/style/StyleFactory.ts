@@ -19,7 +19,7 @@
 import Feature from 'ol/Feature';
 import Style from 'ol/style/Style';
 import { Fill, Icon, Stroke, Text } from 'ol/style';
-import { Logger } from '@abc-map/frontend-commons';
+import { Logger } from '@abc-map/shared';
 import { DefaultStyle, FeatureStyle } from './FeatureStyle';
 import { SelectionStyleFactory } from './SelectionStyleFactory';
 import { StyleCache } from './StyleCache';
@@ -28,7 +28,7 @@ import Geometry from 'ol/geom/Geometry';
 import GeometryType from 'ol/geom/GeometryType';
 import { IconProcessor } from './IconProcessor';
 import { safeGetIcon } from './PointIcons';
-import { PointIcons } from '@abc-map/shared-entities';
+import { PointIcons } from '@abc-map/shared';
 
 const logger = Logger.get('VectorStyles.ts');
 

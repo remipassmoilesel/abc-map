@@ -17,7 +17,7 @@
  */
 
 import { Env } from './Env';
-import { Logger } from '@abc-map/frontend-commons';
+import { Logger } from '@abc-map/shared';
 
 const logger = Logger.get('FileIO.ts');
 

@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcWindow, E2eMap } from '@abc-map/frontend-commons';
+import { AbcWindow, E2eMap } from '@abc-map/shared';
 import Chainable = Cypress.Chainable;
 
 export class MainMap {

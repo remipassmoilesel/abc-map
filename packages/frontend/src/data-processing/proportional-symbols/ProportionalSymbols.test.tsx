@@ -33,7 +33,7 @@ import {
   testGeometryLayer2,
   testGeometryLayer3,
 } from './ProportionalSymbols.test.data';
-import { StyleProperties } from '@abc-map/shared-entities';
+import { StyleProperties } from '@abc-map/shared';
 import { MapWrapper } from '../../core/geo/map/MapWrapper';
 
 logger.disable();
@@ -47,7 +47,7 @@ describe('ProportionalSymbols', () => {
     map = MapFactory.createNaked();
     geoMock = sinon.createStubInstance(GeoService);
     geoMock.getMainMap.returns(map);
-    const services = ({ geo: geoMock } as unknown) as Services;
+    const services = { geo: geoMock } as unknown as Services;
 
     module = new ProportionalSymbols(services);
   });

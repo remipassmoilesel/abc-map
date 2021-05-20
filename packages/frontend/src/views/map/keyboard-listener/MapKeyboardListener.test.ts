@@ -38,7 +38,7 @@ describe('MapKeyboardListener', () => {
     history = sinon.createStubInstance(HistoryService);
     geo = sinon.createStubInstance(GeoService);
     toasts = sinon.createStubInstance(ToastService);
-    keyboardListener = new MapKeyboardListener(({ geo, history, toasts } as unknown) as Services);
+    keyboardListener = new MapKeyboardListener({ geo, history, toasts } as unknown as Services);
     keyboardListener.initialize();
   });
 
@@ -53,8 +53,8 @@ describe('MapKeyboardListener', () => {
     const textarea = document.createElement('textarea');
     const event2 = fakeEvent(textarea, 'z', true);
 
-    keyboardListener.handleKeyPress((event1 as unknown) as KeyboardEvent);
-    keyboardListener.handleKeyPress((event2 as unknown) as KeyboardEvent);
+    keyboardListener.handleKeyPress(event1 as unknown as KeyboardEvent);
+    keyboardListener.handleKeyPress(event2 as unknown as KeyboardEvent);
 
     expect(event1.preventDefault.callCount).toEqual(0);
     expect(event1.stopPropagation.callCount).toEqual(0);
@@ -67,7 +67,7 @@ describe('MapKeyboardListener', () => {
     const input = document.createElement('input');
     const event = fakeEvent(input, 'v', true);
 
-    keyboardListener.handleKeyPress((event as unknown) as KeyboardEvent);
+    keyboardListener.handleKeyPress(event as unknown as KeyboardEvent);
   });
 
   it('should delete on Delete if features found', () => {
@@ -76,8 +76,8 @@ describe('MapKeyboardListener', () => {
     const map = sinon.createStubInstance(MapWrapper);
     const vectorLayer = sinon.createStubInstance(LayerWrapper);
     const vectorSource = sinon.createStubInstance(VectorSource);
-    geo.getMainMap.returns((map as unknown) as MapWrapper);
-    map.getActiveVectorLayer.returns((vectorLayer as unknown) as VectorLayerWrapper);
+    geo.getMainMap.returns(map as unknown as MapWrapper);
+    map.getActiveVectorLayer.returns(vectorLayer as unknown as VectorLayerWrapper);
     map.getSelectedFeatures.returns([FeatureWrapper.create()]);
     vectorLayer.getSource.returns(vectorSource);
 
@@ -94,8 +94,8 @@ describe('MapKeyboardListener', () => {
     const map = sinon.createStubInstance(MapWrapper);
     const vectorLayer = sinon.createStubInstance(LayerWrapper);
     const vectorSource = sinon.createStubInstance(VectorSource);
-    geo.getMainMap.returns((map as unknown) as MapWrapper);
-    map.getActiveVectorLayer.returns((vectorLayer as unknown) as VectorLayerWrapper);
+    geo.getMainMap.returns(map as unknown as MapWrapper);
+    map.getActiveVectorLayer.returns(vectorLayer as unknown as VectorLayerWrapper);
     map.getSelectedFeatures.returns([]);
     vectorLayer.getSource.returns(vectorSource);
 

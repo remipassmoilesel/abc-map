@@ -21,7 +21,7 @@ import { MongodbClient } from '../mongodb/MongodbClient';
 import { ConfigLoader } from '../config/ConfigLoader';
 import { assert } from 'chai';
 import { TestHelper } from '../utils/TestHelper';
-import { VoteValue } from '@abc-map/shared-entities';
+import { VoteValue } from '@abc-map/shared';
 
 describe('VoteService', () => {
   let service: VoteService;

@@ -22,7 +22,7 @@ import { asNumberOrString } from '../../core/utils/numbers';
 import { ServiceProps, withServices } from '../../core/withServices';
 import Cls from './PropertiesForm.module.scss';
 import { nanoid } from 'nanoid';
-import { Logger } from '@abc-map/frontend-commons';
+import { Logger } from '@abc-map/shared';
 
 // TODO: unit test
 

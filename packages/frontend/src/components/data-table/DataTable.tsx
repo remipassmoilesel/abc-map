@@ -17,7 +17,7 @@
  */
 
 import React, { Component, ReactNode } from 'react';
-import { Logger } from '@abc-map/frontend-commons';
+import { Logger } from '@abc-map/shared';
 import { ServiceProps, withServices } from '../../core/withServices';
 import { DataRow, getFields } from '../../core/data/data-source/DataSource';
 import Cls from './DataTable.module.scss';

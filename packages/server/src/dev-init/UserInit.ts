@@ -17,11 +17,11 @@
  */
 
 import { Services } from '../services/services';
-import { AbcUser } from '@abc-map/shared-entities';
+import { AbcUser } from '@abc-map/shared';
 import { Config } from '../config/Config';
 import * as uuid from 'uuid-random';
 import { PasswordHasher } from '../authentication/PasswordHasher';
-import { Logger } from '../utils/Logger';
+import { Logger } from '@abc-map/shared';
 
 const logger = Logger.get('UserInit.ts', 'info');
 

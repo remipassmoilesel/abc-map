@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { DEFAULT_PROJECTION, LayerProperties } from '@abc-map/shared-entities';
+import { DEFAULT_PROJECTION, LayerProperties } from '@abc-map/shared';
 import { Map } from 'ol';
 import { MapFactory } from './MapFactory';
 import TileLayer from 'ol/layer/Tile';

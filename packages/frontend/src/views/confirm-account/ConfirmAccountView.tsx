@@ -17,9 +17,9 @@
  */
 
 import React, { Component, ReactNode } from 'react';
-import { Logger, ConfirmAccountParams, FrontendRoutes } from '@abc-map/frontend-commons';
+import { Logger, ConfirmAccountParams, FrontendRoutes } from '@abc-map/shared';
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
-import { ConfirmationStatus } from '@abc-map/shared-entities';
+import { ConfirmationStatus } from '@abc-map/shared';
 import { ServiceProps, withServices } from '../../core/withServices';
 import Cls from './ConfirmAccountView.module.scss';
 
@@ -51,7 +51,7 @@ class ConfirmAccountView extends Component<Props, State> {
         )}
         {ConfirmationStatus.Succeed === status && (
           <div data-cy={'account-enabled'}>
-            Votre compte est activé, vous êtes connecté. <Link to={FrontendRoutes.map()}>Direction: la carte !</Link>
+            Votre compte est activé, vous êtes connecté. <Link to={FrontendRoutes.map().raw()}>Direction: la carte !</Link>
           </div>
         )}
       </div>

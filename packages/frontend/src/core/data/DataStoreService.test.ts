@@ -23,7 +23,7 @@ import { GeoService } from '../geo/GeoService';
 import { AxiosInstance } from 'axios';
 import { LayerFactory } from '../geo/layers/LayerFactory';
 import { MapFactory } from '../geo/map/MapFactory';
-import { AbcFile } from '@abc-map/frontend-commons';
+import { AbcFile } from '@abc-map/shared';
 
 describe('DataStoreService', () => {
   let apiClient: { get: SinonStub };
@@ -44,10 +44,10 @@ describe('DataStoreService', () => {
     const readerFactory = sinon.stub().returns({ read: dataReader });
 
     service = new DataStoreService(
-      (apiClient as unknown) as AxiosInstance,
-      (downloadClient as unknown) as AxiosInstance,
-      (geoService as unknown) as GeoService,
-      (readerFactory as unknown) as DataReaderFactory
+      apiClient as unknown as AxiosInstance,
+      downloadClient as unknown as AxiosInstance,
+      geoService as unknown as GeoService,
+      readerFactory as unknown as DataReaderFactory
     );
   });
 
@@ -56,7 +56,7 @@ describe('DataStoreService', () => {
     dataReader.resolves([LayerFactory.newVectorLayer()]);
     geoService.getMainMap.returns(map);
 
-    const files: AbcFile[] = [{ path: '/test/path', content: {} as Blob }];
+    const files: AbcFile<Blob>[] = [{ path: '/test/path', content: {} as Blob }];
     await service.importFiles(files);
 
     expect(dataReader.callCount).toEqual(1);

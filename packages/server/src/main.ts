@@ -17,7 +17,7 @@
  */
 
 import 'source-map-support/register';
-import { Logger } from './utils/Logger';
+import { Logger } from '@abc-map/shared';
 import { HttpServer } from './server/HttpServer';
 import { Services, servicesFactory } from './services/services';
 import { ConfigLoader } from './config/ConfigLoader';

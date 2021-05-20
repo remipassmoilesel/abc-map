@@ -17,7 +17,7 @@
  */
 
 import React, { Component, ReactNode } from 'react';
-import { Logger } from '@abc-map/frontend-commons';
+import { Logger } from '@abc-map/shared';
 import ColorSelector from '../_common/color-selector/ColorSelector';
 import PointSizeSelector from './size-selector/PointSizeSelector';
 import PointIconSelector from './icon-selector/PointIconSelector';

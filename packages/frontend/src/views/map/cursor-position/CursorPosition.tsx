@@ -17,7 +17,7 @@
  */
 
 import React, { Component, ReactNode } from 'react';
-import { Logger } from '@abc-map/frontend-commons';
+import { Logger } from '@abc-map/shared';
 import { Coordinate } from 'ol/coordinate';
 
 const logger = Logger.get('CursorPosition.tsx');

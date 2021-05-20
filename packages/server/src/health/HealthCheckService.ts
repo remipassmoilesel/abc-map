@@ -38,9 +38,9 @@
 
 import { MongodbClient } from '../mongodb/MongodbClient';
 import { MongodbCollection } from '../mongodb/MongodbCollection';
-import { AbcProject } from '@abc-map/shared-entities';
+import { AbcProjectManifest } from '@abc-map/shared';
 import { AbstractService } from '../services/AbstractService';
-import { Logger } from '../utils/Logger';
+import { Logger } from '@abc-map/shared';
 
 export enum HealthStatus {
   HEALTHY = 'HEALTHY',
@@ -69,7 +69,7 @@ export class HealthCheckService extends AbstractService {
   }
 
   private async isMongodbUp(): Promise<boolean> {
-    const collection = await this.mongodbClient.collection<AbcProject>(MongodbCollection.Projects);
+    const collection = await this.mongodbClient.collection<AbcProjectManifest>(MongodbCollection.Projects);
     return collection
       .find({})
       .limit(1)

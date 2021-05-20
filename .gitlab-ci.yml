@@ -8,13 +8,12 @@ cache:
     - .yarn-cache
     - .cypress-cache
     - packages/abc-cli/node_modules
-    - packages/backend/node_modules/
-    - packages/documentation/node_modules/
     - packages/e2e-tests/node_modules/
     - packages/frontend/node_modules/
-    - packages/frontend-commons/node_modules/
     - packages/performance-tests/node_modules/
-    - packages/shared-entities/node_modules/
+    - packages/server/node_modules/
+    - packages/shared/node_modules/
+    - packages/user-documentation/node_modules/
 
 
 test:

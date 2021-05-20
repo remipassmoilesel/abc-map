@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { getAbcWindow } from '@abc-map/frontend-commons';
+import { getAbcWindow } from '@abc-map/shared';
 
 export class Env {
   public static isE2e(): boolean {

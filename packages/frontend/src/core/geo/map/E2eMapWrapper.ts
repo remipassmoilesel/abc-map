@@ -17,8 +17,8 @@
  */
 
 import { MapWrapper } from './MapWrapper';
-import { Logger, E2eMap } from '@abc-map/frontend-commons';
-import { LayerMetadata, BaseMetadata } from '@abc-map/shared-entities';
+import { Logger, E2eMap } from '@abc-map/shared';
+import { LayerMetadata, BaseMetadata } from '@abc-map/shared';
 import Feature from 'ol/Feature';
 import Geometry from 'ol/geom/Geometry';
 

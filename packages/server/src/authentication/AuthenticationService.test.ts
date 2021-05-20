@@ -34,7 +34,7 @@ import {
   UserStatus,
   ResetPasswordToken,
   AbcUser,
-} from '@abc-map/shared-entities';
+} from '@abc-map/shared';
 import { PasswordHasher } from './PasswordHasher';
 import * as sinon from 'sinon';
 import { SinonStubbedInstance } from 'sinon';
@@ -64,7 +64,7 @@ describe('AuthenticationService', () => {
 
     registrations = new RegistrationDao(mongodbClient);
     userService = UserService.create(config, mongodbClient);
-    service = new AuthenticationService(config, registrations, userService, hasher, (emails as unknown) as EmailService);
+    service = new AuthenticationService(config, registrations, userService, hasher, emails as unknown as EmailService);
     await userService.init();
     await service.init();
   });

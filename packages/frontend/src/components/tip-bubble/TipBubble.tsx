@@ -17,7 +17,7 @@
  */
 
 import React, { Component, ReactNode } from 'react';
-import { Logger } from '@abc-map/frontend-commons';
+import { Logger } from '@abc-map/shared';
 import { Modal } from 'react-bootstrap';
 import { AllTips } from '@abc-map/user-documentation';
 import Cls from './TipBubble.module.scss';

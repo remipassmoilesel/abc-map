@@ -22,7 +22,7 @@ import { assert } from 'chai';
 
 describe('Authentication', () => {
   it('should return user', () => {
-    const req = ({ user: { user: { id: 'test-user-id' } } } as unknown) as FastifyRequest;
+    const req = { user: { user: { id: 'test-user-id' } } } as unknown as FastifyRequest;
 
     const user = Authentication.from(req);
 
@@ -30,7 +30,7 @@ describe('Authentication', () => {
   });
 
   it('should return nothing', () => {
-    const req = ({} as unknown) as FastifyRequest;
+    const req = {} as unknown as FastifyRequest;
 
     const user = Authentication.from(req);
 

@@ -17,8 +17,8 @@
  */
 
 import React, { ChangeEvent, KeyboardEvent, Component, ReactNode } from 'react';
-import { Logger, Zipper } from '@abc-map/frontend-commons';
-import { AbcArtefact } from '@abc-map/shared-entities';
+import { Logger } from '@abc-map/shared';
+import { AbcArtefact, Zipper } from '@abc-map/shared';
 import ArtefactCard from './artefact-card/ArtefactCard';
 import { ServiceProps, withServices } from '../../core/withServices';
 import NavigationBar from './NavigationBar';
@@ -185,7 +185,7 @@ class DataStoreView extends Component<ServiceProps, State> {
         if (res.length === 1 && FileFormat.ZIP === FileFormats.fromPath(res[0].path)) {
           content = res[0].content;
         } else {
-          content = await Zipper.zipFiles(res);
+          content = await Zipper.forFrontend().zipFiles(res);
         }
 
         FileIO.outputBlob(content, 'artefact.zip');

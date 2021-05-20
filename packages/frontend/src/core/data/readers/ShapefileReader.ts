@@ -17,13 +17,14 @@
  */
 
 import { AbstractDataReader } from './AbstractDataReader';
-import { AbcProjection, LayerType, VectorMetadata } from '@abc-map/shared-entities';
+import { AbcProjection, LayerType, VectorMetadata } from '@abc-map/shared';
 import { FileFormat, FileFormats } from '../FileFormats';
-import { AbcFile, Logger } from '@abc-map/frontend-commons';
+import { Logger } from '@abc-map/shared';
+import { AbcFile } from '@abc-map/shared';
 import * as shapefile from 'shapefile';
 import { GeoJSON } from 'ol/format';
 import VectorSource from 'ol/source/Vector';
-import { BlobIO } from '@abc-map/frontend-commons';
+import { BlobIO } from '@abc-map/shared';
 import uuid from 'uuid-random';
 import { LayerWrapper } from '../../geo/layers/LayerWrapper';
 import { LayerFactory } from '../../geo/layers/LayerFactory';
@@ -31,11 +32,11 @@ import { LayerFactory } from '../../geo/layers/LayerFactory';
 const logger = Logger.get('ShapefileReader.ts');
 
 export class ShapefileReader extends AbstractDataReader {
-  public async isSupported(files: AbcFile[]): Promise<boolean> {
+  public async isSupported(files: AbcFile<Blob>[]): Promise<boolean> {
     return files.filter((f) => FileFormats.fromPath(f.path) === FileFormat.SHAPEFILE).length > 0;
   }
 
-  public async read(files: AbcFile[], projection: AbcProjection): Promise<LayerWrapper[]> {
+  public async read(files: AbcFile<Blob>[], projection: AbcProjection): Promise<LayerWrapper[]> {
     const _files = files.filter((f) => FileFormats.fromPath(f.path) === FileFormat.SHAPEFILE);
     if (_files.length > 2) {
       return Promise.reject(new Error('Cannot parse more than one shapefile at once'));

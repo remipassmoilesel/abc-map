@@ -17,7 +17,7 @@
  */
 
 import React, { ChangeEvent, Component, ReactNode } from 'react';
-import { FrontendRoutes, Logger, PasswordLostParams } from '@abc-map/frontend-commons';
+import { FrontendRoutes, Logger, PasswordLostParams } from '@abc-map/shared';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { ServiceProps, withServices } from '../../core/withServices';
 import { PasswordStrength, Strength } from '../../core/utils/PasswordStrength';
@@ -112,7 +112,7 @@ class ResetPasswordView extends Component<Props, State> {
         this.setState({ password: '', confirmation: '' });
         return modals.login();
       })
-      .then(() => this.props.history.push(FrontendRoutes.map()))
+      .then(() => this.props.history.push(FrontendRoutes.map().raw()))
       .catch((err) => logger.error('Reset password error: ', err));
   };
 

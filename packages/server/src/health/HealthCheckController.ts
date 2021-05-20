@@ -39,7 +39,7 @@
 import { Controller } from '../server/Controller';
 import { Services } from '../services/services';
 import { HealthStatus } from './HealthCheckService';
-import { Logger } from '../utils/Logger';
+import { Logger } from '@abc-map/shared';
 import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 
 const logger = Logger.get('HealthCheckController.ts');

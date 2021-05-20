@@ -22,10 +22,10 @@ import { HistoryKey } from '../../../../core/history/HistoryKey';
 import { AddLayersTask } from '../../../../core/history/tasks/layers/AddLayersTask';
 import { LabelledLayerTypes, LabelledLayerType } from './LabelledLayerTypes';
 import WmsSettingsPanel from './wms/WmsSettingsPanel';
-import { Logger } from '@abc-map/frontend-commons';
+import { Logger } from '@abc-map/shared';
 import { Link } from 'react-router-dom';
-import { WmsDefinition } from '@abc-map/shared-entities';
-import { FrontendRoutes } from '@abc-map/frontend-commons';
+import { WmsDefinition } from '@abc-map/shared';
+import { FrontendRoutes } from '@abc-map/shared';
 import { LayerFactory } from '../../../../core/geo/layers/LayerFactory';
 import { ServiceProps, withServices } from '../../../../core/withServices';
 
@@ -72,7 +72,7 @@ class AddLayerModal extends Component<Props, State> {
           </div>
           <div className={'mb-2 mt-2'}>
             <i className={'fa fa-info ml-2 mr-2'} /> Vous pouvez aussi ajouter des couches à partir du&nbsp;
-            <Link to={FrontendRoutes.dataStore()}>Catalogue de données.</Link>
+            <Link to={FrontendRoutes.dataStore().raw()}>Catalogue de données.</Link>
           </div>
 
           {wmsSelected && <WmsSettingsPanel onChange={this.handleWmsSettingsChanged} />}

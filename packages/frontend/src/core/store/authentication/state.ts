@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcUser, UserStatus } from '@abc-map/shared-entities';
+import { AbcUser, UserStatus } from '@abc-map/shared';
 
 export interface AuthenticationState {
   userStatus?: UserStatus;

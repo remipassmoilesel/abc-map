@@ -23,7 +23,7 @@ import { VectorLayerWrapper } from '../../core/geo/layers/LayerWrapper';
 import Point from 'ol/geom/Point';
 import * as _ from 'lodash';
 import { DataRow } from '../../core/data/data-source/DataSource';
-import { StyleProperties } from '@abc-map/shared-entities';
+import { StyleProperties } from '@abc-map/shared';
 import Feature from 'ol/Feature';
 import Geometry from 'ol/geom/Geometry';
 

@@ -34,7 +34,7 @@ describe('tileLoadAuthenticated', () => {
   });
 
   it('function setup should include credentials', () => {
-    tileLoadAuthenticated({ username: 'test-username', password: 'test-password' }, (factoryStub as unknown) as HttpClientFactory);
+    tileLoadAuthenticated({ username: 'test-username', password: 'test-password' }, factoryStub as unknown as HttpClientFactory);
     expect(factoryStub.callCount).toEqual(1);
     expect(factoryStub.getCalls()[0].args).toEqual([
       {
@@ -59,8 +59,8 @@ describe('tileLoadAuthenticated', () => {
     const tileImage = document.createElement('img');
     tileStub.getImage.returns(tileImage as HTMLImageElement);
 
-    const load = tileLoadAuthenticated({ username: 'test-username', password: 'test-password' }, (factoryStub as unknown) as HttpClientFactory);
-    load((tileStub as unknown) as Tile, 'http://test-url');
+    const load = tileLoadAuthenticated({ username: 'test-username', password: 'test-password' }, factoryStub as unknown as HttpClientFactory);
+    load(tileStub as unknown as Tile, 'http://test-url');
     await TestHelper.wait(10); // We wait here because of an internal promise
 
     expect(clientStub.get.callCount).toEqual(1);
@@ -76,8 +76,8 @@ describe('tileLoadAuthenticated', () => {
 
     const tileStub = sinon.createStubInstance(ImageTile);
 
-    const func = tileLoadAuthenticated({ username: 'test-username', password: 'test-password' }, (factoryStub as unknown) as HttpClientFactory);
-    func((tileStub as unknown) as Tile, 'http://test-url');
+    const func = tileLoadAuthenticated({ username: 'test-username', password: 'test-password' }, factoryStub as unknown as HttpClientFactory);
+    func(tileStub as unknown as Tile, 'http://test-url');
     await TestHelper.wait(10); // We wait here because of an internal promise
 
     expect(clientStub.get.callCount).toEqual(1);
@@ -94,8 +94,8 @@ describe('tileLoadAuthenticated', () => {
 
     const tileStub = sinon.createStubInstance(VectorTile);
 
-    const func = tileLoadAuthenticated({ username: 'test-username', password: 'test-password' }, (factoryStub as unknown) as HttpClientFactory);
-    func((tileStub as unknown) as Tile, 'http://test-url');
+    const func = tileLoadAuthenticated({ username: 'test-username', password: 'test-password' }, factoryStub as unknown as HttpClientFactory);
+    func(tileStub as unknown as Tile, 'http://test-url');
     await TestHelper.wait(10); // We wait here because of an internal promise
 
     expect(clientStub.get.callCount).toEqual(1);

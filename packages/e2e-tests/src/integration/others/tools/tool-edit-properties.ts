@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FrontendRoutes, MapTool } from '@abc-map/frontend-commons';
+import { FrontendRoutes, MapTool } from '@abc-map/shared';
 import { TestHelper } from '../../../helpers/TestHelper';
 import { ToolSelector } from '../../../helpers/ToolSelector';
 import { Draw } from '../../../helpers/Draw';
@@ -31,7 +31,7 @@ describe('Edit properties', function () {
   });
 
   it('user can edit properties, then undo', function () {
-    cy.visit(FrontendRoutes.dataStore())
+    cy.visit(FrontendRoutes.dataStore().raw())
       .then(() => DataStore.importByName('Pays du monde'))
       .then(() => TopBar.map())
       .then(() => MainMap.getComponent())

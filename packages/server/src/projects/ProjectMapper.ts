@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcProjectMetadata } from '@abc-map/shared-entities';
+import { AbcProjectMetadata } from '@abc-map/shared';
 import { ProjectDocument } from './ProjectDocument';
 
 export class ProjectMapper {

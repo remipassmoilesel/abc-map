@@ -16,11 +16,11 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcLayer, AbcProject, WmsAuthentication } from '@abc-map/shared-entities';
-import { Logger } from '@abc-map/frontend-commons';
+import { AbcLayer, AbcProjectManifest, WmsAuthentication } from '@abc-map/shared';
+import { Logger } from '@abc-map/shared';
 import { MapWrapper } from './map/MapWrapper';
 import { MapFactory } from './map/MapFactory';
-import { AbstractTool } from './tools/AbstractTool';
+import { AbstractTool } from '../tools/AbstractTool';
 import { mainStore } from '../store/store';
 import { MapActions } from '../store/map/actions';
 import { AxiosInstance } from 'axios';
@@ -55,7 +55,7 @@ export class GeoService {
     return result;
   }
 
-  public async importProject(map: MapWrapper, project: AbcProject): Promise<void> {
+  public async importProject(map: MapWrapper, project: AbcProjectManifest): Promise<void> {
     map.unwrap().getLayers().clear();
     for (const abcLayer of project.layers) {
       const layer = await LayerFactory.fromAbcLayer(abcLayer);

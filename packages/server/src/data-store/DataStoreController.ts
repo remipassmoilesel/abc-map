@@ -18,7 +18,7 @@
 
 import { Controller } from '../server/Controller';
 import { Services } from '../services/services';
-import { AbcArtefact, PaginatedResponse } from '@abc-map/shared-entities';
+import { AbcArtefact, PaginatedResponse } from '@abc-map/shared';
 import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import fastifyStatic from 'fastify-static';
 import { ByIdParams, GetByIdSchema, ListSchema, SearchQuery, SearchSchema } from './DataStoreController.schemas';

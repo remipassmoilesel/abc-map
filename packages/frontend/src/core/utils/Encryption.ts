@@ -17,7 +17,7 @@
  */
 
 import * as sjcl from 'sjcl';
-import { AbcLayer, AbcProject, AbcWmsLayer, LayerType, WmsMetadata } from '@abc-map/shared-entities';
+import { AbcLayer, AbcProjectManifest, AbcWmsLayer, LayerType, WmsMetadata } from '@abc-map/shared';
 
 /**
  * Warning: changes in this file will require a data migration
@@ -66,7 +66,7 @@ export class Encryption {
     return result;
   }
 
-  public static async decryptProject(project: AbcProject, password: string): Promise<AbcProject> {
+  public static async decryptProject(project: AbcProjectManifest, password: string): Promise<AbcProjectManifest> {
     const layers: AbcLayer[] = [];
     for (const lay of project.layers) {
       if (LayerType.Wms === lay.type && lay.metadata.auth?.username && lay.metadata.auth?.password) {

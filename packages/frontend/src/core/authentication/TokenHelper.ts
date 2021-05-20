@@ -1,5 +1,5 @@
 import jwtDecode from 'jwt-decode';
-import { AuthenticationToken } from '@abc-map/shared-entities';
+import { AuthenticationToken } from '@abc-map/shared';
 
 export class TokenHelper {
   /**

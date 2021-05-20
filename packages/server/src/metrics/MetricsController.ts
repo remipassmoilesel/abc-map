@@ -19,7 +19,7 @@
  */
 
 import { Controller } from '../server/Controller';
-import { Logger } from '../utils/Logger';
+import { Logger } from '@abc-map/shared';
 import { Services } from '../services/services';
 import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 

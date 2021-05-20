@@ -18,12 +18,12 @@
 
 import { logger as geoLogger, GeoService } from './GeoService';
 import { logger as mapLogger } from './map/MapWrapper';
-import { AbcProject, AbcVectorLayer, LayerType, PredefinedLayerModel, PredefinedMetadata } from '@abc-map/shared-entities';
+import { AbcProjectManifest, AbcVectorLayer, LayerType, PredefinedLayerModel, PredefinedMetadata } from '@abc-map/shared';
 import { TestHelper } from '../utils/TestHelper';
 import VectorSource from 'ol/source/Vector';
 import TileLayer from 'ol/layer/Tile';
 import { MapFactory } from './map/MapFactory';
-import { httpExternalClient } from '../http/HttpClients';
+import { httpExternalClient } from '../http/http-clients';
 import { HistoryService } from '../history/HistoryService';
 import { LayerFactory } from './layers/LayerFactory';
 import VectorImageLayer from 'ol/layer/VectorImage';
@@ -61,7 +61,7 @@ describe('GeoService', () => {
   });
 
   it('importProject()', async () => {
-    const project: AbcProject = TestHelper.sampleProject();
+    const project: AbcProjectManifest = TestHelper.sampleProject();
     const map = MapFactory.createNaked();
 
     await service.importProject(map, project);

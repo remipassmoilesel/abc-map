@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcLayout, AbcProject, AbcProjectMetadata } from '@abc-map/shared-entities';
+import { AbcLayout, AbcProjectManifest, AbcProjectMetadata } from '@abc-map/shared';
 
 export enum ActionType {
   NewProject = 'NewProject',
@@ -66,7 +66,7 @@ export interface ClearLayouts {
 
 export interface LoadProject {
   type: ActionType.LoadProject;
-  project: AbcProject;
+  project: AbcProjectManifest;
 }
 
 export type ProjectAction = NewProject | RenameProject | AddLayouts | RemoveLayouts | UpdateLayout | SetLayoutIndex | ClearLayouts | LoadProject;
@@ -121,7 +121,7 @@ export class ProjectActions {
     };
   }
 
-  public static loadProject(project: AbcProject): ProjectAction {
+  public static loadProject(project: AbcProjectManifest): ProjectAction {
     return {
       type: ActionType.LoadProject,
       project,

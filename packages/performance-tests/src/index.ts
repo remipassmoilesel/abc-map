@@ -21,7 +21,7 @@ import { Options } from 'k6/options';
 import http, { batch, ObjectBatchRequest } from 'k6/http';
 import { parseHTML } from 'k6/html';
 import { check, sleep } from 'k6';
-import { AuthenticationRequest } from '@abc-map/shared-entities';
+import { AuthenticationRequest } from '@abc-map/shared';
 import { extractAuthentication, jsonGet, jsonPost, sampleProjectMetadata } from './utils/helpers';
 import { FormData } from './utils/FormDataPolyfill';
 import { Config } from './utils/Config';

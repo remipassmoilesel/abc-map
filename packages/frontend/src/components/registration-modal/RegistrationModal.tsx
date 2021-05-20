@@ -17,7 +17,7 @@
  */
 
 import React, { ChangeEvent, Component, KeyboardEvent, ReactNode } from 'react';
-import { Logger } from '@abc-map/frontend-commons';
+import { Logger } from '@abc-map/shared';
 import { ModalEventListener, ModalEventType, ModalStatus } from '../../core/ui/typings';
 import { ServiceProps, withServices } from '../../core/withServices';
 import { Modal } from 'react-bootstrap';

@@ -18,7 +18,7 @@
 
 import React, { Component, ReactNode } from 'react';
 import { NominatimResult } from '../../../core/geo/NominatimResult';
-import { Logger } from '@abc-map/frontend-commons';
+import { Logger } from '@abc-map/shared';
 import Cls from './SearchResult.module.scss';
 
 const logger = Logger.get('SearchResult.tsx');

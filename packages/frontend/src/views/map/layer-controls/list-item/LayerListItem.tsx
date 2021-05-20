@@ -17,8 +17,8 @@
  */
 
 import React, { Component, ReactNode } from 'react';
-import { Logger } from '@abc-map/frontend-commons';
-import { BaseMetadata } from '@abc-map/shared-entities';
+import { Logger } from '@abc-map/shared';
+import { BaseMetadata } from '@abc-map/shared';
 import Cls from './LayerListItem.module.scss';
 
 const logger = Logger.get('LayerListItem.tsx', 'info');

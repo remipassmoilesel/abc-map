@@ -17,7 +17,7 @@
  */
 
 import { TestHelper } from '../../../helpers/TestHelper';
-import { FrontendRoutes } from '@abc-map/frontend-commons';
+import { FrontendRoutes } from '@abc-map/shared';
 import { DataStore } from '../../../helpers/DataStore';
 import { TopBar } from '../../../helpers/TopBar';
 
@@ -27,7 +27,7 @@ describe('Script module', function () {
   });
 
   it('User can execute sample script', () => {
-    cy.visit(FrontendRoutes.dataProcessing())
+    cy.visit(FrontendRoutes.dataProcessing().withoutOptionals())
       .get('[data-cy=scripts]')
       .click()
       .get('[data-cy=execute]')
@@ -44,7 +44,7 @@ const layerName = map.listLayers()[2].name;
 map.getFeaturesOfLayer(layerName).forEach((f, i) => f.set('e2e', i))
 map.getFeaturesOfLayer(layerName).forEach((f) => log(f.get('e2e')))
 `;
-    cy.visit(FrontendRoutes.dataProcessing())
+    cy.visit(FrontendRoutes.dataProcessing().withoutOptionals())
       .then(() => DataStore.importByName('Pays du monde'))
       .then(() => TopBar.dataProcessing())
       .get('[data-cy=scripts]')

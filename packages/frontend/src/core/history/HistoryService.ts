@@ -18,7 +18,7 @@
 
 import { HistoryKey } from './HistoryKey';
 import { Task } from './Task';
-import { Logger } from '@abc-map/frontend-commons';
+import { Logger } from '@abc-map/shared';
 import { UiActions } from '../store/ui/actions';
 import { MainStore, mainStore } from '../store/store';
 

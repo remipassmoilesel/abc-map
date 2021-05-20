@@ -19,7 +19,7 @@
 import React, { Component, ReactNode } from 'react';
 import { HistoryKey } from '../../../../core/history/HistoryKey';
 import { AddFeaturesTask } from '../../../../core/history/tasks/features/AddFeaturesTask';
-import { Logger } from '@abc-map/frontend-commons';
+import { Logger } from '@abc-map/shared';
 import StrokeWidthSelector from '../_common/stroke-width-selector/StrokeWidthSelector';
 import ColorSelector from '../_common/color-selector/ColorSelector';
 import FillPatternSelector from '../_common/fill-pattern-selector/FillPatternSelector';

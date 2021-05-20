@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FrontendRoutes } from '@abc-map/frontend-commons';
+import { FrontendRoutes } from '@abc-map/shared';
 import { TopBar } from '../../helpers/TopBar';
 import { TestHelper } from '../../helpers/TestHelper';
 
@@ -30,7 +30,7 @@ describe('Top bar', () => {
   });
 
   it('All links should work', () => {
-    cy.visit(FrontendRoutes.landing())
+    cy.visit(FrontendRoutes.landing().raw())
       // Map view
       .then(() => TopBar.map())
       .get('[data-cy=search-on-map')

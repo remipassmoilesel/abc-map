@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FrontendRoutes } from '@abc-map/frontend-commons';
+import { FrontendRoutes } from '@abc-map/shared';
 import { TestHelper } from '../../helpers/TestHelper';
 import { Download } from '../../helpers/Download';
 import { Toasts } from '../../helpers/Toasts';
@@ -28,7 +28,7 @@ describe('Data store', function () {
   });
 
   it('User can search then download artefact', () => {
-    cy.visit(FrontendRoutes.dataStore())
+    cy.visit(FrontendRoutes.dataStore().raw())
       .get('[data-cy=data-store-search]')
       .type('pays')
       .type('{enter}')
@@ -44,7 +44,7 @@ describe('Data store', function () {
   });
 
   it('User can search then add artefact to project', () => {
-    cy.visit(FrontendRoutes.dataStore())
+    cy.visit(FrontendRoutes.dataStore().raw())
       .get('[data-cy=data-store-search]')
       .type('pays')
       .type('{enter}')
@@ -65,7 +65,7 @@ describe('Data store', function () {
   });
 
   it('User can search then show license', () => {
-    cy.visit(FrontendRoutes.dataStore())
+    cy.visit(FrontendRoutes.dataStore().raw())
       .get('[data-cy=data-store-search]')
       .type('pays')
       .type('{enter}')

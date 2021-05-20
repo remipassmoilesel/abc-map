@@ -16,8 +16,8 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { LayerType, WmsMetadata } from '@abc-map/shared-entities';
-import { FrontendRoutes, ProjectHelper } from '@abc-map/frontend-commons';
+import { LayerType, WmsMetadata } from '@abc-map/shared';
+import { FrontendRoutes, ProjectHelper } from '@abc-map/shared';
 import { Toasts } from '../../helpers/Toasts';
 import { TestHelper } from '../../helpers/TestHelper';
 import { Download } from '../../helpers/Download';
@@ -42,7 +42,7 @@ describe('Project', function () {
     });
 
     it('can create new project', function () {
-      cy.visit(FrontendRoutes.map())
+      cy.visit(FrontendRoutes.map().raw())
         .get('[data-cy=new-project]')
         .click()
         .then(() => Toasts.assertText('Nouveau projet créé'))
@@ -57,7 +57,7 @@ describe('Project', function () {
     });
 
     it('can rename project', function () {
-      cy.visit(FrontendRoutes.map())
+      cy.visit(FrontendRoutes.map().raw())
         .get('[data-cy=rename-project]')
         .click()
         .get('[data-cy=modal-rename-input]')
@@ -72,7 +72,7 @@ describe('Project', function () {
     });
 
     it('can export project', function () {
-      cy.visit(FrontendRoutes.map())
+      cy.visit(FrontendRoutes.map().raw())
         .then(() => LayerControls.addWmsLayer())
         .get('[data-cy=export-project]')
         .click()
@@ -83,8 +83,9 @@ describe('Project', function () {
         .then(() => Download.fileAsBlob())
         .then((downloaded) => TestData.projectSample1().then((witness) => ({ downloaded, witness })))
         .should(async ({ downloaded, witness }) => {
-          const projectA = await ProjectHelper.extractManifest(downloaded);
-          const projectB = await ProjectHelper.extractManifest(witness);
+          const helper = ProjectHelper.forFrontend();
+          const projectA = await helper.extractManifest(downloaded);
+          const projectB = await helper.extractManifest(witness);
           expect(projectA.metadata.projection).deep.equals(projectB.metadata.projection);
           expect(projectA.metadata.version).equals(projectB.metadata.version);
           expect(projectA.layers).length(projectB.layers.length);
@@ -96,7 +97,7 @@ describe('Project', function () {
     });
 
     it('can import project', function () {
-      cy.visit(FrontendRoutes.map())
+      cy.visit(FrontendRoutes.map().raw())
         .get('[data-cy=import-project]')
         .click()
         .then(() => TestData.projectSample1())
@@ -121,7 +122,7 @@ describe('Project', function () {
     });
 
     it('can export project with credentials', function () {
-      cy.visit(FrontendRoutes.map())
+      cy.visit(FrontendRoutes.map().raw())
         .then(() => LayerControls.addWmsLayerWithCredentials())
         .get('[data-cy=export-project]')
         .click()
@@ -135,7 +136,7 @@ describe('Project', function () {
         .click()
         .then(() => Download.fileAsBlob())
         .should(async (downloaded) => {
-          const project = await ProjectHelper.extractManifest(downloaded);
+          const project = await ProjectHelper.forFrontend().extractManifest(downloaded);
 
           expect(project.layers[2].type).equals(LayerType.Wms);
           expect((project.layers[2].metadata as WmsMetadata).remoteUrl).not.equal(WmsConstants.AUTHENTICATED_URL);
@@ -149,7 +150,7 @@ describe('Project', function () {
     });
 
     it('can import project with credentials', function () {
-      cy.visit(FrontendRoutes.map())
+      cy.visit(FrontendRoutes.map().raw())
         .get('[data-cy=import-project]')
         .click()
         .then(() => TestData.projectSample2())
@@ -177,7 +178,7 @@ describe('Project', function () {
 
     // TODO: replace by unit test
     it('password modal do not keep password in state', function () {
-      cy.visit(FrontendRoutes.map())
+      cy.visit(FrontendRoutes.map().raw())
         .get('[data-cy=import-project]')
         .click()
         .then(() => TestData.projectSample2())
@@ -212,7 +213,7 @@ describe('Project', function () {
     });
 
     it('can store project online without credentials', function () {
-      cy.visit(FrontendRoutes.map())
+      cy.visit(FrontendRoutes.map().raw())
         .then(() => LayerControls.addWmsLayer())
         .get('[data-cy=save-project]')
         .click()
@@ -223,7 +224,7 @@ describe('Project', function () {
     });
 
     it('can store project online with credentials', function () {
-      cy.visit(FrontendRoutes.map())
+      cy.visit(FrontendRoutes.map().raw())
         // Create a project and store it online
         .then(() => LayerControls.addWmsLayerWithCredentials())
         .get('[data-cy=save-project]')
@@ -239,7 +240,7 @@ describe('Project', function () {
     });
 
     it('can load remote project', function () {
-      cy.visit(FrontendRoutes.map())
+      cy.visit(FrontendRoutes.map().raw())
         // Create a project and store it online
         .then(() => LayerControls.addWmsLayer())
         .get('[data-cy=save-project]')
@@ -269,7 +270,7 @@ describe('Project', function () {
     });
 
     it('can load remote remote project with credentials', function () {
-      cy.visit(FrontendRoutes.map())
+      cy.visit(FrontendRoutes.map().raw())
         // Create a project and store it online
         .then(() => LayerControls.addWmsLayerWithCredentials())
         .get('[data-cy=save-project]')
@@ -308,7 +309,7 @@ describe('Project', function () {
 
     it('can delete project', function () {
       const projectName = uuid();
-      cy.visit(FrontendRoutes.map())
+      cy.visit(FrontendRoutes.map().raw())
         // Create project
         .then(() => LayerControls.addWmsLayer())
         // Rename project

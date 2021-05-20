@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FeatureProperties, FillPatterns, StyleProperties } from '@abc-map/shared-entities';
+import { FeatureProperties, FillPatterns, StyleProperties } from '@abc-map/shared';
 import { Circle, LineString, Point, Polygon } from 'ol/geom';
 import { FeatureWrapper } from './FeatureWrapper';
 import { FeatureStyle } from '../style/FeatureStyle';
@@ -24,7 +24,7 @@ import { TestHelper } from '../../utils/TestHelper';
 import { Style } from 'ol/style';
 import Feature from 'ol/Feature';
 import Geometry from 'ol/geom/Geometry';
-import { PointIcons } from '@abc-map/shared-entities';
+import { PointIcons } from '@abc-map/shared';
 
 describe('FeatureWrapper', () => {
   it('create() should create and set id', () => {

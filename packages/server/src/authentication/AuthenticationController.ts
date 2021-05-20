@@ -32,8 +32,8 @@ import {
   PasswordLostRequest,
   ResetPasswordRequest,
   ConfirmationStatus,
-} from '@abc-map/shared-entities';
-import { Logger } from '../utils/Logger';
+} from '@abc-map/shared';
+import { Logger } from '@abc-map/shared';
 import { Authentication } from './Authentication';
 import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import { Config } from '../config/Config';

@@ -24,9 +24,10 @@ import {
   AbcArtefact,
   AbcLayout,
   AbcPredefinedLayer,
-  AbcProject,
+  AbcProjectManifest,
   AbcVectorLayer,
   AbcWmsLayer,
+  CompressedProject,
   CurrentVersion,
   DEFAULT_PROJECTION,
   FillPatterns,
@@ -34,12 +35,11 @@ import {
   LayoutFormats,
   ManifestName,
   PredefinedLayerModel,
-} from '@abc-map/shared-entities';
+  Zipper,
+} from '@abc-map/shared';
 import uuid from 'uuid-random';
 import { FeatureStyle } from '../geo/style/FeatureStyle';
-import { CompressedProject } from '../project/CompressedProject';
-import { Zipper } from '@abc-map/frontend-commons';
-import { PointIcons } from '@abc-map/shared-entities';
+import { PointIcons } from '@abc-map/shared';
 import { Coordinate } from 'ol/coordinate';
 import MapBrowserEvent from 'ol/MapBrowserEvent';
 import { Map } from 'ol';
@@ -56,7 +56,7 @@ export class TestHelper {
     return [this.samplePointFeature(), this.samplePointFeature(), this.samplePointFeature()];
   }
 
-  public static sampleProject(): AbcProject {
+  public static sampleProject(): AbcProjectManifest {
     return {
       metadata: {
         id: uuid(),
@@ -70,10 +70,10 @@ export class TestHelper {
     };
   }
 
-  public static async sampleCompressedProject(): Promise<CompressedProject> {
+  public static async sampleCompressedProject(): Promise<CompressedProject<Blob>> {
     const project = this.sampleProject();
     const metadata = project.metadata;
-    const zip = await Zipper.zipFiles([{ path: ManifestName, content: new Blob([JSON.stringify(project)]) }]);
+    const zip = await Zipper.forFrontend().zipFiles([{ path: ManifestName, content: new Blob([JSON.stringify(project)]) }]);
     return {
       metadata: metadata,
       project: zip,

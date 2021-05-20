@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { MapTool } from '@abc-map/frontend-commons';
+import { MapTool } from '@abc-map/shared';
 
 export class ToolSelector {
   public static enable(tool: MapTool): Cypress.Chainable<any> {

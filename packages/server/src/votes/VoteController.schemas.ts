@@ -1,5 +1,5 @@
 import { FastifySchema } from 'fastify/types/schema';
-import { VoteValue } from '@abc-map/shared-entities';
+import { VoteValue } from '@abc-map/shared';
 
 /**
  * Copyright © 2021 Rémi Pace.

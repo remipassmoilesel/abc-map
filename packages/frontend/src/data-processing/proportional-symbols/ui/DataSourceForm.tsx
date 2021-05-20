@@ -17,7 +17,7 @@
  */
 
 import React, { ChangeEvent, Component, ReactNode } from 'react';
-import { Logger } from '@abc-map/frontend-commons';
+import { Logger } from '@abc-map/shared';
 import DataSourceSelector from '../../../components/data-source-selector/DataSourceSelector';
 import { DataRow, DataSource, getFields } from '../../../core/data/data-source/DataSource';
 import DataTable from '../../../components/data-table/DataTable';

@@ -17,10 +17,10 @@
  */
 
 import React, { Component, ReactNode } from 'react';
-import { Logger } from '@abc-map/frontend-commons';
+import { Logger } from '@abc-map/shared';
 import { connect, ConnectedProps } from 'react-redux';
-import { ToolRegistry } from '../../../core/geo/tools/ToolRegistry';
-import { MapTool } from '@abc-map/frontend-commons';
+import { ToolRegistry } from '../../../core/tools/ToolRegistry';
+import { MapTool } from '@abc-map/shared';
 import { MainState } from '../../../core/store/reducer';
 import SelectionPanel from './selection/SelectionToolPanel';
 import LineStringPanel from './line-string/LineStringToolPanel';

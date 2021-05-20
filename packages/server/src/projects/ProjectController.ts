@@ -18,9 +18,8 @@
 
 import { Controller } from '../server/Controller';
 import { Services } from '../services/services';
-import { AbcProjectMetadata, AbcUser } from '@abc-map/shared-entities';
+import { AbcProjectMetadata, AbcUser, CompressedProject, NodeBinary } from '@abc-map/shared';
 import { Authentication } from '../authentication/Authentication';
-import { CompressedProject } from './CompressedProject';
 import { AuthorizationService } from '../authorization/AuthorizationService';
 import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import fastifyMultipart, { MultipartValue } from 'fastify-multipart';
@@ -67,7 +66,7 @@ export class ProjectController extends Controller {
 
     const data = await req.file();
 
-    const metadataField = (data.fields['metadata'] as unknown) as MultipartValue<string>;
+    const metadataField = data.fields['metadata'] as unknown as MultipartValue<string>;
     if (!metadataField.value) {
       reply.badRequest(`Invalid form data`);
       return;
@@ -84,7 +83,7 @@ export class ProjectController extends Controller {
       return;
     }
 
-    const project: CompressedProject = { metadata, project: data.file };
+    const project: CompressedProject<NodeBinary> = { metadata, project: data.file };
     const result = await this.services.project.save(user.id, project).then(() => ({ status: 'saved' }));
 
     reply.status(200).send(result);

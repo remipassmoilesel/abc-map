@@ -18,7 +18,7 @@
 
 import { IconProcessor, mountSvg } from './IconProcessor';
 import { PointIcon } from './PointIcons';
-import { PointIcons } from '@abc-map/shared-entities';
+import { PointIcons } from '@abc-map/shared';
 
 // WARNING
 //

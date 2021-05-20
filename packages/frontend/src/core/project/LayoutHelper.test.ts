@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { LayoutFormats } from '@abc-map/shared-entities';
+import { LayoutFormats } from '@abc-map/shared';
 import { LayoutHelper } from './LayoutHelper';
 
 describe('LayoutHelper', () => {

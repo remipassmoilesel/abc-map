@@ -17,7 +17,7 @@
  */
 
 import React, { ChangeEvent, Component, ReactNode } from 'react';
-import { Logger } from '@abc-map/frontend-commons';
+import { Logger } from '@abc-map/shared';
 import { ServiceProps, withServices } from '../../core/withServices';
 import { LayerChangeHandler } from '../../core/geo/map/MapWrapper';
 import { LayerWrapper, VectorLayerWrapper } from '../../core/geo/layers/LayerWrapper';

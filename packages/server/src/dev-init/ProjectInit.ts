@@ -17,13 +17,11 @@
  */
 
 import { Services } from '../services/services';
-import { AbcProject, AbcUser, ManifestName } from '@abc-map/shared-entities';
+import { AbcUser, Logger, ProjectHelper } from '@abc-map/shared';
 import { Resources } from '../utils/Resources';
 import { promises as fs } from 'fs';
-import { CompressedProject } from '../projects/CompressedProject';
-import { Zipper } from '../utils/Zipper';
 import * as uuid from 'uuid-random';
-import { Logger } from '../utils/Logger';
+import { CompressedProject, NodeBinary } from '@abc-map/shared/build/project/CompressedProject';
 
 const logger = Logger.get('ProjectInit');
 
@@ -50,7 +48,7 @@ export class ProjectInit {
         continue;
       }
 
-      const project: CompressedProject = {
+      const project: CompressedProject<NodeBinary> = {
         ...sampleProject,
         metadata: {
           ...sampleProject.metadata,
@@ -63,13 +61,7 @@ export class ProjectInit {
 
   private async loadSampleProject(): Promise<CompressedProject> {
     const project = await fs.readFile(this.resources.getSampleProject());
-    const files = await Zipper.unzip(project);
-    const manifest = files.find((f) => f.path.endsWith(ManifestName));
-    if (!manifest) {
-      throw new Error(`Invalid project: ${this.resources.getSampleProject()}`);
-    }
-
-    const metadata = (JSON.parse(manifest.content.toString('utf-8')) as AbcProject).metadata;
-    return { metadata, project };
+    const manifest = await ProjectHelper.forBackend().extractManifest(project);
+    return { metadata: manifest.metadata, project };
   }
 }
