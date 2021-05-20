@@ -17,17 +17,17 @@
  */
 
 import { AxiosInstance } from 'axios';
-import { AbcArtefact } from '@abc-map/shared-entities';
+import { AbcArtefact } from '@abc-map/shared';
 import { DatastoreRoutes as Api } from '../http/ApiRoutes';
-import { Logger } from '@abc-map/frontend-commons';
+import { Logger } from '@abc-map/shared';
 import { DataReader } from './readers/DataReader';
-import { AbcFile } from '@abc-map/frontend-commons';
+import { AbcFile } from '@abc-map/shared';
 import { LayerWrapper } from '../geo/layers/LayerWrapper';
 import { GeoService } from '../geo/GeoService';
 import { getArea } from 'ol/extent';
 import { DateTime } from 'luxon';
-import { BlobIO } from '@abc-map/frontend-commons';
-import { PaginatedResponse } from '@abc-map/shared-entities';
+import { BlobIO } from '@abc-map/shared';
+import { PaginatedResponse } from '@abc-map/shared';
 
 const logger = Logger.get('DataService.ts');
 
@@ -52,7 +52,7 @@ export class DataStoreService {
     return this.apiClient.get(Api.search(), { params }).then((res) => res.data);
   }
 
-  public downloadFilesFrom(artefact: AbcArtefact): Promise<AbcFile[]> {
+  public downloadFilesFrom(artefact: AbcArtefact): Promise<AbcFile<Blob>[]> {
     const files = artefact.files.map((file) => this.downloadClient.get(Api.download(file)).then((res) => ({ path: file, content: res.data })));
     return Promise.all(files);
   }
@@ -66,7 +66,7 @@ export class DataStoreService {
     return this.importFiles(files);
   }
 
-  public async importFiles(files: AbcFile[]): Promise<ImportResult> {
+  public async importFiles(files: AbcFile<Blob>[]): Promise<ImportResult> {
     const map = this.geo.getMainMap();
     const layers = await this.readerFactory().read(files, map.getProjection());
     if (!layers.length) {

@@ -18,7 +18,7 @@
 
 import 'source-map-support/register';
 import { ConfigLoader } from './config/ConfigLoader';
-import { Logger } from './utils/Logger';
+import { Logger } from '@abc-map/shared';
 
 const logger = Logger.get('main.test.ts');
 

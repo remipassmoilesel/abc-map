@@ -20,7 +20,7 @@ import { TestHelper } from '../../helpers/TestHelper';
 import { Registration } from '../../helpers/Registration';
 import { Authentication } from '../../helpers/Authentication';
 import { Toasts } from '../../helpers/Toasts';
-import { FrontendRoutes } from '@abc-map/frontend-commons';
+import { FrontendRoutes } from '@abc-map/shared';
 
 describe('Authentication', function () {
   beforeEach(() => {
@@ -60,7 +60,7 @@ describe('Authentication', function () {
       const email = Registration.newEmail();
       Registration.newUser(email)
         .then(() => Registration.enableAccount(email))
-        .visit(FrontendRoutes.landing())
+        .visit(FrontendRoutes.landing().raw())
         .get('[data-cy=open-login]')
         .click()
         .get('input[data-cy=email]')

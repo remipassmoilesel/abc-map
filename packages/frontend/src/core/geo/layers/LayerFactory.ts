@@ -22,7 +22,7 @@ import uuid from 'uuid-random';
 import VectorSource from 'ol/source/Vector';
 import { tileLoadAuthenticated } from '../map/tileLoadAuthenticated';
 import { GeoJSON } from 'ol/format';
-import { AbcLayer, LayerType, PredefinedLayerModel, PredefinedMetadata, VectorMetadata, WmsDefinition, WmsMetadata } from '@abc-map/shared-entities';
+import { AbcLayer, LayerType, PredefinedLayerModel, PredefinedMetadata, VectorMetadata, WmsDefinition, WmsMetadata } from '@abc-map/shared';
 import { LayerWrapper, PredefinedLayerWrapper, VectorLayerWrapper, WmsLayerWrapper } from './LayerWrapper';
 import VectorImageLayer from 'ol/layer/VectorImage';
 import Geometry from 'ol/geom/Geometry';

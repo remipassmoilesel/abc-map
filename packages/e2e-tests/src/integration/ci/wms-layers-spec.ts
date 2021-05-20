@@ -16,8 +16,8 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { LayerType } from '@abc-map/shared-entities';
-import { FrontendRoutes } from '@abc-map/frontend-commons';
+import { LayerType } from '@abc-map/shared';
+import { FrontendRoutes } from '@abc-map/shared';
 import { TestHelper } from '../../helpers/TestHelper';
 import { MainMap } from '../../helpers/MainMap';
 import { WmsConstants } from '../../helpers/WmsConstants';
@@ -28,7 +28,7 @@ describe('Wms layers', function () {
   });
 
   it('User can add WMS layers without authentication', () => {
-    cy.visit(FrontendRoutes.map())
+    cy.visit(FrontendRoutes.map().raw())
       // Open add layer dialog
       .get('[data-cy=add-layer]')
       .click()
@@ -66,7 +66,7 @@ describe('Wms layers', function () {
   });
 
   it('User can add WMS layers with authentication', () => {
-    cy.visit(FrontendRoutes.map())
+    cy.visit(FrontendRoutes.map().raw())
       // Open add layer dialog
       .get('[data-cy=add-layer]')
       .click()

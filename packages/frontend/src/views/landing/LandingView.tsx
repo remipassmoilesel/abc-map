@@ -17,10 +17,10 @@
  */
 
 import React, { Component, ReactNode } from 'react';
-import { Logger } from '@abc-map/frontend-commons';
+import { Logger } from '@abc-map/shared';
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
-import { FrontendRoutes } from '@abc-map/frontend-commons';
-import { AbcVoteAggregation } from '@abc-map/shared-entities';
+import { FrontendRoutes } from '@abc-map/shared';
+import { AbcVoteAggregation } from '@abc-map/shared';
 import { ServiceProps, withServices } from '../../core/withServices';
 import { DateTime } from 'luxon';
 import Illustration1Icon from '../../assets/illustrations/illustration-1.svg';
@@ -64,19 +64,21 @@ class LandingView extends Component<Props, State> {
             </p>
             <ul>
               <li>
-                Vous pouvez tout de suite vous lancer sur <Link to={FrontendRoutes.map()}>la page Carte</Link> !
+                Vous pouvez tout de suite vous lancer sur <Link to={FrontendRoutes.map().raw()}>la page Carte</Link> !
               </li>
               <li>
-                ... mais vous feriez bien de prendre quelques minutes pour consulter <Link to={FrontendRoutes.documentation()}>la page Documentation</Link>
+                ... mais vous feriez bien de prendre quelques minutes pour consulter{' '}
+                <Link to={FrontendRoutes.documentation().raw()}>la page Documentation</Link>
               </li>
               <li>
-                Importez des données de votre ordinateur ou <Link to={FrontendRoutes.dataStore()}>sur la page Catalogue de données</Link>
+                Importez des données de votre ordinateur ou <Link to={FrontendRoutes.dataStore().raw()}>sur la page Catalogue de données</Link>
               </li>
               <li>
-                Si vous le souhaitez, appliquez un traitement de données sur <Link to={FrontendRoutes.dataProcessing('')}>la page Traitement de données</Link>
+                Si vous le souhaitez, appliquez un traitement de données sur{' '}
+                <Link to={FrontendRoutes.dataProcessing().withoutOptionals()}>la page Traitement de données</Link>
               </li>
               <li>
-                Mettez en page et exportez votre carte sur <Link to={FrontendRoutes.layout()}>la page Mise en page</Link>
+                Mettez en page et exportez votre carte sur <Link to={FrontendRoutes.layout().raw()}>la page Mise en page</Link>
               </li>
             </ul>
 

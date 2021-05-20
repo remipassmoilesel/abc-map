@@ -19,7 +19,7 @@
 import { Config } from '../config/Config';
 import { UserDao } from './UserDao';
 import { MongodbClient } from '../mongodb/MongodbClient';
-import { AbcUser, AnonymousUser } from '@abc-map/shared-entities';
+import { AbcUser, AnonymousUser } from '@abc-map/shared';
 import { UserMapper } from './UserMapper';
 import { PasswordHasher } from '../authentication/PasswordHasher';
 import { AbstractService } from '../services/AbstractService';

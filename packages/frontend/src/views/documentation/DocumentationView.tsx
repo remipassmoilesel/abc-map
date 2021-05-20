@@ -17,7 +17,7 @@
  */
 
 import React, { Component, ReactNode } from 'react';
-import { Logger } from '@abc-map/frontend-commons';
+import { Logger } from '@abc-map/shared';
 import { content as doc } from '@abc-map/user-documentation';
 import { ServiceProps, withServices } from '../../core/withServices';
 import Cls from './DocumentationView.module.scss';

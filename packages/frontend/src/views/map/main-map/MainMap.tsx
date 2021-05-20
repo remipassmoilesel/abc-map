@@ -17,9 +17,9 @@
  */
 
 import React, { Component, DragEvent, ReactNode } from 'react';
-import { Logger } from '@abc-map/frontend-commons';
+import { Logger } from '@abc-map/shared';
 import { MapWrapper } from '../../../core/geo/map/MapWrapper';
-import { AbcFile } from '@abc-map/frontend-commons';
+import { AbcFile } from '@abc-map/shared';
 import { HistoryKey } from '../../../core/history/HistoryKey';
 import { AddLayersTask } from '../../../core/history/tasks/layers/AddLayersTask';
 import { ServiceProps, withServices } from '../../../core/withServices';
@@ -98,7 +98,7 @@ export class MainMap extends Component<Props, State> {
     const { dataStore, history, toasts } = this.props.services;
     ev.preventDefault();
 
-    const files: AbcFile[] = Array.from(ev.dataTransfer.files).map((f) => ({ path: f.name, content: f }));
+    const files: AbcFile<Blob>[] = Array.from(ev.dataTransfer.files).map((f) => ({ path: f.name, content: f }));
     if (!files.length) {
       toasts.info('Vous devez sélectionner un ou plusieurs fichiers');
       return;

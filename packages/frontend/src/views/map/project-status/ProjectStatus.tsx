@@ -17,9 +17,9 @@
  */
 
 import React, { Component, ReactNode } from 'react';
-import { AbcProjectMetadata } from '@abc-map/shared-entities';
+import { AbcProjectMetadata } from '@abc-map/shared';
 import { ModalStatus } from '../../../core/ui/typings';
-import { Logger } from '@abc-map/frontend-commons';
+import { Logger } from '@abc-map/shared';
 import { ServiceProps, withServices } from '../../../core/withServices';
 
 const logger = Logger.get('ProjectStatus.tsx');

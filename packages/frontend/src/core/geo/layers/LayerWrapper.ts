@@ -17,7 +17,7 @@
  */
 
 import TileLayer from 'ol/layer/Tile';
-import { Logger } from '@abc-map/frontend-commons';
+import { Logger } from '@abc-map/shared';
 import {
   AbcLayer,
   AbcProjection,
@@ -31,7 +31,7 @@ import {
   VectorMetadata,
   WmsLayerProperties,
   WmsMetadata,
-} from '@abc-map/shared-entities';
+} from '@abc-map/shared';
 import uuid from 'uuid-random';
 import { GeoJSON } from 'ol/format';
 import BaseLayer from 'ol/layer/Base';

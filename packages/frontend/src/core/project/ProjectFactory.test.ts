@@ -17,7 +17,7 @@
  */
 
 import { ProjectFactory } from './ProjectFactory';
-import { CurrentVersion, DEFAULT_PROJECTION } from '@abc-map/shared-entities';
+import { CurrentVersion, DEFAULT_PROJECTION } from '@abc-map/shared';
 
 describe('ProjectFactory', () => {
   it('newProjectMetadata()', () => {

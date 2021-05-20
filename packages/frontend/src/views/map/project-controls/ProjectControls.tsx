@@ -17,8 +17,8 @@
  */
 
 import React, { Component, ReactNode } from 'react';
-import { UserStatus } from '@abc-map/shared-entities';
-import { Logger } from '@abc-map/frontend-commons';
+import { UserStatus } from '@abc-map/shared';
+import { Logger } from '@abc-map/shared';
 import { Constants } from '../../../core/Constants';
 import { connect, ConnectedProps } from 'react-redux';
 import { MainState } from '../../../core/store/reducer';

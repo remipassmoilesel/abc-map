@@ -17,7 +17,7 @@
  */
 
 import { Services } from '../services/services';
-import { AnonymousUser } from '@abc-map/shared-entities';
+import { AnonymousUser } from '@abc-map/shared';
 import { TestHelper } from './TestHelper';
 import { IncomingHttpHeaders } from 'http';
 import * as uuid from 'uuid-random';

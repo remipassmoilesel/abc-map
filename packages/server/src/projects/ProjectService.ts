@@ -19,10 +19,9 @@
 import { Config } from '../config/Config';
 import { ProjectDao } from './ProjectDao';
 import { MongodbClient } from '../mongodb/MongodbClient';
-import { AbcProjectMetadata } from '@abc-map/shared-entities';
+import { AbcProjectMetadata, CompressedProject, NodeBinary } from '@abc-map/shared';
 import { ProjectMapper } from './ProjectMapper';
 import { AbstractService } from '../services/AbstractService';
-import { CompressedProject } from './CompressedProject';
 
 export class ProjectService extends AbstractService {
   public static create(config: Config, client: MongodbClient): ProjectService {
@@ -33,7 +32,7 @@ export class ProjectService extends AbstractService {
     super();
   }
 
-  public async save(ownerId: string, project: CompressedProject): Promise<void> {
+  public async save(ownerId: string, project: CompressedProject<NodeBinary>): Promise<void> {
     if (!ownerId || typeof ownerId !== 'string') {
       throw new Error('Owner id is mandatory');
     }
@@ -42,7 +41,7 @@ export class ProjectService extends AbstractService {
     return Promise.all([this.dao.saveMetadata(doc), this.dao.saveCompressedFile(project.metadata.id, project.project)]).then(() => undefined);
   }
 
-  public async findById(id: string): Promise<CompressedProject | undefined> {
+  public async findById(id: string): Promise<CompressedProject<NodeBinary> | undefined> {
     const metadata = await this.dao.findMetadataById(id);
     if (!metadata) {
       return;

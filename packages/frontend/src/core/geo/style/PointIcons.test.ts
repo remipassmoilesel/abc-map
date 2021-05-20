@@ -18,7 +18,7 @@
 
 import { getAllIcons, safeGetIcon } from './PointIcons';
 import { mountSvg } from './IconProcessor';
-import { PointIcons } from '@abc-map/shared-entities';
+import { PointIcons } from '@abc-map/shared';
 
 describe('PointIcons', () => {
   it('safeGetIcon()', () => {

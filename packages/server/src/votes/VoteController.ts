@@ -18,7 +18,7 @@
 
 import { Controller } from '../server/Controller';
 import { Services } from '../services/services';
-import { AbcVote } from '@abc-map/shared-entities';
+import { AbcVote } from '@abc-map/shared';
 import { DateTime } from 'luxon';
 import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import { StatParams, VoteSchema } from './VoteController.schemas';

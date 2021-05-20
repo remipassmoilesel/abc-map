@@ -17,7 +17,7 @@
  */
 
 import { TestHelper } from '../../../helpers/TestHelper';
-import { FrontendRoutes } from '@abc-map/frontend-commons';
+import { FrontendRoutes } from '@abc-map/shared';
 import { DataStore } from '../../../helpers/DataStore';
 import { TopBar } from '../../../helpers/TopBar';
 import { TestData } from '../../../test-data/TestData';
@@ -30,7 +30,7 @@ describe('Proportional symbols', function () {
   });
 
   it('User can create proportional symbols', () => {
-    cy.visit(FrontendRoutes.dataProcessing())
+    cy.visit(FrontendRoutes.dataProcessing().withoutOptionals())
       // Import layer
       .then(() => DataStore.importByName('Pays du monde'))
       .then(() => TopBar.dataProcessing())

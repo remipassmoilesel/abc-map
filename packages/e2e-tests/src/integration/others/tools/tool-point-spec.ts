@@ -16,13 +16,13 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { StyleProperties } from '@abc-map/shared-entities';
-import { FrontendRoutes, MapTool } from '@abc-map/frontend-commons';
+import { StyleProperties } from '@abc-map/shared';
+import { FrontendRoutes, MapTool } from '@abc-map/shared';
 import { TestHelper } from '../../../helpers/TestHelper';
 import { ToolSelector } from '../../../helpers/ToolSelector';
 import { Draw } from '../../../helpers/Draw';
 import { MainMap } from '../../../helpers/MainMap';
-import { PointIcons } from '@abc-map/shared-entities';
+import { PointIcons } from '@abc-map/shared';
 
 describe('Tool Point', function () {
   beforeEach(() => {
@@ -30,7 +30,7 @@ describe('Tool Point', function () {
   });
 
   it('user can draw', function () {
-    cy.visit(FrontendRoutes.map())
+    cy.visit(FrontendRoutes.map().raw())
       .then(() => MainMap.getComponent())
       .then(() => ToolSelector.enable(MapTool.Point))
       .then(() => Draw.click(100, 100))
@@ -55,7 +55,7 @@ describe('Tool Point', function () {
   });
 
   it('user can move', function () {
-    cy.visit(FrontendRoutes.map())
+    cy.visit(FrontendRoutes.map().raw())
       .then(() => MainMap.getComponent())
       .then(() => ToolSelector.enable(MapTool.Point))
       // Create point

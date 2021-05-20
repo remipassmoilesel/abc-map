@@ -19,7 +19,7 @@
 import React, { Component, ReactNode } from 'react';
 import { Modal } from 'react-bootstrap';
 import * as Bowser from 'bowser';
-import { Logger } from '@abc-map/frontend-commons';
+import { Logger } from '@abc-map/shared';
 import Cls from './DeviceWarningModal.module.scss';
 
 const logger = Logger.get('DeviceWarningModal.tsx');

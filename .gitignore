@@ -2,3 +2,6 @@
 *.log
 notes/
 node_modules/
+
+.yarn-cache
+.cypress-cache

@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FrontendRoutes } from '@abc-map/frontend-commons';
+import { FrontendRoutes } from '@abc-map/shared';
 import { TestHelper } from '../../helpers/TestHelper';
 import { LayoutPreview } from '../../helpers/LayoutPreview';
 import { LayoutList } from '../../helpers/LayoutList';
@@ -31,7 +31,7 @@ describe('Layout', function () {
     });
 
     it('on first view, see no layout and can create one with center button', function () {
-      cy.visit(FrontendRoutes.layout())
+      cy.visit(FrontendRoutes.layout().raw())
         .get('[data-cy=layout-list] [data-cy=no-layout]')
         .should('exist')
         .then(() => LayoutList.getNames())
@@ -50,7 +50,7 @@ describe('Layout', function () {
     });
 
     it('can create layout, undo and redo', function () {
-      cy.visit(FrontendRoutes.layout())
+      cy.visit(FrontendRoutes.layout().raw())
         .get('[data-cy=layout-controls] [data-cy=new-layout]')
         .click()
         .then(() => LayoutList.getNames())
@@ -68,7 +68,7 @@ describe('Layout', function () {
     });
 
     it('can change layout order, undo and redo', function () {
-      cy.visit(FrontendRoutes.layout())
+      cy.visit(FrontendRoutes.layout().raw())
         .get('[data-cy=layout-controls] [data-cy=new-layout]')
         .click()
         .click()
@@ -89,7 +89,7 @@ describe('Layout', function () {
     });
 
     it('can delete all layouts, undo and redo', function () {
-      cy.visit(FrontendRoutes.layout())
+      cy.visit(FrontendRoutes.layout().raw())
         .get('[data-cy=layout-controls] [data-cy=new-layout]')
         .click()
         .click()
@@ -106,7 +106,7 @@ describe('Layout', function () {
     });
 
     it('can export as PDF', function () {
-      cy.visit(FrontendRoutes.layout())
+      cy.visit(FrontendRoutes.layout().raw())
         .get('[data-cy=layout-controls] [data-cy=new-layout]')
         .click()
         .click()
@@ -122,7 +122,7 @@ describe('Layout', function () {
     });
 
     it('can export as PNG', function () {
-      cy.visit(FrontendRoutes.layout())
+      cy.visit(FrontendRoutes.layout().raw())
         .get('[data-cy=layout-controls] [data-cy=new-layout]')
         .click()
         .click()

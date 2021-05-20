@@ -17,12 +17,12 @@
  */
 
 import { Map } from 'ol';
-import { LayerProperties, AbcProjection, VectorMetadata } from '@abc-map/shared-entities';
+import { LayerProperties, AbcProjection, VectorMetadata } from '@abc-map/shared';
 import * as _ from 'lodash';
 import { ResizeObserverFactory } from '../../utils/ResizeObserverFactory';
 import BaseEvent from 'ol/events/Event';
-import { Logger } from '@abc-map/frontend-commons';
-import { AbstractTool } from '../tools/AbstractTool';
+import { Logger } from '@abc-map/shared';
+import { AbstractTool } from '../../tools/AbstractTool';
 import TileLayer from 'ol/layer/Tile';
 import { FeatureWrapper } from '../features/FeatureWrapper';
 import { LayerFactory } from '../layers/LayerFactory';

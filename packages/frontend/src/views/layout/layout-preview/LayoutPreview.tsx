@@ -17,8 +17,8 @@
  */
 
 import React, { Component, ReactNode } from 'react';
-import { getAbcWindow, Logger } from '@abc-map/frontend-commons';
-import { AbcLayout } from '@abc-map/shared-entities';
+import { getAbcWindow, Logger } from '@abc-map/shared';
+import { AbcLayout } from '@abc-map/shared';
 import { LayoutHelper } from '../../../core/project/LayoutHelper';
 import View from 'ol/View';
 import { MapWrapper } from '../../../core/geo/map/MapWrapper';

@@ -16,12 +16,12 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FrontendRoutes } from '@abc-map/frontend-commons';
+import { FrontendRoutes } from '@abc-map/shared';
 
 describe('Display', function () {
   it('Too small display should warn', function () {
     cy.viewport(500, 500)
-      .visit(FrontendRoutes.map())
+      .visit(FrontendRoutes.map().raw())
       .get('[data-cy=device-warning]')
       .should('exist')
       .get('[data-cy=device-warning-confirm]')
@@ -32,7 +32,7 @@ describe('Display', function () {
 
   it('Correct display should warn', function () {
     cy.viewport(1980, 1080)
-      .visit(FrontendRoutes.map())
+      .visit(FrontendRoutes.map().raw())
       .wait(1000) // We must wait here in order to let appear modal
       .get('[data-cy=device-warning]')
       .should('not.exist');

@@ -20,14 +20,14 @@ import { logger, ProjectService } from './ProjectService';
 import { GeoService } from '../geo/GeoService';
 import { ProjectFactory } from './ProjectFactory';
 import { ProjectActions } from '../store/project/actions';
-import { AbcLayer, AbcProject, AbcWmsLayer } from '@abc-map/shared-entities';
+import { AbcLayer, AbcProjectManifest, AbcWmsLayer } from '@abc-map/shared';
 import { TestHelper } from '../utils/TestHelper';
 import { MapFactory } from '../geo/map/MapFactory';
 import { MainStore, storeFactory } from '../store/store';
 import { MapWrapper } from '../geo/map/MapWrapper';
 import * as sinon from 'sinon';
 import { SinonStubbedInstance } from 'sinon';
-import { ProjectHelper } from '@abc-map/frontend-commons';
+import { ProjectHelper } from '@abc-map/shared';
 
 logger.disable();
 
@@ -39,14 +39,14 @@ describe('ProjectService', function () {
   beforeEach(() => {
     store = storeFactory();
     geoMock = sinon.createStubInstance(GeoService);
-    projectService = new ProjectService({} as any, {} as any, store, (geoMock as unknown) as GeoService);
+    projectService = new ProjectService({} as any, {} as any, store, geoMock as unknown as GeoService);
   });
 
   describe('newProject()', () => {
     it('newProject() should reset main map', async function () {
       // Prepare
       const mapMock = sinon.createStubInstance(MapWrapper);
-      geoMock.getMainMap.returns((mapMock as unknown) as MapWrapper);
+      geoMock.getMainMap.returns(mapMock as unknown as MapWrapper);
 
       // Act
       projectService.newProject();
@@ -94,7 +94,7 @@ describe('ProjectService', function () {
       // Assert
       expect(exported.metadata).toEqual(metadata);
 
-      const manifest: AbcProject = await ProjectHelper.extractManifest(exported.project);
+      const manifest: AbcProjectManifest = await ProjectHelper.forFrontend().extractManifest(exported.project);
       expect(manifest.metadata).toEqual(metadata);
       expect(manifest.layouts).toEqual(layouts);
       expect(manifest.layers).toEqual(layers);
@@ -135,7 +135,7 @@ describe('ProjectService', function () {
       expect(exported.metadata.projection).toEqual(metadata.projection);
       expect(exported.metadata.containsCredentials).toEqual(true);
 
-      const manifest: AbcProject = await ProjectHelper.extractManifest(exported.project);
+      const manifest: AbcProjectManifest = await ProjectHelper.forFrontend().extractManifest(exported.project);
       expect(manifest.metadata.id).toEqual(metadata.id);
       expect(manifest.metadata.name).toEqual(metadata.name);
       expect(manifest.metadata.projection).toEqual(metadata.projection);

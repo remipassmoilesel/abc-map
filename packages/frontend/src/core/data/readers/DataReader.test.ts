@@ -17,9 +17,9 @@
  */
 
 import { DataReader } from './DataReader';
-import { TestData } from '../../test-data/TestData';
-import { DEFAULT_PROJECTION } from '@abc-map/shared-entities';
-import { AbcFile, Zipper } from '@abc-map/frontend-commons';
+import { TestData } from '../../../assets/test-data/TestData';
+import { DEFAULT_PROJECTION, Zipper } from '@abc-map/shared';
+import { AbcFile } from '@abc-map/shared';
 import VectorImageLayer from 'ol/layer/VectorImage';
 import { VectorLayerWrapper } from '../../geo/layers/LayerWrapper';
 
@@ -34,7 +34,7 @@ describe('DataReader', function () {
 
   describe('read()', function () {
     it('Unknown format should not fail', async () => {
-      const files: AbcFile[] = [
+      const files: AbcFile<Blob>[] = [
         {
           path: 'test.xyzert',
           content: new Blob(),
@@ -48,7 +48,7 @@ describe('DataReader', function () {
 
     it('should read multiple files with multiple formats', async function () {
       const content = await testData.getSampleArchive();
-      const files: AbcFile[] = [
+      const files: AbcFile<Blob>[] = [
         {
           path: 'test.zip',
           content,
@@ -75,7 +75,7 @@ describe('DataReader', function () {
   describe('GPX', () => {
     it('should read', async () => {
       const content = await testData.getSampleGpx();
-      const files: AbcFile[] = [
+      const files: AbcFile<Blob>[] = [
         {
           path: 'test.gpx',
           content,
@@ -99,7 +99,7 @@ describe('DataReader', function () {
   describe('KML', () => {
     it('should read', async () => {
       const content = await testData.getSampleKml();
-      const files: AbcFile[] = [
+      const files: AbcFile<Blob>[] = [
         {
           path: 'test.kml',
           content,
@@ -123,7 +123,7 @@ describe('DataReader', function () {
   describe('GeoJSON', () => {
     it('should read', async () => {
       const content = await testData.getSampleGeojson();
-      const files: AbcFile[] = [
+      const files: AbcFile<Blob>[] = [
         {
           path: 'test.geojson',
           content,
@@ -147,7 +147,7 @@ describe('DataReader', function () {
   describe('Shapefile', () => {
     it('should read zipped', async () => {
       const content = await testData.getSampleShapefile();
-      const files: AbcFile[] = [
+      const files: AbcFile<Blob>[] = [
         {
           path: 'test.zip',
           content,
@@ -169,7 +169,7 @@ describe('DataReader', function () {
 
     it('should read unzipped', async () => {
       const content = await testData.getSampleShapefile();
-      const files = await Zipper.unzip(content);
+      const files = await Zipper.forFrontend().unzip(content);
 
       const layer = await reader.read(files, projection);
       expect(layer).toBeInstanceOf(Array);

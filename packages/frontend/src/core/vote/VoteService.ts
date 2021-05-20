@@ -16,10 +16,10 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Logger } from '@abc-map/frontend-commons';
+import { Logger } from '@abc-map/shared';
 import { AxiosInstance } from 'axios';
 import { VoteRoutes as Api } from '../http/ApiRoutes';
-import { AbcVote, AbcVoteAggregation, VoteValue } from '@abc-map/shared-entities';
+import { AbcVote, AbcVoteAggregation, VoteValue } from '@abc-map/shared';
 import { DateTime } from 'luxon';
 
 export const logger = Logger.get('ProjectService.ts', 'info');

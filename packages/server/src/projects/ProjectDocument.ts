@@ -17,7 +17,7 @@
  */
 
 import { MongodbDocument } from '../mongodb/MongodbDocument';
-import { AbcProjection } from '@abc-map/shared-entities';
+import { AbcProjection } from '@abc-map/shared';
 
 export interface ProjectDocument extends MongodbDocument {
   ownerId: string;

@@ -22,11 +22,11 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { getServices } from './core/Services';
 import { E2eMapWrapper } from './core/geo/map/E2eMapWrapper';
-import { getAbcWindow, Logger } from '@abc-map/frontend-commons';
-import { UserStatus } from '@abc-map/shared-entities';
+import { getAbcWindow, Logger } from '@abc-map/shared';
+import { UserStatus } from '@abc-map/shared';
 import { mainStore } from './core/store/store';
 import { AxiosError } from 'axios';
-import { HttpError } from './core/utils/HttpError';
+import { HttpError } from './core/http/HttpError';
 import './index.scss';
 import { BUILD_INFO } from './build-version';
 

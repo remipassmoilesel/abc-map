@@ -17,8 +17,8 @@
  */
 
 import React, { Component, ReactNode } from 'react';
-import { Logger } from '@abc-map/frontend-commons';
-import { AbcLayout } from '@abc-map/shared-entities';
+import { Logger } from '@abc-map/shared';
+import { AbcLayout } from '@abc-map/shared';
 import Cls from './LayoutList.module.scss';
 import LayoutListItem from './LayoutListItem';
 

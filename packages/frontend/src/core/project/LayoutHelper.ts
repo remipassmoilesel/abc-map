@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcLayout, LayoutFormat } from '@abc-map/shared-entities';
+import { AbcLayout, LayoutFormat } from '@abc-map/shared';
 
 export interface Dimension {
   width: number;

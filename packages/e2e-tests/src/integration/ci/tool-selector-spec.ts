@@ -17,7 +17,7 @@
  */
 
 import { ToolSelector } from '../../helpers/ToolSelector';
-import { FrontendRoutes, MapTool } from '@abc-map/frontend-commons';
+import { FrontendRoutes, MapTool } from '@abc-map/shared';
 import { TestHelper } from '../../helpers/TestHelper';
 
 describe('ToolSelector', function () {
@@ -26,7 +26,7 @@ describe('ToolSelector', function () {
   });
 
   it('selector should change current tool', () => {
-    cy.visit(FrontendRoutes.map());
+    cy.visit(FrontendRoutes.map().raw());
 
     for (const tool in MapTool) {
       cy.then(() => ToolSelector.enable(tool as MapTool))

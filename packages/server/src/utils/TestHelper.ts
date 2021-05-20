@@ -16,10 +16,20 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcArtefact, AbcProject, AbcUser, CurrentVersion, DEFAULT_PROJECTION, LayerType, ManifestName, PredefinedLayerModel } from '@abc-map/shared-entities';
+import {
+  AbcArtefact,
+  AbcProjectManifest,
+  AbcUser,
+  CompressedProject,
+  CurrentVersion,
+  DEFAULT_PROJECTION,
+  LayerType,
+  ManifestName,
+  NodeBinary,
+  PredefinedLayerModel,
+  Zipper,
+} from '@abc-map/shared';
 import * as uuid from 'uuid-random';
-import { Zipper } from './Zipper';
-import { CompressedProject } from '../projects/CompressedProject';
 import { ProjectDocument } from '../projects/ProjectDocument';
 import { DateTime } from 'luxon';
 
@@ -32,7 +42,7 @@ export class TestHelper {
     };
   }
 
-  public static sampleProject(): AbcProject {
+  public static sampleProject(): AbcProjectManifest {
     return {
       metadata: {
         id: uuid(),
@@ -87,10 +97,10 @@ export class TestHelper {
     };
   }
 
-  public static async sampleCompressedProject(): Promise<CompressedProject> {
+  public static async sampleCompressedProject(): Promise<CompressedProject<NodeBinary>> {
     const project = this.sampleProject();
     const metadata = project.metadata;
-    const zip = await Zipper.zipFiles([{ path: ManifestName, content: Buffer.from(JSON.stringify(project), 'utf-8') }]);
+    const zip = await Zipper.forBackend().zipFiles([{ path: ManifestName, content: Buffer.from(JSON.stringify(project), 'utf-8') }]);
     return {
       metadata: metadata,
       project: zip,

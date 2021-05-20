@@ -23,9 +23,9 @@ import { ServiceProps, withServices } from '../../core/withServices';
 import { Titles } from './titles';
 import * as _ from 'lodash';
 import { Encouragements } from './encouragements';
-import { Logger } from '@abc-map/frontend-commons';
+import { Logger } from '@abc-map/shared';
 import Cls from './SolicitationModal.module.scss';
-import { VoteValue } from '@abc-map/shared-entities';
+import { VoteValue } from '@abc-map/shared';
 
 interface State {
   visible: boolean;

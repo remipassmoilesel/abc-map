@@ -49,7 +49,7 @@ function isCliUpToDate() {
 
 function updateCli() {
   console.log("\n🔨 Abc CLI must be initialized, it may take a few minutes ... 🔧\n");
-  child_process.execSync("yarn install", {cwd: cliRoot, stdio: 'inherit'});
+  child_process.execSync("yarn install --silent", {cwd: cliRoot, stdio: 'inherit'});
   child_process.execSync("yarn run clean-build", {cwd: cliRoot, stdio: 'inherit'});
   fs.writeFileSync(lastBuildDateFile, JSON.stringify({date: new Date()}));
   console.log('\n')

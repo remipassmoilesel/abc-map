@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcUser } from '@abc-map/shared-entities';
+import { AbcUser } from '@abc-map/shared';
 import { UserDocument } from './UserDocument';
 
 export class UserMapper {

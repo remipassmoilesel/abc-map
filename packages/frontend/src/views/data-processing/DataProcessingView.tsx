@@ -17,7 +17,7 @@
  */
 
 import React, { Component, ReactNode } from 'react';
-import { DataProcessingParams, FrontendRoutes, Logger } from '@abc-map/frontend-commons';
+import { DataProcessingParams, FrontendRoutes, Logger } from '@abc-map/shared';
 import { getModules } from '../../data-processing';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import Cls from './DataProcessingView.module.scss';
@@ -39,7 +39,7 @@ class DataProcessingView extends Component<Props, {}> {
         <div className={Cls.leftMenu}>
           <div className={'mx-2 my-4 font-weight-bold'}>Modules</div>
           {Modules.map((mod) => (
-            <Link key={mod.getId()} className={'btn btn-link'} to={FrontendRoutes.dataProcessing(mod.getId())} data-cy={mod.getId()}>
+            <Link key={mod.getId()} className={'btn btn-link'} to={FrontendRoutes.dataProcessing().withParams({ moduleId: mod.getId() })} data-cy={mod.getId()}>
               {mod.getReadableName()}
             </Link>
           ))}

@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FrontendRoutes } from '@abc-map/frontend-commons';
+import { FrontendRoutes } from '@abc-map/shared';
 import * as uuid from 'uuid-random';
 import { Toasts } from './Toasts';
 import Chainable = Cypress.Chainable;
@@ -35,7 +35,7 @@ export class Registration {
   public static newUser(email: string): Chainable<any> {
     // We register user
     return cy
-      .visit(FrontendRoutes.landing())
+      .visit(FrontendRoutes.landing().raw())
       .get('[data-cy=open-registration]')
       .click()
       .get('input[data-cy=email]')

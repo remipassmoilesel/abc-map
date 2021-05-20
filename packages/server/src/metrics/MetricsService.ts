@@ -19,7 +19,7 @@
  */
 
 import { AbstractService } from '../services/AbstractService';
-import { Logger } from '../utils/Logger';
+import { Logger } from '@abc-map/shared';
 import { collectDefaultMetrics, Counter, Registry } from 'prom-client';
 import { CounterMap, CounterNames, Counters } from './MetricsService.definitions';
 

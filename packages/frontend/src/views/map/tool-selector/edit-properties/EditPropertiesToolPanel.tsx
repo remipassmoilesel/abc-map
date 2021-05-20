@@ -17,7 +17,7 @@
  */
 
 import React, { Component, ReactNode } from 'react';
-import { Logger } from '@abc-map/frontend-commons';
+import { Logger } from '@abc-map/shared';
 import TipBubble from '../../../../components/tip-bubble/TipBubble';
 import { ToolTips } from '@abc-map/user-documentation';
 import Cls from './EditPropertiesToolPanel.module.scss';

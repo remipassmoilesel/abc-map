@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AuthenticationToken } from '@abc-map/shared-entities';
+import { AuthenticationToken } from '@abc-map/shared';
 
 export enum ActionType {
   Login = 'Login',

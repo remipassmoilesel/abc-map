@@ -17,7 +17,7 @@
  */
 
 import React, { Component, ReactNode } from 'react';
-import { Logger } from '@abc-map/frontend-commons';
+import { Logger } from '@abc-map/shared';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import Cls from './TopBarLink.module.scss';
 

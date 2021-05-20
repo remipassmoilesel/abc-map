@@ -24,8 +24,8 @@ import { assert } from 'chai';
 import * as uuid from 'uuid-random';
 import { StreamReader } from '../utils/StreamReader';
 import ReadableStream = NodeJS.ReadableStream;
-import { CompressedProject } from './CompressedProject';
 import { Readable } from 'stream';
+import { CompressedProject } from '@abc-map/shared';
 
 describe('ProjectService', () => {
   let userId: string;

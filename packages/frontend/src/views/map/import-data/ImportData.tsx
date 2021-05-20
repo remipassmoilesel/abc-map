@@ -17,7 +17,8 @@
  */
 
 import React, { Component, ReactNode } from 'react';
-import { AbcFile, Logger } from '@abc-map/frontend-commons';
+import { Logger } from '@abc-map/shared';
+import { AbcFile } from '@abc-map/shared';
 import { FileIO, InputResultType, InputType } from '../../../core/utils/FileIO';
 import { AddLayersTask } from '../../../core/history/tasks/layers/AddLayersTask';
 import { HistoryKey } from '../../../core/history/HistoryKey';
@@ -52,7 +53,7 @@ class ImportData extends Component<ServiceProps, {}> {
         }
 
         toasts.info('Import en cours ...');
-        const files: AbcFile[] = result.files.map((f) => ({ path: f.name, content: f }));
+        const files: AbcFile<Blob>[] = result.files.map((f) => ({ path: f.name, content: f }));
 
         return dataStore.importFiles(files).then((res) => {
           if (!res.layers.length) {

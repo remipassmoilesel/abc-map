@@ -19,7 +19,7 @@
 import { Config } from '../config/Config';
 import * as nodemailer from 'nodemailer';
 import { Transporter } from 'nodemailer';
-import { Logger } from '../utils/Logger';
+import { Logger } from '@abc-map/shared';
 import * as fs from 'fs';
 import * as path from 'path';
 

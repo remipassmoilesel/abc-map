@@ -18,9 +18,9 @@
 
 import React, { ChangeEvent, Component, ReactNode } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
-import { Logger } from '@abc-map/frontend-commons';
+import { Logger } from '@abc-map/shared';
 import LayoutList from './layout-list/LayoutList';
-import { AbcLayout, AbcProjection, LayoutFormat, LayoutFormats } from '@abc-map/shared-entities';
+import { AbcLayout, AbcProjection, LayoutFormat, LayoutFormats } from '@abc-map/shared';
 import LayoutPreview from './layout-preview/LayoutPreview';
 import HistoryControls from '../../components/history-controls/HistoryControls';
 import { HistoryKey } from '../../core/history/HistoryKey';

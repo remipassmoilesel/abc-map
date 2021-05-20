@@ -26,7 +26,7 @@ import * as sinon from 'sinon';
 import Feature from 'ol/Feature';
 import Style from 'ol/style/Style';
 import { safeGetIcon } from './PointIcons';
-import { PointIcons } from '@abc-map/shared-entities';
+import { PointIcons } from '@abc-map/shared';
 import { IconProcessor } from './IconProcessor';
 
 // TODO: test other geometries
@@ -37,7 +37,7 @@ describe('StyleFactory', () => {
     let factory: StyleFactory;
     beforeEach(() => {
       cache = sinon.createStubInstance(StyleCache);
-      factory = new StyleFactory((cache as unknown) as StyleCache);
+      factory = new StyleFactory(cache as unknown as StyleCache);
     });
 
     it('should create style then register in cache', () => {

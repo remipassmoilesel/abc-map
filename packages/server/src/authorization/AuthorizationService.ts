@@ -17,11 +17,11 @@
  */
 
 import { AbstractService } from '../services/AbstractService';
-import { Logger } from '../utils/Logger';
+import { Logger } from '@abc-map/shared';
 import { MongodbClient } from '../mongodb/MongodbClient';
 import { ProjectDao } from '../projects/ProjectDao';
 import { Authentication } from '../authentication/Authentication';
-import { isUserAnonymous } from '@abc-map/shared-entities';
+import { isUserAnonymous } from '@abc-map/shared';
 import { FastifyRequest } from 'fastify';
 
 const logger = Logger.get('AuthorizationService.ts');

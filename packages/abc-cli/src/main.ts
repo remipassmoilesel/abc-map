@@ -87,12 +87,16 @@ async function main(args: string[]) {
       service.cleanBuild();
       break;
 
-    case CommandName.WATCH:
-      service.watch();
+    case CommandName.DEPENDENCY_CHECK:
+      service.dependencyCheck();
       break;
 
     case CommandName.TEST:
       service.test();
+      break;
+
+    case CommandName.WATCH:
+      service.watch();
       break;
 
     case CommandName.E2E: {
@@ -123,10 +127,6 @@ async function main(args: string[]) {
 
     case CommandName.CLEAN:
       service.clean();
-      break;
-
-    case CommandName.DEPENDENCY_CHECK:
-      service.dependencyCheck();
       break;
 
     case CommandName.NPM_REGISTRY:

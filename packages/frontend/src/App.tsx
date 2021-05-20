@@ -18,7 +18,7 @@
 
 import React, { Component, ReactNode } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { FrontendRoutes } from '@abc-map/frontend-commons';
+import { FrontendRoutes } from '@abc-map/shared';
 import MapView from './views/map/MapView';
 import { Provider } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
@@ -50,14 +50,14 @@ class App extends Component<ServiceProps, {}> {
         <BrowserRouter>
           <TopBar />
           <Switch>
-            <Route exact path={FrontendRoutes.landing()} component={LandingView} />
-            <Route exact path={FrontendRoutes.map()} component={MapView} />
-            <Route exact path={FrontendRoutes.dataStore()} component={DataStoreView} />
-            <Route exact path={FrontendRoutes.layout()} component={LayoutView} />
-            <Route exact path={FrontendRoutes.documentation()} component={DocumentationView} />
-            <Route exact path={FrontendRoutes.confirmAccount()} component={ConfirmAccountView} />
-            <Route exact path={FrontendRoutes.dataProcessing()} component={DataProcessingView} />
-            <Route exact path={FrontendRoutes.resetPassword()} component={ResetPasswordView} />
+            <Route exact path={FrontendRoutes.landing().raw()} component={LandingView} />
+            <Route exact path={FrontendRoutes.map().raw()} component={MapView} />
+            <Route exact path={FrontendRoutes.dataStore().raw()} component={DataStoreView} />
+            <Route exact path={FrontendRoutes.layout().raw()} component={LayoutView} />
+            <Route exact path={FrontendRoutes.documentation().raw()} component={DocumentationView} />
+            <Route exact path={FrontendRoutes.confirmAccount().raw()} component={ConfirmAccountView} />
+            <Route exact path={FrontendRoutes.dataProcessing().raw()} component={DataProcessingView} />
+            <Route exact path={FrontendRoutes.resetPassword().raw()} component={ResetPasswordView} />
             <Route path={'*'} component={NotFoundView} />
           </Switch>
           <ToastContainer className={'toast-container'} />

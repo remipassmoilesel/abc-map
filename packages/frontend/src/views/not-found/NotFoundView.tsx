@@ -17,9 +17,9 @@
  */
 
 import React, { Component, ReactNode } from 'react';
-import { Logger } from '@abc-map/frontend-commons';
+import { Logger } from '@abc-map/shared';
 import { Link } from 'react-router-dom';
-import { FrontendRoutes } from '@abc-map/frontend-commons';
+import { FrontendRoutes } from '@abc-map/shared';
 import Cls from './NotFoundView.module.scss';
 
 const logger = Logger.get('NotFoundView.tsx');
@@ -29,7 +29,7 @@ class NotFoundView extends Component<{}, {}> {
     return (
       <div className={Cls.notFoundView}>
         <h3>Cette page n&apos;existe pas !</h3>
-        <Link to={FrontendRoutes.landing()}>Retourner à l&apos;accueil</Link>
+        <Link to={FrontendRoutes.landing().raw()}>Retourner à l&apos;accueil</Link>
       </div>
     );
   }

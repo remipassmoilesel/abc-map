@@ -17,12 +17,12 @@
  */
 
 import { AbstractDataReader } from './AbstractDataReader';
-import { LayerType, WmsDefinition, WmsMetadata } from '@abc-map/shared-entities';
+import { LayerType, WmsDefinition, WmsMetadata } from '@abc-map/shared';
 import { FileFormat, FileFormats } from '../FileFormats';
-import { AbcFile } from '@abc-map/frontend-commons';
+import { AbcFile } from '@abc-map/shared';
 import * as yaml from 'js-yaml';
-import { BlobIO } from '@abc-map/frontend-commons';
-import { Logger } from '@abc-map/frontend-commons';
+import { BlobIO } from '@abc-map/shared';
+import { Logger } from '@abc-map/shared';
 import uuid from 'uuid-random';
 import { LayerWrapper } from '../../geo/layers/LayerWrapper';
 import { LayerFactory } from '../../geo/layers/LayerFactory';
@@ -30,16 +30,16 @@ import { LayerFactory } from '../../geo/layers/LayerFactory';
 const logger = Logger.get('WmsDefinitionReader.ts');
 
 export class WmsDefinitionReader extends AbstractDataReader {
-  public async isSupported(files: AbcFile[]): Promise<boolean> {
+  public async isSupported(files: AbcFile<Blob>[]): Promise<boolean> {
     return files.filter((f) => FileFormats.fromPath(f.path) === FileFormat.WMS_DEFINITION).length > 0;
   }
 
-  public async read(files: AbcFile[]): Promise<LayerWrapper[]> {
+  public async read(files: AbcFile<Blob>[]): Promise<LayerWrapper[]> {
     const definitions = files.filter((f) => FileFormats.fromPath(f.path) === FileFormat.WMS_DEFINITION);
     const layers: LayerWrapper[] = [];
     for (const file of definitions) {
       const fileContent = await BlobIO.asString(file.content);
-      const definition = yaml.safeLoad(fileContent) as WmsDefinition | undefined;
+      const definition = yaml.load(fileContent) as WmsDefinition | undefined;
       if (!definition || !definition.remoteUrl || !definition.remoteLayerName) {
         // TODO: we should fail here
         logger.error('Invalid definition: ', { definition, fileContent });

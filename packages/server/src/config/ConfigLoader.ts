@@ -18,7 +18,7 @@
 
 import { Env, EnvKey } from './Env';
 import { Config, ConfigInput } from './Config';
-import { Logger } from '../utils/Logger';
+import { Logger } from '@abc-map/shared';
 import * as path from 'path';
 import * as _ from 'lodash';
 import { promises as fs } from 'fs';

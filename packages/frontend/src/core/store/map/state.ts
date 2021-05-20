@@ -17,8 +17,8 @@
  */
 
 import { FeatureStyle } from '../../geo/style/FeatureStyle';
-import { MapTool } from '@abc-map/frontend-commons';
-import { PointIcons } from '@abc-map/shared-entities';
+import { MapTool } from '@abc-map/shared';
+import { PointIcons } from '@abc-map/shared';
 
 export interface MapState {
   /**

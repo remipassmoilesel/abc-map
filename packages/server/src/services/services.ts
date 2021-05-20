@@ -19,7 +19,7 @@
 import { ProjectService } from '../projects/ProjectService';
 import { Config } from '../config/Config';
 import { MongodbClient } from '../mongodb/MongodbClient';
-import { Logger } from '../utils/Logger';
+import { Logger } from '@abc-map/shared';
 import { UserService } from '../users/UserService';
 import { AuthenticationService } from '../authentication/AuthenticationService';
 import { HealthCheckService } from '../health/HealthCheckService';

@@ -17,7 +17,7 @@
  */
 
 import { mapInitialState, MapState } from './state';
-import { MapTool } from '@abc-map/frontend-commons';
+import { MapTool } from '@abc-map/shared';
 import { MapActions } from './actions';
 import { mapReducer } from './reducer';
 

@@ -25,7 +25,7 @@ import { disableSmtpClientLogging } from '../email/SmtpClient';
 import { TestHelper } from '../utils/TestHelper';
 import { Config } from '../config/Config';
 import { PasswordHasher } from './PasswordHasher';
-import { AnonymousUser, AuthenticationRequest, RegistrationConfirmationRequest, RegistrationRequest } from '@abc-map/shared-entities';
+import { AnonymousUser, AuthenticationRequest, RegistrationConfirmationRequest, RegistrationRequest } from '@abc-map/shared';
 import * as jwt from 'jsonwebtoken';
 import { RegistrationDao } from './RegistrationDao';
 import { MongodbClient } from '../mongodb/MongodbClient';

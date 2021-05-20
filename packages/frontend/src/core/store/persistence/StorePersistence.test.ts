@@ -19,8 +19,8 @@
 import { StorePersistence } from './StorePersistence';
 import { LocalStorageService, StorageKey } from '../../utils/LocalStorageService';
 import sinon, { SinonStub } from 'sinon';
-import { UserStatus } from '@abc-map/shared-entities';
-import { MapTool } from '@abc-map/frontend-commons';
+import { UserStatus } from '@abc-map/shared';
+import { MapTool } from '@abc-map/shared';
 import { MainState } from '../reducer';
 import { TestHelper } from '../../utils/TestHelper';
 

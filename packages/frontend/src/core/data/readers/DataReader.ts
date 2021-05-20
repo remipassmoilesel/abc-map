@@ -17,11 +17,11 @@
  */
 
 import { AbstractDataReader } from './AbstractDataReader';
-import { AbcProjection } from '@abc-map/shared-entities';
+import { AbcProjection, Zipper } from '@abc-map/shared';
 import { GpxReader } from './GpxReader';
 import { KmlReader } from './KmlReader';
 import { ShapefileReader } from './ShapefileReader';
-import { AbcFile, Zipper } from '@abc-map/frontend-commons';
+import { AbcFile } from '@abc-map/shared';
 import { FileFormat, FileFormats } from '../FileFormats';
 import { GeoJsonReader } from './GeoJsonReader';
 import { WmsDefinitionReader } from './WmsDefinitionReader';
@@ -35,16 +35,16 @@ export class DataReader {
 
   constructor(private readers: AbstractDataReader[]) {}
 
-  public async read(files: AbcFile[], projection: AbcProjection): Promise<LayerWrapper[]> {
+  public async read(files: AbcFile<Blob>[], projection: AbcProjection): Promise<LayerWrapper[]> {
     if (!files.length) {
       return [];
     }
 
     // First we unzip if needed
-    const _files: AbcFile[] = [];
+    const _files: AbcFile<Blob>[] = [];
     for (const f of files) {
       if (FileFormats.fromPath(f.path) === FileFormat.ZIP) {
-        const unzipped = await Zipper.unzip(f.content);
+        const unzipped = await Zipper.forFrontend().unzip(f.content);
         _files.push(...unzipped);
       } else {
         _files.push(f);

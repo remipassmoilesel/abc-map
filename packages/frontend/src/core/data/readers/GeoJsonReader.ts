@@ -17,22 +17,22 @@
  */
 
 import { AbstractDataReader } from './AbstractDataReader';
-import { AbcProjection, LayerType, VectorMetadata } from '@abc-map/shared-entities';
+import { AbcProjection, LayerType, VectorMetadata } from '@abc-map/shared';
 import { FileFormat, FileFormats } from '../FileFormats';
 import { GeoJSON } from 'ol/format';
-import { BlobIO } from '@abc-map/frontend-commons';
+import { BlobIO } from '@abc-map/shared';
 import VectorSource from 'ol/source/Vector';
-import { AbcFile } from '@abc-map/frontend-commons';
+import { AbcFile } from '@abc-map/shared';
 import uuid from 'uuid-random';
 import { LayerWrapper } from '../../geo/layers/LayerWrapper';
 import { LayerFactory } from '../../geo/layers/LayerFactory';
 
 export class GeoJsonReader extends AbstractDataReader {
-  public async isSupported(files: AbcFile[]): Promise<boolean> {
+  public async isSupported(files: AbcFile<Blob>[]): Promise<boolean> {
     return files.filter((f) => FileFormats.fromPath(f.path) === FileFormat.GEOJSON).length > 0;
   }
 
-  public async read(files: AbcFile[], projection: AbcProjection): Promise<LayerWrapper[]> {
+  public async read(files: AbcFile<Blob>[], projection: AbcProjection): Promise<LayerWrapper[]> {
     const layers: LayerWrapper[] = [];
     const format = new GeoJSON();
     const _files = files.filter((f) => FileFormats.fromPath(f.path) === FileFormat.GEOJSON);

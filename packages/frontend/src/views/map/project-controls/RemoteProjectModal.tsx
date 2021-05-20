@@ -17,8 +17,8 @@
  */
 
 import React, { ChangeEvent, Component, ReactNode } from 'react';
-import { AbcProjectMetadata } from '@abc-map/shared-entities';
-import { Logger } from '@abc-map/frontend-commons';
+import { AbcProjectMetadata } from '@abc-map/shared';
+import { Logger } from '@abc-map/shared';
 import { Modal } from 'react-bootstrap';
 import { ServiceProps, withServices } from '../../../core/withServices';
 import Cls from './RemoteProjectModal.module.scss';

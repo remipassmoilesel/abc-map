@@ -19,7 +19,7 @@
 import squareIcon from '../../../assets/point-icons/square.inline.svg';
 import circleIcon from '../../../assets/point-icons/circle.inline.svg';
 import starIcon from '../../../assets/point-icons/star.inline.svg';
-import { PointIcons } from '@abc-map/shared-entities';
+import { PointIcons } from '@abc-map/shared';
 
 export interface PointIcon {
   name: PointIcons;

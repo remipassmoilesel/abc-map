@@ -21,7 +21,7 @@ import { Services, servicesFactory } from '../services/services';
 import { ConfigLoader } from '../config/ConfigLoader';
 import { assert } from 'chai';
 import { Config } from '../config/Config';
-import { AbcVote, VoteValue } from '@abc-map/shared-entities';
+import { AbcVote, VoteValue } from '@abc-map/shared';
 import { TestAuthentication } from '../utils/TestAuthentication';
 
 describe('VoteController', () => {

@@ -16,8 +16,8 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { StyleProperties } from '@abc-map/shared-entities';
-import { FrontendRoutes, MapTool } from '@abc-map/frontend-commons';
+import { StyleProperties } from '@abc-map/shared';
+import { FrontendRoutes, MapTool } from '@abc-map/shared';
 import { TestHelper } from '../../../helpers/TestHelper';
 import { ToolSelector } from '../../../helpers/ToolSelector';
 import { Draw } from '../../../helpers/Draw';
@@ -29,7 +29,7 @@ describe('Tool Polygon', function () {
   });
 
   it('user can draw', function () {
-    cy.visit(FrontendRoutes.map())
+    cy.visit(FrontendRoutes.map().raw())
       .then(() => MainMap.getComponent())
       .then(() => ToolSelector.enable(MapTool.Polygon))
       // First
@@ -62,7 +62,7 @@ describe('Tool Polygon', function () {
   });
 
   it('user can modify', function () {
-    cy.visit(FrontendRoutes.map())
+    cy.visit(FrontendRoutes.map().raw())
       .then(() => MainMap.getComponent())
       .then(() => ToolSelector.enable(MapTool.Polygon))
       // Create polygon

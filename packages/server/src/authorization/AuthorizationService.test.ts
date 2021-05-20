@@ -21,7 +21,7 @@ import { ConfigLoader } from '../config/ConfigLoader';
 import { AuthorizationService } from './AuthorizationService';
 import { Config } from '../config/Config';
 import { ProjectDao } from '../projects/ProjectDao';
-import { AnonymousUser, AuthenticationToken, UserStatus } from '@abc-map/shared-entities';
+import { AnonymousUser, AuthenticationToken, UserStatus } from '@abc-map/shared';
 import * as uuid from 'uuid-random';
 import { assert } from 'chai';
 import { ProjectDocument } from '../projects/ProjectDocument';
@@ -155,10 +155,10 @@ function authenticatedRequest(id?: string): FastifyRequest {
     userStatus: UserStatus.Authenticated,
   };
 
-  return ({ user: token } as unknown) as FastifyRequest;
+  return { user: token } as unknown as FastifyRequest;
 }
 
 function anonymousRequest(): FastifyRequest {
   const token: AuthenticationToken = { user: AnonymousUser, userStatus: UserStatus.Anonymous };
-  return ({ user: token } as unknown) as FastifyRequest;
+  return { user: token } as unknown as FastifyRequest;
 }

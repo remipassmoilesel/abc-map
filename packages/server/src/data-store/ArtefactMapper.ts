@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcArtefact } from '@abc-map/shared-entities';
+import { AbcArtefact } from '@abc-map/shared';
 import { ArtefactDocument } from './ArtefactDocument';
 
 export class ArtefactMapper {

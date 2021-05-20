@@ -25,7 +25,7 @@ import {
   PredefinedMetadata,
   VectorMetadata,
   WmsDefinition,
-} from '@abc-map/shared-entities';
+} from '@abc-map/shared';
 import VectorSource from 'ol/source/Vector';
 import { LayerWrapper, logger as wrapperLogger } from './LayerWrapper';
 import { TestHelper } from '../../utils/TestHelper';

@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcProject, AbcProjectMetadata, CurrentVersion, DEFAULT_PROJECTION } from '@abc-map/shared-entities';
+import { AbcProjectManifest, AbcProjectMetadata, CurrentVersion, DEFAULT_PROJECTION } from '@abc-map/shared';
 import uuid from 'uuid-random';
 import { DateTime } from 'luxon';
 
@@ -31,7 +31,7 @@ export class ProjectFactory {
     };
   }
 
-  public static newProject(): AbcProject {
+  public static newProject(): AbcProjectManifest {
     return {
       metadata: ProjectFactory.newProjectMetadata(),
       layers: [],

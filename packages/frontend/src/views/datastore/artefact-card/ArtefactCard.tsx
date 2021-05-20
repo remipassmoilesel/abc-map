@@ -17,8 +17,8 @@
  */
 
 import React, { Component, ReactNode } from 'react';
-import { Logger } from '@abc-map/frontend-commons';
-import { AbcArtefact } from '@abc-map/shared-entities';
+import { Logger } from '@abc-map/shared';
+import { AbcArtefact } from '@abc-map/shared';
 import { ServiceProps, withServices } from '../../../core/withServices';
 import { Modal } from 'react-bootstrap';
 import Cls from './ArtefactCard.module.scss';

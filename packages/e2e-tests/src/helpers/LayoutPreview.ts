@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcWindow, E2eMap } from '@abc-map/frontend-commons';
+import { AbcWindow, E2eMap } from '@abc-map/shared';
 import Chainable = Cypress.Chainable;
 
 export class LayoutPreview {
@@ -28,7 +28,7 @@ export class LayoutPreview {
     return cy.window().then((_window) => {
       const window: AbcWindow = _window as any;
       const map = window.abc.layoutPreview;
-      expect(map).not.equals(undefined);
+      expect(map).not.undefined;
       return map as E2eMap;
     });
   }

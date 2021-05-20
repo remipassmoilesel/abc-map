@@ -18,7 +18,7 @@
 
 import { VoteDao } from './VoteDao';
 import { MongodbClient } from '../mongodb/MongodbClient';
-import { AbcVote, AbcVoteAggregation, VoteValue } from '@abc-map/shared-entities';
+import { AbcVote, AbcVoteAggregation, VoteValue } from '@abc-map/shared';
 import { AbstractService } from '../services/AbstractService';
 import { VoteDocument } from './VoteDocument';
 import * as uuid from 'uuid-random';

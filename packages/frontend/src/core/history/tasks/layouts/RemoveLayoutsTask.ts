@@ -18,9 +18,9 @@
 
 import { Task } from '../../Task';
 import { ProjectService } from '../../../project/ProjectService';
-import { AbcLayout } from '@abc-map/shared-entities';
+import { AbcLayout } from '@abc-map/shared';
 import { getServices } from '../../../Services';
-import { Logger } from '@abc-map/frontend-commons';
+import { Logger } from '@abc-map/shared';
 
 const logger = Logger.get('RemoveLayoutsTask');
 

@@ -19,7 +19,7 @@
  */
 
 import http, { RefinedResponse, ResponseType } from 'k6/http';
-import { AbcProjectMetadata, AuthenticationResponse } from '@abc-map/shared-entities';
+import { AbcProjectMetadata, AuthenticationResponse } from '@abc-map/shared';
 import { bytes } from 'k6';
 import uuid from 'uuid-random';
 

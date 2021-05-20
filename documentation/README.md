@@ -10,6 +10,7 @@ check [https://alpha.abc-map.fr/documentation](https://alpha.abc-map.fr/document
 - [Setup a developer workstation](./1_setup-workstation.md)
 - [High level architecture](./2_architecture.md)
 - [Deploy an instance of Abc-Map](./3_deployment.md)
+- [How to ?](./4_how-tos.md)
 
 
 

@@ -17,7 +17,7 @@
  */
 
 import { TestHelper } from '../../../helpers/TestHelper';
-import { FrontendRoutes } from '@abc-map/frontend-commons';
+import { FrontendRoutes } from '@abc-map/shared';
 import { DataStore } from '../../../helpers/DataStore';
 import { TopBar } from '../../../helpers/TopBar';
 import { Download } from '../../../helpers/Download';
@@ -28,7 +28,7 @@ describe('Data viewer module', function () {
   });
 
   it('User can see layer data', () => {
-    cy.visit(FrontendRoutes.dataProcessing())
+    cy.visit(FrontendRoutes.dataProcessing().withoutOptionals())
       .then(() => DataStore.importByName('Pays du monde'))
       .then(() => TopBar.dataProcessing())
       .get('[data-cy=data-viewer]')
@@ -53,7 +53,7 @@ describe('Data viewer module', function () {
   });
 
   it('User can download', () => {
-    cy.visit(FrontendRoutes.dataProcessing())
+    cy.visit(FrontendRoutes.dataProcessing().withoutOptionals())
       .then(() => DataStore.importByName('Pays du monde'))
       .then(() => TopBar.dataProcessing())
       .get('[data-cy=data-viewer]')

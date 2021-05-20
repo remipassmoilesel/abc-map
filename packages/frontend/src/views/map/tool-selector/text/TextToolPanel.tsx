@@ -17,7 +17,7 @@
  */
 
 import React, { Component, ReactNode } from 'react';
-import { Logger } from '@abc-map/frontend-commons';
+import { Logger } from '@abc-map/shared';
 import TextFormat from '../_common/text-format/TextFormat';
 import TipBubble from '../../../../components/tip-bubble/TipBubble';
 import { ToolTips } from '@abc-map/user-documentation';

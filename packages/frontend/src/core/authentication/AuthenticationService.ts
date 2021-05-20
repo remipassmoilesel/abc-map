@@ -32,10 +32,10 @@ import {
   RenewResponse,
   ResetPasswordRequest,
   UserStatus,
-} from '@abc-map/shared-entities';
+} from '@abc-map/shared';
 import { AuthenticationActions } from '../store/authentication/actions';
 import jwtDecode from 'jwt-decode';
-import { Logger } from '@abc-map/frontend-commons';
+import { Logger } from '@abc-map/shared';
 import { MainStore } from '../store/store';
 import { ToastService } from '../ui/ToastService';
 import { TokenHelper } from './TokenHelper';

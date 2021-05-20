@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Logger } from '../utils/Logger';
+import { Logger } from '@abc-map/shared';
 import { Config } from '../config/Config';
 import { Services } from '../services/services';
 import * as path from 'path';
@@ -161,9 +161,6 @@ export class HttpServer {
     // index.html is server from fastify-static when route is '/' or from memory cache otherwise
     this.app.register(fastifyStatic, { wildcard: false, root: this.config.frontendPath });
     this.app.get('/*', this.sendIndex);
-    this.app.head('/', async (req: FastifyRequest, res: FastifyReply) => {
-      res.status(200).send();
-    });
 
     await this.loadCache();
   }

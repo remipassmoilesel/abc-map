@@ -18,7 +18,7 @@
 
 import { FillPatternFactory } from './FillPatternFactory';
 import { FillProperties } from './FeatureStyle';
-import { FillPatterns } from '@abc-map/shared-entities';
+import { FillPatterns } from '@abc-map/shared';
 
 describe('FillPatternFactory', () => {
   let factory: FillPatternFactory;

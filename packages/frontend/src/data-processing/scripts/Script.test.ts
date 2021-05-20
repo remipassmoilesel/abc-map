@@ -32,7 +32,7 @@ describe('Scripts', function () {
 
     beforeEach(() => {
       geoStub = sinon.createStubInstance(GeoService);
-      const services = ({ geo: geoStub } as unknown) as Services;
+      const services = { geo: geoStub } as unknown as Services;
       scripts = new Scripts(services);
     });
 

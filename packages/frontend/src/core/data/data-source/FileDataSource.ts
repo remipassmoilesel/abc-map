@@ -17,7 +17,7 @@
  */
 
 import { DataRow, DataSource, DataSourceType } from './DataSource';
-import { Logger } from '@abc-map/frontend-commons';
+import { Logger } from '@abc-map/shared';
 import { CsvParser } from '../csv-parser/CsvParser';
 import { nanoid } from 'nanoid';
 

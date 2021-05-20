@@ -17,10 +17,10 @@
  */
 
 import React, { ChangeEvent, Component, ReactNode } from 'react';
-import { Logger } from '@abc-map/frontend-commons';
+import { Logger } from '@abc-map/shared';
 import { WmsBoundingBox, WmsCapabilities, WmsLayer } from '../../../../../core/geo/WmsCapabilities';
 import WmsLayerItem from './WmsLayerItem';
-import { AbcProjection, WmsAuthentication, WmsDefinition } from '@abc-map/shared-entities';
+import { AbcProjection, WmsAuthentication, WmsDefinition } from '@abc-map/shared';
 import { ServiceProps, withServices } from '../../../../../core/withServices';
 import './WmsSettingsPanel.scss';
 

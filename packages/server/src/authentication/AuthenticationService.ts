@@ -30,12 +30,12 @@ import {
   RegistrationToken,
   UserStatus,
   ResetPasswordToken,
-} from '@abc-map/shared-entities';
+} from '@abc-map/shared';
 import { Config } from '../config/Config';
 import { UserService } from '../users/UserService';
 import * as uuid from 'uuid-random';
 import { AbstractService } from '../services/AbstractService';
-import { Logger } from '../utils/Logger';
+import { Logger } from '@abc-map/shared';
 import { RegistrationDao } from './RegistrationDao';
 import { MongodbClient } from '../mongodb/MongodbClient';
 import { RegistrationDocument } from './RegistrationDocument';

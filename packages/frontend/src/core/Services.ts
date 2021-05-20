@@ -18,16 +18,15 @@
 
 import { ProjectService } from './project/ProjectService';
 import { GeoService } from './geo/GeoService';
-import { httpExternalClient, httpApiClient, httpDownloadClient } from './http/HttpClients';
+import { httpApiClient, httpDownloadClient, httpExternalClient } from './http/http-clients';
 import { AuthenticationService } from './authentication/AuthenticationService';
 import { HistoryService } from './history/HistoryService';
 import { DataStoreService } from './data/DataStoreService';
 import { mainStore } from './store/store';
 import { ToastService } from './ui/ToastService';
 import { ModalService } from './ui/ModalService';
-import { AxiosError } from 'axios';
 import { VoteService } from './vote/VoteService';
-import { HttpError } from './utils/HttpError';
+import { httpErrorHandler } from './http/httpErrorHandler';
 
 export interface Services {
   project: ProjectService;
@@ -51,8 +50,8 @@ export function getServices(): Services {
 function serviceFactory(): Services {
   const toasts = new ToastService();
 
-  const jsonClient = httpApiClient(5_000, (err) => httpErrorHandler(err, toasts));
-  const downloadClient = httpDownloadClient(5_000, (err) => httpErrorHandler(err, toasts));
+  const jsonClient = httpApiClient(5_000, (err) => httpErrorHandler(toasts, err));
+  const downloadClient = httpDownloadClient(5_000, (err) => httpErrorHandler(toasts, err));
   const externalClient = httpExternalClient(5_000);
 
   const modals = new ModalService();
@@ -73,15 +72,4 @@ function serviceFactory(): Services {
     dataStore,
     vote,
   };
-}
-
-function httpErrorHandler(err: AxiosError | undefined, toasts: ToastService) {
-  if (HttpError.isForbidden(err)) {
-    toasts.error('Cette opération est interdite.');
-  }
-  if (HttpError.isTooManyRequests(err)) {
-    toasts.error('Vous avez dépassé le nombre de demandes autorisés, veuillez réessayer plus tard');
-  }
-
-  return Promise.reject(err);
 }

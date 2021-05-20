@@ -20,7 +20,7 @@ import { Services } from '../services/services';
 import { UserInit } from './UserInit';
 import { ProjectInit } from './ProjectInit';
 import { Config, LOCAL_ENVIRONMENT, STAGING_ENVIRONMENT, TEST_ENVIRONMENT } from '../config/Config';
-import { Logger } from '../utils/Logger';
+import { Logger } from '@abc-map/shared';
 
 const logger = Logger.get('DevInit');
 

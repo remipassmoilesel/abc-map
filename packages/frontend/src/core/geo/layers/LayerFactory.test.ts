@@ -19,7 +19,7 @@
 import { LayerFactory } from './LayerFactory';
 import VectorSource from 'ol/source/Vector';
 import { TileWMS } from 'ol/source';
-import { LayerProperties, LayerType, PredefinedLayerModel, WmsDefinition } from '@abc-map/shared-entities';
+import { LayerProperties, LayerType, PredefinedLayerModel, WmsDefinition } from '@abc-map/shared';
 import { TestHelper } from '../../utils/TestHelper';
 import TileLayer from 'ol/layer/Tile';
 import { VectorLayerWrapper, WmsLayerWrapper } from './LayerWrapper';
