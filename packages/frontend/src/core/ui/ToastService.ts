@@ -18,12 +18,18 @@
 
 import { toast } from 'react-toastify';
 import { ToastOptions } from 'react-toastify/dist/types';
+import { AxiosError } from 'axios';
+import { HttpError } from '../http/HttpError';
+import { Logger } from '@abc-map/shared';
+
+const logger = Logger.get('ToastService');
 
 const defaultOptions: ToastOptions = {
   position: 'bottom-right',
   autoClose: 5_000,
   pauseOnFocusLoss: true,
   hideProgressBar: true,
+  className: 'abc-toast',
 };
 
 export class ToastService {
@@ -45,5 +51,39 @@ export class ToastService {
 
   public featureNotReady(): void {
     this.info("Cette fonctionnalité n'est pas encore disponible");
+  }
+
+  public httpError(err: AxiosError | Error | undefined): void {
+    logger.error('HTTP error: ', JSON.stringify(err));
+
+    // Too many requests
+    if (HttpError.isTooManyRequests(err)) {
+      const reset = err.response?.headers['x-ratelimit-reset'] || 0;
+      if (reset) {
+        this.error(`Vous avez dépassé le nombre de demandes autorisés, veuillez réessayer dans ${Math.round(reset / 60)} minute(s).`);
+      } else {
+        this.error('Vous avez dépassé le nombre de demandes autorisés, veuillez réessayer plus tard.');
+      }
+    }
+
+    // Forbidden
+    else if (HttpError.isForbidden(err)) {
+      this.error('Cette opération est interdite.');
+    }
+
+    // Unauthorized
+    else if (HttpError.isUnauthorized(err)) {
+      this.error('Vous devez être connecté pour effectuer cette opération.');
+    }
+
+    // Network error
+    else if (err?.message === 'Network Error') {
+      this.error('Il y a un problème avec votre connexion internet.');
+    }
+
+    // Others
+    else {
+      this.genericError();
+    }
   }
 }

@@ -1,6 +1,6 @@
 export const ConfigInputSchema = {
   type: 'object',
-  required: ['environmentName', 'externalUrl', 'database', 'jwt', 'authentication', 'registration', 'smtp', 'datastore'],
+  required: ['environmentName', 'externalUrl', 'server', 'project', 'database', 'jwt', 'authentication', 'registration', 'smtp', 'datastore'],
   additionalProperties: false,
   properties: {
     environmentName: { type: 'string' },
@@ -39,6 +39,14 @@ export const ConfigInputSchema = {
             timeWindow: { type: 'string' },
           },
         },
+      },
+    },
+    project: {
+      type: 'object',
+      minProperties: 1,
+      additionalProperties: false,
+      properties: {
+        maxPerUser: { type: 'number' },
       },
     },
     database: {

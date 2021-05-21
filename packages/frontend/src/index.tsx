@@ -20,30 +20,29 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { getServices } from './core/Services';
+import { getServices, Services } from './core/Services';
 import { E2eMapWrapper } from './core/geo/map/E2eMapWrapper';
 import { getAbcWindow, Logger } from '@abc-map/shared';
 import { UserStatus } from '@abc-map/shared';
 import { mainStore } from './core/store/store';
 import { AxiosError } from 'axios';
 import { HttpError } from './core/http/HttpError';
-import './index.scss';
 import { BUILD_INFO } from './build-version';
+import './index.scss';
 
-const logger = Logger.get('index.tsx', 'info');
+export const logger = Logger.get('index.tsx', 'warn');
 const svc = getServices();
 
 logger.info('Version: ', BUILD_INFO);
 
-authenticate()
+authenticate(svc)
   .then(() => load())
   .catch((err) => {
     logger.error(err);
     loadingError(err);
   });
 
-// TODO: test
-async function authenticate(): Promise<void> {
+export async function authenticate(svc: Services): Promise<void> {
   const isAuthenticated = svc.authentication.getUserStatus() === UserStatus.Authenticated;
   if (isAuthenticated) {
     return svc.authentication.renewToken().catch((err) => {

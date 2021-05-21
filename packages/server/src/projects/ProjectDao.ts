@@ -23,9 +23,15 @@ import { MongodbBucket } from '../mongodb/MongodbBucket';
 import { Collection, GridFSBucket } from 'mongodb';
 import ReadableStream = NodeJS.ReadableStream;
 import { Readable } from 'stream';
+import { GridFsFile } from '../mongodb/GridFsFile';
 
 export class ProjectDao {
   constructor(private client: MongodbClient) {}
+
+  public async init(): Promise<void> {
+    const coll = await this.collection();
+    await coll.createIndex('ownerId', { unique: false });
+  }
 
   public async saveMetadata(project: ProjectDocument): Promise<void> {
     const coll = await this.collection();
@@ -71,19 +77,15 @@ export class ProjectDao {
       .toArray();
   }
 
-  public async deleteMetadataById(projectId: string): Promise<void> {
+  public async deleteMetadataByIds(projectIds: string[]): Promise<void> {
     const coll = await this.collection();
-    await coll.deleteOne({ _id: projectId });
+    await coll.deleteMany({ _id: { $in: projectIds } });
   }
 
-  public async deleteCompressedFileById(projectId: string): Promise<void> {
+  public async deleteProjectsByIds(projectIds: string[]): Promise<void> {
     const bucket = await this.bucket();
-    const file = await bucket.find({ filename: projectId }).toArray();
-    if (file.length !== 1) {
-      throw new Error(`Invalid file: ${projectId}`);
-    }
-
-    await bucket.delete(file[0]._id);
+    const files: GridFsFile[] = await bucket.find({ filename: { $in: projectIds } }).toArray();
+    await Promise.all(files.map((f) => bucket.delete(f._id)));
   }
 
   private collection(): Promise<Collection<ProjectDocument>> {
@@ -92,5 +94,24 @@ export class ProjectDao {
 
   private bucket(): Promise<GridFSBucket> {
     return this.client.bucket(MongodbBucket.Projects);
+  }
+
+  public async countByUserId(userId: string) {
+    const collection = await this.collection();
+
+    const pipeline: object[] = [
+      {
+        $match: {
+          ownerId: userId,
+        },
+      },
+      {
+        $count: 'projects',
+      },
+    ];
+
+    const cursor = collection.aggregate(pipeline);
+    const result = (await cursor.next()) as unknown as { projects: number } | null;
+    return result?.projects || 0;
   }
 }

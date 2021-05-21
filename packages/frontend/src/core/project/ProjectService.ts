@@ -17,8 +17,8 @@
  */
 
 import { ProjectActions } from '../store/project/actions';
-import { CompressedProject, Logger, ProjectHelper } from '@abc-map/shared';
-import { AbcLayout, AbcProjectManifest, AbcProjection, AbcProjectMetadata, LayerType, LayoutFormat, ManifestName, WmsMetadata, Zipper } from '@abc-map/shared';
+import { CompressedProject, Logger, ProjectConstants, ProjectHelper } from '@abc-map/shared';
+import { AbcLayout, AbcProjectManifest, AbcProjection, AbcProjectMetadata, LayerType, LayoutFormat, WmsMetadata, Zipper } from '@abc-map/shared';
 import { AxiosInstance } from 'axios';
 import { ProjectFactory } from './ProjectFactory';
 import { GeoService } from '../geo/GeoService';
@@ -27,11 +27,19 @@ import uuid from 'uuid-random';
 import { MainStore } from '../store/store';
 import { Encryption } from '../utils/Encryption';
 import { BlobIO } from '@abc-map/shared';
+import { HttpError } from '../http/HttpError';
+import { ToastService } from '../ui/ToastService';
 
 export const logger = Logger.get('ProjectService.ts', 'info');
 
 export class ProjectService {
-  constructor(private jsonClient: AxiosInstance, private downloadClient: AxiosInstance, private store: MainStore, private geoService: GeoService) {}
+  constructor(
+    private jsonClient: AxiosInstance,
+    private downloadClient: AxiosInstance,
+    private store: MainStore,
+    private toasts: ToastService,
+    private geoService: GeoService
+  ) {}
 
   public newProject(): void {
     this.geoService.getMainMap().defaultLayers();
@@ -44,15 +52,33 @@ export class ProjectService {
   }
 
   public list(): Promise<AbcProjectMetadata[]> {
-    return this.jsonClient.get(Api.listProject()).then((res) => res.data);
+    return this.jsonClient
+      .get(Api.listProject())
+      .then((res) => res.data)
+      .catch((err) => {
+        this.toasts.httpError(err);
+        return Promise.reject(err);
+      });
   }
 
   public findById(id: string): Promise<Blob | undefined> {
-    return this.downloadClient.get(Api.findById(id)).then((res) => res.data);
+    return this.downloadClient
+      .get(Api.findById(id))
+      .then((res) => res.data)
+      .catch((err) => {
+        this.toasts.httpError(err);
+        return Promise.reject(err);
+      });
   }
 
   public deleteById(id: string): Promise<void> {
-    return this.jsonClient.delete(Api.findById(id)).then(() => undefined);
+    return this.jsonClient
+      .delete(Api.findById(id))
+      .then(() => undefined)
+      .catch((err) => {
+        this.toasts.httpError(err);
+        return Promise.reject(err);
+      });
   }
 
   public async exportCurrentProject(password?: string): Promise<CompressedProject<Blob>> {
@@ -78,36 +104,53 @@ export class ProjectService {
       }
     }
 
-    const project = await Zipper.forFrontend().zipFiles([{ path: ManifestName, content: new Blob([JSON.stringify(manifest)]) }]);
+    const project = await Zipper.forFrontend().zipFiles([{ path: ProjectConstants.ManifestName, content: new Blob([JSON.stringify(manifest)]) }]);
     return { project, metadata: manifest.metadata };
   }
 
-  // TODO: we should check project size before save()
   public save(project: CompressedProject<Blob>): Promise<void> {
+    if (project.project.size >= ProjectConstants.MaxSizeBytes) {
+      throw new Error('Project is too heavy');
+    }
+
     const formData = new FormData();
     formData.append('metadata', JSON.stringify(project.metadata));
-    formData.append('project', project.project as Blob);
+    formData.append('project', project.project);
     return this.jsonClient
       .post(Api.saveProject(), formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       })
-      .then(() => undefined);
+      .then(() => undefined)
+      .catch((err) => {
+        if (HttpError.isTooManyProject(err)) {
+          this.toasts.error('Désolé 😞 vous avez atteint votre quota de projet enregistré. Supprimez-en un.');
+        } else {
+          this.toasts.httpError(err);
+        }
+
+        return Promise.reject(err);
+      });
   }
 
   public loadRemoteProject(id: string, password?: string): Promise<void> {
-    return this.findById(id).then((blob) => {
-      if (!blob) {
-        return Promise.reject(new Error('Project not found'));
-      }
-      return this.loadProject(blob, password);
-    });
+    return this.findById(id)
+      .then((blob) => {
+        if (!blob) {
+          return Promise.reject(new Error('Project not found'));
+        }
+        return this.loadProject(blob, password);
+      })
+      .catch((err) => {
+        this.toasts.httpError(err);
+        return Promise.reject(err);
+      });
   }
 
   public async loadProject(blob: Blob, password?: string): Promise<void> {
     const unzipped = await Zipper.forFrontend().unzip(blob);
-    const manifestFile = unzipped.find((f) => f.path.endsWith(ManifestName));
+    const manifestFile = unzipped.find((f) => f.path.endsWith(ProjectConstants.ManifestName));
     if (!manifestFile) {
       return Promise.reject(new Error('Invalid project'));
     }

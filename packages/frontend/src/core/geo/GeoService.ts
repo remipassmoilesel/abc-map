@@ -33,13 +33,14 @@ import { HistoryService } from '../history/HistoryService';
 import { LayerFactory } from './layers/LayerFactory';
 import { NominatimResult } from './NominatimResult';
 import { FeatureWrapper } from './features/FeatureWrapper';
+import { ToastService } from '../ui/ToastService';
 
 export const logger = Logger.get('GeoService.ts');
 
 export class GeoService {
   private mainMap = MapFactory.createDefault();
 
-  constructor(private httpClient: AxiosInstance, private history: HistoryService) {}
+  constructor(private httpClient: AxiosInstance, private toasts: ToastService, private history: HistoryService) {}
 
   public getMainMap(): MapWrapper {
     return this.mainMap;
@@ -75,9 +76,13 @@ export class GeoService {
     const capabilitiesUrl = `${url}?service=wms&request=GetCapabilities`;
     const parser = new WMSCapabilitiesParser();
 
-    return this.httpClient.get(capabilitiesUrl, { auth }).then((res) => {
-      return parser.read(res.data);
-    });
+    return this.httpClient
+      .get(capabilitiesUrl, { auth })
+      .then((res) => parser.read(res.data))
+      .catch((err) => {
+        this.toasts.httpError(err);
+        return Promise.reject(err);
+      });
   }
 
   public updateSelectedFeatures(transform: (x: FeatureStyle, f: FeatureWrapper) => FeatureStyle) {
@@ -108,6 +113,10 @@ export class GeoService {
           format: 'json',
         },
       })
-      .then((res) => res.data);
+      .then((res) => res.data)
+      .catch((err) => {
+        this.toasts.httpError(err);
+        return Promise.reject(err);
+      });
   }
 }

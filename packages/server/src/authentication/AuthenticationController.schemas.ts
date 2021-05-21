@@ -52,6 +52,18 @@ export const LoginRequestSchema: FastifySchema = {
   },
 };
 
+export const UpdatePasswordRequestSchema: FastifySchema = {
+  body: {
+    type: 'object',
+    required: ['previousPassword', 'newPassword'],
+    additionalProperties: false,
+    properties: {
+      previousPassword: { type: 'string' },
+      newPassword: { type: 'string' },
+    },
+  },
+};
+
 export const PasswordLostRequestSchema: FastifySchema = {
   body: {
     type: 'object',
@@ -70,6 +82,17 @@ export const ResetPasswordSchema: FastifySchema = {
     additionalProperties: false,
     properties: {
       token: { type: 'string' },
+      password: { type: 'string' },
+    },
+  },
+};
+
+export const DeleteAccountSchema: FastifySchema = {
+  body: {
+    type: 'object',
+    required: ['password'],
+    additionalProperties: false,
+    properties: {
       password: { type: 'string' },
     },
   },

@@ -28,7 +28,6 @@ import { MetricsController } from '../metrics/MetricsController';
 import { HealthCheckController } from '../health/HealthCheckController';
 import { AuthenticationController } from '../authentication/AuthenticationController';
 import { ProjectController } from '../projects/ProjectController';
-import { UserController } from '../users/UserController';
 import { DataStoreController } from '../data-store/DataStoreController';
 import { VoteController } from '../votes/VoteController';
 import { Controller } from './Controller';
@@ -53,7 +52,7 @@ function publicControllers(config: Config, services: Services): Controller[] {
  * @param services
  */
 function privateControllers(config: Config, services: Services): Controller[] {
-  return [new ProjectController(services), new UserController(services), new DataStoreController(services), new VoteController(services)];
+  return [new ProjectController(config, services), new DataStoreController(services), new VoteController(services)];
 }
 
 /**

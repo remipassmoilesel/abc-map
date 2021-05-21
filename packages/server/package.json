@@ -35,7 +35,8 @@
     "glob": "^7.1.6",
     "js-yaml": "^4.1.0",
     "luxon": "^1.27.0",
-    "prom-client": "^13.1.0"
+    "prom-client": "^13.1.0",
+    "bson": "^1.1.4"
   },
   "devDependencies": {
     "@types/js-yaml": "^4.0.1",
@@ -51,6 +52,7 @@
     "@typescript-eslint/eslint-plugin": "^4.24.0",
     "@typescript-eslint/parser": "^4.24.0",
     "@types/luxon": "^1.26.5",
+    "@types/bson": "^1.0.11",
     "chai": "^4.2.0",
     "eslint": "^7.26.0",
     "eslint-config-prettier": "^8.1.0",

@@ -18,7 +18,7 @@
 
 import { Controller } from '../server/Controller';
 import { Services } from '../services/services';
-import { AbcProjectMetadata, AbcUser, CompressedProject, NodeBinary } from '@abc-map/shared';
+import { AbcProjectMetadata, AbcUser, CompressedProject, NodeBinary, ProjectConstants, ProjectSaveResponse, ProjectSaveStatus } from '@abc-map/shared';
 import { Authentication } from '../authentication/Authentication';
 import { AuthorizationService } from '../authorization/AuthorizationService';
 import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
@@ -27,11 +27,12 @@ import { ByIdParams, ByIdSchema, ListSchema } from './ProjectController.schemas'
 import { Validation } from '../utils/Validation';
 import { PaginatedQuery, PaginationHelper } from '../server/PaginationHelper';
 import 'fastify-sensible';
+import { Config } from '../config/Config';
 
 export class ProjectController extends Controller {
   private authz: AuthorizationService;
 
-  constructor(private services: Services) {
+  constructor(private config: Config, private services: Services) {
     super();
     this.authz = this.services.authorization;
   }
@@ -46,7 +47,7 @@ export class ProjectController extends Controller {
         fieldNameSize: 100,
         fieldSize: 10 * 1024,
         fields: 1,
-        fileSize: 5 * 1024 * 1024,
+        fileSize: ProjectConstants.MaxSizeBytes,
         files: 1,
         headerPairs: 50,
       },
@@ -83,10 +84,19 @@ export class ProjectController extends Controller {
       return;
     }
 
-    const project: CompressedProject<NodeBinary> = { metadata, project: data.file };
-    const result = await this.services.project.save(user.id, project).then(() => ({ status: 'saved' }));
+    const projectNumbers = await this.services.project.countByUserId(user.id);
+    const projectsLeft = this.config.project.maxPerUser - projectNumbers;
+    if (projectsLeft < 1) {
+      const response: ProjectSaveResponse = { status: ProjectSaveStatus.LimitReached, projectsLeft };
+      reply.status(402).send(response);
+      return;
+    }
 
-    reply.status(200).send(result);
+    const project: CompressedProject<NodeBinary> = { metadata, project: data.file };
+    await this.services.project.save(user.id, project);
+
+    const response: ProjectSaveResponse = { status: ProjectSaveStatus.Saved, projectsLeft };
+    reply.status(200).send(response);
   };
 
   private list = async (req: FastifyRequest<{ Querystring: PaginatedQuery }>, reply: FastifyReply): Promise<void> => {

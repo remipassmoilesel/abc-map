@@ -24,29 +24,33 @@ export class RegistrationDao {
   constructor(private client: MongodbClient) {}
 
   public async init(): Promise<void> {
-    const coll = await this.client.collection<RegistrationDocument>(MongodbCollection.Registrations);
+    const coll = await this.collection();
     await coll.createIndex('email', { unique: false });
   }
 
   public async save(registration: RegistrationDocument): Promise<void> {
-    const coll = await this.client.collection<RegistrationDocument>(MongodbCollection.Registrations);
+    const coll = await this.collection();
     await coll.replaceOne({ _id: registration._id }, registration, { upsert: true });
   }
 
   public async findById(id: string): Promise<RegistrationDocument | undefined> {
-    const coll = await this.client.collection<RegistrationDocument>(MongodbCollection.Registrations);
+    const coll = await this.collection();
     const res = await coll.findOne({ _id: id });
     return res || undefined;
   }
 
   public async findByEmail(email: string): Promise<RegistrationDocument | undefined> {
-    const coll = await this.client.collection<RegistrationDocument>(MongodbCollection.Registrations);
+    const coll = await this.collection();
     const res = await coll.findOne({ email });
     return res || undefined;
   }
 
   public async deleteById(id: string): Promise<void> {
-    const coll = await this.client.collection<RegistrationDocument>(MongodbCollection.Registrations);
+    const coll = await this.collection();
     await coll.deleteOne({ _id: id });
+  }
+
+  private collection() {
+    return this.client.collection<RegistrationDocument>(MongodbCollection.Registrations);
   }
 }

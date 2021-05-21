@@ -28,18 +28,20 @@ import { MapWrapper } from '../geo/map/MapWrapper';
 import * as sinon from 'sinon';
 import { SinonStubbedInstance } from 'sinon';
 import { ProjectHelper } from '@abc-map/shared';
+import { ToastService } from '../ui/ToastService';
 
 logger.disable();
 
 describe('ProjectService', function () {
   let store: MainStore;
   let geoMock: SinonStubbedInstance<GeoService>;
+  let toastMock: SinonStubbedInstance<ToastService>;
   let projectService: ProjectService;
 
   beforeEach(() => {
     store = storeFactory();
     geoMock = sinon.createStubInstance(GeoService);
-    projectService = new ProjectService({} as any, {} as any, store, geoMock as unknown as GeoService);
+    projectService = new ProjectService({} as any, {} as any, store, toastMock as unknown as ToastService, geoMock as unknown as GeoService);
   });
 
   describe('newProject()', () => {

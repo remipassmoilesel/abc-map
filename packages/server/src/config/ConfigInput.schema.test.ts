@@ -38,6 +38,9 @@ const sampleConfig: ConfigInput = {
       timeWindow: '10m',
     },
   },
+  project: {
+    maxPerUser: 10,
+  },
   database: {
     url: 'mongodb://localhost:27019',
     username: 'admin',

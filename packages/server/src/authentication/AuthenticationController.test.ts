@@ -64,12 +64,12 @@ describe('AuthenticationController', () => {
     await server.shutdown();
   });
 
-  describe('POST /authentication/registration', () => {
+  describe('POST /authentication/account', () => {
     it('should fail with invalid request', async () => {
       // Act
       const response = await server.getApp().inject({
         method: 'POST',
-        path: '/api/authentication/registration',
+        path: '/api/authentication/account',
         payload: {
           'wrong-var': 'wrong-val',
         },
@@ -88,7 +88,7 @@ describe('AuthenticationController', () => {
       };
       const response = await server.getApp().inject({
         method: 'POST',
-        path: '/api/authentication/registration',
+        path: '/api/authentication/account',
         payload,
       });
 
@@ -97,12 +97,12 @@ describe('AuthenticationController', () => {
     });
   });
 
-  describe('POST /authentication/registration/confirmation', () => {
+  describe('POST /authentication/account/confirmation', () => {
     it('should fail with invalid request', async () => {
       // Act
       const response = await server.getApp().inject({
         method: 'POST',
-        path: '/api/authentication/registration/confirmation',
+        path: '/api/authentication/account/confirmation',
         payload: {
           'wrong-var': 'wrong-val',
         },
@@ -128,7 +128,7 @@ describe('AuthenticationController', () => {
       // Act
       const response = await server.getApp().inject({
         method: 'POST',
-        path: '/api/authentication/registration/confirmation',
+        path: '/api/authentication/account/confirmation',
         payload,
       });
 
@@ -148,7 +148,7 @@ describe('AuthenticationController', () => {
       // Act
       const response = await server.getApp().inject({
         method: 'POST',
-        path: '/api/authentication/registration/confirmation',
+        path: '/api/authentication/account/confirmation',
         payload,
       });
 
@@ -157,7 +157,7 @@ describe('AuthenticationController', () => {
     });
   });
 
-  describe('POST /authentication/login', () => {
+  describe('POST /authentication', () => {
     it('should work with existing user and correct password', async () => {
       // Prepare
       const user = TestHelper.sampleUser();
@@ -171,7 +171,7 @@ describe('AuthenticationController', () => {
       };
       const response = await server.getApp().inject({
         method: 'POST',
-        path: '/api/authentication/login',
+        path: '/api/authentication',
         payload,
       });
 
@@ -187,7 +187,7 @@ describe('AuthenticationController', () => {
       };
       const response = await server.getApp().inject({
         method: 'POST',
-        path: '/api/authentication/login',
+        path: '/api/authentication',
         payload,
       });
 
@@ -198,7 +198,7 @@ describe('AuthenticationController', () => {
     it('should fail with invalid request', async () => {
       const response = await server.getApp().inject({
         method: 'POST',
-        path: '/api/authentication/login',
+        path: '/api/authentication',
         payload: {
           'wrong-var': 'wrong-val',
         },
@@ -221,7 +221,7 @@ describe('AuthenticationController', () => {
       };
       const response = await server.getApp().inject({
         method: 'POST',
-        path: '/api/authentication/login',
+        path: '/api/authentication',
         payload,
       });
 
@@ -230,11 +230,11 @@ describe('AuthenticationController', () => {
     });
   });
 
-  describe('POST /authentication/renew', () => {
+  describe('GET /authentication/token', () => {
     it('should fail without authentication', async () => {
       const response = await server.getApp().inject({
-        method: 'POST',
-        path: '/api/authentication/renew',
+        method: 'GET',
+        path: '/api/authentication/token',
       });
 
       assert.equal(response.statusCode, 403);
@@ -252,8 +252,8 @@ describe('AuthenticationController', () => {
 
       // Act
       const response = await server.getApp().inject({
-        method: 'POST',
-        path: '/api/authentication/renew',
+        method: 'GET',
+        path: '/api/authentication/token',
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -271,10 +271,83 @@ describe('AuthenticationController', () => {
 
       // Act
       const response = await server.getApp().inject({
-        method: 'POST',
-        path: '/api/authentication/renew',
+        method: 'GET',
+        path: '/api/authentication/token',
         headers: {
           Authorization: `Bearer ${token}`,
+        },
+      });
+
+      // Assert
+      assert.equal(response.statusCode, 200);
+    });
+  });
+
+  describe('PATCH /authentication/password', () => {
+    it('should fail with bad request', async () => {
+      const response = await server.getApp().inject({
+        method: 'PATCH',
+        path: '/api/authentication/password',
+        payload: {
+          'wrong-var': 'wrong-val',
+        },
+      });
+
+      assert.equal(response.statusCode, 400);
+      assert.equal(response.body, '{"statusCode":400,"error":"Bad Request","message":"body should have required property \'previousPassword\'"}');
+    });
+
+    it('should reply 403 user is not connected', async () => {
+      // Act
+      const response = await server.getApp().inject({
+        method: 'PATCH',
+        path: '/api/authentication/password',
+        payload: {
+          previousPassword: 'azerty1234',
+          newPassword: 'qwerty789',
+        },
+      });
+
+      // Assert
+      assert.equal(response.statusCode, 403);
+    });
+
+    it('should reply 403 if previous password is not correct', async () => {
+      // Prepare
+      const user = TestHelper.sampleUser();
+      await services.user.save(user);
+      const token = services.authentication.signAuthenticationToken(user);
+
+      // Act
+      const response = await server.getApp().inject({
+        method: 'PATCH',
+        path: '/api/authentication/password',
+        headers: { Authorization: `Bearer ${token}` },
+        payload: {
+          previousPassword: 'azerty1234',
+          newPassword: 'qwerty789',
+        },
+      });
+
+      // Assert
+      assert.equal(response.statusCode, 403);
+    });
+
+    it('should work', async () => {
+      // Prepare
+      const user = TestHelper.sampleUser();
+      user.password = await passwordHasher.hashPassword('azerty1234', user.id);
+      await services.user.save(user);
+      const token = services.authentication.signAuthenticationToken(user);
+
+      // Act
+      const response = await server.getApp().inject({
+        method: 'PATCH',
+        path: '/api/authentication/password',
+        headers: { Authorization: `Bearer ${token}` },
+        payload: {
+          previousPassword: 'azerty1234',
+          newPassword: 'qwerty789',
         },
       });
 
@@ -287,55 +360,6 @@ describe('AuthenticationController', () => {
     it('should fail with bad request', async () => {
       const response = await server.getApp().inject({
         method: 'POST',
-        path: '/api/authentication/password',
-        payload: {
-          'wrong-var': 'wrong-val',
-        },
-      });
-
-      assert.equal(response.statusCode, 400);
-      assert.equal(response.body, '{"statusCode":400,"error":"Bad Request","message":"body should have required property \'email\'"}');
-    });
-
-    it('should reply 200 even if user does not exist', async () => {
-      const email = 'nobody@abc-map.fr';
-
-      // Act
-      const response = await server.getApp().inject({
-        method: 'POST',
-        path: '/api/authentication/password',
-        payload: {
-          email,
-        },
-      });
-
-      // Assert
-      assert.equal(response.statusCode, 200);
-    });
-
-    it('should work', async () => {
-      const user = TestHelper.sampleUser();
-      await services.user.save(user);
-
-      // Act
-      const response = await server.getApp().inject({
-        method: 'POST',
-        path: '/api/authentication/password',
-        payload: {
-          email: user.email,
-        },
-      });
-
-      // Assert
-      // TODO: better assertion here, we do not prove that mail was sent
-      assert.equal(response.statusCode, 200);
-    });
-  });
-
-  describe('PATCH /authentication/password', () => {
-    it('should fail with bad request', async () => {
-      const response = await server.getApp().inject({
-        method: 'PATCH',
         path: '/api/authentication/password',
         payload: {
           'wrong-var': 'wrong-val',
@@ -358,7 +382,7 @@ describe('AuthenticationController', () => {
 
       // Act
       const response = await server.getApp().inject({
-        method: 'PATCH',
+        method: 'POST',
         path: '/api/authentication/password',
         payload: {
           token,
@@ -378,10 +402,118 @@ describe('AuthenticationController', () => {
 
       // Act
       const response = await server.getApp().inject({
-        method: 'PATCH',
+        method: 'POST',
         path: '/api/authentication/password',
         payload: {
           token,
+          password: 'azerty1234',
+        },
+      });
+
+      // Assert
+      assert.equal(response.statusCode, 200);
+    });
+  });
+
+  describe('POST /authentication/password/reset-email', () => {
+    it('should fail with bad request', async () => {
+      const response = await server.getApp().inject({
+        method: 'POST',
+        path: '/api/authentication/password/reset-email',
+        payload: {
+          'wrong-var': 'wrong-val',
+        },
+      });
+
+      assert.equal(response.statusCode, 400);
+      assert.equal(response.body, '{"statusCode":400,"error":"Bad Request","message":"body should have required property \'email\'"}');
+    });
+
+    it('should reply 200 even if user does not exist', async () => {
+      const email = 'nobody@abc-map.fr';
+
+      // Act
+      const response = await server.getApp().inject({
+        method: 'POST',
+        path: '/api/authentication/password/reset-email',
+        payload: {
+          email,
+        },
+      });
+
+      // Assert
+      assert.equal(response.statusCode, 200);
+    });
+
+    it('should work', async () => {
+      const user = TestHelper.sampleUser();
+      await services.user.save(user);
+
+      // Act
+      const response = await server.getApp().inject({
+        method: 'POST',
+        path: '/api/authentication/password/reset-email',
+        payload: {
+          email: user.email,
+        },
+      });
+
+      // Assert
+      // TODO: better assertion here, we do not prove that mail was sent
+      assert.equal(response.statusCode, 200);
+    });
+  });
+
+  describe('DELETE /', () => {
+    it('should fail with bad request', async () => {
+      const response = await server.getApp().inject({
+        method: 'DELETE',
+        path: '/api/authentication/',
+        payload: {
+          'wrong-var': 'wrong-val',
+        },
+      });
+
+      assert.equal(response.statusCode, 400);
+      assert.equal(response.body, '{"statusCode":400,"error":"Bad Request","message":"body should have required property \'password\'"}');
+    });
+
+    it('should fail if password is incorrect', async () => {
+      const user = TestHelper.sampleUser();
+      user.password = await passwordHasher.hashPassword('azerty1234', user.id);
+      await services.user.save(user);
+      const token = await services.authentication.signAuthenticationToken(user);
+
+      // Act
+      const response = await server.getApp().inject({
+        method: 'DELETE',
+        path: '/api/authentication',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        payload: {
+          password: 'qwerty789',
+        },
+      });
+
+      // Assert
+      assert.equal(response.statusCode, 403);
+    });
+
+    it('should work', async () => {
+      const user = TestHelper.sampleUser();
+      user.password = await passwordHasher.hashPassword('azerty1234', user.id);
+      await services.user.save(user);
+      const token = await services.authentication.signAuthenticationToken(user);
+
+      // Act
+      const response = await server.getApp().inject({
+        method: 'DELETE',
+        path: '/api/authentication',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        payload: {
           password: 'azerty1234',
         },
       });
@@ -397,7 +529,7 @@ describe('AuthenticationController', () => {
     for (let i = 0; i <= config.server.authenticationRateLimit.max; i++) {
       await server.getApp().inject({
         method: 'POST',
-        path: '/api/authentication/password',
+        path: '/api/authentication/password/reset-email',
         headers: { 'x-forwarded-for': '10.10.10.10' },
         payload: { email },
       });
@@ -405,13 +537,13 @@ describe('AuthenticationController', () => {
 
     const blocked = await server.getApp().inject({
       method: 'POST',
-      path: '/api/authentication/password',
+      path: '/api/authentication/password/reset-email',
       headers: { 'x-forwarded-for': '10.10.10.10' },
       payload: { email },
     });
     const notBlocked = await server.getApp().inject({
       method: 'POST',
-      path: '/api/authentication/password',
+      path: '/api/authentication/password/reset-email',
       headers: { 'x-forwarded-for': '10.10.10.20' },
       payload: { email },
     });

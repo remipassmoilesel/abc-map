@@ -29,17 +29,17 @@ export class VoteDao {
   constructor(private client: MongodbClient) {}
 
   public async init(): Promise<void> {
-    const coll = await this.client.collection<VoteDocument>(MongodbCollection.Votes);
+    const coll = await this.collection();
     await coll.createIndex({ date: 1 });
   }
 
   public async save(vote: VoteDocument): Promise<void> {
-    const coll = await this.client.collection<VoteDocument>(MongodbCollection.Votes);
+    const coll = await this.collection();
     await coll.replaceOne({ _id: vote._id }, vote, { upsert: true });
   }
 
   public async aggregate(start: Date, end: Date): Promise<VoteAggregation[]> {
-    const coll = await this.client.collection<VoteDocument>(MongodbCollection.Votes);
+    const coll = await this.collection();
     const aggregation = await coll
       .aggregate<{ _id: number; count: number }>([
         {
@@ -62,5 +62,9 @@ export class VoteDao {
       .toArray();
 
     return aggregation.map((raw) => ({ value: raw._id, count: raw.count }));
+  }
+
+  private async collection() {
+    return this.client.collection<VoteDocument>(MongodbCollection.Votes);
   }
 }

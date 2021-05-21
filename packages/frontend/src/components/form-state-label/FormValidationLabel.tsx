@@ -25,6 +25,7 @@ export enum FormState {
   PasswordTooWeak = 'PasswordTooWeak',
   PasswordNotConfirmed = 'PasswordNotConfirmed',
   PasswordEqualEmail = 'PasswordEqualEmail',
+  DeletionNotConfirmed = 'DeletionNotConfirmed',
   Ok = 'Ok',
 }
 
@@ -61,6 +62,11 @@ class FormValidationLabel extends Component<Props, {}> {
         {FormState.PasswordEqualEmail === formState && (
           <>
             <i className={'fa fa-exclamation-circle'} /> Le mot de passe et l&apos;email doivent être différents !
+          </>
+        )}
+        {FormState.DeletionNotConfirmed === formState && (
+          <>
+            <i className={'fa fa-exclamation-circle'} /> Vous devez confirmer la suppression de votre compte.
           </>
         )}
         {FormState.Ok === formState && (

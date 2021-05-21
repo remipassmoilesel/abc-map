@@ -157,10 +157,7 @@ class PasswordLostModal extends Component<ServiceProps, State> {
         toasts.info('Si votre adresse est enregistrée, votre demande sera traitée !');
         this.close();
       })
-      .catch((err) => {
-        logger.error(err);
-        toasts.genericError();
-      });
+      .catch((err) => logger.error(err));
   };
 
   private handleEmailChange = (ev: ChangeEvent<HTMLInputElement>) => {

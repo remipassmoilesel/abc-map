@@ -28,16 +28,21 @@ import { HistoryService } from '../history/HistoryService';
 import { LayerFactory } from './layers/LayerFactory';
 import VectorImageLayer from 'ol/layer/VectorImage';
 import { VectorLayerWrapper } from './layers/LayerWrapper';
+import { SinonStubbedInstance } from 'sinon';
+import { ToastService } from '../ui/ToastService';
+import * as sinon from 'sinon';
 
 geoLogger.disable();
 mapLogger.disable();
 
 // TODO: improve tests
 describe('GeoService', () => {
+  let toasts: SinonStubbedInstance<ToastService>;
   let service: GeoService;
 
   beforeEach(() => {
-    service = new GeoService(httpExternalClient(5_000), HistoryService.create());
+    toasts = sinon.createStubInstance(ToastService);
+    service = new GeoService(httpExternalClient(5_000), toasts, HistoryService.create());
   });
 
   it('exportLayers()', async () => {

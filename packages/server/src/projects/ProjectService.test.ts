@@ -26,15 +26,18 @@ import { StreamReader } from '../utils/StreamReader';
 import ReadableStream = NodeJS.ReadableStream;
 import { Readable } from 'stream';
 import { CompressedProject } from '@abc-map/shared';
+import { UserService } from '../users/UserService';
 
 describe('ProjectService', () => {
   let userId: string;
   let client: MongodbClient;
+  let userService: UserService;
   let service: ProjectService;
 
   before(async () => {
     const config = await ConfigLoader.load();
     client = await MongodbClient.createAndConnect(config);
+    userService = UserService.create(config, client);
 
     service = ProjectService.create(config, client);
   });
@@ -181,30 +184,42 @@ describe('ProjectService', () => {
     });
   });
 
-  describe('delete()', () => {
-    it('should work', async () => {
-      // Prepare
-      const p1 = await TestHelper.sampleCompressedProject();
-      await service.save(userId, p1);
+  it('delete()', async () => {
+    // Prepare
+    const p1 = await TestHelper.sampleCompressedProject();
+    await service.save(userId, p1);
 
-      // Act
-      await service.deleteById(p1.metadata.id);
+    // Act
+    await service.deleteById(p1.metadata.id);
 
-      // Assert
-      const dbProject = await service.findById(p1.metadata.id);
-      assert.isUndefined(dbProject);
-    });
+    // Assert
+    const dbProject = await service.findById(p1.metadata.id);
+    assert.isUndefined(dbProject);
+  });
 
-    it('should fail', async () => {
-      // Prepare
-      const p1 = await TestHelper.sampleCompressedProject();
+  it('deleteByUserId()', async () => {
+    // Prepare
+    const user1 = TestHelper.sampleUser();
+    await userService.save(user1);
+    const user2 = TestHelper.sampleUser();
+    await userService.save(user2);
 
-      // Act
-      const error: Error = await service.deleteById(p1.metadata.id).catch((err) => err);
+    const p1 = await TestHelper.sampleCompressedProject();
+    const p2 = await TestHelper.sampleCompressedProject();
+    const p3 = await TestHelper.sampleCompressedProject();
+    await service.save(user1.id, p1);
+    await service.save(user1.id, p2);
+    await service.save(user2.id, p3);
 
-      // Assert
-      assert.instanceOf(error, Error);
-      assert.match(error.message, /Invalid file/);
-    });
+    // Act
+    await service.deleteByUserId(user1.id);
+
+    // Assert
+    const project1 = await service.findById(p1.metadata.id);
+    assert.isUndefined(project1);
+    const project2 = await service.findById(p2.metadata.id);
+    assert.isUndefined(project2);
+    const project3 = await service.findById(p3.metadata.id);
+    assert.isDefined(project3);
   });
 });

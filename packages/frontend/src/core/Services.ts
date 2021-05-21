@@ -26,7 +26,6 @@ import { mainStore } from './store/store';
 import { ToastService } from './ui/ToastService';
 import { ModalService } from './ui/ModalService';
 import { VoteService } from './vote/VoteService';
-import { httpErrorHandler } from './http/httpErrorHandler';
 
 export interface Services {
   project: ProjectService;
@@ -48,19 +47,18 @@ export function getServices(): Services {
 }
 
 function serviceFactory(): Services {
-  const toasts = new ToastService();
-
-  const jsonClient = httpApiClient(5_000, (err) => httpErrorHandler(toasts, err));
-  const downloadClient = httpDownloadClient(5_000, (err) => httpErrorHandler(toasts, err));
+  const jsonClient = httpApiClient(5_000);
+  const downloadClient = httpDownloadClient(5_000);
   const externalClient = httpExternalClient(5_000);
 
+  const toasts = new ToastService();
   const modals = new ModalService();
   const history = HistoryService.create();
-  const geo = new GeoService(externalClient, history);
-  const project = new ProjectService(jsonClient, downloadClient, mainStore, geo);
+  const geo = new GeoService(externalClient, toasts, history);
+  const project = new ProjectService(jsonClient, downloadClient, mainStore, toasts, geo);
   const authentication = new AuthenticationService(jsonClient, mainStore, toasts);
-  const dataStore = new DataStoreService(jsonClient, downloadClient, geo);
-  const vote = new VoteService(jsonClient);
+  const dataStore = new DataStoreService(jsonClient, downloadClient, toasts, geo);
+  const vote = new VoteService(jsonClient, toasts);
 
   return {
     project,

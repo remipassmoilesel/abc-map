@@ -18,11 +18,11 @@
 
 import { ProjectHelper } from './ProjectHelper';
 import { AbcFile, Zipper } from '../zip';
-import { ManifestName } from './AbcProjectManifest';
+import { ProjectConstants } from './ProjectConstants';
 
 describe('ProjectHelper', () => {
   it('should find manifest', async () => {
-    const files: AbcFile[] = [{ path: ManifestName, content: Buffer.from('{"variable":"value"}') }];
+    const files: AbcFile[] = [{ path: ProjectConstants.ManifestName, content: Buffer.from('{"variable":"value"}') }];
     const project = await Zipper.forBackend().zipFiles(files);
 
     const manifest = await ProjectHelper.forBackend().extractManifest(project);

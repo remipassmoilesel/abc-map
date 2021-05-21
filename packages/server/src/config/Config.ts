@@ -30,6 +30,7 @@ export interface ConfigInput {
   development?: DevelopmentDataConfig;
   externalUrl: string;
   server: ServerConfig;
+  project: ProjectConfig;
   database: DatabaseConfig;
   jwt: JwtConfig;
   authentication: AuthenticationConfig;
@@ -65,6 +66,10 @@ export interface ServerConfig {
     max: number;
     timeWindow: string;
   };
+}
+
+export interface ProjectConfig {
+  maxPerUser: number;
 }
 
 export interface DatabaseConfig {

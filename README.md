@@ -48,3 +48,11 @@ but for now you should expect some breaking changes.
 
 See [documentation](./documentation) folder.
 
+
+## Roadmap
+
+Upcoming work and features:      
+
+- Internationalization
+- Automated map legend creation
+- More frontend tests

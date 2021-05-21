@@ -49,8 +49,16 @@
     background-color: white;
   }
 
+  :global(.dropdown-toggle::after) {
+    content: none;
+  }
+
+  :global(.fa-user-circle) {
+    font-size: 1.4em;
+  }
+
 }
 
 .dropDown {
-  width: 15rem;
+  width: 17em;
 }
