@@ -95,7 +95,7 @@ class TopBar extends Component<Props, {}> {
                     Mon compte
                   </Dropdown.Item>
                   <Dropdown.Divider />
-                  <Dropdown.Item onClick={this.handleLogout} disabled={!userAuthenticated} data-cy={'logout'}>
+                  <Dropdown.Item onClick={this.handleLogout} data-cy={'logout'}>
                     <i className={'fa fa-lock mr-3'} /> Se déconnecter
                   </Dropdown.Item>
                 </>

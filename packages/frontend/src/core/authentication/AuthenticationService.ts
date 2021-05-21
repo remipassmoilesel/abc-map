@@ -149,7 +149,11 @@ export class AuthenticationService {
         this.dispatchToken(result.data.token);
       })
       .catch((err) => {
-        this.toasts.httpError(err);
+        if (HttpError.isForbidden(err)) {
+          this.toasts.error('Vous devez vous reconnecter');
+        } else {
+          this.toasts.httpError(err);
+        }
         return Promise.reject(err);
       });
   }
@@ -161,7 +165,7 @@ export class AuthenticationService {
       .then((res) => {
         const registration: RegistrationResponse = res.data;
         if (res.data.status === RegistrationStatus.Successful) {
-          this.toasts.info('Un email vient de vous être envoyé, vous devez activer votre compte');
+          this.toasts.info('Un email vient de vous être envoyé, vous devez activer votre compte. Pensez à vérifier vos spam !');
           return registration;
         }
 

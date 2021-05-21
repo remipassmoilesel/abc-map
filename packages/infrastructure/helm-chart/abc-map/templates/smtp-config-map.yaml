@@ -1,0 +1,12 @@
+{{- if .Values.smtp.enabled -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "abc-map.fullname" . }}-smtp-config
+  labels:
+  {{- include "abc-map.labels" . | nindent 4 }}
+data:
+  private-key: |
+{{ .Values.smtp.dkim.private_key | indent 4 }}
+
+  {{- end }}

@@ -45,9 +45,7 @@ authenticate(svc)
 export async function authenticate(svc: Services): Promise<void> {
   const isAuthenticated = svc.authentication.getUserStatus() === UserStatus.Authenticated;
   if (isAuthenticated) {
-    return svc.authentication.renewToken().catch((err) => {
-      svc.toasts.error('Vous devez vous reconnecter');
-      logger.error(err);
+    return svc.authentication.renewToken().catch(() => {
       return svc.authentication.anonymousLogin();
     });
   } else {

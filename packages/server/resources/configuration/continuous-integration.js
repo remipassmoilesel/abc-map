@@ -39,6 +39,7 @@ module.exports = {
     confirmationExpiresIn: '24h',
   },
   smtp: {
+    from: 'no-reply@abc-map.fr',
     host: 'smtp.ethereal.email',
     port: 587,
     auth: {
@@ -50,7 +51,8 @@ module.exports = {
     path: 'resources/datastore',
   },
   development: {
-    enabled: true,
+    generateData: true,
     users: 100,
+    persistEmails: true,
   },
 };

@@ -47,8 +47,9 @@ export interface Config extends ConfigInput {
 }
 
 export interface DevelopmentDataConfig {
-  enabled: boolean;
+  generateData: boolean;
   users: number;
+  persistEmails: boolean;
 }
 
 export interface ServerConfig {
@@ -96,6 +97,7 @@ export interface RegistrationConfig {
 }
 
 export interface SmtpConfig {
+  from: string;
   host: string;
   port: number;
   secure?: boolean;

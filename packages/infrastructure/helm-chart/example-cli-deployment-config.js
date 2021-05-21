@@ -30,5 +30,5 @@ module.exports = {
   tag: 'my-tag',
   namespace: 'my-kubernetes-namespace',
   valuesFile: 'my-values-file',
-  healthCheckUrl: 'https://my-abc-map-instance.fr/'
+  healthCheckUrl: 'https://abc-map.my-domain.fr/api/health/'
 }

@@ -52,6 +52,7 @@ describe('User account', function () {
       .click()
       .get('[data-cy=logout]')
       .click()
+      .wait(500)
       .then(() => Authentication.login(email, 'qwerty789'));
   });
 

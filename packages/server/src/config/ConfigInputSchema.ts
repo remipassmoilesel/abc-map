@@ -89,11 +89,13 @@ export const ConfigInputSchema = {
     },
     smtp: {
       type: 'object',
-      minProperties: 3,
+      requiredProperties: ['from', 'host', 'port'],
       additionalProperties: false,
       properties: {
+        from: { type: 'string' },
         host: { type: 'string' },
         port: { type: 'number' },
+        secure: { type: 'boolean' },
         auth: {
           type: 'object',
           minProperties: 2,
@@ -118,8 +120,9 @@ export const ConfigInputSchema = {
       minProperties: 2,
       additionalProperties: false,
       properties: {
-        enabled: { type: 'boolean' },
+        generateData: { type: 'boolean' },
         users: { type: 'number' },
+        persistEmails: { type: 'boolean' },
       },
     },
   },
