@@ -45,8 +45,9 @@ export class SmtpClient {
     logger.info(`Sending mail to ${to}`);
     const html = this.htmlTemplate(subject, body);
 
-    if (!this.config.development) {
+    if (!this.config.development?.persistEmails) {
       await this.transporter.sendMail({
+        from: this.config.smtp.from,
         to,
         subject,
         html,

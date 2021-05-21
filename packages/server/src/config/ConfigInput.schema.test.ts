@@ -60,6 +60,7 @@ const sampleConfig: ConfigInput = {
     confirmationExpiresIn: '24h',
   },
   smtp: {
+    from: 'no-reply@abc-map.fr',
     host: 'smtp.ethereal.email',
     port: 587,
     auth: {
@@ -71,8 +72,9 @@ const sampleConfig: ConfigInput = {
     path: 'resources/datastore',
   },
   development: {
-    enabled: true,
+    generateData: true,
     users: 10,
+    persistEmails: false,
   },
 };
 

@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "abc-map.fullname" . }}-smtp
+  labels:
+    {{- include "abc-map.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: 25
+      targetPort: smtp
+      protocol: TCP
+      name: smtp
+  selector:
+    app.kubernetes.io/name: {{ include "abc-map.name" . }}-smtp
+    app.kubernetes.io/instance: {{ .Release.Name }}-smtp

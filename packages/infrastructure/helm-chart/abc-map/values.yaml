@@ -21,14 +21,10 @@ fullnameOverride: ""
 
 abcMap:
   replicaCount: 2
-  podAnnotations: { }
-
   image:
     repository: registry.gitlab.com/abc-map/abc-map-2/server
     pullPolicy: IfNotPresent
     tag: "0.1.0"
-
-  imagePullSecrets: [ ]
 
   config: |
     module.exports = {
@@ -73,6 +69,7 @@ abcMap:
         confirmationExpiresIn: '24h',
       },
       smtp: {
+        from: 'no-reply@abc-map.fr',
         host: '<CHANGE_ME>',
         port: 587,
         auth: {
@@ -101,12 +98,11 @@ abcMap:
       secretName: <CHANGE_ME>
       host: <CHANGE_ME>
 
+  podAnnotations: { }
+  imagePullSecrets: [ ]
   resources: { }
-
   nodeSelector: { }
-
   tolerations: [ ]
-
   affinity: { }
 
 
@@ -119,10 +115,24 @@ mongodb:
     existingClaim: <CHANGE_ME>
 
   resources: { }
-
   nodeSelector: { }
-
   tolerations: [ ]
+  affinity: { }
 
+
+smtp:
+  enabled: true
+  replicaCount: 1
+  dkim:
+    domain: <CHANGE_ME>
+    selector: <CHANGE_ME>
+    private_key: |
+      -----BEGIN RSA PRIVATE KEY-----
+      <CHANGE_ME>
+
+
+  resources: { }
+  nodeSelector: { }
+  tolerations: [ ]
   affinity: { }
 

@@ -17,7 +17,7 @@
  */
 
 import React, { Component, ReactNode } from 'react';
-import { Logger } from '@abc-map/shared';
+import { Logger, UserStatus } from '@abc-map/shared';
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
 import { FrontendRoutes } from '@abc-map/shared';
 import { AbcVoteAggregation } from '@abc-map/shared';
@@ -29,15 +29,23 @@ import Illustration3Icon from '../../assets/illustrations/illustration-3.svg';
 import * as _ from 'lodash';
 import Cls from './LandingView.module.scss';
 import { BUILD_INFO } from '../../build-version';
+import { MainState } from '../../core/store/reducer';
+import { connect, ConnectedProps } from 'react-redux';
 
 const logger = Logger.get('Landing.tsx', 'info');
+
+const mapStateToProps = (state: MainState) => ({
+  authenticated: state.authentication.userStatus === UserStatus.Authenticated,
+});
+
+const connector = connect(mapStateToProps);
+
+type Props = ConnectedProps<typeof connector> & RouteComponentProps<any, any> & ServiceProps;
 
 interface State {
   voteAggregation?: AbcVoteAggregation;
   illustration: string;
 }
-
-declare type Props = RouteComponentProps<any, any> & ServiceProps;
 
 class LandingView extends Component<Props, State> {
   constructor(props: Props) {
@@ -49,6 +57,8 @@ class LandingView extends Component<Props, State> {
 
   public render(): ReactNode {
     const voteAggregation = this.state.voteAggregation;
+    const authenticated = this.props.authenticated;
+
     return (
       <div className={Cls.landing}>
         <div className={'d-flex flex-column'}>
@@ -86,35 +96,44 @@ class LandingView extends Component<Props, State> {
 
             {!!voteAggregation?.total && (
               <>
-                <p>
+                <p className={'mt-5'}>
                   Sur les 7 derniers jours, {voteAggregation.satisfied} % des utilisateurs ont déclaré être satisfait !
-                  <br />
-                  {voteAggregation.satisfied < 30 && "C'est pas top top, mais que font les développeurs ?"}
-                  {voteAggregation.satisfied < 60 && 'Hmmm, va falloir faire mieux !'}
-                  {voteAggregation.satisfied >= 60 && 'Pas mal non ?'}
+                  <div className={'mt-3'}>
+                    {voteAggregation.satisfied < 60 && (
+                      <>
+                        Va falloir faire mieux <span className={'ml-2'}>🧑‍🏭</span>
+                      </>
+                    )}
+                    {voteAggregation.satisfied >= 60 && (
+                      <>
+                        Champagne ! <span className={'ml-2'}>🎉</span>
+                      </>
+                    )}
+                  </div>
                 </p>
               </>
             )}
           </div>
 
-          <div>
-            {/* Login and registration */}
-
-            <h3 className={'mt-5'}>Inscription, connexion</h3>
-            <p className={'mt-4'}>
-              La connexion est <i>facultative</i>, mais elle permet de sauvegarder ses cartes en ligne.
-            </p>
-            <div className={'mt-5'}>
-              <button className={'btn btn-primary mr-3'} onClick={this.handleRegister} data-cy={'open-registration'}>
-                <i className={'fa fa-feather-alt'} />
-                S&apos;inscrire
-              </button>
-              <button className={'btn btn-primary mr-3'} onClick={this.handleLogin} data-cy={'open-login'}>
-                <i className={'fa fa-lock-open'} />
-                Se connecter
-              </button>
+          {/* Login and registration */}
+          {!authenticated && (
+            <div>
+              <h3 className={'mt-5'}>Inscription, connexion</h3>
+              <p className={'mt-4'}>
+                La connexion est <i>facultative</i>, mais elle permet de sauvegarder ses cartes en ligne.
+              </p>
+              <div className={'mt-5'}>
+                <button className={'btn btn-primary mr-3'} onClick={this.handleRegister} data-cy={'open-registration'}>
+                  <i className={'fa fa-feather-alt'} />
+                  S&apos;inscrire
+                </button>
+                <button className={'btn btn-primary mr-3'} onClick={this.handleLogin} data-cy={'open-login'}>
+                  <i className={'fa fa-lock-open'} />
+                  Se connecter
+                </button>
+              </div>
             </div>
-          </div>
+          )}
         </div>
         <div className={'mt-5'}>
           {/* Some bullshit illustration */}
@@ -161,4 +180,4 @@ class LandingView extends Component<Props, State> {
   };
 }
 
-export default withRouter(withServices(LandingView));
+export default connector(withRouter(withServices(LandingView)));

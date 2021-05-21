@@ -56,7 +56,7 @@ describe('AuthenticationService', () => {
   before(async () => {
     config = await ConfigLoader.load();
     // We can disable this option because we mock smtp client
-    config.development = { enabled: false } as DevelopmentDataConfig;
+    config.development = { generateData: false } as DevelopmentDataConfig;
     mongodbClient = await MongodbClient.createAndConnect(config);
 
     hasher = new PasswordHasher(config);
