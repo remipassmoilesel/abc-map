@@ -62,14 +62,14 @@ export default () => {
 
   // We try to connect with bad credentials
   const badCredentials: AuthenticationRequest = { email: 'bad email', password: 'bad password' };
-  const req1 = jsonPost(`${fileOptions.host}/api/authentication/login`, badCredentials);
+  const req1 = jsonPost(`${fileOptions.host}/api/authentication`, badCredentials);
   check(req1, {
     'Bad authentication status is 401': (res) => res.status === 401,
   });
 
   // We login with correct credentials
   const goodCredentials: AuthenticationRequest = { email: `user-${__VU}@abc-map.fr`, password: 'azerty1234' };
-  const req2 = jsonPost(`${fileOptions.host}/api/authentication/login`, goodCredentials);
+  const req2 = jsonPost(`${fileOptions.host}/api/authentication`, goodCredentials);
   const auth = extractAuthentication(req2.body);
   check(req2, {
     'Good authentication status is 200': (res) => res.status === 200,

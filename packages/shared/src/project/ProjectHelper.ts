@@ -16,9 +16,10 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcProjectManifest, ManifestName } from './AbcProjectManifest';
+import { AbcProjectManifest } from './AbcProjectManifest';
 import { Zipper } from '../zip';
 import { BlobIO } from '../frontend/blob/BlobIO';
+import { ProjectConstants } from './ProjectConstants';
 
 export class ProjectHelper<T extends Blob | Buffer = Blob | Buffer> {
   public static forFrontend(): ProjectHelper<Blob> {
@@ -33,7 +34,7 @@ export class ProjectHelper<T extends Blob | Buffer = Blob | Buffer> {
 
   public async extractManifest(zip: T): Promise<AbcProjectManifest> {
     const files = await new Zipper(this.binaryFormat).unzip(zip);
-    const manifest = files.find((f) => f.path.endsWith(ManifestName));
+    const manifest = files.find((f) => f.path.endsWith(ProjectConstants.ManifestName));
     if (!manifest) {
       return Promise.reject(new Error('No manifest found'));
     }

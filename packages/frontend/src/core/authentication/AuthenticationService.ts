@@ -16,13 +16,14 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AxiosError, AxiosInstance } from 'axios';
+import { AxiosInstance } from 'axios';
 import { AuthenticationRoutes as Api } from '../http/ApiRoutes';
 import {
   AnonymousUser,
   AuthenticationRequest,
   AuthenticationResponse,
   AuthenticationToken,
+  DeleteAccountRequest,
   PasswordLostRequest,
   RegistrationConfirmationRequest,
   RegistrationConfirmationResponse,
@@ -31,6 +32,7 @@ import {
   RegistrationStatus,
   RenewResponse,
   ResetPasswordRequest,
+  UpdatePasswordRequest,
   UserStatus,
 } from '@abc-map/shared';
 import { AuthenticationActions } from '../store/authentication/actions';
@@ -39,6 +41,7 @@ import { Logger } from '@abc-map/shared';
 import { MainStore } from '../store/store';
 import { ToastService } from '../ui/ToastService';
 import { TokenHelper } from './TokenHelper';
+import { HttpError } from '../http/HttpError';
 
 const logger = Logger.get('AuthenticationService.ts', 'info');
 
@@ -81,7 +84,7 @@ export class AuthenticationService {
   public login(email: string, password: string): Promise<void> {
     const request: AuthenticationRequest = { email, password };
     return this.httpClient
-      .post<AuthenticationResponse>(Api.login(), request)
+      .post<AuthenticationResponse>(Api.authentication(), request)
       .then(async (res) => {
         const auth: AuthenticationResponse = res.data;
         if (auth.token) {
@@ -91,13 +94,27 @@ export class AuthenticationService {
         if (UserStatus.Authenticated === this.store.getState().authentication.userStatus) {
           this.toasts.info('Vous êtes connecté !');
         }
-        return Promise.resolve();
       })
-      .catch((err: AxiosError | Error | undefined) => {
-        logger.error('Authentication error: ', err);
-        if (err && 'response' in err && err.response?.data?.status) {
-          logger.error(err.response?.data);
+      .catch((err) => {
+        if (HttpError.isUnauthorized(err)) {
           this.toasts.error('Vos identifiants sont incorrects');
+        } else {
+          this.toasts.httpError(err);
+        }
+        return Promise.reject(err);
+      });
+  }
+
+  public updatePassword(previousPassword: string, newPassword: string): Promise<void> {
+    const req: UpdatePasswordRequest = { previousPassword, newPassword };
+    return this.httpClient
+      .patch(Api.password(), req)
+      .then(() => undefined)
+      .catch((err) => {
+        if (HttpError.isForbidden(err)) {
+          this.toasts.error('Votre mot de passe est incorrect');
+        } else {
+          this.toasts.httpError(err);
         }
         return Promise.reject(err);
       });
@@ -105,30 +122,42 @@ export class AuthenticationService {
 
   public passwordLost(email: string): Promise<void> {
     const req: PasswordLostRequest = { email };
-    return this.httpClient.post(Api.password(), req);
+    return this.httpClient
+      .post(Api.passwordResetEmail(), req)
+      .then(() => undefined)
+      .catch((err) => {
+        this.toasts.httpError(err);
+        return Promise.reject(err);
+      });
   }
 
   public resetPassword(token: string, password: string): Promise<void> {
     const req: ResetPasswordRequest = { token, password };
     return this.httpClient
-      .patch(Api.password(), req)
+      .post(Api.password(), req)
       .then(() => undefined)
       .catch((err) => {
-        this.toasts.genericError();
+        this.toasts.httpError(err);
         return Promise.reject(err);
       });
   }
 
   public renewToken(): Promise<void> {
-    return this.httpClient.post<RenewResponse>(Api.renew()).then((result) => {
-      this.dispatchToken(result.data.token);
-    });
+    return this.httpClient
+      .get<RenewResponse>(Api.token())
+      .then((result) => {
+        this.dispatchToken(result.data.token);
+      })
+      .catch((err) => {
+        this.toasts.httpError(err);
+        return Promise.reject(err);
+      });
   }
 
   public registration(email: string, password: string): Promise<RegistrationResponse> {
     const request: RegistrationRequest = { email, password };
     return this.httpClient
-      .post<RegistrationResponse>(Api.registration(), request)
+      .post<RegistrationResponse>(Api.account(), request)
       .then((res) => {
         const registration: RegistrationResponse = res.data;
         if (res.data.status === RegistrationStatus.Successful) {
@@ -139,12 +168,12 @@ export class AuthenticationService {
         this.toasts.genericError();
         return Promise.reject(new Error('Invalid registration status'));
       })
-      .catch((err: AxiosError | Error | undefined) => {
+      .catch((err) => {
         logger.error('Registration error: ', err);
-        if (err && 'response' in err && err.response?.data?.status === RegistrationStatus.EmailAlreadyExists) {
+        if (HttpError.isConflict(err)) {
           this.toasts.info('Cette adresse email est déjà prise');
         } else {
-          this.toasts.genericError();
+          this.toasts.httpError(err);
         }
         return Promise.reject(err);
       });
@@ -153,7 +182,7 @@ export class AuthenticationService {
   public confirmRegistration(token: string): Promise<RegistrationConfirmationResponse> {
     const request: RegistrationConfirmationRequest = { token };
     return this.httpClient
-      .post(Api.confirmRegistration(), request)
+      .post(Api.accountConfirmation(), request)
       .then((res) => {
         const response: RegistrationConfirmationResponse = res.data;
         if (response.token) {
@@ -162,7 +191,18 @@ export class AuthenticationService {
         return response;
       })
       .catch((err) => {
-        this.toasts.genericError();
+        this.toasts.httpError(err);
+        return Promise.reject(err);
+      });
+  }
+
+  public deleteAccount(password: string): Promise<void> {
+    const request: DeleteAccountRequest = { password };
+    return this.httpClient
+      .delete(Api.authentication(), { data: request })
+      .then(() => undefined)
+      .catch((err) => {
+        this.toasts.httpError(err);
         return Promise.reject(err);
       });
   }

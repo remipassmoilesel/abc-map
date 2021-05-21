@@ -28,13 +28,12 @@ import {
   AbcVectorLayer,
   AbcWmsLayer,
   CompressedProject,
-  CurrentVersion,
   DEFAULT_PROJECTION,
   FillPatterns,
   LayerType,
   LayoutFormats,
-  ManifestName,
   PredefinedLayerModel,
+  ProjectConstants,
   Zipper,
 } from '@abc-map/shared';
 import uuid from 'uuid-random';
@@ -60,7 +59,7 @@ export class TestHelper {
     return {
       metadata: {
         id: uuid(),
-        version: CurrentVersion,
+        version: ProjectConstants.CurrentVersion,
         name: `Test project ${uuid()}`,
         projection: DEFAULT_PROJECTION,
         containsCredentials: false,
@@ -73,7 +72,7 @@ export class TestHelper {
   public static async sampleCompressedProject(): Promise<CompressedProject<Blob>> {
     const project = this.sampleProject();
     const metadata = project.metadata;
-    const zip = await Zipper.forFrontend().zipFiles([{ path: ManifestName, content: new Blob([JSON.stringify(project)]) }]);
+    const zip = await Zipper.forFrontend().zipFiles([{ path: ProjectConstants.ManifestName, content: new Blob([JSON.stringify(project)]) }]);
     return {
       metadata: metadata,
       project: zip,

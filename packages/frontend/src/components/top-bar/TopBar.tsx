@@ -67,23 +67,39 @@ class TopBar extends Component<Props, {}> {
         <div className={'ml-3'}>
           <Dropdown data-cy={'user-menu'}>
             <Dropdown.Toggle variant="light">
-              <i className={'fa fa-user'} />
+              <i className={'fa fa-user-circle'} />
             </Dropdown.Toggle>
             <Dropdown.Menu className={Cls.dropDown}>
               <Dropdown.ItemText data-cy={'user-label'}>{userLabel}</Dropdown.ItemText>
               <Dropdown.Divider />
               {!userAuthenticated && (
                 <>
-                  <Dropdown.Item onClick={this.handleRegister}>S&apos;inscrire</Dropdown.Item>
-                  <Dropdown.Item onClick={this.handleLogin}>Se connecter</Dropdown.Item>
+                  <Dropdown.Item onClick={this.handleRegister}>
+                    <i className={'fa fa-feather mr-3'} />
+                    S&apos;inscrire
+                  </Dropdown.Item>
+                  <Dropdown.Item onClick={this.handleLogin}>
+                    <i className={'fa fa-lock-open mr-3'} />
+                    Se connecter
+                  </Dropdown.Item>
                   <Dropdown.Item onClick={this.handlePasswordLost} data-cy={'reset-password'}>
+                    <i className={'fa fa-key mr-3'} />
                     Mot de passe perdu
                   </Dropdown.Item>
                 </>
               )}
-              <Dropdown.Item onClick={this.handleLogout} disabled={!userAuthenticated} data-cy={'logout'}>
-                <i className={'fa fa-lock mr-2'} /> Se déconnecter
-              </Dropdown.Item>
+              {userAuthenticated && (
+                <>
+                  <Dropdown.Item onClick={this.handleUserAccount} data-cy={'user-profile'}>
+                    <i className={'fa fa-cogs mr-3'} />
+                    Mon compte
+                  </Dropdown.Item>
+                  <Dropdown.Divider />
+                  <Dropdown.Item onClick={this.handleLogout} disabled={!userAuthenticated} data-cy={'logout'}>
+                    <i className={'fa fa-lock mr-3'} /> Se déconnecter
+                  </Dropdown.Item>
+                </>
+              )}
             </Dropdown.Menu>
           </Dropdown>
         </div>
@@ -118,6 +134,10 @@ class TopBar extends Component<Props, {}> {
     });
   };
 
+  private handleUserAccount = () => {
+    this.props.history.push(FrontendRoutes.userAccount().raw());
+  };
+
   private handleLogout = () => {
     const { project, authentication, toasts, history } = this.props.services;
 
@@ -125,11 +145,11 @@ class TopBar extends Component<Props, {}> {
     history.clean();
     authentication
       .logout()
-      .then(() => toasts.info("Vous n'êtes plus connecté !"))
-      .catch((err) => {
-        toasts.genericError();
-        logger.error(err);
-      });
+      .then(() => {
+        toasts.info('Vous êtes déconnecté 👋');
+        this.props.history.push(FrontendRoutes.landing().raw());
+      })
+      .catch((err) => logger.error(err));
   };
 }
 

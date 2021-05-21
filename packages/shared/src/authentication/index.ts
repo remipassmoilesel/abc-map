@@ -16,14 +16,8 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-export * from './requests/AuthenticationRequest';
-export * from './requests/PasswordLostRequest';
-export * from './requests/RegistrationConfirmationRequest';
-export * from './requests/RegistrationRequest';
-export * from './requests/ResetPasswordRequest';
-export * from './responses/AuthenticationResponse';
-export * from './responses/RegistrationConfirmationResponse';
-export * from './responses/RegistrationResponse';
+export * from './requests';
+export * from './responses';
 export * from './AbcUser';
 export * from './AnonymousUser';
 export * from './AuthenticationToken';

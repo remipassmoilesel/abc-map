@@ -17,7 +17,7 @@
  */
 
 import React, { Component, ReactNode } from 'react';
-import { UserStatus } from '@abc-map/shared';
+import { ProjectConstants, UserStatus } from '@abc-map/shared';
 import { Logger } from '@abc-map/shared';
 import { Constants } from '../../../core/Constants';
 import { connect, ConnectedProps } from 'react-redux';
@@ -119,8 +119,12 @@ class ProjectControls extends Component<Props, State> {
 
       toasts.info('Enregistrement en cours ...');
       const compressed = await project.exportCurrentProject(password);
-      await project.save(compressed);
+      if (compressed.project.size >= ProjectConstants.MaxSizeBytes) {
+        toasts.error("Désolé 😞 ce projet est trop gros. Mais vous pouvez l'exporter.");
+        return;
+      }
 
+      await project.save(compressed);
       toasts.info('Projet enregistré !');
     };
 

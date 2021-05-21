@@ -37,6 +37,30 @@ export enum Dependencies {
 export class BuildService {
   constructor(private config: Config, private registry: Registry, private shell: Shell) {}
 
+  public async continuousIntegration() {
+    const start = new Date().getTime();
+
+    await this.install(Dependencies.Development);
+    this.lint();
+    this.cleanBuild();
+    this.dependencyCheck(); // Dependency check must be launched AFTER build for local dependencies
+    this.test();
+    await this.install(Dependencies.Production);
+
+    const servers = await this.startServersForE2e();
+    try {
+      await this.e2eTests();
+      await this.performanceTests();
+    } finally {
+      servers.kill('SIGTERM');
+    }
+
+    await this.install(Dependencies.Development); // We reinstall for caching purposes
+
+    const tookSec = Math.round((new Date().getTime() - start) / 1000);
+    logger.info(`CI took ${tookSec} seconds`);
+  }
+
   public async install(dependencies = Dependencies.Development): Promise<void> {
     // Local dependencies.
     // For development purposes. We use default npm registry and local packages as symlinks.
@@ -219,6 +243,8 @@ export class BuildService {
 
     const tookMin = Math.round((Date.now() - start) / 1000 / 60);
     logger.info(`Ready ! Deployment took ${tookMin} minutes,`);
+
+    await this.install(Dependencies.Development);
   }
 
   private getDockerConfigs(): DockerConfig[] {

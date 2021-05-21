@@ -37,24 +37,28 @@ export class ProjectRoutes {
 }
 
 export class AuthenticationRoutes {
-  public static login(): string {
-    return '/authentication/login';
+  public static authentication(): string {
+    return '/authentication';
   }
 
-  public static renew(): string {
-    return '/authentication/renew';
+  public static token(): string {
+    return '/authentication/token';
   }
 
   public static password(): string {
     return '/authentication/password';
   }
 
-  public static registration(): string {
-    return '/authentication/registration';
+  public static passwordResetEmail(): string {
+    return '/authentication/password/reset-email';
   }
 
-  public static confirmRegistration(): string {
-    return '/authentication/registration/confirmation';
+  public static account(): string {
+    return '/authentication/account';
+  }
+
+  public static accountConfirmation(): string {
+    return '/authentication/account/confirmation';
   }
 }
 

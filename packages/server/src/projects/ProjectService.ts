@@ -32,6 +32,10 @@ export class ProjectService extends AbstractService {
     super();
   }
 
+  public async init(): Promise<void> {
+    await this.dao.init();
+  }
+
   public async save(ownerId: string, project: CompressedProject<NodeBinary>): Promise<void> {
     if (!ownerId || typeof ownerId !== 'string') {
       throw new Error('Owner id is mandatory');
@@ -60,6 +64,20 @@ export class ProjectService extends AbstractService {
   }
 
   public async deleteById(projectId: string): Promise<void> {
-    await Promise.all([this.dao.deleteMetadataById(projectId), this.dao.deleteCompressedFileById(projectId)]);
+    await Promise.all([this.dao.deleteMetadataByIds([projectId]), this.dao.deleteProjectsByIds([projectId])]);
+  }
+
+  public async deleteByUserId(userId: string): Promise<void> {
+    const projects = await this.dao.list(userId, 0, this.config.project.maxPerUser);
+    if (!projects.length) {
+      return;
+    }
+
+    const ids = projects.map((p) => p._id);
+    await Promise.all([this.dao.deleteMetadataByIds(ids), this.dao.deleteProjectsByIds(ids)]);
+  }
+
+  public async countByUserId(userId: string): Promise<number> {
+    return this.dao.countByUserId(userId);
   }
 }

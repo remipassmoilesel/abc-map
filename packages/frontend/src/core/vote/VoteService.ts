@@ -21,18 +21,31 @@ import { AxiosInstance } from 'axios';
 import { VoteRoutes as Api } from '../http/ApiRoutes';
 import { AbcVote, AbcVoteAggregation, VoteValue } from '@abc-map/shared';
 import { DateTime } from 'luxon';
+import { ToastService } from '../ui/ToastService';
 
 export const logger = Logger.get('ProjectService.ts', 'info');
 
 export class VoteService {
-  constructor(private httpClient: AxiosInstance) {}
+  constructor(private httpClient: AxiosInstance, private toasts: ToastService) {}
 
   public vote(value: VoteValue): Promise<void> {
     const data: AbcVote = { value };
-    return this.httpClient.post(Api.vote(), data);
+    return this.httpClient
+      .post(Api.vote(), data)
+      .then(() => undefined)
+      .catch((err) => {
+        this.toasts.httpError(err);
+        return Promise.reject(err);
+      });
   }
 
   public getStats(from: DateTime, to: DateTime): Promise<AbcVoteAggregation> {
-    return this.httpClient.get<AbcVoteAggregation>(Api.stats(from, to)).then((res) => res.data);
+    return this.httpClient
+      .get<AbcVoteAggregation>(Api.stats(from, to))
+      .then((res) => res.data)
+      .catch((err) => {
+        this.toasts.httpError(err);
+        return Promise.reject(err);
+      });
   }
 }

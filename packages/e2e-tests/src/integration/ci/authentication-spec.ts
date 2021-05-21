@@ -84,7 +84,7 @@ describe('Authentication', function () {
         .click()
         .get('[data-cy=logout]')
         .click()
-        .then(() => Toasts.assertText("Vous n'êtes plus connecté !"))
+        .then(() => Toasts.assertText('Vous êtes déconnecté'))
         .get('[data-cy=user-menu]')
         .click()
         .get('[data-cy=user-label]')

@@ -17,7 +17,7 @@
  */
 
 import { Config } from '../config/Config';
-import { DataStoreDao } from './DataStoreDao';
+import { ArtefactDao } from './ArtefactDao';
 import { MongodbClient } from '../mongodb/MongodbClient';
 import { ArtefactMapper } from './ArtefactMapper';
 import { AbstractService } from '../services/AbstractService';
@@ -34,10 +34,10 @@ export const logger = Logger.get('DatastoreService.ts', 'info');
 
 export class DataStoreService extends AbstractService {
   public static create(config: Config, client: MongodbClient): DataStoreService {
-    return new DataStoreService(config, new DataStoreDao(config, client));
+    return new DataStoreService(config, new ArtefactDao(config, client));
   }
 
-  constructor(private config: Config, private dao: DataStoreDao) {
+  constructor(private config: Config, private dao: ArtefactDao) {
     super();
   }
 

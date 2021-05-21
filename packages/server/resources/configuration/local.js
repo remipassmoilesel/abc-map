@@ -17,6 +17,9 @@ module.exports = {
       timeWindow: '1m',
     },
   },
+  project: {
+    maxPerUser: 10,
+  },
   database: {
     url: 'mongodb://localhost:27019',
     username: 'admin',

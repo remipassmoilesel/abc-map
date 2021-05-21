@@ -39,6 +39,10 @@ export class FrontendRoutes {
     return new Route<EmptyParams>('/documentation');
   }
 
+  public static dataProcessing() {
+    return new Route<DataProcessingParams>('/data-processing/:moduleId?');
+  }
+
   public static confirmAccount() {
     return new Route<ConfirmAccountParams>('/confirm-account/:token');
   }
@@ -47,8 +51,8 @@ export class FrontendRoutes {
     return new Route<ResetPasswordParams>('/reset-password/:token');
   }
 
-  public static dataProcessing() {
-    return new Route<DataProcessingParams>('/data-processing/:moduleId?');
+  public static userAccount() {
+    return new Route<EmptyParams>('/user-profile');
   }
 }
 

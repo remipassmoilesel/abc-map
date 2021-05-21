@@ -51,6 +51,9 @@ abcMap:
           timeWindow: '30m',
         },
       },
+      project: {
+        maxPerUser: 10,
+      },
       database: {
         url: 'mongodb://<CHANGE_ME>:27017',
         username: '<CHANGE_ME>',

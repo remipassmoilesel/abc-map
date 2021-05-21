@@ -128,25 +128,19 @@ class DataStoreView extends Component<ServiceProps, State> {
   };
 
   private loadArtefacts() {
-    const { toasts, dataStore } = this.props.services;
+    const { dataStore } = this.props.services;
     const { limit, offset, searchQuery } = this.state;
 
     if (searchQuery) {
       dataStore
         .searchArtefacts(searchQuery, limit, offset)
         .then((res) => this.setState({ artefacts: res.content, limit: res.limit, offset: res.offset, total: res.total, activePage: 1 }))
-        .catch((err) => {
-          logger.error(err);
-          toasts.genericError();
-        });
+        .catch((err) => logger.error(err));
     } else {
       dataStore
         .listArtefacts(limit, offset)
         .then((res) => this.setState({ artefacts: res.content, limit: res.limit, offset: res.offset, total: res.total }))
-        .catch((err) => {
-          logger.error(err);
-          toasts.genericError();
-        });
+        .catch((err) => logger.error(err));
     }
   }
 

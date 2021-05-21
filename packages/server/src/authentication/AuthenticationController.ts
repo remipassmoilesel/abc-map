@@ -32,17 +32,21 @@ import {
   PasswordLostRequest,
   ResetPasswordRequest,
   ConfirmationStatus,
+  UpdatePasswordRequest,
+  DeleteAccountRequest,
 } from '@abc-map/shared';
 import { Logger } from '@abc-map/shared';
 import { Authentication } from './Authentication';
 import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import { Config } from '../config/Config';
 import {
+  DeleteAccountSchema,
   LoginRequestSchema,
   PasswordLostRequestSchema,
   RegistrationConfirmationRequestSchema,
   RegistrationRequestSchema,
   ResetPasswordSchema,
+  UpdatePasswordRequestSchema,
 } from './AuthenticationController.schemas';
 import { jwtPlugin } from '../server/jwtPlugin';
 
@@ -67,12 +71,14 @@ export class AuthenticationController extends Controller {
       config: { rateLimit: { max: this.config.server.authenticationRateLimit.max, timeWindow: this.config.server.authenticationRateLimit.timeWindow } },
     };
 
-    app.post('/registration', { schema: RegistrationRequestSchema, ...lowRateLimit }, this.registration);
-    app.post('/registration/confirmation', { schema: RegistrationConfirmationRequestSchema, ...lowRateLimit }, this.confirmRegistration);
-    app.post('/login', { schema: LoginRequestSchema, ...lowRateLimit }, this.login);
-    app.post('/renew', { ...lowRateLimit }, this.renew);
-    app.post('/password', { schema: PasswordLostRequestSchema, ...lowRateLimit }, this.passwordLost);
-    app.patch('/password', { schema: ResetPasswordSchema, ...lowRateLimit }, this.resetPassword);
+    app.post('/', { schema: LoginRequestSchema, ...lowRateLimit }, this.login);
+    app.delete('/', { schema: DeleteAccountSchema, ...lowRateLimit }, this.deleteAccount);
+    app.patch('/password', { schema: UpdatePasswordRequestSchema, ...lowRateLimit }, this.updatePassword);
+    app.post('/password', { schema: ResetPasswordSchema, ...lowRateLimit }, this.resetPassword);
+    app.post('/password/reset-email', { schema: PasswordLostRequestSchema, ...lowRateLimit }, this.passwordLost);
+    app.post('/account', { schema: RegistrationRequestSchema, ...lowRateLimit }, this.registration);
+    app.post('/account/confirmation', { schema: RegistrationConfirmationRequestSchema, ...lowRateLimit }, this.confirmRegistration);
+    app.get('/token', { ...lowRateLimit }, this.renew);
   };
 
   private registration = async (req: FastifyRequest<{ Body: RegistrationRequest }>, reply: FastifyReply): Promise<void> => {
@@ -164,6 +170,31 @@ export class AuthenticationController extends Controller {
     reply.status(200).send(response);
   };
 
+  private updatePassword = async (req: FastifyRequest<{ Body: UpdatePasswordRequest }>, reply: FastifyReply): Promise<void> => {
+    const { authentication } = this.services;
+
+    try {
+      await req.jwtVerify();
+    } catch (err) {
+      reply.forbidden();
+    }
+
+    const user = Authentication.from(req);
+    if (!user) {
+      reply.forbidden();
+      return;
+    }
+
+    const auth = await authentication.authenticate(user.email, req.body.previousPassword);
+    if (AuthenticationStatus.Refused === auth.status) {
+      reply.forbidden();
+      return;
+    }
+
+    await authentication.updatePassword(user.email, req.body.newPassword);
+    reply.status(200).send();
+  };
+
   private passwordLost = async (req: FastifyRequest<{ Body: PasswordLostRequest }>, reply: FastifyReply): Promise<void> => {
     const { authentication } = this.services;
 
@@ -183,6 +214,32 @@ export class AuthenticationController extends Controller {
 
     // Here we MUST fetch email from token
     await authentication.updatePassword(tokenContent.email, req.body.password);
+    reply.status(200).send();
+  };
+
+  private deleteAccount = async (req: FastifyRequest<{ Body: DeleteAccountRequest }>, reply: FastifyReply): Promise<void> => {
+    const { authentication, project, user: userService } = this.services;
+
+    try {
+      await req.jwtVerify();
+    } catch (err) {
+      reply.forbidden();
+    }
+
+    const user = Authentication.from(req);
+    if (!user) {
+      reply.forbidden();
+      return;
+    }
+
+    const auth = await authentication.authenticate(user.email, req.body.password);
+    if (AuthenticationStatus.Refused === auth.status) {
+      reply.forbidden();
+      return;
+    }
+
+    await project.deleteByUserId(user.id);
+    await userService.deleteById(user.id);
     reply.status(200).send();
   };
 }

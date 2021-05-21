@@ -24,12 +24,14 @@ import { AxiosInstance } from 'axios';
 import { LayerFactory } from '../geo/layers/LayerFactory';
 import { MapFactory } from '../geo/map/MapFactory';
 import { AbcFile } from '@abc-map/shared';
+import { ToastService } from '../ui/ToastService';
 
 describe('DataStoreService', () => {
   let apiClient: { get: SinonStub };
   let downloadClient: { get: SinonStub };
   let geoService: SinonStubbedInstance<GeoService>;
   let dataReader: SinonStub;
+  let toasts: SinonStubbedInstance<ToastService>;
   let service: DataStoreService;
 
   beforeEach(() => {
@@ -40,12 +42,14 @@ describe('DataStoreService', () => {
       get: sinon.stub(),
     };
     geoService = sinon.createStubInstance(GeoService);
+    toasts = sinon.createStubInstance(ToastService);
     dataReader = sinon.stub();
     const readerFactory = sinon.stub().returns({ read: dataReader });
 
     service = new DataStoreService(
       apiClient as unknown as AxiosInstance,
       downloadClient as unknown as AxiosInstance,
+      toasts as unknown as ToastService,
       geoService as unknown as GeoService,
       readerFactory as unknown as DataReaderFactory
     );

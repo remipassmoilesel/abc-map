@@ -27,7 +27,7 @@ export declare type HttpErrorHandler = (e: AxiosError | undefined) => void;
 /**
  * This client is configured for JSON requests and responses
  */
-export function httpApiClient(timeout: number, errorHandler: HttpErrorHandler): AxiosInstance {
+export function httpApiClient(timeout: number, errorHandler?: HttpErrorHandler): AxiosInstance {
   const client = axios.create({
     baseURL: '/api',
     timeout,
@@ -39,7 +39,7 @@ export function httpApiClient(timeout: number, errorHandler: HttpErrorHandler): 
   });
 
   client.interceptors.request.use(authenticationInterceptor);
-  client.interceptors.response.use((response) => response, errorHandler);
+  client.interceptors.response.use(undefined, errorHandler);
 
   return client;
 }
@@ -47,7 +47,7 @@ export function httpApiClient(timeout: number, errorHandler: HttpErrorHandler): 
 /**
  * This client is configured for raw responses
  */
-export function httpDownloadClient(timeout: number, errorHandler: HttpErrorHandler): AxiosInstance {
+export function httpDownloadClient(timeout: number, errorHandler?: HttpErrorHandler): AxiosInstance {
   const client = axios.create({
     baseURL: '/api',
     timeout,
@@ -56,7 +56,7 @@ export function httpDownloadClient(timeout: number, errorHandler: HttpErrorHandl
   });
 
   client.interceptors.request.use(authenticationInterceptor);
-  client.interceptors.response.use((response) => response, errorHandler);
+  client.interceptors.response.use(undefined, errorHandler);
 
   return client;
 }

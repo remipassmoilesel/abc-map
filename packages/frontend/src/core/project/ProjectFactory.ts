@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcProjectManifest, AbcProjectMetadata, CurrentVersion, DEFAULT_PROJECTION } from '@abc-map/shared';
+import { AbcProjectManifest, AbcProjectMetadata, DEFAULT_PROJECTION, ProjectConstants } from '@abc-map/shared';
 import uuid from 'uuid-random';
 import { DateTime } from 'luxon';
 
@@ -24,7 +24,7 @@ export class ProjectFactory {
   public static newProjectMetadata(): AbcProjectMetadata {
     return {
       id: uuid(),
-      version: CurrentVersion,
+      version: ProjectConstants.CurrentVersion,
       projection: DEFAULT_PROJECTION,
       name: `Projet du ${DateTime.local().toLocaleString()}`,
       containsCredentials: false,

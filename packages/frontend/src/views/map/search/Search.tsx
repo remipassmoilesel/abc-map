@@ -83,7 +83,7 @@ class Search extends Component<Props, State> {
   };
 
   private search = _.debounce((query) => {
-    const { geo, toasts } = this.props.services;
+    const { geo } = this.props.services;
 
     this.setState({ loading: true });
     geo
@@ -93,10 +93,7 @@ class Search extends Component<Props, State> {
         logger.debug('Results: ', results);
         this.setState({ results });
       })
-      .catch((err) => {
-        logger.error('Error while geocoding: ', err);
-        toasts.genericError();
-      })
+      .catch((err) => logger.error('Error while geocoding: ', err))
       .finally(() => this.setState({ loading: false }));
   }, 500);
 

@@ -25,29 +25,38 @@ export class UserDao {
   constructor(private config: Config, private client: MongodbClient) {}
 
   public async init(): Promise<void> {
-    const coll = await this.client.collection<UserDocument>(MongodbCollection.Users);
+    const coll = await this.collection();
     await coll.createIndex('email', { unique: true });
   }
 
   public async save(project: UserDocument): Promise<void> {
-    const coll = await this.client.collection<UserDocument>(MongodbCollection.Users);
+    const coll = await this.collection();
     await coll.replaceOne({ _id: project._id }, project, { upsert: true });
   }
 
   public async findById(id: string): Promise<UserDocument | undefined> {
-    const coll = await this.client.collection<UserDocument>(MongodbCollection.Users);
+    const coll = await this.collection();
     const res = await coll.findOne({ _id: id });
     return res || undefined;
   }
 
   public async findByEmail(email: string): Promise<UserDocument | undefined> {
-    const coll = await this.client.collection<UserDocument>(MongodbCollection.Users);
+    const coll = await this.collection();
     const res = await coll.findOne({ email });
     return res || undefined;
   }
 
   public async count(): Promise<number> {
-    const coll = await this.client.collection<UserDocument>(MongodbCollection.Users);
+    const coll = await this.collection();
     return coll.countDocuments();
+  }
+
+  public async deleteById(userId: string) {
+    const coll = await this.collection();
+    await coll.deleteOne({ _id: userId });
+  }
+
+  private async collection() {
+    return this.client.collection<UserDocument>(MongodbCollection.Users);
   }
 }

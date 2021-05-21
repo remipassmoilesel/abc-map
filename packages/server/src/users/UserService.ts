@@ -73,4 +73,8 @@ export class UserService extends AbstractService {
   public async count(): Promise<number> {
     return this.dao.count();
   }
+
+  public async deleteById(userId: string) {
+    await this.dao.deleteById(userId);
+  }
 }

@@ -17,7 +17,7 @@
  */
 
 import React, { ChangeEvent, Component, KeyboardEvent, ReactNode } from 'react';
-import { Logger } from '@abc-map/shared';
+import { FrontendRoutes, Logger } from '@abc-map/shared';
 import { Modal } from 'react-bootstrap';
 import { ServiceProps, withServices } from '../../core/withServices';
 import { ModalEventListener, ModalEventType, ModalStatus } from '../../core/ui/typings';
@@ -25,8 +25,11 @@ import { ValidationHelper } from '../../core/utils/ValidationHelper';
 import { PasswordStrength, Strength } from '../../core/utils/PasswordStrength';
 import Cls from './LoginModal.module.scss';
 import FormValidationLabel, { FormState } from '../form-state-label/FormValidationLabel';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 const logger = Logger.get('LoginModal.tsx', 'info');
+
+declare type Props = ServiceProps & RouteComponentProps<any>;
 
 interface State {
   visible: boolean;
@@ -36,8 +39,8 @@ interface State {
   formState: FormState;
 }
 
-class LoginModal extends Component<ServiceProps, State> {
-  constructor(props: ServiceProps) {
+class LoginModal extends Component<Props, State> {
+  constructor(props: Props) {
     super(props);
     this.state = {
       visible: false,
@@ -178,7 +181,10 @@ class LoginModal extends Component<ServiceProps, State> {
 
     authentication
       .login(email, password)
-      .then(() => this.close())
+      .then(() => {
+        this.close();
+        this.props.history.push(FrontendRoutes.map().raw());
+      })
       .catch((err) => logger.error(err));
   };
 
@@ -215,4 +221,4 @@ class LoginModal extends Component<ServiceProps, State> {
   }
 }
 
-export default withServices(LoginModal);
+export default withRouter(withServices(LoginModal));

@@ -16,29 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Controller } from '../server/Controller';
-import { Services } from '../services/services';
-import { FastifyInstance } from 'fastify';
-
-// TODO: test
-// TODO: change password
-// TODO: delete account
-
-export class UserController extends Controller {
-  constructor(private services: Services) {
-    super();
-  }
-
-  public getRoot(): string {
-    return '/user';
-  }
-
-  public setup = async (app: FastifyInstance): Promise<void> => {
-    app.post('/:id', this.updateUser);
-  };
-
-  // TODO: implement
-  private updateUser = (): Promise<void> => {
-    return Promise.reject(new Error('Not implemented'));
-  };
+export interface UpdatePasswordRequest {
+  previousPassword: string;
+  newPassword: string;
 }

@@ -73,9 +73,19 @@ describe('UserService', () => {
       assert.equal(dbUser?.password, user.password);
     });
 
-    it('should return undefined()', async () => {
+    it('should return undefined', async () => {
       const res = await service.findByEmail(uuid());
       assert.isUndefined(res);
     });
+  });
+
+  it('delete()', async () => {
+    const user = TestHelper.sampleUser();
+    await service.save(user);
+
+    await service.deleteById(user.id);
+
+    const res = await service.findById(user.id);
+    assert.isUndefined(res);
   });
 });

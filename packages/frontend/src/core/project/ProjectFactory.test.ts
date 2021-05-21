@@ -17,7 +17,7 @@
  */
 
 import { ProjectFactory } from './ProjectFactory';
-import { CurrentVersion, DEFAULT_PROJECTION } from '@abc-map/shared';
+import { DEFAULT_PROJECTION, ProjectConstants } from '@abc-map/shared';
 
 describe('ProjectFactory', () => {
   it('newProjectMetadata()', () => {
@@ -25,7 +25,7 @@ describe('ProjectFactory', () => {
     expect(a.id).toBeDefined();
     expect(a.name).toContain('Projet du');
     expect(a.projection).toEqual(DEFAULT_PROJECTION);
-    expect(a.version).toBe(CurrentVersion);
+    expect(a.version).toBe(ProjectConstants.CurrentVersion);
   });
 
   it('newProject()', () => {

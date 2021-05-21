@@ -50,27 +50,7 @@ async function main(args: string[]) {
 
   switch (command.name) {
     case CommandName.CI: {
-      const start = new Date().getTime();
-
-      await service.install(Dependencies.Development);
-      service.lint();
-      service.cleanBuild();
-      service.dependencyCheck(); // Dependency check must be launched AFTER build for local dependencies
-      service.test();
-      await service.install(Dependencies.Production);
-
-      const servers = await service.startServersForE2e();
-      try {
-        await service.e2eTests();
-        await service.performanceTests();
-      } finally {
-        servers.kill('SIGTERM');
-      }
-
-      await service.install(Dependencies.Development); // We reinstall for caching purposes
-
-      const tookSec = Math.round((new Date().getTime() - start) / 1000);
-      logger.info(`CI took ${tookSec} seconds`);
+      await service.continuousIntegration();
       banners.done();
       break;
     }

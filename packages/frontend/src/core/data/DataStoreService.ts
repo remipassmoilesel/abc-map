@@ -28,6 +28,7 @@ import { getArea } from 'ol/extent';
 import { DateTime } from 'luxon';
 import { BlobIO } from '@abc-map/shared';
 import { PaginatedResponse } from '@abc-map/shared';
+import { ToastService } from '../ui/ToastService';
 
 const logger = Logger.get('DataService.ts');
 
@@ -40,25 +41,57 @@ export declare type DataReaderFactory = () => DataReader;
 const defaultReaderFactory: DataReaderFactory = () => DataReader.create();
 
 export class DataStoreService {
-  constructor(private apiClient: AxiosInstance, private downloadClient: AxiosInstance, private geo: GeoService, private readerFactory = defaultReaderFactory) {}
+  constructor(
+    private apiClient: AxiosInstance,
+    private downloadClient: AxiosInstance,
+    private toasts: ToastService,
+    private geo: GeoService,
+    private readerFactory = defaultReaderFactory
+  ) {}
 
   public listArtefacts(limit = 50, offset = 0): Promise<PaginatedResponse<AbcArtefact>> {
     const params = { limit, offset };
-    return this.apiClient.get(Api.list(), { params }).then((res) => res.data);
+    return this.apiClient
+      .get(Api.list(), { params })
+      .then((res) => res.data)
+      .catch((err) => {
+        this.toasts.httpError(err);
+        return Promise.reject(err);
+      });
   }
 
   public searchArtefacts(query: string, limit = 50, offset = 0): Promise<PaginatedResponse<AbcArtefact>> {
     const params = { query: encodeURI(query), limit, offset };
-    return this.apiClient.get(Api.search(), { params }).then((res) => res.data);
+    return this.apiClient
+      .get(Api.search(), { params })
+      .then((res) => res.data)
+      .catch((err) => {
+        this.toasts.httpError(err);
+        return Promise.reject(err);
+      });
   }
 
   public downloadFilesFrom(artefact: AbcArtefact): Promise<AbcFile<Blob>[]> {
-    const files = artefact.files.map((file) => this.downloadClient.get(Api.download(file)).then((res) => ({ path: file, content: res.data })));
+    const files = artefact.files.map((file) =>
+      this.downloadClient
+        .get(Api.download(file))
+        .then((res) => ({ path: file, content: res.data }))
+        .catch((err) => {
+          this.toasts.httpError(err);
+          return Promise.reject(err);
+        })
+    );
     return Promise.all(files);
   }
 
   public downloadLicense(artefact: AbcArtefact): Promise<string> {
-    return this.downloadClient.get(Api.download(artefact.license)).then((res) => BlobIO.asString(res.data));
+    return this.downloadClient
+      .get(Api.download(artefact.license))
+      .then((res) => BlobIO.asString(res.data))
+      .catch((err) => {
+        this.toasts.httpError(err);
+        return Promise.reject(err);
+      });
   }
 
   public async importArtefact(artefact: AbcArtefact): Promise<ImportResult> {

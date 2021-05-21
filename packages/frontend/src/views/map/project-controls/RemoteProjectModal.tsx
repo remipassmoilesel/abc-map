@@ -128,14 +128,11 @@ class RemoteProjectModal extends Component<Props, State> {
   }
 
   private listProjects() {
-    const { project, toasts } = this.props.services;
+    const { project } = this.props.services;
     project
       .list()
       .then((projects) => this.setState({ projects }))
-      .catch((err) => {
-        logger.error(err);
-        toasts.genericError();
-      });
+      .catch((err) => logger.error(err));
   }
 
   private handlePasswordInput = (ev: ChangeEvent<HTMLInputElement>) => {
@@ -164,10 +161,7 @@ class RemoteProjectModal extends Component<Props, State> {
         this.setState({ selected: undefined, deleteConfirmation: undefined });
         this.listProjects();
       })
-      .catch((err) => {
-        logger.error(err);
-        toasts.genericError();
-      });
+      .catch((err) => logger.error(err));
   };
 
   private handleCancel = () => this.props.onHide();
