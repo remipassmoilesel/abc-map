@@ -21,6 +21,7 @@ import { Logger } from '@abc-map/shared';
 import { Link } from 'react-router-dom';
 import { FrontendRoutes } from '@abc-map/shared';
 import Cls from './NotFoundView.module.scss';
+import { addNoIndexMeta, pageSetup, removeNoIndexMeta } from '../../core/utils/page-setup';
 
 const logger = Logger.get('NotFoundView.tsx');
 
@@ -28,10 +29,19 @@ class NotFoundView extends Component<{}, {}> {
   public render(): ReactNode {
     return (
       <div className={Cls.notFoundView}>
-        <h3>Cette page n&apos;existe pas !</h3>
+        <h3>Impossible de trouver cette page 😱</h3>
         <Link to={FrontendRoutes.landing().raw()}>Retourner à l&apos;accueil</Link>
       </div>
     );
+  }
+
+  public componentDidMount() {
+    pageSetup('Impossible de trouver cette page', `404 - Impossible de trouver ce que vous recherchez.`);
+    addNoIndexMeta();
+  }
+
+  public componentWillUnmount() {
+    removeNoIndexMeta();
   }
 }
 

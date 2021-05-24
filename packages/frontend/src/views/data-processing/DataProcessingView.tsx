@@ -22,6 +22,7 @@ import { getModules } from '../../data-processing';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import Cls from './DataProcessingView.module.scss';
 import '../../data-processing/style.scss';
+import { pageSetup } from '../../core/utils/page-setup';
 
 const logger = Logger.get('DataProcessingView.tsx');
 
@@ -63,6 +64,10 @@ class DataProcessingView extends Component<Props, {}> {
         </div>
       </div>
     );
+  }
+
+  public componentDidMount() {
+    pageSetup('Traitements de données', `Représentez des données sur vos cartes: symboles proportionnels, dégradés et couleurs, et plus ⚙️⚙️`);
   }
 }
 

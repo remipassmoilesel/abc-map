@@ -32,8 +32,7 @@ import 'cypress-file-upload';
 
 const PROJECT_PASSWORD = 'azerty1234';
 
-// TODO: better assertions on project and layers
-// TODO: test features and style
+// TODO: simplify test when project compatibility test suite will be up
 
 describe('Project', function () {
   describe('As a visitor', function () {
@@ -212,6 +211,10 @@ describe('Project', function () {
         .then(() => Authentication.login(email, password));
     });
 
+    afterEach(() => {
+      Authentication.logout();
+    });
+
     it('can store project online without credentials', function () {
       cy.visit(FrontendRoutes.map().raw())
         .then(() => LayerControls.addWmsLayer())
@@ -337,7 +340,9 @@ describe('Project', function () {
         .click()
         .then(() => Toasts.assertText('Project supprimé !'))
         .get('[data-cy=remote-project]')
-        .should('not.exist');
+        .should('not.exist')
+        .get('[data-cy=cancel-button]')
+        .click();
     });
   });
 });

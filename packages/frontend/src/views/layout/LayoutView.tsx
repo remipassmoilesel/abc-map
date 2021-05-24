@@ -35,6 +35,7 @@ import { UpdateLayoutTask } from '../../core/history/tasks/layouts/UpdateLayoutT
 import { FileIO } from '../../core/utils/FileIO';
 import * as _ from 'lodash';
 import Cls from './LayoutView.module.scss';
+import { pageSetup } from '../../core/utils/page-setup';
 
 const logger = Logger.get('LayoutView.tsx', 'warn');
 
@@ -150,6 +151,8 @@ class LayoutView extends Component<Props, State> {
   }
 
   public componentDidMount() {
+    pageSetup('Mise en page', `Mettez en page et exportez vos cartes au format PDF ou PNG 🚶‍♂️ 🚶‍♀️`);
+
     const layouts = this.props.layouts;
     if (layouts.length) {
       this.setState({ activeLayoutId: layouts[0].id });

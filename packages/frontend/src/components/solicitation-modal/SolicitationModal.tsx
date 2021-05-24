@@ -123,10 +123,9 @@ class SolicitationModal extends Component<ServiceProps, State> {
   }
 
   private handleVote = (value: VoteValue) => {
-    const { toasts, vote } = this.props.services;
+    const { vote } = this.props.services;
+    // We do not wait for vote
     vote.vote(value).catch((err) => logger.error('Error while voting: ', err));
-
-    toasts.info('Merci pour votre participation !');
     this.close();
   };
 

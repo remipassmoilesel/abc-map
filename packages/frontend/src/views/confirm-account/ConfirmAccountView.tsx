@@ -17,11 +17,12 @@
  */
 
 import React, { Component, ReactNode } from 'react';
-import { Logger, ConfirmAccountParams, FrontendRoutes } from '@abc-map/shared';
+import { ConfirmAccountParams, ConfirmationStatus, FrontendRoutes, Logger } from '@abc-map/shared';
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
-import { ConfirmationStatus } from '@abc-map/shared';
 import { ServiceProps, withServices } from '../../core/withServices';
 import Cls from './ConfirmAccountView.module.scss';
+import { HttpError } from '../../core/http/HttpError';
+import { pageSetup } from '../../core/utils/page-setup';
 
 const logger = Logger.get('ConfirmAccount.tsx', 'info');
 
@@ -44,22 +45,37 @@ class ConfirmAccountView extends Component<Props, State> {
 
     return (
       <div className={Cls.confirmAccount}>
-        <h3>Activation de votre compte</h3>
-        {ConfirmationStatus.InProgress === status && <div>Veuillez patienter ...</div>}
-        {ConfirmationStatus.Failed === status && (
-          <div>L&apos;activation de votre compte a échoué, vous pouvez rafraichir cette page ou réessayer plus tard.</div>
+        <h3 className={'mb-4'}>Activation de votre compte</h3>
+        {ConfirmationStatus.InProgress === status && <>Veuillez patienter ...</>}
+
+        {ConfirmationStatus.AlreadyConfirmed === status && (
+          <>
+            Cet adresse email a déjà été activée 🤷 <br />
+            Connectez-vous ou demandez une réinitialisation de mot de passe.
+          </>
         )}
+
+        {ConfirmationStatus.Failed === status && (
+          <>
+            L&apos;activation de votre compte a échoué 🥺.
+            <br /> Peut-être avez-vous déjà activé votre compte ?
+          </>
+        )}
+
         {ConfirmationStatus.Succeed === status && (
-          <div data-cy={'account-enabled'}>
-            Votre compte est activé, vous êtes connecté. <Link to={FrontendRoutes.map().raw()}>Direction: la carte !</Link>
-          </div>
+          <>
+            <span data-cy={'account-enabled'}>Votre compte est activé, vous êtes connecté ✨</span>
+            <br /> <Link to={FrontendRoutes.map().raw()}>Direction: la carte !</Link>
+          </>
         )}
       </div>
     );
   }
 
   public componentDidMount() {
-    const { authentication } = this.props.services;
+    pageSetup("Confirmation d'inscription", 'Ici vous pouvez activer votre compte Abc-Map');
+
+    const { authentication, toasts } = this.props.services;
 
     const token = this.props.match.params.token;
     if (!token) {
@@ -70,7 +86,14 @@ class ConfirmAccountView extends Component<Props, State> {
         .then((res) => this.setState({ status: res.status }))
         .catch((err) => {
           logger.error('Registration error: ', err);
-          this.setState({ status: ConfirmationStatus.Failed });
+          if (HttpError.isConflict(err)) {
+            this.setState({ status: ConfirmationStatus.AlreadyConfirmed });
+          } else if (HttpError.isUnauthorized(err)) {
+            this.setState({ status: ConfirmationStatus.Failed });
+          } else {
+            toasts.httpError(err);
+            this.setState({ status: ConfirmationStatus.Failed });
+          }
         });
     }
   }

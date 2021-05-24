@@ -34,10 +34,10 @@ describe('Edit properties', function () {
     cy.visit(FrontendRoutes.dataStore().raw())
       .then(() => DataStore.importByName('Pays du monde'))
       .then(() => TopBar.map())
-      .then(() => MainMap.getComponent())
+      .then(() => MainMap.fixedView())
       .then(() => ToolSelector.enable(MapTool.EditProperties))
       // Edit Algeria
-      .then(() => Draw.click(200, 200))
+      .then(() => Draw.click(200, 200, { ctrlKey: true }))
       .get('[data-cy=property-name]')
       .should('have.text', 'COUNTRY')
       .get('[data-cy=property-value]')
@@ -63,7 +63,7 @@ describe('Edit properties', function () {
       .get('[data-cy=properties-modal-confirm]')
       .click()
       // Check property names
-      .then(() => Draw.click(200, 200))
+      .then(() => Draw.click(200, 200, { ctrlKey: true }))
       .get('[data-cy=property-name]')
       .should((elem) => {
         const names = elem.toArray().map((e) => e.textContent);
@@ -79,7 +79,7 @@ describe('Edit properties', function () {
       .click()
       // Undo
       .then(() => History.undo())
-      .then(() => Draw.click(200, 200))
+      .then(() => Draw.click(200, 200, { ctrlKey: true }))
       .get('[data-cy=property-name]')
       .should((elem) => {
         const names = elem.toArray().map((e) => e.textContent);

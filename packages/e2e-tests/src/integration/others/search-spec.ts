@@ -27,6 +27,7 @@ describe('Search on map', function () {
 
   it('user can search', function () {
     cy.visit(FrontendRoutes.map().raw())
+      .then(() => MainMap.fixedView())
       .then(() => MainMap.getComponent())
       .get('[data-cy=search-on-map]')
       .clear()

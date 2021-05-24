@@ -31,7 +31,7 @@ describe('Tool Point', function () {
 
   it('user can draw', function () {
     cy.visit(FrontendRoutes.map().raw())
-      .then(() => MainMap.getComponent())
+      .then(() => MainMap.fixedView())
       .then(() => ToolSelector.enable(MapTool.Point))
       .then(() => Draw.click(100, 100))
       .then(() => Draw.click(150, 150))
@@ -43,20 +43,20 @@ describe('Tool Point', function () {
         expect(features[0].getGeometry()?.getType()).equal('Point');
         expect(features[0].getGeometry()?.getExtent()).deep.equals([-1118865.2444950184, 4048111.8978092954, -1118865.2444950184, 4048111.8978092954]);
         expect(features[0].get(StyleProperties.PointSize)).equal(15);
-        expect(features[0].get(StyleProperties.PointColor)).equal('#3F37C9');
+        expect(features[0].get(StyleProperties.PointColor)).equal('#FF5733');
         expect(features[0].get(StyleProperties.PointIcon)).equal(PointIcons.Circle);
 
         expect(features[1].getGeometry()?.getType()).equal('Point');
         expect(features[1].getGeometry()?.getExtent()).deep.equals([-629668.2634698902, 3558914.9167841673, -629668.2634698902, 3558914.9167841673]);
         expect(features[0].get(StyleProperties.PointSize)).equal(15);
-        expect(features[0].get(StyleProperties.PointColor)).equal('#3F37C9');
+        expect(features[0].get(StyleProperties.PointColor)).equal('#FF5733');
         expect(features[0].get(StyleProperties.PointIcon)).equal(PointIcons.Circle);
       });
   });
 
   it('user can move', function () {
     cy.visit(FrontendRoutes.map().raw())
-      .then(() => MainMap.getComponent())
+      .then(() => MainMap.fixedView())
       .then(() => ToolSelector.enable(MapTool.Point))
       // Create point
       .then(() => Draw.click(100, 100))

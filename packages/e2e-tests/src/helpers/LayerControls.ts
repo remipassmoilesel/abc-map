@@ -30,8 +30,15 @@ export class LayerControls {
   }
 
   public static addOsmLayer(): Cypress.Chainable<any> {
-    const option = 'Couche OpenStreetMap';
-    return cy.get('[data-cy=add-layer]').click().get('[data-cy=add-layer-type]').select(option).get('[data-cy=add-layer-confirm]').click();
+    return cy
+      .get('[data-cy=add-layer]')
+      .click()
+      .get('[data-cy=add-layer-type]')
+      .select('Fond de carte')
+      .get('[data-cy=predefined-model]')
+      .select('OpenStreetMap')
+      .get('[data-cy=add-layer-confirm]')
+      .click();
   }
 
   public static addVectorLayer(): Cypress.Chainable<any> {

@@ -208,7 +208,7 @@ class LoginModal extends Component<Props, State> {
 
   private validateForm(email: string, password: string): FormState {
     // Check email
-    if (!ValidationHelper.isEmailValid(email)) {
+    if (!ValidationHelper.email(email)) {
       return FormState.InvalidEmail;
     }
 

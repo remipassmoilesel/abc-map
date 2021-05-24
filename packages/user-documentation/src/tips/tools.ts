@@ -103,9 +103,9 @@ export const Tools: Tip[] = [
   },
   {
     id: ToolTips.EditProperties,
-    content: `<h4>Outil texte</h4>
+    content: `<h4>Outil d'édition des propriétés</h4>
               <ul>
-                <li><b>Pour éditer les propriétés</b> d'une géométrie, cliquez sur une géométrie</li>
+                <li><b>Pour éditer les propriétés</b> d'une géométrie, maintenez <code>CTRL</code> et cliquez sur une géométrie</li>
                 ${undoRedoTip}
               </ul>
               `,

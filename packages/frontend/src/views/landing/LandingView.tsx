@@ -31,6 +31,7 @@ import Cls from './LandingView.module.scss';
 import { BUILD_INFO } from '../../build-version';
 import { MainState } from '../../core/store/reducer';
 import { connect, ConnectedProps } from 'react-redux';
+import { pageSetup } from '../../core/utils/page-setup';
 
 const logger = Logger.get('Landing.tsx', 'info');
 
@@ -96,7 +97,7 @@ class LandingView extends Component<Props, State> {
 
             {!!voteAggregation?.total && (
               <>
-                <p className={'mt-5'}>
+                <div className={'mt-5'}>
                   Sur les 7 derniers jours, {voteAggregation.satisfied} % des utilisateurs ont déclaré être satisfait !
                   <div className={'mt-3'}>
                     {voteAggregation.satisfied < 60 && (
@@ -110,7 +111,7 @@ class LandingView extends Component<Props, State> {
                       </>
                     )}
                   </div>
-                </p>
+                </div>
               </>
             )}
           </div>
@@ -151,6 +152,11 @@ class LandingView extends Component<Props, State> {
   }
 
   public componentDidMount() {
+    pageSetup(
+      'Cartographie libre et gratuite en ligne',
+      `Abc-Map, nouvelle version 🚀 Créez des cartes géographiques simplement: importez, dessinez, visualisez des données, et bien plus !`
+    );
+
     const { vote } = this.props.services;
 
     const from = DateTime.now().minus({ days: 7 });

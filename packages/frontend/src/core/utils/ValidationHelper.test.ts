@@ -16,16 +16,17 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import Feature from 'ol/Feature';
-import Geometry from 'ol/geom/Geometry';
-import BaseEvent from 'ol/events/Event';
+import { ValidationHelper } from './ValidationHelper';
 
-export enum EditPropertiesEvent {
-  FeatureSelected = 'feature-selected',
-}
+describe('ValidationHelper', () => {
+  it('email()', () => {
+    expect(ValidationHelper.email('abcd')).toBe(false);
+    expect(ValidationHelper.email('abcd@efgh.ijk')).toBe(true);
+  });
 
-export class FeatureSelected extends BaseEvent {
-  constructor(public readonly feature: Feature<Geometry>) {
-    super(EditPropertiesEvent.FeatureSelected);
-  }
-}
+  it('url()', () => {
+    expect(ValidationHelper.url('abcd')).toBe(false);
+    expect(ValidationHelper.url('http://abcdefgh.ijk')).toBe(true);
+    expect(ValidationHelper.url('https://abc.def-gh.ijk')).toBe(true);
+  });
+});

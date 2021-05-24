@@ -16,15 +16,11 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-.abc-wms-settings {
-
-  .wms-layer-selector {
-    height: 20em;
-    overflow-x: hidden;
-    overflow-y: scroll;
-    padding: 5px;
-    border: solid 1px lightgrey;
-  }
-
+.wmsLayerSelector {
+  height: 15em;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  padding: 5px;
+  border: solid 1px lightgrey;
 }
 

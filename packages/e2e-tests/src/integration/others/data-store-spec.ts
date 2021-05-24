@@ -21,6 +21,7 @@ import { TestHelper } from '../../helpers/TestHelper';
 import { Download } from '../../helpers/Download';
 import { Toasts } from '../../helpers/Toasts';
 import { MainMap } from '../../helpers/MainMap';
+import { TopBar } from '../../helpers/TopBar';
 
 describe('Data store', function () {
   beforeEach(() => {
@@ -53,6 +54,7 @@ describe('Data store', function () {
       .get('[data-cy=import-artefact]')
       .click()
       .then(() => Toasts.assertText('Import terminé !'))
+      .then(() => TopBar.map())
       .then(() => MainMap.getReference())
       .should((map) => {
         const layers = map.getLayersMetadata();

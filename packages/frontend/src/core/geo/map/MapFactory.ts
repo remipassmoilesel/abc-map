@@ -23,6 +23,25 @@ import { DEFAULT_PROJECTION } from '@abc-map/shared';
 import { MapWrapper } from './MapWrapper';
 import { defaults as defaultControls, ScaleLine } from 'ol/control';
 import { layoutMapInteractions } from './interactions';
+import * as _ from 'lodash';
+
+const defaultView = createView(9, [3.9, 43]);
+
+const views: View[] = [
+  createView(6, [-65, 47]),
+  createView(6, [-85, 23]),
+  createView(6, [-76, -12]),
+  createView(11, [55.45, -4.66]),
+  createView(11, [39.67, -4.06]),
+  createView(4, [10, 2]),
+  createView(5, [46, 20]),
+  createView(5, [107, 19]),
+  createView(5, [134, -28]),
+  createView(5, [46, -19]),
+  createView(6, [-19, 17]),
+  createView(9, [3.9, 43]),
+  createView(9, [-5, 36]),
+];
 
 export class MapFactory {
   public static createDefault(): MapWrapper {
@@ -30,18 +49,20 @@ export class MapFactory {
     const internal = new Map({
       layers: [],
       controls: defaultControls().extend([scale]),
-      interactions: [],
-      view: new View({
-        center: fromLonLat([37.41, 8.82]),
-        zoom: 4,
-        projection: DEFAULT_PROJECTION.name,
-      }),
+      view: defaultView,
     });
 
     const map = new MapWrapper(internal);
     map.defaultLayers();
     map.setDefaultInteractions();
 
+    return map;
+  }
+
+  public static createDefaultWithRandomView(): MapWrapper {
+    const map = this.createDefault();
+    const view = _.sample(views);
+    map.unwrap().setView(view || defaultView);
     return map;
   }
 
@@ -72,4 +93,12 @@ export class MapFactory {
     });
     return new MapWrapper(internal);
   }
+}
+
+function createView(zoom: number, lonLat: [number, number], projection = DEFAULT_PROJECTION): View {
+  return new View({
+    center: fromLonLat(lonLat),
+    zoom,
+    projection: projection.name,
+  });
 }

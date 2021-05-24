@@ -205,7 +205,7 @@ class RegistrationModal extends Component<ServiceProps, State> {
 
   private validateForm(email: string, password: string, confirmation: string): FormState {
     // Check email
-    if (!ValidationHelper.isEmailValid(email)) {
+    if (!ValidationHelper.email(email)) {
       return FormState.InvalidEmail;
     }
 

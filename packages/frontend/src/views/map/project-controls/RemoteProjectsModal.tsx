@@ -21,7 +21,7 @@ import { AbcProjectMetadata } from '@abc-map/shared';
 import { Logger } from '@abc-map/shared';
 import { Modal } from 'react-bootstrap';
 import { ServiceProps, withServices } from '../../../core/withServices';
-import Cls from './RemoteProjectModal.module.scss';
+import Cls from './RemoteProjectsModal.module.scss';
 
 const logger = Logger.get('RemoteProjectModal.tsx');
 
@@ -38,7 +38,7 @@ export interface LocalProps {
 
 declare type Props = LocalProps & ServiceProps;
 
-class RemoteProjectModal extends Component<Props, State> {
+class RemoteProjectsModal extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -109,7 +109,7 @@ class RemoteProjectModal extends Component<Props, State> {
             <>
               <div className={'font-weight-bold my-3'}>Attention: l&apos;ouverture du projet effacera le projet en cours</div>
               <div className={'d-flex justify-content-end'}>
-                <button className={'btn btn-secondary mr-3'} onClick={this.handleCancel}>
+                <button className={'btn btn-secondary mr-3'} onClick={this.handleCancel} data-cy={'cancel-button'}>
                   Annuler
                 </button>
                 <button className={'btn btn-primary'} onClick={this.handleConfirm} disabled={!selected} data-cy="open-project-confirm">
@@ -195,4 +195,4 @@ class RemoteProjectModal extends Component<Props, State> {
   };
 }
 
-export default withServices(RemoteProjectModal);
+export default withServices(RemoteProjectsModal);

@@ -16,16 +16,17 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-.abc-wms-layer-item {
-  margin-bottom: 0.7em;
-  padding: 0.5em;
-  border: solid 1px lightgrey;
-  border-radius: 8px;
-  cursor: pointer;
+export interface E2eFeature {
+  getId(): string | number | undefined;
+  getProperties(): { [k: string]: E2eFeatureProperty };
+  getGeometry(): E2eGeometry | undefined;
+  get(property: string): E2eFeatureProperty;
+  getStyle(): object[] | object | undefined;
+}
 
-  &.selected {
-    color: white;
-    background-color: blue;
-  }
+export declare type E2eFeatureProperty = object | string | number | undefined;
 
+export interface E2eGeometry {
+  getType(): string;
+  getExtent(): [number, number, number, number];
 }

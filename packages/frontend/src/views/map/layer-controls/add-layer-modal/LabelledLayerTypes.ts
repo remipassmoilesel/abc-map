@@ -22,9 +22,9 @@ export interface LabelledLayerType {
 }
 
 export class LabelledLayerTypes {
-  public static readonly Osm: LabelledLayerType = {
-    id: 'Osm',
-    label: 'Couche OpenStreetMap',
+  public static readonly BaseMap: LabelledLayerType = {
+    id: 'BaseMap',
+    label: 'Fond de carte',
   };
 
   public static readonly Vector: LabelledLayerType = {
@@ -37,7 +37,7 @@ export class LabelledLayerTypes {
     label: 'Couche distante (WMS)',
   };
 
-  public static readonly All: LabelledLayerType[] = [LabelledLayerTypes.Osm, LabelledLayerTypes.Vector, LabelledLayerTypes.Wms];
+  public static readonly All: LabelledLayerType[] = [LabelledLayerTypes.BaseMap, LabelledLayerTypes.Vector, LabelledLayerTypes.Wms];
 
   public static find(value: string): LabelledLayerType | undefined {
     return LabelledLayerTypes.All.find((type) => type.id === value);

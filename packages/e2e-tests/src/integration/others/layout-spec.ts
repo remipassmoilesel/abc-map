@@ -23,6 +23,8 @@ import { LayoutList } from '../../helpers/LayoutList';
 import { History } from '../../helpers/History';
 import { Download } from '../../helpers/Download';
 import { Toasts } from '../../helpers/Toasts';
+import { MainMap } from '../../helpers/MainMap';
+import { TopBar } from '../../helpers/TopBar';
 
 describe('Layout', function () {
   describe('As a visitor', function () {
@@ -31,7 +33,9 @@ describe('Layout', function () {
     });
 
     it('on first view, see no layout and can create one with center button', function () {
-      cy.visit(FrontendRoutes.layout().raw())
+      cy.visit(FrontendRoutes.map().raw())
+        .then(() => MainMap.fixedView())
+        .then(() => TopBar.layout())
         .get('[data-cy=layout-list] [data-cy=no-layout]')
         .should('exist')
         .then(() => LayoutList.getNames())

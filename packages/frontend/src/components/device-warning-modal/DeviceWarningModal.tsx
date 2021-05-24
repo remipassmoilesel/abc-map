@@ -48,11 +48,9 @@ class DeviceWarningModal extends Component<{}, State> {
           <Modal.Title>Avertissement</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div data-cy={'device-warning'}>Abc-Map risque de ne pas fonctionner correctement !</div>
-          <div className={'m-3'}>
-            Abc-Map est conçu pour fonctionner sur un ordinateur de bureau, avec les navigateurs Chromium ou Firefox. La configuration détectée sur votre
-            appareil peut entrainer des problèmes d&apos;utilisation.
-          </div>
+          <div data-cy={'device-warning'}>Abc-Map risque de ne pas fonctionner correctement 🤔</div>
+          <div className={'my-3'}>Abc-Map est conçu pour fonctionner sur un ordinateur de bureau, avec les navigateurs Chromium ou Firefox.</div>
+          <div className={'my-3'}>Votre configuration actuelle peut entrainer des problèmes d&apos;affichage et d&apos;utilisation.</div>
           <div className={'d-flex justify-content-end'}>
             <button className={'btn btn-primary'} onClick={this.handleClose} data-cy="device-warning-confirm">
               J&apos;ai compris

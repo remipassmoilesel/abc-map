@@ -18,25 +18,26 @@
 
 import { AbstractTool } from '../AbstractTool';
 import { Logger, MapTool } from '@abc-map/shared';
-import VectorSource from 'ol/source/Vector';
-import Geometry from 'ol/geom/Geometry';
 import { Map } from 'ol';
 import Icon from '../../../assets/tool-icons/properties.svg';
 import { MainStore } from '../../store/store';
 import { HistoryService } from '../../history/HistoryService';
 import { ModalService } from '../../ui/ModalService';
-import { EditPropertiesInteraction, Options } from './EditPropertiesInteraction';
-import { EditPropertiesEvent, FeatureSelected } from './EditPropertiesEvent';
 import { FeatureWrapper } from '../../geo/features/FeatureWrapper';
 import { ModalStatus } from '../../ui/typings';
 import { HistoryKey } from '../../history/HistoryKey';
 import { SetFeatureProperties } from '../../history/tasks/features/SetFeatureProperties';
 import * as _ from 'lodash';
+import { defaultInteractions } from '../../geo/map/interactions';
+import { Select } from 'ol/interaction';
+import { withControlKeyOnly, withMainButton } from '../common/common-conditions';
+import { LayerWrapper } from '../../geo/layers/LayerWrapper';
+import { Options } from 'ol/interaction/Select';
 
 const logger = Logger.get('EditPropertiesTool.ts');
 
-function interactionFactory(options: Options): EditPropertiesInteraction {
-  return new EditPropertiesInteraction(options);
+function interactionFactory(options: Options): Select {
+  return new Select(options);
 }
 
 export class EditPropertiesTool extends AbstractTool {
@@ -56,11 +57,23 @@ export class EditPropertiesTool extends AbstractTool {
     return 'Editer les propriétés';
   }
 
-  protected setupInternal(map: Map, source: VectorSource<Geometry>): void {
-    const edit = this.newInteraction({ source });
+  protected setupInternal(map: Map): void {
+    // Select interaction will condition modification of features
+    const select = this.newInteraction({
+      condition: (ev) => withControlKeyOnly(ev) && withMainButton(ev),
+      layers: (lay) => LayerWrapper.from(lay).isActive(),
+      // Warning: here we must use null to not manage styles with Select interaction
+      // Otherwise modification of style can be 'restored' from a bad state
+      style: null as any,
+    });
 
-    edit.on(EditPropertiesEvent.FeatureSelected, (ev: FeatureSelected) => {
-      const feature = FeatureWrapper.from(ev.feature);
+    select.on('select', () => {
+      const raw = select.getFeatures().pop();
+      if (!raw) {
+        return;
+      }
+
+      const feature = FeatureWrapper.from(raw);
       const before = feature.getSimpleProperties();
 
       this.modals
@@ -75,7 +88,12 @@ export class EditPropertiesTool extends AbstractTool {
         .catch((err) => logger.error('Error while editing feature properties: ', err));
     });
 
-    map.addInteraction(edit);
-    this.interactions.push(edit);
+    map.addInteraction(select);
+    this.interactions.push(select);
+
+    // Interactions for map view manipulation
+    const defaults = defaultInteractions();
+    defaults.forEach((i) => map.addInteraction(i));
+    this.interactions.push(...defaults);
   }
 }

@@ -25,11 +25,22 @@ export class MainMap {
   }
 
   public static getReference(): Chainable<E2eMap> {
-    return cy.window().then((_window) => {
-      const window: AbcWindow = _window as any;
-      const map = window.abc.mainMap;
-      expect(map).not.equals(undefined);
-      return map as E2eMap;
-    });
+    return this.getComponent() // We fetch component to wait for initialization
+      .then(() => cy.window())
+      .then((_window) => {
+        const window: AbcWindow = _window as any;
+        const map = window.abc.mainMap;
+        expect(map).not.equals(undefined);
+        return map as E2eMap;
+      });
+  }
+
+  public static fixedView(): Chainable<any> {
+    return this.getReference()
+      .then((map) => {
+        map.setView(4, 37.41, 8.82);
+        return map;
+      })
+      .wait(600);
   }
 }

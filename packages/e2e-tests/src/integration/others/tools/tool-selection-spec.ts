@@ -31,7 +31,7 @@ describe('Tool Selection', function () {
 
   it('user can select', function () {
     cy.visit(FrontendRoutes.map().raw())
-      .then(() => MainMap.getComponent())
+      .then(() => MainMap.fixedView())
       .then(() => ToolSelector.enable(MapTool.Point))
       // Create points
       .then(() => Draw.click(100, 100))
@@ -54,7 +54,7 @@ describe('Tool Selection', function () {
 
   it('user can duplicate selection then undo', function () {
     cy.visit(FrontendRoutes.map().raw())
-      .then(() => MainMap.getComponent())
+      .then(() => MainMap.fixedView())
       .then(() => ToolSelector.enable(MapTool.Point))
       // Create points
       .then(() => Draw.click(100, 100))
@@ -92,7 +92,7 @@ describe('Tool Selection', function () {
 
   it('user can drag selection then undo', function () {
     cy.visit(FrontendRoutes.map().raw())
-      .then(() => MainMap.getComponent())
+      .then(() => MainMap.fixedView())
       // Draw points
       .then(() => ToolSelector.enable(MapTool.Point))
       .then(() => Draw.click(150, 150))
@@ -132,7 +132,7 @@ describe('Tool Selection', function () {
 
   it('user can drag duplicated features', function () {
     cy.visit(FrontendRoutes.map().raw())
-      .then(() => MainMap.getComponent())
+      .then(() => MainMap.fixedView())
       // Draw points
       .then(() => ToolSelector.enable(MapTool.Point))
       .then(() => Draw.click(150, 150))
@@ -158,7 +158,7 @@ describe('Tool Selection', function () {
 
   it('user change stroke style then undo', function () {
     cy.visit(FrontendRoutes.map().raw())
-      .then(() => MainMap.getComponent())
+      .then(() => MainMap.fixedView())
       .then(() => ToolSelector.enable(MapTool.Polygon))
       // Draw feature
       .then(() => Draw.click(100, 100))
@@ -183,7 +183,7 @@ describe('Tool Selection', function () {
       .then(() => MainMap.getReference())
       .should((map) => {
         const features = map.getActiveLayerFeatures();
-        expect(features[0].getProperties()[StyleProperties.StrokeColor]).equal('#3F37C9');
+        expect(features[0].getProperties()[StyleProperties.StrokeColor]).equal('#FF5733');
       })
       .then(() => History.redo())
       .then(() => MainMap.getReference())
@@ -195,7 +195,7 @@ describe('Tool Selection', function () {
 
   it('user change fill style then undo', function () {
     cy.visit(FrontendRoutes.map().raw())
-      .then(() => MainMap.getComponent())
+      .then(() => MainMap.fixedView())
       .then(() => ToolSelector.enable(MapTool.Polygon))
       // Draw feature then select
       .then(() => Draw.click(100, 100))

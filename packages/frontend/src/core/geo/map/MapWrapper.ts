@@ -17,7 +17,7 @@
  */
 
 import { Map } from 'ol';
-import { LayerProperties, AbcProjection, VectorMetadata } from '@abc-map/shared';
+import { LayerProperties, AbcProjection, VectorMetadata, PredefinedLayerModel } from '@abc-map/shared';
 import * as _ from 'lodash';
 import { ResizeObserverFactory } from '../../utils/ResizeObserverFactory';
 import BaseEvent from 'ol/events/Event';
@@ -73,7 +73,7 @@ export class MapWrapper {
 
   public defaultLayers(): void {
     this.internal.getLayers().clear();
-    const osm = LayerFactory.newOsmLayer();
+    const osm = LayerFactory.newPredefinedLayer(PredefinedLayerModel.OSM);
     this.addLayer(osm);
 
     const vector = LayerFactory.newVectorLayer();

@@ -30,6 +30,7 @@ import {
   RegistrationToken,
   UserStatus,
   ResetPasswordToken,
+  ConfirmationStatus,
 } from '@abc-map/shared';
 import { Config } from '../config/Config';
 import { UserService } from '../users/UserService';
@@ -101,11 +102,17 @@ export class AuthenticationService extends AbstractService {
    * Confirm user account, and return an authentication token
    * @param registrationId
    */
-  public async confirmRegistration(registrationId: string): Promise<AbcUser> {
+  public async confirmRegistration(registrationId: string): Promise<AbcUser | ConfirmationStatus.AlreadyConfirmed> {
     // Get corresponding registration
     const registration = await this.registrations.findById(registrationId);
     if (!registration) {
       return Promise.reject(new Error(`Registration not found with id: ${registrationId}`));
+    }
+
+    // Check if not already confirmed
+    const alreadyPresent = await this.users.findByEmail(registration.email);
+    if (alreadyPresent) {
+      return ConfirmationStatus.AlreadyConfirmed;
     }
 
     // Save user
@@ -115,9 +122,6 @@ export class AuthenticationService extends AbstractService {
       password: registration.password,
     };
     await this.users.save(user);
-
-    // Delete registration, we do not wait for promise
-    this.registrations.deleteById(registration._id).catch((err) => logger.error('Cannot delete registration: ', err));
 
     return user;
   }

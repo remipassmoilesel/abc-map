@@ -38,7 +38,7 @@ import { ToastService } from '../ui/ToastService';
 export const logger = Logger.get('GeoService.ts');
 
 export class GeoService {
-  private mainMap = MapFactory.createDefault();
+  private mainMap = MapFactory.createDefaultWithRandomView();
 
   constructor(private httpClient: AxiosInstance, private toasts: ToastService, private history: HistoryService) {}
 
@@ -76,13 +76,7 @@ export class GeoService {
     const capabilitiesUrl = `${url}?service=wms&request=GetCapabilities`;
     const parser = new WMSCapabilitiesParser();
 
-    return this.httpClient
-      .get(capabilitiesUrl, { auth })
-      .then((res) => parser.read(res.data))
-      .catch((err) => {
-        this.toasts.httpError(err);
-        return Promise.reject(err);
-      });
+    return this.httpClient.get(capabilitiesUrl, { auth }).then((res) => parser.read(res.data));
   }
 
   public updateSelectedFeatures(transform: (x: FeatureStyle, f: FeatureWrapper) => FeatureStyle) {

@@ -58,6 +58,7 @@ describe('Proportional symbols', function () {
       .get('[data-cy=process]')
       .click()
       .then(() => Toasts.assertText('Traitement terminé !'))
+      .then(() => TopBar.map())
       .then(() => MainMap.getReference())
       .should((map) => {
         const layers = map.getLayersMetadata();

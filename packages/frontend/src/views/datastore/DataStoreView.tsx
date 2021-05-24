@@ -27,6 +27,7 @@ import { AddLayersTask } from '../../core/history/tasks/layers/AddLayersTask';
 import { FileFormat, FileFormats } from '../../core/data/FileFormats';
 import { FileIO } from '../../core/utils/FileIO';
 import Cls from './DataStoreView.module.scss';
+import { pageSetup } from '../../core/utils/page-setup';
 
 const logger = Logger.get('DataStore.tsx', 'info');
 
@@ -105,6 +106,8 @@ class DataStoreView extends Component<ServiceProps, State> {
   }
 
   public componentDidMount() {
+    pageSetup('Magasin de données', `Ajoutez des données compatibles et sélectionnées en un clic. Pays du monde, hydrographie, et bien plus !`);
+
     this.loadArtefacts();
   }
 

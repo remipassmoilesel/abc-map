@@ -26,6 +26,8 @@ export enum FormState {
   PasswordNotConfirmed = 'PasswordNotConfirmed',
   PasswordEqualEmail = 'PasswordEqualEmail',
   DeletionNotConfirmed = 'DeletionNotConfirmed',
+  InvalidUrl = 'InvalidUrl',
+  MissingRemoteLayer = 'MissingRemoteLayer',
   Ok = 'Ok',
 }
 
@@ -67,6 +69,16 @@ class FormValidationLabel extends Component<Props, {}> {
         {FormState.DeletionNotConfirmed === formState && (
           <>
             <i className={'fa fa-exclamation-circle'} /> Vous devez confirmer la suppression de votre compte.
+          </>
+        )}
+        {FormState.InvalidUrl === formState && (
+          <>
+            <i className={'fa fa-exclamation-circle'} /> L&apos;URL doit être valide et commencer par <code>http://</code> ou <code>https://</code>.
+          </>
+        )}
+        {FormState.MissingRemoteLayer === formState && (
+          <>
+            <i className={'fa fa-exclamation-circle'} /> Vous devez sélectionner une couche distante.
           </>
         )}
         {FormState.Ok === formState && (

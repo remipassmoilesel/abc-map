@@ -47,7 +47,7 @@ describe('GeoService', () => {
 
   it('exportLayers()', async () => {
     const map = MapFactory.createNaked();
-    const osm = LayerFactory.newOsmLayer();
+    const osm = LayerFactory.newPredefinedLayer(PredefinedLayerModel.OSM);
     const features = LayerFactory.newVectorLayer(new VectorSource({ features: TestHelper.sampleFeatures() }));
     map.addLayer(osm);
     map.addLayer(features);

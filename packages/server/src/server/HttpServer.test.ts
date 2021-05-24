@@ -34,6 +34,9 @@ describe('HttpServer', () => {
     config.server.globalRateLimit.timeWindow = '1min';
 
     services = await servicesFactory(config);
+  });
+
+  beforeEach(async () => {
     server = HttpServer.create(config, services);
     await server.initialize();
   });
@@ -96,5 +99,65 @@ describe('HttpServer', () => {
     assert.equal(blocked.statusCode, 429);
     assert.match(blocked.body, /Quota de requêtes dépassé/);
     assert.equal(notBlocked.statusCode, 200);
+  });
+
+  it('should serve sitemap.xml', async () => {
+    const req = await server.getApp().inject({
+      method: 'GET',
+      path: '/sitemap.xml',
+    });
+
+    assert.equal(req.headers['content-type'], 'application/xml');
+    assert.equal(
+      req.body.replace(/\s/gi, '').replace(new RegExp(config.externalUrl, 'ig'), 'http://external-url'),
+      `
+<?xml version="1.0" encoding="UTF-8"?>
+
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <url>
+    <loc>http://external-url/</loc>
+    <lastmod>2021-22-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1</priority>
+  </url>
+
+  <url>
+    <loc>http://external-url/documentation</loc>
+    <lastmod>2021-22-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>http://external-url/map</loc>
+    <lastmod>2021-22-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>http://external-url/datastore</loc>
+    <lastmod>2021-22-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>http://external-url/datastore</loc>
+    <lastmod>2021-22-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>http://external-url/layout</loc>
+    <lastmod>2021-22-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+</urlset>`.replace(/\s/gi, '')
+    );
   });
 });

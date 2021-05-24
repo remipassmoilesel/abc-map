@@ -30,7 +30,7 @@ describe('Tool LineString', function () {
 
   it('user can draw', function () {
     cy.visit(FrontendRoutes.map().raw())
-      .then(() => MainMap.getComponent())
+      .then(() => MainMap.fixedView())
       .then(() => ToolSelector.enable(MapTool.LineString))
       // First
       .then(() => Draw.click(100, 100))
@@ -50,19 +50,19 @@ describe('Tool LineString', function () {
         expect(features[0].getGeometry()?.getType()).equal('LineString');
         expect(features[0].getGeometry()?.getExtent()).deep.equals([-1118865.2444950184, 3558914.9167841673, -629668.2634698902, 4048111.8978092954]);
         expect(features[0].get(StyleProperties.StrokeWidth)).equal(5);
-        expect(features[0].get(StyleProperties.StrokeColor)).equal('#3F37C9');
+        expect(features[0].get(StyleProperties.StrokeColor)).equal('#FF5733');
 
         expect(features[1].getGeometry()?.getType()).equal('LineString');
         expect(features[1].getGeometry()?.getExtent()).deep.equals([837922.6796054938, 1602126.9926836556, 1327119.6606306215, 2091323.9737087833]);
         expect(features[1].get(StyleProperties.StrokeWidth)).equal(5);
-        expect(features[1].get(StyleProperties.StrokeColor)).equal('#3F37C9');
+        expect(features[1].get(StyleProperties.StrokeColor)).equal('#FF5733');
       });
   });
 
   it('user can modify', function () {
     cy.visit(FrontendRoutes.map().raw())
       // Create line
-      .then(() => MainMap.getComponent())
+      .then(() => MainMap.fixedView())
       .then(() => ToolSelector.enable(MapTool.LineString))
       .then(() => Draw.click(100, 100))
       .then(() => Draw.click(150, 150))

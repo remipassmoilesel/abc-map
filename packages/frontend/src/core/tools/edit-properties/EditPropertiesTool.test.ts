@@ -18,26 +18,27 @@
 
 import { EditPropertiesTool } from './EditPropertiesTool';
 import * as sinon from 'sinon';
-import { SinonStubbedInstance } from 'sinon';
-import { EditPropertiesInteraction } from './EditPropertiesInteraction';
+import { SinonStub, SinonStubbedInstance } from 'sinon';
 import { ModalService } from '../../ui/ModalService';
 import { HistoryService } from '../../history/HistoryService';
-import { Map } from 'ol';
+import { Collection, Map } from 'ol';
 import VectorSource from 'ol/source/Vector';
-import { FeatureSelected } from './EditPropertiesEvent';
 import { ModalEventType, ModalStatus } from '../../ui/typings';
 import Feature from 'ol/Feature';
 import { Point } from 'ol/geom';
 import { HistoryKey } from '../../history/HistoryKey';
 import { SetFeatureProperties } from '../../history/tasks/features/SetFeatureProperties';
 import { TestHelper } from '../../utils/TestHelper';
+import { Select } from 'ol/interaction';
+import BaseEvent from 'ol/events/Event';
 
 describe('EditPropertiesTool', () => {
   let map: SinonStubbedInstance<Map>;
   let source: SinonStubbedInstance<VectorSource>;
-  let interaction: EditPropertiesInteraction;
   let modals: SinonStubbedInstance<ModalService>;
   let history: SinonStubbedInstance<HistoryService>;
+  let getFeaturesStub: SinonStub;
+  let interaction: Select;
   let tool: EditPropertiesTool;
 
   beforeEach(() => {
@@ -45,7 +46,9 @@ describe('EditPropertiesTool', () => {
     history = sinon.createStubInstance(HistoryService);
     map = sinon.createStubInstance(Map);
     source = sinon.createStubInstance(VectorSource);
-    interaction = new EditPropertiesInteraction({ source: source as unknown as VectorSource });
+    getFeaturesStub = sinon.stub();
+    interaction = new Select();
+    interaction.getFeatures = getFeaturesStub;
     const factory = () => interaction;
 
     tool = new EditPropertiesTool({} as any, history as unknown as HistoryService, modals as unknown as ModalService, factory);
@@ -55,10 +58,11 @@ describe('EditPropertiesTool', () => {
   it('should do nothing on cancel', async () => {
     // Prepare
     const feature = new Feature(new Point([1, 2]));
+    getFeaturesStub.returns(new Collection([feature]));
     modals.featurePropertiesModal.resolves({ status: ModalStatus.Canceled, properties: { abcd: 1234 }, type: ModalEventType.FeaturePropertiesClosed });
 
     // Act
-    interaction.dispatchEvent(new FeatureSelected(feature));
+    interaction.dispatchEvent(new BaseEvent('select'));
     await TestHelper.wait(10); // We wait an internal promise
 
     // Assert
@@ -69,10 +73,11 @@ describe('EditPropertiesTool', () => {
     // Prepare
     const feature = new Feature(new Point([1, 2]));
     feature.set('abcd', 1234);
+    getFeaturesStub.returns(new Collection([feature]));
     modals.featurePropertiesModal.resolves({ status: ModalStatus.Confirmed, properties: { abcd: 1234 }, type: ModalEventType.FeaturePropertiesClosed });
 
     // Act
-    interaction.dispatchEvent(new FeatureSelected(feature));
+    interaction.dispatchEvent(new BaseEvent('select'));
     await TestHelper.wait(10); // We wait an internal promise
 
     // Assert
@@ -83,10 +88,11 @@ describe('EditPropertiesTool', () => {
     // Prepare
     const feature = new Feature(new Point([1, 2]));
     feature.set('abcd', 12345);
+    getFeaturesStub.returns(new Collection([feature]));
     modals.featurePropertiesModal.resolves({ status: ModalStatus.Confirmed, properties: { abcd: 4567 }, type: ModalEventType.FeaturePropertiesClosed });
 
     // Act
-    interaction.dispatchEvent(new FeatureSelected(feature));
+    interaction.dispatchEvent(new BaseEvent('select'));
     await TestHelper.wait(10); // We wait an internal promise
 
     // Assert
@@ -100,7 +106,8 @@ describe('EditPropertiesTool', () => {
   it('dispose()', () => {
     tool.dispose();
 
-    expect(map.removeInteraction.callCount).toEqual(1);
-    expect(map.removeInteraction.args[0][0].constructor.name).toEqual('EditPropertiesInteraction');
+    expect(map.removeInteraction.callCount).toEqual(5);
+    const names = map.removeInteraction.args.map((args) => args[0].constructor.name);
+    expect(names).toEqual(['Select', 'DoubleClickZoom', 'DragPan', 'KeyboardPan', 'MouseWheelZoom']);
   });
 });

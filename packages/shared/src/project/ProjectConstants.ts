@@ -1,4 +1,7 @@
 export class ProjectConstants {
+  /**
+   * Maximum size of project for uploads, in bytes
+   */
   public static readonly MaxSizeBytes = 5 * 1024 * 1024;
 
   /**

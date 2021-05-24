@@ -57,9 +57,7 @@ export class Registration {
         expect(activationLink).to.match(/^http:\/\/localhost:[0-9]+\/confirm-account\//);
         return cy.visit(activationLink);
       })
-      .get('div[data-cy=account-enabled]')
-      .should((elem) => {
-        expect(elem.text()).to.contains('Votre compte est activé');
-      });
+      .get('[data-cy=account-enabled]')
+      .should('contain', 'Votre compte est activé');
   }
 }
