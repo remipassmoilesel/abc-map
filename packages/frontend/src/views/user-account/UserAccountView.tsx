@@ -25,6 +25,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import ChangePasswordForm from './ChangePasswordForm';
 import DeleteAccountForm from './DeleteAccountForm';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { pageSetup } from '../../core/utils/page-setup';
 
 const logger = Logger.get('UserAccountView.tsx', 'info');
 
@@ -54,7 +55,7 @@ class UserAccountView extends Component<Props, {}> {
                 <div className={'mb-2'}>Adresse email:</div>
                 <input type={'email'} readOnly={true} value={user.email} className={'form-control'} />
                 <small className={'mt-2'}>Pour le moment, vous ne pouvez pas modifier votre adresse email.</small>
-                <div className={'mt-4'}>Et c&apos;est tout !</div>
+                <div className={'mt-4'}>Pas plus !</div>
               </div>
             </div>
 
@@ -68,6 +69,10 @@ class UserAccountView extends Component<Props, {}> {
         )}
       </div>
     );
+  }
+
+  public componentDidMount() {
+    pageSetup('Mon compte');
   }
 
   private handleChangePassword = (previousPassword: string, newPassword: string) => {

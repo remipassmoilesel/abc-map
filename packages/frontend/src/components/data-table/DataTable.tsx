@@ -21,11 +21,15 @@ import { Logger } from '@abc-map/shared';
 import { ServiceProps, withServices } from '../../core/withServices';
 import { DataRow, getFields } from '../../core/data/data-source/DataSource';
 import Cls from './DataTable.module.scss';
+import RowActions from './RowActions';
 
 const logger = Logger.get('DataSourceSelector.tsx');
 
 interface Props extends ServiceProps {
   rows: DataRow[];
+  onEdit?: (r: DataRow) => void;
+  onDelete?: (r: DataRow) => void;
+  withActions?: boolean;
   className?: string;
   'data-cy'?: string;
 }
@@ -33,6 +37,7 @@ interface Props extends ServiceProps {
 class DataTable extends Component<Props, {}> {
   public render(): ReactNode {
     const className = this.props.className;
+    const withActions = this.props.withActions || false;
     const rows = this.props.rows;
     if (!rows.length) {
       return <div className={`${Cls.dataTable} ${className}`}>Pas de données</div>;
@@ -66,6 +71,11 @@ class DataTable extends Component<Props, {}> {
                     {this.normalize(row[key])}
                   </td>
                 ))}
+                {withActions && (
+                  <td className={Cls.rowActions}>
+                    <RowActions row={row} onEdit={this.handleEditRow} onDelete={this.handleDelete} />
+                  </td>
+                )}
               </tr>
             ))}
           </tbody>
@@ -85,6 +95,14 @@ class DataTable extends Component<Props, {}> {
       return field;
     }
   }
+
+  private handleEditRow = (row: DataRow) => {
+    this.props.onEdit && this.props.onEdit(row);
+  };
+
+  private handleDelete = (row: DataRow) => {
+    this.props.onDelete && this.props.onDelete(row);
+  };
 }
 
 export default withServices(DataTable);

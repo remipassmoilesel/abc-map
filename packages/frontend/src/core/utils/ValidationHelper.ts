@@ -17,9 +17,18 @@
  */
 
 const VALID_EMAIL = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+const VALID_URL = /^https?:\/\/.+$/;
 
 export class ValidationHelper {
-  public static isEmailValid(email: string): boolean {
+  public static email(email: string): boolean {
     return email.match(VALID_EMAIL) !== null;
+  }
+
+  /**
+   * Warning: URL validation is weak
+   * @param email
+   */
+  public static url(email: string): boolean {
+    return email.match(VALID_URL) !== null;
   }
 }

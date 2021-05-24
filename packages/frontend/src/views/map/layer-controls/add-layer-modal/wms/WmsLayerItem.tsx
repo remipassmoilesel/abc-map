@@ -19,7 +19,7 @@
 import React, { Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/shared';
 import { WmsLayer } from '../../../../../core/geo/WmsCapabilities';
-import './WmsLayerItem.scss';
+import Cls from './WmsLayerItem.module.scss';
 
 const logger = Logger.get('WmsLayerItem.tsx');
 
@@ -32,7 +32,7 @@ interface Props {
 class WmsLayerItem extends Component<Props, {}> {
   public render(): ReactNode {
     const layer = this.props.layer;
-    const classes = this.props.selected ? 'abc-wms-layer-item selected' : 'abc-wms-layer-item';
+    const classes = this.props.selected ? `${Cls.wmsLayerItem} ${Cls.selected}` : Cls.wmsLayerItem;
     return (
       <div className={classes} onClick={this.handleClick} data-cy={'wms-layer-item'}>
         <div>{layer.Name}</div>

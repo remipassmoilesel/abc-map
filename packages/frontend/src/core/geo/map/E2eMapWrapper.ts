@@ -17,10 +17,12 @@
  */
 
 import { MapWrapper } from './MapWrapper';
-import { Logger, E2eMap } from '@abc-map/shared';
+import { Logger, E2eMap, DEFAULT_PROJECTION } from '@abc-map/shared';
 import { LayerMetadata, BaseMetadata } from '@abc-map/shared';
 import Feature from 'ol/Feature';
 import Geometry from 'ol/geom/Geometry';
+import View from 'ol/View';
+import { fromLonLat } from 'ol/proj';
 
 export const logger = Logger.get('E2eMapWrapper.ts', 'debug');
 
@@ -58,6 +60,16 @@ export class E2eMapWrapper implements E2eMap {
     }
 
     return layer.getSource().getFeatures();
+  }
+
+  public setView(zoom: number, lon: number, lat: number): void {
+    const view = new View({
+      center: fromLonLat([lon, lat]),
+      zoom,
+      projection: DEFAULT_PROJECTION.name,
+    });
+
+    this.internal.unwrap().setView(view);
   }
 
   public getViewExtent() {

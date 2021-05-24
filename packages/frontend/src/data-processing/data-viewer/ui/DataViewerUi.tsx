@@ -27,6 +27,12 @@ import { ServiceProps, withServices } from '../../../core/withServices';
 import { CsvParser } from '../../../core/data/csv-parser/CsvParser';
 import { FileIO } from '../../../core/utils/FileIO';
 import Cls from './DataViewerUi.module.scss';
+import { FeatureWrapper } from '../../../core/geo/features/FeatureWrapper';
+import { ModalStatus } from '../../../core/ui/typings';
+import * as _ from 'lodash';
+import { HistoryKey } from '../../../core/history/HistoryKey';
+import { SetFeatureProperties } from '../../../core/history/tasks/features/SetFeatureProperties';
+import { RemoveFeaturesTask } from '../../../core/history/tasks/features/RemoveFeaturesTask';
 
 const logger = Logger.get('DataViewerUi.tsx');
 
@@ -73,7 +79,7 @@ class DataViewerUi extends Component<Props, State> {
             <div className={'my-3'}>
               <b>{data.length}</b> entrées affichées
             </div>
-            <DataTable rows={data} className={Cls.dataTable} data-cy={'data-table'} />
+            <DataTable rows={data} withActions={true} onEdit={this.handleEdit} onDelete={this.handleDelete} className={Cls.dataTable} data-cy={'data-table'} />
           </>
         )}
         {layer && !data.length && <div className={'my-3'}>Pas de données à afficher</div>}
@@ -133,6 +139,64 @@ class DataViewerUi extends Component<Props, State> {
         toasts.genericError();
       });
   };
+
+  private handleEdit = (r: DataRow) => {
+    const { toasts, modals, history } = this.props.services;
+
+    const layer = this.state.layer;
+    const feature = this.getFeature(r);
+    if (!feature || !layer) {
+      toasts.genericError();
+      return;
+    }
+
+    const before = feature.getSimpleProperties();
+
+    modals
+      .featurePropertiesModal(before)
+      .then((modalEvent) => {
+        const after = modalEvent.properties;
+        if (ModalStatus.Confirmed === modalEvent.status && !_.isEqual(before, after)) {
+          feature.overwriteSimpleProperties(after);
+          history.register(HistoryKey.Map, new SetFeatureProperties(feature, before, after));
+          this.showData(layer);
+        }
+      })
+      .catch((err) => logger.error('Error while editing feature properties: ', err));
+  };
+
+  private handleDelete = (r: DataRow) => {
+    const { toasts, history } = this.props.services;
+
+    const layer = this.state.layer;
+    const feature = this.getFeature(r);
+    if (!feature || !layer) {
+      toasts.genericError();
+      return;
+    }
+
+    const task = new RemoveFeaturesTask(layer.getSource(), [feature]);
+    history.register(HistoryKey.Map, task);
+    layer.getSource().removeFeature(feature.unwrap());
+    this.showData(layer);
+  };
+
+  private getFeature(r: DataRow): FeatureWrapper | undefined {
+    const layer = this.state.layer;
+    if (!layer) {
+      return;
+    }
+
+    const feature = layer
+      .getSource()
+      .getFeatures()
+      .find((f) => f.getId() === r._id);
+    if (!feature) {
+      return;
+    }
+
+    return FeatureWrapper.from(feature);
+  }
 }
 
 export default withServices(DataViewerUi);

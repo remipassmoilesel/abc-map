@@ -67,18 +67,18 @@ export class AuthenticationController extends Controller {
 
     // We limit usage of these routes in order to prevent bruteforce
     // FIXME We should use responses (200, 403, 401) to alter limits and ban for a larger period
-    const lowRateLimit = {
+    const authRateLimit = {
       config: { rateLimit: { max: this.config.server.authenticationRateLimit.max, timeWindow: this.config.server.authenticationRateLimit.timeWindow } },
     };
 
-    app.post('/', { schema: LoginRequestSchema, ...lowRateLimit }, this.login);
-    app.delete('/', { schema: DeleteAccountSchema, ...lowRateLimit }, this.deleteAccount);
-    app.patch('/password', { schema: UpdatePasswordRequestSchema, ...lowRateLimit }, this.updatePassword);
-    app.post('/password', { schema: ResetPasswordSchema, ...lowRateLimit }, this.resetPassword);
-    app.post('/password/reset-email', { schema: PasswordLostRequestSchema, ...lowRateLimit }, this.passwordLost);
-    app.post('/account', { schema: RegistrationRequestSchema, ...lowRateLimit }, this.registration);
-    app.post('/account/confirmation', { schema: RegistrationConfirmationRequestSchema, ...lowRateLimit }, this.confirmRegistration);
-    app.get('/token', { ...lowRateLimit }, this.renew);
+    app.post('/', { schema: LoginRequestSchema, ...authRateLimit }, this.login);
+    app.delete('/', { schema: DeleteAccountSchema, ...authRateLimit }, this.deleteAccount);
+    app.patch('/password', { schema: UpdatePasswordRequestSchema, ...authRateLimit }, this.updatePassword);
+    app.post('/password', { schema: ResetPasswordSchema, ...authRateLimit }, this.resetPassword);
+    app.post('/password/reset-email', { schema: PasswordLostRequestSchema, ...authRateLimit }, this.passwordLost);
+    app.post('/account', { schema: RegistrationRequestSchema, ...authRateLimit }, this.registration);
+    app.post('/account/confirmation', { schema: RegistrationConfirmationRequestSchema, ...authRateLimit }, this.confirmRegistration);
+    app.get('/token', { ...authRateLimit }, this.renew);
   };
 
   private registration = async (req: FastifyRequest<{ Body: RegistrationRequest }>, reply: FastifyReply): Promise<void> => {
@@ -99,7 +99,7 @@ export class AuthenticationController extends Controller {
   };
 
   private confirmRegistration = async (req: FastifyRequest<{ Body: RegistrationConfirmationRequest }>, reply: FastifyReply): Promise<void> => {
-    const { metrics, authentication } = this.services;
+    const { authentication, metrics } = this.services;
 
     // Verify token
     const tokenContent = await authentication.verifyRegistrationToken(req.body.token);
@@ -112,9 +112,17 @@ export class AuthenticationController extends Controller {
 
     try {
       // Confirm account then reply
-      const user = await authentication.confirmRegistration(tokenContent.registrationId);
-      const token = authentication.signAuthenticationToken(user);
+      const result = await authentication.confirmRegistration(tokenContent.registrationId);
 
+      // Email already confirmed
+      if (ConfirmationStatus.AlreadyConfirmed === result) {
+        const response: RegistrationConfirmationResponse = { status: ConfirmationStatus.AlreadyConfirmed };
+        reply.status(409).send(response);
+        return;
+      }
+
+      // Email confirmed
+      const token = authentication.signAuthenticationToken(result);
       const response: RegistrationConfirmationResponse = { status: ConfirmationStatus.Succeed, token };
       reply.status(200).send(response);
 

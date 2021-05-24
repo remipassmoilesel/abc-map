@@ -73,7 +73,7 @@ function loadingError(err: Error | AxiosError | undefined): void {
   if (HttpError.isTooManyRequests(err)) {
     message = 'Vous avez dépassé le nombre de demandes autorisés 😭. Veuillez réessayer plus tard.';
   } else {
-    message = 'Une erreur empêche le chargement de la page 😭. Veuillez réessayer plus tard.';
+    message = 'Petit problème technique 😅 Veuillez réessayer plus tard.';
   }
 
   const root = document.querySelector('#root');

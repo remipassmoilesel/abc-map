@@ -30,6 +30,7 @@ describe('Tool Text', function () {
 
   it('user can add text', function () {
     cy.visit(FrontendRoutes.map().raw())
+      .then(() => MainMap.fixedView())
       .then(() => MainMap.getComponent())
       .then(() => ToolSelector.enable(MapTool.Point))
       // Draw 2 points

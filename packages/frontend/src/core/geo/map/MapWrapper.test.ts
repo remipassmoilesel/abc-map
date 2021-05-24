@@ -17,7 +17,7 @@
  */
 
 import { MapFactory } from './MapFactory';
-import { LayerProperties } from '@abc-map/shared';
+import { LayerProperties, PredefinedLayerModel } from '@abc-map/shared';
 import { MapTool } from '@abc-map/shared';
 import { Map } from 'ol';
 import { logger, MapWrapper } from './MapWrapper';
@@ -102,14 +102,14 @@ describe('MapWrapper', function () {
   describe('setActiveLayer()', () => {
     it('on wrong layer', () => {
       const map = MapFactory.createNaked();
-      const layer1 = LayerFactory.newOsmLayer();
+      const layer1 = LayerFactory.newPredefinedLayer(PredefinedLayerModel.OSM);
 
       expect(() => map.setActiveLayer(layer1)).toThrow(new Error('Layer does not belong to map'));
     });
 
     it('once', () => {
       const map = MapFactory.createNaked();
-      const layer1 = LayerFactory.newOsmLayer();
+      const layer1 = LayerFactory.newPredefinedLayer(PredefinedLayerModel.OSM);
       const layer2 = LayerFactory.newVectorLayer();
       const layer3 = LayerFactory.newVectorLayer();
       map.addLayer(layer1);
@@ -127,7 +127,7 @@ describe('MapWrapper', function () {
 
     it('twice', () => {
       const map = MapFactory.createNaked();
-      const layer1 = LayerFactory.newOsmLayer();
+      const layer1 = LayerFactory.newPredefinedLayer(PredefinedLayerModel.OSM);
       const layer2 = LayerFactory.newVectorLayer();
       const layer3 = LayerFactory.newVectorLayer();
       map.addLayer(layer1);
@@ -154,7 +154,7 @@ describe('MapWrapper', function () {
 
     it('should return layer if one is active', () => {
       const map = MapFactory.createNaked();
-      const layer1 = LayerFactory.newOsmLayer();
+      const layer1 = LayerFactory.newPredefinedLayer(PredefinedLayerModel.OSM);
       map.addLayer(layer1);
       map.setActiveLayer(layer1);
 
@@ -171,7 +171,7 @@ describe('MapWrapper', function () {
 
     it('should return undefined if no vector layer active', () => {
       const map = MapFactory.createNaked();
-      const layer = LayerFactory.newOsmLayer();
+      const layer = LayerFactory.newPredefinedLayer(PredefinedLayerModel.OSM);
       map.addLayer(layer);
       map.setActiveLayer(layer);
 
@@ -247,7 +247,7 @@ describe('MapWrapper', function () {
       // Prepare
       const map = MapFactory.createNaked();
       const vector = LayerFactory.newVectorLayer();
-      const tile = LayerFactory.newOsmLayer();
+      const tile = LayerFactory.newPredefinedLayer(PredefinedLayerModel.OSM);
 
       map.addLayer(vector);
       map.addLayer(tile);
@@ -268,7 +268,7 @@ describe('MapWrapper', function () {
       // Prepare
       const map = MapFactory.createNaked();
       const vector = LayerFactory.newVectorLayer();
-      const tile = LayerFactory.newOsmLayer();
+      const tile = LayerFactory.newPredefinedLayer(PredefinedLayerModel.OSM);
 
       map.addLayer(vector);
       map.addLayer(tile);

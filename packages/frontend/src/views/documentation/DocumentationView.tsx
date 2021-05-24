@@ -25,6 +25,7 @@ import { MainState } from '../../core/store/reducer';
 import { connect, ConnectedProps } from 'react-redux';
 import { UiActions } from '../../core/store/ui/actions';
 import * as _ from 'lodash';
+import { pageSetup } from '../../core/utils/page-setup';
 
 const logger = Logger.get('DocumentationView.tsx', 'info');
 
@@ -65,6 +66,8 @@ class DocumentationView extends Component<Props, {}> {
   }
 
   public componentDidMount() {
+    pageSetup('Documentation', `La documentation contient des exemples pratiques, une FAQ et des explications sur le fonctionnement d'Abc-Map.`);
+
     const current = this.viewPortRef.current;
     if (!current) {
       logger.error('Ref not ready');

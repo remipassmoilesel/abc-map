@@ -26,14 +26,15 @@ import { AuthenticationService, logger } from './AuthenticationService';
 import { UserService } from '../users/UserService';
 import { Config, DevelopmentDataConfig } from '../config/Config';
 import {
+  AbcUser,
   AnonymousUser,
   AuthenticationStatus,
   AuthenticationToken,
+  ConfirmationStatus,
   RegistrationStatus,
   RegistrationToken,
-  UserStatus,
   ResetPasswordToken,
-  AbcUser,
+  UserStatus,
 } from '@abc-map/shared';
 import { PasswordHasher } from './PasswordHasher';
 import * as sinon from 'sinon';
@@ -284,8 +285,7 @@ describe('AuthenticationService', () => {
       const token = (await service.verifyRegistrationToken(emails.confirmRegistration.getCall(0).args[1])) as RegistrationToken;
 
       // Act
-      const registeredUser = await service.confirmRegistration(token.registrationId);
-      await TestHelper.wait(10); // Wait an internal promise
+      const registeredUser = (await service.confirmRegistration(token.registrationId)) as AbcUser;
 
       // Assert
       assert.isDefined(registeredUser.id);
@@ -297,6 +297,23 @@ describe('AuthenticationService', () => {
       const error: Error = await service.confirmRegistration('non existing registration').catch((err) => err);
 
       assert.match(error.message, /Registration not found/);
+    });
+
+    it('should not create user if email already confirmed', async () => {
+      // Prepare
+      const user = TestHelper.sampleUser();
+      await service.register({ email: user.email, password: user.password });
+      await service.register({ email: user.email, password: user.password });
+      const token1 = (await service.verifyRegistrationToken(emails.confirmRegistration.getCall(0).args[1])) as RegistrationToken;
+      await service.confirmRegistration(token1.registrationId);
+
+      const token2 = (await service.verifyRegistrationToken(emails.confirmRegistration.getCall(1).args[1])) as RegistrationToken;
+
+      // Act
+      const result = await service.confirmRegistration(token2.registrationId);
+
+      // Assert
+      assert.equal(result, ConfirmationStatus.AlreadyConfirmed);
     });
   });
 

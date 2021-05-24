@@ -63,13 +63,13 @@ describe('LayerWrapper', () => {
   });
 
   it('getName()', () => {
-    const layer = LayerFactory.newOsmLayer();
+    const layer = LayerFactory.newPredefinedLayer(PredefinedLayerModel.OSM);
     layer.unwrap().set(LayerProperties.Name, 'test-name');
     expect(layer.getName()).toEqual('test-name');
   });
 
   it('isActive()', () => {
-    const layer = LayerFactory.newOsmLayer();
+    const layer = LayerFactory.newPredefinedLayer(PredefinedLayerModel.OSM);
 
     layer.unwrap().set(LayerProperties.Active, true);
     expect(layer.isActive()).toEqual(true);
@@ -79,7 +79,7 @@ describe('LayerWrapper', () => {
   });
 
   it('isVisible()', () => {
-    const layer = LayerFactory.newOsmLayer();
+    const layer = LayerFactory.newPredefinedLayer(PredefinedLayerModel.OSM);
 
     layer.unwrap().setVisible(true);
     expect(layer.isVisible()).toEqual(true);
@@ -89,7 +89,7 @@ describe('LayerWrapper', () => {
   });
 
   it('getOpacity()', () => {
-    const layer = LayerFactory.newOsmLayer();
+    const layer = LayerFactory.newPredefinedLayer(PredefinedLayerModel.OSM);
 
     layer.unwrap().setOpacity(0.5);
     expect(layer.getOpacity()).toEqual(0.5);
@@ -97,12 +97,12 @@ describe('LayerWrapper', () => {
 
   describe('setId()', () => {
     it('with id', () => {
-      const layer = LayerFactory.newOsmLayer().setId('test-id');
+      const layer = LayerFactory.newPredefinedLayer(PredefinedLayerModel.OSM).setId('test-id');
       expect(layer.getId()).toEqual('test-id');
     });
 
     it('without id', () => {
-      const layer = LayerFactory.newOsmLayer();
+      const layer = LayerFactory.newPredefinedLayer(PredefinedLayerModel.OSM);
       layer.unwrap().set(LayerProperties.Id, undefined);
       expect(layer.getId()).toBeUndefined();
 
@@ -119,7 +119,7 @@ describe('LayerWrapper', () => {
     });
 
     it('on predefined layer', () => {
-      const layer = LayerFactory.newOsmLayer();
+      const layer = LayerFactory.newPredefinedLayer(PredefinedLayerModel.OSM);
       layer.setActive(true).setVisible(false).setOpacity(0.5);
 
       const metadata = layer.getMetadata();
@@ -178,7 +178,7 @@ describe('LayerWrapper', () => {
 
   describe('toAbcLayer()', () => {
     it('with OSM layer', async () => {
-      const layer = LayerFactory.newOsmLayer().setVisible(false).setOpacity(0.5).setActive(true);
+      const layer = LayerFactory.newPredefinedLayer(PredefinedLayerModel.OSM).setVisible(false).setOpacity(0.5).setActive(true);
 
       const abcLayer = (await layer.toAbcLayer()) as AbcPredefinedLayer;
 
@@ -221,7 +221,7 @@ describe('LayerWrapper', () => {
 
   describe('shallowClone()', () => {
     it('with tile layer', () => {
-      const layer = LayerFactory.newOsmLayer();
+      const layer = LayerFactory.newPredefinedLayer(PredefinedLayerModel.OSM);
       const clone = layer.shallowClone();
       expect(clone).toBeDefined();
       expect(clone.unwrap()).toBeInstanceOf(TileLayer);

@@ -174,7 +174,7 @@ class PasswordLostModal extends Component<ServiceProps, State> {
 
   private validateForm(email: string): FormState {
     // Check email
-    if (!ValidationHelper.isEmailValid(email)) {
+    if (!ValidationHelper.email(email)) {
       return FormState.InvalidEmail;
     }
 

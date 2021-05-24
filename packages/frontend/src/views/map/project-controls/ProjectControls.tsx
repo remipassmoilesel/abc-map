@@ -23,7 +23,7 @@ import { Constants } from '../../../core/Constants';
 import { connect, ConnectedProps } from 'react-redux';
 import { MainState } from '../../../core/store/reducer';
 import { FileIO, InputResultType, InputType } from '../../../core/utils/FileIO';
-import RemoteProjectModal from './RemoteProjectModal';
+import RemoteProjectModal from './RemoteProjectsModal';
 import { ModalStatus } from '../../../core/ui/typings';
 import { ServiceProps, withServices } from '../../../core/withServices';
 

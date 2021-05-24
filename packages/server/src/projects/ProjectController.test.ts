@@ -24,7 +24,7 @@ import { assert } from 'chai';
 import { Config } from '../config/Config';
 import * as FormData from 'form-data';
 import { TestAuthentication } from '../utils/TestAuthentication';
-import { AbcProjectMetadata, AbcUser, CompressedProject } from '@abc-map/shared';
+import { AbcProjectMetadata, AbcUser, CompressedProject, ProjectConstants } from '@abc-map/shared';
 import { IncomingHttpHeaders } from 'http';
 import { StreamReader } from '../utils/StreamReader';
 import ReadableStream = NodeJS.ReadableStream;
@@ -172,7 +172,7 @@ describe('ProjectController', () => {
     it('should fail if project is too big', async () => {
       // Prepare
       const project = await TestHelper.sampleCompressedProject();
-      const heavyProject = Buffer.from(_.range(1, 6_000_000).map(() => 128));
+      const heavyProject = Buffer.from(_.range(1, ProjectConstants.MaxSizeBytes + 1000).map(() => 128));
       const form = new FormData();
       form.append('metadata', JSON.stringify(project.metadata));
       form.append('project', heavyProject);

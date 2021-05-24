@@ -34,21 +34,21 @@ export const mapInitialState: MapState = {
   currentStyle: {
     fill: {
       color1: '#FFFFFF',
-      color2: '#005cc1',
+      color2: '#FF5733',
     },
     stroke: {
-      color: '#3F37C9',
+      color: '#FF5733',
       width: 5,
     },
     text: {
-      color: '#3F37C9',
+      color: '#FF5733',
       font: 'sans-serif',
       size: 30,
     },
     point: {
       icon: PointIcons.Circle,
       size: 15,
-      color: '#3F37C9',
+      color: '#FF5733',
     },
   },
 };

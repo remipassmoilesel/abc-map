@@ -20,7 +20,8 @@ import { Config } from '../config/Config';
 import * as nodemailer from 'nodemailer';
 import { Transporter } from 'nodemailer';
 import { Logger } from '@abc-map/shared';
-import * as fs from 'fs';
+import { promises as fs } from 'fs';
+import { constants } from 'fs';
 import * as path from 'path';
 
 const logger = Logger.get('SmtpClient.ts', 'info');
@@ -53,7 +54,7 @@ export class SmtpClient {
         html,
       });
     } else {
-      this.fakeSending(to, html);
+      await this.fakeSending(to, html);
     }
   }
 
@@ -79,15 +80,19 @@ export class SmtpClient {
     /* eslint-enable max-len */
   }
 
-  // TODO: promisify
-  private fakeSending(email: string, body: string): void {
+  private async fakeSending(email: string, body: string): Promise<void> {
     const mailDir = path.resolve(__dirname, '..', '..', '..', 'e2e-tests', 'emails');
     const mailPath = path.resolve(mailDir, `${email}.html`);
-
     logger.warn(`Mail will not be sent, you can see it at: ${mailPath}`);
-    if (!fs.existsSync(mailDir)) {
-      fs.mkdirSync(mailDir);
+
+    const dirExists = await fs
+      .access(mailDir, constants.F_OK)
+      .then(() => true)
+      .catch(() => false);
+
+    if (!dirExists) {
+      await fs.mkdir(mailDir);
     }
-    fs.writeFileSync(mailPath, body);
+    await fs.writeFile(mailPath, body);
   }
 }

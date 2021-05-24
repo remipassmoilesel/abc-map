@@ -30,7 +30,7 @@ describe('Draw features history', function () {
 
   it('user can add feature then undo and redo', function () {
     cy.visit(FrontendRoutes.map().raw())
-      .then(() => MainMap.getComponent())
+      .then(() => MainMap.fixedView())
       .then(() => ToolSelector.enable(MapTool.LineString))
       // First line
       .then(() => Draw.click(100, 100))
@@ -85,7 +85,7 @@ describe('Draw features history', function () {
 
   it('user can modify feature then undo', function () {
     cy.visit(FrontendRoutes.map().raw())
-      .then(() => MainMap.getComponent())
+      .then(() => MainMap.fixedView())
       .then(() => ToolSelector.enable(MapTool.LineString))
       // Create line
       .then(() => Draw.click(100, 100))

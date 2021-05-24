@@ -143,19 +143,9 @@ export class AuthenticationService {
   }
 
   public renewToken(): Promise<void> {
-    return this.httpClient
-      .get<RenewResponse>(Api.token())
-      .then((result) => {
-        this.dispatchToken(result.data.token);
-      })
-      .catch((err) => {
-        if (HttpError.isForbidden(err)) {
-          this.toasts.error('Vous devez vous reconnecter');
-        } else {
-          this.toasts.httpError(err);
-        }
-        return Promise.reject(err);
-      });
+    return this.httpClient.get<RenewResponse>(Api.token()).then((result) => {
+      this.dispatchToken(result.data.token);
+    });
   }
 
   public registration(email: string, password: string): Promise<RegistrationResponse> {
@@ -185,19 +175,13 @@ export class AuthenticationService {
 
   public confirmRegistration(token: string): Promise<RegistrationConfirmationResponse> {
     const request: RegistrationConfirmationRequest = { token };
-    return this.httpClient
-      .post(Api.accountConfirmation(), request)
-      .then((res) => {
-        const response: RegistrationConfirmationResponse = res.data;
-        if (response.token) {
-          this.dispatchToken(response.token);
-        }
-        return response;
-      })
-      .catch((err) => {
-        this.toasts.httpError(err);
-        return Promise.reject(err);
-      });
+    return this.httpClient.post(Api.accountConfirmation(), request).then((res) => {
+      const response: RegistrationConfirmationResponse = res.data;
+      if (response.token) {
+        this.dispatchToken(response.token);
+      }
+      return response;
+    });
   }
 
   public deleteAccount(password: string): Promise<void> {
@@ -206,7 +190,11 @@ export class AuthenticationService {
       .delete(Api.authentication(), { data: request })
       .then(() => undefined)
       .catch((err) => {
-        this.toasts.httpError(err);
+        if (HttpError.isForbidden(err)) {
+          this.toasts.error("Le mot de passe saisi n'est pas correct");
+        } else {
+          this.toasts.httpError(err);
+        }
         return Promise.reject(err);
       });
   }

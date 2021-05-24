@@ -26,19 +26,81 @@ import { VectorLayerWrapper, WmsLayerWrapper } from './LayerWrapper';
 import VectorImageLayer from 'ol/layer/VectorImage';
 
 describe('LayerFactory', () => {
-  it('newOsmLayer()', () => {
-    const layer = LayerFactory.newOsmLayer();
-    const metadata = layer.getMetadata();
-    expect(metadata).toBeDefined();
-    expect(metadata?.id).toBeDefined();
-    expect(metadata?.name).toEqual('OpenStreetMap');
-    expect(metadata?.opacity).toEqual(1);
-    expect(metadata?.visible).toEqual(true);
-    expect(metadata?.active).toEqual(false);
-    expect(metadata?.type).toEqual(LayerType.Predefined);
-    expect(metadata?.model).toEqual(PredefinedLayerModel.OSM);
-    expect(layer.unwrap().get(LayerProperties.Managed)).toBe(true);
-    expect(layer.unwrap()).toBeInstanceOf(TileLayer);
+  describe('newPredefinedLayer()', () => {
+    it('OSM', () => {
+      const layer = LayerFactory.newPredefinedLayer(PredefinedLayerModel.OSM);
+      const metadata = layer.getMetadata();
+      expect(metadata).toBeDefined();
+      expect(metadata?.id).toBeDefined();
+      expect(metadata?.name).toEqual('OpenStreetMap');
+      expect(metadata?.opacity).toEqual(1);
+      expect(metadata?.visible).toEqual(true);
+      expect(metadata?.active).toEqual(false);
+      expect(metadata?.type).toEqual(LayerType.Predefined);
+      expect(metadata?.model).toEqual(PredefinedLayerModel.OSM);
+      expect(layer.unwrap().get(LayerProperties.Managed)).toBe(true);
+      expect(layer.unwrap()).toBeInstanceOf(TileLayer);
+    });
+
+    it('StamenToner', () => {
+      const layer = LayerFactory.newPredefinedLayer(PredefinedLayerModel.StamenToner);
+      const metadata = layer.getMetadata();
+      expect(metadata).toBeDefined();
+      expect(metadata?.id).toBeDefined();
+      expect(metadata?.name).toEqual('Stamen Toner');
+      expect(metadata?.opacity).toEqual(1);
+      expect(metadata?.visible).toEqual(true);
+      expect(metadata?.active).toEqual(false);
+      expect(metadata?.type).toEqual(LayerType.Predefined);
+      expect(metadata?.model).toEqual(PredefinedLayerModel.StamenToner);
+      expect(layer.unwrap().get(LayerProperties.Managed)).toBe(true);
+      expect(layer.unwrap()).toBeInstanceOf(TileLayer);
+    });
+
+    it('StamenTonerLite', () => {
+      const layer = LayerFactory.newPredefinedLayer(PredefinedLayerModel.StamenTonerLite);
+      const metadata = layer.getMetadata();
+      expect(metadata).toBeDefined();
+      expect(metadata?.id).toBeDefined();
+      expect(metadata?.name).toEqual('Stamen Toner Lite');
+      expect(metadata?.opacity).toEqual(1);
+      expect(metadata?.visible).toEqual(true);
+      expect(metadata?.active).toEqual(false);
+      expect(metadata?.type).toEqual(LayerType.Predefined);
+      expect(metadata?.model).toEqual(PredefinedLayerModel.StamenTonerLite);
+      expect(layer.unwrap().get(LayerProperties.Managed)).toBe(true);
+      expect(layer.unwrap()).toBeInstanceOf(TileLayer);
+    });
+
+    it('StamenTerrain', () => {
+      const layer = LayerFactory.newPredefinedLayer(PredefinedLayerModel.StamenTerrain);
+      const metadata = layer.getMetadata();
+      expect(metadata).toBeDefined();
+      expect(metadata?.id).toBeDefined();
+      expect(metadata?.name).toEqual('Stamen Terrain');
+      expect(metadata?.opacity).toEqual(1);
+      expect(metadata?.visible).toEqual(true);
+      expect(metadata?.active).toEqual(false);
+      expect(metadata?.type).toEqual(LayerType.Predefined);
+      expect(metadata?.model).toEqual(PredefinedLayerModel.StamenTerrain);
+      expect(layer.unwrap().get(LayerProperties.Managed)).toBe(true);
+      expect(layer.unwrap()).toBeInstanceOf(TileLayer);
+    });
+
+    it('StamenWatercolor', () => {
+      const layer = LayerFactory.newPredefinedLayer(PredefinedLayerModel.StamenWatercolor);
+      const metadata = layer.getMetadata();
+      expect(metadata).toBeDefined();
+      expect(metadata?.id).toBeDefined();
+      expect(metadata?.name).toEqual('Stamen Watercolor');
+      expect(metadata?.opacity).toEqual(1);
+      expect(metadata?.visible).toEqual(true);
+      expect(metadata?.active).toEqual(false);
+      expect(metadata?.type).toEqual(LayerType.Predefined);
+      expect(metadata?.model).toEqual(PredefinedLayerModel.StamenWatercolor);
+      expect(layer.unwrap().get(LayerProperties.Managed)).toBe(true);
+      expect(layer.unwrap()).toBeInstanceOf(TileLayer);
+    });
   });
 
   describe('newVectorLayer()', () => {

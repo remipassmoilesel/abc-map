@@ -34,4 +34,8 @@ export class Authentication {
       .click()
       .then(() => Toasts.assertText('Vous êtes connecté !'));
   }
+
+  public static logout(): Chainable<any> {
+    return cy.get('[data-cy=user-menu]').click().get('[data-cy=logout]').click();
+  }
 }

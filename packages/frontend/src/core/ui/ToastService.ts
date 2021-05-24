@@ -46,7 +46,7 @@ export class ToastService {
   }
 
   public genericError(): void {
-    this.error('Une erreur est survenue, veuillez réessayer plus tard.');
+    this.error('Aie ! Petit problème technique 😅 Veuillez réessayer plus tard.');
   }
 
   public featureNotReady(): void {
@@ -54,7 +54,7 @@ export class ToastService {
   }
 
   public httpError(err: AxiosError | Error | undefined): void {
-    logger.error('HTTP error: ', JSON.stringify(err));
+    logger.error('HTTP error: ', err);
 
     // Too many requests
     if (HttpError.isTooManyRequests(err)) {
@@ -78,7 +78,7 @@ export class ToastService {
 
     // Network error
     else if (err?.message === 'Network Error') {
-      this.error('Il y a un problème avec votre connexion internet.');
+      this.error('Impossible de se connecter au serveur 📡 Êtes vous connecté ?');
     }
 
     // Others

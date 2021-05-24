@@ -82,4 +82,8 @@ export interface AbcWmsLayer extends AbcBaseLayer {
 
 export enum PredefinedLayerModel {
   OSM = 'OSM',
+  StamenToner = 'StamenToner',
+  StamenTonerLite = 'StamenTonerLite',
+  StamenTerrain = 'StamenTerrain',
+  StamenWatercolor = 'StamenWatercolor',
 }

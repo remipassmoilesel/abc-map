@@ -74,10 +74,6 @@ class TopBar extends Component<Props, {}> {
               <Dropdown.Divider />
               {!userAuthenticated && (
                 <>
-                  <Dropdown.Item onClick={this.handleRegister}>
-                    <i className={'fa fa-feather mr-3'} />
-                    S&apos;inscrire
-                  </Dropdown.Item>
                   <Dropdown.Item onClick={this.handleLogin}>
                     <i className={'fa fa-lock-open mr-3'} />
                     Se connecter
@@ -85,6 +81,10 @@ class TopBar extends Component<Props, {}> {
                   <Dropdown.Item onClick={this.handlePasswordLost} data-cy={'reset-password'}>
                     <i className={'fa fa-key mr-3'} />
                     Mot de passe perdu
+                  </Dropdown.Item>
+                  <Dropdown.Item onClick={this.handleRegister}>
+                    <i className={'fa fa-feather mr-3'} />
+                    S&apos;inscrire
                   </Dropdown.Item>
                 </>
               )}

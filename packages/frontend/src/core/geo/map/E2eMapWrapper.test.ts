@@ -20,12 +20,13 @@ import { MapFactory } from './MapFactory';
 import { E2eMapWrapper } from './E2eMapWrapper';
 import { TestHelper } from '../../utils/TestHelper';
 import { LayerFactory } from '../layers/LayerFactory';
+import { PredefinedLayerModel } from '@abc-map/shared';
 
 describe('E2eMapWrapper', function () {
   it('getLayersMetadata()', function () {
     const map = MapFactory.createNaked();
     const e2e = new E2eMapWrapper(map);
-    const layer1 = LayerFactory.newOsmLayer();
+    const layer1 = LayerFactory.newPredefinedLayer(PredefinedLayerModel.OSM);
     const layer2 = LayerFactory.newVectorLayer();
     map.addLayer(layer1);
     map.addLayer(layer2);
@@ -38,7 +39,7 @@ describe('E2eMapWrapper', function () {
     const map = MapFactory.createNaked();
     const e2e = new E2eMapWrapper(map);
     const layer1 = LayerFactory.newVectorLayer();
-    const layer2 = LayerFactory.newOsmLayer();
+    const layer2 = LayerFactory.newPredefinedLayer(PredefinedLayerModel.OSM);
     const features = TestHelper.sampleFeatures();
     map.addLayer(layer1);
     map.addLayer(layer2);

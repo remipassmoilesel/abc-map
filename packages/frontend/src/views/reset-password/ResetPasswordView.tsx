@@ -23,6 +23,7 @@ import { ServiceProps, withServices } from '../../core/withServices';
 import { PasswordStrength, Strength } from '../../core/utils/PasswordStrength';
 import FormValidationLabel, { FormState } from '../../components/form-state-label/FormValidationLabel';
 import Cls from './ResetPasswordView.module.scss';
+import { pageSetup } from '../../core/utils/page-setup';
 
 const logger = Logger.get('ResetPasswordView.tsx', 'info');
 
@@ -85,6 +86,10 @@ class ResetPasswordView extends Component<Props, State> {
         </div>
       </div>
     );
+  }
+
+  public componentDidMount() {
+    pageSetup('Réinitialisation de mot de passe');
   }
 
   public handleSubmit = () => {

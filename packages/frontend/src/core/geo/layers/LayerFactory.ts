@@ -17,7 +17,7 @@
  */
 
 import TileLayer from 'ol/layer/Tile';
-import { OSM, TileWMS } from 'ol/source';
+import { OSM, Stamen, TileWMS } from 'ol/source';
 import uuid from 'uuid-random';
 import VectorSource from 'ol/source/Vector';
 import { tileLoadAuthenticated } from '../map/tileLoadAuthenticated';
@@ -30,19 +30,45 @@ import TileSource from 'ol/source/Tile';
 import { FeatureWrapper } from '../features/FeatureWrapper';
 
 export class LayerFactory {
-  public static newOsmLayer(): PredefinedLayerWrapper {
-    const layer = new TileLayer({
-      source: new OSM(),
-    });
+  public static newPredefinedLayer(model: PredefinedLayerModel, meta?: PredefinedMetadata): PredefinedLayerWrapper {
+    let name: string;
+    let source: TileSource;
+    switch (model) {
+      case PredefinedLayerModel.OSM:
+        source = new OSM();
+        name = 'OpenStreetMap';
+        break;
+      case PredefinedLayerModel.StamenToner:
+        source = new Stamen({ layer: 'toner' });
+        name = 'Stamen Toner';
+        break;
+      case PredefinedLayerModel.StamenTonerLite:
+        source = new Stamen({ layer: 'toner-lite' });
+        name = 'Stamen Toner Lite';
+        break;
+      case PredefinedLayerModel.StamenTerrain:
+        source = new Stamen({ layer: 'terrain' });
+        name = 'Stamen Terrain';
+        break;
+      case PredefinedLayerModel.StamenWatercolor:
+        source = new Stamen({ layer: 'watercolor' });
+        name = 'Stamen Watercolor';
+        break;
+      default:
+        throw new Error(`Unhandled predefined layer type: ${model}`);
+    }
+
+    const layer = new TileLayer({ source });
 
     const metadata: PredefinedMetadata = {
       id: uuid(),
-      name: 'OpenStreetMap',
+      name,
       type: LayerType.Predefined,
       active: false,
       opacity: 1,
       visible: true,
-      model: PredefinedLayerModel.OSM,
+      model,
+      ...meta,
     };
 
     return LayerWrapper.from<TileLayer, TileSource, PredefinedMetadata>(layer).setMetadata(metadata);
@@ -99,12 +125,7 @@ export class LayerFactory {
 
     // Predefined layer
     if (LayerType.Predefined === abcLayer.type) {
-      if (PredefinedLayerModel.OSM === abcLayer.metadata.model) {
-        layer = this.newOsmLayer();
-        layer.setMetadata(abcLayer.metadata);
-      } else {
-        return Promise.reject(new Error(`Unhandled predefined layer type: ${abcLayer.type}`));
-      }
+      return this.newPredefinedLayer(abcLayer.metadata.model, abcLayer.metadata);
     }
 
     // Vector layer

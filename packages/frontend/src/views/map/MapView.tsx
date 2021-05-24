@@ -40,6 +40,7 @@ import CursorPosition from './cursor-position/CursorPosition';
 import { Coordinate } from 'ol/coordinate';
 import { MapKeyboardListener } from './keyboard-listener/MapKeyboardListener';
 import { MapEvent } from 'ol';
+import { pageSetup } from '../../core/utils/page-setup';
 
 const logger = Logger.get('MapView.tsx', 'debug');
 
@@ -99,6 +100,8 @@ export class MapView extends Component<Props, State> {
   }
 
   public componentDidMount() {
+    pageSetup('La carte !', `Visualisez, créez et modifiez des cartes dans votre navigateur 🌍 ✏️`);
+
     const map = this.state.map;
 
     map.addLayerChangeListener(this.handleLayerChange);

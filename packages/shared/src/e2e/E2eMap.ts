@@ -17,13 +17,16 @@
  */
 
 import { BaseMetadata, LayerMetadata } from '../project';
+import { E2eFeature } from './E2eFeature';
 
 export interface E2eMap {
   getLayersMetadata(): LayerMetadata[];
 
   getActiveLayerMetadata(): BaseMetadata | undefined;
 
-  getActiveLayerFeatures(): any[]; // TODO: better typings
+  getActiveLayerFeatures(): E2eFeature[];
 
   getViewExtent(): [number, number, number, number];
+
+  setView(zoom: number, lon: number, lat: number): void;
 }

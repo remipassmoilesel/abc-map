@@ -23,6 +23,7 @@ export interface RegistrationConfirmationResponse {
 
 export enum ConfirmationStatus {
   InProgress = 'InProgress',
+  AlreadyConfirmed = 'AlreadyConfirmed',
   Failed = 'Failed',
   Succeed = 'Succeed',
 }
