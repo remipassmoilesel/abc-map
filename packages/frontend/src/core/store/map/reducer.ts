@@ -115,6 +115,12 @@ export function mapReducer(state = mapInitialState, action: MapAction): MapState
       return newState;
     }
 
+    case ActionType.SetMainMapDimensions: {
+      const newState: MapState = { ...state };
+      newState.mainMapDimensions = action.dimensions;
+      return newState;
+    }
+
     default:
       return state;
   }

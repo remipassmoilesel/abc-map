@@ -30,7 +30,7 @@ import { IconProcessor } from './IconProcessor';
 import { safeGetIcon } from './PointIcons';
 import { PointIcons } from '@abc-map/shared';
 
-const logger = Logger.get('VectorStyles.ts');
+const logger = Logger.get('StyleFactory.ts');
 
 export class StyleFactory {
   private fillPattern = new FillPatternFactory();
@@ -38,16 +38,16 @@ export class StyleFactory {
 
   constructor(private cache = new StyleCache()) {}
 
-  public getFor(feature: Feature<Geometry>, properties: FeatureStyle, selected: boolean): Style[] {
+  public getFor(feature: Feature<Geometry>, properties: FeatureStyle, selected: boolean, ratio: number): Style[] {
     const type = feature.getGeometry()?.getType();
     if (!type) {
       return [];
     }
 
-    let style = this.cache.get(type, properties);
+    let style = this.cache.get(type, properties, ratio);
     if (!style) {
-      style = this.createStyle(type, properties);
-      this.cache.put(type, properties, style);
+      style = this.createStyle(type, properties, ratio);
+      this.cache.put(type, properties, ratio, style);
     }
 
     if (selected) {
@@ -57,55 +57,58 @@ export class StyleFactory {
     return style;
   }
 
-  private createStyle(type: GeometryType, properties: FeatureStyle): Style[] {
+  private createStyle(type: GeometryType, properties: FeatureStyle, ratio: number): Style[] {
     // Text can apply to all geometries
     let textStyle: Text | undefined;
     if (properties.text?.value) {
-      textStyle = this.createText(properties);
+      textStyle = this.createText(properties, ratio);
     }
 
     // Points
     if (GeometryType.POINT === type || GeometryType.MULTI_POINT === type) {
-      const size = properties.point?.size || 10;
+      const size = (properties.point?.size || 10) * ratio;
       const name = (properties.point?.icon as PointIcons) || PointIcons.Square;
       const color = properties.point?.color || '#000000';
       const icon = IconProcessor.prepare(safeGetIcon(name), size, color);
-      const pointStyle = new Icon({ img: icon, imgSize: [size, size] });
+      // We must use "src" attribute here, as icons may not be loaded
+      const pointStyle = new Icon({ src: icon, imgSize: [size, size] });
       return [new Style({ image: pointStyle, text: textStyle })];
     }
 
     // Line strings
     else if (GeometryType.LINE_STRING === type || GeometryType.MULTI_LINE_STRING === type || GeometryType.LINEAR_RING === type) {
-      const stroke = this.createStroke(properties);
+      const stroke = this.createStroke(properties, ratio);
       return [new Style({ stroke, text: textStyle })];
     }
 
     // Others
     else {
       const fill = this.createFill(properties);
-      const stroke = this.createStroke(properties);
+      const stroke = this.createStroke(properties, ratio);
       return [new Style({ fill, stroke, text: textStyle })];
     }
   }
 
-  private createText(properties: FeatureStyle): Text {
+  private createText(properties: FeatureStyle, ratio: number): Text {
     const text = properties.text;
-    const fontName = text?.font || DefaultStyle.text?.font;
-    const fontSize = text?.size || DefaultStyle.text?.size;
+    const fontName = text?.font || DefaultStyle.text.font;
+    const fontSize = (text?.size || DefaultStyle.text.size) * ratio;
     const font = `${fontSize}px ${fontName}`;
+    const offsetX = (text?.offsetX ?? DefaultStyle.text.offsetX) * ratio;
+    const offsetY = (text?.offsetY ?? DefaultStyle.text.offsetY) * ratio;
     return new Text({
       fill: new Fill({ color: text?.color || DefaultStyle.text?.color }),
       font,
       text: text?.value,
-      offsetX: text?.offsetX,
-      offsetY: text?.offsetY,
+      offsetX,
+      offsetY,
       textAlign: text?.alignment,
     });
   }
 
-  private createStroke(properties: FeatureStyle): Stroke {
+  private createStroke(properties: FeatureStyle, ratio: number): Stroke {
     return new Stroke({
-      width: properties.stroke?.width || DefaultStyle.stroke?.width,
+      width: (properties.stroke?.width || DefaultStyle.stroke.width) * ratio,
       color: properties.stroke?.color || DefaultStyle.stroke?.color,
     });
   }

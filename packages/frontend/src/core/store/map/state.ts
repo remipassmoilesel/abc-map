@@ -16,9 +16,10 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FeatureStyle } from '../../geo/style/FeatureStyle';
+import { FeatureStyle } from '../../geo/styles/FeatureStyle';
 import { MapTool } from '@abc-map/shared';
 import { PointIcons } from '@abc-map/shared';
+import { DimensionsPx } from '../../utils/DimensionsPx';
 
 export interface MapState {
   /**
@@ -27,6 +28,11 @@ export interface MapState {
   tool: MapTool;
 
   currentStyle: FeatureStyle;
+
+  /**
+   * Largest dimensions of the main map. Used for rendering in previews and export to "guess" a style ratio.
+   */
+  mainMapDimensions: DimensionsPx;
 }
 
 export const mapInitialState: MapState = {
@@ -50,5 +56,9 @@ export const mapInitialState: MapState = {
       size: 15,
       color: '#FF5733',
     },
+  },
+  mainMapDimensions: {
+    width: 640,
+    height: 480,
   },
 };

@@ -37,7 +37,7 @@ interface State {
 
 declare type Props = LocalProps & ServiceProps;
 
-export class MainMap extends Component<Props, State> {
+class MainMap extends Component<Props, State> {
   private mapRef = React.createRef<HTMLDivElement>();
 
   constructor(props: Props) {
@@ -73,20 +73,21 @@ export class MainMap extends Component<Props, State> {
   }
 
   public componentDidMount() {
-    const div = this.mapRef.current;
-    if (!div) {
-      return logger.error('Cannot mount map, div reference not ready');
-    }
-
-    this.initializeMap(div);
+    this.initializeMap();
   }
 
   public componentWillUnmount() {
     this.cleanupMap();
   }
 
-  private initializeMap(div: HTMLDivElement): void {
+  private initializeMap(): void {
     logger.info('Initializing map');
+    const div = this.mapRef.current;
+    if (!div) {
+      logger.error('Cannot mount map, div reference not ready');
+      return;
+    }
+
     this.props.map.setTarget(div);
   }
 

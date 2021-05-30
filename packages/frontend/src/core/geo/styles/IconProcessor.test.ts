@@ -20,11 +20,6 @@ import { IconProcessor, mountSvg } from './IconProcessor';
 import { PointIcon } from './PointIcons';
 import { PointIcons } from '@abc-map/shared';
 
-// WARNING
-//
-// Test setup with Jest does not use webpack, but we mock webpack behavior with a transformer.
-//
-
 describe('IconProcessor', () => {
   it('prepare()', () => {
     const icon: PointIcon = {
@@ -33,10 +28,9 @@ describe('IconProcessor', () => {
     };
 
     const actual = IconProcessor.prepare(icon, 500, '#FF0000');
-    expect(actual).toBeInstanceOf(HTMLImageElement);
-    expect(actual.src).toMatch(/^data:image\/svg\+xml;base64,.+/);
+    expect(actual).toMatch(/^data:image\/svg\+xml;base64,.+/);
 
-    const { svg } = mountSvg(atob(actual.src.substr(26)));
+    const { svg } = mountSvg(atob(actual.substr(26)));
     expect(svg.getAttribute('width')).toEqual('500');
     expect(svg.getAttribute('height')).toEqual('500');
 

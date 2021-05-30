@@ -150,8 +150,9 @@ module.exports = {
       from: {
         path: '^(src)',
         pathNot: [
-          'src/setupTests.ts',
-          'src/core/utils/TestHelper.ts',
+          'setupTests.ts$',
+          'TestHelper.ts$',
+          'abcRender.tsx$',
           '\\.(spec|test)\\.(js|mjs|cjs|ts|tsx|ls|coffee|litcoffee|coffee\\.md)$'
         ]
       },

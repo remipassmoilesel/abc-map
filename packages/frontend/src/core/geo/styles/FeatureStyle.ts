@@ -83,7 +83,7 @@ export interface PointProperties {
   size?: number;
 }
 
-export const DefaultStyle: Required<FeatureStyle> = {
+export const DefaultStyle = {
   stroke: {
     color: '#000',
     width: 2,
@@ -95,6 +95,8 @@ export const DefaultStyle: Required<FeatureStyle> = {
     color: '#00f',
     font: 'sans-serif',
     size: 600,
+    offsetX: 10,
+    offsetY: 10,
   },
   point: {
     icon: DefaultIcon.name,

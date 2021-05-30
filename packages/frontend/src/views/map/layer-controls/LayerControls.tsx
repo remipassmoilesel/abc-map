@@ -40,7 +40,7 @@ interface State {
 
 declare type Props = LocalProps & ServiceProps;
 
-export class LayerControls extends Component<Props, State> {
+class LayerControls extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -66,17 +66,23 @@ export class LayerControls extends Component<Props, State> {
           <button onClick={this.handleAddLayer} className={'btn btn-outline-primary'} title={'Ajouter une couche'} data-cy={'add-layer'}>
             <i className={'fa fa-plus'} />
           </button>
-          <button onClick={this.handleRename} className={'btn btn-outline-primary'} title={'Renommer la couche'} data-cy={'rename-layer'}>
-            <i className={'fa fa-edit'} />
-          </button>
           <button onClick={this.handleRemoveActive} className={'btn btn-outline-primary'} title={'Supprimer la couche active'} data-cy={'delete-layer'}>
             <i className={'fa fa-trash'} />
+          </button>
+          <button onClick={this.handleToggleVisibility} className={'btn btn-outline-primary'} title={'Changer la visibilité'}>
+            <i className={'fa fa-eye'} />
+          </button>
+          <button onClick={this.handleRename} className={'btn btn-outline-primary'} title={'Renommer la couche'} data-cy={'rename-layer'}>
+            <i className={'fa fa-edit'} />
           </button>
           <button onClick={this.handleZoom} className={'btn btn-outline-primary'} title={'Zoom sur la couche'}>
             <i className={'fa fa-search-plus'} />
           </button>
-          <button onClick={this.handleToggleVisibility} className={'btn btn-outline-primary'} title={'Changer la visibilité'}>
-            <i className={'fa fa-eye'} />
+          <button onClick={this.handleLayerBack} className={'btn btn-outline-primary'} title={'Derrière'}>
+            <i className={'fa fa-arrow-up'} />
+          </button>
+          <button onClick={this.handleLayerForward} className={'btn btn-outline-primary'} title={'Devant'}>
+            <i className={'fa fa-arrow-down'} />
           </button>
         </div>
         <AddLayerModal visible={this.state.addModalVisible} onHide={this.hideAddModal} />
@@ -189,6 +195,38 @@ export class LayerControls extends Component<Props, State> {
     }
 
     map.setLayerVisible(active, !active.isVisible());
+  };
+
+  private handleLayerForward = () => {
+    this.moveLayer(+1);
+  };
+
+  private handleLayerBack = () => {
+    this.moveLayer(-1);
+  };
+
+  private moveLayer = (move: number) => {
+    const { toasts, geo } = this.props.services;
+
+    const map = geo.getMainMap();
+    const active = map.getActiveLayer();
+    if (!active) {
+      toasts.info("Vous devez d'abord sélectionner une couche");
+      return;
+    }
+
+    const layers = map.getLayers();
+    let position = layers.findIndex((l) => l.getId() && l.getId() === active.getId()) + move;
+
+    if (position < 0) {
+      position = 0;
+    }
+    if (position >= layers.length) {
+      position = layers.length - 1;
+    }
+
+    map.removeLayer(active);
+    map.addLayer(active, position);
   };
 }
 

@@ -49,7 +49,10 @@ class DeviceWarningModal extends Component<{}, State> {
         </Modal.Header>
         <Modal.Body>
           <div data-cy={'device-warning'}>Abc-Map risque de ne pas fonctionner correctement 🤔</div>
-          <div className={'my-3'}>Abc-Map est conçu pour fonctionner sur un ordinateur de bureau, avec les navigateurs Chromium ou Firefox.</div>
+          <div className={'my-3'}>
+            Abc-Map est conçu pour fonctionner sur un ordinateur de bureau, avec les navigateurs <code>Firefox</code> ou <code>Chromium</code>, et une
+            résolution d&apos;écran minimale de <code>1366x768</code>.
+          </div>
           <div className={'my-3'}>Votre configuration actuelle peut entrainer des problèmes d&apos;affichage et d&apos;utilisation.</div>
           <div className={'d-flex justify-content-end'}>
             <button className={'btn btn-primary'} onClick={this.handleClose} data-cy="device-warning-confirm">
@@ -62,7 +65,7 @@ class DeviceWarningModal extends Component<{}, State> {
   }
 
   public componentDidMount() {
-    if (!this.isOptimalSetup()) {
+    if (!this.isOptimalDevice()) {
       this.setState({ visible: true });
     }
   }
@@ -71,11 +74,11 @@ class DeviceWarningModal extends Component<{}, State> {
     this.setState({ visible: false });
   };
 
-  public isOptimalSetup(): boolean {
+  public isOptimalDevice(): boolean {
     const browser = Bowser.getParser(window.navigator.userAgent);
     const deviceSupported = browser.getPlatform().type === 'desktop';
-    const browserSupported = ['chrome', 'firefox', 'electron'].indexOf(browser.getBrowserName(true)) !== -1;
-    const screenSizeSupported = window.innerWidth > 1000 && window.innerHeight > 600;
+    const browserSupported = ['chrome', 'electron', 'firefox'].indexOf(browser.getBrowserName(true)) !== -1;
+    const screenSizeSupported = window.innerWidth >= 1366 && window.innerHeight >= 768;
     return deviceSupported && browserSupported && screenSizeSupported;
   }
 }

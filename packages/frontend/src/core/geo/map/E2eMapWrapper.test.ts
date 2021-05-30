@@ -18,7 +18,7 @@
 
 import { MapFactory } from './MapFactory';
 import { E2eMapWrapper } from './E2eMapWrapper';
-import { TestHelper } from '../../utils/TestHelper';
+import { TestHelper } from '../../utils/test/TestHelper';
 import { LayerFactory } from '../layers/LayerFactory';
 import { PredefinedLayerModel } from '@abc-map/shared';
 

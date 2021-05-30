@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 import { Services } from './core/Services';
-import { newTestServices, TestServices } from './core/utils/TestServices';
+import { newTestServices, TestServices } from './core/utils/test/TestServices';
 import { UserStatus } from '@abc-map/shared';
 import { authenticate, logger } from './index';
 

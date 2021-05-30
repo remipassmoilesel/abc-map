@@ -41,6 +41,7 @@ import Geometry from 'ol/geom/Geometry';
 import VectorImageLayer from 'ol/layer/VectorImage';
 import { Source } from 'ol/source';
 import { Layer } from 'ol/layer';
+import { styleFunction } from '../styles/style-function';
 
 export const logger = Logger.get('LayerWrapper');
 
@@ -148,14 +149,14 @@ export class LayerWrapper<Layer extends OlLayers = OlLayers, Source extends OlSo
   /**
    * Shallow clone layer
    */
-  public shallowClone(): LayerWrapper<Layer, Source, Meta> {
+  public shallowClone(styleRatio = 1): LayerWrapper<Layer, Source, Meta> {
     let layer: TileLayer | VectorImageLayer;
     if (this.isPredefined()) {
       layer = new TileLayer({ source: this.layer.getSource() as TileSource });
     } else if (this.isWms()) {
       layer = new TileLayer({ source: this.layer.getSource() as TileSource });
     } else if (this.isVector()) {
-      layer = new VectorImageLayer({ source: this.layer.getSource() as VectorSource<Geometry> });
+      layer = new VectorImageLayer({ source: this.layer.getSource() as VectorSource<Geometry>, style: (f) => styleFunction(styleRatio, f) });
     } else {
       throw new Error('Unsupported layer type');
     }

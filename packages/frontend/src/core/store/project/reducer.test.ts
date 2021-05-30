@@ -20,7 +20,7 @@ import { projectReducer } from './reducer';
 import { ProjectActions } from './actions';
 import { ProjectFactory } from '../../project/ProjectFactory';
 import { projectInitialState, ProjectState } from './state';
-import { TestHelper } from '../../utils/TestHelper';
+import { TestHelper } from '../../utils/test/TestHelper';
 import { AbcLayout } from '@abc-map/shared';
 
 describe('Project reducer', function () {

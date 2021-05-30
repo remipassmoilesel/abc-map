@@ -35,9 +35,9 @@ export class SmtpClient {
 
   constructor(private config: Config) {
     this.transporter = nodemailer.createTransport({
+      from: config.smtp.from,
       host: config.smtp.host,
       port: config.smtp.port,
-      secure: config.smtp.secure,
       auth: config.smtp.auth,
     });
   }

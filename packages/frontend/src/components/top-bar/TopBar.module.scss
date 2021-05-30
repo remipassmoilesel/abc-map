@@ -47,6 +47,9 @@
 
   :global(.dropdown-toggle) {
     background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   :global(.dropdown-toggle::after) {

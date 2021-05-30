@@ -18,7 +18,6 @@
 
 import Style from 'ol/style/Style';
 import { FeatureStyle } from './FeatureStyle';
-import * as objectHash from 'object-hash';
 import GeometryType from 'ol/geom/GeometryType';
 
 interface CacheEntry {
@@ -29,17 +28,17 @@ interface CacheEntry {
 export class StyleCache {
   private cache: CacheEntry[] = [];
 
-  public put(geom: GeometryType, properties: FeatureStyle, style: Style[]): void {
-    const key = this.cacheKey(geom, properties);
+  public put(geom: GeometryType, properties: FeatureStyle, ratio: number, style: Style[]): void {
+    const key = this.cacheKey(geom, properties, ratio);
     this.cache.push({ key: key, style });
   }
 
-  public get(geom: GeometryType, properties: FeatureStyle): Style[] | undefined {
-    const key = this.cacheKey(geom, properties);
+  public get(geom: GeometryType, properties: FeatureStyle, ratio: number): Style[] | undefined {
+    const key = this.cacheKey(geom, properties, ratio);
     return this.cache.find((entry) => entry.key === key)?.style;
   }
 
-  private cacheKey(geom: GeometryType, properties: FeatureStyle): string {
-    return objectHash.sha1({ geom, properties });
+  private cacheKey(geom: GeometryType, properties: FeatureStyle, ratio: number): string {
+    return JSON.stringify({ geom, properties, ratio });
   }
 }

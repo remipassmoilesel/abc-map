@@ -55,7 +55,7 @@ class LayoutPreview extends Component<Props, State> {
 
     return (
       <div className={Cls.layoutPreview} data-cy={'layout-preview'}>
-        <h3>{layout?.name}</h3>
+        <h4>{layout?.name}</h4>
         {layout && (
           <div className={Cls.previewContainer}>
             <div className={Cls.previewFrame} ref={this.mapRef} data-cy={'layout-preview-map'} />
@@ -76,13 +76,15 @@ class LayoutPreview extends Component<Props, State> {
 
   public componentDidMount() {
     if (this.props.layout) {
-      this.updateMap(this.props.layout);
+      this.setupPreview(this.props.layout);
     }
   }
 
   public componentDidUpdate(prevProps: Readonly<Props>) {
-    if (!_.isEqual(prevProps.layout, this.props.layout)) {
-      this.updateMap(this.props.layout);
+    const layoutChanged = !_.isEqual(prevProps.layout?.id, this.props.layout?.id);
+    const formatChanged = prevProps.layout?.format.name !== this.props.layout?.format.name;
+    if (layoutChanged || formatChanged) {
+      this.setupPreview(this.props.layout);
     }
   }
 
@@ -90,8 +92,8 @@ class LayoutPreview extends Component<Props, State> {
     this.state.previewMap?.dispose();
   }
 
-  private updateMap(layout?: AbcLayout): void {
-    logger.info('Updating preview map', layout);
+  private setupPreview(layout?: AbcLayout): void {
+    logger.debug('Updating preview map', layout);
 
     if (!layout) {
       this.state.previewMap?.dispose();
@@ -105,7 +107,7 @@ class LayoutPreview extends Component<Props, State> {
       return;
     }
 
-    // Map iniotialization
+    // Map initialization
     const mainMap = this.props.mainMap;
     const previewMap = this.state.previewMap || this.initializePreviewMap(div);
 
@@ -114,44 +116,34 @@ class LayoutPreview extends Component<Props, State> {
     div.style.height = divSize.height;
     previewMap.unwrap().updateSize();
 
-    // Layer update if needed
-    const previousLayers = previewMap.getLayers();
-    const newLayers = mainMap.getLayers();
-    const layersChanged = !_.isEqual(
-      previousLayers.map((lay) => lay.getId()),
-      newLayers.map((lay) => lay.getId())
-    );
-    if (layersChanged) {
-      previewMap.unwrap().getLayers().clear();
-      newLayers.forEach((lay) => {
-        const clone = lay.shallowClone();
-        previewMap.addLayer(clone);
-      });
-    }
-
     // View update
-    const format = layout.format;
-    const view = layout.view;
     const mapSize = previewMap.unwrap().getSize();
     if (!mapSize) {
       logger.error('Cannot update map: ', { mapSize });
       return;
     }
 
-    const dimension = LayoutHelper.formatToPixel(format);
+    const dimension = LayoutHelper.formatToPixel(layout.format);
     const scaling = Math.min(dimension.width / mapSize[0], dimension.height / mapSize[1]);
+    const styleRatio = LayoutHelper.styleRatio(mapSize[0], mapSize[1]);
+
+    previewMap.unwrap().getLayers().clear();
+    mainMap.getLayers().forEach((lay) => {
+      const clone = lay.shallowClone(styleRatio);
+      previewMap.addLayer(clone);
+    });
 
     previewMap.unwrap().setView(
       new View({
-        center: view.center,
-        resolution: view.resolution * scaling,
-        projection: view.projection.name,
+        center: layout.view.center,
+        resolution: layout.view.resolution * scaling,
+        projection: layout.view.projection.name,
       })
     );
   }
 
   private initializePreviewMap(div: HTMLDivElement): MapWrapper {
-    logger.info('Initializing preview map');
+    logger.debug('Initializing preview map');
     const preview = MapFactory.createLayout();
     preview.setTarget(div);
 

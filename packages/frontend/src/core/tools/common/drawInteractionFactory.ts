@@ -17,7 +17,7 @@
  */
 
 import GeometryType from 'ol/geom/GeometryType';
-import { FeatureStyle } from '../../geo/style/FeatureStyle';
+import { FeatureStyle } from '../../geo/styles/FeatureStyle';
 import { Draw, Modify, Select, Snap } from 'ol/interaction';
 import { withControlKeyOnly, withGeometry, withMainButton } from './common-conditions';
 import { LayerWrapper } from '../../geo/layers/LayerWrapper';
@@ -30,9 +30,10 @@ import { UpdateGeometriesTask, UpdateItem } from '../../history/tasks/features/U
 import VectorSource from 'ol/source/Vector';
 import { Logger } from '@abc-map/shared';
 import { Task } from '../../history/Task';
-import { createEditingStyle } from 'ol/style/Style';
 import { Collection } from 'ol';
 import { noModifierKeys } from 'ol/events/condition';
+import { styleFunction } from '../../geo/styles/style-function';
+import { createEditingStyle } from 'ol/style/Style';
 
 const logger = Logger.get('drawInteractionFactory.ts');
 
@@ -81,11 +82,11 @@ export function drawInteractionFactory(type: SupportedGeometry, source: VectorSo
     condition: (e) => noModifierKeys(e) && withMainButton(e),
     finishCondition: (e) => noModifierKeys(e) && withMainButton(e),
     style: (f) => {
-      // This style is for the point under cursor. Otherwise, Modify should not manage style.
       if (f.getGeometry()?.getType() === GeometryType.POINT) {
-        return editingStyle.Point;
+        return styleFunction(1, f).concat(editingStyle.Point);
       }
-      return [];
+
+      return styleFunction(1, f);
     },
   });
 

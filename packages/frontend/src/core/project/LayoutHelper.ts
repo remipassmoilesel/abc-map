@@ -16,24 +16,39 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcLayout, LayoutFormat } from '@abc-map/shared';
+import { LayoutFormat, Logger } from '@abc-map/shared';
+import { DimensionsPx } from '../utils/DimensionsPx';
+import { mainStore } from '../store/store';
 
-export interface Dimension {
-  width: number;
-  height: number;
-}
+const logger = Logger.get('LayoutHelper.ts');
 
 export class LayoutHelper {
   public static readonly DPI = 25.4;
   public static readonly PRINT_RESOLUTION = 200;
 
-  public static layoutToPixel(layout: AbcLayout): Dimension {
-    return this.formatToPixel(layout.format);
-  }
-
-  public static formatToPixel(format: LayoutFormat): Dimension {
+  public static formatToPixel(format: LayoutFormat): DimensionsPx {
     const width = Math.round((format.width * LayoutHelper.PRINT_RESOLUTION) / LayoutHelper.DPI);
     const height = Math.round((format.height * LayoutHelper.PRINT_RESOLUTION) / LayoutHelper.DPI);
     return { width, height };
+  }
+
+  /**
+   * Here we compute a style ratio for previews and exports.
+   *
+   * We use diagonals of main map and provided dimension.
+   *
+   * @param mapWidth
+   * @param mapHeight
+   */
+  public static styleRatio(mapWidth: number, mapHeight: number): number {
+    const mainMap = mainStore.getState().map.mainMapDimensions;
+    if (!mainMap) {
+      throw new Error('Main map dimensions not set');
+    }
+
+    const targetDiag = Math.sqrt(mapWidth ** 2 + mapHeight ** 2);
+    const mainMapDiag = Math.sqrt(mainMap.width ** 2 + mainMap.height ** 2);
+
+    return targetDiag / mainMapDiag;
   }
 }

@@ -23,7 +23,7 @@ import { PolygonTool } from './PolygonTool';
 import * as sinon from 'sinon';
 import { MapFactory } from '../../geo/map/MapFactory';
 import { Snap } from 'ol/interaction';
-import { TestHelper } from '../../utils/TestHelper';
+import { TestHelper } from '../../utils/test/TestHelper';
 
 describe('PolygonTool', () => {
   it('setup()', () => {

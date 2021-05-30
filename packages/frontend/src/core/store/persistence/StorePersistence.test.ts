@@ -22,7 +22,7 @@ import sinon, { SinonStub } from 'sinon';
 import { UserStatus } from '@abc-map/shared';
 import { MapTool } from '@abc-map/shared';
 import { MainState } from '../reducer';
-import { TestHelper } from '../../utils/TestHelper';
+import { TestHelper } from '../../utils/test/TestHelper';
 
 describe('StorePersistence', () => {
   let storage: LocalStorageService;
@@ -60,6 +60,10 @@ describe('StorePersistence', () => {
           point: {
             size: 5,
           },
+        },
+        mainMapDimensions: {
+          width: 640,
+          height: 480,
         },
       },
       authentication: {
@@ -104,6 +108,10 @@ describe('StorePersistence', () => {
           point: {
             size: 5,
           },
+        },
+        mainMapDimensions: {
+          width: 640,
+          height: 480,
         },
       },
       authentication: {

@@ -17,17 +17,15 @@
  */
 
 import { StyleFactory } from './StyleFactory';
-import { TestHelper } from '../../utils/TestHelper';
+import { TestHelper } from '../../utils/test/TestHelper';
 import Geometry from 'ol/geom/Geometry';
 import { Point } from 'ol/geom';
+import * as sinon from 'sinon';
 import { SinonStubbedInstance } from 'sinon';
 import { StyleCache } from './StyleCache';
-import * as sinon from 'sinon';
 import Feature from 'ol/Feature';
 import Style from 'ol/style/Style';
-import { safeGetIcon } from './PointIcons';
 import { PointIcons } from '@abc-map/shared';
-import { IconProcessor } from './IconProcessor';
 
 // TODO: test other geometries
 
@@ -45,14 +43,15 @@ describe('StyleFactory', () => {
       const properties = TestHelper.sampleStyleProperties();
       cache.get.returns(undefined);
 
-      const styles = factory.getFor(feature, properties, false);
+      const styles = factory.getFor(feature, properties, false, 1);
 
       expect(styles.length).toEqual(1);
       expect(cache.get.callCount).toEqual(1);
       expect(cache.put.callCount).toEqual(1);
       expect(cache.put.args[0][0]).toEqual('Point');
       expect(cache.put.args[0][1]).toEqual(properties);
-      expect(cache.put.args[0][2]).toEqual(styles);
+      expect(cache.put.args[0][2]).toEqual(1);
+      expect(cache.put.args[0][3]).toEqual(styles);
     });
 
     it('should not create style', () => {
@@ -61,7 +60,7 @@ describe('StyleFactory', () => {
       const style = new Style();
       cache.get.returns([style]);
 
-      const styles = factory.getFor(feature, properties, false);
+      const styles = factory.getFor(feature, properties, false, 1);
 
       expect(styles.length).toEqual(1);
       expect(cache.get.callCount).toEqual(1);
@@ -86,13 +85,10 @@ describe('StyleFactory', () => {
         },
       };
 
-      const style = factory.getFor(feature, properties, false);
+      const style = factory.getFor(feature, properties, false, 1);
 
       expect(style).toHaveLength(1);
       expect(style[0].getImage().getImageSize()).toEqual([25, 25]);
-      const image = style[0].getImage().getImage(1) as HTMLImageElement;
-      expect(image).toBeInstanceOf(HTMLImageElement);
-      expect(image).toEqual(IconProcessor.prepare(safeGetIcon(PointIcons.Square), 25, '#ABCDEF'));
       expect(style[0].getFill()).toBeNull();
       expect(style[0].getStroke()).toBeNull();
     });
@@ -110,7 +106,7 @@ describe('StyleFactory', () => {
         },
       };
 
-      const style = factory.getFor(feature, properties, true);
+      const style = factory.getFor(feature, properties, true, 1);
 
       expect(style).toHaveLength(2);
       expect(style[0].getImage().getImageSize()).toEqual([25, 25]);

@@ -22,16 +22,18 @@ const serializer = new XMLSerializer();
 
 export class IconProcessor {
   /**
-   * Create an image element with specified characteristics.
+   * Create a data url of icon with specified characteristics.
    *
    * Here we could use URL.createObjectURL() instead of base64 data uri, but it is not a great optimization and
    * it does not render well with openlayers when changing icon.
+   *
+   * WARNING: image returned may NOT be loaded, use img.onload
    *
    * @param icon
    * @param size
    * @param color
    */
-  public static prepare(icon: PointIcon, size: number, color: string): HTMLImageElement {
+  public static prepare(icon: PointIcon, size: number, color: string): string {
     const { svg } = mountSvg(icon.contentSvg);
 
     // We set size. Viewbox attribute is set in icons (see tests).
@@ -57,12 +59,7 @@ export class IconProcessor {
     // We MUST use XML serializer here, otherwise SVG will not render
     const serialized = btoa(serializer.serializeToString(svg));
 
-    const image = document.createElement('img');
-    image.src = `data:image/svg+xml;base64,${serialized}`;
-    image.width = size;
-    image.height = size;
-
-    return image;
+    return `data:image/svg+xml;base64,${serialized}`;
   }
 }
 

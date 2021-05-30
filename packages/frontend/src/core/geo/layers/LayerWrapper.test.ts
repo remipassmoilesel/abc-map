@@ -28,7 +28,7 @@ import {
 } from '@abc-map/shared';
 import VectorSource from 'ol/source/Vector';
 import { LayerWrapper, logger as wrapperLogger } from './LayerWrapper';
-import { TestHelper } from '../../utils/TestHelper';
+import { TestHelper } from '../../utils/test/TestHelper';
 import { LayerFactory } from './LayerFactory';
 import TileLayer from 'ol/layer/Tile';
 import VectorImageLayer from 'ol/layer/VectorImage';

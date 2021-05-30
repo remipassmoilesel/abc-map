@@ -17,18 +17,31 @@
  */
 
 import * as React from 'react';
-import { getServices, Services } from './Services';
+import { Services } from './Services';
 
 export interface ServiceProps {
   services: Services;
 }
+
+const ServiceContext = React.createContext<Services | false>(false);
+
+export const ServiceProvider = ServiceContext.Provider;
 
 declare type WrappedComponent<P> = React.ComponentClass<Omit<P, keyof ServiceProps>>;
 
 export function withServices<P extends ServiceProps>(Component: React.ComponentType<P>): WrappedComponent<P> {
   class ServiceWrapper extends React.Component<any, any> {
     public render() {
-      return <Component {...(this.props as P)} services={getServices()} />;
+      return (
+        <ServiceContext.Consumer>
+          {(value) => {
+            if (!value) {
+              throw new Error(`You should not use ${Component.displayName} outside a <ServiceProvider>`);
+            }
+            return <Component {...(this.props as P)} services={value} />;
+          }}
+        </ServiceContext.Consumer>
+      );
     }
   }
 

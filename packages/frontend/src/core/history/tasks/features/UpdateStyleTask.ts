@@ -17,7 +17,7 @@
  */
 
 import { Task } from '../../Task';
-import { FeatureStyle } from '../../../geo/style/FeatureStyle';
+import { FeatureStyle } from '../../../geo/styles/FeatureStyle';
 import { FeatureWrapper } from '../../../geo/features/FeatureWrapper';
 
 export interface UpdateStyleItem {

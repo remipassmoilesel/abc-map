@@ -15,22 +15,14 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
+import { DimensionsPx } from '../../utils/DimensionsPx';
 
-import React from 'react';
-import { screen } from '@testing-library/react';
-import LayerControls from './LayerControls';
-import { newTestServices, TestServices } from '../../../core/utils/test/TestServices';
-import { abcRender } from '../../../core/utils/test/abcRender';
+export declare type SizeListener = (e: MapSizeChangedEvent) => void;
 
-describe('LayerControls', () => {
-  let testServices: TestServices;
-  beforeEach(() => {
-    testServices = newTestServices();
-  });
+export const MapSizeChanged = 'MapSizeChangedEvent';
 
-  it('renders without layers', () => {
-    abcRender(<LayerControls layers={[]} />, { services: testServices });
-    const linkElement = screen.getByText(/Aucune couche/i);
-    expect(linkElement).toBeInTheDocument();
-  });
-});
+export class MapSizeChangedEvent extends Event {
+  constructor(public readonly dimensions: DimensionsPx) {
+    super(MapSizeChanged);
+  }
+}

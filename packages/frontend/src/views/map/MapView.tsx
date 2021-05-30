@@ -41,6 +41,8 @@ import { Coordinate } from 'ol/coordinate';
 import { MapKeyboardListener } from './keyboard-listener/MapKeyboardListener';
 import { MapEvent } from 'ol';
 import { pageSetup } from '../../core/utils/page-setup';
+import { MapActions } from '../../core/store/map/actions';
+import { MapSizeChangedEvent } from '../../core/geo/map/MapSizeChangedEvent';
 
 const logger = Logger.get('MapView.tsx', 'debug');
 
@@ -53,16 +55,18 @@ interface State {
 
 const mapStateToProps = (state: MainState) => ({
   project: state.project.metadata,
-  tool: state.map.tool,
-  currentStyle: state.map.currentStyle,
-  userStatus: state.authentication.userStatus,
+  mapDimensions: state.map.mainMapDimensions,
 });
 
-const connector = connect(mapStateToProps);
+const mapDispatchToProps = {
+  updateDimensions: MapActions.setMainMapDimensions,
+};
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type Props = ConnectedProps<typeof connector> & ServiceProps;
 
-export class MapView extends Component<Props, State> {
+class MapView extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -104,6 +108,7 @@ export class MapView extends Component<Props, State> {
 
     const map = this.state.map;
 
+    map.addSizeListener(this.handleMapSizeChange);
     map.addLayerChangeListener(this.handleLayerChange);
     this.handleLayerChange(); // We trigger manually the first event for setup
 
@@ -119,6 +124,7 @@ export class MapView extends Component<Props, State> {
   public componentWillUnmount() {
     const map = this.state.map;
 
+    map.removeSizeListener(this.handleMapSizeChange);
     map.removeLayerChangeListener(this.handleLayerChange);
     map.unwrap().un('rendercomplete', this.handleRenderComplete);
     map.unwrap().un('pointermove', this.handlePointerMove);
@@ -150,6 +156,23 @@ export class MapView extends Component<Props, State> {
 
     logger.error('Map error: ', ev);
     toasts.genericError();
+  };
+
+  /**
+   * Here we set main map size in store for later exports.
+   *
+   * We keep only the biggest size in order to keep consistent exports event if window was resized.
+   *
+   * @param ev
+   */
+  private handleMapSizeChange = (ev: MapSizeChangedEvent) => {
+    const width = ev.dimensions.width;
+    const height = ev.dimensions.height;
+    const previousWidth = this.props.mapDimensions?.width || 0;
+    const previousHeight = this.props.mapDimensions?.height || 0;
+    if (width > previousWidth || height > previousHeight) {
+      this.props.updateDimensions(width, height);
+    }
   };
 }
 

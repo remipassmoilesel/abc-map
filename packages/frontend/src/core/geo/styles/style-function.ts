@@ -15,22 +15,21 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
+import { FeatureLike } from 'ol/Feature';
+import { StyleFactory } from './StyleFactory';
+import { FeatureWrapper } from '../features/FeatureWrapper';
+import { Logger } from '@abc-map/shared';
+import { Style } from 'ol/style';
 
-import React from 'react';
-import { screen } from '@testing-library/react';
-import LayerControls from './LayerControls';
-import { newTestServices, TestServices } from '../../../core/utils/test/TestServices';
-import { abcRender } from '../../../core/utils/test/abcRender';
+const logger = Logger.get('style-function.ts');
 
-describe('LayerControls', () => {
-  let testServices: TestServices;
-  beforeEach(() => {
-    testServices = newTestServices();
-  });
+const styleFactory = new StyleFactory();
 
-  it('renders without layers', () => {
-    abcRender(<LayerControls layers={[]} />, { services: testServices });
-    const linkElement = screen.getByText(/Aucune couche/i);
-    expect(linkElement).toBeInTheDocument();
-  });
-});
+export const styleFunction = function (ratio: number, f: FeatureLike): Style[] {
+  const feature = FeatureWrapper.fromFeatureLike(f);
+  if (!feature) {
+    return [];
+  }
+
+  return styleFactory.getFor(feature.unwrap(), feature.getStyleProperties(), feature.isSelected(), ratio);
+};

@@ -98,6 +98,7 @@ export class BuildService {
 
   public lint(): void {
     this.shell.sync('lerna run lint');
+    this.shell.sync('lerna exec "sort-package-json"');
     this.shell.sync(`helm lint ${this.config.getChartRoot()}`);
   }
 
