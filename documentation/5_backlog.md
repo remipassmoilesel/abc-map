@@ -28,6 +28,11 @@ Web worker should be used in several tasks of frontend:
 - ...
 
 
+## Map legend
+
+A user should be able to generate a legend on layout page.
+
+
 ## Datastore artefact with prompt
 
 A user should be able to use preconfigured data layer as an artifact.       

@@ -32,6 +32,7 @@ export enum StyleProperties {
   PointIcon = 'abc:style:point:icon',
   PointSize = 'abc:style:point:size',
   PointColor = 'abc:style:point:color',
+  ZIndex = 'abc:style:z-index',
 }
 
 export enum FillPatterns {

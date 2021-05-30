@@ -27,6 +27,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { ServiceProps, withServices } from '../../../../core/withServices';
 import TipBubble from '../../../../components/tip-bubble/TipBubble';
 import { ToolTips } from '@abc-map/user-documentation';
+import ZIndex from '../_common/z-index/ZIndex';
 
 const logger = Logger.get('PolygonToolPanel.tsx');
 
@@ -47,11 +48,12 @@ class PolygonToolPanel extends Component<Props, {}> {
         <WidthSelector />
         <ColorSelector stroke={true} fillColor1={true} fillColor2={true} />
         <FillPatternSelector />
-        <div className={'d-flex justify-content-center'}>
+        <div className={'d-flex justify-content-center mb-3'}>
           <button className={'btn btn-sm btn-outline-primary mt-3'} onClick={this.handleApplyStyle}>
             Appliquer le style
           </button>
         </div>
+        <ZIndex />
       </div>
     );
   }

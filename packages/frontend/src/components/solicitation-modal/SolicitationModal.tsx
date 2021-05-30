@@ -73,20 +73,20 @@ class SolicitationModal extends Component<ServiceProps, State> {
           </div>
 
           <div className={'mt-5 mx-4 text-center'}>
-            <p>Comment ça c&apos;est passé ? Faites le savoir ! </p>
+            <p>Comment ça c&apos;est passé ?</p>
           </div>
 
           <div className={'d-flex flex-row justify-content-center mb-4'}>
             <button onClick={() => this.handleVote(VoteValue.NOT_SATISFIED)} className={`btn btn-outline-primary ${Cls.voteBtn}`}>
-              <i className={'fa fa-frown'} />
+              <span className={Cls.face}>😞</span>
               Pas bien
             </button>
             <button onClick={() => this.handleVote(VoteValue.BLAH)} className={`btn btn-outline-primary ${Cls.voteBtn}`}>
-              <i className={'fa fa-meh'} />
+              <span className={Cls.face}>🥱</span>
               Bof ...
             </button>
             <button onClick={() => this.handleVote(VoteValue.SATISFIED)} className={`btn btn-outline-primary ${Cls.voteBtn}`}>
-              <i className={'fa fa-smile-beam'} />
+              <span className={Cls.face}>🥰</span>
               Bien !
             </button>
           </div>

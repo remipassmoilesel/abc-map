@@ -24,6 +24,7 @@ export interface FeatureStyle {
   fill?: FillProperties;
   text?: TextProperties;
   point?: PointProperties;
+  zIndex?: number;
 }
 
 export interface StrokeProperties {
