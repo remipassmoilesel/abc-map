@@ -25,7 +25,7 @@ import MapBrowserEventType from 'ol/MapBrowserEventType';
 import MapBrowserEvent from 'ol/MapBrowserEvent';
 import View from 'ol/View';
 import * as sinon from 'sinon';
-import { TestHelper } from '../../utils/TestHelper';
+import { TestHelper } from '../../utils/test/TestHelper';
 import { FeatureWrapper } from '../../geo/features/FeatureWrapper';
 import { Polygon } from 'ol/geom';
 import { AddFeaturesTask } from '../../history/tasks/features/AddFeaturesTask';

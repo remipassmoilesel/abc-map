@@ -20,7 +20,7 @@ import { MainStore } from '../../store/store';
 import { HistoryService } from '../../history/HistoryService';
 import VectorSource from 'ol/source/Vector';
 import { SelectionTool } from './SelectionTool';
-import { TestHelper } from '../../utils/TestHelper';
+import { TestHelper } from '../../utils/test/TestHelper';
 import { MapFactory } from '../../geo/map/MapFactory';
 
 describe('Selection', () => {

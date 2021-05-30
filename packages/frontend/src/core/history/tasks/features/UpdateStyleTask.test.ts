@@ -17,9 +17,9 @@
  */
 
 import { UpdateStyleTask } from './UpdateStyleTask';
-import { TestHelper } from '../../../utils/TestHelper';
+import { TestHelper } from '../../../utils/test/TestHelper';
 import { FeatureWrapper } from '../../../geo/features/FeatureWrapper';
-import { FeatureStyle } from '../../../geo/style/FeatureStyle';
+import { FeatureStyle } from '../../../geo/styles/FeatureStyle';
 
 describe('UpdateStyleTask', function () {
   let feature: FeatureWrapper;

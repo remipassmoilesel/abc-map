@@ -26,7 +26,7 @@ import { MapActions } from '../store/map/actions';
 import { AxiosInstance } from 'axios';
 import { WMSCapabilities as WMSCapabilitiesParser } from 'ol/format';
 import { WmsCapabilities } from './WmsCapabilities';
-import { FeatureStyle } from './style/FeatureStyle';
+import { FeatureStyle } from './styles/FeatureStyle';
 import { UpdateStyleItem, UpdateStyleTask } from '../history/tasks/features/UpdateStyleTask';
 import { HistoryKey } from '../history/HistoryKey';
 import { HistoryService } from '../history/HistoryService';

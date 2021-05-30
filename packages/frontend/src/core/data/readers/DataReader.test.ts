@@ -91,7 +91,6 @@ describe('DataReader', function () {
       expect(features).toHaveLength(189);
       features.forEach((f) => {
         expect(f.getId()).toBeDefined();
-        expect(f.getStyle()).not.toBeNull();
       });
     });
   });
@@ -115,7 +114,6 @@ describe('DataReader', function () {
       expect(features).toHaveLength(20);
       features.forEach((f) => {
         expect(f.getId()).toBeDefined();
-        expect(f.getStyle()).not.toBeNull();
       });
     });
   });
@@ -139,7 +137,6 @@ describe('DataReader', function () {
       expect(features).toHaveLength(91);
       features.forEach((f) => {
         expect(f.getId()).toBeDefined();
-        expect(f.getStyle()).not.toBeNull();
       });
     });
   });
@@ -163,7 +160,6 @@ describe('DataReader', function () {
       expect(features).toHaveLength(610);
       features.forEach((f) => {
         expect(f.getId()).toBeDefined();
-        expect(f.getStyle()).not.toBeNull();
       });
     });
 
@@ -181,7 +177,6 @@ describe('DataReader', function () {
       expect(features).toHaveLength(610);
       features.forEach((f) => {
         expect(f.getId()).toBeDefined();
-        expect(f.getStyle()).not.toBeNull();
       });
     });
   });

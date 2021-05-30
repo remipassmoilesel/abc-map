@@ -19,7 +19,7 @@
 import { logger as geoLogger, GeoService } from './GeoService';
 import { logger as mapLogger } from './map/MapWrapper';
 import { AbcProjectManifest, AbcVectorLayer, LayerType, PredefinedLayerModel, PredefinedMetadata } from '@abc-map/shared';
-import { TestHelper } from '../utils/TestHelper';
+import { TestHelper } from '../utils/test/TestHelper';
 import VectorSource from 'ol/source/Vector';
 import TileLayer from 'ol/layer/Tile';
 import { MapFactory } from './map/MapFactory';

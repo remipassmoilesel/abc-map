@@ -152,7 +152,7 @@ export class ProjectService {
     const unzipped = await Zipper.forFrontend().unzip(blob);
     const manifestFile = unzipped.find((f) => f.path.endsWith(ProjectConstants.ManifestName));
     if (!manifestFile) {
-      return Promise.reject(new Error('Invalid project'));
+      return Promise.reject(new Error('Invalid project, manifest not found'));
     }
 
     const project = JSON.parse(await BlobIO.asString(manifestFile.content));
@@ -215,6 +215,7 @@ export class ProjectService {
     this.store.dispatch(ProjectActions.renameProject(name));
   }
 
+  // TODO: Delete this method, unziping project is a heavy process
   public async compressedContainsCredentials(blob: Blob): Promise<boolean> {
     const manifest = await ProjectHelper.forFrontend().extractManifest(blob);
     return this.manifestContainsCredentials(manifest);

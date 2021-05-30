@@ -21,7 +21,7 @@ import { HistoryService } from '../../history/HistoryService';
 import { Map } from 'ol';
 import VectorSource from 'ol/source/Vector';
 import { TextTool } from './TextTool';
-import { TestHelper } from '../../utils/TestHelper';
+import { TestHelper } from '../../utils/test/TestHelper';
 
 describe('Text', () => {
   it('setup()', () => {

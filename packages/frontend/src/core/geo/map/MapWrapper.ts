@@ -31,6 +31,7 @@ import VectorImageLayer from 'ol/layer/VectorImage';
 import VectorSource from 'ol/source/Vector';
 import Geometry from 'ol/geom/Geometry';
 import { defaultInteractions } from './interactions';
+import { MapSizeChanged, MapSizeChangedEvent, SizeListener } from './MapSizeChangedEvent';
 
 export const logger = Logger.get('MapWrapper.ts', 'debug');
 
@@ -45,6 +46,7 @@ export declare type FeatureCallback = (feat: FeatureWrapper, layer: LayerWrapper
 export class MapWrapper {
   private sizeObserver?: ResizeObserver;
   private currentTool?: AbstractTool;
+  private sizeEventTarget = document.createDocumentFragment();
 
   constructor(private readonly internal: Map) {
     this.addLayerChangeListener(this.handleLayerChange);
@@ -62,7 +64,7 @@ export class MapWrapper {
 
     if (node) {
       // Here we listen to div support size change
-      const resize = _.throttle(() => this.internal.updateSize(), 300, { trailing: true });
+      const resize = _.debounce(this.handleSizeChange, 100);
       this.sizeObserver = ResizeObserverFactory.create(resize);
       this.sizeObserver.observe(node);
     } else {
@@ -81,8 +83,12 @@ export class MapWrapper {
     this.setActiveLayer(vector);
   }
 
-  public addLayer(layer: LayerWrapper): void {
-    this.internal.addLayer(layer.unwrap());
+  public addLayer(layer: LayerWrapper, position?: number): void {
+    if (typeof position !== 'undefined') {
+      this.internal.getLayers().insertAt(position, layer.unwrap());
+    } else {
+      this.internal.addLayer(layer.unwrap());
+    }
   }
 
   /**
@@ -260,11 +266,33 @@ export class MapWrapper {
   /**
    * Move to specified extent. Numbers are: minX, minY, maxX, maxY.
    */
-  public moveTo(extent: [number, number, number, number]): void {
+  public moveViewTo(extent: [number, number, number, number]): void {
     const duration = 1500;
     const view = this.internal.getView();
     view.fit(extent, { duration });
   }
+
+  public addSizeListener(listener: SizeListener): void {
+    this.sizeEventTarget.addEventListener(MapSizeChanged, listener as EventListener);
+  }
+
+  public removeSizeListener(listener: SizeListener): void {
+    this.sizeEventTarget.removeEventListener(MapSizeChanged, listener as EventListener);
+  }
+
+  private handleSizeChange = () => {
+    // Each time support size change, we update map
+    this.internal.updateSize();
+
+    // Then we notify listeners
+    const target = this.internal.getTarget();
+    if (!target || !(target instanceof HTMLDivElement)) {
+      logger.error('Invalid target, size event will not be dispatched');
+      return;
+    }
+
+    this.sizeEventTarget.dispatchEvent(new MapSizeChangedEvent({ width: target.clientWidth, height: target.clientHeight }));
+  };
 
   public unwrap(): Map {
     return this.internal;

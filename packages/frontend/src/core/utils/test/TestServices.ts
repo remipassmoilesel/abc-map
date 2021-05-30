@@ -1,14 +1,14 @@
 import * as sinon from 'sinon';
-import { ProjectService } from '../project/ProjectService';
-import { GeoService } from '../geo/GeoService';
-import { ToastService } from '../ui/ToastService';
-import { ModalService } from '../ui/ModalService';
-import { AuthenticationService } from '../authentication/AuthenticationService';
-import { HistoryService } from '../history/HistoryService';
-import { DataStoreService } from '../data/DataStoreService';
-import { VoteService } from '../vote/VoteService';
+import { ProjectService } from '../../project/ProjectService';
+import { GeoService } from '../../geo/GeoService';
+import { ToastService } from '../../ui/ToastService';
+import { ModalService } from '../../ui/ModalService';
+import { AuthenticationService } from '../../authentication/AuthenticationService';
+import { HistoryService } from '../../history/HistoryService';
+import { DataStoreService } from '../../data/DataStoreService';
+import { VoteService } from '../../vote/VoteService';
 import { SinonStubbedInstance } from 'sinon';
-import { Services } from '../Services';
+import { Services } from '../../Services';
 
 type SameKeys<T> = {
   [P in keyof T]: SinonStubbedInstance<any>;

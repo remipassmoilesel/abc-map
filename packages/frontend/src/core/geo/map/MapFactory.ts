@@ -25,7 +25,7 @@ import { defaults as defaultControls, ScaleLine } from 'ol/control';
 import { layoutMapInteractions } from './interactions';
 import * as _ from 'lodash';
 
-const defaultView = createView(9, [3.9, 43]);
+const defaultView = createView(2, [10, 45]);
 
 const views: View[] = [
   createView(6, [-65, 47]),
@@ -35,12 +35,17 @@ const views: View[] = [
   createView(11, [39.67, -4.06]),
   createView(4, [10, 2]),
   createView(5, [46, 20]),
-  createView(5, [107, 19]),
+  createView(5, [117, 36]),
   createView(5, [134, -28]),
-  createView(5, [46, -19]),
-  createView(6, [-19, 17]),
+  createView(6, [46, -19]),
+  createView(9, [-16.2, 14]),
   createView(9, [3.9, 43]),
+  createView(11, [4.5, 43.5]),
   createView(9, [-5, 36]),
+  createView(8, [22, 60]),
+  createView(8, [5.88, 60]),
+  createView(9, [-1.9, 49.1]),
+  createView(10, [-4.6, 48.2]),
 ];
 
 export class MapFactory {

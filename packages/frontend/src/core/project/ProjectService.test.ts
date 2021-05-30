@@ -21,7 +21,7 @@ import { GeoService } from '../geo/GeoService';
 import { ProjectFactory } from './ProjectFactory';
 import { ProjectActions } from '../store/project/actions';
 import { AbcLayer, AbcProjectManifest, AbcWmsLayer } from '@abc-map/shared';
-import { TestHelper } from '../utils/TestHelper';
+import { TestHelper } from '../utils/test/TestHelper';
 import { MapFactory } from '../geo/map/MapFactory';
 import { MainStore, storeFactory } from '../store/store';
 import { MapWrapper } from '../geo/map/MapWrapper';

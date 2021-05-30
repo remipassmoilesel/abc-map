@@ -20,7 +20,7 @@ import { HttpClientFactory, logger, tileLoadAuthenticated } from './tileLoadAuth
 import * as sinon from 'sinon';
 import { SinonStub } from 'sinon';
 import { ImageTile, Tile, VectorTile } from 'ol';
-import { TestHelper } from '../../utils/TestHelper';
+import { TestHelper } from '../../utils/test/TestHelper';
 import TileState from 'ol/TileState';
 
 logger.disable();

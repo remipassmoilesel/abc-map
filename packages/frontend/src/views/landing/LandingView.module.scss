@@ -21,17 +21,13 @@
 .landing {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-evenly;
 
   height: 95vh;
+  padding: 3rem;
   overflow: auto;
 
-  padding: 3rem 10rem;
   font-size: 1.1em;
-
-  p {
-    margin: 1em 0;
-  }
 
   :global(.btn) {
     width: 13rem;
@@ -52,8 +48,25 @@
   }
 }
 
+.leftColumn {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+
+  margin-right: 1rem;
+}
+
+.rightColumn {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  margin-left: 1rem;
+}
+
 .illustration {
   width: 40vw;
+  margin-bottom: 2rem;
 }
 
 .intro {
@@ -61,8 +74,6 @@
 }
 
 .version {
-  margin-top: 2em;
   font-size: 0.9em;
   color: #ffffff;
-  text-align: right;
 }

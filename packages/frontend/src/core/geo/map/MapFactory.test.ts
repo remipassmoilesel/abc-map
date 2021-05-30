@@ -21,7 +21,7 @@ import { Map } from 'ol';
 import { MapFactory } from './MapFactory';
 import TileLayer from 'ol/layer/Tile';
 import VectorImageLayer from 'ol/layer/VectorImage';
-import { TestHelper } from '../../utils/TestHelper';
+import { TestHelper } from '../../utils/test/TestHelper';
 
 describe('MapFactory', () => {
   it('createDefault()', () => {

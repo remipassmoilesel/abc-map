@@ -37,7 +37,7 @@ import {
   Zipper,
 } from '@abc-map/shared';
 import uuid from 'uuid-random';
-import { FeatureStyle } from '../geo/style/FeatureStyle';
+import { FeatureStyle } from '../../geo/styles/FeatureStyle';
 import { PointIcons } from '@abc-map/shared';
 import { Coordinate } from 'ol/coordinate';
 import MapBrowserEvent from 'ol/MapBrowserEvent';

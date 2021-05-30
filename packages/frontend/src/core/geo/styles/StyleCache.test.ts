@@ -17,7 +17,7 @@
  */
 
 import { StyleCache } from './StyleCache';
-import { TestHelper } from '../../utils/TestHelper';
+import { TestHelper } from '../../utils/test/TestHelper';
 import { Style } from 'ol/style';
 import { FeatureStyle } from './FeatureStyle';
 import GeometryType from 'ol/geom/GeometryType';
@@ -33,16 +33,16 @@ describe('StyleCache', function () {
 
   it('should return style', function () {
     const style = [new Style()];
-    cache.put(GeometryType.LINE_STRING, props, style);
+    cache.put(GeometryType.LINE_STRING, props, 1, style);
 
-    const fromCache = cache.get(GeometryType.LINE_STRING, props);
+    const fromCache = cache.get(GeometryType.LINE_STRING, props, 1);
 
     expect(fromCache).toStrictEqual(style);
   });
 
   it('should return nothing if properties are different', function () {
     const style = [new Style()];
-    cache.put(GeometryType.LINE_STRING, props, style);
+    cache.put(GeometryType.LINE_STRING, props, 1, style);
     const otherProps: FeatureStyle = {
       ...props,
       fill: {
@@ -50,16 +50,25 @@ describe('StyleCache', function () {
       },
     };
 
-    const fromCache = cache.get(GeometryType.LINE_STRING, otherProps);
+    const fromCache = cache.get(GeometryType.LINE_STRING, otherProps, 1);
 
     expect(fromCache).toBeUndefined();
   });
 
   it('should return nothing if geometry is different', function () {
     const style = [new Style()];
-    cache.put(GeometryType.LINE_STRING, props, style);
+    cache.put(GeometryType.LINE_STRING, props, 1, style);
 
-    const fromCache = cache.get(GeometryType.POLYGON, props);
+    const fromCache = cache.get(GeometryType.POLYGON, props, 1);
+
+    expect(fromCache).toBeUndefined();
+  });
+
+  it('should return nothing if ratio is different', function () {
+    const style = [new Style()];
+    cache.put(GeometryType.LINE_STRING, props, 1, style);
+
+    const fromCache = cache.get(GeometryType.LINE_STRING, props, 0.5);
 
     expect(fromCache).toBeUndefined();
   });

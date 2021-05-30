@@ -28,6 +28,8 @@ import { mainStore } from './core/store/store';
 import { AxiosError } from 'axios';
 import { HttpError } from './core/http/HttpError';
 import { BUILD_INFO } from './build-version';
+import { ServiceProvider } from './core/withServices';
+import { Provider } from 'react-redux';
 import './index.scss';
 
 export const logger = Logger.get('index.tsx', 'warn');
@@ -61,9 +63,13 @@ function load() {
   _window.abc.store = mainStore;
 
   ReactDOM.render(
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>,
+    <Provider store={mainStore}>
+      <ServiceProvider value={getServices()}>
+        <React.StrictMode>
+          <App />
+        </React.StrictMode>
+      </ServiceProvider>
+    </Provider>,
     document.getElementById('root')
   );
 }

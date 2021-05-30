@@ -59,20 +59,23 @@ class LandingView extends Component<Props, State> {
   public render(): ReactNode {
     const voteAggregation = this.state.voteAggregation;
     const authenticated = this.props.authenticated;
+    const illustration = this.state.illustration;
+    const buildHash = BUILD_INFO.hash;
+    const buildDate = DateTime.fromISO(BUILD_INFO.date).toLocal().toFormat('dd/MM/yyyy (HH:mm)');
 
     return (
       <div className={Cls.landing}>
-        <div className={'d-flex flex-column'}>
+        <div className={Cls.leftColumn}>
+          {/* Introduction */}
+
           <div>
             <h1>Bienvenue !</h1>
 
-            {/* Introduction */}
+            <p className={Cls.intro}>Abc-Map est un logiciel libre de cartographie.</p>
+          </div>
 
-            <p className={Cls.intro}>
-              Abc-Map est un logiciel libre de cartographie.
-              <br />
-              Abc-Map vous permet de créer des cartes simplement, sans connaissances techniques.
-            </p>
+          <div>
+            <h5>Comment ça marche ?</h5>
             <ul>
               <li>
                 Vous pouvez tout de suite vous lancer sur <Link to={FrontendRoutes.map().raw()}>la page Carte</Link> !
@@ -93,37 +96,22 @@ class LandingView extends Component<Props, State> {
               </li>
             </ul>
 
-            {/* Vote results */}
+            {/* Current version */}
 
-            {!!voteAggregation?.total && (
-              <>
-                <div className={'mt-5'}>
-                  Sur les 7 derniers jours, {voteAggregation.satisfied} % des utilisateurs ont déclaré être satisfait !
-                  <div className={'mt-3'}>
-                    {voteAggregation.satisfied < 60 && (
-                      <>
-                        Va falloir faire mieux <span className={'ml-2'}>🧑‍🏭</span>
-                      </>
-                    )}
-                    {voteAggregation.satisfied >= 60 && (
-                      <>
-                        Champagne ! <span className={'ml-2'}>🎉</span>
-                      </>
-                    )}
-                  </div>
-                </div>
-              </>
-            )}
+            <div className={Cls.version}>
+              Version {buildHash} du {buildDate}. Bien vu !
+            </div>
           </div>
 
           {/* Login and registration */}
+
           {!authenticated && (
             <div>
-              <h3 className={'mt-5'}>Inscription, connexion</h3>
-              <p className={'mt-4'}>
+              <h3>Inscription, connexion</h3>
+              <p>
                 La connexion est <i>facultative</i>, mais elle permet de sauvegarder ses cartes en ligne.
               </p>
-              <div className={'mt-5'}>
+              <div>
                 <button className={'btn btn-primary mr-3'} onClick={this.handleRegister} data-cy={'open-registration'}>
                   <i className={'fa fa-feather-alt'} />
                   S&apos;inscrire
@@ -136,16 +124,29 @@ class LandingView extends Component<Props, State> {
             </div>
           )}
         </div>
-        <div className={'mt-5'}>
+
+        <div className={Cls.rightColumn}>
           {/* Some bullshit illustration */}
 
-          <img src={this.state.illustration} alt={'Une belle illustration pour faire comme les vrais !'} className={Cls.illustration} />
+          <img src={illustration} alt={'Une belle illustration pour faire comme les vrais !'} className={Cls.illustration} />
 
-          {/* Current version */}
+          {/* Vote results */}
 
-          <div className={Cls.version}>
-            Version {BUILD_INFO.hash} du {BUILD_INFO.date}. Bien vu !
-          </div>
+          {!!voteAggregation?.total && (
+            <div>
+              Sur les 7 derniers jours, {voteAggregation.satisfied} % des utilisateurs ont déclaré être satisfait.&nbsp;
+              {voteAggregation.satisfied < 60 && (
+                <>
+                  Va falloir faire mieux <span className={'ml-2'}>🧑‍🏭</span>
+                </>
+              )}
+              {voteAggregation.satisfied >= 60 && (
+                <>
+                  Champagne ! <span className={'ml-2'}>🎉</span>
+                </>
+              )}
+            </div>
+          )}
         </div>
       </div>
     );

@@ -27,7 +27,7 @@ import { LayerFactory } from '../layers/LayerFactory';
 import VectorImageLayer from 'ol/layer/VectorImage';
 import { DragRotateAndZoom } from 'ol/interaction';
 import { LineStringTool } from '../../tools/line-string/LineStringTool';
-import { TestHelper } from '../../utils/TestHelper';
+import { TestHelper } from '../../utils/test/TestHelper';
 
 logger.disable();
 

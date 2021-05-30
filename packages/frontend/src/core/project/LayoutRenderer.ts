@@ -24,39 +24,45 @@ import { AbcFile, AbcLayout, Zipper } from '@abc-map/shared';
 import { MapFactory } from '../geo/map/MapFactory';
 import { jsPDF } from 'jspdf';
 
-const logger = Logger.get('LayoutRenderer', 'debug');
+export const logger = Logger.get('LayoutRenderer');
+
+// TODO: test
 
 export class LayoutRenderer {
   private map?: MapWrapper;
+  private support?: HTMLDivElement;
 
-  public init() {
+  public init(support: HTMLDivElement) {
+    this.support = support;
     this.map = MapFactory.createNaked();
+    this.map.setTarget(support);
   }
 
   public dispose() {
     this.map?.dispose();
   }
 
-  public async renderLayoutsAsPdf(layouts: AbcLayout[], sourceMap: MapWrapper, support: HTMLDivElement): Promise<Blob> {
+  public async renderLayoutsAsPdf(layouts: AbcLayout[], sourceMap: MapWrapper): Promise<Blob> {
     const pdf = new jsPDF();
+
+    // jsPDF create a first page that may not correspond to first layout
+    pdf.deletePage(1);
+
     for (const layout of layouts) {
       const format = layout.format;
-      const index = layouts.indexOf(layout);
-      if (index !== 0) {
-        pdf.addPage([format.width, format.height], format.orientation);
-      }
+      pdf.addPage([format.width, format.height], format.orientation);
 
-      const canvas = await this.renderLayout(layout, sourceMap, support);
+      const canvas = await this.renderLayout(layout, sourceMap);
       pdf.addImage(canvas.toDataURL('image/jpeg'), 'JPEG', 0, 0, layout.format.width, layout.format.height);
     }
 
     return pdf.output('blob');
   }
 
-  public async renderLayoutsAsPng(layouts: AbcLayout[], sourceMap: MapWrapper, support: HTMLDivElement): Promise<Blob> {
+  public async renderLayoutsAsPng(layouts: AbcLayout[], sourceMap: MapWrapper): Promise<Blob> {
     const files: AbcFile<Blob>[] = [];
     for (const layout of layouts) {
-      const canvas = await this.renderLayout(layout, sourceMap, support);
+      const canvas = await this.renderLayout(layout, sourceMap);
       const image = await BlobIO.canvasToPng(canvas);
       files.push({ path: layout.name, content: image });
     }
@@ -64,29 +70,35 @@ export class LayoutRenderer {
     return Zipper.forFrontend().zipFiles(files);
   }
 
-  public renderLayout(layout: AbcLayout, sourceMap: MapWrapper, support: HTMLDivElement): Promise<HTMLCanvasElement> {
+  public renderLayout(layout: AbcLayout, sourceMap: MapWrapper): Promise<HTMLCanvasElement> {
     logger.info('Rendering layout: ', layout);
     const renderingMap = this.map;
-    if (!renderingMap) {
+    const support = this.support;
+    if (!renderingMap || !support) {
       throw new Error('You must call init() before rendering');
     }
-    renderingMap.setTarget(support);
 
     // We adapt size of map to layout
-    const dimension = LayoutHelper.layoutToPixel(layout);
+    const dimension = LayoutHelper.formatToPixel(layout.format);
     support.style.marginTop = '200px';
     support.style.width = `${dimension.width}px`;
     support.style.height = `${dimension.height}px`;
     renderingMap.unwrap().updateSize();
 
-    // We copy layers from sourceMap to exporMap
-    renderingMap.unwrap().getLayers().clear();
-    sourceMap.getLayers().forEach((lay) => renderingMap.addLayer(lay));
+    const styleRatio = LayoutHelper.styleRatio(dimension.width, dimension.height);
 
-    const viewResolution = renderingMap.unwrap().getView().getResolution();
-    if (!viewResolution) {
-      return Promise.reject(new Error('ViewResolution not available'));
-    }
+    // We copy layers from sourceMap to exportMap
+    renderingMap.unwrap().getLayers().clear();
+    sourceMap.getLayers().forEach((lay) => renderingMap.addLayer(lay.shallowClone(styleRatio)));
+
+    // We set view
+    renderingMap.unwrap().setView(
+      new View({
+        center: layout.view.center,
+        resolution: layout.view.resolution,
+        projection: layout.view.projection.name,
+      })
+    );
 
     const canvas = document.createElement('canvas');
     canvas.width = dimension.width;
@@ -94,14 +106,14 @@ export class LayoutRenderer {
 
     const ctx = canvas.getContext('2d');
     if (!ctx) {
-      return Promise.reject(new Error('ctx not available'));
+      return Promise.reject(new Error('Canvas 2D context not available'));
     }
 
     // We paint a white rectangle as background
     ctx.fillStyle = 'white';
     ctx.fillRect(0, 0, dimension.width, dimension.height);
 
-    // Then we export layers on render complete
+    // Then we export layers when render complete
     return new Promise<HTMLCanvasElement>((resolve, reject) => {
       renderingMap.unwrap().once('rendercomplete', () => {
         const layers = support.querySelectorAll('.ol-layer canvas');
@@ -130,14 +142,7 @@ export class LayoutRenderer {
         resolve(canvas);
       });
 
-      // We set view and trigger render
-      renderingMap.unwrap().setView(
-        new View({
-          center: layout.view.center,
-          resolution: layout.view.resolution,
-          projection: layout.view.projection.name,
-        })
-      );
+      renderingMap.unwrap().render();
     });
   }
 }

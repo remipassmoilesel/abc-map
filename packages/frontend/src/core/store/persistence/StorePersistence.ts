@@ -71,7 +71,7 @@ export class StorePersistence {
     };
 
     // We can not store project as most of informations are only present in map
-    cleanState.project = undefined as any; // New project will be set at store bootstrap
+    cleanState.project = undefined as any;
     cleanState.map.tool = MapTool.None;
     cleanState.ui.historyCapabilities = {};
     try {

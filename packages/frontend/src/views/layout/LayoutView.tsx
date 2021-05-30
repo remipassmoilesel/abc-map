@@ -209,7 +209,7 @@ class LayoutView extends Component<Props, State> {
     const layouts = this.props.layouts;
 
     if (!active) {
-      toasts.info("Vous devez d'abord sélectionner une page");
+      toasts.info('Vous devez sélectionner une page');
       return;
     }
 
@@ -289,7 +289,7 @@ class LayoutView extends Component<Props, State> {
     }
 
     const renderer = new LayoutRenderer();
-    renderer.init();
+    renderer.init(support);
 
     const exportLayouts = async () => {
       toasts.info("Début de l'export ...");
@@ -297,10 +297,10 @@ class LayoutView extends Component<Props, State> {
       const map = this.state.map;
 
       if (format === 'pdf') {
-        const result = await renderer.renderLayoutsAsPdf(layouts, map, support);
+        const result = await renderer.renderLayoutsAsPdf(layouts, map);
         FileIO.outputBlob(result, 'map.pdf');
       } else {
-        const result = await renderer.renderLayoutsAsPng(layouts, map, support);
+        const result = await renderer.renderLayoutsAsPng(layouts, map);
         FileIO.outputBlob(result, 'map.zip');
       }
 

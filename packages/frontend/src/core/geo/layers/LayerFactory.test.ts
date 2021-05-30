@@ -20,7 +20,7 @@ import { LayerFactory } from './LayerFactory';
 import VectorSource from 'ol/source/Vector';
 import { TileWMS } from 'ol/source';
 import { LayerProperties, LayerType, PredefinedLayerModel, WmsDefinition } from '@abc-map/shared';
-import { TestHelper } from '../../utils/TestHelper';
+import { TestHelper } from '../../utils/test/TestHelper';
 import TileLayer from 'ol/layer/Tile';
 import { VectorLayerWrapper, WmsLayerWrapper } from './LayerWrapper';
 import VectorImageLayer from 'ol/layer/VectorImage';
@@ -227,7 +227,6 @@ describe('LayerFactory', () => {
 
       const features = layer.getSource().getFeatures();
       expect(features).toHaveLength(2);
-      features.forEach((f) => expect(f.getStyle()).not.toBeNull());
     });
 
     it('with wms layer, without authentication', async () => {

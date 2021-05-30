@@ -27,7 +27,7 @@ import { TextInteraction } from './TextInteraction';
 import { FeatureWrapper } from '../../geo/features/FeatureWrapper';
 import { HistoryKey } from '../../history/HistoryKey';
 import { UpdateStyleTask } from '../../history/tasks/features/UpdateStyleTask';
-import { FeatureStyle } from '../../geo/style/FeatureStyle';
+import { FeatureStyle } from '../../geo/styles/FeatureStyle';
 import GeometryType from 'ol/geom/GeometryType';
 import { TextEvent, TextChanged, TextEnd, TextStart } from './TextInteractionEvents';
 

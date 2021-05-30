@@ -20,7 +20,7 @@ import React, { Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/shared';
 import { FillPatterns } from '@abc-map/shared';
 import { LabelledFillPatterns } from './LabelledFillPatterns';
-import { FillPatternFactory } from '../../../../../core/geo/style/FillPatternFactory';
+import { FillPatternFactory } from '../../../../../core/geo/styles/FillPatternFactory';
 import Cls from './FillPatternButton.module.scss';
 
 const logger = Logger.get('FillPatternButton.tsx', 'info');

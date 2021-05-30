@@ -19,16 +19,13 @@
 import Feature, { FeatureLike } from 'ol/Feature';
 import Geometry from 'ol/geom/Geometry';
 import { FeatureProperties, StyleProperties } from '@abc-map/shared';
-import { FeatureStyle, DefaultStyle } from '../style/FeatureStyle';
-import { StyleFactory } from '../style/StyleFactory';
+import { FeatureStyle, DefaultStyle } from '../styles/FeatureStyle';
 import { nanoid } from 'nanoid';
 import GeometryType from 'ol/geom/GeometryType';
 import { Point, Circle, GeometryCollection, LinearRing, LineString, MultiLineString, MultiPoint, MultiPolygon, Polygon } from 'ol/geom';
 import { Logger } from '@abc-map/shared';
 
 const logger = Logger.get('FeatureWrapper.ts');
-
-const styles = new StyleFactory();
 
 export declare type PropertiesMap = { [key: string]: any };
 export declare type SimplePropertiesMap = { [key: string]: string | number | undefined };
@@ -103,7 +100,6 @@ export class FeatureWrapper<Geom extends OlGeometry = OlGeometry> {
 
   public setSelected(value: boolean): FeatureWrapper {
     this.feature.set(FeatureProperties.Selected, value);
-    this.applyStyle();
     return this;
   }
 
@@ -143,7 +139,7 @@ export class FeatureWrapper<Geom extends OlGeometry = OlGeometry> {
    * @param properties
    */
   public setStyleProperties(properties: FeatureStyle): FeatureWrapper {
-    const setIfDefined = (name: string, value: any) => {
+    const setIfDefined = (name: string, value: string | number | undefined) => {
       if (typeof value !== 'undefined') {
         this.feature.set(name, value);
       }
@@ -164,8 +160,6 @@ export class FeatureWrapper<Geom extends OlGeometry = OlGeometry> {
     setIfDefined(StyleProperties.PointIcon, properties.point?.icon);
     setIfDefined(StyleProperties.PointSize, properties.point?.size);
     setIfDefined(StyleProperties.PointColor, properties.point?.color);
-
-    this.applyStyle();
 
     return this;
   }
@@ -194,14 +188,6 @@ export class FeatureWrapper<Geom extends OlGeometry = OlGeometry> {
         break;
     }
 
-    this.applyStyle();
-    return this;
-  }
-
-  public applyStyle(): FeatureWrapper {
-    const properties = this.getStyleProperties();
-    const style = styles.getFor(this.feature, properties, this.isSelected());
-    this.feature.setStyle(style);
     return this;
   }
 
@@ -218,7 +204,6 @@ export class FeatureWrapper<Geom extends OlGeometry = OlGeometry> {
         value: text,
       },
     });
-    this.applyStyle();
     return this;
   }
 

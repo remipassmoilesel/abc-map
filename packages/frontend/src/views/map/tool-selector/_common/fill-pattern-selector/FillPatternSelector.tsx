@@ -20,7 +20,7 @@ import React, { Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/shared';
 import { FillPatterns } from '@abc-map/shared';
 import { LabelledFillPatterns } from './LabelledFillPatterns';
-import { FillPatternFactory } from '../../../../../core/geo/style/FillPatternFactory';
+import { FillPatternFactory } from '../../../../../core/geo/styles/FillPatternFactory';
 import { MainState } from '../../../../../core/store/reducer';
 import { MapActions } from '../../../../../core/store/map/actions';
 import { connect, ConnectedProps } from 'react-redux';

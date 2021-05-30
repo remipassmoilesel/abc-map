@@ -44,11 +44,7 @@ describe('Data import', () => {
 
         const features = map.getActiveLayerFeatures();
         expect(features).length(12);
-        features.forEach((f) => {
-          expect(f.getId()).not.undefined;
-          expect(f.getStyle()).not.null;
-          expect(f.getStyle()).length(1);
-        });
+        features.forEach((f) => expect(f.getId()).not.undefined);
       })
       .then(() => History.undo())
       .then(() => MainMap.getReference())
@@ -87,11 +83,7 @@ describe('Data import', () => {
 
         const features = map.getActiveLayerFeatures();
         expect(features).length(12);
-        features.forEach((f) => {
-          expect(f.getId()).not.undefined;
-          expect(f.getStyle()).not.null;
-          expect(f.getStyle()).length(1);
-        });
+        features.forEach((f) => expect(f.getId()).not.undefined);
       })
       .then(() => History.undo())
       .then(() => MainMap.getReference())

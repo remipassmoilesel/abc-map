@@ -20,7 +20,6 @@ import React, { Component, ReactNode } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { FrontendRoutes } from '@abc-map/shared';
 import MapView from './views/map/MapView';
-import { Provider } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
 import LandingView from './views/landing/LandingView';
 import LayoutView from './views/layout/LayoutView';
@@ -30,7 +29,6 @@ import NotFoundView from './views/not-found/NotFoundView';
 import DocumentationView from './views/documentation/DocumentationView';
 import ConfirmAccountView from './views/confirm-account/ConfirmAccountView';
 import { Env } from './core/utils/Env';
-import { mainStore } from './core/store/store';
 import RenameModal from './components/rename-modal/RenameModal';
 import PasswordModal from './components/password-modal/PasswordModal';
 import DeviceWarningModal from './components/device-warning-modal/DeviceWarningModal';
@@ -47,32 +45,30 @@ import UserAccountView from './views/user-account/UserAccountView';
 class App extends Component<ServiceProps, {}> {
   public render(): ReactNode {
     return (
-      <Provider store={mainStore}>
-        <BrowserRouter>
-          <TopBar />
-          <Switch>
-            <Route exact path={FrontendRoutes.landing().raw()} component={LandingView} />
-            <Route exact path={FrontendRoutes.map().raw()} component={MapView} />
-            <Route exact path={FrontendRoutes.dataStore().raw()} component={DataStoreView} />
-            <Route exact path={FrontendRoutes.layout().raw()} component={LayoutView} />
-            <Route exact path={FrontendRoutes.documentation().raw()} component={DocumentationView} />
-            <Route exact path={FrontendRoutes.confirmAccount().raw()} component={ConfirmAccountView} />
-            <Route exact path={FrontendRoutes.dataProcessing().raw()} component={DataProcessingView} />
-            <Route exact path={FrontendRoutes.resetPassword().raw()} component={ResetPasswordView} />
-            <Route exact path={FrontendRoutes.userAccount().raw()} component={UserAccountView} />
-            <Route path={'*'} component={NotFoundView} />
-          </Switch>
-          <ToastContainer className={'toast-container'} />
-          <RenameModal />
-          <PasswordModal />
-          <DeviceWarningModal />
-          <EditPropertiesModal />
-          <SolicitationModal />
-          <LoginModal />
-          <RegistrationModal />
-          <PasswordLostModal />
-        </BrowserRouter>
-      </Provider>
+      <BrowserRouter>
+        <TopBar />
+        <Switch>
+          <Route exact path={FrontendRoutes.landing().raw()} component={LandingView} />
+          <Route exact path={FrontendRoutes.map().raw()} component={MapView} />
+          <Route exact path={FrontendRoutes.dataStore().raw()} component={DataStoreView} />
+          <Route exact path={FrontendRoutes.layout().raw()} component={LayoutView} />
+          <Route exact path={FrontendRoutes.documentation().raw()} component={DocumentationView} />
+          <Route exact path={FrontendRoutes.confirmAccount().raw()} component={ConfirmAccountView} />
+          <Route exact path={FrontendRoutes.dataProcessing().raw()} component={DataProcessingView} />
+          <Route exact path={FrontendRoutes.resetPassword().raw()} component={ResetPasswordView} />
+          <Route exact path={FrontendRoutes.userAccount().raw()} component={UserAccountView} />
+          <Route path={'*'} component={NotFoundView} />
+        </Switch>
+        <ToastContainer className={'toast-container'} />
+        <RenameModal />
+        <PasswordModal />
+        <DeviceWarningModal />
+        <EditPropertiesModal />
+        <SolicitationModal />
+        <LoginModal />
+        <RegistrationModal />
+        <PasswordLostModal />
+      </BrowserRouter>
     );
   }
 

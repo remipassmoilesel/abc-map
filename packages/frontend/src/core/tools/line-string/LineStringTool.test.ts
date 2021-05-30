@@ -22,7 +22,7 @@ import VectorSource from 'ol/source/Vector';
 import * as sinon from 'sinon';
 import { MapFactory } from '../../geo/map/MapFactory';
 import { Snap } from 'ol/interaction';
-import { TestHelper } from '../../utils/TestHelper';
+import { TestHelper } from '../../utils/test/TestHelper';
 import { LineStringTool } from './LineStringTool';
 
 describe('LineStringTool', () => {

@@ -28,7 +28,7 @@ import Feature from 'ol/Feature';
 import { Point } from 'ol/geom';
 import { HistoryKey } from '../../history/HistoryKey';
 import { SetFeatureProperties } from '../../history/tasks/features/SetFeatureProperties';
-import { TestHelper } from '../../utils/TestHelper';
+import { TestHelper } from '../../utils/test/TestHelper';
 import { Select } from 'ol/interaction';
 import BaseEvent from 'ol/events/Event';
 

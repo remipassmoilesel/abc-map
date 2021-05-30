@@ -23,7 +23,7 @@ import { Polygon } from 'ol/geom';
 import Geometry from 'ol/geom/Geometry';
 import { FeatureWrapper } from '../../geo/features/FeatureWrapper';
 import Point from 'ol/geom/Point';
-import { TestHelper } from '../../utils/TestHelper';
+import { TestHelper } from '../../utils/test/TestHelper';
 
 describe('findFeatureNearCursor', function () {
   it('should find nothing if source is empty', () => {

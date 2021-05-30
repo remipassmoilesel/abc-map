@@ -108,7 +108,7 @@ class Search extends Component<Props, State> {
     const max = fromLonLat([coords[3], coords[1]], projection);
     const extent = [...min, ...max] as [number, number, number, number];
 
-    this.props.map.moveTo(extent);
+    this.props.map.moveViewTo(extent);
   };
 
   private handleClose = () => {

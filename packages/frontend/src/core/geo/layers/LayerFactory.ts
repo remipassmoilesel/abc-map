@@ -27,7 +27,7 @@ import { LayerWrapper, PredefinedLayerWrapper, VectorLayerWrapper, WmsLayerWrapp
 import VectorImageLayer from 'ol/layer/VectorImage';
 import Geometry from 'ol/geom/Geometry';
 import TileSource from 'ol/source/Tile';
-import { FeatureWrapper } from '../features/FeatureWrapper';
+import { styleFunction } from '../styles/style-function';
 
 export class LayerFactory {
   public static newPredefinedLayer(model: PredefinedLayerModel, meta?: PredefinedMetadata): PredefinedLayerWrapper {
@@ -76,7 +76,7 @@ export class LayerFactory {
 
   public static newVectorLayer(source?: VectorSource): VectorLayerWrapper {
     const _source = source || new VectorSource();
-    const layer = new VectorImageLayer({ source: _source });
+    const layer = new VectorImageLayer({ style: (f) => styleFunction(1, f), source: _source });
 
     const metadata: VectorMetadata = {
       id: uuid(),
@@ -137,7 +137,6 @@ export class LayerFactory {
 
       layer = this.newVectorLayer(source);
       layer.setMetadata(abcLayer.metadata);
-      source.getFeatures().forEach((f) => FeatureWrapper.from(f).applyStyle());
     }
 
     // Wms layer

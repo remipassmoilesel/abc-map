@@ -17,68 +17,52 @@
  */
 
 import React from 'react';
-import { logger, MainMap } from './MainMap';
-import ReactDOM, { unmountComponentAtNode } from 'react-dom';
-import { act } from 'react-dom/test-utils';
-import { MapWrapper } from '../../../core/geo/map/MapWrapper';
+import { logger } from './MainMap';
+import MainMap from './MainMap';
 import { MapFactory } from '../../../core/geo/map/MapFactory';
 import { LayerFactory } from '../../../core/geo/layers/LayerFactory';
+import { newTestServices, TestServices } from '../../../core/utils/test/TestServices';
+import { abcRender } from '../../../core/utils/test/abcRender';
 
 logger.disable();
 
 describe('MainMap', () => {
-  let container: HTMLDivElement;
-  beforeEach(() => {
-    container = document.createElement('div');
-    document.body.appendChild(container);
-  });
+  let services: TestServices;
 
-  afterEach(() => {
-    unmountComponentAtNode(container);
-    container.remove();
+  beforeEach(() => {
+    services = newTestServices();
   });
 
   describe('Initialization', () => {
     it('should initialize map correctly', () => {
+      // Prepare
       const map = MapFactory.createNaked();
       const internal = map.unwrap();
-
       expect(internal.getTarget()).toBeUndefined();
 
-      act(() => {
-        renderMap(map, container);
-      });
+      // Act
+      abcRender(<MainMap map={map} />, { services });
 
+      // Assert
       expect(internal.getTarget()).toBeInstanceOf(HTMLDivElement);
     });
   });
 
   describe('Cleanup', () => {
     it('should remove target', () => {
+      // Prepare
       const map = MapFactory.createNaked();
       const internal = map.unwrap();
       const vector = LayerFactory.newVectorLayer();
       map.addLayer(vector);
       map.setActiveLayer(vector);
 
-      act(() => {
-        renderMap(map, container);
-      });
+      // Act
+      const { unmount } = abcRender(<MainMap map={map} />, { services });
+      unmount();
 
-      act(() => {
-        unmountComponentAtNode(container);
-      });
-
+      // Assert
       expect(internal.getTarget()).toBeUndefined();
     });
   });
 });
-
-/**
- * Render map with specified parameters then return a reference to component.
- *
- */
-function renderMap(map: MapWrapper, container: HTMLElement): MainMap {
-  // Note: ReactDOM.render() function signature is broken
-  return ReactDOM.render(<MainMap map={map} services={{} as any} />, container) as any;
-}

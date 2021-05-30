@@ -19,8 +19,8 @@
 import { FeatureProperties, FillPatterns, StyleProperties } from '@abc-map/shared';
 import { Circle, LineString, Point, Polygon } from 'ol/geom';
 import { FeatureWrapper } from './FeatureWrapper';
-import { FeatureStyle } from '../style/FeatureStyle';
-import { TestHelper } from '../../utils/TestHelper';
+import { FeatureStyle } from '../styles/FeatureStyle';
+import { TestHelper } from '../../utils/test/TestHelper';
 import { Style } from 'ol/style';
 import Feature from 'ol/Feature';
 import Geometry from 'ol/geom/Geometry';
@@ -94,15 +94,6 @@ describe('FeatureWrapper', () => {
 
       expect(feature.unwrap().get(FeatureProperties.Selected)).toBe(true);
       expect(feature.isSelected()).toBe(true);
-    });
-
-    it('setSelected() should apply style', () => {
-      const feature = FeatureWrapper.create();
-      expect(feature.unwrap().getStyle()).toBeNull();
-
-      feature.setSelected(true);
-
-      expect(feature.unwrap().getStyle()).not.toBeNull();
     });
 
     it('isSelected() should return true', () => {
@@ -185,15 +176,6 @@ describe('FeatureWrapper', () => {
       });
     });
 
-    it('applyStyle()', () => {
-      const feature = FeatureWrapper.create(new Point([4, 5]));
-      expect(feature.unwrap().getStyle()).toBeNull();
-
-      feature.applyStyle();
-
-      expect(feature.unwrap().getStyle()).not.toBeNull();
-    });
-
     describe('setStyleProperties()', () => {
       it('should set all properties', () => {
         const feature = FeatureWrapper.create();
@@ -224,15 +206,6 @@ describe('FeatureWrapper', () => {
         feature.setStyleProperties({ point: { icon: 'test-icon' } });
 
         expect(feature.getAllProperties()).toEqual({ 'abc:style:point:icon': 'test-icon' });
-      });
-
-      it('setStyleProperties() should apply style', () => {
-        const feature = FeatureWrapper.create();
-        expect(feature.unwrap().getStyle()).toBeNull();
-
-        feature.setStyleProperties(TestHelper.sampleStyleProperties());
-
-        expect(feature.unwrap().getStyle()).not.toBeNull();
       });
     });
 
@@ -273,15 +246,6 @@ describe('FeatureWrapper', () => {
       expect(feature.unwrap().get(StyleProperties.FillColor1)).toEqual('#FFFFFF');
       expect(feature.unwrap().get(StyleProperties.FillColor2)).toEqual('#FF0000');
       expect(feature.unwrap().get(StyleProperties.FillPattern)).toEqual(FillPatterns.HatchingObliqueLeft);
-    });
-
-    it('should apply style', () => {
-      const feature = FeatureWrapper.create();
-      expect(feature.unwrap().getStyle()).toBeNull();
-
-      feature.setText('Sample text');
-
-      expect(feature.unwrap().getStyle()).not.toBeNull();
     });
   });
 

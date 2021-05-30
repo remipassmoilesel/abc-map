@@ -24,7 +24,7 @@ import { FrontendRoutes } from '@abc-map/shared';
 
 describe('Authentication', function () {
   beforeEach(() => {
-    TestHelper.init();
+    TestHelper.init().clearLocalStorage();
   });
 
   describe('As a visitor', () => {
@@ -41,7 +41,7 @@ describe('Authentication', function () {
         .then(() => Authentication.login(email, password));
     });
 
-    it('cannot login if account is not enabled', function () {
+    it.skip('cannot login if account is not enabled', function () {
       const email = Registration.newEmail();
       const password = Registration.getPassword();
       Registration.newUser(email)

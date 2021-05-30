@@ -57,7 +57,7 @@ class DataProcessingView extends Component<Props, {}> {
               <i className={'fa fa-cogs'} />
               <h4>
                 Sélectionnez un module
-                <br /> dans le menu à gauche.
+                <br /> dans le menu de gauche.
               </h4>
             </div>
           )}

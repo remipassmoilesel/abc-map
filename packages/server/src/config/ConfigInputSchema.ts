@@ -95,7 +95,6 @@ export const ConfigInputSchema = {
         from: { type: 'string' },
         host: { type: 'string' },
         port: { type: 'number' },
-        secure: { type: 'boolean' },
         auth: {
           type: 'object',
           minProperties: 2,

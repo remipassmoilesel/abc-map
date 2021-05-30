@@ -22,13 +22,13 @@ import { MainState } from '../../../../../core/store/reducer';
 import { MapActions } from '../../../../../core/store/map/actions';
 import { ServiceProps, withServices } from '../../../../../core/withServices';
 import { Modal } from 'react-bootstrap';
-import { getAllIcons, safeGetIcon, PointIcon } from '../../../../../core/geo/style/PointIcons';
-import { IconProcessor } from '../../../../../core/geo/style/IconProcessor';
+import { getAllIcons, safeGetIcon, PointIcon } from '../../../../../core/geo/styles/PointIcons';
+import { IconProcessor } from '../../../../../core/geo/styles/IconProcessor';
 import Cls from './PointIconSelector.module.scss';
 
 interface IconPreview {
   icon: PointIcon;
-  preview: HTMLImageElement;
+  preview: string;
 }
 
 const mapStateToProps = (state: MainState) => ({
@@ -49,7 +49,7 @@ interface State {
   selectedPreview?: IconPreview;
 }
 
-const previewColor = '#005de2';
+const defaultPreviewColor = '#005de2';
 
 class PointIconSelector extends Component<Props, State> {
   constructor(props: Props) {
@@ -70,7 +70,7 @@ class PointIconSelector extends Component<Props, State> {
         <div className={'mr-2'}>Icône: </div>
         <button onClick={this.handleOpen} className={'btn btn-outline-secondary btn-sm'}>
           {!selected && 'Choisir'}
-          {selected && <img src={selected.preview.src} alt={selected.icon.name} />}
+          {selected && <img src={selected.preview} alt={selected.icon.name} />}
         </button>
 
         <Modal show={modal} onHide={this.handleCancel} size={'lg'} className={Cls.modal}>
@@ -82,7 +82,7 @@ class PointIconSelector extends Component<Props, State> {
               {iconPreviews.map((i) => (
                 <img
                   key={i.icon.name}
-                  src={i.preview.src}
+                  src={i.preview}
                   onClick={() => this.handleSelection(i.icon)}
                   className={`btn btn-outline-secondary ${Cls.iconPreview}`}
                   alt={i.icon.name}
@@ -100,21 +100,17 @@ class PointIconSelector extends Component<Props, State> {
   }
 
   public componentDidUpdate(prevProps: Readonly<Props>) {
-    if (this.props.point?.icon !== prevProps.point?.icon) {
+    const iconChanged = this.props.point?.icon !== prevProps.point?.icon;
+    const colorChanged = this.props.point?.color !== prevProps.point?.color;
+    if (iconChanged || colorChanged) {
       this.updateSelectedPreview();
     }
   }
 
   private handleOpen = (): void => {
-    // If not already done, we prepare icon previews
-    if (!this.state.iconPreviews.length) {
-      const icons = getAllIcons().map((i) => {
-        return { icon: i, preview: IconProcessor.prepare(i, 50, previewColor) };
-      });
-      this.setState({ iconPreviews: icons, modal: true });
-    } else {
-      this.setState({ modal: true });
-    }
+    const color = this.props.point?.color || defaultPreviewColor;
+    const iconPreviews = getAllIcons().map((i) => ({ icon: i, preview: IconProcessor.prepare(i, 50, color) }));
+    this.setState({ iconPreviews, modal: true });
   };
 
   private handleCancel = (): void => {
@@ -146,8 +142,9 @@ class PointIconSelector extends Component<Props, State> {
       return;
     }
 
+    const color = this.props.point?.color || defaultPreviewColor;
     const icon = safeGetIcon(iconName);
-    const preview = IconProcessor.prepare(icon, 20, previewColor);
+    const preview = IconProcessor.prepare(icon, 20, color);
     const selectedPreview: IconPreview = { icon, preview };
     this.setState({ selectedPreview });
   }

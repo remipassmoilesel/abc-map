@@ -192,6 +192,8 @@ class ProjectControls extends Component<Props, State> {
         return toasts.error('Vous devez sélectionner un fichier au format abm2');
       }
 
+      toasts.info('Chargement ...');
+
       let password: string | undefined;
       if (await project.compressedContainsCredentials(file)) {
         const ev = await modals.projectPassword();
@@ -201,7 +203,6 @@ class ProjectControls extends Component<Props, State> {
         password = ev.value;
       }
 
-      toasts.info('Chargement ...');
       await project.loadProject(file, password);
       history.clean();
       toasts.info('Projet importé !');
