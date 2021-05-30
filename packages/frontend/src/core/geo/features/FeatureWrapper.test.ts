@@ -198,6 +198,7 @@ describe('FeatureWrapper', () => {
         expect(ol.get(StyleProperties.PointIcon)).toEqual('star');
         expect(ol.get(StyleProperties.PointSize)).toEqual(5);
         expect(ol.get(StyleProperties.PointColor)).toEqual('#00FF00');
+        expect(ol.get(StyleProperties.ZIndex)).toEqual(5);
       });
 
       it('setStyleProperties() should not set undefined properties', () => {
@@ -226,6 +227,7 @@ describe('FeatureWrapper', () => {
       feature.unwrap().set(StyleProperties.PointIcon, PointIcons.Star);
       feature.unwrap().set(StyleProperties.PointSize, 5);
       feature.unwrap().set(StyleProperties.PointColor, '#00FF00');
+      feature.unwrap().set(StyleProperties.ZIndex, 5);
 
       const properties = feature.getStyleProperties();
 

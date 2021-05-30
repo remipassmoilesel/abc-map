@@ -31,6 +31,7 @@ import TipBubble from '../../../../components/tip-bubble/TipBubble';
 import { ToolTips } from '@abc-map/user-documentation';
 import PointIconSelector from '../point/icon-selector/PointIconSelector';
 import PointSizeSelector from '../point/size-selector/PointSizeSelector';
+import ZIndex from '../_common/z-index/ZIndex';
 
 const logger = Logger.get('SelectionToolPanel.tsx');
 
@@ -49,6 +50,7 @@ class SelectionToolPanel extends Component<ServiceProps, {}> {
         <ColorSelector point={true} stroke={true} fillColor1={true} fillColor2={true} />
         <FillPatternSelector />
         <TextFormat />
+        <ZIndex />
       </div>
     );
   }

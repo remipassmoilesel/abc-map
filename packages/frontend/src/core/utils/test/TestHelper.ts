@@ -224,6 +224,7 @@ export class TestHelper {
         size: 5,
         color: '#00FF00',
       },
+      zIndex: 5,
     };
   }
 

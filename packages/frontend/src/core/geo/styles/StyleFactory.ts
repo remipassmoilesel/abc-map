@@ -72,20 +72,20 @@ export class StyleFactory {
       const icon = IconProcessor.prepare(safeGetIcon(name), size, color);
       // We must use "src" attribute here, as icons may not be loaded
       const pointStyle = new Icon({ src: icon, imgSize: [size, size] });
-      return [new Style({ image: pointStyle, text: textStyle })];
+      return [new Style({ image: pointStyle, text: textStyle, zIndex: properties.zIndex })];
     }
 
     // Line strings
     else if (GeometryType.LINE_STRING === type || GeometryType.MULTI_LINE_STRING === type || GeometryType.LINEAR_RING === type) {
       const stroke = this.createStroke(properties, ratio);
-      return [new Style({ stroke, text: textStyle })];
+      return [new Style({ stroke, text: textStyle, zIndex: properties.zIndex })];
     }
 
     // Others
     else {
       const fill = this.createFill(properties);
       const stroke = this.createStroke(properties, ratio);
-      return [new Style({ fill, stroke, text: textStyle })];
+      return [new Style({ fill, stroke, text: textStyle, zIndex: properties.zIndex })];
     }
   }
 

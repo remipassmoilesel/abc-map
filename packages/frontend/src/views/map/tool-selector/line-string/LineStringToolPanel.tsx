@@ -26,6 +26,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import Cls from './LineStringToolPanel.module.scss';
 import TipBubble from '../../../../components/tip-bubble/TipBubble';
 import { ToolTips } from '@abc-map/user-documentation';
+import ZIndex from '../_common/z-index/ZIndex';
 
 const logger = Logger.get('LineStringToolPanel.tsx');
 
@@ -44,11 +45,12 @@ class LineStringToolPanel extends Component<Props, {}> {
         <TipBubble id={ToolTips.LineString} label={'Aide'} className={'mx-3 mb-4'} />
         <StrokeWidthSelector />
         <ColorSelector stroke={true} />
-        <div className={'d-flex justify-content-center'}>
+        <div className={'d-flex justify-content-center mb-3'}>
           <button className={'btn btn-sm btn-outline-primary mt-3'} onClick={this.handleApplyStyle}>
             Appliquer le style
           </button>
         </div>
+        <ZIndex />
       </div>
     );
   }

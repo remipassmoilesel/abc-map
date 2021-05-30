@@ -131,6 +131,7 @@ export class FeatureWrapper<Geom extends OlGeometry = OlGeometry> {
         size: this.feature.get(StyleProperties.PointSize),
         color: this.feature.get(StyleProperties.PointColor),
       },
+      zIndex: this.feature.get(StyleProperties.ZIndex),
     };
   }
 
@@ -160,6 +161,7 @@ export class FeatureWrapper<Geom extends OlGeometry = OlGeometry> {
     setIfDefined(StyleProperties.PointIcon, properties.point?.icon);
     setIfDefined(StyleProperties.PointSize, properties.point?.size);
     setIfDefined(StyleProperties.PointColor, properties.point?.color);
+    setIfDefined(StyleProperties.ZIndex, properties.zIndex);
 
     return this;
   }
