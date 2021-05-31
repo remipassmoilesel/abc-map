@@ -35,7 +35,7 @@ export function storeFactory(preLoadedState?: MainState): Store<MainState> {
 
 export const mainStore = storeFactory(preLoadedState);
 
-// At every store change, we persist store state in localstorage, but at most 1 time per second
+// At every store change, we persist store state in localstorage, but at most X times per second
 const persist = _.throttle(() => persistence.saveState(mainStore.getState()), 500, { leading: true });
 mainStore.subscribe(() => persist());
 

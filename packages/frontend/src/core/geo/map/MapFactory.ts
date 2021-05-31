@@ -71,7 +71,7 @@ export class MapFactory {
     return map;
   }
 
-  public static createLayout(): MapWrapper {
+  public static createLayoutPreview(): MapWrapper {
     const internal = new Map({
       controls: [],
       interactions: layoutMapInteractions(),

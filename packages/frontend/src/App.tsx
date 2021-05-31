@@ -30,7 +30,7 @@ import DocumentationView from './views/documentation/DocumentationView';
 import ConfirmAccountView from './views/confirm-account/ConfirmAccountView';
 import { Env } from './core/utils/Env';
 import RenameModal from './components/rename-modal/RenameModal';
-import PasswordModal from './components/password-modal/PasswordModal';
+import PasswordInputModal from './components/password-input-modal/PasswordInputModal';
 import DeviceWarningModal from './components/device-warning-modal/DeviceWarningModal';
 import { ServiceProps, withServices } from './core/withServices';
 import DataProcessingView from './views/data-processing/DataProcessingView';
@@ -41,6 +41,7 @@ import RegistrationModal from './components/registration-modal/RegistrationModal
 import PasswordLostModal from './components/password-lost-modal/PasswordLostModal';
 import ResetPasswordView from './views/reset-password/ResetPasswordView';
 import UserAccountView from './views/user-account/UserAccountView';
+import SetPasswordModal from './components/set-password-modal/SetPasswordModal';
 
 class App extends Component<ServiceProps, {}> {
   public render(): ReactNode {
@@ -61,7 +62,8 @@ class App extends Component<ServiceProps, {}> {
         </Switch>
         <ToastContainer className={'toast-container'} />
         <RenameModal />
-        <PasswordModal />
+        <PasswordInputModal />
+        <SetPasswordModal />
         <DeviceWarningModal />
         <EditPropertiesModal />
         <SolicitationModal />

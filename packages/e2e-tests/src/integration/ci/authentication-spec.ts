@@ -38,10 +38,11 @@ describe('Authentication', function () {
       const password = Registration.getPassword();
       Registration.newUser(email)
         .then(() => Registration.enableAccount(email))
-        .then(() => Authentication.login(email, password));
+        .then(() => Authentication.login(email, password))
+        .then(() => Authentication.logout());
     });
 
-    it.skip('cannot login if account is not enabled', function () {
+    it('cannot login if account is not enabled', function () {
       const email = Registration.newEmail();
       const password = Registration.getPassword();
       Registration.newUser(email)

@@ -7,7 +7,8 @@
   ],
   "scripts": {
     "start:watch": "react-app-rewired start",
-    "lint": "eslint './src/**/{*.tsx,*.ts}' --fix --max-warnings=0",
+    "lint": "eslint './src/**/{*.tsx,*.ts}' --max-warnings=0",
+    "lint-fix": "yarn run lint --fix",
     "build": "CI=true yarn run build:version && react-app-rewired build && yarn run build:check",
     "build:version": "./scripts/build-version.js",
     "build:check": "./scripts/check-build.js",

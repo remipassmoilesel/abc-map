@@ -26,6 +26,7 @@ import { FileIO, InputResultType, InputType } from '../../../core/utils/FileIO';
 import RemoteProjectModal from './RemoteProjectsModal';
 import { ModalStatus } from '../../../core/ui/typings';
 import { ServiceProps, withServices } from '../../../core/withServices';
+import { Encryption } from '../../../core/utils/Encryption';
 
 const logger = Logger.get('ProjectControls.tsx');
 
@@ -110,7 +111,7 @@ class ProjectControls extends Component<Props, State> {
     const save = async () => {
       let password: string | undefined;
       if (geo.getMainMap().containsCredentials()) {
-        const event = await modals.projectPassword();
+        const event = await modals.setProjectPassword();
         if (event.status === ModalStatus.Canceled) {
           return;
         }
@@ -132,7 +133,7 @@ class ProjectControls extends Component<Props, State> {
       .solicitation()
       .then(() => save())
       .catch((err) => {
-        logger.error(err);
+        logger.error('Cannot save project: ', err);
         toasts.genericError();
       });
   };
@@ -151,7 +152,7 @@ class ProjectControls extends Component<Props, State> {
     const exportProject = async () => {
       let password: string | undefined;
       if (geo.getMainMap().containsCredentials()) {
-        const event = await modals.projectPassword();
+        const event = await modals.setProjectPassword();
         if (event.status === ModalStatus.Canceled) {
           return;
         }
@@ -168,7 +169,7 @@ class ProjectControls extends Component<Props, State> {
       .solicitation()
       .then(() => exportProject())
       .catch((err) => {
-        logger.error(err);
+        logger.error('Cannot export project: ', err);
         toasts.genericError();
       });
   };
@@ -196,7 +197,7 @@ class ProjectControls extends Component<Props, State> {
 
       let password: string | undefined;
       if (await project.compressedContainsCredentials(file)) {
-        const ev = await modals.projectPassword();
+        const ev = await modals.getProjectPassword();
         if (ev.status === ModalStatus.Canceled) {
           return;
         }
@@ -209,8 +210,13 @@ class ProjectControls extends Component<Props, State> {
     };
 
     importProject().catch((err) => {
-      logger.error(err);
-      toasts.genericError();
+      logger.error('Cannot import project: ', err);
+
+      if (Encryption.isInvalidPasswordError(err)) {
+        toasts.error('Mot de passe incorrect !');
+      } else {
+        toasts.genericError();
+      }
     });
   };
 }

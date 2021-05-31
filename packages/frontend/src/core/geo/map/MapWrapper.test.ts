@@ -284,4 +284,36 @@ describe('MapWrapper', function () {
       expect(TestHelper.interactionCount(map.unwrap(), 'Draw')).toEqual(1);
     });
   });
+
+  describe('containsCredentials()', () => {
+    it('should return false', () => {
+      const map = MapFactory.createNaked();
+      map.addLayer(LayerFactory.newVectorLayer());
+
+      expect(map.containsCredentials()).toEqual(false);
+    });
+
+    it('should return true if XYZ layer', () => {
+      const map = MapFactory.createNaked();
+      map.addLayer(LayerFactory.newXyzLayer('http://test-url'));
+
+      expect(map.containsCredentials()).toEqual(true);
+    });
+
+    it('should return true if WMS layer with credentials', () => {
+      const map = MapFactory.createNaked();
+      map.addLayer(
+        LayerFactory.newWmsLayer({
+          remoteUrl: 'test-remoteUrl',
+          remoteLayerName: 'test-remoteLayerName',
+          auth: {
+            username: 'username',
+            password: 'password',
+          },
+        })
+      );
+
+      expect(map.containsCredentials()).toEqual(true);
+    });
+  });
 });

@@ -27,6 +27,7 @@ import {
   AbcProjectManifest,
   AbcVectorLayer,
   AbcWmsLayer,
+  AbcXyzLayer,
   CompressedProject,
   DEFAULT_PROJECTION,
   FillPatterns,
@@ -55,7 +56,7 @@ export class TestHelper {
     return [this.samplePointFeature(), this.samplePointFeature(), this.samplePointFeature()];
   }
 
-  public static sampleProject(): AbcProjectManifest {
+  public static sampleProjectManifest(): AbcProjectManifest {
     return {
       metadata: {
         id: uuid(),
@@ -70,7 +71,7 @@ export class TestHelper {
   }
 
   public static async sampleCompressedProject(): Promise<CompressedProject<Blob>> {
-    const project = this.sampleProject();
+    const project = this.sampleProjectManifest();
     const metadata = project.metadata;
     const zip = await Zipper.forFrontend().zipFiles([{ path: ProjectConstants.ManifestName, content: new Blob([JSON.stringify(project)]) }]);
     return {
@@ -144,6 +145,24 @@ export class TestHelper {
         auth: {
           username: 'test-username',
           password: 'test-password',
+        },
+      },
+    };
+  }
+
+  public static sampleXyzLayer(): AbcXyzLayer {
+    return {
+      type: LayerType.Xyz,
+      metadata: {
+        id: uuid(),
+        name: 'Couche XYZ',
+        type: LayerType.Xyz,
+        visible: true,
+        active: true,
+        opacity: 1,
+        remoteUrl: 'http://remote-url',
+        projection: {
+          name: 'EPSG:4326',
         },
       },
     };

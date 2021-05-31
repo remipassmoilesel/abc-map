@@ -24,6 +24,7 @@ import { Services } from '../../Services';
 import { Provider } from 'react-redux';
 import { storeFactory } from '../../store/store';
 import { MainState } from '../../store/reducer';
+import { MemoryRouter } from 'react-router-dom';
 
 interface Options extends RenderOptions {
   services?: TestServices;
@@ -37,9 +38,11 @@ export function abcRender(ui: React.ReactElement, options?: Options): RenderResu
       const services = options?.services || newTestServices();
 
       return (
-        <ServiceProvider value={services as unknown as Services}>
-          <Provider store={store}>{ui}</Provider>
-        </ServiceProvider>
+        <MemoryRouter>
+          <ServiceProvider value={services as unknown as Services}>
+            <Provider store={store}>{ui}</Provider>
+          </ServiceProvider>
+        </MemoryRouter>
       );
     }
   }

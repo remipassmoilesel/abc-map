@@ -41,7 +41,7 @@ export class BuildService {
     const start = new Date().getTime();
 
     await this.install(Dependencies.Development);
-    this.lint();
+    this.lint(false);
     this.cleanBuild();
     this.dependencyCheck(); // Dependency check must be launched AFTER build for local dependencies
     this.test();
@@ -96,8 +96,10 @@ export class BuildService {
     });
   }
 
-  public lint(): void {
-    this.shell.sync('lerna run lint');
+  public lint(fix: boolean): void {
+    const lintTask = fix ? 'lint-fix' : 'lint';
+    this.shell.sync(`lerna run ${lintTask}`);
+
     this.shell.sync('lerna exec "sort-package-json"');
     this.shell.sync(`helm lint ${this.config.getChartRoot()}`);
   }

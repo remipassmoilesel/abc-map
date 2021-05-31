@@ -18,18 +18,21 @@
 
 import React, { ChangeEvent, Component, ReactNode } from 'react';
 import { Modal } from 'react-bootstrap';
-import { ModalEventListener, ModalEventType, ModalStatus, ShowPasswordModal } from '../../core/ui/typings';
+import { ModalEventListener, ModalEventType, ModalStatus, ShowPasswordInputModal } from '../../core/ui/typings';
 import { ServiceProps, withServices } from '../../core/withServices';
+import FormValidationLabel, { FormState } from '../form-state-label/FormValidationLabel';
+import { PasswordStrength, ValidationHelper } from '../../core/utils/ValidationHelper';
 
 interface State {
   visible: boolean;
   title: string;
   message: string;
   value: string;
-  listener?: ModalEventListener<ShowPasswordModal>;
+  formState: FormState;
+  listener?: ModalEventListener<ShowPasswordInputModal>;
 }
 
-class PasswordModal extends Component<ServiceProps, State> {
+class PasswordInputModal extends Component<ServiceProps, State> {
   constructor(props: ServiceProps) {
     super(props);
     this.state = {
@@ -37,6 +40,7 @@ class PasswordModal extends Component<ServiceProps, State> {
       title: '',
       message: '',
       value: '',
+      formState: FormState.InvalidPassword,
     };
   }
 
@@ -48,6 +52,10 @@ class PasswordModal extends Component<ServiceProps, State> {
       return <div />;
     }
 
+    const value = this.state.value;
+    const formState = this.state.formState;
+    const submitDisabled = formState !== FormState.Ok;
+
     return (
       <Modal show={visible} onHide={this.handleCancel}>
         <Modal.Header closeButton>
@@ -55,14 +63,32 @@ class PasswordModal extends Component<ServiceProps, State> {
         </Modal.Header>
         <Modal.Body>
           <div>{message}</div>
+
           <div className={'m-3'}>
-            <input className={'form-control'} type={'password'} value={this.state.value} onChange={this.handleInputChange} data-cy="modal-password-input" />
+            <input
+              className={'form-control'}
+              type={'password'}
+              value={value}
+              placeholder={'Mot de passe'}
+              onChange={this.handleInputChange}
+              data-cy="password-input"
+              data-testid="password-input"
+            />
           </div>
+
+          <FormValidationLabel state={formState} />
+
           <div className={'d-flex justify-content-end'}>
-            <button className={'btn btn-secondary mr-3'} onClick={this.handleCancel} data-cy="modal-password-cancel">
+            <button className={'btn btn-secondary mr-3'} onClick={this.handleCancel} data-cy="password-cancel" data-testid={'password-cancel'}>
               Annuler
             </button>
-            <button className={'btn btn-primary'} onClick={this.handleConfirm} data-cy="modal-password-confirm">
+            <button
+              className={'btn btn-primary'}
+              onClick={this.handleConfirm}
+              disabled={submitDisabled}
+              data-cy="password-confirm"
+              data-testid={'password-confirm'}
+            >
               Confirmer
             </button>
           </div>
@@ -74,8 +100,8 @@ class PasswordModal extends Component<ServiceProps, State> {
   public componentDidMount() {
     const { modals } = this.props.services;
 
-    const listener: ModalEventListener<ShowPasswordModal> = (ev) => this.setState({ visible: true, title: ev.title, message: ev.message });
-    modals.addListener(ModalEventType.ShowPassword, listener);
+    const listener: ModalEventListener<ShowPasswordInputModal> = (ev) => this.setState({ visible: true, title: ev.title, message: ev.message });
+    modals.addListener(ModalEventType.ShowPasswordInput, listener);
     this.setState({ listener });
   }
 
@@ -83,20 +109,22 @@ class PasswordModal extends Component<ServiceProps, State> {
     const { modals } = this.props.services;
 
     if (this.state.listener) {
-      modals.removeListener(ModalEventType.ShowPassword, this.state.listener);
+      modals.removeListener(ModalEventType.ShowPasswordInput, this.state.listener);
     }
   }
 
   private handleInputChange = (ev: ChangeEvent<HTMLInputElement>) => {
-    this.setState({ value: ev.target.value });
+    const value = ev.target.value;
+    const formState = this.validateForm(value);
+    this.setState({ value, formState });
   };
 
   private handleCancel = () => {
     const { modals } = this.props.services;
 
     modals.dispatch({
-      type: ModalEventType.PasswordClosed,
-      value: this.state.value,
+      type: ModalEventType.PasswordInputClosed,
+      value: '',
       status: ModalStatus.Canceled,
     });
 
@@ -106,14 +134,29 @@ class PasswordModal extends Component<ServiceProps, State> {
   private handleConfirm = () => {
     const { modals } = this.props.services;
 
+    const formState = this.validateForm(this.state.value);
+    if (formState !== FormState.Ok) {
+      this.setState({ formState });
+      return;
+    }
+
     modals.dispatch({
-      type: ModalEventType.PasswordClosed,
+      type: ModalEventType.PasswordInputClosed,
       value: this.state.value,
       status: ModalStatus.Confirmed,
     });
 
     this.setState({ visible: false, value: '' });
   };
+
+  private validateForm(password: string): FormState {
+    // Check password strength
+    if (ValidationHelper.password(password) !== PasswordStrength.Correct) {
+      return FormState.InvalidPassword;
+    }
+
+    return FormState.Ok;
+  }
 }
 
-export default withServices(PasswordModal);
+export default withServices(PasswordInputModal);

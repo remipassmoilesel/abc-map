@@ -37,7 +37,12 @@ export class LabelledLayerTypes {
     label: 'Couche distante (WMS)',
   };
 
-  public static readonly All: LabelledLayerType[] = [LabelledLayerTypes.BaseMap, LabelledLayerTypes.Vector, LabelledLayerTypes.Wms];
+  public static readonly Xyz: LabelledLayerType = {
+    id: 'Xyz',
+    label: 'Couche distante (XYZ)',
+  };
+
+  public static readonly All: LabelledLayerType[] = [LabelledLayerTypes.BaseMap, LabelledLayerTypes.Vector, LabelledLayerTypes.Wms, LabelledLayerTypes.Xyz];
 
   public static find(value: string): LabelledLayerType | undefined {
     return LabelledLayerTypes.All.find((type) => type.id === value);

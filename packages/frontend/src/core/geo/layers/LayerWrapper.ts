@@ -17,7 +17,7 @@
  */
 
 import TileLayer from 'ol/layer/Tile';
-import { Logger } from '@abc-map/shared';
+import { Logger, XyzLayerProperties, XyzMetadata } from '@abc-map/shared';
 import {
   AbcLayer,
   AbcProjection,
@@ -39,7 +39,7 @@ import TileSource from 'ol/source/Tile';
 import VectorSource from 'ol/source/Vector';
 import Geometry from 'ol/geom/Geometry';
 import VectorImageLayer from 'ol/layer/VectorImage';
-import { Source } from 'ol/source';
+import { Source, XYZ } from 'ol/source';
 import { Layer } from 'ol/layer';
 import { styleFunction } from '../styles/style-function';
 
@@ -51,6 +51,7 @@ export declare type OlSources = Source | VectorSource<Geometry> | TileSource;
 export declare type VectorLayerWrapper = LayerWrapper<VectorImageLayer, VectorSource<Geometry>, VectorMetadata>;
 export declare type PredefinedLayerWrapper = LayerWrapper<TileLayer, TileSource, PredefinedMetadata>;
 export declare type WmsLayerWrapper = LayerWrapper<TileLayer, TileSource, WmsMetadata>;
+export declare type XyzLayerWrapper = LayerWrapper<TileLayer, XYZ, XyzMetadata>;
 
 export class LayerWrapper<Layer extends OlLayers = OlLayers, Source extends OlSources = OlSources, Meta extends LayerMetadata = LayerMetadata> {
   public static from<L extends OlLayers, S extends OlSources, M extends LayerMetadata>(layer: L): LayerWrapper<L, S, M> {
@@ -146,6 +147,10 @@ export class LayerWrapper<Layer extends OlLayers = OlLayers, Source extends OlSo
     return this.getType() === LayerType.Wms;
   }
 
+  public isXyz(): this is XyzLayerWrapper {
+    return this.getType() === LayerType.Xyz;
+  }
+
   /**
    * Shallow clone layer
    */
@@ -177,12 +182,18 @@ export class LayerWrapper<Layer extends OlLayers = OlLayers, Source extends OlSo
       this.setPredefinedMetadata(props as PredefinedMetadata);
     } else if (LayerType.Wms === props.type) {
       this.setWmsMetadata(props as WmsMetadata);
+    } else if (LayerType.Xyz === props.type) {
+      this.setXyzMetadata(props as XyzMetadata);
     }
     return this;
   }
 
   private setPredefinedMetadata(props: PredefinedMetadata): void {
     this.layer.set(PredefinedLayerProperties.Model, props.model);
+  }
+
+  private setXyzMetadata(props: XyzMetadata): void {
+    this.layer.set(XyzLayerProperties.Url, props.remoteUrl);
   }
 
   private setWmsMetadata(props: WmsMetadata): void {
@@ -202,6 +213,8 @@ export class LayerWrapper<Layer extends OlLayers = OlLayers, Source extends OlSo
       return this.getVectorMetadata() as Meta;
     } else if (this.isWms()) {
       return this.getWmsMetadata() as Meta;
+    } else if (this.isXyz()) {
+      return this.getXyzMetadata() as Meta;
     }
   }
 
@@ -292,6 +305,27 @@ export class LayerWrapper<Layer extends OlLayers = OlLayers, Source extends OlSo
     };
   }
 
+  private getXyzMetadata(): XyzMetadata | undefined {
+    const base = this.getBaseMetadata();
+    if (!base) {
+      return;
+    }
+
+    const remoteUrl: string | undefined = this.layer.get(XyzLayerProperties.Url);
+    const projection: string | undefined = this.layer.get(XyzLayerProperties.Projection);
+    if (base.type !== LayerType.Xyz || !remoteUrl) {
+      logger.error('Invalid layer: ', [this.layer, base]);
+      return;
+    }
+
+    return {
+      ...base,
+      type: LayerType.Xyz,
+      remoteUrl,
+      projection: (projection && { name: projection }) || undefined,
+    };
+  }
+
   public async toAbcLayer(): Promise<AbcLayer> {
     const commonMeta = this.getMetadata();
     if (!commonMeta) {
@@ -334,6 +368,18 @@ export class LayerWrapper<Layer extends OlLayers = OlLayers, Source extends OlSo
       }
       return {
         type: LayerType.Wms,
+        metadata: meta,
+      };
+    }
+
+    // XYZ Layer
+    else if (this.isXyz()) {
+      const meta = this.getXyzMetadata();
+      if (!meta) {
+        return Promise.reject(new Error('Invalid wms layer'));
+      }
+      return {
+        type: LayerType.Xyz,
         metadata: meta,
       };
     }

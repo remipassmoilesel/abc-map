@@ -21,8 +21,10 @@ import { SimplePropertiesMap } from '../geo/features/FeatureWrapper';
 export enum ModalEventType {
   ShowRename = 'ShowRename',
   RenameClosed = 'RenameClosed',
-  ShowPassword = 'ShowPassword',
-  PasswordClosed = 'PasswordClosed',
+  ShowPasswordInput = 'ShowPasswordInput',
+  PasswordInputClosed = 'PasswordInputClosed',
+  ShowSetPassword = 'ShowSetPassword',
+  SetPasswordClosed = 'SetPasswordClosed',
   ShowFeatureProperties = 'ShowFeatureProperties',
   FeaturePropertiesClosed = 'FeaturePropertiesClosed',
   ShowSolicitation = 'ShowSolicitation',
@@ -53,14 +55,26 @@ export interface RenameModalClosedEvent {
   status: ModalStatus;
 }
 
-export interface ShowPasswordModal {
-  type: ModalEventType.ShowPassword;
+export interface ShowPasswordInputModal {
+  type: ModalEventType.ShowPasswordInput;
+  title: string;
+  message: string;
+}
+
+export interface ShowSetPasswordModal {
+  type: ModalEventType.ShowSetPassword;
   title: string;
   message: string;
 }
 
 export interface PasswordModalClosedEvent {
-  type: ModalEventType.PasswordClosed;
+  type: ModalEventType.PasswordInputClosed;
+  value: string;
+  status: ModalStatus;
+}
+
+export interface SetPasswordModalClosedEvent {
+  type: ModalEventType.SetPasswordClosed;
   value: string;
   status: ModalStatus;
 }
@@ -115,8 +129,10 @@ export interface PasswordLostClosedEvent {
 export declare type ModalEvent =
   | ShowRenameModal
   | RenameModalClosedEvent
-  | ShowPasswordModal
+  | ShowPasswordInputModal
+  | ShowSetPasswordModal
   | PasswordModalClosedEvent
+  | SetPasswordModalClosedEvent
   | ShowFeaturePropertiesModal
   | FeaturePropertiesClosedEvent
   | ShowSolicitationModal

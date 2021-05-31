@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcPredefinedLayer, AbcVectorLayer, LayerType, PredefinedLayerModel } from './AbcLayer';
+import { AbcPredefinedLayer, AbcVectorLayer, AbcWmsLayer, AbcXyzLayer, LayerType, PredefinedLayerModel } from './AbcLayer';
 
 /**
  * If this test fail, you should write a migration script then adapt it
@@ -63,6 +63,7 @@ describe('AbcLayer', () => {
   it('PredefinedLayer should not change without migration', () => {
     /* eslint-disable */
     const layerWitness = '{"type":"Predefined","metadata":{"id":"test-layer-id","name":"Test predefined layer","active":true,"visible":true,"opacity":0.5,"type":"Predefined","model":"OSM"}}';
+    const modelsWitness = '"{\\"OSM\\":\\"OSM\\",\\"StamenToner\\":\\"StamenToner\\",\\"StamenTonerLite\\":\\"StamenTonerLite\\",\\"StamenTerrain\\":\\"StamenTerrain\\",\\"StamenWatercolor\\":\\"StamenWatercolor\\"}"';
     /* eslint-enable */
 
     const currentLayer: AbcPredefinedLayer = {
@@ -77,12 +78,58 @@ describe('AbcLayer', () => {
         model: PredefinedLayerModel.OSM,
       },
     };
+    const currentModels = JSON.stringify(PredefinedLayerModel);
 
     expect(JSON.stringify(currentLayer)).toEqual(layerWitness);
-
-    const modelsWitness = '["OSM"]';
-    const currentModels = [PredefinedLayerModel.OSM];
-
     expect(JSON.stringify(currentModels)).toEqual(modelsWitness);
+  });
+
+  it('WMS layer should not change without migration', () => {
+    /* eslint-disable */
+    const layerWitness = '{"type":"Wms","metadata":{"id":"test-layer-id","name":"Test wms layer","active":true,"visible":true,"opacity":0.5,"type":"Wms","auth":{"username":"test-username","password":"test-password"},"extent":[1,1,1,1],"projection":{"name":"EPSG:4326"},"remoteLayerName":"test-remoteLayerName","remoteUrl":"test-remoteUrl"}}';
+    /* eslint-enable */
+
+    const currentLayer: AbcWmsLayer = {
+      type: LayerType.Wms,
+      metadata: {
+        id: 'test-layer-id',
+        name: 'Test wms layer',
+        active: true,
+        visible: true,
+        opacity: 0.5,
+        type: LayerType.Wms,
+        auth: {
+          username: 'test-username',
+          password: 'test-password',
+        },
+        extent: [1, 1, 1, 1],
+        projection: { name: 'EPSG:4326' },
+        remoteLayerName: 'test-remoteLayerName',
+        remoteUrl: 'test-remoteUrl',
+      },
+    };
+
+    expect(JSON.stringify(currentLayer)).toEqual(layerWitness);
+  });
+
+  it('XYZ layer should not change without migration', () => {
+    /* eslint-disable */
+    const layerWitness = '{"type":"Xyz","metadata":{"id":"test-layer-id","name":"Test wms layer","active":true,"visible":true,"opacity":0.5,"type":"Xyz","remoteUrl":"test-remoteUrl"}}';
+    /* eslint-enable */
+
+    const currentLayer: AbcXyzLayer = {
+      type: LayerType.Xyz,
+      metadata: {
+        id: 'test-layer-id',
+        name: 'Test wms layer',
+        active: true,
+        visible: true,
+        opacity: 0.5,
+        type: LayerType.Xyz,
+        remoteUrl: 'test-remoteUrl',
+      },
+    };
+
+    expect(JSON.stringify(currentLayer)).toEqual(layerWitness);
   });
 });

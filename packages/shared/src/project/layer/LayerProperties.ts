@@ -69,3 +69,8 @@ export enum WmsLayerProperties {
   Projection = 'abc:layer:wms:projection',
   Extent = 'abc:layer:wms:extent',
 }
+
+export enum XyzLayerProperties {
+  Url = 'abc:layer:xyz:url',
+  Projection = 'abc:layer:xyz:projection',
+}

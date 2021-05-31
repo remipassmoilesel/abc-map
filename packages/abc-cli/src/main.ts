@@ -60,7 +60,7 @@ async function main(args: string[]) {
       break;
 
     case CommandName.LINT:
-      service.lint();
+      service.lint(true);
       break;
 
     case CommandName.BUILD:

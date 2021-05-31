@@ -19,9 +19,18 @@
 import { FeatureCollection } from 'geojson';
 import { AbcProjection } from '../AbcProjection';
 
-export type AbcLayer = AbcVectorLayer | AbcPredefinedLayer | AbcWmsLayer;
+export type AbcLayer = AbcVectorLayer | AbcPredefinedLayer | AbcWmsLayer | AbcXyzLayer;
 
-export type LayerMetadata = VectorMetadata | PredefinedMetadata | WmsMetadata;
+export type LayerMetadata = VectorMetadata | PredefinedMetadata | WmsMetadata | XyzMetadata;
+
+export enum LayerType {
+  Vector = 'Vector',
+  Predefined = 'Predefined',
+  Wms = 'Wms',
+  Xyz = 'Xyz',
+}
+
+// Base types
 
 export interface AbcBaseLayer {
   type: LayerType;
@@ -37,14 +46,39 @@ export interface BaseMetadata {
   type: LayerType;
 }
 
+// Vector layer
+
 export interface VectorMetadata extends BaseMetadata {
   type: LayerType.Vector;
 }
+
+export interface AbcVectorLayer extends AbcBaseLayer {
+  type: LayerType.Vector;
+  metadata: VectorMetadata;
+  features: FeatureCollection;
+}
+
+// Predefined layers
 
 export interface PredefinedMetadata extends BaseMetadata {
   type: LayerType.Predefined;
   model: PredefinedLayerModel;
 }
+
+export interface AbcPredefinedLayer extends AbcBaseLayer {
+  type: LayerType.Predefined;
+  metadata: PredefinedMetadata;
+}
+
+export enum PredefinedLayerModel {
+  OSM = 'OSM',
+  StamenToner = 'StamenToner',
+  StamenTonerLite = 'StamenTonerLite',
+  StamenTerrain = 'StamenTerrain',
+  StamenWatercolor = 'StamenWatercolor',
+}
+
+// WMS
 
 export interface WmsMetadata extends BaseMetadata {
   type: LayerType.Wms;
@@ -58,32 +92,20 @@ export interface WmsMetadata extends BaseMetadata {
   };
 }
 
-export enum LayerType {
-  Vector = 'Vector',
-  Predefined = 'Predefined',
-  Wms = 'Wms',
-}
-
-export interface AbcVectorLayer extends AbcBaseLayer {
-  type: LayerType.Vector;
-  metadata: VectorMetadata;
-  features: FeatureCollection;
-}
-
-export interface AbcPredefinedLayer extends AbcBaseLayer {
-  type: LayerType.Predefined;
-  metadata: PredefinedMetadata;
-}
-
 export interface AbcWmsLayer extends AbcBaseLayer {
   type: LayerType.Wms;
   metadata: WmsMetadata;
 }
 
-export enum PredefinedLayerModel {
-  OSM = 'OSM',
-  StamenToner = 'StamenToner',
-  StamenTonerLite = 'StamenTonerLite',
-  StamenTerrain = 'StamenTerrain',
-  StamenWatercolor = 'StamenWatercolor',
+// XYZ
+
+export interface XyzMetadata extends BaseMetadata {
+  type: LayerType.Xyz;
+  projection?: AbcProjection;
+  remoteUrl: string;
+}
+
+export interface AbcXyzLayer extends AbcBaseLayer {
+  type: LayerType.Xyz;
+  metadata: XyzMetadata;
 }

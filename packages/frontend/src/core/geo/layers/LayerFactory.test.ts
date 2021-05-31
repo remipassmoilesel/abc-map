@@ -22,7 +22,7 @@ import { TileWMS } from 'ol/source';
 import { LayerProperties, LayerType, PredefinedLayerModel, WmsDefinition } from '@abc-map/shared';
 import { TestHelper } from '../../utils/test/TestHelper';
 import TileLayer from 'ol/layer/Tile';
-import { VectorLayerWrapper, WmsLayerWrapper } from './LayerWrapper';
+import { VectorLayerWrapper, WmsLayerWrapper, XyzLayerWrapper } from './LayerWrapper';
 import VectorImageLayer from 'ol/layer/VectorImage';
 
 describe('LayerFactory', () => {
@@ -229,7 +229,7 @@ describe('LayerFactory', () => {
       expect(features).toHaveLength(2);
     });
 
-    it('with wms layer, without authentication', async () => {
+    it('with WMS layer, without authentication', async () => {
       const abcLayer = TestHelper.sampleWmsLayer();
       abcLayer.metadata.auth = undefined;
       abcLayer.metadata.opacity = 0.5;
@@ -256,11 +256,8 @@ describe('LayerFactory', () => {
       expect(layer.unwrap()).toBeInstanceOf(TileLayer);
     });
 
-    it('with wms layer, with authentication', async () => {
+    it('with WMS layer, with authentication', async () => {
       const abcLayer = TestHelper.sampleWmsLayer();
-      abcLayer.metadata.opacity = 0.5;
-      abcLayer.metadata.active = true;
-      abcLayer.metadata.visible = false;
 
       const layer = (await LayerFactory.fromAbcLayer(abcLayer)) as WmsLayerWrapper;
 
@@ -272,6 +269,29 @@ describe('LayerFactory', () => {
       expect(metadata?.extent).toEqual([1, 2, 3, 4]);
       expect(metadata?.auth?.username).toEqual('test-username');
       expect(metadata?.auth?.password).toEqual('test-password');
+      expect(layer.unwrap().get(LayerProperties.Managed)).toBe(true);
+      expect(layer.unwrap()).toBeInstanceOf(TileLayer);
+    });
+
+    it('with XYZ layer, with authentication', async () => {
+      const abcLayer = TestHelper.sampleXyzLayer();
+      abcLayer.metadata.opacity = 0.5;
+      abcLayer.metadata.active = true;
+      abcLayer.metadata.visible = false;
+
+      const layer = (await LayerFactory.fromAbcLayer(abcLayer)) as XyzLayerWrapper;
+
+      expect(layer.unwrap()).toBeInstanceOf(TileLayer);
+      const metadata = layer.getMetadata();
+      expect(metadata).toBeDefined();
+      expect(metadata?.id).toBeDefined();
+      expect(metadata?.id).toEqual(abcLayer.metadata.id);
+      expect(metadata?.name).toEqual('Couche XYZ');
+      expect(metadata?.opacity).toEqual(0.5);
+      expect(metadata?.visible).toEqual(false);
+      expect(metadata?.active).toEqual(true);
+      expect(metadata?.type).toEqual(LayerType.Xyz);
+      expect(metadata?.remoteUrl).toEqual('http://remote-url');
       expect(layer.unwrap().get(LayerProperties.Managed)).toBe(true);
       expect(layer.unwrap()).toBeInstanceOf(TileLayer);
     });

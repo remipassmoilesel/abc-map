@@ -87,7 +87,7 @@ export class ProjectService {
       throw new Error('Password is mandatory when project contains credentials');
     }
 
-    const manifest: AbcProjectManifest = {
+    let manifest: AbcProjectManifest = {
       metadata: {
         ...this.store.getState().project.metadata,
         containsCredentials,
@@ -97,11 +97,7 @@ export class ProjectService {
     };
 
     if (containsCredentials && password) {
-      for (const layer of manifest.layers) {
-        if (LayerType.Wms === layer.type) {
-          layer.metadata = await Encryption.encryptWmsMetadata(layer.metadata, password);
-        }
-      }
+      manifest = await Encryption.encryptManifest(manifest, password);
     }
 
     const project = await Zipper.forFrontend().zipFiles([{ path: ProjectConstants.ManifestName, content: new Blob([JSON.stringify(manifest)]) }]);
@@ -155,18 +151,17 @@ export class ProjectService {
       return Promise.reject(new Error('Invalid project, manifest not found'));
     }
 
-    const project = JSON.parse(await BlobIO.asString(manifestFile.content));
-    if (this.manifestContainsCredentials(project) && !password) {
+    let manifest = JSON.parse(await BlobIO.asString(manifestFile.content));
+    if (this.manifestContainsCredentials(manifest) && !password) {
       throw new Error('Password is mandatory when project contains credentials');
     }
 
     const map = this.geoService.getMainMap();
-    let _project = project;
     if (password) {
-      _project = await Encryption.decryptProject(project, password);
+      manifest = await Encryption.decryptManifest(manifest, password);
     }
-    await this.geoService.importProject(map, _project);
-    this.store.dispatch(ProjectActions.loadProject(_project));
+    await this.geoService.importProject(map, manifest);
+    this.store.dispatch(ProjectActions.loadProject(manifest));
   }
 
   public newLayout(name: string, format: LayoutFormat, center: number[], resolution: number, projection: AbcProjection): AbcLayout {
@@ -222,11 +217,20 @@ export class ProjectService {
   }
 
   public manifestContainsCredentials(project: AbcProjectManifest): boolean {
-    const wmsLayers = project.layers.filter((lay) => LayerType.Wms === lay.type);
-    const withCredentials = wmsLayers.find((lay) => {
-      const metadata: WmsMetadata = lay.metadata as WmsMetadata;
-      return metadata.auth?.username && metadata.auth?.password;
-    });
-    return !!withCredentials;
+    // XYZ layers may contains credentials in URL
+    const xyzLayers = project.layers.find((lay) => LayerType.Xyz === lay.type);
+    if (xyzLayers) {
+      return true;
+    }
+
+    // Search for a wms layer with credentials
+    const wmsLayersWithCredentials = project.layers
+      .filter((lay) => LayerType.Wms === lay.type)
+      .find((lay) => {
+        const metadata: WmsMetadata = lay.metadata as WmsMetadata;
+        return metadata.auth?.username && metadata.auth?.password;
+      });
+
+    return !!wmsLayersWithCredentials;
   }
 }

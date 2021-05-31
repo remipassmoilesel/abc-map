@@ -42,7 +42,6 @@ describe('Wms layers', function () {
       .type(WmsConstants.PUBLIC_URL)
       .get('[data-cy=wms-settings-capabilities]')
       .click()
-      .wait(1000)
       // Select remote layer then add
       .get('[data-cy=wms-layer-item]')
       .eq(1)
@@ -87,7 +86,6 @@ describe('Wms layers', function () {
       // Get capabilities, select remote layer then add
       .get('[data-cy=wms-settings-capabilities]')
       .click()
-      .wait(1000)
       .get('[data-cy=wms-layer-item]')
       .eq(1)
       .click()

@@ -19,7 +19,7 @@
 import React, { ChangeEvent, Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/shared';
 import FormValidationLabel, { FormState } from '../../components/form-state-label/FormValidationLabel';
-import { PasswordStrength, Strength } from '../../core/utils/PasswordStrength';
+import { PasswordStrength, ValidationHelper } from '../../core/utils/ValidationHelper';
 
 const logger = Logger.get('ChangePasswordForm.tsx', 'info');
 
@@ -124,7 +124,7 @@ class ChangePasswordForm extends Component<Props, State> {
 
   private validateForm(password: string, confirmation: string): FormState {
     // Check password strength
-    if (PasswordStrength.check(password) !== Strength.Correct) {
+    if (ValidationHelper.password(password) !== PasswordStrength.Correct) {
       return FormState.PasswordTooWeak;
     }
 

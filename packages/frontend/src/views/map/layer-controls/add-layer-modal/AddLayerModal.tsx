@@ -27,6 +27,7 @@ import { Link } from 'react-router-dom';
 import { LayerFactory } from '../../../../core/geo/layers/LayerFactory';
 import { ServiceProps, withServices } from '../../../../core/withServices';
 import PredefinedSelector from './predefined/PredefinedSelector';
+import XYZSettingsPanel from './xyz/XYZSettingsPanel';
 
 const logger = Logger.get('AddLayerModal.tsx');
 
@@ -39,6 +40,7 @@ interface State {
   layerType: LabelledLayerType;
   predefinedModel: PredefinedLayerModel;
   wms?: WmsDefinition;
+  xyzUrl?: string;
 }
 
 declare type Props = LocalProps & ServiceProps;
@@ -64,6 +66,7 @@ class AddLayerModal extends Component<Props, State> {
     const predefinedModel = this.state.predefinedModel;
     const baseMapSelected = layerTypeId === LabelledLayerTypes.BaseMap.id;
     const wmsSelected = layerTypeId === LabelledLayerTypes.Wms.id;
+    const xyzSelected = layerTypeId === LabelledLayerTypes.Xyz.id;
     return (
       <Modal show={true} onHide={onHide}>
         <Modal.Header closeButton>
@@ -83,13 +86,14 @@ class AddLayerModal extends Component<Props, State> {
             </select>
           </div>
 
-          <div className={'my-2'}>
-            <i className={'fa fa-info mx-2'} /> Vous pouvez aussi ajouter des couches à partir du&nbsp;
+          <div className={'mt-2 mb-3'}>
+            <i className={'fa fa-info mx-2'} /> Essayez aussi le &nbsp;
             <Link to={FrontendRoutes.dataStore().raw()}>Catalogue de données.</Link>
           </div>
 
           {baseMapSelected && <PredefinedSelector value={predefinedModel} onChange={this.handleBaseMapChanged} />}
           {wmsSelected && <WmsSettingsPanel onChange={this.handleWmsSettingsChanged} />}
+          {xyzSelected && <XYZSettingsPanel onChange={this.handleXyzUrlChanged} />}
 
           <div className={'d-flex justify-content-end mt-3'}>
             <button className={'btn btn-secondary mr-3'} onClick={onHide}>
@@ -114,6 +118,8 @@ class AddLayerModal extends Component<Props, State> {
       this.handleNewVectorLayer();
     } else if (LabelledLayerTypes.Wms.id === selected.id) {
       this.handleNewWmsLayer();
+    } else if (LabelledLayerTypes.Xyz.id === selected.id) {
+      this.handleNewXyzLayer();
     } else {
       toasts.genericError();
     }
@@ -168,8 +174,27 @@ class AddLayerModal extends Component<Props, State> {
     history.register(HistoryKey.Map, new AddLayersTask(map, [layer]));
   };
 
+  private handleNewXyzLayer = () => {
+    const { history, geo, toasts } = this.props.services;
+
+    const url = this.state.xyzUrl;
+    if (!url) {
+      return toasts.info("Vous devez d'abord saisir une URL");
+    }
+
+    const map = geo.getMainMap();
+    const layer = LayerFactory.newXyzLayer(url);
+    map.addLayer(layer);
+    map.setActiveLayer(layer);
+    history.register(HistoryKey.Map, new AddLayersTask(map, [layer]));
+  };
+
   private handleWmsSettingsChanged = (wms: WmsDefinition) => {
     this.setState({ wms });
+  };
+
+  private handleXyzUrlChanged = (xyzUrl: string) => {
+    this.setState({ xyzUrl });
   };
 
   private handleBaseMapChanged = (predefinedModel: PredefinedLayerModel) => {
@@ -177,12 +202,16 @@ class AddLayerModal extends Component<Props, State> {
   };
 
   private isAddAllowed(): boolean {
-    if (this.state.layerType !== LabelledLayerTypes.Wms) {
-      return true;
+    const type = this.state.layerType;
+    if (type === LabelledLayerTypes.Wms) {
+      const urlIsDefined = !!this.state.wms?.remoteUrl;
+      const layerIsDefined = !!this.state.wms?.remoteLayerName;
+      return urlIsDefined && layerIsDefined;
+    } else if (type === LabelledLayerTypes.Xyz) {
+      return !!this.state.xyzUrl;
     }
-    const urlIsDefined = !!this.state.wms?.remoteUrl;
-    const layerIsDefined = !!this.state.wms?.remoteLayerName;
-    return urlIsDefined && layerIsDefined;
+
+    return true;
   }
 }
 

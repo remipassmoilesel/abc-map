@@ -172,4 +172,26 @@ describe('ProjectService', function () {
     expect(store.getState().project.metadata.id).toEqual(newProject.metadata.id);
     expect(geoMock.importProject.callCount).toEqual(1);
   });
+
+  describe('manifestContainsCredentials()', function () {
+    it('should return false', () => {
+      const manifest = TestHelper.sampleProjectManifest();
+
+      expect(projectService.manifestContainsCredentials(manifest)).toBe(false);
+    });
+
+    it('should return true if authenticated WMS layer', () => {
+      const manifest = TestHelper.sampleProjectManifest();
+      manifest.layers.push(TestHelper.sampleWmsLayer());
+
+      expect(projectService.manifestContainsCredentials(manifest)).toBe(true);
+    });
+
+    it('should return true if XYZ layer', () => {
+      const manifest = TestHelper.sampleProjectManifest();
+      manifest.layers.push(TestHelper.sampleXyzLayer());
+
+      expect(projectService.manifestContainsCredentials(manifest)).toBe(true);
+    });
+  });
 });

@@ -20,10 +20,10 @@ import React, { ChangeEvent, Component, ReactNode } from 'react';
 import { FrontendRoutes, Logger, PasswordLostParams } from '@abc-map/shared';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { ServiceProps, withServices } from '../../core/withServices';
-import { PasswordStrength, Strength } from '../../core/utils/PasswordStrength';
 import FormValidationLabel, { FormState } from '../../components/form-state-label/FormValidationLabel';
 import Cls from './ResetPasswordView.module.scss';
 import { pageSetup } from '../../core/utils/page-setup';
+import { PasswordStrength, ValidationHelper } from '../../core/utils/ValidationHelper';
 
 const logger = Logger.get('ResetPasswordView.tsx', 'info');
 
@@ -135,7 +135,7 @@ class ResetPasswordView extends Component<Props, State> {
 
   private validateForm(password: string, confirmation: string): FormState {
     // Check password strength
-    if (PasswordStrength.check(password) !== Strength.Correct) {
+    if (ValidationHelper.password(password) !== PasswordStrength.Correct) {
       return FormState.PasswordTooWeak;
     }
 

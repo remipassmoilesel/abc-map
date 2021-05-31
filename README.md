@@ -51,8 +51,4 @@ See [documentation](./documentation) folder.
 
 ## Roadmap
 
-Upcoming work and features:      
-
-- Internationalization
-- Automated map legend creation
-- More frontend tests
+See [backlog](./documentation/5_backlog.md).

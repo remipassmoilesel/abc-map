@@ -127,16 +127,17 @@ describe('Project', function () {
         .click()
         .get('[data-cy=close-solicitation-modal]')
         .click()
-        .get('[data-cy=modal-password-input]')
-        .should('be.empty')
+        .get('[data-cy=password-input]')
         .clear()
         .type(PROJECT_PASSWORD)
-        .get('[data-cy=modal-password-confirm]')
+        .get('[data-cy=password-confirmation]')
+        .clear()
+        .type(PROJECT_PASSWORD)
+        .get('[data-cy=password-confirm]')
         .click()
         .then(() => Download.fileAsBlob())
         .should(async (downloaded) => {
           const project = await ProjectHelper.forFrontend().extractManifest(downloaded);
-
           expect(project.layers[2].type).equals(LayerType.Wms);
           expect((project.layers[2].metadata as WmsMetadata).remoteUrl).not.equal(WmsConstants.AUTHENTICATED_URL);
           expect((project.layers[2].metadata as WmsMetadata).remoteUrl).contains('encrypted:');
@@ -156,10 +157,10 @@ describe('Project', function () {
         .then((project) => {
           return cy.get('[data-cy=file-input]').attachFile({ filePath: 'project.abm2', fileContent: project });
         })
-        .get('[data-cy=modal-password-input]')
+        .get('[data-cy=password-input]')
         .should('be.empty')
         .type(PROJECT_PASSWORD)
-        .get('[data-cy=modal-password-confirm]')
+        .get('[data-cy=password-confirm]')
         .click()
         .then(() => Toasts.assertText('Projet importé !'))
         // Check project name
@@ -173,30 +174,6 @@ describe('Project', function () {
           expect(layers).length(1);
           expect(layers[0].type).equal(LayerType.Wms);
         });
-    });
-
-    // TODO: replace by unit test
-    it('password modal do not keep password in state', function () {
-      cy.visit(FrontendRoutes.map().raw())
-        .get('[data-cy=import-project]')
-        .click()
-        .then(() => TestData.projectSample2())
-        .then((project) => {
-          return cy.get('[data-cy=file-input]').attachFile({ filePath: 'project.abm2', fileContent: project });
-        })
-        .get('[data-cy=modal-password-input]')
-        .should('be.empty')
-        .type(PROJECT_PASSWORD)
-        .get('[data-cy=modal-password-cancel]')
-        .click()
-        .get('[data-cy=import-project]')
-        .click()
-        .then(() => TestData.projectSample2())
-        .then((project) => {
-          return cy.get('[data-cy=file-input]').attachFile({ filePath: 'project.abm2', fileContent: project });
-        })
-        .get('[data-cy=modal-password-input]')
-        .should('be.empty');
     });
   });
 
@@ -234,10 +211,13 @@ describe('Project', function () {
         .click()
         .get('[data-cy=close-solicitation-modal]')
         .click()
-        .get('[data-cy=modal-password-input]')
+        .get('[data-cy=password-input]')
         .clear()
-        .type('azerty1234')
-        .get('[data-cy=modal-password-confirm]')
+        .type(PROJECT_PASSWORD)
+        .get('[data-cy=password-confirmation]')
+        .clear()
+        .type(PROJECT_PASSWORD)
+        .get('[data-cy=password-confirm]')
         .click()
         .then(() => Toasts.assertText('Projet enregistré !'));
     });
@@ -280,10 +260,13 @@ describe('Project', function () {
         .click()
         .get('[data-cy=close-solicitation-modal]')
         .click()
-        .get('[data-cy=modal-password-input]')
+        .get('[data-cy=password-input]')
         .clear()
-        .type('azerty1234')
-        .get('[data-cy=modal-password-confirm]')
+        .type(PROJECT_PASSWORD)
+        .get('[data-cy=password-confirmation]')
+        .clear()
+        .type(PROJECT_PASSWORD)
+        .get('[data-cy=password-confirm]')
         .click()
         .then(() => Toasts.assertText('Projet enregistré !'))
         // Clean map
@@ -297,7 +280,7 @@ describe('Project', function () {
         .click()
         .get('[data-cy=project-password]')
         .clear()
-        .type('azerty1234')
+        .type(PROJECT_PASSWORD)
         .get('[data-cy=open-project-confirm]')
         .click()
         .then(() => Toasts.assertText('Projet ouvert !'))

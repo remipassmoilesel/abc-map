@@ -36,6 +36,11 @@ export class Authentication {
   }
 
   public static logout(): Chainable<any> {
-    return cy.get('[data-cy=user-menu]').click().get('[data-cy=logout]').click();
+    return cy
+      .wait(600) // We must wait for next storage persistence window
+      .get('[data-cy=user-menu]')
+      .click()
+      .get('[data-cy=logout]')
+      .click();
   }
 }

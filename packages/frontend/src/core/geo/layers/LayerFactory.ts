@@ -17,13 +17,23 @@
  */
 
 import TileLayer from 'ol/layer/Tile';
-import { OSM, Stamen, TileWMS } from 'ol/source';
+import { OSM, Stamen, TileWMS, XYZ } from 'ol/source';
 import uuid from 'uuid-random';
 import VectorSource from 'ol/source/Vector';
 import { tileLoadAuthenticated } from '../map/tileLoadAuthenticated';
 import { GeoJSON } from 'ol/format';
-import { AbcLayer, LayerType, PredefinedLayerModel, PredefinedMetadata, VectorMetadata, WmsDefinition, WmsMetadata } from '@abc-map/shared';
-import { LayerWrapper, PredefinedLayerWrapper, VectorLayerWrapper, WmsLayerWrapper } from './LayerWrapper';
+import {
+  AbcLayer,
+  AbcProjection,
+  LayerType,
+  PredefinedLayerModel,
+  PredefinedMetadata,
+  VectorMetadata,
+  WmsDefinition,
+  WmsMetadata,
+  XyzMetadata,
+} from '@abc-map/shared';
+import { LayerWrapper, PredefinedLayerWrapper, VectorLayerWrapper, WmsLayerWrapper, XyzLayerWrapper } from './LayerWrapper';
 import VectorImageLayer from 'ol/layer/VectorImage';
 import Geometry from 'ol/geom/Geometry';
 import TileSource from 'ol/source/Tile';
@@ -120,6 +130,24 @@ export class LayerFactory {
     return LayerWrapper.from<TileLayer, TileSource, WmsMetadata>(layer).setMetadata(metadata);
   }
 
+  public static newXyzLayer(url: string, projection?: AbcProjection): XyzLayerWrapper {
+    const source = new XYZ({ url, projection: projection?.name });
+    const layer = new TileLayer({ source });
+
+    const metadata: XyzMetadata = {
+      id: uuid(),
+      name: 'Couche XYZ',
+      type: LayerType.Xyz,
+      active: false,
+      opacity: 1,
+      visible: true,
+      remoteUrl: url,
+      projection: projection,
+    };
+
+    return LayerWrapper.from<TileLayer, XYZ, XyzMetadata>(layer).setMetadata(metadata);
+  }
+
   public static async fromAbcLayer(abcLayer: AbcLayer): Promise<LayerWrapper> {
     let layer: LayerWrapper | undefined;
 
@@ -142,6 +170,12 @@ export class LayerFactory {
     // Wms layer
     else if (LayerType.Wms === abcLayer.type) {
       layer = this.newWmsLayer(abcLayer.metadata);
+      layer.setMetadata(abcLayer.metadata);
+    }
+
+    // Xyz layer
+    else if (LayerType.Xyz === abcLayer.type) {
+      layer = this.newXyzLayer(abcLayer.metadata.remoteUrl, abcLayer.metadata.projection);
       layer.setMetadata(abcLayer.metadata);
     }
 
