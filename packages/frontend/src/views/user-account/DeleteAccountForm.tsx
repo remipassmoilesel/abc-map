@@ -19,7 +19,7 @@
 import React, { ChangeEvent, Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/shared';
 import FormValidationLabel, { FormState } from '../../components/form-state-label/FormValidationLabel';
-import { PasswordStrength, Strength } from '../../core/utils/PasswordStrength';
+import { PasswordStrength, ValidationHelper } from '../../core/utils/ValidationHelper';
 
 const logger = Logger.get('DeleteAccountForm.tsx', 'info');
 
@@ -97,8 +97,8 @@ class DeleteAccountForm extends Component<Props, State> {
 
   private validateForm(password: string, confirmation: boolean): FormState {
     // Check password strength
-    if (PasswordStrength.check(password) !== Strength.Correct) {
-      return FormState.PasswordTooWeak;
+    if (ValidationHelper.password(password) !== PasswordStrength.Correct) {
+      return FormState.InvalidPassword;
     }
 
     // Check confirmation

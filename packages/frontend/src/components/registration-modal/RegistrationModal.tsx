@@ -21,8 +21,7 @@ import { Logger } from '@abc-map/shared';
 import { ModalEventListener, ModalEventType, ModalStatus } from '../../core/ui/typings';
 import { ServiceProps, withServices } from '../../core/withServices';
 import { Modal } from 'react-bootstrap';
-import { ValidationHelper } from '../../core/utils/ValidationHelper';
-import { PasswordStrength, Strength } from '../../core/utils/PasswordStrength';
+import { PasswordStrength, ValidationHelper } from '../../core/utils/ValidationHelper';
 import FormValidationLabel, { FormState } from '../form-state-label/FormValidationLabel';
 import Cls from './RegistrationModal.module.scss';
 
@@ -60,7 +59,7 @@ class RegistrationModal extends Component<ServiceProps, State> {
     }
 
     return (
-      <Modal show={visible} onHide={this.close}>
+      <Modal show={visible} onHide={this.handleCancel}>
         <Modal.Header closeButton>
           <Modal.Title>
             <i className={'fa fa-feather mr-3'} />
@@ -85,6 +84,7 @@ class RegistrationModal extends Component<ServiceProps, State> {
                 placeholder={'Adresse email'}
                 className={'form-control'}
                 data-cy={'email'}
+                data-testid={'email'}
               />
               <input
                 type={'password'}
@@ -94,6 +94,7 @@ class RegistrationModal extends Component<ServiceProps, State> {
                 placeholder={'Mot de passe'}
                 className={'form-control'}
                 data-cy={'password'}
+                data-testid={'password'}
               />
               <input
                 type={'password'}
@@ -103,6 +104,7 @@ class RegistrationModal extends Component<ServiceProps, State> {
                 placeholder={'Confirmation du mot de passe'}
                 className={'form-control'}
                 data-cy={'password-confirmation'}
+                data-testid={'password-confirmation'}
               />
             </div>
 
@@ -113,7 +115,13 @@ class RegistrationModal extends Component<ServiceProps, State> {
             {/* Action buttons */}
 
             <div className={'d-flex justify-content-end'}>
-              <button type={'button'} onClick={this.close} className={'btn btn-outline-secondary'} data-cy={'cancel-registration'}>
+              <button
+                type={'button'}
+                onClick={this.handleCancel}
+                className={'btn btn-outline-secondary'}
+                data-cy={'cancel-registration'}
+                data-testid={'cancel-registration'}
+              >
                 Annuler
               </button>
 
@@ -123,6 +131,7 @@ class RegistrationModal extends Component<ServiceProps, State> {
                 onClick={this.handleSubmit}
                 className={'btn btn-primary'}
                 data-cy={'confirm-registration'}
+                data-testid={'confirm-registration'}
               >
                 Inscription
               </button>
@@ -149,7 +158,7 @@ class RegistrationModal extends Component<ServiceProps, State> {
     }
   }
 
-  private close = () => {
+  private handleCancel = () => {
     const { modals } = this.props.services;
 
     modals.dispatch({
@@ -161,8 +170,7 @@ class RegistrationModal extends Component<ServiceProps, State> {
   };
 
   private handleSubmit = () => {
-    const { authentication } = this.props.services;
-
+    const { authentication, modals } = this.props.services;
     const email = this.state.email;
     const password = this.state.password;
     const confirmation = this.state.confirmation;
@@ -175,7 +183,14 @@ class RegistrationModal extends Component<ServiceProps, State> {
 
     authentication
       .registration(email, password)
-      .then(() => this.close())
+      .then(() => {
+        modals.dispatch({
+          type: ModalEventType.RegistrationClosed,
+          status: ModalStatus.Confirmed,
+        });
+
+        this.setState({ visible: false, email: '', password: '', confirmation: '' });
+      })
       .catch((err) => logger.error('Registration error: ', err));
   };
 
@@ -210,7 +225,7 @@ class RegistrationModal extends Component<ServiceProps, State> {
     }
 
     // Check password strength
-    if (PasswordStrength.check(password) !== Strength.Correct) {
+    if (ValidationHelper.password(password) !== PasswordStrength.Correct) {
       return FormState.PasswordTooWeak;
     }
 

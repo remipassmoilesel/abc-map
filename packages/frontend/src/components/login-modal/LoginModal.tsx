@@ -21,8 +21,7 @@ import { FrontendRoutes, Logger } from '@abc-map/shared';
 import { Modal } from 'react-bootstrap';
 import { ServiceProps, withServices } from '../../core/withServices';
 import { ModalEventListener, ModalEventType, ModalStatus } from '../../core/ui/typings';
-import { ValidationHelper } from '../../core/utils/ValidationHelper';
-import { PasswordStrength, Strength } from '../../core/utils/PasswordStrength';
+import { PasswordStrength, ValidationHelper } from '../../core/utils/ValidationHelper';
 import Cls from './LoginModal.module.scss';
 import FormValidationLabel, { FormState } from '../form-state-label/FormValidationLabel';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
@@ -60,7 +59,7 @@ class LoginModal extends Component<Props, State> {
     }
 
     return (
-      <Modal show={visible} onHide={this.close}>
+      <Modal show={visible} onHide={this.handleCancel}>
         <Modal.Header closeButton>
           <Modal.Title>
             <i className={'fa fa-lock-open mr-3'} />
@@ -84,6 +83,7 @@ class LoginModal extends Component<Props, State> {
                 placeholder={'Adresse email'}
                 className={'form-control'}
                 data-cy={'email'}
+                data-testid={'email'}
               />
               <input
                 type={'password'}
@@ -93,6 +93,7 @@ class LoginModal extends Component<Props, State> {
                 placeholder={'Mot de passe'}
                 className={'form-control'}
                 data-cy={'password'}
+                data-testid={'password'}
               />
             </div>
 
@@ -108,7 +109,13 @@ class LoginModal extends Component<Props, State> {
             {/* Action buttons */}
 
             <div className={'d-flex justify-content-end'}>
-              <button type={'button'} onClick={this.close} className={`btn btn-outline-secondary ${Cls.actionButton}`} data-cy={'cancel-login'}>
+              <button
+                type={'button'}
+                onClick={this.handleCancel}
+                className={`btn btn-outline-secondary ${Cls.actionButton}`}
+                data-cy={'cancel-login'}
+                data-testid={'cancel-login'}
+              >
                 Annuler
               </button>
               <button
@@ -117,6 +124,7 @@ class LoginModal extends Component<Props, State> {
                 onClick={this.handleSubmit}
                 className={`btn btn-primary ${Cls.actionButton}`}
                 data-cy={'confirm-login'}
+                data-testid={'confirm-login'}
               >
                 Connexion
               </button>
@@ -143,7 +151,24 @@ class LoginModal extends Component<Props, State> {
     }
   }
 
-  private close = () => {
+  private handlePasswordLost = () => {
+    const { modals, toasts } = this.props.services;
+
+    modals.dispatch({
+      type: ModalEventType.LoginClosed,
+      status: ModalStatus.Canceled,
+    });
+    this.setState({ visible: false, email: '', password: '' });
+
+    setTimeout(() => {
+      modals.passwordLost().catch((err) => {
+        toasts.genericError();
+        logger.error('Cannot open password lost modal', err);
+      });
+    }, 400);
+  };
+
+  private handleCancel = () => {
     const { modals } = this.props.services;
 
     modals.dispatch({
@@ -154,22 +179,8 @@ class LoginModal extends Component<Props, State> {
     this.setState({ visible: false, email: '', password: '' });
   };
 
-  private handlePasswordLost = () => {
-    const { modals, toasts } = this.props.services;
-
-    this.close();
-
-    setTimeout(() => {
-      modals.passwordLost().catch((err) => {
-        toasts.genericError();
-        logger.error('Cannot open password lost modal', err);
-      });
-    }, 400);
-  };
-
   private handleSubmit = () => {
-    const { authentication } = this.props.services;
-
+    const { authentication, modals } = this.props.services;
     const email = this.state.email;
     const password = this.state.password;
 
@@ -182,7 +193,12 @@ class LoginModal extends Component<Props, State> {
     authentication
       .login(email, password)
       .then(() => {
-        this.close();
+        modals.dispatch({
+          type: ModalEventType.LoginClosed,
+          status: ModalStatus.Confirmed,
+        });
+        this.setState({ visible: false, email: '', password: '' });
+
         this.props.history.push(FrontendRoutes.map().raw());
       })
       .catch((err) => logger.error(err));
@@ -213,7 +229,7 @@ class LoginModal extends Component<Props, State> {
     }
 
     // Check password strength
-    if (PasswordStrength.check(password) !== Strength.Correct) {
+    if (ValidationHelper.password(password) !== PasswordStrength.Correct) {
       return FormState.InvalidPassword;
     }
 

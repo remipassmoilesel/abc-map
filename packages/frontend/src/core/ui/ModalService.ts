@@ -27,6 +27,7 @@ import {
   PasswordModalClosedEvent,
   RegistrationClosedEvent,
   RenameModalClosedEvent,
+  SetPasswordModalClosedEvent,
   SolicitationClosedEvent,
 } from './typings';
 import { SimplePropertiesMap } from '../geo/features/FeatureWrapper';
@@ -45,14 +46,24 @@ export class ModalService {
     return this.modalPromise({ type: ModalEventType.ShowRename, title, message, value }, ModalEventType.RenameClosed);
   }
 
-  public projectPassword(): Promise<PasswordModalClosedEvent> {
+  public setProjectPassword(): Promise<SetPasswordModalClosedEvent> {
     const message = 'Votre projet contient des identifiants, vous devez choisir un mot de passe pour les protéger.';
     const title = 'Mot de passe du projet';
-    return this.passwordModal(title, message);
+    return this.setPasswordModal(title, message);
   }
 
-  public passwordModal(title: string, message: string): Promise<PasswordModalClosedEvent> {
-    return this.modalPromise({ type: ModalEventType.ShowPassword, title, message }, ModalEventType.PasswordClosed);
+  public passwordInputModal(title: string, message: string): Promise<PasswordModalClosedEvent> {
+    return this.modalPromise({ type: ModalEventType.ShowPasswordInput, title, message }, ModalEventType.PasswordInputClosed);
+  }
+
+  public getProjectPassword(): Promise<PasswordModalClosedEvent> {
+    const message = 'Votre projet est protégé par un mot de passe.';
+    const title = 'Mot de passe du projet';
+    return this.passwordInputModal(title, message);
+  }
+
+  public setPasswordModal(title: string, message: string): Promise<SetPasswordModalClosedEvent> {
+    return this.modalPromise({ type: ModalEventType.ShowSetPassword, title, message }, ModalEventType.SetPasswordClosed);
   }
 
   public featurePropertiesModal(properties: SimplePropertiesMap): Promise<FeaturePropertiesClosedEvent> {

@@ -62,7 +62,6 @@ export class LayerControls {
         // Get capabilities
         .get('[data-cy=wms-settings-capabilities]')
         .click()
-        .wait(1000)
         // Select WMS layer
         .get('[data-cy=wms-layer-item]')
         .eq(1)
@@ -94,7 +93,6 @@ export class LayerControls {
         // Get capabilities
         .get('[data-cy=wms-settings-capabilities]')
         .click()
-        .wait(1000)
         // Select remote layer then add
         .get('[data-cy=wms-layer-item]')
         .eq(1)

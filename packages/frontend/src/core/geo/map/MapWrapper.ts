@@ -237,7 +237,12 @@ export class MapWrapper {
   }
 
   public containsCredentials(): boolean {
-    const withCredentials = this.getLayers().find((lay) => {
+    const xyz = this.getLayers().find((l) => l.isXyz());
+    if (xyz) {
+      return true;
+    }
+
+    const wmsWithCredentials = this.getLayers().find((lay) => {
       if (lay.isWms()) {
         const meta = lay.getMetadata();
         return meta?.auth?.username && meta?.auth?.password;
@@ -245,7 +250,7 @@ export class MapWrapper {
       return false;
     });
 
-    return !!withCredentials;
+    return !!wmsWithCredentials;
   }
 
   public setLayerVisible(layer: LayerWrapper, value: boolean) {

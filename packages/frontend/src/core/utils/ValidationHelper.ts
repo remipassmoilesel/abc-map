@@ -16,6 +16,13 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { passwordStrength } from 'check-password-strength';
+
+export enum PasswordStrength {
+  Weak = 'Weak',
+  Correct = 'Correct',
+}
+
 const VALID_EMAIL = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 const VALID_URL = /^https?:\/\/.+$/;
 
@@ -30,5 +37,10 @@ export class ValidationHelper {
    */
   public static url(email: string): boolean {
     return email.match(VALID_URL) !== null;
+  }
+
+  // WARNING: modify this method may require data migration (user profiles)
+  public static password(password: string): PasswordStrength {
+    return passwordStrength(password).id >= 1 ? PasswordStrength.Correct : PasswordStrength.Weak;
   }
 }

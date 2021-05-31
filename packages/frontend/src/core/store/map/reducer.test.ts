@@ -21,6 +21,8 @@ import { MapTool } from '@abc-map/shared';
 import { MapActions } from './actions';
 import { mapReducer } from './reducer';
 
+// TODO: use deepFreeze() instead of stringify()
+
 describe('Map reducer', function () {
   it('SetTool', function () {
     const initial: MapState = {

@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ValidationHelper } from './ValidationHelper';
+import { PasswordStrength, ValidationHelper } from './ValidationHelper';
 
 describe('ValidationHelper', () => {
   it('email()', () => {
@@ -28,5 +28,13 @@ describe('ValidationHelper', () => {
     expect(ValidationHelper.url('abcd')).toBe(false);
     expect(ValidationHelper.url('http://abcdefgh.ijk')).toBe(true);
     expect(ValidationHelper.url('https://abc.def-gh.ijk')).toBe(true);
+  });
+
+  it('check() should return Weak', () => {
+    expect(ValidationHelper.password('azerty')).toEqual(PasswordStrength.Weak);
+  });
+
+  it('check() should return Correct', () => {
+    expect(ValidationHelper.password('HeyBob123')).toEqual(PasswordStrength.Correct);
   });
 });

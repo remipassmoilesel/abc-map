@@ -22,6 +22,7 @@ import { Logger } from '@abc-map/shared';
 import { Modal } from 'react-bootstrap';
 import { ServiceProps, withServices } from '../../../core/withServices';
 import Cls from './RemoteProjectsModal.module.scss';
+import { Encryption } from '../../../core/utils/Encryption';
 
 const logger = Logger.get('RemoteProjectModal.tsx');
 
@@ -112,7 +113,7 @@ class RemoteProjectsModal extends Component<Props, State> {
                 <button className={'btn btn-secondary mr-3'} onClick={this.handleCancel} data-cy={'cancel-button'}>
                   Annuler
                 </button>
-                <button className={'btn btn-primary'} onClick={this.handleConfirm} disabled={!selected} data-cy="open-project-confirm">
+                <button className={'btn btn-primary'} onClick={this.handleOpenProject} disabled={!selected} data-cy="open-project-confirm">
                   Ouvrir le projet
                 </button>
               </div>
@@ -132,7 +133,7 @@ class RemoteProjectsModal extends Component<Props, State> {
     project
       .list()
       .then((projects) => this.setState({ projects }))
-      .catch((err) => logger.error(err));
+      .catch((err) => logger.error('Cannot list projects: ', err));
   }
 
   private handlePasswordInput = (ev: ChangeEvent<HTMLInputElement>) => {
@@ -161,12 +162,12 @@ class RemoteProjectsModal extends Component<Props, State> {
         this.setState({ selected: undefined, deleteConfirmation: undefined });
         this.listProjects();
       })
-      .catch((err) => logger.error(err));
+      .catch((err) => logger.error('Cannot delete project: ', err));
   };
 
   private handleCancel = () => this.props.onHide();
 
-  private handleConfirm = () => {
+  private handleOpenProject = () => {
     const { project, toasts, history } = this.props.services;
 
     const loadProject = async () => {
@@ -189,8 +190,13 @@ class RemoteProjectsModal extends Component<Props, State> {
     };
 
     loadProject().catch((err) => {
-      toasts.genericError();
-      logger.error(err);
+      logger.error('Cannot open project: ', err);
+
+      if (Encryption.isInvalidPasswordError(err)) {
+        toasts.error('Mot de passe incorrect !');
+      } else {
+        toasts.genericError();
+      }
     });
   };
 }

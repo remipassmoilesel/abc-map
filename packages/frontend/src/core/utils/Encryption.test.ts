@@ -17,6 +17,9 @@
  */
 
 import { Encryption } from './Encryption';
+import { TestHelper } from './test/TestHelper';
+import { deepFreeze } from './deepFreeze';
+import { AbcWmsLayer, AbcXyzLayer } from '@abc-map/shared';
 
 /**
  * Warning: changes on encryption will require a data migration
@@ -28,17 +31,88 @@ describe('Encryption', () => {
     expect(result).toMatch('encrypted:');
   });
 
-  it('decrypt() with correct secret', async () => {
-    const encrypted = await Encryption.encrypt('test', 'secret');
-    const result = await Encryption.decrypt(encrypted, 'secret');
-    expect(result).toEqual('test');
+  describe('decrypt()', () => {
+    it('with correct secret', async () => {
+      const encrypted = await Encryption.encrypt('test', 'secret');
+      const result = await Encryption.decrypt(encrypted, 'secret');
+      expect(result).toEqual('test');
+    });
+
+    it('with incorrect secret', async () => {
+      const encrypted = await Encryption.encrypt('test', 'secret');
+      const error: Error = await Encryption.decrypt(encrypted, 'not-the-secret').catch((err) => err);
+      expect(error.message).toMatch('Invalid password');
+    });
   });
 
-  it('decrypt() with incorrect secret', async () => {
-    expect.assertions(1);
-    const encrypted = await Encryption.encrypt('test', 'secret');
-    return Encryption.decrypt(encrypted, 'not-the-secret').catch((err) => {
-      expect(err.message).toMatch('Invalid password');
+  describe('isInvalidPassword()', () => {
+    it('should return true', async () => {
+      // Prepare
+      const encrypted = await Encryption.encrypt('test', 'secret');
+      const error: Error = await Encryption.decrypt(encrypted, 'not-the-secret').catch((err) => err);
+
+      // Act
+      expect(Encryption.isInvalidPasswordError(error)).toBe(true);
     });
+
+    it('should return false', async () => {
+      expect(Encryption.isInvalidPasswordError(new Error())).toBe(false);
+      expect(Encryption.isInvalidPasswordError(undefined)).toBe(false);
+    });
+  });
+
+  it('encryptManifest()', async () => {
+    // Prepare
+    const manifest = deepFreeze({
+      ...TestHelper.sampleProjectManifest(),
+      layers: [...TestHelper.sampleProjectManifest().layers, TestHelper.sampleWmsLayer(), TestHelper.sampleXyzLayer()],
+    });
+
+    // Act
+    const result = await Encryption.encryptManifest(manifest, 'azerty1234');
+
+    expect(manifest.metadata).toEqual(result.metadata);
+    expect(manifest.layers.length).toEqual(result.layers.length);
+    expect(manifest.layers.slice(0, 2)).toEqual(result.layers.slice(0, 2));
+
+    const originalWms = manifest.layers[2] as AbcWmsLayer;
+    const wms = result.layers[2] as AbcWmsLayer;
+    expect(wms.metadata.remoteUrl).toMatch('encrypted:');
+    expect(wms.metadata.auth?.username).toMatch('encrypted:');
+    expect(wms.metadata.auth?.password).toMatch('encrypted:');
+    expect(wms.metadata.remoteUrl).not.toEqual(originalWms.metadata.remoteUrl);
+    expect(wms.metadata.auth?.username).not.toEqual(originalWms.metadata.auth?.username);
+    expect(wms.metadata.auth?.password).not.toEqual(originalWms.metadata.auth?.password);
+
+    const originalXyz = manifest.layers[2] as AbcXyzLayer;
+    const xyz = result.layers[2] as AbcXyzLayer;
+    expect(xyz.metadata.remoteUrl).toMatch('encrypted:');
+    expect(xyz.metadata.remoteUrl).not.toEqual(originalXyz.metadata.remoteUrl);
+  });
+
+  it('decryptManifest()', async () => {
+    // Prepare
+    const manifest = deepFreeze({
+      ...TestHelper.sampleProjectManifest(),
+      layers: [...TestHelper.sampleProjectManifest().layers, TestHelper.sampleWmsLayer(), TestHelper.sampleXyzLayer()],
+    });
+    const encrypted = deepFreeze(await Encryption.encryptManifest(manifest, 'azerty1234'));
+
+    // Act
+    const result = await Encryption.decryptManifest(encrypted, 'azerty1234');
+
+    expect(manifest.metadata).toEqual(result.metadata);
+    expect(manifest.layers.length).toEqual(result.layers.length);
+    expect(manifest.layers.slice(0, 2)).toEqual(result.layers.slice(0, 2));
+
+    const originalWms = manifest.layers[2] as AbcWmsLayer;
+    const wms = result.layers[2] as AbcWmsLayer;
+    expect(wms.metadata.remoteUrl).toEqual(originalWms.metadata.remoteUrl);
+    expect(wms.metadata.auth?.username).toEqual(originalWms.metadata.auth?.username);
+    expect(wms.metadata.auth?.password).toEqual(originalWms.metadata.auth?.password);
+
+    const originalXyz = manifest.layers[2] as AbcXyzLayer;
+    const xyz = result.layers[2] as AbcXyzLayer;
+    expect(xyz.metadata.remoteUrl).toEqual(originalXyz.metadata.remoteUrl);
   });
 });

@@ -23,6 +23,8 @@ import { projectInitialState, ProjectState } from './state';
 import { TestHelper } from '../../utils/test/TestHelper';
 import { AbcLayout } from '@abc-map/shared';
 
+// TODO: use deepFreeze() instead of stringify()
+
 describe('Project reducer', function () {
   it('NewProject', function () {
     const initialState: ProjectState = {
@@ -143,7 +145,7 @@ describe('Project reducer', function () {
     };
     const snapshot = JSON.stringify(initialState);
 
-    const project = TestHelper.sampleProject();
+    const project = TestHelper.sampleProjectManifest();
     const state = projectReducer(initialState, ProjectActions.loadProject(project));
 
     expect(JSON.stringify(initialState)).toEqual(snapshot);

@@ -11,7 +11,8 @@
     "build": "tsc",
     "watch": "tsc --watch | sed -u 's/\\x1Bc//g'",
     "clean-build": "yarn run clean && yarn run build",
-    "lint": "eslint './src/**/*.ts' --fix --max-warnings=0",
+    "lint": "eslint './src/**/*.ts' --max-warnings=0",
+    "lint-fix": "yarn run lint --fix",
     "coverage": "nyc mocha --trace-warnings 'build/**/*.test.js'",
     "test": "mocha --trace-warnings 'build/**/*.test.js'",
     "dep-check": "depcruise -c .dependency-cruiser.js src"

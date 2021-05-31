@@ -66,7 +66,7 @@ describe('GeoService', () => {
   });
 
   it('importProject()', async () => {
-    const project: AbcProjectManifest = TestHelper.sampleProject();
+    const project: AbcProjectManifest = TestHelper.sampleProjectManifest();
     const map = MapFactory.createNaked();
 
     await service.importProject(map, project);

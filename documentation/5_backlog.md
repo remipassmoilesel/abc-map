@@ -1,8 +1,33 @@
 # Backlog
 
+* [More unit tests on frontend, refactoring of E2E tests.](#more-unit-tests-on-frontend-refactoring-of-e2e-tests)
+* [Internationalization](#internationalization)
+* [Projection change](#projection-change)
+* [Geopackage import](#geopackage-import)
+* [Geopackage export](#geopackage-export)
+* [Shapefile export](#shapefile-export)
+* [Vector tiles support](#vector-tiles-support)
+* [Web worker usage](#web-worker-usage)
+* [Map legend](#map-legend)
+* [Custom icons](#custom-icons)
+* [Images](#images)
+* [Datastore artefact with prompt](#datastore-artefact-with-prompt)
+
+
+## More unit tests on frontend, refactoring of E2E tests.
+
+Frontend needs more unit tests, and some E2E tests needs to be refactored.   
+
+
 ## Internationalization
 
 Frontend should be available in French and in English, with an extensible system.   
+
+
+## Projection change
+
+A user must be able to modify the projection of projects. By selecting a projection from a predefined list,
+or by importing their own. 
 
 
 ## Geopackage import
@@ -20,6 +45,11 @@ A user should be able to export maps or layers as geopackages. A DataWriter can 
 A user should be able to export layers as shapefiles. A DataWriter can be created.
 
 
+## Vector tiles support
+
+A user should be able to use vector tiles layers.
+
+
 ## Web worker usage
 
 Web worker should be used in several tasks of frontend:
@@ -31,6 +61,16 @@ Web worker should be used in several tasks of frontend:
 ## Map legend
 
 A user should be able to generate a legend on layout page.
+
+
+## Custom icons
+
+A user should be able to use their own icons.
+
+
+## Images
+
+A user should be able to import images.
 
 
 ## Datastore artefact with prompt

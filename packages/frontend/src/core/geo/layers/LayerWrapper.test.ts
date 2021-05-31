@@ -19,12 +19,14 @@
 import {
   AbcPredefinedLayer,
   AbcVectorLayer,
+  AbcXyzLayer,
   LayerProperties,
   LayerType,
   PredefinedLayerModel,
   PredefinedMetadata,
   VectorMetadata,
   WmsDefinition,
+  XyzMetadata,
 } from '@abc-map/shared';
 import VectorSource from 'ol/source/Vector';
 import { LayerWrapper, logger as wrapperLogger } from './LayerWrapper';
@@ -43,6 +45,7 @@ describe('LayerWrapper', () => {
       expect(LayerWrapper.from(layer).isPredefined()).toBe(true);
       expect(LayerWrapper.from(layer).isVector()).toBe(false);
       expect(LayerWrapper.from(layer).isWms()).toBe(false);
+      expect(LayerWrapper.from(layer).isXyz()).toBe(false);
     });
 
     it('vector()', () => {
@@ -51,6 +54,7 @@ describe('LayerWrapper', () => {
       expect(LayerWrapper.from(layer).isVector()).toBe(true);
       expect(LayerWrapper.from(layer).isPredefined()).toBe(false);
       expect(LayerWrapper.from(layer).isWms()).toBe(false);
+      expect(LayerWrapper.from(layer).isXyz()).toBe(false);
     });
 
     it('wms()', () => {
@@ -59,6 +63,16 @@ describe('LayerWrapper', () => {
       expect(LayerWrapper.from(layer).isWms()).toBe(true);
       expect(LayerWrapper.from(layer).isPredefined()).toBe(false);
       expect(LayerWrapper.from(layer).isVector()).toBe(false);
+      expect(LayerWrapper.from(layer).isXyz()).toBe(false);
+    });
+
+    it('xyz()', () => {
+      const layer = new TileLayer();
+      layer.set(LayerProperties.Type, LayerType.Xyz);
+      expect(LayerWrapper.from(layer).isWms()).toBe(false);
+      expect(LayerWrapper.from(layer).isPredefined()).toBe(false);
+      expect(LayerWrapper.from(layer).isVector()).toBe(false);
+      expect(LayerWrapper.from(layer).isXyz()).toBe(true);
     });
   });
 
@@ -174,6 +188,21 @@ describe('LayerWrapper', () => {
       expect(metadata?.auth?.password).toEqual('test-password');
       expect(metadata?.remoteUrl).toEqual('http://test-url');
     });
+
+    it('on XYZ layer', () => {
+      const layer = LayerFactory.newXyzLayer('http://test-url');
+      layer.setActive(true).setVisible(false).setOpacity(0.5);
+
+      const metadata = layer.getMetadata();
+      expect(metadata).toBeDefined();
+      expect(metadata?.id).toBeDefined();
+      expect(metadata?.id).toEqual(layer.getId());
+      expect(metadata?.opacity).toEqual(0.5);
+      expect(metadata?.visible).toEqual(false);
+      expect(metadata?.active).toEqual(true);
+      expect(metadata?.type).toEqual(LayerType.Xyz);
+      expect(metadata?.remoteUrl).toEqual('http://test-url');
+    });
   });
 
   describe('toAbcLayer()', () => {
@@ -213,6 +242,25 @@ describe('LayerWrapper', () => {
         active: true,
         opacity: 0.5,
         visible: false,
+      };
+      expect(abcLayer.metadata.id).toBeDefined();
+      expect(abcLayer.metadata).toEqual(expectedMetadata);
+    });
+
+    it('with xyz layer', async () => {
+      const layer = LayerFactory.newXyzLayer('http://test-url').setVisible(false).setOpacity(0.5).setActive(true);
+
+      const abcLayer = (await layer.toAbcLayer()) as AbcXyzLayer;
+
+      expect(abcLayer.type).toEqual(LayerType.Xyz);
+      const expectedMetadata: XyzMetadata = {
+        id: layer.getId() as string,
+        type: LayerType.Xyz,
+        name: 'Couche XYZ',
+        active: true,
+        opacity: 0.5,
+        visible: false,
+        remoteUrl: 'http://test-url',
       };
       expect(abcLayer.metadata.id).toBeDefined();
       expect(abcLayer.metadata).toEqual(expectedMetadata);

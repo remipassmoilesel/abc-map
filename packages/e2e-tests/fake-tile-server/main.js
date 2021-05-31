@@ -23,18 +23,22 @@ const cors = require('cors');
 
 const PORT = 3010;
 const responses = path.resolve(__dirname, 'responses');
-const capabilities = fs.readFileSync(path.resolve(responses, 'capabilities.xml')).toString('utf-8');
+const capabilities = fs.readFileSync(path.resolve(responses, 'wms-capabilities.xml')).toString('utf-8');
 const tile = fs.readFileSync(path.resolve(responses, 'tile.png'));
 const authorization = 'Basic amVhbi1ib25ubzphemVydHkxMjM0'; // jean-bonno:azerty1234
 
-const wms = express();
-wms.use(cors());
+const app = express();
+app.use(cors());
 
-wms.get('/public', function (req, res) {
+app.get('/xyz*', function (req, res) {
+  handleXyzRequest(req, res);
+});
+
+app.get('/wms/public', function (req, res) {
   handleWmsRequest(req, res);
 });
 
-wms.get('/authenticated', function (req, res) {
+app.get('/wms/authenticated', function (req, res) {
   if (req.headers['authorization'] !== authorization) {
     res.status(401).send();
     return;
@@ -43,9 +47,13 @@ wms.get('/authenticated', function (req, res) {
   handleWmsRequest(req, res);
 });
 
-wms.listen(PORT, 'localhost', () => {
-  console.log(`Fake WMS server listening on localhost:${PORT}`);
+app.listen(PORT, 'localhost', () => {
+  console.log(`Fake tile server listening on localhost:${PORT}`);
 });
+
+function handleXyzRequest(req, res) {
+  res.set('Content-Type', 'image/png').status(200).end(tile, 'binary');
+}
 
 function handleWmsRequest(req, res) {
   if (req.url.endsWith('request=GetCapabilities')) {

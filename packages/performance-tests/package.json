@@ -15,7 +15,8 @@
     "build": "webpack",
     "watch": "webpack -w",
     "clean-build": "yarn run clean && yarn run build",
-    "lint": "eslint './src/**/*.ts' --fix --max-warnings=0",
+    "lint": "eslint './src/**/*.ts' --max-warnings=0",
+    "lint-fix": "yarn run lint --fix",
     "dep-check": "depcruise -c .dependency-cruiser.js src"
   },
   "dependencies": {
