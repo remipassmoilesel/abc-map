@@ -20,7 +20,7 @@ import React, { ChangeEvent, Component, ReactNode } from 'react';
 import { Modal } from 'react-bootstrap';
 import { HistoryKey } from '../../../../core/history/HistoryKey';
 import { AddLayersTask } from '../../../../core/history/tasks/layers/AddLayersTask';
-import { LabelledLayerType, LabelledLayerTypes } from './LabelledLayerTypes';
+import { LabeledLayerType, LabeledLayerTypes } from './LabeledLayerTypes';
 import WmsSettingsPanel from './wms/WmsSettingsPanel';
 import { FrontendRoutes, Logger, PredefinedLayerModel, WmsDefinition } from '@abc-map/shared';
 import { Link } from 'react-router-dom';
@@ -37,7 +37,7 @@ interface LocalProps {
 }
 
 interface State {
-  layerType: LabelledLayerType;
+  layerType: LabeledLayerType;
   predefinedModel: PredefinedLayerModel;
   wms?: WmsDefinition;
   xyzUrl?: string;
@@ -49,7 +49,7 @@ class AddLayerModal extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      layerType: LabelledLayerTypes.Vector,
+      layerType: LabeledLayerTypes.Vector,
       predefinedModel: PredefinedLayerModel.OSM,
     };
   }
@@ -64,9 +64,9 @@ class AddLayerModal extends Component<Props, State> {
     const onHide = this.props.onHide;
     const layerTypeId = this.state.layerType.id;
     const predefinedModel = this.state.predefinedModel;
-    const baseMapSelected = layerTypeId === LabelledLayerTypes.BaseMap.id;
-    const wmsSelected = layerTypeId === LabelledLayerTypes.Wms.id;
-    const xyzSelected = layerTypeId === LabelledLayerTypes.Xyz.id;
+    const baseMapSelected = layerTypeId === LabeledLayerTypes.BaseMap.id;
+    const wmsSelected = layerTypeId === LabeledLayerTypes.Wms.id;
+    const xyzSelected = layerTypeId === LabeledLayerTypes.Xyz.id;
     return (
       <Modal show={true} onHide={onHide}>
         <Modal.Header closeButton>
@@ -76,7 +76,7 @@ class AddLayerModal extends Component<Props, State> {
           <div className={'mb-2'}>Sélectionnez le type de couche que vous souhaitez ajouter : </div>
           <div className={'form-group'}>
             <select value={layerTypeId} onChange={this.handleLayerTypeChanged} className={'form-control'} data-cy={'add-layer-type'}>
-              {LabelledLayerTypes.All.map((type) => {
+              {LabeledLayerTypes.All.map((type) => {
                 return (
                   <option key={type.id} value={type.id}>
                     {type.label}
@@ -112,13 +112,13 @@ class AddLayerModal extends Component<Props, State> {
     const { toasts } = this.props.services;
 
     const selected = this.state.layerType;
-    if (LabelledLayerTypes.BaseMap.id === selected.id) {
+    if (LabeledLayerTypes.BaseMap.id === selected.id) {
       this.handleNewBaseMap();
-    } else if (LabelledLayerTypes.Vector.id === selected.id) {
+    } else if (LabeledLayerTypes.Vector.id === selected.id) {
       this.handleNewVectorLayer();
-    } else if (LabelledLayerTypes.Wms.id === selected.id) {
+    } else if (LabeledLayerTypes.Wms.id === selected.id) {
       this.handleNewWmsLayer();
-    } else if (LabelledLayerTypes.Xyz.id === selected.id) {
+    } else if (LabeledLayerTypes.Xyz.id === selected.id) {
       this.handleNewXyzLayer();
     } else {
       toasts.genericError();
@@ -131,7 +131,7 @@ class AddLayerModal extends Component<Props, State> {
     const { toasts } = this.props.services;
 
     const value = ev.target.value;
-    const layerType = LabelledLayerTypes.find(value);
+    const layerType = LabeledLayerTypes.find(value);
     if (!layerType) {
       return toasts.genericError();
     }
@@ -203,11 +203,11 @@ class AddLayerModal extends Component<Props, State> {
 
   private isAddAllowed(): boolean {
     const type = this.state.layerType;
-    if (type === LabelledLayerTypes.Wms) {
+    if (type === LabeledLayerTypes.Wms) {
       const urlIsDefined = !!this.state.wms?.remoteUrl;
       const layerIsDefined = !!this.state.wms?.remoteLayerName;
       return urlIsDefined && layerIsDefined;
-    } else if (type === LabelledLayerTypes.Xyz) {
+    } else if (type === LabeledLayerTypes.Xyz) {
       return !!this.state.xyzUrl;
     }
 

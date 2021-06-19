@@ -153,9 +153,9 @@ class DataSourceSelector extends Component<Props, State> {
         if (rows.length >= 500) {
           this.setState({ message: `Attention: cette source contient beaucoup de données (${rows.length}), le traitement sera long.` });
         } else if (rows.length === 0) {
-          this.setState({ message: 'Cette source de données est vide' });
+          this.setState({ message: 'Cette source de données est vide.' });
         } else {
-          this.setState({ message: `${rows.length} entrées seront traitées` });
+          this.setState({ message: `${rows.length} entrées seront traitées.` });
         }
         this.props.onSelected(source);
       })

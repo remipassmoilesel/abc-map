@@ -16,35 +16,35 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-export interface LabelledLayerType {
+export interface LabeledLayerType {
   id: string;
   label: string;
 }
 
-export class LabelledLayerTypes {
-  public static readonly BaseMap: LabelledLayerType = {
+export class LabeledLayerTypes {
+  public static readonly BaseMap: LabeledLayerType = {
     id: 'BaseMap',
     label: 'Fond de carte',
   };
 
-  public static readonly Vector: LabelledLayerType = {
+  public static readonly Vector: LabeledLayerType = {
     id: 'Vector',
     label: 'Couche de géométries',
   };
 
-  public static readonly Wms: LabelledLayerType = {
+  public static readonly Wms: LabeledLayerType = {
     id: 'Wms',
     label: 'Couche distante (WMS)',
   };
 
-  public static readonly Xyz: LabelledLayerType = {
+  public static readonly Xyz: LabeledLayerType = {
     id: 'Xyz',
     label: 'Couche distante (XYZ)',
   };
 
-  public static readonly All: LabelledLayerType[] = [LabelledLayerTypes.BaseMap, LabelledLayerTypes.Vector, LabelledLayerTypes.Wms, LabelledLayerTypes.Xyz];
+  public static readonly All: LabeledLayerType[] = [LabeledLayerTypes.BaseMap, LabeledLayerTypes.Vector, LabeledLayerTypes.Wms, LabeledLayerTypes.Xyz];
 
-  public static find(value: string): LabelledLayerType | undefined {
-    return LabelledLayerTypes.All.find((type) => type.id === value);
+  public static find(value: string): LabeledLayerType | undefined {
+    return LabeledLayerTypes.All.find((type) => type.id === value);
   }
 }

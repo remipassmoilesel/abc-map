@@ -18,12 +18,13 @@
 
 import { DataSource } from '../../core/data/data-source/DataSource';
 import { VectorLayerWrapper } from '../../core/geo/layers/LayerWrapper';
+import { ScaleAlgorithm } from '../_common/algorithm/Algorithm';
 
 export interface Parameters {
   newLayerName?: string;
   data: {
     source?: DataSource;
-    sizeField?: string;
+    valueField?: string;
     joinBy?: string;
   };
   geometries: {
@@ -40,11 +41,6 @@ export interface Parameters {
 
 export enum PointType {
   Circle = 'Circle',
-}
-
-export enum ScaleAlgorithm {
-  Absolute = 'Absolute',
-  Interpolated = 'Interpolated',
 }
 
 export function newParameters(): Parameters {

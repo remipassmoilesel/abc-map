@@ -18,7 +18,7 @@
 
 import React, { Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/shared';
-import ColorSelector from '../_common/color-selector/ColorSelector';
+import ColorSelector from '../../../../components/color-picker/ColorSelector';
 import PointSizeSelector from './size-selector/PointSizeSelector';
 import PointIconSelector from './icon-selector/PointIconSelector';
 import { ServiceProps, withServices } from '../../../../core/withServices';

@@ -35,6 +35,8 @@ interface Props extends ServiceProps {
   onSelected: (lay: VectorLayerWrapper | undefined) => void;
 
   'data-cy'?: string;
+
+  label?: string;
 }
 
 interface State {
@@ -54,16 +56,20 @@ class VectorLayerSelector extends Component<Props, State> {
     const value = this.props.value || None;
     const layers = this.state.layers;
     const dataCy = this.props['data-cy'];
+    const label = this.props.label;
 
     return (
-      <select onChange={this.handleSelection} value={value} className={'form-control'} data-cy={dataCy}>
-        <option value={None}>Sélectionnez une couche</option>
-        {layers.map((lay) => (
-          <option key={lay.getId()} value={lay.getId()}>
-            {lay.getName()}
-          </option>
-        ))}
-      </select>
+      <>
+        {label && <div className={'flex-grow-1'}>{label}</div>}
+        <select onChange={this.handleSelection} value={value} className={'form-control'} data-cy={dataCy}>
+          <option value={None}>Sélectionnez une couche</option>
+          {layers.map((lay) => (
+            <option key={lay.getId()} value={lay.getId()}>
+              {lay.getName()}
+            </option>
+          ))}
+        </select>
+      </>
     );
   }
 

@@ -26,7 +26,8 @@ class DifferentSymbolsUi extends Component<{}, {}> {
   public render(): ReactNode {
     return (
       <div className={Cls.panel}>
-        <h4 className={'text-center my-5'}>Ce module n&apos;est pas encore prêt !</h4>
+        <i className={`fa fa-file-code`} />
+        <h4 className={'text-center my-5'}>Ce module n&apos;est pas terminé !</h4>
       </div>
     );
   }

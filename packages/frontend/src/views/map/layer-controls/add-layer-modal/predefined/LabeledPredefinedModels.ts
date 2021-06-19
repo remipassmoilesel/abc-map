@@ -22,7 +22,7 @@ import StamenTonerLitePreview from './previews/stamen-toner-lite.jpg';
 import StamenTerrainPreview from './previews/stamen-terrain.jpg';
 import StamenWaterColorPreview from './previews/stamen-watercolor.jpg';
 
-export interface LabelledPredefinedModel {
+export interface LabeledPredefinedModel {
   id: PredefinedLayerModel;
   label: string;
   preview: string;
@@ -35,8 +35,8 @@ const osmLicense = '<a href="https://creativecommons.org/licenses/by-sa/2.0/" ta
 const byStamen = '<a href="https://stamen.com/" target="_blank">Stamen Design</a>';
 const stamenLicense = '<a href="https://creativecommons.org/licenses/by/3.0/" target="_blank">CC BY 3.0</a>';
 
-export class LabelledPredefinedModels {
-  public static readonly Osm: LabelledPredefinedModel = {
+export class LabeledPredefinedModels {
+  public static readonly Osm: LabeledPredefinedModel = {
     id: PredefinedLayerModel.OSM,
     label: 'OpenStreetMap',
     preview: OsmPreview,
@@ -44,7 +44,7 @@ export class LabelledPredefinedModels {
     license: osmLicense,
   };
 
-  public static readonly StamenToner: LabelledPredefinedModel = {
+  public static readonly StamenToner: LabeledPredefinedModel = {
     id: PredefinedLayerModel.StamenToner,
     label: 'Stamen Toner',
     preview: StamenTonerPreview,
@@ -52,7 +52,7 @@ export class LabelledPredefinedModels {
     license: stamenLicense,
   };
 
-  public static readonly StamenTonerLite: LabelledPredefinedModel = {
+  public static readonly StamenTonerLite: LabeledPredefinedModel = {
     id: PredefinedLayerModel.StamenTonerLite,
     label: 'Stamen Toner Lite',
     preview: StamenTonerLitePreview,
@@ -60,7 +60,7 @@ export class LabelledPredefinedModels {
     license: stamenLicense,
   };
 
-  public static readonly StamenTerrain: LabelledPredefinedModel = {
+  public static readonly StamenTerrain: LabeledPredefinedModel = {
     id: PredefinedLayerModel.StamenTerrain,
     label: 'Stamen Terrain',
     preview: StamenTerrainPreview,
@@ -68,7 +68,7 @@ export class LabelledPredefinedModels {
     license: stamenLicense,
   };
 
-  public static readonly StamenWatercolor: LabelledPredefinedModel = {
+  public static readonly StamenWatercolor: LabeledPredefinedModel = {
     id: PredefinedLayerModel.StamenWatercolor,
     label: 'Stamen Watercolor',
     preview: StamenWaterColorPreview,
@@ -76,15 +76,15 @@ export class LabelledPredefinedModels {
     license: stamenLicense,
   };
 
-  public static readonly All: LabelledPredefinedModel[] = [
-    LabelledPredefinedModels.Osm,
-    LabelledPredefinedModels.StamenToner,
-    LabelledPredefinedModels.StamenTonerLite,
-    LabelledPredefinedModels.StamenTerrain,
-    LabelledPredefinedModels.StamenWatercolor,
+  public static readonly All: LabeledPredefinedModel[] = [
+    LabeledPredefinedModels.Osm,
+    LabeledPredefinedModels.StamenToner,
+    LabeledPredefinedModels.StamenTonerLite,
+    LabeledPredefinedModels.StamenTerrain,
+    LabeledPredefinedModels.StamenWatercolor,
   ];
 
-  public static find(model: PredefinedLayerModel): LabelledPredefinedModel | undefined {
-    return LabelledPredefinedModels.All.find((type) => type.id === model);
+  public static find(model: PredefinedLayerModel): LabeledPredefinedModel | undefined {
+    return LabeledPredefinedModels.All.find((type) => type.id === model);
   }
 }

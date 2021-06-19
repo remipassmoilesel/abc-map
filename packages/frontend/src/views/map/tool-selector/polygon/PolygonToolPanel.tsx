@@ -19,7 +19,7 @@
 import React, { Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/shared';
 import WidthSelector from '../_common/stroke-width-selector/StrokeWidthSelector';
-import ColorSelector from '../_common/color-selector/ColorSelector';
+import ColorSelector from '../../../../components/color-picker/ColorSelector';
 import FillPatternSelector from '../_common/fill-pattern-selector/FillPatternSelector';
 import Cls from './PolygonToolPanel.module.scss';
 import { MainState } from '../../../../core/store/reducer';

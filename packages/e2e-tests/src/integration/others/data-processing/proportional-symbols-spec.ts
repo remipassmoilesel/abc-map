@@ -45,7 +45,7 @@ describe('Proportional symbols', function () {
       .then((file) => {
         return cy.get('[data-cy=file-input]').attachFile({ filePath: 'project.csv', fileContent: file });
       })
-      .get('[data-cy=size-field]')
+      .get('[data-cy=value-field]')
       .select('VALUE')
       .get('[data-cy=data-joinby-field]')
       .select('COUNTRY')

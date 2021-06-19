@@ -18,13 +18,15 @@
 
 import React, { ChangeEvent, Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/shared';
-import { PointType, ScaleAlgorithm } from '../Parameters';
-import TipBubble from '../../../components/tip-bubble/TipBubble';
+import { PointType } from '../Parameters';
+import { Algorithm, isScaleAlgorithm, ScaleAlgorithm } from '../../_common/algorithm/Algorithm';
+import AlgorithmSelector from '../../_common/algorithm/AlgorithmSelector';
+import FormLine from '../../_common/form-line/FormLine';
 import { ProportionalSymbolsTips } from '@abc-map/user-documentation';
 
 const logger = Logger.get('SymbolConfigForm.tsx');
 
-export interface ConfigFormValues {
+export interface SymbolConfigFormValues {
   layerName: string;
   type: PointType;
   sizeMin: number;
@@ -33,9 +35,11 @@ export interface ConfigFormValues {
 }
 
 interface Props {
-  values: ConfigFormValues;
-  onChange: (config: ConfigFormValues) => void;
+  values: SymbolConfigFormValues;
+  onChange: (config: SymbolConfigFormValues) => void;
 }
+
+const algorithms = Object.values(ScaleAlgorithm);
 
 class SymbolConfigForm extends Component<Props, {}> {
   public render(): ReactNode {
@@ -43,42 +47,51 @@ class SymbolConfigForm extends Component<Props, {}> {
 
     return (
       <>
-        <div className={'form-line'}>
-          <label htmlFor="layer-name">Nom de la nouvelle couche</label>
+        <FormLine>
+          <label htmlFor="layer-name" className={'flex-grow-1'}>
+            Nom de la nouvelle couche:
+          </label>
           <input type={'text'} className={'form-control'} id={'layer-name'} value={value?.layerName} onChange={this.handleLayerNameChange} />
-        </div>
+        </FormLine>
 
-        <div className={'form-line'}>
-          <label htmlFor="symbol">Type de symbole</label>
+        <FormLine>
+          <label htmlFor="symbol" className={'flex-grow-1'}>
+            Type de symbole
+          </label>
           <select className={'form-control'} id={'symbol'} value={value?.type} onChange={this.handleTypeChange}>
             <option value={PointType.Circle}>Rond</option>
           </select>
-        </div>
+        </FormLine>
 
-        <div className={'form-line'}>
-          <label htmlFor="min-size">Taille minimale</label>
+        <FormLine>
+          <label htmlFor="min-size" className={'flex-grow-1'}>
+            Taille minimale
+          </label>
           <input type={'number'} value={value?.sizeMin} onChange={this.handleSizeMinChange} min={1} className={'form-control'} id={'min-size'} />
-        </div>
+        </FormLine>
 
-        <div className={'form-line'}>
-          <label htmlFor="max-size">Taille maximale</label>
+        <FormLine>
+          <label htmlFor="max-size" className={'flex-grow-1'}>
+            Taille maximale
+          </label>
           <input type={'number'} value={value?.sizeMax} onChange={this.handleSizeMaxChange} min={1} className={'form-control'} id={'max-size'} />
-        </div>
+        </FormLine>
 
-        <div className={'form-line'}>
-          <label htmlFor="algorithm">Échelle des symboles</label>
-          <select value={value.algorithm} onChange={this.handleAlgorithmChange} className={'form-control'} id={'algorithm'}>
-            <option value={ScaleAlgorithm.Absolute}>Absolue</option>
-            <option value={ScaleAlgorithm.Interpolated}>Interpolée</option>
-          </select>
-          <TipBubble id={ProportionalSymbolsTips.Algorithm} />
-        </div>
+        <FormLine>
+          <AlgorithmSelector
+            label={'Echelle des symboles:'}
+            value={value.algorithm}
+            tip={ProportionalSymbolsTips.Algorithm}
+            only={algorithms}
+            onChange={this.handleAlgorithmChange}
+          />
+        </FormLine>
       </>
     );
   }
 
   private handleLayerNameChange = (ev: ChangeEvent<HTMLInputElement>) => {
-    const config: ConfigFormValues = {
+    const config: SymbolConfigFormValues = {
       ...this.props.values,
       layerName: ev.target.value,
     };
@@ -86,7 +99,7 @@ class SymbolConfigForm extends Component<Props, {}> {
   };
 
   private handleTypeChange = (ev: ChangeEvent<HTMLSelectElement>) => {
-    const config: ConfigFormValues = {
+    const config: SymbolConfigFormValues = {
       ...this.props.values,
       type: ev.target.value as PointType,
     };
@@ -94,7 +107,7 @@ class SymbolConfigForm extends Component<Props, {}> {
   };
 
   private handleSizeMinChange = (ev: ChangeEvent<HTMLInputElement>) => {
-    const config: ConfigFormValues = {
+    const config: SymbolConfigFormValues = {
       ...this.props.values,
       sizeMin: parseFloat(ev.target.value),
     };
@@ -102,17 +115,22 @@ class SymbolConfigForm extends Component<Props, {}> {
   };
 
   private handleSizeMaxChange = (ev: ChangeEvent<HTMLInputElement>) => {
-    const config: ConfigFormValues = {
+    const config: SymbolConfigFormValues = {
       ...this.props.values,
       sizeMax: parseFloat(ev.target.value),
     };
     this.props.onChange(config);
   };
 
-  private handleAlgorithmChange = (ev: ChangeEvent<HTMLSelectElement>) => {
-    const config: ConfigFormValues = {
+  private handleAlgorithmChange = (value: Algorithm) => {
+    if (!isScaleAlgorithm(value)) {
+      logger.error('Invalid value: ', value);
+      return;
+    }
+
+    const config: SymbolConfigFormValues = {
       ...this.props.values,
-      algorithm: ev.target.value as ScaleAlgorithm,
+      algorithm: value,
     };
     this.props.onChange(config);
   };

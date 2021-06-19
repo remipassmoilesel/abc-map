@@ -20,10 +20,11 @@ import React, { ChangeEvent, Component, ReactNode } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { MainState } from '../../../../../core/store/reducer';
 import { MapActions } from '../../../../../core/store/map/actions';
-import ColorPicker from '../color-selector/ColorPicker';
+import ColorPicker from '../../../../../components/color-picker/ColorPicker';
 import * as _ from 'lodash';
 import { ServiceProps, withServices } from '../../../../../core/withServices';
 import Cls from './TextFormat.module.scss';
+import OptionRow from '../option-row/OptionRow';
 
 const mapStateToProps = (state: MainState) => ({
   color: state.map.currentStyle.text?.color,
@@ -42,9 +43,15 @@ type Props = ConnectedProps<typeof connector> & ServiceProps;
 class TextFormat extends Component<Props, {}> {
   public render(): ReactNode {
     return (
-      <div className={'control-item'}>
-        <ColorPicker label={'Texte'} initialValue={this.props.color} onClose={this.handleColorSelected} />
-        <div className={'d-flex justify-content-between align-items-center'}>
+      <>
+        {/* Color */}
+        <OptionRow>
+          <div>Texte</div>
+          <ColorPicker initialValue={this.props.color} onClose={this.handleColorSelected} />
+        </OptionRow>
+
+        {/* Size */}
+        <OptionRow>
           <div>Taille du texte:</div>
           <select onChange={this.handleSizeChange} value={this.props.size} className={`form-control form-control-sm ${Cls.select}`}>
             {_.range(5, 51).map((val) => (
@@ -53,8 +60,8 @@ class TextFormat extends Component<Props, {}> {
               </option>
             ))}
           </select>
-        </div>
-      </div>
+        </OptionRow>
+      </>
     );
   }
 

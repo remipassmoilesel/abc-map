@@ -17,5 +17,15 @@
  */
 
 .panel {
+  flex-grow: 1;
 
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+
+  :global(.fa){
+    font-size: 4rem;
+  }
 }

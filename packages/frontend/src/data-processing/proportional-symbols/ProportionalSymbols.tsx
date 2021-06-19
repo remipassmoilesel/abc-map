@@ -18,9 +18,9 @@
 
 import React, { ReactNode } from 'react';
 import { Module } from '../Module';
-import Panel from './ui/ProportionalSymbolsUi';
+import ProportionalSymbolsUi from './ui/ProportionalSymbolsUi';
 import { ModuleId } from '../ModuleId';
-import { newParameters, Parameters, ScaleAlgorithm } from './Parameters';
+import { newParameters, Parameters } from './Parameters';
 import { LayerFactory } from '../../core/geo/layers/LayerFactory';
 import { Services } from '../../core/Services';
 import { getCenter } from 'ol/extent';
@@ -29,6 +29,8 @@ import { Point } from 'ol/geom';
 import Geometry from 'ol/geom/Geometry';
 import Feature from 'ol/Feature';
 import { Logger } from '@abc-map/shared';
+import { ScaleAlgorithm } from '../_common/algorithm/Algorithm';
+import { Stats } from '../_common/stats/Stats';
 
 export const logger = Logger.get('ProportionalSymbols.tsx');
 
@@ -48,25 +50,25 @@ export class ProportionalSymbols extends Module {
   }
 
   public getUserInterface(): ReactNode {
-    return <Panel initialValue={this.params} onChange={this.handleParamsChange} onProcess={() => this.process(this.params)} />;
+    return <ProportionalSymbolsUi initialValue={this.params} onChange={this.handleParamsChange} onProcess={() => this.process(this.params)} />;
   }
 
   public async process(params: Parameters): Promise<void> {
     logger.info('Using parameters: ', params);
 
     const { newLayerName, data, geometries, points } = params;
-    const { sizeField, source, joinBy: dataJoinBy } = data;
+    const { valueField, source, joinBy: dataJoinBy } = data;
     const { layer: geometryLayer, joinBy: geometryJoinBy } = geometries;
     const { sizeMin, sizeMax, algorithm } = points;
 
-    if (!newLayerName || !source || !sizeField || !sizeMin || !sizeMax || !dataJoinBy || !geometryLayer || !geometryJoinBy || !algorithm) {
+    if (!newLayerName || !source || !valueField || !sizeMin || !sizeMax || !dataJoinBy || !geometryLayer || !geometryJoinBy || !algorithm) {
       return Promise.reject(new Error('Invalid parameters'));
     }
 
     // We sort data source items to extract min and max values
     const rows = await source.getRows();
     const sortedValues = rows
-      .map((r) => r[sizeField])
+      .map((r) => r[valueField])
       .filter((v) => typeof v === 'number')
       .sort((a, b) => (a as number) - (b as number)) as number[];
 
@@ -97,14 +99,14 @@ export class ProportionalSymbols extends Module {
           return null;
         }
 
-        const value = row[sizeField];
+        const value = row[valueField];
         if (typeof value !== 'number') {
           logger.error(`Invalid size value: ${value}`);
           return null;
         }
 
-        if (value < 1) {
-          logger.warn('Some values are smaller than one, skipping');
+        if (value <= 0) {
+          logger.warn('Some values are smaller than zero, skipping');
           return null;
         }
 
@@ -149,19 +151,13 @@ export class ProportionalSymbols extends Module {
     }
 
     if (ScaleAlgorithm.Absolute === algorithm) {
-      size = Math.round((sizeMin * value) / valueMin);
+      size = Stats.proportionality(value, sizeMin, valueMin, sizeMax);
     } else if (ScaleAlgorithm.Interpolated === algorithm) {
-      size = Math.round(sizeMin + (sizeMax - sizeMin) * ((value - valueMin) / (valueMax - valueMin)));
+      size = Stats.interpolated(value, valueMin, sizeMin, valueMax, sizeMax);
     } else {
       throw new Error(`Unhandled algorithm: ${algorithm}`);
     }
 
-    if (size < sizeMin) {
-      return sizeMin;
-    }
-    if (size > sizeMax) {
-      return sizeMax;
-    }
     return size;
   }
 

@@ -17,7 +17,7 @@
  */
 
 import { logger, ProportionalSymbols } from './ProportionalSymbols';
-import { newParameters, Parameters, PointType, ScaleAlgorithm } from './Parameters';
+import { newParameters, Parameters, PointType } from './Parameters';
 import * as sinon from 'sinon';
 import { SinonStubbedInstance } from 'sinon';
 import { GeoService } from '../../core/geo/GeoService';
@@ -35,6 +35,7 @@ import {
 } from './ProportionalSymbols.test.data';
 import { StyleProperties } from '@abc-map/shared';
 import { MapWrapper } from '../../core/geo/map/MapWrapper';
+import { ScaleAlgorithm } from '../_common/algorithm/Algorithm';
 
 logger.disable();
 
@@ -67,7 +68,7 @@ describe('ProportionalSymbols', () => {
       newLayerName: 'New layer name',
       data: {
         source,
-        sizeField: 'population',
+        valueField: 'population',
         joinBy: 'code_reg',
       },
       geometries: {
@@ -123,7 +124,7 @@ describe('ProportionalSymbols', () => {
       newLayerName: 'New layer name',
       data: {
         source,
-        sizeField: 'population',
+        valueField: 'population',
         joinBy: 'code_reg',
       },
       geometries: {
@@ -166,7 +167,7 @@ describe('ProportionalSymbols', () => {
       newLayerName: 'New layer name',
       data: {
         source,
-        sizeField: 'population',
+        valueField: 'population',
         joinBy: 'code_reg',
       },
       geometries: {
@@ -208,7 +209,7 @@ describe('ProportionalSymbols', () => {
       newLayerName: 'New layer name',
       data: {
         source,
-        sizeField: 'value',
+        valueField: 'value',
         joinBy: 'code',
       },
       geometries: {
@@ -264,7 +265,7 @@ describe('ProportionalSymbols', () => {
       newLayerName: 'New layer name',
       data: {
         source,
-        sizeField: 'value',
+        valueField: 'value',
         joinBy: 'code',
       },
       geometries: {
@@ -305,7 +306,7 @@ describe('ProportionalSymbols', () => {
       newLayerName: 'New layer name',
       data: {
         source,
-        sizeField: 'value',
+        valueField: 'value',
         joinBy: 'code',
       },
       geometries: {

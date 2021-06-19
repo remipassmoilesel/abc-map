@@ -18,22 +18,25 @@
 
 import React, { ChangeEvent, Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/shared';
-import DataSourceSelector from '../../../components/data-source-selector/DataSourceSelector';
-import { DataRow, DataSource, getFields } from '../../../core/data/data-source/DataSource';
-import DataTable from '../../../components/data-table/DataTable';
-import { ServiceProps, withServices } from '../../../core/withServices';
-import TipBubble from '../../../components/tip-bubble/TipBubble';
-import { ProportionalSymbolsTips } from '@abc-map/user-documentation';
+import DataSourceSelector from '../../components/data-source-selector/DataSourceSelector';
+import { DataRow, DataSource, getFields } from '../../core/data/data-source/DataSource';
+import DataTable from '../../components/data-table/DataTable';
+import { ServiceProps, withServices } from '../../core/withServices';
+import TipBubble from '../../components/tip-bubble/TipBubble';
+import { DataProcessingTips } from '@abc-map/user-documentation';
+import FormLine from './form-line/FormLine';
 
 const logger = Logger.get('DataSourceForm.tsx');
 
 export interface DataSourceFormValues {
   source: DataSource | undefined;
-  sizeField: string;
+  valueField: string;
   joinBy: string;
 }
 
 interface Props extends ServiceProps {
+  valuesFieldLabel: string;
+  valuesFieldTip: string;
   values: DataSourceFormValues;
   onChange: (params: DataSourceFormValues) => void;
 }
@@ -54,8 +57,10 @@ class DataSourceForm extends Component<Props, State> {
 
   public render(): ReactNode {
     const source = this.props.values.source;
-    const sizeField = this.props.values.sizeField;
+    const valueField = this.props.values.valueField;
     const joinBy = this.props.values.joinBy;
+    const valuesFieldLabel = this.props.valuesFieldLabel;
+    const valuesFieldTip = this.props.valuesFieldTip;
     const dataSamples = this.state.dataSamples;
     const dataFields = this.state.dataFields;
 
@@ -65,9 +70,13 @@ class DataSourceForm extends Component<Props, State> {
           <DataSourceSelector onSelected={this.handleDataSourceSelected} value={source} />
         </div>
 
-        <div className={'form-line my-3'}>
-          <label htmlFor="size-field">Champ de taille</label>
-          <select className={'form-control'} id={'size-field'} value={sizeField} onChange={this.handleSourceFieldChange} data-cy={'size-field'}>
+        <FormLine>
+          <label htmlFor="value-field" className={'flex-grow-1'}>
+            {valuesFieldLabel}
+          </label>
+
+          <TipBubble id={valuesFieldTip} />
+          <select className={'form-control'} id={'value-field'} value={valueField} onChange={this.handleSourceFieldChange} data-cy={'value-field'}>
             {!dataFields.length && <option>Sélectionnez une source de données</option>}
             {!!dataFields.length &&
               [<option key={0}>Sélectionnez un champ</option>].concat(
@@ -78,11 +87,14 @@ class DataSourceForm extends Component<Props, State> {
                 ))
               )}
           </select>
-          <TipBubble id={ProportionalSymbolsTips.SizeField} />
-        </div>
+        </FormLine>
 
-        <div className={'form-line my-3'}>
-          <label htmlFor="data-join-by">Champ de jointure</label>
+        <FormLine>
+          <label htmlFor="data-join-by" className={'flex-grow-1'}>
+            Jointure avec les géométries par:
+          </label>
+
+          <TipBubble id={DataProcessingTips.JoinBy} />
           <select className={'form-control'} id={'data-join-by'} value={joinBy} onChange={this.handleJoinByChange} data-cy={'data-joinby-field'}>
             {!dataFields.length && <option>Sélectionnez une source de données</option>}
             {!!dataFields.length &&
@@ -94,8 +106,7 @@ class DataSourceForm extends Component<Props, State> {
                 ))
               )}
           </select>
-          <TipBubble id={ProportionalSymbolsTips.JoinBy} />
-        </div>
+        </FormLine>
 
         {!!dataSamples.length && (
           <>
@@ -109,13 +120,13 @@ class DataSourceForm extends Component<Props, State> {
 
   public componentDidMount() {
     const dataSource = this.props.values.source;
-    this.dataSourcePreview(dataSource);
+    this.dataSourcePreview(dataSource).catch((err) => logger.error('Data preview error: ', err));
   }
 
   public componentDidUpdate(prevProps: Readonly<Props>) {
     const dataSource = this.props.values.source;
     if (dataSource?.getId() !== prevProps.values.source?.getId()) {
-      this.dataSourcePreview(dataSource);
+      this.dataSourcePreview(dataSource).catch((err) => logger.error('Data preview error: ', err));
     }
   }
 
@@ -124,7 +135,7 @@ class DataSourceForm extends Component<Props, State> {
       const values: DataSourceFormValues = {
         ...this.props.values,
         source,
-        sizeField: '',
+        valueField: '',
       };
       this.props.onChange(values);
     });
@@ -133,7 +144,7 @@ class DataSourceForm extends Component<Props, State> {
   private handleSourceFieldChange = (ev: ChangeEvent<HTMLSelectElement>) => {
     const values: DataSourceFormValues = {
       ...this.props.values,
-      sizeField: ev.target.value,
+      valueField: ev.target.value,
     };
 
     this.props.onChange(values);

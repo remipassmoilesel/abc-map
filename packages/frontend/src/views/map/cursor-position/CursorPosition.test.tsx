@@ -16,10 +16,16 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { render, screen } from '@testing-library/react';
+import CursorPosition from './CursorPosition';
 
-.fillPatternSelector {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-}
+describe('CursorPosition', () => {
+  it('should render', () => {
+    const position = [1.111111118, 2.11111119];
+    render(<CursorPosition position={position} />);
+
+    expect(screen.getByText('Position du curseur')).toBeDefined();
+    expect(screen.getByText((t) => !!t.match(/Longitude.+1\.111/))).toBeDefined();
+    expect(screen.getByText((t) => !!t.match(/Latitude.+2\.111/))).toBeDefined();
+  });
+});
