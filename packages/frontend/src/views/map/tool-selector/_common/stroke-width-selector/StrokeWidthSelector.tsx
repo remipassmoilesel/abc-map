@@ -23,6 +23,7 @@ import { MapActions } from '../../../../../core/store/map/actions';
 import _ from 'lodash';
 import { ServiceProps, withServices } from '../../../../../core/withServices';
 import Cls from './StrokeWidthSelector.module.scss';
+import OptionRow from '../option-row/OptionRow';
 
 const mapStateToProps = (state: MainState) => ({
   stroke: state.map.currentStyle.stroke,
@@ -39,8 +40,8 @@ type Props = ConnectedProps<typeof connector> & ServiceProps;
 class StrokeWidthSelector extends Component<Props, {}> {
   public render(): ReactNode {
     return (
-      <div className={'control-item d-flex align-items-center justify-content-between'}>
-        <div className={'mr-2'}>Épaisseur de trait:</div>
+      <OptionRow>
+        <div className={'mr-2'}>Épaisseur:</div>
         <select value={this.props.stroke?.width} onChange={this.handleSelection} className={`form-control form-control-sm ${Cls.select}`}>
           {_.range(1, 50).map((value) => (
             <option key={value} value={value}>
@@ -48,7 +49,7 @@ class StrokeWidthSelector extends Component<Props, {}> {
             </option>
           ))}
         </select>
-      </div>
+      </OptionRow>
     );
   }
 

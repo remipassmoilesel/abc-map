@@ -25,6 +25,7 @@ import { Modal } from 'react-bootstrap';
 import { getAllIcons, safeGetIcon, PointIcon } from '../../../../../core/geo/styles/PointIcons';
 import { IconProcessor } from '../../../../../core/geo/styles/IconProcessor';
 import Cls from './PointIconSelector.module.scss';
+import OptionRow from '../../_common/option-row/OptionRow';
 
 interface IconPreview {
   icon: PointIcon;
@@ -66,13 +67,17 @@ class PointIconSelector extends Component<Props, State> {
     const selected = this.state.selectedPreview;
 
     return (
-      <div className={'control-item d-flex align-items-center justify-content-between'}>
-        <div className={'mr-2'}>Icône: </div>
-        <button onClick={this.handleOpen} className={'btn btn-outline-secondary btn-sm'}>
-          {!selected && 'Choisir'}
-          {selected && <img src={selected.preview} alt={selected.icon.name} />}
-        </button>
+      <>
+        {/* Button, always visible */}
+        <OptionRow>
+          <div className={'mr-2'}>Icône: </div>
+          <button onClick={this.handleOpen} className={'btn btn-outline-secondary btn-sm'}>
+            {!selected && 'Choisir'}
+            {selected && <img src={selected.preview} alt={selected.icon.name} />}
+          </button>
+        </OptionRow>
 
+        {/* Modal, visible on demand */}
         <Modal show={modal} onHide={this.handleCancel} size={'lg'} className={Cls.modal}>
           <Modal.Header closeButton>
             <Modal.Title>Icônes</Modal.Title>
@@ -91,7 +96,7 @@ class PointIconSelector extends Component<Props, State> {
             </div>
           </Modal.Body>
         </Modal>
-      </div>
+      </>
     );
   }
 

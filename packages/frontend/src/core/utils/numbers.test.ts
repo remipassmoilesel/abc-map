@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { asNumberOrString, isNumeric } from './numbers';
+import { asNumberOrString, isNumeric, toPrecision } from './numbers';
 
 describe('numbers', () => {
   it('isNumeric()', () => {
@@ -33,5 +33,11 @@ describe('numbers', () => {
     expect(asNumberOrString('001')).toEqual(1);
     expect(asNumberOrString('abcdef')).toEqual('abcdef');
     expect(asNumberOrString('abc,def')).toEqual('abc,def');
+  });
+
+  it('toPrecision()', () => {
+    expect(toPrecision(1, 4)).toEqual(1);
+    expect(toPrecision(1.00001, 4)).toEqual(1);
+    expect(toPrecision(1.77778, 4)).toEqual(1.7778);
   });
 });

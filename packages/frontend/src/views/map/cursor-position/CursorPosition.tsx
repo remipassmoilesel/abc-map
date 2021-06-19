@@ -19,6 +19,7 @@
 import React, { Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/shared';
 import { Coordinate } from 'ol/coordinate';
+import { toPrecision } from '../../../core/utils/numbers';
 
 const logger = Logger.get('CursorPosition.tsx');
 
@@ -33,8 +34,8 @@ class CursorPosition extends Component<Props, {}> {
       return <div />;
     }
 
-    const lon = Math.round(position[0] * 1000) / 1000;
-    const lat = Math.round(position[1] * 1000) / 1000;
+    const lon = toPrecision(position[0], 3);
+    const lat = toPrecision(position[1], 3);
     return (
       <div className={'control-block'}>
         <div className={'mb-2'}>Position du curseur</div>

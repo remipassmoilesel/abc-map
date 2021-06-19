@@ -22,10 +22,9 @@ import { ColorResult, SketchPicker } from 'react-color';
 import { Modal } from 'react-bootstrap';
 import Cls from './ColorPicker.module.scss';
 
-const logger = Logger.get('ColorPickerButton.tsx', 'info');
+const logger = Logger.get('ColorPicker.tsx', 'info');
 
 interface Props {
-  label: string;
   initialValue?: string;
   onClose: (value: string) => void;
   'data-cy'?: string;
@@ -46,19 +45,22 @@ class ColorPicker extends Component<Props, State> {
   }
 
   public render(): ReactNode {
+    const value = this.state.value;
+    const modalVisible = this.state.modalVisible;
+
     return (
       <>
-        <div className={'control-item d-flex align-item-center justify-content-between my-2'} data-cy={this.props['data-cy']}>
-          <div>{this.props.label}:</div>
-          <button onClick={this.handleClick} className={Cls.button} type={'button'} style={{ backgroundColor: this.state.value }} />
-        </div>
-        <Modal show={this.state.modalVisible} onHide={this.handleModalClose} size={'sm'}>
-          <Modal.Header closeButton>{this.props.label}</Modal.Header>
+        {/* Button, always visible */}
+        <button onClick={this.handleClick} className={Cls.button} type={'button'} style={{ backgroundColor: value }} data-cy={this.props['data-cy']} />
+
+        {/* Modal, visible on demand */}
+        <Modal show={modalVisible} onHide={this.handleModalClose} size={'sm'}>
+          <Modal.Header closeButton>Sélectionnez une couleur</Modal.Header>
           <Modal.Body className={'d-flex justify-content-center'}>
-            <SketchPicker color={this.state.value} onChange={this.handleChange} width={'300px'} />
+            <SketchPicker color={value} onChange={this.handleChange} width={'300px'} />
           </Modal.Body>
           <Modal.Footer>
-            <button className={'btn btn-outline-secondary'} onClick={this.handleModalClose} data-cy={'close-modal'}>
+            <button onClick={this.handleModalClose} data-cy={'close-modal'} className={'btn btn-outline-secondary'}>
               Fermer
             </button>
           </Modal.Footer>

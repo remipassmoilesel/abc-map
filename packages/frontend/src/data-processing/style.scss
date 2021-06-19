@@ -21,25 +21,5 @@
 }
 
 .explanation {
-  margin: 0 0 0.8rem 0;
-}
-
-.form-line {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-
-  margin-bottom: 0.5rem;
-
-  label {
-    width: 20%;
-  }
-
-  input {
-    width: 30%;
-  }
-
-  select {
-    width: 30%;
-  }
+  margin: 1rem 0;
 }

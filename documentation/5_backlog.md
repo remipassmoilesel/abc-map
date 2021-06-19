@@ -53,7 +53,7 @@ A user should be able to use vector tiles layers.
 ## Web worker usage
 
 Web worker should be used in several tasks of frontend:
-- Zip / unzip of project
+- Zip / unzip of project, per example with https://gildas-lormeau.github.io/zip.js/core-api.html
 - Data processing
 - ...
 

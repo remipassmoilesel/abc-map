@@ -26,5 +26,5 @@ import { Scripts } from './scripts/Scripts';
 
 export function getModules(): Module[] {
   const services = getServices();
-  return [new DataViewer(), new ProportionalSymbols(services), new DifferentSymbols(), new ColorGradients(), new Scripts(services)];
+  return [new DataViewer(), new ColorGradients(services), new ProportionalSymbols(services), new DifferentSymbols(), new Scripts(services)];
 }

@@ -18,7 +18,7 @@
 
 import React, { ChangeEvent, Component, ReactNode } from 'react';
 import { Logger, PredefinedLayerModel } from '@abc-map/shared';
-import { LabelledPredefinedModels } from './LabelledPredefinedModels';
+import { LabeledPredefinedModels } from './LabeledPredefinedModels';
 
 const logger = Logger.get('PredefinedSelector.tsx');
 
@@ -30,13 +30,13 @@ interface Props {
 class PredefinedSelector extends Component<Props, {}> {
   public render(): ReactNode {
     const model = this.props.value;
-    const labelledModel = LabelledPredefinedModels.find(model);
+    const labelledModel = LabeledPredefinedModels.find(model);
     return (
       <div className={'mb-3'}>
         <div className={'mb-2'}>Sélectionnez le type de fond de carte : </div>
         <div className={'form-group'}>
           <select value={model} onChange={this.handleChange} className={'form-control'} data-cy={'predefined-model'}>
-            {LabelledPredefinedModels.All.map((m) => (
+            {LabeledPredefinedModels.All.map((m) => (
               <option key={m.id} value={m.id}>
                 {m.label}
               </option>

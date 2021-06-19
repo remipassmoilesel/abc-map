@@ -18,7 +18,7 @@
 
 import React, { Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/shared';
-import ColorSelector from '../_common/color-selector/ColorSelector';
+import ColorSelector from '../../../../components/color-picker/ColorSelector';
 import StrokeWidthSelector from '../_common/stroke-width-selector/StrokeWidthSelector';
 import { ServiceProps, withServices } from '../../../../core/withServices';
 import { MainState } from '../../../../core/store/reducer';
@@ -41,7 +41,7 @@ type Props = ConnectedProps<typeof connector> & ServiceProps;
 class LineStringToolPanel extends Component<Props, {}> {
   public render(): ReactNode {
     return (
-      <div className={Cls.linePanel}>
+      <div className={Cls.lineStringPanel}>
         <TipBubble id={ToolTips.LineString} label={'Aide'} className={'mx-3 mb-4'} />
         <StrokeWidthSelector />
         <ColorSelector stroke={true} />

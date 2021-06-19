@@ -18,10 +18,11 @@
 
 import React, { Component, ReactNode } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
-import { MainState } from '../../../../../core/store/reducer';
-import { MapActions } from '../../../../../core/store/map/actions';
+import { MainState } from '../../core/store/reducer';
+import { MapActions } from '../../core/store/map/actions';
 import ColorPicker from './ColorPicker';
-import { ServiceProps, withServices } from '../../../../../core/withServices';
+import { ServiceProps, withServices } from '../../core/withServices';
+import OptionRow from '../../views/map/tool-selector/_common/option-row/OptionRow';
 
 export interface LocalProps {
   /**
@@ -72,10 +73,33 @@ class ColorSelector extends Component<Props, {}> {
 
     return (
       <div className={'control-item'}>
-        {strokeColor && <ColorPicker label={'Trait'} initialValue={strokeProps?.color} onClose={this.handleStrokeColor} data-cy={'stroke-color'} />}
-        {fillColor1 && <ColorPicker label={'Remplissage'} initialValue={fillProps?.color1} onClose={this.handleFillColor1} data-cy={'fill-color1'} />}
-        {fillColor2 && <ColorPicker label={'Texture'} initialValue={fillProps?.color2} onClose={this.handleFillColor2} data-cy={'fill-color2'} />}
-        {pointColor && <ColorPicker label={"Couleur d'icône"} initialValue={pointProps?.color} onClose={this.handlePointColor} data-cy={'point-color'} />}
+        {strokeColor && (
+          <OptionRow>
+            <div>Trait: </div>
+            <ColorPicker initialValue={strokeProps?.color} onClose={this.handleStrokeColor} data-cy={'stroke-color'} />
+          </OptionRow>
+        )}
+
+        {fillColor1 && (
+          <OptionRow>
+            <div>Remplissage: </div>
+            <ColorPicker initialValue={fillProps?.color1} onClose={this.handleFillColor1} data-cy={'fill-color1'} />
+          </OptionRow>
+        )}
+
+        {fillColor2 && (
+          <OptionRow>
+            <div>Texture: </div>
+            <ColorPicker initialValue={fillProps?.color2} onClose={this.handleFillColor2} data-cy={'fill-color2'} />
+          </OptionRow>
+        )}
+
+        {pointColor && (
+          <OptionRow>
+            <div>Couleur d&apos;icône: </div>
+            <ColorPicker initialValue={pointProps?.color} onClose={this.handlePointColor} data-cy={'point-color'} />
+          </OptionRow>
+        )}
       </div>
     );
   }

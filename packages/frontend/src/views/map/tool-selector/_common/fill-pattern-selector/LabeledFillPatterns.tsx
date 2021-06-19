@@ -18,54 +18,54 @@
 
 import { FillPatterns } from '@abc-map/shared';
 
-export interface LabelledFillPattern {
+export interface LabeledFillPattern {
   label: string;
   value: FillPatterns;
 }
 
-export class LabelledFillPatterns {
-  public static readonly Flat: LabelledFillPattern = {
+export class LabeledFillPatterns {
+  public static readonly Flat: LabeledFillPattern = {
     label: 'Aplat',
     value: FillPatterns.Flat,
   };
 
-  public static readonly Circles: LabelledFillPattern = {
+  public static readonly Circles: LabeledFillPattern = {
     label: 'Cercles',
     value: FillPatterns.Circles,
   };
 
-  public static readonly Squares: LabelledFillPattern = {
+  public static readonly Squares: LabeledFillPattern = {
     label: 'Carrés',
     value: FillPatterns.Squares,
   };
 
-  public static readonly HatchingVertical: LabelledFillPattern = {
+  public static readonly HatchingVertical: LabeledFillPattern = {
     label: 'Hachures verticales',
     value: FillPatterns.HatchingVertical,
   };
 
-  public static readonly HatchingHorizontal: LabelledFillPattern = {
+  public static readonly HatchingHorizontal: LabeledFillPattern = {
     label: 'Hachures horizontales',
     value: FillPatterns.HatchingHorizontal,
   };
 
-  public static readonly HatchingObliqueRight: LabelledFillPattern = {
+  public static readonly HatchingObliqueRight: LabeledFillPattern = {
     label: 'Hachures obliques \\\\',
     value: FillPatterns.HatchingObliqueRight,
   };
 
-  public static readonly HatchingObliqueLeft: LabelledFillPattern = {
+  public static readonly HatchingObliqueLeft: LabeledFillPattern = {
     label: 'Hachures obliques //',
     value: FillPatterns.HatchingObliqueLeft,
   };
 
-  public static readonly All: LabelledFillPattern[] = [
-    LabelledFillPatterns.Flat,
-    LabelledFillPatterns.Circles,
-    LabelledFillPatterns.Squares,
-    LabelledFillPatterns.HatchingVertical,
-    LabelledFillPatterns.HatchingHorizontal,
-    LabelledFillPatterns.HatchingObliqueRight,
-    LabelledFillPatterns.HatchingObliqueLeft,
+  public static readonly All: LabeledFillPattern[] = [
+    LabeledFillPatterns.Flat,
+    LabeledFillPatterns.Circles,
+    LabeledFillPatterns.Squares,
+    LabeledFillPatterns.HatchingVertical,
+    LabeledFillPatterns.HatchingHorizontal,
+    LabeledFillPatterns.HatchingObliqueRight,
+    LabeledFillPatterns.HatchingObliqueLeft,
   ];
 }

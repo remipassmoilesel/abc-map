@@ -42,14 +42,14 @@ class TipBubble extends Component<Props, State> {
 
   public render(): ReactNode {
     const label = this.props.label;
-    const className = this.props.className;
+    const className = this.props.className || '';
     const modal = this.state.open;
 
     return (
       <>
         <div onClick={this.handleClick} className={`${Cls.bubble} ${className}`}>
           {label && <div className={'mr-2'}>{label}</div>}
-          <i className={`fa fa-question`} />
+          <i className={`fa fa-question-circle`} />
         </div>
         <Modal show={modal} onHide={this.handleHide}>
           <Modal.Body>

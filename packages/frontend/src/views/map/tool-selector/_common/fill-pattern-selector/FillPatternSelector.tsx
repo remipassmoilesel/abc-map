@@ -19,7 +19,7 @@
 import React, { Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/shared';
 import { FillPatterns } from '@abc-map/shared';
-import { LabelledFillPatterns } from './LabelledFillPatterns';
+import { LabeledFillPatterns } from './LabeledFillPatterns';
 import { FillPatternFactory } from '../../../../../core/geo/styles/FillPatternFactory';
 import { MainState } from '../../../../../core/store/reducer';
 import { MapActions } from '../../../../../core/store/map/actions';
@@ -27,7 +27,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { ServiceProps, withServices } from '../../../../../core/withServices';
 import { Modal } from 'react-bootstrap';
 import FillPatternButton from './FillPatternButton';
-import Cls from './FillPatternSelector.module.scss';
+import OptionRow from '../option-row/OptionRow';
 
 const logger = Logger.get('FillPatternSelector.tsx', 'info');
 
@@ -67,10 +67,13 @@ class FillPatternSelector extends Component<Props, State> {
 
     return (
       <>
-        <div className={`${Cls.fillPatternSelector} control-item`}>
+        {/* Button, always visible */}
+        <OptionRow>
           <div>Style de texture:</div>
           <FillPatternButton width={40} height={40} pattern={pattern} color1={color1} color2={color2} onClick={this.showModal} />
-        </div>
+        </OptionRow>
+
+        {/* Modal, visible on demand */}
         <Modal show={modal} onHide={this.closeModal}>
           <Modal.Header closeButton>
             <Modal.Title>Textures</Modal.Title>
@@ -92,7 +95,7 @@ class FillPatternSelector extends Component<Props, State> {
   private getPatternButtons(): ReactNode[] {
     const color1 = this.props.fill?.color1;
     const color2 = this.props.fill?.color2;
-    return LabelledFillPatterns.All.map((item) => {
+    return LabeledFillPatterns.All.map((item) => {
       return (
         <div className={'d-flex align-items-center m-3'} key={item.value}>
           <FillPatternButton onClick={this.handleSelection} pattern={item.value} color1={color1} color2={color2} width={65} height={65} />

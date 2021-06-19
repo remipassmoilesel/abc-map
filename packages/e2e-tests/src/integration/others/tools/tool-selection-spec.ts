@@ -168,7 +168,8 @@ describe('Tool Selection', function () {
       // Select it
       .then(() => ToolSelector.enable(MapTool.Selection))
       .then(() => Draw.drag(50, 50, 400, 400))
-      .get('[data-cy=stroke-color] button')
+      .get('[data-cy=stroke-color]')
+      .wait(800)
       .click()
       .get('div[title="#D0021B"]')
       .click()
@@ -204,7 +205,7 @@ describe('Tool Selection', function () {
       .then(() => Draw.dblclick(150, 100))
       .then(() => ToolSelector.enable(MapTool.Selection))
       .then(() => Draw.drag(50, 50, 400, 400))
-      .get('[data-cy=fill-color1] button')
+      .get('[data-cy=fill-color1]')
       .click()
       .get('div[title="#D0021B"]')
       .click()

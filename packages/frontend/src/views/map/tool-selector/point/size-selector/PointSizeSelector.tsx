@@ -23,6 +23,7 @@ import { MapActions } from '../../../../../core/store/map/actions';
 import * as _ from 'lodash';
 import { ServiceProps, withServices } from '../../../../../core/withServices';
 import Cls from './PointSizeSelector.module.scss';
+import OptionRow from '../../_common/option-row/OptionRow';
 
 const mapStateToProps = (state: MainState) => ({
   point: state.map.currentStyle.point,
@@ -41,8 +42,8 @@ class StrokeWidthSelector extends Component<Props, {}> {
     const size = this.props.point?.size;
 
     return (
-      <div className={'control-item d-flex align-items-center justify-content-between'}>
-        <div className={'mr-2'}>Taille d&apos;icone:</div>
+      <OptionRow>
+        <div>Taille d&apos;icone:</div>
         <select value={size} onChange={this.handleSelection} className={`form-control form-control-sm ${Cls.select}`}>
           {_.range(15, 101).map((value) => (
             <option key={value} value={value}>
@@ -50,7 +51,7 @@ class StrokeWidthSelector extends Component<Props, {}> {
             </option>
           ))}
         </select>
-      </div>
+      </OptionRow>
     );
   }
 

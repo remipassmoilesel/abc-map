@@ -27,8 +27,8 @@ const logger = Logger.get('EditPropertiesPanel.tsx');
 class EditPropertiesPanel extends Component<{}, {}> {
   public render(): ReactNode {
     return (
-      <div className={Cls.selectionPanel}>
-        <TipBubble id={ToolTips.EditProperties} label={'Aide'} className={'mx-3 mb-4'} />
+      <div className={Cls.editPropertiesPanel}>
+        <TipBubble id={ToolTips.EditProperties} label={'Aide'} />
       </div>
     );
   }

@@ -18,13 +18,16 @@
 
 import React, { Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/shared';
-import { newParameters, Parameters, PointType, ScaleAlgorithm } from '../Parameters';
+import { newParameters, Parameters, PointType } from '../Parameters';
 import FoldableCard from '../../../components/foldable-card/FoldableCard';
 import { ServiceProps, withServices } from '../../../core/withServices';
-import SymbolConfigForm, { ConfigFormValues } from './SymbolConfigForm';
-import DataSourceForm, { DataSourceFormValues } from './DataSourceForm';
+import SymbolConfigForm, { SymbolConfigFormValues } from './SymbolConfigForm';
+import DataSourceForm, { DataSourceFormValues } from '../../_common/DataSourceForm';
+import GeometryLayerForm, { GeometryLayerFormValues } from '../../_common/GeometryLayerForm';
+import { ScaleAlgorithm } from '../../_common/algorithm/Algorithm';
 import Cls from './ProportionalSymbolsUi.module.scss';
-import GeometryLayerForm, { GeometryLayerFormValues } from './GeometryLayerForm';
+import Sample from './sample.png';
+import { ProportionalSymbolsTips } from '@abc-map/user-documentation';
 
 const logger = Logger.get('ProportionalSymbolsUi.tsx');
 
@@ -49,7 +52,7 @@ class ProportionalSymbolsUi extends Component<Props, State> {
     const params = this.state.params;
     const message = this.state.message;
 
-    const configValues: ConfigFormValues = {
+    const configValues: SymbolConfigFormValues = {
       layerName: params.newLayerName || '',
       type: params.points.type || PointType.Circle,
       sizeMin: params.points.sizeMin || 10,
@@ -59,7 +62,7 @@ class ProportionalSymbolsUi extends Component<Props, State> {
 
     const dataSourceValues: DataSourceFormValues = {
       source: params.data.source,
-      sizeField: params.data.sizeField || '',
+      valueField: params.data.valueField || '',
       joinBy: params.data.joinBy || '',
     };
 
@@ -72,42 +75,21 @@ class ProportionalSymbolsUi extends Component<Props, State> {
       <div className={Cls.panel}>
         {/* Module introduction */}
         <FoldableCard title={'1. Introduction'} className={'section'}>
-          <div className={'explanation'}>
-            <p>
-              Le module <b>Symboles Proportionnels</b> vous permet de créer des symboles de tailles variables. Cette représentation est utiles pour représenter
-              des données en valeurs absolues.
-            </p>
-            <p>
-              Par exemple vous pouvez comparer la <i>population</i> des régions de France:
-            </p>
-            <ul>
-              <li>La région Occitanie qui a 5 millions d&apos;habitants aura un symbole de taille 50</li>
-              <li>La région Ile de France qui a 12 millions d&apos;habitants aura un symbole de taille 120</li>
-            </ul>
-            <p>
-              Vous devez configurer une <i>source de données</i> et une <i>couche de géométrie</i>. Dans notre exemple :
-            </p>
-            <ul>
-              <li>
-                La source de données est un classeur CSV qui contient un champ &apos;population&apos; (<i>Champ de taille</i>) et un champ &apos;code&apos; (
-                <i>Champ de jointure</i>)
-              </li>
-              <li>
-                La couche de géométrie est une couche qui contient la forme de chaque région (<i>Géométrie</i>), chaque forme ayant un champ &apos;code&apos; (
-                <i>Champ de jointure</i>)
-              </li>
-            </ul>
-            <p>
-              La source de données est mise en relation avec la couche de géométrie à l&apos;aide du champ de jointure. Chaque symbole aura les caractéristiques
-              attachées à la valeur de ce champ. Dans notre exemple le champ &apos;code&apos; est le champs de jointure:
-            </p>
-            <ul>
-              <li>Pour le code &apos;FR-OCC&apos; un symbole de taille 50 sera créé au centre de l&apos;Occitanie</li>
-              <li>Pour le code &apos;FR-IDF&apos; un symbole de taille 120 sera créé au centre de l&apos;Ile de France</li>
-            </ul>
-            <p>
-              <b>Attention:</b> les valeurs inférieures à zéro sont ignorées.
-            </p>
+          <div className={'explanation d-flex flex-row justify-content-between align-items-start'}>
+            <div className={Cls.introduction}>
+              <p>Les symboles proportionnels permettent de représenter des données statistiques absolues (population, budgets annuels, etc ...)</p>
+              <p>Comment ça marche ?</p>
+              <ul>
+                <li>
+                  Sélectionnez une source de données et un champ de valeur. C&apos;est ce champ qui déterminera la taille des symboles. Par exemple, un
+                  &nbsp;classeur CSV contenant la population française par département et le champ <code>population_2011</code> contenant les données de
+                  &nbsp;population.
+                </li>
+                <li>Sélectionnez une couche de géométries. Les géométries détermineront la position de chaque symbole.</li>
+                <li>Sélectionner un champ de jointure entre les données et les géométries.</li>
+              </ul>
+            </div>
+            <img src={Sample} alt={'Exemple de carte'} className={Cls.sample} />
           </div>
         </FoldableCard>
 
@@ -117,7 +99,12 @@ class ProportionalSymbolsUi extends Component<Props, State> {
             La source de données contient le champ qui déterminera la taille des symboles. La source de données peut être une couche de la carte ou un classeur
             au format CSV.
           </div>
-          <DataSourceForm values={dataSourceValues} onChange={this.handleDataSourceChange} />
+          <DataSourceForm
+            valuesFieldLabel={'Taille des symboles à partir de:'}
+            valuesFieldTip={ProportionalSymbolsTips.SizeField}
+            values={dataSourceValues}
+            onChange={this.handleDataSourceChange}
+          />
         </FoldableCard>
 
         {/* Vector layer selection */}
@@ -157,7 +144,7 @@ class ProportionalSymbolsUi extends Component<Props, State> {
       ...this.state.params,
       data: {
         source: values.source,
-        sizeField: values.sizeField,
+        valueField: values.valueField,
         joinBy: values.joinBy,
       },
     };
@@ -179,16 +166,11 @@ class ProportionalSymbolsUi extends Component<Props, State> {
     this.props.onChange(params);
   };
 
-  private handleConfigChange = (values: ConfigFormValues) => {
+  private handleConfigChange = (values: SymbolConfigFormValues) => {
     const params: Parameters = {
       ...this.state.params,
       newLayerName: values.layerName,
-      points: {
-        sizeMin: values.sizeMin,
-        sizeMax: values.sizeMax,
-        type: values.type,
-        algorithm: values.algorithm,
-      },
+      points: { ...values },
     };
 
     this.setState({ params });
@@ -219,6 +201,7 @@ class ProportionalSymbolsUi extends Component<Props, State> {
       });
   };
 
+  // TODO: replace with formstate ?
   private validateParameters(): boolean {
     const params = this.state.params;
 
@@ -232,7 +215,7 @@ class ProportionalSymbolsUi extends Component<Props, State> {
       return false;
     }
 
-    if (!params.data.sizeField) {
+    if (!params.data.valueField) {
       this.setState({ message: 'Le champ taille est obligatoire.' });
       return false;
     }

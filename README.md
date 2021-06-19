@@ -6,6 +6,8 @@ Official rewrite, attempt n°265 👨‍💻.
 <img alt="pipeline status" src="https://gitlab.com/remipassmoilesel/abc-map-2/badges/master/pipeline.svg" />
 </a>     
 
+[![first-timers-only](https://img.shields.io/badge/first--timers--only-friendly-blue.svg?style=flat-square)](https://www.firsttimersonly.com/)
+
 
 ## Purpose
 

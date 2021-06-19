@@ -21,7 +21,7 @@ import { HistoryKey } from '../../../../core/history/HistoryKey';
 import { AddFeaturesTask } from '../../../../core/history/tasks/features/AddFeaturesTask';
 import { Logger } from '@abc-map/shared';
 import StrokeWidthSelector from '../_common/stroke-width-selector/StrokeWidthSelector';
-import ColorSelector from '../_common/color-selector/ColorSelector';
+import ColorSelector from '../../../../components/color-picker/ColorSelector';
 import FillPatternSelector from '../_common/fill-pattern-selector/FillPatternSelector';
 import { FeatureWrapper } from '../../../../core/geo/features/FeatureWrapper';
 import TextFormat from '../_common/text-format/TextFormat';

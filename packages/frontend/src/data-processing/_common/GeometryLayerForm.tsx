@@ -18,14 +18,15 @@
 
 import React, { ChangeEvent, Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/shared';
-import { DataRow, getFields } from '../../../core/data/data-source/DataSource';
-import DataTable from '../../../components/data-table/DataTable';
-import { ServiceProps, withServices } from '../../../core/withServices';
-import { VectorLayerWrapper } from '../../../core/geo/layers/LayerWrapper';
-import VectorLayerSelector from '../../../components/vector-layer-selector/VectorLayerSelector';
-import { LayerDataSource } from '../../../core/data/data-source/LayerDataSource';
-import TipBubble from '../../../components/tip-bubble/TipBubble';
-import { ProportionalSymbolsTips } from '@abc-map/user-documentation';
+import { DataRow, getFields } from '../../core/data/data-source/DataSource';
+import DataTable from '../../components/data-table/DataTable';
+import { ServiceProps, withServices } from '../../core/withServices';
+import { VectorLayerWrapper } from '../../core/geo/layers/LayerWrapper';
+import VectorLayerSelector from '../../components/vector-layer-selector/VectorLayerSelector';
+import { LayerDataSource } from '../../core/data/data-source/LayerDataSource';
+import TipBubble from '../../components/tip-bubble/TipBubble';
+import { DataProcessingTips } from '@abc-map/user-documentation';
+import FormLine from './form-line/FormLine';
 
 const logger = Logger.get('GeometryLayerForm.tsx');
 
@@ -66,19 +67,23 @@ class GeometryLayerForm extends Component<Props, State> {
 
     return (
       <>
-        <div className={'form-line my-3'}>
-          <VectorLayerSelector value={layer?.getId()} onSelected={this.handleGeometryLayerSelected} data-cy={'geometry-layer'} />
-        </div>
+        <FormLine>
+          <VectorLayerSelector label={'Couche: '} value={layer?.getId()} onSelected={this.handleGeometryLayerSelected} data-cy={'geometry-layer'} />
+        </FormLine>
 
         <div className={'my-3'}>
-          {geometries === 0 && <div className={'my-3'}>Cette couche ne contient aucune géométrie</div>}
-          {geometries > 0 && <div className={'my-3'}>{geometries} géométries seront traitées</div>}
+          {layer && geometries < 1 && <div className={'my-3'}>Cette couche ne contient aucune géométrie.</div>}
+          {geometries > 0 && <div className={'my-3'}>{geometries} géométries seront traitées.</div>}
         </div>
 
-        <div className={'form-line my-3'}>
-          <label htmlFor="geometries-join-by">Champ de jointure</label>
+        <FormLine>
+          <label htmlFor="geometries-join-by" className={'flex-grow-1'}>
+            Jointure avec les données par:
+          </label>
+
+          <TipBubble id={DataProcessingTips.JoinBy} />
           <select className={'form-control'} id={'geometries-join-by'} value={joinBy} onChange={this.handleJoinByChanged} data-cy={'geometry-joinby-field'}>
-            {!featureFields.length && <option>Sélectionnez une source</option>}
+            {!featureFields.length && <option>Sélectionnez une couche</option>}
             {!!featureFields.length &&
               [<option key={0}>Sélectionnez un champ</option>].concat(
                 featureFields.map((f) => (
@@ -88,8 +93,7 @@ class GeometryLayerForm extends Component<Props, State> {
                 ))
               )}
           </select>
-          <TipBubble id={ProportionalSymbolsTips.JoinBy} />
-        </div>
+        </FormLine>
 
         {!!dataSamples.length && (
           <>
@@ -103,13 +107,13 @@ class GeometryLayerForm extends Component<Props, State> {
 
   public componentDidMount() {
     const layer = this.props.values.layer;
-    this.layerDataPreview(layer);
+    this.layerDataPreview(layer).catch((err) => logger.error('Data preview error: ', err));
   }
 
   public componentDidUpdate(prevProps: Readonly<Props>) {
     const layer = this.props.values.layer;
     if (layer?.getId() !== prevProps.values.layer?.getId()) {
-      this.layerDataPreview(layer);
+      this.layerDataPreview(layer).catch((err) => logger.error('Data preview error: ', err));
     }
   }
 

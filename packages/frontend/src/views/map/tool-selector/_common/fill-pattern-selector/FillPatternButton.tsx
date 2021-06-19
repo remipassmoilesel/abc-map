@@ -19,7 +19,7 @@
 import React, { Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/shared';
 import { FillPatterns } from '@abc-map/shared';
-import { LabelledFillPatterns } from './LabelledFillPatterns';
+import { LabeledFillPatterns } from './LabeledFillPatterns';
 import { FillPatternFactory } from '../../../../../core/geo/styles/FillPatternFactory';
 import Cls from './FillPatternButton.module.scss';
 
@@ -50,7 +50,7 @@ class FillPatternButton extends Component<Props, State> {
     const width = this.props.width;
     const height = this.props.height;
     const padding = 8;
-    const title = LabelledFillPatterns.All.find((p) => p.value === this.props.pattern)?.label || 'Pas de nom';
+    const title = LabeledFillPatterns.All.find((p) => p.value === this.props.pattern)?.label || 'Pas de nom';
 
     return (
       <button

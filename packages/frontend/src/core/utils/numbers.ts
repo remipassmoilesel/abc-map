@@ -38,3 +38,7 @@ export function asNumberOrString(str: string): number | string {
     return str;
   }
 }
+
+export function toPrecision(n: number, precision = 4): number {
+  return Math.round(n * 10 ** precision) / 10 ** precision;
+}
