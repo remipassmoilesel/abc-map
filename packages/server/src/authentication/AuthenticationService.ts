@@ -176,8 +176,11 @@ export class AuthenticationService extends AbstractService {
   public async updatePassword(email: string, newPassword: string): Promise<void> {
     const user = await this.users.findByEmail(email);
     if (!user) {
-      logger.warn(`User not found: ${user}`);
-      return;
+      throw new Error(`User not found: ${email}`);
+    }
+
+    if (newPassword.toLocaleLowerCase().trim() === user.email.toLocaleLowerCase().trim()) {
+      throw new Error('Password cannot be equal to email');
     }
 
     user.password = await this.hasher.hashPassword(newPassword.trim(), user.id);

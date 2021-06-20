@@ -23,7 +23,7 @@ import { ServiceProps, withServices } from '../../core/withServices';
 import { ModalEventListener, ModalEventType, ModalStatus, ShowPasswordLostModal } from '../../core/ui/typings';
 import { ValidationHelper } from '../../core/utils/ValidationHelper';
 import Cls from './PasswordLostModal.module.scss';
-import FormValidationLabel from '../form-state-label/FormValidationLabel';
+import FormValidationLabel from '../form-validation-label/FormValidationLabel';
 
 const logger = Logger.get('PasswordLostModal.tsx', 'info');
 

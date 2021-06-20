@@ -62,7 +62,7 @@ class DataTable extends Component<Props, {}> {
           </thead>
           <tbody>
             {rows.map((row, i) => (
-              <tr key={row._id}>
+              <tr key={row._id} data-testid={'data-row'}>
                 <th scope="row" className={Cls.numberColumn}>
                   {i + 1}
                 </th>

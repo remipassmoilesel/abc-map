@@ -27,8 +27,8 @@ import { FillPatternFactory } from './FillPatternFactory';
 import Geometry from 'ol/geom/Geometry';
 import GeometryType from 'ol/geom/GeometryType';
 import { IconProcessor } from './IconProcessor';
-import { safeGetIcon } from './PointIcons';
-import { PointIcons } from '@abc-map/shared';
+import { DefaultIcon, safeGetIcon } from '../../../assets/point-icons/PointIcons';
+import { PointIconName } from '../../../assets/point-icons/PointIconName';
 
 const logger = Logger.get('StyleFactory.ts');
 
@@ -67,9 +67,9 @@ export class StyleFactory {
     // Points
     if (GeometryType.POINT === type || GeometryType.MULTI_POINT === type) {
       const size = (properties.point?.size || 10) * ratio;
-      const name = (properties.point?.icon as PointIcons) || PointIcons.Square;
+      const name = (properties.point?.icon as PointIconName) || DefaultIcon;
       const color = properties.point?.color || '#000000';
-      const icon = IconProcessor.prepare(safeGetIcon(name), size, color);
+      const icon = IconProcessor.get().prepareCached(safeGetIcon(name), size, color);
       // We must use "src" attribute here, as icons may not be loaded
       const pointStyle = new Icon({ src: icon, imgSize: [size, size] });
       return [new Style({ image: pointStyle, text: textStyle, zIndex: properties.zIndex })];

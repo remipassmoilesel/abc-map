@@ -17,17 +17,21 @@
  */
 
 import { IconProcessor, mountSvg } from './IconProcessor';
-import { PointIcon } from './PointIcons';
-import { PointIcons } from '@abc-map/shared';
+import { PointIcon, safeGetIcon } from '../../../assets/point-icons/PointIcons';
+import sinon from 'sinon';
+import { PointIconName } from '../../../assets/point-icons/PointIconName';
 
 describe('IconProcessor', () => {
-  it('prepare()', () => {
-    const icon: PointIcon = {
-      name: 'Test icon' as PointIcons,
-      contentSvg: sample(),
-    };
+  const fakeIcon: PointIcon = {
+    name: 'Test icon' as PointIconName,
+    contentSvg: sample(),
+  };
 
-    const actual = IconProcessor.prepare(icon, 500, '#FF0000');
+  it('prepare() with sample', () => {
+    // Act
+    const actual = IconProcessor.get().prepare(fakeIcon, 500, '#FF0000');
+
+    // Assert
     expect(actual).toMatch(/^data:image\/svg\+xml;base64,.+/);
 
     const { svg } = mountSvg(atob(actual.substr(26)));
@@ -36,6 +40,52 @@ describe('IconProcessor', () => {
 
     const rect = svg.querySelector('rect') as SVGElement;
     expect(rect.getAttribute('style')).toEqual('fill: #FF0000; stroke: none; stroke-width: 0.200643; stroke-linejoin: round;');
+  });
+
+  it('prepare() with icon from library', () => {
+    // Act
+    const icon = safeGetIcon(PointIconName.Icon0CircleFill);
+    const actual = IconProcessor.get().prepare(icon, 500, '#FF0000');
+
+    // Assert
+    expect(actual).toMatch(/^data:image\/svg\+xml;base64,.+/);
+
+    const { svg } = mountSvg(atob(actual.substr(26)));
+    expect(svg.getAttribute('fill')).toEqual('#FF0000');
+  });
+
+  describe('prepareCached()', () => {
+    it('should set cache then return', () => {
+      // Prepare
+      const cache = sinon.createStubInstance(Map);
+      const instance = new IconProcessor(cache as unknown as Map<string, string>);
+      cache.get.returns(undefined);
+
+      // Act
+      const actual = instance.prepareCached(fakeIcon, 500, '#FF0000');
+
+      // Assert
+      expect(cache.get.callCount).toEqual(1);
+      expect(cache.set.callCount).toEqual(1);
+      expect(cache.set.args[0][0]).toEqual('["Test icon",500,"#FF0000"]');
+      expect(cache.set.args[0][1]).toMatch(/^data:image\/svg\+xml;base64,.+/);
+      expect(actual).toMatch(/^data:image\/svg\+xml;base64,.+/);
+    });
+
+    it('should get cache then return', () => {
+      // Prepare
+      const cache = sinon.createStubInstance(Map);
+      const instance = new IconProcessor(cache as unknown as Map<string, string>);
+      cache.get.returns('test cache content');
+
+      // Act
+      const actual = instance.prepareCached(fakeIcon, 500, '#FF0000');
+
+      // Assert
+      expect(cache.get.callCount).toEqual(1);
+      expect(cache.set.callCount).toEqual(0);
+      expect(actual).toEqual('test cache content');
+    });
   });
 });
 

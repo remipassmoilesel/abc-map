@@ -21,13 +21,14 @@ import { Logger } from '@abc-map/shared';
 import { newParameters, Parameters } from '../Parameters';
 import FoldableCard from '../../../components/foldable-card/FoldableCard';
 import { ServiceProps, withServices } from '../../../core/withServices';
-import DataSourceForm, { DataSourceFormValues } from '../../_common/DataSourceForm';
-import { ClassificationAlgorithm } from '../../_common/algorithm/Algorithm';
+import DataSourceForm, { DataSourceFormValues } from '../../_common/data-source-form/DataSourceForm';
 import GradientsConfigForm, { ColorsConfigFormValues } from './GradientsConfigForm';
-import GeometryLayerForm, { GeometryLayerFormValues } from '../../_common/GeometryLayerForm';
+import GeometryLayerForm, { GeometryLayerFormValues } from '../../_common/geometry-layer-form/GeometryLayerForm';
 import Sample from './sample.png';
 import { ColorGradientTips } from '@abc-map/user-documentation';
 import Cls from './ColorGradientsUi.module.scss';
+import { FormState } from '../../../components/form-validation-label/FormState';
+import FormValidationLabel from '../../../components/form-validation-label/FormValidationLabel';
 
 const logger = Logger.get('ColorGradientsUI.tsx');
 
@@ -39,7 +40,7 @@ interface Props extends ServiceProps {
 
 interface State {
   params: Parameters;
-  message?: string;
+  formState?: FormState;
 }
 
 class ColorGradientsUI extends Component<Props, State> {
@@ -50,25 +51,25 @@ class ColorGradientsUI extends Component<Props, State> {
 
   public render(): ReactNode {
     const params = this.state.params;
-    const message = this.state.message;
+    const formState = this.state.formState;
 
     const configValues: ColorsConfigFormValues = {
-      layerName: params.newLayerName || '',
-      start: params.colors.start || '#ffffff',
-      end: params.colors.end || '#000000',
-      algorithm: params.colors.algorithm || ClassificationAlgorithm.NaturalBreaks,
-      classes: params.colors.classes || [],
+      layerName: params.newLayerName,
+      start: params.colors.start,
+      end: params.colors.end,
+      algorithm: params.colors.algorithm,
+      classes: params.colors.classes,
     };
 
     const dataSourceValues: DataSourceFormValues = {
       source: params.data.source,
-      valueField: params.data.valueField || '',
-      joinBy: params.data.joinBy || '',
+      valueField: params.data.valueField,
+      joinBy: params.data.joinBy,
     };
 
     const geometryLayerValues: GeometryLayerFormValues = {
       layer: params.geometries.layer,
-      joinBy: params.geometries.joinBy || '',
+      joinBy: params.geometries.joinBy,
     };
 
     return (
@@ -117,7 +118,7 @@ class ColorGradientsUI extends Component<Props, State> {
         {/* Data processing parameters */}
         <FoldableCard title={'4. Paramètres du traitement'} className={'section'}>
           <div className={'explanation'}>
-            Les couleurs seront créés dans une nouvelle couche. Leurs valeurs seront déterminées par le champs source utilisé, et par le type d&apos;algorithme.
+            Les couleurs seront créés dans une nouvelle couche. Leurs valeurs seront déterminées par le champ source utilisé, et par le type d&apos;algorithme.
           </div>
           {!dataSourceValues.valueField && <div>Vous devez choisir un champ de valeur.</div>}
           {!dataSourceValues.source && <div>Vous devez choisir une source de données.</div>}
@@ -131,7 +132,11 @@ class ColorGradientsUI extends Component<Props, State> {
           )}
         </FoldableCard>
 
-        {message && <div className={'m-3 font-weight-bold d-flex justify-content-end'}>{message}</div>}
+        {formState && (
+          <div className={'m-3 d-flex justify-content-end'}>
+            <FormValidationLabel state={formState} />
+          </div>
+        )}
 
         <div className={'d-flex flex-row justify-content-end'}>
           <button className={'btn btn-secondary mr-3'} onClick={this.handleCancel}>
@@ -198,8 +203,9 @@ class ColorGradientsUI extends Component<Props, State> {
   private handleSubmit = () => {
     const { toasts } = this.props.services;
 
-    const isValid = this.validateParameters();
-    if (!isValid) {
+    const formState = this.validateParameters();
+    this.setState({ formState });
+    if (formState !== FormState.Ok) {
       return;
     }
 
@@ -212,56 +218,46 @@ class ColorGradientsUI extends Component<Props, State> {
       });
   };
 
-  // TODO: replace with formstate ?
-  private validateParameters(): boolean {
+  private validateParameters(): FormState {
     const params = this.state.params;
 
     if (!params.newLayerName) {
-      this.setState({ message: 'Le nom de la couche est obligatoire.' });
-      return false;
+      return FormState.MissingNewLayerName;
     }
 
     if (!params.data.source) {
-      this.setState({ message: 'La source de données est obligatoire.' });
-      return false;
+      return FormState.MissingDataSource;
     }
 
     if (!params.data.valueField) {
-      this.setState({ message: 'Le champ valeur est obligatoire.' });
-      return false;
+      return FormState.MissingColorValueField;
     }
 
     if (!params.data.joinBy) {
-      this.setState({ message: 'Le champ jointure de la source de données est obligatoire.' });
-      return false;
+      return FormState.MissingDataJoinBy;
     }
 
     if (!params.geometries.layer) {
-      this.setState({ message: 'La couche de géométries est obligatoire.' });
-      return false;
+      return FormState.MissingGeometryLayer;
     }
 
     if (!params.geometries.joinBy) {
-      this.setState({ message: 'Le champ jointure de la couche de géométries est obligatoire.' });
-      return false;
+      return FormState.MissingGeometryJoinBy;
     }
 
     if (!params.colors.algorithm) {
-      this.setState({ message: "L'algorithme est obligatoire." });
-      return false;
+      return FormState.MissingAlgorithm;
     }
 
     if (!params.colors.start) {
-      this.setState({ message: 'La couleur de début est obligatoire.' });
-      return false;
+      return FormState.MissingStartColor;
     }
 
     if (!params.colors.end) {
-      this.setState({ message: 'La couleur de fin est obligatoire.' });
-      return false;
+      return FormState.MissingEndColor;
     }
 
-    return true;
+    return FormState.Ok;
   }
 }
 

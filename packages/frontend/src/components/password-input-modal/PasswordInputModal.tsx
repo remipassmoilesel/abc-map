@@ -20,8 +20,9 @@ import React, { ChangeEvent, Component, ReactNode } from 'react';
 import { Modal } from 'react-bootstrap';
 import { ModalEventListener, ModalEventType, ModalStatus, ShowPasswordInputModal } from '../../core/ui/typings';
 import { ServiceProps, withServices } from '../../core/withServices';
-import FormValidationLabel, { FormState } from '../form-state-label/FormValidationLabel';
+import FormValidationLabel from '../form-validation-label/FormValidationLabel';
 import { PasswordStrength, ValidationHelper } from '../../core/utils/ValidationHelper';
+import { FormState } from '../form-validation-label/FormState';
 
 interface State {
   visible: boolean;

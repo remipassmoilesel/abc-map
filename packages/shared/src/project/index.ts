@@ -20,7 +20,6 @@ export * from './feature/FeatureProperties';
 export * from './layer/AbcLayer';
 export * from './layer/LayerProperties';
 export * from './layout/AbcLayout';
-export * from './style/PointIcons';
 export * from './style/StyleProperties';
 export * from './AbcProjectManifest';
 export * from './AbcProjection';

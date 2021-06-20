@@ -47,13 +47,13 @@ describe('Proportional symbols', function () {
       })
       .get('[data-cy=value-field]')
       .select('VALUE')
-      .get('[data-cy=data-joinby-field]')
+      .get('[data-cy=data-join-by]')
       .select('COUNTRY')
       // Geometry layer parameters
       .get('[data-cy=geometry-layer] > option')
       .eq(2)
       .then((opt) => cy.get('[data-cy=geometry-layer]').select(opt.text()))
-      .get('[data-cy=geometry-joinby-field]')
+      .get('[data-cy=geometries-join-by]')
       .select('COUNTRY')
       .get('[data-cy=process]')
       .click()
@@ -68,18 +68,22 @@ describe('Proportional symbols', function () {
         const features = map.getActiveLayerFeatures();
         expect(features.length).equal(252);
 
-        const properties = features.slice(0, 10).map((f) => ({ country: f.get('COUNTRY'), pointValue: f.get('point-value') }));
+        const properties = features
+          .sort((a, b) => (a.get('COUNTRY') as string).localeCompare(b.get('COUNTRY') as string))
+          .slice(0, 10)
+          .map((f) => ({ country: f.get('COUNTRY'), pointValue: f.get('point-value') }));
+
         expect(properties).deep.equal([
-          { country: 'Tajikistan', pointValue: 10 },
-          { country: 'Turkmenistan', pointValue: 12 },
-          { country: 'Uzbekistan', pointValue: 10 },
-          { country: 'North Korea', pointValue: 11 },
-          { country: 'Mongolia', pointValue: 8 },
-          { country: 'Kyrgyzstan', pointValue: 10 },
-          { country: 'Kazakhstan', pointValue: 10 },
-          { country: 'Bhutan', pointValue: 6 },
-          { country: 'Nepal', pointValue: 5 },
-          { country: 'Pakistan', pointValue: 8 },
+          { country: 'Afghanistan', pointValue: 11 },
+          { country: 'Albania', pointValue: 7 },
+          { country: 'Algeria', pointValue: 7 },
+          { country: 'American Samoa (US)', pointValue: 19 },
+          { country: 'American Virgin Islands (US)', pointValue: 28 },
+          { country: 'Andorra', pointValue: 7 },
+          { country: 'Angola', pointValue: 6 },
+          { country: 'Anguilla (UK)', pointValue: 13 },
+          { country: 'Antarctica', pointValue: 10 },
+          { country: 'Antigua and Barbuda', pointValue: 19 },
         ]);
       });
   });

@@ -28,7 +28,7 @@ interface Props extends ServiceProps {
   /**
    * The selected layer id
    */
-  value?: string;
+  value: string | undefined;
   /**
    * Triggered on layer selected
    */
@@ -61,7 +61,7 @@ class VectorLayerSelector extends Component<Props, State> {
     return (
       <>
         {label && <div className={'flex-grow-1'}>{label}</div>}
-        <select onChange={this.handleSelection} value={value} className={'form-control'} data-cy={dataCy}>
+        <select onChange={this.handleSelection} value={value} className={'form-control'} data-cy={dataCy} data-testid="vector-layer-selector">
           <option value={None}>Sélectionnez une couche</option>
           {layers.map((lay) => (
             <option key={lay.getId()} value={lay.getId()}>

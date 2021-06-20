@@ -17,7 +17,7 @@
  */
 
 import { logger, ProportionalSymbols } from './ProportionalSymbols';
-import { newParameters, Parameters, PointType } from './Parameters';
+import { newParameters, Parameters } from './Parameters';
 import * as sinon from 'sinon';
 import { SinonStubbedInstance } from 'sinon';
 import { GeoService } from '../../core/geo/GeoService';
@@ -36,6 +36,7 @@ import {
 import { StyleProperties } from '@abc-map/shared';
 import { MapWrapper } from '../../core/geo/map/MapWrapper';
 import { ScaleAlgorithm } from '../_common/algorithm/Algorithm';
+import { PointIconName } from '../../assets/point-icons/PointIconName';
 
 logger.disable();
 
@@ -75,8 +76,9 @@ describe('ProportionalSymbols', () => {
         layer,
         joinBy: 'CODE',
       },
-      points: {
-        type: PointType.Circle,
+      symbols: {
+        type: PointIconName.IconPlusCircleFill,
+        color: '#0094e3',
         sizeMin: 2,
         sizeMax: 100,
         algorithm: ScaleAlgorithm.Absolute,
@@ -131,8 +133,9 @@ describe('ProportionalSymbols', () => {
         layer,
         joinBy: 'CODE',
       },
-      points: {
-        type: PointType.Circle,
+      symbols: {
+        type: PointIconName.IconPlusCircleFill,
+        color: '#0094e3',
         sizeMin: 2,
         sizeMax: 6,
         algorithm: ScaleAlgorithm.Absolute,
@@ -174,8 +177,9 @@ describe('ProportionalSymbols', () => {
         layer,
         joinBy: 'CODE',
       },
-      points: {
-        type: PointType.Circle,
+      symbols: {
+        type: PointIconName.IconPlusCircleFill,
+        color: '#0094e3',
         sizeMin: 2,
         sizeMax: 100,
         algorithm: ScaleAlgorithm.Interpolated,
@@ -216,8 +220,9 @@ describe('ProportionalSymbols', () => {
         layer,
         joinBy: 'code',
       },
-      points: {
-        type: PointType.Circle,
+      symbols: {
+        type: PointIconName.IconPlusCircleFill,
+        color: '#0094e3',
         sizeMin: 2,
         sizeMax: 100,
         algorithm: ScaleAlgorithm.Interpolated,
@@ -272,8 +277,9 @@ describe('ProportionalSymbols', () => {
         layer,
         joinBy: 'code',
       },
-      points: {
-        type: PointType.Circle,
+      symbols: {
+        type: PointIconName.IconPlusCircleFill,
+        color: '#0094e3',
         sizeMin: 2,
         sizeMax: 100,
         algorithm: ScaleAlgorithm.Absolute,
@@ -313,8 +319,9 @@ describe('ProportionalSymbols', () => {
         layer,
         joinBy: 'code',
       },
-      points: {
-        type: PointType.Circle,
+      symbols: {
+        type: PointIconName.IconPlusCircleFill,
+        color: '#0094e3',
         sizeMin: 2,
         sizeMax: 100,
         algorithm: ScaleAlgorithm.Interpolated,

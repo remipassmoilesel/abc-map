@@ -21,16 +21,9 @@ import { connect, ConnectedProps } from 'react-redux';
 import { MainState } from '../../../../../core/store/reducer';
 import { MapActions } from '../../../../../core/store/map/actions';
 import { ServiceProps, withServices } from '../../../../../core/withServices';
-import { Modal } from 'react-bootstrap';
-import { getAllIcons, safeGetIcon, PointIcon } from '../../../../../core/geo/styles/PointIcons';
-import { IconProcessor } from '../../../../../core/geo/styles/IconProcessor';
-import Cls from './PointIconSelector.module.scss';
 import OptionRow from '../../_common/option-row/OptionRow';
-
-interface IconPreview {
-  icon: PointIcon;
-  preview: string;
-}
+import PointIconPicker from '../../../../../components/icon-picker/PointIconPicker';
+import { PointIconName } from '../../../../../assets/point-icons/PointIconName';
 
 const mapStateToProps = (state: MainState) => ({
   point: state.map.currentStyle.point,
@@ -44,115 +37,35 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type Props = ConnectedProps<typeof connector> & ServiceProps;
 
-interface State {
-  modal: boolean;
-  iconPreviews: IconPreview[];
-  selectedPreview?: IconPreview;
-}
-
-const defaultPreviewColor = '#005de2';
-
-class PointIconSelector extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      modal: false,
-      iconPreviews: [],
-    };
-  }
-
+class PointIconSelector extends Component<Props, {}> {
   public render(): ReactNode {
-    const iconPreviews = this.state.iconPreviews;
-    const modal = this.state.modal;
-    const selected = this.state.selectedPreview;
+    const selected = this.props.point?.icon as PointIconName;
 
     return (
-      <>
-        {/* Button, always visible */}
-        <OptionRow>
-          <div className={'mr-2'}>Icône: </div>
-          <button onClick={this.handleOpen} className={'btn btn-outline-secondary btn-sm'}>
-            {!selected && 'Choisir'}
-            {selected && <img src={selected.preview} alt={selected.icon.name} />}
-          </button>
-        </OptionRow>
-
-        {/* Modal, visible on demand */}
-        <Modal show={modal} onHide={this.handleCancel} size={'lg'} className={Cls.modal}>
-          <Modal.Header closeButton>
-            <Modal.Title>Icônes</Modal.Title>
-          </Modal.Header>
-          <Modal.Body className={'d-flex flex-column'}>
-            <div className={Cls.viewPort}>
-              {iconPreviews.map((i) => (
-                <img
-                  key={i.icon.name}
-                  src={i.preview}
-                  onClick={() => this.handleSelection(i.icon)}
-                  className={`btn btn-outline-secondary ${Cls.iconPreview}`}
-                  alt={i.icon.name}
-                />
-              ))}
-            </div>
-          </Modal.Body>
-        </Modal>
-      </>
+      <OptionRow>
+        <div className={'mr-2'}>Icône: </div>
+        <PointIconPicker value={selected} onChange={this.handleSelection} />
+      </OptionRow>
     );
   }
 
-  public componentDidMount() {
-    this.updateSelectedPreview();
-  }
-
-  public componentDidUpdate(prevProps: Readonly<Props>) {
-    const iconChanged = this.props.point?.icon !== prevProps.point?.icon;
-    const colorChanged = this.props.point?.color !== prevProps.point?.color;
-    if (iconChanged || colorChanged) {
-      this.updateSelectedPreview();
-    }
-  }
-
-  private handleOpen = (): void => {
-    const color = this.props.point?.color || defaultPreviewColor;
-    const iconPreviews = getAllIcons().map((i) => ({ icon: i, preview: IconProcessor.prepare(i, 50, color) }));
-    this.setState({ iconPreviews, modal: true });
-  };
-
-  private handleCancel = (): void => {
-    this.setState({ modal: false });
-  };
-
-  private handleSelection = (icon: PointIcon): void => {
+  private handleSelection = (icon: PointIconName): void => {
     const { geo } = this.props.services;
 
-    this.props.setPointIcon(icon.name);
+    this.props.setPointIcon(icon);
 
     geo.updateSelectedFeatures((style) => {
       return {
         ...style,
         point: {
           ...style.point,
-          icon: icon.name,
+          icon,
         },
       };
     });
 
     this.setState({ modal: false });
   };
-
-  private updateSelectedPreview() {
-    const iconName = this.props.point?.icon;
-    if (!iconName) {
-      this.setState({ selectedPreview: undefined });
-      return;
-    }
-
-    const color = this.props.point?.color || defaultPreviewColor;
-    const icon = safeGetIcon(iconName);
-    const preview = IconProcessor.prepare(icon, 20, color);
-    const selectedPreview: IconPreview = { icon, preview };
-    this.setState({ selectedPreview });
-  }
 }
 
 export default connector(withServices(PointIconSelector));

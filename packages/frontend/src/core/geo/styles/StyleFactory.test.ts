@@ -25,7 +25,7 @@ import { SinonStubbedInstance } from 'sinon';
 import { StyleCache } from './StyleCache';
 import Feature from 'ol/Feature';
 import Style from 'ol/style/Style';
-import { PointIcons } from '@abc-map/shared';
+import { PointIconName } from '../../../assets/point-icons/PointIconName';
 
 // TODO: test other geometries
 
@@ -79,7 +79,7 @@ describe('StyleFactory', () => {
       const properties = {
         ...TestHelper.sampleStyleProperties(),
         point: {
-          icon: PointIcons.Square,
+          icon: PointIconName.IconArrow90DegLeft,
           size: 25,
           color: '#ABCDEF',
         },
@@ -101,7 +101,7 @@ describe('StyleFactory', () => {
           color1: '#ABCDEF',
         },
         point: {
-          icon: PointIcons.Square,
+          icon: PointIconName.IconArrow90DegLeft,
           size: 25,
         },
       };

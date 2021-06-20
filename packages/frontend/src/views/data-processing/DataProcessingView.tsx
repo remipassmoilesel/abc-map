@@ -45,7 +45,7 @@ class DataProcessingView extends Component<Props, {}> {
             </Link>
           ))}
         </div>
-        <div className={Cls.viewPort}>
+        <div className={Cls.viewPort} data-cy={'data-processing-viewport'}>
           {module && (
             <>
               <h4>{module.getReadableName()}</h4>

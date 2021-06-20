@@ -22,9 +22,10 @@ import { Modal } from 'react-bootstrap';
 import { ServiceProps, withServices } from '../../core/withServices';
 import { ModalEventListener, ModalEventType, ModalStatus } from '../../core/ui/typings';
 import { PasswordStrength, ValidationHelper } from '../../core/utils/ValidationHelper';
-import Cls from './LoginModal.module.scss';
-import FormValidationLabel, { FormState } from '../form-state-label/FormValidationLabel';
+import FormValidationLabel from '../form-validation-label/FormValidationLabel';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { FormState } from '../form-validation-label/FormState';
+import Cls from './LoginModal.module.scss';
 
 const logger = Logger.get('LoginModal.tsx', 'info');
 

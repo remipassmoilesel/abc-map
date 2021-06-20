@@ -21,10 +21,8 @@ import { VectorLayerWrapper } from '../../core/geo/layers/LayerWrapper';
 import { ClassificationAlgorithm, GradientAlgorithm } from '../_common/algorithm/Algorithm';
 import { GradientClass } from './GradientClass';
 
-// FIXME Parameters should be mandatory ?
-// FIXME Or flat parameters ?
 export interface Parameters {
-  newLayerName?: string;
+  newLayerName: string;
   data: {
     source?: DataSource;
     valueField?: string;
@@ -35,10 +33,10 @@ export interface Parameters {
     joinBy?: string;
   };
   colors: {
-    start?: string;
-    end?: string;
-    algorithm?: GradientAlgorithm;
-    classes?: GradientClass[];
+    start: string;
+    end: string;
+    algorithm: GradientAlgorithm;
+    classes: GradientClass[];
   };
 }
 

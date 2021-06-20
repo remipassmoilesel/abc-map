@@ -398,8 +398,19 @@ describe('AuthenticationService', () => {
   });
 
   describe('updatePassword()', () => {
-    it('should do nothing if user is unknown', async () => {
-      await service.updatePassword('non-existing@abc-map.fr', 'azerty1234');
+    it('should throw if user is unknown', async () => {
+      const error: Error = await service.updatePassword('non-existing@abc-map.fr', 'azerty1234').catch((err) => err);
+      assert.instanceOf(error, Error);
+      assert.equal(error.message, 'User not found: non-existing@abc-map.fr');
+    });
+
+    it('should throw if password equal email', async () => {
+      const user = TestHelper.sampleUser();
+      await userService.save(user);
+
+      const error: Error = await service.updatePassword(user.email, user.email.toLocaleUpperCase()).catch((err) => err);
+      assert.instanceOf(error, Error);
+      assert.equal(error.message, 'Password cannot be equal to email');
     });
 
     it('should update password if user is known', async () => {

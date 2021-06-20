@@ -22,7 +22,8 @@ import { TestHelper } from '../../../helpers/TestHelper';
 import { ToolSelector } from '../../../helpers/ToolSelector';
 import { Draw } from '../../../helpers/Draw';
 import { MainMap } from '../../../helpers/MainMap';
-import { PointIcons } from '@abc-map/shared';
+
+const Icon0CircleFill = 'twbs/0_circle-fill.inline.svg';
 
 describe('Tool Point', function () {
   beforeEach(() => {
@@ -44,13 +45,13 @@ describe('Tool Point', function () {
         expect(features[0].getGeometry()?.getExtent()).deep.equals([-1118865.2444950184, 4048111.8978092954, -1118865.2444950184, 4048111.8978092954]);
         expect(features[0].get(StyleProperties.PointSize)).equal(15);
         expect(features[0].get(StyleProperties.PointColor)).equal('#FF5733');
-        expect(features[0].get(StyleProperties.PointIcon)).equal(PointIcons.Circle);
+        expect(features[0].get(StyleProperties.PointIcon)).equal(Icon0CircleFill);
 
         expect(features[1].getGeometry()?.getType()).equal('Point');
         expect(features[1].getGeometry()?.getExtent()).deep.equals([-629668.2634698902, 3558914.9167841673, -629668.2634698902, 3558914.9167841673]);
         expect(features[0].get(StyleProperties.PointSize)).equal(15);
         expect(features[0].get(StyleProperties.PointColor)).equal('#FF5733');
-        expect(features[0].get(StyleProperties.PointIcon)).equal(PointIcons.Circle);
+        expect(features[0].get(StyleProperties.PointIcon)).equal(Icon0CircleFill);
       });
   });
 

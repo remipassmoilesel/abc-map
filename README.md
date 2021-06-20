@@ -16,10 +16,14 @@ Abc-Map is a tool for processing geographic information that is easy to understa
 Use cases:             
 
 - Education
-- Professional uses: tourism, deliveries, etc. 
+- Professional uses: tourism, deliveries, ...
 - Sports and leisure: hiking, hunting, treasure hunts, ...
 
-More information [here](https://alpha.abc-map.fr/documentation).
+More information [here](https://alpha.abc-map.fr/documentation).    
+
+
+Please keep in mind that this is a side project, developed at night after often 10 hours of code during the day. 
+A lot of things needs to be improved !    
 
 
 ## Status of project
