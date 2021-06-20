@@ -18,17 +18,20 @@
 
 import React, { ChangeEvent, Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/shared';
-import { PointType } from '../Parameters';
 import { Algorithm, isScaleAlgorithm, ScaleAlgorithm } from '../../_common/algorithm/Algorithm';
 import AlgorithmSelector from '../../_common/algorithm/AlgorithmSelector';
 import FormLine from '../../_common/form-line/FormLine';
 import { ProportionalSymbolsTips } from '@abc-map/user-documentation';
+import PointIconPicker from '../../../components/icon-picker/PointIconPicker';
+import ColorPicker from '../../../components/color-picker/ColorPicker';
+import { PointIconName } from '../../../assets/point-icons/PointIconName';
 
 const logger = Logger.get('SymbolConfigForm.tsx');
 
 export interface SymbolConfigFormValues {
   layerName: string;
-  type: PointType;
+  type: PointIconName;
+  color: string;
   sizeMin: number;
   sizeMax: number;
   algorithm: ScaleAlgorithm;
@@ -43,7 +46,7 @@ const algorithms = Object.values(ScaleAlgorithm);
 
 class SymbolConfigForm extends Component<Props, {}> {
   public render(): ReactNode {
-    const value = this.props.values;
+    const values = this.props.values;
 
     return (
       <>
@@ -51,36 +54,41 @@ class SymbolConfigForm extends Component<Props, {}> {
           <label htmlFor="layer-name" className={'flex-grow-1'}>
             Nom de la nouvelle couche:
           </label>
-          <input type={'text'} className={'form-control'} id={'layer-name'} value={value?.layerName} onChange={this.handleLayerNameChange} />
+          <input type={'text'} className={'form-control'} id={'layer-name'} value={values?.layerName} onChange={this.handleLayerNameChange} />
         </FormLine>
 
         <FormLine>
           <label htmlFor="symbol" className={'flex-grow-1'}>
-            Type de symbole
+            Type de symbole:
           </label>
-          <select className={'form-control'} id={'symbol'} value={value?.type} onChange={this.handleTypeChange}>
-            <option value={PointType.Circle}>Rond</option>
-          </select>
+          <PointIconPicker value={values.type} onChange={this.handleTypeChange} />
+        </FormLine>
+
+        <FormLine>
+          <label htmlFor="symbol" className={'flex-grow-1'}>
+            Couleur:
+          </label>
+          <ColorPicker initialValue={values.color} onClose={this.handleColorChange} />
         </FormLine>
 
         <FormLine>
           <label htmlFor="min-size" className={'flex-grow-1'}>
-            Taille minimale
+            Taille minimale:
           </label>
-          <input type={'number'} value={value?.sizeMin} onChange={this.handleSizeMinChange} min={1} className={'form-control'} id={'min-size'} />
+          <input type={'number'} value={values?.sizeMin} onChange={this.handleSizeMinChange} min={1} className={'form-control'} id={'min-size'} />
         </FormLine>
 
         <FormLine>
           <label htmlFor="max-size" className={'flex-grow-1'}>
-            Taille maximale
+            Taille maximale:
           </label>
-          <input type={'number'} value={value?.sizeMax} onChange={this.handleSizeMaxChange} min={1} className={'form-control'} id={'max-size'} />
+          <input type={'number'} value={values?.sizeMax} onChange={this.handleSizeMaxChange} min={1} className={'form-control'} id={'max-size'} />
         </FormLine>
 
         <FormLine>
           <AlgorithmSelector
             label={'Echelle des symboles:'}
-            value={value.algorithm}
+            value={values.algorithm}
             tip={ProportionalSymbolsTips.Algorithm}
             only={algorithms}
             onChange={this.handleAlgorithmChange}
@@ -98,10 +106,18 @@ class SymbolConfigForm extends Component<Props, {}> {
     this.props.onChange(config);
   };
 
-  private handleTypeChange = (ev: ChangeEvent<HTMLSelectElement>) => {
+  private handleTypeChange = (type: PointIconName) => {
     const config: SymbolConfigFormValues = {
       ...this.props.values,
-      type: ev.target.value as PointType,
+      type,
+    };
+    this.props.onChange(config);
+  };
+
+  private handleColorChange = (color: string) => {
+    const config: SymbolConfigFormValues = {
+      ...this.props.values,
+      color,
     };
     this.props.onChange(config);
   };

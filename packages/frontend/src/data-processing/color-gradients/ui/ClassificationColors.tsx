@@ -69,19 +69,23 @@ class ClassificationColors extends Component<Props, State> {
           </select>
         </FormLine>
 
-        <FormLine>
-          <div className={'flex-grow-1'}>Classes:</div>
+        {classes.length && (
+          <FormLine>
+            <div className={'flex-grow-1'}>Classes:</div>
 
-          <div className={'d-flex flex-column'}>
-            {classes.map((cl) => (
-              <ClassRow key={cl.id} gradientClass={cl} onChange={this.handleClassChanged} />
-            ))}
-            <button onClick={this.handleResetClasses} className={'btn btn-outline-secondary my-3'}>
-              <i className={'fa fa-undo mr-2'} />
-              Couleurs par défaut
-            </button>
-          </div>
-        </FormLine>
+            <div className={'d-flex flex-column'}>
+              {classes.map((cl) => (
+                <ClassRow key={cl.id} gradientClass={cl} onChange={this.handleClassChanged} />
+              ))}
+              <div>
+                <button onClick={this.handleResetClasses} className={'btn btn-outline-secondary my-3'}>
+                  <i className={'fa fa-undo mr-2'} />
+                  Couleurs par défaut
+                </button>
+              </div>
+            </div>
+          </FormLine>
+        )}
       </>
     );
   }

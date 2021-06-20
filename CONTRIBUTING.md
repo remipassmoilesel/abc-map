@@ -1,8 +1,10 @@
 # Contributing
 
-All contributions are welcome, but must follow this guide.       
-
 This project is licensed under GPL v3, see [LICENSE.txt](./LICENSE.txt) for more details.         
+
+All contributions are welcome, but must follow this guide. Please keep in mind that this is a side project, 
+developed at night after often 10 hours of code during the day. A lot of things needs to be improved, and code reviews 
+can take a long time.
 
 
 ## Before starting 

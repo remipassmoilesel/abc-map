@@ -21,9 +21,10 @@ import { AbcProjection, Logger, WmsAuthentication, WmsDefinition } from '@abc-ma
 import { WmsBoundingBox, WmsCapabilities, WmsLayer } from '../../../../../core/geo/WmsCapabilities';
 import WmsLayerItem from './WmsLayerItem';
 import { ServiceProps, withServices } from '../../../../../core/withServices';
-import FormValidationLabel, { FormState } from '../../../../../components/form-state-label/FormValidationLabel';
+import FormValidationLabel from '../../../../../components/form-validation-label/FormValidationLabel';
 import { ValidationHelper } from '../../../../../core/utils/ValidationHelper';
 import Cls from './WmsSettingsPanel.module.scss';
+import { FormState } from '../../../../../components/form-validation-label/FormState';
 
 const logger = Logger.get('WmsSettingsPanel.tsx');
 

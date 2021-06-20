@@ -56,10 +56,10 @@ export class ProportionalSymbols extends Module {
   public async process(params: Parameters): Promise<void> {
     logger.info('Using parameters: ', params);
 
-    const { newLayerName, data, geometries, points } = params;
+    const { newLayerName, data, geometries, symbols } = params;
     const { valueField, source, joinBy: dataJoinBy } = data;
     const { layer: geometryLayer, joinBy: geometryJoinBy } = geometries;
-    const { sizeMin, sizeMax, algorithm } = points;
+    const { sizeMin, sizeMax, algorithm, type, color } = symbols;
 
     if (!newLayerName || !source || !valueField || !sizeMin || !sizeMax || !dataJoinBy || !geometryLayer || !geometryJoinBy || !algorithm) {
       return Promise.reject(new Error('Invalid parameters'));
@@ -120,6 +120,8 @@ export class ProportionalSymbols extends Module {
           point: {
             ...style.point,
             size,
+            icon: type,
+            color,
           },
         });
 

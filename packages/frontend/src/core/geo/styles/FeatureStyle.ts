@@ -17,7 +17,7 @@
  */
 
 import { FillPatterns } from '@abc-map/shared';
-import { DefaultIcon } from './PointIcons';
+import { DefaultIcon } from '../../../assets/point-icons/PointIcons';
 
 export interface FeatureStyle {
   stroke?: StrokeProperties;

@@ -18,16 +18,18 @@
 
 import React, { Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/shared';
-import { newParameters, Parameters, PointType } from '../Parameters';
+import { newParameters, Parameters } from '../Parameters';
 import FoldableCard from '../../../components/foldable-card/FoldableCard';
 import { ServiceProps, withServices } from '../../../core/withServices';
 import SymbolConfigForm, { SymbolConfigFormValues } from './SymbolConfigForm';
-import DataSourceForm, { DataSourceFormValues } from '../../_common/DataSourceForm';
-import GeometryLayerForm, { GeometryLayerFormValues } from '../../_common/GeometryLayerForm';
+import DataSourceForm, { DataSourceFormValues } from '../../_common/data-source-form/DataSourceForm';
+import GeometryLayerForm, { GeometryLayerFormValues } from '../../_common/geometry-layer-form/GeometryLayerForm';
 import { ScaleAlgorithm } from '../../_common/algorithm/Algorithm';
 import Cls from './ProportionalSymbolsUi.module.scss';
 import Sample from './sample.png';
 import { ProportionalSymbolsTips } from '@abc-map/user-documentation';
+import FormValidationLabel from '../../../components/form-validation-label/FormValidationLabel';
+import { FormState } from '../../../components/form-validation-label/FormState';
 
 const logger = Logger.get('ProportionalSymbolsUi.tsx');
 
@@ -39,7 +41,7 @@ interface Props extends ServiceProps {
 
 interface State {
   params: Parameters;
-  message?: string;
+  formState?: FormState;
 }
 
 class ProportionalSymbolsUi extends Component<Props, State> {
@@ -50,25 +52,26 @@ class ProportionalSymbolsUi extends Component<Props, State> {
 
   public render(): ReactNode {
     const params = this.state.params;
-    const message = this.state.message;
-
-    const configValues: SymbolConfigFormValues = {
-      layerName: params.newLayerName || '',
-      type: params.points.type || PointType.Circle,
-      sizeMin: params.points.sizeMin || 10,
-      sizeMax: params.points.sizeMax || 100,
-      algorithm: params.points.algorithm || ScaleAlgorithm.Absolute,
-    };
+    const formState = this.state.formState;
 
     const dataSourceValues: DataSourceFormValues = {
       source: params.data.source,
-      valueField: params.data.valueField || '',
-      joinBy: params.data.joinBy || '',
+      valueField: params.data.valueField,
+      joinBy: params.data.joinBy,
     };
 
     const geometryLayerValues: GeometryLayerFormValues = {
       layer: params.geometries.layer,
-      joinBy: params.geometries.joinBy || '',
+      joinBy: params.geometries.joinBy,
+    };
+
+    const configValues: SymbolConfigFormValues = {
+      layerName: params.newLayerName,
+      type: params.symbols.type,
+      color: params.symbols.color,
+      sizeMin: params.symbols.sizeMin,
+      sizeMax: params.symbols.sizeMax,
+      algorithm: params.symbols.algorithm || ScaleAlgorithm.Absolute,
     };
 
     return (
@@ -119,13 +122,17 @@ class ProportionalSymbolsUi extends Component<Props, State> {
         {/* Data processing parameters */}
         <FoldableCard title={'4. Paramètres du traitement'} className={'section'}>
           <div className={'explanation'}>
-            Les symboles seront créés dans une nouvelle couche. Leurs tailles seront déterminées par le champs source utilisé, entre la taille minimum et la
+            Les symboles seront créés dans une nouvelle couche. Leurs tailles seront déterminées par le champ source utilisé, entre la taille minimum et la
             taille maximum spécifiée.
           </div>
           <SymbolConfigForm values={configValues} onChange={this.handleConfigChange} />
         </FoldableCard>
 
-        {message && <div className={'m-3 font-weight-bold d-flex justify-content-end'}>{message}</div>}
+        {formState && (
+          <div className={'m-3 d-flex justify-content-end'}>
+            <FormValidationLabel state={formState} />
+          </div>
+        )}
 
         <div className={'d-flex flex-row justify-content-end'}>
           <button className={'btn btn-secondary mr-3'} onClick={this.handleCancel}>
@@ -170,7 +177,7 @@ class ProportionalSymbolsUi extends Component<Props, State> {
     const params: Parameters = {
       ...this.state.params,
       newLayerName: values.layerName,
-      points: { ...values },
+      symbols: { ...values },
     };
 
     this.setState({ params });
@@ -187,8 +194,9 @@ class ProportionalSymbolsUi extends Component<Props, State> {
   private handleSubmit = () => {
     const { toasts } = this.props.services;
 
-    const isValid = this.validateParameters();
-    if (!isValid) {
+    const formState = this.validateParameters();
+    this.setState({ formState });
+    if (formState !== FormState.Ok) {
       return;
     }
 
@@ -201,66 +209,54 @@ class ProportionalSymbolsUi extends Component<Props, State> {
       });
   };
 
-  // TODO: replace with formstate ?
-  private validateParameters(): boolean {
+  private validateParameters(): FormState {
     const params = this.state.params;
 
     if (!params.newLayerName) {
-      this.setState({ message: 'Le nom de la couche est obligatoire.' });
-      return false;
+      return FormState.MissingNewLayerName;
     }
 
     if (!params.data.source) {
-      this.setState({ message: 'La source de données est obligatoire.' });
-      return false;
+      return FormState.MissingDataSource;
     }
 
     if (!params.data.valueField) {
-      this.setState({ message: 'Le champ taille est obligatoire.' });
-      return false;
+      return FormState.MissingSymbolValueField;
     }
 
     if (!params.data.joinBy) {
-      this.setState({ message: 'Le champ jointure de la source de données est obligatoire.' });
-      return false;
+      return FormState.MissingDataJoinBy;
     }
 
     if (!params.geometries.layer) {
-      this.setState({ message: 'La couche de géométries est obligatoire.' });
-      return false;
+      return FormState.MissingGeometryLayer;
     }
 
     if (!params.geometries.joinBy) {
-      this.setState({ message: 'Le champ jointure de la couche de géométries est obligatoire.' });
-      return false;
+      return FormState.MissingGeometryJoinBy;
     }
 
-    if (!params.points.algorithm) {
-      this.setState({ message: "L'algorithme est obligatoire." });
-      return false;
+    if (!params.symbols.algorithm) {
+      return FormState.MissingAlgorithm;
     }
 
-    if (!params.points.type) {
-      this.setState({ message: 'Le type de symbole est obligatoire.' });
-      return false;
+    if (!params.symbols.type) {
+      return FormState.MissingSymbolType;
     }
 
-    if (!params.points.sizeMin) {
-      this.setState({ message: 'La taille minimale est obligatoire est doit être supérieure à zéro.' });
-      return false;
+    if (!params.symbols.sizeMin) {
+      return FormState.MissingSizeMin;
     }
 
-    if (!params.points.sizeMax) {
-      this.setState({ message: 'La taille maximale est obligatoire est doit être supérieure à zéro.' });
-      return false;
+    if (!params.symbols.sizeMax) {
+      return FormState.MissingSizeMax;
     }
 
-    if (params.points.sizeMin >= params.points.sizeMax) {
-      this.setState({ message: 'La taille minimale doit être inférieure à la taille maximale.' });
-      return false;
+    if (params.symbols.sizeMin >= params.symbols.sizeMax) {
+      return FormState.InvalidSizeMinMax;
     }
 
-    return true;
+    return FormState.Ok;
   }
 }
 

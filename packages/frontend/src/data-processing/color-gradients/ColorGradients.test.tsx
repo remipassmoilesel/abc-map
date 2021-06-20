@@ -26,7 +26,8 @@ import { ClassificationAlgorithm, ScaleAlgorithm } from '../_common/algorithm/Al
 import VectorSource from 'ol/source/Vector';
 import { newParameters, Parameters } from './Parameters';
 import { ColorGradients, logger } from './ColorGradients';
-import { featuresToComparableValues, testDataSource1, testGeometryLayer1, testGradientClasses } from './ColorGradients.test.data';
+import { featuresToComparableValues, testGradientClasses } from './ColorGradients.test.data';
+import { TestHelper } from '../../core/utils/test/TestHelper';
 
 logger.disable();
 
@@ -51,8 +52,8 @@ describe('ColorGradients', () => {
 
   it('Test dataset 1 with ScaleAlgorithm.Interpolated', async () => {
     // Prepare
-    const source = testDataSource1();
-    const layer = testGeometryLayer1();
+    const source = TestHelper.regionsFranceDataSource();
+    const layer = TestHelper.regionsFranceVectorLayer();
 
     // Act
     const parameters: Parameters = {
@@ -70,6 +71,7 @@ describe('ColorGradients', () => {
         start: '#000',
         end: '#FFF',
         algorithm: ScaleAlgorithm.Interpolated,
+        classes: [],
       },
     };
 
@@ -85,27 +87,27 @@ describe('ColorGradients', () => {
 
     const actual = featuresToComparableValues(features, 'code');
     expect(actual).toEqual([
-      { color: '#a6a6a6', value: 0.124, joinedBy: 1 },
-      { color: '#353535', value: 0.043, joinedBy: 2 },
-      { color: '#404040', value: 0.051, joinedBy: 3 },
-      { color: '#2f2f2f', value: 0.039, joinedBy: 4 },
-      { color: '#000000', value: 0.005, joinedBy: 5 },
-      { color: '#6e6e6e', value: 0.084, joinedBy: 6 },
-      { color: '#787878', value: 0.091, joinedBy: 7 },
-      { color: '#ffffff', value: 0.188, joinedBy: 8 },
-      { color: '#3f3f3f', value: 0.05, joinedBy: 9 },
-      { color: '#797979', value: 0.092, joinedBy: 10 },
-      { color: '#787878', value: 0.091, joinedBy: 11 },
-      { color: '#4a4a4a', value: 0.058, joinedBy: 12 },
-      { color: '#666666', value: 0.078, joinedBy: 13 },
+      { color: '#a6a6a6', value: 0.124, joinedBy: 11 },
+      { color: '#353535', value: 0.043, joinedBy: 22 },
+      { color: '#404040', value: 0.051, joinedBy: 33 },
+      { color: '#2f2f2f', value: 0.039, joinedBy: 44 },
+      { color: '#000000', value: 0.005, joinedBy: 55 },
+      { color: '#6e6e6e', value: 0.084, joinedBy: 66 },
+      { color: '#787878', value: 0.091, joinedBy: 77 },
+      { color: '#ffffff', value: 0.188, joinedBy: 88 },
+      { color: '#3f3f3f', value: 0.05, joinedBy: 99 },
+      { color: '#797979', value: 0.092, joinedBy: 910 },
+      { color: '#787878', value: 0.091, joinedBy: 911 },
+      { color: '#4a4a4a', value: 0.058, joinedBy: 912 },
+      { color: '#666666', value: 0.078, joinedBy: 913 },
     ]);
   });
 
   it('Test dataset 1 with ClassificationAlgorithm.NaturalBreaks', async () => {
     // Prepare
-    const source = testDataSource1();
+    const source = TestHelper.regionsFranceDataSource();
     const classes = testGradientClasses(ClassificationAlgorithm.NaturalBreaks, 5);
-    const layer = testGeometryLayer1();
+    const layer = TestHelper.regionsFranceVectorLayer();
 
     // Act
     const parameters: Parameters = {
@@ -139,27 +141,27 @@ describe('ColorGradients', () => {
 
     const actual = featuresToComparableValues(features, 'code');
     expect(actual).toEqual([
-      { color: '#bf0040', value: 0.124, joinedBy: 1 },
-      { color: '#4000bf', value: 0.043, joinedBy: 2 },
-      { color: '#4000bf', value: 0.051, joinedBy: 3 },
-      { color: '#4000bf', value: 0.039, joinedBy: 4 },
-      { color: '#0000ff', value: 0.005, joinedBy: 5 },
-      { color: '#800080', value: 0.084, joinedBy: 6 },
-      { color: '#800080', value: 0.091, joinedBy: 7 },
-      { color: '#ff0000', value: 0.188, joinedBy: 8 },
-      { color: '#4000bf', value: 0.05, joinedBy: 9 },
-      { color: '#800080', value: 0.092, joinedBy: 10 },
-      { color: '#800080', value: 0.091, joinedBy: 11 },
-      { color: '#4000bf', value: 0.058, joinedBy: 12 },
-      { color: '#800080', value: 0.078, joinedBy: 13 },
+      { color: '#bf0040', value: 0.124, joinedBy: 11 },
+      { color: '#4000bf', value: 0.043, joinedBy: 22 },
+      { color: '#4000bf', value: 0.051, joinedBy: 33 },
+      { color: '#4000bf', value: 0.039, joinedBy: 44 },
+      { color: '#0000ff', value: 0.005, joinedBy: 55 },
+      { color: '#800080', value: 0.084, joinedBy: 66 },
+      { color: '#800080', value: 0.091, joinedBy: 77 },
+      { color: '#ff0000', value: 0.188, joinedBy: 88 },
+      { color: '#4000bf', value: 0.05, joinedBy: 99 },
+      { color: '#800080', value: 0.092, joinedBy: 910 },
+      { color: '#800080', value: 0.091, joinedBy: 911 },
+      { color: '#4000bf', value: 0.058, joinedBy: 912 },
+      { color: '#800080', value: 0.078, joinedBy: 913 },
     ]);
   });
 
   it('Test dataset 1 with ClassificationAlgorithm.Quantiles', async () => {
     // Prepare
-    const source = testDataSource1();
+    const source = TestHelper.regionsFranceDataSource();
     const classes = testGradientClasses(ClassificationAlgorithm.Quantiles, 5);
-    const layer = testGeometryLayer1();
+    const layer = TestHelper.regionsFranceVectorLayer();
 
     // Act
     const parameters: Parameters = {
@@ -193,27 +195,27 @@ describe('ColorGradients', () => {
 
     const actual = featuresToComparableValues(features, 'code');
     expect(actual).toEqual([
-      { color: '#ff0000', value: 0.124, joinedBy: 1 },
-      { color: '#0000ff', value: 0.043, joinedBy: 2 },
-      { color: '#4000bf', value: 0.051, joinedBy: 3 },
-      { color: '#0000ff', value: 0.039, joinedBy: 4 },
-      { color: '#0000ff', value: 0.005, joinedBy: 5 },
-      { color: '#800080', value: 0.084, joinedBy: 6 },
-      { color: '#bf0040', value: 0.091, joinedBy: 7 },
-      { color: '#ff0000', value: 0.188, joinedBy: 8 },
-      { color: '#4000bf', value: 0.05, joinedBy: 9 },
-      { color: '#bf0040', value: 0.092, joinedBy: 10 },
-      { color: '#bf0040', value: 0.091, joinedBy: 11 },
-      { color: '#4000bf', value: 0.058, joinedBy: 12 },
-      { color: '#800080', value: 0.078, joinedBy: 13 },
+      { color: '#ff0000', value: 0.124, joinedBy: 11 },
+      { color: '#0000ff', value: 0.043, joinedBy: 22 },
+      { color: '#4000bf', value: 0.051, joinedBy: 33 },
+      { color: '#0000ff', value: 0.039, joinedBy: 44 },
+      { color: '#0000ff', value: 0.005, joinedBy: 55 },
+      { color: '#800080', value: 0.084, joinedBy: 66 },
+      { color: '#bf0040', value: 0.091, joinedBy: 77 },
+      { color: '#ff0000', value: 0.188, joinedBy: 88 },
+      { color: '#4000bf', value: 0.05, joinedBy: 99 },
+      { color: '#bf0040', value: 0.092, joinedBy: 910 },
+      { color: '#bf0040', value: 0.091, joinedBy: 911 },
+      { color: '#4000bf', value: 0.058, joinedBy: 912 },
+      { color: '#800080', value: 0.078, joinedBy: 913 },
     ]);
   });
 
   it('Test dataset 1 with ClassificationAlgorithm.EqualIntervals', async () => {
     // Prepare
-    const source = testDataSource1();
+    const source = TestHelper.regionsFranceDataSource();
     const classes = testGradientClasses(ClassificationAlgorithm.EqualIntervals, 5);
-    const layer = testGeometryLayer1();
+    const layer = TestHelper.regionsFranceVectorLayer();
 
     // Act
     const parameters: Parameters = {
@@ -247,19 +249,19 @@ describe('ColorGradients', () => {
 
     const actual = featuresToComparableValues(features, 'code');
     expect(actual).toEqual([
-      { color: '#bf0040', value: 0.124, joinedBy: 1 },
-      { color: '#4000bf', value: 0.043, joinedBy: 2 },
-      { color: '#4000bf', value: 0.051, joinedBy: 3 },
-      { color: '#0000ff', value: 0.039, joinedBy: 4 },
-      { color: '#0000ff', value: 0.005, joinedBy: 5 },
-      { color: '#800080', value: 0.084, joinedBy: 6 },
-      { color: '#800080', value: 0.091, joinedBy: 7 },
-      { color: '#ff0000', value: 0.188, joinedBy: 8 },
-      { color: '#4000bf', value: 0.05, joinedBy: 9 },
-      { color: '#800080', value: 0.092, joinedBy: 10 },
-      { color: '#800080', value: 0.091, joinedBy: 11 },
-      { color: '#4000bf', value: 0.058, joinedBy: 12 },
-      { color: '#4000bf', value: 0.078, joinedBy: 13 },
+      { color: '#bf0040', value: 0.124, joinedBy: 11 },
+      { color: '#4000bf', value: 0.043, joinedBy: 22 },
+      { color: '#4000bf', value: 0.051, joinedBy: 33 },
+      { color: '#0000ff', value: 0.039, joinedBy: 44 },
+      { color: '#0000ff', value: 0.005, joinedBy: 55 },
+      { color: '#800080', value: 0.084, joinedBy: 66 },
+      { color: '#800080', value: 0.091, joinedBy: 77 },
+      { color: '#ff0000', value: 0.188, joinedBy: 88 },
+      { color: '#4000bf', value: 0.05, joinedBy: 99 },
+      { color: '#800080', value: 0.092, joinedBy: 910 },
+      { color: '#800080', value: 0.091, joinedBy: 911 },
+      { color: '#4000bf', value: 0.058, joinedBy: 912 },
+      { color: '#4000bf', value: 0.078, joinedBy: 913 },
     ]);
   });
 });

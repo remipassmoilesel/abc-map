@@ -19,8 +19,9 @@
 import React, { ChangeEvent, Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/shared';
 import { ServiceProps, withServices } from '../../../../../core/withServices';
-import FormValidationLabel, { FormState } from '../../../../../components/form-state-label/FormValidationLabel';
+import FormValidationLabel from '../../../../../components/form-validation-label/FormValidationLabel';
 import { ValidationHelper } from '../../../../../core/utils/ValidationHelper';
+import { FormState } from '../../../../../components/form-validation-label/FormState';
 
 const logger = Logger.get('XYZSettingsPanel.tsx');
 

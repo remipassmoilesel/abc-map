@@ -18,8 +18,8 @@
 
 import { FeatureStyle } from '../../geo/styles/FeatureStyle';
 import { MapTool } from '@abc-map/shared';
-import { PointIcons } from '@abc-map/shared';
 import { DimensionsPx } from '../../utils/DimensionsPx';
+import { PointIconName } from '../../../assets/point-icons/PointIconName';
 
 export interface MapState {
   /**
@@ -52,7 +52,7 @@ export const mapInitialState: MapState = {
       size: 30,
     },
     point: {
-      icon: PointIcons.Circle,
+      icon: PointIconName.Icon0CircleFill,
       size: 15,
       color: '#FF5733',
     },

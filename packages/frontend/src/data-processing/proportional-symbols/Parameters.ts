@@ -19,9 +19,10 @@
 import { DataSource } from '../../core/data/data-source/DataSource';
 import { VectorLayerWrapper } from '../../core/geo/layers/LayerWrapper';
 import { ScaleAlgorithm } from '../_common/algorithm/Algorithm';
+import { PointIconName } from '../../assets/point-icons/PointIconName';
 
 export interface Parameters {
-  newLayerName?: string;
+  newLayerName: string;
   data: {
     source?: DataSource;
     valueField?: string;
@@ -31,16 +32,13 @@ export interface Parameters {
     layer?: VectorLayerWrapper;
     joinBy?: string;
   };
-  points: {
-    type?: PointType;
-    sizeMin?: number;
-    sizeMax?: number;
-    algorithm?: ScaleAlgorithm;
+  symbols: {
+    type: PointIconName;
+    color: string;
+    sizeMin: number;
+    sizeMax: number;
+    algorithm: ScaleAlgorithm;
   };
-}
-
-export enum PointType {
-  Circle = 'Circle',
 }
 
 export function newParameters(): Parameters {
@@ -48,10 +46,11 @@ export function newParameters(): Parameters {
     newLayerName: 'Symboles',
     data: {},
     geometries: {},
-    points: {
-      type: PointType.Circle,
-      sizeMin: 1,
-      sizeMax: 20,
+    symbols: {
+      type: PointIconName.Icon0CircleFill,
+      color: '#0094e3',
+      sizeMin: 20,
+      sizeMax: 100,
       algorithm: ScaleAlgorithm.Absolute,
     },
   };

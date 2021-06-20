@@ -16,11 +16,32 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { PointIcon } from './PointIcons';
+import { PointIcon } from '../../../assets/point-icons/PointIcons';
 
 const serializer = new XMLSerializer();
 
+let instance: IconProcessor | undefined;
+
 export class IconProcessor {
+  public static get(): IconProcessor {
+    if (!instance) {
+      instance = new IconProcessor();
+    }
+    return instance;
+  }
+
+  constructor(private cache = new Map<string, string>()) {}
+
+  public prepareCached(icon: PointIcon, size: number, color: string): string {
+    const key = JSON.stringify([icon.name, size, color]);
+    let value = this.cache.get(key);
+    if (!value) {
+      value = this.prepare(icon, size, color);
+      this.cache.set(key, value);
+    }
+    return value;
+  }
+
   /**
    * Create a data url of icon with specified characteristics.
    *
@@ -33,12 +54,16 @@ export class IconProcessor {
    * @param size
    * @param color
    */
-  public static prepare(icon: PointIcon, size: number, color: string): string {
+  public prepare(icon: PointIcon, size: number, color: string): string {
     const { svg } = mountSvg(icon.contentSvg);
 
     // We set size. Viewbox attribute is set in icons (see tests).
     svg.setAttribute('width', `${size}`);
     svg.setAttribute('height', `${size}`);
+
+    if (svg.getAttribute('fill')) {
+      svg.setAttribute('fill', color);
+    }
 
     // We set colors
     const children = svg.getElementsByTagName('*');

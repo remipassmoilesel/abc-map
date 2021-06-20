@@ -22,8 +22,9 @@ import { ModalEventListener, ModalEventType, ModalStatus } from '../../core/ui/t
 import { ServiceProps, withServices } from '../../core/withServices';
 import { Modal } from 'react-bootstrap';
 import { PasswordStrength, ValidationHelper } from '../../core/utils/ValidationHelper';
-import FormValidationLabel, { FormState } from '../form-state-label/FormValidationLabel';
+import FormValidationLabel from '../form-validation-label/FormValidationLabel';
 import Cls from './RegistrationModal.module.scss';
+import { FormState } from '../form-validation-label/FormState';
 
 const logger = Logger.get('RegistrationModal.tsx', 'info');
 

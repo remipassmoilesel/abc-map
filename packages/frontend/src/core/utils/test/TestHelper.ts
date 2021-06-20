@@ -19,7 +19,7 @@
 import { Feature as GeoJsonFeature, GeoJsonProperties, Geometry as GeoJsonGeometry } from 'geojson';
 import Feature from 'ol/Feature';
 import Geometry from 'ol/geom/Geometry';
-import { Point } from 'ol/geom';
+import { Point, Polygon } from 'ol/geom';
 import {
   AbcArtefact,
   AbcLayout,
@@ -39,10 +39,15 @@ import {
 } from '@abc-map/shared';
 import uuid from 'uuid-random';
 import { FeatureStyle } from '../../geo/styles/FeatureStyle';
-import { PointIcons } from '@abc-map/shared';
 import { Coordinate } from 'ol/coordinate';
 import MapBrowserEvent from 'ol/MapBrowserEvent';
 import { Map } from 'ol';
+import { RegionsMetropolitanFrance } from './TestHelper.data';
+import { TestDataSource } from '../../data/data-source/TestDataSource';
+import { VectorLayerWrapper } from '../../geo/layers/LayerWrapper';
+import { FeatureWrapper } from '../../geo/features/FeatureWrapper';
+import { LayerFactory } from '../../geo/layers/LayerFactory';
+import { PointIconName } from '../../../assets/point-icons/PointIconName';
 
 export class TestHelper {
   public static samplePointFeature(): Feature<Geometry> {
@@ -239,7 +244,7 @@ export class TestHelper {
         alignment: 'left',
       },
       point: {
-        icon: PointIcons.Star,
+        icon: PointIconName.IconMoonStars,
         size: 5,
         color: '#00FF00',
       },
@@ -274,5 +279,39 @@ export class TestHelper {
       .getInteractions()
       .getArray()
       .map((inter) => inter.constructor.name);
+  }
+
+  public static regionsFrance() {
+    return RegionsMetropolitanFrance.slice();
+  }
+
+  public static regionsFranceDataSource(): TestDataSource {
+    return TestDataSource.from(this.regionsFrance());
+  }
+
+  public static regionsFranceVectorLayer(): VectorLayerWrapper {
+    const features = this.regionsFrance().map((reg) => {
+      const feat = FeatureWrapper.create(
+        new Polygon([
+          [
+            [reg.code, reg.code],
+            [reg.code + 1, reg.code + 1],
+            [reg.code, reg.code],
+          ],
+        ])
+      );
+      feat.unwrap().setId(reg._id);
+      feat.unwrap().set('CODE', reg.code);
+      feat.unwrap().set('NAME', reg.name);
+      feat.unwrap().set('POP_PERCENT', reg.popPercent);
+      feat.unwrap().set('POP', reg.population);
+      return feat.unwrap();
+    });
+
+    const layer = LayerFactory.newVectorLayer();
+    layer.setName('Regions of France');
+    layer.getSource().addFeatures(features);
+
+    return layer;
   }
 }
