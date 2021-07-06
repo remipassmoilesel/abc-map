@@ -145,14 +145,16 @@ class DataSourceForm extends Component<Props, State> {
   }
 
   private handleDataSourceSelected = (source: DataSource | undefined) => {
-    this.dataSourcePreview(source).then(() => {
-      const values: DataSourceFormValues = {
-        ...this.props.values,
-        source,
-        valueField: '',
-      };
-      this.props.onChange(values);
-    });
+    this.dataSourcePreview(source)
+      .then(() => {
+        const values: DataSourceFormValues = {
+          ...this.props.values,
+          source,
+          valueField: '',
+        };
+        this.props.onChange(values);
+      })
+      .catch((err) => logger.error('Preview error: ', err));
   };
 
   private handleSourceFieldChange = (ev: ChangeEvent<HTMLSelectElement>) => {

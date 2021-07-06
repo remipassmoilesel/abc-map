@@ -43,7 +43,7 @@ class StrokeWidthSelector extends Component<Props, {}> {
       <OptionRow>
         <div className={'mr-2'}>Épaisseur:</div>
         <select value={this.props.stroke?.width} onChange={this.handleSelection} className={`form-control form-control-sm ${Cls.select}`}>
-          {_.range(1, 50).map((value) => (
+          {_.range(2, 21).map((value) => (
             <option key={value} value={value}>
               {value}
             </option>

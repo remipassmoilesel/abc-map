@@ -19,7 +19,7 @@
 import Feature, { FeatureLike } from 'ol/Feature';
 import Geometry from 'ol/geom/Geometry';
 import { FeatureProperties, StyleProperties } from '@abc-map/shared';
-import { FeatureStyle, DefaultStyle } from '../styles/FeatureStyle';
+import { FeatureStyle, DefaultStyle } from '@abc-map/shared';
 import { nanoid } from 'nanoid';
 import GeometryType from 'ol/geom/GeometryType';
 import { Point, Circle, GeometryCollection, LinearRing, LineString, MultiLineString, MultiPoint, MultiPolygon, Polygon } from 'ol/geom';

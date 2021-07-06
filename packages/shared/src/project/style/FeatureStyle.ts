@@ -15,9 +15,7 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
-
-import { FillPatterns } from '@abc-map/shared';
-import { DefaultIcon } from '../../../assets/point-icons/PointIcons';
+import { FillPatterns } from './StyleProperties';
 
 export interface FeatureStyle {
   stroke?: StrokeProperties;
@@ -100,7 +98,7 @@ export const DefaultStyle = {
     offsetY: 10,
   },
   point: {
-    icon: DefaultIcon.name,
+    icon: 'twbs/0_circle-fill.inline.svg',
     size: 15,
   },
 };

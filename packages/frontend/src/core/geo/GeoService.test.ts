@@ -69,7 +69,7 @@ describe('GeoService', () => {
     const project: AbcProjectManifest = TestHelper.sampleProjectManifest();
     const map = MapFactory.createNaked();
 
-    await service.importProject(map, project);
+    await service.importLayers(map, project.layers);
 
     const layers = map.getLayers();
     expect(layers[0].unwrap()).toBeInstanceOf(TileLayer);

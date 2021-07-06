@@ -92,7 +92,7 @@ describe('drawInteractionFactory.ts', () => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     [modify, draw, snap, select] = interaction.interactions;
 
-    await renderMap();
+    await TestHelper.renderMap(map);
   });
 
   afterEach(() => {
@@ -151,7 +151,7 @@ describe('drawInteractionFactory.ts', () => {
       click(60, 10);
       click(60, 60);
       doubleClick(10, 60);
-      await renderMap();
+      await TestHelper.renderMap(map);
 
       const feature = featureFromSource(0);
       expect(feature.isSelected()).toBe(false);
@@ -173,14 +173,14 @@ describe('drawInteractionFactory.ts', () => {
       click(60, 10);
       click(60, 60);
       doubleClick(10, 60);
-      await renderMap();
+      await TestHelper.renderMap(map);
 
       // Draw second
       click(110, 110);
       click(160, 110);
       click(160, 160);
       doubleClick(110, 160);
-      await renderMap();
+      await TestHelper.renderMap(map);
 
       // Act
       singleClick(20, 20, { ctrl: true });
@@ -201,7 +201,7 @@ describe('drawInteractionFactory.ts', () => {
       click(60, 10);
       click(60, 60);
       doubleClick(10, 60);
-      await renderMap();
+      await TestHelper.renderMap(map);
       singleClick(20, 20, { ctrl: true });
 
       // Act
@@ -209,7 +209,7 @@ describe('drawInteractionFactory.ts', () => {
       click(160, 110);
       click(160, 160);
       doubleClick(110, 160);
-      await renderMap();
+      await TestHelper.renderMap(map);
 
       // Assert
       expect(featureFromSource(0).isSelected()).toBe(false);
@@ -227,10 +227,10 @@ describe('drawInteractionFactory.ts', () => {
       click(60, 10);
       click(60, 60);
       doubleClick(10, 60);
-      await renderMap();
+      await TestHelper.renderMap(map);
 
       singleClick(20, 20, { ctrl: true });
-      await renderMap();
+      await TestHelper.renderMap(map);
 
       // Act
       drag(60, 60, 180, 180);
@@ -277,18 +277,6 @@ describe('drawInteractionFactory.ts', () => {
 
   function featureFromSource(i: number): FeatureWrapper<Polygon> {
     return FeatureWrapper.from<Polygon>(source.getFeatures()[i] as Feature<Polygon>);
-  }
-
-  /**
-   * After map modifications, we must render in order to let map update its state
-   */
-  function renderMap(): Promise<void> {
-    return new Promise<void>((resolve) => {
-      map.render();
-      map.once('postrender', () => {
-        resolve();
-      });
-    });
   }
 
   function drag(startX: number, startY: number, endX: number, endY: number, options?: SimulatedEventOptions) {

@@ -39,7 +39,7 @@ export class DataStoreController extends Controller {
     app.get('/:artefactId', { schema: GetByIdSchema }, this.getById);
 
     const root = this.services.datastore.getRoot();
-    app.register(fastifyStatic, { root, prefix: '/download' });
+    void app.register(fastifyStatic, { root, prefix: '/download' });
   };
 
   private list = async (req: FastifyRequest<{ Querystring: PaginatedQuery }>, reply: FastifyReply): Promise<void> => {
@@ -53,7 +53,7 @@ export class DataStoreController extends Controller {
       offset,
       total,
     };
-    reply.status(200).send(result);
+    void reply.status(200).send(result);
   };
 
   private search = async (req: FastifyRequest<{ Querystring: SearchQuery }>, reply: FastifyReply): Promise<void> => {
@@ -68,14 +68,14 @@ export class DataStoreController extends Controller {
       offset,
       total,
     };
-    reply.status(200).send(result);
+    void reply.status(200).send(result);
   };
 
   private getById = async (req: FastifyRequest<{ Params: ByIdParams }>, reply: FastifyReply): Promise<void> => {
     const id = req.params.artefactId;
     const result = await this.services.datastore.findById(id);
     if (result) {
-      reply.status(200).send(result);
+      void reply.status(200).send(result);
     } else {
       reply.notFound();
     }

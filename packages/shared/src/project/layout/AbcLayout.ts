@@ -81,7 +81,7 @@ export class LayoutFormats {
     orientation: 'landscape',
   };
 
-  public static ALL: LayoutFormat[] = [
+  public static All: LayoutFormat[] = [
     LayoutFormats.A5_PORTRAIT,
     LayoutFormats.A5_LANDSCAPE,
     LayoutFormats.A4_PORTRAIT,

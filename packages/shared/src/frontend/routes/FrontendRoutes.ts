@@ -35,6 +35,10 @@ export class FrontendRoutes {
     return new Route<EmptyParams>('/layout');
   }
 
+  public static mapLegend() {
+    return new Route<EmptyParams>('/layout/map-legend');
+  }
+
   public static documentation() {
     return new Route<EmptyParams>('/documentation');
   }

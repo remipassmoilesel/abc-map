@@ -38,15 +38,17 @@ describe('UpdateGeometryTask', function () {
     task = new UpdateGeometriesTask([item]);
   });
 
-  it('should undo', function () {
-    task.undo();
+  it('should undo', async () => {
+    await task.undo();
+
     expect(feature.getGeometry()).toBeInstanceOf(Point);
     expect((feature.getGeometry() as Point).getCoordinates()).toEqual([16, 48]);
     expect(feature.getGeometry() === before).toBeFalsy();
   });
 
-  it('should redo', function () {
-    task.redo();
+  it('should redo', async () => {
+    await task.redo();
+
     expect(feature.getGeometry()).toBeInstanceOf(Point);
     expect((feature.getGeometry() as Point).getCoordinates()).toEqual([12, 12]);
     expect(feature.getGeometry() === after).toBeFalsy();

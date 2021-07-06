@@ -42,7 +42,7 @@ export class ProjectController extends Controller {
   }
 
   public setup = async (app: FastifyInstance): Promise<void> => {
-    app.register(fastifyMultipart, {
+    void app.register(fastifyMultipart, {
       limits: {
         fieldNameSize: 100,
         fieldSize: 10 * 1024,
@@ -88,7 +88,7 @@ export class ProjectController extends Controller {
     const projectsLeft = this.config.project.maxPerUser - projectNumbers;
     if (projectsLeft < 1) {
       const response: ProjectSaveResponse = { status: ProjectSaveStatus.LimitReached, projectsLeft };
-      reply.status(402).send(response);
+      void reply.status(402).send(response);
       return;
     }
 
@@ -96,7 +96,7 @@ export class ProjectController extends Controller {
     await this.services.project.save(user.id, project);
 
     const response: ProjectSaveResponse = { status: ProjectSaveStatus.Saved, projectsLeft };
-    reply.status(200).send(response);
+    void reply.status(200).send(response);
   };
 
   private list = async (req: FastifyRequest<{ Querystring: PaginatedQuery }>, reply: FastifyReply): Promise<void> => {
@@ -109,7 +109,7 @@ export class ProjectController extends Controller {
 
     const user = Authentication.from(req) as AbcUser;
     const result = await this.services.project.list(user.id, offset, limit);
-    reply.status(200).send(result);
+    void reply.status(200).send(result);
   };
 
   private findById = async (req: FastifyRequest<{ Params: ByIdParams }>, reply: FastifyReply): Promise<void> => {
@@ -125,7 +125,7 @@ export class ProjectController extends Controller {
       return;
     }
 
-    reply.status(200).send(result.project);
+    void reply.status(200).send(result.project);
   };
 
   private deleteById = async (req: FastifyRequest<{ Params: ByIdParams }>, reply: FastifyReply): Promise<void> => {
@@ -136,6 +136,6 @@ export class ProjectController extends Controller {
     }
 
     await this.services.project.deleteById(projectId);
-    reply.status(200).send({ status: 'deleted' });
+    void reply.status(200).send({ status: 'deleted' });
   };
 }

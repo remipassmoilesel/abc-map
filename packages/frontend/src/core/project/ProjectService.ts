@@ -17,7 +17,7 @@
  */
 
 import { ProjectActions } from '../store/project/actions';
-import { CompressedProject, Logger, ProjectConstants, ProjectHelper } from '@abc-map/shared';
+import { AbcLegendItem, CompressedProject, LegendDisplay, Logger, ProjectConstants, ProjectHelper } from '@abc-map/shared';
 import { AbcLayout, AbcProjectManifest, AbcProjection, AbcProjectMetadata, LayerType, LayoutFormat, WmsMetadata, Zipper } from '@abc-map/shared';
 import { AxiosInstance } from 'axios';
 import { ProjectFactory } from './ProjectFactory';
@@ -29,6 +29,8 @@ import { Encryption } from '../utils/Encryption';
 import { BlobIO } from '@abc-map/shared';
 import { HttpError } from '../http/HttpError';
 import { ToastService } from '../ui/ToastService';
+import { HistoryService } from '../history/HistoryService';
+import { StyleFactory } from '../geo/styles/StyleFactory';
 
 export const logger = Logger.get('ProjectService.ts', 'info');
 
@@ -38,11 +40,16 @@ export class ProjectService {
     private downloadClient: AxiosInstance,
     private store: MainStore,
     private toasts: ToastService,
-    private geoService: GeoService
+    private geoService: GeoService,
+    private history: HistoryService,
+    private styleFactory: StyleFactory
   ) {}
 
+  // TODO: create event emitter, then extract this ?
   public newProject(): void {
-    this.geoService.getMainMap().defaultLayers();
+    this.geoService.getMainMap().setDefaultLayers();
+    this.history.resetHistory();
+    this.styleFactory.clearCache();
     this.store.dispatch(ProjectActions.newProject(ProjectFactory.newProjectMetadata()));
     logger.info('New project created');
   }
@@ -51,7 +58,7 @@ export class ProjectService {
     return this.store.getState().project.metadata;
   }
 
-  public list(): Promise<AbcProjectMetadata[]> {
+  public listRemoteProjects(): Promise<AbcProjectMetadata[]> {
     return this.jsonClient
       .get(Api.listProject())
       .then((res) => res.data)
@@ -94,6 +101,7 @@ export class ProjectService {
       },
       layers: await this.geoService.exportLayers(this.geoService.getMainMap()),
       layouts: this.store.getState().project.layouts,
+      legend: this.store.getState().project.legend,
     };
 
     if (containsCredentials && password) {
@@ -151,16 +159,18 @@ export class ProjectService {
       return Promise.reject(new Error('Invalid project, manifest not found'));
     }
 
-    let manifest = JSON.parse(await BlobIO.asString(manifestFile.content));
+    let manifest: AbcProjectManifest = JSON.parse(await BlobIO.asString(manifestFile.content));
     if (this.manifestContainsCredentials(manifest) && !password) {
       throw new Error('Password is mandatory when project contains credentials');
     }
+
+    this.history.resetHistory();
 
     const map = this.geoService.getMainMap();
     if (password) {
       manifest = await Encryption.decryptManifest(manifest, password);
     }
-    await this.geoService.importProject(map, manifest);
+    await this.geoService.importLayers(map, manifest.layers);
     this.store.dispatch(ProjectActions.loadProject(manifest));
   }
 
@@ -185,6 +195,22 @@ export class ProjectService {
 
   public setLayoutIndex(layout: AbcLayout, index: number): void {
     this.store.dispatch(ProjectActions.setLayoutIndex(layout, index));
+  }
+
+  public addLegendItems(items: AbcLegendItem[]): void {
+    this.store.dispatch(ProjectActions.addItems(items));
+  }
+
+  public updateLegendItem(item: AbcLegendItem): void {
+    this.store.dispatch(ProjectActions.updateItem(item));
+  }
+
+  public setLegendSize(width: number, height: number) {
+    this.store.dispatch(ProjectActions.setLegendSize(width, height));
+  }
+
+  public setLegendDisplay(display: LegendDisplay) {
+    this.store.dispatch(ProjectActions.setLegendDisplay(display));
   }
 
   public updateLayout(layout: AbcLayout) {
@@ -232,5 +258,13 @@ export class ProjectService {
       });
 
     return !!wmsLayersWithCredentials;
+  }
+
+  public deleteLegendItem(item: AbcLegendItem) {
+    this.store.dispatch(ProjectActions.deleteLegendItem(item));
+  }
+
+  public setLegendItemIndex(item: AbcLegendItem, newIndex: number) {
+    this.store.dispatch(ProjectActions.setLegendItemIndex(item, newIndex));
   }
 }

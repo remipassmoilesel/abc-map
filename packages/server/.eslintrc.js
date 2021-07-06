@@ -1,4 +1,4 @@
-{
+module.exports = {
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
@@ -14,6 +14,10 @@
     "node": true,
     "mocha": true,
     "es6": true
+  },
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.json"
   },
   "rules": {
     "no-only-tests/no-only-tests": "error",
@@ -51,8 +55,8 @@
         "varsIgnorePattern": "logger"
       }
     ],
-    "max-len": ["error", { "code": 160 }]
+    "max-len": ["error", { "code": 160 }],
+    "@typescript-eslint/no-floating-promises": ["error"]
   },
-  "parser": "@typescript-eslint/parser"
 }
 

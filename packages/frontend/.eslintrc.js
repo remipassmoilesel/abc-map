@@ -1,5 +1,4 @@
-{
-  "parser": "@typescript-eslint/parser",
+module.exports = {
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
@@ -18,6 +17,10 @@
     "browser": true,
     "jest": true,
     "es6": true
+  },
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.json"
   },
   "rules": {
     "react/react-in-jsx-scope": "off",
@@ -52,7 +55,8 @@
       {
         "varsIgnorePattern": "logger"
       }
-    ]
+    ],
+    "@typescript-eslint/no-floating-promises": ["error"]
   },
   "settings": {
     "react": {

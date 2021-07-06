@@ -117,7 +117,7 @@ export class BuildService {
   }
 
   public test(): void {
-    this.shell.sync('lerna run test');
+    this.shell.sync('lerna run test --stream');
   }
 
   public async e2eTests(): Promise<void> {

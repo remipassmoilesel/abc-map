@@ -29,23 +29,37 @@ import * as sinon from 'sinon';
 import { SinonStubbedInstance } from 'sinon';
 import { ProjectHelper } from '@abc-map/shared';
 import { ToastService } from '../ui/ToastService';
+import { HistoryService } from '../history/HistoryService';
+import { StyleFactory } from '../geo/styles/StyleFactory';
 
 logger.disable();
 
 describe('ProjectService', function () {
   let store: MainStore;
   let geoMock: SinonStubbedInstance<GeoService>;
+  let historyMock: SinonStubbedInstance<HistoryService>;
   let toastMock: SinonStubbedInstance<ToastService>;
+  let styleFactoryMock: SinonStubbedInstance<StyleFactory>;
   let projectService: ProjectService;
 
   beforeEach(() => {
     store = storeFactory();
     geoMock = sinon.createStubInstance(GeoService);
-    projectService = new ProjectService({} as any, {} as any, store, toastMock as unknown as ToastService, geoMock as unknown as GeoService);
+    historyMock = sinon.createStubInstance(HistoryService);
+    styleFactoryMock = sinon.createStubInstance(StyleFactory);
+    projectService = new ProjectService(
+      {} as any,
+      {} as any,
+      store,
+      toastMock as unknown as ToastService,
+      geoMock as unknown as GeoService,
+      historyMock as unknown as HistoryService,
+      styleFactoryMock as unknown as StyleFactory
+    );
   });
 
   describe('newProject()', () => {
-    it('newProject() should reset main map', async function () {
+    it('newProject() should reset main map and history', async function () {
       // Prepare
       const mapMock = sinon.createStubInstance(MapWrapper);
       geoMock.getMainMap.returns(mapMock as unknown as MapWrapper);
@@ -55,7 +69,8 @@ describe('ProjectService', function () {
 
       // Assert
       expect(geoMock.getMainMap.callCount).toEqual(1);
-      expect(mapMock.defaultLayers.callCount).toEqual(1);
+      expect(mapMock.setDefaultLayers.callCount).toEqual(1);
+      expect(historyMock.resetHistory.callCount).toEqual(1);
     });
 
     it('newProject() should dispatch', async function () {
@@ -170,7 +185,8 @@ describe('ProjectService', function () {
     await projectService.loadProject(newProject.project);
 
     expect(store.getState().project.metadata.id).toEqual(newProject.metadata.id);
-    expect(geoMock.importProject.callCount).toEqual(1);
+    expect(geoMock.importLayers.callCount).toEqual(1);
+    expect(historyMock.resetHistory.callCount).toEqual(1);
   });
 
   describe('manifestContainsCredentials()', function () {

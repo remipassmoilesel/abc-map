@@ -19,7 +19,7 @@
 import { StorePersistence } from './StorePersistence';
 import { LocalStorageService, StorageKey } from '../../utils/LocalStorageService';
 import sinon, { SinonStub } from 'sinon';
-import { UserStatus } from '@abc-map/shared';
+import { LegendDisplay, UserStatus } from '@abc-map/shared';
 import { MapTool } from '@abc-map/shared';
 import { MainState } from '../reducer';
 import { TestHelper } from '../../utils/test/TestHelper';
@@ -40,6 +40,12 @@ describe('StorePersistence', () => {
       project: {
         metadata: { name: 'test-project' } as any,
         layouts: [TestHelper.sampleLayout()],
+        legend: {
+          display: LegendDisplay.BottomRightCorner,
+          items: [],
+          width: 300,
+          height: 500,
+        },
       },
       map: {
         tool: MapTool.Point,

@@ -16,9 +16,9 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Feature } from 'ol';
 import GeometryType from 'ol/geom/GeometryType';
 import { logger, SelectionStyleFactory } from './SelectionStyleFactory';
+import { FeatureWrapper } from '../features/FeatureWrapper';
 
 logger.disable();
 
@@ -57,7 +57,7 @@ describe('SelectionStyleFactory', function () {
   });
 });
 
-function fakeFeature(geom: GeometryType): Feature {
+function fakeFeature(geom: GeometryType): FeatureWrapper {
   return {
     getGeometry() {
       return {
@@ -66,5 +66,5 @@ function fakeFeature(geom: GeometryType): Feature {
         },
       };
     },
-  } as Feature;
+  } as FeatureWrapper;
 }

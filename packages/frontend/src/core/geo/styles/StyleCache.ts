@@ -17,28 +17,48 @@
  */
 
 import Style from 'ol/style/Style';
-import { FeatureStyle } from './FeatureStyle';
-import GeometryType from 'ol/geom/GeometryType';
+import { FeatureStyle } from '@abc-map/shared';
+import { nanoid } from 'nanoid';
+import { GeometryType } from '@abc-map/shared';
 
-interface CacheEntry {
-  key: string;
-  style: Style[];
+export interface StyleCacheEntry {
+  id: string;
+  style: Style;
+  geomType: GeometryType;
+  properties: FeatureStyle;
+  ratio: number;
 }
 
 export class StyleCache {
-  private cache: CacheEntry[] = [];
+  private cache = new Map<string, StyleCacheEntry>();
 
-  public put(geom: GeometryType, properties: FeatureStyle, ratio: number, style: Style[]): void {
-    const key = this.cacheKey(geom, properties, ratio);
-    this.cache.push({ key: key, style });
+  public put(geomType: GeometryType, properties: FeatureStyle, ratio: number, style: Style): void {
+    const key = this.cacheKey(geomType, properties, ratio);
+    const entry = {
+      id: nanoid(),
+      geomType,
+      properties,
+      ratio,
+      style,
+    };
+    this.cache.set(key, entry);
   }
 
-  public get(geom: GeometryType, properties: FeatureStyle, ratio: number): Style[] | undefined {
+  public get(geom: GeometryType, properties: FeatureStyle, ratio: number): Style | undefined {
     const key = this.cacheKey(geom, properties, ratio);
-    return this.cache.find((entry) => entry.key === key)?.style;
+    return this.cache.get(key)?.style;
   }
 
-  private cacheKey(geom: GeometryType, properties: FeatureStyle, ratio: number): string {
-    return JSON.stringify({ geom, properties, ratio });
+  public getAll(): StyleCacheEntry[] {
+    return Array.from(this.cache.values());
+  }
+
+  public clear() {
+    this.cache.clear();
+  }
+
+  private cacheKey(geomType: GeometryType, properties: FeatureStyle, ratio: number): string {
+    const key = { geomType, properties, ratio };
+    return JSON.stringify(key);
   }
 }

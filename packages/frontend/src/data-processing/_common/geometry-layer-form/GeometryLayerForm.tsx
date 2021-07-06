@@ -126,15 +126,17 @@ class GeometryLayerForm extends Component<Props, State> {
   }
 
   private handleGeometryLayerSelected = (layer: VectorLayerWrapper | undefined) => {
-    this.layerDataPreview(layer).then(() => {
-      const values: GeometryLayerFormValues = {
-        ...this.props.values,
-        layer,
-        joinBy: '', // We reset field when layer change
-      };
+    this.layerDataPreview(layer)
+      .then(() => {
+        const values: GeometryLayerFormValues = {
+          ...this.props.values,
+          layer,
+          joinBy: '', // We reset field when layer change
+        };
 
-      this.props.onChange(values);
-    });
+        this.props.onChange(values);
+      })
+      .catch((err) => logger.error('Preview error: ', err));
   };
 
   private handleJoinByChanged = (ev: ChangeEvent<HTMLSelectElement>) => {

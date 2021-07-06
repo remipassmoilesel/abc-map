@@ -32,11 +32,11 @@ import { TestHelper } from '../../utils/test/TestHelper';
 logger.disable();
 
 describe('MapWrapper', function () {
-  it('defaultLayers()', () => {
+  it('setDefaultLayers()', () => {
     const map = MapFactory.createNaked();
     map.addLayer(LayerFactory.newVectorLayer());
 
-    map.defaultLayers();
+    map.setDefaultLayers();
 
     const layers = map.getLayers();
     expect(layers).toHaveLength(2);

@@ -88,12 +88,12 @@ export class AuthenticationController extends Controller {
     const response: RegistrationResponse = { status };
 
     if (RegistrationStatus.Successful === status) {
-      reply.status(200).send(response);
+      void reply.status(200).send(response);
       metrics.newRegistration();
     } else if (RegistrationStatus.EmailAlreadyExists === status) {
-      reply.status(409).send(response);
+      void reply.status(409).send(response);
     } else {
-      reply.status(500).send(response);
+      void reply.status(500).send(response);
       metrics.registrationError();
     }
   };
@@ -106,7 +106,7 @@ export class AuthenticationController extends Controller {
     if (!tokenContent) {
       logger.warn('Bad registration token');
       metrics.registrationConfirmationFailed();
-      reply.unauthorized();
+      void reply.unauthorized();
       return;
     }
 
@@ -117,21 +117,21 @@ export class AuthenticationController extends Controller {
       // Email already confirmed
       if (ConfirmationStatus.AlreadyConfirmed === result) {
         const response: RegistrationConfirmationResponse = { status: ConfirmationStatus.AlreadyConfirmed };
-        reply.status(409).send(response);
+        void reply.status(409).send(response);
         return;
       }
 
       // Email confirmed
       const token = authentication.signAuthenticationToken(result);
       const response: RegistrationConfirmationResponse = { status: ConfirmationStatus.Succeed, token };
-      reply.status(200).send(response);
+      void reply.status(200).send(response);
 
       metrics.registrationConfirmed();
     } catch (e) {
       logger.error('Registration confirmation error: ', e);
 
       const response: RegistrationConfirmationResponse = { status: ConfirmationStatus.Failed };
-      reply.status(401).send(response);
+      void reply.status(401).send(response);
 
       metrics.registrationConfirmationFailed();
     }
@@ -146,7 +146,7 @@ export class AuthenticationController extends Controller {
     if (auth.user) {
       const token = this.services.authentication.signAuthenticationToken(auth.user);
       const response: AuthenticationResponse = { token, status: AuthenticationStatus.Successful };
-      reply.status(200).send(response);
+      void reply.status(200).send(response);
 
       if (isEmailAnonymous(request.email)) {
         metrics.anonymousAuthenticationSucceeded();
@@ -155,7 +155,7 @@ export class AuthenticationController extends Controller {
       }
     } else {
       const response: AuthenticationResponse = { status: auth.status };
-      reply.status(401).send(response);
+      void reply.status(401).send(response);
 
       metrics.authenticationFailed();
     }
@@ -165,17 +165,17 @@ export class AuthenticationController extends Controller {
     try {
       await req.jwtVerify();
     } catch (err) {
-      reply.forbidden();
+      void reply.forbidden();
     }
 
     const user = Authentication.from(req);
     if (!user) {
-      reply.forbidden();
+      void reply.forbidden();
       return;
     }
 
     const response: RenewResponse = { token: this.services.authentication.signAuthenticationToken(user) };
-    reply.status(200).send(response);
+    void reply.status(200).send(response);
   };
 
   private updatePassword = async (req: FastifyRequest<{ Body: UpdatePasswordRequest }>, reply: FastifyReply): Promise<void> => {
@@ -184,23 +184,23 @@ export class AuthenticationController extends Controller {
     try {
       await req.jwtVerify();
     } catch (err) {
-      reply.forbidden();
+      void reply.forbidden();
     }
 
     const user = Authentication.from(req);
     if (!user) {
-      reply.forbidden();
+      void reply.forbidden();
       return;
     }
 
     const auth = await authentication.authenticate(user.email, req.body.previousPassword);
     if (AuthenticationStatus.Refused === auth.status) {
-      reply.forbidden();
+      void reply.forbidden();
       return;
     }
 
     await authentication.updatePassword(user.email, req.body.newPassword);
-    reply.status(200).send();
+    void reply.status(200).send();
   };
 
   private passwordLost = async (req: FastifyRequest<{ Body: PasswordLostRequest }>, reply: FastifyReply): Promise<void> => {
@@ -208,7 +208,7 @@ export class AuthenticationController extends Controller {
 
     await authentication.passwordLost(req.body.email);
 
-    reply.status(200).send();
+    void reply.status(200).send();
   };
 
   private resetPassword = async (req: FastifyRequest<{ Body: ResetPasswordRequest }>, reply: FastifyReply): Promise<void> => {
@@ -216,13 +216,13 @@ export class AuthenticationController extends Controller {
 
     const tokenContent = await authentication.verifyResetPasswordToken(req.body.token);
     if (!tokenContent) {
-      reply.unauthorized();
+      void reply.unauthorized();
       return;
     }
 
     // Here we MUST fetch email from token
     await authentication.updatePassword(tokenContent.email, req.body.password);
-    reply.status(200).send();
+    void reply.status(200).send();
   };
 
   private deleteAccount = async (req: FastifyRequest<{ Body: DeleteAccountRequest }>, reply: FastifyReply): Promise<void> => {
@@ -231,23 +231,23 @@ export class AuthenticationController extends Controller {
     try {
       await req.jwtVerify();
     } catch (err) {
-      reply.forbidden();
+      void reply.forbidden();
     }
 
     const user = Authentication.from(req);
     if (!user) {
-      reply.forbidden();
+      void reply.forbidden();
       return;
     }
 
     const auth = await authentication.authenticate(user.email, req.body.password);
     if (AuthenticationStatus.Refused === auth.status) {
-      reply.forbidden();
+      void reply.forbidden();
       return;
     }
 
     await project.deleteByUserId(user.id);
     await userService.deleteById(user.id);
-    reply.status(200).send();
+    void reply.status(200).send();
   };
 }

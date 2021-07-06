@@ -17,7 +17,7 @@
  */
 
 import React, { Component, ReactNode } from 'react';
-import { getAbcWindow, Logger } from '@abc-map/shared';
+import { AbcLegend, getAbcWindow, Logger } from '@abc-map/shared';
 import { AbcLayout } from '@abc-map/shared';
 import { LayoutHelper } from '../../../core/project/LayoutHelper';
 import View from 'ol/View';
@@ -27,10 +27,13 @@ import { PreviewDimensions } from './PreviewDimensions';
 import * as _ from 'lodash';
 import { E2eMapWrapper } from '../../../core/geo/map/E2eMapWrapper';
 import Cls from './LayoutPreview.module.scss';
+import { Control } from 'ol/control';
+import { LegendRenderer } from '../../../core/geo/legend/LegendRenderer';
 
 const logger = Logger.get('LayoutPreview.tsx', 'warn');
 
 interface Props {
+  legend: AbcLegend;
   layout?: AbcLayout;
   mainMap: MapWrapper;
   onLayoutChanged: (lay: AbcLayout) => void;
@@ -39,10 +42,13 @@ interface Props {
 
 interface State {
   previewMap?: MapWrapper;
+  legendCanvas?: HTMLCanvasElement;
+  legendControl?: Control;
 }
 
 class LayoutPreview extends Component<Props, State> {
   private mapRef = React.createRef<HTMLDivElement>();
+  private legendRenderer = new LegendRenderer();
 
   constructor(props: Props) {
     super(props);
@@ -58,7 +64,7 @@ class LayoutPreview extends Component<Props, State> {
         <h4>{layout?.name}</h4>
         {layout && (
           <div className={Cls.previewContainer}>
-            <div className={Cls.previewFrame} ref={this.mapRef} data-cy={'layout-preview-map'} />
+            <div className={Cls.previewMap} ref={this.mapRef} data-cy={'layout-preview-map'} />
           </div>
         )}
         {!layout && (
@@ -76,15 +82,16 @@ class LayoutPreview extends Component<Props, State> {
 
   public componentDidMount() {
     if (this.props.layout) {
-      this.setupPreview(this.props.layout);
+      this.setupPreview(this.props.layout).catch((err) => logger.error('Rendering error: ', err));
     }
   }
 
   public componentDidUpdate(prevProps: Readonly<Props>) {
     const layoutChanged = !_.isEqual(prevProps.layout?.id, this.props.layout?.id);
     const formatChanged = prevProps.layout?.format.name !== this.props.layout?.format.name;
-    if (layoutChanged || formatChanged) {
-      this.setupPreview(this.props.layout);
+    const legendChanged = prevProps.legend.display !== this.props.legend.display;
+    if (layoutChanged || formatChanged || legendChanged) {
+      this.setupPreview(this.props.layout).catch((err) => logger.error('Rendering error: ', err));
     }
   }
 
@@ -92,34 +99,33 @@ class LayoutPreview extends Component<Props, State> {
     this.state.previewMap?.dispose();
   }
 
-  private setupPreview(layout?: AbcLayout): void {
-    logger.debug('Updating preview map', layout);
-
+  private async setupPreview(layout?: AbcLayout): Promise<void> {
+    // We dispose previous map
+    this.state.previewMap?.dispose();
+    this.state.legendControl?.dispose();
     if (!layout) {
-      this.state.previewMap?.dispose();
-      this.setState({ previewMap: undefined });
+      this.setState({ previewMap: undefined, legendCanvas: undefined, legendControl: undefined });
       return;
     }
 
-    const div = this.mapRef.current;
-    if (!div) {
-      logger.error('Cannot update map: ', { div });
+    const mapSupport = this.mapRef.current;
+    if (!mapSupport) {
+      logger.error('Cannot update preview map: ', { mapSupport });
       return;
     }
 
     // Map initialization
     const mainMap = this.props.mainMap;
-    const previewMap = this.state.previewMap || this.initializePreviewMap(div);
+    const previewMap = this.initializePreviewMap(mapSupport);
 
     const divSize = this.getPreviewDimensionsFor(layout);
-    div.style.width = divSize.width;
-    div.style.height = divSize.height;
+    mapSupport.style.width = divSize.width;
+    mapSupport.style.height = divSize.height;
     previewMap.unwrap().updateSize();
 
-    // View update
     const mapSize = previewMap.unwrap().getSize();
     if (!mapSize) {
-      logger.error('Cannot update map: ', { mapSize });
+      logger.error('Cannot update preview map: ', { mapSize });
       return;
     }
 
@@ -133,6 +139,13 @@ class LayoutPreview extends Component<Props, State> {
       previewMap.addLayer(clone);
     });
 
+    // Legend initialization
+    const legend = this.props.legend;
+    const canvas = this.initializeLegendCanvas(legend, previewMap);
+    canvas.width = legend.width * styleRatio;
+    canvas.height = legend.height * styleRatio;
+    await this.legendRenderer.renderLegend(legend, canvas, styleRatio);
+
     previewMap.unwrap().setView(
       new View({
         center: layout.view.center,
@@ -144,46 +157,29 @@ class LayoutPreview extends Component<Props, State> {
 
   private initializePreviewMap(div: HTMLDivElement): MapWrapper {
     logger.debug('Initializing preview map');
-    const preview = MapFactory.createLayoutPreview();
-    preview.setTarget(div);
+    const previewMap = MapFactory.createLayoutPreview();
+    previewMap.setTarget(div);
 
     // We listen for view changes, in order to persist them in layout
-    preview.unwrap().on('moveend', this.handlePreviewChanged);
+    previewMap.unwrap().on('moveend', this.handlePreviewChanged);
 
-    getAbcWindow().abc.layoutPreview = new E2eMapWrapper(preview);
+    getAbcWindow().abc.layoutPreview = new E2eMapWrapper(previewMap);
 
-    this.setState({ previewMap: preview });
-    return preview;
+    this.setState({ previewMap });
+    return previewMap;
   }
 
-  /**
-   * Compute preview map dimensions from layout. The main goal of this function is to create
-   * a map that fit both layout and user screen.
-   */
-  private getPreviewDimensionsFor(layout: AbcLayout): PreviewDimensions {
-    const format = layout.format;
-    const unit = 'vmin';
-    const maxHeight = 80;
-    const maxWidth = 100;
+  private initializeLegendCanvas(legend: AbcLegend, previewMap: MapWrapper): HTMLCanvasElement {
+    logger.debug('Initializing legend canvas');
 
-    // Portrait format
-    if (format.height > format.width) {
-      const height = Math.round(maxHeight);
-      const width = Math.round((format.width * height) / format.height);
-      return {
-        width: `${width}${unit}`,
-        height: `${height}${unit}`,
-      };
-    }
-    // Landscape format
-    else {
-      const width = Math.round(maxWidth);
-      const height = Math.round((format.height * width) / format.width);
-      return {
-        width: `${width}${unit}`,
-        height: `${height}${unit}`,
-      };
-    }
+    const legendCanvas = document.createElement('canvas');
+    this.legendRenderer.setPreviewStyle(legend, legendCanvas);
+
+    const legendControl = new Control({ element: legendCanvas });
+    previewMap.unwrap().addControl(legendControl);
+
+    this.setState({ legendCanvas, legendControl });
+    return legendCanvas;
   }
 
   /**
@@ -225,6 +221,36 @@ class LayoutPreview extends Component<Props, State> {
       this.props.onLayoutChanged(updated);
     }
   };
+
+  /**
+   * Compute preview map dimensions from layout. The main goal of this function is to create
+   * a map that fit both layout and user screen.
+   */
+  private getPreviewDimensionsFor(layout: AbcLayout): PreviewDimensions {
+    const format = layout.format;
+    const unit = 'vmin';
+    const maxHeight = 80;
+    const maxWidth = 100;
+
+    // Portrait format
+    if (format.height > format.width) {
+      const height = Math.round(maxHeight);
+      const width = Math.round((format.width * height) / format.height);
+      return {
+        width: `${width}${unit}`,
+        height: `${height}${unit}`,
+      };
+    }
+    // Landscape format
+    else {
+      const width = Math.round(maxWidth);
+      const height = Math.round((format.height * width) / format.width);
+      return {
+        width: `${width}${unit}`,
+        height: `${height}${unit}`,
+      };
+    }
+  }
 }
 
 export default LayoutPreview;

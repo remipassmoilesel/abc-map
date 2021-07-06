@@ -31,6 +31,7 @@ import { BUILD_INFO } from './build-version';
 import { ServiceProvider } from './core/withServices';
 import { Provider } from 'react-redux';
 import './index.scss';
+import ErrorBoundary from './views/error-boundary/ErrorBoundary';
 
 export const logger = Logger.get('index.tsx', 'warn');
 const svc = getServices();
@@ -66,7 +67,9 @@ function load() {
     <Provider store={mainStore}>
       <ServiceProvider value={getServices()}>
         <React.StrictMode>
-          <App />
+          <ErrorBoundary>
+            <App />
+          </ErrorBoundary>
         </React.StrictMode>
       </ServiceProvider>
     </Provider>,

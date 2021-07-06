@@ -2,11 +2,16 @@
 
 Official rewrite, attempt n°265 👨‍💻.
 
-<a href="https://gitlab.com/remipassmoilesel/abc-map-2/-/commits/master">
-<img alt="pipeline status" src="https://gitlab.com/remipassmoilesel/abc-map-2/badges/master/pipeline.svg" />
-</a>     
+<div>
+  <a href="https://gitlab.com/remipassmoilesel/abc-map-2/-/commits/master">
+    <img alt="Pipeline status" src="https://gitlab.com/remipassmoilesel/abc-map-2/badges/master/pipeline.svg" />
+  </a>
+  &nbsp;&nbsp;
+  <a href="https://www.firsttimersonly.com/">
+    <img alt="First timers only" src="https://img.shields.io/badge/first--timers--only-friendly-blue.svg?style=flat-square" />
+  </a>
+</div>
 
-[![first-timers-only](https://img.shields.io/badge/first--timers--only-friendly-blue.svg?style=flat-square)](https://www.firsttimersonly.com/)
 
 
 ## Purpose

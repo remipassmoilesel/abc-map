@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcLayer, AbcProjectManifest, WmsAuthentication } from '@abc-map/shared';
+import { AbcLayer, WmsAuthentication } from '@abc-map/shared';
 import { Logger } from '@abc-map/shared';
 import { MapWrapper } from './map/MapWrapper';
 import { MapFactory } from './map/MapFactory';
@@ -26,7 +26,7 @@ import { MapActions } from '../store/map/actions';
 import { AxiosInstance } from 'axios';
 import { WMSCapabilities as WMSCapabilitiesParser } from 'ol/format';
 import { WmsCapabilities } from './WmsCapabilities';
-import { FeatureStyle } from './styles/FeatureStyle';
+import { FeatureStyle } from '@abc-map/shared';
 import { UpdateStyleItem, UpdateStyleTask } from '../history/tasks/features/UpdateStyleTask';
 import { HistoryKey } from '../history/HistoryKey';
 import { HistoryService } from '../history/HistoryService';
@@ -56,9 +56,12 @@ export class GeoService {
     return result;
   }
 
-  public async importProject(map: MapWrapper, project: AbcProjectManifest): Promise<void> {
+  public async importLayers(map: MapWrapper, layers: AbcLayer[]): Promise<void> {
+    // First we delete all existing layers
     map.unwrap().getLayers().clear();
-    for (const abcLayer of project.layers) {
+
+    // Then we add new layers
+    for (const abcLayer of layers) {
       const layer = await LayerFactory.fromAbcLayer(abcLayer);
       map.addLayer(layer);
     }

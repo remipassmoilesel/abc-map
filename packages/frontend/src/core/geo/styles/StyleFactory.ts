@@ -16,48 +16,105 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import Feature from 'ol/Feature';
 import Style from 'ol/style/Style';
 import { Fill, Icon, Stroke, Text } from 'ol/style';
-import { Logger } from '@abc-map/shared';
-import { DefaultStyle, FeatureStyle } from './FeatureStyle';
+import { DefaultStyle, FeatureStyle, GeometryType, Logger } from '@abc-map/shared';
 import { SelectionStyleFactory } from './SelectionStyleFactory';
-import { StyleCache } from './StyleCache';
+import { StyleCache, StyleCacheEntry } from './StyleCache';
 import { FillPatternFactory } from './FillPatternFactory';
-import Geometry from 'ol/geom/Geometry';
-import GeometryType from 'ol/geom/GeometryType';
 import { IconProcessor } from './IconProcessor';
 import { DefaultIcon, safeGetIcon } from '../../../assets/point-icons/PointIcons';
 import { PointIconName } from '../../../assets/point-icons/PointIconName';
+import { FeatureWrapper } from '../features/FeatureWrapper';
 
 const logger = Logger.get('StyleFactory.ts');
 
 export class StyleFactory {
+  private static instance: StyleFactory | undefined;
+
+  public static get(): StyleFactory {
+    if (!this.instance) {
+      this.instance = new StyleFactory();
+    }
+    return this.instance;
+  }
+
   private fillPattern = new FillPatternFactory();
   private selection = new SelectionStyleFactory();
 
   constructor(private cache = new StyleCache()) {}
 
-  public getFor(feature: Feature<Geometry>, properties: FeatureStyle, selected: boolean, ratio: number): Style[] {
+  public getForFeature(feature: FeatureWrapper, ratio: number): Style[] {
     const type = feature.getGeometry()?.getType();
     if (!type) {
       return [];
     }
 
+    const properties = feature.getStyleProperties();
+    const style = this.getForProperties(properties, type, ratio);
+
+    if (feature.isSelected()) {
+      return [style, ...this.selection.getForFeature(feature)];
+    }
+
+    return [style];
+  }
+
+  public getForProperties(properties: FeatureStyle, type: GeometryType, ratio: number): Style {
     let style = this.cache.get(type, properties, ratio);
     if (!style) {
       style = this.createStyle(type, properties, ratio);
       this.cache.put(type, properties, ratio, style);
     }
 
-    if (selected) {
-      return [...style, ...this.selection.getForFeature(feature)];
-    }
-
     return style;
   }
 
-  private createStyle(type: GeometryType, properties: FeatureStyle, ratio: number): Style[] {
+  public getAvailableStyles(ratio: number): StyleCacheEntry[] {
+    return this.cache
+      .getAll()
+      .filter((item) => item.ratio === ratio)
+      .sort((a, b) => {
+        // First we sort by geometry type
+        const geomOrder = a.geomType.localeCompare(b.geomType);
+        if (geomOrder !== 0) {
+          return geomOrder;
+        }
+
+        // Then we sort points by size
+        const pointSizeOrder = (a.properties.point?.size || 0) - (b.properties.point?.size || 0);
+        if (pointSizeOrder !== 0) {
+          return pointSizeOrder;
+        }
+
+        // Then we sort points by symbol
+        const pointSymbolOrder = (a.properties.point?.icon || '').localeCompare(b.properties.point?.icon || '');
+        if (pointSymbolOrder !== 0) {
+          return pointSymbolOrder;
+        }
+
+        // Then we sort points by color
+        const pointColorOrder = (a.properties.point?.color || '').localeCompare(b.properties.point?.color || '');
+        if (pointColorOrder !== 0) {
+          return pointColorOrder;
+        }
+
+        // Then we sort others by stroke color
+        const stokeColorOrder = (a.properties.stroke?.color || '').localeCompare(b.properties.stroke?.color || '');
+        if (stokeColorOrder !== 0) {
+          return stokeColorOrder;
+        }
+
+        // Then we sort others by background color
+        return (a.properties.fill?.color1 || '').localeCompare(b.properties.fill?.color1 || '');
+      });
+  }
+
+  public clearCache() {
+    this.cache.clear();
+  }
+
+  private createStyle(type: GeometryType, properties: FeatureStyle, ratio: number): Style {
     // Text can apply to all geometries
     let textStyle: Text | undefined;
     if (properties.text?.value) {
@@ -72,20 +129,20 @@ export class StyleFactory {
       const icon = IconProcessor.get().prepareCached(safeGetIcon(name), size, color);
       // We must use "src" attribute here, as icons may not be loaded
       const pointStyle = new Icon({ src: icon, imgSize: [size, size] });
-      return [new Style({ image: pointStyle, text: textStyle, zIndex: properties.zIndex })];
+      return new Style({ image: pointStyle, text: textStyle, zIndex: properties.zIndex });
     }
 
     // Line strings
     else if (GeometryType.LINE_STRING === type || GeometryType.MULTI_LINE_STRING === type || GeometryType.LINEAR_RING === type) {
       const stroke = this.createStroke(properties, ratio);
-      return [new Style({ stroke, text: textStyle, zIndex: properties.zIndex })];
+      return new Style({ stroke, text: textStyle, zIndex: properties.zIndex });
     }
 
     // Others
     else {
       const fill = this.createFill(properties);
       const stroke = this.createStroke(properties, ratio);
-      return [new Style({ fill, stroke, text: textStyle, zIndex: properties.zIndex })];
+      return new Style({ fill, stroke, text: textStyle, zIndex: properties.zIndex });
     }
   }
 

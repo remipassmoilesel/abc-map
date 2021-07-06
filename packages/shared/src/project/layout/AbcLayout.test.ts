@@ -53,6 +53,6 @@ describe('AbcLayout', () => {
     const formatsWitness = '[{"name":"A5 Portrait","width":148,"height":210,"orientation":"portrait"},{"name":"A5 Paysage","width":210,"height":148,"orientation":"landscape"},{"name":"A4 Portrait","width":210,"height":297,"orientation":"portrait"},{"name":"A4 Paysage","width":297,"height":210,"orientation":"landscape"},{"name":"A3 Portrait","width":297,"height":420,"orientation":"portrait"},{"name":"A3 Paysage","width":420,"height":297,"orientation":"landscape"}]';
     /* eslint-enable */
 
-    expect(JSON.stringify(LayoutFormats.ALL)).toEqual(formatsWitness);
+    expect(JSON.stringify(LayoutFormats.All)).toEqual(formatsWitness);
   });
 });

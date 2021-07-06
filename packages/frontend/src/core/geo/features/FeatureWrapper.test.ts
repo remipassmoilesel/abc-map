@@ -19,7 +19,7 @@
 import { FeatureProperties, FillPatterns, StyleProperties } from '@abc-map/shared';
 import { Circle, LineString, Point, Polygon } from 'ol/geom';
 import { FeatureWrapper } from './FeatureWrapper';
-import { FeatureStyle } from '../styles/FeatureStyle';
+import { FeatureStyle } from '@abc-map/shared';
 import { TestHelper } from '../../utils/test/TestHelper';
 import { Style } from 'ol/style';
 import Feature from 'ol/Feature';

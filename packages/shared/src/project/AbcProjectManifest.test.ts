@@ -17,6 +17,8 @@
  */
 
 import { AbcProjectManifest } from './AbcProjectManifest';
+import { LegendDisplay } from './legend';
+import { GeometryType } from './feature';
 
 /**
  * If this test fail, you should write a migration script then adapt it
@@ -24,7 +26,7 @@ import { AbcProjectManifest } from './AbcProjectManifest';
 describe('AbcProjectManifest', () => {
   it('should not change without migration', () => {
     /* eslint-disable */
-    const witness = '{"metadata":{"id":"test-project-id","version":"0.1","name":"Test project","projection":{"name":"EPSG:4326"},"containsCredentials":false},"layers":[],"layouts":[]}';
+    const witness = '{"metadata":{"id":"test-project-id","version":"0.1","name":"Test project","projection":{"name":"EPSG:4326"},"containsCredentials":false},"layers":[],"layouts":[],"legend":{"display":"BottomRightCorner","width":300,"height":500,"items":[{"id":"test-id","text":"Test text","symbol":{"geomType":"Polygon","properties":{"stroke":{"width":1,"color":"#FFF"}}}}]}}';
     /* eslint-enable */
 
     const current: AbcProjectManifest = {
@@ -39,6 +41,26 @@ describe('AbcProjectManifest', () => {
       },
       layers: [],
       layouts: [],
+      legend: {
+        display: LegendDisplay.BottomRightCorner,
+        width: 300,
+        height: 500,
+        items: [
+          {
+            id: 'test-id',
+            text: 'Test text',
+            symbol: {
+              geomType: GeometryType.POLYGON,
+              properties: {
+                stroke: {
+                  width: 1,
+                  color: '#FFF',
+                },
+              },
+            },
+          },
+        ],
+      },
     };
 
     expect(JSON.stringify(current)).toEqual(witness);

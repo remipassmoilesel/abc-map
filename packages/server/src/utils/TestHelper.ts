@@ -23,6 +23,7 @@ import {
   CompressedProject,
   DEFAULT_PROJECTION,
   LayerType,
+  LegendDisplay,
   NodeBinary,
   PredefinedLayerModel,
   ProjectConstants,
@@ -93,6 +94,12 @@ export class TestHelper {
         },
       ],
       layouts: [],
+      legend: {
+        display: LegendDisplay.Hidden,
+        items: [],
+        width: 300,
+        height: 500,
+      },
     };
   }
 

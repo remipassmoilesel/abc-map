@@ -73,7 +73,7 @@ export class MapWrapper {
     }
   }
 
-  public defaultLayers(): void {
+  public setDefaultLayers(): void {
     this.internal.getLayers().clear();
     const osm = LayerFactory.newPredefinedLayer(PredefinedLayerModel.OSM);
     this.addLayer(osm);

@@ -117,7 +117,7 @@ export class HttpServer {
     });
 
     // Utility methods
-    this.app.register(fastifySensible, { errorHandler: false });
+    void this.app.register(fastifySensible, { errorHandler: false });
 
     // Global error handler
     this.app.setErrorHandler(async (err, request, reply) => {
@@ -125,23 +125,23 @@ export class HttpServer {
 
       // Return 429 error page if necessary
       if (reply.statusCode === 429) {
-        reply.header('Content-Type', 'text/html; charset=UTF-8').send(this.error429cache);
+        void reply.header('Content-Type', 'text/html; charset=UTF-8').send(this.error429cache);
         metrics.requestQuotaExceeded();
         return;
       } else {
-        reply.status(reply.statusCode || 500).send(err);
+        void reply.status(reply.statusCode || 500).send(err);
       }
     });
 
     // Rate limit
     const globalRateLimit = this.config.server.globalRateLimit;
-    this.app.register(fastifyRateLimit, {
+    void this.app.register(fastifyRateLimit, {
       max: globalRateLimit.max,
       timeWindow: globalRateLimit.timeWindow,
     });
 
     // Public API controllers
-    this.app.register(
+    void this.app.register(
       async (app) => {
         this.publicControllers.forEach((ctr) => app.register(ctr.setup, { prefix: ctr.getRoot() }));
       },
@@ -149,7 +149,7 @@ export class HttpServer {
     );
 
     // Private controllers, authentication needed
-    this.app.register(
+    void this.app.register(
       async (app) => {
         this.authenticationHook(app);
         this.privateControllers.forEach((ctr) => app.register(ctr.setup, { prefix: ctr.getRoot() }));
@@ -162,7 +162,7 @@ export class HttpServer {
 
     // Frontend service
     // index.html is server from fastify-static when route is '/' or from memory cache otherwise
-    this.app.register(fastifyStatic, { wildcard: false, root: this.config.frontendPath });
+    void this.app.register(fastifyStatic, { wildcard: false, root: this.config.frontendPath });
     this.app.get('/*', this.sendIndex);
 
     await this.loadCache();
@@ -173,12 +173,12 @@ export class HttpServer {
       throw new Error('index.html is not ready');
     }
 
-    reply.header('Content-Type', 'text/html; charset=UTF-8').status(200).send(this.indexCache);
+    void reply.header('Content-Type', 'text/html; charset=UTF-8').status(200).send(this.indexCache);
   };
 
   private generateSitemap = (req: FastifyRequest, reply: FastifyReply) => {
     const sitemap = generateSitemap(this.config.externalUrl);
-    reply.status(200).header('Content-Type', 'application/xml').send(sitemap);
+    void reply.status(200).header('Content-Type', 'application/xml').send(sitemap);
   };
 
   private authenticationHook(app: FastifyInstance) {

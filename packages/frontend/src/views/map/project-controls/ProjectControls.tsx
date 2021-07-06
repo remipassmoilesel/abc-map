@@ -98,10 +98,9 @@ class ProjectControls extends Component<Props, State> {
   }
 
   private handleNewProject = () => {
-    const { toasts, project, history } = this.props.services;
+    const { toasts, project } = this.props.services;
 
     project.newProject();
-    history.clean();
     toasts.info('Nouveau projet créé');
   };
 
@@ -175,7 +174,7 @@ class ProjectControls extends Component<Props, State> {
   };
 
   private handleImportProject = () => {
-    const { toasts, modals, project, history } = this.props.services;
+    const { toasts, modals, project } = this.props.services;
 
     const importProject = async () => {
       const result = await FileIO.openInput(InputType.Single, '.abm2');
@@ -205,7 +204,6 @@ class ProjectControls extends Component<Props, State> {
       }
 
       await project.loadProject(file, password);
-      history.clean();
       toasts.info('Projet importé !');
     };
 
