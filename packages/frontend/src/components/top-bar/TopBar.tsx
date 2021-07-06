@@ -49,7 +49,7 @@ class TopBar extends Component<Props, {}> {
     return (
       <div className={Cls.topBar} data-cy={'top-bar'}>
         <h1>
-          <Link to={FrontendRoutes.landing().raw()} data-cy={'landing'} className={'d-flex align-items-ce'}>
+          <Link to={FrontendRoutes.landing().raw()} data-cy={'landing'} className={'d-flex align-items-center'}>
             <img src={MainIcon} alt={'Logo'} height={'25'} className={'mr-3'} />
             Abc-Map
           </Link>
@@ -139,10 +139,9 @@ class TopBar extends Component<Props, {}> {
   };
 
   private handleLogout = () => {
-    const { project, authentication, toasts, history } = this.props.services;
+    const { project, authentication, toasts } = this.props.services;
 
     project.newProject();
-    history.clean();
     authentication
       .logout()
       .then(() => {

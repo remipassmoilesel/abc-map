@@ -17,7 +17,7 @@
  */
 
 import GeometryType from 'ol/geom/GeometryType';
-import { FeatureStyle } from '../../geo/styles/FeatureStyle';
+import { FeatureStyle } from '@abc-map/shared';
 import { Draw, Modify, Select, Snap } from 'ol/interaction';
 import { withControlKeyOnly, withGeometry, withMainButton } from './common-conditions';
 import { LayerWrapper } from '../../geo/layers/LayerWrapper';

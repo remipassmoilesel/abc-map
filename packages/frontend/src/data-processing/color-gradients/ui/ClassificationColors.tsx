@@ -104,8 +104,9 @@ class ClassificationColors extends Component<Props, State> {
     const dataSourceChanged = prevProps.dataSource.getId() !== this.props.dataSource.getId();
     const algorithmChanged = prevProps.algorithm !== this.props.algorithm;
     const numberOfClassesChanged = prevState.numberOfClasses !== this.state.numberOfClasses;
+    const valueFieldChanged = prevProps.valueField !== this.props.valueField;
 
-    if (dataSourceChanged || algorithmChanged || numberOfClassesChanged) {
+    if (dataSourceChanged || algorithmChanged || numberOfClassesChanged || valueFieldChanged) {
       this.computeClasses().catch((err) => {
         toasts.genericError();
         logger.error('Cannot preview classes: ', err);

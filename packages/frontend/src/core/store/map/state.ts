@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FeatureStyle } from '../../geo/styles/FeatureStyle';
+import { FeatureStyle } from '@abc-map/shared';
 import { MapTool } from '@abc-map/shared';
 import { DimensionsPx } from '../../utils/DimensionsPx';
 import { PointIconName } from '../../../assets/point-icons/PointIconName';

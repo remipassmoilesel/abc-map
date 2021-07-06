@@ -23,13 +23,11 @@ import { Style } from 'ol/style';
 
 const logger = Logger.get('style-function.ts');
 
-const styleFactory = new StyleFactory();
-
 export const styleFunction = function (ratio: number, f: FeatureLike): Style[] {
   const feature = FeatureWrapper.fromFeatureLike(f);
   if (!feature) {
     return [];
   }
 
-  return styleFactory.getFor(feature.unwrap(), feature.getStyleProperties(), feature.isSelected(), ratio);
+  return StyleFactory.get().getForFeature(feature, ratio);
 };

@@ -18,6 +18,7 @@
 
 import { AbcLayout, AbcProjectMetadata } from '@abc-map/shared';
 import { ProjectFactory } from '../../project/ProjectFactory';
+import { AbcLegend } from '@abc-map/shared';
 
 export interface ProjectState {
   /**
@@ -29,9 +30,15 @@ export interface ProjectState {
    * Layouts of current project
    */
   layouts: AbcLayout[];
+
+  /**
+   * Legend of current project
+   */
+  legend: AbcLegend;
 }
 
 export const projectInitialState: ProjectState = {
   metadata: ProjectFactory.newProjectMetadata(),
   layouts: [],
+  legend: ProjectFactory.newLegend(),
 };

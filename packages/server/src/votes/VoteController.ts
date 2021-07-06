@@ -47,7 +47,7 @@ export class VoteController extends Controller {
 
   private vote = async (req: FastifyRequest<{ Body: AbcVote }>, reply: FastifyReply): Promise<void> => {
     await this.services.vote.save(req.body, DateTime.now());
-    reply.status(200).send();
+    void reply.status(200).send();
   };
 
   private stats = async (req: FastifyRequest<{ Params: StatParams }>, reply: FastifyReply): Promise<void> => {
@@ -60,6 +60,6 @@ export class VoteController extends Controller {
     const fromDateTime = DateTime.fromISO(from).startOf('day');
     const toDateTime = DateTime.fromISO(to).endOf('day');
     const result = await this.services.vote.aggregate(fromDateTime, toDateTime);
-    reply.send(result);
+    void reply.send(result);
   };
 }

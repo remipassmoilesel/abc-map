@@ -19,30 +19,37 @@
 import { MapWrapper } from '../geo/map/MapWrapper';
 import { LayoutHelper } from './LayoutHelper';
 import View from 'ol/View';
-import { BlobIO, Logger } from '@abc-map/shared';
+import { AbcLegend, BlobIO, Logger } from '@abc-map/shared';
 import { AbcFile, AbcLayout, Zipper } from '@abc-map/shared';
 import { MapFactory } from '../geo/map/MapFactory';
 import { jsPDF } from 'jspdf';
+import { LegendRenderer } from '../geo/legend/LegendRenderer';
 
 export const logger = Logger.get('LayoutRenderer');
 
-// TODO: test
+// TODO: test, find a way to trigger openlayers renders with jest
 
 export class LayoutRenderer {
-  private map?: MapWrapper;
   private support?: HTMLDivElement;
+  private map?: MapWrapper;
+  private legendCanvas?: HTMLCanvasElement;
+  private legendRenderer = new LegendRenderer();
 
   public init(support: HTMLDivElement) {
+    // Initialize map
     this.support = support;
     this.map = MapFactory.createNaked();
     this.map.setTarget(support);
+
+    // Initialize legend
+    this.legendCanvas = document.createElement('canvas');
   }
 
   public dispose() {
     this.map?.dispose();
   }
 
-  public async renderLayoutsAsPdf(layouts: AbcLayout[], sourceMap: MapWrapper): Promise<Blob> {
+  public async renderLayoutsAsPdf(layouts: AbcLayout[], legend: AbcLegend, sourceMap: MapWrapper): Promise<Blob> {
     const pdf = new jsPDF();
 
     // jsPDF create a first page that may not correspond to first layout
@@ -52,17 +59,17 @@ export class LayoutRenderer {
       const format = layout.format;
       pdf.addPage([format.width, format.height], format.orientation);
 
-      const canvas = await this.renderLayout(layout, sourceMap);
+      const canvas = await this.renderLayout(layout, legend, sourceMap);
       pdf.addImage(canvas.toDataURL('image/jpeg'), 'JPEG', 0, 0, layout.format.width, layout.format.height);
     }
 
     return pdf.output('blob');
   }
 
-  public async renderLayoutsAsPng(layouts: AbcLayout[], sourceMap: MapWrapper): Promise<Blob> {
+  public async renderLayoutsAsPng(layouts: AbcLayout[], legend: AbcLegend, sourceMap: MapWrapper): Promise<Blob> {
     const files: AbcFile<Blob>[] = [];
     for (const layout of layouts) {
-      const canvas = await this.renderLayout(layout, sourceMap);
+      const canvas = await this.renderLayout(layout, legend, sourceMap);
       const image = await BlobIO.canvasToPng(canvas);
       files.push({ path: layout.name, content: image });
     }
@@ -70,28 +77,29 @@ export class LayoutRenderer {
     return Zipper.forFrontend().zipFiles(files);
   }
 
-  public renderLayout(layout: AbcLayout, sourceMap: MapWrapper): Promise<HTMLCanvasElement> {
+  private renderLayout(layout: AbcLayout, legend: AbcLegend, sourceMap: MapWrapper): Promise<HTMLCanvasElement> {
     logger.info('Rendering layout: ', layout);
-    const renderingMap = this.map;
     const support = this.support;
-    if (!renderingMap || !support) {
+    const renderingMap = this.map;
+    const legendCanvas = this.legendCanvas;
+    if (!renderingMap || !support || !legendCanvas) {
       throw new Error('You must call init() before rendering');
     }
 
-    // We adapt size of map to layout
+    // Adapt size of map to layout
     const dimension = LayoutHelper.formatToPixel(layout.format);
     support.style.marginTop = '200px';
     support.style.width = `${dimension.width}px`;
     support.style.height = `${dimension.height}px`;
-    renderingMap.unwrap().updateSize();
+    renderingMap.unwrap().setSize([dimension.width, dimension.height]);
 
     const styleRatio = LayoutHelper.styleRatio(dimension.width, dimension.height);
 
-    // We copy layers from sourceMap to exportMap
+    // Copy layers from sourceMap to exportMap
     renderingMap.unwrap().getLayers().clear();
     sourceMap.getLayers().forEach((lay) => renderingMap.addLayer(lay.shallowClone(styleRatio)));
 
-    // We set view
+    // Set view
     renderingMap.unwrap().setView(
       new View({
         center: layout.view.center,
@@ -100,21 +108,22 @@ export class LayoutRenderer {
       })
     );
 
-    const canvas = document.createElement('canvas');
-    canvas.width = dimension.width;
-    canvas.height = dimension.height;
+    // Prepare a canvas for export
+    const exportCanvas = document.createElement('canvas');
+    exportCanvas.width = dimension.width;
+    exportCanvas.height = dimension.height;
 
-    const ctx = canvas.getContext('2d');
+    const ctx = exportCanvas.getContext('2d');
     if (!ctx) {
       return Promise.reject(new Error('Canvas 2D context not available'));
     }
 
-    // We paint a white rectangle as background
+    // Paint a white rectangle as background
     ctx.fillStyle = 'white';
     ctx.fillRect(0, 0, dimension.width, dimension.height);
 
-    // Then we export layers when render complete
     return new Promise<HTMLCanvasElement>((resolve, reject) => {
+      // Render layers
       renderingMap.unwrap().once('rendercomplete', () => {
         const layers = support.querySelectorAll('.ol-layer canvas');
         layers.forEach((layer) => {
@@ -125,7 +134,7 @@ export class LayoutRenderer {
           }
 
           if (layer.width > 0) {
-            const opacity = (layer.parentNode as HTMLElement)?.style.opacity || '';
+            const opacity = (layer.parentNode as HTMLElement | null)?.style.opacity || '';
             ctx.globalAlpha = opacity === '' ? 1 : Number(opacity);
 
             // Get the transform parameters from the style's transform matrix
@@ -139,7 +148,22 @@ export class LayoutRenderer {
           }
         });
 
-        resolve(canvas);
+        const renderLegend = async () => {
+          // Render legend
+          legendCanvas.width = legend.width * styleRatio;
+          legendCanvas.height = legend.height * styleRatio;
+          await this.legendRenderer.renderLegend(legend, legendCanvas, styleRatio);
+
+          const position = this.legendRenderer.getLegendPosition(legend, legendCanvas, exportCanvas);
+          if (!position) {
+            throw new Error(`Unhandled legend display: ${legend.display}`);
+          }
+          ctx.drawImage(legendCanvas, position.x, position.y);
+        };
+
+        renderLegend()
+          .then(() => resolve(exportCanvas))
+          .catch(reject);
       });
 
       renderingMap.unwrap().render();

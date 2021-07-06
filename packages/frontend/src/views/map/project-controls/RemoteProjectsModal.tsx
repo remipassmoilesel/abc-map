@@ -131,7 +131,7 @@ class RemoteProjectsModal extends Component<Props, State> {
   private listProjects() {
     const { project } = this.props.services;
     project
-      .list()
+      .listRemoteProjects()
       .then((projects) => this.setState({ projects }))
       .catch((err) => logger.error('Cannot list projects: ', err));
   }
@@ -168,7 +168,7 @@ class RemoteProjectsModal extends Component<Props, State> {
   private handleCancel = () => this.props.onHide();
 
   private handleOpenProject = () => {
-    const { project, toasts, history } = this.props.services;
+    const { project, toasts } = this.props.services;
 
     const loadProject = async () => {
       const selected = this.state.selected;
@@ -184,7 +184,6 @@ class RemoteProjectsModal extends Component<Props, State> {
       }
 
       await project.loadRemoteProject(selected.id, passwordValue);
-      history.clean();
       toasts.info('Projet ouvert !');
       this.props.onHide();
     };

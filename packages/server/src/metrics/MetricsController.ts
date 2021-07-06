@@ -40,6 +40,6 @@ export class MetricsController extends Controller {
 
   private getMetrics = async (req: FastifyRequest, reply: FastifyReply): Promise<void> => {
     const metrics = await this.services.metrics.getMetrics();
-    reply.status(200).send(metrics);
+    void reply.status(200).send(metrics);
   };
 }

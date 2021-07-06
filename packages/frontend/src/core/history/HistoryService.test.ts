@@ -69,7 +69,7 @@ describe('HistoryService', () => {
     fakeHistory[HistoryKey.Map]?.undo.forEach((t) => (t.dispose = disposeStub));
 
     // Act
-    service.clean();
+    service.resetHistory();
 
     // Assert
     expect(service.getHistory()).toEqual({});

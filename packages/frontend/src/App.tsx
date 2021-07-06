@@ -42,6 +42,8 @@ import PasswordLostModal from './components/password-lost-modal/PasswordLostModa
 import ResetPasswordView from './views/reset-password/ResetPasswordView';
 import UserAccountView from './views/user-account/UserAccountView';
 import SetPasswordModal from './components/set-password-modal/SetPasswordModal';
+import MapLegendView from './views/map-legend/MapLegendView';
+import LegendSymbolPickerModal from './components/legend-symbol-picker-modal/LegendSymbolPickerModal';
 
 class App extends Component<ServiceProps, {}> {
   public render(): ReactNode {
@@ -53,6 +55,7 @@ class App extends Component<ServiceProps, {}> {
           <Route exact path={FrontendRoutes.map().raw()} component={MapView} />
           <Route exact path={FrontendRoutes.dataStore().raw()} component={DataStoreView} />
           <Route exact path={FrontendRoutes.layout().raw()} component={LayoutView} />
+          <Route exact path={FrontendRoutes.mapLegend().raw()} component={MapLegendView} />
           <Route exact path={FrontendRoutes.documentation().raw()} component={DocumentationView} />
           <Route exact path={FrontendRoutes.confirmAccount().raw()} component={ConfirmAccountView} />
           <Route exact path={FrontendRoutes.dataProcessing().raw()} component={DataProcessingView} />
@@ -70,6 +73,7 @@ class App extends Component<ServiceProps, {}> {
         <LoginModal />
         <RegistrationModal />
         <PasswordLostModal />
+        <LegendSymbolPickerModal />
       </BrowserRouter>
     );
   }

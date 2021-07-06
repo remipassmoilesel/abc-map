@@ -1,4 +1,4 @@
-{
+module.exports = {
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
@@ -8,12 +8,18 @@
   "plugins": [
     "no-only-tests",
     "@typescript-eslint",
+    "cypress",
     "prettier"
   ],
   "env": {
     "node": true,
     "mocha": true,
-    "es6": true
+    "es6": true,
+    "cypress/globals": true
+  },
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.json"
   },
   "rules": {
     "no-only-tests/no-only-tests": "error",
@@ -51,8 +57,13 @@
         "varsIgnorePattern": "logger"
       }
     ],
-    "max-len": ["error", { "code": 160 }]
-  },
-  "parser": "@typescript-eslint/parser"
+    "max-len": [
+      "error",
+      {
+        "code": 160
+      }
+    ],
+    "@typescript-eslint/no-floating-promises": ["error"]
+  }
 }
 

@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcLayout, AbcProjectManifest, AbcProjectMetadata } from '@abc-map/shared';
+import { AbcLayout, AbcLegendItem, AbcProjectManifest, AbcProjectMetadata, LegendDisplay } from '@abc-map/shared';
 
 export enum ActionType {
   NewProject = 'NewProject',
@@ -27,6 +27,12 @@ export enum ActionType {
   ClearLayouts = 'ClearLayouts',
   LoadProject = 'LoadProject',
   RemoveLayouts = 'RemoveLayouts',
+  AddLegendItems = 'AddLegendItems',
+  UpdateLegendItem = 'UpdateLegendItem',
+  SetLegendSize = 'SetLegendSize',
+  SetLegendDisplay = 'SetLegendDisplay',
+  SetLegendItemIndex = 'SetLegendItemIndex',
+  DeleteLegendItem = 'DeleteLegendItem',
 }
 
 export interface NewProject {
@@ -69,7 +75,53 @@ export interface LoadProject {
   project: AbcProjectManifest;
 }
 
-export type ProjectAction = NewProject | RenameProject | AddLayouts | RemoveLayouts | UpdateLayout | SetLayoutIndex | ClearLayouts | LoadProject;
+export interface AddLegendItems {
+  type: ActionType.AddLegendItems;
+  items: AbcLegendItem[];
+}
+
+export interface UpdateLegendItem {
+  type: ActionType.UpdateLegendItem;
+  item: AbcLegendItem;
+}
+
+export interface SetLegendSize {
+  type: ActionType.SetLegendSize;
+  width: number;
+  height: number;
+}
+
+export interface SetLegendDisplay {
+  type: ActionType.SetLegendDisplay;
+  display: LegendDisplay;
+}
+
+export interface DeleteLegendItem {
+  type: ActionType.DeleteLegendItem;
+  item: AbcLegendItem;
+}
+
+export interface SetLegendItemIndex {
+  type: ActionType.SetLegendItemIndex;
+  item: AbcLegendItem;
+  index: number;
+}
+
+export type ProjectAction =
+  | NewProject
+  | RenameProject
+  | AddLayouts
+  | RemoveLayouts
+  | UpdateLayout
+  | SetLayoutIndex
+  | ClearLayouts
+  | LoadProject
+  | AddLegendItems
+  | UpdateLegendItem
+  | SetLegendSize
+  | SetLegendDisplay
+  | DeleteLegendItem
+  | SetLegendItemIndex;
 
 export class ProjectActions {
   public static newProject(metadata: AbcProjectMetadata): ProjectAction {
@@ -125,6 +177,50 @@ export class ProjectActions {
     return {
       type: ActionType.LoadProject,
       project,
+    };
+  }
+
+  public static addItems(items: AbcLegendItem[]): ProjectAction {
+    return {
+      type: ActionType.AddLegendItems,
+      items,
+    };
+  }
+
+  public static updateItem(item: AbcLegendItem): ProjectAction {
+    return {
+      type: ActionType.UpdateLegendItem,
+      item,
+    };
+  }
+
+  public static setLegendSize(width: number, height: number): ProjectAction {
+    return {
+      type: ActionType.SetLegendSize,
+      width,
+      height,
+    };
+  }
+
+  public static setLegendDisplay(display: LegendDisplay): ProjectAction {
+    return {
+      type: ActionType.SetLegendDisplay,
+      display,
+    };
+  }
+
+  public static deleteLegendItem(item: AbcLegendItem): ProjectAction {
+    return {
+      type: ActionType.DeleteLegendItem,
+      item,
+    };
+  }
+
+  public static setLegendItemIndex(item: AbcLegendItem, index: number): ProjectAction {
+    return {
+      type: ActionType.SetLegendItemIndex,
+      item,
+      index,
     };
   }
 }

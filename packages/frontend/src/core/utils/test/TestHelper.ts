@@ -23,6 +23,7 @@ import { Point, Polygon } from 'ol/geom';
 import {
   AbcArtefact,
   AbcLayout,
+  AbcLegendItem,
   AbcPredefinedLayer,
   AbcProjectManifest,
   AbcVectorLayer,
@@ -33,12 +34,12 @@ import {
   FillPatterns,
   LayerType,
   LayoutFormats,
+  LegendDisplay,
   PredefinedLayerModel,
   ProjectConstants,
   Zipper,
 } from '@abc-map/shared';
 import uuid from 'uuid-random';
-import { FeatureStyle } from '../../geo/styles/FeatureStyle';
 import { Coordinate } from 'ol/coordinate';
 import MapBrowserEvent from 'ol/MapBrowserEvent';
 import { Map } from 'ol';
@@ -48,8 +49,20 @@ import { VectorLayerWrapper } from '../../geo/layers/LayerWrapper';
 import { FeatureWrapper } from '../../geo/features/FeatureWrapper';
 import { LayerFactory } from '../../geo/layers/LayerFactory';
 import { PointIconName } from '../../../assets/point-icons/PointIconName';
+import { nanoid } from 'nanoid';
+import { FeatureStyle } from '@abc-map/shared';
 
 export class TestHelper {
+  public static renderMap(map: Map): Promise<void> {
+    return new Promise<void>((resolve) => {
+      map.render();
+      // This should be rendercomplete
+      map.once('rendercomplete', () => {
+        resolve();
+      });
+    });
+  }
+
   public static samplePointFeature(): Feature<Geometry> {
     const feature = new Feature<Geometry>();
     feature.setGeometry(new Point([1, 2]));
@@ -72,6 +85,12 @@ export class TestHelper {
       },
       layers: [this.sampleOsmLayer(), this.sampleVectorLayer()],
       layouts: [],
+      legend: {
+        display: LegendDisplay.Hidden,
+        items: [],
+        width: 300,
+        height: 500,
+      },
     };
   }
 
@@ -313,5 +332,12 @@ export class TestHelper {
     layer.getSource().addFeatures(features);
 
     return layer;
+  }
+
+  public static sampleLegendItem(): AbcLegendItem {
+    return {
+      id: nanoid(),
+      text: 'Legend item text',
+    };
   }
 }

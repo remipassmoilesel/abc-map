@@ -17,8 +17,7 @@
  */
 
 import { DEVICE_PIXEL_RATIO } from 'ol/has';
-import { FillProperties } from './FeatureStyle';
-import { FillPatterns } from '@abc-map/shared';
+import { FillPatterns, FillProperties } from '@abc-map/shared';
 
 const ratio = DEVICE_PIXEL_RATIO;
 

@@ -34,7 +34,7 @@ export declare type Props = LocalProps & RouteComponentProps<any, any>;
 
 class TopBarLink extends Component<Props, {}> {
   public render(): ReactNode {
-    const activeMatch = this.props.activeMatch || this.props.to;
+    const activeMatch = this.props.activeMatch || new RegExp(`^${this.props.to}`, 'i');
     const active = this.props.location.pathname.match(activeMatch);
     const classes = active ? `${Cls.topBarLink} ${Cls.active}` : Cls.topBarLink;
     const dataCy = this.props['data-cy'];

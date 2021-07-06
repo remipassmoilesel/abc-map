@@ -16,9 +16,9 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { ChangeEvent, Component, ReactNode } from 'react';
+import React, { Component, ReactNode } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
-import { Logger } from '@abc-map/shared';
+import { LegendDisplay, Logger } from '@abc-map/shared';
 import LayoutList from './layout-list/LayoutList';
 import { AbcLayout, AbcProjection, LayoutFormat, LayoutFormats } from '@abc-map/shared';
 import LayoutPreview from './layout-preview/LayoutPreview';
@@ -33,9 +33,10 @@ import { SetLayoutIndexTask } from '../../core/history/tasks/layouts/SetLayoutIn
 import { LayoutRenderer } from '../../core/project/LayoutRenderer';
 import { UpdateLayoutTask } from '../../core/history/tasks/layouts/UpdateLayoutTask';
 import { FileIO } from '../../core/utils/FileIO';
-import * as _ from 'lodash';
-import Cls from './LayoutView.module.scss';
 import { pageSetup } from '../../core/utils/page-setup';
+import LayoutControls from './layout-controls/LayoutControls';
+import { ExportFormat } from './ExportFormat';
+import Cls from './LayoutView.module.scss';
 
 const logger = Logger.get('LayoutView.tsx', 'warn');
 
@@ -45,10 +46,6 @@ interface State {
    */
   map: MapWrapper;
   /**
-   * Current format selected
-   */
-  format: LayoutFormat;
-  /**
    * Id of active layout. We must not store layout here in order to get consistent updates.
    */
   activeLayoutId?: string;
@@ -56,6 +53,7 @@ interface State {
 
 const mapStateToProps = (state: MainState) => ({
   layouts: state.project.layouts,
+  legend: state.project.legend,
 });
 
 const connector = connect(mapStateToProps);
@@ -67,22 +65,13 @@ class LayoutView extends Component<Props, State> {
 
   constructor(props: Props) {
     super(props);
-    this.state = {
-      format: LayoutFormats.A4_PORTRAIT,
-      map: this.props.services.geo.getMainMap(),
-    };
+    this.state = { map: this.props.services.geo.getMainMap() };
   }
 
   public render(): ReactNode {
     const layouts = this.props.layouts;
+    const legend = this.props.legend;
     const activeLayout = this.getActiveLayout();
-    const format = this.state.format.name;
-
-    const formatOptions = LayoutFormats.ALL.map((fmt) => (
-      <option key={fmt.name} value={fmt.name}>
-        {fmt.name}
-      </option>
-    ));
 
     return (
       <div className={Cls.layoutView}>
@@ -93,55 +82,28 @@ class LayoutView extends Component<Props, State> {
           </div>
 
           {/* Layout preview on center */}
-          <LayoutPreview layout={activeLayout} mainMap={this.state.map} onLayoutChanged={this.handleLayoutChanged} onNewLayout={this.handleNewLayout} />
+          <LayoutPreview
+            layout={activeLayout}
+            legend={legend}
+            mainMap={this.state.map}
+            onLayoutChanged={this.handleLayoutChanged}
+            onNewLayout={this.handleNewLayout}
+          />
 
           {/* Controls on right */}
           <div className={Cls.rightPanel} data-cy={'layout-controls'}>
-            <div className={'control-block form-group'}>
-              <select className={'form-control'} onChange={this.handleFormatChanged} value={format} data-cy={'format-select'}>
-                {formatOptions}
-              </select>
-              <button onClick={this.handleNewLayout} className={'btn btn-link'} data-cy={'new-layout'}>
-                <i className={'fa fa-plus mr-2'} />
-                Nouvelle page
-              </button>
-            </div>
+            <LayoutControls
+              format={activeLayout?.format}
+              legendDisplay={legend.display}
+              onFormatChanged={this.handleFormatChanged}
+              onNewLayout={this.handleNewLayout}
+              onLayoutUp={this.handleLayoutUp}
+              onLayoutDown={this.handleLayoutDown}
+              onClearAll={this.handleClearAll}
+              onLegendChanged={this.handleLegendChanged}
+              onExport={this.handleExport}
+            />
 
-            <div className={'control-block'}>
-              <div className={'control-item'}>
-                <button onClick={this.handleLayoutUp} className={'btn btn-link'} data-cy={'layout-up'}>
-                  <i className={'fa fa-arrow-up mr-2'} />
-                  Monter
-                </button>
-              </div>
-              <div className={'control-item'}>
-                <button onClick={this.handleLayoutDown} className={'btn btn-link'} data-cy={'layout-down'}>
-                  <i className={'fa fa-arrow-down mr-2'} />
-                  Descendre
-                </button>
-              </div>
-              <div className={'control-item'}>
-                <button onClick={this.handleClearAll} className={'btn btn-link'} data-cy={'clear-all'}>
-                  <i className={'fa fa-trash-alt mr-2'} />
-                  Supprimer tout
-                </button>
-              </div>
-            </div>
-
-            <div className={'control-block form-group'}>
-              <div className={'control-item'}>
-                <button onClick={() => this.handleExport('pdf')} className={'btn btn-link'} data-cy={'pdf-export'}>
-                  <i className={'fa fa-download mr-2'} />
-                  Export PDF
-                </button>
-              </div>
-              <div className={'control-item'}>
-                <button onClick={() => this.handleExport('png')} className={'btn btn-link'} data-cy={'png-export'}>
-                  <i className={'fa fa-download mr-2'} />
-                  Export PNG
-                </button>
-              </div>
-            </div>
             <HistoryControls historyKey={HistoryKey.Layout} />
           </div>
         </div>
@@ -189,7 +151,7 @@ class LayoutView extends Component<Props, State> {
     const layoutRes = Math.round(resolution - resolution * 0.2);
     const projection: AbcProjection = { name: view.getProjection().getCode() };
 
-    const layout = project.newLayout(name, this.state.format, center, layoutRes, projection);
+    const layout = project.newLayout(name, LayoutFormats.A4_PORTRAIT, center, layoutRes, projection);
     history.register(HistoryKey.Layout, AddLayoutsTask.create([layout]));
 
     this.setState({ activeLayoutId: layout.id });
@@ -236,6 +198,12 @@ class LayoutView extends Component<Props, State> {
     history.register(HistoryKey.Layout, RemoveLayoutsTask.create(layouts));
   };
 
+  private handleLegendChanged = (display: LegendDisplay) => {
+    const { project } = this.props.services;
+
+    project.setLegendDisplay(display);
+  };
+
   private handleDeleted = (lay: AbcLayout) => {
     const { project, history } = this.props.services;
 
@@ -243,19 +211,11 @@ class LayoutView extends Component<Props, State> {
     history.register(HistoryKey.Layout, RemoveLayoutsTask.create([lay]));
   };
 
-  private handleFormatChanged = (ev: ChangeEvent<HTMLSelectElement>) => {
+  private handleFormatChanged = (format: LayoutFormat) => {
     const { project, history } = this.props.services;
 
-    const value = ev.target.value;
-    const format = LayoutFormats.ALL.find((fmt) => fmt.name === value);
-    if (!format) {
-      return logger.error(`Format not found: ${value}`);
-    }
-
-    this.setState({ format });
-
     const active = this.getActiveLayout();
-    const formatChanged = !_.isEqual(active?.format, format);
+    const formatChanged = active?.format.name !== format.name;
     if (active && formatChanged) {
       const update: AbcLayout = {
         ...active,
@@ -279,7 +239,7 @@ class LayoutView extends Component<Props, State> {
     }
   };
 
-  private handleExport = (format: 'pdf' | 'png') => {
+  private handleExport = (format: ExportFormat) => {
     const { toasts, modals } = this.props.services;
     const support = this.exportSupport.current;
     if (!support) {
@@ -295,13 +255,18 @@ class LayoutView extends Component<Props, State> {
       toasts.info("Début de l'export ...");
       const layouts = this.props.layouts;
       const map = this.state.map;
+      const legend = this.props.legend;
 
-      if (format === 'pdf') {
-        const result = await renderer.renderLayoutsAsPdf(layouts, map);
+      if (ExportFormat.PDF === format) {
+        const result = await renderer.renderLayoutsAsPdf(layouts, legend, map);
         FileIO.outputBlob(result, 'map.pdf');
-      } else {
-        const result = await renderer.renderLayoutsAsPng(layouts, map);
+      } else if (ExportFormat.PNG === format) {
+        const result = await renderer.renderLayoutsAsPng(layouts, legend, map);
         FileIO.outputBlob(result, 'map.zip');
+      } else {
+        toasts.genericError();
+        logger.error('Unhandled format: ', format);
+        return;
       }
 
       toasts.info('Export terminé !');

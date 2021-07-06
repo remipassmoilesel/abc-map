@@ -46,7 +46,7 @@ export class HistoryService {
 
   constructor(private maxSize: number, private history: History = {}, private store: MainStore) {}
 
-  public clean(): void {
+  public resetHistory(): void {
     for (const key in this.history) {
       const stack = this.getStack(key as HistoryKey);
       stack.undo.forEach((task) => task.dispose().catch((err) => logger.error(err)));

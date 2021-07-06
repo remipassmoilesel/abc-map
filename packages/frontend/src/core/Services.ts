@@ -26,6 +26,7 @@ import { mainStore } from './store/store';
 import { ToastService } from './ui/ToastService';
 import { ModalService } from './ui/ModalService';
 import { VoteService } from './vote/VoteService';
+import { StyleFactory } from './geo/styles/StyleFactory';
 
 export interface Services {
   project: ProjectService;
@@ -55,7 +56,7 @@ function serviceFactory(): Services {
   const modals = new ModalService();
   const history = HistoryService.create();
   const geo = new GeoService(externalClient, toasts, history);
-  const project = new ProjectService(jsonClient, downloadClient, mainStore, toasts, geo);
+  const project = new ProjectService(jsonClient, downloadClient, mainStore, toasts, geo, history, StyleFactory.get());
   const authentication = new AuthenticationService(jsonClient, mainStore, toasts);
   const dataStore = new DataStoreService(jsonClient, downloadClient, toasts, geo);
   const vote = new VoteService(jsonClient, toasts);

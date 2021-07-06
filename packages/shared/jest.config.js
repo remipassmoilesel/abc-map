@@ -9,5 +9,5 @@ module.exports = {
   coverageProvider: 'babel',
   coverageReporters: ['text', 'html'],
   errorOnDeprecated: true,
-  roots: ['src']
+  roots: ['src'],
 };

@@ -19,7 +19,7 @@
 import { UpdateStyleTask } from './UpdateStyleTask';
 import { TestHelper } from '../../../utils/test/TestHelper';
 import { FeatureWrapper } from '../../../geo/features/FeatureWrapper';
-import { FeatureStyle } from '../../../geo/styles/FeatureStyle';
+import { FeatureStyle } from '@abc-map/shared';
 
 describe('UpdateStyleTask', function () {
   let feature: FeatureWrapper;
@@ -44,13 +44,15 @@ describe('UpdateStyleTask', function () {
     task = new UpdateStyleTask([{ feature, before, after }]);
   });
 
-  it('should undo', function () {
-    task.undo();
+  it('should undo', async () => {
+    await task.undo();
+
     expect(feature.getStyleProperties().stroke?.width).toEqual(10);
   });
 
-  it('should redo', function () {
-    task.redo();
+  it('should redo', async () => {
+    await task.redo();
+
     expect(feature.getStyleProperties().stroke?.width).toEqual(20);
   });
 });

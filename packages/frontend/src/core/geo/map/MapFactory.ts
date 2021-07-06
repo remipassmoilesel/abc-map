@@ -58,7 +58,7 @@ export class MapFactory {
     });
 
     const map = new MapWrapper(internal);
-    map.defaultLayers();
+    map.setDefaultLayers();
     map.setDefaultInteractions();
 
     return map;

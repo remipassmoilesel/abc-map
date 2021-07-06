@@ -19,11 +19,13 @@
 import { AbcLayer } from './layer/AbcLayer';
 import { AbcLayout } from './layout/AbcLayout';
 import { AbcProjection } from './AbcProjection';
+import { AbcLegend } from './legend';
 
 export interface AbcProjectManifest {
   metadata: AbcProjectMetadata;
   layers: AbcLayer[];
   layouts: AbcLayout[];
+  legend: AbcLegend;
 }
 
 export interface AbcProjectMetadata {

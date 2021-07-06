@@ -17,6 +17,7 @@
  */
 
 import { SimplePropertiesMap } from '../geo/features/FeatureWrapper';
+import { StyleCacheEntry } from '../geo/styles/StyleCache';
 
 export enum ModalEventType {
   ShowRename = 'ShowRename',
@@ -35,6 +36,8 @@ export enum ModalEventType {
   RegistrationClosed = 'RegistrationClosed',
   ShowPasswordLost = 'ShowPasswordLost',
   PasswordLostClosed = 'PasswordLostClosed',
+  ShowLegendSymbolPicker = 'ShowLegendSymbolPicker',
+  LegendSymbolPickerClosed = 'LegendSymbolPickerClosed',
 }
 
 export enum ModalStatus {
@@ -126,6 +129,16 @@ export interface PasswordLostClosedEvent {
   status: ModalStatus;
 }
 
+export interface ShowLegendSymbolPicker {
+  type: ModalEventType.ShowLegendSymbolPicker;
+}
+
+export interface LegendSymbolPickerClosedEvent {
+  type: ModalEventType.LegendSymbolPickerClosed;
+  status: ModalStatus;
+  style?: StyleCacheEntry;
+}
+
 export declare type ModalEvent =
   | ShowRenameModal
   | RenameModalClosedEvent
@@ -142,7 +155,9 @@ export declare type ModalEvent =
   | ShowRegistrationModal
   | RegistrationClosedEvent
   | ShowPasswordLostModal
-  | PasswordLostClosedEvent;
+  | PasswordLostClosedEvent
+  | ShowLegendSymbolPicker
+  | LegendSymbolPickerClosedEvent;
 
 export class InternalEvent extends Event {
   constructor(type: ModalEventType, public readonly payload: ModalEvent) {

@@ -32,14 +32,14 @@ describe('SetFeatureProperties', function () {
     task = new SetFeatureProperties(feature, before, after);
   });
 
-  it('should undo', function () {
-    task.undo();
+  it('should undo', async () => {
+    await task.undo();
 
     expect(feature.getSimpleProperties()).toEqual(before);
   });
 
-  it('should redo', function () {
-    task.redo();
+  it('should redo', async () => {
+    await task.redo();
 
     expect(feature.getSimpleProperties()).toEqual(after);
   });

@@ -18,14 +18,14 @@
 
 import { StyleFactory } from './StyleFactory';
 import { TestHelper } from '../../utils/test/TestHelper';
-import Geometry from 'ol/geom/Geometry';
 import { Point } from 'ol/geom';
 import * as sinon from 'sinon';
 import { SinonStubbedInstance } from 'sinon';
-import { StyleCache } from './StyleCache';
-import Feature from 'ol/Feature';
+import { StyleCache, StyleCacheEntry } from './StyleCache';
 import Style from 'ol/style/Style';
 import { PointIconName } from '../../../assets/point-icons/PointIconName';
+import { FeatureWrapper } from '../features/FeatureWrapper';
+import { GeometryType } from '@abc-map/shared';
 
 // TODO: test other geometries
 
@@ -38,33 +38,58 @@ describe('StyleFactory', () => {
       factory = new StyleFactory(cache as unknown as StyleCache);
     });
 
-    it('should create style then register in cache', () => {
-      const feature = new Feature<Geometry>(new Point([1, 1]));
-      const properties = TestHelper.sampleStyleProperties();
-      cache.get.returns(undefined);
+    describe('getForFeature()', () => {
+      it('should create style then register in cache', () => {
+        const feature = FeatureWrapper.create(new Point([1, 1]));
+        const properties = TestHelper.sampleStyleProperties();
+        feature.setStyleProperties(properties);
+        cache.get.returns(undefined);
 
-      const styles = factory.getFor(feature, properties, false, 1);
+        const styles = factory.getForFeature(feature, 1);
 
-      expect(styles.length).toEqual(1);
-      expect(cache.get.callCount).toEqual(1);
-      expect(cache.put.callCount).toEqual(1);
-      expect(cache.put.args[0][0]).toEqual('Point');
-      expect(cache.put.args[0][1]).toEqual(properties);
-      expect(cache.put.args[0][2]).toEqual(1);
-      expect(cache.put.args[0][3]).toEqual(styles);
+        expect(styles.length).toEqual(1);
+        expect(cache.get.callCount).toEqual(1);
+        expect(cache.put.callCount).toEqual(1);
+        expect(cache.put.args[0][0]).toEqual('Point');
+        expect(cache.put.args[0][1]).toEqual(properties);
+        expect(cache.put.args[0][2]).toEqual(1);
+        expect(cache.put.args[0][3]).toEqual(styles[0]);
+      });
+
+      it('should not create style', () => {
+        const feature = FeatureWrapper.create(new Point([1, 1]));
+        const properties = TestHelper.sampleStyleProperties();
+        feature.setStyleProperties(properties);
+        const style = new Style();
+        cache.get.returns(style);
+
+        const styles = factory.getForFeature(feature, 1);
+
+        expect(styles.length).toEqual(1);
+        expect(cache.get.callCount).toEqual(1);
+        expect(cache.put.callCount).toEqual(0);
+      });
     });
 
-    it('should not create style', () => {
-      const feature = new Feature<Geometry>(new Point([1, 1]));
-      const properties = TestHelper.sampleStyleProperties();
-      const style = new Style();
-      cache.get.returns([style]);
+    describe('getForFeature()', () => {
+      it('should sort styles', () => {
+        // Prepare
+        const cacheContent: StyleCacheEntry[] = [
+          { id: '6', ratio: 1, geomType: GeometryType.POLYGON, properties: { fill: { color1: '#FFFFFF' } }, style: new Style() },
+          { id: '5', ratio: 1, geomType: GeometryType.POLYGON, properties: { fill: { color1: '#FFFF00' } }, style: new Style() },
+          { id: '4', ratio: 1, geomType: GeometryType.POLYGON, properties: { fill: { color1: '#000000' } }, style: new Style() },
+          { id: '3', ratio: 1, geomType: GeometryType.POINT, properties: { point: { size: 25 } }, style: new Style() },
+          { id: '2', ratio: 1, geomType: GeometryType.POINT, properties: { point: { size: 15 } }, style: new Style() },
+          { id: '1', ratio: 1, geomType: GeometryType.POINT, properties: { point: { size: 5 } }, style: new Style() },
+        ];
+        cache.getAll.returns(cacheContent);
 
-      const styles = factory.getFor(feature, properties, false, 1);
+        // Act
+        const styles = factory.getAvailableStyles(1);
 
-      expect(styles.length).toEqual(1);
-      expect(cache.get.callCount).toEqual(1);
-      expect(cache.put.callCount).toEqual(0);
+        // Assert
+        expect(styles.map((st) => st.id)).toEqual(['1', '2', '3', '4', '5', '6']);
+      });
     });
   });
 
@@ -74,43 +99,48 @@ describe('StyleFactory', () => {
       factory = new StyleFactory();
     });
 
-    it('For point not selected', () => {
-      const feature = new Feature<Geometry>(new Point([1, 1]));
-      const properties = {
-        ...TestHelper.sampleStyleProperties(),
-        point: {
-          icon: PointIconName.IconArrow90DegLeft,
-          size: 25,
-          color: '#ABCDEF',
-        },
-      };
+    describe('getForFeature()', () => {
+      it('For point not selected', () => {
+        const feature = FeatureWrapper.create(new Point([1, 1]));
+        const properties = {
+          ...TestHelper.sampleStyleProperties(),
+          point: {
+            icon: PointIconName.IconArrow90DegLeft,
+            size: 25,
+            color: '#ABCDEF',
+          },
+        };
+        feature.setStyleProperties(properties);
 
-      const style = factory.getFor(feature, properties, false, 1);
+        const style = factory.getForFeature(feature, 1);
 
-      expect(style).toHaveLength(1);
-      expect(style[0].getImage().getImageSize()).toEqual([25, 25]);
-      expect(style[0].getFill()).toBeNull();
-      expect(style[0].getStroke()).toBeNull();
-    });
+        expect(style).toHaveLength(1);
+        expect(style[0].getImage().getImageSize()).toEqual([25, 25]);
+        expect(style[0].getFill()).toBeNull();
+        expect(style[0].getStroke()).toBeNull();
+      });
 
-    it('For point selected', () => {
-      const feature = new Feature<Geometry>(new Point([1, 1]));
-      const properties = {
-        ...TestHelper.sampleStyleProperties(),
-        fill: {
-          color1: '#ABCDEF',
-        },
-        point: {
-          icon: PointIconName.IconArrow90DegLeft,
-          size: 25,
-        },
-      };
+      it('For point selected', () => {
+        const feature = FeatureWrapper.create(new Point([1, 1]));
+        const properties = {
+          ...TestHelper.sampleStyleProperties(),
+          fill: {
+            color1: '#ABCDEF',
+          },
+          point: {
+            icon: PointIconName.IconArrow90DegLeft,
+            size: 25,
+          },
+        };
+        feature.setStyleProperties(properties);
+        feature.setSelected(true);
 
-      const style = factory.getFor(feature, properties, true, 1);
+        const style = factory.getForFeature(feature, 1);
 
-      expect(style).toHaveLength(2);
-      expect(style[0].getImage().getImageSize()).toEqual([25, 25]);
-      expect(style[1]).toBeDefined();
+        expect(style).toHaveLength(2);
+        expect(style[0].getImage().getImageSize()).toEqual([25, 25]);
+        expect(style[1]).toBeDefined();
+      });
     });
   });
 });

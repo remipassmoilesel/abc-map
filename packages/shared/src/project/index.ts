@@ -16,11 +16,11 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-export * from './feature/FeatureProperties';
-export * from './layer/AbcLayer';
-export * from './layer/LayerProperties';
-export * from './layout/AbcLayout';
-export * from './style/StyleProperties';
+export * from './feature';
+export * from './layer';
+export * from './layout';
+export * from './legend';
+export * from './style';
 export * from './AbcProjectManifest';
 export * from './AbcProjection';
 export * from './CompressedProject';

@@ -20,9 +20,8 @@ import GeometryType from 'ol/geom/GeometryType';
 import Style from 'ol/style/Style';
 import { Fill, Stroke } from 'ol/style';
 import CircleStyle from 'ol/style/Circle';
-import Geometry from 'ol/geom/Geometry';
-import Feature from 'ol/Feature';
 import { Logger } from '@abc-map/shared';
+import { FeatureWrapper } from '../features/FeatureWrapper';
 
 export const logger = Logger.get('SelectionStyleFactory.ts');
 
@@ -75,7 +74,7 @@ const point = [
 const geometryCollection = polygon.concat(lineString, point);
 
 export class SelectionStyleFactory {
-  public getForFeature(feature: Feature<Geometry>): Style[] {
+  public getForFeature(feature: FeatureWrapper): Style[] {
     const geometry = feature.getGeometry()?.getType();
     if (!geometry) {
       return [];

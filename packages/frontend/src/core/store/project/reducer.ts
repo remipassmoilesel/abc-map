@@ -18,6 +18,7 @@
 
 import { ActionType, ProjectAction } from './actions';
 import { projectInitialState, ProjectState } from './state';
+import { ProjectFactory } from '../../project/ProjectFactory';
 
 // TODO: test immutability of state in all branches
 
@@ -36,6 +37,7 @@ export function projectReducer(state = projectInitialState, action: ProjectActio
       const newState: ProjectState = { ...state };
       newState.metadata = action.metadata;
       newState.layouts = [];
+      newState.legend = ProjectFactory.newLegend();
       return newState;
     }
 
@@ -54,10 +56,7 @@ export function projectReducer(state = projectInitialState, action: ProjectActio
 
     case ActionType.UpdateLayout: {
       const layouts = state.layouts.map((lay) => {
-        if (lay.id === action.layout.id) {
-          return action.layout;
-        }
-        return lay;
+        return lay.id === action.layout.id ? action.layout : lay;
       });
 
       const newState: ProjectState = { ...state };
@@ -68,15 +67,15 @@ export function projectReducer(state = projectInitialState, action: ProjectActio
     case ActionType.SetLayoutIndex: {
       const layouts = state.layouts.filter((lay) => lay.id !== action.layout.id);
       layouts.splice(action.index, 0, action.layout);
+
       const newState: ProjectState = { ...state };
       newState.layouts = layouts;
       return newState;
     }
 
     case ActionType.RemoveLayouts: {
-      const layouts = state.layouts.filter((lay) => !action.ids.find((i) => lay.id === i));
       const newState: ProjectState = { ...state };
-      newState.layouts = layouts;
+      newState.layouts = state.layouts.filter((lay) => !action.ids.find((i) => lay.id === i));
       return newState;
     }
 
@@ -90,6 +89,49 @@ export function projectReducer(state = projectInitialState, action: ProjectActio
       const newState: ProjectState = { ...state };
       newState.metadata = action.project.metadata;
       newState.layouts = action.project.layouts;
+      newState.legend = action.project.legend;
+      return newState;
+    }
+
+    case ActionType.AddLegendItems: {
+      const newState: ProjectState = { ...state, legend: { ...state.legend } };
+      newState.legend.items = [...state.legend.items, ...action.items];
+      return newState;
+    }
+
+    case ActionType.UpdateLegendItem: {
+      const newState: ProjectState = { ...state, legend: { ...state.legend } };
+      newState.legend.items = state.legend.items.map((item) => {
+        return item.id === action.item.id ? action.item : item;
+      });
+      return newState;
+    }
+
+    case ActionType.SetLegendSize: {
+      const newState: ProjectState = { ...state, legend: { ...state.legend } };
+      newState.legend.width = action.width;
+      newState.legend.height = action.height;
+      return newState;
+    }
+
+    case ActionType.SetLegendDisplay: {
+      const newState: ProjectState = { ...state, legend: { ...state.legend } };
+      newState.legend.display = action.display;
+      return newState;
+    }
+
+    case ActionType.DeleteLegendItem: {
+      const newState: ProjectState = { ...state, legend: { ...state.legend } };
+      newState.legend.items = state.legend.items.filter((it) => it.id !== action.item.id);
+      return newState;
+    }
+
+    case ActionType.SetLegendItemIndex: {
+      const items = state.legend.items.filter((it) => it.id !== action.item.id);
+      items.splice(action.index, 0, action.item);
+
+      const newState: ProjectState = { ...state, legend: { ...state.legend } };
+      newState.legend.items = items;
       return newState;
     }
 

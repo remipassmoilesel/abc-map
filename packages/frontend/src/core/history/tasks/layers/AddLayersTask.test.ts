@@ -28,24 +28,24 @@ describe('AddLayersTask', () => {
     map = MapFactory.createNaked();
   });
 
-  it('undo()', () => {
+  it('undo()', async () => {
     const layer1 = LayerFactory.newVectorLayer();
     const layer2 = LayerFactory.newVectorLayer();
     map.addLayer(layer1);
     map.addLayer(layer2);
 
     const task = new AddLayersTask(map, [layer1, layer2]);
-    task.undo();
+    await task.undo();
 
     expect(map.getLayers()).toHaveLength(0);
   });
 
-  it('redo()', () => {
+  it('redo()', async () => {
     const layer1 = LayerFactory.newVectorLayer();
     const layer2 = LayerFactory.newVectorLayer();
 
     const task = new AddLayersTask(map, [layer1, layer2]);
-    task.redo();
+    await task.redo();
 
     expect(map.getLayers()).toHaveLength(2);
     expect(map.getLayers()[1].isActive()).toEqual(true);
