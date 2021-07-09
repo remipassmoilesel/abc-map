@@ -75,9 +75,6 @@ describe('Project', function () {
         .then(() => LayerControls.addWmsLayer())
         .get('[data-cy=export-project]')
         .click()
-        .get('[data-cy=close-solicitation-modal]')
-        .click()
-        .then(() => Toasts.assertText('Export en cours ...'))
         .then(() => Toasts.assertText('Export terminé !'))
         .then(() => Download.fileAsBlob())
         .then((downloaded) => TestData.projectSample1().then((witness) => ({ downloaded, witness })))
@@ -92,7 +89,9 @@ describe('Project', function () {
           expect(projectA.layers[1].type).equals(projectB.layers[1].type);
           expect(projectA.layers[2].type).equals(projectB.layers[2].type);
           expect(projectA.layouts).deep.equals(projectB.layouts);
-        });
+        })
+        .get('[data-cy=close-solicitation-modal]')
+        .click();
     });
 
     it('can import project', function () {
@@ -103,7 +102,6 @@ describe('Project', function () {
         .then((project) => {
           return cy.get('[data-cy=file-input]').attachFile({ filePath: 'project.abm2', fileContent: project });
         })
-        .then(() => Toasts.assertText('Chargement ...'))
         .then(() => Toasts.assertText('Projet importé !'))
         // Check project name
         .get('[data-cy=project-name]')
@@ -125,8 +123,6 @@ describe('Project', function () {
         .then(() => LayerControls.addWmsLayerWithCredentials())
         .get('[data-cy=export-project]')
         .click()
-        .get('[data-cy=close-solicitation-modal]')
-        .click()
         .get('[data-cy=password-input]')
         .clear()
         .type(PROJECT_PASSWORD)
@@ -146,7 +142,9 @@ describe('Project', function () {
           expect((project.layers[2].metadata as WmsMetadata).auth?.username).contains('encrypted:');
           expect((project.layers[2].metadata as WmsMetadata).auth?.password).not.equal(WmsConstants.PASSWORD);
           expect((project.layers[2].metadata as WmsMetadata).auth?.password).contains('encrypted:');
-        });
+        })
+        .get('[data-cy=close-solicitation-modal]')
+        .click();
     });
 
     it('can import project with credentials', function () {
@@ -197,10 +195,9 @@ describe('Project', function () {
         .then(() => LayerControls.addWmsLayer())
         .get('[data-cy=save-project]')
         .click()
+        .then(() => Toasts.assertText('Projet enregistré !'))
         .get('[data-cy=close-solicitation-modal]')
-        .click()
-        .then(() => Toasts.assertText('Enregistrement en cours ...'))
-        .then(() => Toasts.assertText('Projet enregistré !'));
+        .click();
     });
 
     it('can store project online with credentials', function () {
@@ -208,8 +205,6 @@ describe('Project', function () {
         // Create a project and store it online
         .then(() => LayerControls.addWmsLayerWithCredentials())
         .get('[data-cy=save-project]')
-        .click()
-        .get('[data-cy=close-solicitation-modal]')
         .click()
         .get('[data-cy=password-input]')
         .clear()
@@ -219,7 +214,9 @@ describe('Project', function () {
         .type(PROJECT_PASSWORD)
         .get('[data-cy=password-confirm]')
         .click()
-        .then(() => Toasts.assertText('Projet enregistré !'));
+        .then(() => Toasts.assertText('Projet enregistré !'))
+        .get('[data-cy=close-solicitation-modal]')
+        .click();
     });
 
     it('can load remote project', function () {
@@ -228,9 +225,9 @@ describe('Project', function () {
         .then(() => LayerControls.addWmsLayer())
         .get('[data-cy=save-project]')
         .click()
+        .then(() => Toasts.assertText('Projet enregistré !'))
         .get('[data-cy=close-solicitation-modal]')
         .click()
-        .then(() => Toasts.assertText('Projet enregistré !'))
         // Clean map
         .get('[data-cy=new-project]')
         .click()
@@ -258,8 +255,6 @@ describe('Project', function () {
         .then(() => LayerControls.addWmsLayerWithCredentials())
         .get('[data-cy=save-project]')
         .click()
-        .get('[data-cy=close-solicitation-modal]')
-        .click()
         .get('[data-cy=password-input]')
         .clear()
         .type(PROJECT_PASSWORD)
@@ -269,6 +264,8 @@ describe('Project', function () {
         .get('[data-cy=password-confirm]')
         .click()
         .then(() => Toasts.assertText('Projet enregistré !'))
+        .get('[data-cy=close-solicitation-modal]')
+        .click()
         // Clean map
         .get('[data-cy=new-project]')
         .click()
@@ -310,10 +307,9 @@ describe('Project', function () {
         // Save project
         .get('[data-cy=save-project]')
         .click()
+        .then(() => Toasts.assertText('Projet enregistré !'))
         .get('[data-cy=close-solicitation-modal]')
         .click()
-        .then(() => Toasts.assertText('Enregistrement en cours ...'))
-        .then(() => Toasts.assertText('Projet enregistré !'))
         // Delete it
         .get('[data-cy=remote-projects]')
         .click()

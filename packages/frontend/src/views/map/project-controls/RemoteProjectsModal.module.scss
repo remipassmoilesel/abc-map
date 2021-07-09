@@ -40,7 +40,7 @@
 .selected {
   color: white;
   background-color: $primary;
-  :global(.fa){
+  :global(.fa) {
     color: white;
   }
 }

@@ -85,3 +85,9 @@ export class VoteRoutes {
     return `/vote/statistics/${from.toISODate()}/${to.toISODate()}`;
   }
 }
+
+export class AboutRoutes {
+  public static about(): string {
+    return '/about';
+  }
+}

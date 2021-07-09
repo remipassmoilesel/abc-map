@@ -28,7 +28,7 @@ export class MainMap {
     return this.getComponent() // We fetch component to wait for initialization
       .then(() => cy.window())
       .then((_window) => {
-        const window: AbcWindow = _window as any;
+        const window = _window as unknown as AbcWindow;
         const map = window.abc.mainMap;
         expect(map).not.equals(undefined);
         return map as E2eMap;

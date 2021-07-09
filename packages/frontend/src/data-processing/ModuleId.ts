@@ -20,6 +20,7 @@ export enum ModuleId {
   DataViewer = 'data-viewer',
   ProportionalSymbols = 'proportional-symbols',
   DifferentSymbols = 'different-symbols',
+  CountPointsInPolygon = 'count-points-in-polygon',
   ColorGradients = 'color-gradients',
   Scripts = 'scripts',
 }

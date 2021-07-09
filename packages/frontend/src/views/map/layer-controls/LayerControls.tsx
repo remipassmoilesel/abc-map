@@ -63,25 +63,25 @@ class LayerControls extends Component<Props, State> {
           {message}
         </div>
         <div className={`control-item ${Cls.controls}`}>
-          <button onClick={this.handleAddLayer} className={'btn btn-outline-primary'} title={'Ajouter une couche'} data-cy={'add-layer'}>
-            <i className={'fa fa-plus'} />
+          <button onClick={this.handleAddLayer} className={'flex-grow-1'} title={'Ajouter une couche'} data-cy={'add-layer'}>
+            <i className={'fa fa-plus mr-2'} /> Ajouter une couche
           </button>
-          <button onClick={this.handleRemoveActive} className={'btn btn-outline-primary'} title={'Supprimer la couche active'} data-cy={'delete-layer'}>
+          <button onClick={this.handleRemoveActive} title={'Supprimer la couche active'} data-cy={'delete-layer'}>
             <i className={'fa fa-trash'} />
           </button>
-          <button onClick={this.handleToggleVisibility} className={'btn btn-outline-primary'} title={'Changer la visibilité'}>
+          <button onClick={this.handleToggleVisibility} title={'Changer la visibilité'}>
             <i className={'fa fa-eye'} />
           </button>
-          <button onClick={this.handleRename} className={'btn btn-outline-primary'} title={'Renommer la couche'} data-cy={'rename-layer'}>
+          <button onClick={this.handleRename} title={'Renommer la couche'} data-cy={'rename-layer'}>
             <i className={'fa fa-edit'} />
           </button>
-          <button onClick={this.handleZoom} className={'btn btn-outline-primary'} title={'Zoom sur la couche'}>
+          <button onClick={this.handleZoom} title={'Zoom sur la couche'}>
             <i className={'fa fa-search-plus'} />
           </button>
-          <button onClick={this.handleLayerBack} className={'btn btn-outline-primary'} title={'Derrière'}>
+          <button onClick={this.handleLayerBack} title={'Derrière'}>
             <i className={'fa fa-arrow-up'} />
           </button>
-          <button onClick={this.handleLayerForward} className={'btn btn-outline-primary'} title={'Devant'}>
+          <button onClick={this.handleLayerForward} title={'Devant'}>
             <i className={'fa fa-arrow-down'} />
           </button>
         </div>

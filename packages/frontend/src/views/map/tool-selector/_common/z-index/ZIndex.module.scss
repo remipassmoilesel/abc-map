@@ -21,11 +21,11 @@
   flex-direction: column;
   justify-content: space-evenly;
 
-  :global(.btn){
+  :global(.btn) {
     text-align: left;
   }
 
-  :global(.fa){
+  :global(.fa) {
     margin-right: 0.5rem;
   }
 }

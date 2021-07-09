@@ -37,12 +37,15 @@ describe('ConfigLoader', () => {
 
   it('load local.js', async () => {
     const config = await loader.load(ConfigLoader.DEFAULT_CONFIG);
+    // We must keep this URL in source code for local CI
+    assert.equal(config.externalUrl, 'http://localhost:10082');
     assert.isDefined(config.environmentName);
     assert.isDefined(config.frontendPath);
   });
 
   it('load continuous-integration.js', async () => {
     const config = await loader.load('resources/configuration/continuous-integration.js');
+    assert.equal(config.externalUrl, 'http://localhost:10082');
     assert.isDefined(config.environmentName);
     assert.isDefined(config.frontendPath);
   });

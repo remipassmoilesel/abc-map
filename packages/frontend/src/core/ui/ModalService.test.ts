@@ -19,6 +19,7 @@
 import { ModalService } from './ModalService';
 import { ModalEvent, ModalEventType, ModalStatus } from './typings';
 import * as sinon from 'sinon';
+import { TestHelper } from '../utils/test/TestHelper';
 
 describe('ModalService', function () {
   const event: ModalEvent = { type: ModalEventType.FeaturePropertiesClosed, properties: {}, status: ModalStatus.Confirmed };
@@ -51,5 +52,40 @@ describe('ModalService', function () {
     expect(service.getListeners().size).toEqual(0);
     expect(service.getListeners().get(listener)).toBeUndefined();
     expect(listener.callCount).toEqual(0);
+  });
+
+  describe('longOperationModal()', () => {
+    it('should succeed', async () => {
+      const listener = sinon.stub();
+      service.addListener(ModalEventType.ShowLongOperationModal, listener);
+      service.addListener(ModalEventType.LongOperationModalClosed, listener);
+
+      await service.longOperationModal(() => TestHelper.wait(200));
+
+      expect(listener.callCount).toEqual(3);
+      expect(listener.args).toEqual([
+        [{ type: ModalEventType.ShowLongOperationModal, burning: true }],
+        [{ type: ModalEventType.ShowLongOperationModal, burning: false }],
+        [{ type: ModalEventType.LongOperationModalClosed }],
+      ]);
+    });
+
+    it('should fail', async () => {
+      const listener = sinon.stub();
+      service.addListener(ModalEventType.ShowLongOperationModal, listener);
+      service.addListener(ModalEventType.LongOperationModalClosed, listener);
+
+      const error: Error = await service
+        .longOperationModal(async () => {
+          await TestHelper.wait(200);
+          return Promise.reject(new Error('Huuooo'));
+        })
+        .catch((err) => err);
+
+      expect(error).toBeInstanceOf(Error);
+      expect(error.message).toEqual('Huuooo');
+      expect(listener.callCount).toEqual(2);
+      expect(listener.args).toEqual([[{ type: ModalEventType.ShowLongOperationModal, burning: true }], [{ type: ModalEventType.LongOperationModalClosed }]]);
+    });
   });
 });

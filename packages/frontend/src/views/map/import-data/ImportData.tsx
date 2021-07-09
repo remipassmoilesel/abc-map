@@ -44,27 +44,35 @@ class ImportData extends Component<ServiceProps, {}> {
   }
 
   private importFile = () => {
-    const { toasts, dataStore, geo, history } = this.props.services;
+    const { toasts, dataStore, geo, history, modals } = this.props.services;
 
-    FileIO.openInput(InputType.Multiple)
-      .then((result) => {
-        if (InputResultType.Canceled === result.type) {
-          return;
+    const selectFiles = async (): Promise<AbcFile<Blob>[] | undefined> => {
+      const result = await FileIO.openInput(InputType.Multiple);
+      if (InputResultType.Canceled === result.type) {
+        return;
+      }
+
+      return result.files.map((f) => ({ path: f.name, content: f }));
+    };
+
+    const importFiles = async (files: AbcFile<Blob>[]) => {
+      const result = await dataStore.importFiles(files);
+
+      if (!result.layers.length) {
+        toasts.error("Ces formats de fichiers ne sont pas supportés, aucune donnée n'a été importée");
+        return;
+      }
+
+      const map = geo.getMainMap();
+      history.register(HistoryKey.Map, new AddLayersTask(map, result.layers));
+      toasts.info('Import terminé !');
+    };
+
+    selectFiles()
+      .then((files) => {
+        if (files) {
+          return modals.longOperationModal(() => importFiles(files));
         }
-
-        toasts.info('Import en cours ...');
-        const files: AbcFile<Blob>[] = result.files.map((f) => ({ path: f.name, content: f }));
-
-        return dataStore.importFiles(files).then((res) => {
-          if (!res.layers.length) {
-            toasts.error("Ces formats de fichiers ne sont pas supportés, aucune donnée n'a été importée");
-            return;
-          }
-
-          const map = geo.getMainMap();
-          history.register(HistoryKey.Map, new AddLayersTask(map, res.layers));
-          toasts.info('Import terminé !');
-        });
       })
       .catch((err) => {
         logger.error(err);

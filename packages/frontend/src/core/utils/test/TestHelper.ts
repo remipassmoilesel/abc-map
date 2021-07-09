@@ -51,6 +51,7 @@ import { LayerFactory } from '../../geo/layers/LayerFactory';
 import { PointIconName } from '../../../assets/point-icons/PointIconName';
 import { nanoid } from 'nanoid';
 import { FeatureStyle } from '@abc-map/shared';
+import { Encryption } from '../Encryption';
 
 export class TestHelper {
   public static renderMap(map: Map): Promise<void> {
@@ -94,14 +95,25 @@ export class TestHelper {
     };
   }
 
-  public static async sampleCompressedProject(): Promise<CompressedProject<Blob>> {
+  public static async sampleCompressedProject(): Promise<[CompressedProject<Blob>, AbcProjectManifest]> {
     const project = this.sampleProjectManifest();
     const metadata = project.metadata;
     const zip = await Zipper.forFrontend().zipFiles([{ path: ProjectConstants.ManifestName, content: new Blob([JSON.stringify(project)]) }]);
-    return {
-      metadata: metadata,
-      project: zip,
-    };
+    return [{ metadata, project: zip }, project];
+  }
+
+  public static async sampleCompressedProtectedProject(): Promise<[CompressedProject<Blob>, AbcProjectManifest]> {
+    let project = this.sampleProjectManifest();
+    const wmsLayer = this.sampleWmsLayer();
+    wmsLayer.metadata.auth = { username: 'test-username', password: 'test-password' };
+    project.layers.push(wmsLayer);
+
+    project = await Encryption.encryptManifest(project, 'azerty1234');
+    project.metadata.containsCredentials = true;
+
+    const metadata = project.metadata;
+    const zip = await Zipper.forFrontend().zipFiles([{ path: ProjectConstants.ManifestName, content: new Blob([JSON.stringify(project)]) }]);
+    return [{ metadata, project: zip }, project];
   }
 
   public static sampleVectorLayer(): AbcVectorLayer {

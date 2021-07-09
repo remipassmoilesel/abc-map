@@ -18,6 +18,7 @@
 
 import * as sjcl from 'sjcl';
 import { AbcLayer, AbcProjectManifest, AbcWmsLayer, AbcXyzLayer, LayerType, WmsMetadata, XyzMetadata } from '@abc-map/shared';
+import { Errors } from './Errors';
 
 /**
  * Warning: changes in this file will require a data migration
@@ -29,16 +30,12 @@ export class Encryption {
     return this.PREFIX + btoa(JSON.stringify(sjcl.encrypt(secret + secret, text).toString()));
   }
 
-  public static isInvalidPasswordError(e: Error | undefined) {
-    return !!e?.message.match('Invalid password:');
-  }
-
   public static async decrypt(text: string, secret: string): Promise<string> {
     const encrypted = JSON.parse(atob(text.substr(this.PREFIX.length)));
     try {
       return sjcl.decrypt(secret + secret, encrypted).toString();
     } catch (err) {
-      return Promise.reject(new Error(`Invalid password: ${err.message}`));
+      Errors.wrongPassword(err);
     }
   }
 
@@ -69,13 +66,17 @@ export class Encryption {
 
     return {
       ...manifest,
+      metadata: {
+        ...manifest.metadata,
+        containsCredentials: true,
+      },
       layers,
     };
   }
 
-  public static async decryptManifest(project: AbcProjectManifest, password: string): Promise<AbcProjectManifest> {
+  public static async decryptManifest(manifest: AbcProjectManifest, password: string): Promise<AbcProjectManifest> {
     const layers: AbcLayer[] = [];
-    for (const lay of project.layers) {
+    for (const lay of manifest.layers) {
       // WMS authenticated layer
       if (LayerType.Wms === lay.type && lay.metadata.auth?.username && lay.metadata.auth?.password) {
         const decrypted: AbcWmsLayer = {
@@ -99,8 +100,12 @@ export class Encryption {
     }
 
     return {
-      ...project,
+      ...manifest,
       layers,
+      metadata: {
+        ...manifest.metadata,
+        containsCredentials: false,
+      },
     };
   }
 

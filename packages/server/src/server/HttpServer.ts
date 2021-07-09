@@ -157,6 +157,9 @@ export class HttpServer {
       { prefix: '/api' }
     );
 
+    // Legal mentions
+    this.app.get('/api/about', (req, reply) => void reply.send(this.config.about));
+
     // Sitemap
     this.app.get('/sitemap.xml', this.generateSitemap);
 

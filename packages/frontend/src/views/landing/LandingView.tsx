@@ -123,6 +123,10 @@ class LandingView extends Component<Props, State> {
               </div>
             </div>
           )}
+
+          <div>
+            <Link to={FrontendRoutes.about().raw()}>A propos de cette plateforme&nbsp;&nbsp;⚖️</Link>
+          </div>
         </div>
 
         <div className={Cls.rightColumn}>

@@ -25,13 +25,14 @@ import {
   ModalEvent,
   ModalEventListener,
   ModalEventType,
-  PasswordModalClosedEvent,
+  PasswordInputClosedEvent,
   RegistrationClosedEvent,
   RenameModalClosedEvent,
   SetPasswordModalClosedEvent,
   SolicitationClosedEvent,
 } from './typings';
 import { SimplePropertiesMap } from '../geo/features/FeatureWrapper';
+import { delayedPromise } from '../utils/delayedPromise';
 
 const logger = Logger.get('ModalService.ts', 'warn');
 
@@ -53,11 +54,11 @@ export class ModalService {
     return this.setPasswordModal(title, message);
   }
 
-  public passwordInputModal(title: string, message: string): Promise<PasswordModalClosedEvent> {
+  public passwordInputModal(title: string, message: string): Promise<PasswordInputClosedEvent> {
     return this.modalPromise({ type: ModalEventType.ShowPasswordInput, title, message }, ModalEventType.PasswordInputClosed);
   }
 
-  public getProjectPassword(): Promise<PasswordModalClosedEvent> {
+  public getProjectPassword(): Promise<PasswordInputClosedEvent> {
     const message = 'Votre projet est protégé par un mot de passe.';
     const title = 'Mot de passe du projet';
     return this.passwordInputModal(title, message);
@@ -89,6 +90,33 @@ export class ModalService {
 
   public legendSymbolPicker(): Promise<LegendSymbolPickerClosedEvent> {
     return this.modalPromise({ type: ModalEventType.ShowLegendSymbolPicker }, ModalEventType.LegendSymbolPickerClosed);
+  }
+
+  public longOperationModal(operation: () => Promise<void>): Promise<void> {
+    this.dispatch({ type: ModalEventType.ShowLongOperationModal, burning: true });
+
+    return new Promise((resolve, reject) => {
+      const display = () => {
+        delayedPromise(operation(), 1000).then(hideOnSuccess).catch(hideOnFail);
+      };
+
+      const hideOnFail = (err: Error) => {
+        this.dispatch({ type: ModalEventType.LongOperationModalClosed });
+        reject(err);
+      };
+
+      const hideOnSuccess = () => {
+        this.dispatch({ type: ModalEventType.ShowLongOperationModal, burning: false });
+
+        setTimeout(() => {
+          this.dispatch({ type: ModalEventType.LongOperationModalClosed });
+          resolve();
+        }, 1000);
+      };
+
+      // We let frontend refresh before operation
+      setTimeout(display, 150);
+    });
   }
 
   private modalPromise<O extends ModalEvent>(input: ModalEvent, closeEventType: ModalEventType): Promise<O> {

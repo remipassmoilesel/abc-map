@@ -29,6 +29,7 @@ import { MapWrapper } from '../geo/map/MapWrapper';
 // TODO: use all styles available
 // TODO: use mocked XYZ layer
 // TODO: use mocked WMS layer
+// TODO: legend
 
 describe('LayoutRenderer', () => {
   let renderer: LayoutRenderer;

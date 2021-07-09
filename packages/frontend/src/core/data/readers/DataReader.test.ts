@@ -47,7 +47,7 @@ describe('DataReader', function () {
     });
 
     it('should read multiple files with multiple formats', async function () {
-      const content = await testData.getSampleArchive();
+      const content = await testData.getSampleZipWithGeoData();
       const files: AbcFile<Blob>[] = [
         {
           path: 'test.zip',

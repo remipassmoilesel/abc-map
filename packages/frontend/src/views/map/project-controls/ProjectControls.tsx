@@ -26,7 +26,7 @@ import { FileIO, InputResultType, InputType } from '../../../core/utils/FileIO';
 import RemoteProjectModal from './RemoteProjectsModal';
 import { ModalStatus } from '../../../core/ui/typings';
 import { ServiceProps, withServices } from '../../../core/withServices';
-import { Encryption } from '../../../core/utils/Encryption';
+import { Errors } from '../../../core/utils/Errors';
 
 const logger = Logger.get('ProjectControls.tsx');
 
@@ -117,10 +117,9 @@ class ProjectControls extends Component<Props, State> {
         password = event.value;
       }
 
-      toasts.info('Enregistrement en cours ...');
       const compressed = await project.exportCurrentProject(password);
       if (compressed.project.size >= ProjectConstants.MaxSizeBytes) {
-        toasts.error("Désolé 😞 ce projet est trop gros. Mais vous pouvez l'exporter.");
+        toasts.error("Désolé 😞 ce projet est trop gros pour être sauvegardé en ligne. Vous pouvez l'exporter sur votre ordinateur.");
         return;
       }
 
@@ -129,8 +128,8 @@ class ProjectControls extends Component<Props, State> {
     };
 
     modals
-      .solicitation()
-      .then(() => save())
+      .longOperationModal(save)
+      .then(() => modals.solicitation())
       .catch((err) => {
         logger.error('Cannot save project: ', err);
         toasts.genericError();
@@ -158,15 +157,14 @@ class ProjectControls extends Component<Props, State> {
         password = event.value;
       }
 
-      toasts.info('Export en cours ...');
       const compressed = await project.exportCurrentProject(password);
       FileIO.outputBlob(compressed.project, `project.${Constants.EXTENSION}`);
       toasts.info('Export terminé !');
     };
 
     modals
-      .solicitation()
-      .then(() => exportProject())
+      .longOperationModal(exportProject)
+      .then(() => modals.solicitation())
       .catch((err) => {
         logger.error('Cannot export project: ', err);
         toasts.genericError();
@@ -174,9 +172,9 @@ class ProjectControls extends Component<Props, State> {
   };
 
   private handleImportProject = () => {
-    const { toasts, modals, project } = this.props.services;
+    const { toasts, project, modals } = this.props.services;
 
-    const importProject = async () => {
+    const selectProject = async (): Promise<File | undefined> => {
       const result = await FileIO.openInput(InputType.Single, '.abm2');
 
       if (InputResultType.Canceled === result.type) {
@@ -184,38 +182,41 @@ class ProjectControls extends Component<Props, State> {
       }
 
       if (result.files.length !== 1) {
-        return toasts.error('Vous devez sélectionner un fichier');
+        toasts.error('Vous devez sélectionner un fichier');
+        return;
       }
 
       const file = result.files[0];
       if (!file.name.endsWith(Constants.EXTENSION)) {
-        return toasts.error('Vous devez sélectionner un fichier au format abm2');
+        toasts.error('Vous devez sélectionner un fichier au format abm2');
+        return;
       }
 
-      toasts.info('Chargement ...');
+      return file;
+    };
 
-      let password: string | undefined;
-      if (await project.compressedContainsCredentials(file)) {
-        const ev = await modals.getProjectPassword();
-        if (ev.status === ModalStatus.Canceled) {
-          return;
-        }
-        password = ev.value;
-      }
-
-      await project.loadProject(file, password);
+    const importProject = async (file: File) => {
+      await project.loadProject(file);
       toasts.info('Projet importé !');
     };
 
-    importProject().catch((err) => {
-      logger.error('Cannot import project: ', err);
+    selectProject()
+      .then((file) => {
+        if (file) {
+          return modals.longOperationModal(() => importProject(file));
+        }
+      })
+      .catch((err) => {
+        logger.error('Cannot import project: ', err);
 
-      if (Encryption.isInvalidPasswordError(err)) {
-        toasts.error('Mot de passe incorrect !');
-      } else {
-        toasts.genericError();
-      }
-    });
+        if (Errors.isWrongPassword(err)) {
+          toasts.error('Mot de passe incorrect !');
+        } else if (Errors.isMissingPassword(err)) {
+          toasts.error('Le mot de passe est obligatoire pour ouvrir ce projet');
+        } else {
+          toasts.genericError();
+        }
+      });
   };
 }
 

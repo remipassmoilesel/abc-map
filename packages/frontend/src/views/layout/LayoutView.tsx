@@ -252,7 +252,6 @@ class LayoutView extends Component<Props, State> {
     renderer.init(support);
 
     const exportLayouts = async () => {
-      toasts.info("Début de l'export ...");
       const layouts = this.props.layouts;
       const map = this.state.map;
       const legend = this.props.legend;
@@ -273,8 +272,8 @@ class LayoutView extends Component<Props, State> {
     };
 
     modals
-      .solicitation()
-      .then(() => exportLayouts())
+      .longOperationModal(exportLayouts)
+      .then(() => modals.solicitation())
       .catch((err) => {
         toasts.genericError();
         logger.error(err);

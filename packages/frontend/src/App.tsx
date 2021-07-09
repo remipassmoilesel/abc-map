@@ -44,6 +44,8 @@ import UserAccountView from './views/user-account/UserAccountView';
 import SetPasswordModal from './components/set-password-modal/SetPasswordModal';
 import MapLegendView from './views/map-legend/MapLegendView';
 import LegendSymbolPickerModal from './components/legend-symbol-picker-modal/LegendSymbolPickerModal';
+import AboutView from './views/about/AboutView';
+import LongOperationModal from './components/long-operation-modal/LongOperationModal';
 
 class App extends Component<ServiceProps, {}> {
   public render(): ReactNode {
@@ -61,6 +63,7 @@ class App extends Component<ServiceProps, {}> {
           <Route exact path={FrontendRoutes.dataProcessing().raw()} component={DataProcessingView} />
           <Route exact path={FrontendRoutes.resetPassword().raw()} component={ResetPasswordView} />
           <Route exact path={FrontendRoutes.userAccount().raw()} component={UserAccountView} />
+          <Route exact path={FrontendRoutes.about().raw()} component={AboutView} />
           <Route path={'*'} component={NotFoundView} />
         </Switch>
         <ToastContainer className={'toast-container'} />
@@ -74,6 +77,7 @@ class App extends Component<ServiceProps, {}> {
         <RegistrationModal />
         <PasswordLostModal />
         <LegendSymbolPickerModal />
+        <LongOperationModal />
       </BrowserRouter>
     );
   }

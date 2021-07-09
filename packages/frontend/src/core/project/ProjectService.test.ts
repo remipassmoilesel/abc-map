@@ -20,46 +20,44 @@ import { logger, ProjectService } from './ProjectService';
 import { GeoService } from '../geo/GeoService';
 import { ProjectFactory } from './ProjectFactory';
 import { ProjectActions } from '../store/project/actions';
-import { AbcLayer, AbcProjectManifest, AbcWmsLayer } from '@abc-map/shared';
+import { AbcLayer, AbcProjectManifest, AbcWmsLayer, ProjectHelper } from '@abc-map/shared';
 import { TestHelper } from '../utils/test/TestHelper';
 import { MapFactory } from '../geo/map/MapFactory';
 import { MainStore, storeFactory } from '../store/store';
 import { MapWrapper } from '../geo/map/MapWrapper';
 import * as sinon from 'sinon';
 import { SinonStubbedInstance } from 'sinon';
-import { ProjectHelper } from '@abc-map/shared';
 import { ToastService } from '../ui/ToastService';
-import { HistoryService } from '../history/HistoryService';
-import { StyleFactory } from '../geo/styles/StyleFactory';
+import { ModalService } from '../ui/ModalService';
+import { ProjectEventType } from './ProjectEvent';
+import { ModalEventType, ModalStatus } from '../ui/typings';
+import { Errors } from '../utils/Errors';
 
 logger.disable();
 
 describe('ProjectService', function () {
   let store: MainStore;
   let geoMock: SinonStubbedInstance<GeoService>;
-  let historyMock: SinonStubbedInstance<HistoryService>;
   let toastMock: SinonStubbedInstance<ToastService>;
-  let styleFactoryMock: SinonStubbedInstance<StyleFactory>;
+  let modals: SinonStubbedInstance<ModalService>;
   let projectService: ProjectService;
 
   beforeEach(() => {
     store = storeFactory();
     geoMock = sinon.createStubInstance(GeoService);
-    historyMock = sinon.createStubInstance(HistoryService);
-    styleFactoryMock = sinon.createStubInstance(StyleFactory);
+    modals = sinon.createStubInstance(ModalService);
     projectService = new ProjectService(
       {} as any,
       {} as any,
       store,
       toastMock as unknown as ToastService,
       geoMock as unknown as GeoService,
-      historyMock as unknown as HistoryService,
-      styleFactoryMock as unknown as StyleFactory
+      modals as unknown as ModalService
     );
   });
 
   describe('newProject()', () => {
-    it('newProject() should reset main map and history', async function () {
+    it('newProject()', async function () {
       // Prepare
       const mapMock = sinon.createStubInstance(MapWrapper);
       geoMock.getMainMap.returns(mapMock as unknown as MapWrapper);
@@ -70,10 +68,9 @@ describe('ProjectService', function () {
       // Assert
       expect(geoMock.getMainMap.callCount).toEqual(1);
       expect(mapMock.setDefaultLayers.callCount).toEqual(1);
-      expect(historyMock.resetHistory.callCount).toEqual(1);
     });
 
-    it('newProject() should dispatch', async function () {
+    it('newProject() should dispatch metadata in store', async function () {
       // Prepare
       const originalId = store.getState().project.metadata.id;
       store.dispatch(ProjectActions.addLayouts([TestHelper.sampleLayout()]));
@@ -89,6 +86,90 @@ describe('ProjectService', function () {
       expect(current.metadata.id).toBeDefined();
       expect(current.metadata.id).not.toEqual(originalId);
       expect(current.layouts).toEqual([]);
+    });
+
+    it('newProject() should dispatch event', async function () {
+      // Prepare
+      const eventListener = sinon.stub();
+      const map = MapFactory.createNaked();
+      geoMock.getMainMap.returns(map);
+      projectService.addEventListener(eventListener);
+
+      // Act
+      projectService.newProject();
+
+      // Assert
+      expect(eventListener.callCount).toEqual(1);
+      expect(eventListener.args[0][0].type).toEqual(ProjectEventType.NewProject);
+    });
+  });
+
+  describe('loadProject()', function () {
+    it('should load project if not protected by password', async () => {
+      // Prepare
+      const map = MapFactory.createNaked();
+      geoMock.getMainMap.resolves(map);
+
+      const eventListener = sinon.stub();
+      projectService.addEventListener(eventListener);
+
+      const [zippedProject, manifest] = await TestHelper.sampleCompressedProject();
+
+      // Act
+      await projectService.loadProject(zippedProject.project);
+
+      // Assert
+      expect(store.getState().project.metadata.id).toEqual(zippedProject.metadata.id);
+      expect(geoMock.importLayers.callCount).toEqual(1);
+      expect(geoMock.importLayers.args).toEqual([[manifest.layers]]);
+      expect(eventListener.callCount).toEqual(1);
+      expect(eventListener.args[0][0].type).toEqual(ProjectEventType.ProjectLoaded);
+    });
+
+    it('should load project after prompt if protected by password', async () => {
+      // Prepare
+      const map = MapFactory.createNaked();
+      geoMock.getMainMap.resolves(map);
+
+      modals.getProjectPassword.resolves({ type: ModalEventType.PasswordInputClosed, value: 'azerty1234', status: ModalStatus.Confirmed });
+
+      const [zippedProject] = await TestHelper.sampleCompressedProtectedProject();
+
+      // Act
+      await projectService.loadProject(zippedProject.project);
+
+      // Assert
+      expect(store.getState().project.metadata.id).toEqual(zippedProject.metadata.id);
+      expect(modals.getProjectPassword.callCount).toEqual(1);
+      expect(geoMock.importLayers.callCount).toEqual(1);
+
+      const wmsLayer = geoMock.importLayers.args[0][0][2] as AbcWmsLayer;
+      expect(wmsLayer.metadata.remoteUrl).toEqual('http://remote-url');
+      expect(wmsLayer.metadata.auth?.username).toEqual('test-username');
+      expect(wmsLayer.metadata.auth?.password).toEqual('test-password');
+    });
+
+    it('should throw if no password given and protected project', async () => {
+      // Prepare
+      const map = MapFactory.createNaked();
+      geoMock.getMainMap.resolves(map);
+
+      const eventListener = sinon.stub();
+      projectService.addEventListener(eventListener);
+
+      modals.getProjectPassword.resolves({ type: ModalEventType.PasswordInputClosed, value: '', status: ModalStatus.Confirmed });
+
+      const [zippedProject] = await TestHelper.sampleCompressedProtectedProject();
+
+      // Act
+      const error: Error = await projectService.loadProject(zippedProject.project).catch((err) => err);
+
+      // Assert
+      expect(Errors.isMissingPassword(error)).toEqual(true);
+      expect(store.getState().project.metadata.id).not.toEqual(zippedProject.metadata.id);
+      expect(modals.getProjectPassword.callCount).toEqual(1);
+      expect(geoMock.importLayers.callCount).toEqual(0);
+      expect(eventListener.callCount).toEqual(0);
     });
   });
 
@@ -172,42 +253,5 @@ describe('ProjectService', function () {
     projectService.renameProject('New title');
 
     expect(store.getState().project.metadata.name).toEqual('New title');
-  });
-
-  it('loadProject() should work', async function () {
-    const map = MapFactory.createNaked();
-    geoMock.getMainMap.resolves(map);
-
-    const metadata = ProjectFactory.newProjectMetadata();
-    store.dispatch(ProjectActions.newProject(metadata));
-
-    const newProject = await TestHelper.sampleCompressedProject();
-    await projectService.loadProject(newProject.project);
-
-    expect(store.getState().project.metadata.id).toEqual(newProject.metadata.id);
-    expect(geoMock.importLayers.callCount).toEqual(1);
-    expect(historyMock.resetHistory.callCount).toEqual(1);
-  });
-
-  describe('manifestContainsCredentials()', function () {
-    it('should return false', () => {
-      const manifest = TestHelper.sampleProjectManifest();
-
-      expect(projectService.manifestContainsCredentials(manifest)).toBe(false);
-    });
-
-    it('should return true if authenticated WMS layer', () => {
-      const manifest = TestHelper.sampleProjectManifest();
-      manifest.layers.push(TestHelper.sampleWmsLayer());
-
-      expect(projectService.manifestContainsCredentials(manifest)).toBe(true);
-    });
-
-    it('should return true if XYZ layer', () => {
-      const manifest = TestHelper.sampleProjectManifest();
-      manifest.layers.push(TestHelper.sampleXyzLayer());
-
-      expect(projectService.manifestContainsCredentials(manifest)).toBe(true);
-    });
   });
 });

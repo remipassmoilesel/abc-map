@@ -201,7 +201,7 @@ class ColorGradientsUI extends Component<Props, State> {
   };
 
   private handleSubmit = () => {
-    const { toasts } = this.props.services;
+    const { toasts, modals } = this.props.services;
 
     const formState = this.validateParameters();
     this.setState({ formState });
@@ -209,8 +209,8 @@ class ColorGradientsUI extends Component<Props, State> {
       return;
     }
 
-    this.props
-      .onProcess()
+    modals
+      .longOperationModal(this.props.onProcess)
       .then(() => toasts.info('Traitement terminé !'))
       .catch((err) => {
         logger.error(err);

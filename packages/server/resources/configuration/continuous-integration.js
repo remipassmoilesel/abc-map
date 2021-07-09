@@ -55,4 +55,24 @@ module.exports = {
     users: 100,
     persistEmails: true,
   },
+  about: `
+        <h3 class='my-3'>Conditions d'utilisation</h3>
+        <div>
+            <div>Ce logiciel est un logiciel libre sous licence <a target='_blank' href='https://www.gnu.org/licenses/agpl-3.0.html'>GNU AGPLv3</a>.</div>
+            <div>Cette licence est expliquée <a target='_blank' href='https://www.gnu.org/licenses/quick-guide-gplv3.fr.html'>ici</a>.</div>
+            <div>Le code source de l'application est disponible <a target='_blank' href='https://gitlab.com/abc-map/abc-map-2_private'>ici</a>.</div>
+        </div>
+
+        <h3 class='mt-5 mb-3'>Données personnelles</h3>
+        <div>
+            <div>Aucun cookie ni dispositif de traçage n'est utilisé.</div>
+            <div>Si vous n'êtes pas inscrit aucune données personnelles n'est stockée ou traitée.</div>
+            <div>Si vous êtes inscrit votre adresse email sert d'identifiant. </div>
+            <div>Vous pouvez supprimer votre compte sur la page de votre profil. </div>
+            <div>Aucune donnée n'est conservée après suppression d'un compte.</div>
+        </div>
+
+        <h3 class='mt-5 mb-3'>Mentions légales</h3>
+        <div>...</div>
+        `
 };

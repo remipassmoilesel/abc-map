@@ -31,33 +31,22 @@ $list-height: 90px;
   overflow-y: scroll;
   padding: 5px;
   border: solid silver 1px;
+  border-radius: 4px;
 }
 
 .controls {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
 
   button {
     margin: 3px;
-    padding: 3px;
-    width: 40px;
-    outline: 0;
-
-    &:hover {
-      :global(.fa) {
-        color: $icon-color !important;
-      }
-    }
-  }
-
-  :global(.fa) {
-    color: $icon-color;
-  }
-
-  :global(.btn-outline-primary:hover) {
-    background-color: inherit;
-    color: black;
+    border: solid 1px $secondary;
+    border-radius: 4px;
+    padding: 6px;
+    min-width: 40px;
   }
 }
 
@@ -65,4 +54,3 @@ $list-height: 90px;
   text-align: center;
   padding: 10px;
 }
-

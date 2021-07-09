@@ -37,6 +37,7 @@ export interface ConfigInput {
   registration: RegistrationConfig;
   smtp: SmtpConfig;
   datastore: DatastoreConfig;
+  about: string;
 }
 
 /**

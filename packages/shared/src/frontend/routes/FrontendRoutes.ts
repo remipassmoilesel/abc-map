@@ -58,6 +58,10 @@ export class FrontendRoutes {
   public static userAccount() {
     return new Route<EmptyParams>('/user-profile');
   }
+
+  public static about() {
+    return new Route<EmptyParams>('/about');
+  }
 }
 
 declare type EmptyParams = {};

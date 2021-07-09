@@ -30,10 +30,10 @@ import { FeatureStyle } from '@abc-map/shared';
 import { UpdateStyleItem, UpdateStyleTask } from '../history/tasks/features/UpdateStyleTask';
 import { HistoryKey } from '../history/HistoryKey';
 import { HistoryService } from '../history/HistoryService';
-import { LayerFactory } from './layers/LayerFactory';
 import { NominatimResult } from './NominatimResult';
 import { FeatureWrapper } from './features/FeatureWrapper';
 import { ToastService } from '../ui/ToastService';
+import { LayerFactory } from './layers/LayerFactory';
 
 export const logger = Logger.get('GeoService.ts');
 
@@ -46,9 +46,10 @@ export class GeoService {
     return this.mainMap;
   }
 
-  public async exportLayers(map: MapWrapper): Promise<AbcLayer[]> {
+  public async exportLayers(): Promise<AbcLayer[]> {
+    const layers = this.getMainMap().getLayers();
     const result: AbcLayer[] = [];
-    const layers = map.getLayers();
+
     for (const layer of layers) {
       const lay = await layer.toAbcLayer();
       result.push(lay);
@@ -56,11 +57,10 @@ export class GeoService {
     return result;
   }
 
-  public async importLayers(map: MapWrapper, layers: AbcLayer[]): Promise<void> {
-    // First we delete all existing layers
+  public async importLayers(layers: AbcLayer[]): Promise<void> {
+    const map = this.getMainMap();
     map.unwrap().getLayers().clear();
 
-    // Then we add new layers
     for (const abcLayer of layers) {
       const layer = await LayerFactory.fromAbcLayer(abcLayer);
       map.addLayer(layer);

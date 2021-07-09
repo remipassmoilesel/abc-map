@@ -40,8 +40,8 @@ class LegendItem extends Component<Props, {}> {
     const downDisabled = this.props.isLast;
 
     return (
-      <div className={Cls.legendItem}>
-        <button className={'btn btn-outline-primary mr-2'} onClick={this.handleSymbolModalClick}>
+      <div className={Cls.legendItem} data-cy={'legend-item'}>
+        <button className={'btn btn-outline-primary mr-2'} onClick={this.handleSymbolModalClick} data-cy={'legend-item-symbol'}>
           <i className={'fa fa-map-marker-alt'} />
         </button>
         <button onClick={this.handleDelete} title={'Supprimer'} className={'btn btn-outline-secondary mr-2'}>

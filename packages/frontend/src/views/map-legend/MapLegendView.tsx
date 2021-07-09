@@ -43,7 +43,7 @@ class MapLegendView extends Component<Props, {}> {
     return (
       <div className={Cls.mapLegendView}>
         <div className={'d-flex flex-row justify-content-end'}>
-          <button className={'btn btn-outline-primary'} onClick={this.handleGoToLayout}>
+          <button className={'btn btn-outline-primary'} onClick={this.handleGoToLayout} data-cy={'back-to-layout'}>
             <i className={'fa fa-arrow-circle-left mr-2'} />
             Revenir à la mise en page
           </button>
