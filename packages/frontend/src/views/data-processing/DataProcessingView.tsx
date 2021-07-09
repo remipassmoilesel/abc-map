@@ -28,6 +28,7 @@ const logger = Logger.get('DataProcessingView.tsx');
 
 declare type Props = RouteComponentProps<DataProcessingParams, any>;
 
+// Modules must be kept in memory
 const Modules = getModules();
 
 class DataProcessingView extends Component<Props, {}> {
@@ -40,7 +41,12 @@ class DataProcessingView extends Component<Props, {}> {
         <div className={Cls.leftMenu}>
           <div className={'mx-2 my-4 font-weight-bold'}>Modules</div>
           {Modules.map((mod) => (
-            <Link key={mod.getId()} className={'btn btn-link'} to={FrontendRoutes.dataProcessing().withParams({ moduleId: mod.getId() })} data-cy={mod.getId()}>
+            <Link
+              key={mod.getId()}
+              className={'btn btn-link my-2'}
+              to={FrontendRoutes.dataProcessing().withParams({ moduleId: mod.getId() })}
+              data-cy={mod.getId()}
+            >
               {mod.getReadableName()}
             </Link>
           ))}

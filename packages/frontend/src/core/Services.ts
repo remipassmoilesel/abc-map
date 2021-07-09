@@ -27,6 +27,11 @@ import { ToastService } from './ui/ToastService';
 import { ModalService } from './ui/ModalService';
 import { VoteService } from './vote/VoteService';
 import { StyleFactory } from './geo/styles/StyleFactory';
+import { AboutService } from './about/AboutService';
+import { ProjectEventType } from './project/ProjectEvent';
+import { Logger } from '@abc-map/shared';
+
+const logger = Logger.get('Services.ts');
 
 export interface Services {
   project: ProjectService;
@@ -37,6 +42,7 @@ export interface Services {
   history: HistoryService;
   dataStore: DataStoreService;
   vote: VoteService;
+  about: AboutService;
 }
 
 let instance: Services | undefined;
@@ -56,10 +62,23 @@ function serviceFactory(): Services {
   const modals = new ModalService();
   const history = HistoryService.create();
   const geo = new GeoService(externalClient, toasts, history);
-  const project = new ProjectService(jsonClient, downloadClient, mainStore, toasts, geo, history, StyleFactory.get());
+  const project = new ProjectService(jsonClient, downloadClient, mainStore, toasts, geo, modals);
   const authentication = new AuthenticationService(jsonClient, mainStore, toasts);
   const dataStore = new DataStoreService(jsonClient, downloadClient, toasts, geo);
   const vote = new VoteService(jsonClient, toasts);
+  const about = new AboutService(downloadClient, toasts);
+
+  project.addEventListener((ev) => {
+    if (ProjectEventType.NewProject === ev.type) {
+      history.resetHistory();
+      StyleFactory.get().clearCache();
+    } else if (ProjectEventType.ProjectLoaded === ev.type) {
+      history.resetHistory();
+      StyleFactory.get().clearCache();
+    } else {
+      logger.error('Unhandled event type: ', ev);
+    }
+  });
 
   return {
     project,
@@ -70,5 +89,6 @@ function serviceFactory(): Services {
     history,
     dataStore,
     vote,
+    about,
   };
 }

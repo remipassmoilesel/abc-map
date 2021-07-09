@@ -42,9 +42,7 @@ class MainMap extends Component<Props, State> {
 
   constructor(props: Props) {
     super(props);
-    this.state = {
-      dragOverlay: false,
-    };
+    this.state = { dragOverlay: false };
   }
 
   public render(): ReactNode {
@@ -96,7 +94,7 @@ class MainMap extends Component<Props, State> {
   }
 
   private handleDrop = (ev: DragEvent<HTMLDivElement>) => {
-    const { dataStore, history, toasts } = this.props.services;
+    const { dataStore, history, toasts, modals } = this.props.services;
     ev.preventDefault();
 
     const files: AbcFile<Blob>[] = Array.from(ev.dataTransfer.files).map((f) => ({ path: f.name, content: f }));
@@ -105,24 +103,24 @@ class MainMap extends Component<Props, State> {
       return;
     }
 
-    toasts.info('Import en cours ...');
-    dataStore
-      .importFiles(files)
-      .then((res) => {
-        if (!res.layers.length) {
-          toasts.error("Ces formats de fichiers ne sont pas supportés, aucune donnée n'a été importée");
-          return;
-        }
-
-        history.register(HistoryKey.Map, new AddLayersTask(this.props.map, res.layers));
-        toasts.info('Import terminé !');
-      })
-      .catch((err) => {
-        logger.error(err);
-        toasts.genericError();
-      });
-
     this.setState({ dragOverlay: false });
+
+    const importFiles = async () => {
+      const result = await dataStore.importFiles(files);
+
+      if (!result.layers.length) {
+        toasts.error("Ces formats de fichiers ne sont pas supportés, aucune donnée n'a été importée");
+        return;
+      }
+
+      history.register(HistoryKey.Map, new AddLayersTask(this.props.map, result.layers));
+      toasts.info('Import terminé !');
+    };
+
+    modals.longOperationModal(importFiles).catch((err) => {
+      logger.error(err);
+      toasts.genericError();
+    });
   };
 
   private handleDragOver = (ev: DragEvent<HTMLDivElement>) => {

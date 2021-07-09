@@ -17,8 +17,22 @@
  */
 
 import { ProjectActions } from '../store/project/actions';
-import { AbcLegendItem, CompressedProject, LegendDisplay, Logger, ProjectConstants, ProjectHelper } from '@abc-map/shared';
-import { AbcLayout, AbcProjectManifest, AbcProjection, AbcProjectMetadata, LayerType, LayoutFormat, WmsMetadata, Zipper } from '@abc-map/shared';
+import {
+  AbcLayout,
+  AbcLegendItem,
+  AbcProjection,
+  AbcProjectManifest,
+  AbcProjectMetadata,
+  BlobIO,
+  CompressedProject,
+  LayerType,
+  LayoutFormat,
+  LegendDisplay,
+  Logger,
+  ProjectConstants,
+  WmsMetadata,
+  Zipper,
+} from '@abc-map/shared';
 import { AxiosInstance } from 'axios';
 import { ProjectFactory } from './ProjectFactory';
 import { GeoService } from '../geo/GeoService';
@@ -26,66 +40,105 @@ import { ProjectRoutes as Api } from '../http/ApiRoutes';
 import uuid from 'uuid-random';
 import { MainStore } from '../store/store';
 import { Encryption } from '../utils/Encryption';
-import { BlobIO } from '@abc-map/shared';
 import { HttpError } from '../http/HttpError';
 import { ToastService } from '../ui/ToastService';
-import { HistoryService } from '../history/HistoryService';
-import { StyleFactory } from '../geo/styles/StyleFactory';
+import { ModalStatus } from '../ui/typings';
+import { ModalService } from '../ui/ModalService';
+import { ProjectEvent, ProjectEventType } from './ProjectEvent';
+import { Errors } from '../utils/Errors';
 
 export const logger = Logger.get('ProjectService.ts', 'info');
 
 export class ProjectService {
+  private eventTarget = document.createDocumentFragment();
+
   constructor(
     private jsonClient: AxiosInstance,
     private downloadClient: AxiosInstance,
     private store: MainStore,
     private toasts: ToastService,
     private geoService: GeoService,
-    private history: HistoryService,
-    private styleFactory: StyleFactory
+    private modals: ModalService
   ) {}
 
-  // TODO: create event emitter, then extract this ?
+  public addEventListener(listener: (ev: ProjectEvent) => void) {
+    this.eventTarget.addEventListener(ProjectEventType.NewProject, listener);
+    this.eventTarget.addEventListener(ProjectEventType.ProjectLoaded, listener);
+  }
+
+  public removeEventListener(listener: (ev: ProjectEvent) => void) {
+    this.eventTarget.removeEventListener(ProjectEventType.NewProject, listener);
+    this.eventTarget.removeEventListener(ProjectEventType.ProjectLoaded, listener);
+  }
+
   public newProject(): void {
-    this.geoService.getMainMap().setDefaultLayers();
-    this.history.resetHistory();
-    this.styleFactory.clearCache();
+    // Create new manifest
     this.store.dispatch(ProjectActions.newProject(ProjectFactory.newProjectMetadata()));
+
+    // Reset main map layers
+    this.geoService.getMainMap().setDefaultLayers();
+
+    this.eventTarget.dispatchEvent(new ProjectEvent(ProjectEventType.NewProject));
     logger.info('New project created');
   }
 
-  public getCurrentMetadata(): AbcProjectMetadata {
-    return this.store.getState().project.metadata;
-  }
-
-  public listRemoteProjects(): Promise<AbcProjectMetadata[]> {
-    return this.jsonClient
-      .get(Api.listProject())
-      .then((res) => res.data)
+  public loadRemoteProject(id: string, password?: string): Promise<void> {
+    return this.findById(id)
+      .then((blob) => {
+        if (!blob) {
+          return Promise.reject(new Error('Project not found'));
+        }
+        return this.loadProject(blob, password);
+      })
       .catch((err) => {
         this.toasts.httpError(err);
         return Promise.reject(err);
       });
   }
 
-  public findById(id: string): Promise<Blob | undefined> {
-    return this.downloadClient
-      .get(Api.findById(id))
-      .then((res) => res.data)
-      .catch((err) => {
-        this.toasts.httpError(err);
-        return Promise.reject(err);
-      });
-  }
+  /**
+   * Load a zipped project.
+   *
+   * If password is missing and project is encrypted, password will be prompted.
+   *
+   * We must prompt here to prevent several unzip of project, which is an expensive operation.
+   *
+   * @param blob
+   * @param password
+   */
+  public async loadProject(blob: Blob, password?: string): Promise<void> {
+    // Unzip project
+    const unzipped = await Zipper.forFrontend().unzip(blob);
+    const manifestFile = unzipped.find((f) => f.path.endsWith(ProjectConstants.ManifestName));
+    if (!manifestFile) {
+      return Promise.reject(new Error('Invalid project, manifest not found'));
+    }
 
-  public deleteById(id: string): Promise<void> {
-    return this.jsonClient
-      .delete(Api.findById(id))
-      .then(() => undefined)
-      .catch((err) => {
-        this.toasts.httpError(err);
-        return Promise.reject(err);
-      });
+    // Parse manifest
+    let manifest: AbcProjectManifest = JSON.parse(await BlobIO.asString(manifestFile.content));
+
+    // Prompt password if necessary
+    let _password = password;
+    if (this.manifestContainsCredentials(manifest) && !_password) {
+      const ev = await this.modals.getProjectPassword();
+      const canceled = ev.status === ModalStatus.Canceled;
+      _password = ev.value;
+      if (canceled || !_password) {
+        Errors.missingPassword();
+      }
+    }
+
+    // Decrypt project manifest if password set
+    if (_password) {
+      manifest = await Encryption.decryptManifest(manifest, _password);
+    }
+
+    // Load project
+    this.store.dispatch(ProjectActions.loadProject(manifest));
+    await this.geoService.importLayers(manifest.layers);
+
+    this.eventTarget.dispatchEvent(new ProjectEvent(ProjectEventType.ProjectLoaded));
+    logger.info('Project loaded');
   }
 
   public async exportCurrentProject(password?: string): Promise<CompressedProject<Blob>> {
@@ -95,11 +148,8 @@ export class ProjectService {
     }
 
     let manifest: AbcProjectManifest = {
-      metadata: {
-        ...this.store.getState().project.metadata,
-        containsCredentials,
-      },
-      layers: await this.geoService.exportLayers(this.geoService.getMainMap()),
+      metadata: this.store.getState().project.metadata,
+      layers: await this.geoService.exportLayers(),
       layouts: this.store.getState().project.layouts,
       legend: this.store.getState().project.legend,
     };
@@ -136,42 +186,6 @@ export class ProjectService {
 
         return Promise.reject(err);
       });
-  }
-
-  public loadRemoteProject(id: string, password?: string): Promise<void> {
-    return this.findById(id)
-      .then((blob) => {
-        if (!blob) {
-          return Promise.reject(new Error('Project not found'));
-        }
-        return this.loadProject(blob, password);
-      })
-      .catch((err) => {
-        this.toasts.httpError(err);
-        return Promise.reject(err);
-      });
-  }
-
-  public async loadProject(blob: Blob, password?: string): Promise<void> {
-    const unzipped = await Zipper.forFrontend().unzip(blob);
-    const manifestFile = unzipped.find((f) => f.path.endsWith(ProjectConstants.ManifestName));
-    if (!manifestFile) {
-      return Promise.reject(new Error('Invalid project, manifest not found'));
-    }
-
-    let manifest: AbcProjectManifest = JSON.parse(await BlobIO.asString(manifestFile.content));
-    if (this.manifestContainsCredentials(manifest) && !password) {
-      throw new Error('Password is mandatory when project contains credentials');
-    }
-
-    this.history.resetHistory();
-
-    const map = this.geoService.getMainMap();
-    if (password) {
-      manifest = await Encryption.decryptManifest(manifest, password);
-    }
-    await this.geoService.importLayers(map, manifest.layers);
-    this.store.dispatch(ProjectActions.loadProject(manifest));
   }
 
   public newLayout(name: string, format: LayoutFormat, center: number[], resolution: number, projection: AbcProjection): AbcLayout {
@@ -236,13 +250,7 @@ export class ProjectService {
     this.store.dispatch(ProjectActions.renameProject(name));
   }
 
-  // TODO: Delete this method, unziping project is a heavy process
-  public async compressedContainsCredentials(blob: Blob): Promise<boolean> {
-    const manifest = await ProjectHelper.forFrontend().extractManifest(blob);
-    return this.manifestContainsCredentials(manifest);
-  }
-
-  public manifestContainsCredentials(project: AbcProjectManifest): boolean {
+  private manifestContainsCredentials(project: AbcProjectManifest): boolean {
     // XYZ layers may contains credentials in URL
     const xyzLayers = project.layers.find((lay) => LayerType.Xyz === lay.type);
     if (xyzLayers) {
@@ -266,5 +274,35 @@ export class ProjectService {
 
   public setLegendItemIndex(item: AbcLegendItem, newIndex: number) {
     this.store.dispatch(ProjectActions.setLegendItemIndex(item, newIndex));
+  }
+
+  public listRemoteProjects(): Promise<AbcProjectMetadata[]> {
+    return this.jsonClient
+      .get(Api.listProject())
+      .then((res) => res.data)
+      .catch((err) => {
+        this.toasts.httpError(err);
+        return Promise.reject(err);
+      });
+  }
+
+  public findById(id: string): Promise<Blob | undefined> {
+    return this.downloadClient
+      .get(Api.findById(id))
+      .then((res) => res.data)
+      .catch((err) => {
+        this.toasts.httpError(err);
+        return Promise.reject(err);
+      });
+  }
+
+  public deleteById(id: string): Promise<void> {
+    return this.jsonClient
+      .delete(Api.findById(id))
+      .then(() => undefined)
+      .catch((err) => {
+        this.toasts.httpError(err);
+        return Promise.reject(err);
+      });
   }
 }

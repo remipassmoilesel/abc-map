@@ -38,6 +38,8 @@ export enum ModalEventType {
   PasswordLostClosed = 'PasswordLostClosed',
   ShowLegendSymbolPicker = 'ShowLegendSymbolPicker',
   LegendSymbolPickerClosed = 'LegendSymbolPickerClosed',
+  ShowLongOperationModal = 'ShowLongOperationModal',
+  LongOperationModalClosed = 'LongOperationModalClosed',
 }
 
 export enum ModalStatus {
@@ -64,16 +66,16 @@ export interface ShowPasswordInputModal {
   message: string;
 }
 
+export interface PasswordInputClosedEvent {
+  type: ModalEventType.PasswordInputClosed;
+  value: string;
+  status: ModalStatus;
+}
+
 export interface ShowSetPasswordModal {
   type: ModalEventType.ShowSetPassword;
   title: string;
   message: string;
-}
-
-export interface PasswordModalClosedEvent {
-  type: ModalEventType.PasswordInputClosed;
-  value: string;
-  status: ModalStatus;
 }
 
 export interface SetPasswordModalClosedEvent {
@@ -139,12 +141,21 @@ export interface LegendSymbolPickerClosedEvent {
   style?: StyleCacheEntry;
 }
 
+export interface ShowLongOperationModal {
+  type: ModalEventType.ShowLongOperationModal;
+  burning: boolean;
+}
+
+export interface LongOperationModalClosedEvent {
+  type: ModalEventType.LongOperationModalClosed;
+}
+
 export declare type ModalEvent =
   | ShowRenameModal
   | RenameModalClosedEvent
   | ShowPasswordInputModal
+  | PasswordInputClosedEvent
   | ShowSetPasswordModal
-  | PasswordModalClosedEvent
   | SetPasswordModalClosedEvent
   | ShowFeaturePropertiesModal
   | FeaturePropertiesClosedEvent
@@ -157,7 +168,9 @@ export declare type ModalEvent =
   | ShowPasswordLostModal
   | PasswordLostClosedEvent
   | ShowLegendSymbolPicker
-  | LegendSymbolPickerClosedEvent;
+  | LegendSymbolPickerClosedEvent
+  | ShowLongOperationModal
+  | LongOperationModalClosedEvent;
 
 export class InternalEvent extends Event {
   constructor(type: ModalEventType, public readonly payload: ModalEvent) {

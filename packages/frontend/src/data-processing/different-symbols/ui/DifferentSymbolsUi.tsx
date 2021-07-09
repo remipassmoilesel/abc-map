@@ -20,7 +20,7 @@ import React, { Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/shared';
 import Cls from './DifferentSymbolsUi.module.scss';
 
-const logger = Logger.get('Panel.tsx');
+const logger = Logger.get('DifferentSymbolsUi.tsx');
 
 class DifferentSymbolsUi extends Component<{}, {}> {
   public render(): ReactNode {
@@ -28,6 +28,7 @@ class DifferentSymbolsUi extends Component<{}, {}> {
       <div className={Cls.panel}>
         <i className={`fa fa-file-code`} />
         <h4 className={'text-center my-5'}>Ce module n&apos;est pas terminé !</h4>
+        <div>Ce module permettra de créer des symboles sur une carte à partir d&apos;un classeur CSV.</div>
       </div>
     );
   }

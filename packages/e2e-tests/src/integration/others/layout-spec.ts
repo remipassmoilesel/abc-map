@@ -116,13 +116,13 @@ describe('Layout', function () {
         .click()
         .get('[data-cy=layout-controls] [data-cy=pdf-export]')
         .click()
-        .get('[data-cy=close-solicitation-modal]')
-        .click()
         .then(() => Toasts.assertText('Export terminé !'))
         .then(() => Download.fileAsBlob())
         .should((pdf) => {
           expect(pdf.size).greaterThan(400_000);
-        });
+        })
+        .get('[data-cy=close-solicitation-modal]')
+        .click();
     });
 
     it('can export as PNG', function () {
@@ -132,13 +132,13 @@ describe('Layout', function () {
         .click()
         .get('[data-cy=layout-controls] [data-cy=png-export]')
         .click()
-        .get('[data-cy=close-solicitation-modal]')
-        .click()
         .then(() => Toasts.assertText('Export terminé !'))
         .then(() => Download.fileAsBlob())
         .should((pdf) => {
           expect(pdf.size).greaterThan(400_000);
-        });
+        })
+        .get('[data-cy=close-solicitation-modal]')
+        .click();
     });
   });
 });

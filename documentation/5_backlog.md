@@ -1,5 +1,8 @@
 # Backlog
 
+* [Better user experience](#better-user-experience)
+* [Better icons and visuals](#better-icons-and-visuals)
+* [Lighter deployment options](#lighter-deployment-options)
 * [More unit tests on frontend, refactoring of E2E tests.](#more-unit-tests-on-frontend-refactoring-of-e2e-tests)
 * [Internationalization](#internationalization)
 * [Projection change](#projection-change)
@@ -12,6 +15,24 @@
 * [Custom icons](#custom-icons)
 * [Images](#images)
 * [Datastore artefact with prompt](#datastore-artefact-with-prompt)
+
+
+## Better user experience
+
+All user experience is in very early stage. If you are experienced in this field and if you have concrete ideas
+open an empty Merge Request to discuss.
+
+
+## Better icons and visuals
+
+Icon and visuals can be improved a lot ✏️ If you are creative but if you don't know how to integrate your work 
+open an empty Merge Request to discuss.     
+
+
+## Lighter deployment options
+
+Current deployment is on Kubernetes and it is not a simple thing for everyone. We should provide at least 
+a standalone script for installation on GNU/Linux. MS Windows is not a target system for deployment.    
 
 
 ## More unit tests on frontend, refactoring of E2E tests.

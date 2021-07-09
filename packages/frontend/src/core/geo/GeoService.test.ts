@@ -22,7 +22,6 @@ import { AbcProjectManifest, AbcVectorLayer, LayerType, PredefinedLayerModel, Pr
 import { TestHelper } from '../utils/test/TestHelper';
 import VectorSource from 'ol/source/Vector';
 import TileLayer from 'ol/layer/Tile';
-import { MapFactory } from './map/MapFactory';
 import { httpExternalClient } from '../http/http-clients';
 import { HistoryService } from '../history/HistoryService';
 import { LayerFactory } from './layers/LayerFactory';
@@ -35,7 +34,6 @@ import * as sinon from 'sinon';
 geoLogger.disable();
 mapLogger.disable();
 
-// TODO: improve tests
 describe('GeoService', () => {
   let toasts: SinonStubbedInstance<ToastService>;
   let service: GeoService;
@@ -43,17 +41,20 @@ describe('GeoService', () => {
   beforeEach(() => {
     toasts = sinon.createStubInstance(ToastService);
     service = new GeoService(httpExternalClient(5_000), toasts, HistoryService.create());
+
+    service.getMainMap().unwrap().getLayers().clear();
   });
 
+  // Export is tested in details in LayerFactory
   it('exportLayers()', async () => {
-    const map = MapFactory.createNaked();
+    const map = service.getMainMap();
     const osm = LayerFactory.newPredefinedLayer(PredefinedLayerModel.OSM);
     const features = LayerFactory.newVectorLayer(new VectorSource({ features: TestHelper.sampleFeatures() }));
     map.addLayer(osm);
     map.addLayer(features);
     map.setActiveLayer(features);
 
-    const layers = await service.exportLayers(map);
+    const layers = await service.exportLayers();
     expect(layers).toHaveLength(2);
 
     expect(layers[0].metadata.type).toEqual(LayerType.Predefined);
@@ -65,13 +66,13 @@ describe('GeoService', () => {
     expect((layers[1] as AbcVectorLayer).features.features).toHaveLength(3);
   });
 
-  it('importProject()', async () => {
+  // Import is tested in details in LayerFactory
+  it('importLayers()', async () => {
     const project: AbcProjectManifest = TestHelper.sampleProjectManifest();
-    const map = MapFactory.createNaked();
 
-    await service.importLayers(map, project.layers);
+    await service.importLayers(project.layers);
 
-    const layers = map.getLayers();
+    const layers = service.getMainMap().getLayers();
     expect(layers[0].unwrap()).toBeInstanceOf(TileLayer);
     expect(layers[1].unwrap()).toBeInstanceOf(VectorImageLayer);
     const features = (layers[1] as VectorLayerWrapper).getSource().getFeatures();

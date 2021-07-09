@@ -17,7 +17,7 @@
  */
 
 import { StorePersistence } from './StorePersistence';
-import { LocalStorageService, StorageKey } from '../../utils/LocalStorageService';
+import { LocalStorageService, StorageKey } from '../../local-storage/LocalStorageService';
 import sinon, { SinonStub } from 'sinon';
 import { LegendDisplay, UserStatus } from '@abc-map/shared';
 import { MapTool } from '@abc-map/shared';

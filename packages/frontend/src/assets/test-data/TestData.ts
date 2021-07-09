@@ -32,8 +32,11 @@ export class TestData {
     return this.readFile('./stations.geojson');
   }
 
-  public async getSampleArchive(): Promise<Blob> {
-    return this.readFile('./archive.zip');
+  /**
+   * Zip containing multiple format of data (KML, geojson, gpx)
+   */
+  public async getSampleZipWithGeoData(): Promise<Blob> {
+    return this.readFile('./geodata.zip');
   }
 
   public async getSampleShapefile(): Promise<Blob> {

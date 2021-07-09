@@ -13,8 +13,7 @@ Official rewrite, attempt n°265 👨‍💻.
 </div>
 
 
-
-## Purpose
+## Purpose in a nutshell
 
 Abc-Map is a tool for processing geographic information that is easy to understand and use.
 
@@ -27,14 +26,37 @@ Use cases:
 More information [here](https://alpha.abc-map.fr/documentation).    
 
 
-Please keep in mind that this is a side project, developed at night after often 10 hours of code during the day. 
-A lot of things needs to be improved !    
-
-
 ## Status of project
 
-Abc-Map 2 is at a very early stage. Everything is done within the means available to make this project a lasting one, 
-but for now you should expect some breaking changes.     
+Abc-Map 2 is at a very early stage. Everything is done within the means available to make this project a 
+long-lasting one, but for now you should expect some breaking changes.
+
+Please keep in mind too that this software is developed at night after often 10 hours of code during the day. 
+A lot of things needs to be and will be improved 💪    
+
+
+## But seriously why ? And why a web application ?
+
+There are some very good GIS available: QGIS, GvSIG, OrbisGIS are great software. But they are intended for 
+experts in the field and are hard to use. The goal of this project is to provide a GIS experience without 
+complex technical knowledge. Of course, at a cost: Abc-Map is less powerful than these software.            
+
+Web technologies, although complex and sometimes literally painful, make it possible to deliver software  
+widely accessible and fully capable of heavy calculations. All the power of browsers has not yet been exploited 
+in this software but it is possible thanks to WebWorkers and WebAssembly to do as well as many office 
+applications.    
+
+
+## What can I find here ?
+
+Source code of Abc-Map and developer documentation, if you want to hack it or deploy your own instance.    
+
+See [documentation](./documentation) folder.
+
+
+## How can I help ?
+
+See [backlog](./documentation/5_backlog.md).
 
 
 ## Technologies used 
@@ -54,12 +76,3 @@ but for now you should expect some breaking changes.
 - [Openlayers](https://openlayers.org/)
 - [Bootstrap](https://getbootstrap.com)
 
-
-## Developer documentation
-
-See [documentation](./documentation) folder.
-
-
-## Roadmap
-
-See [backlog](./documentation/5_backlog.md).

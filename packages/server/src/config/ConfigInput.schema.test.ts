@@ -76,6 +76,7 @@ const sampleConfig: ConfigInput = {
     users: 10,
     persistEmails: false,
   },
+  about: '<div>Put legal mentions here !</div>',
 };
 
 describe('ConfigInput.schema', () => {

@@ -42,8 +42,8 @@ class NewLegendItemForm extends Component<Props, State> {
       <div className={'my-4'}>
         <div className={'mb-2'}>Ajouter une entrée:</div>
         <div className={Cls.form}>
-          <input type={'text'} value={text} onChange={this.handleTextChange} className={`form-control ${Cls.textField}`} />
-          <button onClick={this.handleSubmit} className={'btn btn-primary ml-2'}>
+          <input type={'text'} value={text} onChange={this.handleTextChange} className={`form-control ${Cls.textField}`} data-cy={'new-item-input'} />
+          <button onClick={this.handleSubmit} className={'btn btn-primary ml-2'} data-cy={'new-item-button'}>
             <i className={'fa fa-plus'} />
           </button>
         </div>

@@ -58,7 +58,7 @@ class PointIconPicker extends Component<Props, State> {
     return (
       <>
         {/* Button, always visible */}
-        <button onClick={this.handleOpen} className={'btn btn-outline-secondary btn-sm'}>
+        <button onClick={this.handleOpen} className={'btn btn-outline-secondary btn-sm'} data-cy={'point-icon-selector'}>
           {!value && 'Choisir'}
           {value && <img src={value.preview} alt={value.icon.name} />}
         </button>
@@ -70,14 +70,15 @@ class PointIconPicker extends Component<Props, State> {
           </Modal.Header>
           <Modal.Body className={'d-flex flex-column'}>
             <div className={Cls.viewPort}>
-              {iconPreviews.map((i) => (
-                <img
-                  key={i.icon.name}
-                  src={i.preview}
-                  onClick={() => this.handleSelection(i.icon)}
+              {iconPreviews.map((icon, idx) => (
+                <button
+                  key={icon.icon.name}
+                  onClick={() => this.handleSelection(icon.icon)}
                   className={`btn btn-outline-secondary ${Cls.iconPreview}`}
-                  alt={i.icon.name}
-                />
+                  data-cy={`point-icon-${idx}`}
+                >
+                  <img src={icon.preview} alt={icon.icon.name} />
+                </button>
               ))}
             </div>
           </Modal.Body>

@@ -39,7 +39,7 @@
   flex-direction: row;
   flex-wrap: wrap;
 
-  :global(.card){
+  :global(.card) {
     height: 45vh;
   }
 }

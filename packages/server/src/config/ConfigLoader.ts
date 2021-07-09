@@ -52,6 +52,8 @@ export class ConfigLoader {
       safe.smtp.auth.pass = safeValue;
     }
 
+    safe.about = `${safe.about.substr(0, 50)}...`;
+
     return safe;
   }
 

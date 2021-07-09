@@ -148,7 +148,7 @@ export class LayerFactory {
     return LayerWrapper.from<TileLayer, XYZ, XyzMetadata>(layer).setMetadata(metadata);
   }
 
-  public static async fromAbcLayer(abcLayer: AbcLayer): Promise<LayerWrapper> {
+  public static fromAbcLayer(abcLayer: AbcLayer): LayerWrapper {
     let layer: LayerWrapper | undefined;
 
     // Predefined layer
@@ -180,7 +180,7 @@ export class LayerFactory {
     }
 
     if (!layer) {
-      return Promise.reject(new Error(`Unhandled layer type: ${(abcLayer as AbcLayer).type}`));
+      throw new Error(`Unhandled layer type: ${(abcLayer as AbcLayer).type}`);
     }
 
     return layer;

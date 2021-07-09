@@ -21,8 +21,8 @@ import { AbcProjectMetadata } from '@abc-map/shared';
 import { Logger } from '@abc-map/shared';
 import { Modal } from 'react-bootstrap';
 import { ServiceProps, withServices } from '../../../core/withServices';
+import { Errors } from '../../../core/utils/Errors';
 import Cls from './RemoteProjectsModal.module.scss';
-import { Encryption } from '../../../core/utils/Encryption';
 
 const logger = Logger.get('RemoteProjectModal.tsx');
 
@@ -168,7 +168,7 @@ class RemoteProjectsModal extends Component<Props, State> {
   private handleCancel = () => this.props.onHide();
 
   private handleOpenProject = () => {
-    const { project, toasts } = this.props.services;
+    const { project, toasts, modals } = this.props.services;
 
     const loadProject = async () => {
       const selected = this.state.selected;
@@ -188,13 +188,13 @@ class RemoteProjectsModal extends Component<Props, State> {
       this.props.onHide();
     };
 
-    loadProject().catch((err) => {
+    modals.longOperationModal(loadProject).catch((err) => {
       logger.error('Cannot open project: ', err);
 
-      if (Encryption.isInvalidPasswordError(err)) {
+      if (Errors.isWrongPassword(err)) {
         toasts.error('Mot de passe incorrect !');
-      } else {
-        toasts.genericError();
+      } else if (Errors.isMissingPassword(err)) {
+        toasts.error('Le mot de passe est obligatoire pour ouvrir ce projet');
       }
     });
   };

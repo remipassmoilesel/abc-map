@@ -35,7 +35,7 @@ class LegendSymbolButton extends Component<Props, {}> {
 
   public render(): ReactNode {
     return (
-      <button onClick={this.handleClick} className={`btn btn-outline-secondary ${Cls.button}`}>
+      <button onClick={this.handleClick} className={`btn btn-outline-secondary ${Cls.button}`} data-cy={'legend-symbol'}>
         <canvas ref={this.canvas} />
       </button>
     );

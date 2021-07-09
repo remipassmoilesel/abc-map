@@ -75,11 +75,11 @@ class LayoutControls extends Component<Props, {}> {
 
         <div className={'control-block'}>
           <div className={'mb-2'}>Légende:</div>
-          <select onChange={this.handleLegendDisplayChanged} value={legendDisplay} className={'form-control mb-3'} data-cy={'format-select'}>
+          <select onChange={this.handleLegendDisplayChanged} value={legendDisplay} className={'form-control mb-3'} data-cy={'legend-select'}>
             <option>...</option>
             {legendOptions}
           </select>
-          <button onClick={this.handleEditLegend} className={'btn btn-outline-secondary'}>
+          <button onClick={this.handleEditLegend} className={'btn btn-outline-secondary'} data-cy={'edit-legend'}>
             <i className={'fa fa-pen mr-2'} />
             Editer la légende
           </button>
