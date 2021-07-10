@@ -24,16 +24,13 @@ import { StyleFactory } from '../styles/StyleFactory';
 import { DefaultSymbolSize } from './constants';
 import { DimensionsPx } from '../../utils/DimensionsPx';
 import ImageState from 'ol/ImageState';
+import { CanvasHelper } from '../../utils/CanvasHelper';
+import { Position } from '../../utils/Position';
 
 const logger = Logger.get('LegendRenderer.ts');
 
-export interface Position {
-  x: number;
-  y: number;
-}
-
 export class LegendRenderer {
-  private readonly borderWidth = 5;
+  private readonly borderWidth = 3;
 
   constructor(private styleFactory = StyleFactory.get(), private olContext = toContext) {}
 
@@ -138,13 +135,9 @@ export class LegendRenderer {
     }
 
     // We clean draw area
-    ctx.fillStyle = 'white';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    // We draw a frame
-    ctx.lineWidth = styleRatio * this.borderWidth;
-    ctx.strokeStyle = 'darkgray';
-    ctx.strokeRect(0, 0, canvas.width, canvas.height);
+    const borderWidth = this.borderWidth * styleRatio;
+    ctx.lineWidth = borderWidth;
+    CanvasHelper.roundedRectangle(ctx, borderWidth / 2, borderWidth / 2, canvas.width - borderWidth, canvas.height - borderWidth, 7, '#0077b6', 'white');
 
     // We iterate items
     const fontSize = 20 * styleRatio;

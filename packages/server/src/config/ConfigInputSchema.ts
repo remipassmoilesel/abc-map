@@ -18,7 +18,7 @@
 
 export const ConfigInputSchema = {
   type: 'object',
-  required: ['environmentName', 'externalUrl', 'server', 'project', 'database', 'jwt', 'authentication', 'registration', 'smtp', 'datastore', 'about'],
+  required: ['environmentName', 'externalUrl', 'server', 'project', 'database', 'jwt', 'authentication', 'registration', 'smtp', 'datastore', 'legalMentions'],
   additionalProperties: false,
   properties: {
     environmentName: { type: 'string' },
@@ -142,7 +142,7 @@ export const ConfigInputSchema = {
         persistEmails: { type: 'boolean' },
       },
     },
-    about: {
+    legalMentions: {
       type: 'string',
     },
   },

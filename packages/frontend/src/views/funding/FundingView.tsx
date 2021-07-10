@@ -1,0 +1,83 @@
+/**
+ * Copyright © 2021 Rémi Pace.
+ * This file is part of Abc-Map.
+ *
+ * Abc-Map is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of
+ * the License, or (at your option) any later version.
+ *
+ * Abc-Map is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General
+ * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+import React, { Component, ReactNode } from 'react';
+import { Logger } from '@abc-map/shared';
+import Cls from './FundingView.module.scss';
+import { ServiceProps, withServices } from '../../core/withServices';
+import PaypalButton from './PaypalButton';
+
+const logger = Logger.get('FundingView.tsx', 'info');
+
+class FundingView extends Component<ServiceProps, {}> {
+  public render(): ReactNode {
+    return (
+      <div className={Cls.funding}>
+        <div className={Cls.content}>
+          <h1 className={'mb-3'}>Participez au développement d&apos;Abc-Map&nbsp;&nbsp;💌</h1>
+
+          <div className={'d-flex flex-column justify-content-end align-items-end my-3'}>
+            <div className={Cls.quote}>Bah voila y disent cé gratuit mééé ça réclame de l&apos;argent !</div>
+            <div className={Cls.quoteAuthor}>JM. Rhien</div>
+          </div>
+
+          <div className={'w-100'}>
+            <h3 className={'my-4'}>Pourquoi ?</h3>
+            <p>Abc-Map est un logiciel libre développé et hébergé bénévolement.</p>
+            <p>Vous avez remarqué ? Pas de pub, pas de course à l&apos;attention, pas de récolte de données personnelles 💪</p>
+            <p>
+              En finançant ce logiciel vous financez un territoire d&apos;internet libre, où le logiciel sert l&apos;utilisateur. Ça pourrait bien devenir une
+              &nbsp;norme un jour 🙏🏻
+            </p>
+          </div>
+
+          <div className={'w-100'}>
+            <h3 className={'my-4'}>Comment ?</h3>
+            <div>
+              Envoyez de l&apos;argent par <i>carte bleue</i> ou via votre <i>compte Paypal</i>.
+            </div>
+            <div className={'d-flex my-4'}>
+              <PaypalButton />
+            </div>
+          </div>
+
+          <div className={'w-100'}>
+            <h3 className={'my-4'}>A quoi ça sert ?</h3>
+            <p>L&apos;argent récolté:</p>
+            <ul>
+              <li>paie les coûts d&apos;hébergement de la plateforme officielle</li>
+              <li>est accumulé pour financer des sessions de développement</li>
+            </ul>
+          </div>
+
+          <div className={'w-100 d-flex flex-column'}>
+            <h3 className={'my-4'}>Réseaux</h3>
+            <a href={'https://twitter.com/AbcRemi'} target={'_blank'} rel="noreferrer">
+              Twitter
+            </a>
+            <a href={'https://remi-pace.fr'} target={'_blank'} rel="noreferrer">
+              Site personnel de l&apos;auteur
+            </a>
+          </div>
+        </div>
+      </div>
+    );
+  }
+}
+
+export default withServices(FundingView);

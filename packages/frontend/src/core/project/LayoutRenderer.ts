@@ -24,16 +24,17 @@ import { AbcFile, AbcLayout, Zipper } from '@abc-map/shared';
 import { MapFactory } from '../geo/map/MapFactory';
 import { jsPDF } from 'jspdf';
 import { LegendRenderer } from '../geo/legend/LegendRenderer';
+import { AttributionRenderer } from './AttributionRenderer';
 
 export const logger = Logger.get('LayoutRenderer');
-
-// TODO: test, find a way to trigger openlayers renders with jest
 
 export class LayoutRenderer {
   private support?: HTMLDivElement;
   private map?: MapWrapper;
   private legendCanvas?: HTMLCanvasElement;
   private legendRenderer = new LegendRenderer();
+  private attributionRenderer = new AttributionRenderer();
+  private attributionCanvas?: HTMLCanvasElement;
 
   public init(support: HTMLDivElement) {
     // Initialize map
@@ -41,8 +42,8 @@ export class LayoutRenderer {
     this.map = MapFactory.createNaked();
     this.map.setTarget(support);
 
-    // Initialize legend
     this.legendCanvas = document.createElement('canvas');
+    this.attributionCanvas = document.createElement('canvas');
   }
 
   public dispose() {
@@ -82,7 +83,8 @@ export class LayoutRenderer {
     const support = this.support;
     const renderingMap = this.map;
     const legendCanvas = this.legendCanvas;
-    if (!renderingMap || !support || !legendCanvas) {
+    const attributionCanvas = this.attributionCanvas;
+    if (!renderingMap || !support || !legendCanvas || !attributionCanvas) {
       throw new Error('You must call init() before rendering');
     }
 
@@ -148,6 +150,13 @@ export class LayoutRenderer {
           }
         });
 
+        // Attribution rendering
+        const attributions = sourceMap.getTextAttributions();
+        this.attributionRenderer.render(attributions, attributionCanvas, styleRatio);
+        const attrPosition = this.attributionRenderer.getAttributionPosition(legend, attributionCanvas, exportCanvas);
+        ctx.drawImage(attributionCanvas, attrPosition.x, attrPosition.y);
+
+        // LegendRedering
         const renderLegend = async () => {
           // Render legend
           legendCanvas.width = legend.width * styleRatio;

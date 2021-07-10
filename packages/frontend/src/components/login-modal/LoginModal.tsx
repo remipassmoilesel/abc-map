@@ -20,7 +20,7 @@ import React, { ChangeEvent, Component, KeyboardEvent, ReactNode } from 'react';
 import { FrontendRoutes, Logger } from '@abc-map/shared';
 import { Modal } from 'react-bootstrap';
 import { ServiceProps, withServices } from '../../core/withServices';
-import { ModalEventListener, ModalEventType, ModalStatus } from '../../core/ui/typings';
+import { ModalEventType, ModalStatus } from '../../core/ui/typings';
 import { PasswordStrength, ValidationHelper } from '../../core/utils/ValidationHelper';
 import FormValidationLabel from '../form-validation-label/FormValidationLabel';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
@@ -35,7 +35,6 @@ interface State {
   visible: boolean;
   email: string;
   password: string;
-  listener?: ModalEventListener;
   formState: FormState;
 }
 
@@ -139,18 +138,18 @@ class LoginModal extends Component<Props, State> {
   public componentDidMount() {
     const { modals } = this.props.services;
 
-    const listener: ModalEventListener = () => this.setState({ visible: true });
-    modals.addListener(ModalEventType.ShowLogin, listener);
-    this.setState({ listener });
+    modals.addListener(ModalEventType.ShowLogin, this.handleOpen);
   }
 
   public componentWillUnmount() {
     const { modals } = this.props.services;
 
-    if (this.state.listener) {
-      modals.removeListener(ModalEventType.ShowLogin, this.state.listener);
-    }
+    modals.removeListener(ModalEventType.ShowLogin, this.handleOpen);
   }
+
+  private handleOpen = () => {
+    this.setState({ visible: true });
+  };
 
   private handlePasswordLost = () => {
     const { modals, toasts } = this.props.services;

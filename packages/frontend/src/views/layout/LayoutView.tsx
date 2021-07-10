@@ -151,7 +151,7 @@ class LayoutView extends Component<Props, State> {
     const layoutRes = Math.round(resolution - resolution * 0.2);
     const projection: AbcProjection = { name: view.getProjection().getCode() };
 
-    const layout = project.newLayout(name, LayoutFormats.A4_PORTRAIT, center, layoutRes, projection);
+    const layout = project.newLayout(name, LayoutFormats.A4_LANDSCAPE, center, layoutRes, projection);
     history.register(HistoryKey.Layout, AddLayoutsTask.create([layout]));
 
     this.setState({ activeLayoutId: layout.id });

@@ -71,28 +71,17 @@ class LandingView extends Component<Props, State> {
           <div>
             <h1>Bienvenue !</h1>
 
-            <p className={Cls.intro}>Abc-Map est un logiciel libre de cartographie.</p>
+            <p className={Cls.intro}>Abc-Map est un logiciel de cartographie libre et gratuit.</p>
           </div>
 
           <div>
             <h5>Comment ça marche ?</h5>
             <ul>
               <li>
-                Vous pouvez tout de suite vous lancer sur <Link to={FrontendRoutes.map().raw()}>la page Carte</Link> !
+                Lancez-vous tout de suite sur la <Link to={FrontendRoutes.map().raw()}>page Carte</Link> !
               </li>
               <li>
-                ... mais vous feriez bien de prendre quelques minutes pour consulter{' '}
-                <Link to={FrontendRoutes.documentation().raw()}>la page Documentation</Link>
-              </li>
-              <li>
-                Importez des données de votre ordinateur ou <Link to={FrontendRoutes.dataStore().raw()}>sur la page Catalogue de données</Link>
-              </li>
-              <li>
-                Si vous le souhaitez, appliquez un traitement de données sur{' '}
-                <Link to={FrontendRoutes.dataProcessing().withoutOptionals()}>la page Traitement de données</Link>
-              </li>
-              <li>
-                Mettez en page et exportez votre carte sur <Link to={FrontendRoutes.layout().raw()}>la page Mise en page</Link>
+                Ou prenez quelques minutes pour consulter la page <Link to={FrontendRoutes.documentation().raw()}> Documentation</Link>
               </li>
             </ul>
 
@@ -108,29 +97,30 @@ class LandingView extends Component<Props, State> {
           {!authenticated && (
             <div>
               <h3>Inscription, connexion</h3>
-              <p>
+              <p className={'mb-5'}>
                 La connexion est <i>facultative</i>, mais elle permet de sauvegarder ses cartes en ligne.
               </p>
               <div>
                 <button className={'btn btn-primary mr-3'} onClick={this.handleRegister} data-cy={'open-registration'}>
-                  <i className={'fa fa-feather-alt'} />
+                  <i className={'fa fa-feather-alt mr-3'} />
                   S&apos;inscrire
                 </button>
                 <button className={'btn btn-primary mr-3'} onClick={this.handleLogin} data-cy={'open-login'}>
-                  <i className={'fa fa-lock-open'} />
+                  <i className={'fa fa-lock-open mr-3'} />
                   Se connecter
                 </button>
               </div>
             </div>
           )}
 
-          <div>
-            <Link to={FrontendRoutes.about().raw()}>A propos de cette plateforme&nbsp;&nbsp;⚖️</Link>
+          <div className={'d-flex flex-column mt-2'}>
+            <Link to={FrontendRoutes.funding().raw()}>Participez au financement d&apos;Abc-Map&nbsp;&nbsp;💌️</Link>
+            <Link to={FrontendRoutes.legalMentions().raw()}>A propos de cette plateforme&nbsp;&nbsp;⚖️</Link>
           </div>
         </div>
 
         <div className={Cls.rightColumn}>
-          {/* Some bullshit illustration */}
+          {/* Some bullshit (but pretty !) illustration */}
 
           <img src={illustration} alt={'Une belle illustration pour faire comme les vrais !'} className={Cls.illustration} />
 

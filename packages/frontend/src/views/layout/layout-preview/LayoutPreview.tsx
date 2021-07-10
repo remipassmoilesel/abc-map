@@ -29,6 +29,7 @@ import { E2eMapWrapper } from '../../../core/geo/map/E2eMapWrapper';
 import Cls from './LayoutPreview.module.scss';
 import { Control } from 'ol/control';
 import { LegendRenderer } from '../../../core/geo/legend/LegendRenderer';
+import { AttributionRenderer } from '../../../core/project/AttributionRenderer';
 
 const logger = Logger.get('LayoutPreview.tsx', 'warn');
 
@@ -43,12 +44,13 @@ interface Props {
 interface State {
   previewMap?: MapWrapper;
   legendCanvas?: HTMLCanvasElement;
-  legendControl?: Control;
+  attributionsCanvas?: HTMLCanvasElement;
 }
 
 class LayoutPreview extends Component<Props, State> {
   private mapRef = React.createRef<HTMLDivElement>();
   private legendRenderer = new LegendRenderer();
+  private attributionRenderer = new AttributionRenderer();
 
   constructor(props: Props) {
     super(props);
@@ -102,9 +104,8 @@ class LayoutPreview extends Component<Props, State> {
   private async setupPreview(layout?: AbcLayout): Promise<void> {
     // We dispose previous map
     this.state.previewMap?.dispose();
-    this.state.legendControl?.dispose();
     if (!layout) {
-      this.setState({ previewMap: undefined, legendCanvas: undefined, legendControl: undefined });
+      this.setState({ previewMap: undefined, legendCanvas: undefined });
       return;
     }
 
@@ -146,6 +147,11 @@ class LayoutPreview extends Component<Props, State> {
     canvas.height = legend.height * styleRatio;
     await this.legendRenderer.renderLegend(legend, canvas, styleRatio);
 
+    // Attributions initialization
+    const attributions = mainMap.getTextAttributions();
+    const attrCanvas = this.initializeAttributionsCanvas(attributions, legend, previewMap);
+    this.attributionRenderer.render(attributions, attrCanvas, styleRatio);
+
     previewMap.unwrap().setView(
       new View({
         center: layout.view.center,
@@ -172,14 +178,27 @@ class LayoutPreview extends Component<Props, State> {
   private initializeLegendCanvas(legend: AbcLegend, previewMap: MapWrapper): HTMLCanvasElement {
     logger.debug('Initializing legend canvas');
 
-    const legendCanvas = document.createElement('canvas');
-    this.legendRenderer.setPreviewStyle(legend, legendCanvas);
+    const canvas = document.createElement('canvas');
+    this.legendRenderer.setPreviewStyle(legend, canvas);
 
-    const legendControl = new Control({ element: legendCanvas });
-    previewMap.unwrap().addControl(legendControl);
+    const control = new Control({ element: canvas });
+    previewMap.unwrap().addControl(control);
 
-    this.setState({ legendCanvas, legendControl });
-    return legendCanvas;
+    this.setState({ legendCanvas: canvas });
+    return canvas;
+  }
+
+  private initializeAttributionsCanvas(attributions: string[], legend: AbcLegend, previewMap: MapWrapper): HTMLCanvasElement {
+    logger.debug('Initializing attributions canvas');
+
+    const canvas = document.createElement('canvas');
+    this.attributionRenderer.setPreviewStyle(attributions, legend, canvas);
+
+    const control = new Control({ element: canvas });
+    previewMap.unwrap().addControl(control);
+
+    this.setState({ attributionsCanvas: canvas });
+    return canvas;
   }
 
   /**

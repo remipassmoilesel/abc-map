@@ -18,7 +18,7 @@
 
 import { Map } from 'ol';
 import { LayerProperties, AbcProjection, VectorMetadata, PredefinedLayerModel } from '@abc-map/shared';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import { ResizeObserverFactory } from '../../utils/ResizeObserverFactory';
 import BaseEvent from 'ol/events/Event';
 import { Logger } from '@abc-map/shared';
@@ -275,6 +275,27 @@ export class MapWrapper {
     const duration = 1500;
     const view = this.internal.getView();
     view.fit(extent, { duration });
+  }
+
+  public getTextAttributions(): string[] {
+    const div = document.createElement('div');
+    return _(this.getLayers())
+      .flatMap((lay) => lay.getSource().getAttributions())
+      .flatMap((attr) => {
+        if (!attr) {
+          return [];
+        }
+
+        const attributions = attr({} as any); // Typings are borked
+        return attributions instanceof Array ? attributions : [attributions];
+      })
+      .uniq() // Some attributions can appear twice
+      .map((attr) => {
+        div.innerHTML = attr;
+        return div.textContent || div.innerText || '';
+      })
+      .push('🌍  Abc-Map')
+      .value();
   }
 
   public addSizeListener(listener: SizeListener): void {

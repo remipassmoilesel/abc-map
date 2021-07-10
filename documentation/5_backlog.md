@@ -1,5 +1,6 @@
 # Backlog
 
+* [Lines with arrows](#lines-with-arrows)
 * [Better user experience](#better-user-experience)
 * [Better icons and visuals](#better-icons-and-visuals)
 * [Lighter deployment options](#lighter-deployment-options)
@@ -15,6 +16,11 @@
 * [Custom icons](#custom-icons)
 * [Images](#images)
 * [Datastore artefact with prompt](#datastore-artefact-with-prompt)
+  
+
+## Lines with arrows
+
+Users should be able to draw lines with arrows.
 
 
 ## Better user experience

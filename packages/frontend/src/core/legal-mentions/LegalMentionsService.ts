@@ -15,12 +15,21 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
+import { AxiosInstance } from 'axios';
+import { ToastService } from '../ui/ToastService';
+import { LegalMentionsRoutes as Api } from '../http/ApiRoutes';
+import { BlobIO } from '@abc-map/shared';
 
-.about {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
+export class LegalMentionsService {
+  constructor(private httpClient: AxiosInstance, private toasts: ToastService) {}
 
-  padding: 4rem;
+  public get(): Promise<string> {
+    return this.httpClient
+      .get(Api.legalMentions())
+      .then((res) => BlobIO.asString(res.data))
+      .catch((err) => {
+        this.toasts.httpError(err);
+        return Promise.reject(err);
+      });
+  }
 }

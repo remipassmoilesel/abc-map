@@ -27,7 +27,7 @@ import { ToastService } from './ui/ToastService';
 import { ModalService } from './ui/ModalService';
 import { VoteService } from './vote/VoteService';
 import { StyleFactory } from './geo/styles/StyleFactory';
-import { AboutService } from './about/AboutService';
+import { LegalMentionsService } from './legal-mentions/LegalMentionsService';
 import { ProjectEventType } from './project/ProjectEvent';
 import { Logger } from '@abc-map/shared';
 
@@ -42,7 +42,7 @@ export interface Services {
   history: HistoryService;
   dataStore: DataStoreService;
   vote: VoteService;
-  about: AboutService;
+  legalMentions: LegalMentionsService;
 }
 
 let instance: Services | undefined;
@@ -66,8 +66,9 @@ function serviceFactory(): Services {
   const authentication = new AuthenticationService(jsonClient, mainStore, toasts);
   const dataStore = new DataStoreService(jsonClient, downloadClient, toasts, geo);
   const vote = new VoteService(jsonClient, toasts);
-  const about = new AboutService(downloadClient, toasts);
+  const legalMentions = new LegalMentionsService(downloadClient, toasts);
 
+  // Here we can listen to project changes for global actions
   project.addEventListener((ev) => {
     if (ProjectEventType.NewProject === ev.type) {
       history.resetHistory();
@@ -89,6 +90,6 @@ function serviceFactory(): Services {
     history,
     dataStore,
     vote,
-    about,
+    legalMentions,
   };
 }
