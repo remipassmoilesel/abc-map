@@ -49,7 +49,7 @@ describe('Layout', function () {
         .then(() => LayoutPreview.getReference())
         .should((map) => {
           const view = map.getViewExtent();
-          expect(view).deep.equal([-2297924.619781941, -8101663.15454807, 10626848.92093467, 10073140.74773206]);
+          expect(view).deep.equal([-4968806.778743008, -5487190.203408006, 13297731.079895737, 7458667.796591994]);
         });
     });
 
@@ -119,7 +119,7 @@ describe('Layout', function () {
         .then(() => Toasts.assertText('Export terminé !'))
         .then(() => Download.fileAsBlob())
         .should((pdf) => {
-          expect(pdf.size).greaterThan(400_000);
+          expect(pdf.size).greaterThan(100_000);
         })
         .get('[data-cy=close-solicitation-modal]')
         .click();
@@ -135,7 +135,7 @@ describe('Layout', function () {
         .then(() => Toasts.assertText('Export terminé !'))
         .then(() => Download.fileAsBlob())
         .should((pdf) => {
-          expect(pdf.size).greaterThan(400_000);
+          expect(pdf.size).greaterThan(100_000);
         })
         .get('[data-cy=close-solicitation-modal]')
         .click();

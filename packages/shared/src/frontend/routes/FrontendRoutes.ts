@@ -59,8 +59,12 @@ export class FrontendRoutes {
     return new Route<EmptyParams>('/user-profile');
   }
 
-  public static about() {
-    return new Route<EmptyParams>('/about');
+  public static legalMentions() {
+    return new Route<EmptyParams>('/legal-mentions');
+  }
+
+  public static funding() {
+    return new Route<EmptyParams>('/funding');
   }
 }
 

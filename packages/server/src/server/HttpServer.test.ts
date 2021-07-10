@@ -111,52 +111,56 @@ describe('HttpServer', () => {
     assert.equal(
       req.body.replace(/\s/gi, '').replace(new RegExp(config.externalUrl, 'ig'), 'http://external-url'),
       `
-<?xml version="1.0" encoding="UTF-8"?>
-
+<?xmlversion="1.0"encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-
-  <url>
-    <loc>http://external-url/</loc>
-    <lastmod>2021-22-05</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>1</priority>
-  </url>
-
-  <url>
-    <loc>http://external-url/documentation</loc>
-    <lastmod>2021-22-05</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <url>
-    <loc>http://external-url/map</loc>
-    <lastmod>2021-22-05</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <url>
-    <loc>http://external-url/datastore</loc>
-    <lastmod>2021-22-05</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>http://external-url/datastore</loc>
-    <lastmod>2021-22-05</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>http://external-url/layout</loc>
-    <lastmod>2021-22-05</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-
+    <url>
+        <loc>http://external-url/</loc>
+        <lastmod>2021-22-05</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>1</priority>
+    </url>
+    <url>
+        <loc>http://external-url/documentation</loc>
+        <lastmod>2021-22-05</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.9</priority>
+    </url>
+    <url>
+        <loc>http://external-url/funding</loc>
+        <lastmod>2021-22-05</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>http://external-url/map</loc>
+        <lastmod>2021-22-05</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>http://external-url/datastore</loc>
+        <lastmod>2021-22-05</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>http://external-url/datastore</loc>
+        <lastmod>2021-22-05</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>http://external-url/layout</loc>
+        <lastmod>2021-22-05</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.5</priority>
+    </url>
+    <url>
+        <loc>http://external-url/legal-mentions</loc>
+        <lastmod>2021-22-05</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.2</priority>
+    </url>
 </urlset>`.replace(/\s/gi, '')
     );
   });

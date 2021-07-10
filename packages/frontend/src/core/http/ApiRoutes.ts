@@ -86,8 +86,8 @@ export class VoteRoutes {
   }
 }
 
-export class AboutRoutes {
-  public static about(): string {
-    return '/about';
+export class LegalMentionsRoutes {
+  public static legalMentions(): string {
+    return '/legal-mentions';
   }
 }

@@ -21,12 +21,13 @@ import View from 'ol/View';
 import { fromLonLat } from 'ol/proj';
 import { DEFAULT_PROJECTION } from '@abc-map/shared';
 import { MapWrapper } from './MapWrapper';
-import { defaults as defaultControls, ScaleLine } from 'ol/control';
+import { Attribution, ScaleLine, Zoom } from 'ol/control';
 import { layoutMapInteractions } from './interactions';
 import * as _ from 'lodash';
 
 const defaultView = createView(2, [10, 45]);
 
+// These views are used at map creation
 const views: View[] = [
   createView(6, [-65, 47]),
   createView(6, [-85, 23]),
@@ -51,9 +52,12 @@ const views: View[] = [
 export class MapFactory {
   public static createDefault(): MapWrapper {
     const scale = new ScaleLine({ units: 'metric' });
+    const attributions = new Attribution({ collapsible: true });
+    const zoom = new Zoom();
+
     const internal = new Map({
       layers: [],
-      controls: defaultControls().extend([scale]),
+      controls: [zoom, attributions, scale],
       view: defaultView,
     });
 

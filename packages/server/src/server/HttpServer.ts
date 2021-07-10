@@ -158,7 +158,7 @@ export class HttpServer {
     );
 
     // Legal mentions
-    this.app.get('/api/about', (req, reply) => void reply.send(this.config.about));
+    this.app.get('/api/legal-mentions', (req, reply) => void reply.send(this.config.legalMentions));
 
     // Sitemap
     this.app.get('/sitemap.xml', this.generateSitemap);

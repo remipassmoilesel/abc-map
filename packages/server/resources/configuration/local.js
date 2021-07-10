@@ -55,7 +55,7 @@ module.exports = {
     users: 100,
     persistEmails: true,
   },
-  about: `
+  legalMentions: `
         <h3 class='my-3'>Conditions d'utilisation</h3>
         <div>
             <div>Ce logiciel est un logiciel libre sous licence <a target='_blank' href='https://www.gnu.org/licenses/agpl-3.0.html'>GNU AGPLv3</a>.</div>
@@ -74,5 +74,15 @@ module.exports = {
 
         <h3 class='mt-5 mb-3'>Mentions légales</h3>
         <div>...</div>
+
+        <h3 class='mt-5 mb-3'>Réseaux</h3>
+        <div class='d-flex flex-column'>
+          <a href={'https://twitter.com/AbcRemi'} target={'_blank'} rel="noreferrer">
+            Twitter
+          </a>
+          <a href={'https://remi-pace.fr'} target={'_blank'} rel="noreferrer">
+            Site personnel de l&apos;auteur
+          </a>
+        </div>
         `
 };

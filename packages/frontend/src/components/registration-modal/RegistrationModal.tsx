@@ -18,7 +18,7 @@
 
 import React, { ChangeEvent, Component, KeyboardEvent, ReactNode } from 'react';
 import { Logger } from '@abc-map/shared';
-import { ModalEventListener, ModalEventType, ModalStatus } from '../../core/ui/typings';
+import { ModalEventType, ModalStatus } from '../../core/ui/typings';
 import { ServiceProps, withServices } from '../../core/withServices';
 import { Modal } from 'react-bootstrap';
 import { PasswordStrength, ValidationHelper } from '../../core/utils/ValidationHelper';
@@ -33,7 +33,6 @@ interface State {
   email: string;
   password: string;
   confirmation: string;
-  listener?: ModalEventListener;
   formState: FormState;
 }
 
@@ -146,18 +145,18 @@ class RegistrationModal extends Component<ServiceProps, State> {
   public componentDidMount() {
     const { modals } = this.props.services;
 
-    const listener: ModalEventListener = () => this.setState({ visible: true });
-    modals.addListener(ModalEventType.ShowRegistration, listener);
-    this.setState({ listener });
+    modals.addListener(ModalEventType.ShowRegistration, this.handleOpen);
   }
 
   public componentWillUnmount() {
     const { modals } = this.props.services;
 
-    if (this.state.listener) {
-      modals.removeListener(ModalEventType.ShowRegistration, this.state.listener);
-    }
+    modals.removeListener(ModalEventType.ShowRegistration, this.handleOpen);
   }
+
+  private handleOpen = () => {
+    this.setState({ visible: true });
+  };
 
   private handleCancel = () => {
     const { modals } = this.props.services;

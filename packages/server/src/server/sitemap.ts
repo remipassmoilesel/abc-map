@@ -39,6 +39,12 @@ export const Sitemap: Url[] = [
     priority: 0.9,
   },
   {
+    loc: FrontendRoutes.funding().raw(),
+    changefreq: 'monthly',
+    lastmod: '2021-22-05',
+    priority: 0.8,
+  },
+  {
     loc: FrontendRoutes.map().raw(),
     changefreq: 'monthly',
     lastmod: '2021-22-05',
@@ -61,6 +67,12 @@ export const Sitemap: Url[] = [
     changefreq: 'monthly',
     lastmod: '2021-22-05',
     priority: 0.5,
+  },
+  {
+    loc: FrontendRoutes.legalMentions().raw(),
+    changefreq: 'monthly',
+    lastmod: '2021-22-05',
+    priority: 0.2,
   },
 ];
 

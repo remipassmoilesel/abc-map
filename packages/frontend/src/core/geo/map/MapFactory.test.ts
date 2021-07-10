@@ -37,7 +37,7 @@ describe('MapFactory', () => {
     expect(layers[0].get(LayerProperties.Active)).toBeFalsy();
     expect(layers[1].get(LayerProperties.Active)).toBeTruthy();
     expect(internal.getView().getProjection().getCode()).toEqual(DEFAULT_PROJECTION.name);
-    expect(getControlNames(internal)).toEqual(['Attribution', 'Rotate', 'ScaleLine', 'Zoom']);
+    expect(getControlNames(internal)).toEqual(['Attribution', 'ScaleLine', 'Zoom']);
     expect(TestHelper.interactionNames(internal)).toEqual(['DoubleClickZoom', 'DragPan', 'KeyboardPan', 'MouseWheelZoom']);
   });
 

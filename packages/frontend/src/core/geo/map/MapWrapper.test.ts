@@ -17,8 +17,7 @@
  */
 
 import { MapFactory } from './MapFactory';
-import { LayerProperties, PredefinedLayerModel } from '@abc-map/shared';
-import { MapTool } from '@abc-map/shared';
+import { LayerProperties, MapTool, PredefinedLayerModel } from '@abc-map/shared';
 import { Map } from 'ol';
 import { logger, MapWrapper } from './MapWrapper';
 import { ToolRegistry } from '../../tools/ToolRegistry';
@@ -314,6 +313,22 @@ describe('MapWrapper', function () {
       );
 
       expect(map.containsCredentials()).toEqual(true);
+    });
+  });
+
+  describe('getTextAttributions()', () => {
+    it('with no layer', () => {
+      const map = MapFactory.createNaked();
+
+      expect(map.getTextAttributions()).toEqual(['🌍  Abc-Map']);
+    });
+
+    it('with several layers', () => {
+      const map = MapFactory.createNaked();
+      map.addLayer(LayerFactory.newPredefinedLayer(PredefinedLayerModel.OSM));
+      map.addLayer(LayerFactory.newPredefinedLayer(PredefinedLayerModel.StamenToner));
+
+      expect(map.getTextAttributions()).toEqual(['© OpenStreetMap contributors.', 'Map tiles by Stamen Design, under CC BY 3.0.', '🌍  Abc-Map']);
     });
   });
 });

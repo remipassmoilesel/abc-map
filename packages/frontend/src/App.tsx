@@ -44,8 +44,9 @@ import UserAccountView from './views/user-account/UserAccountView';
 import SetPasswordModal from './components/set-password-modal/SetPasswordModal';
 import MapLegendView from './views/map-legend/MapLegendView';
 import LegendSymbolPickerModal from './components/legend-symbol-picker-modal/LegendSymbolPickerModal';
-import AboutView from './views/about/AboutView';
+import LegalMentionsView from './views/legal-mentions/LegalMentionsView';
 import LongOperationModal from './components/long-operation-modal/LongOperationModal';
+import FundingView from './views/funding/FundingView';
 
 class App extends Component<ServiceProps, {}> {
   public render(): ReactNode {
@@ -63,7 +64,8 @@ class App extends Component<ServiceProps, {}> {
           <Route exact path={FrontendRoutes.dataProcessing().raw()} component={DataProcessingView} />
           <Route exact path={FrontendRoutes.resetPassword().raw()} component={ResetPasswordView} />
           <Route exact path={FrontendRoutes.userAccount().raw()} component={UserAccountView} />
-          <Route exact path={FrontendRoutes.about().raw()} component={AboutView} />
+          <Route exact path={FrontendRoutes.legalMentions().raw()} component={LegalMentionsView} />
+          <Route exact path={FrontendRoutes.funding().raw()} component={FundingView} />
           <Route path={'*'} component={NotFoundView} />
         </Switch>
         <ToastContainer className={'toast-container'} />

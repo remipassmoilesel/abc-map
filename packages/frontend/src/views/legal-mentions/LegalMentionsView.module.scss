@@ -16,55 +16,20 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-@import "src/assets/styles/variables";
-
-.landing {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-
+.legalMentions {
+  width: 100vw;
   height: 95vh;
-  padding: 3rem;
+
   overflow: auto;
-
-  font-size: 1.1em;
-
-  :global(.btn) {
-    width: 13rem;
-  }
-
-  button {
-    height: 3rem;
-    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-  }
 }
 
-.leftColumn {
+.content {
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
+  justify-content: flex-start;
+  align-items: flex-start;
 
-  margin-right: 1rem;
-}
-
-.rightColumn {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-
-  margin-left: 1rem;
-}
-
-.illustration {
-  width: 40vw;
-  margin-bottom: 2rem;
-}
-
-.intro {
-  font-size: 1.3rem;
-}
-
-.version {
-  font-size: 0.9em;
-  color: #ffffff;
+  width: 60vw;
+  max-width: 60vw;
+  margin: 4rem auto;
 }

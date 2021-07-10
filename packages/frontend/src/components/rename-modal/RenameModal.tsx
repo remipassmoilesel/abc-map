@@ -18,7 +18,7 @@
 
 import React, { ChangeEvent, Component, ReactNode } from 'react';
 import { Modal } from 'react-bootstrap';
-import { ModalEventListener, ModalEventType, ModalStatus, ShowRenameModal } from '../../core/ui/typings';
+import { ModalEventType, ModalStatus, ShowRenameModal } from '../../core/ui/typings';
 import { ServiceProps, withServices } from '../../core/withServices';
 
 interface State {
@@ -26,7 +26,6 @@ interface State {
   title: string;
   message: string;
   value: string;
-  listener?: ModalEventListener<ShowRenameModal>;
 }
 
 class RenameModal extends Component<ServiceProps, State> {
@@ -75,18 +74,18 @@ class RenameModal extends Component<ServiceProps, State> {
   public componentDidMount() {
     const { modals } = this.props.services;
 
-    const listener: ModalEventListener<ShowRenameModal> = (ev) => this.setState({ visible: true, title: ev.title, message: ev.message, value: ev.value });
-    modals.addListener(ModalEventType.ShowRename, listener);
-    this.setState({ listener });
+    modals.addListener(ModalEventType.ShowRename, this.handleOpen);
   }
 
   public componentWillUnmount() {
     const { modals } = this.props.services;
 
-    if (this.state.listener) {
-      modals.removeListener(ModalEventType.ShowRename, this.state.listener);
-    }
+    modals.removeListener(ModalEventType.ShowRename, this.handleOpen);
   }
+
+  private handleOpen = (ev: ShowRenameModal) => {
+    this.setState({ visible: true, title: ev.title, message: ev.message, value: ev.value });
+  };
 
   private handleInputChanged = (ev: ChangeEvent<HTMLInputElement>) => {
     this.setState({ value: ev.target.value });

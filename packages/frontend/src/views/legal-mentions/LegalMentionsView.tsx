@@ -18,40 +18,42 @@
 
 import React, { Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/shared';
-import Cls from './AboutView.module.scss';
+import Cls from './LegalMentionsView.module.scss';
 import { pageSetup } from '../../core/utils/page-setup';
 import { ServiceProps, withServices } from '../../core/withServices';
 
-const logger = Logger.get('AboutView.tsx', 'info');
+const logger = Logger.get('LegalMentionsView.tsx', 'info');
 
 interface State {
-  about?: string;
+  legalMentions?: string;
 }
 
-class AboutView extends Component<ServiceProps, State> {
+class LegalMentionsView extends Component<ServiceProps, State> {
   constructor(props: ServiceProps) {
     super(props);
     this.state = {};
   }
 
   public render(): ReactNode {
-    const about = this.state.about;
+    const legalMentions = this.state.legalMentions;
     return (
-      <div className={Cls.about}>
-        <h1 className={'mb-4'}>A propos</h1>
+      <div className={Cls.legalMentions}>
+        <div className={Cls.content}>
+          <h1 className={'mb-4'}>A propos</h1>
 
-        {about && <div dangerouslySetInnerHTML={{ __html: about }} />}
+          {legalMentions && <div dangerouslySetInnerHTML={{ __html: legalMentions }} />}
+        </div>
       </div>
     );
   }
 
   public componentDidMount() {
-    pageSetup('A propos');
-    this.props.services.about
+    pageSetup('A propos de cette plateforme');
+    this.props.services.legalMentions
       .get()
-      .then((about) => this.setState({ about }))
+      .then((legalMentions) => this.setState({ legalMentions }))
       .catch((err) => logger.error('Cannot fetch legal mentions: ', err));
   }
 }
 
-export default withServices(AboutView);
+export default withServices(LegalMentionsView);

@@ -18,7 +18,7 @@
 
 import React, { ChangeEvent, Component, ReactNode } from 'react';
 import { Modal } from 'react-bootstrap';
-import { ModalEventListener, ModalEventType, ModalStatus, ShowSetPasswordModal } from '../../core/ui/typings';
+import { ModalEventType, ModalStatus, ShowSetPasswordModal } from '../../core/ui/typings';
 import { ServiceProps, withServices } from '../../core/withServices';
 import FormValidationLabel from '../form-validation-label/FormValidationLabel';
 import { PasswordStrength, ValidationHelper } from '../../core/utils/ValidationHelper';
@@ -31,7 +31,6 @@ interface State {
   password: string;
   confirmation: string;
   formState: FormState;
-  listener?: ModalEventListener<ShowSetPasswordModal>;
 }
 
 class SetPasswordModal extends Component<ServiceProps, State> {
@@ -114,18 +113,18 @@ class SetPasswordModal extends Component<ServiceProps, State> {
   public componentDidMount() {
     const { modals } = this.props.services;
 
-    const listener: ModalEventListener<ShowSetPasswordModal> = (ev) => this.setState({ visible: true, title: ev.title, message: ev.message });
-    modals.addListener(ModalEventType.ShowSetPassword, listener);
-    this.setState({ listener });
+    modals.addListener(ModalEventType.ShowSetPassword, this.handleOpen);
   }
 
   public componentWillUnmount() {
     const { modals } = this.props.services;
 
-    if (this.state.listener) {
-      modals.removeListener(ModalEventType.ShowSetPassword, this.state.listener);
-    }
+    modals.removeListener(ModalEventType.ShowSetPassword, this.handleOpen);
   }
+
+  private handleOpen = (ev: ShowSetPasswordModal) => {
+    this.setState({ visible: true, title: ev.title, message: ev.message });
+  };
 
   private handlePasswordChange = (ev: ChangeEvent<HTMLInputElement>) => {
     const password = ev.target.value;

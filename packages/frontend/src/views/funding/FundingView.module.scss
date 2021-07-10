@@ -15,21 +15,31 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
-import { AxiosInstance } from 'axios';
-import { ToastService } from '../ui/ToastService';
-import { AboutRoutes as Api } from '../http/ApiRoutes';
-import { BlobIO } from '@abc-map/shared';
 
-export class AboutService {
-  constructor(private httpClient: AxiosInstance, private toasts: ToastService) {}
+.funding {
+  height: 95vh;
+  width: 100vw;
 
-  public get(): Promise<string> {
-    return this.httpClient
-      .get(Api.about())
-      .then((res) => BlobIO.asString(res.data))
-      .catch((err) => {
-        this.toasts.httpError(err);
-        return Promise.reject(err);
-      });
-  }
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+
+  width: 60vw;
+  max-width: 60vw;
+  margin: 4rem auto;
+}
+
+.quote {
+  font-style: italic;
+  font-size: 1.3rem;
+}
+
+.quoteAuthor {
+  font-size: 0.9rem;
 }

@@ -30,7 +30,7 @@ describe('Legend', function () {
       TestHelper.init();
     });
 
-    it('on first view, see no layout and can create one with center button', function () {
+    it('can create a legend', function () {
       cy.visit(FrontendRoutes.map().raw())
         .then(() => MainMap.fixedView())
         // First point

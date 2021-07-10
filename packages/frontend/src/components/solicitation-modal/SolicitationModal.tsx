@@ -18,26 +18,28 @@
 
 import React, { Component, ReactNode } from 'react';
 import { Modal } from 'react-bootstrap';
-import { ModalEventListener, ModalEventType, ModalStatus } from '../../core/ui/typings';
+import { ModalEventType, ModalStatus } from '../../core/ui/typings';
 import { ServiceProps, withServices } from '../../core/withServices';
 import { Titles } from './titles';
 import * as _ from 'lodash';
 import { Encouragements } from './encouragements';
-import { Logger } from '@abc-map/shared';
+import { FrontendRoutes, Logger } from '@abc-map/shared';
 import Cls from './SolicitationModal.module.scss';
 import { VoteValue } from '@abc-map/shared';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
+
+const logger = Logger.get('SolicitationModal.ts');
+
+declare type Props = ServiceProps & RouteComponentProps;
 
 interface State {
   visible: boolean;
-  listener?: ModalEventListener;
   title?: string;
   encouragement?: string;
 }
 
-const logger = Logger.get('SolicitationModal.ts');
-
-class SolicitationModal extends Component<ServiceProps, State> {
-  constructor(props: ServiceProps) {
+class SolicitationModal extends Component<Props, State> {
+  constructor(props: Props) {
     super(props);
     this.state = { visible: false };
   }
@@ -64,8 +66,8 @@ class SolicitationModal extends Component<ServiceProps, State> {
               <br /> soutenez votre logiciel !
             </p>
 
-            <button onClick={this.handleDonate} className={'btn btn-primary'}>
-              Faire un don
+            <button onClick={this.handleDonate} className={'btn btn-primary mt-5'}>
+              Soutenir le développement
             </button>
             <button onClick={this.handleDonate} className={'btn btn-link'}>
               A quoi ça sert ?
@@ -104,23 +106,20 @@ class SolicitationModal extends Component<ServiceProps, State> {
   public componentDidMount() {
     const { modals } = this.props.services;
 
-    const listener: ModalEventListener = () => {
-      const title = _.sample(Titles);
-      const encouragement = _.sample(Encouragements);
-      this.setState({ visible: true, title, encouragement });
-    };
-
-    modals.addListener(ModalEventType.ShowSolicitation, listener);
-    this.setState({ listener });
+    modals.addListener(ModalEventType.ShowSolicitation, this.handleOpen);
   }
 
   public componentWillUnmount() {
     const { modals } = this.props.services;
 
-    if (this.state.listener) {
-      modals.removeListener(ModalEventType.ShowSolicitation, this.state.listener);
-    }
+    modals.removeListener(ModalEventType.ShowSolicitation, this.handleOpen);
   }
+
+  private handleOpen = () => {
+    const title = _.sample(Titles);
+    const encouragement = _.sample(Encouragements);
+    this.setState({ visible: true, title, encouragement });
+  };
 
   private handleVote = (value: VoteValue) => {
     const { vote } = this.props.services;
@@ -130,8 +129,8 @@ class SolicitationModal extends Component<ServiceProps, State> {
   };
 
   private handleDonate = () => {
-    const { toasts } = this.props.services;
-    toasts.featureNotReady();
+    const { history } = this.props;
+    history.push(FrontendRoutes.funding().raw());
     this.close();
   };
 
@@ -147,4 +146,4 @@ class SolicitationModal extends Component<ServiceProps, State> {
   };
 }
 
-export default withServices(SolicitationModal);
+export default withRouter(withServices(SolicitationModal));

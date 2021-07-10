@@ -20,7 +20,7 @@ import React, { KeyboardEvent, ChangeEvent, Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/shared';
 import { Modal } from 'react-bootstrap';
 import { ServiceProps, withServices } from '../../core/withServices';
-import { ModalEventListener, ModalEventType, ModalStatus, ShowPasswordLostModal } from '../../core/ui/typings';
+import { ModalEventType, ModalStatus } from '../../core/ui/typings';
 import { ValidationHelper } from '../../core/utils/ValidationHelper';
 import Cls from './PasswordLostModal.module.scss';
 import FormValidationLabel from '../form-validation-label/FormValidationLabel';
@@ -31,7 +31,6 @@ interface State {
   visible: boolean;
   email: string;
   formState: FormState;
-  listener?: ModalEventListener<ShowPasswordLostModal>;
 }
 
 enum FormState {
@@ -117,18 +116,18 @@ class PasswordLostModal extends Component<ServiceProps, State> {
   public componentDidMount() {
     const { modals } = this.props.services;
 
-    const listener: ModalEventListener<ShowPasswordLostModal> = () => this.setState({ visible: true });
-    modals.addListener(ModalEventType.ShowPasswordLost, listener);
-    this.setState({ listener });
+    modals.addListener(ModalEventType.ShowPasswordLost, this.handleOpen);
   }
 
   public componentWillUnmount() {
     const { modals } = this.props.services;
 
-    if (this.state.listener) {
-      modals.removeListener(ModalEventType.ShowLogin, this.state.listener);
-    }
+    modals.removeListener(ModalEventType.ShowPasswordLost, this.handleOpen);
   }
+
+  private handleOpen = () => {
+    this.setState({ visible: true });
+  };
 
   private close = () => {
     const { modals } = this.props.services;
