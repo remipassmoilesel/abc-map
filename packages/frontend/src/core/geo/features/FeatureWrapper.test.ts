@@ -191,7 +191,7 @@ describe('FeatureWrapper', () => {
         expect(ol.get(StyleProperties.TextValue)).toEqual('Test text value');
         expect(ol.get(StyleProperties.TextColor)).toEqual('#0000FF');
         expect(ol.get(StyleProperties.TextSize)).toEqual(30);
-        expect(ol.get(StyleProperties.TextFont)).toEqual('sans-serif');
+        expect(ol.get(StyleProperties.TextFont)).toEqual('AbcCantarell');
         expect(ol.get(StyleProperties.TextOffsetX)).toEqual(20);
         expect(ol.get(StyleProperties.TextOffsetY)).toEqual(30);
         expect(ol.get(StyleProperties.TextAlignment)).toEqual('left');
@@ -220,7 +220,7 @@ describe('FeatureWrapper', () => {
       feature.unwrap().set(StyleProperties.TextValue, 'Test text value');
       feature.unwrap().set(StyleProperties.TextColor, '#0000FF');
       feature.unwrap().set(StyleProperties.TextSize, 30);
-      feature.unwrap().set(StyleProperties.TextFont, 'sans-serif');
+      feature.unwrap().set(StyleProperties.TextFont, 'AbcCantarell');
       feature.unwrap().set(StyleProperties.TextOffsetX, 20);
       feature.unwrap().set(StyleProperties.TextOffsetY, 30);
       feature.unwrap().set(StyleProperties.TextAlignment, 'left');

@@ -320,7 +320,7 @@ describe('MapWrapper', function () {
     it('with no layer', () => {
       const map = MapFactory.createNaked();
 
-      expect(map.getTextAttributions()).toEqual(['🌍  Abc-Map']);
+      expect(map.getTextAttributions()).toEqual([]);
     });
 
     it('with several layers', () => {
@@ -328,7 +328,7 @@ describe('MapWrapper', function () {
       map.addLayer(LayerFactory.newPredefinedLayer(PredefinedLayerModel.OSM));
       map.addLayer(LayerFactory.newPredefinedLayer(PredefinedLayerModel.StamenToner));
 
-      expect(map.getTextAttributions()).toEqual(['© OpenStreetMap contributors.', 'Map tiles by Stamen Design, under CC BY 3.0.', '🌍  Abc-Map']);
+      expect(map.getTextAttributions()).toEqual(['© OpenStreetMap contributors.', 'Map tiles by Stamen Design, under CC BY 3.0.']);
     });
   });
 });

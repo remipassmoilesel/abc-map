@@ -16,6 +16,8 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
+@import "src/assets/styles/variables";
+
 .item {
   margin: 10px;
   padding: 10px;
@@ -25,7 +27,7 @@
 
   &.active {
     color: white;
-    background: #007bff;
+    background: $primary;
 
     :global(.fa) {
       color: white;

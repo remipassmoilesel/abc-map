@@ -38,6 +38,13 @@ export class TestData {
     return cy.readFile(`${root}/test-project-2.abm2`, 'base64').then((str) => Cypress.Blob.base64StringToBlob(str));
   }
 
+  /**
+   * More complete project
+   */
+  public static projectSample3(): Chainable<Blob> {
+    return cy.readFile(`${root}/test-project-3.abm2`, 'base64').then((str) => Cypress.Blob.base64StringToBlob(str));
+  }
+
   public static sampleGpx(): Chainable<Blob> {
     return cy.readFile(`${root}/campings-bretagne.gpx`, 'base64').then((str) => Cypress.Blob.base64StringToBlob(str));
   }

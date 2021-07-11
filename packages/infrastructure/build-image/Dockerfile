@@ -16,17 +16,20 @@
 
 FROM node:14-buster
 
-# Cypress dependencies
-RUN apt-get update && \
-      apt-get install -y libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb
+ENV DEBIAN_FRONTEND="noninteractive" TZ="Europe/London"
 
-# NodeJS
-RUN npm i -g npm && npm install -g yarn --force
+# Toos and cypress dependencies
+RUN apt-get update && \
+      apt-get install -y libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libgconf-2-4 libnss3 libxss1 \
+      libasound2 libxtst6 xauth xvfb chromium curl imagemagick ghostscript git build-essential
+
+# Default Image magick policy does not allow PDF processing
+COPY policy.xml /etc/ImageMagick-6/policy.xml
 
 # Helm
-RUN wget https://get.helm.sh/helm-v3.5.4-linux-amd64.tar.gz && tar -xf helm-v3.5.4-linux-amd64.tar.gz \
+RUN curl -sL https://get.helm.sh/helm-v3.5.4-linux-amd64.tar.gz -o helm.tar.gz && tar -xf helm.tar.gz \
       && mv linux-amd64/helm /usr/local/bin
 
 # K6
-RUN wget https://github.com/k6io/k6/releases/download/v0.32.0/k6-v0.32.0-linux-amd64.deb \
-      && dpkg -i k6-v0.32.0-linux-amd64.deb
+RUN curl -sL https://github.com/k6io/k6/releases/download/v0.32.0/k6-v0.32.0-linux-amd64.deb -o k6.deb && dpkg -i k6.deb
+

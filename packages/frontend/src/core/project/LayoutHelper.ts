@@ -19,6 +19,7 @@
 import { LayoutFormat, Logger } from '@abc-map/shared';
 import { DimensionsPx } from '../utils/DimensionsPx';
 import { mainStore } from '../store/store';
+import { toPrecision } from '../utils/numbers';
 
 const logger = Logger.get('LayoutHelper.ts');
 
@@ -49,6 +50,6 @@ export class LayoutHelper {
     const targetDiag = Math.sqrt(mapWidth ** 2 + mapHeight ** 2);
     const mainMapDiag = Math.sqrt(mainMap.width ** 2 + mainMap.height ** 2);
 
-    return targetDiag / mainMapDiag;
+    return toPrecision(targetDiag / mainMapDiag, 2);
   }
 }

@@ -79,17 +79,17 @@ class SolicitationModal extends Component<Props, State> {
           </div>
 
           <div className={'d-flex flex-row justify-content-center mb-4'}>
-            <button onClick={() => this.handleVote(VoteValue.NOT_SATISFIED)} className={`btn btn-outline-primary ${Cls.voteBtn}`}>
-              <span className={Cls.face}>😞</span>
-              Pas bien
+            <button onClick={() => this.handleVote(VoteValue.SATISFIED)} className={`btn btn-outline-primary ${Cls.voteBtn}`}>
+              <span className={Cls.face}>🥰</span>
+              Bien !
             </button>
             <button onClick={() => this.handleVote(VoteValue.BLAH)} className={`btn btn-outline-primary ${Cls.voteBtn}`}>
               <span className={Cls.face}>🥱</span>
               Bof ...
             </button>
-            <button onClick={() => this.handleVote(VoteValue.SATISFIED)} className={`btn btn-outline-primary ${Cls.voteBtn}`}>
-              <span className={Cls.face}>🥰</span>
-              Bien !
+            <button onClick={() => this.handleVote(VoteValue.NOT_SATISFIED)} className={`btn btn-outline-primary ${Cls.voteBtn}`}>
+              <span className={Cls.face}>😞</span>
+              Pas bien
             </button>
           </div>
 

@@ -19,6 +19,7 @@
 import { ProjectActions } from '../store/project/actions';
 import {
   AbcLayout,
+  AbcLegend,
   AbcLegendItem,
   AbcProjection,
   AbcProjectManifest,
@@ -201,6 +202,14 @@ export class ProjectService {
     };
     this.addLayouts([layout]);
     return layout;
+  }
+
+  public getLayouts(): AbcLayout[] {
+    return this.store.getState().project.layouts;
+  }
+
+  public getLegend(): AbcLegend {
+    return this.store.getState().project.legend;
   }
 
   public addLayouts(layouts: AbcLayout[]): void {

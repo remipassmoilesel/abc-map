@@ -61,7 +61,7 @@ describe('StorePersistence', () => {
           text: {
             color: '#123456',
             size: 30,
-            font: 'sans-serif',
+            font: 'AbcCantarell',
           },
           point: {
             size: 5,
@@ -109,7 +109,7 @@ describe('StorePersistence', () => {
           text: {
             color: '#123456',
             size: 30,
-            font: 'sans-serif',
+            font: 'AbcCantarell',
           },
           point: {
             size: 5,

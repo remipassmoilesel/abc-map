@@ -294,7 +294,6 @@ export class MapWrapper {
         div.innerHTML = attr;
         return div.textContent || div.innerText || '';
       })
-      .push('🌍  Abc-Map')
       .value();
   }
 

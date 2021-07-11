@@ -24,7 +24,7 @@ import VectorSource from 'ol/source/Vector';
 import { findFeatureNearCursor } from '../common/findFeatureNearCursor';
 import { Interaction } from 'ol/interaction';
 import MapBrowserEventType from 'ol/MapBrowserEventType';
-import { withMainButton, withShiftKey } from '../common/common-conditions';
+import { withControlKey, withMainButton } from '../common/common-conditions';
 
 const logger = Logger.get('TextInteraction.ts');
 
@@ -45,7 +45,7 @@ export class TextInteraction extends Interaction {
    * @param event
    */
   public handleEvent(event: MapBrowserEvent<UIEvent>): boolean {
-    if (withShiftKey(event) || !withMainButton(event)) {
+    if (!withControlKey(event) || !withMainButton(event)) {
       return true;
     }
 
@@ -72,12 +72,8 @@ export class TextInteraction extends Interaction {
       text,
       x,
       y,
-      (text) => {
-        this.dispatchEvent(new TextChanged(feature, text));
-      },
-      (text) => {
-        this.dispatchEvent(new TextEnd(feature, text));
-      }
+      (text) => this.dispatchEvent(new TextChanged(feature, text)),
+      (text) => this.dispatchEvent(new TextEnd(feature, text))
     );
 
     return false;
@@ -85,33 +81,49 @@ export class TextInteraction extends Interaction {
 
   private showTextBox(value: string, x: number, y: number, onChange: (text: string) => void, onClose: (text: string) => void) {
     const backdrop = document.createElement('div');
+    const inputBox = document.createElement('div');
+    const input = document.createElement('input');
+    const button = document.createElement('button');
+
+    const handleValidation = () => {
+      document.body.removeChild(backdrop);
+      document.body.removeChild(inputBox);
+      onClose(input.value);
+    };
+
     backdrop.style.position = 'fixed';
     backdrop.style.top = '0';
     backdrop.style.right = '0';
     backdrop.style.left = '0';
     backdrop.style.bottom = '0';
     backdrop.dataset['cy'] = 'text-box-backdrop';
+    backdrop.addEventListener('click', handleValidation);
+
+    inputBox.style.display = 'flex';
+    inputBox.style.justifyContent = 'stretch';
+    inputBox.style.alignItems = 'stretch';
+    inputBox.style.border = 'solid 1px silver';
+    inputBox.style.borderRadius = '5px';
+    inputBox.style.background = 'white';
+    inputBox.style.position = 'absolute';
+    inputBox.style.left = x + 'px';
+    inputBox.style.top = y - 30 + 'px';
+    inputBox.style.width = `300px`;
+
+    input.type = 'text';
+    input.value = value;
+    input.dataset['cy'] = 'text-box';
+    input.className = 'form-control';
+    input.oninput = () => onChange(input.value);
+
+    button.type = 'button';
+    button.className = 'btn btn-outline-primary';
+    button.onclick = handleValidation;
+    button.innerText = 'Ok';
+
+    inputBox.append(input);
+    inputBox.append(button);
     document.body.append(backdrop);
-
-    const box = document.createElement('input');
-    box.type = 'text';
-    box.value = value;
-    box.dataset['cy'] = 'text-box';
-    box.className = 'form-control';
-    box.style.position = 'absolute';
-    box.style.left = x + 'px';
-    box.style.top = y - 30 + 'px';
-    box.style.width = `200px`;
-    document.body.append(box);
-
-    backdrop.addEventListener('click', () => {
-      document.body.removeChild(backdrop);
-      document.body.removeChild(box);
-      onClose(box.value);
-    });
-
-    box.oninput = () => {
-      onChange(box.value);
-    };
+    document.body.append(inputBox);
   }
 }

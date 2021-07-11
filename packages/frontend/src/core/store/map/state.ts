@@ -48,7 +48,7 @@ export const mapInitialState: MapState = {
     },
     text: {
       color: '#FF5733',
-      font: 'sans-serif',
+      font: 'AbcCantarell',
       size: 30,
     },
     point: {

@@ -22,7 +22,7 @@ import { httpApiClient, httpDownloadClient, httpExternalClient } from './http/ht
 import { AuthenticationService } from './authentication/AuthenticationService';
 import { HistoryService } from './history/HistoryService';
 import { DataStoreService } from './data/DataStoreService';
-import { mainStore } from './store/store';
+import { MainStore, mainStore } from './store/store';
 import { ToastService } from './ui/ToastService';
 import { ModalService } from './ui/ModalService';
 import { VoteService } from './vote/VoteService';
@@ -48,12 +48,12 @@ export interface Services {
 let instance: Services | undefined;
 export function getServices(): Services {
   if (!instance) {
-    instance = serviceFactory();
+    instance = servicesFactory(mainStore);
   }
   return instance;
 }
 
-function serviceFactory(): Services {
+export function servicesFactory(store: MainStore): Services {
   const jsonClient = httpApiClient(5_000);
   const downloadClient = httpDownloadClient(5_000);
   const externalClient = httpExternalClient(5_000);
@@ -62,8 +62,8 @@ function serviceFactory(): Services {
   const modals = new ModalService();
   const history = HistoryService.create();
   const geo = new GeoService(externalClient, toasts, history);
-  const project = new ProjectService(jsonClient, downloadClient, mainStore, toasts, geo, modals);
-  const authentication = new AuthenticationService(jsonClient, mainStore, toasts);
+  const project = new ProjectService(jsonClient, downloadClient, store, toasts, geo, modals);
+  const authentication = new AuthenticationService(jsonClient, store, toasts);
   const dataStore = new DataStoreService(jsonClient, downloadClient, toasts, geo);
   const vote = new VoteService(jsonClient, toasts);
   const legalMentions = new LegalMentionsService(downloadClient, toasts);

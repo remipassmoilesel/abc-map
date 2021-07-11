@@ -30,7 +30,7 @@ import { ServiceProps, withServices } from '../../core/withServices';
 import { AddLayoutsTask } from '../../core/history/tasks/layouts/AddLayoutsTask';
 import { RemoveLayoutsTask } from '../../core/history/tasks/layouts/RemoveLayoutsTask';
 import { SetLayoutIndexTask } from '../../core/history/tasks/layouts/SetLayoutIndexTask';
-import { LayoutRenderer } from '../../core/project/LayoutRenderer';
+import { LayoutRenderer } from '../../core/project/rendering/LayoutRenderer';
 import { UpdateLayoutTask } from '../../core/history/tasks/layouts/UpdateLayoutTask';
 import { FileIO } from '../../core/utils/FileIO';
 import { pageSetup } from '../../core/utils/page-setup';

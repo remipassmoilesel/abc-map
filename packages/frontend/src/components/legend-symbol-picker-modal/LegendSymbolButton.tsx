@@ -19,7 +19,7 @@
 import React, { Component, ReactNode } from 'react';
 import { StyleCacheEntry } from '../../core/geo/styles/StyleCache';
 import { Logger } from '@abc-map/shared';
-import { LegendRenderer } from '../../core/geo/legend/LegendRenderer';
+import { LegendRenderer } from '../../core/project/rendering/LegendRenderer';
 import Cls from './LegendSymbolButton.module.scss';
 
 const logger = Logger.get('LegendSymbolButton');
@@ -49,7 +49,7 @@ class LegendSymbolButton extends Component<Props, {}> {
     }
 
     const style = this.props.style;
-    const dimensions = this.legendRender.symbolSizeForStyle(style.style, style.geomType);
+    const dimensions = this.legendRender.symbolSizeForStyle(style.style, style.geomType, 1);
     canvas.width = dimensions.width;
     canvas.height = dimensions.height;
 

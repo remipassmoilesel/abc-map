@@ -37,7 +37,7 @@ class ProjectStatus extends Component<Props, {}> {
       <div className={'control-block d-flex flex-column'}>
         <div className={'control-item d-flex flex-column'}>
           <div data-cy="project-name">{metadata.name}</div>
-          <div>Projection: {metadata.projection.name}</div>
+          <div>Projection {metadata.projection.name}</div>
           <div>
             <button className={'btn btn-link'} onClick={this.onRename} data-cy="rename-project">
               Renommer

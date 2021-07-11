@@ -29,13 +29,17 @@
 }
 
 .voteBtn {
-  width: 5.5rem;
-  height: 5.5rem;
+  width: 6rem;
+  height: 6rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   margin: 0.5rem;
 }
 
 .face {
+  display: block;
   font-size: 2rem;
   margin-bottom: 0.4rem;
 }

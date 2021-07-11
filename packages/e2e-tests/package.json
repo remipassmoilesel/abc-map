@@ -6,13 +6,14 @@
     "build"
   ],
   "scripts": {
-    "test:e2e:before-merge": "cypress run --config-file ./config/ci.json --spec 'src/integration/ci/**/*'",
-    "test:e2e:interactive": "cypress open --config-file ./config/development.json",
+    "e2e:ci": "cypress run --browser chromium --headless --config-file ./config/ci.json --spec 'src/integration/**/*'",
+    "e2e:dev": "cypress run --browser chromium --headless --config-file ./config/development.json --spec 'src/integration/**/*'",
+    "e2e:dev:interactive": "cypress open --config-file ./config/development.json",
     "clean": "rm -rf build",
     "build": "tsc",
     "watch": "tsc --watch | sed -u 's/\\x1Bc//g'",
     "clean-build": "yarn run clean && yarn run build",
-    "lint": "eslint './src/**/*.ts' --max-warnings=0",
+    "lint": "eslint 'src/**/*.ts' --max-warnings=0",
     "lint-fix": "yarn run lint --fix",
     "dep-check": "depcruise -c .dependency-cruiser.js src"
   },

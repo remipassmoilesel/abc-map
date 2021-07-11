@@ -21,3 +21,4 @@ Le contrôle des couches affiche les couches et permet:
 - De renommer une couche
 - De zoomer sur une couche
 - De changer l'ordre des couches
+- De sélectionner une couche *active*

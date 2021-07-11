@@ -19,7 +19,7 @@
 import { MainMap } from './MainMap';
 
 const waitTimeBeforeMs = 200;
-const waitTimeAfterMs = 400;
+const waitTimeAfterMs = 200;
 const drawReference = { x: 100, y: 100 };
 const defaultOptions = { button: 0, pointerId: 1 };
 

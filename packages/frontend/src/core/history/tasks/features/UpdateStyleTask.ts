@@ -34,12 +34,16 @@ export class UpdateStyleTask extends Task {
   public async undo(): Promise<void> {
     this.items.forEach((item) => {
       item.feature.setStyleProperties(item.before);
+      // We must set text here in order to erase it if necessary
+      item.feature.setText(item.before.text?.value || '');
     });
   }
 
   public async redo(): Promise<void> {
     this.items.forEach((item) => {
       item.feature.setStyleProperties(item.after);
+      // We must set text here in order to erase it if necessary
+      item.feature.setText(item.after.text?.value || '');
     });
   }
 }

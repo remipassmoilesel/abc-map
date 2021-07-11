@@ -82,8 +82,9 @@ export const Tools: Tip[] = [
     id: ToolTips.Text,
     content: `<h4>Outil texte</h4>
               <ul>
-                <li><b>Pour ajouter du texte</b>, cliquez sur une géométrie</li>
-                <li><b>Pour modifier du texte</b>, cliquez sur une géométrie</li>
+                <li><b>Pour ajouter du texte</b>, maintenez <code>CTRL</code> et cliquez sur une géométrie. Un contrôle de
+                saisie apparait, saisissez votre texte puis validez votre saisie</li>
+                <li><b>Pour modifier du texte</b>, maintenez <code>CTRL</code> et cliquez sur une géométrie</li>
                 ${undoRedoTip}
               </ul>
               `,

@@ -121,7 +121,7 @@ export class BuildService {
   }
 
   public async e2eTests(): Promise<void> {
-    this.shell.sync('yarn run test:e2e:before-merge', { cwd: this.config.getE2eRoot() });
+    this.shell.sync('yarn run e2e:ci', { cwd: this.config.getE2eRoot() });
   }
 
   public async performanceTests(): Promise<void> {
@@ -185,7 +185,7 @@ export class BuildService {
 
   public applyLicense(): void {
     const header = `${this.config.getProjectRoot()}/license-header.txt`;
-    const skip = `-skip 'js' -skip 'json' -skip 'yaml' -skip 'yml' -skip 'YAML'`;
+    const skip = `-skip 'js' -skip 'json' -skip 'yaml' -skip 'yml' -skip 'YAML' -skip 'policy.xml'`;
     this.shell.sync(`addlicense -f ${header} ${skip} packages`);
   }
 

@@ -30,6 +30,7 @@ import { UpdateStyleTask } from '../../history/tasks/features/UpdateStyleTask';
 import { FeatureStyle } from '@abc-map/shared';
 import GeometryType from 'ol/geom/GeometryType';
 import { TextEvent, TextChanged, TextEnd, TextStart } from './TextInteractionEvents';
+import { defaultInteractions } from '../../geo/map/interactions';
 
 const logger = Logger.get('TextTool.ts');
 
@@ -47,10 +48,14 @@ export class TextTool extends AbstractTool {
   }
 
   protected setupInternal(map: Map, source: VectorSource<Geometry>): void {
+    // Interactions for map view manipulation
+    const defaults = defaultInteractions();
+    defaults.forEach((i) => map.addInteraction(i));
+    this.interactions.push(...defaults);
+
     const text = new TextInteraction({ source });
 
     let before: FeatureStyle | undefined;
-
     text.on(TextEvent.Start, (ev: TextStart) => {
       const feature = FeatureWrapper.from(ev.feature);
 
@@ -86,12 +91,9 @@ export class TextTool extends AbstractTool {
         return;
       }
 
-      const after = FeatureWrapper.from(ev.feature).getStyleProperties();
-      if (before.text?.value === after.text?.value) {
-        return;
-      }
-
       const feature = FeatureWrapper.from(ev.feature);
+      const after = feature.getStyleProperties();
+
       this.history.register(HistoryKey.Map, new UpdateStyleTask([{ before, after, feature }]));
     });
 

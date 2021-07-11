@@ -269,7 +269,7 @@ export class TestHelper {
         value: 'Test text value',
         color: '#0000FF',
         size: 30,
-        font: 'sans-serif',
+        font: 'AbcCantarell',
         offsetX: 20,
         offsetY: 30,
         alignment: 'left',

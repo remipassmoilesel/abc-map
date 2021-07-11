@@ -3,7 +3,7 @@
 # Outils de dessin
 
 Les outils de dessin permettent de créer ou de modifier des formes. Les outils de dessin ne fonctionnent
-que sur une couche de géométries, ils sont désactivés sur les couches de fond de carte.
+que sur une couche de géométries active, ils sont désactivés si vous sélectionnez une couche fond de carte.
 
 Chaque outil propose une aide spécifique pour expliquer son fonctionnement.
 

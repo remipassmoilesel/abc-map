@@ -92,7 +92,7 @@ export const DefaultStyle = {
   },
   text: {
     color: '#00f',
-    font: 'sans-serif',
+    font: 'AbcCantarell',
     size: 600,
     offsetX: 10,
     offsetY: 10,

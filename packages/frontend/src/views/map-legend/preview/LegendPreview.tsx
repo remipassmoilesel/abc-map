@@ -18,7 +18,7 @@
 
 import React, { Component, ReactNode } from 'react';
 import { AbcLegend, Logger } from '@abc-map/shared';
-import { LegendRenderer } from '../../../core/geo/legend/LegendRenderer';
+import { LegendRenderer } from '../../../core/project/rendering/LegendRenderer';
 import { ResizableBox, ResizeCallbackData } from 'react-resizable';
 import 'react-resizable/css/styles.css';
 

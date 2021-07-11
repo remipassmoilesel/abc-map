@@ -28,10 +28,10 @@ import * as _ from 'lodash';
 import { E2eMapWrapper } from '../../../core/geo/map/E2eMapWrapper';
 import Cls from './LayoutPreview.module.scss';
 import { Control } from 'ol/control';
-import { LegendRenderer } from '../../../core/geo/legend/LegendRenderer';
-import { AttributionRenderer } from '../../../core/project/AttributionRenderer';
+import { LegendRenderer } from '../../../core/project/rendering/LegendRenderer';
+import { AttributionRenderer } from '../../../core/project/rendering/AttributionRenderer';
 
-const logger = Logger.get('LayoutPreview.tsx', 'warn');
+const logger = Logger.get('LayoutPreview.tsx');
 
 interface Props {
   legend: AbcLegend;
@@ -105,7 +105,7 @@ class LayoutPreview extends Component<Props, State> {
     // We dispose previous map
     this.state.previewMap?.dispose();
     if (!layout) {
-      this.setState({ previewMap: undefined, legendCanvas: undefined });
+      this.setState({ previewMap: undefined, legendCanvas: undefined, attributionsCanvas: undefined });
       return;
     }
 
@@ -150,7 +150,7 @@ class LayoutPreview extends Component<Props, State> {
     // Attributions initialization
     const attributions = mainMap.getTextAttributions();
     const attrCanvas = this.initializeAttributionsCanvas(attributions, legend, previewMap);
-    this.attributionRenderer.render(attributions, attrCanvas, styleRatio);
+    await this.attributionRenderer.render(attributions, attrCanvas, styleRatio);
 
     previewMap.unwrap().setView(
       new View({
@@ -162,7 +162,6 @@ class LayoutPreview extends Component<Props, State> {
   }
 
   private initializePreviewMap(div: HTMLDivElement): MapWrapper {
-    logger.debug('Initializing preview map');
     const previewMap = MapFactory.createLayoutPreview();
     previewMap.setTarget(div);
 
@@ -176,8 +175,6 @@ class LayoutPreview extends Component<Props, State> {
   }
 
   private initializeLegendCanvas(legend: AbcLegend, previewMap: MapWrapper): HTMLCanvasElement {
-    logger.debug('Initializing legend canvas');
-
     const canvas = document.createElement('canvas');
     this.legendRenderer.setPreviewStyle(legend, canvas);
 
@@ -189,8 +186,6 @@ class LayoutPreview extends Component<Props, State> {
   }
 
   private initializeAttributionsCanvas(attributions: string[], legend: AbcLegend, previewMap: MapWrapper): HTMLCanvasElement {
-    logger.debug('Initializing attributions canvas');
-
     const canvas = document.createElement('canvas');
     this.attributionRenderer.setPreviewStyle(attributions, legend, canvas);
 

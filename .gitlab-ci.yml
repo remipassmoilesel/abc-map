@@ -1,5 +1,5 @@
 ---
-image: registry.gitlab.com/abc-map/abc-map-2_private/build-image:v0.7
+image: registry.gitlab.com/abc-map/abc-map-2_private/build-image:v0.15
 
 
 cache:
@@ -31,3 +31,4 @@ test:
     when: always
     paths:
       - "packages/e2e-tests/screenshots"
+      - "packages/e2e-tests/generated"

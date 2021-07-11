@@ -60,7 +60,9 @@ class LongOperationModal extends Component<ServiceProps, State> {
         {!burning && (
           <>
             <h1>Ha quand même !</h1>
-            <div className={Cls.icon}>✅</div>
+            <div className={Cls.icon} data-cy={'long-operation-done'}>
+              ✅
+            </div>
           </>
         )}
       </div>
