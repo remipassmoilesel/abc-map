@@ -25,98 +25,154 @@ const logger = Logger.get('FormValidationLabel.tsx');
 
 export interface Props {
   state: FormState;
+  className?: string;
 }
 
 class FormValidationLabel extends Component<Props, {}> {
   public render(): ReactNode {
     const formState = this.props.state;
+    const className = this.props.className;
+    const { icon, message } = this.getIconAndMessage(formState);
 
+    if (icon && message) {
+      return (
+        <MessageLabel icon={icon} className={className}>
+          {message}
+        </MessageLabel>
+      );
+    } else {
+      return (
+        <MessageLabel icon={'fa-exclamation-circle'} className={className}>
+          {(() => {
+            logger.error(`Unhandled state: ${formState}`, { icon, message });
+            return <>Formulaire invalide, mais impossible de vous dire pourquoi 😭</>;
+          })()}
+        </MessageLabel>
+      );
+    }
+  }
+
+  private getIconAndMessage(formState: FormState): { icon: string; message: React.ReactNode } {
+    let icon = '';
+    let message: React.ReactNode = '';
     switch (formState) {
       case FormState.Ok:
-        return <MessageLabel icon={'fa-rocket'} message={'Tout est bon !'} />;
+        icon = 'fa-rocket';
+        message = 'Tout est bon !';
+        break;
 
       case FormState.InvalidEmail:
-        return <MessageLabel icon={'fa-exclamation-circle'} message={"L'adresse email n'est pas valide."} />;
+        icon = 'fa-exclamation-circle';
+        message = "L'adresse email n'est pas valide.";
+        break;
 
       case FormState.InvalidPassword:
-        return <MessageLabel icon={'fa-exclamation-circle'} message={"Le mot de passe n'est pas valide."} />;
+        icon = 'fa-exclamation-circle';
+        message = "Le mot de passe n'est pas valide.";
+        break;
 
       case FormState.PasswordTooWeak:
-        return (
-          <MessageLabel
-            icon={'fa-exclamation-circle'}
-            message={'Le mot de passe doit contenir 6 caractères minimum, une majuscule, un chiffre ou un symbole.'}
-          />
-        );
+        icon = 'fa-exclamation-circle';
+        message = 'Le mot de passe doit contenir 6 caractères minimum, une majuscule, un chiffre ou un symbole.';
+        break;
 
       case FormState.PasswordNotConfirmed:
-        return <MessageLabel icon={'fa-exclamation-circle'} message={'Le mot de passe et la confirmation de mot de passe ne correspondent pas.'} />;
+        icon = 'fa-exclamation-circle';
+        message = 'Le mot de passe et la confirmation de mot de passe ne correspondent pas.';
+        break;
 
       case FormState.PasswordEqualEmail:
-        return <MessageLabel icon={'fa-laugh-wink'} message={"Le mot de passe et l'email doivent être différents !"} />;
+        icon = 'fa-laugh-wink';
+        message = "Le mot de passe et l'email doivent être différents !";
+        break;
 
       case FormState.DeletionNotConfirmed:
-        return <MessageLabel icon={'fa-exclamation-circle'} message={'Vous devez confirmer la suppression de votre compte.'} />;
+        icon = 'fa-exclamation-circle';
+        message = 'Vous devez confirmer la suppression de votre compte.';
+        break;
 
       case FormState.InvalidUrl:
-        return (
-          <MessageLabel icon={'fa-exclamation-circle'}>
+        icon = 'fa-exclamation-circle';
+        message = (
+          <>
             L&apos;URL doit être valide et commencer par <code>http://</code> ou <code>https://</code>.
-          </MessageLabel>
+          </>
         );
+
+        break;
 
       case FormState.MissingRemoteLayer:
-        return <MessageLabel icon={'fa-exclamation-circle'} message={'La couche distante est obligatoire.'} />;
+        icon = 'fa-exclamation-circle';
+        message = 'La couche distante est obligatoire.';
+        break;
 
       case FormState.MissingNewLayerName:
-        return <MessageLabel icon={'fa-exclamation-circle'} message={'Le nom de la couche est obligatoire.'} />;
+        icon = 'fa-exclamation-circle';
+        message = 'Le nom de la couche est obligatoire.';
+        break;
 
       case FormState.MissingDataSource:
-        return <MessageLabel icon={'fa-exclamation-circle'} message={'La source de données est obligatoire.'} />;
+        icon = 'fa-exclamation-circle';
+        message = 'La source de données est obligatoire.';
+        break;
 
       case FormState.MissingDataJoinBy:
-        return <MessageLabel icon={'fa-exclamation-circle'} message={'Le champ de jointure des données est obligatoire.'} />;
+        icon = 'fa-exclamation-circle';
+        message = 'Le champ de jointure des données est obligatoire.';
+        break;
 
       case FormState.MissingAlgorithm:
-        return <MessageLabel icon={'fa-exclamation-circle'} message={"L'algorithme est obligatoire."} />;
+        icon = 'fa-exclamation-circle';
+        message = "L'algorithme est obligatoire.";
+        break;
 
       case FormState.MissingColorValueField:
-        return <MessageLabel icon={'fa-exclamation-circle'} message={'Le champ couleur est obligatoire.'} />;
+        icon = 'fa-exclamation-circle';
+        message = 'Le champ couleur est obligatoire.';
+        break;
 
       case FormState.MissingSymbolValueField:
-        return <MessageLabel icon={'fa-exclamation-circle'} message={'Le champ de taille de symbole est obligatoire.'} />;
+        icon = 'fa-exclamation-circle';
+        message = 'Le champ de taille de symbole est obligatoire.';
+        break;
 
       case FormState.MissingSizeMin:
-        return <MessageLabel icon={'fa-exclamation-circle'} message={'La taille minimale est obligatoire.'} />;
+        icon = 'fa-exclamation-circle';
+        message = 'La taille minimale est obligatoire.';
+        break;
 
       case FormState.MissingSizeMax:
-        return <MessageLabel icon={'fa-exclamation-circle'} message={'La taille maximale est obligatoire.'} />;
+        icon = 'fa-exclamation-circle';
+        message = 'La taille maximale est obligatoire.';
+        break;
 
       case FormState.InvalidSizeMinMax:
-        return <MessageLabel icon={'fa-exclamation-circle'} message={'La taille minimale doit être supérieure à la taille maximale.'} />;
+        icon = 'fa-exclamation-circle';
+        message = 'La taille minimale doit être supérieure à la taille maximale.';
+        break;
 
       case FormState.MissingSymbolType:
-        return <MessageLabel icon={'fa-exclamation-circle'} message={'Le type de symbole est obligatoire.'} />;
+        icon = 'fa-exclamation-circle';
+        message = 'Le type de symbole est obligatoire.';
+        break;
 
       case FormState.MissingGeometryLayer:
-        return <MessageLabel icon={'fa-exclamation-circle'} message={'La couche de géométrie est obligatoire.'} />;
+        icon = 'fa-exclamation-circle';
+        message = 'La couche de géométrie est obligatoire.';
+        break;
 
       case FormState.MissingStartColor:
-        return <MessageLabel icon={'fa-exclamation-circle'} message={'La couleur de début est obligatoire.'} />;
+        icon = 'fa-exclamation-circle';
+        message = 'La couleur de début est obligatoire.';
+        break;
 
       case FormState.MissingEndColor:
-        return <MessageLabel icon={'fa-exclamation-circle'} message={'La couleur de fin est obligatoire.'} />;
-
-      default:
-        return (
-          <MessageLabel icon={'fa-exclamation-circle'}>
-            {(() => {
-              logger.error(`Unhandled state: ${formState}`);
-              return <>Formulaire invalide, mais impossible de vous dire pourquoi 😭</>;
-            })()}
-          </MessageLabel>
-        );
+        icon = 'fa-exclamation-circle';
+        message = 'La couleur de fin est obligatoire.';
+        break;
     }
+
+    return { icon, message };
   }
 }
 

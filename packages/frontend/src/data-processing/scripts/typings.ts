@@ -41,7 +41,11 @@ export class ScriptError extends Error {
 
 export const Example = `\
 // A simplified API of map is available as 'map' variable
-for(const layer of map.listLayers()){
-  log(layer.name)
-}
+map.listLayers().forEach((layer) => {
+  if (layer.isVector()) {
+    log(\`Layer \${layer.name}: \${layer.getFeatures().length} features\`);
+  } else {
+    log(\`Layer \${layer.name}: Not vector (\${layer.unwrap().constructor.name})\`);
+  }
+});
 `;

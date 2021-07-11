@@ -108,7 +108,9 @@ class RemoteProjectsModal extends Component<Props, State> {
 
           {showButtons && (
             <>
-              <div className={'font-weight-bold my-3'}>Attention: l&apos;ouverture du projet effacera le projet en cours</div>
+              <div className={'my-3 alert alert-danger d-flex align-items-center justify-content-center'}>
+                <i className={'fa fa-exclamation-triangle mr-2'} /> Vous allez perdre les modifications en cours.
+              </div>
               <div className={'d-flex justify-content-end'}>
                 <button className={'btn btn-secondary mr-3'} onClick={this.handleCancel} data-cy={'cancel-button'}>
                   Annuler

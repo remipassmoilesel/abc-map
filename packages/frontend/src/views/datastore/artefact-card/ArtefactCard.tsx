@@ -77,7 +77,7 @@ class ArtefactCard extends Component<Props, State> {
 
           <div className={'d-flex flex-row justify-content-end'}>
             <button className={'btn btn-link mr-2'} onClick={this.handleShowLicense} data-cy={'show-license'}>
-              License d&apos;utilisation
+              Licence d&apos;utilisation
             </button>
             <button className={'btn btn-link mr-2'} onClick={this.handleDownloadArtefact} data-cy={'download-artefact'}>
               Télécharger
@@ -92,7 +92,7 @@ class ArtefactCard extends Component<Props, State> {
 
         <Modal show={licenseModal} onHide={this.handleModalClose} size={'lg'}>
           <Modal.Header closeButton data-cy={'license-header'}>
-            {name} : License d&apos;utilisation
+            {name} : Licence d&apos;utilisation
           </Modal.Header>
           <Modal.Body className={'d-flex justify-content-center'}>
             <pre className={Cls.licenseView}>{license}</pre>

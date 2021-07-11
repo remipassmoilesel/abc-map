@@ -43,7 +43,7 @@ class DataProcessingView extends Component<Props, {}> {
           {Modules.map((mod) => (
             <Link
               key={mod.getId()}
-              className={'btn btn-link my-2'}
+              className={'btn btn-link mb-1'}
               to={FrontendRoutes.dataProcessing().withParams({ moduleId: mod.getId() })}
               data-cy={mod.getId()}
             >

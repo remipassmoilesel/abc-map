@@ -35,14 +35,14 @@ describe('Script module', function () {
       .get('[data-cy=message]')
       .should('contain', 'Script exécuté sans erreurs')
       .get('[data-cy=output]')
-      .should('contain', 'OpenStreetMap\nGéométries');
+      .should('contain', 'Layer OpenStreetMap: Not vector (TileLayer)\nLayer Géométries: 0 features');
   });
 
   it('User can update features', () => {
     const script = `\
 const layerName = map.listLayers()[2].name;
-map.getFeaturesOfLayer(layerName).forEach((f, i) => f.set('e2e', i))
-map.getFeaturesOfLayer(layerName).forEach((f) => log(f.get('e2e')))
+map.findByName(layerName).getFeatures().forEach((f, i) => f.set('e2e', i))
+map.findByName(layerName).getFeatures().forEach((f) => log(f.get('e2e')))
 `;
     cy.visit(FrontendRoutes.dataProcessing().withoutOptionals())
       .then(() => DataStore.importByName('Pays du monde'))

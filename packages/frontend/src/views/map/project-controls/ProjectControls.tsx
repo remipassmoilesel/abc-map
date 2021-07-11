@@ -98,10 +98,17 @@ class ProjectControls extends Component<Props, State> {
   }
 
   private handleNewProject = () => {
-    const { toasts, project } = this.props.services;
+    const { modals, toasts, project } = this.props.services;
 
-    project.newProject();
-    toasts.info('Nouveau projet créé');
+    modals
+      .modificationsLostConfirmation()
+      .then((res) => {
+        if (ModalStatus.Confirmed === res) {
+          project.newProject();
+          toasts.info('Nouveau projet créé');
+        }
+      })
+      .catch((err) => logger.error('Confirmation error: ', err));
   };
 
   private handleSaveProject = () => {
@@ -200,7 +207,13 @@ class ProjectControls extends Component<Props, State> {
       toasts.info('Projet importé !');
     };
 
-    selectProject()
+    modals
+      .modificationsLostConfirmation()
+      .then((res) => {
+        if (ModalStatus.Confirmed === res) {
+          return selectProject();
+        }
+      })
       .then((file) => {
         if (file) {
           return modals.longOperationModal(() => importProject(file));

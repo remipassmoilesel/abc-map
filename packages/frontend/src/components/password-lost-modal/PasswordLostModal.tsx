@@ -89,7 +89,7 @@ class PasswordLostModal extends Component<ServiceProps, State> {
 
             {/* Form validation */}
 
-            <FormValidationLabel state={formState} />
+            <FormValidationLabel state={formState} className={'mx-4'} />
 
             {/* Action buttons */}
 

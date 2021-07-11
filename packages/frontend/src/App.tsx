@@ -47,6 +47,7 @@ import LegendSymbolPickerModal from './components/legend-symbol-picker-modal/Leg
 import LegalMentionsView from './views/legal-mentions/LegalMentionsView';
 import LongOperationModal from './components/long-operation-modal/LongOperationModal';
 import FundingView from './views/funding/FundingView';
+import ConfirmationModal from './components/confirmation-modal/ConfirmationModal';
 
 class App extends Component<ServiceProps, {}> {
   public render(): ReactNode {
@@ -80,6 +81,7 @@ class App extends Component<ServiceProps, {}> {
         <PasswordLostModal />
         <LegendSymbolPickerModal />
         <LongOperationModal />
+        <ConfirmationModal />
       </BrowserRouter>
     );
   }

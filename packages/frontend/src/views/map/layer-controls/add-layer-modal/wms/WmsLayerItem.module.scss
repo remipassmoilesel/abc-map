@@ -16,6 +16,8 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
+@import "src/assets/styles/variables";
+
 .wmsLayerItem {
   margin-bottom: 0.7em;
   padding: 0.5em;
@@ -25,6 +27,6 @@
 
   &.selected {
     color: white;
-    background-color: blue;
+    background-color: $primary;
   }
 }

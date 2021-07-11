@@ -40,6 +40,8 @@ export enum ModalEventType {
   LegendSymbolPickerClosed = 'LegendSymbolPickerClosed',
   ShowLongOperationModal = 'ShowLongOperationModal',
   LongOperationModalClosed = 'LongOperationModalClosed',
+  ShowConfirmation = 'ShowConfirmation',
+  ConfirmationClosed = 'ConfirmationClosed',
 }
 
 export enum ModalStatus {
@@ -150,6 +152,17 @@ export interface LongOperationModalClosedEvent {
   type: ModalEventType.LongOperationModalClosed;
 }
 
+export interface ShowConfirmation {
+  type: ModalEventType.ShowConfirmation;
+  title: string;
+  message: string;
+}
+
+export interface ConfirmationClosedEvent {
+  type: ModalEventType.ConfirmationClosed;
+  status: ModalStatus;
+}
+
 export declare type ModalEvent =
   | ShowRenameModal
   | RenameModalClosedEvent
@@ -170,7 +183,9 @@ export declare type ModalEvent =
   | ShowLegendSymbolPicker
   | LegendSymbolPickerClosedEvent
   | ShowLongOperationModal
-  | LongOperationModalClosedEvent;
+  | LongOperationModalClosedEvent
+  | ShowConfirmation
+  | ConfirmationClosedEvent;
 
 export class InternalEvent extends Event {
   constructor(type: ModalEventType, public readonly payload: ModalEvent) {
