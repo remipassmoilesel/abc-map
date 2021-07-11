@@ -104,7 +104,7 @@ class LoginModal extends Component<Props, State> {
             </div>
 
             {/* Form validation */}
-            <FormValidationLabel state={formState} />
+            <FormValidationLabel state={formState} className={'mx-4'} />
 
             {/* Action buttons */}
 

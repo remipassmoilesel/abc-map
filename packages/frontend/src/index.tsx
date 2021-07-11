@@ -30,8 +30,8 @@ import { HttpError } from './core/http/HttpError';
 import { BUILD_INFO } from './build-version';
 import { ServiceProvider } from './core/withServices';
 import { Provider } from 'react-redux';
-import './index.scss';
 import ErrorBoundary from './views/error-boundary/ErrorBoundary';
+import './index.scss';
 
 export const logger = Logger.get('index.tsx', 'warn');
 const svc = getServices();

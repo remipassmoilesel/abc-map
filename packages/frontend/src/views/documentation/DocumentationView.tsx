@@ -51,16 +51,16 @@ class DocumentationView extends Component<Props, {}> {
 
   public render(): ReactNode {
     return (
-      <div className={Cls.documentation} ref={this.viewPortRef}>
-        <h1 className={'mb-4'}>Documentation</h1>
-        {doc && (
-          <>
-            <div className={'toc'} dangerouslySetInnerHTML={{ __html: doc.toc }} />
+      <div className={Cls.documentation}>
+        <h1 className={Cls.header}>Documentation</h1>
+        <div className={Cls.content}>
+          <div className={Cls.toc} dangerouslySetInnerHTML={{ __html: doc.toc }} />
+          <div className={Cls.viewport} ref={this.viewPortRef}>
             {doc.modules.map((mod, i) => (
               <div key={i} className={Cls.module} dangerouslySetInnerHTML={{ __html: mod }} />
             ))}
-          </>
-        )}
+          </div>
+        </div>
       </div>
     );
   }

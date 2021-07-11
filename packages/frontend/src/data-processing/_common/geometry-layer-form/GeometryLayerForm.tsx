@@ -99,7 +99,7 @@ class GeometryLayerForm extends Component<Props, State> {
         </FormLine>
 
         <div className={'my-3'}>
-          {layer && geometries < 1 && <MessageLabel icon={'fa-exclamation-triangle'} message={'Cette couche ne contient aucune géométrie.'} />}
+          {layer && geometries < 1 && <MessageLabel icon={'fa-exclamation-triangle'}>Cette couche ne contient aucune géométrie.</MessageLabel>}
           {layer && geometries > 0 && <MessageLabel icon={'fa-info-circle'}>{geometries} géométries seront traitées.</MessageLabel>}
         </div>
 

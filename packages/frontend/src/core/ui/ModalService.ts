@@ -18,6 +18,7 @@
 
 import { Logger } from '@abc-map/shared';
 import {
+  ConfirmationClosedEvent,
   FeaturePropertiesClosedEvent,
   InternalEvent,
   LegendSymbolPickerClosedEvent,
@@ -25,6 +26,7 @@ import {
   ModalEvent,
   ModalEventListener,
   ModalEventType,
+  ModalStatus,
   PasswordInputClosedEvent,
   RegistrationClosedEvent,
   RenameModalClosedEvent,
@@ -117,6 +119,22 @@ export class ModalService {
       // We let frontend refresh before operation
       setTimeout(display, 150);
     });
+  }
+
+  public modificationsLostConfirmation(): Promise<ModalStatus> {
+    const input: ModalEvent = {
+      type: ModalEventType.ShowConfirmation,
+      title: 'Modifications en cours',
+      message: `
+          <p>Si vous continuez, les modifications en cours seront perdues.</p>
+          <p>Si vous avez exporté ou sauvegardé votre projet vous pouvez ignorer ce message.</p>`,
+    };
+    return this.modalPromise<ConfirmationClosedEvent>(input, ModalEventType.ConfirmationClosed).then((res) => res.status);
+  }
+
+  public confirmation(title: string, message: string): Promise<ModalStatus> {
+    const input: ModalEvent = { type: ModalEventType.ShowConfirmation, title, message };
+    return this.modalPromise<ConfirmationClosedEvent>(input, ModalEventType.ConfirmationClosed).then((res) => res.status);
   }
 
   private modalPromise<O extends ModalEvent>(input: ModalEvent, closeEventType: ModalEventType): Promise<O> {

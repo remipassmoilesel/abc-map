@@ -16,12 +16,35 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import faq from './0_faq.md';
-import map from './1_carte.md';
-import datastore from './2_catalogue.md';
-import dataProcessing from './3_traitement-donnees.md';
-import layout from './4_mise-en-page.md';
+import toc from './00_toc.md';
+import functionalities from './01_features.md';
+import projects from './02_projects.md';
+import map from './03_map.md';
+import layers from './04_layers.md';
+import drawingTools from './05_drawing-tools.md';
+import dataImport from './06_data-import.md';
+import dataStore from './07_data-store.md';
+import layoutLegend from './08_layout-legend.md';
+import userProfile from './09_user-profile.md';
+import faq from './10_faq.md';
+import proportionalSymbols from './11_proportional-symbols.md';
+import colorGradients from './12_color-gradients.md';
+import scripts from './13_scripts.md';
 
-const content = [faq, map, datastore, dataProcessing, layout];
+const content = [
+  functionalities,
+  projects,
+  map,
+  layers,
+  drawingTools,
+  dataImport,
+  dataStore,
+  layoutLegend,
+  userProfile,
+  faq,
+  proportionalSymbols,
+  colorGradients,
+  scripts,
+];
 
-export { content };
+export { toc, content };

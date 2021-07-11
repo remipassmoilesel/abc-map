@@ -21,20 +21,18 @@ import Cls from './MessageLabel.module.scss';
 
 export interface Props {
   icon: string;
-  message?: string;
   className?: string;
 }
 
 class MessageLabel extends Component<Props, {}> {
   public render(): ReactNode {
     const icon = this.props.icon;
-    const message = this.props.message;
     const children = this.props.children;
     const className = this.props.className || '';
 
     return (
       <div className={`${Cls.message} ${className}`}>
-        <i className={`fa ${icon}`} /> {message || children}
+        <i className={`fa ${icon}`} /> {children}
       </div>
     );
   }

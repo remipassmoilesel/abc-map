@@ -90,6 +90,7 @@ class ProportionalSymbolsUi extends Component<Props, State> {
                 </li>
                 <li>Sélectionnez une couche de géométries. Les géométries détermineront la position de chaque symbole.</li>
                 <li>Sélectionner un champ de jointure entre les données et les géométries.</li>
+                <li>Ensuite sélectionnez les caractéristiques des points à créer.</li>
               </ul>
             </div>
             <img src={Sample} alt={'Exemple de carte'} className={Cls.sample} />

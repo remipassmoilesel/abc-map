@@ -18,9 +18,9 @@
 
 import React, { Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/shared';
-import Cls from './FundingView.module.scss';
 import { ServiceProps, withServices } from '../../core/withServices';
 import PaypalButton from './PaypalButton';
+import Cls from './FundingView.module.scss';
 
 const logger = Logger.get('FundingView.tsx', 'info');
 
@@ -33,7 +33,7 @@ class FundingView extends Component<ServiceProps, {}> {
 
           <div className={'d-flex flex-column justify-content-end align-items-end my-3'}>
             <div className={Cls.quote}>Bah voila y disent cé gratuit mééé ça réclame de l&apos;argent !</div>
-            <div className={Cls.quoteAuthor}>JM. Rhien</div>
+            <div className={Cls.quoteAuthor}>J. Suipaconthent</div>
           </div>
 
           <div className={'w-100'}>
@@ -62,6 +62,19 @@ class FundingView extends Component<ServiceProps, {}> {
             <ul>
               <li>paie les coûts d&apos;hébergement de la plateforme officielle</li>
               <li>est accumulé pour financer des sessions de développement</li>
+            </ul>
+
+            <p>Les prochaines fonctionnalités prévues sont:</p>
+            <ul>
+              <li>La création de symboles à partir de classeurs CSV</li>
+              <li>Le compte de points dans des polygones</li>
+              <li>La traduction en plusieurs langues</li>
+              <li>
+                Et plus !{' '}
+                <a href={'https://gitlab.com/abc-map/abc-map-2_private/-/blob/master/documentation/5_backlog.md'} target={'_blank'} rel="noreferrer">
+                  Voir ici
+                </a>
+              </li>
             </ul>
           </div>
 

@@ -15,8 +15,32 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
+import { LayerWrapper } from '../../../core/geo/layers/LayerWrapper';
+import Feature from 'ol/Feature';
+import Geometry from 'ol/geom/Geometry';
 
-export interface ScriptLayer {
-  id: string;
-  name: string;
+export class ScriptLayer {
+  public readonly id: string;
+  public readonly name: string;
+
+  constructor(private readonly layer: LayerWrapper) {
+    this.id = layer.getId() || '<no-id>';
+    this.name = layer.getName() || '<no-name>';
+  }
+
+  public isVector(): boolean {
+    return this.layer.isVector();
+  }
+
+  public getFeatures(): Feature<Geometry>[] {
+    if (!this.layer.isVector()) {
+      throw new Error(`Layer with name ${this.name} is not a vector layer`);
+    }
+
+    return this.layer.getSource().getFeatures();
+  }
+
+  public unwrap() {
+    return this.layer.unwrap();
+  }
 }

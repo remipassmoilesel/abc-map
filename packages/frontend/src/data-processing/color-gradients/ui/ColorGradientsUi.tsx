@@ -89,6 +89,7 @@ class ColorGradientsUI extends Component<Props, State> {
                 </li>
                 <li>Sélectionnez une couche de géométries. Les géométries seront dupliquées et remplies avec la couleur calculée.</li>
                 <li>Sélectionner un champ de jointure entre les données et les géométries.</li>
+                <li>Ensuite sélectionnez les caractéristiques des géométries à créer.</li>
               </ul>
             </div>
             <img src={Sample} alt={'Exemple de carte'} className={Cls.sample} />

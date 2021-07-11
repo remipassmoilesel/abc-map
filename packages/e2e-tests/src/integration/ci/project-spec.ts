@@ -44,6 +44,8 @@ describe('Project', function () {
       cy.visit(FrontendRoutes.map().raw())
         .get('[data-cy=new-project]')
         .click()
+        .get('[data-cy=confirmation-confirm]')
+        .click()
         .then(() => Toasts.assertText('Nouveau projet créé'))
         .then(() => MainMap.getReference())
         .should((map) => {
@@ -98,6 +100,8 @@ describe('Project', function () {
       cy.visit(FrontendRoutes.map().raw())
         .get('[data-cy=import-project]')
         .click()
+        .get('[data-cy=confirmation-confirm]')
+        .click()
         .then(() => TestData.projectSample1())
         .then((project) => {
           return cy.get('[data-cy=file-input]').attachFile({ filePath: 'project.abm2', fileContent: project });
@@ -150,6 +154,8 @@ describe('Project', function () {
     it('can import project with credentials', function () {
       cy.visit(FrontendRoutes.map().raw())
         .get('[data-cy=import-project]')
+        .click()
+        .get('[data-cy=confirmation-confirm]')
         .click()
         .then(() => TestData.projectSample2())
         .then((project) => {
@@ -231,6 +237,8 @@ describe('Project', function () {
         // Clean map
         .get('[data-cy=new-project]')
         .click()
+        .get('[data-cy=confirmation-confirm]')
+        .click()
         // Open remote project
         .get('[data-cy=remote-projects]')
         .click()
@@ -268,6 +276,8 @@ describe('Project', function () {
         .click()
         // Clean map
         .get('[data-cy=new-project]')
+        .click()
+        .get('[data-cy=confirmation-confirm]')
         .click()
         // Open remote project
         .get('[data-cy=remote-projects]')

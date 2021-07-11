@@ -49,7 +49,7 @@ describe('Top bar', () => {
       .should('exist')
       // Documentation
       .then(() => TopBar.documentation())
-      .get('[data-cy=toc]')
-      .should('contain', 'Sommaire');
+      .get('h1')
+      .should('contain', 'Documentation');
   });
 });

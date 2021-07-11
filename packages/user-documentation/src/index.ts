@@ -16,9 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as examples from './examples';
 import * as reference from './reference';
-import toc from './toc.md';
 
 export * from './tips';
 
@@ -28,8 +26,8 @@ export interface Documentation {
 }
 
 const content: Documentation = {
-  toc,
-  modules: [...examples.content, ...reference.content],
+  toc: reference.toc,
+  modules: reference.content,
 };
 
 export { content };
