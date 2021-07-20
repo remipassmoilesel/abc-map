@@ -23,7 +23,7 @@ import { ToastService } from '../../ui/ToastService';
 import { ModalService } from '../../ui/ModalService';
 import { AuthenticationService } from '../../authentication/AuthenticationService';
 import { HistoryService } from '../../history/HistoryService';
-import { DataStoreService } from '../../data/DataStoreService';
+import { DataService } from '../../data/DataService';
 import { VoteService } from '../../vote/VoteService';
 import { SinonStubbedInstance } from 'sinon';
 import { Services } from '../../Services';
@@ -40,7 +40,7 @@ export interface TestServices {
   modals: SinonStubbedInstance<ModalService>;
   authentication: SinonStubbedInstance<AuthenticationService>;
   history: SinonStubbedInstance<HistoryService>;
-  dataStore: SinonStubbedInstance<DataStoreService>;
+  data: SinonStubbedInstance<DataService>;
   vote: SinonStubbedInstance<VoteService>;
   legalMentions: SinonStubbedInstance<LegalMentionsService>;
 }
@@ -54,7 +54,7 @@ export function newTestServices(): TestServices {
     modals: sinon.createStubInstance(ModalService),
     authentication: sinon.createStubInstance(AuthenticationService),
     history: sinon.createStubInstance(HistoryService),
-    dataStore: sinon.createStubInstance(DataStoreService),
+    data: sinon.createStubInstance(DataService),
     vote: sinon.createStubInstance(VoteService),
     legalMentions: sinon.createStubInstance(LegalMentionsService),
   };

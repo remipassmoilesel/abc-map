@@ -2,6 +2,10 @@
 
 # Catalogue de données
 
+<div class='alert alert-warning mb-4'>
+  Le catalogue de données est en cours de remplissage, c'est une question de temps ⌛
+</div>
+
 La page `Catalogue de données` propose des données courantes et testées sur le logiciel.
 
 Les données sont proposées sous forme d'`artéfact`, c’est-à-dire en paquet utilisable en tant que couche sur une carte.

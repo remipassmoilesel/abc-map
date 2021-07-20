@@ -71,13 +71,15 @@ export class AuthenticationService extends AbstractService {
   }
 
   public async register(request: RegistrationRequest): Promise<RegistrationStatus> {
+    const email = request.email.toLocaleLowerCase().trim();
+
     // Anonymous email cannot be used for account
-    if (isEmailAnonymous(request.email)) {
+    if (isEmailAnonymous(email)) {
       return RegistrationStatus.EmailAlreadyExists;
     }
 
     // Check if email is already used
-    const emailAlreadyUsed = !!(await this.users.findByEmail(request.email));
+    const emailAlreadyUsed = !!(await this.users.findByEmail(email));
     if (emailAlreadyUsed) {
       return RegistrationStatus.EmailAlreadyExists;
     }
@@ -85,7 +87,7 @@ export class AuthenticationService extends AbstractService {
     // Save registration request
     const registration: RegistrationDocument = {
       _id: uuid(),
-      email: request.email.toLocaleLowerCase().trim(),
+      email,
       password: '',
     };
     registration.password = await this.hasher.hashPassword(request.password.trim(), registration._id);
@@ -127,7 +129,8 @@ export class AuthenticationService extends AbstractService {
   }
 
   public async authenticate(email: string, password: string): Promise<Authentication> {
-    if (isEmailAnonymous(email) && password === AnonymousUser.password) {
+    const _email = email.toLocaleLowerCase().trim();
+    if (isEmailAnonymous(_email) && password === AnonymousUser.password) {
       return {
         status: AuthenticationStatus.Successful,
         user: {
@@ -137,7 +140,7 @@ export class AuthenticationService extends AbstractService {
       };
     }
 
-    const user = await this.users.findByEmail(email);
+    const user = await this.users.findByEmail(_email);
     if (!user) {
       return {
         status: AuthenticationStatus.Refused,
@@ -163,20 +166,22 @@ export class AuthenticationService extends AbstractService {
   }
 
   public async passwordLost(email: string): Promise<void> {
-    const user = await this.users.findByEmail(email);
+    const _email = email.toLocaleLowerCase().trim();
+    const user = await this.users.findByEmail(_email);
     if (!user) {
       logger.warn(`User not found: ${user}`);
       return;
     }
 
-    const token = this.signResetPasswordToken(email);
-    this.emails.passwordLost(email, token).catch((err) => logger.error('Mail failure: ', err));
+    const token = this.signResetPasswordToken(_email);
+    this.emails.passwordLost(_email, token).catch((err) => logger.error('Mail failure: ', err));
   }
 
   public async updatePassword(email: string, newPassword: string): Promise<void> {
-    const user = await this.users.findByEmail(email);
+    const _email = email.toLocaleLowerCase().trim();
+    const user = await this.users.findByEmail(_email);
     if (!user) {
-      throw new Error(`User not found: ${email}`);
+      throw new Error(`User not found: ${_email}`);
     }
 
     if (newPassword.toLocaleLowerCase().trim() === user.email.toLocaleLowerCase().trim()) {

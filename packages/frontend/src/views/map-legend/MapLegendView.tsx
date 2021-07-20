@@ -25,6 +25,7 @@ import Cls from './MapLegendView.module.scss';
 import LegendPreview from './preview/LegendPreview';
 import LegendUpdateForm from './legend-update/LegendUpdateForm';
 import { RouteComponentProps } from 'react-router-dom';
+import { pageSetup } from '../../core/utils/page-setup';
 
 const logger = Logger.get('MapLegendView.tsx');
 
@@ -69,6 +70,10 @@ class MapLegendView extends Component<Props, {}> {
         </div>
       </div>
     );
+  }
+
+  public componentDidMount() {
+    pageSetup('Edition de la légende', 'Créez une légende pour votre carte 🌍');
   }
 
   private handleSizeChanged = (width: number, height: number) => {

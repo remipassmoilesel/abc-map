@@ -42,6 +42,7 @@ import { SinonStubbedInstance } from 'sinon';
 import jwtDecode from 'jwt-decode';
 import { RegistrationDao } from './RegistrationDao';
 import { EmailService } from '../email/EmailService';
+import { RegistrationDocument } from './RegistrationDocument';
 
 logger.disable();
 
@@ -275,6 +276,19 @@ describe('AuthenticationService', () => {
       // Assert
       assert.equal(status, RegistrationStatus.Successful);
     });
+
+    it('should trim password', async () => {
+      // Prepare
+      const email = TestHelper.sampleUser().email;
+
+      // Act
+      await service.register({ email, password: '       azerty1234     ' });
+
+      // Assert
+      const token = await getRegistrationToken();
+      const registration = (await registrations.findById(token.registrationId)) as RegistrationDocument;
+      assert.equal(registration.password, await hasher.hashPassword('azerty1234', registration._id));
+    });
   });
 
   describe('confirmRegistration()', () => {
@@ -282,7 +296,7 @@ describe('AuthenticationService', () => {
       // Prepare
       const user = TestHelper.sampleUser();
       await service.register({ email: user.email, password: user.password });
-      const token = (await service.verifyRegistrationToken(emails.confirmRegistration.getCall(0).args[1])) as RegistrationToken;
+      const token = await getRegistrationToken();
 
       // Act
       const registeredUser = (await service.confirmRegistration(token.registrationId)) as AbcUser;
@@ -304,10 +318,10 @@ describe('AuthenticationService', () => {
       const user = TestHelper.sampleUser();
       await service.register({ email: user.email, password: user.password });
       await service.register({ email: user.email, password: user.password });
-      const token1 = (await service.verifyRegistrationToken(emails.confirmRegistration.getCall(0).args[1])) as RegistrationToken;
+      const token1 = await getRegistrationToken();
       await service.confirmRegistration(token1.registrationId);
 
-      const token2 = (await service.verifyRegistrationToken(emails.confirmRegistration.getCall(1).args[1])) as RegistrationToken;
+      const token2 = await getRegistrationToken(1);
 
       // Act
       const result = await service.confirmRegistration(token2.registrationId);
@@ -370,6 +384,17 @@ describe('AuthenticationService', () => {
       assert.isDefined(res2.user?.id);
       assert.notEqual(res1.user?.id, res2.user?.id);
     });
+
+    it('should trim passwords', async () => {
+      const password = '     azerty1234      ';
+      const user = TestHelper.sampleUser();
+      user.password = await hasher.hashPassword(password.trim(), user.id);
+      await userService.save(user);
+
+      const res = await service.authenticate(user.email, password);
+
+      assert.equal(res.status, AuthenticationStatus.Successful);
+    });
   });
 
   describe('passwordLost()', () => {
@@ -427,4 +452,8 @@ describe('AuthenticationService', () => {
       assert.equal(dbUser.password, await hasher.hashPassword('azerty1234', user.id));
     });
   });
+
+  function getRegistrationToken(call = 0): Promise<RegistrationToken> {
+    return service.verifyRegistrationToken(emails.confirmRegistration.getCall(call).args[1]).then((res) => res as RegistrationToken);
+  }
 });

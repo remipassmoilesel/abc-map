@@ -4,6 +4,9 @@
 
 Vous pouvez vous inscrire et vous connecter pour enregistrer vos projets en ligne.
 
-Gardez cependant à l'esprit que cette plateforme est proposée dans le but d'être utilise mais qu'elle est proposée sans aucune garantie.
+Gardez à l'esprit que cette plateforme est proposée dans le but d'être utile, mais sans aucune garantie.
 
-**Le nombre de projets est limité par compte utilisateur, et les projets seront bientôt supprimés après un mois d'inactivité.**
+<div class='alert alert-danger'>
+  <div>Le nombre de projets est limité par compte utilisateur.</div>
+  <div>Les projets seront bientôt supprimés après un mois d'inactivité.</div>
+</div>

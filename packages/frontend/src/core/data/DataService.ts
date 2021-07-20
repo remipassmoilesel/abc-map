@@ -17,35 +17,46 @@
  */
 
 import { AxiosInstance } from 'axios';
-import { AbcArtefact } from '@abc-map/shared';
+import { AbcArtefact, AbcFile, BlobIO, Logger, PaginatedResponse } from '@abc-map/shared';
 import { DatastoreRoutes as Api } from '../http/ApiRoutes';
-import { Logger } from '@abc-map/shared';
 import { DataReader } from './readers/DataReader';
-import { AbcFile } from '@abc-map/shared';
-import { LayerWrapper } from '../geo/layers/LayerWrapper';
 import { GeoService } from '../geo/GeoService';
 import { getArea } from 'ol/extent';
 import { DateTime } from 'luxon';
-import { BlobIO } from '@abc-map/shared';
-import { PaginatedResponse } from '@abc-map/shared';
 import { ToastService } from '../ui/ToastService';
+import { ModalService } from '../ui/ModalService';
+import { ModalStatus } from '../ui/typings';
+import { HistoryKey } from '../history/HistoryKey';
+import { AddLayersTask } from '../history/tasks/layers/AddLayersTask';
+import { HistoryService } from '../history/HistoryService';
 
 const logger = Logger.get('DataService.ts');
 
+export const MAX_RECOMMENDED_SIZE = 5 * 1024 * 1024;
+export const MAX_RECOMMENDED_FEATURES = 1000;
+
+export enum ImportStatus {
+  Succeed = 'Succeed',
+  Failed = 'Failed',
+  Canceled = 'Canceled',
+}
+
 export interface ImportResult {
-  layers: LayerWrapper[];
+  status: ImportStatus;
 }
 
 export declare type DataReaderFactory = () => DataReader;
 
 const defaultReaderFactory: DataReaderFactory = () => DataReader.create();
 
-export class DataStoreService {
+export class DataService {
   constructor(
     private apiClient: AxiosInstance,
     private downloadClient: AxiosInstance,
     private toasts: ToastService,
     private geo: GeoService,
+    private modals: ModalService,
+    private history: HistoryService,
     private readerFactory = defaultReaderFactory
   ) {}
 
@@ -100,10 +111,23 @@ export class DataStoreService {
   }
 
   public async importFiles(files: AbcFile<Blob>[]): Promise<ImportResult> {
+    // We check if files are not too big
+    const bigFiles = files.filter((f) => f.content.size >= MAX_RECOMMENDED_SIZE);
+    if (bigFiles.length && (await this.modals.dataSizeWarning()) === ModalStatus.Canceled) {
+      return { status: ImportStatus.Canceled };
+    }
+
+    // We read files
     const map = this.geo.getMainMap();
     const layers = await this.readerFactory().read(files, map.getProjection());
     if (!layers.length) {
-      return { layers: [] };
+      return { status: ImportStatus.Failed };
+    }
+
+    // We check if layers are not too big
+    const bigLayers = layers.filter((lay) => lay.isVector() && lay.getSource().getFeatures().length > MAX_RECOMMENDED_FEATURES);
+    if (!bigFiles.length && bigLayers.length && (await this.modals.dataSizeWarning()) === ModalStatus.Canceled) {
+      return { status: ImportStatus.Canceled };
     }
 
     // We add layers
@@ -112,6 +136,7 @@ export class DataStoreService {
       lay.setName(`Import de ${hour} (${i + 1})`);
       map.addLayer(lay);
     });
+    this.history.register(HistoryKey.Map, new AddLayersTask(map, layers));
 
     // We set last one active
     const last = layers[layers.length - 1];
@@ -123,6 +148,6 @@ export class DataStoreService {
       map.unwrap().getView().fit(extent);
     }
 
-    return { layers };
+    return { status: ImportStatus.Succeed };
   }
 }

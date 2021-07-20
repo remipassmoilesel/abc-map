@@ -113,7 +113,7 @@ class LayoutView extends Component<Props, State> {
   }
 
   public componentDidMount() {
-    pageSetup('Mise en page', `Mettez en page et exportez vos cartes au format PDF ou PNG 🚶‍♂️ 🚶‍♀️`);
+    pageSetup('Mise en page', `Mettez en page et exportez vos cartes au format PDF ou PNG 📐 🚶‍♀️`);
 
     const layouts = this.props.layouts;
     if (layouts.length) {

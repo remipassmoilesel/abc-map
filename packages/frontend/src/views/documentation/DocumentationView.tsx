@@ -17,7 +17,7 @@
  */
 
 import React, { Component, ReactNode } from 'react';
-import { Logger } from '@abc-map/shared';
+import { getAbcWindow, Logger } from '@abc-map/shared';
 import { content as doc } from '@abc-map/user-documentation';
 import { ServiceProps, withServices } from '../../core/withServices';
 import Cls from './DocumentationView.module.scss';
@@ -26,6 +26,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { UiActions } from '../../core/store/ui/actions';
 import * as _ from 'lodash';
 import { pageSetup } from '../../core/utils/page-setup';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 const logger = Logger.get('DocumentationView.tsx', 'info');
 
@@ -39,7 +40,7 @@ const mapDispatchToProps = {
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
-type Props = ConnectedProps<typeof connector> & ServiceProps;
+type Props = ConnectedProps<typeof connector> & ServiceProps & RouteComponentProps;
 
 class DocumentationView extends Component<Props, {}> {
   private viewPortRef = React.createRef<HTMLDivElement>();
@@ -66,7 +67,7 @@ class DocumentationView extends Component<Props, {}> {
   }
 
   public componentDidMount() {
-    pageSetup('Documentation', `La documentation contient des exemples pratiques, une FAQ et des explications sur le fonctionnement d'Abc-Map.`);
+    pageSetup('Documentation', `La documentation explique le fonctionnement d'Abc-Map 📖`);
 
     const current = this.viewPortRef.current;
     if (!current) {
@@ -75,6 +76,8 @@ class DocumentationView extends Component<Props, {}> {
     }
     current.addEventListener('scroll', this.handleScroll);
     current.scrollTop = this.props.position;
+
+    getAbcWindow().abc.goTo = this.goTo;
   }
 
   public componentWillUnmount() {
@@ -85,6 +88,14 @@ class DocumentationView extends Component<Props, {}> {
     }
     current.removeEventListener('scroll', this.handleScroll);
   }
+
+  /**
+   * This route is used for documentation links
+   * @param route
+   */
+  private goTo = (route: string) => {
+    this.props.history.push(route);
+  };
 
   private handleScroll = _.debounce(() => {
     const current = this.viewPortRef.current;
@@ -97,4 +108,4 @@ class DocumentationView extends Component<Props, {}> {
   }, 100);
 }
 
-export default connector(withServices(DocumentationView));
+export default connector(withRouter(withServices(DocumentationView)));

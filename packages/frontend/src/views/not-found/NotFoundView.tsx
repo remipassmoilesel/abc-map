@@ -29,14 +29,14 @@ class NotFoundView extends Component<{}, {}> {
   public render(): ReactNode {
     return (
       <div className={Cls.notFoundView}>
-        <h3>Impossible de trouver cette page 😱</h3>
+        <h3>Vous êtes perdu 😱</h3>
         <Link to={FrontendRoutes.landing().raw()}>Retourner à l&apos;accueil</Link>
       </div>
     );
   }
 
   public componentDidMount() {
-    pageSetup('Impossible de trouver cette page', `404 - Impossible de trouver ce que vous recherchez.`);
+    pageSetup('404 - Vous êtes perdu');
     addNoIndexMeta();
   }
 

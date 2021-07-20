@@ -28,33 +28,27 @@ const testDataDir = path.resolve(testRoot, 'src/test-data');
 module.exports = (on, config) => {
   // Set windows size on launch for CI
   on('before:browser:launch', (browser = {}, launchOptions) => {
-    const width = 1920
-    const height = 1080
+    const width = 1920;
+    const height = 1080;
 
     if (browser.name === 'chrome' || browser.name === 'chromium') {
-      launchOptions.args.push(`--window-size=${width},${height}`)
+      launchOptions.args.push(`--window-size=${width},${height}`);
 
       // force screen to be non-retina and just use our given resolution
-      launchOptions.args.push('--force-device-scale-factor=1')
-    }
-
-    else if (browser.name === 'electron') {
+      launchOptions.args.push('--force-device-scale-factor=1');
+    } else if (browser.name === 'electron') {
       // might not work on CI for some reason
-      launchOptions.preferences.width = width
-      launchOptions.preferences.height = height
+      launchOptions.preferences.width = width;
+      launchOptions.preferences.height = height;
+    } else if (browser.name === 'firefox') {
+      launchOptions.args.push(`--width=${width}`);
+      launchOptions.args.push(`--height=${height}`);
+    } else {
+      console.error('Cannot set window size for runner, tests may fail.');
     }
 
-    else if (browser.name === 'firefox') {
-      launchOptions.args.push(`--width=${width}`)
-      launchOptions.args.push(`--height=${height}`)
-    }
-
-    else {
-      console.error('Cannot set window size for runner, tests may fail.')
-    }
-
-    return launchOptions
-  })
+    return launchOptions;
+  });
 
   on('task', {
 
@@ -100,4 +94,9 @@ module.exports = (on, config) => {
       }));
     }
   });
+
+  // Log console output if debug enabled
+  if(process.env.DEBUG) {
+    require('cypress-log-to-output').install(on);
+  }
 };

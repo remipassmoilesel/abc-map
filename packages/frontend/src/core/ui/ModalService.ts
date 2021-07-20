@@ -27,6 +27,7 @@ import {
   ModalEventListener,
   ModalEventType,
   ModalStatus,
+  OperationStatus,
   PasswordInputClosedEvent,
   RegistrationClosedEvent,
   RenameModalClosedEvent,
@@ -94,10 +95,10 @@ export class ModalService {
     return this.modalPromise({ type: ModalEventType.ShowLegendSymbolPicker }, ModalEventType.LegendSymbolPickerClosed);
   }
 
-  public longOperationModal(operation: () => Promise<void>): Promise<void> {
+  public longOperationModal(operation: () => Promise<OperationStatus | void>): Promise<OperationStatus> {
     this.dispatch({ type: ModalEventType.ShowLongOperationModal, burning: true });
 
-    return new Promise((resolve, reject) => {
+    return new Promise<OperationStatus>((resolve, reject) => {
       const display = () => {
         delayedPromise(operation(), 1000).then(hideOnSuccess).catch(hideOnFail);
       };
@@ -107,12 +108,18 @@ export class ModalService {
         reject(err);
       };
 
-      const hideOnSuccess = () => {
+      const hideOnSuccess = (res: OperationStatus | void) => {
+        if (res === OperationStatus.Canceled) {
+          this.dispatch({ type: ModalEventType.LongOperationModalClosed });
+          resolve(OperationStatus.Canceled);
+          return;
+        }
+
         this.dispatch({ type: ModalEventType.ShowLongOperationModal, burning: false });
 
         setTimeout(() => {
           this.dispatch({ type: ModalEventType.LongOperationModalClosed });
-          resolve();
+          resolve(OperationStatus.Succeed);
         }, 1000);
       };
 
@@ -124,10 +131,34 @@ export class ModalService {
   public modificationsLostConfirmation(): Promise<ModalStatus> {
     const input: ModalEvent = {
       type: ModalEventType.ShowConfirmation,
-      title: 'Modifications en cours',
+      title: 'Modifications en cours ✍️',
       message: `
-          <p>Si vous continuez, les modifications en cours seront perdues.</p>
-          <p>Si vous avez exporté ou sauvegardé votre projet vous pouvez ignorer ce message.</p>`,
+          <div class='my-3'>
+            Si vous continuez, les modifications en cours seront perdues.
+          </div>
+          <div class='my-3'>
+            Si vous avez exporté ou sauvegardé votre projet vous pouvez ignorer ce message.
+          </div>`,
+    };
+    return this.modalPromise<ConfirmationClosedEvent>(input, ModalEventType.ConfirmationClosed).then((res) => res.status);
+  }
+
+  public dataSizeWarning(): Promise<ModalStatus> {
+    const input: ModalEvent = {
+      type: ModalEventType.ShowConfirmation,
+      title: 'Jeu de données lourd 🏋️',
+      message: `
+          <div class='my-3'>
+            Vous êtes sur le point d'importer une grande quantité de données.
+          </div>
+          <div class='my-3'>
+            Abc-Map n'est pas encore prêt pour accueillir des jeux de données lourds, vous risquez de ralentir et de bloquer votre session.
+          </div>
+          <div class='my-3'>
+            Pour le moment mieux vaut utiliser des fichiers de <code>moins de 5 mo</code> et des couches de <code>moins de 1000 formes</code>.<br/>
+            Dans un futur proche, vous pourrez utiliser plus de données.
+          </div>
+      `,
     };
     return this.modalPromise<ConfirmationClosedEvent>(input, ModalEventType.ConfirmationClosed).then((res) => res.status);
   }

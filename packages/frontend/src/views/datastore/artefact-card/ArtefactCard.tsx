@@ -108,10 +108,10 @@ class ArtefactCard extends Component<Props, State> {
   }
 
   private handleShowLicense = () => {
-    const { dataStore } = this.props.services;
+    const { data } = this.props.services;
     const artefact = this.props.artefact;
 
-    dataStore
+    data
       .downloadLicense(artefact)
       .then((license) => this.setState({ licenseModal: true, license }))
       .catch((err) => logger.error(err));

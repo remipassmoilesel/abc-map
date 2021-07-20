@@ -1,5 +1,6 @@
 # Backlog
 
+* [Performance: WebASM and web worker usage](#performance-webasm-and-web-worker-usage)
 * [Text labels not attached to features](#text-labels-not-attached-to-features)
 * [Backgrounds for text label](#backgrounds-for-text-label)
 * [Users should be able to measure distances](#users-should-be-able-to-measure-distances)
@@ -14,12 +15,24 @@
 * [Geopackage export](#geopackage-export)
 * [Shapefile export](#shapefile-export)
 * [Vector tiles support](#vector-tiles-support)
-* [Web worker usage](#web-worker-usage)
 * [Map legend](#map-legend)
 * [Custom icons](#custom-icons)
 * [Images](#images)
 * [Datastore artefact with prompt](#datastore-artefact-with-prompt)
-  
+
+
+## Performance: WebASM and web worker usage
+
+We should use WebASM and web workers everywhere that is possible, in order to prevent UI freeze and to get better 
+performances. 
+
+Tasks:
+- Zip / unzip of project, per example with https://gildas-lormeau.github.io/zip.js/core-api.html
+- Data display in tables
+- Data parsing
+- Data processing
+- ...
+
 
 ## Text labels not attached to features
 
@@ -95,14 +108,6 @@ A user should be able to export layers as shapefiles. A DataWriter can be create
 ## Vector tiles support
 
 A user should be able to use vector tiles layers.
-
-
-## Web worker usage
-
-Web worker should be used in several tasks of frontend:
-- Zip / unzip of project, per example with https://gildas-lormeau.github.io/zip.js/core-api.html
-- Data processing
-- ...
 
 
 ## Map legend

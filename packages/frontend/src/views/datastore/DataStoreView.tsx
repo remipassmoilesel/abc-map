@@ -16,18 +16,16 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { ChangeEvent, KeyboardEvent, Component, ReactNode } from 'react';
-import { Logger } from '@abc-map/shared';
-import { AbcArtefact, Zipper } from '@abc-map/shared';
+import React, { ChangeEvent, Component, KeyboardEvent, ReactNode } from 'react';
+import { AbcArtefact, Logger, Zipper } from '@abc-map/shared';
 import ArtefactCard from './artefact-card/ArtefactCard';
 import { ServiceProps, withServices } from '../../core/withServices';
 import NavigationBar from './NavigationBar';
-import { HistoryKey } from '../../core/history/HistoryKey';
-import { AddLayersTask } from '../../core/history/tasks/layers/AddLayersTask';
 import { FileFormat, FileFormats } from '../../core/data/FileFormats';
 import { FileIO } from '../../core/utils/FileIO';
 import Cls from './DataStoreView.module.scss';
 import { pageSetup } from '../../core/utils/page-setup';
+import { ImportStatus } from '../../core/data/DataService';
 
 const logger = Logger.get('DataStore.tsx', 'info');
 
@@ -106,7 +104,7 @@ class DataStoreView extends Component<ServiceProps, State> {
   }
 
   public componentDidMount() {
-    pageSetup('Magasin de données', `Ajoutez des données compatibles et sélectionnées en un clic. Pays du monde, hydrographie, et bien plus !`);
+    pageSetup('Catalogue de données', `Ajoutez des données compatibles et sélectionnées en un clic. Pays du monde, hydrographie, et bien plus 🛒`);
 
     this.loadArtefacts();
   }
@@ -131,16 +129,16 @@ class DataStoreView extends Component<ServiceProps, State> {
   };
 
   private loadArtefacts() {
-    const { dataStore } = this.props.services;
+    const { data } = this.props.services;
     const { limit, offset, searchQuery } = this.state;
 
     if (searchQuery) {
-      dataStore
+      data
         .searchArtefacts(searchQuery, limit, offset)
         .then((res) => this.setState({ artefacts: res.content, limit: res.limit, offset: res.offset, total: res.total, activePage: 1 }))
         .catch((err) => logger.error(err));
     } else {
-      dataStore
+      data
         .listArtefacts(limit, offset)
         .then((res) => this.setState({ artefacts: res.content, limit: res.limit, offset: res.offset, total: res.total }))
         .catch((err) => logger.error(err));
@@ -148,19 +146,19 @@ class DataStoreView extends Component<ServiceProps, State> {
   }
 
   private handleImportArtefact = (artefact: AbcArtefact) => {
-    const { toasts, dataStore, geo, history } = this.props.services;
+    const { toasts, data } = this.props.services;
 
     this.setState({ downloading: true });
-    dataStore
+    data
       .importArtefact(artefact)
       .then((res) => {
-        if (!res.layers.length) {
+        if (res.status === ImportStatus.Failed) {
           toasts.error('Ces fichiers ne sont pas supportés');
           return;
         }
-
-        const map = geo.getMainMap();
-        history.register(HistoryKey.Map, new AddLayersTask(map, res.layers));
+        if (res.status === ImportStatus.Canceled) {
+          return;
+        }
 
         toasts.info('Import terminé !');
       })
@@ -172,10 +170,10 @@ class DataStoreView extends Component<ServiceProps, State> {
   };
 
   private handleDownloadArtefact = (artefact: AbcArtefact) => {
-    const { toasts, dataStore } = this.props.services;
+    const { toasts, data } = this.props.services;
 
     this.setState({ downloading: true });
-    dataStore
+    data
       .downloadFilesFrom(artefact)
       .then(async (res) => {
         let content: Blob;

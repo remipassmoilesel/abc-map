@@ -17,13 +17,12 @@
  */
 
 import React, { Component, DragEvent, ReactNode } from 'react';
-import { Logger } from '@abc-map/shared';
+import { AbcFile, Logger } from '@abc-map/shared';
 import { MapWrapper } from '../../../core/geo/map/MapWrapper';
-import { AbcFile } from '@abc-map/shared';
-import { HistoryKey } from '../../../core/history/HistoryKey';
-import { AddLayersTask } from '../../../core/history/tasks/layers/AddLayersTask';
 import { ServiceProps, withServices } from '../../../core/withServices';
+import { ImportStatus } from '../../../core/data/DataService';
 import Cls from './MainMap.module.scss';
+import { OperationStatus } from '../../../core/ui/typings';
 
 export const logger = Logger.get('MainMap.ts', 'debug');
 
@@ -94,7 +93,7 @@ class MainMap extends Component<Props, State> {
   }
 
   private handleDrop = (ev: DragEvent<HTMLDivElement>) => {
-    const { dataStore, history, toasts, modals } = this.props.services;
+    const { data, toasts, modals } = this.props.services;
     ev.preventDefault();
 
     const files: AbcFile<Blob>[] = Array.from(ev.dataTransfer.files).map((f) => ({ path: f.name, content: f }));
@@ -106,14 +105,17 @@ class MainMap extends Component<Props, State> {
     this.setState({ dragOverlay: false });
 
     const importFiles = async () => {
-      const result = await dataStore.importFiles(files);
+      const result = await data.importFiles(files);
 
-      if (!result.layers.length) {
+      if (result.status === ImportStatus.Failed) {
         toasts.error("Ces formats de fichiers ne sont pas supportés, aucune donnée n'a été importée");
         return;
       }
 
-      history.register(HistoryKey.Map, new AddLayersTask(this.props.map, result.layers));
+      if (result.status === ImportStatus.Canceled) {
+        return OperationStatus.Canceled;
+      }
+
       toasts.info('Import terminé !');
     };
 

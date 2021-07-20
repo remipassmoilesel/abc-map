@@ -104,9 +104,24 @@ export class ArtefactDao {
     return coll.deleteMany({}).then(() => undefined);
   }
 
+  public async delete(toDelete: ArtefactDocument[]) {
+    if (!toDelete.length) {
+      return;
+    }
+
+    const coll = await this.collection();
+    const ids = toDelete.map((d) => d._id);
+    return coll.deleteMany({ _id: { $in: ids } });
+  }
+
   public async count(): Promise<number> {
     const coll = await this.collection();
     return coll.countDocuments();
+  }
+
+  public async findAll(): Promise<ArtefactDocument[]> {
+    const coll = await this.collection();
+    return coll.find({}).toArray();
   }
 
   private async collection() {

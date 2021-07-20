@@ -28,6 +28,7 @@ import { Logger } from '@abc-map/shared';
 import * as util from 'util';
 import { ManifestReader } from './ManifestReader';
 import * as crypto from 'crypto';
+import { ArtefactDocument } from './ArtefactDocument';
 const globPromise = util.promisify(glob);
 
 export const logger = Logger.get('DatastoreService.ts', 'info');
@@ -91,6 +92,7 @@ export class DataStoreService extends AbstractService {
     const root = this.getRoot();
     logger.info(`Indexing datastore path: ${root}`);
 
+    // List artefacts on disk
     const manifestPaths = await globPromise(`{${root}/**/artefact.yml,${root}/**/artefact.yaml}`, {
       nocase: true,
     });
@@ -106,7 +108,7 @@ export class DataStoreService extends AbstractService {
       return path.relative(datastorePath, absolute);
     }
 
-    const documents: AbcArtefact[] = [];
+    const artefacts: ArtefactDocument[] = [];
     for (const manifestPath of manifestPaths) {
       const manifest = await ManifestReader.read(manifestPath);
       const artefact = manifest.artefact;
@@ -114,8 +116,8 @@ export class DataStoreService extends AbstractService {
       const files = manifest.artefact.files.map((file) => relativePath(manifest.path, file));
       const license = relativePath(manifest.path, manifest.artefact.license);
 
-      const doc: AbcArtefact = {
-        id: hash(artefactPath),
+      const doc: ArtefactDocument = {
+        _id: hash(artefactPath),
         name: artefact.name,
         description: artefact.description,
         keywords: artefact.keywords || [],
@@ -125,11 +127,17 @@ export class DataStoreService extends AbstractService {
         files,
       };
 
-      documents.push(doc);
+      artefacts.push(doc);
     }
 
-    await this.dao.deleteAll();
-    await this.saveAll(documents);
+    // Save them
+    await this.dao.saveAll(artefacts);
+
+    // Delete non existing ones
+    const existing = await this.dao.findAll();
+    const toDelete = existing.filter((artA) => !artefacts.find((artB) => artB._id === artA._id));
+    await this.dao.delete(toDelete);
+
     logger.info('Indexing done !');
   }
 }

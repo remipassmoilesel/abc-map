@@ -2,7 +2,7 @@
 
 # Les projets
 
-Un projet est une représentation d'une carte et des objets associés à cette carte. Il permettent de sauvegarder votre travail.
+Un projet est une représentation d'une carte et des objets associés à cette carte. Ils permettent de sauvegarder votre travail.
 
 Les projets contiennent:
 

@@ -21,6 +21,7 @@ import { Logger } from '@abc-map/shared';
 import { ServiceProps, withServices } from '../../core/withServices';
 import PaypalButton from './PaypalButton';
 import Cls from './FundingView.module.scss';
+import { pageSetup } from '../../core/utils/page-setup';
 
 const logger = Logger.get('FundingView.tsx', 'info');
 
@@ -90,6 +91,10 @@ class FundingView extends Component<ServiceProps, {}> {
         </div>
       </div>
     );
+  }
+
+  public componentDidMount() {
+    pageSetup('Financez Abc-Map', "Financez un petit bout d'Internet libre 💌");
   }
 }
 

@@ -20,7 +20,7 @@ import TileLayer from 'ol/layer/Tile';
 import { OSM, Stamen, TileWMS, XYZ } from 'ol/source';
 import uuid from 'uuid-random';
 import VectorSource from 'ol/source/Vector';
-import { tileLoadAuthenticated } from '../map/tileLoadAuthenticated';
+import { wmsLoadingAuthenticated } from './wmsLoadingAuthenticated';
 import { GeoJSON } from 'ol/format';
 import {
   AbcLayer,
@@ -38,6 +38,7 @@ import VectorImageLayer from 'ol/layer/VectorImage';
 import Geometry from 'ol/geom/Geometry';
 import TileSource from 'ol/source/Tile';
 import { styleFunction } from '../styles/style-function';
+import { wmsLoadingPublic } from './wmsLoadingPublic';
 
 export class LayerFactory {
   public static newPredefinedLayer(model: PredefinedLayerModel, meta?: PredefinedMetadata): PredefinedLayerWrapper {
@@ -101,7 +102,7 @@ export class LayerFactory {
   }
 
   public static newWmsLayer(def: WmsDefinition): WmsLayerWrapper {
-    const tileLoadFunction = def.auth?.username && def.auth?.password ? tileLoadAuthenticated(def.auth) : undefined;
+    const tileLoadFunction = def.auth?.username && def.auth?.password ? wmsLoadingAuthenticated(def.auth) : wmsLoadingPublic();
 
     // TODO: FIXME: which extent should we set ?
     const layer = new TileLayer({

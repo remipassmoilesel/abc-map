@@ -3,7 +3,12 @@
 ## Run all tests, the quick way
 
     $ abc start
-    $ yarn run e2e:interactive
+    $ yarn run e2e:dev:interactive
+
+
+## Debug console output
+
+    $ DEBUG=true yarn run e2e:ci
 
 
 ## Error: attempt to perform an operation not allowed by the security policy `gs' @ error/delegate.c/ExternalDelegateCommand/378

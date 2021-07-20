@@ -17,13 +17,11 @@
  */
 
 import React, { Component, ReactNode } from 'react';
-import { Logger } from '@abc-map/shared';
-import { AbcFile } from '@abc-map/shared';
+import { AbcFile, Logger } from '@abc-map/shared';
 import { FileIO, InputResultType, InputType } from '../../../core/utils/FileIO';
-import { AddLayersTask } from '../../../core/history/tasks/layers/AddLayersTask';
-import { HistoryKey } from '../../../core/history/HistoryKey';
 import { ServiceProps, withServices } from '../../../core/withServices';
-import './ImportData.module.scss';
+import { ImportStatus } from '../../../core/data/DataService';
+import { OperationStatus } from '../../../core/ui/typings';
 
 const logger = Logger.get('ImportData.tsx', 'debug');
 
@@ -36,15 +34,13 @@ class ImportData extends Component<ServiceProps, {}> {
             <i className={'fa fa-table mr-2'} /> Importer des données
           </button>
         </div>
-        <div>
-          <i>Vous pouvez importer des données en sélectionnant un fichier et en le déposant sur la carte</i>
-        </div>
+        <div className={'mb-2 font-italic'}>Vous pouvez aussi déposer des fichiers sur la carte.</div>
       </div>
     );
   }
 
   private importFile = () => {
-    const { toasts, dataStore, geo, history, modals } = this.props.services;
+    const { toasts, data, modals } = this.props.services;
 
     const selectFiles = async (): Promise<AbcFile<Blob>[] | undefined> => {
       const result = await FileIO.openInput(InputType.Multiple);
@@ -56,15 +52,17 @@ class ImportData extends Component<ServiceProps, {}> {
     };
 
     const importFiles = async (files: AbcFile<Blob>[]) => {
-      const result = await dataStore.importFiles(files);
+      const result = await data.importFiles(files);
 
-      if (!result.layers.length) {
+      if (result.status === ImportStatus.Failed) {
         toasts.error("Ces formats de fichiers ne sont pas supportés, aucune donnée n'a été importée");
         return;
       }
 
-      const map = geo.getMainMap();
-      history.register(HistoryKey.Map, new AddLayersTask(map, result.layers));
+      if (result.status === ImportStatus.Canceled) {
+        return OperationStatus.Canceled;
+      }
+
       toasts.info('Import terminé !');
     };
 

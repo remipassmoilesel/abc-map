@@ -17,7 +17,7 @@
  */
 
 import toc from './00_toc.md';
-import functionalities from './01_features.md';
+import introduction from './01_introduction.md';
 import projects from './02_projects.md';
 import map from './03_map.md';
 import layers from './04_layers.md';
@@ -32,7 +32,7 @@ import colorGradients from './12_color-gradients.md';
 import scripts from './13_scripts.md';
 
 const content = [
-  functionalities,
+  introduction,
   projects,
   map,
   layers,

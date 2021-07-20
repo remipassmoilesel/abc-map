@@ -23,7 +23,7 @@ import { ImageTile } from 'ol';
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import TileState from 'ol/TileState';
 
-export const logger = Logger.get('tileLoadFunction.ts');
+export const logger = Logger.get('wmsLoadingAuthenticated.ts');
 
 export declare type HttpClientFactory = (config: AxiosRequestConfig) => AxiosInstance;
 
@@ -31,7 +31,7 @@ function defaultHttpClientFactory(config: AxiosRequestConfig): AxiosInstance {
   return axios.create(config);
 }
 
-export function tileLoadAuthenticated(auth: WmsAuthentication, factory: HttpClientFactory = defaultHttpClientFactory): LoadFunction {
+export function wmsLoadingAuthenticated(auth: WmsAuthentication, factory: HttpClientFactory = defaultHttpClientFactory): LoadFunction {
   const authClient = factory({
     timeout: 10_000,
     responseType: 'blob',
@@ -49,6 +49,7 @@ export function tileLoadAuthenticated(auth: WmsAuthentication, factory: HttpClie
         const blob = res.data as Blob;
         if (tile.getImage && tile.getImage() instanceof HTMLImageElement) {
           const image = tile.getImage() as HTMLImageElement;
+          image.crossOrigin = 'Anonymous';
           image.src = URL.createObjectURL(blob);
         } else {
           tile.setState(TileState.ERROR);

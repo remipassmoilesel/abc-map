@@ -41,9 +41,7 @@ export class WmsDefinitionReader extends AbstractDataReader {
       const fileContent = await BlobIO.asString(file.content);
       const definition = yaml.load(fileContent) as WmsDefinition | undefined;
       if (!definition || !definition.remoteUrl || !definition.remoteLayerName) {
-        // TODO: we should fail here
-        logger.error('Invalid definition: ', { definition, fileContent });
-        continue;
+        return Promise.reject(new Error(`Invalid WMS definition: ${JSON.stringify(definition)}`));
       }
 
       const layer = LayerFactory.newWmsLayer(definition);

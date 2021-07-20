@@ -17,7 +17,7 @@
  */
 
 import { ModalService } from './ModalService';
-import { ModalEvent, ModalEventType, ModalStatus } from './typings';
+import { ModalEvent, ModalEventType, ModalStatus, OperationStatus } from './typings';
 import * as sinon from 'sinon';
 import { TestHelper } from '../utils/test/TestHelper';
 
@@ -60,8 +60,9 @@ describe('ModalService', function () {
       service.addListener(ModalEventType.ShowLongOperationModal, listener);
       service.addListener(ModalEventType.LongOperationModalClosed, listener);
 
-      await service.longOperationModal(() => TestHelper.wait(200));
+      const res = await service.longOperationModal(() => TestHelper.wait(200));
 
+      expect(res).toEqual(OperationStatus.Succeed);
       expect(listener.callCount).toEqual(3);
       expect(listener.args).toEqual([
         [{ type: ModalEventType.ShowLongOperationModal, burning: true }],
@@ -84,6 +85,21 @@ describe('ModalService', function () {
 
       expect(error).toBeInstanceOf(Error);
       expect(error.message).toEqual('Huuooo');
+      expect(listener.callCount).toEqual(2);
+      expect(listener.args).toEqual([[{ type: ModalEventType.ShowLongOperationModal, burning: true }], [{ type: ModalEventType.LongOperationModalClosed }]]);
+    });
+
+    it('should close quickly on cancel', async () => {
+      const listener = sinon.stub();
+      service.addListener(ModalEventType.ShowLongOperationModal, listener);
+      service.addListener(ModalEventType.LongOperationModalClosed, listener);
+
+      const res = await service.longOperationModal(async () => {
+        await TestHelper.wait(200);
+        return OperationStatus.Canceled;
+      });
+
+      expect(res).toEqual(OperationStatus.Canceled);
       expect(listener.callCount).toEqual(2);
       expect(listener.args).toEqual([[{ type: ModalEventType.ShowLongOperationModal, burning: true }], [{ type: ModalEventType.LongOperationModalClosed }]]);
     });

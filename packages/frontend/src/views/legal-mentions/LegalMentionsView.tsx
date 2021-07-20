@@ -49,6 +49,7 @@ class LegalMentionsView extends Component<ServiceProps, State> {
 
   public componentDidMount() {
     pageSetup('A propos de cette plateforme');
+
     this.props.services.legalMentions
       .get()
       .then((legalMentions) => this.setState({ legalMentions }))

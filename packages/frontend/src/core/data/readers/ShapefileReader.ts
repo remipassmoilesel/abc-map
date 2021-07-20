@@ -28,6 +28,9 @@ import { BlobIO } from '@abc-map/shared';
 import uuid from 'uuid-random';
 import { LayerWrapper } from '../../geo/layers/LayerWrapper';
 import { LayerFactory } from '../../geo/layers/LayerFactory';
+import proj4 from 'proj4';
+import { WktParser } from '../wkt/WktParser';
+import { register } from 'ol/proj/proj4';
 
 const logger = Logger.get('ShapefileReader.ts');
 
@@ -47,12 +50,22 @@ export class ShapefileReader extends AbstractDataReader {
       return Promise.reject(new Error('Shapefile not found'));
     }
 
+    // We read feature collection from shapefile
     const shpBuffer = await BlobIO.asArrayBuffer(shp.content);
     const dbfBuffer = dbf ? await BlobIO.asArrayBuffer(dbf.content) : undefined;
-    const geojson = await shapefile.read(shpBuffer, dbfBuffer, { encoding: 'utf-8' });
+    const featureColl = await shapefile.read(shpBuffer, dbfBuffer, { encoding: 'utf-8' });
 
+    // We try to use a prj file if any
+    const prjFile = files.find((f) => f.path.toLocaleLowerCase().endsWith('.prj'));
+    const prjParsed = prjFile ? await WktParser.parsePrj(prjFile.content) : undefined;
+    if (prjParsed) {
+      proj4.defs(prjParsed.wkt.srsCode, prjParsed.original);
+      register(proj4);
+    }
+
+    // We load Openlayers features
     const format = new GeoJSON();
-    const features = format.readFeatures(geojson, { featureProjection: projection.name });
+    const features = format.readFeatures(featureColl, { dataProjection: prjParsed?.wkt.srsCode, featureProjection: projection.name });
     this.prepareFeatures(features);
 
     const layer = LayerFactory.newVectorLayer(new VectorSource({ features }));

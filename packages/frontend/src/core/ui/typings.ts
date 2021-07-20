@@ -194,3 +194,8 @@ export class InternalEvent extends Event {
 }
 
 export declare type ModalEventListener<T extends ModalEvent = ModalEvent> = (ev: T) => void;
+
+export enum OperationStatus {
+  Succeed = 'Succeed',
+  Canceled = 'Canceled',
+}
