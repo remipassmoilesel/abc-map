@@ -17,7 +17,7 @@
  */
 
 import React, { Component, DragEvent, ReactNode } from 'react';
-import { AbcFile, Logger } from '@abc-map/shared';
+import { AbcFile, Logger, ProjectConstants } from '@abc-map/shared';
 import { MapWrapper } from '../../../core/geo/map/MapWrapper';
 import { ServiceProps, withServices } from '../../../core/withServices';
 import { ImportStatus } from '../../../core/data/DataService';
@@ -95,6 +95,7 @@ class MainMap extends Component<Props, State> {
   private handleDrop = (ev: DragEvent<HTMLDivElement>) => {
     const { data, toasts, modals } = this.props.services;
     ev.preventDefault();
+    this.setState({ dragOverlay: false });
 
     const files: AbcFile<Blob>[] = Array.from(ev.dataTransfer.files).map((f) => ({ path: f.name, content: f }));
     if (!files.length) {
@@ -102,18 +103,22 @@ class MainMap extends Component<Props, State> {
       return;
     }
 
-    this.setState({ dragOverlay: false });
+    const project = files.find((f) => f.path.toLocaleLowerCase().endsWith(ProjectConstants.FileExtension));
+    if (project) {
+      toasts.info(`Vous devez importer votre projet à l'aide du contrôle 'Importer un projet'`);
+      return;
+    }
 
     const importFiles = async () => {
       const result = await data.importFiles(files);
 
       if (result.status === ImportStatus.Failed) {
         toasts.error("Ces formats de fichiers ne sont pas supportés, aucune donnée n'a été importée");
-        return;
+        return OperationStatus.Interrupted;
       }
 
       if (result.status === ImportStatus.Canceled) {
-        return OperationStatus.Canceled;
+        return OperationStatus.Interrupted;
       }
 
       toasts.info('Import terminé !');

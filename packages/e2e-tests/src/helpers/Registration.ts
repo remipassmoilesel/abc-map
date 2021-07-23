@@ -46,7 +46,7 @@ export class Registration {
       .type(defaultPassword)
       .get('button[data-cy=confirm-registration]')
       .click()
-      .then(() => Toasts.assertText('Un email vient de vous être envoyé, vous devez activer votre compte'));
+      .then(() => Toasts.assertText('Vous devez activer votre compte, vous allez recevoir un email. Pensez à vérifier vos spam'));
   }
 
   public static enableAccount(email: string): Chainable<any> {

@@ -16,7 +16,17 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
+@import "src/assets/styles/variables";
+
 .selectionPanel {
   display: flex;
   flex-direction: column;
+}
+
+.section {
+  padding-bottom: 0.3rem;
+  margin-top: 0.9rem;
+  margin-bottom: 0.3rem;
+  border-bottom: 1px solid silver;
+  color: #747474;
 }

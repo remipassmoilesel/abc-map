@@ -52,7 +52,7 @@ class ProjectStatus extends Component<Props, {}> {
     const { modals, project, toasts } = this.props.services;
 
     modals
-      .rename('Renommer', 'Renommer le project', this.props.project.name)
+      .rename(`Renommer le projet '${this.props.project.name}'`, this.props.project.name)
       .then((event) => {
         if (event.status === ModalStatus.Confirmed) {
           project.renameProject(event.value);

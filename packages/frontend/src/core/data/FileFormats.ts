@@ -22,7 +22,6 @@ export enum FileFormat {
   KML = 'KML',
   SHAPEFILE = 'SHAPEFILE',
   WMS_DEFINITION = 'WMS_DEFINITION',
-  ABM2 = 'ABM2',
   GEOJSON = 'GEOJSON',
 }
 
@@ -32,7 +31,6 @@ const extensionMap: ExtensionMap = {
   [FileFormat.GPX]: ['.gpx'],
   [FileFormat.KML]: ['.kml'],
   [FileFormat.SHAPEFILE]: ['.shp', '.dbf'],
-  [FileFormat.ABM2]: ['.abm2'],
   [FileFormat.GEOJSON]: ['.geojson', '.json'],
   [FileFormat.WMS_DEFINITION]: ['.wms'],
 };

@@ -54,17 +54,20 @@ class RenameModal extends Component<ServiceProps, State> {
           <Modal.Title>{title}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div>{message}</div>
-          <div className={'m-3'}>
-            <input className={'form-control'} type={'text'} value={value} onChange={this.handleInputChanged} data-cy="modal-rename-input" />
-          </div>
-          <div className={'d-flex justify-content-end'}>
-            <button className={'btn btn-secondary mr-3'} onClick={this.handleCancel}>
-              Annuler
-            </button>
-            <button className={'btn btn-primary'} onClick={this.handleConfirm} data-cy="rename-modal-confirm">
-              Renommer
-            </button>
+          <div className={'p-3'}>
+            <div>{message}</div>
+            <div className={'my-3'}>
+              <input className={'form-control'} type={'text'} value={value} onChange={this.handleInputChanged} data-cy="modal-rename-input" />
+            </div>
+
+            <div className={'d-flex justify-content-end'}>
+              <button className={'btn btn-secondary mr-2'} onClick={this.handleCancel}>
+                Annuler
+              </button>
+              <button className={'btn btn-primary'} onClick={this.handleConfirm} data-cy="rename-modal-confirm">
+                Renommer
+              </button>
+            </div>
           </div>
         </Modal.Body>
       </Modal>

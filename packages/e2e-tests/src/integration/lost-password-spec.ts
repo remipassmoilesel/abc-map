@@ -45,7 +45,7 @@ describe('Reset password', function () {
       .type(email)
       .get('[data-cy=confirm-reset-password]')
       .click()
-      .then(() => Toasts.assertText('Si votre adresse est enregistrée, votre demande sera traitée !'))
+      .then(() => Toasts.assertText('Demande envoyée ! Pensez à vérifiez vos spam'))
       // Read reset password mail then visit link
       .readFile(`emails/${email}.html`)
       .then((content) => {

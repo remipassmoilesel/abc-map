@@ -28,6 +28,7 @@ import Cls from './PointToolPanel.module.scss';
 import TipBubble from '../../../../components/tip-bubble/TipBubble';
 import { ToolTips } from '@abc-map/user-documentation';
 import ZIndex from '../_common/z-index/ZIndex';
+import ApplyStyleButton from '../_common/ApplyStyleButton';
 
 const logger = Logger.get('PointToolPanel.tsx');
 
@@ -47,11 +48,7 @@ class PointToolPanel extends Component<Props, {}> {
         <PointSizeSelector />
         <ColorSelector point={true} />
         <PointIconSelector />
-        <div className={'d-flex justify-content-center mb-3'}>
-          <button className={'btn btn-sm btn-outline-primary mt-3'} onClick={this.handleApplyStyle}>
-            Appliquer le style
-          </button>
-        </div>
+        <ApplyStyleButton onClick={this.handleApplyStyle} />
         <ZIndex />
       </div>
     );

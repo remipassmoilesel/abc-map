@@ -23,7 +23,6 @@ import { ServiceProps, withServices } from '../../core/withServices';
 import { Modal } from 'react-bootstrap';
 import { PasswordStrength, ValidationHelper } from '../../core/utils/ValidationHelper';
 import FormValidationLabel from '../form-validation-label/FormValidationLabel';
-import Cls from './RegistrationModal.module.scss';
 import { FormState } from '../form-validation-label/FormState';
 
 const logger = Logger.get('RegistrationModal.tsx', 'info');
@@ -61,56 +60,52 @@ class RegistrationModal extends Component<ServiceProps, State> {
     return (
       <Modal show={visible} onHide={this.handleCancel}>
         <Modal.Header closeButton>
-          <Modal.Title>
-            <i className={'fa fa-feather mr-3'} />
-            Inscription
-          </Modal.Title>
+          <Modal.Title>Inscription 🪶</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div className={`d-flex flex-column ${Cls.form}`}>
+          <div className={`d-flex flex-column p-3`}>
             {/* Intro */}
 
-            <p className={'mb-2'}>Pour vous inscrire, remplissez ce formulaire et confirmez votre adresse email.</p>
-            <p>Vos informations personnelles et vos cartes ne seront jamais transmises à un tiers.</p>
+            <p className={'mb-3'}>
+              Pour vous inscrire, remplissez ce formulaire. Vos données personnelles et vos cartes ne seront jamais transmises à un tiers.
+            </p>
 
             {/* Registration form */}
 
-            <div className={`form-group`}>
-              <input
-                type={'email'}
-                value={email}
-                onChange={this.handleEmailChange}
-                onKeyUp={this.handleKeyUp}
-                placeholder={'Adresse email'}
-                className={'form-control'}
-                data-cy={'email'}
-                data-testid={'email'}
-              />
-              <input
-                type={'password'}
-                value={password}
-                onChange={this.handlePasswordChange}
-                onKeyUp={this.handleKeyUp}
-                placeholder={'Mot de passe'}
-                className={'form-control'}
-                data-cy={'password'}
-                data-testid={'password'}
-              />
-              <input
-                type={'password'}
-                value={confirmation}
-                onChange={this.handleConfirmationChange}
-                onKeyUp={this.handleKeyUp}
-                placeholder={'Confirmation du mot de passe'}
-                className={'form-control'}
-                data-cy={'password-confirmation'}
-                data-testid={'password-confirmation'}
-              />
-            </div>
+            <input
+              type={'email'}
+              value={email}
+              onChange={this.handleEmailChange}
+              onKeyUp={this.handleKeyUp}
+              placeholder={'Adresse email'}
+              className={'form-control mb-2'}
+              data-cy={'email'}
+              data-testid={'email'}
+            />
+            <input
+              type={'password'}
+              value={password}
+              onChange={this.handlePasswordChange}
+              onKeyUp={this.handleKeyUp}
+              placeholder={'Mot de passe'}
+              className={'form-control mb-2'}
+              data-cy={'password'}
+              data-testid={'password'}
+            />
+            <input
+              type={'password'}
+              value={confirmation}
+              onChange={this.handleConfirmationChange}
+              onKeyUp={this.handleKeyUp}
+              placeholder={'Confirmation du mot de passe'}
+              className={'form-control mb-3'}
+              data-cy={'password-confirmation'}
+              data-testid={'password-confirmation'}
+            />
 
             {/* Form validation */}
 
-            <FormValidationLabel state={formState} className={'mx-4'} />
+            <FormValidationLabel state={formState} className={'mb-4'} />
 
             {/* Action buttons */}
 
@@ -129,7 +124,7 @@ class RegistrationModal extends Component<ServiceProps, State> {
                 type={'button'}
                 disabled={formState !== FormState.Ok}
                 onClick={this.handleSubmit}
-                className={'btn btn-primary'}
+                className={'btn btn-primary ml-2'}
                 data-cy={'confirm-registration'}
                 data-testid={'confirm-registration'}
               >

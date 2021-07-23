@@ -1,4 +1,4 @@
-/*!
+/**
  * Copyright © 2021 Rémi Pace.
  * This file is part of Abc-Map.
  *
@@ -14,21 +14,27 @@
  *
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
- *
- *
  */
+import React, { Component, ReactNode } from 'react';
 
-.form {
-  display: flex;
-  flex-direction: column;
+interface Props {
+  onClick: () => void;
+}
 
-  input {
-    margin: 1rem;
-    width: 90%;
-  }
-
-  button {
-    margin: 0.7rem;
-    width: 10rem;
+class ApplyStyleButton extends Component<Props, {}> {
+  public render(): ReactNode {
+    return (
+      <div className={'d-flex justify-content-center mb-3'}>
+        <button
+          onClick={this.props.onClick}
+          title={'Cliquez pour appliquer le style courant aux formes sélectionnées'}
+          className={'btn btn-sm btn-outline-primary mt-3'}
+        >
+          Appliquer le style
+        </button>
+      </div>
+    );
   }
 }
+
+export default ApplyStyleButton;

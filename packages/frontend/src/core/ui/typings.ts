@@ -197,5 +197,5 @@ export declare type ModalEventListener<T extends ModalEvent = ModalEvent> = (ev:
 
 export enum OperationStatus {
   Succeed = 'Succeed',
-  Canceled = 'Canceled',
+  Interrupted = 'Interrupted',
 }

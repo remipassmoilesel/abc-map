@@ -66,7 +66,7 @@ module.exports = {
         <h3 class='mt-5 mb-3'>Données personnelles</h3>
         <div>
             <div>Aucun cookie ni dispositif de traçage n'est utilisé.</div>
-            <div>Si vous n'êtes pas inscrit aucune données personnelles n'est stockée ou traitée.</div>
+            <div>Si vous n'êtes pas inscrit aucune donnée personnelle n'est stockée ou traitée.</div>
             <div>Si vous êtes inscrit votre adresse email sert d'identifiant. </div>
             <div>Vous pouvez supprimer votre compte sur la page de votre profil. </div>
             <div>Aucune donnée n'est conservée après suppression d'un compte.</div>

@@ -103,7 +103,7 @@ class FormValidationLabel extends Component<Props, {}> {
 
       case FormState.MissingRemoteLayer:
         icon = 'fa-exclamation-circle';
-        message = 'La couche distante est obligatoire.';
+        message = 'Listez les couches puis sélectionnez-en une.';
         break;
 
       case FormState.MissingNewLayerName:

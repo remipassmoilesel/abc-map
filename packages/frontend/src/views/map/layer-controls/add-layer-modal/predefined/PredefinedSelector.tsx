@@ -34,15 +34,14 @@ class PredefinedSelector extends Component<Props, {}> {
     return (
       <div className={'mb-3'}>
         <div className={'mb-2'}>Sélectionnez le type de fond de carte : </div>
-        <div className={'form-group'}>
-          <select value={model} onChange={this.handleChange} className={'form-control'} data-cy={'predefined-model'}>
-            {LabeledPredefinedModels.All.map((m) => (
-              <option key={m.id} value={m.id}>
-                {m.label}
-              </option>
-            ))}
-          </select>
-        </div>
+        <select value={model} onChange={this.handleChange} className={'form-control mb-3'} data-cy={'predefined-model'}>
+          {LabeledPredefinedModels.All.map((m) => (
+            <option key={m.id} value={m.id}>
+              {m.label}
+            </option>
+          ))}
+        </select>
+
         <div className={'mb-2'}>Aperçu : </div>
         <div className={'d-flex justify-content-center'}>
           <img src={labelledModel?.preview} width={440} alt={labelledModel?.label} className={'border'} />

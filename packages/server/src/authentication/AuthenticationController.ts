@@ -66,7 +66,7 @@ export class AuthenticationController extends Controller {
     jwtPlugin(this.config, app);
 
     // We limit usage of these routes in order to prevent bruteforce
-    // FIXME We should use responses (200, 403, 401) to alter limits and ban for a larger period
+    // FIXME We should use responses (200, 403, 401) to alter limits and ban for a larger period brute-forcers
     const authRateLimit = {
       config: { rateLimit: { max: this.config.server.authenticationRateLimit.max, timeWindow: this.config.server.authenticationRateLimit.timeWindow } },
     };
@@ -75,7 +75,7 @@ export class AuthenticationController extends Controller {
     app.delete('/', { schema: DeleteAccountSchema, ...authRateLimit }, this.deleteAccount);
     app.patch('/password', { schema: UpdatePasswordRequestSchema, ...authRateLimit }, this.updatePassword);
     app.post('/password', { schema: ResetPasswordSchema, ...authRateLimit }, this.resetPassword);
-    app.post('/password/reset-email', { schema: PasswordLostRequestSchema, ...authRateLimit }, this.passwordLost);
+    app.post('/password/reset-email', { schema: PasswordLostRequestSchema, ...authRateLimit }, this.passwordResetEmail);
     app.post('/account', { schema: RegistrationRequestSchema, ...authRateLimit }, this.registration);
     app.post('/account/confirmation', { schema: RegistrationConfirmationRequestSchema, ...authRateLimit }, this.confirmRegistration);
     app.get('/token', { ...authRateLimit }, this.renew);
@@ -203,10 +203,11 @@ export class AuthenticationController extends Controller {
     void reply.status(200).send();
   };
 
-  private passwordLost = async (req: FastifyRequest<{ Body: PasswordLostRequest }>, reply: FastifyReply): Promise<void> => {
+  private passwordResetEmail = async (req: FastifyRequest<{ Body: PasswordLostRequest }>, reply: FastifyReply): Promise<void> => {
     const { authentication } = this.services;
 
-    await authentication.passwordLost(req.body.email);
+    // We must not wait here, in order to not give clues on existence of address
+    authentication.passwordLost(req.body.email).catch((err) => logger.error('Cannot send verification email', err));
 
     void reply.status(200).send();
   };

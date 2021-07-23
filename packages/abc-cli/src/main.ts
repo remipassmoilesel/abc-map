@@ -51,7 +51,7 @@ async function main(args: string[]) {
   switch (command.name) {
     case CommandName.CI: {
       await service.continuousIntegration();
-      banners.done();
+      banners.bigDone();
       break;
     }
 
