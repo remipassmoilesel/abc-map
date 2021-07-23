@@ -40,17 +40,24 @@ class SelectionToolPanel extends Component<ServiceProps, {}> {
     return (
       <div className={Cls.selectionPanel}>
         <TipBubble id={ToolTips.Selection} label={'Aide'} className={'mx-3 mb-3'} />
-        <button className={`btn btn-outline-secondary mb-2`} onClick={this.handleDuplicate} data-cy={'duplicate-selection'}>
+        <button className={`btn btn-outline-secondary mb-3`} onClick={this.handleDuplicate} data-cy={'duplicate-selection'}>
           <i className={'fa fa-copy mr-3'} />
           Dupliquer
         </button>
+        <ZIndex />
+
+        <div className={Cls.section}>Points</div>
         <PointIconSelector />
         <PointSizeSelector />
+        <ColorSelector point={true} />
+
+        <div className={Cls.section}>Lignes et polygones</div>
         <StrokeWidthSelector />
-        <ColorSelector point={true} stroke={true} fillColor1={true} fillColor2={true} />
+        <ColorSelector point={false} stroke={true} fillColor1={true} fillColor2={true} />
         <FillPatternSelector />
+
+        <div className={Cls.section}>Texte</div>
         <TextFormat />
-        <ZIndex />
       </div>
     );
   }

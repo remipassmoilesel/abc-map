@@ -19,7 +19,6 @@
 import React, { Component, ReactNode } from 'react';
 import { ProjectConstants, UserStatus } from '@abc-map/shared';
 import { Logger } from '@abc-map/shared';
-import { Constants } from '../../../core/Constants';
 import { connect, ConnectedProps } from 'react-redux';
 import { MainState } from '../../../core/store/reducer';
 import { FileIO, InputResultType, InputType } from '../../../core/utils/FileIO';
@@ -165,7 +164,7 @@ class ProjectControls extends Component<Props, State> {
       }
 
       const compressed = await project.exportCurrentProject(password);
-      FileIO.outputBlob(compressed.project, `project.${Constants.EXTENSION}`);
+      FileIO.outputBlob(compressed.project, `project.${ProjectConstants.FileExtension}`);
       toasts.info('Export terminé !');
     };
 
@@ -182,7 +181,7 @@ class ProjectControls extends Component<Props, State> {
     const { toasts, project, modals } = this.props.services;
 
     const selectProject = async (): Promise<File | undefined> => {
-      const result = await FileIO.openInput(InputType.Single, '.abm2');
+      const result = await FileIO.openInput(InputType.Single, ProjectConstants.FileExtension);
 
       if (InputResultType.Canceled === result.type) {
         return;
@@ -194,8 +193,8 @@ class ProjectControls extends Component<Props, State> {
       }
 
       const file = result.files[0];
-      if (!file.name.endsWith(Constants.EXTENSION)) {
-        toasts.error('Vous devez sélectionner un fichier au format abm2');
+      if (!file.name.endsWith(ProjectConstants.FileExtension)) {
+        toasts.error(`Vous devez sélectionner un fichier au format ${ProjectConstants.FileExtension}`);
         return;
       }
 

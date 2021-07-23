@@ -28,6 +28,7 @@ import { LayerFactory } from '../../../../core/geo/layers/LayerFactory';
 import { ServiceProps, withServices } from '../../../../core/withServices';
 import PredefinedSelector from './predefined/PredefinedSelector';
 import XYZSettingsPanel from './xyz/XYZSettingsPanel';
+import Cls from './AddLayerModal.module.scss';
 
 const logger = Logger.get('AddLayerModal.tsx');
 
@@ -49,8 +50,8 @@ class AddLayerModal extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      layerType: LabeledLayerTypes.Vector,
-      predefinedModel: PredefinedLayerModel.OSM,
+      layerType: LabeledLayerTypes.BaseMap,
+      predefinedModel: PredefinedLayerModel.StamenWatercolor,
     };
   }
 
@@ -68,13 +69,14 @@ class AddLayerModal extends Component<Props, State> {
     const wmsSelected = layerTypeId === LabeledLayerTypes.Wms.id;
     const xyzSelected = layerTypeId === LabeledLayerTypes.Xyz.id;
     return (
-      <Modal show={true} onHide={onHide}>
+      <Modal show={true} onHide={onHide} dialogClassName={Cls.modal}>
         <Modal.Header closeButton>
-          <Modal.Title>Ajouter une couche</Modal.Title>
+          <Modal.Title>Ajouter une couche 🗺️</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div className={'mb-2'}>Sélectionnez le type de couche que vous souhaitez ajouter : </div>
-          <div className={'form-group'}>
+          <div className={`p-3`}>
+            <div className={'mb-2'}>Sélectionnez le type de couche que vous souhaitez ajouter : </div>
+
             <select value={layerTypeId} onChange={this.handleLayerTypeChanged} className={'form-control'} data-cy={'add-layer-type'}>
               {LabeledLayerTypes.All.map((type) => {
                 return (
@@ -84,24 +86,24 @@ class AddLayerModal extends Component<Props, State> {
                 );
               })}
             </select>
-          </div>
 
-          <div className={'mt-2 mb-3'}>
-            <i className={'fa fa-info mx-2'} /> Essayez aussi le &nbsp;
-            <Link to={FrontendRoutes.dataStore().raw()}>Catalogue de données.</Link>
-          </div>
+            <div className={`mt-2 mb-4 ${Cls.advice}`}>
+              <i className={'fa fa-info mx-2'} /> Essayez aussi le &nbsp;
+              <Link to={FrontendRoutes.dataStore().raw()}>Catalogue de données.</Link>
+            </div>
 
-          {baseMapSelected && <PredefinedSelector value={predefinedModel} onChange={this.handleBaseMapChanged} />}
-          {wmsSelected && <WmsSettingsPanel onChange={this.handleWmsSettingsChanged} />}
-          {xyzSelected && <XYZSettingsPanel onChange={this.handleXyzUrlChanged} />}
+            {baseMapSelected && <PredefinedSelector value={predefinedModel} onChange={this.handleBaseMapChanged} />}
+            {wmsSelected && <WmsSettingsPanel onChange={this.handleWmsSettingsChanged} />}
+            {xyzSelected && <XYZSettingsPanel onChange={this.handleXyzUrlChanged} />}
 
-          <div className={'d-flex justify-content-end mt-3'}>
-            <button className={'btn btn-secondary mr-3'} onClick={onHide}>
-              Annuler
-            </button>
-            <button disabled={!this.isAddAllowed()} className={'btn btn-primary'} onClick={this.handleConfirm} data-cy={'add-layer-confirm'}>
-              Ajouter
-            </button>
+            <div className={'d-flex justify-content-end mt-3'}>
+              <button className={'btn btn-secondary mr-3'} onClick={onHide}>
+                Annuler
+              </button>
+              <button disabled={!this.isAddAllowed()} className={'btn btn-primary'} onClick={this.handleConfirm} data-cy={'add-layer-confirm'}>
+                Ajouter
+              </button>
+            </div>
           </div>
         </Modal.Body>
       </Modal>

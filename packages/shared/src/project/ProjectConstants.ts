@@ -31,4 +31,6 @@ export class ProjectConstants {
    * Name of main data file in project archive
    */
   public static readonly ManifestName = 'project.json';
+
+  public static readonly FileExtension = '.abm2';
 }

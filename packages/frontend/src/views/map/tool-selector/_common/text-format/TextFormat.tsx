@@ -46,13 +46,13 @@ class TextFormat extends Component<Props, {}> {
       <>
         {/* Color */}
         <OptionRow>
-          <div>Texte</div>
+          <div>Couleur:</div>
           <ColorPicker initialValue={this.props.color} onClose={this.handleColorSelected} />
         </OptionRow>
 
         {/* Size */}
         <OptionRow>
-          <div>Taille du texte:</div>
+          <div>Taille:</div>
           <select onChange={this.handleSizeChange} value={this.props.size} className={`form-control form-control-sm ${Cls.select}`}>
             {_.range(5, 51).map((val) => (
               <option key={val} value={val}>

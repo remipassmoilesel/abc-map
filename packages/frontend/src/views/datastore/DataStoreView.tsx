@@ -26,8 +26,9 @@ import { FileIO } from '../../core/utils/FileIO';
 import Cls from './DataStoreView.module.scss';
 import { pageSetup } from '../../core/utils/page-setup';
 import { ImportStatus } from '../../core/data/DataService';
+import { delayedPromise } from '../../core/utils/delayedPromise';
 
-const logger = Logger.get('DataStore.tsx', 'info');
+const logger = Logger.get('DataStoreView.tsx', 'info');
 
 const PageSize = 6;
 
@@ -89,7 +90,11 @@ class DataStoreView extends Component<ServiceProps, State> {
 
         {/* Artefacts list */}
 
-        {downloading && <h4 className={'my-3 mx-2'}>Veuillez patienter pendant le téléchargement ...</h4>}
+        {downloading && (
+          <div className={Cls.loading}>
+            <h4 className={'my-3 mx-2'}>Patience patience ⌛</h4>
+          </div>
+        )}
 
         {!downloading && (
           <div className={Cls.artefactList}>
@@ -104,7 +109,7 @@ class DataStoreView extends Component<ServiceProps, State> {
   }
 
   public componentDidMount() {
-    pageSetup('Catalogue de données', `Ajoutez des données compatibles et sélectionnées en un clic. Pays du monde, hydrographie, et bien plus 🛒`);
+    pageSetup('Catalogue de données', `Ajoutez des données compatibles et sélectionnées en un clic 🛒`);
 
     this.loadArtefacts();
   }
@@ -149,8 +154,7 @@ class DataStoreView extends Component<ServiceProps, State> {
     const { toasts, data } = this.props.services;
 
     this.setState({ downloading: true });
-    data
-      .importArtefact(artefact)
+    delayedPromise(data.importArtefact(artefact))
       .then((res) => {
         if (res.status === ImportStatus.Failed) {
           toasts.error('Ces fichiers ne sont pas supportés');
@@ -173,8 +177,7 @@ class DataStoreView extends Component<ServiceProps, State> {
     const { toasts, data } = this.props.services;
 
     this.setState({ downloading: true });
-    data
-      .downloadFilesFrom(artefact)
+    delayedPromise(data.downloadFilesFrom(artefact))
       .then(async (res) => {
         let content: Blob;
         if (res.length === 1 && FileFormat.ZIP === FileFormats.fromPath(res[0].path)) {

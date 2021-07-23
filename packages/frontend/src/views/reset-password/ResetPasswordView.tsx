@@ -56,26 +56,22 @@ class ResetPasswordView extends Component<Props, State> {
         <h3 className={'mb-4'}>Réinitialiser votre mot de passe</h3>
         <div className={Cls.form}>
           <div className={'my-4'}>Entrez ici votre nouveau mot de passe et confirmez-le.</div>
-          <div className={'form-group'}>
-            <input
-              placeholder={'Mot de passe'}
-              type={'password'}
-              value={password}
-              onChange={this.handlePasswordChange}
-              className={'form-control'}
-              data-cy={'new-password'}
-            />
-          </div>
-          <div className={'form-group'}>
-            <input
-              placeholder={'Confirmation'}
-              type={'password'}
-              value={confirmation}
-              onChange={this.handleConfirmationChange}
-              className={'form-control'}
-              data-cy={'confirmation'}
-            />
-          </div>
+          <input
+            placeholder={'Mot de passe'}
+            type={'password'}
+            value={password}
+            onChange={this.handlePasswordChange}
+            className={'form-control mb-2'}
+            data-cy={'new-password'}
+          />
+          <input
+            placeholder={'Confirmation'}
+            type={'password'}
+            value={confirmation}
+            onChange={this.handleConfirmationChange}
+            className={'form-control mb-2'}
+            data-cy={'confirmation'}
+          />
 
           <FormValidationLabel state={formState} />
 

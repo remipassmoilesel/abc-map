@@ -60,7 +60,7 @@ class ImportData extends Component<ServiceProps, {}> {
       }
 
       if (result.status === ImportStatus.Canceled) {
-        return OperationStatus.Canceled;
+        return OperationStatus.Interrupted;
       }
 
       toasts.info('Import terminé !');

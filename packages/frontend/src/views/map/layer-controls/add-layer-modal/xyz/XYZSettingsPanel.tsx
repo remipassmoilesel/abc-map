@@ -51,16 +51,14 @@ class XYZSettingsPanel extends Component<Props, State> {
     return (
       <div>
         <div className={'d-flex flex-column'}>
-          <div className={'form-group'}>
-            <input
-              type={'text'}
-              value={url}
-              onChange={this.handleUrlChanged}
-              className={'form-control mb-2'}
-              placeholder={'URL (obligatoire)'}
-              data-cy={'xyz-settings-url'}
-            />
-          </div>
+          <input
+            type={'text'}
+            value={url}
+            onChange={this.handleUrlChanged}
+            className={'form-control mb-3'}
+            placeholder={'URL (obligatoire)'}
+            data-cy={'xyz-settings-url'}
+          />
           <div className={'alert alert-info'}>
             L&apos;URL doit contenir les variables {variable('x')}, {variable('y')} et {variable('z')}. <br />
             Exemple:&nbsp;

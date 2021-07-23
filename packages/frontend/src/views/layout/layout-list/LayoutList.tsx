@@ -40,18 +40,13 @@ class LayoutList extends Component<Props, {}> {
       return <LayoutListItem key={lay.id} active={active} layout={lay} onSelected={handleSelected} onDeleted={handleDeleted} />;
     });
 
-    let message: ReactNode | undefined;
-    if (!items.length) {
-      message = 'Les pages sont affichées ici.';
-    }
-
     return (
       <div className={Cls.layoutList} data-cy={'layout-list'}>
         <div className={'m-4 font-weight-bold'}>Pages</div>
         {items}
-        {message && (
+        {!items.length && (
           <div className={'m-4'} data-cy={'no-layout'}>
-            {message}
+            La liste des pages est affichée ici.
           </div>
         )}
       </div>

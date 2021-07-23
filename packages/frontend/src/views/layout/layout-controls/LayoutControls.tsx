@@ -106,7 +106,7 @@ class LayoutControls extends Component<Props, {}> {
           </div>
         </div>
 
-        <div className={'control-block form-group'}>
+        <div className={'control-block'}>
           <div className={'control-item'}>
             <button onClick={() => handleExport(ExportFormat.PDF)} className={'btn btn-link'} data-cy={'pdf-export'}>
               <i className={'fa fa-download mr-2'} />

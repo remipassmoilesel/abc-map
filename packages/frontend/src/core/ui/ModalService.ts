@@ -47,13 +47,14 @@ export class ModalService {
     this.eventTarget = document.createDocumentFragment();
   }
 
-  public rename(title: string, message: string, value: string): Promise<RenameModalClosedEvent> {
+  public rename(message: string, value: string): Promise<RenameModalClosedEvent> {
+    const title = 'Renommage ✏️';
     return this.modalPromise({ type: ModalEventType.ShowRename, title, message, value }, ModalEventType.RenameClosed);
   }
 
   public setProjectPassword(): Promise<SetPasswordModalClosedEvent> {
+    const title = 'Mot de passe du projet 🔑';
     const message = 'Votre projet contient des identifiants, vous devez choisir un mot de passe pour les protéger.';
-    const title = 'Mot de passe du projet';
     return this.setPasswordModal(title, message);
   }
 
@@ -62,8 +63,8 @@ export class ModalService {
   }
 
   public getProjectPassword(): Promise<PasswordInputClosedEvent> {
+    const title = 'Mot de passe du projet 🔑';
     const message = 'Votre projet est protégé par un mot de passe.';
-    const title = 'Mot de passe du projet';
     return this.passwordInputModal(title, message);
   }
 
@@ -109,9 +110,9 @@ export class ModalService {
       };
 
       const hideOnSuccess = (res: OperationStatus | void) => {
-        if (res === OperationStatus.Canceled) {
+        if (res === OperationStatus.Interrupted) {
           this.dispatch({ type: ModalEventType.LongOperationModalClosed });
-          resolve(OperationStatus.Canceled);
+          resolve(OperationStatus.Interrupted);
           return;
         }
 

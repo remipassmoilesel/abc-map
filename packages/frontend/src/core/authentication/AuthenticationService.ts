@@ -155,7 +155,7 @@ export class AuthenticationService {
       .then((res) => {
         const registration: RegistrationResponse = res.data;
         if (res.data.status === RegistrationStatus.Successful) {
-          this.toasts.info('Un email vient de vous être envoyé, vous devez activer votre compte. Pensez à vérifier vos spam !');
+          this.toasts.info('Vous devez activer votre compte, vous allez recevoir un email. Pensez à vérifier vos spam 📧');
           return registration;
         }
 

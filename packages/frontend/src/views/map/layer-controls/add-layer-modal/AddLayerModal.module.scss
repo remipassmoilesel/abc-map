@@ -16,17 +16,11 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-.form {
-  display: flex;
-  flex-direction: column;
-
-  input {
-    margin: 1rem;
-    width: 90%;
-  }
+.modal {
+  min-width: 550px;
+  width: 550px;
 }
 
-.actionButton {
-  margin: 0.7rem;
-  width: 10rem;
+.advice {
+  font-size: 0.9rem;
 }

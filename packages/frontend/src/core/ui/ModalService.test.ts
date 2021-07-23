@@ -96,10 +96,10 @@ describe('ModalService', function () {
 
       const res = await service.longOperationModal(async () => {
         await TestHelper.wait(200);
-        return OperationStatus.Canceled;
+        return OperationStatus.Interrupted;
       });
 
-      expect(res).toEqual(OperationStatus.Canceled);
+      expect(res).toEqual(OperationStatus.Interrupted);
       expect(listener.callCount).toEqual(2);
       expect(listener.args).toEqual([[{ type: ModalEventType.ShowLongOperationModal, burning: true }], [{ type: ModalEventType.LongOperationModalClosed }]]);
     });

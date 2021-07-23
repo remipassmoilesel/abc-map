@@ -25,7 +25,6 @@ import { PasswordStrength, ValidationHelper } from '../../core/utils/ValidationH
 import FormValidationLabel from '../form-validation-label/FormValidationLabel';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { FormState } from '../form-validation-label/FormState';
-import Cls from './LoginModal.module.scss';
 
 const logger = Logger.get('LoginModal.tsx', 'info');
 
@@ -61,27 +60,24 @@ class LoginModal extends Component<Props, State> {
     return (
       <Modal show={visible} onHide={this.handleCancel}>
         <Modal.Header closeButton>
-          <Modal.Title>
-            <i className={'fa fa-lock-open mr-3'} />
-            Connexion
-          </Modal.Title>
+          <Modal.Title>Connexion 🔓</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div className={`d-flex flex-column ${Cls.form}`}>
-            {/*Intro*/}
+          <div className={`d-flex flex-column p-3`}>
+            {/* Intro */}
 
             <p>Pour vous connecter, renseignez votre adresse email et votre mot de passe ci-dessous:</p>
 
             {/* Login form */}
 
-            <div className={`form-group`}>
+            <div className={'d-flex flex-column mb-3'}>
               <input
                 type={'email'}
                 value={email}
                 onInput={this.handleEmailChange}
                 onKeyUp={this.handleKeyUp}
                 placeholder={'Adresse email'}
-                className={'form-control'}
+                className={'form-control my-2'}
                 data-cy={'email'}
                 data-testid={'email'}
               />
@@ -91,38 +87,30 @@ class LoginModal extends Component<Props, State> {
                 onInput={this.handlePasswordChange}
                 onKeyUp={this.handleKeyUp}
                 placeholder={'Mot de passe'}
-                className={'form-control'}
+                className={'form-control my-2'}
                 data-cy={'password'}
                 data-testid={'password'}
               />
             </div>
 
-            <div className={'d-flex justify-content-end'}>
-              <button onClick={this.handlePasswordLost} className={'btn btn-link'}>
-                Mot de passe perdu ?
-              </button>
-            </div>
-
             {/* Form validation */}
-            <FormValidationLabel state={formState} className={'mx-4'} />
+
+            <FormValidationLabel state={formState} className={'mb-5'} />
 
             {/* Action buttons */}
 
             <div className={'d-flex justify-content-end'}>
-              <button
-                type={'button'}
-                onClick={this.handleCancel}
-                className={`btn btn-outline-secondary ${Cls.actionButton}`}
-                data-cy={'cancel-login'}
-                data-testid={'cancel-login'}
-              >
+              <button onClick={this.handlePasswordLost} className={'btn btn-link mr-3'}>
+                Mot de passe perdu ?
+              </button>
+              <button type={'button'} onClick={this.handleCancel} className={`btn btn-outline-secondary`} data-cy={'cancel-login'} data-testid={'cancel-login'}>
                 Annuler
               </button>
               <button
                 type={'button'}
                 disabled={formState !== FormState.Ok}
                 onClick={this.handleSubmit}
-                className={`btn btn-primary ${Cls.actionButton}`}
+                className={`btn btn-primary ml-2`}
                 data-cy={'confirm-login'}
                 data-testid={'confirm-login'}
               >

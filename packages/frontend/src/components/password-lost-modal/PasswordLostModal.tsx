@@ -22,7 +22,6 @@ import { Modal } from 'react-bootstrap';
 import { ServiceProps, withServices } from '../../core/withServices';
 import { ModalEventType, ModalStatus } from '../../core/ui/typings';
 import { ValidationHelper } from '../../core/utils/ValidationHelper';
-import Cls from './PasswordLostModal.module.scss';
 import FormValidationLabel from '../form-validation-label/FormValidationLabel';
 
 const logger = Logger.get('PasswordLostModal.tsx', 'info');
@@ -59,18 +58,15 @@ class PasswordLostModal extends Component<ServiceProps, State> {
     return (
       <Modal show={visible} onHide={this.close}>
         <Modal.Header closeButton>
-          <Modal.Title>
-            <i className={'fa fa-key mr-3'} />
-            Mot de passe perdu
-          </Modal.Title>
+          <Modal.Title>Mot de passe perdu 🔑</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div className={`d-flex flex-column ${Cls.form}`}>
+          <div className={`d-flex flex-column p-3`}>
             {/*Intro*/}
 
-            <p>
-              Pour vous connecter, renseignez votre adresse email ci-dessous, si votre adresse est enregistrée vous recevrez un email pour réinitialiser votre
-              mot de passe:
+            <p className={'mb-3'}>
+              Pour réinitialiser votre mot de passe, renseignez votre adresse email ci-dessous. Si votre adresse est enregistrée vous recevrez des instructions
+              par email.
             </p>
 
             {/* Email form */}
@@ -89,19 +85,19 @@ class PasswordLostModal extends Component<ServiceProps, State> {
 
             {/* Form validation */}
 
-            <FormValidationLabel state={formState} className={'mx-4'} />
+            <FormValidationLabel state={formState} className={'mb-4'} />
 
             {/* Action buttons */}
 
             <div className={'d-flex justify-content-end'}>
-              <button type={'button'} onClick={this.close} className={`btn btn-outline-secondary ${Cls.actionButton}`} data-cy={'cancel-login'}>
+              <button type={'button'} onClick={this.close} className={`btn btn-outline-secondary`} data-cy={'cancel-login'}>
                 Annuler
               </button>
               <button
                 type={'button'}
                 disabled={formState !== FormState.Ok}
                 onClick={this.handleSubmit}
-                className={`btn btn-primary ${Cls.actionButton}`}
+                className={`btn btn-primary ml-2`}
                 data-cy={'confirm-reset-password'}
               >
                 Connexion
@@ -153,7 +149,7 @@ class PasswordLostModal extends Component<ServiceProps, State> {
     authentication
       .passwordLost(email)
       .then(() => {
-        toasts.info('Si votre adresse est enregistrée, votre demande sera traitée !');
+        toasts.info('Demande envoyée ! Pensez à vérifiez vos spam 📧');
         this.close();
       })
       .catch((err) => logger.error(err));

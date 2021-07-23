@@ -62,35 +62,37 @@ class PasswordInputModal extends Component<ServiceProps, State> {
           <Modal.Title>{title}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div>{message}</div>
+          <div className={'p-3'}>
+            <div className={'mb-3'}>{message}</div>
 
-          <div className={'m-3'}>
-            <input
-              className={'form-control'}
-              type={'password'}
-              value={value}
-              placeholder={'Mot de passe'}
-              onChange={this.handleInputChange}
-              data-cy="password-input"
-              data-testid="password-input"
-            />
-          </div>
+            <div className={'mb-3'}>
+              <input
+                className={'form-control'}
+                type={'password'}
+                value={value}
+                placeholder={'Mot de passe'}
+                onChange={this.handleInputChange}
+                data-cy="password-input"
+                data-testid="password-input"
+              />
+            </div>
 
-          <FormValidationLabel state={formState} />
+            <FormValidationLabel state={formState} className={'mb-3'} />
 
-          <div className={'d-flex justify-content-end'}>
-            <button className={'btn btn-secondary mr-3'} onClick={this.handleCancel} data-cy="password-cancel" data-testid={'password-cancel'}>
-              Annuler
-            </button>
-            <button
-              className={'btn btn-primary'}
-              onClick={this.handleConfirm}
-              disabled={submitDisabled}
-              data-cy="password-confirm"
-              data-testid={'password-confirm'}
-            >
-              Confirmer
-            </button>
+            <div className={'d-flex justify-content-end'}>
+              <button className={'btn btn-secondary mr-3'} onClick={this.handleCancel} data-cy="password-cancel" data-testid={'password-cancel'}>
+                Annuler
+              </button>
+              <button
+                className={'btn btn-primary'}
+                onClick={this.handleConfirm}
+                disabled={submitDisabled}
+                data-cy="password-confirm"
+                data-testid={'password-confirm'}
+              >
+                Confirmer
+              </button>
+            </div>
           </div>
         </Modal.Body>
       </Modal>

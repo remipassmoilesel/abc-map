@@ -149,8 +149,9 @@ class LayerControls extends Component<Props, State> {
       return toasts.info("Vous devez d'abord sélectionner une couche");
     }
 
+    const layerName = active.getMetadata()?.name || 'Couche';
     modals
-      .rename('Renommer', 'Renommer la couche', active.getMetadata()?.name || 'Couche')
+      .rename(`Renommer la couche '${layerName}'`, layerName)
       .then((res) => {
         if (ModalStatus.Confirmed) {
           map.renameLayer(active, res.value);

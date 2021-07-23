@@ -63,38 +63,36 @@ class WmsSettingsPanel extends Component<Props, State> {
     const formState = this.state.formState;
     return (
       <div>
-        <div className={'form-group d-flex flex-row'}>
-          <input type="text" placeholder={'URL'} className={'form-control'} value={url} onChange={this.handleUrlChanged} data-cy={'wms-settings-url'} />
+        <div className={'d-flex flex-row'}>
+          <input type="text" placeholder={'URL'} className={'form-control mb-3'} value={url} onChange={this.handleUrlChanged} data-cy={'wms-settings-url'} />
         </div>
         <div className={'d-flex flex-column'}>
-          <div className={'form-group'}>
-            <input
-              type={'text'}
-              value={username}
-              onChange={this.handleUsernameChanged}
-              className={'form-control mb-2'}
-              placeholder={"Nom d'utilisateur (optionnel)"}
-              data-cy={'wms-settings-username'}
-            />
-            <input
-              type={'password'}
-              value={password}
-              onChange={this.handlePasswordChanged}
-              className={'form-control mb-2'}
-              placeholder={'Mot de passe (optionnel)'}
-              data-cy={'wms-settings-password'}
-            />
-          </div>
+          <input
+            type={'text'}
+            value={username}
+            onChange={this.handleUsernameChanged}
+            className={'form-control mb-2'}
+            placeholder={"Nom d'utilisateur (optionnel)"}
+            data-cy={'wms-settings-username'}
+          />
+          <input
+            type={'password'}
+            value={password}
+            onChange={this.handlePasswordChanged}
+            className={'form-control mb-3'}
+            placeholder={'Mot de passe (optionnel)'}
+            data-cy={'wms-settings-password'}
+          />
         </div>
 
-        <div className={'d-flex justify-content-end'}>
+        <div className={'d-flex justify-content-end mb-3'}>
           <button onClick={this.getCapabilities} data-cy={'wms-settings-capabilities'} className={'btn btn-primary ml-2'}>
             Lister les couches disponibles
           </button>
         </div>
 
         {capabilities && (
-          <div className={'mt-2'}>
+          <>
             <div>
               Service WMS: {capabilities.Service.Title} {capabilities.version}
             </div>
@@ -104,7 +102,7 @@ class WmsSettingsPanel extends Component<Props, State> {
                 <WmsLayerItem key={`${lay.Name}-${i}`} layer={lay} selected={selectedLayer?.Name === lay.Name} onSelected={this.handleLayerSelected} />
               ))}
             </div>
-          </div>
+          </>
         )}
 
         <FormValidationLabel state={formState} />
@@ -113,16 +111,16 @@ class WmsSettingsPanel extends Component<Props, State> {
   }
 
   private handleUrlChanged = (ev: ChangeEvent<HTMLInputElement>) => {
-    const value = ev.target.value;
-    const formState = this.validateForm(ev.target.value, this.state.selectedLayer);
-    this.setState({ url: value, formState }, () => {
+    const url = ev.target.value;
+    const formState = this.validateForm(url, this.state.selectedLayer);
+    this.setState({ url: url, formState }, () => {
       const wms = this.getDefinitionFromState();
       this.props.onChange(wms);
     });
   };
 
   private handleLayerSelected = (layer: WmsLayer) => {
-    const formState = this.validateForm(this.state.url, this.state.selectedLayer);
+    const formState = this.validateForm(this.state.url, layer);
     this.setState({ selectedLayer: layer, formState }, () => {
       const wms = this.getDefinitionFromState();
       this.props.onChange(wms);

@@ -57,7 +57,6 @@ class TopBar extends Component<Props, {}> {
 
         <div className={'flex-grow-1'} />
 
-        <TopBarLink label={'Accueil'} to={FrontendRoutes.landing().raw()} activeMatch={/^\/$/} data-cy={'landing'} />
         <TopBarLink label={'Carte'} to={FrontendRoutes.map().raw()} data-cy={'map'} />
         <TopBarLink label={'Catalogue de données'} to={FrontendRoutes.dataStore().raw()} data-cy={'data-store'} />
         <TopBarLink label={'Traitement de données'} to={FrontendRoutes.dataProcessing().withoutOptionals()} data-cy={'data-processing'} />
