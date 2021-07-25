@@ -118,7 +118,10 @@ abcMap:
       secretName: <CHANGE_ME>
       host: <CHANGE_ME>
 
-  podAnnotations: { }
+  podAnnotations:
+    prometheus.io/scrape: 'true'
+    prometheus.io/path: '/api/metrics'
+
   imagePullSecrets: [ ]
   resources: { }
   nodeSelector: { }

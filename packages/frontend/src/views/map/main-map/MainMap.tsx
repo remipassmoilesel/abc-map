@@ -120,8 +120,6 @@ class MainMap extends Component<Props, State> {
       if (result.status === ImportStatus.Canceled) {
         return OperationStatus.Interrupted;
       }
-
-      toasts.info('Import terminé !');
     };
 
     modals.longOperationModal(importFiles).catch((err) => {
