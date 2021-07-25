@@ -1,6 +1,7 @@
 # Backlog
 
 * [Performance: WebASM and web worker usage](#performance-webasm-and-web-worker-usage)
+* [Scale on exports](#scale-on-exports)
 * [Text labels not attached to features](#text-labels-not-attached-to-features)
 * [Backgrounds for text label](#backgrounds-for-text-label)
 * [Users should be able to measure distances](#users-should-be-able-to-measure-distances)
@@ -32,6 +33,11 @@ Tasks:
 - Data parsing
 - Data processing
 - ...
+
+
+## Scale on exports
+
+Users should be able to export scale optionally.
 
 
 ## Text labels not attached to features
