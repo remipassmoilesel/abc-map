@@ -1,9 +1,9 @@
 ---
-image: registry.gitlab.com/abc-map/abc-map-2_private/build-image:v0.15
+image: registry.gitlab.com/abc-map/abc-map/build-image:v0.15
 
 
 cache:
-  key: main
+  key: $CI_PROJECT_ID
   paths:
     - .yarn-cache
     - .cypress-cache

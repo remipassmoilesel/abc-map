@@ -176,6 +176,7 @@ export class BuildService {
     this.shell.sync('lerna exec "rm -rf node_modules"');
     this.shell.sync('lerna exec "rm -rf build"');
     this.shell.sync('lerna exec "rm -rf .nyc_output"');
+    this.shell.sync('lerna exec "rm -rf coverage"');
     this.shell.sync(`rm -rf ${this.config.getServerPublicRoot()}`);
   }
 
@@ -213,20 +214,24 @@ export class BuildService {
     }
   }
 
-  public async deploy(configPath: string): Promise<void> {
+  public async deploy(configPath: string, buildImages: boolean): Promise<void> {
     const start = Date.now();
     const config = this.loadDeployConfig(configPath);
 
-    // Build
-    logger.info('\n 🛠️  Building ... 🛠️\n');
-    await this.install(Dependencies.Development);
-    this.cleanBuild();
+    // Build images
+    if (buildImages) {
+      logger.info('\n 🛠️  Building ... 🛠️\n');
+      await this.install(Dependencies.Development);
+      this.cleanBuild();
 
-    // Package and push
-    logger.info('\n 📦️ Packaging ... 🏋️‍♂️\n');
-    await this.install(Dependencies.Production);
-    this.dockerBuild(config.registry, config.tag);
-    this.dockerPush(config.registry, config.tag);
+      // Package and push
+      logger.info('\n 📦️ Packaging ... 🏋️‍♂️\n');
+      await this.install(Dependencies.Production);
+      this.dockerBuild(config.registry, config.tag);
+      this.dockerPush(config.registry, config.tag);
+    } else {
+      logger.info('\n⏩️ Skipping build. More time for 🍺️\n');
+    }
 
     // Deploy
     this.shell.sync(`helm upgrade ${config.releaseName} ${this.config.getChartRoot()} \
@@ -237,7 +242,6 @@ export class BuildService {
                         --wait`);
 
     logger.info(`Waiting for services readiness ...`);
-
     const options = {
       resources: [config.healthCheckUrl],
       timeout: 30_000,
@@ -245,9 +249,11 @@ export class BuildService {
     await waitOn(options);
 
     const tookMin = Math.round((Date.now() - start) / 1000 / 60);
-    logger.info(`Ready ! Deployment took ${tookMin} minutes,`);
+    logger.info(`Ready ! Deployment took ${tookMin} minutes.`);
 
-    await this.install(Dependencies.Development);
+    if (buildImages) {
+      await this.install(Dependencies.Development);
+    }
   }
 
   private getDockerConfigs(): DockerConfig[] {

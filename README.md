@@ -3,8 +3,8 @@
 Official rewrite, attempt n°265 👨‍💻.
 
 <div>
-  <a href="https://gitlab.com/remipassmoilesel/abc-map-2/-/commits/master">
-    <img alt="Pipeline status" src="https://gitlab.com/remipassmoilesel/abc-map-2/badges/master/pipeline.svg" />
+  <a href="https://gitlab.com/abc-map/abc-map/-/commits/master">
+    <img alt="Pipeline status" src="https://gitlab.com/abc-map/abc-map/badges/master/pipeline.svg" />
   </a>
   &nbsp;&nbsp;
   <a href="https://www.firsttimersonly.com/">
@@ -31,11 +31,11 @@ More information [here](https://alpha.abc-map.fr/documentation).
 Abc-Map 2 is at a very early stage. Everything is done within the means available to make this project a 
 long-lasting one, but for now you should expect some breaking changes.
 
-Please keep in mind too that this software is developed at night after often 10 hours of code during the day. 
+Please keep in mind that this software is developed at night after often 10 hours of code during the day. 
 A lot of things needs to be and will be improved 💪    
 
 
-## But seriously why ? And why a web application ?
+## Why ? And why a web application ?
 
 There are some very good GIS available: QGIS, GvSIG, OrbisGIS are great software. But they are intended for 
 experts in the field and are hard to use. The goal of this project is to provide a GIS experience without 
@@ -56,7 +56,8 @@ See [documentation](./documentation) folder.
 
 ## How can I help ?
 
-See [backlog](./documentation/5_backlog.md).
+See [CONTRIBUTING](./CONTRIBUTING.md).      
+See [backlog](./documentation/5_backlog.md).        
 
 
 ## Technologies used 

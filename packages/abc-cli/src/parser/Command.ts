@@ -118,6 +118,7 @@ export interface DockerPush {
 export interface Deploy {
   name: CommandName.DEPLOY;
   configPath: string;
+  skipBuild: boolean;
 }
 
 export interface Help {

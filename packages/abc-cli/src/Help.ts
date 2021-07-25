@@ -50,7 +50,7 @@ Other commands:
   $ ./abc-cli apply-license               Apply license to project files. Use: https://github.com/google/addlicense.
   $ ./abc-cli docker-build REGISTRY TAG   Build project docker images.
   $ ./abc-cli docker-push REGISTRY TAG    Push project docker images.
-  $ ./abc-cli deploy /path/to/config.js   Build, push project then deploy it
+  $ ./abc-cli deploy /path/to/config.js   Build, push project then deploy it. Use --skip-build to skip build steps.
   $ ./abc-cli help                        Show this help.
 
     `);

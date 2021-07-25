@@ -126,7 +126,7 @@ async function main(args: string[]) {
       break;
 
     case CommandName.DEPLOY:
-      await service.deploy(command.configPath);
+      await service.deploy(command.configPath, !command.skipBuild);
       break;
 
     case CommandName.HELP:

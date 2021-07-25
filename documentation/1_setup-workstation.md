@@ -21,7 +21,7 @@ For Debian like and Ubuntu:
     $ npm i -g yarn
 
     # Clone source code
-    $ git clone https://gitlab.com/remipassmoilesel/abc-map-2.git
+    $ git clone https://gitlab.com/abc-map/abc-map.git
     $ cd abc-map-2
 
 

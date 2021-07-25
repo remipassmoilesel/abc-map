@@ -19,7 +19,7 @@ comme:
 
 ## Licence et code source
 
-Abc-Map est un logiciel libre sous licence <a target='_blank' href='https://www.gnu.org/licenses/agpl-3.0.html'>GNU AGPLv3</a>. Cette licence est expliquée <a target='_blank' href='https://www.gnu.org/licenses/quick-guide-gplv3.fr.html'>ici</a>. Le code source de l'application est disponible <a target='_blank' href='https://gitlab.com/abc-map/abc-map-2_private'>ici</a>.
+Abc-Map est un logiciel libre sous licence <a target='_blank' href='https://www.gnu.org/licenses/agpl-3.0.html'>GNU AGPLv3</a>. Cette licence est expliquée <a target='_blank' href='https://www.gnu.org/licenses/quick-guide-gplv3.fr.html'>ici</a>. Le code source de l'application est disponible <a target='_blank' href='https://gitlab.com/abc-map/abc-map'>ici</a>.
 
 <div class='alert alert-info my-3'>
   <a class='btn btn-link' onclick='abc.goTo("/funding")'>
