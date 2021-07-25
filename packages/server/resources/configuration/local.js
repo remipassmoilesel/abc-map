@@ -60,7 +60,7 @@ module.exports = {
         <div>
             <div>Ce logiciel est un logiciel libre sous licence <a target='_blank' href='https://www.gnu.org/licenses/agpl-3.0.html'>GNU AGPLv3</a>.</div>
             <div>Cette licence est expliquée <a target='_blank' href='https://www.gnu.org/licenses/quick-guide-gplv3.fr.html'>ici</a>.</div>
-            <div>Le code source de l'application est disponible <a target='_blank' href='https://gitlab.com/abc-map/abc-map-2_private'>ici</a>.</div>
+            <div>Le code source de l'application est disponible <a target='_blank' href='https://gitlab.com/abc-map/abc-map'>ici</a>.</div>
         </div>
 
         <h3 class='mt-5 mb-3'>Données personnelles</h3>

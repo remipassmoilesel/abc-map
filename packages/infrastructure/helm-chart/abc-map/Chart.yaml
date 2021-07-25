@@ -27,7 +27,7 @@ version: 0.1.0
 appVersion: "0.1.0"
 
 sources:
-  - https://gitlab.com/abc-map/abc-map-2_private
+  - https://gitlab.com/abc-map/abc-map
 
 maintainers:
   - name: remipassmoilesel

@@ -79,7 +79,8 @@ export class Parser {
       }
       case CommandName.DEPLOY: {
         const configPath = getConfigPath(args);
-        return { name: CommandName.DEPLOY, configPath };
+        const skipBuild = !!args.find((a) => a === '--skip-build');
+        return { name: CommandName.DEPLOY, configPath, skipBuild };
       }
       case CommandName.HELP: {
         return { name: CommandName.HELP };

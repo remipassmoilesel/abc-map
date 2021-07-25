@@ -6,8 +6,8 @@
 
 - Prenez le temps de consulter la documentation
 - Prenez le temps de regarder les vidéos explicatives
-- Consultez les [Issues](https://gitlab.com/abc-map/abc-map-2_private/-/issues) du projet. Quelqu'un a peut-être déjà trouvé une solution à votre problème !
-- Créez une [Issue](https://gitlab.com/abc-map/abc-map-2_private/-/issues). Décrivez votre problème aussi précisément que possible, quelqu'un pourra peut-être vous aider.
+- Consultez les [Issues](https://gitlab.com/abc-map/abc-map/-/issues) du projet. Quelqu'un a peut-être déjà trouvé une solution à votre problème !
+- Créez une [Issue](https://gitlab.com/abc-map/abc-map/-/issues). Décrivez votre problème aussi précisément que possible, quelqu'un pourra peut-être vous aider.
 
 **Quelles sont les formats de données utilisables dans Abc-Map ?**
 
@@ -39,7 +39,7 @@ Cette licence est expliquée <a target='_blank' href='https://www.gnu.org/licens
 
 **Après avoir importé un fichier je ne vois rien sur la carte**
 
-Le fichier est peut être non supporté, défectueux, ou le système de coordonnées n'est pas supporté. Créez une [Issue](https://gitlab.com/abc-map/abc-map-2_private/-/issues)
+Le fichier est peut être non supporté, défectueux, ou le système de coordonnées n'est pas supporté. Créez une [Issue](https://gitlab.com/abc-map/abc-map/-/issues)
 
 **Je veux télécharger la version 1**
 

@@ -2,17 +2,19 @@
 
 This project is licensed under GPL v3, see [LICENSE.txt](./LICENSE.txt) for more details.         
 
-All contributions are welcome, but must follow this guide. Please keep in mind that this is a side project, 
-developed at night after often 10 hours of code during the day. A lot of things needs to be improved, and code reviews 
-can take a long time.
+All contributions are welcome, but must follow this guide.       
+
+Please keep in mind that this is a side project, developed at night after often 10 hours of code during the day.   
+A lot of things needs to be improved, and code reviews can take a long time.      
 
 
 ## Before starting 
 
-Ensure that your idea is a need that will be shared by other people. You can discuss it by opening an issue on 
-the main repository.    
+Ensure that your idea is a need that will be shared by other people.       
 
-Please check the [backlog](documentation/5_backlog.md) too !
+Open an issue to discuss it and to avoid unnecessary or duplicate work.        
+
+If not already done, please check the [backlog](documentation/5_backlog.md) too !
 
 
 ## Before submitting code
@@ -20,6 +22,16 @@ Please check the [backlog](documentation/5_backlog.md) too !
 - Try it, smarten it
 - Test it
 - Proofread it
+
+
+## Submit your code
+
+See [Forking Workflow](https://docs.gitlab.com/ee/user/project/repository/forking_workflow.html).
+
+In a nutshell:   
+- Fork Abc-Map
+- Create a branch, let the code genius speak
+- Create a Merge Request, target this repo/master
 
 
 ## Master branch is production ready
@@ -32,5 +44,6 @@ In order to make this possible, all contributions must be carefully reviewed. A 
 - Automated test inspection     
 
 Since no one is paid yet, code reviews take time.     
+
 
 

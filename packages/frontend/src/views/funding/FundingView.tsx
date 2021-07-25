@@ -72,7 +72,7 @@ class FundingView extends Component<ServiceProps, {}> {
               <li>La traduction en plusieurs langues</li>
               <li>
                 Et plus !{' '}
-                <a href={'https://gitlab.com/abc-map/abc-map-2_private/-/blob/master/documentation/5_backlog.md'} target={'_blank'} rel="noreferrer">
+                <a href={'https://gitlab.com/abc-map/abc-map/-/blob/master/documentation/5_backlog.md'} target={'_blank'} rel="noreferrer">
                   Voir ici
                 </a>
               </li>
