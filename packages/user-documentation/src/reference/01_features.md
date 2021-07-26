@@ -17,16 +17,6 @@ comme:
 - <a href="http://orbisgis.org/" target='_blank'>OrbisGIS</a>
 - <a href="http://www.gvsig.com" target='_blank'>gvSig</a>
 
-## Licence et code source
-
-Abc-Map est un logiciel libre sous licence <a target='_blank' href='https://www.gnu.org/licenses/agpl-3.0.html'>GNU AGPLv3</a>. Cette licence est expliquée <a target='_blank' href='https://www.gnu.org/licenses/quick-guide-gplv3.fr.html'>ici</a>. Le code source de l'application est disponible <a target='_blank' href='https://gitlab.com/abc-map/abc-map'>ici</a>.
-
-<div class='alert alert-info my-3'>
-  <a class='btn btn-link' onclick='abc.goTo("/funding")'>
-  Participez au financement d&apos;Abc-Map pour défendre un petit bout d'Internet libre &nbsp;&nbsp;💌
-  </a>
-</div>
-
 ## Comment ça marche ?
 
 Une utilisation basique d'Abc-Map comprend ces étapes:
@@ -34,3 +24,17 @@ Une utilisation basique d'Abc-Map comprend ces étapes:
 - Affichage de la carte, import de données et mise en forme
 - Traitement de données: symboles proportionnels, dégradés de couleurs, etc ...
 - Mise en page et export au format PDF
+
+## Statut, licence et code source
+
+Abc-Map est un logiciel libre sous licence <a target='_blank' href='https://www.gnu.org/licenses/agpl-3.0.html'>GNU AGPLv3</a>. Cette licence est expliquée <a target='_blank' href='https://www.gnu.org/licenses/quick-guide-gplv3.fr.html'>ici</a>.
+
+Le code source de l'application est disponible <a target='_blank' href='https://gitlab.com/abc-map/abc-map'>ici</a>.
+
+<div class='alert alert-info my-3'>
+  <p class="m-3">Ce projet est tout neuf ✨ Du coup il y a beaucoup de choses à améliorer, à commencer par cette documentation.</p>
+
+  <a class='btn btn-link' onclick='abc.goTo("/funding")'>
+  Participez au financement d&apos;Abc-Map pour défendre un petit bout d'Internet libre &nbsp;&nbsp;💌
+  </a>
+</div>

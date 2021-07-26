@@ -1,4 +1,4 @@
-<div class="toc-section">Bases</div>
+<div class="toc-section">Généralités</div>
 
 [A quoi sert Abc-Map ?](#features)
 [Les projets](#projects)
@@ -8,7 +8,7 @@
 [Importer des données](#data-import)
 [Catalogue de données](#data-store)
 [Mise en page et légende](#layout-legend)
-[Profil utilisateur](#user-profile)
+[Inscription, connexion](#registration)
 [Questions fréquentes](#faq)
 
 <div class="toc-section">Traitements données</div>

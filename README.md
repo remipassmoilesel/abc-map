@@ -12,6 +12,8 @@ Official rewrite, attempt n°265 👨‍💻.
   </a>
 </div>
 
+Main repository of project is located here: [https://gitlab.com/abc-map/abc-map](https://gitlab.com/abc-map/abc-map).
+
 
 ## Purpose in a nutshell
 
@@ -23,7 +25,7 @@ Use cases:
 - Professional uses: tourism, deliveries, ...
 - Sports and leisure: hiking, hunting, treasure hunts, ...
 
-More information [here](https://alpha.abc-map.fr/documentation).    
+More information [here](https://abc-map.fr/documentation).    
 
 
 ## Status of project
