@@ -17,3 +17,12 @@ Sur la page carte vous pouvez:
 - Sauvegarder en ligne votre projet si vous êtes inscrit ou connecté
 
 Les projets exportés ont l'estension de fichier `.abm2`. Ce sont des archives Zip contenant toutes les informations de votre projet dans un format proche de GeoJSON.
+
+## Identifiants
+
+Si votre projet contient des couches qui utilisent des identifiants (WMS, XYZ, ...) à chaque export vous devez saisir un mot de passe.
+
+Ce mot de passe permet de chiffrer vos identifiants. Même si une personne mal intentionnée peut ouvrir votre projet, elle ne pourra pas
+lire vos identifiants.
+
+Attention à bien choisir un mot de passe fort. Privilégiez si possible l'utilisation d'un gestionnaire de mot de passe.
