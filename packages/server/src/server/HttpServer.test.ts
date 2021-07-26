@@ -115,49 +115,49 @@ describe('HttpServer', () => {
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
         <loc>http://external-url/</loc>
-        <lastmod>2021-22-05</lastmod>
+        <lastmod>2021-05-22</lastmod>
         <changefreq>monthly</changefreq>
         <priority>1</priority>
     </url>
     <url>
         <loc>http://external-url/documentation</loc>
-        <lastmod>2021-22-05</lastmod>
+        <lastmod>2021-05-22</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.9</priority>
     </url>
     <url>
         <loc>http://external-url/funding</loc>
-        <lastmod>2021-22-05</lastmod>
+        <lastmod>2021-05-22</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
         <loc>http://external-url/map</loc>
-        <lastmod>2021-22-05</lastmod>
+        <lastmod>2021-05-22</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
         <loc>http://external-url/datastore</loc>
-        <lastmod>2021-22-05</lastmod>
+        <lastmod>2021-05-22</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>http://external-url/datastore</loc>
-        <lastmod>2021-22-05</lastmod>
+        <lastmod>2021-05-22</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>http://external-url/layout</loc>
-        <lastmod>2021-22-05</lastmod>
+        <lastmod>2021-05-22</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.5</priority>
     </url>
     <url>
         <loc>http://external-url/legal-mentions</loc>
-        <lastmod>2021-22-05</lastmod>
+        <lastmod>2021-05-22</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.2</priority>
     </url>
