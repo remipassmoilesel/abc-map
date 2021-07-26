@@ -91,6 +91,10 @@ class ColorGradientsUI extends Component<Props, State> {
                 <li>Sélectionner un champ de jointure entre les données et les géométries.</li>
                 <li>Ensuite sélectionnez les caractéristiques des géométries à créer.</li>
               </ul>
+              <div className={'alert alert-warning mt-4'}>
+                Pour le moment utilisez uniquement des champs de jointure alphanumériques, c&apos;est à dire qui contiennent des lettres. <br />
+                Faute de quoi les jointures ne fonctionneront pas.
+              </div>
             </div>
             <img src={Sample} alt={'Exemple de carte'} className={Cls.sample} />
           </div>

@@ -17,6 +17,12 @@ Open an issue to discuss it and to avoid unnecessary or duplicate work.
 If not already done, please check the [backlog](documentation/5_backlog.md) too !
 
 
+## Getting started
+
+Please read the contents of [documentation/] folder before. Don't worry, it's a quick read. You will learn how to set up your workstation and to start 
+Abc-Map locally.
+
+
 ## Before submitting code
 
 - Try it, smarten it

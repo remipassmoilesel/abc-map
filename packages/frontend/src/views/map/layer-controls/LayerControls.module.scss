@@ -44,7 +44,9 @@ $list-height: 100px;
   button {
     margin: 3px;
     border: solid 1px $secondary;
-    border-radius: 4px;
+    background-color: inherit;
+    border-radius: 7px;
+
     padding: 6px;
     min-width: 40px;
   }

@@ -84,7 +84,7 @@ class SolicitationModal extends Component<Props, State> {
               Bien !
             </button>
             <button onClick={() => this.handleVote(VoteValue.BLAH)} className={`btn btn-outline-primary ${Cls.voteBtn}`}>
-              <span className={Cls.face}>🥱</span>
+              <span className={Cls.face}>😐</span>
               Bof ...
             </button>
             <button onClick={() => this.handleVote(VoteValue.NOT_SATISFIED)} className={`btn btn-outline-primary ${Cls.voteBtn}`}>

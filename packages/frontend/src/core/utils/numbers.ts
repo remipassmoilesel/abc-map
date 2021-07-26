@@ -24,8 +24,12 @@ export function isNumeric(str: string): boolean {
  * If passed argument "looks like" a number (001, 111, ...) it will be converted to.
  * @param str
  */
-export function asNumberOrString(str: string): number | string {
+export function asNumberOrString(str: string | number): number | string {
   let value = str;
+
+  if (typeof value === 'number') {
+    return value;
+  }
 
   // We normalize float separator
   if (value.indexOf(',')) {
