@@ -1,5 +1,15 @@
 # How toooz
 
+## Start Abc-Map locally
+
+Check [setup-workstation.md](./1_setup-workstation.md) first, then:      
+
+    $ ./abc-cli install     # Install all dependencies
+    $ ./abc-cli build       # Build all packages, needed the first time or after many changes
+    $ ./abc-cli watch       # Watch and compile sources
+    $ ./abc-cli start       # Start application
+
+
 ## Fix my broken repo
 
     $ git checkout master

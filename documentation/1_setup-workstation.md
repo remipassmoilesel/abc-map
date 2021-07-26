@@ -22,14 +22,15 @@ For Debian like and Ubuntu:
 
     # Clone source code
     $ git clone https://gitlab.com/abc-map/abc-map.git
-    $ cd abc-map-2
+    $ cd abc-map
 
 
 A CLI tool builds and starts the project:
 
     $ ./abc-cli install     # Install all dependencies
     $ ./abc-cli build       # Build all packages, needed the first time or after many changes
-    $ ./abc-cli start       # Start application and watch sources, for development purposes
+    $ ./abc-cli watch       # Watch and compile sources
+    $ ./abc-cli start       # Start application
 
 
 See CLI help for more commands:
@@ -58,9 +59,3 @@ TODO:
 - Kubectl
 - Helm
 
-
-## Deployment options
-
-TODO:
-- Docker simple example
-- Helm chart

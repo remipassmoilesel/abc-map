@@ -23,6 +23,7 @@ import { LegendDisplay, UserStatus } from '@abc-map/shared';
 import { MapTool } from '@abc-map/shared';
 import { MainState } from '../reducer';
 import { TestHelper } from '../../utils/test/TestHelper';
+import { DimensionsPx } from '../../utils/DimensionsPx';
 
 describe('StorePersistence', () => {
   let storage: LocalStorageService;
@@ -115,10 +116,7 @@ describe('StorePersistence', () => {
             size: 5,
           },
         },
-        mainMapDimensions: {
-          width: 640,
-          height: 480,
-        },
+        mainMapDimensions: undefined as unknown as DimensionsPx,
       },
       authentication: {
         tokenString: 'abcd',
