@@ -31,9 +31,7 @@ interface State {
 class DeviceWarningModal extends Component<{}, State> {
   constructor(props: {}) {
     super(props);
-    this.state = {
-      visible: false,
-    };
+    this.state = { visible: false };
   }
 
   public render(): ReactNode {
@@ -43,7 +41,7 @@ class DeviceWarningModal extends Component<{}, State> {
     }
 
     return (
-      <Modal show={visible} onHide={this.handleClose} backdrop={'static'} className={Cls.deviceWarning}>
+      <Modal show={visible} onHide={this.handleClose} backdrop={'static'} dialogClassName={Cls.deviceWarning}>
         <Modal.Header closeButton>
           <Modal.Title>Avertissement</Modal.Title>
         </Modal.Header>

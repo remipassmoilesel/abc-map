@@ -14,5 +14,5 @@ Backend is stateless, so it can be horizontally scaled.
 
 - Describe repository
 - Describe CLI
-- Describe processes
+- Describe CI
 - Describe tests
