@@ -5,8 +5,8 @@
 Sur la page `Mise en page` vous pouvez mettre en page et exporter vos cartes au format `PDF` ou `PNG`.
 
 <figure>
-    <img src="./assets/layout-controls.png" alt="Controles de mise en page"/>
-    <figcaption>Controles de mise en page</figcaption>
+    <img src="./assets/layout-controls.png" alt="Contrôles de mise en page"/>
+    <figcaption>Contrôles de mise en page</figcaption>
 </figure>
 
 Pour cela, créez des `feuilles de mise en page`, positionnez la carte tel que vous le souhaitez et cliquez sur `Export PDF` ou `Export PNG`.

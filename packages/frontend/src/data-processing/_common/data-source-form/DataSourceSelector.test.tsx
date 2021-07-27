@@ -30,7 +30,7 @@ import { CsvParsingError } from '../../../core/data/csv-parser/typings';
 
 logger.disable();
 
-describe('GeometryLayerForm', () => {
+describe('DataSourceSelector', () => {
   let map: MapWrapper;
   let services: TestServices;
   let handleSelection: SinonStub;

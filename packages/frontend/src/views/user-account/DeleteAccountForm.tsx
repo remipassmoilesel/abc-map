@@ -54,7 +54,7 @@ class DeleteAccountForm extends Component<Props, State> {
         <h2>Supprimer mon compte</h2>
         <div className={'alert alert-danger'}>
           <input type={'checkbox'} checked={confirmation} onChange={this.handleConfirmationChange} className={'mr-2'} data-cy={'delete-account-checkbox'} />
-          Je comprend que la suppression de mon compte est DEFINITIVE. Je perdrais tous les projets associés à mon compte.
+          Je comprends que la suppression de mon compte est DEFINITIVE. Je perdrais tous les projets associés à mon compte.
         </div>
         <div className={'mb-2'}>Mot de passe:</div>
         <input type={'password'} value={password} onChange={this.handlePasswordChange} className={'form-control'} data-cy={'delete-account-password'} />

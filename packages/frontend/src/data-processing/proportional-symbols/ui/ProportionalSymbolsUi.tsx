@@ -119,7 +119,7 @@ class ProportionalSymbolsUi extends Component<Props, State> {
         <FoldableCard title={'3. Sélectionner une couche de géométries'} className={'section'}>
           <div className={'explanation'}>
             La couche de géométries sera utilisée pour déterminer la position des symboles. Dans le cas de polygones, les symboles seront positionnés au centre
-            des polygones. Dans le cas de points, les symboles seront positionné sur les points.
+            des polygones. Dans le cas de points, les symboles seront positionnés sur les points.
           </div>
           <GeometryLayerForm values={geometryLayerValues} onChange={this.handleGeometryLayerChange} />
         </FoldableCard>

@@ -23,7 +23,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { MainState } from '../../../core/store/reducer';
 import { FileIO, InputResultType, InputType } from '../../../core/utils/FileIO';
 import RemoteProjectModal from './RemoteProjectsModal';
-import { ModalStatus } from '../../../core/ui/typings';
+import { ModalStatus, OperationStatus } from '../../../core/ui/typings';
 import { ServiceProps, withServices } from '../../../core/withServices';
 import { Errors } from '../../../core/utils/Errors';
 
@@ -126,7 +126,7 @@ class ProjectControls extends Component<Props, State> {
       const compressed = await project.exportCurrentProject(password);
       if (compressed.project.size >= ProjectConstants.MaxSizeBytes) {
         toasts.error("Désolé 😞 ce projet est trop gros pour être sauvegardé en ligne. Vous pouvez l'exporter sur votre ordinateur.");
-        return;
+        return OperationStatus.Interrupted;
       }
 
       await project.save(compressed);

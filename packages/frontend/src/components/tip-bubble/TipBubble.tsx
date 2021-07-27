@@ -52,7 +52,7 @@ class TipBubble extends Component<Props, State> {
           <i className={`fa fa-question-circle`} />
         </div>
         <Modal show={modal} onHide={this.handleHide}>
-          <Modal.Body>
+          <Modal.Body className={Cls.modalContent}>
             <div dangerouslySetInnerHTML={{ __html: this.getTip() }} />
           </Modal.Body>
         </Modal>

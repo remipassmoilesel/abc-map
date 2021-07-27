@@ -30,7 +30,7 @@ import {
 import AlgorithmSelector from '../../_common/algorithm/AlgorithmSelector';
 import FormLine from '../../_common/form-line/FormLine';
 import ScaleColors from './ScaleColors';
-import ClassificationColors from './ClassificationColors';
+import ClassificationColors, { ClassesConfig } from './ClassificationColors';
 import { DataSource } from '../../../core/data/data-source/DataSource';
 import { GradientClass } from '../GradientClass';
 import { ColorGradientTips } from '@abc-map/user-documentation';
@@ -83,11 +83,11 @@ class GradientsConfigForm extends Component<Props, {}> {
         {isScaleAlgorithm(currentAlgo) && <ScaleColors start={values.start} end={values.end} onChange={this.handleScaleColorsChanged} />}
         {isClassificationAlgorithm(currentAlgo) && (
           <ClassificationColors
-            values={values.classes}
+            value={{ classes: values.classes, startColor: values.start, endColor: values.end }}
             dataSource={dataSource}
             valueField={valueField}
             algorithm={currentAlgo}
-            onChange={this.handleClassesChanged}
+            onChange={this.handleColorConfigChanged}
           />
         )}
       </>
@@ -124,10 +124,12 @@ class GradientsConfigForm extends Component<Props, {}> {
     this.props.onChange(config);
   };
 
-  private handleClassesChanged = (classes: GradientClass[]) => {
+  private handleColorConfigChanged = (classes: ClassesConfig) => {
     const config: ColorsConfigFormValues = {
       ...this.props.values,
-      classes,
+      classes: classes.classes,
+      start: classes.startColor,
+      end: classes.endColor,
     };
     this.props.onChange(config);
   };

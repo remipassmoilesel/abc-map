@@ -123,7 +123,7 @@ class DataSourceSelector extends Component<Props, State> {
     // If a datasource is set, we switch to the proper display
     if (datasource) {
       const display = datasource?.getType() && datasource.getType() === DataSourceType.CsvFile ? Display.File : Display.Layers;
-      this.setState({ display }, () => this.inspectSource(datasource));
+      this.setState({ display }, () => this.inspectSource(datasource).catch((err) => logger.error('Data source error: ', err)));
     }
   }
 
@@ -132,7 +132,7 @@ class DataSourceSelector extends Component<Props, State> {
 
     // If datasource was reset, we reset state
     if (datasource?.getId() !== prevProps.value?.getId()) {
-      this.inspectSource(datasource);
+      this.inspectSource(datasource).catch((err) => logger.error('Data source error: ', err));
     }
   }
 
@@ -146,7 +146,10 @@ class DataSourceSelector extends Component<Props, State> {
       return;
     }
 
-    this.inspectSource(new LayerDataSource(layer));
+    const source = new LayerDataSource(layer);
+    this.inspectSource(source)
+      .then(() => this.props.onSelected(source))
+      .catch((err) => logger.error('Data source error: ', err));
   };
 
   private handleImportFile = () => {
@@ -154,9 +157,14 @@ class DataSourceSelector extends Component<Props, State> {
 
     FileIO.openInput(InputType.Single, '.csv')
       .then((res) => {
-        if (res.type === InputResultType.Confirmed) {
-          this.inspectSource(new FileDataSource(res.files[0]));
+        if (res.type !== InputResultType.Confirmed) {
+          return;
         }
+
+        const source = new FileDataSource(res.files[0]);
+        return this.inspectSource(source)
+          .then(() => this.props.onSelected(source))
+          .catch((err) => logger.error('Data source error: ', err));
       })
       .catch((err) => {
         logger.error(err);
@@ -164,27 +172,23 @@ class DataSourceSelector extends Component<Props, State> {
       });
   };
 
-  private inspectSource(source?: DataSource): void {
+  private async inspectSource(source: DataSource | undefined): Promise<void> {
     if (!source) {
       this.setState({ rows: NoRowsInformation, error: false, errorAtLine: NoLineInformation });
-      this.props.onSelected(source);
       return;
     }
 
     // First we check that data source is valid
-    source
+    return source
       .getRows()
-      .then((rows) => {
-        this.setState({ rows: rows.length, error: false, errorAtLine: NoLineInformation });
-        this.props.onSelected(source);
-      })
+      .then((rows) => this.setState({ rows: rows.length, error: false, errorAtLine: NoLineInformation }))
       .catch((err: CsvParsingError | Error) => {
-        logger.error('Data source error: ', err);
         if ('row' in err && typeof err.row !== 'undefined') {
           this.setState({ error: true, errorAtLine: err.row });
         } else {
           this.setState({ error: true, errorAtLine: NoLineInformation });
         }
+        return Promise.reject(err);
       });
   }
 }

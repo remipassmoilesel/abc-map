@@ -28,40 +28,54 @@ import * as _ from 'lodash';
 import * as chroma from 'chroma-js';
 import { nanoid } from 'nanoid';
 import ClassRow from './ClassRow';
+import ColorPicker from '../../../components/color-picker/ColorPicker';
 
 const logger = Logger.get('ColorScaleSelection.tsx');
 
 interface Props extends ServiceProps {
-  values: GradientClass[];
+  value: ClassesConfig;
   dataSource: DataSource;
   valueField: string;
   algorithm: ClassificationAlgorithm;
-  onChange: (classes: GradientClass[]) => void;
+  onChange: (change: ClassesConfig) => void;
+}
+
+export interface ClassesConfig {
+  classes: GradientClass[];
+  startColor: string;
+  endColor: string;
 }
 
 interface State {
   numberOfClasses: number;
 }
 
-const defaultStartColor = '#fee0d1';
-const defaultEndColor = '#99390f';
-
 class ClassificationColors extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = { numberOfClasses: props.values.length || 5 };
+    this.state = { numberOfClasses: props.value.classes.length || 5 };
   }
 
   public render(): ReactNode {
     const numberOfClasses = this.state.numberOfClasses;
-    const classes = this.props.values;
+    const classes = this.props.value.classes;
+    const startColor = this.props.value.startColor;
+    const endColor = this.props.value.endColor;
 
     return (
       <>
         <FormLine>
+          <div className={'flex-grow-1'}>Couleur de début:</div>
+          <ColorPicker initialValue={startColor} onClose={this.handleStartChanged} />
+        </FormLine>
+        <FormLine>
+          <div className={'flex-grow-1'}>Couleur de fin:</div>
+          <ColorPicker initialValue={endColor} onClose={this.handleEndChanged} />
+        </FormLine>
+        <FormLine>
           <div className={'flex-grow-1'}>Nombre de classes:</div>
           <select className={'form-control'} value={numberOfClasses} onChange={this.handleClassNumberChanged}>
-            {_.range(3, 16).map((i) => (
+            {_.range(3, 11).map((i) => (
               <option key={i} value={i}>
                 {i}
               </option>
@@ -80,7 +94,7 @@ class ClassificationColors extends Component<Props, State> {
               <div>
                 <button onClick={this.handleResetClasses} className={'btn btn-outline-secondary my-3'}>
                   <i className={'fa fa-undo mr-2'} />
-                  Couleurs par défaut
+                  Calculer les classes
                 </button>
               </div>
             </div>
@@ -105,8 +119,10 @@ class ClassificationColors extends Component<Props, State> {
     const algorithmChanged = prevProps.algorithm !== this.props.algorithm;
     const numberOfClassesChanged = prevState.numberOfClasses !== this.state.numberOfClasses;
     const valueFieldChanged = prevProps.valueField !== this.props.valueField;
+    const startChanged = prevProps.value.startColor !== this.props.value.startColor;
+    const endChanged = prevProps.value.endColor !== this.props.value.endColor;
 
-    if (dataSourceChanged || algorithmChanged || numberOfClassesChanged || valueFieldChanged) {
+    if (dataSourceChanged || algorithmChanged || numberOfClassesChanged || valueFieldChanged || startChanged || endChanged) {
       this.computeClasses().catch((err) => {
         toasts.genericError();
         logger.error('Cannot preview classes: ', err);
@@ -120,43 +136,51 @@ class ClassificationColors extends Component<Props, State> {
   };
 
   private handleClassChanged = (cl: GradientClass) => {
-    const classes = this.props.values.map((c) => (c.id === cl.id ? cl : c));
-    this.props.onChange(classes);
+    const classes = this.props.value.classes.map((c) => (c.id === cl.id ? cl : c));
+
+    this.props.onChange({ ...this.props.value, classes });
+  };
+
+  private handleStartChanged = (color: string) => {
+    this.props.onChange({ ...this.props.value, startColor: color });
+  };
+
+  private handleEndChanged = (color: string) => {
+    this.props.onChange({ ...this.props.value, endColor: color });
   };
 
   private handleResetClasses = () => {
+    const startColor = this.props.value.startColor;
+    const endColor = this.props.value.endColor;
     const numberOfClasses = this.state.numberOfClasses;
-    const classes = this.props.values;
-    const colorFunc = chroma.scale([defaultStartColor, defaultEndColor]).domain([0, numberOfClasses]).classes(numberOfClasses);
+    const classes = this.props.value.classes;
+
+    const colorFunc = chroma.scale([startColor, endColor]).domain([0, numberOfClasses]).classes(numberOfClasses);
     const newClasses = classes.map((cl, i) => ({
       ...cl,
       id: nanoid(),
       color: colorFunc(i).hex(),
     }));
 
-    this.props.onChange(newClasses);
+    this.props.onChange({ ...this.props.value, classes: newClasses });
   };
 
   private async computeClasses() {
+    const startColor = this.props.value.startColor;
+    const endColor = this.props.value.endColor;
     const dataSource = this.props.dataSource;
     const algo = this.props.algorithm;
     const valueField = this.props.valueField;
     const numberOfClasses = this.state.numberOfClasses;
-    const previousClasses = this.props.values;
 
-    const colorFunc = chroma.scale([defaultStartColor, defaultEndColor]).domain([0, numberOfClasses]).classes(numberOfClasses);
+    const colorFunc = chroma.scale([startColor, endColor]).domain([0, numberOfClasses]).classes(numberOfClasses);
     const rows = await dataSource.getRows();
     const data = rows.map((row) => row[valueField]).filter((v) => typeof v === 'number') as number[];
     const classes = Stats.classify(algo, numberOfClasses, data).map((cl, i) => {
-      const color = previousClasses[i] && previousClasses[i].color !== colorFunc(i).hex() ? previousClasses[i].color : colorFunc(i).hex();
-      return {
-        ...cl,
-        id: nanoid(),
-        color,
-      };
+      return { ...cl, id: nanoid(), color: colorFunc(i).hex() };
     });
 
-    this.props.onChange(classes);
+    this.props.onChange({ ...this.props.value, classes });
   }
 }
 

@@ -21,11 +21,11 @@ De droite à gauche et de haut en bas il y a:
 - L'outil Sélection
 - L'outil Propriétés
 
-Vous pouvez cliquer sur le bouton "Aide" de chaque outil pour connaitre son fonctionnement détaillé.
+Vous pouvez cliquer sur le bouton "Aide" de chaque outil pour connaître son fonctionnement détaillé.
 
 ## Outil Point
 
-L'outil Point permet de créer et de modifier des points. Vous pouvez sélectionner une icone, une taille et une couleur.
+L'outil Point permet de créer et de modifier des points. Vous pouvez sélectionner une icône, une taille et une couleur.
 
 ## Outil Ligne
 
@@ -41,4 +41,4 @@ L'outil Texte permet d'ajouter et de modifier du texte attaché à des formes ex
 
 ## Outil Propriétés
 
-L'outil Propriétés permet de créer et de modifier des propriétés à des formes existante.
+L'outil Propriétés permet de créer et de modifier des propriétés à des formes existantes.
