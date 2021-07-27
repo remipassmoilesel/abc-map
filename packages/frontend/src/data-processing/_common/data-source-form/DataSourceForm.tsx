@@ -67,7 +67,7 @@ class DataSourceForm extends Component<Props, State> {
     return (
       <>
         <div className={'mb-4'}>
-          <DataSourceSelector onSelected={this.handleDataSourceSelected} value={source} />
+          <DataSourceSelector value={source} onSelected={this.handleDataSourceSelected} />
         </div>
 
         <FormLine>

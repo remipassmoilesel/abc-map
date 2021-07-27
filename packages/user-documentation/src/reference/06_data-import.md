@@ -9,8 +9,8 @@ Vous pouvez importer des données sur vos cartes de plusieurs manières:
 - En utilisant vos propres données, en utilisant le contrôle d'import de données
 
 <figure>
-    <img src="./assets/data-import.png" alt="Controle d'import de données"/>
-    <figcaption>Controle d'import de données</figcaption>
+    <img src="./assets/data-import.png" alt="Contrôle d'import de données"/>
+    <figcaption>Contrôle d'import de données</figcaption>
 </figure>
 
 Vous pouvez importer:

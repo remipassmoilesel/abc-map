@@ -123,7 +123,7 @@ class ColorGradientsUI extends Component<Props, State> {
         {/* Data processing parameters */}
         <FoldableCard title={'4. Paramètres du traitement'} className={'section'}>
           <div className={'explanation'}>
-            Les couleurs seront créés dans une nouvelle couche. Leurs valeurs seront déterminées par le champ source utilisé, et par le type d&apos;algorithme.
+            Les couleurs seront créées dans une nouvelle couche. Leurs valeurs seront déterminées par le champ source utilisé, et par le type d&apos;algorithme.
           </div>
           {!dataSourceValues.valueField && <div>Vous devez choisir un champ de valeur.</div>}
           {!dataSourceValues.source && <div>Vous devez choisir une source de données.</div>}

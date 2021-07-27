@@ -47,7 +47,7 @@ class PredefinedSelector extends Component<Props, {}> {
           <img src={labelledModel?.preview} width={440} alt={labelledModel?.label} className={'border'} />
         </div>
         <div className={'my-2'}>
-          Origine des données et license:
+          Origine des données et licence:
           <div>
             <span dangerouslySetInnerHTML={{ __html: labelledModel?.by || '' }} />
             <span className={'ml-2'} dangerouslySetInnerHTML={{ __html: labelledModel?.license || '' }} />

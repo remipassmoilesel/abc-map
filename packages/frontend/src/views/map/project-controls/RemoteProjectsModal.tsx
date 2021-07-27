@@ -59,7 +59,7 @@ class RemoteProjectsModal extends Component<Props, State> {
     return (
       <Modal show={true} onHide={this.props.onHide} backdrop={'static'}>
         <Modal.Header closeButton>
-          <Modal.Title>Projet enregistrés</Modal.Title>
+          <Modal.Title>Projets enregistrés</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div className={'mb-3'}>Sélectionnez un projet: </div>

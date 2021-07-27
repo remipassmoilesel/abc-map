@@ -83,7 +83,7 @@ export const Tools: Tip[] = [
     content: `<h4>Outil texte</h4>
               <ul>
                 <li><b>Pour ajouter du texte</b>, maintenez <code>CTRL</code> et cliquez sur une géométrie. Un contrôle de
-                saisie apparait, saisissez votre texte puis validez votre saisie</li>
+                saisie apparaît, saisissez votre texte puis validez votre saisie</li>
                 <li><b>Pour modifier du texte</b>, maintenez <code>CTRL</code> et cliquez sur une géométrie</li>
                 ${undoRedoTip}
               </ul>
@@ -93,7 +93,7 @@ export const Tools: Tip[] = [
     id: ToolTips.Selection,
     content: `<h4>Outil sélection</h4>
               <ul>
-                <li><b>Pour sélectionner des géométries</b>, tracez un rectangle sur la carte et relachez. Vous pouvez ensuite
+                <li><b>Pour sélectionner des géométries</b>, tracez un rectangle sur la carte et relâchez. Vous pouvez ensuite
                 déplacer la sélection ou modifier ses caractéristiques </li>
                 <li><b>Pour supprimer des géométries</b>, sélectionnez-les et appuyez sur <code>SUPPR</code></li>
                 <li><b>Pour dupliquer des géométries</b>, sélectionnez-les et appuyez sur le bouton <code>Dupliquer</code>

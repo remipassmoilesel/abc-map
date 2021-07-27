@@ -46,8 +46,8 @@ export function newParameters(): Parameters {
     data: {},
     geometries: {},
     colors: {
-      start: 'blue',
-      end: 'red',
+      start: '#fee0d1',
+      end: '#99390f',
       algorithm: ClassificationAlgorithm.NaturalBreaks,
       classes: [],
     },

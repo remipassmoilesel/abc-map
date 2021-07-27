@@ -16,7 +16,7 @@ Sur la page carte vous pouvez:
 - Exporter un projet sur votre ordinateur
 - Sauvegarder en ligne votre projet si vous êtes inscrit ou connecté
 
-Les projets exportés ont l'estension de fichier `.abm2`. Ce sont des archives Zip contenant toutes les informations de votre projet dans un format proche de GeoJSON.
+Les projets exportés ont l'extension de fichier `.abm2`. Ce sont des archives Zip contenant toutes les informations de votre projet dans un format proche de GeoJSON.
 
 ## Identifiants
 
