@@ -17,6 +17,6 @@
  */
 
 .deviceWarning {
-  // Modals are too large on mobile device
-  max-width: 95vw;
+  width: 80vw !important;
+  max-width: 80vw !important;
 }
