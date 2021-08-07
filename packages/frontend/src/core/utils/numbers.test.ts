@@ -16,22 +16,34 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { asNumberOrString, isNumeric, toPrecision } from './numbers';
+import { asNumberOrString, isValidNumber, toPrecision } from './numbers';
 
 describe('numbers', () => {
-  it('isNumeric()', () => {
-    expect(isNumeric('1')).toBeTruthy();
-    expect(isNumeric('1.1')).toBeTruthy();
-    expect(isNumeric('001')).toBeTruthy();
-    expect(isNumeric('abcdef')).toBeFalsy();
+  it('isValidNumber()', () => {
+    expect(isValidNumber(1)).toBeTruthy();
+    expect(isValidNumber('1')).toBeTruthy();
+    expect(isValidNumber('1.1')).toBeTruthy();
+    expect(isValidNumber('001')).toBeTruthy();
+
+    expect(isValidNumber('')).toBeFalsy();
+    expect(isValidNumber('   ')).toBeFalsy();
+    expect(isValidNumber('abcdef')).toBeFalsy();
+    expect(isValidNumber('1000px')).toBeFalsy();
+    expect(isValidNumber(' 10 001')).toBeFalsy();
+    expect(isValidNumber('10 001 ')).toBeFalsy();
+    expect(isValidNumber(null)).toBeFalsy();
+    expect(isValidNumber(undefined)).toBeFalsy();
+    expect(isValidNumber(undefined)).toBeFalsy();
   });
 
   it('asNumberOrString()', () => {
+    expect(asNumberOrString(NaN)).toEqual(NaN);
     expect(asNumberOrString(1)).toEqual(1);
     expect(asNumberOrString('1')).toEqual(1);
     expect(asNumberOrString('1,1')).toEqual(1.1);
     expect(asNumberOrString('1.1')).toEqual(1.1);
     expect(asNumberOrString('001')).toEqual(1);
+    expect(asNumberOrString(' 1 958 492 ')).toEqual(1_958_492);
     expect(asNumberOrString('abcdef')).toEqual('abcdef');
     expect(asNumberOrString('abc,def')).toEqual('abc,def');
   });

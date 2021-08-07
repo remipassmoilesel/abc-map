@@ -43,7 +43,7 @@ import uuid from 'uuid-random';
 import { Coordinate } from 'ol/coordinate';
 import MapBrowserEvent from 'ol/MapBrowserEvent';
 import { Map } from 'ol';
-import { RegionsMetropolitanFrance } from './TestHelper.data';
+import { RegionsOfMetropolitanFrance } from './TestHelper.data';
 import { TestDataSource } from '../../data/data-source/TestDataSource';
 import { VectorLayerWrapper } from '../../geo/layers/LayerWrapper';
 import { FeatureWrapper } from '../../geo/features/FeatureWrapper';
@@ -312,16 +312,16 @@ export class TestHelper {
       .map((inter) => inter.constructor.name);
   }
 
-  public static regionsFrance() {
-    return RegionsMetropolitanFrance.slice();
+  public static regionsOfFrance() {
+    return RegionsOfMetropolitanFrance.slice();
   }
 
-  public static regionsFranceDataSource(): TestDataSource {
-    return TestDataSource.from(this.regionsFrance());
+  public static regionsOfFranceDataSource(): TestDataSource {
+    return TestDataSource.from(this.regionsOfFrance());
   }
 
-  public static regionsFranceVectorLayer(): VectorLayerWrapper {
-    const features = this.regionsFrance().map((reg) => {
+  public static regionsOfFranceVectorLayer(): VectorLayerWrapper {
+    const features = this.regionsOfFrance().map((reg) => {
       const feat = FeatureWrapper.create(
         new Polygon([
           [

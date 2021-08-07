@@ -49,7 +49,7 @@ describe('GeometryLayerForm', () => {
 
   it('should notify on layer selection', async () => {
     // Prepare
-    const layer = TestHelper.regionsFranceVectorLayer();
+    const layer = TestHelper.regionsOfFranceVectorLayer();
     map.addLayer(layer);
     abcRender(<GeometryLayerForm values={{ layer: undefined, joinBy: '' }} onChange={handleChanges} />, { services });
 
@@ -65,7 +65,7 @@ describe('GeometryLayerForm', () => {
 
   it('should notify on join field selection', async () => {
     // Prepare
-    const layer = TestHelper.regionsFranceVectorLayer();
+    const layer = TestHelper.regionsOfFranceVectorLayer();
     map.addLayer(layer);
 
     // We render then select one layer
@@ -87,7 +87,7 @@ describe('GeometryLayerForm', () => {
 
   it('should show data samples on selection', async () => {
     // Prepare
-    const layer = TestHelper.regionsFranceVectorLayer();
+    const layer = TestHelper.regionsOfFranceVectorLayer();
     map.addLayer(layer);
     abcRender(<GeometryLayerForm values={{ layer: undefined, joinBy: '' }} onChange={handleChanges} />, { services });
 

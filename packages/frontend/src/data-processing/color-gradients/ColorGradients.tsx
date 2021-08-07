@@ -30,7 +30,7 @@ import { GradientAlgorithm, ScaleAlgorithm } from '../_common/algorithm/Algorith
 import { Services } from '../../core/Services';
 import { GradientClass } from './GradientClass';
 import * as chroma from 'chroma-js';
-import { toPrecision } from '../../core/utils/numbers';
+import { asNumberOrString, isValidNumber, toPrecision } from '../../core/utils/numbers';
 
 export const logger = Logger.get('ColorGradients.tsx', 'info');
 
@@ -56,10 +56,10 @@ export class ColorGradients extends Module {
   public async process(params: Parameters): Promise<void> {
     logger.info('Using parameters: ', params);
 
-    const { newLayerName, data, geometries, colors } = params;
-    const { valueField, source, joinBy: dataJoinBy } = data;
-    const { layer: geometryLayer, joinBy: geometryJoinBy } = geometries;
-    const { start, end, algorithm, classes } = colors;
+    const { newLayerName } = params;
+    const { valueField, source, joinBy: dataJoinBy } = params.data;
+    const { layer: geometryLayer, joinBy: geometryJoinBy } = params.geometries;
+    const { start, end, algorithm, classes } = params.colors;
 
     if (!newLayerName || !source || !valueField || !start || !end || !dataJoinBy || !geometryLayer || !geometryJoinBy || !algorithm) {
       return Promise.reject(new Error('Invalid parameters'));
@@ -72,8 +72,8 @@ export class ColorGradients extends Module {
     // We sort data source items to extract min and max values
     const rows = await source.getRows();
     const sortedValues = rows
-      .map((r) => r[valueField])
-      .filter((v) => typeof v === 'number')
+      .map((r) => asNumberOrString(r[valueField] ?? NaN))
+      .filter((v) => isValidNumber(v))
       .sort((a, b) => (a as number) - (b as number)) as number[];
 
     if (!sortedValues.length || rows.length !== sortedValues.length) {
@@ -103,14 +103,9 @@ export class ColorGradients extends Module {
           return null;
         }
 
-        const value = row[valueField];
-        if (typeof value !== 'number') {
+        const value = asNumberOrString(row[valueField] ?? NaN);
+        if (!isValidNumber(value) || value <= 0) {
           logger.error(`Invalid color value: ${value}`);
-          return null;
-        }
-
-        if (value <= 0) {
-          logger.warn('Some values are smaller than zero, skipping');
           return null;
         }
 

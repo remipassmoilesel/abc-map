@@ -24,7 +24,7 @@ import { LayerChangeHandler } from '../../../core/geo/map/MapWrapper';
 import VectorLayerSelector from '../../../components/vector-layer-selector/VectorLayerSelector';
 import { DataSource, DataSourceType } from '../../../core/data/data-source/DataSource';
 import { LayerDataSource } from '../../../core/data/data-source/LayerDataSource';
-import { FileDataSource } from '../../../core/data/data-source/FileDataSource';
+import { CsvDataSource } from '../../../core/data/data-source/CsvDataSource';
 import { VectorLayerWrapper } from '../../../core/geo/layers/LayerWrapper';
 import { CsvParsingError } from '../../../core/data/csv-parser/typings';
 import Cls from './DataSourceSelector.module.scss';
@@ -91,13 +91,13 @@ class DataSourceSelector extends Component<Props, State> {
               Sélectionner un fichier sur votre ordinateur. Ce fichier doit :
               <ul className={'mt-2'}>
                 <li>Être au format CSV: séparateur virgule, guillemets doubles</li>
-                <li>Être encodé en UTF-8</li>
                 <li>Avoir une ligne d&apos;en-tête avec le nom des colonnes</li>
+                <li>Être encodé en UTF-8</li>
               </ul>
             </div>
             <div className={'d-flex'}>
               <button onClick={this.handleImportFile} className={'btn btn-primary'} data-cy={'data-source-import-file'}>
-                Importer un fichier CSV
+                Choisir un fichier CSV
               </button>
             </div>
           </div>
@@ -161,7 +161,7 @@ class DataSourceSelector extends Component<Props, State> {
           return;
         }
 
-        const source = new FileDataSource(res.files[0]);
+        const source = new CsvDataSource(res.files[0]);
         return this.inspectSource(source)
           .then(() => this.props.onSelected(source))
           .catch((err) => logger.error('Data source error: ', err));

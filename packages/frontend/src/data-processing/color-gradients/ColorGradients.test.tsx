@@ -52,8 +52,8 @@ describe('ColorGradients', () => {
 
   it('Test dataset 1 with ScaleAlgorithm.Interpolated', async () => {
     // Prepare
-    const source = TestHelper.regionsFranceDataSource();
-    const layer = TestHelper.regionsFranceVectorLayer();
+    const source = TestHelper.regionsOfFranceDataSource();
+    const layer = TestHelper.regionsOfFranceVectorLayer();
 
     // Act
     const parameters: Parameters = {
@@ -105,9 +105,9 @@ describe('ColorGradients', () => {
 
   it('Test dataset 1 with ClassificationAlgorithm.NaturalBreaks', async () => {
     // Prepare
-    const source = TestHelper.regionsFranceDataSource();
+    const source = TestHelper.regionsOfFranceDataSource();
     const classes = testGradientClasses(ClassificationAlgorithm.NaturalBreaks, 5);
-    const layer = TestHelper.regionsFranceVectorLayer();
+    const layer = TestHelper.regionsOfFranceVectorLayer();
 
     // Act
     const parameters: Parameters = {
@@ -159,9 +159,9 @@ describe('ColorGradients', () => {
 
   it('Test dataset 1 with ClassificationAlgorithm.Quantiles', async () => {
     // Prepare
-    const source = TestHelper.regionsFranceDataSource();
+    const source = TestHelper.regionsOfFranceDataSource();
     const classes = testGradientClasses(ClassificationAlgorithm.Quantiles, 5);
-    const layer = TestHelper.regionsFranceVectorLayer();
+    const layer = TestHelper.regionsOfFranceVectorLayer();
 
     // Act
     const parameters: Parameters = {
@@ -213,9 +213,9 @@ describe('ColorGradients', () => {
 
   it('Test dataset 1 with ClassificationAlgorithm.EqualIntervals', async () => {
     // Prepare
-    const source = TestHelper.regionsFranceDataSource();
+    const source = TestHelper.regionsOfFranceDataSource();
     const classes = testGradientClasses(ClassificationAlgorithm.EqualIntervals, 5);
-    const layer = TestHelper.regionsFranceVectorLayer();
+    const layer = TestHelper.regionsOfFranceVectorLayer();
 
     // Act
     const parameters: Parameters = {

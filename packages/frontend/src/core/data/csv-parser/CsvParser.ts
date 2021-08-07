@@ -19,7 +19,6 @@
 import * as Papa from 'papaparse';
 import { BlobIO, Logger } from '@abc-map/shared';
 import { CsvParsingError, CsvRow } from './typings';
-import { asNumberOrString } from '../../utils/numbers';
 
 const logger = Logger.get('CsvParser.ts');
 
@@ -50,24 +49,7 @@ export class CsvParser {
       return Promise.reject(new Error(`Invalid file, it must contains headers`));
     }
 
-    return this.normalize(data);
-  }
-
-  /**
-   * All values parsed from papaparse are string. In order to prevent errors with Javascript type coercion,
-   * we cast numbers as numbers for better processing.
-   *
-   * @param rows
-   * @private
-   */
-  private static normalize(rows: CsvRow[]): CsvRow[] {
-    for (const row of rows) {
-      for (const property in row) {
-        const value = row[property] as string;
-        row[property] = asNumberOrString(value);
-      }
-    }
-    return rows;
+    return data;
   }
 
   public static async unparse(rows: CsvRow[], name: string): Promise<File> {

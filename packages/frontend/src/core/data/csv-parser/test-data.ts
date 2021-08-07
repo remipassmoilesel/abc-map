@@ -30,16 +30,9 @@ export const File1 = sampleCsvFile(`\
 
 `);
 
-export const File2 = sampleCsvFile(`\
-"label","altitude"
-"value3","11,88"
-"value4",11.89
-"value5","Hello, how are you ?"
-`);
+export const File2 = sampleCsvFile('');
 
-export const File3 = sampleCsvFile('');
-
-export const File4 = sampleCsvFile(`
+export const File3 = sampleCsvFile(`
 "a";"b";"c"
 "d";"e";"f"
 `);

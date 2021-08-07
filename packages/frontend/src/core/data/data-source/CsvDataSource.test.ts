@@ -17,26 +17,26 @@
  */
 
 import { DataSourceType } from './DataSource';
-import { FileDataSource, logger } from './FileDataSource';
+import { CsvDataSource, logger } from './CsvDataSource';
 import { File1 } from '../csv-parser/test-data';
 
 logger.disable();
 
-describe('FileDataSource', () => {
+describe('CsvDataSource', () => {
   it('getId()', () => {
-    const data = new FileDataSource(File1);
+    const data = new CsvDataSource(File1);
 
     expect(data.getId()).toMatch(/^test\.csv/);
   });
 
   it('getType()', () => {
-    const data = new FileDataSource(File1);
+    const data = new CsvDataSource(File1);
 
     expect(data.getType()).toEqual(DataSourceType.CsvFile);
   });
 
   it('getRows()', async () => {
-    const data = new FileDataSource(File1);
+    const data = new CsvDataSource(File1);
 
     const rows = await data.getRows();
 
@@ -44,13 +44,13 @@ describe('FileDataSource', () => {
     rows.forEach((r) => expect(r._id).toBeDefined());
     const comparable = rows.map((r) => ({ ...r, _id: '' }));
     expect(comparable).toEqual([
-      { _id: '', label: 'value1', altitude: 1234 },
-      { _id: '', label: 'value2', altitude: 5678 },
+      { _id: '', label: 'value1', altitude: '1234' },
+      { _id: '', label: 'value2', altitude: '5678' },
     ]);
   });
 
   it('getRows() from cache', async () => {
-    const data = new FileDataSource(File1);
+    const data = new CsvDataSource(File1);
 
     const firsts = await data.getRows();
     const seconds = await data.getRows();

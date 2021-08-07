@@ -92,7 +92,7 @@ class DataStoreView extends Component<ServiceProps, State> {
 
         {downloading && (
           <div className={Cls.loading}>
-            <h4 className={'my-3 mx-2'}>Patience patience ⌛</h4>
+            <h4 className={'my-3 mx-2'}>Un peu de patience ⌛</h4>
           </div>
         )}
 

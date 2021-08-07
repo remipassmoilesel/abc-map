@@ -128,7 +128,9 @@ export class HttpServer {
         void reply.header('Content-Type', 'text/html; charset=UTF-8').send(this.error429cache);
         metrics.requestQuotaExceeded();
         return;
-      } else {
+      }
+      // Or return error and error status
+      else {
         void reply.status(reply.statusCode || 500).send(err);
       }
     });

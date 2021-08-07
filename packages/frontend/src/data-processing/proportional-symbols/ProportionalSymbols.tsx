@@ -31,6 +31,7 @@ import Feature from 'ol/Feature';
 import { Logger } from '@abc-map/shared';
 import { ScaleAlgorithm } from '../_common/algorithm/Algorithm';
 import { Stats } from '../_common/stats/Stats';
+import { asNumberOrString, isValidNumber } from '../../core/utils/numbers';
 
 export const logger = Logger.get('ProportionalSymbols.tsx');
 
@@ -56,10 +57,10 @@ export class ProportionalSymbols extends Module {
   public async process(params: Parameters): Promise<void> {
     logger.info('Using parameters: ', params);
 
-    const { newLayerName, data, geometries, symbols } = params;
-    const { valueField, source, joinBy: dataJoinBy } = data;
-    const { layer: geometryLayer, joinBy: geometryJoinBy } = geometries;
-    const { sizeMin, sizeMax, algorithm, type, color } = symbols;
+    const { newLayerName } = params;
+    const { valueField, source, joinBy: dataJoinBy } = params.data;
+    const { layer: geometryLayer, joinBy: geometryJoinBy } = params.geometries;
+    const { sizeMin, sizeMax, algorithm, type, color } = params.symbols;
 
     if (!newLayerName || !source || !valueField || !sizeMin || !sizeMax || !dataJoinBy || !geometryLayer || !geometryJoinBy || !algorithm) {
       return Promise.reject(new Error('Invalid parameters'));
@@ -68,8 +69,8 @@ export class ProportionalSymbols extends Module {
     // We sort data source items to extract min and max values
     const rows = await source.getRows();
     const sortedValues = rows
-      .map((r) => r[valueField])
-      .filter((v) => typeof v === 'number')
+      .map((r) => asNumberOrString(r[valueField] ?? NaN))
+      .filter((v) => isValidNumber(v))
       .sort((a, b) => (a as number) - (b as number)) as number[];
 
     if (!sortedValues.length || rows.length !== sortedValues.length) {
@@ -99,14 +100,9 @@ export class ProportionalSymbols extends Module {
           return null;
         }
 
-        const value = row[valueField];
-        if (typeof value !== 'number') {
+        const value = asNumberOrString(row[valueField] ?? NaN);
+        if (!isValidNumber(value) || value <= 0) {
           logger.error(`Invalid size value: ${value}`);
-          return null;
-        }
-
-        if (value <= 0) {
-          logger.warn('Some values are smaller than zero, skipping');
           return null;
         }
 

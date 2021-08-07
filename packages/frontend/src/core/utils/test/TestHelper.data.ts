@@ -16,27 +16,27 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-export const RegionsMetropolitanFrance = [
+export const RegionsOfMetropolitanFrance = [
   {
     _id: 1,
     code: 11, // Code is arbitrary
     name: 'Auvergne-Rhône-Alpes',
-    population: 8_092_598,
-    popPercent: 0.124,
+    population: '8 092 598', // The first numbers are intentionally formatted differently
+    popPercent: '0,124',
   },
   {
     _id: 2,
     code: 22,
     name: 'Bourgogne-Franche-Comté',
-    population: 2_786_205,
-    popPercent: 0.043,
+    population: '2 786 205',
+    popPercent: '0,043',
   },
   {
     _id: 3,
     code: 33,
     name: 'Bretagne',
-    population: 3_371_297,
-    popPercent: 0.051,
+    population: '3 371 297',
+    popPercent: '0,051',
   },
   {
     _id: 4,
