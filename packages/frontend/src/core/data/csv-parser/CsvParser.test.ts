@@ -17,7 +17,7 @@
  */
 
 import { CsvParser } from './CsvParser';
-import { File1, File2, File3, File4 } from './test-data';
+import { File1, File2, File3 } from './test-data';
 import { CsvParsingError } from './typings';
 
 describe('CsvParser', () => {
@@ -26,29 +26,19 @@ describe('CsvParser', () => {
       const rows = await CsvParser.parse(File1);
 
       expect(rows).toEqual([
-        { label: 'value1', altitude: 1234 },
-        { label: 'value2', altitude: 5678 },
-      ]);
-    });
-
-    it('should normalize', async () => {
-      const rows = await CsvParser.parse(File2);
-
-      expect(rows).toEqual([
-        { label: 'value3', altitude: 11.88 },
-        { label: 'value4', altitude: 11.89 },
-        { label: 'value5', altitude: 'Hello, how are you ?' },
+        { label: 'value1', altitude: '1234' },
+        { label: 'value2', altitude: '5678' },
       ]);
     });
 
     it('should return empty array', async () => {
-      const result = await CsvParser.parse(File3);
+      const result = await CsvParser.parse(File2);
 
       expect(result).toEqual([]);
     });
 
     it('should fail', async () => {
-      const error: CsvParsingError = await CsvParser.parse(File4).catch((err) => err);
+      const error: CsvParsingError = await CsvParser.parse(File3).catch((err) => err);
       expect(error.message).toMatch('Invalid data');
       expect(error.row).toEqual(0);
     });
@@ -64,8 +54,8 @@ describe('CsvParser', () => {
 
       rows = await CsvParser.parse(file);
       expect(rows).toEqual([
-        { label: 'value1', altitude: 1234 },
-        { label: 'value2', altitude: 5678 },
+        { label: 'value1', altitude: '1234' },
+        { label: 'value2', altitude: '5678' },
       ]);
     });
 

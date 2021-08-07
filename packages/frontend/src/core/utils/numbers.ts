@@ -16,16 +16,16 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-export function isNumeric(str: string): boolean {
-  return !isNaN(str as any) && !isNaN(parseFloat(str));
+export function isValidNumber(x: any): x is number {
+  return !isNaN(x) && !isNaN(parseFloat(x));
 }
 
 /**
- * If passed argument "looks like" a number (001, 111, ...) it will be converted to.
- * @param str
+ * If passed argument "looks like" a number (001, 111, 1 000 000, ...) it will be converted to.
+ * @param x
  */
-export function asNumberOrString(str: string | number): number | string {
-  let value = str;
+export function asNumberOrString(x: string | number): number | string {
+  let value = x;
 
   if (typeof value === 'number') {
     return value;
@@ -36,10 +36,13 @@ export function asNumberOrString(str: string | number): number | string {
     value = value.replace(',', '.');
   }
 
-  if (isNumeric(value)) {
+  // We remove blank chars
+  value = value.replace(new RegExp('\\s', 'ig'), '');
+
+  if (isValidNumber(value)) {
     return parseFloat(value);
   } else {
-    return str;
+    return x;
   }
 }
 

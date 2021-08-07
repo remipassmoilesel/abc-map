@@ -77,7 +77,7 @@ describe('GeometryLayerForm', () => {
 
   it('should notify on layer selected', async () => {
     // Prepare
-    const layer = TestHelper.regionsFranceVectorLayer();
+    const layer = TestHelper.regionsOfFranceVectorLayer();
     map.addLayer(layer);
 
     abcRender(
@@ -102,7 +102,7 @@ describe('GeometryLayerForm', () => {
 
   it('should notify on value field selected', async () => {
     // Prepare
-    const layer = TestHelper.regionsFranceVectorLayer();
+    const layer = TestHelper.regionsOfFranceVectorLayer();
     map.addLayer(layer);
 
     // We select a layer then wait for loading
@@ -131,7 +131,7 @@ describe('GeometryLayerForm', () => {
 
   it('should notify on join-by field selected', async () => {
     // Prepare
-    const layer = TestHelper.regionsFranceVectorLayer();
+    const layer = TestHelper.regionsOfFranceVectorLayer();
     map.addLayer(layer);
 
     // We select a layer, a value field then wait for loading
@@ -160,7 +160,7 @@ describe('GeometryLayerForm', () => {
 
   it('should show data sample on layer selection', async () => {
     // Prepare
-    const layer = TestHelper.regionsFranceVectorLayer();
+    const layer = TestHelper.regionsOfFranceVectorLayer();
     map.addLayer(layer);
 
     abcRender(

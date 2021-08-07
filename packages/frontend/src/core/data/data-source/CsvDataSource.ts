@@ -21,9 +21,9 @@ import { Logger } from '@abc-map/shared';
 import { CsvParser } from '../csv-parser/CsvParser';
 import { nanoid } from 'nanoid';
 
-export const logger = Logger.get('FileDataSource');
+export const logger = Logger.get('CsvDataSource');
 
-export class FileDataSource implements DataSource {
+export class CsvDataSource implements DataSource {
   private _cache?: DataRow[];
   constructor(private file: File) {}
 

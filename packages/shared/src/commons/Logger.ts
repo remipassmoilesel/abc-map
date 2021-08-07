@@ -61,6 +61,6 @@ export class Logger {
   }
 
   private normalizeMessage(message: string): string {
-    return `[${this.name}] ${message}`;
+    return `[${new Date().toISOString()}][${this.name}] ${message}`;
   }
 }

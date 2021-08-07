@@ -25,11 +25,15 @@ import { ClassificationAlgorithm } from '../_common/algorithm/Algorithm';
 import { nanoid } from 'nanoid';
 import chroma from 'chroma-js';
 import { TestHelper } from '../../core/utils/test/TestHelper';
+import { asNumberOrString, isValidNumber } from '../../core/utils/numbers';
 
 export const testGradientClasses = (algo: ClassificationAlgorithm, numberOfClasses: number): GradientClass[] => {
-  const values = TestHelper.regionsFrance().map((reg) => reg.popPercent);
+  const values = TestHelper.regionsOfFrance()
+    .map((reg) => asNumberOrString(reg.popPercent))
+    .filter(isValidNumber) as number[];
   const classes = Stats.classify(algo, numberOfClasses, values);
   const colorFunc = chroma.scale(['blue', 'red']).domain([0, numberOfClasses]).classes(numberOfClasses);
+
   return classes.map((cl, i) => ({
     ...cl,
     id: nanoid(),

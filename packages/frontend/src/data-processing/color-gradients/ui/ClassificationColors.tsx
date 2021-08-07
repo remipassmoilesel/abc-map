@@ -29,6 +29,7 @@ import * as chroma from 'chroma-js';
 import { nanoid } from 'nanoid';
 import ClassRow from './ClassRow';
 import ColorPicker from '../../../components/color-picker/ColorPicker';
+import { asNumberOrString, isValidNumber } from '../../../core/utils/numbers';
 
 const logger = Logger.get('ColorScaleSelection.tsx');
 
@@ -175,7 +176,7 @@ class ClassificationColors extends Component<Props, State> {
 
     const colorFunc = chroma.scale([startColor, endColor]).domain([0, numberOfClasses]).classes(numberOfClasses);
     const rows = await dataSource.getRows();
-    const data = rows.map((row) => row[valueField]).filter((v) => typeof v === 'number') as number[];
+    const data = rows.map((row) => asNumberOrString(row[valueField] ?? NaN)).filter(isValidNumber) as number[];
     const classes = Stats.classify(algo, numberOfClasses, data).map((cl, i) => {
       return { ...cl, id: nanoid(), color: colorFunc(i).hex() };
     });
