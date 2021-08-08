@@ -62,28 +62,30 @@ class LayerControls extends Component<Props, State> {
           {items}
           {message}
         </div>
-        <div className={`control-item ${Cls.controls}`}>
-          <button onClick={this.handleAddLayer} className={'flex-grow-1'} title={'Ajouter une couche'} data-cy={'add-layer'}>
-            <i className={'fa fa-plus mr-2'} /> Ajouter une couche
+        <div className={`control-item`}>
+          <button onClick={this.handleAddLayer} className={Cls.controlButton} title={'Nouvelle couche'} data-cy={'add-layer'}>
+            <i className={'fa fa-plus mr-2'} /> Nouvelle couche
           </button>
-          <button onClick={this.handleRemoveActive} title={'Supprimer la couche active'} data-cy={'delete-layer'}>
-            <i className={'fa fa-trash'} />
-          </button>
-          <button onClick={this.handleToggleVisibility} title={'Changer la visibilité'}>
-            <i className={'fa fa-eye'} />
-          </button>
-          <button onClick={this.handleRename} title={'Renommer la couche'} data-cy={'rename-layer'}>
-            <i className={'fa fa-edit'} />
-          </button>
-          <button onClick={this.handleZoom} title={'Zoom sur la couche'}>
-            <i className={'fa fa-search-plus'} />
-          </button>
-          <button onClick={this.handleLayerBack} title={'Derrière'}>
-            <i className={'fa fa-arrow-up'} />
-          </button>
-          <button onClick={this.handleLayerForward} title={'Devant'}>
-            <i className={'fa fa-arrow-down'} />
-          </button>
+          <div className={Cls.controls}>
+            <button onClick={this.handleRemoveActive} className={Cls.controlButton} title={'Supprimer la couche active'} data-cy={'delete-layer'}>
+              <i className={'fa fa-trash'} />
+            </button>
+            <button onClick={this.handleToggleVisibility} className={Cls.controlButton} title={'Changer la visibilité'}>
+              <i className={'fa fa-eye'} />
+            </button>
+            <button onClick={this.handleRename} className={Cls.controlButton} title={'Renommer la couche'} data-cy={'rename-layer'}>
+              <i className={'fa fa-edit'} />
+            </button>
+            <button onClick={this.handleZoom} className={Cls.controlButton} title={'Zoom sur la couche'}>
+              <i className={'fa fa-search-plus'} />
+            </button>
+            <button onClick={this.handleLayerBack} className={Cls.controlButton} title={'Derrière'}>
+              <i className={'fa fa-arrow-up'} />
+            </button>
+            <button onClick={this.handleLayerForward} className={Cls.controlButton} title={'Devant'}>
+              <i className={'fa fa-arrow-down'} />
+            </button>
+          </div>
         </div>
         <AddLayerModal visible={this.state.addModalVisible} onHide={this.hideAddModal} />
       </div>

@@ -67,7 +67,7 @@ class SolicitationModal extends Component<Props, State> {
             </p>
 
             <button onClick={this.handleDonate} className={'btn btn-primary mt-5'}>
-              Soutenir le développement
+              Soutenir le développement <span className={'ml-2'}>💪</span>
             </button>
             <button onClick={this.handleDonate} className={'btn btn-link'}>
               A quoi ça sert ?

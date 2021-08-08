@@ -2,7 +2,8 @@
 
 # Les projets
 
-Un projet est une représentation d'une carte et des objets associés à cette carte. Ils permettent de sauvegarder votre travail.
+Un projet est une représentation d'une carte et des objets associés à cette carte. Les projets permettent de
+sauvegarder votre travail.
 
 Les projets contiennent:
 
@@ -16,13 +17,15 @@ Sur la page carte vous pouvez:
 - Exporter un projet sur votre ordinateur
 - Sauvegarder en ligne votre projet si vous êtes inscrit ou connecté
 
-Les projets exportés ont l'extension de fichier `.abm2`. Ce sont des archives Zip contenant toutes les informations de votre projet dans un format proche de GeoJSON.
+Les projets exportés ont l'extension de fichier `.abm2`. Ce sont des archives Zip contenant toutes les informations de
+votre projet dans un format proche de GeoJSON.
 
 ## Identifiants
 
 Si votre projet contient des couches qui utilisent des identifiants (WMS, XYZ, ...) à chaque export vous devez saisir un mot de passe.
 
-Ce mot de passe permet de chiffrer vos identifiants. Même si une personne mal intentionnée peut ouvrir votre projet, elle ne pourra pas
-lire vos identifiants.
+Ce mot de passe permet de chiffrer vos identifiants. Si une personne mal intentionnée ouvre votre projet, elle ne
+pourra pas lire vos identifiants.
 
-Attention à bien choisir un mot de passe fort. Privilégiez si possible l'utilisation d'un gestionnaire de mot de passe.
+Choisissez un mot de passe fort comme par exemple `i57kJqBP7`. Pas facile à retenir ? Utilisez un gestionnaire de mot
+de passe comme <a href='https://www.keepassx.org/' target='_blank'>KeePassX</a>.

@@ -46,7 +46,7 @@ export class SelectionTool extends AbstractTool {
   }
 
   public getLabel(): string {
-    return 'Sélection';
+    return 'Sélectionner des formes';
   }
 
   protected setupInternal(map: Map, source: VectorSource<Geometry>): void {

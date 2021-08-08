@@ -47,7 +47,7 @@ export class PolygonTool extends AbstractTool {
   }
 
   public getLabel(): string {
-    return 'Polygones';
+    return 'Créer des polygones';
   }
 
   protected setupInternal(map: Map, source: VectorSource<Geometry>): void {

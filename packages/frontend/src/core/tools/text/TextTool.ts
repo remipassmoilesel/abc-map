@@ -44,7 +44,7 @@ export class TextTool extends AbstractTool {
   }
 
   public getLabel(): string {
-    return 'Texte';
+    return 'Ajouter du texte';
   }
 
   protected setupInternal(map: Map, source: VectorSource<Geometry>): void {

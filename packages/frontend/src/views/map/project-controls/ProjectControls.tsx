@@ -79,18 +79,17 @@ class ProjectControls extends Component<Props, State> {
           </button>
         </div>
         <div className={'control-item'}>
-          <button onClick={this.handleImportProject} type={'button'} className={'btn btn-link'} data-cy={'import-project'}>
-            <i className={'fa fa-upload mr-2'} />
-            Importer un projet
-          </button>
-        </div>
-        <div className={'control-item'}>
           <button onClick={this.handleExportProject} type={'button'} className={'btn btn-link'} data-cy={'export-project'}>
             <i className={'fa fa-download mr-2'} />
             Exporter le projet
           </button>
         </div>
-
+        <div className={'control-item'}>
+          <button onClick={this.handleImportProject} type={'button'} className={'btn btn-link'} data-cy={'import-project'}>
+            <i className={'fa fa-upload mr-2'} />
+            Importer un projet
+          </button>
+        </div>
         {remoteProjectModal && <RemoteProjectModal onHide={this.handleRemoteProjectModalHide} />}
       </div>
     );

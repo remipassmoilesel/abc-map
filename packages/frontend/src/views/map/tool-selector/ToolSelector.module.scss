@@ -28,17 +28,22 @@
   flex-direction: row;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
 
-  padding: 0.2em 0.5em;
+  padding: 0.2em 0;
 }
 
 .toolButton {
-  margin: 2px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  margin: 3px;
   padding: 6px;
   width: 40px;
 
-  border: solid 1px $secondary;
+  border: none;
   background-color: inherit;
   border-radius: 7px;
 
@@ -49,7 +54,7 @@
   }
 
   &.active {
-    border: solid 2px $primary;
+    border: solid 1px $primary;
   }
 }
 

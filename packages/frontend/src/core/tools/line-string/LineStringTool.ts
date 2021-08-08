@@ -44,7 +44,7 @@ export class LineStringTool extends AbstractTool {
   }
 
   public getLabel(): string {
-    return 'Lignes';
+    return 'Créer des lignes';
   }
 
   protected setupInternal(map: Map, source: VectorSource<Geometry>): void {

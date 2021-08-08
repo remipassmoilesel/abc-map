@@ -30,15 +30,17 @@ $panel-width: 250px;
 .leftPanel {
   width: $panel-width;
   height: 95vh;
-  border-right: solid 1px lightgrey;
   overflow-x: hidden;
   overflow-y: auto;
+
+  padding-top: 0.7rem;
 }
 
 .rightPanel {
   width: $panel-width;
   height: 95vh;
-  border-left: solid 1px lightgrey;
   overflow-x: hidden;
   overflow-y: auto;
+
+  padding-top: 0.7rem;
 }

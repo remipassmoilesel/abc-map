@@ -42,13 +42,13 @@ describe('Tool Point', function () {
 
         expect(features).length(2);
         expect(features[0].getGeometry()?.getType()).equal('Point');
-        expect(features[0].getGeometry()?.getExtent()).deep.equals([-1118865.2444950184, 4048111.8978092954, -1118865.2444950184, 4048111.8978092954]);
+        expect(features[0].getGeometry()?.getExtent()).deep.equals([-1118865.2444950186, 4048111.897809295, -1118865.2444950186, 4048111.897809295]);
         expect(features[0].get(StyleProperties.PointSize)).equal(15);
         expect(features[0].get(StyleProperties.PointColor)).equal('#FF5733');
         expect(features[0].get(StyleProperties.PointIcon)).equal(Icon0CircleFill);
 
         expect(features[1].getGeometry()?.getType()).equal('Point');
-        expect(features[1].getGeometry()?.getExtent()).deep.equals([-629668.2634698902, 3558914.9167841673, -629668.2634698902, 3558914.9167841673]);
+        expect(features[1].getGeometry()?.getExtent()).deep.equals([-629668.2634698907, 3558914.916784167, -629668.2634698907, 3558914.916784167]);
         expect(features[0].get(StyleProperties.PointSize)).equal(15);
         expect(features[0].get(StyleProperties.PointColor)).equal('#FF5733');
         expect(features[0].get(StyleProperties.PointIcon)).equal(Icon0CircleFill);
@@ -71,7 +71,7 @@ describe('Tool Point', function () {
 
         expect(features).length(1);
         expect(features[0].getGeometry()?.getType()).equal('Point');
-        expect(features[0].getGeometry()?.getExtent()).deep.equals([3773104.565756262, -843857.9124419848, 3773104.565756262, -843857.9124419848]);
+        expect(features[0].getGeometry()?.getExtent()).deep.equals([3773104.565756262, -843857.9124419857, 3773104.565756262, -843857.9124419857]);
       });
   });
 });

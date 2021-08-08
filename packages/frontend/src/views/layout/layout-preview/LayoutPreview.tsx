@@ -71,10 +71,11 @@ class LayoutPreview extends Component<Props, State> {
         )}
         {!layout && (
           <div className={Cls.noLayout}>
-            <i className={'fa fa-print'} />
-            <div>Exportez ou imprimez votre carte en créant une page.</div>
+            <i className={`fa fa-print ${Cls.bigIcon}`} />
+            <div>Créez une page pour exporter votre carte</div>
             <button onClick={handleNewLayout} className={'btn btn-primary mt-3'} data-cy={'new-layout'}>
-              Créer une page A4
+              <i className={'fa fa-plus mr-2'} />
+              Nouvelle page A4
             </button>
           </div>
         )}

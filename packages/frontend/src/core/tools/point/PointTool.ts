@@ -47,7 +47,7 @@ export class PointTool extends AbstractTool {
   }
 
   public getLabel(): string {
-    return 'Point';
+    return 'Créer des points';
   }
 
   protected setupInternal(map: Map, source: VectorSource<Geometry>): void {

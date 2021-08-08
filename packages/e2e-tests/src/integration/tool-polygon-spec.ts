@@ -48,13 +48,13 @@ describe('Tool Polygon', function () {
 
         expect(features).length(2);
         expect(features[0].getGeometry()?.getType()).equal('Polygon');
-        expect(features[0].getGeometry()?.getExtent()).deep.equals([-1118865.2444950184, 3558914.9167841673, -629668.2634698902, 4048111.8978092954]);
+        expect(features[0].getGeometry()?.getExtent()).deep.equals([-1118865.2444950186, 3558914.916784167, -629668.2634698907, 4048111.897809295]);
         expect(features[0].get(StyleProperties.StrokeWidth)).equal(5);
         expect(features[0].get(StyleProperties.StrokeColor)).equal('#FF5733');
         expect(features[0].get(StyleProperties.FillColor1)).equal('#FFFFFF');
 
         expect(features[1].getGeometry()?.getType()).equal('Polygon');
-        expect(features[1].getGeometry()?.getExtent()).deep.equals([837922.6796054938, 1602126.9926836556, 1327119.6606306215, 2091323.9737087833]);
+        expect(features[1].getGeometry()?.getExtent()).deep.equals([837922.6796054933, 1602126.9926836547, 1327119.6606306215, 2091323.9737087828]);
         expect(features[1].get(StyleProperties.StrokeWidth)).equal(5);
         expect(features[1].get(StyleProperties.StrokeColor)).equal('#FF5733');
         expect(features[1].get(StyleProperties.FillColor1)).equal('#FFFFFF');
@@ -79,7 +79,7 @@ describe('Tool Polygon', function () {
         const features = map.getActiveLayerFeatures();
         expect(features).length(1);
         expect(features[0].getGeometry()?.getType()).equal('Polygon');
-        expect(features[0].getGeometry()?.getExtent()).deep.equals([-1118865.2444950184, -843857.9124419848, 3773104.565756262, 4048111.8978092954]);
+        expect(features[0].getGeometry()?.getExtent()).deep.equals([-1118865.2444950186, -843857.9124419857, 3773104.565756262, 4048111.897809295]);
       });
   });
 });

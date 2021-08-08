@@ -39,16 +39,24 @@ $list-height: 100px;
   flex-direction: row;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+}
 
-  button {
-    margin: 3px;
-    border: solid 1px $secondary;
-    background-color: inherit;
-    border-radius: 7px;
+.controlButton {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
 
-    padding: 6px;
-    min-width: 40px;
+  margin: 3px;
+  padding: 6px;
+
+  border: none;
+  background-color: inherit;
+  min-width: 40px;
+
+  :global(.fa) {
+    font-size: 17px;
   }
 }
 

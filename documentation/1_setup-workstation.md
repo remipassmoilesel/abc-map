@@ -2,8 +2,8 @@
 
 **The development environment has only been tested under GNU / Linux, it will not work on Windows.**
 
-**Windows is supported as a target operating system, via browsers. It will never be actively supported 
-as a development operating system.**
+Windows is supported as a target operating system, via browsers. It will never be actively supported 
+as a development operating system.     
 
 
 ## Minimal setup

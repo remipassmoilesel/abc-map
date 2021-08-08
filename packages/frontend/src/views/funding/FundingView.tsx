@@ -30,12 +30,7 @@ class FundingView extends Component<ServiceProps, {}> {
     return (
       <div className={Cls.funding}>
         <div className={Cls.content}>
-          <h1 className={'mb-3'}>Participez au développement d&apos;Abc-Map&nbsp;&nbsp;💌</h1>
-
-          <div className={'d-flex flex-column justify-content-end align-items-end my-3'}>
-            <div className={Cls.quote}>Bah voila y disent cé gratuit mééé ça réclame de l&apos;argent !</div>
-            <div className={Cls.quoteAuthor}>J. Suipaconthent</div>
-          </div>
+          <h1 className={'mb-3'}>Soutenez le développement d&apos;Abc-Map&nbsp;&nbsp;💌</h1>
 
           <div className={'w-100'}>
             <h3 className={'my-4'}>Pourquoi ?</h3>
@@ -68,7 +63,7 @@ class FundingView extends Component<ServiceProps, {}> {
             <p>Les prochaines fonctionnalités prévues sont:</p>
             <ul>
               <li>La création de symboles à partir de classeurs CSV</li>
-              <li>Le compte de points dans des polygones</li>
+              <li>Le Compte de géométries dans des polygones</li>
               <li>La traduction en plusieurs langues</li>
               <li>
                 Et plus !{' '}
@@ -79,13 +74,16 @@ class FundingView extends Component<ServiceProps, {}> {
             </ul>
           </div>
 
-          <div className={'w-100 d-flex flex-column'}>
-            <h3 className={'my-4'}>Réseaux</h3>
-            <a href={'https://twitter.com/AbcRemi'} target={'_blank'} rel="noreferrer">
-              Twitter
+          <h3 className="mt-5 mb-3">Réseaux</h3>
+          <div className="d-flex flex-column">
+            <a href="https://twitter.com/AbcRemi" target="_blank" rel="noreferrer">
+              🐦 Twitter
             </a>
-            <a href={'https://remi-pace.fr'} target={'_blank'} rel="noreferrer">
-              Site personnel de l&apos;auteur
+            <a href="mailto:fr.abcmap@gmail.com" target="_blank" rel="noreferrer">
+              📧 Contact
+            </a>
+            <a href="https://remi-pace.fr" target="_blank" rel="noreferrer">
+              🌐 Site personnel de l&apos;auteur
             </a>
           </div>
         </div>

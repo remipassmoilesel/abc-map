@@ -46,7 +46,7 @@ describe('Tool Selection', function () {
 
         expect(features).length(3);
         expect(features[0].get(FeatureProperties.Selected)).undefined;
-        expect(features[0].getGeometry()?.getExtent()).deep.equals([-1118865.2444950184, 4048111.8978092954, -1118865.2444950184, 4048111.8978092954]);
+        expect(features[0].getGeometry()?.getExtent()).deep.equals([-1118865.2444950186, 4048111.897809295, -1118865.2444950186, 4048111.897809295]);
         expect(features[1].get(FeatureProperties.Selected)).equal(true);
         expect(features[2].get(FeatureProperties.Selected)).equal(true);
       });
@@ -70,11 +70,11 @@ describe('Tool Selection', function () {
         const features = map.getActiveLayerFeatures();
 
         expect(features).length(5);
-        expect(features[0].getGeometry()?.getExtent()).deep.equals([-1118865.2444950184, 4048111.8978092954, -1118865.2444950184, 4048111.8978092954]);
-        expect(features[1].getGeometry()?.getExtent()).deep.equals([-629668.2634698902, 3558914.9167841673, -629668.2634698902, 3558914.9167841673]);
-        expect(features[2].getGeometry()?.getExtent()).deep.equals([-140471.28244476253, 3069717.9357590396, -140471.28244476253, 3069717.9357590396]);
-        expect(features[3].getGeometry()?.getExtent()).deep.equals([-336150.0748548134, 3265396.7281690906, -336150.0748548134, 3265396.7281690906]);
-        expect(features[4].getGeometry()?.getExtent()).deep.equals([153046.9061703143, 2776199.747143963, 153046.9061703143, 2776199.747143963]);
+        expect(features[0].getGeometry()?.getExtent()).deep.equals([-1118865.2444950186, 4048111.897809295, -1118865.2444950186, 4048111.897809295]);
+        expect(features[1].getGeometry()?.getExtent()).deep.equals([-629668.2634698907, 3558914.916784167, -629668.2634698907, 3558914.916784167]);
+        expect(features[2].getGeometry()?.getExtent()).deep.equals([-140471.28244476253, 3069717.9357590387, -140471.28244476253, 3069717.9357590387]);
+        expect(features[3].getGeometry()?.getExtent()).deep.equals([-336150.07485481387, 3265396.72816909, -336150.07485481387, 3265396.72816909]);
+        expect(features[4].getGeometry()?.getExtent()).deep.equals([153046.9061703143, 2776199.747143962, 153046.9061703143, 2776199.747143962]);
       })
       .then(() => History.undo())
       .then(() => MainMap.getReference())
@@ -107,8 +107,8 @@ describe('Tool Selection', function () {
         const features = map.getActiveLayerFeatures();
 
         expect(features).length(2);
-        expect(features[0].getGeometry()?.getExtent()).deep.equals([3283907.584731134, -354660.93141685706, 3283907.584731134, -354660.93141685706]);
-        expect(features[1].getGeometry()?.getExtent()).deep.equals([3773104.565756262, -843857.9124419848, 3773104.565756262, -843857.9124419848]);
+        expect(features[0].getGeometry()?.getExtent()).deep.equals([3283907.5847311337, -354660.9314168575, 3283907.5847311337, -354660.9314168575]);
+        expect(features[1].getGeometry()?.getExtent()).deep.equals([3773104.565756262, -843857.9124419857, 3773104.565756262, -843857.9124419857]);
       })
       .then(() => History.undo())
       .then(() => MainMap.getReference())
@@ -116,8 +116,8 @@ describe('Tool Selection', function () {
         const features = map.getActiveLayerFeatures();
 
         expect(features).length(2);
-        expect(features[0].getGeometry()?.getExtent()).deep.equals([-629668.2634698902, 3558914.9167841673, -629668.2634698902, 3558914.9167841673]);
-        expect(features[1].getGeometry()?.getExtent()).deep.equals([-140471.28244476253, 3069717.9357590396, -140471.28244476253, 3069717.9357590396]);
+        expect(features[0].getGeometry()?.getExtent()).deep.equals([-629668.2634698907, 3558914.916784167, -629668.2634698907, 3558914.916784167]);
+        expect(features[1].getGeometry()?.getExtent()).deep.equals([-140471.28244476253, 3069717.9357590387, -140471.28244476253, 3069717.9357590387]);
       })
       .then(() => History.redo())
       .then(() => MainMap.getReference())
@@ -125,8 +125,8 @@ describe('Tool Selection', function () {
         const features = map.getActiveLayerFeatures();
 
         expect(features).length(2);
-        expect(features[0].getGeometry()?.getExtent()).deep.equals([3283907.584731134, -354660.93141685706, 3283907.584731134, -354660.93141685706]);
-        expect(features[1].getGeometry()?.getExtent()).deep.equals([3773104.565756262, -843857.9124419848, 3773104.565756262, -843857.9124419848]);
+        expect(features[0].getGeometry()?.getExtent()).deep.equals([3283907.5847311337, -354660.9314168575, 3283907.5847311337, -354660.9314168575]);
+        expect(features[1].getGeometry()?.getExtent()).deep.equals([3773104.565756262, -843857.9124419857, 3773104.565756262, -843857.9124419857]);
       });
   });
 
@@ -149,10 +149,10 @@ describe('Tool Selection', function () {
       .should((map) => {
         const features = map.getActiveLayerFeatures();
 
-        expect(features[0].getGeometry()?.getExtent()).deep.equals([-629668.2634698902, 3558914.9167841673, -629668.2634698902, 3558914.9167841673]);
-        expect(features[1].getGeometry()?.getExtent()).deep.equals([-140471.28244476253, 3069717.9357590396, -140471.28244476253, 3069717.9357590396]);
-        expect(features[2].getGeometry()?.getExtent()).deep.equals([3283907.584731134, -354660.93141685706, 3283907.584731134, -354660.93141685706]);
-        expect(features[3].getGeometry()?.getExtent()).deep.equals([3773104.565756262, -843857.9124419848, 3773104.565756262, -843857.9124419848]);
+        expect(features[0].getGeometry()?.getExtent()).deep.equals([-629668.2634698907, 3558914.916784167, -629668.2634698907, 3558914.916784167]);
+        expect(features[1].getGeometry()?.getExtent()).deep.equals([-140471.28244476253, 3069717.9357590387, -140471.28244476253, 3069717.9357590387]);
+        expect(features[2].getGeometry()?.getExtent()).deep.equals([3283907.5847311337, -354660.9314168575, 3283907.5847311337, -354660.9314168575]);
+        expect(features[3].getGeometry()?.getExtent()).deep.equals([3773104.565756262, -843857.9124419857, 3773104.565756262, -843857.9124419857]);
       });
   });
 

@@ -27,7 +27,7 @@ export class CountPointsInPolygon extends Module {
   }
 
   public getReadableName(): string {
-    return 'Compte de points';
+    return 'Compte de géométries';
   }
 
   public getUserInterface(): ReactNode {

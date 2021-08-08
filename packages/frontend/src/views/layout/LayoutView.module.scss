@@ -30,14 +30,12 @@ $panel-width: 250px;
 
 .leftPanel {
   width: $panel-width;
-  border-right: solid 1px lightgrey;
 }
 
 .rightPanel {
   display: flex;
   flex-direction: column;
   width: $panel-width;
-  border-left: solid 1px lightgrey;
 
   padding-top: 1rem;
 }

@@ -1,18 +1,19 @@
-# Abc-Map 2
+# Abc-Map
 
 Official rewrite, attempt n°265 👨‍💻.
 
 <div>
   <a href="https://gitlab.com/abc-map/abc-map/-/commits/master">
     <img alt="Pipeline status" src="https://gitlab.com/abc-map/abc-map/badges/master/pipeline.svg" />
-  </a>
-  &nbsp;&nbsp;
+  </a>&nbsp;&nbsp;
   <a href="https://www.firsttimersonly.com/">
     <img alt="First timers only" src="https://img.shields.io/badge/first--timers--only-friendly-blue.svg?style=flat-square" />
   </a>
 </div>
 
-Main repository of project is located here: [https://gitlab.com/abc-map/abc-map](https://gitlab.com/abc-map/abc-map).
+Main repository of project is located here: [https://gitlab.com/abc-map/abc-map](https://gitlab.com/abc-map/abc-map).         
+
+You can try it here on [abc-map.fr](https://abc-map.fr).          
 
 
 ## Purpose in a nutshell
@@ -28,25 +29,21 @@ Use cases:
 More information [here](https://abc-map.fr/documentation).    
 
 
+## Why ?
+
+There are some very good GIS available: [QGIS](https://www.qgis.org) and others are great software. But they are 
+designed by and for experts, and are hard to use. The goal of this project is to provide a light GIS experience 
+without complex technical knowledge. 
+
+
 ## Status of project
 
-Abc-Map 2 is at a very early stage. Everything is done within the means available to make this project a 
-long-lasting one, but for now you should expect some breaking changes.
+Abc-Map 2 is at a very early stage. 
 
-Please keep in mind that this software is developed at night after often 10 hours of code during the day. 
-A lot of things needs to be and will be improved 💪    
+Everything is done within the means available to make this project a long-lasting one. But this software is developed 
+at night after often 10 hours of code during the day.       
 
-
-## Why ? And why a web application ?
-
-There are some very good GIS available: QGIS, GvSIG, OrbisGIS are great software. But they are intended for 
-experts in the field and are hard to use. The goal of this project is to provide a GIS experience without 
-complex technical knowledge. Of course, at a cost: Abc-Map is less powerful than these software.            
-
-Web technologies, although complex and sometimes literally painful, make it possible to deliver software  
-widely accessible and fully capable of heavy calculations. All the power of browsers has not yet been exploited 
-in this software but it is possible thanks to WebWorkers and WebAssembly to do as well as many office 
-applications.    
+A lot of things needs to be - and will be - improved 💪
 
 
 ## What can I find here ?

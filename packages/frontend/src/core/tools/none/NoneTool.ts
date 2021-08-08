@@ -32,7 +32,7 @@ export class NoneTool extends AbstractTool {
   }
 
   public getLabel(): string {
-    return 'Aucun';
+    return 'Déplacer la carte';
   }
 
   protected setupInternal(map: Map) {

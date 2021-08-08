@@ -31,6 +31,11 @@ You must modify Image Magick configuration:
 Yes ! That's true, and I don't know to make this f.... work head and headless. So for the moment it passes only 
 with Chromium headless.
 
+Pass only rendering test: 
+
+    $ ./node_modules/.bin/cypress run --browser chromium --headless --config-file ./config/ci.json --spec src/integration/rendering-spec.ts
+
+
 
   
 

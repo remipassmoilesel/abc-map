@@ -68,7 +68,8 @@ class ToolSelector extends Component<Props, {}> {
           <div className={Cls.message}>
             Vous devez sélectionner une couche de géométries pour utiliser les outils.
             <button onClick={this.createVectorLayer} className={'btn btn-outline-secondary my-3'}>
-              Créer une couche
+              <i className={'fa fa-plus mr-2'} />
+              Nouvelle couche
             </button>
           </div>
         )}

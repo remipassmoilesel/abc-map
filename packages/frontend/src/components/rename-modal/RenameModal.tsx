@@ -60,7 +60,7 @@ class RenameModal extends Component<ServiceProps, State> {
               <input className={'form-control'} type={'text'} value={value} onChange={this.handleInputChanged} data-cy="modal-rename-input" />
             </div>
 
-            <div className={'d-flex justify-content-end'}>
+            <div className={'d-flex justify-content-end mt-4'}>
               <button className={'btn btn-secondary mr-2'} onClick={this.handleCancel}>
                 Annuler
               </button>
