@@ -76,7 +76,7 @@ export class MetricsService extends AbstractService {
   }
 
   public registrationConfirmed() {
-    this.counters[CounterNames.RegistrationError]?.inc();
+    this.counters[CounterNames.RegistrationConfirmed]?.inc();
   }
 
   public requestQuotaExceeded() {
