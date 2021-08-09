@@ -11,9 +11,9 @@ Official rewrite, attempt n°265 👨‍💻.
   </a>
 </div>
 
-Main repository of project is located here: [https://gitlab.com/abc-map/abc-map](https://gitlab.com/abc-map/abc-map).         
+You can try it here on [abc-map.fr](https://abc-map.fr).
 
-You can try it here on [abc-map.fr](https://abc-map.fr).          
+Main repository of source code is on Gitlab: [https://gitlab.com/abc-map/abc-map](https://gitlab.com/abc-map/abc-map).
 
 
 ## Purpose in a nutshell
@@ -67,7 +67,7 @@ See [CONTRIBUTING](./CONTRIBUTING.md) and [backlog](./documentation/5_backlog.md
 - [Mongodb](https://www.mongodb.com/)
 - [K6](https://k6.io/) for load testing
 - [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/) for local development
-- [Helm](https://helm.sh/) and [Kubernetes](https://kubernetes.io/) for deployment
+- [Kubernetes](https://kubernetes.io/) and [Helm](https://helm.sh/) for deployment
 
 **Frontend**: 
 - [Typescript](https://www.typescriptlang.org/)

@@ -16,6 +16,8 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
+@import "src/assets/styles/variables";
+
 .documentation {
   height: 95vh;
   max-height: 95vh;
@@ -106,6 +108,15 @@
 
     &::before {
       content: "🙋 ";
+    }
+  }
+
+  a {
+    color: $primary !important; // Important because some links does not have href attribute in documentation
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline !important;
     }
   }
 }
