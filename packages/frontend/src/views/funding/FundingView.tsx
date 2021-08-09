@@ -76,7 +76,7 @@ class FundingView extends Component<ServiceProps, {}> {
 
           <h3 className="mt-5 mb-3">Réseaux</h3>
           <div className="d-flex flex-column">
-            <a href="https://twitter.com/AbcRemi" target="_blank" rel="noreferrer">
+            <a href="https://twitter.com/abcmapfr" target="_blank" rel="noreferrer">
               🐦 Twitter
             </a>
             <a href="mailto:fr.abcmap@gmail.com" target="_blank" rel="noreferrer">
