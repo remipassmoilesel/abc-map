@@ -169,7 +169,7 @@ export class AuthenticationService extends AbstractService {
     const _email = email.toLocaleLowerCase().trim();
     const user = await this.users.findByEmail(_email);
     if (!user) {
-      logger.warn(`User not found: ${user}`);
+      logger.warn(`User not found: ${_email}`);
       return;
     }
 
