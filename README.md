@@ -1,8 +1,6 @@
 # Abc-Map
 
-Official rewrite, attempt n°265 👨‍💻.
-
-<div>
+<div style="margin-bottom: 1.5rem">
   <a href="https://gitlab.com/abc-map/abc-map/-/commits/master">
     <img alt="Pipeline status" src="https://gitlab.com/abc-map/abc-map/badges/master/pipeline.svg" />
   </a>&nbsp;&nbsp;
@@ -11,7 +9,9 @@ Official rewrite, attempt n°265 👨‍💻.
   </a>
 </div>
 
-You can try it here on [abc-map.fr](https://abc-map.fr).
+Official rewrite, attempt n°265 👨‍💻.
+
+You can try it on [abc-map.fr](https://abc-map.fr).
 
 Main repository of source code is on Gitlab: [https://gitlab.com/abc-map/abc-map](https://gitlab.com/abc-map/abc-map).
 
