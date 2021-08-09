@@ -77,7 +77,7 @@ module.exports = {
 
         <h3 class='mt-5 mb-3'>Réseaux</h3>
         <div class='d-flex flex-column'>
-          <a href={'https://twitter.com/AbcRemi'} target={'_blank'} rel="noreferrer">
+          <a href={'https://twitter.com/abcmapfr'} target={'_blank'} rel="noreferrer">
             Twitter
           </a>
           <a href={'https://remi-pace.fr'} target={'_blank'} rel="noreferrer">
