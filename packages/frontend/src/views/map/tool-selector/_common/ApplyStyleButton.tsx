@@ -27,7 +27,7 @@ class ApplyStyleButton extends Component<Props, {}> {
       <div className={'d-flex justify-content-center mb-3'}>
         <button
           onClick={this.props.onClick}
-          title={'Cliquez pour appliquer le style courant aux formes sélectionnées'}
+          title={'Cliquez pour appliquer le style courant aux géométries sélectionnées'}
           className={'btn btn-sm btn-outline-primary mt-3'}
         >
           Appliquer le style

@@ -28,7 +28,7 @@ class EditPropertiesPanel extends Component<{}, {}> {
   public render(): ReactNode {
     return (
       <div className={Cls.editPropertiesPanel}>
-        <TipBubble id={ToolTips.EditProperties} label={'Aide'} />
+        <TipBubble id={ToolTips.EditProperties} label={"Aide de l'outil"} />
       </div>
     );
   }

@@ -2,10 +2,11 @@
 
 # Outils de dessin
 
-Les outils de dessin permettent de créer ou de modifier des formes. Les outils de dessin ne fonctionnent
+Les outils de dessin permettent de créer ou de modifier des géométries. Les outils de dessin ne fonctionnent
 que sur une couche de géométries active, ils sont désactivés si vous sélectionnez une couche fond de carte.
 
-Chaque outil propose une aide spécifique pour expliquer son fonctionnement.
+Chaque outil propose une aide spécifique pour expliquer son fonctionnement. Chaque outil ne modifie que son type de géométrie associé: l'outil
+polygone ne modifie que les polygones, l'outil point ne modifie que les points, etc ...
 
 <figure>
     <img src="./assets/drawing-tool-help.png" alt="Sélecteur d'outil de dessin et bouton aide de l'outil"/>
@@ -37,8 +38,11 @@ L'outil Polygone permet de créer et de modifier des polygones. Vous pouvez sél
 
 ## Outil Texte
 
-L'outil Texte permet d'ajouter et de modifier du texte attaché à des formes existantes.
+L'outil Texte permet d'ajouter et de modifier du texte attaché à des géométries existantes.
 
 ## Outil Propriétés
 
-L'outil Propriétés permet de créer et de modifier des propriétés à des formes existantes.
+L'outil Propriétés permet de créer et de modifier les propriétés de géométries existantes.
+
+Une propriété est une donnée associée à une géométrie. Par exemple vous pouvez associer la propriété `population` `67 000 000` à la géométrie représentant
+la France sur une carte du monde. Ces propriétés sont utilisées dans les traitements de données.

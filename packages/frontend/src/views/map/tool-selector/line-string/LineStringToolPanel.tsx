@@ -43,7 +43,7 @@ class LineStringToolPanel extends Component<Props, {}> {
   public render(): ReactNode {
     return (
       <div className={Cls.lineStringPanel}>
-        <TipBubble id={ToolTips.LineString} label={'Aide'} className={'mx-3 mb-4'} />
+        <TipBubble id={ToolTips.LineString} label={"Aide de l'outil"} className={'mx-3 mb-4'} />
         <StrokeWidthSelector />
         <ColorSelector stroke={true} />
         <ApplyStyleButton onClick={this.handleApplyStyle} />
