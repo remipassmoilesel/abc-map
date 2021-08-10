@@ -45,7 +45,7 @@ class PolygonToolPanel extends Component<Props, {}> {
   public render(): ReactNode {
     return (
       <div className={Cls.polygonPanel}>
-        <TipBubble id={ToolTips.Polygon} label={'Aide'} className={'mx-3 mb-4'} />
+        <TipBubble id={ToolTips.Polygon} label={"Aide de l'outil"} className={'mx-3 mb-4'} />
         <WidthSelector />
         <ColorSelector stroke={true} fillColor1={true} fillColor2={true} />
         <FillPatternSelector />

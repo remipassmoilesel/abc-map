@@ -39,7 +39,7 @@ class SelectionToolPanel extends Component<ServiceProps, {}> {
   public render(): ReactNode {
     return (
       <div className={Cls.selectionPanel}>
-        <TipBubble id={ToolTips.Selection} label={'Aide'} className={'mx-3 mb-3'} />
+        <TipBubble id={ToolTips.Selection} label={"Aide de l'outil"} className={'mx-3 mb-3'} />
         <button className={`btn btn-outline-secondary mb-3`} onClick={this.handleDuplicate} data-cy={'duplicate-selection'}>
           <i className={'fa fa-copy mr-3'} />
           Dupliquer

@@ -52,7 +52,7 @@ class LegendSymbolPickerModal extends Component<ServiceProps, State> {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div>Voici les formes utilisées sur la carte:</div>
+          <div>Voici les géométries utilisées sur la carte:</div>
           <div className={Cls.symbolContainer}>
             {styles.map((st) => (
               <LegendSymbolButton key={st.id} style={st} onClick={this.handleSymbolSelected} />

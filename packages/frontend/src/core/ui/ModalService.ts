@@ -156,7 +156,7 @@ export class ModalService {
             Abc-Map n'est pas encore prêt pour accueillir des jeux de données lourds, vous risquez de ralentir et de bloquer votre session.
           </div>
           <div class='my-3'>
-            Pour le moment préférez des fichiers de <code>moins de 5 mo</code> et des couches de <code>moins de 1000 formes</code>.
+            Pour le moment préférez des fichiers de <code>moins de 5 mo</code> et des couches de <code>moins de 1000 géométries</code>.
             Dans un futur proche, vous pourrez utiliser plus de données.
           </div>
       `,

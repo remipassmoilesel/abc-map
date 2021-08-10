@@ -24,7 +24,7 @@ Vous pouvez utiliser dans ce logiciel:
 
 Pour l'instant il n'y a pas d'application mobile. Vous pouvez cependant exporter vos cartes au format PDF: c'est facile, et vous prendrez soin de votre batterie. N'hésitez pas à soutenir le projet.
 
-<div class="frequent-question">Je veux ajouter du texte sans ajouter de formes</div>
+<div class="frequent-question">Je veux ajouter du texte sans ajouter une géométrie</div>
 
 Pour l'instant ce n'est pas possible ! N'hésitez pas à soutenir le projet.
 

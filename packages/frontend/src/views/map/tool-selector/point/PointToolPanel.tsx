@@ -44,7 +44,7 @@ class PointToolPanel extends Component<Props, {}> {
   public render(): ReactNode {
     return (
       <div className={Cls.pointPanel}>
-        <TipBubble id={ToolTips.Point} label={'Aide'} className={'mx-3 mb-4'} />
+        <TipBubble id={ToolTips.Point} label={"Aide de l'outil"} className={'mx-3 mb-4'} />
         <PointSizeSelector />
         <ColorSelector point={true} />
         <PointIconSelector />
