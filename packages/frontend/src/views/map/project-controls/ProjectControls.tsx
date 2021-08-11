@@ -17,8 +17,7 @@
  */
 
 import React, { Component, ReactNode } from 'react';
-import { ProjectConstants, UserStatus } from '@abc-map/shared';
-import { Logger } from '@abc-map/shared';
+import { Logger, ProjectConstants, UserStatus } from '@abc-map/shared';
 import { connect, ConnectedProps } from 'react-redux';
 import { MainState } from '../../../core/store/reducer';
 import { FileIO, InputResultType, InputType } from '../../../core/utils/FileIO';
@@ -64,7 +63,7 @@ class ProjectControls extends Component<Props, State> {
               </button>
             </div>
             <div className={'control-item'}>
-              <button onClick={this.handleSaveProject} type={'button'} className={'btn btn-link'} data-cy={'save-project'}>
+              <button onClick={this.handleSaveProject} type={'button'} className={'btn btn-link'} data-cy={'save-project'} data-testid={'save-project'}>
                 <i className={'fa fa-pen-alt mr-2'} />
                 Enregistrer en ligne
               </button>
@@ -74,12 +73,12 @@ class ProjectControls extends Component<Props, State> {
         )}
 
         <div className={'control-item'}>
-          <button onClick={this.handleNewProject} type={'button'} className={'btn btn-link'} data-cy={'new-project'}>
+          <button onClick={this.handleNewProject} type={'button'} className={'btn btn-link'} data-cy={'new-project'} data-testid={'new-project'}>
             <i className={'fa fa-file mr-2'} /> Nouveau projet
           </button>
         </div>
         <div className={'control-item'}>
-          <button onClick={this.handleExportProject} type={'button'} className={'btn btn-link'} data-cy={'export-project'}>
+          <button onClick={this.handleExportProject} type={'button'} className={'btn btn-link'} data-cy={'export-project'} data-testid={'export-project'}>
             <i className={'fa fa-download mr-2'} />
             Exporter le projet
           </button>
@@ -117,7 +116,7 @@ class ProjectControls extends Component<Props, State> {
       if (geo.getMainMap().containsCredentials()) {
         const event = await modals.setProjectPassword();
         if (event.status === ModalStatus.Canceled) {
-          return;
+          return OperationStatus.Interrupted;
         }
         password = event.value;
       }
@@ -134,7 +133,11 @@ class ProjectControls extends Component<Props, State> {
 
     modals
       .longOperationModal(save)
-      .then(() => modals.solicitation())
+      .then((status) => {
+        if (status === OperationStatus.Succeed) {
+          return modals.solicitation();
+        }
+      })
       .catch((err) => {
         logger.error('Cannot save project: ', err);
         toasts.genericError();
@@ -157,7 +160,7 @@ class ProjectControls extends Component<Props, State> {
       if (geo.getMainMap().containsCredentials()) {
         const event = await modals.setProjectPassword();
         if (event.status === ModalStatus.Canceled) {
-          return;
+          return OperationStatus.Interrupted;
         }
         password = event.value;
       }
@@ -169,7 +172,11 @@ class ProjectControls extends Component<Props, State> {
 
     modals
       .longOperationModal(exportProject)
-      .then(() => modals.solicitation())
+      .then((status) => {
+        if (status === OperationStatus.Succeed) {
+          return modals.solicitation();
+        }
+      })
       .catch((err) => {
         logger.error('Cannot export project: ', err);
         toasts.genericError();
