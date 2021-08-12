@@ -6,5 +6,5 @@ La carte affiche les données du projet en cours. Sur la page carte vous pouvez:
 
 - Importer des données
 - Rechercher un emplacement
-- Ajouter des géométries à votre carte: points, traits, polygones, ...
-- Enregistrer, ouvrir, importer et exporter vos projets
+- Tracer des géométries: points, traits, polygones, ...
+- Importer et exporter vos projets, ou les enregistrer en ligne si vous êtes connecté

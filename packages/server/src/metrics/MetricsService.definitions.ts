@@ -30,6 +30,8 @@ export const CounterNames = {
   RegistrationConfirmationFailed: `${Prefix}_registration_confirmation_failed`,
   RegistrationConfirmed: `${Prefix}_registration_confirmed`,
   RequestQuotaExceeded: `${Prefix}_request_quota_exceeded`,
+  DatastoreList: `${Prefix}_datastore_display`,
+  DatastoreSearch: `${Prefix}_datastore_search`,
 };
 
 export const Counters: { [k: string]: CounterConfiguration<string> } = {
@@ -64,6 +66,14 @@ export const Counters: { [k: string]: CounterConfiguration<string> } = {
   [CounterNames.RequestQuotaExceeded]: {
     name: CounterNames.RequestQuotaExceeded,
     help: 'Number of requests out of standard quota',
+  },
+  [CounterNames.DatastoreList]: {
+    name: CounterNames.DatastoreList,
+    help: 'Number of data store display',
+  },
+  [CounterNames.DatastoreSearch]: {
+    name: CounterNames.DatastoreSearch,
+    help: 'Number of data store search',
   },
 };
 

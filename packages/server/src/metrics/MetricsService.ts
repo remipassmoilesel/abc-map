@@ -82,4 +82,12 @@ export class MetricsService extends AbstractService {
   public requestQuotaExceeded() {
     this.counters[CounterNames.RequestQuotaExceeded]?.inc();
   }
+
+  public datastoreList() {
+    this.counters[CounterNames.DatastoreList]?.inc();
+  }
+
+  public datastoreSearch() {
+    this.counters[CounterNames.DatastoreSearch]?.inc();
+  }
 }

@@ -34,19 +34,22 @@ export class DataStoreController extends Controller {
   }
 
   public setup = async (app: FastifyInstance): Promise<void> => {
+    const { datastore } = this.services;
+
     app.get('/list', { schema: ListSchema }, this.list);
     app.get('/search', { schema: SearchSchema }, this.search);
     app.get('/:artefactId', { schema: GetByIdSchema }, this.getById);
 
-    const root = this.services.datastore.getRoot();
+    const root = datastore.getRoot();
     void app.register(fastifyStatic, { root, prefix: '/download' });
   };
 
   private list = async (req: FastifyRequest<{ Querystring: PaginatedQuery }>, reply: FastifyReply): Promise<void> => {
-    const { limit, offset } = PaginationHelper.fromQuery(req);
+    const { datastore, metrics } = this.services;
+    metrics.datastoreList();
 
-    const content = await this.services.datastore.list(limit, offset);
-    const total = await this.services.datastore.countArtefacts();
+    const { limit, offset } = PaginationHelper.fromQuery(req);
+    const [content, total] = await Promise.all([datastore.list(limit, offset), datastore.countArtefacts()]);
     const result: PaginatedResponse<AbcArtefact> = {
       content,
       limit,
@@ -57,11 +60,13 @@ export class DataStoreController extends Controller {
   };
 
   private search = async (req: FastifyRequest<{ Querystring: SearchQuery }>, reply: FastifyReply): Promise<void> => {
+    const { datastore, metrics } = this.services;
+    metrics.datastoreSearch();
+
     const { limit, offset } = PaginationHelper.fromQuery(req);
     const query = req.query.query;
 
-    const content = await this.services.datastore.search(query, limit, offset);
-    const total = await this.services.datastore.countArtefacts();
+    const [content, total] = await Promise.all([datastore.search(query, limit, offset), datastore.countArtefacts()]);
     const result: PaginatedResponse<AbcArtefact> = {
       content,
       limit,
@@ -72,8 +77,10 @@ export class DataStoreController extends Controller {
   };
 
   private getById = async (req: FastifyRequest<{ Params: ByIdParams }>, reply: FastifyReply): Promise<void> => {
+    const { datastore } = this.services;
+
     const id = req.params.artefactId;
-    const result = await this.services.datastore.findById(id);
+    const result = await datastore.findById(id);
     if (result) {
       void reply.status(200).send(result);
     } else {
