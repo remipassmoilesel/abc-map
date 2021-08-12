@@ -109,9 +109,7 @@ export class HttpServer {
     const { metrics } = this.services;
 
     // Add security headers
-    const middleware = helmet({
-      contentSecurityPolicy: false,
-    });
+    const middleware = helmet({ contentSecurityPolicy: false });
     this.app.addHook('onRequest', function (req, reply, next) {
       middleware(req.raw, reply.raw, next as (err?: unknown) => void);
     });

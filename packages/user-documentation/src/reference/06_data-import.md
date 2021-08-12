@@ -2,11 +2,11 @@
 
 # Importer des données
 
-Vous pouvez importer des données sur vos cartes de plusieurs manières:
+Vous pouvez importer des données de plusieurs manières:
 
-- En utilisant le `Catalogue de données`, qui fournit des données courantes
-- En utilisant vos propres données, en déposant vos données sur `la page Carte`
-- En utilisant vos propres données, en utilisant le contrôle d'import de données
+- En utilisant le `Catalogue de données`, qui fournit des données sélectionnées
+- En utilisant des fichiers, en les déposant sur `la page Carte`
+- En utilisant des fichiers, en cliquant sur le contrôle d'import de données de `la page Carte`
 
 <figure>
     <img src="./assets/data-import.png" alt="Contrôle d'import de données"/>
@@ -22,7 +22,7 @@ Vous pouvez importer:
 
 Les fichiers sont systématiquement importés dans de nouvelles couches, avec le style par défaut.
 
-## Sources externes
+## Sources de données
 
 Si vous ne trouvez pas ce que vous voulez, pensez à visiter:
 
