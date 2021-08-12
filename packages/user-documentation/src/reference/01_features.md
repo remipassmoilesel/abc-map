@@ -18,11 +18,11 @@ Abc-Map permet de manipuler des données géographiques. Avec Abc-Map vous pouve
 - Réaliser des analyses spatiales et statistiques
 - Exporter vos cartes au format PDF ou PNG
 
-Comment ça marche ? Découvrez-le en 5 minutes chrono grâce à <a href="https://youtu.be/bXl3Uq5fU34" target="_blank">la vidéo de présentation 📹</a>
+Comment ça marche ? Découvrez-le en vidéo 📹
 
-1. Importez, visualisez, créez, modifiez des données sur <a onclick='abc.goTo("/map")'>la page Carte</a>
-2. Si vous le souhaitez, appliquez un <a onclick='abc.goTo("/data-processing")'> traitement de données</a>
-3. Exportez sur une ou plusieurs pages au format PDF sur <a onclick='abc.goTo("/map")'>la page Mise en page</a>
+- <a href="https://youtu.be/bXl3Uq5fU34" target="_blank">Présentation des fonctionnalités basiques en 5 minutes chrono</a>
+- <a href="https://youtu.be/majmp2GFfkE" target="_blank">Import et export de données</a>
+- Représenter la densité de population en France métropolitaine avec des dégradés de couleurs (à venir 🚧)
 
 ## Quels genres de cartes puis-je créer avec ce logiciel ?
 
