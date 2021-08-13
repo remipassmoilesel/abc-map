@@ -22,6 +22,8 @@ import { FeatureWrapper } from '../features/FeatureWrapper';
 
 logger.disable();
 
+// TODO: improve tests
+
 describe('SelectionStyleFactory', function () {
   let factory: SelectionStyleFactory;
 
@@ -32,22 +34,31 @@ describe('SelectionStyleFactory', function () {
   describe('getForFeature()', function () {
     it('Point', function () {
       const feature = fakeFeature(GeometryType.POINT);
-      expect(factory.getForFeature(feature)).toHaveLength(1);
+      const styles = factory.getForFeature(feature);
+      expect(styles).toHaveLength(1);
+      expect(styles[0].getZIndex()).toEqual(Infinity);
     });
 
     it('LineString', function () {
       const feature = fakeFeature(GeometryType.LINE_STRING);
-      expect(factory.getForFeature(feature)).toHaveLength(1);
+      const styles = factory.getForFeature(feature);
+      expect(styles).toHaveLength(1);
+      expect(styles[0].getZIndex()).toEqual(Infinity);
     });
 
     it('Polygon', function () {
       const feature = fakeFeature(GeometryType.POLYGON);
-      expect(factory.getForFeature(feature)).toHaveLength(1);
+      const styles = factory.getForFeature(feature);
+      expect(styles).toHaveLength(1);
+      expect(styles[0].getZIndex()).toEqual(Infinity);
     });
 
     it('Circle', function () {
       const feature = fakeFeature(GeometryType.CIRCLE);
-      expect(factory.getForFeature(feature)).toHaveLength(2);
+      const styles = factory.getForFeature(feature);
+      expect(styles).toHaveLength(2);
+      expect(styles[0].getZIndex()).toEqual(Infinity);
+      expect(styles[1].getZIndex()).toEqual(Infinity);
     });
 
     it('Non supported type', function () {
