@@ -25,13 +25,14 @@ import Cls from './FillPatternButton.module.scss';
 
 const logger = Logger.get('FillPatternButton.tsx', 'info');
 
-interface Props {
+export interface Props {
   width: number;
   height: number;
-  pattern?: FillPatterns;
-  color1?: string;
-  color2?: string;
+  pattern: FillPatterns;
+  color1: string;
+  color2: string;
   onClick: (ev: FillPatterns) => void;
+  factory?: FillPatternFactory;
 }
 
 interface State {
@@ -43,7 +44,7 @@ class FillPatternButton extends Component<Props, State> {
 
   constructor(props: Props) {
     super(props);
-    this.state = { patternFactory: new FillPatternFactory() };
+    this.state = { patternFactory: this.props.factory || new FillPatternFactory() };
   }
 
   public render(): ReactNode {
@@ -57,7 +58,7 @@ class FillPatternButton extends Component<Props, State> {
         onClick={this.handleClick}
         title={title}
         className={`btn btn-outline-secondary ${Cls.fillPatternButton}`}
-        style={{ width: width + 'px', height: height + 'px' }}
+        style={{ width: `${width}px`, height: `${height}px` }}
       >
         <canvas ref={this.canvas} width={width - padding} height={height - padding} />
       </button>
@@ -68,16 +69,16 @@ class FillPatternButton extends Component<Props, State> {
     this.preview();
   }
 
-  public componentDidUpdate() {
-    this.preview();
+  public componentDidUpdate(prevProps: Readonly<Props>) {
+    const patternChanged = prevProps.pattern !== this.props.pattern;
+    const color1Changed = prevProps.color1 !== this.props.color1;
+    const color2Changed = prevProps.color2 !== this.props.color2;
+    if (patternChanged || color1Changed || color2Changed) {
+      this.preview();
+    }
   }
 
   private handleClick = () => {
-    if (!this.props.pattern) {
-      logger.error('Pattern not set');
-      return;
-    }
-
     this.props.onClick(this.props.pattern);
   };
 
@@ -93,7 +94,7 @@ class FillPatternButton extends Component<Props, State> {
     }
 
     if (FillPatterns.Flat === pattern) {
-      ctx.fillStyle = color1 || 'white';
+      ctx.fillStyle = color1;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       return;
     }

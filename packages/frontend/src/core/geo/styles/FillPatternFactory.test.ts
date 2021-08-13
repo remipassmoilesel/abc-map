@@ -31,7 +31,7 @@ describe('FillPatternFactory', () => {
       color1: '#fff',
       color2: '#000',
     };
-    expect(factory.create({ ...properties, pattern: FillPatterns.Flat })).toBeUndefined();
+    expect(factory.create({ ...properties, pattern: FillPatterns.Flat })).toBeNull();
     expect(factory.create({ ...properties, pattern: FillPatterns.Circles })).toBeDefined();
     expect(factory.create({ ...properties, pattern: FillPatterns.Squares })).toBeDefined();
     expect(factory.create({ ...properties, pattern: FillPatterns.HatchingVertical })).toBeDefined();

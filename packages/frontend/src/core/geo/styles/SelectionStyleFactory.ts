@@ -25,11 +25,10 @@ import { FeatureWrapper } from '../features/FeatureWrapper';
 
 export const logger = Logger.get('SelectionStyleFactory.ts');
 
-// TODO: test
-
 const fillColor = 'rgba(201,211,255,0.33)';
 const strokeColor = '#4671ff';
 const width = 3;
+const zIndex = Infinity;
 
 const strokeDash = new Stroke({
   color: strokeColor,
@@ -49,12 +48,14 @@ const polygon = [
   new Style({
     fill,
     stroke: strokeDash,
+    zIndex,
   }),
 ];
 
 const lineString = [
   new Style({
     stroke: strokeDash,
+    zIndex,
   }),
 ];
 
@@ -67,7 +68,7 @@ const point = [
       fill,
       stroke: strokePlain,
     }),
-    zIndex: Infinity,
+    zIndex,
   }),
 ];
 

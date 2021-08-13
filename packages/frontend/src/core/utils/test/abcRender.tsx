@@ -46,5 +46,11 @@ export function abcRender(ui: React.ReactElement, options?: Options): RenderResu
       );
     }
   }
-  return rtlRender(ui, { wrapper: TestServiceWrapper, ...options });
+
+  const rendered = rtlRender(ui, { wrapper: TestServiceWrapper, ...options });
+
+  return {
+    ...rendered,
+    rerender: abcRender.bind(null, ui, options),
+  };
 }

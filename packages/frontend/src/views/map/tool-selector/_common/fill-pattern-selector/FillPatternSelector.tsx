@@ -60,9 +60,9 @@ class FillPatternSelector extends Component<Props, State> {
   }
 
   public render(): ReactNode {
-    const pattern = this.props.fill?.pattern;
-    const color1 = this.props.fill?.color1;
-    const color2 = this.props.fill?.color2;
+    const pattern = this.props.fill?.pattern || FillPatterns.Flat;
+    const color1 = this.props.fill?.color1 || 'white';
+    const color2 = this.props.fill?.color2 || 'black';
     const modal = this.state.modal;
 
     return (
@@ -93,8 +93,8 @@ class FillPatternSelector extends Component<Props, State> {
   };
 
   private getPatternButtons(): ReactNode[] {
-    const color1 = this.props.fill?.color1;
-    const color2 = this.props.fill?.color2;
+    const color1 = this.props.fill?.color1 || 'white';
+    const color2 = this.props.fill?.color2 || 'black';
     return LabeledFillPatterns.All.map((item) => {
       return (
         <div className={'d-flex align-items-center m-3'} key={item.value}>
