@@ -32,6 +32,9 @@ import { Logger } from '@abc-map/shared';
 import { ScaleAlgorithm } from '../_common/algorithm/Algorithm';
 import { Stats } from '../_common/stats/Stats';
 import { asNumberOrString, isValidNumber } from '../../core/utils/numbers';
+import { ProcessingResult } from './ProcessingResult';
+import { Status } from '../color-gradients/ProcessingResult';
+import { prettyStringify } from '../../core/utils/strings';
 
 export const logger = Logger.get('ProportionalSymbols.tsx');
 
@@ -54,13 +57,21 @@ export class ProportionalSymbols extends Module {
     return <ProportionalSymbolsUi initialValue={this.params} onChange={this.handleParamsChange} onProcess={() => this.process(this.params)} />;
   }
 
-  public async process(params: Parameters): Promise<void> {
+  public async process(params: Parameters): Promise<ProcessingResult> {
     logger.info('Using parameters: ', params);
 
     const { newLayerName } = params;
     const { valueField, source, joinBy: dataJoinBy } = params.data;
     const { layer: geometryLayer, joinBy: geometryJoinBy } = params.geometries;
     const { sizeMin, sizeMax, algorithm, type, color } = params.symbols;
+
+    const result: ProcessingResult = {
+      status: Status.Succeed,
+      featuresProcessed: 0,
+      invalidFeatures: 0,
+      missingDataRows: [],
+      invalidValues: [],
+    };
 
     if (!newLayerName || !source || !valueField || !sizeMin || !sizeMax || !dataJoinBy || !geometryLayer || !geometryJoinBy || !algorithm) {
       return Promise.reject(new Error('Invalid parameters'));
@@ -74,13 +85,18 @@ export class ProportionalSymbols extends Module {
       .sort((a, b) => (a as number) - (b as number)) as number[];
 
     if (!sortedValues.length || rows.length !== sortedValues.length) {
-      return Promise.reject(new Error('Invalid datasource'));
+      const invalidValues = rows
+        .map((row) => asNumberOrString(row[valueField] ?? NaN))
+        .filter((value) => !isValidNumber(value))
+        .map((value) => `${valueField}: ${prettyStringify(value)}`);
+      return { ...result, status: Status.InvalidValues, invalidValues };
     }
 
     const valueMin = sortedValues[0];
     const valueMax = sortedValues[sortedValues.length - 1];
     if (valueMin >= valueMax) {
-      return Promise.reject(new Error('Invalid datasource'));
+      const invalidValues = [`Minimum: ${String(valueMin)}`, `Maximum: ${String(valueMax)}`];
+      return { ...result, status: Status.InvalidMinMax, invalidValues };
     }
 
     // Then, for each geometry we create a proportional symbol
@@ -91,17 +107,20 @@ export class ProportionalSymbols extends Module {
         const joinKey: string | number | undefined = feat.get(geometryJoinBy);
         if (!geom || typeof joinKey === 'undefined') {
           logger.error(`Invalid feature, no geometry or join value found. geometryJoinBy=${geometryJoinBy} key=${joinKey}`, feat);
+          result.invalidFeatures++;
           return null;
         }
 
         const row = rows.find((r) => r[dataJoinBy] === joinKey);
         if (!row) {
           logger.error(`Row does not exist for join key ${joinKey}`);
+          result.missingDataRows.push(prettyStringify(joinKey));
           return null;
         }
 
         const value = asNumberOrString(row[valueField] ?? NaN);
         if (!isValidNumber(value) || value <= 0) {
+          // Invalid values should have been inspected at sort()
           logger.error(`Invalid size value: ${value}`);
           return null;
         }
@@ -126,6 +145,7 @@ export class ProportionalSymbols extends Module {
           'point-value': value,
         });
 
+        result.featuresProcessed++;
         return newFeat;
       })
       .filter((f) => !!f)
@@ -139,6 +159,12 @@ export class ProportionalSymbols extends Module {
     const map = this.services.geo.getMainMap();
     map.addLayer(newLayer);
     map.setActiveLayer(newLayer);
+
+    if (result.missingDataRows.length || result.invalidValues.length || result.invalidFeatures) {
+      result.status = Status.BadProcessing;
+    }
+
+    return result;
   }
 
   private pointSize(algorithm: ScaleAlgorithm, value: number, valueMin: number, valueMax: number, sizeMin: number, sizeMax: number): number {

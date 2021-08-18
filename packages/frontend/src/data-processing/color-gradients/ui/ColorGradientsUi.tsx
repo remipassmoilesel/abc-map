@@ -22,25 +22,28 @@ import { newParameters, Parameters } from '../Parameters';
 import FoldableCard from '../../../components/foldable-card/FoldableCard';
 import { ServiceProps, withServices } from '../../../core/withServices';
 import DataSourceForm, { DataSourceFormValues } from '../../_common/data-source-form/DataSourceForm';
-import GradientsConfigForm, { ColorsConfigFormValues } from './GradientsConfigForm';
+import GradientsConfigForm, { ColorsConfigFormValues } from './components/GradientsConfigForm';
 import GeometryLayerForm, { GeometryLayerFormValues } from '../../_common/geometry-layer-form/GeometryLayerForm';
 import Sample from './sample.png';
 import { ColorGradientTips } from '@abc-map/user-documentation';
 import Cls from './ColorGradientsUi.module.scss';
 import { FormState } from '../../../components/form-validation-label/FormState';
 import FormValidationLabel from '../../../components/form-validation-label/FormValidationLabel';
+import { isProcessingResult, ProcessingResult } from '../ProcessingResult';
+import ProcessingReportModal from './components/report-modal/ProcessingReportModal';
 
 const logger = Logger.get('ColorGradientsUI.tsx');
 
 interface Props extends ServiceProps {
   initialValue: Parameters;
   onChange: (params: Parameters) => void;
-  onProcess: () => Promise<void>;
+  onProcess: () => Promise<ProcessingResult>;
 }
 
 interface State {
   params: Parameters;
   formState?: FormState;
+  result?: ProcessingResult;
 }
 
 class ColorGradientsUI extends Component<Props, State> {
@@ -52,6 +55,7 @@ class ColorGradientsUI extends Component<Props, State> {
   public render(): ReactNode {
     const params = this.state.params;
     const formState = this.state.formState;
+    const result = this.state.result;
 
     const configValues: ColorsConfigFormValues = {
       layerName: params.newLayerName,
@@ -133,12 +137,14 @@ class ColorGradientsUI extends Component<Props, State> {
           )}
         </FoldableCard>
 
+        {/* Form validation */}
         {formState && (
           <div className={'m-3 d-flex justify-content-end'}>
             <FormValidationLabel state={formState} />
           </div>
         )}
 
+        {/* Bottom controls */}
         <div className={'d-flex flex-row justify-content-end'}>
           <button className={'btn btn-secondary mr-3'} onClick={this.handleCancel}>
             Réinitialiser
@@ -147,6 +153,9 @@ class ColorGradientsUI extends Component<Props, State> {
             Lancer le traitement
           </button>
         </div>
+
+        {/* Result report */}
+        {result && <ProcessingReportModal result={result} params={params} onClose={this.handleModalClosed} />}
       </div>
     );
   }
@@ -211,12 +220,22 @@ class ColorGradientsUI extends Component<Props, State> {
     }
 
     modals
-      .longOperationModal(this.props.onProcess)
-      .then(() => toasts.info('Traitement terminé !'))
+      .longOperationModal<ProcessingResult>(this.props.onProcess)
+      .then((result) => {
+        if (isProcessingResult(result)) {
+          this.setState({ result });
+        } else {
+          return Promise.reject(new Error('Invalid result'));
+        }
+      })
       .catch((err) => {
-        logger.error(err);
+        logger.error('Data processing failed', err);
         toasts.genericError();
       });
+  };
+
+  private handleModalClosed = () => {
+    this.setState({ result: undefined });
   };
 
   private validateParameters(): FormState {

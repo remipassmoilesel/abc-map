@@ -21,7 +21,7 @@ import { Logger } from '@abc-map/shared';
 import { newParameters, Parameters } from '../Parameters';
 import FoldableCard from '../../../components/foldable-card/FoldableCard';
 import { ServiceProps, withServices } from '../../../core/withServices';
-import SymbolConfigForm, { SymbolConfigFormValues } from './SymbolConfigForm';
+import SymbolConfigForm, { SymbolConfigFormValues } from './components/SymbolConfigForm';
 import DataSourceForm, { DataSourceFormValues } from '../../_common/data-source-form/DataSourceForm';
 import GeometryLayerForm, { GeometryLayerFormValues } from '../../_common/geometry-layer-form/GeometryLayerForm';
 import { ScaleAlgorithm } from '../../_common/algorithm/Algorithm';
@@ -30,18 +30,21 @@ import Sample from './sample.png';
 import { ProportionalSymbolsTips } from '@abc-map/user-documentation';
 import FormValidationLabel from '../../../components/form-validation-label/FormValidationLabel';
 import { FormState } from '../../../components/form-validation-label/FormState';
+import { isProcessingResult, ProcessingResult } from '../ProcessingResult';
+import ProcessingReportModal from './components/report-modal/ProcessingReportModal';
 
 const logger = Logger.get('ProportionalSymbolsUi.tsx');
 
 interface Props extends ServiceProps {
   initialValue: Parameters;
   onChange: (params: Parameters) => void;
-  onProcess: () => Promise<void>;
+  onProcess: () => Promise<ProcessingResult>;
 }
 
 interface State {
   params: Parameters;
   formState?: FormState;
+  result?: ProcessingResult;
 }
 
 class ProportionalSymbolsUi extends Component<Props, State> {
@@ -53,6 +56,7 @@ class ProportionalSymbolsUi extends Component<Props, State> {
   public render(): ReactNode {
     const params = this.state.params;
     const formState = this.state.formState;
+    const result = this.state.result;
 
     const dataSourceValues: DataSourceFormValues = {
       source: params.data.source,
@@ -143,6 +147,9 @@ class ProportionalSymbolsUi extends Component<Props, State> {
             Lancer le traitement
           </button>
         </div>
+
+        {/* Result report */}
+        {result && <ProcessingReportModal result={result} params={params} onClose={this.handleModalClosed} />}
       </div>
     );
   }
@@ -202,12 +209,22 @@ class ProportionalSymbolsUi extends Component<Props, State> {
     }
 
     modals
-      .longOperationModal(this.props.onProcess)
-      .then(() => toasts.info('Traitement terminé !'))
+      .longOperationModal<ProcessingResult>(this.props.onProcess)
+      .then((result) => {
+        if (isProcessingResult(result)) {
+          this.setState({ result });
+        } else {
+          return Promise.reject(new Error('Invalid result'));
+        }
+      })
       .catch((err) => {
-        logger.error(err);
+        logger.error('Data processing failed', err);
         toasts.genericError();
       });
+  };
+
+  private handleModalClosed = () => {
+    this.setState({ result: undefined });
   };
 
   private validateParameters(): FormState {

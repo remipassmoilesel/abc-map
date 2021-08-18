@@ -16,15 +16,15 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 import * as sinon from 'sinon';
-import { abcRender } from '../../../core/utils/test/abcRender';
+import { abcRender } from '../../../../../core/utils/test/abcRender';
 import ClassRow from './ClassRow';
-import { GradientClass } from '../GradientClass';
+import { GradientClass } from '../../../GradientClass';
 import { nanoid } from 'nanoid';
-import { deepFreeze } from '../../../core/utils/deepFreeze';
+import { deepFreeze } from '../../../../../core/utils/deepFreeze';
 import { screen } from '@testing-library/react';
 
 let colorChangedHandler: (color: string) => void;
-jest.mock('../../../components/color-picker/ColorPicker', () => {
+jest.mock('../../../../../components/color-picker/ColorPicker', () => {
   return {
     __esModule: true,
     // eslint-disable-next-line react/display-name

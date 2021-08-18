@@ -18,18 +18,18 @@
 
 import React, { ChangeEvent, Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/shared';
-import FormLine from '../../_common/form-line/FormLine';
-import { DataSource } from '../../../core/data/data-source/DataSource';
-import { GradientClass } from '../GradientClass';
-import { ServiceProps, withServices } from '../../../core/withServices';
-import { Stats } from '../../_common/stats/Stats';
-import { ClassificationAlgorithm } from '../../_common/algorithm/Algorithm';
+import FormLine from '../../../_common/form-line/FormLine';
+import { DataSource } from '../../../../core/data/data-source/DataSource';
+import { GradientClass } from '../../GradientClass';
+import { ServiceProps, withServices } from '../../../../core/withServices';
+import { Stats } from '../../../_common/stats/Stats';
+import { ClassificationAlgorithm } from '../../../_common/algorithm/Algorithm';
 import * as _ from 'lodash';
 import * as chroma from 'chroma-js';
 import { nanoid } from 'nanoid';
-import ClassRow from './ClassRow';
-import ColorPicker from '../../../components/color-picker/ColorPicker';
-import { asNumberOrString, isValidNumber } from '../../../core/utils/numbers';
+import ClassRow from './class-row/ClassRow';
+import ColorPicker from '../../../../components/color-picker/ColorPicker';
+import { asNumberOrString, isValidNumber } from '../../../../core/utils/numbers';
 
 const logger = Logger.get('ColorScaleSelection.tsx');
 

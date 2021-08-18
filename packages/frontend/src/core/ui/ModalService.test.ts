@@ -55,7 +55,7 @@ describe('ModalService', function () {
   });
 
   describe('longOperationModal()', () => {
-    it('should succeed', async () => {
+    it('should succeed and return status', async () => {
       const listener = sinon.stub();
       service.addListener(ModalEventType.ShowLongOperationModal, listener);
       service.addListener(ModalEventType.LongOperationModalClosed, listener);
@@ -63,6 +63,25 @@ describe('ModalService', function () {
       const res = await service.longOperationModal(() => TestHelper.wait(200));
 
       expect(res).toEqual(OperationStatus.Succeed);
+      expect(listener.callCount).toEqual(3);
+      expect(listener.args).toEqual([
+        [{ type: ModalEventType.ShowLongOperationModal, burning: true }],
+        [{ type: ModalEventType.ShowLongOperationModal, burning: false }],
+        [{ type: ModalEventType.LongOperationModalClosed }],
+      ]);
+    });
+
+    it('should succeed and return result', async () => {
+      const listener = sinon.stub();
+      service.addListener(ModalEventType.ShowLongOperationModal, listener);
+      service.addListener(ModalEventType.LongOperationModalClosed, listener);
+
+      const res = await service.longOperationModal<boolean>(async () => {
+        await TestHelper.wait(200);
+        return false;
+      });
+
+      expect(res).toEqual(false);
       expect(listener.callCount).toEqual(3);
       expect(listener.args).toEqual([
         [{ type: ModalEventType.ShowLongOperationModal, burning: true }],

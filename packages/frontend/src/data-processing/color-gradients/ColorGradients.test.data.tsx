@@ -24,14 +24,12 @@ import { Stats } from '../_common/stats/Stats';
 import { ClassificationAlgorithm } from '../_common/algorithm/Algorithm';
 import { nanoid } from 'nanoid';
 import chroma from 'chroma-js';
-import { TestHelper } from '../../core/utils/test/TestHelper';
 import { asNumberOrString, isValidNumber } from '../../core/utils/numbers';
+import { DataValue } from '../../core/data/data-source/DataSource';
 
-export const testGradientClasses = (algo: ClassificationAlgorithm, numberOfClasses: number): GradientClass[] => {
-  const values = TestHelper.regionsOfFrance()
-    .map((reg) => asNumberOrString(reg.popPercent))
-    .filter(isValidNumber) as number[];
-  const classes = Stats.classify(algo, numberOfClasses, values);
+export const testGradientClasses = (values: DataValue[], algo: ClassificationAlgorithm, numberOfClasses: number): GradientClass[] => {
+  const _values = values.map((x) => asNumberOrString(x)).filter(isValidNumber) as number[];
+  const classes = Stats.classify(algo, numberOfClasses, _values);
   const colorFunc = chroma.scale(['blue', 'red']).domain([0, numberOfClasses]).classes(numberOfClasses);
 
   return classes.map((cl, i) => ({

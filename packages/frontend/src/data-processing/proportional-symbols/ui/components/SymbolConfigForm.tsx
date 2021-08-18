@@ -18,13 +18,13 @@
 
 import React, { ChangeEvent, Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/shared';
-import { Algorithm, isScaleAlgorithm, ScaleAlgorithm } from '../../_common/algorithm/Algorithm';
-import AlgorithmSelector from '../../_common/algorithm/AlgorithmSelector';
-import FormLine from '../../_common/form-line/FormLine';
+import { Algorithm, isScaleAlgorithm, ScaleAlgorithm } from '../../../_common/algorithm/Algorithm';
+import AlgorithmSelector from '../../../_common/algorithm/AlgorithmSelector';
+import FormLine from '../../../_common/form-line/FormLine';
 import { ProportionalSymbolsTips } from '@abc-map/user-documentation';
-import PointIconPicker from '../../../components/icon-picker/PointIconPicker';
-import ColorPicker from '../../../components/color-picker/ColorPicker';
-import { PointIconName } from '../../../assets/point-icons/PointIconName';
+import PointIconPicker from '../../../../components/icon-picker/PointIconPicker';
+import ColorPicker from '../../../../components/color-picker/ColorPicker';
+import { PointIconName } from '../../../../assets/point-icons/PointIconName';
 
 const logger = Logger.get('SymbolConfigForm.tsx');
 

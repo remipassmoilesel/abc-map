@@ -18,8 +18,8 @@
 
 import React, { Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/shared';
-import { GradientClass } from '../GradientClass';
-import ColorPicker from '../../../components/color-picker/ColorPicker';
+import { GradientClass } from '../../../GradientClass';
+import ColorPicker from '../../../../../components/color-picker/ColorPicker';
 import Cls from './ClassRow.module.scss';
 
 const logger = Logger.get('ClassRow.tsx');
