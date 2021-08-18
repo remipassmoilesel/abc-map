@@ -78,10 +78,14 @@ class LandingView extends Component<Props, State> {
             <h5>Comment ça marche ?</h5>
             <ul>
               <li>
-                Lancez-vous tout de suite sur la <Link to={FrontendRoutes.map().raw()}>page Carte</Link> !
+                Regardez&nbsp;
+                <a href={'https://www.youtube.com/channel/UCrlsEykrLNpK12Id7c7GP7g'} target={'_blank'} rel="noreferrer">
+                  une vidéo de présentation 📹
+                </a>
+                &nbsp; ou parcourez la <Link to={FrontendRoutes.documentation().raw()}>Documentation</Link>
               </li>
               <li>
-                Ou prenez quelques minutes pour consulter la page <Link to={FrontendRoutes.documentation().raw()}> Documentation</Link>
+                Puis lancez-vous sur la <Link to={FrontendRoutes.map().raw()}>Carte</Link> !
               </li>
             </ul>
 

@@ -26,13 +26,13 @@ import {
   isGradientAlgorithm,
   isScaleAlgorithm,
   ScaleAlgorithm,
-} from '../../_common/algorithm/Algorithm';
-import AlgorithmSelector from '../../_common/algorithm/AlgorithmSelector';
-import FormLine from '../../_common/form-line/FormLine';
+} from '../../../_common/algorithm/Algorithm';
+import AlgorithmSelector from '../../../_common/algorithm/AlgorithmSelector';
+import FormLine from '../../../_common/form-line/FormLine';
 import ScaleColors from './ScaleColors';
 import ClassificationColors, { ClassesConfig } from './ClassificationColors';
-import { DataSource } from '../../../core/data/data-source/DataSource';
-import { GradientClass } from '../GradientClass';
+import { DataSource } from '../../../../core/data/data-source/DataSource';
+import { GradientClass } from '../../GradientClass';
 import { ColorGradientTips } from '@abc-map/user-documentation';
 
 const logger = Logger.get('SymbolConfigForm.tsx');

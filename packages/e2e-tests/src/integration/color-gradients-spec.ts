@@ -21,7 +21,6 @@ import { FrontendRoutes } from '@abc-map/shared';
 import { DataStore } from '../helpers/DataStore';
 import { TopBar } from '../helpers/TopBar';
 import { TestData } from '../test-data/TestData';
-import { Toasts } from '../helpers/Toasts';
 import { MainMap } from '../helpers/MainMap';
 
 describe('Color gradients', function () {
@@ -60,7 +59,8 @@ describe('Color gradients', function () {
       .scrollTo('bottom')
       .get('[data-cy=process]')
       .click()
-      .then(() => Toasts.assertText('Traitement terminé !'))
+      .get('[data-cy=close-processing-report]')
+      .click()
       .then(() => TopBar.map())
       .then(() => MainMap.getReference())
       .should((map) => {

@@ -96,12 +96,32 @@ export class ModalService {
     return this.modalPromise({ type: ModalEventType.ShowLegendSymbolPicker }, ModalEventType.LegendSymbolPickerClosed);
   }
 
-  public longOperationModal(operation: () => Promise<OperationStatus | void>): Promise<OperationStatus> {
+  public longOperationModal<Result = void>(operation: () => Promise<OperationStatus | Result>): Promise<OperationStatus | Result> {
+    // We show waiting screen
     this.dispatch({ type: ModalEventType.ShowLongOperationModal, burning: true });
 
-    return new Promise<OperationStatus>((resolve, reject) => {
-      const display = () => {
-        delayedPromise(operation(), 1000).then(hideOnSuccess).catch(hideOnFail);
+    return new Promise<OperationStatus | Result>((resolve, reject) => {
+      const start = () => {
+        return delayedPromise(operation(), 1000).then(hideOnSuccess).catch(hideOnFail);
+      };
+
+      const hideOnSuccess = (res: OperationStatus | Result) => {
+        // Operation was interrupted (per example canceled), we resolve with status
+        if (res === OperationStatus.Interrupted) {
+          this.dispatch({ type: ModalEventType.LongOperationModalClosed });
+          resolve(OperationStatus.Interrupted);
+          return;
+        }
+
+        // We show end of waiting screen
+        this.dispatch({ type: ModalEventType.ShowLongOperationModal, burning: false });
+
+        setTimeout(() => {
+          this.dispatch({ type: ModalEventType.LongOperationModalClosed });
+
+          // Then we resolve with result or status
+          resolve(res ?? OperationStatus.Succeed);
+        }, 800);
       };
 
       const hideOnFail = (err: Error) => {
@@ -109,23 +129,8 @@ export class ModalService {
         reject(err);
       };
 
-      const hideOnSuccess = (res: OperationStatus | void) => {
-        if (res === OperationStatus.Interrupted) {
-          this.dispatch({ type: ModalEventType.LongOperationModalClosed });
-          resolve(OperationStatus.Interrupted);
-          return;
-        }
-
-        this.dispatch({ type: ModalEventType.ShowLongOperationModal, burning: false });
-
-        setTimeout(() => {
-          this.dispatch({ type: ModalEventType.LongOperationModalClosed });
-          resolve(OperationStatus.Succeed);
-        }, 1000);
-      };
-
       // We let frontend refresh before operation
-      setTimeout(display, 150);
+      setTimeout(start, 150);
     });
   }
 

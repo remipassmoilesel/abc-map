@@ -18,8 +18,8 @@
 
 import React, { Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/shared';
-import ColorPicker from '../../../components/color-picker/ColorPicker';
-import FormLine from '../../_common/form-line/FormLine';
+import ColorPicker from '../../../../components/color-picker/ColorPicker';
+import FormLine from '../../../_common/form-line/FormLine';
 
 const logger = Logger.get('ColorScaleSelection.tsx');
 

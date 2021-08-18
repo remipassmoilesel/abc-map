@@ -313,7 +313,7 @@ export class TestHelper {
   }
 
   public static regionsOfFrance() {
-    return RegionsOfMetropolitanFrance.slice();
+    return RegionsOfMetropolitanFrance.slice().map((row) => ({ ...row }));
   }
 
   public static regionsOfFranceDataSource(): TestDataSource {

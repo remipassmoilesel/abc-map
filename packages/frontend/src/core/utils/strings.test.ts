@@ -16,36 +16,16 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-export interface Prj {
-  original: string;
-  wkt: PrjWkt;
-}
+import { prettyStringify } from './strings';
 
-// TODO: improve typings
-export interface PrjWkt {
-  type: 'PROJCS';
-  name: string;
-  projName: string;
-  srsCode: string;
-  GEOGCS?: any;
-  latitude_of_center?: number;
-  longitude_of_center?: number;
-  false_easting?: number;
-  false_northing?: number;
-  axis?: string;
-  units?: string;
-  to_meter?: 1;
-  datumCode?: string;
-  ellps?: string;
-  a?: number;
-  rf?: number;
-  lat0?: number;
-  longc?: number;
-  x0?: number;
-  y0?: number;
-  long0?: number;
-  UNIT?: any;
-  PROJECTION?: string;
-  AUTHORITY?: { EPSG: string };
-  AXIS?: any;
-}
+describe('strings', () => {
+  it('prettyStringify', () => {
+    expect(prettyStringify(null)).toEqual('Valeur non définie');
+    expect(prettyStringify(undefined)).toEqual('Valeur non définie');
+    expect(prettyStringify({})).toEqual('{}');
+    expect(prettyStringify('')).toEqual('""');
+    expect(prettyStringify(0)).toEqual('0');
+    expect(prettyStringify(11)).toEqual('11');
+    expect(prettyStringify([])).toEqual('[]');
+  });
+});
