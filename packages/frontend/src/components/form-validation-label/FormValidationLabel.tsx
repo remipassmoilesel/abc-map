@@ -121,6 +121,11 @@ class FormValidationLabel extends Component<Props, {}> {
         message = 'Le champ de jointure des données est obligatoire.';
         break;
 
+      case FormState.MissingGeometryJoinBy:
+        icon = 'fa-exclamation-circle';
+        message = 'Le champ de jointure des géométries est obligatoire.';
+        break;
+
       case FormState.MissingAlgorithm:
         icon = 'fa-exclamation-circle';
         message = "L'algorithme est obligatoire.";
