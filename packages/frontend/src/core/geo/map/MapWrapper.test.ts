@@ -330,5 +330,13 @@ describe('MapWrapper', function () {
 
       expect(map.getTextAttributions()).toEqual(['© OpenStreetMap contributors.', 'Map tiles by Stamen Design, under CC BY 3.0.']);
     });
+
+    it('with hidden layers', () => {
+      const map = MapFactory.createNaked();
+      map.addLayer(LayerFactory.newPredefinedLayer(PredefinedLayerModel.OSM).setVisible(false));
+      map.addLayer(LayerFactory.newVectorLayer());
+
+      expect(map.getTextAttributions()).toEqual([]);
+    });
   });
 });
