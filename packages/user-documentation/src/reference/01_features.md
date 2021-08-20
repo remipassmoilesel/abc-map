@@ -22,7 +22,7 @@ Abc-Map permet de manipuler des données géographiques. Avec Abc-Map vous pouve
 
 - <a href="https://youtu.be/bXl3Uq5fU34" target="_blank">Présentation des fonctionnalités basiques en 5 minutes chrono</a>
 - <a href="https://youtu.be/majmp2GFfkE" target="_blank">Import et export de données</a>
-- Représenter la densité de population en France métropolitaine avec des dégradés de couleurs (à venir 🚧)
+- <a href="https://youtu.be/irT6eV7JGDw" target="_blank">Représenter la densité de population en France métropolitaine avec des dégradés de couleurs</a>
 
 ## Quels genres de cartes puis-je créer avec ce logiciel ?
 

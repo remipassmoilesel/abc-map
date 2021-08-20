@@ -280,6 +280,7 @@ export class MapWrapper {
   public getTextAttributions(): string[] {
     const div = document.createElement('div');
     return _(this.getLayers())
+      .filter((lay) => lay.isVisible())
       .flatMap((lay) => lay.getSource().getAttributions())
       .flatMap((attr) => {
         if (!attr) {
