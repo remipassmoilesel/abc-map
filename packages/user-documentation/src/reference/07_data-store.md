@@ -6,9 +6,9 @@
   Le catalogue de données est en cours de remplissage, c'est une question de temps ⌛
 </div>
 
-La page `Catalogue de données` propose des données courantes et testées sur le logiciel.
+La page `Catalogue de données` propose des données courantes sélectionnées pour Abc-Map.
 
-Les données sont proposées sous forme d'`artefact`, c’est-à-dire en paquet utilisable en tant que couche sur une carte.
+Les données sont proposées sous forme d'`artefacts`, c’est-à-dire en paquets utilisables en tant que couche sur une carte.
 
 <figure>
     <img src="./assets/data-store-card.png" alt="Exemple d'artefact du catalogue de données"/>

@@ -27,8 +27,9 @@ Abc-Map permet de manipuler des données géographiques. Avec Abc-Map vous pouve
 ## Quels genres de cartes puis-je créer avec ce logiciel ?
 
 - Des itinéraires de balades ou de randonnées
-- Des cartes professionnelles : places de marchés, zones de travail, etc ...
-- Des cartes statistiques : densité de population par régions, budgets par communes, etc ...
+- Des cartes routières, cartes touristiques, itinéraires événementiels, ...
+- Des cartes pour activités professionnelles : places de marchés, zones de travail, ...
+- Des cartes statistiques : densité de population par régions, budgets par communes, ...
 - Et plus !
 
 ## Alternatives
@@ -39,7 +40,8 @@ comme <a href="https://www.qgis.org/" target='_blank'>QGis</a> ou <a href="http:
 
 ## Statut, licence et code source
 
-Ce logiciel est développé bénévolement. La plateforme officielle (https://abc-map.fr) est hébergée bénévolement.
+Ce logiciel est développé bénévolement. La plateforme officielle ([abc-map.fr](https://abc-map.fr)) est hébergée
+bénévolement.
 
 Abc-Map est un logiciel libre sous licence <a target='_blank' href='https://www.gnu.org/licenses/agpl-3.0.html'>GNU AGPLv3</a>.
 Cette licence est expliquée <a target='_blank' href='https://www.gnu.org/licenses/quick-guide-gplv3.fr.html'>ici</a>.

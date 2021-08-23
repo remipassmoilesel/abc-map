@@ -21,6 +21,7 @@ import { AbcLegend, Logger } from '@abc-map/shared';
 import { LegendRenderer } from '../../../core/project/rendering/LegendRenderer';
 import { ResizableBox, ResizeCallbackData } from 'react-resizable';
 import 'react-resizable/css/styles.css';
+import Cls from './LegendPreview.module.scss';
 
 const logger = Logger.get('LegendPreview.tsx');
 
@@ -40,6 +41,7 @@ class LegendPreview extends Component<Props, {}> {
     return (
       <ResizableBox width={width} height={height} onResize={this.handleResize}>
         <canvas ref={this.preview} width={width} height={height} />
+        <div className={Cls.help}>Déplacez ce coin pour redimensionner ⬆️</div>
       </ResizableBox>
     );
   }

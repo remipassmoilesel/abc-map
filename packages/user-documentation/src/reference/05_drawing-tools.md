@@ -44,5 +44,6 @@ L'outil Texte permet d'ajouter et de modifier du texte attaché à des géométr
 
 L'outil Propriétés permet de créer et de modifier les propriétés de géométries existantes.
 
-Une propriété est une donnée associée à une géométrie. Par exemple vous pouvez associer la propriété `population` `67 000 000` à la géométrie représentant
-la France sur une carte du monde. Ces propriétés sont utilisées dans les traitements de données.
+Une propriété est une donnée associée à une géométrie. Par exemple vous pouvez associer la propriété `population` et
+la valeur `67 000 000` à la géométrie représentant la France sur une carte du monde. Ces propriétés sont utilisées
+dans les traitements de données.
