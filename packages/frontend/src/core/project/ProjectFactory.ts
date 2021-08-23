@@ -49,7 +49,7 @@ export class ProjectFactory {
     return {
       display: LegendDisplay.Hidden,
       items: [],
-      width: 300,
+      width: 400,
       height: 300,
     };
   }

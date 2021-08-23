@@ -71,7 +71,7 @@ describe('Legend', function () {
       .then((store) => {
         const legend: AbcLegend = store.getState().project.legend;
         expect(legend.display).equal(LegendDisplay.BottomRightCorner);
-        expect(legend.width).equal(300);
+        expect(legend.width).equal(400);
         expect(legend.height).equal(300);
         expect(legend.items.length).deep.equal(1);
         expect(legend.items[0].id).not.undefined;
