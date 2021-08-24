@@ -16,24 +16,10 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcLayer } from './layer/AbcLayer';
-import { AbcLayout } from './layout/AbcLayout';
 import { AbcProjection } from './AbcProjection';
-import { AbcLegend } from './legend';
-import { AbcView } from './AbcView';
 
-export interface AbcProjectManifest {
-  metadata: AbcProjectMetadata;
-  layers: AbcLayer[];
-  layouts: AbcLayout[];
-  legend: AbcLegend;
-  view: AbcView;
-}
-
-export interface AbcProjectMetadata {
-  id: string;
-  version: string;
-  name: string;
+export interface AbcView {
+  center: number[];
+  resolution: number;
   projection: AbcProjection;
-  containsCredentials: boolean;
 }

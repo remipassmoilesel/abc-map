@@ -18,6 +18,7 @@
 
 import { ProjectActions } from '../store/project/actions';
 import {
+  AbcFile,
   AbcLayout,
   AbcLegend,
   AbcLegendItem,
@@ -47,6 +48,7 @@ import { ModalStatus } from '../ui/typings';
 import { ModalService } from '../ui/ModalService';
 import { ProjectEvent, ProjectEventType } from './ProjectEvent';
 import { Errors } from '../utils/Errors';
+import { ProjectUpdater } from './migrations/ProjectUpdater';
 
 export const logger = Logger.get('ProjectService.ts', 'info');
 
@@ -59,27 +61,26 @@ export class ProjectService {
     private store: MainStore,
     private toasts: ToastService,
     private geoService: GeoService,
-    private modals: ModalService
+    private modals: ModalService,
+    private updater = ProjectUpdater.create()
   ) {}
 
   public addEventListener(listener: (ev: ProjectEvent) => void) {
-    this.eventTarget.addEventListener(ProjectEventType.NewProject, listener);
     this.eventTarget.addEventListener(ProjectEventType.ProjectLoaded, listener);
   }
 
   public removeEventListener(listener: (ev: ProjectEvent) => void) {
-    this.eventTarget.removeEventListener(ProjectEventType.NewProject, listener);
     this.eventTarget.removeEventListener(ProjectEventType.ProjectLoaded, listener);
   }
 
-  public newProject(): void {
+  public async newProject(): Promise<void> {
     // Create new manifest
-    this.store.dispatch(ProjectActions.newProject(ProjectFactory.newProjectMetadata()));
+    const manifest = ProjectFactory.newProjectManifest();
+    await this.loadManifest(manifest, undefined);
 
     // Reset main map layers
     this.geoService.getMainMap().setDefaultLayers();
 
-    this.eventTarget.dispatchEvent(new ProjectEvent(ProjectEventType.NewProject));
     logger.info('New project created');
   }
 
@@ -89,7 +90,7 @@ export class ProjectService {
         if (!blob) {
           return Promise.reject(new Error('Project not found'));
         }
-        return this.loadProject(blob, password);
+        return this.loadBlobProject(blob, password);
       })
       .catch((err) => {
         this.toasts.httpError(err);
@@ -107,7 +108,7 @@ export class ProjectService {
    * @param blob
    * @param password
    */
-  public async loadProject(blob: Blob, password?: string): Promise<void> {
+  public async loadBlobProject(blob: Blob, password?: string): Promise<void> {
     // Unzip project
     const unzipped = await Zipper.forFrontend().unzip(blob);
     const manifestFile = unzipped.find((f) => f.path.endsWith(ProjectConstants.ManifestName));
@@ -116,8 +117,11 @@ export class ProjectService {
     }
 
     // Parse manifest
-    let manifest: AbcProjectManifest = JSON.parse(await BlobIO.asString(manifestFile.content));
+    const manifest: AbcProjectManifest = JSON.parse(await BlobIO.asString(manifestFile.content));
+    return this.loadManifest(manifest, password);
+  }
 
+  public async loadManifest(manifest: AbcProjectManifest, password: string | undefined, files: AbcFile[] = []): Promise<void> {
     // Prompt password if necessary
     let _password = password;
     if (this.manifestContainsCredentials(manifest) && !_password) {
@@ -134,9 +138,16 @@ export class ProjectService {
       manifest = await Encryption.decryptManifest(manifest, _password);
     }
 
+    // Migrate project if necessary
+    const migrated = await this.updater.update(manifest, files);
+
     // Load project
-    this.store.dispatch(ProjectActions.loadProject(manifest));
-    await this.geoService.importLayers(manifest.layers);
+    this.store.dispatch(ProjectActions.loadProject(migrated.manifest));
+    await this.geoService.importLayers(migrated.manifest.layers);
+
+    // Set view
+    this.store.dispatch(ProjectActions.viewChanged(migrated.manifest.view));
+    this.geoService.getMainMap().setView(migrated.manifest.view);
 
     this.eventTarget.dispatchEvent(new ProjectEvent(ProjectEventType.ProjectLoaded));
     logger.info('Project loaded');
@@ -153,6 +164,7 @@ export class ProjectService {
       layers: await this.geoService.exportLayers(),
       layouts: this.store.getState().project.layouts,
       legend: this.store.getState().project.legend,
+      view: this.store.getState().project.view,
     };
 
     if (containsCredentials && password) {

@@ -18,7 +18,6 @@
 
 import { projectReducer } from './reducer';
 import { ProjectActions } from './actions';
-import { ProjectFactory } from '../../project/ProjectFactory';
 import { projectInitialState, ProjectState } from './state';
 import { TestHelper } from '../../utils/test/TestHelper';
 import { AbcLayout, AbcLegendItem, LegendDisplay } from '@abc-map/shared';
@@ -26,19 +25,23 @@ import { deepFreeze } from '../../utils/deepFreeze';
 import { nanoid } from 'nanoid';
 
 describe('Project reducer', function () {
-  it('NewProject', function () {
+  it('LoadProject', function () {
     // Prepare
     const initialState: ProjectState = deepFreeze({
       ...projectInitialState,
       layouts: [TestHelper.sampleLayout()],
     });
-    const action = ProjectActions.newProject(ProjectFactory.newProjectMetadata());
+
+    const project = TestHelper.sampleProjectManifest();
 
     // Act
-    const state = projectReducer(initialState, action);
+    const state = projectReducer(initialState, ProjectActions.loadProject(project));
 
     // Assert
-    expect(state.metadata.id).not.toEqual(initialState.metadata.id);
+    expect(state.metadata.id).toEqual(project.metadata.id);
+    expect(state.metadata.version).toEqual(project.metadata.version);
+    expect(state.metadata.projection).toEqual(project.metadata.projection);
+    expect(state.metadata.name).toEqual(project.metadata.name);
     expect(state.layouts).toEqual([]);
   });
 
@@ -144,26 +147,6 @@ describe('Project reducer', function () {
     const state = projectReducer(initialState, ProjectActions.clearLayouts());
 
     // Assert
-    expect(state.layouts).toEqual([]);
-  });
-
-  it('LoadProject', function () {
-    // Prepare
-    const initialState: ProjectState = deepFreeze({
-      ...projectInitialState,
-      layouts: [TestHelper.sampleLayout()],
-    });
-
-    const project = TestHelper.sampleProjectManifest();
-
-    // Act
-    const state = projectReducer(initialState, ProjectActions.loadProject(project));
-
-    // Assert
-    expect(state.metadata.id).toEqual(project.metadata.id);
-    expect(state.metadata.version).toEqual(project.metadata.version);
-    expect(state.metadata.projection).toEqual(project.metadata.projection);
-    expect(state.metadata.name).toEqual(project.metadata.name);
     expect(state.layouts).toEqual([]);
   });
 

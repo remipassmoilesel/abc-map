@@ -17,10 +17,15 @@
  */
 
 import { ProjectConstants } from './ProjectConstants';
+import semver from 'semver';
 
 describe('ProjectConstants', () => {
+  it('version should be valid', () => {
+    expect(semver.valid(ProjectConstants.CurrentVersion)).toBeTruthy();
+  });
+
   it('modifications require data migration', () => {
-    expect(ProjectConstants.CurrentVersion).toEqual('0.1');
+    expect(ProjectConstants.CurrentVersion).toEqual('0.2.0');
     expect(ProjectConstants.ManifestName).toEqual('project.json');
   });
 });

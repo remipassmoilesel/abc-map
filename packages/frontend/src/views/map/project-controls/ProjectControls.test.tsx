@@ -39,6 +39,7 @@ describe('ProjectControls', () => {
   describe('new project', () => {
     it('should create on confirmation', async () => {
       // Prepare
+      services.project.newProject.resolves();
       services.modals.modificationsLostConfirmation.resolves(ModalStatus.Confirmed);
       abcRender(<ProjectControls />, { services });
 
@@ -48,11 +49,13 @@ describe('ProjectControls', () => {
       // Assert
       await waitFor(() => {
         expect(services.project.newProject.callCount).toEqual(1);
+        expect(services.toasts.info.callCount).toEqual(1);
       });
     });
 
     it('should not create', async () => {
       // Prepare
+      services.project.newProject.resolves();
       services.modals.modificationsLostConfirmation.resolves(ModalStatus.Canceled);
       abcRender(<ProjectControls />, { services });
 
@@ -60,6 +63,7 @@ describe('ProjectControls', () => {
       userEvent.click(screen.getByTestId('new-project'));
 
       // Assert
+      await TestHelper.wait(10); // We must wait a little, otherwise test cannot fail
       await waitFor(() => {
         expect(services.project.newProject.callCount).toEqual(0);
       });

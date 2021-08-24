@@ -140,14 +140,17 @@ class TopBar extends Component<Props, {}> {
   private handleLogout = () => {
     const { project, authentication, toasts } = this.props.services;
 
-    project.newProject();
-    authentication
-      .logout()
+    project
+      .newProject()
+      .then(() => authentication.logout())
       .then(() => {
         toasts.info('Vous êtes déconnecté 👋');
         this.props.history.push(FrontendRoutes.landing().raw());
       })
-      .catch((err) => logger.error(err));
+      .catch((err) => {
+        toasts.genericError();
+        logger.error(err);
+      });
   };
 }
 

@@ -25,7 +25,7 @@ export class ProjectConstants {
   /**
    * Version of project, not used for the moment but will be useful for data migrations
    */
-  public static readonly CurrentVersion = '0.1';
+  public static readonly CurrentVersion = '0.2.0';
 
   /**
    * Name of main data file in project archive

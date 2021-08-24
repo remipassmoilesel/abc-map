@@ -24,6 +24,7 @@ import { MapTool } from '@abc-map/shared';
 import { MainState } from '../reducer';
 import { TestHelper } from '../../utils/test/TestHelper';
 import { DimensionsPx } from '../../utils/DimensionsPx';
+import { Views } from '../../geo/Views';
 
 describe('StorePersistence', () => {
   let storage: LocalStorageService;
@@ -47,6 +48,7 @@ describe('StorePersistence', () => {
           width: 300,
           height: 500,
         },
+        view: Views.random(),
       },
       map: {
         tool: MapTool.Point,
@@ -95,7 +97,7 @@ describe('StorePersistence', () => {
     const snapshot = stateSnapshot(sampleState);
 
     const expectedState: MainState = {
-      project: undefined as any,
+      project: undefined as any, // A new project is created on bootstrap
       map: {
         tool: MapTool.None,
         currentStyle: {

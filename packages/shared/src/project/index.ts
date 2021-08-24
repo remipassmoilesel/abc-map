@@ -22,6 +22,7 @@ export * from './layout';
 export * from './legend';
 export * from './style';
 export * from './AbcProjectManifest';
+export * from './AbcView';
 export * from './AbcProjection';
 export * from './CompressedProject';
 export * from './ProjectConstants';

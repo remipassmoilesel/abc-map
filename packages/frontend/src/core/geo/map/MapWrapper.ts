@@ -17,7 +17,7 @@
  */
 
 import { Map } from 'ol';
-import { LayerProperties, AbcProjection, VectorMetadata, PredefinedLayerModel } from '@abc-map/shared';
+import { LayerProperties, AbcProjection, VectorMetadata, PredefinedLayerModel, AbcView } from '@abc-map/shared';
 import _ from 'lodash';
 import { ResizeObserverFactory } from '../../utils/ResizeObserverFactory';
 import BaseEvent from 'ol/events/Event';
@@ -32,6 +32,7 @@ import VectorSource from 'ol/source/Vector';
 import Geometry from 'ol/geom/Geometry';
 import { defaultInteractions } from './interactions';
 import { MapSizeChanged, MapSizeChangedEvent, SizeListener } from './MapSizeChangedEvent';
+import { Views } from '../Views';
 
 export const logger = Logger.get('MapWrapper.ts', 'debug');
 
@@ -296,6 +297,14 @@ export class MapWrapper {
         return div.textContent || div.innerText || '';
       })
       .value();
+  }
+
+  public setView(view: AbcView) {
+    this.internal.setView(Views.abcToOl(view));
+  }
+
+  public getView(): AbcView {
+    return Views.olToAbc(this.internal.getView());
   }
 
   public addSizeListener(listener: SizeListener): void {
