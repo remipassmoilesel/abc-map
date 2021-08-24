@@ -64,7 +64,7 @@ export class E2eMapWrapper implements E2eMap {
 
   public setView(zoom: number, lon: number, lat: number): void {
     const view = new View({
-      center: fromLonLat([lon, lat]),
+      center: fromLonLat([lon, lat], DEFAULT_PROJECTION.name),
       zoom,
       projection: DEFAULT_PROJECTION.name,
     });

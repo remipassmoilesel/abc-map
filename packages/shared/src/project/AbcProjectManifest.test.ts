@@ -26,7 +26,7 @@ import { GeometryType } from './feature';
 describe('AbcProjectManifest', () => {
   it('should not change without migration', () => {
     /* eslint-disable */
-    const witness = '{"metadata":{"id":"test-project-id","version":"0.1","name":"Test project","projection":{"name":"EPSG:4326"},"containsCredentials":false},"layers":[],"layouts":[],"legend":{"display":"BottomRightCorner","width":300,"height":500,"items":[{"id":"test-id","text":"Test text","symbol":{"geomType":"Polygon","properties":{"stroke":{"width":1,"color":"#FFF"}}}}]}}';
+    const witness = '{"metadata":{"id":"test-project-id","version":"0.1","name":"Test project","projection":{"name":"EPSG:4326"},"containsCredentials":false},"layers":[],"layouts":[],"legend":{"display":"BottomRightCorner","width":300,"height":500,"items":[{"id":"test-id","text":"Test text","symbol":{"geomType":"Polygon","properties":{"stroke":{"width":1,"color":"#FFF"}}}}]},"view":{"center":[1,2],"resolution":1000,"projection":{"name":"EPSG:4326"}}}';
     /* eslint-enable */
 
     const current: AbcProjectManifest = {
@@ -60,6 +60,11 @@ describe('AbcProjectManifest', () => {
             },
           },
         ],
+      },
+      view: {
+        center: [1, 2],
+        resolution: 1000,
+        projection: { name: 'EPSG:4326' },
       },
     };
 

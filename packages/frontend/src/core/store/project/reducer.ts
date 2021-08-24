@@ -18,7 +18,6 @@
 
 import { ActionType, ProjectAction } from './actions';
 import { projectInitialState, ProjectState } from './state';
-import { ProjectFactory } from '../../project/ProjectFactory';
 
 // TODO: test immutability of state in all branches
 
@@ -33,11 +32,11 @@ export function projectReducer(state = projectInitialState, action: ProjectActio
   }
 
   switch (action.type) {
-    case ActionType.NewProject: {
+    case ActionType.LoadProject: {
       const newState: ProjectState = { ...state };
-      newState.metadata = action.metadata;
-      newState.layouts = [];
-      newState.legend = ProjectFactory.newLegend();
+      newState.metadata = action.project.metadata;
+      newState.layouts = action.project.layouts;
+      newState.legend = action.project.legend;
       return newState;
     }
 
@@ -85,14 +84,6 @@ export function projectReducer(state = projectInitialState, action: ProjectActio
       return newState;
     }
 
-    case ActionType.LoadProject: {
-      const newState: ProjectState = { ...state };
-      newState.metadata = action.project.metadata;
-      newState.layouts = action.project.layouts;
-      newState.legend = action.project.legend;
-      return newState;
-    }
-
     case ActionType.AddLegendItems: {
       const newState: ProjectState = { ...state, legend: { ...state.legend } };
       newState.legend.items = [...state.legend.items, ...action.items];
@@ -132,6 +123,16 @@ export function projectReducer(state = projectInitialState, action: ProjectActio
 
       const newState: ProjectState = { ...state, legend: { ...state.legend } };
       newState.legend.items = items;
+      return newState;
+    }
+
+    case ActionType.ViewChanged: {
+      const newState: ProjectState = { ...state };
+      newState.view = {
+        resolution: action.view.resolution,
+        center: action.view.center.slice(),
+        projection: { ...action.view.projection },
+      };
       return newState;
     }
 

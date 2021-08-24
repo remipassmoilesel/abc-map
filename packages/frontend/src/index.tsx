@@ -40,6 +40,7 @@ logger.info('Version: ', BUILD_INFO);
 
 authenticate(svc)
   .then(() => load())
+  .then(() => svc.project.newProject())
   .catch((err) => {
     logger.error(err);
     loadingError(err);

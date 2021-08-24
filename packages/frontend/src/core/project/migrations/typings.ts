@@ -16,24 +16,16 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcLayer } from './layer/AbcLayer';
-import { AbcLayout } from './layout/AbcLayout';
-import { AbcProjection } from './AbcProjection';
-import { AbcLegend } from './legend';
-import { AbcView } from './AbcView';
+import { AbcFile, AbcProjectManifest } from '@abc-map/shared';
 
-export interface AbcProjectManifest {
-  metadata: AbcProjectMetadata;
-  layers: AbcLayer[];
-  layouts: AbcLayout[];
-  legend: AbcLegend;
-  view: AbcView;
+export interface MigratedProject {
+  manifest: AbcProjectManifest;
+  files: AbcFile[];
 }
 
-export interface AbcProjectMetadata {
-  id: string;
-  version: string;
-  name: string;
-  projection: AbcProjection;
-  containsCredentials: boolean;
+export interface ProjectMigration {
+  interestedBy(manifest: AbcProjectManifest, files: AbcFile[]): Promise<boolean>;
+  migrate(manifest: AbcProjectManifest, files: AbcFile[]): Promise<MigratedProject>;
 }
+
+export declare type MigrationsFactory = () => ProjectMigration[];

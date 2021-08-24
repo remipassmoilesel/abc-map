@@ -21,16 +21,23 @@ import { DEFAULT_PROJECTION, ProjectConstants } from '@abc-map/shared';
 
 describe('ProjectFactory', () => {
   it('newProjectMetadata()', () => {
-    const a = ProjectFactory.newProjectMetadata();
-    expect(a.id).toBeDefined();
-    expect(a.name).toContain('Projet du');
-    expect(a.projection).toEqual(DEFAULT_PROJECTION);
-    expect(a.version).toBe(ProjectConstants.CurrentVersion);
+    const metadata = ProjectFactory.newProjectMetadata();
+    expect(metadata.id).toBeDefined();
+    expect(metadata.name).toContain('Projet du');
+    expect(metadata.projection).toEqual(DEFAULT_PROJECTION);
+    expect(metadata.version).toBe(ProjectConstants.CurrentVersion);
   });
 
-  it('newProject()', () => {
-    const a = ProjectFactory.newProject();
-    expect(a.layers).toHaveLength(0);
-    expect(a.layouts).toHaveLength(0);
+  it('newProjectManifest()', () => {
+    const manifest = ProjectFactory.newProjectManifest();
+    expect(manifest.layers).toHaveLength(0);
+    expect(manifest.layouts).toHaveLength(0);
+    expect(manifest.legend).toBeDefined();
+    expect(manifest.view).toBeDefined();
+  });
+
+  it('newLegend()', () => {
+    const legend = ProjectFactory.newLegend();
+    expect(legend).toEqual({ display: 'Hidden', height: 300, items: [], width: 400 });
   });
 });

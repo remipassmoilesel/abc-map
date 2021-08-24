@@ -19,6 +19,7 @@
 import { AbcLegend, AbcProjectManifest, AbcProjectMetadata, DEFAULT_PROJECTION, LegendDisplay, ProjectConstants } from '@abc-map/shared';
 import uuid from 'uuid-random';
 import { DateTime } from 'luxon';
+import { Views } from '../geo/Views';
 
 export class ProjectFactory {
   public static newProjectMetadata(): AbcProjectMetadata {
@@ -31,17 +32,13 @@ export class ProjectFactory {
     };
   }
 
-  public static newProject(): AbcProjectManifest {
+  public static newProjectManifest(): AbcProjectManifest {
     return {
       metadata: ProjectFactory.newProjectMetadata(),
       layers: [],
       layouts: [],
-      legend: {
-        display: LegendDisplay.Hidden,
-        items: [],
-        width: 300,
-        height: 500,
-      },
+      legend: this.newLegend(),
+      view: Views.random(),
     };
   }
 

@@ -19,6 +19,8 @@
 import { AbcLayout, AbcProjectMetadata } from '@abc-map/shared';
 import { ProjectFactory } from '../../project/ProjectFactory';
 import { AbcLegend } from '@abc-map/shared';
+import { AbcView } from '@abc-map/shared/build/project/AbcView';
+import { Views } from '../../geo/Views';
 
 export interface ProjectState {
   /**
@@ -35,10 +37,14 @@ export interface ProjectState {
    * Legend of current project
    */
   legend: AbcLegend;
+
+  view: AbcView;
 }
 
+// This state is not used, a new project is created on bootstrap
 export const projectInitialState: ProjectState = {
   metadata: ProjectFactory.newProjectMetadata(),
   layouts: [],
   legend: ProjectFactory.newLegend(),
+  view: Views.defaultView(),
 };

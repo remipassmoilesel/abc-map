@@ -100,6 +100,11 @@ export class TestHelper {
         width: 300,
         height: 500,
       },
+      view: {
+        center: [1, 2],
+        projection: DEFAULT_PROJECTION,
+        resolution: 1000,
+      },
     };
   }
 

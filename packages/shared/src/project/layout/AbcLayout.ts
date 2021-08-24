@@ -16,13 +16,13 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcProjection } from '../AbcProjection';
+import { AbcView } from '../AbcView';
 
 export interface AbcLayout {
   id: string;
   name: string;
   format: LayoutFormat;
-  view: AbcLayoutView;
+  view: AbcView;
 }
 
 export interface LayoutFormat {
@@ -89,10 +89,4 @@ export class LayoutFormats {
     LayoutFormats.A3_PORTRAIT,
     LayoutFormats.A3_LANDSCAPE,
   ];
-}
-
-export interface AbcLayoutView {
-  center: number[];
-  resolution: number;
-  projection: AbcProjection;
 }

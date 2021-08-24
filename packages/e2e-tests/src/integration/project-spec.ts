@@ -83,7 +83,7 @@ describe('Project', function () {
           const projectA = await helper.extractManifest(downloaded);
           const projectB = await helper.extractManifest(witness);
           expect(projectA.metadata.projection).deep.equals(projectB.metadata.projection);
-          expect(projectA.metadata.version).equals(projectB.metadata.version);
+          expect(projectA.metadata.version).equals('0.2.0');
           expect(projectA.layers).length(projectB.layers.length);
           expect(projectA.layers[0].type).equals(projectB.layers[0].type);
           expect(projectA.layers[1].type).equals(projectB.layers[1].type);

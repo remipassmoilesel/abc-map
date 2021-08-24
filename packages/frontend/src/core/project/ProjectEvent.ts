@@ -19,7 +19,6 @@
 /* eslint-disable @typescript-eslint/no-useless-constructor */
 
 export enum ProjectEventType {
-  NewProject = 'NewProject',
   ProjectLoaded = 'ProjectLoaded',
 }
 

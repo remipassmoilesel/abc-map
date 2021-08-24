@@ -16,16 +16,15 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcLayout, AbcLegendItem, AbcProjectManifest, AbcProjectMetadata, LegendDisplay } from '@abc-map/shared';
+import { AbcLayout, AbcLegendItem, AbcProjectManifest, AbcView, LegendDisplay } from '@abc-map/shared';
 
 export enum ActionType {
-  NewProject = 'NewProject',
+  LoadProject = 'LoadProject',
   RenameProject = 'RenameProject',
   AddLayouts = 'AddLayouts',
   UpdateLayout = 'UpdateLayout',
   SetLayoutIndex = 'SetLayoutIndex',
   ClearLayouts = 'ClearLayouts',
-  LoadProject = 'LoadProject',
   RemoveLayouts = 'RemoveLayouts',
   AddLegendItems = 'AddLegendItems',
   UpdateLegendItem = 'UpdateLegendItem',
@@ -33,11 +32,12 @@ export enum ActionType {
   SetLegendDisplay = 'SetLegendDisplay',
   SetLegendItemIndex = 'SetLegendItemIndex',
   DeleteLegendItem = 'DeleteLegendItem',
+  ViewChanged = 'ViewChanged',
 }
 
-export interface NewProject {
-  type: ActionType.NewProject;
-  metadata: AbcProjectMetadata;
+export interface LoadProject {
+  type: ActionType.LoadProject;
+  project: AbcProjectManifest;
 }
 
 export interface RenameProject {
@@ -68,11 +68,6 @@ export interface RemoveLayouts {
 
 export interface ClearLayouts {
   type: ActionType.ClearLayouts;
-}
-
-export interface LoadProject {
-  type: ActionType.LoadProject;
-  project: AbcProjectManifest;
 }
 
 export interface AddLegendItems {
@@ -107,27 +102,32 @@ export interface SetLegendItemIndex {
   index: number;
 }
 
+export interface ViewChanged {
+  type: ActionType.ViewChanged;
+  view: AbcView;
+}
+
 export type ProjectAction =
-  | NewProject
+  | LoadProject
   | RenameProject
   | AddLayouts
   | RemoveLayouts
   | UpdateLayout
   | SetLayoutIndex
   | ClearLayouts
-  | LoadProject
   | AddLegendItems
   | UpdateLegendItem
   | SetLegendSize
   | SetLegendDisplay
   | DeleteLegendItem
-  | SetLegendItemIndex;
+  | SetLegendItemIndex
+  | ViewChanged;
 
 export class ProjectActions {
-  public static newProject(metadata: AbcProjectMetadata): ProjectAction {
+  public static loadProject(project: AbcProjectManifest): ProjectAction {
     return {
-      type: ActionType.NewProject,
-      metadata,
+      type: ActionType.LoadProject,
+      project,
     };
   }
 
@@ -173,13 +173,6 @@ export class ProjectActions {
     };
   }
 
-  public static loadProject(project: AbcProjectManifest): ProjectAction {
-    return {
-      type: ActionType.LoadProject,
-      project,
-    };
-  }
-
   public static addItems(items: AbcLegendItem[]): ProjectAction {
     return {
       type: ActionType.AddLegendItems,
@@ -221,6 +214,13 @@ export class ProjectActions {
       type: ActionType.SetLegendItemIndex,
       item,
       index,
+    };
+  }
+
+  public static viewChanged(view: AbcView): ProjectAction {
+    return {
+      type: ActionType.ViewChanged,
+      view,
     };
   }
 }

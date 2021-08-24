@@ -30,6 +30,7 @@ import { VectorLayerWrapper } from './layers/LayerWrapper';
 import { SinonStubbedInstance } from 'sinon';
 import { ToastService } from '../ui/ToastService';
 import * as sinon from 'sinon';
+import { storeFactory } from '../store/store';
 
 geoLogger.disable();
 mapLogger.disable();
@@ -40,7 +41,7 @@ describe('GeoService', () => {
 
   beforeEach(() => {
     toasts = sinon.createStubInstance(ToastService);
-    service = new GeoService(httpExternalClient(5_000), toasts, HistoryService.create());
+    service = new GeoService(httpExternalClient(5_000), toasts, HistoryService.create(), storeFactory());
 
     service.getMainMap().unwrap().getLayers().clear();
   });

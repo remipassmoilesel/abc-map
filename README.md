@@ -74,4 +74,3 @@ See [CONTRIBUTING](./CONTRIBUTING.md) and [backlog](./documentation/5_backlog.md
 - [React](https://reactjs.org/)
 - [Openlayers](https://openlayers.org/)
 - [Bootstrap](https://getbootstrap.com)
-

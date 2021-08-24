@@ -21,7 +21,7 @@ import { Logger } from '@abc-map/shared';
 import { MapWrapper } from './map/MapWrapper';
 import { MapFactory } from './map/MapFactory';
 import { AbstractTool } from '../tools/AbstractTool';
-import { mainStore } from '../store/store';
+import { MainStore, mainStore } from '../store/store';
 import { MapActions } from '../store/map/actions';
 import { AxiosInstance } from 'axios';
 import { WMSCapabilities as WMSCapabilitiesParser } from 'ol/format';
@@ -34,13 +34,16 @@ import { NominatimResult } from './NominatimResult';
 import { FeatureWrapper } from './features/FeatureWrapper';
 import { ToastService } from '../ui/ToastService';
 import { LayerFactory } from './layers/LayerFactory';
+import { ProjectActions } from '../store/project/actions';
 
 export const logger = Logger.get('GeoService.ts');
 
 export class GeoService {
-  private mainMap = MapFactory.createDefaultWithRandomView();
+  private mainMap = MapFactory.createDefault();
 
-  constructor(private httpClient: AxiosInstance, private toasts: ToastService, private history: HistoryService) {}
+  constructor(private httpClient: AxiosInstance, private toasts: ToastService, private history: HistoryService, private store: MainStore) {
+    this.listenViewChanges();
+  }
 
   public getMainMap(): MapWrapper {
     return this.mainMap;
@@ -115,5 +118,12 @@ export class GeoService {
         this.toasts.httpError(err);
         return Promise.reject(err);
       });
+  }
+
+  private listenViewChanges() {
+    this.mainMap.unwrap().on('moveend', () => {
+      const view = this.mainMap.getView();
+      this.store.dispatch(ProjectActions.viewChanged(view));
+    });
   }
 }

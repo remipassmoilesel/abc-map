@@ -61,7 +61,7 @@ export function servicesFactory(store: MainStore): Services {
   const toasts = new ToastService();
   const modals = new ModalService();
   const history = HistoryService.create();
-  const geo = new GeoService(externalClient, toasts, history);
+  const geo = new GeoService(externalClient, toasts, history, store);
   const project = new ProjectService(jsonClient, downloadClient, store, toasts, geo, modals);
   const authentication = new AuthenticationService(jsonClient, store, toasts);
   const data = new DataService(jsonClient, downloadClient, toasts, geo, modals, history);
@@ -70,10 +70,7 @@ export function servicesFactory(store: MainStore): Services {
 
   // Here we can listen to project changes for global actions
   project.addEventListener((ev) => {
-    if (ProjectEventType.NewProject === ev.type) {
-      history.resetHistory();
-      StyleFactory.get().clearCache();
-    } else if (ProjectEventType.ProjectLoaded === ev.type) {
+    if (ProjectEventType.ProjectLoaded === ev.type) {
       history.resetHistory();
       StyleFactory.get().clearCache();
     } else {
