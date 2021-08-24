@@ -38,11 +38,11 @@ export class AttributionRenderer {
     const iconHeight = (softwareIcon.height / 8) * styleRatio;
 
     // Estimate size of attributions
-    const fontSize = 20 * styleRatio;
+    const fontSize = 15 * styleRatio;
     ctx.fillStyle = 'black';
     ctx.font = `${fontSize}px AbcCantarell`;
 
-    const margin = 12 * styleRatio;
+    const margin = 10 * styleRatio;
     let width = 0;
     let height = 0;
     for (const attr of attributions) {
@@ -61,7 +61,7 @@ export class AttributionRenderer {
     canvas.height = height;
     ctx.globalAlpha = 0.6;
 
-    CanvasHelper.roundedRectangle(ctx, 0, 0, canvas.width, canvas.height, 7, undefined, 'white');
+    CanvasHelper.roundedRectangle(ctx, 0, 0, canvas.width, canvas.height, 7 * styleRatio, undefined, 'white');
 
     // Draw data attributions
     const x = margin;

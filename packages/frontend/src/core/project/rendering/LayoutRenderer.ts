@@ -26,7 +26,7 @@ import { jsPDF } from 'jspdf';
 import { LegendRenderer } from './LegendRenderer';
 import { AttributionRenderer } from './AttributionRenderer';
 
-export const logger = Logger.get('LayoutRenderer');
+export const logger = Logger.get('LayoutRenderer', 'info');
 
 export class LayoutRenderer {
   private support?: HTMLDivElement;
@@ -96,6 +96,7 @@ export class LayoutRenderer {
     renderingMap.unwrap().setSize([dimension.width, dimension.height]);
 
     const styleRatio = LayoutHelper.styleRatio(dimension.width, dimension.height);
+    logger.info(`Rendering style ratio: ${styleRatio}`);
 
     // Copy layers from sourceMap to exportMap
     renderingMap.unwrap().getLayers().clear();
