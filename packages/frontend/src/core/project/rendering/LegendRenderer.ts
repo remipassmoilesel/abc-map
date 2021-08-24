@@ -39,10 +39,13 @@ export class LegendRenderer {
   constructor(private styleFactory = StyleFactory.get(), private olContext = toContext) {}
 
   public symbolSizeForStyle(style: Style, geom: GeometryType, styleRatio: number): DimensionsPx {
+    // Points have variable sizes
     if (GeometryType.POINT === geom) {
       const size = style.getImage().getImageSize();
       return { width: size[0] + 5, height: size[1] + 5 };
-    } else {
+    }
+    // Polygon and others not
+    else {
       return { width: DefaultSymbolSize.width * styleRatio, height: DefaultSymbolSize.height * styleRatio };
     }
   }
@@ -141,14 +144,23 @@ export class LegendRenderer {
     // We clean draw area
     const borderWidth = this.borderWidth * styleRatio;
     ctx.lineWidth = borderWidth;
-    CanvasHelper.roundedRectangle(ctx, borderWidth / 2, borderWidth / 2, canvas.width - borderWidth, canvas.height - borderWidth, 7, '#0077b6', 'white');
+    CanvasHelper.roundedRectangle(
+      ctx,
+      borderWidth / 2,
+      borderWidth / 2,
+      canvas.width - borderWidth,
+      canvas.height - borderWidth,
+      7 * styleRatio,
+      '#0077b6',
+      'white'
+    );
 
     // We iterate items
-    const fontSize = 20 * styleRatio;
-    const lineMargin = fontSize * 0.9;
+    const fontSize = 15 * styleRatio;
+    const lineMargin = 10 * styleRatio;
     const symbolMargin = fontSize * 0.5;
     const x = fontSize * 0.5;
-    let y = fontSize * 0.5 + fontSize;
+    let y = lineMargin;
     for (const item of legend.items) {
       let symbolSize: DimensionsPx = { width: 0, height: 0 };
 

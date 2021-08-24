@@ -42,13 +42,13 @@ export class LayoutHelper {
    * @param mapHeight
    */
   public static styleRatio(mapWidth: number, mapHeight: number): number {
-    const mainMap = mainStore.getState().map.mainMapDimensions;
-    if (!mainMap) {
+    const { width, height } = mainStore.getState().map.mainMapDimensions;
+    if (!width || !height) {
       throw new Error('Main map dimensions not set');
     }
 
     const targetDiag = Math.sqrt(mapWidth ** 2 + mapHeight ** 2);
-    const mainMapDiag = Math.sqrt(mainMap.width ** 2 + mainMap.height ** 2);
+    const mainMapDiag = Math.sqrt(width ** 2 + height ** 2);
 
     return toPrecision(targetDiag / mainMapDiag, 2);
   }
