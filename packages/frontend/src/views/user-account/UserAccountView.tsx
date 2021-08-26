@@ -19,15 +19,15 @@
 import React, { Component, ReactNode } from 'react';
 import { FrontendRoutes, Logger, UserStatus } from '@abc-map/shared';
 import { ServiceProps, withServices } from '../../core/withServices';
-import Cls from './UserAccountView.module.scss';
 import { MainState } from '../../core/store/reducer';
 import { connect, ConnectedProps } from 'react-redux';
 import ChangePasswordForm from './ChangePasswordForm';
 import DeleteAccountForm from './DeleteAccountForm';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { pageSetup } from '../../core/utils/page-setup';
+import Cls from './UserAccountView.module.scss';
 
-const logger = Logger.get('UserAccountView.tsx', 'info');
+const logger = Logger.get('UserAccountView.tsx');
 
 const mapStateToProps = (state: MainState) => ({
   user: state.authentication.user,

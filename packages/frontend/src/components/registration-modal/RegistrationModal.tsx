@@ -25,7 +25,7 @@ import { PasswordStrength, ValidationHelper } from '../../core/utils/ValidationH
 import FormValidationLabel from '../form-validation-label/FormValidationLabel';
 import { FormState } from '../form-validation-label/FormState';
 
-const logger = Logger.get('RegistrationModal.tsx', 'info');
+const logger = Logger.get('RegistrationModal.tsx');
 
 interface State {
   visible: boolean;

@@ -29,7 +29,7 @@ import TopBarLink from './TopBarLink';
 import MainIcon from '../../assets/main-icon.svg';
 import Cls from './TopBar.module.scss';
 
-const logger = Logger.get('TopBar.tsx', 'info');
+const logger = Logger.get('TopBar.tsx');
 
 const mapStateToProps = (state: MainState) => ({
   userStatus: state.authentication.userStatus,

@@ -34,7 +34,7 @@ import { asNumberOrString, isValidNumber, toPrecision } from '../../core/utils/n
 import { ProcessingResult, Status } from './ProcessingResult';
 import { prettyStringify } from '../../core/utils/strings';
 
-export const logger = Logger.get('ColorGradients.tsx', 'info');
+export const logger = Logger.get('ColorGradients.tsx');
 
 export class ColorGradients extends Module {
   private params = newParameters();

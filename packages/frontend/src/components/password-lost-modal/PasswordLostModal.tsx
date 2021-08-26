@@ -24,7 +24,7 @@ import { ModalEventType, ModalStatus } from '../../core/ui/typings';
 import { ValidationHelper } from '../../core/utils/ValidationHelper';
 import FormValidationLabel from '../form-validation-label/FormValidationLabel';
 
-const logger = Logger.get('PasswordLostModal.tsx', 'info');
+const logger = Logger.get('PasswordLostModal.tsx');
 
 interface State {
   visible: boolean;

@@ -23,7 +23,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { MainState } from '../../core/store/reducer';
 import { ServiceProps, withServices } from '../../core/withServices';
 
-const logger = Logger.get('HistoryControls.tsx', 'info');
+const logger = Logger.get('HistoryControls.tsx');
 
 interface LocalProps {
   historyKey: HistoryKey;

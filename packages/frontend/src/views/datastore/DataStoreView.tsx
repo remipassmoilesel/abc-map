@@ -28,7 +28,7 @@ import { pageSetup } from '../../core/utils/page-setup';
 import { ImportStatus } from '../../core/data/DataService';
 import { delayedPromise } from '../../core/utils/delayedPromise';
 
-const logger = Logger.get('DataStoreView.tsx', 'info');
+const logger = Logger.get('DataStoreView.tsx');
 
 const PageSize = 6;
 

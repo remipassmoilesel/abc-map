@@ -20,7 +20,6 @@ import { Config } from '../config/Config';
 import { MongodbClient } from '../mongodb/MongodbClient';
 import { ArtefactDocument } from './ArtefactDocument';
 import { MongodbCollection } from '../mongodb/MongodbCollection';
-import { FilterQuery } from 'mongodb';
 
 export class ArtefactDao {
   constructor(private config: Config, private client: MongodbClient) {}
@@ -78,7 +77,7 @@ export class ArtefactDao {
     // First we try a text search
     const results = await coll
       .find({ $text: { $search: cleanQuery } })
-      .project({ score: { $meta: 'textScore' } })
+      .project<ArtefactDocument>({ score: { $meta: 'textScore' } })
       .limit(limit)
       .skip(offset)
       .sort({ score: { $meta: 'textScore' } })
@@ -91,7 +90,7 @@ export class ArtefactDao {
     // If nothing were found, we list document name beginning with needle
     else {
       const regexp = new RegExp(`^${cleanQuery}`, 'i');
-      const query: FilterQuery<ArtefactDocument> = {
+      const query = {
         $or: [{ name: { $regex: regexp } }, { description: { $regex: regexp } }],
       };
 

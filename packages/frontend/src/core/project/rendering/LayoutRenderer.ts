@@ -26,7 +26,7 @@ import { jsPDF } from 'jspdf';
 import { LegendRenderer } from './LegendRenderer';
 import { AttributionRenderer } from './AttributionRenderer';
 
-export const logger = Logger.get('LayoutRenderer', 'info');
+export const logger = Logger.get('LayoutRenderer');
 
 export class LayoutRenderer {
   private support?: HTMLDivElement;

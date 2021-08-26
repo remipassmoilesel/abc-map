@@ -17,7 +17,6 @@
  */
 
 import React, { Component, ReactNode } from 'react';
-import { Logger } from '@abc-map/shared';
 import { FillPatterns } from '@abc-map/shared';
 import { LabeledFillPatterns } from './LabeledFillPatterns';
 import { FillPatternFactory } from '../../../../../core/geo/styles/FillPatternFactory';
@@ -28,8 +27,6 @@ import { ServiceProps, withServices } from '../../../../../core/withServices';
 import { Modal } from 'react-bootstrap';
 import FillPatternButton from './FillPatternButton';
 import OptionRow from '../option-row/OptionRow';
-
-const logger = Logger.get('FillPatternSelector.tsx', 'info');
 
 const mapStateToProps = (state: MainState) => ({
   fill: state.map.currentStyle.fill,

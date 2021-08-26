@@ -26,7 +26,7 @@ import FormValidationLabel from '../form-validation-label/FormValidationLabel';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { FormState } from '../form-validation-label/FormState';
 
-const logger = Logger.get('LoginModal.tsx', 'info');
+const logger = Logger.get('LoginModal.tsx');
 
 declare type Props = ServiceProps & RouteComponentProps<any>;
 

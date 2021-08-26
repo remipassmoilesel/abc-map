@@ -17,11 +17,8 @@
  */
 
 import React, { Component, ReactNode } from 'react';
-import { Logger } from '@abc-map/shared';
 import { BaseMetadata } from '@abc-map/shared';
 import Cls from './LayerListItem.module.scss';
-
-const logger = Logger.get('LayerListItem.tsx', 'info');
 
 interface Props {
   metadata: BaseMetadata;

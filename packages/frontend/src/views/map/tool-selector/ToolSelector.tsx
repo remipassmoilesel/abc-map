@@ -17,7 +17,6 @@
  */
 
 import React, { Component, ReactNode } from 'react';
-import { Logger } from '@abc-map/shared';
 import { connect, ConnectedProps } from 'react-redux';
 import { ToolRegistry } from '../../../core/tools/ToolRegistry';
 import { MapTool } from '@abc-map/shared';
@@ -34,8 +33,6 @@ import { AddLayersTask } from '../../../core/history/tasks/layers/AddLayersTask'
 import { ServiceProps, withServices } from '../../../core/withServices';
 import Cls from './ToolSelector.module.scss';
 import EditPropertiesToolPanel from './edit-properties/EditPropertiesToolPanel';
-
-const logger = Logger.get('ToolSelector.tsx', 'info');
 
 interface LocalProps {
   activeLayer?: LayerWrapper;

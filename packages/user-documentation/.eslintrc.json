@@ -6,7 +6,6 @@
     "prettier"
   ],
   "plugins": [
-    "no-only-tests",
     "@typescript-eslint",
     "prettier"
   ],
@@ -16,7 +15,6 @@
     "es6": true
   },
   "rules": {
-    "no-only-tests/no-only-tests": "error",
     "no-console": 1,
     "prettier/prettier": [
       "error",

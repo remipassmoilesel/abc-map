@@ -22,7 +22,7 @@ import CodeEditor from './CodeEditor';
 import Cls from './ScriptsUI.module.scss';
 import { ScriptError } from '../typings';
 
-const logger = Logger.get('ScriptsUI.tsx', 'info');
+const logger = Logger.get('ScriptsUI.tsx');
 
 interface Props {
   initialValue: string;

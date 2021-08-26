@@ -23,10 +23,6 @@ import 'prismjs/components/prism-javascript';
 import 'prismjs/themes/prism.css';
 import Cls from './CodeEditor.module.scss';
 
-import { Logger } from '@abc-map/shared';
-
-const logger = Logger.get('CodeEditor.tsx', 'info');
-
 interface Props {
   initialContent: string;
   onChange: (content: string) => void;

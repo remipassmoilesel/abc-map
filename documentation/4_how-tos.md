@@ -10,6 +10,12 @@ Check [setup-workstation.md](./1_setup-workstation.md) first, then:
     $ ./abc-cli start       # Start application
 
 
+## Add a dependency 
+
+1. Edit target `package.json`, add your dependency
+1. Run `$ abc install`
+
+
 ## Fix my broken repo
 
     $ git checkout master

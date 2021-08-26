@@ -20,11 +20,11 @@ import React, { Component, ReactNode } from 'react';
 import { ConfirmAccountParams, ConfirmationStatus, FrontendRoutes, Logger } from '@abc-map/shared';
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
 import { ServiceProps, withServices } from '../../core/withServices';
-import Cls from './ConfirmAccountView.module.scss';
 import { HttpError } from '../../core/http/HttpError';
 import { pageSetup } from '../../core/utils/page-setup';
+import Cls from './ConfirmAccountView.module.scss';
 
-const logger = Logger.get('ConfirmAccount.tsx', 'info');
+const logger = Logger.get('ConfirmAccount.tsx');
 
 interface State {
   status: ConfirmationStatus;

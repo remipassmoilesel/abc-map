@@ -50,7 +50,7 @@ import { ProjectEvent, ProjectEventType } from './ProjectEvent';
 import { Errors } from '../utils/Errors';
 import { ProjectUpdater } from './migrations/ProjectUpdater';
 
-export const logger = Logger.get('ProjectService.ts', 'info');
+export const logger = Logger.get('ProjectService.ts');
 
 export class ProjectService {
   private eventTarget = document.createDocumentFragment();

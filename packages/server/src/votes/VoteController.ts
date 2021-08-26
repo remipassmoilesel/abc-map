@@ -46,8 +46,12 @@ export class VoteController extends Controller {
   };
 
   private vote = async (req: FastifyRequest<{ Body: AbcVote }>, reply: FastifyReply): Promise<void> => {
-    await this.services.vote.save(req.body, DateTime.now());
+    const { vote, metrics } = this.services;
+
+    await vote.save(req.body, DateTime.now());
     void reply.status(200).send();
+
+    metrics.vote();
   };
 
   private stats = async (req: FastifyRequest<{ Params: StatParams }>, reply: FastifyReply): Promise<void> => {

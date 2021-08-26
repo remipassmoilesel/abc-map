@@ -17,12 +17,9 @@
  */
 
 import React, { Component, ReactNode } from 'react';
-import { Logger } from '@abc-map/shared';
 import { Modal } from 'react-bootstrap';
 import { AllTips } from '@abc-map/user-documentation';
 import Cls from './TipBubble.module.scss';
-
-const logger = Logger.get('TipBubble.tsx', 'info');
 
 interface Props {
   id: string;

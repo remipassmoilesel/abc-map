@@ -17,12 +17,9 @@
  */
 
 import React, { Component, ReactNode } from 'react';
-import { Logger } from '@abc-map/shared';
 import { ColorResult, SketchPicker } from 'react-color';
 import { Modal } from 'react-bootstrap';
 import Cls from './ColorPicker.module.scss';
-
-const logger = Logger.get('ColorPicker.tsx', 'info');
 
 interface Props {
   initialValue?: string;

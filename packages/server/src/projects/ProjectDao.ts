@@ -22,8 +22,8 @@ import { MongodbCollection } from '../mongodb/MongodbCollection';
 import { MongodbBucket } from '../mongodb/MongodbBucket';
 import { Collection, GridFSBucket } from 'mongodb';
 import ReadableStream = NodeJS.ReadableStream;
+import WritableStream = NodeJS.WritableStream;
 import { Readable } from 'stream';
-import { GridFsFile } from '../mongodb/GridFsFile';
 
 export class ProjectDao {
   constructor(private client: MongodbClient) {}
@@ -47,11 +47,12 @@ export class ProjectDao {
       upload.on('error', (err) => reject(err));
     });
 
+    // Stream typings are borked
     if (file instanceof Buffer) {
       const fileStream = Readable.from(file);
-      fileStream.pipe(upload);
+      fileStream.pipe(upload as unknown as WritableStream);
     } else {
-      file.pipe(upload);
+      file.pipe(upload as unknown as WritableStream);
     }
 
     return res;
@@ -84,7 +85,7 @@ export class ProjectDao {
 
   public async deleteProjectsByIds(projectIds: string[]): Promise<void> {
     const bucket = await this.bucket();
-    const files: GridFsFile[] = await bucket.find({ filename: { $in: projectIds } }).toArray();
+    const files = await bucket.find({ filename: { $in: projectIds } }).toArray();
     await Promise.all(files.map((f) => bucket.delete(f._id)));
   }
 
