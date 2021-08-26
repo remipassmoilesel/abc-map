@@ -44,23 +44,23 @@ export class Logger {
     this.logger.setLevel('silent');
   }
 
-  public debug(message: string, data?: any): void {
+  public debug(message: string | Error, data?: any): void {
     this.logger.debug(this.normalizeMessage(message), data || '');
   }
 
-  public info(message: string, data?: any): void {
+  public info(message: string | Error, data?: any): void {
     this.logger.info(this.normalizeMessage(message), data || '');
   }
 
-  public warn(message: string, data?: any): void {
+  public warn(message: string | Error, data?: any): void {
     this.logger.warn(this.normalizeMessage(message), data || '');
   }
 
-  public error(message: string, data?: any): void {
+  public error(message: string | Error, data?: any): void {
     this.logger.error(this.normalizeMessage(message), data || '');
   }
 
-  private normalizeMessage(message: string): string {
+  private normalizeMessage(message: string | Error): string {
     return `[${new Date().toISOString()}][${this.name}] ${message}`;
   }
 }

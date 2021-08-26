@@ -32,6 +32,12 @@ export const CounterNames = {
   RequestQuotaExceeded: `${Prefix}_request_quota_exceeded`,
   DatastoreList: `${Prefix}_datastore_display`,
   DatastoreSearch: `${Prefix}_datastore_search`,
+  ResetPasswordEmail: `${Prefix}_reset_password_email`,
+  ResetPassword: `${Prefix}_reset_password`,
+  ProjectSaved: `${Prefix}_project_saved`,
+  ProjectList: `${Prefix}_project_list`,
+  ProjectFetch: `${Prefix}_project_fetch`,
+  Vote: `${Prefix}_vote`,
 };
 
 export const Counters: { [k: string]: CounterConfiguration<string> } = {
@@ -74,6 +80,30 @@ export const Counters: { [k: string]: CounterConfiguration<string> } = {
   [CounterNames.DatastoreSearch]: {
     name: CounterNames.DatastoreSearch,
     help: 'Number of data store search',
+  },
+  [CounterNames.ResetPasswordEmail]: {
+    name: CounterNames.ResetPasswordEmail,
+    help: 'Number of password reset requests',
+  },
+  [CounterNames.ResetPassword]: {
+    name: CounterNames.ResetPassword,
+    help: 'Number of effective password reset',
+  },
+  [CounterNames.ProjectSaved]: {
+    name: CounterNames.ProjectSaved,
+    help: 'Number of project save requests',
+  },
+  [CounterNames.ProjectList]: {
+    name: CounterNames.ProjectList,
+    help: 'Number of project list requests',
+  },
+  [CounterNames.ProjectFetch]: {
+    name: CounterNames.ProjectFetch,
+    help: 'Number project read requests',
+  },
+  [CounterNames.Vote]: {
+    name: CounterNames.Vote,
+    help: 'Number of vote requests',
   },
 };
 

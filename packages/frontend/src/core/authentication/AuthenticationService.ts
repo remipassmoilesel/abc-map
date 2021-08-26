@@ -43,7 +43,7 @@ import { ToastService } from '../ui/ToastService';
 import { TokenHelper } from './TokenHelper';
 import { HttpError } from '../http/HttpError';
 
-const logger = Logger.get('AuthenticationService.ts', 'info');
+const logger = Logger.get('AuthenticationService.ts');
 
 export class AuthenticationService {
   private tokenInterval: any;

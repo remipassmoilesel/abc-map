@@ -17,12 +17,9 @@
  */
 
 import React, { ChangeEvent, Component, ReactNode } from 'react';
-import { Logger } from '@abc-map/shared';
 import FormValidationLabel from '../../components/form-validation-label/FormValidationLabel';
 import { PasswordStrength, ValidationHelper } from '../../core/utils/ValidationHelper';
 import { FormState } from '../../components/form-validation-label/FormState';
-
-const logger = Logger.get('DeleteAccountForm.tsx', 'info');
 
 interface Props {
   onSubmit: (password: string) => void;

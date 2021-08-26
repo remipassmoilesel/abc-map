@@ -15,8 +15,7 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
-
-import { ObjectId } from 'bson';
+import { ObjectId } from 'mongodb';
 
 export interface GridFsFile {
   _id: ObjectId;

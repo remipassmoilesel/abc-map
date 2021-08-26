@@ -44,7 +44,7 @@ import { pageSetup } from '../../core/utils/page-setup';
 import { MapActions } from '../../core/store/map/actions';
 import { MapSizeChangedEvent } from '../../core/geo/map/MapSizeChangedEvent';
 
-const logger = Logger.get('MapView.tsx', 'debug');
+const logger = Logger.get('MapView.tsx');
 
 interface State {
   layers: LayerWrapper[];

@@ -17,11 +17,8 @@
  */
 
 import React, { Component, ReactNode } from 'react';
-import { Logger } from '@abc-map/shared';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import Cls from './TopBarLink.module.scss';
-
-const logger = Logger.get('TopBarSection.tsx', 'info');
 
 export interface LocalProps {
   to: string;

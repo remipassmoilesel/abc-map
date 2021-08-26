@@ -26,8 +26,8 @@ import fastifyMultipart, { MultipartValue } from 'fastify-multipart';
 import { ByIdParams, ByIdSchema, ListSchema } from './ProjectController.schemas';
 import { Validation } from '../utils/Validation';
 import { PaginatedQuery, PaginationHelper } from '../server/PaginationHelper';
-import 'fastify-sensible';
 import { Config } from '../config/Config';
+import 'fastify-sensible';
 
 export class ProjectController extends Controller {
   private authz: AuthorizationService;
@@ -59,6 +59,8 @@ export class ProjectController extends Controller {
   };
 
   private save = async (req: FastifyRequest, reply: FastifyReply): Promise<void> => {
+    const { project: projectService, metrics } = this.services;
+
     const user = Authentication.from(req);
     if (!user) {
       reply.forbidden();
@@ -84,7 +86,7 @@ export class ProjectController extends Controller {
       return;
     }
 
-    const projectNumbers = await this.services.project.countByUserId(user.id);
+    const projectNumbers = await projectService.countByUserId(user.id);
     const projectsLeft = this.config.project.maxPerUser - projectNumbers;
     if (projectsLeft < 1) {
       const response: ProjectSaveResponse = { status: ProjectSaveStatus.LimitReached, projectsLeft };
@@ -93,13 +95,16 @@ export class ProjectController extends Controller {
     }
 
     const project: CompressedProject<NodeBinary> = { metadata, project: data.file };
-    await this.services.project.save(user.id, project);
+    await projectService.save(user.id, project);
 
     const response: ProjectSaveResponse = { status: ProjectSaveStatus.Saved, projectsLeft };
     void reply.status(200).send(response);
+
+    metrics.projectSaved();
   };
 
   private list = async (req: FastifyRequest<{ Querystring: PaginatedQuery }>, reply: FastifyReply): Promise<void> => {
+    const { project, metrics } = this.services;
     const { limit, offset } = PaginationHelper.fromQuery(req);
 
     if (!(await this.authz.canListProjects(req))) {
@@ -108,24 +113,30 @@ export class ProjectController extends Controller {
     }
 
     const user = Authentication.from(req) as AbcUser;
-    const result = await this.services.project.list(user.id, offset, limit);
+    const result = await project.list(user.id, offset, limit);
     void reply.status(200).send(result);
+
+    metrics.projectList();
   };
 
   private findById = async (req: FastifyRequest<{ Params: ByIdParams }>, reply: FastifyReply): Promise<void> => {
+    const { project, metrics } = this.services;
+
     const projectId = req.params.projectId;
     if (!(await this.authz.canReadProject(req, projectId))) {
       reply.forbidden();
       return;
     }
 
-    const result = await this.services.project.findById(projectId);
+    const result = await project.findById(projectId);
     if (!result) {
       reply.notFound();
       return;
     }
 
     void reply.status(200).send(result.project);
+
+    metrics.projectFetch();
   };
 
   private deleteById = async (req: FastifyRequest<{ Params: ByIdParams }>, reply: FastifyReply): Promise<void> => {

@@ -23,7 +23,7 @@ import { ServiceProps, withServices } from '../../../core/withServices';
 import { Modal } from 'react-bootstrap';
 import Cls from './ArtefactCard.module.scss';
 
-const logger = Logger.get('ArtefactCard.tsx', 'info');
+const logger = Logger.get('ArtefactCard.tsx');
 
 interface LocalProps {
   artefact: AbcArtefact;

@@ -21,10 +21,10 @@ import { FrontendRoutes, Logger, PasswordLostParams } from '@abc-map/shared';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { ServiceProps, withServices } from '../../core/withServices';
 import FormValidationLabel from '../../components/form-validation-label/FormValidationLabel';
-import Cls from './ResetPasswordView.module.scss';
 import { pageSetup } from '../../core/utils/page-setup';
 import { PasswordStrength, ValidationHelper } from '../../core/utils/ValidationHelper';
 import { FormState } from '../../components/form-validation-label/FormState';
+import Cls from './ResetPasswordView.module.scss';
 
 const logger = Logger.get('ResetPasswordView.tsx', 'info');
 

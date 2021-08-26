@@ -34,7 +34,7 @@ import { defaultInteractions } from './interactions';
 import { MapSizeChanged, MapSizeChangedEvent, SizeListener } from './MapSizeChangedEvent';
 import { Views } from '../Views';
 
-export const logger = Logger.get('MapWrapper.ts', 'debug');
+export const logger = Logger.get('MapWrapper.ts');
 
 export declare type LayerChangeHandler = (ev: BaseEvent) => void;
 

@@ -24,7 +24,7 @@ import { ImportStatus } from '../../../core/data/DataService';
 import Cls from './MainMap.module.scss';
 import { OperationStatus } from '../../../core/ui/typings';
 
-export const logger = Logger.get('MainMap.ts', 'debug');
+export const logger = Logger.get('MainMap.ts');
 
 interface LocalProps {
   map: MapWrapper;

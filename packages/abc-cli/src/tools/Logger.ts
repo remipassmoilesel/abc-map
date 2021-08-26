@@ -28,7 +28,7 @@ export class Logger {
   public static get(name: string, level: LogSeverity = 'warn'): Logger {
     const internalLogger = logLevel.getLogger(name);
     internalLogger.setLevel(level);
-    return new Logger(name, internalLogger);
+    return new Logger(internalLogger);
   }
 
   public static setGlobalLevel(level: LogSeverity): void {
@@ -36,25 +36,25 @@ export class Logger {
     logLevel.setDefaultLevel(level);
   }
 
-  private constructor(private name: string, private logger: LogLevelLogger) {}
+  private constructor(private logger: LogLevelLogger) {}
 
   public disable(): void {
     this.logger.setLevel('silent');
   }
 
-  public debug(message: string, data?: any): void {
+  public debug(message: string | Error, data?: any): void {
     this.logger.debug(message, data || '');
   }
 
-  public info(message: string, data?: any): void {
+  public info(message: string | Error, data?: any): void {
     this.logger.info(message, data || '');
   }
 
-  public warn(message: string, data?: any): void {
+  public warn(message: string | Error, data?: any): void {
     this.logger.warn(message, data || '');
   }
 
-  public error(message: string, data?: any): void {
+  public error(message: string | Error, data?: any): void {
     this.logger.error(message, data || '');
   }
 }

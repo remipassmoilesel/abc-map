@@ -204,16 +204,17 @@ export class AuthenticationController extends Controller {
   };
 
   private passwordResetEmail = async (req: FastifyRequest<{ Body: PasswordLostRequest }>, reply: FastifyReply): Promise<void> => {
-    const { authentication } = this.services;
+    const { authentication, metrics } = this.services;
 
     // We must not wait here, in order to not give clues on existence of address
     authentication.passwordLost(req.body.email).catch((err) => logger.error('Cannot send verification email', err));
-
     void reply.status(200).send();
+
+    metrics.resetPasswordEmail();
   };
 
   private resetPassword = async (req: FastifyRequest<{ Body: ResetPasswordRequest }>, reply: FastifyReply): Promise<void> => {
-    const { authentication } = this.services;
+    const { authentication, metrics } = this.services;
 
     const tokenContent = await authentication.verifyResetPasswordToken(req.body.token);
     if (!tokenContent) {
@@ -224,6 +225,8 @@ export class AuthenticationController extends Controller {
     // Here we MUST fetch email from token
     await authentication.updatePassword(tokenContent.email, req.body.password);
     void reply.status(200).send();
+
+    metrics.resetPassword();
   };
 
   private deleteAccount = async (req: FastifyRequest<{ Body: DeleteAccountRequest }>, reply: FastifyReply): Promise<void> => {

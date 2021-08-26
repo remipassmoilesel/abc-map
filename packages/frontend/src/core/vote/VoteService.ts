@@ -16,14 +16,11 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Logger } from '@abc-map/shared';
 import { AxiosInstance } from 'axios';
 import { VoteRoutes as Api } from '../http/ApiRoutes';
 import { AbcVote, AbcVoteAggregation, VoteValue } from '@abc-map/shared';
 import { DateTime } from 'luxon';
 import { ToastService } from '../ui/ToastService';
-
-export const logger = Logger.get('ProjectService.ts', 'info');
 
 export class VoteService {
   constructor(private httpClient: AxiosInstance, private toasts: ToastService) {}

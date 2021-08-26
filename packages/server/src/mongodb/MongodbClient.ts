@@ -39,12 +39,11 @@ export class MongodbClient {
 
   constructor(private config: Config) {
     const options: MongoClientOptions = {
-      useUnifiedTopology: true,
       connectTimeoutMS: 5_000,
       socketTimeoutMS: 5_000,
       serverSelectionTimeoutMS: 5_000,
       auth: {
-        user: config.database.username,
+        username: config.database.username,
         password: config.database.password,
       },
     };
@@ -52,23 +51,12 @@ export class MongodbClient {
   }
 
   public async connect(): Promise<void> {
-    if (this.client.isConnected()) {
-      // Warning: call connect on already connected client cause undefined behaviors
-      return Promise.reject(new Error('Mongodb client already connected'));
-    }
-
     await this.client.connect();
     this.dbRef = this.client.db(this.databaseName());
   }
 
-  public isConnected(): boolean {
-    return this.client.isConnected();
-  }
-
   public async disconnect(): Promise<void> {
-    if (this.client.isConnected()) {
-      return this.client.close();
-    }
+    return this.client.close();
   }
 
   public async db(): Promise<Db> {

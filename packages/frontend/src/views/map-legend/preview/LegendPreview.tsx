@@ -40,8 +40,10 @@ class LegendPreview extends Component<Props, {}> {
 
     return (
       <ResizableBox width={width} height={height} onResize={this.handleResize}>
-        <canvas ref={this.preview} width={width} height={height} />
-        <div className={Cls.help}>Déplacez ce coin pour redimensionner ⬆️</div>
+        <>
+          <canvas ref={this.preview} width={width} height={height} />
+          <div className={Cls.help}>Déplacez ce coin pour redimensionner ⬆️</div>
+        </>
       </ResizableBox>
     );
   }

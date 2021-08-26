@@ -33,7 +33,7 @@ import { MainState } from '../../core/store/reducer';
 import { connect, ConnectedProps } from 'react-redux';
 import { pageSetup } from '../../core/utils/page-setup';
 
-const logger = Logger.get('Landing.tsx', 'info');
+const logger = Logger.get('Landing.tsx');
 
 const mapStateToProps = (state: MainState) => ({
   authenticated: state.authentication.userStatus === UserStatus.Authenticated,

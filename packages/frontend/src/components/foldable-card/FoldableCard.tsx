@@ -17,10 +17,7 @@
  */
 
 import React, { Component } from 'react';
-import { Logger } from '@abc-map/shared';
 import Cls from './FoldableCard.module.scss';
-
-const logger = Logger.get('FoldableCard.tsx', 'info');
 
 interface Props {
   className?: string;

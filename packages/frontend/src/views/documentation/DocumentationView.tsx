@@ -28,7 +28,7 @@ import * as _ from 'lodash';
 import { pageSetup } from '../../core/utils/page-setup';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 
-const logger = Logger.get('DocumentationView.tsx', 'info');
+const logger = Logger.get('DocumentationView.tsx');
 
 const mapStateToProps = (state: MainState) => ({
   position: state.ui.documentation.scrollPosition,

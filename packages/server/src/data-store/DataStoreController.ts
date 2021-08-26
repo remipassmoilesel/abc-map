@@ -46,7 +46,6 @@ export class DataStoreController extends Controller {
 
   private list = async (req: FastifyRequest<{ Querystring: PaginatedQuery }>, reply: FastifyReply): Promise<void> => {
     const { datastore, metrics } = this.services;
-    metrics.datastoreList();
 
     const { limit, offset } = PaginationHelper.fromQuery(req);
     const [content, total] = await Promise.all([datastore.list(limit, offset), datastore.countArtefacts()]);
@@ -57,11 +56,12 @@ export class DataStoreController extends Controller {
       total,
     };
     void reply.status(200).send(result);
+
+    metrics.datastoreList();
   };
 
   private search = async (req: FastifyRequest<{ Querystring: SearchQuery }>, reply: FastifyReply): Promise<void> => {
     const { datastore, metrics } = this.services;
-    metrics.datastoreSearch();
 
     const { limit, offset } = PaginationHelper.fromQuery(req);
     const query = req.query.query;
@@ -74,6 +74,8 @@ export class DataStoreController extends Controller {
       total,
     };
     void reply.status(200).send(result);
+
+    metrics.datastoreSearch();
   };
 
   private getById = async (req: FastifyRequest<{ Params: ByIdParams }>, reply: FastifyReply): Promise<void> => {

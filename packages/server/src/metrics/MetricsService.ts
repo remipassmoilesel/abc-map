@@ -39,11 +39,15 @@ export class MetricsService extends AbstractService {
     collectDefaultMetrics({ register: registry });
 
     this.counters = {};
-    for (const k of Object.values(CounterNames)) {
-      this.counters[k] = new Counter({
-        ...Counters[k],
-        registers: [registry],
-      });
+    for (const name of Object.values(CounterNames)) {
+      try {
+        this.counters[name] = new Counter({
+          ...Counters[name],
+          registers: [registry],
+        });
+      } catch (e) {
+        logger.error(`Cannot register counter ${name}`, e);
+      }
     }
   }
 
@@ -89,5 +93,29 @@ export class MetricsService extends AbstractService {
 
   public datastoreSearch() {
     this.counters[CounterNames.DatastoreSearch]?.inc();
+  }
+
+  public resetPasswordEmail() {
+    this.counters[CounterNames.ResetPasswordEmail]?.inc();
+  }
+
+  public resetPassword() {
+    this.counters[CounterNames.ResetPassword]?.inc();
+  }
+
+  public projectSaved() {
+    this.counters[CounterNames.ProjectSaved]?.inc();
+  }
+
+  public projectList() {
+    this.counters[CounterNames.ProjectList]?.inc();
+  }
+
+  public projectFetch() {
+    this.counters[CounterNames.ProjectFetch]?.inc();
+  }
+
+  public vote() {
+    this.counters[CounterNames.Vote]?.inc();
   }
 }

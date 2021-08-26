@@ -6,7 +6,6 @@ module.exports = {
     "prettier"
   ],
   "plugins": [
-    "no-only-tests",
     "@typescript-eslint",
     "prettier"
   ],
@@ -20,7 +19,6 @@ module.exports = {
     "project": "./tsconfig.json"
   },
   "rules": {
-    "no-only-tests/no-only-tests": "error",
     "no-console": "off",
     "prettier/prettier": [
       "error",
