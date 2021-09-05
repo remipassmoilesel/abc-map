@@ -18,7 +18,6 @@
 
 import { FrontendRoutes } from '@abc-map/shared';
 import * as uuid from 'uuid-random';
-import { Toasts } from './Toasts';
 import Chainable = Cypress.Chainable;
 
 const defaultPassword = 'azerty1234';
@@ -44,9 +43,10 @@ export class Registration {
       .type(defaultPassword)
       .get('input[data-cy=password-confirmation]')
       .type(defaultPassword)
-      .get('button[data-cy=confirm-registration]')
+      .get('button[data-cy=submit-registration]')
       .click()
-      .then(() => Toasts.assertText('Vous devez activer votre compte, vous allez recevoir un email. Pensez à vérifier vos spam'));
+      .get('button[data-cy=confirm-registration]')
+      .click();
   }
 
   public static enableAccount(email: string): Chainable<any> {

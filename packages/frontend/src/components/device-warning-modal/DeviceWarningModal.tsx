@@ -43,13 +43,13 @@ class DeviceWarningModal extends Component<{}, State> {
     return (
       <Modal show={visible} onHide={this.handleClose} backdrop={'static'} dialogClassName={Cls.deviceWarning}>
         <Modal.Header closeButton>
-          <Modal.Title>Avertissement</Modal.Title>
+          <Modal.Title>⚠️ Avertissement</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div data-cy={'device-warning'}>Abc-Map risque de ne pas fonctionner correctement 🤔</div>
           <div className={'my-3'}>
-            Abc-Map est conçu pour fonctionner sur un ordinateur de bureau, avec les navigateurs <code>Firefox</code> ou <code>Chromium</code>, et une
-            résolution d&apos;écran minimale de <code>1366x768</code>.
+            Abc-Map est conçu pour fonctionner sur un <code>ordinateur de bureau</code>, avec les navigateurs <code>Firefox</code> ou <code>Chromium</code>, et
+            une résolution d&apos;écran minimale de <code>1366x768</code>.
           </div>
           <div className={'my-3'}>Votre configuration actuelle peut entrainer des problèmes d&apos;affichage et d&apos;utilisation.</div>
           <div className={'d-flex justify-content-end'}>

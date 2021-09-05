@@ -18,7 +18,6 @@
 
 import React, { ChangeEvent, Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/shared';
-import { MapWrapper } from '../../../core/geo/map/MapWrapper';
 import * as _ from 'lodash';
 import { NominatimResult } from '../../../core/geo/NominatimResult';
 import SearchResult from './SearchResult';
@@ -34,14 +33,8 @@ export interface State {
   loading: boolean;
 }
 
-export interface LocalProps {
-  map: MapWrapper;
-}
-
-declare type Props = LocalProps & ServiceProps;
-
-class Search extends Component<Props, State> {
-  constructor(props: Props) {
+class Search extends Component<ServiceProps, State> {
+  constructor(props: ServiceProps) {
     super(props);
     this.state = {
       query: '',
@@ -72,6 +65,11 @@ class Search extends Component<Props, State> {
             </div>
           </>
         )}
+        <div className={'control-item'}>
+          <button className={'btn btn-link'} onClick={this.handleGeolocate} data-testid={'geolocate'}>
+            <i className={'fa fa-map-marker-alt mr-2'} /> Afficher ma position
+          </button>
+        </div>
       </div>
     );
   }
@@ -108,11 +106,23 @@ class Search extends Component<Props, State> {
     const max = fromLonLat([coords[3], coords[1]], projection);
     const extent = [...min, ...max] as [number, number, number, number];
 
-    this.props.map.moveViewTo(extent);
+    geo.getMainMap().moveViewToExtent(extent);
   };
 
   private handleClose = () => {
     this.setState({ query: '' });
+  };
+
+  private handleGeolocate = () => {
+    const { geo, toasts } = this.props.services;
+
+    geo
+      .getUserPosition()
+      .then((coords) => geo.getMainMap().moveViewToPosition(coords, 12))
+      .catch((err) => {
+        logger.error('Cannot get current position', err);
+        toasts.genericError();
+      });
   };
 }
 

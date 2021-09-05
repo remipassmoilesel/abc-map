@@ -18,7 +18,7 @@
 import { newTestServices, TestServices } from '../../core/utils/test/TestServices';
 import { abcRender } from '../../core/utils/test/abcRender';
 import { ModalEvent, ModalEventType } from '../../core/ui/typings';
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { TestHelper } from '../../core/utils/test/TestHelper';
 import RegistrationModal from './RegistrationModal';
@@ -49,10 +49,10 @@ describe('RegistrationModal', () => {
     userEvent.type(screen.getByTestId('password-confirmation'), 'azerty1235');
 
     // Assert
-    expect(screen.getByTestId('confirm-registration')).toBeDisabled();
+    expect(screen.getByTestId('submit-registration')).toBeDisabled();
   });
 
-  it('should register on submit', () => {
+  it('should register on submit then show confirm button', async () => {
     // Prepare
     abcRender(<RegistrationModal />, { services });
     dispatch({ type: ModalEventType.ShowRegistration });
@@ -62,10 +62,13 @@ describe('RegistrationModal', () => {
     services.authentication.registration.resolves();
 
     // Act
-    screen.getByTestId('confirm-registration').click();
+    screen.getByTestId('submit-registration').click();
 
     // Assert
     expect(services.authentication.registration.args).toEqual([['heyhey@hey.com', 'azerty1234']]);
+    await waitFor(() => {
+      expect(screen.getByTestId('confirm-registration')).toBeDefined();
+    });
   });
 
   it('should not keep state after cancel', () => {
@@ -97,7 +100,7 @@ describe('RegistrationModal', () => {
     services.authentication.registration.resolves();
 
     // Act
-    screen.getByTestId('confirm-registration').click();
+    screen.getByTestId('submit-registration').click();
     await TestHelper.wait(10); // Wait internal promise
     dispatch({ type: ModalEventType.ShowRegistration });
 

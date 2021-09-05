@@ -61,6 +61,7 @@ class WmsSettingsPanel extends Component<Props, State> {
     const username = this.state.username;
     const password = this.state.password;
     const formState = this.state.formState;
+    const layers = capabilities?.Capability?.Layer?.Layer || [];
     return (
       <div>
         <div className={'d-flex flex-row'}>
@@ -94,11 +95,15 @@ class WmsSettingsPanel extends Component<Props, State> {
         {capabilities && (
           <>
             <div>
-              Service WMS: {capabilities.Service.Title} {capabilities.version}
+              Service:{' '}
+              <code>
+                {capabilities.Service?.Title || 'Sans titre'} {capabilities.version}
+              </code>
             </div>
             <div className={'mb-2'}>Couches disponibles : </div>
             <div className={Cls.wmsLayerSelector}>
-              {capabilities.Capability.Layer.Layer.map((lay, i) => (
+              {layers.length < 1 && <div className={'p-3 text-center'}>Pas de couche disponible</div>}
+              {layers.map((lay, i) => (
                 <WmsLayerItem key={`${lay.Name}-${i}`} layer={lay} selected={selectedLayer?.Name === lay.Name} onSelected={this.handleLayerSelected} />
               ))}
             </div>
@@ -162,9 +167,9 @@ class WmsSettingsPanel extends Component<Props, State> {
   };
 
   private getDefinitionFromState(): WmsDefinition {
-    const boundingBox: WmsBoundingBox | undefined = this.state.selectedLayer?.BoundingBox.length ? this.state.selectedLayer?.BoundingBox[0] : undefined;
-    // FIXME: is this the good projection to choose ?
-    const projection: AbcProjection | undefined = boundingBox ? { name: boundingBox.crs } : undefined;
+    const boundingBox: WmsBoundingBox | undefined = this.state.selectedLayer?.BoundingBox?.length ? this.state.selectedLayer?.BoundingBox[0] : undefined;
+    // FIXME: is this the right projection to choose ?
+    const projection: AbcProjection | undefined = boundingBox && boundingBox.crs ? { name: boundingBox.crs } : undefined;
     const extent = boundingBox?.extent;
     let auth: WmsAuthentication | undefined;
     if (this.state.username && this.state.password) {

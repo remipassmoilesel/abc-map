@@ -33,6 +33,8 @@ import Geometry from 'ol/geom/Geometry';
 import { defaultInteractions } from './interactions';
 import { MapSizeChanged, MapSizeChangedEvent, SizeListener } from './MapSizeChangedEvent';
 import { Views } from '../Views';
+import { fromLonLat } from 'ol/proj';
+import { Coordinate } from 'ol/coordinate';
 
 export const logger = Logger.get('MapWrapper.ts');
 
@@ -270,12 +272,18 @@ export class MapWrapper {
   }
 
   /**
-   * Move to specified extent. Numbers are: minX, minY, maxX, maxY.
+   * Move to specified extent. Extent numbers are: minX, minY, maxX, maxY.
    */
-  public moveViewTo(extent: [number, number, number, number]): void {
+  public moveViewToExtent(extent: [number, number, number, number]): void {
     const duration = 1500;
     const view = this.internal.getView();
     view.fit(extent, { duration });
+  }
+
+  public moveViewToPosition(coords: Coordinate, zoom: number): void {
+    const view = this.internal.getView();
+    view.setCenter(fromLonLat(coords));
+    view.setZoom(zoom);
   }
 
   public getTextAttributions(): string[] {

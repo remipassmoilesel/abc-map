@@ -84,7 +84,7 @@ class MapView extends Component<Props, State> {
         {/*Left menu*/}
         <div className={Cls.leftPanel}>
           <ProjectStatus project={this.props.project} />
-          <Search map={this.state.map} />
+          <Search />
           <ProjectControls />
           <HistoryControls historyKey={HistoryKey.Map} />
           <ImportData />
