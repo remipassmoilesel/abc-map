@@ -32,17 +32,17 @@ export class LabeledLayerTypes {
     label: 'Couche de géométries',
   };
 
-  public static readonly Wms: LabeledLayerType = {
-    id: 'Wms',
-    label: 'Couche distante (WMS)',
-  };
-
   public static readonly Xyz: LabeledLayerType = {
     id: 'Xyz',
     label: 'Couche distante (XYZ)',
   };
 
-  public static readonly All: LabeledLayerType[] = [LabeledLayerTypes.BaseMap, LabeledLayerTypes.Vector, LabeledLayerTypes.Wms, LabeledLayerTypes.Xyz];
+  public static readonly Wms: LabeledLayerType = {
+    id: 'Wms',
+    label: 'Couche distante (WMS)',
+  };
+
+  public static readonly All: LabeledLayerType[] = [LabeledLayerTypes.BaseMap, LabeledLayerTypes.Vector, LabeledLayerTypes.Xyz, LabeledLayerTypes.Wms];
 
   public static find(value: string): LabeledLayerType | undefined {
     return LabeledLayerTypes.All.find((type) => type.id === value);

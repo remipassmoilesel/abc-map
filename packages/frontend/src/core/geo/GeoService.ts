@@ -35,6 +35,7 @@ import { FeatureWrapper } from './features/FeatureWrapper';
 import { ToastService } from '../ui/ToastService';
 import { LayerFactory } from './layers/LayerFactory';
 import { ProjectActions } from '../store/project/actions';
+import { Coordinate } from 'ol/coordinate';
 
 export const logger = Logger.get('GeoService.ts');
 
@@ -47,6 +48,15 @@ export class GeoService {
 
   public getMainMap(): MapWrapper {
     return this.mainMap;
+  }
+
+  public getUserPosition(): Promise<Coordinate> {
+    return new Promise<Coordinate>((resolve, reject) => {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => resolve([pos.coords.longitude, pos.coords.latitude]),
+        (err) => reject(err)
+      );
+    });
   }
 
   public async exportLayers(): Promise<AbcLayer[]> {
