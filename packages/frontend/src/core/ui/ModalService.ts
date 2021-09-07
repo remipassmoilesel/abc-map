@@ -40,12 +40,8 @@ import { delayedPromise } from '../utils/delayedPromise';
 const logger = Logger.get('ModalService.ts', 'warn');
 
 export class ModalService {
-  private eventTarget: EventTarget;
+  private eventTarget = document.createDocumentFragment();
   private listeners = new Map<ModalEventListener<any>, EventListener>();
-
-  constructor() {
-    this.eventTarget = document.createDocumentFragment();
-  }
 
   public rename(message: string, value: string): Promise<RenameModalClosedEvent> {
     const title = 'Renommage ✏️';
@@ -191,24 +187,27 @@ export class ModalService {
   }
 
   public addListener<T extends ModalEvent = ModalEvent>(type: ModalEventType, listener: ModalEventListener<T>) {
+    // We create a listener wrapper that filters events
     const _listener: EventListener = (ev) => {
-      if (!(ev instanceof InternalEvent) || ev.type !== type) {
+      if (!(ev instanceof InternalEvent) || ev.payload.type !== type) {
         logger.error('Bad event received: ', ev);
         return;
       }
       listener(ev.payload as T);
     };
+
     this.eventTarget.addEventListener(type, _listener);
     this.listeners.set(listener, _listener);
   }
 
   public removeListener(type: ModalEventType, listener: ModalEventListener<any>) {
     const _listener = this.listeners.get(listener);
-    this.listeners.delete(listener);
     if (!_listener) {
       logger.warn('Listener was not registered: ', _listener);
       return;
     }
+
+    this.listeners.delete(listener);
     this.eventTarget.removeEventListener(type, _listener);
   }
 

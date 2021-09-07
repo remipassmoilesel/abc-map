@@ -21,6 +21,8 @@ import { ServiceProps, withServices } from '../../core/withServices';
 import PaypalButton from './PaypalButton';
 import Cls from './FundingView.module.scss';
 import { pageSetup } from '../../core/utils/page-setup';
+import utipLogo from './utip.png';
+import tipeeeLogo from './tipeee.png';
 
 class FundingView extends Component<ServiceProps, {}> {
   public render(): ReactNode {
@@ -39,13 +41,37 @@ class FundingView extends Component<ServiceProps, {}> {
             </p>
           </div>
 
-          <div className={'w-100'}>
+          <div>
             <h3 className={'my-4'}>Comment ?</h3>
-            <div>
-              Envoyez de l&apos;argent par <i>carte bleue</i> ou via votre <i>compte Paypal</i>.
-            </div>
-            <div className={'d-flex my-4'}>
-              <PaypalButton />
+            <div className={'d-flex'}>
+              <div className={'d-flex flex-column align-items-center mr-5'}>
+                <div className={'mb-3'}>
+                  Par <b>Carte</b> ou <b>Paypal</b>.
+                </div>
+                <div className={Cls.fundingMedium}>
+                  <PaypalButton />
+                </div>
+              </div>
+              <div className={'d-flex flex-column align-items-center mr-5'}>
+                <div className={'mb-3'}>
+                  Avec <b>uTip</b>
+                </div>
+                <div className={Cls.fundingMedium}>
+                  <a href={'https://utip.io/abcmap'} target={'_blank'} rel="noreferrer">
+                    <img src={utipLogo} height={'100'} alt={'uTip'} />
+                  </a>
+                </div>
+              </div>
+              <div className={'d-flex flex-column align-items-center'}>
+                <div className={'mb-3'}>
+                  Avec <b>Tipeee</b>
+                </div>
+                <div className={Cls.fundingMedium}>
+                  <a href={'https://fr.tipeee.com/abc-map'} target={'_blank'} rel="noreferrer">
+                    <img src={tipeeeLogo} height={'70'} alt={'uTip'} />
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -53,14 +79,16 @@ class FundingView extends Component<ServiceProps, {}> {
             <h3 className={'my-4'}>A quoi ça sert ?</h3>
             <p>L&apos;argent récolté:</p>
             <ul>
-              <li>paie les coûts d&apos;hébergement de la plateforme officielle</li>
-              <li>est accumulé pour financer des sessions de développement</li>
+              <li>paie l&apos;hébergement</li>
+              <li>finance des sessions de développement</li>
+              <li>finance de la documentation</li>
             </ul>
 
             <p>Les prochaines fonctionnalités prévues sont:</p>
             <ul>
+              <li>De meilleurs styles pour créer de plus belles cartes</li>
               <li>La création de symboles à partir de classeurs CSV</li>
-              <li>Le Compte de géométries dans des polygones</li>
+              <li>Le compte de géométries dans des polygones</li>
               <li>La traduction en plusieurs langues</li>
               <li>
                 Et plus !{' '}

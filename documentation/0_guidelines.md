@@ -19,8 +19,9 @@ Privacy and security are primary concerns, and data collection must be justified
 
 In order to promote quality developments, it is desirable to maintain a good development experience.      
 
-Someone who does not know this project should be able to start it and compile it in few hours. Services (like 
-server, frontend and databases) should start quickly, not fail, and display enough information to be understandable.  
+Someone who does not know this project should be able to start it, to build it, and to hack it in few hours. Services 
+(servers, frontend and databases) should start quickly, should not fail, and should display enough information to be 
+understandable.  
 
 The software code must be kept clear and understandable. It must be extensively tested to allow to develop it quickly 
 and with confidence.     
