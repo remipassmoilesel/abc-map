@@ -18,15 +18,12 @@
 
 import React, { Component, ReactNode } from 'react';
 import { Modal } from 'react-bootstrap';
-import { getAllIcons, PointIcon, safeGetIcon } from '../../assets/point-icons/PointIcons';
-import Cls from './PointIconPicker.module.scss';
+import { PointIcon, safeGetIcon } from '../../assets/point-icons/PointIcon';
 import { IconProcessor } from '../../core/geo/styles/IconProcessor';
 import { PointIconName } from '../../assets/point-icons/PointIconName';
-
-interface IconPreview {
-  icon: PointIcon;
-  preview: string;
-}
+import { IconCategory, LabeledIconCategories } from '../../assets/point-icons/IconCategory';
+import { getPreviews, IconPreview } from './previews';
+import Cls from './PointIconPicker.module.scss';
 
 interface Props {
   value: PointIconName | undefined;
@@ -36,7 +33,7 @@ interface Props {
 interface State {
   valuePreview?: IconPreview;
   modal: boolean;
-  iconPreviews: IconPreview[];
+  iconPreviews?: Map<IconCategory, IconPreview[]>;
 }
 
 const previewColor = '#0094e3';
@@ -44,10 +41,7 @@ const previewColor = '#0094e3';
 class PointIconPicker extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = {
-      modal: false,
-      iconPreviews: [],
-    };
+    this.state = { modal: false };
   }
 
   public render(): ReactNode {
@@ -70,16 +64,26 @@ class PointIconPicker extends Component<Props, State> {
           </Modal.Header>
           <Modal.Body className={'d-flex flex-column'}>
             <div className={Cls.viewPort}>
-              {iconPreviews.map((icon, idx) => (
-                <button
-                  key={icon.icon.name}
-                  onClick={() => this.handleSelection(icon.icon)}
-                  className={`btn btn-outline-secondary ${Cls.iconPreview}`}
-                  data-cy={`point-icon-${idx}`}
-                >
-                  <img src={icon.preview} alt={icon.icon.name} />
-                </button>
-              ))}
+              {iconPreviews &&
+                LabeledIconCategories.All.map((category) => {
+                  return (
+                    <div key={category.value} className={Cls.category}>
+                      <h1 className={Cls.categoryTitle}>{category.label}</h1>
+                      <div className={Cls.categoryContent}>
+                        {iconPreviews.get(category.value)?.map((icon, idx) => (
+                          <button
+                            key={icon.icon.name}
+                            onClick={() => this.handleSelection(icon.icon)}
+                            className={`btn btn-outline-secondary ${Cls.iconPreview}`}
+                            data-cy={`${category.value}-${idx}`}
+                          >
+                            <img src={icon.preview} alt={icon.icon.name} />
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })}
             </div>
           </Modal.Body>
         </Modal>
@@ -99,7 +103,7 @@ class PointIconPicker extends Component<Props, State> {
   }
 
   private handleOpen = (): void => {
-    const iconPreviews = getAllIcons().map((i) => ({ icon: i, preview: IconProcessor.get().prepareCached(i, 50, previewColor) }));
+    const iconPreviews = getPreviews();
     this.setState({ iconPreviews, modal: true });
   };
 

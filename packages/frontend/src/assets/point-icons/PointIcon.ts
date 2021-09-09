@@ -17,12 +17,17 @@
  */
 import { AllIcons } from './icons';
 import { PointIconName } from './PointIconName';
+import { IconCategory } from './IconCategory';
 
 export interface PointIcon {
   name: PointIconName;
   contentSvg: string;
+  category: IconCategory;
 }
 
+/**
+ * Default icon is used when an icon is not found
+ */
 export const DefaultIcon = AllIcons[0];
 
 /**

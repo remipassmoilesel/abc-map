@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { PointIcon } from '../../../assets/point-icons/PointIcons';
+import { PointIcon } from '../../../assets/point-icons/PointIcon';
 
 const serializer = new XMLSerializer();
 

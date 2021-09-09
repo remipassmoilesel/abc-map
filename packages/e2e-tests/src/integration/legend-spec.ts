@@ -38,13 +38,13 @@ describe('Legend', function () {
       // Second point
       .get('[data-cy=point-icon-selector]')
       .click()
-      .get('[data-cy=point-icon-5]')
+      .get('[data-cy=Pins-5]')
       .click()
       .then(() => Draw.click(200, 200))
       // Third point
       .get('[data-cy=point-icon-selector]')
       .click()
-      .get('[data-cy=point-icon-10]')
+      .get('[data-cy=Pins-7]')
       .click()
       .then(() => Draw.click(300, 300))
       // Create layout
@@ -77,7 +77,7 @@ describe('Legend', function () {
         expect(legend.items[0].id).not.undefined;
         expect(legend.items[0].text).equal('Legend item 1');
         expect(legend.items[0].symbol?.geomType).equal('Point');
-        expect(legend.items[0].symbol?.properties.point?.icon).equal('twbs/0_stars.inline.svg');
+        expect(legend.items[0].symbol?.properties.point?.icon).equal('twbs/pin-map-fill.inline.svg');
       });
   });
 });
