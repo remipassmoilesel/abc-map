@@ -26,11 +26,24 @@
   max-height: 70vh;
 
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  flex-direction: column;
 
   overflow-x: hidden;
   overflow-y: scroll;
+}
+
+.category {
+  margin-bottom: 1.5rem;
+}
+
+.categoryTitle {
+  font-size: 1.3rem;
+}
+
+.categoryContent {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
 }
 
 .iconPreview {

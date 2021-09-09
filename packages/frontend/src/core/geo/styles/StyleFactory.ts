@@ -23,7 +23,7 @@ import { SelectionStyleFactory } from './SelectionStyleFactory';
 import { StyleCache, StyleCacheEntry } from './StyleCache';
 import { FillPatternFactory } from './FillPatternFactory';
 import { IconProcessor } from './IconProcessor';
-import { DefaultIcon, safeGetIcon } from '../../../assets/point-icons/PointIcons';
+import { DefaultIcon, safeGetIcon } from '../../../assets/point-icons/PointIcon';
 import { PointIconName } from '../../../assets/point-icons/PointIconName';
 import { FeatureWrapper } from '../features/FeatureWrapper';
 

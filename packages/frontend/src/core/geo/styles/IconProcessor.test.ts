@@ -17,14 +17,16 @@
  */
 
 import { IconProcessor, mountSvg } from './IconProcessor';
-import { PointIcon, safeGetIcon } from '../../../assets/point-icons/PointIcons';
+import { PointIcon, safeGetIcon } from '../../../assets/point-icons/PointIcon';
 import sinon from 'sinon';
 import { PointIconName } from '../../../assets/point-icons/PointIconName';
+import { IconCategory } from '../../../assets/point-icons/IconCategory';
 
 describe('IconProcessor', () => {
   const fakeIcon: PointIcon = {
     name: 'Test icon' as PointIconName,
     contentSvg: sample(),
+    category: IconCategory.Geometries,
   };
 
   it('prepare() with sample', () => {

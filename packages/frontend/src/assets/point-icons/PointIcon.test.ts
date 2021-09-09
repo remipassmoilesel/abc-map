@@ -16,12 +16,12 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { DefaultIcon, getAllIcons, safeGetIcon } from './PointIcons';
+import { DefaultIcon, getAllIcons, safeGetIcon } from './PointIcon';
 import { mountSvg } from '../../core/geo/styles/IconProcessor';
 import { PointIconName } from './PointIconName';
 import { IconNamesWitness } from './PointIcons.test.data';
 
-describe('PointIcons', () => {
+describe('PointIcon', () => {
   it('safeGetIcon()', () => {
     const icon = safeGetIcon(PointIconName.IconArrow90DegLeft);
     expect(icon.name).toEqual(PointIconName.IconArrow90DegLeft);

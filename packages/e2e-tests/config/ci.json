@@ -7,6 +7,7 @@
   "videosFolder": "videos",
   "supportFile": "src/support/index.js",
   "video": false,
+  "watchForFileChanges": false,
   "retries": {
     "runMode": 2
   }
