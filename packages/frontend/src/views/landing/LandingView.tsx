@@ -75,19 +75,25 @@ class LandingView extends Component<Props, State> {
           </div>
 
           <div>
-            <h5>Comment ça marche ?</h5>
-            <ul>
+            <h3>Comment ça marche ?</h3>
+            <ul className={'mt-3'}>
               <li>
-                Regardez&nbsp;
+                Regardez une&nbsp;
                 <a href={'https://www.youtube.com/channel/UCrlsEykrLNpK12Id7c7GP7g'} target={'_blank'} rel="noreferrer">
-                  une vidéo de présentation 📹
+                  vidéo de présentation 📹
                 </a>
-                &nbsp; ou parcourez la <Link to={FrontendRoutes.documentation().raw()}>Documentation</Link>
+                &nbsp; ou parcourez la <Link to={FrontendRoutes.documentation().raw()}>documentation 📖</Link>
               </li>
               <li>
-                Puis lancez-vous sur la <Link to={FrontendRoutes.map().raw()}>Carte</Link> !
+                Puis lancez-vous sur la <Link to={FrontendRoutes.map().raw()}>carte 🌍</Link>
               </li>
             </ul>
+            <div className={'mt-4'}>
+              <button className={'btn btn-primary'} onClick={this.handleGoToMap}>
+                <i className={'fa fa-rocket mr-2'} />
+                Commencer
+              </button>
+            </div>
 
             {/* Current version */}
 
@@ -101,26 +107,19 @@ class LandingView extends Component<Props, State> {
           {!authenticated && (
             <div>
               <h3>Inscription, connexion</h3>
-              <p className={'mb-5'}>
-                La connexion est <i>facultative</i>, mais elle permet de sauvegarder ses cartes en ligne.
-              </p>
+              <p className={'mb-4'}>La connexion est facultative ! Vous pouvez utiliser Abc-Map sans vous inscrire 😉</p>
               <div>
-                <button className={'btn btn-primary mr-3'} onClick={this.handleRegister} data-cy={'open-registration'}>
+                <button className={'btn btn-outline-primary'} onClick={this.handleRegister} data-cy={'open-registration'}>
                   <i className={'fa fa-feather-alt mr-3'} />
                   S&apos;inscrire
                 </button>
-                <button className={'btn btn-primary mr-3'} onClick={this.handleLogin} data-cy={'open-login'}>
+                <button className={'btn btn-outline-primary'} onClick={this.handleLogin} data-cy={'open-login'}>
                   <i className={'fa fa-lock-open mr-3'} />
                   Se connecter
                 </button>
               </div>
             </div>
           )}
-
-          <div className={'d-flex flex-column mt-2'}>
-            <Link to={FrontendRoutes.funding().raw()}>Participez au financement d&apos;Abc-Map&nbsp;&nbsp;💌️</Link>
-            <Link to={FrontendRoutes.legalMentions().raw()}>A propos de cette plateforme&nbsp;&nbsp;⚖️</Link>
-          </div>
         </div>
 
         <div className={Cls.rightColumn}>
@@ -131,7 +130,7 @@ class LandingView extends Component<Props, State> {
           {/* Vote results */}
 
           {!!voteAggregation?.total && (
-            <div>
+            <div className={'text-right'}>
               Sur les 7 derniers jours, {voteAggregation.satisfied} % des utilisateurs ont déclaré être satisfait.&nbsp;
               {voteAggregation.satisfied < 60 && (
                 <>
@@ -145,6 +144,10 @@ class LandingView extends Component<Props, State> {
               )}
             </div>
           )}
+
+          <div className={'mt-3'}>
+            <Link to={FrontendRoutes.legalMentions().raw()}>A propos de cette plateforme&nbsp;&nbsp;⚖️</Link>
+          </div>
         </div>
       </div>
     );
@@ -165,6 +168,12 @@ class LandingView extends Component<Props, State> {
       .then((res) => this.setState({ voteAggregation: res }))
       .catch((err) => logger.error(err));
   }
+
+  public handleGoToMap = () => {
+    const { history } = this.props;
+
+    history.push(FrontendRoutes.map().raw());
+  };
 
   private handleLogin = () => {
     const { modals, toasts } = this.props.services;

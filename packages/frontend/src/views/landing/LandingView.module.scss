@@ -29,13 +29,13 @@
 
   font-size: 1.1em;
 
-  :global(.btn) {
-    width: 13rem;
-  }
-
   button {
     height: 3rem;
-    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    width: 11rem;
+
+    margin-left: 1rem;
+
+    box-shadow: 0 0.2rem 1rem rgba(0, 0, 0, 0.15);
   }
 }
 
@@ -51,6 +51,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: flex-end;
 
   margin-left: 1rem;
 }

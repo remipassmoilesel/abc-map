@@ -9,11 +9,13 @@
   </a>
 </div>
 
-Official rewrite, attempt n°265 👨‍💻.
+Official rewrite, attempt n°265 👨‍💻.  
 
-You can try it on [abc-map.fr](https://abc-map.fr).
+You can try it on [abc-map.fr](https://abc-map.fr).  
 
-Main repository of source code is on Gitlab: [https://gitlab.com/abc-map/abc-map](https://gitlab.com/abc-map/abc-map).
+Main repository of source code is on Gitlab: [https://gitlab.com/abc-map/abc-map](https://gitlab.com/abc-map/abc-map).  
+
+If you like it, please give it a star 🌟
 
 
 ## Purpose in a nutshell

@@ -16,32 +16,11 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-.funding {
-  height: 95vh;
-  width: 100vw;
+.fundingMedium {
+  width: 180px;
+  height: 110px;
 
-  overflow-x: hidden;
-  overflow-y: scroll;
-}
-
-.content {
   display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-
-  font-size: 1.05rem;
-
-  width: 60vw;
-  max-width: 60vw;
-  margin: 4rem auto;
-}
-
-.quote {
-  font-style: italic;
-  font-size: 1.3rem;
-}
-
-.quoteAuthor {
-  font-size: 0.9rem;
+  align-items: center;
+  justify-content: center;
 }
