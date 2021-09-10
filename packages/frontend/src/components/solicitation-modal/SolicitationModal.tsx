@@ -22,11 +22,11 @@ import { ModalEventType, ModalStatus } from '../../core/ui/typings';
 import { ServiceProps, withServices } from '../../core/withServices';
 import { Titles } from './titles';
 import * as _ from 'lodash';
-import { Encouragements } from './encouragements';
 import { FrontendRoutes, Logger } from '@abc-map/shared';
-import Cls from './SolicitationModal.module.scss';
 import { VoteValue } from '@abc-map/shared';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { FundingLinks } from '../funding-links/FundingLinks';
+import Cls from './SolicitationModal.module.scss';
 
 const logger = Logger.get('SolicitationModal.ts');
 
@@ -35,7 +35,6 @@ declare type Props = ServiceProps & RouteComponentProps;
 interface State {
   visible: boolean;
   title?: string;
-  encouragement?: string;
 }
 
 class SolicitationModal extends Component<Props, State> {
@@ -47,7 +46,6 @@ class SolicitationModal extends Component<Props, State> {
   public render(): ReactNode {
     const visible = this.state.visible;
     const title = this.state.title;
-    const encouragement = this.state.encouragement;
     if (!visible) {
       return <div />;
     }
@@ -58,19 +56,13 @@ class SolicitationModal extends Component<Props, State> {
           <Modal.Title>{title}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div className={Cls.encouragement} dangerouslySetInnerHTML={{ __html: encouragement || '' }} />
+          <h4 className={'text-center m-4'}>Soutenez votre logiciel ✊</h4>
 
-          <div className={'d-flex flex-column justify-content-center align-items-center m-5'}>
-            <p className={'text-center'}>
-              Abc-Map est un logiciel libre hébergé et développé bénévolement,
-              <br /> soutenez votre logiciel !
-            </p>
+          <div className={'border rounded m-4 p-3 d-flex flex-column justify-content-center align-items-center mb-2'}>
+            <FundingLinks />
 
-            <button onClick={this.handleDonate} className={'btn btn-primary mt-5'}>
-              Soutenir le développement <span className={'ml-2'}>💪</span>
-            </button>
-            <button onClick={this.handleDonate} className={'btn btn-link'}>
-              A quoi ça sert ?
+            <button onClick={this.handleDonate} className={'btn btn-link mt-4'}>
+              A quoi servent les dons ?
             </button>
           </div>
 
@@ -117,8 +109,7 @@ class SolicitationModal extends Component<Props, State> {
 
   private handleOpen = () => {
     const title = _.sample(Titles);
-    const encouragement = _.sample(Encouragements);
-    this.setState({ visible: true, title, encouragement });
+    this.setState({ visible: true, title });
   };
 
   private handleVote = (value: VoteValue) => {

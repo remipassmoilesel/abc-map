@@ -18,11 +18,9 @@
 
 import React, { Component, ReactNode } from 'react';
 import { ServiceProps, withServices } from '../../core/withServices';
-import PaypalButton from './PaypalButton';
-import Cls from './FundingView.module.scss';
 import { pageSetup } from '../../core/utils/page-setup';
-import utipLogo from './utip.png';
-import tipeeeLogo from './tipeee.png';
+import { FundingLinks } from '../../components/funding-links/FundingLinks';
+import Cls from './FundingView.module.scss';
 
 class FundingView extends Component<ServiceProps, {}> {
   public render(): ReactNode {
@@ -43,36 +41,7 @@ class FundingView extends Component<ServiceProps, {}> {
 
           <div>
             <h3 className={'my-4'}>Comment ?</h3>
-            <div className={'d-flex'}>
-              <div className={'d-flex flex-column align-items-center mr-5'}>
-                <div className={'mb-3'}>
-                  Par <b>Carte</b> ou <b>Paypal</b>.
-                </div>
-                <div className={Cls.fundingMedium}>
-                  <PaypalButton />
-                </div>
-              </div>
-              <div className={'d-flex flex-column align-items-center mr-5'}>
-                <div className={'mb-3'}>
-                  Avec <b>uTip</b>
-                </div>
-                <div className={Cls.fundingMedium}>
-                  <a href={'https://utip.io/abcmap'} target={'_blank'} rel="noreferrer">
-                    <img src={utipLogo} height={'100'} alt={'uTip'} />
-                  </a>
-                </div>
-              </div>
-              <div className={'d-flex flex-column align-items-center'}>
-                <div className={'mb-3'}>
-                  Avec <b>Tipeee</b>
-                </div>
-                <div className={Cls.fundingMedium}>
-                  <a href={'https://fr.tipeee.com/abc-map'} target={'_blank'} rel="noreferrer">
-                    <img src={tipeeeLogo} height={'70'} alt={'uTip'} />
-                  </a>
-                </div>
-              </div>
-            </div>
+            <FundingLinks />
           </div>
 
           <div className={'w-100'}>
@@ -99,13 +68,16 @@ class FundingView extends Component<ServiceProps, {}> {
             </ul>
           </div>
 
-          <h3 className="mt-5 mb-3">Réseaux</h3>
+          <h3 className="mt-3 mb-3">Liens</h3>
           <div className="d-flex flex-column">
             <a href="https://twitter.com/abcmapfr" target="_blank" rel="noreferrer">
               🐦 Twitter
             </a>
             <a href="mailto:fr.abcmap@gmail.com" target="_blank" rel="noreferrer">
               📧 Contact
+            </a>
+            <a href="https://gitlab.com/abc-map/abc-map" target="_blank" rel="noreferrer">
+              👨‍💻 Code source
             </a>
             <a href="https://remi-pace.fr" target="_blank" rel="noreferrer">
               🌐 Site personnel de l&apos;auteur

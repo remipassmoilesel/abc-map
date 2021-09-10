@@ -62,6 +62,7 @@ class TopBar extends Component<Props, {}> {
         <TopBarLink label={'Traitement de données'} to={FrontendRoutes.dataProcessing().withoutOptionals()} data-cy={'data-processing'} />
         <TopBarLink label={'Mise en page'} to={FrontendRoutes.layout().raw()} data-cy={'layout'} />
         <TopBarLink label={'Documentation'} to={FrontendRoutes.documentation().raw()} data-cy={'help'} />
+        <TopBarLink label={'Soutenez Abc-Map 💌'} to={FrontendRoutes.funding().raw()} data-cy={'help'} />
 
         <div className={'ml-3'}>
           <Dropdown data-cy={'user-menu'}>
