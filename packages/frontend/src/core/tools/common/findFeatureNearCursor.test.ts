@@ -28,32 +28,36 @@ import { TestHelper } from '../../utils/test/TestHelper';
 describe('findFeatureNearCursor', function () {
   it('should find nothing if source is empty', () => {
     const source = new VectorSource();
+    const event = TestHelper.mapBrowserEvent({ coordinate: [1, 1] });
 
-    const result = findFeatureNearCursor(TestHelper.mapBrowserEvent([1, 1]), source, noopFilter, 7);
+    const result = findFeatureNearCursor(event, source, noopFilter, 7);
 
     expect(result).toBeUndefined();
   });
 
   it('should find a geometry on coordinate', () => {
     const { source, feature1 } = testVectorSource1();
+    const event = TestHelper.mapBrowserEvent({ coordinate: [2, 2] });
 
-    const result = findFeatureNearCursor(TestHelper.mapBrowserEvent([2, 2]), source, noopFilter, 7);
+    const result = findFeatureNearCursor(event, source, noopFilter, 7);
 
     expect(result).toEqual(feature1);
   });
 
   it('should find a geometry near coordinate if nothing on', () => {
     const { source, feature2 } = testVectorSource1();
+    const event = TestHelper.mapBrowserEvent({ coordinate: [120, 120] });
 
-    const result = findFeatureNearCursor(TestHelper.mapBrowserEvent([120, 120]), source, noopFilter, 7);
+    const result = findFeatureNearCursor(event, source, noopFilter, 7);
 
     expect(result).toEqual(feature2);
   });
 
   it('should find nothing if nothing on and out of tolerance', () => {
     const { source } = testVectorSource1();
+    const event = TestHelper.mapBrowserEvent({ coordinate: [128, 128] });
 
-    const result = findFeatureNearCursor(TestHelper.mapBrowserEvent([128, 128]), source, noopFilter, 7);
+    const result = findFeatureNearCursor(event, source, noopFilter, 7);
 
     expect(result).toBeUndefined();
   });
@@ -61,8 +65,9 @@ describe('findFeatureNearCursor', function () {
   it('should use filter if position on geometry', () => {
     const { source } = testVectorSource2();
     const filter: FeatureFilter = (f) => f.getGeometry() instanceof Polygon;
+    const event = TestHelper.mapBrowserEvent({ coordinate: [111, 111] });
 
-    const result = findFeatureNearCursor(TestHelper.mapBrowserEvent([111, 111]), source, filter, 7);
+    const result = findFeatureNearCursor(event, source, filter, 7);
 
     expect(result).toBeUndefined();
   });
@@ -70,16 +75,18 @@ describe('findFeatureNearCursor', function () {
   it('should use filter if position near geometry', () => {
     const { source } = testVectorSource2();
     const filter: FeatureFilter = (f) => f.getGeometry() instanceof Polygon;
+    const event = TestHelper.mapBrowserEvent({ coordinate: [115, 115] });
 
-    const result = findFeatureNearCursor(TestHelper.mapBrowserEvent([115, 115]), source, filter, 7);
+    const result = findFeatureNearCursor(event, source, filter, 7);
 
     expect(result).toBeUndefined();
   });
 
   it('should use style properties for tolerance', () => {
     const { source, feature2 } = testVectorSource2();
+    const event = TestHelper.mapBrowserEvent({ coordinate: [125, 125] });
 
-    const result = findFeatureNearCursor(TestHelper.mapBrowserEvent([125, 125]), source, noopFilter, 0);
+    const result = findFeatureNearCursor(event, source, noopFilter, 0);
 
     expect(result).toEqual(feature2);
   });

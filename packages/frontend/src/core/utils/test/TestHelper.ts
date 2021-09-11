@@ -31,6 +31,7 @@ import {
   AbcXyzLayer,
   CompressedProject,
   DEFAULT_PROJECTION,
+  FeatureStyle,
   FillPatterns,
   LayerType,
   LayoutFormats,
@@ -50,8 +51,18 @@ import { FeatureWrapper } from '../../geo/features/FeatureWrapper';
 import { LayerFactory } from '../../geo/layers/LayerFactory';
 import { PointIconName } from '../../../assets/point-icons/PointIconName';
 import { nanoid } from 'nanoid';
-import { FeatureStyle } from '@abc-map/shared';
 import { Encryption } from '../Encryption';
+import MapBrowserEventType from 'ol/MapBrowserEventType';
+
+interface EventSettings {
+  coordinate?: Coordinate;
+  resolution?: number;
+  type?: MapBrowserEventType;
+  ctrlKey?: boolean;
+  button?: number;
+  mapTarget?: HTMLDivElement;
+  pixel?: [number, number];
+}
 
 export class TestHelper {
   public static renderMap(map: Map): Promise<void> {
@@ -288,19 +299,28 @@ export class TestHelper {
     };
   }
 
-  public static mapBrowserEvent(coordinate: Coordinate, resolution = 2): MapBrowserEvent<UIEvent> {
+  public static mapBrowserEvent(settings: EventSettings): MapBrowserEvent<UIEvent> {
     return {
-      coordinate,
+      type: settings.type ?? MapBrowserEventType.POINTERDOWN,
+      coordinate: settings.coordinate ?? [1, 1],
+      pixel: settings.pixel ?? [10, 10],
+      originalEvent: {
+        ctrlKey: settings.ctrlKey,
+        button: settings.button,
+      },
       map: {
         getView() {
           return {
             getResolution() {
-              return resolution;
+              return settings.resolution ?? 2;
             },
           };
         },
+        getTarget() {
+          return settings.mapTarget;
+        },
       },
-    } as any;
+    } as unknown as MapBrowserEvent<UIEvent>;
   }
 
   public static interactionCount(map: Map, name: string): number {

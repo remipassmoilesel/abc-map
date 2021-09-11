@@ -61,7 +61,12 @@ export class TextInteraction extends Interaction {
       return false;
     }
 
-    const map = event.map.getTarget() as HTMLDivElement;
+    const map = event.map.getTarget();
+    if (!map || !(map instanceof HTMLDivElement)) {
+      logger.error('Invalid map target: ', map);
+      return false;
+    }
+
     const x = map.getBoundingClientRect().x + event.pixel[0];
     const y = map.getBoundingClientRect().y + event.pixel[1];
 
@@ -82,13 +87,14 @@ export class TextInteraction extends Interaction {
   private showTextBox(value: string, x: number, y: number, onChange: (text: string) => void, onClose: (text: string) => void) {
     const backdrop = document.createElement('div');
     const inputBox = document.createElement('div');
-    const input = document.createElement('input');
+    const textarea = document.createElement('textarea');
+    const buttonBox = document.createElement('div');
     const button = document.createElement('button');
 
     const handleValidation = () => {
       document.body.removeChild(backdrop);
       document.body.removeChild(inputBox);
-      onClose(input.value);
+      onClose(textarea.value);
     };
 
     backdrop.style.position = 'fixed';
@@ -98,32 +104,38 @@ export class TextInteraction extends Interaction {
     backdrop.style.bottom = '0';
     backdrop.dataset['cy'] = 'text-box-backdrop';
     backdrop.addEventListener('click', handleValidation);
+    backdrop.dataset['testid'] = 'backdrop';
 
     inputBox.style.display = 'flex';
-    inputBox.style.justifyContent = 'stretch';
-    inputBox.style.alignItems = 'stretch';
-    inputBox.style.border = 'solid 1px silver';
+    inputBox.style.justifyContent = 'center';
+    inputBox.style.alignItems = 'flex-start';
     inputBox.style.borderRadius = '5px';
-    inputBox.style.background = 'white';
     inputBox.style.position = 'absolute';
     inputBox.style.left = x + 'px';
     inputBox.style.top = y - 30 + 'px';
-    inputBox.style.width = `300px`;
 
-    input.type = 'text';
-    input.value = value;
-    input.dataset['cy'] = 'text-box';
-    input.className = 'form-control';
-    input.oninput = () => onChange(input.value);
+    textarea.cols = 25;
+    textarea.rows = 2;
+    textarea.value = value;
+    textarea.dataset['cy'] = 'text-box';
+    textarea.className = 'form-control';
+    textarea.oninput = () => onChange(textarea.value);
+    textarea.dataset['testid'] = 'textarea';
 
+    buttonBox.style.background = 'white';
     button.type = 'button';
     button.className = 'btn btn-outline-primary';
     button.onclick = handleValidation;
     button.innerText = 'Ok';
+    button.dataset['testid'] = 'button';
 
-    inputBox.append(input);
-    inputBox.append(button);
+    inputBox.append(textarea);
+    buttonBox.append(button);
+    inputBox.append(buttonBox);
     document.body.append(backdrop);
     document.body.append(inputBox);
+
+    // We must delay focus otherwise it append before element setup
+    setTimeout(() => textarea.focus(), 100);
   }
 }
