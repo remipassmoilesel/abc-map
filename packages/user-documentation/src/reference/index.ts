@@ -27,9 +27,10 @@ import dataStore from './07_data-store.md';
 import layoutLegend from './08_layout-legend.md';
 import registration from './09_registration.md';
 import faq from './10_faq.md';
-import proportionalSymbols from './11_proportional-symbols.md';
-import colorGradients from './12_color-gradients.md';
-import scripts from './13_scripts.md';
+import helpme from './11_helpme.md';
+import proportionalSymbols from './12_proportional-symbols.md';
+import colorGradients from './13_color-gradients.md';
+import scripts from './14_scripts.md';
 
 const content = [
   features,
@@ -42,6 +43,7 @@ const content = [
   layoutLegend,
   registration,
   faq,
+  helpme,
   proportionalSymbols,
   colorGradients,
   scripts,

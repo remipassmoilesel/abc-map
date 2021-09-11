@@ -40,6 +40,11 @@ L'outil Polygone permet de créer et de modifier des polygones. Vous pouvez sél
 
 L'outil Texte permet d'ajouter et de modifier du texte attaché à des géométries existantes.
 
+## Outil Sélection
+
+L'outil Sélection permet de sélectionner, de déplacer et de modifier plusieurs géométries
+en même temps.
+
 ## Outil Propriétés
 
 L'outil Propriétés permet de créer et de modifier les propriétés de géométries existantes.

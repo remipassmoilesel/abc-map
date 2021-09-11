@@ -159,6 +159,7 @@ export class StyleFactory {
       text: text?.value,
       offsetX,
       offsetY,
+      overflow: true,
       textAlign: text?.alignment,
     });
   }
