@@ -10,6 +10,7 @@
 [Mise en page et légende](#layout-legend)
 [Inscription, connexion](#registration)
 [Questions fréquentes](#faq)
+[A l'aide ! 🔥](#helpme)
 
 <div class="toc-section">Traitements données</div>
 

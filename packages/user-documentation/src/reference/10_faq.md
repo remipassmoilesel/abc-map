@@ -2,13 +2,6 @@
 
 # Questions fréquentes
 
-<div class="frequent-question">J'ai besoin d'aide</div>
-
-- Prenez le temps de consulter la documentation
-- Prenez le temps de regarder les vidéos explicatives
-- Consultez les <a href="https://gitlab.com/abc-map/abc-map/-/issues" target="_blank">Issues</a> du projet. Quelqu'un a peut-être déjà trouvé une solution à votre problème !
-- Créez une <a href="https://gitlab.com/abc-map/abc-map/-/issues" target="_blank">Issue</a>. Décrivez votre problème aussi précisément que possible, quelqu'un pourra peut-être vous aider.
-
 <div class="frequent-question">Quelles sont les formats de données utilisables dans Abc-Map ?</div>
 
 Vous pouvez utiliser dans ce logiciel:
