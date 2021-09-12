@@ -35,17 +35,19 @@ declare type Props = ServiceProps & RouteComponentProps;
 interface State {
   visible: boolean;
   title?: string;
+  voteDone: boolean;
 }
 
 class SolicitationModal extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = { visible: false };
+    this.state = { visible: false, voteDone: false };
   }
 
   public render(): ReactNode {
     const visible = this.state.visible;
     const title = this.state.title;
+    const voteDone = this.state.voteDone;
     if (!visible) {
       return <div />;
     }
@@ -66,24 +68,34 @@ class SolicitationModal extends Component<Props, State> {
             </button>
           </div>
 
-          <div className={'mt-5 mx-4 text-center'}>
-            <p>Comment ça c&apos;est passé ?</p>
-          </div>
+          {!voteDone && (
+            <>
+              <div className={'mt-5 mx-4 text-center'}>
+                <p>Comment ça c&apos;est passé ?</p>
+              </div>
+              <div className={'d-flex flex-row justify-content-center mb-4'}>
+                <button onClick={() => this.handleVote(VoteValue.SATISFIED)} className={`btn btn-outline-primary ${Cls.voteBtn}`}>
+                  <span className={Cls.face}>🥰</span>
+                  Bien !
+                </button>
+                <button onClick={() => this.handleVote(VoteValue.BLAH)} className={`btn btn-outline-primary ${Cls.voteBtn}`}>
+                  <span className={Cls.face}>😐</span>
+                  Bof ...
+                </button>
+                <button onClick={() => this.handleVote(VoteValue.NOT_SATISFIED)} className={`btn btn-outline-primary ${Cls.voteBtn}`}>
+                  <span className={Cls.face}>😞</span>
+                  Pas bien
+                </button>
+              </div>
+            </>
+          )}
 
-          <div className={'d-flex flex-row justify-content-center mb-4'}>
-            <button onClick={() => this.handleVote(VoteValue.SATISFIED)} className={`btn btn-outline-primary ${Cls.voteBtn}`}>
-              <span className={Cls.face}>🥰</span>
-              Bien !
-            </button>
-            <button onClick={() => this.handleVote(VoteValue.BLAH)} className={`btn btn-outline-primary ${Cls.voteBtn}`}>
-              <span className={Cls.face}>😐</span>
-              Bof ...
-            </button>
-            <button onClick={() => this.handleVote(VoteValue.NOT_SATISFIED)} className={`btn btn-outline-primary ${Cls.voteBtn}`}>
-              <span className={Cls.face}>😞</span>
-              Pas bien
-            </button>
-          </div>
+          {voteDone && (
+            <div className={'d-flex flex-column justify-content-center align-items-center my-5'}>
+              <h5>Merci pour votre retour 👍️</h5>
+              <h5>Faites-un don pour soutenir ce projet, c&apos;est facile: par ici ⬆</h5>
+            </div>
+          )}
 
           <div className={'d-flex justify-content-end'}>
             <button className={'btn btn-outline-secondary'} onClick={this.close} data-cy={'close-solicitation-modal'}>
@@ -109,14 +121,14 @@ class SolicitationModal extends Component<Props, State> {
 
   private handleOpen = () => {
     const title = _.sample(Titles);
-    this.setState({ visible: true, title });
+    this.setState({ visible: true, title, voteDone: false });
   };
 
   private handleVote = (value: VoteValue) => {
     const { vote } = this.props.services;
     // We do not wait for vote
     vote.vote(value).catch((err) => logger.error('Error while voting: ', err));
-    this.close();
+    this.setState({ voteDone: true });
   };
 
   private handleDonate = () => {
