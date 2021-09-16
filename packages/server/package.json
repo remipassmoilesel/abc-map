@@ -17,6 +17,7 @@
     "lint-fix": "yarn run lint --fix",
     "coverage": "nyc mocha --trace-warnings 'build/**/*.test.js'",
     "test": "mocha --trace-warnings 'build/**/*.test.js'",
+    "test:interactive": "mocha --watch --trace-warnings 'build/**/*.test.js'",
     "dep-check": "depcruise -c .dependency-cruiser.js src"
   },
   "dependencies": {

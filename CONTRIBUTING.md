@@ -14,7 +14,7 @@ Ensure that your idea is a need that will be shared by other people.
 
 Open an issue to discuss it and to avoid unnecessary or duplicate work.        
 
-If not already done, please check the [backlog](documentation/5_backlog.md) too !
+If not already done, please check the [bottomless well](documentation/5_the_bottomless_well.md) too !
 
 
 ## Getting started 🏁

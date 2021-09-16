@@ -57,7 +57,7 @@ See [documentation](./documentation) folder.
 
 ## How can I help ?
 
-See [CONTRIBUTING](./CONTRIBUTING.md) and [backlog](./documentation/5_backlog.md).        
+See [CONTRIBUTING](./CONTRIBUTING.md) and [backlog](./documentation/5_the_bottomless_well.md).        
 
 
 ## Technologies used 
