@@ -30,6 +30,8 @@ For Debian like and Ubuntu:
     $ cd abc-map
 
 
+## Start commands
+
 A CLI tool builds and starts the project:  
 
     $ ./abc-cli install     # Install all dependencies
@@ -47,11 +49,27 @@ See CLI help for more commands:
     $ ./abc-cli help
 
 
+You can build, test, start packages independently too:
+
+    $ yarn run start:watch        # Start and reload on source change 
+    $ yarn run test               # Run tests once, may need build before
+    $ yarn run test:interactive   # Run tests and rerun on source change, may need build before
+    $ yarn run coverage           # Run tests and export coverage report, may need build before
+    $ yarn run build              # Typescript build 
+    $ yarn run clean              # Clean build sources 
+    $ yarn run clean-build        # Guess what ?
+    $ yarn run lint               # Apply eslint
+    $ yarn run lint-fix           # Apply eslint and fix when possible
+    $ yarn run dep-check          # Dependency analysis with dependency-cruiser
+
+
+## Local services
+
 After start, several services are launched on start:
-- A Mongodb instance on port 27019
-- A Mongo Express instance on port 27020
-- Backend server on port 10082
-- Webpack dev server on port 3005
+- A Mongodb instance on port `27019`
+- A Mongo Express instance on port `27020`
+- Server on port `10082`
+- Webpack dev server on port `3005`
 
 
 You can clean local data by using command:

@@ -131,7 +131,7 @@ class LandingView extends Component<Props, State> {
 
           {!!voteAggregation?.total && (
             <div className={'text-right'}>
-              Sur les 7 derniers jours, {voteAggregation.satisfied} % des utilisateurs ont déclaré être satisfait.&nbsp;
+              Depuis 7 jours, {voteAggregation.satisfied} % des votes sont positifs.&nbsp;
               {voteAggregation.satisfied < 60 && (
                 <>
                   Va falloir faire mieux <span className={'ml-2'}>🧑‍🏭</span>
