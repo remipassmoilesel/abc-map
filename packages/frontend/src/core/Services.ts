@@ -62,7 +62,7 @@ export function servicesFactory(store: MainStore): Services {
   const modals = new ModalService();
   const history = HistoryService.create();
   const geo = new GeoService(externalClient, toasts, history, store);
-  const project = new ProjectService(jsonClient, downloadClient, store, toasts, geo, modals);
+  const project = ProjectService.create(jsonClient, downloadClient, store, toasts, geo, modals);
   const authentication = new AuthenticationService(jsonClient, store, toasts);
   const data = new DataService(jsonClient, downloadClient, toasts, geo, modals, history);
   const vote = new VoteService(jsonClient, toasts);

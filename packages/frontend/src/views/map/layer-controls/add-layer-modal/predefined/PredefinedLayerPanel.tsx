@@ -19,21 +19,30 @@
 import React, { ChangeEvent, Component, ReactNode } from 'react';
 import { Logger, PredefinedLayerModel } from '@abc-map/shared';
 import { LabeledPredefinedModels } from './LabeledPredefinedModels';
+import ControlButtons from '../_common/ControlButtons';
+import { ServiceProps, withServices } from '../../../../../core/withServices';
+import { LayerFactory } from '../../../../../core/geo/layers/LayerFactory';
+import { HistoryKey } from '../../../../../core/history/HistoryKey';
+import { AddLayersTask } from '../../../../../core/history/tasks/layers/AddLayersTask';
 
-const logger = Logger.get('PredefinedSelector.tsx');
+const logger = Logger.get('PredefinedLayerPanel.tsx');
 
-interface Props {
+interface Props extends ServiceProps {
   value: PredefinedLayerModel;
   onChange: (m: PredefinedLayerModel) => void;
+  onCancel: () => void;
+  onConfirm: () => void;
 }
 
-class PredefinedSelector extends Component<Props, {}> {
+class PredefinedLayerPanel extends Component<Props, {}> {
   public render(): ReactNode {
     const model = this.props.value;
     const labelledModel = LabeledPredefinedModels.find(model);
+    const onCancel = this.props.onCancel;
+
     return (
-      <div className={'mb-3'}>
-        <div className={'mb-2'}>Sélectionnez le type de fond de carte : </div>
+      <div className={'flex-grow-1 d-flex flex-column'}>
+        <div className={'mb-3'}>Sélectionnez le fond de carte que vous souhaitez : </div>
         <select value={model} onChange={this.handleChange} className={'form-control mb-3'} data-cy={'predefined-model'}>
           {LabeledPredefinedModels.All.map((m) => (
             <option key={m.id} value={m.id}>
@@ -43,19 +52,33 @@ class PredefinedSelector extends Component<Props, {}> {
         </select>
 
         <div className={'mb-2'}>Aperçu : </div>
-        <div className={'d-flex justify-content-center'}>
+        <div className={'d-flex justify-content-center mb-4'}>
           <img src={labelledModel?.preview} width={440} alt={labelledModel?.label} className={'border'} />
         </div>
-        <div className={'my-2'}>
-          Origine des données et licence:
-          <div>
-            <span dangerouslySetInnerHTML={{ __html: labelledModel?.by || '' }} />
-            <span className={'ml-2'} dangerouslySetInnerHTML={{ __html: labelledModel?.license || '' }} />
-          </div>
+        <div>
+          Origine des données et licence:&nbsp;
+          <span dangerouslySetInnerHTML={{ __html: labelledModel?.by || '' }} />
+          <span className={'ml-2'} dangerouslySetInnerHTML={{ __html: labelledModel?.license || '' }} />
         </div>
+
+        {/* Control buttons */}
+        <ControlButtons onCancel={onCancel} onConfirm={this.handleConfirm} />
       </div>
     );
   }
+
+  private handleConfirm = () => {
+    const { geo, history } = this.props.services;
+    const { value } = this.props;
+
+    const map = geo.getMainMap();
+    const layer = LayerFactory.newPredefinedLayer(value);
+    map.addLayer(layer);
+    map.setActiveLayer(layer);
+    history.register(HistoryKey.Map, new AddLayersTask(map, [layer]));
+
+    this.props.onConfirm();
+  };
 
   private handleChange = (ev: ChangeEvent<HTMLSelectElement>) => {
     const value = ev.target.value as PredefinedLayerModel;
@@ -63,4 +86,4 @@ class PredefinedSelector extends Component<Props, {}> {
   };
 }
 
-export default PredefinedSelector;
+export default withServices(PredefinedLayerPanel);

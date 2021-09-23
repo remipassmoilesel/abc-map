@@ -22,34 +22,41 @@ import { ServiceProps, withServices } from '../../../../../core/withServices';
 import FormValidationLabel from '../../../../../components/form-validation-label/FormValidationLabel';
 import { ValidationHelper } from '../../../../../core/utils/ValidationHelper';
 import { FormState } from '../../../../../components/form-validation-label/FormState';
+import ControlButtons from '../_common/ControlButtons';
+import { LayerFactory } from '../../../../../core/geo/layers/LayerFactory';
+import { HistoryKey } from '../../../../../core/history/HistoryKey';
+import { AddLayersTask } from '../../../../../core/history/tasks/layers/AddLayersTask';
 
-const logger = Logger.get('XYZSettingsPanel.tsx');
+const logger = Logger.get('XYZLayerPanel.tsx');
 
 interface LocalProps {
+  value: string;
   onChange: (xyzUrl: string) => void;
+  onCancel: () => void;
+  onConfirm: () => void;
 }
 
 interface State {
-  url: string;
   formState: FormState;
 }
 
 declare type Props = LocalProps & ServiceProps;
 
-class XYZSettingsPanel extends Component<Props, State> {
+class XYZLayerPanel extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = {
-      url: '',
-      formState: FormState.InvalidUrl,
-    };
+    this.state = { formState: FormState.InvalidUrl };
   }
 
   public render(): ReactNode {
-    const url = this.state.url;
+    const url = this.props.value;
     const formState = this.state.formState;
+    const onCancel = this.props.onCancel;
+    const submitDisabled = formState !== FormState.Ok;
+
     return (
-      <div>
+      <div className={'flex-grow-1 d-flex flex-column justify-content-between'}>
+        {/* Url form */}
         <div className={'d-flex flex-column'}>
           <input
             type={'text'}
@@ -68,17 +75,38 @@ class XYZSettingsPanel extends Component<Props, State> {
           </div>
         </div>
 
+        {/* Form validation */}
         <FormValidationLabel state={formState} />
+
+        {/* Control buttons */}
+        <ControlButtons submitDisabled={submitDisabled} onCancel={onCancel} onConfirm={this.handleConfirm} />
       </div>
     );
   }
 
+  public componentDidMount() {
+    // We validate form on mount, in case of a pre exising state
+    const formState = this.validateForm(this.props.value);
+    this.setState({ formState });
+  }
+
+  private handleConfirm = () => {
+    const { history, geo } = this.props.services;
+
+    const map = geo.getMainMap();
+    const layer = LayerFactory.newXyzLayer(this.props.value);
+    map.addLayer(layer);
+    map.setActiveLayer(layer);
+    history.register(HistoryKey.Map, new AddLayersTask(map, [layer]));
+
+    this.props.onConfirm();
+  };
+
   private handleUrlChanged = (ev: ChangeEvent<HTMLInputElement>) => {
     const value = ev.target.value;
-    const formState = this.validateForm(ev.target.value);
-    this.setState({ url: value, formState }, () => {
-      this.props.onChange(value);
-    });
+
+    const formState = this.validateForm(value);
+    this.setState({ formState }, () => this.props.onChange(value));
   };
 
   private validateForm(url: string): FormState {
@@ -94,4 +122,4 @@ function variable(name: string) {
   return <code>&#123;{name}&#125;</code>;
 }
 
-export default withServices(XYZSettingsPanel);
+export default withServices(XYZLayerPanel);

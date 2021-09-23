@@ -19,8 +19,9 @@
 import { Encryption } from './Encryption';
 import { TestHelper } from './test/TestHelper';
 import { deepFreeze } from './deepFreeze';
-import { AbcProjectManifest, AbcWmsLayer, AbcXyzLayer } from '@abc-map/shared';
+import { AbcLayer, AbcProjectManifest, AbcWmsLayer, AbcWmtsLayer, AbcXyzLayer } from '@abc-map/shared';
 import { Errors } from './Errors';
+import _ from 'lodash';
 
 /**
  * Warning: changes on encryption will require a data migration
@@ -46,62 +47,140 @@ describe('Encryption', () => {
     });
   });
 
-  it('encryptManifest()', async () => {
-    // Prepare
-    const manifest: AbcProjectManifest = deepFreeze({
-      ...TestHelper.sampleProjectManifest(),
-      layers: [...TestHelper.sampleProjectManifest().layers, TestHelper.sampleWmsLayer(), TestHelper.sampleXyzLayer()],
-      metadata: {
-        ...TestHelper.sampleProjectManifest().metadata,
-        containsCredentials: false,
-      },
+  describe('encryptManifest()', () => {
+    it('layers with no secrets', async () => {
+      const manifest = newClearManifest([TestHelper.sampleOsmLayer(), TestHelper.sampleVectorLayer()]);
+
+      const encrypted = await Encryption.encryptManifest(manifest, 'azerty1234');
+
+      expect(encrypted.metadata).toEqual({ ...manifest.metadata, containsCredentials: true });
+      expect(encrypted.layers.length).toEqual(manifest.layers.length);
+      expect(encrypted.layers).toEqual(manifest.layers);
     });
 
-    // Act
-    const result = await Encryption.encryptManifest(manifest, 'azerty1234');
+    it('WMS layer, with authentication', async () => {
+      const original = TestHelper.sampleWmsLayer();
+      const manifest = newClearManifest([original]);
 
-    expect(result.metadata).toEqual({ ...manifest.metadata, containsCredentials: true });
-    expect(result.layers.length).toEqual(manifest.layers.length);
-    expect(result.layers.slice(0, 2)).toEqual(manifest.layers.slice(0, 2));
+      const encrypted = await Encryption.encryptManifest(manifest, 'azerty1234');
 
-    const originalWms = manifest.layers[2] as AbcWmsLayer;
-    const wms = result.layers[2] as AbcWmsLayer;
-    expect(wms.metadata.remoteUrl).toMatch('encrypted:');
-    expect(wms.metadata.auth?.username).toMatch('encrypted:');
-    expect(wms.metadata.auth?.password).toMatch('encrypted:');
-    expect(wms.metadata.remoteUrl).not.toEqual(originalWms.metadata.remoteUrl);
-    expect(wms.metadata.auth?.username).not.toEqual(originalWms.metadata.auth?.username);
-    expect(wms.metadata.auth?.password).not.toEqual(originalWms.metadata.auth?.password);
+      const wms = encrypted.layers[0] as AbcWmsLayer;
+      expect(wms.metadata.remoteUrl).toMatch('encrypted:');
+      expect(wms.metadata.auth?.username).toMatch('encrypted:');
+      expect(wms.metadata.auth?.password).toMatch('encrypted:');
+      expect(wms.metadata.remoteUrl).not.toContain(original.metadata.remoteUrl);
+      expect(wms.metadata.auth?.username).not.toContain(original.metadata.auth?.username);
+      expect(wms.metadata.auth?.password).not.toContain(original.metadata.auth?.password);
 
-    const originalXyz = manifest.layers[2] as AbcXyzLayer;
-    const xyz = result.layers[2] as AbcXyzLayer;
-    expect(xyz.metadata.remoteUrl).toMatch('encrypted:');
-    expect(xyz.metadata.remoteUrl).not.toEqual(originalXyz.metadata.remoteUrl);
+      expect(comparableMetadata(wms)).toEqual(comparableMetadata(original));
+    });
+
+    it('WMS layer, without authentication', async () => {
+      const original = TestHelper.sampleWmsLayer();
+      original.metadata.auth = undefined;
+      const manifest = newClearManifest([original]);
+
+      const encrypted = await Encryption.encryptManifest(manifest, 'azerty1234');
+
+      const wms = encrypted.layers[0] as AbcWmsLayer;
+      expect(wms.metadata.remoteUrl).toMatch('encrypted:');
+      expect(wms.metadata.remoteUrl).not.toContain(original.metadata.remoteUrl);
+
+      expect(comparableMetadata(wms)).toEqual(comparableMetadata(original));
+    });
+
+    it('WMTS layer', async () => {
+      const original = TestHelper.sampleWmtsLayer();
+      const manifest = newClearManifest([original]);
+
+      const encrypted = await Encryption.encryptManifest(manifest, 'azerty1234');
+
+      const wmts = encrypted.layers[0] as AbcWmtsLayer;
+      expect(wmts.metadata.remoteUrl).toMatch('encrypted:');
+      expect(wmts.metadata.auth?.username).toMatch('encrypted:');
+      expect(wmts.metadata.auth?.password).toMatch('encrypted:');
+      expect(wmts.metadata.remoteUrl).not.toContain(original.metadata.remoteUrl);
+      expect(wmts.metadata.auth?.username).not.toContain(original.metadata.auth?.username);
+      expect(wmts.metadata.auth?.password).not.toContain(original.metadata.auth?.password);
+
+      expect(comparableMetadata(wmts)).toEqual(comparableMetadata(original));
+    });
+
+    it('XYZ layer', async () => {
+      const original = TestHelper.sampleXyzLayer();
+      const manifest = newClearManifest([original]);
+
+      const encrypted = await Encryption.encryptManifest(manifest, 'azerty1234');
+
+      const xyz = encrypted.layers[0] as AbcXyzLayer;
+      expect(xyz.metadata.remoteUrl).toMatch('encrypted:');
+      expect(xyz.metadata.remoteUrl).not.toContain(original.metadata.remoteUrl);
+
+      expect(comparableMetadata(xyz)).toEqual(comparableMetadata(original));
+    });
   });
 
-  it('decryptManifest()', async () => {
-    // Prepare
-    const manifest = deepFreeze({
-      ...TestHelper.sampleProjectManifest(),
-      layers: [...TestHelper.sampleProjectManifest().layers, TestHelper.sampleWmsLayer(), TestHelper.sampleXyzLayer()],
+  describe('decryptManifest()', () => {
+    it('layers with no secrets', async () => {
+      const originals = deepFreeze([TestHelper.sampleOsmLayer(), TestHelper.sampleVectorLayer()]);
+      const manifest = await newEncryptedManifest(originals);
+
+      const result = await Encryption.decryptManifest(manifest, 'azerty1234');
+
+      expect(result.layers).toEqual(originals);
     });
-    const encrypted = deepFreeze(await Encryption.encryptManifest(manifest, 'azerty1234'));
 
-    // Act
-    const result = await Encryption.decryptManifest(encrypted, 'azerty1234');
+    it('WMS with authentication', async () => {
+      const original = deepFreeze(TestHelper.sampleWmsLayer());
+      const manifest = await newEncryptedManifest([original]);
 
-    expect(result.metadata).toEqual({ ...manifest.metadata, containsCredentials: false });
-    expect(result.layers.length).toEqual(manifest.layers.length);
-    expect(result.layers.slice(0, 2)).toEqual(manifest.layers.slice(0, 2));
+      const result = await Encryption.decryptManifest(manifest, 'azerty1234');
 
-    const originalWms = manifest.layers[2] as AbcWmsLayer;
-    const wms = result.layers[2] as AbcWmsLayer;
-    expect(wms.metadata.remoteUrl).toEqual(originalWms.metadata.remoteUrl);
-    expect(wms.metadata.auth?.username).toEqual(originalWms.metadata.auth?.username);
-    expect(wms.metadata.auth?.password).toEqual(originalWms.metadata.auth?.password);
+      expect(result.layers[0]).toEqual(original);
+    });
 
-    const originalXyz = manifest.layers[2] as AbcXyzLayer;
-    const xyz = result.layers[2] as AbcXyzLayer;
-    expect(xyz.metadata.remoteUrl).toEqual(originalXyz.metadata.remoteUrl);
+    it('WMTS with authentication', async () => {
+      const original = deepFreeze(TestHelper.sampleWmtsLayer());
+      const manifest = await newEncryptedManifest([original]);
+
+      const result = await Encryption.decryptManifest(manifest, 'azerty1234');
+
+      expect(result.layers[0]).toEqual(original);
+    });
+
+    it('XYZ', async () => {
+      const original = deepFreeze(TestHelper.sampleXyzLayer());
+      const manifest = await newEncryptedManifest([original]);
+
+      const result = await Encryption.decryptManifest(manifest, 'azerty1234');
+
+      expect(result.layers[0]).toEqual(original);
+    });
   });
 });
+
+function newClearManifest(layers: AbcLayer[]): AbcProjectManifest {
+  // We "freeze" project in order to check immutability
+  const template = TestHelper.sampleProjectManifest();
+  return deepFreeze({
+    ...template,
+    layers,
+    metadata: {
+      ...template.metadata,
+      containsCredentials: false,
+    },
+  });
+}
+
+async function newEncryptedManifest(layers: AbcLayer[]): Promise<AbcProjectManifest> {
+  // We "freeze" project in order to check immutability
+  const template = TestHelper.sampleProjectManifest();
+  const manifest = deepFreeze({ ...template, layers });
+  const encrypted = await Encryption.encryptManifest(manifest, 'azerty1234');
+
+  return deepFreeze(encrypted);
+}
+
+function comparableMetadata(meta: any): any {
+  return _.omit(meta, ['metadata.auth', 'metadata.remoteUrl']);
+}

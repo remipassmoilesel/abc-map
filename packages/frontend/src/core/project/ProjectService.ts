@@ -32,7 +32,6 @@ import {
   LegendDisplay,
   Logger,
   ProjectConstants,
-  WmsMetadata,
   Zipper,
 } from '@abc-map/shared';
 import { AxiosInstance } from 'axios';
@@ -48,11 +47,23 @@ import { ModalStatus } from '../ui/typings';
 import { ModalService } from '../ui/ModalService';
 import { ProjectEvent, ProjectEventType } from './ProjectEvent';
 import { Errors } from '../utils/Errors';
-import { ProjectUpdater } from './migrations/ProjectUpdater';
+import { ProjectUpdater } from './ProjectUpdater';
 
 export const logger = Logger.get('ProjectService.ts');
 
 export class ProjectService {
+  public static create(
+    jsonClient: AxiosInstance,
+    downloadClient: AxiosInstance,
+    store: MainStore,
+    toasts: ToastService,
+    geoService: GeoService,
+    modals: ModalService
+  ) {
+    const updater = ProjectUpdater.create(modals);
+    return new ProjectService(jsonClient, downloadClient, store, toasts, geoService, modals, updater);
+  }
+
   private eventTarget = document.createDocumentFragment();
 
   constructor(
@@ -62,7 +73,7 @@ export class ProjectService {
     private toasts: ToastService,
     private geoService: GeoService,
     private modals: ModalService,
-    private updater = ProjectUpdater.create()
+    private updater: ProjectUpdater
   ) {}
 
   public addEventListener(listener: (ev: ProjectEvent) => void) {
@@ -122,9 +133,12 @@ export class ProjectService {
   }
 
   public async loadManifest(manifest: AbcProjectManifest, password: string | undefined, files: AbcFile[] = []): Promise<void> {
+    // Migrate project if necessary
+    const migrated = await this.updater.update(manifest, files);
+
     // Prompt password if necessary
     let _password = password;
-    if (this.manifestContainsCredentials(manifest) && !_password) {
+    if (this.manifestContainsCredentials(migrated.manifest) && !_password) {
       const ev = await this.modals.getProjectPassword();
       const canceled = ev.status === ModalStatus.Canceled;
       _password = ev.value;
@@ -135,11 +149,8 @@ export class ProjectService {
 
     // Decrypt project manifest if password set
     if (_password) {
-      manifest = await Encryption.decryptManifest(manifest, _password);
+      migrated.manifest = await Encryption.decryptManifest(migrated.manifest, _password);
     }
-
-    // Migrate project if necessary
-    const migrated = await this.updater.update(manifest, files);
 
     // Load project
     this.store.dispatch(ProjectActions.loadProject(migrated.manifest));
@@ -272,21 +283,10 @@ export class ProjectService {
   }
 
   private manifestContainsCredentials(project: AbcProjectManifest): boolean {
-    // XYZ layers may contains credentials in URL
-    const xyzLayers = project.layers.find((lay) => LayerType.Xyz === lay.type);
-    if (xyzLayers) {
-      return true;
-    }
+    const protectedTypes = [LayerType.Wms, LayerType.Wmts, LayerType.Xyz];
+    const protectedLayer = project.layers.find((lay) => protectedTypes.includes(lay.type));
 
-    // Search for a wms layer with credentials
-    const wmsLayersWithCredentials = project.layers
-      .filter((lay) => LayerType.Wms === lay.type)
-      .find((lay) => {
-        const metadata: WmsMetadata = lay.metadata as WmsMetadata;
-        return metadata.auth?.username && metadata.auth?.password;
-      });
-
-    return !!wmsLayersWithCredentials;
+    return !!protectedLayer;
   }
 
   public deleteLegendItem(item: AbcLegendItem) {

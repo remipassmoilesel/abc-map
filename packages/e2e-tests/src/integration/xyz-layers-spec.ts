@@ -33,7 +33,7 @@ describe('XYZ layers', function () {
       .get('[data-cy=add-layer]')
       .click()
       .get('[data-cy=add-layer-type]')
-      .select('Couche distante (XYZ)')
+      .select('Couche distante XYZ')
       .get('[data-cy=add-layer-confirm]')
       .should('be.disabled')
       // Enter URL

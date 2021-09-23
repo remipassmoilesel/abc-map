@@ -299,7 +299,7 @@ describe('MapWrapper', function () {
       expect(map.containsCredentials()).toEqual(true);
     });
 
-    it('should return true if WMS layer with credentials', () => {
+    it('should return true if WMS layer', () => {
       const map = MapFactory.createNaked();
       map.addLayer(
         LayerFactory.newWmsLayer({
@@ -311,6 +311,13 @@ describe('MapWrapper', function () {
           },
         })
       );
+
+      expect(map.containsCredentials()).toEqual(true);
+    });
+
+    it('should return true if WMTS layer', () => {
+      const map = MapFactory.createNaked();
+      map.addLayer(LayerFactory.newWmtsLayer(TestHelper.sampleWmtsSettings()));
 
       expect(map.containsCredentials()).toEqual(true);
     });

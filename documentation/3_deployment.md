@@ -8,7 +8,7 @@ Supported deployment is on Kubernetes, but you can easily deploy Abc-Map on any 
 
 ## Version
 
-At the moment there are no versions, because it is not yet necessary. 
+Presently there are no versions, because it is not yet necessary. 
 
 Docker images are built when the official platform is deployed. They are stored in the Gitlab repository with dated tags
 (e.g: `v2021-07-27T04-25-45-863Z`). This repository is cleaned up regularly.

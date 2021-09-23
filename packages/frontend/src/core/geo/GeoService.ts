@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcLayer, WmsAuthentication } from '@abc-map/shared';
+import { AbcLayer, BasicAuthentication } from '@abc-map/shared';
 import { Logger } from '@abc-map/shared';
 import { MapWrapper } from './map/MapWrapper';
 import { MapFactory } from './map/MapFactory';
@@ -24,7 +24,7 @@ import { AbstractTool } from '../tools/AbstractTool';
 import { MainStore, mainStore } from '../store/store';
 import { MapActions } from '../store/map/actions';
 import { AxiosInstance } from 'axios';
-import { WMSCapabilities as WMSCapabilitiesParser } from 'ol/format';
+import { WMSCapabilities as WMSCapabilitiesParser, WMTSCapabilities as WMTSCapabilitiesParser } from 'ol/format';
 import { WmsCapabilities } from './WmsCapabilities';
 import { FeatureStyle } from '@abc-map/shared';
 import { UpdateStyleItem, UpdateStyleTask } from '../history/tasks/features/UpdateStyleTask';
@@ -36,6 +36,7 @@ import { ToastService } from '../ui/ToastService';
 import { LayerFactory } from './layers/LayerFactory';
 import { ProjectActions } from '../store/project/actions';
 import { Coordinate } from 'ol/coordinate';
+import { WmtsCapabilities } from './WmtsCapabilities';
 
 export const logger = Logger.get('GeoService.ts');
 
@@ -88,11 +89,33 @@ export class GeoService {
   /**
    * Warning: responses can be VERY heavy
    */
-  public getWmsCapabilities(url: string, auth?: WmsAuthentication): Promise<WmsCapabilities> {
-    const capabilitiesUrl = `${url}?service=wms&request=GetCapabilities`;
-    const parser = new WMSCapabilitiesParser();
+  public getWmsCapabilities(url: string, auth?: BasicAuthentication): Promise<WmsCapabilities> {
+    let capabilitiesUrl = url;
+    if (url.indexOf('?') === -1) {
+      capabilitiesUrl = `${url}?service=wms&request=GetCapabilities`;
+    }
 
-    return this.httpClient.get(capabilitiesUrl, { auth }).then((res) => parser.read(res.data));
+    return this.httpClient.get(capabilitiesUrl, { auth }).then((res) => {
+      const document = new DOMParser().parseFromString(res.data, 'application/xml');
+      const parser = new WMSCapabilitiesParser();
+      return parser.read(document);
+    });
+  }
+
+  /**
+   * Warning: responses can be VERY heavy
+   */
+  public getWmtsCapabilities(url: string, auth?: BasicAuthentication): Promise<WmtsCapabilities> {
+    let capabilitiesUrl = url;
+    if (url.indexOf('?') === -1) {
+      capabilitiesUrl = `${url}?service=wmts&request=GetCapabilities`;
+    }
+
+    return this.httpClient.get(capabilitiesUrl, { auth }).then((res) => {
+      const document = new DOMParser().parseFromString(res.data, 'application/xml');
+      const parser = new WMTSCapabilitiesParser();
+      return parser.read(document);
+    });
   }
 
   public updateSelectedFeatures(transform: (x: FeatureStyle, f: FeatureWrapper) => FeatureStyle) {

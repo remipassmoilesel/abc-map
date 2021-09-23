@@ -18,15 +18,17 @@
 
 import { FeatureCollection } from 'geojson';
 import { AbcProjection } from '../AbcProjection';
+import { BasicAuthentication } from '../BasicAuthentication';
 
-export type AbcLayer = AbcVectorLayer | AbcPredefinedLayer | AbcWmsLayer | AbcXyzLayer;
+export type AbcLayer = AbcVectorLayer | AbcPredefinedLayer | AbcWmsLayer | AbcWmtsLayer | AbcXyzLayer;
 
-export type LayerMetadata = VectorMetadata | PredefinedMetadata | WmsMetadata | XyzMetadata;
+export type LayerMetadata = VectorMetadata | PredefinedMetadata | WmsMetadata | WmtsMetadata | XyzMetadata;
 
 export enum LayerType {
   Vector = 'Vector',
   Predefined = 'Predefined',
   Wms = 'Wms',
+  Wmts = 'Wmts',
   Xyz = 'Xyz',
 }
 
@@ -86,15 +88,33 @@ export interface WmsMetadata extends BaseMetadata {
   extent?: [number, number, number, number];
   remoteUrl: string;
   remoteLayerName: string;
-  auth?: {
-    username: string;
-    password: string;
-  };
+  auth?: BasicAuthentication;
 }
 
 export interface AbcWmsLayer extends AbcBaseLayer {
   type: LayerType.Wms;
   metadata: WmsMetadata;
+}
+
+// WMTS
+
+export interface WmtsMetadata extends BaseMetadata {
+  type: LayerType.Wmts;
+  remoteUrl: string;
+  remoteLayerName: string;
+  matrixSet: string;
+  style: string;
+  auth?: BasicAuthentication;
+  resolutions: number[];
+  matrixIds: string[];
+  projection?: AbcProjection;
+  origins: number[][];
+  extent?: [number, number, number, number];
+}
+
+export interface AbcWmtsLayer extends AbcBaseLayer {
+  type: LayerType.Wmts;
+  metadata: WmtsMetadata;
 }
 
 // XYZ

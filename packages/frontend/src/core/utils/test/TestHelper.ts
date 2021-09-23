@@ -28,6 +28,7 @@ import {
   AbcProjectManifest,
   AbcVectorLayer,
   AbcWmsLayer,
+  AbcWmtsLayer,
   AbcXyzLayer,
   CompressedProject,
   DEFAULT_PROJECTION,
@@ -53,6 +54,7 @@ import { PointIconName } from '../../../assets/point-icons/PointIconName';
 import { nanoid } from 'nanoid';
 import { Encryption } from '../Encryption';
 import MapBrowserEventType from 'ol/MapBrowserEventType';
+import { WmtsSettings } from '../../geo/layers/LayerFactory.types';
 
 interface EventSettings {
   coordinate?: Coordinate;
@@ -198,6 +200,44 @@ export class TestHelper {
           username: 'test-username',
           password: 'test-password',
         },
+      },
+    };
+  }
+
+  public static sampleWmtsLayer(): AbcWmtsLayer {
+    return {
+      type: LayerType.Wmts,
+      metadata: {
+        id: uuid(),
+        name: 'Couche WMTS',
+        type: LayerType.Wmts,
+        visible: true,
+        active: true,
+        opacity: 1,
+        ...this.sampleWmtsSettings(),
+      },
+    };
+  }
+
+  public static sampleWmtsSettings(): WmtsSettings {
+    return {
+      remoteUrl: 'http://domain.fr/wmts',
+      remoteLayerName: 'test-layer-name',
+      projection: { name: 'EPSG:3857' },
+      extent: [-7034346.839028204, -2443080.2980507985, 6216929.25854652, 6652314.571658893],
+      matrixSet: 'PM',
+      style: 'normal',
+      resolutions: [156543.033928041, 78271.51696402048, 39135.758482010235, 19567.87924100512],
+      matrixIds: ['0', '1', '2', '3'],
+      origins: [
+        [-20037508.342789248, 20037508.342789248],
+        [-20037508.342789248, 20037508.342789248],
+        [-20037508.342789248, 20037508.342789248],
+        [-20037508.342789248, 20037508.342789248],
+      ],
+      auth: {
+        username: 'test-username',
+        password: 'test-password',
       },
     };
   }

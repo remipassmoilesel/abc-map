@@ -33,7 +33,7 @@ import { ProjectEventType } from './ProjectEvent';
 import { ModalEventType, ModalStatus } from '../ui/typings';
 import { Errors } from '../utils/Errors';
 import { LayerFactory } from '../geo/layers/LayerFactory';
-import { ProjectUpdater } from './migrations/ProjectUpdater';
+import { ProjectUpdater } from './ProjectUpdater';
 
 logger.disable();
 

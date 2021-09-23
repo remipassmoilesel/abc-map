@@ -72,23 +72,19 @@ describe('Project', function () {
 
     it('can export project', function () {
       cy.visit(FrontendRoutes.map().raw())
-        .then(() => LayerControls.addWmsLayer())
         .get('[data-cy=export-project]')
         .click()
         .then(() => Toasts.assertText('Export terminé !'))
         .then(() => Download.fileAsBlob())
-        .then((downloaded) => TestData.projectSample1().then((witness) => ({ downloaded, witness })))
-        .should(async ({ downloaded, witness }) => {
+        .should(async (downloaded) => {
           const helper = ProjectHelper.forFrontend();
           const projectA = await helper.extractManifest(downloaded);
-          const projectB = await helper.extractManifest(witness);
-          expect(projectA.metadata.projection).deep.equals(projectB.metadata.projection);
-          expect(projectA.metadata.version).equals('0.2.0');
-          expect(projectA.layers).length(projectB.layers.length);
-          expect(projectA.layers[0].type).equals(projectB.layers[0].type);
-          expect(projectA.layers[1].type).equals(projectB.layers[1].type);
-          expect(projectA.layers[2].type).equals(projectB.layers[2].type);
-          expect(projectA.layouts).deep.equals(projectB.layouts);
+          expect(projectA.metadata.id).not.undefined;
+          expect(projectA.metadata.projection).deep.equals({ name: 'EPSG:3857' });
+          expect(projectA.metadata.version).equals('0.3.0');
+          expect(projectA.layers).length(2);
+          expect(projectA.layers[0].type).equals(LayerType.Predefined);
+          expect(projectA.layers[1].type).equals(LayerType.Vector);
         })
         .get('[data-cy=close-solicitation-modal]')
         .click();
@@ -113,10 +109,9 @@ describe('Project', function () {
         .then(() => MainMap.getReference())
         .should((map) => {
           const layers = map.getLayersMetadata();
-          expect(layers).length(3);
+          expect(layers).length(2);
           expect(layers[0].type).equal(LayerType.Predefined);
           expect(layers[1].type).equal(LayerType.Vector);
-          expect(layers[2].type).equal(LayerType.Wms);
         });
     });
 
@@ -196,7 +191,6 @@ describe('Project', function () {
 
     it('can store project online without credentials', function () {
       cy.visit(FrontendRoutes.map().raw())
-        .then(() => LayerControls.addWmsLayer())
         .get('[data-cy=save-project]')
         .click()
         .then(() => Toasts.assertText('Projet enregistré !'))
@@ -226,7 +220,6 @@ describe('Project', function () {
     it('can load remote project', function () {
       cy.visit(FrontendRoutes.map().raw())
         // Create a project and store it online
-        .then(() => LayerControls.addWmsLayer())
         .get('[data-cy=save-project]')
         .click()
         .then(() => Toasts.assertText('Projet enregistré !'))
@@ -251,7 +244,6 @@ describe('Project', function () {
           const layers = map.getLayersMetadata();
           expect(layers[0].type).equal(LayerType.Predefined);
           expect(layers[1].type).equal(LayerType.Vector);
-          expect(layers[2].type).equal(LayerType.Wms);
         });
     });
 
@@ -301,8 +293,6 @@ describe('Project', function () {
     it('can delete project', function () {
       const projectName = uuid();
       cy.visit(FrontendRoutes.map().raw())
-        // Create project
-        .then(() => LayerControls.addWmsLayer())
         // Rename project
         .get('[data-cy=rename-project]')
         .click()

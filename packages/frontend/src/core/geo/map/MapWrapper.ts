@@ -17,7 +17,7 @@
  */
 
 import { Map } from 'ol';
-import { LayerProperties, AbcProjection, VectorMetadata, PredefinedLayerModel, AbcView } from '@abc-map/shared';
+import { LayerProperties, AbcProjection, VectorMetadata, PredefinedLayerModel, AbcView, LayerType } from '@abc-map/shared';
 import _ from 'lodash';
 import { ResizeObserverFactory } from '../../utils/ResizeObserverFactory';
 import BaseEvent from 'ol/events/Event';
@@ -240,20 +240,13 @@ export class MapWrapper {
   }
 
   public containsCredentials(): boolean {
-    const xyz = this.getLayers().find((l) => l.isXyz());
-    if (xyz) {
-      return true;
-    }
-
-    const wmsWithCredentials = this.getLayers().find((lay) => {
-      if (lay.isWms()) {
-        const meta = lay.getMetadata();
-        return meta?.auth?.username && meta?.auth?.password;
-      }
-      return false;
+    const protectedTypes = [LayerType.Wms, LayerType.Wmts, LayerType.Xyz];
+    const protectedLayer = this.getLayers().find((lay) => {
+      const type = lay.getType();
+      return type && protectedTypes.includes(type);
     });
 
-    return !!wmsWithCredentials;
+    return !!protectedLayer;
   }
 
   public setLayerVisible(layer: LayerWrapper, value: boolean) {

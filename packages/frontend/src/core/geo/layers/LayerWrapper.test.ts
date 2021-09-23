@@ -25,7 +25,6 @@ import {
   PredefinedLayerModel,
   PredefinedMetadata,
   VectorMetadata,
-  WmsDefinition,
   XyzMetadata,
 } from '@abc-map/shared';
 import VectorSource from 'ol/source/Vector';
@@ -34,6 +33,9 @@ import { TestHelper } from '../../utils/test/TestHelper';
 import { LayerFactory } from './LayerFactory';
 import TileLayer from 'ol/layer/Tile';
 import VectorImageLayer from 'ol/layer/VectorImage';
+import { WmsSettings } from './LayerFactory.types';
+import TileSource from 'ol/source/Tile';
+import { WMTS, XYZ } from 'ol/source';
 
 wrapperLogger.disable();
 
@@ -44,35 +46,49 @@ describe('LayerWrapper', () => {
       layer.set(LayerProperties.Type, LayerType.Predefined);
       expect(LayerWrapper.from(layer).isPredefined()).toBe(true);
       expect(LayerWrapper.from(layer).isVector()).toBe(false);
-      expect(LayerWrapper.from(layer).isWms()).toBe(false);
       expect(LayerWrapper.from(layer).isXyz()).toBe(false);
+      expect(LayerWrapper.from(layer).isWms()).toBe(false);
+      expect(LayerWrapper.from(layer).isWmts()).toBe(false);
     });
 
     it('vector()', () => {
       const layer = new VectorImageLayer();
       layer.set(LayerProperties.Type, LayerType.Vector);
-      expect(LayerWrapper.from(layer).isVector()).toBe(true);
       expect(LayerWrapper.from(layer).isPredefined()).toBe(false);
-      expect(LayerWrapper.from(layer).isWms()).toBe(false);
+      expect(LayerWrapper.from(layer).isVector()).toBe(true);
       expect(LayerWrapper.from(layer).isXyz()).toBe(false);
+      expect(LayerWrapper.from(layer).isWms()).toBe(false);
+      expect(LayerWrapper.from(layer).isWmts()).toBe(false);
     });
 
     it('wms()', () => {
       const layer = new VectorImageLayer();
       layer.set(LayerProperties.Type, LayerType.Wms);
-      expect(LayerWrapper.from(layer).isWms()).toBe(true);
       expect(LayerWrapper.from(layer).isPredefined()).toBe(false);
       expect(LayerWrapper.from(layer).isVector()).toBe(false);
       expect(LayerWrapper.from(layer).isXyz()).toBe(false);
+      expect(LayerWrapper.from(layer).isWms()).toBe(true);
+      expect(LayerWrapper.from(layer).isWmts()).toBe(false);
+    });
+
+    it('wmts()', () => {
+      const layer = new TileLayer();
+      layer.set(LayerProperties.Type, LayerType.Wmts);
+      expect(LayerWrapper.from(layer).isPredefined()).toBe(false);
+      expect(LayerWrapper.from(layer).isVector()).toBe(false);
+      expect(LayerWrapper.from(layer).isXyz()).toBe(false);
+      expect(LayerWrapper.from(layer).isWms()).toBe(false);
+      expect(LayerWrapper.from(layer).isWmts()).toBe(true);
     });
 
     it('xyz()', () => {
       const layer = new TileLayer();
       layer.set(LayerProperties.Type, LayerType.Xyz);
-      expect(LayerWrapper.from(layer).isWms()).toBe(false);
       expect(LayerWrapper.from(layer).isPredefined()).toBe(false);
       expect(LayerWrapper.from(layer).isVector()).toBe(false);
       expect(LayerWrapper.from(layer).isXyz()).toBe(true);
+      expect(LayerWrapper.from(layer).isWms()).toBe(false);
+      expect(LayerWrapper.from(layer).isWmts()).toBe(false);
     });
   });
 
@@ -162,7 +178,7 @@ describe('LayerWrapper', () => {
     });
 
     it('on WMS layer', () => {
-      const def: WmsDefinition = {
+      const def: WmsSettings = {
         remoteUrl: 'http://test-url',
         remoteLayerName: 'test-layer-name',
         projection: { name: 'EPSG:4326' },
@@ -268,10 +284,14 @@ describe('LayerWrapper', () => {
   });
 
   describe('shallowClone()', () => {
-    it('with tile layer', () => {
+    it('with predefined layer', () => {
+      // Prepare
       const layer = LayerFactory.newPredefinedLayer(PredefinedLayerModel.OSM);
+
+      // Act
       const clone = layer.shallowClone();
-      expect(clone).toBeDefined();
+
+      // Assert
       expect(clone.unwrap()).toBeInstanceOf(TileLayer);
       expect(clone.unwrap().getSource()).toStrictEqual(layer.unwrap().getSource());
       expect(clone.unwrap()).not.toStrictEqual(layer.unwrap());
@@ -279,9 +299,13 @@ describe('LayerWrapper', () => {
     });
 
     it('with vector layer', () => {
+      // Prepare
       const layer = LayerFactory.newVectorLayer();
+
+      // Act
       const clone = layer.shallowClone();
-      expect(clone).toBeDefined();
+
+      // Assert
       expect(clone.unwrap()).toBeInstanceOf(VectorImageLayer);
       expect(clone.unwrap().getSource()).toStrictEqual(layer.unwrap().getSource());
       expect(clone.unwrap()).not.toStrictEqual(layer.unwrap());
@@ -289,7 +313,8 @@ describe('LayerWrapper', () => {
     });
 
     it('with WMS layer', () => {
-      const def: WmsDefinition = {
+      // Prepare
+      const settings: WmsSettings = {
         remoteUrl: 'http://test-url',
         remoteLayerName: 'test-layer-name',
         projection: { name: 'EPSG:4326' },
@@ -298,10 +323,46 @@ describe('LayerWrapper', () => {
           password: 'test-password',
         },
       };
-      const layer = LayerFactory.newWmsLayer(def);
+      const layer = LayerFactory.newWmsLayer(settings);
+
+      // Act
       const clone = layer.shallowClone();
-      expect(clone).toBeDefined();
+
+      // Assert
       expect(clone.unwrap()).toBeInstanceOf(TileLayer);
+      expect(clone.unwrap().getSource()).toBeInstanceOf(TileSource);
+      expect(clone.unwrap().getSource()).toStrictEqual(layer.unwrap().getSource());
+      expect(clone.unwrap()).not.toStrictEqual(layer.unwrap());
+      expect(clone.getMetadata()).toEqual(layer.getMetadata());
+    });
+
+    it('with WMTS layer', () => {
+      // Prepare
+      const settings = TestHelper.sampleWmtsSettings();
+      const layer = LayerFactory.newWmtsLayer(settings);
+
+      // Act
+      const clone = layer.shallowClone();
+
+      // Assert
+      expect(clone.unwrap()).toBeInstanceOf(TileLayer);
+      expect(clone.unwrap().getSource()).toBeInstanceOf(WMTS);
+      expect(clone.unwrap().getSource()).toStrictEqual(layer.unwrap().getSource());
+      expect(clone.unwrap()).not.toStrictEqual(layer.unwrap());
+      expect(clone.getMetadata()).toEqual(layer.getMetadata());
+    });
+
+    it('with XYZ layer', () => {
+      // Prepare
+      const settings = TestHelper.sampleXyzLayer().metadata;
+      const layer = LayerFactory.newXyzLayer(settings.remoteUrl, settings.projection);
+
+      // Act
+      const clone = layer.shallowClone();
+
+      // Assert
+      expect(clone.unwrap()).toBeInstanceOf(TileLayer);
+      expect(clone.unwrap().getSource()).toBeInstanceOf(XYZ);
       expect(clone.unwrap().getSource()).toStrictEqual(layer.unwrap().getSource());
       expect(clone.unwrap()).not.toStrictEqual(layer.unwrap());
       expect(clone.getMetadata()).toEqual(layer.getMetadata());

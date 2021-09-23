@@ -37,15 +37,31 @@ class ErrorBoundary extends React.Component<ServiceProps, State> {
     if (this.state.hasError) {
       return (
         <div className={Cls.errorScreen}>
+          {/* Message */}
           <h1>Aïe Aïe Aïe 😵</h1>
           <div className={'m-5 text-center'}>
             Une erreur empêche l&apos;application de fonctionner correctement. Cet échec a été consigné,
             <br />
-            le développeur responsable de cette erreur viens de recevoir sa lettre de démission par email.
+            le développeur responsable de cette erreur vient de recevoir une lettre de démission par email.
           </div>
+
+          {/* Reload page */}
           <button className={'btn btn-primary mt-4'} onClick={this.handleRefresh}>
             Recharger la page
           </button>
+          <div className={'mb-4 mt-2 text-center'}>
+            Action recommandée, <br /> mais vous perdrez les modifications non enregistrées.
+          </div>
+
+          {/* Return to app */}
+          <button className={'btn btn-outline-primary mt-4'} onClick={this.handleClose}>
+            Revenir à l&apos;application
+          </button>
+          <div className={'mb-5 mt-2 text-center'}>
+            L&apos;application sera peut-être instable,
+            <br />
+            mais vous pourrez sauvegardez votre travail et recharger la page.
+          </div>
         </div>
       );
     }
@@ -66,13 +82,17 @@ class ErrorBoundary extends React.Component<ServiceProps, State> {
     window.removeEventListener('error', this.handleError);
   }
 
+  private handleClose = () => {
+    this.setState({ hasError: false });
+  };
+
   private handleRefresh = () => {
     window.location.reload();
   };
 
   private handleError = (err: ErrorEvent) => {
-    this.props.services.toasts.genericError();
     logger.error('Unhandled error: ', err);
+    this.setState({ hasError: true });
   };
 }
 

@@ -17,7 +17,7 @@
  */
 
 import TileLayer from 'ol/layer/Tile';
-import { Logger, XyzLayerProperties, XyzMetadata } from '@abc-map/shared';
+import { Logger, WmtsLayerProperties, WmtsMetadata, XyzLayerProperties, XyzMetadata } from '@abc-map/shared';
 import {
   AbcLayer,
   AbcProjection,
@@ -39,18 +39,19 @@ import TileSource from 'ol/source/Tile';
 import VectorSource from 'ol/source/Vector';
 import Geometry from 'ol/geom/Geometry';
 import VectorImageLayer from 'ol/layer/VectorImage';
-import { Source, XYZ } from 'ol/source';
+import { Source, TileWMS, WMTS, XYZ } from 'ol/source';
 import { Layer } from 'ol/layer';
 import { styleFunction } from '../styles/style-function';
 
 export const logger = Logger.get('LayerWrapper');
 
 export declare type OlLayers = Layer | VectorImageLayer | TileLayer;
-export declare type OlSources = Source | VectorSource<Geometry> | TileSource;
+export declare type OlSources = Source | VectorSource<Geometry> | TileSource | TileWMS | WMTS;
 
 export declare type VectorLayerWrapper = LayerWrapper<VectorImageLayer, VectorSource<Geometry>, VectorMetadata>;
 export declare type PredefinedLayerWrapper = LayerWrapper<TileLayer, TileSource, PredefinedMetadata>;
-export declare type WmsLayerWrapper = LayerWrapper<TileLayer, TileSource, WmsMetadata>;
+export declare type WmsLayerWrapper = LayerWrapper<TileLayer, TileWMS, WmsMetadata>;
+export declare type WmtsLayerWrapper = LayerWrapper<TileLayer, WMTS, WmtsMetadata>;
 export declare type XyzLayerWrapper = LayerWrapper<TileLayer, XYZ, XyzMetadata>;
 
 export class LayerWrapper<Layer extends OlLayers = OlLayers, Source extends OlSources = OlSources, Meta extends LayerMetadata = LayerMetadata> {
@@ -147,6 +148,10 @@ export class LayerWrapper<Layer extends OlLayers = OlLayers, Source extends OlSo
     return this.getType() === LayerType.Wms;
   }
 
+  public isWmts(): this is WmtsLayerWrapper {
+    return this.getType() === LayerType.Wmts;
+  }
+
   public isXyz(): this is XyzLayerWrapper {
     return this.getType() === LayerType.Xyz;
   }
@@ -160,10 +165,14 @@ export class LayerWrapper<Layer extends OlLayers = OlLayers, Source extends OlSo
       layer = new TileLayer({ source: this.layer.getSource() as TileSource });
     } else if (this.isWms()) {
       layer = new TileLayer({ source: this.layer.getSource() as TileSource });
+    } else if (this.isWmts()) {
+      layer = new TileLayer({ source: this.layer.getSource() as WMTS });
+    } else if (this.isXyz()) {
+      layer = new TileLayer({ source: this.layer.getSource() as XYZ });
     } else if (this.isVector()) {
       layer = new VectorImageLayer({ source: this.layer.getSource() as VectorSource<Geometry>, style: (f) => styleFunction(styleRatio, f) });
     } else {
-      throw new Error('Unsupported layer type');
+      throw new Error(`Cannot clone layer, type is not supported: ${this.getType()}`);
     }
 
     return LayerWrapper.from<Layer, Source, Meta>(layer as Layer).setMetadata(this.getMetadata() as Meta);
@@ -182,6 +191,8 @@ export class LayerWrapper<Layer extends OlLayers = OlLayers, Source extends OlSo
       this.setPredefinedMetadata(props as PredefinedMetadata);
     } else if (LayerType.Wms === props.type) {
       this.setWmsMetadata(props as WmsMetadata);
+    } else if (LayerType.Wmts === props.type) {
+      this.setWmtsMetadata(props as WmtsMetadata);
     } else if (LayerType.Xyz === props.type) {
       this.setXyzMetadata(props as XyzMetadata);
     }
@@ -205,6 +216,20 @@ export class LayerWrapper<Layer extends OlLayers = OlLayers, Source extends OlSo
     this.layer.set(WmsLayerProperties.Extent, props.extent);
   }
 
+  private setWmtsMetadata(props: WmtsMetadata): void {
+    this.layer.set(WmtsLayerProperties.Url, props.remoteUrl);
+    this.layer.set(WmtsLayerProperties.LayerName, props.remoteLayerName);
+    this.layer.set(WmtsLayerProperties.Username, props.auth?.username);
+    this.layer.set(WmtsLayerProperties.Password, props.auth?.password);
+    this.layer.set(WmtsLayerProperties.Projection, props.projection);
+    this.layer.set(WmtsLayerProperties.Extent, props.extent);
+    this.layer.set(WmtsLayerProperties.MatrixSet, props.matrixSet);
+    this.layer.set(WmtsLayerProperties.Style, props.style);
+    this.layer.set(WmtsLayerProperties.Resolutions, props.resolutions);
+    this.layer.set(WmtsLayerProperties.MatrixIds, props.matrixIds);
+    this.layer.set(WmtsLayerProperties.Origins, props.origins);
+  }
+
   public getMetadata(): Meta | undefined {
     // Types are buggy here
     if (this.isPredefined()) {
@@ -213,6 +238,8 @@ export class LayerWrapper<Layer extends OlLayers = OlLayers, Source extends OlSo
       return this.getVectorMetadata() as Meta;
     } else if (this.isWms()) {
       return this.getWmsMetadata() as Meta;
+    } else if (this.isWmts()) {
+      return this.getWmtsMetadata() as Meta;
     } else if (this.isXyz()) {
       return this.getXyzMetadata() as Meta;
     }
@@ -305,6 +332,45 @@ export class LayerWrapper<Layer extends OlLayers = OlLayers, Source extends OlSo
     };
   }
 
+  private getWmtsMetadata(): WmtsMetadata | undefined {
+    const base = this.getBaseMetadata();
+    if (!base) {
+      return;
+    }
+
+    const remoteUrl: string | undefined = this.layer.get(WmtsLayerProperties.Url);
+    const remoteLayerName: string | undefined = this.layer.get(WmtsLayerProperties.LayerName);
+    const username: string | undefined = this.layer.get(WmtsLayerProperties.Username);
+    const password: string | undefined = this.layer.get(WmtsLayerProperties.Password);
+    const projection: AbcProjection | undefined = this.layer.get(WmtsLayerProperties.Projection);
+    const extent: [number, number, number, number] | undefined = this.layer.get(WmtsLayerProperties.Extent);
+    const matrixSet: string | undefined = this.layer.get(WmtsLayerProperties.MatrixSet);
+    const style: string | undefined = this.layer.get(WmtsLayerProperties.Style);
+    const resolutions: number[] | undefined = this.layer.get(WmtsLayerProperties.Resolutions);
+    const matrixIds: string[] | undefined = this.layer.get(WmtsLayerProperties.MatrixIds);
+    const origins: number[][] | undefined = this.layer.get(WmtsLayerProperties.Origins);
+    if (base.type !== LayerType.Wmts || !remoteUrl || !remoteLayerName || !matrixSet || !style || !resolutions || !matrixIds || !origins) {
+      logger.error('Invalid layer : ', [this.layer, base]);
+      return;
+    }
+
+    const auth = username && password ? { username, password } : undefined;
+    return {
+      ...base,
+      type: LayerType.Wmts,
+      remoteUrl,
+      remoteLayerName,
+      auth,
+      projection,
+      extent,
+      matrixSet,
+      style,
+      resolutions,
+      matrixIds,
+      origins,
+    };
+  }
+
   private getXyzMetadata(): XyzMetadata | undefined {
     const base = this.getBaseMetadata();
     if (!base) {
@@ -360,7 +426,7 @@ export class LayerWrapper<Layer extends OlLayers = OlLayers, Source extends OlSo
       };
     }
 
-    // Wms Layer
+    // WMS Layer
     else if (this.isWms()) {
       const meta = this.getWmsMetadata();
       if (!meta) {
@@ -368,6 +434,18 @@ export class LayerWrapper<Layer extends OlLayers = OlLayers, Source extends OlSo
       }
       return {
         type: LayerType.Wms,
+        metadata: meta,
+      };
+    }
+
+    // WMTS Layer
+    else if (this.isWmts()) {
+      const meta = this.getWmtsMetadata();
+      if (!meta) {
+        return Promise.reject(new Error('Invalid wmts layer'));
+      }
+      return {
+        type: LayerType.Wmts,
         metadata: meta,
       };
     }

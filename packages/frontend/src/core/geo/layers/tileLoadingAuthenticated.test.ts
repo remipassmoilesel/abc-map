@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { HttpClientFactory, logger, wmsLoadingAuthenticated } from './wmsLoadingAuthenticated';
+import { HttpClientFactory, logger, tileLoadingAuthenticated } from './tileLoadingAuthenticated';
 import * as sinon from 'sinon';
 import { SinonStub } from 'sinon';
 import { ImageTile, Tile, VectorTile } from 'ol';
@@ -25,7 +25,7 @@ import TileState from 'ol/TileState';
 
 logger.disable();
 
-describe('wmsLoadingAuthenticated', () => {
+describe('tileLoadingAuthenticated', () => {
   let factoryStub: SinonStub;
 
   beforeEach(() => {
@@ -34,7 +34,7 @@ describe('wmsLoadingAuthenticated', () => {
   });
 
   it('function setup should include credentials', () => {
-    wmsLoadingAuthenticated({ username: 'test-username', password: 'test-password' }, factoryStub as unknown as HttpClientFactory);
+    tileLoadingAuthenticated({ username: 'test-username', password: 'test-password' }, factoryStub as unknown as HttpClientFactory);
     expect(factoryStub.callCount).toEqual(1);
     expect(factoryStub.getCalls()[0].args).toEqual([
       {
@@ -59,7 +59,7 @@ describe('wmsLoadingAuthenticated', () => {
     const tileImage = document.createElement('img');
     tileStub.getImage.returns(tileImage as HTMLImageElement);
 
-    const load = wmsLoadingAuthenticated({ username: 'test-username', password: 'test-password' }, factoryStub as unknown as HttpClientFactory);
+    const load = tileLoadingAuthenticated({ username: 'test-username', password: 'test-password' }, factoryStub as unknown as HttpClientFactory);
     load(tileStub as unknown as Tile, 'http://test-url');
     await TestHelper.wait(10); // We wait here because of an internal promise
 
@@ -76,7 +76,7 @@ describe('wmsLoadingAuthenticated', () => {
 
     const tileStub = sinon.createStubInstance(ImageTile);
 
-    const func = wmsLoadingAuthenticated({ username: 'test-username', password: 'test-password' }, factoryStub as unknown as HttpClientFactory);
+    const func = tileLoadingAuthenticated({ username: 'test-username', password: 'test-password' }, factoryStub as unknown as HttpClientFactory);
     func(tileStub as unknown as Tile, 'http://test-url');
     await TestHelper.wait(10); // We wait here because of an internal promise
 
@@ -94,7 +94,7 @@ describe('wmsLoadingAuthenticated', () => {
 
     const tileStub = sinon.createStubInstance(VectorTile);
 
-    const func = wmsLoadingAuthenticated({ username: 'test-username', password: 'test-password' }, factoryStub as unknown as HttpClientFactory);
+    const func = tileLoadingAuthenticated({ username: 'test-username', password: 'test-password' }, factoryStub as unknown as HttpClientFactory);
     func(tileStub as unknown as Tile, 'http://test-url');
     await TestHelper.wait(10); // We wait here because of an internal promise
 
