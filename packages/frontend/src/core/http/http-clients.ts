@@ -66,9 +66,7 @@ export function httpDownloadClient(timeout: number, errorHandler?: HttpErrorHand
  * @param timeout
  */
 export function httpExternalClient(timeout: number): AxiosInstance {
-  return axios.create({
-    timeout,
-  });
+  return axios.create({ timeout });
 }
 
 function authenticationInterceptor(config: AxiosRequestConfig): AxiosRequestConfig {

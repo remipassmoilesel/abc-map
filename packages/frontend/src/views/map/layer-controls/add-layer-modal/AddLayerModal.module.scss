@@ -15,12 +15,37 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
+@import "src/assets/styles/variables";
+
+$modal-width: 70vw;
+$left-panel-width: 23vw;
 
 .modal {
-  min-width: 550px;
-  width: 550px;
+  min-width: $modal-width;
+  max-width: $modal-width;
+  width: $modal-width;
 }
 
-.advice {
-  font-size: 0.9rem;
+.leftPanel {
+  min-width: $left-panel-width;
+  max-width: $left-panel-width;
+  width: $left-panel-width;
+
+  margin-right: 1rem;
+  padding-right: 1rem;
+
+  border-right: solid $gray-300 1px;
+  border-radius: 7px;
+}
+
+.rightPanel {
+  flex-grow: 1;
+  margin-left: 1rem;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.subTitle {
+  font-size: 1.1rem;
 }

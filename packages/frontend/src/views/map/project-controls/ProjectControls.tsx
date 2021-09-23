@@ -45,14 +45,13 @@ type Props = ConnectedProps<typeof connector> & ServiceProps;
 class ProjectControls extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = {
-      remoteProjectModal: false,
-    };
+    this.state = { remoteProjectModal: false };
   }
 
   public render(): ReactNode {
     const remoteProjectModal = this.state.remoteProjectModal;
     const userAuthenticated = this.props.userStatus === UserStatus.Authenticated;
+
     return (
       <div className={'control-block'}>
         {userAuthenticated && (

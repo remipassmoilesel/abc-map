@@ -52,20 +52,20 @@ export class MapKeyboardListener {
     }
 
     if (Shortcuts.isDelete(ev)) {
+      ev.preventDefault();
+      ev.stopPropagation();
+
       this.deleteSelectedFeatures();
-
-      ev.preventDefault();
-      ev.stopPropagation();
     } else if (Shortcuts.isRedo(ev)) {
+      ev.preventDefault();
+      ev.stopPropagation();
+
       this.redo();
-
-      ev.preventDefault();
-      ev.stopPropagation();
     } else if (Shortcuts.isUndo(ev)) {
-      this.undo();
-
       ev.preventDefault();
       ev.stopPropagation();
+
+      this.undo();
     }
   };
 

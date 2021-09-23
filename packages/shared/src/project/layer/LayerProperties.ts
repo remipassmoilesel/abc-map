@@ -70,6 +70,20 @@ export enum WmsLayerProperties {
   Extent = 'abc:layer:wms:extent',
 }
 
+export enum WmtsLayerProperties {
+  Url = 'abc:layer:wmts:url',
+  LayerName = 'abc:layer:wmts:layer-name',
+  Username = 'abc:layer:wmts:username',
+  Password = 'abc:layer:wmts:password',
+  Projection = 'abc:layer:wmts:projection',
+  Extent = 'abc:layer:wmts:extent',
+  MatrixSet = 'abc:layer:wmts:matrix-set',
+  Style = 'abc:layer:wmts:style',
+  Resolutions = 'abc:layer:wmts:resolutions',
+  MatrixIds = 'abc:layer:wmts:matrix-ids',
+  Origins = 'abc:layer:wmts:origins',
+}
+
 export enum XyzLayerProperties {
   Url = 'abc:layer:xyz:url',
   Projection = 'abc:layer:xyz:projection',

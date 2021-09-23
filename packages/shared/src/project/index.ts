@@ -28,3 +28,4 @@ export * from './CompressedProject';
 export * from './ProjectConstants';
 export * from './ProjectHelper';
 export * from './ProjectSaveResponse';
+export * from './BasicAuthentication';

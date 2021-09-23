@@ -22,6 +22,8 @@ import { LayoutList } from '../helpers/LayoutList';
 import { History } from '../helpers/History';
 import { Download } from '../helpers/Download';
 import { Toasts } from '../helpers/Toasts';
+import { LayerControls } from '../helpers/LayerControls';
+import { TopBar } from '../helpers/TopBar';
 
 describe('Layout', function () {
   describe('As a visitor', function () {
@@ -85,23 +87,25 @@ describe('Layout', function () {
         .should((elem) => expect(elem).deep.equal([]));
     });
 
-    it('can export PDF', function () {
-      cy.visit(FrontendRoutes.layout().raw())
+    it('can export PDF with all layer types', function () {
+      cy.visit(FrontendRoutes.map().raw())
+        .then(() => LayerControls.addWmsLayer())
+        .then(() => LayerControls.addWmtsLayer())
+        .then(() => TopBar.layout())
         .get('[data-cy=layout-controls] [data-cy=new-layout]')
-        .click()
         .click()
         .get('[data-cy=layout-controls] [data-cy=pdf-export]')
         .click()
-        .then(() => Toasts.assertText('Export terminé !'))
+        .then(() => Toasts.assertText('Export terminé !', 50_000))
         .then(() => Download.fileAsBlob())
         .should((pdf) => {
-          expect(pdf.size).greaterThan(100_000);
+          expect(pdf.size).greaterThan(50_000);
         })
         .get('[data-cy=close-solicitation-modal]')
         .click();
     });
 
-    it('can export PNG', function () {
+    it('can export PNG with several sheets', function () {
       cy.visit(FrontendRoutes.layout().raw())
         .get('[data-cy=layout-controls] [data-cy=new-layout]')
         .click()

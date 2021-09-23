@@ -17,7 +17,7 @@
  */
 
 import * as sjcl from 'sjcl';
-import { AbcLayer, AbcProjectManifest, AbcWmsLayer, AbcXyzLayer, LayerType, WmsMetadata, XyzMetadata } from '@abc-map/shared';
+import { AbcLayer, AbcProjectManifest, AbcWmsLayer, AbcWmtsLayer, AbcXyzLayer, LayerType, WmsMetadata, WmtsMetadata, XyzMetadata } from '@abc-map/shared';
 import { Errors } from './Errors';
 
 /**
@@ -42,11 +42,19 @@ export class Encryption {
   public static async encryptManifest(manifest: AbcProjectManifest, password: string): Promise<AbcProjectManifest> {
     const layers: AbcLayer[] = [];
     for (const lay of manifest.layers) {
-      // WMS authenticated layer
-      if (LayerType.Wms === lay.type && lay.metadata.auth?.username && lay.metadata.auth?.password) {
+      // WMS layer
+      if (LayerType.Wms === lay.type) {
         const decrypted: AbcWmsLayer = {
           ...lay,
           metadata: await this.encryptWmsMetadata(lay.metadata, password),
+        };
+        layers.push(decrypted);
+      }
+      // WMTS layer
+      else if (LayerType.Wmts === lay.type) {
+        const decrypted: AbcWmtsLayer = {
+          ...lay,
+          metadata: await this.encryptWmtsMetadata(lay.metadata, password),
         };
         layers.push(decrypted);
       }
@@ -77,11 +85,19 @@ export class Encryption {
   public static async decryptManifest(manifest: AbcProjectManifest, password: string): Promise<AbcProjectManifest> {
     const layers: AbcLayer[] = [];
     for (const lay of manifest.layers) {
-      // WMS authenticated layer
-      if (LayerType.Wms === lay.type && lay.metadata.auth?.username && lay.metadata.auth?.password) {
+      // WMS
+      if (LayerType.Wms === lay.type) {
         const decrypted: AbcWmsLayer = {
           ...lay,
           metadata: await this.decryptWmsMetadata(lay.metadata, password),
+        };
+        layers.push(decrypted);
+      }
+      // WMTS
+      else if (LayerType.Wmts === lay.type) {
+        const decrypted: AbcWmtsLayer = {
+          ...lay,
+          metadata: await this.decryptWmtsMetadata(lay.metadata, password),
         };
         layers.push(decrypted);
       }
@@ -110,32 +126,62 @@ export class Encryption {
   }
 
   private static async encryptWmsMetadata(metadata: WmsMetadata, password: string): Promise<WmsMetadata> {
-    const result: WmsMetadata = {
-      ...metadata,
-    };
-    if (!result.auth || !result.auth.username || !result.auth.password) {
-      return Promise.reject(new Error('Cannot encrypt wms metadata, invalid credentials'));
+    const result: WmsMetadata = { ...metadata };
+
+    // Encrypt URL, it may contains secret keys
+    result.remoteUrl = await Encryption.encrypt(result.remoteUrl, password);
+
+    // Encrypt authentication if any
+    if (result.auth) {
+      result.auth = { ...result.auth };
+      result.auth.username = await Encryption.encrypt(result.auth.username, password);
+      result.auth.password = await Encryption.encrypt(result.auth.password, password);
     }
 
+    return result;
+  }
+
+  private static async encryptWmtsMetadata(metadata: WmtsMetadata, password: string): Promise<WmtsMetadata> {
+    const result: WmtsMetadata = { ...metadata };
+
+    // Encrypt URL, it may contains secret keys
     result.remoteUrl = await Encryption.encrypt(result.remoteUrl, password);
-    result.auth = { ...result.auth };
-    result.auth.username = await Encryption.encrypt(result.auth.username, password);
-    result.auth.password = await Encryption.encrypt(result.auth.password, password);
+
+    // Encrypt authentication if any
+    if (result.auth) {
+      result.auth = { ...result.auth };
+      result.auth.username = await Encryption.encrypt(result.auth.username, password);
+      result.auth.password = await Encryption.encrypt(result.auth.password, password);
+    }
+
     return result;
   }
 
   private static async decryptWmsMetadata(metadata: WmsMetadata, password: string): Promise<WmsMetadata> {
-    const result: WmsMetadata = {
-      ...metadata,
-    };
-    if (!result.auth || !result.auth.username || !result.auth.password) {
-      return Promise.reject(new Error('Cannot encrypt wms metadata, invalid credentials'));
-    }
+    const result: WmsMetadata = { ...metadata };
 
     result.remoteUrl = await Encryption.decrypt(result.remoteUrl, password);
-    result.auth = { ...result.auth };
-    result.auth.username = await Encryption.decrypt(result.auth.username, password);
-    result.auth.password = await Encryption.decrypt(result.auth.password, password);
+
+    if (result.auth) {
+      result.auth = { ...result.auth };
+      result.auth.username = await Encryption.decrypt(result.auth.username, password);
+      result.auth.password = await Encryption.decrypt(result.auth.password, password);
+    }
+
+    return result;
+  }
+
+  private static async decryptWmtsMetadata(metadata: WmtsMetadata, password: string): Promise<WmtsMetadata> {
+    const result: WmtsMetadata = { ...metadata };
+
+    result.remoteUrl = await Encryption.decrypt(result.remoteUrl, password);
+
+    if (result.auth) {
+      result.auth = { ...result.auth };
+      result.auth.username = await Encryption.decrypt(result.auth.username, password);
+      result.auth.password = await Encryption.decrypt(result.auth.password, password);
+    }
+
     return result;
   }
 

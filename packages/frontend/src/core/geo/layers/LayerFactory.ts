@@ -17,10 +17,10 @@
  */
 
 import TileLayer from 'ol/layer/Tile';
-import { OSM, Stamen, TileWMS, XYZ } from 'ol/source';
+import { OSM, Stamen, TileWMS, WMTS, XYZ } from 'ol/source';
 import uuid from 'uuid-random';
 import VectorSource from 'ol/source/Vector';
-import { wmsLoadingAuthenticated } from './wmsLoadingAuthenticated';
+import { tileLoadingAuthenticated } from './tileLoadingAuthenticated';
 import { GeoJSON } from 'ol/format';
 import {
   AbcLayer,
@@ -29,19 +29,21 @@ import {
   PredefinedLayerModel,
   PredefinedMetadata,
   VectorMetadata,
-  WmsDefinition,
   WmsMetadata,
+  WmtsMetadata,
   XyzMetadata,
 } from '@abc-map/shared';
-import { LayerWrapper, PredefinedLayerWrapper, VectorLayerWrapper, WmsLayerWrapper, XyzLayerWrapper } from './LayerWrapper';
+import { LayerWrapper, PredefinedLayerWrapper, VectorLayerWrapper, WmsLayerWrapper, WmtsLayerWrapper, XyzLayerWrapper } from './LayerWrapper';
 import VectorImageLayer from 'ol/layer/VectorImage';
 import Geometry from 'ol/geom/Geometry';
 import TileSource from 'ol/source/Tile';
 import { styleFunction } from '../styles/style-function';
-import { wmsLoadingPublic } from './wmsLoadingPublic';
+import { tileLoadingPublic } from './tileLoadingPublic';
+import { WmsSettings, WmtsSettings } from './LayerFactory.types';
+import WMTSTileGrid from 'ol/tilegrid/WMTS';
 
 export class LayerFactory {
-  public static newPredefinedLayer(model: PredefinedLayerModel, meta?: PredefinedMetadata): PredefinedLayerWrapper {
+  public static newPredefinedLayer(model: PredefinedLayerModel): PredefinedLayerWrapper {
     let name: string;
     let source: TileSource;
     switch (model) {
@@ -79,7 +81,6 @@ export class LayerFactory {
       opacity: 1,
       visible: true,
       model,
-      ...meta,
     };
 
     return LayerWrapper.from<TileLayer, TileSource, PredefinedMetadata>(layer).setMetadata(metadata);
@@ -101,38 +102,81 @@ export class LayerFactory {
     return LayerWrapper.from<VectorImageLayer, VectorSource<Geometry>, VectorMetadata>(layer).setMetadata(metadata);
   }
 
-  public static newWmsLayer(def: WmsDefinition): WmsLayerWrapper {
-    const tileLoadFunction = def.auth?.username && def.auth?.password ? wmsLoadingAuthenticated(def.auth) : wmsLoadingPublic();
+  public static newWmsLayer(settings: WmsSettings): WmsLayerWrapper {
+    const tileLoadFunction = settings.auth?.username && settings.auth?.password ? tileLoadingAuthenticated(settings.auth) : tileLoadingPublic();
 
-    // TODO: FIXME: which extent should we set ?
     const layer = new TileLayer({
+      extent: settings.extent,
       source: new TileWMS({
-        url: def.remoteUrl,
-        params: { LAYERS: def.remoteLayerName, TILED: true },
+        url: settings.remoteUrl,
+        params: { LAYERS: settings.remoteLayerName, TILED: true },
         tileLoadFunction,
-        projection: def.projection?.name,
+        projection: settings.projection?.name,
       }),
     });
 
     const metadata: WmsMetadata = {
       id: uuid(),
-      name: def.remoteLayerName,
+      name: settings.remoteLayerName,
       type: LayerType.Wms,
       active: false,
       opacity: 1,
       visible: true,
-      remoteUrl: def.remoteUrl,
-      remoteLayerName: def.remoteLayerName,
-      projection: def.projection,
-      extent: def.extent,
-      auth: def.auth,
+      remoteUrl: settings.remoteUrl,
+      remoteLayerName: settings.remoteLayerName,
+      projection: settings.projection,
+      extent: settings.extent,
+      auth: settings.auth,
     };
 
-    return LayerWrapper.from<TileLayer, TileSource, WmsMetadata>(layer).setMetadata(metadata);
+    return LayerWrapper.from<TileLayer, TileWMS, WmsMetadata>(layer).setMetadata(metadata);
+  }
+
+  public static newWmtsLayer(settings: WmtsSettings): WmtsLayerWrapper {
+    const tileLoadFunction = settings.auth?.username && settings.auth?.password ? tileLoadingAuthenticated(settings.auth) : tileLoadingPublic();
+
+    const layer = new TileLayer({
+      extent: settings.extent,
+      source: new WMTS({
+        url: settings.remoteUrl,
+        layer: settings.remoteLayerName,
+        matrixSet: settings.matrixSet,
+        tileLoadFunction,
+        style: settings.style,
+        projection: settings.projection?.name,
+        tileGrid: new WMTSTileGrid({
+          origins: settings.origins,
+          matrixIds: settings.matrixIds,
+          resolutions: settings.resolutions,
+          extent: settings.extent,
+        }),
+      }),
+    });
+
+    const metadata: WmtsMetadata = {
+      id: uuid(),
+      name: settings.remoteLayerName,
+      type: LayerType.Wmts,
+      active: false,
+      opacity: 1,
+      visible: true,
+      remoteUrl: settings.remoteUrl,
+      remoteLayerName: settings.remoteLayerName,
+      matrixSet: settings.matrixSet,
+      style: settings.style,
+      auth: settings.auth,
+      resolutions: settings.resolutions,
+      matrixIds: settings.matrixIds,
+      projection: settings.projection,
+      origins: settings.origins,
+      extent: settings.extent,
+    };
+
+    return LayerWrapper.from<TileLayer, WMTS, WmtsMetadata>(layer).setMetadata(metadata);
   }
 
   public static newXyzLayer(url: string, projection?: AbcProjection): XyzLayerWrapper {
-    const source = new XYZ({ url, projection: projection?.name });
+    const source = new XYZ({ url, projection: projection?.name, tileLoadFunction: tileLoadingPublic() });
     const layer = new TileLayer({ source });
 
     const metadata: XyzMetadata = {
@@ -154,7 +198,8 @@ export class LayerFactory {
 
     // Predefined layer
     if (LayerType.Predefined === abcLayer.type) {
-      return this.newPredefinedLayer(abcLayer.metadata.model, abcLayer.metadata);
+      layer = this.newPredefinedLayer(abcLayer.metadata.model);
+      layer.setMetadata(abcLayer.metadata);
     }
 
     // Vector layer
@@ -171,6 +216,12 @@ export class LayerFactory {
     // Wms layer
     else if (LayerType.Wms === abcLayer.type) {
       layer = this.newWmsLayer(abcLayer.metadata);
+      layer.setMetadata(abcLayer.metadata);
+    }
+
+    // Wmts layer
+    else if (LayerType.Wmts === abcLayer.type) {
+      layer = this.newWmtsLayer(abcLayer.metadata);
       layer.setMetadata(abcLayer.metadata);
     }
 

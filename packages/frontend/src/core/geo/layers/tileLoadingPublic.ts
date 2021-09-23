@@ -17,13 +17,12 @@
  */
 
 import { LoadFunction } from 'ol/Tile';
-import { WmsAuthentication } from '@abc-map/shared';
 import { Logger } from '@abc-map/shared';
 import { ImageTile } from 'ol';
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import TileState from 'ol/TileState';
 
-export const logger = Logger.get('wmsLoadingAuthenticated.ts');
+export const logger = Logger.get('tileLoadingPublic.ts');
 
 export declare type HttpClientFactory = (config: AxiosRequestConfig) => AxiosInstance;
 
@@ -31,19 +30,12 @@ function defaultHttpClientFactory(config: AxiosRequestConfig): AxiosInstance {
   return axios.create(config);
 }
 
-export function wmsLoadingAuthenticated(auth: WmsAuthentication, factory: HttpClientFactory = defaultHttpClientFactory): LoadFunction {
-  const authClient = factory({
-    timeout: 10_000,
-    responseType: 'blob',
-    auth: {
-      username: auth.username,
-      password: auth.password,
-    },
-  });
+export function tileLoadingPublic(factory: HttpClientFactory = defaultHttpClientFactory): LoadFunction {
+  const publicCLient = factory({ timeout: 10_000, responseType: 'blob' });
 
   return function (_tile, src) {
     const tile: ImageTile = _tile as ImageTile;
-    authClient
+    publicCLient
       .get(src)
       .then((res) => {
         const blob = res.data as Blob;

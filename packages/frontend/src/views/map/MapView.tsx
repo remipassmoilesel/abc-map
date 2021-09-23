@@ -32,24 +32,19 @@ import { LayerWrapper } from '../../core/geo/layers/LayerWrapper';
 import Search from './search/Search';
 import ImportData from './import-data/ImportData';
 import { ServiceProps, withServices } from '../../core/withServices';
-import * as _ from 'lodash';
-import MapBrowserEvent from 'ol/MapBrowserEvent';
-import Cls from './MapView.module.scss';
-import { toLonLat } from 'ol/proj';
 import CursorPosition from './cursor-position/CursorPosition';
-import { Coordinate } from 'ol/coordinate';
 import { MapKeyboardListener } from './keyboard-listener/MapKeyboardListener';
 import { MapEvent } from 'ol';
 import { pageSetup } from '../../core/utils/page-setup';
 import { MapActions } from '../../core/store/map/actions';
 import { MapSizeChangedEvent } from '../../core/geo/map/MapSizeChangedEvent';
+import Cls from './MapView.module.scss';
 
 const logger = Logger.get('MapView.tsx');
 
 interface State {
   layers: LayerWrapper[];
   map: MapWrapper;
-  position?: Coordinate;
   keyboardListener?: MapKeyboardListener;
 }
 
@@ -77,7 +72,6 @@ class MapView extends Component<Props, State> {
 
   public render(): ReactNode {
     const activeLayer = this.state.layers.find((lay) => lay.isActive());
-    const position = this.state.position;
 
     return (
       <div className={Cls.mapView}>
@@ -88,7 +82,7 @@ class MapView extends Component<Props, State> {
           <ProjectControls />
           <HistoryControls historyKey={HistoryKey.Map} />
           <ImportData />
-          <CursorPosition position={position} />
+          <CursorPosition />
         </div>
 
         {/*Main map*/}
@@ -113,7 +107,6 @@ class MapView extends Component<Props, State> {
     this.handleLayerChange(); // We trigger manually the first event for setup
 
     map.unwrap().on('rendercomplete', this.handleRenderComplete);
-    map.unwrap().on('pointermove', this.handlePointerMove);
     map.unwrap().on('error', this.handleMapError);
 
     const keyboardListener = MapKeyboardListener.create();
@@ -127,7 +120,6 @@ class MapView extends Component<Props, State> {
     map.removeSizeListener(this.handleMapSizeChange);
     map.removeLayerChangeListener(this.handleLayerChange);
     map.unwrap().un('rendercomplete', this.handleRenderComplete);
-    map.unwrap().un('pointermove', this.handlePointerMove);
 
     this.state.keyboardListener?.destroy();
   }
@@ -141,15 +133,6 @@ class MapView extends Component<Props, State> {
   private handleRenderComplete = () => {
     logger.debug('Map rendering complete');
   };
-
-  private handlePointerMove = _.throttle(
-    (ev: MapBrowserEvent) => {
-      const position = toLonLat(ev.coordinate, ev.map.getView().getProjection());
-      this.setState({ position });
-    },
-    200,
-    { trailing: true }
-  );
 
   private handleMapError = (ev: MapEvent) => {
     const { toasts } = this.props.services;

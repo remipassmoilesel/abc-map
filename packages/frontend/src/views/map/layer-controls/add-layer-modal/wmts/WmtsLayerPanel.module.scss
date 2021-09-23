@@ -16,10 +16,14 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-.wmsLayerSelector {
-  height: 15em;
+.wmtsLayerSelector {
+  height: 35vh;
   overflow-x: hidden;
   overflow-y: scroll;
   padding: 5px;
   border: solid 1px lightgrey;
+}
+
+.warn {
+  font-size: 0.9rem;
 }

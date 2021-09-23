@@ -18,18 +18,27 @@
 
 import React, { Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/shared';
-import { Coordinate } from 'ol/coordinate';
 import { toPrecision } from '../../../core/utils/numbers';
+import { ServiceProps, withServices } from '../../../core/withServices';
+import * as _ from 'lodash';
+import MapBrowserEvent from 'ol/MapBrowserEvent';
+import { toLonLat } from 'ol/proj';
+import { Coordinate } from 'ol/coordinate';
 
 const logger = Logger.get('CursorPosition.tsx');
 
-export interface Props {
+interface State {
   position?: Coordinate;
 }
 
-class CursorPosition extends Component<Props, {}> {
+class CursorPosition extends Component<ServiceProps, State> {
+  constructor(props: ServiceProps) {
+    super(props);
+    this.state = {};
+  }
+
   public render(): ReactNode {
-    const position = this.props.position;
+    const position = this.state.position;
     if (!position) {
       return <div />;
     }
@@ -44,6 +53,27 @@ class CursorPosition extends Component<Props, {}> {
       </div>
     );
   }
+
+  public componentDidMount() {
+    const map = this.props.services.geo.getMainMap();
+
+    map.unwrap().on('pointermove', this.handlePointerMove);
+  }
+
+  public componentWillUnmount() {
+    const map = this.props.services.geo.getMainMap();
+
+    map.unwrap().un('pointermove', this.handlePointerMove);
+  }
+
+  private handlePointerMove = _.throttle(
+    (ev: MapBrowserEvent) => {
+      const position = toLonLat(ev.coordinate, ev.map.getView().getProjection());
+      this.setState({ position });
+    },
+    200,
+    { trailing: true }
+  );
 }
 
-export default CursorPosition;
+export default withServices(CursorPosition);

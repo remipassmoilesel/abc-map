@@ -16,16 +16,67 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import CursorPosition from './CursorPosition';
+import { abcRender } from '../../../core/utils/test/abcRender';
+import { newTestServices, TestServices } from '../../../core/utils/test/TestServices';
+import * as sinon from 'sinon';
+import { MapWrapper } from '../../../core/geo/map/MapWrapper';
 
 describe('CursorPosition', () => {
-  it('should render', () => {
-    const position = [1.111111118, 2.11111119];
-    render(<CursorPosition position={position} />);
+  let services: TestServices;
+  beforeEach(() => {
+    services = newTestServices();
+  });
 
-    expect(screen.getByText('Position du curseur')).toBeDefined();
-    expect(screen.getByText((t) => !!t.match(/Longitude.+1\.111/))).toBeDefined();
-    expect(screen.getByText((t) => !!t.match(/Latitude.+2\.111/))).toBeDefined();
+  it('should render nothing if no position', () => {
+    const map = fakeMap();
+    services.geo.getMainMap.returns(map as unknown as MapWrapper);
+
+    const { unmount } = abcRender(<CursorPosition />, { services });
+
+    expect(screen.queryByText('Position du curseur')).toBeNull();
+    expect(map.unwrap().on.callCount).toEqual(1);
+
+    unmount();
+    expect(map.unwrap().un.callCount).toEqual(1);
+  });
+
+  it('should render position', () => {
+    // Prepare
+    const map = fakeMap();
+    services.geo.getMainMap.returns(map as unknown as MapWrapper);
+
+    abcRender(<CursorPosition />, { services });
+
+    const handler = map.unwrap().on.args[0][1];
+
+    // Act
+    handler({ coordinate: [-20026376.39, -20048966.1], map: map.unwrap() });
+
+    // Assert
+    expect(screen.queryByText('Position du curseur')).toBeDefined();
+    expect(screen.queryByText('Latitude: -85.06')).toBeDefined();
+    expect(screen.queryByText('Longitude: -179.9')).toBeDefined();
   });
 });
+
+function fakeMap() {
+  const onStub = sinon.stub();
+  const unStub = sinon.stub();
+  return {
+    unwrap: function () {
+      return {
+        on: onStub,
+        un: unStub,
+        getView: function () {
+          return {
+            getProjection: function () {
+              return 'EPSG:3857';
+            },
+          };
+        },
+      };
+    },
+  };
+}

@@ -1,5 +1,8 @@
 # End-to-end tests 
 
+By default, tests run on frontend served on port 10082.
+
+
 ## Run all tests, the quick way
 
     $ abc start
@@ -11,7 +14,18 @@
     $ DEBUG=true yarn run e2e:ci
 
 
-## Error: attempt to perform an operation not allowed by the security policy `gs' @ error/delegate.c/ExternalDelegateCommand/378
+## Troubleshooting
+
+### Run tests with webpack dev server (port 3005)
+
+Edit `packages/e2e-tests/config/development.json`, settings `baseUrl`.
+
+```
+  "baseUrl": "http://localhost:3005",
+```
+
+
+### Error: attempt to perform an operation not allowed by the security policy `gs' @ error/delegate.c/ExternalDelegateCommand/378
 
 You must modify Image Magick configuration:       
 
@@ -26,7 +40,7 @@ You must modify Image Magick configuration:
     </policymap>
 
 
-## Rendering test does not pass with GUI
+### Rendering test does not pass with GUI
 
 Yes ! That's true, and I don't know to make this f.... work head and headless. So for the moment it passes only 
 with Chromium headless.

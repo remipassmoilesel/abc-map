@@ -18,32 +18,30 @@
 
 import { FromV010ToV020 } from './FromV010ToV020';
 import { AbcProjectManifest } from '@abc-map/shared';
-import { TestHelper } from '../../utils/test/TestHelper';
 import { deepFreeze } from '../../utils/deepFreeze';
 import { Views } from '../../geo/Views';
+import { MigratedProject } from './typings';
+import { TestData } from './test-data/TestData';
 
 describe('FromV010ToV020', () => {
+  let project: MigratedProject;
   let migration: FromV010ToV020;
-  beforeEach(() => {
+  beforeEach(async () => {
+    project = await TestData.project01();
     migration = new FromV010ToV020();
   });
 
-  it('interestedBy() should return true if version < 0.2', async () => {
-    expect(await migration.interestedBy(fakeProject('0.1'))).toEqual(true);
-    expect(await migration.interestedBy(fakeProject('0.1.0'))).toEqual(true);
-    expect(await migration.interestedBy(fakeProject('0.2.0'))).toEqual(false);
-    expect(await migration.interestedBy(fakeProject('0.3.0'))).toEqual(false);
+  it('interestedBy() should return true', async () => {
+    expect(await migration.interestedBy(project.manifest)).toEqual(true);
+    expect(await migration.interestedBy(TestData.fakeProject('0.3.0'))).toEqual(false);
   });
 
   it('migrate should work', async () => {
     // Prepare
-    const original = TestHelper.sampleProjectManifest();
-    original.metadata.version = '0.1';
-    original.view = undefined as any;
-    deepFreeze(original);
+    const original = deepFreeze(project.manifest);
 
     // Act
-    const result = await migration.migrate(original, []);
+    const result = await migration.migrate(original as unknown as AbcProjectManifest, []);
 
     // Assert
     expect(result.manifest.metadata).toEqual({ ...original.metadata, version: '0.2.0' });
@@ -52,7 +50,3 @@ describe('FromV010ToV020', () => {
     expect(result.manifest.view).toEqual(Views.defaultView());
   });
 });
-
-function fakeProject(version: string): AbcProjectManifest {
-  return { metadata: { version } } as unknown as AbcProjectManifest;
-}

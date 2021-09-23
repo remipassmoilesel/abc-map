@@ -17,6 +17,7 @@
  */
 
 import { WmsConstants } from './WmsConstants';
+import { WmtsConstants } from './WmtsConstants';
 
 export class LayerControls {
   public static getNames(): Cypress.Chainable<string[]> {
@@ -34,7 +35,7 @@ export class LayerControls {
       .get('[data-cy=add-layer]')
       .click()
       .get('[data-cy=add-layer-type]')
-      .select('Fond de carte')
+      .select('Fond de carte prédéfini')
       .get('[data-cy=predefined-model]')
       .select('OpenStreetMap')
       .get('[data-cy=add-layer-confirm]')
@@ -46,6 +47,32 @@ export class LayerControls {
     return cy.get('[data-cy=add-layer]').click().get('[data-cy=add-layer-type]').select(option).get('[data-cy=add-layer-confirm]').click();
   }
 
+  public static addWmtsLayer(): Cypress.Chainable<any> {
+    return (
+      cy
+        // Open add layer modal
+        .get('[data-cy=add-layer]')
+        .click()
+        // Fill WMS layer form
+        .get('[data-cy=add-layer-type]')
+        .select('Couche distante WMTS')
+        .get('[data-cy=add-layer-confirm]')
+        .get('[data-cy=wmts-settings-url]')
+        .clear()
+        .type(WmtsConstants.PUBLIC_URL)
+        // Get capabilities
+        .get('[data-cy=wmts-settings-capabilities]')
+        .click()
+        // Select WMS layer
+        .get('[data-cy=wmts-layer-item]')
+        .eq(0)
+        .click()
+        // Add layer
+        .get('[data-cy=add-layer-confirm]')
+        .click()
+    );
+  }
+
   public static addWmsLayer(): Cypress.Chainable<any> {
     return (
       cy
@@ -54,7 +81,7 @@ export class LayerControls {
         .click()
         // Fill WMS layer form
         .get('[data-cy=add-layer-type]')
-        .select('Couche distante (WMS)')
+        .select('Couche distante WMS')
         .get('[data-cy=add-layer-confirm]')
         .get('[data-cy=wms-settings-url]')
         .clear()
@@ -79,7 +106,7 @@ export class LayerControls {
         .get('[data-cy=add-layer]')
         .click()
         .get('[data-cy=add-layer-type]')
-        .select('Couche distante (WMS)')
+        .select('Couche distante WMS')
         // Fill WMS layer form
         .get('[data-cy=wms-settings-url]')
         .clear()

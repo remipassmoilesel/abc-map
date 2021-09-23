@@ -38,6 +38,10 @@ describe('Rendering spec', function () {
       .then((project) => {
         return cy.get('[data-cy=file-input]').attachFile({ filePath: 'project.abm2', fileContent: project });
       })
+      .get('[data-cy=password-input]')
+      .type('azerty1234')
+      .get('[data-cy=password-confirm]')
+      .click()
       .then(() => Toasts.assertText('Projet importé !'))
       .get('[data-cy=layout]')
       .click()

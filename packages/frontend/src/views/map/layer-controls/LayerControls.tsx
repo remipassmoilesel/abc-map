@@ -43,9 +43,7 @@ declare type Props = LocalProps & ServiceProps;
 class LayerControls extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = {
-      addModalVisible: false,
-    };
+    this.state = { addModalVisible: false };
   }
 
   public render(): ReactNode {

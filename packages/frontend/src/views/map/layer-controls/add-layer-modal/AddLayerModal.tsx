@@ -18,21 +18,21 @@
 
 import React, { ChangeEvent, Component, ReactNode } from 'react';
 import { Modal } from 'react-bootstrap';
-import { HistoryKey } from '../../../../core/history/HistoryKey';
-import { AddLayersTask } from '../../../../core/history/tasks/layers/AddLayersTask';
-import { LabeledLayerType, LabeledLayerTypes } from './LabeledLayerTypes';
-import WmsSettingsPanel from './wms/WmsSettingsPanel';
-import { FrontendRoutes, Logger, PredefinedLayerModel, WmsDefinition } from '@abc-map/shared';
-import { Link } from 'react-router-dom';
-import { LayerFactory } from '../../../../core/geo/layers/LayerFactory';
+import { LabeledLayerType, LabeledLayerTypes } from './_common/LabeledLayerTypes';
+import WmsLayerPanel from './wms/WmsLayerPanel';
+import { Logger, PredefinedLayerModel } from '@abc-map/shared';
 import { ServiceProps, withServices } from '../../../../core/withServices';
-import PredefinedSelector from './predefined/PredefinedSelector';
-import XYZSettingsPanel from './xyz/XYZSettingsPanel';
+import PredefinedPanel from './predefined/PredefinedLayerPanel';
+import XYZLayerPanel from './xyz/XYZLayerPanel';
 import Cls from './AddLayerModal.module.scss';
+import GeometryLayerPanel from './geometry/GeometryLayerPanel';
+import HelpPanel from './help-panel/HelpPanel';
+import WmtsLayerPanel from './wmts/WmtsLayerPanel';
+import { WmsSettings, WmtsSettings } from '../../../../core/geo/layers/LayerFactory.types';
 
 const logger = Logger.get('AddLayerModal.tsx');
 
-interface LocalProps {
+interface Props extends ServiceProps {
   visible: boolean;
   onHide: () => void;
 }
@@ -40,17 +40,31 @@ interface LocalProps {
 interface State {
   layerType: LabeledLayerType;
   predefinedModel: PredefinedLayerModel;
-  wms?: WmsDefinition;
+  wms?: WmsSettings;
+  wmts?: WmtsSettings;
   xyzUrl?: string;
 }
 
-declare type Props = LocalProps & ServiceProps;
+export const EmptyWmsValues: WmsSettings = {
+  remoteUrl: '',
+  remoteLayerName: '',
+};
+
+export const EmptyWmtsValues: WmtsSettings = {
+  remoteUrl: '',
+  remoteLayerName: '',
+  matrixSet: '',
+  style: '',
+  resolutions: [],
+  matrixIds: [],
+  origins: [],
+};
 
 class AddLayerModal extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      layerType: LabeledLayerTypes.BaseMap,
+      layerType: LabeledLayerTypes.Predefined,
       predefinedModel: PredefinedLayerModel.StamenWatercolor,
     };
   }
@@ -58,16 +72,22 @@ class AddLayerModal extends Component<Props, State> {
   public render(): ReactNode {
     const visible = this.props.visible;
     if (!visible) {
-      // We keep modal always mounted in order to keep state between displays
       return <div />;
     }
 
     const onHide = this.props.onHide;
     const layerTypeId = this.state.layerType.id;
-    const predefinedModel = this.state.predefinedModel;
-    const baseMapSelected = layerTypeId === LabeledLayerTypes.BaseMap.id;
-    const wmsSelected = layerTypeId === LabeledLayerTypes.Wms.id;
+    const predefinedValues = this.state.predefinedModel;
+    const xyzValues = this.state.xyzUrl || '';
+    const wmsValues = this.state.wms || EmptyWmsValues;
+    const wmtsValues = this.state.wmts || EmptyWmtsValues;
+
+    const predefinedSelected = layerTypeId === LabeledLayerTypes.Predefined.id;
+    const geometrySelected = layerTypeId === LabeledLayerTypes.Vector.id;
     const xyzSelected = layerTypeId === LabeledLayerTypes.Xyz.id;
+    const wmsSelected = layerTypeId === LabeledLayerTypes.Wms.id;
+    const wmtsSelected = layerTypeId === LabeledLayerTypes.Wmts.id;
+
     return (
       <Modal show={true} onHide={onHide} dialogClassName={Cls.modal}>
         <Modal.Header closeButton>
@@ -75,34 +95,33 @@ class AddLayerModal extends Component<Props, State> {
         </Modal.Header>
         <Modal.Body>
           <div className={`p-3`}>
-            <div className={'mb-2'}>Sélectionnez le type de couche que vous souhaitez ajouter : </div>
+            <div className={'d-flex'}>
+              <div className={Cls.leftPanel}>
+                {/* Type selector */}
+                <div className={`mb-4 ${Cls.subTitle}`}>Quelle type de couche souhaitez-vous ajouter ?</div>
+                <select value={layerTypeId} onChange={this.handleLayerTypeChange} className={'form-control'} data-cy={'add-layer-type'}>
+                  {LabeledLayerTypes.All.map((type) => (
+                    <option key={type.id} value={type.id}>
+                      {type.label}
+                    </option>
+                  ))}
+                </select>
 
-            <select value={layerTypeId} onChange={this.handleLayerTypeChanged} className={'form-control'} data-cy={'add-layer-type'}>
-              {LabeledLayerTypes.All.map((type) => {
-                return (
-                  <option key={type.id} value={type.id}>
-                    {type.label}
-                  </option>
-                );
-              })}
-            </select>
+                {/* Advice */}
+                <HelpPanel type={layerTypeId} />
+              </div>
 
-            <div className={`mt-2 mb-4 ${Cls.advice}`}>
-              <i className={'fa fa-info mx-2'} /> Essayez aussi le &nbsp;
-              <Link to={FrontendRoutes.dataStore().raw()}>Catalogue de données.</Link>
-            </div>
-
-            {baseMapSelected && <PredefinedSelector value={predefinedModel} onChange={this.handleBaseMapChanged} />}
-            {wmsSelected && <WmsSettingsPanel onChange={this.handleWmsSettingsChanged} />}
-            {xyzSelected && <XYZSettingsPanel onChange={this.handleXyzUrlChanged} />}
-
-            <div className={'d-flex justify-content-end mt-3'}>
-              <button className={'btn btn-secondary mr-3'} onClick={onHide}>
-                Annuler
-              </button>
-              <button disabled={!this.isAddAllowed()} className={'btn btn-primary'} onClick={this.handleConfirm} data-cy={'add-layer-confirm'}>
-                Ajouter
-              </button>
+              {/* Settings panels */}
+              <div className={Cls.rightPanel}>
+                <h6 className={`mb-4 ${Cls.subTitle}`}>Paramètres</h6>
+                {predefinedSelected && (
+                  <PredefinedPanel value={predefinedValues} onChange={this.handlePredefinedValueChanged} onCancel={onHide} onConfirm={onHide} />
+                )}
+                {geometrySelected && <GeometryLayerPanel onConfirm={onHide} onCancel={onHide} />}
+                {xyzSelected && <XYZLayerPanel value={xyzValues} onChange={this.handleXyzValuesChange} onConfirm={onHide} onCancel={onHide} />}
+                {wmsSelected && <WmsLayerPanel value={wmsValues} onChange={this.handleWmsValuesChange} onConfirm={onHide} onCancel={onHide} />}
+                {wmtsSelected && <WmtsLayerPanel value={wmtsValues} onChange={this.handleWmtsValuesChange} onConfirm={onHide} onCancel={onHide} />}
+              </div>
             </div>
           </div>
         </Modal.Body>
@@ -110,111 +129,32 @@ class AddLayerModal extends Component<Props, State> {
     );
   }
 
-  private handleConfirm = () => {
-    const { toasts } = this.props.services;
-
-    const selected = this.state.layerType;
-    if (LabeledLayerTypes.BaseMap.id === selected.id) {
-      this.handleNewBaseMap();
-    } else if (LabeledLayerTypes.Vector.id === selected.id) {
-      this.handleNewVectorLayer();
-    } else if (LabeledLayerTypes.Wms.id === selected.id) {
-      this.handleNewWmsLayer();
-    } else if (LabeledLayerTypes.Xyz.id === selected.id) {
-      this.handleNewXyzLayer();
-    } else {
-      toasts.genericError();
-    }
-
-    this.props.onHide();
-  };
-
-  private handleLayerTypeChanged = (ev: ChangeEvent<HTMLSelectElement>) => {
-    const { toasts } = this.props.services;
-
+  private handleLayerTypeChange = (ev: ChangeEvent<HTMLSelectElement>) => {
     const value = ev.target.value;
     const layerType = LabeledLayerTypes.find(value);
     if (!layerType) {
-      return toasts.genericError();
+      logger.error('Invalid type: ', value);
+      return;
     }
+
     this.setState({ layerType });
   };
 
-  private handleNewBaseMap = () => {
-    const { geo, history } = this.props.services;
-    const { predefinedModel } = this.state;
-
-    const map = geo.getMainMap();
-    const layer = LayerFactory.newPredefinedLayer(predefinedModel);
-    map.addLayer(layer);
-    map.setActiveLayer(layer);
-    history.register(HistoryKey.Map, new AddLayersTask(map, [layer]));
-  };
-
-  private handleNewVectorLayer = () => {
-    const { history, geo } = this.props.services;
-
-    const map = geo.getMainMap();
-    const layer = LayerFactory.newVectorLayer();
-    map.addLayer(layer);
-    map.setActiveLayer(layer);
-    history.register(HistoryKey.Map, new AddLayersTask(map, [layer]));
-  };
-
-  private handleNewWmsLayer = () => {
-    const { history, geo, toasts } = this.props.services;
-
-    const wms = this.state.wms;
-    if (!wms) {
-      return toasts.info("Vous devez d'abord paramétrer votre couche");
-    }
-
-    const map = geo.getMainMap();
-    const layer = LayerFactory.newWmsLayer(wms);
-    map.addLayer(layer);
-    map.setActiveLayer(layer);
-    history.register(HistoryKey.Map, new AddLayersTask(map, [layer]));
-  };
-
-  private handleNewXyzLayer = () => {
-    const { history, geo, toasts } = this.props.services;
-
-    const url = this.state.xyzUrl;
-    if (!url) {
-      return toasts.info("Vous devez d'abord saisir une URL");
-    }
-
-    const map = geo.getMainMap();
-    const layer = LayerFactory.newXyzLayer(url);
-    map.addLayer(layer);
-    map.setActiveLayer(layer);
-    history.register(HistoryKey.Map, new AddLayersTask(map, [layer]));
-  };
-
-  private handleWmsSettingsChanged = (wms: WmsDefinition) => {
+  private handleWmsValuesChange = (wms: WmsSettings) => {
     this.setState({ wms });
   };
 
-  private handleXyzUrlChanged = (xyzUrl: string) => {
+  private handleWmtsValuesChange = (wmts: WmtsSettings) => {
+    this.setState({ wmts });
+  };
+
+  private handleXyzValuesChange = (xyzUrl: string) => {
     this.setState({ xyzUrl });
   };
 
-  private handleBaseMapChanged = (predefinedModel: PredefinedLayerModel) => {
+  private handlePredefinedValueChanged = (predefinedModel: PredefinedLayerModel) => {
     this.setState({ predefinedModel });
   };
-
-  private isAddAllowed(): boolean {
-    const type = this.state.layerType;
-    if (type === LabeledLayerTypes.Wms) {
-      const urlIsDefined = !!this.state.wms?.remoteUrl;
-      const layerIsDefined = !!this.state.wms?.remoteLayerName;
-      return urlIsDefined && layerIsDefined;
-    } else if (type === LabeledLayerTypes.Xyz) {
-      return !!this.state.xyzUrl;
-    }
-
-    return true;
-  }
 }
 
 export default withServices(AddLayerModal);
