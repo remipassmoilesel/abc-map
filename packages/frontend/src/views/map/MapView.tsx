@@ -37,7 +37,7 @@ import { MapKeyboardListener } from './keyboard-listener/MapKeyboardListener';
 import { MapEvent } from 'ol';
 import { pageSetup } from '../../core/utils/page-setup';
 import { MapActions } from '../../core/store/map/actions';
-import { MapSizeChangedEvent } from '../../core/geo/map/MapSizeChangedEvent';
+import { MapSizeChangedEvent } from '../../core/geo/map/MapWrapper.events';
 import Cls from './MapView.module.scss';
 
 const logger = Logger.get('MapView.tsx');
@@ -49,7 +49,6 @@ interface State {
 }
 
 const mapStateToProps = (state: MainState) => ({
-  project: state.project.metadata,
   mapDimensions: state.map.mainMapDimensions,
 });
 
@@ -72,12 +71,13 @@ class MapView extends Component<Props, State> {
 
   public render(): ReactNode {
     const activeLayer = this.state.layers.find((lay) => lay.isActive());
+    const layers = this.state.layers;
 
     return (
       <div className={Cls.mapView}>
         {/*Left menu*/}
         <div className={Cls.leftPanel}>
-          <ProjectStatus project={this.props.project} />
+          <ProjectStatus />
           <Search />
           <ProjectControls />
           <HistoryControls historyKey={HistoryKey.Map} />
@@ -90,7 +90,7 @@ class MapView extends Component<Props, State> {
 
         {/*Right menu*/}
         <div className={Cls.rightPanel}>
-          <LayerControls layers={this.state.layers} />
+          <LayerControls layers={layers} />
           <ToolSelector activeLayer={activeLayer} />
         </div>
       </div>

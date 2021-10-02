@@ -73,7 +73,6 @@ export function sampleProjectMetadata(): AbcProjectMetadata {
     id: projectId,
     version: '0.0.1',
     name: `Test project ${projectId}`,
-    projection: { name: 'EPSG:3857' },
     containsCredentials: false,
   };
 }

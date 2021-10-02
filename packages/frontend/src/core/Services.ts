@@ -54,21 +54,21 @@ export function getServices(): Services {
 }
 
 export function servicesFactory(store: MainStore): Services {
-  const jsonClient = httpApiClient(5_000);
+  const apiClient = httpApiClient(5_000);
   const downloadClient = httpDownloadClient(5_000);
   const externalClient = httpExternalClient(5_000);
 
   const toasts = new ToastService();
   const modals = new ModalService();
   const history = HistoryService.create();
-  const geo = new GeoService(externalClient, toasts, history, store);
-  const project = ProjectService.create(jsonClient, downloadClient, store, toasts, geo, modals);
-  const authentication = new AuthenticationService(jsonClient, store, toasts);
-  const data = new DataService(jsonClient, downloadClient, toasts, geo, modals, history);
-  const vote = new VoteService(jsonClient, toasts);
+  const geo = new GeoService(apiClient, externalClient, toasts, history, store);
+  const project = ProjectService.create(apiClient, downloadClient, store, toasts, geo, modals);
+  const authentication = new AuthenticationService(apiClient, store, toasts);
+  const data = new DataService(apiClient, downloadClient, toasts, geo, modals, history);
+  const vote = new VoteService(apiClient, toasts);
   const legalMentions = new LegalMentionsService(downloadClient, toasts);
 
-  // Here we can listen to project changes for global actions
+  // When project loaded, we clean style cache and undo/redo history
   project.addEventListener((ev) => {
     if (ProjectEventType.ProjectLoaded === ev.type) {
       history.resetHistory();
@@ -77,6 +77,15 @@ export function servicesFactory(store: MainStore): Services {
       logger.error('Unhandled event type: ', ev);
     }
   });
+
+  // When main map move we save view in project
+  geo
+    .getMainMap()
+    .unwrap()
+    .on('moveend', () => {
+      const view = geo.getMainMap().getView();
+      project.setView(view);
+    });
 
   return {
     project,

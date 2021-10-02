@@ -87,9 +87,65 @@ describe('Layout', function () {
         .should((elem) => expect(elem).deep.equal([]));
     });
 
-    it('can export PDF with all layer types', function () {
+    it('can export PDF with predefined layer', function () {
       cy.visit(FrontendRoutes.map().raw())
+        .then(() => LayerControls.deleteActiveLayer())
+        .then(() => TopBar.layout())
+        .get('[data-cy=layout-controls] [data-cy=new-layout]')
+        .click()
+        .get('[data-cy=layout-controls] [data-cy=pdf-export]')
+        .click()
+        .then(() => Toasts.assertText('Export terminé !', 50_000))
+        .then(() => Download.fileAsBlob())
+        .should((pdf) => {
+          expect(pdf.size).greaterThan(50_000);
+        })
+        .get('[data-cy=close-solicitation-modal]')
+        .click();
+    });
+
+    it('can export PDF with XYZ layer', function () {
+      cy.visit(FrontendRoutes.map().raw())
+        .then(() => LayerControls.deleteActiveLayer())
+        .then(() => LayerControls.deleteActiveLayer())
+        .then(() => LayerControls.addXyzLayer())
+        .then(() => TopBar.layout())
+        .get('[data-cy=layout-controls] [data-cy=new-layout]')
+        .click()
+        .get('[data-cy=layout-controls] [data-cy=pdf-export]')
+        .click()
+        .then(() => Toasts.assertText('Export terminé !', 50_000))
+        .then(() => Download.fileAsBlob())
+        .should((pdf) => {
+          expect(pdf.size).greaterThan(50_000);
+        })
+        .get('[data-cy=close-solicitation-modal]')
+        .click();
+    });
+
+    it('can export PDF with WMS layer', function () {
+      cy.visit(FrontendRoutes.map().raw())
+        .then(() => LayerControls.deleteActiveLayer())
+        .then(() => LayerControls.deleteActiveLayer())
         .then(() => LayerControls.addWmsLayer())
+        .then(() => TopBar.layout())
+        .get('[data-cy=layout-controls] [data-cy=new-layout]')
+        .click()
+        .get('[data-cy=layout-controls] [data-cy=pdf-export]')
+        .click()
+        .then(() => Toasts.assertText('Export terminé !', 50_000))
+        .then(() => Download.fileAsBlob())
+        .should((pdf) => {
+          expect(pdf.size).greaterThan(50_000);
+        })
+        .get('[data-cy=close-solicitation-modal]')
+        .click();
+    });
+
+    it('can export PDF with WMTS layer', function () {
+      cy.visit(FrontendRoutes.map().raw())
+        .then(() => LayerControls.deleteActiveLayer())
+        .then(() => LayerControls.deleteActiveLayer())
         .then(() => LayerControls.addWmtsLayer())
         .then(() => TopBar.layout())
         .get('[data-cy=layout-controls] [data-cy=new-layout]')

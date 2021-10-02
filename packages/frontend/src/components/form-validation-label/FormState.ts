@@ -26,6 +26,7 @@ export enum FormState {
   PasswordEqualEmail = 'PasswordEqualEmail',
   DeletionNotConfirmed = 'DeletionNotConfirmed',
   InvalidUrl = 'InvalidUrl',
+  MissingXYZPlaceHolders = 'MissingXYZPlaceHolders',
   MissingRemoteLayer = 'MissingRemoteLayer',
 
   MissingNewLayerName = 'MissingLayerName',

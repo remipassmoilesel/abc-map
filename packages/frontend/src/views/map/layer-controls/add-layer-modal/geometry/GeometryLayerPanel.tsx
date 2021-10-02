@@ -37,7 +37,7 @@ class GeometryLayerPanel extends Component<Props, {}> {
 
     return (
       <div className={'flex-grow-1 d-flex flex-column justify-content-between'}>
-        <div className={'mt-3'}>Rien à paramétrer ici ✌️</div>
+        <div>Rien à paramétrer ici ✌️</div>
 
         {/* Control buttons */}
         <ControlButtons onCancel={onCancel} onConfirm={this.handleConfirm} />
@@ -53,6 +53,8 @@ class GeometryLayerPanel extends Component<Props, {}> {
     map.addLayer(layer);
     map.setActiveLayer(layer);
     history.register(HistoryKey.Map, new AddLayersTask(map, [layer]));
+
+    this.props.onConfirm();
   };
 }
 

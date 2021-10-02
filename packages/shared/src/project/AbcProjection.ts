@@ -23,3 +23,37 @@ export interface AbcProjection {
 export const DEFAULT_PROJECTION: AbcProjection = {
   name: 'EPSG:3857',
 };
+
+/**
+ * This function extract a valid projection name from string if any.
+ *
+ * It supports only CRS:## EPSG:## codes.
+ *
+ * @param projection
+ */
+export function normalizedProjectionName(projection: string): string | undefined {
+  const code = projection
+    .toLocaleUpperCase()
+    .trim()
+    .match(/(EPSG|CRS)[:]+([0-9]+)/i);
+
+  if (code && code.length && code[1] && code[2]) {
+    return `${code[1]}:${code[2]}`;
+  }
+}
+
+export function projectionCodeFromName(projection: string): string | undefined {
+  return normalizedProjectionName(projection)?.split(':')[1] || undefined;
+}
+
+/**
+ * Return true if projection names can be normalized and are equals
+ *
+ * @param projectionA
+ * @param projectionB
+ */
+export function isProjectionEqual(projectionA: string, projectionB: string): boolean {
+  const a = normalizedProjectionName(projectionA);
+  const b = normalizedProjectionName(projectionB);
+  return (typeof a !== 'undefined' || typeof b !== 'undefined') && a === b;
+}

@@ -16,6 +16,8 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
+@import "src/assets/styles/variables";
+
 .mapContainer {
   flex-grow: 1;
 
@@ -29,7 +31,8 @@
 .map {
   flex-grow: 1;
   height: 95vh;
-  border: solid 1px lightgrey;
+  border: solid 1px $gray-400;
+  background: $gray-200;
 }
 
 .dropOverlay1 {
@@ -70,4 +73,20 @@
   align-items: center;
 
   background-color: transparent;
+}
+
+.tileLoadError {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 0.2rem 1rem;
+  cursor: pointer;
+
+  background: $warning;
 }

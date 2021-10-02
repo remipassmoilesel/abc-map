@@ -22,6 +22,7 @@ import { FileIO, InputResultType, InputType } from '../../../core/utils/FileIO';
 import { ServiceProps, withServices } from '../../../core/withServices';
 import { ImportStatus } from '../../../core/data/DataService';
 import { OperationStatus } from '../../../core/ui/typings';
+import Cls from './ImportData.module.scss';
 
 const logger = Logger.get('ImportData.tsx', 'debug');
 
@@ -34,7 +35,7 @@ class ImportData extends Component<ServiceProps, {}> {
             <i className={'fa fa-table mr-2'} /> Importer des données
           </button>
         </div>
-        <div className={'mb-2 font-italic'}>Vous pouvez aussi déposer des fichiers sur la carte.</div>
+        <div className={`mb-2 ${Cls.advice}`}>Vous pouvez aussi déposer des fichiers sur la carte.</div>
       </div>
     );
   }

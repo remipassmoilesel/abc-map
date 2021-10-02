@@ -205,11 +205,12 @@ export class LayerWrapper<Layer extends OlLayers = OlLayers, Source extends OlSo
 
   private setXyzMetadata(props: XyzMetadata): void {
     this.layer.set(XyzLayerProperties.Url, props.remoteUrl);
+    this.layer.set(XyzLayerProperties.Projection, props.projection);
   }
 
   private setWmsMetadata(props: WmsMetadata): void {
-    this.layer.set(WmsLayerProperties.Url, props.remoteUrl);
-    this.layer.set(WmsLayerProperties.LayerName, props.remoteLayerName);
+    this.layer.set(WmsLayerProperties.Urls, props.remoteUrls);
+    this.layer.set(WmsLayerProperties.RemoteLayerName, props.remoteLayerName);
     this.layer.set(WmsLayerProperties.Username, props.auth?.username);
     this.layer.set(WmsLayerProperties.Password, props.auth?.password);
     this.layer.set(WmsLayerProperties.Projection, props.projection);
@@ -217,17 +218,10 @@ export class LayerWrapper<Layer extends OlLayers = OlLayers, Source extends OlSo
   }
 
   private setWmtsMetadata(props: WmtsMetadata): void {
-    this.layer.set(WmtsLayerProperties.Url, props.remoteUrl);
+    this.layer.set(WmtsLayerProperties.CapabilitiesUrl, props.capabilitiesUrl);
     this.layer.set(WmtsLayerProperties.LayerName, props.remoteLayerName);
     this.layer.set(WmtsLayerProperties.Username, props.auth?.username);
     this.layer.set(WmtsLayerProperties.Password, props.auth?.password);
-    this.layer.set(WmtsLayerProperties.Projection, props.projection);
-    this.layer.set(WmtsLayerProperties.Extent, props.extent);
-    this.layer.set(WmtsLayerProperties.MatrixSet, props.matrixSet);
-    this.layer.set(WmtsLayerProperties.Style, props.style);
-    this.layer.set(WmtsLayerProperties.Resolutions, props.resolutions);
-    this.layer.set(WmtsLayerProperties.MatrixIds, props.matrixIds);
-    this.layer.set(WmtsLayerProperties.Origins, props.origins);
   }
 
   public getMetadata(): Meta | undefined {
@@ -309,13 +303,13 @@ export class LayerWrapper<Layer extends OlLayers = OlLayers, Source extends OlSo
       return;
     }
 
-    const remoteUrl: string | undefined = this.layer.get(WmsLayerProperties.Url);
-    const remoteLayerName: string | undefined = this.layer.get(WmsLayerProperties.LayerName);
+    const remoteUrls: string[] | undefined = this.layer.get(WmsLayerProperties.Urls);
+    const remoteLayerName: string | undefined = this.layer.get(WmsLayerProperties.RemoteLayerName);
     const username: string | undefined = this.layer.get(WmsLayerProperties.Username);
     const password: string | undefined = this.layer.get(WmsLayerProperties.Password);
     const projection: AbcProjection | undefined = this.layer.get(WmsLayerProperties.Projection);
     const extent: [number, number, number, number] | undefined = this.layer.get(WmsLayerProperties.Extent);
-    if (base.type !== LayerType.Wms || !remoteUrl || !remoteLayerName) {
+    if (base.type !== LayerType.Wms || !remoteUrls || !remoteLayerName) {
       logger.error('Invalid layer: ', [this.layer, base]);
       return;
     }
@@ -324,7 +318,7 @@ export class LayerWrapper<Layer extends OlLayers = OlLayers, Source extends OlSo
     return {
       ...base,
       type: LayerType.Wms,
-      remoteUrl,
+      remoteUrls,
       remoteLayerName,
       auth,
       projection,
@@ -338,18 +332,11 @@ export class LayerWrapper<Layer extends OlLayers = OlLayers, Source extends OlSo
       return;
     }
 
-    const remoteUrl: string | undefined = this.layer.get(WmtsLayerProperties.Url);
+    const capabilitiesUrl: string | undefined = this.layer.get(WmtsLayerProperties.CapabilitiesUrl);
     const remoteLayerName: string | undefined = this.layer.get(WmtsLayerProperties.LayerName);
     const username: string | undefined = this.layer.get(WmtsLayerProperties.Username);
     const password: string | undefined = this.layer.get(WmtsLayerProperties.Password);
-    const projection: AbcProjection | undefined = this.layer.get(WmtsLayerProperties.Projection);
-    const extent: [number, number, number, number] | undefined = this.layer.get(WmtsLayerProperties.Extent);
-    const matrixSet: string | undefined = this.layer.get(WmtsLayerProperties.MatrixSet);
-    const style: string | undefined = this.layer.get(WmtsLayerProperties.Style);
-    const resolutions: number[] | undefined = this.layer.get(WmtsLayerProperties.Resolutions);
-    const matrixIds: string[] | undefined = this.layer.get(WmtsLayerProperties.MatrixIds);
-    const origins: number[][] | undefined = this.layer.get(WmtsLayerProperties.Origins);
-    if (base.type !== LayerType.Wmts || !remoteUrl || !remoteLayerName || !matrixSet || !style || !resolutions || !matrixIds || !origins) {
+    if (base.type !== LayerType.Wmts || !capabilitiesUrl || !remoteLayerName) {
       logger.error('Invalid layer : ', [this.layer, base]);
       return;
     }
@@ -358,16 +345,9 @@ export class LayerWrapper<Layer extends OlLayers = OlLayers, Source extends OlSo
     return {
       ...base,
       type: LayerType.Wmts,
-      remoteUrl,
+      capabilitiesUrl,
       remoteLayerName,
       auth,
-      projection,
-      extent,
-      matrixSet,
-      style,
-      resolutions,
-      matrixIds,
-      origins,
     };
   }
 
@@ -378,7 +358,7 @@ export class LayerWrapper<Layer extends OlLayers = OlLayers, Source extends OlSo
     }
 
     const remoteUrl: string | undefined = this.layer.get(XyzLayerProperties.Url);
-    const projection: string | undefined = this.layer.get(XyzLayerProperties.Projection);
+    const projection: AbcProjection | undefined = this.layer.get(XyzLayerProperties.Projection);
     if (base.type !== LayerType.Xyz || !remoteUrl) {
       logger.error('Invalid layer: ', [this.layer, base]);
       return;
@@ -388,7 +368,7 @@ export class LayerWrapper<Layer extends OlLayers = OlLayers, Source extends OlSo
       ...base,
       type: LayerType.Xyz,
       remoteUrl,
-      projection: (projection && { name: projection }) || undefined,
+      projection,
     };
   }
 

@@ -19,12 +19,16 @@
 import {
   AbcPredefinedLayer,
   AbcVectorLayer,
+  AbcWmsLayer,
+  AbcWmtsLayer,
   AbcXyzLayer,
   LayerProperties,
   LayerType,
   PredefinedLayerModel,
   PredefinedMetadata,
   VectorMetadata,
+  WmsMetadata,
+  WmtsMetadata,
   XyzMetadata,
 } from '@abc-map/shared';
 import VectorSource from 'ol/source/Vector';
@@ -149,10 +153,14 @@ describe('LayerWrapper', () => {
     });
 
     it('on predefined layer', () => {
+      // Prepare
       const layer = LayerFactory.newPredefinedLayer(PredefinedLayerModel.OSM);
       layer.setActive(true).setVisible(false).setOpacity(0.5);
 
+      // Act
       const metadata = layer.getMetadata();
+
+      // Assert
       expect(metadata).toBeDefined();
       expect(metadata?.id).toBeDefined();
       expect(metadata?.id).toEqual(layer.getId());
@@ -164,10 +172,14 @@ describe('LayerWrapper', () => {
     });
 
     it('on vector layer', () => {
+      // Prepare
       const layer = LayerFactory.newVectorLayer(new VectorSource());
       layer.setActive(true).setVisible(false).setOpacity(0.5);
 
+      // Act
       const metadata = layer.getMetadata();
+
+      // Assert
       expect(metadata).toBeDefined();
       expect(metadata?.id).toBeDefined();
       expect(metadata?.id).toEqual(layer.getId());
@@ -178,8 +190,10 @@ describe('LayerWrapper', () => {
     });
 
     it('on WMS layer', () => {
+      // Prepare
       const def: WmsSettings = {
-        remoteUrl: 'http://test-url',
+        capabilitiesUrl: 'http://test-url/capabilities',
+        remoteUrls: ['http://test-url'],
         remoteLayerName: 'test-layer-name',
         projection: { name: 'EPSG:4326' },
         auth: {
@@ -190,7 +204,10 @@ describe('LayerWrapper', () => {
       const layer = LayerFactory.newWmsLayer(def);
       layer.setActive(true).setVisible(false).setOpacity(0.5);
 
+      // Act
       const metadata = layer.getMetadata();
+
+      // Assert
       expect(metadata).toBeDefined();
       expect(metadata?.id).toBeDefined();
       expect(metadata?.id).toEqual(layer.getId());
@@ -202,14 +219,18 @@ describe('LayerWrapper', () => {
       expect(metadata?.projection?.name).toEqual('EPSG:4326');
       expect(metadata?.auth?.username).toEqual('test-username');
       expect(metadata?.auth?.password).toEqual('test-password');
-      expect(metadata?.remoteUrl).toEqual('http://test-url');
+      expect(metadata?.remoteUrls).toEqual(['http://test-url']);
     });
 
     it('on XYZ layer', () => {
-      const layer = LayerFactory.newXyzLayer('http://test-url');
+      // Prepare
+      const layer = LayerFactory.newXyzLayer('http://test-url', { name: 'EPSG:4326' });
       layer.setActive(true).setVisible(false).setOpacity(0.5);
 
+      // Act
       const metadata = layer.getMetadata();
+
+      // Assert
       expect(metadata).toBeDefined();
       expect(metadata?.id).toBeDefined();
       expect(metadata?.id).toEqual(layer.getId());
@@ -218,16 +239,21 @@ describe('LayerWrapper', () => {
       expect(metadata?.active).toEqual(true);
       expect(metadata?.type).toEqual(LayerType.Xyz);
       expect(metadata?.remoteUrl).toEqual('http://test-url');
+      expect(metadata?.projection).toEqual({ name: 'EPSG:4326' });
     });
   });
 
   describe('toAbcLayer()', () => {
     it('with OSM layer', async () => {
+      // Prepare
       const layer = LayerFactory.newPredefinedLayer(PredefinedLayerModel.OSM).setVisible(false).setOpacity(0.5).setActive(true);
 
+      // Act
       const abcLayer = (await layer.toAbcLayer()) as AbcPredefinedLayer;
 
+      // Assert
       expect(abcLayer.type).toEqual(LayerType.Predefined);
+      expect(abcLayer.metadata.id).toBeDefined();
       const expectedMetadata: PredefinedMetadata = {
         id: layer.getId() as string,
         type: LayerType.Predefined,
@@ -237,20 +263,24 @@ describe('LayerWrapper', () => {
         visible: false,
         model: PredefinedLayerModel.OSM,
       };
-      expect(abcLayer.metadata.id).toBeDefined();
       expect(abcLayer.metadata).toEqual(expectedMetadata);
     });
 
     it('with vector layer', async () => {
+      // Prepare
       const vectorSource = new VectorSource({ features: TestHelper.sampleFeatures() });
       const layer = LayerFactory.newVectorLayer(vectorSource).setVisible(false).setOpacity(0.5).setActive(true);
 
+      // Act
       const abcLayer = (await layer.toAbcLayer()) as AbcVectorLayer;
 
+      // Assert
       expect(abcLayer.type).toEqual(LayerType.Vector);
       expect(abcLayer.features).toBeDefined();
       expect(abcLayer.features.features.length).toEqual(3);
       expect(abcLayer.features.features[0].geometry.type).toEqual('Point');
+
+      expect(abcLayer.metadata.id).toBeDefined();
       const expectedMetadata: VectorMetadata = {
         id: layer.getId() as string,
         type: LayerType.Vector,
@@ -259,15 +289,17 @@ describe('LayerWrapper', () => {
         opacity: 0.5,
         visible: false,
       };
-      expect(abcLayer.metadata.id).toBeDefined();
       expect(abcLayer.metadata).toEqual(expectedMetadata);
     });
 
-    it('with xyz layer', async () => {
-      const layer = LayerFactory.newXyzLayer('http://test-url').setVisible(false).setOpacity(0.5).setActive(true);
+    it('with XYZ layer', async () => {
+      // Prepare
+      const layer = LayerFactory.newXyzLayer('http://test-url', { name: 'EPSG:4326' }).setVisible(false).setOpacity(0.5).setActive(true);
 
+      // Act
       const abcLayer = (await layer.toAbcLayer()) as AbcXyzLayer;
 
+      // Assert
       expect(abcLayer.type).toEqual(LayerType.Xyz);
       const expectedMetadata: XyzMetadata = {
         id: layer.getId() as string,
@@ -277,95 +309,166 @@ describe('LayerWrapper', () => {
         opacity: 0.5,
         visible: false,
         remoteUrl: 'http://test-url',
+        projection: { name: 'EPSG:4326' },
       };
       expect(abcLayer.metadata.id).toBeDefined();
       expect(abcLayer.metadata).toEqual(expectedMetadata);
     });
-  });
 
-  describe('shallowClone()', () => {
-    it('with predefined layer', () => {
-      // Prepare
-      const layer = LayerFactory.newPredefinedLayer(PredefinedLayerModel.OSM);
-
-      // Act
-      const clone = layer.shallowClone();
-
-      // Assert
-      expect(clone.unwrap()).toBeInstanceOf(TileLayer);
-      expect(clone.unwrap().getSource()).toStrictEqual(layer.unwrap().getSource());
-      expect(clone.unwrap()).not.toStrictEqual(layer.unwrap());
-      expect(clone.getMetadata()).toEqual(layer.getMetadata());
-    });
-
-    it('with vector layer', () => {
-      // Prepare
-      const layer = LayerFactory.newVectorLayer();
-
-      // Act
-      const clone = layer.shallowClone();
-
-      // Assert
-      expect(clone.unwrap()).toBeInstanceOf(VectorImageLayer);
-      expect(clone.unwrap().getSource()).toStrictEqual(layer.unwrap().getSource());
-      expect(clone.unwrap()).not.toStrictEqual(layer.unwrap());
-      expect(clone.getMetadata()).toEqual(layer.getMetadata());
-    });
-
-    it('with WMS layer', () => {
+    // Prepare
+    it('with WMS layer', async () => {
       // Prepare
       const settings: WmsSettings = {
-        remoteUrl: 'http://test-url',
-        remoteLayerName: 'test-layer-name',
+        capabilitiesUrl: 'http://domain/capabilities',
+        remoteUrls: ['http://domain/GetMap'],
+        remoteLayerName: 'test-layer',
         projection: { name: 'EPSG:4326' },
+        extent: [1, 2, 3, 4],
         auth: {
           username: 'test-username',
           password: 'test-password',
         },
       };
-      const layer = LayerFactory.newWmsLayer(settings);
+      const layer = LayerFactory.newWmsLayer(settings).setVisible(false).setOpacity(0.5).setActive(true);
 
       // Act
-      const clone = layer.shallowClone();
+      const abcLayer = (await layer.toAbcLayer()) as AbcWmsLayer;
 
       // Assert
-      expect(clone.unwrap()).toBeInstanceOf(TileLayer);
-      expect(clone.unwrap().getSource()).toBeInstanceOf(TileSource);
-      expect(clone.unwrap().getSource()).toStrictEqual(layer.unwrap().getSource());
-      expect(clone.unwrap()).not.toStrictEqual(layer.unwrap());
-      expect(clone.getMetadata()).toEqual(layer.getMetadata());
+      expect(abcLayer.metadata.id).toBeDefined();
+      expect(abcLayer.type).toEqual(LayerType.Wms);
+      const expectedMetadata: WmsMetadata = {
+        id: layer.getId() as string,
+        type: LayerType.Wms,
+        active: true,
+        opacity: 0.5,
+        visible: false,
+        name: 'test-layer',
+        remoteUrls: ['http://domain/GetMap'],
+        remoteLayerName: 'test-layer',
+        projection: { name: 'EPSG:4326' },
+        extent: [1, 2, 3, 4],
+        auth: {
+          username: 'test-username',
+          password: 'test-password',
+        },
+      };
+      expect(abcLayer.metadata).toEqual(expectedMetadata);
     });
 
-    it('with WMTS layer', () => {
+    it('with WMTS layer', async () => {
       // Prepare
       const settings = TestHelper.sampleWmtsSettings();
-      const layer = LayerFactory.newWmtsLayer(settings);
+      const layer = LayerFactory.newWmtsLayer(settings).setVisible(false).setOpacity(0.5).setActive(true);
 
       // Act
-      const clone = layer.shallowClone();
+      const abcLayer = (await layer.toAbcLayer()) as AbcWmtsLayer;
 
       // Assert
-      expect(clone.unwrap()).toBeInstanceOf(TileLayer);
-      expect(clone.unwrap().getSource()).toBeInstanceOf(WMTS);
-      expect(clone.unwrap().getSource()).toStrictEqual(layer.unwrap().getSource());
-      expect(clone.unwrap()).not.toStrictEqual(layer.unwrap());
-      expect(clone.getMetadata()).toEqual(layer.getMetadata());
+      expect(abcLayer.metadata.id).toBeDefined();
+      expect(abcLayer.type).toEqual(LayerType.Wmts);
+      const expectedMetadata: WmtsMetadata = {
+        id: layer.getId() as string,
+        type: LayerType.Wmts,
+        active: true,
+        opacity: 0.5,
+        visible: false,
+        name: 'GEOGRAPHICALGRIDSYSTEMS.MAPS',
+        remoteLayerName: 'GEOGRAPHICALGRIDSYSTEMS.MAPS',
+        capabilitiesUrl: 'http://domain.fr/wmts',
+        auth: {
+          username: 'test-username',
+          password: 'test-password',
+        },
+      };
+      expect(abcLayer.metadata).toEqual(expectedMetadata);
     });
+  });
+});
 
-    it('with XYZ layer', () => {
-      // Prepare
-      const settings = TestHelper.sampleXyzLayer().metadata;
-      const layer = LayerFactory.newXyzLayer(settings.remoteUrl, settings.projection);
+describe('shallowClone()', () => {
+  it('with predefined layer', () => {
+    // Prepare
+    const layer = LayerFactory.newPredefinedLayer(PredefinedLayerModel.OSM);
 
-      // Act
-      const clone = layer.shallowClone();
+    // Act
+    const clone = layer.shallowClone();
 
-      // Assert
-      expect(clone.unwrap()).toBeInstanceOf(TileLayer);
-      expect(clone.unwrap().getSource()).toBeInstanceOf(XYZ);
-      expect(clone.unwrap().getSource()).toStrictEqual(layer.unwrap().getSource());
-      expect(clone.unwrap()).not.toStrictEqual(layer.unwrap());
-      expect(clone.getMetadata()).toEqual(layer.getMetadata());
-    });
+    // Assert
+    expect(clone.unwrap()).toBeInstanceOf(TileLayer);
+    expect(clone.unwrap().getSource()).toStrictEqual(layer.unwrap().getSource());
+    expect(clone.unwrap()).not.toStrictEqual(layer.unwrap());
+    expect(clone.getMetadata()).toEqual(layer.getMetadata());
+  });
+
+  it('with vector layer', () => {
+    // Prepare
+    const layer = LayerFactory.newVectorLayer();
+
+    // Act
+    const clone = layer.shallowClone();
+
+    // Assert
+    expect(clone.unwrap()).toBeInstanceOf(VectorImageLayer);
+    expect(clone.unwrap().getSource()).toStrictEqual(layer.unwrap().getSource());
+    expect(clone.unwrap()).not.toStrictEqual(layer.unwrap());
+    expect(clone.getMetadata()).toEqual(layer.getMetadata());
+  });
+
+  it('with WMS layer', () => {
+    // Prepare
+    const settings: WmsSettings = {
+      capabilitiesUrl: 'http://test-url/capabilities',
+      remoteUrls: ['http://test-url'],
+      remoteLayerName: 'test-layer-name',
+      projection: { name: 'EPSG:4326' },
+      auth: {
+        username: 'test-username',
+        password: 'test-password',
+      },
+    };
+    const layer = LayerFactory.newWmsLayer(settings);
+
+    // Act
+    const clone = layer.shallowClone();
+
+    // Assert
+    expect(clone.unwrap()).toBeInstanceOf(TileLayer);
+    expect(clone.unwrap().getSource()).toBeInstanceOf(TileSource);
+    expect(clone.unwrap().getSource()).toStrictEqual(layer.unwrap().getSource());
+    expect(clone.unwrap()).not.toStrictEqual(layer.unwrap());
+    expect(clone.getMetadata()).toEqual(layer.getMetadata());
+  });
+
+  it('with WMTS layer', () => {
+    // Prepare
+    const settings = TestHelper.sampleWmtsSettings();
+    const layer = LayerFactory.newWmtsLayer(settings);
+
+    // Act
+    const clone = layer.shallowClone();
+
+    // Assert
+    expect(clone.unwrap()).toBeInstanceOf(TileLayer);
+    expect(clone.unwrap().getSource()).toBeInstanceOf(WMTS);
+    expect(clone.unwrap().getSource()).toStrictEqual(layer.unwrap().getSource());
+    expect(clone.unwrap()).not.toStrictEqual(layer.unwrap());
+    expect(clone.getMetadata()).toEqual(layer.getMetadata());
+  });
+
+  it('with XYZ layer', () => {
+    // Prepare
+    const settings = TestHelper.sampleXyzLayer().metadata;
+    const layer = LayerFactory.newXyzLayer(settings.remoteUrl, settings.projection);
+
+    // Act
+    const clone = layer.shallowClone();
+
+    // Assert
+    expect(clone.unwrap()).toBeInstanceOf(TileLayer);
+    expect(clone.unwrap().getSource()).toBeInstanceOf(XYZ);
+    expect(clone.unwrap().getSource()).toStrictEqual(layer.unwrap().getSource());
+    expect(clone.unwrap()).not.toStrictEqual(layer.unwrap());
+    expect(clone.getMetadata()).toEqual(layer.getMetadata());
   });
 });

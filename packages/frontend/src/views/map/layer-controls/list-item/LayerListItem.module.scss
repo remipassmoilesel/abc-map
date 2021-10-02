@@ -26,6 +26,10 @@
   cursor: pointer;
   user-select: none;
 
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+
   :global(.fa) {
     margin: 0 7px;
   }

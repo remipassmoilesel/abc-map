@@ -91,3 +91,9 @@ export class LegalMentionsRoutes {
     return '/legal-mentions';
   }
 }
+
+export class ProjectionRoutes {
+  public static findByCode(code: string): string {
+    return `/projections/${code}`;
+  }
+}

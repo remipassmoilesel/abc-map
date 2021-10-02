@@ -65,10 +65,10 @@ describe('Encryption', () => {
       const encrypted = await Encryption.encryptManifest(manifest, 'azerty1234');
 
       const wms = encrypted.layers[0] as AbcWmsLayer;
-      expect(wms.metadata.remoteUrl).toMatch('encrypted:');
+      expect(wms.metadata.remoteUrls[0]).toMatch('encrypted:');
       expect(wms.metadata.auth?.username).toMatch('encrypted:');
       expect(wms.metadata.auth?.password).toMatch('encrypted:');
-      expect(wms.metadata.remoteUrl).not.toContain(original.metadata.remoteUrl);
+      expect(wms.metadata.remoteUrls[0]).not.toContain(original.metadata.remoteUrls[0]);
       expect(wms.metadata.auth?.username).not.toContain(original.metadata.auth?.username);
       expect(wms.metadata.auth?.password).not.toContain(original.metadata.auth?.password);
 
@@ -83,8 +83,8 @@ describe('Encryption', () => {
       const encrypted = await Encryption.encryptManifest(manifest, 'azerty1234');
 
       const wms = encrypted.layers[0] as AbcWmsLayer;
-      expect(wms.metadata.remoteUrl).toMatch('encrypted:');
-      expect(wms.metadata.remoteUrl).not.toContain(original.metadata.remoteUrl);
+      expect(wms.metadata.remoteUrls[0]).toMatch('encrypted:');
+      expect(wms.metadata.remoteUrls[0]).not.toContain(original.metadata.remoteUrls[0]);
 
       expect(comparableMetadata(wms)).toEqual(comparableMetadata(original));
     });
@@ -96,10 +96,10 @@ describe('Encryption', () => {
       const encrypted = await Encryption.encryptManifest(manifest, 'azerty1234');
 
       const wmts = encrypted.layers[0] as AbcWmtsLayer;
-      expect(wmts.metadata.remoteUrl).toMatch('encrypted:');
+      expect(wmts.metadata.capabilitiesUrl).toMatch('encrypted:');
       expect(wmts.metadata.auth?.username).toMatch('encrypted:');
       expect(wmts.metadata.auth?.password).toMatch('encrypted:');
-      expect(wmts.metadata.remoteUrl).not.toContain(original.metadata.remoteUrl);
+      expect(wmts.metadata.capabilitiesUrl).not.toContain(original.metadata.capabilitiesUrl);
       expect(wmts.metadata.auth?.username).not.toContain(original.metadata.auth?.username);
       expect(wmts.metadata.auth?.password).not.toContain(original.metadata.auth?.password);
 
@@ -182,5 +182,5 @@ async function newEncryptedManifest(layers: AbcLayer[]): Promise<AbcProjectManif
 }
 
 function comparableMetadata(meta: any): any {
-  return _.omit(meta, ['metadata.auth', 'metadata.remoteUrl']);
+  return _.omit(meta, ['metadata.auth', 'metadata.remoteUrl', 'metadata.remoteUrls', 'metadata.capabilitiesUrl']);
 }

@@ -17,10 +17,11 @@
  */
 
 import { AbcProjection, BasicAuthentication } from '@abc-map/shared';
-import { Coordinate } from 'ol/coordinate';
+import { Options as WmtsSourceOptions } from 'ol/source/WMTS';
 
 export interface WmsSettings {
-  remoteUrl: string;
+  capabilitiesUrl?: string;
+  remoteUrls: string[];
   remoteLayerName: string;
   projection?: AbcProjection;
   extent?: [number, number, number, number];
@@ -28,14 +29,10 @@ export interface WmsSettings {
 }
 
 export interface WmtsSettings {
-  remoteUrl: string;
+  capabilitiesUrl: string;
   remoteLayerName: string;
-  matrixSet: string;
-  style: string;
+  sourceOptions?: WmtsSourceOptions;
   auth?: BasicAuthentication;
-  resolutions: number[];
-  matrixIds: string[];
-  projection?: AbcProjection;
-  origins: Coordinate[];
-  extent?: [number, number, number, number];
 }
+
+export type { WmtsSourceOptions };

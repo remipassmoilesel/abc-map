@@ -19,7 +19,7 @@
 import { AbcProjection, BasicAuthentication } from '../project';
 
 export interface WmsDefinition {
-  remoteUrl: string;
+  remoteUrls: string[];
   remoteLayerName: string;
   projection?: AbcProjection;
   extent?: [number, number, number, number];

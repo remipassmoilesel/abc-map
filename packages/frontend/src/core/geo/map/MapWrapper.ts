@@ -31,10 +31,11 @@ import VectorImageLayer from 'ol/layer/VectorImage';
 import VectorSource from 'ol/source/Vector';
 import Geometry from 'ol/geom/Geometry';
 import { defaultInteractions } from './interactions';
-import { MapSizeChanged, MapSizeChangedEvent, SizeListener } from './MapSizeChangedEvent';
+import { EventType, MapSizeChangedEvent, SizeListener, TileErrorListener, TileLoadErrorEvent } from './MapWrapper.events';
 import { Views } from '../Views';
 import { fromLonLat } from 'ol/proj';
 import { Coordinate } from 'ol/coordinate';
+import TileSource from 'ol/source/Tile';
 
 export const logger = Logger.get('MapWrapper.ts');
 
@@ -49,7 +50,7 @@ export declare type FeatureCallback = (feat: FeatureWrapper, layer: LayerWrapper
 export class MapWrapper {
   private sizeObserver?: ResizeObserver;
   private currentTool?: AbstractTool;
-  private sizeEventTarget = document.createDocumentFragment();
+  private eventTarget = document.createDocumentFragment();
 
   constructor(private readonly internal: Map) {
     this.addLayerChangeListener(this.handleLayerChange);
@@ -87,10 +88,15 @@ export class MapWrapper {
   }
 
   public addLayer(layer: LayerWrapper, position?: number): void {
+    const olLayer = layer.unwrap();
     if (typeof position !== 'undefined') {
-      this.internal.getLayers().insertAt(position, layer.unwrap());
+      this.internal.getLayers().insertAt(position, olLayer);
     } else {
-      this.internal.addLayer(layer.unwrap());
+      this.internal.addLayer(olLayer);
+    }
+
+    if (olLayer instanceof TileLayer) {
+      olLayer.getSource().addEventListener('tileloaderror', this.handleTileLoadError);
     }
   }
 
@@ -140,7 +146,12 @@ export class MapWrapper {
   }
 
   public removeLayer(layer: LayerWrapper): void {
-    this.internal.getLayers().remove(layer.unwrap());
+    const olLayer = layer.unwrap();
+    this.internal.getLayers().remove(olLayer);
+
+    if (olLayer instanceof TileLayer) {
+      olLayer.getSource().removeEventListener('tileloaderror', this.handleTileLoadError);
+    }
   }
 
   public getActiveVectorLayer(): VectorLayerWrapper | undefined {
@@ -309,11 +320,19 @@ export class MapWrapper {
   }
 
   public addSizeListener(listener: SizeListener): void {
-    this.sizeEventTarget.addEventListener(MapSizeChanged, listener as EventListener);
+    this.eventTarget.addEventListener(EventType.MapSizeChanged, listener as EventListener);
   }
 
   public removeSizeListener(listener: SizeListener): void {
-    this.sizeEventTarget.removeEventListener(MapSizeChanged, listener as EventListener);
+    this.eventTarget.removeEventListener(EventType.MapSizeChanged, listener as EventListener);
+  }
+
+  public addTileErrorListener(listener: TileErrorListener): void {
+    this.eventTarget.addEventListener(EventType.TileLoadError, listener as EventListener);
+  }
+
+  public removeTileErrorListener(listener: TileErrorListener): void {
+    this.eventTarget.removeEventListener(EventType.TileLoadError, listener as EventListener);
   }
 
   private handleSizeChange = () => {
@@ -327,7 +346,25 @@ export class MapWrapper {
       return;
     }
 
-    this.sizeEventTarget.dispatchEvent(new MapSizeChangedEvent({ width: target.clientWidth, height: target.clientHeight }));
+    this.eventTarget.dispatchEvent(new MapSizeChangedEvent({ width: target.clientWidth, height: target.clientHeight }));
+  };
+
+  private handleTileLoadError = (ev: BaseEvent) => {
+    if (!(ev.target instanceof TileSource)) {
+      logger.error('Unhandled event target: ', ev);
+      return true;
+    }
+
+    const layer = this.internal
+      .getLayers()
+      .getArray()
+      .find((lay) => lay instanceof TileLayer && lay.getSource() === ev.target) as TileLayer | undefined;
+
+    if (layer) {
+      this.eventTarget.dispatchEvent(new TileLoadErrorEvent(LayerWrapper.from(layer)));
+    }
+
+    return true;
   };
 
   public unwrap(): Map {

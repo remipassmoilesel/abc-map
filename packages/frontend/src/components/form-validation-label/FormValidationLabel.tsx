@@ -95,10 +95,18 @@ class FormValidationLabel extends Component<Props, {}> {
         icon = 'fa-exclamation-circle';
         message = (
           <>
-            L&apos;URL doit être valide et commencer par <code>http://</code> ou <code>https://</code>.
+            L&apos;URL doit être valide et commencer par <code>https://</code>.
           </>
         );
+        break;
 
+      case FormState.MissingXYZPlaceHolders:
+        icon = 'fa-exclamation-circle';
+        message = (
+          <>
+            L&apos;URL doit contenir <code>&#123;x&#125;</code>, <code>&#123;y&#125;</code> et <code>&#123;z&#125;</code>.
+          </>
+        );
         break;
 
       case FormState.MissingRemoteLayer:

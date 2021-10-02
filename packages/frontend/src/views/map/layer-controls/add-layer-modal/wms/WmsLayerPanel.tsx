@@ -17,7 +17,7 @@
  */
 
 import React, { ChangeEvent, Component, ReactNode } from 'react';
-import { BasicAuthentication, Logger } from '@abc-map/shared';
+import { AbcProjection, BasicAuthentication, isProjectionEqual, Logger, normalizedProjectionName } from '@abc-map/shared';
 import { WmsCapabilities, WmsLayer } from '../../../../../core/geo/WmsCapabilities';
 import WmsLayerItem from './WmsLayerItem';
 import { ServiceProps, withServices } from '../../../../../core/withServices';
@@ -29,12 +29,12 @@ import { HistoryKey } from '../../../../../core/history/HistoryKey';
 import { AddLayersTask } from '../../../../../core/history/tasks/layers/AddLayersTask';
 import ControlButtons from '../_common/ControlButtons';
 import { WmsSettings } from '../../../../../core/geo/layers/LayerFactory.types';
-import { removeQuery } from '../../../../../core/utils/removeQuery';
 import Cls from './WmsLayerPanel.module.scss';
 
 const logger = Logger.get('WmsLayerPanel.tsx');
 
 interface Props extends ServiceProps {
+  projectProjection: AbcProjection;
   value: WmsSettings;
   onChange: (values: WmsSettings) => void;
   onCancel: () => void;
@@ -61,19 +61,17 @@ class WmsLayerPanel extends Component<Props, State> {
     const loading = this.state.loading;
     const onCancel = this.props.onCancel;
     const submitDisabled = formState !== FormState.Ok;
-    const protocolWarn = this.props.value.remoteUrl.toLocaleLowerCase().includes('wmts');
+    const protocolWarn = this.props.value.capabilitiesUrl?.toLocaleLowerCase().includes('wmts');
 
     return (
       <div className={'flex-grow-1 d-flex flex-column justify-content-between'}>
-        <div className={'mb-2'}>Pour le moment, seules les projections EPSG:4326 et EPSG:3857 sont supportées.</div>
-
         {/* URL and credentials form */}
         <div className={'d-flex flex-row'}>
           <input
             type="text"
             placeholder={'URL'}
             className={'form-control mb-3'}
-            value={value?.remoteUrl}
+            value={value?.capabilitiesUrl}
             onChange={this.handleUrlChanged}
             data-cy={'wms-settings-url'}
           />
@@ -139,7 +137,7 @@ class WmsLayerPanel extends Component<Props, State> {
 
     const values: WmsSettings = {
       ...this.props.value,
-      remoteUrl: url,
+      capabilitiesUrl: url,
     };
 
     const formState = this.validateForm(values);
@@ -149,29 +147,47 @@ class WmsLayerPanel extends Component<Props, State> {
   private handleLayerSelected = (layer: WmsLayer) => {
     const { toasts } = this.props.services;
 
-    try {
-      const values = this.getValues(layer);
-      const formState = this.validateForm(values);
-      this.setState({ formState }, () => this.props.onChange(values));
-    } catch (err) {
-      logger.error('Cannot use layer: ', err);
-      toasts.error('Désolé, cette couche ne peut pas être utilisée');
-    }
+    this.getValues(layer)
+      .then((values) => {
+        const formState = this.validateForm(values);
+        this.setState({ formState }, () => this.props.onChange(values));
+      })
+      .catch((err) => {
+        logger.error('Cannot use layer: ', err);
+        toasts.error('Désolé, cette couche ne peut pas être utilisée');
+      });
   };
 
-  private getValues(layer: WmsLayer): WmsSettings {
-    const layerName = layer.Name || '';
+  private async getValues(layer: WmsLayer): Promise<WmsSettings> {
+    const { geo } = this.props.services;
+    const capabilities = this.state.capabilities;
+    const projectProjection = this.props.projectProjection;
 
-    // FIXME: what if the projection is not registered ?
-    const boundingBox = layer.BoundingBox?.length ? layer.BoundingBox[0] : undefined;
-    const projection = boundingBox?.crs ? { name: boundingBox.crs } : undefined;
-    const extent = boundingBox?.extent;
+    // We grab layer name and WMS urls
+    const remoteLayerName = layer.Name || '';
+    const dcpTypes = capabilities?.Capability?.Request?.GetMap?.DCPType;
+    const remoteUrls = dcpTypes?.map((dcpType) => dcpType.HTTP?.Get?.OnlineResource).filter((url) => typeof url === 'string' && !!url) as string[];
+    if (!remoteLayerName || !remoteUrls || !remoteUrls.length) {
+      return Promise.reject(new Error('Invalid layer name or URLs'));
+    }
+
+    // We try to the project projection, otherwise we use the first projection available
+    let projectionName = layer.CRS?.find((crs) => isProjectionEqual(crs, projectProjection.name));
+    if (!projectionName) {
+      // FIXME: we should try to load projection in order to ensure we can use it
+      projectionName = layer.CRS?.find((crs) => normalizedProjectionName(crs));
+    }
+
+    // We load projection if any
+    if (projectionName) {
+      await geo.loadProjection(projectionName);
+    }
 
     return {
       ...this.props.value,
-      remoteLayerName: layerName,
-      extent,
-      projection,
+      remoteUrls,
+      remoteLayerName,
+      projection: projectionName ? { name: projectionName } : undefined,
     };
   }
 
@@ -209,7 +225,12 @@ class WmsLayerPanel extends Component<Props, State> {
     const { geo, toasts } = this.props.services;
     const value = this.props.value;
 
-    this.setState({ loading: true });
+    if (!value.capabilitiesUrl) {
+      toasts.error("L'URL est obligatoire");
+      return;
+    }
+
+    this.setState({ loading: true, capabilities: undefined });
 
     let auth: BasicAuthentication | undefined;
     if (value.auth?.username && value.auth?.password) {
@@ -217,10 +238,10 @@ class WmsLayerPanel extends Component<Props, State> {
     }
 
     geo
-      .getWmsCapabilities(value.remoteUrl, auth)
+      .getWmsCapabilities(value.capabilitiesUrl, auth)
       .then((capabilities) => this.setState({ capabilities }))
       .catch((err) => {
-        toasts.error("Impossible d'obtenir les capacités du serveur, vérifiez l'url");
+        toasts.error("Impossible d'obtenir les capacités du serveur, vérifiez l'URL et les identifiants");
         logger.error(err);
       })
       .finally(() => this.setState({ loading: false }));
@@ -228,14 +249,10 @@ class WmsLayerPanel extends Component<Props, State> {
 
   private handleConfirm = () => {
     const { history, geo } = this.props.services;
-
-    const wmsOptions: WmsSettings = {
-      ...this.props.value,
-      remoteUrl: removeQuery(this.props.value.remoteUrl),
-    };
+    const { value: settings } = this.props;
 
     const map = geo.getMainMap();
-    const layer = LayerFactory.newWmsLayer(wmsOptions);
+    const layer = LayerFactory.newWmsLayer(settings);
     map.addLayer(layer);
     map.setActiveLayer(layer);
     history.register(HistoryKey.Map, new AddLayersTask(map, [layer]));
@@ -244,7 +261,7 @@ class WmsLayerPanel extends Component<Props, State> {
   };
 
   private validateForm(value: WmsSettings): FormState {
-    if (!ValidationHelper.url(value.remoteUrl)) {
+    if (!ValidationHelper.url(value.capabilitiesUrl || '')) {
       return FormState.InvalidUrl;
     }
 

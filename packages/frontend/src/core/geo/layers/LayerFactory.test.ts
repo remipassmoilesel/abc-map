@@ -20,18 +20,19 @@ import { LayerFactory } from './LayerFactory';
 import VectorSource from 'ol/source/Vector';
 import { TileWMS, WMTS } from 'ol/source';
 import { LayerProperties, LayerType, PredefinedLayerModel } from '@abc-map/shared';
-import { TestHelper } from '../../utils/test/TestHelper';
 import TileLayer from 'ol/layer/Tile';
-import { VectorLayerWrapper, WmsLayerWrapper, WmtsLayerWrapper, XyzLayerWrapper } from './LayerWrapper';
 import VectorImageLayer from 'ol/layer/VectorImage';
-import { WmsSettings, WmtsSettings } from './LayerFactory.types';
+import { WmsSettings } from './LayerFactory.types';
+import { TestHelper } from '../../utils/test/TestHelper';
 import WMTSTileGrid from 'ol/tilegrid/WMTS';
 
 describe('LayerFactory', () => {
   describe('newPredefinedLayer()', () => {
     it('OSM', () => {
+      // Act
       const layer = LayerFactory.newPredefinedLayer(PredefinedLayerModel.OSM);
 
+      // Assert
       const metadata = layer.getMetadata();
       expect(metadata).toBeDefined();
       expect(metadata?.id).toBeDefined();
@@ -46,8 +47,10 @@ describe('LayerFactory', () => {
     });
 
     it('StamenToner', () => {
+      // Act
       const layer = LayerFactory.newPredefinedLayer(PredefinedLayerModel.StamenToner);
 
+      // Assert
       const metadata = layer.getMetadata();
       expect(metadata).toBeDefined();
       expect(metadata?.id).toBeDefined();
@@ -62,8 +65,10 @@ describe('LayerFactory', () => {
     });
 
     it('StamenTonerLite', () => {
+      // Act
       const layer = LayerFactory.newPredefinedLayer(PredefinedLayerModel.StamenTonerLite);
 
+      // Assert
       const metadata = layer.getMetadata();
       expect(metadata).toBeDefined();
       expect(metadata?.id).toBeDefined();
@@ -78,8 +83,10 @@ describe('LayerFactory', () => {
     });
 
     it('StamenTerrain', () => {
+      // Act
       const layer = LayerFactory.newPredefinedLayer(PredefinedLayerModel.StamenTerrain);
 
+      // Assert
       const metadata = layer.getMetadata();
       expect(metadata).toBeDefined();
       expect(metadata?.id).toBeDefined();
@@ -94,8 +101,10 @@ describe('LayerFactory', () => {
     });
 
     it('StamenWatercolor', () => {
+      // Act
       const layer = LayerFactory.newPredefinedLayer(PredefinedLayerModel.StamenWatercolor);
 
+      // Assert
       const metadata = layer.getMetadata();
       expect(metadata).toBeDefined();
       expect(metadata?.id).toBeDefined();
@@ -112,8 +121,10 @@ describe('LayerFactory', () => {
 
   describe('newVectorLayer()', () => {
     it('without source', () => {
+      // Act
       const layer = LayerFactory.newVectorLayer();
 
+      // Assert
       const metadata = layer.getMetadata();
       expect(metadata).toBeDefined();
       expect(metadata?.id).toBeDefined();
@@ -128,22 +139,30 @@ describe('LayerFactory', () => {
     });
 
     it('with source', () => {
+      // Prepare
       const source = new VectorSource();
+
+      // Act
       const layer = LayerFactory.newVectorLayer(source);
 
+      // Assert
       expect(layer.unwrap().getSource()).toStrictEqual(source);
     });
   });
 
   describe('newWmsLayer()', () => {
     it('without authentication', () => {
+      // Prepare
       const def: WmsSettings = {
-        remoteUrl: 'http://test-url',
+        remoteUrls: ['http://test-url'],
         remoteLayerName: 'test-layer-name',
         projection: { name: 'EPSG:4326' },
       };
 
+      // Act
       const layer = LayerFactory.newWmsLayer(def);
+
+      // Assert
       const metadata = layer.getMetadata();
       expect(metadata).toBeDefined();
       expect(metadata?.id).toBeDefined();
@@ -163,8 +182,9 @@ describe('LayerFactory', () => {
     });
 
     it('with authentication', () => {
+      // Prepare
       const settings: WmsSettings = {
-        remoteUrl: 'http://test-url',
+        remoteUrls: ['http://test-url'],
         remoteLayerName: 'test-layer-name',
         projection: { name: 'EPSG:4326' },
         auth: {
@@ -173,7 +193,10 @@ describe('LayerFactory', () => {
         },
       };
 
+      // Act
       const layer = LayerFactory.newWmsLayer(settings);
+
+      // Assert
       const metadata = layer.getMetadata();
       expect(metadata).toBeDefined();
       expect(metadata?.id).toBeDefined();
@@ -194,199 +217,63 @@ describe('LayerFactory', () => {
   });
 
   describe('newWmtsLayer()', () => {
-    it('with authentication', () => {
-      const settings: WmtsSettings = {
-        remoteUrl: 'http://domain.fr/wmts',
-        remoteLayerName: 'test-layer-name',
-        projection: { name: 'EPSG:3857' },
-        extent: [-7034346.839028204, -2443080.2980507985, 6216929.25854652, 6652314.571658893],
-        matrixSet: 'PM',
-        style: 'normal',
-        resolutions: [156543.033928041, 78271.51696402048, 39135.758482010235, 19567.87924100512],
-        matrixIds: ['0', '1', '2', '3'],
-        origins: [
-          [-20037508.342789248, 20037508.342789248],
-          [-20037508.342789248, 20037508.342789248],
-          [-20037508.342789248, 20037508.342789248],
-          [-20037508.342789248, 20037508.342789248],
-        ],
-        auth: {
-          username: 'test-username',
-          password: 'test-password',
-        },
+    it('without authentication', () => {
+      // Prepare
+      const settings = {
+        ...TestHelper.sampleWmtsSettings(),
+        auth: undefined,
       };
 
+      // Act
       const layer = LayerFactory.newWmtsLayer(settings);
+
+      // Assert
       const metadata = layer.getMetadata();
       expect(metadata).toBeDefined();
       expect(metadata?.id).toBeDefined();
-      expect(metadata?.name).toEqual('test-layer-name');
+      expect(metadata?.name).toEqual('GEOGRAPHICALGRIDSYSTEMS.MAPS');
       expect(metadata?.opacity).toEqual(1);
       expect(metadata?.visible).toEqual(true);
       expect(metadata?.active).toEqual(false);
       expect(metadata?.type).toEqual(LayerType.Wmts);
+      expect(metadata?.capabilitiesUrl).toEqual('http://domain.fr/wmts');
+      expect(metadata?.remoteLayerName).toEqual('GEOGRAPHICALGRIDSYSTEMS.MAPS');
+      expect(metadata?.auth).toEqual(undefined);
       expect(layer.unwrap().get(LayerProperties.Managed)).toBe(true);
       expect(layer.unwrap()).toBeInstanceOf(TileLayer);
 
       const source = layer.unwrap().getSource() as WMTS;
-      const grid = source.getTileGrid() as WMTSTileGrid;
       expect(source).toBeInstanceOf(WMTS);
-      expect(source.getUrls()).toEqual(['http://domain.fr/wmts']);
-      expect(source.getTileLoadFunction().toString()).toContain('authClient');
-      expect(grid.getExtent()).toEqual(settings.extent);
-      expect(grid.getResolutions()).toEqual(settings.resolutions);
-      expect(grid.getMatrixIds()).toEqual(settings.matrixIds);
+      expect(source.getTileGrid()).toBeInstanceOf(WMTSTileGrid);
+      expect(source.getTileLoadFunction().toString()).not.toContain('authClient');
     });
-  });
 
-  describe('fromAbcLayer()', () => {
-    it('with OSM layer', async () => {
-      const abcLayer = TestHelper.sampleOsmLayer();
-      abcLayer.metadata.name = 'OpenStreetMap';
-      abcLayer.metadata.opacity = 0.5;
-      abcLayer.metadata.active = true;
-      abcLayer.metadata.visible = false;
+    it('with authentication', () => {
+      // Prepare
+      const settings = TestHelper.sampleWmtsSettings();
 
-      const layer = await LayerFactory.fromAbcLayer(abcLayer);
-      expect(layer.unwrap()).toBeInstanceOf(TileLayer);
+      // Act
+      const layer = LayerFactory.newWmtsLayer(settings);
+
+      // Assert
       const metadata = layer.getMetadata();
       expect(metadata).toBeDefined();
       expect(metadata?.id).toBeDefined();
-      expect(metadata?.id).toEqual(abcLayer.metadata.id);
-      expect(metadata?.name).toEqual('OpenStreetMap');
-      expect(metadata?.opacity).toEqual(0.5);
-      expect(metadata?.visible).toEqual(false);
-      expect(metadata?.active).toEqual(true);
-      expect(metadata?.type).toEqual(LayerType.Predefined);
-      expect(layer.unwrap().get(LayerProperties.Managed)).toBe(true);
-    });
-
-    it('with vector layer', async () => {
-      const abcLayer = TestHelper.sampleVectorLayer();
-      abcLayer.features.features = [TestHelper.sampleGeojsonFeature(), TestHelper.sampleGeojsonFeature()];
-      abcLayer.metadata.name = 'What a beautiful layer';
-      abcLayer.metadata.opacity = 0.5;
-      abcLayer.metadata.active = true;
-      abcLayer.metadata.visible = false;
-
-      const layer = (await LayerFactory.fromAbcLayer(abcLayer)) as VectorLayerWrapper;
-      expect(layer.unwrap()).toBeInstanceOf(VectorImageLayer);
-      const metadata = layer.getMetadata();
-      expect(metadata).toBeDefined();
-      expect(metadata?.id).toBeDefined();
-      expect(metadata?.id).toEqual(abcLayer.metadata.id);
-      expect(metadata?.name).toEqual('What a beautiful layer');
-      expect(metadata?.opacity).toEqual(0.5);
-      expect(metadata?.visible).toEqual(false);
-      expect(metadata?.active).toEqual(true);
-      expect(metadata?.type).toEqual(LayerType.Vector);
-      expect(layer.unwrap().get(LayerProperties.Managed)).toBe(true);
-
-      const features = layer.getSource().getFeatures();
-      expect(features).toHaveLength(2);
-    });
-
-    it('with WMS layer, without authentication', async () => {
-      const abcLayer = TestHelper.sampleWmsLayer();
-      abcLayer.metadata.auth = undefined;
-      abcLayer.metadata.opacity = 0.5;
-      abcLayer.metadata.active = true;
-      abcLayer.metadata.visible = false;
-
-      const layer = (await LayerFactory.fromAbcLayer(abcLayer)) as WmsLayerWrapper;
-
-      expect(layer.unwrap()).toBeInstanceOf(TileLayer);
-      const metadata = layer.getMetadata();
-      expect(metadata).toBeDefined();
-      expect(metadata?.id).toBeDefined();
-      expect(metadata?.id).toEqual(abcLayer.metadata.id);
-      expect(metadata?.name).toEqual('Couche WMS');
-      expect(metadata?.opacity).toEqual(0.5);
-      expect(metadata?.visible).toEqual(false);
-      expect(metadata?.active).toEqual(true);
-      expect(metadata?.type).toEqual(LayerType.Wms);
-      expect(metadata?.remoteUrl).toEqual('http://remote-url');
-      expect(metadata?.remoteLayerName).toEqual('test-layer-name');
-      expect(metadata?.extent).toEqual([1, 2, 3, 4]);
-      expect(metadata?.auth).toBeUndefined();
-      expect(layer.unwrap().get(LayerProperties.Managed)).toBe(true);
-    });
-
-    it('with WMS layer, with authentication', async () => {
-      const abcLayer = TestHelper.sampleWmsLayer();
-
-      const layer = (await LayerFactory.fromAbcLayer(abcLayer)) as WmsLayerWrapper;
-
-      expect(layer.unwrap()).toBeInstanceOf(TileLayer);
-      const metadata = layer.getMetadata();
-      expect(metadata).toBeDefined();
-      expect(metadata?.remoteUrl).toEqual('http://remote-url');
-      expect(metadata?.remoteLayerName).toEqual('test-layer-name');
-      expect(metadata?.extent).toEqual([1, 2, 3, 4]);
-      expect(metadata?.auth?.username).toEqual('test-username');
-      expect(metadata?.auth?.password).toEqual('test-password');
-      expect(layer.unwrap().get(LayerProperties.Managed)).toBe(true);
-    });
-
-    it('with WMTS layer, without authentication', async () => {
-      const abcLayer = TestHelper.sampleWmtsLayer();
-      abcLayer.metadata.opacity = 0.5;
-      abcLayer.metadata.active = true;
-      abcLayer.metadata.visible = false;
-
-      const layer = (await LayerFactory.fromAbcLayer(abcLayer)) as WmtsLayerWrapper;
-
-      expect(layer.unwrap()).toBeInstanceOf(TileLayer);
-      const metadata = layer.getMetadata();
-      expect(metadata).toBeDefined();
-      expect(metadata?.id).toBeDefined();
-      expect(metadata?.id).toEqual(abcLayer.metadata.id);
-      expect(metadata?.name).toEqual('Couche WMTS');
-      expect(metadata?.opacity).toEqual(0.5);
-      expect(metadata?.visible).toEqual(false);
-      expect(metadata?.active).toEqual(true);
+      expect(metadata?.name).toEqual('GEOGRAPHICALGRIDSYSTEMS.MAPS');
+      expect(metadata?.opacity).toEqual(1);
+      expect(metadata?.visible).toEqual(true);
+      expect(metadata?.active).toEqual(false);
       expect(metadata?.type).toEqual(LayerType.Wmts);
-      expect(metadata?.remoteUrl).toEqual('http://domain.fr/wmts');
-      expect(metadata?.remoteLayerName).toEqual('test-layer-name');
-      expect(metadata?.projection).toEqual({ name: 'EPSG:3857' });
-      expect(metadata?.extent).toEqual([-7034346.839028204, -2443080.2980507985, 6216929.25854652, 6652314.571658893]);
-      expect(metadata?.matrixSet).toEqual('PM');
-      expect(metadata?.style).toEqual('normal');
-      expect(metadata?.resolutions).toEqual([156543.033928041, 78271.51696402048, 39135.758482010235, 19567.87924100512]);
-      expect(metadata?.matrixIds).toEqual(['0', '1', '2', '3']);
-      expect(metadata?.origins).toEqual([
-        [-20037508.342789248, 20037508.342789248],
-        [-20037508.342789248, 20037508.342789248],
-        [-20037508.342789248, 20037508.342789248],
-        [-20037508.342789248, 20037508.342789248],
-      ]);
-      expect(metadata?.auth).toEqual({
-        username: 'test-username',
-        password: 'test-password',
-      });
+      expect(metadata?.capabilitiesUrl).toEqual('http://domain.fr/wmts');
+      expect(metadata?.remoteLayerName).toEqual('GEOGRAPHICALGRIDSYSTEMS.MAPS');
+      expect(metadata?.auth).toEqual({ password: 'test-password', username: 'test-username' });
       expect(layer.unwrap().get(LayerProperties.Managed)).toBe(true);
-    });
-
-    it('with XYZ layer', async () => {
-      const abcLayer = TestHelper.sampleXyzLayer();
-      abcLayer.metadata.opacity = 0.5;
-      abcLayer.metadata.active = true;
-      abcLayer.metadata.visible = false;
-
-      const layer = (await LayerFactory.fromAbcLayer(abcLayer)) as XyzLayerWrapper;
-
       expect(layer.unwrap()).toBeInstanceOf(TileLayer);
-      const metadata = layer.getMetadata();
-      expect(metadata).toBeDefined();
-      expect(metadata?.id).toBeDefined();
-      expect(metadata?.id).toEqual(abcLayer.metadata.id);
-      expect(metadata?.name).toEqual('Couche XYZ');
-      expect(metadata?.opacity).toEqual(0.5);
-      expect(metadata?.visible).toEqual(false);
-      expect(metadata?.active).toEqual(true);
-      expect(metadata?.type).toEqual(LayerType.Xyz);
-      expect(metadata?.remoteUrl).toEqual('http://remote-url');
-      expect(layer.unwrap().get(LayerProperties.Managed)).toBe(true);
+
+      const source = layer.unwrap().getSource() as WMTS;
+      expect(source).toBeInstanceOf(WMTS);
+      expect(source.getTileGrid()).toBeInstanceOf(WMTSTileGrid);
+      expect(source.getTileLoadFunction().toString()).toContain('authClient');
     });
   });
 });

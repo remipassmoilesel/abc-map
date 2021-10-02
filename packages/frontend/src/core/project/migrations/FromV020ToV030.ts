@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcFile, AbcProjectManifest, AbcWmsLayer, LayerType } from '@abc-map/shared';
+import { AbcFile, AbcProjection, AbcProjectManifest, BasicAuthentication, LayerType } from '@abc-map/shared';
 import { MigratedProject, ProjectMigration } from './typings';
 import semver from 'semver';
 import { ModalService } from '../../ui/ModalService';
@@ -25,8 +25,22 @@ import { Encryption } from '../../utils/Encryption';
 
 const NEXT = '0.3.0';
 
+export interface AbcWmsLayer020 {
+  type: LayerType.Wms;
+  metadata: WmsMetadata020;
+}
+
+export interface WmsMetadata020 {
+  type: LayerType.Wms;
+  projection?: AbcProjection;
+  extent?: [number, number, number, number];
+  remoteUrl: string;
+  remoteLayerName: string;
+  auth?: BasicAuthentication;
+}
+
 /**
- * This migration add encrypted wms remote url, even without authentication credentials
+ * This migration add encrypted WMS remote url, even without authentication credentials
  */
 export class FromV020ToV030 implements ProjectMigration {
   constructor(private modalService: ModalService) {}
@@ -37,11 +51,11 @@ export class FromV020ToV030 implements ProjectMigration {
   }
 
   public async migrate(manifest: AbcProjectManifest, files: AbcFile[]): Promise<MigratedProject> {
-    const hasWmsLayer = manifest.layers.find((lay) => lay.metadata.type === LayerType.Wms) as AbcWmsLayer | undefined;
-    const urlIsEncrypted = hasWmsLayer?.metadata.remoteUrl.startsWith('encrypted:');
+    const wmsLayers = manifest.layers.filter((lay) => lay.metadata.type === LayerType.Wms) as unknown as AbcWmsLayer020[];
+    const clearUrl = wmsLayers?.find((layer) => !layer.metadata.remoteUrl.startsWith('encrypted:'))?.metadata.remoteUrl;
 
     // No migration needed, we only upgrade version
-    if (!hasWmsLayer || urlIsEncrypted) {
+    if (!wmsLayers.length || !clearUrl) {
       return {
         manifest: {
           ...manifest,
@@ -64,16 +78,20 @@ export class FromV020ToV030 implements ProjectMigration {
     }
 
     // We encrypt project then return it
-    const encrypted = await Encryption.encryptManifest(manifest, password.value);
-    return {
-      manifest: {
-        ...encrypted,
-        metadata: {
-          ...encrypted.metadata,
-          version: NEXT,
-        },
-      },
-      files,
-    };
+    for (const layer of manifest.layers) {
+      if (layer.metadata.type !== LayerType.Wms) {
+        continue;
+      }
+
+      const url = (layer.metadata as unknown as WmsMetadata020).remoteUrl;
+      if (!url.includes('encrypted:')) {
+        (layer.metadata as unknown as WmsMetadata020).remoteUrl = await Encryption.encrypt(url, password.value);
+      }
+    }
+
+    manifest.metadata.version = NEXT;
+    manifest.metadata.containsCredentials = true;
+
+    return { manifest, files };
   }
 }

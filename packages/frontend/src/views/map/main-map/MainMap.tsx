@@ -23,6 +23,8 @@ import { ServiceProps, withServices } from '../../../core/withServices';
 import { ImportStatus } from '../../../core/data/DataService';
 import Cls from './MainMap.module.scss';
 import { OperationStatus } from '../../../core/ui/typings';
+import { TileLoadErrorEvent } from '../../../core/geo/map/MapWrapper.events';
+import * as _ from 'lodash';
 
 export const logger = Logger.get('MainMap.ts');
 
@@ -32,6 +34,7 @@ interface LocalProps {
 
 interface State {
   dragOverlay: boolean;
+  tileError: string;
 }
 
 declare type Props = LocalProps & ServiceProps;
@@ -41,15 +44,26 @@ class MainMap extends Component<Props, State> {
 
   constructor(props: Props) {
     super(props);
-    this.state = { dragOverlay: false };
+    this.state = { dragOverlay: false, tileError: '' };
   }
 
   public render(): ReactNode {
+    const tileError = this.state.tileError;
     const dragOverlay = this.state.dragOverlay;
 
     return (
       <div className={Cls.mapContainer}>
+        {/* Main map support */}
         <div ref={this.mapRef} data-cy={'main-map'} className={Cls.map} onDragOver={this.handleDragOver} />
+
+        {/* Warning if tiles does not load */}
+        {tileError && (
+          <div className={Cls.tileLoadError} onClick={this.handleDismissTileError}>
+            {tileError} <i className={'fa fa-times ml-2'} />
+          </div>
+        )}
+
+        {/* Overlay shown just before drag and drop */}
         {dragOverlay && (
           <>
             <div className={Cls.dropOverlay1}>
@@ -78,6 +92,8 @@ class MainMap extends Component<Props, State> {
   }
 
   private initializeMap(): void {
+    const { map } = this.props;
+
     logger.info('Initializing map');
     const div = this.mapRef.current;
     if (!div) {
@@ -85,11 +101,15 @@ class MainMap extends Component<Props, State> {
       return;
     }
 
-    this.props.map.setTarget(div);
+    map.setTarget(div);
+    map.addTileErrorListener(this.handleTileError);
   }
 
   private cleanupMap() {
-    this.props.map.setTarget(undefined);
+    const { map } = this.props;
+
+    map.setTarget(undefined);
+    map.removeTileErrorListener(this.handleTileError);
   }
 
   private handleDrop = (ev: DragEvent<HTMLDivElement>) => {
@@ -136,6 +156,14 @@ class MainMap extends Component<Props, State> {
   private handleDragLeave = (ev: DragEvent<HTMLDivElement>) => {
     ev.preventDefault();
     this.setState({ dragOverlay: false });
+  };
+
+  private handleTileError = _.throttle((ev: TileLoadErrorEvent) => {
+    this.setState({ tileError: `La couche "${ev.layer.getName()}" ne charge pas correctement. Vérifiez ses paramètres.` });
+  }, 1000);
+
+  private handleDismissTileError = () => {
+    this.setState({ tileError: '' });
   };
 }
 

@@ -114,6 +114,10 @@ class XYZLayerPanel extends Component<Props, State> {
       return FormState.InvalidUrl;
     }
 
+    if (!ValidationHelper.xyzUrl(url)) {
+      return FormState.MissingXYZPlaceHolders;
+    }
+
     return FormState.Ok;
   }
 }

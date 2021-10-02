@@ -17,14 +17,13 @@
  */
 
 import { ProjectFactory } from './ProjectFactory';
-import { DEFAULT_PROJECTION, ProjectConstants } from '@abc-map/shared';
+import { ProjectConstants } from '@abc-map/shared';
 
 describe('ProjectFactory', () => {
   it('newProjectMetadata()', () => {
     const metadata = ProjectFactory.newProjectMetadata();
     expect(metadata.id).toBeDefined();
     expect(metadata.name).toContain('Projet du');
-    expect(metadata.projection).toEqual(DEFAULT_PROJECTION);
     expect(metadata.version).toBe(ProjectConstants.CurrentVersion);
   });
 

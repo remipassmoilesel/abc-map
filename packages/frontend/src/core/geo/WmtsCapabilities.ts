@@ -15,8 +15,15 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
+import { WMTSCapabilities as WMTSCapabilitiesParser } from 'ol/format';
 
-// TODO: better typings
+export function parseWmtsCapabilities(data: string): WmtsCapabilities {
+  const document = new DOMParser().parseFromString(data, 'application/xml');
+  const parser = new WMTSCapabilitiesParser();
+
+  return parser.read(document);
+}
+
 export interface WmtsCapabilities {
   version?: string;
   ServiceIdentification?: ServiceIdentification;
@@ -42,7 +49,7 @@ export interface ServiceProvider {
 
 export interface Contents {
   Layer?: WmtsLayer[];
-  TileMatrixSet?: TileMatrixSet;
+  TileMatrixSet?: TileMatrixSet[];
 }
 
 export interface WmtsLayer {
@@ -52,6 +59,8 @@ export interface WmtsLayer {
   Identifier?: string;
   Style?: any[];
   Format?: string[];
+  Dimension?: any[];
+  ResourceURL?: any[];
   TileMatrixSetLink?: TileMatrixSetLink[];
 }
 

@@ -24,10 +24,35 @@ describe('ValidationHelper', () => {
     expect(ValidationHelper.email('abcd@efgh.ijk')).toBe(true);
   });
 
-  it('url()', () => {
-    expect(ValidationHelper.url('abcd')).toBe(false);
-    expect(ValidationHelper.url('http://abcdefgh.ijk')).toBe(true);
-    expect(ValidationHelper.url('https://abc.def-gh.ijk')).toBe(true);
+  describe('url()', () => {
+    const _window = window as any;
+    delete _window.location;
+
+    it('in http context', () => {
+      _window.location = { protocol: 'http:' };
+
+      expect(ValidationHelper.url('abcd')).toBe(false);
+      expect(ValidationHelper.url('http://abcdefgh.ijk')).toBe(true);
+      expect(ValidationHelper.url('https://abcdefgh.ijk')).toBe(true);
+      expect(ValidationHelper.url('https://abc.def-gh.ijk')).toBe(true);
+    });
+
+    it('in https context', () => {
+      _window.location = { protocol: 'https:' };
+
+      expect(ValidationHelper.url('abcd')).toBe(false);
+      expect(ValidationHelper.url('http://abcdefgh.ijk')).toBe(false);
+      expect(ValidationHelper.url('https://abcdefgh.ijk')).toBe(true);
+      expect(ValidationHelper.url('https://abc.def-gh.ijk')).toBe(true);
+    });
+  });
+
+  it('xyzUrl()', () => {
+    expect(ValidationHelper.xyzUrl('abcd{x}/{y}/{z}')).toBe(false);
+    expect(ValidationHelper.xyzUrl('https://abc.def-gh.ijk/{x}/{y}')).toBe(false);
+    expect(ValidationHelper.xyzUrl('https://abc.def-gh.ijk/{x}/{z}')).toBe(false);
+    expect(ValidationHelper.xyzUrl('https://abc.def-gh.ijk/{y}/{z}')).toBe(false);
+    expect(ValidationHelper.xyzUrl('https://abc.def-gh.ijk/{x}/{y}/{z}')).toBe(true);
   });
 
   it('check() should return Weak', () => {

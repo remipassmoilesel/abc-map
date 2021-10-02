@@ -43,11 +43,11 @@ export class Zipper<T extends Blob | Buffer> {
     const result: AbcFile<T>[] = [];
     for (const name in zip.files) {
       const file = await zip.file(name)?.async(this.binaryFormat);
-      if (!file) {
-        throw new Error(`Invalid file: ${name}`);
-      }
 
-      result.push({ path: name, content: file as T });
+      // "name" can represent a directory
+      if (file) {
+        result.push({ path: name, content: file as T });
+      }
     }
     return result;
   }

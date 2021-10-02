@@ -22,4 +22,5 @@ export enum MongodbCollection {
   Users = 'Users',
   Registrations = 'Registrations',
   Votes = 'Votes',
+  Projections = 'Projections',
 }

@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcLegend, AbcProjectManifest, AbcProjectMetadata, DEFAULT_PROJECTION, LegendDisplay, ProjectConstants } from '@abc-map/shared';
+import { AbcLegend, AbcProjectManifest, AbcProjectMetadata, LegendDisplay, ProjectConstants } from '@abc-map/shared';
 import uuid from 'uuid-random';
 import { DateTime } from 'luxon';
 import { Views } from '../geo/Views';
@@ -26,7 +26,6 @@ export class ProjectFactory {
     return {
       id: uuid(),
       version: ProjectConstants.CurrentVersion,
-      projection: DEFAULT_PROJECTION,
       name: `Projet du ${DateTime.local().toLocaleString()}`,
       containsCredentials: false,
     };

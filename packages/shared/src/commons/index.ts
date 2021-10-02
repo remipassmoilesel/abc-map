@@ -18,3 +18,4 @@
 
 export * from './Logger';
 export * from './PaginatedResponse';
+export * from './ProjectionDto';

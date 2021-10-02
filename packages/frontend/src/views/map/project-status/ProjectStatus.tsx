@@ -17,52 +17,66 @@
  */
 
 import React, { Component, ReactNode } from 'react';
-import { AbcProjectMetadata } from '@abc-map/shared';
-import { ModalStatus } from '../../../core/ui/typings';
 import { Logger } from '@abc-map/shared';
-import { ServiceProps, withServices } from '../../../core/withServices';
+import EditProjectModal from './edit-project-modal/EditProjectModal';
+import Cls from './ProjectStatus.module.scss';
+import { MainState } from '../../../core/store/reducer';
+import { connect, ConnectedProps } from 'react-redux';
 
 const logger = Logger.get('ProjectStatus.tsx');
 
-interface LocalProps {
-  project: AbcProjectMetadata;
+const mapStateToProps = (state: MainState) => ({
+  metadata: state.project.metadata,
+  view: state.project.view,
+});
+
+const connector = connect(mapStateToProps);
+
+type Props = ConnectedProps<typeof connector>;
+
+interface State {
+  editModal: boolean;
 }
 
-declare type Props = LocalProps & ServiceProps;
+class ProjectStatus extends Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+    this.state = { editModal: false };
+  }
 
-class ProjectStatus extends Component<Props, {}> {
   public render(): ReactNode {
-    const metadata = this.props.project;
+    const { view, metadata } = this.props;
+    const editModal = this.state.editModal;
+
     return (
       <div className={'control-block d-flex flex-column'}>
-        <div className={'control-item d-flex flex-column'}>
-          <div data-cy="project-name">{metadata.name}</div>
-          <div>Projection {metadata.projection.name}</div>
-          <div>
-            <button className={'btn btn-link'} onClick={this.onRename} data-cy="rename-project">
-              Renommer
-            </button>
-          </div>
+        {/* Project name */}
+        <div className={Cls.name} data-cy="project-name">
+          {metadata.name}
         </div>
+
+        {/* Current projection */}
+        <div className={Cls.projection}>Projection: {view.projection.name}</div>
+
+        {/* Edit button and modal */}
+        <div className={`control-item mt-3`}>
+          <button onClick={this.handleEditClick} className={'btn btn-link'} data-cy="edit-project">
+            <i className={'fa fa-pencil-alt mr-2'} /> Editer
+          </button>
+        </div>
+
+        <EditProjectModal visible={editModal} onClose={this.handleModalClose} />
       </div>
     );
   }
 
-  private onRename = () => {
-    const { modals, project, toasts } = this.props.services;
+  private handleEditClick = () => {
+    this.setState({ editModal: true });
+  };
 
-    modals
-      .rename(`Renommer le projet '${this.props.project.name}'`, this.props.project.name)
-      .then((event) => {
-        if (event.status === ModalStatus.Confirmed) {
-          project.renameProject(event.value);
-        }
-      })
-      .catch((err) => {
-        logger.error(err);
-        toasts.genericError();
-      });
+  private handleModalClose = () => {
+    this.setState({ editModal: false });
   };
 }
 
-export default withServices(ProjectStatus);
+export default connector(ProjectStatus);

@@ -40,7 +40,7 @@ export function projectReducer(state = projectInitialState, action: ProjectActio
       return newState;
     }
 
-    case ActionType.RenameProject: {
+    case ActionType.SetProjectName: {
       const newState: ProjectState = { ...state };
       newState.metadata = { ...state.metadata };
       newState.metadata.name = action.name;
@@ -126,7 +126,7 @@ export function projectReducer(state = projectInitialState, action: ProjectActio
       return newState;
     }
 
-    case ActionType.ViewChanged: {
+    case ActionType.SetView: {
       const newState: ProjectState = { ...state };
       newState.view = {
         resolution: action.view.resolution,

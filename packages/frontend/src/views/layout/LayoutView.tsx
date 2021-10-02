@@ -147,10 +147,9 @@ class LayoutView extends Component<Props, State> {
       return;
     }
 
-    // Here we make an estimation of resolution as we can't know main map size
-    const layoutRes = Math.round(resolution - resolution * 0.2);
+    // If resolution is below one, we keep it. Otherwise we use a greater one.
+    const layoutRes = resolution < 1 ? resolution : Math.round(resolution - resolution * 0.2);
     const projection: AbcProjection = { name: view.getProjection().getCode() };
-
     const layout = project.newLayout(name, LayoutFormats.A4_LANDSCAPE, center, layoutRes, projection);
     history.register(HistoryKey.Layout, AddLayoutsTask.create([layout]));
 

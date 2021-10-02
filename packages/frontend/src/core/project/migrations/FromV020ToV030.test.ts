@@ -16,13 +16,14 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcProjectManifest, AbcWmsLayer, LayerType } from '@abc-map/shared';
+import { AbcProjectManifest, LayerType } from '@abc-map/shared';
 import { FromV020ToV030 } from './FromV020ToV030';
 import { ModalService } from '../../ui/ModalService';
 import sinon, { SinonStubbedInstance } from 'sinon';
 import { ModalEventType, ModalStatus } from '../../ui/typings';
 import { TestData } from './test-data/TestData';
 import { MigratedProject } from './typings';
+import { WmsMetadata030 } from './FromV030ToV040';
 
 describe('FromV020ToV030', () => {
   let modals: SinonStubbedInstance<ModalService>;
@@ -50,9 +51,9 @@ describe('FromV020ToV030', () => {
     // Assert
     expect(result.manifest.metadata).toEqual({ ...sampleProject.manifest.metadata, containsCredentials: true, version: '0.3.0' });
 
-    const wmsLayer = result.manifest.layers[2] as AbcWmsLayer;
-    expect(wmsLayer.metadata.remoteUrl).toMatch(/encrypted:.+/);
-    expect(wmsLayer.metadata.remoteUrl).not.toContain('http://localhost');
+    const metadata = result.manifest.layers[2].metadata as unknown as WmsMetadata030;
+    expect(metadata.remoteUrl).toMatch(/encrypted:.+/);
+    expect(metadata.remoteUrl).not.toContain('http://localhost');
   });
 
   it('migrate do nothing if url is encrypted', async () => {

@@ -109,7 +109,7 @@ class RemoteProjectsModal extends Component<Props, State> {
           {showButtons && (
             <>
               <div className={'my-3 alert alert-danger d-flex align-items-center justify-content-center'}>
-                <i className={'fa fa-exclamation-triangle mr-2'} /> Vous allez perdre les modifications en cours.
+                <i className={'fa fa-exclamation-triangle mr-2'} /> Les modifications en cours seront perdues !
               </div>
               <div className={'d-flex justify-content-end'}>
                 <button className={'btn btn-secondary mr-3'} onClick={this.handleCancel} data-cy={'cancel-button'}>

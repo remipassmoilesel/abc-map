@@ -86,7 +86,7 @@ export interface WmsMetadata extends BaseMetadata {
   type: LayerType.Wms;
   projection?: AbcProjection;
   extent?: [number, number, number, number];
-  remoteUrl: string;
+  remoteUrls: string[];
   remoteLayerName: string;
   auth?: BasicAuthentication;
 }
@@ -100,16 +100,9 @@ export interface AbcWmsLayer extends AbcBaseLayer {
 
 export interface WmtsMetadata extends BaseMetadata {
   type: LayerType.Wmts;
-  remoteUrl: string;
+  capabilitiesUrl: string;
   remoteLayerName: string;
-  matrixSet: string;
-  style: string;
   auth?: BasicAuthentication;
-  resolutions: number[];
-  matrixIds: string[];
-  projection?: AbcProjection;
-  origins: number[][];
-  extent?: [number, number, number, number];
 }
 
 export interface AbcWmtsLayer extends AbcBaseLayer {

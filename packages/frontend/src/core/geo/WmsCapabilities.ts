@@ -15,6 +15,13 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
+import { WMSCapabilities as WMSCapabilitiesParser } from 'ol/format';
+
+export function parseWmsCapabilities(data: string): WmsCapabilities | undefined {
+  const document = new DOMParser().parseFromString(data, 'application/xml');
+  const parser = new WMSCapabilitiesParser();
+  return parser.read(document);
+}
 
 export interface WmsCapabilities {
   Capability?: WmsCapability;
@@ -32,6 +39,7 @@ export interface WmsServiceInfo {
     ContactAddress?: any;
     ContactVoiceTelephone?: string;
     ContactFacsimileTelephone?: string;
+    ContactElectronicMailAddress?: string;
   };
   Fees?: string;
   KeywordList?: string[];
@@ -46,15 +54,31 @@ export interface WmsCapability {
 }
 
 export interface WmsRequestInfo {
-  GetCapabilities?: any;
-  GetMap?: any;
-  GetFeatureInfo?: any;
+  GetCapabilities?: WmsGetCapabilityInfo;
+  GetMap?: WmsGetCapabilityInfo;
+  GetFeatureInfo?: WmsGetCapabilityInfo;
+}
+
+export interface WmsGetCapabilityInfo {
+  Format?: string[];
+  DCPType?: {
+    // TODO: complete
+    HTTP?: {
+      Get?: {
+        OnlineResource?: string;
+      };
+      Post?: {
+        OnlineResource?: string;
+      };
+    };
+  }[];
 }
 
 export interface WmsLayerInfo {
   Title?: string;
   Abstract?: string;
   CRS?: string[];
+  EX_GeographicBoundingBox?: number[];
   Layer?: WmsLayer[];
 }
 

@@ -20,21 +20,32 @@ import { HttpClientFactory, logger, tileLoadingAuthenticated } from './tileLoadi
 import * as sinon from 'sinon';
 import { SinonStub } from 'sinon';
 import { ImageTile, Tile, VectorTile } from 'ol';
-import { TestHelper } from '../../utils/test/TestHelper';
 import TileState from 'ol/TileState';
+import { waitFor } from '@testing-library/react';
+import { AxiosInstance } from 'axios';
 
 logger.disable();
 
 describe('tileLoadingAuthenticated', () => {
+  let getStub: SinonStub;
+  let fakeClient: AxiosInstance;
   let factoryStub: SinonStub;
 
   beforeEach(() => {
+    getStub = sinon.stub();
+    fakeClient = { get: getStub } as unknown as AxiosInstance;
+
     factoryStub = sinon.stub();
+    factoryStub.returns(fakeClient);
+
     global.URL.createObjectURL = jest.fn(() => 'http://test-object-url');
   });
 
   it('function setup should include credentials', () => {
+    // Act
     tileLoadingAuthenticated({ username: 'test-username', password: 'test-password' }, factoryStub as unknown as HttpClientFactory);
+
+    // Assert
     expect(factoryStub.callCount).toEqual(1);
     expect(factoryStub.getCalls()[0].args).toEqual([
       {
@@ -48,58 +59,56 @@ describe('tileLoadingAuthenticated', () => {
     ]);
   });
 
-  it('load should set image', async () => {
-    const clientStub = {
-      get: sinon.stub(),
-    };
-    clientStub.get.returns(Promise.resolve({}));
-    factoryStub.returns(clientStub);
+  it('loadTile() should set image attributes', async () => {
+    // Prepare
+    getStub.resolves(Promise.resolve({}));
 
     const tileStub = sinon.createStubInstance(ImageTile);
     const tileImage = document.createElement('img');
-    tileStub.getImage.returns(tileImage as HTMLImageElement);
+    tileStub.getImage.returns(tileImage);
 
-    const load = tileLoadingAuthenticated({ username: 'test-username', password: 'test-password' }, factoryStub as unknown as HttpClientFactory);
-    load(tileStub as unknown as Tile, 'http://test-url');
-    await TestHelper.wait(10); // We wait here because of an internal promise
+    const loadTile = tileLoadingAuthenticated({ username: 'test-username', password: 'test-password' }, factoryStub as unknown as HttpClientFactory);
 
-    expect(clientStub.get.callCount).toEqual(1);
-    expect(tileImage.getAttribute('src')).toEqual('http://test-object-url');
+    // Act
+    loadTile(tileStub as unknown as Tile, 'http://test-url');
+
+    // Assert
+    await waitFor(() => {
+      expect(getStub.args).toEqual([['http://test-url']]);
+      expect(tileImage.getAttribute('src')).toEqual('http://test-object-url');
+      expect(tileImage.getAttribute('crossorigin')).toEqual('Anonymous');
+    });
   });
 
-  it('load should set status as error if request fail', async () => {
-    const clientStub = {
-      get: sinon.stub(),
-    };
-    clientStub.get.returns(Promise.reject(new Error('Test error')));
-    factoryStub.returns(clientStub);
-
+  it('loadTile() should set status as error if request fail', async () => {
+    // Prepare
+    getStub.resolves(Promise.reject(new Error('Test error')));
     const tileStub = sinon.createStubInstance(ImageTile);
+    const loadTile = tileLoadingAuthenticated({ username: 'test-username', password: 'test-password' }, factoryStub as unknown as HttpClientFactory);
 
-    const func = tileLoadingAuthenticated({ username: 'test-username', password: 'test-password' }, factoryStub as unknown as HttpClientFactory);
-    func(tileStub as unknown as Tile, 'http://test-url');
-    await TestHelper.wait(10); // We wait here because of an internal promise
+    // Act
+    loadTile(tileStub as unknown as Tile, 'http://test-url');
 
-    expect(clientStub.get.callCount).toEqual(1);
-    expect(tileStub.setState.callCount).toEqual(1);
-    expect(tileStub.setState.getCalls()[0].args).toEqual([TileState.ERROR]);
+    // Assert
+    await waitFor(() => {
+      expect(getStub.callCount).toEqual(1);
+      expect(tileStub.setState.args).toEqual([[TileState.ERROR]]);
+    });
   });
 
-  it('load should set status as error if tile is incorrect', async () => {
-    const clientStub = {
-      get: sinon.stub(),
-    };
-    clientStub.get.returns(Promise.resolve({}));
-    factoryStub.returns(clientStub);
-
+  it('loadTile() should set status as error if tile is not supported', async () => {
+    // Prepare
+    getStub.resolves(Promise.resolve({}));
     const tileStub = sinon.createStubInstance(VectorTile);
+    const loadTile = tileLoadingAuthenticated({ username: 'test-username', password: 'test-password' }, factoryStub as unknown as HttpClientFactory);
 
-    const func = tileLoadingAuthenticated({ username: 'test-username', password: 'test-password' }, factoryStub as unknown as HttpClientFactory);
-    func(tileStub as unknown as Tile, 'http://test-url');
-    await TestHelper.wait(10); // We wait here because of an internal promise
+    // Act
+    loadTile(tileStub as unknown as Tile, 'http://test-url');
 
-    expect(clientStub.get.callCount).toEqual(1);
-    expect(tileStub.setState.callCount).toEqual(1);
-    expect(tileStub.setState.getCalls()[0].args).toEqual([TileState.ERROR]);
+    // Assert
+    await waitFor(() => {
+      expect(tileStub.setState.callCount).toEqual(1);
+      expect(tileStub.setState.getCalls()[0].args).toEqual([TileState.ERROR]);
+    });
   });
 });

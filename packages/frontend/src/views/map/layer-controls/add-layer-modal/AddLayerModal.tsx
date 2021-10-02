@@ -29,13 +29,23 @@ import GeometryLayerPanel from './geometry/GeometryLayerPanel';
 import HelpPanel from './help-panel/HelpPanel';
 import WmtsLayerPanel from './wmts/WmtsLayerPanel';
 import { WmsSettings, WmtsSettings } from '../../../../core/geo/layers/LayerFactory.types';
+import { MainState } from '../../../../core/store/reducer';
+import { connect, ConnectedProps } from 'react-redux';
 
 const logger = Logger.get('AddLayerModal.tsx');
 
-interface Props extends ServiceProps {
+interface LocalProps extends ServiceProps {
   visible: boolean;
   onHide: () => void;
 }
+
+const mapStateToProps = (state: MainState) => ({
+  projection: state.project.view.projection,
+});
+
+const connector = connect(mapStateToProps);
+
+declare type Props = LocalProps & ConnectedProps<typeof connector>;
 
 interface State {
   layerType: LabeledLayerType;
@@ -46,18 +56,22 @@ interface State {
 }
 
 export const EmptyWmsValues: WmsSettings = {
-  remoteUrl: '',
+  capabilitiesUrl: '',
+  remoteUrls: [],
   remoteLayerName: '',
+  auth: {
+    password: '',
+    username: '',
+  },
 };
 
 export const EmptyWmtsValues: WmtsSettings = {
-  remoteUrl: '',
+  capabilitiesUrl: '',
   remoteLayerName: '',
-  matrixSet: '',
-  style: '',
-  resolutions: [],
-  matrixIds: [],
-  origins: [],
+  auth: {
+    username: '',
+    password: '',
+  },
 };
 
 class AddLayerModal extends Component<Props, State> {
@@ -81,6 +95,7 @@ class AddLayerModal extends Component<Props, State> {
     const xyzValues = this.state.xyzUrl || '';
     const wmsValues = this.state.wms || EmptyWmsValues;
     const wmtsValues = this.state.wmts || EmptyWmtsValues;
+    const projection = this.props.projection;
 
     const predefinedSelected = layerTypeId === LabeledLayerTypes.Predefined.id;
     const geometrySelected = layerTypeId === LabeledLayerTypes.Vector.id;
@@ -95,10 +110,10 @@ class AddLayerModal extends Component<Props, State> {
         </Modal.Header>
         <Modal.Body>
           <div className={`p-3`}>
+            <div className={`mb-4 ${Cls.subTitle}`}>Quelle type de couche souhaitez-vous ajouter ?</div>
             <div className={'d-flex'}>
               <div className={Cls.leftPanel}>
                 {/* Type selector */}
-                <div className={`mb-4 ${Cls.subTitle}`}>Quelle type de couche souhaitez-vous ajouter ?</div>
                 <select value={layerTypeId} onChange={this.handleLayerTypeChange} className={'form-control'} data-cy={'add-layer-type'}>
                   {LabeledLayerTypes.All.map((type) => (
                     <option key={type.id} value={type.id}>
@@ -113,13 +128,14 @@ class AddLayerModal extends Component<Props, State> {
 
               {/* Settings panels */}
               <div className={Cls.rightPanel}>
-                <h6 className={`mb-4 ${Cls.subTitle}`}>Paramètres</h6>
                 {predefinedSelected && (
                   <PredefinedPanel value={predefinedValues} onChange={this.handlePredefinedValueChanged} onCancel={onHide} onConfirm={onHide} />
                 )}
                 {geometrySelected && <GeometryLayerPanel onConfirm={onHide} onCancel={onHide} />}
                 {xyzSelected && <XYZLayerPanel value={xyzValues} onChange={this.handleXyzValuesChange} onConfirm={onHide} onCancel={onHide} />}
-                {wmsSelected && <WmsLayerPanel value={wmsValues} onChange={this.handleWmsValuesChange} onConfirm={onHide} onCancel={onHide} />}
+                {wmsSelected && (
+                  <WmsLayerPanel projectProjection={projection} value={wmsValues} onChange={this.handleWmsValuesChange} onConfirm={onHide} onCancel={onHide} />
+                )}
                 {wmtsSelected && <WmtsLayerPanel value={wmtsValues} onChange={this.handleWmtsValuesChange} onConfirm={onHide} onCancel={onHide} />}
               </div>
             </div>
@@ -157,4 +173,4 @@ class AddLayerModal extends Component<Props, State> {
   };
 }
 
-export default withServices(AddLayerModal);
+export default connector(withServices(AddLayerModal));

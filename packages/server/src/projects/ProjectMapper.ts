@@ -25,9 +25,6 @@ export class ProjectMapper {
       _id: dto.id,
       ownerId: userId,
       name: dto.name,
-      projection: {
-        name: dto.projection.name,
-      },
       version: dto.version,
       containsCredentials: dto.containsCredentials,
     };
@@ -37,9 +34,6 @@ export class ProjectMapper {
     return {
       id: doc._id,
       name: doc.name,
-      projection: {
-        name: doc.projection.name,
-      },
       version: doc.version,
       containsCredentials: doc.containsCredentials,
     };

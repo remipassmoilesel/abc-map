@@ -37,18 +37,24 @@ async function main() {
   logger.info('Starting Abc-Map ...');
   setupProcessExitHandler();
 
+  // Configuration loading
   logger.info(`Loading configuration: ${ConfigLoader.getPathFromEnv()}`);
   const config = await ConfigLoader.load();
   logger.info('Configuration used: ', JSON.stringify(ConfigLoader.safeConfig(config), null, 2));
 
+  // Initialize services
   services = await servicesFactory(config);
 
+  // Create dev data if needed
   if (config.development) {
     await DevInit.create(config, services).init();
   }
 
+  // Index datastore and projections
   services.datastore.index().catch((err) => logger.error(err));
+  services.projections.index().catch((err) => logger.error(err));
 
+  // Instantiate then start server
   server = HttpServer.create(config, services);
   await server.initialize();
 

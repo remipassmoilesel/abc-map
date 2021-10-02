@@ -20,7 +20,7 @@ import { AbcLayout, AbcLegendItem, AbcProjectManifest, AbcView, LegendDisplay } 
 
 export enum ActionType {
   LoadProject = 'LoadProject',
-  RenameProject = 'RenameProject',
+  SetProjectName = 'SetProjectName',
   AddLayouts = 'AddLayouts',
   UpdateLayout = 'UpdateLayout',
   SetLayoutIndex = 'SetLayoutIndex',
@@ -32,7 +32,7 @@ export enum ActionType {
   SetLegendDisplay = 'SetLegendDisplay',
   SetLegendItemIndex = 'SetLegendItemIndex',
   DeleteLegendItem = 'DeleteLegendItem',
-  ViewChanged = 'ViewChanged',
+  SetView = 'SetView',
 }
 
 export interface LoadProject {
@@ -40,8 +40,8 @@ export interface LoadProject {
   project: AbcProjectManifest;
 }
 
-export interface RenameProject {
-  type: ActionType.RenameProject;
+export interface SetProjectName {
+  type: ActionType.SetProjectName;
   name: string;
 }
 
@@ -102,14 +102,14 @@ export interface SetLegendItemIndex {
   index: number;
 }
 
-export interface ViewChanged {
-  type: ActionType.ViewChanged;
+export interface SetView {
+  type: ActionType.SetView;
   view: AbcView;
 }
 
 export type ProjectAction =
   | LoadProject
-  | RenameProject
+  | SetProjectName
   | AddLayouts
   | RemoveLayouts
   | UpdateLayout
@@ -121,7 +121,7 @@ export type ProjectAction =
   | SetLegendDisplay
   | DeleteLegendItem
   | SetLegendItemIndex
-  | ViewChanged;
+  | SetView;
 
 export class ProjectActions {
   public static loadProject(project: AbcProjectManifest): ProjectAction {
@@ -131,9 +131,9 @@ export class ProjectActions {
     };
   }
 
-  public static renameProject(name: string): ProjectAction {
+  public static setProjectName(name: string): ProjectAction {
     return {
-      type: ActionType.RenameProject,
+      type: ActionType.SetProjectName,
       name,
     };
   }
@@ -217,9 +217,9 @@ export class ProjectActions {
     };
   }
 
-  public static viewChanged(view: AbcView): ProjectAction {
+  public static setView(view: AbcView): ProjectAction {
     return {
-      type: ActionType.ViewChanged,
+      type: ActionType.SetView,
       view,
     };
   }

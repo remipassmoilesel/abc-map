@@ -33,19 +33,25 @@ function defaultHttpClientFactory(config: AxiosRequestConfig): AxiosInstance {
 export function tileLoadingPublic(factory: HttpClientFactory = defaultHttpClientFactory): LoadFunction {
   const publicCLient = factory({ timeout: 10_000, responseType: 'blob' });
 
-  return function (_tile, src) {
-    const tile: ImageTile = _tile as ImageTile;
+  return function (tile, src) {
+    if (!(tile instanceof ImageTile)) {
+      tile.setState(TileState.ERROR);
+      logger.error('Unhandled tile type: ', tile);
+      return;
+    }
+
     publicCLient
       .get(src)
       .then((res) => {
         const blob = res.data as Blob;
-        if (tile.getImage && tile.getImage() instanceof HTMLImageElement) {
-          const image = tile.getImage() as HTMLImageElement;
+        const image = tile.getImage();
+        if (image && image instanceof HTMLImageElement) {
+          // This is necessary for exports
           image.crossOrigin = 'Anonymous';
           image.src = URL.createObjectURL(blob);
         } else {
           tile.setState(TileState.ERROR);
-          logger.error('Unhandled tile: ', tile);
+          logger.error('Unhandled tile type: ', tile);
         }
       })
       .catch((err) => {

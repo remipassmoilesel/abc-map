@@ -29,6 +29,7 @@ import { AuthorizationService } from '../authorization/AuthorizationService';
 import { VoteService } from '../votes/VoteService';
 import { MetricsService } from '../metrics/MetricsService';
 import { EmailService } from '../email/EmailService';
+import { ProjectionService } from '../projections/ProjectionService';
 
 const logger = Logger.get('services.ts');
 
@@ -45,6 +46,7 @@ export interface Services {
   vote: VoteService;
   metrics: MetricsService;
   emails: EmailService;
+  projections: ProjectionService;
   shutdown: ShutdownFunc;
 }
 
@@ -59,6 +61,7 @@ export async function servicesFactory(config: Config): Promise<Services> {
   const authorization = AuthorizationService.create(mongodb);
   const vote = VoteService.create(mongodb);
   const metrics = MetricsService.create();
+  const projections = ProjectionService.create(config, mongodb);
 
   const shutdown: ShutdownFunc = () => mongodb.disconnect().catch((err) => logger.error(err));
 
@@ -72,6 +75,7 @@ export async function servicesFactory(config: Config): Promise<Services> {
     vote,
     metrics,
     emails,
+    projections,
     shutdown,
   };
 

@@ -62,8 +62,8 @@ export enum PredefinedLayerProperties {
 }
 
 export enum WmsLayerProperties {
-  Url = 'abc:layer:wms:url',
-  LayerName = 'abc:layer:wms:layer-name',
+  Urls = 'abc:layer:wms:urls',
+  RemoteLayerName = 'abc:layer:wms:remote-layer-name',
   Username = 'abc:layer:wms:username',
   Password = 'abc:layer:wms:password',
   Projection = 'abc:layer:wms:projection',
@@ -71,17 +71,10 @@ export enum WmsLayerProperties {
 }
 
 export enum WmtsLayerProperties {
-  Url = 'abc:layer:wmts:url',
+  CapabilitiesUrl = 'abc:layer:wmts:capabilities-url',
   LayerName = 'abc:layer:wmts:layer-name',
   Username = 'abc:layer:wmts:username',
   Password = 'abc:layer:wmts:password',
-  Projection = 'abc:layer:wmts:projection',
-  Extent = 'abc:layer:wmts:extent',
-  MatrixSet = 'abc:layer:wmts:matrix-set',
-  Style = 'abc:layer:wmts:style',
-  Resolutions = 'abc:layer:wmts:resolutions',
-  MatrixIds = 'abc:layer:wmts:matrix-ids',
-  Origins = 'abc:layer:wmts:origins',
 }
 
 export enum XyzLayerProperties {
