@@ -53,7 +53,7 @@ class SolicitationModal extends Component<Props, State> {
     }
 
     return (
-      <Modal show={visible} onHide={this.close} size={'lg'}>
+      <Modal show={visible} onHide={this.close} size={'lg'} backdrop={'static'}>
         <Modal.Header closeButton>
           <Modal.Title>{title}</Modal.Title>
         </Modal.Header>

@@ -18,6 +18,7 @@
 
 import { WmsConstants } from './WmsConstants';
 import { WmtsConstants } from './WmtsConstants';
+import { XyzConstants } from './XyzConstants';
 
 export class LayerControls {
   public static getNames(): Cypress.Chainable<string[]> {
@@ -28,6 +29,16 @@ export class LayerControls {
 
   public static getActiveItem() {
     return cy.get('[data-cy=layers-list] [data-cy=list-item][data-layer=active]');
+  }
+
+  public static deleteActiveLayer() {
+    return (
+      cy
+        .get('[data-cy=delete-layer]')
+        .click()
+        // Wait for UI updates
+        .wait(600)
+    );
   }
 
   public static addOsmLayer(): Cypress.Chainable<any> {
@@ -56,7 +67,6 @@ export class LayerControls {
         // Fill WMS layer form
         .get('[data-cy=add-layer-type]')
         .select('Couche distante WMTS')
-        .get('[data-cy=add-layer-confirm]')
         .get('[data-cy=wmts-settings-url]')
         .clear()
         .type(WmtsConstants.PUBLIC_URL)
@@ -82,7 +92,6 @@ export class LayerControls {
         // Fill WMS layer form
         .get('[data-cy=add-layer-type]')
         .select('Couche distante WMS')
-        .get('[data-cy=add-layer-confirm]')
         .get('[data-cy=wms-settings-url]')
         .clear()
         .type(WmsConstants.PUBLIC_URL)
@@ -93,6 +102,24 @@ export class LayerControls {
         .get('[data-cy=wms-layer-item]')
         .eq(1)
         .click()
+        // Add layer
+        .get('[data-cy=add-layer-confirm]')
+        .click()
+    );
+  }
+
+  public static addXyzLayer(): Cypress.Chainable<any> {
+    return (
+      cy
+        // Open add layer modal
+        .get('[data-cy=add-layer]')
+        .click()
+        // Fill XYZ layer form
+        .get('[data-cy=add-layer-type]')
+        .select('Couche distante XYZ')
+        .get('[data-cy=xyz-settings-url]')
+        .clear()
+        .type(XyzConstants.PUBLIC_URL, { parseSpecialCharSequences: false })
         // Add layer
         .get('[data-cy=add-layer-confirm]')
         .click()

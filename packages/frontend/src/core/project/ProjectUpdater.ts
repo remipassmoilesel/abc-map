@@ -21,6 +21,7 @@ import { FromV010ToV020 } from './migrations/FromV010ToV020';
 import { AbcFile, AbcProjectManifest } from '@abc-map/shared';
 import { FromV020ToV030 } from './migrations/FromV020ToV030';
 import { ModalService } from '../ui/ModalService';
+import { FromV030ToV040 } from './migrations/FromV030ToV040';
 
 /**
  * This class take a project and update its format to the latest version
@@ -28,7 +29,7 @@ import { ModalService } from '../ui/ModalService';
 export class ProjectUpdater {
   public static create(modal: ModalService) {
     // Migrations must be passed in chronological order
-    return new ProjectUpdater(() => [new FromV010ToV020(), new FromV020ToV030(modal)]);
+    return new ProjectUpdater(() => [new FromV010ToV020(), new FromV020ToV030(modal), new FromV030ToV040()]);
   }
 
   constructor(private migrations: MigrationsFactory) {}

@@ -40,7 +40,6 @@ describe('Project reducer', function () {
     // Assert
     expect(state.metadata.id).toEqual(project.metadata.id);
     expect(state.metadata.version).toEqual(project.metadata.version);
-    expect(state.metadata.projection).toEqual(project.metadata.projection);
     expect(state.metadata.name).toEqual(project.metadata.name);
     expect(state.layouts).toEqual([]);
   });
@@ -50,7 +49,7 @@ describe('Project reducer', function () {
     const initialState: ProjectState = deepFreeze({
       ...projectInitialState,
     });
-    const action = ProjectActions.renameProject('New name');
+    const action = ProjectActions.setProjectName('New name');
 
     // Act
     const state = projectReducer(initialState, action);

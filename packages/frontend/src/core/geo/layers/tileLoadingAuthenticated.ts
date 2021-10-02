@@ -17,8 +17,7 @@
  */
 
 import { LoadFunction } from 'ol/Tile';
-import { BasicAuthentication } from '@abc-map/shared';
-import { Logger } from '@abc-map/shared';
+import { BasicAuthentication, Logger } from '@abc-map/shared';
 import { ImageTile } from 'ol';
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import TileState from 'ol/TileState';
@@ -46,19 +45,25 @@ export function tileLoadingAuthenticated(auth: BasicAuthentication, factory: Htt
     },
   });
 
-  return function (_tile, src) {
-    const tile: ImageTile = _tile as ImageTile;
+  return function (tile, src) {
+    if (!(tile instanceof ImageTile)) {
+      tile.setState(TileState.ERROR);
+      logger.error('Unhandled tile type: ', tile);
+      return;
+    }
+
     authClient
       .get(src)
       .then((res) => {
         const blob = res.data as Blob;
-        if (tile.getImage && tile.getImage() instanceof HTMLImageElement) {
-          const image = tile.getImage() as HTMLImageElement;
+        const image = tile.getImage();
+        if (image && image instanceof HTMLImageElement) {
+          // This is necessary for exports
           image.crossOrigin = 'Anonymous';
           image.src = URL.createObjectURL(blob);
         } else {
           tile.setState(TileState.ERROR);
-          logger.error('Unhandled tile: ', tile);
+          logger.error('Unhandled tile type: ', tile);
         }
       })
       .catch((err) => {

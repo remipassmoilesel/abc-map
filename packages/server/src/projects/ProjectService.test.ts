@@ -63,7 +63,6 @@ describe('ProjectService', () => {
       assert.isDefined(dbProject);
       assert.equal(dbProject?.metadata.id, sampleProject.metadata.id);
       assert.equal(dbProject?.metadata.name, sampleProject.metadata.name);
-      assert.deepEqual(dbProject?.metadata.projection, sampleProject.metadata.projection);
       assert.isDefined(dbProject?.project);
     });
 
@@ -141,7 +140,6 @@ describe('ProjectService', () => {
       assert.isDefined(dbProject);
       assert.equal(dbProject?.metadata.id, project.metadata.id);
       assert.equal(dbProject?.metadata.name, project.metadata.name);
-      assert.deepEqual(dbProject?.metadata.projection, project.metadata.projection);
       assert.isDefined(dbProject?.project);
       const buffer = await StreamReader.read(dbProject?.project as ReadableStream);
       assert.deepEqual(buffer, project.project);

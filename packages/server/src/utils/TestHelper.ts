@@ -48,7 +48,6 @@ export class TestHelper {
         id: uuid(),
         version: ProjectConstants.CurrentVersion,
         name: `Test project ${uuid()}`,
-        projection: DEFAULT_PROJECTION,
         containsCredentials: false,
       },
       layers: [
@@ -124,7 +123,6 @@ export class TestHelper {
       ownerId: uuid(),
       containsCredentials: false,
       name: 'Fake project',
-      projection: { name: 'EPSG:4326' },
       version: '0.1',
     };
   }

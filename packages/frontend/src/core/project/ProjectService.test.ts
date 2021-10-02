@@ -141,7 +141,7 @@ describe('ProjectService', function () {
       expect(geoMock.importLayers.callCount).toEqual(1);
 
       const wmsLayer = geoMock.importLayers.args[0][0][2] as AbcWmsLayer;
-      expect(wmsLayer.metadata.remoteUrl).toEqual('http://remote-url');
+      expect(wmsLayer.metadata.remoteUrls).toEqual(['http://remote-url']);
       expect(wmsLayer.metadata.auth?.username).toEqual('test-username');
       expect(wmsLayer.metadata.auth?.password).toEqual('test-password');
     });
@@ -201,11 +201,30 @@ describe('ProjectService', function () {
       const [zippedProject, manifest] = await TestHelper.sampleCompressedProject();
 
       // Act
-      await projectService.loadBlobProject(zippedProject.project).catch((err) => err);
+      await projectService.loadBlobProject(zippedProject.project);
 
       // Assert
       expect(updater.update.callCount).toEqual(1);
       expect(updater.update.args[0][0]).toEqual(manifest);
+    });
+
+    it('should load projections', async () => {
+      // Prepare
+      modals.getProjectPassword.resolves({ type: ModalEventType.PasswordInputClosed, value: 'azerty1234', status: ModalStatus.Confirmed });
+
+      const map = MapFactory.createNaked();
+      geoMock.getMainMap.returns(map);
+
+      const wms = TestHelper.sampleWmsLayer({ projection: { name: 'EPSG:2154' } });
+      const xyz = TestHelper.sampleXyzLayer({ projection: { name: 'EPSG:4326' } });
+      const [zippedProject] = await TestHelper.sampleCompressedProtectedProject({ layers: [wms, xyz] });
+
+      // Act
+      await projectService.loadBlobProject(zippedProject.project);
+
+      // Assert
+      // Load project projection, WMS projection, XYZ projection
+      expect(geoMock.loadProjection.args).toEqual([['EPSG:3857'], ['EPSG:2154'], ['EPSG:4326']]);
     });
   });
 
@@ -274,20 +293,18 @@ describe('ProjectService', function () {
       expect(exported.metadata.id).toEqual(original.metadata.id);
       expect(exported.metadata.name).toEqual(original.metadata.name);
       expect(exported.metadata.version).toEqual(original.metadata.version);
-      expect(exported.metadata.projection).toEqual(original.metadata.projection);
       expect(exported.metadata.containsCredentials).toEqual(true);
 
       const exportedMft: AbcProjectManifest = await ProjectHelper.forFrontend().extractManifest(exported.project);
       expect(exportedMft.metadata.id).toEqual(original.metadata.id);
       expect(exportedMft.metadata.name).toEqual(original.metadata.name);
-      expect(exportedMft.metadata.projection).toEqual(original.metadata.projection);
       expect(exportedMft.metadata.version).toEqual(original.metadata.version);
       expect(exportedMft.metadata.containsCredentials).toEqual(true);
       expect(exportedMft.layouts).toEqual(layouts);
       expect(exportedMft.layers[0]).toEqual(layers[0]);
       expect(exportedMft.layers[1]).toEqual(layers[1]);
       const wms = exportedMft.layers[2] as AbcWmsLayer;
-      expect(wms.metadata.remoteUrl).toMatch('encrypted:');
+      wms.metadata.remoteUrls.forEach((url) => expect(url).toMatch('encrypted:'));
       expect(wms.metadata.auth?.username).toMatch('encrypted:');
       expect(wms.metadata.auth?.password).toMatch('encrypted:');
     });

@@ -19,10 +19,13 @@ FROM node:14-alpine
 RUN mkdir -p /srv
 WORKDIR /srv
 
+RUN mkdir -p resources
+
 COPY build build
 COPY node_modules node_modules
 COPY public public
 COPY package.json package.json
+COPY resources/projections.zip resources/projections.zip
 
 ENV NODE_ENV=production
 CMD node /srv/build/main.js

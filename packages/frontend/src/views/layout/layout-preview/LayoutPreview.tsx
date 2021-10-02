@@ -30,6 +30,7 @@ import Cls from './LayoutPreview.module.scss';
 import { Control } from 'ol/control';
 import { LegendRenderer } from '../../../core/project/rendering/LegendRenderer';
 import { AttributionRenderer } from '../../../core/project/rendering/AttributionRenderer';
+import { toPrecision } from '../../../core/utils/numbers';
 
 const logger = Logger.get('LayoutPreview.tsx');
 
@@ -228,7 +229,7 @@ class LayoutPreview extends Component<Props, State> {
       view: {
         center,
         projection: { name: projection.getCode() },
-        resolution: Math.round(resolution / scaling), // We must round in order to prevent weird trigger
+        resolution: toPrecision(resolution / scaling, 10),
       },
     };
 

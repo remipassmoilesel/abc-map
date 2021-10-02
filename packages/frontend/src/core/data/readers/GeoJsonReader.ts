@@ -38,7 +38,7 @@ export class GeoJsonReader extends AbstractDataReader {
     const _files = files.filter((f) => FileFormats.fromPath(f.path) === FileFormat.GEOJSON);
     for (const file of _files) {
       const content = await BlobIO.asString(file.content);
-      const features = await format.readFeatures(content, { featureProjection: projection.name });
+      const features = format.readFeatures(content, { featureProjection: projection.name });
       this.prepareFeatures(features);
 
       const layer = LayerFactory.newVectorLayer(new VectorSource({ features }));

@@ -17,12 +17,10 @@
  */
 
 import { MongodbDocument } from '../mongodb/MongodbDocument';
-import { AbcProjection } from '@abc-map/shared';
 
 export interface ProjectDocument extends MongodbDocument {
   ownerId: string;
   version: string;
   name: string;
-  projection: AbcProjection;
   containsCredentials: boolean;
 }

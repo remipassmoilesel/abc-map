@@ -28,12 +28,8 @@ import { AddLayersTask } from '../../../../../core/history/tasks/layers/AddLayer
 import ControlButtons from '../_common/ControlButtons';
 import { WmtsCapabilities, WmtsLayer } from '../../../../../core/geo/WmtsCapabilities';
 import { WmtsSettings } from '../../../../../core/geo/layers/LayerFactory.types';
-import { optionsFromCapabilities } from 'ol/source/WMTS';
-import { toAbcProjection } from '../../../../../core/geo/toAbcProjection';
 import { LayerFactory } from '../../../../../core/geo/layers/LayerFactory';
-import { removeQuery } from '../../../../../core/utils/removeQuery';
 import Cls from './WmtsLayerPanel.module.scss';
-import { Coordinate } from 'ol/coordinate';
 
 const logger = Logger.get('WmtsLayerPanel.tsx');
 
@@ -64,19 +60,17 @@ class WmtsLayerPanel extends Component<Props, State> {
     const loading = this.state.loading;
     const onCancel = this.props.onCancel;
     const submitDisabled = formState !== FormState.Ok;
-    const protocolWarn = this.props.value.remoteUrl.toLocaleLowerCase().includes('wms');
+    const protocolWarn = this.props.value.capabilitiesUrl?.toLocaleLowerCase().includes('wms');
 
     return (
       <div className={'flex-grow-1 d-flex flex-column justify-content-between'}>
-        <div className={'mb-2'}>Pour le moment, seules les projections EPSG:4326 et EPSG:3857 sont supportées.</div>
-
         {/* URL and credentials form */}
         <div className={'d-flex flex-row'}>
           <input
             type="text"
             placeholder={'URL'}
             className={'form-control mb-3'}
-            value={value?.remoteUrl}
+            value={value?.capabilitiesUrl}
             onChange={this.handleUrlChanged}
             data-cy={'wmts-settings-url'}
           />
@@ -149,7 +143,7 @@ class WmtsLayerPanel extends Component<Props, State> {
 
     const values: WmtsSettings = {
       ...this.props.value,
-      remoteUrl: url,
+      capabilitiesUrl: url,
     };
 
     const formState = this.validateForm(values);
@@ -159,42 +153,36 @@ class WmtsLayerPanel extends Component<Props, State> {
   private handleLayerSelected = (layer: WmtsLayer) => {
     const { toasts } = this.props.services;
 
-    try {
-      const values = this.getValues(layer);
-      const formState = this.validateForm(values);
-      this.setState({ formState }, () => this.props.onChange(values));
-    } catch (err) {
-      logger.error('Cannot use layer: ', err);
-      toasts.error('Désolé, cette couche ne peut pas être utilisée');
-    }
+    this.getValues(layer)
+      .then((values) => {
+        const formState = this.validateForm(values);
+        this.setState({ formState }, () => this.props.onChange(values));
+      })
+      .catch((err) => {
+        logger.error('Cannot use layer: ', err);
+        toasts.error('Désolé, cette couche ne peut pas être utilisée');
+      });
   };
 
-  private getValues(layer: WmtsLayer): WmtsSettings {
-    const layerName = layer.Identifier;
-    const matrixSet = layer.TileMatrixSetLink && layer.TileMatrixSetLink[0].TileMatrixSet;
-    if (!layerName || !matrixSet) {
-      throw new Error(`Invalid parameters: ${JSON.stringify({ layerName, matrixSet })}`);
+  private async getValues(layer: WmtsLayer): Promise<WmtsSettings> {
+    const { geo } = this.props.services;
+
+    const remoteLayerName = layer.Identifier;
+    if (!remoteLayerName) {
+      return Promise.reject(new Error('Layer does not have identifier'));
     }
 
-    // We create options with openlayers helper
-    const options = optionsFromCapabilities(this.state.capabilities, { layer: layerName, matrixSet });
-
-    // We grab origins for later persistence of layer
-    const origins: Coordinate[] = [];
-    for (let i = 0; i < options.tileGrid.getResolutions().length; i++) {
-      origins.push(options.tileGrid.getOrigin(i));
+    const capabilities = this.state.capabilities;
+    if (!capabilities) {
+      return Promise.reject(new Error('Capabilities not ready'));
     }
+
+    const options = await geo.getWmtsLayerOptions(remoteLayerName, capabilities);
 
     return {
       ...this.props.value,
-      remoteLayerName: layerName,
-      matrixSet,
-      matrixIds: options.tileGrid.getMatrixIds(),
-      resolutions: options.tileGrid.getResolutions(),
-      origins,
-      style: options.style,
-      projection: toAbcProjection(options.projection),
-      extent: options.tileGrid.getExtent(),
+      remoteLayerName,
+      sourceOptions: options,
     };
   }
 
@@ -232,7 +220,12 @@ class WmtsLayerPanel extends Component<Props, State> {
     const { geo, toasts } = this.props.services;
     const value = this.props.value;
 
-    this.setState({ loading: true });
+    if (!value.capabilitiesUrl) {
+      toasts.error("L'URL est obligatoire.");
+      return;
+    }
+
+    this.setState({ loading: true, capabilities: undefined });
 
     let auth: BasicAuthentication | undefined;
     if (value.auth?.username && value.auth?.password) {
@@ -240,10 +233,10 @@ class WmtsLayerPanel extends Component<Props, State> {
     }
 
     geo
-      .getWmtsCapabilities(value.remoteUrl, auth)
+      .getWmtsCapabilities(value.capabilitiesUrl, auth)
       .then((capabilities) => this.setState({ capabilities }))
       .catch((err) => {
-        toasts.error("Impossible d'obtenir les capacités du serveur, vérifiez l'url");
+        toasts.error("Impossible d'obtenir les capacités du serveur, vérifiez l'URL et les identifiants");
         logger.error(err);
       })
       .finally(() => this.setState({ loading: false }));
@@ -251,14 +244,10 @@ class WmtsLayerPanel extends Component<Props, State> {
 
   private handleConfirm = () => {
     const { history, geo } = this.props.services;
-
-    const wmtsOptions: WmtsSettings = {
-      ...this.props.value,
-      remoteUrl: removeQuery(this.props.value.remoteUrl),
-    };
+    const { value: settings } = this.props;
 
     const map = geo.getMainMap();
-    const layer = LayerFactory.newWmtsLayer(wmtsOptions);
+    const layer = LayerFactory.newWmtsLayer(settings);
     map.addLayer(layer);
     map.setActiveLayer(layer);
     history.register(HistoryKey.Map, new AddLayersTask(map, [layer]));
@@ -267,7 +256,7 @@ class WmtsLayerPanel extends Component<Props, State> {
   };
 
   private validateForm(value: WmtsSettings): FormState {
-    if (!ValidationHelper.url(value.remoteUrl)) {
+    if (!ValidationHelper.url(value.capabilitiesUrl || '')) {
       return FormState.InvalidUrl;
     }
 

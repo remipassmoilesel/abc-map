@@ -18,7 +18,6 @@
 
 import { AbcLayer } from './layer/AbcLayer';
 import { AbcLayout } from './layout/AbcLayout';
-import { AbcProjection } from './AbcProjection';
 import { AbcLegend } from './legend';
 import { AbcView } from './AbcView';
 
@@ -34,6 +33,5 @@ export interface AbcProjectMetadata {
   id: string;
   version: string;
   name: string;
-  projection: AbcProjection;
   containsCredentials: boolean;
 }

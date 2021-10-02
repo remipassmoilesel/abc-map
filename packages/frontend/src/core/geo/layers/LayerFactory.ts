@@ -21,18 +21,7 @@ import { OSM, Stamen, TileWMS, WMTS, XYZ } from 'ol/source';
 import uuid from 'uuid-random';
 import VectorSource from 'ol/source/Vector';
 import { tileLoadingAuthenticated } from './tileLoadingAuthenticated';
-import { GeoJSON } from 'ol/format';
-import {
-  AbcLayer,
-  AbcProjection,
-  LayerType,
-  PredefinedLayerModel,
-  PredefinedMetadata,
-  VectorMetadata,
-  WmsMetadata,
-  WmtsMetadata,
-  XyzMetadata,
-} from '@abc-map/shared';
+import { AbcProjection, LayerType, PredefinedLayerModel, PredefinedMetadata, VectorMetadata, WmsMetadata, WmtsMetadata, XyzMetadata } from '@abc-map/shared';
 import { LayerWrapper, PredefinedLayerWrapper, VectorLayerWrapper, WmsLayerWrapper, WmtsLayerWrapper, XyzLayerWrapper } from './LayerWrapper';
 import VectorImageLayer from 'ol/layer/VectorImage';
 import Geometry from 'ol/geom/Geometry';
@@ -40,7 +29,6 @@ import TileSource from 'ol/source/Tile';
 import { styleFunction } from '../styles/style-function';
 import { tileLoadingPublic } from './tileLoadingPublic';
 import { WmsSettings, WmtsSettings } from './LayerFactory.types';
-import WMTSTileGrid from 'ol/tilegrid/WMTS';
 
 export class LayerFactory {
   public static newPredefinedLayer(model: PredefinedLayerModel): PredefinedLayerWrapper {
@@ -108,7 +96,7 @@ export class LayerFactory {
     const layer = new TileLayer({
       extent: settings.extent,
       source: new TileWMS({
-        url: settings.remoteUrl,
+        urls: settings.remoteUrls,
         params: { LAYERS: settings.remoteLayerName, TILED: true },
         tileLoadFunction,
         projection: settings.projection?.name,
@@ -122,7 +110,7 @@ export class LayerFactory {
       active: false,
       opacity: 1,
       visible: true,
-      remoteUrl: settings.remoteUrl,
+      remoteUrls: settings.remoteUrls,
       remoteLayerName: settings.remoteLayerName,
       projection: settings.projection,
       extent: settings.extent,
@@ -133,23 +121,17 @@ export class LayerFactory {
   }
 
   public static newWmtsLayer(settings: WmtsSettings): WmtsLayerWrapper {
+    if (!settings.sourceOptions) {
+      throw new Error('Source options are mandatory');
+    }
+
     const tileLoadFunction = settings.auth?.username && settings.auth?.password ? tileLoadingAuthenticated(settings.auth) : tileLoadingPublic();
 
+    // We do not set extent here as it can have weird behaviors
     const layer = new TileLayer({
-      extent: settings.extent,
       source: new WMTS({
-        url: settings.remoteUrl,
-        layer: settings.remoteLayerName,
-        matrixSet: settings.matrixSet,
+        ...settings.sourceOptions,
         tileLoadFunction,
-        style: settings.style,
-        projection: settings.projection?.name,
-        tileGrid: new WMTSTileGrid({
-          origins: settings.origins,
-          matrixIds: settings.matrixIds,
-          resolutions: settings.resolutions,
-          extent: settings.extent,
-        }),
       }),
     });
 
@@ -160,16 +142,9 @@ export class LayerFactory {
       active: false,
       opacity: 1,
       visible: true,
-      remoteUrl: settings.remoteUrl,
+      capabilitiesUrl: settings.capabilitiesUrl,
       remoteLayerName: settings.remoteLayerName,
-      matrixSet: settings.matrixSet,
-      style: settings.style,
       auth: settings.auth,
-      resolutions: settings.resolutions,
-      matrixIds: settings.matrixIds,
-      projection: settings.projection,
-      origins: settings.origins,
-      extent: settings.extent,
     };
 
     return LayerWrapper.from<TileLayer, WMTS, WmtsMetadata>(layer).setMetadata(metadata);
@@ -187,54 +162,9 @@ export class LayerFactory {
       opacity: 1,
       visible: true,
       remoteUrl: url,
-      projection: projection,
+      projection,
     };
 
     return LayerWrapper.from<TileLayer, XYZ, XyzMetadata>(layer).setMetadata(metadata);
-  }
-
-  public static fromAbcLayer(abcLayer: AbcLayer): LayerWrapper {
-    let layer: LayerWrapper | undefined;
-
-    // Predefined layer
-    if (LayerType.Predefined === abcLayer.type) {
-      layer = this.newPredefinedLayer(abcLayer.metadata.model);
-      layer.setMetadata(abcLayer.metadata);
-    }
-
-    // Vector layer
-    else if (LayerType.Vector === abcLayer.type) {
-      const geoJson = new GeoJSON();
-      const source = new VectorSource({
-        features: geoJson.readFeatures(abcLayer.features),
-      });
-
-      layer = this.newVectorLayer(source);
-      layer.setMetadata(abcLayer.metadata);
-    }
-
-    // Wms layer
-    else if (LayerType.Wms === abcLayer.type) {
-      layer = this.newWmsLayer(abcLayer.metadata);
-      layer.setMetadata(abcLayer.metadata);
-    }
-
-    // Wmts layer
-    else if (LayerType.Wmts === abcLayer.type) {
-      layer = this.newWmtsLayer(abcLayer.metadata);
-      layer.setMetadata(abcLayer.metadata);
-    }
-
-    // Xyz layer
-    else if (LayerType.Xyz === abcLayer.type) {
-      layer = this.newXyzLayer(abcLayer.metadata.remoteUrl, abcLayer.metadata.projection);
-      layer.setMetadata(abcLayer.metadata);
-    }
-
-    if (!layer) {
-      throw new Error(`Unhandled layer type: ${(abcLayer as AbcLayer).type}`);
-    }
-
-    return layer;
   }
 }

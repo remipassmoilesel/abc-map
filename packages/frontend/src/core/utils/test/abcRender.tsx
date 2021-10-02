@@ -28,13 +28,13 @@ import { MemoryRouter } from 'react-router-dom';
 
 interface Options extends RenderOptions {
   services?: TestServices;
-  state?: MainState;
+  state?: Partial<MainState>;
 }
 
 export function abcRender(ui: React.ReactElement, options?: Options): RenderResult {
   class TestServiceWrapper extends React.Component<any, any> {
     public render() {
-      const store = storeFactory(options?.state);
+      const store = storeFactory(options?.state as unknown as MainState);
       const services = options?.services || newTestServices();
 
       return (

@@ -35,6 +35,7 @@ import { jwtPlugin } from './jwtPlugin';
 import fastifyRateLimit from 'fastify-rate-limit';
 import * as helmet from 'helmet';
 import { generateSitemap } from './sitemap';
+import { ProjectionController } from '../projections/ProjectionController';
 
 const logger = Logger.get('HttpServer.ts', 'info');
 
@@ -53,7 +54,7 @@ function publicControllers(config: Config, services: Services): Controller[] {
  * @param services
  */
 function privateControllers(config: Config, services: Services): Controller[] {
-  return [new ProjectController(config, services), new DataStoreController(services), new VoteController(services)];
+  return [new ProjectController(config, services), new DataStoreController(services), new VoteController(services), new ProjectionController(services)];
 }
 
 /**

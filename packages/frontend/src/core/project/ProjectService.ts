@@ -25,6 +25,7 @@ import {
   AbcProjection,
   AbcProjectManifest,
   AbcProjectMetadata,
+  AbcView,
   BlobIO,
   CompressedProject,
   LayerType,
@@ -152,12 +153,22 @@ export class ProjectService {
       migrated.manifest = await Encryption.decryptManifest(migrated.manifest, _password);
     }
 
+    // Load view and layers projection
+    await this.geoService.loadProjection(migrated.manifest.view.projection.name);
+    for (const lay of migrated.manifest.layers) {
+      if (LayerType.Wms === lay.type && lay.metadata.projection) {
+        await this.geoService.loadProjection(lay.metadata.projection.name);
+      } else if (LayerType.Xyz === lay.type && lay.metadata.projection) {
+        await this.geoService.loadProjection(lay.metadata.projection.name);
+      }
+    }
+
     // Load project
     this.store.dispatch(ProjectActions.loadProject(migrated.manifest));
     await this.geoService.importLayers(migrated.manifest.layers);
 
     // Set view
-    this.store.dispatch(ProjectActions.viewChanged(migrated.manifest.view));
+    this.store.dispatch(ProjectActions.setView(migrated.manifest.view));
     this.geoService.getMainMap().setView(migrated.manifest.view);
 
     this.eventTarget.dispatchEvent(new ProjectEvent(ProjectEventType.ProjectLoaded));
@@ -279,7 +290,7 @@ export class ProjectService {
   }
 
   public renameProject(name: string) {
-    this.store.dispatch(ProjectActions.renameProject(name));
+    this.store.dispatch(ProjectActions.setProjectName(name));
   }
 
   private manifestContainsCredentials(project: AbcProjectManifest): boolean {
@@ -295,6 +306,10 @@ export class ProjectService {
 
   public setLegendItemIndex(item: AbcLegendItem, newIndex: number) {
     this.store.dispatch(ProjectActions.setLegendItemIndex(item, newIndex));
+  }
+
+  public setView(view: AbcView): void {
+    this.store.dispatch(ProjectActions.setView(view));
   }
 
   public listRemoteProjects(): Promise<AbcProjectMetadata[]> {

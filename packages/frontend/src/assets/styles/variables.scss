@@ -19,6 +19,8 @@
 $black: #000;
 $blue: #0077b6;
 $indigo: #6610f2;
+$cadet-blue: #607089;
+$yellow: #ffc107;
 
 $gray-100: #f8f9fa;
 $gray-200: #e9ecef;
@@ -31,6 +33,8 @@ $gray-800: #343a40;
 $gray-900: #212529;
 
 $primary: $blue;
-$secondary: $gray-600;
+$secondary: $cadet-blue;
+$warning: $yellow;
 
 $card-border-color: rgba($black, 0.125);
+$border-radius: 0.7rem;

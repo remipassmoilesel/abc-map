@@ -49,7 +49,7 @@ describe('Wmts layers', function () {
       .get('[data-cy=add-layer-confirm]')
       .click()
       // Ensure requests return correct code
-      .intercept('GET', '**Request=GetTile*')
+      .intercept('GET', '/wmts/public/layer=7328,style=39/**')
       .as('wmts')
       .wait('@wmts')
       .should((req) => {
@@ -91,7 +91,7 @@ describe('Wmts layers', function () {
       .click()
       .get('[data-cy=add-layer-confirm]')
       .click()
-      .intercept('GET', '**Request=GetTile*')
+      .intercept('GET', '/wmts/authenticated/layer=7328,style=39/**')
       .as('wmts')
       .wait('@wmts')
       .should((req) => {

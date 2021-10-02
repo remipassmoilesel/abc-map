@@ -57,12 +57,12 @@ describe('Project', function () {
 
     it('can rename project', function () {
       cy.visit(FrontendRoutes.map().raw())
-        .get('[data-cy=rename-project]')
+        .get('[data-cy=edit-project]')
         .click()
-        .get('[data-cy=modal-rename-input]')
+        .get('[data-cy=project-name-input]')
         .clear()
         .type('My awesome project')
-        .get('[data-cy=rename-modal-confirm]')
+        .get('[data-cy=button-confirm]')
         .click()
         .get('[data-cy=project-name]')
         .should((elem) => {
@@ -80,11 +80,13 @@ describe('Project', function () {
           const helper = ProjectHelper.forFrontend();
           const projectA = await helper.extractManifest(downloaded);
           expect(projectA.metadata.id).not.undefined;
-          expect(projectA.metadata.projection).deep.equals({ name: 'EPSG:3857' });
-          expect(projectA.metadata.version).equals('0.3.0');
+          expect(projectA.metadata.version).equals('0.4.0');
           expect(projectA.layers).length(2);
           expect(projectA.layers[0].type).equals(LayerType.Predefined);
           expect(projectA.layers[1].type).equals(LayerType.Vector);
+          expect(projectA.view.projection).deep.equals({ name: 'EPSG:3857' });
+          expect(projectA.view.resolution).not.undefined;
+          expect(projectA.view.center).not.undefined;
         })
         .get('[data-cy=close-solicitation-modal]')
         .click();
@@ -132,13 +134,14 @@ describe('Project', function () {
         .should(async (downloaded) => {
           const project = await ProjectHelper.forFrontend().extractManifest(downloaded);
           expect(project.layers[2].type).equals(LayerType.Wms);
-          expect((project.layers[2].metadata as WmsMetadata).remoteUrl).not.equal(WmsConstants.AUTHENTICATED_URL);
-          expect((project.layers[2].metadata as WmsMetadata).remoteUrl).contains('encrypted:');
-          expect((project.layers[2].metadata as WmsMetadata).auth?.username).contains('encrypted:');
-          expect((project.layers[2].metadata as WmsMetadata).auth?.username).not.equal(WmsConstants.USERNAME);
-          expect((project.layers[2].metadata as WmsMetadata).auth?.username).contains('encrypted:');
-          expect((project.layers[2].metadata as WmsMetadata).auth?.password).not.equal(WmsConstants.PASSWORD);
-          expect((project.layers[2].metadata as WmsMetadata).auth?.password).contains('encrypted:');
+          const wmsMeta = project.layers[2].metadata as WmsMetadata;
+          expect(wmsMeta.remoteUrls[0]).not.equal(WmsConstants.AUTHENTICATED_URL);
+          expect(wmsMeta.remoteUrls[0]).contains('encrypted:');
+          expect(wmsMeta.auth?.username).contains('encrypted:');
+          expect(wmsMeta.auth?.username).not.equal(WmsConstants.USERNAME);
+          expect(wmsMeta.auth?.username).contains('encrypted:');
+          expect(wmsMeta.auth?.password).not.equal(WmsConstants.PASSWORD);
+          expect(wmsMeta.auth?.password).contains('encrypted:');
         })
         .get('[data-cy=close-solicitation-modal]')
         .click();
@@ -294,12 +297,12 @@ describe('Project', function () {
       const projectName = uuid();
       cy.visit(FrontendRoutes.map().raw())
         // Rename project
-        .get('[data-cy=rename-project]')
+        .get('[data-cy=edit-project]')
         .click()
-        .get('[data-cy=modal-rename-input]')
+        .get('[data-cy=project-name-input]')
         .clear()
         .type(projectName)
-        .get('[data-cy=rename-modal-confirm]')
+        .get('[data-cy=button-confirm]')
         .click()
         .get('[data-cy=project-name]')
         // Save project

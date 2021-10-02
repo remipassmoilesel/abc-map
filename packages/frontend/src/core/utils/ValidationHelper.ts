@@ -24,7 +24,8 @@ export enum PasswordStrength {
 }
 
 const VALID_EMAIL = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-const VALID_URL = /^https?:\/\/.+$/;
+const VALID_HTTP_URL = /^https?:\/\/.+$/;
+const VALID_HTTPS_URL = /^https:\/\/.+$/;
 
 export class ValidationHelper {
   public static email(email: string): boolean {
@@ -32,11 +33,26 @@ export class ValidationHelper {
   }
 
   /**
-   * Warning: URL validation is weak
-   * @param email
+   * This method return true if 'url' looks like a URL.
+   *
+   * Warning:
+   * - URL validation is weak.
+   * - We enforce usage of HTTPS because of browser security policies.*
+   * @param url
    */
-  public static url(email: string): boolean {
-    return email.match(VALID_URL) !== null;
+  public static url(url: string): boolean {
+    if (window.location.protocol.indexOf('https') !== -1) {
+      return url.match(VALID_HTTPS_URL) !== null;
+    } else {
+      return url.match(VALID_HTTP_URL) !== null;
+    }
+  }
+
+  public static xyzUrl(url: string): boolean {
+    const x = url.indexOf('{x}') !== -1;
+    const y = url.indexOf('{y}') !== -1;
+    const z = url.indexOf('{z}') !== -1;
+    return this.url(url) && x && y && z;
   }
 
   // WARNING: modify this method may require data migration (user profiles)

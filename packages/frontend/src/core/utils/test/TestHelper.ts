@@ -39,13 +39,16 @@ import {
   LegendDisplay,
   PredefinedLayerModel,
   ProjectConstants,
+  ProjectionDto,
+  WmsMetadata,
+  XyzMetadata,
   Zipper,
 } from '@abc-map/shared';
 import uuid from 'uuid-random';
 import { Coordinate } from 'ol/coordinate';
 import MapBrowserEvent from 'ol/MapBrowserEvent';
 import { Map } from 'ol';
-import { RegionsOfMetropolitanFrance } from './TestHelper.data';
+import { RegionsOfMetropolitanFrance, SampleWmsCapabilities, SampleWmtsCapabilities } from './TestHelper.data';
 import { TestDataSource } from '../../data/data-source/TestDataSource';
 import { VectorLayerWrapper } from '../../geo/layers/LayerWrapper';
 import { FeatureWrapper } from '../../geo/features/FeatureWrapper';
@@ -55,6 +58,9 @@ import { nanoid } from 'nanoid';
 import { Encryption } from '../Encryption';
 import MapBrowserEventType from 'ol/MapBrowserEventType';
 import { WmtsSettings } from '../../geo/layers/LayerFactory.types';
+import { WmtsCapabilities } from '../../geo/WmtsCapabilities';
+import { optionsFromCapabilities } from 'ol/source/WMTS';
+import { WmsCapabilities } from '../../geo/WmsCapabilities';
 
 interface EventSettings {
   coordinate?: Coordinate;
@@ -94,7 +100,6 @@ export class TestHelper {
         id: uuid(),
         version: ProjectConstants.CurrentVersion,
         name: `Test project ${uuid()}`,
-        projection: DEFAULT_PROJECTION,
         containsCredentials: false,
       },
       layers: [this.sampleOsmLayer(), this.sampleVectorLayer()],
@@ -113,25 +118,42 @@ export class TestHelper {
     };
   }
 
-  public static async sampleCompressedProject(): Promise<[CompressedProject<Blob>, AbcProjectManifest]> {
-    const project = this.sampleProjectManifest();
-    const metadata = project.metadata;
+  public static async sampleCompressedProject(template?: Partial<AbcProjectManifest>): Promise<[CompressedProject<Blob>, AbcProjectManifest]> {
+    const sampleProject = this.sampleProjectManifest();
+    const project: AbcProjectManifest = {
+      ...sampleProject,
+      ...template,
+      metadata: {
+        ...sampleProject.metadata,
+        ...template?.metadata,
+      },
+    };
+
     const zip = await Zipper.forFrontend().zipFiles([{ path: ProjectConstants.ManifestName, content: new Blob([JSON.stringify(project)]) }]);
-    return [{ metadata, project: zip }, project];
+    return [{ metadata: project.metadata, project: zip }, project];
   }
 
-  public static async sampleCompressedProtectedProject(): Promise<[CompressedProject<Blob>, AbcProjectManifest]> {
+  public static async sampleCompressedProtectedProject(template?: Partial<AbcProjectManifest>): Promise<[CompressedProject<Blob>, AbcProjectManifest]> {
     let project = this.sampleProjectManifest();
-    const wmsLayer = this.sampleWmsLayer();
-    wmsLayer.metadata.auth = { username: 'test-username', password: 'test-password' };
-    project.layers.push(wmsLayer);
+    project = {
+      ...project,
+      ...template,
+      metadata: {
+        ...project.metadata,
+        ...template?.metadata,
+      },
+    };
+
+    if (typeof template === 'undefined') {
+      const wmsLayer = this.sampleWmsLayer();
+      wmsLayer.metadata.auth = { username: 'test-username', password: 'test-password' };
+      project.layers.push(wmsLayer);
+    }
 
     project = await Encryption.encryptManifest(project, 'azerty1234');
-    project.metadata.containsCredentials = true;
 
-    const metadata = project.metadata;
     const zip = await Zipper.forFrontend().zipFiles([{ path: ProjectConstants.ManifestName, content: new Blob([JSON.stringify(project)]) }]);
-    return [{ metadata, project: zip }, project];
+    return [{ metadata: project.metadata, project: zip }, project];
   }
 
   public static sampleVectorLayer(): AbcVectorLayer {
@@ -180,7 +202,7 @@ export class TestHelper {
     };
   }
 
-  public static sampleWmsLayer(): AbcWmsLayer {
+  public static sampleWmsLayer(template?: Partial<WmsMetadata>): AbcWmsLayer {
     return {
       type: LayerType.Wms,
       metadata: {
@@ -190,7 +212,7 @@ export class TestHelper {
         visible: true,
         active: true,
         opacity: 1,
-        remoteUrl: 'http://remote-url',
+        remoteUrls: ['http://remote-url'],
         remoteLayerName: 'test-layer-name',
         projection: {
           name: 'EPSG:4326',
@@ -200,8 +222,13 @@ export class TestHelper {
           username: 'test-username',
           password: 'test-password',
         },
+        ...template,
       },
     };
+  }
+
+  public static sampleWmsCapabilities(): WmsCapabilities {
+    return SampleWmsCapabilities();
   }
 
   public static sampleWmtsLayer(): AbcWmtsLayer {
@@ -219,22 +246,15 @@ export class TestHelper {
     };
   }
 
+  public static sampleWmtsCapabilities(): WmtsCapabilities {
+    return SampleWmtsCapabilities();
+  }
+
   public static sampleWmtsSettings(): WmtsSettings {
     return {
-      remoteUrl: 'http://domain.fr/wmts',
-      remoteLayerName: 'test-layer-name',
-      projection: { name: 'EPSG:3857' },
-      extent: [-7034346.839028204, -2443080.2980507985, 6216929.25854652, 6652314.571658893],
-      matrixSet: 'PM',
-      style: 'normal',
-      resolutions: [156543.033928041, 78271.51696402048, 39135.758482010235, 19567.87924100512],
-      matrixIds: ['0', '1', '2', '3'],
-      origins: [
-        [-20037508.342789248, 20037508.342789248],
-        [-20037508.342789248, 20037508.342789248],
-        [-20037508.342789248, 20037508.342789248],
-        [-20037508.342789248, 20037508.342789248],
-      ],
+      capabilitiesUrl: 'http://domain.fr/wmts',
+      remoteLayerName: 'GEOGRAPHICALGRIDSYSTEMS.MAPS',
+      sourceOptions: optionsFromCapabilities(TestHelper.sampleWmtsCapabilities(), { layer: 'GEOGRAPHICALGRIDSYSTEMS.MAPS', matrixSet: 'PM' }),
       auth: {
         username: 'test-username',
         password: 'test-password',
@@ -242,7 +262,7 @@ export class TestHelper {
     };
   }
 
-  public static sampleXyzLayer(): AbcXyzLayer {
+  public static sampleXyzLayer(template?: Partial<XyzMetadata>): AbcXyzLayer {
     return {
       type: LayerType.Xyz,
       metadata: {
@@ -256,6 +276,7 @@ export class TestHelper {
         projection: {
           name: 'EPSG:4326',
         },
+        ...template,
       },
     };
   }
@@ -378,7 +399,9 @@ export class TestHelper {
   }
 
   public static regionsOfFrance() {
-    return RegionsOfMetropolitanFrance.slice().map((row) => ({ ...row }));
+    return RegionsOfMetropolitanFrance()
+      .slice()
+      .map((row) => ({ ...row }));
   }
 
   public static regionsOfFranceDataSource(): TestDataSource {
@@ -416,5 +439,23 @@ export class TestHelper {
       id: nanoid(),
       text: 'Legend item text',
     };
+  }
+
+  public static sampleProjectionDto(): ProjectionDto {
+    /* eslint-disable */
+    return {
+      code: '2154',
+      kind: 'CRS-PROJCRS',
+      bbox: [51.56, -9.86, 41.15, 10.38],
+      wkt: 'PROJCS["RGF93 / Lambert-93",GEOGCS["RGF93",DATUM["Reseau_Geodesique_Francais_1993",SPHEROID["GRS 1980",6378137,298.257222101,AUTHORITY["EPSG","7019"]],TOWGS84[0,0,0,0,0,0,0],AUTHORITY["EPSG","6171"]],PRIMEM["Greenwich",0,AUTHORITY["EPSG","8901"]],UNIT["degree",0.0174532925199433,AUTHORITY["EPSG","9122"]],AUTHORITY["EPSG","4171"]],PROJECTION["Lambert_Conformal_Conic_2SP"],PARAMETER["standard_parallel_1",49],PARAMETER["standard_parallel_2",44],PARAMETER["latitude_of_origin",46.5],PARAMETER["central_meridian",3],PARAMETER["false_easting",700000],PARAMETER["false_northing",6600000],UNIT["metre",1,AUTHORITY["EPSG","9001"]],AXIS["X",EAST],AXIS["Y",NORTH],AUTHORITY["EPSG","2154"]]',
+      unit: 'metre',
+      proj4: '+proj=lcc +lat_1=49 +lat_2=44 +lat_0=46.5 +lon_0=3 +x_0=700000 +y_0=6600000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs',
+      name: 'RGF93 / Lambert-93',
+      area: 'France - onshore and offshore, mainland and Corsica.',
+      default_trans: 1671,
+      trans: [1671, 8573],
+      accuracy: 1,
+    };
+    /* eslint-enable */
   }
 }

@@ -54,7 +54,7 @@ const wmsCapabilities = fs.readFileSync(path.resolve(responses, 'wms-capabilitie
 const tileWms = fs.readFileSync(path.resolve(responses, 'tile-wms.png'));
 
 app.get('/wms/public', function (req, res) {
-  handleWmsRequest(req, res);
+  handleWmsRequest(req, res, false);
 });
 
 app.get('/wms/authenticated', function (req, res) {
@@ -63,12 +63,13 @@ app.get('/wms/authenticated', function (req, res) {
     return;
   }
 
-  handleWmsRequest(req, res);
+  handleWmsRequest(req, res, true);
 });
 
-function handleWmsRequest(req, res) {
+function handleWmsRequest(req, res, authenticated) {
   if (req.url.endsWith('request=GetCapabilities')) {
-    res.set('Content-Type', 'application/xml').status(200).send(wmsCapabilities);
+    const capabilities = authenticated ? wmsCapabilities.replace(/http:\/\/localhost:3010\/wms\/public/ig, 'http://localhost:3010/wms/authenticated') : wmsCapabilities;
+    res.set('Content-Type', 'application/xml').status(200).send(capabilities);
     return;
   }
 
@@ -90,26 +91,27 @@ function handleWmsRequest(req, res) {
 const wmtsCapabilities = fs.readFileSync(path.resolve(responses, 'wmts-capabilities.xml')).toString('utf-8');
 const tileWmts = fs.readFileSync(path.resolve(responses, 'tile-wmts.png'));
 
-app.get('/wmts/public', function (req, res) {
-  handleWmtsRequest(req, res);
+app.get('/wmts/public*', function (req, res) {
+  handleWmtsRequest(req, res, false);
 });
 
-app.get('/wmts/authenticated', function (req, res) {
+app.get('/wmts/authenticated*', function (req, res) {
   if (req.headers['authorization'] !== authorization) {
     res.status(401).send();
     return;
   }
 
-  handleWmtsRequest(req, res);
+  handleWmtsRequest(req, res, true);
 });
 
-function handleWmtsRequest(req, res) {
-  if (req.url.endsWith('request=GetCapabilities')) {
-    res.set('Content-Type', 'application/xml').status(200).send(wmtsCapabilities);
+function handleWmtsRequest(req, res, authenticated) {
+  if (req.url.endsWith('request=GetCapabilities') || req.url.indexOf('WMTSCapabilities.xml') !== -1) {
+    const capabilities = authenticated ? wmtsCapabilities.replace(/http:\/\/localhost:3010\/wmts\/public/ig, 'http://localhost:3010/wmts/authenticated') : wmtsCapabilities;
+    res.set('Content-Type', 'application/xml').status(200).send(capabilities);
     return;
   }
 
-  if (req.url.indexOf('Request=GetTile') !== -1) {
+  if (req.url.indexOf('Request=GetTile') !== -1 || req.url.indexOf('/layer') !== -1) {
     res.set('Content-Type', 'image/png').status(200).end(tileWmts, 'binary');
     return;
   }

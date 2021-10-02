@@ -16,24 +16,24 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { logger as geoLogger, GeoService } from './GeoService';
+import { GeoService, logger as geoLogger } from './GeoService';
 import { logger as mapLogger } from './map/MapWrapper';
-import { AbcProjectManifest, AbcVectorLayer, LayerType, PredefinedLayerModel, PredefinedMetadata } from '@abc-map/shared';
+import { AbcVectorLayer, LayerProperties, LayerType, PredefinedLayerModel, PredefinedMetadata } from '@abc-map/shared';
 import { TestHelper } from '../utils/test/TestHelper';
 import VectorSource from 'ol/source/Vector';
 import TileLayer from 'ol/layer/Tile';
-import { httpExternalClient } from '../http/http-clients';
+import { httpApiClient, httpExternalClient } from '../http/http-clients';
 import { HistoryService } from '../history/HistoryService';
 import { LayerFactory } from './layers/LayerFactory';
 import VectorImageLayer from 'ol/layer/VectorImage';
-import { VectorLayerWrapper } from './layers/LayerWrapper';
-import { SinonStubbedInstance } from 'sinon';
-import { ToastService } from '../ui/ToastService';
+import { VectorLayerWrapper, WmsLayerWrapper, WmtsLayerWrapper, XyzLayerWrapper } from './layers/LayerWrapper';
 import * as sinon from 'sinon';
+import { SinonStub, SinonStubbedInstance } from 'sinon';
+import { ToastService } from '../ui/ToastService';
 import { storeFactory } from '../store/store';
 import { HttpClientStub } from '../utils/test/HttpClientStub';
 import { AxiosInstance } from 'axios';
-import { SampleWmsCapabilities, SampleWmtsCapabilities } from './GeoService.test.data';
+import { get as getProjection } from 'ol/proj';
 
 // Default parser fail with WMS capabilities
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -46,19 +46,33 @@ mapLogger.disable();
 describe('GeoService', () => {
   describe('With a stub http client', () => {
     let toasts: SinonStubbedInstance<ToastService>;
-    let httpClient: HttpClientStub;
+    let apiClient: HttpClientStub;
+    let externalClient: HttpClientStub;
+    let wmsParser: SinonStub;
+    let wmtsParser: SinonStub;
     let service: GeoService;
 
     beforeEach(() => {
       toasts = sinon.createStubInstance(ToastService);
-      httpClient = new HttpClientStub();
-      service = new GeoService(httpClient as unknown as AxiosInstance, toasts, HistoryService.create(), storeFactory());
+      apiClient = new HttpClientStub();
+      externalClient = new HttpClientStub();
+      wmsParser = sinon.stub();
+      wmtsParser = sinon.stub();
+      service = new GeoService(
+        apiClient as unknown as AxiosInstance,
+        externalClient as unknown as AxiosInstance,
+        toasts,
+        HistoryService.create(),
+        storeFactory(),
+        wmsParser,
+        wmtsParser
+      );
 
       service.getMainMap().unwrap().getLayers().clear();
     });
 
-    // Export is tested in details in LayerFactory
     it('exportLayers()', async () => {
+      // Prepare
       const map = service.getMainMap();
       const osm = LayerFactory.newPredefinedLayer(PredefinedLayerModel.OSM);
       const features = LayerFactory.newVectorLayer(new VectorSource({ features: TestHelper.sampleFeatures() }));
@@ -66,7 +80,10 @@ describe('GeoService', () => {
       map.addLayer(features);
       map.setActiveLayer(features);
 
+      // Act
       const layers = await service.exportLayers();
+
+      // Assert
       expect(layers).toHaveLength(2);
 
       expect(layers[0].metadata.type).toEqual(LayerType.Predefined);
@@ -78,63 +95,256 @@ describe('GeoService', () => {
       expect((layers[1] as AbcVectorLayer).features.features).toHaveLength(3);
     });
 
-    // Import is tested in details in LayerFactory
-    it('importLayers()', async () => {
-      const project: AbcProjectManifest = TestHelper.sampleProjectManifest();
+    it('Import layers', async () => {
+      // Prepare
+      const layers = [TestHelper.sampleOsmLayer(), TestHelper.sampleVectorLayer(), TestHelper.sampleXyzLayer()];
 
-      await service.importLayers(project.layers);
+      // Act
+      await service.importLayers(layers);
 
-      const layers = service.getMainMap().getLayers();
-      expect(layers[0].unwrap()).toBeInstanceOf(TileLayer);
-      expect(layers[1].unwrap()).toBeInstanceOf(VectorImageLayer);
-      const features = (layers[1] as VectorLayerWrapper).getSource().getFeatures();
-      expect(features).toHaveLength(1);
-      expect(features[0].getGeometry()?.getType()).toEqual('Point');
+      // Assert
+      const olLayers = service.getMainMap().getLayers();
+      expect(olLayers[0].isPredefined()).toEqual(true);
+      expect(olLayers[1].isVector()).toEqual(true);
+      expect(olLayers[2].isXyz()).toEqual(true);
+    });
+
+    describe('toOlLayer()', () => {
+      it('with OSM layer', async () => {
+        // Prepare
+        const abcLayer = TestHelper.sampleOsmLayer();
+        abcLayer.metadata.name = 'OpenStreetMap';
+        abcLayer.metadata.opacity = 0.5;
+        abcLayer.metadata.active = true;
+        abcLayer.metadata.visible = false;
+
+        // Act
+        const layer = await service.toOlLayer(abcLayer);
+
+        // Assert
+        expect(layer.unwrap()).toBeInstanceOf(TileLayer);
+        const metadata = layer.getMetadata();
+        expect(metadata).toBeDefined();
+        expect(metadata?.id).toBeDefined();
+        expect(metadata?.id).toEqual(abcLayer.metadata.id);
+        expect(metadata?.name).toEqual('OpenStreetMap');
+        expect(metadata?.opacity).toEqual(0.5);
+        expect(metadata?.visible).toEqual(false);
+        expect(metadata?.active).toEqual(true);
+        expect(metadata?.type).toEqual(LayerType.Predefined);
+        expect(layer.unwrap().get(LayerProperties.Managed)).toBe(true);
+      });
+
+      it('with vector layer', async () => {
+        // Prepare
+        const abcLayer = TestHelper.sampleVectorLayer();
+        abcLayer.features.features = [TestHelper.sampleGeojsonFeature(), TestHelper.sampleGeojsonFeature()];
+        abcLayer.metadata.name = 'What a beautiful layer';
+        abcLayer.metadata.opacity = 0.5;
+        abcLayer.metadata.active = true;
+        abcLayer.metadata.visible = false;
+
+        // Act
+        const layer = (await service.toOlLayer(abcLayer)) as VectorLayerWrapper;
+
+        // Assert
+        expect(layer.unwrap()).toBeInstanceOf(VectorImageLayer);
+        const metadata = layer.getMetadata();
+        expect(metadata).toBeDefined();
+        expect(metadata?.id).toBeDefined();
+        expect(metadata?.id).toEqual(abcLayer.metadata.id);
+        expect(metadata?.name).toEqual('What a beautiful layer');
+        expect(metadata?.opacity).toEqual(0.5);
+        expect(metadata?.visible).toEqual(false);
+        expect(metadata?.active).toEqual(true);
+        expect(metadata?.type).toEqual(LayerType.Vector);
+        expect(layer.unwrap().get(LayerProperties.Managed)).toBe(true);
+
+        const features = layer.getSource().getFeatures();
+        expect(features).toHaveLength(2);
+      });
+
+      it('with WMS layer, without authentication', async () => {
+        // Prepare
+        const abcLayer = TestHelper.sampleWmsLayer();
+        abcLayer.metadata.opacity = 0.5;
+        abcLayer.metadata.active = true;
+        abcLayer.metadata.visible = false;
+
+        // Act
+        const layer = (await service.toOlLayer(abcLayer)) as WmsLayerWrapper;
+
+        // Assert
+        expect(layer.unwrap()).toBeInstanceOf(TileLayer);
+        const metadata = layer.getMetadata();
+        expect(metadata).toBeDefined();
+        expect(metadata?.id).toBeDefined();
+        expect(metadata?.id).toEqual(abcLayer.metadata.id);
+        expect(metadata?.name).toEqual('Couche WMS');
+        expect(metadata?.opacity).toEqual(0.5);
+        expect(metadata?.visible).toEqual(false);
+        expect(metadata?.active).toEqual(true);
+        expect(metadata?.type).toEqual(LayerType.Wms);
+        expect(metadata?.remoteUrls).toEqual(['http://remote-url']);
+        expect(metadata?.remoteLayerName).toEqual('test-layer-name');
+        expect(metadata?.extent).toEqual([1, 2, 3, 4]);
+        expect(metadata?.auth?.username).toEqual('test-username');
+        expect(metadata?.auth?.password).toEqual('test-password');
+        expect(layer.unwrap().get(LayerProperties.Managed)).toBe(true);
+      });
+
+      it('with WMTS layer, with authentication', async () => {
+        // Prepare
+        externalClient.get.resolves({ data: '<xml></xml>' });
+        wmtsParser.returns(TestHelper.sampleWmtsCapabilities());
+        const abcLayer = TestHelper.sampleWmtsLayer();
+        abcLayer.metadata.opacity = 0.5;
+        abcLayer.metadata.active = true;
+        abcLayer.metadata.visible = false;
+
+        // Act
+        const layer = (await service.toOlLayer(abcLayer)) as WmtsLayerWrapper;
+
+        expect(layer.unwrap()).toBeInstanceOf(TileLayer);
+        const metadata = layer.getMetadata();
+        expect(metadata).toBeDefined();
+        expect(metadata?.id).toBeDefined();
+        expect(metadata?.id).toEqual(abcLayer.metadata.id);
+        expect(metadata?.name).toEqual('Couche WMTS');
+        expect(metadata?.opacity).toEqual(0.5);
+        expect(metadata?.visible).toEqual(false);
+        expect(metadata?.active).toEqual(true);
+        expect(metadata?.type).toEqual(LayerType.Wmts);
+        expect(metadata?.capabilitiesUrl).toEqual('http://domain.fr/wmts');
+        expect(metadata?.remoteLayerName).toEqual('GEOGRAPHICALGRIDSYSTEMS.MAPS');
+        expect(metadata?.auth).toEqual({ username: 'test-username', password: 'test-password' });
+        expect(layer.unwrap().get(LayerProperties.Managed)).toBe(true);
+      });
+
+      it('with XYZ layer', async () => {
+        // Prepare
+        const abcLayer = TestHelper.sampleXyzLayer();
+        abcLayer.metadata.opacity = 0.5;
+        abcLayer.metadata.active = true;
+        abcLayer.metadata.visible = false;
+
+        // Act
+        const layer = (await service.toOlLayer(abcLayer)) as XyzLayerWrapper;
+
+        // Assert
+        expect(layer.unwrap()).toBeInstanceOf(TileLayer);
+        const metadata = layer.getMetadata();
+        expect(metadata).toBeDefined();
+        expect(metadata?.id).toBeDefined();
+        expect(metadata?.id).toEqual(abcLayer.metadata.id);
+        expect(metadata?.name).toEqual('Couche XYZ');
+        expect(metadata?.opacity).toEqual(0.5);
+        expect(metadata?.visible).toEqual(false);
+        expect(metadata?.active).toEqual(true);
+        expect(metadata?.type).toEqual(LayerType.Xyz);
+        expect(metadata?.remoteUrl).toEqual('http://remote-url');
+        expect(layer.unwrap().get(LayerProperties.Managed)).toBe(true);
+      });
     });
 
     describe('getWmsCapabilities()', () => {
       it('should use provided query and auth', async () => {
-        httpClient.get.resolves({ data: SampleWmsCapabilities });
+        externalClient.get.resolves({ data: '<xml></xml>' });
+        wmsParser.returns(TestHelper.sampleWmsCapabilities());
         const url = 'http://domain.fr/wms?service=wms&request=GetCapabilities';
         const auth = { username: 'test-username', password: 'test-password' };
 
         const result = await service.getWmsCapabilities(url, auth);
 
-        expect(httpClient.get.args).toEqual([['http://domain.fr/wms?service=wms&request=GetCapabilities', { auth }]]);
+        expect(externalClient.get.args).toEqual([['http://domain.fr/wms?service=wms&request=GetCapabilities', { auth }]]);
         expect(result.version).toEqual('1.3.0');
       });
 
       it('should add query if absent', async () => {
-        httpClient.get.resolves({ data: SampleWmsCapabilities });
+        externalClient.get.resolves({ data: '<xml></xml>' });
+        wmsParser.returns(TestHelper.sampleWmsCapabilities());
         const url = 'http://domain.fr/wms';
 
         const result = await service.getWmsCapabilities(url);
 
-        expect(httpClient.get.args).toEqual([['http://domain.fr/wms?service=wms&request=GetCapabilities', { auth: undefined }]]);
+        expect(externalClient.get.args).toEqual([['http://domain.fr/wms?service=wms&request=GetCapabilities', { auth: undefined }]]);
         expect(result.version).toEqual('1.3.0');
       });
     });
 
     describe('getWmtsCapabilities()', () => {
       it('should use provided query and auth', async () => {
-        httpClient.get.resolves({ data: SampleWmtsCapabilities });
+        externalClient.get.resolves({ data: '<xml></xml>' });
+        wmtsParser.returns(TestHelper.sampleWmtsCapabilities());
         const url = 'http://domain.fr/wmts?service=wmts&request=GetCapabilities';
         const auth = { username: 'test-username', password: 'test-password' };
 
         const result = await service.getWmtsCapabilities(url, auth);
 
-        expect(httpClient.get.args).toEqual([['http://domain.fr/wmts?service=wmts&request=GetCapabilities', { auth }]]);
+        expect(externalClient.get.args).toEqual([['http://domain.fr/wmts?service=wmts&request=GetCapabilities', { auth }]]);
         expect(result.version).toEqual('1.0.0');
       });
 
       it('should add query if absent', async () => {
-        httpClient.get.resolves({ data: SampleWmtsCapabilities });
+        externalClient.get.resolves({ data: '<xml></xml>' });
+        wmtsParser.returns(TestHelper.sampleWmtsCapabilities());
         const url = 'http://domain.fr/wmts';
 
         const result = await service.getWmtsCapabilities(url);
 
-        expect(httpClient.get.args).toEqual([['http://domain.fr/wmts?service=wmts&request=GetCapabilities', { auth: undefined }]]);
+        expect(externalClient.get.args).toEqual([['http://domain.fr/wmts?service=wmts&request=GetCapabilities', { auth: undefined }]]);
         expect(result.version).toEqual('1.0.0');
+      });
+    });
+
+    describe('loadProjection()', () => {
+      it('should fail if code is not supported ', async () => {
+        // Act
+        const err: Error = await service.loadProjection('abcdef').catch((err) => err);
+
+        // Assert
+        expect(err).toBeInstanceOf(Error);
+        expect(err.message).toEqual('Cannot load projection abcdef, name is not valid');
+      });
+
+      it('should not fetch projection if projection is supported by OpenLayers', async () => {
+        // Act
+        const result = await service.loadProjection('CRS:84');
+
+        // Assert
+        expect(result).toEqual([-180, -85, 180, 85]);
+        expect(apiClient.get.callCount).toEqual(0);
+      });
+
+      it('should fetch projection and register it', async () => {
+        // Prepare
+        apiClient.get.resolves({ data: TestHelper.sampleProjectionDto() });
+        expect(getProjection('EPSG:2154')).toBeNull();
+
+        // Act
+        const result = await service.loadProjection('urn:ogc:def:crs:EPSG::2154');
+
+        // Assert
+        expect(result).toEqual([-378305.8099675197, 6005304.5085882535, 1320649.5712336523, 7235612.724773034]);
+        expect(apiClient.get.args).toEqual([['/projections/EPSG:2154']]);
+        expect(getProjection('EPSG:2154')).toBeDefined();
+        expect(getProjection('urn:ogc:def:crs:EPSG::2154')).toBeDefined();
+      });
+
+      it('should correct world extent', async () => {
+        // Prepare
+        apiClient.get.resolves({
+          data: {
+            ...TestHelper.sampleProjectionDto(),
+            bbox: [51.56, 10.38, 41.15, -9.86],
+          },
+        });
+
+        // Act
+        const result = await service.loadProjection('urn:ogc:def:crs:EPSG::2154');
+
+        // Assert
+        expect(result).toEqual([-5810242.794404252, 6034305.735038247, 7288727.539464668, 16806543.64439309]);
       });
     });
   });
@@ -145,7 +355,7 @@ describe('GeoService', () => {
 
     beforeEach(() => {
       toasts = sinon.createStubInstance(ToastService);
-      service = new GeoService(httpExternalClient(5_000), toasts, HistoryService.create(), storeFactory());
+      service = new GeoService(httpApiClient(5_000), httpExternalClient(5_000), toasts, HistoryService.create(), storeFactory());
 
       service.getMainMap().unwrap().getLayers().clear();
     });

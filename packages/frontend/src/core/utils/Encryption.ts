@@ -129,7 +129,7 @@ export class Encryption {
     const result: WmsMetadata = { ...metadata };
 
     // Encrypt URL, it may contains secret keys
-    result.remoteUrl = await Encryption.encrypt(result.remoteUrl, password);
+    result.remoteUrls = await Promise.all(result.remoteUrls.map((url) => Encryption.encrypt(url, password)));
 
     // Encrypt authentication if any
     if (result.auth) {
@@ -145,7 +145,7 @@ export class Encryption {
     const result: WmtsMetadata = { ...metadata };
 
     // Encrypt URL, it may contains secret keys
-    result.remoteUrl = await Encryption.encrypt(result.remoteUrl, password);
+    result.capabilitiesUrl = await Encryption.encrypt(result.capabilitiesUrl, password);
 
     // Encrypt authentication if any
     if (result.auth) {
@@ -160,7 +160,7 @@ export class Encryption {
   private static async decryptWmsMetadata(metadata: WmsMetadata, password: string): Promise<WmsMetadata> {
     const result: WmsMetadata = { ...metadata };
 
-    result.remoteUrl = await Encryption.decrypt(result.remoteUrl, password);
+    result.remoteUrls = await Promise.all(result.remoteUrls.map((url) => Encryption.decrypt(url, password)));
 
     if (result.auth) {
       result.auth = { ...result.auth };
@@ -174,7 +174,7 @@ export class Encryption {
   private static async decryptWmtsMetadata(metadata: WmtsMetadata, password: string): Promise<WmtsMetadata> {
     const result: WmtsMetadata = { ...metadata };
 
-    result.remoteUrl = await Encryption.decrypt(result.remoteUrl, password);
+    result.capabilitiesUrl = await Encryption.decrypt(result.capabilitiesUrl, password);
 
     if (result.auth) {
       result.auth = { ...result.auth };

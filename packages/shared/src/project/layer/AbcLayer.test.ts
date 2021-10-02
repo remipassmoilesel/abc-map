@@ -86,7 +86,7 @@ describe('AbcLayer', () => {
 
   it('WMS layer should not change without migration', () => {
     /* eslint-disable */
-    const layerWitness = '{"type":"Wms","metadata":{"id":"test-layer-id","name":"Test wms layer","active":true,"visible":true,"opacity":0.5,"type":"Wms","auth":{"username":"test-username","password":"test-password"},"extent":[1,1,1,1],"projection":{"name":"EPSG:4326"},"remoteLayerName":"test-remoteLayerName","remoteUrl":"test-remoteUrl"}}';
+    const layerWitness = '{"type":"Wms","metadata":{"id":"test-layer-id","name":"Test wms layer","active":true,"visible":true,"opacity":0.5,"type":"Wms","auth":{"username":"test-username","password":"test-password"},"extent":[1,1,1,1],"projection":{"name":"EPSG:4326"},"remoteLayerName":"test-remoteLayerName","remoteUrls":["test-remoteUrls"]}}';
     /* eslint-enable */
 
     const currentLayer: AbcWmsLayer = {
@@ -105,7 +105,7 @@ describe('AbcLayer', () => {
         extent: [1, 1, 1, 1],
         projection: { name: 'EPSG:4326' },
         remoteLayerName: 'test-remoteLayerName',
-        remoteUrl: 'test-remoteUrl',
+        remoteUrls: ['test-remoteUrls'],
       },
     };
 

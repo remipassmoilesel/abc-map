@@ -27,6 +27,8 @@ import VectorImageLayer from 'ol/layer/VectorImage';
 import { DragRotateAndZoom } from 'ol/interaction';
 import { LineStringTool } from '../../tools/line-string/LineStringTool';
 import { TestHelper } from '../../utils/test/TestHelper';
+import sinon from 'sinon';
+import BaseEvent from 'ol/events/Event';
 
 logger.disable();
 
@@ -303,7 +305,8 @@ describe('MapWrapper', function () {
       const map = MapFactory.createNaked();
       map.addLayer(
         LayerFactory.newWmsLayer({
-          remoteUrl: 'test-remoteUrl',
+          capabilitiesUrl: 'http://test-capabilitiesUrl',
+          remoteUrls: ['http://test-remoteUrl'],
           remoteLayerName: 'test-remoteLayerName',
           auth: {
             username: 'username',
@@ -344,6 +347,28 @@ describe('MapWrapper', function () {
       map.addLayer(LayerFactory.newVectorLayer());
 
       expect(map.getTextAttributions()).toEqual([]);
+    });
+  });
+
+  describe('Tile error listener', () => {
+    it('addTileErrorListener()', () => {
+      // Prepare
+      const map = MapFactory.createNaked();
+      map.addLayer(LayerFactory.newPredefinedLayer(PredefinedLayerModel.OSM));
+      map.addLayer(LayerFactory.newPredefinedLayer(PredefinedLayerModel.StamenToner));
+
+      const event = new BaseEvent('tileloaderror');
+      event.target = map.getLayers()[0].getSource();
+
+      const listener = sinon.stub();
+
+      // Act
+      map.addTileErrorListener(listener);
+      map.getLayers()[0].getSource().dispatchEvent(event);
+
+      // Assert
+      expect(listener.callCount).toEqual(1);
+      expect(listener.args[0][0].layer.getId()).toEqual(map.getLayers()[0].getId());
     });
   });
 });
