@@ -24,6 +24,7 @@ import * as _ from 'lodash';
 import MapBrowserEvent from 'ol/MapBrowserEvent';
 import { toLonLat } from 'ol/proj';
 import { Coordinate } from 'ol/coordinate';
+import Cls from './CursorPosition.module.scss';
 
 const logger = Logger.get('CursorPosition.tsx');
 
@@ -48,8 +49,8 @@ class CursorPosition extends Component<ServiceProps, State> {
     return (
       <div className={'control-block'}>
         <div className={'mb-2'}>Position du curseur</div>
-        <div>Latitude: {lat}</div>
-        <div>Longitude: {lon}</div>
+        <div className={Cls.latLon}>Latitude: {lat}</div>
+        <div className={Cls.latLon}>Longitude: {lon}</div>
       </div>
     );
   }

@@ -25,6 +25,7 @@ import RemoteProjectModal from './RemoteProjectsModal';
 import { ModalStatus, OperationStatus } from '../../../core/ui/typings';
 import { ServiceProps, withServices } from '../../../core/withServices';
 import { Errors } from '../../../core/utils/Errors';
+import { Encryption } from '../../../core/utils/Encryption';
 
 const logger = Logger.get('ProjectControls.tsx');
 
@@ -111,7 +112,7 @@ class ProjectControls extends Component<Props, State> {
 
     const save = async () => {
       let password: string | undefined;
-      if (geo.getMainMap().containsCredentials()) {
+      if (Encryption.mapContainsCredentials(geo.getMainMap())) {
         const event = await modals.setProjectPassword();
         if (event.status === ModalStatus.Canceled) {
           return OperationStatus.Interrupted;
@@ -155,7 +156,7 @@ class ProjectControls extends Component<Props, State> {
 
     const exportProject = async () => {
       let password: string | undefined;
-      if (geo.getMainMap().containsCredentials()) {
+      if (Encryption.mapContainsCredentials(geo.getMainMap())) {
         const event = await modals.setProjectPassword();
         if (event.status === ModalStatus.Canceled) {
           return OperationStatus.Interrupted;

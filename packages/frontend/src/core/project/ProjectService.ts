@@ -97,17 +97,20 @@ export class ProjectService {
   }
 
   public loadRemoteProject(id: string, password?: string): Promise<void> {
-    return this.findById(id)
-      .then((blob) => {
-        if (!blob) {
-          return Promise.reject(new Error('Project not found'));
-        }
-        return this.loadBlobProject(blob, password);
-      })
-      .catch((err) => {
-        this.toasts.httpError(err);
-        return Promise.reject(err);
-      });
+    return (
+      this.findById(id)
+        // We handle network errors before project loading
+        .catch((err) => {
+          this.toasts.httpError(err);
+          return Promise.reject(err);
+        })
+        .then((blob) => {
+          if (!blob) {
+            return Promise.reject(new Error('Project not found'));
+          }
+          return this.loadBlobProject(blob, password);
+        })
+    );
   }
 
   /**
@@ -139,8 +142,9 @@ export class ProjectService {
 
     // Prompt password if necessary
     let _password = password;
-    if (this.manifestContainsCredentials(migrated.manifest) && !_password) {
-      const ev = await this.modals.getProjectPassword();
+    if (Encryption.manifestContainsCredentials(migrated.manifest) && !_password) {
+      const witness = Encryption.extractEncryptedData(migrated.manifest);
+      const ev = await this.modals.getProjectPassword(witness || '');
       const canceled = ev.status === ModalStatus.Canceled;
       _password = ev.value;
       if (canceled || !_password) {
@@ -176,7 +180,7 @@ export class ProjectService {
   }
 
   public async exportCurrentProject(password?: string): Promise<CompressedProject<Blob>> {
-    const containsCredentials = this.geoService.getMainMap().containsCredentials();
+    const containsCredentials = Encryption.mapContainsCredentials(this.geoService.getMainMap());
     if (containsCredentials && !password) {
       throw new Error('Password is mandatory when project contains credentials');
     }
@@ -291,13 +295,6 @@ export class ProjectService {
 
   public renameProject(name: string) {
     this.store.dispatch(ProjectActions.setProjectName(name));
-  }
-
-  private manifestContainsCredentials(project: AbcProjectManifest): boolean {
-    const protectedTypes = [LayerType.Wms, LayerType.Wmts, LayerType.Xyz];
-    const protectedLayer = project.layers.find((lay) => protectedTypes.includes(lay.type));
-
-    return !!protectedLayer;
   }
 
   public deleteLegendItem(item: AbcLegendItem) {

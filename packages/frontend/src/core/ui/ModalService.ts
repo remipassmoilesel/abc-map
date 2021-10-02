@@ -54,14 +54,14 @@ export class ModalService {
     return this.setPasswordModal(title, message);
   }
 
-  public passwordInputModal(title: string, message: string): Promise<PasswordInputClosedEvent> {
-    return this.modalPromise({ type: ModalEventType.ShowPasswordInput, title, message }, ModalEventType.PasswordInputClosed);
+  public passwordInputModal(title: string, message: string, witness: string): Promise<PasswordInputClosedEvent> {
+    return this.modalPromise({ type: ModalEventType.ShowPasswordInput, title, message, witness }, ModalEventType.PasswordInputClosed);
   }
 
-  public getProjectPassword(): Promise<PasswordInputClosedEvent> {
+  public getProjectPassword(witness: string): Promise<PasswordInputClosedEvent> {
     const title = 'Mot de passe du projet 🔑';
     const message = 'Votre projet est protégé par un mot de passe.';
-    return this.passwordInputModal(title, message);
+    return this.passwordInputModal(title, message, witness);
   }
 
   public setPasswordModal(title: string, message: string): Promise<SetPasswordModalClosedEvent> {

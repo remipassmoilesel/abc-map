@@ -212,7 +212,7 @@ export class TestHelper {
         visible: true,
         active: true,
         opacity: 1,
-        remoteUrls: ['http://remote-url'],
+        remoteUrls: ['http://domain.fr/wms'],
         remoteLayerName: 'test-layer-name',
         projection: {
           name: 'EPSG:4326',
@@ -272,7 +272,7 @@ export class TestHelper {
         visible: true,
         active: true,
         opacity: 1,
-        remoteUrl: 'http://remote-url',
+        remoteUrl: 'http://domain.fr/xyz/{x}/{y}/{z}',
         projection: {
           name: 'EPSG:4326',
         },

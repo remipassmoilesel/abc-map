@@ -23,12 +23,18 @@ import { ServiceProps, withServices } from '../../core/withServices';
 import FormValidationLabel from '../form-validation-label/FormValidationLabel';
 import { PasswordStrength, ValidationHelper } from '../../core/utils/ValidationHelper';
 import { FormState } from '../form-validation-label/FormState';
+import { Encryption } from '../../core/utils/Encryption';
+import { Errors } from '../../core/utils/Errors';
+import { Logger } from '@abc-map/shared';
+
+const logger = Logger.get('PasswordInputModal.tsx');
 
 interface State {
   visible: boolean;
   title: string;
   message: string;
   value: string;
+  witness: string;
   formState: FormState;
 }
 
@@ -40,7 +46,8 @@ class PasswordInputModal extends Component<ServiceProps, State> {
       title: '',
       message: '',
       value: '',
-      formState: FormState.InvalidPassword,
+      witness: '',
+      formState: FormState.PasswordTooWeak,
     };
   }
 
@@ -112,7 +119,7 @@ class PasswordInputModal extends Component<ServiceProps, State> {
   }
 
   private handleOpen = (ev: ShowPasswordInputModal) => {
-    this.setState({ visible: true, title: ev.title, message: ev.message });
+    this.setState({ visible: true, title: ev.title, message: ev.message, witness: ev.witness, formState: FormState.PasswordTooWeak });
   };
 
   private handleInputChange = (ev: ChangeEvent<HTMLInputElement>) => {
@@ -134,7 +141,8 @@ class PasswordInputModal extends Component<ServiceProps, State> {
   };
 
   private handleConfirm = () => {
-    const { modals } = this.props.services;
+    const { modals, toasts } = this.props.services;
+    const { witness, value } = this.state;
 
     const formState = this.validateForm(this.state.value);
     if (formState !== FormState.Ok) {
@@ -142,13 +150,32 @@ class PasswordInputModal extends Component<ServiceProps, State> {
       return;
     }
 
-    modals.dispatch({
-      type: ModalEventType.PasswordInputClosed,
-      value: this.state.value,
-      status: ModalStatus.Confirmed,
-    });
+    Encryption.decrypt(witness, value)
+      .then(() => {
+        modals.dispatch({
+          type: ModalEventType.PasswordInputClosed,
+          value: this.state.value,
+          status: ModalStatus.Confirmed,
+        });
 
-    this.setState({ visible: false, value: '' });
+        this.setState({ visible: false, value: '' });
+      })
+      .catch((err) => {
+        if (Errors.isWrongPassword(err)) {
+          this.setState({ formState: FormState.InvalidPassword });
+        } else {
+          logger.error('Unhandled encryption error: ', err);
+          toasts.genericError();
+
+          modals.dispatch({
+            type: ModalEventType.PasswordInputClosed,
+            value: '',
+            status: ModalStatus.Canceled,
+          });
+
+          this.setState({ visible: false, value: '' });
+        }
+      });
   };
 
   private validateForm(password: string): FormState {

@@ -22,8 +22,8 @@ import * as _ from 'lodash';
 import { NominatimResult } from '../../../core/geo/NominatimResult';
 import SearchResult from './SearchResult';
 import { ServiceProps, withServices } from '../../../core/withServices';
-import { fromLonLat } from 'ol/proj';
 import Cls from './Search.module.scss';
+import { Extent } from 'ol/extent';
 
 const logger = Logger.get('Search.tsx');
 
@@ -98,15 +98,12 @@ class Search extends Component<ServiceProps, State> {
   private handleResultSelected = (res: NominatimResult) => {
     const { geo } = this.props.services;
 
-    this.setState({ query: '' });
-
-    const coords = res.boundingbox.map((n) => parseFloat(n)) as [number, number, number, number];
-    const projection = geo.getMainMap().unwrap().getView().getProjection();
-    const min = fromLonLat([coords[2], coords[0]], projection);
-    const max = fromLonLat([coords[3], coords[1]], projection);
-    const extent = [...min, ...max] as [number, number, number, number];
+    const bbox = res.boundingbox.map((n) => parseFloat(n)) as [number, number, number, number];
+    const extent: Extent = [bbox[2], bbox[0], bbox[3], bbox[1]];
 
     geo.getMainMap().moveViewToExtent(extent);
+
+    this.setState({ query: '' });
   };
 
   private handleClose = () => {
@@ -118,10 +115,10 @@ class Search extends Component<ServiceProps, State> {
 
     geo
       .getUserPosition()
-      .then((coords) => geo.getMainMap().moveViewToPosition(coords, 12))
+      .then((coords) => geo.getMainMap().moveViewToPosition(coords, 9))
       .catch((err) => {
-        logger.error('Cannot get current position', err);
         toasts.genericError();
+        logger.error('Cannot get current position', err);
       });
   };
 }

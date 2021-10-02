@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcLayer, BasicAuthentication, FeatureStyle, LayerType, Logger, normalizedProjectionName, ProjectionDto } from '@abc-map/shared';
+import { AbcLayer, BasicAuthentication, EPSG_4326, FeatureStyle, LayerType, Logger, normalizedProjectionName, ProjectionDto } from '@abc-map/shared';
 import { MapWrapper } from './map/MapWrapper';
 import { MapFactory } from './map/MapFactory';
 import { AbstractTool } from '../tools/AbstractTool';
@@ -35,9 +35,9 @@ import { LayerFactory } from './layers/LayerFactory';
 import { Coordinate } from 'ol/coordinate';
 import { parseWmtsCapabilities, WmtsCapabilities } from './WmtsCapabilities';
 import { register } from 'ol/proj/proj4';
-import { get as getProjection, getTransform } from 'ol/proj';
+import { get as getProjection, transformExtent } from 'ol/proj';
 import proj4 from 'proj4';
-import { applyTransform, Extent } from 'ol/extent';
+import { Extent } from 'ol/extent';
 import { optionsFromCapabilities } from 'ol/source/WMTS';
 import { LayerWrapper } from './layers/LayerWrapper';
 import VectorSource from 'ol/source/Vector';
@@ -270,8 +270,7 @@ export class GeoService {
 
     // Openlayers supports these projections out of the box
     if (OlSupportedProjections.includes(_code)) {
-      const fromLonLat = getTransform('EPSG:4326', _code);
-      return applyTransform([-180, -85, 180, 85], fromLonLat, undefined, 8);
+      return transformExtent([-180, -85, 180, 85], EPSG_4326.name, _code, 8);
     }
 
     // We fetch projection
@@ -291,15 +290,14 @@ export class GeoService {
     // See: https://openlayers.org/en/latest/doc/tutorials/raster-reprojection.html
     // See: https://openlayers.org/en/latest/examples/reprojection-by-code.html
     const proj = getProjection(_code);
-    const fromLonLat = getTransform('EPSG:4326', proj);
-
     let worldExtent: Extent = [bbox[1], bbox[2], bbox[3], bbox[0]];
     proj.setWorldExtent(worldExtent);
 
     if (bbox[1] > bbox[3]) {
       worldExtent = [bbox[1], bbox[2], bbox[3] + 360, bbox[0]];
     }
-    const extent = applyTransform(worldExtent, fromLonLat, undefined, 8);
+
+    const extent = transformExtent(worldExtent, EPSG_4326.name, _code, 8);
     proj.setExtent(extent);
     return extent;
   }
