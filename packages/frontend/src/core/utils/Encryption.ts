@@ -17,8 +17,27 @@
  */
 
 import * as sjcl from 'sjcl';
-import { AbcLayer, AbcProjectManifest, AbcWmsLayer, AbcWmtsLayer, AbcXyzLayer, LayerType, WmsMetadata, WmtsMetadata, XyzMetadata } from '@abc-map/shared';
+import {
+  AbcLayer,
+  AbcProjectManifest,
+  AbcWmsLayer,
+  AbcWmtsLayer,
+  AbcXyzLayer,
+  LayerType,
+  Logger,
+  WmsMetadata,
+  WmtsMetadata,
+  XyzMetadata,
+} from '@abc-map/shared';
 import { Errors } from './Errors';
+import { MapWrapper } from '../geo/map/MapWrapper';
+
+const logger = Logger.get('Encryption.ts');
+
+/**
+ * These types of layer contains credentials
+ */
+const ProtectedLayerTypes = [LayerType.Wms, LayerType.Wmts, LayerType.Xyz];
 
 /**
  * Warning: changes in this file will require a data migration
@@ -39,8 +58,41 @@ export class Encryption {
     }
   }
 
+  public static manifestContainsCredentials(project: AbcProjectManifest): boolean {
+    const protectedLayer = project.layers.find((lay) => ProtectedLayerTypes.includes(lay.type));
+
+    return !!protectedLayer;
+  }
+
+  public static mapContainsCredentials(map: MapWrapper): boolean {
+    const protectedTypes = [LayerType.Wms, LayerType.Wmts, LayerType.Xyz];
+    const protectedLayer = map.getLayers().find((lay) => {
+      const type = lay.getType();
+      return type && protectedTypes.includes(type);
+    });
+
+    return !!protectedLayer;
+  }
+
+  public static extractEncryptedData(project: AbcProjectManifest): string | undefined {
+    const protectedLayer = project.layers.find((lay) => ProtectedLayerTypes.includes(lay.type));
+    if (LayerType.Wms === protectedLayer?.type) {
+      return protectedLayer.metadata.remoteUrls[0];
+    }
+    if (LayerType.Wmts === protectedLayer?.type) {
+      return protectedLayer.metadata.capabilitiesUrl;
+    }
+    if (LayerType.Xyz === protectedLayer?.type) {
+      return protectedLayer.metadata.remoteUrl;
+    }
+    if (protectedLayer) {
+      logger.error('Unhandled protected layer type: ', protectedLayer?.type);
+    }
+  }
+
   public static async encryptManifest(manifest: AbcProjectManifest, password: string): Promise<AbcProjectManifest> {
     const layers: AbcLayer[] = [];
+    let containsCredentials = false;
     for (const lay of manifest.layers) {
       // WMS layer
       if (LayerType.Wms === lay.type) {
@@ -49,6 +101,7 @@ export class Encryption {
           metadata: await this.encryptWmsMetadata(lay.metadata, password),
         };
         layers.push(decrypted);
+        containsCredentials = true;
       }
       // WMTS layer
       else if (LayerType.Wmts === lay.type) {
@@ -57,6 +110,7 @@ export class Encryption {
           metadata: await this.encryptWmtsMetadata(lay.metadata, password),
         };
         layers.push(decrypted);
+        containsCredentials = true;
       }
       // XYZ layers
       else if (LayerType.Xyz === lay.type) {
@@ -65,6 +119,7 @@ export class Encryption {
           metadata: await this.encryptXyzMetadata(lay.metadata, password),
         };
         layers.push(decrypted);
+        containsCredentials = true;
       }
       // Other layers
       else {
@@ -76,7 +131,7 @@ export class Encryption {
       ...manifest,
       metadata: {
         ...manifest.metadata,
-        containsCredentials: true,
+        containsCredentials,
       },
       layers,
     };

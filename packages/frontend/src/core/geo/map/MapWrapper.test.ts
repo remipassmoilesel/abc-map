@@ -17,7 +17,7 @@
  */
 
 import { MapFactory } from './MapFactory';
-import { LayerProperties, MapTool, PredefinedLayerModel } from '@abc-map/shared';
+import { EPSG_4326, LayerProperties, MapTool, PredefinedLayerModel } from '@abc-map/shared';
 import { Map } from 'ol';
 import { logger, MapWrapper } from './MapWrapper';
 import { ToolRegistry } from '../../tools/ToolRegistry';
@@ -29,6 +29,7 @@ import { LineStringTool } from '../../tools/line-string/LineStringTool';
 import { TestHelper } from '../../utils/test/TestHelper';
 import sinon from 'sinon';
 import BaseEvent from 'ol/events/Event';
+import { Views } from '../Views';
 
 logger.disable();
 
@@ -286,46 +287,6 @@ describe('MapWrapper', function () {
     });
   });
 
-  describe('containsCredentials()', () => {
-    it('should return false', () => {
-      const map = MapFactory.createNaked();
-      map.addLayer(LayerFactory.newVectorLayer());
-
-      expect(map.containsCredentials()).toEqual(false);
-    });
-
-    it('should return true if XYZ layer', () => {
-      const map = MapFactory.createNaked();
-      map.addLayer(LayerFactory.newXyzLayer('http://test-url'));
-
-      expect(map.containsCredentials()).toEqual(true);
-    });
-
-    it('should return true if WMS layer', () => {
-      const map = MapFactory.createNaked();
-      map.addLayer(
-        LayerFactory.newWmsLayer({
-          capabilitiesUrl: 'http://test-capabilitiesUrl',
-          remoteUrls: ['http://test-remoteUrl'],
-          remoteLayerName: 'test-remoteLayerName',
-          auth: {
-            username: 'username',
-            password: 'password',
-          },
-        })
-      );
-
-      expect(map.containsCredentials()).toEqual(true);
-    });
-
-    it('should return true if WMTS layer', () => {
-      const map = MapFactory.createNaked();
-      map.addLayer(LayerFactory.newWmtsLayer(TestHelper.sampleWmtsSettings()));
-
-      expect(map.containsCredentials()).toEqual(true);
-    });
-  });
-
   describe('getTextAttributions()', () => {
     it('with no layer', () => {
       const map = MapFactory.createNaked();
@@ -370,5 +331,23 @@ describe('MapWrapper', function () {
       expect(listener.callCount).toEqual(1);
       expect(listener.args[0][0].layer.getId()).toEqual(map.getLayers()[0].getId());
     });
+  });
+
+  it('moveViewToExtent()', () => {
+    const map = MapFactory.createNaked();
+    map.setView(Views.defaultView());
+
+    map.moveViewToExtent([41.2611155, 51.3055721, -5.4517733, 9.8282225], EPSG_4326, 0);
+
+    expect(map.getView()).toEqual({ projection: { name: 'EPSG:3857' }, center: [1993138.8696730416, 3887501.414438], resolution: 55760.470248395766 });
+  });
+
+  it('moveViewToPosition()', () => {
+    const map = MapFactory.createNaked();
+    map.setView(Views.defaultView());
+
+    map.moveViewToPosition([3.8371328, 43.6207616], 5);
+
+    expect(map.getView()).toEqual({ projection: { name: 'EPSG:3857' }, center: [427147.669402168, 5406940.509560228], resolution: 4891.96981025128 });
   });
 });

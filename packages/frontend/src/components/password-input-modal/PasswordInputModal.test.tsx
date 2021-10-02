@@ -18,65 +18,90 @@
 import { newTestServices, TestServices } from '../../core/utils/test/TestServices';
 import { abcRender } from '../../core/utils/test/abcRender';
 import PasswordInputModal from './PasswordInputModal';
-import { ModalEvent, ModalEventType } from '../../core/ui/typings';
-import { screen } from '@testing-library/react';
+import { ModalEvent, ModalEventType, ShowPasswordInputModal } from '../../core/ui/typings';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { Encryption } from '../../core/utils/Encryption';
+import { TestHelper } from '../../core/utils/test/TestHelper';
 
 describe('PasswordInputModal', () => {
+  let showCmd: ShowPasswordInputModal;
   let services: TestServices;
 
-  beforeEach(() => {
+  beforeEach(async () => {
+    const witness = await Encryption.encrypt('witness sentence', 'azerty1234');
+    showCmd = { type: ModalEventType.ShowPasswordInput, title: 'Password needed', message: 'Enter password', witness };
     services = newTestServices();
   });
 
   it('should become visible', () => {
     abcRender(<PasswordInputModal />, { services });
 
-    dispatch({ type: ModalEventType.ShowPasswordInput, title: 'Password needed', message: 'Enter password' });
+    dispatch(showCmd);
 
     expect(screen.getByText('Password needed')).toBeDefined();
     expect(screen.getByText('Enter password')).toBeDefined();
   });
 
-  it('should emit after submit', () => {
+  it('should emit after submit', async () => {
     // Prepare
     abcRender(<PasswordInputModal />, { services });
-    dispatch({ type: ModalEventType.ShowPasswordInput, title: 'Password needed', message: 'Enter password' });
+    dispatch(showCmd);
     userEvent.type(screen.getByTestId('password-input'), 'azerty1234');
 
     // Act
     screen.getByTestId('password-confirm').click();
 
     // Assert
-    expect(services.modals.dispatch.args).toEqual([[{ status: 'Confirmed', type: 'PasswordInputClosed', value: 'azerty1234' }]]);
+    await waitFor(() => {
+      expect(services.modals.dispatch.args).toEqual([[{ status: 'Confirmed', type: 'PasswordInputClosed', value: 'azerty1234' }]]);
+    });
   });
 
   it('should not keep state after cancel', () => {
     // Prepare
     abcRender(<PasswordInputModal />, { services });
-    dispatch({ type: ModalEventType.ShowPasswordInput, title: 'Password needed', message: 'Enter password' });
+    dispatch(showCmd);
     userEvent.type(screen.getByTestId('password-input'), 'azerty1234');
 
     // Act
     screen.getByTestId('password-cancel').click();
-    dispatch({ type: ModalEventType.ShowPasswordInput, title: 'Password needed', message: 'Enter password' });
+    dispatch(showCmd);
 
     // Assert
     expect(screen.getByTestId('password-input')).toHaveValue('');
   });
 
-  it('should not keep state after confirm', () => {
+  it('should not keep state after confirm', async () => {
     // Prepare
     abcRender(<PasswordInputModal />, { services });
-    dispatch({ type: ModalEventType.ShowPasswordInput, title: 'Password needed', message: 'Enter password' });
+    dispatch(showCmd);
     userEvent.type(screen.getByTestId('password-input'), 'azerty1234');
 
     // Act
     screen.getByTestId('password-confirm').click();
-    dispatch({ type: ModalEventType.ShowPasswordInput, title: 'Password needed', message: 'Enter password' });
+    await TestHelper.wait(10); // Wait internal promise
+    dispatch(showCmd);
 
     // Assert
-    expect(screen.getByTestId('password-input')).toHaveValue('');
+    await waitFor(() => {
+      expect(screen.getByTestId('password-input')).toHaveValue('');
+    });
+  });
+
+  it('should warn if password is incorrect', async () => {
+    // Prepare
+    abcRender(<PasswordInputModal />, { services });
+    dispatch(showCmd);
+
+    // Act
+    userEvent.type(screen.getByTestId('password-input'), 'azerty5678');
+    screen.getByTestId('password-confirm').click();
+
+    // Assert
+    await waitFor(() => {
+      expect(screen.getByText(/Le mot de passe n'est pas valide/)).toBeDefined();
+    });
   });
 
   function dispatch(ev: ModalEvent) {

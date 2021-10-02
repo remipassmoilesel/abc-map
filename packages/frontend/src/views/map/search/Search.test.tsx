@@ -45,7 +45,7 @@ describe('Search', () => {
     // Assert
     await waitFor(() => {
       expect(services.geo.getUserPosition.callCount).toEqual(1);
-      expect(map.moveViewToPosition.args).toEqual([[[5, 6], 12]]);
+      expect(map.moveViewToPosition.args).toEqual([[[5, 6], 9]]);
     });
   });
 });

@@ -185,7 +185,7 @@ describe('GeoService', () => {
         expect(metadata?.visible).toEqual(false);
         expect(metadata?.active).toEqual(true);
         expect(metadata?.type).toEqual(LayerType.Wms);
-        expect(metadata?.remoteUrls).toEqual(['http://remote-url']);
+        expect(metadata?.remoteUrls).toEqual(['http://domain.fr/wms']);
         expect(metadata?.remoteLayerName).toEqual('test-layer-name');
         expect(metadata?.extent).toEqual([1, 2, 3, 4]);
         expect(metadata?.auth?.username).toEqual('test-username');
@@ -242,7 +242,7 @@ describe('GeoService', () => {
         expect(metadata?.visible).toEqual(false);
         expect(metadata?.active).toEqual(true);
         expect(metadata?.type).toEqual(LayerType.Xyz);
-        expect(metadata?.remoteUrl).toEqual('http://remote-url');
+        expect(metadata?.remoteUrl).toEqual('http://domain.fr/xyz/{x}/{y}/{z}');
         expect(layer.unwrap().get(LayerProperties.Managed)).toBe(true);
       });
     });
@@ -331,7 +331,7 @@ describe('GeoService', () => {
         expect(getProjection('urn:ogc:def:crs:EPSG::2154')).toBeDefined();
       });
 
-      it('should correct world extent', async () => {
+      it('should return correct world extent', async () => {
         // Prepare
         apiClient.get.resolves({
           data: {

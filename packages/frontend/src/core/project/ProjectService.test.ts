@@ -141,7 +141,7 @@ describe('ProjectService', function () {
       expect(geoMock.importLayers.callCount).toEqual(1);
 
       const wmsLayer = geoMock.importLayers.args[0][0][2] as AbcWmsLayer;
-      expect(wmsLayer.metadata.remoteUrls).toEqual(['http://remote-url']);
+      expect(wmsLayer.metadata.remoteUrls).toEqual(['http://domain.fr/wms']);
       expect(wmsLayer.metadata.auth?.username).toEqual('test-username');
       expect(wmsLayer.metadata.auth?.password).toEqual('test-password');
     });
@@ -243,7 +243,7 @@ describe('ProjectService', function () {
       const layouts = [TestHelper.sampleLayout(), TestHelper.sampleLayout()];
       store.dispatch(ProjectActions.addLayouts(layouts));
 
-      mainMapMock.containsCredentials.returns(false);
+      mainMapMock.getLayers.returns([]);
 
       const layers: AbcLayer[] = [TestHelper.sampleOsmLayer(), TestHelper.sampleVectorLayer()];
       geoMock.exportLayers.resolves(layers);
@@ -262,7 +262,7 @@ describe('ProjectService', function () {
 
     it('should fail with credentials and without password', async function () {
       // Prepare
-      mainMapMock.containsCredentials.returns(true);
+      mainMapMock.getLayers.returns([LayerFactory.newXyzLayer('https://nowhere')]);
 
       // Act
       const error: Error = await projectService.exportCurrentProject('').catch((err) => err);
@@ -281,7 +281,7 @@ describe('ProjectService', function () {
       const layouts = [TestHelper.sampleLayout(), TestHelper.sampleLayout()];
       store.dispatch(ProjectActions.addLayouts(layouts));
 
-      mainMapMock.containsCredentials.returns(true);
+      mainMapMock.getLayers.returns([LayerFactory.newXyzLayer('https://nowhere')]);
 
       const layers: AbcLayer[] = [TestHelper.sampleOsmLayer(), TestHelper.sampleVectorLayer(), TestHelper.sampleWmsLayer()];
       geoMock.exportLayers.resolves(layers);

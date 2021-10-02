@@ -26,18 +26,20 @@ import Cls from './RemoteProjectsModal.module.scss';
 
 const logger = Logger.get('RemoteProjectModal.tsx');
 
-interface State {
-  projects: AbcProjectMetadata[];
-  selected?: AbcProjectMetadata;
-  passwordValue: string;
-  deleteConfirmation?: AbcProjectMetadata;
-}
-
 export interface LocalProps {
   onHide: () => void;
 }
 
 declare type Props = LocalProps & ServiceProps;
+
+interface State {
+  projects: AbcProjectMetadata[];
+  selected?: AbcProjectMetadata;
+  passwordValue: string;
+  deleteConfirmation?: AbcProjectMetadata;
+  message: string;
+  loading: boolean;
+}
 
 class RemoteProjectsModal extends Component<Props, State> {
   constructor(props: Props) {
@@ -45,6 +47,8 @@ class RemoteProjectsModal extends Component<Props, State> {
     this.state = {
       projects: [],
       passwordValue: '',
+      message: '',
+      loading: false,
     };
   }
 
@@ -55,6 +59,9 @@ class RemoteProjectsModal extends Component<Props, State> {
     const deleteConfirmation = this.state.deleteConfirmation;
     const showCredentials = !deleteConfirmation && selected && selected.containsCredentials;
     const showButtons = !deleteConfirmation;
+    const showModificationsWarning = !deleteConfirmation;
+    const message = this.state.message;
+    const loading = this.state.loading;
 
     return (
       <Modal show={true} onHide={this.props.onHide} backdrop={'static'}>
@@ -63,7 +70,9 @@ class RemoteProjectsModal extends Component<Props, State> {
         </Modal.Header>
         <Modal.Body>
           <div className={'mb-3'}>Sélectionnez un projet: </div>
-          <div className={Cls.recentProjects}>
+
+          {/* List of projects */}
+          <div className={Cls.projectList}>
             {projects.map((pr) => {
               const isSelected = selected?.id === pr.id;
               const classes = isSelected ? `${Cls.item} ${Cls.selected}` : Cls.item;
@@ -80,42 +89,57 @@ class RemoteProjectsModal extends Component<Props, State> {
                 </div>
               );
             })}
+            {!projects.length && <div>Aucun projet enregistré.</div>}
           </div>
 
+          {showModificationsWarning && (
+            <div className={'my-3 alert alert-danger d-flex align-items-center justify-content-center'}>
+              <i className={'fa fa-exclamation-triangle mr-2'} /> Les modifications en cours seront perdues !
+            </div>
+          )}
+
+          {/* Delete confirmation */}
           {deleteConfirmation && (
-            <div className={`alert alert-danger ${Cls.deleteConfirmation}`}>
-              <div className={'my-2'}>Êtes vous sur de vouloir supprimer &apos;{deleteConfirmation.name}&apos; ?</div>
-              <div className={'my-2'}>
-                <b>Attention: cette opération ne peut PAS être annulée. </b>
-              </div>
-              <div className={'d-flex justify-content-end align-items-center mt-4'}>
-                <button className={'btn btn-secondary mr-2'} onClick={this.handleDeleteCanceled}>
-                  Non
+            <div className={`alert alert-danger ${Cls.deleteConfirmation} p-2`}>
+              <div className={'mb-2 text-center'}>Etes vous sur ? Vous allez supprimer définitivement: </div>
+              <div className={'font-weight-bold text-center'}>{deleteConfirmation.name}</div>
+              <div className={'d-flex justify-content-center align-items-center mt-4'}>
+                <button onClick={this.handleDeleteCanceled} className={'btn btn-secondary mr-2'} disabled={loading}>
+                  Ne pas supprimer
                 </button>
-                <button className={'btn btn-danger'} onClick={this.handleDeleteConfirmed} data-cy={'confirm-deletion'}>
-                  Oui, supprimer définitivement
+                <button onClick={this.handleDeleteConfirmed} className={'btn btn-danger'} disabled={loading} data-cy={'confirm-deletion'}>
+                  Supprimer définitivement
                 </button>
               </div>
             </div>
           )}
 
+          {/* Password prompt, if project is protected */}
           {showCredentials && (
             <div className={Cls.passwordInput}>
               <div>Ce projet est protégé par un mot de passe:</div>
-              <input type={'password'} onInput={this.handlePasswordInput} value={passwordValue} className={'form-control'} data-cy={'project-password'} />
+              <input
+                type={'password'}
+                onInput={this.handlePasswordInput}
+                value={passwordValue}
+                placeholder={'Mot de passe du projet'}
+                className={'form-control'}
+                data-cy={'project-password'}
+              />
             </div>
           )}
 
+          {/* Confirmation buttons */}
           {showButtons && (
             <>
-              <div className={'my-3 alert alert-danger d-flex align-items-center justify-content-center'}>
-                <i className={'fa fa-exclamation-triangle mr-2'} /> Les modifications en cours seront perdues !
-              </div>
+              {/* Message if any */}
+              {message && <div className={'my-3 d-flex justify-content-end'}>{message}</div>}
+
               <div className={'d-flex justify-content-end'}>
-                <button className={'btn btn-secondary mr-3'} onClick={this.handleCancel} data-cy={'cancel-button'}>
+                <button onClick={this.handleCancel} disabled={loading} className={'btn btn-secondary mr-3'} data-cy={'cancel-button'}>
                   Annuler
                 </button>
-                <button className={'btn btn-primary'} onClick={this.handleOpenProject} disabled={!selected} data-cy="open-project-confirm">
+                <button onClick={this.handleOpenProject} disabled={!selected || loading} className={'btn btn-primary'} data-cy="open-project-confirm">
                   Ouvrir le projet
                 </button>
               </div>
@@ -157,6 +181,8 @@ class RemoteProjectsModal extends Component<Props, State> {
       return;
     }
 
+    this.setState({ loading: true });
+
     project
       .deleteById(id)
       .then(() => {
@@ -164,7 +190,8 @@ class RemoteProjectsModal extends Component<Props, State> {
         this.setState({ selected: undefined, deleteConfirmation: undefined });
         this.listProjects();
       })
-      .catch((err) => logger.error('Cannot delete project: ', err));
+      .catch((err) => logger.error('Cannot delete project: ', err))
+      .finally(() => this.setState({ loading: false }));
   };
 
   private handleCancel = () => this.props.onHide();
@@ -172,14 +199,16 @@ class RemoteProjectsModal extends Component<Props, State> {
   private handleOpenProject = () => {
     const { project, toasts, modals } = this.props.services;
 
+    this.setState({ loading: true });
+
     const loadProject = async () => {
       const selected = this.state.selected;
+      const passwordValue = this.state.passwordValue;
       if (!selected) {
         toasts.info('Vous devez sélectionner un projet.');
         return;
       }
 
-      const passwordValue = this.state.passwordValue;
       if (selected.containsCredentials && !passwordValue) {
         toasts.info('Vous devez entrer un mot de passe');
         return;
@@ -190,15 +219,18 @@ class RemoteProjectsModal extends Component<Props, State> {
       this.props.onHide();
     };
 
-    modals.longOperationModal(loadProject).catch((err) => {
-      logger.error('Cannot open project: ', err);
+    modals
+      .longOperationModal(loadProject)
+      .catch((err) => {
+        logger.error('Cannot open project: ', err);
 
-      if (Errors.isWrongPassword(err)) {
-        toasts.error('Mot de passe incorrect !');
-      } else if (Errors.isMissingPassword(err)) {
-        toasts.error('Le mot de passe est obligatoire pour ouvrir ce projet');
-      }
-    });
+        if (Errors.isWrongPassword(err) || Errors.isMissingPassword(err)) {
+          this.setState({ message: 'Mot de passe incorrect.' });
+        } else {
+          toasts.genericError();
+        }
+      })
+      .finally(() => this.setState({ loading: false }));
   };
 }
 

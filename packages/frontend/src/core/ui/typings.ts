@@ -66,6 +66,10 @@ export interface ShowPasswordInputModal {
   type: ModalEventType.ShowPasswordInput;
   title: string;
   message: string;
+  /**
+   * Witness is an encrypted string that will be used to test if password is correct.
+   */
+  witness: string;
 }
 
 export interface PasswordInputClosedEvent {

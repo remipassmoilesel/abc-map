@@ -22,22 +22,29 @@ import { deepFreeze } from './deepFreeze';
 import { AbcLayer, AbcProjectManifest, AbcWmsLayer, AbcWmtsLayer, AbcXyzLayer } from '@abc-map/shared';
 import { Errors } from './Errors';
 import _ from 'lodash';
+import { MapFactory } from '../geo/map/MapFactory';
+import { LayerFactory } from '../geo/layers/LayerFactory';
 
 /**
  * Warning: changes on encryption will require a data migration
  */
 describe('Encryption', () => {
   it('encrypt()', async () => {
-    const result = await Encryption.encrypt('test', 'secret');
+    const result = await Encryption.encrypt('text to encrypt', 'secret');
     expect(result).not.toEqual('test');
     expect(result).toMatch('encrypted:');
   });
 
   describe('decrypt()', () => {
+    /**
+     * If this test fail, you must migrate projects
+     */
     it('with correct secret', async () => {
-      const encrypted = await Encryption.encrypt('test', 'secret');
+      /* eslint-disable */
+      const encrypted = 'encrypted:IntcIml2XCI6XCJsZm5XeTVoeUlSU1BuRWh4WWlOazZnPT1cIixcInZcIjoxLFwiaXRlclwiOjEwMDAwLFwia3NcIjoxMjgsXCJ0c1wiOjY0LFwibW9kZVwiOlwiY2NtXCIsXCJhZGF0YVwiOlwiXCIsXCJjaXBoZXJcIjpcImFlc1wiLFwic2FsdFwiOlwiZ25mM2RZbmxBVEE9XCIsXCJjdFwiOlwic09McnlaYjJ0dFNKV0dnenhKOTdiamFtdHZNWnVjND1cIn0i';
+      /* eslint-enable */
       const result = await Encryption.decrypt(encrypted, 'secret');
-      expect(result).toEqual('test');
+      expect(result).toEqual('text to decrypt');
     });
 
     it('with incorrect secret', async () => {
@@ -47,22 +54,70 @@ describe('Encryption', () => {
     });
   });
 
+  describe('mapContainsCredentials()', () => {
+    it('should return false', () => {
+      const map = MapFactory.createNaked();
+      map.addLayer(LayerFactory.newVectorLayer());
+
+      expect(Encryption.mapContainsCredentials(map)).toEqual(false);
+    });
+
+    it('should return true if XYZ layer', () => {
+      const map = MapFactory.createNaked();
+      map.addLayer(LayerFactory.newXyzLayer('http://test-url'));
+
+      expect(Encryption.mapContainsCredentials(map)).toEqual(true);
+    });
+
+    it('should return true if WMS layer', () => {
+      const map = MapFactory.createNaked();
+      map.addLayer(
+        LayerFactory.newWmsLayer({
+          capabilitiesUrl: 'http://test-capabilitiesUrl',
+          remoteUrls: ['http://test-remoteUrl'],
+          remoteLayerName: 'test-remoteLayerName',
+          auth: {
+            username: 'username',
+            password: 'password',
+          },
+        })
+      );
+
+      expect(Encryption.mapContainsCredentials(map)).toEqual(true);
+    });
+
+    it('should return true if WMTS layer', () => {
+      const map = MapFactory.createNaked();
+      map.addLayer(LayerFactory.newWmtsLayer(TestHelper.sampleWmtsSettings()));
+
+      expect(Encryption.mapContainsCredentials(map)).toEqual(true);
+    });
+  });
+
   describe('encryptManifest()', () => {
     it('layers with no secrets', async () => {
+      // Prepare
       const manifest = newClearManifest([TestHelper.sampleOsmLayer(), TestHelper.sampleVectorLayer()]);
 
+      // Act
       const encrypted = await Encryption.encryptManifest(manifest, 'azerty1234');
 
-      expect(encrypted.metadata).toEqual({ ...manifest.metadata, containsCredentials: true });
+      // Assert
+      expect(encrypted.metadata).toEqual({ ...manifest.metadata, containsCredentials: false });
       expect(encrypted.layers.length).toEqual(manifest.layers.length);
       expect(encrypted.layers).toEqual(manifest.layers);
     });
 
     it('WMS layer, with authentication', async () => {
+      // Prepare
       const original = TestHelper.sampleWmsLayer();
       const manifest = newClearManifest([original]);
 
+      // Act
       const encrypted = await Encryption.encryptManifest(manifest, 'azerty1234');
+
+      // Assert
+      expect(encrypted.metadata.containsCredentials).toEqual(true);
 
       const wms = encrypted.layers[0] as AbcWmsLayer;
       expect(wms.metadata.remoteUrls[0]).toMatch('encrypted:');
@@ -76,11 +131,16 @@ describe('Encryption', () => {
     });
 
     it('WMS layer, without authentication', async () => {
+      // Prepare
       const original = TestHelper.sampleWmsLayer();
       original.metadata.auth = undefined;
       const manifest = newClearManifest([original]);
 
+      // Act
       const encrypted = await Encryption.encryptManifest(manifest, 'azerty1234');
+
+      // Assert
+      expect(encrypted.metadata.containsCredentials).toEqual(true);
 
       const wms = encrypted.layers[0] as AbcWmsLayer;
       expect(wms.metadata.remoteUrls[0]).toMatch('encrypted:');
@@ -90,10 +150,15 @@ describe('Encryption', () => {
     });
 
     it('WMTS layer', async () => {
+      // Prepare
       const original = TestHelper.sampleWmtsLayer();
       const manifest = newClearManifest([original]);
 
+      // Act
       const encrypted = await Encryption.encryptManifest(manifest, 'azerty1234');
+
+      // Assert
+      expect(encrypted.metadata.containsCredentials).toEqual(true);
 
       const wmts = encrypted.layers[0] as AbcWmtsLayer;
       expect(wmts.metadata.capabilitiesUrl).toMatch('encrypted:');
@@ -107,10 +172,15 @@ describe('Encryption', () => {
     });
 
     it('XYZ layer', async () => {
+      // Prepare
       const original = TestHelper.sampleXyzLayer();
       const manifest = newClearManifest([original]);
 
+      // Act
       const encrypted = await Encryption.encryptManifest(manifest, 'azerty1234');
+
+      // Assert
+      expect(encrypted.metadata.containsCredentials).toEqual(true);
 
       const xyz = encrypted.layers[0] as AbcXyzLayer;
       expect(xyz.metadata.remoteUrl).toMatch('encrypted:');
@@ -156,6 +226,20 @@ describe('Encryption', () => {
 
       expect(result.layers[0]).toEqual(original);
     });
+  });
+
+  it('extractEncryptedData()', () => {
+    let project = { layers: [] } as unknown as AbcProjectManifest;
+    expect(Encryption.extractEncryptedData(project)).toBeUndefined();
+
+    project = { layers: [TestHelper.sampleWmsLayer()] } as unknown as AbcProjectManifest;
+    expect(Encryption.extractEncryptedData(project)).toEqual('http://domain.fr/wms');
+
+    project = { layers: [TestHelper.sampleXyzLayer()] } as unknown as AbcProjectManifest;
+    expect(Encryption.extractEncryptedData(project)).toEqual('http://domain.fr/xyz/{x}/{y}/{z}');
+
+    project = { layers: [TestHelper.sampleWmtsLayer()] } as unknown as AbcProjectManifest;
+    expect(Encryption.extractEncryptedData(project)).toEqual('http://domain.fr/wmts');
   });
 });
 

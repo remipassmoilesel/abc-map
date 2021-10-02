@@ -17,11 +17,10 @@
  */
 
 import { Map } from 'ol';
-import { LayerProperties, AbcProjection, VectorMetadata, PredefinedLayerModel, AbcView, LayerType } from '@abc-map/shared';
+import { AbcProjection, AbcView, EPSG_4326, LayerProperties, Logger, PredefinedLayerModel, VectorMetadata } from '@abc-map/shared';
 import _ from 'lodash';
 import { ResizeObserverFactory } from '../../utils/ResizeObserverFactory';
 import BaseEvent from 'ol/events/Event';
-import { Logger } from '@abc-map/shared';
 import { AbstractTool } from '../../tools/AbstractTool';
 import TileLayer from 'ol/layer/Tile';
 import { FeatureWrapper } from '../features/FeatureWrapper';
@@ -33,9 +32,10 @@ import Geometry from 'ol/geom/Geometry';
 import { defaultInteractions } from './interactions';
 import { EventType, MapSizeChangedEvent, SizeListener, TileErrorListener, TileLoadErrorEvent } from './MapWrapper.events';
 import { Views } from '../Views';
-import { fromLonLat } from 'ol/proj';
+import { fromLonLat, transformExtent } from 'ol/proj';
 import { Coordinate } from 'ol/coordinate';
 import TileSource from 'ol/source/Tile';
+import { Extent } from 'ol/extent';
 
 export const logger = Logger.get('MapWrapper.ts');
 
@@ -250,16 +250,6 @@ export class MapWrapper {
     return this.sizeObserver;
   }
 
-  public containsCredentials(): boolean {
-    const protectedTypes = [LayerType.Wms, LayerType.Wmts, LayerType.Xyz];
-    const protectedLayer = this.getLayers().find((lay) => {
-      const type = lay.getType();
-      return type && protectedTypes.includes(type);
-    });
-
-    return !!protectedLayer;
-  }
-
   public setLayerVisible(layer: LayerWrapper, value: boolean) {
     layer.setVisible(value);
     this.triggerLayerChange();
@@ -277,16 +267,23 @@ export class MapWrapper {
 
   /**
    * Move to specified extent. Extent numbers are: minX, minY, maxX, maxY.
+   *
+   * Source projection is assumed EPSG4326
    */
-  public moveViewToExtent(extent: [number, number, number, number]): void {
-    const duration = 1500;
+  public moveViewToExtent(extent: Extent, sourceProjection?: AbcProjection, duration = 1500): void {
+    const _sourceProj = sourceProjection || EPSG_4326;
+    const _extent = transformExtent(extent, _sourceProj.name, this.getView().projection.name);
+
     const view = this.internal.getView();
-    view.fit(extent, { duration });
+    view.fit(_extent, { duration });
   }
 
+  /**
+   * Source projection is assumed EPSG4326
+   */
   public moveViewToPosition(coords: Coordinate, zoom: number): void {
     const view = this.internal.getView();
-    view.setCenter(fromLonLat(coords));
+    view.setCenter(fromLonLat(coords, this.getView().projection.name));
     view.setZoom(zoom);
   }
 

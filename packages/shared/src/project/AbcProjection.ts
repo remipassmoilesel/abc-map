@@ -20,9 +20,15 @@ export interface AbcProjection {
   name: string;
 }
 
-export const DEFAULT_PROJECTION: AbcProjection = {
+export const EPSG_3857: AbcProjection = {
   name: 'EPSG:3857',
 };
+
+export const EPSG_4326: AbcProjection = {
+  name: 'EPSG:4326',
+};
+
+export const DEFAULT_PROJECTION = EPSG_3857;
 
 /**
  * This function extract a valid projection name from string if any.
