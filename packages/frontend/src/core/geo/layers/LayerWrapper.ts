@@ -42,6 +42,7 @@ import VectorImageLayer from 'ol/layer/VectorImage';
 import { Source, TileWMS, WMTS, XYZ } from 'ol/source';
 import { Layer } from 'ol/layer';
 import { styleFunction } from '../styles/style-function';
+import { stripHtml } from '../../utils/strings';
 
 export const logger = Logger.get('LayerWrapper');
 
@@ -178,6 +179,22 @@ export class LayerWrapper<Layer extends OlLayers = OlLayers, Source extends OlSo
     return LayerWrapper.from<Layer, Source, Meta>(layer as Layer).setMetadata(this.getMetadata() as Meta);
   }
 
+  public getAttributions(): string[] | undefined {
+    const getAttributions = this.layer.getSource().getAttributions();
+    if (!getAttributions) {
+      return;
+    }
+
+    let attributions = getAttributions({} as any); // Typings are borked
+    attributions = attributions instanceof Array ? attributions : [attributions];
+    return attributions.filter((s) => !!s).map((attr) => stripHtml(attr));
+  }
+
+  public setAttributions(attr: string[]): LayerWrapper<Layer, Source, Meta> {
+    this.layer.getSource().setAttributions(attr);
+    return this;
+  }
+
   public setMetadata(props: Meta): LayerWrapper<Layer, Source, Meta> {
     this.layer.set(LayerProperties.Managed, true);
     this.layer.set(LayerProperties.Id, props.id);
@@ -186,6 +203,9 @@ export class LayerWrapper<Layer extends OlLayers = OlLayers, Source extends OlSo
     this.layer.set(LayerProperties.Active, props.active);
     this.layer.setOpacity(props.opacity);
     this.layer.setVisible(props.visible);
+    if (props.attributions && props.attributions.length) {
+      this.layer.getSource().setAttributions(props.attributions);
+    }
 
     if (LayerType.Predefined === props.type) {
       this.setPredefinedMetadata(props as PredefinedMetadata);
@@ -246,6 +266,7 @@ export class LayerWrapper<Layer extends OlLayers = OlLayers, Source extends OlSo
     const active: boolean | undefined = this.layer.get(LayerProperties.Active);
     const opacity: number | undefined = this.layer.getOpacity();
     const visible: boolean | undefined = this.layer.getVisible();
+    const attributions: string[] | undefined = this.getAttributions();
     if (!id || !name || !type) {
       logger.error('Invalid layer: ', [this.layer, id, name, type]);
       return;
@@ -255,6 +276,7 @@ export class LayerWrapper<Layer extends OlLayers = OlLayers, Source extends OlSo
       id,
       name,
       type,
+      attributions,
       opacity: opacity ?? 1,
       active: active ?? false,
       visible: visible ?? true,

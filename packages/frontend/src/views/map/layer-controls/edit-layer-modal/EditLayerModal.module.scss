@@ -15,14 +15,16 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
+@import "src/assets/styles/variables";
 
-export function prettyStringify(value: any): string {
-  return typeof value !== 'undefined' && value !== null ? JSON.stringify(value) : 'Valeur non définie';
+$modal-width: 25vw;
+
+.modal {
+  min-width: $modal-width;
+  max-width: $modal-width;
+  width: $modal-width;
 }
 
-const div = document.createElement('div');
-
-export function stripHtml(value: string): string {
-  div.innerHTML = value;
-  return div.textContent || div.innerText || '';
+.opacitySlider {
+  width: 80%;
 }

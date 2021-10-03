@@ -21,11 +21,11 @@ import { Logger } from '@abc-map/shared';
 import { Extent, getArea } from 'ol/extent';
 import { RemoveLayerTask } from '../../../core/history/tasks/layers/RemoveLayerTask';
 import { HistoryKey } from '../../../core/history/HistoryKey';
-import { ModalStatus } from '../../../core/ui/typings';
 import LayerListItem from './list-item/LayerListItem';
 import AddLayerModal from './add-layer-modal/AddLayerModal';
 import { LayerWrapper } from '../../../core/geo/layers/LayerWrapper';
 import { ServiceProps, withServices } from '../../../core/withServices';
+import EditLayerModal from './edit-layer-modal/EditLayerModal';
 import Cls from './LayerControls.module.scss';
 
 const logger = Logger.get('LayerControls.tsx', 'debug');
@@ -35,6 +35,7 @@ interface LocalProps {
 }
 
 interface State {
+  editLayer?: LayerWrapper;
   addModalVisible: boolean;
 }
 
@@ -47,18 +48,16 @@ class LayerControls extends Component<Props, State> {
   }
 
   public render(): ReactNode {
+    const addModalVisible = this.state.addModalVisible;
+    const editLayer = this.state.editLayer;
     const items = this.getItems();
-    let message: ReactNode | undefined;
-    if (!items || !items.length) {
-      message = <div className={Cls.noLayers}>Aucune couche</div>;
-    }
 
     return (
       <div className={`control-block ${Cls.layerControls}`}>
         <div className={'control-item'}>Couches</div>
         <div className={`control-item ${Cls.layerList}`} data-cy="layers-list">
           {items}
-          {message}
+          {!items.length && <div className={Cls.noLayers}>Aucune couche</div>}
         </div>
         <div className={`control-item`}>
           <button onClick={this.handleAddLayer} className={Cls.controlButton} title={'Nouvelle couche'} data-cy={'add-layer'}>
@@ -71,7 +70,7 @@ class LayerControls extends Component<Props, State> {
             <button onClick={this.handleToggleVisibility} className={Cls.controlButton} title={'Changer la visibilité'}>
               <i className={'fa fa-eye'} />
             </button>
-            <button onClick={this.handleRename} className={Cls.controlButton} title={'Renommer la couche'} data-cy={'rename-layer'}>
+            <button onClick={this.handleEditLayer} className={Cls.controlButton} title={'Editer la couche'} data-cy={'edit-layer'}>
               <i className={'fa fa-edit'} />
             </button>
             <button onClick={this.handleZoom} className={Cls.controlButton} title={'Zoom sur la couche'}>
@@ -85,7 +84,8 @@ class LayerControls extends Component<Props, State> {
             </button>
           </div>
         </div>
-        <AddLayerModal visible={this.state.addModalVisible} onHide={this.hideAddModal} />
+        <AddLayerModal visible={addModalVisible} onHide={this.handleAddLayerModalClosed} />
+        {editLayer && <EditLayerModal layer={editLayer} onHide={this.handleEditLayerClosed} />}
       </div>
     );
   }
@@ -136,31 +136,25 @@ class LayerControls extends Component<Props, State> {
     this.setState({ addModalVisible: true });
   };
 
-  private hideAddModal = () => {
+  private handleAddLayerModalClosed = () => {
     this.setState({ addModalVisible: false });
   };
 
-  private handleRename = () => {
-    const { toasts, modals, geo } = this.props.services;
+  private handleEditLayerClosed = () => {
+    this.setState({ editLayer: undefined });
+  };
+
+  private handleEditLayer = () => {
+    const { toasts, geo } = this.props.services;
 
     const map = geo.getMainMap();
     const active = map.getActiveLayer();
     if (!active) {
-      return toasts.info("Vous devez d'abord sélectionner une couche");
+      toasts.info("Vous devez d'abord sélectionner une couche");
+      return;
     }
 
-    const layerName = active.getMetadata()?.name || 'Couche';
-    modals
-      .rename(`Renommer la couche '${layerName}'`, layerName)
-      .then((res) => {
-        if (ModalStatus.Confirmed) {
-          map.renameLayer(active, res.value);
-        }
-      })
-      .catch((err) => {
-        logger.error(err);
-        toasts.genericError();
-      });
+    this.setState({ editLayer: active });
   };
 
   private handleRemoveActive = () => {

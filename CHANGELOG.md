@@ -3,7 +3,15 @@
 Presently there are no versions, because it is not yet necessary. 
 
 
-## Better password input (XXXXX 02/10/2021)
+## Layer edition modal (XXXXX 02/10/2021)
+
+- Add new modal for layer edition
+- Add name form field
+- Add opacity control
+- Add attributions form field
+
+
+## Better password input (145209f 02/10/2021)
 
 - Better password input, password is verified before closing the input modal
 

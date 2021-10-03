@@ -46,6 +46,11 @@ export interface BaseMetadata {
   visible: boolean;
   active: boolean;
   type: LayerType;
+  /**
+   * Users can add a custom attribution to a layer (for exports).
+   * But they can not modify existing ones (like OSM attributions).
+   */
+  attributions?: string[];
 }
 
 // Vector layer
