@@ -86,16 +86,16 @@ describe('Map', function () {
 
   it('user can rename layer', function () {
     cy.visit(FrontendRoutes.map().raw())
-      .get('[data-cy=rename-layer]')
+      .get('[data-cy=edit-layer]')
       .click()
-      .get('[data-cy=modal-rename-input]')
+      .get('[data-cy=name-input]')
       .clear()
-      .type('Awesome layer')
-      .get('[data-cy=rename-modal-confirm]')
+      .type('My awesome layer')
+      .get('[data-cy=submit-button]')
       .click()
       .then(() => LayerControls.getNames())
       .should((names) => {
-        expect(names).deep.equals(['OpenStreetMap', 'Awesome layer']);
+        expect(names).deep.equals(['OpenStreetMap', 'My awesome layer']);
       });
   });
 

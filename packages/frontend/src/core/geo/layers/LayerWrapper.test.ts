@@ -262,6 +262,7 @@ describe('LayerWrapper', () => {
         opacity: 0.5,
         visible: false,
         model: PredefinedLayerModel.OSM,
+        attributions: ['© OpenStreetMap contributors.'],
       };
       expect(abcLayer.metadata).toEqual(expectedMetadata);
     });
