@@ -17,9 +17,12 @@
  */
 
 import React, { Component, ReactNode } from 'react';
-import { ColorResult, SketchPicker } from 'react-color';
+import { ColorResult, RGBColor, SketchPicker } from 'react-color';
 import { Modal } from 'react-bootstrap';
 import Cls from './ColorPicker.module.scss';
+import { ColorTranslator } from 'colortranslator';
+
+const { toRGBA } = ColorTranslator;
 
 interface Props {
   initialValue?: string;
@@ -29,15 +32,21 @@ interface Props {
 
 interface State {
   modalVisible: boolean;
-  value: string;
+  value: RGBColor;
 }
+const i18n = {
+  title: {
+    fr: 'Sélectionnez une couleur',
+    en: 'Select a color',
+  },
+};
 
 class ColorPicker extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
       modalVisible: false,
-      value: this.props.initialValue || '#fffff',
+      value: this.props.initialValue ? toRGBA(this.props.initialValue, false) : { r: 220, g: 220, b: 254, a: 0.9 },
     };
   }
 
@@ -48,13 +57,13 @@ class ColorPicker extends Component<Props, State> {
     return (
       <>
         {/* Button, always visible */}
-        <button onClick={this.handleClick} className={Cls.button} type={'button'} style={{ backgroundColor: value }} data-cy={this.props['data-cy']} />
+        <button onClick={this.handleClick} className={Cls.button} type={'button'} style={{ backgroundColor: toRGBA(value) }} data-cy={this.props['data-cy']} />
 
         {/* Modal, visible on demand */}
         <Modal show={modalVisible} onHide={this.handleModalClose} size={'sm'}>
-          <Modal.Header closeButton>Sélectionnez une couleur</Modal.Header>
+          <Modal.Header closeButton>{i18n.title.fr}</Modal.Header>
           <Modal.Body className={'d-flex justify-content-center'}>
-            <SketchPicker color={value} onChange={this.handleChange} width={'300px'} />
+            <SketchPicker disableAlpha={false} color={value} onChange={this.handleChange} width={'300px'} />
           </Modal.Body>
           <Modal.Footer>
             <button onClick={this.handleModalClose} data-cy={'close-modal'} className={'btn btn-outline-secondary'}>
@@ -67,7 +76,7 @@ class ColorPicker extends Component<Props, State> {
   }
 
   private handleChange = (color: ColorResult) => {
-    this.setState({ value: color.hex });
+    this.setState({ value: color.rgb });
   };
 
   private handleClick = () => {
@@ -76,7 +85,7 @@ class ColorPicker extends Component<Props, State> {
 
   private handleModalClose = () => {
     this.setState({ modalVisible: false });
-    this.props.onClose(this.state.value);
+    this.props.onClose(toRGBA(this.state.value));
   };
 }
 

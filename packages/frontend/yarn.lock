@@ -4136,6 +4136,11 @@ colorette@^1.2.1, colorette@^1.2.2:
   resolved "https://registry.yarnpkg.com/colorette/-/colorette-1.2.2.tgz#cbcc79d5e99caea2dbf10eb3a26fd8b3e6acfa94"
   integrity sha512-MKGMzyfeuutC/ZJ1cba9NqcNpfeqMUcYmyF1ZFY6/Cn7CNSAKx6a+s48sqLqyAiZuaP2TcqMhoo+dlwFnVxT9w==
 
+colortranslator@^1.7.1:
+  version "1.7.1"
+  resolved "https://registry.yarnpkg.com/colortranslator/-/colortranslator-1.7.1.tgz#60f8db80b3755ce37f873cf848af99c3c17bb156"
+  integrity sha512-AORTES33uYs9z04eGnMMq5Ehtsz28jyHTYTUItZFEbTXnYmx7ZVV6lPfDOpem1NLAh6PCVIYm1YDCHULu+C/sw==
+
 combined-stream@^1.0.6, combined-stream@~1.0.6:
   version "1.0.8"
   resolved "https://registry.yarnpkg.com/combined-stream/-/combined-stream-1.0.8.tgz#c3d45a8b34fd730631a110a8a2520682b31d5a7f"

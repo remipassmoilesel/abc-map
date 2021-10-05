@@ -178,7 +178,7 @@ describe('Tool Selection', function () {
       .then(() => MainMap.getReference())
       .should((map) => {
         const features = map.getActiveLayerFeatures();
-        expect(features[0].getProperties()[StyleProperties.StrokeColor]).equal('#d0021b');
+        expect(features[0].getProperties()[StyleProperties.StrokeColor]).equal('rgba(208,2,27,1)');
       })
       .then(() => History.undo())
       .then(() => MainMap.getReference())
@@ -190,7 +190,7 @@ describe('Tool Selection', function () {
       .then(() => MainMap.getReference())
       .should((map) => {
         const features = map.getActiveLayerFeatures();
-        expect(features[0].getProperties()[StyleProperties.StrokeColor]).equal('#d0021b');
+        expect(features[0].getProperties()[StyleProperties.StrokeColor]).equal('rgba(208,2,27,1)');
       });
   });
 
@@ -214,7 +214,7 @@ describe('Tool Selection', function () {
       .then(() => MainMap.getReference())
       .should((map) => {
         const features = map.getActiveLayerFeatures();
-        expect(features[0].getProperties()[StyleProperties.FillColor1]).equal('#d0021b');
+        expect(features[0].getProperties()[StyleProperties.FillColor1]).equal('rgba(208,2,27,1)');
       })
       .then(() => History.undo())
       .then(() => MainMap.getReference())
@@ -226,7 +226,7 @@ describe('Tool Selection', function () {
       .then(() => MainMap.getReference())
       .should((map) => {
         const features = map.getActiveLayerFeatures();
-        expect(features[0].getProperties()[StyleProperties.FillColor1]).equal('#d0021b');
+        expect(features[0].getProperties()[StyleProperties.FillColor1]).equal('rgba(208,2,27,1)');
       });
   });
 });
