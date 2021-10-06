@@ -68,11 +68,11 @@ describe('Common conditions', () => {
       ])
     );
 
-    expect(withGeometry(feature1, GeometryType.LINE_STRING)).toBe(true);
-    expect(withGeometry(feature1, GeometryType.POLYGON)).toBe(false);
+    expect(withGeometry(feature1, [GeometryType.LINE_STRING])).toBe(true);
+    expect(withGeometry(feature1, [GeometryType.POLYGON])).toBe(false);
 
     const feature2 = new Feature();
-    expect(withGeometry(feature2, GeometryType.LINE_STRING)).toBe(false);
+    expect(withGeometry(feature2, [GeometryType.LINE_STRING])).toBe(false);
   });
 });
 

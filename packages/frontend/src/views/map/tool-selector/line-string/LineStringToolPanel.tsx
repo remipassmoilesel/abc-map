@@ -20,62 +20,24 @@ import React, { Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/shared';
 import ColorSelector from '../../../../components/color-picker/ColorSelector';
 import StrokeWidthSelector from '../_common/stroke-width-selector/StrokeWidthSelector';
-import { ServiceProps, withServices } from '../../../../core/withServices';
-import { MainState } from '../../../../core/store/reducer';
-import { connect, ConnectedProps } from 'react-redux';
 import Cls from './LineStringToolPanel.module.scss';
 import TipBubble from '../../../../components/tip-bubble/TipBubble';
 import { ToolTips } from '@abc-map/user-documentation';
-import ZIndex from '../_common/z-index/ZIndex';
-import ApplyStyleButton from '../_common/ApplyStyleButton';
+import ButtonBar from '../_common/button-bar/ButtonBar';
 
 const logger = Logger.get('LineStringToolPanel.tsx');
 
-const mapStateToProps = (state: MainState) => ({
-  stroke: state.map.currentStyle.stroke,
-});
-
-const connector = connect(mapStateToProps);
-
-type Props = ConnectedProps<typeof connector> & ServiceProps;
-
-class LineStringToolPanel extends Component<Props, {}> {
+class LineStringToolPanel extends Component<{}, {}> {
   public render(): ReactNode {
     return (
       <div className={Cls.lineStringPanel}>
-        <TipBubble id={ToolTips.LineString} label={"Aide de l'outil"} className={'mx-3 mb-4'} />
+        <TipBubble id={ToolTips.LineString} label={"Aide de l'outil"} className={'mx-3 mb-3'} />
+        <ButtonBar />
         <StrokeWidthSelector />
         <ColorSelector stroke={true} />
-        <ApplyStyleButton onClick={this.handleApplyStyle} />
-        <ZIndex />
       </div>
     );
   }
-
-  private handleApplyStyle = () => {
-    const { geo, toasts } = this.props.services;
-    const color = this.props.stroke?.color;
-    const width = this.props.stroke?.width;
-    if (!color) {
-      toasts.info('Vous devez sélectionner une couleur');
-      return;
-    }
-    if (!width) {
-      toasts.info('Vous devez sélectionner une épaisseur');
-      return;
-    }
-
-    geo.updateSelectedFeatures((style) => {
-      return {
-        ...style,
-        stroke: {
-          ...style.stroke,
-          color,
-          width,
-        },
-      };
-    });
-  };
 }
 
-export default withServices(connector(LineStringToolPanel));
+export default LineStringToolPanel;

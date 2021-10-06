@@ -51,6 +51,8 @@ export const logger = Logger.get('GeoService.ts');
  */
 const OlSupportedProjections = ['EPSG:4326', 'CRS:84', 'EPSG:3857', 'EPSG:102100', 'EPSG:102113', 'EPSG:900913'];
 
+export declare type StyleTransformFunc = (x: FeatureStyle, f: FeatureWrapper) => FeatureStyle | undefined;
+
 export class GeoService {
   private mainMap = MapFactory.createDefault();
 
@@ -222,23 +224,37 @@ export class GeoService {
     return optionsFromCapabilities(capabilities, { layer: layerName, matrixSet: matrixSetName });
   }
 
-  public updateSelectedFeatures(transform: (x: FeatureStyle, f: FeatureWrapper) => FeatureStyle) {
+  /**
+   * Call transform function on each selected feature of **active layer**. Transform function can return a new style object.
+   *
+   * Transformations will be registered in undo/redo history.
+   *
+   * Returns the number of features changed.
+   *
+   * @param transform
+   */
+  public updateSelectedFeatures(transform: StyleTransformFunc): number {
     const historyItems: UpdateStyleItem[] = [];
+
     this.getMainMap().forEachFeatureSelected((feat) => {
-      const newStyle = transform(feat.getStyleProperties(), feat);
+      const style = feat.getStyleProperties();
+      const newStyle = transform(style, feat);
+      if (newStyle) {
+        historyItems.push({
+          feature: feat,
+          before: style,
+          after: newStyle,
+        });
 
-      historyItems.push({
-        feature: feat,
-        before: feat.getStyleProperties(),
-        after: newStyle,
-      });
-
-      feat.setStyleProperties(newStyle);
+        feat.setStyleProperties(newStyle);
+      }
     });
 
     if (historyItems.length) {
       this.history.register(HistoryKey.Map, new UpdateStyleTask(historyItems));
     }
+
+    return historyItems.length;
   }
 
   public async geocode(query: string): Promise<NominatimResult[]> {

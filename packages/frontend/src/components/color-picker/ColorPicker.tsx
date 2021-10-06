@@ -34,6 +34,7 @@ interface State {
   modalVisible: boolean;
   value: RGBColor;
 }
+
 const i18n = {
   title: {
     fr: 'Sélectionnez une couleur',
@@ -66,7 +67,7 @@ class ColorPicker extends Component<Props, State> {
             <SketchPicker disableAlpha={false} color={value} onChange={this.handleChange} width={'300px'} />
           </Modal.Body>
           <Modal.Footer>
-            <button onClick={this.handleModalClose} data-cy={'close-modal'} className={'btn btn-outline-secondary'}>
+            <button onClick={this.handleModalClose} className={'btn btn-outline-secondary'} data-cy={'close-modal'} data-testid={'close-modal'}>
               Fermer
             </button>
           </Modal.Footer>

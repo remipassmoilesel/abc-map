@@ -29,7 +29,7 @@ class TextToolPanel extends Component<{}, {}> {
   public render(): ReactNode {
     return (
       <div className={'abc-text-panel'}>
-        <TipBubble id={ToolTips.Text} label={"Aide de l'outil"} className={'mx-3 mb-4'} />
+        <TipBubble id={ToolTips.Text} label={"Aide de l'outil"} className={'mx-3 mb-3'} />
         <TextFormat />
       </div>
     );

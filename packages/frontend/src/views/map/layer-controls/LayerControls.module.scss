@@ -36,29 +36,14 @@ $list-height: 100px;
   border-radius: $border-radius;
 }
 
-.controls {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: flex-start;
-}
-
-.controlButton {
+.row {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
 
-  margin: 3px;
-  padding: 6px;
-
-  border: none;
-  background-color: inherit;
-  min-width: 40px;
-
-  :global(.fa) {
-    font-size: 17px;
+  :global(.btn) {
+    padding: 0.3rem 0.6rem !important;
   }
 }
 

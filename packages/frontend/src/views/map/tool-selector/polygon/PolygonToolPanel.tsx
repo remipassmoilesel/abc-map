@@ -21,77 +21,25 @@ import { Logger } from '@abc-map/shared';
 import WidthSelector from '../_common/stroke-width-selector/StrokeWidthSelector';
 import ColorSelector from '../../../../components/color-picker/ColorSelector';
 import FillPatternSelector from '../_common/fill-pattern-selector/FillPatternSelector';
-import Cls from './PolygonToolPanel.module.scss';
-import { MainState } from '../../../../core/store/reducer';
-import { connect, ConnectedProps } from 'react-redux';
-import { ServiceProps, withServices } from '../../../../core/withServices';
 import TipBubble from '../../../../components/tip-bubble/TipBubble';
 import { ToolTips } from '@abc-map/user-documentation';
-import ZIndex from '../_common/z-index/ZIndex';
-import ApplyStyleButton from '../_common/ApplyStyleButton';
+import ButtonBar from '../_common/button-bar/ButtonBar';
+import Cls from './PolygonToolPanel.module.scss';
 
 const logger = Logger.get('PolygonToolPanel.tsx');
 
-const mapStateToProps = (state: MainState) => ({
-  stroke: state.map.currentStyle.stroke,
-  fill: state.map.currentStyle.fill,
-});
-
-const connector = connect(mapStateToProps);
-
-type Props = ConnectedProps<typeof connector> & ServiceProps;
-
-class PolygonToolPanel extends Component<Props, {}> {
+class PolygonToolPanel extends Component<{}, {}> {
   public render(): ReactNode {
     return (
       <div className={Cls.polygonPanel}>
-        <TipBubble id={ToolTips.Polygon} label={"Aide de l'outil"} className={'mx-3 mb-4'} />
+        <TipBubble id={ToolTips.Polygon} label={"Aide de l'outil"} className={'mx-3 mb-3'} />
+        <ButtonBar />
         <WidthSelector />
         <ColorSelector stroke={true} fillColor1={true} fillColor2={true} />
         <FillPatternSelector />
-        <ApplyStyleButton onClick={this.handleApplyStyle} />
-        <ZIndex />
       </div>
     );
   }
-
-  private handleApplyStyle = () => {
-    const { geo, toasts } = this.props.services;
-    const strokeColor = this.props.stroke?.color;
-    const strokeWidth = this.props.stroke?.width;
-    const fillColor1 = this.props.fill?.color1;
-    const fillColor2 = this.props.fill?.color2;
-    const fillPattern = this.props.fill?.pattern;
-    if (!strokeColor) {
-      toasts.info('Vous devez sélectionner une couleur');
-      return;
-    }
-    if (!strokeWidth) {
-      toasts.info('Vous devez sélectionner une épaisseur');
-      return;
-    }
-    if (!fillColor1) {
-      toasts.info('Vous devez sélectionner une couleur de fond');
-      return;
-    }
-
-    geo.updateSelectedFeatures((style) => {
-      return {
-        ...style,
-        stroke: {
-          ...style.stroke,
-          color: strokeColor,
-          width: strokeWidth,
-        },
-        fill: {
-          ...style.fill,
-          color1: fillColor1,
-          color2: fillColor2,
-          pattern: fillPattern,
-        },
-      };
-    });
-  };
 }
 
-export default withServices(connector(PolygonToolPanel));
+export default PolygonToolPanel;

@@ -13,7 +13,7 @@
 
 Abc-Map permet de manipuler des données géographiques. Avec Abc-Map vous pouvez:
 
-- Importer et visualiser des données (XYZ, WMS, shapefiles, GPX, ...)
+- Importer et visualiser des données (XYZ, WMS, WMTS, shapefiles, GPX, ...)
 - Créer et modifier des géométries et leurs propriétés
 - Réaliser des analyses spatiales et statistiques
 - Exporter vos cartes au format PDF ou PNG

@@ -66,7 +66,7 @@ export class PolygonTool extends AbstractTool {
       this.history.register(HistoryKey.Map, t);
     };
 
-    this.drawInteractions = this.interactionFactory(GeometryType.POLYGON, source, getStyle, handleTask);
+    this.drawInteractions = this.interactionFactory(GeometryType.POLYGON, [GeometryType.POLYGON, GeometryType.MULTI_POLYGON], source, getStyle, handleTask);
     this.drawInteractions.interactions.forEach((i) => map.addInteraction(i));
     this.interactions.push(...this.drawInteractions.interactions);
   }

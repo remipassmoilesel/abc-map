@@ -16,6 +16,7 @@ Vous pouvez utiliser dans ce logiciel:
 - des fichiers GeoJSON
 - des fichiers Shapefile
 - des couches WMS
+- des couches WMTS
 - des couches XYZ (avec URL comportant des variables `x`, `y` et `z`)
 
 <div class="frequent-question">Je veux utiliser une carte sur mon téléphone mobile</div>

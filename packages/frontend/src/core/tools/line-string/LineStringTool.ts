@@ -63,7 +63,13 @@ export class LineStringTool extends AbstractTool {
       this.history.register(HistoryKey.Map, t);
     };
 
-    this.drawInteractions = this.interactionFactory(GeometryType.LINE_STRING, source, getStyle, handleTask);
+    this.drawInteractions = this.interactionFactory(
+      GeometryType.LINE_STRING,
+      [GeometryType.LINE_STRING, GeometryType.MULTI_LINE_STRING],
+      source,
+      getStyle,
+      handleTask
+    );
     this.drawInteractions.interactions.forEach((i) => map.addInteraction(i));
     this.interactions.push(...this.drawInteractions.interactions);
   }

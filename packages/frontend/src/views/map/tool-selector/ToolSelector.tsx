@@ -55,9 +55,14 @@ class ToolSelector extends Component<Props, {}> {
     return (
       <div className={`control-block ${Cls.toolSelector}`} data-cy={'tool-selector'}>
         <div className={'mb-2 text-bold'}>Outils de dessin</div>
-        {toolsActive && (
+        {toolsActive && buttons && (
           <>
-            <div className={Cls.toolList}>{buttons}</div>
+            {buttons.map((row, i) => (
+              <div key={i} className={Cls.toolRow}>
+                {row}
+              </div>
+            ))}
+
             {toolPanel && <div className={Cls.toolPanel}>{toolPanel}</div>}
           </>
         )}
@@ -74,8 +79,8 @@ class ToolSelector extends Component<Props, {}> {
     );
   }
 
-  private getToolButtons(): ReactNode[] {
-    return ToolRegistry.getAll().map((tool) => {
+  private getToolButtons(): ReactNode[][] {
+    const flatList = ToolRegistry.getAll().map((tool) => {
       const isActive = tool.getId() === this.props.currentTool;
       const classes = isActive ? `${Cls.toolButton} ${Cls.active}` : Cls.toolButton;
       return (
@@ -91,6 +96,14 @@ class ToolSelector extends Component<Props, {}> {
         </button>
       );
     });
+
+    const rowLength = 4;
+    const rows: ReactNode[][] = [];
+    for (let i = 0; i < flatList.length; i += rowLength) {
+      rows.push(flatList.slice(i, i + rowLength));
+    }
+
+    return rows;
   }
 
   private getToolPanel(): ReactNode | undefined {

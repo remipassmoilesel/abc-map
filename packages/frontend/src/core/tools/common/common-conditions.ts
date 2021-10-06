@@ -44,6 +44,7 @@ export function withMainButton(ev: MapBrowserEvent<UIEvent | KeyboardEvent | Mou
   return 'button' in original && original.button === 0;
 }
 
-export function withGeometry(feat: FeatureLike, type: GeometryType): boolean {
-  return feat && feat.getGeometry()?.getType() === type;
+export function withGeometry(feat: FeatureLike, types: GeometryType[]): boolean {
+  const type = feat?.getGeometry()?.getType();
+  return (type && types.includes(type)) || false;
 }

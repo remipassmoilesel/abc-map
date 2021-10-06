@@ -16,8 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FeatureStyle } from '@abc-map/shared';
-import { MapTool } from '@abc-map/shared';
+import { FillPatterns, MapTool } from '@abc-map/shared';
 import { DimensionsPx } from '../../utils/DimensionsPx';
 import { PointIconName } from '../../../assets/point-icons/PointIconName';
 
@@ -27,7 +26,27 @@ export interface MapState {
    */
   tool: MapTool;
 
-  currentStyle: FeatureStyle;
+  currentStyle: {
+    fill: {
+      color1: string;
+      color2: string;
+      pattern: FillPatterns;
+    };
+    stroke: {
+      color: string;
+      width: number;
+    };
+    text: {
+      color: string;
+      font: string;
+      size: number;
+    };
+    point: {
+      icon: PointIconName;
+      size: number;
+      color: string;
+    };
+  };
 
   /**
    * Largest dimensions of the main map. Used for rendering in previews and export to "guess" a style ratio.
@@ -41,6 +60,7 @@ export const mapInitialState: MapState = {
     fill: {
       color1: '#FFFFFF',
       color2: '#FF5733',
+      pattern: FillPatterns.Flat,
     },
     stroke: {
       color: '#FF5733',

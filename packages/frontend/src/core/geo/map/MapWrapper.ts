@@ -17,7 +17,7 @@
  */
 
 import { Map } from 'ol';
-import { AbcProjection, AbcView, EPSG_4326, LayerProperties, Logger, PredefinedLayerModel, VectorMetadata } from '@abc-map/shared';
+import { AbcProjection, AbcView, EPSG_4326, LayerProperties, Logger, PredefinedLayerModel } from '@abc-map/shared';
 import _ from 'lodash';
 import { ResizeObserverFactory } from '../../utils/ResizeObserverFactory';
 import BaseEvent from 'ol/events/Event';
@@ -27,8 +27,6 @@ import { FeatureWrapper } from '../features/FeatureWrapper';
 import { LayerFactory } from '../layers/LayerFactory';
 import { LayerWrapper, VectorLayerWrapper } from '../layers/LayerWrapper';
 import VectorImageLayer from 'ol/layer/VectorImage';
-import VectorSource from 'ol/source/Vector';
-import Geometry from 'ol/geom/Geometry';
 import { defaultInteractions } from './interactions';
 import { EventType, MapSizeChangedEvent, SizeListener, TileErrorListener, TileLoadErrorEvent } from './MapWrapper.events';
 import { Views } from '../Views';
@@ -41,7 +39,7 @@ export const logger = Logger.get('MapWrapper.ts');
 
 export declare type LayerChangeHandler = (ev: BaseEvent) => void;
 
-export declare type FeatureCallback = (feat: FeatureWrapper, layer: LayerWrapper<VectorImageLayer, VectorSource<Geometry>, VectorMetadata>) => void;
+export declare type FeatureCallback = (feat: FeatureWrapper, layer: VectorLayerWrapper) => void;
 
 /**
  * This class wrap OpenLayers map. The goal is not to replace all methods, but to ensure
@@ -161,17 +159,29 @@ export class MapWrapper {
     }
   }
 
-  public forEachFeatureSelected(callback: FeatureCallback) {
+  /**
+   * Call callback with each selected feature in **active vector layer**.
+   *
+   * Return number of feature processed.
+   *
+   * @param callback
+   */
+  public forEachFeatureSelected(callback: FeatureCallback): number {
     const layer = this.getActiveVectorLayer();
     if (!layer) {
-      return;
+      return 0;
     }
+
+    let i = 0;
     layer.getSource().forEachFeature((feat) => {
       const feature = FeatureWrapper.from(feat);
       if (feature.isSelected()) {
         callback(feature, layer);
+        i++;
       }
     });
+
+    return i;
   }
 
   public getSelectedFeatures(): FeatureWrapper[] {
@@ -256,12 +266,11 @@ export class MapWrapper {
   }
 
   /**
-   * This method is used to trigger changes for operations that does not trigger changes normally,
-   * like rename layer, or change active layer.
-   * @private
+   * This method trigger layer change listeners.
+   *
+   * Listeners can listen for layer added events, removed, renamed, opacity changed, etc ...
    */
-  // FIXME: find a better solution
-  private triggerLayerChange(): void {
+  public triggerLayerChange(): void {
     this.internal.getLayers().set(LayerProperties.LastLayerChange, performance.now());
   }
 

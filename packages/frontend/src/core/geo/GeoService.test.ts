@@ -18,7 +18,7 @@
 
 import { GeoService, logger as geoLogger } from './GeoService';
 import { logger as mapLogger } from './map/MapWrapper';
-import { AbcVectorLayer, LayerProperties, LayerType, PredefinedLayerModel, PredefinedMetadata } from '@abc-map/shared';
+import { AbcVectorLayer, FeatureStyle, LayerProperties, LayerType, PredefinedLayerModel, PredefinedMetadata } from '@abc-map/shared';
 import { TestHelper } from '../utils/test/TestHelper';
 import VectorSource from 'ol/source/Vector';
 import TileLayer from 'ol/layer/Tile';
@@ -34,6 +34,10 @@ import { storeFactory } from '../store/store';
 import { HttpClientStub } from '../utils/test/HttpClientStub';
 import { AxiosInstance } from 'axios';
 import { get as getProjection } from 'ol/proj';
+import { FeatureWrapper } from './features/FeatureWrapper';
+import { Point } from 'ol/geom';
+import { UpdateStyleTask } from '../history/tasks/features/UpdateStyleTask';
+import { HistoryKey } from '../history/HistoryKey';
 
 // Default parser fail with WMS capabilities
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -46,6 +50,7 @@ mapLogger.disable();
 describe('GeoService', () => {
   describe('With a stub http client', () => {
     let toasts: SinonStubbedInstance<ToastService>;
+    let history: SinonStubbedInstance<HistoryService>;
     let apiClient: HttpClientStub;
     let externalClient: HttpClientStub;
     let wmsParser: SinonStub;
@@ -54,6 +59,7 @@ describe('GeoService', () => {
 
     beforeEach(() => {
       toasts = sinon.createStubInstance(ToastService);
+      history = sinon.createStubInstance(HistoryService);
       apiClient = new HttpClientStub();
       externalClient = new HttpClientStub();
       wmsParser = sinon.stub();
@@ -62,7 +68,7 @@ describe('GeoService', () => {
         apiClient as unknown as AxiosInstance,
         externalClient as unknown as AxiosInstance,
         toasts,
-        HistoryService.create(),
+        history as unknown as HistoryService,
         storeFactory(),
         wmsParser,
         wmtsParser
@@ -345,6 +351,70 @@ describe('GeoService', () => {
 
         // Assert
         expect(result).toEqual([-5810242.794404252, 6034305.735038247, 7288727.539464668, 16806543.64439309]);
+      });
+    });
+
+    describe('updateSelectedFeatures()', () => {
+      let f1: FeatureWrapper;
+      let f2: FeatureWrapper;
+      let f3: FeatureWrapper;
+
+      beforeEach(() => {
+        const map = service.getMainMap();
+        const layer = LayerFactory.newVectorLayer();
+        map.addLayer(layer);
+        map.setActiveLayer(layer);
+
+        f1 = FeatureWrapper.create(new Point([1, 1])).setSelected(true);
+        f2 = FeatureWrapper.create(new Point([1, 1])).setSelected(true);
+        f3 = FeatureWrapper.create(new Point([1, 1])).setSelected(false);
+        layer.getSource().addFeatures([f1.unwrap(), f2.unwrap(), f3.unwrap()]);
+      });
+
+      it('should call callback with selected features and their styles', () => {
+        // Prepare
+        const f1Style = f1.getStyleProperties();
+        const f2Style = f2.getStyleProperties();
+        const handler = sinon.stub<any, FeatureStyle>();
+        handler.onFirstCall().returns({ zIndex: 5 });
+        handler.onSecondCall().returns({ zIndex: 6 });
+
+        // Act
+        const result = service.updateSelectedFeatures(handler);
+
+        // Assert
+        expect(result).toEqual(2);
+        expect(handler.args).toEqual([
+          [f1Style, f1],
+          [f2Style, f2],
+        ]);
+      });
+
+      it('should register task if style change', () => {
+        // Prepare
+        const f1Style = f1.getStyleProperties();
+        const handler = sinon.stub<any, FeatureStyle | undefined>();
+        handler.onFirstCall().returns({ zIndex: 5 });
+        handler.onSecondCall().returns(undefined);
+
+        // Act
+        service.updateSelectedFeatures(handler);
+
+        // Assert
+        expect(history.register.args).toEqual([[HistoryKey.Map, new UpdateStyleTask([{ feature: f1, before: f1Style, after: { zIndex: 5 } }])]]);
+      });
+
+      it('should not register task if style change', () => {
+        // Prepare
+        const handler = sinon.stub<any, FeatureStyle | undefined>();
+        handler.onFirstCall().returns(undefined);
+        handler.onSecondCall().returns(undefined);
+
+        // Act
+        service.updateSelectedFeatures(handler);
+
+        // Assert
+        expect(history.register.callCount).toEqual(0);
       });
     });
   });

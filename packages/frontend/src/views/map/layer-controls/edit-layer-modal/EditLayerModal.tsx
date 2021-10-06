@@ -20,11 +20,15 @@ import React, { ChangeEvent, Component, ReactNode } from 'react';
 import { Modal } from 'react-bootstrap';
 import { LayerWrapper } from '../../../../core/geo/layers/LayerWrapper';
 import { Logger } from '@abc-map/shared';
+import * as _ from 'lodash';
 import Cls from './EditLayerModal.module.scss';
+import { ServiceProps, withServices } from '../../../../core/withServices';
+import { HistoryKey } from '../../../../core/history/HistoryKey';
+import { EditLayerTask } from '../../../../core/history/tasks/layers/EditLayerTask';
 
 const logger = Logger.get('EditLayerModal.tsx');
 
-interface Props {
+interface Props extends ServiceProps {
   layer: LayerWrapper;
   onHide: () => void;
 }
@@ -142,15 +146,22 @@ class EditLayerModal extends Component<Props, State> {
   };
 
   private handleConfirm = () => {
+    const { history, geo } = this.props.services;
+    const map = geo.getMainMap();
     const layer = this.props.layer;
-    const newName = this.state.nameInput;
+    const name = this.state.nameInput;
     const opacity = this.state.opacityInput;
-    const attributionsInput = this.state.attributionsInput;
+    const attributions = this.state.attributionsInput.split(/\r?\n/);
 
-    layer.setName(newName).setOpacity(opacity).setAttributions(attributionsInput.split(/\r?\n/));
+    const before = { name: layer.getName() || '', opacity: layer.getOpacity(), attributions: layer.getAttributions()?.slice() || [] };
+    const after = { name, opacity, attributions };
+    if (!_.isEqual(before, after)) {
+      layer.setName(name).setOpacity(opacity).setAttributions(attributions);
+      history.register(HistoryKey.Map, new EditLayerTask(map, layer, before, after));
+    }
 
     this.props.onHide();
   };
 }
 
-export default EditLayerModal;
+export default withServices(EditLayerModal);

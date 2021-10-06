@@ -93,8 +93,9 @@ export const Tools: Tip[] = [
     id: ToolTips.Selection,
     content: `<h4>Outil sélection</h4>
               <ul>
-                <li><b>Pour sélectionner des géométries</b>, tracez un rectangle sur la carte et relâchez. Vous pouvez ensuite
-                déplacer la sélection ou modifier ses caractéristiques </li>
+                <li><b>Pour sélectionner des géométries</b>, maintenez <code>CTRL</code>, tracez un rectangle sur la carte puis relâchez</li>
+                <li><b>Pour modifier les caractéristiques de plusieurs géométries</b>, sélectionnez-les puis utilisez le panneau d'options de
+                l'outil sélection</li>
                 <li><b>Pour supprimer des géométries</b>, sélectionnez-les et appuyez sur <code>SUPPR</code></li>
                 <li><b>Pour dupliquer des géométries</b>, sélectionnez-les et appuyez sur le bouton <code>Dupliquer</code>
                 du panneau Sélection</li>
