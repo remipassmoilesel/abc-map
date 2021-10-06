@@ -86,7 +86,7 @@ describe('drawInteractionFactory.ts', () => {
     // Set up interaction
     getStyleStub = sinon.stub();
     onTaskStub = sinon.stub();
-    interaction = drawInteractionFactory(GeometryType.POLYGON, source, getStyleStub, onTaskStub);
+    interaction = drawInteractionFactory(GeometryType.POLYGON, [GeometryType.POLYGON], source, getStyleStub, onTaskStub);
     interaction.interactions.forEach((i) => map.addInteraction(i));
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

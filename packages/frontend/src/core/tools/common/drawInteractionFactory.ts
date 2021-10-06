@@ -40,10 +40,18 @@ const logger = Logger.get('drawInteractionFactory.ts');
 export declare type GetStyleFunc = () => FeatureStyle;
 export declare type HistoryTaskHandler = (t: Task) => void;
 
+export declare type ToolMode = GeometryType.POINT | GeometryType.LINE_STRING | GeometryType.POLYGON;
+
 // For the moment, we support only those geometries
 // Circles does not serialize in geojson
 // Rectangle cannot be modified in a correct way with this method
-export declare type SupportedGeometry = GeometryType.POINT | GeometryType.LINE_STRING | GeometryType.POLYGON;
+export declare type SupportedGeometry =
+  | GeometryType.POINT
+  | GeometryType.MULTI_POINT
+  | GeometryType.LINE_STRING
+  | GeometryType.MULTI_LINE_STRING
+  | GeometryType.MULTI_POLYGON
+  | GeometryType.POLYGON;
 
 export interface DrawInteraction {
   interactions: [Modify, Draw, Snap, Select];
@@ -55,17 +63,24 @@ const editingStyle = createEditingStyle();
 /**
  * Create a draw interaction bundle for specified geometry type.
  *
- * @param type
+ * @param mode "Mode" of drawing tool, can be point, linestring or polygon. See ol/interaction/Draw.js:122
+ * @param targetTypes Only these types of features will be handled
  * @param source
  * @param getStyle
  * @param onTask
  */
-export function drawInteractionFactory(type: SupportedGeometry, source: VectorSource, getStyle: GetStyleFunc, onTask: HistoryTaskHandler): DrawInteraction {
+export function drawInteractionFactory(
+  mode: ToolMode,
+  targetTypes: SupportedGeometry[],
+  source: VectorSource,
+  getStyle: GetStyleFunc,
+  onTask: HistoryTaskHandler
+): DrawInteraction {
   // Select interaction will condition modification of features
   const select = new Select({
     condition: (ev) => withControlKeyOnly(ev) && withMainButton(ev),
     layers: (lay) => LayerWrapper.from(lay).isActive(),
-    filter: (feat) => withGeometry(feat, type),
+    filter: (feat) => withGeometry(feat, targetTypes),
     // Warning: here we must use null to not manage styles with Select interaction
     // Otherwise modification of style can be 'restored' from a bad state
     style: null as any,
@@ -78,7 +93,7 @@ export function drawInteractionFactory(type: SupportedGeometry, source: VectorSo
 
   const draw = new Draw({
     source: source,
-    type,
+    type: mode,
     condition: (e) => noModifierKeys(e) && withMainButton(e),
     finishCondition: (e) => noModifierKeys(e) && withMainButton(e),
     style: (f) => {

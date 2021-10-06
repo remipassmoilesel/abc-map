@@ -10,6 +10,8 @@ const path = require("path");
 const fs = require("fs");
 const child_process = require("child_process");
 
+const NodeVersionMin = '14';
+
 const projectRoot = path.resolve(__dirname);
 const cliRoot = path.resolve(projectRoot, 'packages/abc-cli');
 const cliMain = path.resolve(cliRoot, 'build', 'main.js');
@@ -17,23 +19,38 @@ const nodeModules = path.resolve(cliRoot, 'node_modules');
 const lastBuildDateFile = path.resolve(cliRoot, '.last-build-date.json');
 
 if (require.main === module) {
-  main(process.argv)
-    .then(() => process.exit(0))
-    .catch(err => {
-      // console.error(err); // Debug only
-      process.exit(1);
-    });
+  try {
+    main(process.argv);
+    process.exit(0);
+  } catch (err) {
+    if (process.env.DEBUG) {
+      console.error(err)
+    } else {
+      console.error(err.message);
+    }
+    process.exit(1);
+  }
 }
 
-async function main(args) {
+function main(args) {
+  checkNodeVersion();
+
   if (!isCliUpToDate()) {
     updateCli();
   }
+
   cliCommand(args);
 }
 
+function checkNodeVersion() {
+  const output = child_process.execSync("node -v", {cwd: cliRoot, stdio: 'pipe'});
+  if (!output || !output.toString('utf-8').startsWith(`v${NodeVersionMin}`)) {
+    throw new Error(`Please use Node.js ${NodeVersionMin}`);
+  }
+}
+
 function isCliUpToDate() {
-  if(process.env.CI && process.env.CI === "true"){
+  if (process.env.CI && process.env.CI === "true") {
     return false;
   }
   const nodeModulesExists = fs.existsSync(nodeModules);
@@ -59,4 +76,3 @@ function cliCommand(args) {
   const argsStr = args.slice(2).join(" ");
   child_process.execSync(`node ${cliMain} ${argsStr}`, {cwd: process.cwd(), stdio: 'inherit'});
 }
-

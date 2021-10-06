@@ -29,7 +29,7 @@ import { HistoryKey } from '../../history/HistoryKey';
 import { UpdateItem, UpdateGeometriesTask } from '../../history/tasks/features/UpdateGeometriesTask';
 import { Logger } from '@abc-map/shared';
 import { FeatureWrapper } from '../../geo/features/FeatureWrapper';
-import { withMainButton } from '../common/common-conditions';
+import { withControlKey, withMainButton } from '../common/common-conditions';
 import { defaultInteractions } from '../../geo/map/interactions';
 
 const logger = Logger.get('SelectionTool.ts');
@@ -57,7 +57,7 @@ export class SelectionTool extends AbstractTool {
 
     // Tool interactions
     const dragBox = new DragBox({
-      condition: withMainButton,
+      condition: (ev) => withMainButton(ev) && withControlKey(ev),
       className: 'abc-selection-box',
     });
 

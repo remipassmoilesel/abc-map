@@ -15,26 +15,22 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
-import React, { Component, ReactNode } from 'react';
 
-interface Props {
-  onClick: () => void;
-}
+.buttonBar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-class ApplyStyleButton extends Component<Props, {}> {
-  public render(): ReactNode {
-    return (
-      <div className={'d-flex justify-content-center mb-3'}>
-        <button
-          onClick={this.props.onClick}
-          title={'Cliquez pour appliquer le style courant aux géométries sélectionnées'}
-          className={'btn btn-sm btn-outline-primary mt-3'}
-        >
-          Appliquer le style
-        </button>
-      </div>
-    );
+  margin-bottom: 0.6rem;
+
+  :global(.btn) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.6rem;
+  }
+
+  :global(.fa) {
+    font-size: 0.9rem;
   }
 }
-
-export default ApplyStyleButton;

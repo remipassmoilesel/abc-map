@@ -64,6 +64,7 @@ class PointIconPicker extends Component<Props, State> {
           </Modal.Header>
           <Modal.Body className={'d-flex flex-column'}>
             <div className={Cls.viewPort}>
+              {!iconPreviews && <h3 className={'d-flex justify-content-center mt-5'}>...</h3>}
               {iconPreviews &&
                 LabeledIconCategories.All.map((category) => {
                   return (
@@ -103,8 +104,16 @@ class PointIconPicker extends Component<Props, State> {
   }
 
   private handleOpen = (): void => {
-    const iconPreviews = getPreviews();
-    this.setState({ iconPreviews, modal: true });
+    // We show modal first
+    this.setState({ modal: true }, () => {
+      // Then we load previews after modal rendering
+      if (!this.state.iconPreviews) {
+        setTimeout(() => {
+          const iconPreviews = getPreviews();
+          this.setState({ iconPreviews });
+        }, 200);
+      }
+    });
   };
 
   private handleCancel = (): void => {

@@ -30,6 +30,8 @@ import { TestHelper } from '../../utils/test/TestHelper';
 import sinon from 'sinon';
 import BaseEvent from 'ol/events/Event';
 import { Views } from '../Views';
+import { FeatureWrapper } from '../features/FeatureWrapper';
+import { Point } from 'ol/geom';
 
 logger.disable();
 
@@ -349,5 +351,30 @@ describe('MapWrapper', function () {
     map.moveViewToPosition([3.8371328, 43.6207616], 5);
 
     expect(map.getView()).toEqual({ projection: { name: 'EPSG:3857' }, center: [427147.669402168, 5406940.509560228], resolution: 4891.96981025128 });
+  });
+
+  it('forEachFeatureSelected()', () => {
+    // Prepare
+    const map = MapFactory.createNaked();
+    const layer = LayerFactory.newVectorLayer();
+    map.addLayer(layer);
+    map.setActiveLayer(layer);
+
+    const f1 = FeatureWrapper.create(new Point([1, 1])).setSelected(true);
+    const f2 = FeatureWrapper.create(new Point([1, 1])).setSelected(true);
+    const f3 = FeatureWrapper.create(new Point([1, 1])).setSelected(false);
+    layer.getSource().addFeatures([f1.unwrap(), f2.unwrap(), f3.unwrap()]);
+
+    const handler = sinon.stub();
+
+    // Act
+    const result = map.forEachFeatureSelected(handler);
+
+    // Assert
+    expect(result).toEqual(2);
+    expect(handler.args).toEqual([
+      [f1, layer],
+      [f2, layer],
+    ]);
   });
 });

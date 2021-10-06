@@ -17,19 +17,33 @@
  */
 
 import { Task } from '../../Task';
-import VectorSource from 'ol/source/Vector';
-import { FeatureWrapper } from '../../../geo/features/FeatureWrapper';
+import { LayerWrapper } from '../../../geo/layers/LayerWrapper';
+import { MapWrapper } from '../../../geo/map/MapWrapper';
 
-export class AddFeaturesTask extends Task {
-  constructor(public readonly source: VectorSource, public readonly features: FeatureWrapper[]) {
+export interface EditableLayerProperties {
+  name: string;
+  opacity: number;
+  attributions: string[];
+}
+
+/**
+ * Undo/Redo modification of layer properties.
+ *
+ * Map is only used to dispatch events for UI updates.
+ *
+ */
+export class EditLayerTask extends Task {
+  constructor(private map: MapWrapper, private layer: LayerWrapper, private before: EditableLayerProperties, private after: EditableLayerProperties) {
     super();
   }
 
   public async undo(): Promise<void> {
-    this.features.forEach((feat) => this.source.removeFeature(feat.unwrap()));
+    this.layer.setName(this.before.name).setOpacity(this.before.opacity).setAttributions(this.before.attributions);
+    this.map.triggerLayerChange();
   }
 
   public async redo(): Promise<void> {
-    this.source.addFeatures(this.features.map((f) => f.unwrap()));
+    this.layer.setName(this.after.name).setOpacity(this.after.opacity).setAttributions(this.after.attributions);
+    this.map.triggerLayerChange();
   }
 }

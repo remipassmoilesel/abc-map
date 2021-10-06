@@ -19,12 +19,13 @@
 import { StorePersistence } from './StorePersistence';
 import { LocalStorageService, StorageKey } from '../../local-storage/LocalStorageService';
 import sinon, { SinonStub } from 'sinon';
-import { LegendDisplay, UserStatus } from '@abc-map/shared';
+import { FillPatterns, LegendDisplay, UserStatus } from '@abc-map/shared';
 import { MapTool } from '@abc-map/shared';
 import { MainState } from '../reducer';
 import { TestHelper } from '../../utils/test/TestHelper';
 import { DimensionsPx } from '../../utils/DimensionsPx';
 import { Views } from '../../geo/Views';
+import { PointIconName } from '../../../assets/point-icons/PointIconName';
 
 describe('StorePersistence', () => {
   let storage: LocalStorageService;
@@ -54,20 +55,23 @@ describe('StorePersistence', () => {
         tool: MapTool.Point,
         currentStyle: {
           fill: {
-            color1: '#789ABC',
-            color2: '#789DEF',
+            color1: '#FFFFFF',
+            color2: '#FF5733',
+            pattern: FillPatterns.Flat,
           },
           stroke: {
+            color: '#FF5733',
             width: 5,
-            color: '#123456',
           },
           text: {
-            color: '#123456',
-            size: 30,
+            color: '#FF5733',
             font: 'AbcCantarell',
+            size: 30,
           },
           point: {
-            size: 5,
+            icon: PointIconName.Icon0CircleFill,
+            size: 15,
+            color: '#FF5733',
           },
         },
         mainMapDimensions: {
@@ -102,20 +106,23 @@ describe('StorePersistence', () => {
         tool: MapTool.None,
         currentStyle: {
           fill: {
-            color1: '#789ABC',
-            color2: '#789DEF',
+            color1: '#FFFFFF',
+            color2: '#FF5733',
+            pattern: FillPatterns.Flat,
           },
           stroke: {
+            color: '#FF5733',
             width: 5,
-            color: '#123456',
           },
           text: {
-            color: '#123456',
-            size: 30,
+            color: '#FF5733',
             font: 'AbcCantarell',
+            size: 30,
           },
           point: {
-            size: 5,
+            icon: PointIconName.Icon0CircleFill,
+            size: 15,
+            color: '#FF5733',
           },
         },
         mainMapDimensions: undefined as unknown as DimensionsPx,

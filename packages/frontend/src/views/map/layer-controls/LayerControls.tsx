@@ -60,27 +60,29 @@ class LayerControls extends Component<Props, State> {
           {!items.length && <div className={Cls.noLayers}>Aucune couche</div>}
         </div>
         <div className={`control-item`}>
-          <button onClick={this.handleAddLayer} className={Cls.controlButton} title={'Nouvelle couche'} data-cy={'add-layer'}>
-            <i className={'fa fa-plus mr-2'} /> Nouvelle couche
-          </button>
-          <div className={Cls.controls}>
-            <button onClick={this.handleRemoveActive} className={Cls.controlButton} title={'Supprimer la couche active'} data-cy={'delete-layer'}>
-              <i className={'fa fa-trash'} />
-            </button>
-            <button onClick={this.handleToggleVisibility} className={Cls.controlButton} title={'Changer la visibilité'}>
-              <i className={'fa fa-eye'} />
-            </button>
-            <button onClick={this.handleEditLayer} className={Cls.controlButton} title={'Editer la couche'} data-cy={'edit-layer'}>
+          <div className={`${Cls.row} ${Cls.smallButtons}`}>
+            <button onClick={this.handleEditLayer} className={'btn btn-link'} title={'Editer la couche'} data-cy={'edit-layer'}>
               <i className={'fa fa-edit'} />
             </button>
-            <button onClick={this.handleZoom} className={Cls.controlButton} title={'Zoom sur la couche'}>
+            <button onClick={this.handleToggleVisibility} className={'btn btn-link'} title={'Changer la visibilité'}>
+              <i className={'fa fa-eye'} />
+            </button>
+            <button onClick={this.handleZoom} className={'btn btn-link'} title={'Zoom sur la couche'}>
               <i className={'fa fa-search-plus'} />
             </button>
-            <button onClick={this.handleLayerBack} className={Cls.controlButton} title={'Derrière'}>
+            <button onClick={this.handleRemoveActive} className={'btn btn-link'} title={'Supprimer la couche active'} data-cy={'delete-layer'}>
+              <i className={'fa fa-trash'} />
+            </button>
+            <button onClick={this.handleLayerBack} className={'btn btn-link'} title={'Derrière'}>
               <i className={'fa fa-arrow-up'} />
             </button>
-            <button onClick={this.handleLayerForward} className={Cls.controlButton} title={'Devant'}>
+            <button onClick={this.handleLayerForward} className={'btn btn-link'} title={'Devant'}>
               <i className={'fa fa-arrow-down'} />
+            </button>
+          </div>
+          <div className={Cls.row}>
+            <button onClick={this.handleAddLayer} className={'btn btn-link'} title={'Nouvelle couche'} data-cy={'add-layer'}>
+              <i className={'fa fa-plus mr-2'} /> Nouvelle couche
             </button>
           </div>
         </div>

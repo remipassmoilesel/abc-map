@@ -21,69 +21,25 @@ import { Logger } from '@abc-map/shared';
 import ColorSelector from '../../../../components/color-picker/ColorSelector';
 import PointSizeSelector from './size-selector/PointSizeSelector';
 import PointIconSelector from './icon-selector/PointIconSelector';
-import { ServiceProps, withServices } from '../../../../core/withServices';
-import { MainState } from '../../../../core/store/reducer';
-import { connect, ConnectedProps } from 'react-redux';
 import Cls from './PointToolPanel.module.scss';
 import TipBubble from '../../../../components/tip-bubble/TipBubble';
 import { ToolTips } from '@abc-map/user-documentation';
-import ZIndex from '../_common/z-index/ZIndex';
-import ApplyStyleButton from '../_common/ApplyStyleButton';
+import ButtonBar from '../_common/button-bar/ButtonBar';
 
 const logger = Logger.get('PointToolPanel.tsx');
 
-const mapStateToProps = (state: MainState) => ({
-  point: state.map.currentStyle.point,
-});
-
-const connector = connect(mapStateToProps);
-
-type Props = ConnectedProps<typeof connector> & ServiceProps;
-
-class PointToolPanel extends Component<Props, {}> {
+class PointToolPanel extends Component<{}, {}> {
   public render(): ReactNode {
     return (
       <div className={Cls.pointPanel}>
-        <TipBubble id={ToolTips.Point} label={"Aide de l'outil"} className={'mx-3 mb-4'} />
+        <TipBubble id={ToolTips.Point} label={"Aide de l'outil"} className={'mx-3 mb-3'} />
+        <ButtonBar />
         <PointSizeSelector />
         <ColorSelector point={true} />
         <PointIconSelector />
-        <ApplyStyleButton onClick={this.handleApplyStyle} />
-        <ZIndex />
       </div>
     );
   }
-
-  private handleApplyStyle = () => {
-    const { geo, toasts } = this.props.services;
-    const icon = this.props.point?.icon;
-    const size = this.props.point?.size;
-    const color = this.props.point?.color;
-    if (!icon) {
-      toasts.info('Vous devez sélectionner une icône');
-      return;
-    }
-    if (!size) {
-      toasts.info('Vous devez sélectionner une taille');
-      return;
-    }
-    if (!color) {
-      toasts.info('Vous devez sélectionner une couleur');
-      return;
-    }
-
-    geo.updateSelectedFeatures((style) => {
-      return {
-        ...style,
-        point: {
-          ...style.point,
-          icon,
-          size,
-          color,
-        },
-      };
-    });
-  };
 }
 
-export default withServices(connector(PointToolPanel));
+export default PointToolPanel;

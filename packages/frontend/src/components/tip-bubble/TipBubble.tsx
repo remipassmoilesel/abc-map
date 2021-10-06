@@ -48,7 +48,7 @@ class TipBubble extends Component<Props, State> {
           {label && <div className={'mr-2'}>{label}</div>}
           <i className={`fa fa-question-circle`} />
         </div>
-        <Modal show={modal} onHide={this.handleHide}>
+        <Modal show={modal} onHide={this.handleHide} dialogClassName={Cls.modal}>
           <Modal.Body className={Cls.modalContent}>
             <div dangerouslySetInnerHTML={{ __html: this.getTip() }} />
           </Modal.Body>
