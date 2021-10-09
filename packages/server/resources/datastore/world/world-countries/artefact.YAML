@@ -1,10 +1,21 @@
-version: 0.1
+---
+version: 0.1.0
 artefact:
-  name: Pays du monde
   license: README.txt
+  name:
+    - language: fr
+      text: Pays du monde
+    - language: en
+      text: Countries of the world
   keywords:
-    - monde
-    - pays
+    - language: fr
+      text:
+        - monde
+        - pays
+    - language: en
+      text:
+        - world
+        - countries
   link: http://tapiquen-sig.jimdo.com
   files:
     - world-countries.zip

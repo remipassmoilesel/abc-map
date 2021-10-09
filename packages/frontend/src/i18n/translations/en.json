@@ -1,0 +1,37 @@
+{
+  "LandingView": {
+    "Welcome": "Welcome !",
+    "AbcMap_is_a_free_software": "Abc-Map is a free and open source mapping software.",
+    "How_does_it_work": "How does it work ?",
+    "Watch_a_presentation_video": "Watch a presentation video",
+    "or_read_the_doc": "or browse the documentation",
+    "Then_open_map": "Then get started on the map",
+    "Lets_go": "Let's go !",
+    "Registration_Login": "Registration, login",
+    "Connection_is_optional": "Connection is optional ! You can use Abc-Map without registering",
+    "Register": "Register",
+    "Login": "Login",
+    "A_pretty_illustration": "A pretty illustration !",
+    "For_7_days_opinions_are_positive": "For 7 days, {{votes}} % of opinions on Abc-Map are positive.",
+    "Champagne": "Champagne",
+    "Will_have_to_do_better": "Va falloir faire mieux",
+    "About_this_platform": "About this plateform"
+  },
+  "TopBar": {
+    "Map": "Map",
+    "Data_store": "Data store",
+    "Data_processing": "Data processing",
+    "Layout": "Layout",
+    "Documentation": "Documentation",
+    "Support_AbcMap": "Support Abc-Map"
+  },
+  "UserMenu": {
+    "Hello_visitor": "Hello visitor !",
+    "Login": "Login",
+    "Register": "Register",
+    "Lost_password": "Password forgotten",
+    "My_account": "My account",
+    "Logout": "Logout",
+    "You_are_disconnected": "You are disconnected"
+  }
+}

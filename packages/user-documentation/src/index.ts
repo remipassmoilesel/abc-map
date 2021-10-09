@@ -16,18 +16,6 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as reference from './reference';
-
+export * from './reference';
 export * from './tips';
-
-export interface Documentation {
-  toc: string;
-  modules: string[];
-}
-
-const content: Documentation = {
-  toc: reference.toc,
-  modules: reference.content,
-};
-
-export { content };
+export * from './DocumentationLang';

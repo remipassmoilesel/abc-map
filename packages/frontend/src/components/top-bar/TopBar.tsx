@@ -17,35 +17,24 @@
  */
 
 import React, { Component, ReactNode } from 'react';
-import { Logger } from '@abc-map/shared';
-import { UserStatus } from '@abc-map/shared';
-import { FrontendRoutes } from '@abc-map/shared';
+import { FrontendRoutes, Logger } from '@abc-map/shared';
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
-import { connect, ConnectedProps } from 'react-redux';
-import { Dropdown } from 'react-bootstrap';
-import { MainState } from '../../core/store/reducer';
 import { ServiceProps, withServices } from '../../core/withServices';
 import TopBarLink from './TopBarLink';
 import MainIcon from '../../assets/main-icon.svg';
+import LangSelector from './lang-selector/LangSelector';
+import UserMenu from './user-menu/UserMenu';
+import { namespacedTranslation } from '../../i18n/i18n';
 import Cls from './TopBar.module.scss';
 
 const logger = Logger.get('TopBar.tsx');
 
-const mapStateToProps = (state: MainState) => ({
-  userStatus: state.authentication.userStatus,
-  user: state.authentication.user,
-});
+type Props = RouteComponentProps<any> & ServiceProps;
 
-const connector = connect(mapStateToProps);
-
-type Props = ConnectedProps<typeof connector> & RouteComponentProps<any> & ServiceProps;
+const t = namespacedTranslation('TopBar');
 
 class TopBar extends Component<Props, {}> {
   public render(): ReactNode {
-    const userAuthenticated = this.props.userStatus === UserStatus.Authenticated;
-    const user = this.props.user;
-    const userLabel = user && userAuthenticated ? user.email : 'Bonjour visiteur !';
-
     return (
       <div className={Cls.topBar} data-cy={'top-bar'}>
         <h1>
@@ -57,102 +46,23 @@ class TopBar extends Component<Props, {}> {
 
         <div className={'flex-grow-1'} />
 
-        <TopBarLink label={'Carte'} to={FrontendRoutes.map().raw()} data-cy={'map'} />
-        <TopBarLink label={'Catalogue de données'} to={FrontendRoutes.dataStore().raw()} data-cy={'data-store'} />
-        <TopBarLink label={'Traitement de données'} to={FrontendRoutes.dataProcessing().withoutOptionals()} data-cy={'data-processing'} />
-        <TopBarLink label={'Mise en page'} to={FrontendRoutes.layout().raw()} data-cy={'layout'} />
-        <TopBarLink label={'Documentation'} to={FrontendRoutes.documentation().raw()} data-cy={'help'} />
-        <TopBarLink label={'Soutenez Abc-Map 💌'} to={FrontendRoutes.funding().raw()} data-cy={'help'} />
+        <TopBarLink label={t('Map')} to={FrontendRoutes.map().raw()} data-cy={'map'} />
+        <TopBarLink label={t('Data_store')} to={FrontendRoutes.dataStore().raw()} data-cy={'data-store'} />
+        <TopBarLink label={t('Data_processing')} to={FrontendRoutes.dataProcessing().withoutOptionals()} data-cy={'data-processing'} />
+        <TopBarLink label={t('Layout')} to={FrontendRoutes.layout().raw()} data-cy={'layout'} />
+        <TopBarLink label={t('Documentation')} to={FrontendRoutes.documentation().raw()} data-cy={'help'} />
+        <TopBarLink label={`${t('Support_AbcMap')} 💌`} to={FrontendRoutes.funding().raw()} data-cy={'help'} />
 
         <div className={'ml-3'}>
-          <Dropdown data-cy={'user-menu'}>
-            <Dropdown.Toggle variant="light">
-              <i className={'fa fa-user-circle'} />
-            </Dropdown.Toggle>
-            <Dropdown.Menu className={Cls.dropDown}>
-              <Dropdown.ItemText data-cy={'user-label'}>{userLabel}</Dropdown.ItemText>
-              <Dropdown.Divider />
-              {!userAuthenticated && (
-                <>
-                  <Dropdown.Item onClick={this.handleLogin}>
-                    <i className={'fa fa-lock-open mr-3'} />
-                    Se connecter
-                  </Dropdown.Item>
-                  <Dropdown.Item onClick={this.handlePasswordLost} data-cy={'reset-password'}>
-                    <i className={'fa fa-key mr-3'} />
-                    Mot de passe perdu
-                  </Dropdown.Item>
-                  <Dropdown.Item onClick={this.handleRegister}>
-                    <i className={'fa fa-feather mr-3'} />
-                    S&apos;inscrire
-                  </Dropdown.Item>
-                </>
-              )}
-              {userAuthenticated && (
-                <>
-                  <Dropdown.Item onClick={this.handleUserAccount} data-cy={'user-profile'}>
-                    <i className={'fa fa-cogs mr-3'} />
-                    Mon compte
-                  </Dropdown.Item>
-                  <Dropdown.Divider />
-                  <Dropdown.Item onClick={this.handleLogout} data-cy={'logout'}>
-                    <i className={'fa fa-lock mr-3'} /> Se déconnecter
-                  </Dropdown.Item>
-                </>
-              )}
-            </Dropdown.Menu>
-          </Dropdown>
+          <LangSelector />
+        </div>
+
+        <div className={'ml-3'}>
+          <UserMenu />
         </div>
       </div>
     );
   }
-
-  private handleLogin = () => {
-    const { modals, toasts } = this.props.services;
-
-    modals.login().catch((err) => {
-      logger.error('Cannot open login modal', err);
-      toasts.genericError();
-    });
-  };
-
-  private handlePasswordLost = () => {
-    const { modals, toasts } = this.props.services;
-
-    modals.passwordLost().catch((err) => {
-      logger.error('Cannot open login modal', err);
-      toasts.genericError();
-    });
-  };
-
-  private handleRegister = () => {
-    const { modals, toasts } = this.props.services;
-
-    modals.registration().catch((err) => {
-      logger.error('Cannot open registration modal', err);
-      toasts.genericError();
-    });
-  };
-
-  private handleUserAccount = () => {
-    this.props.history.push(FrontendRoutes.userAccount().raw());
-  };
-
-  private handleLogout = () => {
-    const { project, authentication, toasts } = this.props.services;
-
-    project
-      .newProject()
-      .then(() => authentication.logout())
-      .then(() => {
-        toasts.info('Vous êtes déconnecté 👋');
-        this.props.history.push(FrontendRoutes.landing().raw());
-      })
-      .catch((err) => {
-        toasts.genericError();
-        logger.error(err);
-      });
-  };
 }
 
-export default connector(withRouter(withServices(TopBar)));
+export default withRouter(withServices(TopBar));

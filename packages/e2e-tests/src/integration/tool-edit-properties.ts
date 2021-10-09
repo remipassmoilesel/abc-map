@@ -32,7 +32,7 @@ describe('Edit properties', function () {
 
   it('user can edit properties, then undo', function () {
     cy.visit(FrontendRoutes.dataStore().raw())
-      .then(() => DataStore.importByName('Pays du monde'))
+      .then(() => DataStore.importByName('Countries of the world'))
       .then(() => TopBar.map())
       .then(() => MainMap.fixedView())
       .then(() => ToolSelector.enable(MapTool.EditProperties))

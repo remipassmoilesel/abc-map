@@ -1,11 +1,23 @@
-version: 0.1
+---
+version: 0.1.0
 artefact:
-  name: Hydrographie du monde
   license: README.txt
   link: http://tapiquen-sig.jimdo.com
+  name:
+    - language: fr
+      text: Hydrographie du monde
+    - language: en
+      text: Hydrography of the world
   keywords:
-    - monde
-    - hydrographie
+    - language: fr
+      text:
+        - monde
+        - hydrographie
+    - language: en
+      text:
+        - monde
+        - hydrography
+
   files:
     - world-hydrography.zip
 

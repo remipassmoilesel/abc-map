@@ -51,8 +51,8 @@ async function main() {
   }
 
   // Index datastore and projections
-  services.datastore.index().catch((err) => logger.error(err));
-  services.projections.index().catch((err) => logger.error(err));
+  services.datastore.index().catch((err) => logger.error(`Datastore indexation failed: ${err.message}`, err));
+  services.projections.index().catch((err) => logger.error(`Projections indexation failed: ${err.message}`, err));
 
   // Instantiate then start server
   server = HttpServer.create(config, services);

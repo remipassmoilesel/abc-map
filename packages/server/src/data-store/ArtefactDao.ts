@@ -20,22 +20,31 @@ import { Config } from '../config/Config';
 import { MongodbClient } from '../mongodb/MongodbClient';
 import { ArtefactDocument } from './ArtefactDocument';
 import { MongodbCollection } from '../mongodb/MongodbCollection';
+import { CreateIndexesOptions, IndexSpecification } from 'mongodb';
+import { MongoLanguage } from '../mongodb/MongodbI18n';
 
 export class ArtefactDao {
   constructor(private config: Config, private client: MongodbClient) {}
 
   public async init() {
     const coll = await this.collection();
-    await coll.createIndex(
-      {
-        name: 'text',
-        description: 'text',
-        keywords: 'text',
+
+    const specs: IndexSpecification = {
+      'name.text': 'text',
+      'description.text': 'text',
+      'keywords.text': 'text',
+    };
+
+    const options: CreateIndexesOptions = {
+      name: 'artefact_search',
+      default_language: 'english',
+      language_override: 'language',
+      weights: {
+        'name.text': 10,
+        'keywords.text': 5,
       },
-      {
-        default_language: 'french',
-      }
-    );
+    };
+    await coll.createIndex(specs, options);
   }
 
   public async save(artefact: ArtefactDocument): Promise<void> {
@@ -46,12 +55,10 @@ export class ArtefactDao {
   public async saveAll(artefacts: ArtefactDocument[]): Promise<void> {
     const coll = await this.collection();
 
-    const operations = artefacts.map((art) => ({
+    const operations = artefacts.map((artefact) => ({
       replaceOne: {
-        filter: {
-          _id: art._id,
-        },
-        replacement: art,
+        filter: { _id: artefact._id },
+        replacement: artefact,
         upsert: true,
       },
     }));
@@ -70,13 +77,13 @@ export class ArtefactDao {
     return coll.find({}).sort({ name: 1, _id: 1 }).skip(offset).limit(limit).toArray();
   }
 
-  public async search(query: string, limit: number, offset: number): Promise<ArtefactDocument[]> {
+  public async search(query: string, lang: MongoLanguage, limit: number, offset: number): Promise<ArtefactDocument[]> {
     const coll = await this.collection();
     const cleanQuery = query.toLocaleLowerCase().trim();
 
     // First we try a text search
     const results = await coll
-      .find({ $text: { $search: cleanQuery } })
+      .find({ $text: { $search: cleanQuery, $language: lang } })
       .project<ArtefactDocument>({ score: { $meta: 'textScore' } })
       .limit(limit)
       .skip(offset)
@@ -91,7 +98,7 @@ export class ArtefactDao {
     else {
       const regexp = new RegExp(`^${cleanQuery}`, 'i');
       const query = {
-        $or: [{ name: { $regex: regexp } }, { description: { $regex: regexp } }],
+        $or: [{ 'name.text': { $regex: regexp } }, { 'description.text': { $regex: regexp } }, { 'keywords.text': { $regex: regexp } }],
       };
 
       return coll.find(query).limit(limit).skip(offset).sort({ name: 1, _id: 1 }).toArray();

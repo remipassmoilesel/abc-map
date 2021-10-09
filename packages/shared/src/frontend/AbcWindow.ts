@@ -25,6 +25,7 @@ export interface AbcWindow extends Window {
     services?: any;
     store?: any;
     goTo?: (r: string) => void;
+    setLang?: (lang: string) => Promise<unknown>;
   };
   __REDUX_DEVTOOLS_EXTENSION__?: () => any;
   Cypress?: any;

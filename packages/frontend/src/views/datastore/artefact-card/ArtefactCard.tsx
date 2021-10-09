@@ -17,10 +17,11 @@
  */
 
 import React, { Component, ReactNode } from 'react';
-import { Logger } from '@abc-map/shared';
+import { getListByLang, getTextByLang, Logger } from '@abc-map/shared';
 import { AbcArtefact } from '@abc-map/shared';
 import { ServiceProps, withServices } from '../../../core/withServices';
 import { Modal } from 'react-bootstrap';
+import { getLang } from '../../../i18n/i18n';
 import Cls from './ArtefactCard.module.scss';
 
 const logger = Logger.get('ArtefactCard.tsx');
@@ -41,16 +42,14 @@ interface State {
 class ArtefactCard extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = {
-      licenseModal: false,
-    };
+    this.state = { licenseModal: false };
   }
 
   public render(): ReactNode {
-    const name = this.props.artefact.name;
     const link = this.props.artefact.link;
-    const description = this.props.artefact.description;
-    const keywords = this.props.artefact.keywords;
+    const name = getTextByLang(this.props.artefact.name, getLang());
+    const description = getTextByLang(this.props.artefact.description, getLang());
+    const keywords = getListByLang(this.props.artefact.keywords, getLang());
     const licenseModal = this.state.licenseModal;
     const license = this.state.license;
 

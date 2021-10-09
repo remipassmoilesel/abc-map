@@ -1,11 +1,26 @@
-version: 0.1
+---
+version: 0.1.0
 artefact:
-  name: Villes du monde
   license: README.txt
-  description: Liste des villes du monde
+  name:
+    - language: fr
+      text: Villes du monde
+    - language: en
+      text: Cities of the world
+  description:
+    - language: fr
+      text: Liste des villes du monde
+    - language: en
+      text: List of cities in the world
   keywords:
-    - monde
-    - villes
+    - language: fr
+      text:
+        - villes
+        - monde
+    - language: en
+      text:
+        - cities
+        - world
   link: http://tapiquen-sig.jimdo.com
   files:
     - world-cities.zip

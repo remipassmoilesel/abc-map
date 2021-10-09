@@ -1,0 +1,37 @@
+{
+  "LandingView": {
+    "Welcome": "Bienvenue !",
+    "AbcMap_is_a_free_software": "Abc-Map est un logiciel de cartographie libre et gratuit.",
+    "How_does_it_work": "Comment ça marche ?",
+    "Watch_a_presentation_video": "Regardez une vidéo de présentation",
+    "or_read_the_doc": "ou parcourez la documentation",
+    "Then_open_map": "Puis lancez-vous sur la carte",
+    "Lets_go": "C'est parti !",
+    "Registration_Login": "Inscription, connexion",
+    "Connection_is_optional": "La connexion est facultative ! Vous pouvez utiliser Abc-Map sans vous inscrire",
+    "Register": "S'inscrire",
+    "Login": "Se connecter",
+    "A_pretty_illustration": "Une belle illustration !",
+    "For_7_days_opinions_are_positive": "Depuis 7 jours, {{votes}} % des avis sur Abc-Map sont positifs.",
+    "Champagne": "Champagne",
+    "Will_have_to_do_better": "Va falloir faire mieux",
+    "About_this_platform": "A propos de cette plateforme"
+  },
+  "TopBar": {
+    "Map": "Carte",
+    "Data_store": "Catalogue de données",
+    "Data_processing": "Traitement de données",
+    "Layout": "Mise en page",
+    "Documentation": "Documentation",
+    "Support_AbcMap": "Soutenez Abc-Map"
+  },
+  "UserMenu": {
+    "Hello_visitor": "Bonjour visiteur !",
+    "Login": "Se connecter",
+    "Register": "S'inscrire",
+    "Lost_password": "Mot de passe perdu",
+    "My_account": "Mon compte",
+    "Logout": "Se déconnecter",
+    "You_are_disconnected": "Vous êtes déconnecté"
+  }
+}

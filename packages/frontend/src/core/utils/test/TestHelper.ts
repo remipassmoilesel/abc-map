@@ -34,6 +34,7 @@ import {
   DEFAULT_PROJECTION,
   FeatureStyle,
   FillPatterns,
+  Language,
   LayerType,
   LayoutFormats,
   LegendDisplay,
@@ -300,12 +301,12 @@ export class TestHelper {
     return {
       id: uuid(),
       path: '/sample/manifest.yaml',
-      name: 'Sample artefact',
+      name: [{ language: Language.English, text: 'Sample artefact' }],
       files: ['file/1.gpx', 'file/2.kml'],
       link: 'http://somewhere',
       license: 'LICENSE.txt',
-      keywords: ['gpx', 'kml'],
-      description: 'A sample artefact',
+      keywords: [{ language: Language.English, text: ['gpx', 'kml'] }],
+      description: [{ language: Language.English, text: 'A sample artefact' }],
     };
   }
 

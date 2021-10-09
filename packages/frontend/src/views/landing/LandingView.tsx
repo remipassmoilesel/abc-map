@@ -17,10 +17,8 @@
  */
 
 import React, { Component, ReactNode } from 'react';
-import { Logger, UserStatus } from '@abc-map/shared';
+import { Language, AbcVoteAggregation, FrontendRoutes, Logger, UserStatus } from '@abc-map/shared';
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
-import { FrontendRoutes } from '@abc-map/shared';
-import { AbcVoteAggregation } from '@abc-map/shared';
 import { ServiceProps, withServices } from '../../core/withServices';
 import { DateTime } from 'luxon';
 import Illustration1Icon from '../../assets/illustrations/illustration-1.svg';
@@ -32,6 +30,7 @@ import { BUILD_INFO } from '../../build-version';
 import { MainState } from '../../core/store/reducer';
 import { connect, ConnectedProps } from 'react-redux';
 import { pageSetup } from '../../core/utils/page-setup';
+import { getLang, namespacedTranslation } from '../../i18n/i18n';
 
 const logger = Logger.get('Landing.tsx');
 
@@ -48,6 +47,8 @@ interface State {
   illustration: string;
 }
 
+const t = namespacedTranslation('LandingView');
+
 class LandingView extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
@@ -62,6 +63,8 @@ class LandingView extends Component<Props, State> {
     const illustration = this.state.illustration;
     const buildHash = BUILD_INFO.hash;
     const buildDate = DateTime.fromISO(BUILD_INFO.date).toLocal().toFormat('dd/MM/yyyy (HH:mm)');
+    // TODO: remove when translation finish
+    const langWarning = getLang() !== Language.French;
 
     return (
       <div className={Cls.landing}>
@@ -69,29 +72,33 @@ class LandingView extends Component<Props, State> {
           {/* Introduction */}
 
           <div>
-            <h1>Bienvenue !</h1>
+            <h1>{t('Welcome')}</h1>
 
-            <p className={Cls.intro}>Abc-Map est un logiciel de cartographie libre et gratuit.</p>
+            <p className={Cls.intro}>{t('AbcMap_is_a_free_software')}</p>
+            {langWarning && (
+              <div className="alert alert-warning">
+                <i className={'fa fa-exclamation-triangle'} /> Hmm, not everything is translated into your language yet.
+              </div>
+            )}
           </div>
 
           <div>
-            <h3>Comment ça marche ?</h3>
+            <h3>{t('How_does_it_work')}</h3>
             <ul className={'mt-3'}>
               <li>
-                Regardez une&nbsp;
                 <a href={'https://www.youtube.com/channel/UCrlsEykrLNpK12Id7c7GP7g'} target={'_blank'} rel="noreferrer">
-                  vidéo de présentation 📹
+                  {t('Watch_a_presentation_video')} 📹
                 </a>
-                &nbsp; ou parcourez la <Link to={FrontendRoutes.documentation().raw()}>documentation 📖</Link>
+                &nbsp; <Link to={FrontendRoutes.documentation().raw()}>{t('or_read_the_doc')} 📖</Link>
               </li>
               <li>
-                Puis lancez-vous sur la <Link to={FrontendRoutes.map().raw()}>carte 🌍</Link>
+                <Link to={FrontendRoutes.map().raw()}>{t('Then_open_map')} 🌍</Link>
               </li>
             </ul>
             <div className={'mt-4'}>
               <button className={'btn btn-primary'} onClick={this.handleGoToMap}>
                 <i className={'fa fa-rocket mr-2'} />
-                Commencer
+                {t('Lets_go')}
               </button>
             </div>
 
@@ -106,16 +113,16 @@ class LandingView extends Component<Props, State> {
 
           {!authenticated && (
             <div>
-              <h3>Inscription, connexion</h3>
-              <p className={'mb-4'}>La connexion est facultative ! Vous pouvez utiliser Abc-Map sans vous inscrire 😉</p>
+              <h3>{t('Registration_Login')}</h3>
+              <p className={'mb-4'}>{t('Connection_is_optional')} 😉</p>
               <div>
                 <button className={'btn btn-outline-primary'} onClick={this.handleRegister} data-cy={'open-registration'}>
                   <i className={'fa fa-feather-alt mr-3'} />
-                  S&apos;inscrire
+                  {t('Register')}
                 </button>
                 <button className={'btn btn-outline-primary'} onClick={this.handleLogin} data-cy={'open-login'}>
                   <i className={'fa fa-lock-open mr-3'} />
-                  Se connecter
+                  {t('Login')}
                 </button>
               </div>
             </div>
@@ -123,30 +130,30 @@ class LandingView extends Component<Props, State> {
         </div>
 
         <div className={Cls.rightColumn}>
-          {/* Some bullshit (but pretty !) illustration */}
+          {/* Some pretty illustration */}
 
-          <img src={illustration} alt={'Une belle illustration pour faire comme les vrais !'} className={Cls.illustration} />
+          <img src={illustration} alt={t('A_pretty_illustration')} className={Cls.illustration} />
 
           {/* Vote results */}
 
           {!!voteAggregation?.total && (
             <div className={'text-right'}>
-              Depuis 7 jours, {voteAggregation.satisfied} % des avis sur Abc-Map sont positifs.&nbsp;
+              {t('For_7_days_opinions_are_positive', { votes: voteAggregation.satisfied })}&nbsp;
               {voteAggregation.satisfied < 60 && (
                 <>
-                  Va falloir faire mieux <span className={'ml-2'}>🧑‍🏭</span>
+                  {t('Will_have_to_do_better')} <span className={'ml-2'}>🧑‍🏭</span>
                 </>
               )}
               {voteAggregation.satisfied >= 60 && (
                 <>
-                  Champagne ! <span className={'ml-2'}>🎉</span>
+                  {t('Champagne')} <span className={'ml-2'}>🎉</span>
                 </>
               )}
             </div>
           )}
 
           <div className={'mt-3'}>
-            <Link to={FrontendRoutes.legalMentions().raw()}>A propos de cette plateforme&nbsp;&nbsp;⚖️</Link>
+            <Link to={FrontendRoutes.legalMentions().raw()}>{t('About_this_platform')}&nbsp;&nbsp;⚖️</Link>
           </div>
         </div>
       </div>

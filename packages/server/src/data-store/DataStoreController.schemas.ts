@@ -20,6 +20,7 @@ import { PaginatedQuery } from '../server/PaginationHelper';
 
 export interface SearchQuery extends PaginatedQuery {
   query: string;
+  lang: string;
 }
 
 export interface ByIdParams {
@@ -46,6 +47,7 @@ export const SearchSchema: FastifySchema = {
       limit: { type: 'string' },
       offset: { type: 'string' },
       query: { type: 'string' },
+      lang: { type: 'string' },
     },
   },
 };

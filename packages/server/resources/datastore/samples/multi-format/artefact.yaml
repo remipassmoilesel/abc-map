@@ -1,8 +1,27 @@
-version: 0.1
+version: 0.1.0
 artefact:
-  name: Exemples d'artefact multi-format
   license: README.md
-  description: Divers fichiers exemple
+  name:
+    - language: fr
+      text: Exemples d'artefact multi-format
+    - language: en
+      text: Multi-format artifact examples
+  description:
+    - language: fr
+      text: Divers fichiers exemple
+    - language: en
+      text: Various example files
+  keywords:
+    - language: en
+      text:
+        - Camping
+        - KML
+        - Geojson
+    - language: fr
+      text:
+        - Camping
+        - KML
+        - Geojson
   files:
     - campings-bretagne.gpx
     - KML_Samples.kml

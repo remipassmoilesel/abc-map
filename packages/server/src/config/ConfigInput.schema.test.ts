@@ -81,7 +81,7 @@ const sampleConfig: ConfigInput = {
 
 describe('ConfigInput.schema', () => {
   it('should validate', () => {
-    assert.isTrue(Validation.configInput(sampleConfig), Validation.formatErrors(Validation.configInput));
+    assert.isTrue(Validation.ConfigInput(sampleConfig), Validation.formatErrors(Validation.ConfigInput));
   });
 
   it('should not validate', () => {
@@ -90,6 +90,6 @@ describe('ConfigInput.schema', () => {
       wrongProperty: false,
     };
 
-    assert.isFalse(Validation.configInput(config));
+    assert.isFalse(Validation.ConfigInput(config));
   });
 });

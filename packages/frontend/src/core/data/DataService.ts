@@ -29,6 +29,7 @@ import { ModalStatus } from '../ui/typings';
 import { HistoryKey } from '../history/HistoryKey';
 import { AddLayersTask } from '../history/tasks/layers/AddLayersTask';
 import { HistoryService } from '../history/HistoryService';
+import { getLang } from '../../i18n/i18n';
 
 const logger = Logger.get('DataService.ts');
 
@@ -72,7 +73,7 @@ export class DataService {
   }
 
   public searchArtefacts(query: string, limit = 50, offset = 0): Promise<PaginatedResponse<AbcArtefact>> {
-    const params = { query: encodeURI(query), limit, offset };
+    const params = { query: encodeURI(query), lang: getLang(), limit, offset };
     return this.apiClient
       .get(Api.search(), { params })
       .then((res) => res.data)

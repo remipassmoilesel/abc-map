@@ -46,7 +46,7 @@ map.findByName(layerName).getFeatures().forEach((f, i) => f.set('e2e', i))
 map.findByName(layerName).getFeatures().forEach((f) => log(f.get('e2e')))
 `;
     cy.visit(FrontendRoutes.dataProcessing().withoutOptionals())
-      .then(() => DataStore.importByName('Pays du monde'))
+      .then(() => DataStore.importByName('Countries of the world'))
       .then(() => TopBar.dataProcessing())
       .get('[data-cy=scripts]')
       .click()

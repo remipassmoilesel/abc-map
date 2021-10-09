@@ -31,7 +31,7 @@ describe('Color gradients', function () {
   it('User can create proportional symbols', () => {
     cy.visit(FrontendRoutes.dataProcessing().withoutOptionals())
       // Import layer
-      .then(() => DataStore.importByName('Pays du monde'))
+      .then(() => DataStore.importByName('Countries of the world'))
       .then(() => TopBar.dataProcessing())
       .get('[data-cy=color-gradients]')
       .click()

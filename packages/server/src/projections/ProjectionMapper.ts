@@ -22,17 +22,17 @@ import { ProjectionDto } from '@abc-map/shared';
 export class ProjectionMapper {
   public static docToDto(doc: ProjectionDocument): ProjectionDto {
     return {
-      code: doc.code,
-      kind: doc.kind,
-      bbox: doc.bbox,
-      wkt: doc.wkt,
-      unit: doc.unit,
-      proj4: doc.proj4,
-      name: doc.name,
-      area: doc.area,
-      default_trans: doc.default_trans,
-      trans: doc.trans,
-      accuracy: doc.accuracy,
+      code: doc.code || undefined,
+      kind: doc.kind || undefined,
+      bbox: doc.bbox || undefined,
+      wkt: doc.wkt || undefined,
+      unit: doc.unit || undefined,
+      proj4: doc.proj4 || undefined,
+      name: doc.name || undefined,
+      area: doc.area || undefined,
+      default_trans: doc.default_trans || undefined,
+      trans: doc.trans || undefined,
+      accuracy: doc.accuracy || undefined,
     };
   }
 }
