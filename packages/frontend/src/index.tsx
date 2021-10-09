@@ -31,9 +31,16 @@ import { BUILD_INFO } from './build-version';
 import { ServiceProvider } from './core/withServices';
 import { Provider } from 'react-redux';
 import ErrorBoundary from './views/error-boundary/ErrorBoundary';
+import { BrowserRouter } from 'react-router-dom';
+
+// Load main style
 import './index.scss';
 
+// Load translations
+import './i18n/i18n';
+
 export const logger = Logger.get('index.tsx', 'warn');
+
 const svc = getServices();
 
 logger.info('Version: ', BUILD_INFO);
@@ -69,7 +76,9 @@ function load() {
       <ServiceProvider value={getServices()}>
         <React.StrictMode>
           <ErrorBoundary>
-            <App />
+            <BrowserRouter>
+              <App />
+            </BrowserRouter>
           </ErrorBoundary>
         </React.StrictMode>
       </ServiceProvider>

@@ -17,8 +17,8 @@
  */
 
 import React, { Component, ReactNode } from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { FrontendRoutes } from '@abc-map/shared';
+import { Route, RouteComponentProps, Switch, withRouter } from 'react-router-dom';
+import { FrontendRoutes, getAbcWindow, isLangSupported, Language } from '@abc-map/shared';
 import MapView from './views/map/MapView';
 import { ToastContainer } from 'react-toastify';
 import LandingView from './views/landing/LandingView';
@@ -48,11 +48,15 @@ import LegalMentionsView from './views/legal-mentions/LegalMentionsView';
 import LongOperationModal from './components/long-operation-modal/LongOperationModal';
 import FundingView from './views/funding/FundingView';
 import ConfirmationModal from './components/confirmation-modal/ConfirmationModal';
+import { setLang } from './i18n/i18n';
+import { withTranslation } from 'react-i18next';
 
-class App extends Component<ServiceProps, {}> {
+type Props = ServiceProps & RouteComponentProps;
+
+class App extends Component<Props, {}> {
   public render(): ReactNode {
     return (
-      <BrowserRouter>
+      <>
         <TopBar />
         <Switch>
           <Route exact path={FrontendRoutes.landing().raw()} component={LandingView} />
@@ -82,7 +86,7 @@ class App extends Component<ServiceProps, {}> {
         <LegendSymbolPickerModal />
         <LongOperationModal />
         <ConfirmationModal />
-      </BrowserRouter>
+      </>
     );
   }
 
@@ -94,6 +98,15 @@ class App extends Component<ServiceProps, {}> {
       window.addEventListener('unload', this.warnBeforeUnload);
       authentication.watchToken();
     }
+
+    getAbcWindow().abc.goTo = this.goTo;
+    getAbcWindow().abc.setLang = (lang) => {
+      if (!isLangSupported(lang)) {
+        throw new Error(`Unknown lang: ${lang}`);
+      }
+
+      return setLang(lang as Language);
+    };
   }
 
   public componentWillUnmount() {
@@ -118,6 +131,14 @@ class App extends Component<ServiceProps, {}> {
     }
     return message;
   };
+
+  /**
+   * This route is used for documentation links
+   * @param route
+   */
+  private goTo = (route: string) => {
+    this.props.history.push(route);
+  };
 }
 
-export default withServices(App);
+export default withTranslation()(withRouter(withServices(App)));

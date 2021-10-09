@@ -84,7 +84,7 @@ export default () => {
   });
 
   // We search artefacts
-  const req4 = jsonGet(`${fileOptions.host}/api/datastore/search?query=monde&limit=6&offset=0`, auth);
+  const req4 = jsonGet(`${fileOptions.host}/api/datastore/search?query=world&lang=en&limit=6&offset=0`, auth);
   check(req4, {
     'Search artefacts status is 200': (res) => res.status === 200,
   });

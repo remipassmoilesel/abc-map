@@ -18,31 +18,32 @@
 
 import { AbcArtefact } from '@abc-map/shared';
 import { ArtefactDocument } from './ArtefactDocument';
+import { MongoI18nMapper } from '../mongodb/MongodbI18n';
 
 export class ArtefactMapper {
   public static dtoToDoc(dto: AbcArtefact): ArtefactDocument {
     return {
       _id: dto.id,
-      name: dto.name,
+      name: dto.name.map(MongoI18nMapper.textToMongo),
       path: dto.path,
-      description: dto.description,
       files: dto.files,
-      keywords: dto.keywords,
+      description: dto.description.map(MongoI18nMapper.textToMongo),
+      keywords: dto.keywords.map(MongoI18nMapper.listToMongo),
       license: dto.license,
-      link: dto.link,
+      link: dto.link || null,
     };
   }
 
   public static docToDto(doc: ArtefactDocument): AbcArtefact {
     return {
       id: doc._id,
-      name: doc.name,
+      name: doc.name.map(MongoI18nMapper.textFromMongo),
       path: doc.path,
-      description: doc.description,
       files: doc.files,
-      keywords: doc.keywords,
+      description: doc.description.map(MongoI18nMapper.textFromMongo),
+      keywords: doc.keywords.map(MongoI18nMapper.listFromMongo),
       license: doc.license,
-      link: doc.link,
+      link: doc.link || undefined,
     };
   }
 }

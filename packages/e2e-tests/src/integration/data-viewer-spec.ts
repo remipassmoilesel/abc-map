@@ -29,7 +29,7 @@ describe('Data viewer module', function () {
 
   it('User can see layer data', () => {
     cy.visit(FrontendRoutes.dataProcessing().withoutOptionals())
-      .then(() => DataStore.importByName('Pays du monde'))
+      .then(() => DataStore.importByName('Countries of the world'))
       .then(() => TopBar.dataProcessing())
       .get('[data-cy=data-viewer]')
       .click()
@@ -54,7 +54,7 @@ describe('Data viewer module', function () {
 
   it('User can download', () => {
     cy.visit(FrontendRoutes.dataProcessing().withoutOptionals())
-      .then(() => DataStore.importByName('Pays du monde'))
+      .then(() => DataStore.importByName('Countries of the world'))
       .then(() => TopBar.dataProcessing())
       .get('[data-cy=data-viewer]')
       .click()

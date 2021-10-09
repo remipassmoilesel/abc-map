@@ -1,9 +1,0 @@
-version: 0.1
-artefact:
-  name: Lacs du monde
-  license: README.txt
-  keywords:
-    - monde
-    - lacs
-  files:
-    - world-lakes.zip

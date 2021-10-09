@@ -56,6 +56,15 @@ describe('ProjectionService', () => {
         _id: uuid(),
         code: `EPSG:4326${uuid()}`,
         wkt: `GEOGCS["WGS 84",DATUM["WGS_1984",SPHEROID["WGS 84",6378137,....`,
+        kind: null,
+        bbox: null,
+        unit: null,
+        proj4: null,
+        name: null,
+        area: null,
+        default_trans: null,
+        trans: null,
+        accuracy: null,
       };
       await dao.upsertByCode([doc]);
 

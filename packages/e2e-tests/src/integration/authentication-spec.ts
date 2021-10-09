@@ -24,7 +24,7 @@ import { FrontendRoutes } from '@abc-map/shared';
 
 describe('Authentication', function () {
   beforeEach(() => {
-    TestHelper.init().clearLocalStorage();
+    return cy.clearLocalStorage().then(() => TestHelper.init());
   });
 
   describe('As a visitor', () => {
@@ -85,12 +85,12 @@ describe('Authentication', function () {
         .click()
         .get('[data-cy=logout]')
         .click()
-        .then(() => Toasts.assertText('Vous êtes déconnecté'))
+        .then(() => Toasts.assertText('You are disconnected'))
         .get('[data-cy=user-menu]')
         .click()
         .get('[data-cy=user-label]')
         .should((elem) => {
-          expect(elem.text()).equal('Bonjour visiteur !');
+          expect(elem.text()).equal('Hello visitor !');
         });
     });
   });

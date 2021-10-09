@@ -17,13 +17,14 @@
  */
 
 import { MongodbDocument } from '../mongodb/MongodbDocument';
+import { MongoI18nList, MongoI18nText } from '../mongodb/MongodbI18n';
 
 export interface ArtefactDocument extends MongodbDocument {
-  name: string;
-  description?: string;
-  keywords: string[];
+  name: MongoI18nText[];
+  description: MongoI18nText[];
+  keywords: MongoI18nList[];
   license: string;
-  link?: string;
+  link: string | null;
   path: string;
   files: string[];
 }

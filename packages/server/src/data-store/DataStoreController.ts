@@ -18,7 +18,7 @@
 
 import { Controller } from '../server/Controller';
 import { Services } from '../services/services';
-import { AbcArtefact, PaginatedResponse } from '@abc-map/shared';
+import { AbcArtefact, langFromString, PaginatedResponse } from '@abc-map/shared';
 import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import fastifyStatic from 'fastify-static';
 import { ByIdParams, GetByIdSchema, ListSchema, SearchQuery, SearchSchema } from './DataStoreController.schemas';
@@ -65,8 +65,14 @@ export class DataStoreController extends Controller {
 
     const { limit, offset } = PaginationHelper.fromQuery(req);
     const query = req.query.query;
+    const lang = langFromString(req.query.lang);
 
-    const [content, total] = await Promise.all([datastore.search(query, limit, offset), datastore.countArtefacts()]);
+    if (!lang || !query) {
+      reply.badRequest('"lang" and "query" parameters are mandatory');
+      return;
+    }
+
+    const [content, total] = await Promise.all([datastore.search(query, lang, limit, offset), datastore.countArtefacts()]);
     const result: PaginatedResponse<AbcArtefact> = {
       content,
       limit,

@@ -76,8 +76,8 @@ export class ProjectController extends Controller {
     }
 
     const metadata: AbcProjectMetadata = JSON.parse(metadataField.value);
-    if (!Validation.projectMetadata(metadata)) {
-      reply.badRequest(`Invalid project metadata`);
+    if (!Validation.ProjectMetadata(metadata)) {
+      reply.badRequest(`Invalid project metadata: ${Validation.formatErrors(Validation.ProjectMetadata)}`);
       return;
     }
 

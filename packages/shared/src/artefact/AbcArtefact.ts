@@ -15,15 +15,16 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
+import { I18nList, I18nText } from '../lang';
 
 export interface AbcArtefact {
   id: string;
-  name: string;
-  description?: string;
+  name: I18nText[];
+  description: I18nText[];
   /**
    * Keywords used for search and filter
    */
-  keywords: string[];
+  keywords: I18nList[];
   /**
    * Path to the license file
    */

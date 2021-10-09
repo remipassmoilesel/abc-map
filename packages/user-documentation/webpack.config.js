@@ -9,8 +9,10 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'build'),
     filename: 'index.js',
-    library: 'documentation',
-    libraryTarget: 'umd',
+    library: {
+      name: 'documentation',
+      type: 'umd',
+    },
   },
   module: {
     rules: [
@@ -40,7 +42,7 @@ module.exports = {
     ],
   },
   resolve: {
-    extensions: ['.tsx', '.ts'],
+    extensions: ['.tsx', '.ts', '.js', '.jsx'],
   },
   watchOptions: {
     ignored: /node_modules/,

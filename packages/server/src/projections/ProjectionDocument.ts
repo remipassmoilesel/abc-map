@@ -19,15 +19,15 @@
 import { MongodbDocument } from '../mongodb/MongodbDocument';
 
 export interface ProjectionDocument extends MongodbDocument {
-  code?: string;
-  kind?: string;
-  bbox?: [number, number, number, number];
-  wkt?: string;
-  unit?: string;
-  proj4?: string;
-  name?: string;
-  area?: string;
-  default_trans?: number;
-  trans?: number[];
-  accuracy?: number;
+  code: string | null;
+  kind: string | null;
+  bbox: [number, number, number, number] | null;
+  wkt: string | null;
+  unit: string | null;
+  proj4: string | null;
+  name: string | null;
+  area: string | null;
+  default_trans: number | null;
+  trans: number[] | null;
+  accuracy: number | null;
 }

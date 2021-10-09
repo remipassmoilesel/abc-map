@@ -17,16 +17,17 @@
  */
 
 import React, { Component, ReactNode } from 'react';
-import { getAbcWindow, Logger } from '@abc-map/shared';
-import { content as doc } from '@abc-map/user-documentation';
+import { Logger } from '@abc-map/shared';
+import { References } from '@abc-map/user-documentation';
 import { ServiceProps, withServices } from '../../core/withServices';
-import Cls from './DocumentationView.module.scss';
 import { MainState } from '../../core/store/reducer';
 import { connect, ConnectedProps } from 'react-redux';
 import { UiActions } from '../../core/store/ui/actions';
 import * as _ from 'lodash';
 import { pageSetup } from '../../core/utils/page-setup';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { getDocumentationLang } from '../../i18n/i18n';
+import Cls from './DocumentationView.module.scss';
 
 const logger = Logger.get('DocumentationView.tsx');
 
@@ -51,14 +52,21 @@ class DocumentationView extends Component<Props, {}> {
   }
 
   public render(): ReactNode {
+    const reference = References.find((ref) => ref.lang === getDocumentationLang());
+
     return (
       <div className={Cls.documentation}>
-        <div className={Cls.toc} dangerouslySetInnerHTML={{ __html: doc.toc }} />
-        <div className={Cls.viewport} ref={this.viewPortRef}>
-          {doc.modules.map((mod, i) => (
-            <div key={i} className={Cls.module} dangerouslySetInnerHTML={{ __html: mod }} />
-          ))}
-        </div>
+        {!reference && <h3 className={'my-5'}>Sorry, documentation is not available in your language</h3>}
+        {reference && (
+          <>
+            <div className={Cls.toc} dangerouslySetInnerHTML={{ __html: reference?.toc }} />
+            <div className={Cls.viewport} ref={this.viewPortRef}>
+              {reference?.modules.map((mod, i) => (
+                <div key={i} className={Cls.module} dangerouslySetInnerHTML={{ __html: mod }} />
+              ))}
+            </div>
+          </>
+        )}
       </div>
     );
   }
@@ -73,8 +81,6 @@ class DocumentationView extends Component<Props, {}> {
     }
     current.addEventListener('scroll', this.handleScroll);
     current.scrollTop = this.props.position;
-
-    getAbcWindow().abc.goTo = this.goTo;
   }
 
   public componentWillUnmount() {
@@ -85,14 +91,6 @@ class DocumentationView extends Component<Props, {}> {
     }
     current.removeEventListener('scroll', this.handleScroll);
   }
-
-  /**
-   * This route is used for documentation links
-   * @param route
-   */
-  private goTo = (route: string) => {
-    this.props.history.push(route);
-  };
 
   private handleScroll = _.debounce(() => {
     const current = this.viewPortRef.current;

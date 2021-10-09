@@ -1,10 +1,21 @@
-version: 0.1
+---
+version: 0.1.0
 artefact:
-  name: Lacs du monde
   license: README.txt
-  keywords:
-    - monde
-    - lacs
   link: http://tapiquen-sig.jimdo.com
+  name:
+    - language: fr
+      text: Lacs du monde
+    - language: en
+      text: Lakes of the world
+  keywords:
+    - language: fr
+      text:
+        - monde
+        - lacs
+    - language: en
+      text:
+        - world
+        - lakes
   files:
     - world-lakes.zip

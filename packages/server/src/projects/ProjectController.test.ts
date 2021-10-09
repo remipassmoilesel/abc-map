@@ -216,7 +216,7 @@ describe('ProjectController', () => {
 
       // Assert
       assert.equal(res.statusCode, 400);
-      assert.equal(res.body, '{"statusCode":400,"error":"Bad Request","message":"Invalid project metadata"}');
+      assert.isTrue(res.body.startsWith('{"statusCode":400,"error":"Bad Request","message":"Invalid project metadata'));
     });
   });
 

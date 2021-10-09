@@ -16,8 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FeatureProperties, StyleProperties } from '@abc-map/shared';
-import { FrontendRoutes, MapTool } from '@abc-map/shared';
+import { FeatureProperties, FrontendRoutes, MapTool, StyleProperties } from '@abc-map/shared';
 import { TestHelper } from '../helpers/TestHelper';
 import { ToolSelector } from '../helpers/ToolSelector';
 import { Draw } from '../helpers/Draw';

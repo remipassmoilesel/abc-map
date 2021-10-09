@@ -24,6 +24,11 @@ Edit `packages/e2e-tests/config/development.json`, settings `baseUrl`.
   "baseUrl": "http://localhost:3005",
 ```
 
+You may need to modify public URL too, in `packages/server/resources/configuration/local.js`
+```
+  externalUrl: 'http://localhost:3005/',
+```
+
 
 ### Error: attempt to perform an operation not allowed by the security policy `gs' @ error/delegate.c/ExternalDelegateCommand/378
 

@@ -22,7 +22,7 @@ import { TestHelper } from '../utils/TestHelper';
 describe('ProjectMetadata.schema', () => {
   it('should validate', () => {
     const meta = TestHelper.sampleProject().metadata;
-    assert.isTrue(Validation.projectMetadata(meta), Validation.formatErrors(Validation.projectMetadata));
+    assert.isTrue(Validation.ProjectMetadata(meta), Validation.formatErrors(Validation.ProjectMetadata));
   });
 
   it('should not validate', () => {
@@ -31,6 +31,6 @@ describe('ProjectMetadata.schema', () => {
       wrongProperty: false,
     };
 
-    assert.isFalse(Validation.projectMetadata(meta));
+    assert.isFalse(Validation.ProjectMetadata(meta));
   });
 });

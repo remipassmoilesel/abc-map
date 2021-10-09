@@ -31,10 +31,10 @@ describe('Data store', function () {
   it('User can search then download artefact', () => {
     cy.visit(FrontendRoutes.dataStore().raw())
       .get('[data-cy=data-store-search]')
-      .type('pays')
+      .type('countries')
       .type('{enter}')
       .get('[data-cy=artefact-name]')
-      .should('contain', 'Pays du monde')
+      .should('contain', 'Countries of the world')
       .get('[data-cy=download-artefact]')
       .click()
       .then(() => Download.fileAsBlob())
@@ -47,10 +47,10 @@ describe('Data store', function () {
   it('User can search then add artefact to project', () => {
     cy.visit(FrontendRoutes.dataStore().raw())
       .get('[data-cy=data-store-search]')
-      .type('pays')
+      .type('countries')
       .type('{enter}')
       .get('[data-cy=artefact-name]')
-      .should('contain', 'Pays du monde')
+      .should('contain', 'Countries of the world')
       .get('[data-cy=import-artefact]')
       .click()
       .then(() => Toasts.assertText('Import terminé !'))
@@ -69,13 +69,13 @@ describe('Data store', function () {
   it('User can search then show license', () => {
     cy.visit(FrontendRoutes.dataStore().raw())
       .get('[data-cy=data-store-search]')
-      .type('pays')
+      .type('countries')
       .type('{enter}')
       .get('[data-cy=artefact-name]')
-      .should('contain', 'Pays du monde')
+      .should('contain', 'Countries of the world')
       .get('[data-cy=show-license]')
       .click()
       .get('[data-cy=license-header]')
-      .should('contain', "Pays du monde : Licence d'utilisation");
+      .should('contain', "Countries of the world : Licence d'utilisation");
   });
 });

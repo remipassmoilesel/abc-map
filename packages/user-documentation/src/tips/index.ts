@@ -16,12 +16,10 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Tip } from './Tip';
-import { DataProcessing } from './data-processing';
-import { Tools } from './tools';
+import { I18nTips } from './Tip';
+import { EnTips } from './en';
+import { FrTips } from './fr';
 
-export * from './Tip';
-export * from './data-processing';
-export * from './tools';
+export const AllTips: I18nTips[] = [EnTips, FrTips];
 
-export const AllTips: Tip[] = [...DataProcessing, ...Tools];
+export * from './tip-ids';

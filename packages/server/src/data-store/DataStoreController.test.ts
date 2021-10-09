@@ -102,6 +102,7 @@ describe('AuthenticationController', () => {
         path: '/api/datastore/search',
         query: {
           query: 'test query',
+          lang: 'en',
         },
         headers: authentication,
       });
@@ -127,7 +128,7 @@ describe('AuthenticationController', () => {
     it('should work with valid request', async () => {
       // Prepare
       const artefact = TestHelper.sampleArtefact();
-      await services.datastore.save(artefact);
+      await services.datastore.saveAll([artefact]);
 
       // Act
       const response = await server.getApp().inject({

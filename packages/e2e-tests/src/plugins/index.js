@@ -51,7 +51,6 @@ module.exports = (on, config) => {
   });
 
   on('task', {
-
     // This task compare two PDF. It does not work very well between different states (headed browser or
     // headless, Firefo or Chromium, ...) So we prioritize headless chromium for CI.
     comparePdf({ actual, expected }) {

@@ -18,6 +18,7 @@
 import * as Ajv from 'ajv';
 import { ProjectMetadataSchema } from '../projects/ProjectMetadata.schema';
 import { ConfigInputSchema } from '../config/ConfigInputSchema';
+import { ArtefactManifestSchema } from '../data-store/ArtefactManifest';
 
 const ajv = new Ajv();
 
@@ -27,11 +28,13 @@ const ajv = new Ajv();
  * WARNING: All validate functions keep states from last call (errors, etc ...)
  */
 export class Validation {
-  public static readonly ajv = ajv;
+  public static readonly Ajv = ajv;
 
-  public static readonly configInput = ajv.compile(ConfigInputSchema);
+  public static readonly ConfigInput = ajv.compile(ConfigInputSchema);
 
-  public static readonly projectMetadata = ajv.compile(ProjectMetadataSchema);
+  public static readonly ProjectMetadata = ajv.compile(ProjectMetadataSchema);
+
+  public static readonly ArtefactManifest = ajv.compile(ArtefactManifestSchema);
 
   public static formatErrors(validateFunc: Ajv.ValidateFunction): string {
     return validateFunc.errors?.map((e) => JSON.stringify(e)).join(', ') || 'No validation error message';

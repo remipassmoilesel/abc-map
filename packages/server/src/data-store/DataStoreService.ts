@@ -21,37 +21,29 @@ import { ArtefactDao } from './ArtefactDao';
 import { MongodbClient } from '../mongodb/MongodbClient';
 import { ArtefactMapper } from './ArtefactMapper';
 import { AbstractService } from '../services/AbstractService';
-import { AbcArtefact } from '@abc-map/shared';
+import { AbcArtefact, Language } from '@abc-map/shared';
 import * as path from 'path';
-import { glob } from 'glob';
 import { Logger } from '@abc-map/shared';
-import * as util from 'util';
-import { ManifestReader } from './ManifestReader';
 import * as crypto from 'crypto';
 import { ArtefactDocument } from './ArtefactDocument';
-const globPromise = util.promisify(glob);
+import { MongoI18nMapper } from '../mongodb/MongodbI18n';
+import { DataStoreScanner } from './DataStoreScanner';
 
 export const logger = Logger.get('DatastoreService.ts', 'info');
 
 export class DataStoreService extends AbstractService {
   public static create(config: Config, client: MongodbClient): DataStoreService {
-    return new DataStoreService(config, new ArtefactDao(config, client));
+    const dao = new ArtefactDao(config, client);
+    const scanner = DataStoreScanner.create();
+    return new DataStoreService(config, dao, scanner);
   }
 
-  constructor(private config: Config, private dao: ArtefactDao) {
+  constructor(private config: Config, private dao: ArtefactDao, private scanner: DataStoreScanner) {
     super();
   }
 
   public init(): Promise<void> {
     return this.dao.init();
-  }
-
-  public async save(artefact: AbcArtefact): Promise<void> {
-    if (!artefact.id) {
-      return Promise.reject(new Error('Id is mandatory'));
-    }
-    const doc = ArtefactMapper.dtoToDoc(artefact);
-    return this.dao.save(doc);
   }
 
   public async saveAll(artefacts: AbcArtefact[]): Promise<void> {
@@ -72,8 +64,8 @@ export class DataStoreService extends AbstractService {
     return docs.map((doc) => ArtefactMapper.docToDto(doc));
   }
 
-  public async search(query: string, limit: number, offset = 0): Promise<AbcArtefact[]> {
-    return this.dao.search(query, limit, offset).then((res) => res.map(ArtefactMapper.docToDto));
+  public async search(query: string, lang: Language, limit: number, offset = 0): Promise<AbcArtefact[]> {
+    return this.dao.search(query, MongoI18nMapper.langToMongo(lang), limit, offset).then((res) => res.map(ArtefactMapper.docToDto));
   }
 
   public async countArtefacts(): Promise<number> {
@@ -81,7 +73,7 @@ export class DataStoreService extends AbstractService {
   }
 
   public getRoot(): string {
-    let result = this.config.datastore.path;
+    let result = this.config.datastore.path.trim();
     if (!path.isAbsolute(result)) {
       result = path.resolve(result);
     }
@@ -92,42 +84,43 @@ export class DataStoreService extends AbstractService {
     const root = this.getRoot();
     logger.info(`Indexing datastore path: ${root}`);
 
-    // List artefacts on disk
-    const manifestPaths = await globPromise(`{${root}/**/artefact.yml,${root}/**/artefact.yaml}`, {
-      nocase: true,
-    });
+    // Read artefact manifests
+    const manifests = await this.scanner.scan(root);
+    const datastorePath = this.getRoot();
 
     function hash(path: string): string {
       const hasher = crypto.createHash('sha512');
       return hasher.update(path).digest('hex');
     }
 
-    const datastorePath = this.config.datastore.path;
     function relativePath(manifestPath: string, filePath: string): string {
       const absolute = path.resolve(path.dirname(manifestPath), filePath);
       return path.relative(datastorePath, absolute);
     }
 
     const artefacts: ArtefactDocument[] = [];
-    for (const manifestPath of manifestPaths) {
-      const manifest = await ManifestReader.read(manifestPath);
-      const artefact = manifest.artefact;
-      const artefactPath = path.relative(datastorePath, manifest.path);
-      const files = manifest.artefact.files.map((file) => relativePath(manifest.path, file));
-      const license = relativePath(manifest.path, manifest.artefact.license);
+    for (const manifest of manifests) {
+      try {
+        const artefact = manifest.artefact;
+        const artefactPath = path.relative(datastorePath, manifest.path);
+        const files = manifest.artefact.files.map((file) => relativePath(manifest.path, file));
+        const license = relativePath(manifest.path, manifest.artefact.license);
 
-      const doc: ArtefactDocument = {
-        _id: hash(artefactPath),
-        name: artefact.name,
-        description: artefact.description,
-        keywords: artefact.keywords || [],
-        link: artefact.link,
-        license,
-        path: artefactPath,
-        files,
-      };
+        const doc: ArtefactDocument = {
+          _id: hash(artefactPath),
+          name: artefact.name.map(MongoI18nMapper.textToMongo),
+          description: (artefact.description || []).map(MongoI18nMapper.textToMongo),
+          keywords: artefact.keywords.map(MongoI18nMapper.listToMongo),
+          files,
+          link: artefact.link || null,
+          license,
+          path: artefactPath,
+        };
 
-      artefacts.push(doc);
+        artefacts.push(doc);
+      } catch (err) {
+        logger.error(`Error while processing manifest: ${manifest.path}`, err);
+      }
     }
 
     // Save them

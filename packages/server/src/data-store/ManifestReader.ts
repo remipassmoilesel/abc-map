@@ -20,44 +20,57 @@ import { ArtefactManifest } from './ArtefactManifest';
 import * as yaml from 'js-yaml';
 import * as path from 'path';
 import { promises as fs } from 'fs';
+import { isLangSupported } from '@abc-map/shared';
+import { Validation } from '../utils/Validation';
+
+export declare type FileModule = typeof fs;
 
 export class ManifestReader {
-  public static async read(manifestPath: string): Promise<ArtefactManifest> {
-    const errorPrefix = ` Manifest error on ${manifestPath}:`;
-    const file = await fs.readFile(manifestPath, 'utf8');
-    const manifest: ArtefactManifest | undefined = yaml.load(file) as ArtefactManifest | undefined;
+  public static create(): ManifestReader {
+    return new ManifestReader(fs);
+  }
+
+  constructor(private file: FileModule) {}
+
+  public async read(manifestPath: string): Promise<ArtefactManifest> {
+    const fileContent = await this.file.readFile(manifestPath, 'utf8');
+    const manifest = yaml.load(fileContent) as ArtefactManifest | undefined;
     if (!manifest) {
       return Promise.reject(new Error(`Invalid manifest: ${manifestPath}`));
     }
 
+    if (!Validation.ArtefactManifest(manifest)) {
+      return Promise.reject(new Error(`Invalid manifest: ${Validation.formatErrors(Validation.ArtefactManifest)}`));
+    }
+
     manifest.path = manifestPath;
 
-    if (!manifest.artefact) {
-      return Promise.reject(new Error(`${errorPrefix} Manifest must contain an artefact section`));
-    }
-    if (!manifest.artefact.name) {
-      return Promise.reject(new Error(`${errorPrefix} Name field is mandatory`));
-    }
-    if (!manifest.artefact.license) {
-      return Promise.reject(new Error(`${errorPrefix} Licence field is mandatory`));
-    }
-    if (!manifest.artefact.files.length) {
-      return Promise.reject(new Error(`${errorPrefix} Artefact must contains files`));
+    // Check languages
+    const invalidDescriptionLang = manifest.artefact.description?.map((text) => text.language).find((lang) => !isLangSupported(lang));
+    if (invalidDescriptionLang) {
+      return Promise.reject(new Error(`Invalid description lang: ${invalidDescriptionLang}`));
     }
 
-    const fileChecks: Promise<any>[] = manifest.artefact.files.flatMap((filePath) =>
-      fs
-        .stat(path.resolve(path.dirname(manifestPath), filePath))
-        .then((stat) => {
-          if (!stat.isFile()) {
-            return Promise.reject(new Error(`${errorPrefix} File ${file} must be a regular file`));
-          }
-        })
-        .catch((err) => {
-          return Promise.reject(new Error(`${errorPrefix} File ${file} must be a regular file: ${err.message}`));
+    const invalidKeywordLang = manifest.artefact.keywords?.map((text) => text.language).find((lang) => !isLangSupported(lang));
+    if (invalidKeywordLang) {
+      return Promise.reject(new Error(`Invalid keyword lang: ${invalidKeywordLang}`));
+    }
+
+    // Check if all files exists
+    await Promise.all(
+      manifest.artefact.files
+        .concat([manifest.artefact.license])
+        .filter((path) => !!path)
+        .map((filePath) => path.resolve(path.dirname(manifestPath), filePath))
+        .map((filePath) => {
+          const reject = () => Promise.reject(new Error(`File ${filePath} must be a regular file`));
+          return this.file
+            .stat(filePath)
+            .then((stat) => (!stat.isFile() ? reject() : undefined))
+            .catch(() => reject());
         })
     );
 
-    return Promise.all(fileChecks).then(() => manifest);
+    return manifest;
   }
 }

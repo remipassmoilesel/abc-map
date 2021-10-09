@@ -20,22 +20,30 @@ import { MongodbClient } from '../mongodb/MongodbClient';
 import { ConfigLoader } from '../config/ConfigLoader';
 import { DataStoreService, logger } from './DataStoreService';
 import { assert } from 'chai';
-import { Resources } from '../utils/Resources';
+import { ArtefactDao } from './ArtefactDao';
+import { DataStoreScanner } from './DataStoreScanner';
+import * as sinon from 'sinon';
+import { SinonStubbedInstance } from 'sinon';
+import { AbcArtefact, Language } from '@abc-map/shared';
+import { TestHelper } from '../utils/TestHelper';
+import * as uuid from 'uuid-random';
+import { ArtefactManifest } from './ArtefactManifest';
 
 logger.disable();
 
-// TODO: refactor tests
 describe('DatastoreService', () => {
-  const ressources = new Resources();
-  let service: DataStoreService;
+  let scanner: SinonStubbedInstance<DataStoreScanner>;
   let client: MongodbClient;
+  let service: DataStoreService;
 
   before(async () => {
     const config = await ConfigLoader.load();
-    config.datastore.path = ressources.getResourcePath('test/datastore');
+    config.datastore.path = '/datastore/ '; // With trailing slash and space
     client = await MongodbClient.createAndConnect(config);
+    const dao = new ArtefactDao(config, client);
+    scanner = sinon.createStubInstance(DataStoreScanner);
 
-    service = DataStoreService.create(config, client);
+    service = new DataStoreService(config, dao, scanner as unknown as DataStoreScanner);
     await service.init();
   });
 
@@ -43,38 +51,88 @@ describe('DatastoreService', () => {
     return client.disconnect();
   });
 
-  it('index() should work', async () => {
-    await service.index();
+  it('saveAll()', async () => {
+    // Prepare
+    const artefact = TestHelper.sampleArtefact();
 
-    const artefacts = (await service.list(10)).sort((a, b) => a.name.localeCompare(b.name));
-    artefacts.forEach((art) => {
-      assert.isDefined(art.id);
-      assert.isDefined(art.name);
-      assert.isDefined(art.link);
-      assert.isDefined(art.license);
-    });
-    assert.deepEqual(
-      artefacts.map((art) => art.name),
-      ['Hydrographie du monde', 'Lacs du monde', 'Pays du monde', 'Villes du monde']
-    );
-    assert.deepEqual(
-      artefacts.map((art) => art.path),
-      ['world/world-hydrography/artefact.yml', 'world/world-lakes/artefact.yml', 'world/world-countries/artefact.YAML', 'world/world-cities/artefact.yaml']
-    );
-    assert.deepEqual(
-      artefacts.map((art) => art.license),
-      ['world/world-hydrography/README.txt', 'world/world-lakes/README.txt', 'world/world-countries/README.txt', 'world/world-cities/README.txt']
-    );
+    // Act
+    await service.saveAll([artefact]);
+
+    // Assert
+    const dbArtefact = await service.findById(artefact.id);
+    assert.deepEqual(dbArtefact, artefact);
   });
 
-  it('index() should produce correct result even if called twice', async () => {
-    await service.index();
+  it('search()', async () => {
+    // Prepare
+    const needle = uuid().replace(/[^a-z0-9]/gi, '');
+
+    const artefact: AbcArtefact = {
+      ...TestHelper.sampleArtefact(),
+      description: [
+        {
+          language: Language.English,
+          text: `Burger of country ${needle}`,
+        },
+      ],
+    };
+    await service.saveAll([artefact]);
+
+    // Act
+    const results = await service.search(needle, Language.English, 10, 0);
+
+    // Assert
+    assert.lengthOf(results, 1);
+    assert.deepEqual(results[0], artefact);
+  });
+
+  it('countArtefacts()', async () => {
+    // Prepare
+    await service.saveAll([TestHelper.sampleArtefact()]);
+
+    // Act
+    const result = await service.countArtefacts();
+
+    // Assert
+    assert.isTrue(result >= 1);
+  });
+
+  it('getRoot()', async () => {
+    assert.equal(service.getRoot(), '/datastore');
+  });
+
+  it('index() should work', async () => {
+    // Prepare
+    const testId = uuid();
+    const artefacts: ArtefactManifest[] = [
+      TestHelper.sampleArtefactManifest(`${testId}-0`),
+      TestHelper.sampleArtefactManifest(`${testId}-1`),
+      TestHelper.sampleArtefactManifest(`${testId}-2`),
+    ].sort((a, b) => a.artefact.name[0].text.localeCompare(b.artefact.name[0].text));
+
+    scanner.scan.resolves(artefacts);
+
+    // Act
     await service.index();
 
-    const artefacts = (await service.list(10)).sort((a, b) => a.name.localeCompare(b.name));
-    assert.deepEqual(
-      artefacts.map((art) => art.name),
-      ['Hydrographie du monde', 'Lacs du monde', 'Pays du monde', 'Villes du monde']
-    );
+    // Assert
+    const dbArtefacts = (await service.list(10)).sort((a, b) => a.name[0].text.localeCompare(b.name[0].text));
+    assert.lengthOf(dbArtefacts, artefacts.length);
+
+    for (let i = 0; i < artefacts.length; i++) {
+      const actual = dbArtefacts[i];
+      const expected = artefacts[i];
+      assert.deepEqual(actual.name, expected.artefact.name);
+      assert.deepEqual(actual.keywords, expected.artefact.keywords);
+      assert.deepEqual(actual.link, expected.artefact.link);
+      assert.deepEqual(actual.description, expected.artefact.description);
+
+      // Downloadable file paths must be relative to datastore path
+      assert.deepEqual(
+        actual.files,
+        expected.artefact.files.map((file) => `${testId}-${i}/${file}`)
+      );
+      assert.deepEqual(actual.license, `${testId}-${i}/${expected.artefact.license}`);
+    }
   });
 });

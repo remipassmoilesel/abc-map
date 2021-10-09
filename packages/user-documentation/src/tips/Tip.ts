@@ -1,3 +1,5 @@
+import { DocumentationLang } from '../DocumentationLang';
+
 /**
  * Copyright © 2021 Rémi Pace.
  * This file is part of Abc-Map.
@@ -19,4 +21,9 @@
 export interface Tip {
   id: string;
   content: string;
+}
+
+export interface I18nTips {
+  lang: DocumentationLang;
+  tips: Tip[];
 }
