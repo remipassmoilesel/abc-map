@@ -16,9 +16,9 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { IconCategory } from '../../assets/point-icons/IconCategory';
 import { IconProcessor } from '../../core/geo/styles/IconProcessor';
 import { getAllIcons, PointIcon } from '../../assets/point-icons/PointIcon';
+import { IconCategory } from '../../assets/point-icons/IconCategory';
 
 export interface IconPreview {
   icon: PointIcon;

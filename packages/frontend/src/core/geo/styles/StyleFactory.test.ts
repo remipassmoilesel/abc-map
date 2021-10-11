@@ -23,7 +23,7 @@ import * as sinon from 'sinon';
 import { SinonStubbedInstance } from 'sinon';
 import { StyleCache, StyleCacheEntry } from './StyleCache';
 import Style from 'ol/style/Style';
-import { PointIconName } from '../../../assets/point-icons/PointIconName';
+import { IconName } from '../../../assets/point-icons/IconName';
 import { FeatureWrapper } from '../features/FeatureWrapper';
 import { GeometryType } from '@abc-map/shared';
 
@@ -105,7 +105,7 @@ describe('StyleFactory', () => {
         const properties = {
           ...TestHelper.sampleStyleProperties(),
           point: {
-            icon: PointIconName.IconArrow90DegLeft,
+            icon: IconName.IconArrow90DegLeft,
             size: 25,
             color: '#ABCDEF',
           },
@@ -128,7 +128,7 @@ describe('StyleFactory', () => {
             color1: '#ABCDEF',
           },
           point: {
-            icon: PointIconName.IconArrow90DegLeft,
+            icon: IconName.IconArrow90DegLeft,
             size: 25,
           },
         };

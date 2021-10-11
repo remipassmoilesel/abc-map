@@ -30,6 +30,7 @@ export class DataStore {
       .contains(name)
       .get('[data-cy=import-artefact]')
       .click()
-      .then(() => Toasts.assertText('Import terminé !'));
+      .then(() => Toasts.assertText('Import done !'))
+      .then(() => Toasts.dismiss());
   }
 }

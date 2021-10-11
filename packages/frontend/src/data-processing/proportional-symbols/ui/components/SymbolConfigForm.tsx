@@ -24,13 +24,13 @@ import FormLine from '../../../_common/form-line/FormLine';
 import { ProportionalSymbolsTips } from '@abc-map/user-documentation';
 import PointIconPicker from '../../../../components/icon-picker/PointIconPicker';
 import ColorPicker from '../../../../components/color-picker/ColorPicker';
-import { PointIconName } from '../../../../assets/point-icons/PointIconName';
+import { IconName } from '../../../../assets/point-icons/IconName';
 
 const logger = Logger.get('SymbolConfigForm.tsx');
 
 export interface SymbolConfigFormValues {
   layerName: string;
-  type: PointIconName;
+  type: IconName;
   color: string;
   sizeMin: number;
   sizeMax: number;
@@ -106,7 +106,7 @@ class SymbolConfigForm extends Component<Props, {}> {
     this.props.onChange(config);
   };
 
-  private handleTypeChange = (type: PointIconName) => {
+  private handleTypeChange = (type: IconName) => {
     const config: SymbolConfigFormValues = {
       ...this.props.values,
       type,

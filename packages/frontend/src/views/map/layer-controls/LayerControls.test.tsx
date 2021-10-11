@@ -30,7 +30,7 @@ describe('LayerControls', () => {
 
   it('renders without layers', () => {
     abcRender(<LayerControls layers={[]} />, { services: testServices });
-    const linkElement = screen.getByText(/Aucune couche/i);
+    const linkElement = screen.getByText(/No layer/i);
     expect(linkElement).toBeInTheDocument();
   });
 });

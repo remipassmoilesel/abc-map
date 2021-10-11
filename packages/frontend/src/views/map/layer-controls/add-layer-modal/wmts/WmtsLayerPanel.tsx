@@ -29,6 +29,8 @@ import ControlButtons from '../_common/ControlButtons';
 import { WmtsCapabilities, WmtsLayer } from '../../../../../core/geo/WmtsCapabilities';
 import { WmtsSettings } from '../../../../../core/geo/layers/LayerFactory.types';
 import { LayerFactory } from '../../../../../core/geo/layers/LayerFactory';
+import { prefixedTranslation } from '../../../../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
 import Cls from './WmtsLayerPanel.module.scss';
 
 const logger = Logger.get('WmtsLayerPanel.tsx');
@@ -45,6 +47,8 @@ interface State {
   formState: FormState;
   loading: boolean;
 }
+
+const t = prefixedTranslation('MapView:AddLayerModal.');
 
 class WmtsLayerPanel extends Component<Props, State> {
   constructor(props: Props) {
@@ -68,7 +72,7 @@ class WmtsLayerPanel extends Component<Props, State> {
         <div className={'d-flex flex-row'}>
           <input
             type="text"
-            placeholder={'URL'}
+            placeholder={t('URL')}
             className={'form-control mb-3'}
             value={value?.capabilitiesUrl}
             onChange={this.handleUrlChanged}
@@ -77,7 +81,7 @@ class WmtsLayerPanel extends Component<Props, State> {
         </div>
 
         {/* Warning if URL seems to belong to use protocol */}
-        {protocolWarn && <div className={`mb-3 ${Cls.warn}`}>⚠️ L&apos;URL contient &apos;WMS&apos;. Etes vous sûr de vouloir ajouter une couche WMTS ?</div>}
+        {protocolWarn && <div className={`mb-3 ${Cls.warn}`}>{t('WMTS_are_you_sure')}</div>}
 
         <div className={'d-flex flex-row mb-3'}>
           <input
@@ -85,7 +89,7 @@ class WmtsLayerPanel extends Component<Props, State> {
             value={value?.auth?.username}
             onChange={this.handleUsernameChanged}
             className={'form-control mr-2'}
-            placeholder={"Nom d'utilisateur (optionnel)"}
+            placeholder={t('Username')}
             data-cy={'wmts-settings-username'}
           />
           <input
@@ -93,7 +97,7 @@ class WmtsLayerPanel extends Component<Props, State> {
             value={value?.auth?.password}
             onChange={this.handlePasswordChanged}
             className={'form-control'}
-            placeholder={'Mot de passe (optionnel)'}
+            placeholder={t('Password')}
             data-cy={'wmts-settings-password'}
           />
         </div>
@@ -101,15 +105,15 @@ class WmtsLayerPanel extends Component<Props, State> {
         {/* Capabilities and layers selection */}
         <div className={'d-flex justify-content-end mb-3'}>
           <button onClick={this.fetchCapabilities} disabled={loading} data-cy={'wmts-settings-capabilities'} className={'btn btn-primary ml-2'}>
-            Lister les couches disponibles
+            {t('List_available_layers')}
           </button>
         </div>
 
-        {loading && <div className={'p-3 text-center'}>Chargement ...</div>}
+        {loading && <div className={'p-3 text-center'}>{t('Loading')}</div>}
 
         {capabilities && (
           <>
-            <div className={'mb-2'}>Sélectionnez une couche : </div>
+            <div className={'mb-2'}>{t('Select_layer')} : </div>
             <div className={Cls.wmtsLayerSelector}>
               {layers.length < 1 && <div className={'p-3 text-center'}>Pas de couche disponible</div>}
               {layers.map((lay, i) => (
@@ -160,7 +164,7 @@ class WmtsLayerPanel extends Component<Props, State> {
       })
       .catch((err) => {
         logger.error('Cannot use layer: ', err);
-        toasts.error('Désolé, cette couche ne peut pas être utilisée');
+        toasts.error(t('Cannot_use_layer'));
       });
   };
 
@@ -221,7 +225,7 @@ class WmtsLayerPanel extends Component<Props, State> {
     const value = this.props.value;
 
     if (!value.capabilitiesUrl) {
-      toasts.error("L'URL est obligatoire.");
+      toasts.error(t('URL_is_mandatory'));
       return;
     }
 
@@ -236,7 +240,7 @@ class WmtsLayerPanel extends Component<Props, State> {
       .getWmtsCapabilities(value.capabilitiesUrl, auth)
       .then((capabilities) => this.setState({ capabilities }))
       .catch((err) => {
-        toasts.error("Impossible d'obtenir les capacités du serveur, vérifiez l'URL et les identifiants");
+        toasts.error(t('Cannot_get_capacities'));
         logger.error(err);
       })
       .finally(() => this.setState({ loading: false }));
@@ -268,4 +272,4 @@ class WmtsLayerPanel extends Component<Props, State> {
   }
 }
 
-export default withServices(WmtsLayerPanel);
+export default withTranslation()(withServices(WmtsLayerPanel));

@@ -19,9 +19,11 @@
 import React, { Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/shared';
 import EditProjectModal from './edit-project-modal/EditProjectModal';
-import Cls from './ProjectStatus.module.scss';
 import { MainState } from '../../../core/store/reducer';
 import { connect, ConnectedProps } from 'react-redux';
+import { withTranslation } from 'react-i18next';
+import { prefixedTranslation } from '../../../i18n/i18n';
+import Cls from './ProjectStatus.module.scss';
 
 const logger = Logger.get('ProjectStatus.tsx');
 
@@ -37,6 +39,8 @@ type Props = ConnectedProps<typeof connector>;
 interface State {
   editModal: boolean;
 }
+
+const t = prefixedTranslation('MapView:ProjectStatus.');
 
 class ProjectStatus extends Component<Props, State> {
   constructor(props: Props) {
@@ -56,12 +60,14 @@ class ProjectStatus extends Component<Props, State> {
         </div>
 
         {/* Current projection */}
-        <div className={Cls.projection}>Projection: {view.projection.name}</div>
+        <div className={Cls.projection}>
+          {t('Projection')}: {view.projection.name}
+        </div>
 
         {/* Edit button and modal */}
         <div className={`control-item mt-3`}>
           <button onClick={this.handleEditClick} className={'btn btn-link'} data-cy="edit-project">
-            <i className={'fa fa-pencil-alt mr-2'} /> Editer
+            <i className={'fa fa-pencil-alt mr-2'} /> {t('Edit')}
           </button>
         </div>
 
@@ -79,4 +85,4 @@ class ProjectStatus extends Component<Props, State> {
   };
 }
 
-export default connector(ProjectStatus);
+export default withTranslation()(withTranslation()(connector(ProjectStatus)));

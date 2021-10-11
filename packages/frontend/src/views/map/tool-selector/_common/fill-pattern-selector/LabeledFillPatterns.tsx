@@ -19,43 +19,43 @@
 import { FillPatterns } from '@abc-map/shared';
 
 export interface LabeledFillPattern {
-  label: string;
+  i18nLabel: string;
   value: FillPatterns;
 }
 
 export class LabeledFillPatterns {
   public static readonly Flat: LabeledFillPattern = {
-    label: 'Aplat',
+    i18nLabel: 'Flat',
     value: FillPatterns.Flat,
   };
 
   public static readonly Circles: LabeledFillPattern = {
-    label: 'Cercles',
+    i18nLabel: 'Circles',
     value: FillPatterns.Circles,
   };
 
   public static readonly Squares: LabeledFillPattern = {
-    label: 'Carrés',
+    i18nLabel: 'Squares',
     value: FillPatterns.Squares,
   };
 
   public static readonly HatchingVertical: LabeledFillPattern = {
-    label: 'Hachures verticales',
+    i18nLabel: 'Vertical_hatching',
     value: FillPatterns.HatchingVertical,
   };
 
   public static readonly HatchingHorizontal: LabeledFillPattern = {
-    label: 'Hachures horizontales',
+    i18nLabel: 'Horizontal_hatching',
     value: FillPatterns.HatchingHorizontal,
   };
 
   public static readonly HatchingObliqueRight: LabeledFillPattern = {
-    label: 'Hachures obliques \\\\',
+    i18nLabel: 'Oblique_hatching_right',
     value: FillPatterns.HatchingObliqueRight,
   };
 
   public static readonly HatchingObliqueLeft: LabeledFillPattern = {
-    label: 'Hachures obliques //',
+    i18nLabel: 'Oblique_hatching_left',
     value: FillPatterns.HatchingObliqueLeft,
   };
 

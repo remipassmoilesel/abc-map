@@ -23,10 +23,12 @@ import { ServiceProps, withServices } from '../../core/withServices';
 import NavigationBar from './NavigationBar';
 import { FileFormat, FileFormats } from '../../core/data/FileFormats';
 import { FileIO } from '../../core/utils/FileIO';
-import Cls from './DataStoreView.module.scss';
 import { pageSetup } from '../../core/utils/page-setup';
 import { ImportStatus } from '../../core/data/DataService';
 import { delayedPromise } from '../../core/utils/delayedPromise';
+import { prefixedTranslation } from '../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
+import Cls from './DataStoreView.module.scss';
 
 const logger = Logger.get('DataStoreView.tsx');
 
@@ -41,6 +43,8 @@ interface State {
   searchQuery: string;
   downloading: boolean;
 }
+
+const t = prefixedTranslation('DataStoreView:');
 
 class DataStoreView extends Component<ServiceProps, State> {
   constructor(props: ServiceProps) {
@@ -75,12 +79,12 @@ class DataStoreView extends Component<ServiceProps, State> {
               value={query}
               onChange={this.handleQueryChange}
               onKeyUp={this.handleKeyUp}
-              placeholder={'France, régions, monde ...'}
+              placeholder={t('France_regions_world')}
               className={'form-control mr-2'}
               data-cy={'data-store-search'}
             />
             <button onClick={this.handleSearch} className={'btn btn-primary'}>
-              Rechercher
+              {t('Search')}
             </button>
           </div>
           <div className={Cls.navigationBar}>
@@ -92,7 +96,7 @@ class DataStoreView extends Component<ServiceProps, State> {
 
         {downloading && (
           <div className={Cls.loading}>
-            <h4 className={'my-3 mx-2'}>Un peu de patience ⌛</h4>
+            <h4 className={'my-3 mx-2'}>{t('A_bit_of_patience')} ⌛</h4>
           </div>
         )}
 
@@ -101,7 +105,7 @@ class DataStoreView extends Component<ServiceProps, State> {
             {artefacts.map((art, i) => (
               <ArtefactCard artefact={art} key={i} onImport={this.handleImportArtefact} onDownload={this.handleDownloadArtefact} />
             ))}
-            {!artefacts.length && query && <div>Aucun résultat</div>}
+            {!artefacts.length && query && <div>{t('No_result')}</div>}
           </div>
         )}
       </div>
@@ -109,7 +113,7 @@ class DataStoreView extends Component<ServiceProps, State> {
   }
 
   public componentDidMount() {
-    pageSetup('Catalogue de données', `Ajoutez des données compatibles et sélectionnées en un clic 🛒`);
+    pageSetup(t('Data_store'), t('Add_data_easily'));
 
     this.loadArtefacts();
   }
@@ -157,14 +161,14 @@ class DataStoreView extends Component<ServiceProps, State> {
     delayedPromise(data.importArtefact(artefact))
       .then((res) => {
         if (res.status === ImportStatus.Failed) {
-          toasts.error('Ces fichiers ne sont pas supportés');
+          toasts.error(t('Formats_not_supported'));
           return;
         }
         if (res.status === ImportStatus.Canceled) {
           return;
         }
 
-        toasts.info('Import terminé !');
+        toasts.info(t('Import_done'));
       })
       .catch((err) => {
         logger.error(err);
@@ -196,4 +200,4 @@ class DataStoreView extends Component<ServiceProps, State> {
   };
 }
 
-export default withServices(DataStoreView);
+export default withTranslation()(withServices(DataStoreView));

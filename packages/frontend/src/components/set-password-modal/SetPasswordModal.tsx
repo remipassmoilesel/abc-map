@@ -23,6 +23,8 @@ import { ServiceProps, withServices } from '../../core/withServices';
 import FormValidationLabel from '../form-validation-label/FormValidationLabel';
 import { PasswordStrength, ValidationHelper } from '../../core/utils/ValidationHelper';
 import { FormState } from '../form-validation-label/FormState';
+import { prefixedTranslation } from '../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
 
 interface State {
   visible: boolean;
@@ -32,6 +34,8 @@ interface State {
   confirmation: string;
   formState: FormState;
 }
+
+const t = prefixedTranslation('SetPasswordModal:');
 
 class SetPasswordModal extends Component<ServiceProps, State> {
   constructor(props: ServiceProps) {
@@ -71,7 +75,7 @@ class SetPasswordModal extends Component<ServiceProps, State> {
               <input
                 className={'form-control'}
                 type={'password'}
-                placeholder={'Mot de passe'}
+                placeholder={t('Password')}
                 value={password}
                 onChange={this.handlePasswordChange}
                 data-cy="password-input"
@@ -82,7 +86,7 @@ class SetPasswordModal extends Component<ServiceProps, State> {
               <input
                 className={'form-control'}
                 type={'password'}
-                placeholder={'Confirmation'}
+                placeholder={t('Confirmation')}
                 value={confirmation}
                 onChange={this.handleConfirmationChange}
                 data-cy="password-confirmation"
@@ -94,7 +98,7 @@ class SetPasswordModal extends Component<ServiceProps, State> {
 
             <div className={'d-flex justify-content-end'}>
               <button className={'btn btn-secondary mr-3'} onClick={this.handleCancel} data-cy="password-cancel" data-testid={'password-cancel'}>
-                Annuler
+                {t('Cancel')}
               </button>
               <button
                 className={'btn btn-primary'}
@@ -103,7 +107,7 @@ class SetPasswordModal extends Component<ServiceProps, State> {
                 data-cy="password-confirm"
                 data-testid={'password-confirm'}
               >
-                Confirmer
+                {t('Confirm')}
               </button>
             </div>
           </div>
@@ -185,4 +189,4 @@ class SetPasswordModal extends Component<ServiceProps, State> {
   }
 }
 
-export default withServices(SetPasswordModal);
+export default withTranslation()(withServices(SetPasswordModal));

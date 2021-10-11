@@ -29,9 +29,11 @@ import { ModalStatus } from '../ui/typings';
 import { HistoryKey } from '../history/HistoryKey';
 import { AddLayersTask } from '../history/tasks/layers/AddLayersTask';
 import { HistoryService } from '../history/HistoryService';
-import { getLang } from '../../i18n/i18n';
+import { getLang, prefixedTranslation } from '../../i18n/i18n';
 
 const logger = Logger.get('DataService.ts');
+
+const t = prefixedTranslation('core:DataService.');
 
 export const MAX_RECOMMENDED_SIZE = 5 * 1024 * 1024;
 export const MAX_RECOMMENDED_FEATURES = 1000;
@@ -134,7 +136,7 @@ export class DataService {
     // We add layers
     const hour = DateTime.local().toFormat('HH:mm');
     layers.forEach((lay, i) => {
-      lay.setName(`Import de ${hour} (${i + 1})`);
+      lay.setName(t('Import_of', { hour, n: i + 1 }));
       map.addLayer(lay);
     });
     this.history.register(HistoryKey.Map, new AddLayersTask(map, layers));

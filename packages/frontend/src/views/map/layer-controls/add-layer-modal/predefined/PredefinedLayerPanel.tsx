@@ -24,6 +24,8 @@ import { ServiceProps, withServices } from '../../../../../core/withServices';
 import { LayerFactory } from '../../../../../core/geo/layers/LayerFactory';
 import { HistoryKey } from '../../../../../core/history/HistoryKey';
 import { AddLayersTask } from '../../../../../core/history/tasks/layers/AddLayersTask';
+import { prefixedTranslation } from '../../../../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
 
 const logger = Logger.get('PredefinedLayerPanel.tsx');
 
@@ -34,6 +36,8 @@ interface Props extends ServiceProps {
   onConfirm: () => void;
 }
 
+const t = prefixedTranslation('MapView:AddLayerModal.');
+
 class PredefinedLayerPanel extends Component<Props, {}> {
   public render(): ReactNode {
     const model = this.props.value;
@@ -42,7 +46,7 @@ class PredefinedLayerPanel extends Component<Props, {}> {
 
     return (
       <div className={'flex-grow-1 d-flex flex-column'}>
-        <div className={'mb-3'}>Sélectionnez le fond de carte que vous souhaitez : </div>
+        <div className={'mb-3'}>{t('Select_basemap_you_want')} :</div>
         <select value={model} onChange={this.handleChange} className={'form-control mb-3'} data-cy={'predefined-model'}>
           {LabeledPredefinedModels.All.map((m) => (
             <option key={m.id} value={m.id}>
@@ -51,12 +55,12 @@ class PredefinedLayerPanel extends Component<Props, {}> {
           ))}
         </select>
 
-        <div className={'mb-2'}>Aperçu : </div>
+        <div className={'mb-2'}>{t('Preview')} : </div>
         <div className={'d-flex justify-content-center mb-4'}>
           <img src={labelledModel?.preview} width={440} alt={labelledModel?.label} className={'border'} />
         </div>
         <div>
-          Origine des données et licence:&nbsp;
+          {t('Origin_of_data_license')}:&nbsp;
           <span dangerouslySetInnerHTML={{ __html: labelledModel?.by || '' }} />
           <span className={'ml-2'} dangerouslySetInnerHTML={{ __html: labelledModel?.license || '' }} />
         </div>
@@ -86,4 +90,4 @@ class PredefinedLayerPanel extends Component<Props, {}> {
   };
 }
 
-export default withServices(PredefinedLayerPanel);
+export default withTranslation()(withServices(PredefinedLayerPanel));

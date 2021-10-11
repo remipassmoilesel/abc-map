@@ -178,9 +178,7 @@ describe('ProjectControls', () => {
       await waitFor(() => {
         expect(services.project.exportCurrentProject.callCount).toEqual(1);
         expect(services.project.save.callCount).toEqual(0);
-        expect(services.toasts.error.args).toEqual([
-          ["Désolé 😞 ce projet est trop gros pour être sauvegardé en ligne. Vous pouvez l'exporter sur votre ordinateur."],
-        ]);
+        expect(services.toasts.error.args).toEqual([['Sorry 😞 this project is too big to save online. You can export it to your computer.']]);
       });
     });
 

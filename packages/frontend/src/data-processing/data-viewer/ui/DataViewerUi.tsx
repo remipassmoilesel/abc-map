@@ -19,7 +19,7 @@
 import React, { Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/shared';
 import { DataRow } from '../../../core/data/data-source/DataSource';
-import VectorLayerSelector from '../../../components/vector-layer-selector/VectorLayerSelector';
+import VectorLayerSelector from '../../_common/vector-layer-selector/VectorLayerSelector';
 import { VectorLayerWrapper } from '../../../core/geo/layers/LayerWrapper';
 import DataTable from '../../../components/data-table/DataTable';
 import { LayerDataSource } from '../../../core/data/data-source/LayerDataSource';
@@ -33,6 +33,8 @@ import * as _ from 'lodash';
 import { HistoryKey } from '../../../core/history/HistoryKey';
 import { SetFeatureProperties } from '../../../core/history/tasks/features/SetFeatureProperties';
 import { RemoveFeaturesTask } from '../../../core/history/tasks/features/RemoveFeaturesTask';
+import { prefixedTranslation } from '../../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
 
 const logger = Logger.get('DataViewerUi.tsx');
 
@@ -46,6 +48,8 @@ interface State {
   layer?: VectorLayerWrapper;
   disableDownload: boolean;
 }
+
+const t = prefixedTranslation('DataProcessingModules:DataViewer.');
 
 class DataViewerUi extends Component<Props, State> {
   constructor(props: Props) {
@@ -64,25 +68,23 @@ class DataViewerUi extends Component<Props, State> {
     return (
       <div className={Cls.panel}>
         <div className={'d-flex flex-column'}>
-          <div className={'my-3'}>Sélectionnez une couche pour visualiser ses données.</div>
+          <div className={'my-3'}>{t('Select_a_layer')}</div>
           <div className={'d-flex flex-row'}>
             <div className={Cls.vectorSelection}>
               <VectorLayerSelector value={layer?.getId()} onSelected={this.handleSelected} data-cy={'layer-selector'} />
             </div>
             <button className={'mx-3 btn btn-secondary'} disabled={disableDownload} onClick={this.handleDownload} data-cy={'download'}>
-              Télécharger au format CSV
+              {t('Download_CSV')}
             </button>
           </div>
         </div>
         {!!data.length && (
           <>
-            <div className={'my-3'}>
-              <b>{data.length}</b> entrées affichées
-            </div>
+            <div className={'my-3'} dangerouslySetInnerHTML={{ __html: t('X_entries_displayed', { entries: data.length }) }} />
             <DataTable rows={data} withActions={true} onEdit={this.handleEdit} onDelete={this.handleDelete} className={Cls.dataTable} data-cy={'data-table'} />
           </>
         )}
-        {layer && !data.length && <div className={'my-3'}>Pas de données à afficher</div>}
+        {layer && !data.length && <div className={'my-3'}>{t('No_data_to_display')}</div>}
       </div>
     );
   }
@@ -124,7 +126,7 @@ class DataViewerUi extends Component<Props, State> {
     const rows = this.state.data;
     const layer = this.state.layer;
     if (!rows.length || !layer) {
-      toasts.error('Vous devez sélectionner une couche qui contient des données');
+      toasts.error(t('You_must_select_a_layer_with_data'));
       return;
     }
 
@@ -199,4 +201,4 @@ class DataViewerUi extends Component<Props, State> {
   }
 }
 
-export default withServices(DataViewerUi);
+export default withTranslation()(withServices(DataViewerUi));

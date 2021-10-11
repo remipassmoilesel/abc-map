@@ -33,7 +33,7 @@ describe('Wms layers', function () {
       .get('[data-cy=add-layer]')
       .click()
       .get('[data-cy=add-layer-type]')
-      .select('Couche distante WMS')
+      .select('WMS layer')
       .get('[data-cy=add-layer-confirm]')
       .should('be.disabled')
       // Enter URL, get capabilities
@@ -70,7 +70,7 @@ describe('Wms layers', function () {
       .get('[data-cy=add-layer]')
       .click()
       .get('[data-cy=add-layer-type]')
-      .select('Couche distante WMS')
+      .select('WMS layer')
       .get('[data-cy=add-layer-confirm]')
       .should('be.disabled')
       // Enter URL, credentials

@@ -19,6 +19,8 @@
 import React, { Component, ReactNode } from 'react';
 import { FrontendRoutes, LayerType, Logger } from '@abc-map/shared';
 import { Link } from 'react-router-dom';
+import { prefixedTranslation } from '../../../../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
 import Cls from './HelpPanel.module.scss';
 
 const logger = Logger.get('HelpPanel.tsx');
@@ -27,20 +29,23 @@ interface Props {
   type: LayerType;
 }
 
+const t = prefixedTranslation('MapView:AddLayerModal.');
+
 class HelpPanel extends Component<Props, {}> {
   public render(): ReactNode {
     const type = this.props.type;
 
     return (
       <div className={Cls.help}>
-        {type === LayerType.Predefined && <div>Les fonds de carte prédéfinis permettent d&apos;afficher facilement et rapidement une carte du monde.</div>}
-        {type === LayerType.Vector && <div>Les couches de géométries permettent de dessiner des formes.</div>}
+        {type === LayerType.Predefined && <div>{t('Basemap_are_easy_to_use')}</div>}
+        {type === LayerType.Vector && <div>{t('Geometry_layers_allow_to_draw')}</div>}
 
         <div className={Cls.datastoreAdvice}>
-          <i className={'fa fa-info mr-3'} />
+          <i className={'fa fa-info-circle mr-3'} />
           <div>
-            Vous ne trouvez pas ce que vous voulez ?<br />
-            Essayez le <Link to={FrontendRoutes.dataStore().raw()}>Catalogue de données.</Link>
+            {t('Cant_find_what_you_want')}
+            <br />
+            <Link to={FrontendRoutes.dataStore().raw()}>{t('Try_data_store')}</Link>
           </div>
         </div>
       </div>
@@ -48,4 +53,4 @@ class HelpPanel extends Component<Props, {}> {
   }
 }
 
-export default HelpPanel;
+export default withTranslation()(HelpPanel);

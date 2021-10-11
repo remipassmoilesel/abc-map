@@ -16,6 +16,11 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
+/**
+ * Supported languages
+ *
+ * Values must be compatible with lang attribute: https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/lang
+ */
 export enum Language {
   English = 'en',
   French = 'fr',

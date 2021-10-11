@@ -18,7 +18,7 @@
 
 import { FillPatterns, MapTool } from '@abc-map/shared';
 import { DimensionsPx } from '../../utils/DimensionsPx';
-import { PointIconName } from '../../../assets/point-icons/PointIconName';
+import { IconName } from '../../../assets/point-icons/IconName';
 
 export interface MapState {
   /**
@@ -42,7 +42,7 @@ export interface MapState {
       size: number;
     };
     point: {
-      icon: PointIconName;
+      icon: IconName;
       size: number;
       color: string;
     };
@@ -72,7 +72,7 @@ export const mapInitialState: MapState = {
       size: 30,
     },
     point: {
-      icon: PointIconName.Icon0CircleFill,
+      icon: IconName.Icon0CircleFill,
       size: 15,
       color: '#FF5733',
     },

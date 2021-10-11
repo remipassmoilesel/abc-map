@@ -19,8 +19,10 @@
 import React, { Component, ReactNode } from 'react';
 import { ColorResult, RGBColor, SketchPicker } from 'react-color';
 import { Modal } from 'react-bootstrap';
-import Cls from './ColorPicker.module.scss';
 import { ColorTranslator } from 'colortranslator';
+import { prefixedTranslation } from '../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
+import Cls from './ColorPicker.module.scss';
 
 const { toRGBA } = ColorTranslator;
 
@@ -35,12 +37,7 @@ interface State {
   value: RGBColor;
 }
 
-const i18n = {
-  title: {
-    fr: 'Sélectionnez une couleur',
-    en: 'Select a color',
-  },
-};
+const t = prefixedTranslation('ColorSelector:');
 
 class ColorPicker extends Component<Props, State> {
   constructor(props: Props) {
@@ -62,13 +59,13 @@ class ColorPicker extends Component<Props, State> {
 
         {/* Modal, visible on demand */}
         <Modal show={modalVisible} onHide={this.handleModalClose} size={'sm'}>
-          <Modal.Header closeButton>{i18n.title.fr}</Modal.Header>
+          <Modal.Header closeButton>{t('Select_a_color')}</Modal.Header>
           <Modal.Body className={'d-flex justify-content-center'}>
             <SketchPicker disableAlpha={false} color={value} onChange={this.handleChange} width={'300px'} />
           </Modal.Body>
           <Modal.Footer>
             <button onClick={this.handleModalClose} className={'btn btn-outline-secondary'} data-cy={'close-modal'} data-testid={'close-modal'}>
-              Fermer
+              {t('Close')}
             </button>
           </Modal.Footer>
         </Modal>
@@ -90,4 +87,4 @@ class ColorPicker extends Component<Props, State> {
   };
 }
 
-export default ColorPicker;
+export default withTranslation()(ColorPicker);

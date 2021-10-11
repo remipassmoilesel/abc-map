@@ -285,7 +285,7 @@ describe('LayerWrapper', () => {
       const expectedMetadata: VectorMetadata = {
         id: layer.getId() as string,
         type: LayerType.Vector,
-        name: 'Géométries',
+        name: 'Geometries',
         active: true,
         opacity: 0.5,
         visible: false,
@@ -305,12 +305,13 @@ describe('LayerWrapper', () => {
       const expectedMetadata: XyzMetadata = {
         id: layer.getId() as string,
         type: LayerType.Xyz,
-        name: 'Couche XYZ',
+        name: 'XYZ layer',
         active: true,
         opacity: 0.5,
         visible: false,
         remoteUrl: 'http://test-url',
         projection: { name: 'EPSG:4326' },
+        attributions: undefined,
       };
       expect(abcLayer.metadata.id).toBeDefined();
       expect(abcLayer.metadata).toEqual(expectedMetadata);

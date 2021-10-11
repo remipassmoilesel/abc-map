@@ -7,7 +7,7 @@ Create one file per language. E.g:
   i18n/translations/...
 ```
 
-Create / use one namespace by view or by shared component. E.g:
+Create / use one namespace by view or by shared component. E.g:  
 
 ```
   {
@@ -17,7 +17,19 @@ Create / use one namespace by view or by shared component. E.g:
   }
 ```
 
-Then use short english keys describing the words translated. E.g.:    
+Use sub namespaces if necessary. E.g.:  
+
+```
+  {
+    "MapView": { 
+      "PrivateComponent1": { ... }
+      "PrivateComponent2": { ... }
+     }
+  }
+```
+
+Then use short english keys describing the words translated. E.g.:  
+
 ```
   {
     "LandingView": {

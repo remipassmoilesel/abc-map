@@ -35,7 +35,7 @@ import {
 } from './ProportionalSymbols.test.data';
 import { MapWrapper } from '../../core/geo/map/MapWrapper';
 import { ScaleAlgorithm } from '../_common/algorithm/Algorithm';
-import { PointIconName } from '../../assets/point-icons/PointIconName';
+import { IconName } from '../../assets/point-icons/IconName';
 import { DataSource } from '../../core/data/data-source/DataSource';
 import { VectorLayerWrapper } from '../../core/geo/layers/LayerWrapper';
 import { Status } from './ProcessingResult';
@@ -76,7 +76,7 @@ describe('ProportionalSymbols', () => {
         joinBy: 'CODE',
       },
       symbols: {
-        type: PointIconName.IconPlusCircleFill,
+        type: IconName.IconPlusCircleFill,
         color: '#0094e3',
         sizeMin: 2,
         sizeMax: 100,
@@ -92,7 +92,7 @@ describe('ProportionalSymbols', () => {
       const parameters: Parameters = {
         ...baseParameters(source, layer),
         symbols: {
-          type: PointIconName.IconPlusCircleFill,
+          type: IconName.IconPlusCircleFill,
           color: '#0094e3',
           sizeMin: 2,
           sizeMax: 100,
@@ -131,7 +131,7 @@ describe('ProportionalSymbols', () => {
       const parameters: Parameters = {
         ...baseParameters(source, layer),
         symbols: {
-          type: PointIconName.IconPlusCircleFill,
+          type: IconName.IconPlusCircleFill,
           color: '#0094e3',
           sizeMin: 2,
           sizeMax: 6,
@@ -168,7 +168,7 @@ describe('ProportionalSymbols', () => {
       const parameters: Parameters = {
         ...baseParameters(source, layer),
         symbols: {
-          type: PointIconName.IconPlusCircleFill,
+          type: IconName.IconPlusCircleFill,
           color: '#0094e3',
           sizeMin: 2,
           sizeMax: 100,
@@ -210,7 +210,7 @@ describe('ProportionalSymbols', () => {
         joinBy: 'code',
       },
       symbols: {
-        type: PointIconName.IconPlusCircleFill,
+        type: IconName.IconPlusCircleFill,
         color: '#0094e3',
         sizeMin: 2,
         sizeMax: 100,
@@ -227,7 +227,7 @@ describe('ProportionalSymbols', () => {
       const parameters: Parameters = {
         ...baseParameters(source, layer),
         symbols: {
-          type: PointIconName.IconPlusCircleFill,
+          type: IconName.IconPlusCircleFill,
           color: '#0094e3',
           sizeMin: 2,
           sizeMax: 100,
@@ -277,7 +277,7 @@ describe('ProportionalSymbols', () => {
       const parameters: Parameters = {
         ...baseParameters(source, layer),
         symbols: {
-          type: PointIconName.IconPlusCircleFill,
+          type: IconName.IconPlusCircleFill,
           color: '#0094e3',
           sizeMin: 2,
           sizeMax: 100,
@@ -312,7 +312,7 @@ describe('ProportionalSymbols', () => {
       const parameters: Parameters = {
         ...baseParameters(source, layer),
         symbols: {
-          type: PointIconName.IconPlusCircleFill,
+          type: IconName.IconPlusCircleFill,
           color: '#0094e3',
           sizeMin: 2,
           sizeMax: 100,
@@ -352,7 +352,7 @@ describe('ProportionalSymbols', () => {
         joinBy: 'CODE',
       },
       symbols: {
-        type: PointIconName.Icon0Circle,
+        type: IconName.Icon0Circle,
         color: '#FFF',
         sizeMin: 1,
         sizeMax: 100,

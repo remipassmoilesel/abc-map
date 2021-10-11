@@ -26,6 +26,8 @@ import { ModalStatus, OperationStatus } from '../../../core/ui/typings';
 import { ServiceProps, withServices } from '../../../core/withServices';
 import { Errors } from '../../../core/utils/Errors';
 import { Encryption } from '../../../core/utils/Encryption';
+import { prefixedTranslation } from '../../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
 
 const logger = Logger.get('ProjectControls.tsx');
 
@@ -43,6 +45,8 @@ const connector = connect(mapStateToProps);
 
 type Props = ConnectedProps<typeof connector> & ServiceProps;
 
+const t = prefixedTranslation('MapView:ProjectControls.');
+
 class ProjectControls extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
@@ -59,13 +63,13 @@ class ProjectControls extends Component<Props, State> {
           <>
             <div className={'control-item'}>
               <button onClick={this.handleOpenProject} type={'button'} className={'btn btn-link'} data-cy={'remote-projects'}>
-                <i className={'fa fa-globe-europe mr-2'} /> Ouvrir un projet
+                <i className={'fa fa-globe-europe mr-2'} /> {t('Open_project')}
               </button>
             </div>
             <div className={'control-item'}>
               <button onClick={this.handleSaveProject} type={'button'} className={'btn btn-link'} data-cy={'save-project'} data-testid={'save-project'}>
                 <i className={'fa fa-pen-alt mr-2'} />
-                Enregistrer en ligne
+                {t('Save_online')}
               </button>
             </div>
             <hr />
@@ -74,19 +78,19 @@ class ProjectControls extends Component<Props, State> {
 
         <div className={'control-item'}>
           <button onClick={this.handleNewProject} type={'button'} className={'btn btn-link'} data-cy={'new-project'} data-testid={'new-project'}>
-            <i className={'fa fa-file mr-2'} /> Nouveau projet
+            <i className={'fa fa-file mr-2'} /> {t('New_project')}
           </button>
         </div>
         <div className={'control-item'}>
           <button onClick={this.handleExportProject} type={'button'} className={'btn btn-link'} data-cy={'export-project'} data-testid={'export-project'}>
             <i className={'fa fa-download mr-2'} />
-            Exporter le projet
+            {t('Export_project')}
           </button>
         </div>
         <div className={'control-item'}>
           <button onClick={this.handleImportProject} type={'button'} className={'btn btn-link'} data-cy={'import-project'}>
             <i className={'fa fa-upload mr-2'} />
-            Importer un projet
+            {t('Import_project')}
           </button>
         </div>
         {remoteProjectModal && <RemoteProjectModal onHide={this.handleRemoteProjectModalHide} />}
@@ -122,7 +126,7 @@ class ProjectControls extends Component<Props, State> {
 
       const compressed = await project.exportCurrentProject(password);
       if (compressed.project.size >= ProjectConstants.MaxSizeBytes) {
-        toasts.error("Désolé 😞 ce projet est trop gros pour être sauvegardé en ligne. Vous pouvez l'exporter sur votre ordinateur.");
+        toasts.error(t('Sorry_this_project_is_too_heavy'));
         return OperationStatus.Interrupted;
       }
 
@@ -193,13 +197,13 @@ class ProjectControls extends Component<Props, State> {
       }
 
       if (result.files.length !== 1) {
-        toasts.error('Vous devez sélectionner un fichier');
+        toasts.error(t('You_must_select_a_file'));
         return;
       }
 
       const file = result.files[0];
       if (!file.name.endsWith(ProjectConstants.FileExtension)) {
-        toasts.error(`Vous devez sélectionner un fichier au format ${ProjectConstants.FileExtension}`);
+        toasts.error(t('You_must_select_a_file_with_extension_', { extension: ProjectConstants.FileExtension }));
         return;
       }
 
@@ -208,7 +212,7 @@ class ProjectControls extends Component<Props, State> {
 
     const importProject = async (file: File) => {
       await project.loadBlobProject(file);
-      toasts.info('Projet importé !');
+      toasts.info(t('Project_loaded'));
     };
 
     modals
@@ -227,9 +231,9 @@ class ProjectControls extends Component<Props, State> {
         logger.error('Cannot import project: ', err);
 
         if (Errors.isWrongPassword(err)) {
-          toasts.error('Mot de passe incorrect !');
+          toasts.error(t('Incorrect_password'));
         } else if (Errors.isMissingPassword(err)) {
-          toasts.error('Le mot de passe est obligatoire pour ouvrir ce projet');
+          toasts.error(t('Password_is_mandatory'));
         } else {
           toasts.genericError();
         }
@@ -237,4 +241,4 @@ class ProjectControls extends Component<Props, State> {
   };
 }
 
-export default connector(withServices(ProjectControls));
+export default withTranslation()(connector(withServices(ProjectControls)));

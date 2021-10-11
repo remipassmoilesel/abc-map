@@ -19,7 +19,11 @@
  */
 
 .message {
-  margin: 1rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  margin: 0.4rem 0 0.8rem 0;
 
   :global(.fa) {
     margin-right: 0.6rem;

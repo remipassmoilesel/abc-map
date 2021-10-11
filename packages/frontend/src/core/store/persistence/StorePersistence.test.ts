@@ -25,7 +25,7 @@ import { MainState } from '../reducer';
 import { TestHelper } from '../../utils/test/TestHelper';
 import { DimensionsPx } from '../../utils/DimensionsPx';
 import { Views } from '../../geo/Views';
-import { PointIconName } from '../../../assets/point-icons/PointIconName';
+import { IconName } from '../../../assets/point-icons/IconName';
 
 describe('StorePersistence', () => {
   let storage: LocalStorageService;
@@ -69,7 +69,7 @@ describe('StorePersistence', () => {
             size: 30,
           },
           point: {
-            icon: PointIconName.Icon0CircleFill,
+            icon: IconName.Icon0CircleFill,
             size: 15,
             color: '#FF5733',
           },
@@ -120,7 +120,7 @@ describe('StorePersistence', () => {
             size: 30,
           },
           point: {
-            icon: PointIconName.Icon0CircleFill,
+            icon: IconName.Icon0CircleFill,
             size: 15,
             color: '#FF5733',
           },

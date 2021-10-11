@@ -22,4 +22,8 @@ export class Toasts {
       expect(elem.text()).to.contains(text);
     });
   }
+
+  public static dismiss(): Cypress.Chainable<any> {
+    return cy.get('.abc-toast').click();
+  }
 }

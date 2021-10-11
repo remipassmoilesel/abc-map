@@ -102,7 +102,7 @@ describe('Project', function () {
         .then((project) => {
           return cy.get('[data-cy=file-input]').attachFile({ filePath: 'project.abm2', fileContent: project });
         })
-        .then(() => Toasts.assertText('Projet importé !'))
+        .then(() => Toasts.assertText('Project loaded !'))
         // Check project name
         .get('[data-cy=project-name]')
         .should((elem) => {
@@ -162,7 +162,7 @@ describe('Project', function () {
         .type(PROJECT_PASSWORD)
         .get('[data-cy=password-confirm]')
         .click()
-        .then(() => Toasts.assertText('Projet importé !'))
+        .then(() => Toasts.assertText('Project loaded !'))
         // Check project name
         .get('[data-cy=project-name]')
         .should((elem) => {

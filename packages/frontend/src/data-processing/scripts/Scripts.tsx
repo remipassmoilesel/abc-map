@@ -38,8 +38,8 @@ export class Scripts extends Module {
     return ModuleId.Scripts;
   }
 
-  public getReadableName(): string {
-    return 'Exécution de scripts';
+  public getI18nName(): string {
+    return 'Running_scripts';
   }
 
   public getUserInterface(): ReactNode {

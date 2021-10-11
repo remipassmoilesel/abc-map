@@ -49,8 +49,8 @@ export class ProportionalSymbols extends Module {
     return ModuleId.ProportionalSymbols;
   }
 
-  public getReadableName(): string {
-    return 'Symboles proportionnels';
+  public getI18nName(): string {
+    return 'Proportional_symbols';
   }
 
   public getUserInterface(): ReactNode {

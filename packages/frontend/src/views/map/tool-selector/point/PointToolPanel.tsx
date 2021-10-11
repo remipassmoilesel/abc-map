@@ -25,14 +25,18 @@ import Cls from './PointToolPanel.module.scss';
 import TipBubble from '../../../../components/tip-bubble/TipBubble';
 import { ToolTips } from '@abc-map/user-documentation';
 import ButtonBar from '../_common/button-bar/ButtonBar';
+import { prefixedTranslation } from '../../../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
 
 const logger = Logger.get('PointToolPanel.tsx');
+
+const t = prefixedTranslation('MapView:ToolSelector.');
 
 class PointToolPanel extends Component<{}, {}> {
   public render(): ReactNode {
     return (
       <div className={Cls.pointPanel}>
-        <TipBubble id={ToolTips.Point} label={"Aide de l'outil"} className={'mx-3 mb-3'} />
+        <TipBubble id={ToolTips.Point} label={t('Tool_help')} className={'mx-3 mb-3'} />
         <ButtonBar />
         <PointSizeSelector />
         <ColorSelector point={true} />
@@ -42,4 +46,4 @@ class PointToolPanel extends Component<{}, {}> {
   }
 }
 
-export default PointToolPanel;
+export default withTranslation()(PointToolPanel);

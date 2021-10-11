@@ -22,18 +22,22 @@ import TextFormat from '../_common/text-format/TextFormat';
 import TipBubble from '../../../../components/tip-bubble/TipBubble';
 import { ToolTips } from '@abc-map/user-documentation';
 import './TextToolPanel.scss';
+import { withTranslation } from 'react-i18next';
+import { prefixedTranslation } from '../../../../i18n/i18n';
 
 const logger = Logger.get('TextToolPanel.tsx');
+
+const t = prefixedTranslation('MapView:ToolSelector.');
 
 class TextToolPanel extends Component<{}, {}> {
   public render(): ReactNode {
     return (
       <div className={'abc-text-panel'}>
-        <TipBubble id={ToolTips.Text} label={"Aide de l'outil"} className={'mx-3 mb-3'} />
+        <TipBubble id={ToolTips.Text} label={t('Tool_help')} className={'mx-3 mb-3'} />
         <TextFormat />
       </div>
     );
   }
 }
 
-export default TextToolPanel;
+export default withTranslation()(TextToolPanel);

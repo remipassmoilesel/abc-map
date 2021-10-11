@@ -24,6 +24,8 @@ import _ from 'lodash';
 import { ServiceProps, withServices } from '../../../../../core/withServices';
 import Cls from './StrokeWidthSelector.module.scss';
 import OptionRow from '../option-row/OptionRow';
+import { prefixedTranslation } from '../../../../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
 
 const mapStateToProps = (state: MainState) => ({
   stroke: state.map.currentStyle.stroke,
@@ -37,11 +39,13 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type Props = ConnectedProps<typeof connector> & ServiceProps;
 
+const t = prefixedTranslation('MapView:ToolSelector.');
+
 class StrokeWidthSelector extends Component<Props, {}> {
   public render(): ReactNode {
     return (
       <OptionRow>
-        <div className={'mr-2'}>Épaisseur:</div>
+        <div className={'mr-2'}>{t('Thickness')}:</div>
         <select value={this.props.stroke?.width} onChange={this.handleSelection} className={`form-control form-control-sm ${Cls.select}`}>
           {_.range(2, 21).map((value) => (
             <option key={value} value={value}>
@@ -71,4 +75,4 @@ class StrokeWidthSelector extends Component<Props, {}> {
   };
 }
 
-export default connector(withServices(StrokeWidthSelector));
+export default withTranslation()(connector(withServices(StrokeWidthSelector)));

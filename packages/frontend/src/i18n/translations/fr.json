@@ -1,5 +1,7 @@
 {
   "LandingView": {
+    "Free_open_source_mapping": "Cartographie libre et gratuite en ligne",
+    "AbcMap_new_version": "Abc-Map, nouvelle version \uD83D\uDE80 Créez des cartes géographiques simplement: importez, dessinez, visualisez des données, et bien plus !",
     "Welcome": "Bienvenue !",
     "AbcMap_is_a_free_software": "Abc-Map est un logiciel de cartographie libre et gratuit.",
     "How_does_it_work": "Comment ça marche ?",
@@ -33,5 +35,365 @@
     "My_account": "Mon compte",
     "Logout": "Se déconnecter",
     "You_are_disconnected": "Vous êtes déconnecté"
+  },
+  "MapView": {
+    "The_map": "La carte !",
+    "Visualize_and_create_in_your_browser": "Visualisez, créez et modifiez des cartes dans votre navigateur \uD83C\uDF0D ✏️",
+    "MainMap": {
+      "Drop_your_files": "Déposez vos fichiers pour les importer",
+      "You_must_select_files": "Vous devez sélectionner un ou plusieurs fichiers",
+      "You_must_import_project_with_import_control": "Vous devez importer votre projet à l'aide du contrôle 'Importer un projet'",
+      "Formats_not_supported": "Ces formats de fichiers ne sont pas supportés, aucune donnée n'a été importée",
+      "Layer_does_not_load": "La couche '{{name}}' ne charge pas correctement. Vérifiez ses paramètres.",
+      "Layer_without_name": "*Couche sans nom*"
+    },
+    "ProjectStatus": {
+      "Projection": "Projection",
+      "Edit": "Editer"
+    },
+    "EditProjectModal": {
+      "Edit_project": "Editer le projet",
+      "Name_of_project": "Nom du projet",
+      "Projection": "Projection",
+      "Default_value": "Valeur par défaut",
+      "To_change_projection_you_must_delete_geometries": "Pour modifier la projection, vous devez supprimer toutes les couches de géométries et toutes les mises en page.",
+      "Cancel": "Annuler",
+      "Confirm": "Confirmer",
+      "You_can_not_use_this_projection": "Vous ne pouvez pas utiliser cette projection."
+    },
+    "Search": {
+      "Search_on_map": "Rechercher sur la carte",
+      "My_location": "Ma position"
+    },
+    "ProjectControls": {
+      "Open_project": "Ouvrir un projet",
+      "Save_online": "Enregistrer en ligne",
+      "New_project": "Nouveau projet",
+      "Import_project": "Importer un projet",
+      "Export_project": "Exporter le projet",
+      "Sorry_this_project_is_too_heavy": "Désolé \uD83D\uDE1E ce projet est trop gros pour être sauvegardé en ligne. Vous pouvez l'exporter sur votre ordinateur.",
+      "You_must_select_a_file": "Vous devez sélectionner un fichier",
+      "You_must_select_a_file_with_extension_": "Vous devez sélectionner un fichier au format {{extension}}",
+      "Project_loaded": "Projet importé !",
+      "Incorrect_password": "Mot de passe incorrect !",
+      "Password_is_mandatory": "Le mot de passe est obligatoire pour ouvrir ce projet"
+    },
+    "ImportData": {
+      "Import_data": "Importer des données",
+      "You_can_also_drop_on_map": "Vous pouvez aussi déposer des fichiers sur la carte.",
+      "Formats_not_supported": "Ces formats de fichiers ne sont pas supportés, aucune donnée n'a été importée"
+    },
+    "CursorPosition": {
+      "Cursor_position": "Position du curseur",
+      "Latitude": "Latitude",
+      "Longitude": "Longitude"
+    },
+    "LayerControls": {
+      "Layers": "Couches",
+      "No_layer": "Aucune couche",
+      "Edit_layer": "Editer la couche",
+      "Change_visibility": "Changer la visibility",
+      "Zoom_on_layer": "Zoom sur la couche",
+      "Delete_active_layer": "Supprimer la couche active",
+      "Move_back": "Déplacer vers l'arrière",
+      "Move_forward": "Déplacer vers l'avant",
+      "New_layer": "Nouvelle couche",
+      "You_must_first_select_layer": "Vous devez d'abord sélectionner une couche",
+      "Unable_to_zoom": "Impossible de zoomer sur cette couche"
+    },
+    "EditLayerModal": {
+      "Edit_layer": "Editer la couche",
+      "Name_of_layer": "Nom de la couche",
+      "Opacity": "Opacité",
+      "Attributions": "Attributions",
+      "Confirm": "Confirm",
+      "Cancel": "Cancel"
+    },
+    "AddLayerModal": {
+      "New_layer": "Nouvelle couche",
+      "What_kind_of_layer": "Quelle type de couche souhaitez-vous ajouter ?",
+      "Select_basemap_you_want": "Sélectionnez le fond de carte que vous souhaitez",
+      "Preview": "Aperçu",
+      "Origin_of_data_license": "Origine des données et licence",
+      "Add": "Ajouter",
+      "Cancel": "Annuler",
+      "Predefined_basemap": "Fond de carte prédéfini",
+      "Geometry_layer": "Couche de géométries",
+      "XYZ_layer": "Couche distante XYZ",
+      "WMS_layer": "Couche distante WMS",
+      "WMTS_layer": "Couche distante WMTS",
+      "Nothing_to_configure_here": "Rien à paramétrer ici",
+      "Basemap_are_easy_to_use": "Les fonds de carte prédéfinis permettent d'afficher facilement et rapidement une carte du monde.",
+      "Geometry_layers_allow_to_draw": "Les couches de géométries permettent de dessiner des formes.",
+      "Cant_find_what_you_want": "Vous ne trouvez pas ce que vous voulez ?",
+      "Try_data_store": "Essayez le catalogue de données.",
+      "URL": "URL",
+      "Username": "Nom d'utilisateur (optionnel)",
+      "Password": "Mot de passe (optionnel)",
+      "List_available_layers": "Lister les couches disponibles",
+      "Loading": "Chargement ...",
+      "Select_layer": "Sélectionnez une couche",
+      "No_layer_available": "Pas de couche disponible",
+      "Cannot_use_layer": "Désolé, cette couche ne peut pas être utilisée",
+      "URL_is_mandatory": "L'URL est obligatoire",
+      "Cannot_get_capacities": "Impossible d'obtenir les capacités du serveur, vérifiez l'URL et les identifiants",
+      "WMS_are_you_sure": "⚠️ L'URL contient 'WMTS'. Etes vous sûr de vouloir ajouter une couche WMS ?",
+      "WMTS_are_you_sure": "⚠️ L'URL contient 'WMS'. Etes vous sûr de vouloir ajouter une couche WMTS ?",
+      "URL_must_contains_placeholders": "L'URL doit contenir les variables <code>{x}</code>, <code>{y}</code> et <code>{z}</code>.",
+      "Example_url_with_placeholders": "Exemple: http://my-domain.net/xyz/<code>{x}</code>/<code>{y}</code>/<code>{z}</code>"
+    },
+    "ToolSelector": {
+      "Drawing_tools": "Outils de dessin",
+      "You_must_select_geometry_layer_before": "Vous devez sélectionner une couche de géométries pour utiliser les outils.",
+      "Create_geometry_layer": "Nouvelle couche",
+      "Apply_style_to_selected_geometries": "Appliquer le style aux géométries sélectionnées",
+      "Duplicate_selected_geometries": "Dupliquer les géométries sélectionnées",
+      "Unselect_all": "Désélectionner tout",
+      "Delete_selected_geometries": "Supprimer les géométries sélectionnées",
+      "Move_geometries_ahead": "Géométries sélectionnées vers l'avant",
+      "Move_selected_geometries_behind": "Géométries sélectionnées vers l'arrière",
+      "You_must_select_geometries_first": "Vous devez d'abord sélectionner des géométries",
+      "Flat": "Aplat",
+      "Circles": "Cercles",
+      "Squares": "Carrés",
+      "Vertical_hatching": "Hachures verticales",
+      "Horizontal_hatching": "Hachures horizontales",
+      "Oblique_hatching_right": "Hachures obliques \\\\",
+      "Oblique_hatching_left": "Hachures obliques //",
+      "No_name": "Sans nom",
+      "Thickness": "Epaisseur",
+      "Texture_style": "Style de texture",
+      "Textures": "Textures",
+      "Color": "Couleur",
+      "Size": "Taille",
+      "Tool_help": "Aide de l'outil",
+      "Icon": "Icône",
+      "Points": "Points",
+      "Lines_and_polygons": "Lignes et polygones",
+      "Text": "Texte"
+    }
+  },
+  "ColorSelector": {
+    "Line": "Trait",
+    "Filling": "Remplissage",
+    "Texture": "Texture",
+    "Icon": "Couleur d'icône",
+    "Select_a_color": "Sélectionnez une couleur",
+    "Close": "Fermer"
+  },
+  "PointIconPicker": {
+    "Select": "Choisir",
+    "Pins": "Epingles",
+    "Geometries": "Géometries",
+    "Objects": "Objets",
+    "Weather": "Météo",
+    "Arrows": "Flêches",
+    "Emojis": "Emojis",
+    "Symbols": "Symboles"
+  },
+  "DeviceWarningModal": {
+    "Warning": "Attention",
+    "AbcMap_may_not_work_properly": "Abc-Map risque de ne pas fonctionner correctement",
+    "AbcMap_is_designed_for_desktop_computers": "Abc-Map est conçu pour fonctionner sur un <code>ordinateur de bureau</code>, avec les navigateurs <code>Firefox</code> ou <code>Chromium</code>, et une résolution d&apos;écran minimale de <code>1366x768</code>.",
+    "I_understand": "J'ai compris"
+  },
+  "ModalService": {
+    "Project_password": "Mot de passe du projet  \uD83D\uDD11",
+    "Your_project_contains_credentials": "Votre projet contient des identifiants, vous devez choisir un mot de passe pour les protéger.",
+    "Enter_project_password": "Saisissez le mot de passe du projet pour le déverrouiller.",
+    "Current_changes": "Modifications en cours",
+    "Current_changes_will_be_lost": "Si vous continuez, les modifications en cours seront perdues.",
+    "If_project_saved_ignore_this_message": "Si vous avez exporté ou sauvegardé votre projet vous pouvez ignorer ce message.",
+    "Heavy_dataset": "Jeu de données lourd",
+    "You_are_about_to_import_heavy_dataset": "Vous êtes sur le point d'importer une grande quantité de données.",
+    "AbcMap_not_yet_ready_for_heavy_dataset": "Abc-Map n'est pas encore prêt pour accueillir des jeux de données lourds, vous risquez de ralentir et de bloquer votre session.",
+    "For_the_moment_prefer_small_dataset": "Pour le moment préférez des fichiers de <code>moins de 5 mo</code> et des couches de <code>moins de 1000 géométries</code>. Dans un futur proche, vous pourrez utiliser plus de données."
+  },
+  "ConfirmationModal": {
+    "Confirm": "Confirmer",
+    "Cancel": "Annuler"
+  },
+  "PasswordInputModal": {
+    "Confirm": "Confirmer",
+    "Cancel": "Annuler",
+    "Password": "Mot de passe"
+  },
+  "SetPasswordModal": {
+    "Confirm": "Confirmer",
+    "Cancel": "Annuler",
+    "Password": "Mot de passe",
+    "Confirmation": "Confirmation"
+  },
+  "FormValidationLabel": {
+    "Invalid_form": "Formulaire invalide, mais impossible de vous dire pourquoi \uD83D\uDE2D",
+    "Perfect": "Parfait !",
+    "Invalid_email": "L'adresse email n'est pas valide.",
+    "Invalid_password": "Le mot de passe n'est pas valide.",
+    "Incorrect_password": "Ce mot de passe n'est pas le bon.",
+    "Password_is_weak": "Le mot de passe doit contenir 6 caractères minimum, une majuscule, un chiffre ou un symbole.",
+    "Password_and_confirmation_do_not_match": "Le mot de passe et la confirmation de mot de passe ne correspondent pas.",
+    "Password_and_email_must_be_different": "Le mot de passe et l'email doivent être différents !",
+    "You_must_confirm_account_deletion": "Vous devez confirmer la suppression de votre compte.",
+    "Invalid_URL": "L'URL doit être valide et commencer par <code>https://</code>.",
+    "Missing_xyz_placeholders": "L'URL doit contenir <code>{x}</code>, <code>{y}</code> et <code>{z}</code>.",
+    "List_layers_then_select_one": "Listez les couches puis sélectionnez-en une.",
+    "The_name_of_the_layer_is_mandatory": "Le nom de la couche est obligatoire.",
+    "Data_source_is_mandatory": "La source de données est obligatoire.",
+    "Join_data_field_is_mandatory": "Le champ de jointure des données est obligatoire.",
+    "Join_geometry_field_is_mandatory": "Le champ de jointure des géométries est obligatoire.",
+    "Algorithm_is_mandatory": "L'algorithme est obligatoire.",
+    "Color_field_is_mandatory": "Le champ couleur est obligatoire.",
+    "Size_field_is_mandatory": "Le champ de taille de symbole est obligatoire.",
+    "Min_size_is_mandatory": "La taille minimale est obligatoire.",
+    "Max_size_is_mandatory": "La taille maximale est obligatoire.",
+    "Max_must_be_greater_than_min": "La taille maximale doit être supérieure à la taille minimale.",
+    "Symbol_type_is_mandatory": "Le type de symbole est obligatoire.",
+    "Geometry_layer_is_mandatory": "La couche de géométrie est obligatoire.",
+    "Start_color_mandatory": "La couleur de début est obligatoire.",
+    "End_color_mandatory": "La couleur de fin est obligatoire."
+  },
+  "LongOperationModal": {
+    "Things_are_getting_hot": "Ça chauffe !",
+    "Dont_try_to_run_away": "N'essayez pas de vous enfuir.",
+    "At_last": "Enfin !"
+  },
+  "HistoryControls": {
+    "Undo": "Annuler",
+    "Redo": "Refaire"
+  },
+  "DataStoreView": {
+    "France_regions_world": "France, régions, monde ...",
+    "Search": "Rechercher",
+    "A_bit_of_patience": "Un peu de patience",
+    "No_result": "Aucun résultat",
+    "Data_store": "Catalogue de données",
+    "Add_data_easily": "Ajoutez des données compatibles et sélectionnées en un clic \uD83D\uDED2",
+    "Formats_not_supported": "Ces fichiers ne sont pas supportés",
+    "Import_done": "Import terminé !",
+    "Keywords": "Mots clés",
+    "Link": "Lien",
+    "Licence_to_use": "Licence d'utilisation",
+    "Download": "Télécharger",
+    "Add_to_project": "Ajouter au projet",
+    "Close": "Fermer"
+  },
+  "DataProcessingView": {
+    "Select_a_module_on_left": "Sélectionnez un module <br /> dans le menu de gauche.",
+    "Data_processing": "Traitements de données",
+    "Visualize_data_on_map": "Visualisez des données sur vos cartes: symboles proportionnels, dégradés et couleurs, et plus ⚙️⚙️"
+  },
+  "DataProcessingModules": {
+    "Color_gradients": "Dégradés de couleurs",
+    "Geometry_count": "Compte de géométries",
+    "Data_tables": "Tableaux de données",
+    "Different_symbols": "Symboles différents",
+    "Proportional_symbols": "Symboles proportionnels",
+    "Running_scripts": "Exécution de scripts",
+    "DataViewer": {
+      "Select_a_layer": "Sélectionnez une couche pour visualiser ses données.",
+      "Download_CSV": "Télécharger au format CSV",
+      "X_entries_displayed": "<b>{{entries}}</b> entrées affichées",
+      "No_data_to_display": "Pas de données à afficher",
+      "You_must_select_a_layer_with_data": "Vous devez sélectionner une couche qui contient des données"
+    },
+    "ColorGradients": {
+      "Color_gradients": "Dégradés de couleurs",
+      "Introduction": "Introduction",
+      "Color_gradients_are_used_to_represent_relative_data": "Les dégradés de couleurs permettent de représenter des données statistiques relatives (densité de population, revenus par habitants, etc ...)",
+      "How_does_it_work": "Comment ça marche ?",
+      "Select_data_source_and_data_field": "Sélectionnez une source de données et un champ de valeur. C'est ce champ qui sera utilisé pour déterminer les couleurs. Par exemple, un classeur CSV contenant la population française par département et le champ <code>densite_pop</code> contenant les données de densité.",
+      "Select_geometry_layer_explanation": "Sélectionnez une couche de géométries. Les géométries seront dupliquées et remplies avec la couleur calculée.",
+      "Select_join_field_explanation": "Sélectionner un champ de jointure entre les données et les géométries.",
+      "Select_parameters_explanation": "Ensuite sélectionnez les caractéristiques des géométries à créer.",
+      "Map_Sample": "Exemple de carte",
+      "Select_data_source": "Sélectionner une source de données",
+      "Data_source_contains_field_that_determine_colors": "La source de données contient le champ qui déterminera les couleurs des géométries. La source de données peut être une couche de la carte ou un classeur au format CSV.",
+      "Colors_from": "Couleurs à partir de:",
+      "Select_geometry_layer": "Sélectionner une couche de géométries",
+      "Colors_applied_to_copy_of_geometries": "Les couleurs seront appliquées à une copie des géométries de la couche sélectionnée.",
+      "Select_parameters": "Paramètres du traitement",
+      "Colors_depends_on_algorithm": "Les couleurs seront créées dans une nouvelle couche. Leurs valeurs seront déterminées par le champ source utilisé, et par le type d'algorithme.",
+      "You_must_select_a_value_field": "Vous devez choisir un champ de valeur.",
+      "You_must_select_a_datasource": "Vous devez choisir une source de données.",
+      "Reset": "Réinitialiser",
+      "Start_processing": "Lancer le traitement",
+      "From": "De",
+      "To": "à",
+      "End_of_processing": "Fin du traitement",
+      "X_features_has_been_processed": "{{featuresProcessed}} géométries ont été traitées.",
+      "Nothing_has_been_processed": "Aucune géométrie n'a été traitée. Le traitement a été mal configuré ou les données sont invalides.",
+      "Some_features_cannot_be_joined": "⚠️ Certaines géométries ({{invalidFeatures}}) n'ont pas la propriété de jointure <code>{{geometryJoinBy}}</code>. Elles n'ont pas été utilisées.",
+      "Some_colors_values_are_incorrect": "⚠️ Certaines valeurs du champ de couleur ({{invalidValues}}) ne peuvent pas être exploitées comme des nombres.",
+      "Some_geometries_does_not_have_data": "⚠️ Certaines géométries ({{missingDataRows}}) n'ont pas de données correspondant à leur propriété <code>{{joinBy}}</code>.",
+      "Undefined_property": "Propriété non définie",
+      "Close": "Fermer",
+      "Processing_done": "Le traitement est terminé",
+      "Processing_done_with_warnings": "Le traitement est terminé, mais il ne s'est pas passé comme prévu",
+      "Processing_was_interrupted_because_of_wrong_data": "Le traitement a été interrompu car certaines données sont incorrectes",
+      "Processing_interrupted_data_must_be_greater_than_0": "Les valeurs doivent être supérieures à zéro et la valeur minimum doit être inférieure à la valeur maximum",
+      "Start_color": "Couleur de début",
+      "End_color": "Couleur de fin",
+      "Number_of_classes": "Nombre de classes",
+      "Classes": "Classes",
+      "Calculate_classes": "Calculer les classes",
+      "Name_of_new_layer": "Nom de la nouvelle couche",
+      "Scale_or_classification": "Echelle ou classification"
+    },
+    "VectorLayerSelector": {
+      "Select_a_layer": "Sélectionnez une couche"
+    },
+    "AlgorithmSelector": {
+      "Choose_algorithm": "Choisissez un algorithme",
+      "Invalid_option": "Option invalide",
+      "Absolute_scale": "Echelle absolue",
+      "Interpolated_scale": "Echelle interpolée",
+      "Equal_intervals": "Intervalles égaux",
+      "Quantiles": "Quantiles",
+      "Natural_breaks": "Seuils naturels"
+    },
+    "DataSourceForm": {
+      "Select_data_source": "Sélectionnez une source de données",
+      "Select_field": "Sélectionnez un champ",
+      "Join_geometries_with": "Jointure avec les géométries par",
+      "Data_samples": "Échantillons de données",
+      "Use_geometry_layer": "Utiliser une couche de géométries",
+      "Use_CSV_workbook": "Utiliser un classeur CSV",
+      "Select_file_on_computer": "Sélectionner un fichier sur votre ordinateur. Ce fichier doit",
+      "Be_in_CSV_format": "Être au format CSV: séparateur virgule, guillemets doubles",
+      "Have_header_row": "Avoir une ligne d'en-tête avec le nom des colonnes",
+      "Be_encoded_UTF8": "Être encodé en UTF-8",
+      "Choose_CSV_file": "Choisir un fichier CSV",
+      "This_source_contains_a_lot_of_data": "Cette source contient beaucoup de données ({{rows}}), le traitement pourra être long.",
+      "Data_source_empty": "Cette source de données est vide.",
+      "X_entries_will_be_processed": "{{rows}} entrées seront traitées.",
+      "This_data_source_is_incorrect": "Cette source de données est incorrecte.",
+      "Error_on_line_X": "Une erreur est survenue à la ligne {{errorAtLine}}."
+    },
+    "GeometryLayerForm": {
+      "Join_with_data_by": "Jointure avec les données par",
+      "Select_layer": "Sélectionnez une couche",
+      "Select_join_field": "Sélectionnez un champ de jointure",
+      "No_geometry_found": "Cette couche ne contient aucune géométrie.",
+      "X_geometries_will_be_processed": "{{geometries}} géométries seront traitées.",
+      "Data_samples": "Échantillons de données",
+      "Layer": "Couche:"
+    }
+  },
+  "core": {
+    "ProjectFactory": {
+      "Project": "Projet du {{date}}"
+    },
+    "LayerFactory": {
+      "OpenStreetMap": "OpenStreetMap",
+      "Stamen_Toner": "Stamen Toner",
+      "Stamen_Toner_Lite": "Stamen Toner Lite",
+      "Stamen_Terrain": "Stamen Terrain",
+      "Stamen_Watercolor": "Stamen Watercolor",
+      "Geometries": "Géométries",
+      "XYZ_layer": "Couche XYZ"
+    },
+    "DataService": {
+      "Import_of": "Import n°{{n}} de {{hour}}"
+    }
   }
 }

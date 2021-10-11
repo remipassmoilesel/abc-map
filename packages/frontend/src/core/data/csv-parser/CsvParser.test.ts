@@ -17,7 +17,7 @@
  */
 
 import { CsvParser } from './CsvParser';
-import { File1, File2, File3 } from './test-data';
+import { File1, File2, File3, File4 } from './CsvParser.test.data';
 import { CsvParsingError } from './typings';
 
 describe('CsvParser', () => {
@@ -39,8 +39,18 @@ describe('CsvParser', () => {
 
     it('should fail', async () => {
       const error: CsvParsingError = await CsvParser.parse(File3).catch((err) => err);
+
+      expect(error).toBeInstanceOf(CsvParsingError);
       expect(error.message).toMatch('Invalid data');
-      expect(error.row).toEqual(0);
+      expect(error.row).toEqual(1);
+    });
+
+    it('should fail and return line of error', async () => {
+      const error: CsvParsingError = await CsvParser.parse(File4).catch((err) => err);
+
+      expect(error).toBeInstanceOf(CsvParsingError);
+      expect(error.message).toMatch('Invalid data');
+      expect(error.row).toEqual(4);
     });
   });
 

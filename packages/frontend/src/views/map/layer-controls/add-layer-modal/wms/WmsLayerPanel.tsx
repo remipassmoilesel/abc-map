@@ -29,6 +29,8 @@ import { HistoryKey } from '../../../../../core/history/HistoryKey';
 import { AddLayersTask } from '../../../../../core/history/tasks/layers/AddLayersTask';
 import ControlButtons from '../_common/ControlButtons';
 import { WmsSettings } from '../../../../../core/geo/layers/LayerFactory.types';
+import { prefixedTranslation } from '../../../../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
 import Cls from './WmsLayerPanel.module.scss';
 
 const logger = Logger.get('WmsLayerPanel.tsx');
@@ -46,6 +48,8 @@ interface State {
   formState: FormState;
   loading: boolean;
 }
+
+const t = prefixedTranslation('MapView:AddLayerModal.');
 
 class WmsLayerPanel extends Component<Props, State> {
   constructor(props: Props) {
@@ -69,7 +73,7 @@ class WmsLayerPanel extends Component<Props, State> {
         <div className={'d-flex flex-row'}>
           <input
             type="text"
-            placeholder={'URL'}
+            placeholder={t('URL')}
             className={'form-control mb-3'}
             value={value?.capabilitiesUrl}
             onChange={this.handleUrlChanged}
@@ -78,7 +82,7 @@ class WmsLayerPanel extends Component<Props, State> {
         </div>
 
         {/* Warning if URL seems to belong to use protocol */}
-        {protocolWarn && <div className={`mb-3 ${Cls.warn}`}>⚠️ L&apos;URL contient &apos;WMTS&apos;. Etes vous sûr de vouloir ajouter une couche WMS ?</div>}
+        {protocolWarn && <div className={`mb-3 ${Cls.warn}`}>{t('WMS_are_you_sure')}</div>}
 
         <div className={'d-flex flex-row mb-3'}>
           <input
@@ -86,7 +90,7 @@ class WmsLayerPanel extends Component<Props, State> {
             value={value?.auth?.username}
             onChange={this.handleUsernameChanged}
             className={'form-control mr-2'}
-            placeholder={"Nom d'utilisateur (optionnel)"}
+            placeholder={t('Username')}
             data-cy={'wms-settings-username'}
           />
           <input
@@ -94,24 +98,24 @@ class WmsLayerPanel extends Component<Props, State> {
             value={value?.auth?.password}
             onChange={this.handlePasswordChanged}
             className={'form-control'}
-            placeholder={'Mot de passe (optionnel)'}
+            placeholder={t('Password')}
             data-cy={'wms-settings-password'}
           />
         </div>
 
         <div className={'d-flex justify-content-end mb-3'}>
           <button onClick={this.fetchCapabilities} disabled={loading} data-cy={'wms-settings-capabilities'} className={'btn btn-primary ml-2'}>
-            Lister les couches disponibles
+            {t('List_available_layers')}
           </button>
         </div>
 
-        {loading && <div className={'p-3 text-center'}>Chargement ...</div>}
+        {loading && <div className={'p-3 text-center'}>{t('Loading')}</div>}
 
         {capabilities && (
           <>
-            <div className={'mb-2'}>Sélectionnez une couche : </div>
+            <div className={'mb-2'}>{t('Select_layer')} : </div>
             <div className={Cls.wmsLayerSelector}>
-              {layers.length < 1 && <div className={'p-3 text-center'}>Pas de couche disponible</div>}
+              {layers.length < 1 && <div className={'p-3 text-center'}>{t('No_layer_available')}</div>}
               {layers.map((lay, i) => (
                 <WmsLayerItem key={`${lay.Name}-${i}`} layer={lay} selected={value?.remoteLayerName === lay.Name} onSelected={this.handleLayerSelected} />
               ))}
@@ -119,6 +123,7 @@ class WmsLayerPanel extends Component<Props, State> {
           </>
         )}
 
+        {/* Form validation and controls */}
         <FormValidationLabel state={formState} />
 
         <ControlButtons onCancel={onCancel} onConfirm={this.handleConfirm} submitDisabled={submitDisabled} />
@@ -154,7 +159,7 @@ class WmsLayerPanel extends Component<Props, State> {
       })
       .catch((err) => {
         logger.error('Cannot use layer: ', err);
-        toasts.error('Désolé, cette couche ne peut pas être utilisée');
+        toasts.error(t('Cannot_use_layer'));
       });
   };
 
@@ -226,7 +231,7 @@ class WmsLayerPanel extends Component<Props, State> {
     const value = this.props.value;
 
     if (!value.capabilitiesUrl) {
-      toasts.error("L'URL est obligatoire");
+      toasts.error(t('URL_is_mandatory'));
       return;
     }
 
@@ -241,7 +246,7 @@ class WmsLayerPanel extends Component<Props, State> {
       .getWmsCapabilities(value.capabilitiesUrl, auth)
       .then((capabilities) => this.setState({ capabilities }))
       .catch((err) => {
-        toasts.error("Impossible d'obtenir les capacités du serveur, vérifiez l'URL et les identifiants");
+        toasts.error(t('Cannot_get_capacities'));
         logger.error(err);
       })
       .finally(() => this.setState({ loading: false }));
@@ -273,4 +278,4 @@ class WmsLayerPanel extends Component<Props, State> {
   }
 }
 
-export default withServices(WmsLayerPanel);
+export default withTranslation()(withServices(WmsLayerPanel));

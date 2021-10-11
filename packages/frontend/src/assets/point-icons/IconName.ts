@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-export enum PointIconName {
+export enum IconName {
   Icon0CircleFill = 'twbs/0_circle-fill.inline.svg',
   Icon0CircleHalf = 'twbs/0_circle-half.inline.svg',
   Icon0CircleSquare = 'twbs/0_circle-square.inline.svg',
@@ -541,4 +541,4 @@ export enum PointIconName {
   IconZoomOut = 'twbs/zoom-out.inline.svg',
 }
 
-export const AllIconNames = Object.values(PointIconName);
+export const AllIconNames = Object.values(IconName);

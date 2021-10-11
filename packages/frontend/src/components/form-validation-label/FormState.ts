@@ -21,6 +21,7 @@ export enum FormState {
 
   InvalidEmail = 'InvalidEmail',
   InvalidPassword = 'InvalidPassword',
+  IncorrectPassword = 'IncorrectPassword',
   PasswordTooWeak = 'PasswordTooWeak',
   PasswordNotConfirmed = 'PasswordNotConfirmed',
   PasswordEqualEmail = 'PasswordEqualEmail',

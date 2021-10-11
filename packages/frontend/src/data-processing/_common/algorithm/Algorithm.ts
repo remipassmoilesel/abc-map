@@ -55,17 +55,17 @@ export interface LabeledAlgorithm {
 export class LabeledAlgorithms {
   public static readonly Absolute: LabeledAlgorithm = {
     value: ScaleAlgorithm.Absolute,
-    label: 'Echelle absolue',
+    label: 'Absolute_scale',
   };
 
   public static readonly Interpolated: LabeledAlgorithm = {
     value: ScaleAlgorithm.Interpolated,
-    label: 'Echelle interpolée',
+    label: 'Interpolated_scale',
   };
 
   public static readonly EqualIntervals: LabeledAlgorithm = {
     value: ClassificationAlgorithm.EqualIntervals,
-    label: 'Intervalles égaux',
+    label: 'Equal_intervals',
   };
 
   public static readonly Quantiles: LabeledAlgorithm = {
@@ -75,7 +75,7 @@ export class LabeledAlgorithms {
 
   public static readonly NaturalBreaks: LabeledAlgorithm = {
     value: ClassificationAlgorithm.NaturalBreaks,
-    label: 'Seuils naturels',
+    label: 'Natural_breaks',
   };
 
   public static readonly All: LabeledAlgorithm[] = [

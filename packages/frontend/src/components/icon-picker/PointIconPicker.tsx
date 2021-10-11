@@ -20,14 +20,17 @@ import React, { Component, ReactNode } from 'react';
 import { Modal } from 'react-bootstrap';
 import { PointIcon, safeGetIcon } from '../../assets/point-icons/PointIcon';
 import { IconProcessor } from '../../core/geo/styles/IconProcessor';
-import { PointIconName } from '../../assets/point-icons/PointIconName';
-import { IconCategory, LabeledIconCategories } from '../../assets/point-icons/IconCategory';
+import { IconName } from '../../assets/point-icons/IconName';
+import { LabeledIconCategories } from './IconCategory';
 import { getPreviews, IconPreview } from './previews';
+import { prefixedTranslation } from '../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
 import Cls from './PointIconPicker.module.scss';
+import { IconCategory } from '../../assets/point-icons/IconCategory';
 
 interface Props {
-  value: PointIconName | undefined;
-  onChange: (p: PointIconName) => void;
+  value: IconName | undefined;
+  onChange: (p: IconName) => void;
 }
 
 interface State {
@@ -37,6 +40,8 @@ interface State {
 }
 
 const previewColor = '#0094e3';
+
+const t = prefixedTranslation('PointIconPicker:');
 
 class PointIconPicker extends Component<Props, State> {
   constructor(props: Props) {
@@ -53,7 +58,7 @@ class PointIconPicker extends Component<Props, State> {
       <>
         {/* Button, always visible */}
         <button onClick={this.handleOpen} className={'btn btn-outline-secondary btn-sm'} data-cy={'point-icon-selector'}>
-          {!value && 'Choisir'}
+          {!value && t('Select')}
           {value && <img src={value.preview} alt={value.icon.name} />}
         </button>
 
@@ -69,7 +74,7 @@ class PointIconPicker extends Component<Props, State> {
                 LabeledIconCategories.All.map((category) => {
                   return (
                     <div key={category.value} className={Cls.category}>
-                      <h1 className={Cls.categoryTitle}>{category.label}</h1>
+                      <h1 className={Cls.categoryTitle}>{t(category.i18nLabel)}</h1>
                       <div className={Cls.categoryContent}>
                         {iconPreviews.get(category.value)?.map((icon, idx) => (
                           <button
@@ -139,4 +144,4 @@ class PointIconPicker extends Component<Props, State> {
   }
 }
 
-export default PointIconPicker;
+export default withTranslation()(PointIconPicker);

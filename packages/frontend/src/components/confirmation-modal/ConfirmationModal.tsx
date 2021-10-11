@@ -20,12 +20,16 @@ import React, { Component, ReactNode } from 'react';
 import { Modal } from 'react-bootstrap';
 import { ModalEventType, ModalStatus, ShowPasswordInputModal } from '../../core/ui/typings';
 import { ServiceProps, withServices } from '../../core/withServices';
+import { prefixedTranslation } from '../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
 
 interface State {
   visible: boolean;
   title: string;
   message: string;
 }
+
+const t = prefixedTranslation('ConfirmationModal:');
 
 class ConfirmationModal extends Component<ServiceProps, State> {
   constructor(props: ServiceProps) {
@@ -55,10 +59,10 @@ class ConfirmationModal extends Component<ServiceProps, State> {
 
           <div className={'mt-4 d-flex justify-content-end'}>
             <button onClick={this.handleCancel} className={'btn btn-secondary mr-2'} data-cy={'confirmation-cancel'}>
-              Annuler
+              {t('Cancel')}
             </button>
             <button onClick={this.handleConfirm} className={'btn btn-primary'} data-cy={'confirmation-confirm'}>
-              Confirmer
+              {t('Confirm')}
             </button>
           </div>
         </Modal.Body>
@@ -105,4 +109,4 @@ class ConfirmationModal extends Component<ServiceProps, State> {
   };
 }
 
-export default withServices(ConfirmationModal);
+export default withTranslation()(withServices(ConfirmationModal));

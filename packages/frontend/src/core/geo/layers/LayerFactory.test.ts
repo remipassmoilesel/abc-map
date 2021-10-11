@@ -128,7 +128,7 @@ describe('LayerFactory', () => {
       const metadata = layer.getMetadata();
       expect(metadata).toBeDefined();
       expect(metadata?.id).toBeDefined();
-      expect(metadata?.name).toEqual('Géométries');
+      expect(metadata?.name).toEqual('Geometries');
       expect(metadata?.opacity).toEqual(1);
       expect(metadata?.visible).toEqual(true);
       expect(metadata?.active).toEqual(false);

@@ -20,6 +20,8 @@ import React, { Component, ReactNode } from 'react';
 import { Modal } from 'react-bootstrap';
 import { ProcessingResult, Status } from '../../../ProcessingResult';
 import { Parameters } from '../../../Parameters';
+import { prefixedTranslation } from '../../../../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
 import Cls from './ProcessingReportModal.module.scss';
 
 interface Props {
@@ -27,6 +29,8 @@ interface Props {
   params: Parameters;
   onClose: () => void;
 }
+
+const t = prefixedTranslation('DataProcessingModules:ColorGradients.');
 
 class ProcessingReportModal extends Component<Props, {}> {
   public render(): ReactNode {
@@ -38,7 +42,7 @@ class ProcessingReportModal extends Component<Props, {}> {
     return (
       <Modal show={true} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Fin du traitement</Modal.Title>
+          <Modal.Title>{t('End_of_processing')}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div className={`p-3 ${Cls.modal}`}>
@@ -46,25 +50,30 @@ class ProcessingReportModal extends Component<Props, {}> {
             <div className={'mb-4'}>{status}</div>
 
             {/* Number of processed features */}
-            {result.featuresProcessed > 0 && <div className={'mb-3'}>{result.featuresProcessed} géométries ont été traitées.</div>}
+            {result.featuresProcessed > 0 && (
+              <div className={'mb-3'}>{t('X_features_has_been_processed', { featuresProcessed: result.featuresProcessed })}</div>
+            )}
 
             {/* Warning if no features processed */}
-            {result.featuresProcessed < 1 && (
-              <div className={'mb-3'}>⚠️ Aucune géométrie n&apos;a été traitée. Le traitement a été mal configuré ou les données sont invalides.</div>
-            )}
+            {result.featuresProcessed < 1 && <div className={'mb-3'}>⚠️ {t('Nothing_has_been_processed')}</div>}
 
             {/* Number of invalid features */}
             {result.invalidFeatures > 0 && (
-              <div className={'mb-3'}>
-                ⚠️ Certaines géométries ({result.invalidFeatures}) n&apos;ont pas la propriété de jointure&nbsp;
-                <code>{params.geometries.joinBy || 'Propriété non définie'}</code>. Elles n&apos;ont pas été utilisées.
-              </div>
+              <div
+                className={'mb-3'}
+                dangerouslySetInnerHTML={{
+                  __html: t('Some_features_cannot_be_joined', {
+                    invalidFeatures: result.invalidFeatures,
+                    geometryJoinBy: params.geometries.joinBy || t('Undefined_property'),
+                  }),
+                }}
+              />
             )}
 
             {/* Number of invalid values */}
             {result.invalidValues.length > 0 && (
               <div className={'mb-3'}>
-                ⚠️ Certaines valeurs de champs de couleur ({result.invalidValues.length}) ne peuvent pas être exploitées comme des nombres.
+                {t('Some_colors_values_are_incorrect', { invalidValues: result.invalidValues.length })}
                 <pre>{result.invalidValues.join('\n')}</pre>
               </div>
             )}
@@ -72,14 +81,21 @@ class ProcessingReportModal extends Component<Props, {}> {
             {/* Data rows not found by join key */}
             {result.missingDataRows.length > 0 && (
               <div className={'mb-3'}>
-                ⚠️ Certaines géométries ({result.missingDataRows.length}) n&apos;ont pas de données correspondante à leur propriété&nbsp;
-                <code>{params.geometries.joinBy || 'Propriété non définie'}</code>.<pre>{result.missingDataRows.join('\n')}</pre>
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: t('Some_geometries_does_not_have_data', {
+                      missingDataRows: result.missingDataRows.length,
+                      joinBy: params.geometries.joinBy || t('Undefined_property'),
+                    }),
+                  }}
+                />
+                <pre>{result.missingDataRows.join('\n')}</pre>
               </div>
             )}
           </div>
           <div className={'mt-4 d-flex justify-content-end'}>
             <button onClick={handleClose} className={'btn btn-primary'} data-cy={'close-processing-report'}>
-              Fermer
+              {t('Close')}
             </button>
           </div>
         </Modal.Body>
@@ -90,19 +106,15 @@ class ProcessingReportModal extends Component<Props, {}> {
   private getStatusFromResult(result: ProcessingResult) {
     switch (result.status) {
       case Status.Succeed:
-        return <div className={'alert alert-primary'}>Le traitement est terminé 🥳 </div>;
+        return <div className={'alert alert-primary'}>{t('Processing_done')} 🥳 </div>;
       case Status.BadProcessing:
-        return <div className={'alert alert-warning'}>Le traitement est terminé, mais il ne s&apos;est pas passé comme prévu 🤷. </div>;
+        return <div className={'alert alert-warning'}>{t('Processing_done_with_warnings')} 🤷. </div>;
       case Status.InvalidValues:
-        return <div className={'alert alert-warning'}>Le traitement a été interrompu car certaines données sont incorrectes 🖩 </div>;
+        return <div className={'alert alert-warning'}>{t('Processing_was_interrupted_because_of_wrong_data')} 🖩 </div>;
       case Status.InvalidMinMax:
-        return (
-          <div className={'alert alert-warning'}>
-            Les valeurs doivent être supérieures à zéro et la valeur minimum doit être inférieure à la valeur maximum 🖩{' '}
-          </div>
-        );
+        return <div className={'alert alert-warning'}>{t('Processing_interrupted_data_must_be_greater_than_0')} 🖩</div>;
     }
   }
 }
 
-export default ProcessingReportModal;
+export default withTranslation()(ProcessingReportModal);

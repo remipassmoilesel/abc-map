@@ -69,7 +69,7 @@ export function servicesFactory(store: MainStore): Services {
   const legalMentions = new LegalMentionsService(downloadClient, toasts);
 
   // When project loaded, we clean style cache and undo/redo history
-  project.addEventListener((ev) => {
+  project.addProjectLoadedListener((ev) => {
     if (ProjectEventType.ProjectLoaded === ev.type) {
       history.resetHistory();
       StyleFactory.get().clearCache();

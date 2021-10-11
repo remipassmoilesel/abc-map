@@ -23,7 +23,9 @@ import { MapActions } from '../../../../../core/store/map/actions';
 import { ServiceProps, withServices } from '../../../../../core/withServices';
 import OptionRow from '../../_common/option-row/OptionRow';
 import PointIconPicker from '../../../../../components/icon-picker/PointIconPicker';
-import { PointIconName } from '../../../../../assets/point-icons/PointIconName';
+import { IconName } from '../../../../../assets/point-icons/IconName';
+import { prefixedTranslation } from '../../../../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
 
 const mapStateToProps = (state: MainState) => ({
   point: state.map.currentStyle.point,
@@ -37,19 +39,21 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type Props = ConnectedProps<typeof connector> & ServiceProps;
 
+const t = prefixedTranslation('MapView:ToolSelector.');
+
 class PointIconSelector extends Component<Props, {}> {
   public render(): ReactNode {
-    const selected = this.props.point?.icon as PointIconName;
+    const selected = this.props.point?.icon as IconName;
 
     return (
       <OptionRow>
-        <div className={'mr-2'}>Icône: </div>
+        <div className={'mr-2'}>{t('Icon')}: </div>
         <PointIconPicker value={selected} onChange={this.handleSelection} />
       </OptionRow>
     );
   }
 
-  private handleSelection = (icon: PointIconName): void => {
+  private handleSelection = (icon: IconName): void => {
     const { geo } = this.props.services;
 
     this.props.setPointIcon(icon);
@@ -68,4 +72,4 @@ class PointIconSelector extends Component<Props, {}> {
   };
 }
 
-export default connector(withServices(PointIconSelector));
+export default withTranslation()(connector(withServices(PointIconSelector)));

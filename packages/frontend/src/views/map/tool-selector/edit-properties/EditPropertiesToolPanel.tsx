@@ -20,18 +20,22 @@ import React, { Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/shared';
 import TipBubble from '../../../../components/tip-bubble/TipBubble';
 import { ToolTips } from '@abc-map/user-documentation';
+import { prefixedTranslation } from '../../../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
 import Cls from './EditPropertiesToolPanel.module.scss';
 
 const logger = Logger.get('EditPropertiesPanel.tsx');
+
+const t = prefixedTranslation('MapView:ToolSelector.');
 
 class EditPropertiesPanel extends Component<{}, {}> {
   public render(): ReactNode {
     return (
       <div className={Cls.editPropertiesPanel}>
-        <TipBubble id={ToolTips.EditProperties} label={"Aide de l'outil"} className={'mx-3 mb-3'} />
+        <TipBubble id={ToolTips.EditProperties} label={t('Tool_help')} className={'mx-3 mb-3'} />
       </div>
     );
   }
 }
 
-export default EditPropertiesPanel;
+export default withTranslation()(EditPropertiesPanel);

@@ -22,8 +22,10 @@ import { MainState } from '../../../../../core/store/reducer';
 import { MapActions } from '../../../../../core/store/map/actions';
 import * as _ from 'lodash';
 import { ServiceProps, withServices } from '../../../../../core/withServices';
-import Cls from './PointSizeSelector.module.scss';
 import OptionRow from '../../_common/option-row/OptionRow';
+import { withTranslation } from 'react-i18next';
+import { prefixedTranslation } from '../../../../../i18n/i18n';
+import Cls from './PointSizeSelector.module.scss';
 
 const mapStateToProps = (state: MainState) => ({
   point: state.map.currentStyle.point,
@@ -37,13 +39,15 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type Props = ConnectedProps<typeof connector> & ServiceProps;
 
-class StrokeWidthSelector extends Component<Props, {}> {
+const t = prefixedTranslation('MapView:ToolSelector.');
+
+class PointSizeSelector extends Component<Props, {}> {
   public render(): ReactNode {
     const size = this.props.point?.size;
 
     return (
       <OptionRow>
-        <div>Taille d&apos;icone:</div>
+        <div>{t('Size')}:</div>
         <select value={size} onChange={this.handleSelection} className={`form-control form-control-sm ${Cls.select}`}>
           {_.range(15, 201).map((value) => (
             <option key={value} value={value}>
@@ -73,4 +77,4 @@ class StrokeWidthSelector extends Component<Props, {}> {
   };
 }
 
-export default connector(withServices(StrokeWidthSelector));
+export default withTranslation()(connector(withServices(PointSizeSelector)));

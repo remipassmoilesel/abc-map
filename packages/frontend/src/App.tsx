@@ -29,7 +29,6 @@ import NotFoundView from './views/not-found/NotFoundView';
 import DocumentationView from './views/documentation/DocumentationView';
 import ConfirmAccountView from './views/confirm-account/ConfirmAccountView';
 import { Env } from './core/utils/Env';
-import RenameModal from './components/rename-modal/RenameModal';
 import PasswordInputModal from './components/password-input-modal/PasswordInputModal';
 import DeviceWarningModal from './components/device-warning-modal/DeviceWarningModal';
 import { ServiceProps, withServices } from './core/withServices';
@@ -74,7 +73,6 @@ class App extends Component<Props, {}> {
           <Route path={'*'} component={NotFoundView} />
         </Switch>
         <ToastContainer className={'toast-container'} />
-        <RenameModal />
         <PasswordInputModal />
         <SetPasswordModal />
         <DeviceWarningModal />

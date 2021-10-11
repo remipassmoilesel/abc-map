@@ -22,6 +22,8 @@ import { HistoryKey } from '../../core/history/HistoryKey';
 import { connect, ConnectedProps } from 'react-redux';
 import { MainState } from '../../core/store/reducer';
 import { ServiceProps, withServices } from '../../core/withServices';
+import { prefixedTranslation } from '../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
 
 const logger = Logger.get('HistoryControls.tsx');
 
@@ -37,6 +39,8 @@ const connector = connect(mapStateToProps);
 
 type Props = ConnectedProps<typeof connector> & LocalProps & ServiceProps;
 
+const t = prefixedTranslation('HistoryControls:');
+
 class HistoryControls extends Component<Props, {}> {
   public render(): ReactNode {
     const canUndo = this.canUndo();
@@ -45,12 +49,12 @@ class HistoryControls extends Component<Props, {}> {
       <div className={'control-block'}>
         <div className={'control-item'}>
           <button onClick={this.onCancel} type={'button'} className={'btn btn-link'} disabled={!canUndo} data-cy={'undo'}>
-            <i className={'fa fa-undo mr-2'} /> Annuler
+            <i className={'fa fa-undo mr-2'} /> {t('Undo')}
           </button>
         </div>
         <div className={'control-item'}>
           <button onClick={this.onRedo} type={'button'} className={'btn btn-link'} disabled={!canRedo} data-cy={'redo'}>
-            <i className={'fa fa-redo mr-2'} /> Refaire
+            <i className={'fa fa-redo mr-2'} /> {t('Redo')}
           </button>
         </div>
       </div>
@@ -92,4 +96,4 @@ class HistoryControls extends Component<Props, {}> {
   };
 }
 
-export default connector(withServices(HistoryControls));
+export default withTranslation()(connector(withServices(HistoryControls)));

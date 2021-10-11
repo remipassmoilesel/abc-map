@@ -20,13 +20,16 @@ import { AbcLegend, AbcProjectManifest, AbcProjectMetadata, LegendDisplay, Proje
 import uuid from 'uuid-random';
 import { DateTime } from 'luxon';
 import { Views } from '../geo/Views';
+import { prefixedTranslation } from '../../i18n/i18n';
+
+const t = prefixedTranslation('core:ProjectFactory.');
 
 export class ProjectFactory {
   public static newProjectMetadata(): AbcProjectMetadata {
     return {
       id: uuid(),
       version: ProjectConstants.CurrentVersion,
-      name: `Projet du ${DateTime.local().toLocaleString()}`,
+      name: t('Project', { date: DateTime.local().toLocaleString() }),
       containsCredentials: false,
     };
   }

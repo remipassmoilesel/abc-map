@@ -28,6 +28,11 @@ describe('Rendering spec', function () {
     TestHelper.init();
   });
 
+  /**
+   * For the moment, this test only pass in continuous integration.
+   *
+   * If you know how to make it pass on all platforms, ping me !
+   */
   it('PDF rendering should be conform', function () {
     cy.visit(FrontendRoutes.map().raw())
       .get('[data-cy=import-project]')
@@ -42,7 +47,7 @@ describe('Rendering spec', function () {
       .type('azerty1234')
       .get('[data-cy=password-confirm]')
       .click()
-      .then(() => Toasts.assertText('Projet importé !'))
+      .then(() => Toasts.assertText('Project loaded !'))
       .get('[data-cy=layout]')
       .click()
       .get('[data-cy=layout-controls] [data-cy=pdf-export]')

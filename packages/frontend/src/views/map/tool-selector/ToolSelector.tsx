@@ -31,8 +31,10 @@ import { LayerFactory } from '../../../core/geo/layers/LayerFactory';
 import { HistoryKey } from '../../../core/history/HistoryKey';
 import { AddLayersTask } from '../../../core/history/tasks/layers/AddLayersTask';
 import { ServiceProps, withServices } from '../../../core/withServices';
-import Cls from './ToolSelector.module.scss';
 import EditPropertiesToolPanel from './edit-properties/EditPropertiesToolPanel';
+import { prefixedTranslation } from '../../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
+import Cls from './ToolSelector.module.scss';
 
 interface LocalProps {
   activeLayer?: LayerWrapper;
@@ -46,15 +48,18 @@ const connector = connect(mapStateToProps);
 
 type Props = ConnectedProps<typeof connector> & LocalProps & ServiceProps;
 
+const t = prefixedTranslation('MapView:ToolSelector.');
+
 class ToolSelector extends Component<Props, {}> {
   public render(): ReactNode {
-    const toolsActive = (this.props.activeLayer && this.props.activeLayer.isVector()) || false;
+    const activeLayer = this.props.activeLayer;
+    const toolsActive = (activeLayer && activeLayer.isVector()) || false;
     const buttons = toolsActive && this.getToolButtons();
     const toolPanel = toolsActive && this.getToolPanel();
 
     return (
       <div className={`control-block ${Cls.toolSelector}`} data-cy={'tool-selector'}>
-        <div className={'mb-2 text-bold'}>Outils de dessin</div>
+        <div className={'mb-2 text-bold'}>{t('Drawing_tools')}</div>
         {toolsActive && buttons && (
           <>
             {buttons.map((row, i) => (
@@ -68,10 +73,10 @@ class ToolSelector extends Component<Props, {}> {
         )}
         {!toolsActive && (
           <div className={Cls.message}>
-            Vous devez sélectionner une couche de géométries pour utiliser les outils.
+            {t('You_must_select_geometry_layer_before')}
             <button onClick={this.createVectorLayer} className={'btn btn-outline-secondary my-3'}>
               <i className={'fa fa-plus mr-2'} />
-              Nouvelle couche
+              {t('Create_geometry_layer')}
             </button>
           </div>
         )}
@@ -141,4 +146,4 @@ class ToolSelector extends Component<Props, {}> {
   };
 }
 
-export default connector(withServices(ToolSelector));
+export default withTranslation()(connector(withServices(ToolSelector)));

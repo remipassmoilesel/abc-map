@@ -25,6 +25,8 @@ import { ServiceProps, withServices } from '../../../core/withServices';
 import TipBubble from '../../../components/tip-bubble/TipBubble';
 import { DataProcessingTips } from '@abc-map/user-documentation';
 import FormLine from '../form-line/FormLine';
+import { prefixedTranslation } from '../../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
 
 const logger = Logger.get('DataSourceForm.tsx');
 
@@ -45,6 +47,8 @@ interface State {
   dataFields: string[];
   dataSamples: DataRow[];
 }
+
+const t = prefixedTranslation('DataProcessingModules:DataSourceForm.');
 
 class DataSourceForm extends Component<Props, State> {
   constructor(props: Props) {
@@ -84,9 +88,9 @@ class DataSourceForm extends Component<Props, State> {
             data-testid={'value-field'}
             data-cy={'value-field'}
           >
-            {!dataFields.length && <option>Sélectionnez une source de données</option>}
+            {!dataFields.length && <option>{t('Select_data_source')}</option>}
             {!!dataFields.length &&
-              [<option key={0}>Sélectionnez un champ</option>].concat(
+              [<option key={0}>{t('Select_field')}</option>].concat(
                 dataFields.map((f) => (
                   <option key={f} value={f}>
                     {f}
@@ -98,7 +102,7 @@ class DataSourceForm extends Component<Props, State> {
 
         <FormLine>
           <label htmlFor="data-join-by" className={'flex-grow-1'}>
-            Jointure avec les géométries par:
+            {t('Join_geometries_with')}:
           </label>
 
           <TipBubble id={DataProcessingTips.JoinBy} />
@@ -110,9 +114,9 @@ class DataSourceForm extends Component<Props, State> {
             data-testid={'data-join-by'}
             data-cy={'data-join-by'}
           >
-            {!dataFields.length && <option>Sélectionnez une source de données</option>}
+            {!dataFields.length && <option>{t('Select_data_source')}</option>}
             {!!dataFields.length &&
-              [<option key={0}>Sélectionnez un champ</option>].concat(
+              [<option key={0}>{t('Select_field')}</option>].concat(
                 dataFields.map((f) => (
                   <option key={f} value={f}>
                     {f}
@@ -124,7 +128,7 @@ class DataSourceForm extends Component<Props, State> {
 
         {!!dataSamples.length && (
           <>
-            <div className={'my-3'}>Échantillons de données</div>
+            <div className={'my-3'}>{t('Data_samples')}</div>
             <DataTable rows={dataSamples} />
           </>
         )}
@@ -203,4 +207,4 @@ class DataSourceForm extends Component<Props, State> {
   }
 }
 
-export default withServices(DataSourceForm);
+export default withTranslation()(withServices(DataSourceForm));

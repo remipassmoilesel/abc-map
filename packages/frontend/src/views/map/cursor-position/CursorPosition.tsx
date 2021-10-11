@@ -24,6 +24,8 @@ import * as _ from 'lodash';
 import MapBrowserEvent from 'ol/MapBrowserEvent';
 import { toLonLat } from 'ol/proj';
 import { Coordinate } from 'ol/coordinate';
+import { prefixedTranslation } from '../../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
 import Cls from './CursorPosition.module.scss';
 
 const logger = Logger.get('CursorPosition.tsx');
@@ -31,6 +33,8 @@ const logger = Logger.get('CursorPosition.tsx');
 interface State {
   position?: Coordinate;
 }
+
+const t = prefixedTranslation('MapView:CursorPosition.');
 
 class CursorPosition extends Component<ServiceProps, State> {
   constructor(props: ServiceProps) {
@@ -48,9 +52,13 @@ class CursorPosition extends Component<ServiceProps, State> {
     const lat = toPrecision(position[1], 3);
     return (
       <div className={'control-block'}>
-        <div className={'mb-2'}>Position du curseur</div>
-        <div className={Cls.latLon}>Latitude: {lat}</div>
-        <div className={Cls.latLon}>Longitude: {lon}</div>
+        <div className={'mb-2'}>{t('Cursor_position')}</div>
+        <div className={Cls.latLon}>
+          {t('Latitude')}: {lat}
+        </div>
+        <div className={Cls.latLon}>
+          {t('Longitude')}: {lon}
+        </div>
       </div>
     );
   }
@@ -77,4 +85,4 @@ class CursorPosition extends Component<ServiceProps, State> {
   );
 }
 
-export default withServices(CursorPosition);
+export default withTranslation()(withServices(CursorPosition));

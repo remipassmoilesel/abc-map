@@ -15,22 +15,28 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
+import { TestHelper } from '../../utils/test/TestHelper';
 
-import { ReactNode } from 'react';
-import { Module } from '../Module';
-import CountPointsInPolygonUi from './ui/CountPointsInPolygonUi';
-import { ModuleId } from '../ModuleId';
+// This file must contains empty lines and final new line
+export const File1 = TestHelper.sampleCsvFile(`\
+"label","altitude"
 
-export class CountPointsInPolygon extends Module {
-  public getId(): ModuleId {
-    return ModuleId.CountPointsInPolygon;
-  }
+"value1",1234
 
-  public getReadableName(): string {
-    return 'Compte de géométries';
-  }
+"value2",5678
 
-  public getUserInterface(): ReactNode {
-    return <CountPointsInPolygonUi />;
-  }
-}
+`);
+
+export const File2 = TestHelper.sampleCsvFile('');
+
+export const File3 = TestHelper.sampleCsvFile(`\
+"a";"b";"c"
+"d";"e";"f"
+`);
+
+export const File4 = TestHelper.sampleCsvFile(`\
+label,altitude
+value1,1234
+value2,1235
+value3
+`);

@@ -46,7 +46,7 @@ export class LayerControls {
       .get('[data-cy=add-layer]')
       .click()
       .get('[data-cy=add-layer-type]')
-      .select('Fond de carte prédéfini')
+      .select('Predefined basemap')
       .get('[data-cy=predefined-model]')
       .select('OpenStreetMap')
       .get('[data-cy=add-layer-confirm]')
@@ -66,7 +66,7 @@ export class LayerControls {
         .click()
         // Fill WMS layer form
         .get('[data-cy=add-layer-type]')
-        .select('Couche distante WMTS')
+        .select('WMTS layer')
         .get('[data-cy=wmts-settings-url]')
         .clear()
         .type(WmtsConstants.PUBLIC_URL)
@@ -91,7 +91,7 @@ export class LayerControls {
         .click()
         // Fill WMS layer form
         .get('[data-cy=add-layer-type]')
-        .select('Couche distante WMS')
+        .select('WMS layer')
         .get('[data-cy=wms-settings-url]')
         .clear()
         .type(WmsConstants.PUBLIC_URL)
@@ -116,7 +116,7 @@ export class LayerControls {
         .click()
         // Fill XYZ layer form
         .get('[data-cy=add-layer-type]')
-        .select('Couche distante XYZ')
+        .select('XYZ layer')
         .get('[data-cy=xyz-settings-url]')
         .clear()
         .type(XyzConstants.PUBLIC_URL, { parseSpecialCharSequences: false })
@@ -133,7 +133,7 @@ export class LayerControls {
         .get('[data-cy=add-layer]')
         .click()
         .get('[data-cy=add-layer-type]')
-        .select('Couche distante WMS')
+        .select('WMS layer')
         // Fill WMS layer form
         .get('[data-cy=wms-settings-url]')
         .clear()

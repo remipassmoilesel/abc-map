@@ -20,7 +20,7 @@ import * as Papa from 'papaparse';
 import { BlobIO, Logger } from '@abc-map/shared';
 import { CsvParsingError, CsvRow } from './typings';
 
-const logger = Logger.get('CsvParser.ts');
+export const logger = Logger.get('CsvParser.ts');
 
 export class CsvParser {
   public static async parse(file: File): Promise<CsvRow[]> {
@@ -36,7 +36,10 @@ export class CsvParser {
     });
 
     if (results.errors.length) {
-      return Promise.reject(new CsvParsingError(`Invalid data: ${results.errors[0].message}`, results.errors[0].row));
+      // We count lines from one, silly humans
+      // If error has a valid row, we add 1 for headers row
+      const row = results.errors[0].row === 0 ? 1 : results.errors[0].row + 2;
+      return Promise.reject(new CsvParsingError(`Invalid data: ${results.errors[0].message}`, row));
     }
 
     const data = results.data;

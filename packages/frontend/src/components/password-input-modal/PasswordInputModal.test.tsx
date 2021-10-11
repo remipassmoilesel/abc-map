@@ -100,7 +100,7 @@ describe('PasswordInputModal', () => {
 
     // Assert
     await waitFor(() => {
-      expect(screen.getByText(/Le mot de passe n'est pas valide/)).toBeDefined();
+      expect(screen.getByText(/This password is incorrect/)).toBeDefined();
     });
   });
 

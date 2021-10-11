@@ -21,7 +21,8 @@ import { getListByLang, getTextByLang, Logger } from '@abc-map/shared';
 import { AbcArtefact } from '@abc-map/shared';
 import { ServiceProps, withServices } from '../../../core/withServices';
 import { Modal } from 'react-bootstrap';
-import { getLang } from '../../../i18n/i18n';
+import { getLang, prefixedTranslation } from '../../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
 import Cls from './ArtefactCard.module.scss';
 
 const logger = Logger.get('ArtefactCard.tsx');
@@ -38,6 +39,8 @@ interface State {
   licenseModal: boolean;
   license?: string;
 }
+
+const t = prefixedTranslation('DataStoreView:');
 
 class ArtefactCard extends Component<Props, State> {
   constructor(props: Props) {
@@ -59,11 +62,15 @@ class ArtefactCard extends Component<Props, State> {
           {/* Meta */}
 
           <h5 data-cy={'artefact-name'}>{name}</h5>
-          {keywords && <small className={'mb-2'}>Mots clés: {keywords.join(', ')}</small>}
+          {keywords && (
+            <small className={'mb-2'}>
+              {t('Keywords')}: {keywords.join(', ')}
+            </small>
+          )}
           {description && <div className={'mb-3'}>{description}</div>}
           {!!link && (
             <div>
-              Lien:&nbsp;
+              {t('Link')}&nbsp;
               <a href={link} rel="noreferrer" target={'_blank'}>
                 {link}
               </a>
@@ -76,13 +83,13 @@ class ArtefactCard extends Component<Props, State> {
 
           <div className={'d-flex flex-row justify-content-end'}>
             <button className={'btn btn-link mr-2'} onClick={this.handleShowLicense} data-cy={'show-license'}>
-              Licence d&apos;utilisation
+              {t('Licence_to_use')}
             </button>
             <button className={'btn btn-link mr-2'} onClick={this.handleDownloadArtefact} data-cy={'download-artefact'}>
-              Télécharger
+              {t('Download')}
             </button>
             <button className={'btn btn-outline-primary'} onClick={this.handleImportArtefact} data-cy={'import-artefact'}>
-              Ajouter au projet
+              {t('Add_to_project')}
             </button>
           </div>
         </div>
@@ -91,14 +98,14 @@ class ArtefactCard extends Component<Props, State> {
 
         <Modal show={licenseModal} onHide={this.handleModalClose} size={'lg'}>
           <Modal.Header closeButton data-cy={'license-header'}>
-            {name} : Licence d&apos;utilisation
+            {name} : {t('Licence_to_use')}
           </Modal.Header>
           <Modal.Body className={'d-flex justify-content-center'}>
             <pre className={Cls.licenseView}>{license}</pre>
           </Modal.Body>
           <Modal.Footer>
             <button className={'btn btn-outline-secondary'} onClick={this.handleModalClose} data-cy={'close-modal'}>
-              Fermer
+              {t('Close')}
             </button>
           </Modal.Footer>
         </Modal>
@@ -129,4 +136,4 @@ class ArtefactCard extends Component<Props, State> {
   };
 }
 
-export default withServices(ArtefactCard);
+export default withTranslation()(withServices(ArtefactCard));
