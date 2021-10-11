@@ -19,7 +19,7 @@
 import { DataSource } from '../../core/data/data-source/DataSource';
 import { VectorLayerWrapper } from '../../core/geo/layers/LayerWrapper';
 import { ScaleAlgorithm } from '../_common/algorithm/Algorithm';
-import { PointIconName } from '../../assets/point-icons/PointIconName';
+import { IconName } from '../../assets/point-icons/IconName';
 
 export interface Parameters {
   newLayerName: string;
@@ -33,7 +33,7 @@ export interface Parameters {
     joinBy?: string;
   };
   symbols: {
-    type: PointIconName;
+    type: IconName;
     color: string;
     sizeMin: number;
     sizeMax: number;
@@ -47,7 +47,7 @@ export function newParameters(): Parameters {
     data: {},
     geometries: {},
     symbols: {
-      type: PointIconName.Icon0CircleFill,
+      type: IconName.Icon0CircleFill,
       color: '#0094e3',
       sizeMin: 20,
       sizeMax: 100,

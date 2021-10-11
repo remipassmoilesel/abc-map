@@ -28,31 +28,35 @@ import PointIconSelector from '../point/icon-selector/PointIconSelector';
 import PointSizeSelector from '../point/size-selector/PointSizeSelector';
 import ButtonBar from '../_common/button-bar/ButtonBar';
 import Cls from './SelectionToolPanel.module.scss';
+import { prefixedTranslation } from '../../../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
 
 const logger = Logger.get('SelectionToolPanel.tsx');
+
+const t = prefixedTranslation('MapView:ToolSelector.');
 
 class SelectionToolPanel extends Component<{}, {}> {
   public render(): ReactNode {
     return (
       <div className={Cls.selectionPanel}>
-        <TipBubble id={ToolTips.Selection} label={"Aide de l'outil"} className={'mx-3 mb-3'} />
+        <TipBubble id={ToolTips.Selection} label={t('Tool_help')} className={'mx-3 mb-3'} />
         <ButtonBar />
 
-        <div className={Cls.section}>Points</div>
+        <div className={Cls.section}>{t('Points')}</div>
         <PointIconSelector />
         <PointSizeSelector />
         <ColorSelector point={true} />
 
-        <div className={Cls.section}>Lignes et polygones</div>
+        <div className={Cls.section}>{t('Lines_and_polygons')}</div>
         <StrokeWidthSelector />
         <ColorSelector point={false} stroke={true} fillColor1={true} fillColor2={true} />
         <FillPatternSelector />
 
-        <div className={Cls.section}>Texte</div>
+        <div className={Cls.section}>{t('Text')}</div>
         <TextFormat />
       </div>
     );
   }
 }
 
-export default SelectionToolPanel;
+export default withTranslation()(SelectionToolPanel);

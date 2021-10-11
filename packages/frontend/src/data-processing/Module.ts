@@ -21,6 +21,6 @@ import { ModuleId } from './ModuleId';
 
 export abstract class Module {
   public abstract getId(): ModuleId;
-  public abstract getReadableName(): string;
+  public abstract getI18nName(): string;
   public abstract getUserInterface(): ReactNode;
 }

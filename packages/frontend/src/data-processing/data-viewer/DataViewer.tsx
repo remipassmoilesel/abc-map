@@ -28,8 +28,8 @@ export class DataViewer extends Module {
     return ModuleId.DataViewer;
   }
 
-  public getReadableName(): string {
-    return 'Tableaux de données';
+  public getI18nName(): string {
+    return 'Data_tables';
   }
 
   public getUserInterface(): ReactNode {

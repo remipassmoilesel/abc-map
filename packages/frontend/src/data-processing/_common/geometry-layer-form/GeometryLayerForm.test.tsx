@@ -42,9 +42,9 @@ describe('GeometryLayerForm', () => {
   it('should render', () => {
     abcRender(<GeometryLayerForm values={{ layer: undefined, joinBy: '' }} onChange={handleChanges} />, { services });
 
-    expect(screen.getByText('Couche:')).toBeDefined();
-    expect(screen.getByText('Jointure avec les données par:')).toBeDefined();
-    expect((screen.getByTestId('geometries-join-by') as HTMLSelectElement).value).toEqual('Sélectionnez une couche');
+    expect(screen.getByText('Layer:')).toBeDefined();
+    expect(screen.getByText('Join with data by:')).toBeDefined();
+    expect((screen.getByTestId('geometries-join-by') as HTMLSelectElement).value).toEqual('Select a layer');
   });
 
   it('should notify on layer selection', async () => {
@@ -72,7 +72,7 @@ describe('GeometryLayerForm', () => {
     abcRender(<GeometryLayerForm values={{ layer: layer, joinBy: '' }} onChange={handleChanges} />, { services });
     userEvent.selectOptions(screen.getByTestId('vector-layer-selector'), 'Regions of France');
 
-    await waitFor(() => screen.getAllByText('Sélectionnez un champ de jointure'));
+    await waitFor(() => screen.getAllByText('Select a join field'));
     handleChanges.reset();
 
     // Act
@@ -113,7 +113,7 @@ describe('GeometryLayerForm', () => {
 
     // Assert
     await waitFor(() => {
-      expect(screen.getByText(/Cette couche ne contient aucune géométrie/)).toBeDefined();
+      expect(screen.getByText(/This layer does not contain any geometry/)).toBeDefined();
     });
   });
 });

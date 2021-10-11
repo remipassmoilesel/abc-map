@@ -19,6 +19,7 @@
 import React, { ChangeEvent, Component, ReactNode } from 'react';
 import { Algorithm, allAlgorithms, LabeledAlgorithms } from './Algorithm';
 import TipBubble from '../../../components/tip-bubble/TipBubble';
+import { prefixedTranslation } from '../../../i18n/i18n';
 
 interface Props {
   label: string;
@@ -28,6 +29,8 @@ interface Props {
   onChange: (value: Algorithm) => void;
 }
 
+const t = prefixedTranslation('DataProcessingModules:AlgorithmSelector.');
+
 class AlgorithmSelector extends Component<Props, {}> {
   public render(): ReactNode {
     const value = this.props.value;
@@ -35,7 +38,7 @@ class AlgorithmSelector extends Component<Props, {}> {
     const tip = this.props.tip;
     const options = (this.props.only || allAlgorithms()).map((algo) => {
       const labeled = LabeledAlgorithms.All.find((lbl) => lbl.value === algo);
-      const label = labeled?.label || 'Option invalide';
+      const label = t(labeled?.label || 'Invalid_option');
       return (
         <option value={algo} key={algo}>
           {label}
@@ -50,7 +53,7 @@ class AlgorithmSelector extends Component<Props, {}> {
         </label>
         <TipBubble id={tip} />
         <select value={value} onChange={this.handleAlgorithmChange} className={'form-control'} id={'algorithm'}>
-          <option value={undefined}>Veuillez choisir</option>
+          <option value={undefined}>{t('Choose_algorithm')}</option>
           {options}
         </select>
       </>

@@ -90,7 +90,7 @@ describe('ProjectService', function () {
       const eventListener = sinon.stub();
       const map = MapFactory.createNaked();
       geoMock.getMainMap.returns(map);
-      projectService.addEventListener(eventListener);
+      projectService.addProjectLoadedListener(eventListener);
 
       // Act
       await projectService.newProject();
@@ -108,7 +108,7 @@ describe('ProjectService', function () {
       geoMock.getMainMap.returns(map);
 
       const eventListener = sinon.stub();
-      projectService.addEventListener(eventListener);
+      projectService.addProjectLoadedListener(eventListener);
 
       const [zippedProject, manifest] = await TestHelper.sampleCompressedProject();
 
@@ -152,7 +152,7 @@ describe('ProjectService', function () {
       geoMock.getMainMap.returns(map);
 
       const eventListener = sinon.stub();
-      projectService.addEventListener(eventListener);
+      projectService.addProjectLoadedListener(eventListener);
 
       modals.getProjectPassword.resolves({ type: ModalEventType.PasswordInputClosed, value: '', status: ModalStatus.Confirmed });
 

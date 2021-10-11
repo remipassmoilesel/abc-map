@@ -26,6 +26,8 @@ import ControlButtons from '../_common/ControlButtons';
 import { LayerFactory } from '../../../../../core/geo/layers/LayerFactory';
 import { HistoryKey } from '../../../../../core/history/HistoryKey';
 import { AddLayersTask } from '../../../../../core/history/tasks/layers/AddLayersTask';
+import { withTranslation } from 'react-i18next';
+import { prefixedTranslation } from '../../../../../i18n/i18n';
 
 const logger = Logger.get('XYZLayerPanel.tsx');
 
@@ -41,6 +43,8 @@ interface State {
 }
 
 declare type Props = LocalProps & ServiceProps;
+
+const t = prefixedTranslation('MapView:AddLayerModal.');
 
 class XYZLayerPanel extends Component<Props, State> {
   constructor(props: Props) {
@@ -63,15 +67,13 @@ class XYZLayerPanel extends Component<Props, State> {
             value={url}
             onChange={this.handleUrlChanged}
             className={'form-control mb-3'}
-            placeholder={'URL (obligatoire)'}
+            placeholder={t('URL')}
             data-cy={'xyz-settings-url'}
           />
           <div className={'alert alert-info'}>
-            L&apos;URL doit contenir les variables {variable('x')}, {variable('y')} et {variable('z')}. <br />
-            Exemple:&nbsp;
-            <code>
-              http://my-domain.net/{variable('x')}/{variable('y')}/{variable('z')}
-            </code>
+            <span dangerouslySetInnerHTML={{ __html: t('URL_must_contains_placeholders') }} />
+            <br />
+            <span dangerouslySetInnerHTML={{ __html: t('Example_url_with_placeholders') }} />
           </div>
         </div>
 
@@ -122,8 +124,4 @@ class XYZLayerPanel extends Component<Props, State> {
   }
 }
 
-function variable(name: string) {
-  return <code>&#123;{name}&#125;</code>;
-}
-
-export default withServices(XYZLayerPanel);
+export default withTranslation()(withServices(XYZLayerPanel));

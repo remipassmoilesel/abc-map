@@ -18,7 +18,7 @@
 
 import { DataSourceType } from './DataSource';
 import { CsvDataSource, logger } from './CsvDataSource';
-import { File1 } from '../csv-parser/test-data';
+import { File1 } from './CsvDataSource.test.data';
 
 logger.disable();
 

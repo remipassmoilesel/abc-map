@@ -16,11 +16,11 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 import { AllIcons } from './icons';
-import { PointIconName } from './PointIconName';
+import { IconName } from './IconName';
 import { IconCategory } from './IconCategory';
 
 export interface PointIcon {
-  name: PointIconName;
+  name: IconName;
   contentSvg: string;
   category: IconCategory;
 }
@@ -37,7 +37,7 @@ export const DefaultIcon = AllIcons[0];
  *
  * @param name
  */
-export function safeGetIcon(name: PointIconName | string): PointIcon {
+export function safeGetIcon(name: IconName | string): PointIcon {
   return AllIcons.find((i) => i.name === name) || DefaultIcon;
 }
 

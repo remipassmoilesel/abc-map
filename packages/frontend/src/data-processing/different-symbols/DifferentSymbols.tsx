@@ -26,8 +26,8 @@ export class DifferentSymbols extends Module {
     return ModuleId.DifferentSymbols;
   }
 
-  public getReadableName(): string {
-    return 'Symboles différents';
+  public getI18nName(): string {
+    return 'Different_symbols';
   }
 
   public getUserInterface(): ReactNode {

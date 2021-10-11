@@ -19,33 +19,33 @@ import { LayerType } from '@abc-map/shared';
 
 export interface LabeledLayerType {
   id: LayerType;
-  label: string;
+  i18nLabel: string;
 }
 
 export class LabeledLayerTypes {
   public static readonly Predefined: LabeledLayerType = {
     id: LayerType.Predefined,
-    label: 'Fond de carte prédéfini',
+    i18nLabel: 'Predefined_basemap',
   };
 
   public static readonly Vector: LabeledLayerType = {
     id: LayerType.Vector,
-    label: 'Couche de géométries',
+    i18nLabel: 'Geometry_layer',
   };
 
   public static readonly Xyz: LabeledLayerType = {
     id: LayerType.Xyz,
-    label: 'Couche distante XYZ',
+    i18nLabel: 'XYZ_layer',
   };
 
   public static readonly Wms: LabeledLayerType = {
     id: LayerType.Wms,
-    label: 'Couche distante WMS',
+    i18nLabel: 'WMS_layer',
   };
 
   public static readonly Wmts: LabeledLayerType = {
     id: LayerType.Wmts,
-    label: 'Couche distante WMTS',
+    i18nLabel: 'WMTS_layer',
   };
 
   public static readonly All: LabeledLayerType[] = [

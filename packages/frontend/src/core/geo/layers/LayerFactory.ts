@@ -29,6 +29,9 @@ import TileSource from 'ol/source/Tile';
 import { styleFunction } from '../styles/style-function';
 import { tileLoadingPublic } from './tileLoadingPublic';
 import { WmsSettings, WmtsSettings } from './LayerFactory.types';
+import { prefixedTranslation } from '../../../i18n/i18n';
+
+const t = prefixedTranslation('core:LayerFactory.');
 
 export class LayerFactory {
   public static newPredefinedLayer(model: PredefinedLayerModel): PredefinedLayerWrapper {
@@ -37,23 +40,23 @@ export class LayerFactory {
     switch (model) {
       case PredefinedLayerModel.OSM:
         source = new OSM();
-        name = 'OpenStreetMap';
+        name = t('OpenStreetMap');
         break;
       case PredefinedLayerModel.StamenToner:
         source = new Stamen({ layer: 'toner' });
-        name = 'Stamen Toner';
+        name = t('Stamen_Toner');
         break;
       case PredefinedLayerModel.StamenTonerLite:
         source = new Stamen({ layer: 'toner-lite' });
-        name = 'Stamen Toner Lite';
+        name = t('Stamen_Toner_Lite');
         break;
       case PredefinedLayerModel.StamenTerrain:
         source = new Stamen({ layer: 'terrain' });
-        name = 'Stamen Terrain';
+        name = t('Stamen_Terrain');
         break;
       case PredefinedLayerModel.StamenWatercolor:
         source = new Stamen({ layer: 'watercolor' });
-        name = 'Stamen Watercolor';
+        name = t('Stamen_Watercolor');
         break;
       default:
         throw new Error(`Unhandled predefined layer type: ${model}`);
@@ -80,7 +83,7 @@ export class LayerFactory {
 
     const metadata: VectorMetadata = {
       id: uuid(),
-      name: 'Géométries',
+      name: t('Geometries'),
       type: LayerType.Vector,
       active: false,
       opacity: 1,
@@ -156,7 +159,7 @@ export class LayerFactory {
 
     const metadata: XyzMetadata = {
       id: uuid(),
-      name: 'Couche XYZ',
+      name: t('XYZ_layer'),
       type: LayerType.Xyz,
       active: false,
       opacity: 1,

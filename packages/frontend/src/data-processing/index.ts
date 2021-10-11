@@ -23,7 +23,7 @@ import { DifferentSymbols } from './different-symbols/DifferentSymbols';
 import { ColorGradients } from './color-gradients/ColorGradients';
 import { getServices } from '../core/Services';
 import { Scripts } from './scripts/Scripts';
-import { CountPointsInPolygon } from './count-in-geometry/CountPointsInPolygon';
+import { FeatureCountByGeometries } from './count-by-geometries/FeatureCountByGeometries';
 
 export function getModules(): Module[] {
   const services = getServices();
@@ -32,7 +32,7 @@ export function getModules(): Module[] {
     new ColorGradients(services),
     new ProportionalSymbols(services),
     new DifferentSymbols(),
-    new CountPointsInPolygon(),
+    new FeatureCountByGeometries(),
     new Scripts(services),
   ];
 }

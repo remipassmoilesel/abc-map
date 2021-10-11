@@ -22,12 +22,14 @@ import { DataRow, getFields } from '../../../core/data/data-source/DataSource';
 import DataTable from '../../../components/data-table/DataTable';
 import { ServiceProps, withServices } from '../../../core/withServices';
 import { VectorLayerWrapper } from '../../../core/geo/layers/LayerWrapper';
-import VectorLayerSelector from '../../../components/vector-layer-selector/VectorLayerSelector';
+import VectorLayerSelector from '../vector-layer-selector/VectorLayerSelector';
 import { LayerDataSource } from '../../../core/data/data-source/LayerDataSource';
 import TipBubble from '../../../components/tip-bubble/TipBubble';
 import { DataProcessingTips } from '@abc-map/user-documentation';
 import FormLine from '../form-line/FormLine';
 import MessageLabel from '../../../components/message-label/MessageLabel';
+import { prefixedTranslation } from '../../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
 
 const logger = Logger.get('GeometryLayerForm.tsx');
 
@@ -49,6 +51,8 @@ interface State {
 
 const UnknownGeometries = -1;
 
+const t = prefixedTranslation('DataProcessingModules:GeometryLayerForm.');
+
 class GeometryLayerForm extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
@@ -69,12 +73,12 @@ class GeometryLayerForm extends Component<Props, State> {
     return (
       <>
         <FormLine>
-          <VectorLayerSelector label={'Couche: '} value={layer?.getId()} onSelected={this.handleGeometryLayerSelected} data-cy={'geometry-layer'} />
+          <VectorLayerSelector label={t('Layer')} value={layer?.getId()} onSelected={this.handleGeometryLayerSelected} data-cy={'geometry-layer'} />
         </FormLine>
 
         <FormLine>
           <label htmlFor="geometries-join-by" className={'flex-grow-1'}>
-            Jointure avec les données par:
+            {t('Join_with_data_by')}:
           </label>
 
           <TipBubble id={DataProcessingTips.JoinBy} />
@@ -86,9 +90,9 @@ class GeometryLayerForm extends Component<Props, State> {
             data-cy={'geometries-join-by'}
             data-testid={'geometries-join-by'}
           >
-            {!featureFields.length && <option>Sélectionnez une couche</option>}
+            {!featureFields.length && <option>{t('Select_layer')}</option>}
             {!!featureFields.length &&
-              [<option key={0}>Sélectionnez un champ de jointure</option>].concat(
+              [<option key={0}>{t('Select_join_field')}</option>].concat(
                 featureFields.map((f) => (
                   <option key={f} value={f}>
                     {f}
@@ -99,13 +103,13 @@ class GeometryLayerForm extends Component<Props, State> {
         </FormLine>
 
         <div className={'my-3'}>
-          {layer && geometries < 1 && <MessageLabel icon={'fa-exclamation-triangle'}>Cette couche ne contient aucune géométrie.</MessageLabel>}
-          {layer && geometries > 0 && <MessageLabel icon={'fa-info-circle'}>{geometries} géométries seront traitées.</MessageLabel>}
+          {layer && geometries < 1 && <MessageLabel icon={'fa-exclamation-triangle'}>{t('No_geometry_found')}</MessageLabel>}
+          {layer && geometries > 0 && <MessageLabel icon={'fa-info-circle'}>{t('X_geometries_will_be_processed', { geometries })}</MessageLabel>}
         </div>
 
         {!!dataSamples.length && (
           <>
-            <div className={'mt-5 mb-3'}>Échantillons de données</div>
+            <div className={'mt-5 mb-3'}>{t('Data_samples')}</div>
             <DataTable rows={dataSamples} />
           </>
         )}
@@ -177,4 +181,4 @@ class GeometryLayerForm extends Component<Props, State> {
   }
 }
 
-export default withServices(GeometryLayerForm);
+export default withTranslation()(withServices(GeometryLayerForm));

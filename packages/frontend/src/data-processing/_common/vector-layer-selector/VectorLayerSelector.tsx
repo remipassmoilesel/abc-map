@@ -18,9 +18,11 @@
 
 import React, { ChangeEvent, Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/shared';
-import { ServiceProps, withServices } from '../../core/withServices';
-import { LayerChangeHandler } from '../../core/geo/map/MapWrapper';
-import { LayerWrapper, VectorLayerWrapper } from '../../core/geo/layers/LayerWrapper';
+import { ServiceProps, withServices } from '../../../core/withServices';
+import { LayerChangeHandler } from '../../../core/geo/map/MapWrapper';
+import { LayerWrapper, VectorLayerWrapper } from '../../../core/geo/layers/LayerWrapper';
+import { withTranslation } from 'react-i18next';
+import { prefixedTranslation } from '../../../i18n/i18n';
 
 const logger = Logger.get('VectorLayerSelector.tsx');
 
@@ -46,6 +48,8 @@ interface State {
 
 const None = 'None';
 
+const t = prefixedTranslation('DataProcessingModules:VectorLayerSelector.');
+
 class VectorLayerSelector extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
@@ -62,7 +66,7 @@ class VectorLayerSelector extends Component<Props, State> {
       <>
         {label && <div className={'flex-grow-1'}>{label}</div>}
         <select onChange={this.handleSelection} value={value} className={'form-control'} data-cy={dataCy} data-testid="vector-layer-selector">
-          <option value={None}>Sélectionnez une couche</option>
+          <option value={None}>{t('Select_a_layer')}</option>
           {layers.map((lay) => (
             <option key={lay.getId()} value={lay.getId()}>
               {lay.getName()}
@@ -118,4 +122,4 @@ class VectorLayerSelector extends Component<Props, State> {
   };
 }
 
-export default withServices(VectorLayerSelector);
+export default withTranslation()(withServices(VectorLayerSelector));

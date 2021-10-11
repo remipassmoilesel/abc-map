@@ -23,8 +23,9 @@ import { MainState } from '../../../core/store/reducer';
 import { connect, ConnectedProps } from 'react-redux';
 import { ServiceProps, withServices } from '../../../core/withServices';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-import { namespacedTranslation } from '../../../i18n/i18n';
+import { prefixedTranslation } from '../../../i18n/i18n';
 import Cls from '../TopBar.module.scss';
+import { withTranslation } from 'react-i18next';
 
 const logger = Logger.get('UserMenu.tsx');
 
@@ -37,7 +38,7 @@ const connector = connect(mapStateToProps);
 
 type Props = ConnectedProps<typeof connector> & RouteComponentProps<any> & ServiceProps;
 
-const t = namespacedTranslation('UserMenu');
+const t = prefixedTranslation('UserMenu:');
 
 class UserMenu extends React.Component<Props, {}> {
   public render() {
@@ -134,4 +135,4 @@ class UserMenu extends React.Component<Props, {}> {
   };
 }
 
-export default withServices(connector(withRouter(UserMenu)));
+export default withTranslation()(withServices(connector(withRouter(UserMenu))));

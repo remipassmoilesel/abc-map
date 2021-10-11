@@ -23,8 +23,10 @@ import { MapActions } from '../../../../../core/store/map/actions';
 import ColorPicker from '../../../../../components/color-picker/ColorPicker';
 import * as _ from 'lodash';
 import { ServiceProps, withServices } from '../../../../../core/withServices';
-import Cls from './TextFormat.module.scss';
 import OptionRow from '../option-row/OptionRow';
+import { prefixedTranslation } from '../../../../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
+import Cls from './TextFormat.module.scss';
 
 const mapStateToProps = (state: MainState) => ({
   color: state.map.currentStyle.text?.color,
@@ -40,19 +42,21 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type Props = ConnectedProps<typeof connector> & ServiceProps;
 
+const t = prefixedTranslation('MapView:ToolSelector.');
+
 class TextFormat extends Component<Props, {}> {
   public render(): ReactNode {
     return (
       <>
         {/* Color */}
         <OptionRow>
-          <div>Couleur:</div>
+          <div>{t('Color')}:</div>
           <ColorPicker initialValue={this.props.color} onClose={this.handleColorSelected} />
         </OptionRow>
 
         {/* Size */}
         <OptionRow>
-          <div>Taille:</div>
+          <div>{t('Size')}:</div>
           <select onChange={this.handleSizeChange} value={this.props.size} className={`form-control form-control-sm ${Cls.select}`}>
             {_.range(5, 51).map((val) => (
               <option key={val} value={val}>
@@ -97,4 +101,4 @@ class TextFormat extends Component<Props, {}> {
   };
 }
 
-export default connector(withServices(TextFormat));
+export default withTranslation()(connector(withServices(TextFormat)));

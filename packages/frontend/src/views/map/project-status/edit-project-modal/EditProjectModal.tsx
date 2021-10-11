@@ -25,6 +25,8 @@ import { ServiceProps, withServices } from '../../../../core/withServices';
 import View from 'ol/View';
 import { Views } from '../../../../core/geo/Views';
 import { MapWrapper } from '../../../../core/geo/map/MapWrapper';
+import { prefixedTranslation } from '../../../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
 import Cls from './EditProjectModal.module.scss';
 
 const logger = Logger.get('EditProjectModal.tsx');
@@ -49,6 +51,8 @@ interface State {
   projectionInput: string;
   message: string;
 }
+
+const t = prefixedTranslation('MapView:EditProjectModal.');
 
 class EditProjectModal extends Component<Props, State> {
   private mainMap: MapWrapper;
@@ -75,12 +79,12 @@ class EditProjectModal extends Component<Props, State> {
     return (
       <Modal show={true} onHide={onClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Editer le projet ✏️</Modal.Title>
+          <Modal.Title>{t('Edit_project')} ✏️</Modal.Title>
         </Modal.Header>
         <Modal.Body className={'d-flex flex-column p-3'}>
           {/* Project name */}
           <div className={'d-flex flex-column mb-4'}>
-            <div className={'mb-2'}>Nom du projet</div>
+            <div className={'mb-2'}>{t('Name_of_project')}</div>
             <input
               type={'text'}
               value={nameInput}
@@ -94,7 +98,7 @@ class EditProjectModal extends Component<Props, State> {
           {/* Project input */}
           <div className={'d-flex flex-column mb-4'}>
             <div className={'d-flex align-items-center mb-2'}>
-              Projection
+              {t('Projection')}
               <a href={'https://fr.wikipedia.org/wiki/Syst%C3%A8me_de_coordonn%C3%A9es_(cartographie)'} className={'mx-2'} target={'_blank'} rel="noreferrer">
                 <i className={'fa fa fa-question-circle'} />
               </a>
@@ -113,15 +117,11 @@ class EditProjectModal extends Component<Props, State> {
             {!projectionDisabled && (
               <div className={'d-flex flex-row justify-content-end align-items-center mt-2'}>
                 <button onClick={this.handleDefaultProjection} disabled={projectionDisabled} className={'btn btn-link'}>
-                  Valeur par défaut
+                  {t('Default_value')}
                 </button>
               </div>
             )}
-            {projectionDisabled && (
-              <div className={`mx-2 mt-2 ${Cls.advice}`}>
-                Pour modifier la projection, vous devez supprimer toutes les couches de géométries et toutes les mises en page.
-              </div>
-            )}
+            {projectionDisabled && <div className={`mx-2 mt-2 ${Cls.advice}`}>{t('To_change_projection_you_must_delete_geometries')}</div>}
 
             {message && <div>{message}</div>}
           </div>
@@ -129,10 +129,10 @@ class EditProjectModal extends Component<Props, State> {
           {/* Button bar */}
           <div className={'d-flex justify-content-end'}>
             <button className={'btn btn-outline-secondary mr-2'} onClick={onClose} data-cy="button-cancel">
-              Annuler
+              {t('Cancel')}
             </button>
             <button className={'btn btn-primary'} onClick={this.handleConfirm} data-cy="button-confirm" data-testid={'button-confirm'}>
-              Confirmer
+              {t('Confirm')}
             </button>
           </div>
         </Modal.Body>
@@ -183,7 +183,7 @@ class EditProjectModal extends Component<Props, State> {
       this.updateProjection(newProj)
         .then(closeModal)
         .catch((err) => {
-          this.setState({ message: 'Vous ne pouvez pas utiliser cette projection.' });
+          this.setState({ message: t('You_can_not_use_this_projection') });
           logger.error('Cannot load projection: ', err);
         });
     }
@@ -206,4 +206,4 @@ class EditProjectModal extends Component<Props, State> {
   };
 }
 
-export default withServices(connector(EditProjectModal));
+export default withTranslation()(withServices(connector(EditProjectModal)));

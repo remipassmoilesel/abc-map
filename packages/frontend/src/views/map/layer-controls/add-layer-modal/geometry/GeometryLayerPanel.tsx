@@ -23,6 +23,7 @@ import { ServiceProps, withServices } from '../../../../../core/withServices';
 import { LayerFactory } from '../../../../../core/geo/layers/LayerFactory';
 import { HistoryKey } from '../../../../../core/history/HistoryKey';
 import { AddLayersTask } from '../../../../../core/history/tasks/layers/AddLayersTask';
+import { prefixedTranslation } from '../../../../../i18n/i18n';
 
 const logger = Logger.get('GeometryLayerPanel.tsx');
 
@@ -31,13 +32,15 @@ interface Props extends ServiceProps {
   onConfirm: () => void;
 }
 
+const t = prefixedTranslation('MapView:AddLayerModal.');
+
 class GeometryLayerPanel extends Component<Props, {}> {
   public render(): ReactNode {
     const onCancel = this.props.onCancel;
 
     return (
       <div className={'flex-grow-1 d-flex flex-column justify-content-between'}>
-        <div>Rien à paramétrer ici ✌️</div>
+        <div>{t('Nothing_to_configure_here')} ✌️</div>
 
         {/* Control buttons */}
         <ControlButtons onCancel={onCancel} onConfirm={this.handleConfirm} />

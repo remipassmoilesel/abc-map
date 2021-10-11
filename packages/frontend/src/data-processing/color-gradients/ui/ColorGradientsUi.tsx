@@ -31,6 +31,8 @@ import { FormState } from '../../../components/form-validation-label/FormState';
 import FormValidationLabel from '../../../components/form-validation-label/FormValidationLabel';
 import { isProcessingResult, ProcessingResult } from '../ProcessingResult';
 import ProcessingReportModal from './components/report-modal/ProcessingReportModal';
+import { prefixedTranslation } from '../../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
 
 const logger = Logger.get('ColorGradientsUI.tsx');
 
@@ -45,6 +47,8 @@ interface State {
   formState?: FormState;
   result?: ProcessingResult;
 }
+
+const t = prefixedTranslation('DataProcessingModules:ColorGradients.');
 
 class ColorGradientsUI extends Component<Props, State> {
   constructor(props: Props) {
@@ -79,35 +83,27 @@ class ColorGradientsUI extends Component<Props, State> {
     return (
       <div className={Cls.panel}>
         {/* Module introduction */}
-        <FoldableCard title={'1. Introduction'} className={'section'}>
+        <FoldableCard title={`1. ${t('Introduction')}`} className={'section'}>
           <div className={'explanation d-flex flex-row justify-content-between align-items-start'}>
             <div className={Cls.introduction}>
-              <p>
-                Les dégradés de couleurs permettent de représenter des données statistiques relatives (densité de population, revenus par habitants, etc ...)
-              </p>
-              <p>Comment ça marche ?</p>
+              <p>{t('Color_gradients_are_used_to_represent_relative_data')}</p>
+              <p>{t('How_does_it_work')}</p>
               <ul>
-                <li>
-                  Sélectionnez une source de données et un champ de valeur. C&apos;est ce champ qui sera utilisé pour déterminer les couleurs. Par exemple, un
-                  &nbsp;classeur CSV contenant la population française par département et le champ <code>densite_pop</code> contenant les données de densité.
-                </li>
-                <li>Sélectionnez une couche de géométries. Les géométries seront dupliquées et remplies avec la couleur calculée.</li>
-                <li>Sélectionner un champ de jointure entre les données et les géométries.</li>
-                <li>Ensuite sélectionnez les caractéristiques des géométries à créer.</li>
+                <li>{t('Select_data_source_and_data_field')}</li>
+                <li>{t('Select_geometry_layer_explanation')}</li>
+                <li>{t('Select_join_field_explanation')}</li>
+                <li>{t('Select_parameters_explanation')}</li>
               </ul>
             </div>
-            <img src={Sample} alt={'Exemple de carte'} className={Cls.sample} />
+            <img src={Sample} alt={t('Map_Sample')} className={Cls.sample} />
           </div>
         </FoldableCard>
 
         {/* Data source selection */}
-        <FoldableCard title={'2. Sélectionner une source de données'} className={'section'}>
-          <div className={'explanation'}>
-            La source de données contient le champ qui déterminera les couleurs des géométries. La source de données peut être une couche de la carte ou
-            &nbsp;un classeur au format CSV.
-          </div>
+        <FoldableCard title={`2. ${t('Select_data_source')}`} className={'section'}>
+          <div className={'explanation'}>{t('Data_source_contains_field_that_determine_colors')}</div>
           <DataSourceForm
-            valuesFieldLabel={'Couleurs à partir de:'}
+            valuesFieldLabel={t('Colors_from')}
             valuesFieldTip={ColorGradientTips.ColorField}
             values={dataSourceValues}
             onChange={this.handleDataSourceChange}
@@ -115,18 +111,16 @@ class ColorGradientsUI extends Component<Props, State> {
         </FoldableCard>
 
         {/* Vector layer selection */}
-        <FoldableCard title={'3. Sélectionner une couche de géométries'} className={'section'}>
-          <div className={'explanation'}>Les couleurs seront appliquées à une copie des géométries de la couche sélectionnée.</div>
+        <FoldableCard title={`3. ${t('Select_geometry_layer')}`} className={'section'}>
+          <div className={'explanation'}>{t('Colors_applied_to_copy_of_geometries')}</div>
           <GeometryLayerForm values={geometryLayerValues} onChange={this.handleGeometryLayerChange} />
         </FoldableCard>
 
         {/* Data processing parameters */}
-        <FoldableCard title={'4. Paramètres du traitement'} className={'section'}>
-          <div className={'explanation'}>
-            Les couleurs seront créées dans une nouvelle couche. Leurs valeurs seront déterminées par le champ source utilisé, et par le type d&apos;algorithme.
-          </div>
-          {!dataSourceValues.valueField && <div>Vous devez choisir un champ de valeur.</div>}
-          {!dataSourceValues.source && <div>Vous devez choisir une source de données.</div>}
+        <FoldableCard title={`4. ${t('Select_parameters')}`} className={'section'}>
+          <div className={'explanation'}>{t('Colors_depends_on_algorithm')}</div>
+          {!dataSourceValues.valueField && <div>{t('You_must_select_a_value_field')}</div>}
+          {!dataSourceValues.source && <div>{t('You_must_select_a_datasource')}</div>}
           {dataSourceValues.valueField && dataSourceValues.source && (
             <GradientsConfigForm
               values={configValues}
@@ -147,10 +141,10 @@ class ColorGradientsUI extends Component<Props, State> {
         {/* Bottom controls */}
         <div className={'d-flex flex-row justify-content-end'}>
           <button className={'btn btn-secondary mr-3'} onClick={this.handleCancel}>
-            Réinitialiser
+            {t('Reset')}
           </button>
           <button className={'btn btn-primary mr-3'} onClick={this.handleSubmit} data-cy={'process'}>
-            Lancer le traitement
+            {t('Start_processing')}
           </button>
         </div>
 
@@ -281,4 +275,4 @@ class ColorGradientsUI extends Component<Props, State> {
   }
 }
 
-export default withServices(ColorGradientsUI);
+export default withTranslation()(withServices(ColorGradientsUI));

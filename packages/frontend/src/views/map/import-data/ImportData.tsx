@@ -22,9 +22,13 @@ import { FileIO, InputResultType, InputType } from '../../../core/utils/FileIO';
 import { ServiceProps, withServices } from '../../../core/withServices';
 import { ImportStatus } from '../../../core/data/DataService';
 import { OperationStatus } from '../../../core/ui/typings';
+import { withTranslation } from 'react-i18next';
+import { prefixedTranslation } from '../../../i18n/i18n';
 import Cls from './ImportData.module.scss';
 
-const logger = Logger.get('ImportData.tsx', 'debug');
+const logger = Logger.get('ImportData.tsx');
+
+const t = prefixedTranslation('MapView:ImportData.');
 
 class ImportData extends Component<ServiceProps, {}> {
   public render(): ReactNode {
@@ -32,10 +36,10 @@ class ImportData extends Component<ServiceProps, {}> {
       <div className={'control-block'}>
         <div className={'control-item'}>
           <button onClick={this.importFile} type={'button'} className={'btn btn-link'} data-cy={'import-data'}>
-            <i className={'fa fa-table mr-2'} /> Importer des données
+            <i className={'fa fa-table mr-2'} /> {t('Import_data')}
           </button>
         </div>
-        <div className={`mb-2 ${Cls.advice}`}>Vous pouvez aussi déposer des fichiers sur la carte.</div>
+        <div className={`mb-2 ${Cls.advice}`}>{t('You_can_also_drop_on_map')}</div>
       </div>
     );
   }
@@ -56,7 +60,7 @@ class ImportData extends Component<ServiceProps, {}> {
       const result = await data.importFiles(files);
 
       if (result.status === ImportStatus.Failed) {
-        toasts.error("Ces formats de fichiers ne sont pas supportés, aucune donnée n'a été importée");
+        toasts.error(t('Formats_not_supported'));
         return;
       }
 
@@ -78,4 +82,4 @@ class ImportData extends Component<ServiceProps, {}> {
   };
 }
 
-export default withServices(ImportData);
+export default withTranslation()(withServices(ImportData));

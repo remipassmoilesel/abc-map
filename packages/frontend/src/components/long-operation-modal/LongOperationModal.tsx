@@ -21,6 +21,7 @@ import { ModalEvent, ModalEventType } from '../../core/ui/typings';
 import { ServiceProps, withServices } from '../../core/withServices';
 import { Logger } from '@abc-map/shared';
 import Cls from './LongOperationModal.module.scss';
+import { prefixedTranslation } from '../../i18n/i18n';
 
 interface State {
   visible: boolean;
@@ -28,6 +29,8 @@ interface State {
 }
 
 const logger = Logger.get('LongOperationModal.ts');
+
+const t = prefixedTranslation('LongOperationModal:');
 
 /**
  * This modal is a little hack, one among many others.
@@ -52,14 +55,14 @@ class LongOperationModal extends Component<ServiceProps, State> {
       <div className={Cls.modal}>
         {burning && (
           <>
-            <h1>Ça chauffe !</h1>
+            <h1>{t('Things_are_getting_hot')}</h1>
             <div className={Cls.icon}>🔥</div>
-            <div>N&apos;essayez pas de vous enfuir, c&apos;est peine perdue ...</div>
+            <div>{t('Dont_try_to_run_away')}</div>
           </>
         )}
         {!burning && (
           <>
-            <h1>Ha quand même !</h1>
+            <h1>{t('At_last')}</h1>
             <div className={Cls.icon} data-cy={'long-operation-done'}>
               ✅
             </div>

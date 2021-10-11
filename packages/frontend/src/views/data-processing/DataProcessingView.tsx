@@ -20,9 +20,11 @@ import React, { Component, ReactNode } from 'react';
 import { DataProcessingParams, FrontendRoutes, Logger } from '@abc-map/shared';
 import { getModules } from '../../data-processing';
 import { Link, RouteComponentProps } from 'react-router-dom';
+import { pageSetup } from '../../core/utils/page-setup';
+import { prefixedTranslation } from '../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
 import Cls from './DataProcessingView.module.scss';
 import '../../data-processing/style.scss';
-import { pageSetup } from '../../core/utils/page-setup';
 
 const logger = Logger.get('DataProcessingView.tsx');
 
@@ -30,6 +32,9 @@ declare type Props = RouteComponentProps<DataProcessingParams, any>;
 
 // Modules must be kept in memory
 const Modules = getModules();
+
+const t = prefixedTranslation('DataProcessingView:');
+const tModules = prefixedTranslation('DataProcessingModules:');
 
 class DataProcessingView extends Component<Props, {}> {
   public render(): ReactNode {
@@ -47,24 +52,21 @@ class DataProcessingView extends Component<Props, {}> {
               to={FrontendRoutes.dataProcessing().withParams({ moduleId: mod.getId() })}
               data-cy={mod.getId()}
             >
-              {mod.getReadableName()}
+              {tModules(mod.getI18nName())}
             </Link>
           ))}
         </div>
         <div className={Cls.viewPort} data-cy={'data-processing-viewport'}>
           {module && (
             <>
-              <h4>{module.getReadableName()}</h4>
+              <h4>{tModules(module.getI18nName())}</h4>
               {module.getUserInterface()}
             </>
           )}
           {!module && (
             <div className={Cls.welcome}>
               <i className={'fa fa-cogs'} />
-              <h4>
-                Sélectionnez un module
-                <br /> dans le menu de gauche.
-              </h4>
+              <h4 dangerouslySetInnerHTML={{ __html: t('Select_a_module_on_left') }} />
             </div>
           )}
         </div>
@@ -73,8 +75,8 @@ class DataProcessingView extends Component<Props, {}> {
   }
 
   public componentDidMount() {
-    pageSetup('Traitements de données', `Représentez des données sur vos cartes: symboles proportionnels, dégradés et couleurs, et plus ⚙️⚙️`);
+    pageSetup(t('Data_processing'), t('Visualize_data_on_map'));
   }
 }
 
-export default DataProcessingView;
+export default withTranslation()(DataProcessingView);

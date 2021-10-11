@@ -25,6 +25,8 @@ import { FeatureWrapper } from '../../../../../core/geo/features/FeatureWrapper'
 import { HistoryKey } from '../../../../../core/history/HistoryKey';
 import { AddFeaturesTask } from '../../../../../core/history/tasks/features/AddFeaturesTask';
 import { RemoveFeaturesTask } from '../../../../../core/history/tasks/features/RemoveFeaturesTask';
+import { prefixedTranslation } from '../../../../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
 import Cls from './ButtonBar.module.scss';
 
 const mapStateToProps = (state: MainState) => ({
@@ -38,24 +40,21 @@ const connector = connect(mapStateToProps);
 
 type Props = ConnectedProps<typeof connector> & ServiceProps;
 
+const t = prefixedTranslation('MapView:ToolSelector.');
+
 class ButtonBar extends React.Component<Props, {}> {
   public render() {
     return (
       <div className={Cls.buttonBar}>
         {/* Apply style on selected features */}
-        <button
-          onClick={this.handleApplyStyle}
-          title={'Appliquer le style courant aux géométries sélectionnées'}
-          className={'btn btn-link'}
-          data-testid={'apply-style'}
-        >
+        <button onClick={this.handleApplyStyle} title={t('Apply_style_to_selected_geometries')} className={'btn btn-link'} data-testid={'apply-style'}>
           <i className={'fa fa-paint-roller'} />
         </button>
 
         {/* Duplicate selected features  */}
         <button
           onClick={this.handleDuplicate}
-          title={'Dupliquer les géométries sélectionnées'}
+          title={t('Duplicate_selected_geometries')}
           className={'btn btn-link'}
           data-cy={'duplicate-selection'}
           data-testid={'duplicate-selection'}
@@ -64,27 +63,22 @@ class ButtonBar extends React.Component<Props, {}> {
         </button>
 
         {/* Delete selected features */}
-        <button onClick={this.handleDeleteFeatures} title={'Supprimer les géométries sélectionnées'} className={'btn btn-link'} data-testid={'delete-features'}>
+        <button onClick={this.handleDeleteFeatures} title={t('Delete_selected_geometries')} className={'btn btn-link'} data-testid={'delete-features'}>
           <i className={'fa fa-trash'} />
         </button>
 
         {/* Unselect all features */}
-        <button onClick={this.handleUnselectAll} title={'Désélectionner tout'} className={'btn btn-link'}>
+        <button onClick={this.handleUnselectAll} title={t('Unselect_all')} className={'btn btn-link'}>
           <i className={'fa fa-times-circle'} />
         </button>
 
         {/* Move selected features behind */}
-        <button onClick={this.handleMoveAhead} title={"Géométries sélectionnées vers l'avant"} className={'btn btn-link'} data-testid={'move-features-forward'}>
+        <button onClick={this.handleMoveAhead} title={t('Move_geometries_ahead')} className={'btn btn-link'} data-testid={'move-features-forward'}>
           <i className={'fa fa-arrow-up'} />
         </button>
 
         {/* Move selected features ahead */}
-        <button
-          onClick={this.handleMoveBehind}
-          title={"Géométries sélectionnées vers l'arrière"}
-          className={'btn btn-link'}
-          data-testid={'move-features-behind'}
-        >
+        <button onClick={this.handleMoveBehind} title={t('Move_selected_geometries_behind')} className={'btn btn-link'} data-testid={'move-features-behind'}>
           <i className={'fa fa-arrow-down'} />
         </button>
       </div>
@@ -150,7 +144,7 @@ class ButtonBar extends React.Component<Props, {}> {
     });
 
     if (!changes) {
-      toasts.info("Vous devez d'abord sélectionner des objets");
+      toasts.info(t('You_must_select_geometries_first'));
     }
   };
 
@@ -164,7 +158,7 @@ class ButtonBar extends React.Component<Props, {}> {
 
     const features = map.getSelectedFeatures();
     if (!features.length) {
-      toasts.info("Vous devez d'abord sélectionner des objets");
+      toasts.info(t('You_must_select_geometries_first'));
       return;
     }
 
@@ -203,7 +197,7 @@ class ButtonBar extends React.Component<Props, {}> {
     const layer = map.getActiveVectorLayer();
     const features = map.getSelectedFeatures();
     if (!layer || !features.length) {
-      toasts.info("Vous devez d'abord sélectionner des objets");
+      toasts.info(t('You_must_select_geometries_first'));
       return;
     }
 
@@ -216,7 +210,7 @@ class ButtonBar extends React.Component<Props, {}> {
 
     const changes = geo.updateSelectedFeatures((s) => ({ ...s, zIndex: (s.zIndex || 0) - 1 }));
     if (!changes) {
-      toasts.info("Vous devez d'abord sélectionner des objets");
+      toasts.info(t('You_must_select_geometries_first'));
     }
   };
 
@@ -225,7 +219,7 @@ class ButtonBar extends React.Component<Props, {}> {
 
     const changes = geo.updateSelectedFeatures((s) => ({ ...s, zIndex: (s.zIndex || 0) + 1 }));
     if (!changes) {
-      toasts.info("Vous devez d'abord sélectionner des objets");
+      toasts.info(t('You_must_select_geometries_first'));
     }
   };
 
@@ -234,11 +228,11 @@ class ButtonBar extends React.Component<Props, {}> {
 
     const selected = geo.getMainMap().getSelectedFeatures();
     if (!selected) {
-      toasts.info("Vous devez d'abord sélectionner des objets");
+      toasts.info(t('You_must_select_geometries_first'));
     }
 
     selected.forEach((f) => f.setSelected(false));
   };
 }
 
-export default withServices(connector(ButtonBar));
+export default withTranslation()(withServices(connector(ButtonBar)));

@@ -15,25 +15,14 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
+import { TestHelper } from '../../utils/test/TestHelper';
 
-@import "src/assets/styles/variables";
+// This file must contains empty lines and final new line
+export const File1 = TestHelper.sampleCsvFile(`\
+"label","altitude"
 
-.selected {
-  height: 1.1rem;
-  max-height: 1.1rem;
-  opacity: 0.6;
-}
+"value1",1234
 
-.dropdown {
-  width: 17rem;
-  min-width: 17rem;
+"value2",5678
 
-  img {
-    height: 1.1rem;
-    max-height: 1.1rem;
-  }
-}
-
-.active {
-  color: $primary !important;
-}
+`);

@@ -24,7 +24,7 @@ import { StyleCache, StyleCacheEntry } from './StyleCache';
 import { FillPatternFactory } from './FillPatternFactory';
 import { IconProcessor } from './IconProcessor';
 import { DefaultIcon, safeGetIcon } from '../../../assets/point-icons/PointIcon';
-import { PointIconName } from '../../../assets/point-icons/PointIconName';
+import { IconName } from '../../../assets/point-icons/IconName';
 import { FeatureWrapper } from '../features/FeatureWrapper';
 
 const logger = Logger.get('StyleFactory.ts');
@@ -124,7 +124,7 @@ export class StyleFactory {
     // Points
     if (GeometryType.POINT === type || GeometryType.MULTI_POINT === type) {
       const size = (properties.point?.size || 10) * ratio;
-      const name = (properties.point?.icon as PointIconName) || DefaultIcon;
+      const name = (properties.point?.icon as IconName) || DefaultIcon;
       const color = properties.point?.color || '#000000';
       const icon = IconProcessor.get().prepareCached(safeGetIcon(name), size, color);
       // We must use "src" attribute here, as icons may not be loaded

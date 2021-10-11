@@ -27,6 +27,8 @@ import { ServiceProps, withServices } from '../../../../../core/withServices';
 import { Modal } from 'react-bootstrap';
 import FillPatternButton from './FillPatternButton';
 import OptionRow from '../option-row/OptionRow';
+import { prefixedTranslation } from '../../../../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
 
 const mapStateToProps = (state: MainState) => ({
   fill: state.map.currentStyle.fill,
@@ -44,6 +46,8 @@ interface State {
   patternFactory: FillPatternFactory;
   modal: boolean;
 }
+
+const t = prefixedTranslation('MapView:ToolSelector.');
 
 class FillPatternSelector extends Component<Props, State> {
   private canvas = React.createRef<HTMLCanvasElement>();
@@ -66,14 +70,14 @@ class FillPatternSelector extends Component<Props, State> {
       <>
         {/* Button, always visible */}
         <OptionRow>
-          <div>Style de texture:</div>
+          <div>{t('Texture_style')}:</div>
           <FillPatternButton width={40} height={40} pattern={pattern} color1={color1} color2={color2} onClick={this.showModal} />
         </OptionRow>
 
         {/* Modal, visible on demand */}
         <Modal show={modal} onHide={this.closeModal}>
           <Modal.Header closeButton>
-            <Modal.Title>Textures</Modal.Title>
+            <Modal.Title>{t('Textures')}</Modal.Title>
           </Modal.Header>
           <Modal.Body className={'p-2'}>{this.getPatternButtons()}</Modal.Body>
         </Modal>
@@ -96,7 +100,7 @@ class FillPatternSelector extends Component<Props, State> {
       return (
         <div className={'d-flex align-items-center m-3'} key={item.value}>
           <FillPatternButton onClick={this.handleSelection} pattern={item.value} color1={color1} color2={color2} width={65} height={65} />
-          <div className={'ml-3'}>{item.label}</div>
+          <div className={'ml-3'}>{t(item.i18nLabel)}</div>
         </div>
       );
     });
@@ -120,4 +124,4 @@ class FillPatternSelector extends Component<Props, State> {
   };
 }
 
-export default connector(withServices(FillPatternSelector));
+export default withTranslation()(connector(withServices(FillPatternSelector)));

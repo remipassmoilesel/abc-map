@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import i18n, { StringMap } from 'i18next';
+import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import { Language, Logger } from '@abc-map/shared';
 import LanguageDetector from 'i18next-browser-languagedetector';
@@ -40,21 +40,42 @@ i18n
       lookupLocalStorage: 'ABC_LANGUAGE',
     },
     resources: resources,
+    supportedLngs: Object.values(Language),
     // TODO: set to English when translation finish
     fallbackLng: Language.French,
-    supportedLngs: Object.values(Language),
     interpolation: {
       escapeValue: false,
     },
   })
+  .then(() => {
+    document.documentElement.setAttribute('lang', getLang());
+  })
   .catch((err) => logger.error('i18n init error:', err));
 
-export function namespacedTranslation(namespace: string) {
-  return (key: string, params?: StringMap) => i18n.t(`${namespace}:${key}`, params);
+export interface StringMap {
+  [k: string]: string | number;
 }
 
-export function setLang(lang: Language): Promise<unknown> {
-  return i18n.changeLanguage(lang);
+/**
+ * This function reduce translation boilerplate. Usage:
+ *
+ * ```
+ *  const t = prefixedTranslation('Namespace:Parent.');
+ *
+ *  t('Key') // Will use 'Namespace:Parent.Key'
+ * ```
+ *
+ * If you use it within a react component, you must wrap component with withTranslation();
+ *
+ * @param prefix
+ */
+export function prefixedTranslation(prefix: string) {
+  return (key: string, params?: StringMap) => i18n.t(`${prefix}${key}`, params);
+}
+
+export async function setLang(lang: Language): Promise<void> {
+  await i18n.changeLanguage(lang);
+  document.documentElement.setAttribute('lang', lang);
 }
 
 export function getLang(): Language {

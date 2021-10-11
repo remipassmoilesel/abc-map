@@ -30,7 +30,8 @@ import { BUILD_INFO } from '../../build-version';
 import { MainState } from '../../core/store/reducer';
 import { connect, ConnectedProps } from 'react-redux';
 import { pageSetup } from '../../core/utils/page-setup';
-import { getLang, namespacedTranslation } from '../../i18n/i18n';
+import { getLang, prefixedTranslation } from '../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
 
 const logger = Logger.get('Landing.tsx');
 
@@ -47,7 +48,7 @@ interface State {
   illustration: string;
 }
 
-const t = namespacedTranslation('LandingView');
+const t = prefixedTranslation('LandingView:');
 
 class LandingView extends Component<Props, State> {
   constructor(props: Props) {
@@ -161,10 +162,7 @@ class LandingView extends Component<Props, State> {
   }
 
   public componentDidMount() {
-    pageSetup(
-      'Cartographie libre et gratuite en ligne',
-      `Abc-Map, nouvelle version 🚀 Créez des cartes géographiques simplement: importez, dessinez, visualisez des données, et bien plus !`
-    );
+    pageSetup(t('Free_open_source_mapping'), t('AbcMap_new_version'));
 
     const { vote } = this.props.services;
 
@@ -201,4 +199,4 @@ class LandingView extends Component<Props, State> {
   };
 }
 
-export default connector(withRouter(withServices(LandingView)));
+export default withTranslation()(connector(withRouter(withServices(LandingView))));

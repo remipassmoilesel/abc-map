@@ -24,7 +24,7 @@ import { TestHelper } from '../../utils/test/TestHelper';
 import { Style } from 'ol/style';
 import Feature from 'ol/Feature';
 import Geometry from 'ol/geom/Geometry';
-import { PointIconName } from '../../../assets/point-icons/PointIconName';
+import { IconName } from '../../../assets/point-icons/IconName';
 
 describe('FeatureWrapper', () => {
   it('create() should create and set id', () => {
@@ -146,7 +146,7 @@ describe('FeatureWrapper', () => {
 
         // Assert
         expect(feature.getStyleProperties()).toEqual({
-          point: { icon: PointIconName.Icon0CircleFill, size: 15 },
+          point: { icon: IconName.Icon0CircleFill, size: 15 },
           fill: { color1: undefined, color2: undefined, pattern: undefined },
           stroke: { color: undefined, width: undefined },
           text: { alignment: undefined, color: undefined, font: undefined, offsetX: undefined, offsetY: undefined, size: undefined, value: undefined },
@@ -195,7 +195,7 @@ describe('FeatureWrapper', () => {
         expect(ol.get(StyleProperties.TextOffsetX)).toEqual(20);
         expect(ol.get(StyleProperties.TextOffsetY)).toEqual(30);
         expect(ol.get(StyleProperties.TextAlignment)).toEqual('left');
-        expect(ol.get(StyleProperties.PointIcon)).toEqual(PointIconName.IconMoonStars);
+        expect(ol.get(StyleProperties.PointIcon)).toEqual(IconName.IconMoonStars);
         expect(ol.get(StyleProperties.PointSize)).toEqual(5);
         expect(ol.get(StyleProperties.PointColor)).toEqual('#00FF00');
         expect(ol.get(StyleProperties.ZIndex)).toEqual(5);
@@ -224,7 +224,7 @@ describe('FeatureWrapper', () => {
       feature.unwrap().set(StyleProperties.TextOffsetX, 20);
       feature.unwrap().set(StyleProperties.TextOffsetY, 30);
       feature.unwrap().set(StyleProperties.TextAlignment, 'left');
-      feature.unwrap().set(StyleProperties.PointIcon, PointIconName.IconMoonStars);
+      feature.unwrap().set(StyleProperties.PointIcon, IconName.IconMoonStars);
       feature.unwrap().set(StyleProperties.PointSize, 5);
       feature.unwrap().set(StyleProperties.PointColor, '#00FF00');
       feature.unwrap().set(StyleProperties.ZIndex, 5);

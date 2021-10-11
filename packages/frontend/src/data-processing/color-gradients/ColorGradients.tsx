@@ -47,8 +47,8 @@ export class ColorGradients extends Module {
     return ModuleId.ColorGradients;
   }
 
-  public getReadableName(): string {
-    return 'Dégradés de couleurs';
+  public getI18nName(): string {
+    return 'Color_gradients';
   }
 
   public getUserInterface(): ReactNode {

@@ -24,14 +24,15 @@ import TopBarLink from './TopBarLink';
 import MainIcon from '../../assets/main-icon.svg';
 import LangSelector from './lang-selector/LangSelector';
 import UserMenu from './user-menu/UserMenu';
-import { namespacedTranslation } from '../../i18n/i18n';
+import { prefixedTranslation } from '../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
 import Cls from './TopBar.module.scss';
 
 const logger = Logger.get('TopBar.tsx');
 
 type Props = RouteComponentProps<any> & ServiceProps;
 
-const t = namespacedTranslation('TopBar');
+const t = prefixedTranslation('TopBar:');
 
 class TopBar extends Component<Props, {}> {
   public render(): ReactNode {
@@ -65,4 +66,4 @@ class TopBar extends Component<Props, {}> {
   }
 }
 
-export default withRouter(withServices(TopBar));
+export default withTranslation()(withRouter(withServices(TopBar)));

@@ -31,6 +31,8 @@ import WmtsLayerPanel from './wmts/WmtsLayerPanel';
 import { WmsSettings, WmtsSettings } from '../../../../core/geo/layers/LayerFactory.types';
 import { MainState } from '../../../../core/store/reducer';
 import { connect, ConnectedProps } from 'react-redux';
+import { prefixedTranslation } from '../../../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
 
 const logger = Logger.get('AddLayerModal.tsx');
 
@@ -74,6 +76,8 @@ export const EmptyWmtsValues: WmtsSettings = {
   },
 };
 
+const t = prefixedTranslation('MapView:AddLayerModal.');
+
 class AddLayerModal extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
@@ -106,18 +110,18 @@ class AddLayerModal extends Component<Props, State> {
     return (
       <Modal show={true} onHide={onHide} dialogClassName={Cls.modal}>
         <Modal.Header closeButton>
-          <Modal.Title>Ajouter une couche 🗺️</Modal.Title>
+          <Modal.Title>{t('New_layer')} 🗺️</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div className={`p-3`}>
-            <div className={`mb-4 ${Cls.subTitle}`}>Quelle type de couche souhaitez-vous ajouter ?</div>
+            <div className={`mb-4 ${Cls.subTitle}`}>{t('What_kind_of_layer')}</div>
             <div className={'d-flex'}>
               <div className={Cls.leftPanel}>
                 {/* Type selector */}
                 <select value={layerTypeId} onChange={this.handleLayerTypeChange} className={'form-control'} data-cy={'add-layer-type'}>
                   {LabeledLayerTypes.All.map((type) => (
                     <option key={type.id} value={type.id}>
-                      {type.label}
+                      {t(type.i18nLabel)}
                     </option>
                   ))}
                 </select>
@@ -173,4 +177,4 @@ class AddLayerModal extends Component<Props, State> {
   };
 }
 
-export default connector(withServices(AddLayerModal));
+export default withTranslation()(connector(withServices(AddLayerModal)));

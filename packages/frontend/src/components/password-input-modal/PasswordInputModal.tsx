@@ -26,6 +26,7 @@ import { FormState } from '../form-validation-label/FormState';
 import { Encryption } from '../../core/utils/Encryption';
 import { Errors } from '../../core/utils/Errors';
 import { Logger } from '@abc-map/shared';
+import { prefixedTranslation } from '../../i18n/i18n';
 
 const logger = Logger.get('PasswordInputModal.tsx');
 
@@ -38,6 +39,8 @@ interface State {
   formState: FormState;
 }
 
+const t = prefixedTranslation('PasswordInputModal:');
+
 class PasswordInputModal extends Component<ServiceProps, State> {
   constructor(props: ServiceProps) {
     super(props);
@@ -47,7 +50,7 @@ class PasswordInputModal extends Component<ServiceProps, State> {
       message: '',
       value: '',
       witness: '',
-      formState: FormState.PasswordTooWeak,
+      formState: FormState.InvalidPassword,
     };
   }
 
@@ -77,7 +80,7 @@ class PasswordInputModal extends Component<ServiceProps, State> {
                 className={'form-control'}
                 type={'password'}
                 value={value}
-                placeholder={'Mot de passe'}
+                placeholder={t('Password')}
                 onChange={this.handleInputChange}
                 data-cy="password-input"
                 data-testid="password-input"
@@ -88,7 +91,7 @@ class PasswordInputModal extends Component<ServiceProps, State> {
 
             <div className={'d-flex justify-content-end'}>
               <button className={'btn btn-secondary mr-3'} onClick={this.handleCancel} data-cy="password-cancel" data-testid={'password-cancel'}>
-                Annuler
+                {t('Cancel')}
               </button>
               <button
                 className={'btn btn-primary'}
@@ -97,7 +100,7 @@ class PasswordInputModal extends Component<ServiceProps, State> {
                 data-cy="password-confirm"
                 data-testid={'password-confirm'}
               >
-                Confirmer
+                {t('Confirm')}
               </button>
             </div>
           </div>
@@ -162,7 +165,7 @@ class PasswordInputModal extends Component<ServiceProps, State> {
       })
       .catch((err) => {
         if (Errors.isWrongPassword(err)) {
-          this.setState({ formState: FormState.InvalidPassword });
+          this.setState({ formState: FormState.IncorrectPassword });
         } else {
           logger.error('Unhandled encryption error: ', err);
           toasts.genericError();

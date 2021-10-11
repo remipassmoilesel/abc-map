@@ -45,7 +45,7 @@ export const Tools: Tip[] = [
                 <li><b>Pour créer une ligne</b>, cliquez sur la carte à plusieurs reprises, puis double-cliquez
                 pour terminer la ligne. Vous pouvez interrompre un dessin en appuyant <code>ECHAP</code></li>
                 <li><b>Pour sélectionner une ligne</b>, maintenez <code>CTRL</code> et cliquez sur la ligne</li>
-                <li><b>Pour modifier une ligne</b>, sélectionnez-la, vous pouvez ensuite avec votre souris créer des sommets,
+                <li><b>Pour modifier une ligne</b>, sélectionnez-la, vous pouvez ensuite créer des sommets,
                 déplacer des sommets, ou modifier ses caractéristiques</li>
                 <li><b>Pour supprimer une ligne</b>, sélectionnez-la et appuyez sur <code>SUPPR</code></li>
                 <li><b>Pour supprimer un sommet</b>, sélectionnez la ligne, maintenez <code>ALT</code> et cliquez sur
@@ -75,7 +75,7 @@ export const Tools: Tip[] = [
     content: `<h4>Outil texte</h4>
               <ul>
                 <li><b>Pour ajouter du texte</b>, maintenez <code>CTRL</code> et cliquez sur une géométrie. Un contrôle de
-                saisie apparaît, saisissez votre texte puis validez votre saisie</li>
+                saisie apparaît, saisissez votre texte puis cliquez sur <code>OK</code></li>
                 <li><b>Pour modifier du texte</b>, maintenez <code>CTRL</code> et cliquez sur une géométrie</li>
                 ${undoRedoTip}
               </ul>

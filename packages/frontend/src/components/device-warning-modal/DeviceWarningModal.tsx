@@ -21,6 +21,8 @@ import { Modal } from 'react-bootstrap';
 import * as Bowser from 'bowser';
 import { Logger } from '@abc-map/shared';
 import phoneWarning from './phone-warning.png';
+import { prefixedTranslation } from '../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
 import Cls from './DeviceWarningModal.module.scss';
 
 const logger = Logger.get('DeviceWarningModal.tsx');
@@ -28,6 +30,8 @@ const logger = Logger.get('DeviceWarningModal.tsx');
 interface State {
   visible: boolean;
 }
+
+const t = prefixedTranslation('DeviceWarningModal:');
 
 class DeviceWarningModal extends Component<{}, State> {
   constructor(props: {}) {
@@ -44,23 +48,19 @@ class DeviceWarningModal extends Component<{}, State> {
     return (
       <Modal show={visible} onHide={this.handleClose} backdrop={'static'} dialogClassName={Cls.deviceWarning}>
         <Modal.Header closeButton>
-          <Modal.Title>Avertissement</Modal.Title>
+          <Modal.Title>{t('Warning')}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div className={'d-flex align-items-center'}>
             <img src={phoneWarning} width={'200'} className={'m-3'} alt={'Ordinateur de bureau conseillé'} />
             <div className={'m-3'}>
-              <div data-cy={'device-warning'}>Abc-Map risque de ne pas fonctionner correctement 🤔</div>
-              <div className={'my-3'}>
-                Abc-Map est conçu pour fonctionner sur un <code>ordinateur de bureau</code>, avec les navigateurs <code>Firefox</code> ou <code>Chromium</code>,
-                et une résolution d&apos;écran minimale de <code>1366x768</code>.
-              </div>
-              <div className={'my-3'}>Votre configuration actuelle peut entrainer des problèmes d&apos;affichage et d&apos;utilisation.</div>
+              <div data-cy={'device-warning'}>{t('AbcMap_may_not_work_properly')} 🤔</div>
+              <div className={'my-3'} dangerouslySetInnerHTML={{ __html: t('AbcMap_is_designed_for_desktop_computers') }} />
             </div>
           </div>
           <div className={'d-flex justify-content-end'}>
             <button className={'btn btn-primary'} onClick={this.handleClose} data-cy="device-warning-confirm">
-              J&apos;ai compris
+              {t('I_understand')}
             </button>
           </div>
         </Modal.Body>
@@ -87,4 +87,4 @@ class DeviceWarningModal extends Component<{}, State> {
   }
 }
 
-export default DeviceWarningModal;
+export default withTranslation()(DeviceWarningModal);

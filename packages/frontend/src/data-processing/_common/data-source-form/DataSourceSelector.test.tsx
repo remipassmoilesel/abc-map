@@ -46,16 +46,16 @@ describe('DataSourceSelector', () => {
   it('should render', () => {
     abcRender(<DataSourceSelector value={undefined} onSelected={handleSelection} />, { services });
 
-    expect(screen.getByText(/Choisir une couche/)).toBeDefined();
-    expect(screen.getByText(/Importer un fichier CSV/)).toBeDefined();
+    expect(screen.getByText(/Use a geometry layer/)).toBeDefined();
+    expect(screen.getByText(/Use a CSV workbook/)).toBeDefined();
   });
 
   it('should change display if user wants to choose a file', () => {
     abcRender(<DataSourceSelector value={undefined} onSelected={handleSelection} />, { services });
 
-    userEvent.click(screen.getByText(/Importer un fichier CSV/));
+    userEvent.click(screen.getByText(/Use a CSV workbook/));
 
-    expect(screen.getByText(/Sélectionner un fichier sur votre ordinateur/)).toBeDefined();
+    expect(screen.getByText(/Choose a CSV file/)).toBeDefined();
   });
 
   it('should warn if data source is empty', async () => {
@@ -64,7 +64,7 @@ describe('DataSourceSelector', () => {
     abcRender(<DataSourceSelector value={fakeSource} onSelected={handleSelection} />, { services });
 
     await waitFor(() => {
-      expect(screen.getByText(/Cette source de données est vide/)).toBeDefined();
+      expect(screen.getByText(/This data source is empty/)).toBeDefined();
     });
   });
 
@@ -74,7 +74,7 @@ describe('DataSourceSelector', () => {
     abcRender(<DataSourceSelector value={fakeSource} onSelected={handleSelection} />, { services });
 
     await waitFor(() => {
-      expect(screen.getByText(/Cette source contient beaucoup de données.+550.+/)).toBeDefined();
+      expect(screen.getByText(/This source contains a lot of data.+550.+/)).toBeDefined();
     });
   });
 
@@ -87,7 +87,7 @@ describe('DataSourceSelector', () => {
     abcRender(<DataSourceSelector value={fakeSource} onSelected={handleSelection} />, { services });
 
     await waitFor(() => {
-      expect(screen.getByText(/Cette source de données est incorrecte/)).toBeDefined();
+      expect(screen.getByText(/This data source is incorrect./)).toBeDefined();
     });
   });
 
@@ -100,7 +100,7 @@ describe('DataSourceSelector', () => {
     abcRender(<DataSourceSelector value={fakeSource} onSelected={handleSelection} />, { services });
 
     await waitFor(() => {
-      expect(screen.getByText(/Une erreur est survenue à la ligne 5/)).toBeDefined();
+      expect(screen.getByText(/An error occurred on line 5/)).toBeDefined();
     });
   });
 });

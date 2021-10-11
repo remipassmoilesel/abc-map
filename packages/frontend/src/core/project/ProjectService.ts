@@ -77,11 +77,11 @@ export class ProjectService {
     private updater: ProjectUpdater
   ) {}
 
-  public addEventListener(listener: (ev: ProjectEvent) => void) {
+  public addProjectLoadedListener(listener: (ev: ProjectEvent) => void) {
     this.eventTarget.addEventListener(ProjectEventType.ProjectLoaded, listener);
   }
 
-  public removeEventListener(listener: (ev: ProjectEvent) => void) {
+  public removeProjectLoadedListener(listener: (ev: ProjectEvent) => void) {
     this.eventTarget.removeEventListener(ProjectEventType.ProjectLoaded, listener);
   }
 

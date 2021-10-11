@@ -19,7 +19,7 @@
 import { FillPatterns } from '@abc-map/shared';
 import { MapTool } from '@abc-map/shared';
 import { DimensionsPx } from '../../utils/DimensionsPx';
-import { PointIconName } from '../../../assets/point-icons/PointIconName';
+import { IconName } from '../../../assets/point-icons/IconName';
 
 export enum ActionType {
   SetTool = 'SetTool',
@@ -78,7 +78,7 @@ export interface SetTextSize {
 
 export interface SetPointIcon {
   type: ActionType.SetPointIcon;
-  icon: PointIconName;
+  icon: IconName;
 }
 
 export interface SetPointSize {
@@ -167,7 +167,7 @@ export class MapActions {
     };
   }
 
-  public static setPointIcon(icon: PointIconName): MapAction {
+  public static setPointIcon(icon: IconName): MapAction {
     return {
       type: ActionType.SetPointIcon,
       icon,

@@ -19,12 +19,12 @@
 import { IconProcessor, mountSvg } from './IconProcessor';
 import { PointIcon, safeGetIcon } from '../../../assets/point-icons/PointIcon';
 import sinon from 'sinon';
-import { PointIconName } from '../../../assets/point-icons/PointIconName';
+import { IconName } from '../../../assets/point-icons/IconName';
 import { IconCategory } from '../../../assets/point-icons/IconCategory';
 
 describe('IconProcessor', () => {
   const fakeIcon: PointIcon = {
-    name: 'Test icon' as PointIconName,
+    name: 'Test icon' as IconName,
     contentSvg: sample(),
     category: IconCategory.Geometries,
   };
@@ -46,7 +46,7 @@ describe('IconProcessor', () => {
 
   it('prepare() with icon from library', () => {
     // Act
-    const icon = safeGetIcon(PointIconName.Icon0CircleFill);
+    const icon = safeGetIcon(IconName.Icon0CircleFill);
     const actual = IconProcessor.get().prepare(icon, 500, '#FF0000');
 
     // Assert

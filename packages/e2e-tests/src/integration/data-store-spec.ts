@@ -53,13 +53,13 @@ describe('Data store', function () {
       .should('contain', 'Countries of the world')
       .get('[data-cy=import-artefact]')
       .click()
-      .then(() => Toasts.assertText('Import terminé !'))
+      .then(() => Toasts.assertText('Import done !'))
       .then(() => TopBar.map())
       .then(() => MainMap.getReference())
       .should((map) => {
         const layers = map.getLayersMetadata();
         expect(layers).length(3);
-        expect(layers[2].name).match(/^Import de/);
+        expect(layers[2].name).match(/^Import n°1 of+/);
 
         const features = map.getActiveLayerFeatures();
         expect(features).length(252);
@@ -76,6 +76,6 @@ describe('Data store', function () {
       .get('[data-cy=show-license]')
       .click()
       .get('[data-cy=license-header]')
-      .should('contain', "Countries of the world : Licence d'utilisation");
+      .should('contain', 'Countries of the world : Licence to use');
   });
 });

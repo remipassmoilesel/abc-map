@@ -21,10 +21,12 @@ import { AbcFile, Logger, ProjectConstants } from '@abc-map/shared';
 import { MapWrapper } from '../../../core/geo/map/MapWrapper';
 import { ServiceProps, withServices } from '../../../core/withServices';
 import { ImportStatus } from '../../../core/data/DataService';
-import Cls from './MainMap.module.scss';
 import { OperationStatus } from '../../../core/ui/typings';
 import { TileLoadErrorEvent } from '../../../core/geo/map/MapWrapper.events';
 import * as _ from 'lodash';
+import { prefixedTranslation } from '../../../i18n/i18n';
+import Cls from './MainMap.module.scss';
+import { withTranslation } from 'react-i18next';
 
 export const logger = Logger.get('MainMap.ts');
 
@@ -38,6 +40,8 @@ interface State {
 }
 
 declare type Props = LocalProps & ServiceProps;
+
+const t = prefixedTranslation('MapView:MainMap.');
 
 class MainMap extends Component<Props, State> {
   private mapRef = React.createRef<HTMLDivElement>();
@@ -68,7 +72,7 @@ class MainMap extends Component<Props, State> {
           <>
             <div className={Cls.dropOverlay1}>
               <i className={'fa fa-file'} />
-              <h1>Déposez vos fichiers pour les importer</h1>
+              <h1>{t('Drop_your_files')}</h1>
             </div>
             <div
               className={Cls.dropOverlay2}
@@ -84,11 +88,17 @@ class MainMap extends Component<Props, State> {
   }
 
   public componentDidMount() {
+    const { project } = this.props.services;
+
     this.initializeMap();
+    project.addProjectLoadedListener(this.handleNewProject);
   }
 
   public componentWillUnmount() {
+    const { project } = this.props.services;
+
     this.cleanupMap();
+    project.removeProjectLoadedListener(this.handleNewProject);
   }
 
   private initializeMap(): void {
@@ -112,6 +122,10 @@ class MainMap extends Component<Props, State> {
     map.removeTileErrorListener(this.handleTileError);
   }
 
+  private handleNewProject = () => {
+    this.setState({ tileError: '' });
+  };
+
   private handleDrop = (ev: DragEvent<HTMLDivElement>) => {
     const { data, toasts, modals } = this.props.services;
     ev.preventDefault();
@@ -119,13 +133,13 @@ class MainMap extends Component<Props, State> {
 
     const files: AbcFile<Blob>[] = Array.from(ev.dataTransfer.files).map((f) => ({ path: f.name, content: f }));
     if (!files.length) {
-      toasts.info('Vous devez sélectionner un ou plusieurs fichiers');
+      toasts.info(t('You_must_select_files'));
       return;
     }
 
     const project = files.find((f) => f.path.toLocaleLowerCase().endsWith(ProjectConstants.FileExtension));
     if (project) {
-      toasts.info(`Vous devez importer votre projet à l'aide du contrôle 'Importer un projet'`);
+      toasts.info(t('You_must_import_project_with_import_control'));
       return;
     }
 
@@ -133,7 +147,7 @@ class MainMap extends Component<Props, State> {
       const result = await data.importFiles(files);
 
       if (result.status === ImportStatus.Failed) {
-        toasts.error("Ces formats de fichiers ne sont pas supportés, aucune donnée n'a été importée");
+        toasts.error(t('Formats_not_supported'));
         return OperationStatus.Interrupted;
       }
 
@@ -159,7 +173,7 @@ class MainMap extends Component<Props, State> {
   };
 
   private handleTileError = _.throttle((ev: TileLoadErrorEvent) => {
-    this.setState({ tileError: `La couche "${ev.layer.getName()}" ne charge pas correctement. Vérifiez ses paramètres.` });
+    this.setState({ tileError: t('Layer_does_not_load', { name: ev.layer.getName() || t('Layer_without_name') }) });
   }, 1000);
 
   private handleDismissTileError = () => {
@@ -167,4 +181,4 @@ class MainMap extends Component<Props, State> {
   };
 }
 
-export default withServices(MainMap);
+export default withTranslation()(withServices(MainMap));

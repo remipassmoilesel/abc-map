@@ -22,8 +22,10 @@ import * as _ from 'lodash';
 import { NominatimResult } from '../../../core/geo/NominatimResult';
 import SearchResult from './SearchResult';
 import { ServiceProps, withServices } from '../../../core/withServices';
-import Cls from './Search.module.scss';
 import { Extent } from 'ol/extent';
+import { prefixedTranslation } from '../../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
+import Cls from './Search.module.scss';
 
 const logger = Logger.get('Search.tsx');
 
@@ -32,6 +34,8 @@ export interface State {
   results: NominatimResult[];
   loading: boolean;
 }
+
+const t = prefixedTranslation('MapView:Search.');
 
 class Search extends Component<ServiceProps, State> {
   constructor(props: ServiceProps) {
@@ -47,12 +51,16 @@ class Search extends Component<ServiceProps, State> {
     const results = this.state.results;
     const query = this.state.query;
     const loading = this.state.loading;
+
     return (
       <div className={`control-block`}>
+        {/* Search input */}
         <div className={'control-item'}>
-          <div className={'my-2'}>Rechercher sur la carte</div>
+          <div className={'my-2'}>{t('Search_on_map')}</div>
           <input type={'text'} className={`form-control ${Cls.input}`} value={query} onChange={this.handleSearch} data-cy={'search-on-map'} />
         </div>
+
+        {/* Search results */}
         {query && (
           <>
             <div className={Cls.backdrop} onClick={this.handleClose} />
@@ -65,9 +73,11 @@ class Search extends Component<ServiceProps, State> {
             </div>
           </>
         )}
+
+        {/* Center map around my position */}
         <div className={'control-item'}>
           <button className={'btn btn-link'} onClick={this.handleGeolocate} data-testid={'geolocate'}>
-            <i className={'fa fa-map-marker-alt mr-2'} /> Afficher ma position
+            <i className={'fa fa-map-marker-alt mr-2'} /> {t('My_location')}
           </button>
         </div>
       </div>
@@ -123,4 +133,4 @@ class Search extends Component<ServiceProps, State> {
   };
 }
 
-export default withServices(Search);
+export default withTranslation()(withServices(Search));

@@ -20,6 +20,7 @@ import React, { Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/shared';
 import ColorPicker from '../../../../components/color-picker/ColorPicker';
 import FormLine from '../../../_common/form-line/FormLine';
+import { prefixedTranslation } from '../../../../i18n/i18n';
 
 const logger = Logger.get('ColorScaleSelection.tsx');
 
@@ -29,6 +30,8 @@ interface Props {
   onChange: (start: string, end: string) => void;
 }
 
+const t = prefixedTranslation('DataProcessingModules:ColorGradients.');
+
 class ScaleColors extends Component<Props, {}> {
   public render(): ReactNode {
     const start = this.props.start;
@@ -37,12 +40,12 @@ class ScaleColors extends Component<Props, {}> {
     return (
       <>
         <FormLine>
-          <div className={'flex-grow-1'}>Couleur de début</div>
+          <div className={'flex-grow-1'}>{t('Start_color')}:</div>
           <ColorPicker initialValue={start} onClose={this.handleStartChanged} />
         </FormLine>
 
         <FormLine>
-          <div className={'flex-grow-1'}>Couleur de fin</div>
+          <div className={'flex-grow-1'}>{t('End_color')}:</div>
           <ColorPicker initialValue={end} onClose={this.handleEndChanged} />
         </FormLine>
       </>

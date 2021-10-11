@@ -66,7 +66,7 @@ describe('Color gradients', function () {
       .should((map) => {
         const layers = map.getLayersMetadata();
         expect(layers).length(4);
-        expect(layers[3].name).equal('Dégradés de couleurs');
+        expect(layers[3].name).equal('Color gradients');
 
         const features = map.getActiveLayerFeatures();
         expect(features.length).equal(252);

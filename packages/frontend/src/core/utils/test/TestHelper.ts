@@ -54,7 +54,7 @@ import { TestDataSource } from '../../data/data-source/TestDataSource';
 import { VectorLayerWrapper } from '../../geo/layers/LayerWrapper';
 import { FeatureWrapper } from '../../geo/features/FeatureWrapper';
 import { LayerFactory } from '../../geo/layers/LayerFactory';
-import { PointIconName } from '../../../assets/point-icons/PointIconName';
+import { IconName } from '../../../assets/point-icons/IconName';
 import { nanoid } from 'nanoid';
 import { Encryption } from '../Encryption';
 import MapBrowserEventType from 'ol/MapBrowserEventType';
@@ -353,7 +353,7 @@ export class TestHelper {
         alignment: 'left',
       },
       point: {
-        icon: PointIconName.IconMoonStars,
+        icon: IconName.IconMoonStars,
         size: 5,
         color: '#00FF00',
       },
@@ -458,5 +458,9 @@ export class TestHelper {
       accuracy: 1,
     };
     /* eslint-enable */
+  }
+
+  public static sampleCsvFile(content: string): File {
+    return new File([content], 'test.csv', { type: 'text/csv' });
   }
 }

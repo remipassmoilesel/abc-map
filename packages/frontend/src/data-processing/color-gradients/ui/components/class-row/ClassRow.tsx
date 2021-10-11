@@ -20,6 +20,8 @@ import React, { Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/shared';
 import { GradientClass } from '../../../GradientClass';
 import ColorPicker from '../../../../../components/color-picker/ColorPicker';
+import { prefixedTranslation } from '../../../../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
 import Cls from './ClassRow.module.scss';
 
 const logger = Logger.get('ClassRow.tsx');
@@ -29,6 +31,8 @@ interface Props {
   onChange: (gradientClass: GradientClass) => void;
 }
 
+const t = prefixedTranslation('DataProcessingModules:ColorGradients.');
+
 class ClassRow extends Component<Props, {}> {
   public render(): ReactNode {
     const gradientClass = this.props.gradientClass;
@@ -37,7 +41,7 @@ class ClassRow extends Component<Props, {}> {
       <div className={`d-flex flex-row my-1 ${Cls.row}`}>
         <ColorPicker initialValue={gradientClass.color} onClose={this.handleColorChange} />
         <div className={'mx-3'}>
-          De <code>{gradientClass.lower}</code> à <code>{gradientClass.upper}</code>
+          {t('From')} <code>{gradientClass.lower}</code> {t('To')} <code>{gradientClass.upper}</code>
         </div>
       </div>
     );
@@ -51,4 +55,4 @@ class ClassRow extends Component<Props, {}> {
   };
 }
 
-export default ClassRow;
+export default withTranslation()(ClassRow);

@@ -16,23 +16,21 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-export function sampleCsvFile(content: string): File {
-  return new File([content], 'test.csv', { type: 'text/csv' });
+import { ReactNode } from 'react';
+import { Module } from '../Module';
+import CountPointsInPolygonUi from './ui/CountPointsInPolygonUi';
+import { ModuleId } from '../ModuleId';
+
+export class FeatureCountByGeometries extends Module {
+  public getId(): ModuleId {
+    return ModuleId.CountPointsInPolygon;
+  }
+
+  public getI18nName(): string {
+    return 'Geometry_count';
+  }
+
+  public getUserInterface(): ReactNode {
+    return <CountPointsInPolygonUi />;
+  }
 }
-
-// This file must contains empty lines and final new line
-export const File1 = sampleCsvFile(`\
-"label","altitude"
-
-"value1",1234
-
-"value2",5678
-
-`);
-
-export const File2 = sampleCsvFile('');
-
-export const File3 = sampleCsvFile(`
-"a";"b";"c"
-"d";"e";"f"
-`);

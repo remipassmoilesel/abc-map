@@ -21,10 +21,12 @@ import { Modal } from 'react-bootstrap';
 import { LayerWrapper } from '../../../../core/geo/layers/LayerWrapper';
 import { Logger } from '@abc-map/shared';
 import * as _ from 'lodash';
-import Cls from './EditLayerModal.module.scss';
 import { ServiceProps, withServices } from '../../../../core/withServices';
 import { HistoryKey } from '../../../../core/history/HistoryKey';
 import { EditLayerTask } from '../../../../core/history/tasks/layers/EditLayerTask';
+import { prefixedTranslation } from '../../../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
+import Cls from './EditLayerModal.module.scss';
 
 const logger = Logger.get('EditLayerModal.tsx');
 
@@ -38,6 +40,8 @@ interface State {
   opacityInput: number;
   attributionsInput: string;
 }
+
+const t = prefixedTranslation('MapView:EditLayerModal.');
 
 class EditLayerModal extends Component<Props, State> {
   constructor(props: Props) {
@@ -59,12 +63,14 @@ class EditLayerModal extends Component<Props, State> {
     return (
       <Modal show={true} onHide={onHide} dialogClassName={Cls.modal}>
         <Modal.Header closeButton>
-          <Modal.Title>Modifier la couche {layer.getName()}</Modal.Title>
+          <Modal.Title>
+            {t('Edit_layer')} {layer.getName()}
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div className={`p-3`}>
             {/* Name of layer */}
-            <div className={'mb-2'}>Nom de la couche:</div>
+            <div className={'mb-2'}>{t('Name_of_layer')}:</div>
             <input
               type={'text'}
               value={nameInput}
@@ -75,7 +81,7 @@ class EditLayerModal extends Component<Props, State> {
             />
 
             {/* Opacity */}
-            <div className={'mb-2'}>Opacité:</div>
+            <div className={'mb-2'}>{t('Opacity')}:</div>
             <div className={'d-flex align-items-center mb-4'}>
               <input
                 type="range"
@@ -102,10 +108,10 @@ class EditLayerModal extends Component<Props, State> {
 
             <div className={'d-flex justify-content-end'}>
               <button className={'btn btn-secondary mr-3'} onClick={onHide} data-testid={'cancel-button'}>
-                Annuler
+                {t('Cancel')}
               </button>
               <button onClick={this.handleConfirm} className={'btn btn-primary'} data-testid={'submit-button'} data-cy={'submit-button'}>
-                Confirmer
+                {t('Confirm')}
               </button>
             </div>
           </div>
@@ -164,4 +170,4 @@ class EditLayerModal extends Component<Props, State> {
   };
 }
 
-export default withServices(EditLayerModal);
+export default withTranslation()(withServices(EditLayerModal));

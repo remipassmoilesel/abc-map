@@ -38,6 +38,8 @@ import { MapEvent } from 'ol';
 import { pageSetup } from '../../core/utils/page-setup';
 import { MapActions } from '../../core/store/map/actions';
 import { MapSizeChangedEvent } from '../../core/geo/map/MapWrapper.events';
+import { withTranslation } from 'react-i18next';
+import { prefixedTranslation } from '../../i18n/i18n';
 import Cls from './MapView.module.scss';
 
 const logger = Logger.get('MapView.tsx');
@@ -59,6 +61,8 @@ const mapDispatchToProps = {
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type Props = ConnectedProps<typeof connector> & ServiceProps;
+
+const t = prefixedTranslation('MapView:');
 
 class MapView extends Component<Props, State> {
   constructor(props: Props) {
@@ -98,7 +102,7 @@ class MapView extends Component<Props, State> {
   }
 
   public componentDidMount() {
-    pageSetup('La carte !', `Visualisez, créez et modifiez des cartes dans votre navigateur 🌍 ✏️`);
+    pageSetup(t('The_map'), t('Visualize_and_create_in_your_browser'));
 
     const map = this.state.map;
 
@@ -159,4 +163,4 @@ class MapView extends Component<Props, State> {
   };
 }
 
-export default connector(withServices(MapView));
+export default withTranslation()(connector(withServices(MapView)));

@@ -34,6 +34,7 @@ import ClassificationColors, { ClassesConfig } from './ClassificationColors';
 import { DataSource } from '../../../../core/data/data-source/DataSource';
 import { GradientClass } from '../../GradientClass';
 import { ColorGradientTips } from '@abc-map/user-documentation';
+import { prefixedTranslation } from '../../../../i18n/i18n';
 
 const logger = Logger.get('SymbolConfigForm.tsx');
 
@@ -54,6 +55,8 @@ interface Props {
 
 const algorithms: Algorithm[] = [ScaleAlgorithm.Interpolated, ...Object.values(ClassificationAlgorithm)];
 
+const t = prefixedTranslation('DataProcessingModules:ColorGradients.');
+
 class GradientsConfigForm extends Component<Props, {}> {
   public render(): ReactNode {
     const values = this.props.values;
@@ -65,14 +68,14 @@ class GradientsConfigForm extends Component<Props, {}> {
       <>
         <FormLine>
           <label htmlFor="layer-name" className={'flex-grow-1'}>
-            Nom de la nouvelle couche:
+            {t('Name_of_new_layer')}:
           </label>
           <input type={'text'} className={'form-control'} id={'layer-name'} value={values?.layerName} onChange={this.handleLayerNameChange} />
         </FormLine>
 
         <FormLine>
           <AlgorithmSelector
-            label={'Echelle ou classification:'}
+            label={`${t('Scale_or_classification')}:`}
             tip={ColorGradientTips.Algorithm}
             only={algorithms}
             value={values.algorithm}

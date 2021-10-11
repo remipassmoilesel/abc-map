@@ -30,6 +30,7 @@ import { nanoid } from 'nanoid';
 import ClassRow from './class-row/ClassRow';
 import ColorPicker from '../../../../components/color-picker/ColorPicker';
 import { asNumberOrString, isValidNumber } from '../../../../core/utils/numbers';
+import { prefixedTranslation } from '../../../../i18n/i18n';
 
 const logger = Logger.get('ColorScaleSelection.tsx');
 
@@ -51,6 +52,8 @@ interface State {
   numberOfClasses: number;
 }
 
+const t = prefixedTranslation('DataProcessingModules:ColorGradients.');
+
 class ClassificationColors extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
@@ -66,15 +69,15 @@ class ClassificationColors extends Component<Props, State> {
     return (
       <>
         <FormLine>
-          <div className={'flex-grow-1'}>Couleur de début:</div>
+          <div className={'flex-grow-1'}>{t('Start_color')}:</div>
           <ColorPicker initialValue={startColor} onClose={this.handleStartChanged} />
         </FormLine>
         <FormLine>
-          <div className={'flex-grow-1'}>Couleur de fin:</div>
+          <div className={'flex-grow-1'}>{t('End_color')}:</div>
           <ColorPicker initialValue={endColor} onClose={this.handleEndChanged} />
         </FormLine>
         <FormLine>
-          <div className={'flex-grow-1'}>Nombre de classes:</div>
+          <div className={'flex-grow-1'}>{t('Number_of_classes')}:</div>
           <select className={'form-control'} value={numberOfClasses} onChange={this.handleClassNumberChanged}>
             {_.range(3, 11).map((i) => (
               <option key={i} value={i}>
@@ -86,7 +89,7 @@ class ClassificationColors extends Component<Props, State> {
 
         {classes.length && (
           <FormLine>
-            <div className={'flex-grow-1'}>Classes:</div>
+            <div className={'flex-grow-1'}>{t('Classes')}:</div>
 
             <div className={'d-flex flex-column'}>
               {classes.map((cl) => (
@@ -95,7 +98,7 @@ class ClassificationColors extends Component<Props, State> {
               <div>
                 <button onClick={this.handleResetClasses} className={'btn btn-outline-secondary my-3'}>
                   <i className={'fa fa-undo mr-2'} />
-                  Calculer les classes
+                  {t('Calculate_classes')}
                 </button>
               </div>
             </div>

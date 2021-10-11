@@ -16,7 +16,7 @@ Ensure that your idea is a need that will be shared by other people.
 
 If not already done, please check the [bottomless well](documentation/5_the_bottomless_well.md) too !         
 
-Please read the [documentation/](documentation/) folder before. Don't worry, it's a quick read. You will
+Please read the [documentation/](documentation) folder before. Don't worry, it's a quick read. You will
 learn how to set up your workstation and to start Abc-Map locally.
 
 

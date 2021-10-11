@@ -21,7 +21,7 @@ import { Logger } from '@abc-map/shared';
 import { FileIO, InputResultType, InputType } from '../../../core/utils/FileIO';
 import { ServiceProps, withServices } from '../../../core/withServices';
 import { LayerChangeHandler } from '../../../core/geo/map/MapWrapper';
-import VectorLayerSelector from '../../../components/vector-layer-selector/VectorLayerSelector';
+import VectorLayerSelector from '../vector-layer-selector/VectorLayerSelector';
 import { DataSource, DataSourceType } from '../../../core/data/data-source/DataSource';
 import { LayerDataSource } from '../../../core/data/data-source/LayerDataSource';
 import { CsvDataSource } from '../../../core/data/data-source/CsvDataSource';
@@ -29,6 +29,8 @@ import { VectorLayerWrapper } from '../../../core/geo/layers/LayerWrapper';
 import { CsvParsingError } from '../../../core/data/csv-parser/typings';
 import Cls from './DataSourceSelector.module.scss';
 import MessageLabel from '../../../components/message-label/MessageLabel';
+import { prefixedTranslation } from '../../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
 
 export const logger = Logger.get('DataSourceSelector.tsx');
 
@@ -53,6 +55,8 @@ enum Display {
 const NoLineInformation = -1;
 const NoRowsInformation = -1;
 
+const t = prefixedTranslation('DataProcessingModules:DataSourceForm.');
+
 class DataSourceSelector extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
@@ -71,11 +75,11 @@ class DataSourceSelector extends Component<Props, State> {
         <div className={'d-flex mb-3'}>
           <div className={Cls.displayControl} onClick={() => this.handleDisplayClick(Display.Layers)} data-cy={'data-source-layer'}>
             <input type={'radio'} name={'display'} value={Display.Layers} checked={display === Display.Layers} readOnly />
-            Choisir une couche
+            {t('Use_geometry_layer')}
           </div>
           <div className={Cls.displayControl} onClick={() => this.handleDisplayClick(Display.File)} data-cy={'data-source-file'}>
             <input type={'radio'} name={'display'} value={Display.File} checked={display === Display.File} readOnly />
-            Importer un fichier CSV
+            {t('Use_CSV_workbook')}
           </div>
         </div>
 
@@ -88,31 +92,29 @@ class DataSourceSelector extends Component<Props, State> {
         {display === Display.File && (
           <div className={Cls.selectFile}>
             <div>
-              Sélectionner un fichier sur votre ordinateur. Ce fichier doit :
+              {t('Select_file_on_computer')}:
               <ul className={'mt-2'}>
-                <li>Être au format CSV: séparateur virgule, guillemets doubles</li>
-                <li>Avoir une ligne d&apos;en-tête avec le nom des colonnes</li>
-                <li>Être encodé en UTF-8</li>
+                <li>{t('Be_in_CSV_format')}</li>
+                <li>{t('Have_header_row')}</li>
+                <li>{t('Be_encoded_UTF8')}</li>
               </ul>
             </div>
             <div className={'d-flex'}>
               <button onClick={this.handleImportFile} className={'btn btn-primary'} data-cy={'data-source-import-file'}>
-                Choisir un fichier CSV
+                {t('Choose_CSV_file')}
               </button>
             </div>
           </div>
         )}
 
         <>
-          {rows >= 500 && (
-            <MessageLabel icon={'fa-exclamation-triangle'}>Cette source contient beaucoup de données ({rows}), le traitement sera long.</MessageLabel>
-          )}
-          {rows === 0 && <MessageLabel icon={'fa-exclamation-triangle'}>Cette source de données est vide.</MessageLabel>}
-          {rows > 0 && <MessageLabel icon={'fa-rocket'}>{rows} entrées seront traitées.</MessageLabel>}
+          {rows >= 500 && <MessageLabel icon={'fa-exclamation-triangle'}>{t('This_source_contains_a_lot_of_data', { rows })}</MessageLabel>}
+          {rows === 0 && <MessageLabel icon={'fa-exclamation-triangle'}>{t('Data_source_empty')}</MessageLabel>}
+          {rows > 0 && <MessageLabel icon={'fa-rocket'}>{t('X_entries_will_be_processed', { rows })}</MessageLabel>}
         </>
 
-        {error && <MessageLabel icon={'fa-exclamation-circle'}>Cette source de données est incorrecte, sélectionnez en une autre.</MessageLabel>}
-        {errorAtLine !== NoLineInformation && <MessageLabel icon={'fa-chevron-right'}>Une erreur est survenue à la ligne {errorAtLine}.</MessageLabel>}
+        {error && <MessageLabel icon={'fa-exclamation-circle'}>{t('This_data_source_is_incorrect')}</MessageLabel>}
+        {errorAtLine !== NoLineInformation && <MessageLabel icon={'fa-chevron-right'}>{t('Error_on_line_X', { errorAtLine })}</MessageLabel>}
       </div>
     );
   }
@@ -193,4 +195,4 @@ class DataSourceSelector extends Component<Props, State> {
   }
 }
 
-export default withServices(DataSourceSelector);
+export default withTranslation()(withServices(DataSourceSelector));

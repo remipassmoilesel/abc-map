@@ -36,7 +36,7 @@ describe('Script module', function () {
       .should('contain', 'Script exécuté sans erreurs')
       .get('[data-cy=output]')
       .should('contain', 'Layer OpenStreetMap: Not vector')
-      .should('contain', 'Layer Géométries: 0 features');
+      .should('contain', 'Layer Geometries: 0 features');
   });
 
   it('User can update features', () => {

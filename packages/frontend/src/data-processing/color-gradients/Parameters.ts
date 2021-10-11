@@ -20,6 +20,9 @@ import { DataSource } from '../../core/data/data-source/DataSource';
 import { VectorLayerWrapper } from '../../core/geo/layers/LayerWrapper';
 import { ClassificationAlgorithm, GradientAlgorithm } from '../_common/algorithm/Algorithm';
 import { GradientClass } from './GradientClass';
+import { prefixedTranslation } from '../../i18n/i18n';
+
+const t = prefixedTranslation('DataProcessingModules:ColorGradients.');
 
 export interface Parameters {
   newLayerName: string;
@@ -42,7 +45,7 @@ export interface Parameters {
 
 export function newParameters(): Parameters {
   return {
-    newLayerName: 'Dégradés de couleurs',
+    newLayerName: t('Color_gradients'),
     data: {},
     geometries: {},
     colors: {

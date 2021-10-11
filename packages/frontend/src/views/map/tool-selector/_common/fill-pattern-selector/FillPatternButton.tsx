@@ -21,6 +21,8 @@ import { Logger } from '@abc-map/shared';
 import { FillPatterns } from '@abc-map/shared';
 import { LabeledFillPatterns } from './LabeledFillPatterns';
 import { FillPatternFactory } from '../../../../../core/geo/styles/FillPatternFactory';
+import { prefixedTranslation } from '../../../../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
 import Cls from './FillPatternButton.module.scss';
 
 const logger = Logger.get('FillPatternButton.tsx', 'info');
@@ -39,6 +41,8 @@ interface State {
   patternFactory: FillPatternFactory;
 }
 
+const t = prefixedTranslation('MapView:ToolSelector.');
+
 class FillPatternButton extends Component<Props, State> {
   private canvas = React.createRef<HTMLCanvasElement>();
 
@@ -51,7 +55,8 @@ class FillPatternButton extends Component<Props, State> {
     const width = this.props.width;
     const height = this.props.height;
     const padding = 8;
-    const title = LabeledFillPatterns.All.find((p) => p.value === this.props.pattern)?.label || 'Pas de nom';
+    const pattern = LabeledFillPatterns.All.find((p) => p.value === this.props.pattern);
+    const title = t(pattern?.i18nLabel || 'No_name');
 
     return (
       <button
@@ -115,4 +120,4 @@ class FillPatternButton extends Component<Props, State> {
   }
 }
 
-export default FillPatternButton;
+export default withTranslation()(FillPatternButton);

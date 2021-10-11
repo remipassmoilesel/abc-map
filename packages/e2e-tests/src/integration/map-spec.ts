@@ -30,12 +30,12 @@ describe('Map', function () {
     cy.visit(FrontendRoutes.map().raw())
       .then(() => LayerControls.getNames())
       .should((names) => {
-        expect(names).deep.equals(['OpenStreetMap', 'Géométries']);
+        expect(names).deep.equals(['OpenStreetMap', 'Geometries']);
       })
       .then(() => LayerControls.getActiveItem())
       .should((elem) => {
         expect(elem.length).equals(1);
-        expect(elem.text()).equals('Géométries');
+        expect(elem.text()).equals('Geometries');
       });
   });
 
@@ -44,7 +44,7 @@ describe('Map', function () {
       .then(() => LayerControls.addOsmLayer())
       .then(() => LayerControls.getNames())
       .should((names) => {
-        expect(names).deep.equals(['OpenStreetMap', 'Géométries', 'OpenStreetMap']);
+        expect(names).deep.equals(['OpenStreetMap', 'Geometries', 'OpenStreetMap']);
       })
       .then(() => LayerControls.getActiveItem())
       .should((elem) => {
@@ -58,24 +58,24 @@ describe('Map', function () {
       .then(() => LayerControls.addOsmLayer())
       .then(() => LayerControls.getNames())
       .should((names) => {
-        expect(names).deep.equals(['OpenStreetMap', 'Géométries', 'OpenStreetMap']);
+        expect(names).deep.equals(['OpenStreetMap', 'Geometries', 'OpenStreetMap']);
       })
       // Undo
       .then(() => History.undo())
       .then(() => LayerControls.getNames())
       .should((names) => {
-        expect(names).deep.equals(['OpenStreetMap', 'Géométries']);
+        expect(names).deep.equals(['OpenStreetMap', 'Geometries']);
       })
       .then(() => LayerControls.getActiveItem())
       .should((elem) => {
         expect(elem.length).equals(1);
-        expect(elem.text()).equals('Géométries');
+        expect(elem.text()).equals('Geometries');
       })
       // Redo
       .then(() => History.redo())
       .then(() => LayerControls.getNames())
       .should((names) => {
-        expect(names).deep.equals(['OpenStreetMap', 'Géométries', 'OpenStreetMap']);
+        expect(names).deep.equals(['OpenStreetMap', 'Geometries', 'OpenStreetMap']);
       })
       .then(() => LayerControls.getActiveItem())
       .should((elem) => {

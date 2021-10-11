@@ -20,8 +20,6 @@ import { SimplePropertiesMap } from '../geo/features/FeatureWrapper';
 import { StyleCacheEntry } from '../geo/styles/StyleCache';
 
 export enum ModalEventType {
-  ShowRename = 'ShowRename',
-  RenameClosed = 'RenameClosed',
   ShowPasswordInput = 'ShowPasswordInput',
   PasswordInputClosed = 'PasswordInputClosed',
   ShowSetPassword = 'ShowSetPassword',
@@ -47,19 +45,6 @@ export enum ModalEventType {
 export enum ModalStatus {
   Confirmed = 'Confirmed',
   Canceled = 'Canceled',
-}
-
-export interface ShowRenameModal {
-  type: ModalEventType.ShowRename;
-  title: string;
-  message: string;
-  value: string;
-}
-
-export interface RenameModalClosedEvent {
-  type: ModalEventType.RenameClosed;
-  value: string;
-  status: ModalStatus;
 }
 
 export interface ShowPasswordInputModal {
@@ -168,8 +153,6 @@ export interface ConfirmationClosedEvent {
 }
 
 export declare type ModalEvent =
-  | ShowRenameModal
-  | RenameModalClosedEvent
   | ShowPasswordInputModal
   | PasswordInputClosedEvent
   | ShowSetPasswordModal

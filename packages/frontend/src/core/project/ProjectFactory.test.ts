@@ -17,14 +17,32 @@
  */
 
 import { ProjectFactory } from './ProjectFactory';
-import { ProjectConstants } from '@abc-map/shared';
+import { Language, ProjectConstants } from '@abc-map/shared';
+import { setLang } from '../../i18n/i18n';
 
 describe('ProjectFactory', () => {
-  it('newProjectMetadata()', () => {
-    const metadata = ProjectFactory.newProjectMetadata();
-    expect(metadata.id).toBeDefined();
-    expect(metadata.name).toContain('Projet du');
-    expect(metadata.version).toBe(ProjectConstants.CurrentVersion);
+  afterEach(() => {
+    return setLang(Language.English);
+  });
+
+  describe('newProjectMetadata()', () => {
+    it('fr', async () => {
+      await setLang(Language.French);
+
+      const metadata = ProjectFactory.newProjectMetadata();
+      expect(metadata.id).toBeDefined();
+      expect(metadata.name).toMatch(/Projet du [0-9]+\/[0-9]+\/[0-9]+/);
+      expect(metadata.version).toBe(ProjectConstants.CurrentVersion);
+    });
+
+    it('en', async () => {
+      await setLang(Language.English);
+
+      const metadata = ProjectFactory.newProjectMetadata();
+      expect(metadata.id).toBeDefined();
+      expect(metadata.name).toMatch(/Project of [0-9]+\/[0-9]+\/[0-9]+/);
+      expect(metadata.version).toBe(ProjectConstants.CurrentVersion);
+    });
   });
 
   it('newProjectManifest()', () => {

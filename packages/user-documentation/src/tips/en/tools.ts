@@ -20,87 +20,85 @@ import { Tip } from '../Tip';
 import { ToolTips } from '../tip-ids';
 
 const undoRedoTip = `
-<li><b>Pour annuler</b> maintenez <code>CTRL</code> et appuyez sur <code>Z</code></li>
-<li><b>Pour refaire</b> maintenez <code>CTRL</code> et <code>MAJ</code>, et appuyez sur <code>Z</code></li>
+<li><b>To cancel</b> hold <code>CTRL</code> and press <code>Z</code></li>
+<li><b>To redo</b> hold <code>CTRL</code> and <code>SHIFT</code>, and press <code>Z</code></li>
 `;
 
 export const Tools: Tip[] = [
   {
     id: ToolTips.Point,
-    content: `<h4>Outil point</h4>
+    content: `<h4>Point tool</h4>
               <ul>
-                <li><b>Pour créer un point</b>, cliquez sur la carte</li>
-                <li><b>Pour sélectionner un point</b>, maintenez <code>CTRL</code> et cliquez sur le point</li>
-                <li><b>Pour modifier un point</b>, sélectionnez-le, vous pouvez ensuite
-                    le déplacer avec votre souris, ou modifier ses caractéristiques</li>
-                <li><b>Pour supprimer un point</b>, sélectionnez-le et appuyez sur <code>SUPPR</code></li>
+                <li><b>To create a point</b>, click on the map</li>
+                <li><b>To select a point</b>, hold <code>CTRL</code> and click on the point</li>
+                <li><b>To modify a point</b>, select it, you can then move it with your mouse, or modify its characteristics</li>
+                <li><b>To delete a point</b>, select it and press <code>DELETE</code></li>
                 ${undoRedoTip}
               </ul>
               `,
   },
   {
     id: ToolTips.LineString,
-    content: `<h4>Outil ligne</h4>
+    content: `<h4>Line tool</h4>
               <ul>
-                <li><b>Pour créer une ligne</b>, cliquez sur la carte à plusieurs reprises, puis double-cliquez
-                pour terminer la ligne. Vous pouvez interrompre un dessin en appuyant <code>ECHAP</code></li>
-                <li><b>Pour sélectionner une ligne</b>, maintenez <code>CTRL</code> et cliquez sur la ligne</li>
-                <li><b>Pour modifier une ligne</b>, sélectionnez-la, vous pouvez ensuite avec votre souris créer des sommets,
-                déplacer des sommets, ou modifier ses caractéristiques</li>
-                <li><b>Pour supprimer une ligne</b>, sélectionnez-la et appuyez sur <code>SUPPR</code></li>
-                <li><b>Pour supprimer un sommet</b>, sélectionnez la ligne, maintenez <code>ALT</code> et cliquez sur
-                le sommet</li>
+                <li><b>To create a line</b>, click on the map several times, then double-click
+                 to end the line. You can interrupt a drawing by pressing <code>ESCAPE</code></li>
+                <li><b>To select a line</b>, hold <code>CTRL</code> and click on the line</li>
+                <li><b>To modify a line</b>, select it, you can then create vertices,
+                 move vertices, or modify its characteristics</li>
+                <li><b>To delete a line</b>, select it and press <code>DELETE</code></li>
+                <li><b>To delete a vertex</b>, select the line, hold <code>ALT</code> and click on the vertex</li>
                 ${undoRedoTip}
               </ul>
               `,
   },
   {
     id: ToolTips.Polygon,
-    content: `<h4>Outil polygone</h4>
+    content: `<h4>Polygon tool</h4>
               <ul>
-                <li><b>Pour créer un polygone</b>, cliquez sur la carte à plusieurs reprises, puis double-cliquez
-                pour terminer le polygone. Vous pouvez interrompre un dessin en appuyant <code>ECHAP</code></li>
-                <li><b>Pour sélectionner un polygone</b>, maintenez <code>CTRL</code> et cliquez sur le polygone</li>
-                <li><b>Pour modifier un polygone</b>, sélectionnez-le, vous pouvez ensuite avec votre souris créer des sommets,
-                déplacer des sommets, ou modifier ses caractéristiques</li>
-                <li><b>Pour supprimer un polygone</b>, sélectionnez-le et appuyez sur <code>SUPPR</code></li>
-                <li><b>Pour supprimer un sommet</b>, sélectionnez le polygone, maintenez <code>ALT</code> et cliquez sur
-                le sommet</li>
+                <li><b>To create a polygon</b>, click on the map several times, then double-click
+                 to complete the polygon. You can interrupt a drawing by pressing <code>ESCAPE</code></li>
+                <li><b>To select a polygon</b>, hold <code>CTRL</code> and click on the polygon</li>
+                <li><b>To modify a polygon</b>, select it, you can then with your mouse create vertices,
+                 move vertices, or modify its characteristics</li>
+                <li><b>To delete a polygon</b>, select it and press <code>DELETE</code></li>
+                <li><b>To delete a vertex</b>, select the polygon, hold <code>ALT</code> and click on
+                 the summit</li>
                 ${undoRedoTip}
               </ul>
               `,
   },
   {
     id: ToolTips.Text,
-    content: `<h4>Outil texte</h4>
+    content: `<h4>Text tool</h4>
               <ul>
-                <li><b>Pour ajouter du texte</b>, maintenez <code>CTRL</code> et cliquez sur une géométrie. Un contrôle de
-                saisie apparaît, saisissez votre texte puis validez votre saisie</li>
-                <li><b>Pour modifier du texte</b>, maintenez <code>CTRL</code> et cliquez sur une géométrie</li>
+                <li><b>To add text</b>, hold <code>CTRL</code> and click on a geometry. An input control
+                appears, enter your text then click on <code>OK</code></li>
+                <li><b>To edit text</b>, hold <code>CTRL</code> and click on a geometry</li>
                 ${undoRedoTip}
               </ul>
               `,
   },
   {
     id: ToolTips.Selection,
-    content: `<h4>Outil sélection</h4>
+    content: `<h4>Selection tool</h4>
               <ul>
-                <li><b>Pour sélectionner des géométries</b>, maintenez <code>CTRL</code>, tracez un rectangle sur la carte puis relâchez</li>
-                <li><b>Pour modifier les caractéristiques de plusieurs géométries</b>, sélectionnez-les puis utilisez le panneau d'options de
-                l'outil sélection</li>
-                <li><b>Pour supprimer des géométries</b>, sélectionnez-les et appuyez sur <code>SUPPR</code></li>
-                <li><b>Pour dupliquer des géométries</b>, sélectionnez-les et appuyez sur le bouton <code>Dupliquer</code>
-                du panneau Sélection</li>
+                <li><b>To select geometries</b>, hold <code>CTRL</code>, draw a rectangle on the map then release</li>
+                <li><b>To modify the characteristics of several geometries</b>, select them then use the options panel of
+                 the selection tool</li>
+                <li><b>To delete geometries</b>, select them and press <code>DELETE</code></li>
+                <li><b>To duplicate geometries</b>, select them and press the <code>Duplicate</code> button
+                 from the Selection panel</li>
                 ${undoRedoTip}
               </ul>
               `,
   },
   {
     id: ToolTips.EditProperties,
-    content: `<h4>Outil d'édition des propriétés</h4>
+    content: `<h4>Property editing tool</h4>
               <ul>
-                <li><b>Pour éditer les propriétés</b> d'une géométrie, maintenez <code>CTRL</code> et cliquez sur une géométrie</li>
-                ${undoRedoTip}
+                 <li><b>To edit the properties</b> of a geometry, hold <code>CTRL</code> and click on a geometry</li>
+                 ${undoRedoTip}
               </ul>
               `,
   },

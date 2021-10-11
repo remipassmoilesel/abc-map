@@ -51,9 +51,9 @@ describe('GeometryLayerForm', () => {
     );
 
     expect(screen.getByText(/Values field/)).toBeDefined();
-    expect(screen.getByText(/Jointure avec les géométries par/)).toBeDefined();
-    expect((screen.getByTestId('value-field') as HTMLSelectElement).value).toEqual('Sélectionnez une source de données');
-    expect((screen.getByTestId('data-join-by') as HTMLSelectElement).value).toEqual('Sélectionnez une source de données');
+    expect(screen.getByText(/Join with geometries by/)).toBeDefined();
+    expect((screen.getByTestId('value-field') as HTMLSelectElement).value).toEqual('Select a data source');
+    expect((screen.getByTestId('data-join-by') as HTMLSelectElement).value).toEqual('Select a data source');
   });
 
   it('should render', () => {
@@ -67,12 +67,12 @@ describe('GeometryLayerForm', () => {
       { services }
     );
 
-    expect(screen.getByText(/Choisir une couche/)).toBeDefined();
-    expect(screen.getByText(/Importer un fichier CSV/)).toBeDefined();
+    expect(screen.getByText(/Select a layer/)).toBeDefined();
+    expect(screen.getByText(/Use a CSV workbook/)).toBeDefined();
     expect(screen.getByText(/Values field/)).toBeDefined();
-    expect(screen.getByText(/Jointure avec les géométries par/)).toBeDefined();
-    expect((screen.getByTestId('value-field') as HTMLSelectElement).value).toEqual('Sélectionnez une source de données');
-    expect((screen.getByTestId('data-join-by') as HTMLSelectElement).value).toEqual('Sélectionnez une source de données');
+    expect(screen.getByText(/Join with geometries by/)).toBeDefined();
+    expect((screen.getByTestId('value-field') as HTMLSelectElement).value).toEqual('Select a data source');
+    expect((screen.getByTestId('data-join-by') as HTMLSelectElement).value).toEqual('Select a data source');
   });
 
   it('should notify on layer selected', async () => {
@@ -116,7 +116,7 @@ describe('GeometryLayerForm', () => {
       { services }
     );
     userEvent.selectOptions(screen.getByTestId('vector-layer-selector'), 'Regions of France');
-    await waitFor(() => screen.getAllByText(/Sélectionnez un champ/));
+    await waitFor(() => screen.getAllByText(/Select a field/));
     handleChanges.reset();
 
     // Act
@@ -145,7 +145,7 @@ describe('GeometryLayerForm', () => {
       { services }
     );
     userEvent.selectOptions(screen.getByTestId('vector-layer-selector'), 'Regions of France');
-    await waitFor(() => screen.getAllByText(/Sélectionnez un champ/));
+    await waitFor(() => screen.getAllByText(/Select a field/));
     handleChanges.reset();
 
     // Act

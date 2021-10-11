@@ -17,12 +17,16 @@
  */
 
 import React from 'react';
+import { prefixedTranslation } from '../../../../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
 
 interface Props {
   submitDisabled?: boolean;
   onCancel: () => void;
   onConfirm: () => void;
 }
+
+const t = prefixedTranslation('MapView:AddLayerModal.');
 
 class ControlButtons extends React.Component<Props, {}> {
   public render() {
@@ -32,14 +36,14 @@ class ControlButtons extends React.Component<Props, {}> {
     return (
       <div className={'d-flex justify-content-end mt-3'}>
         <button className={'btn btn-secondary mr-3'} onClick={onCancel}>
-          Annuler
+          {t('Cancel')}
         </button>
         <button disabled={submitDisabled} className={'btn btn-primary'} onClick={onConfirm} data-cy={'add-layer-confirm'}>
-          Ajouter
+          {t('Add')}
         </button>
       </div>
     );
   }
 }
 
-export default ControlButtons;
+export default withTranslation()(ControlButtons);

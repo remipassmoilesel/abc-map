@@ -16,14 +16,14 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { MapWrapper } from '../../core/geo/map/MapWrapper';
-import { MapFactory } from '../../core/geo/map/MapFactory';
-import { newTestServices, TestServices } from '../../core/utils/test/TestServices';
-import { abcRender } from '../../core/utils/test/abcRender';
+import { MapWrapper } from '../../../core/geo/map/MapWrapper';
+import { MapFactory } from '../../../core/geo/map/MapFactory';
+import { newTestServices, TestServices } from '../../../core/utils/test/TestServices';
+import { abcRender } from '../../../core/utils/test/abcRender';
 import { screen } from '@testing-library/react';
 import VectorLayerSelector from './VectorLayerSelector';
 import sinon, { SinonStub } from 'sinon';
-import { LayerFactory } from '../../core/geo/layers/LayerFactory';
+import { LayerFactory } from '../../../core/geo/layers/LayerFactory';
 import { PredefinedLayerModel } from '@abc-map/shared';
 import userEvent from '@testing-library/user-event';
 
@@ -106,7 +106,7 @@ describe('VectorLayerSelector', () => {
     handleSelected.reset();
 
     // Act
-    userEvent.selectOptions(screen.getByTestId('vector-layer-selector'), ['Sélectionnez une couche']);
+    userEvent.selectOptions(screen.getByTestId('vector-layer-selector'), ['Select a layer']);
 
     // Assert
     expect(handleSelected.callCount).toEqual(1);

@@ -30,27 +30,24 @@ import {
   OperationStatus,
   PasswordInputClosedEvent,
   RegistrationClosedEvent,
-  RenameModalClosedEvent,
   SetPasswordModalClosedEvent,
   SolicitationClosedEvent,
 } from './typings';
 import { SimplePropertiesMap } from '../geo/features/FeatureWrapper';
 import { delayedPromise } from '../utils/delayedPromise';
+import { prefixedTranslation } from '../../i18n/i18n';
 
 const logger = Logger.get('ModalService.ts', 'warn');
+
+const t = prefixedTranslation('ModalService:');
 
 export class ModalService {
   private eventTarget = document.createDocumentFragment();
   private listeners = new Map<ModalEventListener<any>, EventListener>();
 
-  public rename(message: string, value: string): Promise<RenameModalClosedEvent> {
-    const title = 'Renommage ✏️';
-    return this.modalPromise({ type: ModalEventType.ShowRename, title, message, value }, ModalEventType.RenameClosed);
-  }
-
   public setProjectPassword(): Promise<SetPasswordModalClosedEvent> {
-    const title = 'Mot de passe du projet 🔑';
-    const message = 'Votre projet contient des identifiants, vous devez choisir un mot de passe pour les protéger.';
+    const title = t('Project_password');
+    const message = t('Your_project_contains_credentials');
     return this.setPasswordModal(title, message);
   }
 
@@ -59,8 +56,8 @@ export class ModalService {
   }
 
   public getProjectPassword(witness: string): Promise<PasswordInputClosedEvent> {
-    const title = 'Mot de passe du projet 🔑';
-    const message = 'Votre projet est protégé par un mot de passe.';
+    const title = t('Project_password');
+    const message = t('Enter_project_password');
     return this.passwordInputModal(title, message, witness);
   }
 
@@ -133,14 +130,11 @@ export class ModalService {
   public modificationsLostConfirmation(): Promise<ModalStatus> {
     const input: ModalEvent = {
       type: ModalEventType.ShowConfirmation,
-      title: 'Modifications en cours ✍️',
+      title: `${t('Current_changes')} ✍️`,
       message: `
-          <div class='my-3'>
-            Si vous continuez, les modifications en cours seront perdues.
-          </div>
-          <div class='my-3'>
-            Si vous avez exporté ou sauvegardé votre projet vous pouvez ignorer ce message.
-          </div>`,
+          <div class='my-3'>${t('Current_changes_will_be_lost')}</div>
+          <div class='my-3'>${t('If_project_saved_ignore_this_message')}</div>
+      `,
     };
     return this.modalPromise<ConfirmationClosedEvent>(input, ModalEventType.ConfirmationClosed).then((res) => res.status);
   }
@@ -148,18 +142,11 @@ export class ModalService {
   public dataSizeWarning(): Promise<ModalStatus> {
     const input: ModalEvent = {
       type: ModalEventType.ShowConfirmation,
-      title: 'Jeu de données lourd 🏋️',
+      title: `${t('Heavy_dataset')} 🏋️`,
       message: `
-          <div class='my-3'>
-            Vous êtes sur le point d'importer une grande quantité de données.
-          </div>
-          <div class='my-3'>
-            Abc-Map n'est pas encore prêt pour accueillir des jeux de données lourds, vous risquez de ralentir et de bloquer votre session.
-          </div>
-          <div class='my-3'>
-            Pour le moment préférez des fichiers de <code>moins de 5 mo</code> et des couches de <code>moins de 1000 géométries</code>.
-            Dans un futur proche, vous pourrez utiliser plus de données.
-          </div>
+          <div class='my-3'>${t('You_are_about_to_import_heavy_dataset')}</div>
+          <div class='my-3'>${t('AbcMap_not_yet_ready_for_heavy_dataset')}</div>
+          <div class='my-3'>${t('For_the_moment_prefer_small_dataset')}</div>
       `,
     };
     return this.modalPromise<ConfirmationClosedEvent>(input, ModalEventType.ConfirmationClosed).then((res) => res.status);

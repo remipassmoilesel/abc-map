@@ -18,18 +18,18 @@
 
 import { DefaultIcon, getAllIcons, safeGetIcon } from './PointIcon';
 import { mountSvg } from '../../core/geo/styles/IconProcessor';
-import { PointIconName } from './PointIconName';
-import { IconNamesWitness } from './PointIcons.test.data';
+import { IconName } from './IconName';
+import { IconNamesWitness } from './PointIcon.test.data';
 
 describe('PointIcon', () => {
   it('safeGetIcon()', () => {
-    const icon = safeGetIcon(PointIconName.IconArrow90DegLeft);
-    expect(icon.name).toEqual(PointIconName.IconArrow90DegLeft);
+    const icon = safeGetIcon(IconName.IconArrow90DegLeft);
+    expect(icon.name).toEqual(IconName.IconArrow90DegLeft);
     expect(icon.contentSvg).toMatch(/^<svg.+/);
   });
 
   it('safeGetIcon() should not fail', () => {
-    const icon = safeGetIcon('not an icon' as PointIconName);
+    const icon = safeGetIcon('not an icon' as IconName);
     expect(icon.name).toEqual(DefaultIcon.name);
     expect(icon.contentSvg).toEqual(DefaultIcon.contentSvg);
   });
@@ -50,6 +50,6 @@ describe('PointIcon', () => {
   });
 
   it('Icon change require migration', () => {
-    expect(PointIconName).toEqual(IconNamesWitness);
+    expect(IconName).toEqual(IconNamesWitness);
   });
 });

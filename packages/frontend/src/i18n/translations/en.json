@@ -1,5 +1,7 @@
 {
   "LandingView": {
+    "Free_open_source_mapping": "Free and open source mapping online",
+    "AbcMap_new_version": "Abc-Map, new version \uD83D\uDE80 Easily create geographic maps: import, draw, visualize data, and much more!",
     "Welcome": "Welcome !",
     "AbcMap_is_a_free_software": "Abc-Map is a free and open source mapping software.",
     "How_does_it_work": "How does it work ?",
@@ -33,5 +35,365 @@
     "My_account": "My account",
     "Logout": "Logout",
     "You_are_disconnected": "You are disconnected"
+  },
+  "MapView": {
+    "The_map": "The map !",
+    "Visualize_and_create_in_your_browser": "View, create and edit maps in your browser \uD83C\uDF0D ✏️",
+    "MainMap": {
+      "Drop_your_files": "Drop your files to import them",
+      "You_must_select_files": "You must select one or more files",
+      "You_must_import_project_with_import_control": "You need to import your project using the 'Import Project' control",
+      "Formats_not_supported": "These file formats are not supported, no data has been imported",
+      "Layer_does_not_load": "Layer '{{name}}' is not loading correctly. Check its settings.",
+      "Layer_without_name": "*Layer without name*"
+    },
+    "ProjectStatus": {
+      "Projection": "Projection",
+      "Edit": "Edit"
+    },
+    "EditProjectModal": {
+      "Edit_project": "Edit project",
+      "Name_of_project": "Name of project",
+      "Projection": "Projection",
+      "Default_value": "Default value",
+      "To_change_projection_you_must_delete_geometries": "To change the projection, you must remove all geometry layers and layouts.",
+      "Cancel": "Cancel",
+      "Confirm": "Confirm",
+      "You_can_not_use_this_projection": "You can not use this projection."
+    },
+    "Search": {
+      "Search_on_map": "Search on map",
+      "My_location": "My location"
+    },
+    "ProjectControls": {
+      "Open_project": "Open project",
+      "Save_online": "Save project online",
+      "New_project": "New project",
+      "Import_project": "Import project",
+      "Export_project": "Export project",
+      "Sorry_this_project_is_too_heavy": "Sorry \uD83D\uDE1E this project is too big to save online. You can export it to your computer.",
+      "You_must_select_a_file": "You must select a file",
+      "You_must_select_a_file_with_extension_": "You must select a file in {{extension}} format",
+      "Project_loaded": "Project loaded !",
+      "Incorrect_password": "Incorrect password !",
+      "Password_is_mandatory": "Password is required to open this project"
+    },
+    "ImportData": {
+      "Import_data": "Import data",
+      "You_can_also_drop_on_map": "You can also drop files on the map.",
+      "Formats_not_supported": "These file formats are not supported, no data has been imported"
+    },
+    "CursorPosition": {
+      "Cursor_position": "Cursor position",
+      "Latitude": "Latitude",
+      "Longitude": "Longitude"
+    },
+    "LayerControls": {
+      "Layers": "Layers",
+      "No_layer": "No layer",
+      "Edit_layer": "Edit layer",
+      "Change_visibility": "Change visibility",
+      "Zoom_on_layer": "Zoom on layer",
+      "Delete_active_layer": "Delete active layer",
+      "Move_back": "Move back",
+      "Move_forward": "Move forward",
+      "New_layer": "New layer",
+      "You_must_first_select_layer": "You must first select a layer",
+      "Unable_to_zoom": "Unable to zoom in on this layer"
+    },
+    "EditLayerModal": {
+      "Edit_layer": "Edit layer",
+      "Name_of_layer": "Name of layer",
+      "Opacity": "Opacity",
+      "Attributions": "Attributions",
+      "Confirm": "Confirm",
+      "Cancel": "Cancel"
+    },
+    "AddLayerModal": {
+      "New_Layer": "New layer",
+      "What_kind_of_layer": "What type of layer do you want to add ?",
+      "Select_basemap_you_want": "Select the basemap you want",
+      "Preview": "Preview",
+      "Origin_of_data_license": "Origin of data and license",
+      "Add": "Add",
+      "Cancel": "Cancel",
+      "Predefined_basemap": "Predefined basemap",
+      "Geometry_layer": "Geometry layer",
+      "XYZ_layer": "XYZ layer",
+      "WMS_layer": "WMS layer",
+      "WMTS_layer": "WMTS layer",
+      "Nothing_to_configure_here": "Nothing to configure here",
+      "Basemap_are_easy_to_use": "Predefined basemaps allow you to quickly and easily display a world map.",
+      "Geometry_layers_allow_to_draw": "Geometry layers allow you to draw shapes.",
+      "Cant_find_what_you_want": "Can not find what you want ?",
+      "Try_data_store": "Try the data store.",
+      "URL": "URL",
+      "Username": "Username (optional)",
+      "Password": "Password (optional)",
+      "List_available_layers": "List available layers",
+      "Loading": "Loading ...",
+      "Select_layer": "Select a layer",
+      "No_layer_available": "No layer available",
+      "Cannot_use_layer": "Sorry, this layer cannot be used",
+      "URL_is_mandatory": "The URL is mandatory",
+      "Cannot_get_capacities": "Unable to get server capabilities, check url and credentials",
+      "WMS_are_you_sure": "⚠️  URL contains 'WMTS'. Are you sure you want to add a WMS layer ?",
+      "WMTS_are_you_sure": "⚠️  URL contains 'WMS'. Are you sure you want to add a WMTS layer ?",
+      "URL_must_contains_placeholders": "URL must contains placeholders <code>{x}</code>, <code>{y}</code> and <code>{z}</code>.",
+      "Example_url_with_placeholders": "Example: http://my-domain.net/xyz/<code>{x}</code>/<code>{y}</code>/<code>{z}</code>"
+    },
+    "ToolSelector": {
+      "Drawing_tools": "Drawing tools",
+      "You_must_select_geometry_layer_before": "You must select a geometry layer to use the tools.",
+      "Create_geometry_layer": "New layer",
+      "Apply_style_to_selected_geometries": "Apply style to selected geometries",
+      "Duplicate_selected_geometries": "Duplicate selected geometries",
+      "Unselect_all": "Unselect all",
+      "Delete_selected_geometries": "Delete selected geometries",
+      "Move_geometries_ahead": "Move selected geometries ahead",
+      "Move_selected_geometries_behind": "Move selected geometries behind",
+      "You_must_select_geometries_first": "You must first select geometries",
+      "Flat": "Flat",
+      "Circles": "Circles",
+      "Squares": "Squares",
+      "Vertical_hatching": "Vertical hatching",
+      "Horizontal_hatching": "Horizontal hatching",
+      "Oblique_hatching_right": "Oblique hatching \\\\",
+      "Oblique_hatching_left": "Oblique hatching //",
+      "No_name": "No nom",
+      "Thickness": "Thickness",
+      "Texture_style": "Texture style",
+      "Textures": "Textures",
+      "Color": "Color",
+      "Size": "Size",
+      "Tool_help": "Tool help",
+      "Icon": "Icon",
+      "Points": "Points",
+      "Lines_and_polygons": "Lines et polygons",
+      "Text": "Text"
+    }
+  },
+  "ColorSelector": {
+    "Line": "Line",
+    "Filling": "Filling",
+    "Texture": "Texture",
+    "Icon": "Icon color",
+    "Select_a_color": "Select a color",
+    "Close": "Close"
+  },
+  "PointIconPicker": {
+    "Select": "Select",
+    "Pins": "Pins",
+    "Geometries": "Geometries",
+    "Objects": "Objects",
+    "Weather": "Weather",
+    "Arrows": "Arrows",
+    "Emojis": "Emojis",
+    "Symbols": "Symbols"
+  },
+  "DeviceWarningModal": {
+    "Warning": "Warning",
+    "AbcMap_may_not_work_properly": "Abc-Map may not work properly",
+    "AbcMap_is_designed_for_desktop_computers": "Abc-Map is designed to work on a <code> desktop computer </code>, with <code> Firefox </code> or <code> Chromium </code> browsers, and a minimum screen resolution of <code> 1366x768 </code>.",
+    "I_understand": "I understand"
+  },
+  "ModalService": {
+    "Project_password": "Project password  \uD83D\uDD11",
+    "Your_project_contains_credentials": "Your project contains credentials, you must choose a password to protect them.",
+    "Enter_project_password": "Enter the project password to unlock it.",
+    "Current_changes": "Current changes",
+    "Current_changes_will_be_lost": "If you continue, the current changes will be lost.",
+    "If_project_saved_ignore_this_message": "If you have exported or saved your project you can ignore this message.",
+    "Heavy_dataset": "Heavy dataset",
+    "You_are_about_to_import_heavy_dataset": "You are about to import a large amount of data.",
+    "AbcMap_not_yet_ready_for_heavy_dataset": "Abc-Map is not yet ready to process heavy datasets, you may slow down and block your session.",
+    "For_the_moment_prefer_small_dataset": "For the moment, prefer files of <code> less than 5 MB </code> and layers of <code> less than 1000 geometries </code>. In the near future, you will be able to use more data."
+  },
+  "ConfirmationModal": {
+    "Confirm": "Confirm",
+    "Cancel": "Cancel"
+  },
+  "PasswordInputModal": {
+    "Confirm": "Confirm",
+    "Cancel": "Cancel",
+    "Password": "Password"
+  },
+  "SetPasswordModal": {
+    "Confirm": "Confirm",
+    "Cancel": "Cancel",
+    "Password": "Password",
+    "Confirmation": "Confirmation"
+  },
+  "FormValidationLabel": {
+    "Invalid_form": "Invalid form, but can't tell you why \uD83D\uDE2D",
+    "Perfect": "Perfect !",
+    "Invalid_email": "Email address is not valid.",
+    "Invalid_password": "This password is not valid.",
+    "Incorrect_password": "This password is incorrect.",
+    "Password_is_weak": "The password must contain at least 6 characters, a capital letter, a number or a symbol.",
+    "Password_and_confirmation_do_not_match": "Password and password confirmation do not match.",
+    "Password_and_email_must_be_different": "Password and email must be different !",
+    "You_must_confirm_account_deletion": "You must confirm the deletion of your account.",
+    "Invalid_URL": "The URL must be valid and start with <code> https:// </code>.",
+    "Missing_xyz_placeholders": "The URL must contain <code> {x}</code>, <code>{y}</code> and <code>{z}</code>.",
+    "List_layers_then_select_one": "List layers and then select one.",
+    "The_name_of_the_layer_is_mandatory": "The name of the layer is required.",
+    "Data_source_is_mandatory": "The data source is mandatory.",
+    "Join_data_field_is_mandatory": "The join data field is mandatory.",
+    "Join_geometry_field_is_mandatory": "The geometry join field is mandatory.",
+    "Algorithm_is_mandatory": "Algorithm is mandatory.",
+    "Color_field_is_mandatory": "Color field is mandatory.",
+    "Size_field_is_mandatory": "Size field is mandatory",
+    "Min_size_is_mandatory": "The minimum size is mandatory.",
+    "Max_size_is_mandatory": "The maximum size is mandatory.",
+    "Max_must_be_greater_than_min": "The maximum size must be greater than the minimum size.",
+    "Symbol_type_is_mandatory": "The type of symbol is required.",
+    "Geometry_layer_is_mandatory": "The geometry layer is mandatory.",
+    "Start_color_mandatory": "The start color is mandatory.",
+    "End_color_mandatory": "The end color is mandatory."
+  },
+  "LongOperationModal": {
+    "Things_are_getting_hot": "Things are getting hot !",
+    "Dont_try_to_run_away": "Don't try to run away.",
+    "At_last": "At last !"
+  },
+  "HistoryControls": {
+    "Undo": "Undo",
+    "Redo": "Redo"
+  },
+  "DataStoreView": {
+    "France_regions_world": "France, regions, world ...",
+    "Search": "Search",
+    "A_bit_of_patience": "Wait for it",
+    "No_result": "No result",
+    "Data_store": "Data store",
+    "Add_data_easily": "Add compatible and selected data with one click \uD83D\uDED2",
+    "Formats_not_supported": "These files are not supported",
+    "Import_done": "Import done !",
+    "Keywords": "Keywords",
+    "Link": "Link",
+    "Licence_to_use": "Licence to use",
+    "Download": "Download",
+    "Add_to_project": "Add to project",
+    "Close": "Close"
+  },
+  "DataProcessingView": {
+    "Select_a_module_on_left": "Select a module <br /> in the left menu.",
+    "Data_processing": "Data processing",
+    "Visualize_data_on_map": "Visualize data on your maps: proportional symbols, color gradients, and more ⚙️⚙️"
+  },
+  "DataProcessingModules": {
+    "Color_gradients": "Color gradients",
+    "Geometry_count": "Geometry count",
+    "Data_tables": "Data tables",
+    "Different_symbols": "Different symbols",
+    "Proportional_symbols": "Proportional symbols",
+    "Running_scripts": "Running scripts",
+    "DataViewer": {
+      "Select_a_layer": "Select a layer to view its data.",
+      "Download_CSV": "Download in CSV format",
+      "X_entries_displayed": "<b>{{entries}}</b> entries displayed",
+      "No_data_to_display": "No data to display",
+      "You_must_select_a_layer_with_data": "You must select a layer that contains data"
+    },
+    "ColorGradients": {
+      "Color_gradients": "Color gradients",
+      "Introduction": "Introduction",
+      "Color_gradients_are_used_to_represent_relative_data": "Color gradients are used to represent relative statistical data (population density, income per inhabitant, etc.)",
+      "How_does_it_work": "How does it work ?",
+      "Select_data_source_and_data_field": "Select a data source and a value field. This field will be used to determine the colors. For example, a CSV workbook containing the French population by department and the <code>densite_pop</code> field containing the density data.",
+      "Select_geometry_layer_explanation": "Select a geometry layer. The geometries will be duplicated and filled with the calculated color.",
+      "Select_join_field_explanation": "Select a join field between the data and the geometries.",
+      "Select_parameters_explanation": "Then select the characteristics of the geometries to create.",
+      "Map_Sample": "Map sample",
+      "Select_data_source": "Select a data source",
+      "Data_source_contains_field_that_determine_colors": "The data source contains the field that will determine the colors of the geometries. The data source can be a map layer or a CSV format workbook.",
+      "Colors_from": "Colors from:",
+      "Select_geometry_layer": "Select geometry layer",
+      "Colors_applied_to_copy_of_geometries": "The colors will be applied to a copy of the geometries of the selected layer.",
+      "Select_parameters": "Processing parameters",
+      "Colors_depends_on_algorithm": "The colors will be created in a new layer. Their values will be determined by the source field used, and by the type of algorithm.",
+      "You_must_select_a_value_field": "You must choose a value field.",
+      "You_must_select_a_datasource": "You must choose a data source.",
+      "Reset": "Reset",
+      "Start_processing": "Start processing",
+      "From": "From",
+      "To": "to",
+      "End_of_processing": "End of processing",
+      "X_features_has_been_processed": "{{featuresProcessed}} geometries have been processed.",
+      "Nothing_has_been_processed": "No geometry has been processed. Processing has been misconfigured or the data is invalid.",
+      "Some_features_cannot_be_joined": "⚠️ Some geometries ({{invalidFeatures}}) do not have the <code>{{geometryJoinBy}}</code> join property. They have not been used.",
+      "Some_colors_values_are_incorrect": "⚠️ Some values of color field ({{invalidValues}}) cannot be used as numbers.",
+      "Some_geometries_does_not_have_data": "⚠️ Some geometries ({{missingDataRows}}) do not have data corresponding to their <code>{{joinBy}}</code> property.",
+      "Undefined_property": "Undefined property",
+      "Close": "Close",
+      "Processing_done": "Processing is complete",
+      "Processing_done_with_warnings": "Processing is complete, but it did not go as expected",
+      "Processing_was_interrupted_because_of_wrong_data": "Processing was interrupted because some data is incorrect",
+      "Processing_interrupted_data_must_be_greater_than_0": "Values must be greater than zero and the minimum value must be less than the maximum value",
+      "Start_color": "Start color",
+      "End_color": "End color",
+      "Number_of_classes": "Number of classes",
+      "Classes": "Classes",
+      "Calculate_classes": "Calculate classes",
+      "Name_of_new_layer": "Name of new layer",
+      "Scale_or_classification": "Scale or classification"
+    },
+    "VectorLayerSelector": {
+      "Select_a_layer": "Select a layer"
+    },
+    "AlgorithmSelector": {
+      "Choose_algorithm": "Choose an algorithm",
+      "Invalid_option": "Invalid option",
+      "Absolute_scale": "Absolute scale",
+      "Interpolated_scale": "Interpolated scale",
+      "Equal_intervals": "Equal intervals",
+      "Quantiles": "Quantiles",
+      "Natural_breaks": "Natural breaks"
+    },
+    "DataSourceForm": {
+      "Select_data_source": "Select a data source",
+      "Select_field": "Select a field",
+      "Join_geometries_with": "Join with geometries by",
+      "Data_samples": "Data samples",
+      "Use_geometry_layer": "Use a geometry layer",
+      "Use_CSV_workbook": "Use a CSV workbook",
+      "Select_file_on_computer": "Select a file on your computer. This file must",
+      "Be_in_CSV_format": "Be in CSV format: comma separator, double quotes",
+      "Have_header_row": "Have a header row with the name of the columns",
+      "Be_encoded_UTF8": "Be encoded in UTF-8",
+      "Choose_CSV_file": "Choose a CSV file",
+      "This_source_contains_a_lot_of_data": "This source contains a lot of data ({{rows}}), processing may take a long time.",
+      "Data_source_empty": "This data source is empty",
+      "X_entries_will_be_processed": "{{rows}} entries will be processed.",
+      "This_data_source_is_incorrect": "This data source is incorrect.",
+      "Error_on_line_X": "An error occurred on line {{errorAtLine}}."
+    },
+    "GeometryLayerForm": {
+      "Join_with_data_by": "Join with data by",
+      "Select_layer": "Select a layer",
+      "Select_join_field": "Select a join field",
+      "No_geometry_found": "This layer does not contain any geometry.",
+      "X_geometries_will_be_processed": "{{geometries}} geometries will be processed.",
+      "Data_samples": "Data samples",
+      "Layer": "Layer:"
+    }
+  },
+  "core": {
+    "ProjectFactory": {
+      "Project": "Project of {{date}}"
+    },
+    "LayerFactory": {
+      "OpenStreetMap": "OpenStreetMap",
+      "Stamen_Toner": "Stamen Toner",
+      "Stamen_Toner_Lite": "Stamen Toner Lite",
+      "Stamen_Terrain": "Stamen Terrain",
+      "Stamen_Watercolor": "Stamen Watercolor",
+      "Geometries": "Geometries",
+      "XYZ_layer": "XYZ layer"
+    },
+    "DataService": {
+      "Import_of": "Import n°{{n}} of {{hour}}"
+    }
   }
 }
