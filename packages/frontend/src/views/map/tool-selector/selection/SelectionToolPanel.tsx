@@ -26,7 +26,7 @@ import TipBubble from '../../../../components/tip-bubble/TipBubble';
 import { ToolTips } from '@abc-map/user-documentation';
 import PointIconSelector from '../point/icon-selector/PointIconSelector';
 import PointSizeSelector from '../point/size-selector/PointSizeSelector';
-import ButtonBar from '../_common/button-bar/ButtonBar';
+import ButtonBar, { StyleApplication } from '../_common/button-bar/ButtonBar';
 import Cls from './SelectionToolPanel.module.scss';
 import { prefixedTranslation } from '../../../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
@@ -40,7 +40,7 @@ class SelectionToolPanel extends Component<{}, {}> {
     return (
       <div className={Cls.selectionPanel}>
         <TipBubble id={ToolTips.Selection} label={t('Tool_help')} className={'mx-3 mb-3'} />
-        <ButtonBar />
+        <ButtonBar applyStyle={StyleApplication.All} />
 
         <div className={Cls.section}>{t('Points')}</div>
         <PointIconSelector />

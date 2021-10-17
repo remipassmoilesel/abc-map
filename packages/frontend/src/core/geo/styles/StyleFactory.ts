@@ -26,6 +26,7 @@ import { IconProcessor } from './IconProcessor';
 import { DefaultIcon, safeGetIcon } from '../../../assets/point-icons/PointIcon';
 import { IconName } from '../../../assets/point-icons/IconName';
 import { FeatureWrapper } from '../features/FeatureWrapper';
+import { toRadians } from '../../utils/numbers';
 
 const logger = Logger.get('StyleFactory.ts');
 
@@ -153,6 +154,9 @@ export class StyleFactory {
     const font = `${fontSize}px ${fontName}`;
     const offsetX = (text?.offsetX ?? DefaultStyle.text.offsetX) * ratio;
     const offsetY = (text?.offsetY ?? DefaultStyle.text.offsetY) * ratio;
+    const rotation = toRadians(text?.rotation ?? 0);
+    const textAlign = text?.alignment;
+
     return new Text({
       fill: new Fill({ color: text?.color || DefaultStyle.text?.color }),
       font,
@@ -160,7 +164,8 @@ export class StyleFactory {
       offsetX,
       offsetY,
       overflow: true,
-      textAlign: text?.alignment,
+      rotation,
+      textAlign,
     });
   }
 

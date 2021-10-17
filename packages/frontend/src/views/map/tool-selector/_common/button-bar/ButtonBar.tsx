@@ -20,7 +20,7 @@ import React from 'react';
 import { ServiceProps, withServices } from '../../../../../core/withServices';
 import { MainState } from '../../../../../core/store/reducer';
 import { connect, ConnectedProps } from 'react-redux';
-import { GeometryType } from '@abc-map/shared';
+import { FeatureStyle, GeometryType } from '@abc-map/shared';
 import { FeatureWrapper } from '../../../../../core/geo/features/FeatureWrapper';
 import { HistoryKey } from '../../../../../core/history/HistoryKey';
 import { AddFeaturesTask } from '../../../../../core/history/tasks/features/AddFeaturesTask';
@@ -28,6 +28,18 @@ import { RemoveFeaturesTask } from '../../../../../core/history/tasks/features/R
 import { prefixedTranslation } from '../../../../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
 import Cls from './ButtonBar.module.scss';
+
+export enum StyleApplication {
+  All = 'All',
+  Text = 'Text',
+  Point = 'Point',
+  Line = 'Line',
+  Polygon = 'Polygon',
+}
+
+interface LocalProps {
+  applyStyle: StyleApplication;
+}
 
 const mapStateToProps = (state: MainState) => ({
   stroke: state.map.currentStyle.stroke,
@@ -38,7 +50,7 @@ const mapStateToProps = (state: MainState) => ({
 
 const connector = connect(mapStateToProps);
 
-type Props = ConnectedProps<typeof connector> & ServiceProps;
+type Props = LocalProps & ConnectedProps<typeof connector> & ServiceProps;
 
 const t = prefixedTranslation('MapView:ToolSelector.');
 
@@ -95,6 +107,14 @@ class ButtonBar extends React.Component<Props, {}> {
     const fillColor1 = this.props.fill?.color1;
     const fillColor2 = this.props.fill?.color2;
     const fillPattern = this.props.fill?.pattern;
+    const text = this.props.text;
+
+    const applyStyle = this.props.applyStyle;
+    const applyAll = applyStyle === StyleApplication.All;
+    const applyText = applyAll || applyStyle === StyleApplication.Text;
+    const applyPoint = applyAll || applyStyle === StyleApplication.Point;
+    const applyLine = applyAll || applyStyle === StyleApplication.Line;
+    const applyPolygon = applyAll || applyStyle === StyleApplication.Polygon;
 
     const changes = geo.updateSelectedFeatures((style, feature) => {
       const type = feature.getGeometry()?.getType();
@@ -102,9 +122,16 @@ class ButtonBar extends React.Component<Props, {}> {
         return;
       }
 
-      if ([GeometryType.POINT, GeometryType.MULTI_POINT].includes(type)) {
-        return {
+      let newStyle: FeatureStyle | undefined;
+      if (applyText) {
+        newStyle = { ...style, text: { ...style.text, ...text } };
+      }
+
+      // Point
+      if (applyPoint && [GeometryType.POINT, GeometryType.MULTI_POINT].includes(type)) {
+        newStyle = {
           ...style,
+          ...newStyle,
           point: {
             ...style.point,
             icon,
@@ -113,10 +140,12 @@ class ButtonBar extends React.Component<Props, {}> {
           },
         };
       }
+
       // Lines
-      else if ([GeometryType.LINE_STRING, GeometryType.MULTI_LINE_STRING].includes(type)) {
-        return {
+      if (applyLine && [GeometryType.LINE_STRING, GeometryType.MULTI_LINE_STRING].includes(type)) {
+        newStyle = {
           ...style,
+          ...newStyle,
           stroke: {
             ...style.stroke,
             color: strokeColor,
@@ -124,10 +153,12 @@ class ButtonBar extends React.Component<Props, {}> {
           },
         };
       }
+
       // Polygons
-      else if ([GeometryType.POLYGON, GeometryType.MULTI_POLYGON].includes(type)) {
-        return {
+      if (applyPolygon && [GeometryType.POLYGON, GeometryType.MULTI_POLYGON].includes(type)) {
+        newStyle = {
           ...style,
+          ...newStyle,
           stroke: {
             ...style.stroke,
             color: strokeColor,
@@ -141,6 +172,8 @@ class ButtonBar extends React.Component<Props, {}> {
           },
         };
       }
+
+      return newStyle;
     });
 
     if (!changes) {

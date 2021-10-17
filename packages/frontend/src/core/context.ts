@@ -16,7 +16,9 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-.abc-text-panel {
-  display: flex;
-  flex-direction: column;
-}
+import * as React from 'react';
+import { Services } from './Services';
+
+export const ServiceContext = React.createContext<Services | false>(false);
+
+export const ServiceProvider = ServiceContext.Provider;

@@ -16,11 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-.select {
-  width: 4rem !important;
-}
-
-.input {
-  margin-left: 0.3rem;
-  width: 5rem !important;
+.textPanel {
+  display: flex;
+  flex-direction: column;
 }

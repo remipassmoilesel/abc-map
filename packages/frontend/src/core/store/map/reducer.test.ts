@@ -20,26 +20,26 @@ import { mapInitialState, MapState } from './state';
 import { MapTool } from '@abc-map/shared';
 import { MapActions } from './actions';
 import { mapReducer } from './reducer';
-
-// TODO: use deepFreeze() instead of stringify()
+import { deepFreeze } from '../../utils/deepFreeze';
 
 describe('Map reducer', function () {
   it('SetTool', function () {
-    const initial: MapState = {
+    // Prepare
+    const initial: MapState = deepFreeze({
       ...mapInitialState,
       tool: MapTool.LineString,
-    };
-    const snapshot = JSON.stringify(initial);
+    });
 
-    const action = MapActions.setTool(MapTool.LineString);
-    const state = mapReducer(initial, action);
+    // Act
+    const state = mapReducer(initial, MapActions.setTool(MapTool.Point));
 
-    expect(JSON.stringify(initial)).toEqual(snapshot);
-    expect(state.tool).toEqual(MapTool.LineString);
+    // Assert
+    expect(state.tool).toEqual(MapTool.Point);
   });
 
   it('SetFillColor', function () {
-    const initial: MapState = {
+    // Prepare
+    const initial: MapState = deepFreeze({
       ...mapInitialState,
       currentStyle: {
         ...mapInitialState.currentStyle,
@@ -48,18 +48,18 @@ describe('Map reducer', function () {
           color1: '#000',
         },
       },
-    };
-    const snapshot = JSON.stringify(initial);
+    });
 
-    const action = MapActions.setFillColor1('#111');
-    const state = mapReducer(initial, action);
+    // Act
+    const state = mapReducer(initial, MapActions.setFillColor1('#111'));
 
-    expect(JSON.stringify(initial)).toEqual(snapshot);
+    // Assert
     expect(state.currentStyle.fill?.color1).toEqual('#111');
   });
 
   it('SetStrokeColor', function () {
-    const initial: MapState = {
+    // Prepare
+    const initial: MapState = deepFreeze({
       ...mapInitialState,
       currentStyle: {
         ...mapInitialState.currentStyle,
@@ -68,18 +68,18 @@ describe('Map reducer', function () {
           color: '#000',
         },
       },
-    };
-    const snapshot = JSON.stringify(initial);
+    });
 
-    const action = MapActions.setStrokeColor('#111');
-    const state = mapReducer(initial, action);
+    // Act
+    const state = mapReducer(initial, MapActions.setStrokeColor('#111'));
 
-    expect(JSON.stringify(initial)).toEqual(snapshot);
+    // Assert
     expect(state.currentStyle.stroke?.color).toEqual('#111');
   });
 
   it('SetStrokeWidth', function () {
-    const initialState: MapState = {
+    // Prepare
+    const initial: MapState = deepFreeze({
       ...mapInitialState,
       currentStyle: {
         ...mapInitialState.currentStyle,
@@ -88,13 +88,72 @@ describe('Map reducer', function () {
           width: 5,
         },
       },
-    };
-    const snapshot = JSON.stringify(initialState);
+    });
 
-    const action = MapActions.setStrokeWidth(10);
-    const state = mapReducer(initialState, action);
+    // Act
+    const state = mapReducer(initial, MapActions.setStrokeWidth(10));
 
-    expect(JSON.stringify(initialState)).toEqual(snapshot);
+    // Assert
     expect(state.currentStyle.stroke?.width).toEqual(10);
+  });
+
+  it('SetTextOffsetX', function () {
+    // Prepare
+    const initial: MapState = deepFreeze({
+      ...mapInitialState,
+      currentStyle: {
+        ...mapInitialState.currentStyle,
+        text: {
+          ...mapInitialState.currentStyle.text,
+          offsetX: 5,
+        },
+      },
+    });
+
+    // Act
+    const state = mapReducer(initial, MapActions.setTextOffsetX(10));
+
+    // Assert
+    expect(state.currentStyle.text?.offsetX).toEqual(10);
+  });
+
+  it('SetTextOffsetY', function () {
+    // Prepare
+    const initial: MapState = deepFreeze({
+      ...mapInitialState,
+      currentStyle: {
+        ...mapInitialState.currentStyle,
+        text: {
+          ...mapInitialState.currentStyle.text,
+          offsetY: 5,
+        },
+      },
+    });
+
+    // Act
+    const state = mapReducer(initial, MapActions.setTextOffsetY(10));
+
+    // Assert
+    expect(state.currentStyle.text?.offsetY).toEqual(10);
+  });
+
+  it('SetTextRotation', function () {
+    // Prepare
+    const initial: MapState = deepFreeze({
+      ...mapInitialState,
+      currentStyle: {
+        ...mapInitialState.currentStyle,
+        text: {
+          ...mapInitialState.currentStyle.text,
+          rotation: 5,
+        },
+      },
+    });
+
+    // Act
+    const state = mapReducer(initial, MapActions.setTextRotation(10));
+
+    // Assert
+    expect(state.currentStyle.text?.rotation).toEqual(10);
   });
 });

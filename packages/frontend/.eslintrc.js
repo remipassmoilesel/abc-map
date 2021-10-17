@@ -4,6 +4,7 @@ module.exports = {
     "plugin:@typescript-eslint/recommended",
     "react-app",
     "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
     "plugin:prettier/recommended",
     "prettier"
   ],
@@ -46,7 +47,7 @@ module.exports = {
       }
     ],
     "prefer-promise-reject-errors": "error",
-    "max-len": ["error", { "code": 160 }],
+    "max-len": ["error", {"code": 160}],
     "@typescript-eslint/ban-types": 0,
     "@typescript-eslint/explicit-module-boundary-types": 0,
     "no-unused-vars": "off",
@@ -56,7 +57,8 @@ module.exports = {
         "varsIgnorePattern": "logger"
       }
     ],
-    "@typescript-eslint/no-floating-promises": ["error"]
+    "@typescript-eslint/no-floating-promises": ["error"],
+    "react-hooks/exhaustive-deps": "error"
   },
   "settings": {
     "react": {

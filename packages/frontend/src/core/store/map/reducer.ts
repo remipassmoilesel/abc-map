@@ -83,6 +83,30 @@ export function mapReducer(state = mapInitialState, action: MapAction): MapState
       return newState;
     }
 
+    case ActionType.SetTextOffsetX: {
+      const newState: MapState = { ...state };
+      newState.currentStyle = { ...newState.currentStyle };
+      newState.currentStyle.text = { ...newState.currentStyle.text };
+      newState.currentStyle.text.offsetX = action.value;
+      return newState;
+    }
+
+    case ActionType.SetTextOffsetY: {
+      const newState: MapState = { ...state };
+      newState.currentStyle = { ...newState.currentStyle };
+      newState.currentStyle.text = { ...newState.currentStyle.text };
+      newState.currentStyle.text.offsetY = action.value;
+      return newState;
+    }
+
+    case ActionType.SetTextRotation: {
+      const newState: MapState = { ...state };
+      newState.currentStyle = { ...newState.currentStyle };
+      newState.currentStyle.text = { ...newState.currentStyle.text };
+      newState.currentStyle.text.rotation = action.value;
+      return newState;
+    }
+
     case ActionType.SetTextSize: {
       const newState: MapState = { ...state };
       newState.currentStyle = { ...newState.currentStyle };

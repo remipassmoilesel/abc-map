@@ -16,28 +16,28 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { Component, ReactNode } from 'react';
+import React from 'react';
 import { Logger } from '@abc-map/shared';
 import TextFormat from '../_common/text-format/TextFormat';
 import TipBubble from '../../../../components/tip-bubble/TipBubble';
 import { ToolTips } from '@abc-map/user-documentation';
-import './TextToolPanel.scss';
 import { withTranslation } from 'react-i18next';
 import { prefixedTranslation } from '../../../../i18n/i18n';
+import ButtonBar, { StyleApplication } from '../_common/button-bar/ButtonBar';
+import Cls from './TextToolPanel.module.scss';
 
 const logger = Logger.get('TextToolPanel.tsx');
 
 const t = prefixedTranslation('MapView:ToolSelector.');
 
-class TextToolPanel extends Component<{}, {}> {
-  public render(): ReactNode {
-    return (
-      <div className={'abc-text-panel'}>
-        <TipBubble id={ToolTips.Text} label={t('Tool_help')} className={'mx-3 mb-3'} />
-        <TextFormat />
-      </div>
-    );
-  }
+function TextToolPanel() {
+  return (
+    <div className={Cls.textPanel}>
+      <TipBubble id={ToolTips.Text} label={t('Tool_help')} className={'mx-3 mb-3'} />
+      <ButtonBar applyStyle={StyleApplication.Text} />
+      <TextFormat />
+    </div>
+  );
 }
 
 export default withTranslation()(TextToolPanel);

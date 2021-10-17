@@ -35,6 +35,8 @@ import { defaultInteractions } from '../../geo/map/interactions';
 const logger = Logger.get('TextTool.ts');
 
 export class TextTool extends AbstractTool {
+  private previousFeature: FeatureWrapper | undefined;
+
   public getId(): MapTool {
     return MapTool.Text;
   }
@@ -59,25 +61,31 @@ export class TextTool extends AbstractTool {
     text.on(TextEvent.Start, (ev: TextStart) => {
       const feature = FeatureWrapper.from(ev.feature);
 
+      // Select feature
+      this.previousFeature?.setSelected(false);
+      feature.setSelected(true);
+
+      // Apply style
+      const currentStyle = this.store.getState().map.currentStyle;
       const style = feature.getStyleProperties();
       style.text = {
         ...style.text,
-        color: this.store.getState().map.currentStyle.text?.color,
-        size: this.store.getState().map.currentStyle.text?.size,
+        color: currentStyle.text?.color,
+        size: currentStyle.text?.size,
+        offsetX: currentStyle.text?.offsetX,
+        offsetY: currentStyle.text?.offsetY,
+        rotation: currentStyle.text?.rotation,
       };
 
       if (feature.getGeometry()?.getType() === GeometryType.POINT) {
-        style.text.offsetX = 20;
-        style.text.offsetY = 20;
         style.text.alignment = 'left';
       } else {
-        style.text.offsetX = 0;
-        style.text.offsetY = 0;
         style.text.alignment = 'center';
       }
 
       feature.setStyleProperties(style);
       before = style;
+      this.previousFeature = feature;
     });
 
     text.on(TextEvent.Changed, (ev: TextChanged) => {
@@ -99,5 +107,10 @@ export class TextTool extends AbstractTool {
 
     map.addInteraction(text);
     this.interactions.push(text);
+  }
+
+  public dispose() {
+    super.dispose();
+    this.previousFeature?.setSelected(false);
   }
 }

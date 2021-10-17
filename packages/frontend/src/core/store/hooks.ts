@@ -16,11 +16,11 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-.select {
-  width: 4rem !important;
-}
+import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
+import { MainState } from './reducer';
+import { mainStore } from './store';
 
-.input {
-  margin-left: 0.3rem;
-  width: 5rem !important;
-}
+export type AppDispatch = typeof mainStore.dispatch;
+
+export const useAppDispatch = () => useDispatch<AppDispatch>();
+export const useAppSelector: TypedUseSelectorHook<MainState> = useSelector;

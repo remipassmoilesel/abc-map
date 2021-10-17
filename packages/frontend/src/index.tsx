@@ -28,10 +28,10 @@ import { mainStore } from './core/store/store';
 import { AxiosError } from 'axios';
 import { HttpError } from './core/http/HttpError';
 import { BUILD_INFO } from './build-version';
-import { ServiceProvider } from './core/withServices';
 import { Provider } from 'react-redux';
 import ErrorBoundary from './views/error-boundary/ErrorBoundary';
 import { BrowserRouter } from 'react-router-dom';
+import { ServiceProvider } from './core/context';
 
 // Load main style
 import './index.scss';

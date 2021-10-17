@@ -2,7 +2,13 @@
 
 Presently there are no versions, because it is not yet necessary. 
 
-## First translation  (XXXXX 17/10/2020)
+
+## Better text position (XXXX  17/10/2020)
+
+Better management of text position, configurable offset and rotation.
+
+
+## First translation  (c422df0f 17/10/2020)
 
 - First translation in English
 

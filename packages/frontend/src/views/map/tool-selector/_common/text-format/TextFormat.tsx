@@ -16,89 +16,155 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { ChangeEvent, Component, ReactNode } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
-import { MainState } from '../../../../../core/store/reducer';
+import React, { ChangeEvent } from 'react';
 import { MapActions } from '../../../../../core/store/map/actions';
 import ColorPicker from '../../../../../components/color-picker/ColorPicker';
 import * as _ from 'lodash';
-import { ServiceProps, withServices } from '../../../../../core/withServices';
 import OptionRow from '../option-row/OptionRow';
 import { prefixedTranslation } from '../../../../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
+import { useAppDispatch, useAppSelector } from '../../../../../core/store/hooks';
+import { useServices } from '../../../../../core/hooks';
 import Cls from './TextFormat.module.scss';
-
-const mapStateToProps = (state: MainState) => ({
-  color: state.map.currentStyle.text?.color,
-  size: state.map.currentStyle.text?.size,
-});
-
-const mapDispatchToProps = {
-  setColor: MapActions.setTextColor,
-  setSize: MapActions.setTextSize,
-};
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-type Props = ConnectedProps<typeof connector> & ServiceProps;
 
 const t = prefixedTranslation('MapView:ToolSelector.');
 
-class TextFormat extends Component<Props, {}> {
-  public render(): ReactNode {
-    return (
-      <>
-        {/* Color */}
-        <OptionRow>
-          <div>{t('Color')}:</div>
-          <ColorPicker initialValue={this.props.color} onClose={this.handleColorSelected} />
-        </OptionRow>
+function TextFormat() {
+  const { geo } = useServices();
 
-        {/* Size */}
-        <OptionRow>
-          <div>{t('Size')}:</div>
-          <select onChange={this.handleSizeChange} value={this.props.size} className={`form-control form-control-sm ${Cls.select}`}>
-            {_.range(5, 51).map((val) => (
-              <option key={val} value={val}>
-                {val}
-              </option>
-            ))}
-          </select>
-        </OptionRow>
-      </>
-    );
-  }
+  const color = useAppSelector((st) => st.map.currentStyle.text.color);
+  const size = useAppSelector((st) => st.map.currentStyle.text.size);
+  const offsetX = useAppSelector((st) => st.map.currentStyle.text.offsetX);
+  const offsetY = useAppSelector((st) => st.map.currentStyle.text.offsetY);
+  const rotation = useAppSelector((st) => st.map.currentStyle.text.rotation);
 
-  private handleColorSelected = (color: string): void => {
-    const { geo } = this.props.services;
+  const dispatch = useAppDispatch();
 
-    this.props.setColor(color);
-    geo.updateSelectedFeatures((style) => {
-      return {
-        ...style,
-        text: {
-          ...style.text,
-          color,
-        },
-      };
-    });
+  const handleColorSelected = (color: string): void => {
+    dispatch(MapActions.setTextColor(color));
+
+    geo.updateSelectedFeatures((style) => ({
+      ...style,
+      text: { ...style.text, color },
+    }));
   };
 
-  private handleSizeChange = (ev: ChangeEvent<HTMLSelectElement>): void => {
-    const { geo } = this.props.services;
-
+  const handleSizeChange = (ev: ChangeEvent<HTMLSelectElement>): void => {
     const size = parseInt(ev.target.value);
-    this.props.setSize(size);
-    geo.updateSelectedFeatures((style) => {
-      return {
-        ...style,
-        text: {
-          ...style.text,
-          size,
-        },
-      };
-    });
+    if (isNaN(size)) {
+      return;
+    }
+
+    dispatch(MapActions.setTextSize(size));
+
+    geo.updateSelectedFeatures((style) => ({
+      ...style,
+      text: { ...style.text, size },
+    }));
   };
+
+  const handleOffsetXChange = (ev: ChangeEvent<HTMLInputElement>) => {
+    const value = parseInt(ev.target.value);
+    if (isNaN(value)) {
+      return;
+    }
+
+    dispatch(MapActions.setTextOffsetX(value));
+
+    geo.updateSelectedFeatures((style) => ({
+      ...style,
+      text: { ...style.text, offsetX: value },
+    }));
+  };
+
+  const handleOffsetYChange = (ev: ChangeEvent<HTMLInputElement>) => {
+    const value = parseInt(ev.target.value);
+    if (isNaN(value)) {
+      return;
+    }
+
+    dispatch(MapActions.setTextOffsetY(value));
+
+    geo.updateSelectedFeatures((style) => ({
+      ...style,
+      text: { ...style.text, offsetY: value },
+    }));
+  };
+
+  const handleRotationChange = (ev: ChangeEvent<HTMLInputElement>) => {
+    const value = parseInt(ev.target.value);
+    if (isNaN(value)) {
+      return;
+    }
+
+    dispatch(MapActions.setTextRotation(value));
+
+    geo.updateSelectedFeatures((style) => ({
+      ...style,
+      text: { ...style.text, rotation: value },
+    }));
+  };
+
+  return (
+    <>
+      {/* Color */}
+      <OptionRow>
+        <div>{t('Color')}:</div>
+        <ColorPicker initialValue={color} onClose={handleColorSelected} />
+      </OptionRow>
+
+      {/* Size */}
+      <OptionRow>
+        <div>{t('Size')}:</div>
+        <select onChange={handleSizeChange} value={size} className={`form-control form-control-sm ${Cls.select}`} data-testid={'text-size'}>
+          {_.range(5, 51).map((val) => (
+            <option key={val} value={val}>
+              {val}
+            </option>
+          ))}
+        </select>
+      </OptionRow>
+
+      {/* Offset X and Y */}
+      <div className={'d-flex flex-column'}>
+        <div className={'mb-2'}>{t('Position')}:</div>
+        <div className={'d-flex justify-content-end align-items-center mb-2'}>
+          <div className={'mr-2'}>x</div>
+          <input
+            type={'number'}
+            value={offsetX}
+            onInput={handleOffsetXChange}
+            min={0}
+            className={`form-control form-control-sm ${Cls.input}`}
+            data-testid={'text-offsetX'}
+          />
+
+          <div className={'mx-2'}>y</div>
+          <input
+            type={'number'}
+            value={offsetY}
+            onInput={handleOffsetYChange}
+            min={0}
+            className={`form-control form-control-sm ${Cls.input}`}
+            data-testid={'text-offsetY'}
+          />
+        </div>
+      </div>
+
+      {/* Rotation */}
+      <OptionRow>
+        <div>{t('Rotation')}:</div>
+        <input
+          type={'number'}
+          value={rotation}
+          onInput={handleRotationChange}
+          min={0}
+          className={`form-control form-control-sm ${Cls.input}`}
+          data-testid={'text-rotation'}
+        />
+      </OptionRow>
+    </>
+  );
 }
 
-export default withTranslation()(connector(withServices(TextFormat)));
+export default withTranslation()(TextFormat);
