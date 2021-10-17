@@ -21,6 +21,9 @@ import { FrontendRoutes, LayoutFormat, LayoutFormats, LegendDisplay, Logger } fr
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { ExportFormat } from '../ExportFormat';
 import { LabeledLegendDisplays } from './LabeledLegendDisplay';
+import { prefixedTranslation } from '../../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
+import { LabeledLayoutFormats } from './LabeledLayoutFormats';
 
 const logger = Logger.get('LayoutControls.tsx', 'warn');
 
@@ -36,6 +39,8 @@ interface Props extends RouteComponentProps {
   onExport: (f: ExportFormat) => void;
 }
 
+const t = prefixedTranslation('LayoutView:');
+
 class LayoutControls extends Component<Props, {}> {
   public render(): ReactNode {
     const format = this.props.format;
@@ -46,15 +51,15 @@ class LayoutControls extends Component<Props, {}> {
     const handleClearAll = this.props.onClearAll;
     const handleExport = this.props.onExport;
 
-    const formatOptions = LayoutFormats.All.map((fmt) => (
-      <option key={fmt.name} value={fmt.name}>
-        {fmt.name}
+    const formatOptions = LabeledLayoutFormats.All.map((fmt) => (
+      <option key={fmt.format.id} value={fmt.format.id}>
+        {t(fmt.i18nLabel)}
       </option>
     ));
 
     const legendOptions = LabeledLegendDisplays.All.map((opt) => (
       <option key={opt.value} value={opt.value}>
-        {opt.label}
+        {t(opt.i18nLabel)}
       </option>
     ));
 
@@ -63,25 +68,25 @@ class LayoutControls extends Component<Props, {}> {
         <div className={'control-block'}>
           <button onClick={handleNewLayout} className={'btn btn-outline-primary mb-3'} data-cy={'new-layout'}>
             <i className={'fa fa-plus mr-2'} />
-            Nouvelle page
+            {t('New_layout')}
           </button>
 
-          <div className={'mb-2'}>Format:</div>
-          <select onChange={this.handleFormatChanged} value={format?.name} className={'form-control'} data-cy={'format-select'}>
+          <div className={'mb-2'}>{t('Format')}:</div>
+          <select onChange={this.handleFormatChanged} value={format?.id} className={'form-control'} data-cy={'format-select'}>
             <option>...</option>
             {formatOptions}
           </select>
         </div>
 
         <div className={'control-block'}>
-          <div className={'mb-2'}>Légende:</div>
+          <div className={'mb-2'}>{t('Legend')}:</div>
           <select onChange={this.handleLegendDisplayChanged} value={legendDisplay} className={'form-control mb-3'} data-cy={'legend-select'}>
             <option>...</option>
             {legendOptions}
           </select>
           <button onClick={this.handleEditLegend} className={'btn btn-outline-secondary'} data-cy={'edit-legend'}>
             <i className={'fa fa-pen mr-2'} />
-            Editer la légende
+            {t('Edit_legend')}
           </button>
         </div>
 
@@ -89,19 +94,19 @@ class LayoutControls extends Component<Props, {}> {
           <div className={'control-item'}>
             <button onClick={handleLayoutUp} className={'btn btn-link'} data-cy={'layout-up'}>
               <i className={'fa fa-arrow-up mr-2'} />
-              Monter
+              {t('Move_up')}
             </button>
           </div>
           <div className={'control-item'}>
             <button onClick={handleLayoutDown} className={'btn btn-link'} data-cy={'layout-down'}>
               <i className={'fa fa-arrow-down mr-2'} />
-              Descendre
+              {t('Move_Down')}
             </button>
           </div>
           <div className={'control-item'}>
             <button onClick={handleClearAll} className={'btn btn-link'} data-cy={'clear-all'}>
               <i className={'fa fa-trash-alt mr-2'} />
-              Supprimer tout
+              {t('Delete_all')}
             </button>
           </div>
         </div>
@@ -110,13 +115,13 @@ class LayoutControls extends Component<Props, {}> {
           <div className={'control-item'}>
             <button onClick={() => handleExport(ExportFormat.PDF)} className={'btn btn-link'} data-cy={'pdf-export'}>
               <i className={'fa fa-download mr-2'} />
-              Export PDF
+              {t('PDF_export')}
             </button>
           </div>
           <div className={'control-item'}>
             <button onClick={() => handleExport(ExportFormat.PNG)} className={'btn btn-link'} data-cy={'png-export'}>
               <i className={'fa fa-download mr-2'} />
-              Export PNG
+              {t('PNG_export')}
             </button>
           </div>
         </div>
@@ -130,7 +135,7 @@ class LayoutControls extends Component<Props, {}> {
 
   private handleFormatChanged = (ev: ChangeEvent<HTMLSelectElement>) => {
     const value = ev.target.value;
-    const format = LayoutFormats.All.find((fmt) => fmt.name === value);
+    const format = LayoutFormats.All.find((fmt) => fmt.id === value);
     if (!format) {
       logger.error(`Format not found: ${value}`);
       return;
@@ -151,4 +156,4 @@ class LayoutControls extends Component<Props, {}> {
   };
 }
 
-export default withRouter(LayoutControls);
+export default withTranslation()(withRouter(LayoutControls));

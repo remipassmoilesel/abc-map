@@ -18,12 +18,16 @@
 
 import React, { Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/shared';
+import { prefixedTranslation } from '../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
 
 const logger = Logger.get('RegistrationDone.tsx');
 
 interface Props {
   onConfirm: () => void;
 }
+
+const t = prefixedTranslation('RegistrationModal:');
 
 class RegistrationDone extends Component<Props> {
   public render(): ReactNode {
@@ -34,10 +38,10 @@ class RegistrationDone extends Component<Props> {
         {/* Intro */}
 
         <div className={'mb-3'}>
-          <b>Plus qu&apos;une étape 🙌</b>
+          <b>{t('One_more_step')}</b>
         </div>
-        <p className={'mb-3'}>Un email vous a été envoyé, il contient un lien pour activer votre compte.</p>
-        <p className={'mb-3'}>Pensez à vérifier vos spam 📧 !</p>
+        <p className={'mb-3'}>{t('Check_email_then_click_confirmation')}</p>
+        <p className={'mb-3'}>{t('Check_your_spam')} 📧 !</p>
 
         {/* Confirmation button */}
 
@@ -49,7 +53,7 @@ class RegistrationDone extends Component<Props> {
             onClick={handleConfirm}
             className={'btn btn-primary ml-2'}
           >
-            Ok !
+            {t('Ok')} !
           </button>
         </div>
       </>
@@ -57,4 +61,4 @@ class RegistrationDone extends Component<Props> {
   }
 }
 
-export default RegistrationDone;
+export default withTranslation()(RegistrationDone);

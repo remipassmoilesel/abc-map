@@ -25,6 +25,7 @@ import { ProportionalSymbolsTips } from '@abc-map/user-documentation';
 import PointIconPicker from '../../../../components/icon-picker/PointIconPicker';
 import ColorPicker from '../../../../components/color-picker/ColorPicker';
 import { IconName } from '../../../../assets/point-icons/IconName';
+import { prefixedTranslation } from '../../../../i18n/i18n';
 
 const logger = Logger.get('SymbolConfigForm.tsx');
 
@@ -44,6 +45,8 @@ interface Props {
 
 const algorithms = Object.values(ScaleAlgorithm);
 
+const t = prefixedTranslation('DataProcessingModules:ProportionalSymbols.');
+
 class SymbolConfigForm extends Component<Props, {}> {
   public render(): ReactNode {
     const values = this.props.values;
@@ -52,42 +55,42 @@ class SymbolConfigForm extends Component<Props, {}> {
       <>
         <FormLine>
           <label htmlFor="layer-name" className={'flex-grow-1'}>
-            Nom de la nouvelle couche:
+            {t('Name_of_new_layer')}:
           </label>
           <input type={'text'} className={'form-control'} id={'layer-name'} value={values?.layerName} onChange={this.handleLayerNameChange} />
         </FormLine>
 
         <FormLine>
           <label htmlFor="symbol" className={'flex-grow-1'}>
-            Type de symbole:
+            {t('Symbol_type')}:
           </label>
           <PointIconPicker value={values.type} onChange={this.handleTypeChange} />
         </FormLine>
 
         <FormLine>
           <label htmlFor="symbol" className={'flex-grow-1'}>
-            Couleur:
+            {t('Color')}:
           </label>
           <ColorPicker initialValue={values.color} onClose={this.handleColorChange} />
         </FormLine>
 
         <FormLine>
           <label htmlFor="min-size" className={'flex-grow-1'}>
-            Taille minimale:
+            {t('Minimal_size')}:
           </label>
           <input type={'number'} value={values?.sizeMin} onChange={this.handleSizeMinChange} min={1} className={'form-control'} id={'min-size'} />
         </FormLine>
 
         <FormLine>
           <label htmlFor="max-size" className={'flex-grow-1'}>
-            Taille maximale:
+            {t('Maximal_size')}:
           </label>
           <input type={'number'} value={values?.sizeMax} onChange={this.handleSizeMaxChange} min={1} className={'form-control'} id={'max-size'} />
         </FormLine>
 
         <FormLine>
           <AlgorithmSelector
-            label={'Echelle des symboles:'}
+            label={t('Symbol_scale')}
             value={values.algorithm}
             tip={ProportionalSymbolsTips.Algorithm}
             only={algorithms}

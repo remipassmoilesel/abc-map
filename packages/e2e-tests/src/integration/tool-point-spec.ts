@@ -23,7 +23,7 @@ import { ToolSelector } from '../helpers/ToolSelector';
 import { Draw } from '../helpers/Draw';
 import { MainMap } from '../helpers/MainMap';
 
-const Icon0CircleFill = 'twbs/0_circle-fill.inline.svg';
+const IconName = 'twbs/geo-alt-fill.inline.svg';
 
 describe('Tool Point', function () {
   beforeEach(() => {
@@ -43,15 +43,15 @@ describe('Tool Point', function () {
         expect(features).length(2);
         expect(features[0].getGeometry()?.getType()).equal('Point');
         expect(features[0].getGeometry()?.getExtent()).deep.equals([-1118865.2444950186, 4048111.897809295, -1118865.2444950186, 4048111.897809295]);
-        expect(features[0].get(StyleProperties.PointSize)).equal(15);
+        expect(features[0].get(StyleProperties.PointSize)).equal(30);
         expect(features[0].get(StyleProperties.PointColor)).equal('#FF5733');
-        expect(features[0].get(StyleProperties.PointIcon)).equal(Icon0CircleFill);
+        expect(features[0].get(StyleProperties.PointIcon)).equal(IconName);
 
         expect(features[1].getGeometry()?.getType()).equal('Point');
         expect(features[1].getGeometry()?.getExtent()).deep.equals([-629668.2634698907, 3558914.916784167, -629668.2634698907, 3558914.916784167]);
-        expect(features[0].get(StyleProperties.PointSize)).equal(15);
+        expect(features[0].get(StyleProperties.PointSize)).equal(30);
         expect(features[0].get(StyleProperties.PointColor)).equal('#FF5733');
-        expect(features[0].get(StyleProperties.PointIcon)).equal(Icon0CircleFill);
+        expect(features[0].get(StyleProperties.PointIcon)).equal(IconName);
       });
   });
 
@@ -62,9 +62,9 @@ describe('Tool Point', function () {
       // Create point
       .then(() => Draw.click(100, 100))
       // Select it
-      .then(() => Draw.click(100, 100, { ctrlKey: true }))
+      .then(() => Draw.click(100, 105, { ctrlKey: true }))
       // Modify it
-      .then(() => Draw.drag(100, 100, 600, 600))
+      .then(() => Draw.drag(100, 105, 600, 600))
       .then(() => MainMap.getReference())
       .should((map) => {
         const features = map.getActiveLayerFeatures();

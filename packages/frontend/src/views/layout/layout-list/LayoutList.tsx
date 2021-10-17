@@ -21,6 +21,8 @@ import { Logger } from '@abc-map/shared';
 import { AbcLayout } from '@abc-map/shared';
 import Cls from './LayoutList.module.scss';
 import LayoutListItem from './LayoutListItem';
+import { prefixedTranslation } from '../../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
 
 const logger = Logger.get('LayoutList.tsx', 'warn');
 
@@ -30,6 +32,8 @@ interface Props {
   onSelected: (lay: AbcLayout) => void;
   onDeleted: (lay: AbcLayout) => void;
 }
+
+const t = prefixedTranslation('LayoutView:');
 
 class LayoutList extends Component<Props, {}> {
   public render(): ReactNode {
@@ -42,11 +46,11 @@ class LayoutList extends Component<Props, {}> {
 
     return (
       <div className={Cls.layoutList} data-cy={'layout-list'}>
-        <div className={'m-4 font-weight-bold'}>Pages</div>
+        <div className={'m-4 font-weight-bold'}>{t('Layouts')}</div>
         {items}
         {!items.length && (
           <div className={'m-4'} data-cy={'no-layout'}>
-            La liste des pages est affichée ici.
+            {t('List_of_layouts_displayed_here')}
           </div>
         )}
       </div>
@@ -54,4 +58,4 @@ class LayoutList extends Component<Props, {}> {
   }
 }
 
-export default LayoutList;
+export default withTranslation()(LayoutList);

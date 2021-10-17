@@ -24,6 +24,6 @@ export class Toasts {
   }
 
   public static dismiss(): Cypress.Chainable<any> {
-    return cy.get('.abc-toast').click();
+    return cy.get('.abc-toast').click({ multiple: true });
   }
 }

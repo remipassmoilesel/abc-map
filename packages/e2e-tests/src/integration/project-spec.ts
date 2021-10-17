@@ -74,7 +74,7 @@ describe('Project', function () {
       cy.visit(FrontendRoutes.map().raw())
         .get('[data-cy=export-project]')
         .click()
-        .then(() => Toasts.assertText('Export terminé !'))
+        .then(() => Toasts.assertText('Export done !'))
         .then(() => Download.fileAsBlob())
         .should(async (downloaded) => {
           const helper = ProjectHelper.forFrontend();
@@ -189,14 +189,14 @@ describe('Project', function () {
     });
 
     afterEach(() => {
-      Authentication.logout();
+      return Authentication.logout();
     });
 
     it('can store project online without credentials', function () {
       cy.visit(FrontendRoutes.map().raw())
         .get('[data-cy=save-project]')
         .click()
-        .then(() => Toasts.assertText('Projet enregistré !'))
+        .then(() => Toasts.assertText('Project saved !'))
         .get('[data-cy=close-solicitation-modal]')
         .click();
     });
@@ -215,7 +215,7 @@ describe('Project', function () {
         .type(PROJECT_PASSWORD)
         .get('[data-cy=password-confirm]')
         .click()
-        .then(() => Toasts.assertText('Projet enregistré !'))
+        .then(() => Toasts.assertText('Project saved !'))
         .get('[data-cy=close-solicitation-modal]')
         .click();
     });
@@ -225,7 +225,7 @@ describe('Project', function () {
         // Create a project and store it online
         .get('[data-cy=save-project]')
         .click()
-        .then(() => Toasts.assertText('Projet enregistré !'))
+        .then(() => Toasts.assertText('Project saved !'))
         .get('[data-cy=close-solicitation-modal]')
         .click()
         // Clean map
@@ -264,7 +264,7 @@ describe('Project', function () {
         .type(PROJECT_PASSWORD)
         .get('[data-cy=password-confirm]')
         .click()
-        .then(() => Toasts.assertText('Projet enregistré !'))
+        .then(() => Toasts.assertText('Project saved !'))
         .get('[data-cy=close-solicitation-modal]')
         .click()
         // Clean map
@@ -308,7 +308,7 @@ describe('Project', function () {
         // Save project
         .get('[data-cy=save-project]')
         .click()
-        .then(() => Toasts.assertText('Projet enregistré !'))
+        .then(() => Toasts.assertText('Project saved !'))
         .get('[data-cy=close-solicitation-modal]')
         .click()
         // Delete it
@@ -318,7 +318,7 @@ describe('Project', function () {
         .click()
         .get('[data-cy=confirm-deletion]')
         .click()
-        .then(() => Toasts.assertText('Project supprimé !'))
+        .then(() => Toasts.assertText('Project deleted !'))
         .get('[data-cy=remote-project]')
         .should('not.exist')
         .get('[data-cy=cancel-button]')

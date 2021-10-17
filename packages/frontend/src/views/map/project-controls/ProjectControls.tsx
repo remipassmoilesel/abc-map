@@ -131,7 +131,7 @@ class ProjectControls extends Component<Props, State> {
       }
 
       await project.save(compressed);
-      toasts.info('Projet enregistré !');
+      toasts.info('Project saved !');
     };
 
     modals
@@ -170,7 +170,7 @@ class ProjectControls extends Component<Props, State> {
 
       const compressed = await project.exportCurrentProject(password);
       FileIO.outputBlob(compressed.project, `projet${ProjectConstants.FileExtension}`);
-      toasts.info('Export terminé !');
+      toasts.info(t('Export_done'));
     };
 
     modals

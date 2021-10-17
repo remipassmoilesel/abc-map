@@ -20,6 +20,9 @@ import { DataSource } from '../../core/data/data-source/DataSource';
 import { VectorLayerWrapper } from '../../core/geo/layers/LayerWrapper';
 import { ScaleAlgorithm } from '../_common/algorithm/Algorithm';
 import { IconName } from '../../assets/point-icons/IconName';
+import { prefixedTranslation } from '../../i18n/i18n';
+
+const t = prefixedTranslation('DataProcessingModules:ProportionalSymbols.');
 
 export interface Parameters {
   newLayerName: string;
@@ -43,7 +46,7 @@ export interface Parameters {
 
 export function newParameters(): Parameters {
   return {
-    newLayerName: 'Symboles',
+    newLayerName: t('Proportional_symbols'),
     data: {},
     geometries: {},
     symbols: {

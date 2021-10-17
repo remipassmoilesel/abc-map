@@ -31,6 +31,7 @@ import {
   AuthenticationStatus,
   AuthenticationToken,
   ConfirmationStatus,
+  Language,
   RegistrationStatus,
   RegistrationToken,
   ResetPasswordToken,
@@ -75,8 +76,8 @@ describe('AuthenticationService', () => {
     emails.confirmRegistration.reset();
     emails.confirmRegistration.resolves();
 
-    emails.passwordLost.reset();
-    emails.passwordLost.resolves();
+    emails.resetPassword.reset();
+    emails.resetPassword.resolves();
   });
 
   after(async () => {
@@ -233,15 +234,14 @@ describe('AuthenticationService', () => {
       const user = TestHelper.sampleUser();
 
       // Act
-      const status = await service.register({ email: user.email, password: user.password });
+      const status = await service.register({ email: user.email, password: user.password, lang: Language.French });
 
       // Assert
       assert.equal(status, RegistrationStatus.Successful);
       assert.equal(emails.confirmRegistration.callCount, 1);
-      assert.equal(emails.confirmRegistration.getCall(0).args[0], user.email);
-
-      const token = emails.confirmRegistration.getCall(0).args[1];
-      assert.match(token, /^eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9\./i);
+      assert.equal(emails.confirmRegistration.args[0][0], Language.French);
+      assert.equal(emails.confirmRegistration.args[0][1], user.email);
+      assert.match(emails.confirmRegistration.args[0][2], /^eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9\./i);
     });
 
     it('should fail if mail already exists', async () => {
@@ -250,7 +250,7 @@ describe('AuthenticationService', () => {
       await userService.save(user);
 
       // Act
-      const status = await service.register({ email: user.email, password: 'azerty1234' });
+      const status = await service.register({ email: user.email, password: 'azerty1234', lang: Language.French });
 
       // Assert
       assert.equal(status, RegistrationStatus.EmailAlreadyExists);
@@ -258,7 +258,7 @@ describe('AuthenticationService', () => {
 
     it('should fail if mail is reserved', async () => {
       // Act
-      const status = await service.register({ email: AnonymousUser.email, password: 'azerty1234' });
+      const status = await service.register({ email: AnonymousUser.email, password: 'azerty1234', lang: Language.French });
 
       // Assert
       assert.equal(status, RegistrationStatus.EmailAlreadyExists);
@@ -268,10 +268,10 @@ describe('AuthenticationService', () => {
     it('should register twice with same email', async () => {
       // Prepare
       const email = TestHelper.sampleUser().email;
-      await service.register({ email, password: 'azerty1234' });
+      await service.register({ email, password: 'azerty1234', lang: Language.French });
 
       // Act
-      const status = await service.register({ email, password: 'azerty1234' });
+      const status = await service.register({ email, password: 'azerty1234', lang: Language.French });
 
       // Assert
       assert.equal(status, RegistrationStatus.Successful);
@@ -282,7 +282,7 @@ describe('AuthenticationService', () => {
       const email = TestHelper.sampleUser().email;
 
       // Act
-      await service.register({ email, password: '       azerty1234     ' });
+      await service.register({ email, password: '       azerty1234     ', lang: Language.French });
 
       // Assert
       const token = await getRegistrationToken();
@@ -295,7 +295,7 @@ describe('AuthenticationService', () => {
     it('should create user', async () => {
       // Prepare
       const user = TestHelper.sampleUser();
-      await service.register({ email: user.email, password: user.password });
+      await service.register({ email: user.email, password: user.password, lang: Language.French });
       const token = await getRegistrationToken();
 
       // Act
@@ -316,8 +316,8 @@ describe('AuthenticationService', () => {
     it('should not create user if email already confirmed', async () => {
       // Prepare
       const user = TestHelper.sampleUser();
-      await service.register({ email: user.email, password: user.password });
-      await service.register({ email: user.email, password: user.password });
+      await service.register({ email: user.email, password: user.password, lang: Language.French });
+      await service.register({ email: user.email, password: user.password, lang: Language.French });
       const token1 = await getRegistrationToken();
       await service.confirmRegistration(token1.registrationId);
 
@@ -400,11 +400,11 @@ describe('AuthenticationService', () => {
   describe('passwordLost()', () => {
     it('should do nothing if user is unknown', async () => {
       // Act
-      await service.passwordLost('non-existing@abc-map.fr');
+      await service.passwordLost('non-existing@abc-map.fr', Language.French);
 
       // Assert
       await TestHelper.wait(10); // Wait an internal promise
-      assert.equal(emails.passwordLost.callCount, 0);
+      assert.equal(emails.resetPassword.callCount, 0);
     });
 
     it('should send mail if user is known', async () => {
@@ -412,13 +412,14 @@ describe('AuthenticationService', () => {
       await userService.save(user);
 
       // Act
-      await service.passwordLost(user.email);
+      await service.passwordLost(user.email, Language.French);
 
       // Assert
       await TestHelper.wait(10); // Wait an internal promise
-      assert.equal(emails.passwordLost.callCount, 1);
-      assert.equal(emails.passwordLost.args[0][0], user.email);
-      assert.match(emails.passwordLost.args[0][1], /^eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9\./i);
+      assert.equal(emails.resetPassword.callCount, 1);
+      assert.equal(emails.resetPassword.args[0][0], Language.French);
+      assert.equal(emails.resetPassword.args[0][1], user.email);
+      assert.match(emails.resetPassword.args[0][2], /^eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9\./i);
     });
   });
 
@@ -454,6 +455,12 @@ describe('AuthenticationService', () => {
   });
 
   function getRegistrationToken(call = 0): Promise<RegistrationToken> {
-    return service.verifyRegistrationToken(emails.confirmRegistration.getCall(call).args[1]).then((res) => res as RegistrationToken);
+    const token = emails.confirmRegistration.getCall(call).args[2];
+    return service.verifyRegistrationToken(token).then((decoded) => {
+      if (!decoded) {
+        return Promise.reject(new Error(`Invalid token: ${token}`));
+      }
+      return decoded;
+    });
   }
 });

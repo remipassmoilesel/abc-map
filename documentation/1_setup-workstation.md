@@ -68,7 +68,7 @@ You can build, test, start packages independently too:
 After start, several services are launched on start:
 - A Mongodb instance on port `27019`
 - A Mongo Express instance on port `27020`
-- Server on port `10082`
+- Server on port `10082`. This port serves the backend API and the last frontend build.
 - Webpack dev server on port `3005`
 
 

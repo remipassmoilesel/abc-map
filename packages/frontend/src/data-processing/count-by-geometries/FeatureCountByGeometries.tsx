@@ -18,7 +18,7 @@
 
 import { ReactNode } from 'react';
 import { Module } from '../Module';
-import CountPointsInPolygonUi from './ui/CountPointsInPolygonUi';
+import FeatureCountByGeometriesUi from './ui/FeatureCountByGeometriesUi';
 import { ModuleId } from '../ModuleId';
 
 export class FeatureCountByGeometries extends Module {
@@ -31,6 +31,6 @@ export class FeatureCountByGeometries extends Module {
   }
 
   public getUserInterface(): ReactNode {
-    return <CountPointsInPolygonUi />;
+    return <FeatureCountByGeometriesUi />;
   }
 }

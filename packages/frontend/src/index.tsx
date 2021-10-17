@@ -90,9 +90,9 @@ function load() {
 function loadingError(err: Error | AxiosError | undefined): void {
   let message: string;
   if (HttpError.isTooManyRequests(err)) {
-    message = 'Vous avez dépassé le nombre de demandes autorisés 😭. Veuillez réessayer plus tard.';
+    message = 'You have exceeded the number of authorized requests 😭. Please try again later.';
   } else {
-    message = 'Petit problème technique 😅 Veuillez réessayer plus tard.';
+    message = 'Small technical issue 😅 Please try again later.';
   }
 
   const root = document.querySelector('#root');

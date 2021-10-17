@@ -24,9 +24,11 @@ import FormValidationLabel from '../../components/form-validation-label/FormVali
 import { pageSetup } from '../../core/utils/page-setup';
 import { PasswordStrength, ValidationHelper } from '../../core/utils/ValidationHelper';
 import { FormState } from '../../components/form-validation-label/FormState';
+import { prefixedTranslation } from '../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
 import Cls from './ResetPasswordView.module.scss';
 
-const logger = Logger.get('ResetPasswordView.tsx', 'info');
+const logger = Logger.get('InitPasswordView.tsx', 'info');
 
 interface State {
   password: string;
@@ -35,6 +37,8 @@ interface State {
 }
 
 type Props = RouteComponentProps<PasswordLostParams> & ServiceProps;
+
+const t = prefixedTranslation('ResetPasswordView:');
 
 class ResetPasswordView extends Component<Props, State> {
   constructor(props: Props) {
@@ -50,14 +54,15 @@ class ResetPasswordView extends Component<Props, State> {
     const password = this.state.password;
     const confirmation = this.state.confirmation;
     const formState = this.state.formState;
+    const submitDisabled = this.state.formState !== FormState.Ok;
 
     return (
       <div className={Cls.resetPassword}>
-        <h3 className={'mb-4'}>Réinitialiser votre mot de passe</h3>
+        <h3 className={'mb-4'}>{t('Reset_your_password')}</h3>
         <div className={Cls.form}>
-          <div className={'my-4'}>Entrez ici votre nouveau mot de passe et confirmez-le.</div>
+          <div className={'my-4'}>{t('Enter_your_new_password_here')}</div>
           <input
-            placeholder={'Mot de passe'}
+            placeholder={t('Password')}
             type={'password'}
             value={password}
             onChange={this.handlePasswordChange}
@@ -65,19 +70,19 @@ class ResetPasswordView extends Component<Props, State> {
             data-cy={'new-password'}
           />
           <input
-            placeholder={'Confirmation'}
+            placeholder={t('Confirmation')}
             type={'password'}
             value={confirmation}
             onChange={this.handleConfirmationChange}
-            className={'form-control mb-2'}
+            className={'form-control mb-4'}
             data-cy={'confirmation'}
           />
 
           <FormValidationLabel state={formState} />
 
           <div className={'d-flex justify-content-end'}>
-            <button className={'mt-4 btn btn-primary'} onClick={this.handleSubmit} data-cy={'reset-password'}>
-              Confirmer
+            <button onClick={this.handleSubmit} className={'mt-4 btn btn-primary'} disabled={submitDisabled} data-cy={'reset-password'}>
+              {t('Change_my_password')}
             </button>
           </div>
         </div>
@@ -110,7 +115,7 @@ class ResetPasswordView extends Component<Props, State> {
     authentication
       .resetPassword(token, password)
       .then(() => {
-        toasts.info('Mot de passe réinitialisé !');
+        toasts.info(t('Password_reset'));
         this.setState({ password: '', confirmation: '' });
         return modals.login();
       })
@@ -145,4 +150,4 @@ class ResetPasswordView extends Component<Props, State> {
   }
 }
 
-export default withRouter(withServices(ResetPasswordView));
+export default withTranslation()(withRouter(withServices(ResetPasswordView)));

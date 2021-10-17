@@ -30,7 +30,7 @@ import Cls from './LayerControls.module.scss';
 import { prefixedTranslation } from '../../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
 
-const logger = Logger.get('LayerControls.tsx', 'debug');
+const logger = Logger.get('LayerControls.tsx');
 
 interface LocalProps {
   layers: LayerWrapper[];

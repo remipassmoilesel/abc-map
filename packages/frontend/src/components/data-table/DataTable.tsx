@@ -20,8 +20,9 @@ import React, { Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/shared';
 import { ServiceProps, withServices } from '../../core/withServices';
 import { DataRow, getFields } from '../../core/data/data-source/DataSource';
-import Cls from './DataTable.module.scss';
 import RowActions from './RowActions';
+import { prefixedTranslation } from '../../i18n/i18n';
+import Cls from './DataTable.module.scss';
 
 const logger = Logger.get('DataSourceSelector.tsx');
 
@@ -34,13 +35,15 @@ interface Props extends ServiceProps {
   'data-cy'?: string;
 }
 
+const t = prefixedTranslation('DataTable:');
+
 class DataTable extends Component<Props, {}> {
   public render(): ReactNode {
     const className = this.props.className;
     const withActions = this.props.withActions || false;
     const rows = this.props.rows;
     if (!rows.length) {
-      return <div className={`${Cls.dataTable} ${className}`}>Pas de données</div>;
+      return <div className={`${Cls.dataTable} ${className}`}>{t('No_data')}</div>;
     }
 
     const dataCy = this.props['data-cy'];
@@ -90,7 +93,7 @@ class DataTable extends Component<Props, {}> {
     } else if (typeof field === 'string' && field.length > 50) {
       return `${field.substr(0, 47)}...`;
     } else if (typeof field === 'undefined') {
-      return 'Sans valeur';
+      return t('Undefined');
     } else {
       return field;
     }

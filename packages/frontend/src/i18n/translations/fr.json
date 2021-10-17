@@ -1,4 +1,7 @@
 {
+  "App": {
+    "Modification_in_progress_will_be_lost": "Les modifications en cours seront perdues, êtes vous sûr ?"
+  },
   "LandingView": {
     "Free_open_source_mapping": "Cartographie libre et gratuite en ligne",
     "AbcMap_new_version": "Abc-Map, nouvelle version \uD83D\uDE80 Créez des cartes géographiques simplement: importez, dessinez, visualisez des données, et bien plus !",
@@ -76,7 +79,9 @@
       "You_must_select_a_file_with_extension_": "Vous devez sélectionner un fichier au format {{extension}}",
       "Project_loaded": "Projet importé !",
       "Incorrect_password": "Mot de passe incorrect !",
-      "Password_is_mandatory": "Le mot de passe est obligatoire pour ouvrir ce projet"
+      "Password_is_mandatory": "Le mot de passe est obligatoire pour ouvrir ce projet",
+      "Project_saved": "Projet enregistré !",
+      "Export_done": "Export terminé !"
     },
     "ImportData": {
       "Import_data": "Importer des données",
@@ -140,7 +145,7 @@
       "WMS_are_you_sure": "⚠️ L'URL contient 'WMTS'. Etes vous sûr de vouloir ajouter une couche WMS ?",
       "WMTS_are_you_sure": "⚠️ L'URL contient 'WMS'. Etes vous sûr de vouloir ajouter une couche WMTS ?",
       "URL_must_contains_placeholders": "L'URL doit contenir les variables <code>{x}</code>, <code>{y}</code> et <code>{z}</code>.",
-      "Example_url_with_placeholders": "Exemple: http://my-domain.net/xyz/<code>{x}</code>/<code>{y}</code>/<code>{z}</code>"
+      "Example_url_with_placeholders": "Exemple: <code>https://my-domain.net/xyz/{x}/{y}/{z}</code>"
     },
     "ToolSelector": {
       "Drawing_tools": "Outils de dessin",
@@ -150,8 +155,8 @@
       "Duplicate_selected_geometries": "Dupliquer les géométries sélectionnées",
       "Unselect_all": "Désélectionner tout",
       "Delete_selected_geometries": "Supprimer les géométries sélectionnées",
-      "Move_geometries_ahead": "Géométries sélectionnées vers l'avant",
-      "Move_selected_geometries_behind": "Géométries sélectionnées vers l'arrière",
+      "Move_geometries_up": "Géométries sélectionnées vers l'avant",
+      "Move_geometries_down": "Géométries sélectionnées vers l'arrière",
       "You_must_select_geometries_first": "Vous devez d'abord sélectionner des géométries",
       "Flat": "Aplat",
       "Circles": "Cercles",
@@ -171,6 +176,23 @@
       "Points": "Points",
       "Lines_and_polygons": "Lignes et polygones",
       "Text": "Texte"
+    },
+    "RemoteProjectsModal": {
+      "Projects_saved": "Projets enregistrés",
+      "Select_a_project": "Sélectionnez un projet",
+      "No_saved_project": "Aucun projet enregistré.",
+      "Current_changes_will_be_lost": "Les modifications en cours seront perdues !",
+      "Are_you_sure": "Etes vous sur ? Vous allez supprimer définitivement:",
+      "Do_not_delete": "Ne pas supprimer",
+      "Delete_definitely": "Supprimer définitivement",
+      "This_project_is_protected_by_a_password": "Ce projet est protégé par un mot de passe",
+      "Password_of_project": "Mot de passe du projet",
+      "Cancel": "Annuler",
+      "Open_project": "Ouvrir le projet",
+      "Project_deleted": "Projet supprimé !",
+      "You_must_select_a_project": "Vous devez sélectionner un projet.",
+      "You_must_enter_a_password": "Vous devez entrer un mot de passe",
+      "Incorrect_password": "Mot de passe incorrect."
     }
   },
   "ColorSelector": {
@@ -207,7 +229,7 @@
     "Heavy_dataset": "Jeu de données lourd",
     "You_are_about_to_import_heavy_dataset": "Vous êtes sur le point d'importer une grande quantité de données.",
     "AbcMap_not_yet_ready_for_heavy_dataset": "Abc-Map n'est pas encore prêt pour accueillir des jeux de données lourds, vous risquez de ralentir et de bloquer votre session.",
-    "For_the_moment_prefer_small_dataset": "Pour le moment préférez des fichiers de <code>moins de 5 mo</code> et des couches de <code>moins de 1000 géométries</code>. Dans un futur proche, vous pourrez utiliser plus de données."
+    "Prefer_small_dataset": "Pour le moment préférez des fichiers de <code>moins de 5 mo</code> et des couches de <code>moins de 1000 géométries</code>. Dans un futur proche, vous pourrez utiliser plus de données."
   },
   "ConfirmationModal": {
     "Confirm": "Confirmer",
@@ -377,7 +399,255 @@
       "X_geometries_will_be_processed": "{{geometries}} géométries seront traitées.",
       "Data_samples": "Échantillons de données",
       "Layer": "Couche:"
+    },
+    "FeatureCountByGeometries": {
+      "Module_not_terminated": "Ce module n'est pas terminé !",
+      "This_module_will": "Ce module permettra de compter le nombre de géométries présentes dans chaque polygone d’une couche."
+    },
+    "DifferentSymbols": {
+      "Module_not_terminated": "Ce module n'est pas terminé !",
+      "This_module_will": "Ce module permettra de créer des symboles à partir d'un classeur CSV."
+    },
+    "ProportionalSymbols": {
+      "Introduction": "Introduction",
+      "Proportional_symbols": "Symboles proportionnels",
+      "Proportional_symbols_are_used_to_represent_absolute_data": "Les symboles proportionnels permettent de représenter des données statistiques absolues (population, budgets annuels, etc ...)",
+      "How_does_it_work": "Comment ça marche ?",
+      "Select_data_source_and_data_field": "Sélectionnez une source de données et un champ de valeur. C'est ce champ qui déterminera la taille des symboles. Par exemple, un classeur CSV contenant la population française par département et le champ <code>population_2011</code> contenant les données de population.",
+      "Select_geometry_layer_explanation": "Sélectionnez une couche de géométries. Les géométries détermineront la position de chaque symbole.",
+      "Select_join_field_explanation": "Sélectionner un champ de jointure entre les données et les géométries.",
+      "Select_parameters_explanation": "Ensuite sélectionnez les caractéristiques des symboles à créer.",
+      "Map_sample": "Exemple de carte",
+      "Select_data_source": "Sélectionner une source de données",
+      "Data_source_contains_field_that_will_determine_symbol_size": "La source de données contient le champ qui déterminera la taille des symboles. La source de données peut être une couche de la carte ou un classeur au format CSV.",
+      "Symbol_size_from": "Taille des symboles à partir de:",
+      "Select_a_geometry_layer": "Sélectionner une couche de géométries",
+      "Processing_parameters": "Paramètres du traitement",
+      "The_geometry_layer_will_be_used_to_determine_the_position_of_the_symbols": "La couche de géométries sera utilisée pour déterminer la position des symboles. Dans le cas de polygones, les symboles seront positionnés au centre des polygones. Dans le cas de points, les symboles seront positionnés sur les points.",
+      "Symbols_are_create_in_a_new_layer": "Les symboles seront créés dans une nouvelle couche. Leurs tailles seront déterminées par le champ source utilisé, entre la taille minimum et la taille maximum spécifiée.",
+      "Reset": "Réinitialiser",
+      "Start_processing": "Lancer le traitement",
+      "Name_of_new_layer": "Nom de la nouvelle couche",
+      "Symbol_type": "Type de symbole",
+      "Color": "Couleur",
+      "Minimal_size": "Taille minimale",
+      "Maximal_size": "Taille maximale",
+      "Symbol_scale": "Échelle des symboles:",
+      "X_features_has_been_processed": "{{featuresProcessed}} géométries ont été traitées.",
+      "Nothing_has_been_processed": "Aucune géométrie n'a été traitée. Le traitement a été mal configuré ou les données sont invalides.",
+      "Some_features_cannot_be_joined": "⚠️ Certaines géométries ({{invalidFeatures}}) n'ont pas la propriété de jointure <code>{{geometryJoinBy}}</code>. Elles n'ont pas été utilisées.",
+      "Some_symbol_values_are_incorrect": "⚠️ Certaines valeurs du champ de taille ({{invalidValues}}) ne peuvent pas être exploitées comme des nombres.",
+      "Some_geometries_does_not_have_data": "⚠️ Certaines géométries ({{missingDataRows}}) n'ont pas de données correspondant à leur propriété <code>{{joinBy}}</code>.",
+      "Undefined_property": "Undefined property",
+      "Close": "Fermer"
+    },
+    "Scripts": {
+      "Script_module_allow_advanced_data_modification": "Le module d'exécution de scripts permet de traiter les données de la carte de manière programmatique en écrivant du code Javascript.",
+      "Keep_in_mind_recommendations": "Gardez en tête ces recommandations",
+      "Dont_use_it_if_you_dont_understand_it": "Si vous ne comprenez pas à quoi sert ce module, ne l'utilisez pas",
+      "Dont_run_code_you_dont_understand": "N'exécutez pas du code que vous ne comprenez pas",
+      "Actions_cannot_be_undone": "Les actions effectuées par un script ne peuvent pas être annulées",
+      "Improper_use_can_cause_security_issue": "Une mauvaise utilisation de ce module peut présenter un risque de sécurité",
+      "Execute": "Exécuter",
+      "Output": "Sortie",
+      "Executed_without_errors": "Script exécuté sans erreurs ✨",
+      "Error": "Erreur d'exécution"
     }
+  },
+  "LayoutView": {
+    "Format": "Format",
+    "List_of_layouts_displayed_here": "La liste des mises en page sera affichée ici.",
+    "Layouts": "Mises en page",
+    "Create_layout_to_export": "Créez une mise en page pour exporter votre carte",
+    "Create_A4_layout": "Nouvelle mise en page A4",
+    "Layout": "Mise en page",
+    "Create_layout_to_export_your_map": "Mettez en page et exportez vos cartes au format PDF ou PNG \uD83D\uDCD0 \uD83D\uDEB6\u200D♀️",
+    "You_muse_select_a_layout": "Vous devez sélectionner une mise en page",
+    "No_legend": "Pas de légende",
+    "Top_left_corner": "En haut à gauche",
+    "Top_right_corner": "En haut à droite",
+    "Bottom_right_corner": "En bas à droite",
+    "Bottom_left_corner": "En bas à gauche",
+    "New_layout": "Nouvelle mise en page",
+    "A5_portrait": "A5 portrait",
+    "A5_landscape": "A5 paysage",
+    "A4_portrait": "A4 portrait",
+    "A4_landscape": "A4 paysage",
+    "A3_portrait": "A3 portrait",
+    "A3_landscape": "A3 paysage",
+    "Legend": "Légende",
+    "Edit_legend": "Editer la légende",
+    "Move_up": "Monter",
+    "Move_Down": "Descendre",
+    "Delete_all": "Supprimer tout",
+    "PDF_export": "Export PDF",
+    "PNG_export": "Export PNG",
+    "You_must_create_layouts_first": "Vous devez d'abord créer une mise en page",
+    "Export_done": "Export terminé !"
+  },
+  "MapLegendView": {
+    "Go_back_to_layout": "Revenir à la mise en page",
+    "Edit_legend": "Edition de la légende",
+    "Preview": "Prévisualisation",
+    "Create_legend_for_your_map": "Créez une légende pour votre carte \uD83C\uDF0D",
+    "No_entry": "Aucune entrée, ajoutez-en une ⬇️",
+    "Width": "Largeur",
+    "Height": "Hauteur",
+    "pixels": "pixels",
+    "Drag_to_resize": "Déplacez ce coin pour redimensionner ⬆",
+    "Add_entry": "Ajouter une entrée",
+    "Change_symbol": "Changer le symbole",
+    "Delete": "Supprimer",
+    "Move_up": "Monter",
+    "Move_down": "Descendre",
+    "Entry_name": "Nom de l'élément: zone forestière, itinéraire balisé, ..."
+  },
+  "FundingView": {
+    "Support_the_development_of": "Soutenez le développement d'Abc-Map",
+    "Why": "Pourquoi",
+    "AbcMap_is_FOSS": "Abc-Map est un logiciel libre développé et hébergé bénévolement.",
+    "No_ads_no_race_for_attention": "Vous avez remarqué ? Pas de pub, pas de course à l'attention, pas de récolte de données personnelles",
+    "Fund_a_free_internet_territory": "En finançant ce logiciel vous financez un territoire d'internet libre, où le logiciel sert l'utilisateur. Ça pourrait bien devenir une norme un jour",
+    "How": "Comment",
+    "What_is_the_point": "A quoi ça sert",
+    "Money_collected": "L'argent récolté",
+    "Pays_hosting": "Paie l'hébergement",
+    "Funds_development_sessions": "Finance des sessions de développement",
+    "Funds_documentation": "Finance de la documentation",
+    "Next_planned_features_are": "Les prochaines fonctionnalités prévues sont",
+    "Better_styles": "De meilleurs styles pour créer de plus belles cartes",
+    "Creating_symbols_from_CSV_workbooks": "La création de symboles à partir de classeurs CSV",
+    "Counting_geometries_in_polygons": "Le compte de géométries dans des polygones",
+    "And_more": "Et plus !",
+    "Links": "Liens",
+    "Source_code": "Code source",
+    "Author_personal_website": "Site personnel de l'auteur"
+  },
+  "FundingLinks": {
+    "By_CB_paypal": "Par <b>Carte bleue</b> ou <b>Paypal</b>.",
+    "With_utip": "Avec <b>uTip</b>",
+    "With_tipeee": "Avec <b>Tipeee</b>",
+    "Donate_with_paypal": "Faire un don Paypal"
+  },
+  "LoginModal": {
+    "Login": "Connexion",
+    "To_connect_type_email_password": "Pour vous connecter, renseignez votre adresse email et votre mot de passe ci-dessous.",
+    "Email": "Adresse email",
+    "Password": "Mot de passe",
+    "Password_lost": "Mot de passe perdu ?",
+    "Cancel": "Annuler",
+    "Connect": "Connexion"
+  },
+  "RegistrationModal": {
+    "Registration": "Inscription",
+    "One_more_step": "Plus qu'une étape \uD83D\uDE4C",
+    "Check_email_then_click_confirmation": "Un email vous a été envoyé, il contient un lien pour activer votre compte.",
+    "Check_your_spam": "Pensez à vérifier vos spam",
+    "Ok": "Ok",
+    "Please_fill_the_form_to_register": "Pour vous inscrire, remplissez ce formulaire. Vos données personnelles et vos cartes ne seront jamais transmises à un tiers.",
+    "Email": "Adresse email",
+    "Password": "Mot de passe",
+    "Password_confirmation": "Confirmation du mot de passe",
+    "Cancel": "Annuler",
+    "Register": "Inscription"
+  },
+  "PasswordLostModal": {
+    "Password_lost": "Récupération de mot de passe",
+    "Fill_this_form_to_recover_your_password": "Pour réinitialiser votre mot de passe, renseignez votre adresse email ci-dessous. Si votre adresse est enregistrée vous recevrez des instructions par email.",
+    "Email_address": "Adresse email",
+    "Cancel": "Annuler",
+    "Confirm": "Confirmer",
+    "Email_sent_check_your_spam": "Demande envoyée ! Pensez à vérifiez vos spam \uD83D\uDCE7"
+  },
+  "UserAccountView": {
+    "My_account": "Mon compte",
+    "You_must_connect_to_display_your_account": "Vous devez vous connecter pour afficher votre compte",
+    "Go_back_to_landing": "Retourner à l'accueil",
+    "My_informations": "Mes informations",
+    "Email_address": "Adresse email",
+    "Email_is_readonly": "Vous ne pouvez pas modifier votre adresse email.",
+    "Nothing_more": "Rien de plus !",
+    "Change_my_password": "Modifier mon mot de passe",
+    "Current_password": "Mot de passe actuel",
+    "New_password": "Nouveau mot de passe",
+    "Confirmation": "Confirmation",
+    "Confirm": "Confirmer",
+    "Delete_my_account": "Supprimer mon compte",
+    "I_understand_that_deletion_is_permanent": "Je comprends que la suppression de mon compte est DEFINITIVE. Je perdrais tous les projets associés à mon compte.",
+    "Password": "Mot de passe",
+    "Delete_my_account_permanently": "Supprimer définitivement mon compte",
+    "Your_account_has_been_deleted": "Votre compte a été supprimé \uD83D\uDE2D",
+    "Password_updated": "Mot de passe mis à jour !"
+  },
+  "LegendSymbolPickerModal": {
+    "Select_symbol": "Sélectionnez un symbole",
+    "Here_are_the_geometry_styles_used_on_the_map": "Voici les styles de géométries utilisés sur la carte",
+    "Add_something_on_map_then_come_back": "Ajoutez quelque chose sur la carte et revenez ensuite"
+  },
+  "ErrorBoundary": {
+    "Aouch": "Aïe Aïe Aïe",
+    "Error_occurred": "Une erreur empêche l'application de fonctionner correctement. Cet échec a été consigné, <br /> le développeur responsable de cette erreur vient de recevoir une lettre de démission.",
+    "Reload_page": "Recharger la page",
+    "Recommended_action": "Action recommandée, <br /> mais vous perdrez les modifications non enregistrées.",
+    "Return_to_application": "Revenir à l'application",
+    "Application_will_be_unstable": "L'application sera peut-être instable, <br /> mais vous pourrez sauvegardez votre travail et recharger la page."
+  },
+  "SolicitationModal": {
+    "So_how_was_it": "Alors, c'était comment ?",
+    "Support_your_software": "Soutenez votre logiciel",
+    "What_are_donations_used_for": "A quoi servent les dons ?",
+    "How_did_it_go": "Comment ça c'est passé ?",
+    "Well": "Bien !",
+    "Blah": "Bof ...",
+    "Not_good": "Pas bien",
+    "Thanks_for_your_feedback": "Merci pour votre retour",
+    "Support_project": "Faites-un don pour soutenir ce projet, c'est facile: par ici",
+    "Close": "Fermer"
+  },
+  "ResetPasswordView": {
+    "Reset_your_password": "Réinitialiser votre mot de passe",
+    "Enter_your_new_password_here": "Entrez ici votre nouveau mot de passe et confirmez-le.",
+    "Password": "Mot de passe",
+    "Confirmation": "Confirmation",
+    "Change_my_password": "Modifier mon mot de passe",
+    "Password_reset": "Mot de passe réinitialisé !"
+  },
+  "NotFoundView": {
+    "You_are_lost": "Vous êtes perdu",
+    "Dont_panic": "Pas de panique, l'accueil est par là"
+  },
+  "ConfirmAccountView": {
+    "And_voila_welcome": "Et voilà, bienvenue !",
+    "Please_wait": "Veuillez patienter ...",
+    "This_account_is_already_activated": "Cet adresse email a déjà été activée \uD83E\uDD37 <br /> Connectez-vous ou demandez une réinitialisation de mot de passe.",
+    "Activation_failed": "L'activation de votre compte a échoué \uD83E\uDD7A. <br /> Peut-être avez-vous déjà activé votre compte ?",
+    "Activation_succeed": "Votre compte est activé, vous êtes connecté",
+    "Map_is_over_here": "Pour la carte, c'est par ici",
+    "Registration_confirmation": "Confirmation d'inscription"
+  },
+  "DataTable": {
+    "No_data": "Pas de données",
+    "Undefined": "Non défini",
+    "Modify": "Modifier",
+    "Delete": "Supprimer"
+  },
+  "EditPropertiesModal": {
+    "Properties": "Propriétés",
+    "Cancel": "Annuler",
+    "Save": "Enregistrer",
+    "Delete_property": "Supprimer la propriété",
+    "Value": "Valeur",
+    "New_property": "Nouvelle propriété"
+  },
+  "FoldingCard": {
+    "Open": "Ouvrir",
+    "Close": "Fermer"
+  },
+  "TipBubble": {
+    "This_tip_is_not_available": "Ce conseil n'est pas disponible"
+  },
+  "LegalMentionsView": {
+    "About_this_platform": "A propos de cette plateforme"
   },
   "core": {
     "ProjectFactory": {
@@ -394,6 +664,32 @@
     },
     "DataService": {
       "Import_of": "Import n°{{n}} de {{hour}}"
+    },
+    "AuthentificationService": {
+      "Invalid_credentials": "Vos identifiants sont incorrects",
+      "Your_password_is_incorrect": "Votre mot de passe est incorrect",
+      "You_are_connected": "Vous êtes connecté !",
+      "This_email_address_is_already_in_use": "Cette adresse email est déjà utilisée"
+    },
+    "LayerDataSource": {
+      "Layer_without_name": "Couche sans nom"
+    },
+    "MapKeyboardListener": {
+      "Nothing_more_to_undo": "Il n'y a plus rien à annuler",
+      "Nothing_more_to_redo": "Il n'y a plus rien à refaire",
+      "You_must_select_features_first": "Vous devez d'abord sélectionner des géométries"
+    },
+    "ToastService": {
+      "Unknown_technical_problem": "Aie ! Petit problème technique \uD83D\uDE05 Veuillez réessayer plus tard.",
+      "This_feature_is_not_yet_available": "Cette fonctionnalité n'est pas encore disponible",
+      "You_have_exceeded_the_number_of_requests_allowed_try_agin_in_XX_min": "Vous avez dépassé le nombre de demandes autorisés, veuillez réessayer dans {{minutes}} minute(s).",
+      "You_have_exceeded_the_number_of_requests_allowed": "Vous avez dépassé le nombre de demandes autorisés, veuillez réessayer plus tard.",
+      "Forbidden": "Cette opération est interdite.",
+      "You_must_connect_before": "Vous devez être connecté pour effectuer cette opération.",
+      "Are_you_connected": "Impossible de se connecter au serveur \uD83D\uDCE1 Êtes vous connecté ?"
+    },
+    "ProjectService": {
+      "Too_much_projects": "Désolé \uD83D\uDE1E vous avez atteint votre quota de projet. Supprimez-en un."
     }
   }
 }

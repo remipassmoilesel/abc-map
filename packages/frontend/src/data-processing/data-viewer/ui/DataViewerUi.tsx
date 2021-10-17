@@ -80,7 +80,7 @@ class DataViewerUi extends Component<Props, State> {
         </div>
         {!!data.length && (
           <>
-            <div className={'my-3'} dangerouslySetInnerHTML={{ __html: t('X_entries_displayed', { entries: data.length }) }} />
+            <div className={'mt-3 mb-4'} dangerouslySetInnerHTML={{ __html: t('X_entries_displayed', { entries: data.length }) }} />
             <DataTable rows={data} withActions={true} onEdit={this.handleEdit} onDelete={this.handleDelete} className={Cls.dataTable} data-cy={'data-table'} />
           </>
         )}

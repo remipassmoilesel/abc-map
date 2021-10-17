@@ -20,6 +20,8 @@ import React, { ChangeEvent, Component, ReactNode } from 'react';
 import FormValidationLabel from '../../components/form-validation-label/FormValidationLabel';
 import { PasswordStrength, ValidationHelper } from '../../core/utils/ValidationHelper';
 import { FormState } from '../../components/form-validation-label/FormState';
+import { prefixedTranslation } from '../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
 
 interface Props {
   onSubmit: (password: string) => void;
@@ -30,6 +32,8 @@ interface State {
   confirmation: boolean;
   password: string;
 }
+
+const t = prefixedTranslation('UserAccountView:');
 
 class DeleteAccountForm extends Component<Props, State> {
   constructor(props: Props) {
@@ -48,20 +52,22 @@ class DeleteAccountForm extends Component<Props, State> {
 
     return (
       <div className={'card card-body'}>
-        <h2>Supprimer mon compte</h2>
+        <h2>{t('Delete_my_account')}</h2>
         <div className={'alert alert-danger'}>
           <input type={'checkbox'} checked={confirmation} onChange={this.handleConfirmationChange} className={'mr-2'} data-cy={'delete-account-checkbox'} />
-          Je comprends que la suppression de mon compte est DEFINITIVE. Je perdrais tous les projets associés à mon compte.
+          {t('I_understand_that_deletion_is_permanent')}
         </div>
-        <div className={'mb-2'}>Mot de passe:</div>
+        <div className={'mb-2'}>{t('Password')}:</div>
+
         <input type={'password'} value={password} onChange={this.handlePasswordChange} className={'form-control'} data-cy={'delete-account-password'} />
+
         <FormValidationLabel state={formState} />
 
         <div className={'flex-grow-1'} />
 
         <div className={'d-flex justify-content-end mt-3'}>
           <button onClick={this.handleSubmit} className={'btn btn-danger'} disabled={formState !== FormState.Ok} data-cy={'delete-account-button'}>
-            Supprimer définitivement mon compte
+            {t('Delete_my_account_permanently')}
           </button>
         </div>
       </div>
@@ -108,4 +114,4 @@ class DeleteAccountForm extends Component<Props, State> {
   }
 }
 
-export default DeleteAccountForm;
+export default withTranslation()(DeleteAccountForm);

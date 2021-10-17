@@ -58,7 +58,7 @@ describe('ButtonBar', () => {
       const style = services.geo.updateSelectedFeatures.args[0][0](f1.getStyleProperties(), f1);
 
       expect(style).toEqual({
-        point: { color: '#FF5733', icon: 'twbs/0_circle-fill.inline.svg', size: 15 },
+        point: { color: '#FF5733', icon: 'twbs/geo-alt-fill.inline.svg', size: 30 },
         fill: { color1: undefined, color2: undefined, pattern: undefined },
         stroke: { color: undefined, width: undefined },
         text: { alignment: undefined, color: undefined, font: undefined, offsetX: undefined, offsetY: undefined, size: undefined, value: undefined },

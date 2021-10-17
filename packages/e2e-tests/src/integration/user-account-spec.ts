@@ -47,13 +47,14 @@ describe('User account', function () {
       .type('qwerty789')
       .get('[data-cy=change-password-button]')
       .click()
-      .then(() => Toasts.assertText('Mot de passe mis à jour !'))
+      .then(() => Toasts.assertText('Password updated !'))
       .get('[data-cy=user-menu]')
       .click()
       .get('[data-cy=logout]')
       .click()
       .wait(500)
-      .then(() => Authentication.login(email, 'qwerty789'));
+      .then(() => Authentication.login(email, 'qwerty789'))
+      .then(() => Authentication.logout());
   });
 
   it('user can delete account', function () {
@@ -67,6 +68,6 @@ describe('User account', function () {
       .type(password)
       .get('[data-cy=delete-account-button]')
       .click()
-      .then(() => Toasts.assertText('Votre compte a été supprimé'));
+      .then(() => Toasts.assertText('Your account has been deleted'));
   });
 });

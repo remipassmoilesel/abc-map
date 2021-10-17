@@ -21,11 +21,13 @@ import { AbcLegendItem, FrontendRoutes, Logger } from '@abc-map/shared';
 import { MainState } from '../../core/store/reducer';
 import { connect, ConnectedProps } from 'react-redux';
 import { ServiceProps, withServices } from '../../core/withServices';
-import Cls from './MapLegendView.module.scss';
 import LegendPreview from './preview/LegendPreview';
 import LegendUpdateForm from './legend-update/LegendUpdateForm';
 import { RouteComponentProps } from 'react-router-dom';
 import { pageSetup } from '../../core/utils/page-setup';
+import { prefixedTranslation } from '../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
+import Cls from './MapLegendView.module.scss';
 
 const logger = Logger.get('MapLegendView.tsx');
 
@@ -37,6 +39,8 @@ const connector = connect(mapStateToProps);
 
 type Props = ConnectedProps<typeof connector> & ServiceProps & RouteComponentProps<{}, {}>;
 
+const t = prefixedTranslation('MapLegendView:');
+
 class MapLegendView extends Component<Props, {}> {
   public render(): ReactNode {
     const legend = this.props.legend;
@@ -46,13 +50,13 @@ class MapLegendView extends Component<Props, {}> {
         <div className={'d-flex flex-row justify-content-end'}>
           <button className={'btn btn-outline-primary'} onClick={this.handleGoToLayout} data-cy={'back-to-layout'}>
             <i className={'fa fa-arrow-circle-left mr-2'} />
-            Revenir à la mise en page
+            {t('Go_back_to_layout')}
           </button>
         </div>
 
         <div className={Cls.content}>
           <div className={Cls.editionPanel}>
-            <h5 className={'mb-4'}>Edition de la légende</h5>
+            <h5 className={'mb-4'}>{t('Edit_legend')}</h5>
             <LegendUpdateForm
               legend={legend}
               onSizeChanged={this.handleSizeChanged}
@@ -64,7 +68,7 @@ class MapLegendView extends Component<Props, {}> {
             />
           </div>
           <div className={Cls.previewPanel}>
-            <h5 className={'mb-4'}>Prévisualisation</h5>
+            <h5 className={'mb-4'}>{t('Preview')}</h5>
             <LegendPreview legend={legend} onSizeChanged={this.handleSizeChanged} />
           </div>
         </div>
@@ -73,7 +77,7 @@ class MapLegendView extends Component<Props, {}> {
   }
 
   public componentDidMount() {
-    pageSetup('Edition de la légende', 'Créez une légende pour votre carte 🌍');
+    pageSetup(t('Edit_legend'), t('Create_legend_for_your_map'));
   }
 
   private handleSizeChanged = (width: number, height: number) => {
@@ -135,4 +139,4 @@ class MapLegendView extends Component<Props, {}> {
   }
 }
 
-export default withServices(connector(MapLegendView));
+export default withTranslation()(withServices(connector(MapLegendView)));

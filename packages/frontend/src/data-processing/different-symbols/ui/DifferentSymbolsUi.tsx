@@ -18,20 +18,24 @@
 
 import React, { Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/shared';
+import { prefixedTranslation } from '../../../i18n/i18n';
 import Cls from './DifferentSymbolsUi.module.scss';
+import { withTranslation } from 'react-i18next';
 
 const logger = Logger.get('DifferentSymbolsUi.tsx');
+
+const t = prefixedTranslation('DataProcessingModules:DifferentSymbols.');
 
 class DifferentSymbolsUi extends Component<{}, {}> {
   public render(): ReactNode {
     return (
       <div className={Cls.panel}>
         <i className={`fa fa-file-code`} />
-        <h4 className={'text-center my-5'}>Ce module n&apos;est pas terminé !</h4>
-        <div>Ce module permettra de créer des symboles sur une carte à partir d&apos;un classeur CSV.</div>
+        <h4 className={'text-center my-5'}>{t('Module_not_terminated')}</h4>
+        <div>{t('This_module_will')}</div>
       </div>
     );
   }
 }
 
-export default DifferentSymbolsUi;
+export default withTranslation()(DifferentSymbolsUi);

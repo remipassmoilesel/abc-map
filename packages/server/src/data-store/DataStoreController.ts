@@ -41,7 +41,7 @@ export class DataStoreController extends Controller {
     app.get('/:artefactId', { schema: GetByIdSchema }, this.getById);
 
     const root = datastore.getRoot();
-    void app.register(fastifyStatic, { root, prefix: '/download' });
+    void app.register(fastifyStatic, { root, prefix: '/download', wildcard: true, index: false });
   };
 
   private list = async (req: FastifyRequest<{ Querystring: PaginatedQuery }>, reply: FastifyReply): Promise<void> => {

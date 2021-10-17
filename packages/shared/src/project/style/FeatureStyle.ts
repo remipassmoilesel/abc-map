@@ -99,6 +99,6 @@ export const DefaultStyle = {
   },
   point: {
     icon: 'twbs/0_circle-fill.inline.svg',
-    size: 15,
+    size: 30,
   },
 };

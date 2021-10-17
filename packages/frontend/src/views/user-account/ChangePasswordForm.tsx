@@ -20,6 +20,8 @@ import React, { ChangeEvent, Component, ReactNode } from 'react';
 import FormValidationLabel from '../../components/form-validation-label/FormValidationLabel';
 import { PasswordStrength, ValidationHelper } from '../../core/utils/ValidationHelper';
 import { FormState } from '../../components/form-validation-label/FormState';
+import { prefixedTranslation } from '../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
 
 interface Props {
   onSubmit: (previousPassword: string, newPassword: string) => void;
@@ -31,6 +33,8 @@ interface State {
   newPassword: string;
   confirmation: string;
 }
+
+const t = prefixedTranslation('UserAccountView:');
 
 class ChangePasswordForm extends Component<Props, State> {
   constructor(props: Props) {
@@ -51,12 +55,12 @@ class ChangePasswordForm extends Component<Props, State> {
 
     return (
       <div className={'card card-body'}>
-        <h2>Modifier mon mot de passe</h2>
+        <h2>{t('Change_my_password')}</h2>
         <input
           type={'password'}
           value={previousPassword}
           onChange={this.handlePreviousPasswordChange}
-          placeholder={'Mot de passe actuel'}
+          placeholder={t('Current_password')}
           className={'form-control mb-2'}
           data-cy={'change-password-old-password'}
         />
@@ -64,7 +68,7 @@ class ChangePasswordForm extends Component<Props, State> {
           type={'password'}
           value={newPassword}
           onChange={this.handleNewPasswordChange}
-          placeholder={'Nouveau mot de passe'}
+          placeholder={t('New_password')}
           className={'form-control mb-2'}
           data-cy={'change-password-new-password'}
         />
@@ -72,7 +76,7 @@ class ChangePasswordForm extends Component<Props, State> {
           type={'password'}
           value={confirmation}
           onChange={this.handleConfirmationChange}
-          placeholder={'Confirmation'}
+          placeholder={t('Confirmation')}
           className={'form-control mb-2'}
           data-cy={'change-password-confirmation'}
         />
@@ -82,7 +86,7 @@ class ChangePasswordForm extends Component<Props, State> {
 
         <div className={'d-flex justify-content-end mt-3'}>
           <button onClick={this.handleSubmit} className={'btn btn-primary'} disabled={formState !== FormState.Ok} data-cy={'change-password-button'}>
-            Modifier mon mot de passe
+            {t('Confirm')}
           </button>
         </div>
       </div>
@@ -135,4 +139,4 @@ class ChangePasswordForm extends Component<Props, State> {
   }
 }
 
-export default ChangePasswordForm;
+export default withTranslation()(ChangePasswordForm);

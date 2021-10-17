@@ -16,14 +16,17 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { VectorLayerWrapper } from '../../../core/geo/layers/LayerWrapper';
+import { VectorLayerWrapper } from '../../geo/layers/LayerWrapper';
 import { DataRow, DataSource, DataSourceType } from './DataSource';
 import { Logger } from '@abc-map/shared';
 import Geometry from 'ol/geom/Geometry';
 import Feature from 'ol/Feature';
 import { FeatureWrapper } from '../../geo/features/FeatureWrapper';
+import { prefixedTranslation } from '../../../i18n/i18n';
 
 const logger = Logger.get('LayerDataSource.ts');
+
+const t = prefixedTranslation('LayerDataSource:');
 
 // FIXME: check if layer with numeric properties are always returned as numbers
 export class LayerDataSource implements DataSource {
@@ -38,7 +41,7 @@ export class LayerDataSource implements DataSource {
   }
 
   public getName(): string {
-    return this.layer.getName() || 'Couche sans nom';
+    return this.layer.getName() || t('Layer_without_name');
   }
 
   public getType(): DataSourceType {

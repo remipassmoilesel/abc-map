@@ -18,8 +18,10 @@
 
 import React, { ChangeEvent, Component, ReactNode } from 'react';
 import { AbcLegendItem, Logger } from '@abc-map/shared';
-import Cls from './LegendItem.module.scss';
+import { prefixedTranslation } from '../../../i18n/i18n';
 import { ServiceProps, withServices } from '../../../core/withServices';
+import { withTranslation } from 'react-i18next';
+import Cls from './LegendItem.module.scss';
 
 const logger = Logger.get('LegendItem.tsx');
 
@@ -33,6 +35,8 @@ interface Props extends ServiceProps {
   onDown: (i: AbcLegendItem) => void;
 }
 
+const t = prefixedTranslation('MapLegendView:');
+
 class LegendItem extends Component<Props, {}> {
   public render(): ReactNode {
     const text = this.props.item.text;
@@ -41,19 +45,19 @@ class LegendItem extends Component<Props, {}> {
 
     return (
       <div className={Cls.legendItem} data-cy={'legend-item'}>
-        <button className={'btn btn-outline-primary mr-2'} onClick={this.handleSymbolModalClick} data-cy={'legend-item-symbol'}>
+        <button onClick={this.handleSymbolModalClick} title={t('Change_symbol')} className={'btn btn-outline-primary mr-2'} data-cy={'legend-item-symbol'}>
           <i className={'fa fa-map-marker-alt'} />
         </button>
-        <button onClick={this.handleDelete} title={'Supprimer'} className={'btn btn-outline-secondary mr-2'}>
+        <button onClick={this.handleDelete} title={t('Delete')} className={'btn btn-outline-secondary mr-2'}>
           <i className={'fa fa-trash'} />
         </button>
-        <button onClick={this.handleUp} disabled={upDisabled} title={'Monter'} className={'btn btn-outline-secondary mr-2'}>
+        <button onClick={this.handleUp} disabled={upDisabled} title={t('Move_up')} className={'btn btn-outline-secondary mr-2'}>
           <i className={'fa fa-arrow-up'} />
         </button>
-        <button onClick={this.handleDown} disabled={downDisabled} title={'Descendre'} className={'btn btn-outline-secondary mr-2'}>
+        <button onClick={this.handleDown} disabled={downDisabled} title={t('Move_down')} className={'btn btn-outline-secondary mr-2'}>
           <i className={'fa fa-arrow-down'} />
         </button>
-        <input type={'text'} value={text} onChange={this.handleTextChange} className={`form-control ${Cls.textField}`} />
+        <input type={'text'} value={text} onChange={this.handleTextChange} placeholder={t('Entry_name')} className={`form-control ${Cls.textField}`} />
       </div>
     );
   }
@@ -99,4 +103,4 @@ class LegendItem extends Component<Props, {}> {
   };
 }
 
-export default withServices(LegendItem);
+export default withTranslation()(withServices(LegendItem));

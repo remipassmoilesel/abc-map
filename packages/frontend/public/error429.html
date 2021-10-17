@@ -17,18 +17,16 @@
  Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
 -->
 
-<html lang="en">
+<!-- Values surrounded by curly braces are templated server side -->
+
+<html lang="{{{lang}}}">
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="theme-color" content="#000000"/>
-  <meta
-    name="description"
-    content="Créez des cartes géographiques facilement, dans votre navigateur."
-  />
-  <title>Abc-Map - Quota de requêtes dépassé !</title>
+  <title>{{{title}}}</title>
 
-  <style type="text/css">
+  <style>
     html, body {
       height: 100%;
       max-height: 100%;
@@ -50,15 +48,20 @@
       text-align: center;
     }
 
+    section {
+      margin: 5rem 0 10rem 0;
+    }
   </style>
 
 </head>
 <body>
 
 <h1>Abc-Map</h1>
-<h2>Quota de demandes dépassé 😭</h2>
 
-<p>Nous avons reçu trop de demandes en provenance de votre adresse IP, veuillez réessayer plus tard.</p>
+<section>
+  <h2>{{{title}}}</h2>
+  <p>{{{message}}}</p>
+</section>
 
 </body>
 </html>

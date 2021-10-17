@@ -35,7 +35,7 @@ describe('RegistrationModal', () => {
 
     dispatch({ type: ModalEventType.ShowRegistration });
 
-    expect(screen.getByPlaceholderText('Adresse email')).toBeDefined();
+    expect(screen.getByPlaceholderText('Email address')).toBeDefined();
   });
 
   it('should have disabled button if form is invalid', () => {

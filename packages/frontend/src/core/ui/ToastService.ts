@@ -21,6 +21,7 @@ import { ToastOptions } from 'react-toastify/dist/types';
 import { AxiosError } from 'axios';
 import { HttpError } from '../http/HttpError';
 import { Logger } from '@abc-map/shared';
+import { prefixedTranslation } from '../../i18n/i18n';
 
 const logger = Logger.get('ToastService');
 
@@ -31,6 +32,8 @@ const defaultOptions: ToastOptions = {
   hideProgressBar: true,
   className: 'abc-toast',
 };
+
+const t = prefixedTranslation('core:ToastService.');
 
 export class ToastService {
   public info(message: string): void {
@@ -46,11 +49,11 @@ export class ToastService {
   }
 
   public genericError(): void {
-    this.error('Aie ! Petit problème technique 😅 Veuillez réessayer plus tard.');
+    this.error(t('Unknown_technical_problem'));
   }
 
   public featureNotReady(): void {
-    this.info("Cette fonctionnalité n'est pas encore disponible");
+    this.info(t('This_feature_is_not_yet_available'));
   }
 
   public httpError(err: AxiosError | Error | undefined): void {
@@ -60,25 +63,26 @@ export class ToastService {
     if (HttpError.isTooManyRequests(err)) {
       const reset = err.response?.headers['x-ratelimit-reset'] || 0;
       if (reset) {
-        this.error(`Vous avez dépassé le nombre de demandes autorisés, veuillez réessayer dans ${Math.round(reset / 60)} minute(s).`);
+        const minutes = Math.round(reset / 60);
+        this.error(t(`You_have_exceeded_the_number_of_requests_allowed_try_agin_in_XX_min`, { minutes }));
       } else {
-        this.error('Vous avez dépassé le nombre de demandes autorisés, veuillez réessayer plus tard.');
+        this.error(t('You_have_exceeded_the_number_of_requests_allowed'));
       }
     }
 
     // Forbidden
     else if (HttpError.isForbidden(err)) {
-      this.error('Cette opération est interdite.');
+      this.error(t('Forbidden'));
     }
 
     // Unauthorized
     else if (HttpError.isUnauthorized(err)) {
-      this.error('Vous devez être connecté pour effectuer cette opération.');
+      this.error(t('You_must_connect_before'));
     }
 
     // Network error
     else if (err?.message === 'Network Error') {
-      this.error('Impossible de se connecter au serveur 📡 Êtes vous connecté ?');
+      this.error(t('Are_you_connected'));
     }
 
     // Others

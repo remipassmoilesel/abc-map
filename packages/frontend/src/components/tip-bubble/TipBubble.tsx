@@ -19,7 +19,8 @@
 import React, { Component, ReactNode } from 'react';
 import { Modal } from 'react-bootstrap';
 import { AllTips } from '@abc-map/user-documentation';
-import { getDocumentationLang } from '../../i18n/i18n';
+import { getDocumentationLang, prefixedTranslation } from '../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
 import Cls from './TipBubble.module.scss';
 
 interface Props {
@@ -31,6 +32,8 @@ interface Props {
 interface State {
   open: boolean;
 }
+
+const t = prefixedTranslation('TipBubble:');
 
 class TipBubble extends Component<Props, State> {
   constructor(props: Props) {
@@ -69,8 +72,8 @@ class TipBubble extends Component<Props, State> {
   private getTip(): string {
     const id = this.props.id;
     const tip = AllTips.find((bundle) => bundle.lang === getDocumentationLang())?.tips.find((tip) => tip.id === id);
-    return tip?.content || "Ce conseil n'est pas disponible.";
+    return tip?.content || t('This_tip_is_not_available');
   }
 }
 
-export default TipBubble;
+export default withTranslation()(TipBubble);

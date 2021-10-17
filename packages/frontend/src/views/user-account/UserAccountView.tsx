@@ -23,8 +23,10 @@ import { MainState } from '../../core/store/reducer';
 import { connect, ConnectedProps } from 'react-redux';
 import ChangePasswordForm from './ChangePasswordForm';
 import DeleteAccountForm from './DeleteAccountForm';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
 import { pageSetup } from '../../core/utils/page-setup';
+import { prefixedTranslation } from '../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
 import Cls from './UserAccountView.module.scss';
 
 const logger = Logger.get('UserAccountView.tsx');
@@ -38,6 +40,8 @@ const connector = connect(mapStateToProps);
 
 type Props = ConnectedProps<typeof connector> & RouteComponentProps<any> & ServiceProps;
 
+const t = prefixedTranslation('UserAccountView:');
+
 class UserAccountView extends Component<Props, {}> {
   public render(): ReactNode {
     const authenticated = this.props.user && this.props.status === UserStatus.Authenticated;
@@ -45,17 +49,24 @@ class UserAccountView extends Component<Props, {}> {
 
     return (
       <div className={Cls.userAccount}>
-        <h1 className={'mb-4'}>Mon compte</h1>
-        {!authenticated && <div>Vous devez vous connecter pour afficher votre compte</div>}
+        <h1 className={'mb-4'}>{t('My_account')}</h1>
+        {!authenticated && (
+          <div className={'my-5 d-flex flex-column align-items-center'}>
+            <div className={'mb-4'}>{t('You_must_connect_to_display_your_account')}</div>
+            <Link to={FrontendRoutes.landing().raw()} className={'btn btn-outline-primary'}>
+              {t('Go_back_to_landing')}
+            </Link>
+          </div>
+        )}
         {authenticated && user && (
           <div className={Cls.cardContainer}>
             <div className={Cls.section}>
               <div className={'card card-body'}>
-                <h2>Mes informations</h2>
-                <div className={'mb-2'}>Adresse email:</div>
+                <h2>{t('My_informations')}</h2>
+                <div className={'mb-2'}>{t('Email_address')}:</div>
                 <input type={'email'} readOnly={true} value={user.email} className={'form-control'} />
-                <small className={'mt-2'}>Pour le moment, vous ne pouvez pas modifier votre adresse email.</small>
-                <div className={'mt-4'}>Pas plus !</div>
+                <small className={'mt-2'}>{t('Email_is_readonly')}</small>
+                <div className={'mt-4'}>{t('Nothing_more')}</div>
               </div>
             </div>
 
@@ -77,9 +88,10 @@ class UserAccountView extends Component<Props, {}> {
 
   private handleChangePassword = (previousPassword: string, newPassword: string) => {
     const { authentication, toasts } = this.props.services;
+
     authentication
       .updatePassword(previousPassword, newPassword)
-      .then(() => toasts.info('Mot de passe mis à jour !'))
+      .then(() => toasts.info(t('Password_updated')))
       .catch((err) => logger.error('Cannot update password', err));
   };
 
@@ -88,7 +100,7 @@ class UserAccountView extends Component<Props, {}> {
     authentication
       .deleteAccount(password)
       .then(() => {
-        toasts.info('Votre compte a été supprimé 😭');
+        toasts.info(t('Your_account_has_been_deleted'));
         this.props.history.push(FrontendRoutes.landing().raw());
         return authentication.logout();
       })
@@ -96,4 +108,4 @@ class UserAccountView extends Component<Props, {}> {
   };
 }
 
-export default connector(withServices(withRouter(UserAccountView)));
+export default withTranslation()(connector(withServices(withRouter(UserAccountView))));

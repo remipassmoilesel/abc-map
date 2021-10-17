@@ -46,14 +46,34 @@ describe('HttpServer', () => {
     await server.shutdown();
   });
 
-  it('should serve index', async () => {
+  it('should serve index in english by default', async () => {
     const res = await server.getApp().inject({
       method: 'GET',
       path: '/',
     });
 
     assert.equal(res.statusCode, 200);
-    assert.match(res.body, /^<!doctype html>/);
+    assert.match(res.body, /Abc-Map - Free \(as in freedom\) online mapping/);
+  });
+
+  it('should serve index in french if header set', async () => {
+    const res = await server.getApp().inject({
+      method: 'GET',
+      path: '/',
+      headers: { 'accept-language': 'fr-FR,fr;q=0.9,en-EN;q=0.8,fr;q=0.7' },
+    });
+
+    assert.equal(res.statusCode, 200);
+    assert.match(res.body, /Abc-Map - Cartographie libre et gratuite en ligne/);
+  });
+
+  it('should reply 200 on head request', async () => {
+    const res = await server.getApp().inject({
+      method: 'HEAD',
+      path: '/',
+    });
+
+    assert.equal(res.statusCode, 200);
   });
 
   it('should return security headers', async () => {
@@ -97,7 +117,7 @@ describe('HttpServer', () => {
     });
 
     assert.equal(blocked.statusCode, 429);
-    assert.match(blocked.body, /Quota de requêtes dépassé/);
+    assert.match(blocked.body, /Quota of requests exceeded/);
     assert.equal(notBlocked.statusCode, 200);
   });
 
@@ -115,49 +135,49 @@ describe('HttpServer', () => {
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
         <loc>http://external-url/</loc>
-        <lastmod>2021-05-22</lastmod>
+        <lastmod>2021-10-16</lastmod>
         <changefreq>monthly</changefreq>
         <priority>1</priority>
     </url>
     <url>
         <loc>http://external-url/documentation</loc>
-        <lastmod>2021-05-22</lastmod>
+        <lastmod>2021-10-16</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.9</priority>
     </url>
     <url>
         <loc>http://external-url/funding</loc>
-        <lastmod>2021-05-22</lastmod>
+        <lastmod>2021-10-16</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
         <loc>http://external-url/map</loc>
-        <lastmod>2021-05-22</lastmod>
+        <lastmod>2021-10-16</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
         <loc>http://external-url/datastore</loc>
-        <lastmod>2021-05-22</lastmod>
+        <lastmod>2021-10-16</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>http://external-url/datastore</loc>
-        <lastmod>2021-05-22</lastmod>
+        <lastmod>2021-10-16</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>http://external-url/layout</loc>
-        <lastmod>2021-05-22</lastmod>
+        <lastmod>2021-10-16</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.5</priority>
     </url>
     <url>
         <loc>http://external-url/legal-mentions</loc>
-        <lastmod>2021-05-22</lastmod>
+        <lastmod>2021-10-16</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.2</priority>
     </url>

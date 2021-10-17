@@ -95,7 +95,7 @@ describe('Layout', function () {
         .click()
         .get('[data-cy=layout-controls] [data-cy=pdf-export]')
         .click()
-        .then(() => Toasts.assertText('Export terminé !', 50_000))
+        .then(() => Toasts.assertText('Export done !', 50_000))
         .then(() => Download.fileAsBlob())
         .should((pdf) => {
           expect(pdf.size).greaterThan(50_000);
@@ -114,7 +114,7 @@ describe('Layout', function () {
         .click()
         .get('[data-cy=layout-controls] [data-cy=pdf-export]')
         .click()
-        .then(() => Toasts.assertText('Export terminé !', 50_000))
+        .then(() => Toasts.assertText('Export done !', 50_000))
         .then(() => Download.fileAsBlob())
         .should((pdf) => {
           expect(pdf.size).greaterThan(50_000);
@@ -133,7 +133,7 @@ describe('Layout', function () {
         .click()
         .get('[data-cy=layout-controls] [data-cy=pdf-export]')
         .click()
-        .then(() => Toasts.assertText('Export terminé !', 50_000))
+        .then(() => Toasts.assertText('Export done !', 50_000))
         .then(() => Download.fileAsBlob())
         .should((pdf) => {
           expect(pdf.size).greaterThan(50_000);
@@ -152,7 +152,7 @@ describe('Layout', function () {
         .click()
         .get('[data-cy=layout-controls] [data-cy=pdf-export]')
         .click()
-        .then(() => Toasts.assertText('Export terminé !', 50_000))
+        .then(() => Toasts.assertText('Export done !', 50_000))
         .then(() => Download.fileAsBlob())
         .should((pdf) => {
           expect(pdf.size).greaterThan(50_000);
@@ -168,7 +168,7 @@ describe('Layout', function () {
         .click()
         .get('[data-cy=layout-controls] [data-cy=png-export]')
         .click()
-        .then(() => Toasts.assertText('Export terminé !'))
+        .then(() => Toasts.assertText('Export done !'))
         .then(() => Download.fileAsBlob())
         .should((pdf) => {
           expect(pdf.size).greaterThan(100_000);

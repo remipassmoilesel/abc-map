@@ -24,4 +24,10 @@ describe('Language', () => {
 
     expect(JSON.stringify(Language)).toEqual(witness);
   });
+
+  it('all langs must be two letters lowercase', () => {
+    Object.values(Language).forEach((lang) => {
+      expect(lang).toMatch(/^[a-z]{2}$/);
+    });
+  });
 });

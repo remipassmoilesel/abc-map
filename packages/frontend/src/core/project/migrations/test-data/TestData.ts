@@ -22,15 +22,19 @@ import { AbcProjectManifest, ProjectHelper, Zipper } from '@abc-map/shared';
 
 export class TestData {
   public static async project01(): Promise<MigratedProject> {
-    return this.fileToMigratedProject(`${__dirname}/project-0.1.zip`);
+    return this.fileToMigratedProject(`${__dirname}/project-0.1.abm2`);
   }
 
   public static async project020(): Promise<MigratedProject> {
-    return this.fileToMigratedProject(`${__dirname}/project-0.2.0.zip`);
+    return this.fileToMigratedProject(`${__dirname}/project-0.2.0.abm2`);
   }
 
   public static async project030(): Promise<MigratedProject> {
-    return this.fileToMigratedProject(`${__dirname}/project-0.3.0.zip`);
+    return this.fileToMigratedProject(`${__dirname}/project-0.3.0.abm2`);
+  }
+
+  public static async project040(): Promise<MigratedProject> {
+    return this.fileToMigratedProject(`${__dirname}/project-0.4.0.abm2`);
   }
 
   public static fakeProject(version: string) {

@@ -146,7 +146,7 @@ describe('FeatureWrapper', () => {
 
         // Assert
         expect(feature.getStyleProperties()).toEqual({
-          point: { icon: IconName.Icon0CircleFill, size: 15 },
+          point: { icon: IconName.Icon0CircleFill, size: 30 },
           fill: { color1: undefined, color2: undefined, pattern: undefined },
           stroke: { color: undefined, width: undefined },
           text: { alignment: undefined, color: undefined, font: undefined, offsetX: undefined, offsetY: undefined, size: undefined, value: undefined },

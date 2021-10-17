@@ -60,13 +60,13 @@ class UserMenu extends React.Component<Props, {}> {
                 <i className={'fa fa-lock-open mr-3'} />
                 {t('Login')}
               </Dropdown.Item>
-              <Dropdown.Item onClick={this.handlePasswordLost} data-cy={'reset-password'}>
-                <i className={'fa fa-key mr-3'} />
-                {t('Lost_password')}
-              </Dropdown.Item>
               <Dropdown.Item onClick={this.handleRegister}>
                 <i className={'fa fa-feather mr-3'} />
                 {t('Register')}
+              </Dropdown.Item>
+              <Dropdown.Item onClick={this.handlePasswordLost} data-cy={'reset-password'}>
+                <i className={'fa fa-key mr-3'} />
+                {t('Lost_password')}
               </Dropdown.Item>
             </>
           )}

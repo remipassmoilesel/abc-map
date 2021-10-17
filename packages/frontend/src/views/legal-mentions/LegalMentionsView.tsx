@@ -18,15 +18,19 @@
 
 import React, { Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/shared';
-import Cls from './LegalMentionsView.module.scss';
 import { pageSetup } from '../../core/utils/page-setup';
 import { ServiceProps, withServices } from '../../core/withServices';
+import { prefixedTranslation } from '../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
+import Cls from './LegalMentionsView.module.scss';
 
 const logger = Logger.get('LegalMentionsView.tsx', 'info');
 
 interface State {
   legalMentions?: string;
 }
+
+const t = prefixedTranslation('LegalMentionsView:');
 
 class LegalMentionsView extends Component<ServiceProps, State> {
   constructor(props: ServiceProps) {
@@ -39,7 +43,7 @@ class LegalMentionsView extends Component<ServiceProps, State> {
     return (
       <div className={Cls.legalMentions}>
         <div className={Cls.content}>
-          <h1 className={'mb-4'}>A propos</h1>
+          <h1 className={'mb-4'}>{t('About_this_platform')}</h1>
 
           {legalMentions && <div dangerouslySetInnerHTML={{ __html: legalMentions }} />}
         </div>
@@ -48,7 +52,7 @@ class LegalMentionsView extends Component<ServiceProps, State> {
   }
 
   public componentDidMount() {
-    pageSetup('A propos de cette plateforme');
+    pageSetup(t('About_this_platform'));
 
     this.props.services.legalMentions
       .get()
@@ -57,4 +61,4 @@ class LegalMentionsView extends Component<ServiceProps, State> {
   }
 }
 
-export default withServices(LegalMentionsView);
+export default withTranslation()(withServices(LegalMentionsView));

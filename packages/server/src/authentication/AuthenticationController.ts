@@ -207,7 +207,7 @@ export class AuthenticationController extends Controller {
     const { authentication, metrics } = this.services;
 
     // We must not wait here, in order to not give clues on existence of address
-    authentication.passwordLost(req.body.email).catch((err) => logger.error('Cannot send verification email', err));
+    authentication.passwordLost(req.body.email, req.body.lang).catch((err) => logger.error('Cannot send verification email', err));
     void reply.status(200).send();
 
     metrics.resetPasswordEmail();

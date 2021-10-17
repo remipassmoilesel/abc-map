@@ -47,10 +47,12 @@ import LegalMentionsView from './views/legal-mentions/LegalMentionsView';
 import LongOperationModal from './components/long-operation-modal/LongOperationModal';
 import FundingView from './views/funding/FundingView';
 import ConfirmationModal from './components/confirmation-modal/ConfirmationModal';
-import { setLang } from './i18n/i18n';
+import { prefixedTranslation, setLang } from './i18n/i18n';
 import { withTranslation } from 'react-i18next';
 
 type Props = ServiceProps & RouteComponentProps;
+
+const t = prefixedTranslation('App:');
 
 class App extends Component<Props, {}> {
   public render(): ReactNode {
@@ -123,7 +125,7 @@ class App extends Component<Props, {}> {
    * @private
    */
   private warnBeforeUnload = (ev: BeforeUnloadEvent | undefined): string => {
-    const message = 'Les modifications en cours seront perdues, êtes vous sûr ?';
+    const message = t('Modification_in_progress_will_be_lost');
     if (ev) {
       ev.returnValue = message;
     }

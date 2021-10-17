@@ -2,13 +2,18 @@
 
 Presently there are no versions, because it is not yet necessary. 
 
+## First translation  (XXXXX 17/10/2020)
+
+- First translation in English
+
+
 ## Better drawing tools (0b60c5c 06/10/2021)
 
 - Selection tool follow the rest of tools, CTRL is needed for actions
 - New buttons on tool panels: delete, duplicate, unselect all, ... 
 
 
-## Layer edition modal (XXXXX 02/10/2021)
+## Layer edition modal (849ed174 02/10/2021)
 
 - Add new modal for layer edition
 - Add name form field

@@ -23,12 +23,16 @@ import { ServiceProps, withServices } from '../../core/withServices';
 import { StyleFactory } from '../../core/geo/styles/StyleFactory';
 import { StyleCacheEntry } from '../../core/geo/styles/StyleCache';
 import LegendSymbolButton from './LegendSymbolButton';
+import { prefixedTranslation } from '../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
 import Cls from './LegendSymbolPickerModal.module.scss';
 
 interface State {
   visible: boolean;
   styles: StyleCacheEntry[];
 }
+
+const t = prefixedTranslation('LegendSymbolPickerModal:');
 
 class LegendSymbolPickerModal extends Component<ServiceProps, State> {
   constructor(props: ServiceProps) {
@@ -48,11 +52,11 @@ class LegendSymbolPickerModal extends Component<ServiceProps, State> {
         <Modal.Header closeButton>
           <Modal.Title>
             <i className={'fa fa-map-marker-alt mr-3'} />
-            Sélectionnez un symbole
+            {t('Select_symbol')}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div>Voici les styles de géométries utilisés sur la carte:</div>
+          <div className={'mb-4'}>{t('Here_are_the_geometry_styles_used_on_the_map')}:</div>
           <div className={Cls.symbolContainer}>
             {styles.map((st) => (
               <LegendSymbolButton key={st.id} style={st} onClick={this.handleSymbolSelected} />
@@ -60,7 +64,7 @@ class LegendSymbolPickerModal extends Component<ServiceProps, State> {
             {!styles.length && (
               <div className={Cls.noSymbol}>
                 <i className={'fa fa-exclamation'} />
-                Ajoutez quelque chose sur la carte et revenez ensuite
+                {t('Add_something_on_map_then_come_back')}
               </div>
             )}
           </div>
@@ -99,4 +103,4 @@ class LegendSymbolPickerModal extends Component<ServiceProps, State> {
   };
 }
 
-export default withServices(LegendSymbolPickerModal);
+export default withTranslation()(withServices(LegendSymbolPickerModal));

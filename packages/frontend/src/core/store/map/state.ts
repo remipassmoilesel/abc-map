@@ -72,8 +72,8 @@ export const mapInitialState: MapState = {
       size: 30,
     },
     point: {
-      icon: IconName.Icon0CircleFill,
-      size: 15,
+      icon: IconName.IconGeoAltFill,
+      size: 30,
       color: '#FF5733',
     },
   },
