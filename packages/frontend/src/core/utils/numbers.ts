@@ -49,3 +49,11 @@ export function asNumberOrString(x: string | number): number | string {
 export function toPrecision(n: number, precision = 4): number {
   return Math.round(n * 10 ** precision) / 10 ** precision;
 }
+
+export function toDegrees(radians: number): number {
+  return Math.round((radians * 180) / Math.PI);
+}
+
+export function toRadians(degrees: number): number {
+  return toPrecision((degrees * Math.PI) / 180, 4);
+}

@@ -351,6 +351,7 @@ export class TestHelper {
         offsetX: 20,
         offsetY: 30,
         alignment: 'left',
+        rotation: 5,
       },
       point: {
         icon: IconName.IconMoonStars,

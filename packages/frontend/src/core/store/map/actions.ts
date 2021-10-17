@@ -30,6 +30,9 @@ export enum ActionType {
   SetFillPattern = 'SetFillPattern',
   SetTextColor = 'SetTextColor',
   SetTextSize = 'SetTextSize',
+  SetTextOffsetX = 'SetTextOffsetX',
+  SetTextOffsetY = 'SetTextOffsetY',
+  SetTextRotation = 'SetTextRotation',
   SetPointIcon = 'SetPointIcon',
   SetPointSize = 'SetPointSize',
   SetPointColor = 'SetPointColor',
@@ -76,6 +79,21 @@ export interface SetTextSize {
   size: number;
 }
 
+export interface SetTextOffsetX {
+  type: ActionType.SetTextOffsetX;
+  value: number;
+}
+
+export interface SetTextOffsetY {
+  type: ActionType.SetTextOffsetY;
+  value: number;
+}
+
+export interface SetTextRotation {
+  type: ActionType.SetTextRotation;
+  value: number;
+}
+
 export interface SetPointIcon {
   type: ActionType.SetPointIcon;
   icon: IconName;
@@ -104,6 +122,9 @@ export type MapAction =
   | SetStrokeWidth
   | SetFillPattern
   | SetTextColor
+  | SetTextOffsetX
+  | SetTextOffsetY
+  | SetTextRotation
   | SetTextSize
   | SetPointIcon
   | SetPointSize
@@ -157,6 +178,27 @@ export class MapActions {
     return {
       type: ActionType.SetTextColor,
       color,
+    };
+  }
+
+  public static setTextOffsetX(value: number): MapAction {
+    return {
+      type: ActionType.SetTextOffsetX,
+      value,
+    };
+  }
+
+  public static setTextOffsetY(value: number): MapAction {
+    return {
+      type: ActionType.SetTextOffsetY,
+      value,
+    };
+  }
+
+  public static setTextRotation(value: number): MapAction {
+    return {
+      type: ActionType.SetTextRotation,
+      value,
     };
   }
 

@@ -15,32 +15,15 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
-
-import * as React from 'react';
+import { useContext } from 'react';
 import { Services } from './Services';
 import { ServiceContext } from './context';
 
-export interface ServiceProps {
-  services: Services;
-}
-
-declare type WrappedComponent<P> = React.ComponentClass<Omit<P, keyof ServiceProps>>;
-
-export function withServices<P extends ServiceProps>(Component: React.ComponentType<P>): WrappedComponent<P> {
-  class ServiceWrapper extends React.Component<any, any> {
-    public render() {
-      return (
-        <ServiceContext.Consumer>
-          {(value) => {
-            if (!value) {
-              throw new Error(`You should not use ${Component.displayName} outside a <ServiceProvider>`);
-            }
-            return <Component {...(this.props as P)} services={value} />;
-          }}
-        </ServiceContext.Consumer>
-      );
-    }
+export function useServices(): Services {
+  const services = useContext(ServiceContext);
+  if (!services) {
+    throw new Error(`You should not use useServices() outside a <ServiceProvider>`);
   }
 
-  return ServiceWrapper;
+  return services;
 }

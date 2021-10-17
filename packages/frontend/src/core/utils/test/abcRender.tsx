@@ -19,22 +19,23 @@
 import React from 'react';
 import { render as rtlRender, RenderOptions, RenderResult } from '@testing-library/react';
 import { newTestServices, TestServices } from './TestServices';
-import { ServiceProvider } from '../../withServices';
 import { Services } from '../../Services';
 import { Provider } from 'react-redux';
-import { storeFactory } from '../../store/store';
+import { MainStore, storeFactory } from '../../store/store';
 import { MainState } from '../../store/reducer';
 import { MemoryRouter } from 'react-router-dom';
+import { ServiceProvider } from '../../context';
 
 interface Options extends RenderOptions {
   services?: TestServices;
   state?: Partial<MainState>;
+  store?: MainStore;
 }
 
 export function abcRender(ui: React.ReactElement, options?: Options): RenderResult {
   class TestServiceWrapper extends React.Component<any, any> {
     public render() {
-      const store = storeFactory(options?.state as unknown as MainState);
+      const store = options?.store || storeFactory(options?.state as unknown as MainState);
       const services = options?.services || newTestServices();
 
       return (

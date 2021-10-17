@@ -74,6 +74,10 @@ export interface TextProperties {
    * Vertical text offset in pixels. A positive will shift the text down.
    */
   alignment?: 'left' | 'right' | 'center' | 'end' | 'start' | undefined;
+  /**
+   * Text rotation in degrees
+   */
+  rotation?: number;
 }
 
 export interface PointProperties {
@@ -96,6 +100,7 @@ export const DefaultStyle = {
     size: 600,
     offsetX: 10,
     offsetY: 10,
+    rotation: 0,
   },
   point: {
     icon: 'twbs/0_circle-fill.inline.svg',

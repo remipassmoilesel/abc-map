@@ -130,10 +130,10 @@ describe('FeatureWrapper', () => {
 
         // Assert
         expect(feature.getStyleProperties()).toEqual({
-          fill: { color1: '#fff', color2: undefined, pattern: undefined },
+          fill: { color1: '#fff' },
           stroke: { color: '#000', width: 2 },
-          point: { icon: undefined, size: undefined },
-          text: { alignment: undefined, color: undefined, font: undefined, offsetX: undefined, offsetY: undefined, size: undefined, value: undefined },
+          point: {},
+          text: {},
         });
       });
 
@@ -147,9 +147,9 @@ describe('FeatureWrapper', () => {
         // Assert
         expect(feature.getStyleProperties()).toEqual({
           point: { icon: IconName.Icon0CircleFill, size: 30 },
-          fill: { color1: undefined, color2: undefined, pattern: undefined },
-          stroke: { color: undefined, width: undefined },
-          text: { alignment: undefined, color: undefined, font: undefined, offsetX: undefined, offsetY: undefined, size: undefined, value: undefined },
+          fill: {},
+          stroke: {},
+          text: {},
         });
       });
 
@@ -169,9 +169,40 @@ describe('FeatureWrapper', () => {
         // Assert
         expect(feature.getStyleProperties()).toEqual({
           stroke: { color: '#000', width: 2 },
-          fill: { color1: undefined, color2: undefined, pattern: undefined },
-          point: { icon: undefined, size: undefined },
-          text: { alignment: undefined, color: undefined, font: undefined, offsetX: undefined, offsetY: undefined, size: undefined, value: undefined },
+          fill: {},
+          point: {},
+          text: {},
+        });
+      });
+
+      it('On line string with text', () => {
+        // Prepare
+        const feature = FeatureWrapper.create(
+          new LineString([
+            [1, 1],
+            [2, 2],
+            [1, 1],
+          ])
+        );
+        feature.setText('Ho !');
+
+        // Act
+        feature.setDefaultStyle();
+
+        // Assert
+        expect(feature.getStyleProperties()).toEqual({
+          stroke: { color: '#000', width: 2 },
+          text: {
+            value: 'Ho !',
+            color: '#00f',
+            size: 600,
+            font: 'AbcCantarell',
+            offsetX: 10,
+            offsetY: 10,
+            rotation: 0,
+          },
+          fill: {},
+          point: {},
         });
       });
     });
@@ -224,6 +255,7 @@ describe('FeatureWrapper', () => {
       feature.unwrap().set(StyleProperties.TextOffsetX, 20);
       feature.unwrap().set(StyleProperties.TextOffsetY, 30);
       feature.unwrap().set(StyleProperties.TextAlignment, 'left');
+      feature.unwrap().set(StyleProperties.TextRotation, 5);
       feature.unwrap().set(StyleProperties.PointIcon, IconName.IconMoonStars);
       feature.unwrap().set(StyleProperties.PointSize, 5);
       feature.unwrap().set(StyleProperties.PointColor, '#00FF00');

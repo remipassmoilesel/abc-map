@@ -124,6 +124,7 @@ export class FeatureWrapper<Geom extends OlGeometry = OlGeometry> {
         font: this.feature.get(StyleProperties.TextFont),
         offsetX: this.feature.get(StyleProperties.TextOffsetX),
         offsetY: this.feature.get(StyleProperties.TextOffsetY),
+        rotation: this.feature.get(StyleProperties.TextRotation),
         alignment: this.feature.get(StyleProperties.TextAlignment),
       },
       point: {
@@ -157,6 +158,7 @@ export class FeatureWrapper<Geom extends OlGeometry = OlGeometry> {
     setIfDefined(StyleProperties.TextFont, properties.text?.font);
     setIfDefined(StyleProperties.TextOffsetX, properties.text?.offsetX);
     setIfDefined(StyleProperties.TextOffsetY, properties.text?.offsetY);
+    setIfDefined(StyleProperties.TextRotation, properties.text?.rotation);
     setIfDefined(StyleProperties.TextAlignment, properties.text?.alignment);
     setIfDefined(StyleProperties.PointIcon, properties.point?.icon);
     setIfDefined(StyleProperties.PointSize, properties.point?.size);
@@ -188,6 +190,10 @@ export class FeatureWrapper<Geom extends OlGeometry = OlGeometry> {
       case GeometryType.LINEAR_RING:
         this.setStyleProperties({ stroke: DefaultStyle.stroke });
         break;
+    }
+
+    if (this.getText()) {
+      this.setStyleProperties({ text: DefaultStyle.text });
     }
 
     return this;

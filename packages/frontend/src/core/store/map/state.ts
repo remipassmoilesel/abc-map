@@ -40,6 +40,9 @@ export interface MapState {
       color: string;
       font: string;
       size: number;
+      offsetX: number;
+      offsetY: number;
+      rotation: number;
     };
     point: {
       icon: IconName;
@@ -70,6 +73,9 @@ export const mapInitialState: MapState = {
       color: '#FF5733',
       font: 'AbcCantarell',
       size: 30,
+      offsetX: 15,
+      offsetY: 15,
+      rotation: 0,
     },
     point: {
       icon: IconName.IconGeoAltFill,

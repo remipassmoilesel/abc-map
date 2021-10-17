@@ -67,6 +67,9 @@ describe('StorePersistence', () => {
             color: '#FF5733',
             font: 'AbcCantarell',
             size: 30,
+            offsetX: 15,
+            offsetY: 10,
+            rotation: 5,
           },
           point: {
             icon: IconName.Icon0CircleFill,
@@ -118,6 +121,9 @@ describe('StorePersistence', () => {
             color: '#FF5733',
             font: 'AbcCantarell',
             size: 30,
+            offsetX: 15,
+            offsetY: 10,
+            rotation: 5,
           },
           point: {
             icon: IconName.Icon0CircleFill,

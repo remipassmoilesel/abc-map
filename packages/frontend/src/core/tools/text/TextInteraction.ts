@@ -122,9 +122,8 @@ export class TextInteraction extends Interaction {
     textarea.oninput = () => onChange(textarea.value);
     textarea.dataset['testid'] = 'textarea';
 
-    buttonBox.style.background = 'white';
     button.type = 'button';
-    button.className = 'btn btn-outline-primary';
+    button.className = 'btn btn-outline-primary abc-text-box-button';
     button.onclick = handleValidation;
     button.innerText = 'Ok';
     button.dataset['testid'] = 'button';

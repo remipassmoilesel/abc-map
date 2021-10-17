@@ -1,0 +1,100 @@
+/**
+ * Copyright © 2021 Rémi Pace.
+ * This file is part of Abc-Map.
+ *
+ * Abc-Map is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of
+ * the License, or (at your option) any later version.
+ *
+ * Abc-Map is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General
+ * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+import { newTestServices, TestServices } from '../../../../../core/utils/test/TestServices';
+import { FeatureWrapper } from '../../../../../core/geo/features/FeatureWrapper';
+import { abcRender } from '../../../../../core/utils/test/abcRender';
+import TextFormat from './TextFormat';
+import { Point } from 'ol/geom';
+import userEvent from '@testing-library/user-event';
+import { screen } from '@testing-library/react';
+import { MainStore, storeFactory } from '../../../../../core/store/store';
+
+describe('TextFormat', () => {
+  let services: TestServices;
+  let store: MainStore;
+  let feature: FeatureWrapper;
+
+  beforeEach(() => {
+    services = newTestServices();
+    store = storeFactory();
+    feature = FeatureWrapper.create(new Point([1, 1]));
+  });
+
+  it('should set size', () => {
+    // Prepare
+    abcRender(<TextFormat />, { services, store });
+
+    // Act
+    userEvent.selectOptions(screen.getByTestId('text-size'), ['45']);
+    callTransform();
+
+    // Assert
+    expect(store.getState().map.currentStyle.text.size).toEqual(45);
+    expect(feature.getStyleProperties().text?.size).toEqual(45);
+  });
+
+  it('should set offsetX', () => {
+    // Prepare
+    abcRender(<TextFormat />, { services, store });
+
+    // Act
+    userEvent.clear(screen.getByTestId('text-offsetX'));
+    userEvent.type(screen.getByTestId('text-offsetX'), '9');
+    callTransform();
+
+    // Assert
+    expect(store.getState().map.currentStyle.text.offsetX).toEqual(9);
+    expect(feature.getStyleProperties().text?.offsetX).toEqual(9);
+  });
+
+  it('should set offsetY', () => {
+    // Prepare
+    abcRender(<TextFormat />, { services, store });
+
+    // Act
+    userEvent.clear(screen.getByTestId('text-offsetY'));
+    userEvent.type(screen.getByTestId('text-offsetY'), '9');
+    callTransform();
+
+    // Assert
+    expect(store.getState().map.currentStyle.text.offsetY).toEqual(9);
+    expect(feature.getStyleProperties().text?.offsetY).toEqual(9);
+  });
+
+  it('should set rotation', () => {
+    // Prepare
+    abcRender(<TextFormat />, { services, store });
+
+    // Act
+    userEvent.clear(screen.getByTestId('text-rotation'));
+    userEvent.type(screen.getByTestId('text-rotation'), '9');
+    callTransform();
+
+    // Assert
+    expect(store.getState().map.currentStyle.text.rotation).toEqual(9);
+    expect(feature.getStyleProperties().text?.rotation).toEqual(9);
+  });
+
+  function callTransform() {
+    const style = services.geo.updateSelectedFeatures.args[0][0](feature.getStyleProperties(), feature);
+    if (style) {
+      feature.setStyleProperties(style);
+    }
+  }
+});

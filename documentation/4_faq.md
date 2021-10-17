@@ -1,6 +1,6 @@
-# How toooz
+# Frequently Asked Questions
 
-## Start Abc-Map locally
+## How to start Abc-Map locally ?
 
 Check [setup-workstation.md](./1_setup-workstation.md) first, then:      
 
@@ -10,13 +10,7 @@ Check [setup-workstation.md](./1_setup-workstation.md) first, then:
     $ ./abc-cli start       # Start application
 
 
-## Add a dependency 
-
-1. Edit target `package.json`, add your dependency
-1. Run `$ abc install`
-
-
-## Fix my broken repo
+## How to fix my broken repository ?
 
     $ git checkout master
     $ abc clean
@@ -29,14 +23,25 @@ In very rare case you may need before all commands above:
     $ rm -rf packages/abc-cli/build
 
 
-## Search outdated dependencies
+## React: functional component or class component ?
+
+Functional components must be privileged.
+
+
+## How to add a dependency ?
+
+1. Edit target `package.json`, add your dependency
+1. Run `$ abc install`
+
+
+## How to search outdated dependencies ?
 
     $ abc install --production
     $ abc npm-registry
     $ lerna exec 'npm outdated --registry http://localhost:4873' --no-bail | tee outdated.log 
 
 
-## Generate a markdown TOC
+## How to generate a markdown TOC ?
 
 See https://github.com/jonschlinkert/markdown-toc#cli
 

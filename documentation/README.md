@@ -10,7 +10,7 @@ check [https://abc-map.fr/documentation](https://abc-map.fr/documentation).
 - [Setup a developer workstation](./1_setup-workstation.md)
 - [High level architecture](./2_architecture.md)
 - [Deploy an instance of Abc-Map](./3_deployment.md)
-- [How to ?](./4_how-tos.md)
+- [FAQ](./4_faq.md)
 - [The bottomless well aka backlog](./5_the_bottomless_well.md)
 
 

@@ -175,7 +175,9 @@
       "Icon": "Icon",
       "Points": "Points",
       "Lines_and_polygons": "Lines and polygons",
-      "Text": "Text"
+      "Text": "Text",
+      "Rotation": "Rotation",
+      "Position": "Position"
     },
     "RemoteProjectsModal": {
       "Projects_saved": "Projets enregistrés",
