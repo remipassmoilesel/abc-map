@@ -20,24 +20,24 @@ import React from 'react';
 import PaypalButton from './PaypalButton';
 import utipLogo from './utip.png';
 import tipeeeLogo from './tipeee.png';
+import { prefixedTranslation } from '../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
 import Cls from './FundingLinks.module.scss';
 
-export class FundingLinks extends React.Component<{}, {}> {
+const t = prefixedTranslation('FundingLinks:');
+
+class FundingLinks extends React.Component<{}, {}> {
   public render() {
     return (
       <div className={'d-flex'}>
         <div className={'d-flex flex-column align-items-center mr-5'}>
-          <div className={'mb-3'}>
-            Par <b>Carte bleue</b> ou <b>Paypal</b>.
-          </div>
+          <div className={'mb-3'} dangerouslySetInnerHTML={{ __html: t('By_CB_paypal') }} />
           <div className={Cls.fundingMedium}>
             <PaypalButton />
           </div>
         </div>
         <div className={'d-flex flex-column align-items-center mr-5'}>
-          <div className={'mb-3'}>
-            Avec <b>uTip</b>
-          </div>
+          <div className={'mb-3'} dangerouslySetInnerHTML={{ __html: t('With_utip') }} />
           <div className={Cls.fundingMedium}>
             <a href={'https://utip.io/abcmap'} target={'_blank'} rel="noreferrer">
               <img src={utipLogo} height={'100'} alt={'uTip'} />
@@ -45,9 +45,7 @@ export class FundingLinks extends React.Component<{}, {}> {
           </div>
         </div>
         <div className={'d-flex flex-column align-items-center'}>
-          <div className={'mb-3'}>
-            Avec <b>Tipeee</b>
-          </div>
+          <div className={'mb-3'} dangerouslySetInnerHTML={{ __html: t('With_tipeee') }} />
           <div className={Cls.fundingMedium}>
             <a href={'https://fr.tipeee.com/abc-map'} target={'_blank'} rel="noreferrer">
               <img src={tipeeeLogo} height={'70'} alt={'uTip'} />
@@ -58,3 +56,5 @@ export class FundingLinks extends React.Component<{}, {}> {
     );
   }
 }
+
+export default withTranslation()(FundingLinks);

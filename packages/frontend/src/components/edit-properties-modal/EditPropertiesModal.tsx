@@ -22,12 +22,16 @@ import { ModalEventType, ModalStatus, ShowFeaturePropertiesModal } from '../../c
 import { ServiceProps, withServices } from '../../core/withServices';
 import { SimplePropertiesMap } from '../../core/geo/features/FeatureWrapper';
 import PropertiesForm from './PropertiesForm';
+import { prefixedTranslation } from '../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
 
 interface State {
   visible: boolean;
   properties?: SimplePropertiesMap;
   newProperties?: SimplePropertiesMap;
 }
+
+const t = prefixedTranslation('EditPropertiesModal:');
 
 class EditPropertiesModal extends Component<ServiceProps, State> {
   constructor(props: ServiceProps) {
@@ -45,7 +49,7 @@ class EditPropertiesModal extends Component<ServiceProps, State> {
     return (
       <Modal show={visible} onHide={this.handleCancel} size={'lg'}>
         <Modal.Header closeButton>
-          <Modal.Title>Propriétés</Modal.Title>
+          <Modal.Title>{t('Properties')}</Modal.Title>
         </Modal.Header>
         <Modal.Body className={'d-flex flex-column'}>
           {/* Properties edition */}
@@ -54,10 +58,10 @@ class EditPropertiesModal extends Component<ServiceProps, State> {
           {/* Confirm and cancel buttons */}
           <div className={'d-flex justify-content-end'}>
             <button className={'btn btn-secondary mr-3'} onClick={this.handleCancel} data-cy="properties-modal-cancel">
-              Annuler
+              {t('Cancel')}
             </button>
             <button className={'btn btn-primary'} onClick={this.handleConfirm} data-cy="properties-modal-confirm">
-              Confirmer
+              {t('Save')}
             </button>
           </div>
         </Modal.Body>
@@ -121,4 +125,4 @@ class EditPropertiesModal extends Component<ServiceProps, State> {
   }
 }
 
-export default withServices(EditPropertiesModal);
+export default withTranslation()(withServices(EditPropertiesModal));

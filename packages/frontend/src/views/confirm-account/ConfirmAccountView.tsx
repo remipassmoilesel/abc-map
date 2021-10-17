@@ -21,16 +21,20 @@ import { ConfirmAccountParams, ConfirmationStatus, FrontendRoutes, Logger } from
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
 import { ServiceProps, withServices } from '../../core/withServices';
 import { HttpError } from '../../core/http/HttpError';
-import { pageSetup } from '../../core/utils/page-setup';
+import { addNoIndexMeta, pageSetup, removeNoIndexMeta } from '../../core/utils/page-setup';
+import { prefixedTranslation } from '../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
 import Cls from './ConfirmAccountView.module.scss';
 
-const logger = Logger.get('ConfirmAccount.tsx');
+const logger = Logger.get('ConfirmAccountView.tsx');
 
 interface State {
   status: ConfirmationStatus;
 }
 
 type Props = RouteComponentProps<ConfirmAccountParams> & ServiceProps;
+
+const t = prefixedTranslation('ConfirmAccountView:');
 
 class ConfirmAccountView extends Component<Props, State> {
   constructor(props: Props) {
@@ -45,36 +49,39 @@ class ConfirmAccountView extends Component<Props, State> {
 
     return (
       <div className={Cls.confirmAccount}>
-        <h3 className={'mb-4'}>Activation de votre compte</h3>
-        {ConfirmationStatus.InProgress === status && <>Veuillez patienter ...</>}
+        <h3 className={'mb-4'} dangerouslySetInnerHTML={{ __html: t('And_voila_welcome') }} />
+        {/* Loading */}
+        {ConfirmationStatus.InProgress === status && <div>{t('Please_wait')}</div>}
 
-        {ConfirmationStatus.AlreadyConfirmed === status && (
-          <>
-            Cet adresse email a déjà été activée 🤷 <br />
-            Connectez-vous ou demandez une réinitialisation de mot de passe.
-          </>
-        )}
+        {/* Account already confirmed */}
+        {ConfirmationStatus.AlreadyConfirmed === status && <div dangerouslySetInnerHTML={{ __html: t('This_account_is_already_activated') }} />}
 
-        {ConfirmationStatus.Failed === status && (
-          <>
-            L&apos;activation de votre compte a échoué 🥺.
-            <br /> Peut-être avez-vous déjà activé votre compte ?
-          </>
-        )}
+        {/* Account confirmation failed */}
+        {ConfirmationStatus.Failed === status && <div dangerouslySetInnerHTML={{ __html: t('Activation_failed') }} />}
 
+        {/* Account confirmation succeed */}
         {ConfirmationStatus.Succeed === status && (
-          <>
-            <span data-cy={'account-enabled'}>Votre compte est activé, vous êtes connecté ✨</span>
-            <br /> <Link to={FrontendRoutes.map().raw()}>Direction: la carte !</Link>
-          </>
+          <div data-cy={'account-enabled'}>
+            {t('Activation_succeed')} ✨<br />
+            <Link to={FrontendRoutes.map().raw()}>{t('Map_is_over_here')}</Link>
+          </div>
         )}
       </div>
     );
   }
 
   public componentDidMount() {
-    pageSetup("Confirmation d'inscription", 'Ici vous pouvez activer votre compte Abc-Map');
+    pageSetup(t('Registration_confirmation'));
+    addNoIndexMeta();
 
+    this.confirmRegistration();
+  }
+
+  public componentWillUnmount() {
+    removeNoIndexMeta();
+  }
+
+  private confirmRegistration() {
     const { authentication, toasts } = this.props.services;
 
     const token = this.props.match.params.token;
@@ -99,4 +106,4 @@ class ConfirmAccountView extends Component<Props, State> {
   }
 }
 
-export default withRouter(withServices(ConfirmAccountView));
+export default withTranslation()(withRouter(withServices(ConfirmAccountView)));

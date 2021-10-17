@@ -21,6 +21,8 @@ import { Logger } from '@abc-map/shared';
 import { PasswordStrength, ValidationHelper } from '../../core/utils/ValidationHelper';
 import FormValidationLabel from '../form-validation-label/FormValidationLabel';
 import { FormState } from '../form-validation-label/FormState';
+import { prefixedTranslation } from '../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
 
 const logger = Logger.get('RegistrationForm.tsx');
 
@@ -40,6 +42,8 @@ interface State {
   confirmation: string;
   formState: FormState;
 }
+
+const t = prefixedTranslation('RegistrationModal:');
 
 class RegistrationForm extends Component<Props, State> {
   constructor(props: Props) {
@@ -63,7 +67,7 @@ class RegistrationForm extends Component<Props, State> {
       <>
         {/* Intro */}
 
-        <p className={'mb-3'}>Pour vous inscrire, remplissez ce formulaire. Vos données personnelles et vos cartes ne seront jamais transmises à un tiers.</p>
+        <p className={'mb-3'}>{t('Please_fill_the_form_to_register')}</p>
 
         {/* Registration form */}
 
@@ -72,7 +76,7 @@ class RegistrationForm extends Component<Props, State> {
           value={email}
           onChange={this.handleEmailChange}
           onKeyUp={this.handleKeyUp}
-          placeholder={'Adresse email'}
+          placeholder={t('Email')}
           className={'form-control mb-2'}
           data-cy={'email'}
           data-testid={'email'}
@@ -82,7 +86,7 @@ class RegistrationForm extends Component<Props, State> {
           value={password}
           onChange={this.handlePasswordChange}
           onKeyUp={this.handleKeyUp}
-          placeholder={'Mot de passe'}
+          placeholder={t('Password')}
           className={'form-control mb-2'}
           data-cy={'password'}
           data-testid={'password'}
@@ -92,7 +96,7 @@ class RegistrationForm extends Component<Props, State> {
           value={confirmation}
           onChange={this.handleConfirmationChange}
           onKeyUp={this.handleKeyUp}
-          placeholder={'Confirmation du mot de passe'}
+          placeholder={t('Password_confirmation')}
           className={'form-control mb-3'}
           data-cy={'password-confirmation'}
           data-testid={'password-confirmation'}
@@ -112,7 +116,7 @@ class RegistrationForm extends Component<Props, State> {
             data-cy={'cancel-registration'}
             data-testid={'cancel-registration'}
           >
-            Annuler
+            {t('Cancel')}
           </button>
 
           <button
@@ -123,7 +127,7 @@ class RegistrationForm extends Component<Props, State> {
             data-cy={'submit-registration'}
             data-testid={'submit-registration'}
           >
-            Inscription
+            {t('Register')}
           </button>
         </div>
       </>
@@ -193,4 +197,4 @@ class RegistrationForm extends Component<Props, State> {
   }
 }
 
-export default RegistrationForm;
+export default withTranslation()(RegistrationForm);

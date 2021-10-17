@@ -63,7 +63,7 @@ describe('Proportional symbols', function () {
       .should((map) => {
         const layers = map.getLayersMetadata();
         expect(layers).length(4);
-        expect(layers[3].name).equal('Symboles');
+        expect(layers[3].name).equal('Proportional symbols');
 
         const features = map.getActiveLayerFeatures();
         expect(features.length).equal(252);

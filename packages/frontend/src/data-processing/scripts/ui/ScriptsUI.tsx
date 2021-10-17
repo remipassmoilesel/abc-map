@@ -21,6 +21,8 @@ import { Logger } from '@abc-map/shared';
 import CodeEditor from './CodeEditor';
 import Cls from './ScriptsUI.module.scss';
 import { ScriptError } from '../typings';
+import { prefixedTranslation } from '../../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
 
 const logger = Logger.get('ScriptsUI.tsx');
 
@@ -36,6 +38,8 @@ interface State {
   output: string[];
 }
 
+const t = prefixedTranslation('DataProcessingModules:Scripts.');
+
 class ScriptsUI extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
@@ -50,18 +54,18 @@ class ScriptsUI extends Component<Props, State> {
     return (
       <div className={Cls.panel}>
         <div className={'mb-2'}>
-          <p>Le module d&apos;exécution de scripts permet de traiter les données de la carte de manière programmatique en écrivant du code Javascript.</p>
-          <p>Gardez en tête ces recommandations: </p>
+          <p>{t('Script_module_allow_advanced_data_modification')}</p>
+          <p>{t('Keep_in_mind_recommendations')}: </p>
           <ul>
-            <li>Si vous ne comprenez pas à quoi sert ce module, ne l&apos;utilisez pas</li>
-            <li>N&apos;exécutez pas du code que vous ne comprenez pas</li>
-            <li>Les actions effectuées par un script ne peuvent pas être annulées</li>
+            <li>{t('Dont_use_it_if_you_dont_understand_it')}</li>
+            <li>{t('Dont_run_code_you_dont_understand')}</li>
+            <li>{t('Actions_cannot_be_undone')}</li>
           </ul>
         </div>
 
         <div className={'alert alert-danger my-2'}>
           <i className={'fa fa-exclamation-triangle mr-2'} />
-          Une mauvaise utilisation de ce module peut présenter un risque de sécurité
+          {t('Improper_use_can_cause_security_issue')}
         </div>
 
         <CodeEditor initialContent={content} onChange={this.handleChange} />
@@ -73,14 +77,13 @@ class ScriptsUI extends Component<Props, State> {
             </div>
           )}
           <button className={'btn btn-primary mt-3'} onClick={this.execute} data-cy={'execute'}>
-            Exécuter
+            {t('Execute')}
           </button>
         </div>
 
         {!!output.length && (
           <div className={Cls.output}>
-            Sortie:
-            <pre data-cy={'output'}>{output.join('\n')}</pre>
+            {t('Output')}: <pre data-cy={'output'}>{output.join('\n')}</pre>
           </div>
         )}
       </div>
@@ -90,11 +93,11 @@ class ScriptsUI extends Component<Props, State> {
   private execute = () => {
     this.props
       .onProcess()
-      .then((output) => this.setState({ message: 'Script exécuté sans erreurs.', output }))
+      .then((output) => this.setState({ message: t('Executed_without_errors'), output }))
       .catch((err: ScriptError | Error) => {
         logger.error('Script error: ', err);
         const output = 'output' in err ? err.output : [];
-        this.setState({ message: err.message, output });
+        this.setState({ message: `${t('Error')}: ${err.message || '<no-message>'}`, output });
       });
   };
 
@@ -104,4 +107,4 @@ class ScriptsUI extends Component<Props, State> {
   };
 }
 
-export default ScriptsUI;
+export default withTranslation()(ScriptsUI);

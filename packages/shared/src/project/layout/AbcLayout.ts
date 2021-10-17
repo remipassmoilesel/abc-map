@@ -26,7 +26,7 @@ export interface AbcLayout {
 }
 
 export interface LayoutFormat {
-  name: string;
+  id: string;
   /**
    * In millimeters
    */
@@ -40,42 +40,42 @@ export interface LayoutFormat {
 
 export class LayoutFormats {
   public static readonly A5_PORTRAIT: LayoutFormat = {
-    name: 'A5 Portrait',
+    id: 'A5_PORTRAIT',
     width: 148,
     height: 210,
     orientation: 'portrait',
   };
 
   public static readonly A5_LANDSCAPE: LayoutFormat = {
-    name: 'A5 Paysage',
+    id: 'A5_LANDSCAPE',
     width: 210,
     height: 148,
     orientation: 'landscape',
   };
 
   public static readonly A4_PORTRAIT: LayoutFormat = {
-    name: 'A4 Portrait',
+    id: 'A4_PORTRAIT',
     width: 210,
     height: 297,
     orientation: 'portrait',
   };
 
   public static readonly A4_LANDSCAPE: LayoutFormat = {
-    name: 'A4 Paysage',
+    id: 'A4_LANDSCAPE',
     width: 297,
     height: 210,
     orientation: 'landscape',
   };
 
   public static readonly A3_PORTRAIT: LayoutFormat = {
-    name: 'A3 Portrait',
+    id: 'A3_PORTRAIT',
     width: 297,
     height: 420,
     orientation: 'portrait',
   };
 
   public static readonly A3_LANDSCAPE: LayoutFormat = {
-    name: 'A3 Paysage',
+    id: 'A3_LANDSCAPE',
     width: 420,
     height: 297,
     orientation: 'landscape',

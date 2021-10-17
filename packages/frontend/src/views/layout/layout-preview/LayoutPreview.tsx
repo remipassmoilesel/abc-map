@@ -31,6 +31,8 @@ import { Control } from 'ol/control';
 import { LegendRenderer } from '../../../core/project/rendering/LegendRenderer';
 import { AttributionRenderer } from '../../../core/project/rendering/AttributionRenderer';
 import { toPrecision } from '../../../core/utils/numbers';
+import { prefixedTranslation } from '../../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
 
 const logger = Logger.get('LayoutPreview.tsx');
 
@@ -47,6 +49,8 @@ interface State {
   legendCanvas?: HTMLCanvasElement;
   attributionsCanvas?: HTMLCanvasElement;
 }
+
+const t = prefixedTranslation('LayoutView:');
 
 class LayoutPreview extends Component<Props, State> {
   private mapRef = React.createRef<HTMLDivElement>();
@@ -73,10 +77,10 @@ class LayoutPreview extends Component<Props, State> {
         {!layout && (
           <div className={Cls.noLayout}>
             <i className={`fa fa-print ${Cls.bigIcon}`} />
-            <div>Créez une page pour exporter votre carte</div>
+            <div>{t('Create_layout_to_export')}</div>
             <button onClick={handleNewLayout} className={'btn btn-primary mt-3'} data-cy={'new-layout'}>
               <i className={'fa fa-plus mr-2'} />
-              Nouvelle page A4
+              {t('Create_A4_layout')}
             </button>
           </div>
         )}
@@ -92,7 +96,7 @@ class LayoutPreview extends Component<Props, State> {
 
   public componentDidUpdate(prevProps: Readonly<Props>) {
     const layoutChanged = !_.isEqual(prevProps.layout?.id, this.props.layout?.id);
-    const formatChanged = prevProps.layout?.format.name !== this.props.layout?.format.name;
+    const formatChanged = prevProps.layout?.format.id !== this.props.layout?.format.id;
     const legendChanged = prevProps.legend.display !== this.props.legend.display;
     if (layoutChanged || formatChanged || legendChanged) {
       this.setupPreview(this.props.layout).catch((err) => logger.error('Rendering error: ', err));
@@ -269,4 +273,4 @@ class LayoutPreview extends Component<Props, State> {
   }
 }
 
-export default LayoutPreview;
+export default withTranslation()(LayoutPreview);

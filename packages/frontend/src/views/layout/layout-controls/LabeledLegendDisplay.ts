@@ -20,33 +20,33 @@ import { LegendDisplay } from '@abc-map/shared';
 
 export interface LabeledLegendDisplay {
   value: LegendDisplay;
-  label: string;
+  i18nLabel: string;
 }
 
 export class LabeledLegendDisplays {
   public static readonly Hidden: LabeledLegendDisplay = {
     value: LegendDisplay.Hidden,
-    label: 'Pas de légende',
+    i18nLabel: 'No_legend',
   };
 
   public static readonly UpperLeftCorner: LabeledLegendDisplay = {
     value: LegendDisplay.UpperLeftCorner,
-    label: 'En haut à gauche',
+    i18nLabel: 'Top_left_corner',
   };
 
   public static readonly UpperRightCorner: LabeledLegendDisplay = {
     value: LegendDisplay.UpperRightCorner,
-    label: 'En haut à droite',
+    i18nLabel: 'Top_right_corner',
   };
 
   public static readonly BottomRightCorner: LabeledLegendDisplay = {
     value: LegendDisplay.BottomRightCorner,
-    label: 'En bas à droite',
+    i18nLabel: 'Bottom_right_corner',
   };
 
   public static readonly BottomLeftCorner: LabeledLegendDisplay = {
     value: LegendDisplay.BottomLeftCorner,
-    label: 'En bas à gauche',
+    i18nLabel: 'Bottom_left_corner',
   };
 
   public static readonly All = [

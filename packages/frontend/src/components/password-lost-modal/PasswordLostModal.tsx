@@ -23,6 +23,8 @@ import { ServiceProps, withServices } from '../../core/withServices';
 import { ModalEventType, ModalStatus } from '../../core/ui/typings';
 import { ValidationHelper } from '../../core/utils/ValidationHelper';
 import FormValidationLabel from '../form-validation-label/FormValidationLabel';
+import { prefixedTranslation } from '../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
 
 const logger = Logger.get('PasswordLostModal.tsx');
 
@@ -36,6 +38,8 @@ enum FormState {
   InvalidEmail = 'InvalidEmail',
   Ok = 'Ok',
 }
+
+const t = prefixedTranslation('PasswordLostModal:');
 
 class PasswordLostModal extends Component<ServiceProps, State> {
   constructor(props: ServiceProps) {
@@ -58,16 +62,13 @@ class PasswordLostModal extends Component<ServiceProps, State> {
     return (
       <Modal show={visible} onHide={this.close}>
         <Modal.Header closeButton>
-          <Modal.Title>Mot de passe perdu 🔑</Modal.Title>
+          <Modal.Title>{t('Password_lost')} 🔑</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div className={`d-flex flex-column p-3`}>
             {/*Intro*/}
 
-            <p className={'mb-3'}>
-              Pour réinitialiser votre mot de passe, renseignez votre adresse email ci-dessous. Si votre adresse est enregistrée vous recevrez des instructions
-              par email.
-            </p>
+            <p className={'mb-3'}>{t('Fill_this_form_to_recover_your_password')}</p>
 
             {/* Email form */}
 
@@ -77,7 +78,7 @@ class PasswordLostModal extends Component<ServiceProps, State> {
                 value={email}
                 onInput={this.handleEmailChange}
                 onKeyUp={this.handleKeyUp}
-                placeholder={'Adresse email'}
+                placeholder={t('Email_address')}
                 className={'form-control'}
                 data-cy={'email'}
               />
@@ -91,7 +92,7 @@ class PasswordLostModal extends Component<ServiceProps, State> {
 
             <div className={'d-flex justify-content-end'}>
               <button type={'button'} onClick={this.close} className={`btn btn-outline-secondary`} data-cy={'cancel-login'}>
-                Annuler
+                {t('Cancel')}
               </button>
               <button
                 type={'button'}
@@ -100,7 +101,7 @@ class PasswordLostModal extends Component<ServiceProps, State> {
                 className={`btn btn-primary ml-2`}
                 data-cy={'confirm-reset-password'}
               >
-                Connexion
+                {t('Confirm')}
               </button>
             </div>
           </div>
@@ -149,7 +150,7 @@ class PasswordLostModal extends Component<ServiceProps, State> {
     authentication
       .passwordLost(email)
       .then(() => {
-        toasts.info('Demande envoyée ! Pensez à vérifiez vos spam 📧');
+        toasts.info(t('Email_sent_check_your_spam'));
         this.close();
       })
       .catch((err) => logger.error(err));
@@ -177,4 +178,4 @@ class PasswordLostModal extends Component<ServiceProps, State> {
   }
 }
 
-export default withServices(PasswordLostModal);
+export default withTranslation()(withServices(PasswordLostModal));

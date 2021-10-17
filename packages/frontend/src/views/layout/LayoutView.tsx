@@ -37,6 +37,7 @@ import { pageSetup } from '../../core/utils/page-setup';
 import LayoutControls from './layout-controls/LayoutControls';
 import { ExportFormat } from './ExportFormat';
 import Cls from './LayoutView.module.scss';
+import { prefixedTranslation } from '../../i18n/i18n';
 
 const logger = Logger.get('LayoutView.tsx', 'warn');
 
@@ -59,6 +60,8 @@ const mapStateToProps = (state: MainState) => ({
 const connector = connect(mapStateToProps);
 
 type Props = ConnectedProps<typeof connector> & ServiceProps;
+
+const t = prefixedTranslation('LayoutView:');
 
 class LayoutView extends Component<Props, State> {
   private exportSupport = React.createRef<HTMLDivElement>();
@@ -113,7 +116,7 @@ class LayoutView extends Component<Props, State> {
   }
 
   public componentDidMount() {
-    pageSetup('Mise en page', `Mettez en page et exportez vos cartes au format PDF ou PNG 📐 🚶‍♀️`);
+    pageSetup(t('Layout'), t('Create_layout_to_export_your_map'));
 
     const layouts = this.props.layouts;
     if (layouts.length) {
@@ -170,7 +173,7 @@ class LayoutView extends Component<Props, State> {
     const layouts = this.props.layouts;
 
     if (!active) {
-      toasts.info('Vous devez sélectionner une page');
+      toasts.info(t('You_muse_select_a_layout'));
       return;
     }
 
@@ -214,7 +217,7 @@ class LayoutView extends Component<Props, State> {
     const { project, history } = this.props.services;
 
     const active = this.getActiveLayout();
-    const formatChanged = active?.format.name !== format.name;
+    const formatChanged = active?.format.id !== format.id;
     if (active && formatChanged) {
       const update: AbcLayout = {
         ...active,
@@ -241,6 +244,7 @@ class LayoutView extends Component<Props, State> {
   private handleExport = (format: ExportFormat) => {
     const { toasts, modals } = this.props.services;
     const support = this.exportSupport.current;
+    const layouts = this.props.layouts;
     if (!support) {
       toasts.genericError();
       logger.error('DOM not ready');
@@ -250,8 +254,12 @@ class LayoutView extends Component<Props, State> {
     const renderer = new LayoutRenderer();
     renderer.init(support);
 
+    if (!layouts.length) {
+      toasts.info(t('You_must_create_layouts_first'));
+      return;
+    }
+
     const exportLayouts = async () => {
-      const layouts = this.props.layouts;
       const map = this.state.map;
       const legend = this.props.legend;
 
@@ -267,7 +275,7 @@ class LayoutView extends Component<Props, State> {
         return;
       }
 
-      toasts.info('Export terminé !');
+      toasts.info(t('Export_done'));
     };
 
     modals

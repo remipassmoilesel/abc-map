@@ -31,6 +31,7 @@ import {
   UserStatus,
   ResetPasswordToken,
   ConfirmationStatus,
+  Language,
 } from '@abc-map/shared';
 import { Config } from '../config/Config';
 import { UserService } from '../users/UserService';
@@ -95,7 +96,7 @@ export class AuthenticationService extends AbstractService {
 
     // Send confirmation mail
     const token = this.signRegistrationToken(registration._id);
-    this.emails.confirmRegistration(registration.email, token).catch((err) => logger.error('Mail failure: ', err));
+    this.emails.confirmRegistration(request.lang, registration.email, token).catch((err) => logger.error('Mail failure: ', err));
 
     return RegistrationStatus.Successful;
   }
@@ -165,7 +166,7 @@ export class AuthenticationService extends AbstractService {
     }
   }
 
-  public async passwordLost(email: string): Promise<void> {
+  public async passwordLost(email: string, lang: Language): Promise<void> {
     const _email = email.toLocaleLowerCase().trim();
     const user = await this.users.findByEmail(_email);
     if (!user) {
@@ -174,7 +175,7 @@ export class AuthenticationService extends AbstractService {
     }
 
     const token = this.signResetPasswordToken(_email);
-    this.emails.passwordLost(_email, token).catch((err) => logger.error('Mail failure: ', err));
+    this.emails.resetPassword(lang, _email, token).catch((err) => logger.error('Mail failure: ', err));
   }
 
   public async updatePassword(email: string, newPassword: string): Promise<void> {

@@ -42,8 +42,11 @@ import { MainStore } from '../store/store';
 import { ToastService } from '../ui/ToastService';
 import { TokenHelper } from './TokenHelper';
 import { HttpError } from '../http/HttpError';
+import { getLang, prefixedTranslation } from '../../i18n/i18n';
 
 const logger = Logger.get('AuthenticationService.ts');
+
+const t = prefixedTranslation('core:AuthentificationService.');
 
 export class AuthenticationService {
   private tokenInterval: any;
@@ -92,12 +95,12 @@ export class AuthenticationService {
         }
 
         if (UserStatus.Authenticated === this.store.getState().authentication.userStatus) {
-          this.toasts.info('Vous êtes connecté !');
+          this.toasts.info(t('You_are_connected'));
         }
       })
       .catch((err) => {
         if (HttpError.isUnauthorized(err)) {
-          this.toasts.error('Vos identifiants sont incorrects');
+          this.toasts.error(t('Invalid_credentials'));
         } else {
           this.toasts.httpError(err);
         }
@@ -112,7 +115,7 @@ export class AuthenticationService {
       .then(() => undefined)
       .catch((err) => {
         if (HttpError.isForbidden(err)) {
-          this.toasts.error('Votre mot de passe est incorrect');
+          this.toasts.error(t('Your_password_is_incorrect'));
         } else {
           this.toasts.httpError(err);
         }
@@ -121,7 +124,7 @@ export class AuthenticationService {
   }
 
   public passwordLost(email: string): Promise<void> {
-    const req: PasswordLostRequest = { email };
+    const req: PasswordLostRequest = { email, lang: getLang() };
     return this.httpClient
       .post(Api.passwordResetEmail(), req)
       .then(() => undefined)
@@ -149,7 +152,7 @@ export class AuthenticationService {
   }
 
   public registration(email: string, password: string): Promise<RegistrationResponse> {
-    const request: RegistrationRequest = { email, password };
+    const request: RegistrationRequest = { email, password, lang: getLang() };
     return this.httpClient
       .post<RegistrationResponse>(Api.account(), request)
       .then((res) => {
@@ -164,7 +167,7 @@ export class AuthenticationService {
       .catch((err) => {
         logger.error('Registration error: ', err);
         if (HttpError.isConflict(err)) {
-          this.toasts.info('Cette adresse email est déjà prise');
+          this.toasts.info(t('This_email_address_is_already_in_use'));
         } else {
           this.toasts.httpError(err);
         }
@@ -190,7 +193,7 @@ export class AuthenticationService {
       .then(() => undefined)
       .catch((err) => {
         if (HttpError.isForbidden(err)) {
-          this.toasts.error("Le mot de passe saisi n'est pas correct");
+          this.toasts.error(t('Your_password_is_incorrect'));
         } else {
           this.toasts.httpError(err);
         }

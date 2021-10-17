@@ -21,8 +21,11 @@ import { HistoryKey } from '../../../core/history/HistoryKey';
 import { RemoveFeaturesTask } from '../../../core/history/tasks/features/RemoveFeaturesTask';
 import { Logger } from '@abc-map/shared';
 import { Shortcuts } from './Shortcuts';
+import { prefixedTranslation } from '../../../i18n/i18n';
 
 const logger = Logger.get('MapKeyboardListener.ts');
+
+const t = prefixedTranslation('MapKeyboardListener:');
 
 export class MapKeyboardListener {
   public static create() {
@@ -70,12 +73,13 @@ export class MapKeyboardListener {
   };
 
   private deleteSelectedFeatures() {
-    const { history, geo } = this.services;
+    const { history, geo, toasts } = this.services;
 
     const map = geo.getMainMap();
     const layer = map.getActiveVectorLayer();
     const features = map.getSelectedFeatures();
     if (!layer || !features.length) {
+      toasts.info(t('You_must_select_features_first'));
       return;
     }
 
@@ -89,7 +93,7 @@ export class MapKeyboardListener {
     if (history.canUndo(HistoryKey.Map)) {
       history.undo(HistoryKey.Map).catch((err) => logger.error(err));
     } else {
-      toasts.info("Il n'y a plus rien à annuler");
+      toasts.info(t('Nothing_more_to_undo'));
     }
   }
 
@@ -99,7 +103,7 @@ export class MapKeyboardListener {
     if (history.canRedo(HistoryKey.Map)) {
       history.redo(HistoryKey.Map).catch((err) => logger.error(err));
     } else {
-      toasts.info("Il n'y a plus rien à refaire");
+      toasts.info(t('Nothing_more_to_redo'));
     }
   }
 }

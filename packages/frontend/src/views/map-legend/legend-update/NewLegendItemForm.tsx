@@ -19,6 +19,8 @@
 import React, { ChangeEvent, Component, ReactNode } from 'react';
 import { AbcLegendItem } from '@abc-map/shared';
 import { nanoid } from 'nanoid';
+import { prefixedTranslation } from '../../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
 import Cls from './NewLegendItemForm.module.scss';
 
 interface Props {
@@ -28,6 +30,8 @@ interface Props {
 interface State {
   text: string;
 }
+
+const t = prefixedTranslation('MapLegendView:');
 
 class NewLegendItemForm extends Component<Props, State> {
   constructor(props: Props) {
@@ -40,9 +44,16 @@ class NewLegendItemForm extends Component<Props, State> {
 
     return (
       <div className={'my-4'}>
-        <div className={'mb-2'}>Ajouter une entrée:</div>
+        <div className={'mb-2'}>{t('Add_entry')}:</div>
         <div className={Cls.form}>
-          <input type={'text'} value={text} onChange={this.handleTextChange} className={`form-control ${Cls.textField}`} data-cy={'new-item-input'} />
+          <input
+            type={'text'}
+            value={text}
+            onChange={this.handleTextChange}
+            placeholder={t('Entry_name')}
+            className={`form-control ${Cls.textField}`}
+            data-cy={'new-item-input'}
+          />
           <button onClick={this.handleSubmit} className={'btn btn-primary ml-2'} data-cy={'new-item-button'}>
             <i className={'fa fa-plus'} />
           </button>
@@ -67,4 +78,4 @@ class NewLegendItemForm extends Component<Props, State> {
   };
 }
 
-export default NewLegendItemForm;
+export default withTranslation()(NewLegendItemForm);

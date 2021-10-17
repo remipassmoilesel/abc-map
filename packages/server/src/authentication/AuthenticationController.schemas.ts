@@ -20,11 +20,12 @@ import { FastifySchema } from 'fastify/types/schema';
 export const RegistrationRequestSchema: FastifySchema = {
   body: {
     type: 'object',
-    required: ['email', 'password'],
+    required: ['email', 'password', 'lang'],
     additionalProperties: false,
     properties: {
       email: { type: 'string' },
       password: { type: 'string' },
+      lang: { type: 'string' },
     },
   },
 };
@@ -67,10 +68,11 @@ export const UpdatePasswordRequestSchema: FastifySchema = {
 export const PasswordLostRequestSchema: FastifySchema = {
   body: {
     type: 'object',
-    required: ['email'],
+    required: ['email', 'lang'],
     additionalProperties: false,
     properties: {
       email: { type: 'string' },
+      lang: { type: 'string' },
     },
   },
 };

@@ -106,14 +106,6 @@ export class BuildService {
 
   public cleanBuild(): void {
     this.shell.sync('lerna run clean-build');
-
-    logger.info('\nCopying frontend distribution to server ...\n');
-    // Here we copy frontend build to public backend dir.
-    // We could use frontend as a dependency but dependency management is messy afterwards (more than usual lol).
-    const sourceDir = `${this.config.getFrontendRoot()}/build`;
-    const targetDir = this.config.getServerPublicRoot();
-    this.shell.sync(`rm -rf ${targetDir}`);
-    this.shell.sync(`cp -R ${sourceDir} ${targetDir}`);
   }
 
   public test(): void {
@@ -173,8 +165,8 @@ export class BuildService {
   }
 
   public clean(): void {
+    this.shell.sync('lerna run clean');
     this.shell.sync('lerna exec "rm -rf node_modules"');
-    this.shell.sync('lerna exec "rm -rf build"');
     this.shell.sync('lerna exec "rm -rf .nyc_output"');
     this.shell.sync('lerna exec "rm -rf coverage"');
     this.shell.sync(`rm -rf ${this.config.getServerPublicRoot()}`);

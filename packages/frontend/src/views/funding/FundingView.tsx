@@ -19,68 +19,67 @@
 import React, { Component, ReactNode } from 'react';
 import { ServiceProps, withServices } from '../../core/withServices';
 import { pageSetup } from '../../core/utils/page-setup';
-import { FundingLinks } from '../../components/funding-links/FundingLinks';
+import FundingLinks from '../../components/funding-links/FundingLinks';
+import { prefixedTranslation } from '../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
 import Cls from './FundingView.module.scss';
+
+const t = prefixedTranslation('FundingView:');
 
 class FundingView extends Component<ServiceProps, {}> {
   public render(): ReactNode {
     return (
       <div className={Cls.funding}>
         <div className={Cls.content}>
-          <h1 className={'mb-3'}>Soutenez le développement d&apos;Abc-Map&nbsp;&nbsp;💌</h1>
+          <h1 className={'mb-3'}>{t('Support_the_development_of')}&nbsp;&nbsp;💌</h1>
 
           <div className={'w-100'}>
-            <h3 className={'my-4'}>Pourquoi ?</h3>
-            <p>Abc-Map est un logiciel libre développé et hébergé bénévolement.</p>
-            <p>Vous avez remarqué ? Pas de pub, pas de course à l&apos;attention, pas de récolte de données personnelles 💪</p>
-            <p>
-              En finançant ce logiciel vous financez un territoire d&apos;internet libre, où le logiciel sert l&apos;utilisateur. Ça pourrait bien devenir une
-              &nbsp;norme un jour 🙏🏻
-            </p>
+            <h3 className={'my-4'}>{t('Why')} ?</h3>
+            <p>{t('AbcMap_is_FOSS')}</p>
+            <p>{t('No_ads_no_race_for_attention')} 💪</p>
+            <p>{t('Fund_a_free_internet_territory')} 🙏🏻</p>
           </div>
 
           <div>
-            <h3 className={'my-4'}>Comment ?</h3>
+            <h3 className={'my-4'}>{t('How')} ?</h3>
             <FundingLinks />
           </div>
 
           <div className={'w-100'}>
-            <h3 className={'my-4'}>A quoi ça sert ?</h3>
-            <p>L&apos;argent récolté:</p>
+            <h3 className={'my-4'}>{t('What_is_the_point')} ?</h3>
+            <p>{t('Money_collected')}:</p>
             <ul>
-              <li>paie l&apos;hébergement</li>
-              <li>finance des sessions de développement</li>
-              <li>finance de la documentation</li>
+              <li>{t('Pays_hosting')}</li>
+              <li>{t('Funds_development_sessions')}</li>
+              <li>{t('Funds_documentation')}</li>
             </ul>
 
-            <p>Les prochaines fonctionnalités prévues sont:</p>
+            <p>{t('Next_planned_features_are')}:</p>
             <ul>
-              <li>De meilleurs styles pour créer de plus belles cartes</li>
-              <li>La création de symboles à partir de classeurs CSV</li>
-              <li>Le compte de géométries dans des polygones</li>
-              <li>La traduction en plusieurs langues</li>
+              <li>{t('Better_styles')}</li>
+              <li>{t('Creating_symbols_from_CSV_workbooks')}</li>
+              <li>{t('Counting_geometries_in_polygons')}</li>
               <li>
-                Et plus !{' '}
                 <a href={'https://gitlab.com/abc-map/abc-map/-/blob/master/documentation/5_the_bottomless_well.md'} target={'_blank'} rel="noreferrer">
-                  Voir ici
+                  {t('And_more')}
                 </a>
               </li>
             </ul>
           </div>
 
-          <h3 className="mt-3 mb-3">Liens</h3>
+          <h3 className="mt-3 mb-3">{t('Links')}</h3>
           <div className="d-flex flex-column">
             <a href="https://twitter.com/abcmapfr" target="_blank" rel="noreferrer">
               🐦 Twitter
             </a>
             <a href="mailto:fr.abcmap@gmail.com" target="_blank" rel="noreferrer">
-              📧 Contact
+              📧 Email
             </a>
             <a href="https://gitlab.com/abc-map/abc-map" target="_blank" rel="noreferrer">
-              👨‍💻 Code source
+              👨‍💻 {t('Source_code')}
             </a>
             <a href="https://remi-pace.fr" target="_blank" rel="noreferrer">
-              🌐 Site personnel de l&apos;auteur
+              🌐 {t('Author_personal_website')}
             </a>
           </div>
         </div>
@@ -93,4 +92,4 @@ class FundingView extends Component<ServiceProps, {}> {
   }
 }
 
-export default withServices(FundingView);
+export default withTranslation()(withServices(FundingView));

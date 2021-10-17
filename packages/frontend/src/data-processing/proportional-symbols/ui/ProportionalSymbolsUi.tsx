@@ -19,19 +19,21 @@
 import React, { Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/shared';
 import { newParameters, Parameters } from '../Parameters';
-import FoldableCard from '../../../components/foldable-card/FoldableCard';
+import FoldingCard from '../../../components/folding-card/FoldingCard';
 import { ServiceProps, withServices } from '../../../core/withServices';
 import SymbolConfigForm, { SymbolConfigFormValues } from './components/SymbolConfigForm';
 import DataSourceForm, { DataSourceFormValues } from '../../_common/data-source-form/DataSourceForm';
 import GeometryLayerForm, { GeometryLayerFormValues } from '../../_common/geometry-layer-form/GeometryLayerForm';
 import { ScaleAlgorithm } from '../../_common/algorithm/Algorithm';
-import Cls from './ProportionalSymbolsUi.module.scss';
 import Sample from './sample.png';
 import { ProportionalSymbolsTips } from '@abc-map/user-documentation';
 import FormValidationLabel from '../../../components/form-validation-label/FormValidationLabel';
 import { FormState } from '../../../components/form-validation-label/FormState';
 import { isProcessingResult, ProcessingResult } from '../ProcessingResult';
 import ProcessingReportModal from './components/report-modal/ProcessingReportModal';
+import { prefixedTranslation } from '../../../i18n/i18n';
+import Cls from './ProportionalSymbolsUi.module.scss';
+import { withTranslation } from 'react-i18next';
 
 const logger = Logger.get('ProportionalSymbolsUi.tsx');
 
@@ -46,6 +48,8 @@ interface State {
   formState?: FormState;
   result?: ProcessingResult;
 }
+
+const t = prefixedTranslation('DataProcessingModules:ProportionalSymbols.');
 
 class ProportionalSymbolsUi extends Component<Props, State> {
   constructor(props: Props) {
@@ -81,57 +85,44 @@ class ProportionalSymbolsUi extends Component<Props, State> {
     return (
       <div className={Cls.panel}>
         {/* Module introduction */}
-        <FoldableCard title={'1. Introduction'} className={'section'}>
+        <FoldingCard title={`1. ${t('Introduction')}`} className={'section'}>
           <div className={'explanation d-flex flex-row justify-content-between align-items-start'}>
             <div className={Cls.introduction}>
-              <p>Les symboles proportionnels permettent de représenter des données statistiques absolues (population, budgets annuels, etc ...)</p>
-              <p>Comment ça marche ?</p>
+              <p>{t('Proportional_symbols_are_used_to_represent_absolute_data')}</p>
+              <p>{t('How_does_it_work')}</p>
               <ul>
-                <li>
-                  Sélectionnez une source de données et un champ de valeur. C&apos;est ce champ qui déterminera la taille des symboles. Par exemple, un
-                  &nbsp;classeur CSV contenant la population française par département et le champ <code>population_2011</code> contenant les données de
-                  &nbsp;population.
-                </li>
-                <li>Sélectionnez une couche de géométries. Les géométries détermineront la position de chaque symbole.</li>
-                <li>Sélectionner un champ de jointure entre les données et les géométries.</li>
-                <li>Ensuite sélectionnez les caractéristiques des points à créer.</li>
+                <li dangerouslySetInnerHTML={{ __html: t('Select_data_source_and_data_field') }} />
+                <li dangerouslySetInnerHTML={{ __html: t('Select_geometry_layer_explanation') }} />
+                <li dangerouslySetInnerHTML={{ __html: t('Select_join_field_explanation') }} />
+                <li dangerouslySetInnerHTML={{ __html: t('Select_parameters_explanation') }} />
               </ul>
             </div>
-            <img src={Sample} alt={'Exemple de carte'} className={Cls.sample} />
+            <img src={Sample} alt={t('Map_sample')} title={t('Map_sample')} className={Cls.sample} />
           </div>
-        </FoldableCard>
+        </FoldingCard>
 
         {/* Data source selection */}
-        <FoldableCard title={'2. Sélectionner une source de données'} className={'section'}>
-          <div className={'explanation'}>
-            La source de données contient le champ qui déterminera la taille des symboles. La source de données peut être une couche de la carte ou un classeur
-            au format CSV.
-          </div>
+        <FoldingCard title={`2. ${t('Select_data_source')}`} className={'section'}>
+          <div className={'explanation'}>{t('Data_source_contains_field_that_will_determine_symbol_size')}</div>
           <DataSourceForm
-            valuesFieldLabel={'Taille des symboles à partir de:'}
+            valuesFieldLabel={t('Symbol_size_from')}
             valuesFieldTip={ProportionalSymbolsTips.SizeField}
             values={dataSourceValues}
             onChange={this.handleDataSourceChange}
           />
-        </FoldableCard>
+        </FoldingCard>
 
         {/* Vector layer selection */}
-        <FoldableCard title={'3. Sélectionner une couche de géométries'} className={'section'}>
-          <div className={'explanation'}>
-            La couche de géométries sera utilisée pour déterminer la position des symboles. Dans le cas de polygones, les symboles seront positionnés au centre
-            des polygones. Dans le cas de points, les symboles seront positionnés sur les points.
-          </div>
+        <FoldingCard title={`3. ${t('Select_a_geometry_layer')}`} className={'section'}>
+          <div className={'explanation'}>{t('The_geometry_layer_will_be_used_to_determine_the_position_of_the_symbols')}</div>
           <GeometryLayerForm values={geometryLayerValues} onChange={this.handleGeometryLayerChange} />
-        </FoldableCard>
+        </FoldingCard>
 
         {/* Data processing parameters */}
-        <FoldableCard title={'4. Paramètres du traitement'} className={'section'}>
-          <div className={'explanation'}>
-            Les symboles seront créés dans une nouvelle couche. Leurs tailles seront déterminées par le champ source utilisé, entre la taille minimum et la
-            taille maximum spécifiée.
-          </div>
+        <FoldingCard title={`4. ${t('Processing_parameters')}`} className={'section'}>
+          <div className={'explanation'}>{t('Symbols_are_create_in_a_new_layer')}</div>
           <SymbolConfigForm values={configValues} onChange={this.handleConfigChange} />
-        </FoldableCard>
+        </FoldingCard>
 
         {formState && (
           <div className={'m-3 d-flex justify-content-end'}>
@@ -141,10 +132,10 @@ class ProportionalSymbolsUi extends Component<Props, State> {
 
         <div className={'d-flex flex-row justify-content-end'}>
           <button className={'btn btn-secondary mr-3'} onClick={this.handleCancel}>
-            Réinitialiser
+            {t('Reset')}
           </button>
           <button className={'btn btn-primary mr-3'} onClick={this.handleSubmit} data-cy={'process'}>
-            Lancer le traitement
+            {t('Start_processing')}
           </button>
         </div>
 
@@ -278,4 +269,4 @@ class ProportionalSymbolsUi extends Component<Props, State> {
   }
 }
 
-export default withServices(ProportionalSymbolsUi);
+export default withTranslation()(withServices(ProportionalSymbolsUi));

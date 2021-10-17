@@ -20,7 +20,6 @@ import { Logger } from '@abc-map/shared';
 import { Config } from '../config/Config';
 import { Services } from '../services/services';
 import * as path from 'path';
-import { promises as fs } from 'fs';
 import { FastifyInstance, fastify, FastifyRequest, FastifyReply } from 'fastify';
 import fastifyStatic from 'fastify-static';
 import fastifySensible from 'fastify-sensible';
@@ -36,6 +35,9 @@ import fastifyRateLimit from 'fastify-rate-limit';
 import * as helmet from 'helmet';
 import { generateSitemap } from './sitemap';
 import { ProjectionController } from '../projections/ProjectionController';
+import pointOfView from 'point-of-view';
+import { getLang } from './getLang';
+import { error409Parameters, indexParameters } from './pagesParameters';
 
 const logger = Logger.get('HttpServer.ts', 'info');
 
@@ -68,8 +70,6 @@ export class HttpServer {
     return new HttpServer(config, services, publicControllers(config, services), privateControllers(config, services));
   }
 
-  private indexCache?: Buffer;
-  private error429cache?: Buffer;
   private app: FastifyInstance;
 
   constructor(private config: Config, private services: Services, private publicControllers: Controller[], private privateControllers: Controller[]) {
@@ -109,6 +109,13 @@ export class HttpServer {
   public async initialize(): Promise<void> {
     const { metrics } = this.services;
 
+    // Templating engine
+    void this.app.register(pointOfView, {
+      engine: { handlebars: require('handlebars') },
+      root: path.resolve(__dirname, '../../public'),
+      viewExt: 'html',
+    });
+
     // Add security headers
     const middleware = helmet({ contentSecurityPolicy: false });
     this.app.addHook('onRequest', function (req, reply, next) {
@@ -124,7 +131,7 @@ export class HttpServer {
 
       // Return 429 error page if necessary
       if (reply.statusCode === 429) {
-        void reply.header('Content-Type', 'text/html; charset=UTF-8').send(this.error429cache);
+        void reply.view('error429', error409Parameters(getLang(request)));
         metrics.requestQuotaExceeded();
         return;
       }
@@ -165,20 +172,15 @@ export class HttpServer {
     this.app.get('/sitemap.xml', this.generateSitemap);
 
     // Frontend service
-    // index.html is server from fastify-static when route is '/' or from memory cache otherwise
-    void this.app.register(fastifyStatic, { wildcard: false, root: this.config.frontendPath });
-    this.app.get('/*', this.sendIndex);
+    this.app.get('/*', (req: FastifyRequest, reply: FastifyReply) => {
+      void reply.view('index', indexParameters(getLang(req)));
+    });
+    this.app.head('/', (req: FastifyRequest, reply: FastifyReply) => {
+      void reply.status(200).send();
+    });
 
-    await this.loadCache();
+    void this.app.register(fastifyStatic, { root: this.config.frontendPath, wildcard: false, index: false });
   }
-
-  private sendIndex = (req: FastifyRequest, reply: FastifyReply): void => {
-    if (!this.indexCache) {
-      throw new Error('index.html is not ready');
-    }
-
-    void reply.header('Content-Type', 'text/html; charset=UTF-8').status(200).send(this.indexCache);
-  };
 
   private generateSitemap = (req: FastifyRequest, reply: FastifyReply) => {
     const sitemap = generateSitemap(this.config.externalUrl);
@@ -194,13 +196,5 @@ export class HttpServer {
         reply.forbidden();
       }
     });
-  }
-
-  private async loadCache(): Promise<void> {
-    const indexPath = path.resolve(this.config.frontendPath, 'index.html');
-    this.indexCache = await fs.readFile(indexPath);
-
-    const error429Path = path.resolve(this.config.frontendPath, 'error429.html');
-    this.error429cache = await fs.readFile(error429Path);
   }
 }

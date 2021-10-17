@@ -19,6 +19,8 @@
 import React from 'react';
 import { ServiceProps, withServices } from '../../core/withServices';
 import { Logger } from '@abc-map/shared';
+import { prefixedTranslation } from '../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
 import Cls from './ErrorBoundary.module.scss';
 
 const logger = Logger.get('ErrorBoundary');
@@ -26,6 +28,8 @@ const logger = Logger.get('ErrorBoundary');
 interface State {
   hasError: boolean;
 }
+
+const t = prefixedTranslation('ErrorBoundary:');
 
 class ErrorBoundary extends React.Component<ServiceProps, State> {
   constructor(props: ServiceProps) {
@@ -38,30 +42,20 @@ class ErrorBoundary extends React.Component<ServiceProps, State> {
       return (
         <div className={Cls.errorScreen}>
           {/* Message */}
-          <h1>Aïe Aïe Aïe 😵</h1>
-          <div className={'m-5 text-center'}>
-            Une erreur empêche l&apos;application de fonctionner correctement. Cet échec a été consigné,
-            <br />
-            le développeur responsable de cette erreur vient de recevoir une lettre de démission par email.
-          </div>
+          <h1>{t('Aouch')} 😵</h1>
+          <div className={'m-5 text-center'} dangerouslySetInnerHTML={{ __html: t('Error_occurred') }} />
 
           {/* Reload page */}
           <button className={'btn btn-primary mt-4'} onClick={this.handleRefresh}>
-            Recharger la page
+            {t('Reload_page')}
           </button>
-          <div className={'mb-4 mt-2 text-center'}>
-            Action recommandée, <br /> mais vous perdrez les modifications non enregistrées.
-          </div>
+          <div className={'mb-4 mt-2 text-center'} dangerouslySetInnerHTML={{ __html: t('Recommended_action') }} />
 
           {/* Return to app */}
           <button className={'btn btn-outline-primary mt-4'} onClick={this.handleClose}>
-            Revenir à l&apos;application
+            {t('Return_to_application')}
           </button>
-          <div className={'mb-5 mt-2 text-center'}>
-            L&apos;application sera peut-être instable,
-            <br />
-            mais vous pourrez sauvegardez votre travail et recharger la page.
-          </div>
+          <div className={'mb-5 mt-2 text-center'} dangerouslySetInnerHTML={{ __html: t('Application_will_be_unstable') }} />
         </div>
       );
     }
@@ -96,4 +90,4 @@ class ErrorBoundary extends React.Component<ServiceProps, State> {
   };
 }
 
-export default withServices(ErrorBoundary);
+export default withTranslation()(withServices(ErrorBoundary));

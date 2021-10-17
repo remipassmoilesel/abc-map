@@ -23,6 +23,8 @@ import { ServiceProps, withServices } from '../../core/withServices';
 import Cls from './PropertiesForm.module.scss';
 import { nanoid } from 'nanoid';
 import { Logger } from '@abc-map/shared';
+import { prefixedTranslation } from '../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
 
 // TODO: unit test
 
@@ -43,6 +45,8 @@ interface NewProperty {
   name: string;
   value: string;
 }
+
+const t = prefixedTranslation('EditPropertiesModal:');
 
 class PropertiesForm extends Component<Props, State> {
   constructor(props: Props) {
@@ -77,7 +81,12 @@ class PropertiesForm extends Component<Props, State> {
               data-cy={'property-value'}
               className={'form-control'}
             />
-            <button className={'ml-2 btn btn-link btn-sm'} onClick={() => this.handleDeleteProperty(property)} data-cy={`delete-property-button-${property}`}>
+            <button
+              onClick={() => this.handleDeleteProperty(property)}
+              className={'ml-2 btn btn-link btn-sm'}
+              title={t('Delete_property')}
+              data-cy={`delete-property-button-${property}`}
+            >
               <i className={'fa fa-trash'} />
             </button>
           </td>
@@ -101,21 +110,22 @@ class PropertiesForm extends Component<Props, State> {
           </td>
           <td className={Cls.value}>
             <input
-              placeholder={'Valeur'}
+              placeholder={t('Value')}
               value={property.value}
               onChange={(ev) => this.handleNewValueChange(property.id, ev)}
               className={'form-control'}
               data-cy={`new-value-${property.name || 'unknown'}`}
             />
             <button
-              className={'ml-2 btn btn-link btn-sm'}
               onClick={() => this.handleDeleteNewProperty(property.id)}
+              title={t('Delete_property')}
+              className={'ml-2 btn btn-link btn-sm'}
               data-cy={`delete-button-${property.name || 'unknown'}`}
             >
               <i className={'fa fa-trash'} />
             </button>
             {isLast && (
-              <button className={'ml-2 btn btn-link btn-sm'} onClick={this.handleNewPropertyField} data-cy={'new-property-button'}>
+              <button onClick={this.handleNewPropertyField} className={'ml-2 btn btn-link btn-sm'} title={t('New_property')} data-cy={'new-property-button'}>
                 <i className={'fa fa-plus text-primary'} />
               </button>
             )}
@@ -200,4 +210,4 @@ class PropertiesForm extends Component<Props, State> {
   }
 }
 
-export default withServices(PropertiesForm);
+export default withTranslation()(withServices(PropertiesForm));

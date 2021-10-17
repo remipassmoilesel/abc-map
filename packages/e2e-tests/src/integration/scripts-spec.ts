@@ -33,7 +33,7 @@ describe('Script module', function () {
       .get('[data-cy=execute]')
       .click()
       .get('[data-cy=message]')
-      .should('contain', 'Script exécuté sans erreurs')
+      .should('contain', 'Script executed without errors')
       .get('[data-cy=output]')
       .should('contain', 'Layer OpenStreetMap: Not vector')
       .should('contain', 'Layer Geometries: 0 features');
@@ -56,7 +56,7 @@ map.findByName(layerName).getFeatures().forEach((f) => log(f.get('e2e')))
       .get('[data-cy=execute]')
       .click()
       .get('[data-cy=message]')
-      .should('contain', 'Script exécuté sans erreurs')
+      .should('contain', 'Script executed without errors')
       .get('[data-cy=output]')
       .should('contain', '0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11');
   });

@@ -19,6 +19,7 @@
 import React, { Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/shared';
 import { DataRow } from '../../core/data/data-source/DataSource';
+import { prefixedTranslation } from '../../i18n/i18n';
 
 const logger = Logger.get('RowActions.tsx');
 
@@ -28,14 +29,16 @@ interface Props {
   onDelete: (r: DataRow) => void;
 }
 
+const t = prefixedTranslation('DataTable:');
+
 class RowActions extends Component<Props, {}> {
   public render(): ReactNode {
     return (
       <>
-        <button onClick={this.handleEdit} className={'btn btn-link'}>
+        <button onClick={this.handleEdit} title={t('Modify')} className={'btn btn-link'}>
           <i className={'fa fa-pencil-alt'} />
         </button>
-        <button onClick={this.handleDelete} className={'btn btn-link'}>
+        <button onClick={this.handleDelete} title={t('Delete')} className={'btn btn-link'}>
           <i className={'fa fa-trash-alt'} />
         </button>
       </>

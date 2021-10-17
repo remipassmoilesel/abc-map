@@ -18,7 +18,7 @@
 
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
-import { Language, Logger } from '@abc-map/shared';
+import { FallbackLang, Language, Logger } from '@abc-map/shared';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import { DocumentationLang } from '@abc-map/user-documentation';
 import en from './translations/en.json';
@@ -41,8 +41,7 @@ i18n
     },
     resources: resources,
     supportedLngs: Object.values(Language),
-    // TODO: set to English when translation finish
-    fallbackLng: Language.French,
+    fallbackLng: FallbackLang,
     interpolation: {
       escapeValue: false,
     },

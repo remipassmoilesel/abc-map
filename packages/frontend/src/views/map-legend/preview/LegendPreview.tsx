@@ -20,8 +20,10 @@ import React, { Component, ReactNode } from 'react';
 import { AbcLegend, Logger } from '@abc-map/shared';
 import { LegendRenderer } from '../../../core/project/rendering/LegendRenderer';
 import { ResizableBox, ResizeCallbackData } from 'react-resizable';
-import 'react-resizable/css/styles.css';
+import { prefixedTranslation } from '../../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
 import Cls from './LegendPreview.module.scss';
+import 'react-resizable/css/styles.css';
 
 const logger = Logger.get('LegendPreview.tsx');
 
@@ -29,6 +31,8 @@ interface Props {
   legend: AbcLegend;
   onSizeChanged: (width: number, height: number) => void;
 }
+
+const t = prefixedTranslation('MapLegendView:');
 
 class LegendPreview extends Component<Props, {}> {
   private legendRenderer = new LegendRenderer();
@@ -42,7 +46,7 @@ class LegendPreview extends Component<Props, {}> {
       <ResizableBox width={width} height={height} onResize={this.handleResize}>
         <>
           <canvas ref={this.preview} width={width} height={height} />
-          <div className={Cls.help}>Déplacez ce coin pour redimensionner ⬆️</div>
+          <div className={Cls.help}>{t('Drag_to_resize')}️</div>
         </>
       </ResizableBox>
     );
@@ -70,4 +74,4 @@ class LegendPreview extends Component<Props, {}> {
   };
 }
 
-export default LegendPreview;
+export default withTranslation()(LegendPreview);

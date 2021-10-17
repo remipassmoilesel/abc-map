@@ -22,6 +22,8 @@ import { Logger } from '@abc-map/shared';
 import { Modal } from 'react-bootstrap';
 import { ServiceProps, withServices } from '../../../core/withServices';
 import { Errors } from '../../../core/utils/Errors';
+import { prefixedTranslation } from '../../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
 import Cls from './RemoteProjectsModal.module.scss';
 
 const logger = Logger.get('RemoteProjectModal.tsx');
@@ -40,6 +42,8 @@ interface State {
   message: string;
   loading: boolean;
 }
+
+const t = prefixedTranslation('MapView:RemoteProjectsModal.');
 
 class RemoteProjectsModal extends Component<Props, State> {
   constructor(props: Props) {
@@ -66,10 +70,10 @@ class RemoteProjectsModal extends Component<Props, State> {
     return (
       <Modal show={true} onHide={this.props.onHide} backdrop={'static'}>
         <Modal.Header closeButton>
-          <Modal.Title>Projets enregistrés</Modal.Title>
+          <Modal.Title>{t('Projects_saved')}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div className={'mb-3'}>Sélectionnez un projet: </div>
+          <div className={'mb-3'}>{t('Select_a_project')}:</div>
 
           {/* List of projects */}
           <div className={Cls.projectList}>
@@ -89,26 +93,26 @@ class RemoteProjectsModal extends Component<Props, State> {
                 </div>
               );
             })}
-            {!projects.length && <div>Aucun projet enregistré.</div>}
+            {!projects.length && <div>{t('No_saved_project')}</div>}
           </div>
 
           {showModificationsWarning && (
             <div className={'my-3 alert alert-danger d-flex align-items-center justify-content-center'}>
-              <i className={'fa fa-exclamation-triangle mr-2'} /> Les modifications en cours seront perdues !
+              <i className={'fa fa-exclamation-triangle mr-2'} /> {t('Current_changes_will_be_lost')}
             </div>
           )}
 
           {/* Delete confirmation */}
           {deleteConfirmation && (
             <div className={`alert alert-danger ${Cls.deleteConfirmation} p-2`}>
-              <div className={'mb-2 text-center'}>Etes vous sur ? Vous allez supprimer définitivement: </div>
+              <div className={'mb-2 text-center'}>{t('Are_you_sure')} </div>
               <div className={'font-weight-bold text-center'}>{deleteConfirmation.name}</div>
               <div className={'d-flex justify-content-center align-items-center mt-4'}>
                 <button onClick={this.handleDeleteCanceled} className={'btn btn-secondary mr-2'} disabled={loading}>
-                  Ne pas supprimer
+                  {t('Do_not_delete')}
                 </button>
                 <button onClick={this.handleDeleteConfirmed} className={'btn btn-danger'} disabled={loading} data-cy={'confirm-deletion'}>
-                  Supprimer définitivement
+                  {t('Delete_definitely')}
                 </button>
               </div>
             </div>
@@ -117,12 +121,12 @@ class RemoteProjectsModal extends Component<Props, State> {
           {/* Password prompt, if project is protected */}
           {showCredentials && (
             <div className={Cls.passwordInput}>
-              <div>Ce projet est protégé par un mot de passe:</div>
+              <div>{t('This_project_is_protected_by_a_password')}:</div>
               <input
                 type={'password'}
                 onInput={this.handlePasswordInput}
                 value={passwordValue}
-                placeholder={'Mot de passe du projet'}
+                placeholder={t('Password_of_project')}
                 className={'form-control'}
                 data-cy={'project-password'}
               />
@@ -137,10 +141,10 @@ class RemoteProjectsModal extends Component<Props, State> {
 
               <div className={'d-flex justify-content-end'}>
                 <button onClick={this.handleCancel} disabled={loading} className={'btn btn-secondary mr-3'} data-cy={'cancel-button'}>
-                  Annuler
+                  {t('Cancel')}
                 </button>
                 <button onClick={this.handleOpenProject} disabled={!selected || loading} className={'btn btn-primary'} data-cy="open-project-confirm">
-                  Ouvrir le projet
+                  {t('Open_project')}
                 </button>
               </div>
             </>
@@ -186,7 +190,7 @@ class RemoteProjectsModal extends Component<Props, State> {
     project
       .deleteById(id)
       .then(() => {
-        toasts.info('Project supprimé !');
+        toasts.info(t('Project_deleted'));
         this.setState({ selected: undefined, deleteConfirmation: undefined });
         this.listProjects();
       })
@@ -205,12 +209,12 @@ class RemoteProjectsModal extends Component<Props, State> {
       const selected = this.state.selected;
       const passwordValue = this.state.passwordValue;
       if (!selected) {
-        toasts.info('Vous devez sélectionner un projet.');
+        toasts.info(t('You_must_select_a_project'));
         return;
       }
 
       if (selected.containsCredentials && !passwordValue) {
-        toasts.info('Vous devez entrer un mot de passe');
+        toasts.info(t('You_must_enter_a_password'));
         return;
       }
 
@@ -225,7 +229,7 @@ class RemoteProjectsModal extends Component<Props, State> {
         logger.error('Cannot open project: ', err);
 
         if (Errors.isWrongPassword(err) || Errors.isMissingPassword(err)) {
-          this.setState({ message: 'Mot de passe incorrect.' });
+          this.setState({ message: t('Incorrect_password') });
         } else {
           toasts.genericError();
         }
@@ -234,4 +238,4 @@ class RemoteProjectsModal extends Component<Props, State> {
   };
 }
 
-export default withServices(RemoteProjectsModal);
+export default withTranslation()(withServices(RemoteProjectsModal));

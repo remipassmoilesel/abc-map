@@ -20,12 +20,12 @@ import React, { Component, ReactNode } from 'react';
 import { Modal } from 'react-bootstrap';
 import { ModalEventType, ModalStatus } from '../../core/ui/typings';
 import { ServiceProps, withServices } from '../../core/withServices';
-import { Titles } from './titles';
-import * as _ from 'lodash';
 import { FrontendRoutes, Logger } from '@abc-map/shared';
 import { VoteValue } from '@abc-map/shared';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-import { FundingLinks } from '../funding-links/FundingLinks';
+import FundingLinks from '../funding-links/FundingLinks';
+import { prefixedTranslation } from '../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
 import Cls from './SolicitationModal.module.scss';
 
 const logger = Logger.get('SolicitationModal.ts');
@@ -34,9 +34,10 @@ declare type Props = ServiceProps & RouteComponentProps;
 
 interface State {
   visible: boolean;
-  title?: string;
   voteDone: boolean;
 }
+
+const t = prefixedTranslation('SolicitationModal:');
 
 class SolicitationModal extends Component<Props, State> {
   constructor(props: Props) {
@@ -46,7 +47,6 @@ class SolicitationModal extends Component<Props, State> {
 
   public render(): ReactNode {
     const visible = this.state.visible;
-    const title = this.state.title;
     const voteDone = this.state.voteDone;
     if (!visible) {
       return <div />;
@@ -55,36 +55,36 @@ class SolicitationModal extends Component<Props, State> {
     return (
       <Modal show={visible} onHide={this.close} size={'lg'} backdrop={'static'}>
         <Modal.Header closeButton>
-          <Modal.Title>{title}</Modal.Title>
+          <Modal.Title>{t('So_how_was_it')}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <h4 className={'text-center m-4'}>Soutenez votre logiciel ✊</h4>
+          <h4 className={'text-center m-4'}>{t('Support_your_software')} ✊</h4>
 
           <div className={'border rounded m-4 p-3 d-flex flex-column justify-content-center align-items-center mb-2'}>
             <FundingLinks />
 
             <button onClick={this.handleDonate} className={'btn btn-link mt-4'}>
-              A quoi servent les dons ?
+              {t('What_are_donations_used_for')}
             </button>
           </div>
 
           {!voteDone && (
             <>
               <div className={'mt-5 mx-4 text-center'}>
-                <p>Comment ça c&apos;est passé ?</p>
+                <p>{t('How_did_it_go')}</p>
               </div>
               <div className={'d-flex flex-row justify-content-center mb-4'}>
                 <button onClick={() => this.handleVote(VoteValue.SATISFIED)} className={`btn btn-outline-primary ${Cls.voteBtn}`}>
                   <span className={Cls.face}>🥰</span>
-                  Bien !
+                  {t('Well')}
                 </button>
                 <button onClick={() => this.handleVote(VoteValue.BLAH)} className={`btn btn-outline-primary ${Cls.voteBtn}`}>
                   <span className={Cls.face}>😐</span>
-                  Bof ...
+                  {t('Blah')}
                 </button>
                 <button onClick={() => this.handleVote(VoteValue.NOT_SATISFIED)} className={`btn btn-outline-primary ${Cls.voteBtn}`}>
                   <span className={Cls.face}>😞</span>
-                  Pas bien
+                  {t('Not_good')}
                 </button>
               </div>
             </>
@@ -92,14 +92,14 @@ class SolicitationModal extends Component<Props, State> {
 
           {voteDone && (
             <div className={'d-flex flex-column justify-content-center align-items-center my-5'}>
-              <h5>Merci pour votre retour 👍️</h5>
-              <h5>Faites-un don pour soutenir ce projet, c&apos;est facile: par ici ⬆</h5>
+              <h5>{t('Thanks_for_your_feedback')} 👍️</h5>
+              <h5>{t('Support_project')} ⬆</h5>
             </div>
           )}
 
           <div className={'d-flex justify-content-end'}>
             <button className={'btn btn-outline-secondary'} onClick={this.close} data-cy={'close-solicitation-modal'}>
-              Fermer
+              {t('Close')}
             </button>
           </div>
         </Modal.Body>
@@ -120,8 +120,7 @@ class SolicitationModal extends Component<Props, State> {
   }
 
   private handleOpen = () => {
-    const title = _.sample(Titles);
-    this.setState({ visible: true, title, voteDone: false });
+    this.setState({ visible: true, voteDone: false });
   };
 
   private handleVote = (value: VoteValue) => {
@@ -149,4 +148,4 @@ class SolicitationModal extends Component<Props, State> {
   };
 }
 
-export default withRouter(withServices(SolicitationModal));
+export default withTranslation()(withRouter(withServices(SolicitationModal)));

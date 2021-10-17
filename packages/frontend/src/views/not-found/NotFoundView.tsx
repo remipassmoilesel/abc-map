@@ -20,23 +20,28 @@ import React, { Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/shared';
 import { Link } from 'react-router-dom';
 import { FrontendRoutes } from '@abc-map/shared';
-import Cls from './NotFoundView.module.scss';
 import { addNoIndexMeta, pageSetup, removeNoIndexMeta } from '../../core/utils/page-setup';
+import { prefixedTranslation } from '../../i18n/i18n';
+import Cls from './NotFoundView.module.scss';
 
 const logger = Logger.get('NotFoundView.tsx');
+
+const t = prefixedTranslation('NotFoundView:');
 
 class NotFoundView extends Component<{}, {}> {
   public render(): ReactNode {
     return (
       <div className={Cls.notFoundView}>
-        <h3>Vous êtes perdu 😱</h3>
-        <Link to={FrontendRoutes.landing().raw()}>Retourner à l&apos;accueil</Link>
+        <h3 className={'mb-5'}>{t('You_are_lost')} 😱</h3>
+        <Link to={FrontendRoutes.landing().raw()} className={'btn btn-outline-primary'}>
+          {t('Dont_panic')}&nbsp;&nbsp;💁🏽
+        </Link>
       </div>
     );
   }
 
   public componentDidMount() {
-    pageSetup('404 - Vous êtes perdu');
+    pageSetup(`404 - ${t('You_are_lost')}`);
     addNoIndexMeta();
   }
 

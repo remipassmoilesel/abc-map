@@ -146,7 +146,7 @@ export class ModalService {
       message: `
           <div class='my-3'>${t('You_are_about_to_import_heavy_dataset')}</div>
           <div class='my-3'>${t('AbcMap_not_yet_ready_for_heavy_dataset')}</div>
-          <div class='my-3'>${t('For_the_moment_prefer_small_dataset')}</div>
+          <div class='my-3'>${t('Prefer_small_dataset')}</div>
       `,
     };
     return this.modalPromise<ConfirmationClosedEvent>(input, ModalEventType.ConfirmationClosed).then((res) => res.status);

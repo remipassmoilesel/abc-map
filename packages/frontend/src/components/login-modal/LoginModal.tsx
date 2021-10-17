@@ -25,6 +25,8 @@ import { PasswordStrength, ValidationHelper } from '../../core/utils/ValidationH
 import FormValidationLabel from '../form-validation-label/FormValidationLabel';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { FormState } from '../form-validation-label/FormState';
+import { prefixedTranslation } from '../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
 
 const logger = Logger.get('LoginModal.tsx');
 
@@ -36,6 +38,8 @@ interface State {
   password: string;
   formState: FormState;
 }
+
+const t = prefixedTranslation('LoginModal:');
 
 class LoginModal extends Component<Props, State> {
   constructor(props: Props) {
@@ -60,13 +64,12 @@ class LoginModal extends Component<Props, State> {
     return (
       <Modal show={visible} onHide={this.handleCancel}>
         <Modal.Header closeButton>
-          <Modal.Title>Connexion 🔓</Modal.Title>
+          <Modal.Title>{t('Login')} 🔓</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div className={`d-flex flex-column p-3`}>
             {/* Intro */}
-
-            <p>Pour vous connecter, renseignez votre adresse email et votre mot de passe ci-dessous:</p>
+            <p>{t('To_connect_type_email_password')}</p>
 
             {/* Login form */}
 
@@ -76,7 +79,7 @@ class LoginModal extends Component<Props, State> {
                 value={email}
                 onInput={this.handleEmailChange}
                 onKeyUp={this.handleKeyUp}
-                placeholder={'Adresse email'}
+                placeholder={t('Email')}
                 className={'form-control my-2'}
                 data-cy={'email'}
                 data-testid={'email'}
@@ -86,7 +89,7 @@ class LoginModal extends Component<Props, State> {
                 value={password}
                 onInput={this.handlePasswordChange}
                 onKeyUp={this.handleKeyUp}
-                placeholder={'Mot de passe'}
+                placeholder={t('Password')}
                 className={'form-control my-2'}
                 data-cy={'password'}
                 data-testid={'password'}
@@ -101,10 +104,10 @@ class LoginModal extends Component<Props, State> {
 
             <div className={'d-flex justify-content-end'}>
               <button onClick={this.handlePasswordLost} className={'btn btn-link mr-3'}>
-                Mot de passe perdu ?
+                {t('Password_lost')}
               </button>
               <button type={'button'} onClick={this.handleCancel} className={`btn btn-outline-secondary`} data-cy={'cancel-login'} data-testid={'cancel-login'}>
-                Annuler
+                {t('Cancel')}
               </button>
               <button
                 type={'button'}
@@ -114,7 +117,7 @@ class LoginModal extends Component<Props, State> {
                 data-cy={'confirm-login'}
                 data-testid={'confirm-login'}
               >
-                Connexion
+                {t('Connect')}
               </button>
             </div>
           </div>
@@ -225,4 +228,4 @@ class LoginModal extends Component<Props, State> {
   }
 }
 
-export default withRouter(withServices(LoginModal));
+export default withTranslation()(withRouter(withServices(LoginModal)));

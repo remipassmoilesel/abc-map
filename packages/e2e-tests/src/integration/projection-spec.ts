@@ -57,7 +57,7 @@ describe('Projection', () => {
       })
       .get('[data-cy=layout-controls] [data-cy=pdf-export]')
       .click()
-      .then(() => Toasts.assertText('Export terminé !', 50_000))
+      .then(() => Toasts.assertText('Export done !', 50_000))
       .then(() => Download.fileAsBlob())
       .should((pdf) => {
         expect(pdf.size).greaterThan(50_000);

@@ -73,12 +73,12 @@ class ButtonBar extends React.Component<Props, {}> {
         </button>
 
         {/* Move selected features behind */}
-        <button onClick={this.handleMoveAhead} title={t('Move_geometries_ahead')} className={'btn btn-link'} data-testid={'move-features-forward'}>
+        <button onClick={this.handleMoveAhead} title={t('Move_geometries_up')} className={'btn btn-link'} data-testid={'move-features-forward'}>
           <i className={'fa fa-arrow-up'} />
         </button>
 
         {/* Move selected features ahead */}
-        <button onClick={this.handleMoveBehind} title={t('Move_selected_geometries_behind')} className={'btn btn-link'} data-testid={'move-features-behind'}>
+        <button onClick={this.handleMoveBehind} title={t('Move_geometries_down')} className={'btn btn-link'} data-testid={'move-features-behind'}>
           <i className={'fa fa-arrow-down'} />
         </button>
       </div>

@@ -18,6 +18,10 @@
 
 import React from 'react';
 import Cls from './PaypalButton.module.scss';
+import { prefixedTranslation } from '../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
+
+const t = prefixedTranslation('FundingLinks:');
 
 class PaypalButton extends React.Component<{}, {}> {
   public render() {
@@ -28,8 +32,8 @@ class PaypalButton extends React.Component<{}, {}> {
           type="image"
           name="submit"
           src="https://www.paypalobjects.com/fr_FR/FR/i/btn/btn_donateCC_LG.gif"
-          title="PayPal"
-          alt="Faites un don Paypal"
+          title={t('Donate_with_paypal')}
+          alt={t('Donate_with_paypal')}
           className={Cls.input}
         />
         <img src="https://www.paypal.com/fr_FR/i/scr/pixel.gif" width="1" height="1" className={Cls.image} alt="" />
@@ -38,4 +42,4 @@ class PaypalButton extends React.Component<{}, {}> {
   }
 }
 
-export default PaypalButton;
+export default withTranslation()(PaypalButton);

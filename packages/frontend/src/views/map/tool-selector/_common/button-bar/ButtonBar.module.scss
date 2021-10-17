@@ -28,6 +28,10 @@
     justify-content: center;
     align-items: center;
     padding: 0.6rem;
+
+    &:hover {
+      text-decoration: none;
+    }
   }
 
   :global(.fa) {

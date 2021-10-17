@@ -1,4 +1,7 @@
 {
+  "App": {
+    "Modification_in_progress_will_be_lost": "Current changes will be lost, are you sure ?"
+  },
   "LandingView": {
     "Free_open_source_mapping": "Free and open source mapping online",
     "AbcMap_new_version": "Abc-Map, new version \uD83D\uDE80 Easily create geographic maps: import, draw, visualize data, and much more!",
@@ -16,7 +19,7 @@
     "A_pretty_illustration": "A pretty illustration !",
     "For_7_days_opinions_are_positive": "For 7 days, {{votes}} % of opinions on Abc-Map are positive.",
     "Champagne": "Champagne",
-    "Will_have_to_do_better": "Va falloir faire mieux",
+    "Will_have_to_do_better": "Will have to do better",
     "About_this_platform": "About this plateform"
   },
   "TopBar": {
@@ -31,7 +34,7 @@
     "Hello_visitor": "Hello visitor !",
     "Login": "Login",
     "Register": "Register",
-    "Lost_password": "Password forgotten",
+    "Lost_password": "Password lost",
     "My_account": "My account",
     "Logout": "Logout",
     "You_are_disconnected": "You are disconnected"
@@ -76,7 +79,9 @@
       "You_must_select_a_file_with_extension_": "You must select a file in {{extension}} format",
       "Project_loaded": "Project loaded !",
       "Incorrect_password": "Incorrect password !",
-      "Password_is_mandatory": "Password is required to open this project"
+      "Password_is_mandatory": "Password is required to open this project",
+      "Project_saved": "Project saved !",
+      "Export_done": "Export done !"
     },
     "ImportData": {
       "Import_data": "Import data",
@@ -110,7 +115,7 @@
       "Cancel": "Cancel"
     },
     "AddLayerModal": {
-      "New_Layer": "New layer",
+      "New_layer": "New layer",
       "What_kind_of_layer": "What type of layer do you want to add ?",
       "Select_basemap_you_want": "Select the basemap you want",
       "Preview": "Preview",
@@ -140,7 +145,7 @@
       "WMS_are_you_sure": "⚠️  URL contains 'WMTS'. Are you sure you want to add a WMS layer ?",
       "WMTS_are_you_sure": "⚠️  URL contains 'WMS'. Are you sure you want to add a WMTS layer ?",
       "URL_must_contains_placeholders": "URL must contains placeholders <code>{x}</code>, <code>{y}</code> and <code>{z}</code>.",
-      "Example_url_with_placeholders": "Example: http://my-domain.net/xyz/<code>{x}</code>/<code>{y}</code>/<code>{z}</code>"
+      "Example_url_with_placeholders": "Example: <code>https://my-domain.net/xyz/{x}/{y}/{z}</code>"
     },
     "ToolSelector": {
       "Drawing_tools": "Drawing tools",
@@ -150,8 +155,8 @@
       "Duplicate_selected_geometries": "Duplicate selected geometries",
       "Unselect_all": "Unselect all",
       "Delete_selected_geometries": "Delete selected geometries",
-      "Move_geometries_ahead": "Move selected geometries ahead",
-      "Move_selected_geometries_behind": "Move selected geometries behind",
+      "Move_geometries_up": "Move selected geometries up",
+      "Move_geometries_down": "Move selected geometries down",
       "You_must_select_geometries_first": "You must first select geometries",
       "Flat": "Flat",
       "Circles": "Circles",
@@ -169,8 +174,25 @@
       "Tool_help": "Tool help",
       "Icon": "Icon",
       "Points": "Points",
-      "Lines_and_polygons": "Lines et polygons",
+      "Lines_and_polygons": "Lines and polygons",
       "Text": "Text"
+    },
+    "RemoteProjectsModal": {
+      "Projects_saved": "Projets enregistrés",
+      "Select_a_project": "Select a project",
+      "No_saved_project": "No saved project.",
+      "Current_changes_will_be_lost": "Current changes will be lost !",
+      "Are_you_sure": "Are you sure ? You will permanently delete:",
+      "Do_not_delete": "Do not delete",
+      "Delete_definitely": "Delete definitely",
+      "This_project_is_protected_by_a_password": "This project is protected by a password",
+      "Password_of_project": "Password of project",
+      "Cancel": "Cancel",
+      "Open_project": "Open project",
+      "Project_deleted": "Project deleted !",
+      "You_must_select_a_project": "You must select a project.",
+      "You_must_enter_a_password": "You must enter a password",
+      "Incorrect_password": "Incorrect password."
     }
   },
   "ColorSelector": {
@@ -207,7 +229,7 @@
     "Heavy_dataset": "Heavy dataset",
     "You_are_about_to_import_heavy_dataset": "You are about to import a large amount of data.",
     "AbcMap_not_yet_ready_for_heavy_dataset": "Abc-Map is not yet ready to process heavy datasets, you may slow down and block your session.",
-    "For_the_moment_prefer_small_dataset": "For the moment, prefer files of <code> less than 5 MB </code> and layers of <code> less than 1000 geometries </code>. In the near future, you will be able to use more data."
+    "Prefer_small_dataset": "Prefer files of <code> less than 5 MB </code> and layers of <code> less than 1000 geometries </code>. In the near future, you will be able to use more data."
   },
   "ConfirmationModal": {
     "Confirm": "Confirm",
@@ -291,7 +313,7 @@
     "Running_scripts": "Running scripts",
     "DataViewer": {
       "Select_a_layer": "Select a layer to view its data.",
-      "Download_CSV": "Download in CSV format",
+      "Download_CSV": "Download CSV workbook",
       "X_entries_displayed": "<b>{{entries}}</b> entries displayed",
       "No_data_to_display": "No data to display",
       "You_must_select_a_layer_with_data": "You must select a layer that contains data"
@@ -377,7 +399,255 @@
       "X_geometries_will_be_processed": "{{geometries}} geometries will be processed.",
       "Data_samples": "Data samples",
       "Layer": "Layer:"
+    },
+    "FeatureCountByGeometries": {
+      "Module_not_terminated": "This module is not finished !",
+      "This_module_will": "This module will count the number of geometries present in each polygon of a layer."
+    },
+    "DifferentSymbols": {
+      "Module_not_terminated": "This module is not finished !",
+      "This_module_will": "This module will allow you to create symbols from a CSV workbook."
+    },
+    "ProportionalSymbols": {
+      "Introduction": "Introduction",
+      "Proportional_symbols": "Proportional symbols",
+      "Proportional_symbols_are_used_to_represent_absolute_data": "Proportional symbols are used to represent absolute data (population, annual budgets, etc.)",
+      "How_does_it_work": "How does it work ?",
+      "Select_data_source_and_data_field": "Select a data source and a value field. This field will determine the size of the symbols. For example, a CSV workbook containing the French population by department and the <code>population_2011</code> field containing the population data.",
+      "Select_geometry_layer_explanation": "Select a geometry layer. The geometries will determine the position of each symbol.",
+      "Select_join_field_explanation": "Select a join field between the data and the geometries.",
+      "Select_parameters_explanation": "Then select the characteristics of the symbols to create.",
+      "Map_sample": "Map sample",
+      "Select_data_source": "Select a data source",
+      "Data_source_contains_field_that_will_determine_symbol_size": "The data source contains the field that will determine the size of the symbols. The data source can be a map layer or a CSV format workbook.",
+      "Symbol_size_from": "Symbol size from:",
+      "Select_a_geometry_layer": "Select a geometry layer",
+      "Processing_parameters": "Processing parameters",
+      "The_geometry_layer_will_be_used_to_determine_the_position_of_the_symbols": "The geometry layer will be used to determine the position of the symbols. In the case of polygons, the symbols will be positioned in the center polygons. In the case of points, the symbols will be positioned on the points.",
+      "Symbols_are_create_in_a_new_layer": "The symbols will be created in a new layer. Their sizes will be determined by the source field used, between the minimum size and the maximum size specified.",
+      "Reset": "Reset",
+      "Start_processing": "Start processing",
+      "Name_of_new_layer": "Name of new layer",
+      "Symbol_type": "Symbol type",
+      "Color": "Color",
+      "Minimal_size": "Minimal size",
+      "Maximal_size": "Maximal size",
+      "Symbol_scale": "Symbol scale:",
+      "X_features_has_been_processed": "{{featuresProcessed}} geometries have been processed.",
+      "Nothing_has_been_processed": "No geometry has been processed. Processing has been misconfigured or the data is invalid.",
+      "Some_features_cannot_be_joined": "⚠️ Some geometries ({{invalidFeatures}}) do not have the <code>{{geometryJoinBy}}</code> join property. They have not been used.",
+      "Some_colors_values_are_incorrect": "⚠️ Some values of size field ({{invalidValues}}) cannot be used as numbers.",
+      "Some_geometries_does_not_have_data": "⚠️ Some geometries ({{missingDataRows}}) do not have data corresponding to their <code>{{joinBy}}</code> property.",
+      "Undefined_property": "Undefined property",
+      "Close": "Close"
+    },
+    "Scripts": {
+      "Script_module_allow_advanced_data_modification": "The script execution module is used to process card data programmatically by writing JavaScript code.",
+      "Keep_in_mind_recommendations": "Keep these recommendations in mind",
+      "Dont_use_it_if_you_dont_understand_it": "If you do not understand what this module is for, do not use it",
+      "Dont_run_code_you_dont_understand": "Don't run code you don't understand",
+      "Actions_cannot_be_undone": "Actions performed by a script cannot be undone",
+      "Improper_use_can_cause_security_issue": "Improper use of this module may present a security risk",
+      "Execute": "Execute",
+      "Output": "Sortie",
+      "Executed_without_errors": "Script executed without errors ✨",
+      "Error": "Execution error"
     }
+  },
+  "LayoutView": {
+    "Format": "Format",
+    "List_of_layouts_displayed_here": "The list of layouts will be displayed here.",
+    "Layouts": "Layouts",
+    "Create_layout_to_export": "Create a layout to export your map",
+    "Create_A4_layout": "New A4 layout",
+    "Layout": "Layout",
+    "Create_layout_to_export_your_map": "Layout and export your maps as PDF or PNG \uD83D\uDCD0 \uD83D\uDEB6\u200D♀️",
+    "You_muse_select_a_layout": "You must select a layout",
+    "No_legend": "No legend",
+    "Top_left_corner": "Top left",
+    "Top_right_corner": "Top right",
+    "Bottom_right_corner": "Bottom right",
+    "Bottom_left_corner": "Bottom left",
+    "New_layout": "New layout",
+    "A5_portrait": "A5 portrait",
+    "A5_landscape": "A5 landscape",
+    "A4_portrait": "A4 portrait",
+    "A4_landscape": "A4 landscape",
+    "A3_portrait": "A3 portrait",
+    "A3_landscape": "A3 landscape",
+    "Legend": "Legend",
+    "Edit_legend": "Edit legend",
+    "Move_up": "Move up",
+    "Move_Down": "Move down",
+    "Delete_all": "Delete all",
+    "PDF_export": "PDF export",
+    "PNG_export": "PNG export",
+    "You_must_create_layouts_first": "You must first create a layout",
+    "Export_done": "Export done !"
+  },
+  "MapLegendView": {
+    "Go_back_to_layout": "Go back to layout",
+    "Edit_legend": "Edit legend",
+    "Preview": "Preview",
+    "Create_legend_for_your_map": "Create a legend for your map \uD83C\uDF0D",
+    "No_entry": "No entry, add one ⬇️",
+    "Width": "Width",
+    "Height": "Height",
+    "pixels": "pixels",
+    "Drag_to_resize": "Move this corner to resize ⬆",
+    "Add_entry": "Add an entry",
+    "Change_symbol": "Change symbol",
+    "Delete": "Delete",
+    "Move_up": "Move up",
+    "Move_down": "Move down",
+    "Entry_name": "Item name: forest area, marked route, ..."
+  },
+  "FundingView": {
+    "Support_the_development_of": "Support the development of Abc-Map",
+    "Why": "Why",
+    "AbcMap_is_FOSS": "Abc-Map is a free software developed and hosted on a voluntary basis.",
+    "No_ads_no_race_for_attention": "You have noticed ? No ads, no race for attention, no collection of personal data",
+    "Fund_a_free_internet_territory": "By funding this software you are funding a free territory of the internet, where the software serves the user. It just might become a norm one day",
+    "How": "How",
+    "What_is_the_point": "What is the point",
+    "Money_collected": "Money collected",
+    "Pays_hosting": "Pays hosting",
+    "Funds_development_sessions": "Funds development sessions",
+    "Funds_documentation": "Funds documentation",
+    "Next_planned_features_are": "The next planned features are",
+    "Better_styles": "Better styles to create better looking cards",
+    "Creating_symbols_from_CSV_workbooks": "Creating symbols from CSV workbooks",
+    "Counting_geometries_in_polygons": "Counting geometries in polygons",
+    "And_more": "And more !",
+    "Links": "Links",
+    "Source_code": "Source code",
+    "Author_personal_website": "Author's personal website"
+  },
+  "FundingLinks": {
+    "By_CB_paypal": "By <b>Credit card</b> or <b>Paypal</b>.",
+    "With_utip": "With <b>uTip</b>",
+    "With_tipeee": "With <b>Tipeee</b>",
+    "Donate_with_paypal": "Donate with Paypal"
+  },
+  "LoginModal": {
+    "Login": "Login",
+    "To_connect_type_email_password": "To connect, enter your email address and password below.",
+    "Email": "Email address",
+    "Password": "Password",
+    "Password_lost": "Forgot your password ?",
+    "Cancel": "Cancel",
+    "Connect": "Login"
+  },
+  "RegistrationModal": {
+    "Registration": "Registration",
+    "One_more_step": "Just one last step \uD83D\uDE4C",
+    "Check_email_then_click_confirmation": "An email has been sent to you, it contains a link to activate your account.",
+    "Check_your_spam": "Remember to check your spam",
+    "Ok": "Ok",
+    "Please_fill_the_form_to_register": "To register, fill out this form. Your personal data and maps will never be transmitted on to a third party.",
+    "Email": "Email address",
+    "Password": "Password",
+    "Password_confirmation": "Password confirmation",
+    "Cancel": "Cancel",
+    "Register": "Register"
+  },
+  "PasswordLostModal": {
+    "Password_lost": "Password recovery",
+    "Fill_this_form_to_recover_your_password": "To reset your password, enter your email address below. If your address is registered you will receive instructions by email.",
+    "Email_address": "Email address",
+    "Cancel": "Cancel",
+    "Confirm": "Confirm",
+    "Email_sent_check_your_spam": "Email sent ! Remember to check your spam \uD83D\uDCE7"
+  },
+  "UserAccountView": {
+    "My_account": "My account",
+    "You_must_connect_to_display_your_account": "You must log in to view your account",
+    "Go_back_to_landing": "Go back to home",
+    "My_informations": "My informations",
+    "Email_address": "Email address",
+    "Email_is_readonly": "You cannot change your email address.",
+    "Nothing_more": "Nothing more !",
+    "Change_my_password": "Change my password",
+    "Current_password": "Current password",
+    "New_password": "New password",
+    "Confirmation": "Confirmation",
+    "Confirm": "Confirm",
+    "Delete_my_account": "Delete my account",
+    "I_understand_that_deletion_is_permanent": "I understand that the deletion of my account is PERMANENT. I would lose all the projects associated with my account.",
+    "Password": "Password",
+    "Delete_my_account_permanently": "Permanently delete my account",
+    "Your_account_has_been_deleted": "Your account has been deleted \uD83D\uDE2D",
+    "Password_updated": "Password updated !"
+  },
+  "LegendSymbolPickerModal": {
+    "Select_symbol": "Select a symbol",
+    "Here_are_the_geometry_styles_used_on_the_map": "Here are the geometry styles used on the map",
+    "Add_something_on_map_then_come_back": "Add something to the map then come back"
+  },
+  "ErrorBoundary": {
+    "Aouch": "Aouch",
+    "Error_occurred": "An error prevents the application from functioning correctly. This failure has been logged, <br /> the developer responsible for this error has just received a letter of resignation.",
+    "Reload_page": "Reload page",
+    "Recommended_action": "Recommended action, <br /> but you will lose unsaved changes.",
+    "Return_to_application": "Return to application",
+    "Application_will_be_unstable": "The application may be unstable, <br /> but you can save your work and reload the page."
+  },
+  "SolicitationModal": {
+    "So_how_was_it": "So how was it ?",
+    "Support_your_software": "Support your software",
+    "What_are_donations_used_for": "What are donations used for ?",
+    "How_did_it_go": "How did it go ?",
+    "Well": "Well !",
+    "Blah": "Blah",
+    "Not_good": "Not good",
+    "Thanks_for_your_feedback": "Thanks for your feedback",
+    "Support_project": "Make a donation to support this project, it's easy: this way",
+    "Close": "Close"
+  },
+  "ResetPasswordView": {
+    "Reset_your_password": "Reset your password",
+    "Enter_your_new_password_here": "Enter your new password here and confirm it.",
+    "Password": "Password",
+    "Confirmation": "Confirmation",
+    "Change_my_password": "Change my password",
+    "Password_reset": "Password reset !"
+  },
+  "NotFoundView": {
+    "You_are_lost": "You are lost",
+    "Dont_panic": "Don't panic, home is over here"
+  },
+  "ConfirmAccountView": {
+    "And_voila_welcome": "<i>Et voilà</i>, welcome !",
+    "Please_wait": "Please wait ...",
+    "This_account_is_already_activated": "This email address has already been activated \uD83E\uDD37 <br /> Log in or request a password reset.",
+    "Activation_failed": "Your account activation failed \uD83E\uDD7A. <br/> You may have already activated your account ?",
+    "Activation_succeed": "Your account is activated, you are logged in",
+    "Map_is_over_here": "For the map, it's over here",
+    "Registration_confirmation": "Registration confirmation"
+  },
+  "DataTable": {
+    "No_data": "No data",
+    "Undefined": "Undefined",
+    "Modify": "Modify",
+    "Delete": "Delete"
+  },
+  "EditPropertiesModal": {
+    "Properties": "Properties",
+    "Cancel": "Cancel",
+    "Save": "Save",
+    "Delete_property": "Delete property",
+    "Value": "Value",
+    "New_property": "New property"
+  },
+  "FoldingCard": {
+    "Open": "Open",
+    "Close": "Close"
+  },
+  "TipBubble": {
+    "This_tip_is_not_available": "This advice is not available"
+  },
+  "LegalMentionsView": {
+    "About_this_platform": "About this platform"
   },
   "core": {
     "ProjectFactory": {
@@ -394,6 +664,32 @@
     },
     "DataService": {
       "Import_of": "Import n°{{n}} of {{hour}}"
+    },
+    "AuthentificationService": {
+      "Invalid_credentials": "Your login details are incorrect",
+      "Your_password_is_incorrect": "Your password is incorrect",
+      "You_are_connected": "You are connected !",
+      "This_email_address_is_already_in_use": "This email address is already in use"
+    },
+    "LayerDataSource": {
+      "Layer_without_name": "Layer without name"
+    },
+    "MapKeyboardListener": {
+      "Nothing_more_to_undo": "There is nothing more to undo",
+      "Nothing_more_to_redo": "There is nothing more to redo",
+      "You_must_select_features_first": "You must first select geometries"
+    },
+    "ToastService": {
+      "Unknown_technical_problem": "Ouch ! Small technical issue \uD83D\uDE05 Please try again later.",
+      "This_feature_is_not_yet_available": "This feature is not yet available",
+      "You_have_exceeded_the_number_of_requests_allowed_try_agin_in_XX_min": "You have exceeded the number of requests allowed, please try again in {{minutes}} minute (s).",
+      "You_have_exceeded_the_number_of_requests_allowed": "You have exceeded the number of requests allowed, please try again later.",
+      "Forbidden": "This operation is prohibited.",
+      "You_must_connect_before": "You must be logged in to perform this operation.",
+      "Are_you_connected": "Unable to connect to the server \uD83D\uDCE1 Are you connected ?"
+    },
+    "ProjectService": {
+      "Too_much_projects": "Sorry \uD83D\uDE1E you have reached your project quota. Delete one."
     }
   }
 }

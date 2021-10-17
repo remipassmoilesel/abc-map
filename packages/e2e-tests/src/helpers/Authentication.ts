@@ -32,7 +32,8 @@ export class Authentication {
       .type(password)
       .get('button[data-cy=confirm-login]')
       .click()
-      .then(() => Toasts.assertText('Vous êtes connecté !'));
+      .then(() => Toasts.assertText('You are connected !'))
+      .then(() => Toasts.dismiss());
   }
 
   public static logout(): Chainable<any> {

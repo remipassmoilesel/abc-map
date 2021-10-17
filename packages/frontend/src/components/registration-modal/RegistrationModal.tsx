@@ -23,6 +23,8 @@ import { ServiceProps, withServices } from '../../core/withServices';
 import { Modal } from 'react-bootstrap';
 import RegistrationForm, { FormValues } from './RegistrationForm';
 import RegistrationDone from './RegistrationDone';
+import { prefixedTranslation } from '../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
 
 const logger = Logger.get('RegistrationModal.tsx');
 
@@ -30,6 +32,8 @@ interface State {
   visible: boolean;
   registrationDone: boolean;
 }
+
+const t = prefixedTranslation('RegistrationModal:');
 
 class RegistrationModal extends Component<ServiceProps, State> {
   constructor(props: ServiceProps) {
@@ -50,7 +54,7 @@ class RegistrationModal extends Component<ServiceProps, State> {
     return (
       <Modal show={visible} onHide={this.handleCancel}>
         <Modal.Header closeButton>
-          <Modal.Title>Inscription 🪶</Modal.Title>
+          <Modal.Title>{t('Registration')} 🪶</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div className={`d-flex flex-column p-3`}>
@@ -110,4 +114,4 @@ class RegistrationModal extends Component<ServiceProps, State> {
   };
 }
 
-export default withServices(RegistrationModal);
+export default withTranslation()(withServices(RegistrationModal));

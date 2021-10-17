@@ -66,7 +66,7 @@ describe('Legend', function () {
       .get('[data-cy=back-to-layout]')
       .click()
       .get('[data-cy=legend-select]')
-      .select('En bas à droite')
+      .select('Bottom right')
       .then(() => Store.getReference())
       .then((store) => {
         const legend: AbcLegend = store.getState().project.legend;

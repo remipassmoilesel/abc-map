@@ -16,11 +16,16 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-export const Titles = [
-  `Alors, c'était comment ?`,
-  `Encore une carte !`,
-  `Ca arrive, une carte pour la deux !`,
-  `Avec ceci ?`,
-  `Ce sera tout ?`,
-  `Et voici, tout beau tout chaud !`,
-];
+import { FastifyRequest } from 'fastify';
+import { FallbackLang, isLangSupported, langFromString, Language } from '@abc-map/shared';
+import * as parser from 'accept-language-parser';
+
+export function getLang(req: FastifyRequest): Language {
+  const header = req.headers['accept-language'];
+  if (!header) {
+    return FallbackLang;
+  }
+
+  const lang = langFromString(parser.parse(header).find((lang) => isLangSupported(lang.code))?.code || '');
+  return lang || FallbackLang;
+}

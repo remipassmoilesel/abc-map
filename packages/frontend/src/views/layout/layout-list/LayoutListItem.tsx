@@ -20,6 +20,8 @@ import React, { Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/shared';
 import { AbcLayout } from '@abc-map/shared';
 import Cls from './LayoutListItem.module.scss';
+import { withTranslation } from 'react-i18next';
+import { prefixedTranslation } from '../../../i18n/i18n';
 
 const logger = Logger.get('LayoutListItem.tsx', 'warn');
 
@@ -30,10 +32,13 @@ interface Props {
   onDeleted: (lay: AbcLayout) => void;
 }
 
+const t = prefixedTranslation('LayoutView:');
+
 class LayoutListItem extends Component<Props, {}> {
   public render(): ReactNode {
     const layout = this.props.layout;
     const classes = this.props.active ? `${Cls.item} ${Cls.active}` : Cls.item;
+
     return (
       <div className={classes}>
         <div className={'d-flex justify-content-between align-items-center'}>
@@ -46,7 +51,7 @@ class LayoutListItem extends Component<Props, {}> {
         </div>
 
         <div onClick={this.handleSelected} className={'cursor-pointer'}>
-          Format: {layout.format.name}
+          {t('Format')}: {layout.format.width}x{layout.format.height}mm
         </div>
       </div>
     );
@@ -61,4 +66,4 @@ class LayoutListItem extends Component<Props, {}> {
   };
 }
 
-export default LayoutListItem;
+export default withTranslation()(LayoutListItem);

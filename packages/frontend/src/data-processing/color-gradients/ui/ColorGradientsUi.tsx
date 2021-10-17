@@ -19,7 +19,7 @@
 import React, { Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/shared';
 import { newParameters, Parameters } from '../Parameters';
-import FoldableCard from '../../../components/foldable-card/FoldableCard';
+import FoldingCard from '../../../components/folding-card/FoldingCard';
 import { ServiceProps, withServices } from '../../../core/withServices';
 import DataSourceForm, { DataSourceFormValues } from '../../_common/data-source-form/DataSourceForm';
 import GradientsConfigForm, { ColorsConfigFormValues } from './components/GradientsConfigForm';
@@ -83,24 +83,24 @@ class ColorGradientsUI extends Component<Props, State> {
     return (
       <div className={Cls.panel}>
         {/* Module introduction */}
-        <FoldableCard title={`1. ${t('Introduction')}`} className={'section'}>
+        <FoldingCard title={`1. ${t('Introduction')}`} className={'section'}>
           <div className={'explanation d-flex flex-row justify-content-between align-items-start'}>
             <div className={Cls.introduction}>
               <p>{t('Color_gradients_are_used_to_represent_relative_data')}</p>
               <p>{t('How_does_it_work')}</p>
               <ul>
-                <li>{t('Select_data_source_and_data_field')}</li>
-                <li>{t('Select_geometry_layer_explanation')}</li>
-                <li>{t('Select_join_field_explanation')}</li>
-                <li>{t('Select_parameters_explanation')}</li>
+                <li dangerouslySetInnerHTML={{ __html: t('Select_data_source_and_data_field') }} />
+                <li dangerouslySetInnerHTML={{ __html: t('Select_geometry_layer_explanation') }} />
+                <li dangerouslySetInnerHTML={{ __html: t('Select_join_field_explanation') }} />
+                <li dangerouslySetInnerHTML={{ __html: t('Select_parameters_explanation') }} />
               </ul>
             </div>
-            <img src={Sample} alt={t('Map_Sample')} className={Cls.sample} />
+            <img src={Sample} alt={t('Map_Sample')} title={t('Map_Sample')} className={Cls.sample} />
           </div>
-        </FoldableCard>
+        </FoldingCard>
 
         {/* Data source selection */}
-        <FoldableCard title={`2. ${t('Select_data_source')}`} className={'section'}>
+        <FoldingCard title={`2. ${t('Select_data_source')}`} className={'section'}>
           <div className={'explanation'}>{t('Data_source_contains_field_that_determine_colors')}</div>
           <DataSourceForm
             valuesFieldLabel={t('Colors_from')}
@@ -108,16 +108,16 @@ class ColorGradientsUI extends Component<Props, State> {
             values={dataSourceValues}
             onChange={this.handleDataSourceChange}
           />
-        </FoldableCard>
+        </FoldingCard>
 
         {/* Vector layer selection */}
-        <FoldableCard title={`3. ${t('Select_geometry_layer')}`} className={'section'}>
+        <FoldingCard title={`3. ${t('Select_geometry_layer')}`} className={'section'}>
           <div className={'explanation'}>{t('Colors_applied_to_copy_of_geometries')}</div>
           <GeometryLayerForm values={geometryLayerValues} onChange={this.handleGeometryLayerChange} />
-        </FoldableCard>
+        </FoldingCard>
 
         {/* Data processing parameters */}
-        <FoldableCard title={`4. ${t('Select_parameters')}`} className={'section'}>
+        <FoldingCard title={`4. ${t('Select_parameters')}`} className={'section'}>
           <div className={'explanation'}>{t('Colors_depends_on_algorithm')}</div>
           {!dataSourceValues.valueField && <div>{t('You_must_select_a_value_field')}</div>}
           {!dataSourceValues.source && <div>{t('You_must_select_a_datasource')}</div>}
@@ -129,7 +129,7 @@ class ColorGradientsUI extends Component<Props, State> {
               onChange={this.handleConfigChange}
             />
           )}
-        </FoldableCard>
+        </FoldingCard>
 
         {/* Form validation */}
         {formState && (

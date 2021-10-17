@@ -45,7 +45,7 @@ describe('Reset password', function () {
       .type(email)
       .get('[data-cy=confirm-reset-password]')
       .click()
-      .then(() => Toasts.assertText('Demande envoyée ! Pensez à vérifiez vos spam'))
+      .then(() => Toasts.assertText('Email sent ! Remember to check your spam'))
       // Read reset password mail then visit link
       .readFile(`emails/${email}.html`)
       .then((content) => {
@@ -60,7 +60,7 @@ describe('Reset password', function () {
       .type('qwerty987')
       .get('[data-cy=reset-password]')
       .click()
-      .then(() => Toasts.assertText('Mot de passe réinitialisé !'))
+      .then(() => Toasts.assertText('Password reset !'))
       // Finally, login
       .get('input[data-cy=email]')
       .type(email)
@@ -68,6 +68,6 @@ describe('Reset password', function () {
       .type('qwerty987')
       .get('button[data-cy=confirm-login]')
       .click()
-      .then(() => Toasts.assertText('Vous êtes connecté !'));
+      .then(() => Toasts.assertText('You are connected !'));
   });
 });

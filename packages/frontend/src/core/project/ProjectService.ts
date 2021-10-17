@@ -49,8 +49,11 @@ import { ModalService } from '../ui/ModalService';
 import { ProjectEvent, ProjectEventType } from './ProjectEvent';
 import { Errors } from '../utils/Errors';
 import { ProjectUpdater } from './ProjectUpdater';
+import { prefixedTranslation } from '../../i18n/i18n';
 
 export const logger = Logger.get('ProjectService.ts');
+
+const t = prefixedTranslation('ProjectService:');
 
 export class ProjectService {
   public static create(
@@ -218,7 +221,7 @@ export class ProjectService {
       .then(() => undefined)
       .catch((err) => {
         if (HttpError.isTooManyProject(err)) {
-          this.toasts.error('Désolé 😞 vous avez atteint votre quota de projet enregistré. Supprimez-en un.');
+          this.toasts.error(t('Too_much_projects'));
         } else {
           this.toasts.httpError(err);
         }

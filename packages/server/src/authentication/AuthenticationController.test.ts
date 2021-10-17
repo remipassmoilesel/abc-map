@@ -25,7 +25,7 @@ import { disableSmtpClientLogging } from '../email/SmtpClient';
 import { TestHelper } from '../utils/TestHelper';
 import { Config } from '../config/Config';
 import { PasswordHasher } from './PasswordHasher';
-import { AnonymousUser, AuthenticationRequest, RegistrationConfirmationRequest, RegistrationRequest } from '@abc-map/shared';
+import { AnonymousUser, AuthenticationRequest, Language, RegistrationConfirmationRequest, RegistrationRequest } from '@abc-map/shared';
 import * as jwt from 'jsonwebtoken';
 import { RegistrationDao } from './RegistrationDao';
 import { MongodbClient } from '../mongodb/MongodbClient';
@@ -85,6 +85,7 @@ describe('AuthenticationController', () => {
       const payload: RegistrationRequest = {
         email: uuid() + '@abc-map.fr',
         password: 'azerty1234',
+        lang: Language.French,
       };
       const response = await server.getApp().inject({
         method: 'POST',
@@ -438,6 +439,7 @@ describe('AuthenticationController', () => {
         path: '/api/authentication/password/reset-email',
         payload: {
           email,
+          lang: Language.French,
         },
       });
 
@@ -455,6 +457,7 @@ describe('AuthenticationController', () => {
         path: '/api/authentication/password/reset-email',
         payload: {
           email: user.email,
+          lang: Language.French,
         },
       });
 
@@ -531,7 +534,7 @@ describe('AuthenticationController', () => {
         method: 'POST',
         path: '/api/authentication/password/reset-email',
         headers: { 'x-forwarded-for': '10.10.10.10' },
-        payload: { email },
+        payload: { email, lang: Language.English },
       });
     }
 
@@ -539,17 +542,17 @@ describe('AuthenticationController', () => {
       method: 'POST',
       path: '/api/authentication/password/reset-email',
       headers: { 'x-forwarded-for': '10.10.10.10' },
-      payload: { email },
+      payload: { email, lang: Language.English },
     });
     const notBlocked = await server.getApp().inject({
       method: 'POST',
       path: '/api/authentication/password/reset-email',
       headers: { 'x-forwarded-for': '10.10.10.20' },
-      payload: { email },
+      payload: { email, lang: Language.English },
     });
 
     assert.equal(blocked.statusCode, 429);
-    assert.match(blocked.body, /Quota de requêtes dépassé/);
+    assert.match(blocked.body, /Quota of requests exceeded/);
     assert.equal(notBlocked.statusCode, 200);
   });
 });

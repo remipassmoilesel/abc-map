@@ -21,6 +21,8 @@ import { AbcLegend, AbcLegendItem, Logger } from '@abc-map/shared';
 import LegendItem from '../legend-item/LegendItem';
 import NewLegendItemForm from './NewLegendItemForm';
 import Cls from './LegendUpdateForm.module.scss';
+import { prefixedTranslation } from '../../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
 
 const logger = Logger.get('LegendUpdateForm.tsx');
 
@@ -33,6 +35,8 @@ interface Props {
   onItemUp: (item: AbcLegendItem) => void;
   onItemDown: (item: AbcLegendItem) => void;
 }
+
+const t = prefixedTranslation('MapLegendView:');
 
 class LegendUpdateForm extends Component<Props, {}> {
   public render(): ReactNode {
@@ -47,7 +51,7 @@ class LegendUpdateForm extends Component<Props, {}> {
 
     return (
       <div className={Cls.updateForm}>
-        {!items.length && <div className={'my-4'}>Aucune entrée</div>}
+        {!items.length && <div className={'my-4'}>{t('No_entry')}</div>}
 
         <div className={'mt-4'}>
           {items.map((item, idx) => {
@@ -71,9 +75,9 @@ class LegendUpdateForm extends Component<Props, {}> {
         <NewLegendItemForm onSubmit={this.handleNewItem} />
 
         <div className={'d-flex flex-row align-items-center my-3'}>
-          <span className={'mr-3'}>Largeur:</span> <input type={'number'} value={width} className={'form-control'} onChange={this.handleWidthChanged} />
-          <span className={'mx-3'}>Hauteur:</span> <input type={'number'} value={height} className={'form-control'} onChange={this.handleHeightChanged} />
-          <span className={'ml-3'}>(px)</span>
+          <span className={'mr-3'}>{t('Width')}:</span> <input type={'number'} value={width} className={'form-control'} onChange={this.handleWidthChanged} />
+          <span className={'mx-3'}>{t('Height')}:</span> <input type={'number'} value={height} className={'form-control'} onChange={this.handleHeightChanged} />
+          <span className={'ml-3'}>({t('pixels')})</span>
         </div>
       </div>
     );
@@ -94,4 +98,4 @@ class LegendUpdateForm extends Component<Props, {}> {
   };
 }
 
-export default LegendUpdateForm;
+export default withTranslation()(LegendUpdateForm);

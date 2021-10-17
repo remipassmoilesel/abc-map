@@ -18,20 +18,24 @@
 
 import React, { Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/shared';
-import Cls from './CountPointsInPolygonUi.module.scss';
+import { prefixedTranslation } from '../../../i18n/i18n';
+import Cls from './FeatureCountByGeometriesUI.module.scss';
+import { withTranslation } from 'react-i18next';
 
 const logger = Logger.get('CountPointsInPolygonUi.tsx');
 
-class CountPointsInPolygonUi extends Component<{}, {}> {
+const t = prefixedTranslation('DataProcessingModules:FeatureCountByGeometries.');
+
+class FeatureCountByGeometriesUi extends Component<{}, {}> {
   public render(): ReactNode {
     return (
       <div className={Cls.panel}>
         <i className={`fa fa-file-code`} />
-        <h4 className={'text-center my-5'}>Ce module n&apos;est pas terminé !</h4>
-        <div>Ce module permettra de compter le nombre de points présents dans chaque polygone d’une couche .</div>
+        <h4 className={'text-center my-5'}>{t('Module_not_terminated')}</h4>
+        <div>{t('This_module_will')}</div>
       </div>
     );
   }
 }
 
-export default CountPointsInPolygonUi;
+export default withTranslation()(FeatureCountByGeometriesUi);

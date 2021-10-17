@@ -54,7 +54,7 @@ describe('Authentication', function () {
         .type(password)
         .get('button[data-cy=confirm-login]')
         .click()
-        .then(() => Toasts.assertText('Vos identifiants sont incorrects'));
+        .then(() => Toasts.assertText('Your login details are incorrect'));
     });
 
     it('cannot login with incorrect password', function () {
@@ -70,7 +70,7 @@ describe('Authentication', function () {
         .type('wrong-password-123')
         .get('button[data-cy=confirm-login]')
         .click()
-        .then(() => Toasts.assertText('Vos identifiants sont incorrects'));
+        .then(() => Toasts.assertText('Your login details are incorrect'));
     });
   });
 
