@@ -22,6 +22,6 @@ import { Tools } from './tools';
 import { DocumentationLang } from '../../DocumentationLang';
 
 export const FrTips: I18nTips = {
-  lang: DocumentationLang.English,
+  lang: DocumentationLang.French,
   tips: [...DataProcessing, ...Tools],
 };
