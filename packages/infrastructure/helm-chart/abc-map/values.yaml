@@ -22,9 +22,9 @@ fullnameOverride: ""
 abcMap:
   replicaCount: 2
   image:
-    repository: registry.gitlab.com/abc-map/abc-map-2/server
-    pullPolicy: IfNotPresent
     tag: "0.1.0"
+    repository: registry.gitlab.com/abc-map/abc-map/server
+    pullPolicy: IfNotPresent
 
   config: |
     module.exports = {

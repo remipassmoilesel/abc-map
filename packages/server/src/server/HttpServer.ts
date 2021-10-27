@@ -38,8 +38,11 @@ import { ProjectionController } from '../projections/ProjectionController';
 import pointOfView from 'point-of-view';
 import { getLang } from './getLang';
 import { error409Parameters, indexParameters } from './pagesParameters';
+import { HookHandlerDoneFunction } from 'fastify/types/hooks';
+import { FastifyError } from 'fastify-error';
+import { createHash } from 'crypto';
 
-const logger = Logger.get('HttpServer.ts', 'info');
+const logger = Logger.get('HttpServer.ts', 'trace');
 
 /**
  * Routes exposed in this controllers are public and do not need a valid authentication
@@ -73,10 +76,7 @@ export class HttpServer {
   private app: FastifyInstance;
 
   constructor(private config: Config, private services: Services, private publicControllers: Controller[], private privateControllers: Controller[]) {
-    this.app = fastify({
-      logger: this.config.server.log.requests,
-      trustProxy: true,
-    });
+    this.app = fastify({ trustProxy: true });
   }
 
   /**
@@ -107,7 +107,9 @@ export class HttpServer {
   }
 
   public async initialize(): Promise<void> {
-    const { metrics } = this.services;
+    if (this.config.server.log.requests) {
+      this.app.addHook('onRequest', this.logRequest);
+    }
 
     // Templating engine
     void this.app.register(pointOfView, {
@@ -118,28 +120,13 @@ export class HttpServer {
 
     // Add security headers
     const middleware = helmet({ contentSecurityPolicy: false });
-    this.app.addHook('onRequest', function (req, reply, next) {
-      middleware(req.raw, reply.raw, next as (err?: unknown) => void);
-    });
+    this.app.addHook('onRequest', (req, reply, next) => middleware(req.raw, reply.raw, next as (err?: unknown) => void));
 
     // Utility methods
     void this.app.register(fastifySensible, { errorHandler: false });
 
     // Global error handler
-    this.app.setErrorHandler(async (err, request, reply) => {
-      this.config.server.log.errors && logger.error('Unhandled error: ', err);
-
-      // Return 429 error page if necessary
-      if (reply.statusCode === 429) {
-        void reply.view('error429', error409Parameters(getLang(request)));
-        metrics.requestQuotaExceeded();
-        return;
-      }
-      // Or return error and error status
-      else {
-        void reply.status(reply.statusCode || 500).send(err);
-      }
-    });
+    this.app.setErrorHandler(this.handleError);
 
     // Rate limit
     const globalRateLimit = this.config.server.globalRateLimit;
@@ -181,6 +168,39 @@ export class HttpServer {
 
     void this.app.register(fastifyStatic, { root: this.config.frontendPath, wildcard: false, index: false });
   }
+
+  private handleError = (err: FastifyError, request: FastifyRequest, reply: FastifyReply) => {
+    const { metrics } = this.services;
+    this.config.server.log.errors && logger.error('Unhandled error: ', err);
+
+    // Return 429 error page if necessary
+    if (reply.statusCode === 429) {
+      void reply.view('error429', error409Parameters(getLang(request)));
+      metrics.requestQuotaExceeded();
+      return;
+    }
+    // Or return error and error status
+    else {
+      void reply.status(reply.statusCode || 500).send(err);
+    }
+  };
+
+  private logRequest = (request: FastifyRequest, reply: FastifyReply, done: HookHandlerDoneFunction) => {
+    const hasher = createHash('md5');
+    const ip = request.headers['x-forwarded-for']?.toString() || '<no-ip-found>';
+    const source = hasher.update(ip).digest('hex');
+
+    const logTrace = {
+      source,
+      userAgent: request.headers['user-agent'],
+      method: request.method,
+      url: request.url,
+      status: reply.statusCode,
+    };
+
+    logger.log(JSON.stringify(logTrace));
+    done();
+  };
 
   private generateSitemap = (req: FastifyRequest, reply: FastifyReply) => {
     const sitemap = generateSitemap(this.config.externalUrl);

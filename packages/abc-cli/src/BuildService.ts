@@ -229,8 +229,8 @@ export class BuildService {
     this.shell.sync(`helm upgrade ${config.releaseName} ${this.config.getChartRoot()} \
                         --install \
                         --namespace ${config.namespace} \
-                        --set abcMap.image.tag='${config.tag}' \
                         --values ${config.valuesFile} \
+                        --set abcMap.image.repository='${config.registry}/server',abcMap.image.tag='${config.tag}' \
                         --wait`);
 
     logger.info(`Waiting for services readiness ...`);
