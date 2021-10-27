@@ -5,7 +5,7 @@ module.exports = {
     host: '127.0.0.1',
     port: 10_082,
     log: {
-      requests: false,
+      requests: true,
       errors: true,
     },
     globalRateLimit: {

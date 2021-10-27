@@ -44,6 +44,10 @@ export class Logger {
     this.logger.setLevel('silent');
   }
 
+  public log(message: string | Error, data?: any): void {
+    this.logger.log(message, data || '');
+  }
+
   public debug(message: string | Error, data?: any): void {
     this.logger.debug(this.normalizeMessage(message), data || '');
   }
