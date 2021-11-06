@@ -73,7 +73,7 @@ export class StorePersistence {
 
     // We can not store project as most of informations are only present in map
     cleanState.project = undefined as any;
-    cleanState.map.tool = MapTool.None;
+    cleanState.map.tool = MapTool.Move;
     // Dimensions will be set at next bootstrap
     cleanState.map.mainMapDimensions = undefined as unknown as DimensionsPx;
     cleanState.ui.historyCapabilities = {};

@@ -38,7 +38,7 @@ export abstract class AbstractTool {
   constructor(protected store: MainStore, protected history: HistoryService) {}
 
   public abstract getId(): MapTool;
-  public abstract getLabel(): string;
+  public abstract getI18nLabel(): string;
   public abstract getIcon(): string;
   protected abstract setupInternal(map: Map, source: VectorSource<Geometry>): void;
 
@@ -48,6 +48,9 @@ export abstract class AbstractTool {
     this.setupInternal(map, source);
   }
 
+  /**
+   * Called when tool is disabled. Do not override, implement dispose internal.
+   */
   public dispose() {
     this.disposeInternal();
 

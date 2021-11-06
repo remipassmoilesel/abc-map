@@ -30,6 +30,7 @@ import { StyleFactory } from './geo/styles/StyleFactory';
 import { LegalMentionsService } from './legal-mentions/LegalMentionsService';
 import { ProjectEventType } from './project/ProjectEvent';
 import { Logger } from '@abc-map/shared';
+import { LocalStorageService } from './local-storage/LocalStorageService';
 
 const logger = Logger.get('Services.ts');
 
@@ -43,6 +44,7 @@ export interface Services {
   data: DataService;
   vote: VoteService;
   legalMentions: LegalMentionsService;
+  storage: LocalStorageService;
 }
 
 let instance: Services | undefined;
@@ -60,13 +62,14 @@ export function servicesFactory(store: MainStore): Services {
 
   const toasts = new ToastService();
   const modals = new ModalService();
-  const history = HistoryService.create();
+  const history = HistoryService.create(store);
   const geo = new GeoService(apiClient, externalClient, toasts, history, store);
   const project = ProjectService.create(apiClient, downloadClient, store, toasts, geo, modals);
   const authentication = new AuthenticationService(apiClient, store, toasts);
   const data = new DataService(apiClient, downloadClient, toasts, geo, modals, history);
   const vote = new VoteService(apiClient, toasts);
   const legalMentions = new LegalMentionsService(downloadClient, toasts);
+  const storage = new LocalStorageService();
 
   // When project loaded, we clean style cache and undo/redo history
   project.addProjectLoadedListener((ev) => {
@@ -97,5 +100,6 @@ export function servicesFactory(store: MainStore): Services {
     data,
     vote,
     legalMentions,
+    storage,
   };
 }

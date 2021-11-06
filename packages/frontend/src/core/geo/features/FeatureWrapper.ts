@@ -51,16 +51,25 @@ export class FeatureWrapper<Geom extends OlGeometry = OlGeometry> {
   }
 
   public static from<T extends OlGeometry = OlGeometry>(ol: Feature<T>): FeatureWrapper<T> {
+    if (!this.isFeature(ol)) {
+      throw new Error(`Invalid feature: ${ol ?? 'undefined'}`);
+    }
     return new FeatureWrapper<T>(ol);
   }
 
-  public static fromFeatureLike(ol: FeatureLike): FeatureWrapper | undefined {
-    const isFeature = ol instanceof Feature;
+  public static fromUnknown(ol: unknown): FeatureWrapper | undefined {
+    if (!this.isFeature(ol)) {
+      return;
+    }
+
     const hasGeometry = ol.getGeometry() instanceof Geometry;
-    const hasId = !!ol.getId();
-    if (isFeature && hasGeometry && hasId) {
+    if (hasGeometry) {
       return FeatureWrapper.from(ol as Feature<Geometry>);
     }
+  }
+
+  public static isFeature(ol: FeatureLike | unknown): ol is Feature {
+    return ol instanceof Feature;
   }
 
   constructor(private feature: Feature<Geom>) {}

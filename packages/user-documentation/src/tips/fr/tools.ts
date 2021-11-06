@@ -24,15 +24,20 @@ const undoRedoTip = `
 <li><b>Pour refaire</b> maintenez <code>CTRL</code> et <code>MAJ</code>, et appuyez sur <code>Z</code></li>
 `;
 
+const moveMapTip = `
+<li><b>Pour déplacez la carte</b> maintenez <code>CTRL</code> et déplacez la carte avec votre souris</li>
+`;
+
 export const Tools: Tip[] = [
   {
     id: ToolTips.Point,
     content: `<h4>Outil point</h4>
               <ul>
+                ${moveMapTip}
                 <li><b>Pour créer un point</b>, cliquez sur la carte</li>
-                <li><b>Pour sélectionner un point</b>, maintenez <code>CTRL</code> et cliquez sur le point</li>
-                <li><b>Pour modifier un point</b>, sélectionnez-le, vous pouvez ensuite
-                    le déplacer avec votre souris, ou modifier ses caractéristiques</li>
+                <li><b>Pour sélectionner un point</b>, maintenez <code>MAJ</code> et cliquez sur le point</li>
+                <li><b>Pour modifier un point</b>, sélectionnez-le, vous pouvez ensuite le déplacer avec votre souris,
+                    ou modifier ses caractéristiques</li>
                 <li><b>Pour supprimer un point</b>, sélectionnez-le et appuyez sur <code>SUPPR</code></li>
                 ${undoRedoTip}
               </ul>
@@ -42,14 +47,15 @@ export const Tools: Tip[] = [
     id: ToolTips.LineString,
     content: `<h4>Outil ligne</h4>
               <ul>
+                ${moveMapTip}
                 <li><b>Pour créer une ligne</b>, cliquez sur la carte à plusieurs reprises, puis double-cliquez
-                pour terminer la ligne. Vous pouvez interrompre un dessin en appuyant <code>ECHAP</code></li>
-                <li><b>Pour sélectionner une ligne</b>, maintenez <code>CTRL</code> et cliquez sur la ligne</li>
+                    pour terminer la ligne. Vous pouvez interrompre un dessin en appuyant <code>ECHAP</code></li>
+                <li><b>Pour sélectionner une ligne</b>, maintenez <code>MAJ</code> et cliquez sur la ligne</li>
                 <li><b>Pour modifier une ligne</b>, sélectionnez-la, vous pouvez ensuite créer des sommets,
-                déplacer des sommets, ou modifier ses caractéristiques</li>
+                    déplacer des sommets, ou modifier ses caractéristiques</li>
                 <li><b>Pour supprimer une ligne</b>, sélectionnez-la et appuyez sur <code>SUPPR</code></li>
                 <li><b>Pour supprimer un sommet</b>, sélectionnez la ligne, maintenez <code>ALT</code> et cliquez sur
-                le sommet</li>
+                    le sommet</li>
                 ${undoRedoTip}
               </ul>
               `,
@@ -58,14 +64,15 @@ export const Tools: Tip[] = [
     id: ToolTips.Polygon,
     content: `<h4>Outil polygone</h4>
               <ul>
+                ${moveMapTip}
                 <li><b>Pour créer un polygone</b>, cliquez sur la carte à plusieurs reprises, puis double-cliquez
-                pour terminer le polygone. Vous pouvez interrompre un dessin en appuyant <code>ECHAP</code></li>
-                <li><b>Pour sélectionner un polygone</b>, maintenez <code>CTRL</code> et cliquez sur le polygone</li>
+                    pour terminer le polygone. Vous pouvez interrompre un dessin en appuyant <code>ECHAP</code></li>
+                <li><b>Pour sélectionner un polygone</b>, maintenez <code>MAJ</code> et cliquez sur le polygone</li>
                 <li><b>Pour modifier un polygone</b>, sélectionnez-le, vous pouvez ensuite avec votre souris créer des sommets,
-                déplacer des sommets, ou modifier ses caractéristiques</li>
+                    déplacer des sommets, ou modifier ses caractéristiques</li>
                 <li><b>Pour supprimer un polygone</b>, sélectionnez-le et appuyez sur <code>SUPPR</code></li>
                 <li><b>Pour supprimer un sommet</b>, sélectionnez le polygone, maintenez <code>ALT</code> et cliquez sur
-                le sommet</li>
+                    le sommet</li>
                 ${undoRedoTip}
               </ul>
               `,
@@ -74,9 +81,10 @@ export const Tools: Tip[] = [
     id: ToolTips.Text,
     content: `<h4>Outil texte</h4>
               <ul>
-                <li><b>Pour ajouter du texte</b>, maintenez <code>CTRL</code> et cliquez sur une géométrie. Un contrôle de
-                saisie apparaît, saisissez votre texte puis cliquez sur <code>OK</code></li>
-                <li><b>Pour modifier du texte</b>, maintenez <code>CTRL</code> et cliquez sur une géométrie</li>
+                ${moveMapTip}
+                <li><b>Pour ajouter du texte</b>, cliquez sur une géométrie. Un contrôle de saisie apparaît, saisissez votre
+                    texte puis cliquez sur <code>OK</code></li>
+                <li><b>Pour modifier du texte</b>, cliquez sur une géométrie</li>
                 ${undoRedoTip}
               </ul>
               `,
@@ -85,12 +93,10 @@ export const Tools: Tip[] = [
     id: ToolTips.Selection,
     content: `<h4>Outil sélection</h4>
               <ul>
-                <li><b>Pour sélectionner des géométries</b>, maintenez <code>CTRL</code>, tracez un rectangle sur la carte puis relâchez</li>
+                ${moveMapTip}
+                <li><b>Pour sélectionner des géométries</b>, tracez un rectangle sur la carte puis relâchez</li>
                 <li><b>Pour modifier les caractéristiques de plusieurs géométries</b>, sélectionnez-les puis utilisez le panneau d'options de
-                l'outil sélection</li>
-                <li><b>Pour supprimer des géométries</b>, sélectionnez-les et appuyez sur <code>SUPPR</code></li>
-                <li><b>Pour dupliquer des géométries</b>, sélectionnez-les et appuyez sur le bouton <code>Dupliquer</code>
-                du panneau Sélection</li>
+                    l'outil sélection</li>
                 ${undoRedoTip}
               </ul>
               `,
@@ -99,7 +105,8 @@ export const Tools: Tip[] = [
     id: ToolTips.EditProperties,
     content: `<h4>Outil d'édition des propriétés</h4>
               <ul>
-                <li><b>Pour éditer les propriétés</b> d'une géométrie, maintenez <code>CTRL</code> et cliquez sur une géométrie</li>
+                ${moveMapTip}
+                <li><b>Pour éditer les propriétés</b> d'une géométrie, cliquez sur une géométrie</li>
                 ${undoRedoTip}
               </ul>
               `,

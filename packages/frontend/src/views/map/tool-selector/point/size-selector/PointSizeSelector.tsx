@@ -49,7 +49,7 @@ class PointSizeSelector extends Component<Props, {}> {
       <OptionRow>
         <div>{t('Size')}:</div>
         <select value={size} onChange={this.handleSelection} className={`form-control form-control-sm ${Cls.select}`}>
-          {_.range(15, 201).map((value) => (
+          {_.range(10, 201).map((value) => (
             <option key={value} value={value}>
               {value}
             </option>

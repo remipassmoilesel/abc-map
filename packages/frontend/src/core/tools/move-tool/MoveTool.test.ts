@@ -21,16 +21,16 @@ import { HistoryService } from '../../history/HistoryService';
 import VectorSource from 'ol/source/Vector';
 import { MapFactory } from '../../geo/map/MapFactory';
 import { TestHelper } from '../../utils/test/TestHelper';
-import { NoneTool } from './NoneTool';
+import { MoveTool } from './MoveTool';
 
-describe('NoneTool', () => {
+describe('MoveTool', () => {
   it('setup()', () => {
     const store = {} as MainStore;
     const history = {} as HistoryService;
     const map = MapFactory.createNaked().unwrap();
     const source = new VectorSource();
 
-    const tool = new NoneTool(store, history);
+    const tool = new MoveTool(store, history);
     tool.setup(map, source);
 
     expect(TestHelper.interactionNames(map)).toEqual(['DoubleClickZoom', 'DragPan', 'KeyboardPan', 'MouseWheelZoom']);
@@ -42,7 +42,7 @@ describe('NoneTool', () => {
     const map = MapFactory.createNaked().unwrap();
     const source = new VectorSource();
 
-    const tool = new NoneTool(store, history);
+    const tool = new MoveTool(store, history);
     tool.setup(map, source);
     tool.dispose();
 

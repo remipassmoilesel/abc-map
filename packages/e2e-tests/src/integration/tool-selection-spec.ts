@@ -38,7 +38,7 @@ describe('Tool Selection', function () {
       .then(() => Draw.click(200, 200))
       // Select them
       .then(() => ToolSelector.enable(MapTool.Selection))
-      .then(() => Draw.drag(150, 150, 600, 600, { ctrlKey: true }))
+      .then(() => Draw.drag(150, 150, 600, 600))
       .then(() => MainMap.getReference())
       .should((map) => {
         const features = map.getActiveLayerFeatures();
@@ -61,7 +61,7 @@ describe('Tool Selection', function () {
       .then(() => Draw.click(200, 200))
       // Select them
       .then(() => ToolSelector.enable(MapTool.Selection))
-      .then(() => Draw.drag(150, 150, 600, 600, { ctrlKey: true }))
+      .then(() => Draw.drag(150, 150, 600, 600))
       .get('[data-cy=duplicate-selection]')
       .click()
       .then(() => MainMap.getReference())
@@ -98,9 +98,9 @@ describe('Tool Selection', function () {
       .then(() => Draw.click(200, 200))
       // Select them
       .then(() => ToolSelector.enable(MapTool.Selection))
-      .then(() => Draw.drag(100, 100, 400, 400, { ctrlKey: true }))
+      .then(() => Draw.drag(100, 100, 400, 400))
       // Drag them
-      .then(() => Draw.drag(200, 200, 600, 600, { ctrlKey: true }))
+      .then(() => Draw.drag(200, 200, 600, 600))
       .then(() => MainMap.getReference())
       .should((map) => {
         const features = map.getActiveLayerFeatures();
@@ -138,12 +138,12 @@ describe('Tool Selection', function () {
       .then(() => Draw.click(200, 200))
       // Select them
       .then(() => ToolSelector.enable(MapTool.Selection))
-      .then(() => Draw.drag(100, 100, 400, 400, { ctrlKey: true }))
+      .then(() => Draw.drag(100, 100, 400, 400))
       // Duplicate them
       .get('[data-cy=duplicate-selection]')
       .click()
       // Drag duplicated
-      .then(() => Draw.drag(230, 230, 600, 600, { ctrlKey: true }))
+      .then(() => Draw.drag(230, 230, 600, 600))
       .then(() => MainMap.getReference())
       .should((map) => {
         const features = map.getActiveLayerFeatures();
@@ -166,7 +166,7 @@ describe('Tool Selection', function () {
       .then(() => Draw.dblclick(150, 100))
       // Select it
       .then(() => ToolSelector.enable(MapTool.Selection))
-      .then(() => Draw.drag(50, 50, 400, 400, { ctrlKey: true }))
+      .then(() => Draw.drag(50, 50, 400, 400))
       .get('[data-cy=stroke-color]')
       .wait(800)
       .click()
@@ -203,7 +203,7 @@ describe('Tool Selection', function () {
       .then(() => Draw.click(100, 150))
       .then(() => Draw.dblclick(150, 100))
       .then(() => ToolSelector.enable(MapTool.Selection))
-      .then(() => Draw.drag(50, 50, 400, 400, { ctrlKey: true }))
+      .then(() => Draw.drag(50, 50, 400, 400))
       .get('[data-cy=fill-color1]')
       .click()
       .get('div[title="#D0021B"]')

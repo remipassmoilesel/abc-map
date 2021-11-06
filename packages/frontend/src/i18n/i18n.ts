@@ -46,9 +46,6 @@ i18n
       escapeValue: false,
     },
   })
-  .then(() => {
-    document.documentElement.setAttribute('lang', getLang());
-  })
   .catch((err) => logger.error('i18n init error:', err));
 
 export interface StringMap {

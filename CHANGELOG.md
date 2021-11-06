@@ -3,7 +3,14 @@
 Presently there are no versions, because it is not yet necessary. 
 
 
-## Better text position (XXXX  17/10/2020)
+## Better interactions, better documentation (XXXXX  06/11/2020)
+
+- CTRL key now used to move map, in order to prevent mistakes
+- SHIFT key now used to select shapes
+- Simplified documentation, fully translated in English
+
+
+## Better text position (6cbeb42b  17/10/2020)
 
 Better management of text position, configurable offset and rotation.
 

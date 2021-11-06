@@ -35,7 +35,7 @@ describe('PolygonTool', () => {
     const tool = new PolygonTool(store, history);
     tool.setup(map, source);
 
-    expect(TestHelper.interactionNames(map)).toEqual(['DoubleClickZoom', 'DragPan', 'KeyboardPan', 'MouseWheelZoom', 'Modify', 'Draw', 'Snap', 'Select']);
+    expect(TestHelper.interactionNames(map)).toEqual(['DragPan', 'KeyboardPan', 'MouseWheelZoom', 'Modify', 'Draw', 'Snap', 'Select']);
   });
 
   it('dispose()', () => {

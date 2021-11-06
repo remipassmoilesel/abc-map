@@ -157,7 +157,7 @@ describe('drawInteractionFactory.ts', () => {
       expect(feature.isSelected()).toBe(false);
 
       // Act
-      singleClick(20, 20, { ctrl: true });
+      singleClick(20, 20, { shift: true });
 
       // Assert
       expect(feature.isSelected()).toBe(true);
@@ -183,8 +183,8 @@ describe('drawInteractionFactory.ts', () => {
       await TestHelper.renderMap(map);
 
       // Act
-      singleClick(20, 20, { ctrl: true });
-      singleClick(120, 120, { ctrl: true });
+      singleClick(20, 20, { shift: true });
+      singleClick(120, 120, { shift: true });
 
       // Assert
       expect(featureFromSource(0).isSelected()).toBe(false);
@@ -202,7 +202,7 @@ describe('drawInteractionFactory.ts', () => {
       click(60, 60);
       doubleClick(10, 60);
       await TestHelper.renderMap(map);
-      singleClick(20, 20, { ctrl: true });
+      singleClick(20, 20, { shift: true });
 
       // Act
       click(110, 110);
@@ -229,7 +229,7 @@ describe('drawInteractionFactory.ts', () => {
       doubleClick(10, 60);
       await TestHelper.renderMap(map);
 
-      singleClick(20, 20, { ctrl: true });
+      singleClick(20, 20, { shift: true });
       await TestHelper.renderMap(map);
 
       // Act

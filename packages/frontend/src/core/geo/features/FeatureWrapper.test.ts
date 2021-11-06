@@ -27,22 +27,36 @@ import Geometry from 'ol/geom/Geometry';
 import { IconName } from '../../../assets/point-icons/IconName';
 
 describe('FeatureWrapper', () => {
-  it('create() should create and set id', () => {
-    const feature = FeatureWrapper.create();
-    expect(feature.unwrap().getId()).toBeDefined();
-  });
+  describe('create(), from(), fromUnknwon()', () => {
+    it('create() should create and set id', () => {
+      const feature = FeatureWrapper.create();
+      expect(feature.unwrap().getId()).toBeDefined();
+    });
 
-  it('from() should not mutate feature', () => {
-    const feature = new Feature(new Point([1, 1]));
-    const properties = JSON.stringify(feature.getProperties());
-    const style = new Style();
-    feature.setStyle(style);
+    it('from() should fail', () => {
+      expect(() => FeatureWrapper.from({} as any)).toThrow('Invalid feature: [object Object]');
+    });
 
-    FeatureWrapper.from(feature);
+    it('from() should work and not mutate feature', () => {
+      const feature = new Feature(new Point([1, 1]));
+      const properties = JSON.stringify(feature.getProperties());
+      const style = new Style();
+      feature.setStyle(style);
 
-    expect(feature.getId()).toBeUndefined();
-    expect(feature.getStyle()).toStrictEqual(style);
-    expect(JSON.stringify(feature.getProperties())).toEqual(properties);
+      FeatureWrapper.from(feature);
+
+      expect(feature.getId()).toBeUndefined();
+      expect(feature.getStyle()).toStrictEqual(style);
+      expect(JSON.stringify(feature.getProperties())).toEqual(properties);
+    });
+
+    it('fromUnknown()', () => {
+      const ol = new Feature(new Point([1, 1]));
+
+      expect(FeatureWrapper.fromUnknown(ol)).toBeDefined();
+      expect(FeatureWrapper.fromUnknown(undefined)).toBeUndefined();
+      expect(FeatureWrapper.fromUnknown(new Style())).toBeUndefined();
+    });
   });
 
   it('clone() should clone feature and geometry', () => {
@@ -146,7 +160,7 @@ describe('FeatureWrapper', () => {
 
         // Assert
         expect(feature.getStyleProperties()).toEqual({
-          point: { icon: IconName.Icon0CircleFill, size: 30 },
+          point: { icon: IconName.Icon0CircleFill, size: 10 },
           fill: {},
           stroke: {},
           text: {},

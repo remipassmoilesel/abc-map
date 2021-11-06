@@ -25,6 +25,7 @@ import { Errors } from '../../../core/utils/Errors';
 import { prefixedTranslation } from '../../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
 import Cls from './RemoteProjectsModal.module.scss';
+import { OperationStatus } from '../../../core/ui/typings';
 
 const logger = Logger.get('RemoteProjectModal.tsx');
 
@@ -210,17 +211,19 @@ class RemoteProjectsModal extends Component<Props, State> {
       const passwordValue = this.state.passwordValue;
       if (!selected) {
         toasts.info(t('You_must_select_a_project'));
-        return;
+        return OperationStatus.Interrupted;
       }
 
       if (selected.containsCredentials && !passwordValue) {
         toasts.info(t('You_must_enter_a_password'));
-        return;
+        return OperationStatus.Interrupted;
       }
 
       await project.loadRemoteProject(selected.id, passwordValue);
       toasts.info('Projet ouvert !');
       this.props.onHide();
+
+      return OperationStatus.Succeed;
     };
 
     modals

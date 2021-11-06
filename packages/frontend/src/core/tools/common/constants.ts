@@ -16,29 +16,4 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbstractTool } from '../AbstractTool';
-import Icon from '../../../assets/tool-icons/none.svg';
-import { Map } from 'ol';
-import { defaultInteractions } from '../../geo/map/interactions';
-import { MapTool } from '@abc-map/shared';
-
-export class NoneTool extends AbstractTool {
-  public getId(): MapTool {
-    return MapTool.None;
-  }
-
-  public getIcon(): string {
-    return Icon;
-  }
-
-  public getLabel(): string {
-    return 'Déplacer la carte';
-  }
-
-  protected setupInternal(map: Map) {
-    const interactions = defaultInteractions();
-    interactions.forEach((i) => map.addInteraction(i));
-
-    this.interactions.push(...interactions);
-  }
-}
+export const DefaultTolerancePx = 5;

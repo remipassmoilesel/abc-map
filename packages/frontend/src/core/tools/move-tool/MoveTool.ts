@@ -16,26 +16,30 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-/**
- * This promise will execute an underlying promise, but will never resolve before the specified delay.
- *
- * This is useful to display a waiting screen that will be at list shown for delay seconds.
- */
-export function delayedPromise<T>(promise: Promise<T>, delay = 1000): Promise<T> {
-  const start = Date.now();
-  return new Promise<T>((resolve, reject) => {
-    promise
-      .then((result) => {
-        const took = Date.now() - start;
-        if (took >= delay) {
-          resolve(result);
-        } else {
-          const delta = delay - took;
-          setTimeout(() => {
-            resolve(result);
-          }, delta);
-        }
-      })
-      .catch(reject);
-  });
+import { AbstractTool } from '../AbstractTool';
+import Icon from '../../../assets/tool-icons/none.svg';
+import { Map } from 'ol';
+import { MapTool } from '@abc-map/shared';
+import { DoubleClickZoom, DragPan, KeyboardPan, MouseWheelZoom } from 'ol/interaction';
+
+export class MoveTool extends AbstractTool {
+  public getId(): MapTool {
+    return MapTool.Move;
+  }
+
+  public getIcon(): string {
+    return Icon;
+  }
+
+  public getI18nLabel(): string {
+    return 'MoveMap';
+  }
+
+  protected setupInternal(map: Map) {
+    const interactions = [new DoubleClickZoom(), new DragPan(), new KeyboardPan(), new MouseWheelZoom()];
+
+    interactions.forEach((i) => map.addInteraction(i));
+
+    this.interactions.push(...interactions);
+  }
 }

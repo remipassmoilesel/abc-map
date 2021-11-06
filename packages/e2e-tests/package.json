@@ -7,8 +7,9 @@
   ],
   "scripts": {
     "e2e:ci": "cypress run --browser chromium --headless --config-file ./config/ci.json --spec 'src/integration/**/*'",
-    "e2e:dev": "cypress run --browser chromium --headless --config-file ./config/development.json --spec 'src/integration/**/*'",
-    "e2e:dev:interactive": "cypress open --config-file ./config/development.json",
+    "e2e:dev": "cypress run --browser chromium --headless --config-file config/development-10082.json --spec 'src/integration/**/*'",
+    "e2e:dev:interactive:3005": "cypress open --config-file config/development-3005.json",
+    "e2e:dev:interactive:10082": "cypress open --config-file config/development-10082.json",
     "clean": "rm -rf build",
     "build": "tsc",
     "watch": "tsc --watch | sed -u 's/\\x1Bc//g'",

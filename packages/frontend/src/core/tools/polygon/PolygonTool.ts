@@ -46,8 +46,8 @@ export class PolygonTool extends AbstractTool {
     return Icon;
   }
 
-  public getLabel(): string {
-    return 'Créer des polygones';
+  public getI18nLabel(): string {
+    return 'CreatePolygons';
   }
 
   protected setupInternal(map: Map, source: VectorSource<Geometry>): void {

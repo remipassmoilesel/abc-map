@@ -33,7 +33,7 @@ describe('Selection', () => {
     const tool = new SelectionTool(store, history);
     tool.setup(map, source);
 
-    expect(TestHelper.interactionNames(map)).toEqual(['DoubleClickZoom', 'DragPan', 'KeyboardPan', 'MouseWheelZoom', 'DragBox', 'Translate']);
+    expect(TestHelper.interactionNames(map)).toEqual(['DragPan', 'KeyboardPan', 'MouseWheelZoom', 'DragBox', 'Translate']);
   });
 
   it('dispose()', () => {

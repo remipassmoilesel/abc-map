@@ -60,7 +60,10 @@ describe('ModalService', function () {
       service.addListener(ModalEventType.ShowLongOperationModal, listener);
       service.addListener(ModalEventType.LongOperationModalClosed, listener);
 
-      const res = await service.longOperationModal(() => TestHelper.wait(200));
+      const res = await service.longOperationModal(async () => {
+        await TestHelper.wait(200);
+        return OperationStatus.Succeed;
+      });
 
       expect(res).toEqual(OperationStatus.Succeed);
       expect(listener.callCount).toEqual(3);
@@ -78,7 +81,7 @@ describe('ModalService', function () {
 
       const res = await service.longOperationModal<boolean>(async () => {
         await TestHelper.wait(200);
-        return false;
+        return [OperationStatus.Succeed, false];
       });
 
       expect(res).toEqual(false);

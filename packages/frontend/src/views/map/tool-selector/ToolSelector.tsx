@@ -49,6 +49,7 @@ const connector = connect(mapStateToProps);
 type Props = ConnectedProps<typeof connector> & LocalProps & ServiceProps;
 
 const t = prefixedTranslation('MapView:ToolSelector.');
+const tTools = prefixedTranslation('core:tools.');
 
 class ToolSelector extends Component<Props, {}> {
   public render(): ReactNode {
@@ -92,12 +93,12 @@ class ToolSelector extends Component<Props, {}> {
         <button
           key={tool.getId()}
           onClick={() => this.handleSelection(tool.getId())}
-          title={tool.getLabel()}
+          title={tTools(tool.getI18nLabel())}
           className={classes}
           data-cy={`tool-${tool.getId().toLocaleLowerCase()}`}
           data-active={isActive}
         >
-          <img src={tool.getIcon()} alt={tool.getLabel()} title={tool.getLabel()} />
+          <img src={tool.getIcon()} alt={tTools(tool.getI18nLabel())} title={tTools(tool.getI18nLabel())} />
         </button>
       );
     });

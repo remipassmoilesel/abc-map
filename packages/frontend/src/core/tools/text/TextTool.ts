@@ -45,8 +45,8 @@ export class TextTool extends AbstractTool {
     return Icon;
   }
 
-  public getLabel(): string {
-    return 'Ajouter du texte';
+  public getI18nLabel(): string {
+    return 'AddText';
   }
 
   protected setupInternal(map: Map, source: VectorSource<Geometry>): void {
@@ -109,8 +109,7 @@ export class TextTool extends AbstractTool {
     this.interactions.push(text);
   }
 
-  public dispose() {
-    super.dispose();
+  protected disposeInternal() {
     this.previousFeature?.setSelected(false);
   }
 }

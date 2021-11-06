@@ -15,23 +15,14 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
-
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { getServices, Services } from './core/Services';
-import { E2eMapWrapper } from './core/geo/map/E2eMapWrapper';
-import { getAbcWindow, Logger } from '@abc-map/shared';
-import { UserStatus } from '@abc-map/shared';
-import { mainStore } from './core/store/store';
+import { Logger } from '@abc-map/shared';
 import { AxiosError } from 'axios';
 import { HttpError } from './core/http/HttpError';
 import { BUILD_INFO } from './build-version';
-import { Provider } from 'react-redux';
-import ErrorBoundary from './views/error-boundary/ErrorBoundary';
-import { BrowserRouter } from 'react-router-dom';
-import { ServiceProvider } from './core/context';
+import { render } from './render';
+import { mainStore, MainStore } from './core/store/store';
 
 // Load main style
 import './index.scss';
@@ -43,51 +34,38 @@ export const logger = Logger.get('index.tsx', 'warn');
 
 const svc = getServices();
 
-logger.info('Version: ', BUILD_INFO);
+bootstrap(svc, mainStore).catch((err) => logger.error('Bootstrap fail: ', err));
 
-authenticate(svc)
-  .then(() => load())
-  .then(() => svc.project.newProject())
-  .catch((err) => {
-    logger.error(err);
-    loadingError(err);
-  });
+export function bootstrap(svc: Services, store: MainStore) {
+  logger.info('Version: ', BUILD_INFO);
+  return authentication(svc)
+    .then(() => render(svc, store))
+    .then(() => svc.project.newProject())
+    .catch((err) => bootstrapError(err));
+}
 
-export async function authenticate(svc: Services): Promise<void> {
-  const isAuthenticated = svc.authentication.getUserStatus() === UserStatus.Authenticated;
-  if (isAuthenticated) {
-    return svc.authentication.renewToken().catch(() => {
+/**
+ * All users are authenticated, as connected users or as anonymous users
+ * @param svc
+ */
+function authentication(svc: Services): Promise<void> {
+  // If we are connected or connected as anonymous we try to renew token
+  const connected = !!svc.authentication.getUserStatus();
+  if (connected) {
+    return svc.authentication.renewToken().catch((err) => {
+      logger.error('Cannot renew token: ', err);
       return svc.authentication.anonymousLogin();
     });
-  } else {
+  }
+  // Else we authenticate as anonymous
+  else {
     return svc.authentication.anonymousLogin();
   }
 }
 
-function load() {
-  // For tests and debug purposes
-  const _window = getAbcWindow();
-  _window.abc.mainMap = new E2eMapWrapper(svc.geo.getMainMap());
-  _window.abc.services = svc;
-  _window.abc.store = mainStore;
+function bootstrapError(err: Error | AxiosError | undefined): void {
+  logger.error('Bootstrap error: ', err);
 
-  ReactDOM.render(
-    <Provider store={mainStore}>
-      <ServiceProvider value={getServices()}>
-        <React.StrictMode>
-          <ErrorBoundary>
-            <BrowserRouter>
-              <App />
-            </BrowserRouter>
-          </ErrorBoundary>
-        </React.StrictMode>
-      </ServiceProvider>
-    </Provider>,
-    document.getElementById('root')
-  );
-}
-
-function loadingError(err: Error | AxiosError | undefined): void {
   let message: string;
   if (HttpError.isTooManyRequests(err)) {
     message = 'You have exceeded the number of authorized requests 😭. Please try again later.';

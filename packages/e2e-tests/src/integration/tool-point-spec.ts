@@ -30,6 +30,19 @@ describe('Tool Point', function () {
     TestHelper.init();
   });
 
+  it('user can move map with CTRL', function () {
+    cy.visit(FrontendRoutes.map().raw())
+      .then(() => MainMap.fixedView())
+      .then(() => ToolSelector.enable(MapTool.Point))
+      // Move map
+      .then(() => Draw.drag(200, 200, 400, 200, { ctrlKey: true }))
+      .then(() => MainMap.getReference())
+      .should((map) => {
+        const view = map.getViewExtent();
+        expect(view).deep.equal([-4924817.756870515, -4121477.6853103423, 9535845.002232268, 5897276.48608428]);
+      });
+  });
+
   it('user can draw', function () {
     cy.visit(FrontendRoutes.map().raw())
       .then(() => MainMap.fixedView())
@@ -55,14 +68,14 @@ describe('Tool Point', function () {
       });
   });
 
-  it('user can move', function () {
+  it('user can move points', function () {
     cy.visit(FrontendRoutes.map().raw())
       .then(() => MainMap.fixedView())
       .then(() => ToolSelector.enable(MapTool.Point))
       // Create point
       .then(() => Draw.click(100, 100))
       // Select it
-      .then(() => Draw.click(100, 105, { ctrlKey: true }))
+      .then(() => Draw.click(100, 105, { shiftKey: true }))
       // Modify it
       .then(() => Draw.drag(100, 105, 600, 600))
       .then(() => MainMap.getReference())

@@ -38,7 +38,7 @@ describe('MapFactory', () => {
     expect(layers[1].get(LayerProperties.Active)).toBeTruthy();
     expect(internal.getView().getProjection().getCode()).toEqual(DEFAULT_PROJECTION.name);
     expect(getControlNames(internal)).toEqual(['Attribution', 'ScaleLine', 'Zoom']);
-    expect(TestHelper.interactionNames(internal)).toEqual(['DoubleClickZoom', 'DragPan', 'KeyboardPan', 'MouseWheelZoom']);
+    expect(TestHelper.interactionNames(internal)).toEqual(['DragPan', 'KeyboardPan', 'MouseWheelZoom']);
   });
 
   it('createNaked()', () => {

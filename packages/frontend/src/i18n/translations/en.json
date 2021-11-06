@@ -145,7 +145,8 @@
       "WMS_are_you_sure": "⚠️  URL contains 'WMTS'. Are you sure you want to add a WMS layer ?",
       "WMTS_are_you_sure": "⚠️  URL contains 'WMS'. Are you sure you want to add a WMTS layer ?",
       "URL_must_contains_placeholders": "URL must contains placeholders <code>{x}</code>, <code>{y}</code> and <code>{z}</code>.",
-      "Example_url_with_placeholders": "Example: <code>https://my-domain.net/xyz/{x}/{y}/{z}</code>"
+      "Example_url_with_placeholders": "Example: <code>https://my-domain.net/xyz/{x}/{y}/{z}</code>",
+      "Sample_URL": "Example URL"
     },
     "ToolSelector": {
       "Drawing_tools": "Drawing tools",
@@ -692,6 +693,15 @@
     },
     "ProjectService": {
       "Too_much_projects": "Sorry \uD83D\uDE1E you have reached your project quota. Delete one."
+    },
+    "tools": {
+      "EditProperties": "Edit geometry properties",
+      "CreateLines": "Create lines",
+      "MoveMap": "Move map",
+      "CreatePoints": "Create points",
+      "CreatePolygons": "Create polygons",
+      "Select": "Select",
+      "AddText": "Add text"
     }
   }
 }

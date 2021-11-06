@@ -28,6 +28,7 @@ import { VoteService } from '../../vote/VoteService';
 import { SinonStubbedInstance } from 'sinon';
 import { Services } from '../../Services';
 import { LegalMentionsService } from '../../legal-mentions/LegalMentionsService';
+import { LocalStorageService } from '../../local-storage/LocalStorageService';
 
 type SameKeys<T> = {
   [P in keyof T]: SinonStubbedInstance<any>;
@@ -43,6 +44,7 @@ export interface TestServices {
   data: SinonStubbedInstance<DataService>;
   vote: SinonStubbedInstance<VoteService>;
   legalMentions: SinonStubbedInstance<LegalMentionsService>;
+  storage: SinonStubbedInstance<LocalStorageService>;
 }
 
 export function newTestServices(): TestServices {
@@ -57,6 +59,7 @@ export function newTestServices(): TestServices {
     data: sinon.createStubInstance(DataService),
     vote: sinon.createStubInstance(VoteService),
     legalMentions: sinon.createStubInstance(LegalMentionsService),
+    storage: sinon.createStubInstance(LocalStorageService),
   };
   return services;
 }

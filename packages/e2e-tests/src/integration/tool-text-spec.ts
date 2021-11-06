@@ -38,7 +38,7 @@ describe('Tool Text', function () {
       .then(() => Draw.click(150, 150))
       // Add text
       .then(() => ToolSelector.enable(MapTool.Text))
-      .then(() => Draw.click(150, 150, { ctrlKey: true }))
+      .then(() => Draw.click(150, 150))
       .get('[data-cy=text-box]')
       .clear()
       .type('A beautiful label')

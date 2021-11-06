@@ -40,16 +40,8 @@ describe('TextInteraction', () => {
     interaction = new TextInteraction({ source });
   });
 
-  it('should do nothing if control key not set', () => {
-    const event = TestHelper.mapBrowserEvent({ ctrlKey: false, button: 0 });
-
-    interaction.handleEvent(event);
-
-    expect(screen.queryByTestId('textarea')).toBeNull();
-  });
-
   it('should do nothing if no features found', () => {
-    const event = TestHelper.mapBrowserEvent({ ctrlKey: true, button: 0 });
+    const event = TestHelper.mapBrowserEvent({ button: 0 });
 
     interaction.handleEvent(event);
 
@@ -67,7 +59,7 @@ describe('TextInteraction', () => {
     feature.setText('Hello');
     source.addFeature(feature.unwrap());
 
-    const event = TestHelper.mapBrowserEvent({ ctrlKey: true, button: 0, coordinate: [1, 1], mapTarget });
+    const event = TestHelper.mapBrowserEvent({ button: 0, coordinate: [1, 1], mapTarget });
 
     // Act
     interaction.handleEvent(event);
@@ -103,7 +95,7 @@ describe('TextInteraction', () => {
     const feature = FeatureWrapper.create(new Point([1, 1]));
     source.addFeature(feature.unwrap());
 
-    const event = TestHelper.mapBrowserEvent({ ctrlKey: true, button: 0, coordinate: [1, 1], mapTarget });
+    const event = TestHelper.mapBrowserEvent({ button: 0, coordinate: [1, 1], mapTarget });
 
     // Act
     interaction.handleEvent(event);

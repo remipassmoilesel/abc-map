@@ -24,7 +24,8 @@ import VectorSource from 'ol/source/Vector';
 import { findFeatureNearCursor } from '../common/findFeatureNearCursor';
 import { Interaction } from 'ol/interaction';
 import MapBrowserEventType from 'ol/MapBrowserEventType';
-import { withControlKey, withMainButton } from '../common/common-conditions';
+import { withMainButton } from '../common/common-conditions';
+import { noModifierKeys } from 'ol/events/condition';
 
 const logger = Logger.get('TextInteraction.ts');
 
@@ -45,7 +46,7 @@ export class TextInteraction extends Interaction {
    * @param event
    */
   public handleEvent(event: MapBrowserEvent<UIEvent>): boolean {
-    if (!withControlKey(event) || !withMainButton(event)) {
+    if (!withMainButton(event) || !noModifierKeys(event)) {
       return true;
     }
 

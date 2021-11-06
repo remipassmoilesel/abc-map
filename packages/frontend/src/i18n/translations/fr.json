@@ -111,8 +111,8 @@
       "Name_of_layer": "Nom de la couche",
       "Opacity": "Opacité",
       "Attributions": "Attributions",
-      "Confirm": "Confirm",
-      "Cancel": "Cancel"
+      "Confirm": "Confirmer",
+      "Cancel": "Annuler"
     },
     "AddLayerModal": {
       "New_layer": "Nouvelle couche",
@@ -145,7 +145,8 @@
       "WMS_are_you_sure": "⚠️ L'URL contient 'WMTS'. Etes vous sûr de vouloir ajouter une couche WMS ?",
       "WMTS_are_you_sure": "⚠️ L'URL contient 'WMS'. Etes vous sûr de vouloir ajouter une couche WMTS ?",
       "URL_must_contains_placeholders": "L'URL doit contenir les variables <code>{x}</code>, <code>{y}</code> et <code>{z}</code>.",
-      "Example_url_with_placeholders": "Exemple: <code>https://my-domain.net/xyz/{x}/{y}/{z}</code>"
+      "Example_url_with_placeholders": "Exemple: <code>https://my-domain.net/xyz/{x}/{y}/{z}</code>",
+      "Sample_URL": "Exemple d'URL"
     },
     "ToolSelector": {
       "Drawing_tools": "Outils de dessin",
@@ -692,6 +693,15 @@
     },
     "ProjectService": {
       "Too_much_projects": "Désolé \uD83D\uDE1E vous avez atteint votre quota de projet. Supprimez-en un."
+    },
+    "tools": {
+      "EditProperties": "Editer les propriétés des geometries",
+      "CreateLines": "Créer des lignes",
+      "MoveMap": "Déplacer la carte",
+      "CreatePoints": "Créer des points",
+      "CreatePolygons": "Créer des polygones",
+      "Select": "Sélection",
+      "AddText": "Ajouter du texte"
     }
   }
 }

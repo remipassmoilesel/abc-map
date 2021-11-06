@@ -71,7 +71,7 @@ describe('Tool Polygon', function () {
       .then(() => Draw.click(100, 150))
       .then(() => Draw.dblclick(150, 100))
       // Select it
-      .then(() => Draw.click(100, 150, { ctrlKey: true }))
+      .then(() => Draw.click(100, 150, { shiftKey: true }))
       // Modify it
       .then(() => Draw.drag(100, 100, 600, 600))
       .then(() => MainMap.getReference())

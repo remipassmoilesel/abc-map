@@ -20,7 +20,7 @@ import { HistoryKey } from './HistoryKey';
 import { Task } from './Task';
 import { Logger } from '@abc-map/shared';
 import { UiActions } from '../store/ui/actions';
-import { MainStore, mainStore } from '../store/store';
+import { MainStore } from '../store/store';
 
 const logger = Logger.get('HistoryService.ts');
 
@@ -40,8 +40,8 @@ export declare type History = {
  * directly UI components, actually canUndo and canRedo only.
  */
 export class HistoryService {
-  public static create(): HistoryService {
-    return new HistoryService(50, {}, mainStore);
+  public static create(store: MainStore): HistoryService {
+    return new HistoryService(50, {}, store);
   }
 
   constructor(private maxSize: number, private history: History = {}, private store: MainStore) {}

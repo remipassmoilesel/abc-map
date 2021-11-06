@@ -25,7 +25,7 @@ import { FileFormat, FileFormats } from '../../core/data/FileFormats';
 import { FileIO } from '../../core/utils/FileIO';
 import { pageSetup } from '../../core/utils/page-setup';
 import { ImportStatus } from '../../core/data/DataService';
-import { delayedPromise } from '../../core/utils/delayedPromise';
+import { solvesInAtLeast } from '../../core/utils/solvesInAtLeast';
 import { prefixedTranslation } from '../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
 import Cls from './DataStoreView.module.scss';
@@ -158,7 +158,7 @@ class DataStoreView extends Component<ServiceProps, State> {
     const { toasts, data } = this.props.services;
 
     this.setState({ downloading: true });
-    delayedPromise(data.importArtefact(artefact))
+    solvesInAtLeast(data.importArtefact(artefact))
       .then((res) => {
         if (res.status === ImportStatus.Failed) {
           toasts.error(t('Formats_not_supported'));
@@ -181,7 +181,7 @@ class DataStoreView extends Component<ServiceProps, State> {
     const { toasts, data } = this.props.services;
 
     this.setState({ downloading: true });
-    delayedPromise(data.downloadFilesFrom(artefact))
+    solvesInAtLeast(data.downloadFilesFrom(artefact))
       .then(async (res) => {
         let content: Blob;
         if (res.length === 1 && FileFormat.ZIP === FileFormats.fromPath(res[0].path)) {

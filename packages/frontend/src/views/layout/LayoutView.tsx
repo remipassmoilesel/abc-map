@@ -38,6 +38,7 @@ import LayoutControls from './layout-controls/LayoutControls';
 import { ExportFormat } from './ExportFormat';
 import Cls from './LayoutView.module.scss';
 import { prefixedTranslation } from '../../i18n/i18n';
+import { OperationStatus } from '../../core/ui/typings';
 
 const logger = Logger.get('LayoutView.tsx', 'warn');
 
@@ -263,19 +264,26 @@ class LayoutView extends Component<Props, State> {
       const map = this.state.map;
       const legend = this.props.legend;
 
-      if (ExportFormat.PDF === format) {
-        const result = await renderer.renderLayoutsAsPdf(layouts, legend, map);
-        FileIO.outputBlob(result, 'map.pdf');
-      } else if (ExportFormat.PNG === format) {
-        const result = await renderer.renderLayoutsAsPng(layouts, legend, map);
-        FileIO.outputBlob(result, 'map.zip');
-      } else {
-        toasts.genericError();
-        logger.error('Unhandled format: ', format);
-        return;
+      let result: Blob | undefined;
+      switch (format) {
+        case ExportFormat.PDF:
+          result = await renderer.renderLayoutsAsPdf(layouts, legend, map);
+          FileIO.outputBlob(result, 'map.pdf');
+          break;
+
+        case ExportFormat.PNG:
+          result = await renderer.renderLayoutsAsPng(layouts, legend, map);
+          FileIO.outputBlob(result, 'map.zip');
+          break;
+
+        default:
+          logger.error('Unhandled format: ', format);
+          toasts.genericError();
+          return OperationStatus.Interrupted;
       }
 
       toasts.info(t('Export_done'));
+      return OperationStatus.Succeed;
     };
 
     modals

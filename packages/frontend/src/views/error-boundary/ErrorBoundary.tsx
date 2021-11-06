@@ -81,6 +81,8 @@ class ErrorBoundary extends React.Component<ServiceProps, State> {
   };
 
   private handleRefresh = () => {
+    const { storage } = this.props.services;
+    storage.clear();
     window.location.reload();
   };
 

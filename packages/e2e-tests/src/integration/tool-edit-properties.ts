@@ -30,6 +30,19 @@ describe('Edit properties', function () {
     TestHelper.init();
   });
 
+  it('user can move map with CTRL', function () {
+    cy.visit(FrontendRoutes.map().raw())
+      .then(() => MainMap.fixedView())
+      .then(() => ToolSelector.enable(MapTool.EditProperties))
+      // Move map
+      .then(() => Draw.drag(200, 200, 400, 200, { ctrlKey: true }))
+      .then(() => MainMap.getReference())
+      .should((map) => {
+        const view = map.getViewExtent();
+        expect(view).deep.equal([-4924817.756870515, -4121477.6853103423, 9535845.002232268, 5897276.48608428]);
+      });
+  });
+
   it('user can edit properties, then undo', function () {
     cy.visit(FrontendRoutes.dataStore().raw())
       .then(() => DataStore.importByName('Countries of the world'))
@@ -37,7 +50,7 @@ describe('Edit properties', function () {
       .then(() => MainMap.fixedView())
       .then(() => ToolSelector.enable(MapTool.EditProperties))
       // Edit Algeria
-      .then(() => Draw.click(200, 200, { ctrlKey: true }))
+      .then(() => Draw.click(200, 200))
       .get('[data-cy=property-name]')
       .should('have.text', 'COUNTRY')
       .get('[data-cy=property-value]')
@@ -63,7 +76,7 @@ describe('Edit properties', function () {
       .get('[data-cy=properties-modal-confirm]')
       .click()
       // Check property names
-      .then(() => Draw.click(200, 200, { ctrlKey: true }))
+      .then(() => Draw.click(200, 200))
       .get('[data-cy=property-name]')
       .should((elem) => {
         const names = elem.toArray().map((e) => e.textContent);
@@ -79,7 +92,7 @@ describe('Edit properties', function () {
       .click()
       // Undo
       .then(() => History.undo())
-      .then(() => Draw.click(200, 200, { ctrlKey: true }))
+      .then(() => Draw.click(200, 200))
       .get('[data-cy=property-name]')
       .should((elem) => {
         const names = elem.toArray().map((e) => e.textContent);
