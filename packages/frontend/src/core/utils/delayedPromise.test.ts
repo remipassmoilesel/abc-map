@@ -16,11 +16,11 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { delayedPromise } from './delayedPromise';
+import { solvesInAtLeast } from './solvesInAtLeast';
 
-describe('delayedPromise.ts()', () => {
+describe('solvesInAtLeast()', () => {
   it('should resolve now', async () => {
-    const result = await delayedPromise(Promise.resolve('value'), 0);
+    const result = await solvesInAtLeast(Promise.resolve('value'), 0);
 
     expect(result).toEqual('value');
   });
@@ -28,7 +28,7 @@ describe('delayedPromise.ts()', () => {
   it('should resolve later', async () => {
     const start = Date.now();
 
-    const result = await delayedPromise(Promise.resolve('value 2'), 500);
+    const result = await solvesInAtLeast(Promise.resolve('value 2'), 500);
 
     const took = Date.now() - start;
     expect(result).toEqual('value 2');
@@ -36,7 +36,7 @@ describe('delayedPromise.ts()', () => {
   });
 
   it('should reject now', async () => {
-    const result: Error = await delayedPromise(Promise.reject(new Error('Test')), 500).catch((err) => err);
+    const result: Error = await solvesInAtLeast(Promise.reject(new Error('Test')), 500).catch((err) => err);
 
     expect(result).toEqual(new Error('Test'));
   });

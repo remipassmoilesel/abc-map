@@ -17,36 +17,14 @@
  */
 
 import toc from './00_toc.md';
-import features from './01_features.md';
-import projects from './02_projects.md';
-import map from './03_map.md';
-import layers from './04_layers.md';
-import drawingTools from './05_drawing-tools.md';
-import dataImport from './06_data-import.md';
-import dataStore from './07_data-store.md';
-import layoutLegend from './08_layout-legend.md';
-import registration from './09_registration.md';
-import faq from './10_faq.md';
-import helpme from './11_helpme.md';
-import proportionalSymbols from './12_proportional-symbols.md';
-import colorGradients from './13_color-gradients.md';
-import scripts from './14_scripts.md';
+import presentation from './01_presentation.md';
+import basics from './02_basics.md';
+import createMap from './03_create-map.md';
+import importData from './04_import-data.md';
+import registration from './05_registration.md';
+import faq from './06_faq.md';
+import help from './07_helpme.md';
 
-const content = [
-  features,
-  projects,
-  map,
-  layers,
-  drawingTools,
-  dataImport,
-  dataStore,
-  layoutLegend,
-  registration,
-  faq,
-  helpme,
-  proportionalSymbols,
-  colorGradients,
-  scripts,
-];
+const content = [presentation, basics, createMap, importData, registration, faq, help];
 
 export { toc, content };

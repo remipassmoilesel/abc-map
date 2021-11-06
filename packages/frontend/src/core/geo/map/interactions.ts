@@ -16,12 +16,15 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { DoubleClickZoom, DragPan, Interaction, KeyboardPan, MouseWheelZoom } from 'ol/interaction';
+import { DragPan, Interaction, KeyboardPan, MouseWheelZoom } from 'ol/interaction';
+import { withControlKey, withMainButton } from '../../tools/common/common-conditions';
+import MapBrowserEvent from 'ol/MapBrowserEvent';
 
 export function defaultInteractions(): Interaction[] {
-  return [new DoubleClickZoom(), new DragPan(), new KeyboardPan(), new MouseWheelZoom()];
+  const condition = (ev: MapBrowserEvent) => withControlKey(ev) && withMainButton(ev);
+  return [new DragPan({ condition }), new KeyboardPan({ condition }), new MouseWheelZoom({ condition })];
 }
 
 export function layoutMapInteractions(): Interaction[] {
-  return [new DoubleClickZoom(), new DragPan(), new KeyboardPan(), new MouseWheelZoom()];
+  return [new DragPan(), new KeyboardPan(), new MouseWheelZoom()];
 }

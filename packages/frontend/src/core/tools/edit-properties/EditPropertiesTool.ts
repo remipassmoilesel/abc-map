@@ -30,9 +30,11 @@ import { SetFeatureProperties } from '../../history/tasks/features/SetFeaturePro
 import * as _ from 'lodash';
 import { defaultInteractions } from '../../geo/map/interactions';
 import { Select } from 'ol/interaction';
-import { withControlKeyOnly, withMainButton } from '../common/common-conditions';
+import { withMainButton } from '../common/common-conditions';
 import { LayerWrapper } from '../../geo/layers/LayerWrapper';
 import { Options } from 'ol/interaction/Select';
+import { noModifierKeys } from 'ol/events/condition';
+import { DefaultTolerancePx } from '../common/constants';
 
 const logger = Logger.get('EditPropertiesTool.ts');
 
@@ -53,29 +55,36 @@ export class EditPropertiesTool extends AbstractTool {
     return Icon;
   }
 
-  public getLabel(): string {
-    return 'Editer les propriétés';
+  public getI18nLabel(): string {
+    return 'EditProperties';
   }
 
   protected setupInternal(map: Map): void {
+    // Default interactions
+    const defaults = defaultInteractions();
+    defaults.forEach((i) => map.addInteraction(i));
+    this.interactions.push(...defaults);
+
     // Select interaction will condition modification of features
     const select = this.newInteraction({
-      condition: (ev) => withControlKeyOnly(ev) && withMainButton(ev),
+      condition: (ev) => withMainButton(ev) && noModifierKeys(ev),
+      toggleCondition: () => false,
       layers: (lay) => LayerWrapper.from(lay).isActive(),
       // Warning: here we must use null to not manage styles with Select interaction
       // Otherwise modification of style can be 'restored' from a bad state
       style: null as any,
+      hitTolerance: DefaultTolerancePx,
     });
 
-    select.on('select', () => {
-      const raw = select.getFeatures().pop();
-      if (!raw) {
-        return;
-      }
+    select.on('select', (ev) => {
+      // Get last feature, select it
+      const feature = FeatureWrapper.from(ev.selected[0]);
+      feature.setSelected(true);
 
-      const feature = FeatureWrapper.from(raw);
+      // Keep previous properties for undo / redo
       const before = feature.getSimpleProperties();
 
+      // Pop up modal, when modification done overwrite properties, register history task
       this.modals
         .featurePropertiesModal(before)
         .then((modalEvent) => {
@@ -84,16 +93,15 @@ export class EditPropertiesTool extends AbstractTool {
             feature.overwriteSimpleProperties(after);
             this.history.register(HistoryKey.Map, new SetFeatureProperties(feature, before, after));
           }
+
+          // We must unselect otherwise we can not select again
+          select.getFeatures().forEach((f) => FeatureWrapper.from(f).setSelected(false));
+          select.getFeatures().clear();
         })
         .catch((err) => logger.error('Error while editing feature properties: ', err));
     });
 
     map.addInteraction(select);
     this.interactions.push(select);
-
-    // Interactions for map view manipulation
-    const defaults = defaultInteractions();
-    defaults.forEach((i) => map.addInteraction(i));
-    this.interactions.push(...defaults);
   }
 }

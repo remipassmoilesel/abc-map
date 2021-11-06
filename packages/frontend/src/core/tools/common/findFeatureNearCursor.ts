@@ -22,8 +22,7 @@ import Feature from 'ol/Feature';
 import VectorSource from 'ol/source/Vector';
 import { toleranceFromStyle } from './toleranceFromStyle';
 import { isCloseTo } from './isCloseTo';
-
-const defaultTolerancePx = 5;
+import { DefaultTolerancePx } from './constants';
 
 export declare type FeatureFilter = (f: Feature<Geometry>) => boolean;
 export const noopFilter: FeatureFilter = () => true;
@@ -40,7 +39,7 @@ export function findFeatureNearCursor(
   event: MapBrowserEvent,
   source: VectorSource,
   filter = noopFilter,
-  tolerancePx = defaultTolerancePx
+  tolerancePx = DefaultTolerancePx
 ): Feature<Geometry> | undefined {
   const coord = event.coordinate;
 

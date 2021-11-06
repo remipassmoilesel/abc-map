@@ -19,7 +19,7 @@
 import GeometryType from 'ol/geom/GeometryType';
 import { FeatureStyle } from '@abc-map/shared';
 import { Draw, Modify, Select, Snap } from 'ol/interaction';
-import { withControlKeyOnly, withGeometry, withMainButton } from './common-conditions';
+import { withGeometry, withMainButton, withShiftKey } from './common-conditions';
 import { LayerWrapper } from '../../geo/layers/LayerWrapper';
 import { SelectEvent } from 'ol/interaction/Select';
 import { FeatureWrapper } from '../../geo/features/FeatureWrapper';
@@ -31,9 +31,10 @@ import VectorSource from 'ol/source/Vector';
 import { Logger } from '@abc-map/shared';
 import { Task } from '../../history/Task';
 import { Collection } from 'ol';
-import { noModifierKeys } from 'ol/events/condition';
 import { styleFunction } from '../../geo/styles/style-function';
 import { createEditingStyle } from 'ol/style/Style';
+import { DefaultTolerancePx } from './constants';
+import { noModifierKeys } from 'ol/events/condition';
 
 const logger = Logger.get('drawInteractionFactory.ts');
 
@@ -63,6 +64,8 @@ const editingStyle = createEditingStyle();
 /**
  * Create a draw interaction bundle for specified geometry type.
  *
+ * For performance purposes, only selected features must be handled by modify, snap, etc ...
+ *
  * @param mode "Mode" of drawing tool, can be point, linestring or polygon. See ol/interaction/Draw.js:122
  * @param targetTypes Only these types of features will be handled
  * @param source
@@ -76,26 +79,32 @@ export function drawInteractionFactory(
   getStyle: GetStyleFunc,
   onTask: HistoryTaskHandler
 ): DrawInteraction {
-  // Select interaction will condition modification of features
+  // Select features. Only selected features can be modified.
   const select = new Select({
-    condition: (ev) => withControlKeyOnly(ev) && withMainButton(ev),
+    condition: (ev) => withMainButton(ev) && withShiftKey(ev),
+    toggleCondition: () => false,
     layers: (lay) => LayerWrapper.from(lay).isActive(),
     filter: (feat) => withGeometry(feat, targetTypes),
     // Warning: here we must use null to not manage styles with Select interaction
     // Otherwise modification of style can be 'restored' from a bad state
     style: null as any,
+    hitTolerance: DefaultTolerancePx,
   });
 
+  // Modify features. Only selected features can be modified.
   const modify = new Modify({
     features: select.getFeatures(),
     condition: withMainButton,
   });
 
+  // Add features
   const draw = new Draw({
     source: source,
     type: mode,
-    condition: (e) => noModifierKeys(e) && withMainButton(e),
-    finishCondition: (e) => noModifierKeys(e) && withMainButton(e),
+    condition: (e) => withMainButton(e) && noModifierKeys(e),
+    finishCondition: (e) => withMainButton(e) && noModifierKeys(e),
+    freehand: false,
+    freehandCondition: () => false,
     style: (f) => {
       if (f.getGeometry()?.getType() === GeometryType.POINT) {
         return styleFunction(1, f).concat(editingStyle.Point);
@@ -105,6 +114,7 @@ export function drawInteractionFactory(
     },
   });
 
+  // Snap point, only on selected features
   const snap = new Snap({ features: select.getFeatures() });
 
   const previousSelection = new Collection<FeatureWrapper>();
@@ -166,7 +176,7 @@ export function drawInteractionFactory(
   });
 
   // If Escape key is pressed and if user is drawing, we cancel drawing
-  // If Escape key is pressed and objetcs are selected, we cancel selection
+  // If Escape key is pressed and objects are selected, we cancel selection
   const handleKey = (ev: KeyboardEvent) => {
     if (ev.key !== 'Escape') {
       return;

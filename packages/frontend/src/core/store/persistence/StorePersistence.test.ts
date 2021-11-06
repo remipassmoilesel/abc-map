@@ -106,7 +106,7 @@ describe('StorePersistence', () => {
     const expectedState: MainState = {
       project: undefined as any, // A new project is created on bootstrap
       map: {
-        tool: MapTool.None,
+        tool: MapTool.Move,
         currentStyle: {
           fill: {
             color1: '#FFFFFF',

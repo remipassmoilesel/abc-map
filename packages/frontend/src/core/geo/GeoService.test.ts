@@ -30,7 +30,7 @@ import { VectorLayerWrapper, WmsLayerWrapper, WmtsLayerWrapper, XyzLayerWrapper 
 import * as sinon from 'sinon';
 import { SinonStub, SinonStubbedInstance } from 'sinon';
 import { ToastService } from '../ui/ToastService';
-import { storeFactory } from '../store/store';
+import { mainStore, storeFactory } from '../store/store';
 import { HttpClientStub } from '../utils/test/HttpClientStub';
 import { AxiosInstance } from 'axios';
 import { get as getProjection } from 'ol/proj';
@@ -425,7 +425,7 @@ describe('GeoService', () => {
 
     beforeEach(() => {
       toasts = sinon.createStubInstance(ToastService);
-      service = new GeoService(httpApiClient(5_000), httpExternalClient(5_000), toasts, HistoryService.create(), storeFactory());
+      service = new GeoService(httpApiClient(5_000), httpExternalClient(5_000), toasts, HistoryService.create(mainStore), storeFactory());
 
       service.getMainMap().unwrap().getLayers().clear();
     });

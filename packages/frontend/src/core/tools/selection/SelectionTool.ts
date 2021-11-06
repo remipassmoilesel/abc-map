@@ -29,8 +29,9 @@ import { HistoryKey } from '../../history/HistoryKey';
 import { UpdateItem, UpdateGeometriesTask } from '../../history/tasks/features/UpdateGeometriesTask';
 import { Logger } from '@abc-map/shared';
 import { FeatureWrapper } from '../../geo/features/FeatureWrapper';
-import { withControlKey, withMainButton } from '../common/common-conditions';
+import { withMainButton } from '../common/common-conditions';
 import { defaultInteractions } from '../../geo/map/interactions';
+import { noModifierKeys } from 'ol/events/condition';
 
 const logger = Logger.get('SelectionTool.ts');
 
@@ -45,8 +46,8 @@ export class SelectionTool extends AbstractTool {
     return Icon;
   }
 
-  public getLabel(): string {
-    return 'Sélectionner des géométries';
+  public getI18nLabel(): string {
+    return 'Select';
   }
 
   protected setupInternal(map: Map, source: VectorSource<Geometry>): void {
@@ -57,7 +58,7 @@ export class SelectionTool extends AbstractTool {
 
     // Tool interactions
     const dragBox = new DragBox({
-      condition: (ev) => withMainButton(ev) && withControlKey(ev),
+      condition: (ev) => withMainButton(ev) && noModifierKeys(ev),
       className: 'abc-selection-box',
     });
 

@@ -104,6 +104,6 @@ export const DefaultStyle = {
   },
   point: {
     icon: 'twbs/0_circle-fill.inline.svg',
-    size: 30,
+    size: 10,
   },
 };

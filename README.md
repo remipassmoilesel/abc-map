@@ -1,4 +1,4 @@
-# Abc-Map
+# Welcome to Abc-Map !
 
 <div style="margin-bottom: 1.5rem">
   <a href="https://gitlab.com/abc-map/abc-map/-/commits/master">
@@ -9,58 +9,40 @@
   </a>
 </div>
 
-Official rewrite, attempt n°265 👨‍💻.  
-
-You can try it on [abc-map.fr](https://abc-map.fr).  
-
-Main repository of source code is on Gitlab: [https://gitlab.com/abc-map/abc-map](https://gitlab.com/abc-map/abc-map).  
-
-If you like it, please give it a star 🌟
-
-
-## Purpose in a nutshell
-
 Abc-Map is a tool for processing geographic information that is easy to understand and use.
 
-Use cases:             
-
+Use cases:  
 - Education
 - Professional uses: tourism, deliveries, ...
 - Sports and leisure: hiking, hunting, treasure hunts, ...
 
-More information [here](https://abc-map.fr/documentation).    
+You can try Abc-Map online on [abc-map.fr](https://abc-map.fr). If you like it, please give it a star 🌟
 
 
 ## Why ?
 
 There are some very good GIS available: [QGIS](https://www.qgis.org) and others are great software. But they are 
-designed by and for experts, and are hard to use. The goal of this project is to provide a light GIS experience 
-without complex technical knowledge. 
-
-
-## Status of project
-
-Abc-Map 2 is at a very early stage. 
-
-Everything is done within the means available to make this project a long-lasting one. But this software is developed 
-at night after often 10 hours of code during the day.       
-
-A lot of things needs to be - and will be - improved 💪
-
-
-## What can I find here ?
-
-Source code of Abc-Map and developer documentation, if you want to hack it or deploy your own instance.    
-
-See [documentation](./documentation) folder.
+designed by and for experts, and are hard to use.  
+ 
+Abc-Map is a lightweight GIS whose objective is to offer a good user experience for neophytes as for experts in a 
+hurry.  
 
 
 ## How can I help ?
 
-See [CONTRIBUTING](./CONTRIBUTING.md) and [backlog](./documentation/5_the_bottomless_well.md).        
+See [CONTRIBUTING](./CONTRIBUTING.md) and [backlog](./documentation/5_the_bottomless_well.md).
 
 
-## Technologies used 
+## Source code, issues, license
+
+Main repository is hosted on Gitlab: [https://gitlab.com/abc-map/abc-map](https://gitlab.com/abc-map/abc-map).  
+
+Something went wrong ? Take a look at the [issues](https://gitlab.com/abc-map/abc-map/-/issues).  
+
+All source code is distributed under GPLv3 license, see [LICENSE.txt](./LICENSE.txt).  
+
+
+## Technologies used
 
 **Backend**:
 - [NodeJS](https://nodejs.org/en/)
@@ -71,8 +53,16 @@ See [CONTRIBUTING](./CONTRIBUTING.md) and [backlog](./documentation/5_the_bottom
 - [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/) for local development
 - [Kubernetes](https://kubernetes.io/) and [Helm](https://helm.sh/) for deployment
 
-**Frontend**: 
+**Frontend**:
 - [Typescript](https://www.typescriptlang.org/)
 - [React](https://reactjs.org/)
 - [Openlayers](https://openlayers.org/)
 - [Bootstrap](https://getbootstrap.com)
+
+
+## Status of project
+
+Abc-Map 2 is at a very early stage. A lot of things needs to be - and will be - improved 💪 
+
+
+

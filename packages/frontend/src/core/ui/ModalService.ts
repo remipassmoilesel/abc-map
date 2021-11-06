@@ -34,7 +34,7 @@ import {
   SolicitationClosedEvent,
 } from './typings';
 import { SimplePropertiesMap } from '../geo/features/FeatureWrapper';
-import { delayedPromise } from '../utils/delayedPromise';
+import { solvesInAtLeast } from '../utils/solvesInAtLeast';
 import { prefixedTranslation } from '../../i18n/i18n';
 
 const logger = Logger.get('ModalService.ts', 'warn');
@@ -89,16 +89,16 @@ export class ModalService {
     return this.modalPromise({ type: ModalEventType.ShowLegendSymbolPicker }, ModalEventType.LegendSymbolPickerClosed);
   }
 
-  public longOperationModal<Result = void>(operation: () => Promise<OperationStatus | Result>): Promise<OperationStatus | Result> {
+  public longOperationModal<Result = void>(operation: () => Promise<OperationStatus | [OperationStatus, Result]>): Promise<OperationStatus | Result> {
     // We show waiting screen
     this.dispatch({ type: ModalEventType.ShowLongOperationModal, burning: true });
 
     return new Promise<OperationStatus | Result>((resolve, reject) => {
       const start = () => {
-        return delayedPromise(operation(), 1000).then(hideOnSuccess).catch(hideOnFail);
+        return solvesInAtLeast(operation(), 1000).then(hideOnSuccess).catch(hideOnFail);
       };
 
-      const hideOnSuccess = (res: OperationStatus | Result) => {
+      const hideOnSuccess = (res: OperationStatus | [OperationStatus, Result]) => {
         // Operation was interrupted (per example canceled), we resolve with status
         if (res === OperationStatus.Interrupted) {
           this.dispatch({ type: ModalEventType.LongOperationModalClosed });
@@ -113,7 +113,7 @@ export class ModalService {
           this.dispatch({ type: ModalEventType.LongOperationModalClosed });
 
           // Then we resolve with result or status
-          resolve(res ?? OperationStatus.Succeed);
+          resolve(res && res instanceof Array ? res[1] : res);
         }, 800);
       };
 

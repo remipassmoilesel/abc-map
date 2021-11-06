@@ -8,7 +8,7 @@
   ],
   "scripts": {
     "start:e2e": "node ./build/main.js",
-    "start:watch": "nodemon --trace-warnings --watch build ./build/main.js",
+    "start:watch": "nodemon --trace-warnings --watch build --watch resources ./build/main.js",
     "clean": "rm -rf build",
     "build": "tsc",
     "watch": "tsc --watch | sed -u 's/\\x1Bc//g'",

@@ -25,7 +25,7 @@ import { prefixedTranslation } from '../../../i18n/i18n';
 
 const logger = Logger.get('MapKeyboardListener.ts');
 
-const t = prefixedTranslation('MapKeyboardListener:');
+const t = prefixedTranslation('core:MapKeyboardListener.');
 
 export class MapKeyboardListener {
   public static create() {

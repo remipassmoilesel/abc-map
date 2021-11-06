@@ -34,6 +34,7 @@ import ProcessingReportModal from './components/report-modal/ProcessingReportMod
 import { prefixedTranslation } from '../../../i18n/i18n';
 import Cls from './ProportionalSymbolsUi.module.scss';
 import { withTranslation } from 'react-i18next';
+import { OperationStatus } from '../../../core/ui/typings';
 
 const logger = Logger.get('ProportionalSymbolsUi.tsx');
 
@@ -200,12 +201,13 @@ class ProportionalSymbolsUi extends Component<Props, State> {
     }
 
     modals
-      .longOperationModal<ProcessingResult>(this.props.onProcess)
-      .then((result) => {
+      .longOperationModal<ProcessingResult>(async () => {
+        const result = await this.props.onProcess();
         if (isProcessingResult(result)) {
           this.setState({ result });
+          return OperationStatus.Succeed;
         } else {
-          return Promise.reject(new Error('Invalid result'));
+          return OperationStatus.Interrupted;
         }
       })
       .catch((err) => {

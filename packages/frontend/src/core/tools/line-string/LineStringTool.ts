@@ -43,8 +43,8 @@ export class LineStringTool extends AbstractTool {
     return Icon;
   }
 
-  public getLabel(): string {
-    return 'Créer des lignes';
+  public getI18nLabel(): string {
+    return 'CreateLines';
   }
 
   protected setupInternal(map: Map, source: VectorSource<Geometry>): void {

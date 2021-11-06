@@ -1,19 +1,9 @@
-<div class="toc-section">Généralités</div>
+<div class="toc-section">Sommaire</div>
 
-[A quoi sert Abc-Map ?](#features)
-[Les projets](#projects)
-[La carte](#map)
-[Les couches](#layers)
-[Outils de dessin](#drawing-tools)
+[Présentation](#presentation)
+[Notions basiques](#basics)
+[Créer une carte](#create-map)
 [Importer des données](#data-import)
-[Catalogue de données](#data-store)
-[Mise en page et légende](#layout-legend)
 [Inscription, connexion](#registration)
 [Questions fréquentes](#faq)
-[A l'aide ! 🔥](#helpme)
-
-<div class="toc-section">Traitements données</div>
-
-[Symboles proportionnels](#proportional-symbols)
-[Dégradés de couleurs](#color-gradients)
-[Scripts](#scripts)
+[🔥 A l'aide !](#helpme)

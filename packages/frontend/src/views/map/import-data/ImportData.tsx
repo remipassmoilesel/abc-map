@@ -59,13 +59,14 @@ class ImportData extends Component<ServiceProps, {}> {
     const importFiles = async (files: AbcFile<Blob>[]) => {
       const result = await data.importFiles(files);
 
-      if (result.status === ImportStatus.Failed) {
-        toasts.error(t('Formats_not_supported'));
-        return;
-      }
-
-      if (result.status === ImportStatus.Canceled) {
-        return OperationStatus.Interrupted;
+      switch (result.status) {
+        case ImportStatus.Failed:
+          toasts.error(t('Formats_not_supported'));
+          return OperationStatus.Interrupted;
+        case ImportStatus.Canceled:
+          return OperationStatus.Interrupted;
+        case ImportStatus.Succeed:
+          return OperationStatus.Succeed;
       }
     };
 

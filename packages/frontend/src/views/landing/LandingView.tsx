@@ -17,7 +17,7 @@
  */
 
 import React, { Component, ReactNode } from 'react';
-import { Language, AbcVoteAggregation, FrontendRoutes, Logger, UserStatus } from '@abc-map/shared';
+import { AbcVoteAggregation, FrontendRoutes, Logger, UserStatus } from '@abc-map/shared';
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
 import { ServiceProps, withServices } from '../../core/withServices';
 import { DateTime } from 'luxon';
@@ -25,13 +25,13 @@ import Illustration1Icon from '../../assets/illustrations/illustration-1.svg';
 import Illustration2Icon from '../../assets/illustrations/illustration-2.svg';
 import Illustration3Icon from '../../assets/illustrations/illustration-3.svg';
 import * as _ from 'lodash';
-import Cls from './LandingView.module.scss';
 import { BUILD_INFO } from '../../build-version';
 import { MainState } from '../../core/store/reducer';
 import { connect, ConnectedProps } from 'react-redux';
 import { pageSetup } from '../../core/utils/page-setup';
-import { getLang, prefixedTranslation } from '../../i18n/i18n';
+import { prefixedTranslation } from '../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
+import Cls from './LandingView.module.scss';
 
 const logger = Logger.get('Landing.tsx');
 
@@ -64,8 +64,6 @@ class LandingView extends Component<Props, State> {
     const illustration = this.state.illustration;
     const buildHash = BUILD_INFO.hash;
     const buildDate = DateTime.fromISO(BUILD_INFO.date).toLocal().toFormat('dd/MM/yyyy (HH:mm)');
-    // TODO: remove when translation finish
-    const langWarning = getLang() !== Language.French;
 
     return (
       <div className={Cls.landing}>
@@ -76,11 +74,6 @@ class LandingView extends Component<Props, State> {
             <h1>{t('Welcome')}</h1>
 
             <p className={Cls.intro}>{t('AbcMap_is_a_free_software')}</p>
-            {langWarning && (
-              <div className="alert alert-warning">
-                <i className={'fa fa-exclamation-triangle'} /> Hmm, not everything is translated into your language yet.
-              </div>
-            )}
           </div>
 
           <div>

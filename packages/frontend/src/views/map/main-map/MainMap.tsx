@@ -154,6 +154,8 @@ class MainMap extends Component<Props, State> {
       if (result.status === ImportStatus.Canceled) {
         return OperationStatus.Interrupted;
       }
+
+      return OperationStatus.Succeed;
     };
 
     modals.longOperationModal(importFiles).catch((err) => {

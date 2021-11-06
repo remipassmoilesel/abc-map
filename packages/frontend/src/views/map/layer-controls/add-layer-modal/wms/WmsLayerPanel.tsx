@@ -84,6 +84,11 @@ class WmsLayerPanel extends Component<Props, State> {
         {/* Warning if URL seems to belong to use protocol */}
         {protocolWarn && <div className={`mb-3 ${Cls.warn}`}>{t('WMS_are_you_sure')}</div>}
 
+        {/* Small advice */}
+        <div className={'alert alert-info'}>
+          {t('Sample_URL')}: <code>https://domain.service.fr/product/wms</code>
+        </div>
+
         <div className={'d-flex flex-row mb-3'}>
           <input
             type={'text'}

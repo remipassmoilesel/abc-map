@@ -91,7 +91,7 @@ describe('Draw features history', function () {
       .then(() => Draw.click(100, 100))
       .then(() => Draw.dblclick(150, 150))
       // Select it
-      .then(() => Draw.click(150, 150, { ctrlKey: true }))
+      .then(() => Draw.click(150, 150, { shiftKey: true }))
       // First modification
       .then(() => Draw.drag(150, 150, 200, 200))
       // Second modification

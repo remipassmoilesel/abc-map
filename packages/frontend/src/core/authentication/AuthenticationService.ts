@@ -72,8 +72,14 @@ export class AuthenticationService {
     clearInterval(this.tokenInterval);
   }
 
-  public getUserStatus(): UserStatus | undefined {
-    return this.store.getState().authentication.userStatus;
+  /**
+   * Return status of user:
+   * - 'Authenticated' if authenticated with username and password
+   * - 'Anonymous' if authenticated with anonymous credentials
+   * - 'false' if not authenticated
+   */
+  public getUserStatus(): UserStatus | false {
+    return this.store.getState().authentication.userStatus ?? false;
   }
 
   public logout(): Promise<void> {

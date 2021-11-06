@@ -28,4 +28,8 @@ export class LocalStorageService {
   public set(key: StorageKey, value: string): void {
     localStorage.setItem(key, value);
   }
+
+  public clear(): void {
+    localStorage.clear();
+  }
 }

@@ -24,7 +24,7 @@ import { Style } from 'ol/style';
 const logger = Logger.get('style-function.ts');
 
 export const styleFunction = function (ratio: number, f: FeatureLike): Style[] {
-  const feature = FeatureWrapper.fromFeatureLike(f);
+  const feature = FeatureWrapper.fromUnknown(f);
   if (!feature) {
     return [];
   }

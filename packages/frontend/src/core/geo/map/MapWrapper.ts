@@ -27,13 +27,13 @@ import { FeatureWrapper } from '../features/FeatureWrapper';
 import { LayerFactory } from '../layers/LayerFactory';
 import { LayerWrapper, VectorLayerWrapper } from '../layers/LayerWrapper';
 import VectorImageLayer from 'ol/layer/VectorImage';
-import { defaultInteractions } from './interactions';
 import { EventType, MapSizeChangedEvent, SizeListener, TileErrorListener, TileLoadErrorEvent } from './MapWrapper.events';
 import { Views } from '../Views';
 import { fromLonLat, transformExtent } from 'ol/proj';
 import { Coordinate } from 'ol/coordinate';
 import TileSource from 'ol/source/Tile';
 import { Extent } from 'ol/extent';
+import { DragPan, KeyboardPan, MouseWheelZoom } from 'ol/interaction';
 
 export const logger = Logger.get('MapWrapper.ts');
 
@@ -243,8 +243,7 @@ export class MapWrapper {
 
   public setDefaultInteractions() {
     this.cleanInteractions();
-
-    defaultInteractions().forEach((i) => this.internal.addInteraction(i));
+    [new DragPan(), new KeyboardPan(), new MouseWheelZoom()].forEach((i) => this.internal.addInteraction(i));
   }
 
   public cleanInteractions() {

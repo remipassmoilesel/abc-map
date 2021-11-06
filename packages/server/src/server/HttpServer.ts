@@ -187,10 +187,11 @@ export class HttpServer {
 
   private logRequest = (request: FastifyRequest, reply: FastifyReply, done: HookHandlerDoneFunction) => {
     const hasher = createHash('md5');
-    const ip = request.headers['x-forwarded-for']?.toString() || '<no-ip-found>';
+    const ip = (request.headers['x-forwarded-for']?.toString() || '000.000.000.000').split('.').slice(1).join('.');
     const source = hasher.update(ip).digest('hex');
 
     const logTrace = {
+      date: new Date().toISOString(),
       source,
       userAgent: request.headers['user-agent'],
       method: request.method,

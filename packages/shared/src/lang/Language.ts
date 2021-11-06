@@ -26,7 +26,6 @@ export enum Language {
   French = 'fr',
 }
 
-// TODO: Apply everywhere when translation finished
 export const FallbackLang = Language.English;
 
 export function isLangSupported(lang: string | Language): boolean {

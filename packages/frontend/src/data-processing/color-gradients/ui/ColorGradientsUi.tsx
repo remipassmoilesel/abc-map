@@ -33,6 +33,7 @@ import { isProcessingResult, ProcessingResult } from '../ProcessingResult';
 import ProcessingReportModal from './components/report-modal/ProcessingReportModal';
 import { prefixedTranslation } from '../../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
+import { OperationStatus } from '../../../core/ui/typings';
 
 const logger = Logger.get('ColorGradientsUI.tsx');
 
@@ -214,12 +215,13 @@ class ColorGradientsUI extends Component<Props, State> {
     }
 
     modals
-      .longOperationModal<ProcessingResult>(this.props.onProcess)
-      .then((result) => {
+      .longOperationModal<ProcessingResult>(async () => {
+        const result = await this.props.onProcess();
         if (isProcessingResult(result)) {
           this.setState({ result });
+          return OperationStatus.Succeed;
         } else {
-          return Promise.reject(new Error('Invalid result'));
+          return OperationStatus.Interrupted;
         }
       })
       .catch((err) => {
