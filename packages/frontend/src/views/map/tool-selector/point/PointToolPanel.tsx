@@ -21,23 +21,14 @@ import { Logger } from '@abc-map/shared';
 import ColorSelector from '../../../../components/color-picker/ColorSelector';
 import PointSizeSelector from './size-selector/PointSizeSelector';
 import PointIconSelector from './icon-selector/PointIconSelector';
-import Cls from './PointToolPanel.module.scss';
-import TipBubble from '../../../../components/tip-bubble/TipBubble';
-import { ToolTips } from '@abc-map/user-documentation';
-import ButtonBar, { StyleApplication } from '../_common/button-bar/ButtonBar';
-import { prefixedTranslation } from '../../../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
 
 const logger = Logger.get('PointToolPanel.tsx');
 
-const t = prefixedTranslation('MapView:ToolSelector.');
-
 class PointToolPanel extends Component<{}, {}> {
   public render(): ReactNode {
     return (
-      <div className={Cls.pointPanel}>
-        <TipBubble id={ToolTips.Point} label={t('Tool_help')} className={'mx-3 mb-3'} />
-        <ButtonBar applyStyle={StyleApplication.Point} />
+      <div>
         <PointSizeSelector />
         <ColorSelector point={true} />
         <PointIconSelector />

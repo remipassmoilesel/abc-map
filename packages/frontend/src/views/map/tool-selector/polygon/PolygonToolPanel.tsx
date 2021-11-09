@@ -21,23 +21,15 @@ import { Logger } from '@abc-map/shared';
 import WidthSelector from '../_common/stroke-width-selector/StrokeWidthSelector';
 import ColorSelector from '../../../../components/color-picker/ColorSelector';
 import FillPatternSelector from '../_common/fill-pattern-selector/FillPatternSelector';
-import TipBubble from '../../../../components/tip-bubble/TipBubble';
-import { ToolTips } from '@abc-map/user-documentation';
-import ButtonBar, { StyleApplication } from '../_common/button-bar/ButtonBar';
 import Cls from './PolygonToolPanel.module.scss';
 import { withTranslation } from 'react-i18next';
-import { prefixedTranslation } from '../../../../i18n/i18n';
 
 const logger = Logger.get('PolygonToolPanel.tsx');
-
-const t = prefixedTranslation('MapView:ToolSelector.');
 
 class PolygonToolPanel extends Component<{}, {}> {
   public render(): ReactNode {
     return (
       <div className={Cls.polygonPanel}>
-        <TipBubble id={ToolTips.Polygon} label={t('Tool_help')} className={'mx-3 mb-3'} />
-        <ButtonBar applyStyle={StyleApplication.Polygon} />
         <WidthSelector />
         <ColorSelector stroke={true} fillColor1={true} fillColor2={true} />
         <FillPatternSelector />

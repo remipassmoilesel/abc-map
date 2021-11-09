@@ -171,7 +171,22 @@ export class HttpServer {
 
   private handleError = (err: FastifyError, request: FastifyRequest, reply: FastifyReply) => {
     const { metrics } = this.services;
-    this.config.server.log.errors && logger.error('Unhandled error: ', err);
+
+    // Log if needed
+    if (this.config.server.log.errors) {
+      const logTrace = {
+        date: new Date().toISOString(),
+        error: err.message,
+        source: getSource(request),
+        userAgent: request.headers['user-agent'],
+        method: request.method,
+        url: request.url,
+        status: reply.statusCode,
+        stack: err.stack,
+      };
+
+      logger.log(JSON.stringify(logTrace));
+    }
 
     // Return 429 error page if necessary
     if (reply.statusCode === 429) {
@@ -186,13 +201,9 @@ export class HttpServer {
   };
 
   private logRequest = (request: FastifyRequest, reply: FastifyReply, done: HookHandlerDoneFunction) => {
-    const hasher = createHash('md5');
-    const ip = (request.headers['x-forwarded-for']?.toString() || '000.000.000.000').split('.').slice(1).join('.');
-    const source = hasher.update(ip).digest('hex');
-
     const logTrace = {
       date: new Date().toISOString(),
-      source,
+      source: getSource(request),
       userAgent: request.headers['user-agent'],
       method: request.method,
       url: request.url,
@@ -218,4 +229,10 @@ export class HttpServer {
       }
     });
   }
+}
+
+function getSource(req: FastifyRequest): string {
+  const hasher = createHash('md5');
+  const ip = (req.headers['x-forwarded-for']?.toString() || '000.000.000.000').split('.').slice(1).join('.');
+  return hasher.update(ip).digest('hex');
 }

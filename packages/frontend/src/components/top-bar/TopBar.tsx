@@ -16,54 +16,50 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { Component, ReactNode } from 'react';
+import React from 'react';
 import { FrontendRoutes, Logger } from '@abc-map/shared';
-import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
-import { ServiceProps, withServices } from '../../core/withServices';
+import { Link } from 'react-router-dom';
 import TopBarLink from './TopBarLink';
 import MainIcon from '../../assets/main-icon.svg';
 import LangSelector from './lang-selector/LangSelector';
 import UserMenu from './user-menu/UserMenu';
 import { prefixedTranslation } from '../../i18n/i18n';
-import { withTranslation } from 'react-i18next';
 import Cls from './TopBar.module.scss';
 
 const logger = Logger.get('TopBar.tsx');
 
-type Props = RouteComponentProps<any> & ServiceProps;
-
 const t = prefixedTranslation('TopBar:');
 
-class TopBar extends Component<Props, {}> {
-  public render(): ReactNode {
-    return (
-      <div className={Cls.topBar} data-cy={'top-bar'}>
-        <h1>
-          <Link to={FrontendRoutes.landing().raw()} data-cy={'landing'} className={'d-flex align-items-center'}>
-            <img src={MainIcon} alt={'Logo'} height={'25'} className={'mr-3'} />
-            Abc-Map
-          </Link>
-        </h1>
+function TopBar() {
+  return (
+    <div className={Cls.topBar} data-cy={'top-bar'}>
+      <h1>
+        <Link to={FrontendRoutes.landing().raw()} data-cy={'landing'} className={'d-flex align-items-center'}>
+          <img src={MainIcon} alt={'Logo'} height={'25'} className={'mr-3'} />
+          Abc-Map
+        </Link>
+      </h1>
 
-        <div className={'flex-grow-1'} />
+      <div className={'flex-grow-1'} />
 
+      <div className={Cls.links}>
         <TopBarLink label={t('Map')} to={FrontendRoutes.map().raw()} data-cy={'map'} />
         <TopBarLink label={t('Data_store')} to={FrontendRoutes.dataStore().raw()} data-cy={'data-store'} />
         <TopBarLink label={t('Data_processing')} to={FrontendRoutes.dataProcessing().withoutOptionals()} data-cy={'data-processing'} />
         <TopBarLink label={t('Layout')} to={FrontendRoutes.layout().raw()} data-cy={'layout'} />
         <TopBarLink label={t('Documentation')} to={FrontendRoutes.documentation().raw()} data-cy={'help'} />
         <TopBarLink label={`${t('Support_AbcMap')} 💌`} to={FrontendRoutes.funding().raw()} data-cy={'help'} />
-
-        <div className={'ml-3'}>
-          <LangSelector />
-        </div>
-
-        <div className={'ml-3'}>
-          <UserMenu />
-        </div>
       </div>
-    );
-  }
+
+      <div className={'ml-3'}>
+        <LangSelector />
+      </div>
+
+      <div className={'ml-3'}>
+        <UserMenu />
+      </div>
+    </div>
+  );
 }
 
-export default withTranslation()(withRouter(withServices(TopBar)));
+export default TopBar;

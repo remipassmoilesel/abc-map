@@ -65,7 +65,7 @@
       "You_can_not_use_this_projection": "Vous ne pouvez pas utiliser cette projection."
     },
     "Search": {
-      "Search_on_map": "Rechercher sur la carte",
+      "Search": "Rechercher",
       "My_location": "Ma position"
     },
     "ProjectControls": {
@@ -102,7 +102,8 @@
       "Delete_active_layer": "Supprimer la couche active",
       "Move_back": "Déplacer vers l'arrière",
       "Move_forward": "Déplacer vers l'avant",
-      "New_layer": "Nouvelle couche",
+      "Add": "Ajouter",
+      "Add_layer": "Ajouter une nouvelle couche",
       "You_must_first_select_layer": "Vous devez d'abord sélectionner une couche",
       "Unable_to_zoom": "Impossible de zoomer sur cette couche"
     },
@@ -149,7 +150,7 @@
       "Sample_URL": "Exemple d'URL"
     },
     "ToolSelector": {
-      "Drawing_tools": "Outils de dessin",
+      "Drawing_tools": "Outils",
       "You_must_select_geometry_layer_before": "Vous devez sélectionner une couche de géométries pour utiliser les outils.",
       "Create_geometry_layer": "Nouvelle couche",
       "Apply_style_to_selected_geometries": "Appliquer le style aux géométries sélectionnées",
@@ -462,7 +463,7 @@
     "List_of_layouts_displayed_here": "La liste des mises en page sera affichée ici.",
     "Layouts": "Mises en page",
     "Create_layout_to_export": "Créez une mise en page pour exporter votre carte",
-    "Create_A4_layout": "Nouvelle mise en page A4",
+    "Create_A4_layout": "Nouvelle page A4",
     "Layout": "Mise en page",
     "Create_layout_to_export_your_map": "Mettez en page et exportez vos cartes au format PDF ou PNG \uD83D\uDCD0 \uD83D\uDEB6\u200D♀️",
     "You_muse_select_a_layout": "Vous devez sélectionner une mise en page",
@@ -471,7 +472,7 @@
     "Top_right_corner": "En haut à droite",
     "Bottom_right_corner": "En bas à droite",
     "Bottom_left_corner": "En bas à gauche",
-    "New_layout": "Nouvelle mise en page",
+    "New_layout": "Nouvelle page",
     "A5_portrait": "A5 portrait",
     "A5_landscape": "A5 paysage",
     "A4_portrait": "A4 portrait",
@@ -480,8 +481,8 @@
     "A3_landscape": "A3 paysage",
     "Legend": "Légende",
     "Edit_legend": "Editer la légende",
-    "Move_up": "Monter",
-    "Move_Down": "Descendre",
+    "Move_up": "Monter la page",
+    "Move_Down": "Descendre la page",
     "Delete_all": "Supprimer tout",
     "PDF_export": "Export PDF",
     "PNG_export": "Export PNG",
@@ -647,7 +648,8 @@
     "Close": "Fermer"
   },
   "TipBubble": {
-    "This_tip_is_not_available": "Ce conseil n'est pas disponible"
+    "This_tip_is_not_available": "Ce conseil n'est pas disponible",
+    "Help": "Aide"
   },
   "LegalMentionsView": {
     "About_this_platform": "A propos de cette plateforme"
@@ -695,13 +697,13 @@
       "Too_much_projects": "Désolé \uD83D\uDE1E vous avez atteint votre quota de projet. Supprimez-en un."
     },
     "tools": {
-      "EditProperties": "Editer les propriétés des geometries",
-      "CreateLines": "Créer des lignes",
-      "MoveMap": "Déplacer la carte",
-      "CreatePoints": "Créer des points",
-      "CreatePolygons": "Créer des polygones",
-      "Select": "Sélection",
-      "AddText": "Ajouter du texte"
+      "MoveMap": "Déplacer",
+      "Properties": "Propriétés",
+      "Lines": "Lignes",
+      "Points": "Points",
+      "Polygons": "Polygones",
+      "Select": "Selection",
+      "Text": "Texte"
     }
   }
 }

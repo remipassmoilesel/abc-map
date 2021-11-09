@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { Component, ReactNode } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Modal } from 'react-bootstrap';
 import { AllTips } from '@abc-map/user-documentation';
 import { getDocumentationLang, prefixedTranslation } from '../../i18n/i18n';
@@ -27,55 +27,48 @@ interface Props {
   id: string;
   label?: string;
   className?: string;
-}
-
-interface State {
-  open: boolean;
+  size?: string;
 }
 
 const t = prefixedTranslation('TipBubble:');
 
-class TipBubble extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = { open: false };
-  }
+function TipBubble(props: Props) {
+  const id = props.id;
+  const label = props.label;
+  const className = props.className || '';
+  const fontSize = props.size;
 
-  public render(): ReactNode {
-    const label = this.props.label;
-    const className = this.props.className || '';
-    const modal = this.state.open;
+  const [open, setOpen] = useState(false);
 
-    return (
-      <>
-        <div onClick={this.handleClick} className={`${Cls.bubble} ${className}`}>
-          {label && <div className={'mr-2'}>{label}</div>}
-          <i className={`fa fa-question-circle`} />
-        </div>
-        {modal && (
-          <Modal show={true} onHide={this.handleHide} dialogClassName={Cls.modal}>
-            <Modal.Body className={Cls.modalContent}>
-              <div dangerouslySetInnerHTML={{ __html: this.getTip() }} />
-            </Modal.Body>
-          </Modal>
-        )}
-      </>
-    );
-  }
+  const handleClick = useCallback(() => {
+    setOpen(true);
+  }, []);
 
-  private handleClick = () => {
-    this.setState({ open: true });
-  };
+  const handleHide = useCallback(() => setOpen(false), []);
 
-  private handleHide = () => {
-    this.setState({ open: false });
-  };
-
-  private getTip(): string {
-    const id = this.props.id;
+  const getTip = useCallback(() => {
     const tip = AllTips.find((bundle) => bundle.lang === getDocumentationLang())?.tips.find((tip) => tip.id === id);
     return tip?.content || t('This_tip_is_not_available');
-  }
+  }, [id]);
+
+  return (
+    <>
+      {/* Help icon */}
+      <div onClick={handleClick} className={`${Cls.bubble} ${className}`} title={label || t('Help')}>
+        {label && <div className={'mr-2'}>{label}</div>}
+        <i className={`fa fa-question-circle`} style={{ fontSize }} />
+      </div>
+
+      {/* Modal */}
+      {open && (
+        <Modal show={true} onHide={handleHide} dialogClassName={Cls.modal}>
+          <Modal.Body className={Cls.modalContent}>
+            <div dangerouslySetInnerHTML={{ __html: getTip() }} />
+          </Modal.Body>
+        </Modal>
+      )}
+    </>
+  );
 }
 
 export default withTranslation()(TipBubble);

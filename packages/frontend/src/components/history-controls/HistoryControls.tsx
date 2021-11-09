@@ -16,84 +16,54 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { Component, ReactNode } from 'react';
+import React, { useCallback } from 'react';
 import { Logger } from '@abc-map/shared';
 import { HistoryKey } from '../../core/history/HistoryKey';
-import { connect, ConnectedProps } from 'react-redux';
-import { MainState } from '../../core/store/reducer';
-import { ServiceProps, withServices } from '../../core/withServices';
 import { prefixedTranslation } from '../../i18n/i18n';
-import { withTranslation } from 'react-i18next';
+import { useAppSelector } from '../../core/store/hooks';
+import { useServices } from '../../core/hooks';
+import Cls from './HistoryControls.module.scss';
 
 const logger = Logger.get('HistoryControls.tsx');
 
-interface LocalProps {
+interface Props {
   historyKey: HistoryKey;
 }
 
-const mapStateToProps = (state: MainState) => ({
-  capabilities: state.ui.historyCapabilities,
-});
-
-const connector = connect(mapStateToProps);
-
-type Props = ConnectedProps<typeof connector> & LocalProps & ServiceProps;
-
 const t = prefixedTranslation('HistoryControls:');
 
-class HistoryControls extends Component<Props, {}> {
-  public render(): ReactNode {
-    const canUndo = this.canUndo();
-    const canRedo = this.canRedo();
-    return (
-      <div className={'control-block'}>
-        <div className={'control-item'}>
-          <button onClick={this.onCancel} type={'button'} className={'btn btn-link'} disabled={!canUndo} data-cy={'undo'}>
-            <i className={'fa fa-undo mr-2'} /> {t('Undo')}
-          </button>
-        </div>
-        <div className={'control-item'}>
-          <button onClick={this.onRedo} type={'button'} className={'btn btn-link'} disabled={!canRedo} data-cy={'redo'}>
-            <i className={'fa fa-redo mr-2'} /> {t('Redo')}
-          </button>
-        </div>
-      </div>
-    );
-  }
+export function HistoryControls(props: Props) {
+  const { historyKey } = props;
+  const capabilities = useAppSelector((state) => state.ui.historyCapabilities)[historyKey];
+  const { history, toasts } = useServices();
 
-  private onCancel = () => {
-    const { history, toasts } = this.props.services;
+  const canUndo = capabilities?.canUndo ?? false;
+  const canRedo = capabilities?.canRedo ?? false;
 
-    history.undo(this.props.historyKey).catch((err) => {
+  const undo = useCallback(() => {
+    history.undo(historyKey).catch((err) => {
       logger.error(err);
       toasts.genericError();
     });
-  };
+  }, [historyKey, history, toasts]);
 
-  private onRedo = () => {
-    const { history, toasts } = this.props.services;
-
-    history.redo(this.props.historyKey).catch((err) => {
+  const redo = useCallback(() => {
+    history.redo(historyKey).catch((err) => {
       logger.error(err);
       toasts.genericError();
     });
-  };
+  }, [historyKey, history, toasts]);
 
-  private canUndo = (): boolean => {
-    const capabilities = this.props.capabilities[this.props.historyKey];
-    if (!capabilities) {
-      return false;
-    }
-    return capabilities.canUndo;
-  };
-
-  private canRedo = (): boolean => {
-    const capabilities = this.props.capabilities[this.props.historyKey];
-    if (!capabilities) {
-      return false;
-    }
-    return capabilities.canRedo;
-  };
+  return (
+    <div className={`control-block ${Cls.historyControls}`}>
+      <button onClick={undo} type={'button'} className={'btn btn-outline-secondary'} disabled={!canUndo} data-cy={'undo'}>
+        <i className={'fa fa-undo mr-2'} /> {t('Undo')}
+      </button>
+      <button onClick={redo} type={'button'} className={'btn btn-outline-secondary'} disabled={!canRedo} data-cy={'redo'}>
+        <i className={'fa fa-redo mr-2'} /> {t('Redo')}
+      </button>
+    </div>
+  );
 }
 
-export default withTranslation()(connector(withServices(HistoryControls)));
+export default HistoryControls;

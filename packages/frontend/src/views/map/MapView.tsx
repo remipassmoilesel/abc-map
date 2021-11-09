@@ -81,12 +81,16 @@ class MapView extends Component<Props, State> {
       <div className={Cls.mapView}>
         {/*Left menu*/}
         <div className={Cls.leftPanel}>
-          <ProjectStatus />
           <Search />
-          <ProjectControls />
-          <HistoryControls historyKey={HistoryKey.Map} />
-          <ImportData />
           <CursorPosition />
+          <ImportData />
+
+          <div className={'flex-grow-1'} />
+
+          <ProjectStatus />
+          <ProjectControls />
+
+          <div className={Cls.spacer} />
         </div>
 
         {/*Main map*/}
@@ -94,6 +98,7 @@ class MapView extends Component<Props, State> {
 
         {/*Right menu*/}
         <div className={Cls.rightPanel}>
+          <HistoryControls historyKey={HistoryKey.Map} />
           <LayerControls layers={layers} />
           <ToolSelector activeLayer={activeLayer} />
         </div>

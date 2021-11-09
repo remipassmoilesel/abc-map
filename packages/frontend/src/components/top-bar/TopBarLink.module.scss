@@ -19,18 +19,13 @@
 @import "src/assets/styles/variables";
 
 .topBarLink {
-  display: block;
-  margin: 10px;
+  border: none;
+  background-color: inherit;
 
-  color: $gray-600 !important;
-
-  &:hover {
-    text-decoration: none !important;
-  }
+  margin: 0 1rem;
+  min-width: 8rem;
 }
 
 .active {
-  text-decoration: none !important;
-  color: $primary !important;
-  outline: 0;
+  border-bottom: solid 3px $primary;
 }

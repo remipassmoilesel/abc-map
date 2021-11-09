@@ -17,7 +17,7 @@
  */
 
 import { AbstractTool } from '../AbstractTool';
-import Icon from '../../../assets/tool-icons/none.svg';
+import Icon from '../../../assets/tool-icons/move.inline.svg';
 import { Map } from 'ol';
 import { MapTool } from '@abc-map/shared';
 import { DoubleClickZoom, DragPan, KeyboardPan, MouseWheelZoom } from 'ol/interaction';

@@ -40,9 +40,9 @@ class LayoutListItem extends Component<Props, {}> {
     const classes = this.props.active ? `${Cls.item} ${Cls.active}` : Cls.item;
 
     return (
-      <div className={classes}>
-        <div className={'d-flex justify-content-between align-items-center'}>
-          <div onClick={this.handleSelected} className={'cursor-pointer'} data-cy={'list-item'}>
+      <div className={classes} onClick={this.handleSelected}>
+        <div className={'d-flex align-items-center'}>
+          <div className={Cls.layoutName} data-cy={'list-item'}>
             {layout.name}
           </div>
           <button className={'btn btn-sm btn-link'} onClick={this.handleDeleted}>
@@ -50,8 +50,8 @@ class LayoutListItem extends Component<Props, {}> {
           </button>
         </div>
 
-        <div onClick={this.handleSelected} className={'cursor-pointer'}>
-          {t('Format')}: {layout.format.width}x{layout.format.height}mm
+        <div className={Cls.format}>
+          {t('Format')}: {layout.format.width}x{layout.format.height} mm
         </div>
       </div>
     );

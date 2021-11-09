@@ -16,5 +16,41 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-.pointPanel {
+@import "src/assets/styles/variables";
+
+.toolButton {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  width: 40px;
+  height: 40px;
+
+  margin: 3px;
+  padding: 6px;
+
+  border: none;
+  background-color: inherit;
+  border-radius: $border-radius;
+
+  outline: 0;
+
+  svg {
+    width: 20px;
+    fill: $gray-600;
+    stroke-linejoin: round;
+  }
+
+  &:hover {
+    background-color: rgba($gray-600, 0.2);
+  }
+
+  &.active {
+    background-color: $primary;
+
+    svg {
+      fill: white;
+    }
+  }
 }

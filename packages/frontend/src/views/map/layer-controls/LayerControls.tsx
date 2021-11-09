@@ -29,6 +29,7 @@ import EditLayerModal from './edit-layer-modal/EditLayerModal';
 import Cls from './LayerControls.module.scss';
 import { prefixedTranslation } from '../../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
+import * as _ from 'lodash';
 
 const logger = Logger.get('LayerControls.tsx');
 
@@ -46,6 +47,8 @@ declare type Props = LocalProps & ServiceProps;
 const t = prefixedTranslation('MapView:LayerControls.');
 
 class LayerControls extends Component<Props, State> {
+  private listRef = React.createRef<HTMLDivElement>();
+
   constructor(props: Props) {
     super(props);
     this.state = { addModalVisible: false };
@@ -54,22 +57,38 @@ class LayerControls extends Component<Props, State> {
   public render(): ReactNode {
     const addModalVisible = this.state.addModalVisible;
     const editLayer = this.state.editLayer;
-    const items = this.getItems();
+    const layers = this.props.layers;
 
     return (
       <div className={`control-block ${Cls.layerControls}`}>
-        <div className={'control-item'}>{t('Layers')}</div>
-        <div className={`control-item ${Cls.layerList}`} data-cy="layers-list">
-          {items}
-          {!items.length && <div className={Cls.noLayers}>{t('No_layer')}</div>}
+        <div className={Cls.titleRow}>
+          {t('Layers')}
+
+          <button onClick={this.handleAddLayer} className={'btn btn-small btn-link font-weight-bold'} title={t('Add_layer')} data-cy={'add-layer'}>
+            <i className={'fa fa-plus mr-1'} /> {t('Add')}
+          </button>
         </div>
+
+        {/* List of layers */}
+        <div className={`control-item ${Cls.layerList}`} data-cy="layers-list" ref={this.listRef}>
+          {!layers.length && <div className={Cls.noLayers}>{t('No_layer')}</div>}
+          {layers
+            .map((layer) => {
+              const metadata = layer.getMetadata();
+              if (!metadata) {
+                logger.error('Unsupported layer: ', layer);
+                return undefined;
+              }
+              return <LayerListItem key={metadata.id} metadata={metadata} onSelect={this.handleSelection} onToggleVisibility={this.handleToggleVisibility} />;
+            })
+            .filter((elem) => !!elem)}
+        </div>
+
+        {/* Controls */}
         <div className={`control-item`}>
-          <div className={`${Cls.row} ${Cls.smallButtons}`}>
+          <div className={Cls.buttonBar}>
             <button onClick={this.handleEditLayer} className={'btn btn-link'} title={t('Edit_layer')} data-cy={'edit-layer'}>
               <i className={'fa fa-edit'} />
-            </button>
-            <button onClick={this.handleToggleVisibility} className={'btn btn-link'} title={t('Change_visibility')}>
-              <i className={'fa fa-eye'} />
             </button>
             <button onClick={this.handleZoom} className={'btn btn-link'} title={t('Zoom_on_layer')}>
               <i className={'fa fa-search-plus'} />
@@ -84,28 +103,25 @@ class LayerControls extends Component<Props, State> {
               <i className={'fa fa-arrow-down'} />
             </button>
           </div>
-          <div className={Cls.row}>
-            <button onClick={this.handleAddLayer} className={'btn btn-link'} title={t('New_layer')} data-cy={'add-layer'}>
-              <i className={'fa fa-plus mr-2'} /> {t('New_layer')}
-            </button>
-          </div>
         </div>
+
+        {/* Modals */}
         <AddLayerModal visible={addModalVisible} onHide={this.handleAddLayerModalClosed} />
         {editLayer && <EditLayerModal layer={editLayer} onHide={this.handleEditLayerClosed} />}
       </div>
     );
   }
 
-  private getItems(): ReactNode[] {
-    return this.props.layers
-      .map((layer) => {
-        const metadata = layer.getMetadata();
-        if (!metadata) {
-          return undefined;
-        }
-        return <LayerListItem key={metadata.id} metadata={metadata} onClick={this.handleSelection} />;
-      })
-      .filter((elem) => !!elem);
+  public componentDidUpdate(prevProps: Readonly<Props>) {
+    const previousIds = prevProps.layers.map((lay) => lay.getId());
+    const layerIds = this.props.layers.map((lay) => lay.getId());
+    if (!_.isEqual(previousIds, layerIds)) {
+      // We scroll to bottom of list if layer list change
+      const div = this.listRef.current;
+      if (div) {
+        div.scrollTop = div.scrollHeight;
+      }
+    }
   }
 
   private handleSelection = (layerId: string) => {
@@ -186,18 +202,17 @@ class LayerControls extends Component<Props, State> {
     }
   };
 
-  private handleToggleVisibility = () => {
-    const { toasts, geo } = this.props.services;
+  private handleToggleVisibility = (layerId: string) => {
+    const { geo } = this.props.services;
 
     const map = geo.getMainMap();
-    const active = map.getActiveLayer();
-    if (!active) {
-      toasts.info(t('You_must_first_select_layer'));
-      logger.error('No layer selected');
+    const layer = map.getLayers().find((lay) => lay.getId() === layerId);
+    if (!layer) {
+      logger.error('Layer not found: ', layerId);
       return;
     }
 
-    map.setLayerVisible(active, !active.isVisible());
+    map.setLayerVisible(layer, !layer.isVisible());
   };
 
   private handleLayerForward = () => {

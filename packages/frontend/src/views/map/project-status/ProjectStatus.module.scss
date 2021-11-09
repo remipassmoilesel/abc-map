@@ -18,13 +18,9 @@
 @import "src/assets/styles/variables";
 
 .name {
-  font-size: 1.1rem;
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
-}
-
-.projection {
-  font-size: 0.9rem;
-  color: $gray-600;
 }

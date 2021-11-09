@@ -16,73 +16,67 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { Component, ReactNode } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Logger } from '@abc-map/shared';
 import { toPrecision } from '../../../core/utils/numbers';
-import { ServiceProps, withServices } from '../../../core/withServices';
 import * as _ from 'lodash';
 import MapBrowserEvent from 'ol/MapBrowserEvent';
 import { toLonLat } from 'ol/proj';
 import { Coordinate } from 'ol/coordinate';
 import { prefixedTranslation } from '../../../i18n/i18n';
-import { withTranslation } from 'react-i18next';
+import { useServices } from '../../../core/hooks';
 import Cls from './CursorPosition.module.scss';
 
 const logger = Logger.get('CursorPosition.tsx');
 
-interface State {
-  position?: Coordinate;
-}
-
 const t = prefixedTranslation('MapView:CursorPosition.');
 
-class CursorPosition extends Component<ServiceProps, State> {
-  constructor(props: ServiceProps) {
-    super(props);
-    this.state = {};
+function CursorPosition() {
+  const { geo } = useServices();
+  const [position, setPosition] = useState<Coordinate | undefined>();
+
+  // Set position when pointer move on map
+  const handlePointerMove = useMemo(
+    () =>
+      _.throttle(
+        (ev: MapBrowserEvent) => {
+          const pos = toLonLat(ev.coordinate, ev.map.getView().getProjection());
+          setPosition(pos);
+        },
+        200,
+        { trailing: true }
+      ),
+    []
+  );
+
+  // Listen to cursor moves on map
+  useEffect(() => {
+    const map = geo.getMainMap();
+    map.unwrap().on('pointermove', handlePointerMove);
+
+    return () => {
+      const map = geo.getMainMap();
+      map.unwrap().un('pointermove', handlePointerMove);
+    };
+  }, [geo, handlePointerMove]);
+
+  if (!position) {
+    return <div />;
   }
 
-  public render(): ReactNode {
-    const position = this.state.position;
-    if (!position) {
-      return <div />;
-    }
-
-    const lon = toPrecision(position[0], 3);
-    const lat = toPrecision(position[1], 3);
-    return (
-      <div className={'control-block'}>
-        <div className={'mb-2'}>{t('Cursor_position')}</div>
-        <div className={Cls.latLon}>
-          {t('Latitude')}: {lat}
-        </div>
-        <div className={Cls.latLon}>
-          {t('Longitude')}: {lon}
-        </div>
+  const lon = toPrecision(position[0], 3);
+  const lat = toPrecision(position[1], 3);
+  return (
+    <div className={'control-block'}>
+      <div className={'mb-2'}>{t('Cursor_position')}</div>
+      <div className={Cls.latLon}>
+        <span className={'badge badge-light'}>{t('Latitude')}</span> {lat}
       </div>
-    );
-  }
-
-  public componentDidMount() {
-    const map = this.props.services.geo.getMainMap();
-
-    map.unwrap().on('pointermove', this.handlePointerMove);
-  }
-
-  public componentWillUnmount() {
-    const map = this.props.services.geo.getMainMap();
-
-    map.unwrap().un('pointermove', this.handlePointerMove);
-  }
-
-  private handlePointerMove = _.throttle(
-    (ev: MapBrowserEvent) => {
-      const position = toLonLat(ev.coordinate, ev.map.getView().getProjection());
-      this.setState({ position });
-    },
-    200,
-    { trailing: true }
+      <div className={Cls.latLon}>
+        <span className={'badge badge-light'}>{t('Longitude')}</span> {lon}
+      </div>
+    </div>
   );
 }
 
-export default withTranslation()(withServices(CursorPosition));
+export default CursorPosition;

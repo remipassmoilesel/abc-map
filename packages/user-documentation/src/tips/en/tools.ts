@@ -105,6 +105,8 @@ export const Tools: Tip[] = [
   {
     id: ToolTips.EditProperties,
     content: `<h4>Property editing tool</h4>
+              <div class="alert alert-info mt-2 mb-3">The property editing tool is used to edit properties
+                attached to geometries (examples: <code>population</code>, <code>GDP</code>, ...)</div>
               <ul>
                 ${moveMapTip}
                  <li><b>To edit the properties</b> of a geometry, click on a geometry</li>

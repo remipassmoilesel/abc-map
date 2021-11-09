@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { screen } from '@testing-library/react';
+import { act, screen } from '@testing-library/react';
 import CursorPosition from './CursorPosition';
 import { abcRender } from '../../../core/utils/test/abcRender';
 import { newTestServices, TestServices } from '../../../core/utils/test/TestServices';
@@ -42,7 +42,7 @@ describe('CursorPosition', () => {
     expect(map.unwrap().un.callCount).toEqual(1);
   });
 
-  it('should render position', () => {
+  it('should render position', async () => {
     // Prepare
     const map = fakeMap();
     services.geo.getMainMap.returns(map as unknown as MapWrapper);
@@ -52,7 +52,9 @@ describe('CursorPosition', () => {
     const handler = map.unwrap().on.args[0][1];
 
     // Act
-    handler({ coordinate: [-20026376.39, -20048966.1], map: map.unwrap() });
+    act(() => {
+      handler({ coordinate: [-20026376.39, -20048966.1], map: map.unwrap() });
+    });
 
     // Assert
     expect(screen.queryByText('Position du curseur')).toBeDefined();

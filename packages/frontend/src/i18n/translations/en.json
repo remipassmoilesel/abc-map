@@ -65,7 +65,7 @@
       "You_can_not_use_this_projection": "You can not use this projection."
     },
     "Search": {
-      "Search_on_map": "Search on map",
+      "Search": "Search",
       "My_location": "My location"
     },
     "ProjectControls": {
@@ -102,7 +102,8 @@
       "Delete_active_layer": "Delete active layer",
       "Move_back": "Move back",
       "Move_forward": "Move forward",
-      "New_layer": "New layer",
+      "Add": "Add",
+      "Add_layer": "Add a new layer",
       "You_must_first_select_layer": "You must first select a layer",
       "Unable_to_zoom": "Unable to zoom in on this layer"
     },
@@ -149,7 +150,7 @@
       "Sample_URL": "Example URL"
     },
     "ToolSelector": {
-      "Drawing_tools": "Drawing tools",
+      "Drawing_tools": "Tools",
       "You_must_select_geometry_layer_before": "You must select a geometry layer to use the tools.",
       "Create_geometry_layer": "New layer",
       "Apply_style_to_selected_geometries": "Apply style to selected geometries",
@@ -480,8 +481,8 @@
     "A3_landscape": "A3 landscape",
     "Legend": "Legend",
     "Edit_legend": "Edit legend",
-    "Move_up": "Move up",
-    "Move_Down": "Move down",
+    "Move_up": "Move layout up",
+    "Move_Down": "Move layout down",
     "Delete_all": "Delete all",
     "PDF_export": "PDF export",
     "PNG_export": "PNG export",
@@ -647,7 +648,8 @@
     "Close": "Close"
   },
   "TipBubble": {
-    "This_tip_is_not_available": "This advice is not available"
+    "This_tip_is_not_available": "This advice is not available",
+    "Help": "Help"
   },
   "LegalMentionsView": {
     "About_this_platform": "About this platform"
@@ -695,13 +697,13 @@
       "Too_much_projects": "Sorry \uD83D\uDE1E you have reached your project quota. Delete one."
     },
     "tools": {
-      "EditProperties": "Edit geometry properties",
-      "CreateLines": "Create lines",
-      "MoveMap": "Move map",
-      "CreatePoints": "Create points",
-      "CreatePolygons": "Create polygons",
-      "Select": "Select",
-      "AddText": "Add text"
+      "MoveMap": "Move",
+      "Properties": "Properties",
+      "Lines": "Lines",
+      "Points": "Points",
+      "Polygons": "Polygons",
+      "Select": "Selection",
+      "Text": "Text"
     }
   }
 }

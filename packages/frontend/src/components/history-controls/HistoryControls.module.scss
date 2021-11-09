@@ -16,7 +16,23 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-.editPropertiesPanel {
+@import "src/assets/styles/variables";
+
+.historyControls {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  padding: 1rem;
+
+  button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin: 0.3rem;
+    padding: 0.3rem 0.8rem;
+    font-size: 1.2rem;
+  }
 }

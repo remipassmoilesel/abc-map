@@ -19,53 +19,77 @@
 @import "src/assets/styles/variables";
 
 .toolSelector {
+  flex-grow: 1;
+
   display: flex;
   flex-direction: column;
-  border-bottom: none !important;
 }
 
-.toolRow {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
+.titleRow {
+  padding: 1rem 0.7rem;
 
-  padding: 0.2em 0;
+  font-size: 1.1rem;
+  font-weight: 600;
 }
 
-.toolButton {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
+.toolsDisabled {
+  flex-grow: 1;
 
-  margin: 3px;
-  padding: 6px;
-
-  border: none;
-  background-color: inherit;
-  border-radius: 7px;
-
-  outline: 0;
-
-  img {
-    width: 22px;
-  }
-
-  &.active {
-    border: solid 1px $primary;
-  }
-}
-
-.toolPanel {
-  padding-top: 0.5em;
-}
-
-.message {
   display: flex;
   flex-direction: column;
 
-  text-align: center;
-  font-style: italic;
+  padding: 1rem 0.7rem;
+
   color: $gray-600;
+}
+
+.toolsEnabled {
+  flex-grow: 1;
+
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: stretch;
+
+  color: $gray-600;
+
+  .toolName {
+    font-size: 1rem;
+    font-weight: 600;
+
+    padding: 0.2rem 0.5rem;
+
+    color: white;
+    background-color: $primary;
+    border-radius: $border-radius;
+  }
+
+  .spacer {
+    height: 2.5rem;
+    margin-bottom: 0.5rem;
+    border-bottom: solid 1px $gray-400;
+  }
+
+  .buttonBar {
+    display: flex;
+    flex-direction: column;
+
+    margin-right: 0.3rem;
+
+    border-top: solid $gray-400 1px;
+    border-right: solid $gray-400 1px;
+    border-radius: $border-radius;
+  }
+
+  .toolOptions {
+    flex-grow: 1;
+
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    display: flex;
+    flex-direction: column;
+
+    padding: 0.5rem;
+  }
 }

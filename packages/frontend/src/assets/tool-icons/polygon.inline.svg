@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="20"
+   height="20"
+   viewBox="0 0 5.2916665 5.291667"
+   version="1.1"
+   id="svg4757"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
+   sodipodi:docname="polygon.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <defs
+     id="defs4751" />
+  <g
+     inkscape:label="Calque 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       id="Tracé_145"
+       data-name="Tracé 145"
+       d="M 4.1468114,5.1281648 H 4.1349254 L 1.4152144,4.9399294 A 0.17271088,0.17271088 0 0 1 1.2730674,4.8458116 L 0.06312108,2.4613342 A 0.17295343,0.17295343 0 0 1 0.10581357,2.2507822 L 2.5344391,0.20420671 A 0.17295343,0.17295343 0 0 1 2.7316496,0.18625661 L 5.1600322,1.5744931 a 0.1724683,0.1724683 0 0 1 0.080534,0.1976958 L 4.3129728,5.0032404 A 0.17295343,0.17295343 0 0 1 4.1468114,5.1281648 Z M 1.5369853,4.6012996 4.0192189,4.7730402 4.8706448,1.8068764 2.6649424,0.54550482 0.43328506,2.4259187 Z"
+       style="stroke-width:0.242572" />
+  </g>
+</svg>

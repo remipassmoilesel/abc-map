@@ -1,0 +1,43 @@
+@import "variables";
+
+$control-color: rgba($secondary, 0.3);
+$control-hover-color: rgba($secondary, 0.9);
+
+.ol-zoom {
+  background: transparent;
+
+  &:hover {
+    background: transparent;
+  }
+
+  button {
+    font-size: 1.1rem;
+    background: $control-color;
+
+    &:hover {
+      background: $control-hover-color;
+    }
+  }
+}
+
+.ol-scale-line {
+  background: $control-color;
+
+  &:hover {
+    background: $control-hover-color;
+  }
+
+  .ol-scale-line-inner {
+    font-size: 1rem !important;
+  }
+}
+
+.ol-attribution {
+  button {
+    background: $control-color !important;
+
+    &:hover {
+      background: $control-hover-color !important;
+    }
+  }
+}

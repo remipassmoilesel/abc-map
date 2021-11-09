@@ -22,11 +22,8 @@ import StrokeWidthSelector from '../_common/stroke-width-selector/StrokeWidthSel
 import ColorSelector from '../../../../components/color-picker/ColorSelector';
 import FillPatternSelector from '../_common/fill-pattern-selector/FillPatternSelector';
 import TextFormat from '../_common/text-format/TextFormat';
-import TipBubble from '../../../../components/tip-bubble/TipBubble';
-import { ToolTips } from '@abc-map/user-documentation';
 import PointIconSelector from '../point/icon-selector/PointIconSelector';
 import PointSizeSelector from '../point/size-selector/PointSizeSelector';
-import ButtonBar, { StyleApplication } from '../_common/button-bar/ButtonBar';
 import Cls from './SelectionToolPanel.module.scss';
 import { prefixedTranslation } from '../../../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
@@ -39,21 +36,24 @@ class SelectionToolPanel extends Component<{}, {}> {
   public render(): ReactNode {
     return (
       <div className={Cls.selectionPanel}>
-        <TipBubble id={ToolTips.Selection} label={t('Tool_help')} className={'mx-3 mb-3'} />
-        <ButtonBar applyStyle={StyleApplication.All} />
+        <div className={Cls.section}>
+          <div className={Cls.title}>{t('Points')}</div>
+          <PointIconSelector />
+          <PointSizeSelector />
+          <ColorSelector point={true} />
+        </div>
 
-        <div className={Cls.section}>{t('Points')}</div>
-        <PointIconSelector />
-        <PointSizeSelector />
-        <ColorSelector point={true} />
+        <div className={Cls.section}>
+          <div className={Cls.title}>{t('Lines_and_polygons')}</div>
+          <StrokeWidthSelector />
+          <ColorSelector point={false} stroke={true} fillColor1={true} fillColor2={true} />
+          <FillPatternSelector />
+        </div>
 
-        <div className={Cls.section}>{t('Lines_and_polygons')}</div>
-        <StrokeWidthSelector />
-        <ColorSelector point={false} stroke={true} fillColor1={true} fillColor2={true} />
-        <FillPatternSelector />
-
-        <div className={Cls.section}>{t('Text')}</div>
-        <TextFormat />
+        <div className={Cls.section}>
+          <div className={Cls.title}>{t('Text')}</div>
+          <TextFormat />
+        </div>
       </div>
     );
   }

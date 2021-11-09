@@ -21,7 +21,7 @@ import { MapTool } from '@abc-map/shared';
 import GeometryType from 'ol/geom/GeometryType';
 import VectorSource from 'ol/source/Vector';
 import Geometry from 'ol/geom/Geometry';
-import Icon from '../../../assets/tool-icons/line.svg';
+import Icon from '../../../assets/tool-icons/line.inline.svg';
 import { Map } from 'ol';
 import { defaultInteractions } from '../../geo/map/interactions';
 import { DrawInteraction, drawInteractionFactory, GetStyleFunc, HistoryTaskHandler } from '../common/drawInteractionFactory';
@@ -44,7 +44,7 @@ export class LineStringTool extends AbstractTool {
   }
 
   public getI18nLabel(): string {
-    return 'CreateLines';
+    return 'Lines';
   }
 
   protected setupInternal(map: Map, source: VectorSource<Geometry>): void {

@@ -16,6 +16,8 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
+@import "src/assets/styles/variables";
+
 $panel-width: 250px;
 
 .layoutView {
@@ -30,6 +32,7 @@ $panel-width: 250px;
 
 .leftPanel {
   width: $panel-width;
+  border-right: solid 1px $gray-400;
 }
 
 .rightPanel {
@@ -38,4 +41,5 @@ $panel-width: 250px;
   width: $panel-width;
 
   padding-top: 1rem;
+  border-left: solid 1px $gray-400;
 }

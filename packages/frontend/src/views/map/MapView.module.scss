@@ -28,17 +28,30 @@ $panel-width: 250px;
 }
 
 .leftPanel {
+  display: flex;
+  flex-direction: column;
+
   width: $panel-width;
   height: 95vh;
   overflow-x: hidden;
   overflow-y: auto;
 
   padding-top: 0.7rem;
+
+  .spacer {
+    height: 4rem;
+  }
 }
 
 .rightPanel {
+  display: flex;
+  flex-direction: column;
+
   width: $panel-width;
   height: 95vh;
+  min-height: 95vh;
+  max-height: 95vh;
+
   overflow-x: hidden;
   overflow-y: auto;
 

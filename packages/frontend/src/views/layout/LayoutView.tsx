@@ -22,7 +22,6 @@ import { LegendDisplay, Logger } from '@abc-map/shared';
 import LayoutList from './layout-list/LayoutList';
 import { AbcLayout, AbcProjection, LayoutFormat, LayoutFormats } from '@abc-map/shared';
 import LayoutPreview from './layout-preview/LayoutPreview';
-import HistoryControls from '../../components/history-controls/HistoryControls';
 import { HistoryKey } from '../../core/history/HistoryKey';
 import { MapWrapper } from '../../core/geo/map/MapWrapper';
 import { MainState } from '../../core/store/reducer';
@@ -107,8 +106,6 @@ class LayoutView extends Component<Props, State> {
               onLegendChanged={this.handleLegendChanged}
               onExport={this.handleExport}
             />
-
-            <HistoryControls historyKey={HistoryKey.Layout} />
           </div>
         </div>
         <div ref={this.exportSupport} />
