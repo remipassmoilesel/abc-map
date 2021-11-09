@@ -44,23 +44,15 @@ interface Props {
   onNewLayout: () => void;
 }
 
-interface State {
-  previewMap?: MapWrapper;
-  legendCanvas?: HTMLCanvasElement;
-  attributionsCanvas?: HTMLCanvasElement;
-}
-
 const t = prefixedTranslation('LayoutView:');
 
-class LayoutPreview extends Component<Props, State> {
+class LayoutPreview extends Component<Props, {}> {
   private mapRef = React.createRef<HTMLDivElement>();
   private legendRenderer = new LegendRenderer();
   private attributionRenderer = new AttributionRenderer();
-
-  constructor(props: Props) {
-    super(props);
-    this.state = {};
-  }
+  private previewMap?: MapWrapper;
+  private legendCanvas?: HTMLCanvasElement;
+  private attributionsCanvas?: HTMLCanvasElement;
 
   public render(): ReactNode {
     const layout = this.props.layout;
@@ -68,12 +60,17 @@ class LayoutPreview extends Component<Props, State> {
 
     return (
       <div className={Cls.layoutPreview} data-cy={'layout-preview'}>
-        <h4>{layout?.name}</h4>
+        {/* There is one layout to preview, we display it */}
         {layout && (
-          <div className={Cls.previewContainer}>
-            <div className={Cls.previewMap} ref={this.mapRef} data-cy={'layout-preview-map'} />
-          </div>
+          <>
+            <h4>{layout?.name}</h4>
+            <div className={Cls.previewContainer}>
+              <div className={Cls.previewMap} ref={this.mapRef} data-cy={'layout-preview-map'} />
+            </div>
+          </>
         )}
+
+        {/* There is no layout to preview, we display a message with "create" a button */}
         {!layout && (
           <div className={Cls.noLayout}>
             <i className={`fa fa-print ${Cls.bigIcon}`} />
@@ -95,23 +92,39 @@ class LayoutPreview extends Component<Props, State> {
   }
 
   public componentDidUpdate(prevProps: Readonly<Props>) {
+    // If layout, format or legend change we setup whole preview map
+    // This is a visible operation, map will blink during setup even if it was previously set up
     const layoutChanged = !_.isEqual(prevProps.layout?.id, this.props.layout?.id);
     const formatChanged = prevProps.layout?.format.id !== this.props.layout?.format.id;
     const legendChanged = prevProps.legend.display !== this.props.legend.display;
     if (layoutChanged || formatChanged || legendChanged) {
       this.setupPreview(this.props.layout).catch((err) => logger.error('Rendering error: ', err));
     }
+
+    // If layout view change, we change the preview map view
+    // This occurs when user switch active layout or when undo button is pressed
+    const viewChanged = !_.isEqual(prevProps.layout?.view, this.props.layout?.view);
+    if (this.props.layout && viewChanged) {
+      this.setPreviewView(this.props.layout);
+    }
   }
 
   public componentWillUnmount() {
-    this.state.previewMap?.dispose();
+    this.previewMap?.dispose();
   }
 
+  /**
+   * This method setup map preview, legend and attributions preview
+   * @param layout
+   * @private
+   */
   private async setupPreview(layout?: AbcLayout): Promise<void> {
     // We dispose previous map
-    this.state.previewMap?.dispose();
+    this.previewMap?.dispose();
     if (!layout) {
-      this.setState({ previewMap: undefined, legendCanvas: undefined, attributionsCanvas: undefined });
+      this.previewMap = undefined;
+      this.legendCanvas = undefined;
+      this.attributionsCanvas = undefined;
       return;
     }
 
@@ -122,8 +135,9 @@ class LayoutPreview extends Component<Props, State> {
     }
 
     // Map initialization
-    const mainMap = this.props.mainMap;
+    // We compute size of map, then we clone layers from main map, with the preview style ratio
     const previewMap = this.initializePreviewMap(mapSupport);
+    this.previewMap = previewMap;
 
     const divSize = this.getPreviewDimensionsFor(layout);
     mapSupport.style.width = divSize.width;
@@ -132,36 +146,56 @@ class LayoutPreview extends Component<Props, State> {
 
     const mapSize = previewMap.unwrap().getSize();
     if (!mapSize) {
-      logger.error('Cannot update preview map: ', { mapSize });
+      logger.error('Cannot update preview map, no size defined');
       return;
     }
 
-    const dimension = LayoutHelper.formatToPixel(layout.format);
-    const scaling = Math.min(dimension.width / mapSize[0], dimension.height / mapSize[1]);
     const styleRatio = LayoutHelper.styleRatio(mapSize[0], mapSize[1]);
 
-    previewMap.unwrap().getLayers().clear();
-    mainMap.getLayers().forEach((lay) => {
+    this.previewMap.unwrap().getLayers().clear();
+    this.props.mainMap.getLayers().forEach((lay) => {
       const clone = lay.shallowClone(styleRatio);
       previewMap.addLayer(clone);
     });
 
     // Legend initialization
     const legend = this.props.legend;
-    const canvas = this.initializeLegendCanvas(legend, previewMap);
-    canvas.width = legend.width * styleRatio;
-    canvas.height = legend.height * styleRatio;
-    await this.legendRenderer.renderLegend(legend, canvas, styleRatio);
+    this.legendCanvas = this.initializeLegendCanvas(legend, previewMap);
+    this.legendCanvas.width = legend.width * styleRatio;
+    this.legendCanvas.height = legend.height * styleRatio;
+    await this.legendRenderer.renderLegend(legend, this.legendCanvas, styleRatio);
 
     // Attributions initialization
-    const attributions = mainMap.getTextAttributions();
-    const attrCanvas = this.initializeAttributionsCanvas(attributions, legend, previewMap);
-    await this.attributionRenderer.render(attributions, attrCanvas, styleRatio);
+    const attributions = this.props.mainMap.getTextAttributions();
+    this.attributionsCanvas = this.initializeAttributionsCanvas(attributions, legend, previewMap);
+    await this.attributionRenderer.render(attributions, this.attributionsCanvas, styleRatio);
 
-    previewMap.unwrap().setView(
+    this.setPreviewView(layout);
+  }
+
+  /**
+   * This method only set view of map
+   * @param layout
+   * @private
+   */
+  private setPreviewView(layout: AbcLayout) {
+    if (!this.previewMap) {
+      return;
+    }
+
+    const mapSize = this.previewMap.unwrap().getSize();
+    if (!mapSize) {
+      logger.error('Cannot update preview map view, no size defined');
+      return;
+    }
+
+    const dimension = LayoutHelper.formatToPixel(layout.format);
+    const scaling = Math.min(dimension.width / mapSize[0], dimension.height / mapSize[1]);
+
+    this.previewMap.unwrap().setView(
       new View({
         center: layout.view.center,
-        resolution: layout.view.resolution * scaling,
+        resolution: toPrecision(layout.view.resolution * scaling, 10),
         projection: layout.view.projection.name,
       })
     );
@@ -176,7 +210,6 @@ class LayoutPreview extends Component<Props, State> {
 
     getAbcWindow().abc.layoutPreview = new E2eMapWrapper(previewMap);
 
-    this.setState({ previewMap });
     return previewMap;
   }
 
@@ -187,7 +220,6 @@ class LayoutPreview extends Component<Props, State> {
     const control = new Control({ element: canvas });
     previewMap.unwrap().addControl(control);
 
-    this.setState({ legendCanvas: canvas });
     return canvas;
   }
 
@@ -198,15 +230,14 @@ class LayoutPreview extends Component<Props, State> {
     const control = new Control({ element: canvas });
     previewMap.unwrap().addControl(control);
 
-    this.setState({ attributionsCanvas: canvas });
     return canvas;
   }
 
   /**
-   * Notify parent component when preview map has been changed
+   * Notify parent component when preview map has been changed, per example if user drag map
    */
   private handlePreviewChanged = () => {
-    const map = this.state.previewMap;
+    const map = this.previewMap;
     const layout = this.props.layout;
     if (!map || !layout) {
       logger.error('Cannot handle preview changes: ', { map, layout });

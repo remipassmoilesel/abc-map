@@ -22,9 +22,13 @@
 
 html,
 body {
-  font-size: 16px;
+  font-size: 14px;
   font-family: "AbcCantarell", sans-serif;
   margin: 0;
+}
+
+button {
+  color: $input-color;
 }
 
 .cursor-pointer {
@@ -32,6 +36,7 @@ body {
 }
 
 .fa {
+  font-size: 0.9rem;
   color: $gray-600;
 }
 

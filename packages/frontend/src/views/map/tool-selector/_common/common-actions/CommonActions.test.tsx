@@ -17,7 +17,7 @@
  */
 import { newTestServices, TestServices } from '../../../../../core/utils/test/TestServices';
 import { abcRender } from '../../../../../core/utils/test/abcRender';
-import ButtonBar, { StyleApplication } from './ButtonBar';
+import CommonActions from './CommonActions';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { LayerFactory } from '../../../../../core/geo/layers/LayerFactory';
@@ -28,7 +28,7 @@ import { MapWrapper } from '../../../../../core/geo/map/MapWrapper';
 import { VectorLayerWrapper } from '../../../../../core/geo/layers/LayerWrapper';
 import { FillPatterns } from '@abc-map/shared';
 
-describe('ButtonBar', () => {
+describe('CommonActions', () => {
   let fPoint: FeatureWrapper;
   let fLine: FeatureWrapper;
   let fPolygon: FeatureWrapper;
@@ -60,9 +60,9 @@ describe('ButtonBar', () => {
   });
 
   describe('Apply style', () => {
-    it('with StyleApplication.Text', () => {
+    it('on point with text', () => {
       // Prepare
-      abcRender(<ButtonBar applyStyle={StyleApplication.Text} />, { services });
+      abcRender(<CommonActions />, { services });
       fPoint.setText('Hey !');
 
       // Act
@@ -80,65 +80,62 @@ describe('ButtonBar', () => {
           rotation: 0,
           size: 30,
         },
-        point: {},
+        point: {
+          color: '#FF5733',
+          icon: 'twbs/geo-alt-fill.inline.svg',
+          size: 30,
+        },
         fill: {},
         stroke: {},
         zIndex: undefined,
       });
     });
 
-    it('with StyleApplication.Point', () => {
+    it('on point without text', () => {
       // Prepare
-      abcRender(<ButtonBar applyStyle={StyleApplication.Point} />, { services });
+      abcRender(<CommonActions />, { services });
 
       // Act
       userEvent.click(screen.getByTestId('apply-style'));
-      const style1 = services.geo.updateSelectedFeatures.args[0][0](fPoint.getStyleProperties(), fPoint);
-      const style2 = services.geo.updateSelectedFeatures.args[0][0](fPoint.getStyleProperties(), fLine);
+      const style = services.geo.updateSelectedFeatures.args[0][0](fPoint.getStyleProperties(), fPoint);
 
       // Assert
-      expect(style1).toEqual({
+      expect(style).toEqual({
         point: { color: '#FF5733', icon: 'twbs/geo-alt-fill.inline.svg', size: 30 },
         fill: {},
         stroke: {},
         text: {},
         zIndex: undefined,
       });
-
-      expect(style2).toBeUndefined();
     });
 
-    it('with StyleApplication.Line', () => {
+    it('on line', () => {
       // Prepare
-      abcRender(<ButtonBar applyStyle={StyleApplication.Line} />, { services });
+      abcRender(<CommonActions />, { services });
 
       // Act
       userEvent.click(screen.getByTestId('apply-style'));
-      const style1 = services.geo.updateSelectedFeatures.args[0][0](fPoint.getStyleProperties(), fLine);
-      const style2 = services.geo.updateSelectedFeatures.args[0][0](fPoint.getStyleProperties(), fPoint);
+      const style = services.geo.updateSelectedFeatures.args[0][0](fPoint.getStyleProperties(), fLine);
 
       // Assert
-      expect(style1).toEqual({
+      expect(style).toEqual({
         stroke: { color: '#FF5733', width: 5 },
         fill: {},
         text: {},
         point: {},
       });
-
-      expect(style2).toBeUndefined();
     });
 
-    it('with StyleApplication.Polygon', () => {
+    it('on polygon', () => {
       // Prepare
-      abcRender(<ButtonBar applyStyle={StyleApplication.Polygon} />, { services });
+      abcRender(<CommonActions />, { services });
 
       // Act
       userEvent.click(screen.getByTestId('apply-style'));
-      const style1 = services.geo.updateSelectedFeatures.args[0][0](fPoint.getStyleProperties(), fPolygon);
-      const style2 = services.geo.updateSelectedFeatures.args[0][0](fPoint.getStyleProperties(), fPoint);
+      const style = services.geo.updateSelectedFeatures.args[0][0](fPoint.getStyleProperties(), fPolygon);
 
       // Assert
-      expect(style1).toEqual({
+      expect(style).toEqual({
         stroke: { color: '#FF5733', width: 5 },
         fill: {
           color1: '#FFFFFF',
@@ -148,57 +145,12 @@ describe('ButtonBar', () => {
         text: {},
         point: {},
       });
-
-      expect(style2).toBeUndefined();
-    });
-
-    it('with StyleApplication.All', () => {
-      // Prepare
-      abcRender(<ButtonBar applyStyle={StyleApplication.All} />, { services });
-      fPoint.setText('Hey !');
-
-      // Act
-      userEvent.click(screen.getByTestId('apply-style'));
-      const style1 = services.geo.updateSelectedFeatures.args[0][0](fPoint.getStyleProperties(), fPoint);
-      const style2 = services.geo.updateSelectedFeatures.args[0][0](fLine.getStyleProperties(), fLine);
-
-      // Assert
-      expect(style1).toEqual({
-        point: { color: '#FF5733', icon: 'twbs/geo-alt-fill.inline.svg', size: 30 },
-        text: {
-          value: 'Hey !',
-          color: '#FF5733',
-          font: 'AbcCantarell',
-          offsetX: 15,
-          offsetY: 15,
-          rotation: 0,
-          size: 30,
-        },
-        fill: {},
-        stroke: {},
-        zIndex: undefined,
-      });
-
-      expect(style2).toEqual({
-        stroke: { color: '#FF5733', width: 5 },
-        text: {
-          color: '#FF5733',
-          font: 'AbcCantarell',
-          offsetX: 15,
-          offsetY: 15,
-          rotation: 0,
-          size: 30,
-        },
-        point: {},
-        fill: {},
-        zIndex: undefined,
-      });
     });
   });
 
   it('Duplicate selection', () => {
     // Prepare
-    abcRender(<ButtonBar applyStyle={StyleApplication.All} />, { services });
+    abcRender(<CommonActions />, { services });
 
     const style = { ...fPoint.getStyleProperties(), zIndex: 5555 };
     fPoint.setStyleProperties(style);
@@ -222,7 +174,7 @@ describe('ButtonBar', () => {
 
   it('Delete features', () => {
     // Prepare
-    abcRender(<ButtonBar applyStyle={StyleApplication.All} />, { services });
+    abcRender(<CommonActions />, { services });
 
     // Act
     userEvent.click(screen.getByTestId('delete-features'));
@@ -240,7 +192,7 @@ describe('ButtonBar', () => {
 
   it('Move features behind', () => {
     // Prepare
-    abcRender(<ButtonBar applyStyle={StyleApplication.All} />, { services });
+    abcRender(<CommonActions />, { services });
 
     fPoint.setStyleProperties({ ...fPoint.getStyleProperties(), zIndex: 5 });
 
@@ -254,7 +206,7 @@ describe('ButtonBar', () => {
 
   it('Move features forward', () => {
     // Prepare
-    abcRender(<ButtonBar applyStyle={StyleApplication.All} />, { services });
+    abcRender(<CommonActions />, { services });
 
     fPoint.setStyleProperties({ ...fPoint.getStyleProperties(), zIndex: 5 });
 

@@ -16,36 +16,35 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { Component, ReactNode } from 'react';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
+import React, { useCallback } from 'react';
+import { useHistory, useLocation } from 'react-router-dom';
 import Cls from './TopBarLink.module.scss';
 
-export interface LocalProps {
+export interface Props {
   to: string;
   activeMatch?: RegExp;
   label: string;
   'data-cy'?: string;
 }
 
-export declare type Props = LocalProps & RouteComponentProps<any, any>;
+function TopBarLink(props: Props) {
+  const location = useLocation();
+  const history = useHistory();
 
-class TopBarLink extends Component<Props, {}> {
-  public render(): ReactNode {
-    const activeMatch = this.props.activeMatch || new RegExp(`^${this.props.to}`, 'i');
-    const active = this.props.location.pathname.match(activeMatch);
-    const classes = active ? `${Cls.topBarLink} ${Cls.active}` : Cls.topBarLink;
-    const dataCy = this.props['data-cy'];
+  const dataCy = props['data-cy'];
+  const to = props.to;
+  const label = props.label;
+  const match = props.activeMatch || new RegExp(`^${to}`, 'i');
+  const isActive = !!location.pathname.match(match);
+  const classes = isActive ? `${Cls.topBarLink} ${Cls.active}` : Cls.topBarLink;
 
-    return (
-      <button onClick={this.handleClick} className={`btn btn-link ${classes}`} data-cy={dataCy}>
-        {this.props.label}
-      </button>
-    );
-  }
+  const handleClick = useCallback(() => history.push(to), [history, to]);
 
-  private handleClick = () => {
-    this.props.history.push(this.props.to);
-  };
+  return (
+    <button onClick={handleClick} className={classes} data-cy={dataCy}>
+      {label}
+    </button>
+  );
 }
 
-export default withRouter(TopBarLink);
+export default TopBarLink;

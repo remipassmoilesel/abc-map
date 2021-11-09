@@ -21,7 +21,7 @@ import { MapTool } from '@abc-map/shared';
 import VectorSource from 'ol/source/Vector';
 import Geometry from 'ol/geom/Geometry';
 import { Map } from 'ol';
-import Icon from '../../../assets/tool-icons/text.svg';
+import Icon from '../../../assets/tool-icons/text.inline.svg';
 import { Logger } from '@abc-map/shared';
 import { TextInteraction } from './TextInteraction';
 import { FeatureWrapper } from '../../geo/features/FeatureWrapper';
@@ -46,7 +46,7 @@ export class TextTool extends AbstractTool {
   }
 
   public getI18nLabel(): string {
-    return 'AddText';
+    return 'Text';
   }
 
   protected setupInternal(map: Map, source: VectorSource<Geometry>): void {

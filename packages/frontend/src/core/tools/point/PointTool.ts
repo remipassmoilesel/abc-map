@@ -20,7 +20,7 @@ import { AbstractTool } from '../AbstractTool';
 import { Logger, MapTool } from '@abc-map/shared';
 import VectorSource from 'ol/source/Vector';
 import Geometry from 'ol/geom/Geometry';
-import Icon from '../../../assets/tool-icons/point.svg';
+import Icon from '../../../assets/tool-icons/point.inline.svg';
 import { Map } from 'ol';
 import { HistoryKey } from '../../history/HistoryKey';
 import { defaultInteractions } from '../../geo/map/interactions';
@@ -47,7 +47,7 @@ export class PointTool extends AbstractTool {
   }
 
   public getI18nLabel(): string {
-    return 'CreatePoints';
+    return 'Points';
   }
 
   protected setupInternal(map: Map, source: VectorSource<Geometry>): void {

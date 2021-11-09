@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="20"
+   height="20"
+   viewBox="0 0 5.2916665 5.291667"
+   version="1.1"
+   id="svg1036"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
+   sodipodi:docname="move.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <defs
+     id="defs1030" />
+  <g
+     inkscape:label="Calque 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       id="Tracé_104"
+       data-name="Tracé 104"
+       d="M 2.1402713,5.2331476 A 0.53384957,0.53384957 0 0 1 2.0805597,5.2299166 0.55482914,0.55482914 0 0 1 1.6125539,4.8626125 L 0.07846289,0.56987167 A 0.38247384,0.38247384 0 0 1 0.56744836,0.080886 L 4.8643887,1.6172366 a 0.5587023,0.5587023 0 0 1 0.107803,1.0005646 L 3.49297,3.5415481 2.6144098,4.9668683 A 0.55386086,0.55386086 0 0 1 2.1402713,5.2331476 Z M 0.43737501,0.39170655 a 0.0493827,0.0493827 0 0 0 -0.0351803,0.0154918 0.04873717,0.04873717 0 0 0 -0.0119435,0.053578 L 1.9246653,4.751907 A 0.22593392,0.22593392 0 0 0 2.3323146,4.794835 L 2.7196305,4.167062 v 0 L 3.2318548,3.3362711 a 0.16557728,0.16557728 0 0 1 0.053257,-0.053578 L 4.7969313,2.3386114 A 0.22593392,0.22593392 0 0 0 4.7530356,1.9312848 L 0.45609535,0.39493418 a 0.05680625,0.05680625 0 0 0 -0.0187205,-0.004199 z"
+       style="stroke-width:0.322762" />
+  </g>
+</svg>

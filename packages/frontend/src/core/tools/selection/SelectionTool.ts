@@ -22,7 +22,7 @@ import { DragBox, Translate } from 'ol/interaction';
 import VectorSource from 'ol/source/Vector';
 import Geometry from 'ol/geom/Geometry';
 import { Collection, Map } from 'ol';
-import Icon from '../../../assets/tool-icons/selection.svg';
+import Icon from '../../../assets/tool-icons/selection.inline.svg';
 import { containsXY, Extent } from 'ol/extent';
 import Feature from 'ol/Feature';
 import { HistoryKey } from '../../history/HistoryKey';

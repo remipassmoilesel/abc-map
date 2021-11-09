@@ -20,23 +20,15 @@ import React, { Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/shared';
 import ColorSelector from '../../../../components/color-picker/ColorSelector';
 import StrokeWidthSelector from '../_common/stroke-width-selector/StrokeWidthSelector';
-import TipBubble from '../../../../components/tip-bubble/TipBubble';
-import { ToolTips } from '@abc-map/user-documentation';
-import ButtonBar, { StyleApplication } from '../_common/button-bar/ButtonBar';
-import { prefixedTranslation } from '../../../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
 import Cls from './LineStringToolPanel.module.scss';
 
 const logger = Logger.get('LineStringToolPanel.tsx');
 
-const t = prefixedTranslation('MapView:ToolSelector.');
-
 class LineStringToolPanel extends Component<{}, {}> {
   public render(): ReactNode {
     return (
       <div className={Cls.lineStringPanel}>
-        <TipBubble id={ToolTips.LineString} label={t('Tool_help')} className={'mx-3 mb-3'} />
-        <ButtonBar applyStyle={StyleApplication.Line} />
         <StrokeWidthSelector />
         <ColorSelector stroke={true} />
       </div>

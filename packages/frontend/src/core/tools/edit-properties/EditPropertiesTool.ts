@@ -19,7 +19,7 @@
 import { AbstractTool } from '../AbstractTool';
 import { Logger, MapTool } from '@abc-map/shared';
 import { Map } from 'ol';
-import Icon from '../../../assets/tool-icons/properties.svg';
+import Icon from '../../../assets/tool-icons/properties.inline.svg';
 import { MainStore } from '../../store/store';
 import { HistoryService } from '../../history/HistoryService';
 import { ModalService } from '../../ui/ModalService';
@@ -56,7 +56,7 @@ export class EditPropertiesTool extends AbstractTool {
   }
 
   public getI18nLabel(): string {
-    return 'EditProperties';
+    return 'Properties';
   }
 
   protected setupInternal(map: Map): void {

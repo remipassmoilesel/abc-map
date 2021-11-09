@@ -16,12 +16,20 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-.buttonBar {
+@import "src/assets/styles/variables";
+
+.commonActions {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 
   margin-bottom: 0.6rem;
+
+  :global(.fa) {
+    font-size: 1.1rem;
+    color: $gray-500;
+  }
 
   :global(.btn) {
     display: flex;
@@ -31,10 +39,10 @@
 
     &:hover {
       text-decoration: none;
-    }
-  }
 
-  :global(.fa) {
-    font-size: 0.9rem;
+      :global(.fa) {
+        color: $gray-700;
+      }
+    }
   }
 }

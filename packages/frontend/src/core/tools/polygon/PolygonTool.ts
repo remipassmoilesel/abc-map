@@ -22,7 +22,7 @@ import GeometryType from 'ol/geom/GeometryType';
 import VectorSource from 'ol/source/Vector';
 import Geometry from 'ol/geom/Geometry';
 import { Map } from 'ol';
-import Icon from '../../../assets/tool-icons/polygon.svg';
+import Icon from '../../../assets/tool-icons/polygon.inline.svg';
 import { DrawInteraction, drawInteractionFactory, GetStyleFunc, HistoryTaskHandler } from '../common/drawInteractionFactory';
 import { HistoryKey } from '../../history/HistoryKey';
 import { defaultInteractions } from '../../geo/map/interactions';
@@ -47,7 +47,7 @@ export class PolygonTool extends AbstractTool {
   }
 
   public getI18nLabel(): string {
-    return 'CreatePolygons';
+    return 'Polygons';
   }
 
   protected setupInternal(map: Map, source: VectorSource<Geometry>): void {

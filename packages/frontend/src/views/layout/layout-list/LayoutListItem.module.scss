@@ -21,9 +21,24 @@
 .item {
   margin: 10px;
   padding: 10px;
-  border: solid 1px lightgrey;
+  border: solid 1px $gray-400;
   border-radius: 0.5rem;
+
+  cursor: pointer;
   user-select: none;
+
+  .layoutName {
+    flex-grow: 1;
+    font-size: 1.2rem;
+  }
+
+  .format {
+    font-size: 0.9rem;
+  }
+
+  &:hover {
+    background: rgba($gray-400, 0.4);
+  }
 
   &.active {
     color: white;

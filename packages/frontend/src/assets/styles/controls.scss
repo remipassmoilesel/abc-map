@@ -19,7 +19,7 @@
 @import "variables";
 
 .control-block {
-  padding: 1rem 0.8rem;
+  padding: 1rem 0.7rem;
   margin: 0;
   border-bottom: solid $gray-300 1px;
 
@@ -30,8 +30,17 @@
     .btn-link {
       padding: 0;
 
+      .fa {
+        font-size: 1.1rem;
+        color: $gray-500;
+      }
+
       &:hover {
         text-decoration: none;
+
+        .fa {
+          color: $gray-700;
+        }
       }
 
       &:focus {

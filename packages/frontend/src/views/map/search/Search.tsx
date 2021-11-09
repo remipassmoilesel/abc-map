@@ -53,11 +53,17 @@ class Search extends Component<ServiceProps, State> {
     const loading = this.state.loading;
 
     return (
-      <div className={`control-block`}>
+      <div className={`control-block ${Cls.search}`}>
         {/* Search input */}
         <div className={'control-item'}>
-          <div className={'my-2'}>{t('Search_on_map')}</div>
-          <input type={'text'} className={`form-control ${Cls.input}`} value={query} onChange={this.handleSearch} data-cy={'search-on-map'} />
+          <input
+            type={'text'}
+            value={query}
+            onChange={this.handleSearch}
+            placeholder={t('Search')}
+            className={`form-control ${Cls.input}`}
+            data-cy={'search-on-map'}
+          />
         </div>
 
         {/* Search results */}
@@ -76,7 +82,7 @@ class Search extends Component<ServiceProps, State> {
 
         {/* Center map around my position */}
         <div className={'control-item'}>
-          <button className={'btn btn-link'} onClick={this.handleGeolocate} data-testid={'geolocate'}>
+          <button className={'btn btn-link my-2'} onClick={this.handleGeolocate} data-testid={'geolocate'}>
             <i className={'fa fa-map-marker-alt mr-2'} /> {t('My_location')}
           </button>
         </div>
@@ -98,7 +104,6 @@ class Search extends Component<ServiceProps, State> {
       .geocode(query)
       .then((results) => {
         results.sort((res) => res.importance);
-        logger.debug('Results: ', results);
         this.setState({ results });
       })
       .catch((err) => logger.error('Error while geocoding: ', err))
@@ -110,7 +115,6 @@ class Search extends Component<ServiceProps, State> {
 
     const bbox = res.boundingbox.map((n) => parseFloat(n)) as [number, number, number, number];
     const extent: Extent = [bbox[2], bbox[0], bbox[3], bbox[1]];
-
     geo.getMainMap().moveViewToExtent(extent);
 
     this.setState({ query: '' });

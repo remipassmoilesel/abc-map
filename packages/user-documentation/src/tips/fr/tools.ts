@@ -104,6 +104,8 @@ export const Tools: Tip[] = [
   {
     id: ToolTips.EditProperties,
     content: `<h4>Outil d'édition des propriétés</h4>
+              <div class="alert alert-info mt-2 mb-3">L'outil d'édition des propriétés sert à éditer les propriétés
+                attachées aux géométries (exemples: <code>population</code>, <code>PIB</code>, ...)</div>
               <ul>
                 ${moveMapTip}
                 <li><b>Pour éditer les propriétés</b> d'une géométrie, cliquez sur une géométrie</li>

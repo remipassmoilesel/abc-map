@@ -16,6 +16,8 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
+@import "src/assets/styles/variables";
+
 .topBar {
   display: flex;
   flex-direction: row;
@@ -23,6 +25,8 @@
 
   height: 5vh;
   padding: 0 10px;
+
+  border-bottom: solid 1px $gray-400;
 
   h1 {
     font-size: 1.3rem;
@@ -58,6 +62,15 @@
   :global(.fa-user-circle) {
     font-size: 1.4em;
   }
+}
+
+.links {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: center;
+
+  height: 100%;
 }
 
 .dropDown {

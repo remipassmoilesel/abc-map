@@ -24,6 +24,8 @@ import { LabeledLegendDisplays } from './LabeledLegendDisplay';
 import { prefixedTranslation } from '../../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
 import { LabeledLayoutFormats } from './LabeledLayoutFormats';
+import HistoryControls from '../../../components/history-controls/HistoryControls';
+import { HistoryKey } from '../../../core/history/HistoryKey';
 
 const logger = Logger.get('LayoutControls.tsx', 'warn');
 
@@ -65,32 +67,26 @@ class LayoutControls extends Component<Props, {}> {
 
     return (
       <>
-        <div className={'control-block'}>
-          <button onClick={handleNewLayout} className={'btn btn-outline-primary mb-3'} data-cy={'new-layout'}>
-            <i className={'fa fa-plus mr-2'} />
-            {t('New_layout')}
-          </button>
+        {/* Undo redo */}
+        <HistoryControls historyKey={HistoryKey.Layout} />
 
+        {/* Change format */}
+        <div className={'control-block'}>
           <div className={'mb-2'}>{t('Format')}:</div>
-          <select onChange={this.handleFormatChanged} value={format?.id} className={'form-control'} data-cy={'format-select'}>
+          <select onChange={this.handleFormatChanged} value={format?.id} className={'form-control mb-3'} data-cy={'format-select'}>
             <option>...</option>
             {formatOptions}
           </select>
         </div>
 
+        {/* New layout, move layout, delete */}
         <div className={'control-block'}>
-          <div className={'mb-2'}>{t('Legend')}:</div>
-          <select onChange={this.handleLegendDisplayChanged} value={legendDisplay} className={'form-control mb-3'} data-cy={'legend-select'}>
-            <option>...</option>
-            {legendOptions}
-          </select>
-          <button onClick={this.handleEditLegend} className={'btn btn-outline-secondary'} data-cy={'edit-legend'}>
-            <i className={'fa fa-pen mr-2'} />
-            {t('Edit_legend')}
-          </button>
-        </div>
-
-        <div className={'control-block'}>
+          <div className={'control-item'}>
+            <button onClick={handleNewLayout} className={'btn btn-link'} data-cy={'new-layout'}>
+              <i className={'fa fa-plus mr-2'} />
+              {t('New_layout')}
+            </button>
+          </div>
           <div className={'control-item'}>
             <button onClick={handleLayoutUp} className={'btn btn-link'} data-cy={'layout-up'}>
               <i className={'fa fa-arrow-up mr-2'} />
@@ -111,15 +107,32 @@ class LayoutControls extends Component<Props, {}> {
           </div>
         </div>
 
+        {/* Legend */}
         <div className={'control-block'}>
+          <div className={'mb-2'}>{t('Legend')}</div>
+          <select onChange={this.handleLegendDisplayChanged} value={legendDisplay} className={'form-control mb-3'} data-cy={'legend-select'}>
+            <option>...</option>
+            {legendOptions}
+          </select>
+
           <div className={'control-item'}>
-            <button onClick={() => handleExport(ExportFormat.PDF)} className={'btn btn-link'} data-cy={'pdf-export'}>
+            <button onClick={this.handleEditLegend} className={'btn btn-link'} data-cy={'edit-legend'}>
+              <i className={'fa fa-pen mr-2'} />
+              {t('Edit_legend')}
+            </button>
+          </div>
+        </div>
+
+        {/* Export buttons */}
+        <div className={'control-block'}>
+          <div className={'control-item d-flex justify-content-center my-3'}>
+            <button onClick={() => handleExport(ExportFormat.PDF)} className={'btn btn-primary'} data-cy={'pdf-export'}>
               <i className={'fa fa-download mr-2'} />
               {t('PDF_export')}
             </button>
           </div>
-          <div className={'control-item'}>
-            <button onClick={() => handleExport(ExportFormat.PNG)} className={'btn btn-link'} data-cy={'png-export'}>
+          <div className={'control-item d-flex justify-content-center mb-3'}>
+            <button onClick={() => handleExport(ExportFormat.PNG)} className={'btn btn-outline-primary'} data-cy={'png-export'}>
               <i className={'fa fa-download mr-2'} />
               {t('PNG_export')}
             </button>

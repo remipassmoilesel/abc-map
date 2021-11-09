@@ -23,6 +23,8 @@
   flex-wrap: nowrap;
   align-items: center;
 
+  height: 2rem;
+
   cursor: pointer;
   user-select: none;
 
@@ -39,7 +41,24 @@
     color: white;
 
     :global(.fa) {
-      color: white;
+      color: white !important;
+    }
+  }
+}
+
+.visibility {
+  cursor: pointer;
+  width: 2rem;
+
+  &.visible {
+    :global(.fa) {
+      color: $gray-600;
+    }
+  }
+
+  &.notVisible {
+    :global(.fa) {
+      color: $gray-500;
     }
   }
 }

@@ -16,28 +16,42 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { Component, ReactNode } from 'react';
+import React, { useCallback } from 'react';
 import { BaseMetadata } from '@abc-map/shared';
 import Cls from './LayerListItem.module.scss';
 
 interface Props {
   metadata: BaseMetadata;
-  onClick: (id: string) => void;
+  onSelect: (id: string) => void;
+  onToggleVisibility: (lay: string) => void;
 }
 
-class LayerListItem extends Component<Props, {}> {
-  public render(): ReactNode {
-    const meta = this.props.metadata;
-    const selectedClass = meta.active ? Cls.active : '';
-    const dataLayer = meta.active ? 'active' : `inactive`;
-    const icon = meta.visible ? 'fa-eye' : 'fa-eye-slash';
-    return (
-      <div onClick={() => this.props.onClick(meta.id)} className={`${Cls.listItem} ${selectedClass}`} data-cy={'list-item'} data-layer={dataLayer}>
-        <i className={`fa ${icon} mr-2`} />
+function LayerListItem(props: Props) {
+  const meta = props.metadata;
+  const itemClasses = meta.active ? `${Cls.listItem} ${Cls.active}` : `${Cls.listItem}`;
+  const icon = meta.visible ? 'fa-eye' : 'fa-eye-slash';
+  const iconClasses = meta.visible ? `${Cls.visibility} ${Cls.visible}` : `${Cls.visibility} ${Cls.notVisible}`;
+  const dataLayer = meta.active ? 'active' : `inactive`;
+
+  const handleSelect = useCallback(() => {
+    props.onSelect(meta.id);
+  }, [props, meta]);
+
+  const handleToggleVisibility = useCallback(() => {
+    props.onToggleVisibility(meta.id);
+  }, [props, meta]);
+
+  return (
+    <div className={itemClasses} data-cy={'list-item'} data-layer={dataLayer}>
+      {/* Eye icon, visible only if layer is visible */}
+      <div onClick={handleToggleVisibility} className={iconClasses}>
+        <i className={`fa ${icon}`} />
+      </div>
+      <div className={'flex-grow-1'} onClick={handleSelect}>
         {meta.name}
       </div>
-    );
-  }
+    </div>
+  );
 }
 
 export default LayerListItem;
