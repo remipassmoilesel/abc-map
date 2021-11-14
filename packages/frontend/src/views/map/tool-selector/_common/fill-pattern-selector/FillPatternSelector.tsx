@@ -50,8 +50,6 @@ interface State {
 const t = prefixedTranslation('MapView:ToolSelector.');
 
 class FillPatternSelector extends Component<Props, State> {
-  private canvas = React.createRef<HTMLCanvasElement>();
-
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -61,9 +59,9 @@ class FillPatternSelector extends Component<Props, State> {
   }
 
   public render(): ReactNode {
-    const pattern = this.props.fill?.pattern || FillPatterns.Flat;
-    const color1 = this.props.fill?.color1 || 'white';
-    const color2 = this.props.fill?.color2 || 'black';
+    const pattern = this.props.fill.pattern;
+    const color1 = this.props.fill.color1;
+    const color2 = this.props.fill.color2;
     const modal = this.state.modal;
 
     return (

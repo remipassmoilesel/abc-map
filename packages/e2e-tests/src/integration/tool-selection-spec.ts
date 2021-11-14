@@ -22,6 +22,7 @@ import { ToolSelector } from '../helpers/ToolSelector';
 import { Draw } from '../helpers/Draw';
 import { MainMap } from '../helpers/MainMap';
 import { History } from '../helpers/History';
+import { DefaultDrawingStyle } from '../helpers/DefaultDrawingStyle';
 
 describe('Tool Selection', function () {
   beforeEach(() => {
@@ -183,7 +184,7 @@ describe('Tool Selection', function () {
       .then(() => MainMap.getReference())
       .should((map) => {
         const features = map.getActiveLayerFeatures();
-        expect(features[0].getProperties()[StyleProperties.StrokeColor]).equal('#FF5733');
+        expect(features[0].getProperties()[StyleProperties.StrokeColor]).equal(DefaultDrawingStyle.stroke.color);
       })
       .then(() => History.redo())
       .then(() => MainMap.getReference())
@@ -219,7 +220,8 @@ describe('Tool Selection', function () {
       .then(() => MainMap.getReference())
       .should((map) => {
         const features = map.getActiveLayerFeatures();
-        expect(features[0].getProperties()[StyleProperties.FillColor1]).equal('#FFFFFF');
+
+        expect(features[0].get(StyleProperties.FillColor1)).equal(DefaultDrawingStyle.fill.color1);
       })
       .then(() => History.redo())
       .then(() => MainMap.getReference())

@@ -61,16 +61,16 @@ export const mapInitialState: MapState = {
   tool: MapTool.Move,
   currentStyle: {
     fill: {
-      color1: '#FFFFFF',
-      color2: '#FF5733',
-      pattern: FillPatterns.Flat,
+      color1: 'rgba(18,90,147,0.30)',
+      color2: 'rgba(255,255,255,0.60)',
+      pattern: FillPatterns.HatchingObliqueRight,
     },
     stroke: {
-      color: '#FF5733',
-      width: 5,
+      color: 'rgba(18,90,147,0.60)',
+      width: 3,
     },
     text: {
-      color: '#FF5733',
+      color: 'rgba(18,90,147,1)',
       font: 'AbcCantarell',
       size: 30,
       offsetX: 15,
@@ -80,7 +80,7 @@ export const mapInitialState: MapState = {
     point: {
       icon: IconName.IconGeoAltFill,
       size: 30,
-      color: '#FF5733',
+      color: 'rgba(18,90,147,0.9)',
     },
   },
   mainMapDimensions: {

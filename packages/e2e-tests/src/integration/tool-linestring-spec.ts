@@ -22,6 +22,7 @@ import { TestHelper } from '../helpers/TestHelper';
 import { ToolSelector } from '../helpers/ToolSelector';
 import { Draw } from '../helpers/Draw';
 import { MainMap } from '../helpers/MainMap';
+import { DefaultDrawingStyle } from '../helpers/DefaultDrawingStyle';
 
 describe('Tool LineString', function () {
   beforeEach(() => {
@@ -49,13 +50,13 @@ describe('Tool LineString', function () {
         expect(features).length(2);
         expect(features[0].getGeometry()?.getType()).equal('LineString');
         expect(features[0].getGeometry()?.getExtent()).deep.equals([-1118865.2444950186, 3558914.916784167, -629668.2634698907, 4048111.897809295]);
-        expect(features[0].get(StyleProperties.StrokeWidth)).equal(5);
-        expect(features[0].get(StyleProperties.StrokeColor)).equal('#FF5733');
+        expect(features[0].get(StyleProperties.StrokeWidth)).equal(DefaultDrawingStyle.stroke.width);
+        expect(features[0].get(StyleProperties.StrokeColor)).equal(DefaultDrawingStyle.stroke.color);
 
         expect(features[1].getGeometry()?.getType()).equal('LineString');
         expect(features[1].getGeometry()?.getExtent()).deep.equals([837922.6796054933, 1602126.9926836547, 1327119.6606306215, 2091323.9737087828]);
-        expect(features[1].get(StyleProperties.StrokeWidth)).equal(5);
-        expect(features[1].get(StyleProperties.StrokeColor)).equal('#FF5733');
+        expect(features[1].get(StyleProperties.StrokeWidth)).equal(DefaultDrawingStyle.stroke.width);
+        expect(features[1].get(StyleProperties.StrokeColor)).equal(DefaultDrawingStyle.stroke.color);
       });
   });
 

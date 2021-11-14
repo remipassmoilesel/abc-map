@@ -16,29 +16,22 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-@import "src/assets/styles/variables";
+import React, { Component, ReactNode } from 'react';
+import { Logger } from '@abc-map/shared';
+import TextFormat from '../_common/text-format/TextFormat';
+import { withTranslation } from 'react-i18next';
+import Cls from './TextToolPanel.module.scss';
 
-$panel-width: 250px;
+const logger = Logger.get('TextToolPanel.tsx');
 
-.layoutView {
-  max-height: 95vh;
-  overflow: hidden;
+class TextToolPanel extends Component<{}, {}> {
+  public render(): ReactNode {
+    return (
+      <div className={Cls.textPanel}>
+        <TextFormat />
+      </div>
+    );
+  }
 }
 
-.content {
-  display: flex;
-  flex-direction: row;
-}
-
-.leftPanel {
-  width: $panel-width;
-  border-right: solid 1px $gray-400;
-}
-
-.rightPanel {
-  display: flex;
-  flex-direction: column;
-  width: $panel-width;
-
-  border-left: solid 1px $gray-400;
-}
+export default withTranslation()(TextToolPanel);

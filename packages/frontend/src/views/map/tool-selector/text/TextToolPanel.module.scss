@@ -16,29 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-@import "src/assets/styles/variables";
-
-$panel-width: 250px;
-
-.layoutView {
-  max-height: 95vh;
-  overflow: hidden;
-}
-
-.content {
-  display: flex;
-  flex-direction: row;
-}
-
-.leftPanel {
-  width: $panel-width;
-  border-right: solid 1px $gray-400;
-}
-
-.rightPanel {
+.textPanel {
   display: flex;
   flex-direction: column;
-  width: $panel-width;
-
-  border-left: solid 1px $gray-400;
 }

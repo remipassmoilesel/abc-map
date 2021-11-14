@@ -17,7 +17,12 @@
  Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
 -->
 
-<!-- Values surrounded by curly braces are templated server side -->
+<!--
+
+- %PUBLIC_URL% will be templated by webpack (presently /) at build time
+- Values surrounded by curly braces will be templated by server at runtime
+
+-->
 
 <html lang="{{{lang}}}">
 <head>
@@ -27,11 +32,12 @@
   <meta name="description" content="{{{description}}}"/>
   <meta name="keywords" content="{{{keywords}}}"/>
   <meta name="theme-color" content="#0077b6"/>
+
   <link rel="icon" href="%PUBLIC_URL%/favicon.ico"/>
 
   <meta property="og:title" content="{{{title}}}"/>
   <meta property="og:description" content="{{{description}}}"/>
-  <meta property="og:image" content="https://abc-map.fr/og-graph-image.png"/>
+  <meta property="og:image" content="{{externalUrl}}/og-graph-image.png"/>
   <meta property="og:image:width" content="1200"/>
   <meta property="og:image:height" content="627"/>
   <meta property="og:type" content="website"/>
