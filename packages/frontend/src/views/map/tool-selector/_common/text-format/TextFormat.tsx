@@ -134,7 +134,6 @@ function TextFormat() {
             type={'number'}
             value={offsetX}
             onInput={handleOffsetXChange}
-            min={0}
             className={`form-control form-control-sm ${Cls.input}`}
             data-testid={'text-offsetX'}
           />
@@ -144,7 +143,6 @@ function TextFormat() {
             type={'number'}
             value={offsetY}
             onInput={handleOffsetYChange}
-            min={0}
             className={`form-control form-control-sm ${Cls.input}`}
             data-testid={'text-offsetY'}
           />
@@ -158,7 +156,6 @@ function TextFormat() {
           type={'number'}
           value={rotation}
           onInput={handleRotationChange}
-          min={0}
           className={`form-control form-control-sm ${Cls.input}`}
           data-testid={'text-rotation'}
         />

@@ -28,6 +28,7 @@ export const STAGING_ENVIRONMENT = 'staging';
 export interface ConfigInput {
   environmentName: string;
   development?: DevelopmentDataConfig;
+  // External URL is the url that will be used by users. It must contains protocol dans full domain. E.g: 'https://abc-map.fr'.
   externalUrl: string;
   server: ServerConfig;
   project: ProjectConfig;

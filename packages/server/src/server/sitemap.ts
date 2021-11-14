@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FrontendRoutes } from '@abc-map/shared';
+import { FrontendRoutes, Language } from '@abc-map/shared';
 
 export interface Url {
   loc: string;
@@ -76,11 +76,19 @@ export const Sitemap: Url[] = [
   },
 ];
 
-export function generateSitemap(baseUrl: string): string {
+export function generateSitemap(baseUrl: string, languages: Language[]): string {
+  // For each URL we create a <URL> block with lang alternatives
   const urls = Sitemap.map((url) => {
+    const loc = `${baseUrl}${url.loc}`;
+
+    const alternates = languages.map((lng) => `<xhtml:link rel="alternate" hreflang="${lng}" href="${loc}?lng=${lng}"/>`);
+    alternates.push(`<xhtml:link rel="alternate" hreflang="en" href="${loc}"/>`);
+    alternates.push(`<xhtml:link rel="alternate" hreflang="x-default" href="${loc}"/>`);
+
     return `
   <url>
-    <loc>${baseUrl}${url.loc}</loc>
+    <loc>${loc}</loc>
+    ${alternates.join('\n    ')}
     <lastmod>${url.lastmod}</lastmod>
     <changefreq>${url.changefreq}</changefreq>
     <priority>${url.priority}</priority>
@@ -88,9 +96,10 @@ export function generateSitemap(baseUrl: string): string {
 `;
   });
 
+  // Then we concat all
   return `\
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   ${urls.join('')}
 </urlset>
 `;

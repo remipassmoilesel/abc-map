@@ -35,6 +35,7 @@ import CommonActions from './_common/common-actions/CommonActions';
 import TipBubble from '../../../components/tip-bubble/TipBubble';
 import { ToolTips } from '@abc-map/user-documentation';
 import { ToolButton } from './ToolButton';
+import TextToolPanel from './text/TextToolPanel';
 
 interface Props {
   activeLayer?: LayerWrapper;
@@ -72,6 +73,8 @@ function ToolSelector(props: Props) {
         return <PolygonPanel />;
       case MapTool.Selection:
         return <SelectionPanel />;
+      case MapTool.Text:
+        return <TextToolPanel />;
     }
   }, [currentTool]);
 

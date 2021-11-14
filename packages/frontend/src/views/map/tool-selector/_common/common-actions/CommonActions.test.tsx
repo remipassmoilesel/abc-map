@@ -27,6 +27,8 @@ import { LineString, Point, Polygon } from 'ol/geom';
 import { MapWrapper } from '../../../../../core/geo/map/MapWrapper';
 import { VectorLayerWrapper } from '../../../../../core/geo/layers/LayerWrapper';
 import { FillPatterns } from '@abc-map/shared';
+import { MainState } from '../../../../../core/store/reducer';
+import { IconName } from '../../../../../assets/point-icons/IconName';
 
 describe('CommonActions', () => {
   let fPoint: FeatureWrapper;
@@ -34,6 +36,7 @@ describe('CommonActions', () => {
   let fPolygon: FeatureWrapper;
   let layer: VectorLayerWrapper;
   let map: MapWrapper;
+  let state: MainState;
   let services: TestServices;
 
   beforeEach(() => {
@@ -55,6 +58,35 @@ describe('CommonActions', () => {
     ).setSelected(false);
     layer.getSource().addFeatures([fPoint.unwrap(), fLine.unwrap()]);
 
+    state = {
+      map: {
+        currentStyle: {
+          stroke: {
+            color: '#FF5733',
+            width: 5,
+          },
+          fill: {
+            color1: '#FFFFFF',
+            color2: '#FF5733',
+            pattern: FillPatterns.Flat,
+          },
+          point: {
+            color: '#FF5733',
+            icon: IconName.IconGeoAltFill,
+            size: 30,
+          },
+          text: {
+            color: '#FF5733',
+            font: 'AbcCantarell',
+            offsetX: 15,
+            offsetY: 15,
+            rotation: 0,
+            size: 30,
+          },
+        },
+      },
+    } as any;
+
     services = newTestServices();
     services.geo.getMainMap.returns(map);
   });
@@ -62,7 +94,7 @@ describe('CommonActions', () => {
   describe('Apply style', () => {
     it('on point with text', () => {
       // Prepare
-      abcRender(<CommonActions />, { services });
+      abcRender(<CommonActions />, { services, state });
       fPoint.setText('Hey !');
 
       // Act
@@ -93,7 +125,7 @@ describe('CommonActions', () => {
 
     it('on point without text', () => {
       // Prepare
-      abcRender(<CommonActions />, { services });
+      abcRender(<CommonActions />, { services, state });
 
       // Act
       userEvent.click(screen.getByTestId('apply-style'));
@@ -111,7 +143,7 @@ describe('CommonActions', () => {
 
     it('on line', () => {
       // Prepare
-      abcRender(<CommonActions />, { services });
+      abcRender(<CommonActions />, { services, state });
 
       // Act
       userEvent.click(screen.getByTestId('apply-style'));
@@ -128,7 +160,7 @@ describe('CommonActions', () => {
 
     it('on polygon', () => {
       // Prepare
-      abcRender(<CommonActions />, { services });
+      abcRender(<CommonActions />, { services, state });
 
       // Act
       userEvent.click(screen.getByTestId('apply-style'));
@@ -150,7 +182,7 @@ describe('CommonActions', () => {
 
   it('Duplicate selection', () => {
     // Prepare
-    abcRender(<CommonActions />, { services });
+    abcRender(<CommonActions />, { services, state });
 
     const style = { ...fPoint.getStyleProperties(), zIndex: 5555 };
     fPoint.setStyleProperties(style);
@@ -174,7 +206,7 @@ describe('CommonActions', () => {
 
   it('Delete features', () => {
     // Prepare
-    abcRender(<CommonActions />, { services });
+    abcRender(<CommonActions />, { services, state });
 
     // Act
     userEvent.click(screen.getByTestId('delete-features'));
@@ -192,7 +224,7 @@ describe('CommonActions', () => {
 
   it('Move features behind', () => {
     // Prepare
-    abcRender(<CommonActions />, { services });
+    abcRender(<CommonActions />, { services, state });
 
     fPoint.setStyleProperties({ ...fPoint.getStyleProperties(), zIndex: 5 });
 

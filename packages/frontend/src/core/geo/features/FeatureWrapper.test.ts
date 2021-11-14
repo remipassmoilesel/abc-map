@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FeatureProperties, FillPatterns, StyleProperties } from '@abc-map/shared';
+import { DefaultStyle, FeatureProperties, FillPatterns, StyleProperties } from '@abc-map/shared';
 import { Circle, LineString, Point, Polygon } from 'ol/geom';
 import { FeatureWrapper } from './FeatureWrapper';
 import { FeatureStyle } from '@abc-map/shared';
@@ -144,8 +144,8 @@ describe('FeatureWrapper', () => {
 
         // Assert
         expect(feature.getStyleProperties()).toEqual({
-          fill: { color1: '#fff' },
-          stroke: { color: '#000', width: 2 },
+          fill: { ...DefaultStyle.fill },
+          stroke: { ...DefaultStyle.stroke },
           point: {},
           text: {},
         });
@@ -160,7 +160,7 @@ describe('FeatureWrapper', () => {
 
         // Assert
         expect(feature.getStyleProperties()).toEqual({
-          point: { icon: IconName.Icon0CircleFill, size: 10 },
+          point: { ...DefaultStyle.point },
           fill: {},
           stroke: {},
           text: {},
@@ -182,7 +182,7 @@ describe('FeatureWrapper', () => {
 
         // Assert
         expect(feature.getStyleProperties()).toEqual({
-          stroke: { color: '#000', width: 2 },
+          stroke: { ...DefaultStyle.stroke },
           fill: {},
           point: {},
           text: {},
@@ -205,15 +205,10 @@ describe('FeatureWrapper', () => {
 
         // Assert
         expect(feature.getStyleProperties()).toEqual({
-          stroke: { color: '#000', width: 2 },
+          stroke: { ...DefaultStyle.stroke },
           text: {
+            ...DefaultStyle.text,
             value: 'Ho !',
-            color: '#00f',
-            size: 600,
-            font: 'AbcCantarell',
-            offsetX: 10,
-            offsetY: 10,
-            rotation: 0,
           },
           fill: {},
           point: {},

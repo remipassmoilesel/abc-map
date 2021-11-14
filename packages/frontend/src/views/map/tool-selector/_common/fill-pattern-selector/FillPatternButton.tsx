@@ -115,6 +115,11 @@ class FillPatternButton extends Component<Props, State> {
       return;
     }
 
+    // First we erase previous pattern
+    ctx.fillStyle = 'white';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Then we draw pattern
     ctx.fillStyle = canvasPattern;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
   }

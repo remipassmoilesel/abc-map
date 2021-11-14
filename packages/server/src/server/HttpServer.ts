@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Logger } from '@abc-map/shared';
+import { Language, Logger } from '@abc-map/shared';
 import { Config } from '../config/Config';
 import { Services } from '../services/services';
 import * as path from 'path';
@@ -160,7 +160,7 @@ export class HttpServer {
 
     // Frontend service
     this.app.get('/*', (req: FastifyRequest, reply: FastifyReply) => {
-      void reply.view('index', indexParameters(getLang(req)));
+      void reply.view('index', indexParameters(getLang(req), this.config.externalUrl));
     });
     this.app.head('/', (req: FastifyRequest, reply: FastifyReply) => {
       void reply.status(200).send();
@@ -215,8 +215,8 @@ export class HttpServer {
   };
 
   private generateSitemap = (req: FastifyRequest, reply: FastifyReply) => {
-    const sitemap = generateSitemap(this.config.externalUrl);
-    void reply.status(200).header('Content-Type', 'application/xml').send(sitemap);
+    const sitemap = generateSitemap(this.config.externalUrl, Object.values(Language));
+    void reply.status(200).header('Content-Type', 'text/xml; charset=utf-8').send(sitemap);
   };
 
   private authenticationHook(app: FastifyInstance) {

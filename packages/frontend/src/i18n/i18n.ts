@@ -36,7 +36,7 @@ i18n
   .use(initReactI18next)
   .init({
     detection: {
-      order: ['localStorage', 'navigator'],
+      order: ['querystring', 'localStorage', 'navigator'],
       lookupLocalStorage: 'ABC_LANGUAGE',
     },
     resources: resources,

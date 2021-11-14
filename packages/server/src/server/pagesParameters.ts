@@ -28,9 +28,10 @@ interface IndexParameters {
   description: string;
   keywords: string;
   noScript: string;
+  externalUrl: string;
 }
 
-export function indexParameters(lang: Language): IndexParameters {
+export function indexParameters(lang: Language, externalUrl: string): IndexParameters {
   switch (lang) {
     case Language.French:
       return {
@@ -39,6 +40,7 @@ export function indexParameters(lang: Language): IndexParameters {
         description: 'Abc-Map, nouvelle version 🚀 Créez des cartes géographiques simplement: importez, dessinez, visualisez des données, et bien plus !',
         keywords: 'carte, cartographie, géographie, système information géographique, statistique, analyse spatiale, logiciel en ligne',
         noScript: 'Vous devez activer Javascript pour utiliser cette application',
+        externalUrl,
       };
     case Language.English:
       return {
@@ -47,6 +49,7 @@ export function indexParameters(lang: Language): IndexParameters {
         description: 'Abc-Map, new version 🚀 Easily create geographic maps: import, draw, visualize data, and more!',
         keywords: 'map, cartography, geography, geographic information system, statistics, spatial analysis, online software',
         noScript: 'You must enable JavaScript to use this application',
+        externalUrl,
       };
   }
 }

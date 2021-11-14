@@ -22,8 +22,7 @@ import { TestHelper } from '../helpers/TestHelper';
 import { ToolSelector } from '../helpers/ToolSelector';
 import { Draw } from '../helpers/Draw';
 import { MainMap } from '../helpers/MainMap';
-
-const IconName = 'twbs/geo-alt-fill.inline.svg';
+import { DefaultDrawingStyle } from '../helpers/DefaultDrawingStyle';
 
 describe('Tool Point', function () {
   beforeEach(() => {
@@ -56,15 +55,15 @@ describe('Tool Point', function () {
         expect(features).length(2);
         expect(features[0].getGeometry()?.getType()).equal('Point');
         expect(features[0].getGeometry()?.getExtent()).deep.equals([-1118865.2444950186, 4048111.897809295, -1118865.2444950186, 4048111.897809295]);
-        expect(features[0].get(StyleProperties.PointSize)).equal(30);
-        expect(features[0].get(StyleProperties.PointColor)).equal('#FF5733');
-        expect(features[0].get(StyleProperties.PointIcon)).equal(IconName);
+        expect(features[0].get(StyleProperties.PointSize)).equal(DefaultDrawingStyle.point.size);
+        expect(features[0].get(StyleProperties.PointColor)).equal(DefaultDrawingStyle.point.color);
+        expect(features[0].get(StyleProperties.PointIcon)).equal(DefaultDrawingStyle.point.icon);
 
         expect(features[1].getGeometry()?.getType()).equal('Point');
         expect(features[1].getGeometry()?.getExtent()).deep.equals([-629668.2634698907, 3558914.916784167, -629668.2634698907, 3558914.916784167]);
-        expect(features[0].get(StyleProperties.PointSize)).equal(30);
-        expect(features[0].get(StyleProperties.PointColor)).equal('#FF5733');
-        expect(features[0].get(StyleProperties.PointIcon)).equal(IconName);
+        expect(features[0].get(StyleProperties.PointSize)).equal(DefaultDrawingStyle.point.size);
+        expect(features[0].get(StyleProperties.PointColor)).equal(DefaultDrawingStyle.point.color);
+        expect(features[0].get(StyleProperties.PointIcon)).equal(DefaultDrawingStyle.point.icon);
       });
   });
 
