@@ -48,7 +48,7 @@ function ProjectStatus() {
 
       {/* Current projection */}
       <div>
-        <span className={'badge badge-secondary'}>{t('Projection')}</span> {view.projection.name}
+        <span className={'badge bg-secondary'}>{t('Projection')}</span> {view.projection.name}
       </div>
 
       {/* Edit button and modal */}

@@ -18,7 +18,7 @@
 
 import MapBrowserEvent from 'ol/MapBrowserEvent';
 import MapBrowserEventType from 'ol/MapBrowserEventType';
-import { withControlKey, withControlKeyOnly, withGeometry, withMainButton, withShiftKey } from './common-conditions';
+import { withControlKey, withControlKeyOnly, withGeometryOfType, withMainButton, withShiftKey } from './common-conditions';
 import { PluggableMap } from 'ol';
 import { LineString } from 'ol/geom';
 import GeometryType from 'ol/geom/GeometryType';
@@ -68,11 +68,11 @@ describe('Common conditions', () => {
       ])
     );
 
-    expect(withGeometry(feature1, [GeometryType.LINE_STRING])).toBe(true);
-    expect(withGeometry(feature1, [GeometryType.POLYGON])).toBe(false);
+    expect(withGeometryOfType(feature1, [GeometryType.LINE_STRING])).toBe(true);
+    expect(withGeometryOfType(feature1, [GeometryType.POLYGON])).toBe(false);
 
     const feature2 = new Feature();
-    expect(withGeometry(feature2, [GeometryType.LINE_STRING])).toBe(false);
+    expect(withGeometryOfType(feature2, [GeometryType.LINE_STRING])).toBe(false);
   });
 });
 

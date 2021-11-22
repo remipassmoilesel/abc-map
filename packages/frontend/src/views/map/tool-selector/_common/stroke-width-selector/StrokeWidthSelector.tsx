@@ -16,63 +16,39 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { ChangeEvent, Component, ReactNode } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
-import { MainState } from '../../../../../core/store/reducer';
+import React, { ChangeEvent, useCallback } from 'react';
 import { MapActions } from '../../../../../core/store/map/actions';
-import _ from 'lodash';
-import { ServiceProps, withServices } from '../../../../../core/withServices';
-import Cls from './StrokeWidthSelector.module.scss';
 import OptionRow from '../option-row/OptionRow';
 import { prefixedTranslation } from '../../../../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
-
-const mapStateToProps = (state: MainState) => ({
-  stroke: state.map.currentStyle.stroke,
-});
-
-const mapDispatchToProps = {
-  setStrokeWidth: MapActions.setStrokeWidth,
-};
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-type Props = ConnectedProps<typeof connector> & ServiceProps;
+import { useAppDispatch, useAppSelector } from '../../../../../core/store/hooks';
+import { useDebouncedStyleTransform } from '../../../../../core/geo/useDebouncedStyleTransform';
+import Cls from './StrokeWidthSelector.module.scss';
 
 const t = prefixedTranslation('MapView:ToolSelector.');
 
-class StrokeWidthSelector extends Component<Props, {}> {
-  public render(): ReactNode {
-    return (
-      <OptionRow>
-        <div className={'mr-2'}>{t('Thickness')}:</div>
-        <select value={this.props.stroke?.width} onChange={this.handleSelection} className={`form-control form-control-sm ${Cls.select}`}>
-          {_.range(2, 21).map((value) => (
-            <option key={value} value={value}>
-              {value}
-            </option>
-          ))}
-        </select>
-      </OptionRow>
-    );
-  }
+function StrokeWidthSelector() {
+  const strokeWidth = useAppSelector((st) => st.map.currentStyle.stroke.width);
+  const dispatch = useAppDispatch();
 
-  private handleSelection = (ev: ChangeEvent<HTMLSelectElement>): void => {
-    const { geo } = this.props.services;
+  const styleTransform = useDebouncedStyleTransform();
 
-    const width = Number(ev.target.value);
-    this.props.setStrokeWidth(width);
+  const handleSelection = useCallback(
+    (ev: ChangeEvent<HTMLInputElement>): void => {
+      const width = Number(ev.target.value);
+      dispatch(MapActions.setStrokeWidth(width));
 
-    geo.updateSelectedFeatures((style) => {
-      return {
-        ...style,
-        stroke: {
-          ...style.stroke,
-          width,
-        },
-      };
-    });
-  };
+      styleTransform((style) => ({ ...style, stroke: { ...style.stroke, width } }));
+    },
+    [dispatch, styleTransform]
+  );
+
+  return (
+    <OptionRow>
+      <div className={'mr-2'}>{t('Thickness')}:</div>
+      <input type={'number'} min={'3'} max={'20'} value={strokeWidth} onChange={handleSelection} className={`form-control form-control-sm ${Cls.input}`} />
+    </OptionRow>
+  );
 }
 
-export default withTranslation()(connector(withServices(StrokeWidthSelector)));
+export default withTranslation()(StrokeWidthSelector);

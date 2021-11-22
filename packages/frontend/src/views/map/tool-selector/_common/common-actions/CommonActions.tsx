@@ -26,6 +26,7 @@ import { prefixedTranslation } from '../../../../../i18n/i18n';
 import Cls from './CommonActions.module.scss';
 import { useAppSelector } from '../../../../../core/store/hooks';
 import { useServices } from '../../../../../core/hooks';
+import { ActionButton } from './ActionButton';
 
 const t = prefixedTranslation('MapView:ToolSelector.');
 
@@ -153,7 +154,10 @@ function CommonActions() {
       return;
     }
 
-    features.forEach((f) => layer.getSource().removeFeature(f.unwrap()));
+    features.forEach((f) => {
+      f.setSelected(false);
+      layer.getSource().removeFeature(f.unwrap());
+    });
     history.register(HistoryKey.Map, new RemoveFeaturesTask(layer.getSource(), features));
   }, [geo, history, toasts]);
 
@@ -172,51 +176,43 @@ function CommonActions() {
   }, [geo, toasts]);
 
   const handleUnselectAll = useCallback(() => {
-    const selected = geo.getMainMap().getSelectedFeatures();
-    if (!selected) {
+    const deselected = geo.deselectAllFeatures();
+    if (!deselected) {
       toasts.info(t('You_must_select_geometries_first'));
     }
-
-    selected.forEach((f) => f.setSelected(false));
   }, [geo, toasts]);
 
   return (
     <div className={Cls.commonActions}>
-      {/* Apply style on selected features */}
-      <button onClick={handleApplyStyle} title={t('Apply_style_to_selected_geometries')} className={'btn btn-link'} data-testid={'apply-style'}>
-        <i className={'fa fa-paint-roller'} />
-      </button>
+      {/* Unselect all features */}
+      <ActionButton onClick={handleUnselectAll} title={t('Unselect_all')}>
+        <i className={'fa fa-times-circle'} />
+      </ActionButton>
 
       {/* Duplicate selected features  */}
-      <button
-        onClick={handleDuplicate}
-        title={t('Duplicate_selected_geometries')}
-        className={'btn btn-link'}
-        data-cy={'duplicate-selection'}
-        data-testid={'duplicate-selection'}
-      >
+      <ActionButton onClick={handleDuplicate} title={t('Duplicate_selected_geometries')} data-cy={'duplicate-selection'} data-testid={'duplicate-selection'}>
         <i className={'fa fa-clone'} />
-      </button>
+      </ActionButton>
+
+      {/* Apply style on selected features */}
+      <ActionButton onClick={handleApplyStyle} title={t('Apply_style_to_selected_geometries')} data-testid={'apply-style'}>
+        <i className={'fa fa-paint-roller'} />
+      </ActionButton>
 
       {/* Delete selected features */}
-      <button onClick={handleDeleteFeatures} title={t('Delete_selected_geometries')} className={'btn btn-link'} data-testid={'delete-features'}>
+      <ActionButton onClick={handleDeleteFeatures} title={t('Delete_selected_geometries')} data-testid={'delete-features'}>
         <i className={'fa fa-trash'} />
-      </button>
-
-      {/* Unselect all features */}
-      <button onClick={handleUnselectAll} title={t('Unselect_all')} className={'btn btn-link'}>
-        <i className={'fa fa-times-circle'} />
-      </button>
+      </ActionButton>
 
       {/* Move selected features behind */}
-      <button onClick={handleMoveAhead} title={t('Move_geometries_up')} className={'btn btn-link'} data-testid={'move-features-forward'}>
+      <ActionButton onClick={handleMoveAhead} title={t('Move_geometries_up')} data-testid={'move-features-forward'}>
         <i className={'fa fa-arrow-up'} />
-      </button>
+      </ActionButton>
 
       {/* Move selected features ahead */}
-      <button onClick={handleMoveBehind} title={t('Move_geometries_down')} className={'btn btn-link'} data-testid={'move-features-behind'}>
+      <ActionButton onClick={handleMoveBehind} title={t('Move_geometries_down')} data-testid={'move-features-behind'}>
         <i className={'fa fa-arrow-down'} />
-      </button>
+      </ActionButton>
     </div>
   );
 }

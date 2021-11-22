@@ -57,7 +57,7 @@ function ToolSelector(props: Props) {
   const handleToolSelection = useCallback(
     (toolId: MapTool) => {
       const tool = ToolRegistry.getById(toolId);
-      geo.setMainTool(tool);
+      geo.setMainMapTool(tool);
     },
     [geo]
   );
@@ -141,7 +141,7 @@ function ToolSelector(props: Props) {
 
             {/* Right part with options  */}
             <div className={Cls.toolOptions}>
-              <div className={'d-flex justify-content-between align-items-center mb-2'}>
+              <div className={'d-flex align-items-center mb-2'}>
                 <div className={Cls.toolName}>{tTools(activeTool.getI18nLabel())}</div>
                 {toolTip}
               </div>

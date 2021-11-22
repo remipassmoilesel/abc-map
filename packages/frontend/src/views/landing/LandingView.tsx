@@ -63,7 +63,6 @@ class LandingView extends Component<Props, State> {
     const authenticated = this.props.authenticated;
     const illustration = this.state.illustration;
     const buildHash = BUILD_INFO.hash;
-    const buildDate = DateTime.fromISO(BUILD_INFO.date).toLocal().toFormat('dd/MM/yyyy (HH:mm)');
 
     return (
       <div className={Cls.landing}>
@@ -98,9 +97,7 @@ class LandingView extends Component<Props, State> {
 
             {/* Current version */}
 
-            <div className={Cls.version}>
-              Version {buildHash} du {buildDate}. Bien vu !
-            </div>
+            <div className={Cls.version}>Version {buildHash}</div>
           </div>
 
           {/* Login and registration */}

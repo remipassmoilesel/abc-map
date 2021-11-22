@@ -145,6 +145,47 @@ export function mapReducer(state = mapInitialState, action: MapAction): MapState
       return newState;
     }
 
+    case ActionType.SetDrawingStyle: {
+      const newState: MapState = { ...state };
+      newState.currentStyle = { ...newState.currentStyle };
+
+      if (action.style.fill) {
+        newState.currentStyle.fill = {
+          color1: action.style.fill.color1 ?? newState.currentStyle.fill.color1,
+          color2: action.style.fill.color2 ?? newState.currentStyle.fill.color2,
+          pattern: action.style.fill.pattern ?? newState.currentStyle.fill.pattern,
+        };
+      }
+
+      if (action.style.stroke) {
+        newState.currentStyle.stroke = {
+          color: action.style.stroke.color ?? newState.currentStyle.stroke.color,
+          width: action.style.stroke.width ?? newState.currentStyle.stroke.width,
+        };
+      }
+
+      if (action.style.text) {
+        newState.currentStyle.text = {
+          color: action.style.text.color ?? newState.currentStyle.text.color,
+          font: action.style.text.font ?? newState.currentStyle.text.font,
+          size: action.style.text.size ?? newState.currentStyle.text.size,
+          offsetX: action.style.text.offsetX ?? newState.currentStyle.text.offsetX,
+          offsetY: action.style.text.offsetY ?? newState.currentStyle.text.offsetY,
+          rotation: action.style.text.rotation ?? newState.currentStyle.text.rotation,
+        };
+      }
+
+      if (action.style.point) {
+        newState.currentStyle.point = {
+          icon: action.style.point.icon ?? newState.currentStyle.point.icon,
+          size: action.style.point.size ?? newState.currentStyle.point.size,
+          color: action.style.point.color ?? newState.currentStyle.point.color,
+        };
+      }
+
+      return newState;
+    }
+
     default:
       return state;
   }

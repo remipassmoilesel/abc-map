@@ -16,65 +16,43 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { ChangeEvent, Component, ReactNode } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
-import { MainState } from '../../../../../core/store/reducer';
+import React, { ChangeEvent, useCallback } from 'react';
+import { useDispatch } from 'react-redux';
 import { MapActions } from '../../../../../core/store/map/actions';
-import * as _ from 'lodash';
-import { ServiceProps, withServices } from '../../../../../core/withServices';
 import OptionRow from '../../_common/option-row/OptionRow';
 import { withTranslation } from 'react-i18next';
 import { prefixedTranslation } from '../../../../../i18n/i18n';
+import { useAppSelector } from '../../../../../core/store/hooks';
+import { useDebouncedStyleTransform } from '../../../../../core/geo/useDebouncedStyleTransform';
 import Cls from './PointSizeSelector.module.scss';
-
-const mapStateToProps = (state: MainState) => ({
-  point: state.map.currentStyle.point,
-});
-
-const mapDispatchToProps = {
-  setPointSize: MapActions.setPointSize,
-};
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-type Props = ConnectedProps<typeof connector> & ServiceProps;
 
 const t = prefixedTranslation('MapView:ToolSelector.');
 
-class PointSizeSelector extends Component<Props, {}> {
-  public render(): ReactNode {
-    const size = this.props.point?.size;
+function PointSizeSelector() {
+  const size = useAppSelector((st) => st.map.currentStyle.point.size);
+  const dispatch = useDispatch();
 
-    return (
-      <OptionRow>
-        <div>{t('Size')}:</div>
-        <select value={size} onChange={this.handleSelection} className={`form-control form-control-sm ${Cls.select}`}>
-          {_.range(10, 201).map((value) => (
-            <option key={value} value={value}>
-              {value}
-            </option>
-          ))}
-        </select>
-      </OptionRow>
-    );
-  }
+  const styleTransform = useDebouncedStyleTransform();
 
-  private handleSelection = (ev: ChangeEvent<HTMLSelectElement>): void => {
-    const { geo } = this.props.services;
+  const handleSizeChanged = useCallback(
+    (ev: ChangeEvent<HTMLInputElement>): void => {
+      const size = Number(ev.target.value);
+      dispatch(MapActions.setPointSize(size));
 
-    const size = Number(ev.target.value);
-    this.props.setPointSize(size);
-
-    geo.updateSelectedFeatures((style) => {
-      return {
+      styleTransform((style) => ({
         ...style,
-        point: {
-          ...style.point,
-          size,
-        },
-      };
-    });
-  };
+        point: { ...style.point, size },
+      }));
+    },
+    [dispatch, styleTransform]
+  );
+
+  return (
+    <OptionRow>
+      <div>{t('Size')}:</div>
+      <input type={'number'} value={size} min={'3'} max={'200'} onChange={handleSizeChanged} className={`form-control form-control-sm ${Cls.input}`} />
+    </OptionRow>
+  );
 }
 
-export default withTranslation()(connector(withServices(PointSizeSelector)));
+export default withTranslation()(PointSizeSelector);

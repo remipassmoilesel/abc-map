@@ -279,7 +279,6 @@ class LayoutView extends Component<Props, State> {
           return OperationStatus.Interrupted;
       }
 
-      toasts.info(t('Export_done'));
       return OperationStatus.Succeed;
     };
 

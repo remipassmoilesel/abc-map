@@ -41,12 +41,12 @@ class ScaleColors extends Component<Props, {}> {
       <>
         <FormLine>
           <div className={'flex-grow-1'}>{t('Start_color')}:</div>
-          <ColorPicker initialValue={start} onClose={this.handleStartChanged} />
+          <ColorPicker value={start} onClose={this.handleStartChanged} />
         </FormLine>
 
         <FormLine>
           <div className={'flex-grow-1'}>{t('End_color')}:</div>
-          <ColorPicker initialValue={end} onClose={this.handleEndChanged} />
+          <ColorPicker value={end} onClose={this.handleEndChanged} />
         </FormLine>
       </>
     );

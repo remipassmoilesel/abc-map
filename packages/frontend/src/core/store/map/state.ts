@@ -45,7 +45,7 @@ export interface MapState {
       rotation: number;
     };
     point: {
-      icon: IconName;
+      icon: string;
       size: number;
       color: string;
     };
@@ -72,9 +72,9 @@ export const mapInitialState: MapState = {
     text: {
       color: 'rgba(18,90,147,1)',
       font: 'AbcCantarell',
-      size: 30,
-      offsetX: 15,
-      offsetY: 15,
+      size: 15,
+      offsetX: 20,
+      offsetY: 20,
       rotation: 0,
     },
     point: {

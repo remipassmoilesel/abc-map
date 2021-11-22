@@ -16,36 +16,29 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { MainStore } from '../../store/store';
-import { HistoryService } from '../../history/HistoryService';
-import VectorSource from 'ol/source/Vector';
-import { MapFactory } from '../../geo/map/MapFactory';
 import { TestHelper } from '../../utils/test/TestHelper';
 import { MoveTool } from './MoveTool';
+import { DrawingTestMap } from '../common/interactions/DrawingTestMap.test.helpers';
 
 describe('MoveTool', () => {
+  let testMap: DrawingTestMap;
+  let tool: MoveTool;
+
+  beforeEach(async () => {
+    testMap = new DrawingTestMap();
+    await testMap.init();
+
+    tool = new MoveTool();
+    tool.setup(testMap.getMap());
+  });
+
   it('setup()', () => {
-    const store = {} as MainStore;
-    const history = {} as HistoryService;
-    const map = MapFactory.createNaked().unwrap();
-    const source = new VectorSource();
-
-    const tool = new MoveTool(store, history);
-    tool.setup(map, source);
-
-    expect(TestHelper.interactionNames(map)).toEqual(['DoubleClickZoom', 'DragPan', 'KeyboardPan', 'MouseWheelZoom']);
+    expect(TestHelper.interactionNames(testMap.getMap())).toEqual(['DoubleClickZoom', 'DragPan', 'KeyboardPan', 'MouseWheelZoom']);
   });
 
   it('dispose()', () => {
-    const store = {} as MainStore;
-    const history = {} as HistoryService;
-    const map = MapFactory.createNaked().unwrap();
-    const source = new VectorSource();
-
-    const tool = new MoveTool(store, history);
-    tool.setup(map, source);
     tool.dispose();
 
-    expect(TestHelper.interactionNames(map)).toEqual([]);
+    expect(TestHelper.interactionNames(testMap.getMap())).toEqual([]);
   });
 });

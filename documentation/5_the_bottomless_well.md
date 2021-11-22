@@ -1,5 +1,6 @@
 # The bottomless well aka backlog
 
+- [Story maps](#story-maps)
 - [Performance: WebASM and web worker usage](#performance-webasm-and-web-worker-usage)
 - [Scale on exports](#scale-on-exports)
 - [Text labels not attached to features](#text-labels-not-attached-to-features)
@@ -20,6 +21,10 @@
 - [Custom icons](#custom-icons)
 - [Images](#images)
 - [Datastore artefact with prompt](#datastore-artefact-with-prompt)
+
+## Story maps (coming soon)
+
+Connected users should be able to create and share story maps.
 
 ## Performance: WebASM and web worker usage
 

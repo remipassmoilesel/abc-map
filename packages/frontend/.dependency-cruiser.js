@@ -30,6 +30,7 @@ module.exports = {
           '(^|/)(babel|webpack)\\.config\\.(js|cjs|mjs|ts|tsx|json)$', // other configs
           'src/assets/styles/mocks/style.js$', // Style mock
           '\\.test\\.ts$', // Tests
+          '\\.test\\.helpers\\.ts$', // Tests helpers
         ]
       },
       to: {},
@@ -151,10 +152,11 @@ module.exports = {
         path: '^(src)',
         pathNot: [
           '\\.(spec|test)\\.(js|mjs|cjs|ts|tsx|ls|coffee|litcoffee|coffee\\.md)$',
-          'setupTests.ts$',
-          'TestHelper.ts$',
-          'abcRender.tsx$',
-          'prepare-icons.js$',
+          'setupTests\\.ts$',
+          'TestHelper\\.ts$',
+          'abcRender\\.tsx$',
+          'prepare-icons\\.js$',
+          '\\.test\\.helpers\\.ts$', // Tests helpers
         ]
       },
       to: {

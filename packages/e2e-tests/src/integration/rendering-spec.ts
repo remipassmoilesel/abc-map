@@ -22,6 +22,7 @@ import { Download } from '../helpers/Download';
 import { TestData } from '../test-data/TestData';
 import { TestHelper } from '../helpers/TestHelper';
 import { PdfComparison } from '../plugins/PdfComparison';
+import { LongOperation } from '../helpers/LongOperation';
 
 describe('Rendering spec', function () {
   beforeEach(() => {
@@ -52,8 +53,7 @@ describe('Rendering spec', function () {
       .click()
       .get('[data-cy=layout-controls] [data-cy=pdf-export]')
       .click()
-      .get('[data-cy=long-operation-done]', { timeout: 20_000 })
-      .then(() => Toasts.assertText('Export done !'))
+      .then(() => LongOperation.done(20_000))
       .then(() => Download.fileAsBlob())
       .then((pdf) => pdf.arrayBuffer())
       .then((pdfContent) => cy.task<PdfComparison>('comparePdf', { actual: pdfContent, expected: 'test-project-3.pdf' }))

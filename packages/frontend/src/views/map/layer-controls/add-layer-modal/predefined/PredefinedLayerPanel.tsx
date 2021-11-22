@@ -47,7 +47,7 @@ class PredefinedLayerPanel extends Component<Props, {}> {
     return (
       <div className={'flex-grow-1 d-flex flex-column'}>
         <div className={'mb-3'}>{t('Select_basemap_you_want')} :</div>
-        <select value={model} onChange={this.handleChange} className={'form-control mb-3'} data-cy={'predefined-model'}>
+        <select value={model} onChange={this.handleChange} className={'form-select mb-3'} data-cy={'predefined-model'}>
           {LabeledPredefinedModels.All.map((m) => (
             <option key={m.id} value={m.id}>
               {m.label}

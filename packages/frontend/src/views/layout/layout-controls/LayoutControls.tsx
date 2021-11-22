@@ -73,7 +73,7 @@ class LayoutControls extends Component<Props, {}> {
         {/* Change format */}
         <div className={'control-block'}>
           <div className={'mb-2'}>{t('Format')}:</div>
-          <select onChange={this.handleFormatChanged} value={format?.id} className={'form-control mb-3'} data-cy={'format-select'}>
+          <select onChange={this.handleFormatChanged} value={format?.id} className={'form-select mb-3'} data-cy={'format-select'}>
             <option>...</option>
             {formatOptions}
           </select>
@@ -110,7 +110,7 @@ class LayoutControls extends Component<Props, {}> {
         {/* Legend */}
         <div className={'control-block'}>
           <div className={'mb-2'}>{t('Legend')}</div>
-          <select onChange={this.handleLegendDisplayChanged} value={legendDisplay} className={'form-control mb-3'} data-cy={'legend-select'}>
+          <select onChange={this.handleLegendDisplayChanged} value={legendDisplay} className={'form-select mb-3'} data-cy={'legend-select'}>
             <option>...</option>
             {legendOptions}
           </select>

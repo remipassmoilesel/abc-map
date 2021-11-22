@@ -21,10 +21,10 @@ import MapBrowserEvent from 'ol/MapBrowserEvent';
 import { FeatureWrapper } from '../../geo/features/FeatureWrapper';
 import { TextChanged, TextEnd, TextStart } from './TextInteractionEvents';
 import VectorSource from 'ol/source/Vector';
-import { findFeatureNearCursor } from '../common/findFeatureNearCursor';
+import { findFeatureNearCursor } from '../common/helpers/findFeatureNearCursor';
 import { Interaction } from 'ol/interaction';
 import MapBrowserEventType from 'ol/MapBrowserEventType';
-import { withMainButton } from '../common/common-conditions';
+import { withMainButton } from '../common/helpers/common-conditions';
 import { noModifierKeys } from 'ol/events/condition';
 
 const logger = Logger.get('TextInteraction.ts');

@@ -81,7 +81,7 @@
       "Incorrect_password": "Mot de passe incorrect !",
       "Password_is_mandatory": "Le mot de passe est obligatoire pour ouvrir ce projet",
       "Project_saved": "Projet enregistré !",
-      "Export_done": "Export terminé !"
+      "New_project_created": "Nouveau projet !"
     },
     "ImportData": {
       "Import_data": "Importer des données",
@@ -486,8 +486,7 @@
     "Delete_all": "Supprimer tout",
     "PDF_export": "Export PDF",
     "PNG_export": "Export PNG",
-    "You_must_create_layouts_first": "Vous devez d'abord créer une mise en page",
-    "Export_done": "Export terminé !"
+    "You_must_create_layouts_first": "Vous devez d'abord créer une mise en page"
   },
   "MapLegendView": {
     "Go_back_to_layout": "Revenir à la mise en page",

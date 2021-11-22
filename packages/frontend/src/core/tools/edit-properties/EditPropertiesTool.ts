@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbstractTool } from '../AbstractTool';
+import { Tool } from '../Tool';
 import { Logger, MapTool } from '@abc-map/shared';
 import { Map } from 'ol';
 import Icon from '../../../assets/tool-icons/properties.inline.svg';
@@ -28,13 +28,15 @@ import { ModalStatus } from '../../ui/typings';
 import { HistoryKey } from '../../history/HistoryKey';
 import { SetFeatureProperties } from '../../history/tasks/features/SetFeatureProperties';
 import * as _ from 'lodash';
-import { defaultInteractions } from '../../geo/map/interactions';
-import { Select } from 'ol/interaction';
-import { withMainButton } from '../common/common-conditions';
+import { Interaction, Select } from 'ol/interaction';
+import { withMainButton } from '../common/helpers/common-conditions';
 import { LayerWrapper } from '../../geo/layers/LayerWrapper';
 import { Options } from 'ol/interaction/Select';
 import { noModifierKeys } from 'ol/events/condition';
 import { DefaultTolerancePx } from '../common/constants';
+import { MoveInteractionsBundle } from '../common/interactions/MoveInteractionsBundle';
+import { SelectionInteractionsBundle } from '../common/interactions/SelectionInteractionsBundle';
+import { MapActions } from '../../store/map/actions';
 
 const logger = Logger.get('EditPropertiesTool.ts');
 
@@ -42,10 +44,13 @@ function interactionFactory(options: Options): Select {
   return new Select(options);
 }
 
-export class EditPropertiesTool extends AbstractTool {
-  constructor(mainStore: MainStore, history: HistoryService, private modals: ModalService, private newInteraction = interactionFactory) {
-    super(mainStore, history);
-  }
+export class EditPropertiesTool implements Tool {
+  private map?: Map;
+  private move?: MoveInteractionsBundle;
+  private selection?: SelectionInteractionsBundle;
+  private interactions: Interaction[] = [];
+
+  constructor(private mainStore: MainStore, private history: HistoryService, private modals: ModalService, private newInteraction = interactionFactory) {}
 
   public getId(): MapTool {
     return MapTool.EditProperties;
@@ -59,11 +64,16 @@ export class EditPropertiesTool extends AbstractTool {
     return 'Properties';
   }
 
-  protected setupInternal(map: Map): void {
+  public setup(map: Map): void {
+    this.map = map;
+
     // Default interactions
-    const defaults = defaultInteractions();
-    defaults.forEach((i) => map.addInteraction(i));
-    this.interactions.push(...defaults);
+    this.move = new MoveInteractionsBundle();
+    this.move.setup(map);
+
+    // Selection with shift click
+    this.selection = new SelectionInteractionsBundle();
+    this.selection.onStyleSelected = (st) => this.mainStore.dispatch(MapActions.setDrawingStyle(st));
 
     // Select interaction will condition modification of features
     const select = this.newInteraction({
@@ -77,9 +87,7 @@ export class EditPropertiesTool extends AbstractTool {
     });
 
     select.on('select', (ev) => {
-      // Get last feature, select it
       const feature = FeatureWrapper.from(ev.selected[0]);
-      feature.setSelected(true);
 
       // Keep previous properties for undo / redo
       const before = feature.getSimpleProperties();
@@ -103,5 +111,21 @@ export class EditPropertiesTool extends AbstractTool {
 
     map.addInteraction(select);
     this.interactions.push(select);
+  }
+
+  public deselectAll() {
+    this.selection?.clear();
+  }
+
+  public dispose() {
+    this.deselectAll();
+
+    this.move?.dispose();
+    this.selection?.dispose();
+
+    this.interactions.forEach((inter) => {
+      this.map?.removeInteraction(inter);
+      inter.dispose();
+    });
   }
 }

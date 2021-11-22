@@ -29,4 +29,8 @@
   :global(.form-control) {
     max-width: 50%;
   }
+
+  :global(.form-select) {
+    max-width: 50%;
+  }
 }

@@ -17,14 +17,28 @@
  */
 
 import { DragPan, Interaction, KeyboardPan, MouseWheelZoom } from 'ol/interaction';
-import { withControlKey, withMainButton } from '../../tools/common/common-conditions';
 import MapBrowserEvent from 'ol/MapBrowserEvent';
+import { Map } from 'ol';
+import { withControlKey, withMainButton } from '../helpers/common-conditions';
 
-export function defaultInteractions(): Interaction[] {
-  const condition = (ev: MapBrowserEvent) => withControlKey(ev) && withMainButton(ev);
-  return [new DragPan({ condition }), new KeyboardPan({ condition }), new MouseWheelZoom({ condition })];
-}
+export class MoveInteractionsBundle {
+  private map?: Map;
+  private interactions: Interaction[];
 
-export function layoutMapInteractions(): Interaction[] {
-  return [new DragPan(), new KeyboardPan(), new MouseWheelZoom()];
+  constructor() {
+    const condition = (ev: MapBrowserEvent) => withControlKey(ev) && withMainButton(ev);
+    this.interactions = [new DragPan({ condition }), new KeyboardPan({ condition }), new MouseWheelZoom({ condition })];
+  }
+
+  public setup(map: Map) {
+    this.map = map;
+    this.interactions.forEach((inter) => map.addInteraction(inter));
+  }
+
+  public dispose() {
+    this.interactions.forEach((inter) => {
+      inter.dispose();
+      this.map?.removeInteraction(inter);
+    });
+  }
 }

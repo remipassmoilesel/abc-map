@@ -16,27 +16,36 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbstractTool } from '../AbstractTool';
-import { MapTool } from '@abc-map/shared';
-import { DragBox, Translate } from 'ol/interaction';
+import { Tool } from '../Tool';
+import { GeometryType, Logger, MapTool } from '@abc-map/shared';
+import { DragBox, Interaction, Translate } from 'ol/interaction';
 import VectorSource from 'ol/source/Vector';
 import Geometry from 'ol/geom/Geometry';
-import { Collection, Map } from 'ol';
+import { Map } from 'ol';
 import Icon from '../../../assets/tool-icons/selection.inline.svg';
-import { containsXY, Extent } from 'ol/extent';
-import Feature from 'ol/Feature';
 import { HistoryKey } from '../../history/HistoryKey';
-import { UpdateItem, UpdateGeometriesTask } from '../../history/tasks/features/UpdateGeometriesTask';
-import { Logger } from '@abc-map/shared';
+import { UpdateGeometriesTask, UpdateItem } from '../../history/tasks/features/UpdateGeometriesTask';
 import { FeatureWrapper } from '../../geo/features/FeatureWrapper';
-import { withMainButton } from '../common/common-conditions';
-import { defaultInteractions } from '../../geo/map/interactions';
+import { withMainButton } from '../common/helpers/common-conditions';
 import { noModifierKeys } from 'ol/events/condition';
+import { MapActions } from '../../store/map/actions';
+import { HistoryService } from '../../history/HistoryService';
+import { MainStore } from '../../store/store';
+import { isWithinExtent } from '../common/helpers/isWithinExtent';
+import { SelectionInteractionsBundle } from '../common/interactions/SelectionInteractionsBundle';
+import { AllSupportedGeometries } from '../common/interactions/SupportedGeometry';
+import { MoveInteractionsBundle } from '../common/interactions/MoveInteractionsBundle';
 
 const logger = Logger.get('SelectionTool.ts');
 
-export class SelectionTool extends AbstractTool {
-  private selection = new Collection<Feature<Geometry>>();
+export class SelectionTool implements Tool {
+  private map?: Map;
+  private source?: VectorSource<Geometry>;
+  private selection?: SelectionInteractionsBundle;
+  private move?: MoveInteractionsBundle;
+  private interactions: Interaction[] = [];
+
+  constructor(private store: MainStore, private history: HistoryService) {}
 
   public getId(): MapTool {
     return MapTool.Selection;
@@ -50,65 +59,81 @@ export class SelectionTool extends AbstractTool {
     return 'Select';
   }
 
-  protected setupInternal(map: Map, source: VectorSource<Geometry>): void {
-    // Interactions for map view manipulation
-    const defaults = defaultInteractions();
-    defaults.forEach((i) => map.addInteraction(i));
-    this.interactions.push(...defaults);
+  public setup(map: Map, source: VectorSource<Geometry>): void {
+    this.map = map;
+    this.source = source;
 
-    // Tool interactions
+    // Interactions for map view manipulation
+    this.move = new MoveInteractionsBundle();
+    this.move.setup(map);
+
+    const dispatchStyle = (feat: FeatureWrapper) => {
+      const style = feat.getStyleProperties();
+      switch (feat.getGeometry()?.getType()) {
+        case GeometryType.POINT:
+          this.store.dispatch(MapActions.setDrawingStyle({ point: style.point }));
+          break;
+        case GeometryType.LINE_STRING:
+        case GeometryType.MULTI_LINE_STRING:
+          this.store.dispatch(MapActions.setDrawingStyle({ stroke: style.stroke }));
+          break;
+        case GeometryType.POLYGON:
+        case GeometryType.MULTI_POLYGON:
+          this.store.dispatch(MapActions.setDrawingStyle({ stroke: style.stroke, fill: style.fill }));
+          break;
+        default:
+          logger.error('Unhandled style: ', { style, feature: feat });
+      }
+    };
+
+    // Selection on shift + click
+    this.selection = new SelectionInteractionsBundle();
+    this.selection.setup(map, this.source, AllSupportedGeometries);
+    this.selection.onStyleSelected = (style, feature) => dispatchStyle(feature);
+
+    const selection = this.selection.getFeatures();
+
+    // Select with a box
     const dragBox = new DragBox({
       condition: (ev) => withMainButton(ev) && noModifierKeys(ev),
       className: 'abc-selection-box',
     });
 
-    const sourceListener = source.on('addfeature', (evt) => {
-      if (FeatureWrapper.from(evt.feature).isSelected()) {
-        this.selection.push(evt.feature);
-
-        // If one feature were added, others can be deselected. So we remove them
-        this.selection
-          .getArray()
-          .slice()
-          .forEach((feat) => {
-            if (!FeatureWrapper.from(feat).isSelected()) {
-              this.selection.remove(feat);
-            }
-          });
-      }
-    });
-    this.sourceListeners.push(sourceListener);
-
     dragBox.on('boxstart', () => {
-      this.selection.forEach((f) => FeatureWrapper.from(f).setSelected(false));
-      this.selection.clear();
+      selection.forEach((f) => FeatureWrapper.from(f).setSelected(false));
+      selection.clear();
     });
 
     dragBox.on('boxend', () => {
       const extent = dragBox.getGeometry().getExtent();
+
       source.forEachFeatureInExtent(extent, (feature) => {
         const geomExtent = feature.getGeometry()?.getExtent();
         if (isWithinExtent(extent, geomExtent)) {
           FeatureWrapper.from(feature).setSelected(true);
-          this.selection.push(feature);
+          selection.push(feature);
         }
       });
+
+      if (selection.getLength()) {
+        const last = FeatureWrapper.from(selection.getArray()[selection.getLength() - 1]);
+        dispatchStyle(last);
+      }
     });
 
-    const translate = new Translate({
-      features: this.selection,
-    });
+    // Translate selection
+    const translate = new Translate({ features: selection });
 
     let translated: FeatureWrapper[] = [];
     translate.on('translatestart', () => {
-      this.selection.forEach((feat) => {
+      selection.forEach((feat) => {
         const clone = FeatureWrapper.from(feat).clone();
         translated.push(clone);
       });
     });
 
     translate.on('translateend', () => {
-      const items = this.selection
+      const items = selection
         .getArray()
         .map((feat) => {
           const feature = FeatureWrapper.from(feat);
@@ -133,19 +158,25 @@ export class SelectionTool extends AbstractTool {
       translated = [];
     });
 
-    map.addInteraction(dragBox);
-    map.addInteraction(translate);
-    this.interactions.push(dragBox);
-    this.interactions.push(translate);
+    [dragBox, translate].forEach((inter) => {
+      map.addInteraction(inter);
+      this.interactions.push(inter);
+    });
   }
 
-  protected disposeInternal() {
-    super.disposeInternal();
-    this.selection.forEach((f) => FeatureWrapper.from(f).setSelected(false));
-    this.selection.clear();
+  public deselectAll() {
+    this.selection?.clear();
   }
-}
 
-function isWithinExtent(selection: Extent, geomExtent?: Extent) {
-  return geomExtent && containsXY(selection, geomExtent[0], geomExtent[1]) && containsXY(selection, geomExtent[2], geomExtent[3]);
+  public dispose() {
+    this.deselectAll();
+
+    this.move?.dispose();
+    this.selection?.dispose();
+
+    this.interactions.forEach((inter) => {
+      this.map?.removeInteraction(inter);
+      inter.dispose();
+    });
+  }
 }

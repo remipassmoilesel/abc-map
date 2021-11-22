@@ -19,8 +19,8 @@
 import { Map } from 'ol';
 import { MapWrapper } from './MapWrapper';
 import { Attribution, ScaleLine, Zoom } from 'ol/control';
-import { layoutMapInteractions } from './interactions';
 import { Views } from '../Views';
+import { DragPan, KeyboardPan, MouseWheelZoom } from 'ol/interaction';
 
 export class MapFactory {
   public static createDefault(): MapWrapper {
@@ -44,7 +44,7 @@ export class MapFactory {
   public static createLayoutPreview(): MapWrapper {
     const internal = new Map({
       controls: [],
-      interactions: layoutMapInteractions(),
+      interactions: [new DragPan(), new KeyboardPan(), new MouseWheelZoom()],
       view: Views.defaultOlView(),
       layers: [],
     });

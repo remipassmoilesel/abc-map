@@ -24,6 +24,7 @@ import { Point } from 'ol/geom';
 import userEvent from '@testing-library/user-event';
 import { screen } from '@testing-library/react';
 import { MainStore, storeFactory } from '../../../../../core/store/store';
+import { TestHelper } from '../../../../../core/utils/test/TestHelper';
 
 describe('TextFormat', () => {
   let services: TestServices;
@@ -36,12 +37,14 @@ describe('TextFormat', () => {
     feature = FeatureWrapper.create(new Point([1, 1]));
   });
 
-  it('should set size', () => {
+  it('should set size', async () => {
     // Prepare
     abcRender(<TextFormat />, { services, store });
 
     // Act
-    userEvent.selectOptions(screen.getByTestId('text-size'), ['45']);
+    userEvent.clear(screen.getByTestId('text-size'));
+    userEvent.type(screen.getByTestId('text-size'), '45');
+    await TestHelper.wait(250); // We must wait for debounce
     callTransform();
 
     // Assert
@@ -49,13 +52,15 @@ describe('TextFormat', () => {
     expect(feature.getStyleProperties().text?.size).toEqual(45);
   });
 
-  it('should set offsetX', () => {
+  it('should set offsetX', async () => {
     // Prepare
     abcRender(<TextFormat />, { services, store });
 
     // Act
     userEvent.clear(screen.getByTestId('text-offsetX'));
     userEvent.type(screen.getByTestId('text-offsetX'), '9');
+
+    await TestHelper.wait(250); // We must wait for debounce
     callTransform();
 
     // Assert
@@ -63,13 +68,15 @@ describe('TextFormat', () => {
     expect(feature.getStyleProperties().text?.offsetX).toEqual(9);
   });
 
-  it('should set offsetY', () => {
+  it('should set offsetY', async () => {
     // Prepare
     abcRender(<TextFormat />, { services, store });
 
     // Act
     userEvent.clear(screen.getByTestId('text-offsetY'));
     userEvent.type(screen.getByTestId('text-offsetY'), '9');
+
+    await TestHelper.wait(250); // We must wait for debounce
     callTransform();
 
     // Assert
@@ -77,13 +84,15 @@ describe('TextFormat', () => {
     expect(feature.getStyleProperties().text?.offsetY).toEqual(9);
   });
 
-  it('should set rotation', () => {
+  it('should set rotation', async () => {
     // Prepare
     abcRender(<TextFormat />, { services, store });
 
     // Act
     userEvent.clear(screen.getByTestId('text-rotation'));
     userEvent.type(screen.getByTestId('text-rotation'), '9');
+
+    await TestHelper.wait(250); // We must wait for debounce
     callTransform();
 
     // Assert

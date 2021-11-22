@@ -72,7 +72,10 @@ export function httpExternalClient(timeout: number): AxiosInstance {
 function authenticationInterceptor(config: AxiosRequestConfig): AxiosRequestConfig {
   const token = mainStore.getState().authentication.tokenString;
   if (token) {
-    config.headers['Authorization'] = `Bearer ${token}`;
+    config.headers = {
+      ...config.headers,
+      Authorization: `Bearer ${token}`,
+    };
   }
   return config;
 }

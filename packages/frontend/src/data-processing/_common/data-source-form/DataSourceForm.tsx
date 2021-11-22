@@ -83,7 +83,7 @@ class DataSourceForm extends Component<Props, State> {
           <select
             value={valueField}
             onChange={this.handleSourceFieldChange}
-            className={'form-control'}
+            className={'form-select'}
             id={'value-field'}
             data-testid={'value-field'}
             data-cy={'value-field'}
@@ -109,7 +109,7 @@ class DataSourceForm extends Component<Props, State> {
           <select
             value={joinBy}
             onChange={this.handleJoinByChange}
-            className={'form-control'}
+            className={'form-select'}
             id={'data-join-by'}
             data-testid={'data-join-by'}
             data-cy={'data-join-by'}

@@ -70,10 +70,10 @@ function CursorPosition() {
     <div className={'control-block'}>
       <div className={'mb-2'}>{t('Cursor_position')}</div>
       <div className={Cls.latLon}>
-        <span className={'badge badge-light'}>{t('Latitude')}</span> {lat}
+        <span className={Cls.label}>{t('Latitude')}</span> {lat}
       </div>
       <div className={Cls.latLon}>
-        <span className={'badge badge-light'}>{t('Longitude')}</span> {lon}
+        <span className={Cls.label}>{t('Longitude')}</span> {lon}
       </div>
     </div>
   );

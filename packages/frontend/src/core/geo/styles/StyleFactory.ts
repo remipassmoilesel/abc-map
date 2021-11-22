@@ -166,6 +166,9 @@ export class StyleFactory {
       overflow: true,
       rotation,
       textAlign,
+      padding: [0, fontSize / 2, 0, fontSize / 2],
+      backgroundFill: new Fill({ color: 'rgba(255,255,255,0.7)' }),
+      backgroundStroke: new Stroke({ color: 'rgba(0,0,0,0.2)' }),
     });
   }
 

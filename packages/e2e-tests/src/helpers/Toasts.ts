@@ -18,7 +18,7 @@
 
 export class Toasts {
   public static assertText(text: string, timeout = 4000): Cypress.Chainable<any> {
-    return cy.get('.toast-container div', { timeout }).should((elem) => {
+    return cy.get('.abc-toast-container div', { timeout }).should((elem) => {
       expect(elem.text()).to.contains(text);
     });
   }

@@ -118,7 +118,7 @@ class AddLayerModal extends Component<Props, State> {
             <div className={'d-flex'}>
               <div className={Cls.leftPanel}>
                 {/* Type selector */}
-                <select value={layerTypeId} onChange={this.handleLayerTypeChange} className={'form-control'} data-cy={'add-layer-type'}>
+                <select value={layerTypeId} onChange={this.handleLayerTypeChange} className={'form-select'} data-cy={'add-layer-type'}>
                   {LabeledLayerTypes.All.map((type) => (
                     <option key={type.id} value={type.id}>
                       {t(type.i18nLabel)}

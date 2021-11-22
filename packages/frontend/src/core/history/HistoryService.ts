@@ -67,6 +67,18 @@ export class HistoryService {
     this.updateUiState(key);
   }
 
+  public remove(key: HistoryKey, task: Task): void {
+    const stack = this.getStack(key);
+
+    const trashed: Task[] = stack.undo.concat(stack.redo).filter((t) => t === task);
+    trashed?.forEach((t) => t.dispose().catch((err) => logger.error('Error while disposing task: ', err)));
+
+    stack.undo = stack.undo.filter((t) => t !== task);
+    stack.redo = stack.redo.filter((t) => t !== task);
+
+    this.updateUiState(key);
+  }
+
   public async undo(key: HistoryKey): Promise<void> {
     const stack = this.getStack(key);
 
@@ -74,11 +86,14 @@ export class HistoryService {
     if (!task) {
       return Promise.reject(new Error('Nothing to undo'));
     }
+
+    // Task reference must be hold in one list reference, in case we want to use remove()
     stack.redo.push(task);
-    this.limitHistorySize(key);
-    this.updateUiState(key);
 
     await task.undo();
+
+    this.limitHistorySize(key);
+    this.updateUiState(key);
   }
 
   public async redo(key: HistoryKey): Promise<void> {
@@ -88,11 +103,14 @@ export class HistoryService {
     if (!task) {
       return Promise.reject(new Error('Nothing to redo'));
     }
+
+    // Task reference must be hold in one list reference, in case we want to use remove()
     stack.undo.push(task);
-    this.limitHistorySize(key);
-    this.updateUiState(key);
 
     await task.redo();
+
+    this.limitHistorySize(key);
+    this.updateUiState(key);
   }
 
   public canUndo(key: HistoryKey): boolean {

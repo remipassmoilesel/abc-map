@@ -16,30 +16,8 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbstractTool } from '../AbstractTool';
-import Icon from '../../../assets/tool-icons/move.inline.svg';
-import { Map } from 'ol';
-import { MapTool } from '@abc-map/shared';
-import { DoubleClickZoom, DragPan, KeyboardPan, MouseWheelZoom } from 'ol/interaction';
-
-export class MoveTool extends AbstractTool {
-  public getId(): MapTool {
-    return MapTool.Move;
-  }
-
-  public getIcon(): string {
-    return Icon;
-  }
-
-  public getI18nLabel(): string {
-    return 'MoveMap';
-  }
-
-  protected setupInternal(map: Map) {
-    const interactions = [new DoubleClickZoom(), new DragPan(), new KeyboardPan(), new MouseWheelZoom()];
-
-    interactions.forEach((i) => map.addInteraction(i));
-
-    this.interactions.push(...interactions);
+export class LongOperation {
+  public static done(timeout = 4000): Cypress.Chainable<any> {
+    return cy.get('[data-cy=long-operation-done]', { timeout });
   }
 }

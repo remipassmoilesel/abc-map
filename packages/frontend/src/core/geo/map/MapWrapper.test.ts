@@ -244,7 +244,7 @@ describe('MapWrapper', function () {
       map.setTool(tool);
 
       expect(tool.setup).toHaveBeenCalled();
-      expect(map.getCurrentTool()).toStrictEqual(tool);
+      expect(map.getTool()).toStrictEqual(tool);
     });
 
     it('Set active layer should set up default interactions (Vector -> Tile)', () => {
@@ -263,7 +263,7 @@ describe('MapWrapper', function () {
       map.setActiveLayer(tile);
 
       // Assert
-      expect(map.getCurrentTool()).toBeInstanceOf(LineStringTool);
+      expect(map.getTool()).toBeInstanceOf(LineStringTool);
       expect(TestHelper.interactionCount(map.unwrap(), 'Draw')).toEqual(0);
       expect(TestHelper.interactionNames(map.unwrap())).toEqual(['DragPan', 'KeyboardPan', 'MouseWheelZoom']);
     });
@@ -284,7 +284,7 @@ describe('MapWrapper', function () {
       map.setActiveLayer(vector);
 
       // Assert
-      expect(map.getCurrentTool()).toBeInstanceOf(LineStringTool);
+      expect(map.getTool()).toBeInstanceOf(LineStringTool);
       expect(TestHelper.interactionCount(map.unwrap(), 'Draw')).toEqual(1);
     });
   });

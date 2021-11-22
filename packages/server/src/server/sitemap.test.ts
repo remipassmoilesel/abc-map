@@ -21,11 +21,9 @@ import { assert } from 'chai';
 
 describe('sitemap', () => {
   it('should return correct sitemap', () => {
-    const sitemap = generateSitemap('http://domain.fr', [Language.English, Language.French]);
+    const actual = generateSitemap('http://domain.fr', [Language.English, Language.French]);
 
-    assert.equal(
-      sitemap.replace(/\s/gi, ''),
-      `
+    const expected = `
       <?xml version="1.0" encoding="UTF-8"?>
       <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
 
@@ -33,20 +31,18 @@ describe('sitemap', () => {
           <loc>http://domain.fr/</loc>
           <xhtml:link rel="alternate" hreflang="en" href="http://domain.fr/?lng=en"/>
           <xhtml:link rel="alternate" hreflang="fr" href="http://domain.fr/?lng=fr"/>
-          <xhtml:link rel="alternate" hreflang="en" href="http://domain.fr/"/>
           <xhtml:link rel="alternate" hreflang="x-default" href="http://domain.fr/"/>
-          <lastmod>2021-10-16</lastmod>
+          <lastmod>0000-00-00</lastmod>
           <changefreq>monthly</changefreq>
-          <priority>1</priority>
+          <priority>1.0</priority>
         </url>
 
         <url>
           <loc>http://domain.fr/documentation</loc>
           <xhtml:link rel="alternate" hreflang="en" href="http://domain.fr/documentation?lng=en"/>
           <xhtml:link rel="alternate" hreflang="fr" href="http://domain.fr/documentation?lng=fr"/>
-          <xhtml:link rel="alternate" hreflang="en" href="http://domain.fr/documentation"/>
           <xhtml:link rel="alternate" hreflang="x-default" href="http://domain.fr/documentation"/>
-          <lastmod>2021-10-16</lastmod>
+          <lastmod>0000-00-00</lastmod>
           <changefreq>monthly</changefreq>
           <priority>0.9</priority>
         </url>
@@ -55,9 +51,8 @@ describe('sitemap', () => {
           <loc>http://domain.fr/funding</loc>
           <xhtml:link rel="alternate" hreflang="en" href="http://domain.fr/funding?lng=en"/>
           <xhtml:link rel="alternate" hreflang="fr" href="http://domain.fr/funding?lng=fr"/>
-          <xhtml:link rel="alternate" hreflang="en" href="http://domain.fr/funding"/>
           <xhtml:link rel="alternate" hreflang="x-default" href="http://domain.fr/funding"/>
-          <lastmod>2021-10-16</lastmod>
+          <lastmod>0000-00-00</lastmod>
           <changefreq>monthly</changefreq>
           <priority>0.8</priority>
         </url>
@@ -66,20 +61,18 @@ describe('sitemap', () => {
           <loc>http://domain.fr/map</loc>
           <xhtml:link rel="alternate" hreflang="en" href="http://domain.fr/map?lng=en"/>
           <xhtml:link rel="alternate" hreflang="fr" href="http://domain.fr/map?lng=fr"/>
-          <xhtml:link rel="alternate" hreflang="en" href="http://domain.fr/map"/>
           <xhtml:link rel="alternate" hreflang="x-default" href="http://domain.fr/map"/>
-          <lastmod>2021-10-16</lastmod>
+          <lastmod>0000-00-00</lastmod>
           <changefreq>monthly</changefreq>
           <priority>0.8</priority>
         </url>
 
         <url>
-          <loc>http://domain.fr/datastore</loc>
-          <xhtml:link rel="alternate" hreflang="en" href="http://domain.fr/datastore?lng=en"/>
-          <xhtml:link rel="alternate" hreflang="fr" href="http://domain.fr/datastore?lng=fr"/>
-          <xhtml:link rel="alternate" hreflang="en" href="http://domain.fr/datastore"/>
-          <xhtml:link rel="alternate" hreflang="x-default" href="http://domain.fr/datastore"/>
-          <lastmod>2021-10-16</lastmod>
+          <loc>http://domain.fr/legal-mentions</loc>
+          <xhtml:link rel="alternate" hreflang="en" href="http://domain.fr/legal-mentions?lng=en"/>
+          <xhtml:link rel="alternate" hreflang="fr" href="http://domain.fr/legal-mentions?lng=fr"/>
+          <xhtml:link rel="alternate" hreflang="x-default" href="http://domain.fr/legal-mentions"/>
+          <lastmod>0000-00-00</lastmod>
           <changefreq>monthly</changefreq>
           <priority>0.7</priority>
         </url>
@@ -88,9 +81,8 @@ describe('sitemap', () => {
           <loc>http://domain.fr/datastore</loc>
           <xhtml:link rel="alternate" hreflang="en" href="http://domain.fr/datastore?lng=en"/>
           <xhtml:link rel="alternate" hreflang="fr" href="http://domain.fr/datastore?lng=fr"/>
-          <xhtml:link rel="alternate" hreflang="en" href="http://domain.fr/datastore"/>
           <xhtml:link rel="alternate" hreflang="x-default" href="http://domain.fr/datastore"/>
-          <lastmod>2021-10-16</lastmod>
+          <lastmod>0000-00-00</lastmod>
           <changefreq>monthly</changefreq>
           <priority>0.6</priority>
         </url>
@@ -99,26 +91,22 @@ describe('sitemap', () => {
           <loc>http://domain.fr/layout</loc>
           <xhtml:link rel="alternate" hreflang="en" href="http://domain.fr/layout?lng=en"/>
           <xhtml:link rel="alternate" hreflang="fr" href="http://domain.fr/layout?lng=fr"/>
-          <xhtml:link rel="alternate" hreflang="en" href="http://domain.fr/layout"/>
           <xhtml:link rel="alternate" hreflang="x-default" href="http://domain.fr/layout"/>
-          <lastmod>2021-10-16</lastmod>
+          <lastmod>0000-00-00</lastmod>
           <changefreq>monthly</changefreq>
           <priority>0.5</priority>
         </url>
 
-        <url>
-          <loc>http://domain.fr/legal-mentions</loc>
-          <xhtml:link rel="alternate" hreflang="en" href="http://domain.fr/legal-mentions?lng=en"/>
-          <xhtml:link rel="alternate" hreflang="fr" href="http://domain.fr/legal-mentions?lng=fr"/>
-          <xhtml:link rel="alternate" hreflang="en" href="http://domain.fr/legal-mentions"/>
-          <xhtml:link rel="alternate" hreflang="x-default" href="http://domain.fr/legal-mentions"/>
-          <lastmod>2021-10-16</lastmod>
-          <changefreq>monthly</changefreq>
-          <priority>0.2</priority>
-        </url>
-
       </urlset>
-    `.replace(/\s/gi, '')
+    `;
+
+    assert.equal(
+      // We remove blank chars
+      actual
+        .replace(/\s/gi, '')
+        // We replace last modification date
+        .replace(/<lastmod>[0-9]{4}-[0-9]{2}-[0-9]{2}<\/lastmod>/gi, '<lastmod>0000-00-00</lastmod>'),
+      expected.replace(/\s/gi, '')
     );
   });
 });

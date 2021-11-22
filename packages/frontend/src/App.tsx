@@ -18,7 +18,7 @@
 
 import React, { Component, ReactNode } from 'react';
 import { Route, RouteComponentProps, Switch, withRouter } from 'react-router-dom';
-import { FrontendRoutes, getAbcWindow, isLangSupported, Language } from '@abc-map/shared';
+import { FrontendRoutes, getAbcWindow } from '@abc-map/shared';
 import MapView from './views/map/MapView';
 import { ToastContainer } from 'react-toastify';
 import LandingView from './views/landing/LandingView';
@@ -47,7 +47,7 @@ import LegalMentionsView from './views/legal-mentions/LegalMentionsView';
 import LongOperationModal from './components/long-operation-modal/LongOperationModal';
 import FundingView from './views/funding/FundingView';
 import ConfirmationModal from './components/confirmation-modal/ConfirmationModal';
-import { prefixedTranslation, setLang } from './i18n/i18n';
+import { prefixedTranslation } from './i18n/i18n';
 import { withTranslation } from 'react-i18next';
 
 type Props = ServiceProps & RouteComponentProps;
@@ -74,7 +74,7 @@ class App extends Component<Props, {}> {
           <Route exact path={FrontendRoutes.funding().raw()} component={FundingView} />
           <Route path={'*'} component={NotFoundView} />
         </Switch>
-        <ToastContainer className={'toast-container'} />
+        <ToastContainer className={'abc-toast-container'} />
         <PasswordInputModal />
         <SetPasswordModal />
         <DeviceWarningModal />
@@ -100,13 +100,6 @@ class App extends Component<Props, {}> {
     }
 
     getAbcWindow().abc.goTo = this.goTo;
-    getAbcWindow().abc.setLang = (lang) => {
-      if (!isLangSupported(lang)) {
-        throw new Error(`Unknown lang: ${lang}`);
-      }
-
-      return setLang(lang as Language);
-    };
   }
 
   public componentWillUnmount() {

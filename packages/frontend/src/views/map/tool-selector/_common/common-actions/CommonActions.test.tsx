@@ -18,7 +18,7 @@
 import { newTestServices, TestServices } from '../../../../../core/utils/test/TestServices';
 import { abcRender } from '../../../../../core/utils/test/abcRender';
 import CommonActions from './CommonActions';
-import { screen } from '@testing-library/react';
+import { act, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { LayerFactory } from '../../../../../core/geo/layers/LayerFactory';
 import { MapFactory } from '../../../../../core/geo/map/MapFactory';
@@ -29,6 +29,7 @@ import { VectorLayerWrapper } from '../../../../../core/geo/layers/LayerWrapper'
 import { FillPatterns } from '@abc-map/shared';
 import { MainState } from '../../../../../core/store/reducer';
 import { IconName } from '../../../../../assets/point-icons/IconName';
+import { TestHelper } from '../../../../../core/utils/test/TestHelper';
 
 describe('CommonActions', () => {
   let fPoint: FeatureWrapper;
@@ -92,13 +93,16 @@ describe('CommonActions', () => {
   });
 
   describe('Apply style', () => {
-    it('on point with text', () => {
+    it('on point with text', async () => {
       // Prepare
       abcRender(<CommonActions />, { services, state });
       fPoint.setText('Hey !');
 
       // Act
-      userEvent.click(screen.getByTestId('apply-style'));
+      await act(async () => {
+        userEvent.click(screen.getByTestId('apply-style'));
+        await TestHelper.wait(0); // We wait for overlay
+      });
       const style = services.geo.updateSelectedFeatures.args[0][0](fPoint.getStyleProperties(), fPoint);
 
       // Assert
@@ -123,12 +127,15 @@ describe('CommonActions', () => {
       });
     });
 
-    it('on point without text', () => {
+    it('on point without text', async () => {
       // Prepare
       abcRender(<CommonActions />, { services, state });
 
       // Act
-      userEvent.click(screen.getByTestId('apply-style'));
+      await act(async () => {
+        userEvent.click(screen.getByTestId('apply-style'));
+        await TestHelper.wait(0); // We wait for overlay
+      });
       const style = services.geo.updateSelectedFeatures.args[0][0](fPoint.getStyleProperties(), fPoint);
 
       // Assert
@@ -141,12 +148,15 @@ describe('CommonActions', () => {
       });
     });
 
-    it('on line', () => {
+    it('on line', async () => {
       // Prepare
       abcRender(<CommonActions />, { services, state });
 
       // Act
-      userEvent.click(screen.getByTestId('apply-style'));
+      await act(async () => {
+        userEvent.click(screen.getByTestId('apply-style'));
+        await TestHelper.wait(0); // We wait for overlay
+      });
       const style = services.geo.updateSelectedFeatures.args[0][0](fPoint.getStyleProperties(), fLine);
 
       // Assert
@@ -158,12 +168,15 @@ describe('CommonActions', () => {
       });
     });
 
-    it('on polygon', () => {
+    it('on polygon', async () => {
       // Prepare
       abcRender(<CommonActions />, { services, state });
 
       // Act
-      userEvent.click(screen.getByTestId('apply-style'));
+      await act(async () => {
+        userEvent.click(screen.getByTestId('apply-style'));
+        await TestHelper.wait(0); // We wait for overlay
+      });
       const style = services.geo.updateSelectedFeatures.args[0][0](fPoint.getStyleProperties(), fPolygon);
 
       // Assert
@@ -180,7 +193,7 @@ describe('CommonActions', () => {
     });
   });
 
-  it('Duplicate selection', () => {
+  it('Duplicate selection', async () => {
     // Prepare
     abcRender(<CommonActions />, { services, state });
 
@@ -188,7 +201,10 @@ describe('CommonActions', () => {
     fPoint.setStyleProperties(style);
 
     // Act
-    userEvent.click(screen.getByTestId('duplicate-selection'));
+    await act(async () => {
+      userEvent.click(screen.getByTestId('duplicate-selection'));
+      await TestHelper.wait(0); // We wait for overlay
+    });
 
     // Assert
     const features = layer
@@ -204,12 +220,15 @@ describe('CommonActions', () => {
     expect(services.history.register.callCount).toEqual(1);
   });
 
-  it('Delete features', () => {
+  it('Delete features', async () => {
     // Prepare
     abcRender(<CommonActions />, { services, state });
 
     // Act
-    userEvent.click(screen.getByTestId('delete-features'));
+    await act(async () => {
+      userEvent.click(screen.getByTestId('delete-features'));
+      await TestHelper.wait(0); // We wait for overlay
+    });
 
     // Assert
     const features = layer
@@ -222,28 +241,34 @@ describe('CommonActions', () => {
     expect(services.history.register.callCount).toEqual(1);
   });
 
-  it('Move features behind', () => {
+  it('Move features behind', async () => {
     // Prepare
     abcRender(<CommonActions />, { services, state });
 
     fPoint.setStyleProperties({ ...fPoint.getStyleProperties(), zIndex: 5 });
 
     // Act
-    userEvent.click(screen.getByTestId('move-features-behind'));
+    await act(async () => {
+      userEvent.click(screen.getByTestId('move-features-behind'));
+      await TestHelper.wait(0); // We wait for overlay
+    });
     const style = services.geo.updateSelectedFeatures.args[0][0](fPoint.getStyleProperties(), fPoint);
 
     // Assert
     expect(style?.zIndex).toEqual(4);
   });
 
-  it('Move features forward', () => {
+  it('Move features forward', async () => {
     // Prepare
     abcRender(<CommonActions />, { services });
 
     fPoint.setStyleProperties({ ...fPoint.getStyleProperties(), zIndex: 5 });
 
     // Act
-    userEvent.click(screen.getByTestId('move-features-forward'));
+    await act(async () => {
+      userEvent.click(screen.getByTestId('move-features-forward'));
+      await TestHelper.wait(0); // We wait for overlay
+    });
     const style = services.geo.updateSelectedFeatures.args[0][0](fPoint.getStyleProperties(), fPoint);
 
     // Assert

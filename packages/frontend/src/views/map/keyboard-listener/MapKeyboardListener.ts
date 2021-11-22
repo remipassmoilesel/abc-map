@@ -35,11 +35,11 @@ export class MapKeyboardListener {
   constructor(private services: Services) {}
 
   public initialize(): void {
-    document.body.addEventListener('keypress', this.handleKeyPress);
+    document.addEventListener('keyup', this.handleKeyPress);
   }
 
   public destroy(): void {
-    document.body.removeEventListener('keypress', this.handleKeyPress);
+    document.removeEventListener('keyup', this.handleKeyPress);
   }
 
   /**
@@ -83,7 +83,10 @@ export class MapKeyboardListener {
       return;
     }
 
-    features.forEach((f) => layer.getSource().removeFeature(f.unwrap()));
+    features.forEach((f) => {
+      f.setSelected(false);
+      layer.getSource().removeFeature(f.unwrap());
+    });
     history.register(HistoryKey.Map, new RemoveFeaturesTask(layer.getSource(), features));
   }
 

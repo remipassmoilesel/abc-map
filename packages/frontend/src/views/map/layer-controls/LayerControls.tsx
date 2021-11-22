@@ -30,6 +30,7 @@ import Cls from './LayerControls.module.scss';
 import { prefixedTranslation } from '../../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
 import * as _ from 'lodash';
+import { WithTooltip } from '../../../components/with-tooltip/WithTooltip';
 
 const logger = Logger.get('LayerControls.tsx');
 
@@ -87,21 +88,31 @@ class LayerControls extends Component<Props, State> {
         {/* Controls */}
         <div className={`control-item`}>
           <div className={Cls.buttonBar}>
-            <button onClick={this.handleEditLayer} className={'btn btn-link'} title={t('Edit_layer')} data-cy={'edit-layer'}>
-              <i className={'fa fa-edit'} />
-            </button>
-            <button onClick={this.handleZoom} className={'btn btn-link'} title={t('Zoom_on_layer')}>
-              <i className={'fa fa-search-plus'} />
-            </button>
-            <button onClick={this.handleRemoveActive} className={'btn btn-link'} title={t('Delete_active_layer')} data-cy={'delete-layer'}>
-              <i className={'fa fa-trash'} />
-            </button>
-            <button onClick={this.handleLayerBack} className={'btn btn-link'} title={t('Move_back')}>
-              <i className={'fa fa-arrow-up'} />
-            </button>
-            <button onClick={this.handleLayerForward} className={'btn btn-link'} title={t('Move_forward')}>
-              <i className={'fa fa-arrow-down'} />
-            </button>
+            <WithTooltip title={t('Edit_layer')}>
+              <button onClick={this.handleEditLayer} className={'btn btn-link'} data-cy={'edit-layer'}>
+                <i className={'fa fa-edit'} />
+              </button>
+            </WithTooltip>
+            <WithTooltip title={t('Zoom_on_layer')}>
+              <button onClick={this.handleZoom} className={'btn btn-link'}>
+                <i className={'fa fa-search-plus'} />
+              </button>
+            </WithTooltip>
+            <WithTooltip title={t('Delete_active_layer')}>
+              <button onClick={this.handleRemoveActive} className={'btn btn-link'} data-cy={'delete-layer'}>
+                <i className={'fa fa-trash'} />
+              </button>
+            </WithTooltip>
+            <WithTooltip title={t('Move_back')}>
+              <button onClick={this.handleLayerBack} className={'btn btn-link'} title={t('Move_back')}>
+                <i className={'fa fa-arrow-up'} />
+              </button>
+            </WithTooltip>
+            <WithTooltip title={t('Move_forward')}>
+              <button onClick={this.handleLayerForward} className={'btn btn-link'}>
+                <i className={'fa fa-arrow-down'} />
+              </button>
+            </WithTooltip>
           </div>
         </div>
 

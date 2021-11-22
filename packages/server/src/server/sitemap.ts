@@ -22,57 +22,51 @@ export interface Url {
   loc: string;
   lastmod: string;
   changefreq: 'monthly';
-  priority: number;
+  priority: string;
 }
 
 export const Sitemap: Url[] = [
   {
     loc: FrontendRoutes.landing().raw(),
     changefreq: 'monthly',
-    lastmod: '2021-10-16',
-    priority: 1,
+    lastmod: '2021-11-15',
+    priority: '1.0', // decimal needed
   },
   {
     loc: FrontendRoutes.documentation().raw(),
     changefreq: 'monthly',
-    lastmod: '2021-10-16',
-    priority: 0.9,
+    lastmod: '2021-11-15',
+    priority: '0.9',
   },
   {
     loc: FrontendRoutes.funding().raw(),
     changefreq: 'monthly',
-    lastmod: '2021-10-16',
-    priority: 0.8,
+    lastmod: '2021-11-15',
+    priority: '0.8',
   },
   {
     loc: FrontendRoutes.map().raw(),
     changefreq: 'monthly',
-    lastmod: '2021-10-16',
-    priority: 0.8,
-  },
-  {
-    loc: FrontendRoutes.dataStore().raw(),
-    changefreq: 'monthly',
-    lastmod: '2021-10-16',
-    priority: 0.7,
-  },
-  {
-    loc: FrontendRoutes.dataStore().withoutOptionals(),
-    changefreq: 'monthly',
-    lastmod: '2021-10-16',
-    priority: 0.6,
-  },
-  {
-    loc: FrontendRoutes.layout().raw(),
-    changefreq: 'monthly',
-    lastmod: '2021-10-16',
-    priority: 0.5,
+    lastmod: '2021-11-15',
+    priority: '0.8',
   },
   {
     loc: FrontendRoutes.legalMentions().raw(),
     changefreq: 'monthly',
-    lastmod: '2021-10-16',
-    priority: 0.2,
+    lastmod: '2021-11-15',
+    priority: '0.7',
+  },
+  {
+    loc: FrontendRoutes.dataStore().withoutOptionals(),
+    changefreq: 'monthly',
+    lastmod: '2021-11-15',
+    priority: '0.6',
+  },
+  {
+    loc: FrontendRoutes.layout().raw(),
+    changefreq: 'monthly',
+    lastmod: '2021-11-15',
+    priority: '0.5',
   },
 ];
 
@@ -82,7 +76,6 @@ export function generateSitemap(baseUrl: string, languages: Language[]): string 
     const loc = `${baseUrl}${url.loc}`;
 
     const alternates = languages.map((lng) => `<xhtml:link rel="alternate" hreflang="${lng}" href="${loc}?lng=${lng}"/>`);
-    alternates.push(`<xhtml:link rel="alternate" hreflang="en" href="${loc}"/>`);
     alternates.push(`<xhtml:link rel="alternate" hreflang="x-default" href="${loc}"/>`);
 
     return `

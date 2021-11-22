@@ -2,6 +2,16 @@
 
 Presently there are no versions, because it is not yet necessary.
 
+## Tools and UX improvements
+
+- Better code structure
+- Harmonized selection between tools, you can use SHIFT + click with all tools
+- Style update on selection, the last element selected dispatch its style to UI
+- Bootstrap 5 upgrade
+- Better tooltips on tools
+- Light background for text
+- Cache for frontend and static assets
+
 ## First UX/UI improvements (22357c6f 09/11/2021)
 
 Based on the work of @redroseven (see https://gitlab.com/abc-map/ux/-/tree/master/part1/sketches), first UX/UI
