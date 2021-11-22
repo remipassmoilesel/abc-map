@@ -16,14 +16,30 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { toleranceFromStyle } from './toleranceFromStyle';
-import { FeatureWrapper } from '../../geo/features/FeatureWrapper';
-import Point from 'ol/geom/Point';
+import { Task } from '../../Task';
+import { Logger } from '@abc-map/shared';
 
-describe('toleranceFromStyle()', () => {
-  it('should return correct value', () => {
-    const feature = FeatureWrapper.create(new Point([1, 1]));
-    feature.setStyleProperties({ point: { size: 8 }, stroke: { width: 6 } });
-    expect(toleranceFromStyle(feature.unwrap(), 2)).toEqual(14);
-  });
-});
+export const logger = Logger.get('UndoCallbackTask');
+
+export class UndoCallbackTask extends Task {
+  constructor(public onUndo: (() => void) | undefined) {
+    super();
+  }
+
+  public async undo(): Promise<void> {
+    if (!this.onUndo) {
+      logger.warn('No callback to execute');
+      return;
+    }
+
+    this.onUndo();
+  }
+
+  public async redo(): Promise<void> {
+    return;
+  }
+
+  public async dispose(): Promise<void> {
+    this.onUndo = undefined;
+  }
+}

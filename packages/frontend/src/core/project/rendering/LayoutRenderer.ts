@@ -19,7 +19,7 @@
 import { MapWrapper } from '../../geo/map/MapWrapper';
 import { LayoutHelper } from '../LayoutHelper';
 import View from 'ol/View';
-import { AbcLegend, BlobIO, Logger } from '@abc-map/shared';
+import { AbcLegend, BlobIO, LegendDisplay, Logger } from '@abc-map/shared';
 import { AbcFile, AbcLayout, Zipper } from '@abc-map/shared';
 import { MapFactory } from '../../geo/map/MapFactory';
 import { jsPDF } from 'jspdf';
@@ -159,8 +159,12 @@ export class LayoutRenderer {
           ctx.drawImage(attributionCanvas, attrPosition.x, attrPosition.y);
         };
 
-        // LegendRedering
+        // Legend rendering
         const renderLegend = async () => {
+          if (LegendDisplay.Hidden === legend.display) {
+            return;
+          }
+
           // Render legend
           legendCanvas.width = legend.width * styleRatio;
           legendCanvas.height = legend.height * styleRatio;
@@ -168,8 +172,10 @@ export class LayoutRenderer {
 
           const position = this.legendRenderer.getLegendPosition(legend, legendCanvas, exportCanvas);
           if (!position) {
-            throw new Error(`Unhandled legend display: ${legend.display}`);
+            logger.error('Unhandled legend display: ', legend);
+            return;
           }
+
           ctx.drawImage(legendCanvas, position.x, position.y);
         };
 

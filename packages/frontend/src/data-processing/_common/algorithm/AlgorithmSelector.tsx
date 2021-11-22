@@ -52,7 +52,7 @@ class AlgorithmSelector extends Component<Props, {}> {
           {label}
         </label>
         <TipBubble id={tip} />
-        <select value={value} onChange={this.handleAlgorithmChange} className={'form-control'} id={'algorithm'}>
+        <select value={value} onChange={this.handleAlgorithmChange} className={'form-select'} id={'algorithm'}>
           <option value={undefined}>{t('Choose_algorithm')}</option>
           {options}
         </select>

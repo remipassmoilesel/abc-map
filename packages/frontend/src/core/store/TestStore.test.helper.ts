@@ -16,13 +16,26 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Geometry } from 'ol/geom';
-import Feature from 'ol/Feature';
-import { FeatureWrapper } from '../../geo/features/FeatureWrapper';
+import sinon, { SinonStub } from 'sinon';
+import { MainState } from './reducer';
 
-export function toleranceFromStyle(feature: Feature<Geometry>, resolution: number): number {
-  const styleProps = FeatureWrapper.from(feature).getStyleProperties();
-  const pointSize = (styleProps.point?.size || 0) / 2;
-  const strokeWidth = (styleProps.stroke?.width || 0) / 2;
-  return (pointSize + strokeWidth) * resolution;
+export interface TestStore {
+  subscribe: SinonStub<[() => void], Function>;
+  dispatch: SinonStub<[any], void>;
+  getState: SinonStub<[], MainState>;
+  _unsubscribe: SinonStub<[], void>;
+}
+
+export function newTestStore(): TestStore {
+  const _unsubscribe = sinon.stub<[], void>();
+
+  const subscribe = sinon.stub<[() => void], Function>();
+  subscribe.returns(_unsubscribe);
+
+  return {
+    subscribe,
+    dispatch: sinon.stub(),
+    getState: sinon.stub(),
+    _unsubscribe,
+  };
 }

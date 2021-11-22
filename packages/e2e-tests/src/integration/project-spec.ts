@@ -29,6 +29,7 @@ import { Registration } from '../helpers/Registration';
 import { Authentication } from '../helpers/Authentication';
 import * as uuid from 'uuid-random';
 import 'cypress-file-upload';
+import { LongOperation } from '../helpers/LongOperation';
 
 const PROJECT_PASSWORD = 'azerty1234';
 
@@ -44,7 +45,7 @@ describe('Project', function () {
         .click()
         .get('[data-cy=confirmation-confirm]')
         .click()
-        .then(() => Toasts.assertText('Nouveau projet créé'))
+        .then(() => Toasts.assertText('New project !'))
         .then(() => MainMap.getReference())
         .should((map) => {
           const layers = map.getLayersMetadata();
@@ -74,7 +75,7 @@ describe('Project', function () {
       cy.visit(FrontendRoutes.map().raw())
         .get('[data-cy=export-project]')
         .click()
-        .then(() => Toasts.assertText('Export done !'))
+        .then(() => LongOperation.done())
         .then(() => Download.fileAsBlob())
         .should(async (downloaded) => {
           const helper = ProjectHelper.forFrontend();

@@ -71,7 +71,7 @@ class SymbolConfigForm extends Component<Props, {}> {
           <label htmlFor="symbol" className={'flex-grow-1'}>
             {t('Color')}:
           </label>
-          <ColorPicker initialValue={values.color} onClose={this.handleColorChange} />
+          <ColorPicker value={values.color} onClose={this.handleColorChange} />
         </FormLine>
 
         <FormLine>

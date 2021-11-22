@@ -33,8 +33,6 @@ describe('Text', () => {
     const text = new TextTool(store, history);
     text.setup(map, source);
 
-    expect(text.getMap()).toStrictEqual(map);
-    expect(text.getSource()).toStrictEqual(source);
     const interactions = TestHelper.interactionNames(map);
     expect(interactions).toContain('TextInteraction');
   });

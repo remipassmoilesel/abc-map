@@ -19,7 +19,7 @@
 import { AbcLayer, BasicAuthentication, EPSG_4326, FeatureStyle, LayerType, Logger, normalizedProjectionName, ProjectionDto } from '@abc-map/shared';
 import { MapWrapper } from './map/MapWrapper';
 import { MapFactory } from './map/MapFactory';
-import { AbstractTool } from '../tools/AbstractTool';
+import { Tool } from '../tools/Tool';
 import { MainStore } from '../store/store';
 import { MapActions } from '../store/map/actions';
 import { AxiosInstance } from 'axios';
@@ -154,7 +154,7 @@ export class GeoService {
     return layer;
   }
 
-  public setMainTool(tool: AbstractTool): void {
+  public setMainMapTool(tool: Tool): void {
     this.getMainMap().setTool(tool);
     this.store.dispatch(MapActions.setTool(tool.getId()));
   }
@@ -316,5 +316,14 @@ export class GeoService {
     const extent = transformExtent(worldExtent, EPSG_4326.name, _code, 8);
     proj.setExtent(extent);
     return extent;
+  }
+
+  public deselectAllFeatures(): number {
+    const features = this.getMainMap().getSelectedFeatures();
+    features.forEach((f) => f.setSelected(false));
+
+    this.getMainMap().getTool()?.deselectAll();
+
+    return features.length;
   }
 }

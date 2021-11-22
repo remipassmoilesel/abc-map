@@ -22,7 +22,6 @@ import { SinonStubbedInstance } from 'sinon';
 import { ModalService } from '../../ui/ModalService';
 import { HistoryService } from '../../history/HistoryService';
 import { Map } from 'ol';
-import VectorSource from 'ol/source/Vector';
 import { ModalEventType, ModalStatus } from '../../ui/typings';
 import Feature from 'ol/Feature';
 import { Point } from 'ol/geom';
@@ -35,7 +34,6 @@ import Geometry from 'ol/geom/Geometry';
 
 describe('EditPropertiesTool', () => {
   let map: SinonStubbedInstance<Map>;
-  let source: SinonStubbedInstance<VectorSource>;
   let modals: SinonStubbedInstance<ModalService>;
   let history: SinonStubbedInstance<HistoryService>;
   let interaction: Select;
@@ -45,12 +43,11 @@ describe('EditPropertiesTool', () => {
     modals = sinon.createStubInstance(ModalService);
     history = sinon.createStubInstance(HistoryService);
     map = sinon.createStubInstance(Map);
-    source = sinon.createStubInstance(VectorSource);
     interaction = new Select();
     const factory = () => interaction;
 
     tool = new EditPropertiesTool({} as any, history as unknown as HistoryService, modals as unknown as ModalService, factory);
-    tool.setup(map as unknown as Map, source as unknown as VectorSource);
+    tool.setup(map as unknown as Map);
   });
 
   it('should do nothing on cancel', async () => {

@@ -16,8 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { toast } from 'react-toastify';
-import { ToastOptions } from 'react-toastify/dist/types';
+import { toast, ToastOptions } from 'react-toastify';
 import { AxiosError } from 'axios';
 import { HttpError } from '../http/HttpError';
 import { Logger } from '@abc-map/shared';
@@ -26,11 +25,16 @@ import { prefixedTranslation } from '../../i18n/i18n';
 const logger = Logger.get('ToastService');
 
 const defaultOptions: ToastOptions = {
-  position: 'bottom-right',
-  autoClose: 5_000,
+  position: 'bottom-center',
+  autoClose: 7_000,
   pauseOnFocusLoss: true,
   hideProgressBar: true,
   className: 'abc-toast',
+  closeOnClick: true,
+  rtl: false,
+  draggable: true,
+  theme: 'colored',
+  icon: false,
 };
 
 const t = prefixedTranslation('core:ToastService.');
@@ -61,7 +65,7 @@ export class ToastService {
 
     // Too many requests
     if (HttpError.isTooManyRequests(err)) {
-      const reset = err.response?.headers['x-ratelimit-reset'] || 0;
+      const reset = parseInt(err.response?.headers['x-ratelimit-reset'] || '0');
       if (reset) {
         const minutes = Math.round(reset / 60);
         this.error(t(`You_have_exceeded_the_number_of_requests_allowed_try_agin_in_XX_min`, { minutes }));

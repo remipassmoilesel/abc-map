@@ -25,15 +25,15 @@ import { FeatureWrapper } from '../features/FeatureWrapper';
 
 export const logger = Logger.get('SelectionStyleFactory.ts');
 
-const fillColor = 'rgba(201,211,255,0.33)';
-const strokeColor = '#4671ff';
+const fillColor = 'rgba(0,233,255,0.30)';
+const strokeColor = '#00e9ff';
 const width = 3;
 const zIndex = Infinity;
 
 const strokeDash = new Stroke({
   color: strokeColor,
   width: width,
-  lineCap: 'square',
+  lineCap: 'round',
   lineDash: [5, 10],
 });
 

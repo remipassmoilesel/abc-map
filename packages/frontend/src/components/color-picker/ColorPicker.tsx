@@ -16,10 +16,10 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { Component, ReactNode } from 'react';
-import { ColorResult, RGBColor, SketchPicker } from 'react-color';
+import React, { useCallback, useEffect, useState } from 'react';
+import { ColorResult, SketchPicker } from 'react-color';
 import { Modal } from 'react-bootstrap';
-import { ColorTranslator } from 'colortranslator';
+import { ColorTranslator, RGBObject } from 'colortranslator';
 import { prefixedTranslation } from '../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
 import Cls from './ColorPicker.module.scss';
@@ -27,64 +27,51 @@ import Cls from './ColorPicker.module.scss';
 const { toRGBA } = ColorTranslator;
 
 interface Props {
-  initialValue?: string;
+  value: string;
   onClose: (value: string) => void;
   'data-cy'?: string;
 }
 
-interface State {
-  modalVisible: boolean;
-  value: RGBColor;
-}
-
 const t = prefixedTranslation('ColorSelector:');
 
-class ColorPicker extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      modalVisible: false,
-      value: this.props.initialValue ? toRGBA(this.props.initialValue, false) : { r: 220, g: 220, b: 254, a: 0.9 },
-    };
-  }
+function ColorPicker(props: Props) {
+  const onClose = props.onClose;
+  const dataCy = props['data-cy'];
 
-  public render(): ReactNode {
-    const value = this.state.value;
-    const modalVisible = this.state.modalVisible;
+  const [modal, displayModal] = useState(false);
 
-    return (
-      <>
-        {/* Button, always visible */}
-        <button onClick={this.handleClick} className={Cls.button} type={'button'} style={{ backgroundColor: toRGBA(value) }} data-cy={this.props['data-cy']} />
+  // We use a derived state because we want to call back with value only when modal closes
+  const [value, setValue] = useState<RGBObject>({ r: 220, g: 220, b: 254, a: 0.9 });
+  useEffect(() => {
+    props.value && setValue(toRGBA(props.value, false));
+  }, [props.value]);
 
-        {/* Modal, visible on demand */}
-        <Modal show={modalVisible} onHide={this.handleModalClose} size={'sm'}>
-          <Modal.Header closeButton>{t('Select_a_color')}</Modal.Header>
-          <Modal.Body className={'d-flex justify-content-center'}>
-            <SketchPicker disableAlpha={false} color={value} onChange={this.handleChange} width={'300px'} />
-          </Modal.Body>
-          <Modal.Footer>
-            <button onClick={this.handleModalClose} className={'btn btn-outline-secondary'} data-cy={'close-modal'} data-testid={'close-modal'}>
-              {t('Close')}
-            </button>
-          </Modal.Footer>
-        </Modal>
-      </>
-    );
-  }
+  const handleChange = useCallback((color: ColorResult) => setValue(color.rgb), []);
+  const handleOpenModal = useCallback(() => displayModal(true), []);
+  const handleCloseModal = useCallback(() => {
+    displayModal(false);
+    onClose(toRGBA(value));
+  }, [onClose, value]);
 
-  private handleChange = (color: ColorResult) => {
-    this.setState({ value: color.rgb });
-  };
+  return (
+    <>
+      {/* Button, always visible */}
+      <button onClick={handleOpenModal} className={Cls.button} type={'button'} style={{ backgroundColor: toRGBA(value) }} data-cy={dataCy} />
 
-  private handleClick = () => {
-    this.setState({ modalVisible: true });
-  };
-
-  private handleModalClose = () => {
-    this.setState({ modalVisible: false });
-    this.props.onClose(toRGBA(this.state.value));
-  };
+      {/* Modal, visible on demand */}
+      <Modal show={modal} onHide={handleCloseModal} size={'sm'}>
+        <Modal.Header closeButton>{t('Select_a_color')}</Modal.Header>
+        <Modal.Body className={'d-flex justify-content-center'}>
+          <SketchPicker disableAlpha={false} color={value} onChange={handleChange} width={'300px'} />
+        </Modal.Body>
+        <Modal.Footer>
+          <button onClick={handleCloseModal} className={'btn btn-outline-secondary'} data-cy={'close-modal'} data-testid={'close-modal'}>
+            {t('Close')}
+          </button>
+        </Modal.Footer>
+      </Modal>
+    </>
+  );
 }
 
 export default withTranslation()(ColorPicker);

@@ -16,26 +16,36 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbstractTool } from '../AbstractTool';
-import { MapTool } from '@abc-map/shared';
+import { Tool } from '../Tool';
+import { FeatureStyle, Logger, MapTool } from '@abc-map/shared';
 import VectorSource from 'ol/source/Vector';
 import Geometry from 'ol/geom/Geometry';
 import { Map } from 'ol';
 import Icon from '../../../assets/tool-icons/text.inline.svg';
-import { Logger } from '@abc-map/shared';
 import { TextInteraction } from './TextInteraction';
 import { FeatureWrapper } from '../../geo/features/FeatureWrapper';
 import { HistoryKey } from '../../history/HistoryKey';
 import { UpdateStyleTask } from '../../history/tasks/features/UpdateStyleTask';
-import { FeatureStyle } from '@abc-map/shared';
 import GeometryType from 'ol/geom/GeometryType';
-import { TextEvent, TextChanged, TextEnd, TextStart } from './TextInteractionEvents';
-import { defaultInteractions } from '../../geo/map/interactions';
+import { TextChanged, TextEnd, TextEvent, TextStart } from './TextInteractionEvents';
+import { Interaction } from 'ol/interaction';
+import { MainStore } from '../../store/store';
+import { HistoryService } from '../../history/HistoryService';
+import { MapActions } from '../../store/map/actions';
+import { SelectionInteractionsBundle } from '../common/interactions/SelectionInteractionsBundle';
+import { AllSupportedGeometries } from '../common/interactions/SupportedGeometry';
+import { MoveInteractionsBundle } from '../common/interactions/MoveInteractionsBundle';
 
 const logger = Logger.get('TextTool.ts');
 
-export class TextTool extends AbstractTool {
-  private previousFeature: FeatureWrapper | undefined;
+export class TextTool implements Tool {
+  private map?: Map;
+  private source?: VectorSource<Geometry>;
+  private move?: MoveInteractionsBundle;
+  private selection?: SelectionInteractionsBundle;
+  private interactions: Interaction[] = [];
+
+  constructor(private store: MainStore, private history: HistoryService) {}
 
   public getId(): MapTool {
     return MapTool.Text;
@@ -49,25 +59,32 @@ export class TextTool extends AbstractTool {
     return 'Text';
   }
 
-  protected setupInternal(map: Map, source: VectorSource<Geometry>): void {
-    // Interactions for map view manipulation
-    const defaults = defaultInteractions();
-    defaults.forEach((i) => map.addInteraction(i));
-    this.interactions.push(...defaults);
+  public setup(map: Map, source: VectorSource<Geometry>): void {
+    this.map = map;
+    this.source = source;
 
+    // Interactions for map view manipulation
+    this.move = new MoveInteractionsBundle();
+    this.move.setup(map);
+
+    // Select on shift + click
+    this.selection = new SelectionInteractionsBundle();
+    this.selection.setup(map, source, AllSupportedGeometries);
+    this.selection.onStyleSelected = (style) => this.store.dispatch(MapActions.setDrawingStyle({ text: style.text }));
+
+    // Edit text
     const text = new TextInteraction({ source });
 
     let before: FeatureStyle | undefined;
     text.on(TextEvent.Start, (ev: TextStart) => {
       const feature = FeatureWrapper.from(ev.feature);
 
-      // Select feature
-      this.previousFeature?.setSelected(false);
-      feature.setSelected(true);
-
-      // Apply style
-      const currentStyle = this.store.getState().map.currentStyle;
+      // Dispatch style
       const style = feature.getStyleProperties();
+      this.store.dispatch(MapActions.setDrawingStyle({ text: style.text }));
+
+      // Apply style to feature
+      const currentStyle = this.store.getState().map.currentStyle;
       style.text = {
         ...style.text,
         color: currentStyle.text?.color,
@@ -85,7 +102,6 @@ export class TextTool extends AbstractTool {
 
       feature.setStyleProperties(style);
       before = style;
-      this.previousFeature = feature;
     });
 
     text.on(TextEvent.Changed, (ev: TextChanged) => {
@@ -109,7 +125,19 @@ export class TextTool extends AbstractTool {
     this.interactions.push(text);
   }
 
-  protected disposeInternal() {
-    this.previousFeature?.setSelected(false);
+  public deselectAll() {
+    this.selection?.clear();
+  }
+
+  public dispose() {
+    this.deselectAll();
+
+    this.move?.dispose();
+    this.selection?.dispose();
+
+    this.interactions.forEach((inter) => {
+      this.map?.removeInteraction(inter);
+      inter.dispose();
+    });
   }
 }

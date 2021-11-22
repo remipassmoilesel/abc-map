@@ -16,15 +16,15 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, useCallback } from 'react';
 import { MapActions } from '../../../../../core/store/map/actions';
 import ColorPicker from '../../../../../components/color-picker/ColorPicker';
-import * as _ from 'lodash';
 import OptionRow from '../option-row/OptionRow';
 import { prefixedTranslation } from '../../../../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '../../../../../core/store/hooks';
 import { useServices } from '../../../../../core/hooks';
+import { useDebouncedStyleTransform } from '../../../../../core/geo/useDebouncedStyleTransform';
 import Cls from './TextFormat.module.scss';
 
 const t = prefixedTranslation('MapView:ToolSelector.');
@@ -40,89 +40,88 @@ function TextFormat() {
 
   const dispatch = useAppDispatch();
 
-  const handleColorSelected = (color: string): void => {
-    dispatch(MapActions.setTextColor(color));
+  const styleTransform = useDebouncedStyleTransform();
 
-    geo.updateSelectedFeatures((style) => ({
-      ...style,
-      text: { ...style.text, color },
-    }));
-  };
+  const handleColorSelected = useCallback(
+    (color: string): void => {
+      dispatch(MapActions.setTextColor(color));
+      geo.updateSelectedFeatures((style) => ({ ...style, text: { ...style.text, color } }));
+    },
+    [dispatch, geo]
+  );
 
-  const handleSizeChange = (ev: ChangeEvent<HTMLSelectElement>): void => {
-    const size = parseInt(ev.target.value);
-    if (isNaN(size)) {
-      return;
-    }
+  const handleSizeChange = useCallback(
+    (ev: ChangeEvent<HTMLInputElement>): void => {
+      const value = parseInt(ev.target.value);
+      if (isNaN(value)) {
+        return;
+      }
 
-    dispatch(MapActions.setTextSize(size));
+      dispatch(MapActions.setTextSize(value));
+      styleTransform((style) => ({ ...style, text: { ...style.text, size: value } }));
+    },
+    [dispatch, styleTransform]
+  );
 
-    geo.updateSelectedFeatures((style) => ({
-      ...style,
-      text: { ...style.text, size },
-    }));
-  };
+  const handleOffsetXChange = useCallback(
+    (ev: ChangeEvent<HTMLInputElement>) => {
+      const value = parseInt(ev.target.value);
+      if (isNaN(value)) {
+        return;
+      }
 
-  const handleOffsetXChange = (ev: ChangeEvent<HTMLInputElement>) => {
-    const value = parseInt(ev.target.value);
-    if (isNaN(value)) {
-      return;
-    }
+      dispatch(MapActions.setTextOffsetX(value));
+      styleTransform((style) => ({ ...style, text: { ...style.text, offsetX: value } }));
+    },
+    [styleTransform, dispatch]
+  );
 
-    dispatch(MapActions.setTextOffsetX(value));
+  const handleOffsetYChange = useCallback(
+    (ev: ChangeEvent<HTMLInputElement>) => {
+      const value = parseInt(ev.target.value);
+      if (isNaN(value)) {
+        return;
+      }
 
-    geo.updateSelectedFeatures((style) => ({
-      ...style,
-      text: { ...style.text, offsetX: value },
-    }));
-  };
+      dispatch(MapActions.setTextOffsetY(value));
+      styleTransform((style) => ({ ...style, text: { ...style.text, offsetY: value } }));
+    },
+    [styleTransform, dispatch]
+  );
 
-  const handleOffsetYChange = (ev: ChangeEvent<HTMLInputElement>) => {
-    const value = parseInt(ev.target.value);
-    if (isNaN(value)) {
-      return;
-    }
+  const handleRotationChange = useCallback(
+    (ev: ChangeEvent<HTMLInputElement>) => {
+      const value = parseInt(ev.target.value);
+      if (isNaN(value)) {
+        return;
+      }
 
-    dispatch(MapActions.setTextOffsetY(value));
-
-    geo.updateSelectedFeatures((style) => ({
-      ...style,
-      text: { ...style.text, offsetY: value },
-    }));
-  };
-
-  const handleRotationChange = (ev: ChangeEvent<HTMLInputElement>) => {
-    const value = parseInt(ev.target.value);
-    if (isNaN(value)) {
-      return;
-    }
-
-    dispatch(MapActions.setTextRotation(value));
-
-    geo.updateSelectedFeatures((style) => ({
-      ...style,
-      text: { ...style.text, rotation: value },
-    }));
-  };
+      dispatch(MapActions.setTextRotation(value));
+      styleTransform((style) => ({ ...style, text: { ...style.text, rotation: value } }));
+    },
+    [styleTransform, dispatch]
+  );
 
   return (
     <>
       {/* Color */}
       <OptionRow>
         <div>{t('Color')}:</div>
-        <ColorPicker initialValue={color} onClose={handleColorSelected} />
+        <ColorPicker value={color} onClose={handleColorSelected} />
       </OptionRow>
 
       {/* Size */}
       <OptionRow>
         <div>{t('Size')}:</div>
-        <select onChange={handleSizeChange} value={size} className={`form-control form-control-sm ${Cls.select}`} data-testid={'text-size'}>
-          {_.range(5, 51).map((val) => (
-            <option key={val} value={val}>
-              {val}
-            </option>
-          ))}
-        </select>
+        <input
+          type={'number'}
+          min={'5'}
+          max={'100'}
+          onChange={handleSizeChange}
+          value={size}
+          className={`form-control form-control-sm ${Cls.input}`}
+          data-testid={'text-size'}
+        />
       </OptionRow>
 
       {/* Offset X and Y */}

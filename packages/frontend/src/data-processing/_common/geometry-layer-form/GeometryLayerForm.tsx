@@ -86,7 +86,7 @@ class GeometryLayerForm extends Component<Props, State> {
             value={joinBy}
             onChange={this.handleJoinByChanged}
             id={'geometries-join-by'}
-            className={'form-control'}
+            className={'form-select'}
             data-cy={'geometries-join-by'}
             data-testid={'geometries-join-by'}
           >

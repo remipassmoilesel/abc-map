@@ -39,7 +39,7 @@ class ClassRow extends Component<Props, {}> {
 
     return (
       <div className={`d-flex flex-row my-1 ${Cls.row}`}>
-        <ColorPicker initialValue={gradientClass.color} onClose={this.handleColorChange} />
+        <ColorPicker value={gradientClass.color} onClose={this.handleColorChange} />
         <div className={'mx-3'}>
           {t('From')} <code>{gradientClass.lower}</code> {t('To')} <code>{gradientClass.upper}</code>
         </div>

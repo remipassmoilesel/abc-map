@@ -166,7 +166,13 @@ export class HttpServer {
       void reply.status(200).send();
     });
 
-    void this.app.register(fastifyStatic, { root: this.config.frontendPath, wildcard: false, index: false });
+    void this.app.register(fastifyStatic, {
+      root: this.config.frontendPath,
+      wildcard: false,
+      index: false,
+      etag: true,
+      maxAge: '3d',
+    });
   }
 
   private handleError = (err: FastifyError, request: FastifyRequest, reply: FastifyReply) => {

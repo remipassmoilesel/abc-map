@@ -28,6 +28,11 @@ const moveMapTip = `
 <li><b>To move the map</b> hold <code>CTRL</code> then drag map with your mouse</li>
 `;
 
+const selectTips = `
+<li><b>To select a geometry</b>, hold <code>SHIFT</code> and click on the geometry</li>
+<li><b>To deselect a geometry</b>, hold <code>SHIFT</code> and click on the selected geometry</li>
+`;
+
 export const Tools: Tip[] = [
   {
     id: ToolTips.Point,
@@ -35,7 +40,7 @@ export const Tools: Tip[] = [
               <ul>
                 ${moveMapTip}
                 <li><b>To create a point</b>, click on the map</li>
-                <li><b>To select a point</b>, hold <code>MAJ</code> and click on the point</li>
+                ${selectTips}
                 <li><b>To modify a point</b>, select it, you can then move it with your mouse, or modify its characteristics</li>
                 <li><b>To delete a point</b>, select it and press <code>DELETE</code></li>
                 ${undoRedoTip}
@@ -49,7 +54,7 @@ export const Tools: Tip[] = [
                 ${moveMapTip}
                 <li><b>To create a line</b>, click on the map several times, then double-click
                  to end the line. You can interrupt a drawing by pressing <code>ESCAPE</code></li>
-                <li><b>To select a line</b>, hold <code>MAJ</code> and click on the line</li>
+                ${selectTips}
                 <li><b>To modify a line</b>, select it, you can then create vertices,
                  move vertices, or modify its characteristics</li>
                 <li><b>To delete a line</b>, select it and press <code>DELETE</code></li>
@@ -65,7 +70,7 @@ export const Tools: Tip[] = [
                 ${moveMapTip}
                 <li><b>To create a polygon</b>, click on the map several times, then double-click
                  to complete the polygon. You can interrupt a drawing by pressing <code>ESCAPE</code></li>
-                <li><b>To select a polygon</b>, hold <code>MAJ</code> and click on the polygon</li>
+                ${selectTips}
                 <li><b>To modify a polygon</b>, select it, you can then with your mouse create vertices,
                  move vertices, or modify its characteristics</li>
                 <li><b>To delete a polygon</b>, select it and press <code>DELETE</code></li>
@@ -83,6 +88,7 @@ export const Tools: Tip[] = [
                 <li><b>To add text</b>, click on a geometry. An input control appears, enter your text then click
                     on <code>OK</code></li>
                 <li><b>To edit text</b>, click on a geometry</li>
+                ${selectTips}
                 ${undoRedoTip}
               </ul>
               `,
@@ -93,11 +99,12 @@ export const Tools: Tip[] = [
               <ul>
                 ${moveMapTip}
                 <li><b>To select geometries</b>, draw a rectangle on the map then release</li>
+                <li>You can also hold <code>SHIFT</code> then click on a geometry to select or deselect it</li>
+                <li><b>To move geometries</b>, select them then <code>drag</code> them</li>
+                <li><b>To delete geometries</b>, select them and press <code>DELETE</code></li>
+                <li><b>To duplicate geometries</b>, select them and click on the <code>Duplicate</code> button</li>
                 <li><b>To modify the characteristics of several geometries</b>, select them then use the options panel of
                  the selection tool</li>
-                <li><b>To delete geometries</b>, select them and press <code>DELETE</code></li>
-                <li><b>To duplicate geometries</b>, select them and press the <code>Duplicate</code> button
-                 from the Selection panel</li>
                 ${undoRedoTip}
               </ul>
               `,
@@ -105,12 +112,15 @@ export const Tools: Tip[] = [
   {
     id: ToolTips.EditProperties,
     content: `<h4>Property editing tool</h4>
-              <div class="alert alert-info mt-2 mb-3">The property editing tool is used to edit properties
-                attached to geometries (examples: <code>population</code>, <code>GDP</code>, ...)</div>
+              <div class="alert alert-info mt-2 mb-3">
+                The property editing tool is used to edit properties attached to geometries.
+                <br/> Examples: <code>population</code>, <code>GDP</code>, ...
+              </div>
               <ul>
                 ${moveMapTip}
-                 <li><b>To edit the properties</b> of a geometry, click on a geometry</li>
-                 ${undoRedoTip}
+                <li><b>To edit the properties</b> of a geometry, click on a geometry</li>
+                ${selectTips}
+                ${undoRedoTip}
               </ul>
               `,
   },

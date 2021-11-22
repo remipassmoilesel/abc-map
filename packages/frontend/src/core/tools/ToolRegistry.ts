@@ -16,8 +16,8 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbstractTool } from './AbstractTool';
-import { MoveTool } from './move-tool/MoveTool';
+import { Tool } from './Tool';
+import { MoveTool } from './move/MoveTool';
 import { PointTool } from './point/PointTool';
 import { MapTool } from '@abc-map/shared';
 import { mainStore } from '../store/store';
@@ -29,11 +29,11 @@ import { getServices } from '../Services';
 import { EditPropertiesTool } from './edit-properties/EditPropertiesTool';
 
 export class ToolRegistry {
-  public static getAll(): AbstractTool[] {
+  public static getAll(): Tool[] {
     const history = getServices().history;
     const modals = getServices().modals;
     return [
-      new MoveTool(mainStore, history),
+      new MoveTool(),
       new PointTool(mainStore, history),
       new LineStringTool(mainStore, history),
       new PolygonTool(mainStore, history),
@@ -43,7 +43,7 @@ export class ToolRegistry {
     ];
   }
 
-  public static getById(id: MapTool): AbstractTool {
+  public static getById(id: MapTool): Tool {
     const result = this.getAll().find((tl) => tl.getId() === id);
     if (!result) {
       throw new Error(`Tool not found: ${id}`);

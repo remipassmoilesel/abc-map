@@ -27,8 +27,23 @@ body {
   margin: 0;
 }
 
+a {
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
 button {
   color: $input-color;
+}
+
+.dropdown-item {
+  text-decoration: none;
+  &:hover {
+    text-decoration: none;
+  }
 }
 
 .cursor-pointer {
@@ -45,9 +60,10 @@ button {
 }
 
 .abc-toast {
-  border-radius: 10px;
   font-size: 1.1em;
   min-height: 4em;
+
+  border-radius: $border-radius;
 }
 
 .modal-title {

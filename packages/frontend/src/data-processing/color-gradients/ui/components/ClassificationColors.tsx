@@ -70,15 +70,15 @@ class ClassificationColors extends Component<Props, State> {
       <>
         <FormLine>
           <div className={'flex-grow-1'}>{t('Start_color')}:</div>
-          <ColorPicker initialValue={startColor} onClose={this.handleStartChanged} />
+          <ColorPicker value={startColor} onClose={this.handleStartChanged} />
         </FormLine>
         <FormLine>
           <div className={'flex-grow-1'}>{t('End_color')}:</div>
-          <ColorPicker initialValue={endColor} onClose={this.handleEndChanged} />
+          <ColorPicker value={endColor} onClose={this.handleEndChanged} />
         </FormLine>
         <FormLine>
           <div className={'flex-grow-1'}>{t('Number_of_classes')}:</div>
-          <select className={'form-control'} value={numberOfClasses} onChange={this.handleClassNumberChanged}>
+          <select className={'form-select'} value={numberOfClasses} onChange={this.handleClassNumberChanged}>
             {_.range(3, 11).map((i) => (
               <option key={i} value={i}>
                 {i}

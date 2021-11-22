@@ -28,6 +28,11 @@ const moveMapTip = `
 <li><b>Pour déplacez la carte</b> maintenez <code>CTRL</code> et déplacez la carte avec votre souris</li>
 `;
 
+const selectTips = `
+<li><b>Pour sélectionner une géométrie</b>, maintenez <code>MAJ</code> et cliquez sur la géométrie</li>
+<li><b>Pour désélectionner une géométrie</b>, maintenez <code>MAJ</code> et cliquez sur la géométrie sélectionnée</li>
+`;
+
 export const Tools: Tip[] = [
   {
     id: ToolTips.Point,
@@ -35,7 +40,7 @@ export const Tools: Tip[] = [
               <ul>
                 ${moveMapTip}
                 <li><b>Pour créer un point</b>, cliquez sur la carte</li>
-                <li><b>Pour sélectionner un point</b>, maintenez <code>MAJ</code> et cliquez sur le point</li>
+                ${selectTips}
                 <li><b>Pour modifier un point</b>, sélectionnez-le, vous pouvez ensuite le déplacer avec votre souris,
                     ou modifier ses caractéristiques</li>
                 <li><b>Pour supprimer un point</b>, sélectionnez-le et appuyez sur <code>SUPPR</code></li>
@@ -50,7 +55,7 @@ export const Tools: Tip[] = [
                 ${moveMapTip}
                 <li><b>Pour créer une ligne</b>, cliquez sur la carte à plusieurs reprises, puis double-cliquez
                     pour terminer la ligne. Vous pouvez interrompre un dessin en appuyant <code>ECHAP</code></li>
-                <li><b>Pour sélectionner une ligne</b>, maintenez <code>MAJ</code> et cliquez sur la ligne</li>
+                ${selectTips}
                 <li><b>Pour modifier une ligne</b>, sélectionnez-la, vous pouvez ensuite créer des sommets,
                     déplacer des sommets, ou modifier ses caractéristiques</li>
                 <li><b>Pour supprimer une ligne</b>, sélectionnez-la et appuyez sur <code>SUPPR</code></li>
@@ -67,7 +72,7 @@ export const Tools: Tip[] = [
                 ${moveMapTip}
                 <li><b>Pour créer un polygone</b>, cliquez sur la carte à plusieurs reprises, puis double-cliquez
                     pour terminer le polygone. Vous pouvez interrompre un dessin en appuyant <code>ECHAP</code></li>
-                <li><b>Pour sélectionner un polygone</b>, maintenez <code>MAJ</code> et cliquez sur le polygone</li>
+                ${selectTips}
                 <li><b>Pour modifier un polygone</b>, sélectionnez-le, vous pouvez ensuite avec votre souris créer des sommets,
                     déplacer des sommets, ou modifier ses caractéristiques</li>
                 <li><b>Pour supprimer un polygone</b>, sélectionnez-le et appuyez sur <code>SUPPR</code></li>
@@ -85,6 +90,7 @@ export const Tools: Tip[] = [
                 <li><b>Pour ajouter du texte</b>, cliquez sur une géométrie. Un contrôle de saisie apparaît, saisissez votre
                     texte puis cliquez sur <code>OK</code></li>
                 <li><b>Pour modifier du texte</b>, cliquez sur une géométrie</li>
+                ${selectTips}
                 ${undoRedoTip}
               </ul>
               `,
@@ -95,6 +101,10 @@ export const Tools: Tip[] = [
               <ul>
                 ${moveMapTip}
                 <li><b>Pour sélectionner des géométries</b>, tracez un rectangle sur la carte puis relâchez</li>
+                <li>Vous pouvez aussi maintenir <code>MAJ</code> puis cliquer sur unne géométrie pour la sélectionner / déselectionner</li>
+                <li><b>Pour déplacer des géométries</b>, sélectionnez les puis <code>cliquez-glisser</code> les</li>
+                <li><b>Pour supprimer des géométries</b>, sélectionnez les puis appuyez sur <code>SUPPR</code></li>
+                <li><b>Pour dupliquer des géométries</b>, sélectionnez les puis cliquez sur le bouton <code>Dupliquer</code></li>
                 <li><b>Pour modifier les caractéristiques de plusieurs géométries</b>, sélectionnez-les puis utilisez le panneau d'options de
                     l'outil sélection</li>
                 ${undoRedoTip}
@@ -104,11 +114,13 @@ export const Tools: Tip[] = [
   {
     id: ToolTips.EditProperties,
     content: `<h4>Outil d'édition des propriétés</h4>
-              <div class="alert alert-info mt-2 mb-3">L'outil d'édition des propriétés sert à éditer les propriétés
-                attachées aux géométries (exemples: <code>population</code>, <code>PIB</code>, ...)</div>
+              <div class="alert alert-info mt-2 mb-3">
+                L'outil d'édition des propriétés sert à éditer les propriétés attachées aux géométries.
+                <br/> Exemples: <code>population</code>, <code>PIB</code>, ...</div>
               <ul>
                 ${moveMapTip}
                 <li><b>Pour éditer les propriétés</b> d'une géométrie, cliquez sur une géométrie</li>
+                ${selectTips}
                 ${undoRedoTip}
               </ul>
               `,

@@ -22,7 +22,7 @@ import Feature from 'ol/Feature';
 import VectorSource from 'ol/source/Vector';
 import { toleranceFromStyle } from './toleranceFromStyle';
 import { isCloseTo } from './isCloseTo';
-import { DefaultTolerancePx } from './constants';
+import { DefaultTolerancePx } from '../constants';
 
 export declare type FeatureFilter = (f: Feature<Geometry>) => boolean;
 export const noopFilter: FeatureFilter = () => true;

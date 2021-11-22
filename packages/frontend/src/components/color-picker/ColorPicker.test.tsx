@@ -28,20 +28,20 @@ describe('ColorPicker', () => {
   });
 
   it('should render button with initial value (hex)', () => {
-    abcRender(<ColorPicker initialValue={'#AABBCCDD'} onClose={handleClose} />);
+    abcRender(<ColorPicker value={'#AABBCCDD'} onClose={handleClose} />);
 
     expect(screen.getByRole('button').style.background).toEqual('rgba(170, 187, 204, 0.87)');
   });
 
   it('should render button with initial value (rgba)', () => {
-    abcRender(<ColorPicker initialValue={'rgba(170, 50, 204, 0.87)'} onClose={handleClose} />);
+    abcRender(<ColorPicker value={'rgba(170, 50, 204, 0.87)'} onClose={handleClose} />);
 
     expect(screen.getByRole('button').style.background).toEqual('rgba(170, 50, 204, 0.87)');
   });
 
   it('should open modal and set color value (hex)', async () => {
     // Prepare
-    abcRender(<ColorPicker initialValue={'#AABBCCDD'} onClose={handleClose} />);
+    abcRender(<ColorPicker value={'#AABBCCDD'} onClose={handleClose} />);
 
     // Act
     userEvent.click(screen.getByRole('button'));
@@ -54,7 +54,7 @@ describe('ColorPicker', () => {
 
   it('should open modal and set color value (rgba)', async () => {
     // Prepare
-    abcRender(<ColorPicker initialValue={'rgba(170, 50, 204, 0.87)'} onClose={handleClose} />);
+    abcRender(<ColorPicker value={'rgba(170, 50, 204, 0.87)'} onClose={handleClose} />);
 
     // Act
     userEvent.click(screen.getByRole('button'));
@@ -67,7 +67,7 @@ describe('ColorPicker', () => {
 
   it('should trigger onClose()', async () => {
     // Prepare
-    abcRender(<ColorPicker initialValue={'#AA32CCDD'} onClose={handleClose} />);
+    abcRender(<ColorPicker value={'#AA32CCDD'} onClose={handleClose} />);
     userEvent.click(screen.getByRole('button'));
 
     // Act

@@ -21,7 +21,7 @@ import { AbcProjection, AbcView, EPSG_4326, LayerProperties, Logger, PredefinedL
 import _ from 'lodash';
 import { ResizeObserverFactory } from '../../utils/ResizeObserverFactory';
 import BaseEvent from 'ol/events/Event';
-import { AbstractTool } from '../../tools/AbstractTool';
+import { Tool } from '../../tools/Tool';
 import TileLayer from 'ol/layer/Tile';
 import { FeatureWrapper } from '../features/FeatureWrapper';
 import { LayerFactory } from '../layers/LayerFactory';
@@ -47,7 +47,7 @@ export declare type FeatureCallback = (feat: FeatureWrapper, layer: VectorLayerW
  */
 export class MapWrapper {
   private sizeObserver?: ResizeObserver;
-  private currentTool?: AbstractTool;
+  private currentTool?: Tool;
   private eventTarget = document.createDocumentFragment();
 
   constructor(private readonly internal: Map) {
@@ -211,7 +211,7 @@ export class MapWrapper {
     this.internal.getLayers().un('propertychange', handler);
   }
 
-  public setTool(tool: AbstractTool): void {
+  public setTool(tool: Tool): void {
     this.currentTool?.dispose();
     this.currentTool = tool;
     this.updateInteractions();
@@ -251,7 +251,7 @@ export class MapWrapper {
     this.internal.getInteractions().clear();
   }
 
-  public getCurrentTool(): AbstractTool | undefined {
+  public getTool(): Tool | undefined {
     return this.currentTool;
   }
 

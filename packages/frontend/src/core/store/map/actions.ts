@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FillPatterns } from '@abc-map/shared';
+import { FeatureStyle, FillPatterns } from '@abc-map/shared';
 import { MapTool } from '@abc-map/shared';
 import { DimensionsPx } from '../../utils/DimensionsPx';
 import { IconName } from '../../../assets/point-icons/IconName';
@@ -37,6 +37,7 @@ export enum ActionType {
   SetPointSize = 'SetPointSize',
   SetPointColor = 'SetPointColor',
   SetMainMapDimensions = 'SetMainMapDimensions',
+  SetDrawingStyle = 'SetDrawingStyle',
 }
 
 export interface SetTool {
@@ -114,6 +115,11 @@ export interface SetMainMapDimensions {
   dimensions: DimensionsPx;
 }
 
+export interface SetDrawingStyle {
+  type: ActionType.SetDrawingStyle;
+  style: FeatureStyle;
+}
+
 export type MapAction =
   | SetTool
   | SetStrokeColor
@@ -129,7 +135,8 @@ export type MapAction =
   | SetPointIcon
   | SetPointSize
   | SetPointColor
-  | SetMainMapDimensions;
+  | SetMainMapDimensions
+  | SetDrawingStyle;
 
 export class MapActions {
   public static setTool(tool: MapTool): MapAction {
@@ -234,6 +241,13 @@ export class MapActions {
     return {
       type: ActionType.SetMainMapDimensions,
       dimensions: { width, height },
+    };
+  }
+
+  public static setDrawingStyle(style: FeatureStyle): MapAction {
+    return {
+      type: ActionType.SetDrawingStyle,
+      style,
     };
   }
 }

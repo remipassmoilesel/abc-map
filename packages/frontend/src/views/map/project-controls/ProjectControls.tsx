@@ -105,7 +105,7 @@ class ProjectControls extends Component<Props, State> {
       .modificationsLostConfirmation()
       .then((res) => {
         if (ModalStatus.Confirmed === res) {
-          return project.newProject().then(() => toasts.info('Nouveau projet créé'));
+          return project.newProject().then(() => toasts.info(t('New_project_created')));
         }
       })
       .catch((err) => logger.error('Confirmation error: ', err));
@@ -172,7 +172,6 @@ class ProjectControls extends Component<Props, State> {
 
       const compressed = await project.exportCurrentProject(password);
       FileIO.outputBlob(compressed.project, `projet${ProjectConstants.FileExtension}`);
-      toasts.info(t('Export_done'));
 
       return OperationStatus.Succeed;
     };

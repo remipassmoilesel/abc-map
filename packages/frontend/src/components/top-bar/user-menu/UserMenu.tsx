@@ -24,8 +24,8 @@ import { connect, ConnectedProps } from 'react-redux';
 import { ServiceProps, withServices } from '../../../core/withServices';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { prefixedTranslation } from '../../../i18n/i18n';
-import Cls from '../TopBar.module.scss';
 import { withTranslation } from 'react-i18next';
+import Cls from './UserMenu.module.scss';
 
 const logger = Logger.get('UserMenu.tsx');
 

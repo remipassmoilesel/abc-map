@@ -16,27 +16,27 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbstractTool } from '../AbstractTool';
-import { Logger, MapTool } from '@abc-map/shared';
+import { Tool } from '../Tool';
+import { FeatureStyle, MapTool } from '@abc-map/shared';
 import VectorSource from 'ol/source/Vector';
 import Geometry from 'ol/geom/Geometry';
 import Icon from '../../../assets/tool-icons/point.inline.svg';
 import { Map } from 'ol';
 import { HistoryKey } from '../../history/HistoryKey';
-import { defaultInteractions } from '../../geo/map/interactions';
-import { DrawInteraction, drawInteractionFactory, GetStyleFunc, HistoryTaskHandler } from '../common/drawInteractionFactory';
+import { DrawInteractionsBundle, GetStyleFunc } from '../common/interactions/DrawInteractionsBundle';
 import GeometryType from 'ol/geom/GeometryType';
 import { MainStore } from '../../store/store';
 import { HistoryService } from '../../history/HistoryService';
+import { MapActions } from '../../store/map/actions';
+import { MoveInteractionsBundle } from '../common/interactions/MoveInteractionsBundle';
+import { SelectionInteractionsBundle } from '../common/interactions/SelectionInteractionsBundle';
 
-const logger = Logger.get('PointTool.tsx');
+export class PointTool implements Tool {
+  private move?: MoveInteractionsBundle;
+  private selection?: SelectionInteractionsBundle;
+  private draw?: DrawInteractionsBundle;
 
-export class PointTool extends AbstractTool {
-  private drawInteractions?: DrawInteraction;
-
-  constructor(store: MainStore, history: HistoryService, private interactionFactory = drawInteractionFactory) {
-    super(store, history);
-  }
+  constructor(private store: MainStore, private history: HistoryService) {}
 
   public getId(): MapTool {
     return MapTool.Point;
@@ -50,28 +50,38 @@ export class PointTool extends AbstractTool {
     return 'Points';
   }
 
-  protected setupInternal(map: Map, source: VectorSource<Geometry>): void {
+  public setup(map: Map, source: VectorSource<Geometry>): void {
     // Interactions for map view manipulation
-    const defaults = defaultInteractions();
-    defaults.forEach((i) => map.addInteraction(i));
-    this.interactions.push(...defaults);
+    this.move = new MoveInteractionsBundle();
+    this.move.setup(map);
 
-    // Tool interactions
+    // Select with shift + click
+    this.selection = new SelectionInteractionsBundle();
+    this.selection.onStyleSelected = (style: FeatureStyle) => this.store.dispatch(MapActions.setDrawingStyle({ point: style.point }));
+    this.selection.setup(map, source, [GeometryType.POINT, GeometryType.MULTI_POINT]);
+
+    // Draw interactions
+    this.draw = new DrawInteractionsBundle(GeometryType.POINT);
+    this.draw.onNewTask = (t) => this.history.register(HistoryKey.Map, t);
+    this.draw.onDeleteTask = (t) => this.history.remove(HistoryKey.Map, t);
+
     const getStyle: GetStyleFunc = () => {
       const style = this.store.getState().map.currentStyle;
       return { point: style.point };
     };
 
-    const handleTask: HistoryTaskHandler = (t) => {
-      this.history.register(HistoryKey.Map, t);
-    };
-
-    this.drawInteractions = this.interactionFactory(GeometryType.POINT, [GeometryType.POINT, GeometryType.MULTI_POINT], source, getStyle, handleTask);
-    this.drawInteractions.interactions.forEach((i) => map.addInteraction(i));
-    this.interactions.push(...this.drawInteractions.interactions);
+    this.draw.setup(map, source, this.selection.getFeatures(), getStyle);
   }
 
-  protected disposeInternal() {
-    this.drawInteractions?.dispose();
+  public deselectAll() {
+    this.selection?.clear();
+  }
+
+  public dispose() {
+    this.deselectAll();
+
+    this.move?.dispose();
+    this.selection?.dispose();
+    this.draw?.dispose();
   }
 }

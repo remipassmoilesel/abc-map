@@ -72,7 +72,7 @@ describe('MapKeyboardListener', () => {
 
   it('should delete on Delete if features found', () => {
     // Prepare
-    const event = new KeyboardEvent('keypress', { key: 'Delete' });
+    const event = new KeyboardEvent('keyup', { key: 'Delete' });
     const map = sinon.createStubInstance(MapWrapper);
     const vectorLayer = sinon.createStubInstance(LayerWrapper);
     const vectorSource = sinon.createStubInstance(VectorSource);
@@ -82,7 +82,7 @@ describe('MapKeyboardListener', () => {
     vectorLayer.getSource.returns(vectorSource);
 
     // Act
-    document.body.dispatchEvent(event);
+    document.dispatchEvent(event);
 
     expect(vectorSource.removeFeature.callCount).toEqual(1);
     expect(history.register.callCount).toEqual(1);
@@ -90,7 +90,7 @@ describe('MapKeyboardListener', () => {
 
   it('should not delete on Delete if features not found', () => {
     // Prepare
-    const event = new KeyboardEvent('keypress', { key: 'Delete' });
+    const event = new KeyboardEvent('keyup', { key: 'Delete' });
     const map = sinon.createStubInstance(MapWrapper);
     const vectorLayer = sinon.createStubInstance(LayerWrapper);
     const vectorSource = sinon.createStubInstance(VectorSource);
@@ -100,29 +100,29 @@ describe('MapKeyboardListener', () => {
     vectorLayer.getSource.returns(vectorSource);
 
     // Act
-    document.body.dispatchEvent(event);
+    document.dispatchEvent(event);
 
     expect(vectorSource.removeFeature.callCount).toEqual(0);
     expect(history.register.callCount).toEqual(0);
   });
 
   it('should undo on CTRL + Z', () => {
-    const event = new KeyboardEvent('keypress', { ctrlKey: true, key: 'z' });
+    const event = new KeyboardEvent('keyup', { ctrlKey: true, key: 'z' });
     history.canUndo.returns(true);
     history.undo.resolves();
 
-    document.body.dispatchEvent(event);
+    document.dispatchEvent(event);
 
     expect(history.canUndo.callCount).toEqual(1);
     expect(history.undo.callCount).toEqual(1);
   });
 
   it('should redo on CTRL + MAJ + Z', () => {
-    const event = new KeyboardEvent('keypress', { ctrlKey: true, shiftKey: true, key: 'Z' });
+    const event = new KeyboardEvent('keyup', { ctrlKey: true, shiftKey: true, key: 'Z' });
     history.canRedo.returns(true);
     history.redo.resolves();
 
-    document.body.dispatchEvent(event);
+    document.dispatchEvent(event);
 
     expect(history.canRedo.callCount).toEqual(1);
     expect(history.redo.callCount).toEqual(1);

@@ -231,9 +231,6 @@ export class LegendRenderer {
 
   public getLegendPosition(legend: AbcLegend, legendCv: HTMLCanvasElement, exportCv: HTMLCanvasElement): Position | undefined {
     switch (legend.display) {
-      case LegendDisplay.Hidden:
-        // If hidden we render it out of map
-        return { x: exportCv.width + 10, y: exportCv.height + 10 };
       case LegendDisplay.UpperLeftCorner:
         return { x: 0, y: 0 };
       case LegendDisplay.UpperRightCorner:

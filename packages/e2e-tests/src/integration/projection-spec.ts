@@ -22,8 +22,8 @@ import { LayerControls } from '../helpers/LayerControls';
 import { TopBar } from '../helpers/TopBar';
 import { MainMap } from '../helpers/MainMap';
 import { LayoutPreview } from '../helpers/LayoutPreview';
-import { Toasts } from '../helpers/Toasts';
 import { Download } from '../helpers/Download';
+import { LongOperation } from '../helpers/LongOperation';
 
 describe('Projection', () => {
   beforeEach(() => {
@@ -57,7 +57,7 @@ describe('Projection', () => {
       })
       .get('[data-cy=layout-controls] [data-cy=pdf-export]')
       .click()
-      .then(() => Toasts.assertText('Export done !', 50_000))
+      .then(() => LongOperation.done(50_000))
       .then(() => Download.fileAsBlob())
       .should((pdf) => {
         expect(pdf.size).greaterThan(50_000);

@@ -80,28 +80,28 @@ class ColorSelector extends Component<Props, {}> {
         {strokeColor && (
           <OptionRow>
             <div>{t('Line')}: </div>
-            <ColorPicker initialValue={strokeProps?.color} onClose={this.handleStrokeColor} data-cy={'stroke-color'} />
+            <ColorPicker value={strokeProps?.color} onClose={this.handleStrokeColor} data-cy={'stroke-color'} />
           </OptionRow>
         )}
 
         {fillColor1 && (
           <OptionRow>
             <div>{t('Filling')}: </div>
-            <ColorPicker initialValue={fillProps?.color1} onClose={this.handleFillColor1} data-cy={'fill-color1'} />
+            <ColorPicker value={fillProps?.color1} onClose={this.handleFillColor1} data-cy={'fill-color1'} />
           </OptionRow>
         )}
 
         {fillColor2 && (
           <OptionRow>
             <div>{t('Texture')}: </div>
-            <ColorPicker initialValue={fillProps?.color2} onClose={this.handleFillColor2} data-cy={'fill-color2'} />
+            <ColorPicker value={fillProps?.color2} onClose={this.handleFillColor2} data-cy={'fill-color2'} />
           </OptionRow>
         )}
 
         {pointColor && (
           <OptionRow>
             <div>{t('Icon')}: </div>
-            <ColorPicker initialValue={pointProps?.color} onClose={this.handlePointColor} data-cy={'point-color'} />
+            <ColorPicker value={pointProps?.color} onClose={this.handlePointColor} data-cy={'point-color'} />
           </OptionRow>
         )}
       </div>

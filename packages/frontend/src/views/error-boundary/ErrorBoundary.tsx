@@ -65,6 +65,8 @@ class ErrorBoundary extends React.Component<ServiceProps, State> {
 
   public componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
     logger.error('Unhandled React error: ', { error, errorInfo });
+    logger.error(`Error stack: ${error.stack || 'Not defined'}`);
+    logger.error(`Component stack: ${errorInfo.componentStack}`);
     this.setState({ hasError: true });
   }
 
