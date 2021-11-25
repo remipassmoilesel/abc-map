@@ -21,6 +21,11 @@ import { SmtpClient } from './SmtpClient';
 import { Config } from '../config/Config';
 import { FrontendRoutes, Language } from '@abc-map/shared';
 
+const Routes = {
+  [Language.French]: new FrontendRoutes(Language.French),
+  [Language.English]: new FrontendRoutes(Language.English),
+};
+
 const footerFr = (config: Config) => `
   <p>&nbsp;</p>
   <small>Ceci est un message automatique, envoyé par la plateforme <a href="${config.externalUrl}">${config.externalUrl}</a>.
@@ -46,7 +51,7 @@ export class EmailService extends AbstractService {
   public confirmRegistration(lang: Language, to: string, token: string): Promise<void> {
     let subject: string;
     let content: string;
-    const href = `${this.config.externalUrl}/confirm-account/${token}`;
+    const href = `${this.config.externalUrl}${Routes[lang].confirmAccount().withParams({ token })}`;
 
     switch (lang) {
       case Language.French:
@@ -75,7 +80,8 @@ export class EmailService extends AbstractService {
   public resetPassword(lang: Language, to: string, token: string): Promise<void> {
     let subject: string;
     let content: string;
-    const href = `${this.config.externalUrl}${FrontendRoutes.resetPassword().withParams({ token })}`;
+
+    const href = `${this.config.externalUrl}${Routes[lang].resetPassword().withParams({ token })}`;
 
     switch (lang) {
       case Language.French:

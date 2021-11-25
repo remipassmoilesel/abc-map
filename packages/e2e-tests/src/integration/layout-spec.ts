@@ -16,7 +16,6 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FrontendRoutes } from '@abc-map/shared';
 import { TestHelper } from '../helpers/TestHelper';
 import { LayoutList } from '../helpers/LayoutList';
 import { History } from '../helpers/History';
@@ -24,6 +23,7 @@ import { Download } from '../helpers/Download';
 import { LayerControls } from '../helpers/LayerControls';
 import { TopBar } from '../helpers/TopBar';
 import { LongOperation } from '../helpers/LongOperation';
+import { Routes } from '../helpers/Routes';
 
 describe('Layout', function () {
   describe('As a visitor', function () {
@@ -32,7 +32,7 @@ describe('Layout', function () {
     });
 
     it('can create layout, undo and redo', function () {
-      cy.visit(FrontendRoutes.layout().raw())
+      cy.visit(Routes.layout().format())
         .get('[data-cy=layout-controls] [data-cy=new-layout]')
         .click()
         .then(() => LayoutList.getNames())
@@ -50,7 +50,7 @@ describe('Layout', function () {
     });
 
     it('can change layout order, undo and redo', function () {
-      cy.visit(FrontendRoutes.layout().raw())
+      cy.visit(Routes.layout().format())
         .get('[data-cy=layout-controls] [data-cy=new-layout]')
         .click()
         .click()
@@ -71,7 +71,7 @@ describe('Layout', function () {
     });
 
     it('can delete all layouts, undo and redo', function () {
-      cy.visit(FrontendRoutes.layout().raw())
+      cy.visit(Routes.layout().format())
         .get('[data-cy=layout-controls] [data-cy=new-layout]')
         .click()
         .click()
@@ -88,7 +88,7 @@ describe('Layout', function () {
     });
 
     it('can export PDF with predefined layer', function () {
-      cy.visit(FrontendRoutes.map().raw())
+      cy.visit(Routes.map().format())
         .then(() => LayerControls.deleteActiveLayer())
         .then(() => TopBar.layout())
         .get('[data-cy=layout-controls] [data-cy=new-layout]')
@@ -105,7 +105,7 @@ describe('Layout', function () {
     });
 
     it('can export PDF with XYZ layer', function () {
-      cy.visit(FrontendRoutes.map().raw())
+      cy.visit(Routes.map().format())
         .then(() => LayerControls.deleteActiveLayer())
         .then(() => LayerControls.deleteActiveLayer())
         .then(() => LayerControls.addXyzLayer())
@@ -124,7 +124,7 @@ describe('Layout', function () {
     });
 
     it('can export PDF with WMS layer', function () {
-      cy.visit(FrontendRoutes.map().raw())
+      cy.visit(Routes.map().format())
         .then(() => LayerControls.deleteActiveLayer())
         .then(() => LayerControls.deleteActiveLayer())
         .then(() => LayerControls.addWmsLayer())
@@ -143,7 +143,7 @@ describe('Layout', function () {
     });
 
     it('can export PDF with WMTS layer', function () {
-      cy.visit(FrontendRoutes.map().raw())
+      cy.visit(Routes.map().format())
         .then(() => LayerControls.deleteActiveLayer())
         .then(() => LayerControls.deleteActiveLayer())
         .then(() => LayerControls.addWmtsLayer())
@@ -162,7 +162,7 @@ describe('Layout', function () {
     });
 
     it('can export PNG with several sheets', function () {
-      cy.visit(FrontendRoutes.layout().raw())
+      cy.visit(Routes.layout().format())
         .get('[data-cy=layout-controls] [data-cy=new-layout]')
         .click()
         .click()

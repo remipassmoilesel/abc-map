@@ -17,7 +17,7 @@
  */
 
 import React, { ChangeEvent, Component, KeyboardEvent, ReactNode } from 'react';
-import { FrontendRoutes, Logger } from '@abc-map/shared';
+import { Logger } from '@abc-map/shared';
 import { Modal } from 'react-bootstrap';
 import { ServiceProps, withServices } from '../../core/withServices';
 import { ModalEventType, ModalStatus } from '../../core/ui/typings';
@@ -27,6 +27,7 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { FormState } from '../form-validation-label/FormState';
 import { prefixedTranslation } from '../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
+import { Routes } from '../../routes';
 
 const logger = Logger.get('LoginModal.tsx');
 
@@ -190,7 +191,7 @@ class LoginModal extends Component<Props, State> {
         });
         this.setState({ visible: false, email: '', password: '' });
 
-        this.props.history.push(FrontendRoutes.map().raw());
+        this.props.history.push(Routes.map().format());
       })
       .catch((err) => logger.error(err));
   };

@@ -16,14 +16,14 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FrontendRoutes } from '@abc-map/shared';
 import Chainable = Cypress.Chainable;
 import { Toasts } from './Toasts';
+import { Routes } from './Routes';
 
 export class Authentication {
   public static login(email: string, password: string): Chainable<any> {
     return cy
-      .visit(FrontendRoutes.landing().raw())
+      .visit(Routes.landing().format())
       .get('[data-cy=open-login]')
       .click()
       .get('input[data-cy=email]')

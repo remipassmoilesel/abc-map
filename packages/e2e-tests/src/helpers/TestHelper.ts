@@ -17,7 +17,7 @@
  */
 
 import Chainable = Cypress.Chainable;
-import { FrontendRoutes } from '@abc-map/shared';
+import { Routes } from './Routes';
 
 export class TestHelper {
   public static init(): Chainable<any> {
@@ -26,7 +26,7 @@ export class TestHelper {
         // We set viewport
         .viewport(1980, 1080)
         // We set default language
-        .visit(FrontendRoutes.map().raw(), {
+        .visit(Routes.map().format(), {
           onBeforeLoad(win) {
             Object.defineProperty(win.navigator, 'language', { value: 'en-US' });
             Object.defineProperty(win.navigator, 'languages', { value: ['en'] });

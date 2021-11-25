@@ -16,13 +16,14 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcLegend, FrontendRoutes, LegendDisplay, MapTool } from '@abc-map/shared';
+import { AbcLegend, LegendDisplay, MapTool } from '@abc-map/shared';
 import { TestHelper } from '../helpers/TestHelper';
 import { MainMap } from '../helpers/MainMap';
 import { TopBar } from '../helpers/TopBar';
 import { ToolSelector } from '../helpers/ToolSelector';
 import { Draw } from '../helpers/Draw';
 import { Store } from '../helpers/Store';
+import { Routes } from '../helpers/Routes';
 
 describe('Legend', function () {
   beforeEach(() => {
@@ -30,7 +31,7 @@ describe('Legend', function () {
   });
 
   it('can create a legend', function () {
-    cy.visit(FrontendRoutes.map().raw())
+    cy.visit(Routes.map().format())
       .then(() => MainMap.fixedView())
       // First point
       .then(() => ToolSelector.enable(MapTool.Point))

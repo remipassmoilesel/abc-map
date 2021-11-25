@@ -17,9 +17,9 @@
  */
 
 import { TestHelper } from '../helpers/TestHelper';
-import { FrontendRoutes } from '@abc-map/shared';
 import { DataStore } from '../helpers/DataStore';
 import { TopBar } from '../helpers/TopBar';
+import { Routes } from '../helpers/Routes';
 
 describe('Script module', function () {
   beforeEach(() => {
@@ -27,7 +27,7 @@ describe('Script module', function () {
   });
 
   it('User can execute sample script', () => {
-    cy.visit(FrontendRoutes.dataProcessing().withoutOptionals())
+    cy.visit(Routes.dataProcessing().format())
       .get('[data-cy=scripts]')
       .click()
       .get('[data-cy=execute]')
@@ -45,7 +45,7 @@ const layerName = map.listLayers()[2].name;
 map.findByName(layerName).getFeatures().forEach((f, i) => f.set('e2e', i))
 map.findByName(layerName).getFeatures().forEach((f) => log(f.get('e2e')))
 `;
-    cy.visit(FrontendRoutes.dataProcessing().withoutOptionals())
+    cy.visit(Routes.dataProcessing().format())
       .then(() => DataStore.importByName('Countries of the world'))
       .then(() => TopBar.dataProcessing())
       .get('[data-cy=scripts]')

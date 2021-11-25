@@ -17,7 +17,7 @@
  */
 
 import React, { Component, ReactNode } from 'react';
-import { AbcVoteAggregation, FrontendRoutes, Logger, UserStatus } from '@abc-map/shared';
+import { AbcVoteAggregation, Logger, UserStatus } from '@abc-map/shared';
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
 import { ServiceProps, withServices } from '../../core/withServices';
 import { DateTime } from 'luxon';
@@ -32,6 +32,7 @@ import { pageSetup } from '../../core/utils/page-setup';
 import { prefixedTranslation } from '../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
 import Cls from './LandingView.module.scss';
+import { Routes } from '../../routes';
 
 const logger = Logger.get('Landing.tsx');
 
@@ -82,10 +83,10 @@ class LandingView extends Component<Props, State> {
                 <a href={'https://www.youtube.com/channel/UCrlsEykrLNpK12Id7c7GP7g'} target={'_blank'} rel="noreferrer">
                   {t('Watch_a_presentation_video')} 📹
                 </a>
-                &nbsp; <Link to={FrontendRoutes.documentation().raw()}>{t('or_read_the_doc')} 📖</Link>
+                &nbsp; <Link to={Routes.documentation().format()}>{t('or_read_the_doc')} 📖</Link>
               </li>
               <li>
-                <Link to={FrontendRoutes.map().raw()}>{t('Then_open_map')} 🌍</Link>
+                <Link to={Routes.map().format()}>{t('Then_open_map')} 🌍</Link>
               </li>
             </ul>
             <div className={'mt-4'}>
@@ -144,7 +145,7 @@ class LandingView extends Component<Props, State> {
           )}
 
           <div className={'mt-3'}>
-            <Link to={FrontendRoutes.legalMentions().raw()}>{t('About_this_platform')}&nbsp;&nbsp;⚖️</Link>
+            <Link to={Routes.legalMentions().format()}>{t('About_this_platform')}&nbsp;&nbsp;⚖️</Link>
           </div>
         </div>
       </div>
@@ -167,7 +168,7 @@ class LandingView extends Component<Props, State> {
   public handleGoToMap = () => {
     const { history } = this.props;
 
-    history.push(FrontendRoutes.map().raw());
+    history.push(Routes.map().format());
   };
 
   private handleLogin = () => {

@@ -16,16 +16,25 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 import { Logger } from '../../commons';
+import { Language } from '../../lang';
 
 const logger = Logger.get('Route.ts');
 
 export declare type Params = { [k: string]: string | undefined };
 
 export class Route<T extends Params> {
-  constructor(private readonly _raw: string) {}
+  constructor(private readonly _raw: string, private lang: Language | (() => Language)) {}
 
   public raw(): string {
     return this._raw;
+  }
+
+  /**
+   * Template lang and remove optional parameters.
+   */
+  public format(): string {
+    const result = this._raw.replace(/:[a-z0-9]+\?\/?/gi, '');
+    return this.replaceParam(result, 'lang', this.getLang());
   }
 
   public withParams(params: T): string {
@@ -34,19 +43,24 @@ export class Route<T extends Params> {
     for (const key in params) {
       const value = params[key];
       if (typeof value === 'string') {
-        const replaced = result.replace(new RegExp(`:${key}\\??`), value);
-        if (replaced === result) {
-          logger.error(`Parameters ${key} have not been found in route: ${this._raw}`);
-        }
-        result = replaced;
+        result = this.replaceParam(result, key, value);
       } else {
         logger.error(`Invalid value supplied for ${key} in route: ${this._raw}`);
       }
     }
-    return result;
+
+    return this.replaceParam(result, 'lang', this.getLang());
   }
 
-  public withoutOptionals(): string {
-    return this._raw.replace(/:[a-z0-9]+\?\/?/gi, '');
+  public getLang(): Language {
+    return typeof this.lang === 'function' ? this.lang() : this.lang;
+  }
+
+  private replaceParam(input: string, key: string, value: string): string {
+    const replaced = input.replace(new RegExp(`:${key}\\??`), value);
+    if (replaced === input) {
+      logger.error(`Parameters ${key} have not been found in route: ${this._raw}`);
+    }
+    return replaced;
   }
 }

@@ -50,7 +50,7 @@ describe('Reset password', function () {
       .readFile(`emails/${email}.html`)
       .then((content) => {
         const resetLink = Cypress.$(content).find('a[data-cy=reset-password-link]').attr('href') || '';
-        expect(resetLink).to.match(/^http:\/\/localhost:[0-9]+\/reset-password\//);
+        expect(resetLink).to.match(/^http:\/\/localhost:[0-9]+\/[a-z]{2}\/reset-password\//);
         return cy.visit(resetLink);
       })
       // Fill form reset password form

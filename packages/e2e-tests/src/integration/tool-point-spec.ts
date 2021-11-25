@@ -17,12 +17,13 @@
  */
 
 import { StyleProperties } from '@abc-map/shared';
-import { FrontendRoutes, MapTool } from '@abc-map/shared';
+import { MapTool } from '@abc-map/shared';
 import { TestHelper } from '../helpers/TestHelper';
 import { ToolSelector } from '../helpers/ToolSelector';
 import { Draw } from '../helpers/Draw';
 import { MainMap } from '../helpers/MainMap';
 import { DefaultDrawingStyle } from '../helpers/DefaultDrawingStyle';
+import { Routes } from '../helpers/Routes';
 
 describe('Tool Point', function () {
   beforeEach(() => {
@@ -30,7 +31,7 @@ describe('Tool Point', function () {
   });
 
   it('user can move map with CTRL', function () {
-    cy.visit(FrontendRoutes.map().raw())
+    cy.visit(Routes.map().format())
       .then(() => MainMap.fixedView())
       .then(() => ToolSelector.enable(MapTool.Point))
       // Move map
@@ -43,7 +44,7 @@ describe('Tool Point', function () {
   });
 
   it('user can draw', function () {
-    cy.visit(FrontendRoutes.map().raw())
+    cy.visit(Routes.map().format())
       .then(() => MainMap.fixedView())
       .then(() => ToolSelector.enable(MapTool.Point))
       .then(() => Draw.click(100, 100))
@@ -68,7 +69,7 @@ describe('Tool Point', function () {
   });
 
   it('user can move points', function () {
-    cy.visit(FrontendRoutes.map().raw())
+    cy.visit(Routes.map().format())
       .then(() => MainMap.fixedView())
       .then(() => ToolSelector.enable(MapTool.Point))
       // Create point

@@ -17,7 +17,7 @@
  */
 
 import React, { Component, ReactNode } from 'react';
-import { AbcLegendItem, FrontendRoutes, Logger } from '@abc-map/shared';
+import { AbcLegendItem, Logger } from '@abc-map/shared';
 import { MainState } from '../../core/store/reducer';
 import { connect, ConnectedProps } from 'react-redux';
 import { ServiceProps, withServices } from '../../core/withServices';
@@ -28,6 +28,7 @@ import { pageSetup } from '../../core/utils/page-setup';
 import { prefixedTranslation } from '../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
 import Cls from './MapLegendView.module.scss';
+import { Routes } from '../../routes';
 
 const logger = Logger.get('MapLegendView.tsx');
 
@@ -99,7 +100,7 @@ class MapLegendView extends Component<Props, {}> {
   };
 
   private handleGoToLayout = () => {
-    this.props.history.push(FrontendRoutes.layout().raw());
+    this.props.history.push(Routes.layout().format());
   };
 
   private handleItemDeleted = (item: AbcLegendItem) => {

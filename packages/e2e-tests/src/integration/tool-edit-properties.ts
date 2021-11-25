@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FrontendRoutes, MapTool } from '@abc-map/shared';
+import { MapTool } from '@abc-map/shared';
 import { TestHelper } from '../helpers/TestHelper';
 import { ToolSelector } from '../helpers/ToolSelector';
 import { Draw } from '../helpers/Draw';
@@ -24,6 +24,7 @@ import { MainMap } from '../helpers/MainMap';
 import { DataStore } from '../helpers/DataStore';
 import { TopBar } from '../helpers/TopBar';
 import { History } from '../helpers/History';
+import { Routes } from '../helpers/Routes';
 
 describe('Edit properties', function () {
   beforeEach(() => {
@@ -31,7 +32,7 @@ describe('Edit properties', function () {
   });
 
   it('user can move map with CTRL', function () {
-    cy.visit(FrontendRoutes.map().raw())
+    cy.visit(Routes.map().format())
       .then(() => MainMap.fixedView())
       .then(() => ToolSelector.enable(MapTool.EditProperties))
       // Move map
@@ -44,7 +45,7 @@ describe('Edit properties', function () {
   });
 
   it('user can edit properties, then undo', function () {
-    cy.visit(FrontendRoutes.dataStore().raw())
+    cy.visit(Routes.dataStore().format())
       .then(() => DataStore.importByName('Countries of the world'))
       .then(() => TopBar.map())
       .then(() => MainMap.fixedView())

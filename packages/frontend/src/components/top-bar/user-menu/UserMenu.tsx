@@ -18,7 +18,7 @@
 
 import React from 'react';
 import { Dropdown } from 'react-bootstrap';
-import { FrontendRoutes, Logger, UserStatus } from '@abc-map/shared';
+import { Logger, UserStatus } from '@abc-map/shared';
 import { MainState } from '../../../core/store/reducer';
 import { connect, ConnectedProps } from 'react-redux';
 import { ServiceProps, withServices } from '../../../core/withServices';
@@ -26,6 +26,7 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { prefixedTranslation } from '../../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
 import Cls from './UserMenu.module.scss';
+import { Routes } from '../../../routes';
 
 const logger = Logger.get('UserMenu.tsx');
 
@@ -115,7 +116,7 @@ class UserMenu extends React.Component<Props, {}> {
   };
 
   private handleUserAccount = () => {
-    this.props.history.push(FrontendRoutes.userAccount().raw());
+    this.props.history.push(Routes.userAccount().format());
   };
 
   private handleLogout = () => {
@@ -126,7 +127,7 @@ class UserMenu extends React.Component<Props, {}> {
       .then(() => authentication.logout())
       .then(() => {
         toasts.info(`${t('You_are_disconnected')} 👋`);
-        this.props.history.push(FrontendRoutes.landing().raw());
+        this.props.history.push(Routes.landing().format());
       })
       .catch((err) => {
         toasts.genericError();

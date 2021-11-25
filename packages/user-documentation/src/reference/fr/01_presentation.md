@@ -22,7 +22,7 @@ Avec Abc-Map vous pouvez créer:
   <b>Ce logiciel est tout neuf ✨ </b>
   <div>Du coup il y a beaucoup de choses à améliorer, à commencer par cette documentation.</div>
 
-  <a class='btn btn-link mt-3' onclick='abc.goTo("/funding")'>
+  <a class='btn btn-link mt-3' onclick='abc.goToFunding()'>
     Participez au financement d&apos;Abc-Map&nbsp;&nbsp;💌
   </a>
 </div>

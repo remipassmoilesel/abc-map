@@ -16,12 +16,12 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FrontendRoutes } from '@abc-map/shared';
 import { TestHelper } from '../helpers/TestHelper';
 import { Download } from '../helpers/Download';
 import { Toasts } from '../helpers/Toasts';
 import { MainMap } from '../helpers/MainMap';
 import { TopBar } from '../helpers/TopBar';
+import { Routes } from '../helpers/Routes';
 
 describe('Data store', function () {
   beforeEach(() => {
@@ -29,7 +29,7 @@ describe('Data store', function () {
   });
 
   it('User can search then download artefact', () => {
-    cy.visit(FrontendRoutes.dataStore().raw())
+    cy.visit(Routes.dataStore().format())
       .get('[data-cy=data-store-search]')
       .type('countries')
       .type('{enter}')
@@ -47,7 +47,7 @@ describe('Data store', function () {
   });
 
   it('User can search then add artefact to project', () => {
-    cy.visit(FrontendRoutes.dataStore().raw())
+    cy.visit(Routes.dataStore().format())
       .get('[data-cy=data-store-search]')
       .type('countries')
       .type('{enter}')
@@ -69,7 +69,7 @@ describe('Data store', function () {
   });
 
   it('User can search then show license', () => {
-    cy.visit(FrontendRoutes.dataStore().raw())
+    cy.visit(Routes.dataStore().format())
       .get('[data-cy=data-store-search]')
       .type('countries')
       .type('{enter}')

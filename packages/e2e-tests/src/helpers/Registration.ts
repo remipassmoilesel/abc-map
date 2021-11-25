@@ -16,9 +16,9 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FrontendRoutes } from '@abc-map/shared';
 import * as uuid from 'uuid-random';
 import Chainable = Cypress.Chainable;
+import { Routes } from './Routes';
 
 const defaultPassword = 'azerty1234';
 
@@ -34,7 +34,7 @@ export class Registration {
   public static newUser(email: string): Chainable<any> {
     // We register user
     return cy
-      .visit(FrontendRoutes.landing().raw())
+      .visit(Routes.landing().format())
       .get('[data-cy=open-registration]')
       .click()
       .get('input[data-cy=email]')
@@ -54,7 +54,7 @@ export class Registration {
       .readFile(`emails/${email}.html`)
       .then((content) => {
         const activationLink = Cypress.$(content).find('a[data-cy=enable-account-link]').attr('href') || '';
-        expect(activationLink).to.match(/^http:\/\/localhost:[0-9]+\/confirm-account\//);
+        expect(activationLink).to.match(/^http:\/\/localhost:[0-9]+\/[a-z]{2}\/confirm-account\//);
         return cy.visit(activationLink);
       })
       .get('[data-cy=account-enabled]')

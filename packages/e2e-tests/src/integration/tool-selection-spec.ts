@@ -16,13 +16,14 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FeatureProperties, FrontendRoutes, MapTool, StyleProperties } from '@abc-map/shared';
+import { FeatureProperties, MapTool, StyleProperties } from '@abc-map/shared';
 import { TestHelper } from '../helpers/TestHelper';
 import { ToolSelector } from '../helpers/ToolSelector';
 import { Draw } from '../helpers/Draw';
 import { MainMap } from '../helpers/MainMap';
 import { History } from '../helpers/History';
 import { DefaultDrawingStyle } from '../helpers/DefaultDrawingStyle';
+import { Routes } from '../helpers/Routes';
 
 describe('Tool Selection', function () {
   beforeEach(() => {
@@ -30,7 +31,7 @@ describe('Tool Selection', function () {
   });
 
   it('user can select', function () {
-    cy.visit(FrontendRoutes.map().raw())
+    cy.visit(Routes.map().format())
       .then(() => MainMap.fixedView())
       .then(() => ToolSelector.enable(MapTool.Point))
       // Create points
@@ -53,7 +54,7 @@ describe('Tool Selection', function () {
   });
 
   it('user can duplicate selection then undo', function () {
-    cy.visit(FrontendRoutes.map().raw())
+    cy.visit(Routes.map().format())
       .then(() => MainMap.fixedView())
       .then(() => ToolSelector.enable(MapTool.Point))
       // Create points
@@ -91,7 +92,7 @@ describe('Tool Selection', function () {
   });
 
   it('user can drag selection then undo', function () {
-    cy.visit(FrontendRoutes.map().raw())
+    cy.visit(Routes.map().format())
       .then(() => MainMap.fixedView())
       // Draw points
       .then(() => ToolSelector.enable(MapTool.Point))
@@ -131,7 +132,7 @@ describe('Tool Selection', function () {
   });
 
   it('user can drag duplicated features', function () {
-    cy.visit(FrontendRoutes.map().raw())
+    cy.visit(Routes.map().format())
       .then(() => MainMap.fixedView())
       // Draw points
       .then(() => ToolSelector.enable(MapTool.Point))
@@ -157,7 +158,7 @@ describe('Tool Selection', function () {
   });
 
   it('user change stroke style then undo', function () {
-    cy.visit(FrontendRoutes.map().raw())
+    cy.visit(Routes.map().format())
       .then(() => MainMap.fixedView())
       .then(() => ToolSelector.enable(MapTool.Polygon))
       // Draw feature
@@ -195,7 +196,7 @@ describe('Tool Selection', function () {
   });
 
   it('user change fill style then undo', function () {
-    cy.visit(FrontendRoutes.map().raw())
+    cy.visit(Routes.map().format())
       .then(() => MainMap.fixedView())
       .then(() => ToolSelector.enable(MapTool.Polygon))
       // Draw feature then select

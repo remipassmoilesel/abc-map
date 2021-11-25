@@ -17,6 +17,7 @@
  */
 
 import { Params, Route } from './Route';
+import { Language } from '../../lang';
 
 interface TestParams extends Params {
   param1: string;
@@ -26,19 +27,19 @@ interface TestParams extends Params {
 describe('Route', () => {
   let route: Route<TestParams>;
   beforeEach(() => {
-    route = new Route<TestParams>('/sample/route/:param1/:param2?/:param3?/');
+    route = new Route<TestParams>('/:lang/sample/route/:param1/:param2?/:param3?/', () => Language.English);
   });
 
   it('raw()', () => {
-    expect(route.raw()).toEqual('/sample/route/:param1/:param2?/:param3?/');
+    expect(route.raw()).toEqual('/:lang/sample/route/:param1/:param2?/:param3?/');
+  });
+
+  it('format()', () => {
+    expect(route.format()).toEqual('/en/sample/route/:param1/');
   });
 
   it('withParams() should replace params', () => {
     const actual = route.withParams({ param1: 'value1', param2: 'value2' });
-    expect(actual).toEqual('/sample/route/value1/value2/:param3?/');
-  });
-
-  it('withoutOptionals()', () => {
-    expect(route.withoutOptionals()).toEqual('/sample/route/:param1/');
+    expect(actual).toEqual('/en/sample/route/value1/value2/:param3?/');
   });
 });

@@ -17,7 +17,7 @@
  */
 
 import React, { ChangeEvent, Component, ReactNode } from 'react';
-import { FrontendRoutes, LayoutFormat, LayoutFormats, LegendDisplay, Logger } from '@abc-map/shared';
+import { LayoutFormat, LayoutFormats, LegendDisplay, Logger } from '@abc-map/shared';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { ExportFormat } from '../ExportFormat';
 import { LabeledLegendDisplays } from './LabeledLegendDisplay';
@@ -26,6 +26,7 @@ import { withTranslation } from 'react-i18next';
 import { LabeledLayoutFormats } from './LabeledLayoutFormats';
 import HistoryControls from '../../../components/history-controls/HistoryControls';
 import { HistoryKey } from '../../../core/history/HistoryKey';
+import { Routes } from '../../../routes';
 
 const logger = Logger.get('LayoutControls.tsx', 'warn');
 
@@ -143,7 +144,7 @@ class LayoutControls extends Component<Props, {}> {
   }
 
   private handleEditLegend = () => {
-    this.props.history.push(FrontendRoutes.mapLegend().raw());
+    this.props.history.push(Routes.mapLegend().format());
   };
 
   private handleFormatChanged = (ev: ChangeEvent<HTMLSelectElement>) => {

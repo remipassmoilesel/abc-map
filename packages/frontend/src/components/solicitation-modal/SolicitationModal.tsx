@@ -20,13 +20,14 @@ import React, { Component, ReactNode } from 'react';
 import { Modal } from 'react-bootstrap';
 import { ModalEventType, ModalStatus } from '../../core/ui/typings';
 import { ServiceProps, withServices } from '../../core/withServices';
-import { FrontendRoutes, Logger } from '@abc-map/shared';
+import { Logger } from '@abc-map/shared';
 import { VoteValue } from '@abc-map/shared';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import FundingLinks from '../funding-links/FundingLinks';
 import { prefixedTranslation } from '../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
 import Cls from './SolicitationModal.module.scss';
+import { Routes } from '../../routes';
 
 const logger = Logger.get('SolicitationModal.ts');
 
@@ -132,7 +133,7 @@ class SolicitationModal extends Component<Props, State> {
 
   private handleDonate = () => {
     const { history } = this.props;
-    history.push(FrontendRoutes.funding().raw());
+    history.push(Routes.funding().format());
     this.close();
   };
 

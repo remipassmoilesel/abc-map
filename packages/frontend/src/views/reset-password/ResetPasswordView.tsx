@@ -17,7 +17,7 @@
  */
 
 import React, { ChangeEvent, Component, ReactNode } from 'react';
-import { FrontendRoutes, Logger, PasswordLostParams } from '@abc-map/shared';
+import { Logger, PasswordLostParams } from '@abc-map/shared';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { ServiceProps, withServices } from '../../core/withServices';
 import FormValidationLabel from '../../components/form-validation-label/FormValidationLabel';
@@ -27,6 +27,7 @@ import { FormState } from '../../components/form-validation-label/FormState';
 import { prefixedTranslation } from '../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
 import Cls from './ResetPasswordView.module.scss';
+import { Routes } from '../../routes';
 
 const logger = Logger.get('InitPasswordView.tsx', 'info');
 
@@ -119,7 +120,7 @@ class ResetPasswordView extends Component<Props, State> {
         this.setState({ password: '', confirmation: '' });
         return modals.login();
       })
-      .then(() => this.props.history.push(FrontendRoutes.map().raw()))
+      .then(() => this.props.history.push(Routes.map().format()))
       .catch((err) => logger.error('Reset password error: ', err));
   };
 

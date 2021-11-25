@@ -17,10 +17,10 @@
  */
 
 import { LayerType } from '@abc-map/shared';
-import { FrontendRoutes } from '@abc-map/shared';
 import { TestHelper } from '../helpers/TestHelper';
 import { MainMap } from '../helpers/MainMap';
 import { XyzConstants } from '../helpers/XyzConstants';
+import { Routes } from '../helpers/Routes';
 
 describe('XYZ layers', function () {
   beforeEach(() => {
@@ -28,7 +28,7 @@ describe('XYZ layers', function () {
   });
 
   it('User can add XYZ layers', () => {
-    cy.visit(FrontendRoutes.map().raw())
+    cy.visit(Routes.map().format())
       // Open add layer dialog
       .get('[data-cy=add-layer]')
       .click()
