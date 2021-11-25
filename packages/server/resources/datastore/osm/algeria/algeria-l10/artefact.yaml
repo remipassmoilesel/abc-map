@@ -1,0 +1,42 @@
+---
+version: 0.1.0
+artefact:
+  license: LICENCE.txt
+  name:
+    - language: en
+      text: "Algeria (admin. level 10)"
+    - language: fr
+      text: "Algérie (niveau admin. 10)"
+
+  description:
+    - language: en
+      text: "Administrative boundaries (provinces, regions, ...)"
+    - language: fr
+      text: "Limites administratives (provinces, régions, ...)"
+  link: https://www.openstreetmap.org/
+  files:
+    - "algeria-l10.zip"
+
+  keywords:
+    - language: en
+      text:
+        - "Algeria"
+        - "DZ"
+        - "DZA"
+        - "Algérie / ⵍⵣⵣⴰⵢⴻⵔ / الجزائر"
+        - "People's Democratic Republic of Algeria"
+        - "Level 10"
+    - language: fr
+      text:
+        - "Algeria"
+        - "DZ"
+        - "DZA"
+        - "Algérie / ⵍⵣⵣⴰⵢⴻⵔ / الجزائر"
+        - "Algérie"
+        - "République algérienne démocratique et populaire"
+        - "RADP"
+
+  metadata:
+    osm_id: "-192756"
+    name: "Algeria"
+    admin_level: "10"

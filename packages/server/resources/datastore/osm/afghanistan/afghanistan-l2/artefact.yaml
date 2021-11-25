@@ -1,0 +1,40 @@
+---
+version: 0.1.0
+artefact:
+  license: LICENCE.txt
+  name:
+    - language: en
+      text: "Afghanistan (borders)"
+    - language: fr
+      text: "Afghanistan (frontières)"
+
+  description:
+    - language: en
+      text: "International borders"
+    - language: fr
+      text: "Frontières internationales"
+  link: https://www.openstreetmap.org/
+  files:
+    - "afghanistan-l2.zip"
+
+  keywords:
+    - language: en
+      text:
+        - "AF"
+        - "AFG"
+        - "افغانستان"
+        - "Afghanistan"
+        - "Islamic Republic of Afghanistan"
+        - "Level 2"
+    - language: fr
+      text:
+        - "AF"
+        - "AFG"
+        - "افغانستان"
+        - "Afghanistan"
+        - "République islamique d'Afghanistan"
+
+  metadata:
+    osm_id: "-303427"
+    name: "Afghanistan"
+    admin_level: "2"

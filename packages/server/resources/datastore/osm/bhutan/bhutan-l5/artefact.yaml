@@ -1,0 +1,39 @@
+---
+version: 0.1.0
+artefact:
+  license: LICENCE.txt
+  name:
+    - language: en
+      text: "Bhutan (admin. level 5)"
+    - language: fr
+      text: "Bhoutan (niveau admin. 5)"
+
+  description:
+    - language: en
+      text: "Administrative boundaries (provinces, regions, ...)"
+    - language: fr
+      text: "Limites administratives (provinces, régions, ...)"
+  link: https://www.openstreetmap.org/
+  files:
+    - "bhutan-l5.zip"
+
+  keywords:
+    - language: en
+      text:
+        - "Bhutan"
+        - "BT"
+        - "BTN"
+        - "Kingdom of Bhutan"
+        - "Level 5"
+    - language: fr
+      text:
+        - "Bhutan"
+        - "BT"
+        - "BTN"
+        - "Bhoutan"
+        - "Royaume du Bhoutan"
+
+  metadata:
+    osm_id: "-184629"
+    name: "Bhutan"
+    admin_level: "5"

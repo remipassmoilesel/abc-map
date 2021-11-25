@@ -44,7 +44,7 @@ class DataProcessingView extends Component<Props, {}> {
     return (
       <div className={Cls.dataProcessingView}>
         <div className={Cls.leftMenu}>
-          <div className={'mx-2 my-4 font-weight-bold'}>Modules</div>
+          <div className={'mx-2 my-4 fw-bold'}>Modules</div>
           {Modules.map((mod) => (
             <Link
               key={mod.getId()}

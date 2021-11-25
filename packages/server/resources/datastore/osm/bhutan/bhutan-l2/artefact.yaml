@@ -1,0 +1,39 @@
+---
+version: 0.1.0
+artefact:
+  license: LICENCE.txt
+  name:
+    - language: en
+      text: "Bhutan (borders)"
+    - language: fr
+      text: "Bhoutan (frontières)"
+
+  description:
+    - language: en
+      text: "International borders"
+    - language: fr
+      text: "Frontières internationales"
+  link: https://www.openstreetmap.org/
+  files:
+    - "bhutan-l2.zip"
+
+  keywords:
+    - language: en
+      text:
+        - "Bhutan"
+        - "BT"
+        - "BTN"
+        - "Kingdom of Bhutan"
+        - "Level 2"
+    - language: fr
+      text:
+        - "Bhutan"
+        - "BT"
+        - "BTN"
+        - "Bhoutan"
+        - "Royaume du Bhoutan"
+
+  metadata:
+    osm_id: "-184629"
+    name: "Bhutan"
+    admin_level: "2"

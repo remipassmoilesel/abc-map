@@ -158,6 +158,7 @@ function fetchFrontend() {
   const assets = doc
     .find('link')
     .toArray()
+    .filter((v) => v.attr('rel') !== 'alternate')
     .map((v) => v.attr('href'))
     .filter((s) => !!s) as string[];
 

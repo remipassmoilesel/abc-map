@@ -35,6 +35,8 @@ describe('Data store', function () {
       .type('{enter}')
       .get('[data-cy=artefact-name]')
       .should('contain', 'Countries of the world')
+      .get('[data-cy=more-actions-menu]')
+      .click()
       .get('[data-cy=download-artefact]')
       .click()
       .then(() => Download.fileAsBlob())
@@ -73,9 +75,11 @@ describe('Data store', function () {
       .type('{enter}')
       .get('[data-cy=artefact-name]')
       .should('contain', 'Countries of the world')
+      .get('[data-cy=more-actions-menu]')
+      .click()
       .get('[data-cy=show-license]')
       .click()
       .get('[data-cy=license-header]')
-      .should('contain', 'Countries of the world : Licence to use');
+      .should('contain', 'Countries of the world : Licence');
   });
 });

@@ -1,0 +1,40 @@
+---
+version: 0.1.0
+artefact:
+  license: LICENCE.txt
+  name:
+    - language: en
+      text: "Afghanistan (admin. level 7)"
+    - language: fr
+      text: "Afghanistan (niveau admin. 7)"
+
+  description:
+    - language: en
+      text: "Administrative boundaries (provinces, regions, ...)"
+    - language: fr
+      text: "Limites administratives (provinces, régions, ...)"
+  link: https://www.openstreetmap.org/
+  files:
+    - "afghanistan-l7.zip"
+
+  keywords:
+    - language: en
+      text:
+        - "AF"
+        - "AFG"
+        - "افغانستان"
+        - "Afghanistan"
+        - "Islamic Republic of Afghanistan"
+        - "Level 7"
+    - language: fr
+      text:
+        - "AF"
+        - "AFG"
+        - "افغانستان"
+        - "Afghanistan"
+        - "République islamique d'Afghanistan"
+
+  metadata:
+    osm_id: "-303427"
+    name: "Afghanistan"
+    admin_level: "7"

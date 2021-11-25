@@ -16,7 +16,12 @@ Les fichiers sont systématiquement importés dans de nouvelles couches, avec le
 Vous pouvez également utiliser des couches WMS, WMTS et XYZ en utilisant le contrôle "Ajouter une couche"
 </div>
 
-## Sources de données
+## Catalogue de données
+
+Le catalogue de données contient des données sélectionnées et compatibles avec Abc-Map. Vous pouvez ajouter ces
+données en un clic, alors n'hésitez pas !
+
+## Sources de données externes
 
 Beaucoup de sites proposent des données gratuites ou payantes, comme par exemple:
 

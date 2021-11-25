@@ -27,8 +27,10 @@ export class DataStore {
       .type('{enter}')
       .wait(800) // We must wait a little for search because cards may already exists
       .get('[data-cy=artefact-name]')
+      .eq(0)
       .contains(name)
       .get('[data-cy=import-artefact]')
+      .eq(0)
       .click()
       .then(() => Toasts.assertText('Import done !'))
       .then(() => Toasts.dismiss());

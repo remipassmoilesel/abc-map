@@ -20,7 +20,7 @@ import React, { Component, ReactNode } from 'react';
 import { getListByLang, getTextByLang, Logger } from '@abc-map/shared';
 import { AbcArtefact } from '@abc-map/shared';
 import { ServiceProps, withServices } from '../../../core/withServices';
-import { Modal } from 'react-bootstrap';
+import { Button, ButtonGroup, Dropdown, Modal } from 'react-bootstrap';
 import { getLang, prefixedTranslation } from '../../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
 import Cls from './ArtefactCard.module.scss';
@@ -59,38 +59,43 @@ class ArtefactCard extends Component<Props, State> {
     return (
       <>
         <div className={`card card-body ${Cls.artefact}`}>
-          {/* Meta */}
+          <h4 data-cy={'artefact-name'}>{name}</h4>
 
-          <h5 data-cy={'artefact-name'}>{name}</h5>
+          {description && <div className={'mb-3'}>{description}</div>}
+
+          <div className={'flex-grow-1'} />
+
           {keywords && (
-            <small className={'mb-2'}>
+            <small className={Cls.keywords}>
               {t('Keywords')}: {keywords.join(', ')}
             </small>
           )}
-          {description && <div className={'mb-3'}>{description}</div>}
-          {!!link && (
-            <div>
-              {t('Link')}&nbsp;
-              <a href={link} rel="noreferrer" target={'_blank'}>
-                {link}
-              </a>
-            </div>
-          )}
-
-          <div className={'flex-grow-1'} />
 
           {/* Actions */}
 
           <div className={'d-flex flex-row justify-content-end'}>
-            <button className={'btn btn-link mr-2'} onClick={this.handleShowLicense} data-cy={'show-license'}>
-              {t('Licence_to_use')}
-            </button>
-            <button className={'btn btn-link mr-2'} onClick={this.handleDownloadArtefact} data-cy={'download-artefact'}>
-              {t('Download')}
-            </button>
-            <button className={'btn btn-outline-primary'} onClick={this.handleImportArtefact} data-cy={'import-artefact'}>
-              {t('Add_to_project')}
-            </button>
+            <Dropdown as={ButtonGroup}>
+              <Button variant={'outline-secondary'} onClick={this.handleImportArtefact} data-cy={'import-artefact'}>
+                <i className={'fa fa-plus mr-2'} />
+                {t('Add_to_project')}
+              </Button>
+
+              <Dropdown.Toggle split variant="outline-secondary" data-cy={'more-actions-menu'} />
+
+              <Dropdown.Menu>
+                <Dropdown.Item onClick={this.handleDownloadArtefact} data-cy={'download-artefact'}>
+                  <i className={'fa fa-download mr-2'} />
+                  {t('Download')}
+                </Dropdown.Item>
+                <Dropdown.Item href={link} rel="noreferrer" target={'_blank'}>
+                  <i className={'fa fa-link mr-2'} /> {t('Source')}
+                </Dropdown.Item>
+                <Dropdown.Item onClick={this.handleShowLicense} data-cy={'show-license'}>
+                  <i className={'fa fa-balance-scale mr-2'} />
+                  {t('Licence')}
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
           </div>
         </div>
 
@@ -98,7 +103,7 @@ class ArtefactCard extends Component<Props, State> {
 
         <Modal show={licenseModal} onHide={this.handleModalClose} size={'lg'}>
           <Modal.Header closeButton data-cy={'license-header'}>
-            {name} : {t('Licence_to_use')}
+            {name} : {t('Licence')}
           </Modal.Header>
           <Modal.Body className={'d-flex justify-content-center'}>
             <pre className={Cls.licenseView}>{license}</pre>
