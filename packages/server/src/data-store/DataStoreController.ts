@@ -64,7 +64,7 @@ export class DataStoreController extends Controller {
     const { datastore, metrics } = this.services;
 
     const { limit, offset } = PaginationHelper.fromQuery(req);
-    const query = req.query.query;
+    const query = decodeURI(req.query.query);
     const lang = langFromString(req.query.lang);
 
     if (!lang || !query) {

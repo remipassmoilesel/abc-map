@@ -45,6 +45,8 @@ export class ArtefactDao {
       },
     };
     await coll.createIndex(specs, options);
+
+    await coll.createIndex({ name: 1 }, { unique: false });
   }
 
   public async save(artefact: ArtefactDocument): Promise<void> {
@@ -83,7 +85,7 @@ export class ArtefactDao {
 
     // First we try a text search
     const results = await coll
-      .find({ $text: { $search: cleanQuery, $language: lang } })
+      .find({ $text: { $search: cleanQuery, $language: lang, $caseSensitive: false, $diacriticSensitive: false } })
       .project<ArtefactDocument>({ score: { $meta: 'textScore' } })
       .limit(limit)
       .skip(offset)

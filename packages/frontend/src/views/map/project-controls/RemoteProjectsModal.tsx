@@ -107,7 +107,7 @@ class RemoteProjectsModal extends Component<Props, State> {
           {deleteConfirmation && (
             <div className={`alert alert-danger ${Cls.deleteConfirmation} p-2`}>
               <div className={'mb-2 text-center'}>{t('Are_you_sure')} </div>
-              <div className={'font-weight-bold text-center'}>{deleteConfirmation.name}</div>
+              <div className={'fw-bold text-center'}>{deleteConfirmation.name}</div>
               <div className={'d-flex justify-content-center align-items-center mt-4'}>
                 <button onClick={this.handleDeleteCanceled} className={'btn btn-secondary mr-2'} disabled={loading}>
                   {t('Do_not_delete')}

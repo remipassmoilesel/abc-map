@@ -86,6 +86,9 @@ export const ArtefactManifestSchema = {
             type: 'string',
           },
         },
+        metadata: {
+          type: 'object',
+        },
       },
     },
   },

@@ -1,0 +1,39 @@
+---
+version: 0.1.0
+artefact:
+  license: LICENCE.txt
+  name:
+    - language: en
+      text: "Bolivia (admin. level 4)"
+    - language: fr
+      text: "Bolivie (niveau admin. 4)"
+
+  description:
+    - language: en
+      text: "Administrative boundaries (provinces, regions, ...)"
+    - language: fr
+      text: "Limites administratives (provinces, régions, ...)"
+  link: https://www.openstreetmap.org/
+  files:
+    - "bolivia-l4.zip"
+
+  keywords:
+    - language: en
+      text:
+        - "Bolivia"
+        - "BO"
+        - "BOL"
+        - "Plurinational State of Bolivia"
+        - "Level 4"
+    - language: fr
+      text:
+        - "Bolivia"
+        - "BO"
+        - "BOL"
+        - "Bolivie"
+        - "État plurinational de Bolivie"
+
+  metadata:
+    osm_id: "-252645"
+    name: "Bolivia"
+    admin_level: "4"

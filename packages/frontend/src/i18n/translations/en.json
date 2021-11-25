@@ -297,10 +297,10 @@
     "Formats_not_supported": "These files are not supported",
     "Import_done": "Import done !",
     "Keywords": "Keywords",
-    "Link": "Link",
-    "Licence_to_use": "Licence to use",
+    "Source": "Source",
+    "Licence": "Licence",
     "Download": "Download",
-    "Add_to_project": "Add to project",
+    "Add_to_project": "Import",
     "Close": "Close"
   },
   "DataProcessingView": {

@@ -16,6 +16,11 @@ The files are always imported in new layers, with the default style.
 You can also use WMS, WMTS and XYZ layers by using the "Add layer" control
 </div>
 
+## Data store
+
+The data store contains data selected and compatible with Abc-Map. You can add these
+data in one click, so don't hesitate!
+
 ## Data sources
 
 Many sites offer free or paid data, such as:

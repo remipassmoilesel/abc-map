@@ -46,7 +46,7 @@ class LayoutList extends Component<Props, {}> {
 
     return (
       <div className={Cls.layoutList} data-cy={'layout-list'}>
-        <div className={'m-4 font-weight-bold'}>{t('Layouts')}</div>
+        <div className={'m-4 fw-bold'}>{t('Layouts')}</div>
         {items}
         {!items.length && (
           <div className={'m-4'} data-cy={'no-layout'}>

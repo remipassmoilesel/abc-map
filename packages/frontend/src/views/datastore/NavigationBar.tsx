@@ -16,68 +16,82 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { Component, ReactNode } from 'react';
+import React, { useCallback } from 'react';
 import * as _ from 'lodash';
+import Cls from './NavigationBar.module.scss';
+
+// This should be an odd number
+const MaxButtons = 11;
 
 interface Props {
+  // This should be an odd number
+  maxButtons?: number;
   activePage: number;
-  offset: number;
-  total: number;
-  pageSize: number;
-  onClick: (page: number, limit: number, offset: number) => void;
+  numberOfPages: number;
+  onClick: (page: number) => void;
 }
 
-// TODO: unit test
+export function NavigationBar(props: Props) {
+  const onClick = props.onClick;
+  const activePage = props.activePage;
+  const numberOfPages = props.numberOfPages;
+  const maxButtons = props.maxButtons || MaxButtons; // Minus active page
 
-class NavigationBar extends Component<Props> {
-  public render(): ReactNode {
-    const activePage = this.props.activePage;
-    const total = this.props.total;
-    const pageSize = this.props.pageSize;
-    const numberOfPages = this.numberOfPages(total, pageSize);
+  // We compute button bounds
+  const halfAround = Math.round((maxButtons - 1) / 2);
+  let firstButton = activePage - halfAround;
+  let lastButton = activePage + halfAround;
 
-    return (
-      <div>
-        <button onClick={() => this.handleClick(activePage - 1)} className={'btn btn-link mr-2'}>
-          &lt;
-        </button>
-        {_.range(1, numberOfPages + 1).map((pageNbr) => {
-          const isActive = pageNbr === activePage;
-          const classes = `btn btn-link mr-2 ${isActive ? 'font-weight-bold' : ''}`;
-          return (
-            <button key={pageNbr} onClick={() => this.handleClick(pageNbr)} className={classes}>
-              {pageNbr}
-            </button>
-          );
-        })}
-        <button onClick={() => this.handleClick(activePage + 1)} className={'btn btn-link mr-2'}>
-          &gt;
-        </button>
-      </div>
-    );
+  if (firstButton < 1) {
+    firstButton = 1;
   }
 
-  private handleClick = (pageNbr: number) => {
-    const { pageSize, total } = this.props;
-    const numberOfPages = this.numberOfPages(total, pageSize);
-
-    if (pageNbr < 1) {
-      pageNbr = 1;
-    }
-
-    if (pageNbr > numberOfPages) {
-      pageNbr = numberOfPages;
-    }
-
-    const limit = pageSize;
-    const offset = (pageNbr - 1) * pageSize;
-
-    this.props.onClick(pageNbr, limit, offset);
-  };
-
-  private numberOfPages(total: number, pageSize: number): number {
-    return Math.ceil(total / pageSize);
+  if (lastButton < maxButtons) {
+    lastButton = Math.min(numberOfPages, maxButtons);
   }
+
+  if (lastButton >= numberOfPages) {
+    firstButton = Math.max(numberOfPages - maxButtons + 1, 1);
+    lastButton = numberOfPages;
+  }
+
+  const handleClick = useCallback(
+    (pageNbr: number) => {
+      if (pageNbr < 1) {
+        pageNbr = 1;
+      }
+
+      if (pageNbr > numberOfPages) {
+        pageNbr = numberOfPages;
+      }
+
+      onClick(pageNbr);
+    },
+    [numberOfPages, onClick]
+  );
+
+  return (
+    <div className={Cls.navigationBar}>
+      {/* Go to first page */}
+      <button onClick={() => handleClick(0)}>&lt;&lt;</button>
+
+      {/* Go back */}
+      <button onClick={() => handleClick(activePage - 1)}>&lt;</button>
+      {_.range(firstButton, lastButton + 1).map((pageNbr) => {
+        const isActive = pageNbr === activePage;
+        const classes = isActive ? Cls.active : '';
+        const testId = isActive ? 'active' : undefined;
+        return (
+          <button key={pageNbr} onClick={() => handleClick(pageNbr)} className={classes} data-testid={testId}>
+            {pageNbr}
+          </button>
+        );
+      })}
+
+      {/* Go next */}
+      <button onClick={() => handleClick(activePage + 1)}>&gt;</button>
+    </div>
+  );
 }
 
 export default NavigationBar;

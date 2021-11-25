@@ -32,7 +32,7 @@ import Cls from './DataStoreView.module.scss';
 
 const logger = Logger.get('DataStoreView.tsx');
 
-const PageSize = 6;
+const PageSize = 9;
 
 interface State {
   artefacts: AbcArtefact[];
@@ -63,16 +63,15 @@ class DataStoreView extends Component<ServiceProps, State> {
   public render(): ReactNode {
     const query = this.state.searchQuery;
     const artefacts = this.state.artefacts;
-    const offset = this.state.offset;
     const total = this.state.total;
     const activePage = this.state.activePage;
+    const numberOfPages = Math.ceil(total / PageSize);
     const downloading = this.state.downloading;
 
     return (
       <div className={Cls.datastore}>
-        {/* Search and navigation bars */}
-
         <div className={Cls.header}>
+          {/* Search bar */}
           <div className={Cls.searchBar}>
             <input
               type={'text'}
@@ -87,19 +86,30 @@ class DataStoreView extends Component<ServiceProps, State> {
               {t('Search')}
             </button>
           </div>
-          <div className={Cls.navigationBar}>
-            {!query && <NavigationBar activePage={activePage} offset={offset} total={total} pageSize={PageSize} onClick={this.handlePageChange} />}
-          </div>
+
+          {/* Navigation bar */}
+          {!query && (
+            <div className={Cls.navigationBar}>
+              <NavigationBar activePage={activePage} numberOfPages={numberOfPages} onClick={this.handlePageChange} />
+            </div>
+          )}
+
+          {/* Clear search button */}
+          {query && (
+            <button className={'btn btn-outline-secondary mx-2'} onClick={this.clearSearch}>
+              <i className={'fa fa-times'} />
+            </button>
+          )}
         </div>
 
-        {/* Artefacts list */}
-
+        {/* Waiting screen */}
         {downloading && (
           <div className={Cls.loading}>
             <h4 className={'my-3 mx-2'}>{t('A_bit_of_patience')} ⌛</h4>
           </div>
         )}
 
+        {/* Artefact list */}
         {!downloading && (
           <div className={Cls.artefactList}>
             {artefacts.map((art, i) => (
@@ -115,7 +125,7 @@ class DataStoreView extends Component<ServiceProps, State> {
   public componentDidMount() {
     pageSetup(t('Data_store'), t('Add_data_easily'));
 
-    this.loadArtefacts();
+    this.listArtefacts();
   }
 
   private handleQueryChange = (ev: ChangeEvent<HTMLInputElement>) => {
@@ -129,29 +139,41 @@ class DataStoreView extends Component<ServiceProps, State> {
     }
   };
 
-  private handlePageChange = (activePage: number, limit: number, offset: number) => {
-    this.setState({ activePage, limit, offset }, () => this.loadArtefacts());
+  private clearSearch = () => {
+    this.setState({ searchQuery: '' }, () => this.listArtefacts());
   };
 
   private handleSearch = () => {
-    this.loadArtefacts();
+    this.searchArtefacts();
   };
 
-  private loadArtefacts() {
+  private searchArtefacts() {
     const { data } = this.props.services;
-    const { limit, offset, searchQuery } = this.state;
+    const { searchQuery } = this.state;
 
-    if (searchQuery) {
-      data
-        .searchArtefacts(searchQuery, limit, offset)
-        .then((res) => this.setState({ artefacts: res.content, limit: res.limit, offset: res.offset, total: res.total, activePage: 1 }))
-        .catch((err) => logger.error(err));
-    } else {
-      data
-        .listArtefacts(limit, offset)
-        .then((res) => this.setState({ artefacts: res.content, limit: res.limit, offset: res.offset, total: res.total }))
-        .catch((err) => logger.error(err));
+    if (!searchQuery) {
+      return;
     }
+
+    data
+      .searchArtefacts(searchQuery)
+      .then((res) => this.setState({ artefacts: res.content }))
+      .catch((err) => logger.error(err));
+  }
+
+  private handlePageChange = (activePage: number) => {
+    const offset = Math.round((activePage - 1) * PageSize);
+    this.setState({ activePage, offset }, () => this.listArtefacts());
+  };
+
+  private listArtefacts() {
+    const { data } = this.props.services;
+    const { limit, offset } = this.state;
+
+    data
+      .listArtefacts(limit, offset)
+      .then((res) => this.setState({ artefacts: res.content, limit: res.limit, offset: res.offset, total: res.total }))
+      .catch((err) => logger.error(err));
   }
 
   private handleImportArtefact = (artefact: AbcArtefact) => {

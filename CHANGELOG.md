@@ -2,7 +2,13 @@
 
 Presently there are no versions, because it is not yet necessary.
 
-## Tools and UX improvements
+## Better datastore (xxxxxxx 25/11/2021)
+
+- Minor style improvements on datastore 
+- Fix datastore search, search works now normally with accents
+
+
+## Tools and UX improvements (d459c713 21/11/2021)
 
 - Better code structure
 - Harmonized selection between tools, you can use SHIFT + click with all tools
