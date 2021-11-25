@@ -17,11 +17,12 @@
  */
 
 import { StyleProperties } from '@abc-map/shared';
-import { FrontendRoutes, MapTool } from '@abc-map/shared';
+import { MapTool } from '@abc-map/shared';
 import { TestHelper } from '../helpers/TestHelper';
 import { ToolSelector } from '../helpers/ToolSelector';
 import { Draw } from '../helpers/Draw';
 import { MainMap } from '../helpers/MainMap';
+import { Routes } from '../helpers/Routes';
 
 describe('Tool Text', function () {
   beforeEach(() => {
@@ -29,7 +30,7 @@ describe('Tool Text', function () {
   });
 
   it('user can add text', function () {
-    cy.visit(FrontendRoutes.map().raw())
+    cy.visit(Routes.map().format())
       .then(() => MainMap.fixedView())
       .then(() => MainMap.getComponent())
       .then(() => ToolSelector.enable(MapTool.Point))

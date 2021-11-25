@@ -17,8 +17,8 @@
  */
 
 import { TestHelper } from '../helpers/TestHelper';
-import { FrontendRoutes } from '@abc-map/shared';
 import { MainMap } from '../helpers/MainMap';
+import { Routes } from '../helpers/Routes';
 
 describe('Search on map', function () {
   beforeEach(() => {
@@ -26,7 +26,7 @@ describe('Search on map', function () {
   });
 
   it('user can search', function () {
-    cy.visit(FrontendRoutes.map().raw())
+    cy.visit(Routes.map().format())
       .then(() => MainMap.fixedView())
       .then(() => MainMap.getComponent())
       .get('[data-cy=search-on-map]')

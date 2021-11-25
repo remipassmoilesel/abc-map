@@ -17,7 +17,7 @@
  */
 
 import React, { Component, ReactNode } from 'react';
-import { ConfirmAccountParams, ConfirmationStatus, FrontendRoutes, Logger } from '@abc-map/shared';
+import { ConfirmAccountParams, ConfirmationStatus, Logger } from '@abc-map/shared';
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
 import { ServiceProps, withServices } from '../../core/withServices';
 import { HttpError } from '../../core/http/HttpError';
@@ -25,6 +25,7 @@ import { addNoIndexMeta, pageSetup, removeNoIndexMeta } from '../../core/utils/p
 import { prefixedTranslation } from '../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
 import Cls from './ConfirmAccountView.module.scss';
+import { Routes } from '../../routes';
 
 const logger = Logger.get('ConfirmAccountView.tsx');
 
@@ -63,7 +64,7 @@ class ConfirmAccountView extends Component<Props, State> {
         {ConfirmationStatus.Succeed === status && (
           <div data-cy={'account-enabled'}>
             {t('Activation_succeed')} ✨<br />
-            <Link to={FrontendRoutes.map().raw()}>{t('Map_is_over_here')}</Link>
+            <Link to={Routes.map().format()}>{t('Map_is_over_here')}</Link>
           </div>
         )}
       </div>

@@ -17,7 +17,7 @@
  */
 
 import React, { Component, ReactNode } from 'react';
-import { FrontendRoutes, Logger, UserStatus } from '@abc-map/shared';
+import { Logger, UserStatus } from '@abc-map/shared';
 import { ServiceProps, withServices } from '../../core/withServices';
 import { MainState } from '../../core/store/reducer';
 import { connect, ConnectedProps } from 'react-redux';
@@ -28,6 +28,7 @@ import { pageSetup } from '../../core/utils/page-setup';
 import { prefixedTranslation } from '../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
 import Cls from './UserAccountView.module.scss';
+import { Routes } from '../../routes';
 
 const logger = Logger.get('UserAccountView.tsx');
 
@@ -42,10 +43,20 @@ type Props = ConnectedProps<typeof connector> & RouteComponentProps<any> & Servi
 
 const t = prefixedTranslation('UserAccountView:');
 
-class UserAccountView extends Component<Props, {}> {
+interface State {
+  passwordFormVersion: number;
+}
+
+class UserAccountView extends Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+    this.state = { passwordFormVersion: 0 };
+  }
+
   public render(): ReactNode {
     const authenticated = this.props.user && this.props.status === UserStatus.Authenticated;
     const user = this.props.user;
+    const passwordFormVersion = this.state.passwordFormVersion;
 
     return (
       <div className={Cls.userAccount}>
@@ -53,7 +64,7 @@ class UserAccountView extends Component<Props, {}> {
         {!authenticated && (
           <div className={'my-5 d-flex flex-column align-items-center'}>
             <div className={'mb-4'}>{t('You_must_connect_to_display_your_account')}</div>
-            <Link to={FrontendRoutes.landing().raw()} className={'btn btn-outline-primary'}>
+            <Link to={Routes.landing().format()} className={'btn btn-outline-primary'}>
               {t('Go_back_to_landing')}
             </Link>
           </div>
@@ -71,7 +82,7 @@ class UserAccountView extends Component<Props, {}> {
             </div>
 
             <div className={Cls.section}>
-              <ChangePasswordForm onSubmit={this.handleChangePassword} />
+              <ChangePasswordForm key={passwordFormVersion} onSubmit={this.handleChangePassword} />
             </div>
             <div className={Cls.section}>
               <DeleteAccountForm onSubmit={this.handleDeleteAccount} />
@@ -91,7 +102,10 @@ class UserAccountView extends Component<Props, {}> {
 
     authentication
       .updatePassword(previousPassword, newPassword)
-      .then(() => toasts.info(t('Password_updated')))
+      .then(() => {
+        toasts.info(t('Password_updated'));
+        this.setState({ passwordFormVersion: this.state.passwordFormVersion + 1 });
+      })
       .catch((err) => logger.error('Cannot update password', err));
   };
 
@@ -101,7 +115,7 @@ class UserAccountView extends Component<Props, {}> {
       .deleteAccount(password)
       .then(() => {
         toasts.info(t('Your_account_has_been_deleted'));
-        this.props.history.push(FrontendRoutes.landing().raw());
+        this.props.history.push(Routes.landing().format());
         return authentication.logout();
       })
       .catch((err) => logger.error('Cannot delete account: ', err));

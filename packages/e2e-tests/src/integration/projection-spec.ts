@@ -17,13 +17,13 @@
  */
 
 import { TestHelper } from '../helpers/TestHelper';
-import { FrontendRoutes } from '@abc-map/shared';
 import { LayerControls } from '../helpers/LayerControls';
 import { TopBar } from '../helpers/TopBar';
 import { MainMap } from '../helpers/MainMap';
 import { LayoutPreview } from '../helpers/LayoutPreview';
 import { Download } from '../helpers/Download';
 import { LongOperation } from '../helpers/LongOperation';
+import { Routes } from '../helpers/Routes';
 
 describe('Projection', () => {
   beforeEach(() => {
@@ -31,7 +31,7 @@ describe('Projection', () => {
   });
 
   it('can use projection and export project', function () {
-    cy.visit(FrontendRoutes.map().raw())
+    cy.visit(Routes.map().format())
       .then(() => MainMap.fixedView())
       // Delete geometry layer
       .then(() => LayerControls.deleteActiveLayer())

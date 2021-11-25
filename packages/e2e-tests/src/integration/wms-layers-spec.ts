@@ -17,10 +17,10 @@
  */
 
 import { LayerType } from '@abc-map/shared';
-import { FrontendRoutes } from '@abc-map/shared';
 import { TestHelper } from '../helpers/TestHelper';
 import { MainMap } from '../helpers/MainMap';
 import { WmsConstants } from '../helpers/WmsConstants';
+import { Routes } from '../helpers/Routes';
 
 describe('Wms layers', function () {
   beforeEach(() => {
@@ -28,7 +28,7 @@ describe('Wms layers', function () {
   });
 
   it('User can add WMS layers without authentication', () => {
-    cy.visit(FrontendRoutes.map().raw())
+    cy.visit(Routes.map().format())
       // Open add layer dialog
       .get('[data-cy=add-layer]')
       .click()
@@ -65,7 +65,7 @@ describe('Wms layers', function () {
   });
 
   it('User can add WMS layers with authentication', () => {
-    cy.visit(FrontendRoutes.map().raw())
+    cy.visit(Routes.map().format())
       // Open add layer dialog
       .get('[data-cy=add-layer]')
       .click()

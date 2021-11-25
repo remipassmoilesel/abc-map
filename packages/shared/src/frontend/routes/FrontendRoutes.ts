@@ -17,54 +17,74 @@
  */
 
 import { Params, Route } from './Route';
+import { Language } from '../../lang';
 
 export class FrontendRoutes {
-  public static landing() {
-    return new Route<EmptyParams>('/');
+  constructor(private lang: Language | (() => Language)) {}
+
+  public landing() {
+    return new Route<EmptyParams>('/:lang', this.lang);
   }
 
-  public static map() {
-    return new Route<EmptyParams>('/map');
+  public map() {
+    return new Route<EmptyParams>('/:lang/map', this.lang);
   }
 
-  public static dataStore() {
-    return new Route<EmptyParams>('/datastore');
+  public dataStore() {
+    return new Route<EmptyParams>('/:lang/datastore', this.lang);
   }
 
-  public static layout() {
-    return new Route<EmptyParams>('/layout');
+  public layout() {
+    return new Route<EmptyParams>('/:lang/layout', this.lang);
   }
 
-  public static mapLegend() {
-    return new Route<EmptyParams>('/layout/map-legend');
+  public mapLegend() {
+    return new Route<EmptyParams>('/:lang/layout/map-legend', this.lang);
   }
 
-  public static documentation() {
-    return new Route<EmptyParams>('/documentation');
+  public documentation() {
+    return new Route<EmptyParams>('/:lang/documentation', this.lang);
   }
 
-  public static dataProcessing() {
-    return new Route<DataProcessingParams>('/data-processing/:moduleId?');
+  public dataProcessing() {
+    return new Route<DataProcessingParams>('/:lang/data-processing/:moduleId?', this.lang);
   }
 
-  public static confirmAccount() {
-    return new Route<ConfirmAccountParams>('/confirm-account/:token');
+  public confirmAccount() {
+    return new Route<ConfirmAccountParams>('/:lang/confirm-account/:token', this.lang);
   }
 
-  public static resetPassword() {
-    return new Route<ResetPasswordParams>('/reset-password/:token');
+  public resetPassword() {
+    return new Route<ResetPasswordParams>('/:lang/reset-password/:token', this.lang);
   }
 
-  public static userAccount() {
-    return new Route<EmptyParams>('/user-profile');
+  public userAccount() {
+    return new Route<EmptyParams>('/:lang/user-profile', this.lang);
   }
 
-  public static legalMentions() {
-    return new Route<EmptyParams>('/legal-mentions');
+  public legalMentions() {
+    return new Route<EmptyParams>('/:lang/legal-mentions', this.lang);
   }
 
-  public static funding() {
-    return new Route<EmptyParams>('/funding');
+  public funding() {
+    return new Route<EmptyParams>('/:lang/funding', this.lang);
+  }
+
+  public getAll(): Route<any>[] {
+    return [
+      this.landing(),
+      this.map(),
+      this.dataStore(),
+      this.layout(),
+      this.mapLegend(),
+      this.documentation(),
+      this.dataProcessing(),
+      this.confirmAccount(),
+      this.resetPassword(),
+      this.userAccount(),
+      this.legalMentions(),
+      this.funding(),
+    ];
   }
 }
 

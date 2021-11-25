@@ -20,7 +20,7 @@ import { Language, Logger } from '@abc-map/shared';
 import { Config } from '../config/Config';
 import { Services } from '../services/services';
 import * as path from 'path';
-import { FastifyInstance, fastify, FastifyRequest, FastifyReply } from 'fastify';
+import { fastify, FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import fastifyStatic from 'fastify-static';
 import fastifySensible from 'fastify-sensible';
 import { MetricsController } from '../metrics/MetricsController';

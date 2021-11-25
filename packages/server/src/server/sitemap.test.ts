@@ -28,71 +28,71 @@ describe('sitemap', () => {
       <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
 
         <url>
-          <loc>http://domain.fr/</loc>
-          <xhtml:link rel="alternate" hreflang="en" href="http://domain.fr/?lng=en"/>
-          <xhtml:link rel="alternate" hreflang="fr" href="http://domain.fr/?lng=fr"/>
-          <xhtml:link rel="alternate" hreflang="x-default" href="http://domain.fr/"/>
-          <lastmod>0000-00-00</lastmod>
+          <loc>http://domain.fr/en</loc>
+          <xhtml:link rel="alternate" hreflang="en" href="http://domain.fr/en"/>
+          <xhtml:link rel="alternate" hreflang="fr" href="http://domain.fr/fr"/>
+          <xhtml:link rel="alternate" hreflang="x-default" href="http://domain.fr/en"/>
+          <lastmod>2021-11-15</lastmod>
           <changefreq>monthly</changefreq>
           <priority>1.0</priority>
         </url>
 
         <url>
-          <loc>http://domain.fr/documentation</loc>
-          <xhtml:link rel="alternate" hreflang="en" href="http://domain.fr/documentation?lng=en"/>
-          <xhtml:link rel="alternate" hreflang="fr" href="http://domain.fr/documentation?lng=fr"/>
-          <xhtml:link rel="alternate" hreflang="x-default" href="http://domain.fr/documentation"/>
-          <lastmod>0000-00-00</lastmod>
+          <loc>http://domain.fr/en/documentation</loc>
+          <xhtml:link rel="alternate" hreflang="en" href="http://domain.fr/en/documentation"/>
+          <xhtml:link rel="alternate" hreflang="fr" href="http://domain.fr/fr/documentation"/>
+          <xhtml:link rel="alternate" hreflang="x-default" href="http://domain.fr/en/documentation"/>
+          <lastmod>2021-11-15</lastmod>
           <changefreq>monthly</changefreq>
           <priority>0.9</priority>
         </url>
 
         <url>
-          <loc>http://domain.fr/funding</loc>
-          <xhtml:link rel="alternate" hreflang="en" href="http://domain.fr/funding?lng=en"/>
-          <xhtml:link rel="alternate" hreflang="fr" href="http://domain.fr/funding?lng=fr"/>
-          <xhtml:link rel="alternate" hreflang="x-default" href="http://domain.fr/funding"/>
-          <lastmod>0000-00-00</lastmod>
+          <loc>http://domain.fr/en/funding</loc>
+          <xhtml:link rel="alternate" hreflang="en" href="http://domain.fr/en/funding"/>
+          <xhtml:link rel="alternate" hreflang="fr" href="http://domain.fr/fr/funding"/>
+          <xhtml:link rel="alternate" hreflang="x-default" href="http://domain.fr/en/funding"/>
+          <lastmod>2021-11-15</lastmod>
           <changefreq>monthly</changefreq>
           <priority>0.8</priority>
         </url>
 
         <url>
-          <loc>http://domain.fr/map</loc>
-          <xhtml:link rel="alternate" hreflang="en" href="http://domain.fr/map?lng=en"/>
-          <xhtml:link rel="alternate" hreflang="fr" href="http://domain.fr/map?lng=fr"/>
-          <xhtml:link rel="alternate" hreflang="x-default" href="http://domain.fr/map"/>
-          <lastmod>0000-00-00</lastmod>
+          <loc>http://domain.fr/en/map</loc>
+          <xhtml:link rel="alternate" hreflang="en" href="http://domain.fr/en/map"/>
+          <xhtml:link rel="alternate" hreflang="fr" href="http://domain.fr/fr/map"/>
+          <xhtml:link rel="alternate" hreflang="x-default" href="http://domain.fr/en/map"/>
+          <lastmod>2021-11-15</lastmod>
           <changefreq>monthly</changefreq>
           <priority>0.8</priority>
         </url>
 
         <url>
-          <loc>http://domain.fr/legal-mentions</loc>
-          <xhtml:link rel="alternate" hreflang="en" href="http://domain.fr/legal-mentions?lng=en"/>
-          <xhtml:link rel="alternate" hreflang="fr" href="http://domain.fr/legal-mentions?lng=fr"/>
-          <xhtml:link rel="alternate" hreflang="x-default" href="http://domain.fr/legal-mentions"/>
-          <lastmod>0000-00-00</lastmod>
+          <loc>http://domain.fr/en/legal-mentions</loc>
+          <xhtml:link rel="alternate" hreflang="en" href="http://domain.fr/en/legal-mentions"/>
+          <xhtml:link rel="alternate" hreflang="fr" href="http://domain.fr/fr/legal-mentions"/>
+          <xhtml:link rel="alternate" hreflang="x-default" href="http://domain.fr/en/legal-mentions"/>
+          <lastmod>2021-11-15</lastmod>
           <changefreq>monthly</changefreq>
           <priority>0.7</priority>
         </url>
 
         <url>
-          <loc>http://domain.fr/datastore</loc>
-          <xhtml:link rel="alternate" hreflang="en" href="http://domain.fr/datastore?lng=en"/>
-          <xhtml:link rel="alternate" hreflang="fr" href="http://domain.fr/datastore?lng=fr"/>
-          <xhtml:link rel="alternate" hreflang="x-default" href="http://domain.fr/datastore"/>
-          <lastmod>0000-00-00</lastmod>
+          <loc>http://domain.fr/en/datastore</loc>
+          <xhtml:link rel="alternate" hreflang="en" href="http://domain.fr/en/datastore"/>
+          <xhtml:link rel="alternate" hreflang="fr" href="http://domain.fr/fr/datastore"/>
+          <xhtml:link rel="alternate" hreflang="x-default" href="http://domain.fr/en/datastore"/>
+          <lastmod>2021-11-15</lastmod>
           <changefreq>monthly</changefreq>
           <priority>0.6</priority>
         </url>
 
         <url>
-          <loc>http://domain.fr/layout</loc>
-          <xhtml:link rel="alternate" hreflang="en" href="http://domain.fr/layout?lng=en"/>
-          <xhtml:link rel="alternate" hreflang="fr" href="http://domain.fr/layout?lng=fr"/>
-          <xhtml:link rel="alternate" hreflang="x-default" href="http://domain.fr/layout"/>
-          <lastmod>0000-00-00</lastmod>
+          <loc>http://domain.fr/en/layout</loc>
+          <xhtml:link rel="alternate" hreflang="en" href="http://domain.fr/en/layout"/>
+          <xhtml:link rel="alternate" hreflang="fr" href="http://domain.fr/fr/layout"/>
+          <xhtml:link rel="alternate" hreflang="x-default" href="http://domain.fr/en/layout"/>
+          <lastmod>2021-11-15</lastmod>
           <changefreq>monthly</changefreq>
           <priority>0.5</priority>
         </url>
@@ -100,13 +100,14 @@ describe('sitemap', () => {
       </urlset>
     `;
 
-    assert.equal(
-      // We remove blank chars
-      actual
-        .replace(/\s/gi, '')
-        // We replace last modification date
-        .replace(/<lastmod>[0-9]{4}-[0-9]{2}-[0-9]{2}<\/lastmod>/gi, '<lastmod>0000-00-00</lastmod>'),
-      expected.replace(/\s/gi, '')
-    );
+    assert.equal(removeBlanks(removeDates(actual)), removeBlanks(removeDates(expected)));
   });
 });
+
+function removeBlanks(s: string): string {
+  return s.replace(/\s/gi, '');
+}
+
+function removeDates(s: string): string {
+  return s.replace(/<lastmod>[0-9]{4}-[0-9]{2}-[0-9]{2}<\/lastmod>/gi, '<lastmod>0000-00-00</lastmod>');
+}

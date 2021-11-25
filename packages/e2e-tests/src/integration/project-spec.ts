@@ -17,7 +17,7 @@
  */
 
 import { LayerType, WmsMetadata } from '@abc-map/shared';
-import { FrontendRoutes, ProjectHelper } from '@abc-map/shared';
+import { ProjectHelper } from '@abc-map/shared';
 import { Toasts } from '../helpers/Toasts';
 import { TestHelper } from '../helpers/TestHelper';
 import { Download } from '../helpers/Download';
@@ -30,6 +30,7 @@ import { Authentication } from '../helpers/Authentication';
 import * as uuid from 'uuid-random';
 import 'cypress-file-upload';
 import { LongOperation } from '../helpers/LongOperation';
+import { Routes } from '../helpers/Routes';
 
 const PROJECT_PASSWORD = 'azerty1234';
 
@@ -40,7 +41,7 @@ describe('Project', function () {
     });
 
     it('can create new project', function () {
-      cy.visit(FrontendRoutes.map().raw())
+      cy.visit(Routes.map().format())
         .get('[data-cy=new-project]')
         .click()
         .get('[data-cy=confirmation-confirm]')
@@ -57,7 +58,7 @@ describe('Project', function () {
     });
 
     it('can rename project', function () {
-      cy.visit(FrontendRoutes.map().raw())
+      cy.visit(Routes.map().format())
         .get('[data-cy=edit-project]')
         .click()
         .get('[data-cy=project-name-input]')
@@ -72,7 +73,7 @@ describe('Project', function () {
     });
 
     it('can export project', function () {
-      cy.visit(FrontendRoutes.map().raw())
+      cy.visit(Routes.map().format())
         .get('[data-cy=export-project]')
         .click()
         .then(() => LongOperation.done())
@@ -94,7 +95,7 @@ describe('Project', function () {
     });
 
     it('can import project', function () {
-      cy.visit(FrontendRoutes.map().raw())
+      cy.visit(Routes.map().format())
         .get('[data-cy=import-project]')
         .click()
         .get('[data-cy=confirmation-confirm]')
@@ -119,7 +120,7 @@ describe('Project', function () {
     });
 
     it('can export project with credentials', function () {
-      cy.visit(FrontendRoutes.map().raw())
+      cy.visit(Routes.map().format())
         .then(() => LayerControls.addWmsLayerWithCredentials())
         .get('[data-cy=export-project]')
         .click()
@@ -149,7 +150,7 @@ describe('Project', function () {
     });
 
     it('can import project with credentials', function () {
-      cy.visit(FrontendRoutes.map().raw())
+      cy.visit(Routes.map().format())
         .get('[data-cy=import-project]')
         .click()
         .get('[data-cy=confirmation-confirm]')
@@ -194,7 +195,7 @@ describe('Project', function () {
     });
 
     it('can store project online without credentials', function () {
-      cy.visit(FrontendRoutes.map().raw())
+      cy.visit(Routes.map().format())
         .get('[data-cy=save-project]')
         .click()
         .then(() => Toasts.assertText('Project saved !'))
@@ -203,7 +204,7 @@ describe('Project', function () {
     });
 
     it('can store project online with credentials', function () {
-      cy.visit(FrontendRoutes.map().raw())
+      cy.visit(Routes.map().format())
         // Create a project and store it online
         .then(() => LayerControls.addWmsLayerWithCredentials())
         .get('[data-cy=save-project]')
@@ -222,7 +223,7 @@ describe('Project', function () {
     });
 
     it('can load remote project', function () {
-      cy.visit(FrontendRoutes.map().raw())
+      cy.visit(Routes.map().format())
         // Create a project and store it online
         .get('[data-cy=save-project]')
         .click()
@@ -252,7 +253,7 @@ describe('Project', function () {
     });
 
     it('can load remote remote project with credentials', function () {
-      cy.visit(FrontendRoutes.map().raw())
+      cy.visit(Routes.map().format())
         // Create a project and store it online
         .then(() => LayerControls.addWmsLayerWithCredentials())
         .get('[data-cy=save-project]')
@@ -296,7 +297,7 @@ describe('Project', function () {
 
     it('can delete project', function () {
       const projectName = uuid();
-      cy.visit(FrontendRoutes.map().raw())
+      cy.visit(Routes.map().format())
         // Rename project
         .get('[data-cy=edit-project]')
         .click()

@@ -18,7 +18,7 @@
 
 import React, { Component, ReactNode } from 'react';
 import { Route, RouteComponentProps, Switch, withRouter } from 'react-router-dom';
-import { FrontendRoutes, getAbcWindow } from '@abc-map/shared';
+import { getAbcWindow } from '@abc-map/shared';
 import MapView from './views/map/MapView';
 import { ToastContainer } from 'react-toastify';
 import LandingView from './views/landing/LandingView';
@@ -49,6 +49,7 @@ import FundingView from './views/funding/FundingView';
 import ConfirmationModal from './components/confirmation-modal/ConfirmationModal';
 import { prefixedTranslation } from './i18n/i18n';
 import { withTranslation } from 'react-i18next';
+import { Routes } from './routes';
 
 type Props = ServiceProps & RouteComponentProps;
 
@@ -60,18 +61,19 @@ class App extends Component<Props, {}> {
       <>
         <TopBar />
         <Switch>
-          <Route exact path={FrontendRoutes.landing().raw()} component={LandingView} />
-          <Route exact path={FrontendRoutes.map().raw()} component={MapView} />
-          <Route exact path={FrontendRoutes.dataStore().raw()} component={DataStoreView} />
-          <Route exact path={FrontendRoutes.layout().raw()} component={LayoutView} />
-          <Route exact path={FrontendRoutes.mapLegend().raw()} component={MapLegendView} />
-          <Route exact path={FrontendRoutes.documentation().raw()} component={DocumentationView} />
-          <Route exact path={FrontendRoutes.confirmAccount().raw()} component={ConfirmAccountView} />
-          <Route exact path={FrontendRoutes.dataProcessing().raw()} component={DataProcessingView} />
-          <Route exact path={FrontendRoutes.resetPassword().raw()} component={ResetPasswordView} />
-          <Route exact path={FrontendRoutes.userAccount().raw()} component={UserAccountView} />
-          <Route exact path={FrontendRoutes.legalMentions().raw()} component={LegalMentionsView} />
-          <Route exact path={FrontendRoutes.funding().raw()} component={FundingView} />
+          <Route exact path={'/'} component={LandingView} />
+          <Route exact path={Routes.landing().raw()} component={LandingView} />
+          <Route exact path={Routes.map().raw()} component={MapView} />
+          <Route exact path={Routes.dataStore().raw()} component={DataStoreView} />
+          <Route exact path={Routes.layout().raw()} component={LayoutView} />
+          <Route exact path={Routes.mapLegend().raw()} component={MapLegendView} />
+          <Route exact path={Routes.documentation().raw()} component={DocumentationView} />
+          <Route exact path={Routes.confirmAccount().raw()} component={ConfirmAccountView} />
+          <Route exact path={Routes.dataProcessing().raw()} component={DataProcessingView} />
+          <Route exact path={Routes.resetPassword().raw()} component={ResetPasswordView} />
+          <Route exact path={Routes.userAccount().raw()} component={UserAccountView} />
+          <Route exact path={Routes.legalMentions().raw()} component={LegalMentionsView} />
+          <Route exact path={Routes.funding().raw()} component={FundingView} />
           <Route path={'*'} component={NotFoundView} />
         </Switch>
         <ToastContainer className={'abc-toast-container'} />
@@ -99,7 +101,10 @@ class App extends Component<Props, {}> {
       authentication.watchToken();
     }
 
-    getAbcWindow().abc.goTo = this.goTo;
+    // This route is used in documentation
+    getAbcWindow().abc.goToFunding = () => {
+      this.props.history.push(Routes.funding().format());
+    };
   }
 
   public componentWillUnmount() {
@@ -123,14 +128,6 @@ class App extends Component<Props, {}> {
       ev.returnValue = message;
     }
     return message;
-  };
-
-  /**
-   * This route is used for documentation links
-   * @param route
-   */
-  private goTo = (route: string) => {
-    this.props.history.push(route);
   };
 }
 

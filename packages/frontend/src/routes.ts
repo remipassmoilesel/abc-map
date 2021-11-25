@@ -15,26 +15,7 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
+import { FrontendRoutes } from '@abc-map/shared';
+import { getLang } from './i18n/i18n';
 
-import { Routes } from '../helpers/Routes';
-
-describe('Display', function () {
-  it('Too small display should warn', function () {
-    cy.viewport(500, 500)
-      .visit(Routes.map().format())
-      .get('[data-cy=device-warning]')
-      .should('exist')
-      .get('[data-cy=device-warning-confirm]')
-      .click()
-      .get('[data-cy=device-warning]')
-      .should('not.exist');
-  });
-
-  it('Correct display should warn', function () {
-    cy.viewport(1980, 1080)
-      .visit(Routes.map().format())
-      .wait(1000) // We must wait here in order to let appear modal
-      .get('[data-cy=device-warning]')
-      .should('not.exist');
-  });
-});
+export const Routes = new FrontendRoutes(getLang);

@@ -24,7 +24,7 @@ export interface AbcWindow extends Window {
     layoutPreview?: E2eMap;
     services?: any;
     store?: any;
-    goTo?: (r: string) => void;
+    goToFunding?: () => void;
   };
   __REDUX_DEVTOOLS_EXTENSION__?: () => any;
   Cypress?: any;

@@ -37,7 +37,7 @@ describe('EmailService', () => {
   describe('confirmRegistration()', () => {
     it('FR', async () => {
       /* eslint-disable */
-      const expectedMessage = "\n          <p>Bonjour !</p>\n          <p>Pour activer votre compte Abc-Map, veuillez <a href=\"http://localhost:10082/confirm-account/confirm-registration-token\" data-cy=\"enable-account-link\">cliquer sur ce lien.</a></p>\n          <p>A bientôt !</p>\n          \n  <p>&nbsp;</p>\n  <small>Ceci est un message automatique, envoyé par la plateforme <a href=\"http://localhost:10082\">http://localhost:10082</a>.\n  Vous ne pouvez pas répondre à ce message.</small>\n\n        ";
+      const expectedMessage = "\n          <p>Bonjour !</p>\n          <p>Pour activer votre compte Abc-Map, veuillez <a href=\"http://localhost:10082/fr/confirm-account/confirm-registration-token\" data-cy=\"enable-account-link\">cliquer sur ce lien.</a></p>\n          <p>A bientôt !</p>\n          \n  <p>&nbsp;</p>\n  <small>Ceci est un message automatique, envoyé par la plateforme <a href=\"http://localhost:10082\">http://localhost:10082</a>.\n  Vous ne pouvez pas répondre à ce message.</small>\n\n        ";
       /* eslint-enable */
 
       await service.confirmRegistration(Language.French, 'to@domain', 'confirm-registration-token');
@@ -47,7 +47,7 @@ describe('EmailService', () => {
 
     it('EN', async () => {
       /* eslint-disable */
-      const expectedMessage = "\n          <p>Hi !</p>\n          <p>To activate your Abc-Map account, please <a href=\"http://localhost:10082/confirm-account/confirm-registration-token\" data-cy=\"enable-account-link\">click on this link.</a></p>\n          <p>Goodbye !</p>\n          \n  <p>&nbsp;</p>\n  <small>This is an automatic message, sent by the platform <a href=\"http://localhost:10082\">http://localhost:10082</a>.\n  You cannot reply to this message.</small>\n\n        ";
+      const expectedMessage = "\n          <p>Hi !</p>\n          <p>To activate your Abc-Map account, please <a href=\"http://localhost:10082/en/confirm-account/confirm-registration-token\" data-cy=\"enable-account-link\">click on this link.</a></p>\n          <p>Goodbye !</p>\n          \n  <p>&nbsp;</p>\n  <small>This is an automatic message, sent by the platform <a href=\"http://localhost:10082\">http://localhost:10082</a>.\n  You cannot reply to this message.</small>\n\n        ";
       /* eslint-enable */
 
       await service.confirmRegistration(Language.English, 'to@domain', 'confirm-registration-token');
@@ -59,7 +59,7 @@ describe('EmailService', () => {
   describe('resetPassword()', () => {
     it('FR', async () => {
       /* eslint-disable */
-      const expectedMessage = "\n          <p>Bonjour !</p>\n          <p>Pour réinitialiser votre mot de passe Abc-Map, veuillez <a href=\"http://localhost:10082/reset-password/reset-password-token\" data-cy=\"reset-password-link\">cliquer sur ce lien.</a></p>\n          <p>Si vous n'êtes pas à l'origine de cette demande, ne tenez pas compte de ce message.</p>\n          <p>A bientôt !</p>\n          \n  <p>&nbsp;</p>\n  <small>Ceci est un message automatique, envoyé par la plateforme <a href=\"http://localhost:10082\">http://localhost:10082</a>.\n  Vous ne pouvez pas répondre à ce message.</small>\n\n        ";
+      const expectedMessage = "\n          <p>Bonjour !</p>\n          <p>Pour réinitialiser votre mot de passe Abc-Map, veuillez <a href=\"http://localhost:10082/fr/reset-password/reset-password-token\" data-cy=\"reset-password-link\">cliquer sur ce lien.</a></p>\n          <p>Si vous n'êtes pas à l'origine de cette demande, ne tenez pas compte de ce message.</p>\n          <p>A bientôt !</p>\n          \n  <p>&nbsp;</p>\n  <small>Ceci est un message automatique, envoyé par la plateforme <a href=\"http://localhost:10082\">http://localhost:10082</a>.\n  Vous ne pouvez pas répondre à ce message.</small>\n\n        ";
       /* eslint-enable */
 
       await service.resetPassword(Language.French, 'to@domain', 'reset-password-token');
@@ -69,7 +69,7 @@ describe('EmailService', () => {
 
     it('EN', async () => {
       /* eslint-disable */
-      const expectedMessage = "\n          <p>Hi !</p>\n          <p>To reset your Abc-Map password, please <a href=\"http://localhost:10082/reset-password/reset-password-token\" data-cy=\"reset-password-link\">click on this link.</a></p>\n          <p>If you are not the initiator of this request, ignore this message.</p>\n          <p>Goodbye !</p>\n          \n  <p>&nbsp;</p>\n  <small>This is an automatic message, sent by the platform <a href=\"http://localhost:10082\">http://localhost:10082</a>.\n  You cannot reply to this message.</small>\n\n        ";
+      const expectedMessage = "\n          <p>Hi !</p>\n          <p>To reset your Abc-Map password, please <a href=\"http://localhost:10082/en/reset-password/reset-password-token\" data-cy=\"reset-password-link\">click on this link.</a></p>\n          <p>If you are not the initiator of this request, ignore this message.</p>\n          <p>Goodbye !</p>\n          \n  <p>&nbsp;</p>\n  <small>This is an automatic message, sent by the platform <a href=\"http://localhost:10082\">http://localhost:10082</a>.\n  You cannot reply to this message.</small>\n\n        ";
       /* eslint-enable */
 
       await service.resetPassword(Language.English, 'to@domain', 'reset-password-token');

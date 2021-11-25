@@ -19,10 +19,10 @@
 import React, { Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/shared';
 import { Link } from 'react-router-dom';
-import { FrontendRoutes } from '@abc-map/shared';
 import { addNoIndexMeta, pageSetup, removeNoIndexMeta } from '../../core/utils/page-setup';
 import { prefixedTranslation } from '../../i18n/i18n';
 import Cls from './NotFoundView.module.scss';
+import { Routes } from '../../routes';
 
 const logger = Logger.get('NotFoundView.tsx');
 
@@ -33,7 +33,7 @@ class NotFoundView extends Component<{}, {}> {
     return (
       <div className={Cls.notFoundView}>
         <h3 className={'mb-5'}>{t('You_are_lost')} 😱</h3>
-        <Link to={FrontendRoutes.landing().raw()} className={'btn btn-outline-primary'}>
+        <Link to={Routes.landing().format()} className={'btn btn-outline-primary'}>
           {t('Dont_panic')}&nbsp;&nbsp;💁🏽
         </Link>
       </div>

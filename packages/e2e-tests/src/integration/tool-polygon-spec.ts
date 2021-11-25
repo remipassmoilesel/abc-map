@@ -17,12 +17,13 @@
  */
 
 import { StyleProperties } from '@abc-map/shared';
-import { FrontendRoutes, MapTool } from '@abc-map/shared';
+import { MapTool } from '@abc-map/shared';
 import { TestHelper } from '../helpers/TestHelper';
 import { ToolSelector } from '../helpers/ToolSelector';
 import { Draw } from '../helpers/Draw';
 import { MainMap } from '../helpers/MainMap';
 import { DefaultDrawingStyle } from '../helpers/DefaultDrawingStyle';
+import { Routes } from '../helpers/Routes';
 
 describe('Tool Polygon', function () {
   beforeEach(() => {
@@ -30,7 +31,7 @@ describe('Tool Polygon', function () {
   });
 
   it('user can draw', function () {
-    cy.visit(FrontendRoutes.map().raw())
+    cy.visit(Routes.map().format())
       .then(() => MainMap.fixedView())
       .then(() => ToolSelector.enable(MapTool.Polygon))
       // First
@@ -67,7 +68,7 @@ describe('Tool Polygon', function () {
   });
 
   it('user can modify', function () {
-    cy.visit(FrontendRoutes.map().raw())
+    cy.visit(Routes.map().format())
       .then(() => MainMap.fixedView())
       .then(() => ToolSelector.enable(MapTool.Polygon))
       // Create polygon

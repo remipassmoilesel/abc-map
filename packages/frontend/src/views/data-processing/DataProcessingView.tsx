@@ -17,11 +17,12 @@
  */
 
 import React, { Component, ReactNode } from 'react';
-import { DataProcessingParams, FrontendRoutes, Logger } from '@abc-map/shared';
+import { DataProcessingParams, Logger } from '@abc-map/shared';
 import { getModules } from '../../data-processing';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { pageSetup } from '../../core/utils/page-setup';
 import { prefixedTranslation } from '../../i18n/i18n';
+import { Routes } from '../../routes';
 import { withTranslation } from 'react-i18next';
 import Cls from './DataProcessingView.module.scss';
 import '../../data-processing/style.scss';
@@ -46,12 +47,7 @@ class DataProcessingView extends Component<Props, {}> {
         <div className={Cls.leftMenu}>
           <div className={'mx-2 my-4 fw-bold'}>Modules</div>
           {Modules.map((mod) => (
-            <Link
-              key={mod.getId()}
-              className={'btn btn-link mb-1'}
-              to={FrontendRoutes.dataProcessing().withParams({ moduleId: mod.getId() })}
-              data-cy={mod.getId()}
-            >
+            <Link key={mod.getId()} className={'btn btn-link mb-1'} to={Routes.dataProcessing().withParams({ moduleId: mod.getId() })} data-cy={mod.getId()}>
               {tModules(mod.getI18nName())}
             </Link>
           ))}

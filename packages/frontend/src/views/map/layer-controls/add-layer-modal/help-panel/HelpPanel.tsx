@@ -17,11 +17,12 @@
  */
 
 import React, { Component, ReactNode } from 'react';
-import { FrontendRoutes, LayerType, Logger } from '@abc-map/shared';
+import { LayerType, Logger } from '@abc-map/shared';
 import { Link } from 'react-router-dom';
 import { prefixedTranslation } from '../../../../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
 import Cls from './HelpPanel.module.scss';
+import { Routes } from '../../../../../routes';
 
 const logger = Logger.get('HelpPanel.tsx');
 
@@ -45,7 +46,7 @@ class HelpPanel extends Component<Props, {}> {
           <div>
             {t('Cant_find_what_you_want')}
             <br />
-            <Link to={FrontendRoutes.dataStore().raw()}>{t('Try_data_store')}</Link>
+            <Link to={Routes.dataStore().format()}>{t('Try_data_store')}</Link>
           </div>
         </div>
       </div>

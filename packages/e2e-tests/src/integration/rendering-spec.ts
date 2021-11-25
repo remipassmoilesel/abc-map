@@ -16,13 +16,13 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FrontendRoutes } from '@abc-map/shared';
 import { Toasts } from '../helpers/Toasts';
 import { Download } from '../helpers/Download';
 import { TestData } from '../test-data/TestData';
 import { TestHelper } from '../helpers/TestHelper';
 import { PdfComparison } from '../plugins/PdfComparison';
 import { LongOperation } from '../helpers/LongOperation';
+import { Routes } from '../helpers/Routes';
 
 describe('Rendering spec', function () {
   beforeEach(() => {
@@ -35,7 +35,7 @@ describe('Rendering spec', function () {
    * If you know how to make it pass on all platforms, ping me !
    */
   it('PDF rendering should be conform', function () {
-    cy.visit(FrontendRoutes.map().raw())
+    cy.visit(Routes.map().format())
       .get('[data-cy=import-project]')
       .click()
       .get('[data-cy=confirmation-confirm]')
