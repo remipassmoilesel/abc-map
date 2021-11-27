@@ -136,7 +136,7 @@ class AddLayerModal extends Component<Props, State> {
                   <PredefinedPanel value={predefinedValues} onChange={this.handlePredefinedValueChanged} onCancel={onHide} onConfirm={onHide} />
                 )}
                 {geometrySelected && <GeometryLayerPanel onConfirm={onHide} onCancel={onHide} />}
-                {xyzSelected && <XYZLayerPanel value={xyzValues} onChange={this.handleXyzValuesChange} onConfirm={onHide} onCancel={onHide} />}
+                {xyzSelected && <XYZLayerPanel url={xyzValues} onChange={this.handleXyzValuesChange} onConfirm={onHide} onCancel={onHide} />}
                 {wmsSelected && (
                   <WmsLayerPanel projectProjection={projection} value={wmsValues} onChange={this.handleWmsValuesChange} onConfirm={onHide} onCancel={onHide} />
                 )}

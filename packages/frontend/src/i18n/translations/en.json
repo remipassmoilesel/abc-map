@@ -147,7 +147,9 @@
       "WMTS_are_you_sure": "⚠️  URL contains 'WMS'. Are you sure you want to add a WMTS layer ?",
       "URL_must_contains_placeholders": "URL must contains placeholders <code>{x}</code>, <code>{y}</code> and <code>{z}</code>.",
       "Example_url_with_placeholders": "Example: <code>https://my-domain.net/xyz/{x}/{y}/{z}</code>",
-      "Sample_URL": "Example URL"
+      "Sample_URL": "Example URL",
+      "Some_placeholders_are_wrong": "Some placeholders may not be correctly interpreted: ",
+      "Use_double_placeholders": "If you are using placeholders other than x, y or z, you must write them as: <code>{s-s}</code> (doubled and with a hyphen)"
     },
     "ToolSelector": {
       "Drawing_tools": "Tools",

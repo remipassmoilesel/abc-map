@@ -16,15 +16,18 @@ The files are always imported in new layers, with the default style.
 You can also use WMS, WMTS and XYZ layers by using the "Add layer" control
 </div>
 
-## Data store
+## Where to find data ?
+
+### In data store
 
 The data store contains data selected and compatible with Abc-Map. You can add these
 data in one click, so don't hesitate!
 
-## Data sources
+### Everywhere else
 
 Many sites offer free or paid data, such as:
 
+- <a href="https://carto.com/help/building-maps/basemap-list/" target="_blank">carto.com</a>
 - <a href="https://www.esri.com" target="_blank">ESRI</a>
 - <a href="https://www.mapbox.com" target="_blank">Mapbox</a>
 - <a href="http://www.naturalearthdata.com" target="_blank">naturalearthdata.com</a>

@@ -40,13 +40,13 @@ class FormValidationLabel extends Component<Props, {}> {
 
     if (icon && message) {
       return (
-        <MessageLabel icon={icon} className={className}>
+        <MessageLabel icon={icon} className={className} data-testid={'form-validation'}>
           <div dangerouslySetInnerHTML={{ __html: message }} />
         </MessageLabel>
       );
     } else {
       return (
-        <MessageLabel icon={'fa-exclamation-circle'} className={className}>
+        <MessageLabel icon={'fa-exclamation-circle'} className={className} data-testid={'form-validation'}>
           {(() => {
             logger.error(`Unhandled state: ${formState}`, { icon, message });
             return <>{t('Invalid_form')}</>;

@@ -35,10 +35,10 @@ class ControlButtons extends React.Component<Props, {}> {
     const submitDisabled = this.props.submitDisabled;
     return (
       <div className={'d-flex justify-content-end mt-3'}>
-        <button className={'btn btn-secondary mr-3'} onClick={onCancel}>
+        <button className={'btn btn-secondary mr-3'} onClick={onCancel} data-testid={'cancel'}>
           {t('Cancel')}
         </button>
-        <button disabled={submitDisabled} className={'btn btn-primary'} onClick={onConfirm} data-cy={'add-layer-confirm'}>
+        <button disabled={submitDisabled} className={'btn btn-primary'} onClick={onConfirm} data-testid={'confirm'} data-cy={'add-layer-confirm'}>
           {t('Add')}
         </button>
       </div>
