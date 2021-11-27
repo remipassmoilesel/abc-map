@@ -1,6 +1,6 @@
 <a name="data-import"></a>
 
-# Importer des données
+# Import de données
 
 Vous pouvez importer:
 
@@ -16,15 +16,18 @@ Les fichiers sont systématiquement importés dans de nouvelles couches, avec le
 Vous pouvez également utiliser des couches WMS, WMTS et XYZ en utilisant le contrôle "Ajouter une couche"
 </div>
 
-## Catalogue de données
+## Ou trouver des données ?
+
+### Dans le catalogue de données
 
 Le catalogue de données contient des données sélectionnées et compatibles avec Abc-Map. Vous pouvez ajouter ces
 données en un clic, alors n'hésitez pas !
 
-## Sources de données externes
+### Partout ailleurs
 
 Beaucoup de sites proposent des données gratuites ou payantes, comme par exemple:
 
+- <a href="https://carto.com/help/building-maps/basemap-list/" target="_blank">carto.com</a>
 - <a href="https://www.esri.com" target="_blank">ESRI</a>
 - <a href="https://www.mapbox.com" target="_blank">Mapbox</a>
 - <a href="http://www.naturalearthdata.com" target="_blank">naturalearthdata.com</a>

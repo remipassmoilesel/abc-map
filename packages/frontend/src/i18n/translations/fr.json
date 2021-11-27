@@ -147,7 +147,9 @@
       "WMTS_are_you_sure": "⚠️ L'URL contient 'WMS'. Etes vous sûr de vouloir ajouter une couche WMTS ?",
       "URL_must_contains_placeholders": "L'URL doit contenir les variables <code>{x}</code>, <code>{y}</code> et <code>{z}</code>.",
       "Example_url_with_placeholders": "Exemple: <code>https://my-domain.net/xyz/{x}/{y}/{z}</code>",
-      "Sample_URL": "Exemple d'URL"
+      "Sample_URL": "Exemple d'URL",
+      "Some_placeholders_are_wrong": "Certaines variables ne seront pas correctement interprétés: ",
+      "Use_double_placeholders": "Si vous utilisez des variables autres qu'x, y ou z, vous devez les écrire sous la forme: <code>{s-s}</code> (doublées et avec un tiret)"
     },
     "ToolSelector": {
       "Drawing_tools": "Outils",

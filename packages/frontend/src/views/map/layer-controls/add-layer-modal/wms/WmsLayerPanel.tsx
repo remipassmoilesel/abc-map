@@ -151,7 +151,8 @@ class WmsLayerPanel extends Component<Props, State> {
     };
 
     const formState = this.validateForm(values);
-    this.setState({ formState }, () => this.props.onChange(values));
+    this.setState({ formState });
+    this.props.onChange(values);
   };
 
   private handleLayerSelected = (layer: WmsLayer) => {
@@ -160,7 +161,8 @@ class WmsLayerPanel extends Component<Props, State> {
     this.getValues(layer)
       .then((values) => {
         const formState = this.validateForm(values);
-        this.setState({ formState }, () => this.props.onChange(values));
+        this.setState({ formState });
+        this.props.onChange(values);
       })
       .catch((err) => {
         logger.error('Cannot use layer: ', err);
@@ -213,7 +215,8 @@ class WmsLayerPanel extends Component<Props, State> {
     };
 
     const formState = this.validateForm(values);
-    this.setState({ formState }, () => this.props.onChange(values));
+    this.setState({ formState });
+    this.props.onChange(values);
   };
 
   private handlePasswordChanged = (ev: ChangeEvent<HTMLInputElement>) => {
@@ -228,7 +231,8 @@ class WmsLayerPanel extends Component<Props, State> {
     };
 
     const formState = this.validateForm(values);
-    this.setState({ formState }, () => this.props.onChange(values));
+    this.setState({ formState });
+    this.props.onChange(values);
   };
 
   private fetchCapabilities = () => {

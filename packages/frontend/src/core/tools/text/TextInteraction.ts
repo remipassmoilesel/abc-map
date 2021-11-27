@@ -42,7 +42,7 @@ export class TextInteraction extends Interaction {
     this.source = options.source;
   }
 
-  // FIXME This methods was created because of errors in openlayers typings,
+  // FIXME These methods was created because of errors in openlayers typings,
   // FIXME which does not allow other events than 'change' or 'error' on interactions 🤷
   public customOn(type: TextEvent.Start, handler: (ev: TextStart) => void): void;
   public customOn(type: TextEvent.Changed, handler: (ev: TextChanged) => void): void;

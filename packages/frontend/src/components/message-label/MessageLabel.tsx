@@ -22,6 +22,7 @@ import Cls from './MessageLabel.module.scss';
 export interface Props {
   icon: string;
   className?: string;
+  'data-testid'?: string;
 }
 
 class MessageLabel extends Component<Props, {}> {
@@ -29,9 +30,10 @@ class MessageLabel extends Component<Props, {}> {
     const icon = this.props.icon;
     const children = this.props.children;
     const className = this.props.className || '';
+    const dataTestId = this.props['data-testid'] || undefined;
 
     return (
-      <div className={`${Cls.message} ${className}`}>
+      <div className={`${Cls.message} ${className}`} data-testid={dataTestId}>
         <i className={`fa ${icon}`} /> {children}
       </div>
     );
