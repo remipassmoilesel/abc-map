@@ -46,14 +46,14 @@ import { stripHtml } from '../../utils/strings';
 
 export const logger = Logger.get('LayerWrapper');
 
-export declare type OlLayers = Layer | VectorImageLayer | TileLayer;
+export declare type OlLayers = Layer<Source> | VectorImageLayer<VectorSource<Geometry>> | TileLayer<TileSource>;
 export declare type OlSources = Source | VectorSource<Geometry> | TileSource | TileWMS | WMTS;
 
-export declare type VectorLayerWrapper = LayerWrapper<VectorImageLayer, VectorSource<Geometry>, VectorMetadata>;
-export declare type PredefinedLayerWrapper = LayerWrapper<TileLayer, TileSource, PredefinedMetadata>;
-export declare type WmsLayerWrapper = LayerWrapper<TileLayer, TileWMS, WmsMetadata>;
-export declare type WmtsLayerWrapper = LayerWrapper<TileLayer, WMTS, WmtsMetadata>;
-export declare type XyzLayerWrapper = LayerWrapper<TileLayer, XYZ, XyzMetadata>;
+export declare type VectorLayerWrapper = LayerWrapper<VectorImageLayer<VectorSource<Geometry>>, VectorSource<Geometry>, VectorMetadata>;
+export declare type PredefinedLayerWrapper = LayerWrapper<TileLayer<TileSource>, TileSource, PredefinedMetadata>;
+export declare type WmsLayerWrapper = LayerWrapper<TileLayer<TileSource>, TileWMS, WmsMetadata>;
+export declare type WmtsLayerWrapper = LayerWrapper<TileLayer<TileSource>, WMTS, WmtsMetadata>;
+export declare type XyzLayerWrapper = LayerWrapper<TileLayer<TileSource>, XYZ, XyzMetadata>;
 
 export class LayerWrapper<Layer extends OlLayers = OlLayers, Source extends OlSources = OlSources, Meta extends LayerMetadata = LayerMetadata> {
   public static from<L extends OlLayers, S extends OlSources, M extends LayerMetadata>(layer: L): LayerWrapper<L, S, M> {
@@ -161,7 +161,7 @@ export class LayerWrapper<Layer extends OlLayers = OlLayers, Source extends OlSo
    * Shallow clone layer
    */
   public shallowClone(styleRatio = 1): LayerWrapper<Layer, Source, Meta> {
-    let layer: TileLayer | VectorImageLayer;
+    let layer: TileLayer<TileSource> | VectorImageLayer<VectorSource<Geometry>>;
     if (this.isPredefined()) {
       layer = new TileLayer({ source: this.layer.getSource() as TileSource });
     } else if (this.isWms()) {

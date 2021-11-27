@@ -28,5 +28,5 @@ export declare type E2eFeatureProperty = object | string | number | undefined;
 
 export interface E2eGeometry {
   getType(): string;
-  getExtent(): [number, number, number, number];
+  getExtent(): number[];
 }

@@ -92,7 +92,7 @@ describe('findFeatureNearCursor', function () {
   });
 });
 
-function testVectorSource1(): { source: VectorSource; feature1: Feature<Geometry>; feature2: Feature<Geometry> } {
+function testVectorSource1(): { source: VectorSource<Geometry>; feature1: Feature<Geometry>; feature2: Feature<Geometry> } {
   const source = new VectorSource();
   const feature1 = new Feature(
     new Polygon([
@@ -123,7 +123,7 @@ function testVectorSource1(): { source: VectorSource; feature1: Feature<Geometry
   return { source, feature1, feature2 };
 }
 
-function testVectorSource2(): { source: VectorSource; feature1: Feature<Geometry>; feature2: Feature<Geometry> } {
+function testVectorSource2(): { source: VectorSource<Geometry>; feature1: Feature<Geometry>; feature2: Feature<Geometry> } {
   const source = new VectorSource();
   const feature1 = FeatureWrapper.create(
     new Polygon([

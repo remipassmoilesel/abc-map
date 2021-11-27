@@ -36,8 +36,8 @@ export const noopFilter: FeatureFilter = () => true;
  *
  */
 export function findFeatureNearCursor(
-  event: MapBrowserEvent,
-  source: VectorSource,
+  event: MapBrowserEvent<MouseEvent>,
+  source: VectorSource<Geometry>,
   filter = noopFilter,
   tolerancePx = DefaultTolerancePx
 ): Feature<Geometry> | undefined {

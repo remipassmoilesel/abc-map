@@ -19,9 +19,10 @@
 import { Task } from '../../Task';
 import VectorSource from 'ol/source/Vector';
 import { FeatureWrapper } from '../../../geo/features/FeatureWrapper';
+import Geometry from 'ol/geom/Geometry';
 
 export class RemoveFeaturesTask extends Task {
-  constructor(private source: VectorSource, private features: FeatureWrapper[]) {
+  constructor(private source: VectorSource<Geometry>, private features: FeatureWrapper[]) {
     super();
   }
 

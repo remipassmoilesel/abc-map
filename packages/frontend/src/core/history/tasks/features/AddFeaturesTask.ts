@@ -19,9 +19,10 @@
 import { Task } from '../../Task';
 import VectorSource from 'ol/source/Vector';
 import { FeatureWrapper } from '../../../geo/features/FeatureWrapper';
+import Geometry from 'ol/geom/Geometry';
 
 export class AddFeaturesTask extends Task {
-  constructor(public readonly source: VectorSource, public readonly features: FeatureWrapper[]) {
+  constructor(public readonly source: VectorSource<Geometry>, public readonly features: FeatureWrapper[]) {
     super();
   }
 

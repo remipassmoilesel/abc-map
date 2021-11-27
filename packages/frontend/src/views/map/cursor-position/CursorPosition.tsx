@@ -39,7 +39,7 @@ function CursorPosition() {
   const handlePointerMove = useMemo(
     () =>
       _.throttle(
-        (ev: MapBrowserEvent) => {
+        (ev: MapBrowserEvent<MouseEvent>) => {
           const pos = toLonLat(ev.coordinate, ev.map.getView().getProjection());
           setPosition(pos);
         },

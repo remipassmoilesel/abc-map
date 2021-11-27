@@ -32,6 +32,7 @@ import { Status } from './ProcessingResult';
 import { DataSource, DataValue } from '../../core/data/data-source/DataSource';
 import { VectorLayerWrapper } from '../../core/geo/layers/LayerWrapper';
 import { TestDataSource } from '../../core/data/data-source/TestDataSource';
+import Geometry from 'ol/geom/Geometry';
 
 logger.disable();
 
@@ -110,7 +111,7 @@ describe('ColorGradients', () => {
       const newLayer = map.getLayers()[0];
       expect(newLayer.getName()).toEqual('New gradient layer');
 
-      const features = (map.getLayers()[0].getSource() as VectorSource).getFeatures();
+      const features = (map.getLayers()[0].getSource() as VectorSource<Geometry>).getFeatures();
       expect(features.length).toEqual(13);
 
       const actual = featuresToComparableValues(features, 'code');
@@ -159,7 +160,7 @@ describe('ColorGradients', () => {
       const newLayer = map.getLayers()[0];
       expect(newLayer.getName()).toEqual('New gradient layer');
 
-      const features = (map.getLayers()[0].getSource() as VectorSource).getFeatures();
+      const features = (map.getLayers()[0].getSource() as VectorSource<Geometry>).getFeatures();
       expect(features.length).toEqual(13);
 
       const actual = featuresToComparableValues(features, 'code');
@@ -208,7 +209,7 @@ describe('ColorGradients', () => {
       const newLayer = map.getLayers()[0];
       expect(newLayer.getName()).toEqual('New gradient layer');
 
-      const features = (map.getLayers()[0].getSource() as VectorSource).getFeatures();
+      const features = (map.getLayers()[0].getSource() as VectorSource<Geometry>).getFeatures();
       expect(features.length).toEqual(13);
 
       const actual = featuresToComparableValues(features, 'code');
@@ -257,7 +258,7 @@ describe('ColorGradients', () => {
       const newLayer = map.getLayers()[0];
       expect(newLayer.getName()).toEqual('New gradient layer');
 
-      const features = (map.getLayers()[0].getSource() as VectorSource).getFeatures();
+      const features = (map.getLayers()[0].getSource() as VectorSource<Geometry>).getFeatures();
       expect(features.length).toEqual(13);
 
       const actual = featuresToComparableValues(features, 'code');

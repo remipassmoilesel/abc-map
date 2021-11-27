@@ -26,7 +26,7 @@ export class MoveInteractionsBundle {
   private interactions: Interaction[];
 
   constructor() {
-    const condition = (ev: MapBrowserEvent) => withControlKey(ev) && withMainButton(ev);
+    const condition = (ev: MapBrowserEvent<MouseEvent>) => withControlKey(ev) && withMainButton(ev);
     this.interactions = [new DragPan({ condition }), new KeyboardPan({ condition }), new MouseWheelZoom({ condition })];
   }
 

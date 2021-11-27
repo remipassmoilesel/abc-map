@@ -221,7 +221,12 @@ export class GeoService {
     }
 
     // We create options with openlayers helper
-    return optionsFromCapabilities(capabilities, { layer: layerName, matrixSet: matrixSetName });
+    const options = optionsFromCapabilities(capabilities, { layer: layerName, matrixSet: matrixSetName });
+    if (!options) {
+      return Promise.reject(new Error('Invalid settings'));
+    }
+
+    return options;
   }
 
   /**

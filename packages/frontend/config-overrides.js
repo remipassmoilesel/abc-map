@@ -18,6 +18,7 @@ module.exports = {
       '\\.inline\\.svg$': '<rootDir>/scripts/inline-svg-transformer.js',
       ...config.transform,
     };
+    config.setupFiles = ['<rootDir>/scripts/test-setup.js']
     return config;
   },
 };

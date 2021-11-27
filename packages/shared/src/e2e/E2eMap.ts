@@ -26,7 +26,7 @@ export interface E2eMap {
 
   getActiveLayerFeatures(): E2eFeature[];
 
-  getViewExtent(): [number, number, number, number];
+  getViewExtent(): number[];
 
   setView(zoom: number, lon: number, lat: number): void;
 }

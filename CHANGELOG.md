@@ -2,11 +2,14 @@
 
 Presently there are no versions, because it is not yet necessary.
 
-## Better datastore (xxxxxxx 25/11/2021)
+## Better language management (2f1a46d6 25/11/2021)
 
-- Minor style improvements on datastore 
+- Language can be determined by URL path instead of query parameters, for SEO.
+
+## Better datastore (fd7c82b0 25/11/2021)
+
+- Minor style improvements on datastore
 - Fix datastore search, search works now normally with accents
-
 
 ## Tools and UX improvements (d459c713 21/11/2021)
 

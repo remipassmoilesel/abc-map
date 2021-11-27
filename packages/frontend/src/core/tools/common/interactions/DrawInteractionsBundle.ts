@@ -41,18 +41,7 @@ const logger = Logger.get('DrawInteraction');
 export declare type GetStyleFunc = () => FeatureStyle;
 export declare type HistoryTaskHandler = (t: Task) => void;
 
-export declare type ToolMode = GeometryType.POINT | GeometryType.LINE_STRING | GeometryType.POLYGON;
-
-// For the moment, we support only those geometries
-// Circles does not serialize in geojson
-// Rectangle cannot be modified in a correct way with this method
-export declare type SupportedGeometry =
-  | GeometryType.POINT
-  | GeometryType.MULTI_POINT
-  | GeometryType.LINE_STRING
-  | GeometryType.MULTI_LINE_STRING
-  | GeometryType.MULTI_POLYGON
-  | GeometryType.POLYGON;
+export declare type ToolMode = typeof GeometryType.POINT | typeof GeometryType.LINE_STRING | typeof GeometryType.POLYGON;
 
 const editingStyle = createEditingStyle();
 
@@ -112,7 +101,15 @@ export class DrawInteractionsBundle {
     // Save initial state of features
     this.modify.on('modifystart', (ev: ModifyEvent) => {
       const features = ev.features.getArray();
-      features.forEach((feat) => modified.push(FeatureWrapper.from(feat).clone()));
+      features.forEach((feat) => {
+        const clone = FeatureWrapper.fromUnknown(feat)?.clone();
+        if (!clone) {
+          logger.error(`Cannot track feature history, invalid feature`, feat);
+          return;
+        }
+
+        modified.push(clone);
+      });
     });
 
     // Create an history task
@@ -120,7 +117,12 @@ export class DrawInteractionsBundle {
       const features = ev.features.getArray();
       const items = features
         .map((feat) => {
-          const feature = FeatureWrapper.from(feat);
+          const feature = FeatureWrapper.fromUnknown(feat);
+          if (!feature) {
+            logger.error(`Cannot track feature history, invalid feature`, feat);
+            return null;
+          }
+
           const before = modified.find((f) => f.getId() === feature.getId());
           const geomBefore = before?.getGeometry();
           const geomAfter = feature?.getGeometry()?.clone(); // As geometries are mutated, here we must clone it

@@ -76,7 +76,7 @@ export class TextTool implements Tool {
     const text = new TextInteraction({ source });
 
     let before: FeatureStyle | undefined;
-    text.on(TextEvent.Start, (ev: TextStart) => {
+    text.customOn(TextEvent.Start, (ev: TextStart) => {
       const feature = FeatureWrapper.from(ev.feature);
 
       // Dispatch style
@@ -104,12 +104,12 @@ export class TextTool implements Tool {
       before = style;
     });
 
-    text.on(TextEvent.Changed, (ev: TextChanged) => {
+    text.customOn(TextEvent.Changed, (ev: TextChanged) => {
       const feature = FeatureWrapper.from(ev.feature);
       feature.setText(ev.text);
     });
 
-    text.on(TextEvent.End, (ev: TextEnd) => {
+    text.customOn(TextEvent.End, (ev: TextEnd) => {
       if (!before) {
         logger.error('Cannot register task, before style was not set');
         return;
