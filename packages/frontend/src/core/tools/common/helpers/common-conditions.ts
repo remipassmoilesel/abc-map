@@ -18,7 +18,7 @@
 
 import MapBrowserEvent from 'ol/MapBrowserEvent';
 import { FeatureLike } from 'ol/Feature';
-import GeometryType from 'ol/geom/GeometryType';
+import { SupportedGeometry } from '../interactions/SupportedGeometry';
 
 export function withShiftKey(ev: MapBrowserEvent<UIEvent | KeyboardEvent | MouseEvent | TouchEvent>): boolean {
   const original = ev.originalEvent;
@@ -44,7 +44,7 @@ export function withMainButton(ev: MapBrowserEvent<UIEvent | KeyboardEvent | Mou
   return 'button' in original && original.button === 0;
 }
 
-export function withGeometryOfType(feat: FeatureLike, types: GeometryType[]): boolean {
+export function withGeometryOfType(feat: FeatureLike, types: SupportedGeometry[]): boolean {
   const type = feat?.getGeometry()?.getType();
   return (type && types.includes(type)) || false;
 }

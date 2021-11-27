@@ -34,13 +34,13 @@ import ImportData from './import-data/ImportData';
 import { ServiceProps, withServices } from '../../core/withServices';
 import CursorPosition from './cursor-position/CursorPosition';
 import { MapKeyboardListener } from './keyboard-listener/MapKeyboardListener';
-import { MapEvent } from 'ol';
 import { pageSetup } from '../../core/utils/page-setup';
 import { MapActions } from '../../core/store/map/actions';
 import { MapSizeChangedEvent } from '../../core/geo/map/MapWrapper.events';
 import { withTranslation } from 'react-i18next';
 import { prefixedTranslation } from '../../i18n/i18n';
 import Cls from './MapView.module.scss';
+import BaseEvent from 'ol/events/Event';
 
 const logger = Logger.get('MapView.tsx');
 
@@ -143,7 +143,7 @@ class MapView extends Component<Props, State> {
     logger.debug('Map rendering complete');
   };
 
-  private handleMapError = (ev: MapEvent) => {
+  private handleMapError = (ev: BaseEvent) => {
     const { toasts } = this.props.services;
 
     logger.error('Map error: ', ev);

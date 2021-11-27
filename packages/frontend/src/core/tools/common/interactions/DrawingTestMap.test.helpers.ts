@@ -43,7 +43,7 @@ interface SimulatedEventOptions {
 export class DrawingTestMap {
   private target: HTMLDivElement;
   private map: Map;
-  private vectorSource: VectorSource;
+  private vectorSource: VectorSource<Geometry>;
   private layer: VectorLayerWrapper;
 
   private mapWidth = 800;
@@ -161,7 +161,7 @@ export class DrawingTestMap {
    * @param options
    * @private
    */
-  private async simulateEvent(type: MapBrowserEventType, x: number, y: number, options?: SimulatedEventOptions): Promise<MapBrowserEvent> {
+  private async simulateEvent(type: string, x: number, y: number, options?: SimulatedEventOptions): Promise<MapBrowserEvent<MouseEvent>> {
     const viewport = this.map.getViewport();
     const position = this.target.getBoundingClientRect();
 

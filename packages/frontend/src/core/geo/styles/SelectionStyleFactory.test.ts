@@ -19,6 +19,7 @@
 import GeometryType from 'ol/geom/GeometryType';
 import { logger, SelectionStyleFactory } from './SelectionStyleFactory';
 import { FeatureWrapper } from '../features/FeatureWrapper';
+import { SupportedGeometry } from '../../tools/common/interactions/SupportedGeometry';
 
 logger.disable();
 
@@ -62,13 +63,13 @@ describe('SelectionStyleFactory', function () {
     });
 
     it('Non supported type', function () {
-      const feature = fakeFeature('non supported' as GeometryType);
+      const feature = fakeFeature('non supported' as SupportedGeometry);
       expect(factory.getForFeature(feature)).toHaveLength(0);
     });
   });
 });
 
-function fakeFeature(geom: GeometryType): FeatureWrapper {
+function fakeFeature(geom: SupportedGeometry): FeatureWrapper {
   return {
     getGeometry() {
       return {

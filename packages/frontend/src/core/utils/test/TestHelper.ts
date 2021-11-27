@@ -66,7 +66,7 @@ import { WmsCapabilities } from '../../geo/WmsCapabilities';
 interface EventSettings {
   coordinate?: Coordinate;
   resolution?: number;
-  type?: MapBrowserEventType;
+  type?: typeof MapBrowserEventType;
   ctrlKey?: boolean;
   button?: number;
   mapTarget?: HTMLDivElement;
@@ -255,7 +255,7 @@ export class TestHelper {
     return {
       capabilitiesUrl: 'http://domain.fr/wmts',
       remoteLayerName: 'GEOGRAPHICALGRIDSYSTEMS.MAPS',
-      sourceOptions: optionsFromCapabilities(TestHelper.sampleWmtsCapabilities(), { layer: 'GEOGRAPHICALGRIDSYSTEMS.MAPS', matrixSet: 'PM' }),
+      sourceOptions: optionsFromCapabilities(TestHelper.sampleWmtsCapabilities(), { layer: 'GEOGRAPHICALGRIDSYSTEMS.MAPS', matrixSet: 'PM' }) || undefined,
       auth: {
         username: 'test-username',
         password: 'test-password',
@@ -362,7 +362,7 @@ export class TestHelper {
     };
   }
 
-  public static mapBrowserEvent(settings: EventSettings): MapBrowserEvent<UIEvent> {
+  public static mapBrowserEvent(settings: EventSettings): MapBrowserEvent<any> {
     return {
       type: settings.type ?? MapBrowserEventType.POINTERDOWN,
       coordinate: settings.coordinate ?? [1, 1],

@@ -25,8 +25,7 @@ import { Tool } from '../../tools/Tool';
 import TileLayer from 'ol/layer/Tile';
 import { FeatureWrapper } from '../features/FeatureWrapper';
 import { LayerFactory } from '../layers/LayerFactory';
-import { LayerWrapper, VectorLayerWrapper } from '../layers/LayerWrapper';
-import VectorImageLayer from 'ol/layer/VectorImage';
+import { LayerWrapper, OlLayers, VectorLayerWrapper } from '../layers/LayerWrapper';
 import { EventType, MapSizeChangedEvent, SizeListener, TileErrorListener, TileLoadErrorEvent } from './MapWrapper.events';
 import { Views } from '../Views';
 import { fromLonLat, transformExtent } from 'ol/proj';
@@ -94,7 +93,7 @@ export class MapWrapper {
     }
 
     if (olLayer instanceof TileLayer) {
-      olLayer.getSource().addEventListener('tileloaderror', this.handleTileLoadError);
+      olLayer.getSource().on('tileloaderror', this.handleTileLoadError);
     }
   }
 
@@ -106,7 +105,7 @@ export class MapWrapper {
       .getLayers()
       .getArray()
       .filter((lay) => LayerWrapper.isManaged(lay))
-      .map((lay) => LayerWrapper.from(lay as TileLayer | VectorImageLayer));
+      .map((lay) => LayerWrapper.from(lay as OlLayers));
   }
 
   public setActiveLayer(layer: LayerWrapper): void {
@@ -148,7 +147,7 @@ export class MapWrapper {
     this.internal.getLayers().remove(olLayer);
 
     if (olLayer instanceof TileLayer) {
-      olLayer.getSource().removeEventListener('tileloaderror', this.handleTileLoadError);
+      olLayer.getSource().un('tileloaderror', this.handleTileLoadError);
     }
   }
 
@@ -351,7 +350,7 @@ export class MapWrapper {
     const layer = this.internal
       .getLayers()
       .getArray()
-      .find((lay) => lay instanceof TileLayer && lay.getSource() === ev.target) as TileLayer | undefined;
+      .find((lay) => lay instanceof TileLayer && lay.getSource() === ev.target) as TileLayer<TileSource> | undefined;
 
     if (layer) {
       this.eventTarget.dispatchEvent(new TileLoadErrorEvent(LayerWrapper.from(layer)));

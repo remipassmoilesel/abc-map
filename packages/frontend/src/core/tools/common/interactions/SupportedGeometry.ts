@@ -23,12 +23,12 @@ import GeometryType from 'ol/geom/GeometryType';
 // Rectangle cannot be modified in a correct way with this method
 
 export declare type SupportedGeometry =
-  | GeometryType.POINT
-  | GeometryType.MULTI_POINT
-  | GeometryType.LINE_STRING
-  | GeometryType.MULTI_LINE_STRING
-  | GeometryType.MULTI_POLYGON
-  | GeometryType.POLYGON;
+  | typeof GeometryType.POINT
+  | typeof GeometryType.MULTI_POINT
+  | typeof GeometryType.LINE_STRING
+  | typeof GeometryType.MULTI_LINE_STRING
+  | typeof GeometryType.MULTI_POLYGON
+  | typeof GeometryType.POLYGON;
 
 export const AllSupportedGeometries: SupportedGeometry[] = [
   GeometryType.POINT,

@@ -19,33 +19,43 @@
 import { Logger } from '@abc-map/shared';
 import MapBrowserEvent from 'ol/MapBrowserEvent';
 import { FeatureWrapper } from '../../geo/features/FeatureWrapper';
-import { TextChanged, TextEnd, TextStart } from './TextInteractionEvents';
+import { TextChanged, TextEnd, TextEvent, TextStart } from './TextInteractionEvents';
 import VectorSource from 'ol/source/Vector';
 import { findFeatureNearCursor } from '../common/helpers/findFeatureNearCursor';
 import { Interaction } from 'ol/interaction';
 import MapBrowserEventType from 'ol/MapBrowserEventType';
 import { withMainButton } from '../common/helpers/common-conditions';
 import { noModifierKeys } from 'ol/events/condition';
+import Geometry from 'ol/geom/Geometry';
 
 const logger = Logger.get('TextInteraction.ts');
 
 export interface Options {
-  source: VectorSource;
+  source: VectorSource<Geometry>;
 }
 
 export class TextInteraction extends Interaction {
-  private readonly source: VectorSource;
+  private readonly source: VectorSource<Geometry>;
 
   constructor(private options: Options) {
     super();
     this.source = options.source;
   }
 
+  // FIXME This methods was created because of errors in openlayers typings,
+  // FIXME which does not allow other events than 'change' or 'error' on interactions 🤷
+  public customOn(type: TextEvent.Start, handler: (ev: TextStart) => void): void;
+  public customOn(type: TextEvent.Changed, handler: (ev: TextChanged) => void): void;
+  public customOn(type: TextEvent.End, handler: (ev: TextEnd) => void): void;
+  public customOn(type: TextEvent, handler: (ev: TextStart | TextChanged | TextEnd) => void): void {
+    this.on(type as any, handler as any);
+  }
+
   /**
    * Return true to continue event dispatch
    * @param event
    */
-  public handleEvent(event: MapBrowserEvent<UIEvent>): boolean {
+  public handleEvent(event: MapBrowserEvent<MouseEvent>): boolean {
     if (!withMainButton(event) || !noModifierKeys(event)) {
       return true;
     }
@@ -56,7 +66,7 @@ export class TextInteraction extends Interaction {
     return true;
   }
 
-  protected handlePointerDown(event: MapBrowserEvent<UIEvent>): boolean {
+  protected handlePointerDown(event: MapBrowserEvent<MouseEvent>): boolean {
     const feature = findFeatureNearCursor(event, this.source);
     if (!feature) {
       return false;

@@ -74,10 +74,10 @@ export class LayerFactory {
       model,
     };
 
-    return LayerWrapper.from<TileLayer, TileSource, PredefinedMetadata>(layer).setMetadata(metadata);
+    return LayerWrapper.from<TileLayer<TileSource>, TileSource, PredefinedMetadata>(layer).setMetadata(metadata);
   }
 
-  public static newVectorLayer(source?: VectorSource): VectorLayerWrapper {
+  public static newVectorLayer(source?: VectorSource<Geometry>): VectorLayerWrapper {
     const _source = source || new VectorSource();
     const layer = new VectorImageLayer({ style: (f) => styleFunction(1, f), source: _source });
 
@@ -90,7 +90,7 @@ export class LayerFactory {
       visible: true,
     };
 
-    return LayerWrapper.from<VectorImageLayer, VectorSource<Geometry>, VectorMetadata>(layer).setMetadata(metadata);
+    return LayerWrapper.from<VectorImageLayer<VectorSource<Geometry>>, VectorSource<Geometry>, VectorMetadata>(layer).setMetadata(metadata);
   }
 
   public static newWmsLayer(settings: WmsSettings): WmsLayerWrapper {
@@ -120,7 +120,7 @@ export class LayerFactory {
       auth: settings.auth,
     };
 
-    return LayerWrapper.from<TileLayer, TileWMS, WmsMetadata>(layer).setMetadata(metadata);
+    return LayerWrapper.from<TileLayer<TileSource>, TileWMS, WmsMetadata>(layer).setMetadata(metadata);
   }
 
   public static newWmtsLayer(settings: WmtsSettings): WmtsLayerWrapper {
@@ -150,7 +150,7 @@ export class LayerFactory {
       auth: settings.auth,
     };
 
-    return LayerWrapper.from<TileLayer, WMTS, WmtsMetadata>(layer).setMetadata(metadata);
+    return LayerWrapper.from<TileLayer<TileSource>, WMTS, WmtsMetadata>(layer).setMetadata(metadata);
   }
 
   public static newXyzLayer(url: string, projection?: AbcProjection): XyzLayerWrapper {
@@ -168,6 +168,6 @@ export class LayerFactory {
       projection,
     };
 
-    return LayerWrapper.from<TileLayer, XYZ, XyzMetadata>(layer).setMetadata(metadata);
+    return LayerWrapper.from<TileLayer<TileSource>, XYZ, XyzMetadata>(layer).setMetadata(metadata);
   }
 }

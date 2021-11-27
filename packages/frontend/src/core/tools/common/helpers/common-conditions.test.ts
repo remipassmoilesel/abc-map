@@ -76,7 +76,7 @@ describe('Common conditions', () => {
   });
 });
 
-function fakeEvent(initDict: MouseEventInit): MapBrowserEvent {
+function fakeEvent(initDict: MouseEventInit): MapBrowserEvent<UIEvent> {
   const map: PluggableMap = {} as any;
   const original = new MouseEvent('pointerup', initDict);
   return new MapBrowserEvent(MapBrowserEventType.POINTERUP, map, original);

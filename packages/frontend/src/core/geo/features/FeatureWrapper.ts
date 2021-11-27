@@ -68,7 +68,7 @@ export class FeatureWrapper<Geom extends OlGeometry = OlGeometry> {
     }
   }
 
-  public static isFeature(ol: FeatureLike | unknown): ol is Feature {
+  public static isFeature(ol: FeatureLike | unknown): ol is Feature<Geometry> {
     return ol instanceof Feature;
   }
 

@@ -46,11 +46,11 @@ export class SelectionInteractionsBundle {
   private features = new Collection<Feature<Geometry>>();
 
   private map?: Map;
-  private source?: VectorSource;
+  private source?: VectorSource<Geometry>;
   private select?: Select;
   private sourceListeners: EventsKey[] = [];
 
-  public setup(map: Map, source: VectorSource, geometryTypes: SupportedGeometry[]) {
+  public setup(map: Map, source: VectorSource<Geometry>, geometryTypes: SupportedGeometry[]) {
     this.map = map;
     this.source = source;
 
@@ -86,7 +86,7 @@ export class SelectionInteractionsBundle {
   }
 
   private handleFeatureAdded = (evt: VectorSourceEvent<Geometry>) => {
-    if (FeatureWrapper.from(evt.feature).isSelected()) {
+    if (evt.feature && FeatureWrapper.from(evt.feature)?.isSelected()) {
       this.features.push(evt.feature);
     }
 
@@ -94,8 +94,10 @@ export class SelectionInteractionsBundle {
   };
 
   private handleFeatureRemoved = (evt: VectorSourceEvent<Geometry>) => {
-    FeatureWrapper.from(evt.feature).setSelected(false);
-    this.features.remove(evt.feature);
+    if (evt.feature) {
+      FeatureWrapper.from(evt.feature).setSelected(false);
+      this.features.remove(evt.feature);
+    }
 
     this.removeUnselected();
   };
@@ -132,6 +134,7 @@ export class SelectionInteractionsBundle {
       this.map?.removeInteraction(this.select);
     }
 
-    this.sourceListeners.forEach((listener) => this.source?.un(listener.type, listener.listener));
+    // FIXME: event types typings are wrong
+    this.sourceListeners.forEach((listener) => this.source?.un(listener.type as any, listener.listener));
   }
 }
