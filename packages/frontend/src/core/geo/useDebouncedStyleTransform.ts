@@ -17,7 +17,7 @@
  */
 
 import { useMemo } from 'react';
-import { debounce } from 'lodash';
+import debounce from 'lodash/debounce';
 import { StyleTransformFunc } from './GeoService';
 import { useServices } from '../hooks';
 

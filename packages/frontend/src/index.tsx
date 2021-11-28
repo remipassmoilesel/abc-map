@@ -16,13 +16,10 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 import reportWebVitals from './reportWebVitals';
-import { getServices, Services } from './core/Services';
+import { getServices } from './core/Services';
 import { Logger } from '@abc-map/shared';
-import { AxiosError } from 'axios';
-import { HttpError } from './core/http/HttpError';
-import { BUILD_INFO } from './build-version';
-import { render } from './render';
-import { mainStore, MainStore } from './core/store/store';
+import { mainStore } from './core/store/store';
+import { bootstrap } from './bootstrap';
 
 // Load main style
 import './index.scss';
@@ -32,58 +29,9 @@ import './i18n/i18n';
 
 export const logger = Logger.get('index.tsx', 'warn');
 
+// Bootstrap app
 const svc = getServices();
-
 bootstrap(svc, mainStore).catch((err) => logger.error('Bootstrap fail: ', err));
-
-export function bootstrap(svc: Services, store: MainStore) {
-  logger.info('Version: ', BUILD_INFO);
-  return authentication(svc)
-    .then(() => render(svc, store))
-    .then(() => svc.project.newProject())
-    .catch((err) => bootstrapError(err));
-}
-
-/**
- * All users are authenticated, as connected users or as anonymous users
- * @param svc
- */
-function authentication(svc: Services): Promise<void> {
-  // If we are connected or connected as anonymous we try to renew token
-  const connected = !!svc.authentication.getUserStatus();
-  if (connected) {
-    return svc.authentication.renewToken().catch((err) => {
-      logger.error('Cannot renew token: ', err);
-      return svc.authentication.anonymousLogin();
-    });
-  }
-  // Else we authenticate as anonymous
-  else {
-    return svc.authentication.anonymousLogin();
-  }
-}
-
-function bootstrapError(err: Error | AxiosError | undefined): void {
-  logger.error('Bootstrap error: ', err);
-
-  let message: string;
-  if (HttpError.isTooManyRequests(err)) {
-    message = 'You have exceeded the number of authorized requests 😭. Please try again later.';
-  } else {
-    message = 'Small technical issue 😅 Please try again later.';
-  }
-
-  const root = document.querySelector('#root');
-  if (!root) {
-    alert(message);
-    return;
-  }
-
-  root.innerHTML = `
-    <h1 class='text-center my-5'>Abc-Map</h1>
-    <h5 class='text-center my-5'>${message}</h5>
-  `;
-}
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

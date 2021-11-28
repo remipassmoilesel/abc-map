@@ -23,6 +23,8 @@ import { prefixedTranslation } from '../../i18n/i18n';
 import { useAppSelector } from '../../core/store/hooks';
 import { useServices } from '../../core/hooks';
 import Cls from './HistoryControls.module.scss';
+import { IconDefs } from '../icon/IconDefs';
+import { FaIcon } from '../icon/FaIcon';
 
 const logger = Logger.get('HistoryControls.tsx');
 
@@ -57,10 +59,10 @@ export function HistoryControls(props: Props) {
   return (
     <div className={`control-block ${Cls.historyControls}`}>
       <button onClick={undo} type={'button'} className={'btn btn-outline-secondary'} disabled={!canUndo} data-cy={'undo'}>
-        <i className={'fa fa-undo mr-2'} /> {t('Undo')}
+        <FaIcon icon={IconDefs.faUndo} className={'mr-2'} /> {t('Undo')}
       </button>
       <button onClick={redo} type={'button'} className={'btn btn-outline-secondary'} disabled={!canRedo} data-cy={'redo'}>
-        <i className={'fa fa-redo mr-2'} /> {t('Redo')}
+        <FaIcon icon={IconDefs.faRedo} className={'mr-2'} /> {t('Redo')}
       </button>
     </div>
   );

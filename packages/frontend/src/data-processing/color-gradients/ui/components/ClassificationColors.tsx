@@ -24,13 +24,15 @@ import { GradientClass } from '../../GradientClass';
 import { ServiceProps, withServices } from '../../../../core/withServices';
 import { Stats } from '../../../_common/stats/Stats';
 import { ClassificationAlgorithm } from '../../../_common/algorithm/Algorithm';
-import * as _ from 'lodash';
+import range from 'lodash/range';
 import * as chroma from 'chroma-js';
 import { nanoid } from 'nanoid';
 import ClassRow from './class-row/ClassRow';
 import ColorPicker from '../../../../components/color-picker/ColorPicker';
 import { asNumberOrString, isValidNumber } from '../../../../core/utils/numbers';
 import { prefixedTranslation } from '../../../../i18n/i18n';
+import { IconDefs } from '../../../../components/icon/IconDefs';
+import { FaIcon } from '../../../../components/icon/FaIcon';
 
 const logger = Logger.get('ColorScaleSelection.tsx');
 
@@ -79,7 +81,7 @@ class ClassificationColors extends Component<Props, State> {
         <FormLine>
           <div className={'flex-grow-1'}>{t('Number_of_classes')}:</div>
           <select className={'form-select'} value={numberOfClasses} onChange={this.handleClassNumberChanged}>
-            {_.range(3, 11).map((i) => (
+            {range(3, 11).map((i) => (
               <option key={i} value={i}>
                 {i}
               </option>
@@ -97,7 +99,7 @@ class ClassificationColors extends Component<Props, State> {
               ))}
               <div>
                 <button onClick={this.handleResetClasses} className={'btn btn-outline-secondary my-3'}>
-                  <i className={'fa fa-undo mr-2'} />
+                  <FaIcon icon={IconDefs.faUndo} className={'mr-2'} />
                   {t('Calculate_classes')}
                 </button>
               </div>

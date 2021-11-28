@@ -25,8 +25,10 @@ import { ServiceProps, withServices } from '../../../core/withServices';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { prefixedTranslation } from '../../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
-import Cls from './UserMenu.module.scss';
 import { Routes } from '../../../routes';
+import { FaIcon } from '../../icon/FaIcon';
+import { IconDefs } from '../../icon/IconDefs';
+import Cls from './UserMenu.module.scss';
 
 const logger = Logger.get('UserMenu.tsx');
 
@@ -50,7 +52,7 @@ class UserMenu extends React.Component<Props, {}> {
     return (
       <Dropdown data-cy={'user-menu'}>
         <Dropdown.Toggle variant="light">
-          <i className={'fa fa-user-circle'} />
+          <FaIcon icon={IconDefs.faUserCircle} size={'1.6rem'} />
         </Dropdown.Toggle>
         <Dropdown.Menu className={Cls.dropDown}>
           <Dropdown.ItemText data-cy={'user-label'}>{userLabel}</Dropdown.ItemText>
@@ -58,15 +60,15 @@ class UserMenu extends React.Component<Props, {}> {
           {!userAuthenticated && (
             <>
               <Dropdown.Item onClick={this.handleLogin}>
-                <i className={'fa fa-lock-open mr-3'} />
+                <FaIcon icon={IconDefs.faLockOpen} className={'mr-3'} />
                 {t('Login')}
               </Dropdown.Item>
               <Dropdown.Item onClick={this.handleRegister}>
-                <i className={'fa fa-feather mr-3'} />
+                <FaIcon icon={IconDefs.faFeather} className={'mr-3'} />
                 {t('Register')}
               </Dropdown.Item>
               <Dropdown.Item onClick={this.handlePasswordLost} data-cy={'reset-password'}>
-                <i className={'fa fa-key mr-3'} />
+                <FaIcon icon={IconDefs.faKey} className={'mr-3'} />
                 {t('Lost_password')}
               </Dropdown.Item>
             </>
@@ -74,12 +76,11 @@ class UserMenu extends React.Component<Props, {}> {
           {userAuthenticated && (
             <>
               <Dropdown.Item onClick={this.handleUserAccount} data-cy={'user-profile'}>
-                <i className={'fa fa-cogs mr-3'} />
-                {t('My_account')}
+                <FaIcon icon={IconDefs.faCogs} className={'mr-3'} /> {t('My_account')}
               </Dropdown.Item>
               <Dropdown.Divider />
               <Dropdown.Item onClick={this.handleLogout} data-cy={'logout'}>
-                <i className={'fa fa-lock mr-3'} /> {t('Logout')}
+                <FaIcon icon={IconDefs.faLock} className={'mr-3'} /> {t('Logout')}
               </Dropdown.Item>
             </>
           )}

@@ -27,9 +27,8 @@
 
   margin: 0.3rem 1rem;
 
-  :global(.fa) {
-    color: $primary !important;
-    font-size: 1.2rem;
+  .icon {
+    color: $primary;
   }
 }
 

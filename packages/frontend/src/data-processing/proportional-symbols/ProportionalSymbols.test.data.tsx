@@ -19,9 +19,10 @@
 import { TestDataSource } from '../../core/data/data-source/TestDataSource';
 import { FeatureWrapper } from '../../core/geo/features/FeatureWrapper';
 import { LayerFactory } from '../../core/geo/layers/LayerFactory';
+import shuffle from 'lodash/shuffle';
+import range from 'lodash/range';
 import { VectorLayerWrapper } from '../../core/geo/layers/LayerWrapper';
 import Point from 'ol/geom/Point';
-import * as _ from 'lodash';
 import { DataRow } from '../../core/data/data-source/DataSource';
 import { StyleProperties } from '@abc-map/shared';
 import Feature from 'ol/Feature';
@@ -79,7 +80,7 @@ export const testGeometryLayer1 = (): VectorLayerWrapper => {
 };
 
 export const testDataSource2 = () => {
-  const dataset: Partial<DataRow>[] = _.shuffle([
+  const dataset: Partial<DataRow>[] = shuffle([
     { code: 1, value: 377.730620008599 },
     { code: 2, value: 1089.36697551601 },
     { code: 3, value: 1634.1807405057 },
@@ -103,7 +104,7 @@ export const testDataSource2 = () => {
 };
 
 export const testGeometryLayer2 = (): VectorLayerWrapper => {
-  const features = _.range(1, 19).map((n) => {
+  const features = range(1, 19).map((n) => {
     const feature = FeatureWrapper.create(new Point([n, n]));
     feature.unwrap().set('code', n);
     return feature.unwrap();
@@ -126,7 +127,7 @@ export const testDataSource3 = () => {
 };
 
 export const testGeometryLayer3 = (): VectorLayerWrapper => {
-  const features = _.range(0, 4).map((n) => {
+  const features = range(0, 4).map((n) => {
     const feature = FeatureWrapper.create(new Point([n, n]));
     feature.unwrap().set('code', n);
     return feature.unwrap();

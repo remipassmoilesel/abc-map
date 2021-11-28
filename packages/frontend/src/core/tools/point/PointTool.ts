@@ -21,7 +21,7 @@ import { FeatureStyle, MapTool } from '@abc-map/shared';
 import VectorSource from 'ol/source/Vector';
 import Geometry from 'ol/geom/Geometry';
 import Icon from '../../../assets/tool-icons/point.inline.svg';
-import { Map } from 'ol';
+import Map from 'ol/Map';
 import { HistoryKey } from '../../history/HistoryKey';
 import { DrawInteractionsBundle, GetStyleFunc } from '../common/interactions/DrawInteractionsBundle';
 import GeometryType from 'ol/geom/GeometryType';

@@ -33,14 +33,16 @@
   flex-direction: row;
   align-items: center;
 
-  margin: 5px 0;
+  margin: 0.4rem 0;
+  padding: 0.5rem;
   cursor: pointer;
 }
 
 .selected {
   color: white;
   background-color: $primary;
-  :global(.fa) {
+
+  :global(.abc-icon) {
     color: white;
   }
 }

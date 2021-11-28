@@ -22,7 +22,7 @@ import GeometryType from 'ol/geom/GeometryType';
 import VectorSource from 'ol/source/Vector';
 import Geometry from 'ol/geom/Geometry';
 import Icon from '../../../assets/tool-icons/line.inline.svg';
-import { Map } from 'ol';
+import Map from 'ol/Map';
 import { DrawInteractionsBundle, GetStyleFunc } from '../common/interactions/DrawInteractionsBundle';
 import { HistoryKey } from '../../history/HistoryKey';
 import { MainStore } from '../../store/store';

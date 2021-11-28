@@ -21,6 +21,8 @@ import { Logger } from '@abc-map/shared';
 import { prefixedTranslation } from '../../../i18n/i18n';
 import Cls from './DifferentSymbolsUi.module.scss';
 import { withTranslation } from 'react-i18next';
+import { FaIcon } from '../../../components/icon/FaIcon';
+import { IconDefs } from '../../../components/icon/IconDefs';
 
 const logger = Logger.get('DifferentSymbolsUi.tsx');
 
@@ -30,7 +32,7 @@ class DifferentSymbolsUi extends Component<{}, {}> {
   public render(): ReactNode {
     return (
       <div className={Cls.panel}>
-        <i className={`fa fa-file-code`} />
+        <FaIcon icon={IconDefs.faFileCode} size={'4rem'} />
         <h4 className={'text-center my-5'}>{t('Module_not_terminated')}</h4>
         <div>{t('This_module_will')}</div>
       </div>

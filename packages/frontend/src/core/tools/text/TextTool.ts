@@ -20,7 +20,7 @@ import { Tool } from '../Tool';
 import { FeatureStyle, Logger, MapTool } from '@abc-map/shared';
 import VectorSource from 'ol/source/Vector';
 import Geometry from 'ol/geom/Geometry';
-import { Map } from 'ol';
+import Map from 'ol/Map';
 import Icon from '../../../assets/tool-icons/text.inline.svg';
 import { TextInteraction } from './TextInteraction';
 import { FeatureWrapper } from '../../geo/features/FeatureWrapper';

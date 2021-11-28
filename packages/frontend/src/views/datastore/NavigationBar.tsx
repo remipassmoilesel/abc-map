@@ -17,7 +17,7 @@
  */
 
 import React, { useCallback } from 'react';
-import * as _ from 'lodash';
+import range from 'lodash/range';
 import Cls from './NavigationBar.module.scss';
 
 // This should be an odd number
@@ -77,7 +77,7 @@ export function NavigationBar(props: Props) {
 
       {/* Go back */}
       <button onClick={() => handleClick(activePage - 1)}>&lt;</button>
-      {_.range(firstButton, lastButton + 1).map((pageNbr) => {
+      {range(firstButton, lastButton + 1).map((pageNbr) => {
         const isActive = pageNbr === activePage;
         const classes = isActive ? Cls.active : '';
         const testId = isActive ? 'active' : undefined;

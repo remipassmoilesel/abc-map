@@ -31,10 +31,10 @@ import { styleFunction } from '../../../geo/styles/style-function';
 import { createEditingStyle } from 'ol/style/Style';
 import { noModifierKeys } from 'ol/events/condition';
 import { UndoCallbackTask } from '../../../history/tasks/features/UndoCallbackTask';
-import { Collection } from 'ol';
+import Collection from 'ol/Collection';
 import Geometry from 'ol/geom/Geometry';
 import Feature from 'ol/Feature';
-import { Map } from 'ol';
+import Map from 'ol/Map';
 
 const logger = Logger.get('DrawInteraction');
 

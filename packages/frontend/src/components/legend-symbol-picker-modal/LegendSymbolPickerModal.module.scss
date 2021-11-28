@@ -47,8 +47,9 @@
 
   font-size: 1.3rem;
 
-  :global(.fa) {
-    font-size: 5rem;
+  .bigIcon {
+    width: 5rem;
+    height: 5rem;
     margin: 2rem;
   }
 }

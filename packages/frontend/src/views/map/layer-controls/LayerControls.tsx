@@ -29,8 +29,10 @@ import EditLayerModal from './edit-layer-modal/EditLayerModal';
 import Cls from './LayerControls.module.scss';
 import { prefixedTranslation } from '../../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
-import * as _ from 'lodash';
 import { WithTooltip } from '../../../components/with-tooltip/WithTooltip';
+import isEqual from 'lodash/isEqual';
+import { FaIcon } from '../../../components/icon/FaIcon';
+import { IconDefs } from '../../../components/icon/IconDefs';
 
 const logger = Logger.get('LayerControls.tsx');
 
@@ -66,7 +68,8 @@ class LayerControls extends Component<Props, State> {
           {t('Layers')}
 
           <button onClick={this.handleAddLayer} className={'btn btn-small btn-link fw-bold'} title={t('Add_layer')} data-cy={'add-layer'}>
-            <i className={'fa fa-plus mr-1'} /> {t('Add')}
+            <FaIcon icon={IconDefs.faPlus} className={'mr-1'} />
+            {t('Add')}
           </button>
         </div>
 
@@ -90,27 +93,27 @@ class LayerControls extends Component<Props, State> {
           <div className={Cls.buttonBar}>
             <WithTooltip title={t('Edit_layer')}>
               <button onClick={this.handleEditLayer} className={'btn btn-link'} data-cy={'edit-layer'}>
-                <i className={'fa fa-edit'} />
+                <FaIcon icon={IconDefs.faEdit} />
               </button>
             </WithTooltip>
             <WithTooltip title={t('Zoom_on_layer')}>
               <button onClick={this.handleZoom} className={'btn btn-link'}>
-                <i className={'fa fa-search-plus'} />
+                <FaIcon icon={IconDefs.faSearchPlus} />
               </button>
             </WithTooltip>
             <WithTooltip title={t('Delete_active_layer')}>
               <button onClick={this.handleRemoveActive} className={'btn btn-link'} data-cy={'delete-layer'}>
-                <i className={'fa fa-trash'} />
+                <FaIcon icon={IconDefs.faTrash} />
               </button>
             </WithTooltip>
             <WithTooltip title={t('Move_back')}>
               <button onClick={this.handleLayerBack} className={'btn btn-link'} title={t('Move_back')}>
-                <i className={'fa fa-arrow-up'} />
+                <FaIcon icon={IconDefs.faArrowUp} />
               </button>
             </WithTooltip>
             <WithTooltip title={t('Move_forward')}>
               <button onClick={this.handleLayerForward} className={'btn btn-link'}>
-                <i className={'fa fa-arrow-down'} />
+                <FaIcon icon={IconDefs.faArrowDown} />
               </button>
             </WithTooltip>
           </div>
@@ -126,7 +129,7 @@ class LayerControls extends Component<Props, State> {
   public componentDidUpdate(prevProps: Readonly<Props>) {
     const previousIds = prevProps.layers.map((lay) => lay.getId());
     const layerIds = this.props.layers.map((lay) => lay.getId());
-    if (!_.isEqual(previousIds, layerIds)) {
+    if (!isEqual(previousIds, layerIds)) {
       // We scroll to bottom of list if layer list change
       const div = this.listRef.current;
       if (div) {

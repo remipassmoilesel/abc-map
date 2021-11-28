@@ -17,7 +17,8 @@
  */
 
 import { FeatureWrapper } from '../../../geo/features/FeatureWrapper';
-import { Collection, Feature } from 'ol';
+import Collection from 'ol/Collection';
+import Feature from 'ol/Feature';
 import Geometry from 'ol/geom/Geometry';
 import VectorSource, { VectorSourceEvent } from 'ol/source/Vector';
 import { EventsKey } from 'ol/events';
@@ -29,7 +30,7 @@ import { DefaultTolerancePx } from '../constants';
 import { SelectEvent } from 'ol/interaction/Select';
 import { SupportedGeometry } from './SupportedGeometry';
 import { FeatureStyle } from '@abc-map/shared';
-import { Map } from 'ol';
+import Map from 'ol/Map';
 
 export declare type StyleSelectionHandler = (style: FeatureStyle, feat: FeatureWrapper) => void;
 

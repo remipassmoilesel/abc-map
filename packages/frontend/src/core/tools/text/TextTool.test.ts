@@ -18,7 +18,7 @@
 
 import { MainStore } from '../../store/store';
 import { HistoryService } from '../../history/HistoryService';
-import { Map } from 'ol';
+import Map from 'ol/Map';
 import VectorSource from 'ol/source/Vector';
 import { TextTool } from './TextTool';
 import { TestHelper } from '../../utils/test/TestHelper';

@@ -30,15 +30,14 @@
     .btn-link {
       padding: 0;
 
-      .fa {
-        font-size: 1.1rem;
+      .abc-icon {
         color: $gray-500;
       }
 
       &:hover {
         text-decoration: none;
 
-        .fa {
+        .abc-icon {
           color: $gray-700;
         }
       }

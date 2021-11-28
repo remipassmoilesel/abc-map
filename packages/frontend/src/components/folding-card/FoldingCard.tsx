@@ -19,6 +19,8 @@
 import React, { Component } from 'react';
 import { withTranslation } from 'react-i18next';
 import { prefixedTranslation } from '../../i18n/i18n';
+import { IconDefs } from '../icon/IconDefs';
+import { FaIcon } from '../icon/FaIcon';
 import Cls from './FoldingCard.module.scss';
 
 interface Props {
@@ -40,7 +42,6 @@ class FoldingCard extends Component<Props, State> {
 
   public render() {
     const isOpen = this.state.isOpen;
-    const icon = `fa fa-chevron-${isOpen ? 'down' : 'right'}`;
     const toolTip = isOpen ? t('Close') : t('Open');
     const className = this.props.className;
     const title = this.props.title;
@@ -50,7 +51,8 @@ class FoldingCard extends Component<Props, State> {
         <div className={Cls.title} onClick={this.toggleCard} title={toolTip}>
           <div>{title}</div>
           <button className="btn btn-link">
-            <i className={icon} />
+            {isOpen && <FaIcon icon={IconDefs.faChevronDown} />}
+            {!isOpen && <FaIcon icon={IconDefs.faChevronRight} />}
           </button>
         </div>
         {isOpen && <div className={'card-body'}>{this.props.children}</div>}

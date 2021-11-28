@@ -18,14 +18,16 @@
 
 import React, { ChangeEvent, Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/shared';
-import * as _ from 'lodash';
 import { NominatimResult } from '../../../core/geo/NominatimResult';
 import SearchResult from './SearchResult';
 import { ServiceProps, withServices } from '../../../core/withServices';
 import { Extent } from 'ol/extent';
 import { prefixedTranslation } from '../../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
+import debounce from 'lodash/debounce';
 import Cls from './Search.module.scss';
+import { IconDefs } from '../../../components/icon/IconDefs';
+import { FaIcon } from '../../../components/icon/FaIcon';
 
 const logger = Logger.get('Search.tsx');
 
@@ -83,7 +85,7 @@ class Search extends Component<ServiceProps, State> {
         {/* Center map around my position */}
         <div className={'control-item'}>
           <button className={'btn btn-link my-2'} onClick={this.handleGeolocate} data-testid={'geolocate'}>
-            <i className={'fa fa-map-marker-alt mr-2'} /> {t('My_location')}
+            <FaIcon icon={IconDefs.faMapMarkerAlt} className={'mr-2'} /> {t('My_location')}
           </button>
         </div>
       </div>
@@ -96,7 +98,7 @@ class Search extends Component<ServiceProps, State> {
     this.search(query);
   };
 
-  private search = _.debounce((query) => {
+  private search = debounce((query) => {
     const { geo } = this.props.services;
 
     this.setState({ loading: true });

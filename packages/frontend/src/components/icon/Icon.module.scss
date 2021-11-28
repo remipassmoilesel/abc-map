@@ -16,59 +16,82 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-@import "variables";
+@import "src/assets/styles/variables";
 
-// html, body and #root are reset earlier in index.html
-
-html,
-body {
-  font-size: 14px;
-  font-family: "AbcCantarell", sans-serif;
-  margin: 0;
+.icon {
+  color: $gray-600;
 }
 
-a {
-  text-decoration: none;
+// PRIMARY
+
+:global(.btn-primary) {
+  .icon {
+    color: white;
+  }
 
   &:hover {
-    text-decoration: underline;
+    .icon {
+      color: white;
+    }
+  }
+
+  &[disabled]:hover {
+    .icon {
+      color: white;
+    }
   }
 }
 
-button {
-  color: $input-color;
-}
+// OUTLINE PRIMARY
 
-.dropdown-item {
-  text-decoration: none;
+:global(.btn-outline-primary) {
+  .icon {
+    color: $primary;
+  }
+
   &:hover {
-    text-decoration: none;
+    .icon {
+      color: white;
+    }
   }
 }
 
-.cursor-pointer {
-  cursor: pointer;
-}
+// SECONDARY
 
-.abc-selection-box {
-  border: 3px dashed #828282;
-}
-
-.abc-toast {
-  font-size: 1.1em;
-  min-height: 4em;
-
-  border-radius: $border-radius;
-}
-
-.modal-title {
-  font-size: 1.2rem;
-}
-
-.abc-text-box-button {
-  background: white;
+:global(.btn-secondary) {
+  .icon {
+    color: $gray-600;
+  }
 
   &:hover {
-    background: $primary;
+    .icon {
+      color: white;
+    }
+  }
+
+  &[disabled]:hover {
+    .icon {
+      color: $gray-600;
+    }
+  }
+}
+
+// OUTLINE SECONDARY
+
+:global(.btn-outline-secondary) {
+  .icon {
+    color: $gray-600;
+  }
+
+  &:hover {
+    .icon {
+      color: white;
+    }
+  }
+
+  &[disabled]:hover {
+    .icon {
+      color: $gray-600;
+    }
   }
 }

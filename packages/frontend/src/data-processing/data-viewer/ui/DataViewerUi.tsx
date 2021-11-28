@@ -18,6 +18,7 @@
 
 import React, { Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/shared';
+import isEqual from 'lodash/isEqual';
 import { DataRow } from '../../../core/data/data-source/DataSource';
 import VectorLayerSelector from '../../_common/vector-layer-selector/VectorLayerSelector';
 import { VectorLayerWrapper } from '../../../core/geo/layers/LayerWrapper';
@@ -29,7 +30,6 @@ import { FileIO } from '../../../core/utils/FileIO';
 import Cls from './DataViewerUi.module.scss';
 import { FeatureWrapper } from '../../../core/geo/features/FeatureWrapper';
 import { ModalStatus } from '../../../core/ui/typings';
-import * as _ from 'lodash';
 import { HistoryKey } from '../../../core/history/HistoryKey';
 import { SetFeatureProperties } from '../../../core/history/tasks/features/SetFeatureProperties';
 import { RemoveFeaturesTask } from '../../../core/history/tasks/features/RemoveFeaturesTask';
@@ -158,7 +158,7 @@ class DataViewerUi extends Component<Props, State> {
       .featurePropertiesModal(before)
       .then((modalEvent) => {
         const after = modalEvent.properties;
-        if (ModalStatus.Confirmed === modalEvent.status && !_.isEqual(before, after)) {
+        if (ModalStatus.Confirmed === modalEvent.status && !isEqual(before, after)) {
           feature.overwriteSimpleProperties(after);
           history.register(HistoryKey.Map, new SetFeatureProperties(feature, before, after));
           this.showData(layer);

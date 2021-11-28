@@ -23,6 +23,8 @@ import { ServiceProps, withServices } from '../../../core/withServices';
 import { Button, ButtonGroup, Dropdown, Modal } from 'react-bootstrap';
 import { getLang, prefixedTranslation } from '../../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
+import { IconDefs } from '../../../components/icon/IconDefs';
+import { FaIcon } from '../../../components/icon/FaIcon';
 import Cls from './ArtefactCard.module.scss';
 
 const logger = Logger.get('ArtefactCard.tsx');
@@ -76,7 +78,7 @@ class ArtefactCard extends Component<Props, State> {
           <div className={'d-flex flex-row justify-content-end'}>
             <Dropdown as={ButtonGroup}>
               <Button variant={'outline-secondary'} onClick={this.handleImportArtefact} data-cy={'import-artefact'}>
-                <i className={'fa fa-plus mr-2'} />
+                <FaIcon icon={IconDefs.faPlus} className={'mr-2'} />
                 {t('Add_to_project')}
               </Button>
 
@@ -84,14 +86,15 @@ class ArtefactCard extends Component<Props, State> {
 
               <Dropdown.Menu>
                 <Dropdown.Item onClick={this.handleDownloadArtefact} data-cy={'download-artefact'}>
-                  <i className={'fa fa-download mr-2'} />
+                  <FaIcon icon={IconDefs.faDownload} className={'mr-2'} />
                   {t('Download')}
                 </Dropdown.Item>
                 <Dropdown.Item href={link} rel="noreferrer" target={'_blank'}>
-                  <i className={'fa fa-link mr-2'} /> {t('Source')}
+                  <FaIcon icon={IconDefs.faLink} className={'mr-2'} />
+                  {t('Source')}
                 </Dropdown.Item>
                 <Dropdown.Item onClick={this.handleShowLicense} data-cy={'show-license'}>
-                  <i className={'fa fa-balance-scale mr-2'} />
+                  <FaIcon icon={IconDefs.faBalanceScale} className={'mr-2'} />
                   {t('Licence')}
                 </Dropdown.Item>
               </Dropdown.Menu>

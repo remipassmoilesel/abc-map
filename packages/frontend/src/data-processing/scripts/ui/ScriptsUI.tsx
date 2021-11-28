@@ -19,10 +19,12 @@
 import React, { Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/shared';
 import CodeEditor from './CodeEditor';
-import Cls from './ScriptsUI.module.scss';
 import { ScriptError } from '../typings';
 import { prefixedTranslation } from '../../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
+import { IconDefs } from '../../../components/icon/IconDefs';
+import { FaIcon } from '../../../components/icon/FaIcon';
+import Cls from './ScriptsUI.module.scss';
 
 const logger = Logger.get('ScriptsUI.tsx');
 
@@ -64,7 +66,7 @@ class ScriptsUI extends Component<Props, State> {
         </div>
 
         <div className={'alert alert-danger my-2'}>
-          <i className={'fa fa-exclamation-triangle mr-2'} />
+          <FaIcon icon={IconDefs.faExclamationTriangle} className={'mr-2'} size={'1.2rem'} />
           {t('Improper_use_can_cause_security_issue')}
         </div>
 

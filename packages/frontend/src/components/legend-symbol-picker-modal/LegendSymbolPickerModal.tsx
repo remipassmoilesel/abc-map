@@ -26,6 +26,8 @@ import LegendSymbolButton from './LegendSymbolButton';
 import { prefixedTranslation } from '../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
 import Cls from './LegendSymbolPickerModal.module.scss';
+import { FaIcon } from '../icon/FaIcon';
+import { IconDefs } from '../icon/IconDefs';
 
 interface State {
   visible: boolean;
@@ -51,7 +53,7 @@ class LegendSymbolPickerModal extends Component<ServiceProps, State> {
       <Modal show={visible} onHide={this.handleCancel} dialogClassName={Cls.modal}>
         <Modal.Header closeButton>
           <Modal.Title>
-            <i className={'fa fa-map-marker-alt mr-3'} />
+            <FaIcon icon={IconDefs.faMapMarkerAlt} className={'mr-3'} />
             {t('Select_symbol')}
           </Modal.Title>
         </Modal.Header>
@@ -63,7 +65,7 @@ class LegendSymbolPickerModal extends Component<ServiceProps, State> {
             ))}
             {!styles.length && (
               <div className={Cls.noSymbol}>
-                <i className={'fa fa-exclamation'} />
+                <FaIcon icon={IconDefs.faExclamation} className={Cls.bigIcon} />
                 {t('Add_something_on_map_then_come_back')}
               </div>
             )}

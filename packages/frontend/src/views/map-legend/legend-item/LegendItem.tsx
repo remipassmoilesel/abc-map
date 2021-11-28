@@ -21,6 +21,8 @@ import { AbcLegendItem, Logger } from '@abc-map/shared';
 import { prefixedTranslation } from '../../../i18n/i18n';
 import { ServiceProps, withServices } from '../../../core/withServices';
 import { withTranslation } from 'react-i18next';
+import { IconDefs } from '../../../components/icon/IconDefs';
+import { FaIcon } from '../../../components/icon/FaIcon';
 import Cls from './LegendItem.module.scss';
 
 const logger = Logger.get('LegendItem.tsx');
@@ -46,16 +48,16 @@ class LegendItem extends Component<Props, {}> {
     return (
       <div className={Cls.legendItem} data-cy={'legend-item'}>
         <button onClick={this.handleSymbolModalClick} title={t('Change_symbol')} className={'btn btn-outline-primary mr-2'} data-cy={'legend-item-symbol'}>
-          <i className={'fa fa-map-marker-alt'} />
-        </button>
-        <button onClick={this.handleDelete} title={t('Delete')} className={'btn btn-outline-secondary mr-2'}>
-          <i className={'fa fa-trash'} />
+          <FaIcon icon={IconDefs.faMapMarkerAlt} size={'1.1rem'} />
         </button>
         <button onClick={this.handleUp} disabled={upDisabled} title={t('Move_up')} className={'btn btn-outline-secondary mr-2'}>
-          <i className={'fa fa-arrow-up'} />
+          <FaIcon icon={IconDefs.faArrowUp} size={'1.1rem'} />
         </button>
         <button onClick={this.handleDown} disabled={downDisabled} title={t('Move_down')} className={'btn btn-outline-secondary mr-2'}>
-          <i className={'fa fa-arrow-down'} />
+          <FaIcon icon={IconDefs.faArrowDown} size={'1.1rem'} />
+        </button>
+        <button onClick={this.handleDelete} title={t('Delete')} className={'btn btn-outline-secondary mr-2'}>
+          <FaIcon icon={IconDefs.faTrash} size={'1.1rem'} />
         </button>
         <input type={'text'} value={text} onChange={this.handleTextChange} placeholder={t('Entry_name')} className={`form-control ${Cls.textField}`} />
       </div>

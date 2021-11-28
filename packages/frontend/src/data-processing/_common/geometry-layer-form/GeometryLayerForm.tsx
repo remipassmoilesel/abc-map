@@ -30,6 +30,7 @@ import FormLine from '../form-line/FormLine';
 import MessageLabel from '../../../components/message-label/MessageLabel';
 import { prefixedTranslation } from '../../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
+import { IconDefs } from '../../../components/icon/IconDefs';
 
 const logger = Logger.get('GeometryLayerForm.tsx');
 
@@ -103,8 +104,8 @@ class GeometryLayerForm extends Component<Props, State> {
         </FormLine>
 
         <div className={'my-3'}>
-          {layer && geometries < 1 && <MessageLabel icon={'fa-exclamation-triangle'}>{t('No_geometry_found')}</MessageLabel>}
-          {layer && geometries > 0 && <MessageLabel icon={'fa-info-circle'}>{t('X_geometries_will_be_processed', { geometries })}</MessageLabel>}
+          {layer && geometries < 1 && <MessageLabel icon={IconDefs.faExclamationTriangle}>{t('No_geometry_found')}</MessageLabel>}
+          {layer && geometries > 0 && <MessageLabel icon={IconDefs.faInfoCircle}>{t('X_geometries_will_be_processed', { geometries })}</MessageLabel>}
         </div>
 
         {!!dataSamples.length && (

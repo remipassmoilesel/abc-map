@@ -18,9 +18,9 @@
 
 import React, { ChangeEvent, Component, ReactNode } from 'react';
 import { Modal } from 'react-bootstrap';
+import isEqual from 'lodash/isEqual';
 import { LayerWrapper } from '../../../../core/geo/layers/LayerWrapper';
 import { Logger } from '@abc-map/shared';
-import * as _ from 'lodash';
 import { ServiceProps, withServices } from '../../../../core/withServices';
 import { HistoryKey } from '../../../../core/history/HistoryKey';
 import { EditLayerTask } from '../../../../core/history/tasks/layers/EditLayerTask';
@@ -161,7 +161,7 @@ class EditLayerModal extends Component<Props, State> {
 
     const before = { name: layer.getName() || '', opacity: layer.getOpacity(), attributions: layer.getAttributions()?.slice() || [] };
     const after = { name, opacity, attributions };
-    if (!_.isEqual(before, after)) {
+    if (!isEqual(before, after)) {
       layer.setName(name).setOpacity(opacity).setAttributions(attributions);
       history.register(HistoryKey.Map, new EditLayerTask(map, layer, before, after));
     }

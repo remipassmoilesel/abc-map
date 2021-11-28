@@ -24,6 +24,8 @@ import { ImportStatus } from '../../../core/data/DataService';
 import { OperationStatus } from '../../../core/ui/typings';
 import { withTranslation } from 'react-i18next';
 import { prefixedTranslation } from '../../../i18n/i18n';
+import { IconDefs } from '../../../components/icon/IconDefs';
+import { FaIcon } from '../../../components/icon/FaIcon';
 import Cls from './ImportData.module.scss';
 
 const logger = Logger.get('ImportData.tsx');
@@ -36,7 +38,7 @@ class ImportData extends Component<ServiceProps, {}> {
       <div className={'control-block'}>
         <div className={'control-item'}>
           <button onClick={this.importFile} type={'button'} className={'btn btn-link'} data-cy={'import-data'}>
-            <i className={'fa fa-table mr-2'} /> {t('Import_data')}
+            <FaIcon icon={IconDefs.faTable} className={'mr-2'} /> {t('Import_data')}
           </button>
         </div>
         <div className={`mb-2 ${Cls.advice}`}>{t('You_can_also_drop_on_map')}</div>

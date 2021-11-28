@@ -28,6 +28,8 @@ import { ImportStatus } from '../../core/data/DataService';
 import { solvesInAtLeast } from '../../core/utils/solvesInAtLeast';
 import { prefixedTranslation } from '../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
+import { IconDefs } from '../../components/icon/IconDefs';
+import { FaIcon } from '../../components/icon/FaIcon';
 import Cls from './DataStoreView.module.scss';
 
 const logger = Logger.get('DataStoreView.tsx');
@@ -97,7 +99,7 @@ class DataStoreView extends Component<ServiceProps, State> {
           {/* Clear search button */}
           {query && (
             <button className={'btn btn-outline-secondary mx-2'} onClick={this.clearSearch}>
-              <i className={'fa fa-times'} />
+              <FaIcon icon={IconDefs.faTimes} />
             </button>
           )}
         </div>

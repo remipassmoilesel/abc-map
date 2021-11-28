@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Map } from 'ol';
+import Map from 'ol/Map';
 import { MapWrapper } from './MapWrapper';
 import { Attribution, ScaleLine, Zoom } from 'ol/control';
 import { Views } from '../Views';

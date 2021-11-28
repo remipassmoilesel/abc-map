@@ -18,7 +18,7 @@
 import { Services } from './core/Services';
 import { newTestServices, TestServices } from './core/utils/test/TestServices';
 import { UserStatus } from '@abc-map/shared';
-import { bootstrap, logger } from './index';
+import { bootstrap, logger } from './bootstrap';
 import { MainStore, storeFactory } from './core/store/store';
 import { render } from './render';
 
@@ -26,7 +26,7 @@ jest.mock('./render');
 
 logger.disable();
 
-describe('index', () => {
+describe('bootstrap', () => {
   let services: TestServices;
   let svc: Services;
   let store: MainStore;

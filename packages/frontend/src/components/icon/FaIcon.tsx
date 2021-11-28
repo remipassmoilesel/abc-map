@@ -16,31 +16,25 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { Component, ReactNode } from 'react';
-import Cls from './MessageLabel.module.scss';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
-import { FaIcon } from '../icon/FaIcon';
+import { CSSProperties } from 'react';
+import Cls from './Icon.module.scss';
 
-export interface Props {
+interface Props {
   icon: IconDefinition;
+  style?: CSSProperties;
   className?: string;
-  'data-testid'?: string;
+  size?: string;
+  color?: string;
+  title?: string;
 }
 
-class MessageLabel extends Component<Props, {}> {
-  public render(): ReactNode {
-    const icon = this.props.icon;
-    const children = this.props.children;
-    const className = this.props.className || '';
-    const dataTestId = this.props['data-testid'] || undefined;
+export function FaIcon(props: Props) {
+  const { icon, size, color, title } = props;
+  const className = `abc-icon ${Cls.icon} ${props.className || ''}`;
+  const dimensions = (props.size && { width: size, height: size }) || undefined;
+  const style: CSSProperties = { ...props.style, color, ...dimensions };
 
-    return (
-      <div className={`${Cls.message} ${className}`} data-testid={dataTestId}>
-        <FaIcon icon={icon} className={'mr-2'} size={'1.2rem'} />
-        {children}
-      </div>
-    );
-  }
+  return <FontAwesomeIcon icon={icon} style={style} className={className} title={title} />;
 }
-
-export default MessageLabel;

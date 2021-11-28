@@ -44,6 +44,10 @@
 
   &:hover {
     background-color: rgba($gray-600, 0.2);
+
+    svg {
+      fill: $gray-800;
+    }
   }
 
   &.active {

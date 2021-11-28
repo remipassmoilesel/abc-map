@@ -19,12 +19,12 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Logger } from '@abc-map/shared';
 import { toPrecision } from '../../../core/utils/numbers';
-import * as _ from 'lodash';
 import MapBrowserEvent from 'ol/MapBrowserEvent';
 import { toLonLat } from 'ol/proj';
 import { Coordinate } from 'ol/coordinate';
 import { prefixedTranslation } from '../../../i18n/i18n';
 import { useServices } from '../../../core/hooks';
+import throttle from 'lodash/throttle';
 import Cls from './CursorPosition.module.scss';
 
 const logger = Logger.get('CursorPosition.tsx');
@@ -38,7 +38,7 @@ function CursorPosition() {
   // Set position when pointer move on map
   const handlePointerMove = useMemo(
     () =>
-      _.throttle(
+      throttle(
         (ev: MapBrowserEvent<MouseEvent>) => {
           const pos = toLonLat(ev.coordinate, ev.map.getView().getProjection());
           setPosition(pos);

@@ -18,7 +18,7 @@
 
 import { LoadFunction } from 'ol/Tile';
 import { BasicAuthentication, Logger } from '@abc-map/shared';
-import { ImageTile } from 'ol';
+import ImageTile from 'ol/ImageTile';
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import TileState from 'ol/TileState';
 
