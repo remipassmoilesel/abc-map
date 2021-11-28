@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Map } from 'ol';
+import Map from 'ol/Map';
 import VectorSource from 'ol/source/Vector';
 import MapBrowserEventType from 'ol/MapBrowserEventType';
 import MapBrowserEvent from 'ol/MapBrowserEvent';

@@ -16,9 +16,10 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Map } from 'ol';
+import Map from 'ol/Map';
 import { AbcProjection, AbcView, EPSG_4326, LayerProperties, Logger, PredefinedLayerModel } from '@abc-map/shared';
-import _ from 'lodash';
+import debounce from 'lodash/debounce';
+import uniq from 'lodash/uniq';
 import { ResizeObserverFactory } from '../../utils/ResizeObserverFactory';
 import BaseEvent from 'ol/events/Event';
 import { Tool } from '../../tools/Tool';
@@ -65,7 +66,7 @@ export class MapWrapper {
 
     if (node) {
       // Here we listen to div support size change
-      const resize = _.debounce(this.handleSizeChange, 100);
+      const resize = debounce(this.handleSizeChange, 100);
       this.sizeObserver = ResizeObserverFactory.create(resize);
       this.sizeObserver.observe(node);
     } else {
@@ -295,12 +296,12 @@ export class MapWrapper {
   }
 
   public getTextAttributions(): string[] {
-    return _(this.getLayers())
+    const attributions = this.getLayers()
       .filter((lay) => lay.isVisible())
       .flatMap((lay) => lay.getAttributions())
-      .uniq() // Some attributions can appear twice
-      .filter((attr) => !!attr)
-      .value() as string[];
+      .filter((attr) => !!attr) as string[];
+
+    return uniq(attributions); // Some attributions can appear twice
   }
 
   public setView(view: AbcView) {

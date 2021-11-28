@@ -31,6 +31,7 @@ import Cls from './DataSourceSelector.module.scss';
 import MessageLabel from '../../../components/message-label/MessageLabel';
 import { prefixedTranslation } from '../../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
+import { IconDefs } from '../../../components/icon/IconDefs';
 
 export const logger = Logger.get('DataSourceSelector.tsx');
 
@@ -108,13 +109,13 @@ class DataSourceSelector extends Component<Props, State> {
         )}
 
         <>
-          {rows >= 500 && <MessageLabel icon={'fa-exclamation-triangle'}>{t('This_source_contains_a_lot_of_data', { rows })}</MessageLabel>}
-          {rows === 0 && <MessageLabel icon={'fa-exclamation-triangle'}>{t('Data_source_empty')}</MessageLabel>}
-          {rows > 0 && <MessageLabel icon={'fa-rocket'}>{t('X_entries_will_be_processed', { rows })}</MessageLabel>}
+          {rows >= 500 && <MessageLabel icon={IconDefs.faExclamationTriangle}>{t('This_source_contains_a_lot_of_data', { rows })}</MessageLabel>}
+          {rows === 0 && <MessageLabel icon={IconDefs.faExclamationTriangle}>{t('Data_source_empty')}</MessageLabel>}
+          {rows > 0 && <MessageLabel icon={IconDefs.faRocket}>{t('X_entries_will_be_processed', { rows })}</MessageLabel>}
         </>
 
-        {error && <MessageLabel icon={'fa-exclamation-circle'}>{t('This_data_source_is_incorrect')}</MessageLabel>}
-        {errorAtLine !== NoLineInformation && <MessageLabel icon={'fa-chevron-right'}>{t('Error_on_line_X', { errorAtLine })}</MessageLabel>}
+        {error && <MessageLabel icon={IconDefs.faExclamationCircle}>{t('This_data_source_is_incorrect')}</MessageLabel>}
+        {errorAtLine !== NoLineInformation && <MessageLabel icon={IconDefs.faChevronRight}>{t('Error_on_line_X', { errorAtLine })}</MessageLabel>}
       </div>
     );
   }

@@ -25,6 +25,8 @@ import { prefixedTranslation } from '../../i18n/i18n';
 import { Routes } from '../../routes';
 import { withTranslation } from 'react-i18next';
 import Cls from './DataProcessingView.module.scss';
+import { FaIcon } from '../../components/icon/FaIcon';
+import { IconDefs } from '../../components/icon/IconDefs';
 import '../../data-processing/style.scss';
 
 const logger = Logger.get('DataProcessingView.tsx');
@@ -55,13 +57,13 @@ class DataProcessingView extends Component<Props, {}> {
         <div className={Cls.viewPort} data-cy={'data-processing-viewport'}>
           {module && (
             <>
-              <h4>{tModules(module.getI18nName())}</h4>
+              <h4 className={'my-3'}>{tModules(module.getI18nName())}</h4>
               {module.getUserInterface()}
             </>
           )}
           {!module && (
             <div className={Cls.welcome}>
-              <i className={'fa fa-cogs'} />
+              <FaIcon icon={IconDefs.faCogs} size={'6rem'} className={'mb-3'} />
               <h4 dangerouslySetInnerHTML={{ __html: t('Select_a_module_on_left') }} />
             </div>
           )}

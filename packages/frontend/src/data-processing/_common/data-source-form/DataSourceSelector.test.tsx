@@ -25,8 +25,8 @@ import DataSourceSelector, { logger } from './DataSourceSelector';
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { TestDataSource } from '../../../core/data/data-source/TestDataSource';
-import * as _ from 'lodash';
 import { CsvParsingError } from '../../../core/data/csv-parser/typings';
+import range from 'lodash/range';
 
 logger.disable();
 
@@ -69,7 +69,7 @@ describe('DataSourceSelector', () => {
   });
 
   it('should warn if data source is too big', async () => {
-    const fakeSource = TestDataSource.from(_.range(0, 550).map((i) => ({ code: i })));
+    const fakeSource = TestDataSource.from(range(0, 550).map((i) => ({ code: i })));
 
     abcRender(<DataSourceSelector value={fakeSource} onSelected={handleSelection} />, { services });
 
@@ -79,7 +79,7 @@ describe('DataSourceSelector', () => {
   });
 
   it('should warn on error', async () => {
-    const fakeSource = TestDataSource.from(_.range(0, 550).map((i) => ({ code: i })));
+    const fakeSource = TestDataSource.from(range(0, 550).map((i) => ({ code: i })));
     const getRowsStub = sinon.stub();
     getRowsStub.rejects();
     fakeSource.getRows = getRowsStub;
@@ -92,7 +92,7 @@ describe('DataSourceSelector', () => {
   });
 
   it('should show line error if any', async () => {
-    const fakeSource = TestDataSource.from(_.range(0, 550).map((i) => ({ code: i })));
+    const fakeSource = TestDataSource.from(range(0, 550).map((i) => ({ code: i })));
     const getRowsStub = sinon.stub();
     getRowsStub.rejects(new CsvParsingError('Missing comma', 5));
     fakeSource.getRows = getRowsStub;

@@ -25,6 +25,8 @@ import { nanoid } from 'nanoid';
 import { Logger } from '@abc-map/shared';
 import { prefixedTranslation } from '../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
+import { FaIcon } from '../icon/FaIcon';
+import { IconDefs } from '../icon/IconDefs';
 
 // TODO: unit test
 
@@ -87,7 +89,7 @@ class PropertiesForm extends Component<Props, State> {
               title={t('Delete_property')}
               data-cy={`delete-property-button-${property}`}
             >
-              <i className={'fa fa-trash'} />
+              <FaIcon icon={IconDefs.faTrash} />
             </button>
           </td>
         </tr>
@@ -122,11 +124,16 @@ class PropertiesForm extends Component<Props, State> {
               className={'ml-2 btn btn-link btn-sm'}
               data-cy={`delete-button-${property.name || 'unknown'}`}
             >
-              <i className={'fa fa-trash'} />
+              <FaIcon icon={IconDefs.faTrash} />
             </button>
             {isLast && (
-              <button onClick={this.handleNewPropertyField} className={'ml-2 btn btn-link btn-sm'} title={t('New_property')} data-cy={'new-property-button'}>
-                <i className={'fa fa-plus text-primary'} />
+              <button
+                onClick={this.handleNewPropertyField}
+                className={`btn btn-link btn-sm ${Cls.buttonNew}`}
+                title={t('New_property')}
+                data-cy={'new-property-button'}
+              >
+                <FaIcon icon={IconDefs.faPlus} size={'1.2rem'} />
               </button>
             )}
           </td>

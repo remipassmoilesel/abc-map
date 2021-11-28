@@ -18,7 +18,9 @@
 
 import * as sinon from 'sinon';
 import { SinonStub } from 'sinon';
-import { ImageTile, Tile, VectorTile } from 'ol';
+import ImageTile from 'ol/ImageTile';
+import Tile from 'ol/Tile';
+import VectorTile from 'ol/VectorTile';
 import TileState from 'ol/TileState';
 import { waitFor } from '@testing-library/react';
 import { AxiosInstance } from 'axios';

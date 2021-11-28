@@ -19,11 +19,11 @@
 import React, { Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/shared';
 import { References } from '@abc-map/user-documentation';
+import debounce from 'lodash/debounce';
 import { ServiceProps, withServices } from '../../core/withServices';
 import { MainState } from '../../core/store/reducer';
 import { connect, ConnectedProps } from 'react-redux';
 import { UiActions } from '../../core/store/ui/actions';
-import * as _ from 'lodash';
 import { pageSetup } from '../../core/utils/page-setup';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { getDocumentationLang } from '../../i18n/i18n';
@@ -92,7 +92,7 @@ class DocumentationView extends Component<Props, {}> {
     current.removeEventListener('scroll', this.handleScroll);
   }
 
-  private handleScroll = _.debounce(() => {
+  private handleScroll = debounce(() => {
     const current = this.viewPortRef.current;
     if (!current) {
       logger.error('Ref not ready');

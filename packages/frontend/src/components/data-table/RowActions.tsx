@@ -20,6 +20,8 @@ import React, { Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/shared';
 import { DataRow } from '../../core/data/data-source/DataSource';
 import { prefixedTranslation } from '../../i18n/i18n';
+import { IconDefs } from '../icon/IconDefs';
+import { FaIcon } from '../icon/FaIcon';
 
 const logger = Logger.get('RowActions.tsx');
 
@@ -36,10 +38,10 @@ class RowActions extends Component<Props, {}> {
     return (
       <>
         <button onClick={this.handleEdit} title={t('Modify')} className={'btn btn-link'}>
-          <i className={'fa fa-pencil-alt'} />
+          <FaIcon icon={IconDefs.faPencilAlt} />
         </button>
         <button onClick={this.handleDelete} title={t('Delete')} className={'btn btn-link'}>
-          <i className={'fa fa-trash-alt'} />
+          <FaIcon icon={IconDefs.faTrashAlt} />
         </button>
       </>
     );

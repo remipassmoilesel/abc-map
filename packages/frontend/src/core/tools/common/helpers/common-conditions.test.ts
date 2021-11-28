@@ -19,7 +19,7 @@
 import MapBrowserEvent from 'ol/MapBrowserEvent';
 import MapBrowserEventType from 'ol/MapBrowserEventType';
 import { withControlKey, withControlKeyOnly, withGeometryOfType, withMainButton, withShiftKey } from './common-conditions';
-import { PluggableMap } from 'ol';
+import PluggableMap from 'ol/PluggableMap';
 import { LineString } from 'ol/geom';
 import GeometryType from 'ol/geom/GeometryType';
 import Feature from 'ol/Feature';

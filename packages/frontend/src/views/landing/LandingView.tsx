@@ -24,15 +24,17 @@ import { DateTime } from 'luxon';
 import Illustration1Icon from '../../assets/illustrations/illustration-1.svg';
 import Illustration2Icon from '../../assets/illustrations/illustration-2.svg';
 import Illustration3Icon from '../../assets/illustrations/illustration-3.svg';
-import * as _ from 'lodash';
 import { BUILD_INFO } from '../../build-version';
 import { MainState } from '../../core/store/reducer';
 import { connect, ConnectedProps } from 'react-redux';
 import { pageSetup } from '../../core/utils/page-setup';
 import { prefixedTranslation } from '../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
-import Cls from './LandingView.module.scss';
+import sample from 'lodash/sample';
 import { Routes } from '../../routes';
+import { FaIcon } from '../../components/icon/FaIcon';
+import { IconDefs } from '../../components/icon/IconDefs';
+import Cls from './LandingView.module.scss';
 
 const logger = Logger.get('Landing.tsx');
 
@@ -55,7 +57,7 @@ class LandingView extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      illustration: _.sample([Illustration1Icon, Illustration2Icon, Illustration3Icon]) as string,
+      illustration: sample([Illustration1Icon, Illustration2Icon, Illustration3Icon]) as string,
     };
   }
 
@@ -91,7 +93,7 @@ class LandingView extends Component<Props, State> {
             </ul>
             <div className={'mt-4'}>
               <button className={'btn btn-primary'} onClick={this.handleGoToMap}>
-                <i className={'fa fa-rocket mr-2'} />
+                <FaIcon icon={IconDefs.faRocket} className={'mr-2'} />
                 {t('Lets_go')}
               </button>
             </div>
@@ -109,11 +111,11 @@ class LandingView extends Component<Props, State> {
               <p className={'mb-4'}>{t('Connection_is_optional')} 😉</p>
               <div>
                 <button className={'btn btn-outline-primary'} onClick={this.handleRegister} data-cy={'open-registration'}>
-                  <i className={'fa fa-feather-alt mr-3'} />
+                  <FaIcon icon={IconDefs.faFeatherAlt} className={'mr-3'} />
                   {t('Register')}
                 </button>
                 <button className={'btn btn-outline-primary'} onClick={this.handleLogin} data-cy={'open-login'}>
-                  <i className={'fa fa-lock-open mr-3'} />
+                  <FaIcon icon={IconDefs.faLockOpen} className={'mr-3'} />
                   {t('Login')}
                 </button>
               </div>

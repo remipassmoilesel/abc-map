@@ -19,14 +19,16 @@
 import React, { Component, DragEvent, ReactNode } from 'react';
 import { AbcFile, Logger, ProjectConstants } from '@abc-map/shared';
 import { MapWrapper } from '../../../core/geo/map/MapWrapper';
+import throttle from 'lodash/throttle';
 import { ServiceProps, withServices } from '../../../core/withServices';
 import { ImportStatus } from '../../../core/data/DataService';
 import { OperationStatus } from '../../../core/ui/typings';
 import { TileLoadErrorEvent } from '../../../core/geo/map/MapWrapper.events';
-import * as _ from 'lodash';
 import { prefixedTranslation } from '../../../i18n/i18n';
 import Cls from './MainMap.module.scss';
 import { withTranslation } from 'react-i18next';
+import { FaIcon } from '../../../components/icon/FaIcon';
+import { IconDefs } from '../../../components/icon/IconDefs';
 
 export const logger = Logger.get('MainMap.ts');
 
@@ -63,7 +65,7 @@ class MainMap extends Component<Props, State> {
         {/* Warning if tiles does not load */}
         {tileError && (
           <div className={Cls.tileLoadError} onClick={this.handleDismissTileError}>
-            {tileError} <i className={'fa fa-times ml-2'} />
+            {tileError} <FaIcon icon={IconDefs.faTimes} className={'ml-2'} />
           </div>
         )}
 
@@ -71,7 +73,7 @@ class MainMap extends Component<Props, State> {
         {dragOverlay && (
           <>
             <div className={Cls.dropOverlay1}>
-              <i className={'fa fa-file'} />
+              <FaIcon icon={IconDefs.faFile} size={'5rem'} />
               <h1>{t('Drop_your_files')}</h1>
             </div>
             <div
@@ -174,7 +176,7 @@ class MainMap extends Component<Props, State> {
     this.setState({ dragOverlay: false });
   };
 
-  private handleTileError = _.throttle((ev: TileLoadErrorEvent) => {
+  private handleTileError = throttle((ev: TileLoadErrorEvent) => {
     this.setState({ tileError: t('Layer_does_not_load', { name: ev.layer.getName() || t('Layer_without_name') }) });
   }, 1000);
 

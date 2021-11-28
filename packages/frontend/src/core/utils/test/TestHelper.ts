@@ -48,7 +48,7 @@ import {
 import uuid from 'uuid-random';
 import { Coordinate } from 'ol/coordinate';
 import MapBrowserEvent from 'ol/MapBrowserEvent';
-import { Map } from 'ol';
+import Map from 'ol/Map';
 import { RegionsOfMetropolitanFrance, SampleWmsCapabilities, SampleWmtsCapabilities } from './TestHelper.data';
 import { TestDataSource } from '../../data/data-source/TestDataSource';
 import { VectorLayerWrapper } from '../../geo/layers/LayerWrapper';

@@ -26,6 +26,8 @@ import { prefixedTranslation } from '../../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
 import Cls from './RemoteProjectsModal.module.scss';
 import { OperationStatus } from '../../../core/ui/typings';
+import { IconDefs } from '../../../components/icon/IconDefs';
+import { FaIcon } from '../../../components/icon/FaIcon';
 
 const logger = Logger.get('RemoteProjectModal.tsx');
 
@@ -86,10 +88,10 @@ class RemoteProjectsModal extends Component<Props, State> {
               return (
                 <div key={pr.id} className={classes}>
                   <div onClick={() => this.handleItemSelected(pr)} className={'flex-grow-1'} data-cy={'remote-project'}>
-                    {pr.name} {hasCredentials && <i className={'fa fa-lock mx-2'} />}
+                    {pr.name} {hasCredentials && <FaIcon icon={IconDefs.faLock} className={'mx-2'} title={t('This_project_is_password_protected')} />}
                   </div>
                   <div onClick={() => this.handleDeleteProject(pr)} data-cy={'delete-project'}>
-                    <i title={'Supprimer le projet'} className={'fa fa-trash mx-2'} />
+                    <FaIcon icon={IconDefs.faTrash} className={'mx-2'} title={t('Delete_project')} />
                   </div>
                 </div>
               );
@@ -98,8 +100,8 @@ class RemoteProjectsModal extends Component<Props, State> {
           </div>
 
           {showModificationsWarning && (
-            <div className={'my-3 alert alert-danger d-flex align-items-center justify-content-center'}>
-              <i className={'fa fa-exclamation-triangle mr-2'} /> {t('Current_changes_will_be_lost')}
+            <div className={'my-3 alert alert-warning d-flex align-items-center justify-content-center'}>
+              <FaIcon icon={IconDefs.faExclamationTriangle} className={'mr-2'} /> {t('Current_changes_will_be_lost')}
             </div>
           )}
 

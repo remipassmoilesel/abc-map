@@ -57,13 +57,12 @@ $list-height: 6rem;
   button {
     padding: 0.3rem 0.6rem !important;
 
-    :global(.fa) {
-      font-size: 1.1rem;
+    :global(.abc-icon) {
       color: $gray-500;
     }
 
     &:hover {
-      :global(.fa) {
+      :global(.abc-icon) {
         color: $gray-700;
       }
     }

@@ -15,8 +15,8 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
-
-import _ from 'lodash';
+import defaultsDeep from 'lodash/defaultsDeep';
+import throttle from 'lodash/throttle';
 import { StorePersistence } from './persistence/StorePersistence';
 import { initialState } from './state';
 import { MainState, mainReducer } from './reducer';
@@ -24,7 +24,7 @@ import { createStore, Store } from 'redux';
 import { getAbcWindow } from '@abc-map/shared';
 
 const persistence = StorePersistence.newPersistence();
-const preLoadedState = _.defaultsDeep(persistence.loadState(), initialState());
+const preLoadedState = defaultsDeep(persistence.loadState(), initialState());
 
 const _window = getAbcWindow();
 const reduxExtension = _window.__REDUX_DEVTOOLS_EXTENSION__ && _window.__REDUX_DEVTOOLS_EXTENSION__();
@@ -36,7 +36,7 @@ export function storeFactory(preLoadedState?: MainState): Store<MainState> {
 export const mainStore = storeFactory(preLoadedState);
 
 // At every store change, we persist store state in localstorage, but at most X times per second
-const persist = _.throttle(() => persistence.saveState(mainStore.getState()), 500, { leading: true });
+const persist = throttle(() => persistence.saveState(mainStore.getState()), 500, { leading: true });
 mainStore.subscribe(() => persist());
 
 export type MainStore = typeof mainStore;

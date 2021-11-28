@@ -21,7 +21,7 @@ import { GeometryType, Logger, MapTool } from '@abc-map/shared';
 import { DragBox, Interaction, Translate } from 'ol/interaction';
 import VectorSource from 'ol/source/Vector';
 import Geometry from 'ol/geom/Geometry';
-import { Map } from 'ol';
+import Map from 'ol/Map';
 import Icon from '../../../assets/tool-icons/selection.inline.svg';
 import { HistoryKey } from '../../history/HistoryKey';
 import { UpdateGeometriesTask, UpdateItem } from '../../history/tasks/features/UpdateGeometriesTask';

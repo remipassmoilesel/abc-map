@@ -21,8 +21,10 @@ import { LayerType, Logger } from '@abc-map/shared';
 import { Link } from 'react-router-dom';
 import { prefixedTranslation } from '../../../../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
-import Cls from './HelpPanel.module.scss';
 import { Routes } from '../../../../../routes';
+import { IconDefs } from '../../../../../components/icon/IconDefs';
+import { FaIcon } from '../../../../../components/icon/FaIcon';
+import Cls from './HelpPanel.module.scss';
 
 const logger = Logger.get('HelpPanel.tsx');
 
@@ -42,7 +44,7 @@ class HelpPanel extends Component<Props, {}> {
         {type === LayerType.Vector && <div>{t('Geometry_layers_allow_to_draw')}</div>}
 
         <div className={Cls.datastoreAdvice}>
-          <i className={'fa fa-info-circle mr-3'} />
+          <FaIcon icon={IconDefs.faInfoCircle} className={'mr-3'} />
           <div>
             {t('Cant_find_what_you_want')}
             <br />

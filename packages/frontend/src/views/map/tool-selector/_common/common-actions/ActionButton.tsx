@@ -19,23 +19,26 @@
 import React from 'react';
 import { WithTooltip } from '../../../../../components/with-tooltip/WithTooltip';
 import Cls from './ActionButton.module.scss';
+import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
+import { FaIcon } from '../../../../../components/icon/FaIcon';
 
 interface Props {
   onClick: () => void;
   title: string;
+  icon: IconDefinition;
   'data-cy'?: string;
   'data-testid'?: string;
-  children: React.ReactNode;
 }
 
 export function ActionButton(props: Props) {
-  const children = props.children;
-  const title = props.title;
+  const { title, icon, onClick } = props;
+  const dataCy = props['data-cy'];
+  const dataTestId = props['data-testid'];
 
   return (
     <WithTooltip title={title} placement={'left'}>
-      <button {...props} className={`btn btn-link ${Cls.button}`}>
-        {children}
+      <button onClick={onClick} className={`btn btn-link ${Cls.button}`} data-cy={dataCy} data-testid={dataTestId}>
+        <FaIcon icon={icon} size={'1.1rem'} />
       </button>
     </WithTooltip>
   );

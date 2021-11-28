@@ -36,6 +36,8 @@ import TipBubble from '../../../components/tip-bubble/TipBubble';
 import { ToolTips } from '@abc-map/user-documentation';
 import { ToolButton } from './ToolButton';
 import TextToolPanel from './text/TextToolPanel';
+import { IconDefs } from '../../../components/icon/IconDefs';
+import { FaIcon } from '../../../components/icon/FaIcon';
 
 interface Props {
   activeLayer?: LayerWrapper;
@@ -119,7 +121,7 @@ function ToolSelector(props: Props) {
         <div className={Cls.toolsDisabled}>
           {t('You_must_select_geometry_layer_before')}
           <button onClick={handleCreateVectorLayer} className={'btn btn-outline-secondary my-3'}>
-            <i className={'fa fa-plus mr-2'} />
+            <FaIcon icon={IconDefs.faPlus} className={'mr-2'} />
             {t('Create_geometry_layer')}
           </button>
         </div>

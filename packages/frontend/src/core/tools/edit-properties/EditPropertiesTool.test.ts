@@ -21,7 +21,7 @@ import * as sinon from 'sinon';
 import { SinonStubbedInstance } from 'sinon';
 import { ModalService } from '../../ui/ModalService';
 import { HistoryService } from '../../history/HistoryService';
-import { Map } from 'ol';
+import Map from 'ol/Map';
 import { ModalEventType, ModalStatus } from '../../ui/typings';
 import Feature from 'ol/Feature';
 import { Point } from 'ol/geom';

@@ -21,6 +21,8 @@ import { Modal } from 'react-bootstrap';
 import { AllTips } from '@abc-map/user-documentation';
 import { getDocumentationLang, prefixedTranslation } from '../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
+import { FaIcon } from '../icon/FaIcon';
+import { IconDefs } from '../icon/IconDefs';
 import Cls from './TipBubble.module.scss';
 
 interface Props {
@@ -36,7 +38,7 @@ function TipBubble(props: Props) {
   const id = props.id;
   const label = props.label;
   const className = props.className || '';
-  const fontSize = props.size;
+  const size = props.size;
 
   const [open, setOpen] = useState(false);
 
@@ -56,7 +58,7 @@ function TipBubble(props: Props) {
       {/* Help icon */}
       <div onClick={handleClick} className={`${Cls.bubble} ${className}`} title={label || t('Help')}>
         {label && <div className={'mr-2'}>{label}</div>}
-        <i className={`fa fa-question-circle`} style={{ fontSize }} />
+        <FaIcon icon={IconDefs.faQuestionCircle} size={size} className={Cls.icon} />
       </div>
 
       {/* Modal */}

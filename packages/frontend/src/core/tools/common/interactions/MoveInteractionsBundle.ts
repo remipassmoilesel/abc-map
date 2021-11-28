@@ -18,7 +18,7 @@
 
 import { DragPan, Interaction, KeyboardPan, MouseWheelZoom } from 'ol/interaction';
 import MapBrowserEvent from 'ol/MapBrowserEvent';
-import { Map } from 'ol';
+import Map from 'ol/Map';
 import { withControlKey, withMainButton } from '../helpers/common-conditions';
 
 export class MoveInteractionsBundle {

@@ -17,7 +17,7 @@
  */
 
 import { Stats } from './Stats';
-import * as _ from 'lodash';
+import shuffle from 'lodash/shuffle';
 import { ClassificationAlgorithm } from '../algorithm/Algorithm';
 
 describe('Stats', () => {
@@ -42,7 +42,7 @@ describe('Stats', () => {
     ];
 
     function getData(): number[] {
-      return _.shuffle(data);
+      return shuffle(data);
     }
 
     it('ClassificationAlgorithm.EqualIntervals', () => {

@@ -27,6 +27,8 @@ import { LabeledLayoutFormats } from './LabeledLayoutFormats';
 import HistoryControls from '../../../components/history-controls/HistoryControls';
 import { HistoryKey } from '../../../core/history/HistoryKey';
 import { Routes } from '../../../routes';
+import { FaIcon } from '../../../components/icon/FaIcon';
+import { IconDefs } from '../../../components/icon/IconDefs';
 
 const logger = Logger.get('LayoutControls.tsx', 'warn');
 
@@ -84,25 +86,25 @@ class LayoutControls extends Component<Props, {}> {
         <div className={'control-block'}>
           <div className={'control-item'}>
             <button onClick={handleNewLayout} className={'btn btn-link'} data-cy={'new-layout'}>
-              <i className={'fa fa-plus mr-2'} />
+              <FaIcon icon={IconDefs.faPlus} className={'mr-2'} />
               {t('New_layout')}
             </button>
           </div>
           <div className={'control-item'}>
             <button onClick={handleLayoutUp} className={'btn btn-link'} data-cy={'layout-up'}>
-              <i className={'fa fa-arrow-up mr-2'} />
+              <FaIcon icon={IconDefs.faArrowUp} className={'mr-2'} />
               {t('Move_up')}
             </button>
           </div>
           <div className={'control-item'}>
             <button onClick={handleLayoutDown} className={'btn btn-link'} data-cy={'layout-down'}>
-              <i className={'fa fa-arrow-down mr-2'} />
+              <FaIcon icon={IconDefs.faArrowDown} className={'mr-2'} />
               {t('Move_Down')}
             </button>
           </div>
           <div className={'control-item'}>
             <button onClick={handleClearAll} className={'btn btn-link'} data-cy={'clear-all'}>
-              <i className={'fa fa-trash-alt mr-2'} />
+              <FaIcon icon={IconDefs.faTrashAlt} className={'mr-2'} />
               {t('Delete_all')}
             </button>
           </div>
@@ -118,7 +120,7 @@ class LayoutControls extends Component<Props, {}> {
 
           <div className={'control-item'}>
             <button onClick={this.handleEditLegend} className={'btn btn-link'} data-cy={'edit-legend'}>
-              <i className={'fa fa-pen mr-2'} />
+              <FaIcon icon={IconDefs.faPen} className={'mr-2'} />
               {t('Edit_legend')}
             </button>
           </div>
@@ -128,13 +130,13 @@ class LayoutControls extends Component<Props, {}> {
         <div className={'control-block'}>
           <div className={'control-item d-flex justify-content-center my-3'}>
             <button onClick={() => handleExport(ExportFormat.PDF)} className={'btn btn-primary'} data-cy={'pdf-export'}>
-              <i className={'fa fa-download mr-2'} />
+              <FaIcon icon={IconDefs.faDownload} className={'mr-2'} />
               {t('PDF_export')}
             </button>
           </div>
           <div className={'control-item d-flex justify-content-center mb-3'}>
             <button onClick={() => handleExport(ExportFormat.PNG)} className={'btn btn-outline-primary'} data-cy={'png-export'}>
-              <i className={'fa fa-download mr-2'} />
+              <FaIcon icon={IconDefs.faDownload} className={'mr-2'} />
               {t('PNG_export')}
             </button>
           </div>

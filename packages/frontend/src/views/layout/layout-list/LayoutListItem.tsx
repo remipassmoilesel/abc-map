@@ -22,6 +22,8 @@ import { AbcLayout } from '@abc-map/shared';
 import Cls from './LayoutListItem.module.scss';
 import { withTranslation } from 'react-i18next';
 import { prefixedTranslation } from '../../../i18n/i18n';
+import { FaIcon } from '../../../components/icon/FaIcon';
+import { IconDefs } from '../../../components/icon/IconDefs';
 
 const logger = Logger.get('LayoutListItem.tsx', 'warn');
 
@@ -46,7 +48,7 @@ class LayoutListItem extends Component<Props, {}> {
             {layout.name}
           </div>
           <button className={'btn btn-sm btn-link'} onClick={this.handleDeleted}>
-            <i className={'fa fa-trash'} />
+            <FaIcon icon={IconDefs.faTrash} />
           </button>
         </div>
 

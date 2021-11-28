@@ -18,7 +18,7 @@
 
 import VectorSource from 'ol/source/Vector';
 import Geometry from 'ol/geom/Geometry';
-import { Map } from 'ol';
+import Map from 'ol/Map';
 import { MapTool } from '@abc-map/shared';
 
 export interface Tool {

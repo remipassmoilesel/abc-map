@@ -18,7 +18,7 @@
 
 import { Tool } from '../Tool';
 import { Logger, MapTool } from '@abc-map/shared';
-import { Map } from 'ol';
+import Map from 'ol/Map';
 import Icon from '../../../assets/tool-icons/properties.inline.svg';
 import { MainStore } from '../../store/store';
 import { HistoryService } from '../../history/HistoryService';
@@ -27,7 +27,6 @@ import { FeatureWrapper } from '../../geo/features/FeatureWrapper';
 import { ModalStatus } from '../../ui/typings';
 import { HistoryKey } from '../../history/HistoryKey';
 import { SetFeatureProperties } from '../../history/tasks/features/SetFeatureProperties';
-import * as _ from 'lodash';
 import { Interaction, Select } from 'ol/interaction';
 import { withMainButton } from '../common/helpers/common-conditions';
 import { LayerWrapper } from '../../geo/layers/LayerWrapper';
@@ -37,6 +36,7 @@ import { DefaultTolerancePx } from '../common/constants';
 import { MoveInteractionsBundle } from '../common/interactions/MoveInteractionsBundle';
 import { SelectionInteractionsBundle } from '../common/interactions/SelectionInteractionsBundle';
 import { MapActions } from '../../store/map/actions';
+import isEqual from 'lodash/isEqual';
 
 const logger = Logger.get('EditPropertiesTool.ts');
 
@@ -97,7 +97,7 @@ export class EditPropertiesTool implements Tool {
         .featurePropertiesModal(before)
         .then((modalEvent) => {
           const after = modalEvent.properties;
-          if (ModalStatus.Confirmed === modalEvent.status && !_.isEqual(before, after)) {
+          if (ModalStatus.Confirmed === modalEvent.status && !isEqual(before, after)) {
             feature.overwriteSimpleProperties(after);
             this.history.register(HistoryKey.Map, new SetFeatureProperties(feature, before, after));
           }

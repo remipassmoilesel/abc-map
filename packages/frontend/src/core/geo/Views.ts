@@ -20,7 +20,7 @@ import View from 'ol/View';
 import { AbcView } from '@abc-map/shared/build/project/AbcView';
 import { DEFAULT_PROJECTION } from '@abc-map/shared';
 import { fromLonLat } from 'ol/proj';
-import * as _ from 'lodash';
+import sample from 'lodash/sample';
 
 const DefaultView: AbcView = {
   resolution: 39135,
@@ -64,7 +64,7 @@ export class Views {
   }
 
   public static random(): AbcView {
-    return _.sample(views) ?? DefaultView;
+    return sample(views) ?? DefaultView;
   }
 
   public static abcToOl(view: AbcView): View {

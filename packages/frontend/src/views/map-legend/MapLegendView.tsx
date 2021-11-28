@@ -27,8 +27,10 @@ import { RouteComponentProps } from 'react-router-dom';
 import { pageSetup } from '../../core/utils/page-setup';
 import { prefixedTranslation } from '../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
-import Cls from './MapLegendView.module.scss';
 import { Routes } from '../../routes';
+import { IconDefs } from '../../components/icon/IconDefs';
+import { FaIcon } from '../../components/icon/FaIcon';
+import Cls from './MapLegendView.module.scss';
 
 const logger = Logger.get('MapLegendView.tsx');
 
@@ -50,7 +52,7 @@ class MapLegendView extends Component<Props, {}> {
       <div className={Cls.mapLegendView}>
         <div className={'d-flex flex-row justify-content-end'}>
           <button className={'btn btn-outline-primary'} onClick={this.handleGoToLayout} data-cy={'back-to-layout'}>
-            <i className={'fa fa-arrow-circle-left mr-2'} />
+            <FaIcon icon={IconDefs.faArrowCircleLeft} className={'mr-2'} />
             {t('Go_back_to_layout')}
           </button>
         </div>

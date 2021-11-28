@@ -18,7 +18,7 @@
 
 import { MapFactory } from './MapFactory';
 import { EPSG_4326, LayerProperties, MapTool, PredefinedLayerModel } from '@abc-map/shared';
-import { Map } from 'ol';
+import Map from 'ol/Map';
 import { logger, MapWrapper } from './MapWrapper';
 import { ToolRegistry } from '../../tools/ToolRegistry';
 import TileLayer from 'ol/layer/Tile';

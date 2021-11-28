@@ -17,7 +17,7 @@
  */
 import { Views } from './Views';
 import { AbcView } from '@abc-map/shared';
-import { View } from 'ol';
+import View from 'ol/View';
 
 describe('View', () => {
   it('defaultView()', () => {

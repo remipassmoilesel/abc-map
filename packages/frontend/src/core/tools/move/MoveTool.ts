@@ -18,7 +18,7 @@
 
 import { Tool } from '../Tool';
 import Icon from '../../../assets/tool-icons/move.inline.svg';
-import { Map } from 'ol';
+import Map from 'ol/Map';
 import { MapTool } from '@abc-map/shared';
 import { DoubleClickZoom, DragPan, Interaction, KeyboardPan, MouseWheelZoom } from 'ol/interaction';
 

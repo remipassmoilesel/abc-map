@@ -49,3 +49,10 @@
     width: 60% !important;
   }
 }
+
+.buttonNew {
+  margin-left: 0.4rem;
+  :global(.abc-icon) {
+    color: $primary;
+  }
+}

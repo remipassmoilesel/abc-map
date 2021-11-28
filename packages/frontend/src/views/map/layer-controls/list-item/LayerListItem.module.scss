@@ -32,7 +32,7 @@
   white-space: nowrap;
   overflow: hidden;
 
-  :global(.fa) {
+  :global(.abc-icon) {
     margin: 0 7px;
   }
 
@@ -40,7 +40,7 @@
     background: $primary;
     color: white;
 
-    :global(.fa) {
+    :global(.abc-icon) {
       color: white !important;
     }
   }
@@ -51,13 +51,13 @@
   width: 2rem;
 
   &.visible {
-    :global(.fa) {
+    :global(.abc-icon) {
       color: $gray-600;
     }
   }
 
   &.notVisible {
-    :global(.fa) {
+    :global(.abc-icon) {
       color: $gray-500;
     }
   }

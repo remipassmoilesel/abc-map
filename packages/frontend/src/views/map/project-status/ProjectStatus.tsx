@@ -21,6 +21,8 @@ import { Logger } from '@abc-map/shared';
 import EditProjectModal from './edit-project-modal/EditProjectModal';
 import { prefixedTranslation } from '../../../i18n/i18n';
 import { useAppSelector } from '../../../core/store/hooks';
+import { IconDefs } from '../../../components/icon/IconDefs';
+import { FaIcon } from '../../../components/icon/FaIcon';
 import Cls from './ProjectStatus.module.scss';
 
 const logger = Logger.get('ProjectStatus.tsx');
@@ -54,7 +56,7 @@ function ProjectStatus() {
       {/* Edit button and modal */}
       <div className={`control-item mt-3`}>
         <button onClick={handleEditClick} className={'btn btn-link'} data-cy="edit-project">
-          <i className={'fa fa-pencil-alt mr-2'} /> {t('Edit')}
+          <FaIcon icon={IconDefs.faPencilAlt} className={'mr-2'} /> {t('Edit')}
         </button>
       </div>
 

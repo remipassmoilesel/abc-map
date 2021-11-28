@@ -21,7 +21,7 @@ import { TestHelper } from '../../../utils/test/TestHelper';
 import { DrawInteractionsBundle } from './DrawInteractionsBundle';
 import VectorSource from 'ol/source/Vector';
 import Geometry from 'ol/geom/Geometry';
-import { Collection } from 'ol';
+import Collection from 'ol/Collection';
 import sinon from 'sinon';
 import Feature from 'ol/Feature';
 import GeometryType from 'ol/geom/GeometryType';

@@ -18,15 +18,17 @@
 
 import React, { ChangeEvent, Component, ReactNode } from 'react';
 import { Modal } from 'react-bootstrap';
-import { AbcProjection, DEFAULT_PROJECTION, Logger } from '@abc-map/shared';
+import { AbcProjection, DEFAULT_PROJECTION, Language, Logger } from '@abc-map/shared';
 import { MainState } from '../../../../core/store/reducer';
 import { connect, ConnectedProps } from 'react-redux';
 import { ServiceProps, withServices } from '../../../../core/withServices';
 import View from 'ol/View';
 import { Views } from '../../../../core/geo/Views';
 import { MapWrapper } from '../../../../core/geo/map/MapWrapper';
-import { prefixedTranslation } from '../../../../i18n/i18n';
+import { getLang, prefixedTranslation } from '../../../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
+import { IconDefs } from '../../../../components/icon/IconDefs';
+import { FaIcon } from '../../../../components/icon/FaIcon';
 import Cls from './EditProjectModal.module.scss';
 
 const logger = Logger.get('EditProjectModal.tsx');
@@ -76,6 +78,15 @@ class EditProjectModal extends Component<Props, State> {
     const hasVectorLayers = !!this.mainMap.getLayers().find((l) => l.isVector());
     const projectionDisabled = hasVectorLayers || hasLayouts;
 
+    let link: string;
+    switch (getLang()) {
+      case Language.French:
+        link = 'https://fr.wikipedia.org/wiki/Syst%C3%A8me_de_coordonn%C3%A9es_(cartographie)';
+        break;
+      default:
+        link = 'https://en.wikipedia.org/wiki/Spatial_reference_system';
+    }
+
     return (
       <Modal show={true} onHide={onClose}>
         <Modal.Header closeButton>
@@ -99,8 +110,8 @@ class EditProjectModal extends Component<Props, State> {
           <div className={'d-flex flex-column mb-4'}>
             <div className={'d-flex align-items-center mb-2'}>
               {t('Projection')}
-              <a href={'https://fr.wikipedia.org/wiki/Syst%C3%A8me_de_coordonn%C3%A9es_(cartographie)'} className={'mx-2'} target={'_blank'} rel="noreferrer">
-                <i className={'fa fa fa-question-circle'} />
+              <a href={link} className={'mx-2'} target={'_blank'} rel="noreferrer">
+                <FaIcon icon={IconDefs.faQuestionCircle} />
               </a>
             </div>
 

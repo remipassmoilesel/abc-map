@@ -17,7 +17,7 @@
  */
 
 import { DEFAULT_PROJECTION, LayerProperties } from '@abc-map/shared';
-import { Map } from 'ol';
+import Map from 'ol/Map';
 import { MapFactory } from './MapFactory';
 import TileLayer from 'ol/layer/Tile';
 import VectorImageLayer from 'ol/layer/VectorImage';

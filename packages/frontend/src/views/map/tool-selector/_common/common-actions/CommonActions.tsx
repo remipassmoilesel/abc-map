@@ -27,6 +27,7 @@ import Cls from './CommonActions.module.scss';
 import { useAppSelector } from '../../../../../core/store/hooks';
 import { useServices } from '../../../../../core/hooks';
 import { ActionButton } from './ActionButton';
+import { IconDefs } from '../../../../../components/icon/IconDefs';
 
 const t = prefixedTranslation('MapView:ToolSelector.');
 
@@ -185,34 +186,28 @@ function CommonActions() {
   return (
     <div className={Cls.commonActions}>
       {/* Unselect all features */}
-      <ActionButton onClick={handleUnselectAll} title={t('Unselect_all')}>
-        <i className={'fa fa-times-circle'} />
-      </ActionButton>
+      <ActionButton onClick={handleUnselectAll} title={t('Unselect_all')} icon={IconDefs.faTimesCircle} />
 
       {/* Duplicate selected features  */}
-      <ActionButton onClick={handleDuplicate} title={t('Duplicate_selected_geometries')} data-cy={'duplicate-selection'} data-testid={'duplicate-selection'}>
-        <i className={'fa fa-clone'} />
-      </ActionButton>
+      <ActionButton
+        onClick={handleDuplicate}
+        title={t('Duplicate_selected_geometries')}
+        icon={IconDefs.faClone}
+        data-cy={'duplicate-selection'}
+        data-testid={'duplicate-selection'}
+      />
 
       {/* Apply style on selected features */}
-      <ActionButton onClick={handleApplyStyle} title={t('Apply_style_to_selected_geometries')} data-testid={'apply-style'}>
-        <i className={'fa fa-paint-roller'} />
-      </ActionButton>
+      <ActionButton onClick={handleApplyStyle} title={t('Apply_style_to_selected_geometries')} icon={IconDefs.faPaintRoller} data-testid={'apply-style'} />
 
       {/* Delete selected features */}
-      <ActionButton onClick={handleDeleteFeatures} title={t('Delete_selected_geometries')} data-testid={'delete-features'}>
-        <i className={'fa fa-trash'} />
-      </ActionButton>
+      <ActionButton onClick={handleDeleteFeatures} title={t('Delete_selected_geometries')} icon={IconDefs.faTrash} data-testid={'delete-features'} />
 
-      {/* Move selected features behind */}
-      <ActionButton onClick={handleMoveAhead} title={t('Move_geometries_up')} data-testid={'move-features-forward'}>
-        <i className={'fa fa-arrow-up'} />
-      </ActionButton>
+      {/* Move selected features up */}
+      <ActionButton onClick={handleMoveAhead} title={t('Move_geometries_up')} icon={IconDefs.faArrowUp} data-testid={'move-features-forward'} />
 
-      {/* Move selected features ahead */}
-      <ActionButton onClick={handleMoveBehind} title={t('Move_geometries_down')} data-testid={'move-features-behind'}>
-        <i className={'fa fa-arrow-down'} />
-      </ActionButton>
+      {/* Move selected features down */}
+      <ActionButton onClick={handleMoveBehind} title={t('Move_geometries_down')} icon={IconDefs.faArrowDown} data-testid={'move-features-behind'} />
     </div>
   );
 }

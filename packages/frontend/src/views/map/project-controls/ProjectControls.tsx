@@ -28,6 +28,8 @@ import { Errors } from '../../../core/utils/Errors';
 import { Encryption } from '../../../core/utils/Encryption';
 import { prefixedTranslation } from '../../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
+import { IconDefs } from '../../../components/icon/IconDefs';
+import { FaIcon } from '../../../components/icon/FaIcon';
 
 const logger = Logger.get('ProjectControls.tsx');
 
@@ -63,12 +65,13 @@ class ProjectControls extends Component<Props, State> {
           <>
             <div className={'control-item'}>
               <button onClick={this.handleOpenProject} type={'button'} className={'btn btn-link'} data-cy={'remote-projects'}>
-                <i className={'fa fa-globe-europe mr-2'} /> {t('Open_project')}
+                <FaIcon icon={IconDefs.faGlobeEurope} className={'mr-2'} />
+                {t('Open_project')}
               </button>
             </div>
             <div className={'control-item'}>
               <button onClick={this.handleSaveProject} type={'button'} className={'btn btn-link'} data-cy={'save-project'} data-testid={'save-project'}>
-                <i className={'fa fa-pen-alt mr-2'} />
+                <FaIcon icon={IconDefs.faPenAlt} className={'mr-2'} />
                 {t('Save_online')}
               </button>
             </div>
@@ -78,18 +81,18 @@ class ProjectControls extends Component<Props, State> {
 
         <div className={'control-item'}>
           <button onClick={this.handleNewProject} type={'button'} className={'btn btn-link'} data-cy={'new-project'} data-testid={'new-project'}>
-            <i className={'fa fa-file mr-2'} /> {t('New_project')}
+            <FaIcon icon={IconDefs.faFile} className={'mr-2'} /> {t('New_project')}
           </button>
         </div>
         <div className={'control-item'}>
           <button onClick={this.handleExportProject} type={'button'} className={'btn btn-link'} data-cy={'export-project'} data-testid={'export-project'}>
-            <i className={'fa fa-download mr-2'} />
+            <FaIcon icon={IconDefs.faDownload} className={'mr-2'} />
             {t('Export_project')}
           </button>
         </div>
         <div className={'control-item'}>
           <button onClick={this.handleImportProject} type={'button'} className={'btn btn-link'} data-cy={'import-project'}>
-            <i className={'fa fa-upload mr-2'} />
+            <FaIcon icon={IconDefs.faUpload} className={'mr-2'} />
             {t('Import_project')}
           </button>
         </div>

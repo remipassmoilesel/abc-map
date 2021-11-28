@@ -19,20 +19,22 @@
 import React, { Component, ReactNode } from 'react';
 import { AbcLegend, getAbcWindow, Logger } from '@abc-map/shared';
 import { AbcLayout } from '@abc-map/shared';
+import isEqual from 'lodash/isEqual';
 import { LayoutHelper } from '../../../core/project/LayoutHelper';
 import View from 'ol/View';
 import { MapWrapper } from '../../../core/geo/map/MapWrapper';
 import { MapFactory } from '../../../core/geo/map/MapFactory';
 import { PreviewDimensions } from './PreviewDimensions';
-import * as _ from 'lodash';
 import { E2eMapWrapper } from '../../../core/geo/map/E2eMapWrapper';
-import Cls from './LayoutPreview.module.scss';
 import { Control } from 'ol/control';
 import { LegendRenderer } from '../../../core/project/rendering/LegendRenderer';
 import { AttributionRenderer } from '../../../core/project/rendering/AttributionRenderer';
 import { toPrecision } from '../../../core/utils/numbers';
 import { prefixedTranslation } from '../../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
+import { IconDefs } from '../../../components/icon/IconDefs';
+import { FaIcon } from '../../../components/icon/FaIcon';
+import Cls from './LayoutPreview.module.scss';
 
 const logger = Logger.get('LayoutPreview.tsx');
 
@@ -73,10 +75,11 @@ class LayoutPreview extends Component<Props, {}> {
         {/* There is no layout to preview, we display a message with "create" a button */}
         {!layout && (
           <div className={Cls.noLayout}>
-            <i className={`fa fa-print ${Cls.bigIcon}`} />
-            <div>{t('Create_layout_to_export')}</div>
+            <FaIcon icon={IconDefs.faPrint} size={'5rem'} className={'mb-3'} />
+            <div className={'mb-3'}>{t('Create_layout_to_export')}</div>
+
             <button onClick={handleNewLayout} className={'btn btn-primary mt-3'} data-cy={'new-layout'}>
-              <i className={'fa fa-plus mr-2'} />
+              <FaIcon icon={IconDefs.faPlus} className={'mr-2'} />
               {t('Create_A4_layout')}
             </button>
           </div>
@@ -94,7 +97,7 @@ class LayoutPreview extends Component<Props, {}> {
   public componentDidUpdate(prevProps: Readonly<Props>) {
     // If layout, format or legend change we setup whole preview map
     // This is a visible operation, map will blink during setup even if it was previously set up
-    const layoutChanged = !_.isEqual(prevProps.layout?.id, this.props.layout?.id);
+    const layoutChanged = !isEqual(prevProps.layout?.id, this.props.layout?.id);
     const formatChanged = prevProps.layout?.format.id !== this.props.layout?.format.id;
     const legendChanged = prevProps.legend.display !== this.props.legend.display;
     if (layoutChanged || formatChanged || legendChanged) {
@@ -103,7 +106,7 @@ class LayoutPreview extends Component<Props, {}> {
 
     // If layout view change, we change the preview map view
     // This occurs when user switch active layout or when undo button is pressed
-    const viewChanged = !_.isEqual(prevProps.layout?.view, this.props.layout?.view);
+    const viewChanged = !isEqual(prevProps.layout?.view, this.props.layout?.view);
     if (this.props.layout && viewChanged) {
       this.setPreviewView(this.props.layout);
     }
@@ -268,7 +271,7 @@ class LayoutPreview extends Component<Props, {}> {
       },
     };
 
-    if (!_.isEqual(layout, updated)) {
+    if (!isEqual(layout, updated)) {
       this.props.onLayoutChanged(updated);
     }
   };

@@ -21,6 +21,8 @@ import { AbcLegendItem } from '@abc-map/shared';
 import { nanoid } from 'nanoid';
 import { prefixedTranslation } from '../../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
+import { FaIcon } from '../../../components/icon/FaIcon';
+import { IconDefs } from '../../../components/icon/IconDefs';
 import Cls from './NewLegendItemForm.module.scss';
 
 interface Props {
@@ -55,7 +57,7 @@ class NewLegendItemForm extends Component<Props, State> {
             data-cy={'new-item-input'}
           />
           <button onClick={this.handleSubmit} className={'btn btn-primary ml-2'} data-cy={'new-item-button'}>
-            <i className={'fa fa-plus'} />
+            <FaIcon icon={IconDefs.faPlus} />
           </button>
         </div>
       </div>

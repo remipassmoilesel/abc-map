@@ -198,7 +198,9 @@
       "Project_deleted": "Projet supprimé !",
       "You_must_select_a_project": "Vous devez sélectionner un projet.",
       "You_must_enter_a_password": "Vous devez entrer un mot de passe",
-      "Incorrect_password": "Mot de passe incorrect."
+      "Incorrect_password": "Mot de passe incorrect.",
+      "Delete_project": "Supprimer le projet",
+      "This_project_is_password_protected": "Ce projet est protégé par mot de passe"
     }
   },
   "ColorSelector": {

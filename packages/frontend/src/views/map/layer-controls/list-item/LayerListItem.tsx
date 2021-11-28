@@ -19,6 +19,8 @@
 import React, { useCallback } from 'react';
 import { BaseMetadata } from '@abc-map/shared';
 import Cls from './LayerListItem.module.scss';
+import { IconDefs } from '../../../../components/icon/IconDefs';
+import { FaIcon } from '../../../../components/icon/FaIcon';
 
 interface Props {
   metadata: BaseMetadata;
@@ -29,7 +31,7 @@ interface Props {
 function LayerListItem(props: Props) {
   const meta = props.metadata;
   const itemClasses = meta.active ? `${Cls.listItem} ${Cls.active}` : `${Cls.listItem}`;
-  const icon = meta.visible ? 'fa-eye' : 'fa-eye-slash';
+  const icon = meta.visible ? IconDefs.faEye : IconDefs.faEyeSlash;
   const iconClasses = meta.visible ? `${Cls.visibility} ${Cls.visible}` : `${Cls.visibility} ${Cls.notVisible}`;
   const dataLayer = meta.active ? 'active' : `inactive`;
 
@@ -45,7 +47,7 @@ function LayerListItem(props: Props) {
     <div className={itemClasses} data-cy={'list-item'} data-layer={dataLayer}>
       {/* Eye icon, visible only if layer is visible */}
       <div onClick={handleToggleVisibility} className={iconClasses}>
-        <i className={`fa ${icon}`} />
+        <FaIcon icon={icon} className={iconClasses} />
       </div>
       <div className={'flex-grow-1'} onClick={handleSelect}>
         {meta.name}

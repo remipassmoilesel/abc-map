@@ -42,10 +42,6 @@
         text-decoration: none;
       }
     }
-
-    :global(.fa) {
-      color: black;
-    }
   }
 
   :global(.dropdown-toggle) {
@@ -57,10 +53,6 @@
 
   :global(.dropdown-toggle::after) {
     content: none;
-  }
-
-  :global(.fa-user-circle) {
-    font-size: 1.4em;
   }
 }
 

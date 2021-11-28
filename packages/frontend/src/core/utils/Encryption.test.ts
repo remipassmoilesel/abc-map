@@ -21,7 +21,7 @@ import { TestHelper } from './test/TestHelper';
 import { deepFreeze } from './deepFreeze';
 import { AbcLayer, AbcProjectManifest, AbcWmsLayer, AbcWmtsLayer, AbcXyzLayer } from '@abc-map/shared';
 import { Errors } from './Errors';
-import _ from 'lodash';
+import omit from 'lodash/omit';
 import { MapFactory } from '../geo/map/MapFactory';
 import { LayerFactory } from '../geo/layers/LayerFactory';
 
@@ -266,5 +266,5 @@ async function newEncryptedManifest(layers: AbcLayer[]): Promise<AbcProjectManif
 }
 
 function comparableMetadata(meta: any): any {
-  return _.omit(meta, ['metadata.auth', 'metadata.remoteUrl', 'metadata.remoteUrls', 'metadata.capabilitiesUrl']);
+  return omit(meta, ['metadata.auth', 'metadata.remoteUrl', 'metadata.remoteUrls', 'metadata.capabilitiesUrl']);
 }
