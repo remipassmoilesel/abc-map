@@ -18,12 +18,12 @@
 import { abcRender } from '../../../../../core/utils/test/abcRender';
 import XYZLayerPanel from './XYZLayerPanel';
 import sinon, { SinonStub } from 'sinon';
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { newTestServices, TestServices } from '../../../../../core/utils/test/TestServices';
 import { MapFactory } from '../../../../../core/geo/map/MapFactory';
 import { XYZ } from 'ol/source';
-import { AddLayersTask } from '../../../../../core/history/tasks/layers/AddLayersTask';
+import { AddLayersChangeset } from '../../../../../core/history/changesets/layers/AddLayersChangeset';
 import { HistoryKey } from '../../../../../core/history/HistoryKey';
 
 describe('XYZLayerPanel', () => {
@@ -63,7 +63,7 @@ describe('XYZLayerPanel', () => {
     expect(onChange.args.flatMap((x) => x)).toEqual(['h', 't', 't', 'p', 's']);
   });
 
-  it('should add layer', () => {
+  it('should add layer', async () => {
     // Prepare
     const map = MapFactory.createNaked();
     services.geo.getMainMap.returns(map);
@@ -79,8 +79,10 @@ describe('XYZLayerPanel', () => {
     expect(layer.isXyz()).toEqual(true);
     expect((layer.getSource() as XYZ).getUrls()).toEqual(['https://s-test-url/{x}/{y}/{z}.png']);
 
-    expect(services.history.register.callCount).toEqual(1);
-    expect(services.history.register.args[0][0]).toEqual(HistoryKey.Map);
-    expect(services.history.register.args[0][1]).toBeInstanceOf(AddLayersTask);
+    await waitFor(() => {
+      expect(services.history.register.callCount).toEqual(1);
+      expect(services.history.register.args[0][0]).toEqual(HistoryKey.Map);
+      expect(services.history.register.args[0][1]).toBeInstanceOf(AddLayersChangeset);
+    });
   });
 });

@@ -25,7 +25,7 @@ import { MapActions } from '../store/map/actions';
 import { AxiosInstance } from 'axios';
 import { GeoJSON } from 'ol/format';
 import { parseWmsCapabilities, WmsCapabilities } from './WmsCapabilities';
-import { UpdateStyleItem, UpdateStyleTask } from '../history/tasks/features/UpdateStyleTask';
+import { UpdateStyleItem, UpdateStyleChangeset } from '../history/changesets/features/UpdateStyleChangeset';
 import { HistoryKey } from '../history/HistoryKey';
 import { HistoryService } from '../history/HistoryService';
 import { NominatimResult } from './NominatimResult';
@@ -239,27 +239,27 @@ export class GeoService {
    * @param transform
    */
   public updateSelectedFeatures(transform: StyleTransformFunc): number {
-    const historyItems: UpdateStyleItem[] = [];
+    const changeSets: UpdateStyleItem[] = [];
 
     this.getMainMap().forEachFeatureSelected((feat) => {
       const style = feat.getStyleProperties();
       const newStyle = transform(style, feat);
       if (newStyle) {
-        historyItems.push({
+        changeSets.push({
           feature: feat,
           before: style,
           after: newStyle,
         });
-
-        feat.setStyleProperties(newStyle);
       }
     });
 
-    if (historyItems.length) {
-      this.history.register(HistoryKey.Map, new UpdateStyleTask(historyItems));
+    if (changeSets.length) {
+      const cs = new UpdateStyleChangeset(changeSets);
+      cs.apply().catch((err) => logger.error('Cannot apply style: ', err));
+      this.history.register(HistoryKey.Map, cs);
     }
 
-    return historyItems.length;
+    return changeSets.length;
   }
 
   public async geocode(query: string): Promise<NominatimResult[]> {

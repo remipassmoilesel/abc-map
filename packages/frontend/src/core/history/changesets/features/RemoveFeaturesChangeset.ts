@@ -16,27 +16,21 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Task } from '../../Task';
-import { MapWrapper } from '../../../geo/map/MapWrapper';
-import { LayerWrapper } from '../../../geo/layers/LayerWrapper';
+import { Changeset } from '../../Changeset';
+import VectorSource from 'ol/source/Vector';
+import { FeatureWrapper } from '../../../geo/features/FeatureWrapper';
+import Geometry from 'ol/geom/Geometry';
 
-export class RemoveLayerTask extends Task {
-  constructor(private map: MapWrapper, private layer: LayerWrapper) {
+export class RemoveFeaturesChangeset extends Changeset {
+  constructor(private source: VectorSource<Geometry>, private features: FeatureWrapper[]) {
     super();
   }
 
-  public async undo(): Promise<void> {
-    this.map.addLayer(this.layer);
-    this.map.setActiveLayer(this.layer);
+  public async apply(): Promise<void> {
+    this.features.forEach((feat) => this.source.removeFeature(feat.unwrap()));
   }
 
-  public async redo(): Promise<void> {
-    this.map.removeLayer(this.layer);
-
-    // We activate the last layer
-    const layers = this.map.getLayers();
-    if (layers.length) {
-      this.map.setActiveLayer(layers[layers.length - 1]);
-    }
+  public async undo(): Promise<void> {
+    this.features.forEach((feat) => this.source.addFeature(feat.unwrap()));
   }
 }

@@ -27,7 +27,7 @@ import { ToastService } from '../ui/ToastService';
 import { ModalService } from '../ui/ModalService';
 import { ModalStatus } from '../ui/typings';
 import { HistoryKey } from '../history/HistoryKey';
-import { AddLayersTask } from '../history/tasks/layers/AddLayersTask';
+import { AddLayersChangeset } from '../history/changesets/layers/AddLayersChangeset';
 import { HistoryService } from '../history/HistoryService';
 import { getLang, prefixedTranslation } from '../../i18n/i18n';
 
@@ -135,11 +135,11 @@ export class DataService {
 
     // We add layers
     const hour = DateTime.local().toFormat('HH:mm');
-    layers.forEach((lay, i) => {
-      lay.setName(t('Import_of', { hour, n: i + 1 }));
-      map.addLayer(lay);
-    });
-    this.history.register(HistoryKey.Map, new AddLayersTask(map, layers));
+    layers.forEach((lay, i) => lay.setName(t('Import_of', { hour, n: i + 1 })));
+
+    const cs = new AddLayersChangeset(map, layers);
+    await cs.apply();
+    this.history.register(HistoryKey.Map, cs);
 
     // We set last one active
     const last = layers[layers.length - 1];

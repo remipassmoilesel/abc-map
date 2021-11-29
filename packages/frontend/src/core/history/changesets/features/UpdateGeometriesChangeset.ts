@@ -16,30 +16,32 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Task } from '../../Task';
-import { Logger } from '@abc-map/shared';
+import { Changeset } from '../../Changeset';
+import Geometry from 'ol/geom/Geometry';
+import { FeatureWrapper } from '../../../geo/features/FeatureWrapper';
 
-export const logger = Logger.get('UndoCallbackTask');
+export interface UpdateItem {
+  feature: FeatureWrapper;
+  before: Geometry;
+  after: Geometry;
+}
 
-export class UndoCallbackTask extends Task {
-  constructor(public onUndo: (() => void) | undefined) {
+export class UpdateGeometriesChangeset extends Changeset {
+  constructor(public readonly items: UpdateItem[]) {
     super();
   }
 
   public async undo(): Promise<void> {
-    if (!this.onUndo) {
-      logger.warn('No callback to execute');
-      return;
-    }
-
-    this.onUndo();
+    // As geometries are mutated, here we must clone it
+    this.items.forEach((item) => {
+      item.feature.unwrap().setGeometry(item.before.clone());
+    });
   }
 
-  public async redo(): Promise<void> {
-    return;
-  }
-
-  public async dispose(): Promise<void> {
-    this.onUndo = undefined;
+  public async apply(): Promise<void> {
+    // As geometries are mutated, here we must clone it
+    this.items.forEach((item) => {
+      item.feature.unwrap().setGeometry(item.after.clone());
+    });
   }
 }

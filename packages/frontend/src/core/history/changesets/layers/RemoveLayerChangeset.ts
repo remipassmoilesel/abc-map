@@ -16,32 +16,27 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Task } from '../../Task';
-import Geometry from 'ol/geom/Geometry';
-import { FeatureWrapper } from '../../../geo/features/FeatureWrapper';
+import { Changeset } from '../../Changeset';
+import { MapWrapper } from '../../../geo/map/MapWrapper';
+import { LayerWrapper } from '../../../geo/layers/LayerWrapper';
 
-export interface UpdateItem {
-  feature: FeatureWrapper;
-  before: Geometry;
-  after: Geometry;
-}
-
-export class UpdateGeometriesTask extends Task {
-  constructor(public readonly items: UpdateItem[]) {
+export class RemoveLayerChangeset extends Changeset {
+  constructor(private map: MapWrapper, private layer: LayerWrapper) {
     super();
   }
 
   public async undo(): Promise<void> {
-    // As geometries are mutated, here we must clone it
-    this.items.forEach((item) => {
-      item.feature.unwrap().setGeometry(item.before.clone());
-    });
+    this.map.addLayer(this.layer);
+    this.map.setActiveLayer(this.layer);
   }
 
-  public async redo(): Promise<void> {
-    // As geometries are mutated, here we must clone it
-    this.items.forEach((item) => {
-      item.feature.unwrap().setGeometry(item.after.clone());
-    });
+  public async apply(): Promise<void> {
+    this.map.removeLayer(this.layer);
+
+    // We activate the last layer
+    const layers = this.map.getLayers();
+    if (layers.length) {
+      this.map.setActiveLayer(layers[layers.length - 1]);
+    }
   }
 }

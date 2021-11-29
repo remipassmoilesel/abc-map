@@ -18,7 +18,7 @@
 
 import { getServices, Services } from '../../../core/Services';
 import { HistoryKey } from '../../../core/history/HistoryKey';
-import { RemoveFeaturesTask } from '../../../core/history/tasks/features/RemoveFeaturesTask';
+import { RemoveFeaturesChangeset } from '../../../core/history/changesets/features/RemoveFeaturesChangeset';
 import { Logger } from '@abc-map/shared';
 import { Shortcuts } from './Shortcuts';
 import { prefixedTranslation } from '../../../i18n/i18n';
@@ -83,11 +83,11 @@ export class MapKeyboardListener {
       return;
     }
 
-    features.forEach((f) => {
-      f.setSelected(false);
-      layer.getSource().removeFeature(f.unwrap());
-    });
-    history.register(HistoryKey.Map, new RemoveFeaturesTask(layer.getSource(), features));
+    features.forEach((f) => f.setSelected(false));
+
+    const cs = new RemoveFeaturesChangeset(layer.getSource(), features);
+    cs.apply().catch((err) => logger.error('Cannot delete features: ', err));
+    history.register(HistoryKey.Map, cs);
   }
 
   private undo() {

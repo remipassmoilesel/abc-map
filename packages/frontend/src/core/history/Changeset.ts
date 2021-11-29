@@ -16,28 +16,10 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import sinon from 'sinon';
-import { logger, UndoCallbackTask } from './UndoCallbackTask';
-
-logger.disable();
-
-describe('UndoCallbackTask', () => {
-  it('should trigger callback on undo', async () => {
-    const callback = sinon.stub();
-    const task = new UndoCallbackTask(callback);
-
-    await task.undo();
-
-    expect(callback.callCount).toEqual(1);
-  });
-
-  it('should not trigger callback after dispose()', async () => {
-    const callback = sinon.stub();
-    const task = new UndoCallbackTask(callback);
-    await task.dispose();
-
-    await task.undo();
-
-    expect(callback.callCount).toEqual(0);
-  });
-});
+export abstract class Changeset {
+  public abstract apply(): Promise<void>;
+  public abstract undo(): Promise<void>;
+  public dispose(): Promise<void> {
+    return Promise.resolve();
+  }
+}

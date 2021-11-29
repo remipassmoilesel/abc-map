@@ -16,19 +16,21 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Task } from '../../Task';
-import BaseLayer from 'ol/layer/Base';
+import { Changeset } from '../../Changeset';
+import VectorSource from 'ol/source/Vector';
+import { FeatureWrapper } from '../../../geo/features/FeatureWrapper';
+import Geometry from 'ol/geom/Geometry';
 
-export class ToggleLayerVisibilityTask extends Task {
-  constructor(private layer: BaseLayer, private state: boolean) {
+export class AddFeaturesChangeset extends Changeset {
+  constructor(public readonly source: VectorSource<Geometry>, public readonly features: FeatureWrapper[]) {
     super();
   }
 
-  public async undo(): Promise<void> {
-    this.layer.setVisible(!this.state);
+  public async apply(): Promise<void> {
+    this.source.addFeatures(this.features.map((f) => f.unwrap()));
   }
 
-  public async redo(): Promise<void> {
-    this.layer.setVisible(this.state);
+  public async undo(): Promise<void> {
+    this.features.forEach((feat) => this.source.removeFeature(feat.unwrap()));
   }
 }

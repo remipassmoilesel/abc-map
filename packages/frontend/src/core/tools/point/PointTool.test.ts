@@ -25,8 +25,8 @@ import { FillPatterns } from '@abc-map/shared';
 import { Point } from 'ol/geom';
 import { TestHelper } from '../../utils/test/TestHelper';
 import { HistoryKey } from '../../history/HistoryKey';
-import { UndoCallbackTask } from '../../history/tasks/features/UndoCallbackTask';
-import { AddFeaturesTask } from '../../history/tasks/features/AddFeaturesTask';
+import { UndoCallbackChangeset } from '../../history/changesets/features/UndoCallbackChangeset';
+import { AddFeaturesChangeset } from '../../history/changesets/features/AddFeaturesChangeset';
 import { deepFreeze } from '../../utils/deepFreeze';
 import { PointTool } from './PointTool';
 import { IconName } from '../../../assets/point-icons/IconName';
@@ -87,17 +87,17 @@ describe('PointTool', () => {
     // Feature must have store style
     expect(feat.getStyleProperties()).toEqual({ point, stroke: {}, fill: {}, text: {} });
 
-    // History tasks must have been registered
+    // Changesets must have been registered
     expect(history.register.callCount).toEqual(2);
     expect(history.register.args[0][0]).toEqual(HistoryKey.Map);
-    expect(history.register.args[0][1]).toBeInstanceOf(UndoCallbackTask);
+    expect(history.register.args[0][1]).toBeInstanceOf(UndoCallbackChangeset);
     expect(history.register.args[1][0]).toEqual(HistoryKey.Map);
-    expect(history.register.args[1][1]).toBeInstanceOf(AddFeaturesTask);
+    expect(history.register.args[1][1]).toBeInstanceOf(AddFeaturesChangeset);
 
-    // First history tasks must have been removed
+    // First changeset must have been removed
     expect(history.remove.callCount).toEqual(1);
     expect(history.register.args[0][0]).toEqual(HistoryKey.Map);
-    expect(history.register.args[0][1]).toBeInstanceOf(UndoCallbackTask);
+    expect(history.register.args[0][1]).toBeInstanceOf(UndoCallbackChangeset);
   });
 
   it('dispose()', async () => {

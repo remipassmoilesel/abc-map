@@ -16,17 +16,17 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Task } from '../../Task';
+import { Changeset } from '../../Changeset';
 import { MapWrapper } from '../../../geo/map/MapWrapper';
 import { LayerWrapper } from '../../../geo/layers/LayerWrapper';
 
-export class AddLayersTask extends Task {
+export class AddLayersChangeset extends Changeset {
   constructor(private map: MapWrapper, private layers: LayerWrapper[]) {
     super();
   }
 
-  public async undo(): Promise<void> {
-    this.layers.forEach((lay) => this.map.removeLayer(lay));
+  public async apply(): Promise<void> {
+    this.layers.forEach((lay) => this.map.addLayer(lay));
 
     // We activate the last layer
     const layers = this.map.getLayers();
@@ -35,8 +35,8 @@ export class AddLayersTask extends Task {
     }
   }
 
-  public async redo(): Promise<void> {
-    this.layers.forEach((lay) => this.map.addLayer(lay));
+  public async undo(): Promise<void> {
+    this.layers.forEach((lay) => this.map.removeLayer(lay));
 
     // We activate the last layer
     const layers = this.map.getLayers();

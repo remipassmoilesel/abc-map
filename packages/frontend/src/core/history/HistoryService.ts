@@ -17,7 +17,7 @@
  */
 
 import { HistoryKey } from './HistoryKey';
-import { Task } from './Task';
+import { Changeset } from './Changeset';
 import { Logger } from '@abc-map/shared';
 import { UiActions } from '../store/ui/actions';
 import { MainStore } from '../store/store';
@@ -25,8 +25,8 @@ import { MainStore } from '../store/store';
 const logger = Logger.get('HistoryService.ts');
 
 export declare type HistoryStack = {
-  undo: Task[];
-  redo: Task[];
+  undo: Changeset[];
+  redo: Changeset[];
 };
 
 export declare type History = {
@@ -49,17 +49,17 @@ export class HistoryService {
   public resetHistory(): void {
     for (const key in this.history) {
       const stack = this.getStack(key as HistoryKey);
-      stack.undo.forEach((task) => task.dispose().catch((err) => logger.error(err)));
-      stack.redo.forEach((task) => task.dispose().catch((err) => logger.error(err)));
+      stack.undo.forEach((cs) => cs.dispose().catch((err) => logger.error(err)));
+      stack.redo.forEach((cs) => cs.dispose().catch((err) => logger.error(err)));
     }
     this.history = {};
     this.store.dispatch(UiActions.cleanHistoryCapabilities());
   }
 
-  public register(key: HistoryKey, task: Task): void {
+  public register(key: HistoryKey, cs: Changeset): void {
     const stack = this.getStack(key);
 
-    stack.undo.push(task);
+    stack.undo.push(cs);
     stack.redo.forEach((t) => t.dispose().catch((err) => logger.error(err)));
     stack.redo = [];
 
@@ -67,14 +67,14 @@ export class HistoryService {
     this.updateUiState(key);
   }
 
-  public remove(key: HistoryKey, task: Task): void {
+  public remove(key: HistoryKey, cs: Changeset): void {
     const stack = this.getStack(key);
 
-    const trashed: Task[] = stack.undo.concat(stack.redo).filter((t) => t === task);
-    trashed?.forEach((t) => t.dispose().catch((err) => logger.error('Error while disposing task: ', err)));
+    const trashed: Changeset[] = stack.undo.concat(stack.redo).filter((t) => t === cs);
+    trashed?.forEach((t) => t.dispose().catch((err) => logger.error('Error while disposing changeset: ', err)));
 
-    stack.undo = stack.undo.filter((t) => t !== task);
-    stack.redo = stack.redo.filter((t) => t !== task);
+    stack.undo = stack.undo.filter((t) => t !== cs);
+    stack.redo = stack.redo.filter((t) => t !== cs);
 
     this.updateUiState(key);
   }
@@ -82,15 +82,15 @@ export class HistoryService {
   public async undo(key: HistoryKey): Promise<void> {
     const stack = this.getStack(key);
 
-    const task = stack.undo.pop();
-    if (!task) {
+    const changeset = stack.undo.pop();
+    if (!changeset) {
       return Promise.reject(new Error('Nothing to undo'));
     }
 
-    // Task reference must be hold in one list reference, in case we want to use remove()
-    stack.redo.push(task);
+    // Changeset reference must be hold in one list reference, in case we want to use remove()
+    stack.redo.push(changeset);
 
-    await task.undo();
+    await changeset.undo();
 
     this.limitHistorySize(key);
     this.updateUiState(key);
@@ -99,15 +99,15 @@ export class HistoryService {
   public async redo(key: HistoryKey): Promise<void> {
     const stack = this.getStack(key);
 
-    const task = stack.redo.pop();
-    if (!task) {
+    const changeset = stack.redo.pop();
+    if (!changeset) {
       return Promise.reject(new Error('Nothing to redo'));
     }
 
-    // Task reference must be hold in one list reference, in case we want to use remove()
-    stack.undo.push(task);
+    // Changeset reference must be hold in one list reference, in case we want to use remove()
+    stack.undo.push(changeset);
 
-    await task.redo();
+    await changeset.apply();
 
     this.limitHistorySize(key);
     this.updateUiState(key);
@@ -141,13 +141,13 @@ export class HistoryService {
     const stack = this.getStack(key);
     if (stack.undo.length > this.maxSize) {
       const trashed = stack.undo.slice(0, -this.maxSize);
-      trashed.forEach((task) => task.dispose().catch((err) => logger.error(err)));
+      trashed.forEach((cs) => cs.dispose().catch((err) => logger.error(err)));
       stack.undo = stack.undo.slice(-this.maxSize);
     }
 
     if (stack.redo.length > this.maxSize) {
       const trashed = stack.redo.slice(0, -this.maxSize);
-      trashed.forEach((task) => task.dispose().catch((err) => logger.error(err)));
+      trashed.forEach((cs) => cs.dispose().catch((err) => logger.error(err)));
       stack.redo = stack.redo.slice(-this.maxSize);
     }
   }

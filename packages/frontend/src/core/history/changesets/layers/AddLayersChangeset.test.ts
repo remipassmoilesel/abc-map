@@ -18,10 +18,10 @@
 
 import { MapWrapper } from '../../../geo/map/MapWrapper';
 import { MapFactory } from '../../../geo/map/MapFactory';
-import { AddLayersTask } from './AddLayersTask';
+import { AddLayersChangeset } from './AddLayersChangeset';
 import { LayerFactory } from '../../../geo/layers/LayerFactory';
 
-describe('AddLayersTask', () => {
+describe('AddLayersChangeset', () => {
   let map: MapWrapper;
 
   beforeEach(() => {
@@ -34,8 +34,8 @@ describe('AddLayersTask', () => {
     map.addLayer(layer1);
     map.addLayer(layer2);
 
-    const task = new AddLayersTask(map, [layer1, layer2]);
-    await task.undo();
+    const changeset = new AddLayersChangeset(map, [layer1, layer2]);
+    await changeset.undo();
 
     expect(map.getLayers()).toHaveLength(0);
   });
@@ -44,8 +44,8 @@ describe('AddLayersTask', () => {
     const layer1 = LayerFactory.newVectorLayer();
     const layer2 = LayerFactory.newVectorLayer();
 
-    const task = new AddLayersTask(map, [layer1, layer2]);
-    await task.redo();
+    const changeset = new AddLayersChangeset(map, [layer1, layer2]);
+    await changeset.apply();
 
     expect(map.getLayers()).toHaveLength(2);
     expect(map.getLayers()[1].isActive()).toEqual(true);

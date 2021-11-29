@@ -27,10 +27,10 @@ import { LineString } from 'ol/geom';
 import { FeatureWrapper } from '../../geo/features/FeatureWrapper';
 import { TestHelper } from '../../utils/test/TestHelper';
 import { HistoryKey } from '../../history/HistoryKey';
-import { UndoCallbackTask } from '../../history/tasks/features/UndoCallbackTask';
-import { AddFeaturesTask } from '../../history/tasks/features/AddFeaturesTask';
+import { UndoCallbackChangeset } from '../../history/changesets/features/UndoCallbackChangeset';
+import { AddFeaturesChangeset } from '../../history/changesets/features/AddFeaturesChangeset';
 import { deepFreeze } from '../../utils/deepFreeze';
-import { UpdateGeometriesTask } from '../../history/tasks/features/UpdateGeometriesTask';
+import { UpdateGeometriesChangeset } from '../../history/changesets/features/UpdateGeometriesChangeset';
 
 describe('LineStringTool', () => {
   const stroke = deepFreeze({ color: 'rgba(18,90,147,0.60)', width: 3 });
@@ -94,17 +94,17 @@ describe('LineStringTool', () => {
     // Feature must have store style
     expect(feat.getStyleProperties()).toEqual({ stroke, fill: {}, point: {}, text: {} });
 
-    // History tasks must have been registered
+    // Changesets must have been registered
     expect(history.register.callCount).toEqual(2);
     expect(history.register.args[0][0]).toEqual(HistoryKey.Map);
-    expect(history.register.args[0][1]).toBeInstanceOf(UndoCallbackTask);
+    expect(history.register.args[0][1]).toBeInstanceOf(UndoCallbackChangeset);
     expect(history.register.args[1][0]).toEqual(HistoryKey.Map);
-    expect(history.register.args[1][1]).toBeInstanceOf(AddFeaturesTask);
+    expect(history.register.args[1][1]).toBeInstanceOf(AddFeaturesChangeset);
 
-    // First history tasks must have been removed
+    // First changeset must have been removed
     expect(history.remove.callCount).toEqual(1);
     expect(history.register.args[0][0]).toEqual(HistoryKey.Map);
-    expect(history.register.args[0][1]).toBeInstanceOf(UndoCallbackTask);
+    expect(history.register.args[0][1]).toBeInstanceOf(UndoCallbackChangeset);
   });
 
   it('shift + click should select lines, toggle select, deselect all', async () => {
@@ -211,15 +211,15 @@ describe('LineStringTool', () => {
     expect(history.register.callCount).toEqual(1);
     expect(history.register.args[0][0]).toEqual(HistoryKey.Map);
 
-    const task = history.register.args[0][1] as UpdateGeometriesTask;
-    expect(task).toBeInstanceOf(UpdateGeometriesTask);
-    expect(task.items.length).toEqual(1);
-    expect((task.items[0].before as LineString).getCoordinates()).toEqual([
+    const changeset = history.register.args[0][1] as UpdateGeometriesChangeset;
+    expect(changeset).toBeInstanceOf(UpdateGeometriesChangeset);
+    expect(changeset.items.length).toEqual(1);
+    expect((changeset.items[0].before as LineString).getCoordinates()).toEqual([
       [10, 0],
       [20, 0],
       [30, 0],
     ]);
-    expect((task.items[0].after as LineString).getCoordinates()).toEqual([
+    expect((changeset.items[0].after as LineString).getCoordinates()).toEqual([
       [10, 0],
       [50, -50],
       [30, 0],

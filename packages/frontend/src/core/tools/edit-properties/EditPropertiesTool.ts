@@ -26,7 +26,7 @@ import { ModalService } from '../../ui/ModalService';
 import { FeatureWrapper } from '../../geo/features/FeatureWrapper';
 import { ModalStatus } from '../../ui/typings';
 import { HistoryKey } from '../../history/HistoryKey';
-import { SetFeatureProperties } from '../../history/tasks/features/SetFeatureProperties';
+import { SetFeaturePropertiesChangeset } from '../../history/changesets/features/SetFeaturePropertiesChangeset';
 import { Interaction, Select } from 'ol/interaction';
 import { withMainButton } from '../common/helpers/common-conditions';
 import { LayerWrapper } from '../../geo/layers/LayerWrapper';
@@ -92,14 +92,15 @@ export class EditPropertiesTool implements Tool {
       // Keep previous properties for undo / redo
       const before = feature.getSimpleProperties();
 
-      // Pop up modal, when modification done overwrite properties, register history task
+      // Pop up modal, when modification done overwrite properties, register changeset
       this.modals
         .featurePropertiesModal(before)
         .then((modalEvent) => {
           const after = modalEvent.properties;
           if (ModalStatus.Confirmed === modalEvent.status && !isEqual(before, after)) {
-            feature.overwriteSimpleProperties(after);
-            this.history.register(HistoryKey.Map, new SetFeatureProperties(feature, before, after));
+            const cs = new SetFeaturePropertiesChangeset(feature, before, after);
+            cs.apply().catch((err) => logger.error('Cannot modify properties: ', err));
+            this.history.register(HistoryKey.Map, cs);
           }
 
           // We must unselect otherwise we can not select again

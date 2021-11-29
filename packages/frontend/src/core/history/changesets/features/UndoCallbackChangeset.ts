@@ -16,25 +16,30 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Task } from '../../Task';
-import { ProjectService } from '../../../project/ProjectService';
-import { AbcLayout } from '@abc-map/shared';
-import { getServices } from '../../../Services';
+import { Changeset } from '../../Changeset';
+import { Logger } from '@abc-map/shared';
 
-export class UpdateLayoutTask extends Task {
-  public static create(before: AbcLayout, after: AbcLayout) {
-    return new UpdateLayoutTask(getServices().project, before, after);
-  }
+export const logger = Logger.get('UndoCallbackChangeset');
 
-  constructor(private project: ProjectService, private before: AbcLayout, private after: AbcLayout) {
+export class UndoCallbackChangeset extends Changeset {
+  constructor(public onUndo: (() => void) | undefined) {
     super();
   }
 
   public async undo(): Promise<void> {
-    this.project.updateLayout(this.before);
+    if (!this.onUndo) {
+      logger.warn('No callback to execute');
+      return;
+    }
+
+    this.onUndo();
   }
 
-  public async redo(): Promise<void> {
-    this.project.updateLayout(this.after);
+  public async apply(): Promise<void> {
+    return;
+  }
+
+  public async dispose(): Promise<void> {
+    this.onUndo = undefined;
   }
 }

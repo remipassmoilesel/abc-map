@@ -25,7 +25,7 @@ import { useServices } from '../hooks';
  * This function returns a debounced function, which apply style transformation to selected features.
  *
  * This is useful for text fields which should apply style transform on features, in order to not apply
- * too much transformations and to not pollute task history.
+ * too much transformations and to not pollute changeset history.
  */
 export function useDebouncedStyleTransform() {
   const { geo } = useServices();

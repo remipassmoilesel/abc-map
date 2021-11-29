@@ -16,8 +16,8 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Task } from '../../Task';
-import { FeatureStyle } from '@abc-map/shared';
+import { Changeset } from '../../Changeset';
+import { cloneFeatureStyle, FeatureStyle } from '@abc-map/shared';
 import { FeatureWrapper } from '../../../geo/features/FeatureWrapper';
 
 export interface UpdateStyleItem {
@@ -26,22 +26,22 @@ export interface UpdateStyleItem {
   feature: FeatureWrapper;
 }
 
-export class UpdateStyleTask extends Task {
+export class UpdateStyleChangeset extends Changeset {
   constructor(private items: UpdateStyleItem[]) {
     super();
   }
 
   public async undo(): Promise<void> {
     this.items.forEach((item) => {
-      item.feature.setStyleProperties(item.before);
+      item.feature.setStyleProperties(cloneFeatureStyle(item.before));
       // We must set text here in order to erase it if necessary
       item.feature.setText(item.before.text?.value || '');
     });
   }
 
-  public async redo(): Promise<void> {
+  public async apply(): Promise<void> {
     this.items.forEach((item) => {
-      item.feature.setStyleProperties(item.after);
+      item.feature.setStyleProperties(cloneFeatureStyle(item.after));
       // We must set text here in order to erase it if necessary
       item.feature.setText(item.after.text?.value || '');
     });

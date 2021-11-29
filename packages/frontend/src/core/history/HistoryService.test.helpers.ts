@@ -18,16 +18,16 @@
 
 import { HistoryKey } from './HistoryKey';
 import { History } from './HistoryService';
-import { Task } from './Task';
+import { Changeset } from './Changeset';
 import sinon from 'sinon';
 
-export class FakeTask extends Task {
+export class FakeChangeset extends Changeset {
   constructor(public id: number) {
     super();
     this.dispose.resolves();
   }
 
-  public redo(): Promise<void> {
+  public apply(): Promise<void> {
     return Promise.resolve();
   }
 
@@ -39,9 +39,9 @@ export class FakeTask extends Task {
 }
 
 export function getUndoStackIds(history: History, key: HistoryKey): number[] {
-  return history[key]?.undo.map((task) => (task as FakeTask).id) as number[];
+  return history[key]?.undo.map((cs) => (cs as FakeChangeset).id) as number[];
 }
 
 export function getRedoStackIds(history: History, key: HistoryKey): number[] {
-  return history[key]?.redo.map((task) => (task as FakeTask).id) as number[];
+  return history[key]?.redo.map((cs) => (cs as FakeChangeset).id) as number[];
 }

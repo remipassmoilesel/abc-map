@@ -16,16 +16,16 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { UpdateStyleTask } from './UpdateStyleTask';
+import { UpdateStyleChangeset } from './UpdateStyleChangeset';
 import { TestHelper } from '../../../utils/test/TestHelper';
 import { FeatureWrapper } from '../../../geo/features/FeatureWrapper';
 import { FeatureStyle } from '@abc-map/shared';
 
-describe('UpdateStyleTask', function () {
+describe('UpdateStyleChangeset', function () {
   let feature: FeatureWrapper;
   let before: FeatureStyle;
   let after: FeatureStyle;
-  let task: UpdateStyleTask;
+  let changeset: UpdateStyleChangeset;
 
   beforeEach(() => {
     feature = FeatureWrapper.create();
@@ -41,17 +41,17 @@ describe('UpdateStyleTask', function () {
       width: 20,
     };
 
-    task = new UpdateStyleTask([{ feature, before, after }]);
+    changeset = new UpdateStyleChangeset([{ feature, before, after }]);
   });
 
   it('should undo', async () => {
-    await task.undo();
+    await changeset.undo();
 
     expect(feature.getStyleProperties().stroke?.width).toEqual(10);
   });
 
   it('should redo', async () => {
-    await task.redo();
+    await changeset.apply();
 
     expect(feature.getStyleProperties().stroke?.width).toEqual(20);
   });

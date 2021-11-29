@@ -26,7 +26,7 @@ import { ModalEventType, ModalStatus } from '../../ui/typings';
 import Feature from 'ol/Feature';
 import { Point } from 'ol/geom';
 import { HistoryKey } from '../../history/HistoryKey';
-import { SetFeatureProperties } from '../../history/tasks/features/SetFeatureProperties';
+import { SetFeaturePropertiesChangeset } from '../../history/changesets/features/SetFeaturePropertiesChangeset';
 import { TestHelper } from '../../utils/test/TestHelper';
 import { Select } from 'ol/interaction';
 import { SelectEvent } from 'ol/interaction/Select';
@@ -77,7 +77,7 @@ describe('EditPropertiesTool', () => {
     expect(history.register.callCount).toEqual(0);
   });
 
-  it('should register history task if properties change', async () => {
+  it('should register changeset if properties change', async () => {
     // Prepare
     const feature = new Feature(new Point([1, 2]));
     feature.set('abcd', 12345);
@@ -90,9 +90,9 @@ describe('EditPropertiesTool', () => {
     // Assert
     expect(history.register.callCount).toEqual(1);
     expect(history.register.args[0][0]).toEqual(HistoryKey.Map);
-    const task = history.register.args[0][1] as SetFeatureProperties;
-    expect(task.before).toEqual({ abcd: 12345 });
-    expect(task.after).toEqual({ abcd: 4567 });
+    const changeset = history.register.args[0][1] as SetFeaturePropertiesChangeset;
+    expect(changeset.before).toEqual({ abcd: 12345 });
+    expect(changeset.after).toEqual({ abcd: 4567 });
   });
 
   it('dispose()', () => {

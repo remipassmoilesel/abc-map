@@ -17,14 +17,14 @@
  */
 
 import { Point } from 'ol/geom';
-import { UpdateGeometriesTask } from './UpdateGeometriesTask';
+import { UpdateGeometriesChangeset } from './UpdateGeometriesChangeset';
 import { FeatureWrapper } from '../../../geo/features/FeatureWrapper';
 
-describe('UpdateGeometryTask', function () {
+describe('UpdateGeometriesChangeset', function () {
   let feature: FeatureWrapper;
   let before: Point;
   let after: Point;
-  let task: UpdateGeometriesTask;
+  let changeset: UpdateGeometriesChangeset;
 
   beforeEach(() => {
     feature = FeatureWrapper.create();
@@ -35,11 +35,11 @@ describe('UpdateGeometryTask', function () {
       before,
       after,
     };
-    task = new UpdateGeometriesTask([item]);
+    changeset = new UpdateGeometriesChangeset([item]);
   });
 
   it('should undo', async () => {
-    await task.undo();
+    await changeset.undo();
 
     expect(feature.getGeometry()).toBeInstanceOf(Point);
     expect((feature.getGeometry() as Point).getCoordinates()).toEqual([16, 48]);
@@ -47,7 +47,7 @@ describe('UpdateGeometryTask', function () {
   });
 
   it('should redo', async () => {
-    await task.redo();
+    await changeset.apply();
 
     expect(feature.getGeometry()).toBeInstanceOf(Point);
     expect((feature.getGeometry() as Point).getCoordinates()).toEqual([12, 12]);

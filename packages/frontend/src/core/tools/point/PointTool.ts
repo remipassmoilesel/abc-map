@@ -62,8 +62,8 @@ export class PointTool implements Tool {
 
     // Draw interactions
     this.draw = new DrawInteractionsBundle(GeometryType.POINT);
-    this.draw.onNewTask = (t) => this.history.register(HistoryKey.Map, t);
-    this.draw.onDeleteTask = (t) => this.history.remove(HistoryKey.Map, t);
+    this.draw.onNewChangeset = (t) => this.history.register(HistoryKey.Map, t);
+    this.draw.onDeleteChangeset = (t) => this.history.remove(HistoryKey.Map, t);
 
     const getStyle: GetStyleFunc = () => {
       const style = this.store.getState().map.currentStyle;

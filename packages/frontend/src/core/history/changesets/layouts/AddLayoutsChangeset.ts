@@ -16,17 +16,14 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Task } from '../../Task';
+import { Changeset } from '../../Changeset';
 import { ProjectService } from '../../../project/ProjectService';
 import { AbcLayout } from '@abc-map/shared';
 import { getServices } from '../../../Services';
-import { Logger } from '@abc-map/shared';
 
-const logger = Logger.get('RemoveLayoutsTask');
-
-export class RemoveLayoutsTask extends Task {
+export class AddLayoutsChangeset extends Changeset {
   public static create(layouts: AbcLayout[]) {
-    return new RemoveLayoutsTask(getServices().project, layouts);
+    return new AddLayoutsChangeset(getServices().project, layouts);
   }
 
   private layouts: AbcLayout[];
@@ -36,11 +33,11 @@ export class RemoveLayoutsTask extends Task {
     this.layouts = layouts.slice();
   }
 
-  public async undo(): Promise<void> {
+  public async apply(): Promise<void> {
     this.project.addLayouts(this.layouts);
   }
 
-  public async redo(): Promise<void> {
+  public async undo(): Promise<void> {
     this.project.removeLayouts(this.layouts.map((lay) => lay.id));
   }
 }
