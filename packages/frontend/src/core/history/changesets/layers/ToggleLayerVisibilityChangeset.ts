@@ -16,21 +16,20 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Task } from '../../Task';
-import { FeatureWrapper, SimplePropertiesMap } from '../../../geo/features/FeatureWrapper';
+import { Changeset } from '../../Changeset';
+import { LayerWrapper } from '../../../geo/layers/LayerWrapper';
+import { MapWrapper } from '../../../geo/map/MapWrapper';
 
-export class SetFeatureProperties extends Task {
-  constructor(private feature: FeatureWrapper, public readonly before: SimplePropertiesMap, public readonly after: SimplePropertiesMap) {
+export class ToggleLayerVisibilityChangeset extends Changeset {
+  constructor(private map: MapWrapper, private layer: LayerWrapper, private state: boolean) {
     super();
   }
 
-  public async undo(): Promise<void> {
-    const properties: SimplePropertiesMap = { ...this.before };
-    this.feature.overwriteSimpleProperties(properties);
+  public async apply(): Promise<void> {
+    this.map.setLayerVisible(this.layer, this.state);
   }
 
-  public async redo(): Promise<void> {
-    const properties: SimplePropertiesMap = { ...this.after };
-    this.feature.overwriteSimpleProperties(properties);
+  public async undo(): Promise<void> {
+    this.map.setLayerVisible(this.layer, !this.state);
   }
 }

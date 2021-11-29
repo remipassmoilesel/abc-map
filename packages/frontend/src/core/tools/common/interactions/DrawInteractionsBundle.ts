@@ -22,15 +22,15 @@ import { Draw, Modify, Snap } from 'ol/interaction';
 import { withMainButton } from '../helpers/common-conditions';
 import { FeatureWrapper } from '../../../geo/features/FeatureWrapper';
 import { DrawEvent } from 'ol/interaction/Draw';
-import { AddFeaturesTask } from '../../../history/tasks/features/AddFeaturesTask';
+import { AddFeaturesChangeset } from '../../../history/changesets/features/AddFeaturesChangeset';
 import { ModifyEvent } from 'ol/interaction/Modify';
-import { UpdateGeometriesTask, UpdateItem } from '../../../history/tasks/features/UpdateGeometriesTask';
+import { UpdateGeometriesChangeset, UpdateItem } from '../../../history/changesets/features/UpdateGeometriesChangeset';
 import VectorSource from 'ol/source/Vector';
-import { Task } from '../../../history/Task';
+import { Changeset } from '../../../history/Changeset';
 import { styleFunction } from '../../../geo/styles/style-function';
 import { createEditingStyle } from 'ol/style/Style';
 import { noModifierKeys } from 'ol/events/condition';
-import { UndoCallbackTask } from '../../../history/tasks/features/UndoCallbackTask';
+import { UndoCallbackChangeset } from '../../../history/changesets/features/UndoCallbackChangeset';
 import Collection from 'ol/Collection';
 import Geometry from 'ol/geom/Geometry';
 import Feature from 'ol/Feature';
@@ -39,7 +39,7 @@ import Map from 'ol/Map';
 const logger = Logger.get('DrawInteraction');
 
 export declare type GetStyleFunc = () => FeatureStyle;
-export declare type HistoryTaskHandler = (t: Task) => void;
+export declare type ChangesetHandler = (t: Changeset) => void;
 
 export declare type ToolMode = typeof GeometryType.POINT | typeof GeometryType.LINE_STRING | typeof GeometryType.POLYGON;
 
@@ -54,17 +54,10 @@ const editingStyle = createEditingStyle();
  *
  * FIXME: add Translate after ol upgrade ? May conflict with Modify
  *
- * @param mode "Mode" of drawing tool, can be point, linestring or polygon. See ol/interaction/Draw.js:122
- * @param targetTypes Only these types of features will be handled
- * @param source
- * @param getStyle
- * @param addTask
- * @param removeTask
- * @param onStyle
  */
 export class DrawInteractionsBundle {
-  public onNewTask?: HistoryTaskHandler;
-  public onDeleteTask?: HistoryTaskHandler;
+  public onNewChangeset?: ChangesetHandler;
+  public onDeleteChangeset?: ChangesetHandler;
 
   private snap?: Snap;
   private modify?: Modify;
@@ -75,7 +68,7 @@ export class DrawInteractionsBundle {
   private selection?: Collection<Feature<Geometry>>;
 
   private getStyle?: GetStyleFunc;
-  private drawingStartTask?: Task;
+  private drawingStartChangeset?: Changeset;
   private escapeKeyListener?: (ev: KeyboardEvent) => void;
 
   constructor(private mode: ToolMode) {}
@@ -112,7 +105,7 @@ export class DrawInteractionsBundle {
       });
     });
 
-    // Create an history task
+    // Create a changeset
     this.modify.on('modifyend', (ev: ModifyEvent) => {
       const features = ev.features.getArray();
       const items = features
@@ -127,7 +120,7 @@ export class DrawInteractionsBundle {
           const geomBefore = before?.getGeometry();
           const geomAfter = feature?.getGeometry()?.clone(); // As geometries are mutated, here we must clone it
           if (!geomBefore || !geomAfter) {
-            logger.error(`Cannot register modify task, 'before' feature not found with id ${feature.getId()}`);
+            logger.error(`Cannot register modify changeset, 'before' feature not found with id ${feature.getId()}`);
             return null;
           }
 
@@ -135,7 +128,7 @@ export class DrawInteractionsBundle {
         })
         .filter((item) => !!item) as UpdateItem[];
 
-      this.onNewTask && this.onNewTask(new UpdateGeometriesTask(items));
+      this.onNewChangeset && this.onNewChangeset(new UpdateGeometriesChangeset(items));
       modified = [];
     });
 
@@ -180,27 +173,27 @@ export class DrawInteractionsBundle {
       feature.setId();
       feature.setStyleProperties(getStyle());
 
-      // Register history task for drawing start
-      this.drawingStartTask = new UndoCallbackTask(() => this.abortDrawing());
-      this.onNewTask && this.onNewTask(this.drawingStartTask);
+      // Register changeset for drawing start
+      this.drawingStartChangeset = new UndoCallbackChangeset(() => this.abortDrawing());
+      this.onNewChangeset && this.onNewChangeset(this.drawingStartChangeset);
     });
 
     this.draw.on('drawend', (ev: DrawEvent) => {
       const feature = FeatureWrapper.from(ev.feature);
 
-      // When draw is confirmed, we replace history task
-      this.drawingStartTask && this.onDeleteTask && this.onDeleteTask(this.drawingStartTask);
-      this.drawingStartTask = undefined;
+      // When draw is confirmed, we replace changeset
+      this.drawingStartChangeset && this.onDeleteChangeset && this.onDeleteChangeset(this.drawingStartChangeset);
+      this.drawingStartChangeset = undefined;
 
-      this.onNewTask && this.onNewTask(new AddFeaturesTask(source, [feature]));
+      this.onNewChangeset && this.onNewChangeset(new AddFeaturesChangeset(source, [feature]));
     });
 
     this.map?.addInteraction(this.draw);
   }
 
   private abortDrawing() {
-    this.drawingStartTask && this.onDeleteTask && this.onDeleteTask(this.drawingStartTask);
-    this.drawingStartTask = undefined;
+    this.drawingStartChangeset && this.onDeleteChangeset && this.onDeleteChangeset(this.drawingStartChangeset);
+    this.drawingStartChangeset = undefined;
 
     const featuresInDrawOverlay = this.draw?.getOverlay().getSource().getFeatures().length || 0;
     if (featuresInDrawOverlay > 1) {

@@ -16,28 +16,31 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Task } from '../../Task';
+import { Changeset } from '../../Changeset';
 import { ProjectService } from '../../../project/ProjectService';
 import { AbcLayout } from '@abc-map/shared';
 import { getServices } from '../../../Services';
 import { Logger } from '@abc-map/shared';
 
-const logger = Logger.get('SetLayoutIndexTask');
+const logger = Logger.get('RemoveLayoutsChangeset');
 
-export class SetLayoutIndexTask extends Task {
-  public static create(layout: AbcLayout, oldIndex: number, newIndex: number) {
-    return new SetLayoutIndexTask(getServices().project, layout, oldIndex, newIndex);
+export class RemoveLayoutsChangeset extends Changeset {
+  public static create(layouts: AbcLayout[]) {
+    return new RemoveLayoutsChangeset(getServices().project, layouts);
   }
 
-  constructor(private project: ProjectService, private layout: AbcLayout, private oldIndex: number, private newIndex: number) {
+  private layouts: AbcLayout[];
+
+  constructor(private project: ProjectService, layouts: AbcLayout[]) {
     super();
+    this.layouts = layouts.slice();
+  }
+
+  public async apply(): Promise<void> {
+    this.project.removeLayouts(this.layouts.map((lay) => lay.id));
   }
 
   public async undo(): Promise<void> {
-    this.project.setLayoutIndex(this.layout, this.oldIndex);
-  }
-
-  public async redo(): Promise<void> {
-    this.project.setLayoutIndex(this.layout, this.newIndex);
+    this.project.addLayouts(this.layouts);
   }
 }

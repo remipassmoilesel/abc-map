@@ -23,7 +23,7 @@ import { LayerWrapper } from '../../../../core/geo/layers/LayerWrapper';
 import { Logger } from '@abc-map/shared';
 import { ServiceProps, withServices } from '../../../../core/withServices';
 import { HistoryKey } from '../../../../core/history/HistoryKey';
-import { EditLayerTask } from '../../../../core/history/tasks/layers/EditLayerTask';
+import { EditLayerChangeset } from '../../../../core/history/changesets/layers/EditLayerChangeset';
 import { prefixedTranslation } from '../../../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
 import Cls from './EditLayerModal.module.scss';
@@ -159,14 +159,19 @@ class EditLayerModal extends Component<Props, State> {
     const opacity = this.state.opacityInput;
     const attributions = this.state.attributionsInput.split(/\r?\n/);
 
-    const before = { name: layer.getName() || '', opacity: layer.getOpacity(), attributions: layer.getAttributions()?.slice() || [] };
-    const after = { name, opacity, attributions };
-    if (!isEqual(before, after)) {
-      layer.setName(name).setOpacity(opacity).setAttributions(attributions);
-      history.register(HistoryKey.Map, new EditLayerTask(map, layer, before, after));
-    }
+    const change = async () => {
+      const before = { name: layer.getName() || '', opacity: layer.getOpacity(), attributions: layer.getAttributions()?.slice() || [] };
+      const after = { name, opacity, attributions };
+      if (!isEqual(before, after)) {
+        const cs = new EditLayerChangeset(map, layer, before, after);
+        await cs.apply();
+        history.register(HistoryKey.Map, cs);
+      }
 
-    this.props.onHide();
+      this.props.onHide();
+    };
+
+    change().catch((err) => logger.error('Cannot update layer', err));
   };
 }
 

@@ -22,10 +22,10 @@ import { abcRender } from '../../../../core/utils/test/abcRender';
 import EditLayerModal from './EditLayerModal';
 import sinon, { SinonStub } from 'sinon';
 import userEvent from '@testing-library/user-event';
-import { fireEvent, screen } from '@testing-library/react';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { newTestServices, TestServices } from '../../../../core/utils/test/TestServices';
 import { HistoryKey } from '../../../../core/history/HistoryKey';
-import { EditLayerTask } from '../../../../core/history/tasks/layers/EditLayerTask';
+import { EditLayerChangeset } from '../../../../core/history/changesets/layers/EditLayerChangeset';
 import { MapWrapper } from '../../../../core/geo/map/MapWrapper';
 import { MapFactory } from '../../../../core/geo/map/MapFactory';
 
@@ -46,7 +46,7 @@ describe('EditLayerModal', () => {
     services.geo.getMainMap.returns(map);
   });
 
-  it('should change name', () => {
+  it('should change name', async () => {
     // Prepare
     abcRender(<EditLayerModal layer={layer} onHide={onHide} />, { services });
 
@@ -56,22 +56,24 @@ describe('EditLayerModal', () => {
     userEvent.click(screen.getByTestId('submit-button'));
 
     // Assert
-    expect(layer.getName()).toEqual('New layer name');
-    expect(onHide.callCount).toEqual(1);
-    expect(services.history.register.args).toEqual([
-      [
-        HistoryKey.Map,
-        new EditLayerTask(
-          map,
-          layer,
-          { attributions: ['© World company', 'All rights reserved'], name: 'Layer 1', opacity: 0.5 },
-          { attributions: ['© World company', 'All rights reserved'], name: 'New layer name', opacity: 0.5 }
-        ),
-      ],
-    ]);
+    await waitFor(() => {
+      expect(layer.getName()).toEqual('New layer name');
+      expect(onHide.callCount).toEqual(1);
+      expect(services.history.register.args).toEqual([
+        [
+          HistoryKey.Map,
+          new EditLayerChangeset(
+            map,
+            layer,
+            { attributions: ['© World company', 'All rights reserved'], name: 'Layer 1', opacity: 0.5 },
+            { attributions: ['© World company', 'All rights reserved'], name: 'New layer name', opacity: 0.5 }
+          ),
+        ],
+      ]);
+    });
   });
 
-  it('should change opacity', () => {
+  it('should change opacity', async () => {
     // Prepare
     abcRender(<EditLayerModal layer={layer} onHide={onHide} />, { services });
 
@@ -80,22 +82,24 @@ describe('EditLayerModal', () => {
     userEvent.click(screen.getByTestId('submit-button'));
 
     // Assert
-    expect(layer.getOpacity()).toEqual(1);
-    expect(onHide.callCount).toEqual(1);
-    expect(services.history.register.args).toEqual([
-      [
-        HistoryKey.Map,
-        new EditLayerTask(
-          map,
-          layer,
-          { attributions: ['© World company', 'All rights reserved'], name: 'Layer 1', opacity: 0.5 },
-          { attributions: ['© World company', 'All rights reserved'], name: 'Layer 1', opacity: 1 }
-        ),
-      ],
-    ]);
+    await waitFor(() => {
+      expect(layer.getOpacity()).toEqual(1);
+      expect(onHide.callCount).toEqual(1);
+      expect(services.history.register.args).toEqual([
+        [
+          HistoryKey.Map,
+          new EditLayerChangeset(
+            map,
+            layer,
+            { attributions: ['© World company', 'All rights reserved'], name: 'Layer 1', opacity: 0.5 },
+            { attributions: ['© World company', 'All rights reserved'], name: 'Layer 1', opacity: 1 }
+          ),
+        ],
+      ]);
+    });
   });
 
-  it('should change attributions', () => {
+  it('should change attributions', async () => {
     // Prepare
     abcRender(<EditLayerModal layer={layer} onHide={onHide} />, { services });
 
@@ -104,22 +108,24 @@ describe('EditLayerModal', () => {
     userEvent.click(screen.getByTestId('submit-button'));
 
     // Assert
-    expect(layer.getAttributions()).toEqual(['© World company', 'All rights reserved', 'All lefts too']);
-    expect(onHide.callCount).toEqual(1);
-    expect(services.history.register.args).toEqual([
-      [
-        HistoryKey.Map,
-        new EditLayerTask(
-          map,
-          layer,
-          { attributions: ['© World company', 'All rights reserved'], name: 'Layer 1', opacity: 0.5 },
-          { attributions: ['© World company', 'All rights reserved', 'All lefts too'], name: 'Layer 1', opacity: 0.5 }
-        ),
-      ],
-    ]);
+    await waitFor(() => {
+      expect(layer.getAttributions()).toEqual(['© World company', 'All rights reserved', 'All lefts too']);
+      expect(onHide.callCount).toEqual(1);
+      expect(services.history.register.args).toEqual([
+        [
+          HistoryKey.Map,
+          new EditLayerChangeset(
+            map,
+            layer,
+            { attributions: ['© World company', 'All rights reserved'], name: 'Layer 1', opacity: 0.5 },
+            { attributions: ['© World company', 'All rights reserved', 'All lefts too'], name: 'Layer 1', opacity: 0.5 }
+          ),
+        ],
+      ]);
+    });
   });
 
-  it('should not register history tasks', () => {
+  it('should not register changesets', async () => {
     // Prepare
     abcRender(<EditLayerModal layer={layer} onHide={onHide} />, { services });
 
@@ -127,8 +133,10 @@ describe('EditLayerModal', () => {
     userEvent.click(screen.getByTestId('submit-button'));
 
     // Assert
-    expect(onHide.callCount).toEqual(1);
-    expect(services.history.register.callCount).toEqual(0);
+    await waitFor(() => {
+      expect(onHide.callCount).toEqual(1);
+      expect(services.history.register.callCount).toEqual(0);
+    });
   });
 
   it('should close on cancel', () => {

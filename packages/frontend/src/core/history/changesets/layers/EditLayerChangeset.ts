@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Task } from '../../Task';
+import { Changeset } from '../../Changeset';
 import { LayerWrapper } from '../../../geo/layers/LayerWrapper';
 import { MapWrapper } from '../../../geo/map/MapWrapper';
 
@@ -32,18 +32,18 @@ export interface EditableLayerProperties {
  * Map is only used to dispatch events for UI updates.
  *
  */
-export class EditLayerTask extends Task {
+export class EditLayerChangeset extends Changeset {
   constructor(private map: MapWrapper, private layer: LayerWrapper, private before: EditableLayerProperties, private after: EditableLayerProperties) {
     super();
   }
 
-  public async undo(): Promise<void> {
-    this.layer.setName(this.before.name).setOpacity(this.before.opacity).setAttributions(this.before.attributions);
+  public async apply(): Promise<void> {
+    this.layer.setName(this.after.name).setOpacity(this.after.opacity).setAttributions(this.after.attributions);
     this.map.triggerLayerChange();
   }
 
-  public async redo(): Promise<void> {
-    this.layer.setName(this.after.name).setOpacity(this.after.opacity).setAttributions(this.after.attributions);
+  public async undo(): Promise<void> {
+    this.layer.setName(this.before.name).setOpacity(this.before.opacity).setAttributions(this.before.attributions);
     this.map.triggerLayerChange();
   }
 }

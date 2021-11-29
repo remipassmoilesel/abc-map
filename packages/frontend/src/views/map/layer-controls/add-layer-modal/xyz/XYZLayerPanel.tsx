@@ -24,7 +24,7 @@ import { FormState } from '../../../../../components/form-validation-label/FormS
 import ControlButtons from '../_common/ControlButtons';
 import { LayerFactory } from '../../../../../core/geo/layers/LayerFactory';
 import { HistoryKey } from '../../../../../core/history/HistoryKey';
-import { AddLayersTask } from '../../../../../core/history/tasks/layers/AddLayersTask';
+import { AddLayersChangeset } from '../../../../../core/history/changesets/layers/AddLayersChangeset';
 import { withTranslation } from 'react-i18next';
 import { prefixedTranslation } from '../../../../../i18n/i18n';
 import { useServices } from '../../../../../core/hooks';
@@ -60,13 +60,19 @@ function XYZLayerPanel(props: Props) {
   }, []);
 
   const handleConfirm = useCallback(() => {
-    const map = geo.getMainMap();
-    const layer = LayerFactory.newXyzLayer(url);
-    map.addLayer(layer);
-    map.setActiveLayer(layer);
-    history.register(HistoryKey.Map, new AddLayersTask(map, [layer]));
+    const add = async () => {
+      const map = geo.getMainMap();
+      const layer = LayerFactory.newXyzLayer(url);
 
-    onConfirm();
+      const cs = new AddLayersChangeset(map, [layer]);
+      await cs.apply();
+      history.register(HistoryKey.Map, cs);
+
+      map.setActiveLayer(layer);
+      onConfirm();
+    };
+
+    add().catch((err) => logger.error('Cannot add layer', err));
   }, [geo, url, history, onConfirm]);
 
   const handleUrlChanged = useCallback(

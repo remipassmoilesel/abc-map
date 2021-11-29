@@ -22,14 +22,12 @@ import {
   AbcLayout,
   AbcLegend,
   AbcLegendItem,
-  AbcProjection,
   AbcProjectManifest,
   AbcProjectMetadata,
   AbcView,
   BlobIO,
   CompressedProject,
   LayerType,
-  LayoutFormat,
   LegendDisplay,
   Logger,
   ProjectConstants,
@@ -39,7 +37,6 @@ import { AxiosInstance } from 'axios';
 import { ProjectFactory } from './ProjectFactory';
 import { GeoService } from '../geo/GeoService';
 import { ProjectRoutes as Api } from '../http/ApiRoutes';
-import uuid from 'uuid-random';
 import { MainStore } from '../store/store';
 import { Encryption } from '../utils/Encryption';
 import { HttpError } from '../http/HttpError';
@@ -228,21 +225,6 @@ export class ProjectService {
 
         return Promise.reject(err);
       });
-  }
-
-  public newLayout(name: string, format: LayoutFormat, center: number[], resolution: number, projection: AbcProjection): AbcLayout {
-    const layout: AbcLayout = {
-      id: uuid(),
-      name,
-      format,
-      view: {
-        center,
-        resolution,
-        projection,
-      },
-    };
-    this.addLayouts([layout]);
-    return layout;
   }
 
   public getLayouts(): AbcLayout[] {

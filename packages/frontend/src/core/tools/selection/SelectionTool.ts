@@ -24,7 +24,7 @@ import Geometry from 'ol/geom/Geometry';
 import Map from 'ol/Map';
 import Icon from '../../../assets/tool-icons/selection.inline.svg';
 import { HistoryKey } from '../../history/HistoryKey';
-import { UpdateGeometriesTask, UpdateItem } from '../../history/tasks/features/UpdateGeometriesTask';
+import { UpdateGeometriesChangeset, UpdateItem } from '../../history/changesets/features/UpdateGeometriesChangeset';
 import { FeatureWrapper } from '../../geo/features/FeatureWrapper';
 import { withMainButton } from '../common/helpers/common-conditions';
 import { noModifierKeys } from 'ol/events/condition';
@@ -138,7 +138,7 @@ export class SelectionTool implements Tool {
         .map((feat) => {
           const feature = FeatureWrapper.from(feat);
           if (!feature.getId()) {
-            logger.error('Cannot register modify task, feature does not have an id');
+            logger.error('Cannot register modify changeset, feature does not have an id');
             return null;
           }
 
@@ -146,7 +146,7 @@ export class SelectionTool implements Tool {
           const geomBefore = before?.getGeometry();
           const geomAfter = feature?.getGeometry()?.clone(); // As geometries are mutated, here we must clone it
           if (!geomBefore || !geomAfter) {
-            logger.error(`Cannot register modify task, 'before' feature not found with id ${feature.getId()}`);
+            logger.error(`Cannot register modify changeset, 'before' feature not found with id ${feature.getId()}`);
             return null;
           }
 
@@ -154,7 +154,7 @@ export class SelectionTool implements Tool {
         })
         .filter((item) => !!item) as UpdateItem[];
 
-      this.history.register(HistoryKey.Map, new UpdateGeometriesTask(items));
+      this.history.register(HistoryKey.Map, new UpdateGeometriesChangeset(items));
       translated = [];
     });
 

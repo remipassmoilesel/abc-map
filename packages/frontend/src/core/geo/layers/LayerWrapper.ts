@@ -115,6 +115,13 @@ export class LayerWrapper<Layer extends OlLayers = OlLayers, Source extends OlSo
     return this.layer.get(LayerProperties.Active) || false;
   }
 
+  /**
+   * Change layer visibility.
+   *
+   * /!\ UI will not be updated, for this use geoService.getMainMap().setLayerVisible().
+   *
+   * @param value
+   */
   public setVisible(value: boolean): LayerWrapper {
     this.layer.setVisible(value);
     return this;

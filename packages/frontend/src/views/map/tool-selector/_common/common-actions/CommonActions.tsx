@@ -17,17 +17,19 @@
  */
 
 import React, { useCallback } from 'react';
-import { FeatureStyle, GeometryType } from '@abc-map/shared';
+import { FeatureStyle, GeometryType, Logger } from '@abc-map/shared';
 import { FeatureWrapper } from '../../../../../core/geo/features/FeatureWrapper';
 import { HistoryKey } from '../../../../../core/history/HistoryKey';
-import { AddFeaturesTask } from '../../../../../core/history/tasks/features/AddFeaturesTask';
-import { RemoveFeaturesTask } from '../../../../../core/history/tasks/features/RemoveFeaturesTask';
+import { AddFeaturesChangeset } from '../../../../../core/history/changesets/features/AddFeaturesChangeset';
+import { RemoveFeaturesChangeset } from '../../../../../core/history/changesets/features/RemoveFeaturesChangeset';
 import { prefixedTranslation } from '../../../../../i18n/i18n';
 import Cls from './CommonActions.module.scss';
 import { useAppSelector } from '../../../../../core/store/hooks';
 import { useServices } from '../../../../../core/hooks';
 import { ActionButton } from './ActionButton';
 import { IconDefs } from '../../../../../components/icon/IconDefs';
+
+const logger = Logger.get('CommonActions.tsx');
 
 const t = prefixedTranslation('MapView:ToolSelector.');
 
@@ -142,8 +144,9 @@ function CommonActions() {
       })
       .filter((feat) => !!feat) as FeatureWrapper[];
 
-    layer.getSource().addFeatures(clones.map((c) => c.unwrap()));
-    history.register(HistoryKey.Map, new AddFeaturesTask(layer.getSource(), clones));
+    const cs = new AddFeaturesChangeset(layer.getSource(), clones);
+    cs.apply().catch((err) => logger.error('Cannot clone features: ', err));
+    history.register(HistoryKey.Map, cs);
   }, [geo, history, toasts]);
 
   const handleDeleteFeatures = useCallback(() => {
@@ -155,11 +158,11 @@ function CommonActions() {
       return;
     }
 
-    features.forEach((f) => {
-      f.setSelected(false);
-      layer.getSource().removeFeature(f.unwrap());
-    });
-    history.register(HistoryKey.Map, new RemoveFeaturesTask(layer.getSource(), features));
+    features.forEach((f) => f.setSelected(false));
+
+    const cs = new RemoveFeaturesChangeset(layer.getSource(), features);
+    cs.apply().catch((err) => logger.error('Cannot delete features: ', err));
+    history.register(HistoryKey.Map, cs);
   }, [geo, history, toasts]);
 
   const handleMoveBehind = useCallback(() => {

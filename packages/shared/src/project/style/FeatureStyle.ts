@@ -110,3 +110,13 @@ export const DefaultStyle = {
     size: 10,
   },
 };
+
+export function cloneFeatureStyle(fs: FeatureStyle): FeatureStyle {
+  return {
+    fill: { ...fs.fill },
+    stroke: { ...fs.stroke },
+    text: { ...fs.text },
+    point: { ...fs.point },
+    zIndex: fs.zIndex,
+  };
+}

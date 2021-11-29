@@ -36,7 +36,7 @@ import { AxiosInstance } from 'axios';
 import { get as getProjection } from 'ol/proj';
 import { FeatureWrapper } from './features/FeatureWrapper';
 import { Point } from 'ol/geom';
-import { UpdateStyleTask } from '../history/tasks/features/UpdateStyleTask';
+import { UpdateStyleChangeset } from '../history/changesets/features/UpdateStyleChangeset';
 import { HistoryKey } from '../history/HistoryKey';
 
 // Default parser fail with WMS capabilities
@@ -390,7 +390,7 @@ describe('GeoService', () => {
         ]);
       });
 
-      it('should register task if style change', () => {
+      it('should register changeset if style change', () => {
         // Prepare
         const f1Style = f1.getStyleProperties();
         const handler = sinon.stub<any, FeatureStyle | undefined>();
@@ -401,10 +401,10 @@ describe('GeoService', () => {
         service.updateSelectedFeatures(handler);
 
         // Assert
-        expect(history.register.args).toEqual([[HistoryKey.Map, new UpdateStyleTask([{ feature: f1, before: f1Style, after: { zIndex: 5 } }])]]);
+        expect(history.register.args).toEqual([[HistoryKey.Map, new UpdateStyleChangeset([{ feature: f1, before: f1Style, after: { zIndex: 5 } }])]]);
       });
 
-      it('should not register task if style change', () => {
+      it('should not register changeset if style change', () => {
         // Prepare
         const handler = sinon.stub<any, FeatureStyle | undefined>();
         handler.onFirstCall().returns(undefined);

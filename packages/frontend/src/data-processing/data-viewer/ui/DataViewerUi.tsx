@@ -31,8 +31,8 @@ import Cls from './DataViewerUi.module.scss';
 import { FeatureWrapper } from '../../../core/geo/features/FeatureWrapper';
 import { ModalStatus } from '../../../core/ui/typings';
 import { HistoryKey } from '../../../core/history/HistoryKey';
-import { SetFeatureProperties } from '../../../core/history/tasks/features/SetFeatureProperties';
-import { RemoveFeaturesTask } from '../../../core/history/tasks/features/RemoveFeaturesTask';
+import { SetFeaturePropertiesChangeset } from '../../../core/history/changesets/features/SetFeaturePropertiesChangeset';
+import { RemoveFeaturesChangeset } from '../../../core/history/changesets/features/RemoveFeaturesChangeset';
 import { prefixedTranslation } from '../../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
 
@@ -159,8 +159,10 @@ class DataViewerUi extends Component<Props, State> {
       .then((modalEvent) => {
         const after = modalEvent.properties;
         if (ModalStatus.Confirmed === modalEvent.status && !isEqual(before, after)) {
-          feature.overwriteSimpleProperties(after);
-          history.register(HistoryKey.Map, new SetFeatureProperties(feature, before, after));
+          const cs = new SetFeaturePropertiesChangeset(feature, before, after);
+          cs.apply().catch((err) => logger.error('Cannot set properties: ', err));
+          history.register(HistoryKey.Map, cs);
+
           this.showData(layer);
         }
       })
@@ -177,9 +179,10 @@ class DataViewerUi extends Component<Props, State> {
       return;
     }
 
-    const task = new RemoveFeaturesTask(layer.getSource(), [feature]);
-    history.register(HistoryKey.Map, task);
-    layer.getSource().removeFeature(feature.unwrap());
+    const cs = new RemoveFeaturesChangeset(layer.getSource(), [feature]);
+    cs.apply().catch((err) => logger.error('Cannot delete feature: ', err));
+    history.register(HistoryKey.Map, cs);
+
     this.showData(layer);
   };
 

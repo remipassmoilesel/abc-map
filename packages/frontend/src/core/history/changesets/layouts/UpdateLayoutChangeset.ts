@@ -16,21 +16,25 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Task } from '../../Task';
-import VectorSource from 'ol/source/Vector';
-import { FeatureWrapper } from '../../../geo/features/FeatureWrapper';
-import Geometry from 'ol/geom/Geometry';
+import { Changeset } from '../../Changeset';
+import { ProjectService } from '../../../project/ProjectService';
+import { AbcLayout } from '@abc-map/shared';
+import { getServices } from '../../../Services';
 
-export class AddFeaturesTask extends Task {
-  constructor(public readonly source: VectorSource<Geometry>, public readonly features: FeatureWrapper[]) {
+export class UpdateLayoutChangeset extends Changeset {
+  public static create(before: AbcLayout, after: AbcLayout) {
+    return new UpdateLayoutChangeset(getServices().project, before, after);
+  }
+
+  constructor(private project: ProjectService, private before: AbcLayout, private after: AbcLayout) {
     super();
   }
 
-  public async undo(): Promise<void> {
-    this.features.forEach((feat) => this.source.removeFeature(feat.unwrap()));
+  public async apply(): Promise<void> {
+    this.project.updateLayout(this.after);
   }
 
-  public async redo(): Promise<void> {
-    this.source.addFeatures(this.features.map((f) => f.unwrap()));
+  public async undo(): Promise<void> {
+    this.project.updateLayout(this.before);
   }
 }

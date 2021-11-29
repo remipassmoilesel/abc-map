@@ -16,31 +16,21 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { Changeset } from '../../Changeset';
 import { FeatureWrapper, SimplePropertiesMap } from '../../../geo/features/FeatureWrapper';
-import { SetFeatureProperties } from './SetFeatureProperties';
 
-describe('SetFeatureProperties', function () {
-  let feature: FeatureWrapper;
-  let before: SimplePropertiesMap;
-  let after: SimplePropertiesMap;
-  let task: SetFeatureProperties;
+export class SetFeaturePropertiesChangeset extends Changeset {
+  constructor(private feature: FeatureWrapper, public readonly before: SimplePropertiesMap, public readonly after: SimplePropertiesMap) {
+    super();
+  }
 
-  beforeEach(() => {
-    feature = FeatureWrapper.create();
-    before = { population: 12345 };
-    after = { population: 56789 };
-    task = new SetFeatureProperties(feature, before, after);
-  });
+  public async apply(): Promise<void> {
+    const properties: SimplePropertiesMap = { ...this.after };
+    this.feature.overwriteSimpleProperties(properties);
+  }
 
-  it('should undo', async () => {
-    await task.undo();
-
-    expect(feature.getSimpleProperties()).toEqual(before);
-  });
-
-  it('should redo', async () => {
-    await task.redo();
-
-    expect(feature.getSimpleProperties()).toEqual(after);
-  });
-});
+  public async undo(): Promise<void> {
+    const properties: SimplePropertiesMap = { ...this.before };
+    this.feature.overwriteSimpleProperties(properties);
+  }
+}

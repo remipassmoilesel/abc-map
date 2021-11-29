@@ -22,7 +22,7 @@ import ControlButtons from '../_common/ControlButtons';
 import { ServiceProps, withServices } from '../../../../../core/withServices';
 import { LayerFactory } from '../../../../../core/geo/layers/LayerFactory';
 import { HistoryKey } from '../../../../../core/history/HistoryKey';
-import { AddLayersTask } from '../../../../../core/history/tasks/layers/AddLayersTask';
+import { AddLayersChangeset } from '../../../../../core/history/changesets/layers/AddLayersChangeset';
 import { prefixedTranslation } from '../../../../../i18n/i18n';
 
 const logger = Logger.get('GeometryLayerPanel.tsx');
@@ -51,13 +51,19 @@ class GeometryLayerPanel extends Component<Props, {}> {
   private handleConfirm = () => {
     const { geo, history } = this.props.services;
 
-    const map = geo.getMainMap();
-    const layer = LayerFactory.newVectorLayer();
-    map.addLayer(layer);
-    map.setActiveLayer(layer);
-    history.register(HistoryKey.Map, new AddLayersTask(map, [layer]));
+    const add = async () => {
+      const map = geo.getMainMap();
+      const layer = LayerFactory.newVectorLayer();
 
-    this.props.onConfirm();
+      const cs = new AddLayersChangeset(map, [layer]);
+      await cs.apply();
+      history.register(HistoryKey.Map, cs);
+
+      map.setActiveLayer(layer);
+      this.props.onConfirm();
+    };
+
+    add().catch((err) => logger.error('Cannot add layer: ', err));
   };
 }
 

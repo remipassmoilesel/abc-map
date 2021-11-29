@@ -26,7 +26,7 @@ import { ValidationHelper } from '../../../../../core/utils/ValidationHelper';
 import { FormState } from '../../../../../components/form-validation-label/FormState';
 import { LayerFactory } from '../../../../../core/geo/layers/LayerFactory';
 import { HistoryKey } from '../../../../../core/history/HistoryKey';
-import { AddLayersTask } from '../../../../../core/history/tasks/layers/AddLayersTask';
+import { AddLayersChangeset } from '../../../../../core/history/changesets/layers/AddLayersChangeset';
 import ControlButtons from '../_common/ControlButtons';
 import { WmsSettings } from '../../../../../core/geo/layers/LayerFactory.types';
 import { prefixedTranslation } from '../../../../../i18n/i18n';
@@ -265,13 +265,19 @@ class WmsLayerPanel extends Component<Props, State> {
     const { history, geo } = this.props.services;
     const { value: settings } = this.props;
 
-    const map = geo.getMainMap();
-    const layer = LayerFactory.newWmsLayer(settings);
-    map.addLayer(layer);
-    map.setActiveLayer(layer);
-    history.register(HistoryKey.Map, new AddLayersTask(map, [layer]));
+    const add = async () => {
+      const map = geo.getMainMap();
+      const layer = LayerFactory.newWmsLayer(settings);
 
-    this.props.onConfirm();
+      const cs = new AddLayersChangeset(map, [layer]);
+      await cs.apply();
+      history.register(HistoryKey.Map, cs);
+
+      map.setActiveLayer(layer);
+      this.props.onConfirm();
+    };
+
+    add().catch((err) => logger.error('Cannot add layer', err));
   };
 
   private validateForm(value: WmsSettings): FormState {

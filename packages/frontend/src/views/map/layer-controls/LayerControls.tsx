@@ -19,7 +19,7 @@
 import React, { Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/shared';
 import { Extent, getArea } from 'ol/extent';
-import { RemoveLayerTask } from '../../../core/history/tasks/layers/RemoveLayerTask';
+import { RemoveLayerChangeset } from '../../../core/history/changesets/layers/RemoveLayerChangeset';
 import { HistoryKey } from '../../../core/history/HistoryKey';
 import LayerListItem from './list-item/LayerListItem';
 import AddLayerModal from './add-layer-modal/AddLayerModal';
@@ -33,6 +33,7 @@ import { WithTooltip } from '../../../components/with-tooltip/WithTooltip';
 import isEqual from 'lodash/isEqual';
 import { FaIcon } from '../../../components/icon/FaIcon';
 import { IconDefs } from '../../../components/icon/IconDefs';
+import { ToggleLayerVisibilityChangeset } from '../../../core/history/changesets/layers/ToggleLayerVisibilityChangeset';
 
 const logger = Logger.get('LayerControls.tsx');
 
@@ -205,19 +206,24 @@ class LayerControls extends Component<Props, State> {
       return;
     }
 
-    // We remove active layer
-    map.removeLayer(layer);
-    history.register(HistoryKey.Map, new RemoveLayerTask(map, layer));
+    const remove = async () => {
+      // We remove active layer
+      const cs = new RemoveLayerChangeset(map, layer);
+      await cs.apply();
+      history.register(HistoryKey.Map, cs);
 
-    // We activate last layer if any
-    const layers = map.getLayers();
-    if (layers.length) {
-      map.setActiveLayer(layers[layers.length - 1]);
-    }
+      // We activate last layer if any
+      const layers = map.getLayers();
+      if (layers.length) {
+        map.setActiveLayer(layers[layers.length - 1]);
+      }
+    };
+
+    remove().catch((err) => logger.error('Cannot remove layer', err));
   };
 
   private handleToggleVisibility = (layerId: string) => {
-    const { geo } = this.props.services;
+    const { geo, history } = this.props.services;
 
     const map = geo.getMainMap();
     const layer = map.getLayers().find((lay) => lay.getId() === layerId);
@@ -226,7 +232,12 @@ class LayerControls extends Component<Props, State> {
       return;
     }
 
-    map.setLayerVisible(layer, !layer.isVisible());
+    const toggle = async () => {
+      const cs = new ToggleLayerVisibilityChangeset(map, layer, !layer.isVisible());
+      await cs.apply();
+      history.register(HistoryKey.Map, cs);
+    };
+    toggle().catch((err) => logger.error('Cannot toggle visibility of layer', err));
   };
 
   private handleLayerForward = () => {

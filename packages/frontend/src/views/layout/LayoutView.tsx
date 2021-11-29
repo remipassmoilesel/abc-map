@@ -26,11 +26,11 @@ import { HistoryKey } from '../../core/history/HistoryKey';
 import { MapWrapper } from '../../core/geo/map/MapWrapper';
 import { MainState } from '../../core/store/reducer';
 import { ServiceProps, withServices } from '../../core/withServices';
-import { AddLayoutsTask } from '../../core/history/tasks/layouts/AddLayoutsTask';
-import { RemoveLayoutsTask } from '../../core/history/tasks/layouts/RemoveLayoutsTask';
-import { SetLayoutIndexTask } from '../../core/history/tasks/layouts/SetLayoutIndexTask';
+import { AddLayoutsChangeset } from '../../core/history/changesets/layouts/AddLayoutsChangeset';
+import { RemoveLayoutsChangeset } from '../../core/history/changesets/layouts/RemoveLayoutsChangeset';
+import { SetLayoutIndexChangeset } from '../../core/history/changesets/layouts/SetLayoutIndexChangeset';
 import { LayoutRenderer } from '../../core/project/rendering/LayoutRenderer';
-import { UpdateLayoutTask } from '../../core/history/tasks/layouts/UpdateLayoutTask';
+import { UpdateLayoutChangeset } from '../../core/history/changesets/layouts/UpdateLayoutChangeset';
 import { FileIO } from '../../core/utils/FileIO';
 import { pageSetup } from '../../core/utils/page-setup';
 import LayoutControls from './layout-controls/LayoutControls';
@@ -38,6 +38,7 @@ import { ExportFormat } from './ExportFormat';
 import Cls from './LayoutView.module.scss';
 import { prefixedTranslation } from '../../i18n/i18n';
 import { OperationStatus } from '../../core/ui/typings';
+import uuid from 'uuid-random';
 
 const logger = Logger.get('LayoutView.tsx', 'warn');
 
@@ -137,7 +138,7 @@ class LayoutView extends Component<Props, State> {
   };
 
   private handleNewLayout = () => {
-    const { project, history } = this.props.services;
+    const { history } = this.props.services;
 
     const name = `Page ${this.props.layouts.length + 1}`;
     const view = this.state.map.unwrap().getView();
@@ -148,13 +149,29 @@ class LayoutView extends Component<Props, State> {
       return;
     }
 
-    // If resolution is below one, we keep it. Otherwise we use a greater one.
-    const layoutRes = resolution < 1 ? resolution : Math.round(resolution - resolution * 0.2);
-    const projection: AbcProjection = { name: view.getProjection().getCode() };
-    const layout = project.newLayout(name, LayoutFormats.A4_LANDSCAPE, center, layoutRes, projection);
-    history.register(HistoryKey.Layout, AddLayoutsTask.create([layout]));
+    const add = async () => {
+      // If resolution is below one, we keep it. Otherwise we use a greater one.
+      const layoutRes = resolution < 1 ? resolution : Math.round(resolution - resolution * 0.2);
+      const projection: AbcProjection = { name: view.getProjection().getCode() };
+      const layout: AbcLayout = {
+        id: uuid(),
+        name,
+        format: LayoutFormats.A4_LANDSCAPE,
+        view: {
+          center,
+          resolution: layoutRes,
+          projection,
+        },
+      };
 
-    this.setState({ activeLayoutId: layout.id });
+      const cs = AddLayoutsChangeset.create([layout]);
+      await cs.apply();
+      history.register(HistoryKey.Layout, cs);
+
+      this.setState({ activeLayoutId: layout.id });
+    };
+
+    add().catch((err) => logger.error('Cannot add layout', err));
   };
 
   private handleLayoutUp = () => {
@@ -166,7 +183,7 @@ class LayoutView extends Component<Props, State> {
   };
 
   private updateLayoutIndex = (diff: number) => {
-    const { project, history, toasts } = this.props.services;
+    const { history, toasts } = this.props.services;
     const active = this.getActiveLayout();
     const layouts = this.props.layouts;
 
@@ -175,27 +192,37 @@ class LayoutView extends Component<Props, State> {
       return;
     }
 
-    const oldIndex = layouts.findIndex((lay) => lay.id === active.id);
-    let newIndex = oldIndex + diff;
-    if (newIndex < 0) {
-      newIndex = 0;
-    }
-    if (newIndex > layouts.length - 1) {
-      newIndex = layouts.length - 1;
-    }
+    const change = async () => {
+      const oldIndex = layouts.findIndex((lay) => lay.id === active.id);
+      let newIndex = oldIndex + diff;
+      if (newIndex < 0) {
+        newIndex = 0;
+      }
+      if (newIndex > layouts.length - 1) {
+        newIndex = layouts.length - 1;
+      }
 
-    if (newIndex !== oldIndex) {
-      project.setLayoutIndex(active, newIndex);
-      history.register(HistoryKey.Layout, SetLayoutIndexTask.create(active, oldIndex, newIndex));
-    }
+      if (newIndex !== oldIndex) {
+        const cs = SetLayoutIndexChangeset.create(active, oldIndex, newIndex);
+        await cs.apply();
+        history.register(HistoryKey.Layout, cs);
+      }
+    };
+
+    change().catch((err) => logger.error('Cannot change layout index', err));
   };
 
   private handleClearAll = () => {
-    const { project, history } = this.props.services;
+    const { history } = this.props.services;
     const layouts = this.props.layouts;
 
-    project.clearLayouts();
-    history.register(HistoryKey.Layout, RemoveLayoutsTask.create(layouts));
+    const clear = async () => {
+      const cs = RemoveLayoutsChangeset.create(layouts);
+      await cs.apply();
+      history.register(HistoryKey.Layout, cs);
+    };
+
+    clear().catch((err) => logger.error('Cannot clear layouts', err));
   };
 
   private handleLegendChanged = (display: LegendDisplay) => {
@@ -205,38 +232,56 @@ class LayoutView extends Component<Props, State> {
   };
 
   private handleDeleted = (lay: AbcLayout) => {
-    const { project, history } = this.props.services;
+    const { history } = this.props.services;
 
-    project.removeLayout(lay.id);
-    history.register(HistoryKey.Layout, RemoveLayoutsTask.create([lay]));
+    const remove = async () => {
+      const cs = RemoveLayoutsChangeset.create([lay]);
+      await cs.apply();
+      history.register(HistoryKey.Layout, cs);
+    };
+
+    remove().catch((err) => logger.error('Cannot remove layer', err));
   };
 
   private handleFormatChanged = (format: LayoutFormat) => {
-    const { project, history } = this.props.services;
+    const { history } = this.props.services;
 
     const active = this.getActiveLayout();
     const formatChanged = active?.format.id !== format.id;
-    if (active && formatChanged) {
+    if (!active || !formatChanged) {
+      return;
+    }
+
+    const change = async () => {
       const update: AbcLayout = {
         ...active,
         format,
       };
 
-      project.updateLayout(update);
-      history.register(HistoryKey.Layout, UpdateLayoutTask.create(active, update));
-    }
+      const cs = UpdateLayoutChangeset.create(active, update);
+      await cs.apply();
+      history.register(HistoryKey.Layout, cs);
+    };
+
+    change().catch((err) => logger.error('Cannot modify layoyt', err));
   };
 
   private handleLayoutChanged = (layout: AbcLayout) => {
-    const { project, history } = this.props.services;
+    const { history } = this.props.services;
 
     const before = this.props.layouts.find((lay) => lay.id === layout.id);
-    if (before) {
-      project.updateLayout(layout);
-      history.register(HistoryKey.Layout, UpdateLayoutTask.create(before, layout));
-    } else {
-      logger.error('Cannot register history task', { before, layout });
+    if (!before) {
+      logger.error('Cannot register changeset', { before, layout });
+      return;
     }
+
+    const change = async () => {
+      const cs = UpdateLayoutChangeset.create(before, layout);
+      await cs.apply();
+      history.register(HistoryKey.Layout, cs);
+    };
+
+    change().catch((err) => logger.error('Cannot modify layout', err));
   };
 
   private handleExport = (format: ExportFormat) => {

@@ -18,7 +18,7 @@
 
 import React, { useCallback } from 'react';
 import { ToolRegistry } from '../../../core/tools/ToolRegistry';
-import { MapTool } from '@abc-map/shared';
+import { Logger, MapTool } from '@abc-map/shared';
 import SelectionPanel from './selection/SelectionToolPanel';
 import LineStringPanel from './line-string/LineStringToolPanel';
 import PointPanel from './point/PointToolPanel';
@@ -26,9 +26,8 @@ import PolygonPanel from './polygon/PolygonToolPanel';
 import { LayerWrapper } from '../../../core/geo/layers/LayerWrapper';
 import { LayerFactory } from '../../../core/geo/layers/LayerFactory';
 import { HistoryKey } from '../../../core/history/HistoryKey';
-import { AddLayersTask } from '../../../core/history/tasks/layers/AddLayersTask';
+import { AddLayersChangeset } from '../../../core/history/changesets/layers/AddLayersChangeset';
 import { prefixedTranslation } from '../../../i18n/i18n';
-import Cls from './ToolSelector.module.scss';
 import { useAppSelector } from '../../../core/store/hooks';
 import { useServices } from '../../../core/hooks';
 import CommonActions from './_common/common-actions/CommonActions';
@@ -38,6 +37,9 @@ import { ToolButton } from './ToolButton';
 import TextToolPanel from './text/TextToolPanel';
 import { IconDefs } from '../../../components/icon/IconDefs';
 import { FaIcon } from '../../../components/icon/FaIcon';
+import Cls from './ToolSelector.module.scss';
+
+const logger = Logger.get('ToolSelector');
 
 interface Props {
   activeLayer?: LayerWrapper;
@@ -101,12 +103,18 @@ function ToolSelector(props: Props) {
 
   // If tools are disabled, user can create a new vector layer here
   const handleCreateVectorLayer = useCallback(() => {
-    const map = geo.getMainMap();
-    const layer = LayerFactory.newVectorLayer();
-    map.addLayer(layer);
-    map.setActiveLayer(layer);
+    const add = async () => {
+      const map = geo.getMainMap();
+      const layer = LayerFactory.newVectorLayer();
 
-    history.register(HistoryKey.Map, new AddLayersTask(map, [layer]));
+      const cs = new AddLayersChangeset(map, [layer]);
+      await cs.apply();
+      history.register(HistoryKey.Map, cs);
+
+      map.setActiveLayer(layer);
+    };
+
+    add().catch((err) => logger.error('Cannot add layer', err));
   }, [geo, history]);
 
   const toolOptions = toolsEnabled && getToolOptions();

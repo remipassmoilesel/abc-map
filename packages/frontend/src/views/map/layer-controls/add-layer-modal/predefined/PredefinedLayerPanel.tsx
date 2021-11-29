@@ -23,7 +23,7 @@ import ControlButtons from '../_common/ControlButtons';
 import { ServiceProps, withServices } from '../../../../../core/withServices';
 import { LayerFactory } from '../../../../../core/geo/layers/LayerFactory';
 import { HistoryKey } from '../../../../../core/history/HistoryKey';
-import { AddLayersTask } from '../../../../../core/history/tasks/layers/AddLayersTask';
+import { AddLayersChangeset } from '../../../../../core/history/changesets/layers/AddLayersChangeset';
 import { prefixedTranslation } from '../../../../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
 
@@ -75,13 +75,19 @@ class PredefinedLayerPanel extends Component<Props, {}> {
     const { geo, history } = this.props.services;
     const { value } = this.props;
 
-    const map = geo.getMainMap();
-    const layer = LayerFactory.newPredefinedLayer(value);
-    map.addLayer(layer);
-    map.setActiveLayer(layer);
-    history.register(HistoryKey.Map, new AddLayersTask(map, [layer]));
+    const add = async () => {
+      const map = geo.getMainMap();
+      const layer = LayerFactory.newPredefinedLayer(value);
 
-    this.props.onConfirm();
+      const cs = new AddLayersChangeset(map, [layer]);
+      await cs.apply();
+      history.register(HistoryKey.Map, cs);
+
+      map.setActiveLayer(layer);
+      this.props.onConfirm();
+    };
+
+    add().catch((err) => logger.error('Cannot add layer', err));
   };
 
   private handleChange = (ev: ChangeEvent<HTMLSelectElement>) => {

@@ -25,7 +25,7 @@ import Icon from '../../../assets/tool-icons/text.inline.svg';
 import { TextInteraction } from './TextInteraction';
 import { FeatureWrapper } from '../../geo/features/FeatureWrapper';
 import { HistoryKey } from '../../history/HistoryKey';
-import { UpdateStyleTask } from '../../history/tasks/features/UpdateStyleTask';
+import { UpdateStyleChangeset } from '../../history/changesets/features/UpdateStyleChangeset';
 import GeometryType from 'ol/geom/GeometryType';
 import { TextChanged, TextEnd, TextEvent, TextStart } from './TextInteractionEvents';
 import { Interaction } from 'ol/interaction';
@@ -111,14 +111,14 @@ export class TextTool implements Tool {
 
     text.customOn(TextEvent.End, (ev: TextEnd) => {
       if (!before) {
-        logger.error('Cannot register task, before style was not set');
+        logger.error('Cannot register changeset, before style was not set');
         return;
       }
 
       const feature = FeatureWrapper.from(ev.feature);
       const after = feature.getStyleProperties();
 
-      this.history.register(HistoryKey.Map, new UpdateStyleTask([{ before, after, feature }]));
+      this.history.register(HistoryKey.Map, new UpdateStyleChangeset([{ before, after, feature }]));
     });
 
     map.addInteraction(text);

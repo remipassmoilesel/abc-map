@@ -16,17 +16,17 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { EditableLayerProperties, EditLayerTask } from './EditLayerTask';
+import { EditableLayerProperties, EditLayerChangeset } from './EditLayerChangeset';
 import sinon, { SinonStubbedInstance } from 'sinon';
 import { LayerWrapper } from '../../../geo/layers/LayerWrapper';
 import { MapWrapper } from '../../../geo/map/MapWrapper';
 
-describe('EditLayerTask', () => {
+describe('EditLayerChangeset', () => {
   let map: SinonStubbedInstance<MapWrapper>;
   let layer: SinonStubbedInstance<LayerWrapper>;
   let before: EditableLayerProperties;
   let after: EditableLayerProperties;
-  let task: EditLayerTask;
+  let changeset: EditLayerChangeset;
 
   beforeEach(() => {
     map = sinon.createStubInstance(MapWrapper);
@@ -46,11 +46,11 @@ describe('EditLayerTask', () => {
       attributions: ['After attribution 1'],
     };
 
-    task = new EditLayerTask(map as unknown as MapWrapper, layer as unknown as LayerWrapper, before, after);
+    changeset = new EditLayerChangeset(map as unknown as MapWrapper, layer as unknown as LayerWrapper, before, after);
   });
 
   it('undo()', async () => {
-    await task.undo();
+    await changeset.undo();
 
     expect(map.triggerLayerChange.callCount).toEqual(1);
     expect(layer.setName.args).toEqual([['Before layer']]);
@@ -59,7 +59,7 @@ describe('EditLayerTask', () => {
   });
 
   it('redo()', async () => {
-    await task.redo();
+    await changeset.apply();
 
     expect(map.triggerLayerChange.callCount).toEqual(1);
     expect(layer.setName.args).toEqual([['After layer']]);
