@@ -16,7 +16,50 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-.deviceWarning {
-  width: 80vw !important;
-  max-width: 80vw !important;
+@import "src/assets/styles/mixins";
+
+.modal {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  padding: 3vmin;
+  background: white;
+
+  font-size: 3vmin;
+  * {
+    font-size: 3vmin;
+  }
+
+  img {
+    width: 20vmin;
+    margin-bottom: 7vmin;
+  }
+
+  .title {
+    font-size: 5vmin;
+    margin-bottom: 7vmin;
+  }
+
+  .explanation1 {
+    text-align: center;
+    margin: 0 3vmin 7vmin 3vmin;
+  }
+
+  .explanation2 {
+    text-align: center;
+    margin: 0 3vmin 3vmin 3vmin;
+  }
+
+  :global(.btn) {
+    padding: 1.5vmin 3vmin;
+    font-size: 3vmin !important;
+  }
 }

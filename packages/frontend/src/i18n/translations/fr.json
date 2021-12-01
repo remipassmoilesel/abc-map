@@ -222,9 +222,9 @@
     "Symbols": "Symboles"
   },
   "DeviceWarningModal": {
-    "Warning": "Attention",
-    "AbcMap_may_not_work_properly": "Abc-Map risque de ne pas fonctionner correctement",
-    "AbcMap_is_designed_for_desktop_computers": "Abc-Map est conçu pour fonctionner sur un <code>ordinateur de bureau</code>, avec les navigateurs <code>Firefox</code> ou <code>Chromium</code>, et une résolution d&apos;écran minimale de <code>1366x768</code>.",
+    "Hello": "Bonjour",
+    "AbcMap_is_designed_for_desktop_computers": "Abc-Map fonctionne mieux sur <code>ordinateur de bureau</code>, avec <code>Firefox</code> ou <code>Chromium</code>, et un écran d'au moins <code>1366x768</code>.",
+    "You_may_come_across_some_bugs": "Vous risquez de croiser quelques bugs",
     "I_understand": "J'ai compris"
   },
   "ModalService": {
