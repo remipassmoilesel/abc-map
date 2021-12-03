@@ -31,7 +31,7 @@ import { Interaction, Select } from 'ol/interaction';
 import { withMainButton } from '../common/helpers/common-conditions';
 import { LayerWrapper } from '../../geo/layers/LayerWrapper';
 import { Options } from 'ol/interaction/Select';
-import { noModifierKeys } from 'ol/events/condition';
+import { noModifierKeys, singleClick } from 'ol/events/condition';
 import { DefaultTolerancePx } from '../common/constants';
 import { MoveInteractionsBundle } from '../common/interactions/MoveInteractionsBundle';
 import { SelectionInteractionsBundle } from '../common/interactions/SelectionInteractionsBundle';
@@ -77,7 +77,7 @@ export class EditPropertiesTool implements Tool {
 
     // Select interaction will condition modification of features
     const select = this.newInteraction({
-      condition: (ev) => withMainButton(ev) && noModifierKeys(ev),
+      condition: (ev) => singleClick(ev) && withMainButton(ev) && noModifierKeys(ev),
       toggleCondition: () => false,
       layers: (lay) => LayerWrapper.from(lay).isActive(),
       // Warning: here we must use null to not manage styles with Select interaction
