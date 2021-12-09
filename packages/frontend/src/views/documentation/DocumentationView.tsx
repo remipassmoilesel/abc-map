@@ -77,9 +77,10 @@ function DocumentationView() {
           {/* Table of content button */}
           <SideMenu
             buttonIcon={IconDefs.faListOl}
-            buttonStyle={{ top: '12vmin', right: '6vmin' }}
+            buttonStyle={{ top: '20vmin', right: '6vmin' }}
             title={t('Table_of_content')}
             menuPlacement={'right'}
+            menuId={'documentationview-layouts-menu'}
             closeOnClick={true}
           >
             <div className={Cls.toc} dangerouslySetInnerHTML={{ __html: reference?.toc }} />

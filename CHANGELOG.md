@@ -2,6 +2,10 @@
 
 Presently there are no versions, because it is not yet necessary.
 
+## Better UI (f23dc515 09/12/2021)
+
+- New UI, more mobile friendly but not totally usable on mobile for the moment
+
 ## Better language management (2f1a46d6 25/11/2021)
 
 - Language can be determined by URL path instead of query parameters, for SEO.

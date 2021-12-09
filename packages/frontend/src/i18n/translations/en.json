@@ -609,7 +609,7 @@
   },
   "ErrorBoundary": {
     "Aouch": "Aouch",
-    "Error_occurred": "An error prevents the application from functioning correctly. This failure has been logged, <br /> the developer responsible for this error has just received a letter of resignation.",
+    "Error_occurred": "An error prevents the application from functioning correctly. <br />This failure has been logged, the developer responsible for this error has just received a letter of resignation.",
     "Reload_page": "Reload page",
     "Recommended_action": "Recommended action, <br /> but you will lose unsaved changes.",
     "Return_to_application": "Return to application",

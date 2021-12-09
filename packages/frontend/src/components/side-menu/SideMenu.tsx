@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { CSSProperties, useCallback, useEffect, useState } from 'react';
+import React, { CSSProperties, useCallback } from 'react';
 import { FaIcon } from '../icon/FaIcon';
 import Cls from './SideMenu.module.scss';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
@@ -25,8 +25,11 @@ import { WithTooltip } from '../with-tooltip/WithTooltip';
 import { FloatingButton } from '../floating-button/FloatingButton';
 import { prefixedTranslation } from '../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
+import { useAppDispatch, useAppSelector } from '../../core/store/hooks';
+import { UiActions } from '../../core/store/ui/actions';
 
 interface Props {
+  menuId: string;
   buttonIcon: IconDefinition;
   title: string;
   titlePlacement?: 'top' | 'right' | 'bottom' | 'left';
@@ -41,20 +44,16 @@ interface Props {
 const t = prefixedTranslation('SideMenu:');
 
 function SideMenu(props: Props) {
-  const { buttonIcon, title, menuWidth, titlePlacement, children, menuPlacement, buttonStyle, 'data-cy': dataCy, closeOnClick } = props;
-  const [open, setOpen] = useState(false);
+  const { menuId, buttonIcon, title, menuWidth, titlePlacement, children, menuPlacement, buttonStyle, 'data-cy': dataCy, closeOnClick } = props;
+  const open = useAppSelector((st) => st.ui.sideMenu)[menuId] ?? false;
+  const dispatch = useAppDispatch();
 
-  // Close menu on unmount
-  useEffect(() => {
-    return () => setOpen(false);
-  }, []);
-
-  const handleToggleClick = useCallback(() => setOpen(!open), [open]);
+  const handleToggleClick = useCallback(() => dispatch(UiActions.setSideMenuState(menuId, !open)), [dispatch, menuId, open]);
   const handleContentClick = useCallback(() => {
     if (closeOnClick) {
-      setOpen(false);
+      dispatch(UiActions.setSideMenuState(menuId, false));
     }
-  }, [closeOnClick]);
+  }, [closeOnClick, dispatch, menuId]);
 
   const menuClasses = `${Cls.menuPanel} ${menuPlacement === 'left' ? Cls.left : Cls.right}`;
   return (

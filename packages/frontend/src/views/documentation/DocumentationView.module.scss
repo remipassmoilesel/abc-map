@@ -44,8 +44,9 @@
   margin-left: 2vw;
   padding-bottom: 80vmin;
 
+  padding-top: 5vmin;
+
   @include media-breakpoint-down(xl) {
-    padding-top: 10vmin;
     width: 100%;
   }
 }

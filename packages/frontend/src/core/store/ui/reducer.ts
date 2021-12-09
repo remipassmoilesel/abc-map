@@ -52,6 +52,16 @@ export function uiReducer(state = uiInitialState, action: UiAction): UiState {
       return newState;
     }
 
+    case ActionType.SetSideMenuState: {
+      return {
+        ...state,
+        sideMenu: {
+          ...state.sideMenu,
+          [action.menuId]: action.state,
+        },
+      };
+    }
+
     default:
       return state;
   }
