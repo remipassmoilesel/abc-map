@@ -106,14 +106,15 @@ function MapView() {
   return (
     <div className={Cls.mapView}>
       {/* Toggle fullscreen button */}
-      <FullscreenButton style={{ top: '12vmin', left: '2vw' }} />
+      <FullscreenButton style={{ top: '20vmin', left: '2vw' }} />
 
       {/* Search menu */}
       <SideMenu
         title={t('Search_menu')}
         buttonIcon={IconDefs.faSearch}
-        buttonStyle={{ top: '24vmin', left: '2vw' }}
+        buttonStyle={{ top: '35vmin', left: '2vw' }}
         menuPlacement={'left'}
+        menuId={'mapview-search-menu'}
         data-cy={'search-menu'}
       >
         <div className={Cls.spacer} />
@@ -127,8 +128,9 @@ function MapView() {
       <SideMenu
         title={t('Project_menu')}
         buttonIcon={IconDefs.faFileAlt}
-        buttonStyle={{ top: '36vmin', left: '2vw' }}
+        buttonStyle={{ top: '50vmin', left: '2vw' }}
         menuPlacement={'left'}
+        menuId={'mapview-project-menu'}
         data-cy={'project-menu'}
       >
         <div className={Cls.spacer} />
@@ -146,8 +148,9 @@ function MapView() {
       <SideMenu
         title={t('Draw_menu')}
         buttonIcon={IconDefs.faDraftingCompass}
-        buttonStyle={{ top: '12vmin', right: '2vw' }}
+        buttonStyle={{ top: '20vmin', right: '2vw' }}
         menuPlacement={'right'}
+        menuId={'mapview-draw-menu'}
         data-cy={'draw-menu'}
       >
         <HistoryControls historyKey={HistoryKey.Map} />

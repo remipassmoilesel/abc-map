@@ -22,6 +22,7 @@ export enum ActionType {
   SetHistoryCapabilities = 'SetHistoryCapabilities',
   CleanHistoryCapabilities = 'CleanHistoryCapabilities',
   SetDocumentationScrollPosition = 'SetDocumentationScrollPosition',
+  SetSideMenuState = 'SetSideMenuState',
 }
 
 export interface SetHistoryCapabilities {
@@ -40,7 +41,13 @@ export interface SetDocumentationScrollPosition {
   position: number;
 }
 
-export type UiAction = SetHistoryCapabilities | CleanHistoryCapabilities | SetDocumentationScrollPosition;
+export interface SetSideMenuState {
+  type: ActionType.SetSideMenuState;
+  menuId: string;
+  state: boolean;
+}
+
+export type UiAction = SetHistoryCapabilities | CleanHistoryCapabilities | SetDocumentationScrollPosition | SetSideMenuState;
 
 export class UiActions {
   public static setHistoryCapabilities(key: HistoryKey, canUndo: boolean, canRedo: boolean): UiAction {
@@ -62,6 +69,14 @@ export class UiActions {
     return {
       type: ActionType.SetDocumentationScrollPosition,
       position,
+    };
+  }
+
+  public static setSideMenuState(menuId: string, state: boolean): UiAction {
+    return {
+      type: ActionType.SetSideMenuState,
+      menuId,
+      state,
     };
   }
 }

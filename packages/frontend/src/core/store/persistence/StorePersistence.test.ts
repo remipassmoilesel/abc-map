@@ -99,6 +99,10 @@ describe('StorePersistence', () => {
         documentation: {
           scrollPosition: 15,
         },
+        sideMenu: {
+          'menu-1': true,
+          'menu-2': false,
+        },
       },
     };
     const snapshot = stateSnapshot(sampleState);
@@ -144,6 +148,10 @@ describe('StorePersistence', () => {
         historyCapabilities: {},
         documentation: {
           scrollPosition: 15,
+        },
+        sideMenu: {
+          'menu-1': true,
+          'menu-2': false,
         },
       },
     };

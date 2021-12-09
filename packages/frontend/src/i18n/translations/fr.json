@@ -609,7 +609,7 @@
   },
   "ErrorBoundary": {
     "Aouch": "Aïe Aïe Aïe",
-    "Error_occurred": "Une erreur empêche l'application de fonctionner correctement. Cet échec a été consigné, <br /> le développeur responsable de cette erreur vient de recevoir une lettre de démission.",
+    "Error_occurred": "Une erreur empêche l'application de fonctionner correctement. <br />Cet échec a été consigné, le développeur responsable de cette erreur vient de recevoir une lettre de démission.",
     "Reload_page": "Recharger la page",
     "Recommended_action": "Action recommandée, <br /> mais vous perdrez les modifications non enregistrées.",
     "Return_to_application": "Revenir à l'application",

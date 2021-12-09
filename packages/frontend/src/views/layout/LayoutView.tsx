@@ -86,8 +86,9 @@ class LayoutView extends Component<Props, State> {
           <SideMenu
             title={t('Layouts_menu')}
             buttonIcon={IconDefs.faCopy}
-            buttonStyle={{ top: '12vmin', left: '2vw' }}
+            buttonStyle={{ top: '20vmin', left: '2vw' }}
             menuPlacement={'left'}
+            menuId={'layoutview-layouts-menu'}
             data-cy={'layouts-menu'}
           >
             <LayoutList layouts={layouts} active={activeLayout} onSelected={this.handleSelected} onDeleted={this.handleDeleted} />
@@ -106,8 +107,9 @@ class LayoutView extends Component<Props, State> {
           <SideMenu
             title={t('Controls_menu')}
             buttonIcon={IconDefs.faRuler}
-            buttonStyle={{ top: '12vmin', right: '2vw' }}
+            buttonStyle={{ top: '20vmin', right: '2vw' }}
             menuPlacement={'right'}
+            menuId={'layoutview-controls-menu'}
             data-cy={'controls-menu'}
           >
             <LayoutControls

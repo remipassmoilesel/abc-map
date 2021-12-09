@@ -28,6 +28,9 @@ export interface UiState {
   documentation: {
     scrollPosition: number;
   };
+  sideMenu: {
+    [k: string]: boolean | undefined;
+  };
 }
 
 export const uiInitialState: UiState = {
@@ -35,4 +38,5 @@ export const uiInitialState: UiState = {
   documentation: {
     scrollPosition: 0,
   },
+  sideMenu: {},
 };
