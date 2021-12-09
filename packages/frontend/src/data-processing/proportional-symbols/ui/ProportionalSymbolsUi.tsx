@@ -87,8 +87,8 @@ class ProportionalSymbolsUi extends Component<Props, State> {
       <div className={Cls.panel}>
         {/* Module introduction */}
         <FoldingCard title={`1. ${t('Introduction')}`} className={'section'}>
-          <div className={'explanation d-flex flex-row justify-content-between align-items-start'}>
-            <div className={Cls.introduction}>
+          <div className={Cls.introduction}>
+            <div>
               <p>{t('Proportional_symbols_are_used_to_represent_absolute_data')}</p>
               <p>{t('How_does_it_work')}</p>
               <ul>
@@ -98,7 +98,7 @@ class ProportionalSymbolsUi extends Component<Props, State> {
                 <li dangerouslySetInnerHTML={{ __html: t('Select_parameters_explanation') }} />
               </ul>
             </div>
-            <img src={Sample} alt={t('Map_sample')} title={t('Map_sample')} className={Cls.sample} />
+            <img src={Sample} alt={t('Map_sample')} title={t('Map_sample')} />
           </div>
         </FoldingCard>
 

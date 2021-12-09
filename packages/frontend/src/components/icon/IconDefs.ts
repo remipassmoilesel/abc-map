@@ -16,6 +16,8 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { faChevronCircleDown } from '@fortawesome/free-solid-svg-icons/faChevronCircleDown';
+import { faSearch } from '@fortawesome/free-solid-svg-icons/faSearch';
 import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons/faExclamationCircle';
 import { faLaughWink } from '@fortawesome/free-solid-svg-icons/faLaughWink';
 import { faRocket } from '@fortawesome/free-solid-svg-icons/faRocket';
@@ -38,6 +40,7 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
 import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
 import { faEdit } from '@fortawesome/free-solid-svg-icons/faEdit';
 import { faSearchPlus } from '@fortawesome/free-solid-svg-icons/faSearchPlus';
+import { faSearchMinus } from '@fortawesome/free-solid-svg-icons/faSearchMinus';
 import { faArrowUp } from '@fortawesome/free-solid-svg-icons/faArrowUp';
 import { faArrowDown } from '@fortawesome/free-solid-svg-icons/faArrowDown';
 import { faEye } from '@fortawesome/free-solid-svg-icons/faEye';
@@ -61,8 +64,30 @@ import { faBalanceScale } from '@fortawesome/free-solid-svg-icons/faBalanceScale
 import { faFeatherAlt } from '@fortawesome/free-solid-svg-icons/faFeatherAlt';
 import { faPen } from '@fortawesome/free-solid-svg-icons/faPen';
 import { faPrint } from '@fortawesome/free-solid-svg-icons/faPrint';
+import { faFileAlt } from '@fortawesome/free-solid-svg-icons/faFileAlt';
+import { faInfo } from '@fortawesome/free-solid-svg-icons/faInfo';
+import { faPlusCircle } from '@fortawesome/free-solid-svg-icons/faPlusCircle';
+import { faMinusCircle } from '@fortawesome/free-solid-svg-icons/faMinusCircle';
+import { faMapSigns } from '@fortawesome/free-solid-svg-icons/faMapSigns';
+import { faExpandAlt } from '@fortawesome/free-solid-svg-icons/faExpandAlt';
+import { faCompressAlt } from '@fortawesome/free-solid-svg-icons/faCompressAlt';
+import { faListOl } from '@fortawesome/free-solid-svg-icons/faListOl';
+import { faMinus } from '@fortawesome/free-solid-svg-icons/faMinus';
+import { faDraftingCompass } from '@fortawesome/free-solid-svg-icons/faDraftingCompass';
+import { faRulerCombined } from '@fortawesome/free-solid-svg-icons/faRulerCombined';
+import { faRuler } from '@fortawesome/free-solid-svg-icons/faRuler';
+import { faCopy } from '@fortawesome/free-solid-svg-icons/faCopy';
+import { faList } from '@fortawesome/free-solid-svg-icons/faList';
+import { faBars } from '@fortawesome/free-solid-svg-icons/faBars';
+import { faLanguage } from '@fortawesome/free-solid-svg-icons/faLanguage';
 
 export const IconDefs = {
+  faLanguage,
+  faBars,
+  faList,
+  faMapSigns,
+  faChevronCircleDown,
+  faSearch,
   faExclamationCircle,
   faLaughWink,
   faRocket,
@@ -80,11 +105,16 @@ export const IconDefs = {
   faKey,
   faLock,
   faCogs,
+  faRulerCombined,
+  faRuler,
+  faCopy,
   faFileCode,
   faTrash,
   faPlus,
+  faMinus,
   faEdit,
   faSearchPlus,
+  faSearchMinus,
   faArrowUp,
   faArrowDown,
   faEye,
@@ -94,6 +124,7 @@ export const IconDefs = {
   faClone,
   faPaintRoller,
   faPencilAlt,
+  faDraftingCompass,
   faTrashAlt,
   faUndo,
   faRedo,
@@ -108,4 +139,11 @@ export const IconDefs = {
   faFeatherAlt,
   faPen,
   faPrint,
+  faFileAlt,
+  faInfo,
+  faPlusCircle,
+  faMinusCircle,
+  faExpandAlt,
+  faCompressAlt,
+  faListOl,
 };

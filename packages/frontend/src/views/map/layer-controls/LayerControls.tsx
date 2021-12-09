@@ -68,9 +68,9 @@ class LayerControls extends Component<Props, State> {
         <div className={Cls.titleRow}>
           {t('Layers')}
 
-          <button onClick={this.handleAddLayer} className={'btn btn-small btn-link fw-bold'} title={t('Add_layer')} data-cy={'add-layer'}>
-            <FaIcon icon={IconDefs.faPlus} className={'mr-1'} />
+          <button onClick={this.handleAddLayer} className={'btn btn-sm btn-outline-primary fw-bold'} title={t('Add_layer')} data-cy={'add-layer'}>
             {t('Add')}
+            <FaIcon icon={IconDefs.faPlus} className={'ml-2'} />
           </button>
         </div>
 

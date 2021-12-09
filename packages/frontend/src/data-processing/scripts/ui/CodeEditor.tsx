@@ -54,7 +54,6 @@ class CodeEditor extends Component<Props, State> {
         style={{
           fontFamily: '"Fira code", "Fira Mono", monospace',
           outline: 0,
-          minHeight: '400px',
         }}
       />
     );

@@ -33,6 +33,8 @@ describe('Legend', function () {
   it('can create a legend', function () {
     cy.visit(Routes.map().format())
       .then(() => MainMap.fixedView())
+      .get('[data-cy=draw-menu]')
+      .click()
       // First point
       .then(() => ToolSelector.enable(MapTool.Point))
       .then(() => Draw.click(100, 100))
@@ -50,7 +52,9 @@ describe('Legend', function () {
       .then(() => Draw.click(300, 300))
       // Create layout
       .then(() => TopBar.layout())
-      .get('[data-cy=layout-controls] [data-cy=new-layout]')
+      .get('[data-cy=controls-menu]')
+      .click()
+      .get('[data-cy=add-layout]')
       .click()
       // Edit legend
       .get('[data-cy=edit-legend]')
@@ -66,14 +70,17 @@ describe('Legend', function () {
       .click()
       .get('[data-cy=back-to-layout]')
       .click()
+      // Set legend position
+      .get('[data-cy=controls-menu]')
+      .click()
       .get('[data-cy=legend-select]')
       .select('Bottom right')
       .then(() => Store.getReference())
       .then((store) => {
         const legend: AbcLegend = store.getState().project.legend;
         expect(legend.display).equal(LegendDisplay.BottomRightCorner);
-        expect(legend.width).equal(400);
-        expect(legend.height).equal(300);
+        expect(legend.width).equal(250);
+        expect(legend.height).equal(250);
         expect(legend.items.length).deep.equal(1);
         expect(legend.items[0].id).not.undefined;
         expect(legend.items[0].text).equal('Legend item 1');

@@ -28,6 +28,8 @@ describe('Script module', function () {
 
   it('User can execute sample script', () => {
     cy.visit(Routes.dataProcessing().format())
+      .get('[data-cy=modules-menu]')
+      .click()
       .get('[data-cy=scripts]')
       .click()
       .get('[data-cy=execute]')
@@ -48,6 +50,8 @@ map.findByName(layerName).getFeatures().forEach((f) => log(f.get('e2e')))
     cy.visit(Routes.dataProcessing().format())
       .then(() => DataStore.importByName('Countries of the world'))
       .then(() => TopBar.dataProcessing())
+      .get('[data-cy=modules-menu]')
+      .click()
       .get('[data-cy=scripts]')
       .click()
       .get('#code-editor')

@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
-
 import { LayoutFormat, Logger } from '@abc-map/shared';
 import { DimensionsPx } from '../utils/DimensionsPx';
 import { mainStore } from '../store/store';
@@ -43,10 +42,6 @@ export class LayoutHelper {
    */
   public static styleRatio(mapWidth: number, mapHeight: number): number {
     const { width, height } = mainStore.getState().map.mainMapDimensions;
-    if (!width || !height) {
-      throw new Error('Main map dimensions not set');
-    }
-
     const targetDiag = Math.sqrt(mapWidth ** 2 + mapHeight ** 2);
     const mainMapDiag = Math.sqrt(width ** 2 + height ** 2);
 

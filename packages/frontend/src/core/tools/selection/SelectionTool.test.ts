@@ -17,7 +17,7 @@
  */
 
 import { DrawingTestMap } from '../common/interactions/DrawingTestMap.test.helpers';
-import { newTestStore, TestStore } from '../../store/TestStore.test.helper';
+import { newTestStore, TestStore } from '../../store/TestStore';
 import { HistoryService } from '../../history/HistoryService';
 import sinon, { SinonStubbedInstance } from 'sinon';
 import { MainStore } from '../../store/store';
@@ -64,7 +64,7 @@ describe('SelectionTool', () => {
   });
 
   it('setup()', () => {
-    expect(TestHelper.interactionNames(testMap.getMap())).toEqual(['DragPan', 'KeyboardPan', 'MouseWheelZoom', 'Select', 'DragBox', 'Translate']);
+    expect(TestHelper.interactionNames(testMap.getMap())).toEqual(['DragPan', 'KeyboardPan', 'MouseWheelZoom', 'PinchZoom', 'Select', 'DragBox', 'Translate']);
   });
 
   it('drag should move map view', async () => {

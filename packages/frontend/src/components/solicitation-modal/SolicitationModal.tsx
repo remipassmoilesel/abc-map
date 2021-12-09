@@ -17,7 +17,6 @@
  */
 
 import React, { Component, ReactNode } from 'react';
-import { Modal } from 'react-bootstrap';
 import { ModalEventType, ModalStatus } from '../../core/ui/typings';
 import { ServiceProps, withServices } from '../../core/withServices';
 import { Logger } from '@abc-map/shared';
@@ -28,6 +27,7 @@ import { prefixedTranslation } from '../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
 import Cls from './SolicitationModal.module.scss';
 import { Routes } from '../../routes';
+import { FullscreenModal } from '../fullscreen-modal/FullscreenModal';
 
 const logger = Logger.get('SolicitationModal.ts');
 
@@ -54,26 +54,27 @@ class SolicitationModal extends Component<Props, State> {
     }
 
     return (
-      <Modal show={visible} onHide={this.close} size={'lg'} backdrop={'static'}>
-        <Modal.Header closeButton>
-          <Modal.Title>{t('So_how_was_it')}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <h4 className={'text-center m-4'}>{t('Support_your_software')} ✊</h4>
+      <FullscreenModal>
+        <div className={Cls.modalContent}>
+          <button className={`btn btn-outline-secondary ${Cls.closeButton}`} onClick={this.close} data-cy={'close-solicitation-modal'}>
+            {t('Close')}
+          </button>
 
-          <div className={'border rounded m-4 p-3 d-flex flex-column justify-content-center align-items-center mb-2'}>
+          <h1>{t('So_how_was_it')}</h1>
+
+          <div className={'border rounded p-4 d-flex flex-column justify-content-center align-items-center mb-5'}>
+            <h4 className={'text-center mb-5'}>{t('Support_your_software')} ✊</h4>
+
             <FundingLinks />
 
-            <button onClick={this.handleDonate} className={'btn btn-link mt-4'}>
+            <button onClick={this.handleDonate} className={'btn btn-link mt-3'}>
               {t('What_are_donations_used_for')}
             </button>
           </div>
 
           {!voteDone && (
-            <>
-              <div className={'mt-5 mx-4 text-center'}>
-                <p>{t('How_did_it_go')}</p>
-              </div>
+            <div className={'d-flex flex-column'}>
+              <h4 className={'mx-4 mb-3 text-center'}>{t('How_did_it_go')}</h4>
               <div className={'d-flex flex-row justify-content-center mb-4'}>
                 <button onClick={() => this.handleVote(VoteValue.SATISFIED)} className={`btn btn-outline-primary ${Cls.voteBtn}`}>
                   <span className={Cls.face}>🥰</span>
@@ -88,23 +89,17 @@ class SolicitationModal extends Component<Props, State> {
                   {t('Not_good')}
                 </button>
               </div>
-            </>
+            </div>
           )}
 
           {voteDone && (
-            <div className={'d-flex flex-column justify-content-center align-items-center my-5'}>
+            <div className={'d-flex flex-column justify-content-center align-items-center mb-5'}>
               <h5>{t('Thanks_for_your_feedback')} 👍️</h5>
               <h5>{t('Support_project')} ⬆</h5>
             </div>
           )}
-
-          <div className={'d-flex justify-content-end'}>
-            <button className={'btn btn-outline-secondary'} onClick={this.close} data-cy={'close-solicitation-modal'}>
-              {t('Close')}
-            </button>
-          </div>
-        </Modal.Body>
-      </Modal>
+        </div>
+      </FullscreenModal>
     );
   }
 

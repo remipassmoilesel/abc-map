@@ -57,3 +57,7 @@ export function toDegrees(radians: number): number {
 export function toRadians(degrees: number): number {
   return toPrecision((degrees * Math.PI) / 180, 4);
 }
+
+export function isDefined(num: number | undefined): num is number {
+  return typeof num === 'number';
+}

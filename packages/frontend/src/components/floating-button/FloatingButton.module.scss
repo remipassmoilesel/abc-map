@@ -1,0 +1,53 @@
+/**
+ * Copyright © 2021 Rémi Pace.
+ * This file is part of Abc-Map.
+ *
+ * Abc-Map is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of
+ * the License, or (at your option) any later version.
+ *
+ * Abc-Map is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General
+ * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+@import "src/assets/styles/variables";
+
+.icon {
+  opacity: $control-color-opacity;
+}
+
+.button {
+  position: absolute;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  z-index: $zIndex-sideMenu-button;
+  padding: 1rem !important;
+
+  background-color: rgba(white, 0.4);
+  border-radius: 100%;
+  border: solid 1px rgba($control-color, 0.3);
+
+  box-shadow: $box-shadow;
+
+  .icon {
+    color: rgba($control-color, 0.8);
+  }
+
+  &:hover {
+    background-color: $control-color-active;
+
+    .icon {
+      color: white;
+      opacity: $control-color-active-opacity;
+    }
+  }
+}

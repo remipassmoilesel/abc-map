@@ -29,6 +29,8 @@ describe('Search on map', function () {
     cy.visit(Routes.map().format())
       .then(() => MainMap.fixedView())
       .then(() => MainMap.getComponent())
+      .get('[data-cy=search-menu]')
+      .click()
       .get('[data-cy=search-on-map]')
       .clear()
       .type('Cournonterral')
@@ -40,7 +42,7 @@ describe('Search on map', function () {
       .then(() => MainMap.getReference())
       .should((map) => {
         const extent = map.getViewExtent();
-        expect(extent).deep.equals([414110.66693799157, 5397227.23333822, 414132.8386027724, 5397242.594491627]);
+        expect(extent).deep.equals([408049.9846993677, 5394212.793119373, 419918.94018540607, 5400357.287769375]);
       });
   });
 });

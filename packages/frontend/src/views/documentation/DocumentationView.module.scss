@@ -17,21 +17,41 @@
  */
 
 @import "src/assets/styles/variables";
+@import "node_modules/bootstrap/scss/bootstrap";
 
 .documentation {
-  height: 95vh;
-  max-height: 95vh;
-
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+
+  height: $view-height;
+  max-height: $view-height;
+  width: 100vw;
+
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.viewport {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+
+  width: 60vw;
+
+  margin-left: 2vw;
+  padding-bottom: 80vmin;
+
+  @include media-breakpoint-down(xl) {
+    padding-top: 10vmin;
+    width: 100%;
+  }
 }
 
 .toc {
-  overflow-x: hidden;
-  overflow-y: auto;
-  padding-top: 2vw;
-  padding-left: 2vw;
-  width: 18vw;
+  padding: 1.5rem;
 
   p {
     display: flex;
@@ -46,16 +66,6 @@
     font-size: 1.1rem;
     margin-bottom: 1rem;
   }
-}
-
-.viewport {
-  overflow-x: hidden;
-  overflow-y: auto;
-
-  width: 95vw;
-  height: 95vh;
-
-  padding-bottom: 60vh;
 }
 
 .module {
@@ -99,6 +109,14 @@
     font: italic smaller "AbcCantarell";
     padding: 3px;
     text-align: center;
+  }
+
+  p {
+    text-align: justify;
+  }
+
+  li {
+    text-align: justify;
   }
 
   :global(.frequent-question) {

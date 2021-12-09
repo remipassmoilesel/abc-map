@@ -33,6 +33,8 @@ describe('Proportional symbols', function () {
       // Import layer
       .then(() => DataStore.importByName('Countries of the world'))
       .then(() => TopBar.dataProcessing())
+      .get('[data-cy=modules-menu]')
+      .click()
       .get('[data-cy=proportional-symbols]')
       .click()
       // Data source parameters

@@ -5,6 +5,11 @@
 Windows is supported as a target operating system, via browsers. It will never be actively supported
 as a development operating system.
 
+Tested environments:
+
+- Manjaro Linux
+- Ubuntu 20.04
+
 ## Minimal setup
 
 With this setup, you can modify project but all tests will not pass and you can not deploy.
@@ -73,8 +78,7 @@ You can clean local data by using command:
 
 With these tools, all tests should pass, and you can deploy your own instance of Abc-Map.
 
-TODO:
-
-- K6
-- Kubectl
-- Helm
+- K6 (k6-v0.32.0): https://k6.io/docs/getting-started/installation/
+- Kubectl (v1.22.3): https://kubernetes.io/fr/docs/tasks/tools/install-kubectl/
+- Helm (v3.7.1): https://helm.sh/docs/intro/install/
+- addlicense: https://github.com/google/addlicense

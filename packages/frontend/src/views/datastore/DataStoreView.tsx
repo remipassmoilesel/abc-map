@@ -31,6 +31,7 @@ import { withTranslation } from 'react-i18next';
 import { IconDefs } from '../../components/icon/IconDefs';
 import { FaIcon } from '../../components/icon/FaIcon';
 import Cls from './DataStoreView.module.scss';
+import { InlineLoader } from '../../components/inline-loader/InlineLoader';
 
 const logger = Logger.get('DataStoreView.tsx');
 
@@ -44,6 +45,7 @@ interface State {
   activePage: number;
   searchQuery: string;
   downloading: boolean;
+  searching: boolean;
 }
 
 const t = prefixedTranslation('DataStoreView:');
@@ -59,6 +61,7 @@ class DataStoreView extends Component<ServiceProps, State> {
       activePage: 1,
       searchQuery: '',
       downloading: false,
+      searching: false,
     };
   }
 
@@ -69,32 +72,25 @@ class DataStoreView extends Component<ServiceProps, State> {
     const activePage = this.state.activePage;
     const numberOfPages = Math.ceil(total / PageSize);
     const downloading = this.state.downloading;
+    const searching = this.state.searching;
 
     return (
       <div className={Cls.datastore}>
         <div className={Cls.header}>
           {/* Search bar */}
-          <div className={Cls.searchBar}>
-            <input
-              type={'text'}
-              value={query}
-              onChange={this.handleQueryChange}
-              onKeyUp={this.handleKeyUp}
-              placeholder={t('France_regions_world')}
-              className={'form-control mr-2'}
-              data-cy={'data-store-search'}
-            />
-            <button onClick={this.handleSearch} className={'btn btn-primary'}>
-              {t('Search')}
-            </button>
-          </div>
+          <input
+            type={'text'}
+            value={query}
+            onChange={this.handleQueryChange}
+            onKeyUp={this.handleKeyUp}
+            placeholder={t('France_regions_world')}
+            className={'form-control mr-2'}
+            data-cy={'data-store-search'}
+          />
 
-          {/* Navigation bar */}
-          {!query && (
-            <div className={Cls.navigationBar}>
-              <NavigationBar activePage={activePage} numberOfPages={numberOfPages} onClick={this.handlePageChange} />
-            </div>
-          )}
+          <button onClick={this.handleSearch} className={'btn btn-primary'}>
+            {t('Search')}
+          </button>
 
           {/* Clear search button */}
           {query && (
@@ -102,6 +98,8 @@ class DataStoreView extends Component<ServiceProps, State> {
               <FaIcon icon={IconDefs.faTimes} />
             </button>
           )}
+
+          <InlineLoader size={2} active={searching} />
         </div>
 
         {/* Waiting screen */}
@@ -113,12 +111,21 @@ class DataStoreView extends Component<ServiceProps, State> {
 
         {/* Artefact list */}
         {!downloading && (
-          <div className={Cls.artefactList}>
-            {artefacts.map((art, i) => (
-              <ArtefactCard artefact={art} key={i} onImport={this.handleImportArtefact} onDownload={this.handleDownloadArtefact} />
-            ))}
-            {!artefacts.length && query && <div>{t('No_result')}</div>}
-          </div>
+          <>
+            <div className={Cls.artefactList}>
+              {artefacts.map((art, i) => (
+                <ArtefactCard artefact={art} key={i} onImport={this.handleImportArtefact} onDownload={this.handleDownloadArtefact} />
+              ))}
+              {!artefacts.length && query && <div className={'mx-3'}>{t('No_result')}</div>}
+            </div>
+
+            {/* Navigation bar */}
+            {!query && !!artefacts.length && (
+              <div className={Cls.navigationBar}>
+                <NavigationBar activePage={activePage} numberOfPages={numberOfPages} onClick={this.handlePageChange} />
+              </div>
+            )}
+          </>
         )}
       </div>
     );
@@ -157,10 +164,12 @@ class DataStoreView extends Component<ServiceProps, State> {
       return;
     }
 
-    data
-      .searchArtefacts(searchQuery)
+    this.setState({ searching: true });
+
+    solvesInAtLeast(data.searchArtefacts(searchQuery), 400)
       .then((res) => this.setState({ artefacts: res.content }))
-      .catch((err) => logger.error(err));
+      .catch((err) => logger.error(err))
+      .finally(() => this.setState({ searching: false }));
   }
 
   private handlePageChange = (activePage: number) => {

@@ -28,7 +28,8 @@
     "Data_processing": "Data processing",
     "Layout": "Layout",
     "Documentation": "Documentation",
-    "Support_AbcMap": "Support Abc-Map"
+    "Support_AbcMap": "Support Abc-Map",
+    "Menu": "Menu"
   },
   "UserMenu": {
     "Hello_visitor": "Hello visitor !",
@@ -42,13 +43,23 @@
   "MapView": {
     "The_map": "The map !",
     "Visualize_and_create_in_your_browser": "View, create and edit maps in your browser \uD83C\uDF0D ✏️",
+    "Search_menu": "Search",
+    "Project_menu": "Project",
+    "Draw_menu": "Draw and layers",
+    "FullscreenButton": {
+      "Fullscreen": "Fullscreen"
+    },
     "MainMap": {
       "Drop_your_files": "Drop your files to import them",
       "You_must_select_files": "You must select one or more files",
       "You_must_import_project_with_import_control": "You need to import your project using the 'Import Project' control",
       "Formats_not_supported": "These file formats are not supported, no data has been imported",
-      "Layer_does_not_load": "Layer '{{name}}' is not loading correctly. Check its settings.",
-      "Layer_without_name": "*Layer without name*"
+      "Layer_does_not_load": "Layer '{{name}}' is not loading correctly. Check its settings or your internet connection.",
+      "Layer_without_name": "*Layer without name*",
+      "Scale": "Scale",
+      "Attributions": "Attributions",
+      "Zoom_in": "Zoom in",
+      "Zoom_out": "Zoom out"
     },
     "ProjectStatus": {
       "Projection": "Projection",
@@ -66,7 +77,8 @@
     },
     "Search": {
       "Search": "Search",
-      "My_location": "My location"
+      "My_location": "My location",
+      "No_results": "No results"
     },
     "ProjectControls": {
       "Open_project": "Open project",
@@ -116,8 +128,9 @@
       "Cancel": "Cancel"
     },
     "AddLayerModal": {
-      "New_layer": "New layer",
-      "What_kind_of_layer": "What type of layer do you want to add ?",
+      "New_layer": "Add a new layer",
+      "What_kind_of_layer": "What type of layer ?",
+      "Parameters": "Parameters",
       "Select_basemap_you_want": "Select the basemap you want",
       "Preview": "Preview",
       "Origin_of_data_license": "Origin of data and license",
@@ -308,7 +321,8 @@
     "Close": "Close"
   },
   "DataProcessingView": {
-    "Select_a_module_on_left": "Select a module <br /> in the left menu.",
+    "Modules": "Modules",
+    "Select_a_module_on_right": "Select a module <br /> in the right menu.",
     "Data_processing": "Data processing",
     "Visualize_data_on_map": "Visualize data on your maps: proportional symbols, color gradients, and more ⚙️⚙️"
   },
@@ -490,7 +504,9 @@
     "Delete_all": "Delete all",
     "PDF_export": "PDF export",
     "PNG_export": "PNG export",
-    "You_must_create_layouts_first": "You must first create a layout"
+    "You_must_create_layouts_first": "You must first create a layout",
+    "Layouts_menu": "Layouts list",
+    "Controls_menu": "Controls"
   },
   "MapLegendView": {
     "Go_back_to_layout": "Go back to layout",
@@ -510,7 +526,7 @@
     "Entry_name": "Item name: forest area, marked route, ..."
   },
   "FundingView": {
-    "Support_the_development_of": "Support the development of Abc-Map",
+    "Support_AbcMap": "Support Abc-Map",
     "Why": "Why",
     "AbcMap_is_FOSS": "Abc-Map is a free software developed and hosted on a voluntary basis.",
     "No_ads_no_race_for_attention": "You have noticed ? No ads, no race for attention, no collection of personal data",
@@ -608,7 +624,7 @@
     "Blah": "Blah",
     "Not_good": "Not good",
     "Thanks_for_your_feedback": "Thanks for your feedback",
-    "Support_project": "Make a donation to support this project, it's easy: this way",
+    "Support_project": "Make a donation to support this project",
     "Close": "Close"
   },
   "ResetPasswordView": {
@@ -656,6 +672,12 @@
   },
   "LegalMentionsView": {
     "About_this_platform": "About this platform"
+  },
+  "SideMenu": {
+    "Close": "Close"
+  },
+  "DocumentationView": {
+    "Table_of_content": "Table of content"
   },
   "core": {
     "ProjectFactory": {

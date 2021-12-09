@@ -16,11 +16,10 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { ChangeEvent, Component, ReactNode } from 'react';
+import React, { ChangeEvent, useCallback, useMemo, useState } from 'react';
 import { Logger } from '@abc-map/shared';
 import { NominatimResult } from '../../../core/geo/NominatimResult';
-import SearchResult from './SearchResult';
-import { ServiceProps, withServices } from '../../../core/withServices';
+import ResultItem from './result/ResultItem';
 import { Extent } from 'ol/extent';
 import { prefixedTranslation } from '../../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
@@ -28,6 +27,9 @@ import debounce from 'lodash/debounce';
 import Cls from './Search.module.scss';
 import { IconDefs } from '../../../components/icon/IconDefs';
 import { FaIcon } from '../../../components/icon/FaIcon';
+import { useServices } from '../../../core/hooks';
+import { solvesInAtLeast } from '../../../core/utils/solvesInAtLeast';
+import { InlineLoader } from '../../../components/inline-loader/InlineLoader';
 
 const logger = Logger.get('Search.tsx');
 
@@ -39,96 +41,54 @@ export interface State {
 
 const t = prefixedTranslation('MapView:Search.');
 
-class Search extends Component<ServiceProps, State> {
-  constructor(props: ServiceProps) {
-    super(props);
-    this.state = {
-      query: '',
-      results: [],
-      loading: false,
-    };
-  }
+function Search() {
+  const { geo, toasts } = useServices();
+  const [query, setQuery] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [typing, setTyping] = useState(false);
+  const [results, setResults] = useState<NominatimResult[]>([]);
 
-  public render(): ReactNode {
-    const results = this.state.results;
-    const query = this.state.query;
-    const loading = this.state.loading;
+  const search = useMemo(
+    () =>
+      debounce((query) => {
+        setLoading(true);
+        setTyping(false);
 
-    return (
-      <div className={`control-block ${Cls.search}`}>
-        {/* Search input */}
-        <div className={'control-item'}>
-          <input
-            type={'text'}
-            value={query}
-            onChange={this.handleSearch}
-            placeholder={t('Search')}
-            className={`form-control ${Cls.input}`}
-            data-cy={'search-on-map'}
-          />
-        </div>
+        solvesInAtLeast(geo.geocode(query), 600)
+          .then((results) => {
+            results.sort((res) => res.importance);
+            setResults(results);
+          })
+          .catch((err) => logger.error('Error while geocoding: ', err))
+          .finally(() => setLoading(false));
+      }, 500),
+    [geo]
+  );
 
-        {/* Search results */}
-        {query && (
-          <>
-            <div className={Cls.backdrop} onClick={this.handleClose} />
-            <div className={Cls.dropdown}>
-              {loading && <div className={Cls.message}>Chargement ...</div>}
-              {!results.length && !loading && <div className={Cls.message}>Aucun résultat</div>}
-              {results.map((res) => (
-                <SearchResult key={res.osm_id} result={res} onClick={this.handleResultSelected} />
-              ))}
-            </div>
-          </>
-        )}
+  const handleQueryChanged = useCallback(
+    (ev: ChangeEvent<HTMLInputElement>) => {
+      const query = ev.currentTarget.value;
+      setQuery(query);
+      setTyping(true);
+      setResults([]);
 
-        {/* Center map around my position */}
-        <div className={'control-item'}>
-          <button className={'btn btn-link my-2'} onClick={this.handleGeolocate} data-testid={'geolocate'}>
-            <FaIcon icon={IconDefs.faMapMarkerAlt} className={'mr-2'} /> {t('My_location')}
-          </button>
-        </div>
-      </div>
-    );
-  }
+      if (query) {
+        search(query);
+      }
+    },
+    [search]
+  );
 
-  private handleSearch = (ev: ChangeEvent<HTMLInputElement>) => {
-    const query = ev.currentTarget.value;
-    this.setState({ query });
-    this.search(query);
-  };
+  const handleResultSelected = useCallback(
+    (res: NominatimResult) => {
+      const bbox = res.boundingbox.map((n) => parseFloat(n)) as [number, number, number, number];
+      const extent: Extent = [bbox[2], bbox[0], bbox[3], bbox[1]];
+      geo.getMainMap().moveViewToExtent(extent);
+    },
+    [geo]
+  );
 
-  private search = debounce((query) => {
-    const { geo } = this.props.services;
-
-    this.setState({ loading: true });
-    geo
-      .geocode(query)
-      .then((results) => {
-        results.sort((res) => res.importance);
-        this.setState({ results });
-      })
-      .catch((err) => logger.error('Error while geocoding: ', err))
-      .finally(() => this.setState({ loading: false }));
-  }, 500);
-
-  private handleResultSelected = (res: NominatimResult) => {
-    const { geo } = this.props.services;
-
-    const bbox = res.boundingbox.map((n) => parseFloat(n)) as [number, number, number, number];
-    const extent: Extent = [bbox[2], bbox[0], bbox[3], bbox[1]];
-    geo.getMainMap().moveViewToExtent(extent);
-
-    this.setState({ query: '' });
-  };
-
-  private handleClose = () => {
-    this.setState({ query: '' });
-  };
-
-  private handleGeolocate = () => {
-    const { geo, toasts } = this.props.services;
-
+  const handleGeolocation = useCallback(() => {
     geo
       .getUserPosition()
       .then((coords) => geo.getMainMap().moveViewToPosition(coords, 9))
@@ -136,7 +96,34 @@ class Search extends Component<ServiceProps, State> {
         toasts.genericError();
         logger.error('Cannot get current position', err);
       });
-  };
+  }, [geo, toasts]);
+
+  return (
+    <div className={`control-block`}>
+      {/* Center map around my position */}
+      <div className={'control-item'}>
+        <button className={'btn btn-link my-2'} onClick={handleGeolocation} data-testid={'geolocate'}>
+          <FaIcon icon={IconDefs.faMapMarkerAlt} className={'mr-2'} /> {t('My_location')}
+        </button>
+      </div>
+
+      {/* Search input */}
+      <div className={'control-item d-flex align-items-center mb-3'}>
+        <input type={'text'} value={query} onChange={handleQueryChanged} placeholder={t('Search')} className={`form-control mr-3`} data-cy={'search-on-map'} />
+        <InlineLoader size={2} active={loading} />
+      </div>
+
+      {/* Search results */}
+      {query && (
+        <>
+          {!results.length && !typing && !loading && <div className={Cls.message}>{t('No_results')} 🤷</div>}
+          {results.map((res) => (
+            <ResultItem key={res.osm_id} result={res} onClick={handleResultSelected} />
+          ))}
+        </>
+      )}
+    </div>
+  );
 }
 
-export default withTranslation()(withServices(Search));
+export default withTranslation()(Search);

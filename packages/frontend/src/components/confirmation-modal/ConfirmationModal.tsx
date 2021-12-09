@@ -50,7 +50,7 @@ class ConfirmationModal extends Component<ServiceProps, State> {
     }
 
     return (
-      <Modal show={visible} onHide={this.handleCancel}>
+      <Modal show={visible} onHide={this.handleCancel} centered>
         <Modal.Header closeButton>
           <Modal.Title>{title}</Modal.Title>
         </Modal.Header>

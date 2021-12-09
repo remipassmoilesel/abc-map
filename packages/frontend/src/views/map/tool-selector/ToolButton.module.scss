@@ -24,11 +24,11 @@
   align-items: center;
   justify-content: center;
 
-  width: 40px;
-  height: 40px;
+  width: 2.5rem;
+  height: 2.5rem;
 
-  margin: 3px;
-  padding: 6px;
+  margin: 0.3rem;
+  padding: 0.6rem;
 
   border: none;
   background-color: inherit;
@@ -37,7 +37,7 @@
   outline: 0;
 
   svg {
-    width: 20px;
+    width: 2rem;
     fill: $gray-600;
     stroke-linejoin: round;
   }

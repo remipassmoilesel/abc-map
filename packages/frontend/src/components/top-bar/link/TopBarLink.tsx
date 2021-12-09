@@ -36,7 +36,7 @@ function TopBarLink(props: Props) {
   const label = props.label;
   const match = props.activeMatch || new RegExp(`^${to}`, 'i');
   const isActive = !!location.pathname.match(match);
-  const classes = isActive ? `${Cls.topBarLink} ${Cls.active}` : Cls.topBarLink;
+  const classes = `${Cls.topBarLink} ${isActive ? Cls.active : ''}`;
 
   const handleClick = useCallback(() => history.push(to), [history, to]);
 

@@ -18,10 +18,31 @@
 
 @import "src/assets/styles/variables";
 
-.selected {
-  height: 1.1rem;
-  max-height: 1.1rem;
-  opacity: 0.6;
+.langSelector {
+  height: 4vh;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  .toggleIcon {
+    height: 2.2vh;
+    max-height: 2.2vh;
+    opacity: 0.6;
+  }
+
+  :global(.dropdown-toggle) {
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border: none;
+  }
+
+  :global(.dropdown-toggle::after) {
+    content: none;
+  }
 }
 
 .dropdown {
@@ -32,8 +53,10 @@
     height: 1.1rem;
     max-height: 1.1rem;
   }
+
+  box-shadow: $box-shadow;
 }
 
 .active {
-  color: $primary !important;
+  text-decoration: underline;
 }

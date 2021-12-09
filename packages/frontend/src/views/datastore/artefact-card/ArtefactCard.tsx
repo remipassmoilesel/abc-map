@@ -104,7 +104,7 @@ class ArtefactCard extends Component<Props, State> {
 
         {/* License modal */}
 
-        <Modal show={licenseModal} onHide={this.handleModalClose} size={'lg'}>
+        <Modal show={licenseModal} onHide={this.handleModalClose} size={'lg'} centered>
           <Modal.Header closeButton data-cy={'license-header'}>
             {name} : {t('Licence')}
           </Modal.Header>

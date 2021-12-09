@@ -17,6 +17,7 @@
  */
 
 @import "src/assets/styles/variables";
+@import "node_modules/bootstrap/scss/bootstrap";
 
 $list-height: 6rem;
 
@@ -55,7 +56,12 @@ $list-height: 6rem;
   justify-content: center;
 
   button {
-    padding: 0.3rem 0.6rem !important;
+    font-size: 1.1rem;
+    padding: 0.5rem !important;
+
+    @include media-breakpoint-down(xl) {
+      font-size: 1.3rem;
+    }
 
     :global(.abc-icon) {
       color: $gray-500;

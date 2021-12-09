@@ -17,14 +17,25 @@
  */
 
 @import "variables";
+@import "node_modules/bootstrap/scss/bootstrap";
 
 // html, body and #root are reset earlier in index.html
 
 html,
 body {
-  font-size: 14px;
   font-family: "AbcCantarell", sans-serif;
   margin: 0;
+  background-color: white;
+
+  font-size: 1.3vmin;
+
+  @include media-breakpoint-down(xl) {
+    font-size: 1.6vmin;
+  }
+
+  @include media-breakpoint-down(md) {
+    font-size: 2.2vmin;
+  }
 }
 
 a {

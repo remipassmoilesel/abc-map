@@ -29,26 +29,28 @@ const t = prefixedTranslation('FundingLinks:');
 class FundingLinks extends React.Component<{}, {}> {
   public render() {
     return (
-      <div className={'d-flex'}>
-        <div className={'d-flex flex-column align-items-center mr-5'}>
+      <div className={Cls.fundingLinks}>
+        <div className={Cls.fundingMedium}>
           <div className={'mb-3'} dangerouslySetInnerHTML={{ __html: t('By_CB_paypal') }} />
-          <div className={Cls.fundingMedium}>
-            <PaypalButton />
+          <div className={Cls.logo}>
+            <PaypalButton className={Cls.paypalImage} />
           </div>
         </div>
-        <div className={'d-flex flex-column align-items-center mr-5'}>
+
+        <div className={Cls.fundingMedium}>
           <div className={'mb-3'} dangerouslySetInnerHTML={{ __html: t('With_utip') }} />
-          <div className={Cls.fundingMedium}>
+          <div className={Cls.logo}>
             <a href={'https://utip.io/abcmap'} target={'_blank'} rel="noreferrer">
-              <img src={utipLogo} height={'100'} alt={'uTip'} />
+              <img src={utipLogo} alt={'uTip'} className={Cls.utipImage} />
             </a>
           </div>
         </div>
-        <div className={'d-flex flex-column align-items-center'}>
+
+        <div className={Cls.fundingMedium}>
           <div className={'mb-3'} dangerouslySetInnerHTML={{ __html: t('With_tipeee') }} />
-          <div className={Cls.fundingMedium}>
+          <div className={Cls.logo}>
             <a href={'https://fr.tipeee.com/abc-map'} target={'_blank'} rel="noreferrer">
-              <img src={tipeeeLogo} height={'70'} alt={'uTip'} />
+              <img src={tipeeeLogo} alt={'Tipeee'} className={Cls.tipeeeImage} />
             </a>
           </div>
         </div>

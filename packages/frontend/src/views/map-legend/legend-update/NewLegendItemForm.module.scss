@@ -19,13 +19,4 @@
 .form {
   display: flex;
   align-items: center;
-
-  :global(.abc-icon) {
-    color: white;
-  }
-}
-
-.textField {
-  width: 600px;
-  max-width: 600px;
 }

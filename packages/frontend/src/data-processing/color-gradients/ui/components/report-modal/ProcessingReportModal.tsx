@@ -40,7 +40,7 @@ class ProcessingReportModal extends Component<Props, {}> {
     const status = this.getStatusFromResult(result);
 
     return (
-      <Modal show={true} onHide={handleClose}>
+      <Modal show={true} onHide={handleClose} centered>
         <Modal.Header closeButton>
           <Modal.Title>{t('End_of_processing')}</Modal.Title>
         </Modal.Header>

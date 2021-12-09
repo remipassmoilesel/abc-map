@@ -98,9 +98,9 @@ describe('EditPropertiesTool', () => {
   it('dispose()', () => {
     tool.dispose();
 
-    expect(map.removeInteraction.callCount).toEqual(4);
+    expect(map.removeInteraction.callCount).toEqual(5);
     const names = map.removeInteraction.args.map((args) => args[0].constructor.name);
-    expect(names).toEqual(['DragPan', 'KeyboardPan', 'MouseWheelZoom', 'Select']);
+    expect(names).toEqual(['DragPan', 'KeyboardPan', 'MouseWheelZoom', 'PinchZoom', 'Select']);
   });
 
   function selectEvent(feats: Feature<Geometry>[]): SelectEvent {

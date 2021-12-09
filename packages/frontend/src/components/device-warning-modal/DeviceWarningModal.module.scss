@@ -16,7 +16,8 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-@import "src/assets/styles/mixins";
+@import "src/assets/styles/variables";
+@import "node_modules/bootstrap/scss/bootstrap";
 
 .modal {
   position: fixed;
@@ -24,6 +25,8 @@
   right: 0;
   bottom: 0;
   left: 0;
+
+  z-index: $zIndex-deviceWarning-modal;
 
   display: flex;
   flex-direction: column;
@@ -33,9 +36,19 @@
   padding: 3vmin;
   background: white;
 
-  font-size: 3vmin;
-  * {
-    font-size: 3vmin;
+  .title {
+    font-size: 3rem;
+    margin-bottom: 3rem;
+  }
+
+  font-size: 1.5rem !important;
+  div,
+  button {
+    font-size: 1.5rem !important;
+  }
+
+  :global(.btn) {
+    padding: 1.5vmin 2vmin;
   }
 
   img {
@@ -43,23 +56,13 @@
     margin-bottom: 7vmin;
   }
 
-  .title {
-    font-size: 5vmin;
-    margin-bottom: 7vmin;
-  }
-
   .explanation1 {
     text-align: center;
-    margin: 0 3vmin 7vmin 3vmin;
+    margin: 0 3vmin 4vmin 3vmin;
   }
 
   .explanation2 {
     text-align: center;
     margin: 0 3vmin 3vmin 3vmin;
-  }
-
-  :global(.btn) {
-    padding: 1.5vmin 3vmin;
-    font-size: 3vmin !important;
   }
 }

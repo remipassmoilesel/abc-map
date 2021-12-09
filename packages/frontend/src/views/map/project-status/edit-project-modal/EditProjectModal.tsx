@@ -88,7 +88,7 @@ class EditProjectModal extends Component<Props, State> {
     }
 
     return (
-      <Modal show={true} onHide={onClose}>
+      <Modal show={true} onHide={onClose} centered>
         <Modal.Header closeButton>
           <Modal.Title>{t('Edit_project')} ✏️</Modal.Title>
         </Modal.Header>

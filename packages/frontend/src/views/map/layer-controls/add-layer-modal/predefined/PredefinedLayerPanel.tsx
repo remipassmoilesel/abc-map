@@ -26,6 +26,7 @@ import { HistoryKey } from '../../../../../core/history/HistoryKey';
 import { AddLayersChangeset } from '../../../../../core/history/changesets/layers/AddLayersChangeset';
 import { prefixedTranslation } from '../../../../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
+import Cls from './PredefinedLayerPanel.module.scss';
 
 const logger = Logger.get('PredefinedLayerPanel.tsx');
 
@@ -57,13 +58,15 @@ class PredefinedLayerPanel extends Component<Props, {}> {
 
         <div className={'mb-2'}>{t('Preview')} : </div>
         <div className={'d-flex justify-content-center mb-4'}>
-          <img src={labelledModel?.preview} width={440} alt={labelledModel?.label} className={'border'} />
+          <img src={labelledModel?.preview} width={440} alt={labelledModel?.label} className={Cls.preview} />
         </div>
-        <div>
+        <div className={'text-center'}>
           {t('Origin_of_data_license')}:&nbsp;
           <span dangerouslySetInnerHTML={{ __html: labelledModel?.by || '' }} />
           <span className={'ml-2'} dangerouslySetInnerHTML={{ __html: labelledModel?.license || '' }} />
         </div>
+
+        <div className={'flex-grow-1'} />
 
         {/* Control buttons */}
         <ControlButtons onCancel={onCancel} onConfirm={this.handleConfirm} />

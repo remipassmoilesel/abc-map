@@ -16,8 +16,10 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
+@import "src/assets/styles/variables";
+
 .layoutList {
-  height: 95vh;
+  height: $view-height;
   overflow-x: hidden;
   overflow-y: auto;
 }

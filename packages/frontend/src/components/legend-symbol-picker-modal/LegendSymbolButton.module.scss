@@ -17,10 +17,10 @@
  */
 
 .button {
-  padding: 5px;
-  margin: 10px;
-
   display: flex !important;
   justify-content: center;
   align-items: center;
+
+  padding: 0.5rem;
+  margin: 1rem;
 }

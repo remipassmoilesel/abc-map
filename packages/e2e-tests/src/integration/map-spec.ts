@@ -18,7 +18,6 @@
 
 import { TestHelper } from '../helpers/TestHelper';
 import { LayerControls } from '../helpers/LayerControls';
-import { History } from '../helpers/History';
 import { Routes } from '../helpers/Routes';
 
 describe('Map', function () {
@@ -28,6 +27,8 @@ describe('Map', function () {
 
   it('default map should have two layers with one active', function () {
     cy.visit(Routes.map().format())
+      .get('[data-cy=draw-menu]')
+      .click()
       .then(() => LayerControls.getNames())
       .should((names) => {
         expect(names).deep.equals(['OpenStreetMap', 'Geometries']);
@@ -41,6 +42,8 @@ describe('Map', function () {
 
   it('user can add layer', function () {
     cy.visit(Routes.map().format())
+      .get('[data-cy=draw-menu]')
+      .click()
       .then(() => LayerControls.addOsmLayer())
       .then(() => LayerControls.getNames())
       .should((names) => {
@@ -55,13 +58,16 @@ describe('Map', function () {
 
   it('user can add layer then undo and redo', function () {
     cy.visit(Routes.map().format())
+      .get('[data-cy=draw-menu]')
+      .click()
       .then(() => LayerControls.addOsmLayer())
       .then(() => LayerControls.getNames())
       .should((names) => {
         expect(names).deep.equals(['OpenStreetMap', 'Geometries', 'OpenStreetMap']);
       })
       // Undo
-      .then(() => History.undo())
+      .get('[data-cy=undo]')
+      .click()
       .then(() => LayerControls.getNames())
       .should((names) => {
         expect(names).deep.equals(['OpenStreetMap', 'Geometries']);
@@ -72,7 +78,8 @@ describe('Map', function () {
         expect(elem.text()).equals('Geometries');
       })
       // Redo
-      .then(() => History.redo())
+      .get('[data-cy=redo]')
+      .click()
       .then(() => LayerControls.getNames())
       .should((names) => {
         expect(names).deep.equals(['OpenStreetMap', 'Geometries', 'OpenStreetMap']);
@@ -86,6 +93,8 @@ describe('Map', function () {
 
   it('user can rename layer', function () {
     cy.visit(Routes.map().format())
+      .get('[data-cy=draw-menu]')
+      .click()
       .get('[data-cy=edit-layer]')
       .click()
       .get('[data-cy=name-input]')
@@ -101,6 +110,8 @@ describe('Map', function () {
 
   it('user can delete layer', function () {
     cy.visit(Routes.map().format())
+      .get('[data-cy=draw-menu]')
+      .click()
       .get('[data-cy=delete-layer]')
       .click()
       .then(() => LayerControls.getNames())

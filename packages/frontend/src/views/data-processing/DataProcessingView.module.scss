@@ -16,37 +16,36 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-.dataProcessingView {
-  height: 95vh;
-  display: flex;
-  flex-direction: row;
-  overflow: hidden;
-}
+@import "src/assets/styles/variables";
 
-.leftMenu {
+.dataProcessingView {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
 
-  height: 100%;
-  width: 270px;
-  min-width: 270px;
-  max-width: 270px;
+  height: $view-height;
+}
 
+.viewPort {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  width: 100vw;
+
+  padding: 1rem;
+  overflow-y: auto;
+}
+
+.rightMenu {
+  display: flex;
+  flex-direction: column;
   padding: 1rem;
 
   :global(.btn) {
     text-align: left;
   }
-}
-
-.viewPort {
-  flex-grow: 1;
-
-  display: flex;
-  flex-direction: column;
-
-  padding: 1rem;
-  overflow-y: scroll;
 }
 
 .welcome {

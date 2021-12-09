@@ -18,13 +18,37 @@
 
 @import "src/assets/styles/variables";
 
-.voteBtn {
-  width: 6rem;
-  height: 6rem;
+.modalContent {
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+
+  height: 100%;
+  width: 100%;
+
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  h1 {
+    text-align: center;
+  }
+}
+
+.closeButton {
+  position: fixed;
+  top: 2vmin;
+  right: 2vmin;
+}
+
+.voteBtn {
+  display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 
+  width: 6rem;
+  height: 6rem;
   margin: 0.5rem;
 
   border: none !important;

@@ -1,5 +1,13 @@
 # Frequently Asked Questions
 
+- [How to start Abc-Map locally ?](#how-to-start-abc-map-locally-)
+- [How to fix my broken repository ?](#how-to-fix-my-broken-repository-)
+- [Desktop or mobile ?](#desktop-or-mobile-)
+- [React: functional component or class component ?](#react-functional-component-or-class-component-)
+- [How to add a dependency ?](#how-to-add-a-dependency-)
+- [How to search outdated dependencies ?](#how-to-search-outdated-dependencies-)
+- [How to generate a markdown TOC ?](#how-to-generate-a-markdown-toc-)
+
 ## How to start Abc-Map locally ?
 
 Check [setup-workstation.md](./1_setup-workstation.md) first, then:
@@ -19,6 +27,10 @@ Check [setup-workstation.md](./1_setup-workstation.md) first, then:
 In very rare case you may need before all commands above:
 
     $ rm -rf packages/abc-cli/build
+
+## Desktop or mobile ?
+
+Abc-Map is a desktop application, but it must be usable on a mobile device.
 
 ## React: functional component or class component ?
 

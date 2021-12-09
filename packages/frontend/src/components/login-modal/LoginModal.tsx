@@ -63,7 +63,7 @@ class LoginModal extends Component<Props, State> {
     }
 
     return (
-      <Modal show={visible} onHide={this.handleCancel}>
+      <Modal show={visible} onHide={this.handleCancel} centered>
         <Modal.Header closeButton>
           <Modal.Title>{t('Login')} 🔓</Modal.Title>
         </Modal.Header>

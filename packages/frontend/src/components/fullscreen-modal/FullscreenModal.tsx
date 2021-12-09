@@ -16,9 +16,13 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-.result {
-  padding: 0.5em;
-  margin-bottom: 0.2em;
-  border: solid 1px lightgrey;
-  cursor: pointer;
+import React, { ReactNode } from 'react';
+import Classes from './FullscreenModal.module.scss';
+
+interface Props {
+  children: ReactNode;
+}
+
+export function FullscreenModal(props: Props) {
+  return <div className={Classes.modal}>{props.children}</div>;
 }

@@ -54,8 +54,8 @@ class ChangePasswordForm extends Component<Props, State> {
     const confirmation = this.state.confirmation;
 
     return (
-      <div className={'card card-body'}>
-        <h2>{t('Change_my_password')}</h2>
+      <div className={'card card-body h-100'}>
+        <h2 className={'mb-4'}>{t('Change_my_password')}</h2>
         <input
           type={'password'}
           value={previousPassword}

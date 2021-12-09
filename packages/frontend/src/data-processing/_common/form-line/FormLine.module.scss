@@ -16,6 +16,8 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
+@import "node_modules/bootstrap/scss/bootstrap";
+
 .formLine {
   display: flex;
   flex-direction: row;
@@ -24,7 +26,9 @@
 
   margin: 1rem 0;
 
-  max-width: 40vw;
+  @include media-breakpoint-up(xl) {
+    max-width: 35vw;
+  }
 
   :global(.form-control) {
     max-width: 50%;

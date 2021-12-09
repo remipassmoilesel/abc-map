@@ -18,19 +18,14 @@
 
 import Map from 'ol/Map';
 import { MapWrapper } from './MapWrapper';
-import { Attribution, ScaleLine, Zoom } from 'ol/control';
 import { Views } from '../Views';
 import { DragPan, KeyboardPan, MouseWheelZoom } from 'ol/interaction';
 
 export class MapFactory {
   public static createDefault(): MapWrapper {
-    const scale = new ScaleLine({ units: 'metric' });
-    const attributions = new Attribution({ collapsible: true });
-    const zoom = new Zoom();
-
     const internal = new Map({
       layers: [],
-      controls: [zoom, attributions, scale],
+      controls: [],
       view: Views.defaultOlView(),
     });
 

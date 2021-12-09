@@ -16,91 +16,88 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { Component, ReactNode } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { Logger } from '@abc-map/shared';
 import { References } from '@abc-map/user-documentation';
 import debounce from 'lodash/debounce';
-import { ServiceProps, withServices } from '../../core/withServices';
-import { MainState } from '../../core/store/reducer';
-import { connect, ConnectedProps } from 'react-redux';
 import { UiActions } from '../../core/store/ui/actions';
 import { pageSetup } from '../../core/utils/page-setup';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
-import { getDocumentationLang } from '../../i18n/i18n';
+import { getDocumentationLang, prefixedTranslation } from '../../i18n/i18n';
 import Cls from './DocumentationView.module.scss';
+import { IconDefs } from '../../components/icon/IconDefs';
+import SideMenu from '../../components/side-menu/SideMenu';
+import { useAppDispatch, useAppSelector } from '../../core/store/hooks';
+import { withTranslation } from 'react-i18next';
 
 const logger = Logger.get('DocumentationView.tsx');
 
-const mapStateToProps = (state: MainState) => ({
-  position: state.ui.documentation.scrollPosition,
-});
+const t = prefixedTranslation('DocumentationView:');
 
-const mapDispatchToProps = {
-  setPosition: UiActions.setDocumentationScrollPosition,
-};
+function DocumentationView() {
+  const position = useAppSelector((st) => st.ui.documentation.scrollPosition);
+  const dispatch = useAppDispatch();
+  const scrollRef = useRef<HTMLDivElement | null>(null);
+  const reference = References.find((ref) => ref.lang === getDocumentationLang());
 
-const connector = connect(mapStateToProps, mapDispatchToProps);
+  // When user scroll documentation, we save scrollTop value in order to restore it
+  const handleScroll = useMemo(
+    () =>
+      debounce(() => {
+        const scroll = scrollRef.current;
+        if (!scroll) {
+          logger.error('Ref not ready');
+          return;
+        }
 
-type Props = ConnectedProps<typeof connector> & ServiceProps & RouteComponentProps;
+        dispatch(UiActions.setDocumentationScrollPosition(scroll.scrollTop));
+      }, 100),
+    [dispatch]
+  );
 
-class DocumentationView extends Component<Props, {}> {
-  private viewPortRef = React.createRef<HTMLDivElement>();
-
-  constructor(props: Props) {
-    super(props);
-    this.state = {};
-  }
-
-  public render(): ReactNode {
-    const reference = References.find((ref) => ref.lang === getDocumentationLang());
-
-    return (
-      <div className={Cls.documentation}>
-        {!reference && <h3 className={'my-5'}>Sorry, documentation is not available in your language</h3>}
-        {reference && (
-          <>
-            <div className={Cls.toc} dangerouslySetInnerHTML={{ __html: reference?.toc }} />
-            <div className={Cls.viewport} ref={this.viewPortRef}>
-              {reference?.modules.map((mod, i) => (
-                <div key={i} className={Cls.module} dangerouslySetInnerHTML={{ __html: mod }} />
-              ))}
-            </div>
-          </>
-        )}
-      </div>
-    );
-  }
-
-  public componentDidMount() {
+  useEffect(() => {
     pageSetup('Documentation', `La documentation explique le fonctionnement d'Abc-Map 📖`);
 
-    const current = this.viewPortRef.current;
-    if (!current) {
+    const scroll = scrollRef.current;
+    if (!scroll) {
       logger.error('Ref not ready');
       return;
     }
-    current.addEventListener('scroll', this.handleScroll);
-    current.scrollTop = this.props.position;
-  }
+    scroll.addEventListener('scroll', handleScroll);
+    scroll.scrollTop = position;
 
-  public componentWillUnmount() {
-    const current = this.viewPortRef.current;
-    if (!current) {
-      logger.error('Ref not ready');
-      return;
-    }
-    current.removeEventListener('scroll', this.handleScroll);
-  }
+    return () => {
+      scroll.removeEventListener('scroll', handleScroll);
+    };
+  }, [handleScroll, position]);
 
-  private handleScroll = debounce(() => {
-    const current = this.viewPortRef.current;
-    if (!current) {
-      logger.error('Ref not ready');
-      return;
-    }
+  return (
+    <div className={Cls.documentation} ref={scrollRef}>
+      {reference && (
+        <>
+          {/* Table of content button */}
+          <SideMenu
+            buttonIcon={IconDefs.faListOl}
+            buttonStyle={{ top: '12vmin', right: '6vmin' }}
+            title={t('Table_of_content')}
+            menuPlacement={'right'}
+            closeOnClick={true}
+          >
+            <div className={Cls.toc} dangerouslySetInnerHTML={{ __html: reference?.toc }} />
+          </SideMenu>
 
-    this.props.setPosition(current.scrollTop);
-  }, 100);
+          {/* Documentation viewport */}
+          <div className={Cls.viewport}>
+            {reference?.modules.map((mod, i) => (
+              <div key={i} className={Cls.module} dangerouslySetInnerHTML={{ __html: mod }} />
+            ))}
+          </div>
+        </>
+      )}
+
+      {/* No documentation found. This should normally never happen as there is a fallback language */}
+      {!reference && <h3 className={'my-5'}>Sorry, documentation is not available in your language</h3>}
+    </div>
+  );
 }
 
-export default connector(withRouter(withServices(DocumentationView)));
+export default withTranslation()(DocumentationView);

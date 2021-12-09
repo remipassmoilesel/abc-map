@@ -16,17 +16,29 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import Chainable = Cypress.Chainable;
+@import "src/assets/styles/variables";
+@import "node_modules/bootstrap/scss/bootstrap";
 
-export class LayoutList {
-  public static getNames(): Chainable<string[]> {
-    return cy.get('[data-cy=layout-list]').then(
-      (elem) =>
-        elem
-          .find('[data-cy=list-item]')
-          .toArray()
-          .map((elem) => elem.textContent)
-          .filter((s) => !!s) as string[]
-    );
+.topBarLink {
+  border: none;
+  background-color: inherit;
+
+  padding: 0.5rem 0;
+  margin: 0 1rem;
+
+  min-width: 10rem;
+
+  text-align: center;
+  white-space: nowrap;
+
+  @include media-breakpoint-down(xl) {
+    font-size: 1.2rem;
+    text-align: left;
+    min-width: unset;
+    margin-bottom: 1rem;
   }
+}
+
+.active {
+  border-bottom: solid 3px $primary;
 }

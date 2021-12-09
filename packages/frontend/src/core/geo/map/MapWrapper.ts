@@ -33,7 +33,7 @@ import { fromLonLat, transformExtent } from 'ol/proj';
 import { Coordinate } from 'ol/coordinate';
 import TileSource from 'ol/source/Tile';
 import { Extent } from 'ol/extent';
-import { DragPan, KeyboardPan, MouseWheelZoom } from 'ol/interaction';
+import { DragPan, KeyboardPan, MouseWheelZoom, PinchZoom } from 'ol/interaction';
 
 export const logger = Logger.get('MapWrapper.ts');
 
@@ -243,7 +243,7 @@ export class MapWrapper {
 
   public setDefaultInteractions() {
     this.cleanInteractions();
-    [new DragPan(), new KeyboardPan(), new MouseWheelZoom()].forEach((i) => this.internal.addInteraction(i));
+    [new DragPan(), new KeyboardPan(), new MouseWheelZoom(), new PinchZoom({})].forEach((i) => this.internal.addInteraction(i));
   }
 
   public cleanInteractions() {

@@ -43,6 +43,15 @@ export interface Canceled {
 export declare type FileInputResult = FilesSelected | Canceled;
 
 export class FileIO {
+  /**
+   * Open a file prompt.
+   *
+   * WARNING: As there are no reliable way to get notified on "cancel", promises here may never end.
+   * WARNING: Also several input=file nodes can be present at the same time in document.
+   *
+   * @param type
+   * @param accept
+   */
   public static openInput(type = InputType.Single, accept?: string): Promise<FileInputResult> {
     const fileNode = document.createElement('input');
     fileNode.setAttribute('type', 'file');
@@ -59,13 +68,9 @@ export class FileIO {
         resolve({ type: InputResultType.Confirmed, files: files || [] });
       };
 
-      fileNode.oncancel = () => {
-        fileNode.remove();
-        resolve({ type: InputResultType.Canceled });
-      };
-
       fileNode.onerror = (err) => {
         logger.error('Error during file selection: ', err);
+        fileNode.remove();
         reject(new Error('Error during file selection'));
       };
 

@@ -18,38 +18,41 @@
 
 import React, { Component, DragEvent, ReactNode } from 'react';
 import { AbcFile, Logger, ProjectConstants } from '@abc-map/shared';
-import { MapWrapper } from '../../../core/geo/map/MapWrapper';
 import throttle from 'lodash/throttle';
 import { ServiceProps, withServices } from '../../../core/withServices';
 import { ImportStatus } from '../../../core/data/DataService';
 import { OperationStatus } from '../../../core/ui/typings';
 import { TileLoadErrorEvent } from '../../../core/geo/map/MapWrapper.events';
 import { prefixedTranslation } from '../../../i18n/i18n';
-import Cls from './MainMap.module.scss';
 import { withTranslation } from 'react-i18next';
 import { FaIcon } from '../../../components/icon/FaIcon';
 import { IconDefs } from '../../../components/icon/IconDefs';
+import { Control, ScaleLine } from 'ol/control';
+import { Attributions } from './attributions/Attributions';
+import { Zoom } from './zoom/Zoom';
+import { WithTooltip } from '../../../components/with-tooltip/WithTooltip';
+import { MapWrapper } from '../../../core/geo/map/MapWrapper';
+import Cls from './MainMap.module.scss';
+import BaseEvent from 'ol/events/Event';
 
 export const logger = Logger.get('MainMap.ts');
-
-interface LocalProps {
-  map: MapWrapper;
-}
 
 interface State {
   dragOverlay: boolean;
   tileError: string;
 }
 
-declare type Props = LocalProps & ServiceProps;
-
 const t = prefixedTranslation('MapView:MainMap.');
 
-class MainMap extends Component<Props, State> {
+class MainMap extends Component<ServiceProps, State> {
+  private map: MapWrapper;
   private mapRef = React.createRef<HTMLDivElement>();
+  private scaleRef = React.createRef<HTMLDivElement>();
+  private controls: Control[] = [];
 
-  constructor(props: Props) {
+  constructor(props: ServiceProps) {
     super(props);
+    this.map = props.services.geo.getMainMap();
     this.state = { dragOverlay: false, tileError: '' };
   }
 
@@ -58,9 +61,21 @@ class MainMap extends Component<Props, State> {
     const dragOverlay = this.state.dragOverlay;
 
     return (
-      <div className={Cls.mapContainer}>
+      <div className={`${Cls.mapContainer} abc-main-map`}>
         {/* Main map support */}
         <div ref={this.mapRef} data-cy={'main-map'} className={Cls.map} onDragOver={this.handleDragOver} />
+
+        <div className={Cls.bottomBar}>
+          <div className={Cls.scale}>
+            <WithTooltip title={t('Scale')} placement={'top'}>
+              <div ref={this.scaleRef} />
+            </WithTooltip>
+          </div>
+          <div className={Cls.controls}>
+            <Attributions />
+            <Zoom />
+          </div>
+        </div>
 
         {/* Warning if tiles does not load */}
         {tileError && (
@@ -104,25 +119,47 @@ class MainMap extends Component<Props, State> {
   }
 
   private initializeMap(): void {
-    const { map } = this.props;
+    const { map } = this;
 
     logger.info('Initializing map');
-    const div = this.mapRef.current;
-    if (!div) {
-      logger.error('Cannot mount map, div reference not ready');
+    const mapSupport = this.mapRef.current;
+    const scaleSupport = this.scaleRef.current;
+    if (!mapSupport || !scaleSupport) {
+      logger.error('Cannot mount map, div reference not ready', {
+        mapSupport,
+        scaleSupport,
+      });
       return;
     }
 
-    map.setTarget(div);
+    map.setTarget(mapSupport);
     map.addTileErrorListener(this.handleTileError);
+
+    const scale = new ScaleLine({ units: 'metric', target: scaleSupport });
+
+    this.controls = [scale];
+    this.controls.forEach((c) => map.unwrap().addControl(c));
+
+    map.unwrap().on('error', this.handleMapError);
   }
 
   private cleanupMap() {
-    const { map } = this.props;
+    const { map } = this;
 
     map.setTarget(undefined);
     map.removeTileErrorListener(this.handleTileError);
+
+    this.controls.forEach((c) => map.unwrap().removeControl(c));
+
+    map.unwrap().un('error', this.handleMapError);
   }
+
+  private handleMapError = (ev: BaseEvent) => {
+    const { toasts } = this.props.services;
+
+    logger.error('Map error: ', ev);
+    toasts.genericError();
+  };
 
   private handleNewProject = () => {
     this.setState({ tileError: '' });

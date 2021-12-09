@@ -30,8 +30,7 @@ describe('User account', function () {
 
     TestHelper.init()
       .then(() => Registration.newUser(email))
-      .then(() => Registration.enableAccount(email))
-      .then(() => Authentication.login(email, password));
+      .then(() => Registration.enableAccount(email));
   });
 
   it('user can change password then login', function () {

@@ -16,22 +16,18 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { Component, ReactNode } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import MainMap from './main-map/MainMap';
 import LayerControls from './layer-controls/LayerControls';
 import ProjectStatus from './project-status/ProjectStatus';
-import { connect, ConnectedProps } from 'react-redux';
 import { Logger } from '@abc-map/shared';
 import ProjectControls from './project-controls/ProjectControls';
 import ToolSelector from './tool-selector/ToolSelector';
 import HistoryControls from '../../components/history-controls/HistoryControls';
 import { HistoryKey } from '../../core/history/HistoryKey';
-import { MapWrapper } from '../../core/geo/map/MapWrapper';
-import { MainState } from '../../core/store/reducer';
 import { LayerWrapper } from '../../core/geo/layers/LayerWrapper';
 import Search from './search/Search';
 import ImportData from './import-data/ImportData';
-import { ServiceProps, withServices } from '../../core/withServices';
 import CursorPosition from './cursor-position/CursorPosition';
 import { MapKeyboardListener } from './keyboard-listener/MapKeyboardListener';
 import { pageSetup } from '../../core/utils/page-setup';
@@ -39,116 +35,34 @@ import { MapActions } from '../../core/store/map/actions';
 import { MapSizeChangedEvent } from '../../core/geo/map/MapWrapper.events';
 import { withTranslation } from 'react-i18next';
 import { prefixedTranslation } from '../../i18n/i18n';
+import { IconDefs } from '../../components/icon/IconDefs';
+import SideMenu from '../../components/side-menu/SideMenu';
+import { useAppDispatch, useAppSelector } from '../../core/store/hooks';
+import { useServices } from '../../core/hooks';
+import { FullscreenButton } from './fullscreen-button/FullscreenButton';
 import Cls from './MapView.module.scss';
-import BaseEvent from 'ol/events/Event';
 
 const logger = Logger.get('MapView.tsx');
 
-interface State {
-  layers: LayerWrapper[];
-  map: MapWrapper;
-  keyboardListener?: MapKeyboardListener;
-}
-
-const mapStateToProps = (state: MainState) => ({
-  mapDimensions: state.map.mainMapDimensions,
-});
-
-const mapDispatchToProps = {
-  updateDimensions: MapActions.setMainMapDimensions,
-};
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-type Props = ConnectedProps<typeof connector> & ServiceProps;
-
 const t = prefixedTranslation('MapView:');
 
-class MapView extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      layers: [],
-      map: this.props.services.geo.getMainMap(),
-    };
-  }
+function MapView() {
+  const { geo } = useServices();
+  const keyboardListener = useRef<MapKeyboardListener | undefined>();
+  const mapDimensions = useAppSelector((st) => st.map.mainMapDimensions);
+  const dispatch = useAppDispatch();
 
-  public render(): ReactNode {
-    const activeLayer = this.state.layers.find((lay) => lay.isActive());
-    const layers = this.state.layers;
+  const [layers, setLayers] = useState<LayerWrapper[]>([]);
+  const [activeLayer, setActiveLayer] = useState<LayerWrapper | undefined>();
 
-    return (
-      <div className={Cls.mapView}>
-        {/*Left menu*/}
-        <div className={Cls.leftPanel}>
-          <Search />
-          <CursorPosition />
-          <ImportData />
-
-          <div className={'flex-grow-1'} />
-
-          <ProjectStatus />
-          <ProjectControls />
-
-          <div className={Cls.spacer} />
-        </div>
-
-        {/*Main map*/}
-        <MainMap map={this.state.map} />
-
-        {/*Right menu*/}
-        <div className={Cls.rightPanel}>
-          <HistoryControls historyKey={HistoryKey.Map} />
-          <LayerControls layers={layers} />
-          <ToolSelector activeLayer={activeLayer} />
-        </div>
-      </div>
-    );
-  }
-
-  public componentDidMount() {
-    pageSetup(t('The_map'), t('Visualize_and_create_in_your_browser'));
-
-    const map = this.state.map;
-
-    map.addSizeListener(this.handleMapSizeChange);
-    map.addLayerChangeListener(this.handleLayerChange);
-    this.handleLayerChange(); // We trigger manually the first event for setup
-
-    map.unwrap().on('rendercomplete', this.handleRenderComplete);
-    map.unwrap().on('error', this.handleMapError);
-
-    const keyboardListener = MapKeyboardListener.create();
-    keyboardListener.initialize();
-    this.setState({ keyboardListener });
-  }
-
-  public componentWillUnmount() {
-    const map = this.state.map;
-
-    map.removeSizeListener(this.handleMapSizeChange);
-    map.removeLayerChangeListener(this.handleLayerChange);
-    map.unwrap().un('rendercomplete', this.handleRenderComplete);
-
-    this.state.keyboardListener?.destroy();
-  }
-
-  private handleLayerChange = (): void => {
+  // When layer list change we set a state with list of layers and active layer
+  const handleLayerChange = useCallback(() => {
     logger.debug('Layers changed');
-    const layers = this.state.map.getLayers();
-    this.setState({ layers });
-  };
+    const map = geo.getMainMap();
 
-  private handleRenderComplete = () => {
-    logger.debug('Map rendering complete');
-  };
-
-  private handleMapError = (ev: BaseEvent) => {
-    const { toasts } = this.props.services;
-
-    logger.error('Map error: ', ev);
-    toasts.genericError();
-  };
+    setLayers(map.getLayers());
+    setActiveLayer(map.getActiveLayer());
+  }, [geo]);
 
   /**
    * Here we set main map size in store for later exports.
@@ -157,15 +71,91 @@ class MapView extends Component<Props, State> {
    *
    * @param ev
    */
-  private handleMapSizeChange = (ev: MapSizeChangedEvent) => {
-    const width = ev.dimensions.width;
-    const height = ev.dimensions.height;
-    const previousWidth = this.props.mapDimensions?.width || 0;
-    const previousHeight = this.props.mapDimensions?.height || 0;
-    if (width > previousWidth || height > previousHeight) {
-      this.props.updateDimensions(width, height);
-    }
-  };
+  const handleMapSizeChange = useCallback(
+    (ev: MapSizeChangedEvent) => {
+      const width = ev.dimensions.width;
+      const height = ev.dimensions.height;
+      const previousWidth = mapDimensions?.width || 0;
+      const previousHeight = mapDimensions?.height || 0;
+      if (width > previousWidth || height > previousHeight) {
+        dispatch(MapActions.setMainMapDimensions(width, height));
+      }
+    },
+    [dispatch, mapDimensions?.height, mapDimensions?.width]
+  );
+
+  useEffect(() => {
+    pageSetup(t('The_map'), t('Visualize_and_create_in_your_browser'));
+
+    const map = geo.getMainMap();
+    map.addSizeListener(handleMapSizeChange);
+    map.addLayerChangeListener(handleLayerChange);
+    handleLayerChange(); // We trigger manually the first event for setup
+
+    keyboardListener.current = MapKeyboardListener.create();
+    keyboardListener.current.initialize();
+
+    return () => {
+      map.removeSizeListener(handleMapSizeChange);
+      map.removeLayerChangeListener(handleLayerChange);
+
+      keyboardListener.current?.destroy();
+    };
+  }, [geo, handleLayerChange, handleMapSizeChange]);
+
+  return (
+    <div className={Cls.mapView}>
+      {/* Toggle fullscreen button */}
+      <FullscreenButton style={{ top: '12vmin', left: '2vw' }} />
+
+      {/* Search menu */}
+      <SideMenu
+        title={t('Search_menu')}
+        buttonIcon={IconDefs.faSearch}
+        buttonStyle={{ top: '24vmin', left: '2vw' }}
+        menuPlacement={'left'}
+        data-cy={'search-menu'}
+      >
+        <div className={Cls.spacer} />
+        <Search />
+        <div className={'flex-grow-1'} />
+        <CursorPosition />
+        <div className={Cls.spacer} />
+      </SideMenu>
+
+      {/* Project menu */}
+      <SideMenu
+        title={t('Project_menu')}
+        buttonIcon={IconDefs.faFileAlt}
+        buttonStyle={{ top: '36vmin', left: '2vw' }}
+        menuPlacement={'left'}
+        data-cy={'project-menu'}
+      >
+        <div className={Cls.spacer} />
+        <ProjectStatus />
+        <ProjectControls />
+        <ImportData />
+        <div className={'flex-grow-1'} />
+        <div className={Cls.spacer} />
+      </SideMenu>
+
+      {/*Main map*/}
+      <MainMap />
+
+      {/* Draw menu */}
+      <SideMenu
+        title={t('Draw_menu')}
+        buttonIcon={IconDefs.faDraftingCompass}
+        buttonStyle={{ top: '12vmin', right: '2vw' }}
+        menuPlacement={'right'}
+        data-cy={'draw-menu'}
+      >
+        <HistoryControls historyKey={HistoryKey.Map} />
+        <LayerControls layers={layers} />
+        <ToolSelector activeLayer={activeLayer} />
+      </SideMenu>
+    </div>
+  );
 }
 
-export default withTranslation()(connector(withServices(MapView)));
+export default withTranslation()(MapView);

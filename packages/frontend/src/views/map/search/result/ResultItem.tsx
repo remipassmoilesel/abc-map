@@ -16,10 +16,11 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { Component, ReactNode } from 'react';
-import { NominatimResult } from '../../../core/geo/NominatimResult';
+import React, { useCallback } from 'react';
+import { NominatimResult } from '../../../../core/geo/NominatimResult';
 import { Logger } from '@abc-map/shared';
-import Cls from './SearchResult.module.scss';
+import Cls from './ResultItem.module.scss';
+import { WithTooltip } from '../../../../components/with-tooltip/WithTooltip';
 
 const logger = Logger.get('SearchResult.tsx');
 
@@ -28,19 +29,20 @@ export interface Props {
   onClick: (res: NominatimResult) => void;
 }
 
-class SearchResult extends Component<Props, {}> {
-  public render(): ReactNode {
-    const res = this.props.result;
-    return (
-      <div title={res.display_name} onClick={this.handleClick} className={Cls.result} data-cy={'search-result'}>
-        {res.display_name.substr(0, 50)}
-      </div>
-    );
-  }
+function ResultItem(props: Props) {
+  const maxLen = 50;
+  const { result, onClick } = props;
+  const displayName = result.display_name.length > maxLen ? result.display_name.substring(0, maxLen - 3) + '...' : result.display_name;
 
-  public handleClick = () => {
-    this.props.onClick(this.props.result);
-  };
+  const handleClick = useCallback(() => onClick(result), [onClick, result]);
+
+  return (
+    <WithTooltip title={result.display_name} placement={'right'}>
+      <button title={result.display_name} onClick={handleClick} className={Cls.result} data-cy={'search-result'}>
+        {displayName}
+      </button>
+    </WithTooltip>
+  );
 }
 
-export default SearchResult;
+export default ResultItem;

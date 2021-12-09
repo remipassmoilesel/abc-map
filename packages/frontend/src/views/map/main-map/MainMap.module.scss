@@ -17,20 +17,21 @@
  */
 
 @import "src/assets/styles/variables";
+@import "node_modules/bootstrap/scss/bootstrap";
 
 .mapContainer {
   flex-grow: 1;
 
   position: relative;
-  height: 95vh;
 
   display: flex;
+  height: $view-height;
   flex-direction: column;
 }
 
 .map {
   flex-grow: 1;
-  height: 95vh;
+  height: $view-height;
   border: solid 1px $gray-400;
   background: $gray-200;
 }
@@ -81,11 +82,70 @@
   right: 0;
 
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
+
+  text-align: center;
 
   padding: 0.2rem 1rem;
   cursor: pointer;
 
   background: $warning;
+
+  z-index: $zIndex-mainMap-tileLoadError;
+}
+
+.bottomBar {
+  position: absolute;
+
+  bottom: 0;
+  left: 25vw;
+  right: 25vw;
+
+  @include media-breakpoint-down(xl) {
+    left: 2vmin;
+    right: 2vmin;
+  }
+
+  height: 6vh;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+  .scale {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+
+    width: 20vw;
+    max-width: 40vw;
+
+    :global(.ol-scale-line) {
+      position: static;
+      background: $control-color;
+      border-radius: $border-radius;
+      padding: 0.4rem;
+
+      &:hover {
+        background: $control-color-active;
+      }
+
+      :global(.ol-scale-line-inner) {
+        font-size: 1rem !important;
+      }
+    }
+  }
+
+  .controls {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    button {
+      margin-left: 1rem;
+    }
+  }
 }

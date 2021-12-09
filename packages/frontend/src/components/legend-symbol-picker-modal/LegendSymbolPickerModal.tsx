@@ -50,7 +50,7 @@ class LegendSymbolPickerModal extends Component<ServiceProps, State> {
     }
 
     return (
-      <Modal show={visible} onHide={this.handleCancel} dialogClassName={Cls.modal}>
+      <Modal show={visible} onHide={this.handleCancel} size={'xl'} centered>
         <Modal.Header closeButton>
           <Modal.Title>
             <FaIcon icon={IconDefs.faMapMarkerAlt} className={'mr-3'} />

@@ -38,7 +38,7 @@ export function ActionButton(props: Props) {
   return (
     <WithTooltip title={title} placement={'left'}>
       <button onClick={onClick} className={`btn btn-link ${Cls.button}`} data-cy={dataCy} data-testid={dataTestId}>
-        <FaIcon icon={icon} size={'1.1rem'} />
+        <FaIcon icon={icon} />
       </button>
     </WithTooltip>
   );

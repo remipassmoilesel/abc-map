@@ -24,13 +24,15 @@ module.exports = {
       from: {
         orphan: true,
         pathNot: [
-          '(^|/)\\.[^/]+\\.(js|cjs|mjs|ts|tsx|json)$', // dot files
-          '\\.d\\.ts$',                            // TypeScript declaration files
-          '(^|/)tsconfig\\.json$',                 // TypeScript config
+          '(^|/)\\.[^/]+\\.(js|cjs|mjs|ts|tsx|json)$',  // dot files
+          '\\.d\\.ts$',                                 // TypeScript declaration files
+          '(^|/)tsconfig\\.json$',                      // TypeScript config
           '(^|/)(babel|webpack)\\.config\\.(js|cjs|mjs|ts|tsx|json)$', // other configs
-          'src/assets/styles/mocks/style.js$', // Style mock
-          '\\.test\\.ts$', // Tests
-          '\\.test\\.helpers\\.ts$', // Tests helpers
+          'src/assets/styles/mocks/style.js$',          // Style mock
+          '\\.test\\.ts$',                              // Tests
+          '\\.test\\.helpers\\.ts$',                    // Tests helpers
+          'src/service-worker.ts$',                     // Service worker
+          'src/serviceWorkerRegistration.ts$'           // Service worker
         ]
       },
       to: {},
@@ -92,7 +94,11 @@ module.exports = {
         "That's problematic as the package either (1) won't be available on live (2 - worse) will be " +
         "available on live with an non-guaranteed version. Fix it by adding the package to the dependencies " +
         "in your package.json.",
-      from: {},
+      from: {
+        pathNot: [
+          'src/service-worker.ts$'
+        ]
+      },
       to: {
         dependencyTypes: [
           'npm-no-pkg',

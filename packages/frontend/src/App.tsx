@@ -59,7 +59,9 @@ class App extends Component<Props, {}> {
   public render(): ReactNode {
     return (
       <>
+        {/* Top bar and main view */}
         <TopBar />
+
         <Switch>
           <Route exact path={'/'} component={LandingView} />
           <Route exact path={Routes.landing().raw()} component={LandingView} />
@@ -77,6 +79,8 @@ class App extends Component<Props, {}> {
           <Route path={'*'} component={NotFoundView} />
         </Switch>
         <ToastContainer className={'abc-toast-container'} />
+
+        {/* Modals */}
         <PasswordInputModal />
         <SetPasswordModal />
         <DeviceWarningModal />

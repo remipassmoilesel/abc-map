@@ -23,23 +23,25 @@ import { withTranslation } from 'react-i18next';
 
 const t = prefixedTranslation('FundingLinks:');
 
-class PaypalButton extends React.Component<{}, {}> {
-  public render() {
-    return (
-      <form action="https://www.paypal.com/donate" method="post" target="_top">
-        <input type="hidden" name="hosted_button_id" value="WH89JA8JJPRCQ" />
-        <input
-          type="image"
-          name="submit"
-          src="https://www.paypalobjects.com/fr_FR/FR/i/btn/btn_donateCC_LG.gif"
-          title={t('Donate_with_paypal')}
-          alt={t('Donate_with_paypal')}
-          className={Cls.input}
-        />
-        <img src="https://www.paypal.com/fr_FR/i/scr/pixel.gif" width="1" height="1" className={Cls.image} alt="" />
-      </form>
-    );
-  }
+interface Props {
+  className: string;
+}
+
+function PaypalButton(props: Props) {
+  return (
+    <form action="https://www.paypal.com/donate" method="post" target="_top">
+      <input type="hidden" name="hosted_button_id" value="WH89JA8JJPRCQ" />
+      <input
+        type="image"
+        name="submit"
+        src="https://www.paypalobjects.com/fr_FR/FR/i/btn/btn_donateCC_LG.gif"
+        title={t('Donate_with_paypal')}
+        alt={t('Donate_with_paypal')}
+        className={`${Cls.input} ${props.className}`}
+      />
+      <img src="https://www.paypal.com/fr_FR/i/scr/pixel.gif" width="1" height="1" className={Cls.image} alt="" />
+    </form>
+  );
 }
 
 export default withTranslation()(PaypalButton);

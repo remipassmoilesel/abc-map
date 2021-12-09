@@ -17,6 +17,7 @@
  */
 
 @import "src/assets/styles/variables";
+@import "node_modules/bootstrap/scss/bootstrap";
 
 .artefact {
   margin-bottom: 1rem;
@@ -25,9 +26,16 @@
   height: 25vh;
 
   width: 30vw;
+  min-width: 400px;
   max-width: 30vw;
 
-  box-shadow: 5px 5px 25px -10px rgba(0, 0, 0, 0.25);
+  @include media-breakpoint-down(xl) {
+    width: 100%;
+    min-width: 100%;
+    max-width: 100%;
+  }
+
+  box-shadow: $box-shadow;
 }
 
 .licenseView {

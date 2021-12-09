@@ -71,7 +71,7 @@ export class Scripts extends Module {
       } else {
         message = `Error at unknown position.`;
       }
-      message += ` Message: ${err.message || '<no-message>'}`;
+      message += ` Message: ${errorMessage(err)}`;
 
       const error = new ScriptError(message, output);
       return Promise.reject(error);
@@ -89,7 +89,7 @@ export function createScript(args: ScriptArguments, content: string): Function {
   return new Function(...Object.keys(args), header + content);
 }
 
-export function parseError(error: Error | any): ErrorPosition | undefined {
+export function parseError(error: Error | unknown | any): ErrorPosition | undefined {
   const stack = error?.stack;
   if (typeof stack !== 'string') {
     return;
@@ -105,4 +105,12 @@ export function parseError(error: Error | any): ErrorPosition | undefined {
   const line = parseInt(match[1]) - 3; // 3 is the default offset
   const column = parseInt(match[2]);
   return { line, column };
+}
+
+export function errorMessage(error: Error | unknown | any): string {
+  if ('message' in error) {
+    return error.message;
+  } else {
+    return '<no-message>';
+  }
 }

@@ -16,11 +16,67 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-.fundingMedium {
-  width: 180px;
-  height: 110px;
+@import "node_modules/bootstrap/scss/bootstrap";
 
+.fundingLinks {
   display: flex;
+  flex-direction: row;
   align-items: center;
-  justify-content: center;
+  justify-content: space-evenly;
+
+  @include media-breakpoint-down(xl) {
+    flex-direction: column;
+  }
+}
+
+.fundingMedium {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+
+  width: 30vmin;
+  height: 12vmin;
+  margin-bottom: 3rem;
+
+  @include media-breakpoint-down(xl) {
+    height: 8rem;
+    width: 60vw;
+  }
+
+  .logo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+  }
+
+  .paypalImage {
+    height: 5vmin;
+
+    @include media-breakpoint-down(xl) {
+      height: 10vmin;
+      max-height: 50px;
+    }
+  }
+
+  .utipImage {
+    height: 9vmin;
+
+    @include media-breakpoint-down(xl) {
+      height: 14vmin;
+      max-height: 70px;
+    }
+  }
+
+  .tipeeeImage {
+    height: 5vmin;
+
+    @include media-breakpoint-down(xl) {
+      height: 10vmin;
+      max-height: 50px;
+    }
+  }
 }

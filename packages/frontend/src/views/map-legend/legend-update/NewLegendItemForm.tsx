@@ -53,7 +53,7 @@ class NewLegendItemForm extends Component<Props, State> {
             value={text}
             onChange={this.handleTextChange}
             placeholder={t('Entry_name')}
-            className={`form-control ${Cls.textField}`}
+            className={`form-control`}
             data-cy={'new-item-input'}
           />
           <button onClick={this.handleSubmit} className={'btn btn-primary ml-2'} data-cy={'new-item-button'}>

@@ -16,7 +16,29 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
+@import "src/assets/styles/variables";
+
+.userMenu {
+  height: 3vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  :global(.dropdown-toggle) {
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border: none;
+  }
+
+  :global(.dropdown-toggle::after) {
+    content: none;
+  }
+}
+
 .dropDown {
   width: 17em;
-  box-shadow: -10px 10px 20px 5px #00000033;
+  box-shadow: $box-shadow;
 }

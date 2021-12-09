@@ -39,12 +39,12 @@ export class LegendRenderer {
   constructor(private styleFactory = StyleFactory.get(), private olContext = toContext) {}
 
   public symbolSizeForStyle(style: Style, geom: GeometryType, styleRatio: number): DimensionsPx {
-    // Points have variable sizes
+    // Points have variable sizes and must keep them in legend
     if (GeometryType.POINT === geom) {
       const size = style.getImage().getImageSize();
       return { width: size[0] + 5, height: size[1] + 5 };
     }
-    // Polygon and others not
+    // Polygon and others does not keep their original sizes
     else {
       return { width: DefaultSymbolSize.width * styleRatio, height: DefaultSymbolSize.height * styleRatio };
     }
@@ -60,10 +60,11 @@ export class LegendRenderer {
     const margin = 5 * styleRatio;
     const width = canvas.width;
     const height = canvas.height;
-    const centerX = width / 2;
-    const centerY = height / 2;
+    const centerX = Math.round(width / 2);
+    const centerY = Math.round(height / 2);
 
-    const vectorContext = this.olContext(ctx, { size: [canvas.width, canvas.height] });
+    // Pixel ratio = 1 is necessary for mobile devices
+    const vectorContext = this.olContext(ctx, { pixelRatio: 1, size: [canvas.width, canvas.height] });
     vectorContext.setStyle(style);
 
     // Point rendering
@@ -190,6 +191,11 @@ export class LegendRenderer {
     }
   }
 
+  /**
+   * This method is used to set canvas position for preview only
+   * @param legend
+   * @param legendCanvas
+   */
   public setPreviewStyle(legend: AbcLegend, legendCanvas: HTMLCanvasElement) {
     legendCanvas.style.position = 'absolute';
     switch (legend.display) {
@@ -229,6 +235,12 @@ export class LegendRenderer {
     }
   }
 
+  /**
+   * This method is used to render legend on exports
+   * @param legend
+   * @param legendCv
+   * @param exportCv
+   */
   public getLegendPosition(legend: AbcLegend, legendCv: HTMLCanvasElement, exportCv: HTMLCanvasElement): Position | undefined {
     switch (legend.display) {
       case LegendDisplay.UpperLeftCorner:

@@ -85,8 +85,8 @@ class ColorGradientsUI extends Component<Props, State> {
       <div className={Cls.panel}>
         {/* Module introduction */}
         <FoldingCard title={`1. ${t('Introduction')}`} className={'section'}>
-          <div className={'explanation d-flex flex-row justify-content-between align-items-start'}>
-            <div className={Cls.introduction}>
+          <div className={Cls.introduction}>
+            <div>
               <p>{t('Color_gradients_are_used_to_represent_relative_data')}</p>
               <p>{t('How_does_it_work')}</p>
               <ul>
@@ -96,7 +96,7 @@ class ColorGradientsUI extends Component<Props, State> {
                 <li dangerouslySetInnerHTML={{ __html: t('Select_parameters_explanation') }} />
               </ul>
             </div>
-            <img src={Sample} alt={t('Map_Sample')} title={t('Map_Sample')} className={Cls.sample} />
+            <img src={Sample} alt={t('Map_Sample')} title={t('Map_Sample')} />
           </div>
         </FoldingCard>
 

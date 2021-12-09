@@ -58,6 +58,7 @@ export class Registration {
         return cy.visit(activationLink);
       })
       .get('[data-cy=account-enabled]')
-      .should('contain', 'Your account is activated');
+      .should('contain', 'Your account is activated')
+      .wait(600);
   }
 }

@@ -39,9 +39,10 @@ describe('MainMap', () => {
       const map = MapFactory.createNaked();
       const internal = map.unwrap();
       expect(internal.getTarget()).toBeUndefined();
+      services.geo.getMainMap.returns(map);
 
       // Act
-      abcRender(<MainMap map={map} />, { services });
+      abcRender(<MainMap />, { services });
 
       // Assert
       expect(internal.getTarget()).toBeInstanceOf(HTMLDivElement);
@@ -56,9 +57,10 @@ describe('MainMap', () => {
       const vector = LayerFactory.newVectorLayer();
       map.addLayer(vector);
       map.setActiveLayer(vector);
+      services.geo.getMainMap.returns(map);
 
       // Act
-      const { unmount } = abcRender(<MainMap map={map} />, { services });
+      const { unmount } = abcRender(<MainMap />, { services });
       unmount();
 
       // Assert

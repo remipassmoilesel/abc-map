@@ -61,7 +61,7 @@ class EditLayerModal extends Component<Props, State> {
     const attributionsInput = this.state.attributionsInput;
 
     return (
-      <Modal show={true} onHide={onHide} dialogClassName={Cls.modal}>
+      <Modal show={true} onHide={onHide} size={'lg'} centered>
         <Modal.Header closeButton>
           <Modal.Title>
             {t('Edit_layer')} {layer.getName()}

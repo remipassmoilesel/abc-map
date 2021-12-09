@@ -39,6 +39,8 @@ import Cls from './LayoutView.module.scss';
 import { prefixedTranslation } from '../../i18n/i18n';
 import { OperationStatus } from '../../core/ui/typings';
 import uuid from 'uuid-random';
+import SideMenu from '../../components/side-menu/SideMenu';
+import { IconDefs } from '../../components/icon/IconDefs';
 
 const logger = Logger.get('LayoutView.tsx', 'warn');
 
@@ -81,9 +83,15 @@ class LayoutView extends Component<Props, State> {
       <div className={Cls.layoutView}>
         <div className={Cls.content}>
           {/* Layout list on left */}
-          <div className={Cls.leftPanel}>
+          <SideMenu
+            title={t('Layouts_menu')}
+            buttonIcon={IconDefs.faCopy}
+            buttonStyle={{ top: '12vmin', left: '2vw' }}
+            menuPlacement={'left'}
+            data-cy={'layouts-menu'}
+          >
             <LayoutList layouts={layouts} active={activeLayout} onSelected={this.handleSelected} onDeleted={this.handleDeleted} />
-          </div>
+          </SideMenu>
 
           {/* Layout preview on center */}
           <LayoutPreview
@@ -95,7 +103,13 @@ class LayoutView extends Component<Props, State> {
           />
 
           {/* Controls on right */}
-          <div className={Cls.rightPanel} data-cy={'layout-controls'}>
+          <SideMenu
+            title={t('Controls_menu')}
+            buttonIcon={IconDefs.faRuler}
+            buttonStyle={{ top: '12vmin', right: '2vw' }}
+            menuPlacement={'right'}
+            data-cy={'controls-menu'}
+          >
             <LayoutControls
               format={activeLayout?.format}
               legendDisplay={legend.display}
@@ -107,7 +121,7 @@ class LayoutView extends Component<Props, State> {
               onLegendChanged={this.handleLegendChanged}
               onExport={this.handleExport}
             />
-          </div>
+          </SideMenu>
         </div>
         <div ref={this.exportSupport} />
       </div>

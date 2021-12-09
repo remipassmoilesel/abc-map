@@ -32,6 +32,7 @@ import { LayerFactory } from '../../../../../core/geo/layers/LayerFactory';
 import { prefixedTranslation } from '../../../../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
 import Cls from './WmtsLayerPanel.module.scss';
+import { solvesInAtLeast } from '../../../../../core/utils/solvesInAtLeast';
 
 const logger = Logger.get('WmtsLayerPanel.tsx');
 
@@ -132,6 +133,8 @@ class WmtsLayerPanel extends Component<Props, State> {
             </div>
           </>
         )}
+
+        <div className={'flex-grow-1'} />
 
         {/* Form validation and controls */}
         <FormValidationLabel state={formState} />
@@ -245,8 +248,7 @@ class WmtsLayerPanel extends Component<Props, State> {
       auth = { username: value.auth.username, password: value.auth.password };
     }
 
-    geo
-      .getWmtsCapabilities(value.capabilitiesUrl, auth)
+    solvesInAtLeast(geo.getWmtsCapabilities(value.capabilitiesUrl, auth), 600)
       .then((capabilities) => this.setState({ capabilities }))
       .catch((err) => {
         toasts.error(t('Cannot_get_capacities'));

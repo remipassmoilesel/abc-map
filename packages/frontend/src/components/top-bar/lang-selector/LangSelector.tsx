@@ -22,25 +22,25 @@ import { LabeledLanguages } from '../../../i18n/Languages';
 import { getLang, setLang } from '../../../i18n/i18n';
 import { Language, Logger } from '@abc-map/shared';
 import Cls from './LangSelector.module.scss';
+import changeLangIcon from '../../../i18n/icons/change-lang.svg';
 
 const logger = Logger.get('LangSelector.tsx');
 
 class LangSelector extends React.Component<{}, {}> {
   public render() {
-    const currentLang = LabeledLanguages.All.find((l) => l.value === getLang());
-
     return (
-      <Dropdown data-cy={'lang-selector'}>
+      <Dropdown data-cy={'lang-selector'} className={Cls.langSelector} align={'end'}>
         {/* Menu icon */}
-        <Dropdown.Toggle variant="light" className={'d-flex justify-content-center align-items-center'}>
-          <img src={currentLang?.icon} alt={currentLang?.label} className={Cls.selected} title={currentLang?.label} />
+        <Dropdown.Toggle variant="light">
+          <img src={changeLangIcon} alt={'Change language'} title={'Change language'} className={Cls.toggleIcon} />
         </Dropdown.Toggle>
 
         {/* Menu items */}
         <Dropdown.Menu className={Cls.dropdown}>
           {LabeledLanguages.All.map((lang) => {
+            const active = getLang() === lang.value;
             return (
-              <Dropdown.Item key={lang.value} onClick={() => this.setLang(lang.value)} className={`d-flex align-items-center`}>
+              <Dropdown.Item key={lang.value} onClick={() => this.setLang(lang.value)} className={`d-flex align-items-center ${active ? Cls.active : ''}`}>
                 <img src={lang.icon} alt={lang.label} className={'mr-2'} /> {lang.label}
               </Dropdown.Item>
             );
