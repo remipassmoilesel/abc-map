@@ -21,19 +21,19 @@
  *
  * This is useful to display a waiting screen that will be at list shown for delay seconds.
  */
-export function solvesInAtLeast<T>(promise: Promise<T>, minDuration = 1000): Promise<T> {
+export function solvesInAtLeast<T>(promise: Promise<T>, minDurationMs = 1000): Promise<T> {
   const start = Date.now();
   return new Promise<T>((resolve, reject) => {
     promise
       .then((result) => {
         const took = Date.now() - start;
         // Promise resoled after min duration, we resolve now
-        if (took >= minDuration) {
+        if (took >= minDurationMs) {
           resolve(result);
         }
         // Promise resoled before min duration, we will resolve on time
         else {
-          const delta = minDuration - took;
+          const delta = minDurationMs - took;
           setTimeout(() => resolve(result), delta);
         }
       })

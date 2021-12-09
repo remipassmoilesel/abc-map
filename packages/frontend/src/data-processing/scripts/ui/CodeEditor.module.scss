@@ -16,19 +16,21 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
+@import "src/assets/styles/variables";
+
 .editor {
   counter-reset: line;
   border: 1px solid #ced4da;
+  min-height: 30vh;
 
   pre {
-    padding-left: 60px !important;
+    padding-left: 2.5rem !important;
   }
 }
 
 .textarea {
   outline: none;
-  padding-left: 60px !important;
-  background: red;
+  padding-left: 2.5rem !important;
 }
 
 .lineNumber {
@@ -36,6 +38,6 @@
   left: 0;
   color: #cccccc;
   text-align: right;
-  width: 40px;
+  width: 2rem;
   font-weight: 100;
 }

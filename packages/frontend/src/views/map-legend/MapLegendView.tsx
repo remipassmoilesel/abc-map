@@ -16,130 +16,101 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { Component, ReactNode } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { AbcLegendItem, Logger } from '@abc-map/shared';
-import { MainState } from '../../core/store/reducer';
-import { connect, ConnectedProps } from 'react-redux';
-import { ServiceProps, withServices } from '../../core/withServices';
 import LegendPreview from './preview/LegendPreview';
 import LegendUpdateForm from './legend-update/LegendUpdateForm';
-import { RouteComponentProps } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { pageSetup } from '../../core/utils/page-setup';
 import { prefixedTranslation } from '../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
 import { Routes } from '../../routes';
 import { IconDefs } from '../../components/icon/IconDefs';
 import { FaIcon } from '../../components/icon/FaIcon';
+import { useAppSelector } from '../../core/store/hooks';
+import { useServices } from '../../core/hooks';
 import Cls from './MapLegendView.module.scss';
 
 const logger = Logger.get('MapLegendView.tsx');
 
-const mapStateToProps = (state: MainState) => ({
-  legend: state.project.legend,
-});
-
-const connector = connect(mapStateToProps);
-
-type Props = ConnectedProps<typeof connector> & ServiceProps & RouteComponentProps<{}, {}>;
-
 const t = prefixedTranslation('MapLegendView:');
 
-class MapLegendView extends Component<Props, {}> {
-  public render(): ReactNode {
-    const legend = this.props.legend;
+export function MapLegendView() {
+  const { project, toasts } = useServices();
+  const legend = useAppSelector((st) => st.project.legend);
+  const history = useHistory();
 
-    return (
-      <div className={Cls.mapLegendView}>
-        <div className={'d-flex flex-row justify-content-end'}>
-          <button className={'btn btn-outline-primary'} onClick={this.handleGoToLayout} data-cy={'back-to-layout'}>
-            <FaIcon icon={IconDefs.faArrowCircleLeft} className={'mr-2'} />
-            {t('Go_back_to_layout')}
-          </button>
+  useEffect(() => {
+    pageSetup(t('Edit_legend'), t('Create_legend_for_your_map'));
+  }, []);
+
+  const handleGoToLayout = useCallback(() => history.push(Routes.layout().format()), [history]);
+  const handleSizeChanged = useCallback((width: number, height: number) => project.setLegendSize(width, height), [project]);
+
+  const handleNewItem = useCallback((item: AbcLegendItem) => project.addLegendItems([item]), [project]);
+  const handleItemChanged = useCallback((item: AbcLegendItem) => project.updateLegendItem(item), [project]);
+  const handleItemDeleted = useCallback((item: AbcLegendItem) => project.deleteLegendItem(item), [project]);
+
+  const moveItem = useCallback(
+    (item: AbcLegendItem, diff: number) => {
+      const items = legend.items;
+      const oldIndex = items.findIndex((i) => i.id === item.id);
+      if (oldIndex === -1) {
+        logger.error('Item not found: ', { item, diff });
+        toasts.genericError();
+        return;
+      }
+
+      let newIndex = oldIndex + diff;
+      if (newIndex < 0) {
+        newIndex = 0;
+      }
+      if (newIndex >= items.length) {
+        newIndex = items.length - 1;
+      }
+
+      project.setLegendItemIndex(item, newIndex);
+    },
+    [legend.items, project, toasts]
+  );
+  const handleItemUp = useCallback((item: AbcLegendItem) => moveItem(item, -1), [moveItem]);
+  const handleItemDown = useCallback((item: AbcLegendItem) => moveItem(item, +1), [moveItem]);
+
+  return (
+    <div className={Cls.mapLegendView}>
+      <div className={'container'}>
+        <div className={'row justify-content-end'}>
+          {/* Go back button */}
+          <div className={'col-sm-4 d-flex justify-content-end'}>
+            <button className={'btn btn-outline-primary'} onClick={handleGoToLayout} data-cy={'back-to-layout'}>
+              <FaIcon icon={IconDefs.faArrowCircleLeft} className={'mr-2'} />
+              {t('Go_back_to_layout')}
+            </button>
+          </div>
         </div>
-
-        <div className={Cls.content}>
-          <div className={Cls.editionPanel}>
-            <h5 className={'mb-4'}>{t('Edit_legend')}</h5>
+        <div className={'row'}>
+          {/* Add / update legend items */}
+          <div className={'col-xl-6 '}>
+            <h1 className={'mt-3 mb-4'}>{t('Edit_legend')}</h1>
             <LegendUpdateForm
               legend={legend}
-              onSizeChanged={this.handleSizeChanged}
-              onNewItem={this.handleNewItem}
-              onItemChanged={this.handleItemChanged}
-              onItemDeleted={this.handleItemDeleted}
-              onItemUp={this.handleItemUp}
-              onItemDown={this.handleItemDown}
+              onSizeChanged={handleSizeChanged}
+              onNewItem={handleNewItem}
+              onItemChanged={handleItemChanged}
+              onItemDeleted={handleItemDeleted}
+              onItemUp={handleItemUp}
+              onItemDown={handleItemDown}
             />
           </div>
-          <div className={Cls.previewPanel}>
-            <h5 className={'mb-4'}>{t('Preview')}</h5>
-            <LegendPreview legend={legend} onSizeChanged={this.handleSizeChanged} />
+          {/* Legend preview */}
+          <div className={'col-xl-6'}>
+            <h4 className={'mt-4 mb-4'}>{t('Preview')}</h4>
+            <LegendPreview legend={legend} onSizeChanged={handleSizeChanged} />
           </div>
         </div>
       </div>
-    );
-  }
-
-  public componentDidMount() {
-    pageSetup(t('Edit_legend'), t('Create_legend_for_your_map'));
-  }
-
-  private handleSizeChanged = (width: number, height: number) => {
-    const { project } = this.props.services;
-
-    project.setLegendSize(width, height);
-  };
-
-  private handleNewItem = (item: AbcLegendItem) => {
-    const { project } = this.props.services;
-
-    project.addLegendItems([item]);
-  };
-
-  private handleItemChanged = (item: AbcLegendItem) => {
-    const { project } = this.props.services;
-
-    project.updateLegendItem(item);
-  };
-
-  private handleGoToLayout = () => {
-    this.props.history.push(Routes.layout().format());
-  };
-
-  private handleItemDeleted = (item: AbcLegendItem) => {
-    const { project } = this.props.services;
-
-    project.deleteLegendItem(item);
-  };
-
-  private handleItemUp = (item: AbcLegendItem) => {
-    this.moveItem(item, -1);
-  };
-
-  private handleItemDown = (item: AbcLegendItem) => {
-    this.moveItem(item, +1);
-  };
-
-  private moveItem(item: AbcLegendItem, diff: number): void {
-    const { toasts, project } = this.props.services;
-
-    const items = this.props.legend.items;
-    const oldIndex = items.findIndex((i) => i.id === item.id);
-    if (oldIndex === -1) {
-      logger.error('Item not found: ', { item, diff });
-      toasts.genericError();
-      return;
-    }
-
-    let newIndex = oldIndex + diff;
-    if (newIndex < 0) {
-      newIndex = 0;
-    }
-    if (newIndex >= items.length) {
-      newIndex = items.length - 1;
-    }
-
-    project.setLegendItemIndex(item, newIndex);
-  }
+    </div>
+  );
 }
 
-export default withTranslation()(withServices(connector(MapLegendView)));
+export default withTranslation()(MapLegendView);

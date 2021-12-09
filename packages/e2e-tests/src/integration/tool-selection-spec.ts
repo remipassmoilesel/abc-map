@@ -21,7 +21,6 @@ import { TestHelper } from '../helpers/TestHelper';
 import { ToolSelector } from '../helpers/ToolSelector';
 import { Draw } from '../helpers/Draw';
 import { MainMap } from '../helpers/MainMap';
-import { History } from '../helpers/History';
 import { DefaultDrawingStyle } from '../helpers/DefaultDrawingStyle';
 import { Routes } from '../helpers/Routes';
 
@@ -33,6 +32,8 @@ describe('Tool Selection', function () {
   it('user can select', function () {
     cy.visit(Routes.map().format())
       .then(() => MainMap.fixedView())
+      .get('[data-cy=draw-menu]')
+      .click()
       .then(() => ToolSelector.enable(MapTool.Point))
       // Create points
       .then(() => Draw.click(100, 100))
@@ -47,7 +48,7 @@ describe('Tool Selection', function () {
 
         expect(features).length(3);
         expect(features[0].get(FeatureProperties.Selected)).undefined;
-        expect(features[0].getGeometry()?.getExtent()).deep.equals([-1118865.2444950186, 4048111.897809295, -1118865.2444950186, 4048111.897809295]);
+        expect(features[0].getGeometry()?.getExtent()).deep.equals([-3564850.1496206587, 4048111.897809295, -3564850.1496206587, 4048111.897809295]);
         expect(features[1].get(FeatureProperties.Selected)).equal(true);
         expect(features[2].get(FeatureProperties.Selected)).equal(true);
       });
@@ -56,6 +57,8 @@ describe('Tool Selection', function () {
   it('user can duplicate selection then undo', function () {
     cy.visit(Routes.map().format())
       .then(() => MainMap.fixedView())
+      .get('[data-cy=draw-menu]')
+      .click()
       .then(() => ToolSelector.enable(MapTool.Point))
       // Create points
       .then(() => Draw.click(100, 100))
@@ -71,19 +74,23 @@ describe('Tool Selection', function () {
         const features = map.getActiveLayerFeatures();
 
         expect(features).length(5);
-        expect(features[0].getGeometry()?.getExtent()).deep.equals([-1118865.2444950186, 4048111.897809295, -1118865.2444950186, 4048111.897809295]);
-        expect(features[1].getGeometry()?.getExtent()).deep.equals([-629668.2634698907, 3558914.916784167, -629668.2634698907, 3558914.916784167]);
-        expect(features[2].getGeometry()?.getExtent()).deep.equals([-140471.28244476253, 3069717.9357590387, -140471.28244476253, 3069717.9357590387]);
-        expect(features[3].getGeometry()?.getExtent()).deep.equals([-336150.07485481387, 3265396.72816909, -336150.07485481387, 3265396.72816909]);
-        expect(features[4].getGeometry()?.getExtent()).deep.equals([153046.9061703143, 2776199.747143962, 153046.9061703143, 2776199.747143962]);
+        expect(features.map((f) => f.getGeometry()?.getExtent())).deep.equals([
+          [-3564850.1496206587, 4048111.897809295, -3564850.1496206587, 4048111.897809295],
+          [-3075653.1685955306, 3558914.916784167, -3075653.1685955306, 3558914.916784167],
+          [-2586456.1875704024, 3069717.9357590387, -2586456.1875704024, 3069717.9357590387],
+          [-2782134.979980454, 3265396.72816909, -2782134.979980454, 3265396.72816909],
+          [-2292937.9989553257, 2776199.747143962, -2292937.9989553257, 2776199.747143962],
+        ]);
       })
-      .then(() => History.undo())
+      .get('[data-cy=undo]')
+      .click()
       .then(() => MainMap.getReference())
       .should((map) => {
         const features = map.getActiveLayerFeatures();
         expect(features).length(3);
       })
-      .then(() => History.redo())
+      .get('[data-cy=redo]')
+      .click()
       .then(() => MainMap.getReference())
       .should((map) => {
         const features = map.getActiveLayerFeatures();
@@ -94,46 +101,60 @@ describe('Tool Selection', function () {
   it('user can drag selection then undo', function () {
     cy.visit(Routes.map().format())
       .then(() => MainMap.fixedView())
+      .get('[data-cy=draw-menu]')
+      .click()
       // Draw points
       .then(() => ToolSelector.enable(MapTool.Point))
-      .then(() => Draw.click(150, 150))
-      .then(() => Draw.click(200, 200))
+      .then(() => Draw.click(300, 300))
+      .then(() => Draw.click(350, 350))
       // Select them
       .then(() => ToolSelector.enable(MapTool.Selection))
-      .then(() => Draw.drag(100, 100, 400, 400))
+      .then(() => Draw.drag(250, 250, 400, 400))
       // Drag them
-      .then(() => Draw.drag(200, 200, 600, 600))
+      .then(() => Draw.drag(300, 300, 600, 600))
       .then(() => MainMap.getReference())
       .should((map) => {
         const features = map.getActiveLayerFeatures();
 
         expect(features).length(2);
-        expect(features[0].getGeometry()?.getExtent()).deep.equals([3283907.5847311337, -354660.9314168575, 3283907.5847311337, -354660.9314168575]);
-        expect(features[1].getGeometry()?.getExtent()).deep.equals([3773104.565756262, -843857.9124419857, 3773104.565756262, -843857.9124419857]);
+        expect(features.map((f) => f.getGeometry()?.getExtent())).deep.equals([
+          [1327119.660630622, -843857.9124419857, 1327119.660630622, -843857.9124419857],
+          [1816316.64165575, -1333054.8934671138, 1816316.64165575, -1333054.8934671138],
+        ]);
       })
-      .then(() => History.undo())
+      // Undo
+      .get('[data-cy=undo]')
+      .click()
       .then(() => MainMap.getReference())
       .should((map) => {
         const features = map.getActiveLayerFeatures();
 
         expect(features).length(2);
-        expect(features[0].getGeometry()?.getExtent()).deep.equals([-629668.2634698907, 3558914.916784167, -629668.2634698907, 3558914.916784167]);
-        expect(features[1].getGeometry()?.getExtent()).deep.equals([-140471.28244476253, 3069717.9357590387, -140471.28244476253, 3069717.9357590387]);
+        expect(features.map((f) => f.getGeometry()?.getExtent())).deep.equals([
+          [-1608062.2255201465, 2091323.9737087828, -1608062.2255201465, 2091323.9737087828],
+          [-1118865.2444950184, 1602126.9926836547, -1118865.2444950184, 1602126.9926836547],
+        ]);
       })
-      .then(() => History.redo())
+      // Redo
+      .get('[data-cy=redo]')
+      .click()
       .then(() => MainMap.getReference())
       .should((map) => {
         const features = map.getActiveLayerFeatures();
 
         expect(features).length(2);
-        expect(features[0].getGeometry()?.getExtent()).deep.equals([3283907.5847311337, -354660.9314168575, 3283907.5847311337, -354660.9314168575]);
-        expect(features[1].getGeometry()?.getExtent()).deep.equals([3773104.565756262, -843857.9124419857, 3773104.565756262, -843857.9124419857]);
+        expect(features.map((f) => f.getGeometry()?.getExtent())).deep.equals([
+          [1327119.660630622, -843857.9124419857, 1327119.660630622, -843857.9124419857],
+          [1816316.64165575, -1333054.8934671138, 1816316.64165575, -1333054.8934671138],
+        ]);
       });
   });
 
   it('user can drag duplicated features', function () {
     cy.visit(Routes.map().format())
       .then(() => MainMap.fixedView())
+      .get('[data-cy=draw-menu]')
+      .click()
       // Draw points
       .then(() => ToolSelector.enable(MapTool.Point))
       .then(() => Draw.click(150, 150))
@@ -150,16 +171,20 @@ describe('Tool Selection', function () {
       .should((map) => {
         const features = map.getActiveLayerFeatures();
 
-        expect(features[0].getGeometry()?.getExtent()).deep.equals([-629668.2634698907, 3558914.916784167, -629668.2634698907, 3558914.916784167]);
-        expect(features[1].getGeometry()?.getExtent()).deep.equals([-140471.28244476253, 3069717.9357590387, -140471.28244476253, 3069717.9357590387]);
-        expect(features[2].getGeometry()?.getExtent()).deep.equals([3283907.5847311337, -354660.9314168575, 3283907.5847311337, -354660.9314168575]);
-        expect(features[3].getGeometry()?.getExtent()).deep.equals([3773104.565756262, -843857.9124419857, 3773104.565756262, -843857.9124419857]);
+        expect(features.map((f) => f.getGeometry()?.getExtent())).deep.equals([
+          [-3075653.1685955306, 3558914.916784167, -3075653.1685955306, 3558914.916784167],
+          [-2586456.1875704024, 3069717.9357590387, -2586456.1875704024, 3069717.9357590387],
+          [837922.6796054938, -354660.9314168575, 837922.6796054938, -354660.9314168575],
+          [1327119.660630622, -843857.9124419857, 1327119.660630622, -843857.9124419857],
+        ]);
       });
   });
 
-  it('user change stroke style then undo', function () {
+  it('user can change stroke style then undo', function () {
     cy.visit(Routes.map().format())
       .then(() => MainMap.fixedView())
+      .get('[data-cy=draw-menu]')
+      .click()
       .then(() => ToolSelector.enable(MapTool.Polygon))
       // Draw feature
       .then(() => Draw.click(100, 100))
@@ -181,13 +206,17 @@ describe('Tool Selection', function () {
         const features = map.getActiveLayerFeatures();
         expect(features[0].getProperties()[StyleProperties.StrokeColor]).equal('rgba(208,2,27,1)');
       })
-      .then(() => History.undo())
+      // Undo
+      .get('[data-cy=undo]')
+      .click()
       .then(() => MainMap.getReference())
       .should((map) => {
         const features = map.getActiveLayerFeatures();
         expect(features[0].getProperties()[StyleProperties.StrokeColor]).equal(DefaultDrawingStyle.stroke.color);
       })
-      .then(() => History.redo())
+      // Redo
+      .get('[data-cy=redo]')
+      .click()
       .then(() => MainMap.getReference())
       .should((map) => {
         const features = map.getActiveLayerFeatures();
@@ -195,9 +224,11 @@ describe('Tool Selection', function () {
       });
   });
 
-  it('user change fill style then undo', function () {
+  it('user can change fill style then undo', function () {
     cy.visit(Routes.map().format())
       .then(() => MainMap.fixedView())
+      .get('[data-cy=draw-menu]')
+      .click()
       .then(() => ToolSelector.enable(MapTool.Polygon))
       // Draw feature then select
       .then(() => Draw.click(100, 100))
@@ -217,14 +248,18 @@ describe('Tool Selection', function () {
         const features = map.getActiveLayerFeatures();
         expect(features[0].getProperties()[StyleProperties.FillColor1]).equal('rgba(208,2,27,1)');
       })
-      .then(() => History.undo())
+      // Undo
+      .get('[data-cy=undo]')
+      .click()
       .then(() => MainMap.getReference())
       .should((map) => {
         const features = map.getActiveLayerFeatures();
 
         expect(features[0].get(StyleProperties.FillColor1)).equal(DefaultDrawingStyle.fill.color1);
       })
-      .then(() => History.redo())
+      // Undo
+      .get('[data-cy=redo]')
+      .click()
       .then(() => MainMap.getReference())
       .should((map) => {
         const features = map.getActiveLayerFeatures();

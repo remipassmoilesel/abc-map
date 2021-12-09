@@ -67,7 +67,7 @@ class PasswordInputModal extends Component<ServiceProps, State> {
     const submitDisabled = formState !== FormState.Ok;
 
     return (
-      <Modal show={visible} onHide={this.handleCancel}>
+      <Modal show={visible} onHide={this.handleCancel} centered>
         <Modal.Header closeButton>
           <Modal.Title>{title}</Modal.Title>
         </Modal.Header>

@@ -283,8 +283,8 @@ class LayoutPreview extends Component<Props, {}> {
   private getPreviewDimensionsFor(layout: AbcLayout): PreviewDimensions {
     const format = layout.format;
     const unit = 'vmin';
-    const maxHeight = 80;
-    const maxWidth = 100;
+    const maxHeight = 90;
+    const maxWidth = 90;
 
     // Portrait format
     if (format.height > format.width) {

@@ -28,7 +28,8 @@
     "Data_processing": "Traitement de données",
     "Layout": "Mise en page",
     "Documentation": "Documentation",
-    "Support_AbcMap": "Soutenez Abc-Map"
+    "Support_AbcMap": "Soutenez Abc-Map",
+    "Menu": "Menu"
   },
   "UserMenu": {
     "Hello_visitor": "Bonjour visiteur !",
@@ -42,13 +43,23 @@
   "MapView": {
     "The_map": "La carte !",
     "Visualize_and_create_in_your_browser": "Visualisez, créez et modifiez des cartes dans votre navigateur \uD83C\uDF0D ✏️",
+    "Search_menu": "Rechercher",
+    "Project_menu": "Projet",
+    "Draw_menu": "Dessin et couches",
+    "FullscreenButton": {
+      "Fullscreen": "Plein écran"
+    },
     "MainMap": {
       "Drop_your_files": "Déposez vos fichiers pour les importer",
       "You_must_select_files": "Vous devez sélectionner un ou plusieurs fichiers",
       "You_must_import_project_with_import_control": "Vous devez importer votre projet à l'aide du contrôle 'Importer un projet'",
       "Formats_not_supported": "Ces formats de fichiers ne sont pas supportés, aucune donnée n'a été importée",
-      "Layer_does_not_load": "La couche '{{name}}' ne charge pas correctement. Vérifiez ses paramètres.",
-      "Layer_without_name": "*Couche sans nom*"
+      "Layer_does_not_load": "La couche '{{name}}' ne charge pas correctement. Vérifiez ses paramètres ou votre connexion internet.",
+      "Layer_without_name": "*Couche sans nom*",
+      "Scale": "Echelle",
+      "Attributions": "Attributions",
+      "Zoom_in": "Zoom avant",
+      "Zoom_out": "Zoom arrière"
     },
     "ProjectStatus": {
       "Projection": "Projection",
@@ -66,7 +77,8 @@
     },
     "Search": {
       "Search": "Rechercher",
-      "My_location": "Ma position"
+      "My_location": "Ma position",
+      "No_results": "Aucun résultat"
     },
     "ProjectControls": {
       "Open_project": "Ouvrir un projet",
@@ -116,8 +128,9 @@
       "Cancel": "Annuler"
     },
     "AddLayerModal": {
-      "New_layer": "Nouvelle couche",
-      "What_kind_of_layer": "Quelle type de couche souhaitez-vous ajouter ?",
+      "New_layer": "Ajouter une nouvelle couche",
+      "What_kind_of_layer": "Quel type de couche ?",
+      "Parameters": "Paramètres",
       "Select_basemap_you_want": "Sélectionnez le fond de carte que vous souhaitez",
       "Preview": "Aperçu",
       "Origin_of_data_license": "Origine des données et licence",
@@ -308,7 +321,8 @@
     "Close": "Fermer"
   },
   "DataProcessingView": {
-    "Select_a_module_on_left": "Sélectionnez un module <br /> dans le menu de gauche.",
+    "Modules": "Modules",
+    "Select_a_module_on_right": "Sélectionnez un module <br /> dans le menu de droite.",
     "Data_processing": "Traitements de données",
     "Visualize_data_on_map": "Visualisez des données sur vos cartes: symboles proportionnels, dégradés et couleurs, et plus ⚙️⚙️"
   },
@@ -490,7 +504,9 @@
     "Delete_all": "Supprimer tout",
     "PDF_export": "Export PDF",
     "PNG_export": "Export PNG",
-    "You_must_create_layouts_first": "Vous devez d'abord créer une mise en page"
+    "You_must_create_layouts_first": "Vous devez d'abord créer une mise en page",
+    "Layouts_menu": "Liste des mises en page",
+    "Controls_menu": "Actions"
   },
   "MapLegendView": {
     "Go_back_to_layout": "Revenir à la mise en page",
@@ -510,7 +526,7 @@
     "Entry_name": "Nom de l'élément: zone forestière, itinéraire balisé, ..."
   },
   "FundingView": {
-    "Support_the_development_of": "Soutenez le développement d'Abc-Map",
+    "Support_AbcMap": "Soutenez d'Abc-Map",
     "Why": "Pourquoi",
     "AbcMap_is_FOSS": "Abc-Map est un logiciel libre développé et hébergé bénévolement.",
     "No_ads_no_race_for_attention": "Vous avez remarqué ? Pas de pub, pas de course à l'attention, pas de récolte de données personnelles",
@@ -608,7 +624,7 @@
     "Blah": "Bof ...",
     "Not_good": "Pas bien",
     "Thanks_for_your_feedback": "Merci pour votre retour",
-    "Support_project": "Faites-un don pour soutenir ce projet, c'est facile: par ici",
+    "Support_project": "Faites-un don pour soutenir ce projet",
     "Close": "Fermer"
   },
   "ResetPasswordView": {
@@ -656,6 +672,12 @@
   },
   "LegalMentionsView": {
     "About_this_platform": "A propos de cette plateforme"
+  },
+  "SideMenu": {
+    "Close": "Fermer"
+  },
+  "DocumentationView": {
+    "Table_of_content": "Sommaire"
   },
   "core": {
     "ProjectFactory": {

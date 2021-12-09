@@ -22,16 +22,17 @@ export enum ErrorCodes {
 }
 
 export class Errors {
-  public static isWrongPassword(e: Error | undefined): boolean {
-    return !!e?.message.match(ErrorCodes.WrongPassword);
+  public static isWrongPassword(error: Error | undefined): boolean {
+    return !!error?.message.match(ErrorCodes.WrongPassword);
   }
 
-  public static wrongPassword(source?: Error): never {
-    throw new Error(`${ErrorCodes.WrongPassword} Wrong password: ${source?.message || 'No source message'}`);
+  public static wrongPassword(source?: Error | unknown): never {
+    const message = source instanceof Error && 'message' in source ? source.message : 'No source message';
+    throw new Error(`${ErrorCodes.WrongPassword} Wrong password: ${message}`);
   }
 
-  public static isMissingPassword(e: Error | undefined): boolean {
-    return !!e?.message.match(ErrorCodes.MissingPassword);
+  public static isMissingPassword(error: Error | undefined): boolean {
+    return !!error?.message.match(ErrorCodes.MissingPassword);
   }
 
   public static missingPassword(): never {

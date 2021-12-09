@@ -16,6 +16,8 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
+@import "src/assets/styles/variables";
+
 .layoutPreview {
   flex-grow: 1;
   display: flex;
@@ -26,7 +28,7 @@
   overflow: auto;
 
   h4 {
-    margin: 2rem 0 0 1rem;
+    margin: 0 0 1rem 1rem;
   }
 }
 
@@ -42,7 +44,6 @@
 .previewContainer {
   position: relative;
 
-  flex-grow: 1;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -51,5 +52,5 @@
 
 .previewMap {
   border: solid 1px darkgrey;
-  box-shadow: 6px 6px 5px 0 rgba(0, 0, 0, 0.15);
+  box-shadow: $box-shadow;
 }

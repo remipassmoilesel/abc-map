@@ -17,14 +17,6 @@
  */
 @import "src/assets/styles/variables";
 
-$modal-width: 25vw;
-
-.modal {
-  min-width: $modal-width;
-  max-width: $modal-width;
-  width: $modal-width;
-}
-
 .opacitySlider {
   width: 80%;
 }

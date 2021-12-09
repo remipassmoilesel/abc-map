@@ -110,6 +110,8 @@ function XYZLayerPanel(props: Props) {
         )}
       </div>
 
+      <div className={'flex-grow-1'} />
+
       {/* Form validation */}
       <FormValidationLabel state={formState} />
 

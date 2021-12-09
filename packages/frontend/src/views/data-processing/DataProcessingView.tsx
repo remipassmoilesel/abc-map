@@ -28,6 +28,7 @@ import Cls from './DataProcessingView.module.scss';
 import { FaIcon } from '../../components/icon/FaIcon';
 import { IconDefs } from '../../components/icon/IconDefs';
 import '../../data-processing/style.scss';
+import SideMenu from '../../components/side-menu/SideMenu';
 
 const logger = Logger.get('DataProcessingView.tsx');
 
@@ -46,14 +47,24 @@ class DataProcessingView extends Component<Props, {}> {
 
     return (
       <div className={Cls.dataProcessingView}>
-        <div className={Cls.leftMenu}>
-          <div className={'mx-2 my-4 fw-bold'}>Modules</div>
-          {Modules.map((mod) => (
-            <Link key={mod.getId()} className={'btn btn-link mb-1'} to={Routes.dataProcessing().withParams({ moduleId: mod.getId() })} data-cy={mod.getId()}>
-              {tModules(mod.getI18nName())}
-            </Link>
-          ))}
-        </div>
+        <SideMenu
+          buttonIcon={IconDefs.faList}
+          buttonStyle={{ top: '12vmin', right: '6vmin' }}
+          title={t('Modules')}
+          menuPlacement={'right'}
+          closeOnClick={true}
+          data-cy={'modules-menu'}
+        >
+          <div className={Cls.rightMenu}>
+            <div className={'mx-2 my-4 fw-bold'}>{t('Modules')}</div>
+            {Modules.map((mod) => (
+              <Link key={mod.getId()} className={'btn btn-link mb-1'} to={Routes.dataProcessing().withParams({ moduleId: mod.getId() })} data-cy={mod.getId()}>
+                {tModules(mod.getI18nName())}
+              </Link>
+            ))}
+          </div>
+        </SideMenu>
+
         <div className={Cls.viewPort} data-cy={'data-processing-viewport'}>
           {module && (
             <>
@@ -64,7 +75,7 @@ class DataProcessingView extends Component<Props, {}> {
           {!module && (
             <div className={Cls.welcome}>
               <FaIcon icon={IconDefs.faCogs} size={'6rem'} className={'mb-3'} />
-              <h4 dangerouslySetInnerHTML={{ __html: t('Select_a_module_on_left') }} />
+              <h4 dangerouslySetInnerHTML={{ __html: t('Select_a_module_on_right') }} />
             </div>
           )}
         </div>

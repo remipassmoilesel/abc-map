@@ -55,6 +55,6 @@ describe('ProjectFactory', () => {
 
   it('newLegend()', () => {
     const legend = ProjectFactory.newLegend();
-    expect(legend).toEqual({ display: 'Hidden', height: 300, items: [], width: 400 });
+    expect(legend).toEqual({ display: 'Hidden', height: 250, items: [], width: 250 });
   });
 });

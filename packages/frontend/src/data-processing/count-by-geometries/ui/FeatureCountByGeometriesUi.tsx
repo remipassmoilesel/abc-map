@@ -34,7 +34,7 @@ class FeatureCountByGeometriesUi extends Component<{}, {}> {
       <div className={Cls.panel}>
         <FaIcon icon={IconDefs.faFileCode} size={'4rem'} />
         <h4 className={'text-center my-5'}>{t('Module_not_terminated')}</h4>
-        <div>{t('This_module_will')}</div>
+        <div className={'text-center'}>{t('This_module_will')}</div>
       </div>
     );
   }

@@ -1,0 +1,89 @@
+/**
+ * Copyright © 2021 Rémi Pace.
+ * This file is part of Abc-Map.
+ *
+ * Abc-Map is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of
+ * the License, or (at your option) any later version.
+ *
+ * Abc-Map is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General
+ * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+@import "src/assets/styles/variables";
+
+.menuPanel {
+  position: absolute;
+  top: 5.5vh;
+  bottom: 0.5vmin;
+
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+
+  background: transparent;
+
+  z-index: $zIndex-sideMenu-panel;
+
+  &.right {
+    right: 0.5vmin;
+    flex-direction: row;
+  }
+
+  &.left {
+    left: 0.5vmin;
+    flex-direction: row-reverse;
+  }
+
+  .menuContent {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: stretch;
+
+    width: 30vmin;
+    min-width: 23rem;
+    height: 100%;
+    max-height: 100%;
+
+    border: solid 1px $gray-300;
+    border-radius: $border-radius;
+
+    background: white;
+
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    box-shadow: $box-shadow;
+  }
+
+  .closeButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin: 0.5rem;
+    padding: 0.5rem;
+
+    border: none;
+    border-radius: $border-radius;
+    background-color: $control-color;
+
+    box-shadow: $box-shadow;
+
+    &:hover {
+      background-color: $control-color-active;
+
+      .icon {
+        opacity: $control-color-active-opacity;
+      }
+    }
+  }
+}

@@ -85,7 +85,7 @@ class LayoutControls extends Component<Props, {}> {
         {/* New layout, move layout, delete */}
         <div className={'control-block'}>
           <div className={'control-item'}>
-            <button onClick={handleNewLayout} className={'btn btn-link'} data-cy={'new-layout'}>
+            <button onClick={handleNewLayout} className={'btn btn-link'} data-cy={'add-layout'}>
               <FaIcon icon={IconDefs.faPlus} className={'mr-2'} />
               {t('New_layout')}
             </button>

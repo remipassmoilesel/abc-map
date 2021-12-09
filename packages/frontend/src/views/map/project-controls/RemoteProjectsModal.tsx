@@ -71,7 +71,7 @@ class RemoteProjectsModal extends Component<Props, State> {
     const loading = this.state.loading;
 
     return (
-      <Modal show={true} onHide={this.props.onHide} backdrop={'static'}>
+      <Modal show={true} onHide={this.props.onHide} backdrop={'static'} centered>
         <Modal.Header closeButton>
           <Modal.Title>{t('Projects_saved')}</Modal.Title>
         </Modal.Header>

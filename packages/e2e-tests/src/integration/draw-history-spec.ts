@@ -21,7 +21,6 @@ import { MapTool } from '@abc-map/shared';
 import { TestHelper } from '../helpers/TestHelper';
 import { MainMap } from '../helpers/MainMap';
 import { Draw } from '../helpers/Draw';
-import { History } from '../helpers/History';
 import { Routes } from '../helpers/Routes';
 
 describe('Draw features history', function () {
@@ -32,6 +31,8 @@ describe('Draw features history', function () {
   it('user can add feature then undo and redo', function () {
     cy.visit(Routes.map().format())
       .then(() => MainMap.fixedView())
+      .get('[data-cy=draw-menu]')
+      .click()
       .then(() => ToolSelector.enable(MapTool.LineString))
       // First line
       .then(() => Draw.click(100, 100))
@@ -43,20 +44,26 @@ describe('Draw features history', function () {
       .should((map) => {
         const features = map.getActiveLayerFeatures();
         expect(features).length(2);
-        expect(features[0].getGeometry()?.getExtent()).deep.equals([-1118865.2444950186, 3558914.916784167, -629668.2634698907, 4048111.897809295]);
-        expect(features[1].getGeometry()?.getExtent()).deep.equals([-140471.28244476253, 2580520.954733911, 348725.69858036516, 3069717.9357590387]);
+        expect(features.map((feat) => feat.getGeometry()?.getExtent())).deep.equals([
+          [-3564850.1496206587, 3558914.916784167, -3075653.1685955306, 4048111.897809295],
+          [-2586456.1875704024, 2580520.954733911, -2097259.2065452747, 3069717.9357590387],
+        ]);
       })
       // First undo
-      .then(() => History.undo())
+      .get('[data-cy=undo]')
+      .click()
       .wait(600)
       .then(() => MainMap.getReference())
       .should((map) => {
         const features = map.getActiveLayerFeatures();
         expect(features).length(1);
-        expect(features[0].getGeometry()?.getExtent()).deep.equals([-1118865.2444950186, 3558914.916784167, -629668.2634698907, 4048111.897809295]);
+        expect(features.map((feat) => feat.getGeometry()?.getExtent())).deep.equals([
+          [-3564850.1496206587, 3558914.916784167, -3075653.1685955306, 4048111.897809295],
+        ]);
       })
       // Second undo
-      .then(() => History.undo())
+      .get('[data-cy=undo]')
+      .click()
       .wait(600)
       .then(() => MainMap.getReference())
       .should((map) => {
@@ -64,29 +71,37 @@ describe('Draw features history', function () {
         expect(features).length(0);
       })
       // First redo
-      .then(() => History.redo())
+      .get('[data-cy=redo]')
+      .click()
       .wait(600)
       .then(() => MainMap.getReference())
       .should((map) => {
         const features = map.getActiveLayerFeatures();
         expect(features).length(1);
-        expect(features[0].getGeometry()?.getExtent()).deep.equals([-1118865.2444950186, 3558914.916784167, -629668.2634698907, 4048111.897809295]);
+        expect(features.map((feat) => feat.getGeometry()?.getExtent())).deep.equals([
+          [-3564850.1496206587, 3558914.916784167, -3075653.1685955306, 4048111.897809295],
+        ]);
       })
       // Second redo
-      .then(() => History.redo())
+      .get('[data-cy=redo]')
+      .click()
       .wait(600)
       .then(() => MainMap.getReference())
       .should((map) => {
         const features = map.getActiveLayerFeatures();
         expect(features).length(2);
-        expect(features[0].getGeometry()?.getExtent()).deep.equals([-1118865.2444950186, 3558914.916784167, -629668.2634698907, 4048111.897809295]);
-        expect(features[1].getGeometry()?.getExtent()).deep.equals([-140471.28244476253, 2580520.954733911, 348725.69858036516, 3069717.9357590387]);
+        expect(features.map((feat) => feat.getGeometry()?.getExtent())).deep.equals([
+          [-3564850.1496206587, 3558914.916784167, -3075653.1685955306, 4048111.897809295],
+          [-2586456.1875704024, 2580520.954733911, -2097259.2065452747, 3069717.9357590387],
+        ]);
       });
   });
 
   it('user can modify feature then undo', function () {
     cy.visit(Routes.map().format())
       .then(() => MainMap.fixedView())
+      .get('[data-cy=draw-menu]')
+      .click()
       .then(() => ToolSelector.enable(MapTool.LineString))
       // Create line
       .then(() => Draw.click(100, 100))
@@ -101,43 +116,57 @@ describe('Draw features history', function () {
       .should((map) => {
         const features = map.getActiveLayerFeatures();
         expect(features).length(1);
-        expect(features[0].getGeometry()?.getExtent()).deep.equals([-140471.28244476253, 1112930.011658527, 1816316.6416557492, 3069717.9357590387]);
+        expect(features.map((feat) => feat.getGeometry()?.getExtent())).deep.equals([
+          [-2586456.1875704024, 1112930.011658527, -629668.2634698907, 3069717.9357590387],
+        ]);
       })
       // First undo
-      .then(() => History.undo())
+      .get('[data-cy=undo]')
+      .click()
       .wait(600)
       .then(() => MainMap.getReference())
       .should((map) => {
         const features = map.getActiveLayerFeatures();
         expect(features).length(1);
-        expect(features[0].getGeometry()?.getExtent()).deep.equals([-1118865.2444950186, 3069717.9357590387, -140471.28244476253, 4048111.897809295]);
+        expect(features.map((feat) => feat.getGeometry()?.getExtent())).deep.equals([
+          [-3564850.1496206587, 3069717.9357590387, -2586456.1875704024, 4048111.897809295],
+        ]);
       })
       // Second undo
-      .then(() => History.undo())
+      .get('[data-cy=undo]')
+      .click()
       .wait(600)
       .then(() => MainMap.getReference())
       .should((map) => {
         const features = map.getActiveLayerFeatures();
         expect(features).length(1);
-        expect(features[0].getGeometry()?.getExtent()).deep.equals([-1118865.2444950186, 3558914.916784167, -629668.2634698907, 4048111.897809295]);
+        expect(features.map((feat) => feat.getGeometry()?.getExtent())).deep.equals([
+          [-3564850.1496206587, 3558914.916784167, -3075653.1685955306, 4048111.897809295],
+        ]);
       })
       // First redo
-      .then(() => History.redo())
+      .get('[data-cy=redo]')
+      .click()
       .wait(600)
       .then(() => MainMap.getReference())
       .should((map) => {
         const features = map.getActiveLayerFeatures();
         expect(features).length(1);
-        expect(features[0].getGeometry()?.getExtent()).deep.equals([-1118865.2444950186, 3069717.9357590387, -140471.28244476253, 4048111.897809295]);
+        expect(features.map((feat) => feat.getGeometry()?.getExtent())).deep.equals([
+          [-3564850.1496206587, 3069717.9357590387, -2586456.1875704024, 4048111.897809295],
+        ]);
       })
       // Second redo
-      .then(() => History.redo())
+      .get('[data-cy=redo]')
+      .click()
       .wait(600)
       .then(() => MainMap.getReference())
       .should((map) => {
         const features = map.getActiveLayerFeatures();
         expect(features).length(1);
-        expect(features[0].getGeometry()?.getExtent()).deep.equals([-140471.28244476253, 1112930.011658527, 1816316.6416557492, 3069717.9357590387]);
+        expect(features.map((feat) => feat.getGeometry()?.getExtent())).deep.equals([
+          [-2586456.1875704024, 1112930.011658527, -629668.2634698907, 3069717.9357590387],
+        ]);
       });
   });
 });

@@ -46,7 +46,7 @@ export class StorePersistence {
       logger.debug('Loaded state: ', res);
       return res;
     } catch (err) {
-      logger.error(err);
+      logger.error('State load error: ', err);
       return undefined;
     }
   }
@@ -82,7 +82,7 @@ export class StorePersistence {
       this.storage.set(StorageKey.REDUX_STATE, serializedState);
       logger.debug('Saved state: ', serializedState);
     } catch (err) {
-      logger.error(err);
+      logger.error('Save state error: ', err);
     }
   }
 }

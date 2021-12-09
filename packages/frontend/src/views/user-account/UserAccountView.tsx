@@ -29,6 +29,7 @@ import { prefixedTranslation } from '../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
 import Cls from './UserAccountView.module.scss';
 import { Routes } from '../../routes';
+import AccountInformations from './AccountInformations';
 
 const logger = Logger.get('UserAccountView.tsx');
 
@@ -60,7 +61,7 @@ class UserAccountView extends Component<Props, State> {
 
     return (
       <div className={Cls.userAccount}>
-        <h1 className={'mb-4'}>{t('My_account')}</h1>
+        <h1 className={'my-5'}>{t('My_account')}</h1>
         {!authenticated && (
           <div className={'my-5 d-flex flex-column align-items-center'}>
             <div className={'mb-4'}>{t('You_must_connect_to_display_your_account')}</div>
@@ -69,23 +70,21 @@ class UserAccountView extends Component<Props, State> {
             </Link>
           </div>
         )}
-        {authenticated && user && (
-          <div className={Cls.cardContainer}>
-            <div className={Cls.section}>
-              <div className={'card card-body'}>
-                <h2>{t('My_informations')}</h2>
-                <div className={'mb-2'}>{t('Email_address')}:</div>
-                <input type={'email'} readOnly={true} value={user.email} className={'form-control'} />
-                <small className={'mt-2'}>{t('Email_is_readonly')}</small>
-                <div className={'mt-4'}>{t('Nothing_more')}</div>
-              </div>
-            </div>
 
-            <div className={Cls.section}>
-              <ChangePasswordForm key={passwordFormVersion} onSubmit={this.handleChangePassword} />
-            </div>
-            <div className={Cls.section}>
-              <DeleteAccountForm onSubmit={this.handleDeleteAccount} />
+        {authenticated && user && (
+          <div className={'container'}>
+            <div className={'row'}>
+              <div className={'col-xl-4 mb-3'}>
+                <AccountInformations user={user} />
+              </div>
+
+              <div className={'col-xl-4 mb-3'}>
+                <ChangePasswordForm key={passwordFormVersion} onSubmit={this.handleChangePassword} />
+              </div>
+
+              <div className={'col-xl-4 mb-3'}>
+                <DeleteAccountForm onSubmit={this.handleDeleteAccount} />
+              </div>
             </div>
           </div>
         )}

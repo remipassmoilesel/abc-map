@@ -54,19 +54,19 @@ class LongOperationModal extends Component<ServiceProps, State> {
     return (
       <div className={Cls.modal}>
         {burning && (
-          <>
+          <div className={Cls.frame}>
             <h1>{t('Things_are_getting_hot')}</h1>
             <div className={Cls.icon}>🔥</div>
             <div>{t('Dont_try_to_run_away')}</div>
-          </>
+          </div>
         )}
         {!burning && (
-          <>
+          <div className={Cls.frame}>
             <h1>{t('At_last')}</h1>
             <div className={Cls.icon} data-cy={'long-operation-done'}>
               ✅
             </div>
-          </>
+          </div>
         )}
       </div>
     );

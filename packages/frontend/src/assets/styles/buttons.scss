@@ -18,8 +18,10 @@
 
 @import "variables";
 
-// Link
-
-.btn-link {
+.btn {
   text-decoration: none;
+
+  &:hover {
+    text-decoration: none;
+  }
 }

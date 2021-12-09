@@ -19,7 +19,6 @@
 import { TestData } from '../test-data/TestData';
 import { MainMap } from '../helpers/MainMap';
 import { TestHelper } from '../helpers/TestHelper';
-import { History } from '../helpers/History';
 import { Routes } from '../helpers/Routes';
 
 describe('Data import', () => {
@@ -29,6 +28,8 @@ describe('Data import', () => {
 
   it('User can import data via graphical control, then undo', () => {
     cy.visit(Routes.map().format())
+      .get('[data-cy=project-menu]')
+      .click()
       .get('[data-cy=import-data]')
       .click()
       .then(() => TestData.sampleGpx())
@@ -46,13 +47,17 @@ describe('Data import', () => {
         expect(features).length(12);
         features.forEach((f) => expect(f.getId()).not.undefined);
       })
-      .then(() => History.undo())
+      .get('[data-cy=draw-menu]')
+      .click()
+      .get('[data-cy=undo]')
+      .click()
       .then(() => MainMap.getReference())
       .should((map) => {
         const layerNames = map.getLayersMetadata().map((l) => l.name);
         expect(layerNames).length(2);
       })
-      .then(() => History.redo())
+      .get('[data-cy=redo]')
+      .click()
       .then(() => MainMap.getReference())
       .should((map) => {
         const layerNames = map.getLayersMetadata().map((l) => l.name);
@@ -85,13 +90,17 @@ describe('Data import', () => {
         expect(features).length(12);
         features.forEach((f) => expect(f.getId()).not.undefined);
       })
-      .then(() => History.undo())
+      .get('[data-cy=draw-menu]')
+      .click()
+      .get('[data-cy=undo]')
+      .click()
       .then(() => MainMap.getReference())
       .should((map) => {
         const layerNames = map.getLayersMetadata().map((l) => l.name);
         expect(layerNames).length(2);
       })
-      .then(() => History.redo())
+      .get('[data-cy=redo]')
+      .click()
       .then(() => MainMap.getReference())
       .should((map) => {
         const layerNames = map.getLayersMetadata().map((l) => l.name);

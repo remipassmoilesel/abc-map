@@ -47,7 +47,7 @@ function LayerListItem(props: Props) {
     <div className={itemClasses} data-cy={'list-item'} data-layer={dataLayer}>
       {/* Eye icon, visible only if layer is visible */}
       <div onClick={handleToggleVisibility} className={iconClasses}>
-        <FaIcon icon={icon} className={iconClasses} />
+        <FaIcon icon={icon} className={iconClasses} size={'1.2rem'} />
       </div>
       <div className={'flex-grow-1'} onClick={handleSelect}>
         {meta.name}

@@ -199,7 +199,7 @@ describe('MapWrapper', function () {
 
       map.setDefaultInteractions();
 
-      expect(TestHelper.interactionNames(map.unwrap())).toEqual(['DragPan', 'KeyboardPan', 'MouseWheelZoom']);
+      expect(TestHelper.interactionNames(map.unwrap())).toEqual(['DragPan', 'KeyboardPan', 'MouseWheelZoom', 'PinchZoom']);
     });
 
     it('cleanInteractions', () => {
@@ -265,7 +265,7 @@ describe('MapWrapper', function () {
       // Assert
       expect(map.getTool()).toBeInstanceOf(LineStringTool);
       expect(TestHelper.interactionCount(map.unwrap(), 'Draw')).toEqual(0);
-      expect(TestHelper.interactionNames(map.unwrap())).toEqual(['DragPan', 'KeyboardPan', 'MouseWheelZoom']);
+      expect(TestHelper.interactionNames(map.unwrap())).toEqual(['DragPan', 'KeyboardPan', 'MouseWheelZoom', 'PinchZoom']);
     });
 
     it('Set active layer should enable interaction (Tile -> Vector)', () => {

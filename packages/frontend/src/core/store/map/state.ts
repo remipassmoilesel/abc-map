@@ -85,7 +85,7 @@ export const mapInitialState: MapState = {
   },
   mainMapDimensions: {
     // FIXME: this is an ugly hack, if user does not display map before rendering a layout we must "guess" values
-    width: window.screen.width * 0.75,
-    height: window.screen.height * 0.85,
+    width: window.innerWidth,
+    height: window.innerHeight * 0.95,
   },
 };

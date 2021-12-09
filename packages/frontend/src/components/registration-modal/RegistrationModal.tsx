@@ -52,7 +52,7 @@ class RegistrationModal extends Component<ServiceProps, State> {
     }
 
     return (
-      <Modal show={visible} onHide={this.handleCancel}>
+      <Modal show={visible} onHide={this.handleCancel} centered>
         <Modal.Header closeButton>
           <Modal.Title>{t('Registration')} 🪶</Modal.Title>
         </Modal.Header>

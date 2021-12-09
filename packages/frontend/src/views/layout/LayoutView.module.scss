@@ -21,24 +21,15 @@
 $panel-width: 250px;
 
 .layoutView {
-  max-height: 95vh;
+  height: $view-height;
+  width: 100%;
   overflow: hidden;
 }
 
 .content {
   display: flex;
   flex-direction: row;
-}
 
-.leftPanel {
-  width: $panel-width;
-  border-right: solid 1px $gray-400;
-}
-
-.rightPanel {
-  display: flex;
-  flex-direction: column;
-  width: $panel-width;
-
-  border-left: solid 1px $gray-400;
+  height: 100%;
+  width: 100%;
 }

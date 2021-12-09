@@ -59,7 +59,7 @@ class LegendItem extends Component<Props, {}> {
         <button onClick={this.handleDelete} title={t('Delete')} className={'btn btn-outline-secondary mr-2'}>
           <FaIcon icon={IconDefs.faTrash} size={'1.1rem'} />
         </button>
-        <input type={'text'} value={text} onChange={this.handleTextChange} placeholder={t('Entry_name')} className={`form-control ${Cls.textField}`} />
+        <input type={'text'} value={text} onChange={this.handleTextChange} placeholder={t('Entry_name')} className={`form-control`} />
       </div>
     );
   }

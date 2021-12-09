@@ -16,10 +16,17 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
+@import "node_modules/bootstrap/scss/bootstrap";
+
 .panel {
   display: flex;
   flex-direction: column;
   padding: 1rem;
+
+  width: 60vw;
+  @include media-breakpoint-down(xl) {
+    width: 100%;
+  }
 }
 
 .message {

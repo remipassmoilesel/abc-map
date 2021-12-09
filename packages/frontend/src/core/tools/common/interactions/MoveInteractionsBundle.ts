@@ -16,18 +16,21 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { DragPan, Interaction, KeyboardPan, MouseWheelZoom } from 'ol/interaction';
+import { DragPan, Interaction, KeyboardPan, MouseWheelZoom, PinchZoom } from 'ol/interaction';
 import MapBrowserEvent from 'ol/MapBrowserEvent';
 import Map from 'ol/Map';
 import { withControlKey, withMainButton } from '../helpers/common-conditions';
 
+/**
+ * This class contains interactions designed to be used in complement of drawing interactions
+ */
 export class MoveInteractionsBundle {
   private map?: Map;
   private interactions: Interaction[];
 
   constructor() {
     const condition = (ev: MapBrowserEvent<MouseEvent>) => withControlKey(ev) && withMainButton(ev);
-    this.interactions = [new DragPan({ condition }), new KeyboardPan({ condition }), new MouseWheelZoom({ condition })];
+    this.interactions = [new DragPan({ condition }), new KeyboardPan({ condition }), new MouseWheelZoom({ condition }), new PinchZoom({})];
   }
 
   public setup(map: Map) {

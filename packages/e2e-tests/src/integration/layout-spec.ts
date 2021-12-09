@@ -17,13 +17,12 @@
  */
 
 import { TestHelper } from '../helpers/TestHelper';
-import { LayoutList } from '../helpers/LayoutList';
-import { History } from '../helpers/History';
 import { Download } from '../helpers/Download';
 import { LayerControls } from '../helpers/LayerControls';
 import { TopBar } from '../helpers/TopBar';
 import { LongOperation } from '../helpers/LongOperation';
 import { Routes } from '../helpers/Routes';
+import Chainable = Cypress.Chainable;
 
 describe('Layout', function () {
   describe('As a visitor', function () {
@@ -33,67 +32,92 @@ describe('Layout', function () {
 
     it('can create layout, undo and redo', function () {
       cy.visit(Routes.layout().format())
-        .get('[data-cy=layout-controls] [data-cy=new-layout]')
+        .get('[data-cy=layouts-menu]')
         .click()
-        .then(() => LayoutList.getNames())
+        .get('[data-cy=controls-menu]')
+        .click()
+        .get('[data-cy=new-layout]')
+        .click()
+        .then(() => getLayoutNames())
         .should((elem) => expect(elem).deep.equal(['Page 1']))
-        .get('[data-cy=layout-controls] [data-cy=new-layout]')
+        .get('[data-cy=add-layout]')
         .click()
-        .then(() => LayoutList.getNames())
+        .then(() => getLayoutNames())
         .should((elem) => expect(elem).deep.equal(['Page 1', 'Page 2']))
-        .then(() => History.undo())
-        .then(() => LayoutList.getNames())
+        .get('[data-cy=undo]')
+        .click()
+        .then(() => getLayoutNames())
         .should((elem) => expect(elem).deep.equal(['Page 1']))
-        .then(() => History.redo())
-        .then(() => LayoutList.getNames())
+        .get('[data-cy=redo]')
+        .click()
+        .then(() => getLayoutNames())
         .should((elem) => expect(elem).deep.equal(['Page 1', 'Page 2']));
     });
 
     it('can change layout order, undo and redo', function () {
       cy.visit(Routes.layout().format())
-        .get('[data-cy=layout-controls] [data-cy=new-layout]')
+        .get('[data-cy=layouts-menu]')
+        .click()
+        .get('[data-cy=controls-menu]')
+        .click()
+        .get('[data-cy=add-layout]')
         .click()
         .click()
-        .get('[data-cy=layout-controls] [data-cy=layout-up]')
+        .get('[data-cy=layout-up]')
         .click()
-        .then(() => LayoutList.getNames())
+        .then(() => getLayoutNames())
         .should((elem) => expect(elem).deep.equal(['Page 2', 'Page 1']))
-        .get('[data-cy=layout-controls] [data-cy=layout-down]')
+        .get('[data-cy=layout-down]')
         .click()
-        .then(() => LayoutList.getNames())
+        .then(() => getLayoutNames())
         .should((elem) => expect(elem).deep.equal(['Page 1', 'Page 2']))
-        .then(() => History.undo())
-        .then(() => LayoutList.getNames())
+        .get('[data-cy=undo]')
+        .click()
+        .then(() => getLayoutNames())
         .should((elem) => expect(elem).deep.equal(['Page 2', 'Page 1']))
-        .then(() => History.redo())
-        .then(() => LayoutList.getNames())
+        .get('[data-cy=redo]')
+        .click()
+        .then(() => getLayoutNames())
         .should((elem) => expect(elem).deep.equal(['Page 1', 'Page 2']));
     });
 
     it('can delete all layouts, undo and redo', function () {
       cy.visit(Routes.layout().format())
-        .get('[data-cy=layout-controls] [data-cy=new-layout]')
+        .get('[data-cy=layouts-menu]')
+        .click()
+        .get('[data-cy=controls-menu]')
+        .click()
+        // Add two layouts
+        .get('[data-cy=add-layout]')
         .click()
         .click()
-        .get('[data-cy=layout-controls] [data-cy=clear-all]')
+        .get('[data-cy=clear-all]')
         .click()
-        .then(() => LayoutList.getNames())
+        .then(() => getLayoutNames())
         .should((elem) => expect(elem).deep.equal([]))
-        .then(() => History.undo())
-        .then(() => LayoutList.getNames())
+        .get('[data-cy=undo]')
+        .click()
+        .then(() => getLayoutNames())
         .should((elem) => expect(elem).deep.equal(['Page 1', 'Page 2']))
-        .then(() => History.redo())
-        .then(() => LayoutList.getNames())
+        .get('[data-cy=redo]')
+        .click()
+        .then(() => getLayoutNames())
         .should((elem) => expect(elem).deep.equal([]));
     });
 
     it('can export PDF with predefined layer', function () {
       cy.visit(Routes.map().format())
+        .get('[data-cy=draw-menu]')
+        .click()
         .then(() => LayerControls.deleteActiveLayer())
         .then(() => TopBar.layout())
-        .get('[data-cy=layout-controls] [data-cy=new-layout]')
+        .get('[data-cy=layouts-menu]')
         .click()
-        .get('[data-cy=layout-controls] [data-cy=pdf-export]')
+        .get('[data-cy=controls-menu]')
+        .click()
+        .get('[data-cy=add-layout]')
+        .click()
+        .get('[data-cy=pdf-export]')
         .click()
         .then(() => LongOperation.done(50_000))
         .then(() => Download.fileAsBlob())
@@ -106,13 +130,19 @@ describe('Layout', function () {
 
     it('can export PDF with XYZ layer', function () {
       cy.visit(Routes.map().format())
+        .get('[data-cy=draw-menu]')
+        .click()
         .then(() => LayerControls.deleteActiveLayer())
         .then(() => LayerControls.deleteActiveLayer())
         .then(() => LayerControls.addXyzLayer())
         .then(() => TopBar.layout())
-        .get('[data-cy=layout-controls] [data-cy=new-layout]')
+        .get('[data-cy=layouts-menu]')
         .click()
-        .get('[data-cy=layout-controls] [data-cy=pdf-export]')
+        .get('[data-cy=controls-menu]')
+        .click()
+        .get('[data-cy=add-layout]')
+        .click()
+        .get('[data-cy=pdf-export]')
         .click()
         .then(() => LongOperation.done(50_000))
         .then(() => Download.fileAsBlob())
@@ -125,13 +155,19 @@ describe('Layout', function () {
 
     it('can export PDF with WMS layer', function () {
       cy.visit(Routes.map().format())
+        .get('[data-cy=draw-menu]')
+        .click()
         .then(() => LayerControls.deleteActiveLayer())
         .then(() => LayerControls.deleteActiveLayer())
         .then(() => LayerControls.addWmsLayer())
         .then(() => TopBar.layout())
-        .get('[data-cy=layout-controls] [data-cy=new-layout]')
+        .get('[data-cy=layouts-menu]')
         .click()
-        .get('[data-cy=layout-controls] [data-cy=pdf-export]')
+        .get('[data-cy=controls-menu]')
+        .click()
+        .get('[data-cy=add-layout]')
+        .click()
+        .get('[data-cy=pdf-export]')
         .click()
         .then(() => LongOperation.done(50_000))
         .then(() => Download.fileAsBlob())
@@ -144,13 +180,19 @@ describe('Layout', function () {
 
     it('can export PDF with WMTS layer', function () {
       cy.visit(Routes.map().format())
+        .get('[data-cy=draw-menu]')
+        .click()
         .then(() => LayerControls.deleteActiveLayer())
         .then(() => LayerControls.deleteActiveLayer())
         .then(() => LayerControls.addWmtsLayer())
         .then(() => TopBar.layout())
-        .get('[data-cy=layout-controls] [data-cy=new-layout]')
+        .get('[data-cy=layouts-menu]')
         .click()
-        .get('[data-cy=layout-controls] [data-cy=pdf-export]')
+        .get('[data-cy=controls-menu]')
+        .click()
+        .get('[data-cy=add-layout]')
+        .click()
+        .get('[data-cy=pdf-export]')
         .click()
         .then(() => LongOperation.done(50_000))
         .then(() => Download.fileAsBlob())
@@ -163,10 +205,14 @@ describe('Layout', function () {
 
     it('can export PNG with several sheets', function () {
       cy.visit(Routes.layout().format())
-        .get('[data-cy=layout-controls] [data-cy=new-layout]')
+        .get('[data-cy=layouts-menu]')
+        .click()
+        .get('[data-cy=controls-menu]')
+        .click()
+        .get('[data-cy=add-layout]')
         .click()
         .click()
-        .get('[data-cy=layout-controls] [data-cy=png-export]')
+        .get('[data-cy=png-export]')
         .click()
         .then(() => LongOperation.done(50_000))
         .then(() => Download.fileAsBlob())
@@ -178,3 +224,14 @@ describe('Layout', function () {
     });
   });
 });
+
+function getLayoutNames(): Chainable<string[]> {
+  return cy.get('[data-cy=layout-list]').then(
+    (elem) =>
+      elem
+        .find('[data-cy=list-item]')
+        .toArray()
+        .map((elem) => elem.textContent)
+        .filter((s) => !!s) as string[]
+  );
+}

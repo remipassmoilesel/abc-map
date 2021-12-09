@@ -16,46 +16,19 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-@import "variables";
+@import "src/assets/styles/variables";
 
-$control-color: rgba($secondary, 0.3);
-$control-hover-color: rgba($secondary, 0.9);
+.result {
+  width: 100%;
+  padding: 0.5em;
+  margin-bottom: 0.2em;
+  text-align: left;
+  background-color: white;
 
-.ol-zoom {
-  background: transparent;
-
-  &:hover {
-    background: transparent;
-  }
-
-  button {
-    font-size: 1.1rem;
-    background: $control-color;
-
-    &:hover {
-      background: $control-hover-color;
-    }
-  }
-}
-
-.ol-scale-line {
-  background: $control-color;
+  border-radius: $border-radius;
+  border: solid 1px lightgrey;
 
   &:hover {
-    background: $control-hover-color;
-  }
-
-  .ol-scale-line-inner {
-    font-size: 1rem !important;
-  }
-}
-
-.ol-attribution {
-  button {
-    background: $control-color !important;
-
-    &:hover {
-      background: $control-hover-color !important;
-    }
+    background-color: rgba($secondary, 0.15);
   }
 }

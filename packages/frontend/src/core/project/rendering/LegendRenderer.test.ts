@@ -64,7 +64,7 @@ describe('LegendRenderer', function () {
       // Assert
       expect(toContext.callCount).toEqual(1);
       expect(toContext.args[0][0]).toBeInstanceOf(CanvasRenderingContext2D);
-      expect(toContext.args[0][1]).toEqual({ size: [800, 600] });
+      expect(toContext.args[0][1]).toEqual({ pixelRatio: 1, size: [800, 600] });
 
       expect(vectorContext.setStyle.callCount).toEqual(1);
       expect(vectorContext.setStyle.args[0][0]).toEqual(style);
@@ -86,7 +86,7 @@ describe('LegendRenderer', function () {
       // Assert
       expect(toContext.callCount).toEqual(1);
       expect(toContext.args[0][0]).toBeInstanceOf(CanvasRenderingContext2D);
-      expect(toContext.args[0][1]).toEqual({ size: [800, 600] });
+      expect(toContext.args[0][1]).toEqual({ pixelRatio: 1, size: [800, 600] });
 
       expect(vectorContext.setStyle.callCount).toEqual(1);
       expect(vectorContext.setStyle.args[0][0]).toEqual(style);

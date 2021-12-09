@@ -29,6 +29,8 @@ describe('XYZ layers', function () {
 
   it('User can add XYZ layers', () => {
     cy.visit(Routes.map().format())
+      .get('[data-cy=draw-menu]')
+      .click()
       // Open add layer dialog
       .get('[data-cy=add-layer]')
       .click()

@@ -16,14 +16,32 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import Chainable = Cypress.Chainable;
+@import "src/assets/styles/variables";
 
-export class History {
-  public static undo(): Chainable<any> {
-    return cy.get('[data-cy=undo').click();
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 2.7rem;
+  width: 2.7rem;
+
+  background-color: rgba(white, 0.4);
+  border-radius: $border-radius;
+  border: solid 1px rgba($control-color, 0.8);
+
+  box-shadow: $box-shadow;
+
+  .icon {
+    color: rgba($control-color, 0.8);
   }
 
-  public static redo(): Chainable<any> {
-    return cy.get('[data-cy=redo').click();
+  &:hover {
+    background-color: $control-color-active;
+
+    .icon {
+      color: white;
+      opacity: $control-color-active-opacity;
+    }
   }
 }

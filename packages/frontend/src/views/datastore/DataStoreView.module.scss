@@ -15,6 +15,8 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
+@import "src/assets/styles/variables";
+@import "node_modules/bootstrap/scss/bootstrap";
 
 .datastore {
   display: flex;
@@ -22,45 +24,33 @@
   justify-content: flex-start;
   align-items: flex-start;
 
-  padding: 1rem;
+  height: $view-height;
 
-  height: 95vh;
-  max-height: 95vh;
+  padding: 1rem;
 
   overflow-x: hidden;
   overflow-y: auto;
-
-  p {
-    margin: 1em 0;
-  }
 }
 
 .header {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
-  align-items: center;
-
-  margin: 1rem 0 2rem 0;
-}
-
-.searchBar {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
   align-items: flex-start;
 
-  width: 35vw;
-}
+  width: 80vw;
+  margin: 1rem 0 2rem 0;
 
-.navigationBar {
-  margin-left: 3rem;
+  @include media-breakpoint-up(xl) {
+    width: 35vw;
+    max-width: 35vw;
+  }
 }
 
 .artefactList {
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   flex-wrap: wrap;
 
@@ -77,4 +67,15 @@
 
   width: 100vw;
   height: 60vw;
+}
+
+.navigationBar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+
+  margin-bottom: 5rem;
 }

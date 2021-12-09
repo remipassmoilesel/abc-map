@@ -16,17 +16,33 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-.panel {
-  display: flex;
-  flex-direction: column;
+@import "node_modules/bootstrap/scss/bootstrap";
 
-  margin-bottom: 5rem;
+.panel {
+  @include media-breakpoint-up(xl) {
+    width: 60vw;
+    margin-left: 3vw;
+  }
 }
 
 .introduction {
-  width: 60%;
-}
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
 
-.sample {
-  width: 300px;
+  @include media-breakpoint-up(xl) {
+    div {
+      width: 60%;
+    }
+
+    img {
+      width: 20vw;
+    }
+  }
+
+  @include media-breakpoint-down(xl) {
+    img {
+      height: 30vh;
+    }
+  }
 }

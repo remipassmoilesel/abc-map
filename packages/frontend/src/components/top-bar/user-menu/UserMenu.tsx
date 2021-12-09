@@ -50,9 +50,9 @@ class UserMenu extends React.Component<Props, {}> {
     const userLabel = user && userAuthenticated ? user.email : t('Hello_visitor');
 
     return (
-      <Dropdown data-cy={'user-menu'}>
-        <Dropdown.Toggle variant="light">
-          <FaIcon icon={IconDefs.faUserCircle} size={'1.6rem'} />
+      <Dropdown className={Cls.userMenu} align={'end'}>
+        <Dropdown.Toggle variant="light" data-cy={'user-menu'}>
+          <FaIcon icon={IconDefs.faUserCircle} size={'1.7rem'} />
         </Dropdown.Toggle>
         <Dropdown.Menu className={Cls.dropDown}>
           <Dropdown.ItemText data-cy={'user-label'}>{userLabel}</Dropdown.ItemText>

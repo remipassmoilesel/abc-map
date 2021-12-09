@@ -30,7 +30,9 @@ describe('Authentication', function () {
   describe('As a visitor', () => {
     it('can register and enable account', function () {
       const email = Registration.newEmail();
-      Registration.newUser(email).then(() => Registration.enableAccount(email));
+      Registration.newUser(email)
+        .then(() => Registration.enableAccount(email))
+        .then(() => Authentication.logout());
     });
 
     it('can login on enabled account with correct password', function () {
@@ -38,6 +40,7 @@ describe('Authentication', function () {
       const password = Registration.getPassword();
       Registration.newUser(email)
         .then(() => Registration.enableAccount(email))
+        .then(() => Authentication.logout())
         .then(() => Authentication.login(email, password))
         .then(() => Authentication.logout());
     });
@@ -61,6 +64,7 @@ describe('Authentication', function () {
       const email = Registration.newEmail();
       Registration.newUser(email)
         .then(() => Registration.enableAccount(email))
+        .then(() => Authentication.logout())
         .visit(Routes.landing().format())
         .get('[data-cy=open-login]')
         .click()
@@ -77,10 +81,8 @@ describe('Authentication', function () {
   describe('As a user', function () {
     it('can logout', function () {
       const email = Registration.newEmail();
-      const password = Registration.getPassword();
       Registration.newUser(email)
         .then(() => Registration.enableAccount(email))
-        .then(() => Authentication.login(email, password))
         .get('[data-cy=user-menu]')
         .click()
         .get('[data-cy=logout]')

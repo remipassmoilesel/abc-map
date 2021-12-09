@@ -63,7 +63,7 @@ class PointIconPicker extends Component<Props, State> {
         </button>
 
         {/* Modal, visible on demand */}
-        <Modal show={modal} onHide={this.handleCancel} dialogClassName={Cls.modal}>
+        <Modal show={modal} onHide={this.handleCancel} size={'xl'} centered>
           <Modal.Header closeButton>
             <Modal.Title>Icônes</Modal.Title>
           </Modal.Header>

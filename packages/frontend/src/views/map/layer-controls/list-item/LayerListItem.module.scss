@@ -32,10 +32,6 @@
   white-space: nowrap;
   overflow: hidden;
 
-  :global(.abc-icon) {
-    margin: 0 7px;
-  }
-
   &.active {
     background: $primary;
     color: white;
@@ -47,8 +43,13 @@
 }
 
 .visibility {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
   cursor: pointer;
-  width: 2rem;
+  width: 3rem;
 
   &.visible {
     :global(.abc-icon) {

@@ -16,17 +16,14 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { Component, ReactNode } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { AbcVoteAggregation, Logger, UserStatus } from '@abc-map/shared';
-import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
-import { ServiceProps, withServices } from '../../core/withServices';
+import { Link, useHistory } from 'react-router-dom';
 import { DateTime } from 'luxon';
 import Illustration1Icon from '../../assets/illustrations/illustration-1.svg';
 import Illustration2Icon from '../../assets/illustrations/illustration-2.svg';
 import Illustration3Icon from '../../assets/illustrations/illustration-3.svg';
 import { BUILD_INFO } from '../../build-version';
-import { MainState } from '../../core/store/reducer';
-import { connect, ConnectedProps } from 'react-redux';
 import { pageSetup } from '../../core/utils/page-setup';
 import { prefixedTranslation } from '../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
@@ -35,50 +32,64 @@ import { Routes } from '../../routes';
 import { FaIcon } from '../../components/icon/FaIcon';
 import { IconDefs } from '../../components/icon/IconDefs';
 import Cls from './LandingView.module.scss';
+import { useAppSelector } from '../../core/store/hooks';
+import { useServices } from '../../core/hooks';
 
-const logger = Logger.get('Landing.tsx');
-
-const mapStateToProps = (state: MainState) => ({
-  authenticated: state.authentication.userStatus === UserStatus.Authenticated,
-});
-
-const connector = connect(mapStateToProps);
-
-type Props = ConnectedProps<typeof connector> & RouteComponentProps<any, any> & ServiceProps;
-
-interface State {
-  voteAggregation?: AbcVoteAggregation;
-  illustration: string;
-}
+const logger = Logger.get('LandingView.tsx');
 
 const t = prefixedTranslation('LandingView:');
 
-class LandingView extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      illustration: sample([Illustration1Icon, Illustration2Icon, Illustration3Icon]) as string,
-    };
-  }
+function LandingView() {
+  const { vote, modals, toasts } = useServices();
+  const history = useHistory();
+  const authenticated = useAppSelector((st) => st.authentication.userStatus) === UserStatus.Authenticated;
+  const [voteAggregation, setVoteAggregation] = useState<AbcVoteAggregation | undefined>();
+  const [illustration, setIllustration] = useState('');
+  const buildHash = BUILD_INFO.hash;
 
-  public render(): ReactNode {
-    const voteAggregation = this.state.voteAggregation;
-    const authenticated = this.props.authenticated;
-    const illustration = this.state.illustration;
-    const buildHash = BUILD_INFO.hash;
+  // Select illustration on mount
+  useEffect(() => {
+    setIllustration(sample([Illustration1Icon, Illustration2Icon, Illustration3Icon]) || Illustration1Icon);
+  }, []);
 
-    return (
-      <div className={Cls.landing}>
-        <div className={Cls.leftColumn}>
-          {/* Introduction */}
+  // Setup view
+  useEffect(() => {
+    pageSetup(t('Free_open_source_mapping'), t('AbcMap_new_version'));
 
-          <div>
+    const from = DateTime.now().minus({ days: 7 });
+    const to = DateTime.now();
+    vote
+      .getStats(from, to)
+      .then((res) => setVoteAggregation(res))
+      .catch((err) => logger.error(err));
+  }, [vote]);
+
+  const handleGoToMap = useCallback(() => history.push(Routes.map().format()), [history]);
+
+  const handleLogin = useCallback(() => {
+    modals.login().catch((err) => {
+      logger.error('Cannot open login modal', err);
+      toasts.genericError();
+    });
+  }, [modals, toasts]);
+
+  const handleRegister = useCallback(() => {
+    modals.registration().catch((err) => {
+      logger.error('Cannot open registration modal', err);
+      toasts.genericError();
+    });
+  }, [modals, toasts]);
+
+  return (
+    <div className={Cls.landing}>
+      <div className={'container'}>
+        <div className={'row'}>
+          <div className={'col-xl-6  mt-5'}>
+            {/* Title */}
             <h1>{t('Welcome')}</h1>
-
             <p className={Cls.intro}>{t('AbcMap_is_a_free_software')}</p>
-          </div>
 
-          <div>
+            {/* Explanation and start link */}
             <h3>{t('How_does_it_work')}</h3>
             <ul className={'mt-3'}>
               <li>
@@ -92,104 +103,64 @@ class LandingView extends Component<Props, State> {
               </li>
             </ul>
             <div className={'mt-4'}>
-              <button className={'btn btn-primary'} onClick={this.handleGoToMap}>
+              <button className={'btn btn-primary'} onClick={handleGoToMap}>
                 <FaIcon icon={IconDefs.faRocket} className={'mr-2'} />
                 {t('Lets_go')}
               </button>
             </div>
 
-            {/* Current version */}
+            {/* Authenticate and register buttons */}
+            {!authenticated && (
+              <div className={Cls.authenticationButtons}>
+                <h3>{t('Registration_Login')}</h3>
+                <p className={'mb-4'}>{t('Connection_is_optional')} 😉</p>
+                <div>
+                  <button className={'btn btn-outline-primary'} onClick={handleRegister} data-cy={'open-registration'}>
+                    <FaIcon icon={IconDefs.faFeatherAlt} className={'mr-3'} />
+                    {t('Register')}
+                  </button>
+                  <button className={'btn btn-outline-primary'} onClick={handleLogin} data-cy={'open-login'}>
+                    <FaIcon icon={IconDefs.faLockOpen} className={'mr-3'} />
+                    {t('Login')}
+                  </button>
+                </div>
+              </div>
+            )}
 
-            <div className={Cls.version}>Version {buildHash}</div>
+            {/* Vote results, legal mentions, current version */}
+            <div className={Cls.bottomMentions}>
+              {!!voteAggregation?.total && (
+                <div>
+                  {t('For_7_days_opinions_are_positive', { votes: voteAggregation.satisfied })}&nbsp;
+                  {voteAggregation.satisfied < 60 && (
+                    <>
+                      {t('Will_have_to_do_better')} <span className={'ml-2'}>🧑‍🏭</span>
+                    </>
+                  )}
+                  {voteAggregation.satisfied >= 60 && (
+                    <>
+                      {t('Champagne')} <span className={'ml-2'}>🎉</span>
+                    </>
+                  )}
+                </div>
+              )}
+
+              <div className={'mt-2'}>
+                <Link to={Routes.legalMentions().format()}>{t('About_this_platform')}&nbsp;&nbsp;⚖️</Link>
+              </div>
+
+              <div className={Cls.version}>Version {buildHash}</div>
+            </div>
           </div>
 
-          {/* Login and registration */}
-
-          {!authenticated && (
-            <div>
-              <h3>{t('Registration_Login')}</h3>
-              <p className={'mb-4'}>{t('Connection_is_optional')} 😉</p>
-              <div>
-                <button className={'btn btn-outline-primary'} onClick={this.handleRegister} data-cy={'open-registration'}>
-                  <FaIcon icon={IconDefs.faFeatherAlt} className={'mr-3'} />
-                  {t('Register')}
-                </button>
-                <button className={'btn btn-outline-primary'} onClick={this.handleLogin} data-cy={'open-login'}>
-                  <FaIcon icon={IconDefs.faLockOpen} className={'mr-3'} />
-                  {t('Login')}
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
-
-        <div className={Cls.rightColumn}>
-          {/* Some pretty illustration */}
-
-          <img src={illustration} alt={t('A_pretty_illustration')} className={Cls.illustration} />
-
-          {/* Vote results */}
-
-          {!!voteAggregation?.total && (
-            <div className={'text-right'}>
-              {t('For_7_days_opinions_are_positive', { votes: voteAggregation.satisfied })}&nbsp;
-              {voteAggregation.satisfied < 60 && (
-                <>
-                  {t('Will_have_to_do_better')} <span className={'ml-2'}>🧑‍🏭</span>
-                </>
-              )}
-              {voteAggregation.satisfied >= 60 && (
-                <>
-                  {t('Champagne')} <span className={'ml-2'}>🎉</span>
-                </>
-              )}
-            </div>
-          )}
-
-          <div className={'mt-3'}>
-            <Link to={Routes.legalMentions().format()}>{t('About_this_platform')}&nbsp;&nbsp;⚖️</Link>
+          {/* Illustration */}
+          <div className={'col-xl-6 d-flex flex-column align-items-end justify-content-end'}>
+            <img src={illustration} alt={t('A_pretty_illustration')} className={Cls.illustration} />
           </div>
         </div>
       </div>
-    );
-  }
-
-  public componentDidMount() {
-    pageSetup(t('Free_open_source_mapping'), t('AbcMap_new_version'));
-
-    const { vote } = this.props.services;
-
-    const from = DateTime.now().minus({ days: 7 });
-    const to = DateTime.now();
-    vote
-      .getStats(from, to)
-      .then((res) => this.setState({ voteAggregation: res }))
-      .catch((err) => logger.error(err));
-  }
-
-  public handleGoToMap = () => {
-    const { history } = this.props;
-
-    history.push(Routes.map().format());
-  };
-
-  private handleLogin = () => {
-    const { modals, toasts } = this.props.services;
-
-    modals.login().catch((err) => {
-      logger.error('Cannot open login modal', err);
-      toasts.genericError();
-    });
-  };
-
-  private handleRegister = () => {
-    const { modals, toasts } = this.props.services;
-
-    modals.registration().catch((err) => {
-      logger.error('Cannot open registration modal', err);
-      toasts.genericError();
-    });
-  };
+    </div>
+  );
 }
 
-export default withTranslation()(connector(withRouter(withServices(LandingView))));
+export default withTranslation()(LandingView);

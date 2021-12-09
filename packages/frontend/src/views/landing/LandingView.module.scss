@@ -17,17 +17,14 @@
  */
 
 @import "src/assets/styles/variables";
+@import "node_modules/bootstrap/scss/bootstrap";
 
 .landing {
   display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
+  align-items: center;
+  justify-content: stretch;
 
-  height: 95vh;
-  padding: 3rem;
-  overflow: auto;
-
-  font-size: 1.1em;
+  height: $view-height;
 
   button {
     height: 3rem;
@@ -35,34 +32,47 @@
 
     margin-left: 1rem;
 
-    box-shadow: 0 0.2rem 1rem rgba(0, 0, 0, 0.15);
+    box-shadow: $box-shadow;
+  }
+
+  @include media-breakpoint-down(xl) {
+    padding: 2rem;
   }
 }
 
-.leftColumn {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-
-  margin-right: 1rem;
+.intro {
+  font-size: 1.5rem;
+  margin: 2rem 0 4rem 0;
 }
 
-.rightColumn {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-end;
+.authenticationButtons {
+  margin-top: 4rem;
+}
 
-  margin-left: 1rem;
+.spacer {
+  height: 20vh;
 }
 
 .illustration {
   width: 40vw;
   margin-bottom: 2rem;
+
+  @include media-breakpoint-down(xl) {
+    display: none;
+  }
 }
 
-.intro {
-  font-size: 1.7rem;
+.bottomMentions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+
+  margin-top: 7rem;
+
+  @include media-breakpoint-down(xl) {
+    margin-top: 10rem;
+  }
 }
 
 .version {

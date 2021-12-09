@@ -29,7 +29,7 @@ export const logger = Logger.get('bootstrap.tsx', 'warn');
 export function bootstrap(svc: Services, store: MainStore) {
   logger.info('Version: ', BUILD_INFO);
 
-  return solvesInAtLeast(authentication(svc), 600)
+  return solvesInAtLeast(authentication(svc), 400)
     .then(() => render(svc, store))
     .then(() => svc.project.newProject())
     .catch((err) => bootstrapError(err));

@@ -32,11 +32,12 @@ import { WmsSettings } from '../../../../../core/geo/layers/LayerFactory.types';
 import { prefixedTranslation } from '../../../../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
 import Cls from './WmsLayerPanel.module.scss';
+import { solvesInAtLeast } from '../../../../../core/utils/solvesInAtLeast';
 
 const logger = Logger.get('WmsLayerPanel.tsx');
 
 interface Props extends ServiceProps {
-  projectProjection: AbcProjection;
+  projection: AbcProjection;
   value: WmsSettings;
   onChange: (values: WmsSettings) => void;
   onCancel: () => void;
@@ -128,6 +129,8 @@ class WmsLayerPanel extends Component<Props, State> {
           </>
         )}
 
+        <div className={'flex-grow-1'} />
+
         {/* Form validation and controls */}
         <FormValidationLabel state={formState} />
 
@@ -173,7 +176,7 @@ class WmsLayerPanel extends Component<Props, State> {
   private async getValues(layer: WmsLayer): Promise<WmsSettings> {
     const { geo } = this.props.services;
     const capabilities = this.state.capabilities;
-    const projectProjection = this.props.projectProjection;
+    const projectProjection = this.props.projection;
 
     // We grab layer name and WMS urls
     const remoteLayerName = layer.Name || '';
@@ -251,8 +254,7 @@ class WmsLayerPanel extends Component<Props, State> {
       auth = { username: value.auth.username, password: value.auth.password };
     }
 
-    geo
-      .getWmsCapabilities(value.capabilitiesUrl, auth)
+    solvesInAtLeast(geo.getWmsCapabilities(value.capabilitiesUrl, auth), 600)
       .then((capabilities) => this.setState({ capabilities }))
       .catch((err) => {
         toasts.error(t('Cannot_get_capacities'));

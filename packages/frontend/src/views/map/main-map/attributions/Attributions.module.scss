@@ -18,14 +18,30 @@
 
 @import "src/assets/styles/variables";
 
-.topBarLink {
-  border: none;
-  background-color: inherit;
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-  margin: 0 1rem;
-  min-width: 8rem;
-}
+  height: 2.7rem;
+  width: 2.7rem;
 
-.active {
-  border-bottom: solid 3px $primary;
+  background-color: rgba(white, 0.4);
+  border-radius: $border-radius;
+  border: solid 1px rgba($control-color, 0.8);
+
+  box-shadow: $box-shadow;
+
+  .icon {
+    color: rgba($control-color, 0.8);
+  }
+
+  &:hover {
+    background-color: $control-color-active;
+
+    .icon {
+      color: white;
+      opacity: $control-color-active-opacity;
+    }
+  }
 }

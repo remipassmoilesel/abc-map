@@ -33,6 +33,8 @@ describe('Color gradients', function () {
       // Import layer
       .then(() => DataStore.importByName('Countries of the world'))
       .then(() => TopBar.dataProcessing())
+      .get('[data-cy=modules-menu]')
+      .click()
       .get('[data-cy=color-gradients]')
       .click()
       // Data source parameters

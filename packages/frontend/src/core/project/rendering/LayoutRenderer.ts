@@ -89,13 +89,13 @@ export class LayoutRenderer {
     }
 
     // Adapt size of map to layout
-    const dimension = LayoutHelper.formatToPixel(layout.format);
+    const exportDimensions = LayoutHelper.formatToPixel(layout.format);
     support.style.marginTop = '200px';
-    support.style.width = `${dimension.width}px`;
-    support.style.height = `${dimension.height}px`;
-    renderingMap.unwrap().setSize([dimension.width, dimension.height]);
+    support.style.width = `${exportDimensions.width}px`;
+    support.style.height = `${exportDimensions.height}px`;
+    renderingMap.unwrap().setSize([exportDimensions.width, exportDimensions.height]);
 
-    const styleRatio = LayoutHelper.styleRatio(dimension.width, dimension.height);
+    const styleRatio = LayoutHelper.styleRatio(exportDimensions.width, exportDimensions.height);
     logger.info(`Rendering style ratio: ${styleRatio}`);
 
     // Copy layers from sourceMap to exportMap
@@ -113,8 +113,8 @@ export class LayoutRenderer {
 
     // Prepare a canvas for export
     const exportCanvas = document.createElement('canvas');
-    exportCanvas.width = dimension.width;
-    exportCanvas.height = dimension.height;
+    exportCanvas.width = exportDimensions.width;
+    exportCanvas.height = exportDimensions.height;
 
     const ctx = exportCanvas.getContext('2d');
     if (!ctx) {
@@ -123,63 +123,77 @@ export class LayoutRenderer {
 
     // Paint a white rectangle as background
     ctx.fillStyle = 'white';
-    ctx.fillRect(0, 0, dimension.width, dimension.height);
+    ctx.fillRect(0, 0, exportDimensions.width, exportDimensions.height);
+
+    // Layers rendering
+    const renderLayers = async () => {
+      const layers = support.querySelectorAll('.ol-layer canvas');
+      layers.forEach((layer) => {
+        logger.info('Rendering layer: ', layer);
+
+        // We reset transform before each layer rendering
+        ctx.resetTransform();
+
+        if (!(layer instanceof HTMLCanvasElement)) {
+          logger.error(`Bad element selected: ${layer.constructor.name}`, layer);
+          return;
+        }
+
+        if (layer.width > 0) {
+          const opacity = (layer.parentNode as HTMLElement | null)?.style.opacity || '';
+          ctx.globalAlpha = opacity === '' ? 1 : Number(opacity);
+
+          // Get the transform parameters from the style's transform matrix
+          const transform = layer.style.transform.match(/^matrix\(([^(]*)\)$/);
+          if (transform) {
+            const args = transform[1].split(',').map(Number) as number[];
+            ctx.setTransform(args[0], args[1], args[2], args[3], args[4], args[5]);
+          }
+
+          ctx.drawImage(layer, 0, 0);
+        }
+      });
+    };
+
+    // Attribution rendering
+    const renderAttributions = async () => {
+      const attributions = sourceMap.getTextAttributions();
+      await this.attributionRenderer.render(attributions, attributionCanvas, styleRatio);
+
+      const attrPosition = this.attributionRenderer.getAttributionPosition(legend, attributionCanvas, exportCanvas);
+
+      // We reset transform then paint attributions
+      ctx.resetTransform();
+      ctx.drawImage(attributionCanvas, attrPosition.x, attrPosition.y);
+    };
+
+    // Legend rendering
+    const renderLegend = async () => {
+      if (LegendDisplay.Hidden === legend.display) {
+        return;
+      }
+
+      // Render legend
+      legendCanvas.width = legend.width * styleRatio;
+      legendCanvas.height = legend.height * styleRatio;
+      await this.legendRenderer.renderLegend(legend, legendCanvas, styleRatio);
+
+      const position = this.legendRenderer.getLegendPosition(legend, legendCanvas, exportCanvas);
+      if (!position) {
+        logger.error('Unhandled legend display: ', legend);
+        return;
+      }
+
+      // We reset transform then paint legend
+      ctx.resetTransform();
+      ctx.drawImage(legendCanvas, position.x, position.y);
+    };
 
     return new Promise<HTMLCanvasElement>((resolve, reject) => {
-      // Render layers
+      // We trigger map rendering
       renderingMap.unwrap().once('rendercomplete', () => {
-        const layers = support.querySelectorAll('.ol-layer canvas');
-        layers.forEach((layer) => {
-          logger.info('Rendering layer: ', layer);
-
-          if (!(layer instanceof HTMLCanvasElement)) {
-            return reject(new Error(`Bad element selected: ${layer.constructor.name}`));
-          }
-
-          if (layer.width > 0) {
-            const opacity = (layer.parentNode as HTMLElement | null)?.style.opacity || '';
-            ctx.globalAlpha = opacity === '' ? 1 : Number(opacity);
-
-            // Get the transform parameters from the style's transform matrix
-            const transform = layer.style.transform.match(/^matrix\(([^(]*)\)$/);
-            if (transform) {
-              const args = transform[1].split(',').map(Number) as number[];
-              ctx.setTransform(args[0], args[1], args[2], args[3], args[4], args[5]);
-            }
-
-            ctx.drawImage(layer, 0, 0);
-          }
-        });
-
-        // Attribution rendering
-        const renderAttributions = async () => {
-          const attributions = sourceMap.getTextAttributions();
-          await this.attributionRenderer.render(attributions, attributionCanvas, styleRatio);
-          const attrPosition = this.attributionRenderer.getAttributionPosition(legend, attributionCanvas, exportCanvas);
-          ctx.drawImage(attributionCanvas, attrPosition.x, attrPosition.y);
-        };
-
-        // Legend rendering
-        const renderLegend = async () => {
-          if (LegendDisplay.Hidden === legend.display) {
-            return;
-          }
-
-          // Render legend
-          legendCanvas.width = legend.width * styleRatio;
-          legendCanvas.height = legend.height * styleRatio;
-          await this.legendRenderer.renderLegend(legend, legendCanvas, styleRatio);
-
-          const position = this.legendRenderer.getLegendPosition(legend, legendCanvas, exportCanvas);
-          if (!position) {
-            logger.error('Unhandled legend display: ', legend);
-            return;
-          }
-
-          ctx.drawImage(legendCanvas, position.x, position.y);
-        };
-
-        renderAttributions()
+        renderLayers()
+          .then(() => renderAttributions())
           .then(() => renderLegend())
           .then(() => resolve(exportCanvas))
           .catch(reject);

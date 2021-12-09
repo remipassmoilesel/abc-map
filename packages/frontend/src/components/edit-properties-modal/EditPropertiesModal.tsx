@@ -47,7 +47,7 @@ class EditPropertiesModal extends Component<ServiceProps, State> {
     }
 
     return (
-      <Modal show={visible} onHide={this.handleCancel} size={'lg'}>
+      <Modal show={visible} onHide={this.handleCancel} size={'lg'} centered>
         <Modal.Header closeButton>
           <Modal.Title>{t('Properties')}</Modal.Title>
         </Modal.Header>

@@ -73,7 +73,7 @@ class FillPatternSelector extends Component<Props, State> {
         </OptionRow>
 
         {/* Modal, visible on demand */}
-        <Modal show={modal} onHide={this.closeModal}>
+        <Modal show={modal} onHide={this.closeModal} centered>
           <Modal.Header closeButton>
             <Modal.Title>{t('Textures')}</Modal.Title>
           </Modal.Header>

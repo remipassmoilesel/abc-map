@@ -16,8 +16,11 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
+@import "src/assets/styles/variables";
+@import "node_modules/bootstrap/scss/bootstrap";
+
 .funding {
-  height: 95vh;
+  height: $view-height;
   width: 100vw;
 
   overflow-x: hidden;
@@ -30,11 +33,16 @@
   justify-content: flex-start;
   align-items: flex-start;
 
-  font-size: 1.05rem;
+  font-size: 1.2rem;
 
+  margin: auto;
   width: 60vw;
-  max-width: 60vw;
-  margin: 4rem auto;
+  padding: 4rem 2rem;
+
+  @include media-breakpoint-down(xl) {
+    width: 100%;
+    padding: 4rem 1rem;
+  }
 }
 
 .quote {

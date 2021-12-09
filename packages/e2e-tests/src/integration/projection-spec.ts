@@ -33,6 +33,10 @@ describe('Projection', () => {
   it('can use projection and export project', function () {
     cy.visit(Routes.map().format())
       .then(() => MainMap.fixedView())
+      .get('[data-cy=project-menu]')
+      .click()
+      .get('[data-cy=draw-menu]')
+      .click()
       // Delete geometry layer
       .then(() => LayerControls.deleteActiveLayer())
       // Change projection
@@ -43,19 +47,21 @@ describe('Projection', () => {
       .type('EPSG:2154')
       .get('[data-cy=button-confirm]')
       .click()
-      .wait(600)
+      .wait(1000)
       .then(() => MainMap.getReference())
       .should((map) => {
-        expect(map.getViewExtent()).deep.equal([-4433234.4736937545, 3222547.8542783004, 5375578.234959887, 10018369.379082989]);
+        expect(map.getViewExtent()).deep.equal([-6092370.588148024, 3222547.8542783004, 7034714.349414157, 10018369.379082989]);
       })
       .then(() => TopBar.layout())
-      .get('[data-cy=layout-controls] [data-cy=new-layout]')
+      .get('[data-cy=controls-menu]')
+      .click()
+      .get('[data-cy=add-layout]')
       .click()
       .then(() => LayoutPreview.getReference())
       .should((map) => {
-        expect(map.getViewExtent()).deep.equal([-3105925.5821303385, 4085298.6337945205, 4048269.3433964713, 9155618.599566769]);
+        expect(map.getViewExtent()).deep.equal([-2747552.1814082167, 4334169.05096266, 3689895.9426743495, 8906748.182398628]);
       })
-      .get('[data-cy=layout-controls] [data-cy=pdf-export]')
+      .get('[data-cy=pdf-export]')
       .click()
       .then(() => LongOperation.done(50_000))
       .then(() => Download.fileAsBlob())

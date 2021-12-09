@@ -50,7 +50,7 @@ function DeviceWarningModal() {
     <div className={Cls.modal}>
       <img src={mainLogo} alt={'Abc-Map'} />
 
-      <div className={Cls.title}>{t('Hello')} 👋</div>
+      <h1 className={Cls.title}>{t('Hello')} 👋</h1>
       <div className={Cls.explanation1} data-cy={'device-warning'} dangerouslySetInnerHTML={{ __html: t('AbcMap_is_designed_for_desktop_computers') }} />
       <div className={Cls.explanation2}>{t('You_may_come_across_some_bugs')} 🐛</div>
 

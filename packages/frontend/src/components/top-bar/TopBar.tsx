@@ -16,34 +16,40 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import { Logger } from '@abc-map/shared';
-import { Link } from 'react-router-dom';
-import TopBarLink from './TopBarLink';
+import TopBarLink from './link/TopBarLink';
 import MainIcon from '../../assets/main-icon.svg';
 import LangSelector from './lang-selector/LangSelector';
 import UserMenu from './user-menu/UserMenu';
 import { prefixedTranslation } from '../../i18n/i18n';
 import Cls from './TopBar.module.scss';
 import { Routes } from '../../routes';
+import { useHistory } from 'react-router-dom';
+import { FaIcon } from '../icon/FaIcon';
+import { IconDefs } from '../icon/IconDefs';
 
 const logger = Logger.get('TopBar.tsx');
 
 const t = prefixedTranslation('TopBar:');
 
 function TopBar() {
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const history = useHistory();
+  const goToLanding = useCallback(() => history.push(Routes.landing().format()), [history]);
+
+  const linksClasses = `${Cls.links} ${mobileOpen ? Cls.open : ''}`;
   return (
     <div className={Cls.topBar} data-cy={'top-bar'}>
-      <h1>
-        <Link to={Routes.landing().format()} data-cy={'landing'} className={'d-flex align-items-center'}>
-          <img src={MainIcon} alt={'Logo'} height={'25'} className={'mr-3'} />
-          Abc-Map
-        </Link>
-      </h1>
+      <button onClick={goToLanding} data-cy={'landing'} className={Cls.brand}>
+        <img src={MainIcon} alt={'Logo'} />
+        <span>Abc-Map</span>
+      </button>
 
-      <div className={'flex-grow-1'} />
+      <div className={Cls.spacer} />
 
-      <div className={Cls.links}>
+      <div className={linksClasses} onClick={() => setMobileOpen(false)}>
+        <h1 className={Cls.menuTitle}>{t('Menu')}</h1>
         <TopBarLink label={t('Map')} to={Routes.map().format()} data-cy={'map'} />
         <TopBarLink label={t('Data_store')} to={Routes.dataStore().format()} data-cy={'data-store'} />
         <TopBarLink label={t('Data_processing')} to={Routes.dataProcessing().format()} data-cy={'data-processing'} />
@@ -52,13 +58,13 @@ function TopBar() {
         <TopBarLink label={`${t('Support_AbcMap')} 💌`} to={Routes.funding().format()} data-cy={'help'} />
       </div>
 
-      <div className={'ml-3'}>
-        <LangSelector />
-      </div>
+      {/* Open menu button, only visible on mobile devices */}
+      <button onClick={() => setMobileOpen(!mobileOpen)} className={Cls.openButton}>
+        {t('Menu')} <FaIcon icon={IconDefs.faMapSigns} size={'1.4rem'} className={'ml-3'} />
+      </button>
 
-      <div className={'ml-3'}>
-        <UserMenu />
-      </div>
+      <LangSelector />
+      <UserMenu />
     </div>
   );
 }

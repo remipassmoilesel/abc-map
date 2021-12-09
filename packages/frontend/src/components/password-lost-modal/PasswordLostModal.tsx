@@ -60,7 +60,7 @@ class PasswordLostModal extends Component<ServiceProps, State> {
     }
 
     return (
-      <Modal show={visible} onHide={this.close}>
+      <Modal show={visible} onHide={this.close} centered>
         <Modal.Header closeButton>
           <Modal.Title>{t('Password_lost')} 🔑</Modal.Title>
         </Modal.Header>

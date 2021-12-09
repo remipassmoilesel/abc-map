@@ -33,7 +33,7 @@ describe('MoveInteractionsBundle', () => {
   });
 
   it('setup()', () => {
-    expect(TestHelper.interactionNames(testMap.getMap())).toEqual(['DragPan', 'KeyboardPan', 'MouseWheelZoom']);
+    expect(TestHelper.interactionNames(testMap.getMap())).toEqual(['DragPan', 'KeyboardPan', 'MouseWheelZoom', 'PinchZoom']);
   });
 
   it('dispose()', () => {

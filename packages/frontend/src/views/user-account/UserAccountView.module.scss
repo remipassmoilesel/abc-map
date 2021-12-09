@@ -16,35 +16,17 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
+@import "src/assets/styles/variables";
+
 .userAccount {
   display: flex;
   flex-direction: column;
+  align-items: center;
 
-  max-height: 95vh;
+  height: $view-height;
+
   overflow-x: hidden;
   overflow-y: auto;
 
-  align-items: center;
-
-  padding: 20px;
-
-  h2 {
-    font-size: 1.3em;
-    margin-bottom: 1em;
-  }
-}
-
-.cardContainer {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-
-  :global(.card) {
-    height: 45vh;
-  }
-}
-
-.section {
-  width: 25vw;
-  margin: 2em;
+  padding: 1rem;
 }

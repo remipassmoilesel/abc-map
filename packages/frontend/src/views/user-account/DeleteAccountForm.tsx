@@ -51,8 +51,8 @@ class DeleteAccountForm extends Component<Props, State> {
     const password = this.state.password;
 
     return (
-      <div className={'card card-body'}>
-        <h2>{t('Delete_my_account')}</h2>
+      <div className={'card card-body h-100'}>
+        <h2 className={'mb-4'}>{t('Delete_my_account')}</h2>
         <div className={'alert alert-danger'}>
           <input type={'checkbox'} checked={confirmation} onChange={this.handleConfirmationChange} className={'mr-2'} data-cy={'delete-account-checkbox'} />
           {t('I_understand_that_deletion_is_permanent')}

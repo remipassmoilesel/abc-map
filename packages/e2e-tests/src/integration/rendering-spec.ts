@@ -23,6 +23,7 @@ import { TestHelper } from '../helpers/TestHelper';
 import { PdfComparison } from '../plugins/PdfComparison';
 import { LongOperation } from '../helpers/LongOperation';
 import { Routes } from '../helpers/Routes';
+import { TopBar } from '../helpers/TopBar';
 
 describe('Rendering spec', function () {
   beforeEach(() => {
@@ -36,6 +37,8 @@ describe('Rendering spec', function () {
    */
   it('PDF rendering should be conform', function () {
     cy.visit(Routes.map().format())
+      .get('[data-cy=project-menu]')
+      .click()
       .get('[data-cy=import-project]')
       .click()
       .get('[data-cy=confirmation-confirm]')
@@ -49,9 +52,12 @@ describe('Rendering spec', function () {
       .get('[data-cy=password-confirm]')
       .click()
       .then(() => Toasts.assertText('Project loaded !'))
+      .then(() => TopBar.layout())
+      .get('[data-cy=controls-menu]')
+      .click()
       .get('[data-cy=layout]')
       .click()
-      .get('[data-cy=layout-controls] [data-cy=pdf-export]')
+      .get('[data-cy=pdf-export]')
       .click()
       .then(() => LongOperation.done(20_000))
       .then(() => Download.fileAsBlob())

@@ -31,7 +31,7 @@ class FundingView extends Component<ServiceProps, {}> {
     return (
       <div className={Cls.funding}>
         <div className={Cls.content}>
-          <h1 className={'mb-3'}>{t('Support_the_development_of')}&nbsp;&nbsp;💌</h1>
+          <h1 className={'mb-3'}>{t('Support_AbcMap')}&nbsp;&nbsp;💌</h1>
 
           <div className={'w-100'}>
             <h3 className={'my-4'}>{t('Why')} ?</h3>
