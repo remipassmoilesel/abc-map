@@ -96,19 +96,19 @@
     display: flex;
     flex-direction: column;
 
-    padding: 5px;
+    padding: 0.5rem;
     margin: 0 0 1.5rem 0;
-    border: 1px darkgrey solid;
-    border-radius: 5px;
+    border: 0.1rem darkgrey solid;
+    border-radius: $border-radius;
   }
 
   img {
-    border: solid 1px lightgrey;
+    border: solid 0.1rem lightgrey;
   }
 
   figcaption {
     font: italic smaller "AbcCantarell";
-    padding: 3px;
+    padding: 0.4rem;
     text-align: center;
   }
 

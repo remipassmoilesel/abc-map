@@ -65,7 +65,7 @@ export function servicesFactory(store: MainStore): Services {
   const history = HistoryService.create(store);
   const geo = new GeoService(apiClient, externalClient, toasts, history, store);
   const project = ProjectService.create(apiClient, downloadClient, store, toasts, geo, modals);
-  const authentication = new AuthenticationService(apiClient, store, toasts);
+  const authentication = new AuthenticationService(apiClient, store);
   const data = new DataService(apiClient, downloadClient, toasts, geo, modals, history);
   const vote = new VoteService(apiClient, toasts);
   const legalMentions = new LegalMentionsService(downloadClient, toasts);

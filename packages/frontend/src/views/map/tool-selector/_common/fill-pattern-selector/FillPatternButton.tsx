@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { Component, ReactNode } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { Logger } from '@abc-map/shared';
 import { FillPatterns } from '@abc-map/shared';
 import { LabeledFillPatterns } from './LabeledFillPatterns';
@@ -24,12 +24,12 @@ import { FillPatternFactory } from '../../../../../core/geo/styles/FillPatternFa
 import { prefixedTranslation } from '../../../../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
 import Cls from './FillPatternButton.module.scss';
+import { getRemSize } from '../../../../../core/ui/getRemSize';
 
 const logger = Logger.get('FillPatternButton.tsx', 'info');
 
 export interface Props {
-  width: number;
-  height: number;
+  size: 'sm' | 'lg';
   pattern: FillPatterns;
   color1: string;
   color2: string;
@@ -37,64 +37,25 @@ export interface Props {
   factory?: FillPatternFactory;
 }
 
-interface State {
-  patternFactory: FillPatternFactory;
-}
-
 const t = prefixedTranslation('MapView:ToolSelector.');
 
-class FillPatternButton extends Component<Props, State> {
-  private canvas = React.createRef<HTMLCanvasElement>();
+function FillPatternButton(props: Props) {
+  const { size, onClick, pattern, color1, color2 } = props;
 
-  constructor(props: Props) {
-    super(props);
-    this.state = { patternFactory: this.props.factory || new FillPatternFactory() };
-  }
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const factoryRef = useRef(props.factory || new FillPatternFactory());
 
-  public render(): ReactNode {
-    const width = this.props.width;
-    const height = this.props.height;
-    const padding = 8;
-    const pattern = LabeledFillPatterns.All.find((p) => p.value === this.props.pattern);
-    const title = t(pattern?.i18nLabel || 'No_name');
+  const labeledPattern = LabeledFillPatterns.All.find((p) => p.value === pattern);
+  const title = t(labeledPattern?.i18nLabel || 'No_name');
 
-    return (
-      <button
-        onClick={this.handleClick}
-        title={title}
-        className={`btn btn-outline-secondary ${Cls.fillPatternButton}`}
-        style={{ width: `${width}px`, height: `${height}px` }}
-      >
-        <canvas ref={this.canvas} width={width - padding} height={height - padding} />
-      </button>
-    );
-  }
+  const handleClick = useCallback(() => onClick(pattern), [onClick, pattern]);
 
-  public componentDidMount() {
-    this.preview();
-  }
-
-  public componentDidUpdate(prevProps: Readonly<Props>) {
-    const patternChanged = prevProps.pattern !== this.props.pattern;
-    const color1Changed = prevProps.color1 !== this.props.color1;
-    const color2Changed = prevProps.color2 !== this.props.color2;
-    if (patternChanged || color1Changed || color2Changed) {
-      this.preview();
-    }
-  }
-
-  private handleClick = () => {
-    this.props.onClick(this.props.pattern);
-  };
-
-  private preview() {
-    const pattern = this.props.pattern;
-    const color1 = this.props.color1;
-    const color2 = this.props.color2;
-    const canvas = this.canvas.current;
-    const ctx = canvas?.getContext('2d');
-    if (!canvas || !ctx) {
-      logger.error('Canvas not ready');
+  const preview = useCallback(() => {
+    const patternFactory = factoryRef?.current;
+    const canvas = canvasRef.current;
+    const ctx = canvasRef.current?.getContext('2d');
+    if (!patternFactory || !canvas || !ctx) {
+      logger.error('Cannot preview, not ready');
       return;
     }
 
@@ -104,12 +65,7 @@ class FillPatternButton extends Component<Props, State> {
       return;
     }
 
-    const canvasPattern = this.state.patternFactory.create({
-      pattern,
-      color1,
-      color2,
-    });
-
+    const canvasPattern = factoryRef.current.create({ pattern, color1, color2 });
     if (!canvasPattern) {
       logger.error(`Invalid pattern: ${pattern}`);
       return;
@@ -117,12 +73,26 @@ class FillPatternButton extends Component<Props, State> {
 
     // First we erase previous pattern
     ctx.fillStyle = 'white';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillRect(0, 0, canvas.clientWidth, canvas.clientHeight);
 
     // Then we draw pattern
     ctx.fillStyle = canvasPattern;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-  }
+  }, [color1, color2, pattern]);
+
+  useEffect(() => preview(), [pattern, color1, color2, preview]);
+
+  const sizeRem = size === 'sm' ? 3 : 8;
+  const paddingRem = size === 'sm' ? 0.6 : 0.8;
+  const remPx = getRemSize() || 15;
+  const buttonSize = remPx * sizeRem;
+  const canvasSize = remPx * sizeRem - remPx * paddingRem;
+
+  return (
+    <button onClick={handleClick} title={title} className={Cls.fillPatternButton} style={{ width: buttonSize, height: buttonSize }}>
+      <canvas ref={canvasRef} width={canvasSize} height={canvasSize} />
+    </button>
+  );
 }
 
 export default withTranslation()(FillPatternButton);

@@ -28,7 +28,7 @@ export class LegalMentionsService {
       .get(Api.legalMentions())
       .then((res) => BlobIO.asString(res.data))
       .catch((err) => {
-        this.toasts.httpError(err);
+        this.toasts.genericError(err);
         return Promise.reject(err);
       });
   }

@@ -134,7 +134,7 @@ class ProjectControls extends Component<Props, State> {
       }
 
       await project.save(compressed);
-      toasts.info('Project saved !');
+      toasts.info(t('Project_saved'));
 
       return OperationStatus.Succeed;
     };

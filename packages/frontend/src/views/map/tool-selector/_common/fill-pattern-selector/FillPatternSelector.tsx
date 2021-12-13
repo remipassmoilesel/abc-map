@@ -69,7 +69,7 @@ class FillPatternSelector extends Component<Props, State> {
         {/* Button, always visible */}
         <OptionRow>
           <div>{t('Texture_style')}:</div>
-          <FillPatternButton width={40} height={40} pattern={pattern} color1={color1} color2={color2} onClick={this.showModal} />
+          <FillPatternButton size={'sm'} pattern={pattern} color1={color1} color2={color2} onClick={this.showModal} />
         </OptionRow>
 
         {/* Modal, visible on demand */}
@@ -97,7 +97,7 @@ class FillPatternSelector extends Component<Props, State> {
     return LabeledFillPatterns.All.map((item) => {
       return (
         <div className={'d-flex align-items-center m-3'} key={item.value}>
-          <FillPatternButton onClick={this.handleSelection} pattern={item.value} color1={color1} color2={color2} width={65} height={65} />
+          <FillPatternButton onClick={this.handleSelection} pattern={item.value} size={'lg'} color1={color1} color2={color2} />
           <div className={'ml-3'}>{t(item.i18nLabel)}</div>
         </div>
       );

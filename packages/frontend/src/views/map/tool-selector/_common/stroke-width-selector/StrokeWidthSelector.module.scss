@@ -16,6 +16,12 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
+@import "node_modules/bootstrap/scss/bootstrap";
+
 .input {
   width: 4rem !important;
+
+  @include media-breakpoint-down(xl) {
+    width: 5rem !important;
+  }
 }

@@ -25,6 +25,7 @@ import RegistrationForm, { FormValues } from './RegistrationForm';
 import RegistrationDone from './RegistrationDone';
 import { prefixedTranslation } from '../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
+import { AuthenticationError, ErrorType } from '../../core/authentication/AuthenticationError';
 
 const logger = Logger.get('RegistrationModal.tsx');
 
@@ -94,12 +95,20 @@ class RegistrationModal extends Component<ServiceProps, State> {
   };
 
   private handleSubmit = ({ email, password }: FormValues) => {
-    const { authentication } = this.props.services;
+    const { authentication, toasts } = this.props.services;
 
     authentication
       .registration(email, password)
       .then(() => this.setState({ registrationDone: true }))
-      .catch((err) => logger.error('Registration error: ', err));
+      .catch((err) => {
+        logger.error('Registration error: ', err);
+
+        if (err instanceof AuthenticationError && err.type === ErrorType.EmailAlreadyInUse) {
+          toasts.error(t('This_email_address_is_already_in_use'));
+        } else {
+          toasts.genericError(err);
+        }
+      });
   };
 
   private handleConfirm = () => {

@@ -82,7 +82,7 @@ function LandingView() {
 
   return (
     <div className={Cls.landing}>
-      <div className={'container'}>
+      <div className={`container ${Cls.container}`}>
         <div className={'row'}>
           <div className={'col-xl-6  mt-5'}>
             {/* Title */}

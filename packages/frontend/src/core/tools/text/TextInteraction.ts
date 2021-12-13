@@ -120,7 +120,7 @@ export class TextInteraction extends Interaction {
     inputBox.style.display = 'flex';
     inputBox.style.justifyContent = 'center';
     inputBox.style.alignItems = 'flex-start';
-    inputBox.style.borderRadius = '5px';
+    inputBox.style.borderRadius = '0.4rem';
     inputBox.style.position = 'absolute';
     inputBox.style.left = x + 'px';
     inputBox.style.top = y - 30 + 'px';

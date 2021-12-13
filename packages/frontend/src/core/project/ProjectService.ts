@@ -101,7 +101,7 @@ export class ProjectService {
       this.findById(id)
         // We handle network errors before project loading
         .catch((err) => {
-          this.toasts.httpError(err);
+          this.toasts.genericError(err);
           return Promise.reject(err);
         })
         .then((blob) => {
@@ -220,7 +220,7 @@ export class ProjectService {
         if (HttpError.isTooManyProject(err)) {
           this.toasts.error(t('Too_much_projects'));
         } else {
-          this.toasts.httpError(err);
+          this.toasts.genericError(err);
         }
 
         return Promise.reject(err);
@@ -299,7 +299,7 @@ export class ProjectService {
       .get(Api.listProject())
       .then((res) => res.data)
       .catch((err) => {
-        this.toasts.httpError(err);
+        this.toasts.genericError(err);
         return Promise.reject(err);
       });
   }
@@ -309,7 +309,7 @@ export class ProjectService {
       .get(Api.findById(id))
       .then((res) => res.data)
       .catch((err) => {
-        this.toasts.httpError(err);
+        this.toasts.genericError(err);
         return Promise.reject(err);
       });
   }
@@ -319,7 +319,7 @@ export class ProjectService {
       .delete(Api.findById(id))
       .then(() => undefined)
       .catch((err) => {
-        this.toasts.httpError(err);
+        this.toasts.genericError(err);
         return Promise.reject(err);
       });
   }

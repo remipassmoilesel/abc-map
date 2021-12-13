@@ -33,7 +33,7 @@ $height: 65vh;
 }
 
 .leftPanel {
-  border-right: solid $gray-300 1px;
+  border-right: solid $gray-300 0.1rem;
   padding-right: 3rem !important;
 
   @include media-breakpoint-down(xl) {

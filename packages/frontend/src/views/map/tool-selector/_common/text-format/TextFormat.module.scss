@@ -20,9 +20,9 @@
 
 .input {
   margin-left: 0.3rem;
-  width: 5rem !important;
+  width: 4rem !important;
 
   @include media-breakpoint-down(xl) {
-    width: 3rem !important;
+    width: 5rem !important;
   }
 }

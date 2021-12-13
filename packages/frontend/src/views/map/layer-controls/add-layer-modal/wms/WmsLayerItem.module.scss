@@ -21,8 +21,8 @@
 .wmsLayerItem {
   margin-bottom: 0.7em;
   padding: 0.5em;
-  border: solid 1px lightgrey;
-  border-radius: 8px;
+  border: solid 0.1rem lightgrey;
+  border-radius: $border-radius;
   cursor: pointer;
 
   &.selected {

@@ -20,8 +20,8 @@
 
 .modal {
   pre {
-    border: solid 1px $gray-600;
-    border-radius: 10px;
+    border: solid 0.1rem $gray-600;
+    border-radius: $border-radius;
     padding: 0.7rem;
     margin: 0.7rem 0;
     height: 6rem;

@@ -58,7 +58,6 @@
 
     @include media-breakpoint-down(xl) {
       height: 10vmin;
-      max-height: 50px;
     }
   }
 
@@ -67,7 +66,6 @@
 
     @include media-breakpoint-down(xl) {
       height: 14vmin;
-      max-height: 70px;
     }
   }
 
@@ -76,7 +74,6 @@
 
     @include media-breakpoint-down(xl) {
       height: 10vmin;
-      max-height: 50px;
     }
   }
 }

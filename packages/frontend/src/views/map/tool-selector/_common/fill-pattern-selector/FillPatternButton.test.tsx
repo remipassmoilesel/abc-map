@@ -31,8 +31,7 @@ describe('FillPatternButton', () => {
     handleClick = sinon.stub();
     factory = sinon.createStubInstance(FillPatternFactory);
     props = {
-      width: 40,
-      height: 40,
+      size: 'sm',
       color1: 'white',
       color2: 'black',
       pattern: FillPatterns.Circles,

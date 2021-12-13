@@ -73,10 +73,10 @@ export class FillPatternFactory {
 
     // square
     ctx.fillStyle = properties.color2 || 'blue';
-    const x = 5 * ratio;
-    const y = 5 * ratio;
-    const w = 6;
-    const h = 6;
+    const x = 4 * ratio;
+    const y = 4 * ratio;
+    const w = 8 * ratio;
+    const h = 8 * ratio;
     ctx.fillRect(x, y, w, h);
 
     return ctx.createPattern(canvas, 'repeat');

@@ -41,7 +41,7 @@ describe('Tool Point', function () {
       .then(() => MainMap.getReference())
       .should((map) => {
         const view = map.getViewExtent();
-        expect(view).deep.equal([-7370802.661996155, -4121477.6853103423, 11981829.907357909, 5897276.48608428]);
+        expect(view).deep.equal([-7380586.601616657, -4131261.6249308446, 11991613.846978411, 5907060.425704782]);
       });
   });
 
@@ -69,8 +69,8 @@ describe('Tool Point', function () {
         expect(features[1].get(StyleProperties.PointIcon)).equal(DefaultDrawingStyle.point.icon);
 
         expect(features.map((f) => f.getGeometry()?.getExtent())).deep.equals([
-          [-1608062.2255201465, 2091323.9737087828, -1608062.2255201465, 2091323.9737087828],
-          [-1118865.2444950184, 1602126.9926836547, -1118865.2444950184, 1602126.9926836547],
+          [-1608062.225520147, 2091323.9737087833, -1608062.225520147, 2091323.9737087833],
+          [-1118865.2444950193, 1602126.9926836556, -1118865.2444950193, 1602126.9926836556],
         ]);
       });
   });
@@ -93,7 +93,7 @@ describe('Tool Point', function () {
 
         expect(features).length(1);
         expect(features[0].getGeometry()?.getType()).equal('Point');
-        expect(features[0].getGeometry()?.getExtent()).deep.equals([1327119.660630622, -843857.9124419857, 1327119.660630622, -843857.9124419857]);
+        expect(features[0].getGeometry()?.getExtent()).deep.equals([1327119.660630621, -843857.9124419848, 1327119.660630621, -843857.9124419848]);
       });
   });
 });

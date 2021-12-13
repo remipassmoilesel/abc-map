@@ -1,6 +1,7 @@
 # The bottomless well aka backlog
 
-- [Story maps](#story-maps)
+- [Story maps (coming soon)](#story-maps-coming-soon)
+- [Progressive web app](#progressive-web-app)
 - [Performance: WebASM and web worker usage](#performance-webasm-and-web-worker-usage)
 - [Scale on exports](#scale-on-exports)
 - [Text labels not attached to features](#text-labels-not-attached-to-features)
@@ -25,6 +26,10 @@
 ## Story maps (coming soon)
 
 Connected users should be able to create and share story maps.
+
+## Progressive web app
+
+Experiment with creating a PWA, trying to cache projects, tiles, etc.
 
 ## Performance: WebASM and web worker usage
 

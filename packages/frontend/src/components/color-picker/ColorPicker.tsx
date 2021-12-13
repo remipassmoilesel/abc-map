@@ -59,10 +59,10 @@ function ColorPicker(props: Props) {
       <button onClick={handleOpenModal} className={Cls.button} type={'button'} style={{ backgroundColor: toRGBA(value) }} data-cy={dataCy} />
 
       {/* Modal, visible on demand */}
-      <Modal show={modal} onHide={handleCloseModal} size={'sm'} centered>
+      <Modal show={modal} onHide={handleCloseModal} centered>
         <Modal.Header closeButton>{t('Select_a_color')}</Modal.Header>
         <Modal.Body className={'d-flex justify-content-center'}>
-          <SketchPicker disableAlpha={false} color={value} onChange={handleChange} width={'300px'} />
+          <SketchPicker disableAlpha={false} color={value} onChange={handleChange} width={'100%'} />
         </Modal.Body>
         <Modal.Footer>
           <button onClick={handleCloseModal} className={'btn btn-outline-secondary'} data-cy={'close-modal'} data-testid={'close-modal'}>

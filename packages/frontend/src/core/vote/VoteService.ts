@@ -31,7 +31,7 @@ export class VoteService {
       .post(Api.vote(), data)
       .then(() => undefined)
       .catch((err) => {
-        this.toasts.httpError(err);
+        this.toasts.genericError(err);
         return Promise.reject(err);
       });
   }
@@ -41,7 +41,7 @@ export class VoteService {
       .get<AbcVoteAggregation>(Api.stats(from, to))
       .then((res) => res.data)
       .catch((err) => {
-        this.toasts.httpError(err);
+        this.toasts.genericError(err);
         return Promise.reject(err);
       });
   }

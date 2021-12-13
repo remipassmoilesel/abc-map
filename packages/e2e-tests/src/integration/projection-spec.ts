@@ -50,7 +50,7 @@ describe('Projection', () => {
       .wait(1000)
       .then(() => MainMap.getReference())
       .should((map) => {
-        expect(map.getViewExtent()).deep.equal([-6092370.588148024, 3222547.8542783004, 7034714.349414157, 10018369.379082989]);
+        expect(map.getViewExtent()).deep.equal([-6099007.132605841, 3215911.3098204834, 7041350.893871974, 10025005.923540805]);
       })
       .then(() => TopBar.layout())
       .get('[data-cy=controls-menu]')
@@ -59,7 +59,7 @@ describe('Projection', () => {
       .click()
       .then(() => LayoutPreview.getReference())
       .should((map) => {
-        expect(map.getViewExtent()).deep.equal([-2747552.1814082167, 4334169.05096266, 3689895.9426743495, 8906748.182398628]);
+        expect(map.getViewExtent()).deep.equal([-2744233.909179308, 4337487.32319157, 3686577.670445441, 8903429.910169719]);
       })
       .get('[data-cy=pdf-export]')
       .click()

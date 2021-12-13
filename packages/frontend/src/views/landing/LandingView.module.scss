@@ -40,6 +40,13 @@
   }
 }
 
+.container {
+  @include media-breakpoint-up(xxl) {
+    // On large screens container must be wide
+    max-width: 75vw !important;
+  }
+}
+
 .intro {
   font-size: 1.5rem;
   margin: 2rem 0 4rem 0;

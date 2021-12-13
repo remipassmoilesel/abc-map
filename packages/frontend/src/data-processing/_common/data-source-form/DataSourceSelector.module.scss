@@ -55,6 +55,6 @@
   flex-direction: column;
   padding: 1rem;
 
-  border: solid 1px $card-border-color;
-  border-radius: 10px;
+  border: solid 0.1rem $card-border-color;
+  border-radius: $border-radius;
 }

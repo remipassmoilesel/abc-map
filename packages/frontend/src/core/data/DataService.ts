@@ -69,7 +69,7 @@ export class DataService {
       .get(Api.list(), { params })
       .then((res) => res.data)
       .catch((err) => {
-        this.toasts.httpError(err);
+        this.toasts.genericError(err);
         return Promise.reject(err);
       });
   }
@@ -80,7 +80,7 @@ export class DataService {
       .get(Api.search(), { params })
       .then((res) => res.data)
       .catch((err) => {
-        this.toasts.httpError(err);
+        this.toasts.genericError(err);
         return Promise.reject(err);
       });
   }
@@ -91,7 +91,7 @@ export class DataService {
         .get(Api.download(file))
         .then((res) => ({ path: file, content: res.data }))
         .catch((err) => {
-          this.toasts.httpError(err);
+          this.toasts.genericError(err);
           return Promise.reject(err);
         })
     );
@@ -103,7 +103,7 @@ export class DataService {
       .get(Api.download(artefact.license))
       .then((res) => BlobIO.asString(res.data))
       .catch((err) => {
-        this.toasts.httpError(err);
+        this.toasts.genericError(err);
         return Promise.reject(err);
       });
   }

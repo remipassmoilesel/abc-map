@@ -41,7 +41,8 @@ describe('Edit properties', function () {
       .then(() => MainMap.getReference())
       .should((map) => {
         const view = map.getViewExtent();
-        expect(view).deep.equal([-7370802.661996155, -4121477.6853103423, 11981829.907357909, 5897276.48608428]);
+
+        expect(view).deep.equal([-7380586.601616657, -4131261.6249308446, 11991613.846978411, 5907060.425704782]);
       });
   });
 
