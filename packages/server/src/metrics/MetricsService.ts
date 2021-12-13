@@ -51,6 +51,10 @@ export class MetricsService extends AbstractService {
     }
   }
 
+  public getRegistry(): Registry {
+    return this.registry;
+  }
+
   public getMetrics(): Promise<string> {
     return this.registry.metrics();
   }

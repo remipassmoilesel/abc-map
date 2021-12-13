@@ -16,9 +16,11 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-$scrollbar_bg: #e5e5e5;
-$scrollbar_fg: #b3b3b3;
-$scrollbar_width: 8px;
+@import "variables";
+
+$scrollbar_bg: $gray-200;
+$scrollbar_fg: $gray-500;
+$scrollbar_width: 0.5rem;
 
 ::-webkit-scrollbar {
   width: $scrollbar_width;
@@ -33,7 +35,7 @@ $scrollbar_width: 8px;
 ::-webkit-scrollbar-thumb {
   background: $scrollbar_fg;
   border: 0 none #ffffff;
-  border-radius: 50px;
+  border-radius: 2.5rem;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -47,7 +49,7 @@ $scrollbar_width: 8px;
 ::-webkit-scrollbar-track {
   background: $scrollbar_bg;
   border: 0 none #ffffff;
-  border-radius: 50px;
+  border-radius: 2.5rem;
 }
 
 ::-webkit-scrollbar-track:hover {

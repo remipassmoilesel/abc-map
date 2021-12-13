@@ -17,7 +17,7 @@
  */
 
 import React, { ChangeEvent, Component, KeyboardEvent, ReactNode } from 'react';
-import { Logger } from '@abc-map/shared';
+import { Logger, UserStatus } from '@abc-map/shared';
 import { Modal } from 'react-bootstrap';
 import { ServiceProps, withServices } from '../../core/withServices';
 import { ModalEventType, ModalStatus } from '../../core/ui/typings';
@@ -28,6 +28,7 @@ import { FormState } from '../form-validation-label/FormState';
 import { prefixedTranslation } from '../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
 import { Routes } from '../../routes';
+import { AuthenticationError, ErrorType } from '../../core/authentication/AuthenticationError';
 
 const logger = Logger.get('LoginModal.tsx');
 
@@ -172,7 +173,7 @@ class LoginModal extends Component<Props, State> {
   };
 
   private handleSubmit = () => {
-    const { authentication, modals } = this.props.services;
+    const { authentication, modals, toasts } = this.props.services;
     const email = this.state.email;
     const password = this.state.password;
 
@@ -184,7 +185,11 @@ class LoginModal extends Component<Props, State> {
 
     authentication
       .login(email, password)
-      .then(() => {
+      .then((status) => {
+        if (UserStatus.Authenticated === status) {
+          toasts.info(t('You_are_connected'));
+        }
+
         modals.dispatch({
           type: ModalEventType.LoginClosed,
           status: ModalStatus.Confirmed,
@@ -193,7 +198,15 @@ class LoginModal extends Component<Props, State> {
 
         this.props.history.push(Routes.map().format());
       })
-      .catch((err) => logger.error(err));
+      .catch((err) => {
+        logger.error('Login error: ', err);
+
+        if (err instanceof AuthenticationError && err.type === ErrorType.InvalidCredentials) {
+          toasts.error(t('Invalid_credentials'));
+        } else {
+          toasts.genericError(err);
+        }
+      });
   };
 
   private handleEmailChange = (ev: ChangeEvent<HTMLInputElement>) => {

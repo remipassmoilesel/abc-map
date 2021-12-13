@@ -1,6 +1,7 @@
 {
-  "App": {
-    "Modification_in_progress_will_be_lost": "Les modifications en cours seront perdues, êtes vous sûr ?"
+  "TokenWatcher": {
+    "Modification_in_progress_will_be_lost": "Les modifications en cours seront perdues, êtes vous sûr ?",
+    "You_are_disconnected": "Vous êtes déconnecté"
   },
   "LandingView": {
     "Free_open_source_mapping": "Cartographie libre et gratuite en ligne",
@@ -236,7 +237,7 @@
   },
   "DeviceWarningModal": {
     "Hello": "Bonjour",
-    "AbcMap_is_designed_for_desktop_computers": "Abc-Map fonctionne mieux sur <code>ordinateur de bureau</code>, avec <code>Firefox</code> ou <code>Chromium</code>, et un écran d'au moins <code>1366x768</code>.",
+    "AbcMap_is_designed_for_desktop_computers": "Abc-Map fonctionne mieux sur <code>ordinateur de bureau</code>, avec <code>Firefox</code> ou <code>Chromium</code>, et un écran de <code>1920x1080</code>.",
     "You_may_come_across_some_bugs": "Vous risquez de croiser quelques bugs",
     "I_understand": "J'ai compris"
   },
@@ -559,7 +560,9 @@
     "Password": "Mot de passe",
     "Password_lost": "Mot de passe perdu ?",
     "Cancel": "Annuler",
-    "Connect": "Connexion"
+    "Connect": "Connexion",
+    "Invalid_credentials": "Vos identifiants sont incorrects",
+    "You_are_connected": "Vous êtes connecté !"
   },
   "RegistrationModal": {
     "Registration": "Inscription",
@@ -572,7 +575,8 @@
     "Password": "Mot de passe",
     "Password_confirmation": "Confirmation du mot de passe",
     "Cancel": "Annuler",
-    "Register": "Inscription"
+    "Register": "Inscription",
+    "This_email_address_is_already_in_use": "Cette adresse email est déjà utilisée"
   },
   "PasswordLostModal": {
     "Password_lost": "Récupération de mot de passe",
@@ -600,7 +604,8 @@
     "Password": "Mot de passe",
     "Delete_my_account_permanently": "Supprimer définitivement mon compte",
     "Your_account_has_been_deleted": "Votre compte a été supprimé \uD83D\uDE2D",
-    "Password_updated": "Mot de passe mis à jour !"
+    "Password_updated": "Mot de passe mis à jour !",
+    "Your_password_is_incorrect": "Votre mot de passe est incorrect"
   },
   "LegendSymbolPickerModal": {
     "Select_symbol": "Sélectionnez un symbole",
@@ -640,10 +645,11 @@
     "Dont_panic": "Pas de panique, l'accueil est par là"
   },
   "ConfirmAccountView": {
+    "Oups": "Oups !",
     "And_voila_welcome": "Et voilà, bienvenue !",
     "Please_wait": "Veuillez patienter ...",
     "This_account_is_already_activated": "Cet adresse email a déjà été activée \uD83E\uDD37 <br /> Connectez-vous ou demandez une réinitialisation de mot de passe.",
-    "Activation_failed": "L'activation de votre compte a échoué \uD83E\uDD7A. <br /> Peut-être avez-vous déjà activé votre compte ?",
+    "Activation_failed": "L'activation de votre compte a échoué \uD83E\uDD7A. <br /> Peut-être avez-vous déjà activé votre compte ? Sinon essayez de vous inscrire à nouveau.",
     "Activation_succeed": "Votre compte est activé, vous êtes connecté",
     "Map_is_over_here": "Pour la carte, c'est par ici",
     "Registration_confirmation": "Confirmation d'inscription"
@@ -694,12 +700,6 @@
     },
     "DataService": {
       "Import_of": "Import n°{{n}} de {{hour}}"
-    },
-    "AuthentificationService": {
-      "Invalid_credentials": "Vos identifiants sont incorrects",
-      "Your_password_is_incorrect": "Votre mot de passe est incorrect",
-      "You_are_connected": "Vous êtes connecté !",
-      "This_email_address_is_already_in_use": "Cette adresse email est déjà utilisée"
     },
     "LayerDataSource": {
       "Layer_without_name": "Couche sans nom"

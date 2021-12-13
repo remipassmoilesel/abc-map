@@ -24,7 +24,7 @@ import { Routes } from '../helpers/Routes';
 
 describe('Authentication', function () {
   beforeEach(() => {
-    return cy.clearLocalStorage().then(() => TestHelper.init());
+    return TestHelper.init();
   });
 
   describe('As a visitor', () => {

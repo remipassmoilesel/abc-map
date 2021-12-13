@@ -23,44 +23,21 @@ import * as path from 'path';
 import { fastify, FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import fastifyStatic from 'fastify-static';
 import fastifySensible from 'fastify-sensible';
-import { MetricsController } from '../metrics/MetricsController';
-import { HealthCheckController } from '../health/HealthCheckController';
-import { AuthenticationController } from '../authentication/AuthenticationController';
-import { ProjectController } from '../projects/ProjectController';
-import { DataStoreController } from '../data-store/DataStoreController';
-import { VoteController } from '../votes/VoteController';
 import { Controller } from './Controller';
 import { jwtPlugin } from './jwtPlugin';
 import fastifyRateLimit from 'fastify-rate-limit';
 import * as helmet from 'helmet';
 import { generateSitemap } from './sitemap';
-import { ProjectionController } from '../projections/ProjectionController';
 import pointOfView from 'point-of-view';
 import { getLang } from './getLang';
 import { error409Parameters, indexParameters } from './pagesParameters';
 import { HookHandlerDoneFunction } from 'fastify/types/hooks';
 import { FastifyError } from 'fastify-error';
 import { createHash } from 'crypto';
+import { privateControllers, publicControllers } from './controllers';
+import * as metricsPlugin from 'fastify-metrics';
 
 const logger = Logger.get('HttpServer.ts', 'trace');
-
-/**
- * Routes exposed in this controllers are public and do not need a valid authentication
- * @param config
- * @param services
- */
-function publicControllers(config: Config, services: Services): Controller[] {
-  return [new MetricsController(services), new HealthCheckController(services), new AuthenticationController(config, services)];
-}
-
-/**
- * Routes exposed in this controllers are private and need a valid authentication
- * @param config
- * @param services
- */
-function privateControllers(config: Config, services: Services): Controller[] {
-  return [new ProjectController(config, services), new DataStoreController(services), new VoteController(services), new ProjectionController(services)];
-}
 
 /**
  * API and frontend server.
@@ -110,6 +87,9 @@ export class HttpServer {
     if (this.config.server.log.requests) {
       this.app.addHook('onRequest', this.logRequest);
     }
+
+    // Metrics
+    void this.app.register(metricsPlugin, { register: this.services.metrics.getRegistry(), enableDefaultMetrics: false });
 
     // Templating engine
     void this.app.register(pointOfView, {

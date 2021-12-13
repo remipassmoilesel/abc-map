@@ -30,6 +30,7 @@ import { withTranslation } from 'react-i18next';
 import Cls from './UserAccountView.module.scss';
 import { Routes } from '../../routes';
 import AccountInformations from './AccountInformations';
+import { AuthenticationError, ErrorType } from '../../core/authentication/AuthenticationError';
 
 const logger = Logger.get('UserAccountView.tsx');
 
@@ -105,7 +106,15 @@ class UserAccountView extends Component<Props, State> {
         toasts.info(t('Password_updated'));
         this.setState({ passwordFormVersion: this.state.passwordFormVersion + 1 });
       })
-      .catch((err) => logger.error('Cannot update password', err));
+      .catch((err) => {
+        logger.error('Cannot update password', err);
+
+        if (err instanceof AuthenticationError && err.type === ErrorType.InvalidCredentials) {
+          toasts.error(t('Your_password_is_incorrect'));
+        } else {
+          toasts.genericError(err);
+        }
+      });
   };
 
   private handleDeleteAccount = (password: string) => {
@@ -117,7 +126,15 @@ class UserAccountView extends Component<Props, State> {
         this.props.history.push(Routes.landing().format());
         return authentication.logout();
       })
-      .catch((err) => logger.error('Cannot delete account: ', err));
+      .catch((err) => {
+        logger.error('Cannot delete account: ', err);
+
+        if (err instanceof AuthenticationError && err.type === ErrorType.InvalidCredentials) {
+          toasts.error(t('Your_password_is_incorrect'));
+        } else {
+          toasts.genericError(err);
+        }
+      });
   };
 }
 

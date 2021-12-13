@@ -121,7 +121,10 @@ class ResetPasswordView extends Component<Props, State> {
         return modals.login();
       })
       .then(() => this.props.history.push(Routes.map().format()))
-      .catch((err) => logger.error('Reset password error: ', err));
+      .catch((err) => {
+        toasts.genericError(err);
+        logger.error('Reset password error: ', err);
+      });
   };
 
   private handlePasswordChange = (ev: ChangeEvent<HTMLInputElement>) => {

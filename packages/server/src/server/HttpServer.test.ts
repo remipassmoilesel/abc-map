@@ -37,6 +37,8 @@ describe('HttpServer', () => {
   });
 
   beforeEach(async () => {
+    services.metrics.getRegistry().clear();
+
     server = HttpServer.create(config, services);
     await server.initialize();
   });

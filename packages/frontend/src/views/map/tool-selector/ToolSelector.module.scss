@@ -67,7 +67,7 @@
   .spacer {
     height: 1rem;
     margin-bottom: 0.5rem;
-    border-bottom: solid 1px $gray-400;
+    border-bottom: solid 0.1rem $gray-400;
   }
 
   .buttonBar {
@@ -76,8 +76,8 @@
 
     margin-right: 0.3rem;
 
-    border-top: solid $gray-400 1px;
-    border-right: solid $gray-400 1px;
+    border-top: solid $gray-400 0.1rem;
+    border-right: solid $gray-400 0.1rem;
     border-radius: $border-radius;
   }
 

@@ -45,7 +45,7 @@ $list-height: 6rem;
   overflow-y: auto;
 
   padding: 0.5rem;
-  border: solid 1px $gray-400;
+  border: solid 0.1rem $gray-400;
   border-radius: $border-radius;
 }
 
@@ -76,5 +76,5 @@ $list-height: 6rem;
 }
 
 .noLayers {
-  padding: 10px;
+  padding: 1rem;
 }

@@ -273,7 +273,7 @@ export class GeoService {
       })
       .then((res) => res.data)
       .catch((err) => {
-        this.toasts.httpError(err);
+        this.toasts.genericError(err);
         return Promise.reject(err);
       });
   }

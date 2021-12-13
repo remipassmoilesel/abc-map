@@ -16,8 +16,8 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { Component, ReactNode } from 'react';
-import { Route, RouteComponentProps, Switch, withRouter } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Route, Switch, useHistory } from 'react-router-dom';
 import { getAbcWindow } from '@abc-map/shared';
 import MapView from './views/map/MapView';
 import { ToastContainer } from 'react-toastify';
@@ -28,10 +28,8 @@ import DataStoreView from './views/datastore/DataStoreView';
 import NotFoundView from './views/not-found/NotFoundView';
 import DocumentationView from './views/documentation/DocumentationView';
 import ConfirmAccountView from './views/confirm-account/ConfirmAccountView';
-import { Env } from './core/utils/Env';
 import PasswordInputModal from './components/password-input-modal/PasswordInputModal';
 import DeviceWarningModal from './components/device-warning-modal/DeviceWarningModal';
-import { ServiceProps, withServices } from './core/withServices';
 import DataProcessingView from './views/data-processing/DataProcessingView';
 import EditPropertiesModal from './components/edit-properties-modal/EditPropertiesModal';
 import SolicitationModal from './components/solicitation-modal/SolicitationModal';
@@ -47,92 +45,56 @@ import LegalMentionsView from './views/legal-mentions/LegalMentionsView';
 import LongOperationModal from './components/long-operation-modal/LongOperationModal';
 import FundingView from './views/funding/FundingView';
 import ConfirmationModal from './components/confirmation-modal/ConfirmationModal';
-import { prefixedTranslation } from './i18n/i18n';
 import { withTranslation } from 'react-i18next';
 import { Routes } from './routes';
+import { TokenWatcher } from './components/token-watcher/TokenWatcher';
 
-type Props = ServiceProps & RouteComponentProps;
+function App() {
+  const history = useHistory();
 
-const t = prefixedTranslation('App:');
-
-class App extends Component<Props, {}> {
-  public render(): ReactNode {
-    return (
-      <>
-        {/* Top bar and main view */}
-        <TopBar />
-
-        <Switch>
-          <Route exact path={'/'} component={LandingView} />
-          <Route exact path={Routes.landing().raw()} component={LandingView} />
-          <Route exact path={Routes.map().raw()} component={MapView} />
-          <Route exact path={Routes.dataStore().raw()} component={DataStoreView} />
-          <Route exact path={Routes.layout().raw()} component={LayoutView} />
-          <Route exact path={Routes.mapLegend().raw()} component={MapLegendView} />
-          <Route exact path={Routes.documentation().raw()} component={DocumentationView} />
-          <Route exact path={Routes.confirmAccount().raw()} component={ConfirmAccountView} />
-          <Route exact path={Routes.dataProcessing().raw()} component={DataProcessingView} />
-          <Route exact path={Routes.resetPassword().raw()} component={ResetPasswordView} />
-          <Route exact path={Routes.userAccount().raw()} component={UserAccountView} />
-          <Route exact path={Routes.legalMentions().raw()} component={LegalMentionsView} />
-          <Route exact path={Routes.funding().raw()} component={FundingView} />
-          <Route path={'*'} component={NotFoundView} />
-        </Switch>
-        <ToastContainer className={'abc-toast-container'} />
-
-        {/* Modals */}
-        <PasswordInputModal />
-        <SetPasswordModal />
-        <DeviceWarningModal />
-        <EditPropertiesModal />
-        <SolicitationModal />
-        <LoginModal />
-        <RegistrationModal />
-        <PasswordLostModal />
-        <LegendSymbolPickerModal />
-        <LongOperationModal />
-        <ConfirmationModal />
-      </>
-    );
-  }
-
-  public componentDidMount() {
-    const { authentication } = this.props.services;
-
-    if (!Env.isE2e()) {
-      window.addEventListener('beforeunload', this.warnBeforeUnload);
-      window.addEventListener('unload', this.warnBeforeUnload);
-      authentication.watchToken();
-    }
-
+  useEffect(() => {
     // This route is used in documentation
-    getAbcWindow().abc.goToFunding = () => {
-      this.props.history.push(Routes.funding().format());
-    };
-  }
+    getAbcWindow().abc.goToFunding = () => history.push(Routes.funding().format());
+  }, [history]);
 
-  public componentWillUnmount() {
-    const { authentication } = this.props.services;
+  return (
+    <>
+      {/* Top bar and main view */}
+      <TopBar />
 
-    if (!Env.isE2e()) {
-      window.removeEventListener('beforeunload', this.warnBeforeUnload);
-      window.removeEventListener('unload', this.warnBeforeUnload);
-      authentication.unwatchToken();
-    }
-  }
+      <Switch>
+        <Route exact path={'/'} component={LandingView} />
+        <Route exact path={Routes.landing().raw()} component={LandingView} />
+        <Route exact path={Routes.map().raw()} component={MapView} />
+        <Route exact path={Routes.dataStore().raw()} component={DataStoreView} />
+        <Route exact path={Routes.layout().raw()} component={LayoutView} />
+        <Route exact path={Routes.mapLegend().raw()} component={MapLegendView} />
+        <Route exact path={Routes.documentation().raw()} component={DocumentationView} />
+        <Route exact path={Routes.confirmAccount().raw()} component={ConfirmAccountView} />
+        <Route exact path={Routes.dataProcessing().raw()} component={DataProcessingView} />
+        <Route exact path={Routes.resetPassword().raw()} component={ResetPasswordView} />
+        <Route exact path={Routes.userAccount().raw()} component={UserAccountView} />
+        <Route exact path={Routes.legalMentions().raw()} component={LegalMentionsView} />
+        <Route exact path={Routes.funding().raw()} component={FundingView} />
+        <Route path={'*'} component={NotFoundView} />
+      </Switch>
+      <ToastContainer className={'abc-toast-container'} />
+      <TokenWatcher />
 
-  /**
-   * Display warning if tab reload or is closing, in order to prevent modifications loss
-   * @param ev
-   * @private
-   */
-  private warnBeforeUnload = (ev: BeforeUnloadEvent | undefined): string => {
-    const message = t('Modification_in_progress_will_be_lost');
-    if (ev) {
-      ev.returnValue = message;
-    }
-    return message;
-  };
+      {/* Modals */}
+      <PasswordInputModal />
+      <SetPasswordModal />
+      <DeviceWarningModal />
+      <EditPropertiesModal />
+      <SolicitationModal />
+      <LoginModal />
+      <RegistrationModal />
+      <PasswordLostModal />
+      <LegendSymbolPickerModal />
+      <LongOperationModal />
+      <ConfirmationModal />
+    </>
+  );
 }
 
-export default withTranslation()(withRouter(withServices(App)));
+export default withTranslation()(App);

@@ -19,13 +19,13 @@
 @import "src/assets/styles/variables";
 
 .projectList {
-  padding: 10px;
-  height: 200px;
+  padding: 1rem;
+  height: 15rem;
 
   overflow-x: hidden;
   overflow-y: scroll;
 
-  border: solid 1px darkgray;
+  border: solid 0.1rem darkgray;
 }
 
 .item {

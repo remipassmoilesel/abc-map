@@ -52,17 +52,11 @@ export class ToastService {
     toast.error(message, options);
   }
 
-  public genericError(): void {
-    this.error(t('Unknown_technical_problem'));
-  }
-
   public featureNotReady(): void {
     this.info(t('This_feature_is_not_yet_available'));
   }
 
-  public httpError(err: AxiosError | Error | undefined): void {
-    logger.error('HTTP error: ', err);
-
+  public genericError(err?: AxiosError | Error): void {
     // Too many requests
     if (HttpError.isTooManyRequests(err)) {
       const reset = parseInt(err.response?.headers['x-ratelimit-reset'] || '0');
@@ -91,7 +85,7 @@ export class ToastService {
 
     // Others
     else {
-      this.genericError();
+      this.error(t('Unknown_technical_problem'));
     }
   }
 }

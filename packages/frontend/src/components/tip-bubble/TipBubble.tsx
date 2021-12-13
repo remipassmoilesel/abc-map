@@ -63,7 +63,7 @@ function TipBubble(props: Props) {
 
       {/* Modal */}
       {open && (
-        <Modal show={true} onHide={handleHide} dialogClassName={Cls.modal} centered>
+        <Modal show={true} onHide={handleHide} size={'sm'} centered>
           <Modal.Body className={Cls.modalContent}>
             <div dangerouslySetInnerHTML={{ __html: getTip() }} />
           </Modal.Body>

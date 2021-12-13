@@ -32,17 +32,16 @@
   }
 }
 
-.modal {
-  min-width: 35vw;
-  max-width: 35vw;
-  width: 35vw;
-}
-
 .modalContent {
   h1,
   h2,
   h3,
   h4 {
     margin-bottom: 1.5rem;
+  }
+
+  ul {
+    list-style: circle;
+    padding: 0 0 0 1.5rem;
   }
 }

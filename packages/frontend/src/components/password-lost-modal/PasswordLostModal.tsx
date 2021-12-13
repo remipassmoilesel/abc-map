@@ -79,7 +79,7 @@ class PasswordLostModal extends Component<ServiceProps, State> {
                 onInput={this.handleEmailChange}
                 onKeyUp={this.handleKeyUp}
                 placeholder={t('Email_address')}
-                className={'form-control'}
+                className={'form-control mb-4'}
                 data-cy={'email'}
               />
             </div>
@@ -153,7 +153,10 @@ class PasswordLostModal extends Component<ServiceProps, State> {
         toasts.info(t('Email_sent_check_your_spam'));
         this.close();
       })
-      .catch((err) => logger.error(err));
+      .catch((err) => {
+        logger.error('Cannot send request for password reset: ', err);
+        toasts.genericError(err);
+      });
   };
 
   private handleEmailChange = (ev: ChangeEvent<HTMLInputElement>) => {

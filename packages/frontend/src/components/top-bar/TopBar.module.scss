@@ -32,7 +32,7 @@
   align-items: center;
   justify-content: flex-start;
 
-  border-bottom: solid 1px $gray-400;
+  border-bottom: solid 0.1rem $gray-400;
   background: white;
   padding: 0 2vw 0 0;
 
@@ -101,7 +101,7 @@
 
       background-color: white;
       border-radius: $border-radius;
-      border: solid 1px $gray-400;
+      border: solid 0.1rem $gray-400;
 
       box-shadow: $box-shadow;
 

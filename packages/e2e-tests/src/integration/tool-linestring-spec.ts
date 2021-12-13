@@ -60,8 +60,8 @@ describe('Tool LineString', function () {
         expect(features[1].get(StyleProperties.StrokeColor)).equal(DefaultDrawingStyle.stroke.color);
 
         expect(features.map((f) => f.getGeometry()?.getExtent())).deep.equals([
-          [-3564850.1496206587, 3558914.916784167, -3075653.1685955306, 4048111.897809295],
-          [-1608062.2255201465, 1602126.9926836547, -1118865.2444950184, 2091323.9737087828],
+          [-3564850.149620659, 3558914.9167841673, -3075653.168595531, 4048111.8978092954],
+          [-1608062.225520147, 1602126.9926836556, -1118865.2444950193, 2091323.9737087833],
         ]);
       });
   });
@@ -86,7 +86,7 @@ describe('Tool LineString', function () {
         const features = map.getActiveLayerFeatures();
         expect(features).length(1);
         expect(features[0].getGeometry()?.getType()).equal('LineString');
-        expect(features[0].getGeometry()?.getExtent()).deep.equals([-3564850.1496206587, -843857.9124419857, 1327119.660630622, 4048111.897809295]);
+        expect(features[0].getGeometry()?.getExtent()).deep.equals([-3564850.149620659, -843857.9124419848, 1327119.660630621, 4048111.8978092954]);
       });
   });
 });

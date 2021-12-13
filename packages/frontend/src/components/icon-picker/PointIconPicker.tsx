@@ -57,7 +57,7 @@ class PointIconPicker extends Component<Props, State> {
     return (
       <>
         {/* Button, always visible */}
-        <button onClick={this.handleOpen} className={'btn btn-outline-secondary btn-sm'} data-cy={'point-icon-selector'}>
+        <button onClick={this.handleOpen} className={'btn  btn-sm btn-outline-secondary'} data-cy={'point-icon-selector'}>
           {!value && t('Select')}
           {value && <img src={value.preview} alt={value.icon.name} />}
         </button>

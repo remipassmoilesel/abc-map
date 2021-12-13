@@ -26,8 +26,6 @@
   height: 25vh;
 
   width: 30vw;
-  min-width: 400px;
-  max-width: 30vw;
 
   @include media-breakpoint-down(xl) {
     width: 100%;

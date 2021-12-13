@@ -15,25 +15,3 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
-
-.viewPort {
-  height: 20vh;
-  max-height: 20vh;
-
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-
-  overflow-x: hidden;
-  overflow-y: scroll;
-}
-
-.iconPreview {
-  width: 60px;
-  height: 60px;
-  margin: 0.5rem;
-
-  &:hover {
-    background: #e2e2e2 !important;
-  }
-}

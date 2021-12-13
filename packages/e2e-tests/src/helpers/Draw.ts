@@ -18,8 +18,8 @@
 
 import { MainMap } from './MainMap';
 
-const waitTimeBeforeMs = 200;
-const waitTimeAfterMs = 200;
+const waitTimeBeforeMs = 100;
+const waitTimeAfterMs = 100;
 const drawReference = { x: 100, y: 100 };
 const defaultOptions = { button: 0, pointerId: 1 };
 

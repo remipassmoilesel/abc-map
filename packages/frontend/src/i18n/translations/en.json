@@ -1,6 +1,7 @@
 {
-  "App": {
-    "Modification_in_progress_will_be_lost": "Current changes will be lost, are you sure ?"
+  "TokenWatcher": {
+    "Modification_in_progress_will_be_lost": "Current changes will be lost, are you sure ?",
+    "You_are_disconnected": "You are disconnected"
   },
   "LandingView": {
     "Free_open_source_mapping": "Free and open source mapping online",
@@ -236,7 +237,7 @@
   },
   "DeviceWarningModal": {
     "Hello": "Hello",
-    "AbcMap_is_designed_for_desktop_computers": "Abc-Map works best on <code>desktop computers</code>, with <code>Firefox</code> or <code>Chromium</code> browsers, and a minimum screen of <code>1366x768</code>.",
+    "AbcMap_is_designed_for_desktop_computers": "Abc-Map works best on <code>desktop computers</code>, with <code>Firefox</code> or <code>Chromium</code> browsers, and a screen of <code>1920x1080</code>.",
     "You_may_come_across_some_bugs": "You may come across some bugs",
     "I_understand": "I understand"
   },
@@ -559,7 +560,9 @@
     "Password": "Password",
     "Password_lost": "Forgot your password ?",
     "Cancel": "Cancel",
-    "Connect": "Login"
+    "Connect": "Login",
+    "Invalid_credentials": "Your login details are incorrect",
+    "You_are_connected": "You are connected !"
   },
   "RegistrationModal": {
     "Registration": "Registration",
@@ -572,7 +575,8 @@
     "Password": "Password",
     "Password_confirmation": "Password confirmation",
     "Cancel": "Cancel",
-    "Register": "Register"
+    "Register": "Register",
+    "This_email_address_is_already_in_use": "This email address is already in use"
   },
   "PasswordLostModal": {
     "Password_lost": "Password recovery",
@@ -600,7 +604,8 @@
     "Password": "Password",
     "Delete_my_account_permanently": "Permanently delete my account",
     "Your_account_has_been_deleted": "Your account has been deleted \uD83D\uDE2D",
-    "Password_updated": "Password updated !"
+    "Password_updated": "Password updated !",
+    "Your_password_is_incorrect": "Your password is incorrect"
   },
   "LegendSymbolPickerModal": {
     "Select_symbol": "Select a symbol",
@@ -640,10 +645,11 @@
     "Dont_panic": "Don't panic, home is over here"
   },
   "ConfirmAccountView": {
+    "Oups": "Whoops !",
     "And_voila_welcome": "<i>Et voilà</i>, welcome !",
     "Please_wait": "Please wait ...",
     "This_account_is_already_activated": "This email address has already been activated \uD83E\uDD37 <br /> Log in or request a password reset.",
-    "Activation_failed": "Your account activation failed \uD83E\uDD7A. <br/> You may have already activated your account ?",
+    "Activation_failed": "Your account activation failed \uD83E\uDD7A. <br/> You may have already activated your account ? Otherwise try register again.",
     "Activation_succeed": "Your account is activated, you are logged in",
     "Map_is_over_here": "For the map, it's over here",
     "Registration_confirmation": "Registration confirmation"
@@ -694,12 +700,6 @@
     },
     "DataService": {
       "Import_of": "Import n°{{n}} of {{hour}}"
-    },
-    "AuthentificationService": {
-      "Invalid_credentials": "Your login details are incorrect",
-      "Your_password_is_incorrect": "Your password is incorrect",
-      "You_are_connected": "You are connected !",
-      "This_email_address_is_already_in_use": "This email address is already in use"
     },
     "LayerDataSource": {
       "Layer_without_name": "Layer without name"

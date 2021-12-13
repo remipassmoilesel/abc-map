@@ -24,6 +24,7 @@ import {
   AuthenticationResponse,
   AuthenticationToken,
   DeleteAccountRequest,
+  Logger,
   PasswordLostRequest,
   RegistrationConfirmationRequest,
   RegistrationConfirmationResponse,
@@ -37,39 +38,48 @@ import {
 } from '@abc-map/shared';
 import { AuthenticationActions } from '../store/authentication/actions';
 import jwtDecode from 'jwt-decode';
-import { Logger } from '@abc-map/shared';
 import { MainStore } from '../store/store';
-import { ToastService } from '../ui/ToastService';
 import { TokenHelper } from './TokenHelper';
 import { HttpError } from '../http/HttpError';
-import { getLang, prefixedTranslation } from '../../i18n/i18n';
+import { getLang } from '../../i18n/i18n';
+import { AuthenticationError, ErrorType } from './AuthenticationError';
 
 const logger = Logger.get('AuthenticationService.ts');
-
-const t = prefixedTranslation('core:AuthentificationService.');
 
 export class AuthenticationService {
   private tokenInterval: any;
 
-  constructor(private httpClient: AxiosInstance, private store: MainStore, private toasts: ToastService) {}
+  constructor(private httpClient: AxiosInstance, private store: MainStore) {}
 
   public watchToken() {
     this.tokenInterval = setInterval(() => {
-      const token = this.store.getState().authentication.tokenString;
-      if (!token) {
-        return;
-      }
-
-      if (TokenHelper.getRemainingSecBeforeExpiration(token) < 10 * 60) {
-        this.renewToken()
-          .then(() => logger.info('Token renewed'))
-          .catch((err) => logger.error('Cannot renew token: ', err));
-      }
+      this.renewToken()
+        .then(() => logger.info('Token renewed'))
+        .catch((err) => logger.error('Cannot renew token: ', err));
     }, 5 * 60 * 1000);
   }
 
   public unwatchToken() {
     clearInterval(this.tokenInterval);
+  }
+
+  /**
+   * Renew token if expires soon.
+   *
+   * If this method fail, an anonymous authentication will occur.
+   */
+  public async renewToken(): Promise<void> {
+    const token = this.store.getState().authentication.tokenString;
+    if (!token) {
+      return;
+    }
+
+    if (TokenHelper.getRemainingSecBeforeExpiration(token) < 10 * 60) {
+      return this.httpClient.get<RenewResponse>(Api.token()).then((result) => {
+        logger.info('Token renewed');
+        this.dispatchToken(result.data.token);
+      });
+    }
   }
 
   /**
@@ -87,28 +97,27 @@ export class AuthenticationService {
   }
 
   public anonymousLogin(): Promise<void> {
-    return this.login(AnonymousUser.email, AnonymousUser.password);
+    return this.login(AnonymousUser.email, AnonymousUser.password).then(() => undefined);
   }
 
-  public login(email: string, password: string): Promise<void> {
+  public login(email: string, password: string): Promise<UserStatus> {
     const request: AuthenticationRequest = { email, password };
     return this.httpClient
       .post<AuthenticationResponse>(Api.authentication(), request)
       .then(async (res) => {
         const auth: AuthenticationResponse = res.data;
         if (auth.token) {
-          this.dispatchToken(auth.token);
+          return this.dispatchToken(auth.token);
         }
-
-        if (UserStatus.Authenticated === this.store.getState().authentication.userStatus) {
-          this.toasts.info(t('You_are_connected'));
+        // This should never happen
+        else {
+          logger.error('No token found in response');
+          return UserStatus.Anonymous;
         }
       })
       .catch((err) => {
         if (HttpError.isUnauthorized(err)) {
-          this.toasts.error(t('Invalid_credentials'));
-        } else {
-          this.toasts.httpError(err);
+          return Promise.reject(new AuthenticationError(ErrorType.InvalidCredentials));
         }
         return Promise.reject(err);
       });
@@ -121,40 +130,21 @@ export class AuthenticationService {
       .then(() => undefined)
       .catch((err) => {
         if (HttpError.isForbidden(err)) {
-          this.toasts.error(t('Your_password_is_incorrect'));
-        } else {
-          this.toasts.httpError(err);
+          return Promise.reject(new AuthenticationError(ErrorType.InvalidCredentials));
         }
+
         return Promise.reject(err);
       });
   }
 
   public passwordLost(email: string): Promise<void> {
     const req: PasswordLostRequest = { email, lang: getLang() };
-    return this.httpClient
-      .post(Api.passwordResetEmail(), req)
-      .then(() => undefined)
-      .catch((err) => {
-        this.toasts.httpError(err);
-        return Promise.reject(err);
-      });
+    return this.httpClient.post(Api.passwordResetEmail(), req).then(() => undefined);
   }
 
   public resetPassword(token: string, password: string): Promise<void> {
     const req: ResetPasswordRequest = { token, password };
-    return this.httpClient
-      .post(Api.password(), req)
-      .then(() => undefined)
-      .catch((err) => {
-        this.toasts.httpError(err);
-        return Promise.reject(err);
-      });
-  }
-
-  public renewToken(): Promise<void> {
-    return this.httpClient.get<RenewResponse>(Api.token()).then((result) => {
-      this.dispatchToken(result.data.token);
-    });
+    return this.httpClient.post(Api.password(), req).then(() => undefined);
   }
 
   public registration(email: string, password: string): Promise<RegistrationResponse> {
@@ -167,16 +157,14 @@ export class AuthenticationService {
           return registration;
         }
 
-        this.toasts.genericError();
         return Promise.reject(new Error('Invalid registration status'));
       })
       .catch((err) => {
         logger.error('Registration error: ', err);
         if (HttpError.isConflict(err)) {
-          this.toasts.info(t('This_email_address_is_already_in_use'));
-        } else {
-          this.toasts.httpError(err);
+          return Promise.reject(new AuthenticationError(ErrorType.EmailAlreadyInUse));
         }
+
         return Promise.reject(err);
       });
   }
@@ -199,16 +187,16 @@ export class AuthenticationService {
       .then(() => undefined)
       .catch((err) => {
         if (HttpError.isForbidden(err)) {
-          this.toasts.error(t('Your_password_is_incorrect'));
-        } else {
-          this.toasts.httpError(err);
+          return Promise.reject(new AuthenticationError(ErrorType.InvalidCredentials));
         }
+
         return Promise.reject(err);
       });
   }
 
-  private dispatchToken(token: string): void {
+  private dispatchToken(token: string): UserStatus {
     const decoded = jwtDecode<AuthenticationToken>(token);
     this.store.dispatch(AuthenticationActions.login(decoded, token));
+    return decoded.userStatus;
   }
 }

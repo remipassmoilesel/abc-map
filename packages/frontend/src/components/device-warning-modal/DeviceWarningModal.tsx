@@ -28,19 +28,20 @@ const t = prefixedTranslation('DeviceWarningModal:');
 function DeviceWarningModal() {
   const [visible, setVisible] = useState(false);
 
-  const isOptimalDevice = useCallback(() => {
+  const isRiskyDevice = useCallback(() => {
     const browser = Bowser.getParser(window.navigator.userAgent);
-    const deviceSupported = browser.getPlatform().type === 'desktop';
-    const browserSupported = ['chrome', 'electron', 'firefox'].indexOf(browser.getBrowserName(true)) !== -1;
-    const screenSizeSupported = window.innerWidth >= 1366 && window.innerHeight >= 768;
-    return deviceSupported && browserSupported && screenSizeSupported;
+    const platformUnsupported = browser.getPlatform().type !== 'desktop';
+    const browserNotSupported = ['chrome', 'electron', 'firefox'].indexOf(browser.getBrowserName(true)) === -1;
+    const windowTooSmall = window.innerWidth < 1366 || window.innerHeight < 768;
+    const windowTooBig = window.innerWidth >= 2560 || window.innerHeight >= 1440;
+    return platformUnsupported || browserNotSupported || windowTooSmall || windowTooBig;
   }, []);
 
   useEffect(() => {
-    if (!isOptimalDevice()) {
+    if (isRiskyDevice()) {
       setVisible(true);
     }
-  }, [isOptimalDevice]);
+  }, [isRiskyDevice]);
 
   if (!visible) {
     return <div />;
