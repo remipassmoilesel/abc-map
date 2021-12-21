@@ -38,7 +38,7 @@ describe('MapFactory', () => {
     expect(layers[1].get(LayerProperties.Active)).toBeTruthy();
     expect(internal.getView().getProjection().getCode()).toEqual(DEFAULT_PROJECTION.name);
     expect(getControlNames(internal)).toEqual([]);
-    expect(TestHelper.interactionNames(internal)).toEqual(['DragPan', 'KeyboardPan', 'MouseWheelZoom', 'PinchZoom']);
+    expect(TestHelper.interactionNames(internal)).toEqual(['DragPan', 'PinchZoom', 'MouseWheelZoom']);
   });
 
   it('createNaked()', () => {
@@ -55,6 +55,5 @@ function getControlNames(map: Map): string[] {
   return map
     .getControls()
     .getArray()
-    .map((ctr) => ctr.constructor.name)
-    .sort((a, b) => a.localeCompare(b));
+    .map((ctr) => ctr.constructor.name);
 }

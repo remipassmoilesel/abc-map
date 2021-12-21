@@ -16,32 +16,44 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { DragPan, Interaction, KeyboardPan, MouseWheelZoom, PinchZoom } from 'ol/interaction';
-import MapBrowserEvent from 'ol/MapBrowserEvent';
+import { Tool } from '../Tool';
+import Icon from '../../../assets/tool-icons/move.inline.svg';
 import Map from 'ol/Map';
-import { withControlKey, withMainButton } from '../helpers/common-conditions';
+import { MapTool } from '@abc-map/shared';
+import { MoveMapInteractionsBundle } from '../common/interactions/MoveMapInteractionsBundle';
 
-/**
- * This class contains interactions designed to be used in complement of drawing interactions
- */
-export class MoveInteractionsBundle {
+export class MoveMapTool implements Tool {
   private map?: Map;
-  private interactions: Interaction[];
+  private move?: MoveMapInteractionsBundle;
 
-  constructor() {
-    const condition = (ev: MapBrowserEvent<MouseEvent>) => withControlKey(ev) && withMainButton(ev);
-    this.interactions = [new DragPan({ condition }), new KeyboardPan({ condition }), new MouseWheelZoom({ condition }), new PinchZoom({})];
+  public getId(): MapTool {
+    return MapTool.MoveMap;
+  }
+
+  public getIcon(): string {
+    return Icon;
+  }
+
+  public getI18nLabel(): string {
+    return 'MoveMap';
+  }
+
+  public getModes() {
+    return [];
   }
 
   public setup(map: Map) {
     this.map = map;
-    this.interactions.forEach((inter) => map.addInteraction(inter));
+
+    this.move = new MoveMapInteractionsBundle({});
+    this.move.setup(map);
+  }
+
+  public deselectAll() {
+    return;
   }
 
   public dispose() {
-    this.interactions.forEach((inter) => {
-      inter.dispose();
-      this.map?.removeInteraction(inter);
-    });
+    this.move?.dispose();
   }
 }

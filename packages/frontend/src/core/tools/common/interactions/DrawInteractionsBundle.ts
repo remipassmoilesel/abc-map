@@ -19,7 +19,6 @@
 import GeometryType from 'ol/geom/GeometryType';
 import { FeatureStyle, Logger } from '@abc-map/shared';
 import { Draw, Modify, Snap } from 'ol/interaction';
-import { withMainButton } from '../helpers/common-conditions';
 import { FeatureWrapper } from '../../../geo/features/FeatureWrapper';
 import { DrawEvent } from 'ol/interaction/Draw';
 import { AddFeaturesChangeset } from '../../../history/changesets/features/AddFeaturesChangeset';
@@ -29,21 +28,31 @@ import VectorSource from 'ol/source/Vector';
 import { Changeset } from '../../../history/Changeset';
 import { styleFunction } from '../../../geo/styles/style-function';
 import { createEditingStyle } from 'ol/style/Style';
-import { noModifierKeys } from 'ol/events/condition';
 import { UndoCallbackChangeset } from '../../../history/changesets/features/UndoCallbackChangeset';
 import Collection from 'ol/Collection';
 import Geometry from 'ol/geom/Geometry';
 import Feature from 'ol/Feature';
 import Map from 'ol/Map';
+import MapBrowserEvent from 'ol/MapBrowserEvent';
 
 const logger = Logger.get('DrawInteraction');
 
 export declare type GetStyleFunc = () => FeatureStyle;
 export declare type ChangesetHandler = (t: Changeset) => void;
+export declare type FeatureAddedHandler = (f: FeatureWrapper) => void;
 
-export declare type ToolMode = typeof GeometryType.POINT | typeof GeometryType.LINE_STRING | typeof GeometryType.POLYGON;
+// This represent the kind of draw interactions will do
+export declare type ToolType = typeof GeometryType.POINT | typeof GeometryType.LINE_STRING | typeof GeometryType.POLYGON;
 
 const editingStyle = createEditingStyle();
+
+export interface Options {
+  type: ToolType;
+  getStyle: GetStyleFunc;
+  drawCondition?: (ev: MapBrowserEvent<UIEvent>) => boolean;
+  modifyCondition?: (ev: MapBrowserEvent<UIEvent>) => boolean;
+  deleteVertex?: (ev: MapBrowserEvent<UIEvent>) => boolean;
+}
 
 /**
  * Wrapper around several Openlayers interactions, used to draw points, lines and polygons.
@@ -52,12 +61,11 @@ const editingStyle = createEditingStyle();
  *
  * This file is tested during tool testing.
  *
- * FIXME: add Translate after ol upgrade ? May conflict with Modify
- *
  */
 export class DrawInteractionsBundle {
   public onNewChangeset?: ChangesetHandler;
   public onDeleteChangeset?: ChangesetHandler;
+  public onFeatureAdded?: FeatureAddedHandler;
 
   private snap?: Snap;
   private modify?: Modify;
@@ -67,17 +75,15 @@ export class DrawInteractionsBundle {
   private source?: VectorSource<Geometry>;
   private selection?: Collection<Feature<Geometry>>;
 
-  private getStyle?: GetStyleFunc;
   private drawingStartChangeset?: Changeset;
   private escapeKeyListener?: (ev: KeyboardEvent) => void;
 
-  constructor(private mode: ToolMode) {}
+  constructor(private options: Options) {}
 
-  public setup(map: Map, source: VectorSource<Geometry>, selection: Collection<Feature<Geometry>>, getStyle: GetStyleFunc) {
+  public setup(map: Map, source: VectorSource<Geometry>, selection: Collection<Feature<Geometry>>) {
     this.map = map;
     this.source = source;
     this.selection = selection;
-    this.getStyle = getStyle;
 
     this.initModification();
     this.initDraw();
@@ -87,12 +93,22 @@ export class DrawInteractionsBundle {
   // Modify features. Only selected features can be modified.
   private initModification() {
     this.snap = new Snap({ features: this.selection });
-    this.modify = new Modify({ features: this.selection, condition: withMainButton });
+
+    this.modify = new Modify({
+      features: this.selection,
+      condition: this.options.modifyCondition,
+      deleteCondition: this.options.deleteVertex,
+    });
 
     let modified: FeatureWrapper[] = [];
 
     // Save initial state of features
     this.modify.on('modifystart', (ev: ModifyEvent) => {
+      // Despite typings, ev.features is in fact nullable
+      if (!ev.features || !ev.features.getLength()) {
+        return;
+      }
+
       const features = ev.features.getArray();
       features.forEach((feat) => {
         const clone = FeatureWrapper.fromUnknown(feat)?.clone();
@@ -107,6 +123,11 @@ export class DrawInteractionsBundle {
 
     // Create a changeset
     this.modify.on('modifyend', (ev: ModifyEvent) => {
+      // Despite typings, ev.features is in fact nullable
+      if (!ev.features || !ev.features.getLength()) {
+        return;
+      }
+
       const features = ev.features.getArray();
       const items = features
         .map((feat) => {
@@ -139,17 +160,17 @@ export class DrawInteractionsBundle {
   // Add features
   private initDraw(): void {
     const selection = this.selection;
-    const getStyle = this.getStyle;
+    const getStyle = this.options.getStyle;
     const source = this.source;
-    if (!selection || !getStyle || !source) {
+    if (!selection || !source) {
       throw new Error('DrawInteractionsBundle not initialized');
     }
 
     this.draw = new Draw({
       source: this.source,
-      type: this.mode,
-      condition: (ev) => withMainButton(ev) && noModifierKeys(ev),
-      finishCondition: (ev) => withMainButton(ev) && noModifierKeys(ev),
+      type: this.options.type,
+      condition: this.options.drawCondition,
+      finishCondition: this.options.drawCondition,
       freehand: false,
       freehandCondition: () => false,
       style: (f) => {
@@ -186,12 +207,14 @@ export class DrawInteractionsBundle {
       this.drawingStartChangeset = undefined;
 
       this.onNewChangeset && this.onNewChangeset(new AddFeaturesChangeset(source, [feature]));
+
+      this.onFeatureAdded && this.onFeatureAdded(feature);
     });
 
     this.map?.addInteraction(this.draw);
   }
 
-  private abortDrawing() {
+  public abortDrawing() {
     this.drawingStartChangeset && this.onDeleteChangeset && this.onDeleteChangeset(this.drawingStartChangeset);
     this.drawingStartChangeset = undefined;
 

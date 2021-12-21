@@ -21,7 +21,7 @@ import { MainMap } from './MainMap';
 const waitTimeBeforeMs = 100;
 const waitTimeAfterMs = 100;
 const drawReference = { x: 100, y: 100 };
-const defaultOptions = { button: 0, pointerId: 1 };
+const defaultOptions = { button: 0, pointerId: 1, isPrimary: true };
 
 export class Draw {
   /**

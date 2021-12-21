@@ -18,36 +18,173 @@
 
 import { MainStore } from '../../store/store';
 import { HistoryService } from '../../history/HistoryService';
-import Map from 'ol/Map';
-import VectorSource from 'ol/source/Vector';
 import { TextTool } from './TextTool';
 import { TestHelper } from '../../utils/test/TestHelper';
+import { DrawingTestMap } from '../common/interactions/DrawingTestMap.test.helpers';
+import { newTestStore, TestStore } from '../../store/TestStore';
+import sinon, { SinonStubbedInstance } from 'sinon';
+import { IconName } from '../../../assets/point-icons/IconName';
+import { deepFreeze } from '../../utils/deepFreeze';
+import { FeatureWrapper } from '../../geo/features/FeatureWrapper';
+import { Polygon } from 'ol/geom';
+import { Modes } from './Modes';
+import { screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { UpdateStyleChangeset } from '../../history/changesets/features/UpdateStyleChangeset';
+import { HistoryKey } from '../../history/HistoryKey';
+import { logger } from './TextBox';
+
+logger.disable();
 
 describe('Text', () => {
+  const textStyle = deepFreeze({
+    color: '#000',
+    font: 'sans-serif',
+    size: 55,
+    offsetX: 20,
+    offsetY: 15,
+    rotation: 0,
+  });
+
+  let map: DrawingTestMap;
+  let store: TestStore;
+  let history: SinonStubbedInstance<HistoryService>;
+  let feature: FeatureWrapper;
+  let tool: TextTool;
+
+  beforeEach(async () => {
+    history = sinon.createStubInstance(HistoryService);
+
+    map = new DrawingTestMap();
+    await map.init();
+
+    store = newTestStore();
+    store.getState.returns({
+      map: {
+        currentStyle: {
+          text: textStyle,
+          point: {
+            icon: IconName.IconGeoAltFill,
+            size: 30,
+            color: 'rgba(18,90,147,0.9)',
+          },
+        },
+      },
+    } as any);
+
+    tool = new TextTool(store as unknown as MainStore, history as unknown as HistoryService);
+    tool.setup(map.getMap(), map.getVectorSource());
+
+    feature = FeatureWrapper.create(
+      new Polygon([
+        [
+          [10, 0],
+          [20, 0],
+          [30, 0],
+        ],
+      ])
+    );
+    map.addFeatures([feature.unwrap()]);
+  });
+
+  afterEach(() => {
+    tool.dispose();
+  });
+
   it('setup()', () => {
-    const store = {} as MainStore;
-    const history = {} as HistoryService;
-    const map = new Map({});
-    const source = new VectorSource();
-
-    const text = new TextTool(store, history);
-    text.setup(map, source);
-
-    const interactions = TestHelper.interactionNames(map);
-    expect(interactions).toContain('TextInteraction');
+    expect(TestHelper.interactionNames(map.getMap())).toEqual(['DragPan', 'PinchZoom', 'MouseWheelZoom', 'Select', 'Select']);
   });
 
   it('dispose()', () => {
-    const store = {} as MainStore;
-    const history = {} as HistoryService;
-    const map = new Map({});
-    const source = new VectorSource();
+    tool.dispose();
 
-    const text = new TextTool(store, history);
-    text.setup(map, source);
-    text.dispose();
+    expect(TestHelper.interactionNames(map.getMap())).toEqual([]);
+  });
 
-    const interactions = TestHelper.interactionNames(map);
-    expect(interactions).not.toContain('TextInteraction');
+  it('drag should move map view', async () => {
+    map.toMapWrapper().setToolMode(Modes.MoveMap);
+
+    await map.drag(0, 0, 50, 50);
+
+    expect(map.getMap().getView().getCenter()).toEqual([-45, 40]);
+  });
+
+  it('click on feature should open text-box', async () => {
+    // Prepare
+    map.toMapWrapper().setToolMode(Modes.EditText);
+
+    // Act
+    await map.click(20, 0);
+
+    // Assert
+    expect(screen.getByTestId('text-box')).toBeDefined();
+  });
+
+  it('validate should register task and set text if text changed', async () => {
+    // Prepare
+    map.toMapWrapper().setToolMode(Modes.EditText);
+    await map.click(20, 0);
+
+    // Act
+    userEvent.type(screen.getByTestId('text-box'), 'hello');
+    userEvent.click(screen.getByTestId('validate'));
+
+    // Assert
+    expect(feature.getText()).toEqual('hello');
+    expect(history.register.args).toEqual([
+      [
+        HistoryKey.Map,
+        new UpdateStyleChangeset([
+          {
+            feature,
+            before: {
+              fill: {},
+              point: {},
+              stroke: {},
+              text: {},
+            },
+            after: {
+              fill: {},
+              point: {},
+              stroke: {},
+              text: {
+                ...textStyle,
+                alignment: 'center',
+                value: 'hello',
+              },
+            },
+          },
+        ]),
+      ],
+    ]);
+  });
+
+  it('validate should not register task and set text if text did not changed', async () => {
+    // Prepare
+    map.toMapWrapper().setToolMode(Modes.EditText);
+    feature.setText('hello');
+    await map.click(20, 0);
+
+    // Act
+    userEvent.clear(screen.getByTestId('text-box'));
+    userEvent.type(screen.getByTestId('text-box'), 'hello');
+    userEvent.click(screen.getByTestId('validate'));
+
+    // Assert
+    expect(feature.getText()).toEqual('hello');
+    expect(history.register.callCount).toEqual(0);
+  });
+
+  it('dispose() should close text-box', async () => {
+    // Prepare
+    map.toMapWrapper().setToolMode(Modes.EditText);
+    feature.setText('hello');
+    await map.click(20, 0);
+
+    // Act
+    tool.dispose();
+
+    // Assert
+    expect(screen.queryByTestId('text-box')).toBeNull();
   });
 });

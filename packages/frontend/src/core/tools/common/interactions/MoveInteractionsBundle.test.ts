@@ -18,22 +18,23 @@
 
 import { DrawingTestMap } from './DrawingTestMap.test.helpers';
 import { TestHelper } from '../../../utils/test/TestHelper';
-import { MoveInteractionsBundle } from './MoveInteractionsBundle';
+import { MoveMapInteractionsBundle } from './MoveMapInteractionsBundle';
+import sinon from 'sinon';
 
-describe('MoveInteractionsBundle', () => {
+describe('MoveMapInteractionsBundle', () => {
   let testMap: DrawingTestMap;
-  let interactions: MoveInteractionsBundle;
+  let interactions: MoveMapInteractionsBundle;
 
   beforeEach(async () => {
     testMap = new DrawingTestMap();
     await testMap.init();
 
-    interactions = new MoveInteractionsBundle();
+    interactions = new MoveMapInteractionsBundle({ condition: sinon.stub() });
     interactions.setup(testMap.getMap());
   });
 
   it('setup()', () => {
-    expect(TestHelper.interactionNames(testMap.getMap())).toEqual(['DragPan', 'KeyboardPan', 'MouseWheelZoom', 'PinchZoom']);
+    expect(TestHelper.interactionNames(testMap.getMap())).toEqual(['DragPan', 'PinchZoom', 'MouseWheelZoom']);
   });
 
   it('dispose()', () => {

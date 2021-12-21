@@ -28,13 +28,15 @@ import { HistoryKey } from '../../history/HistoryKey';
 import { HistoryService } from '../../history/HistoryService';
 import { MainStore } from '../../store/store';
 import { MapActions } from '../../store/map/actions';
-import { MoveInteractionsBundle } from '../common/interactions/MoveInteractionsBundle';
+import { MoveMapInteractionsBundle } from '../common/interactions/MoveMapInteractionsBundle';
 import { SelectionInteractionsBundle } from '../common/interactions/SelectionInteractionsBundle';
+import { ToolMode } from '../ToolMode';
+import { CommonConditions, CommonModes } from '../common/common-modes';
 
 const logger = Logger.get('PolygonTool.ts');
 
 export class PolygonTool implements Tool {
-  private move?: MoveInteractionsBundle;
+  private move?: MoveMapInteractionsBundle;
   private selection?: SelectionInteractionsBundle;
   private draw?: DrawInteractionsBundle;
 
@@ -48,31 +50,50 @@ export class PolygonTool implements Tool {
     return Icon;
   }
 
+  public getModes(): ToolMode[] {
+    return [CommonModes.CreateGeometry, CommonModes.ModifyGeometry, CommonModes.MoveMap];
+  }
+
   public getI18nLabel(): string {
     return 'Polygons';
   }
 
   public setup(map: Map, source: VectorSource<Geometry>): void {
     // Interactions for map view manipulation
-    this.move = new MoveInteractionsBundle();
+    this.move = new MoveMapInteractionsBundle({ condition: CommonConditions.MoveMap });
     this.move.setup(map);
 
-    // Select with shift + click
-    this.selection = new SelectionInteractionsBundle();
+    // Selection for modifications
+    this.selection = new SelectionInteractionsBundle({ condition: CommonConditions.Selection });
     this.selection.onStyleSelected = (style: FeatureStyle) => this.store.dispatch(MapActions.setDrawingStyle({ stroke: style.stroke, fill: style.fill }));
     this.selection.setup(map, source, [GeometryType.POLYGON, GeometryType.MULTI_POLYGON]);
 
     // Draw interactions
-    this.draw = new DrawInteractionsBundle(GeometryType.POLYGON);
-    this.draw.onNewChangeset = (t) => this.history.register(HistoryKey.Map, t);
-    this.draw.onDeleteChangeset = (t) => this.history.remove(HistoryKey.Map, t);
-
     const getStyle: GetStyleFunc = () => {
       const style = this.store.getState().map.currentStyle;
       return { fill: style.fill, stroke: style.stroke };
     };
 
-    this.draw.setup(map, source, this.selection.getFeatures(), getStyle);
+    this.draw = new DrawInteractionsBundle({
+      type: GeometryType.POLYGON,
+      getStyle,
+      drawCondition: CommonConditions.CreateGeometry,
+      modifyCondition: CommonConditions.ModifyGeometry,
+      deleteVertex: CommonConditions.DeleteVertex,
+    });
+    this.draw.onNewChangeset = (t) => this.history.register(HistoryKey.Map, t);
+    this.draw.onDeleteChangeset = (t) => this.history.remove(HistoryKey.Map, t);
+    this.draw.onFeatureAdded = (feat) => {
+      feat.setSelected(true);
+      this.selection?.getFeatures().push(feat.unwrap());
+    };
+
+    this.draw.setup(map, source, this.selection.getFeatures());
+  }
+
+  public modeChanged(): void {
+    this.draw?.abortDrawing();
+    this.selection?.clear();
   }
 
   public deselectAll() {

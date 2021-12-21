@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { Component, ReactNode } from 'react';
+import React from 'react';
 import { Logger } from '@abc-map/shared';
 import TextFormat from '../_common/text-format/TextFormat';
 import { withTranslation } from 'react-i18next';
@@ -24,14 +24,12 @@ import Cls from './TextToolPanel.module.scss';
 
 const logger = Logger.get('TextToolPanel.tsx');
 
-class TextToolPanel extends Component<{}, {}> {
-  public render(): ReactNode {
-    return (
-      <div className={Cls.textPanel}>
-        <TextFormat />
-      </div>
-    );
-  }
+function TextToolPanel() {
+  return (
+    <div className={Cls.textPanel}>
+      <TextFormat />
+    </div>
+  );
 }
 
 export default withTranslation()(TextToolPanel);

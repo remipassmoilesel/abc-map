@@ -17,7 +17,7 @@
  */
 
 export enum MapTool {
-  Move = 'Move',
+  MoveMap = 'MoveMap',
   Point = 'Point',
   LineString = 'LineString',
   Polygon = 'Polygon',

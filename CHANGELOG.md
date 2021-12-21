@@ -2,6 +2,12 @@
 
 Presently there are no versions, because it is not yet necessary.
 
+## Better tools (XXXXX 21/12/2021)
+
+- "Modes" for tools, in order to replace keyboard shortcuts and to provide a better UX
+- Better keyboard shortcuts on main map, thanks to Mousetrap 
+- Keyboard shortcuts on layout view 
+
 ## Better UI (f23dc515 09/12/2021)
 
 - New UI, more mobile friendly but not totally usable on mobile for the moment

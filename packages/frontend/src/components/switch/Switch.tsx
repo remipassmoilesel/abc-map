@@ -16,30 +16,22 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import Feature from 'ol/Feature';
-import Geometry from 'ol/geom/Geometry';
-import BaseEvent from 'ol/events/Event';
+import { useCallback } from 'react';
+import Cls from './Switch.module.scss';
 
-export enum TextEvent {
-  Start = 'text-start',
-  Changed = 'text-changed',
-  End = 'text-end',
+interface Props {
+  onChange: (ev: boolean) => void;
+  value: boolean;
 }
 
-export class TextStart extends BaseEvent {
-  constructor(public readonly feature: Feature<Geometry>, public readonly text: string) {
-    super(TextEvent.Start);
-  }
-}
+export function Switch(props: Props) {
+  const { value, onChange } = props;
+  const toggle = useCallback(() => onChange(!value), [onChange, value]);
 
-export class TextChanged extends BaseEvent {
-  constructor(public readonly feature: Feature<Geometry>, public readonly text: string) {
-    super(TextEvent.Changed);
-  }
-}
-
-export class TextEnd extends BaseEvent {
-  constructor(public readonly feature: Feature<Geometry>, public readonly text: string) {
-    super(TextEvent.End);
-  }
+  return (
+    <div className={Cls.toggle} onClick={toggle}>
+      <input type="checkbox" checked={value} onChange={toggle} className={Cls.toggleCheckbox} />
+      <div className={Cls.toggleSwitch} />
+    </div>
+  );
 }

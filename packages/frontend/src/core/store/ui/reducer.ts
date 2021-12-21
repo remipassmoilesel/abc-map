@@ -24,10 +24,6 @@ import { uiInitialState, UiState } from './state';
  *
  */
 export function uiReducer(state = uiInitialState, action: UiAction): UiState {
-  if (!Object.values(ActionType).includes(action.type)) {
-    return state;
-  }
-
   switch (action.type) {
     case ActionType.SetHistoryCapabilities: {
       const newState: UiState = { ...state };

@@ -16,16 +16,26 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-export class Shortcuts {
-  public static isDelete(ev: KeyboardEvent): boolean {
-    return ev.key === 'Delete' && !ev.shiftKey && !ev.ctrlKey && !ev.altKey;
+import { Map } from 'ol';
+import { ToolMode } from '../ToolMode';
+
+const ToolModeProperty = 'abc:map:tool-mode';
+
+export class ToolModeHelper {
+  public static is(map: Map, ...modes: ToolMode[]): boolean {
+    const current = this.get(map);
+    if (!current) {
+      return false;
+    }
+
+    return modes.includes(current);
   }
 
-  public static isUndo(ev: KeyboardEvent): boolean {
-    return ev.ctrlKey && ev.key === 'z' && !ev.shiftKey;
+  public static get(map: Map): ToolMode | undefined {
+    return map.get(ToolModeProperty);
   }
 
-  public static isRedo(ev: KeyboardEvent): boolean {
-    return ev.ctrlKey && ev.shiftKey && ev.key === 'Z';
+  public static set(map: Map, mode: ToolMode | undefined): void {
+    map.set(ToolModeProperty, mode);
   }
 }

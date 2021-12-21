@@ -27,11 +27,13 @@ import Feature from 'ol/Feature';
 import { LayerFactory } from '../../../geo/layers/LayerFactory';
 import { VectorLayerWrapper } from '../../../geo/layers/LayerWrapper';
 import { Geometry } from 'ol/geom';
+import { MapWrapper } from '../../../geo/map/MapWrapper';
 
 interface SimulatedEventOptions {
   shift?: boolean;
   ctrl?: boolean;
   button?: number;
+  isPrimary?: boolean;
 }
 
 /**
@@ -124,8 +126,8 @@ export class DrawingTestMap {
     this.vectorSource.addFeatures(feats);
   }
 
-  public getFeature<Geom extends OlGeometry>(i: number): FeatureWrapper<Geom> {
-    return FeatureWrapper.from<Geom>(this.vectorSource.getFeatures()[i] as Feature<Geom>);
+  public getFeature<Geom extends OlGeometry>(i: number): FeatureWrapper<Geom> | undefined {
+    return FeatureWrapper.fromUnknown<Geom>(this.vectorSource.getFeatures()[i]) as FeatureWrapper<Geom> | undefined;
   }
 
   public async drag(startX: number, startY: number, endX: number, endY: number, options?: SimulatedEventOptions): Promise<void> {
@@ -172,6 +174,7 @@ export class DrawingTestMap {
       clientY: position.top + y + this.mapHeight / 2,
       ctrlKey: options?.ctrl ?? false,
       shiftKey: options?.shift ?? false,
+      isPrimary: options?.isPrimary ?? true,
       preventDefault: function () {
         return;
       },
@@ -197,6 +200,10 @@ export class DrawingTestMap {
     await this.render();
 
     return simulatedEvent;
+  }
+
+  public toMapWrapper(): MapWrapper {
+    return MapWrapper.from(this.map);
   }
 
   public dispose() {

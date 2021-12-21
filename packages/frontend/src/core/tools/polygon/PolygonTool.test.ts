@@ -32,19 +32,22 @@ import { deepFreeze } from '../../utils/deepFreeze';
 import { UpdateGeometriesChangeset } from '../../history/changesets/features/UpdateGeometriesChangeset';
 import { PolygonTool } from './PolygonTool';
 import { IconName } from '../../../assets/point-icons/IconName';
+import { CommonModes } from '../common/common-modes';
 
 describe('PolygonTool', () => {
-  const stroke = deepFreeze({ color: 'rgba(18,90,147,0.60)', width: 3 });
-  const fill = deepFreeze({ color1: 'rgba(18,90,147,0.30)', color2: 'rgba(255,255,255,0.60)', pattern: FillPatterns.HatchingObliqueRight });
+  const strokeStyle = deepFreeze({ color: 'rgba(18,90,147,0.60)', width: 3 });
+  const fillStyle = deepFreeze({ color1: 'rgba(18,90,147,0.30)', color2: 'rgba(255,255,255,0.60)', pattern: FillPatterns.HatchingObliqueRight });
 
-  let testMap: DrawingTestMap;
+  let map: DrawingTestMap;
   let store: TestStore;
   let history: SinonStubbedInstance<HistoryService>;
   let tool: PolygonTool;
 
   beforeEach(async () => {
-    testMap = new DrawingTestMap();
-    await testMap.init();
+    history = sinon.createStubInstance(HistoryService);
+
+    map = new DrawingTestMap();
+    await map.init();
 
     store = newTestStore();
     store.getState.returns({
@@ -55,49 +58,49 @@ describe('PolygonTool', () => {
             size: 30,
             color: 'rgba(18,90,147,0.9)',
           },
-          fill,
-          stroke,
+          fill: fillStyle,
+          stroke: strokeStyle,
         },
       },
     } as any);
 
-    history = sinon.createStubInstance(HistoryService);
-
     tool = new PolygonTool(store as unknown as MainStore, history as unknown as HistoryService);
-    tool.setup(testMap.getMap(), testMap.getVectorSource());
+    tool.setup(map.getMap(), map.getVectorSource());
   });
 
   it('setup()', () => {
-    expect(TestHelper.interactionNames(testMap.getMap())).toEqual([
-      'DragPan',
-      'KeyboardPan',
-      'MouseWheelZoom',
-      'PinchZoom',
-      'Select',
-      'Modify',
-      'Snap',
-      'Draw',
-    ]);
+    expect(TestHelper.interactionNames(map.getMap())).toEqual(['DragPan', 'PinchZoom', 'MouseWheelZoom', 'Select', 'Modify', 'Snap', 'Draw']);
+  });
+
+  it('dispose()', () => {
+    tool.dispose();
+
+    expect(TestHelper.interactionNames(map.getMap())).toEqual([]);
   });
 
   it('drag should move map view', async () => {
-    await testMap.drag(0, 0, 50, 50, { ctrl: true });
+    map.toMapWrapper().setToolMode(CommonModes.MoveMap);
 
-    expect(testMap.getMap().getView().getCenter()).toEqual([-45, 40]);
+    await map.drag(0, 0, 50, 50);
+
+    expect(map.getMap().getView().getCenter()).toEqual([-45, 40]);
   });
 
   it('click should draw polygon', async () => {
+    // Prepare
+    map.toMapWrapper().setToolMode(CommonModes.CreateGeometry);
+
     // Act
-    await testMap.click(10, 0);
-    await testMap.click(20, 0);
-    await testMap.doubleClick(30, 0);
+    await map.click(10, 0);
+    await map.click(20, 0);
+    await map.doubleClick(30, 0);
 
     // Assert
     // Feature must exists
-    const feat = testMap.getFeature<Polygon>(0);
+    const feat = map.getFeature<Polygon>(0);
     expect(feat).toBeDefined();
-    expect(feat.getGeometry()).toBeInstanceOf(Polygon);
-    expect(feat.getGeometry()?.getCoordinates()).toEqual([
+    expect(feat?.getGeometry()).toBeInstanceOf(Polygon);
+    expect(feat?.getGeometry()?.getCoordinates()).toEqual([
       [
         [10, 0],
         [20, 0],
@@ -107,7 +110,7 @@ describe('PolygonTool', () => {
     ]);
 
     // Feature must have store style
-    expect(feat.getStyleProperties()).toEqual({ stroke, fill, point: {}, text: {} });
+    expect(feat?.getStyleProperties()).toEqual({ stroke: strokeStyle, fill: fillStyle, point: {}, text: {} });
 
     // Changesets must have been registered
     expect(history.register.callCount).toEqual(2);
@@ -122,8 +125,10 @@ describe('PolygonTool', () => {
     expect(history.register.args[0][1]).toBeInstanceOf(UndoCallbackChangeset);
   });
 
-  it('shift + click should select polygons, toggle select, deselect all', async () => {
+  it('should select polygons, toggle select, deselect all', async () => {
     // Prepare
+    map.toMapWrapper().setToolMode(CommonModes.ModifyGeometry);
+
     const feature1 = FeatureWrapper.create(
       new Polygon([
         [
@@ -133,7 +138,7 @@ describe('PolygonTool', () => {
         ],
       ])
     );
-    feature1.setStyleProperties({ stroke, fill });
+    feature1.setStyleProperties({ stroke: strokeStyle, fill: fillStyle });
 
     const feature2 = FeatureWrapper.create(
       new Polygon([
@@ -146,21 +151,21 @@ describe('PolygonTool', () => {
     );
     feature2.setStyleProperties({ stroke: { color: 'green', width: 6 }, fill: { color1: 'green', color2: 'red', pattern: FillPatterns.Circles } });
 
-    testMap.addFeatures([feature1.unwrap(), feature2.unwrap()]);
+    map.addFeatures([feature1.unwrap(), feature2.unwrap()]);
 
     // Act & assert
     // Select one
-    await testMap.click(20, 0, { shift: true });
+    await map.click(20, 0);
     expect(feature1.isSelected()).toBe(true);
     expect(feature2.isSelected()).toBe(false);
 
     // Select two
-    await testMap.click(35, -20, { shift: true });
+    await map.click(35, -20);
     expect(feature1.isSelected()).toBe(true);
     expect(feature2.isSelected()).toBe(true);
 
     // Toggle one
-    await testMap.click(20, 0, { shift: true });
+    await map.click(20, 0);
     expect(feature1.isSelected()).toBe(false);
     expect(feature2.isSelected()).toBe(true);
 
@@ -171,7 +176,7 @@ describe('PolygonTool', () => {
 
     // Style must have been dispatch
     expect(store.dispatch.args).toEqual([
-      [{ type: 'SetDrawingStyle', style: { stroke, fill } }],
+      [{ type: 'SetDrawingStyle', style: { stroke: strokeStyle, fill: fillStyle } }],
       [
         {
           type: 'SetDrawingStyle',
@@ -192,20 +197,22 @@ describe('PolygonTool', () => {
         ],
       ])
     );
-    testMap.addFeatures([feature1.unwrap()]);
+    map.addFeatures([feature1.unwrap()]);
 
     // Act & assert
     // Select one
-    await testMap.click(20, 0, { shift: true });
+    map.toMapWrapper().setToolMode(CommonModes.ModifyGeometry);
+    await map.click(20, 0);
     expect(feature1.isSelected()).toBe(true);
 
     // Draw two
-    await testMap.click(50, 20);
-    await testMap.click(60, 20);
-    await testMap.doubleClick(70, 20);
+    map.toMapWrapper().setToolMode(CommonModes.CreateGeometry);
+    await map.click(50, 20);
+    await map.click(60, 20);
+    await map.doubleClick(70, 20);
 
-    expect(testMap.getFeature(0).isSelected()).toBe(false);
-    expect(testMap.getFeature(1).isSelected()).toBe(false);
+    expect(map.getFeature(0)?.isSelected()).toBe(false);
+    expect(map.getFeature(1)?.isSelected()).toBe(true);
   });
 
   it('select then modify should update geometries and history', async () => {
@@ -219,15 +226,16 @@ describe('PolygonTool', () => {
         ],
       ])
     );
-    testMap.addFeatures([feature1.unwrap()]);
+    map.addFeatures([feature1.unwrap()]);
+    map.toMapWrapper().setToolMode(CommonModes.ModifyGeometry);
 
     // Act
     // Select one
-    await testMap.click(20, 0, { shift: true });
+    await map.click(20, 0);
     expect(feature1.isSelected()).toBe(true);
 
     // Modify one
-    await testMap.drag(20, 0, 50, 50);
+    await map.drag(20, 0, 50, 50);
 
     // Assert
     const geom = feature1.getGeometry() as Polygon;
@@ -260,7 +268,7 @@ describe('PolygonTool', () => {
     ]);
   });
 
-  it('dispose()', async () => {
+  it('dispose() should unselect all', async () => {
     // Prepare
     const feature1 = FeatureWrapper.create(
       new Polygon([
@@ -271,10 +279,11 @@ describe('PolygonTool', () => {
         ],
       ])
     );
-    testMap.addFeatures([feature1.unwrap()]);
+    map.addFeatures([feature1.unwrap()]);
+    map.toMapWrapper().setToolMode(CommonModes.ModifyGeometry);
 
     // Select
-    await testMap.click(20, 0, { shift: true });
+    await map.click(20, 0);
     expect(feature1.isSelected()).toBe(true);
 
     // Act
@@ -282,6 +291,5 @@ describe('PolygonTool', () => {
 
     // Assert
     expect(feature1.isSelected()).toBe(false);
-    expect(TestHelper.interactionNames(testMap.getMap())).toEqual([]);
   });
 });

@@ -57,14 +57,14 @@ export class FeatureWrapper<Geom extends OlGeometry = OlGeometry> {
     return new FeatureWrapper<T>(ol);
   }
 
-  public static fromUnknown(ol: unknown): FeatureWrapper | undefined {
+  public static fromUnknown<T extends OlGeometry = OlGeometry>(ol: unknown): FeatureWrapper<T> | undefined {
     if (!this.isFeature(ol)) {
       return;
     }
 
     const hasGeometry = ol.getGeometry() instanceof Geometry;
     if (hasGeometry) {
-      return FeatureWrapper.from(ol as Feature<Geometry>);
+      return FeatureWrapper.from(ol as Feature<T>);
     }
   }
 
@@ -146,7 +146,10 @@ export class FeatureWrapper<Geom extends OlGeometry = OlGeometry> {
   }
 
   /**
-   * Set style properties on feature
+   * Set style properties on feature.
+   *
+   * Properties are set only if they are defined.
+   *
    * @param properties
    */
   public setStyleProperties(properties: FeatureStyle): FeatureWrapper {

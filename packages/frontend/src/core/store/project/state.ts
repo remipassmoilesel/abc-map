@@ -34,6 +34,11 @@ export interface ProjectState {
   layouts: AbcLayout[];
 
   /**
+   * Current layout displayed
+   */
+  activeLayoutId?: string;
+
+  /**
    * Legend of current project
    */
   legend: AbcLegend;

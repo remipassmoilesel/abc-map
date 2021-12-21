@@ -24,10 +24,6 @@ import { authenticationInitialState, AuthenticationState } from './state';
  *
  */
 export function authenticationReducer(state = authenticationInitialState, action: AuthenticationAction): AuthenticationState {
-  if (!Object.values(ActionType).includes(action.type)) {
-    return state;
-  }
-
   switch (action.type) {
     case ActionType.Login: {
       const newState: AuthenticationState = { ...state };

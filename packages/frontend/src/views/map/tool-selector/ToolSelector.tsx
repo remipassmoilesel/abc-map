@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { ToolRegistry } from '../../../core/tools/ToolRegistry';
 import { Logger, MapTool } from '@abc-map/shared';
 import SelectionPanel from './selection/SelectionToolPanel';
@@ -28,7 +28,6 @@ import { LayerFactory } from '../../../core/geo/layers/LayerFactory';
 import { HistoryKey } from '../../../core/history/HistoryKey';
 import { AddLayersChangeset } from '../../../core/history/changesets/layers/AddLayersChangeset';
 import { prefixedTranslation } from '../../../i18n/i18n';
-import { useAppSelector } from '../../../core/store/hooks';
 import { useServices } from '../../../core/hooks';
 import CommonActions from './_common/common-actions/CommonActions';
 import TipBubble from '../../../components/tip-bubble/TipBubble';
@@ -37,38 +36,50 @@ import { ToolButton } from './ToolButton';
 import TextToolPanel from './text/TextToolPanel';
 import { IconDefs } from '../../../components/icon/IconDefs';
 import { FaIcon } from '../../../components/icon/FaIcon';
+import ToolModeSelector from './_common/tool-mode-selector/ToolModeSelector';
+import { Tool } from '../../../core/tools/Tool';
 import Cls from './ToolSelector.module.scss';
 
 const logger = Logger.get('ToolSelector');
 
 interface Props {
-  activeLayer?: LayerWrapper;
+  activeLayer: LayerWrapper | undefined;
 }
 
 const t = prefixedTranslation('MapView:ToolSelector.');
 const tTools = prefixedTranslation('core:tools.');
 
 function ToolSelector(props: Props) {
+  const { activeLayer } = props;
+  const [activeTool, setActiveTool] = useState<Tool | undefined>();
   const { geo, history } = useServices();
-  const currentTool = useAppSelector((st) => st.map.tool);
-  const activeLayer = props.activeLayer;
+  const mainMap = geo.getMainMap();
 
-  // Tools can be disabled if user clicks on raster layer
+  // We update tool state when tool change
+  const handleToolChange = useCallback(() => setActiveTool(mainMap.getTool()), [mainMap]);
+
+  useEffect(() => {
+    mainMap.addToolListener(handleToolChange);
+    handleToolChange(); // We manually trigger the first setup
+
+    return () => mainMap.removeToolListener(handleToolChange);
+  }, [handleToolChange, mainMap]);
+
+  // Tools can be disabled if user selects a raster layer
   const toolsEnabled = (activeLayer && activeLayer.isVector()) || false;
-  const activeTool = ToolRegistry.getById(currentTool);
 
   // Called when user select a tool
   const handleToolSelection = useCallback(
     (toolId: MapTool) => {
       const tool = ToolRegistry.getById(toolId);
-      geo.setMainMapTool(tool);
+      mainMap.setTool(tool);
     },
-    [geo]
+    [mainMap]
   );
 
   // Called if tools are enabled
   const getToolOptions = useCallback(() => {
-    switch (currentTool) {
+    switch (activeTool?.getId()) {
       case MapTool.Point:
         return <PointPanel />;
       case MapTool.LineString:
@@ -80,12 +91,12 @@ function ToolSelector(props: Props) {
       case MapTool.Text:
         return <TextToolPanel />;
     }
-  }, [currentTool]);
+  }, [activeTool]);
 
   // Called if tools are enabled
   const getToolTip = useCallback(() => {
     const size = '1.5rem';
-    switch (currentTool) {
+    switch (activeTool?.getId()) {
       case MapTool.Point:
         return <TipBubble id={ToolTips.Point} size={size} />;
       case MapTool.LineString:
@@ -99,7 +110,7 @@ function ToolSelector(props: Props) {
       case MapTool.EditProperties:
         return <TipBubble id={ToolTips.EditProperties} size={size} />;
     }
-  }, [currentTool]);
+  }, [activeTool]);
 
   // If tools are disabled, user can create a new vector layer here
   const handleCreateVectorLayer = useCallback(() => {
@@ -142,7 +153,7 @@ function ToolSelector(props: Props) {
             {/* Left part with tool buttons and common actions */}
             <div className={Cls.buttonBar}>
               {ToolRegistry.getAll().map((tool) => {
-                const isActive = tool.getId() === currentTool;
+                const isActive = tool.getId() === activeTool?.getId();
                 return <ToolButton key={tool.getId()} tool={tool} active={isActive} onSelect={handleToolSelection} />;
               })}
               <div className={Cls.spacer} />
@@ -151,11 +162,21 @@ function ToolSelector(props: Props) {
 
             {/* Right part with options  */}
             <div className={Cls.toolOptions}>
-              <div className={'d-flex align-items-center mb-2'}>
-                <div className={Cls.toolName}>{tTools(activeTool.getI18nLabel())}</div>
-                {toolTip}
-              </div>
-              {toolOptions}
+              {activeTool && (
+                <>
+                  {/* Tool name and help */}
+                  <div className={'d-flex align-items-center mb-2'}>
+                    <div className={Cls.toolName}>{tTools(activeTool.getI18nLabel())}</div>
+                    {toolTip}
+                  </div>
+
+                  {/* Mode selector if needed */}
+                  {!!activeTool.getModes().length && <ToolModeSelector />}
+
+                  {/* Options if any */}
+                  {toolOptions}
+                </>
+              )}
             </div>
           </div>
         </>

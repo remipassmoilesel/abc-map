@@ -19,7 +19,7 @@
 import { StyleProperties } from '@abc-map/shared';
 import { MapTool } from '@abc-map/shared';
 import { TestHelper } from '../helpers/TestHelper';
-import { ToolSelector } from '../helpers/ToolSelector';
+import { ModeName, ToolSelector } from '../helpers/ToolSelector';
 import { Draw } from '../helpers/Draw';
 import { MainMap } from '../helpers/MainMap';
 import { DefaultDrawingStyle } from '../helpers/DefaultDrawingStyle';
@@ -36,8 +36,9 @@ describe('Tool Point', function () {
       .get('[data-cy=draw-menu]')
       .click()
       .then(() => ToolSelector.enable(MapTool.Point))
+      .then(() => ToolSelector.toolMode(ModeName.MoveMap))
       // Move map
-      .then(() => Draw.drag(200, 200, 400, 200, { ctrlKey: true }))
+      .then(() => Draw.drag(200, 200, 400, 200))
       .then(() => MainMap.getReference())
       .should((map) => {
         const view = map.getViewExtent();
@@ -84,7 +85,8 @@ describe('Tool Point', function () {
       // Create point
       .then(() => Draw.click(300, 300))
       // Select it
-      .then(() => Draw.click(300, 295, { shiftKey: true }))
+      .then(() => ToolSelector.toolMode(ModeName.Modify))
+      .then(() => Draw.click(300, 295))
       // Modify it
       .then(() => Draw.drag(300, 295, 600, 600))
       .then(() => MainMap.getReference())

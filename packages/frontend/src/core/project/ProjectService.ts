@@ -239,6 +239,19 @@ export class ProjectService {
     this.store.dispatch(ProjectActions.addLayouts(layouts));
   }
 
+  public setActiveLayout(id: string | undefined) {
+    this.store.dispatch(ProjectActions.setActiveLayout(id));
+  }
+
+  public getActiveLayout(): AbcLayout | undefined {
+    const id = this.store.getState().project.activeLayoutId;
+    if (!id) {
+      return;
+    }
+
+    return this.store.getState().project.layouts.find((lay) => lay.id === id);
+  }
+
   public setLayoutIndex(layout: AbcLayout, index: number): void {
     this.store.dispatch(ProjectActions.setLayoutIndex(layout, index));
   }

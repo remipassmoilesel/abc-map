@@ -24,18 +24,37 @@ import { ToolRegistry } from '../../tools/ToolRegistry';
 import TileLayer from 'ol/layer/Tile';
 import { LayerFactory } from '../layers/LayerFactory';
 import VectorImageLayer from 'ol/layer/VectorImage';
-import { DragRotateAndZoom } from 'ol/interaction';
-import { LineStringTool } from '../../tools/line-string/LineStringTool';
 import { TestHelper } from '../../utils/test/TestHelper';
 import sinon from 'sinon';
 import BaseEvent from 'ol/events/Event';
 import { Views } from '../Views';
 import { FeatureWrapper } from '../features/FeatureWrapper';
 import { Point } from 'ol/geom';
+import { MoveMapTool } from '../../tools/move/MoveMapTool';
+import { CommonModes } from '../../tools/common/common-modes';
+import { ToolModeHelper } from '../../tools/common/ToolModeHelper';
 
 logger.disable();
 
 describe('MapWrapper', function () {
+  describe('from()', () => {
+    it('from()', () => {
+      const map = new Map({});
+
+      const wrapper = MapWrapper.from(map);
+
+      expect(wrapper.unwrap()).toStrictEqual(map);
+    });
+
+    it('fromUnknown()', () => {
+      const map = new Map({});
+
+      expect(MapWrapper.fromUnknown(map)?.unwrap()).toStrictEqual(map);
+      expect(MapWrapper.fromUnknown(null)).toBeUndefined();
+      expect(MapWrapper.fromUnknown({})).toBeUndefined();
+    });
+  });
+
   it('setDefaultLayers()', () => {
     const map = MapFactory.createNaked();
     map.addLayer(LayerFactory.newVectorLayer());
@@ -55,7 +74,7 @@ describe('MapWrapper', function () {
       const support = document.createElement('div');
       const olMap = new Map({});
 
-      const map = new MapWrapper(olMap);
+      const map = MapWrapper.from(olMap);
       map.addLayer(LayerFactory.newVectorLayer());
       map.setTarget(support);
 
@@ -67,7 +86,7 @@ describe('MapWrapper', function () {
       const support = document.createElement('div');
       const olMap = new Map({});
 
-      const map = new MapWrapper(olMap);
+      const map = MapWrapper.from(olMap);
       map.addLayer(LayerFactory.newVectorLayer());
       map.setTarget(support);
       map.setTarget(undefined);
@@ -81,7 +100,7 @@ describe('MapWrapper', function () {
       const olMap = new Map({});
       olMap.dispose = jest.fn();
 
-      const map = new MapWrapper(olMap);
+      const map = MapWrapper.from(olMap);
       map.addLayer(LayerFactory.newVectorLayer());
       map.setTarget(support);
 
@@ -192,28 +211,33 @@ describe('MapWrapper', function () {
     });
   });
 
-  describe('Interaction handling', () => {
-    it('setDefaultInteractions', () => {
-      const map = MapFactory.createNaked();
-      map.unwrap().addInteraction(new DragRotateAndZoom());
-
-      map.setDefaultInteractions();
-
-      expect(TestHelper.interactionNames(map.unwrap())).toEqual(['DragPan', 'KeyboardPan', 'MouseWheelZoom', 'PinchZoom']);
-    });
-
-    it('cleanInteractions', () => {
-      const map = MapFactory.createNaked();
-      map.unwrap().addInteraction(new DragRotateAndZoom());
-
-      map.cleanInteractions();
-
-      expect(TestHelper.interactionNames(map.unwrap())).toEqual([]);
-    });
-  });
-
   describe('Tool handling', () => {
-    it('Set tool should dispose previous tool', () => {
+    it('setDefaultTool()', () => {
+      const map = MapFactory.createNaked();
+      expect(map.getTool()?.getId()).toEqual(undefined);
+
+      map.setDefaultTool();
+
+      expect(map.getTool()).toBeInstanceOf(MoveMapTool);
+      expect(map.getTool()?.getId()).toEqual(MapTool.MoveMap);
+      expect(TestHelper.interactionNames(map.unwrap())).toEqual(['DragPan', 'PinchZoom', 'MouseWheelZoom']);
+    });
+
+    it('setDefaultTool() should dispatch', () => {
+      // Prepare
+      const map = MapFactory.createNaked();
+
+      const toolListener = jest.fn();
+      map.addToolListener(toolListener);
+
+      // Act
+      map.setDefaultTool();
+
+      // Assert
+      expect(toolListener).toHaveBeenCalled();
+    });
+
+    it('setTool() should dispose previous tool', () => {
       // Prepare
       const map = MapFactory.createNaked();
       const layer = LayerFactory.newVectorLayer();
@@ -221,19 +245,33 @@ describe('MapWrapper', function () {
       map.setActiveLayer(layer);
 
       const previous = ToolRegistry.getById(MapTool.LineString);
-      const disposeMock = jest.fn();
-      previous.dispose = disposeMock;
+      previous.dispose = jest.fn();
       map.setTool(previous);
 
       // Act
-      const tool = ToolRegistry.getById(MapTool.LineString);
-      map.setTool(tool);
+      map.setTool(ToolRegistry.getById(MapTool.LineString));
 
       // Assert
-      expect(disposeMock).toHaveBeenCalledTimes(1);
+      expect(previous.dispose).toHaveBeenCalledTimes(1);
     });
 
-    it('Set tool should setup tool', () => {
+    it('setTool() should do nothing if active layer is raster', () => {
+      // Prepare
+      const map = MapFactory.createNaked();
+      const layer = LayerFactory.newPredefinedLayer(PredefinedLayerModel.OSM);
+      map.addLayer(layer);
+      map.setActiveLayer(layer);
+
+      // Act
+      map.setTool(ToolRegistry.getById(MapTool.LineString));
+
+      // Assert
+      expect(map.getTool()).toBeInstanceOf(MoveMapTool);
+      expect(TestHelper.interactionNames(map.unwrap())).toEqual(['DragPan', 'PinchZoom', 'MouseWheelZoom']);
+    });
+
+    it('setTool() should setup tool', () => {
+      // Prepare
       const map = MapFactory.createNaked();
       const layer = LayerFactory.newVectorLayer();
       map.addLayer(layer);
@@ -241,34 +279,33 @@ describe('MapWrapper', function () {
 
       const tool = ToolRegistry.getById(MapTool.LineString);
       tool.setup = jest.fn();
+
+      // Act
       map.setTool(tool);
 
+      // Assert
       expect(tool.setup).toHaveBeenCalled();
       expect(map.getTool()).toStrictEqual(tool);
     });
 
-    it('Set active layer should set up default interactions (Vector -> Tile)', () => {
+    it('setTool() should dispatch', () => {
       // Prepare
       const map = MapFactory.createNaked();
-      const vector = LayerFactory.newVectorLayer();
-      const tile = LayerFactory.newPredefinedLayer(PredefinedLayerModel.OSM);
+      const layer = LayerFactory.newVectorLayer();
+      map.addLayer(layer);
+      map.setActiveLayer(layer);
 
-      map.addLayer(vector);
-      map.addLayer(tile);
-      map.setActiveLayer(vector);
-      map.setTool(ToolRegistry.getById(MapTool.LineString));
-      expect(TestHelper.interactionCount(map.unwrap(), 'Draw')).toEqual(1);
+      const toolListener = jest.fn();
+      map.addToolListener(toolListener);
 
       // Act
-      map.setActiveLayer(tile);
+      map.setTool(ToolRegistry.getById(MapTool.LineString));
 
       // Assert
-      expect(map.getTool()).toBeInstanceOf(LineStringTool);
-      expect(TestHelper.interactionCount(map.unwrap(), 'Draw')).toEqual(0);
-      expect(TestHelper.interactionNames(map.unwrap())).toEqual(['DragPan', 'KeyboardPan', 'MouseWheelZoom', 'PinchZoom']);
+      expect(toolListener).toHaveBeenCalled();
     });
 
-    it('Set active layer should enable interaction (Tile -> Vector)', () => {
+    it('Set tile layer as active layer should set up default tool', () => {
       // Prepare
       const map = MapFactory.createNaked();
       const vector = LayerFactory.newVectorLayer();
@@ -276,16 +313,39 @@ describe('MapWrapper', function () {
 
       map.addLayer(vector);
       map.addLayer(tile);
-      map.setActiveLayer(tile);
+      map.setActiveLayer(vector);
       map.setTool(ToolRegistry.getById(MapTool.LineString));
-      expect(TestHelper.interactionCount(map.unwrap(), 'Draw')).toEqual(0);
+      expect(TestHelper.interactionCount(map.unwrap(), 'Draw')).toEqual(1);
 
       // Act
-      map.setActiveLayer(vector);
+      map.setActiveLayer(tile);
 
       // Assert
-      expect(map.getTool()).toBeInstanceOf(LineStringTool);
-      expect(TestHelper.interactionCount(map.unwrap(), 'Draw')).toEqual(1);
+      expect(map.getTool()).toBeInstanceOf(MoveMapTool);
+      expect(TestHelper.interactionCount(map.unwrap(), 'Draw')).toEqual(0);
+    });
+
+    it('setToolMode() should call modeChanged()', () => {
+      // Prepare
+      const map = MapFactory.createNaked();
+      const vector = LayerFactory.newVectorLayer();
+      map.addLayer(vector);
+      map.setActiveLayer(vector);
+
+      const tool = ToolRegistry.getById(MapTool.LineString);
+      tool.modeChanged = jest.fn();
+      map.setTool(tool);
+
+      const toolListener = jest.fn();
+      map.addToolListener(toolListener);
+
+      // Act
+      map.setToolMode(CommonModes.ModifyGeometry);
+
+      // Assert
+      expect(tool.modeChanged).toHaveBeenCalled();
+      expect(ToolModeHelper.get(map.unwrap())).toEqual(CommonModes.ModifyGeometry);
+      expect(toolListener).toHaveBeenCalled();
     });
   });
 

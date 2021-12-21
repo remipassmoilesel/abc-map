@@ -26,6 +26,11 @@ interface Props {
   children: ReactComponentElement<any, any>;
 }
 
+/**
+ * In order to use this component, children must accepts ref.
+ * @param props
+ * @constructor
+ */
 export function WithTooltip(props: Props) {
   const children = props.children;
   const title = props.title;

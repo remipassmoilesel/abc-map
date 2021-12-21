@@ -20,8 +20,8 @@ import { getServices, Services } from '../../../core/Services';
 import { HistoryKey } from '../../../core/history/HistoryKey';
 import { RemoveFeaturesChangeset } from '../../../core/history/changesets/features/RemoveFeaturesChangeset';
 import { Logger } from '@abc-map/shared';
-import { Shortcuts } from './Shortcuts';
 import { prefixedTranslation } from '../../../i18n/i18n';
+import Mousetrap from 'mousetrap';
 
 const logger = Logger.get('MapKeyboardListener.ts');
 
@@ -35,44 +35,18 @@ export class MapKeyboardListener {
   constructor(private services: Services) {}
 
   public initialize(): void {
-    document.addEventListener('keyup', this.handleKeyPress);
+    Mousetrap.bind('del', this.deleteSelectedFeatures);
+    Mousetrap.bind('ctrl+z', this.undo);
+    Mousetrap.bind('ctrl+shift+z', this.redo);
   }
 
   public destroy(): void {
-    document.removeEventListener('keyup', this.handleKeyPress);
+    Mousetrap.unbind('del');
+    Mousetrap.unbind('ctrl+z');
+    Mousetrap.unbind('ctrl+shift+z');
   }
 
-  /**
-   * Handle keyboard events.
-   *
-   * This method is public for tests purposes.
-   * @param ev
-   */
-  public handleKeyPress = (ev: KeyboardEvent) => {
-    const fromForm = ev.target instanceof Node && ['INPUT', 'TEXTAREA'].indexOf(ev.target.nodeName) !== -1;
-    if (fromForm) {
-      return;
-    }
-
-    if (Shortcuts.isDelete(ev)) {
-      ev.preventDefault();
-      ev.stopPropagation();
-
-      this.deleteSelectedFeatures();
-    } else if (Shortcuts.isRedo(ev)) {
-      ev.preventDefault();
-      ev.stopPropagation();
-
-      this.redo();
-    } else if (Shortcuts.isUndo(ev)) {
-      ev.preventDefault();
-      ev.stopPropagation();
-
-      this.undo();
-    }
-  };
-
-  private deleteSelectedFeatures() {
+  private deleteSelectedFeatures = () => {
     const { history, geo, toasts } = this.services;
 
     const map = geo.getMainMap();
@@ -88,9 +62,9 @@ export class MapKeyboardListener {
     const cs = new RemoveFeaturesChangeset(layer.getSource(), features);
     cs.apply().catch((err) => logger.error('Cannot delete features: ', err));
     history.register(HistoryKey.Map, cs);
-  }
+  };
 
-  private undo() {
+  private undo = () => {
     const { toasts, history } = this.services;
 
     if (history.canUndo(HistoryKey.Map)) {
@@ -98,9 +72,9 @@ export class MapKeyboardListener {
     } else {
       toasts.info(t('Nothing_more_to_undo'));
     }
-  }
+  };
 
-  private redo() {
+  private redo = () => {
     const { toasts, history } = this.services;
 
     if (history.canRedo(HistoryKey.Map)) {
@@ -108,5 +82,5 @@ export class MapKeyboardListener {
     } else {
       toasts.info(t('Nothing_more_to_redo'));
     }
-  }
+  };
 }

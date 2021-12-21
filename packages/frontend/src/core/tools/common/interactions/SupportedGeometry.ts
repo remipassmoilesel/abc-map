@@ -30,7 +30,7 @@ export declare type SupportedGeometry =
   | typeof GeometryType.MULTI_POLYGON
   | typeof GeometryType.POLYGON;
 
-export const AllSupportedGeometries: SupportedGeometry[] = [
+export const SupportedGeometries: SupportedGeometry[] = [
   GeometryType.POINT,
   GeometryType.MULTI_POINT,
   GeometryType.LINE_STRING,
