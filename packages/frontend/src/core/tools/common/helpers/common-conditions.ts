@@ -39,11 +39,6 @@ export function withAltKey(ev: MapBrowserEvent<UIEvent | KeyboardEvent | MouseEv
   return 'altKey' in original && original.altKey;
 }
 
-export function withMainButton(ev: MapBrowserEvent<UIEvent | KeyboardEvent | MouseEvent | TouchEvent>): boolean {
-  const original = ev.originalEvent;
-  return 'button' in original && original.button === 0;
-}
-
 export function withGeometryOfType(feat: FeatureLike, types: SupportedGeometry[]): boolean {
   const type = feat?.getGeometry()?.getType();
   return (type && types.includes(type)) || false;

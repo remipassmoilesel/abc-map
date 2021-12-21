@@ -23,7 +23,7 @@ import GeometryType from 'ol/geom/GeometryType';
 import { FeatureWrapper } from '../../../geo/features/FeatureWrapper';
 import { LineString, Point, Polygon } from 'ol/geom';
 
-describe('SelectionUpdater', () => {
+describe('SelectionInteractionsBundle', () => {
   let testMap: DrawingTestMap;
   let interactions: SelectionInteractionsBundle;
 
@@ -31,7 +31,7 @@ describe('SelectionUpdater', () => {
     testMap = new DrawingTestMap();
     await testMap.init();
 
-    interactions = new SelectionInteractionsBundle();
+    interactions = new SelectionInteractionsBundle({ condition: () => true });
     interactions.setup(testMap.getMap(), testMap.getVectorSource(), [GeometryType.LINE_STRING]);
   });
 
@@ -51,7 +51,7 @@ describe('SelectionUpdater', () => {
     testMap.getVectorSource().addFeature(feature1.unwrap());
 
     // Act
-    await testMap.click(5, 5, { shift: true });
+    await testMap.click(5, 5);
 
     // Assert
     expect(feature1.isSelected()).toEqual(true);
@@ -71,7 +71,7 @@ describe('SelectionUpdater', () => {
     testMap.getVectorLayer().setActive(false);
 
     // Act
-    await testMap.click(5, 5, { shift: true });
+    await testMap.click(5, 5);
 
     // Assert
     expect(feature1.isSelected()).toEqual(false);
@@ -92,7 +92,7 @@ describe('SelectionUpdater', () => {
     testMap.getVectorSource().addFeature(feature1.unwrap());
 
     // Act
-    await testMap.click(5, 5, { shift: true });
+    await testMap.click(5, 5);
 
     // Assert
     expect(feature1.isSelected()).toEqual(false);

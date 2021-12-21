@@ -29,4 +29,6 @@ export interface E2eMap {
   getViewExtent(): number[];
 
   setView(zoom: number, lon: number, lat: number): void;
+
+  unwrap(): void;
 }

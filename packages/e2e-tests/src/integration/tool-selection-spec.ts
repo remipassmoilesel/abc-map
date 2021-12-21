@@ -47,7 +47,7 @@ describe('Tool Selection', function () {
         const features = map.getActiveLayerFeatures();
 
         expect(features).length(3);
-        expect(features[0].get(FeatureProperties.Selected)).undefined;
+        expect(features[0].get(FeatureProperties.Selected)).equal(false);
         expect(features[0].getGeometry()?.getExtent()).deep.equals([-3564850.149620659, 4048111.8978092954, -3564850.149620659, 4048111.8978092954]);
         expect(features[1].get(FeatureProperties.Selected)).equal(true);
         expect(features[2].get(FeatureProperties.Selected)).equal(true);

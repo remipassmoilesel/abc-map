@@ -23,16 +23,20 @@ import Geometry from 'ol/geom/Geometry';
 import VectorSource, { VectorSourceEvent } from 'ol/source/Vector';
 import { EventsKey } from 'ol/events';
 import { Select } from 'ol/interaction';
-import { withGeometryOfType, withMainButton, withShiftKey } from '../helpers/common-conditions';
-import { singleClick } from 'ol/events/condition';
+import { withGeometryOfType } from '../helpers/common-conditions';
 import { LayerWrapper } from '../../../geo/layers/LayerWrapper';
 import { DefaultTolerancePx } from '../constants';
 import { SelectEvent } from 'ol/interaction/Select';
 import { SupportedGeometry } from './SupportedGeometry';
 import { FeatureStyle } from '@abc-map/shared';
 import Map from 'ol/Map';
+import MapBrowserEvent from 'ol/MapBrowserEvent';
 
 export declare type StyleSelectionHandler = (style: FeatureStyle, feat: FeatureWrapper) => void;
+
+export interface Options {
+  condition: (ev: MapBrowserEvent<UIEvent>) => boolean;
+}
 
 /**
  * This object bundles selection interactions.
@@ -51,22 +55,20 @@ export class SelectionInteractionsBundle {
   private select?: Select;
   private sourceListeners: EventsKey[] = [];
 
+  constructor(private options: Options) {}
+
   public setup(map: Map, source: VectorSource<Geometry>, geometryTypes: SupportedGeometry[]) {
     this.map = map;
     this.source = source;
 
-    this.sourceListeners.push(source.on('addfeature', this.handleFeatureAdded));
-    this.sourceListeners.push(source.on('removefeature', this.handleFeatureRemoved));
-    this.sourceListeners.push(source.on('clear', this.handleClear));
-
     this.select = new Select({
-      condition: (ev) => withMainButton(ev) && singleClick(ev) && withShiftKey(ev),
-      toggleCondition: (ev) => withMainButton(ev) && singleClick(ev) && withShiftKey(ev),
+      condition: this.options.condition,
+      toggleCondition: this.options.condition,
       layers: (lay) => LayerWrapper.from(lay).isActive(),
       filter: (feat) => withGeometryOfType(feat, geometryTypes),
       // Warning: here we must use null to not manage styles with Select interaction
       // Otherwise modification of style can be 'restored' from a bad state
-      style: null as any,
+      style: null,
       hitTolerance: DefaultTolerancePx,
       features: this.features,
     });
@@ -82,6 +84,12 @@ export class SelectionInteractionsBundle {
       ev.selected.forEach((f) => FeatureWrapper.from(f).setSelected(true));
       ev.deselected.forEach((f) => FeatureWrapper.from(f).setSelected(false));
     });
+
+    // When vector source change we update selection
+    // TODO: unit test
+    this.sourceListeners.push(source.on('addfeature', this.handleFeatureAdded));
+    this.sourceListeners.push(source.on('removefeature', this.handleFeatureRemoved));
+    this.sourceListeners.push(source.on('clear', this.handleClear));
 
     map.addInteraction(this.select);
   }

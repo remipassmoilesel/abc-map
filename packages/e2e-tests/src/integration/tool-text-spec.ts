@@ -45,7 +45,7 @@ describe('Tool Text', function () {
       .get('[data-cy=text-box]')
       .clear()
       .type('A beautiful label')
-      .get('[data-cy=text-box-backdrop]')
+      .get('[data-cy=text-box-validate]')
       .click()
       .then(() => MainMap.getReference())
       .should((map) => {

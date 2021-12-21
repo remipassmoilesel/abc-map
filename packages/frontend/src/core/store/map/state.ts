@@ -16,16 +16,14 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FillPatterns, MapTool } from '@abc-map/shared';
+import { FillPatterns } from '@abc-map/shared';
 import { DimensionsPx } from '../../utils/DimensionsPx';
 import { IconName } from '../../../assets/point-icons/IconName';
 
 export interface MapState {
   /**
-   * Current tool selected
+   * Current style to apply
    */
-  tool: MapTool;
-
   currentStyle: {
     fill: {
       color1: string;
@@ -58,7 +56,6 @@ export interface MapState {
 }
 
 export const mapInitialState: MapState = {
-  tool: MapTool.Move,
   currentStyle: {
     fill: {
       color1: 'rgba(18,90,147,0.30)',

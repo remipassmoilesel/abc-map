@@ -19,7 +19,6 @@
 import Map from 'ol/Map';
 import { MapWrapper } from './MapWrapper';
 import { Views } from '../Views';
-import { DragPan, KeyboardPan, MouseWheelZoom } from 'ol/interaction';
 
 export class MapFactory {
   public static createDefault(): MapWrapper {
@@ -29,9 +28,9 @@ export class MapFactory {
       view: Views.defaultOlView(),
     });
 
-    const map = new MapWrapper(internal);
+    const map = MapWrapper.from(internal);
     map.setDefaultLayers();
-    map.setDefaultInteractions();
+    map.setDefaultTool();
 
     return map;
   }
@@ -39,11 +38,15 @@ export class MapFactory {
   public static createLayoutPreview(): MapWrapper {
     const internal = new Map({
       controls: [],
-      interactions: [new DragPan(), new KeyboardPan(), new MouseWheelZoom()],
+      interactions: [],
       view: Views.defaultOlView(),
       layers: [],
     });
-    return new MapWrapper(internal);
+
+    const map = MapWrapper.from(internal);
+    map.setDefaultTool();
+
+    return map;
   }
 
   public static createNaked(): MapWrapper {
@@ -53,6 +56,7 @@ export class MapFactory {
       view: Views.defaultOlView(),
       layers: [],
     });
-    return new MapWrapper(internal);
+
+    return MapWrapper.from(internal);
   }
 }

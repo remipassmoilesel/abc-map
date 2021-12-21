@@ -24,17 +24,7 @@ import { mapInitialState, MapState } from './state';
  *
  */
 export function mapReducer(state = mapInitialState, action: MapAction): MapState {
-  if (!Object.values(ActionType).includes(action.type)) {
-    return state;
-  }
-
   switch (action.type) {
-    case ActionType.SetTool: {
-      const newState: MapState = { ...state };
-      newState.tool = action.tool;
-      return newState;
-    }
-
     case ActionType.SetFillColor1: {
       const newState: MapState = { ...state };
       newState.currentStyle = { ...newState.currentStyle };

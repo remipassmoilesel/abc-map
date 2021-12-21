@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ToolSelector } from '../helpers/ToolSelector';
+import { ModeName, ToolSelector } from '../helpers/ToolSelector';
 import { MapTool } from '@abc-map/shared';
 import { TestHelper } from '../helpers/TestHelper';
 import { MainMap } from '../helpers/MainMap';
@@ -107,7 +107,8 @@ describe('Draw features history', function () {
       .then(() => Draw.click(100, 100))
       .then(() => Draw.dblclick(150, 150))
       // Select it
-      .then(() => Draw.click(150, 150, { shiftKey: true }))
+      .then(() => ToolSelector.toolMode(ModeName.Modify))
+      .then(() => Draw.click(150, 150))
       // First modification
       .then(() => Draw.drag(150, 150, 200, 200))
       // Second modification

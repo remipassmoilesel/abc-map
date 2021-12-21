@@ -16,16 +16,11 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { Component, ReactNode } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
-import { LegendDisplay, Logger } from '@abc-map/shared';
+import React, { useCallback, useEffect, useRef } from 'react';
+import { AbcLayout, AbcProjection, LayoutFormat, LayoutFormats, LegendDisplay, Logger } from '@abc-map/shared';
 import LayoutList from './layout-list/LayoutList';
-import { AbcLayout, AbcProjection, LayoutFormat, LayoutFormats } from '@abc-map/shared';
 import LayoutPreview from './layout-preview/LayoutPreview';
 import { HistoryKey } from '../../core/history/HistoryKey';
-import { MapWrapper } from '../../core/geo/map/MapWrapper';
-import { MainState } from '../../core/store/reducer';
-import { ServiceProps, withServices } from '../../core/withServices';
 import { AddLayoutsChangeset } from '../../core/history/changesets/layouts/AddLayoutsChangeset';
 import { RemoveLayoutsChangeset } from '../../core/history/changesets/layouts/RemoveLayoutsChangeset';
 import { SetLayoutIndexChangeset } from '../../core/history/changesets/layouts/SetLayoutIndexChangeset';
@@ -41,123 +36,50 @@ import { OperationStatus } from '../../core/ui/typings';
 import uuid from 'uuid-random';
 import SideMenu from '../../components/side-menu/SideMenu';
 import { IconDefs } from '../../components/icon/IconDefs';
+import { useServices } from '../../core/hooks';
+import { useAppSelector } from '../../core/store/hooks';
+import { withTranslation } from 'react-i18next';
+import { LayoutKeyboardListener } from './keyboard-listener/LayoutKeyboardListener';
 
 const logger = Logger.get('LayoutView.tsx', 'warn');
 
-interface State {
-  /**
-   * Reference to the main map
-   */
-  map: MapWrapper;
-  /**
-   * Id of active layout. We must not store layout here in order to get consistent updates.
-   */
-  activeLayoutId?: string;
-}
-
-const mapStateToProps = (state: MainState) => ({
-  layouts: state.project.layouts,
-  legend: state.project.legend,
-});
-
-const connector = connect(mapStateToProps);
-
-type Props = ConnectedProps<typeof connector> & ServiceProps;
-
 const t = prefixedTranslation('LayoutView:');
 
-class LayoutView extends Component<Props, State> {
-  private exportSupport = React.createRef<HTMLDivElement>();
+function LayoutView() {
+  const { geo, project, history, toasts, modals } = useServices();
+  const exportSupport = useRef<HTMLDivElement>(null);
+  const keyboardShortcuts = useRef<LayoutKeyboardListener | null>(null);
 
-  constructor(props: Props) {
-    super(props);
-    this.state = { map: this.props.services.geo.getMainMap() };
-  }
+  const layouts = useAppSelector((st) => st.project.layouts);
+  const activeLayoutId = useAppSelector((st) => st.project.activeLayoutId);
+  const activeLayout = layouts.find((lay) => lay.id === activeLayoutId);
+  const legend = useAppSelector((st) => st.project.legend);
 
-  public render(): ReactNode {
-    const layouts = this.props.layouts;
-    const legend = this.props.legend;
-    const activeLayout = this.getActiveLayout();
-
-    return (
-      <div className={Cls.layoutView}>
-        <div className={Cls.content}>
-          {/* Layout list on left */}
-          <SideMenu
-            title={t('Layouts_menu')}
-            buttonIcon={IconDefs.faCopy}
-            buttonStyle={{ top: '20vmin', left: '2vw' }}
-            menuPlacement={'left'}
-            menuId={'layoutview-layouts-menu'}
-            data-cy={'layouts-menu'}
-          >
-            <LayoutList layouts={layouts} active={activeLayout} onSelected={this.handleSelected} onDeleted={this.handleDeleted} />
-          </SideMenu>
-
-          {/* Layout preview on center */}
-          <LayoutPreview
-            layout={activeLayout}
-            legend={legend}
-            mainMap={this.state.map}
-            onLayoutChanged={this.handleLayoutChanged}
-            onNewLayout={this.handleNewLayout}
-          />
-
-          {/* Controls on right */}
-          <SideMenu
-            title={t('Controls_menu')}
-            buttonIcon={IconDefs.faRuler}
-            buttonStyle={{ top: '20vmin', right: '2vw' }}
-            menuPlacement={'right'}
-            menuId={'layoutview-controls-menu'}
-            data-cy={'controls-menu'}
-          >
-            <LayoutControls
-              format={activeLayout?.format}
-              legendDisplay={legend.display}
-              onFormatChanged={this.handleFormatChanged}
-              onNewLayout={this.handleNewLayout}
-              onLayoutUp={this.handleLayoutUp}
-              onLayoutDown={this.handleLayoutDown}
-              onClearAll={this.handleClearAll}
-              onLegendChanged={this.handleLegendChanged}
-              onExport={this.handleExport}
-            />
-          </SideMenu>
-        </div>
-        <div ref={this.exportSupport} />
-      </div>
-    );
-  }
-
-  public componentDidMount() {
+  // Setup page
+  useEffect(() => {
     pageSetup(t('Layout'), t('Create_layout_to_export_your_map'));
 
-    const layouts = this.props.layouts;
-    if (layouts.length) {
-      this.setState({ activeLayoutId: layouts[0].id });
+    keyboardShortcuts.current = LayoutKeyboardListener.create();
+    keyboardShortcuts.current.initialize();
+    return () => {
+      keyboardShortcuts.current?.destroy();
+    };
+  }, []);
+
+  // If one layout was deleted, update active layout
+  useEffect(() => {
+    if (!activeLayout && layouts.length) {
+      project.setActiveLayout(layouts[layouts.length - 1].id);
     }
-  }
+  }, [activeLayout, layouts, project]);
 
-  public componentDidUpdate() {
-    const layouts = this.props.layouts;
-    const activeId = this.state.activeLayoutId;
-    const activeExists = layouts.find((lay) => lay.id === activeId);
+  // User has selected a layout
+  const handleSelected = useCallback((lay: AbcLayout) => project.setActiveLayout(lay.id), [project]);
 
-    if (!activeExists && layouts.length) {
-      this.setState({ activeLayoutId: layouts[layouts.length - 1].id });
-    }
-  }
-
-  private handleSelected = (lay: AbcLayout) => {
-    this.setState({ activeLayoutId: lay.id });
-  };
-
-  private handleNewLayout = () => {
-    const { history } = this.props.services;
-
-    const name = `Page ${this.props.layouts.length + 1}`;
-    const view = this.state.map.unwrap().getView();
+  // User creates a new layout
+  const handleNewLayout = useCallback(() => {
+    const name = `Page ${layouts.length + 1}`;
+    const view = geo.getMainMap().unwrap().getView();
     const center = view.getCenter();
     const resolution = view.getResolution();
     if (!center || !resolution) {
@@ -165,7 +87,7 @@ class LayoutView extends Component<Props, State> {
       return;
     }
 
-    const add = async () => {
+    const apply = async () => {
       // If resolution is below one, we keep it. Otherwise we use a greater one.
       const layoutRes = resolution < 1 ? resolution : Math.round(resolution - resolution * 0.2);
       const projection: AbcProjection = { name: view.getProjection().getCode() };
@@ -184,182 +106,212 @@ class LayoutView extends Component<Props, State> {
       await cs.apply();
       history.register(HistoryKey.Layout, cs);
 
-      this.setState({ activeLayoutId: layout.id });
+      project.setActiveLayout(layout.id);
     };
 
-    add().catch((err) => logger.error('Cannot add layout', err));
-  };
+    apply().catch((err) => logger.error('Cannot create layout: ', err));
+  }, [geo, history, layouts.length, project]);
 
-  private handleLayoutUp = () => {
-    this.updateLayoutIndex(-1);
-  };
-
-  private handleLayoutDown = () => {
-    this.updateLayoutIndex(+1);
-  };
-
-  private updateLayoutIndex = (diff: number) => {
-    const { history, toasts } = this.props.services;
-    const active = this.getActiveLayout();
-    const layouts = this.props.layouts;
-
-    if (!active) {
-      toasts.info(t('You_muse_select_a_layout'));
-      return;
-    }
-
-    const change = async () => {
-      const oldIndex = layouts.findIndex((lay) => lay.id === active.id);
-      let newIndex = oldIndex + diff;
-      if (newIndex < 0) {
-        newIndex = 0;
-      }
-      if (newIndex > layouts.length - 1) {
-        newIndex = layouts.length - 1;
+  // User change layout position in list
+  const updateLayoutIndex = useCallback(
+    (diff: number) => {
+      if (!activeLayout) {
+        toasts.info(t('You_muse_select_a_layout'));
+        return;
       }
 
-      if (newIndex !== oldIndex) {
-        const cs = SetLayoutIndexChangeset.create(active, oldIndex, newIndex);
-        await cs.apply();
-        history.register(HistoryKey.Layout, cs);
-      }
-    };
+      const apply = async () => {
+        const oldIndex = layouts.findIndex((lay) => lay.id === activeLayout.id);
+        let newIndex = oldIndex + diff;
+        if (newIndex < 0) {
+          newIndex = 0;
+        }
+        if (newIndex > layouts.length - 1) {
+          newIndex = layouts.length - 1;
+        }
 
-    change().catch((err) => logger.error('Cannot change layout index', err));
-  };
+        if (newIndex !== oldIndex) {
+          const cs = SetLayoutIndexChangeset.create(activeLayout, oldIndex, newIndex);
+          await cs.apply();
+          history.register(HistoryKey.Layout, cs);
+        }
+      };
 
-  private handleClearAll = () => {
-    const { history } = this.props.services;
-    const layouts = this.props.layouts;
+      apply().catch((err) => logger.error('Cannot change layout index', err));
+    },
+    [activeLayout, history, layouts, toasts]
+  );
 
-    const clear = async () => {
+  const handleLayoutUp = useCallback(() => updateLayoutIndex(-1), [updateLayoutIndex]);
+  const handleLayoutDown = useCallback(() => updateLayoutIndex(+1), [updateLayoutIndex]);
+
+  // User delete all layouts
+  const handleClearAll = useCallback(() => {
+    const apply = async () => {
       const cs = RemoveLayoutsChangeset.create(layouts);
       await cs.apply();
       history.register(HistoryKey.Layout, cs);
     };
 
-    clear().catch((err) => logger.error('Cannot clear layouts', err));
-  };
+    apply().catch((err) => logger.error('Cannot delete layouts: ', err));
+  }, [history, layouts]);
 
-  private handleLegendChanged = (display: LegendDisplay) => {
-    const { project } = this.props.services;
+  // User change legend position
+  const handleLegendChanged = useCallback((display: LegendDisplay) => project.setLegendDisplay(display), [project]);
 
-    project.setLegendDisplay(display);
-  };
+  // User delete layout
+  const handleDeleted = useCallback(
+    (lay: AbcLayout) => {
+      const apply = async () => {
+        const cs = RemoveLayoutsChangeset.create([lay]);
+        await cs.apply();
+        history.register(HistoryKey.Layout, cs);
+      };
 
-  private handleDeleted = (lay: AbcLayout) => {
-    const { history } = this.props.services;
+      apply().catch((err) => logger.error('Cannot delete layout: ', err));
+    },
+    [history]
+  );
 
-    const remove = async () => {
-      const cs = RemoveLayoutsChangeset.create([lay]);
-      await cs.apply();
-      history.register(HistoryKey.Layout, cs);
-    };
+  // User change layout format
+  const handleFormatChanged = useCallback(
+    (format: LayoutFormat) => {
+      const formatChanged = activeLayout?.format.id !== format.id;
+      if (!activeLayout || !formatChanged) {
+        return;
+      }
 
-    remove().catch((err) => logger.error('Cannot remove layer', err));
-  };
-
-  private handleFormatChanged = (format: LayoutFormat) => {
-    const { history } = this.props.services;
-
-    const active = this.getActiveLayout();
-    const formatChanged = active?.format.id !== format.id;
-    if (!active || !formatChanged) {
-      return;
-    }
-
-    const change = async () => {
       const update: AbcLayout = {
-        ...active,
+        ...activeLayout,
         format,
       };
 
-      const cs = UpdateLayoutChangeset.create(active, update);
-      await cs.apply();
-      history.register(HistoryKey.Layout, cs);
-    };
+      const apply = async () => {
+        const cs = UpdateLayoutChangeset.create(activeLayout, update);
+        await cs.apply();
+        history.register(HistoryKey.Layout, cs);
+      };
 
-    change().catch((err) => logger.error('Cannot modify layoyt', err));
-  };
+      apply().catch((err) => logger.error('Cannot update layout: ', err));
+    },
+    [activeLayout, history]
+  );
 
-  private handleLayoutChanged = (layout: AbcLayout) => {
-    const { history } = this.props.services;
-
-    const before = this.props.layouts.find((lay) => lay.id === layout.id);
-    if (!before) {
-      logger.error('Cannot register changeset', { before, layout });
-      return;
-    }
-
-    const change = async () => {
-      const cs = UpdateLayoutChangeset.create(before, layout);
-      await cs.apply();
-      history.register(HistoryKey.Layout, cs);
-    };
-
-    change().catch((err) => logger.error('Cannot modify layout', err));
-  };
-
-  private handleExport = (format: ExportFormat) => {
-    const { toasts, modals } = this.props.services;
-    const support = this.exportSupport.current;
-    const layouts = this.props.layouts;
-    if (!support) {
-      toasts.genericError();
-      logger.error('DOM not ready');
-      return;
-    }
-
-    const renderer = new LayoutRenderer();
-    renderer.init(support);
-
-    if (!layouts.length) {
-      toasts.info(t('You_must_create_layouts_first'));
-      return;
-    }
-
-    const exportLayouts = async () => {
-      const map = this.state.map;
-      const legend = this.props.legend;
-
-      let result: Blob | undefined;
-      switch (format) {
-        case ExportFormat.PDF:
-          result = await renderer.renderLayoutsAsPdf(layouts, legend, map);
-          FileIO.outputBlob(result, 'map.pdf');
-          break;
-
-        case ExportFormat.PNG:
-          result = await renderer.renderLayoutsAsPng(layouts, legend, map);
-          FileIO.outputBlob(result, 'map.zip');
-          break;
-
-        default:
-          logger.error('Unhandled format: ', format);
-          toasts.genericError();
-          return OperationStatus.Interrupted;
+  // User change layout view (scroll or drag)
+  const handleLayoutChanged = useCallback(
+    (layout: AbcLayout) => {
+      const before = layouts.find((lay) => lay.id === layout.id);
+      if (!before) {
+        logger.error('Cannot register changeset', { before, layout });
+        return;
       }
 
-      return OperationStatus.Succeed;
-    };
+      const apply = async () => {
+        const cs = UpdateLayoutChangeset.create(before, layout);
+        await cs.apply();
+        history.register(HistoryKey.Layout, cs);
+      };
 
-    modals
-      .longOperationModal(exportLayouts)
-      .then(() => modals.solicitation())
-      .catch((err) => {
+      apply().catch((err) => logger.error('Cannot update layout: ', err));
+    },
+    [history, layouts]
+  );
+
+  // User exports layouts to PDF or PNG
+  const handleExport = useCallback(
+    (format: ExportFormat) => {
+      const support = exportSupport.current;
+      if (!support) {
         toasts.genericError();
-        logger.error(err);
-      })
-      .finally(() => renderer.dispose());
-  };
+        logger.error('DOM not ready');
+        return;
+      }
 
-  private getActiveLayout(): AbcLayout | undefined {
-    const activeId = this.state.activeLayoutId;
-    if (!activeId) {
-      return;
-    }
-    return this.props.layouts.find((lay) => lay.id === activeId);
-  }
+      const renderer = new LayoutRenderer();
+      renderer.init(support);
+
+      if (!layouts.length) {
+        toasts.info(t('You_must_create_layouts_first'));
+        return;
+      }
+
+      const exportLayouts = async () => {
+        let result: Blob | undefined;
+        switch (format) {
+          case ExportFormat.PDF:
+            result = await renderer.renderLayoutsAsPdf(layouts, legend, geo.getMainMap());
+            FileIO.outputBlob(result, 'map.pdf');
+            break;
+
+          case ExportFormat.PNG:
+            result = await renderer.renderLayoutsAsPng(layouts, legend, geo.getMainMap());
+            FileIO.outputBlob(result, 'map.zip');
+            break;
+
+          default:
+            logger.error('Unhandled format: ', format);
+            toasts.genericError();
+            return OperationStatus.Interrupted;
+        }
+
+        return OperationStatus.Succeed;
+      };
+
+      modals
+        .longOperationModal(exportLayouts)
+        .then(() => modals.solicitation())
+        .catch((err) => {
+          toasts.genericError();
+          logger.error(err);
+        })
+        .finally(() => renderer.dispose());
+    },
+    [geo, layouts, legend, modals, toasts]
+  );
+
+  return (
+    <div className={Cls.layoutView}>
+      <div className={Cls.content}>
+        {/* Layout list on left */}
+        <SideMenu
+          title={t('Layouts_menu')}
+          buttonIcon={IconDefs.faCopy}
+          buttonStyle={{ top: '20vmin', left: '2vw' }}
+          menuPlacement={'left'}
+          menuId={'layoutview-layouts-menu'}
+          data-cy={'layouts-menu'}
+        >
+          <LayoutList layouts={layouts} active={activeLayout} onSelected={handleSelected} onDeleted={handleDeleted} />
+        </SideMenu>
+
+        {/* Layout preview on center */}
+        <LayoutPreview layout={activeLayout} legend={legend} mainMap={geo.getMainMap()} onLayoutChanged={handleLayoutChanged} onNewLayout={handleNewLayout} />
+
+        {/* Controls on right */}
+        <SideMenu
+          title={t('Controls_menu')}
+          buttonIcon={IconDefs.faRuler}
+          buttonStyle={{ top: '20vmin', right: '2vw' }}
+          menuPlacement={'right'}
+          menuId={'layoutview-controls-menu'}
+          data-cy={'controls-menu'}
+        >
+          <LayoutControls
+            format={activeLayout?.format}
+            legendDisplay={legend.display}
+            onFormatChanged={handleFormatChanged}
+            onNewLayout={handleNewLayout}
+            onLayoutUp={handleLayoutUp}
+            onLayoutDown={handleLayoutDown}
+            onClearAll={handleClearAll}
+            onLegendChanged={handleLegendChanged}
+            onExport={handleExport}
+          />
+        </SideMenu>
+      </div>
+      <div ref={exportSupport} />
+    </div>
+  );
 }
 
-export default connector(withServices(LayoutView));
+export default withTranslation()(LayoutView);

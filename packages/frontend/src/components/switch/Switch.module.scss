@@ -1,0 +1,78 @@
+/**
+ * Copyright © 2021 Rémi Pace.
+ * This file is part of Abc-Map.
+ *
+ * Abc-Map is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of
+ * the License, or (at your option) any later version.
+ *
+ * Abc-Map is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General
+ * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+@import "src/assets/styles/variables";
+
+$transition: 0.15s;
+
+.toggle {
+  *,
+  *:before,
+  *:after {
+    box-sizing: border-box;
+  }
+
+  cursor: pointer;
+  display: inline-block;
+}
+
+.toggleSwitch {
+  display: inline-block;
+  background: $gray-500;
+  border-radius: 1rem;
+  width: 3rem;
+  height: 1.8rem;
+  position: relative;
+  vertical-align: middle;
+  transition: background $transition;
+
+  &:before,
+  &:after {
+    content: "";
+  }
+
+  &:before {
+    display: block;
+    background: linear-gradient(to bottom, #fff 0%, #eee 100%);
+    border-radius: 50%;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.25);
+    width: 1.3rem;
+    height: 1.3rem;
+    position: absolute;
+    top: 0.25rem;
+    left: 0.25rem;
+    transition: left $transition;
+  }
+
+  .toggle:hover &:before {
+    background: linear-gradient(to bottom, #fff 0%, #fff 100%);
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5);
+  }
+
+  .toggleCheckbox:checked + & {
+    background: $primary;
+    &:before {
+      left: 1.5rem;
+    }
+  }
+}
+
+.toggleCheckbox {
+  position: absolute;
+  visibility: hidden;
+}

@@ -17,12 +17,10 @@
  */
 
 import { FeatureStyle, FillPatterns } from '@abc-map/shared';
-import { MapTool } from '@abc-map/shared';
 import { DimensionsPx } from '../../utils/DimensionsPx';
 import { IconName } from '../../../assets/point-icons/IconName';
 
 export enum ActionType {
-  SetTool = 'SetTool',
   SetFillColor1 = 'SetFillColor1',
   SetFillColor2 = 'SetFillColor2',
   SetStrokeColor = 'SetStrokeColor',
@@ -38,11 +36,6 @@ export enum ActionType {
   SetPointColor = 'SetPointColor',
   SetMainMapDimensions = 'SetMainMapDimensions',
   SetDrawingStyle = 'SetDrawingStyle',
-}
-
-export interface SetTool {
-  type: ActionType.SetTool;
-  tool: MapTool;
 }
 
 export interface SetFillColor1 {
@@ -121,7 +114,6 @@ export interface SetDrawingStyle {
 }
 
 export type MapAction =
-  | SetTool
   | SetStrokeColor
   | SetFillColor1
   | SetFillColor2
@@ -139,13 +131,6 @@ export type MapAction =
   | SetDrawingStyle;
 
 export class MapActions {
-  public static setTool(tool: MapTool): MapAction {
-    return {
-      type: ActionType.SetTool,
-      tool,
-    };
-  }
-
   public static setFillColor1(color: string): MapAction {
     return {
       type: ActionType.SetFillColor1,

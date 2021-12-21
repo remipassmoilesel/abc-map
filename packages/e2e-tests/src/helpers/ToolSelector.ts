@@ -18,6 +18,14 @@
 
 import { MapTool } from '@abc-map/shared';
 
+export enum ModeName {
+  Create = 'tool-mode-create',
+  Modify = 'tool-mode-modify',
+  MoveMap = 'tool-mode-movemap',
+  Select = 'tool-mode-select',
+  EditProperties = 'tool-mode-editproperties',
+}
+
 export class ToolSelector {
   public static enable(tool: MapTool): Cypress.Chainable<any> {
     return cy.get('[data-cy=tool-selector]').get(`[data-cy=tool-${tool.toLocaleLowerCase()}]`).click();
@@ -28,5 +36,9 @@ export class ToolSelector {
       const name = (elem.data()['cy'] || '').substr('tool-'.length);
       return Object.values(MapTool).find((t) => t.toLocaleLowerCase() === name) as MapTool;
     });
+  }
+
+  public static toolMode(mode: ModeName) {
+    return cy.get(`[data-cy=${mode}]`).click();
   }
 }

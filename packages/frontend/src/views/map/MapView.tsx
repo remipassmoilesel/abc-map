@@ -48,29 +48,33 @@ const t = prefixedTranslation('MapView:');
 
 function MapView() {
   const { geo } = useServices();
+  const dispatch = useAppDispatch();
   const keyboardListener = useRef<MapKeyboardListener | undefined>();
   const mapDimensions = useAppSelector((st) => st.map.mainMapDimensions);
-  const dispatch = useAppDispatch();
-
   const [layers, setLayers] = useState<LayerWrapper[]>([]);
   const [activeLayer, setActiveLayer] = useState<LayerWrapper | undefined>();
 
-  // When layer list change we set a state with list of layers and active layer
+  const mainMap = geo.getMainMap();
+
+  // Page title
+  useEffect(() => pageSetup(t('The_map'), t('Visualize_and_create_in_your_browser')), []);
+
+  // When layer list change we update layer list state
   const handleLayerChange = useCallback(() => {
     logger.debug('Layers changed');
-    const map = geo.getMainMap();
+    setLayers(mainMap.getLayers());
+    setActiveLayer(mainMap.getActiveLayer());
+  }, [mainMap]);
 
-    setLayers(map.getLayers());
-    setActiveLayer(map.getActiveLayer());
-  }, [geo]);
+  useEffect(() => {
+    mainMap.addLayerChangeListener(handleLayerChange);
+    handleLayerChange(); // We manually trigger the first setup
 
-  /**
-   * Here we set main map size in store for later exports.
-   *
-   * We keep only the biggest size in order to keep consistent exports event if window was resized.
-   *
-   * @param ev
-   */
+    return () => mainMap.removeLayerChangeListener(handleLayerChange);
+  }, [handleLayerChange, mainMap]);
+
+  // When main map size change we store it to use it for later exports.
+  // We keep only the biggest size in order to keep consistent exports event if window was resized.
   const handleMapSizeChange = useCallback(
     (ev: MapSizeChangedEvent) => {
       const width = ev.dimensions.width;
@@ -85,23 +89,17 @@ function MapView() {
   );
 
   useEffect(() => {
-    pageSetup(t('The_map'), t('Visualize_and_create_in_your_browser'));
+    mainMap.addSizeListener(handleMapSizeChange);
+    return () => mainMap.removeSizeListener(handleMapSizeChange);
+  }, [handleMapSizeChange, mainMap]);
 
-    const map = geo.getMainMap();
-    map.addSizeListener(handleMapSizeChange);
-    map.addLayerChangeListener(handleLayerChange);
-    handleLayerChange(); // We trigger manually the first event for setup
-
+  // We setup keyboard shortcuts
+  useEffect(() => {
     keyboardListener.current = MapKeyboardListener.create();
     keyboardListener.current.initialize();
 
-    return () => {
-      map.removeSizeListener(handleMapSizeChange);
-      map.removeLayerChangeListener(handleLayerChange);
-
-      keyboardListener.current?.destroy();
-    };
-  }, [geo, handleLayerChange, handleMapSizeChange]);
+    return () => keyboardListener.current?.destroy();
+  }, [keyboardListener]);
 
   return (
     <div className={Cls.mapView}>

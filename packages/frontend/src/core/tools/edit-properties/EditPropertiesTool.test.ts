@@ -21,89 +21,108 @@ import * as sinon from 'sinon';
 import { SinonStubbedInstance } from 'sinon';
 import { ModalService } from '../../ui/ModalService';
 import { HistoryService } from '../../history/HistoryService';
-import Map from 'ol/Map';
 import { ModalEventType, ModalStatus } from '../../ui/typings';
 import Feature from 'ol/Feature';
-import { Point } from 'ol/geom';
+import { LineString } from 'ol/geom';
 import { HistoryKey } from '../../history/HistoryKey';
 import { SetFeaturePropertiesChangeset } from '../../history/changesets/features/SetFeaturePropertiesChangeset';
 import { TestHelper } from '../../utils/test/TestHelper';
-import { Select } from 'ol/interaction';
-import { SelectEvent } from 'ol/interaction/Select';
+import { DrawingTestMap } from '../common/interactions/DrawingTestMap.test.helpers';
+import { Modes } from './Modes';
 import Geometry from 'ol/geom/Geometry';
 
 describe('EditPropertiesTool', () => {
-  let map: SinonStubbedInstance<Map>;
   let modals: SinonStubbedInstance<ModalService>;
   let history: SinonStubbedInstance<HistoryService>;
-  let interaction: Select;
+  let feature: Feature<Geometry>;
+  let map: DrawingTestMap;
   let tool: EditPropertiesTool;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     modals = sinon.createStubInstance(ModalService);
     history = sinon.createStubInstance(HistoryService);
-    map = sinon.createStubInstance(Map);
-    interaction = new Select();
-    const factory = () => interaction;
 
-    tool = new EditPropertiesTool({} as any, history as unknown as HistoryService, modals as unknown as ModalService, factory);
-    tool.setup(map as unknown as Map);
+    map = new DrawingTestMap();
+    await map.init();
+
+    tool = new EditPropertiesTool({} as any, history as unknown as HistoryService, modals as unknown as ModalService);
+    tool.setup(map.getMap());
+
+    feature = new Feature(
+      new LineString([
+        [0, 0],
+        [5, 5],
+      ])
+    );
+    map.addFeatures([feature]);
   });
 
-  it('should do nothing on cancel', async () => {
-    // Prepare
-    const feature = new Feature(new Point([1, 2]));
-    modals.featurePropertiesModal.resolves({ status: ModalStatus.Canceled, properties: { abcd: 1234 }, type: ModalEventType.FeaturePropertiesClosed });
-
-    // Act
-    interaction.dispatchEvent(selectEvent([feature]));
-    await TestHelper.wait(10); // We wait an internal promise
-
-    // Assert
-    expect(history.register.callCount).toEqual(0);
-  });
-
-  it('should do nothing if properties does not change', async () => {
-    // Prepare
-    const feature = new Feature(new Point([1, 2]));
-    feature.set('abcd', 1234);
-    modals.featurePropertiesModal.resolves({ status: ModalStatus.Confirmed, properties: { abcd: 1234 }, type: ModalEventType.FeaturePropertiesClosed });
-
-    // Act
-    interaction.dispatchEvent(selectEvent([feature]));
-    await TestHelper.wait(10); // We wait an internal promise
-
-    // Assert
-    expect(history.register.callCount).toEqual(0);
-  });
-
-  it('should register changeset if properties change', async () => {
-    // Prepare
-    const feature = new Feature(new Point([1, 2]));
-    feature.set('abcd', 12345);
-    modals.featurePropertiesModal.resolves({ status: ModalStatus.Confirmed, properties: { abcd: 4567 }, type: ModalEventType.FeaturePropertiesClosed });
-
-    // Act
-    interaction.dispatchEvent(selectEvent([feature]));
-    await TestHelper.wait(10); // We wait an internal promise
-
-    // Assert
-    expect(history.register.callCount).toEqual(1);
-    expect(history.register.args[0][0]).toEqual(HistoryKey.Map);
-    const changeset = history.register.args[0][1] as SetFeaturePropertiesChangeset;
-    expect(changeset.before).toEqual({ abcd: 12345 });
-    expect(changeset.after).toEqual({ abcd: 4567 });
+  it('setup()', () => {
+    expect(TestHelper.interactionNames(map.getMap())).toEqual(['DragPan', 'PinchZoom', 'MouseWheelZoom', 'Select']);
   });
 
   it('dispose()', () => {
     tool.dispose();
 
-    expect(map.removeInteraction.callCount).toEqual(5);
-    const names = map.removeInteraction.args.map((args) => args[0].constructor.name);
-    expect(names).toEqual(['DragPan', 'KeyboardPan', 'MouseWheelZoom', 'PinchZoom', 'Select']);
+    expect(TestHelper.interactionNames(map.getMap())).toEqual([]);
   });
 
-  function selectEvent(feats: Feature<Geometry>[]): SelectEvent {
-    return new SelectEvent('select' as any, feats, [], {} as any);
-  }
+  it('drag should move map view', async () => {
+    map.toMapWrapper().setToolMode(Modes.MoveMap);
+
+    await map.drag(0, 0, 50, 50);
+
+    expect(map.getMap().getView().getCenter()).toEqual([-45, 40]);
+  });
+
+  it('should do nothing on cancel', async () => {
+    // Prepare
+    map.toMapWrapper().setToolMode(Modes.EditProperties);
+    modals.featurePropertiesModal.resolves({ status: ModalStatus.Canceled, properties: { abcd: 1234 }, type: ModalEventType.FeaturePropertiesClosed });
+
+    // Act
+    await map.click(5, 5);
+    await TestHelper.wait(10); // We wait an internal promise
+
+    // Assert
+    expect(modals.featurePropertiesModal.callCount).toEqual(1);
+    expect(history.register.callCount).toEqual(0);
+  });
+
+  it('should do nothing if properties does not change', async () => {
+    // Prepare
+    map.toMapWrapper().setToolMode(Modes.EditProperties);
+    feature.set('abcd', 1234);
+
+    modals.featurePropertiesModal.resolves({ status: ModalStatus.Confirmed, properties: { abcd: 1234 }, type: ModalEventType.FeaturePropertiesClosed });
+
+    // Act
+    await map.click(5, 5);
+    await TestHelper.wait(10); // We wait an internal promise
+
+    // Assert
+    expect(modals.featurePropertiesModal.callCount).toEqual(1);
+    expect(history.register.callCount).toEqual(0);
+  });
+
+  it('should register changeset if properties change', async () => {
+    // Prepare
+    map.toMapWrapper().setToolMode(Modes.EditProperties);
+    feature.set('abcd', 12345);
+
+    modals.featurePropertiesModal.resolves({ status: ModalStatus.Confirmed, properties: { abcd: 4567 }, type: ModalEventType.FeaturePropertiesClosed });
+
+    // Act
+    await map.click(5, 5);
+    await TestHelper.wait(10); // We wait an internal promise
+
+    // Assert
+    expect(modals.featurePropertiesModal.callCount).toEqual(1);
+    expect(history.register.callCount).toEqual(1);
+    expect(history.register.args[0][0]).toEqual(HistoryKey.Map);
+
+    const changeset = history.register.args[0][1] as SetFeaturePropertiesChangeset;
+    expect(changeset.before).toEqual({ abcd: 12345 });
+    expect(changeset.after).toEqual({ abcd: 4567 });
+  });
 });

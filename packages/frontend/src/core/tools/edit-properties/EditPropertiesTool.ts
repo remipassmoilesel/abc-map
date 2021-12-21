@@ -28,29 +28,22 @@ import { ModalStatus } from '../../ui/typings';
 import { HistoryKey } from '../../history/HistoryKey';
 import { SetFeaturePropertiesChangeset } from '../../history/changesets/features/SetFeaturePropertiesChangeset';
 import { Interaction, Select } from 'ol/interaction';
-import { withMainButton } from '../common/helpers/common-conditions';
 import { LayerWrapper } from '../../geo/layers/LayerWrapper';
-import { Options } from 'ol/interaction/Select';
-import { noModifierKeys, singleClick } from 'ol/events/condition';
 import { DefaultTolerancePx } from '../common/constants';
-import { MoveInteractionsBundle } from '../common/interactions/MoveInteractionsBundle';
-import { SelectionInteractionsBundle } from '../common/interactions/SelectionInteractionsBundle';
-import { MapActions } from '../../store/map/actions';
+import { MoveMapInteractionsBundle } from '../common/interactions/MoveMapInteractionsBundle';
 import isEqual from 'lodash/isEqual';
+import { ToolMode } from '../ToolMode';
+import { Conditions, Modes } from './Modes';
 
 const logger = Logger.get('EditPropertiesTool.ts');
 
-function interactionFactory(options: Options): Select {
-  return new Select(options);
-}
-
 export class EditPropertiesTool implements Tool {
   private map?: Map;
-  private move?: MoveInteractionsBundle;
-  private selection?: SelectionInteractionsBundle;
+  private move?: MoveMapInteractionsBundle;
+  private select?: Select;
   private interactions: Interaction[] = [];
 
-  constructor(private mainStore: MainStore, private history: HistoryService, private modals: ModalService, private newInteraction = interactionFactory) {}
+  constructor(private store: MainStore, private history: HistoryService, private modals: ModalService) {}
 
   public getId(): MapTool {
     return MapTool.EditProperties;
@@ -58,6 +51,10 @@ export class EditPropertiesTool implements Tool {
 
   public getIcon(): string {
     return Icon;
+  }
+
+  public getModes(): ToolMode[] {
+    return [Modes.EditProperties, Modes.MoveMap];
   }
 
   public getI18nLabel(): string {
@@ -68,26 +65,36 @@ export class EditPropertiesTool implements Tool {
     this.map = map;
 
     // Default interactions
-    this.move = new MoveInteractionsBundle();
+    this.move = new MoveMapInteractionsBundle({ condition: Conditions.MoveMap });
     this.move.setup(map);
 
-    // Selection with shift click
-    this.selection = new SelectionInteractionsBundle();
-    this.selection.onStyleSelected = (st) => this.mainStore.dispatch(MapActions.setDrawingStyle(st));
-
-    // Select interaction will condition modification of features
-    const select = this.newInteraction({
-      condition: (ev) => singleClick(ev) && withMainButton(ev) && noModifierKeys(ev),
-      toggleCondition: () => false,
+    // Edit properties on selection
+    this.select = new Select({
+      condition: Conditions.EditProperties,
+      toggleCondition: Conditions.EditProperties,
       layers: (lay) => LayerWrapper.from(lay).isActive(),
       // Warning: here we must use null to not manage styles with Select interaction
       // Otherwise modification of style can be 'restored' from a bad state
-      style: null as any,
+      style: null,
       hitTolerance: DefaultTolerancePx,
     });
 
-    select.on('select', (ev) => {
+    this.select.on('select', (ev) => {
+      // We clear deselected elements
+      ev.deselected.forEach((f) => FeatureWrapper.from(f).setSelected(false));
+
+      if (!ev.selected.length) {
+        return;
+      }
+
+      // We keep only the last feature in selection
+      this.select?.getFeatures().forEach((f) => FeatureWrapper.from(f).setSelected(false));
+      this.select?.getFeatures().clear();
+      this.select?.getFeatures().push(ev.selected[0]);
+
+      // We select feature
       const feature = FeatureWrapper.from(ev.selected[0]);
+      feature.setSelected(true);
 
       // Keep previous properties for undo / redo
       const before = feature.getSimpleProperties();
@@ -102,27 +109,24 @@ export class EditPropertiesTool implements Tool {
             cs.apply().catch((err) => logger.error('Cannot modify properties: ', err));
             this.history.register(HistoryKey.Map, cs);
           }
-
-          // We must unselect otherwise we can not select again
-          select.getFeatures().forEach((f) => FeatureWrapper.from(f).setSelected(false));
-          select.getFeatures().clear();
         })
         .catch((err) => logger.error('Error while editing feature properties: ', err));
     });
 
-    map.addInteraction(select);
-    this.interactions.push(select);
+    map.addInteraction(this.select);
+    this.interactions.push(this.select);
   }
 
   public deselectAll() {
-    this.selection?.clear();
+    this.select?.getFeatures().forEach((f) => FeatureWrapper.from(f).setSelected(false));
+    this.select?.getFeatures().clear();
   }
 
   public dispose() {
     this.deselectAll();
 
     this.move?.dispose();
-    this.selection?.dispose();
+    this.select?.dispose();
 
     this.interactions.forEach((inter) => {
       this.map?.removeInteraction(inter);

@@ -16,13 +16,23 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { Component, ReactNode } from 'react';
+import React, { MouseEvent, ReactNode } from 'react';
 import Cls from './OptionRow.module.scss';
 
-class OptionRow extends Component<{}, {}> {
-  public render(): ReactNode {
-    return <div className={Cls.optionRow}>{this.props.children}</div>;
-  }
+interface Props {
+  children: ReactNode;
+  onClick?: (ev: MouseEvent) => void;
+  className?: string;
+}
+
+function OptionRow(props: Props) {
+  const { children, onClick, className } = props;
+
+  return (
+    <div className={`${Cls.optionRow} ${className}`} onClick={onClick}>
+      {children}
+    </div>
+  );
 }
 
 export default OptionRow;

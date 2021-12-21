@@ -17,28 +17,34 @@
  */
 
 import { TestHelper } from '../../utils/test/TestHelper';
-import { MoveTool } from './MoveTool';
+import { MoveMapTool } from './MoveMapTool';
 import { DrawingTestMap } from '../common/interactions/DrawingTestMap.test.helpers';
 
-describe('MoveTool', () => {
-  let testMap: DrawingTestMap;
-  let tool: MoveTool;
+describe('MoveMapTool', () => {
+  let map: DrawingTestMap;
+  let tool: MoveMapTool;
 
   beforeEach(async () => {
-    testMap = new DrawingTestMap();
-    await testMap.init();
+    map = new DrawingTestMap();
+    await map.init();
 
-    tool = new MoveTool();
-    tool.setup(testMap.getMap());
+    tool = new MoveMapTool();
+    tool.setup(map.getMap());
   });
 
   it('setup()', () => {
-    expect(TestHelper.interactionNames(testMap.getMap())).toEqual(['DoubleClickZoom', 'DragPan', 'KeyboardPan', 'MouseWheelZoom']);
+    expect(TestHelper.interactionNames(map.getMap())).toEqual(['DragPan', 'PinchZoom', 'MouseWheelZoom']);
   });
 
   it('dispose()', () => {
     tool.dispose();
 
-    expect(TestHelper.interactionNames(testMap.getMap())).toEqual([]);
+    expect(TestHelper.interactionNames(map.getMap())).toEqual([]);
+  });
+
+  it('drag should move map view', async () => {
+    await map.drag(0, 0, 50, 50);
+
+    expect(map.getMap().getView().getCenter()).toEqual([-45, 40]);
   });
 });

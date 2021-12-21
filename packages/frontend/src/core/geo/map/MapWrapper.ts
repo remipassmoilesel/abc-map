@@ -33,36 +33,60 @@ import { fromLonLat, transformExtent } from 'ol/proj';
 import { Coordinate } from 'ol/coordinate';
 import TileSource from 'ol/source/Tile';
 import { Extent } from 'ol/extent';
-import { DragPan, KeyboardPan, MouseWheelZoom, PinchZoom } from 'ol/interaction';
+import { ToolMode } from '../../tools/ToolMode';
+import PluggableMap from 'ol/PluggableMap';
+import { ToolModeHelper } from '../../tools/common/ToolModeHelper';
+import { MoveMapTool } from '../../tools/move/MoveMapTool';
 
 export const logger = Logger.get('MapWrapper.ts');
 
 export declare type LayerChangeHandler = (ev: BaseEvent) => void;
 
+export declare type ToolChangedHandler = (ev: BaseEvent) => void;
+
 export declare type FeatureCallback = (feat: FeatureWrapper, layer: VectorLayerWrapper) => void;
+
+const ToolChangedEvent = 'abc:map:tool-changed';
+
+const ToolProperty = 'abc:map:tool';
 
 /**
  * This class wrap OpenLayers map. The goal is not to replace all methods, but to ensure
  * that critical operations are well done (set active layer, etc ...)
  */
 export class MapWrapper {
+  public static from(map: PluggableMap): MapWrapper {
+    if (!(map instanceof Map)) {
+      throw new Error('Invalid map: ' + (map ?? 'undefined'));
+    }
+
+    return new MapWrapper(map);
+  }
+
+  public static fromUnknown(map: unknown): MapWrapper | undefined {
+    if (!(map instanceof Map)) {
+      return undefined;
+    }
+
+    return new MapWrapper(map);
+  }
+
   private sizeObserver?: ResizeObserver;
-  private currentTool?: Tool;
   private eventTarget = document.createDocumentFragment();
 
-  constructor(private readonly internal: Map) {
+  private constructor(private readonly internalMap: Map) {
     this.addLayerChangeListener(this.handleLayerChange);
   }
 
   public dispose() {
     this.removeLayerChangeListener(this.handleLayerChange);
-    this.internal.dispose();
+    this.internalMap.dispose();
     this.sizeObserver?.disconnect();
     this.sizeObserver = undefined;
   }
 
   public setTarget(node: HTMLDivElement | undefined) {
-    this.internal.setTarget(node);
+    this.internalMap.setTarget(node);
 
     if (node) {
       // Here we listen to div support size change
@@ -76,7 +100,7 @@ export class MapWrapper {
   }
 
   public setDefaultLayers(): void {
-    this.internal.getLayers().clear();
+    this.internalMap.getLayers().clear();
     const osm = LayerFactory.newPredefinedLayer(PredefinedLayerModel.OSM);
     this.addLayer(osm);
 
@@ -88,9 +112,9 @@ export class MapWrapper {
   public addLayer(layer: LayerWrapper, position?: number): void {
     const olLayer = layer.unwrap();
     if (typeof position !== 'undefined') {
-      this.internal.getLayers().insertAt(position, olLayer);
+      this.internalMap.getLayers().insertAt(position, olLayer);
     } else {
-      this.internal.addLayer(olLayer);
+      this.internalMap.addLayer(olLayer);
     }
 
     if (olLayer instanceof TileLayer) {
@@ -102,7 +126,7 @@ export class MapWrapper {
    * Return layers managed layers
    */
   public getLayers(): LayerWrapper[] {
-    return this.internal
+    return this.internalMap
       .getLayers()
       .getArray()
       .filter((lay) => LayerWrapper.isManaged(lay))
@@ -145,7 +169,7 @@ export class MapWrapper {
 
   public removeLayer(layer: LayerWrapper): void {
     const olLayer = layer.unwrap();
-    this.internal.getLayers().remove(olLayer);
+    this.internalMap.getLayers().remove(olLayer);
 
     if (olLayer instanceof TileLayer) {
       olLayer.getSource().un('tileloaderror', this.handleTileLoadError);
@@ -199,61 +223,101 @@ export class MapWrapper {
 
   public getProjection(): AbcProjection {
     return {
-      name: this.internal.getView().getProjection().getCode(),
+      name: this.internalMap.getView().getProjection().getCode(),
     };
   }
 
   public addLayerChangeListener(handler: LayerChangeHandler) {
-    this.internal.getLayers().on('propertychange', handler);
+    this.internalMap.getLayers().on('propertychange', handler);
   }
 
   public removeLayerChangeListener(handler: LayerChangeHandler) {
-    this.internal.getLayers().un('propertychange', handler);
+    this.internalMap.getLayers().un('propertychange', handler);
   }
 
-  public setTool(tool: Tool): void {
-    this.currentTool?.dispose();
-    this.currentTool = tool;
-    this.updateInteractions();
-  }
-
-  private handleLayerChange = () => {
-    if (!this.currentTool) {
-      this.setDefaultInteractions();
-      return;
-    }
-
-    this.currentTool.dispose();
-    this.updateInteractions();
-  };
-
-  private updateInteractions() {
-    const layer = this.getActiveVectorLayer();
-    if (!layer) {
-      this.setDefaultInteractions();
-      return;
-    }
-
-    this.cleanInteractions();
-
-    this.currentTool?.setup(this.internal, layer.getSource());
-    logger.debug(`Activated tool '${this.currentTool?.getId()}'`);
-    return;
-  }
-
-  public setDefaultInteractions() {
-    this.cleanInteractions();
-    [new DragPan(), new KeyboardPan(), new MouseWheelZoom(), new PinchZoom({})].forEach((i) => this.internal.addInteraction(i));
-  }
-
-  public cleanInteractions() {
-    this.internal.getInteractions().forEach((i) => i.dispose());
-    this.internal.getInteractions().clear();
-  }
-
+  /**
+   * Get current map tool, may be undefined
+   */
   public getTool(): Tool | undefined {
-    return this.currentTool;
+    return this.internalMap.get(ToolProperty);
   }
+
+  /**
+   * Set current map tool then dispatch event
+   *
+   * For the moment tools are supposed to work with vector layers. So if active layer is not a vector layer, we setup MoveMapTool instead.
+   */
+  public setTool(tool: Tool): void {
+    this.getTool()?.dispose();
+
+    const vectorLayer = this.getActiveVectorLayer();
+    if (!vectorLayer) {
+      this.setDefaultTool();
+      return;
+    }
+
+    this.internalMap.set(ToolProperty, tool);
+    tool.setup(this.internalMap, vectorLayer.getSource());
+    this.setToolMode(tool.getModes().length ? tool.getModes()[0] : undefined);
+  }
+
+  /**
+   * Reset tool state and setup default tool: MoveMapTool
+   */
+  public setDefaultTool() {
+    // Dispose current tool
+    this.getTool()?.dispose();
+
+    const interactions = this.internalMap.getInteractions().getArray().slice();
+    interactions.forEach((i) => {
+      i.dispose();
+      this.internalMap.removeInteraction(i);
+    });
+
+    // Setup Move Map tool
+    const tool = new MoveMapTool();
+    tool.setup(this.internalMap);
+    this.internalMap.set(ToolProperty, tool);
+
+    // Set mode and dispatch
+    this.setToolMode(undefined);
+  }
+
+  /**
+   * Set current tool mode then dispatch event
+   */
+  public setToolMode(toolMode: ToolMode | undefined): void {
+    ToolModeHelper.set(this.internalMap, toolMode);
+
+    const tool = this.getTool();
+    toolMode && tool?.modeChanged && tool.modeChanged(toolMode);
+
+    this.internalMap.dispatchEvent(ToolChangedEvent);
+  }
+
+  public getToolMode(): ToolMode | undefined {
+    return ToolModeHelper.get(this.internalMap);
+  }
+
+  public addToolListener(listener: ToolChangedHandler): void {
+    // Typings are borked
+    this.internalMap.on(ToolChangedEvent as any, listener);
+  }
+
+  public removeToolListener(listener: ToolChangedHandler): void {
+    // Typings are borked
+    this.internalMap.un(ToolChangedEvent as any, listener);
+  }
+
+  /**
+   * If user select a raster layer, we must disable tools
+   */
+  private handleLayerChange = () => {
+    const vectorLayer = this.getActiveVectorLayer();
+    if (!vectorLayer) {
+      this.setDefaultTool();
+    }
+  };
 
   public getSizeObserver(): ResizeObserver | undefined {
     return this.sizeObserver;
@@ -270,7 +334,7 @@ export class MapWrapper {
    * Listeners can listen for layer added events, removed, renamed, opacity changed, etc ...
    */
   public triggerLayerChange(): void {
-    this.internal.getLayers().set(LayerProperties.LastLayerChange, performance.now());
+    this.internalMap.getLayers().set(LayerProperties.LastLayerChange, performance.now());
   }
 
   /**
@@ -282,7 +346,7 @@ export class MapWrapper {
     const _sourceProj = sourceProjection || EPSG_4326;
     const _extent = transformExtent(extent, _sourceProj.name, this.getView().projection.name);
 
-    const view = this.internal.getView();
+    const view = this.internalMap.getView();
     view.fit(_extent, { duration });
   }
 
@@ -290,7 +354,7 @@ export class MapWrapper {
    * Source projection is assumed EPSG4326
    */
   public moveViewToPosition(coords: Coordinate, zoom: number): void {
-    const view = this.internal.getView();
+    const view = this.internalMap.getView();
     view.setCenter(fromLonLat(coords, this.getView().projection.name));
     view.setZoom(zoom);
   }
@@ -305,11 +369,11 @@ export class MapWrapper {
   }
 
   public setView(view: AbcView) {
-    this.internal.setView(Views.abcToOl(view));
+    this.internalMap.setView(Views.abcToOl(view));
   }
 
   public getView(): AbcView {
-    return Views.olToAbc(this.internal.getView());
+    return Views.olToAbc(this.internalMap.getView());
   }
 
   public addSizeListener(listener: SizeListener): void {
@@ -330,10 +394,10 @@ export class MapWrapper {
 
   private handleSizeChange = () => {
     // Each time support size change, we update map
-    this.internal.updateSize();
+    this.internalMap.updateSize();
 
     // Then we notify listeners
-    const target = this.internal.getTarget();
+    const target = this.internalMap.getTarget();
     if (!target || !(target instanceof HTMLDivElement)) {
       logger.error('Invalid target, size event will not be dispatched');
       return;
@@ -348,7 +412,7 @@ export class MapWrapper {
       return true;
     }
 
-    const layer = this.internal
+    const layer = this.internalMap
       .getLayers()
       .getArray()
       .find((lay) => lay instanceof TileLayer && lay.getSource() === ev.target) as TileLayer<TileSource> | undefined;
@@ -361,6 +425,6 @@ export class MapWrapper {
   };
 
   public unwrap(): Map {
-    return this.internal;
+    return this.internalMap;
   }
 }

@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { Component, ReactNode } from 'react';
+import React from 'react';
 import { Logger } from '@abc-map/shared';
 import StrokeWidthSelector from '../_common/stroke-width-selector/StrokeWidthSelector';
 import ColorSelector from '../../../../components/color-picker/ColorSelector';
@@ -24,39 +24,37 @@ import FillPatternSelector from '../_common/fill-pattern-selector/FillPatternSel
 import TextFormat from '../_common/text-format/TextFormat';
 import PointIconSelector from '../point/icon-selector/PointIconSelector';
 import PointSizeSelector from '../point/size-selector/PointSizeSelector';
-import Cls from './SelectionToolPanel.module.scss';
 import { prefixedTranslation } from '../../../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
+import Cls from './SelectionToolPanel.module.scss';
 
 const logger = Logger.get('SelectionToolPanel.tsx');
 
 const t = prefixedTranslation('MapView:ToolSelector.');
 
-class SelectionToolPanel extends Component<{}, {}> {
-  public render(): ReactNode {
-    return (
-      <div className={Cls.selectionPanel}>
-        <div className={Cls.section}>
-          <div className={Cls.title}>{t('Points')}</div>
-          <PointIconSelector />
-          <PointSizeSelector />
-          <ColorSelector point={true} />
-        </div>
-
-        <div className={Cls.section}>
-          <div className={Cls.title}>{t('Lines_and_polygons')}</div>
-          <StrokeWidthSelector />
-          <ColorSelector point={false} stroke={true} fillColor1={true} fillColor2={true} />
-          <FillPatternSelector />
-        </div>
-
-        <div className={Cls.section}>
-          <div className={Cls.title}>{t('Text')}</div>
-          <TextFormat />
-        </div>
+function SelectionToolPanel() {
+  return (
+    <div className={Cls.selectionPanel}>
+      <div className={Cls.section}>
+        <div className={Cls.title}>{t('Points')}</div>
+        <PointIconSelector />
+        <PointSizeSelector />
+        <ColorSelector point={true} />
       </div>
-    );
-  }
+
+      <div className={Cls.section}>
+        <div className={Cls.title}>{t('Lines_and_polygons')}</div>
+        <StrokeWidthSelector />
+        <ColorSelector point={false} stroke={true} fillColor1={true} fillColor2={true} />
+        <FillPatternSelector />
+      </div>
+
+      <div className={Cls.section}>
+        <div className={Cls.title}>{t('Text')}</div>
+        <TextFormat />
+      </div>
+    </div>
+  );
 }
 
 export default withTranslation()(SelectionToolPanel);

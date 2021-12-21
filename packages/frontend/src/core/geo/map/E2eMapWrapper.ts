@@ -76,7 +76,7 @@ export class E2eMapWrapper implements E2eMap {
     return this.internal.unwrap().getView().calculateExtent();
   }
 
-  public getInternal(): MapWrapper {
+  public unwrap(): MapWrapper {
     return this.internal;
   }
 }

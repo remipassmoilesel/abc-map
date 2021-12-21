@@ -83,7 +83,7 @@ describe('Legend', function () {
         expect(legend.items[0].id).not.undefined;
         expect(legend.items[0].text).equal('Legend item 1');
         expect(legend.items[0].symbol?.geomType).equal('Point');
-        expect(legend.items[0].symbol?.properties.point?.icon).equal('twbs/pin-map-fill.inline.svg');
+        expect(legend.items[0].symbol?.properties.point?.icon).equal('twbs/pin-angle.inline.svg');
       });
   });
 });

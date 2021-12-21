@@ -26,6 +26,9 @@ import sinon from 'sinon';
 import Feature from 'ol/Feature';
 import GeometryType from 'ol/geom/GeometryType';
 
+/**
+ * These interactions are tested through map tools (linestring tool, polygon tool, point tool)
+ */
 describe('DrawInteractionsBundle', () => {
   let testMap: DrawingTestMap;
   let interactions: DrawInteractionsBundle;
@@ -34,10 +37,15 @@ describe('DrawInteractionsBundle', () => {
     testMap = new DrawingTestMap();
     await testMap.init();
 
-    interactions = new DrawInteractionsBundle(GeometryType.LINE_STRING);
+    interactions = new DrawInteractionsBundle({
+      type: GeometryType.LINE_STRING,
+      getStyle: sinon.stub(),
+      drawCondition: sinon.stub(),
+      modifyCondition: sinon.stub(),
+    });
     const source = new VectorSource<Geometry>();
     const selection = new Collection<Feature<Geometry>>();
-    interactions.setup(testMap.getMap(), source, selection, sinon.stub());
+    interactions.setup(testMap.getMap(), source, selection);
   });
 
   it('setup()', () => {

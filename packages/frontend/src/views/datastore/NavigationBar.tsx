@@ -21,7 +21,7 @@ import range from 'lodash/range';
 import Cls from './NavigationBar.module.scss';
 
 // This should be an odd number
-const MaxButtons = 11;
+const MaxButtons = 7;
 
 interface Props {
   // This should be an odd number

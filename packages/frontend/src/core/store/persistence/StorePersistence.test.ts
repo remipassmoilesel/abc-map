@@ -20,7 +20,6 @@ import { StorePersistence } from './StorePersistence';
 import { LocalStorageService, StorageKey } from '../../local-storage/LocalStorageService';
 import sinon, { SinonStub } from 'sinon';
 import { FillPatterns, LegendDisplay, UserStatus } from '@abc-map/shared';
-import { MapTool } from '@abc-map/shared';
 import { MainState } from '../reducer';
 import { TestHelper } from '../../utils/test/TestHelper';
 import { DimensionsPx } from '../../utils/DimensionsPx';
@@ -52,7 +51,6 @@ describe('StorePersistence', () => {
         view: Views.random(),
       },
       map: {
-        tool: MapTool.Point,
         currentStyle: {
           fill: {
             color1: '#FFFFFF',
@@ -110,7 +108,6 @@ describe('StorePersistence', () => {
     const expectedState: MainState = {
       project: undefined as any, // A new project is created on bootstrap
       map: {
-        tool: MapTool.Move,
         currentStyle: {
           fill: {
             color1: '#FFFFFF',

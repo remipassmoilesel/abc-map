@@ -16,25 +16,22 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { Component, ReactNode } from 'react';
+import React from 'react';
 import { Logger } from '@abc-map/shared';
 import ColorSelector from '../../../../components/color-picker/ColorSelector';
 import PointSizeSelector from './size-selector/PointSizeSelector';
 import PointIconSelector from './icon-selector/PointIconSelector';
-import { withTranslation } from 'react-i18next';
 
 const logger = Logger.get('PointToolPanel.tsx');
 
-class PointToolPanel extends Component<{}, {}> {
-  public render(): ReactNode {
-    return (
-      <div>
-        <PointSizeSelector />
-        <ColorSelector point={true} />
-        <PointIconSelector />
-      </div>
-    );
-  }
+function PointToolPanel() {
+  return (
+    <div>
+      <PointSizeSelector />
+      <ColorSelector point={true} />
+      <PointIconSelector />
+    </div>
+  );
 }
 
-export default withTranslation()(PointToolPanel);
+export default PointToolPanel;

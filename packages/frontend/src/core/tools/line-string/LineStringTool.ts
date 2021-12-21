@@ -28,11 +28,13 @@ import { HistoryKey } from '../../history/HistoryKey';
 import { MainStore } from '../../store/store';
 import { HistoryService } from '../../history/HistoryService';
 import { MapActions } from '../../store/map/actions';
-import { MoveInteractionsBundle } from '../common/interactions/MoveInteractionsBundle';
+import { MoveMapInteractionsBundle } from '../common/interactions/MoveMapInteractionsBundle';
 import { SelectionInteractionsBundle } from '../common/interactions/SelectionInteractionsBundle';
+import { ToolMode } from '../ToolMode';
+import { CommonConditions, CommonModes } from '../common/common-modes';
 
 export class LineStringTool implements Tool {
-  private move?: MoveInteractionsBundle;
+  private move?: MoveMapInteractionsBundle;
   private selection?: SelectionInteractionsBundle;
   private draw?: DrawInteractionsBundle;
 
@@ -46,31 +48,52 @@ export class LineStringTool implements Tool {
     return Icon;
   }
 
+  public getModes(): ToolMode[] {
+    return [CommonModes.CreateGeometry, CommonModes.ModifyGeometry, CommonModes.MoveMap];
+  }
+
   public getI18nLabel(): string {
     return 'Lines';
   }
 
   public setup(map: Map, source: VectorSource<Geometry>): void {
     // Interactions for map view manipulation
-    this.move = new MoveInteractionsBundle();
+    this.move = new MoveMapInteractionsBundle({ condition: CommonConditions.MoveMap });
     this.move.setup(map);
 
-    // Select with shift + click
-    this.selection = new SelectionInteractionsBundle();
+    // Selection for modifications
+    this.selection = new SelectionInteractionsBundle({ condition: CommonConditions.Selection });
     this.selection.onStyleSelected = (style: FeatureStyle) => this.store.dispatch(MapActions.setDrawingStyle({ stroke: style.stroke }));
     this.selection.setup(map, source, [GeometryType.LINE_STRING, GeometryType.MULTI_LINE_STRING]);
 
     // Draw interactions
-    this.draw = new DrawInteractionsBundle(GeometryType.LINE_STRING);
-    this.draw.onNewChangeset = (t) => this.history.register(HistoryKey.Map, t);
-    this.draw.onDeleteChangeset = (t) => this.history.remove(HistoryKey.Map, t);
-
     const getStyle: GetStyleFunc = () => {
       const style = this.store.getState().map.currentStyle;
       return { stroke: style.stroke };
     };
 
-    this.draw.setup(map, source, this.selection.getFeatures(), getStyle);
+    // Modification is obviously allowed in modification but also in creation,
+    // because we must be able to modify a just created geometry
+    this.draw = new DrawInteractionsBundle({
+      type: GeometryType.LINE_STRING,
+      getStyle,
+      drawCondition: CommonConditions.CreateGeometry,
+      modifyCondition: CommonConditions.ModifyGeometry,
+      deleteVertex: CommonConditions.DeleteVertex,
+    });
+    this.draw.onNewChangeset = (t) => this.history.register(HistoryKey.Map, t);
+    this.draw.onDeleteChangeset = (t) => this.history.remove(HistoryKey.Map, t);
+    this.draw.onFeatureAdded = (feat) => {
+      feat.setSelected(true);
+      this.selection?.getFeatures().push(feat.unwrap());
+    };
+
+    this.draw.setup(map, source, this.selection.getFeatures());
+  }
+
+  public modeChanged(): void {
+    this.draw?.abortDrawing();
+    this.selection?.clear();
   }
 
   public deselectAll() {

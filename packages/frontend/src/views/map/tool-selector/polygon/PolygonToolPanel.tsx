@@ -16,26 +16,23 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { Component, ReactNode } from 'react';
+import React from 'react';
 import { Logger } from '@abc-map/shared';
 import WidthSelector from '../_common/stroke-width-selector/StrokeWidthSelector';
 import ColorSelector from '../../../../components/color-picker/ColorSelector';
 import FillPatternSelector from '../_common/fill-pattern-selector/FillPatternSelector';
 import Cls from './PolygonToolPanel.module.scss';
-import { withTranslation } from 'react-i18next';
 
 const logger = Logger.get('PolygonToolPanel.tsx');
 
-class PolygonToolPanel extends Component<{}, {}> {
-  public render(): ReactNode {
-    return (
-      <div className={Cls.polygonPanel}>
-        <WidthSelector />
-        <ColorSelector stroke={true} fillColor1={true} fillColor2={true} />
-        <FillPatternSelector />
-      </div>
-    );
-  }
+function PolygonToolPanel() {
+  return (
+    <div className={Cls.polygonPanel}>
+      <WidthSelector />
+      <ColorSelector stroke={true} fillColor1={true} fillColor2={true} />
+      <FillPatternSelector />
+    </div>
+  );
 }
 
-export default withTranslation()(PolygonToolPanel);
+export default PolygonToolPanel;

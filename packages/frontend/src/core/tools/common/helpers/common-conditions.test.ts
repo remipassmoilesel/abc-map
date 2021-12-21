@@ -18,7 +18,7 @@
 
 import MapBrowserEvent from 'ol/MapBrowserEvent';
 import MapBrowserEventType from 'ol/MapBrowserEventType';
-import { withControlKey, withControlKeyOnly, withGeometryOfType, withMainButton, withShiftKey } from './common-conditions';
+import { withControlKey, withControlKeyOnly, withGeometryOfType, withShiftKey } from './common-conditions';
 import PluggableMap from 'ol/PluggableMap';
 import { LineString } from 'ol/geom';
 import GeometryType from 'ol/geom/GeometryType';
@@ -50,14 +50,6 @@ describe('Common conditions', () => {
 
     const ev3 = fakeEvent({ ctrlKey: false, shiftKey: false });
     expect(withControlKeyOnly(ev3)).toBe(false);
-  });
-
-  it('withMainButton()', () => {
-    const ev1 = fakeEvent({ button: 0 });
-    expect(withMainButton(ev1)).toBe(true);
-
-    const ev2 = fakeEvent({ button: 1 });
-    expect(withMainButton(ev2)).toBe(false);
   });
 
   it('withGeometry()', () => {

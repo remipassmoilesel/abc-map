@@ -20,12 +20,29 @@ import VectorSource from 'ol/source/Vector';
 import Geometry from 'ol/geom/Geometry';
 import Map from 'ol/Map';
 import { MapTool } from '@abc-map/shared';
+import { ToolMode } from './ToolMode';
 
 export interface Tool {
+  // Unique ID of tool
   getId(): MapTool;
+
+  // Modes that can influence behavior of tool. First mode is default one.
+  getModes(): ToolMode[];
+
+  // I18n id of name of tool
   getI18nLabel(): string;
+
+  // Icon of tool
   getIcon(): string;
+
+  // Called when tool is enabled
   setup(map: Map, source: VectorSource<Geometry>): void;
+
+  // Can on deselect all, in order to clean internal selections
   deselectAll(): void;
+
+  modeChanged?(mode: ToolMode): void;
+
+  // Called when tool is disabled
   dispose(): void;
 }

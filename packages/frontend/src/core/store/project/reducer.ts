@@ -27,15 +27,12 @@ import { projectInitialState, ProjectState } from './state';
  * Also, project objet can be very heavy so please avoid deep clone
  */
 export function projectReducer(state = projectInitialState, action: ProjectAction): ProjectState {
-  if (!Object.values(ActionType).includes(action.type)) {
-    return state;
-  }
-
   switch (action.type) {
     case ActionType.LoadProject: {
       const newState: ProjectState = { ...state };
       newState.metadata = action.project.metadata;
       newState.layouts = action.project.layouts;
+      newState.activeLayoutId = undefined;
       newState.legend = action.project.legend;
       return newState;
     }
@@ -81,6 +78,12 @@ export function projectReducer(state = projectInitialState, action: ProjectActio
     case ActionType.ClearLayouts: {
       const newState: ProjectState = { ...state };
       newState.layouts = [];
+      return newState;
+    }
+
+    case ActionType.SetActiveLayout: {
+      const newState: ProjectState = { ...state };
+      newState.activeLayoutId = action.id;
       return newState;
     }
 

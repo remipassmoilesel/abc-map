@@ -19,13 +19,11 @@
 import { AbcLayer, BasicAuthentication, EPSG_4326, FeatureStyle, LayerType, Logger, normalizedProjectionName, ProjectionDto } from '@abc-map/shared';
 import { MapWrapper } from './map/MapWrapper';
 import { MapFactory } from './map/MapFactory';
-import { Tool } from '../tools/Tool';
 import { MainStore } from '../store/store';
-import { MapActions } from '../store/map/actions';
 import { AxiosInstance } from 'axios';
 import { GeoJSON } from 'ol/format';
 import { parseWmsCapabilities, WmsCapabilities } from './WmsCapabilities';
-import { UpdateStyleItem, UpdateStyleChangeset } from '../history/changesets/features/UpdateStyleChangeset';
+import { UpdateStyleChangeset, UpdateStyleItem } from '../history/changesets/features/UpdateStyleChangeset';
 import { HistoryKey } from '../history/HistoryKey';
 import { HistoryService } from '../history/HistoryService';
 import { NominatimResult } from './NominatimResult';
@@ -152,11 +150,6 @@ export class GeoService {
     }
 
     return layer;
-  }
-
-  public setMainMapTool(tool: Tool): void {
-    this.getMainMap().setTool(tool);
-    this.store.dispatch(MapActions.setTool(tool.getId()));
   }
 
   /**

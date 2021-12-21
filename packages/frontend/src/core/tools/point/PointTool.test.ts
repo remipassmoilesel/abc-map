@@ -30,18 +30,22 @@ import { AddFeaturesChangeset } from '../../history/changesets/features/AddFeatu
 import { deepFreeze } from '../../utils/deepFreeze';
 import { PointTool } from './PointTool';
 import { IconName } from '../../../assets/point-icons/IconName';
+import { CommonModes } from '../common/common-modes';
 
 // FIXME: selection does not work in tests with points
 describe('PointTool', () => {
-  const point = deepFreeze({ icon: IconName.Icon0Circle, size: 30, color: 'rgba(18,90,147,0.9)' });
-  let testMap: DrawingTestMap;
+  const pointStyle = deepFreeze({ icon: IconName.Icon0Circle, size: 30, color: 'rgba(18,90,147,0.9)' });
+
+  let map: DrawingTestMap;
   let store: TestStore;
   let history: SinonStubbedInstance<HistoryService>;
   let tool: PointTool;
 
   beforeEach(async () => {
-    testMap = new DrawingTestMap();
-    await testMap.init();
+    history = sinon.createStubInstance(HistoryService);
+
+    map = new DrawingTestMap();
+    await map.init();
 
     store = newTestStore();
     store.getState.returns({
@@ -52,49 +56,49 @@ describe('PointTool', () => {
             color2: 'rgba(255,255,255,0.60)',
             pattern: FillPatterns.HatchingObliqueRight,
           },
-          point,
+          point: pointStyle,
         },
       },
     } as any);
 
-    history = sinon.createStubInstance(HistoryService);
-
     tool = new PointTool(store as unknown as MainStore, history as unknown as HistoryService);
-    tool.setup(testMap.getMap(), testMap.getVectorSource());
+    tool.setup(map.getMap(), map.getVectorSource());
   });
 
   it('setup()', () => {
-    expect(TestHelper.interactionNames(testMap.getMap())).toEqual([
-      'DragPan',
-      'KeyboardPan',
-      'MouseWheelZoom',
-      'PinchZoom',
-      'Select',
-      'Modify',
-      'Snap',
-      'Draw',
-    ]);
+    expect(TestHelper.interactionNames(map.getMap())).toEqual(['DragPan', 'PinchZoom', 'MouseWheelZoom', 'Select', 'Modify', 'Snap', 'Draw']);
+  });
+
+  it('dispose()', () => {
+    tool.dispose();
+
+    expect(TestHelper.interactionNames(map.getMap())).toEqual([]);
   });
 
   it('drag should move map view', async () => {
-    await testMap.drag(0, 0, 50, 50, { ctrl: true });
+    map.toMapWrapper().setToolMode(CommonModes.MoveMap);
 
-    expect(testMap.getMap().getView().getCenter()).toEqual([-45, 40]);
+    await map.drag(0, 0, 50, 50);
+
+    expect(map.getMap().getView().getCenter()).toEqual([-45, 40]);
   });
 
   it('click should draw point', async () => {
+    // Prepare
+    map.toMapWrapper().setToolMode(CommonModes.CreateGeometry);
+
     // Act
-    await testMap.click(10, 0);
+    await map.click(10, 0);
 
     // Assert
     // Feature must exists
-    const feat = testMap.getFeature<Point>(0);
+    const feat = map.getFeature<Point>(0);
     expect(feat).toBeDefined();
-    expect(feat.getGeometry()).toBeInstanceOf(Point);
-    expect(feat.getGeometry()?.getCoordinates()).toEqual([10, 0]);
+    expect(feat?.getGeometry()).toBeInstanceOf(Point);
+    expect(feat?.getGeometry()?.getCoordinates()).toEqual([10, 0]);
 
     // Feature must have store style
-    expect(feat.getStyleProperties()).toEqual({ point, stroke: {}, fill: {}, text: {} });
+    expect(feat?.getStyleProperties()).toEqual({ point: pointStyle, stroke: {}, fill: {}, text: {} });
 
     // Changesets must have been registered
     expect(history.register.callCount).toEqual(2);
@@ -107,13 +111,5 @@ describe('PointTool', () => {
     expect(history.remove.callCount).toEqual(1);
     expect(history.register.args[0][0]).toEqual(HistoryKey.Map);
     expect(history.register.args[0][1]).toBeInstanceOf(UndoCallbackChangeset);
-  });
-
-  it('dispose()', async () => {
-    // Act
-    tool.dispose();
-
-    // Assert
-    expect(TestHelper.interactionNames(testMap.getMap())).toEqual([]);
   });
 });

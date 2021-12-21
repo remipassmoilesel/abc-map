@@ -19,31 +19,33 @@
 import { Tool } from '../Tool';
 import { GeometryType, Logger, MapTool } from '@abc-map/shared';
 import { DragBox, Interaction, Translate } from 'ol/interaction';
-import VectorSource from 'ol/source/Vector';
+import VectorSource, { VectorSourceEvent } from 'ol/source/Vector';
 import Geometry from 'ol/geom/Geometry';
 import Map from 'ol/Map';
 import Icon from '../../../assets/tool-icons/selection.inline.svg';
 import { HistoryKey } from '../../history/HistoryKey';
 import { UpdateGeometriesChangeset, UpdateItem } from '../../history/changesets/features/UpdateGeometriesChangeset';
 import { FeatureWrapper } from '../../geo/features/FeatureWrapper';
-import { withMainButton } from '../common/helpers/common-conditions';
-import { noModifierKeys } from 'ol/events/condition';
 import { MapActions } from '../../store/map/actions';
 import { HistoryService } from '../../history/HistoryService';
 import { MainStore } from '../../store/store';
 import { isWithinExtent } from '../common/helpers/isWithinExtent';
-import { SelectionInteractionsBundle } from '../common/interactions/SelectionInteractionsBundle';
-import { AllSupportedGeometries } from '../common/interactions/SupportedGeometry';
-import { MoveInteractionsBundle } from '../common/interactions/MoveInteractionsBundle';
+import { MoveMapInteractionsBundle } from '../common/interactions/MoveMapInteractionsBundle';
+import { ToolMode } from '../ToolMode';
+import { Conditions, Modes } from './Modes';
+import Collection from 'ol/Collection';
+import Feature from 'ol/Feature';
+import { EventsKey } from 'ol/events';
 
 const logger = Logger.get('SelectionTool.ts');
 
 export class SelectionTool implements Tool {
   private map?: Map;
   private source?: VectorSource<Geometry>;
-  private selection?: SelectionInteractionsBundle;
-  private move?: MoveInteractionsBundle;
+  private move?: MoveMapInteractionsBundle;
   private interactions: Interaction[] = [];
+  private selection = new Collection<Feature<Geometry>>();
+  private sourceListeners: EventsKey[] = [];
 
   constructor(private store: MainStore, private history: HistoryService) {}
 
@@ -55,6 +57,10 @@ export class SelectionTool implements Tool {
     return Icon;
   }
 
+  public getModes(): ToolMode[] {
+    return [Modes.Select, Modes.MoveMap];
+  }
+
   public getI18nLabel(): string {
     return 'Select';
   }
@@ -64,7 +70,7 @@ export class SelectionTool implements Tool {
     this.source = source;
 
     // Interactions for map view manipulation
-    this.move = new MoveInteractionsBundle();
+    this.move = new MoveMapInteractionsBundle({ condition: Conditions.Move });
     this.move.setup(map);
 
     const dispatchStyle = (feat: FeatureWrapper) => {
@@ -86,22 +92,12 @@ export class SelectionTool implements Tool {
       }
     };
 
-    // Selection on shift + click
-    this.selection = new SelectionInteractionsBundle();
-    this.selection.setup(map, this.source, AllSupportedGeometries);
-    this.selection.onStyleSelected = (style, feature) => dispatchStyle(feature);
-
-    const selection = this.selection.getFeatures();
-
     // Select with a box
-    const dragBox = new DragBox({
-      condition: (ev) => withMainButton(ev) && noModifierKeys(ev),
-      className: 'abc-selection-box',
-    });
+    const dragBox = new DragBox({ condition: Conditions.Select, className: 'abc-selection-box' });
 
     dragBox.on('boxstart', () => {
-      selection.forEach((f) => FeatureWrapper.from(f).setSelected(false));
-      selection.clear();
+      this.selection.forEach((f) => FeatureWrapper.from(f).setSelected(false));
+      this.selection.clear();
     });
 
     dragBox.on('boxend', () => {
@@ -111,29 +107,29 @@ export class SelectionTool implements Tool {
         const geomExtent = feature.getGeometry()?.getExtent();
         if (isWithinExtent(extent, geomExtent)) {
           FeatureWrapper.from(feature).setSelected(true);
-          selection.push(feature);
+          this.selection.push(feature);
         }
       });
 
-      if (selection.getLength()) {
-        const last = FeatureWrapper.from(selection.getArray()[selection.getLength() - 1]);
+      if (this.selection.getLength()) {
+        const last = FeatureWrapper.from(this.selection.getArray()[this.selection.getLength() - 1]);
         dispatchStyle(last);
       }
     });
 
     // Translate selection
-    const translate = new Translate({ features: selection });
+    const translate = new Translate({ features: this.selection, condition: Conditions.Select });
 
     let translated: FeatureWrapper[] = [];
     translate.on('translatestart', () => {
-      selection.forEach((feat) => {
+      this.selection.forEach((feat) => {
         const clone = FeatureWrapper.from(feat).clone();
         translated.push(clone);
       });
     });
 
     translate.on('translateend', () => {
-      const items = selection
+      const items = this.selection
         .getArray()
         .map((feat) => {
           const feature = FeatureWrapper.from(feat);
@@ -158,25 +154,67 @@ export class SelectionTool implements Tool {
       translated = [];
     });
 
+    // When vector source change we update selection
+    // TODO: unit test
+    this.sourceListeners.push(source.on('addfeature', this.handleFeatureAdded));
+    this.sourceListeners.push(source.on('removefeature', this.handleFeatureRemoved));
+    this.sourceListeners.push(source.on('clear', this.handleSourceClear));
+
     [dragBox, translate].forEach((inter) => {
       map.addInteraction(inter);
       this.interactions.push(inter);
     });
   }
 
+  private handleFeatureAdded = (evt: VectorSourceEvent<Geometry>) => {
+    if (evt.feature && FeatureWrapper.from(evt.feature)?.isSelected()) {
+      this.selection.push(evt.feature);
+    }
+
+    this.removeUnselected();
+  };
+
+  private handleFeatureRemoved = (evt: VectorSourceEvent<Geometry>) => {
+    if (evt.feature) {
+      FeatureWrapper.from(evt.feature).setSelected(false);
+      this.selection.remove(evt.feature);
+    }
+
+    this.removeUnselected();
+  };
+
+  private handleSourceClear = () => {
+    this.deselectAll();
+  };
+
+  // When source change, some features may be unselected (eg, after a "duplicate")
+  private removeUnselected = () => {
+    this.selection
+      .getArray()
+      .slice()
+      .forEach((feat) => {
+        if (!FeatureWrapper.from(feat).isSelected()) {
+          this.selection.remove(feat);
+        }
+      });
+  };
+
   public deselectAll() {
-    this.selection?.clear();
+    this.selection.forEach((f) => FeatureWrapper.from(f).setSelected(false));
+    this.selection.clear();
   }
 
   public dispose() {
     this.deselectAll();
 
     this.move?.dispose();
-    this.selection?.dispose();
 
     this.interactions.forEach((inter) => {
       this.map?.removeInteraction(inter);
       inter.dispose();
     });
+
+    // FIXME: event types typings are wrong
+    this.sourceListeners.forEach((listener) => this.source?.un(listener.type as any, listener.listener));
   }
 }

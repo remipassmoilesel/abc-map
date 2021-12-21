@@ -26,6 +26,7 @@ export enum ActionType {
   SetLayoutIndex = 'SetLayoutIndex',
   ClearLayouts = 'ClearLayouts',
   RemoveLayouts = 'RemoveLayouts',
+  SetActiveLayout = 'SetActiveLayout',
   AddLegendItems = 'AddLegendItems',
   UpdateLegendItem = 'UpdateLegendItem',
   SetLegendSize = 'SetLegendSize',
@@ -68,6 +69,11 @@ export interface RemoveLayouts {
 
 export interface ClearLayouts {
   type: ActionType.ClearLayouts;
+}
+
+export interface SetActiveLayout {
+  type: ActionType.SetActiveLayout;
+  id: string | undefined;
 }
 
 export interface AddLegendItems {
@@ -115,6 +121,7 @@ export type ProjectAction =
   | UpdateLayout
   | SetLayoutIndex
   | ClearLayouts
+  | SetActiveLayout
   | AddLegendItems
   | UpdateLegendItem
   | SetLegendSize
@@ -170,6 +177,13 @@ export class ProjectActions {
   public static clearLayouts(): ProjectAction {
     return {
       type: ActionType.ClearLayouts,
+    };
+  }
+
+  public static setActiveLayout(id: string | undefined): ProjectAction {
+    return {
+      type: ActionType.SetActiveLayout,
+      id,
     };
   }
 

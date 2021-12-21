@@ -1,6 +1,8 @@
 # The bottomless well aka backlog
 
 - [Story maps (coming soon)](#story-maps-coming-soon)
+- [Custom (and better) map tools](#custom-and-better-map-tools)
+- ["Go to coordinates" UI control](#go-to-coordinates-ui-control)
 - [Progressive web app](#progressive-web-app)
 - [Performance: WebASM and web worker usage](#performance-webasm-and-web-worker-usage)
 - [Scale on exports](#scale-on-exports)
@@ -26,6 +28,16 @@
 ## Story maps (coming soon)
 
 Connected users should be able to create and share story maps.
+
+## Custom (and better) map tools
+
+For the moment the drawing tools are assemblies of interactions provided by Openlayers. Although these interactions are functional,
+they are not all compatible with each other. These tools should be rewritten from scratch to be easier to use and more efficient.
+Tool "modes" should be removed.
+
+## "Go to coordinates" UI control
+
+Users should be able to move map to WGS84 coordinates.
 
 ## Progressive web app
 

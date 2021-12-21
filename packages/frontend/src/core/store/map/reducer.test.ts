@@ -17,26 +17,11 @@
  */
 
 import { mapInitialState, MapState } from './state';
-import { MapTool } from '@abc-map/shared';
 import { MapActions } from './actions';
 import { mapReducer } from './reducer';
 import { deepFreeze } from '../../utils/deepFreeze';
 
 describe('Map reducer', function () {
-  it('SetTool', function () {
-    // Prepare
-    const initial: MapState = deepFreeze({
-      ...mapInitialState,
-      tool: MapTool.LineString,
-    });
-
-    // Act
-    const state = mapReducer(initial, MapActions.setTool(MapTool.Point));
-
-    // Assert
-    expect(state.tool).toEqual(MapTool.Point);
-  });
-
   it('SetFillColor', function () {
     // Prepare
     const initial: MapState = deepFreeze({

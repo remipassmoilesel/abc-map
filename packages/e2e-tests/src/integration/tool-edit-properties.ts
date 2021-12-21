@@ -18,12 +18,12 @@
 
 import { MapTool } from '@abc-map/shared';
 import { TestHelper } from '../helpers/TestHelper';
-import { ToolSelector } from '../helpers/ToolSelector';
-import { Draw } from '../helpers/Draw';
+import { ModeName, ToolSelector } from '../helpers/ToolSelector';
 import { MainMap } from '../helpers/MainMap';
 import { DataStore } from '../helpers/DataStore';
 import { TopBar } from '../helpers/TopBar';
 import { Routes } from '../helpers/Routes';
+import { Draw } from '../helpers/Draw';
 
 describe('Edit properties', function () {
   beforeEach(() => {
@@ -36,8 +36,9 @@ describe('Edit properties', function () {
       .get('[data-cy=draw-menu]')
       .click()
       .then(() => ToolSelector.enable(MapTool.EditProperties))
+      .then(() => ToolSelector.toolMode(ModeName.MoveMap))
       // Move map
-      .then(() => Draw.drag(200, 200, 400, 200, { ctrlKey: true }))
+      .then(() => Draw.drag(200, 200, 400, 200))
       .then(() => MainMap.getReference())
       .should((map) => {
         const view = map.getViewExtent();
@@ -82,6 +83,7 @@ describe('Edit properties', function () {
       .click()
       // Check property names
       .then(() => Draw.click(500, 200))
+      .then(() => Draw.click(500, 200))
       .get('[data-cy=property-name]')
       .should((elem) => {
         const names = elem.toArray().map((e) => e.textContent);
@@ -98,6 +100,7 @@ describe('Edit properties', function () {
       // Undo
       .get('[data-cy=undo]')
       .click()
+      .then(() => Draw.click(500, 200))
       .then(() => Draw.click(500, 200))
       .get('[data-cy=property-name]')
       .should((elem) => {

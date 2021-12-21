@@ -19,7 +19,7 @@
 import { StyleProperties } from '@abc-map/shared';
 import { MapTool } from '@abc-map/shared';
 import { TestHelper } from '../helpers/TestHelper';
-import { ToolSelector } from '../helpers/ToolSelector';
+import { ModeName, ToolSelector } from '../helpers/ToolSelector';
 import { Draw } from '../helpers/Draw';
 import { MainMap } from '../helpers/MainMap';
 import { DefaultDrawingStyle } from '../helpers/DefaultDrawingStyle';
@@ -78,7 +78,8 @@ describe('Tool LineString', function () {
       .then(() => Draw.click(100, 150))
       .then(() => Draw.dblclick(150, 100))
       // Select it
-      .then(() => Draw.click(150, 150, { shiftKey: true }))
+      .then(() => ToolSelector.toolMode(ModeName.Modify))
+      .then(() => Draw.click(150, 150))
       // Modify it
       .then(() => Draw.drag(100, 100, 600, 600))
       .then(() => MainMap.getReference())

@@ -16,24 +16,21 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { Component, ReactNode } from 'react';
+import React from 'react';
 import { Logger } from '@abc-map/shared';
 import ColorSelector from '../../../../components/color-picker/ColorSelector';
 import StrokeWidthSelector from '../_common/stroke-width-selector/StrokeWidthSelector';
-import { withTranslation } from 'react-i18next';
 import Cls from './LineStringToolPanel.module.scss';
 
 const logger = Logger.get('LineStringToolPanel.tsx');
 
-class LineStringToolPanel extends Component<{}, {}> {
-  public render(): ReactNode {
-    return (
-      <div className={Cls.lineStringPanel}>
-        <StrokeWidthSelector />
-        <ColorSelector stroke={true} />
-      </div>
-    );
-  }
+function LineStringToolPanel() {
+  return (
+    <div className={Cls.lineStringPanel}>
+      <StrokeWidthSelector />
+      <ColorSelector stroke={true} />
+    </div>
+  );
 }
 
-export default withTranslation()(LineStringToolPanel);
+export default LineStringToolPanel;

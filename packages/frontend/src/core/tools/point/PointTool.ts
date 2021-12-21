@@ -28,11 +28,13 @@ import GeometryType from 'ol/geom/GeometryType';
 import { MainStore } from '../../store/store';
 import { HistoryService } from '../../history/HistoryService';
 import { MapActions } from '../../store/map/actions';
-import { MoveInteractionsBundle } from '../common/interactions/MoveInteractionsBundle';
+import { MoveMapInteractionsBundle } from '../common/interactions/MoveMapInteractionsBundle';
 import { SelectionInteractionsBundle } from '../common/interactions/SelectionInteractionsBundle';
+import { ToolMode } from '../ToolMode';
+import { CommonConditions, CommonModes } from '../common/common-modes';
 
 export class PointTool implements Tool {
-  private move?: MoveInteractionsBundle;
+  private move?: MoveMapInteractionsBundle;
   private selection?: SelectionInteractionsBundle;
   private draw?: DrawInteractionsBundle;
 
@@ -46,31 +48,48 @@ export class PointTool implements Tool {
     return Icon;
   }
 
+  public getModes(): ToolMode[] {
+    return [CommonModes.CreateGeometry, CommonModes.ModifyGeometry, CommonModes.MoveMap];
+  }
+
   public getI18nLabel(): string {
     return 'Points';
   }
 
   public setup(map: Map, source: VectorSource<Geometry>): void {
     // Interactions for map view manipulation
-    this.move = new MoveInteractionsBundle();
+    this.move = new MoveMapInteractionsBundle({ condition: CommonConditions.MoveMap });
     this.move.setup(map);
 
-    // Select with shift + click
-    this.selection = new SelectionInteractionsBundle();
+    // Selection for modifications
+    this.selection = new SelectionInteractionsBundle({ condition: CommonConditions.Selection });
     this.selection.onStyleSelected = (style: FeatureStyle) => this.store.dispatch(MapActions.setDrawingStyle({ point: style.point }));
     this.selection.setup(map, source, [GeometryType.POINT, GeometryType.MULTI_POINT]);
 
     // Draw interactions
-    this.draw = new DrawInteractionsBundle(GeometryType.POINT);
-    this.draw.onNewChangeset = (t) => this.history.register(HistoryKey.Map, t);
-    this.draw.onDeleteChangeset = (t) => this.history.remove(HistoryKey.Map, t);
-
     const getStyle: GetStyleFunc = () => {
       const style = this.store.getState().map.currentStyle;
       return { point: style.point };
     };
 
-    this.draw.setup(map, source, this.selection.getFeatures(), getStyle);
+    this.draw = new DrawInteractionsBundle({
+      type: GeometryType.POINT,
+      getStyle,
+      drawCondition: CommonConditions.CreateGeometry,
+      modifyCondition: CommonConditions.ModifyGeometry,
+    });
+    this.draw.onNewChangeset = (t) => this.history.register(HistoryKey.Map, t);
+    this.draw.onDeleteChangeset = (t) => this.history.remove(HistoryKey.Map, t);
+    this.draw.onFeatureAdded = (feat) => {
+      feat.setSelected(true);
+      this.selection?.getFeatures().push(feat.unwrap());
+    };
+    this.draw.setup(map, source, this.selection.getFeatures());
+  }
+
+  public modeChanged(): void {
+    this.draw?.abortDrawing();
+    this.selection?.clear();
   }
 
   public deselectAll() {
