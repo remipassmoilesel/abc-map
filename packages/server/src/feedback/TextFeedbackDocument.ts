@@ -16,5 +16,10 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-export * from './AbcVote';
-export * from './AbcVoteAggregation';
+import { MongodbDocument } from '../mongodb/MongodbDocument';
+
+export interface TextFeedbackDocument extends MongodbDocument {
+  text: string;
+  lang: string;
+  when: Date;
+}

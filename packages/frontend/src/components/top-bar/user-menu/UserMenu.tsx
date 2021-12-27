@@ -84,6 +84,11 @@ class UserMenu extends React.Component<Props, {}> {
               </Dropdown.Item>
             </>
           )}
+          <Dropdown.Divider />
+          <Dropdown.Item onClick={this.handleFeedback}>
+            <FaIcon icon={IconDefs.faComments} className={'mr-3'} />
+            {t('Feedbacks')}
+          </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
     );
@@ -132,8 +137,14 @@ class UserMenu extends React.Component<Props, {}> {
       })
       .catch((err) => {
         toasts.genericError();
-        logger.error(err);
+        logger.error('Logout error: ', err);
       });
+  };
+
+  private handleFeedback = () => {
+    const { modals } = this.props.services;
+
+    modals.textFeedback().catch((err) => logger.error('Feedback modal error: ', err));
   };
 }
 

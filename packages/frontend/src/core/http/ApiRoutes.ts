@@ -76,13 +76,17 @@ export class DatastoreRoutes {
   }
 }
 
-export class VoteRoutes {
+export class FeedbackRoutes {
+  public static textFeedback(): string {
+    return '/feedback/text';
+  }
+
   public static vote(): string {
-    return '/vote';
+    return '/feedback/vote';
   }
 
   public static stats(from: DateTime, to: DateTime): string {
-    return `/vote/statistics/${from.toISODate()}/${to.toISODate()}`;
+    return `/feedback/vote/statistics/${from.toISODate()}/${to.toISODate()}`;
   }
 }
 

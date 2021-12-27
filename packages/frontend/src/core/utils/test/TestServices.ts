@@ -24,7 +24,7 @@ import { ModalService } from '../../ui/ModalService';
 import { AuthenticationService } from '../../authentication/AuthenticationService';
 import { HistoryService } from '../../history/HistoryService';
 import { DataService } from '../../data/DataService';
-import { VoteService } from '../../vote/VoteService';
+import { FeedbackService } from '../../feedback/FeedbackService';
 import { SinonStubbedInstance } from 'sinon';
 import { Services } from '../../Services';
 import { LegalMentionsService } from '../../legal-mentions/LegalMentionsService';
@@ -42,7 +42,7 @@ export interface TestServices {
   authentication: SinonStubbedInstance<AuthenticationService>;
   history: SinonStubbedInstance<HistoryService>;
   data: SinonStubbedInstance<DataService>;
-  vote: SinonStubbedInstance<VoteService>;
+  feedback: SinonStubbedInstance<FeedbackService>;
   legalMentions: SinonStubbedInstance<LegalMentionsService>;
   storage: SinonStubbedInstance<LocalStorageService>;
 }
@@ -57,7 +57,7 @@ export function newTestServices(): TestServices {
     authentication: sinon.createStubInstance(AuthenticationService),
     history: sinon.createStubInstance(HistoryService),
     data: sinon.createStubInstance(DataService),
-    vote: sinon.createStubInstance(VoteService),
+    feedback: sinon.createStubInstance(FeedbackService),
     legalMentions: sinon.createStubInstance(LegalMentionsService),
     storage: sinon.createStubInstance(LocalStorageService),
   };

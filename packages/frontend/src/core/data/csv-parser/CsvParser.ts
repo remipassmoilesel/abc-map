@@ -31,7 +31,6 @@ export class CsvParser {
       header: true,
       delimiter: ',',
       quoteChar: '"',
-      encoding: 'utf-8',
       skipEmptyLines: true,
     });
 

@@ -1,6 +1,3 @@
-import { FastifySchema } from 'fastify/types/schema';
-import { VoteValue } from '@abc-map/shared';
-
 /**
  * Copyright © 2021 Rémi Pace.
  * This file is part of Abc-Map.
@@ -19,18 +16,24 @@ import { VoteValue } from '@abc-map/shared';
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-export interface StatParams {
-  from: string;
-  to: string;
-}
+import { MongodbClient } from '../mongodb/MongodbClient';
+import { MongodbCollection } from '../mongodb/MongodbCollection';
+import { TextFeedbackDocument } from './TextFeedbackDocument';
 
-export const VoteSchema: FastifySchema = {
-  body: {
-    type: 'object',
-    required: ['value'],
-    additionalProperties: false,
-    properties: {
-      value: { type: 'number', enum: [VoteValue.NOT_SATISFIED, VoteValue.BLAH, VoteValue.SATISFIED] },
-    },
-  },
-};
+export class TextFeedbackDao {
+  constructor(private client: MongodbClient) {}
+
+  public async init(): Promise<void> {
+    const coll = await this.collection();
+    await coll.createIndex({ date: 1 });
+  }
+
+  public async save(feedback: TextFeedbackDocument): Promise<void> {
+    const coll = await this.collection();
+    await coll.replaceOne({ _id: feedback._id }, feedback, { upsert: true });
+  }
+
+  private async collection() {
+    return this.client.collection<TextFeedbackDocument>(MongodbCollection.TextFeedbacks);
+  }
+}

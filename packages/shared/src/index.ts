@@ -23,5 +23,5 @@ export * from './e2e';
 export * from './frontend';
 export * from './lang';
 export * from './project';
-export * from './vote';
+export * from './feedback';
 export * from './zip';

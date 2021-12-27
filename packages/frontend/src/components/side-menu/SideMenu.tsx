@@ -36,6 +36,7 @@ interface Props {
   children: React.ReactNode;
   menuPlacement: 'right' | 'left';
   menuWidth?: string;
+  contentStyle?: CSSProperties;
   buttonStyle?: CSSProperties;
   'data-cy'?: string;
   closeOnClick?: boolean;
@@ -44,7 +45,7 @@ interface Props {
 const t = prefixedTranslation('SideMenu:');
 
 function SideMenu(props: Props) {
-  const { menuId, buttonIcon, title, menuWidth, titlePlacement, children, menuPlacement, buttonStyle, 'data-cy': dataCy, closeOnClick } = props;
+  const { menuId, buttonIcon, title, menuWidth, contentStyle, titlePlacement, children, menuPlacement, buttonStyle, 'data-cy': dataCy, closeOnClick } = props;
   const open = useAppSelector((st) => st.ui.sideMenu)[menuId] ?? false;
   const dispatch = useAppDispatch();
 
@@ -67,7 +68,7 @@ function SideMenu(props: Props) {
               </button>
             </WithTooltip>
 
-            <div className={Cls.menuContent} style={{ width: menuWidth }} onClick={handleContentClick}>
+            <div className={Cls.menuContent} style={{ width: menuWidth, ...contentStyle }} onClick={handleContentClick}>
               {children}
             </div>
           </div>

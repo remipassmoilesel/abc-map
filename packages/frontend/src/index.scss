@@ -16,12 +16,13 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-@import "assets/styles/font";
 @import "assets/styles/variables";
-@import "~bootstrap/scss/bootstrap";
+@import "../node_modules/bootstrap/scss/bootstrap";
+@import "../node_modules/ol/ol.css";
+@import "../node_modules/react-toastify/dist/ReactToastify.css";
+
+@import "assets/styles/font";
 @import "assets/styles/spacing.scss";
-@import "~ol/ol.css";
-@import "~react-toastify/dist/ReactToastify.css";
 @import "assets/styles/scrollbar";
 @import "assets/styles/globals";
 @import "assets/styles/buttons";

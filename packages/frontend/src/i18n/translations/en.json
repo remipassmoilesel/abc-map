@@ -39,7 +39,11 @@
     "Lost_password": "Password lost",
     "My_account": "My account",
     "Logout": "Logout",
-    "You_are_disconnected": "You are disconnected"
+    "You_are_disconnected": "You are disconnected",
+    "Feedbacks": "Feedbacks ?"
+  },
+  "FeedbackModal": {
+    "So_how_is_it_going": "So how is it going ?"
   },
   "MapView": {
     "The_map": "The map !",
@@ -633,7 +637,8 @@
     "Not_good": "Not good",
     "Thanks_for_your_feedback": "Thanks for your feedback",
     "Support_project": "Make a donation to support this project",
-    "Close": "Close"
+    "Close": "Close",
+    "What_happened": "What happened ?️"
   },
   "ResetPasswordView": {
     "Reset_your_password": "Reset your password",
@@ -687,6 +692,21 @@
   },
   "DocumentationView": {
     "Table_of_content": "Table of content"
+  },
+  "AskFeedbackBubble": {
+    "Hello": "Hello",
+    "Everything_is_fine": "Everything is fine ?",
+    "Give_your_opinion": "Take a few minutes to give your opinion.",
+    "Ok": "Ok !",
+    "No_thanks": "No thanks"
+  },
+  "TextFeedbackForm": {
+    "You_must_enter_at_least_15_chars": "You must enter at least 15 characters",
+    "Contextualize_comments": "Remember to contextualize your comments so that they are more easily understandable \uD83D\uDCA1",
+    "If_you_want_a_response_add_email": "If you want an answer add your email address.",
+    "Thank_you": "Thank you",
+    "Cancel": "Cancel",
+    "Send": "Send"
   },
   "core": {
     "ProjectFactory": {

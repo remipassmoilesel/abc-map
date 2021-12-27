@@ -18,28 +18,41 @@
 
 import { VoteDao } from './VoteDao';
 import { MongodbClient } from '../mongodb/MongodbClient';
-import { AbcVote, AbcVoteAggregation, VoteValue } from '@abc-map/shared';
+import { AbcTextFeedback, AbcVote, AbcVoteAggregation, VoteValue } from '@abc-map/shared';
 import { AbstractService } from '../services/AbstractService';
 import { VoteDocument } from './VoteDocument';
 import * as uuid from 'uuid-random';
 import { DateTime } from 'luxon';
+import { TextFeedbackDocument } from './TextFeedbackDocument';
+import { TextFeedbackDao } from './TextFeedbackDao';
 
 const authorizedValues = [VoteValue.NOT_SATISFIED, VoteValue.BLAH, VoteValue.SATISFIED];
 
-export class VoteService extends AbstractService {
-  public static create(client: MongodbClient): VoteService {
-    return new VoteService(new VoteDao(client));
+export class FeedbackService extends AbstractService {
+  public static create(client: MongodbClient): FeedbackService {
+    return new FeedbackService(new VoteDao(client), new TextFeedbackDao(client));
   }
 
-  constructor(private dao: VoteDao) {
+  constructor(private voteDao: VoteDao, private feedbackDao: TextFeedbackDao) {
     super();
   }
 
   public async init(): Promise<void> {
-    return this.dao.init();
+    return this.voteDao.init();
   }
 
-  public async save(vote: AbcVote, date: DateTime): Promise<void> {
+  public async textFeedback(feedback: AbcTextFeedback, date: DateTime): Promise<void> {
+    const doc: TextFeedbackDocument = {
+      _id: uuid(),
+      text: feedback.text,
+      lang: feedback.lang,
+      when: date.toJSDate(),
+    };
+
+    await this.feedbackDao.save(doc);
+  }
+
+  public async vote(vote: AbcVote, date: DateTime): Promise<void> {
     if (authorizedValues.indexOf(vote.value) === -1) {
       return Promise.reject(new Error(`Invalid value: ${vote.value}`));
     }
@@ -50,11 +63,11 @@ export class VoteService extends AbstractService {
       date: date.toJSDate(),
     };
 
-    return this.dao.save(doc);
+    await this.voteDao.save(doc);
   }
 
   public async aggregate(start: DateTime, end: DateTime): Promise<AbcVoteAggregation> {
-    const agg = await this.dao.aggregate(start.toJSDate(), end.toJSDate());
+    const agg = await this.voteDao.aggregate(start.toJSDate(), end.toJSDate());
 
     const notSatisfied = agg.find((v) => v.value === VoteValue.NOT_SATISFIED)?.count || 0;
     const blah = agg.find((v) => v.value === VoteValue.BLAH)?.count || 0;

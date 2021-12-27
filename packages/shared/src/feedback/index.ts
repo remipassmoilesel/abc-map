@@ -16,36 +16,6 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-@import "src/assets/styles/variables";
-@import "node_modules/bootstrap/scss/bootstrap";
-
-.artefact {
-  margin-bottom: 1rem;
-  margin-right: 1rem;
-  min-height: 25vh;
-  height: 25vh;
-
-  width: 30vw;
-  max-width: 30vw;
-
-  @include media-breakpoint-down(xl) {
-    width: 100%;
-    min-width: 100%;
-    max-width: 100%;
-  }
-
-  box-shadow: $box-shadow;
-}
-
-.licenseView {
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  max-height: 70vh;
-  overflow-x: hidden;
-  overflow-y: auto;
-}
-
-.keywords {
-  color: $gray-600;
-  margin-bottom: 1.5rem;
-}
+export * from './AbcTextFeedback';
+export * from './AbcVote';
+export * from './AbcVoteAggregation';
