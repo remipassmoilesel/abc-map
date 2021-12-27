@@ -38,6 +38,7 @@ export const CounterNames = {
   ProjectList: `${Prefix}_project_list`,
   ProjectFetch: `${Prefix}_project_fetch`,
   Vote: `${Prefix}_vote`,
+  TextFeedback: `${Prefix}_text_feedback`,
 };
 
 export const Counters: { [k: string]: CounterConfiguration<string> } = {
@@ -104,6 +105,10 @@ export const Counters: { [k: string]: CounterConfiguration<string> } = {
   [CounterNames.Vote]: {
     name: CounterNames.Vote,
     help: 'Number of vote requests',
+  },
+  [CounterNames.TextFeedback]: {
+    name: CounterNames.TextFeedback,
+    help: 'Number of text feedbacks requests',
   },
 };
 

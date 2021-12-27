@@ -149,6 +149,7 @@ function MapView() {
         buttonStyle={{ top: '20vmin', right: '2vw' }}
         menuPlacement={'right'}
         menuId={'mapview-draw-menu'}
+        contentStyle={{ overflowY: 'scroll' }}
         data-cy={'draw-menu'}
       >
         <HistoryControls historyKey={HistoryKey.Map} />

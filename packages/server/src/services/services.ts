@@ -26,7 +26,7 @@ import { HealthCheckService } from '../health/HealthCheckService';
 import { AbstractService } from './AbstractService';
 import { DataStoreService } from '../data-store/DataStoreService';
 import { AuthorizationService } from '../authorization/AuthorizationService';
-import { VoteService } from '../votes/VoteService';
+import { FeedbackService } from '../feedback/FeedbackService';
 import { MetricsService } from '../metrics/MetricsService';
 import { EmailService } from '../email/EmailService';
 import { ProjectionService } from '../projections/ProjectionService';
@@ -43,7 +43,7 @@ export interface Services {
   health: HealthCheckService;
   datastore: DataStoreService;
   authorization: AuthorizationService;
-  vote: VoteService;
+  feedback: FeedbackService;
   metrics: MetricsService;
   emails: EmailService;
   projections: ProjectionService;
@@ -59,7 +59,7 @@ export async function servicesFactory(config: Config): Promise<Services> {
   const health = HealthCheckService.create(mongodb);
   const datastore = DataStoreService.create(config, mongodb);
   const authorization = AuthorizationService.create(mongodb);
-  const vote = VoteService.create(mongodb);
+  const feedback = FeedbackService.create(mongodb);
   const metrics = MetricsService.create();
   const projections = ProjectionService.create(config, mongodb);
 
@@ -72,7 +72,7 @@ export async function servicesFactory(config: Config): Promise<Services> {
     health,
     datastore,
     authorization,
-    vote,
+    feedback,
     metrics,
     emails,
     projections,

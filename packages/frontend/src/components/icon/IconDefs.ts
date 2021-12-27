@@ -34,6 +34,7 @@ import { faLockOpen } from '@fortawesome/free-solid-svg-icons/faLockOpen';
 import { faFeather } from '@fortawesome/free-solid-svg-icons/faFeather';
 import { faKey } from '@fortawesome/free-solid-svg-icons/faKey';
 import { faLock } from '@fortawesome/free-solid-svg-icons/faLock';
+import { faComments } from '@fortawesome/free-solid-svg-icons/faComments';
 import { faCogs } from '@fortawesome/free-solid-svg-icons/faCogs';
 import { faFileCode } from '@fortawesome/free-solid-svg-icons/faFileCode';
 import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
@@ -104,6 +105,7 @@ export const IconDefs = {
   faFeather,
   faKey,
   faLock,
+  faComments,
   faCogs,
   faRulerCombined,
   faRuler,

@@ -17,13 +17,25 @@
  */
 
 import { AxiosInstance } from 'axios';
-import { VoteRoutes as Api } from '../http/ApiRoutes';
-import { AbcVote, AbcVoteAggregation, VoteValue } from '@abc-map/shared';
+import { FeedbackRoutes as Api } from '../http/ApiRoutes';
+import { AbcTextFeedback, AbcVote, AbcVoteAggregation, VoteValue } from '@abc-map/shared';
 import { DateTime } from 'luxon';
 import { ToastService } from '../ui/ToastService';
+import { getLang } from '../../i18n/i18n';
 
-export class VoteService {
+export class FeedbackService {
   constructor(private httpClient: AxiosInstance, private toasts: ToastService) {}
+
+  public textFeedback(text: string): Promise<void> {
+    const data: AbcTextFeedback = { text, lang: getLang() };
+    return this.httpClient
+      .post(Api.textFeedback(), data)
+      .then(() => undefined)
+      .catch((err) => {
+        this.toasts.genericError(err);
+        return Promise.reject(err);
+      });
+  }
 
   public vote(value: VoteValue): Promise<void> {
     const data: AbcVote = { value };

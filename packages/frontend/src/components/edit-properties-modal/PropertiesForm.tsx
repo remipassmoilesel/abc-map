@@ -34,6 +34,7 @@ const logger = Logger.get('PropertiesForm.tsx');
 
 interface Props extends ServiceProps {
   properties: SimplePropertiesMap;
+  // Triggered when properties change. Properties must be normalized before submission (spaces, ...)
   onChange: (value: SimplePropertiesMap) => void;
   onNewPropertiesChange: (value: SimplePropertiesMap) => void;
 }
@@ -154,7 +155,7 @@ class PropertiesForm extends Component<Props, State> {
   private handlePropertyChange(property: string, ev: ChangeEvent<HTMLInputElement>): void {
     const res: SimplePropertiesMap = {
       ...this.props.properties,
-      [property]: asNumberOrString(ev.target.value.trim()),
+      [property]: asNumberOrString(ev.target.value),
     };
 
     this.props.onChange(res);
@@ -173,7 +174,7 @@ class PropertiesForm extends Component<Props, State> {
   private handleNewNameChange = (propertyId: string, ev: ChangeEvent<HTMLInputElement>) => {
     const newProperties = this.state.newProperties.map((p) => {
       if (p.id === propertyId) {
-        return { ...p, name: ev.target.value.trim() };
+        return { ...p, name: ev.target.value };
       }
       return p;
     });
@@ -185,7 +186,7 @@ class PropertiesForm extends Component<Props, State> {
   private handleNewValueChange = (propertyId: string, ev: ChangeEvent<HTMLInputElement>) => {
     const newProperties = this.state.newProperties.map((p) => {
       if (p.id === propertyId) {
-        return { ...p, value: ev.target.value.trim() };
+        return { ...p, value: ev.target.value };
       }
       return p;
     });

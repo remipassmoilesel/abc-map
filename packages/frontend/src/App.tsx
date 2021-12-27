@@ -48,6 +48,8 @@ import ConfirmationModal from './components/confirmation-modal/ConfirmationModal
 import { withTranslation } from 'react-i18next';
 import { Routes } from './routes';
 import { TokenWatcher } from './components/token-watcher/TokenWatcher';
+import FeedbackPopup from './components/feedback/FeedbackPopup';
+import FeedbackModal from './components/feedback/FeedbackModal';
 
 function App() {
   const history = useHistory();
@@ -82,6 +84,8 @@ function App() {
       <TokenWatcher />
 
       {/* Modals */}
+      <FeedbackPopup />
+      <FeedbackModal />
       <PasswordInputModal />
       <SetPasswordModal />
       <DeviceWarningModal />

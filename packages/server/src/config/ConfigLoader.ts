@@ -21,10 +21,8 @@ import { Config, ConfigInput } from './Config';
 import { Logger } from '@abc-map/shared';
 import * as path from 'path';
 import * as _ from 'lodash';
-import { promises as fs } from 'fs';
+import * as fs from 'fs';
 import { Validation } from '../utils/Validation';
-
-/* eslint-disable @typescript-eslint/no-var-requires */
 
 const logger = Logger.get('ConfigLoader.ts', 'info');
 
@@ -52,7 +50,7 @@ export class ConfigLoader {
       safe.smtp.auth.pass = safeValue;
     }
 
-    safe.legalMentions = `${safe.legalMentions.substr(0, 50)}...`;
+    safe.legalMentions = `${safe.legalMentions.substring(0, 50)}...`;
 
     return safe;
   }
@@ -61,6 +59,7 @@ export class ConfigLoader {
     const _configPath = path.resolve(configPath);
     let input: ConfigInput;
     try {
+      /* eslint-disable @typescript-eslint/no-var-requires */
       input = _.cloneDeep(require(_configPath));
     } catch (e) {
       return Promise.reject(new Error(`Cannot load configuration '${configPath}': '${e.message || 'No message'}'`));
@@ -77,7 +76,7 @@ export class ConfigLoader {
     };
 
     // We check if datastore is a directory
-    if (!(await fs.stat(config.datastore.path)).isDirectory()) {
+    if (!this.isDir(config.datastore.path)) {
       throw new Error(`Datastore root '${config.datastore.path}' must be a directory`);
     }
 
@@ -88,10 +87,14 @@ export class ConfigLoader {
     }
 
     // We check if frontend path is a directory
-    if (!(await fs.stat(config.frontendPath)).isDirectory()) {
+    if (!this.isDir(config.frontendPath)) {
       throw new Error(`Frontend root '${config.frontendPath}' must be a directory`);
     }
 
     return config;
+  }
+
+  private isDir(path: string): boolean {
+    return fs.existsSync(path) && fs.statSync(path).isDirectory();
   }
 }

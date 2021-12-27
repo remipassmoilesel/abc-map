@@ -122,4 +122,8 @@ export class MetricsService extends AbstractService {
   public vote() {
     this.counters[CounterNames.Vote]?.inc();
   }
+
+  public textFeedback() {
+    this.counters[CounterNames.TextFeedback]?.inc();
+  }
 }

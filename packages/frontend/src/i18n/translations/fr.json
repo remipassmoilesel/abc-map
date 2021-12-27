@@ -39,7 +39,8 @@
     "Lost_password": "Mot de passe perdu",
     "My_account": "Mon compte",
     "Logout": "Se déconnecter",
-    "You_are_disconnected": "Vous êtes déconnecté"
+    "You_are_disconnected": "Vous êtes déconnecté",
+    "Feedbacks": "Commentaires ?"
   },
   "MapView": {
     "The_map": "La carte !",
@@ -633,7 +634,8 @@
     "Not_good": "Pas bien",
     "Thanks_for_your_feedback": "Merci pour votre retour",
     "Support_project": "Faites-un don pour soutenir ce projet",
-    "Close": "Fermer"
+    "Close": "Fermer",
+    "What_happened": "Que s'est il passé ?️"
   },
   "ResetPasswordView": {
     "Reset_your_password": "Réinitialiser votre mot de passe",
@@ -687,6 +689,24 @@
   },
   "DocumentationView": {
     "Table_of_content": "Sommaire"
+  },
+  "AskFeedbackBubble": {
+    "Hello": "Salut",
+    "Everything_is_fine": "Tout va bien ?",
+    "Give_your_opinion": "Prenez quelques minutes pour donner votre avis.",
+    "Ok": "Ok !",
+    "No_thanks": "Non merci"
+  },
+  "TextFeedbackForm": {
+    "You_must_enter_at_least_15_chars": "Vous devez saisir au moins 15 caractères",
+    "Contextualize_comments": "Pensez à contextualisez vos commentaires pour qu'ils soient plus facilement compréhensibles \uD83D\uDCA1",
+    "If_you_want_a_response_add_email": "Si vous souhaitez une réponse ajoutez votre adresse email.",
+    "Thank_you": "Merci",
+    "Cancel": "Annuler",
+    "Send": "Envoyer"
+  },
+  "FeedbackModal": {
+    "So_how_is_it_going": "Alors, comment ça se passe ?"
   },
   "core": {
     "ProjectFactory": {

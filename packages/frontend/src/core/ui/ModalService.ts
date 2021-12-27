@@ -32,6 +32,7 @@ import {
   RegistrationClosedEvent,
   SetPasswordModalClosedEvent,
   SolicitationClosedEvent,
+  TextFeedbackClosed,
 } from './typings';
 import { SimplePropertiesMap } from '../geo/features/FeatureWrapper';
 import { solvesInAtLeast } from '../utils/solvesInAtLeast';
@@ -87,6 +88,10 @@ export class ModalService {
 
   public legendSymbolPicker(): Promise<LegendSymbolPickerClosedEvent> {
     return this.modalPromise({ type: ModalEventType.ShowLegendSymbolPicker }, ModalEventType.LegendSymbolPickerClosed);
+  }
+
+  public textFeedback(): Promise<TextFeedbackClosed> {
+    return this.modalPromise({ type: ModalEventType.ShowTextFeedback }, ModalEventType.TextFeedbackClosed);
   }
 
   public longOperationModal<Result = void>(operation: () => Promise<OperationStatus | [OperationStatus, Result]>): Promise<OperationStatus | Result> {

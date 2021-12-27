@@ -6,7 +6,7 @@
     "node_modules"
   ],
   "compilerOptions": {
-    "target": "es2015",
+    "target": "es6",
     "module": "commonjs",
     "outDir": "build",
     "strict": true,

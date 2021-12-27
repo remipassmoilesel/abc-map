@@ -24,7 +24,7 @@ import { Config } from '../config/Config';
 import { AbcVote, VoteValue } from '@abc-map/shared';
 import { TestAuthentication } from '../utils/TestAuthentication';
 
-describe('VoteController', () => {
+describe('FeedbackController', () => {
   let config: Config;
   let services: Services;
   let server: HttpServer;
@@ -36,10 +36,14 @@ describe('VoteController', () => {
     config.server.log.errors = false;
 
     services = await servicesFactory(config);
+    testAuth = new TestAuthentication(services);
+  });
+
+  beforeEach(async () => {
+    services.metrics.getRegistry().clear();
+
     server = HttpServer.create(config, services);
     await server.initialize();
-
-    testAuth = new TestAuthentication(services);
   });
 
   after(async () => {
@@ -51,7 +55,7 @@ describe('VoteController', () => {
     it('should fail for non connected user', async () => {
       const vote: AbcVote = { value: VoteValue.SATISFIED };
       const res = await server.getApp().inject({
-        url: '/api/vote',
+        url: '/api/feedback/vote',
         method: 'POST',
         payload: vote,
       });
@@ -62,19 +66,7 @@ describe('VoteController', () => {
     it('should work', async () => {
       const vote: AbcVote = { value: VoteValue.SATISFIED };
       const res = await server.getApp().inject({
-        url: '/api/vote',
-        method: 'POST',
-        payload: vote,
-        headers: testAuth.anonymous(),
-      });
-
-      assert.equal(res.statusCode, 200);
-    });
-
-    it('should work', async () => {
-      const vote: AbcVote = { value: VoteValue.SATISFIED };
-      const res = await server.getApp().inject({
-        url: '/api/vote',
+        url: '/api/feedback/vote',
         method: 'POST',
         payload: vote,
         headers: testAuth.anonymous(),
@@ -86,9 +78,9 @@ describe('VoteController', () => {
     it('too many vote should fail', async () => {
       const vote: AbcVote = { value: VoteValue.SATISFIED };
 
-      for (let i = 0; i < 10; i++) {
+      for (let i = 0; i < 30; i++) {
         await server.getApp().inject({
-          url: '/api/vote',
+          url: '/api/feedback/vote',
           method: 'POST',
           payload: vote,
           headers: testAuth.anonymous(),
@@ -96,7 +88,7 @@ describe('VoteController', () => {
       }
 
       const res = await server.getApp().inject({
-        url: '/api/vote',
+        url: '/api/feedback/vote',
         method: 'POST',
         payload: vote,
         headers: testAuth.anonymous(),
@@ -106,12 +98,12 @@ describe('VoteController', () => {
     });
   });
 
-  describe('GET /api/vote/statistics/:from/:to', () => {
+  describe('GET /api/feedback/vote/statistics/:from/:to', () => {
     it('should fail for non connected user', async () => {
       const from = new Date().toISOString();
       const to = new Date().toISOString();
       const res = await server.getApp().inject({
-        url: `/api/vote/statistics/${from}/${to}`,
+        url: `/api/feedback/vote/statistics/${from}/${to}`,
         method: 'GET',
       });
 
@@ -122,7 +114,7 @@ describe('VoteController', () => {
       const from = new Date().toISOString();
       const to = new Date().toISOString();
       const res = await server.getApp().inject({
-        url: `/api/vote/statistics/${from}/${to}`,
+        url: `/api/feedback/vote/statistics/${from}/${to}`,
         method: 'GET',
         headers: testAuth.anonymous(),
       });

@@ -24,7 +24,7 @@ import { HealthCheckController } from '../health/HealthCheckController';
 import { AuthenticationController } from '../authentication/AuthenticationController';
 import { ProjectController } from '../projects/ProjectController';
 import { DataStoreController } from '../data-store/DataStoreController';
-import { VoteController } from '../votes/VoteController';
+import { FeedbackController } from '../feedback/FeedbackController';
 import { ProjectionController } from '../projections/ProjectionController';
 
 /**
@@ -42,5 +42,5 @@ export function publicControllers(config: Config, services: Services): Controlle
  * @param services
  */
 export function privateControllers(config: Config, services: Services): Controller[] {
-  return [new ProjectController(config, services), new DataStoreController(services), new VoteController(services), new ProjectionController(services)];
+  return [new ProjectController(config, services), new DataStoreController(services), new FeedbackController(services), new ProjectionController(services)];
 }

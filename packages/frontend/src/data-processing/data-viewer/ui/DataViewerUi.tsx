@@ -111,9 +111,7 @@ class DataViewerUi extends Component<Props, State> {
 
     new LayerDataSource(layer)
       .getRows()
-      .then((data) => {
-        this.setState({ data, layer, disableDownload: data.length < 1 });
-      })
+      .then((data) => this.setState({ data, layer, disableDownload: data.length < 1 }))
       .catch((err) => {
         this.setState({ data: [], layer, disableDownload: true });
         logger.error(err);

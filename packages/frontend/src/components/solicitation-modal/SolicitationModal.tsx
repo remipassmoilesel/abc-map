@@ -28,6 +28,7 @@ import { withTranslation } from 'react-i18next';
 import Cls from './SolicitationModal.module.scss';
 import { Routes } from '../../routes';
 import { FullscreenModal } from '../fullscreen-modal/FullscreenModal';
+import TextFeedbackForm from '../feedback/form/TextFeedbackForm';
 
 const logger = Logger.get('SolicitationModal.ts');
 
@@ -36,6 +37,7 @@ declare type Props = ServiceProps & RouteComponentProps;
 interface State {
   visible: boolean;
   voteDone: boolean;
+  voteValue?: VoteValue;
 }
 
 const t = prefixedTranslation('SolicitationModal:');
@@ -47,8 +49,7 @@ class SolicitationModal extends Component<Props, State> {
   }
 
   public render(): ReactNode {
-    const visible = this.state.visible;
-    const voteDone = this.state.voteDone;
+    const { visible, voteDone, voteValue } = this.state;
     if (!visible) {
       return <div />;
     }
@@ -92,8 +93,14 @@ class SolicitationModal extends Component<Props, State> {
             </div>
           )}
 
-          {voteDone && (
-            <div className={'d-flex flex-column justify-content-center align-items-center mb-5'}>
+          {voteDone && voteValue && voteValue < VoteValue.SATISFIED && (
+            <div className={Cls.feedbackArea}>
+              <h5>{t('What_happened')}</h5>
+              <TextFeedbackForm onCancel={this.close} onDone={this.close} className={'mt-4'} />
+            </div>
+          )}
+          {voteDone && voteValue && voteValue === VoteValue.SATISFIED && (
+            <div className={Cls.feedbackArea}>
               <h5>{t('Thanks_for_your_feedback')} 👍️</h5>
               <h5>{t('Support_project')} ⬆</h5>
             </div>
@@ -120,10 +127,10 @@ class SolicitationModal extends Component<Props, State> {
   };
 
   private handleVote = (value: VoteValue) => {
-    const { vote } = this.props.services;
+    const { feedback } = this.props.services;
     // We do not wait for vote
-    vote.vote(value).catch((err) => logger.error('Error while voting: ', err));
-    this.setState({ voteDone: true });
+    feedback.vote(value).catch((err) => logger.error('Error while voting: ', err));
+    this.setState({ voteDone: true, voteValue: value });
   };
 
   private handleDonate = () => {

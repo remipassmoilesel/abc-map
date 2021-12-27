@@ -17,6 +17,7 @@
  */
 
 @import "src/assets/styles/variables";
+@import "node_modules/bootstrap/scss/bootstrap";
 
 .modalContent {
   display: flex;
@@ -58,4 +59,18 @@
   display: block;
   font-size: 1.7rem;
   margin-bottom: 0.4rem;
+}
+
+.feedbackArea {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  margin-bottom: 3rem;
+  width: 40rem;
+
+  @include media-breakpoint-down(xl) {
+    width: 70%;
+  }
 }

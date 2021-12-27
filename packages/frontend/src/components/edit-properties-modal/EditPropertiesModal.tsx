@@ -118,10 +118,23 @@ class EditPropertiesModal extends Component<ServiceProps, State> {
   };
 
   private getProperties(): SimplePropertiesMap {
-    return {
+    const result = {
       ...this.state.properties,
       ...this.state.newProperties,
     };
+
+    for (const k in result) {
+      result[k] = this.normalizeProperty(result[k]);
+    }
+
+    return result;
+  }
+
+  private normalizeProperty(property: string | number | undefined): string | number | undefined {
+    if (typeof property === 'string') {
+      return property.trim();
+    }
+    return property;
   }
 }
 

@@ -40,7 +40,7 @@ const logger = Logger.get('LandingView.tsx');
 const t = prefixedTranslation('LandingView:');
 
 function LandingView() {
-  const { vote, modals, toasts } = useServices();
+  const { feedback, modals, toasts } = useServices();
   const history = useHistory();
   const authenticated = useAppSelector((st) => st.authentication.userStatus) === UserStatus.Authenticated;
   const [voteAggregation, setVoteAggregation] = useState<AbcVoteAggregation | undefined>();
@@ -58,11 +58,11 @@ function LandingView() {
 
     const from = DateTime.now().minus({ days: 7 });
     const to = DateTime.now();
-    vote
+    feedback
       .getStats(from, to)
       .then((res) => setVoteAggregation(res))
       .catch((err) => logger.error(err));
-  }, [vote]);
+  }, [feedback]);
 
   const handleGoToMap = useCallback(() => history.push(Routes.map().format()), [history]);
 

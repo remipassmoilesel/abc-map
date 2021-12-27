@@ -1,0 +1,55 @@
+@import "src/assets/styles/variables";
+
+.container {
+  position: fixed;
+  bottom: 3vmin;
+  right: 5vmin;
+  z-index: $zIndex-feedback-bubble;
+
+  .bubble {
+    position: relative;
+    background: $secondary;
+    border-radius: $border-radius;
+
+    color: white;
+    padding: 1rem;
+    font-size: 1.1rem;
+  }
+
+  .bubble:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    right: 10%;
+    width: 0;
+    height: 0;
+    border: 0.969em solid transparent;
+    border-top-color: $secondary;
+    border-bottom: 0;
+    border-right: 0;
+    margin-left: -0.484em;
+    margin-bottom: -0.969em;
+  }
+
+  .btnOk {
+    border-radius: $border-radius;
+    background-color: white;
+    padding: 0.2rem 0.5rem;
+    border: none;
+
+    color: $secondary;
+    font-weight: bold;
+
+    margin: 0.4rem;
+  }
+
+  .btnNo {
+    border-radius: $border-radius;
+    background-color: white;
+    padding: 0.2rem 0.5rem;
+    border: none;
+    color: $gray-600;
+
+    margin: 0.4rem;
+  }
+}

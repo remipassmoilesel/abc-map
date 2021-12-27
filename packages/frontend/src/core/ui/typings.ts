@@ -35,6 +35,8 @@ export enum ModalEventType {
   ShowPasswordLost = 'ShowPasswordLost',
   PasswordLostClosed = 'PasswordLostClosed',
   ShowLegendSymbolPicker = 'ShowLegendSymbolPicker',
+  ShowTextFeedback = 'ShowTextFeedback',
+  TextFeedbackClosed = 'TextFeedbackClosed',
   LegendSymbolPickerClosed = 'LegendSymbolPickerClosed',
   ShowLongOperationModal = 'ShowLongOperationModal',
   LongOperationModalClosed = 'LongOperationModalClosed',
@@ -126,6 +128,15 @@ export interface ShowLegendSymbolPicker {
   type: ModalEventType.ShowLegendSymbolPicker;
 }
 
+export interface ShowTextFeedback {
+  type: ModalEventType.ShowTextFeedback;
+}
+
+export interface TextFeedbackClosed {
+  type: ModalEventType.TextFeedbackClosed;
+  status: ModalStatus;
+}
+
 export interface LegendSymbolPickerClosedEvent {
   type: ModalEventType.LegendSymbolPickerClosed;
   status: ModalStatus;
@@ -168,6 +179,8 @@ export declare type ModalEvent =
   | ShowPasswordLostModal
   | PasswordLostClosedEvent
   | ShowLegendSymbolPicker
+  | ShowTextFeedback
+  | TextFeedbackClosed
   | LegendSymbolPickerClosedEvent
   | ShowLongOperationModal
   | LongOperationModalClosedEvent

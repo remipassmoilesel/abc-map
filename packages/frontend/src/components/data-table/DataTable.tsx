@@ -16,17 +16,17 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { Component, ReactNode } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Logger } from '@abc-map/shared';
-import { ServiceProps, withServices } from '../../core/withServices';
 import { DataRow, getFields } from '../../core/data/data-source/DataSource';
 import RowActions from './RowActions';
 import { prefixedTranslation } from '../../i18n/i18n';
 import Cls from './DataTable.module.scss';
+import _ from 'lodash';
 
 const logger = Logger.get('DataSourceSelector.tsx');
 
-interface Props extends ServiceProps {
+interface Props {
   rows: DataRow[];
   onEdit?: (r: DataRow) => void;
   onDelete?: (r: DataRow) => void;
@@ -37,75 +37,82 @@ interface Props extends ServiceProps {
 
 const t = prefixedTranslation('DataTable:');
 
-class DataTable extends Component<Props, {}> {
-  public render(): ReactNode {
-    const className = this.props.className;
-    const withActions = this.props.withActions || false;
-    const rows = this.props.rows;
-    if (!rows.length) {
-      return <div className={`${Cls.dataTable} ${className}`}>{t('No_data')}</div>;
-    }
+function DataTable(props: Props) {
+  const { className, rows, 'data-cy': dataCy, onEdit, onDelete } = props;
+  const withActions = props.withActions ?? false;
+  const [fields, setFields] = useState<string[]>([]);
 
-    const dataCy = this.props['data-cy'];
-    const keys = getFields(rows[0]);
-    return (
-      <div className={`${Cls.dataTable} ${className}`} data-cy={dataCy}>
-        <table className={'table'}>
-          <thead>
-            <tr>
-              <th scope="col" className={Cls.numberColumn}>
-                #
+  // Each time rows change, we get keys from objet. We must iterate on each row.
+  useEffect(() => {
+    const fields = _(rows)
+      .flatMap((r) => getFields(r))
+      .uniqBy((f) => f)
+      .sort()
+      .value();
+    setFields(fields);
+  }, [rows]);
+
+  if (!rows.length) {
+    return <div className={`${Cls.dataTable} ${className}`}>{t('No_data')}</div>;
+  }
+
+  return (
+    <div className={`${Cls.dataTable} ${className}`} data-cy={dataCy}>
+      <table className={'table'}>
+        <thead>
+          <tr>
+            <th scope="col" className={Cls.numberColumn}>
+              #
+            </th>
+            {fields.map((key, i) => (
+              <th scope="col" key={key + i} data-cy={'header'}>
+                {key}
               </th>
-              {keys.map((key, i) => (
-                <th scope="col" key={key + i} data-cy={'header'}>
-                  {key}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map((row, i) => (
-              <tr key={row._id} data-testid={'data-row'}>
-                <th scope="row" className={Cls.numberColumn}>
-                  {i + 1}
-                </th>
-                {keys.map((key) => (
-                  <td key={key + i} title={row[key]?.toString()} data-cy={'cell'}>
-                    {this.normalize(row[key])}
-                  </td>
-                ))}
-                {withActions && (
-                  <td className={Cls.rowActions}>
-                    <RowActions row={row} onEdit={this.handleEditRow} onDelete={this.handleDelete} />
-                  </td>
-                )}
-              </tr>
             ))}
-          </tbody>
-        </table>
-      </div>
-    );
-  }
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row, i) => (
+            <tr key={row._id} data-testid={'data-row'}>
+              {/* Row number */}
+              <th scope="row" className={Cls.numberColumn}>
+                {i + 1}
+              </th>
 
-  private normalize(field: string | number | undefined): string | number | undefined {
-    if (typeof field === 'number') {
-      return field;
-    } else if (typeof field === 'string' && field.length > 50) {
-      return `${field.substr(0, 47)}...`;
-    } else if (typeof field === 'undefined') {
-      return t('Undefined');
-    } else {
-      return field;
-    }
-  }
+              {/* Data */}
+              {fields.map((key) => (
+                <td key={key + i} title={row[key]?.toString()} data-cy={'cell'}>
+                  {normalize(row[key])}
+                </td>
+              ))}
 
-  private handleEditRow = (row: DataRow) => {
-    this.props.onEdit && this.props.onEdit(row);
-  };
+              {/* Filler */}
+              <td className={'flex-grow-1'} />
 
-  private handleDelete = (row: DataRow) => {
-    this.props.onDelete && this.props.onDelete(row);
-  };
+              {/* Actions */}
+              {withActions && (
+                <td className={Cls.rowActions}>
+                  <RowActions row={row} onEdit={onEdit} onDelete={onDelete} />
+                </td>
+              )}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
 }
 
-export default withServices(DataTable);
+function normalize(field: string | number | undefined): string | number | undefined {
+  if (typeof field === 'number') {
+    return field;
+  } else if (typeof field === 'string' && field.length > 50) {
+    return `${field.substring(0, 47)}...`;
+  } else if (typeof field === 'undefined') {
+    return t('Undefined');
+  } else {
+    return field;
+  }
+}
+
+export default DataTable;

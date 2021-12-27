@@ -18,37 +18,47 @@
 
 import { Controller } from '../server/Controller';
 import { Services } from '../services/services';
-import { AbcVote } from '@abc-map/shared';
+import { AbcTextFeedback, AbcVote } from '@abc-map/shared';
 import { DateTime } from 'luxon';
 import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
-import { StatParams, VoteSchema } from './VoteController.schemas';
+import { StatParams, TextFeedbackSchema, VoteSchema } from './FeedbackController.schemas';
 
-export class VoteController extends Controller {
+export class FeedbackController extends Controller {
   constructor(private services: Services) {
     super();
   }
 
   public getRoot(): string {
-    return '/vote';
+    return '/feedback';
   }
 
   public setup = async (app: FastifyInstance): Promise<void> => {
     // We restrict vote by ip
-    const voteConfig = {
+    const config = {
       rateLimit: {
-        max: 10,
+        max: 30,
         timeWindow: '1h',
       },
     };
 
-    app.post('/', { config: voteConfig, schema: VoteSchema }, this.vote);
-    app.get('/statistics/:from/:to', this.stats);
+    app.post('/text', { config, schema: TextFeedbackSchema }, this.textFeedback);
+    app.post('/vote', { config, schema: VoteSchema }, this.vote);
+    app.get('/vote/statistics/:from/:to', this.stats);
+  };
+
+  private textFeedback = async (req: FastifyRequest<{ Body: AbcTextFeedback }>, reply: FastifyReply): Promise<void> => {
+    const { feedback, metrics } = this.services;
+
+    await feedback.textFeedback(req.body, DateTime.now());
+    void reply.status(200).send();
+
+    metrics.textFeedback();
   };
 
   private vote = async (req: FastifyRequest<{ Body: AbcVote }>, reply: FastifyReply): Promise<void> => {
-    const { vote, metrics } = this.services;
+    const { feedback, metrics } = this.services;
 
-    await vote.save(req.body, DateTime.now());
+    await feedback.vote(req.body, DateTime.now());
     void reply.status(200).send();
 
     metrics.vote();
@@ -63,7 +73,7 @@ export class VoteController extends Controller {
 
     const fromDateTime = DateTime.fromISO(from).startOf('day');
     const toDateTime = DateTime.fromISO(to).endOf('day');
-    const result = await this.services.vote.aggregate(fromDateTime, toDateTime);
+    const result = await this.services.feedback.aggregate(fromDateTime, toDateTime);
     void reply.send(result);
   };
 }

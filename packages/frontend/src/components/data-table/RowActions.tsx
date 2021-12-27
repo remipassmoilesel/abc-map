@@ -27,8 +27,8 @@ const logger = Logger.get('RowActions.tsx');
 
 interface Props {
   row: DataRow;
-  onEdit: (r: DataRow) => void;
-  onDelete: (r: DataRow) => void;
+  onEdit?: (r: DataRow) => void;
+  onDelete?: (r: DataRow) => void;
 }
 
 const t = prefixedTranslation('DataTable:');
@@ -48,11 +48,11 @@ class RowActions extends Component<Props, {}> {
   }
 
   private handleEdit = () => {
-    this.props.onEdit(this.props.row);
+    this.props.onEdit && this.props.onEdit(this.props.row);
   };
 
   private handleDelete = () => {
-    this.props.onDelete(this.props.row);
+    this.props.onDelete && this.props.onDelete(this.props.row);
   };
 }
 
