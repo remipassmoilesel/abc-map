@@ -16,9 +16,14 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Language } from '../lang';
+import { messageFromError } from './messageFromError';
 
-export interface AbcTextFeedback {
-  text: string;
-  lang: Language;
-}
+describe('messageFromError', () => {
+  it('should work', () => {
+    expect(messageFromError(new Error('Test error'))).toEqual('Test error');
+    expect(messageFromError('Test error')).toEqual('Test error');
+    expect(messageFromError(new Error())).toEqual('<no-message>');
+    expect(messageFromError('')).toEqual('<no-message>');
+    expect(messageFromError(undefined)).toEqual('<no-message>');
+  });
+});

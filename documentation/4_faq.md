@@ -64,3 +64,7 @@ You must run `abc build`.
 
 Type check have been disabled on webpack, it is checked only when you use watch command or in CI.  
 So this message will never disappear !
+
+## (node:132766) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' ...
+
+This message comes from react-scripts 5.

@@ -16,9 +16,12 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Language } from '../lang';
+const noMessage = '<no-message>';
 
-export interface AbcTextFeedback {
-  text: string;
-  lang: Language;
+export function messageFromError(e: unknown): string {
+  if (typeof e === 'string') {
+    return e || noMessage;
+  } else if (e instanceof Error) {
+    return e.message || noMessage;
+  } else return noMessage;
 }

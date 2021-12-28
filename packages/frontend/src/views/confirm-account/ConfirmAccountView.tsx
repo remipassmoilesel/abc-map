@@ -64,10 +64,8 @@ function ConfirmAccountView() {
 
     confirmRegistration();
 
-    return () => {
-      removeNoIndexMeta();
-    };
-  });
+    return () => removeNoIndexMeta();
+  }, [confirmRegistration]);
 
   return (
     <div className={Cls.confirmAccount}>

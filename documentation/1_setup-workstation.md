@@ -1,9 +1,9 @@
 # Setup development workstation
 
-**The development environment has only been tested under GNU / Linux, it will not work on Windows.**
+**The development environment has only been tested under GNU / Linux, it may not work on Windows.**
 
-Windows is supported as a target operating system, via browsers. It will never be actively supported
-as a development operating system.
+Windows is supported as a target operating system, via browsers. It is not actively supported
+as a development operating system. You can use dual boot or [virtual machines](https://brb.nci.nih.gov/seqtools/installUbuntu.html).
 
 Tested environments:
 

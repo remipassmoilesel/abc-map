@@ -18,7 +18,7 @@
 
 import { Env, EnvKey } from './Env';
 import { Config, ConfigInput } from './Config';
-import { Logger } from '@abc-map/shared';
+import { Logger, messageFromError } from '@abc-map/shared';
 import * as path from 'path';
 import * as _ from 'lodash';
 import * as fs from 'fs';
@@ -62,7 +62,7 @@ export class ConfigLoader {
       /* eslint-disable @typescript-eslint/no-var-requires */
       input = _.cloneDeep(require(_configPath));
     } catch (e) {
-      return Promise.reject(new Error(`Cannot load configuration '${configPath}': '${e.message || 'No message'}'`));
+      return Promise.reject(new Error(`Cannot load configuration '${configPath}': '${messageFromError(e)}'`));
     }
 
     // We validate config input

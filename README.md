@@ -29,7 +29,7 @@ hurry.
 
 ## How can I help ?
 
-See [CONTRIBUTING](./CONTRIBUTING.md) and [backlog](./documentation/5_the_bottomless_well.md).
+See [CONTRIBUTING](./CONTRIBUTING.md) and [backlog](./documentation/5_backlog.md).
 
 ## Source code, issues, license
 

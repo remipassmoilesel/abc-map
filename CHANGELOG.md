@@ -1,8 +1,8 @@
 # Changelog
 
-Presently there are no versions, because it is not yet necessary.
+Presently there are no versions, since nobody has asked for it yet 👍
 
-## Feedback form (XXXXXXX XX/12/2021)
+## Feedback form (d1c94ae0 27/12/2021)
 
 - Add feedback prompt in frontend
 - Add feedback form and backend
