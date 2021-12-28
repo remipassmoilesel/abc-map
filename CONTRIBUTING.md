@@ -13,7 +13,7 @@ Ensure that your idea is a need that will be shared by other people.
 
 [Open an issue](https://gitlab.com/abc-map/abc-map/-/issues/new) to discuss it and to avoid unnecessary or duplicate work.
 
-If not already done, please check the [bottomless well](documentation/5_the_bottomless_well.md) too !
+If not already done, please check the [bottomless well](documentation/5_backlog.md) too !
 
 Please read the [documentation/](documentation) folder before. Don't worry, it's a quick read. You will
 learn how to set up your workstation and to start Abc-Map locally.

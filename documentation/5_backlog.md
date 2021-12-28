@@ -24,6 +24,7 @@
 - [Custom icons](#custom-icons)
 - [Images](#images)
 - [Datastore artefact with prompt](#datastore-artefact-with-prompt)
+- [Better errors for bad server configuration](#better-errors-for-bad-server-configuration)
 
 ## Story maps (coming soon)
 
@@ -163,3 +164,9 @@ Information prompt can be described in resource manifests such as for a WMS laye
 
 With these prompt statements, we can build a suitable interface to enter the necessary variables, and use
 the data on map.
+
+## Better errors for bad server configuration
+
+When server starts it validates configuration with AJV. Errors are thrown without formatting.
+We should format errors in order to provide better installation experience.
+See per example: https://atlassian.github.io/better-ajv-errors/

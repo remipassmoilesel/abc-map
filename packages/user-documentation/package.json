@@ -8,27 +8,27 @@
     "build"
   ],
   "scripts": {
-    "clean": "rm -rf build",
     "build": "webpack",
-    "watch": "webpack -w",
+    "clean": "rm -rf build",
     "clean-build": "yarn run clean && yarn run build",
     "dep-check": "depcruise -c .dependency-cruiser.js src",
     "lint": "eslint './src/**/*.ts' --max-warnings=0 && prettier --check src/**/*.md",
-    "lint-fix": "eslint './src/**/*.ts' --fix --max-warnings=0 && prettier --write src/**/*.md"
+    "lint-fix": "eslint './src/**/*.ts' --fix --max-warnings=0 && prettier --write src/**/*.md",
+    "watch": "webpack -w"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^4.29.3",
-    "@typescript-eslint/parser": "^4.29.3",
-    "dependency-cruiser": "^10.1.1",
-    "eslint": "^7.32.0",
+    "@typescript-eslint/eslint-plugin": "^5.8.0",
+    "@typescript-eslint/parser": "^5.8.0",
+    "dependency-cruiser": "^11.2.0",
+    "eslint": "^8.5.0",
     "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-prettier": "^3.4.1",
-    "html-loader": "^2.1.2",
+    "eslint-plugin-prettier": "^4.0.0",
+    "html-loader": "^3.0.1",
     "markdown-loader": "^6.0.0",
-    "prettier": "^2.3.2",
-    "ts-loader": "^9.2.5",
-    "typescript": "^4.3.5",
-    "webpack": "^5.51.1",
-    "webpack-cli": "^4.8.0"
+    "prettier": "^2.5.1",
+    "ts-loader": "^9.2.6",
+    "typescript": "^4.5.4",
+    "webpack": "^5.65.0",
+    "webpack-cli": "^4.9.1"
   }
 }

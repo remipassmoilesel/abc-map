@@ -15,8 +15,10 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
+import { JSONSchemaType } from 'ajv';
+import { ConfigInput } from './Config';
 
-export const ConfigInputSchema = {
+export const ConfigInputSchema: JSONSchemaType<ConfigInput> = {
   type: 'object',
   required: ['environmentName', 'externalUrl', 'server', 'project', 'database', 'jwt', 'authentication', 'registration', 'smtp', 'datastore', 'legalMentions'],
   additionalProperties: false,
@@ -25,15 +27,13 @@ export const ConfigInputSchema = {
     externalUrl: { type: 'string' },
     server: {
       type: 'object',
-      minProperties: 5,
-      additionalProperties: false,
+      required: ['host', 'port', 'log', 'globalRateLimit', 'authenticationRateLimit'],
       properties: {
         host: { type: 'string' },
         port: { type: 'number' },
         log: {
           type: 'object',
-          minProperties: 2,
-          additionalProperties: false,
+          required: ['requests', 'errors'],
           properties: {
             requests: { type: 'boolean' },
             errors: { type: 'boolean' },
@@ -41,8 +41,7 @@ export const ConfigInputSchema = {
         },
         globalRateLimit: {
           type: 'object',
-          minProperties: 2,
-          additionalProperties: false,
+          required: ['max', 'timeWindow'],
           properties: {
             max: { type: 'number' },
             timeWindow: { type: 'string' },
@@ -50,8 +49,7 @@ export const ConfigInputSchema = {
         },
         authenticationRateLimit: {
           type: 'object',
-          minProperties: 2,
-          additionalProperties: false,
+          required: ['max', 'timeWindow'],
           properties: {
             max: { type: 'number' },
             timeWindow: { type: 'string' },
@@ -61,34 +59,31 @@ export const ConfigInputSchema = {
     },
     project: {
       type: 'object',
-      minProperties: 1,
-      additionalProperties: false,
+      required: ['maxPerUser'],
       properties: {
         maxPerUser: { type: 'number' },
       },
     },
     database: {
       type: 'object',
-      minProperties: 3,
-      additionalProperties: false,
+      required: ['url', 'username', 'password'],
       properties: {
         url: { type: 'string' },
+        databaseName: { type: 'string', nullable: true },
         username: { type: 'string' },
         password: { type: 'string' },
       },
     },
     jwt: {
       type: 'object',
-      minProperties: 1,
-      additionalProperties: false,
+      required: ['algorithm'],
       properties: {
         algorithm: { type: 'string' },
       },
     },
     authentication: {
       type: 'object',
-      minProperties: 3,
-      additionalProperties: false,
+      required: ['secret', 'tokenExpiresIn', 'passwordLostExpiresIn'],
       properties: {
         secret: { type: 'string' },
         tokenExpiresIn: { type: 'string' },
@@ -97,8 +92,7 @@ export const ConfigInputSchema = {
     },
     registration: {
       type: 'object',
-      minProperties: 3,
-      additionalProperties: false,
+      required: ['passwordSalt', 'secret', 'confirmationExpiresIn'],
       properties: {
         passwordSalt: { type: 'string' },
         secret: { type: 'string' },
@@ -107,7 +101,7 @@ export const ConfigInputSchema = {
     },
     smtp: {
       type: 'object',
-      requiredProperties: ['from', 'host', 'port'],
+      required: ['from', 'host', 'port'],
       additionalProperties: false,
       properties: {
         from: { type: 'string' },
@@ -115,8 +109,8 @@ export const ConfigInputSchema = {
         port: { type: 'number' },
         auth: {
           type: 'object',
-          minProperties: 2,
-          additionalProperties: false,
+          required: [],
+          nullable: true,
           properties: {
             user: { type: 'string' },
             pass: { type: 'string' },
@@ -126,16 +120,15 @@ export const ConfigInputSchema = {
     },
     datastore: {
       type: 'object',
-      minProperties: 1,
-      additionalProperties: false,
+      required: ['path'],
       properties: {
         path: { type: 'string' },
       },
     },
     development: {
       type: 'object',
-      minProperties: 2,
-      additionalProperties: false,
+      required: ['generateData', 'users', 'persistEmails'],
+      nullable: true,
       properties: {
         generateData: { type: 'boolean' },
         users: { type: 'number' },

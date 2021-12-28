@@ -15,7 +15,8 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
-import * as Ajv from 'ajv';
+import Ajv from 'ajv';
+import { ValidateFunction } from 'ajv';
 import { ProjectMetadataSchema } from '../projects/ProjectMetadata.schema';
 import { ConfigInputSchema } from '../config/ConfigInputSchema';
 import { ArtefactManifestSchema } from '../data-store/ArtefactManifest';
@@ -23,12 +24,14 @@ import { ArtefactManifestSchema } from '../data-store/ArtefactManifest';
 const ajv = new Ajv();
 
 /**
+ * This class regroup common schemas and helpers.
+ *
  * AJV version is constrained by Fastify supported version
  *
  * WARNING: All validate functions keep states from last call (errors, etc ...)
  */
 export class Validation {
-  public static readonly Ajv = ajv;
+  public static readonly Ajv = Ajv;
 
   public static readonly ConfigInput = ajv.compile(ConfigInputSchema);
 
@@ -36,7 +39,7 @@ export class Validation {
 
   public static readonly ArtefactManifest = ajv.compile(ArtefactManifestSchema);
 
-  public static formatErrors(validateFunc: Ajv.ValidateFunction): string {
+  public static formatErrors(validateFunc: ValidateFunction): string {
     return validateFunc.errors?.map((e) => JSON.stringify(e)).join(', ') || 'No validation error message';
   }
 }

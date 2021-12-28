@@ -100,7 +100,9 @@ export class BuildService {
     const lintTask = fix ? 'lint-fix' : 'lint';
     this.shell.sync(`lerna run ${lintTask}`);
 
-    this.shell.sync('lerna exec "sort-package-json"');
+    const sortScript = fix ? 'sort-package-json' : 'sort-package-json --check';
+    this.shell.sync(`lerna exec "${sortScript}"`);
+
     this.shell.sync(`helm lint ${this.config.getChartRoot()}`);
   }
 

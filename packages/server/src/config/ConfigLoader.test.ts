@@ -32,7 +32,7 @@ describe('ConfigLoader', () => {
 
   it('load bad config', async () => {
     const err = await loader.load('resources/test/wrong-config.js').catch((err) => err);
-    assert.match(err.message, /Invalid configuration: \{"keyword":"minProperties"/);
+    assert.match(err.message, /Invalid configuration: {"instancePath"/);
   });
 
   it('load local.js', async () => {
