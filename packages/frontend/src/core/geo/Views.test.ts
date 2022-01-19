@@ -54,20 +54,52 @@ describe('View', () => {
     expect(actual.getProjection().getCode()).toEqual(original.projection.name);
   });
 
-  it('olToAbc()', () => {
-    // Prepare
-    const original: View = new View({
-      resolution: 12345,
-      center: [1113194, 5621521],
-      projection: 'EPSG:3857',
+  describe('olToAbc()', () => {
+    it('should translate', () => {
+      // Prepare
+      const original = new View({
+        resolution: 12345,
+        center: [1113194, 5621521],
+        projection: 'EPSG:3857',
+      });
+
+      // Act
+      const actual = Views.olToAbc(original);
+
+      // Assert
+      expect(actual.resolution).toEqual(original.getResolution());
+      expect(actual.center).toEqual(original.getCenter());
+      expect(actual.projection.name).toEqual(original.getProjection().getCode());
     });
 
-    // Act
-    const actual = Views.olToAbc(original);
+    it('should use default view if no values set', () => {
+      // Prepare
+      const original = new View({});
 
-    // Assert
-    expect(actual.resolution).toEqual(original.getResolution());
-    expect(actual.center).toEqual(original.getCenter());
-    expect(actual.projection.name).toEqual(original.getProjection().getCode());
+      // Act
+      const actual = Views.olToAbc(original);
+
+      // Assert
+      expect(actual.resolution).toEqual(39135);
+      expect(actual.center).toEqual([1113194.9079327357, 5621521.486192066]);
+      expect(actual.projection.name).toEqual(original.getProjection().getCode());
+    });
+
+    it('should limit precision to prevent weird comparison issues', () => {
+      // Prepare
+      const original = new View({
+        resolution: 12345,
+        center: [1113194.777777777, 5621521.777777777],
+        projection: 'EPSG:3857',
+      });
+
+      // Act
+      const actual = Views.olToAbc(original);
+
+      // Assert
+      expect(actual.resolution).toEqual(original.getResolution());
+      expect(actual.center).toEqual(original.getCenter());
+      expect(actual.projection.name).toEqual(original.getProjection().getCode());
+    });
   });
 });

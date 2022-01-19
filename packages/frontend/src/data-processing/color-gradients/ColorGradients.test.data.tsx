@@ -28,7 +28,7 @@ import { asNumberOrString, isValidNumber } from '../../core/utils/numbers';
 import { DataValue } from '../../core/data/data-source/DataSource';
 
 export const testGradientClasses = (values: DataValue[], algo: ClassificationAlgorithm, numberOfClasses: number): GradientClass[] => {
-  const _values = values.map((x) => asNumberOrString(x)).filter(isValidNumber) as number[];
+  const _values = values.map((x) => asNumberOrString(x)).filter(isValidNumber);
   const classes = Stats.classify(algo, numberOfClasses, _values);
   const colorFunc = chroma.scale(['blue', 'red']).domain([0, numberOfClasses]).classes(numberOfClasses);
 

@@ -70,12 +70,10 @@ $box-shadow-sm: 0 0.125rem 0.25rem rgba($black, 0.075) !default;
 $box-shadow-lg: 0 1rem 3rem rgba($black, 0.175) !default;
 $box-shadow-inset: inset 0 0.1rem 2px rgba($black, 0.075) !default;
 
-// Top bar and view height, relatives
-// As the main map view surface influences the export style ratios, you should not modify these variables
-// without taking a look at the exports.
-
-$top-bar-height: 5vh;
-$view-height: 100vh - $top-bar-height;
+// Top bar height
+// As the main map view surface influences the export style ratios, you should not modify
+// these variables without taking a look at the exports.
+$top-bar-height: 4rem;
 
 // Bootstrap z-indexes starts at 1000
 
@@ -83,6 +81,8 @@ $zIndex-mainMap-tileLoadError: 11;
 
 $zIndex-sideMenu-button: 11;
 $zIndex-sideMenu-panel: 12;
+
+$zIndex-sharedMap-menu: 12;
 
 $zIndex-feedback-bubble: 13;
 

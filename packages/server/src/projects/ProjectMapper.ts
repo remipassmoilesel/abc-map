@@ -27,6 +27,7 @@ export class ProjectMapper {
       name: dto.name,
       version: dto.version,
       containsCredentials: dto.containsCredentials,
+      public: dto.public,
     };
   }
 
@@ -36,6 +37,7 @@ export class ProjectMapper {
       name: doc.name,
       version: doc.version,
       containsCredentials: doc.containsCredentials,
+      public: doc.public,
     };
   }
 }

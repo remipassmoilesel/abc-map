@@ -25,13 +25,13 @@
   position: relative;
 
   display: flex;
-  height: $view-height;
+  height: 100%;
   flex-direction: column;
 }
 
 .map {
   flex-grow: 1;
-  height: $view-height;
+  height: 100%;
   background: $gray-200;
 }
 

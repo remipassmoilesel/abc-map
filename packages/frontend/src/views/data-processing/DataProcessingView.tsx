@@ -27,8 +27,9 @@ import { withTranslation } from 'react-i18next';
 import Cls from './DataProcessingView.module.scss';
 import { FaIcon } from '../../components/icon/FaIcon';
 import { IconDefs } from '../../components/icon/IconDefs';
-import '../../data-processing/style.scss';
 import SideMenu from '../../components/side-menu/SideMenu';
+import { isDesktopDevice } from '../../core/ui/isDesktopDevice';
+import '../../data-processing/style.scss';
 
 const logger = Logger.get('DataProcessingView.tsx');
 
@@ -49,11 +50,12 @@ class DataProcessingView extends Component<Props, {}> {
       <div className={Cls.dataProcessingView}>
         <SideMenu
           buttonIcon={IconDefs.faList}
-          buttonStyle={{ top: '20vmin', right: '6vmin' }}
+          buttonStyle={{ top: '50vh', right: '6vmin' }}
           title={t('Modules')}
           menuPlacement={'right'}
           closeOnClick={true}
-          menuId={'dataprocessingview-layouts-menu'}
+          menuId={'views/DataProcessingView'}
+          initiallyOpened={isDesktopDevice()}
           data-cy={'modules-menu'}
         >
           <div className={Cls.rightMenu}>

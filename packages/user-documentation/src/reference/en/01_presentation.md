@@ -21,7 +21,8 @@ With Abc-Map you can create:
 (<i>Automatic translation only 🤭</i>)
 
 <div class='alert alert-info my-4 d-flex flex-column'>
-  <b>This software is brand new ✨ </b>
+  <b class="mb-2">This software is brand new ✨ </b>
+  <div class="mb-2">Abc-Map is constantly evolving, every week an improvement is published.</div>
   <div>So there are a lot of things to improve, starting with this documentation.</div>
 
   <a class='btn btn-link mt-3' onclick='abc.goTo("/funding")'>

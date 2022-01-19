@@ -35,8 +35,8 @@ export class TopBar {
     return cy.get('[data-cy=top-bar] [data-cy=data-processing]').click();
   }
 
-  public static layout(): Chainable<any> {
-    return cy.get('[data-cy=top-bar] [data-cy=layout]').click();
+  public static export(): Chainable<any> {
+    return cy.get('[data-cy=top-bar] [data-cy=export]').click();
   }
 
   public static documentation(): Chainable<any> {

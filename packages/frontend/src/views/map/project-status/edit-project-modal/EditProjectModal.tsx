@@ -40,8 +40,8 @@ interface LocalProps {
 
 const mapStateToProps = (state: MainState) => ({
   name: state.project.metadata.name,
-  projection: state.project.view.projection,
-  layouts: state.project.layouts,
+  projection: state.project.mainView.projection,
+  layouts: state.project.layouts.list,
 });
 
 const connector = connect(mapStateToProps);

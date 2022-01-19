@@ -87,7 +87,7 @@ describe('GeoService', () => {
       map.setActiveLayer(features);
 
       // Act
-      const layers = await service.exportLayers();
+      const layers = await service.exportLayers(map);
 
       // Assert
       expect(layers).toHaveLength(2);

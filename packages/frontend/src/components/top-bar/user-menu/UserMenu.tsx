@@ -78,7 +78,6 @@ class UserMenu extends React.Component<Props, {}> {
               <Dropdown.Item onClick={this.handleUserAccount} data-cy={'user-profile'}>
                 <FaIcon icon={IconDefs.faCogs} className={'mr-3'} /> {t('My_account')}
               </Dropdown.Item>
-              <Dropdown.Divider />
               <Dropdown.Item onClick={this.handleLogout} data-cy={'logout'}>
                 <FaIcon icon={IconDefs.faLock} className={'mr-3'} /> {t('Logout')}
               </Dropdown.Item>

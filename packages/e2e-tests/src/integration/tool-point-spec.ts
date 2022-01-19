@@ -30,11 +30,9 @@ describe('Tool Point', function () {
     TestHelper.init();
   });
 
-  it('user can move map with CTRL', function () {
+  it('user can move map', function () {
     cy.visit(Routes.map().format())
       .then(() => MainMap.fixedView())
-      .get('[data-cy=draw-menu]')
-      .click()
       .then(() => ToolSelector.enable(MapTool.Point))
       .then(() => ToolSelector.toolMode(ModeName.MoveMap))
       // Move map
@@ -42,15 +40,13 @@ describe('Tool Point', function () {
       .then(() => MainMap.getReference())
       .should((map) => {
         const view = map.getViewExtent();
-        expect(view).deep.equal([-7380586.601616657, -4131261.6249308446, 11991613.846978411, 5907060.425704782]);
+        expect(view).deep.equal([-7380586.601616657, -4116585.715500091, 11991613.846978411, 5892384.516274028]);
       });
   });
 
   it('user can draw', function () {
     cy.visit(Routes.map().format())
       .then(() => MainMap.fixedView())
-      .get('[data-cy=draw-menu]')
-      .click()
       .then(() => ToolSelector.enable(MapTool.Point))
       .then(() => Draw.click(300, 300))
       .then(() => Draw.click(350, 350))
@@ -70,8 +66,8 @@ describe('Tool Point', function () {
         expect(features[1].get(StyleProperties.PointIcon)).equal(DefaultDrawingStyle.point.icon);
 
         expect(features.map((f) => f.getGeometry()?.getExtent())).deep.equals([
-          [-1608062.225520147, 2091323.9737087833, -1608062.225520147, 2091323.9737087833],
-          [-1118865.2444950193, 1602126.9926836556, -1118865.2444950193, 1602126.9926836556],
+          [-1608062.225520147, 2073284.835033481, -1608062.225520147, 2073284.835033481],
+          [-1118865.2444950193, 1584087.8540083533, -1118865.2444950193, 1584087.8540083533],
         ]);
       });
   });
@@ -79,8 +75,6 @@ describe('Tool Point', function () {
   it('user can move points', function () {
     cy.visit(Routes.map().format())
       .then(() => MainMap.fixedView())
-      .get('[data-cy=draw-menu]')
-      .click()
       .then(() => ToolSelector.enable(MapTool.Point))
       // Create point
       .then(() => Draw.click(300, 300))
@@ -95,7 +89,7 @@ describe('Tool Point', function () {
 
         expect(features).length(1);
         expect(features[0].getGeometry()?.getType()).equal('Point');
-        expect(features[0].getGeometry()?.getExtent()).deep.equals([1327119.660630621, -843857.9124419848, 1327119.660630621, -843857.9124419848]);
+        expect(features[0].getGeometry()?.getExtent()).deep.equals([1327119.660630621, -861897.051117287, 1327119.660630621, -861897.051117287]);
       });
   });
 });

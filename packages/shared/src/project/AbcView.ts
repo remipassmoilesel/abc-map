@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcProjection } from './AbcProjection';
+import { AbcProjection } from './projection/AbcProjection';
 
 export interface AbcView {
   center: number[];

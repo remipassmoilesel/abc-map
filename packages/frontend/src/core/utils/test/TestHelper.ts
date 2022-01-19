@@ -26,7 +26,9 @@ import {
   AbcLegendItem,
   AbcPredefinedLayer,
   AbcProjectManifest,
+  AbcSharedView,
   AbcVectorLayer,
+  AbcView,
   AbcWmsLayer,
   AbcWmtsLayer,
   AbcXyzLayer,
@@ -102,6 +104,7 @@ export class TestHelper {
         version: ProjectConstants.CurrentVersion,
         name: `Test project ${uuid()}`,
         containsCredentials: false,
+        public: false,
       },
       layers: [this.sampleOsmLayer(), this.sampleVectorLayer()],
       layouts: [],
@@ -116,6 +119,7 @@ export class TestHelper {
         projection: DEFAULT_PROJECTION,
         resolution: 1000,
       },
+      sharedViews: [],
     };
   }
 
@@ -320,6 +324,23 @@ export class TestHelper {
         resolution: 1000,
         projection: DEFAULT_PROJECTION,
       },
+    };
+  }
+
+  public static sampleView(): AbcView {
+    return {
+      center: [1.5, 45.4],
+      resolution: 1000,
+      projection: DEFAULT_PROJECTION,
+    };
+  }
+
+  public static sampleSharedView(): AbcSharedView {
+    return {
+      id: uuid(),
+      title: 'Sample layout',
+      view: this.sampleView(),
+      layers: [],
     };
   }
 

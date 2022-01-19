@@ -27,20 +27,20 @@
   bottom: 0;
   z-index: $zIndex-longOperation-modal;
 
+  user-select: none;
+
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 
-  background: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.8);
   color: $secondary;
 
   h1 {
     text-align: center;
-
-    @include media-breakpoint-down(xl) {
-      font-size: 1.3rem;
-    }
+    font-size: 2rem;
+    user-select: none;
   }
 }
 
@@ -50,17 +50,18 @@
   justify-content: center;
   align-items: center;
 
-  width: 50vmin;
-  height: 50vmin;
+  width: 40rem;
+  height: 35rem;
 
-  border: solid 0.1rem $gray-400;
   border-radius: $border-radius;
 
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0.7);
+
+  user-select: none;
 }
 
 .icon {
-  font-size: 6rem;
+  font-size: 3rem;
   margin: 1.5rem;
 
   @include media-breakpoint-down(xl) {

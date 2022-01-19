@@ -21,6 +21,7 @@ import { ProjectFactory } from '../../project/ProjectFactory';
 import { AbcLegend } from '@abc-map/shared';
 import { AbcView } from '@abc-map/shared/build/project/AbcView';
 import { Views } from '../../geo/Views';
+import { AbcSharedView } from '@abc-map/shared';
 
 export interface ProjectState {
   /**
@@ -29,27 +30,49 @@ export interface ProjectState {
   metadata: AbcProjectMetadata;
 
   /**
-   * Layouts of current project
+   * View used on main map, and persisted with project
    */
-  layouts: AbcLayout[];
-
-  /**
-   * Current layout displayed
-   */
-  activeLayoutId?: string;
+  mainView: AbcView;
 
   /**
    * Legend of current project
    */
   legend: AbcLegend;
 
-  view: AbcView;
+  layouts: {
+    /**
+     * Layouts of current project
+     */
+    list: AbcLayout[];
+
+    /**
+     * Current layout displayed
+     */
+    activeId?: string;
+  };
+
+  sharedViews: {
+    /**
+     * Shared views of current project
+     */
+    list: AbcSharedView[];
+
+    /**
+     * Current view displayed
+     */
+    activeId?: string;
+  };
 }
 
 // This state is not used, a new project is created on bootstrap
 export const projectInitialState: ProjectState = {
   metadata: ProjectFactory.newProjectMetadata(),
-  layouts: [],
+  mainView: Views.defaultView(),
   legend: ProjectFactory.newLegend(),
-  view: Views.defaultView(),
+  layouts: {
+    list: [],
+  },
+  sharedViews: {
+    list: [],
+  },
 };

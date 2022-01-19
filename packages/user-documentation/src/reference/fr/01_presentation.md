@@ -19,7 +19,8 @@ Avec Abc-Map vous pouvez créer:
 - <a href="https://youtu.be/irT6eV7JGDw" target="_blank">Représenter la densité de population en France métropolitaine avec des dégradés de couleurs</a>
 
 <div class='alert alert-info my-4 d-flex flex-column'>
-  <b>Ce logiciel est tout neuf ✨ </b>
+  <b class="mb-2">Ce logiciel est tout neuf ✨ </b>
+  <div class="mb-2">Abc-Map est en constante évolution, chaque semaine une amélioration est publiée.</div>
   <div>Du coup il y a beaucoup de choses à améliorer, à commencer par cette documentation.</div>
 
   <a class='btn btn-link mt-3' onclick='abc.goToFunding()'>

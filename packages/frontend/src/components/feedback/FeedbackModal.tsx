@@ -19,7 +19,7 @@
 import { Modal } from 'react-bootstrap';
 import TextFeedbackForm from './form/TextFeedbackForm';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useServices } from '../../core/hooks';
+import { useServices } from '../../core/useServices';
 import { ModalEventType, ModalStatus } from '../../core/ui/typings';
 import { prefixedTranslation } from '../../i18n/i18n';
 

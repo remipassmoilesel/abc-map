@@ -18,18 +18,24 @@
 
 @import "src/assets/styles/variables";
 
-.icon {
-  opacity: $control-color-opacity;
-}
-
-.button {
-  position: absolute;
+.container {
+  position: fixed;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
   z-index: $zIndex-sideMenu-button;
+
+  background: transparent;
+  border-radius: 100%;
+}
+
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   padding: 1rem !important;
 
   background-color: rgba(white, 0.7);
@@ -39,10 +45,11 @@
   box-shadow: $box-shadow;
 
   .icon {
+    opacity: $control-color-opacity;
     color: rgba($control-color, 0.8);
   }
 
-  &:hover {
+  &:hover:not([disabled]) {
     background-color: $control-color-active;
 
     .icon {

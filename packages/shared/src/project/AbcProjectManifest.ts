@@ -16,22 +16,33 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcLayer } from './layer/AbcLayer';
-import { AbcLayout } from './layout/AbcLayout';
+import { AbcLayer } from './layer';
+import { AbcLayout } from './layout';
 import { AbcLegend } from './legend';
 import { AbcView } from './AbcView';
+import { AbcSharedView } from './shared-views';
 
 export interface AbcProjectManifest {
+  // Metadata: id, version, etc ...
   metadata: AbcProjectMetadata;
-  layers: AbcLayer[];
-  layouts: AbcLayout[];
-  legend: AbcLegend;
+  // Main view for edition
   view: AbcView;
+  // Layers: raster, geometries, ...
+  layers: AbcLayer[];
+  // Layouts for PDF exports
+  layouts: AbcLayout[];
+  // Main legend
+  legend: AbcLegend;
+  // Views publicly accessible
+  sharedViews: AbcSharedView[];
 }
 
 export interface AbcProjectMetadata {
   id: string;
   version: string;
   name: string;
+  // True if project contains encrypted credentials, false otherwise
   containsCredentials: boolean;
+  // True if project can be accessed publicly
+  public: boolean;
 }

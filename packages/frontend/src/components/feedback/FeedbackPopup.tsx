@@ -18,7 +18,7 @@
 
 import React, { useCallback, useEffect, useState } from 'react';
 import AskFeedbackBubble from './ask-bubble/AskFeedbackBubble';
-import { useServices } from '../../core/hooks';
+import { useServices } from '../../core/useServices';
 import { Logger } from '@abc-map/shared';
 
 const logger = Logger.get('FeedbackPopup.tsx');

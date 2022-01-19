@@ -3,6 +3,9 @@
     "Modification_in_progress_will_be_lost": "Les modifications en cours seront perdues, êtes vous sûr ?",
     "You_are_disconnected": "Vous êtes déconnecté"
   },
+  "WarningBeforeUnload": {
+    "Modification_in_progress_will_be_lost": "Les modifications en cours seront perdues, êtes vous sûr ?"
+  },
   "LandingView": {
     "Free_open_source_mapping": "Cartographie libre et gratuite en ligne",
     "AbcMap_new_version": "Abc-Map, nouvelle version \uD83D\uDE80 Créez des cartes géographiques simplement: importez, dessinez, visualisez des données, et bien plus !",
@@ -27,7 +30,8 @@
     "Map": "Carte",
     "Data_store": "Catalogue de données",
     "Data_processing": "Traitement de données",
-    "Layout": "Mise en page",
+    "Export": "Export",
+    "Share": "Partage",
     "Documentation": "Documentation",
     "Support_AbcMap": "Soutenez Abc-Map",
     "Menu": "Menu"
@@ -88,7 +92,7 @@
       "New_project": "Nouveau projet",
       "Import_project": "Importer un projet",
       "Export_project": "Exporter le projet",
-      "Sorry_this_project_is_too_heavy": "Désolé \uD83D\uDE1E ce projet est trop gros pour être sauvegardé en ligne. Vous pouvez l'exporter sur votre ordinateur.",
+      "Sorry_this_project_is_too_heavy": "Désolé \uD83D\uDE1E ce projet est trop lourd pour être sauvegardé en ligne. Vous pouvez l'exporter sur votre ordinateur.",
       "You_must_select_a_file": "Vous devez sélectionner un fichier",
       "You_must_select_a_file_with_extension_": "Vous devez sélectionner un fichier au format {{extension}}",
       "Project_loaded": "Projet importé !",
@@ -303,7 +307,7 @@
   "LongOperationModal": {
     "Things_are_getting_hot": "Ça chauffe !",
     "Dont_try_to_run_away": "N'essayez pas de vous enfuir.",
-    "At_last": "Enfin !"
+    "Done": "Enfin !"
   },
   "HistoryControls": {
     "Undo": "Annuler",
@@ -481,11 +485,12 @@
       "Error": "Erreur d'exécution"
     }
   },
-  "LayoutView": {
+  "ExportView": {
     "Format": "Format",
     "List_of_layouts_displayed_here": "La liste des mises en page sera affichée ici.",
     "Layouts": "Mises en page",
-    "Create_layout_to_export": "Créez une mise en page pour exporter votre carte",
+    "Export": "Export",
+    "Create_layout_to_export": "Créez une mise en page pour exporter votre carte en PDF ou PNG",
     "Create_A4_layout": "Nouvelle page A4",
     "Layout": "Mise en page",
     "Create_layout_to_export_your_map": "Mettez en page et exportez vos cartes au format PDF ou PNG \uD83D\uDCD0 \uD83D\uDEB6\u200D♀️",
@@ -688,7 +693,8 @@
     "Close": "Fermer"
   },
   "DocumentationView": {
-    "Table_of_content": "Sommaire"
+    "Table_of_content": "Sommaire",
+    "Back_to_top": "Retour en haut"
   },
   "AskFeedbackBubble": {
     "Hello": "Salut",
@@ -707,6 +713,58 @@
   },
   "FeedbackModal": {
     "So_how_is_it_going": "Alors, comment ça se passe ?"
+  },
+  "ShareSettingsView": {
+    "Share": "Partage",
+    "Share_your_maps_online": "Partagez vos cartes en ligne",
+    "Project_shared": "Projet partagé !",
+    "Map_sharing": "Partage de carte",
+    "You_can_share_your_map_using_a_public_link": "Vous pouvez partager votre carte à l'aide d'un lien public <br/> ou l'intégrer dans vos sites à l'aide d'un code <code>iframe</code>.",
+    "You_must_sign_in_to_share_your_maps": "Vous devez vous connecter pour partager vos cartes.",
+    "Login": "Se connecter",
+    "Register": "S'inscrire",
+    "Warning": "Attention",
+    "If_your_card_contains_identifiers": "Si votre carte contient des identifiants, ces identifiants seront accessibles publiquement.",
+    "If_these_identifiers_give_access_to_paid_services": "Si ces identifiants donnent accès à des services payants, cela peut entrainer une facturation excessive.",
+    "This_map_is_private": "Cette carte est privée.",
+    "Enable_sharing": "Activer le partage",
+    "Previous_view": "Vue précédente",
+    "Next_view": "Vue suivante",
+    "Edit_view": "Editer la vue",
+    "Delete_view": "Supprimer la vue",
+    "Cancel": "Annuler",
+    "Confirm": "Enregistrer",
+    "You_cannot_delete_the_last_view": "Vous ne pouvez pas supprimer la dernière vue",
+    "Main_view": "Vue principale",
+    "View_list": "Liste des vues",
+    "Configuration": "Configuration",
+    "View": "Vue",
+    "Overview": "Aperçu",
+    "Publish": "Publier",
+    "Address_and_share_code": "Adresse et code de partage",
+    "Disable_sharing": "Désactiver le partage",
+    "New_view": "Nouvelle vue",
+    "Visible_layers": "Couches visibles",
+    "Work_in_progress": "Travail en cours",
+    "This_feature_is_under_development": "Cette fonctionnalité est en cours de développement.",
+    "It_certainly_lacks_options": "Il manque certainement des options, et vous rencontrerez peut-être quelques bugs.",
+    "Close": "Fermer"
+  },
+  "CopyButton": {
+    "Copied": "Copié !",
+    "Copy_to_clipboard": "Copier dans le presse papier",
+    "Cannot_copy_to_clipboard": "Impossible de copier dans le presse-papiers avec ce navigateur"
+  },
+  "SharedMapView": {
+    "Shared_map": "Carte partagée",
+    "Cannot_display_map": "Aie ! Impossible de trouver cette carte",
+    "But_dont_panic_you_can_create_your_own": "Mais pas de panique, vous pouvez créer votre propre carte avec",
+    "Navigation": "Navigation",
+    "Previous_view": "Vue précédente",
+    "Next_view": "Vue suivante",
+    "Close": "Fermer",
+    "This_map_was_created_and_published_with_Abc-Map": "Cette carte a été créée et publiée avec Abc-Map.",
+    "Abc-Map_is_free_mapping_software_try_it": "Abc-Map est un logiciel libre de cartographie, essayez le !"
   },
   "core": {
     "ProjectFactory": {
@@ -728,14 +786,14 @@
       "Layer_without_name": "Couche sans nom"
     },
     "MapKeyboardListener": {
-      "Nothing_more_to_undo": "Il n'y a plus rien à annuler",
-      "Nothing_more_to_redo": "Il n'y a plus rien à refaire",
       "You_must_select_features_first": "Vous devez d'abord sélectionner des géométries"
     },
-    "LayoutKeyboardListener": {
-      "Nothing_to_delete": "Il n'y a rien à supprimer",
+    "HistoryKeyboardListener": {
       "Nothing_more_to_undo": "Il n'y a plus rien à annuler",
       "Nothing_more_to_redo": "Il n'y a plus rien à refaire"
+    },
+    "LayoutKeyboardListener": {
+      "Nothing_to_delete": "Il n'y a rien à supprimer"
     },
     "ToastService": {
       "Unknown_technical_problem": "Aie ! Petit problème technique \uD83D\uDE05 Veuillez réessayer plus tard.",
@@ -746,8 +804,10 @@
       "You_must_connect_before": "Vous devez être connecté pour effectuer cette opération.",
       "Are_you_connected": "Impossible de se connecter au serveur \uD83D\uDCE1 Êtes vous connecté ?"
     },
-    "ProjectService": {
-      "Too_much_projects": "Désolé \uD83D\uDE1E vous avez atteint votre quota de projet. Supprimez-en un."
+    "useSaveProjectOnline": {
+      "Too_much_projects": "Désolé \uD83D\uDE1E vous avez atteint votre quota de projet. Supprimez-en un.",
+      "Project_too_heavy": "Ce projet est trop lourd",
+      "Project_saved": "Projet enregistré !"
     },
     "tools": {
       "MoveMap": "Déplacer",

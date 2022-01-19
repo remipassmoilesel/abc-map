@@ -51,6 +51,7 @@ export class TestHelper {
         version: ProjectConstants.CurrentVersion,
         name: `Test project ${uuid()}`,
         containsCredentials: false,
+        public: false,
       },
       layers: [
         {
@@ -106,6 +107,7 @@ export class TestHelper {
         projection: DEFAULT_PROJECTION,
         resolution: 1000,
       },
+      sharedViews: [],
     };
   }
 
@@ -123,9 +125,10 @@ export class TestHelper {
     return {
       _id: uuid(),
       ownerId: uuid(),
-      containsCredentials: false,
       name: 'Fake project',
       version: '0.1',
+      public: false,
+      containsCredentials: false,
     };
   }
 

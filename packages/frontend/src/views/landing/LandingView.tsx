@@ -33,7 +33,7 @@ import { FaIcon } from '../../components/icon/FaIcon';
 import { IconDefs } from '../../components/icon/IconDefs';
 import Cls from './LandingView.module.scss';
 import { useAppSelector } from '../../core/store/hooks';
-import { useServices } from '../../core/hooks';
+import { useServices } from '../../core/useServices';
 
 const logger = Logger.get('LandingView.tsx');
 

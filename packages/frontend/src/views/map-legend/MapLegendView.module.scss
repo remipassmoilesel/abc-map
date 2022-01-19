@@ -19,7 +19,7 @@
 @import "src/assets/styles/variables";
 
 .mapLegendView {
-  height: $view-height;
+  height: 100%;
 
   display: flex;
   flex-direction: column;

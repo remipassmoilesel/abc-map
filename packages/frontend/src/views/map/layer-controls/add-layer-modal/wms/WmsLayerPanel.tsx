@@ -181,7 +181,7 @@ class WmsLayerPanel extends Component<Props, State> {
     // We grab layer name and WMS urls
     const remoteLayerName = layer.Name || '';
     const dcpTypes = capabilities?.Capability?.Request?.GetMap?.DCPType;
-    const remoteUrls = dcpTypes?.map((dcpType) => dcpType.HTTP?.Get?.OnlineResource).filter((url) => typeof url === 'string' && !!url) as string[];
+    const remoteUrls = dcpTypes?.map((dcpType) => dcpType.HTTP?.Get?.OnlineResource).filter((url): url is string => typeof url === 'string' && !!url);
     if (!remoteLayerName || !remoteUrls || !remoteUrls.length) {
       return Promise.reject(new Error('Invalid layer name or URLs'));
     }

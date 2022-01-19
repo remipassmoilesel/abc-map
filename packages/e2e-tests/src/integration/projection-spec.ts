@@ -35,8 +35,6 @@ describe('Projection', () => {
       .then(() => MainMap.fixedView())
       .get('[data-cy=project-menu]')
       .click()
-      .get('[data-cy=draw-menu]')
-      .click()
       // Delete geometry layer
       .then(() => LayerControls.deleteActiveLayer())
       // Change projection
@@ -50,11 +48,9 @@ describe('Projection', () => {
       .wait(1000)
       .then(() => MainMap.getReference())
       .should((map) => {
-        expect(map.getViewExtent()).deep.equal([-6099007.132605841, 3215911.3098204834, 7041350.893871974, 10025005.923540805]);
+        expect(map.getViewExtent()).deep.equal([-6099007.132605841, 3225866.126507209, 7041350.893871974, 10015051.10685408]);
       })
-      .then(() => TopBar.layout())
-      .get('[data-cy=controls-menu]')
-      .click()
+      .then(() => TopBar.export())
       .get('[data-cy=add-layout]')
       .click()
       .then(() => LayoutPreview.getReference())

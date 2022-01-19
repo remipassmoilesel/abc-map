@@ -18,5 +18,6 @@
 
 export enum HistoryKey {
   Map = 'Map',
-  Layout = 'Layout',
+  Export = 'Export',
+  SharedViews = 'SharedViews',
 }

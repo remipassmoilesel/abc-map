@@ -16,24 +16,12 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcFile, AbcLayer, AbcProjection, AbcProjectManifest, AbcProjectMetadata, BaseMetadata, BasicAuthentication, LayerType } from '@abc-map/shared';
+import { AbcFile, AbcLayer, AbcProjectManifest, AbcProjectMetadata, LayerType } from '@abc-map/shared';
 import { MigratedProject, ProjectMigration } from './typings';
+import { AbcProjectMetadata030, WmsMetadata030 } from './old-typings/project-030';
 import semver from 'semver';
 
 const NEXT = '0.4.0';
-
-export interface AbcProjectMetadata030 extends AbcProjectMetadata {
-  projection?: AbcProjection;
-}
-
-export interface WmsMetadata030 extends BaseMetadata {
-  type: LayerType.Wms;
-  projection?: AbcProjection;
-  extent?: [number, number, number, number];
-  remoteUrl: string;
-  remoteLayerName: string;
-  auth?: BasicAuthentication;
-}
 
 /**
  * This migration:
@@ -83,7 +71,7 @@ export class FromV030ToV040 implements ProjectMigration {
     return {
       manifest: {
         ...manifest,
-        metadata,
+        metadata: metadata as AbcProjectMetadata,
         layers: upgrated,
       },
       files,

@@ -16,28 +16,15 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcFile, AbcProjection, AbcProjectManifest, BasicAuthentication, LayerType } from '@abc-map/shared';
+import { AbcFile, AbcProjectManifest, LayerType } from '@abc-map/shared';
 import { MigratedProject, ProjectMigration } from './typings';
 import semver from 'semver';
 import { ModalService } from '../../ui/ModalService';
 import { ModalStatus } from '../../ui/typings';
 import { Encryption } from '../../utils/Encryption';
+import { AbcWmsLayer020, WmsMetadata020 } from './old-typings/project-020';
 
 const NEXT = '0.3.0';
-
-export interface AbcWmsLayer020 {
-  type: LayerType.Wms;
-  metadata: WmsMetadata020;
-}
-
-export interface WmsMetadata020 {
-  type: LayerType.Wms;
-  projection?: AbcProjection;
-  extent?: [number, number, number, number];
-  remoteUrl: string;
-  remoteLayerName: string;
-  auth?: BasicAuthentication;
-}
 
 /**
  * This migration add encrypted WMS remote url, even without authentication credentials

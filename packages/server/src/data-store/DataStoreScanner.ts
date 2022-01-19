@@ -41,6 +41,6 @@ export class DataStoreScanner {
     const paths = await this.glob(`{${root}/**/artefact.yml,${root}/**/artefact.yaml}`, { nocase: true });
 
     const manifests = Promise.all(paths.map((path) => this.reader.read(path).catch((err) => logger.error(`Invalid manifest: ${path}`, err))));
-    return manifests.then((res) => res.filter((m) => !!m) as ArtefactManifest[]);
+    return manifests.then((res) => res.filter((m): m is ArtefactManifest => !!m));
   }
 }

@@ -33,8 +33,6 @@ describe('Tool Polygon', function () {
   it('user can draw', function () {
     cy.visit(Routes.map().format())
       .then(() => MainMap.fixedView())
-      .get('[data-cy=draw-menu]')
-      .click()
       .then(() => ToolSelector.enable(MapTool.Polygon))
       // First
       .then(() => Draw.click(100, 100))
@@ -66,8 +64,8 @@ describe('Tool Polygon', function () {
         expect(features[1].get(StyleProperties.FillPattern)).equal(DefaultDrawingStyle.fill.pattern);
 
         expect(features.map((f) => f.getGeometry()?.getExtent())).deep.equals([
-          [-3564850.149620659, 3558914.9167841673, -3075653.168595531, 4048111.8978092954],
-          [-1608062.225520147, 1602126.9926836556, -1118865.2444950193, 2091323.9737087833],
+          [-3564850.149620659, 3540875.778108865, -3075653.168595531, 4030072.759133993],
+          [-1608062.225520147, 1584087.8540083533, -1118865.2444950193, 2073284.835033481],
         ]);
       });
   });
@@ -75,8 +73,6 @@ describe('Tool Polygon', function () {
   it('user can modify', function () {
     cy.visit(Routes.map().format())
       .then(() => MainMap.fixedView())
-      .get('[data-cy=draw-menu]')
-      .click()
       .then(() => ToolSelector.enable(MapTool.Polygon))
       // Create polygon
       .then(() => Draw.click(100, 100))
@@ -93,7 +89,7 @@ describe('Tool Polygon', function () {
         const features = map.getActiveLayerFeatures();
         expect(features).length(1);
         expect(features[0].getGeometry()?.getType()).equal('Polygon');
-        expect(features[0].getGeometry()?.getExtent()).deep.equals([-3564850.149620659, -843857.9124419848, 1327119.660630621, 4048111.8978092954]);
+        expect(features[0].getGeometry()?.getExtent()).deep.equals([-3564850.149620659, -861897.051117287, 1327119.660630621, 4030072.759133993]);
       });
   });
 });

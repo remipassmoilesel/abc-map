@@ -43,7 +43,7 @@ interface Props {
 
 function AddLayerModal(props: Props) {
   const { onHide, visible } = props;
-  const projection = useAppSelector((st) => st.project.view.projection);
+  const projection = useAppSelector((st) => st.project.mainView.projection);
   const [layerType, setLayerType] = useState<LabeledLayerType>(LabeledLayerTypes.Predefined);
 
   const [predefinedValues, setPredefinedValues] = useState<PredefinedLayerModel>(PredefinedLayerModel.StamenWatercolor);

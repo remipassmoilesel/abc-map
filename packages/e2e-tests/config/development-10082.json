@@ -7,5 +7,6 @@
   "videosFolder": "videos",
   "supportFile": "src/support/index.js",
   "video": false,
-  "watchForFileChanges": false
+  "watchForFileChanges": false,
+  "numTestsKeptInMemory": 0
 }

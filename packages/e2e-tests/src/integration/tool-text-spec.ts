@@ -33,8 +33,6 @@ describe('Tool Text', function () {
     cy.visit(Routes.map().format())
       .then(() => MainMap.fixedView())
       .then(() => MainMap.getComponent())
-      .get('[data-cy=draw-menu]')
-      .click()
       .then(() => ToolSelector.enable(MapTool.Point))
       // Draw 2 points
       .then(() => Draw.click(100, 100))

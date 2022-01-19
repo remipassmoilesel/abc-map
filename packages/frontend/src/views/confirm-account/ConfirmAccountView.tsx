@@ -24,7 +24,7 @@ import { addNoIndexMeta, pageSetup, removeNoIndexMeta } from '../../core/utils/p
 import { prefixedTranslation } from '../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
 import { Routes } from '../../routes';
-import { useServices } from '../../core/hooks';
+import { useServices } from '../../core/useServices';
 import Cls from './ConfirmAccountView.module.scss';
 
 const logger = Logger.get('ConfirmAccountView.tsx');

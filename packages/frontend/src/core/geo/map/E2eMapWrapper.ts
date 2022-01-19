@@ -41,7 +41,7 @@ export class E2eMapWrapper implements E2eMap {
     return this.internal
       .getLayers()
       .map((lay) => lay.getMetadata())
-      .filter((meta) => !!meta) as LayerMetadata[];
+      .filter((meta): meta is LayerMetadata => !!meta);
   }
 
   public getActiveLayerMetadata(): BaseMetadata | undefined {

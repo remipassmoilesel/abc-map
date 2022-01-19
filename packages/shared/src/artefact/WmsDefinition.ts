@@ -16,12 +16,13 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcProjection, BasicAuthentication } from '../project';
+import { AbcProjection } from '../project';
+import { LayerAuthentication } from '../project/layer/LayerAuthentication';
 
 export interface WmsDefinition {
   remoteUrls: string[];
   remoteLayerName: string;
   projection?: AbcProjection;
   extent?: [number, number, number, number];
-  auth?: BasicAuthentication;
+  auth?: LayerAuthentication;
 }

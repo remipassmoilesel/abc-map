@@ -16,67 +16,91 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ProjectUpdater } from './ProjectUpdater';
+import { logger, ProjectUpdater } from './ProjectUpdater';
 import { ProjectMigration } from './migrations/typings';
-import sinon from 'sinon';
+import sinon, { SinonStubbedInstance } from 'sinon';
 import { TestHelper } from '../utils/test/TestHelper';
+import { ModalService } from '../ui/ModalService';
+import { TestData } from './migrations/test-data/TestData';
+
+logger.disable();
 
 describe('ProjectUpdater', () => {
-  let migration1: TestProjectMigration;
-  let migration2: TestProjectMigration;
-  let updater: ProjectUpdater;
+  describe('With fake migrations', () => {
+    let migration1: TestProjectMigration;
+    let migration2: TestProjectMigration;
+    let updater: ProjectUpdater;
 
-  beforeEach(() => {
-    migration1 = new TestProjectMigration();
-    migration2 = new TestProjectMigration();
-    updater = new ProjectUpdater(() => [migration1, migration2]);
+    beforeEach(() => {
+      migration1 = new TestProjectMigration();
+      migration2 = new TestProjectMigration();
+      updater = new ProjectUpdater(() => [migration1, migration2]);
+    });
+
+    it('update() should do nothing if project is up to date', async () => {
+      // Prepare
+      migration1.interestedBy.resolves(false);
+      migration2.interestedBy.resolves(false);
+      const manifest = TestHelper.sampleProjectManifest();
+
+      // Act
+      await updater.update(manifest, []);
+
+      // Assert
+      expect(migration1.migrate.callCount).toEqual(0);
+    });
+
+    it('update() should migrate project if necessary', async () => {
+      // Prepare
+      migration1.interestedBy.resolves(false);
+      migration2.interestedBy.resolves(true);
+      const manifest = TestHelper.sampleProjectManifest();
+
+      // Act
+      await updater.update(manifest, []);
+
+      // Assert
+      expect(migration2.migrate.callCount).toEqual(1);
+      expect(migration2.migrate.args[0]).toEqual([manifest, []]);
+    });
+
+    it('update() should pass migrated projects to next migration scripts', async () => {
+      // Prepare
+      const afterMigration1 = { manifest: { fakeProject: true }, files: [{ fakeFile: true }] };
+      migration1.interestedBy.resolves(true);
+      migration1.migrate.returns(afterMigration1);
+
+      migration2.interestedBy.resolves(true);
+
+      const manifest = TestHelper.sampleProjectManifest();
+
+      // Act
+      await updater.update(manifest, []);
+
+      // Assert
+      expect(migration1.migrate.callCount).toEqual(1);
+      expect(migration1.migrate.args[0]).toEqual([manifest, []]);
+      expect(migration2.migrate.callCount).toEqual(1);
+      expect(migration2.migrate.args[0]).toEqual([afterMigration1.manifest, afterMigration1.files]);
+    });
   });
 
-  it('update() should do nothing if project is up to date', async () => {
-    // Prepare
-    migration1.interestedBy.resolves(false);
-    migration2.interestedBy.resolves(false);
-    const manifest = TestHelper.sampleProjectManifest();
+  describe('With existing migrations', () => {
+    let modal: SinonStubbedInstance<ModalService>;
+    let updater: ProjectUpdater;
 
-    // Act
-    await updater.update(manifest, []);
+    beforeEach(() => {
+      modal = sinon.createStubInstance(ModalService);
+      updater = ProjectUpdater.create(modal as unknown as ModalService);
+    });
 
-    // Assert
-    expect(migration1.migrate.callCount).toEqual(0);
-  });
+    it('should migrate', async () => {
+      const project = await TestData.project01();
 
-  it('update() should migrate project if necessary', async () => {
-    // Prepare
-    migration1.interestedBy.resolves(false);
-    migration2.interestedBy.resolves(true);
-    const manifest = TestHelper.sampleProjectManifest();
+      const result = await updater.update(project.manifest, project.files);
 
-    // Act
-    await updater.update(manifest, []);
-
-    // Assert
-    expect(migration2.migrate.callCount).toEqual(1);
-    expect(migration2.migrate.args[0]).toEqual([manifest, []]);
-  });
-
-  it('update() should pass migrated projects to next migration scripts', async () => {
-    // Prepare
-    const afterMigration1 = { manifest: { fakeProject: true }, files: [{ fakeFile: true }] };
-    migration1.interestedBy.resolves(true);
-    migration1.migrate.returns(afterMigration1);
-
-    migration2.interestedBy.resolves(true);
-
-    const manifest = TestHelper.sampleProjectManifest();
-
-    // Act
-    await updater.update(manifest, []);
-
-    // Assert
-    expect(migration1.migrate.callCount).toEqual(1);
-    expect(migration1.migrate.args[0]).toEqual([manifest, []]);
-    expect(migration2.migrate.callCount).toEqual(1);
-    expect(migration2.migrate.args[0]).toEqual([afterMigration1.manifest, afterMigration1.files]);
+      expect(result.manifest.metadata.version).toEqual('0.6.0');
+    });
   });
 });
 

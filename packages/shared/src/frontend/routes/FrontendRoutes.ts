@@ -34,8 +34,16 @@ export class FrontendRoutes {
     return new Route<EmptyParams>('/:lang/datastore', this.lang);
   }
 
-  public layout() {
-    return new Route<EmptyParams>('/:lang/layout', this.lang);
+  public export() {
+    return new Route<EmptyParams>('/:lang/export', this.lang);
+  }
+
+  public shareSettings() {
+    return new Route<EmptyParams>('/:lang/share/settings', this.lang);
+  }
+
+  public sharedMap() {
+    return new Route<SharedMapParams>('/:lang/shared-map/:projectId', this.lang);
   }
 
   public mapLegend() {
@@ -75,7 +83,9 @@ export class FrontendRoutes {
       this.landing(),
       this.map(),
       this.dataStore(),
-      this.layout(),
+      this.export(),
+      this.shareSettings(),
+      this.sharedMap(),
       this.mapLegend(),
       this.documentation(),
       this.dataProcessing(),
@@ -108,4 +118,8 @@ export interface PasswordLostParams extends Params {
 
 export interface DataProcessingParams extends Params {
   moduleId?: string;
+}
+
+export interface SharedMapParams extends Params {
+  projectId?: string;
 }

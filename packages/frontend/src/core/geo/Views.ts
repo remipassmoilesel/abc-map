@@ -21,6 +21,7 @@ import { AbcView } from '@abc-map/shared/build/project/AbcView';
 import { DEFAULT_PROJECTION } from '@abc-map/shared';
 import { fromLonLat } from 'ol/proj';
 import sample from 'lodash/sample';
+import { toPrecision } from '../utils/numbers';
 
 const DefaultView: AbcView = {
   resolution: 39135,
@@ -76,11 +77,12 @@ export class Views {
   }
 
   public static olToAbc(view: View): AbcView {
+    const prevision = 10;
     const olProj = view.getProjection();
     const projection = olProj ? { name: olProj.getCode() } : DefaultView.projection;
     return {
-      center: view.getCenter()?.slice() || DefaultView.center,
-      resolution: view.getResolution() || DefaultView.resolution,
+      center: (view.getCenter() || DefaultView.center).map((n) => toPrecision(n, prevision)),
+      resolution: toPrecision(view.getResolution() || DefaultView.resolution, prevision),
       projection,
     };
   }

@@ -408,13 +408,14 @@ describe('shallowClone()', () => {
     const layer = LayerFactory.newVectorLayer();
 
     // Act
-    const clone = layer.shallowClone();
+    const clone = layer.shallowClone(2);
 
     // Assert
     expect(clone.unwrap()).toBeInstanceOf(VectorImageLayer);
     expect(clone.unwrap().getSource()).toStrictEqual(layer.unwrap().getSource());
     expect(clone.unwrap()).not.toStrictEqual(layer.unwrap());
     expect(clone.getMetadata()).toEqual(layer.getMetadata());
+    expect(clone.unwrap().get(LayerProperties.StyleRatio)).toEqual(2);
   });
 
   it('with WMS layer', () => {

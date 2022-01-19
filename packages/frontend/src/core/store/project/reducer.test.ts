@@ -18,20 +18,41 @@
 
 import { projectReducer } from './reducer';
 import { ProjectActions } from './actions';
-import { projectInitialState, ProjectState } from './state';
+import { ProjectState } from './state';
 import { TestHelper } from '../../utils/test/TestHelper';
-import { AbcLayout, AbcLegendItem, LegendDisplay } from '@abc-map/shared';
+import { AbcLayout, AbcLegendItem, AbcSharedView, AbcView, LegendDisplay } from '@abc-map/shared';
 import { deepFreeze } from '../../utils/deepFreeze';
-import { nanoid } from 'nanoid';
 
 describe('Project reducer', function () {
+  let initialState: ProjectState;
+  beforeEach(() => {
+    initialState = deepFreeze({
+      metadata: {
+        ...TestHelper.sampleProjectManifest().metadata,
+        public: false,
+      },
+      mainView: {
+        ...TestHelper.sampleView(),
+      },
+      legend: {
+        display: LegendDisplay.BottomRightCorner,
+        items: [TestHelper.sampleLegendItem()],
+        width: 800,
+        height: 600,
+      },
+      layouts: {
+        list: [TestHelper.sampleLayout()],
+        activeId: 'test-active-layout-id',
+      },
+      sharedViews: {
+        list: [TestHelper.sampleSharedView()],
+        activeId: 'test-active-share-view-id',
+      },
+    });
+  });
+
   it('LoadProject', function () {
     // Prepare
-    const initialState: ProjectState = deepFreeze({
-      ...projectInitialState,
-      layouts: [TestHelper.sampleLayout()],
-    });
-
     const project = TestHelper.sampleProjectManifest();
 
     // Act
@@ -41,146 +62,221 @@ describe('Project reducer', function () {
     expect(state.metadata.id).toEqual(project.metadata.id);
     expect(state.metadata.version).toEqual(project.metadata.version);
     expect(state.metadata.name).toEqual(project.metadata.name);
-    expect(state.layouts).toEqual([]);
+    expect(state.layouts.list).toEqual([]);
+    expect(state.layouts.activeId).toEqual(undefined);
+    expect(state.sharedViews.list).toEqual([]);
+    expect(state.sharedViews.activeId).toEqual(undefined);
   });
 
-  it('RenameProject', function () {
-    // Prepare
-    const initialState: ProjectState = deepFreeze({
-      ...projectInitialState,
-    });
-    const action = ProjectActions.setProjectName('New name');
-
+  it('SetProjectName', () => {
     // Act
-    const state = projectReducer(initialState, action);
+    const state = projectReducer(initialState, ProjectActions.setProjectName('New name'));
 
     // Assert
     expect(state.metadata.name).toEqual('New name');
   });
 
-  it('AddLayouts', function () {
+  it('AddLayouts', () => {
     // Prepare
-    const initialState: ProjectState = deepFreeze({
-      ...projectInitialState,
-      layouts: [TestHelper.sampleLayout()],
-    });
     const layout = TestHelper.sampleLayout();
-    const action = ProjectActions.addLayouts([layout]);
 
     // Act
-    const state = projectReducer(initialState, action);
+    const state = projectReducer(initialState, ProjectActions.addLayouts([layout]));
 
     // Assert
-    expect(state.layouts).toEqual([initialState.layouts[0], layout]);
+    expect(state.layouts.list[1]).toEqual(layout);
   });
 
-  it('UpdateLayout', function () {
+  it('UpdateLayout', () => {
     // Prepare
-    const originalLayout = TestHelper.sampleLayout();
-    originalLayout.view.resolution = 111111;
-
-    const initialState: ProjectState = deepFreeze({
-      ...projectInitialState,
-      layouts: [originalLayout],
-    });
-
-    const updatedLayout: AbcLayout = {
-      ...originalLayout,
-      view: {
-        ...originalLayout.view,
-        resolution: 99999,
-      },
+    const layout: AbcLayout = {
+      ...initialState.layouts.list[0],
+      name: 'New name',
     };
-    const action = ProjectActions.updateLayout(updatedLayout);
 
     // Act
-    const state = projectReducer(initialState, action);
+    const state = projectReducer(initialState, ProjectActions.updateLayout(layout));
 
     // Assert
-    expect(state.layouts[0].id).toEqual(originalLayout.id);
-    expect(state.layouts[0].view.resolution).toEqual(99999);
+    expect(state.layouts.list[0].name).toEqual('New name');
   });
 
-  it('SetLayoutIndex', function () {
+  it('SetLayoutIndex', () => {
     // Prepare
-    const originalLayouts = [TestHelper.sampleLayout(), TestHelper.sampleLayout(), TestHelper.sampleLayout()];
-    const initialState: ProjectState = {
-      ...projectInitialState,
-      layouts: originalLayouts,
-    };
-    const action = ProjectActions.setLayoutIndex(originalLayouts[2], 1);
+    const layout = TestHelper.sampleLayout();
+    initialState = projectReducer(initialState, ProjectActions.addLayouts([layout]));
 
     // Act
-    const state = projectReducer(initialState, action);
+    const state = projectReducer(initialState, ProjectActions.setLayoutIndex(layout, 0));
 
     // Assert
-    expect(state.layouts.length).toEqual(3);
-    expect(state.layouts.map((l) => l.id)).toEqual([originalLayouts[0].id, originalLayouts[2].id, originalLayouts[1].id]);
+    expect(state.layouts.list[0]).toEqual(layout);
   });
 
-  it('RemoveLayouts', function () {
+  it('RemoveLayouts', () => {
     // Prepare
-    const originalLayouts = [TestHelper.sampleLayout(), TestHelper.sampleLayout()];
-    const initialState: ProjectState = deepFreeze({
-      ...projectInitialState,
-      layouts: originalLayouts,
-    });
-    const action = ProjectActions.removeLayouts([originalLayouts[1].id]);
+    const layout = initialState.layouts.list[0];
 
     // Act
-    const state = projectReducer(initialState, action);
+    const state = projectReducer(initialState, ProjectActions.removeLayouts([layout.id]));
 
     // Assert
-    expect(state.layouts.length).toEqual(1);
-    expect(state.layouts[0].id).toEqual(originalLayouts[0].id);
+    expect(state.layouts.list.length).toEqual(0);
   });
 
-  it('ClearLayouts', function () {
-    // Prepare
-    const initialState: ProjectState = deepFreeze({
-      ...projectInitialState,
-      layouts: [TestHelper.sampleLayout()],
-    });
-
+  it('ClearLayouts', () => {
     // Act
     const state = projectReducer(initialState, ProjectActions.clearLayouts());
 
     // Assert
-    expect(state.layouts).toEqual([]);
+    expect(state.layouts.list.length).toEqual(0);
   });
 
-  it('UpdateLegendItem', function () {
+  it('SetActiveLayout', () => {
     // Prepare
-    const item: AbcLegendItem = {
-      id: nanoid(),
-      text: 'Original text',
-    };
-    const initialState: ProjectState = deepFreeze({
-      ...projectInitialState,
-      legend: {
-        display: LegendDisplay.BottomRightCorner,
-        items: [TestHelper.sampleLegendItem(), item],
-        width: 300,
-        height: 500,
-      },
-    });
+    const layout = initialState.layouts.list[0];
 
     // Act
-    const state = projectReducer(
-      initialState,
-      ProjectActions.updateItem({
-        ...item,
-        text: 'New text',
-      })
-    );
+    const state = projectReducer(initialState, ProjectActions.setActiveLayout(layout.id));
 
     // Assert
-    expect(state.legend.items).toEqual([
-      initialState.legend.items[0],
-      {
-        ...item,
-        text: 'New text',
-      },
-    ]);
+    expect(state.layouts.activeId).toEqual(layout.id);
+  });
+
+  it('AddLegendItems', () => {
+    // Prepare
+    const item = TestHelper.sampleLegendItem();
+
+    // Act
+    const state = projectReducer(initialState, ProjectActions.addLegendItems([item]));
+
+    // Assert
+    expect(state.legend.items[1]).toEqual(item);
+  });
+
+  it('UpdateLegendItem', () => {
+    // Prepare
+    const item: AbcLegendItem = {
+      ...initialState.legend.items[0],
+      text: 'Test text',
+    };
+
+    // Act
+    const state = projectReducer(initialState, ProjectActions.updateLegendItem(item));
+
+    // Assert
+    expect(state.legend.items[0].text).toEqual('Test text');
+  });
+
+  it('SetLegendSize', () => {
+    // Act
+    const state = projectReducer(initialState, ProjectActions.setLegendSize(3000, 4000));
+
+    // Assert
+    expect(state.legend.width).toEqual(3000);
+    expect(state.legend.height).toEqual(4000);
+  });
+
+  it('SetLegendDisplay', () => {
+    // Act
+    const state = projectReducer(initialState, ProjectActions.setLegendDisplay(LegendDisplay.BottomLeftCorner));
+
+    // Assert
+    expect(state.legend.display).toEqual(LegendDisplay.BottomLeftCorner);
+  });
+
+  it('DeleteLegendItem', () => {
+    // Prepare
+    const item = initialState.legend.items[0];
+
+    // Act
+    const state = projectReducer(initialState, ProjectActions.deleteLegendItem(item));
+
+    // Assert
+    expect(state.legend.items.length).toEqual(0);
+  });
+
+  it('SetLegendItemIndex', () => {
+    // Prepare
+    const item1 = initialState.legend.items[0];
+    const item2 = TestHelper.sampleLegendItem();
+    let state = projectReducer(initialState, ProjectActions.addLegendItems([item2]));
+
+    // Act
+    state = projectReducer(state, ProjectActions.setLegendItemIndex(item2, 0));
+
+    // Assert
+    expect(state.legend.items[0].id).toEqual(item2.id);
+    expect(state.legend.items[1].id).toEqual(item1.id);
+  });
+
+  it('AddSharedViews', () => {
+    // Prepare
+    const view = TestHelper.sampleSharedView();
+
+    // Act
+    const state = projectReducer(initialState, ProjectActions.addSharedViews([view]));
+
+    // Assert
+    expect(state.sharedViews.list[1].id).toEqual(view.id);
+  });
+
+  it('UpdateSharedView', () => {
+    // Prepare
+    const view: AbcSharedView = {
+      ...initialState.sharedViews.list[0],
+      title: 'Test title',
+    };
+
+    // Act
+    const state = projectReducer(initialState, ProjectActions.updateSharedView(view));
+
+    // Assert
+    expect(state.sharedViews.list[0].title).toEqual('Test title');
+  });
+
+  it('RemoveSharedViews', () => {
+    // Prepare
+    const view = initialState.sharedViews.list[0];
+
+    // Act
+    const state = projectReducer(initialState, ProjectActions.removeSharedViews([view]));
+
+    // Assert
+    expect(state.sharedViews.list.length).toEqual(0);
+  });
+
+  it('SetActiveSharedView', () => {
+    // Prepare
+    const view = initialState.sharedViews.list[0];
+
+    // Act
+    const state = projectReducer(initialState, ProjectActions.setActiveSharedView(view.id));
+
+    // Assert
+    expect(state.sharedViews.activeId).toEqual(view.id);
+  });
+
+  it('SetView', () => {
+    // Prepare
+    const view: AbcView = {
+      center: [111, 222],
+      projection: { name: 'EPSG:XXXX' },
+      resolution: 888888,
+    };
+
+    // Act
+    const state = projectReducer(initialState, ProjectActions.setView(view));
+
+    // Assert
+    expect(state.mainView).toEqual(view);
+  });
+
+  it('SetPublic', () => {
+    // Act
+    const state = projectReducer(initialState, ProjectActions.setPublic(true));
+
+    // Assert
+    expect(state.metadata.public).toEqual(true);
   });
 });

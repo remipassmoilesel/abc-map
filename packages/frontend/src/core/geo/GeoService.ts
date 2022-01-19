@@ -64,6 +64,12 @@ export class GeoService {
     private wmtsCapabilitiesParser = parseWmtsCapabilities
   ) {}
 
+  /**
+   * Main map is the map used for edition. But it also hold all data of current project in order to stay
+   * memory efficient.
+   *
+   * It must be mount ONLY on edit map.
+   */
   public getMainMap(): MapWrapper {
     return this.mainMap;
   }
@@ -77,8 +83,8 @@ export class GeoService {
     });
   }
 
-  public async exportLayers(): Promise<AbcLayer[]> {
-    const layers = this.getMainMap().getLayers();
+  public async exportLayers(map: MapWrapper): Promise<AbcLayer[]> {
+    const layers = map.getLayers();
     const result: AbcLayer[] = [];
 
     for (const layer of layers) {

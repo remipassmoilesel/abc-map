@@ -19,7 +19,7 @@
 import { useCallback } from 'react';
 import { FaIcon } from '../../../../components/icon/FaIcon';
 import { IconDefs } from '../../../../components/icon/IconDefs';
-import { useServices } from '../../../../core/hooks';
+import { useServices } from '../../../../core/useServices';
 import { easeOut } from 'ol/easing';
 import { WithTooltip } from '../../../../components/with-tooltip/WithTooltip';
 import { prefixedTranslation } from '../../../../i18n/i18n';

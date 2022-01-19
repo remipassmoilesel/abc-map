@@ -50,7 +50,7 @@ export class LayerDataSource implements DataSource {
 
   public async getRows(): Promise<DataRow[]> {
     const features = this.layer.getSource().getFeatures();
-    const rows: DataRow[] = features.map((f) => this.featureToDataRow(f)).filter((r) => !!r) as DataRow[];
+    const rows: DataRow[] = features.map((f) => this.featureToDataRow(f)).filter((r): r is DataRow => !!r);
 
     if (features.length !== rows.length) {
       return Promise.reject(new Error(`Some features does not have an id. Original array: ${features.length} rows: ${rows.length}`));

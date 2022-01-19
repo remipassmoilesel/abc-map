@@ -31,8 +31,6 @@ describe('Draw features history', function () {
   it('user can add feature then undo and redo', function () {
     cy.visit(Routes.map().format())
       .then(() => MainMap.fixedView())
-      .get('[data-cy=draw-menu]')
-      .click()
       .then(() => ToolSelector.enable(MapTool.LineString))
       // First line
       .then(() => Draw.click(100, 100))
@@ -45,8 +43,8 @@ describe('Draw features history', function () {
         const features = map.getActiveLayerFeatures();
         expect(features).length(2);
         expect(features.map((feat) => feat.getGeometry()?.getExtent())).deep.equals([
-          [-3564850.149620659, 3558914.9167841673, -3075653.168595531, 4048111.8978092954],
-          [-2586456.1875704033, 2580520.9547339114, -2097259.206545275, 3069717.9357590396],
+          [-3564850.149620659, 3540875.778108865, -3075653.168595531, 4030072.759133993],
+          [-2586456.1875704033, 2562481.816058609, -2097259.206545275, 3051678.7970837373],
         ]);
       })
       // First undo
@@ -58,7 +56,7 @@ describe('Draw features history', function () {
         const features = map.getActiveLayerFeatures();
         expect(features).length(1);
         expect(features.map((feat) => feat.getGeometry()?.getExtent())).deep.equals([
-          [-3564850.149620659, 3558914.9167841673, -3075653.168595531, 4048111.8978092954],
+          [-3564850.149620659, 3540875.778108865, -3075653.168595531, 4030072.759133993],
         ]);
       })
       // Second undo
@@ -79,7 +77,7 @@ describe('Draw features history', function () {
         const features = map.getActiveLayerFeatures();
         expect(features).length(1);
         expect(features.map((feat) => feat.getGeometry()?.getExtent())).deep.equals([
-          [-3564850.149620659, 3558914.9167841673, -3075653.168595531, 4048111.8978092954],
+          [-3564850.149620659, 3540875.778108865, -3075653.168595531, 4030072.759133993],
         ]);
       })
       // Second redo
@@ -91,8 +89,8 @@ describe('Draw features history', function () {
         const features = map.getActiveLayerFeatures();
         expect(features).length(2);
         expect(features.map((feat) => feat.getGeometry()?.getExtent())).deep.equals([
-          [-3564850.149620659, 3558914.9167841673, -3075653.168595531, 4048111.8978092954],
-          [-2586456.1875704033, 2580520.9547339114, -2097259.206545275, 3069717.9357590396],
+          [-3564850.149620659, 3540875.778108865, -3075653.168595531, 4030072.759133993],
+          [-2586456.1875704033, 2562481.816058609, -2097259.206545275, 3051678.7970837373],
         ]);
       });
   });
@@ -100,8 +98,6 @@ describe('Draw features history', function () {
   it('user can modify feature then undo', function () {
     cy.visit(Routes.map().format())
       .then(() => MainMap.fixedView())
-      .get('[data-cy=draw-menu]')
-      .click()
       .then(() => ToolSelector.enable(MapTool.LineString))
       // Create line
       .then(() => Draw.click(100, 100))
@@ -118,7 +114,7 @@ describe('Draw features history', function () {
         const features = map.getActiveLayerFeatures();
         expect(features).length(1);
         expect(features.map((feat) => feat.getGeometry()?.getExtent())).deep.equals([
-          [-2586456.1875704033, 1112930.011658527, -629668.2634698907, 3069717.9357590396],
+          [-2586456.1875704033, 1094890.8729832247, -629668.2634698907, 3051678.7970837373],
         ]);
       })
       // First undo
@@ -130,7 +126,7 @@ describe('Draw features history', function () {
         const features = map.getActiveLayerFeatures();
         expect(features).length(1);
         expect(features.map((feat) => feat.getGeometry()?.getExtent())).deep.equals([
-          [-3564850.149620659, 3069717.9357590396, -2586456.1875704033, 4048111.8978092954],
+          [-3564850.149620659, 3051678.7970837373, -2586456.1875704033, 4030072.759133993],
         ]);
       })
       // Second undo
@@ -142,7 +138,7 @@ describe('Draw features history', function () {
         const features = map.getActiveLayerFeatures();
         expect(features).length(1);
         expect(features.map((feat) => feat.getGeometry()?.getExtent())).deep.equals([
-          [-3564850.149620659, 3558914.9167841673, -3075653.168595531, 4048111.8978092954],
+          [-3564850.149620659, 3540875.778108865, -3075653.168595531, 4030072.759133993],
         ]);
       })
       // First redo
@@ -154,7 +150,7 @@ describe('Draw features history', function () {
         const features = map.getActiveLayerFeatures();
         expect(features).length(1);
         expect(features.map((feat) => feat.getGeometry()?.getExtent())).deep.equals([
-          [-3564850.149620659, 3069717.9357590396, -2586456.1875704033, 4048111.8978092954],
+          [-3564850.149620659, 3051678.7970837373, -2586456.1875704033, 4030072.759133993],
         ]);
       })
       // Second redo
@@ -166,7 +162,7 @@ describe('Draw features history', function () {
         const features = map.getActiveLayerFeatures();
         expect(features).length(1);
         expect(features.map((feat) => feat.getGeometry()?.getExtent())).deep.equals([
-          [-2586456.1875704033, 1112930.011658527, -629668.2634698907, 3069717.9357590396],
+          [-2586456.1875704033, 1094890.8729832247, -629668.2634698907, 3051678.7970837373],
         ]);
       });
   });

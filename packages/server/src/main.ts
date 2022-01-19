@@ -22,6 +22,7 @@ import { HttpServer } from './server/HttpServer';
 import { Services, servicesFactory } from './services/services';
 import { ConfigLoader } from './config/ConfigLoader';
 import { DevInit } from './dev-init/DevInit';
+import { DbMigrationsLauncher } from './mongodb/migrations/DbMigrationsLauncher';
 
 const logger = Logger.get('main.ts', 'info');
 
@@ -41,6 +42,10 @@ async function main() {
   logger.info(`Loading configuration: ${ConfigLoader.getPathFromEnv()}`);
   const config = await ConfigLoader.load();
   logger.info('Configuration used: ', JSON.stringify(ConfigLoader.safeConfig(config), null, 2));
+
+  // Database migration
+  const migration = await DbMigrationsLauncher.create(config);
+  await migration.migrate();
 
   // Initialize services
   services = await servicesFactory(config);

@@ -52,14 +52,14 @@ export class ModalService {
     return this.setPasswordModal(title, message);
   }
 
-  public passwordInputModal(title: string, message: string, witness: string): Promise<PasswordInputClosedEvent> {
-    return this.modalPromise({ type: ModalEventType.ShowPasswordInput, title, message, witness }, ModalEventType.PasswordInputClosed);
-  }
-
   public getProjectPassword(witness: string): Promise<PasswordInputClosedEvent> {
     const title = t('Project_password');
     const message = t('Enter_project_password');
     return this.passwordInputModal(title, message, witness);
+  }
+
+  public passwordInputModal(title: string, message: string, witness: string): Promise<PasswordInputClosedEvent> {
+    return this.modalPromise({ type: ModalEventType.ShowPasswordInput, title, message, witness }, ModalEventType.PasswordInputClosed);
   }
 
   public setPasswordModal(title: string, message: string): Promise<SetPasswordModalClosedEvent> {
@@ -96,29 +96,30 @@ export class ModalService {
 
   public longOperationModal<Result = void>(operation: () => Promise<OperationStatus | [OperationStatus, Result]>): Promise<OperationStatus | Result> {
     // We show waiting screen
-    this.dispatch({ type: ModalEventType.ShowLongOperationModal, burning: true });
+    this.dispatch({ type: ModalEventType.ShowLongOperationModal, processing: true });
 
     return new Promise<OperationStatus | Result>((resolve, reject) => {
-      const start = () => {
-        return solvesInAtLeast(operation(), 1000).then(hideOnSuccess).catch(hideOnFail);
-      };
+      const start = () => solvesInAtLeast(operation(), 1000).then(hideOnSuccess).catch(hideOnFail);
 
-      const hideOnSuccess = (res: OperationStatus | [OperationStatus, Result]) => {
-        // Operation was interrupted (per example canceled), we resolve with status
-        if (res === OperationStatus.Interrupted) {
+      const hideOnSuccess = (_result: OperationStatus | [OperationStatus, Result]) => {
+        const status = _result instanceof Array ? _result[0] : _result;
+        const result = _result instanceof Array ? _result[1] : _result;
+
+        // Operation was interrupted (per example canceled)
+        if (status === OperationStatus.Interrupted) {
           this.dispatch({ type: ModalEventType.LongOperationModalClosed });
-          resolve(OperationStatus.Interrupted);
+          resolve(result ?? OperationStatus.Interrupted);
           return;
         }
 
         // We show end of waiting screen
-        this.dispatch({ type: ModalEventType.ShowLongOperationModal, burning: false });
+        this.dispatch({ type: ModalEventType.ShowLongOperationModal, processing: false });
 
         setTimeout(() => {
           this.dispatch({ type: ModalEventType.LongOperationModalClosed });
 
           // Then we resolve with result or status
-          resolve(res && res instanceof Array ? res[1] : res);
+          resolve(result ?? OperationStatus.Succeed);
         }, 800);
       };
 

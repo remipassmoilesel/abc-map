@@ -27,7 +27,6 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { FormState } from '../form-validation-label/FormState';
 import { prefixedTranslation } from '../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
-import { Routes } from '../../routes';
 import { AuthenticationError, ErrorType } from '../../core/authentication/AuthenticationError';
 
 const logger = Logger.get('LoginModal.tsx');
@@ -195,8 +194,6 @@ class LoginModal extends Component<Props, State> {
           status: ModalStatus.Confirmed,
         });
         this.setState({ visible: false, email: '', password: '' });
-
-        this.props.history.push(Routes.map().format());
       })
       .catch((err) => {
         logger.error('Login error: ', err);

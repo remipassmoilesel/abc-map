@@ -33,8 +33,6 @@ describe('Legend', function () {
   it('can create a legend', function () {
     cy.visit(Routes.map().format())
       .then(() => MainMap.fixedView())
-      .get('[data-cy=draw-menu]')
-      .click()
       // First point
       .then(() => ToolSelector.enable(MapTool.Point))
       .then(() => Draw.click(100, 100))
@@ -51,9 +49,7 @@ describe('Legend', function () {
       .click()
       .then(() => Draw.click(300, 300))
       // Create layout
-      .then(() => TopBar.layout())
-      .get('[data-cy=controls-menu]')
-      .click()
+      .then(() => TopBar.export())
       .get('[data-cy=add-layout]')
       .click()
       // Edit legend

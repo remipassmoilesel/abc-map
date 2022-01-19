@@ -41,12 +41,13 @@ import Geometry from 'ol/geom/Geometry';
 import VectorImageLayer from 'ol/layer/VectorImage';
 import { Source, TileWMS, WMTS, XYZ } from 'ol/source';
 import { Layer } from 'ol/layer';
+import LayerRenderer from 'ol/renderer/Layer';
 import { styleFunction } from '../styles/style-function';
 import { stripHtml } from '../../utils/strings';
 
 export const logger = Logger.get('LayerWrapper');
 
-export declare type OlLayers = Layer<Source> | VectorImageLayer<VectorSource<Geometry>> | TileLayer<TileSource>;
+export declare type OlLayers = Layer<Source, LayerRenderer<any>> | VectorImageLayer<VectorSource<Geometry>> | TileLayer<TileSource>;
 export declare type OlSources = Source | VectorSource<Geometry> | TileSource | TileWMS | WMTS;
 
 export declare type VectorLayerWrapper = LayerWrapper<VectorImageLayer<VectorSource<Geometry>>, VectorSource<Geometry>, VectorMetadata>;
@@ -179,6 +180,7 @@ export class LayerWrapper<Layer extends OlLayers = OlLayers, Source extends OlSo
       layer = new TileLayer({ source: this.layer.getSource() as XYZ });
     } else if (this.isVector()) {
       layer = new VectorImageLayer({ source: this.layer.getSource() as VectorSource<Geometry>, style: (f) => styleFunction(styleRatio, f) });
+      layer.set(LayerProperties.StyleRatio, styleRatio);
     } else {
       throw new Error(`Cannot clone layer, type is not supported: ${this.getType()}`);
     }

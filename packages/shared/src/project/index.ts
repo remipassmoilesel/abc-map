@@ -17,15 +17,15 @@
  */
 
 export * from './feature';
+export * from './helpers';
 export * from './layer';
 export * from './layout';
 export * from './legend';
+export * from './projection';
+export * from './shared-views';
 export * from './style';
 export * from './AbcProjectManifest';
 export * from './AbcView';
-export * from './AbcProjection';
 export * from './CompressedProject';
 export * from './ProjectConstants';
-export * from './ProjectHelper';
 export * from './ProjectSaveResponse';
-export * from './BasicAuthentication';

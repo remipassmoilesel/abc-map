@@ -99,8 +99,17 @@ export class HttpServer {
     });
 
     // Add security headers
-    const middleware = helmet({ contentSecurityPolicy: false });
-    this.app.addHook('onRequest', (req, reply, next) => middleware(req.raw, reply.raw, next as (err?: unknown) => void));
+    // The first middleware is strict, for the classic use of frontend
+    const strictMiddleware = helmet({ contentSecurityPolicy: false });
+    // The second middleware allows iframes
+    const allowIframesMiddleware = helmet({ contentSecurityPolicy: false, frameguard: false });
+    this.app.addHook('onRequest', (req, reply, next) => {
+      if (req.url.indexOf('/shared-map/') !== -1) {
+        allowIframesMiddleware(req.raw, reply.raw, next as (err?: unknown) => void);
+      } else {
+        strictMiddleware(req.raw, reply.raw, next as (err?: unknown) => void);
+      }
+    });
 
     // Utility methods
     void this.app.register(fastifySensible, { errorHandler: false });
@@ -163,7 +172,7 @@ export class HttpServer {
       const logTrace = {
         date: new Date().toISOString(),
         error: err.message,
-        source: getSource(request),
+        source: hashSource(request),
         userAgent: request.headers['user-agent'],
         method: request.method,
         url: request.url,
@@ -189,7 +198,7 @@ export class HttpServer {
   private logRequest = (request: FastifyRequest, reply: FastifyReply, done: HookHandlerDoneFunction) => {
     const logTrace = {
       date: new Date().toISOString(),
-      source: getSource(request),
+      source: hashSource(request),
       userAgent: request.headers['user-agent'],
       method: request.method,
       url: request.url,
@@ -217,8 +226,9 @@ export class HttpServer {
   }
 }
 
-function getSource(req: FastifyRequest): string {
-  const hasher = createHash('md5');
+export function hashSource(req: FastifyRequest): string {
+  const hasher = createHash('sha256');
   const ip = (req.headers['x-forwarded-for']?.toString() || '000.000.000.000').split('.').slice(1).join('.');
-  return hasher.update(ip).digest('hex');
+  const ua = req.headers['user-agent'] || 'no-user-agent';
+  return hasher.update(ip + ua).digest('hex');
 }

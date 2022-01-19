@@ -25,7 +25,7 @@ import { RemoveFeaturesChangeset } from '../../../../../core/history/changesets/
 import { prefixedTranslation } from '../../../../../i18n/i18n';
 import Cls from './CommonActions.module.scss';
 import { useAppSelector } from '../../../../../core/store/hooks';
-import { useServices } from '../../../../../core/hooks';
+import { useServices } from '../../../../../core/useServices';
 import { ActionButton } from './ActionButton';
 import { IconDefs } from '../../../../../components/icon/IconDefs';
 
@@ -142,7 +142,7 @@ function CommonActions() {
 
         return clone;
       })
-      .filter((feat) => !!feat) as FeatureWrapper[];
+      .filter((feat): feat is FeatureWrapper => !!feat);
 
     const cs = new AddFeaturesChangeset(layer.getSource(), clones);
     cs.apply().catch((err) => logger.error('Cannot clone features: ', err));

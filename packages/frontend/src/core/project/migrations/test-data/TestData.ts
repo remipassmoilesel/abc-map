@@ -37,6 +37,10 @@ export class TestData {
     return this.fileToMigratedProject(`${__dirname}/project-0.4.0.abm2`);
   }
 
+  public static async project050(): Promise<MigratedProject> {
+    return this.fileToMigratedProject(`${__dirname}/project-0.5.0.abm2`);
+  }
+
   public static fakeProject(version: string) {
     return { metadata: { version } } as unknown as AbcProjectManifest;
   }

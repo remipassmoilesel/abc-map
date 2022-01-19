@@ -41,14 +41,21 @@ describe('StorePersistence', () => {
     const sampleState: MainState = {
       project: {
         metadata: { name: 'test-project' } as any,
-        layouts: [TestHelper.sampleLayout()],
+        mainView: Views.random(),
         legend: {
           display: LegendDisplay.BottomRightCorner,
           items: [],
           width: 300,
           height: 500,
         },
-        view: Views.random(),
+        layouts: {
+          list: [TestHelper.sampleLayout()],
+          activeId: 'test-active-id',
+        },
+        sharedViews: {
+          list: [TestHelper.sampleSharedView()],
+          activeId: 'test-active-id',
+        },
       },
       map: {
         currentStyle: {
@@ -101,6 +108,12 @@ describe('StorePersistence', () => {
           'menu-1': true,
           'menu-2': false,
         },
+        floatingButtons: {
+          'button-1': [1, 1],
+        },
+        informations: {
+          sharedMapAlpha: true,
+        },
       },
     };
     const snapshot = stateSnapshot(sampleState);
@@ -149,6 +162,12 @@ describe('StorePersistence', () => {
         sideMenu: {
           'menu-1': true,
           'menu-2': false,
+        },
+        floatingButtons: {
+          'button-1': [1, 1],
+        },
+        informations: {
+          sharedMapAlpha: true,
         },
       },
     };

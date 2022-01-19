@@ -31,43 +31,49 @@ const Sitemap: Url[] = [
   {
     routeEn: routesEn.landing(),
     changefreq: 'monthly',
-    lastmod: '2021-11-25',
+    lastmod: '2022-01-04',
     priority: '1.0', // decimal needed
   },
   {
     routeEn: routesEn.documentation(),
     changefreq: 'monthly',
-    lastmod: '2021-11-25',
+    lastmod: '2022-01-04',
     priority: '0.9',
   },
   {
     routeEn: routesEn.funding(),
     changefreq: 'monthly',
-    lastmod: '2021-11-25',
+    lastmod: '2022-01-04',
     priority: '0.8',
   },
   {
     routeEn: routesEn.map(),
     changefreq: 'monthly',
-    lastmod: '2021-11-25',
+    lastmod: '2022-01-04',
     priority: '0.8',
   },
   {
     routeEn: routesEn.legalMentions(),
     changefreq: 'monthly',
-    lastmod: '2021-11-25',
+    lastmod: '2022-01-04',
     priority: '0.7',
   },
   {
     routeEn: routesEn.dataStore(),
     changefreq: 'monthly',
-    lastmod: '2021-11-25',
+    lastmod: '2022-01-04',
     priority: '0.6',
   },
   {
-    routeEn: routesEn.layout(),
+    routeEn: routesEn.shareSettings(),
     changefreq: 'monthly',
-    lastmod: '2021-11-25',
+    lastmod: '2022-01-04',
+    priority: '0.5',
+  },
+  {
+    routeEn: routesEn.export(),
+    changefreq: 'monthly',
+    lastmod: '2022-01-04',
     priority: '0.5',
   },
 ];

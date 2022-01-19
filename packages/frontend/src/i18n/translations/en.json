@@ -1,7 +1,9 @@
 {
   "TokenWatcher": {
-    "Modification_in_progress_will_be_lost": "Current changes will be lost, are you sure ?",
     "You_are_disconnected": "You are disconnected"
+  },
+  "WarningBeforeUnload": {
+    "Modification_in_progress_will_be_lost": "Current changes will be lost, are you sure ?"
   },
   "LandingView": {
     "Free_open_source_mapping": "Free and open source mapping online",
@@ -27,7 +29,8 @@
     "Map": "Map",
     "Data_store": "Data store",
     "Data_processing": "Data processing",
-    "Layout": "Layout",
+    "Export": "Export",
+    "Share": "Share",
     "Documentation": "Documentation",
     "Support_AbcMap": "Support Abc-Map",
     "Menu": "Menu"
@@ -306,7 +309,7 @@
   "LongOperationModal": {
     "Things_are_getting_hot": "Things are getting hot !",
     "Dont_try_to_run_away": "Don't try to run away.",
-    "At_last": "At last !"
+    "Done": "Done !"
   },
   "HistoryControls": {
     "Undo": "Undo",
@@ -484,11 +487,12 @@
       "Error": "Execution error"
     }
   },
-  "LayoutView": {
+  "ExportView": {
     "Format": "Format",
     "List_of_layouts_displayed_here": "The list of layouts will be displayed here.",
     "Layouts": "Layouts",
-    "Create_layout_to_export": "Create a layout to export your map",
+    "Export": "Export",
+    "Create_layout_to_export": "Create a layout to export your map to PDF or PNG",
     "Create_A4_layout": "New A4 layout",
     "Layout": "Layout",
     "Create_layout_to_export_your_map": "Layout and export your maps as PDF or PNG \uD83D\uDCD0 \uD83D\uDEB6\u200D♀️",
@@ -691,7 +695,8 @@
     "Close": "Close"
   },
   "DocumentationView": {
-    "Table_of_content": "Table of content"
+    "Table_of_content": "Table of content",
+    "Back_to_top": "Back to top"
   },
   "AskFeedbackBubble": {
     "Hello": "Hello",
@@ -707,6 +712,58 @@
     "Thank_you": "Thank you",
     "Cancel": "Cancel",
     "Send": "Send"
+  },
+  "ShareSettingsView": {
+    "Share": "Share",
+    "Share_your_maps_online": "Share your maps online",
+    "Project_shared": "Project shared !",
+    "Map_sharing": "Map sharing",
+    "You_can_share_your_map_using_a_public_link": "You can share your map using a public link or embed it <br/> into your websites using an <code>iframe</code> code.",
+    "You_must_sign_in_to_share_your_maps": "You must sign in to share your maps.",
+    "Login": "Login",
+    "Register": "Register",
+    "Warning": "Warning",
+    "If_your_card_contains_identifiers": "If your map contains identifiers, these identifiers will be publicly accessible.",
+    "If_these_identifiers_give_access_to_paid_services": "If these identifiers give access to paid services, this can lead to excessive billing.",
+    "This_map_is_private": "This map is private",
+    "Enable_sharing": "Enable sharing",
+    "Previous_view": "Previous view",
+    "Next_view": "Next view",
+    "Edit_view": "Edit view",
+    "Delete_view": "Delete view",
+    "Cancel": "Cancel",
+    "Confirm": "Save",
+    "You_cannot_delete_the_last_view": "You cannot delete the last view",
+    "Main_view": "Main view",
+    "View_list": "View list",
+    "Configuration": "Configuration",
+    "View": "View",
+    "Overview": "Overview",
+    "Publish": "Publish",
+    "Address_and_share_code": "Address and share code",
+    "Disable_sharing": "Disable sharing",
+    "New_view": "New view",
+    "Visible_layers": "Visible layers",
+    "Work_in_progress": "Work in progress",
+    "This_feature_is_under_development": "This feature is under development.",
+    "It_certainly_lacks_options": "It certainly lacks options, and you might run into a few bugs.",
+    "Close": "Close"
+  },
+  "CopyButton": {
+    "Copied": "Copied !",
+    "Copy_to_clipboard": "Copy to clipboard",
+    "Cannot_copy_to_clipboard": "Cannot copy to clipboard with this browser"
+  },
+  "SharedMapView": {
+    "Shared_map": "Shared map",
+    "Cannot_display_map": "Ouch ! Could not find this map",
+    "But_dont_panic_you_can_create_your_own": "But don't panic, you can create your own map with",
+    "Navigation": "Navigation",
+    "Previous_view": "Previous view",
+    "Next_view": "Next view",
+    "Close": "Close",
+    "This_map_was_created_and_published_with_Abc-Map": "This map was created and published with Abc-Map.",
+    "Abc-Map_is_free_mapping_software_try_it": "Abc-Map is free mapping software, try it !"
   },
   "core": {
     "ProjectFactory": {
@@ -728,14 +785,14 @@
       "Layer_without_name": "Layer without name"
     },
     "MapKeyboardListener": {
-      "Nothing_more_to_undo": "There is nothing more to undo",
-      "Nothing_more_to_redo": "There is nothing more to redo",
       "You_must_select_features_first": "You must first select geometries"
     },
-    "LayoutKeyboardListener": {
-      "Nothing_to_delete": "There is nothing to delete",
+    "HistoryKeyboardListener": {
       "Nothing_more_to_undo": "There is nothing more to undo",
       "Nothing_more_to_redo": "There is nothing more to redo"
+    },
+    "LayoutKeyboardListener": {
+      "Nothing_to_delete": "There is nothing to delete"
     },
     "ToastService": {
       "Unknown_technical_problem": "Ouch ! Small technical issue \uD83D\uDE05 Please try again later.",
@@ -746,8 +803,10 @@
       "You_must_connect_before": "You must be logged in to perform this operation.",
       "Are_you_connected": "Unable to connect to the server \uD83D\uDCE1 Are you connected ?"
     },
-    "ProjectService": {
-      "Too_much_projects": "Sorry \uD83D\uDE1E you have reached your project quota. Delete one."
+    "useSaveProjectOnline": {
+      "Too_much_projects": "Sorry \uD83D\uDE1E you have reached your project quota. Delete one.",
+      "Project_too_heavy": "This project is too heavy",
+      "Project_saved": "Project saved !"
     },
     "tools": {
       "MoveMap": "Move",

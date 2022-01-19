@@ -29,7 +29,7 @@ import { LayerWrapper } from '../../core/geo/layers/LayerWrapper';
 import Search from './search/Search';
 import ImportData from './import-data/ImportData';
 import CursorPosition from './cursor-position/CursorPosition';
-import { MapKeyboardListener } from './keyboard-listener/MapKeyboardListener';
+import { MapKeyboardListener } from './MapKeyboardListener';
 import { pageSetup } from '../../core/utils/page-setup';
 import { MapActions } from '../../core/store/map/actions';
 import { MapSizeChangedEvent } from '../../core/geo/map/MapWrapper.events';
@@ -38,8 +38,9 @@ import { prefixedTranslation } from '../../i18n/i18n';
 import { IconDefs } from '../../components/icon/IconDefs';
 import SideMenu from '../../components/side-menu/SideMenu';
 import { useAppDispatch, useAppSelector } from '../../core/store/hooks';
-import { useServices } from '../../core/hooks';
+import { useServices } from '../../core/useServices';
 import { FullscreenButton } from './fullscreen-button/FullscreenButton';
+import { isDesktopDevice } from '../../core/ui/isDesktopDevice';
 import Cls from './MapView.module.scss';
 
 const logger = Logger.get('MapView.tsx');
@@ -49,7 +50,7 @@ const t = prefixedTranslation('MapView:');
 function MapView() {
   const { geo } = useServices();
   const dispatch = useAppDispatch();
-  const keyboardListener = useRef<MapKeyboardListener | undefined>();
+  const keyboardListeners = useRef<MapKeyboardListener | undefined>();
   const mapDimensions = useAppSelector((st) => st.map.mainMapDimensions);
   const [layers, setLayers] = useState<LayerWrapper[]>([]);
   const [activeLayer, setActiveLayer] = useState<LayerWrapper | undefined>();
@@ -95,24 +96,24 @@ function MapView() {
 
   // We setup keyboard shortcuts
   useEffect(() => {
-    keyboardListener.current = MapKeyboardListener.create();
-    keyboardListener.current.initialize();
+    keyboardListeners.current = MapKeyboardListener.create();
+    keyboardListeners.current.initialize();
 
-    return () => keyboardListener.current?.destroy();
-  }, [keyboardListener]);
+    return () => keyboardListeners.current?.destroy();
+  }, [keyboardListeners]);
 
   return (
     <div className={Cls.mapView}>
       {/* Toggle fullscreen button */}
-      <FullscreenButton style={{ top: '20vmin', left: '2vw' }} />
+      <FullscreenButton style={{ top: '40vh', left: '2vw' }} />
 
       {/* Search menu */}
       <SideMenu
         title={t('Search_menu')}
         buttonIcon={IconDefs.faSearch}
-        buttonStyle={{ top: '35vmin', left: '2vw' }}
+        buttonStyle={{ top: '50vh', left: '2vw' }}
         menuPlacement={'left'}
-        menuId={'mapview-search-menu'}
+        menuId={'views/MapView-search'}
         data-cy={'search-menu'}
       >
         <div className={Cls.spacer} />
@@ -126,9 +127,9 @@ function MapView() {
       <SideMenu
         title={t('Project_menu')}
         buttonIcon={IconDefs.faFileAlt}
-        buttonStyle={{ top: '50vmin', left: '2vw' }}
+        buttonStyle={{ top: '60vh', left: '2vw' }}
         menuPlacement={'left'}
-        menuId={'mapview-project-menu'}
+        menuId={'views/MapView-project'}
         data-cy={'project-menu'}
       >
         <div className={Cls.spacer} />
@@ -146,10 +147,11 @@ function MapView() {
       <SideMenu
         title={t('Draw_menu')}
         buttonIcon={IconDefs.faDraftingCompass}
-        buttonStyle={{ top: '20vmin', right: '2vw' }}
+        buttonStyle={{ top: '50vh', right: '2vw' }}
         menuPlacement={'right'}
-        menuId={'mapview-draw-menu'}
-        contentStyle={{ overflowY: 'scroll' }}
+        menuId={'views/MapView-draw'}
+        menuStyle={{ overflowY: 'scroll' }}
+        initiallyOpened={isDesktopDevice()}
         data-cy={'draw-menu'}
       >
         <HistoryControls historyKey={HistoryKey.Map} />
