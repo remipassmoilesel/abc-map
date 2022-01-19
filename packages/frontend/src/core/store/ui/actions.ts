@@ -25,6 +25,7 @@ export enum ActionType {
   SetSideMenuState = 'SetSideMenuState',
   SetFloatingButtonPosition = 'SetFloatingButtonPosition',
   AckSharedMapInformation = 'AckSharedMapInformation',
+  SetExperimentalFeature = 'SetExperimentalFeature',
 }
 
 export interface SetHistoryCapabilities {
@@ -60,13 +61,20 @@ export interface AckSharedMapInformation {
   type: ActionType.AckSharedMapInformation;
 }
 
+export interface SetExperimentalFeature {
+  type: ActionType.SetExperimentalFeature;
+  id: string;
+  state: boolean;
+}
+
 export type UiAction =
   | SetHistoryCapabilities
   | CleanHistoryCapabilities
   | SetDocumentationScrollPosition
   | SetSideMenuState
   | SetFloatingButtonPosition
-  | AckSharedMapInformation;
+  | AckSharedMapInformation
+  | SetExperimentalFeature;
 
 export class UiActions {
   public static setHistoryCapabilities(key: HistoryKey, canUndo: boolean, canRedo: boolean): UiAction {
@@ -111,6 +119,14 @@ export class UiActions {
   public static ackSharedMapInformation(): UiAction {
     return {
       type: ActionType.AckSharedMapInformation,
+    };
+  }
+
+  public static setExperimentalFeature(id: string, state: boolean): UiAction {
+    return {
+      type: ActionType.SetExperimentalFeature,
+      id,
+      state,
     };
   }
 }

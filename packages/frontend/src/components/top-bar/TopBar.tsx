@@ -28,6 +28,8 @@ import { Routes } from '../../routes';
 import { useHistory } from 'react-router-dom';
 import { FaIcon } from '../icon/FaIcon';
 import { IconDefs } from '../icon/IconDefs';
+import { useAppSelector } from '../../core/store/hooks';
+import { MapSharing } from '../../ExperimentalFeatures';
 
 const logger = Logger.get('TopBar.tsx');
 
@@ -39,6 +41,8 @@ function TopBar() {
   const goToLanding = useCallback(() => history.push(Routes.landing().format()), [history]);
 
   const linksClasses = `${Cls.links} ${mobileOpen ? Cls.open : ''}`;
+  const withSharing = useAppSelector((st) => st.ui.experimentalFeatures[MapSharing.id]) ?? false;
+
   return (
     <div className={Cls.topBar} data-cy={'top-bar'}>
       <button onClick={goToLanding} data-cy={'landing'} className={Cls.brand}>
@@ -54,7 +58,7 @@ function TopBar() {
         <TopBarLink label={t('Data_store')} to={Routes.dataStore().format()} data-cy={'data-store'} />
         <TopBarLink label={t('Data_processing')} to={Routes.dataProcessing().format()} data-cy={'data-processing'} />
         <TopBarLink label={t('Export')} to={Routes.export().format()} data-cy={'export'} />
-        <TopBarLink label={t('Share')} to={Routes.shareSettings().format()} data-cy={'share'} />
+        {withSharing && <TopBarLink label={t('Share')} to={Routes.shareSettings().format()} data-cy={'share'} />}
         <TopBarLink label={t('Documentation')} to={Routes.documentation().format()} data-cy={'help'} />
         <TopBarLink label={`${t('Support_AbcMap')} 💌`} to={Routes.funding().format()} data-cy={'help'} />
       </div>

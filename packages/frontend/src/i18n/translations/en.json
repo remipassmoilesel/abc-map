@@ -43,10 +43,17 @@
     "My_account": "My account",
     "Logout": "Logout",
     "You_are_disconnected": "You are disconnected",
-    "Feedbacks": "Feedbacks ?"
+    "Feedbacks": "Feedbacks ?",
+    "Experimental_features": "Experimental features"
   },
   "FeedbackModal": {
     "So_how_is_it_going": "So how is it going ?"
+  },
+  "ExperimentalFeaturesModal": {
+    "Experimental_features": "Experimental features",
+    "Here_you_can_enable_features": "Here you can enable features that are not yet stable.",
+    "Close": "Close",
+    "MapSharing": "Map sharing"
   },
   "MapView": {
     "The_map": "The map !",

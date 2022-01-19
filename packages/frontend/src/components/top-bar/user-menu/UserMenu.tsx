@@ -28,6 +28,8 @@ import { withTranslation } from 'react-i18next';
 import { Routes } from '../../../routes';
 import { FaIcon } from '../../icon/FaIcon';
 import { IconDefs } from '../../icon/IconDefs';
+import { ExperimentalFeatures } from '../../../ExperimentalFeatures';
+import ExperimentalFeaturesModal from '../experimental-features/ExperimentalFeaturesModal';
 import Cls from './UserMenu.module.scss';
 
 const logger = Logger.get('UserMenu.tsx');
@@ -41,55 +43,77 @@ const connector = connect(mapStateToProps);
 
 type Props = ConnectedProps<typeof connector> & RouteComponentProps<any> & ServiceProps;
 
+interface State {
+  experimentalFeaturesModal: boolean;
+}
+
 const t = prefixedTranslation('UserMenu:');
 
-class UserMenu extends React.Component<Props, {}> {
+class UserMenu extends React.Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+    this.state = { experimentalFeaturesModal: false };
+  }
+
   public render() {
     const userAuthenticated = this.props.userStatus === UserStatus.Authenticated;
     const user = this.props.user;
     const userLabel = user && userAuthenticated ? user.email : t('Hello_visitor');
+    const experimentalFeaturesMenuEntry = ExperimentalFeatures.length > 0;
+    const experimentalFeaturesModal = this.state.experimentalFeaturesModal;
 
     return (
-      <Dropdown className={Cls.userMenu} align={'end'}>
-        <Dropdown.Toggle variant="light" data-cy={'user-menu'}>
-          <FaIcon icon={IconDefs.faUserCircle} size={'1.7rem'} />
-        </Dropdown.Toggle>
-        <Dropdown.Menu className={Cls.dropDown}>
-          <Dropdown.ItemText data-cy={'user-label'}>{userLabel}</Dropdown.ItemText>
-          <Dropdown.Divider />
-          {!userAuthenticated && (
-            <>
-              <Dropdown.Item onClick={this.handleLogin}>
-                <FaIcon icon={IconDefs.faLockOpen} className={'mr-3'} />
-                {t('Login')}
+      <>
+        <Dropdown className={Cls.userMenu} align={'end'}>
+          <Dropdown.Toggle variant="light" data-cy={'user-menu'}>
+            <FaIcon icon={IconDefs.faUserCircle} size={'1.7rem'} />
+          </Dropdown.Toggle>
+          <Dropdown.Menu className={Cls.dropDown}>
+            <Dropdown.ItemText data-cy={'user-label'}>{userLabel}</Dropdown.ItemText>
+            <Dropdown.Divider />
+            {!userAuthenticated && (
+              <>
+                <Dropdown.Item onClick={this.handleLogin}>
+                  <FaIcon icon={IconDefs.faLockOpen} className={'mr-3'} />
+                  {t('Login')}
+                </Dropdown.Item>
+                <Dropdown.Item onClick={this.handleRegister}>
+                  <FaIcon icon={IconDefs.faFeather} className={'mr-3'} />
+                  {t('Register')}
+                </Dropdown.Item>
+                <Dropdown.Item onClick={this.handlePasswordLost} data-cy={'reset-password'}>
+                  <FaIcon icon={IconDefs.faKey} className={'mr-3'} />
+                  {t('Lost_password')}
+                </Dropdown.Item>
+              </>
+            )}
+            {userAuthenticated && (
+              <>
+                <Dropdown.Item onClick={this.handleUserAccount} data-cy={'user-profile'}>
+                  <FaIcon icon={IconDefs.faCogs} className={'mr-3'} /> {t('My_account')}
+                </Dropdown.Item>
+                <Dropdown.Item onClick={this.handleLogout} data-cy={'logout'}>
+                  <FaIcon icon={IconDefs.faLock} className={'mr-3'} /> {t('Logout')}
+                </Dropdown.Item>
+              </>
+            )}
+            <Dropdown.Divider />
+            <Dropdown.Item onClick={this.handleFeedback}>
+              <FaIcon icon={IconDefs.faComments} className={'mr-3'} />
+              {t('Feedbacks')}
+            </Dropdown.Item>
+
+            {experimentalFeaturesMenuEntry && (
+              <Dropdown.Item onClick={this.handleExperimentalFeaturesModal}>
+                <FaIcon icon={IconDefs.faFlask} className={'mr-3'} />
+                {t('Experimental_features')}
               </Dropdown.Item>
-              <Dropdown.Item onClick={this.handleRegister}>
-                <FaIcon icon={IconDefs.faFeather} className={'mr-3'} />
-                {t('Register')}
-              </Dropdown.Item>
-              <Dropdown.Item onClick={this.handlePasswordLost} data-cy={'reset-password'}>
-                <FaIcon icon={IconDefs.faKey} className={'mr-3'} />
-                {t('Lost_password')}
-              </Dropdown.Item>
-            </>
-          )}
-          {userAuthenticated && (
-            <>
-              <Dropdown.Item onClick={this.handleUserAccount} data-cy={'user-profile'}>
-                <FaIcon icon={IconDefs.faCogs} className={'mr-3'} /> {t('My_account')}
-              </Dropdown.Item>
-              <Dropdown.Item onClick={this.handleLogout} data-cy={'logout'}>
-                <FaIcon icon={IconDefs.faLock} className={'mr-3'} /> {t('Logout')}
-              </Dropdown.Item>
-            </>
-          )}
-          <Dropdown.Divider />
-          <Dropdown.Item onClick={this.handleFeedback}>
-            <FaIcon icon={IconDefs.faComments} className={'mr-3'} />
-            {t('Feedbacks')}
-          </Dropdown.Item>
-        </Dropdown.Menu>
-      </Dropdown>
+            )}
+          </Dropdown.Menu>
+        </Dropdown>
+
+        {experimentalFeaturesModal && <ExperimentalFeaturesModal visible={experimentalFeaturesModal} onClose={this.experimentalFeaturesModalClosed} />}
+      </>
     );
   }
 
@@ -144,6 +168,14 @@ class UserMenu extends React.Component<Props, {}> {
     const { modals } = this.props.services;
 
     modals.textFeedback().catch((err) => logger.error('Feedback modal error: ', err));
+  };
+
+  private handleExperimentalFeaturesModal = () => {
+    this.setState({ experimentalFeaturesModal: true });
+  };
+
+  private experimentalFeaturesModalClosed = () => {
+    this.setState({ experimentalFeaturesModal: false });
   };
 }
 

@@ -25,6 +25,7 @@ import { TestHelper } from '../../utils/test/TestHelper';
 import { DimensionsPx } from '../../utils/DimensionsPx';
 import { Views } from '../../geo/Views';
 import { IconName } from '../../../assets/point-icons/IconName';
+import { deepFreeze } from '../../utils/deepFreeze';
 
 describe('StorePersistence', () => {
   let storage: LocalStorageService;
@@ -38,7 +39,8 @@ describe('StorePersistence', () => {
   });
 
   it('persist should clean state, without undesirable state fields', () => {
-    const sampleState: MainState = {
+    // Prepare
+    const sampleState: MainState = deepFreeze({
       project: {
         metadata: { name: 'test-project' } as any,
         mainView: Views.random(),
@@ -114,9 +116,12 @@ describe('StorePersistence', () => {
         informations: {
           sharedMapAlpha: true,
         },
+        experimentalFeatures: {
+          Feature1: true,
+          Feature2: false,
+        },
       },
-    };
-    const snapshot = stateSnapshot(sampleState);
+    });
 
     const expectedState: MainState = {
       project: undefined as any, // A new project is created on bootstrap
@@ -169,10 +174,17 @@ describe('StorePersistence', () => {
         informations: {
           sharedMapAlpha: true,
         },
+        experimentalFeatures: {
+          Feature1: true,
+          Feature2: false,
+        },
       },
     };
 
+    // Act
     persistence.saveState(sampleState);
+
+    // Assert
     expect(setStorageStub.callCount).toEqual(1);
 
     const call = setStorageStub.getCall(0);
@@ -180,11 +192,5 @@ describe('StorePersistence', () => {
 
     const actualState = JSON.parse(call.args[1]);
     expect(actualState).toEqual(expectedState);
-
-    expect(stateSnapshot(sampleState)).toEqual(snapshot);
   });
 });
-
-function stateSnapshot(state: MainState): string {
-  return JSON.stringify(state);
-}

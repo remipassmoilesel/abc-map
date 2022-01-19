@@ -44,7 +44,17 @@
     "My_account": "Mon compte",
     "Logout": "Se déconnecter",
     "You_are_disconnected": "Vous êtes déconnecté",
-    "Feedbacks": "Commentaires ?"
+    "Feedbacks": "Commentaires ?",
+    "Experimental_features": "Fonctionnalités expérimentales"
+  },
+  "FeedbackModal": {
+    "So_how_is_it_going": "Alors, comment ça se passe ?"
+  },
+  "ExperimentalFeaturesModal": {
+    "Experimental_features": "Fonctionnalités expérimentales",
+    "Here_you_can_enable_features": "Ici vous pouvez activer des fonctionnalités qui ne sont pas encore stable.",
+    "Close": "Fermer",
+    "MapSharing": "Partage de carte"
   },
   "MapView": {
     "The_map": "La carte !",
@@ -710,9 +720,6 @@
     "Thank_you": "Merci",
     "Cancel": "Annuler",
     "Send": "Envoyer"
-  },
-  "FeedbackModal": {
-    "So_how_is_it_going": "Alors, comment ça se passe ?"
   },
   "ShareSettingsView": {
     "Share": "Partage",
