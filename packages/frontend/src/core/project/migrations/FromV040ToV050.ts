@@ -18,22 +18,15 @@
 
 import { AbcFile, AbcLayout, AbcProjectManifest, AbcProjectMetadata, LayoutFormats, Logger } from '@abc-map/shared';
 import { MigratedProject, ProjectMigration } from './typings';
+import { LayoutFormat040 } from './old-typings/project-040';
 import semver from 'semver';
 
 const NEXT = '0.5.0';
 
 const logger = Logger.get('FromV040ToV050.ts');
 
-export interface LayoutFormat040 {
-  name?: string;
-  id: string;
-  width: number;
-  height: number;
-  orientation: 'portrait' | 'landscape';
-}
-
-const v040LayoutNameMapper = (name: string): string => {
-  switch (name.trim()) {
+const v040LayoutNameMapper = (name: string | undefined): string => {
+  switch (name?.trim()) {
     case 'A5 Portrait':
       return LayoutFormats.A5_PORTRAIT.id;
     case 'A5 Paysage':
@@ -63,8 +56,13 @@ export class FromV040ToV050 implements ProjectMigration {
 
   public async migrate(manifest: AbcProjectManifest, files: AbcFile[]): Promise<MigratedProject> {
     const layouts: AbcLayout[] = manifest.layouts.map((layout) => {
+      // There was a mistake in migrations, some projects were migrated without version upgrade
+      if (layout.format.id) {
+        return layout;
+      }
+
       const format: LayoutFormat040 = { ...layout.format };
-      const id = v040LayoutNameMapper(format.name as string);
+      const id = v040LayoutNameMapper(format.name);
 
       // We remove old name, set new id
       delete format.name;

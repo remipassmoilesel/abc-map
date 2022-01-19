@@ -22,3 +22,11 @@ export interface AbcProjectMetadata040 {
   name: string;
   containsCredentials: boolean;
 }
+
+export interface LayoutFormat040 {
+  name?: string;
+  id: string;
+  width: number;
+  height: number;
+  orientation: 'portrait' | 'landscape';
+}
