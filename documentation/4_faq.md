@@ -1,5 +1,7 @@
 # Frequently Asked Questions
 
+<!-- toc -->
+
 - [How to start Abc-Map locally ?](#how-to-start-abc-map-locally-)
 - [Desktop or mobile ?](#desktop-or-mobile-)
 - [React: functional component or class component ?](#react-functional-component-or-class-component-)
@@ -8,11 +10,13 @@
 - [How to generate a markdown TOC ?](#how-to-generate-a-markdown-toc-)
 - [How to fix my broken repository ?](#how-to-fix-my-broken-repository-)
 - [Server crashed: Error: Frontend root 'abc-map/packages/server/public' must be a directory](#server-crashed-error-frontend-root-abc-mappackagesserverpublic-must-be-a-directory)
-- [Frontend: Files successfully emitted, waiting for typecheck results...](#frontend-files-successfully-emitted-waiting-for-typecheck-results)
+- [(node:132766) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' ...](#node132766-dep_webpack_dev_server_on_after_setup_middleware-deprecationwarning-onaftersetupmiddleware-)
+
+<!-- tocstop -->
 
 ## How to start Abc-Map locally ?
 
-Check [setup-workstation.md](./1_setup-workstation.md) first, then:
+Check [setup-workstation.md](./1_set-up-workstation.md) first, then:
 
     $ ./abc-cli install     # Install all dependencies
     $ ./abc-cli build       # Build all packages, needed the first time or after many changes
@@ -59,11 +63,6 @@ In very rare case you may need before all commands above:
 ## Server crashed: Error: Frontend root 'abc-map/packages/server/public' must be a directory
 
 You must run `abc build`.
-
-## Frontend: Files successfully emitted, waiting for typecheck results...
-
-Type check have been disabled on webpack, it is checked only when you use watch command or in CI.  
-So this message will never disappear !
 
 ## (node:132766) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' ...
 

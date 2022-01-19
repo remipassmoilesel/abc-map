@@ -53,8 +53,20 @@ export class Registration {
     return cy
       .readFile(`emails/${email}.html`)
       .then((content) => {
-        const activationLink = Cypress.$(content).find('a[data-cy=enable-account-link]').attr('href') || '';
-        expect(activationLink).to.match(/^http:\/\/localhost:[0-9]+\/[a-z]{2}\/confirm-account\//);
+        let activationLink = Cypress.$(content).find('a[data-cy=enable-account-link]').attr('href') || '';
+        expect(activationLink).to.match(/^http:\/\/localhost:[0-9]+\/[a-z]{2}/);
+
+        // If activation link does not match cypress baseurl config, we update it
+        const hostMatch = activationLink.match(/^(http:\/\/localhost:[0-9]+)/);
+        const host = hostMatch?.length ? hostMatch[1] : undefined;
+        const pathMatch = activationLink.match(/(\/[a-z]{2}\/confirm-account\/.+)$/);
+        const path = pathMatch?.length ? pathMatch[1] : undefined;
+        if (host !== Cypress.config('baseUrl')) {
+          const newLink = `${Cypress.config('baseUrl')}${path}`;
+          cy.log(`Confirmation URL has been updated from ${activationLink.substring(0, 60)}... to ${newLink.substring(0, 60)}...`);
+          activationLink = newLink;
+        }
+
         return cy.visit(activationLink);
       })
       .get('[data-cy=account-enabled]')

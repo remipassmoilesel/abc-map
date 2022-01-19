@@ -49,6 +49,8 @@ export enum LayerProperties {
    * This property is set on layer collection in order to trigger changes
    */
   LastLayerChange = 'abc:layers:last-change',
+
+  StyleRatio = 'abc:layers:style-ratio',
 }
 
 /**

@@ -27,8 +27,6 @@ describe('Map', function () {
 
   it('default map should have two layers with one active', function () {
     cy.visit(Routes.map().format())
-      .get('[data-cy=draw-menu]')
-      .click()
       .then(() => LayerControls.getNames())
       .should((names) => {
         expect(names).deep.equals(['OpenStreetMap', 'Geometries']);
@@ -42,8 +40,6 @@ describe('Map', function () {
 
   it('user can add layer', function () {
     cy.visit(Routes.map().format())
-      .get('[data-cy=draw-menu]')
-      .click()
       .then(() => LayerControls.addOsmLayer())
       .then(() => LayerControls.getNames())
       .should((names) => {
@@ -58,8 +54,6 @@ describe('Map', function () {
 
   it('user can add layer then undo and redo', function () {
     cy.visit(Routes.map().format())
-      .get('[data-cy=draw-menu]')
-      .click()
       .then(() => LayerControls.addOsmLayer())
       .then(() => LayerControls.getNames())
       .should((names) => {
@@ -93,8 +87,6 @@ describe('Map', function () {
 
   it('user can rename layer', function () {
     cy.visit(Routes.map().format())
-      .get('[data-cy=draw-menu]')
-      .click()
       .get('[data-cy=edit-layer]')
       .click()
       .get('[data-cy=name-input]')
@@ -110,8 +102,6 @@ describe('Map', function () {
 
   it('user can delete layer', function () {
     cy.visit(Routes.map().format())
-      .get('[data-cy=draw-menu]')
-      .click()
       .get('[data-cy=delete-layer]')
       .click()
       .then(() => LayerControls.getNames())

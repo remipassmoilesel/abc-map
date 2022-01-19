@@ -42,7 +42,7 @@ describe('Search on map', function () {
       .then(() => MainMap.getReference())
       .should((map) => {
         const extent = map.getViewExtent();
-        expect(extent).deep.equals([408055.5640958941, 5394212.793119373, 419913.3607888797, 5400357.287769375]);
+        expect(extent).deep.equals([408038.177297224, 5394212.793119373, 419930.7475875498, 5400357.287769375]);
       });
   });
 });

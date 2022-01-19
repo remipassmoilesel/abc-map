@@ -47,8 +47,6 @@ describe('Data import', () => {
         expect(features).length(12);
         features.forEach((f) => expect(f.getId()).not.undefined);
       })
-      .get('[data-cy=draw-menu]')
-      .click()
       .get('[data-cy=undo]')
       .click()
       .then(() => MainMap.getReference())
@@ -90,8 +88,6 @@ describe('Data import', () => {
         expect(features).length(12);
         features.forEach((f) => expect(f.getId()).not.undefined);
       })
-      .get('[data-cy=draw-menu]')
-      .click()
       .get('[data-cy=undo]')
       .click()
       .then(() => MainMap.getReference())

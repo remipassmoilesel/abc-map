@@ -19,7 +19,7 @@
 import { useMemo } from 'react';
 import debounce from 'lodash/debounce';
 import { StyleTransformFunc } from './GeoService';
-import { useServices } from '../hooks';
+import { useServices } from '../useServices';
 
 /**
  * This function returns a debounced function, which apply style transformation to selected features.

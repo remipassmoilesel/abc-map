@@ -82,13 +82,10 @@ export function servicesFactory(store: MainStore): Services {
   });
 
   // When main map move we save view in project
-  geo
-    .getMainMap()
-    .unwrap()
-    .on('moveend', () => {
-      const view = geo.getMainMap().getView();
-      project.setView(view);
-    });
+  geo.getMainMap().addViewMoveListener(() => {
+    const view = geo.getMainMap().getView();
+    project.setView(view);
+  });
 
   return {
     project,

@@ -74,5 +74,6 @@ export function sampleProjectMetadata(): AbcProjectMetadata {
     version: '0.0.1',
     name: `Test project ${projectId}`,
     containsCredentials: false,
+    public: false,
   };
 }

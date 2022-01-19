@@ -17,9 +17,11 @@
  */
 import { Config } from '../config/Config';
 import { Services, servicesFactory } from '../services/services';
-import { HttpServer } from './HttpServer';
+import { hashSource, HttpServer } from './HttpServer';
 import { ConfigLoader } from '../config/ConfigLoader';
 import { assert } from 'chai';
+import { FrontendRoutes, Language } from '@abc-map/shared';
+import { FastifyRequest } from 'fastify';
 
 describe('HttpServer', () => {
   let config: Config;
@@ -78,7 +80,7 @@ describe('HttpServer', () => {
     assert.equal(res.statusCode, 200);
   });
 
-  it('should return security headers', async () => {
+  it('should return security headers on /', async () => {
     const res = await server.getApp().inject({
       method: 'GET',
       path: '/',
@@ -86,6 +88,22 @@ describe('HttpServer', () => {
 
     assert.isDefined(res.headers['x-dns-prefetch-control']);
     assert.isDefined(res.headers['x-frame-options']);
+    assert.isDefined(res.headers['strict-transport-security']);
+    assert.isDefined(res.headers['x-download-options']);
+    assert.isDefined(res.headers['x-content-type-options']);
+    assert.isDefined(res.headers['x-permitted-cross-domain-policies']);
+    assert.isDefined(res.headers['referrer-policy']);
+  });
+
+  it('should allow iframe on shared maps', async () => {
+    const res = await server.getApp().inject({
+      method: 'GET',
+      path: new FrontendRoutes(Language.French).sharedMap().withParams({ projectId: 'test-project-id' }),
+    });
+
+    assert.isUndefined(res.headers['x-frame-options']);
+
+    assert.isDefined(res.headers['x-dns-prefetch-control']);
     assert.isDefined(res.headers['strict-transport-security']);
     assert.isDefined(res.headers['x-download-options']);
     assert.isDefined(res.headers['x-content-type-options']);
@@ -131,5 +149,16 @@ describe('HttpServer', () => {
 
     assert.equal(req.headers['content-type'], 'text/xml; charset=utf-8');
     assert.isTrue(req.body.replace(/\s/gi, '').startsWith('<?xmlversion="1.0"encoding="UTF-8"?>'));
+  });
+
+  it('hashSource()', () => {
+    const req1 = { headers: {} } as unknown as FastifyRequest;
+    assert.deepEqual(hashSource(req1), '5fe14f265f1aab15f4474efeb0b9bffeac3793a7c6905f8344f638653231bc2a');
+
+    const req2 = { headers: { 'x-forwarded-for': '90.90.90.90' } } as unknown as FastifyRequest;
+    assert.deepEqual(hashSource(req2), 'ff05e2ffcb03cfea04d594778ef2e19ca6657f7d5856f9ee7d947ddf835bce5e');
+
+    const req3 = { headers: { 'x-forwarded-for': '90.90.90.90', 'user-agent': 'Mozilla/5.0 Firefox/5.0.1' } } as unknown as FastifyRequest;
+    assert.deepEqual(hashSource(req3), '450f862a2f253aee6ff4679dcea399eb3ad1566033cc0bd42d491e29ae613b2f');
   });
 });

@@ -1,7 +1,5 @@
 module.exports = {
   environmentName: 'local',
-  // If you want to make all E2E tests pass, change 10082 to 3005 (frontend port)
-  // This is set to 10082 in order to make local pipelines pass (abc ci)
   externalUrl: 'http://localhost:10082/',
   server: {
     host: '127.0.0.1',

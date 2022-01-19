@@ -16,6 +16,8 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { faBan } from '@fortawesome/free-solid-svg-icons/faBan';
+import { faEraser } from '@fortawesome/free-solid-svg-icons/faEraser';
 import { faChevronCircleDown } from '@fortawesome/free-solid-svg-icons/faChevronCircleDown';
 import { faSearch } from '@fortawesome/free-solid-svg-icons/faSearch';
 import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons/faExclamationCircle';
@@ -44,6 +46,8 @@ import { faSearchPlus } from '@fortawesome/free-solid-svg-icons/faSearchPlus';
 import { faSearchMinus } from '@fortawesome/free-solid-svg-icons/faSearchMinus';
 import { faArrowUp } from '@fortawesome/free-solid-svg-icons/faArrowUp';
 import { faArrowDown } from '@fortawesome/free-solid-svg-icons/faArrowDown';
+import { faArrowRight } from '@fortawesome/free-solid-svg-icons/faArrowRight';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons/faArrowLeft';
 import { faEye } from '@fortawesome/free-solid-svg-icons/faEye';
 import { faEyeSlash } from '@fortawesome/free-solid-svg-icons/faEyeSlash';
 import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
@@ -81,8 +85,14 @@ import { faCopy } from '@fortawesome/free-solid-svg-icons/faCopy';
 import { faList } from '@fortawesome/free-solid-svg-icons/faList';
 import { faBars } from '@fortawesome/free-solid-svg-icons/faBars';
 import { faLanguage } from '@fortawesome/free-solid-svg-icons/faLanguage';
+import { faShareAltSquare } from '@fortawesome/free-solid-svg-icons/faShareAltSquare';
+import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons/faExternalLinkAlt';
+import { faClipboard } from '@fortawesome/free-solid-svg-icons/faClipboard';
+import { faStickyNote } from '@fortawesome/free-solid-svg-icons/faStickyNote';
 
 export const IconDefs = {
+  faBan,
+  faEraser,
   faLanguage,
   faBars,
   faList,
@@ -119,6 +129,8 @@ export const IconDefs = {
   faSearchMinus,
   faArrowUp,
   faArrowDown,
+  faArrowRight,
+  faArrowLeft,
   faEye,
   faEyeSlash,
   faTimes,
@@ -148,4 +160,8 @@ export const IconDefs = {
   faExpandAlt,
   faCompressAlt,
   faListOl,
+  faShareAltSquare,
+  faExternalLinkAlt,
+  faClipboard,
+  faStickyNote,
 };

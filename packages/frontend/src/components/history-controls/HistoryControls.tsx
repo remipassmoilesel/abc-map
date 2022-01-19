@@ -21,7 +21,7 @@ import { Logger } from '@abc-map/shared';
 import { HistoryKey } from '../../core/history/HistoryKey';
 import { prefixedTranslation } from '../../i18n/i18n';
 import { useAppSelector } from '../../core/store/hooks';
-import { useServices } from '../../core/hooks';
+import { useServices } from '../../core/useServices';
 import Cls from './HistoryControls.module.scss';
 import { IconDefs } from '../icon/IconDefs';
 import { FaIcon } from '../icon/FaIcon';
@@ -34,7 +34,7 @@ interface Props {
 
 const t = prefixedTranslation('HistoryControls:');
 
-export function HistoryControls(props: Props) {
+function HistoryControls(props: Props) {
   const { historyKey } = props;
   const capabilities = useAppSelector((state) => state.ui.historyCapabilities)[historyKey];
   const { history, toasts } = useServices();

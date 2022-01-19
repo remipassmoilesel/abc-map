@@ -29,24 +29,39 @@ import { useAppDispatch, useAppSelector } from '../../core/store/hooks';
 import { UiActions } from '../../core/store/ui/actions';
 
 interface Props {
-  menuId: string;
-  buttonIcon: IconDefinition;
   title: string;
   titlePlacement?: 'top' | 'right' | 'bottom' | 'left';
-  children: React.ReactNode;
+  // Menu ID must be a unique identifier of menu. It is used for storing menu state in store (open / closed).
+  menuId: string;
   menuPlacement: 'right' | 'left';
   menuWidth?: string;
-  contentStyle?: CSSProperties;
+  menuStyle?: CSSProperties;
+  buttonIcon: IconDefinition;
   buttonStyle?: CSSProperties;
   'data-cy'?: string;
   closeOnClick?: boolean;
+  children: React.ReactNode;
+  initiallyOpened?: boolean;
 }
 
 const t = prefixedTranslation('SideMenu:');
 
 function SideMenu(props: Props) {
-  const { menuId, buttonIcon, title, menuWidth, contentStyle, titlePlacement, children, menuPlacement, buttonStyle, 'data-cy': dataCy, closeOnClick } = props;
-  const open = useAppSelector((st) => st.ui.sideMenu)[menuId] ?? false;
+  const {
+    menuId,
+    buttonIcon,
+    title,
+    menuWidth,
+    menuStyle,
+    titlePlacement,
+    children,
+    menuPlacement,
+    buttonStyle,
+    'data-cy': dataCy,
+    closeOnClick,
+    initiallyOpened,
+  } = props;
+  const open = useAppSelector((st) => st.ui.sideMenu)[menuId] ?? initiallyOpened ?? false;
   const dispatch = useAppDispatch();
 
   const handleToggleClick = useCallback(() => dispatch(UiActions.setSideMenuState(menuId, !open)), [dispatch, menuId, open]);
@@ -68,7 +83,7 @@ function SideMenu(props: Props) {
               </button>
             </WithTooltip>
 
-            <div className={Cls.menuContent} style={{ width: menuWidth, ...contentStyle }} onClick={handleContentClick}>
+            <div className={Cls.menuContent} style={{ width: menuWidth, ...menuStyle }} onClick={handleContentClick}>
               {children}
             </div>
           </div>
@@ -76,7 +91,15 @@ function SideMenu(props: Props) {
       )}
 
       {!open && (
-        <FloatingButton icon={buttonIcon} title={title} onClick={handleToggleClick} titlePlacement={titlePlacement} style={buttonStyle} data-cy={dataCy} />
+        <FloatingButton
+          buttonId={`components/SideMenu-${menuId}`}
+          icon={buttonIcon}
+          title={title}
+          onClick={handleToggleClick}
+          titlePlacement={titlePlacement}
+          style={buttonStyle}
+          data-cy={dataCy}
+        />
       )}
     </>
   );

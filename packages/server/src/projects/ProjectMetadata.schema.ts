@@ -18,13 +18,14 @@
 
 export const ProjectMetadataSchema = {
   type: 'object',
-  minProperties: 4,
-  maxProperties: 4,
+  minProperties: 5,
+  maxProperties: 5,
   additionalProperties: false,
   properties: {
     id: { type: 'string' },
     version: { type: 'string' },
     name: { type: 'string' },
     containsCredentials: { type: 'boolean' },
+    public: { type: 'boolean' },
   },
 };

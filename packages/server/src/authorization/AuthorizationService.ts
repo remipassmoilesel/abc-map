@@ -54,16 +54,12 @@ export class AuthorizationService extends AbstractService {
       return false;
     }
 
-    if (isUserAnonymous(user)) {
+    const metadata = await this.project.findMetadataById(projectId);
+    if (!metadata) {
       return false;
     }
 
-    const project = await this.project.findMetadataById(projectId);
-    if (!project) {
-      return false;
-    }
-
-    return project.ownerId === user.id;
+    return metadata.public || metadata.ownerId === user.id;
   }
 
   public async canWriteProject(req: FastifyRequest, projectId: string): Promise<boolean> {

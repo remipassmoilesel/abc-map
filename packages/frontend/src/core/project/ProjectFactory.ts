@@ -31,6 +31,7 @@ export class ProjectFactory {
       version: ProjectConstants.CurrentVersion,
       name: t('Project', { date: DateTime.local().toLocaleString() }),
       containsCredentials: false,
+      public: false,
     };
   }
 
@@ -41,6 +42,7 @@ export class ProjectFactory {
       layouts: [],
       legend: this.newLegend(),
       view: Views.random(),
+      sharedViews: [],
     };
   }
 

@@ -30,11 +30,9 @@ describe('Edit properties', function () {
     TestHelper.init();
   });
 
-  it('user can move map with CTRL', function () {
+  it('user can move map', function () {
     cy.visit(Routes.map().format())
       .then(() => MainMap.fixedView())
-      .get('[data-cy=draw-menu]')
-      .click()
       .then(() => ToolSelector.enable(MapTool.EditProperties))
       .then(() => ToolSelector.toolMode(ModeName.MoveMap))
       // Move map
@@ -43,7 +41,7 @@ describe('Edit properties', function () {
       .should((map) => {
         const view = map.getViewExtent();
 
-        expect(view).deep.equal([-7380586.601616657, -4131261.6249308446, 11991613.846978411, 5907060.425704782]);
+        expect(view).deep.equal([-7380586.601616657, -4116585.715500091, 11991613.846978411, 5892384.516274028]);
       });
   });
 
@@ -52,8 +50,6 @@ describe('Edit properties', function () {
       .then(() => DataStore.importByName('Countries of the world'))
       .then(() => TopBar.map())
       .then(() => MainMap.fixedView())
-      .get('[data-cy=draw-menu]')
-      .click()
       .then(() => ToolSelector.enable(MapTool.EditProperties))
       // Edit Algeria
       .then(() => Draw.click(500, 200))

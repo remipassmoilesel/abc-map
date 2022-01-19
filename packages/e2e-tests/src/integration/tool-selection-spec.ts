@@ -32,8 +32,6 @@ describe('Tool Selection', function () {
   it('user can select', function () {
     cy.visit(Routes.map().format())
       .then(() => MainMap.fixedView())
-      .get('[data-cy=draw-menu]')
-      .click()
       .then(() => ToolSelector.enable(MapTool.Point))
       // Create points
       .then(() => Draw.click(100, 100))
@@ -48,7 +46,7 @@ describe('Tool Selection', function () {
 
         expect(features).length(3);
         expect(features[0].get(FeatureProperties.Selected)).equal(false);
-        expect(features[0].getGeometry()?.getExtent()).deep.equals([-3564850.149620659, 4048111.8978092954, -3564850.149620659, 4048111.8978092954]);
+        expect(features[0].getGeometry()?.getExtent()).deep.equals([-3564850.149620659, 4030072.759133993, -3564850.149620659, 4030072.759133993]);
         expect(features[1].get(FeatureProperties.Selected)).equal(true);
         expect(features[2].get(FeatureProperties.Selected)).equal(true);
       });
@@ -57,8 +55,6 @@ describe('Tool Selection', function () {
   it('user can duplicate selection then undo', function () {
     cy.visit(Routes.map().format())
       .then(() => MainMap.fixedView())
-      .get('[data-cy=draw-menu]')
-      .click()
       .then(() => ToolSelector.enable(MapTool.Point))
       // Create points
       .then(() => Draw.click(100, 100))
@@ -75,11 +71,11 @@ describe('Tool Selection', function () {
 
         expect(features).length(5);
         expect(features.map((f) => f.getGeometry()?.getExtent())).deep.equals([
-          [-3564850.149620659, 4048111.8978092954, -3564850.149620659, 4048111.8978092954],
-          [-3075653.168595531, 3558914.9167841673, -3075653.168595531, 3558914.9167841673],
-          [-2586456.1875704033, 3069717.9357590396, -2586456.1875704033, 3069717.9357590396],
-          [-2782134.9799804543, 3265396.7281690906, -2782134.9799804543, 3265396.7281690906],
-          [-2292937.9989553266, 2776199.747143963, -2292937.9989553266, 2776199.747143963],
+          [-3564850.149620659, 4030072.759133993, -3564850.149620659, 4030072.759133993],
+          [-3075653.168595531, 3540875.778108865, -3075653.168595531, 3540875.778108865],
+          [-2586456.1875704033, 3051678.7970837373, -2586456.1875704033, 3051678.7970837373],
+          [-2782134.9799804543, 3247357.5894937883, -2782134.9799804543, 3247357.5894937883],
+          [-2292937.9989553266, 2758160.6084686606, -2292937.9989553266, 2758160.6084686606],
         ]);
       })
       .get('[data-cy=undo]')
@@ -101,8 +97,6 @@ describe('Tool Selection', function () {
   it('user can drag selection then undo', function () {
     cy.visit(Routes.map().format())
       .then(() => MainMap.fixedView())
-      .get('[data-cy=draw-menu]')
-      .click()
       // Draw points
       .then(() => ToolSelector.enable(MapTool.Point))
       .then(() => Draw.click(300, 300))
@@ -118,8 +112,8 @@ describe('Tool Selection', function () {
 
         expect(features).length(2);
         expect(features.map((f) => f.getGeometry()?.getExtent())).deep.equals([
-          [1327119.660630621, -843857.9124419848, 1327119.660630621, -843857.9124419848],
-          [1816316.6416557487, -1333054.8934671124, 1816316.6416557487, -1333054.8934671124],
+          [1327119.660630621, -861897.051117287, 1327119.660630621, -861897.051117287],
+          [1816316.6416557487, -1351094.0321424147, 1816316.6416557487, -1351094.0321424147],
         ]);
       })
       // Undo
@@ -131,8 +125,8 @@ describe('Tool Selection', function () {
 
         expect(features).length(2);
         expect(features.map((f) => f.getGeometry()?.getExtent())).deep.equals([
-          [-1608062.225520147, 2091323.9737087833, -1608062.225520147, 2091323.9737087833],
-          [-1118865.2444950193, 1602126.9926836556, -1118865.2444950193, 1602126.9926836556],
+          [-1608062.225520147, 2073284.835033481, -1608062.225520147, 2073284.835033481],
+          [-1118865.2444950193, 1584087.8540083533, -1118865.2444950193, 1584087.8540083533],
         ]);
       })
       // Redo
@@ -144,8 +138,8 @@ describe('Tool Selection', function () {
 
         expect(features).length(2);
         expect(features.map((f) => f.getGeometry()?.getExtent())).deep.equals([
-          [1327119.660630621, -843857.9124419848, 1327119.660630621, -843857.9124419848],
-          [1816316.6416557487, -1333054.8934671124, 1816316.6416557487, -1333054.8934671124],
+          [1327119.660630621, -861897.051117287, 1327119.660630621, -861897.051117287],
+          [1816316.6416557487, -1351094.0321424147, 1816316.6416557487, -1351094.0321424147],
         ]);
       });
   });
@@ -153,8 +147,6 @@ describe('Tool Selection', function () {
   it('user can drag duplicated features', function () {
     cy.visit(Routes.map().format())
       .then(() => MainMap.fixedView())
-      .get('[data-cy=draw-menu]')
-      .click()
       // Draw points
       .then(() => ToolSelector.enable(MapTool.Point))
       .then(() => Draw.click(150, 150))
@@ -172,10 +164,10 @@ describe('Tool Selection', function () {
         const features = map.getActiveLayerFeatures();
 
         expect(features.map((f) => f.getGeometry()?.getExtent())).deep.equals([
-          [-3075653.168595531, 3558914.9167841673, -3075653.168595531, 3558914.9167841673],
-          [-2586456.1875704033, 3069717.9357590396, -2586456.1875704033, 3069717.9357590396],
-          [837922.6796054933, -354660.93141685706, 837922.6796054933, -354660.93141685706],
-          [1327119.660630621, -843857.9124419848, 1327119.660630621, -843857.9124419848],
+          [-3075653.168595531, 3540875.778108865, -3075653.168595531, 3540875.778108865],
+          [-2586456.1875704033, 3051678.7970837373, -2586456.1875704033, 3051678.7970837373],
+          [837922.6796054933, -372700.0700921593, 837922.6796054933, -372700.0700921593],
+          [1327119.660630621, -861897.051117287, 1327119.660630621, -861897.051117287],
         ]);
       });
   });
@@ -183,8 +175,6 @@ describe('Tool Selection', function () {
   it('user can change stroke style then undo', function () {
     cy.visit(Routes.map().format())
       .then(() => MainMap.fixedView())
-      .get('[data-cy=draw-menu]')
-      .click()
       .then(() => ToolSelector.enable(MapTool.Polygon))
       // Draw feature
       .then(() => Draw.click(100, 100))
@@ -227,8 +217,6 @@ describe('Tool Selection', function () {
   it('user can change fill style then undo', function () {
     cy.visit(Routes.map().format())
       .then(() => MainMap.fixedView())
-      .get('[data-cy=draw-menu]')
-      .click()
       .then(() => ToolSelector.enable(MapTool.Polygon))
       // Draw feature then select
       .then(() => Draw.click(100, 100))

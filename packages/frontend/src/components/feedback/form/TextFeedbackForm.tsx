@@ -18,7 +18,7 @@
 
 import React, { ChangeEvent, useCallback, useState } from 'react';
 import Cls from './TextFeedbackForm.module.scss';
-import { useServices } from '../../../core/hooks';
+import { useServices } from '../../../core/useServices';
 import { Logger } from '@abc-map/shared';
 import { prefixedTranslation } from '../../../i18n/i18n';
 

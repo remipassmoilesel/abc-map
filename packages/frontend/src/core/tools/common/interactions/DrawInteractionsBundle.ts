@@ -147,7 +147,7 @@ export class DrawInteractionsBundle {
 
           return { feature, before: geomBefore, after: geomAfter };
         })
-        .filter((item) => !!item) as UpdateItem[];
+        .filter((item): item is UpdateItem => !!item);
 
       this.onNewChangeset && this.onNewChangeset(new UpdateGeometriesChangeset(items));
       modified = [];

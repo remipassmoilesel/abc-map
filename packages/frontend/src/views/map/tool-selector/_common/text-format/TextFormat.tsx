@@ -23,7 +23,7 @@ import OptionRow from '../option-row/OptionRow';
 import { prefixedTranslation } from '../../../../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '../../../../../core/store/hooks';
-import { useServices } from '../../../../../core/hooks';
+import { useServices } from '../../../../../core/useServices';
 import { useDebouncedStyleTransform } from '../../../../../core/geo/useDebouncedStyleTransform';
 import Cls from './TextFormat.module.scss';
 

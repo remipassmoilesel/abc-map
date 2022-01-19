@@ -17,8 +17,8 @@
  */
 
 import { FeatureCollection } from 'geojson';
-import { AbcProjection } from '../AbcProjection';
-import { BasicAuthentication } from '../BasicAuthentication';
+import { AbcProjection } from '../projection/AbcProjection';
+import { LayerAuthentication } from './LayerAuthentication';
 
 export type AbcLayer = AbcVectorLayer | AbcPredefinedLayer | AbcWmsLayer | AbcWmtsLayer | AbcXyzLayer;
 
@@ -93,7 +93,7 @@ export interface WmsMetadata extends BaseMetadata {
   extent?: [number, number, number, number];
   remoteUrls: string[];
   remoteLayerName: string;
-  auth?: BasicAuthentication;
+  auth?: LayerAuthentication;
 }
 
 export interface AbcWmsLayer extends AbcBaseLayer {
@@ -107,7 +107,7 @@ export interface WmtsMetadata extends BaseMetadata {
   type: LayerType.Wmts;
   capabilitiesUrl: string;
   remoteLayerName: string;
-  auth?: BasicAuthentication;
+  auth?: LayerAuthentication;
 }
 
 export interface AbcWmtsLayer extends AbcBaseLayer {

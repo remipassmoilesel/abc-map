@@ -88,7 +88,7 @@ describe('Project', function () {
           const helper = ProjectHelper.forFrontend();
           const projectA = await helper.extractManifest(downloaded);
           expect(projectA.metadata.id).not.undefined;
-          expect(projectA.metadata.version).equals('0.4.0');
+          expect(projectA.metadata.version).equals('0.6.0');
           expect(projectA.layers).length(2);
           expect(projectA.layers[0].type).equals(LayerType.Predefined);
           expect(projectA.layers[1].type).equals(LayerType.Vector);
@@ -129,8 +129,6 @@ describe('Project', function () {
 
     it('can export project with credentials', function () {
       cy.visit(Routes.map().format())
-        .get('[data-cy=draw-menu]')
-        .click()
         .then(() => LayerControls.addWmsLayerWithCredentials())
         .get('[data-cy=project-menu]')
         .click()
@@ -221,8 +219,6 @@ describe('Project', function () {
       cy.visit(Routes.map().format())
         .get('[data-cy=project-menu]')
         .click()
-        .get('[data-cy=draw-menu]')
-        .click()
         // Create a project and store it online
         .then(() => LayerControls.addWmsLayerWithCredentials())
         .get('[data-cy=save-project]')
@@ -275,8 +271,6 @@ describe('Project', function () {
     it('can load remote remote project with credentials', function () {
       cy.visit(Routes.map().format())
         .get('[data-cy=project-menu]')
-        .click()
-        .get('[data-cy=draw-menu]')
         .click()
         // Create a project and store it online
         .then(() => LayerControls.addWmsLayerWithCredentials())

@@ -33,9 +33,26 @@ export class ProjectDao {
     await coll.createIndex('ownerId', { unique: false });
   }
 
+  public async findAllMetadata(limit: number, skip = 0): Promise<ProjectDocument[]> {
+    const coll = await this.collection();
+    return coll.find({}).limit(limit).skip(skip).toArray();
+  }
+
   public async saveMetadata(project: ProjectDocument): Promise<void> {
     const coll = await this.collection();
     await coll.replaceOne({ _id: project._id }, project, { upsert: true });
+  }
+
+  public async saveAllMetadata(projects: ProjectDocument[]): Promise<void> {
+    const coll = await this.collection();
+    const bulk = coll.initializeUnorderedBulkOp();
+    projects.forEach((doc) =>
+      bulk
+        .find({ _id: { $eq: doc._id } })
+        .upsert()
+        .replaceOne(doc)
+    );
+    await bulk.execute();
   }
 
   public async saveCompressedFile(projectId: string, file: Buffer | ReadableStream): Promise<void> {

@@ -33,9 +33,7 @@ class NotFoundView extends Component<{}, {}> {
     return (
       <div className={Cls.notFoundView}>
         <h3 className={'mb-5'}>{t('You_are_lost')} 😱</h3>
-        <Link to={Routes.landing().format()} className={'btn btn-outline-primary'}>
-          {t('Dont_panic')}&nbsp;&nbsp;💁🏽
-        </Link>
+        <Link to={Routes.landing().format()}>{t('Dont_panic')}&nbsp;&nbsp;💁🏽</Link>
       </div>
     );
   }

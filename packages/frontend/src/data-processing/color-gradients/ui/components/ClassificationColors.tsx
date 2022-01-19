@@ -181,7 +181,7 @@ class ClassificationColors extends Component<Props, State> {
 
     const colorFunc = chroma.scale([startColor, endColor]).domain([0, numberOfClasses]).classes(numberOfClasses);
     const rows = await dataSource.getRows();
-    const data = rows.map((row) => asNumberOrString(row[valueField] ?? NaN)).filter(isValidNumber) as number[];
+    const data = rows.map((row) => asNumberOrString(row[valueField] ?? NaN)).filter(isValidNumber);
     const classes = Stats.classify(algo, numberOfClasses, data).map((cl, i) => {
       return { ...cl, id: nanoid(), color: colorFunc(i).hex() };
     });

@@ -37,7 +37,7 @@ module.exports = {
   jest: function (config) {
     // React app rewired merge 'transformIgnorePatterns' field with automagical stuff that break Openlayers support in tests, so we replace it
     // See: https://github.com/timarney/react-app-rewired/issues/241
-    config.transformIgnorePatterns = ['node_modules/(?!(ol)/)'];
+    config.transformIgnorePatterns = ['node_modules/(?!(ol|geotiff)/)'];
     config.moduleNameMapper = {'\\.css$': '<rootDir>/src/assets/styles/mocks/style.js'};
     config.coverageReporters = ['text', 'html'];
     config.transform = {

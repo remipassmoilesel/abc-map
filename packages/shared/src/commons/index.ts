@@ -20,3 +20,4 @@ export * from './Logger';
 export * from './messageFromError';
 export * from './PaginatedResponse';
 export * from './ProjectionDto';
+export * from './BasicAuthentication';

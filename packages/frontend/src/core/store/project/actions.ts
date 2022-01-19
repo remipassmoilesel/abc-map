@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcLayout, AbcLegendItem, AbcProjectManifest, AbcView, LegendDisplay } from '@abc-map/shared';
+import { AbcLayout, AbcLegendItem, AbcProjectManifest, AbcSharedView, AbcView, LegendDisplay } from '@abc-map/shared';
 
 export enum ActionType {
   LoadProject = 'LoadProject',
@@ -33,7 +33,12 @@ export enum ActionType {
   SetLegendDisplay = 'SetLegendDisplay',
   SetLegendItemIndex = 'SetLegendItemIndex',
   DeleteLegendItem = 'DeleteLegendItem',
+  AddSharedViews = 'AddSharedViews',
+  SetActiveSharedView = 'SetActiveSharedView',
+  UpdateSharedView = 'UpdateSharedView',
+  RemoveSharedViews = 'RemoveSharedViews',
   SetView = 'SetView',
+  SetPublic = 'SetPublic',
 }
 
 export interface LoadProject {
@@ -108,9 +113,34 @@ export interface SetLegendItemIndex {
   index: number;
 }
 
+export interface AddSharedViews {
+  type: ActionType.AddSharedViews;
+  views: AbcSharedView[];
+}
+
+export interface SetActiveSharedView {
+  type: ActionType.SetActiveSharedView;
+  id: string;
+}
+
+export interface UpdateSharedView {
+  type: ActionType.UpdateSharedView;
+  view: AbcSharedView;
+}
+
+export interface RemoveSharedViews {
+  type: ActionType.RemoveSharedViews;
+  views: AbcSharedView[];
+}
+
 export interface SetView {
   type: ActionType.SetView;
   view: AbcView;
+}
+
+export interface SetPublic {
+  type: ActionType.SetPublic;
+  value: boolean;
 }
 
 export type ProjectAction =
@@ -128,7 +158,12 @@ export type ProjectAction =
   | SetLegendDisplay
   | DeleteLegendItem
   | SetLegendItemIndex
-  | SetView;
+  | AddSharedViews
+  | SetActiveSharedView
+  | UpdateSharedView
+  | RemoveSharedViews
+  | SetView
+  | SetPublic;
 
 export class ProjectActions {
   public static loadProject(project: AbcProjectManifest): ProjectAction {
@@ -187,14 +222,14 @@ export class ProjectActions {
     };
   }
 
-  public static addItems(items: AbcLegendItem[]): ProjectAction {
+  public static addLegendItems(items: AbcLegendItem[]): ProjectAction {
     return {
       type: ActionType.AddLegendItems,
       items,
     };
   }
 
-  public static updateItem(item: AbcLegendItem): ProjectAction {
+  public static updateLegendItem(item: AbcLegendItem): ProjectAction {
     return {
       type: ActionType.UpdateLegendItem,
       item,
@@ -231,10 +266,45 @@ export class ProjectActions {
     };
   }
 
+  public static addSharedViews(views: AbcSharedView[]): ProjectAction {
+    return {
+      type: ActionType.AddSharedViews,
+      views,
+    };
+  }
+
+  public static setActiveSharedView(id: string): ProjectAction {
+    return {
+      type: ActionType.SetActiveSharedView,
+      id,
+    };
+  }
+
+  public static updateSharedView(view: AbcSharedView): ProjectAction {
+    return {
+      type: ActionType.UpdateSharedView,
+      view,
+    };
+  }
+
+  public static removeSharedViews(views: AbcSharedView[]): ProjectAction {
+    return {
+      type: ActionType.RemoveSharedViews,
+      views,
+    };
+  }
+
   public static setView(view: AbcView): ProjectAction {
     return {
       type: ActionType.SetView,
       view,
+    };
+  }
+
+  public static setPublic(value: boolean): ProjectAction {
+    return {
+      type: ActionType.SetPublic,
+      value,
     };
   }
 }

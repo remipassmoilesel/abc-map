@@ -28,7 +28,7 @@ import { LayerFactory } from '../../../core/geo/layers/LayerFactory';
 import { HistoryKey } from '../../../core/history/HistoryKey';
 import { AddLayersChangeset } from '../../../core/history/changesets/layers/AddLayersChangeset';
 import { prefixedTranslation } from '../../../i18n/i18n';
-import { useServices } from '../../../core/hooks';
+import { useServices } from '../../../core/useServices';
 import CommonActions from './_common/common-actions/CommonActions';
 import TipBubble from '../../../components/tip-bubble/TipBubble';
 import { ToolTips } from '@abc-map/user-documentation';

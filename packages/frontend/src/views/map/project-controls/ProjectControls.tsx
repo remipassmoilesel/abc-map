@@ -25,11 +25,12 @@ import RemoteProjectModal from './RemoteProjectsModal';
 import { ModalStatus, OperationStatus } from '../../../core/ui/typings';
 import { ServiceProps, withServices } from '../../../core/withServices';
 import { Errors } from '../../../core/utils/Errors';
-import { Encryption } from '../../../core/utils/Encryption';
 import { prefixedTranslation } from '../../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
 import { IconDefs } from '../../../components/icon/IconDefs';
 import { FaIcon } from '../../../components/icon/FaIcon';
+import { ProjectStatus } from '../../../core/project/ProjectStatus';
+import { saveProjectOnline } from '../../../core/project/useSaveProjectOnline';
 
 const logger = Logger.get('ProjectControls.tsx');
 
@@ -115,41 +116,15 @@ class ProjectControls extends Component<Props, State> {
   };
 
   private handleSaveProject = () => {
-    const { toasts, project, geo, modals } = this.props.services;
+    const services = this.props.services;
 
-    const save = async () => {
-      let password: string | undefined;
-      if (Encryption.mapContainsCredentials(geo.getMainMap())) {
-        const event = await modals.setProjectPassword();
-        if (event.status === ModalStatus.Canceled) {
-          return OperationStatus.Interrupted;
-        }
-        password = event.value;
-      }
-
-      const compressed = await project.exportCurrentProject(password);
-      if (compressed.project.size >= ProjectConstants.MaxSizeBytes) {
-        toasts.error(t('Sorry_this_project_is_too_heavy'));
-        return OperationStatus.Interrupted;
-      }
-
-      await project.save(compressed);
-      toasts.info(t('Project_saved'));
-
-      return OperationStatus.Succeed;
-    };
-
-    modals
-      .longOperationModal(save)
+    saveProjectOnline(this.props.services)
       .then((status) => {
-        if (status === OperationStatus.Succeed) {
-          return modals.solicitation();
+        if (ProjectStatus.Ok === status) {
+          return services.modals.solicitation();
         }
       })
-      .catch((err) => {
-        logger.error('Cannot save project: ', err);
-        toasts.genericError();
-      });
+      .catch((err) => logger.error('Cannot save project: ', err));
   };
 
   private handleOpenProject = () => {
@@ -161,21 +136,15 @@ class ProjectControls extends Component<Props, State> {
   };
 
   private handleExportProject = () => {
-    const { toasts, project, geo, modals } = this.props.services;
+    const { toasts, project, modals } = this.props.services;
 
     const exportProject = async () => {
-      let password: string | undefined;
-      if (Encryption.mapContainsCredentials(geo.getMainMap())) {
-        const event = await modals.setProjectPassword();
-        if (event.status === ModalStatus.Canceled) {
-          return OperationStatus.Interrupted;
-        }
-        password = event.value;
+      const compressed = await project.exportCurrentProject();
+      if (ProjectStatus.Canceled === compressed) {
+        return OperationStatus.Interrupted;
       }
 
-      const compressed = await project.exportCurrentProject(password);
       FileIO.outputBlob(compressed.project, `projet${ProjectConstants.FileExtension}`);
-
       return OperationStatus.Succeed;
     };
 

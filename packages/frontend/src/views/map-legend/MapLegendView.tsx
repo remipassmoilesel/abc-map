@@ -28,7 +28,7 @@ import { Routes } from '../../routes';
 import { IconDefs } from '../../components/icon/IconDefs';
 import { FaIcon } from '../../components/icon/FaIcon';
 import { useAppSelector } from '../../core/store/hooks';
-import { useServices } from '../../core/hooks';
+import { useServices } from '../../core/useServices';
 import Cls from './MapLegendView.module.scss';
 
 const logger = Logger.get('MapLegendView.tsx');
@@ -44,7 +44,7 @@ export function MapLegendView() {
     pageSetup(t('Edit_legend'), t('Create_legend_for_your_map'));
   }, []);
 
-  const handleGoToLayout = useCallback(() => history.push(Routes.layout().format()), [history]);
+  const handleGoToExport = useCallback(() => history.push(Routes.export().format()), [history]);
   const handleSizeChanged = useCallback((width: number, height: number) => project.setLegendSize(width, height), [project]);
 
   const handleNewItem = useCallback((item: AbcLegendItem) => project.addLegendItems([item]), [project]);
@@ -82,7 +82,7 @@ export function MapLegendView() {
         <div className={'row justify-content-end'}>
           {/* Go back button */}
           <div className={'col-sm-4 d-flex justify-content-end'}>
-            <button className={'btn btn-outline-primary'} onClick={handleGoToLayout} data-cy={'back-to-layout'}>
+            <button className={'btn btn-outline-primary'} onClick={handleGoToExport} data-cy={'back-to-layout'}>
               <FaIcon icon={IconDefs.faArrowCircleLeft} className={'mr-2'} />
               {t('Go_back_to_layout')}
             </button>

@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { Logger } from '@abc-map/shared';
 import { References } from '@abc-map/user-documentation';
 import debounce from 'lodash/debounce';
@@ -28,6 +28,7 @@ import { IconDefs } from '../../components/icon/IconDefs';
 import SideMenu from '../../components/side-menu/SideMenu';
 import { useAppDispatch, useAppSelector } from '../../core/store/hooks';
 import { withTranslation } from 'react-i18next';
+import { FloatingButton } from '../../components/floating-button/FloatingButton';
 
 const logger = Logger.get('DocumentationView.tsx');
 
@@ -38,6 +39,11 @@ function DocumentationView() {
   const dispatch = useAppDispatch();
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const reference = References.find((ref) => ref.lang === getDocumentationLang());
+
+  // Page setup
+  useEffect(() => {
+    pageSetup('Documentation', `La documentation explique le fonctionnement d'Abc-Map 📖`);
+  }, []);
 
   // When user scroll documentation, we save scrollTop value in order to restore it
   const handleScroll = useMemo(
@@ -55,8 +61,6 @@ function DocumentationView() {
   );
 
   useEffect(() => {
-    pageSetup('Documentation', `La documentation explique le fonctionnement d'Abc-Map 📖`);
-
     const scroll = scrollRef.current;
     if (!scroll) {
       logger.error('Ref not ready');
@@ -65,10 +69,18 @@ function DocumentationView() {
     scroll.addEventListener('scroll', handleScroll);
     scroll.scrollTop = position;
 
-    return () => {
-      scroll.removeEventListener('scroll', handleScroll);
-    };
+    return () => scroll.removeEventListener('scroll', handleScroll);
   }, [handleScroll, position]);
+
+  const handleGoToTop = useCallback(() => {
+    const scroll = scrollRef.current;
+    if (!scroll) {
+      logger.error('Ref not ready');
+      return;
+    }
+
+    scroll.scroll({ top: 0, behavior: 'smooth' });
+  }, []);
 
   return (
     <div className={Cls.documentation} ref={scrollRef}>
@@ -77,14 +89,23 @@ function DocumentationView() {
           {/* Table of content button */}
           <SideMenu
             buttonIcon={IconDefs.faListOl}
-            buttonStyle={{ top: '20vmin', right: '6vmin' }}
+            buttonStyle={{ top: '45vh', right: '6vmin' }}
             title={t('Table_of_content')}
             menuPlacement={'right'}
-            menuId={'documentationview-layouts-menu'}
+            menuId={'views/DocumentationView-toc'}
             closeOnClick={true}
           >
             <div className={Cls.toc} dangerouslySetInnerHTML={{ __html: reference?.toc }} />
           </SideMenu>
+
+          {/* Go to top button */}
+          <FloatingButton
+            icon={IconDefs.faArrowUp}
+            style={{ top: '55vh', right: '6vmin' }}
+            title={t('Back_to_top')}
+            buttonId={'views/DocumentationView-go-to-top'}
+            onClick={handleGoToTop}
+          />
 
           {/* Documentation viewport */}
           <div className={Cls.viewport}>

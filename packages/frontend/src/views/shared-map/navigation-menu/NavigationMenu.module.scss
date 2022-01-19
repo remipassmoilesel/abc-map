@@ -1,0 +1,102 @@
+/**
+ * Copyright © 2021 Rémi Pace.
+ * This file is part of Abc-Map.
+ *
+ * Abc-Map is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of
+ * the License, or (at your option) any later version.
+ *
+ * Abc-Map is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General
+ * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+@import "src/assets/styles/variables";
+@import "node_modules/bootstrap/scss/bootstrap";
+
+.drawer {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  bottom: 1rem;
+  left: 80vw;
+
+  z-index: $zIndex-sharedMap-menu;
+
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+
+  padding: 1rem;
+
+  background-color: rgba(255, 255, 255, 0.7);
+  border: solid 0.1rem $gray-400;
+  border-radius: $border-radius;
+
+  @include media-breakpoint-down(xl) {
+    left: 1rem;
+  }
+}
+
+.navButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin: 0.5rem;
+  padding: 0.5rem;
+}
+
+.closeButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin: 0.5rem;
+  padding: 0.5rem;
+
+  border: none;
+  border-radius: $border-radius;
+  background-color: $control-color;
+  box-shadow: $box-shadow;
+
+  color: white;
+
+  .icon {
+    margin-right: 0.5rem;
+  }
+
+  &:hover {
+    background-color: $control-color-active;
+
+    .icon {
+      opacity: $control-color-active-opacity;
+    }
+  }
+}
+
+.softwareCredits {
+  display: flex;
+  align-items: center;
+
+  font-size: 1.1rem;
+
+  a {
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .logo {
+    height: 1.5rem;
+    margin-right: 1rem;
+  }
+}

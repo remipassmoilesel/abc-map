@@ -99,6 +99,14 @@ export class MapWrapper {
     }
   }
 
+  public addViewMoveListener(listener: () => void) {
+    this.internalMap.on('moveend', listener);
+  }
+
+  public removeViewMoveListener(listener: () => void) {
+    this.internalMap.un('moveend', listener);
+  }
+
   public setDefaultLayers(): void {
     this.internalMap.getLayers().clear();
     const osm = LayerFactory.newPredefinedLayer(PredefinedLayerModel.OSM);
@@ -120,6 +128,15 @@ export class MapWrapper {
     if (olLayer instanceof TileLayer) {
       olLayer.getSource().on('tileloaderror', this.handleTileLoadError);
     }
+  }
+
+  public importLayersFrom(other: MapWrapper, styleRatio = 1) {
+    this.unwrap().getLayers().clear();
+
+    other.getLayers().forEach((layer) => {
+      const clone = layer.shallowClone(styleRatio);
+      this.addLayer(clone);
+    });
   }
 
   /**

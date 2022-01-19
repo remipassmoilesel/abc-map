@@ -1,6 +1,10 @@
 # The bottomless well aka backlog
 
+<!-- toc -->
+
+- [Better legend (coming soon)](#better-legend-coming-soon)
 - [Story maps (coming soon)](#story-maps-coming-soon)
+- [SVG Export](#svg-export)
 - [Custom (and better) map tools](#custom-and-better-map-tools)
 - ["Go to coordinates" UI control](#go-to-coordinates-ui-control)
 - [Progressive web app](#progressive-web-app)
@@ -26,9 +30,21 @@
 - [Datastore artefact with prompt](#datastore-artefact-with-prompt)
 - [Better errors for bad server configuration](#better-errors-for-bad-server-configuration)
 
+<!-- tocstop -->
+
+## Better legend (coming soon)
+
+Users should be able to enter rich text in legends. Legends need to be prettier.
+
+A possible solution would be to use HTML, a rich text editor like SlateJS, and HTML2Canvas for PDF exports.
+
 ## Story maps (coming soon)
 
 Connected users should be able to create and share story maps.
+
+## SVG Export
+
+For interoperability with other software. Per example better layouts using Inkscape.
 
 ## Custom (and better) map tools
 

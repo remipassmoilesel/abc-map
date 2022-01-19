@@ -16,10 +16,12 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcProjectMetadata, WmsMetadata } from '@abc-map/shared';
+import { WmsMetadata } from '@abc-map/shared';
 import { TestData } from './test-data/TestData';
 import { MigratedProject } from './typings';
-import { FromV030ToV040, WmsMetadata030 } from './FromV030ToV040';
+import { FromV030ToV040 } from './FromV030ToV040';
+import { WmsMetadata030 } from './old-typings/project-030';
+import { AbcProjectMetadata040 } from './old-typings/project-040';
 
 describe('FromV030ToV040', () => {
   let sampleProject: MigratedProject;
@@ -40,7 +42,7 @@ describe('FromV030ToV040', () => {
     const result = await migration.migrate(sampleProject.manifest, sampleProject.files);
 
     // Assert
-    const expectedMetadata: AbcProjectMetadata = {
+    const expectedMetadata: AbcProjectMetadata040 = {
       id: sampleProject.manifest.metadata.id,
       version: '0.4.0',
       name: sampleProject.manifest.metadata.name,

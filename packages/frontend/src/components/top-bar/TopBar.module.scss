@@ -24,6 +24,9 @@
   z-index: $zIndex-topBar;
 
   height: $top-bar-height;
+  min-height: $top-bar-height;
+  max-height: $top-bar-height;
+
   width: 100vw;
   max-width: 100vw;
 

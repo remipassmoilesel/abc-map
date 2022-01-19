@@ -401,7 +401,7 @@ describe('MapWrapper', function () {
 
     map.moveViewToExtent([41.2611155, 51.3055721, -5.4517733, 9.8282225], EPSG_4326, 0);
 
-    expect(map.getView()).toEqual({ projection: { name: 'EPSG:3857' }, center: [1993138.8696730416, 3887501.414438], resolution: 55760.470248395766 });
+    expect(map.getView()).toEqual({ projection: { name: 'EPSG:3857' }, center: [1993138.8696730416, 3887501.414438], resolution: 55760.4702483958 });
   });
 
   it('moveViewToPosition()', () => {
@@ -410,7 +410,7 @@ describe('MapWrapper', function () {
 
     map.moveViewToPosition([3.8371328, 43.6207616], 5);
 
-    expect(map.getView()).toEqual({ projection: { name: 'EPSG:3857' }, center: [427147.669402168, 5406940.509560228], resolution: 4891.96981025128 });
+    expect(map.getView()).toEqual({ projection: { name: 'EPSG:3857' }, center: [427147.669402168, 5406940.509560228], resolution: 4891.9698102513 });
   });
 
   it('forEachFeatureSelected()', () => {
@@ -436,5 +436,21 @@ describe('MapWrapper', function () {
       [f1, layer],
       [f2, layer],
     ]);
+  });
+
+  it('importLayersFrom()', () => {
+    // Prepare
+    const origin = MapFactory.createNaked();
+    origin.addLayer(LayerFactory.newPredefinedLayer(PredefinedLayerModel.OSM).setName('Test layer 1'));
+    origin.addLayer(LayerFactory.newVectorLayer().setName('Test layer 2'));
+
+    const destination = MapFactory.createNaked();
+
+    // Act
+    destination.importLayersFrom(origin, 2);
+
+    // Assert
+    expect(destination.getLayers().map((l) => l.getName())).toEqual(['Test layer 1', 'Test layer 2']);
+    expect(destination.getLayers().map((l) => l.unwrap().get(LayerProperties.StyleRatio))).toEqual([undefined, 2]);
   });
 });

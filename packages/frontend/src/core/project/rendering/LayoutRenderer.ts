@@ -90,7 +90,8 @@ export class LayoutRenderer {
 
     // Adapt size of map to layout
     const exportDimensions = LayoutHelper.formatToPixel(layout.format);
-    support.style.marginTop = '200px';
+    support.style.position = 'fixed';
+    support.style.bottom = '-10000px';
     support.style.width = `${exportDimensions.width}px`;
     support.style.height = `${exportDimensions.height}px`;
     renderingMap.unwrap().setSize([exportDimensions.width, exportDimensions.height]);

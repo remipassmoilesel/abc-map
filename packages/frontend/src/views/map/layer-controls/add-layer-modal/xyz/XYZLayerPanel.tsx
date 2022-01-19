@@ -27,7 +27,7 @@ import { HistoryKey } from '../../../../../core/history/HistoryKey';
 import { AddLayersChangeset } from '../../../../../core/history/changesets/layers/AddLayersChangeset';
 import { withTranslation } from 'react-i18next';
 import { prefixedTranslation } from '../../../../../i18n/i18n';
-import { useServices } from '../../../../../core/hooks';
+import { useServices } from '../../../../../core/useServices';
 
 const logger = Logger.get('XYZLayerPanel.tsx');
 

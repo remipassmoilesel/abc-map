@@ -24,6 +24,7 @@ import {
   AbcLegendItem,
   AbcProjectManifest,
   AbcProjectMetadata,
+  AbcSharedView,
   AbcView,
   BlobIO,
   CompressedProject,
@@ -46,11 +47,11 @@ import { ModalService } from '../ui/ModalService';
 import { ProjectEvent, ProjectEventType } from './ProjectEvent';
 import { Errors } from '../utils/Errors';
 import { ProjectUpdater } from './ProjectUpdater';
-import { prefixedTranslation } from '../../i18n/i18n';
+import cloneDeep from 'lodash/cloneDeep';
+import { ProjectStatus } from './ProjectStatus';
+import { Routes } from '../../routes';
 
 export const logger = Logger.get('ProjectService.ts');
-
-const t = prefixedTranslation('ProjectService:');
 
 export class ProjectService {
   public static create(
@@ -88,7 +89,7 @@ export class ProjectService {
   public async newProject(): Promise<void> {
     // Create new manifest
     const manifest = ProjectFactory.newProjectManifest();
-    await this.loadManifest(manifest, undefined);
+    await this.loadExtracted(manifest, undefined);
 
     // Reset main map layers
     this.geoService.getMainMap().setDefaultLayers();
@@ -133,33 +134,33 @@ export class ProjectService {
 
     // Parse manifest
     const manifest: AbcProjectManifest = JSON.parse(await BlobIO.asString(manifestFile.content));
-    return this.loadManifest(manifest, password);
+    return this.loadExtracted(manifest, password);
   }
 
-  public async loadManifest(manifest: AbcProjectManifest, password: string | undefined, files: AbcFile[] = []): Promise<void> {
+  private async loadExtracted(_manifest: AbcProjectManifest, _password: string | undefined, _files: AbcFile[] = []): Promise<void> {
     // Migrate project if necessary
-    const migrated = await this.updater.update(manifest, files);
+    let { manifest } = await this.updater.update(_manifest, _files);
 
     // Prompt password if necessary
-    let _password = password;
-    if (Encryption.manifestContainsCredentials(migrated.manifest) && !_password) {
-      const witness = Encryption.extractEncryptedData(migrated.manifest);
+    let password = _password;
+    if (Encryption.manifestContainsCredentials(manifest) && !password) {
+      const witness = Encryption.extractEncryptedData(manifest);
       const ev = await this.modals.getProjectPassword(witness || '');
       const canceled = ev.status === ModalStatus.Canceled;
-      _password = ev.value;
-      if (canceled || !_password) {
+      password = ev.value;
+      if (canceled || !password) {
         Errors.missingPassword();
       }
     }
 
     // Decrypt project manifest if password set
-    if (_password) {
-      migrated.manifest = await Encryption.decryptManifest(migrated.manifest, _password);
+    if (password) {
+      manifest = await Encryption.decryptManifest(manifest, password);
     }
 
     // Load view and layers projection
-    await this.geoService.loadProjection(migrated.manifest.view.projection.name);
-    for (const lay of migrated.manifest.layers) {
+    await this.geoService.loadProjection(manifest.view.projection.name);
+    for (const lay of manifest.layers) {
       if (LayerType.Wms === lay.type && lay.metadata.projection) {
         await this.geoService.loadProjection(lay.metadata.projection.name);
       } else if (LayerType.Xyz === lay.type && lay.metadata.projection) {
@@ -168,32 +169,51 @@ export class ProjectService {
     }
 
     // Load project
-    this.store.dispatch(ProjectActions.loadProject(migrated.manifest));
-    await this.geoService.importLayers(migrated.manifest.layers);
+    this.store.dispatch(ProjectActions.loadProject(manifest));
+    await this.geoService.importLayers(manifest.layers);
+
+    // Set active layout if any
+    if (manifest.layouts.length) {
+      this.store.dispatch(ProjectActions.setActiveLayout(manifest.layouts[0].id));
+    }
+
+    // Set active shared view
+    if (manifest.sharedViews.length) {
+      this.store.dispatch(ProjectActions.setActiveSharedView(manifest.sharedViews[0].id));
+    }
 
     // Set view
-    this.store.dispatch(ProjectActions.setView(migrated.manifest.view));
-    this.geoService.getMainMap().setView(migrated.manifest.view);
+    this.store.dispatch(ProjectActions.setView(manifest.view));
+    this.geoService.getMainMap().setView(manifest.view);
 
     this.eventTarget.dispatchEvent(new ProjectEvent(ProjectEventType.ProjectLoaded));
     logger.info('Project loaded');
   }
 
-  public async exportCurrentProject(password?: string): Promise<CompressedProject<Blob>> {
+  public async exportCurrentProject(): Promise<CompressedProject<Blob> | ProjectStatus.Canceled> {
+    const state = this.store.getState().project;
     const containsCredentials = Encryption.mapContainsCredentials(this.geoService.getMainMap());
-    if (containsCredentials && !password) {
-      throw new Error('Password is mandatory when project contains credentials');
+    const shouldBeEncrypted = containsCredentials && !state.metadata.public;
+
+    let password: string | undefined;
+    if (shouldBeEncrypted) {
+      const event = await this.modals.setProjectPassword();
+      if (event.status === ModalStatus.Canceled) {
+        return ProjectStatus.Canceled;
+      }
+      password = event.value;
     }
 
     let manifest: AbcProjectManifest = {
-      metadata: this.store.getState().project.metadata,
-      layers: await this.geoService.exportLayers(),
-      layouts: this.store.getState().project.layouts,
-      legend: this.store.getState().project.legend,
-      view: this.store.getState().project.view,
+      metadata: cloneDeep(state.metadata),
+      layers: await this.geoService.exportLayers(this.geoService.getMainMap()),
+      view: cloneDeep(state.mainView),
+      legend: cloneDeep(state.legend),
+      layouts: cloneDeep(state.layouts.list),
+      sharedViews: cloneDeep(state.sharedViews.list),
     };
 
-    if (containsCredentials && password) {
+    if (shouldBeEncrypted && password) {
       manifest = await Encryption.encryptManifest(manifest, password);
     }
 
@@ -201,38 +221,40 @@ export class ProjectService {
     return { project, metadata: manifest.metadata };
   }
 
-  public save(project: CompressedProject<Blob>): Promise<void> {
-    if (project.project.size >= ProjectConstants.MaxSizeBytes) {
-      throw new Error('Project is too heavy');
+  public async saveCurrent(): Promise<ProjectStatus> {
+    const compressed = await this.exportCurrentProject();
+    if (ProjectStatus.Canceled === compressed) {
+      return ProjectStatus.Canceled;
+    }
+
+    if (compressed.project.size >= ProjectConstants.MaxSizeBytes) {
+      return ProjectStatus.TooHeavy;
     }
 
     const formData = new FormData();
-    formData.append('metadata', JSON.stringify(project.metadata));
-    formData.append('project', project.project);
+    formData.append('metadata', JSON.stringify(compressed.metadata));
+    formData.append('project', compressed.project);
     return this.jsonClient
       .post(Api.saveProject(), formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       })
-      .then(() => undefined)
+      .then<ProjectStatus.Ok>(() => ProjectStatus.Ok)
       .catch((err) => {
         if (HttpError.isTooManyProject(err)) {
-          this.toasts.error(t('Too_much_projects'));
-        } else {
-          this.toasts.genericError(err);
+          return ProjectStatus.OnlineQuotaExceeded;
         }
-
         return Promise.reject(err);
       });
   }
 
-  public getLayouts(): AbcLayout[] {
-    return this.store.getState().project.layouts;
+  public setPublic(shared: boolean): void {
+    this.store.dispatch(ProjectActions.setPublic(shared));
   }
 
-  public getLegend(): AbcLegend {
-    return this.store.getState().project.legend;
+  public getLayouts(): AbcLayout[] {
+    return this.store.getState().project.layouts.list;
   }
 
   public addLayouts(layouts: AbcLayout[]): void {
@@ -244,12 +266,13 @@ export class ProjectService {
   }
 
   public getActiveLayout(): AbcLayout | undefined {
-    const id = this.store.getState().project.activeLayoutId;
+    const state = this.store.getState().project;
+    const id = state.layouts.activeId;
     if (!id) {
       return;
     }
 
-    return this.store.getState().project.layouts.find((lay) => lay.id === id);
+    return state.layouts.list.find((lay) => lay.id === id);
   }
 
   public setLayoutIndex(layout: AbcLayout, index: number): void {
@@ -257,11 +280,11 @@ export class ProjectService {
   }
 
   public addLegendItems(items: AbcLegendItem[]): void {
-    this.store.dispatch(ProjectActions.addItems(items));
+    this.store.dispatch(ProjectActions.addLegendItems(items));
   }
 
   public updateLegendItem(item: AbcLegendItem): void {
-    this.store.dispatch(ProjectActions.updateItem(item));
+    this.store.dispatch(ProjectActions.updateLegendItem(item));
   }
 
   public setLegendSize(width: number, height: number) {
@@ -295,6 +318,10 @@ export class ProjectService {
     this.store.dispatch(ProjectActions.setProjectName(name));
   }
 
+  public getLegend(): AbcLegend {
+    return this.store.getState().project.legend;
+  }
+
   public deleteLegendItem(item: AbcLegendItem) {
     this.store.dispatch(ProjectActions.deleteLegendItem(item));
   }
@@ -303,8 +330,47 @@ export class ProjectService {
     this.store.dispatch(ProjectActions.setLegendItemIndex(item, newIndex));
   }
 
+  public addSharedViews(views: AbcSharedView[]): void {
+    this.store.dispatch(ProjectActions.addSharedViews(views));
+  }
+
+  public getSharedViews(): AbcSharedView[] {
+    return this.store.getState().project.sharedViews.list;
+  }
+
+  public getActiveSharedView(): AbcSharedView | undefined {
+    const state = this.store.getState().project.sharedViews;
+    if (!state.activeId) {
+      return;
+    }
+
+    return state.list.find((v) => v.id === state.activeId);
+  }
+
+  public setActiveSharedView(id: string): void {
+    this.store.dispatch(ProjectActions.setActiveSharedView(id));
+  }
+
+  public updateSharedView(view: AbcSharedView): void {
+    this.store.dispatch(ProjectActions.updateSharedView(view));
+  }
+
+  public removeSharedViews(views: AbcSharedView[]): void {
+    this.store.dispatch(ProjectActions.removeSharedViews(views));
+
+    const remainingViews = this.store.getState().project.sharedViews;
+    if (remainingViews.list.length) {
+      this.store.dispatch(ProjectActions.setActiveSharedView(remainingViews.list[0].id));
+    }
+  }
+
   public setView(view: AbcView): void {
     this.store.dispatch(ProjectActions.setView(view));
+  }
+
+  public getPublicLink(): string {
+    const projectId = this.store.getState().project.metadata.id;
+    return `${window.location.protocol}//${window.location.host}${Routes.sharedMap().withParams({ projectId })}`;
   }
 
   public listRemoteProjects(): Promise<AbcProjectMetadata[]> {

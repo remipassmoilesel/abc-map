@@ -22,7 +22,7 @@ import { ToolMode } from '../../../../../core/tools/ToolMode';
 import { useCallback, useEffect, useState } from 'react';
 import Mousetrap from 'mousetrap';
 import { Logger } from '@abc-map/shared';
-import { useServices } from '../../../../../core/hooks';
+import { useServices } from '../../../../../core/useServices';
 
 const logger = Logger.get('ToolModeSelector.tsx');
 

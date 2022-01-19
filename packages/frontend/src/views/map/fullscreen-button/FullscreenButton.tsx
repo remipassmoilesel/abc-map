@@ -18,7 +18,7 @@
 
 import { IconDefs } from '../../../components/icon/IconDefs';
 import React, { CSSProperties, useCallback, useState } from 'react';
-import { useServices } from '../../../core/hooks';
+import { useServices } from '../../../core/useServices';
 import { Logger } from '@abc-map/shared';
 import { FloatingButton } from '../../../components/floating-button/FloatingButton';
 import { prefixedTranslation } from '../../../i18n/i18n';
@@ -60,5 +60,5 @@ export function FullscreenButton(props: Props) {
     }
   }, [toasts]);
 
-  return <FloatingButton icon={fullscreenIcon} title={t('Fullscreen')} onClick={toggleFullscreen} style={style} />;
+  return <FloatingButton buttonId={'map/FullscreenButton'} icon={fullscreenIcon} title={t('Fullscreen')} onClick={toggleFullscreen} style={style} />;
 }

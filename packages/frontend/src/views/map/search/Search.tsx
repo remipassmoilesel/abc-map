@@ -27,7 +27,7 @@ import debounce from 'lodash/debounce';
 import Cls from './Search.module.scss';
 import { IconDefs } from '../../../components/icon/IconDefs';
 import { FaIcon } from '../../../components/icon/FaIcon';
-import { useServices } from '../../../core/hooks';
+import { useServices } from '../../../core/useServices';
 import { solvesInAtLeast } from '../../../core/utils/solvesInAtLeast';
 import { InlineLoader } from '../../../components/inline-loader/InlineLoader';
 

@@ -17,12 +17,12 @@
  */
 
 import React, { useEffect } from 'react';
-import { Route, Switch, useHistory } from 'react-router-dom';
+import { matchPath, Route, Switch, useHistory, useLocation } from 'react-router-dom';
 import { getAbcWindow } from '@abc-map/shared';
 import MapView from './views/map/MapView';
 import { ToastContainer } from 'react-toastify';
 import LandingView from './views/landing/LandingView';
-import LayoutView from './views/layout/LayoutView';
+import ExportView from './views/export/ExportView';
 import TopBar from './components/top-bar/TopBar';
 import DataStoreView from './views/datastore/DataStoreView';
 import NotFoundView from './views/not-found/NotFoundView';
@@ -46,13 +46,21 @@ import LongOperationModal from './components/long-operation-modal/LongOperationM
 import FundingView from './views/funding/FundingView';
 import ConfirmationModal from './components/confirmation-modal/ConfirmationModal';
 import { withTranslation } from 'react-i18next';
-import { Routes } from './routes';
-import { TokenWatcher } from './components/token-watcher/TokenWatcher';
 import FeedbackPopup from './components/feedback/FeedbackPopup';
 import FeedbackModal from './components/feedback/FeedbackModal';
+import { Routes } from './routes';
+import ShareSettingsView from './views/share-settings/ShareSettingsView';
+import { WarningBeforeUnload } from './components/warning-before-unload/WarningBeforeUnload';
+import { TokenWatcher } from './components/token-watcher/TokenWatcher';
+import { SharedMapView } from './views/shared-map/SharedMapView';
+import Cls from './App.module.scss';
 
-function App() {
+const fullscreenRoutes = [Routes.sharedMap().raw()];
+
+export function App() {
   const history = useHistory();
+  const location = useLocation();
+  const fullscreenView = !fullscreenRoutes.find((r) => matchPath(location.pathname, { path: r }));
 
   useEffect(() => {
     // This route is used in documentation
@@ -61,42 +69,61 @@ function App() {
 
   return (
     <>
-      {/* Top bar and main view */}
-      <TopBar />
+      {/* Edition: with top bar, most of views are enabled */}
+      {fullscreenView && (
+        <>
+          <TopBar />
 
-      <Switch>
-        <Route exact path={'/'} component={LandingView} />
-        <Route exact path={Routes.landing().raw()} component={LandingView} />
-        <Route exact path={Routes.map().raw()} component={MapView} />
-        <Route exact path={Routes.dataStore().raw()} component={DataStoreView} />
-        <Route exact path={Routes.layout().raw()} component={LayoutView} />
-        <Route exact path={Routes.mapLegend().raw()} component={MapLegendView} />
-        <Route exact path={Routes.documentation().raw()} component={DocumentationView} />
-        <Route exact path={Routes.confirmAccount().raw()} component={ConfirmAccountView} />
-        <Route exact path={Routes.dataProcessing().raw()} component={DataProcessingView} />
-        <Route exact path={Routes.resetPassword().raw()} component={ResetPasswordView} />
-        <Route exact path={Routes.userAccount().raw()} component={UserAccountView} />
-        <Route exact path={Routes.legalMentions().raw()} component={LegalMentionsView} />
-        <Route exact path={Routes.funding().raw()} component={FundingView} />
-        <Route path={'*'} component={NotFoundView} />
-      </Switch>
+          <div className={Cls.appViewport}>
+            <Switch>
+              <Route exact path={'/'} component={LandingView} />
+              <Route exact path={Routes.landing().raw()} component={LandingView} />
+              <Route exact path={Routes.map().raw()} component={MapView} />
+              <Route exact path={Routes.dataStore().raw()} component={DataStoreView} />
+              <Route exact path={Routes.shareSettings().raw()} component={ShareSettingsView} />
+              <Route exact path={Routes.export().raw()} component={ExportView} />
+              <Route exact path={Routes.mapLegend().raw()} component={MapLegendView} />
+              <Route exact path={Routes.documentation().raw()} component={DocumentationView} />
+              <Route exact path={Routes.confirmAccount().raw()} component={ConfirmAccountView} />
+              <Route exact path={Routes.dataProcessing().raw()} component={DataProcessingView} />
+              <Route exact path={Routes.resetPassword().raw()} component={ResetPasswordView} />
+              <Route exact path={Routes.userAccount().raw()} component={UserAccountView} />
+              <Route exact path={Routes.legalMentions().raw()} component={LegalMentionsView} />
+              <Route exact path={Routes.funding().raw()} component={FundingView} />
+              <Route path={'*'} component={NotFoundView} />
+            </Switch>
+          </div>
+
+          <ConfirmationModal />
+          <DeviceWarningModal />
+          <EditPropertiesModal />
+          <FeedbackModal />
+          <FeedbackPopup />
+          <LegendSymbolPickerModal />
+          <LoginModal />
+          <LongOperationModal />
+          <PasswordInputModal />
+          <PasswordLostModal />
+          <RegistrationModal />
+          <SetPasswordModal />
+          <SolicitationModal />
+          <WarningBeforeUnload />
+        </>
+      )}
+
+      {/* Map share, fullscreen */}
+      {!fullscreenView && (
+        <>
+          <Switch>
+            <Route exact path={Routes.sharedMap().raw()} component={SharedMapView} />
+            <Route path={'*'} component={NotFoundView} />
+          </Switch>
+        </>
+      )}
+
+      {/* Common components */}
       <ToastContainer className={'abc-toast-container'} />
       <TokenWatcher />
-
-      {/* Modals */}
-      <FeedbackPopup />
-      <FeedbackModal />
-      <PasswordInputModal />
-      <SetPasswordModal />
-      <DeviceWarningModal />
-      <EditPropertiesModal />
-      <SolicitationModal />
-      <LoginModal />
-      <RegistrationModal />
-      <PasswordLostModal />
-      <LegendSymbolPickerModal />
-      <LongOperationModal />
-      <ConfirmationModal />
     </>
   );
 }

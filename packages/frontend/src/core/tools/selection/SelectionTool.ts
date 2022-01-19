@@ -148,7 +148,7 @@ export class SelectionTool implements Tool {
 
           return { feature, before: geomBefore, after: geomAfter };
         })
-        .filter((item) => !!item) as UpdateItem[];
+        .filter((item): item is UpdateItem => !!item);
 
       this.history.register(HistoryKey.Map, new UpdateGeometriesChangeset(items));
       translated = [];

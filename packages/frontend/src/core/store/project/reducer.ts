@@ -19,8 +19,6 @@
 import { ActionType, ProjectAction } from './actions';
 import { projectInitialState, ProjectState } from './state';
 
-// TODO: test immutability of state in all branches
-
 /**
  * Warning: this function MUST be fast, and we MUST clone state to return a new state object
  *
@@ -29,12 +27,17 @@ import { projectInitialState, ProjectState } from './state';
 export function projectReducer(state = projectInitialState, action: ProjectAction): ProjectState {
   switch (action.type) {
     case ActionType.LoadProject: {
-      const newState: ProjectState = { ...state };
-      newState.metadata = action.project.metadata;
-      newState.layouts = action.project.layouts;
-      newState.activeLayoutId = undefined;
-      newState.legend = action.project.legend;
-      return newState;
+      return {
+        metadata: action.project.metadata,
+        mainView: action.project.view,
+        layouts: {
+          list: action.project.layouts,
+        },
+        sharedViews: {
+          list: action.project.sharedViews,
+        },
+        legend: action.project.legend,
+      };
     }
 
     case ActionType.SetProjectName: {
@@ -45,45 +48,43 @@ export function projectReducer(state = projectInitialState, action: ProjectActio
     }
 
     case ActionType.AddLayouts: {
-      const newState: ProjectState = { ...state };
-      newState.layouts = [...state.layouts, ...action.layouts];
+      const newState: ProjectState = { ...state, layouts: { ...state.layouts } };
+      newState.layouts.list = [...state.layouts.list, ...action.layouts];
       return newState;
     }
 
     case ActionType.UpdateLayout: {
-      const layouts = state.layouts.map((lay) => {
+      const list = state.layouts.list.map((lay) => {
         return lay.id === action.layout.id ? action.layout : lay;
       });
 
-      const newState: ProjectState = { ...state };
-      newState.layouts = layouts;
+      const newState: ProjectState = { ...state, layouts: { ...state.layouts } };
+      newState.layouts.list = list;
       return newState;
     }
 
     case ActionType.SetLayoutIndex: {
-      const layouts = state.layouts.filter((lay) => lay.id !== action.layout.id);
-      layouts.splice(action.index, 0, action.layout);
+      const list = state.layouts.list.filter((lay) => lay.id !== action.layout.id);
+      list.splice(action.index, 0, action.layout);
 
-      const newState: ProjectState = { ...state };
-      newState.layouts = layouts;
+      const newState: ProjectState = { ...state, layouts: { ...state.layouts } };
+      newState.layouts.list = list;
       return newState;
     }
 
     case ActionType.RemoveLayouts: {
-      const newState: ProjectState = { ...state };
-      newState.layouts = state.layouts.filter((lay) => !action.ids.find((i) => lay.id === i));
+      const newState: ProjectState = { ...state, layouts: { ...state.layouts } };
+      newState.layouts.list = state.layouts.list.filter((lay) => !action.ids.find((i) => lay.id === i));
       return newState;
     }
 
     case ActionType.ClearLayouts: {
-      const newState: ProjectState = { ...state };
-      newState.layouts = [];
-      return newState;
+      return { ...state, layouts: { list: [], activeId: undefined } };
     }
 
     case ActionType.SetActiveLayout: {
-      const newState: ProjectState = { ...state };
-      newState.activeLayoutId = action.id;
+      const newState: ProjectState = { ...state, layouts: { ...state.layouts } };
+      newState.layouts.activeId = action.id;
       return newState;
     }
 
@@ -129,13 +130,47 @@ export function projectReducer(state = projectInitialState, action: ProjectActio
       return newState;
     }
 
+    case ActionType.AddSharedViews: {
+      const newState: ProjectState = { ...state, sharedViews: { ...state.sharedViews } };
+      newState.sharedViews.list = newState.sharedViews.list.slice();
+      newState.sharedViews.list = newState.sharedViews.list.concat(action.views);
+      return newState;
+    }
+
+    case ActionType.UpdateSharedView: {
+      const newState: ProjectState = { ...state, sharedViews: { ...state.sharedViews } };
+      newState.sharedViews.list = newState.sharedViews.list.map((view) => {
+        if (view.id === action.view.id) {
+          return action.view;
+        }
+        return view;
+      });
+      return newState;
+    }
+
+    case ActionType.RemoveSharedViews: {
+      const newState: ProjectState = { ...state, sharedViews: { ...state.sharedViews } };
+      newState.sharedViews.list = newState.sharedViews.list.filter((viewA) => !action.views.find((viewB) => viewB.id === viewA.id));
+      return newState;
+    }
+
+    case ActionType.SetActiveSharedView: {
+      return { ...state, sharedViews: { ...state.sharedViews, activeId: action.id } };
+    }
+
     case ActionType.SetView: {
       const newState: ProjectState = { ...state };
-      newState.view = {
+      newState.mainView = {
         resolution: action.view.resolution,
         center: action.view.center.slice(),
         projection: { ...action.view.projection },
       };
+      return newState;
+    }
+
+    case ActionType.SetPublic: {
+      const newState: ProjectState = { ...state, metadata: { ...state.metadata } };
+      newState.metadata.public = action.value;
       return newState;
     }
 

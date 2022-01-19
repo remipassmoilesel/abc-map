@@ -1,0 +1,12 @@
+{
+  "name": "@abc-map/developer-documentation",
+  "version": "0.1.0",
+  "license": "AGPL-3.0-or-later",
+  "scripts": {
+    "build": "node scripts/toc.js && prettier --write ."
+  },
+  "dependencies": {
+    "prettier": "2.5.1",
+    "markdown-toc": "1.2.0"
+  }
+}

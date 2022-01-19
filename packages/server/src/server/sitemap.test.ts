@@ -88,10 +88,20 @@ describe('sitemap', () => {
         </url>
 
         <url>
-          <loc>http://domain.fr/en/layout</loc>
-          <xhtml:link rel="alternate" hreflang="en" href="http://domain.fr/en/layout"/>
-          <xhtml:link rel="alternate" hreflang="fr" href="http://domain.fr/fr/layout"/>
-          <xhtml:link rel="alternate" hreflang="x-default" href="http://domain.fr/en/layout"/>
+          <loc>http://domain.fr/en/share/settings</loc>
+          <xhtml:link rel="alternate" hreflang="en" href="http://domain.fr/en/share/settings"/>
+          <xhtml:link rel="alternate" hreflang="fr" href="http://domain.fr/fr/share/settings"/>
+          <xhtml:link rel="alternate" hreflang="x-default" href="http://domain.fr/en/share/settings"/>
+          <lastmod>2022-01-04</lastmod>
+          <changefreq>monthly</changefreq>
+          <priority>0.5</priority>
+        </url>
+
+        <url>
+          <loc>http://domain.fr/en/export</loc>
+          <xhtml:link rel="alternate" hreflang="en" href="http://domain.fr/en/export"/>
+          <xhtml:link rel="alternate" hreflang="fr" href="http://domain.fr/fr/export"/>
+          <xhtml:link rel="alternate" hreflang="x-default" href="http://domain.fr/en/export"/>
           <lastmod>2021-11-15</lastmod>
           <changefreq>monthly</changefreq>
           <priority>0.5</priority>
@@ -99,6 +109,10 @@ describe('sitemap', () => {
 
       </urlset>
     `;
+
+    // Uncomment this to fix test
+    // require('fs').writeFileSync("actual.xml", actual)
+    // require('fs').writeFileSync("expected.xml", expected)
 
     assert.equal(removeBlanks(removeDates(actual)), removeBlanks(removeDates(expected)));
   });

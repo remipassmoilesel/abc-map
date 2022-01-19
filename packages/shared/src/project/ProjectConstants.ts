@@ -23,9 +23,9 @@ export class ProjectConstants {
   public static readonly MaxSizeBytes = 5 * 1024 * 1024;
 
   /**
-   * Version of project, not used for the moment but will be useful for data migrations
+   * Version of project, useful for migrations
    */
-  public static readonly CurrentVersion = '0.3.0';
+  public static readonly CurrentVersion = '0.6.0';
 
   /**
    * Name of main data file in project archive

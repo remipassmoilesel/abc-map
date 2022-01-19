@@ -4,7 +4,12 @@
 
 Abc-Map is designed to be scalable but also to operate in an environment with limited resources.
 
-For this purpose the number of mandatory processes for an instance is limited:
+For this purpose:
+
+- server processes are stateless
+- the number of mandatory processes is limited
+
+Processes:
 
 - One backend server, which serves frontend as static ressources
 - One Mongodb server, which can be external and shared with other applications

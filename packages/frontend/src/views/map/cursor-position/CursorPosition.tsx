@@ -23,7 +23,7 @@ import MapBrowserEvent from 'ol/MapBrowserEvent';
 import { toLonLat } from 'ol/proj';
 import { Coordinate } from 'ol/coordinate';
 import { prefixedTranslation } from '../../../i18n/i18n';
-import { useServices } from '../../../core/hooks';
+import { useServices } from '../../../core/useServices';
 import throttle from 'lodash/throttle';
 import Cls from './CursorPosition.module.scss';
 

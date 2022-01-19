@@ -16,11 +16,12 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { useServices } from '../../core/hooks';
+import { useServices } from '../../core/useServices';
 import { useCallback, useEffect } from 'react';
 import { Env } from '../../core/utils/Env';
 import { prefixedTranslation } from '../../i18n/i18n';
-import { Logger } from '@abc-map/shared';
+import { Logger, UserStatus } from '@abc-map/shared';
+import { useAppSelector } from '../../core/store/hooks';
 
 const logger = Logger.get('TokenWatcher.tsx');
 
@@ -28,6 +29,7 @@ const t = prefixedTranslation('TokenWatcher:');
 
 export function TokenWatcher() {
   const { authentication, toasts } = useServices();
+  const userStatus = useAppSelector((st) => st.authentication.userStatus);
 
   // When a tab is focused after a long period of inactivity, we must try to renew token or login
   const handleFocus = useCallback(() => {
@@ -35,45 +37,33 @@ export function TokenWatcher() {
       .renewToken()
       .catch((err) => {
         logger.error('Cannot renew token: ', err);
-        toasts.info(t('You_are_disconnected'));
+
+        if (userStatus === UserStatus.Authenticated) {
+          toasts.info(t('You_are_disconnected'));
+        }
+
         return authentication.anonymousLogin();
       })
       .catch((err) => {
         logger.error('Cannot login as anonymous: ', err);
         toasts.genericError(err);
       });
-  }, [authentication, toasts]);
+  }, [authentication, toasts, userStatus]);
 
-  /**
-   * Display warning if tab reload or is closing, in order to prevent modifications loss
-   * @param ev
-   * @private
-   */
-  const warnBeforeUnload = useCallback((ev: BeforeUnloadEvent | undefined): string => {
-    const message = t('Modification_in_progress_will_be_lost');
-    if (ev) {
-      ev.returnValue = message;
-    }
-    return message;
-  }, []);
-
+  // We watch token and renew it when it is about to expire
   useEffect(() => {
     if (!Env.isE2e()) {
-      window.addEventListener('beforeunload', warnBeforeUnload);
-      window.addEventListener('unload', warnBeforeUnload);
       window.addEventListener('focus', handleFocus);
       authentication.watchToken();
     }
 
     return () => {
       if (!Env.isE2e()) {
-        window.removeEventListener('beforeunload', warnBeforeUnload);
-        window.removeEventListener('unload', warnBeforeUnload);
         window.removeEventListener('focus', handleFocus);
         authentication.unwatchToken();
       }
     };
-  }, [authentication, handleFocus, warnBeforeUnload]);
+  }, [authentication, handleFocus]);
 
   return <></>;
 }

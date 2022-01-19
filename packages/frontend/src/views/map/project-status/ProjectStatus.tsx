@@ -31,7 +31,7 @@ const t = prefixedTranslation('MapView:ProjectStatus.');
 
 function ProjectStatus() {
   const [editModal, setEditModal] = useState(false);
-  const { view, metadata } = useAppSelector((st) => st.project);
+  const { mainView, metadata } = useAppSelector((st) => st.project);
 
   const handleEditClick = useCallback(() => {
     setEditModal(true);
@@ -50,7 +50,7 @@ function ProjectStatus() {
 
       {/* Current projection */}
       <div>
-        <span className={'badge bg-secondary'}>{t('Projection')}</span> {view.projection.name}
+        <span className={'badge bg-secondary'}>{t('Projection')}</span> {mainView.projection.name}
       </div>
 
       {/* Edit button and modal */}

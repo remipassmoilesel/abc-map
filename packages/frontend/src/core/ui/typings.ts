@@ -145,7 +145,7 @@ export interface LegendSymbolPickerClosedEvent {
 
 export interface ShowLongOperationModal {
   type: ModalEventType.ShowLongOperationModal;
-  burning: boolean;
+  processing: boolean;
 }
 
 export interface LongOperationModalClosedEvent {

@@ -26,8 +26,11 @@ const generatedDir = path.resolve(testRoot, 'generated');
 const testDataDir = path.resolve(testRoot, 'src/test-data');
 
 module.exports = (on, config) => {
-  // Set windows size on launch for CI
+
   on('before:browser:launch', (browser = {}, launchOptions) => {
+
+    // Set windows size on launch for CI
+    // Even if we set viewport size, window size affect PDF and PNG rendering
     const width = 1920;
     const height = 1080;
 
@@ -52,7 +55,7 @@ module.exports = (on, config) => {
 
   on('task', {
     // This task compare two PDF. It does not work very well between different states (headed browser or
-    // headless, Firefo or Chromium, ...) So we prioritize headless chromium for CI.
+    // headless, Firefox or Chromium, ...) So we prioritize headless chromium for CI.
     comparePdf({ actual, expected }) {
       const name = `${uuid()}.pdf`;
       const expectedPdfPath = path.resolve(testDataDir, expected);

@@ -16,85 +16,67 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { Component, ReactNode } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { ModalEvent, ModalEventType } from '../../core/ui/typings';
-import { ServiceProps, withServices } from '../../core/withServices';
 import { Logger } from '@abc-map/shared';
-import Cls from './LongOperationModal.module.scss';
 import { prefixedTranslation } from '../../i18n/i18n';
+import { useServices } from '../../core/useServices';
+import Cls from './LongOperationModal.module.scss';
+import { Loader } from './Loader';
 
-interface State {
-  visible: boolean;
-  burning: boolean;
-}
-
-const logger = Logger.get('LongOperationModal.ts');
+const logger = Logger.get('LongOperationModal.tsx');
 
 const t = prefixedTranslation('LongOperationModal:');
 
-/**
- * This modal is a little hack, one among many others.
- *
- * As we does not use web workers yet, display may freeze. So we display a static waiting screen to hide it 🪄
- *
- */
-class LongOperationModal extends Component<ServiceProps, State> {
-  constructor(props: ServiceProps) {
-    super(props);
-    this.state = { visible: false, burning: false };
-  }
+function LongOperationModal() {
+  const { modals } = useServices();
+  const [visible, setVisible] = useState(false);
+  const [processing, setProcessing] = useState(false);
 
-  public render(): ReactNode {
-    const visible = this.state.visible;
-    const burning = this.state.burning;
-    if (!visible) {
-      return <div />;
-    }
-
-    return (
-      <div className={Cls.modal}>
-        {burning && (
-          <div className={Cls.frame}>
-            <h1>{t('Things_are_getting_hot')}</h1>
-            <div className={Cls.icon}>🔥</div>
-            <div>{t('Dont_try_to_run_away')}</div>
-          </div>
-        )}
-        {!burning && (
-          <div className={Cls.frame}>
-            <h1>{t('At_last')}</h1>
-            <div className={Cls.icon} data-cy={'long-operation-done'}>
-              ✅
-            </div>
-          </div>
-        )}
-      </div>
-    );
-  }
-
-  public componentDidMount() {
-    const { modals } = this.props.services;
-
-    modals.addListener(ModalEventType.ShowLongOperationModal, this.handleVisibilityChanged);
-    modals.addListener(ModalEventType.LongOperationModalClosed, this.handleVisibilityChanged);
-  }
-
-  public componentWillUnmount() {
-    const { modals } = this.props.services;
-
-    modals.removeListener(ModalEventType.ShowLongOperationModal, this.handleVisibilityChanged);
-    modals.removeListener(ModalEventType.LongOperationModalClosed, this.handleVisibilityChanged);
-  }
-
-  private handleVisibilityChanged = (ev: ModalEvent) => {
+  const handleVisibilityChanged = useCallback((ev: ModalEvent) => {
     if (ModalEventType.ShowLongOperationModal === ev.type) {
-      this.setState({ visible: true, burning: ev.burning });
+      setVisible(true);
+      setProcessing(ev.processing);
     } else if (ModalEventType.LongOperationModalClosed === ev.type) {
-      this.setState({ visible: false, burning: false });
+      setVisible(false);
     } else {
       logger.error('Unhandled event: ', ev);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    modals.addListener(ModalEventType.ShowLongOperationModal, handleVisibilityChanged);
+    modals.addListener(ModalEventType.LongOperationModalClosed, handleVisibilityChanged);
+
+    return () => {
+      modals.removeListener(ModalEventType.ShowLongOperationModal, handleVisibilityChanged);
+      modals.removeListener(ModalEventType.LongOperationModalClosed, handleVisibilityChanged);
+    };
+  }, [handleVisibilityChanged, modals]);
+
+  if (!visible) {
+    return <div />;
+  }
+
+  return (
+    <div className={Cls.modal}>
+      {processing && (
+        <div className={Cls.frame}>
+          <h1>{t('Things_are_getting_hot')}</h1>
+          <div className={'mb-5'}>{t('Dont_try_to_run_away')}</div>
+          <Loader />
+        </div>
+      )}
+      {!processing && (
+        <div className={Cls.frame}>
+          <h1>{t('Done')}</h1>
+          <div className={Cls.icon} data-cy={'long-operation-done'}>
+            🙌
+          </div>
+        </div>
+      )}
+    </div>
+  );
 }
 
-export default withServices(LongOperationModal);
+export default LongOperationModal;

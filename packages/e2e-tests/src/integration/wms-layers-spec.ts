@@ -29,8 +29,6 @@ describe('Wms layers', function () {
 
   it('User can add WMS layers without authentication', () => {
     cy.visit(Routes.map().format())
-      .get('[data-cy=draw-menu]')
-      .click()
       // Open add layer dialog
       .get('[data-cy=add-layer]')
       .click()
@@ -68,8 +66,6 @@ describe('Wms layers', function () {
 
   it('User can add WMS layers with authentication', () => {
     cy.visit(Routes.map().format())
-      .get('[data-cy=draw-menu]')
-      .click()
       // Open add layer dialog
       .get('[data-cy=add-layer]')
       .click()

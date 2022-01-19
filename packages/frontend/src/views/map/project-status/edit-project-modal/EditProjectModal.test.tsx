@@ -38,12 +38,14 @@ describe('EditProjectModal', () => {
       metadata: {
         name: 'My awesome project',
       },
-      view: {
+      mainView: {
         projection: {
           name: 'EPSG:4326',
         },
       },
-      layouts: [],
+      layouts: {
+        list: [],
+      },
     } as any,
   };
 
@@ -69,7 +71,10 @@ describe('EditProjectModal', () => {
       ...baseState,
       project: {
         ...baseState.project,
-        layouts: [{ id: 'layout-1' }],
+        layouts: {
+          list: [{ id: 'layout-1' }],
+          activeId: '',
+        },
       },
     } as MainState;
 

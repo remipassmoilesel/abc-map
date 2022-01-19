@@ -33,6 +33,8 @@ describe('ProjectFactory', () => {
       expect(metadata.id).toBeDefined();
       expect(metadata.name).toMatch(/Projet du [0-9]+\/[0-9]+\/[0-9]+/);
       expect(metadata.version).toBe(ProjectConstants.CurrentVersion);
+      expect(metadata.containsCredentials).toBe(false);
+      expect(metadata.public).toBe(false);
     });
 
     it('en', async () => {
