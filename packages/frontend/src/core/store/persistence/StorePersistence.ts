@@ -76,6 +76,7 @@ export class StorePersistence {
     // Dimensions will be set at next bootstrap
     cleanState.map.mainMapDimensions = undefined as unknown as DimensionsPx;
     cleanState.ui.historyCapabilities = {};
+
     try {
       const serializedState = JSON.stringify(cleanState);
       this.storage.set(StorageKey.REDUX_STATE, serializedState);

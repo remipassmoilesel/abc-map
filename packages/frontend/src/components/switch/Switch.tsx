@@ -18,18 +18,20 @@
 
 import { useCallback } from 'react';
 import Cls from './Switch.module.scss';
+import clsx from 'clsx';
 
 interface Props {
   onChange: (ev: boolean) => void;
   value: boolean;
+  className?: string;
 }
 
 export function Switch(props: Props) {
-  const { value, onChange } = props;
+  const { value, onChange, className } = props;
   const toggle = useCallback(() => onChange(!value), [onChange, value]);
 
   return (
-    <div className={Cls.toggle} onClick={toggle}>
+    <div className={clsx(Cls.toggle, className)} onClick={toggle}>
       <input type="checkbox" checked={value} onChange={toggle} className={Cls.toggleCheckbox} />
       <div className={Cls.toggleSwitch} />
     </div>

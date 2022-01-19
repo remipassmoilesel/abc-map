@@ -16,39 +16,14 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-export interface UiState {
-  historyCapabilities: {
-    [k: string]:
-      | {
-          canUndo: boolean;
-          canRedo: boolean;
-        }
-      | undefined;
-  };
-  documentation: {
-    scrollPosition: number;
-  };
-  sideMenu: {
-    [k: string]: boolean | undefined;
-  };
-  floatingButtons: {
-    [k: string]: [number, number] | undefined;
-  };
-  informations: {
-    sharedMapAlpha: boolean;
-  };
-  experimentalFeatures: {
-    [k: string]: boolean | undefined;
-  };
+/*
+ * You can reference in this file features that will not be enabled by default.
+ */
+
+export interface ExperimentalFeature {
+  id: string;
 }
 
-export const uiInitialState: UiState = {
-  historyCapabilities: {},
-  documentation: { scrollPosition: 0 },
-  sideMenu: {},
-  floatingButtons: {},
-  informations: {
-    sharedMapAlpha: false,
-  },
-  experimentalFeatures: {},
-};
+export const MapSharing = { id: 'MapSharing' };
+
+export const ExperimentalFeatures: ExperimentalFeature[] = [MapSharing];

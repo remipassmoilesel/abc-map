@@ -78,6 +78,16 @@ export function uiReducer(state = uiInitialState, action: UiAction): UiState {
       };
     }
 
+    case ActionType.SetExperimentalFeature: {
+      return {
+        ...state,
+        experimentalFeatures: {
+          ...state.experimentalFeatures,
+          [action.id]: action.state,
+        },
+      };
+    }
+
     default:
       return state;
   }
