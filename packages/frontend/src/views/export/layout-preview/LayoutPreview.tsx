@@ -16,290 +16,161 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { Component, ReactNode } from 'react';
-import { AbcLegend, getAbcWindow, Logger } from '@abc-map/shared';
+import Cls from './LayoutPreview.module.scss';
+import React, { useCallback, useEffect, useState } from 'react';
+import { AbcView, getAbcWindow, LayoutFormat, Logger } from '@abc-map/shared';
 import { AbcLayout } from '@abc-map/shared';
 import isEqual from 'lodash/isEqual';
 import { LayoutHelper } from '../../../core/project/LayoutHelper';
-import View from 'ol/View';
 import { MapWrapper } from '../../../core/geo/map/MapWrapper';
 import { MapFactory } from '../../../core/geo/map/MapFactory';
-import { PreviewDimensions } from './PreviewDimensions';
 import { E2eMapWrapper } from '../../../core/geo/map/E2eMapWrapper';
-import { Control } from 'ol/control';
-import { LegendRenderer } from '../../../core/project/rendering/LegendRenderer';
-import { AttributionRenderer } from '../../../core/project/rendering/AttributionRenderer';
 import { toPrecision } from '../../../core/utils/numbers';
 import { prefixedTranslation } from '../../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
 import { IconDefs } from '../../../components/icon/IconDefs';
 import { FaIcon } from '../../../components/icon/FaIcon';
-import Cls from './LayoutPreview.module.scss';
+import { Attributions } from '../../../components/attributions/Attributions';
+import { MapLegend } from '../../../components/map-legend/MapLegend';
+import { MapUi } from '../../../components/map-ui/MapUi';
+import { DimensionsPx } from '../../../core/utils/DimensionsPx';
+import { useServices } from '../../../core/useServices';
 
 const logger = Logger.get('LayoutPreview.tsx');
 
+const t = prefixedTranslation('ExportView:');
+
 interface Props {
-  legend: AbcLegend;
   layout?: AbcLayout;
   mainMap: MapWrapper;
   onLayoutChanged: (lay: AbcLayout) => void;
   onNewLayout: () => void;
 }
 
-const t = prefixedTranslation('ExportView:');
+function LayoutPreview(props: Props) {
+  const { layout, onNewLayout, onLayoutChanged } = props;
+  const { geo } = useServices();
+  const [previewView, setPreviewView] = useState<AbcView | undefined>();
+  const [previewMap, setPreviewMap] = useState<MapWrapper | undefined>();
+  const [previewRatio, setPreviewRatio] = useState(1);
+  const [previewDimensions, setPreviewDimensions] = useState<DimensionsPx | undefined>();
 
-class LayoutPreview extends Component<Props, {}> {
-  private mapRef = React.createRef<HTMLDivElement>();
-  private legendRenderer = new LegendRenderer();
-  private attributionRenderer = new AttributionRenderer();
-  private previewMap?: MapWrapper;
-  private legendCanvas?: HTMLCanvasElement;
-  private attributionsCanvas?: HTMLCanvasElement;
-
-  public render(): ReactNode {
-    const layout = this.props.layout;
-    const handleNewLayout = this.props.onNewLayout;
-
-    return (
-      <div className={Cls.layoutPreview} data-cy={'layout-preview'}>
-        {/* There is one layout to preview, we display it */}
-        {layout && (
-          <div className={Cls.previewContainer}>
-            <div className={Cls.previewMap} ref={this.mapRef} data-cy={'layout-preview-map'} />
-          </div>
-        )}
-
-        {/* There is no layout to preview, we display a message with "create" a button */}
-        {!layout && (
-          <div className={Cls.noLayout}>
-            <FaIcon icon={IconDefs.faPrint} size={'5rem'} className={'mb-4'} />
-            <h3 className={'mb-4'}>{t('Export')}</h3>
-            <div className={'mb-3'}>{t('Create_layout_to_export')}</div>
-
-            <button onClick={handleNewLayout} className={'btn btn-primary mt-3'} data-cy={'new-layout'}>
-              <FaIcon icon={IconDefs.faPlus} className={'mr-2'} />
-              {t('Create_A4_layout')}
-            </button>
-          </div>
-        )}
-      </div>
-    );
-  }
-
-  public componentDidMount() {
-    if (this.props.layout) {
-      this.setupPreview(this.props.layout).catch((err) => logger.error('Rendering error: ', err));
-    }
-  }
-
-  public componentDidUpdate(prevProps: Readonly<Props>) {
-    // If layout, format or legend change we setup whole preview map
-    // This is a visible operation, map will blink during setup even if it was previously set up
-    const layoutChanged = !isEqual(prevProps.layout?.id, this.props.layout?.id);
-    const formatChanged = prevProps.layout?.format.id !== this.props.layout?.format.id;
-    const legendChanged = prevProps.legend.display !== this.props.legend.display;
-    if (layoutChanged || formatChanged || legendChanged) {
-      this.setupPreview(this.props.layout).catch((err) => logger.error('Rendering error: ', err));
-    }
-
-    // If layout view change, we change the preview map view
-    // This occurs when user switch active layout or when undo button is pressed
-    const viewChanged = !isEqual(prevProps.layout?.view, this.props.layout?.view);
-    if (this.props.layout && viewChanged) {
-      this.setPreviewView(this.props.layout);
-    }
-  }
-
-  public componentWillUnmount() {
-    this.previewMap?.dispose();
-  }
-
-  /**
-   * This method setup map preview, legend and attributions preview
-   * @param layout
-   * @private
-   */
-  private async setupPreview(layout?: AbcLayout): Promise<void> {
-    // We dispose previous map
-    this.previewMap?.dispose();
-    if (!layout) {
-      this.previewMap = undefined;
-      this.legendCanvas = undefined;
-      this.attributionsCanvas = undefined;
+  // Preview map setup
+  // We must instantiate a new map each time layout or layout format change
+  useEffect(() => {
+    // If no layout set, we cannot set up layers
+    if (!layout?.format) {
+      logger.debug('Cannot setup layers, no layout set');
       return;
     }
 
-    const mapSupport = this.mapRef.current;
-    if (!mapSupport) {
-      logger.error('Cannot update preview map: ', { mapSupport });
+    // We instantiate a new map if necessary
+    const map = MapFactory.createLayoutPreview();
+    getAbcWindow().abc.layoutPreview = new E2eMapWrapper(map);
+    setPreviewMap(map);
+
+    // We compute preview map dimensions
+    const { width, height } = getPreviewDimensionsFor(layout.format);
+    setPreviewDimensions({ width, height });
+
+    // We clone layers with adapted style ratio
+    const previewRatio = geo.getMainMap().getMainRatio(width, height);
+    setPreviewRatio(previewRatio);
+
+    const mainMap = geo.getMainMap();
+    map.importLayersFrom(mainMap, { ratio: previewRatio, withSelection: false });
+
+    return () => map.dispose();
+  }, [geo, layout?.format]);
+
+  // Preview view setup
+  useEffect(() => {
+    if (!previewMap || !previewMap.getTarget() || !layout?.view || !previewDimensions) {
+      logger.debug('Cannot update preview map view, not ready', { previewMap, view: layout?.view, previewDimensions });
       return;
     }
 
-    // Map initialization
-    // We compute size of map, then we clone layers from main map, with the preview style ratio
-    const previewMap = this.initializePreviewMap(mapSupport);
-    this.previewMap = previewMap;
+    const dimensionPx = LayoutHelper.formatToPixel(layout.format);
+    const ratio = previewMap.getRatioWith(dimensionPx.width, dimensionPx.height);
+    const resolution = toPrecision(layout.view.resolution * ratio, 9);
+    const updatedView = { ...layout.view, resolution };
 
-    const divSize = this.getPreviewDimensionsFor(layout);
-    mapSupport.style.width = divSize.width;
-    mapSupport.style.height = divSize.height;
-    previewMap.unwrap().updateSize();
-
-    const mapSize = previewMap.unwrap().getSize();
-    if (!mapSize) {
-      logger.error('Cannot update preview map, no size defined');
-      return;
+    if (!isEqual(previewView, updatedView)) {
+      setPreviewView(updatedView);
     }
+  }, [layout?.format, layout?.view, previewDimensions, previewMap, previewView]);
 
-    const styleRatio = LayoutHelper.styleRatio(mapSize[0], mapSize[1]);
+  // Triggered when user moves map
+  const handleViewChange = useCallback(
+    (view: AbcView) => {
+      if (!previewMap || !previewMap.getTarget() || !layout || !previewDimensions) {
+        logger.debug('Cannot handle view changes, not ready', { previewMap, layout, previewDimensions });
+        return;
+      }
 
-    this.previewMap.unwrap().getLayers().clear();
-    previewMap.importLayersFrom(this.props.mainMap, styleRatio);
+      const dimensionPx = LayoutHelper.formatToPixel(layout.format);
+      const ratio = previewMap.getRatioWith(dimensionPx.width, dimensionPx.height);
+      const resolution = toPrecision(view.resolution / ratio, 9);
+      const updated: AbcLayout = { ...layout, view: { ...view, resolution } };
 
-    // Legend initialization
-    const legend = this.props.legend;
-    this.legendCanvas = this.initializeLegendCanvas(legend, previewMap);
-    this.legendCanvas.width = legend.width * styleRatio;
-    this.legendCanvas.height = legend.height * styleRatio;
-    await this.legendRenderer.renderLegend(legend, this.legendCanvas, styleRatio);
+      if (!isEqual(layout.view, updated.view)) {
+        onLayoutChanged(updated);
+      }
+    },
+    [layout, onLayoutChanged, previewDimensions, previewMap]
+  );
 
-    // Attributions initialization
-    const attributions = this.props.mainMap.getTextAttributions();
-    this.attributionsCanvas = this.initializeAttributionsCanvas(attributions, legend, previewMap);
-    await this.attributionRenderer.render(attributions, this.attributionsCanvas, styleRatio);
+  return (
+    <div className={Cls.layoutPreview} data-cy={'layout-preview'}>
+      {/* There is one layout to preview, we display it */}
+      {previewMap && previewDimensions && layout && (
+        <div className={Cls.previewContainer}>
+          <MapUi
+            map={previewMap}
+            view={previewView}
+            onViewMove={handleViewChange}
+            width={previewDimensions.width + 'px'}
+            height={previewDimensions.height + 'px'}
+            className={Cls.previewMap}
+            data-cy={'layout-preview-map'}
+          />
+          <MapLegend legend={layout.legend} map={previewMap} ratio={previewRatio} />
+          <Attributions legendDisplay={layout.legend.display} map={previewMap} ratio={previewRatio} />
+        </div>
+      )}
 
-    this.setPreviewView(layout);
+      {/* There is no layout to preview, we display a message with "create" a button */}
+      {!layout && (
+        <div className={Cls.noLayout}>
+          <FaIcon icon={IconDefs.faPrint} size={'5rem'} className={'mb-4'} />
+          <h3 className={'mb-4'}>{t('Export')}</h3>
+          <div className={'mb-3'}>{t('Create_layout_to_export')}</div>
+
+          <button onClick={onNewLayout} className={'btn btn-primary mt-3'} data-cy={'new-layout'}>
+            <FaIcon icon={IconDefs.faPlus} className={'mr-2'} />
+            {t('Create_A4_layout')}
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/**
+ * Compute preview map dimensions from layout. The main goal of this function is to create
+ * a map that fit both layout and user screen.
+ */
+function getPreviewDimensionsFor(format: LayoutFormat): DimensionsPx {
+  const maxWidth = Math.round(document.body.offsetWidth - document.body.offsetWidth / 5);
+  const maxHeight = Math.round(document.body.offsetHeight - document.body.offsetHeight / 5);
+
+  let width = maxWidth;
+  let height = Math.round((format.height * width) / format.width);
+  if (height > maxHeight) {
+    height = maxHeight;
+    width = Math.round((format.width * height) / format.height);
   }
-
-  /**
-   * This method only set view of map
-   * @param layout
-   * @private
-   */
-  private setPreviewView(layout: AbcLayout) {
-    if (!this.previewMap) {
-      return;
-    }
-
-    const mapSize = this.previewMap.unwrap().getSize();
-    if (!mapSize) {
-      logger.error('Cannot update preview map view, no size defined');
-      return;
-    }
-
-    const dimension = LayoutHelper.formatToPixel(layout.format);
-    const scaling = Math.min(dimension.width / mapSize[0], dimension.height / mapSize[1]);
-
-    this.previewMap.unwrap().setView(
-      new View({
-        center: layout.view.center,
-        resolution: toPrecision(layout.view.resolution * scaling, 10),
-        projection: layout.view.projection.name,
-      })
-    );
-  }
-
-  private initializePreviewMap(div: HTMLDivElement): MapWrapper {
-    const previewMap = MapFactory.createLayoutPreview();
-    previewMap.setTarget(div);
-
-    // We listen for view changes, in order to persist them in layout
-    previewMap.unwrap().on('moveend', this.handlePreviewChanged);
-
-    getAbcWindow().abc.layoutPreview = new E2eMapWrapper(previewMap);
-
-    return previewMap;
-  }
-
-  private initializeLegendCanvas(legend: AbcLegend, previewMap: MapWrapper): HTMLCanvasElement {
-    const canvas = document.createElement('canvas');
-    this.legendRenderer.setPreviewStyle(legend, canvas);
-
-    const control = new Control({ element: canvas });
-    previewMap.unwrap().addControl(control);
-
-    return canvas;
-  }
-
-  private initializeAttributionsCanvas(attributions: string[], legend: AbcLegend, previewMap: MapWrapper): HTMLCanvasElement {
-    const canvas = document.createElement('canvas');
-    this.attributionRenderer.setPreviewStyle(attributions, legend, canvas);
-
-    const control = new Control({ element: canvas });
-    previewMap.unwrap().addControl(control);
-
-    return canvas;
-  }
-
-  /**
-   * Notify parent component when preview map has been changed, per example if user drag map
-   */
-  private handlePreviewChanged = () => {
-    const map = this.previewMap;
-    const layout = this.props.layout;
-    if (!map || !layout) {
-      logger.error('Cannot handle preview changes: ', { map, layout });
-      return;
-    }
-
-    const format = layout.format;
-    const mapSize = map.unwrap().getSize();
-    const view = map.unwrap().getView();
-    const center = view.getCenter();
-    const resolution = view.getResolution();
-    const projection = view.getProjection();
-
-    if (!mapSize || !center || !resolution) {
-      logger.error('Cannot handle preview changes: ', { mapSize, center, resolution });
-      return;
-    }
-
-    const dimension = LayoutHelper.formatToPixel(format);
-    const scaling = Math.min(dimension.width / mapSize[0], dimension.height / mapSize[1]);
-
-    const updated: AbcLayout = {
-      ...layout,
-      view: {
-        center,
-        projection: { name: projection.getCode() },
-        resolution: toPrecision(resolution / scaling, 10),
-      },
-    };
-
-    if (!isEqual(layout, updated)) {
-      this.props.onLayoutChanged(updated);
-    }
-  };
-
-  /**
-   * Compute preview map dimensions from layout. The main goal of this function is to create
-   * a map that fit both layout and user screen.
-   */
-  private getPreviewDimensionsFor(layout: AbcLayout): PreviewDimensions {
-    const format = layout.format;
-    const unit = 'vmin';
-    const maxHeight = 90;
-    const maxWidth = 90;
-
-    // Portrait format
-    if (format.height > format.width) {
-      const height = Math.round(maxHeight);
-      const width = Math.round((format.width * height) / format.height);
-      return {
-        width: `${width}${unit}`,
-        height: `${height}${unit}`,
-      };
-    }
-    // Landscape format
-    else {
-      const width = Math.round(maxWidth);
-      const height = Math.round((format.height * width) / format.width);
-      return {
-        width: `${width}${unit}`,
-        height: `${height}${unit}`,
-      };
-    }
-  }
+  return { width, height };
 }
 
 export default withTranslation()(LayoutPreview);

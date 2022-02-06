@@ -21,7 +21,6 @@ import { AbcFile, Logger, ProjectConstants } from '@abc-map/shared';
 import throttle from 'lodash/throttle';
 import { ServiceProps, withServices } from '../../../core/withServices';
 import { ImportStatus } from '../../../core/data/DataService';
-import { OperationStatus } from '../../../core/ui/typings';
 import { TileLoadErrorEvent } from '../../../core/geo/map/MapWrapper.events';
 import { prefixedTranslation } from '../../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
@@ -166,7 +165,7 @@ class MainMap extends Component<ServiceProps, State> {
   };
 
   private handleDrop = (ev: DragEvent<HTMLDivElement>) => {
-    const { data, toasts, modals } = this.props.services;
+    const { data, toasts } = this.props.services;
     ev.preventDefault();
     this.setState({ dragOverlay: false });
 
@@ -182,25 +181,21 @@ class MainMap extends Component<ServiceProps, State> {
       return;
     }
 
-    const importFiles = async () => {
-      const result = await data.importFiles(files);
-
-      if (result.status === ImportStatus.Failed) {
-        toasts.error(t('Formats_not_supported'));
-        return OperationStatus.Interrupted;
-      }
-
-      if (result.status === ImportStatus.Canceled) {
-        return OperationStatus.Interrupted;
-      }
-
-      return OperationStatus.Succeed;
-    };
-
-    modals.longOperationModal(importFiles).catch((err) => {
-      logger.error(err);
-      toasts.genericError();
-    });
+    const firstToast = toasts.info(t('Import_in_progress'));
+    data
+      .importFiles(files)
+      .then((result) => {
+        if (result.status === ImportStatus.Failed) {
+          toasts.error(t('Formats_not_supported'));
+        } else {
+          toasts.info(t('Done'));
+        }
+      })
+      .catch((err) => {
+        logger.error('Import error: ', err);
+        toasts.genericError();
+      })
+      .finally(() => toasts.dismiss(firstToast));
   };
 
   private handleDragOver = (ev: DragEvent<HTMLDivElement>) => {

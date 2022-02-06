@@ -16,6 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
+import Cls from './MapView.module.scss';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import MainMap from './main-map/MainMap';
 import LayerControls from './layer-controls/LayerControls';
@@ -31,17 +32,13 @@ import ImportData from './import-data/ImportData';
 import CursorPosition from './cursor-position/CursorPosition';
 import { MapKeyboardListener } from './MapKeyboardListener';
 import { pageSetup } from '../../core/utils/page-setup';
-import { MapActions } from '../../core/store/map/actions';
-import { MapSizeChangedEvent } from '../../core/geo/map/MapWrapper.events';
 import { withTranslation } from 'react-i18next';
 import { prefixedTranslation } from '../../i18n/i18n';
 import { IconDefs } from '../../components/icon/IconDefs';
 import SideMenu from '../../components/side-menu/SideMenu';
-import { useAppDispatch, useAppSelector } from '../../core/store/hooks';
 import { useServices } from '../../core/useServices';
 import { FullscreenButton } from './fullscreen-button/FullscreenButton';
 import { isDesktopDevice } from '../../core/ui/isDesktopDevice';
-import Cls from './MapView.module.scss';
 
 const logger = Logger.get('MapView.tsx');
 
@@ -49,9 +46,7 @@ const t = prefixedTranslation('MapView:');
 
 function MapView() {
   const { geo } = useServices();
-  const dispatch = useAppDispatch();
   const keyboardListeners = useRef<MapKeyboardListener | undefined>();
-  const mapDimensions = useAppSelector((st) => st.map.mainMapDimensions);
   const [layers, setLayers] = useState<LayerWrapper[]>([]);
   const [activeLayer, setActiveLayer] = useState<LayerWrapper | undefined>();
 
@@ -73,26 +68,6 @@ function MapView() {
 
     return () => mainMap.removeLayerChangeListener(handleLayerChange);
   }, [handleLayerChange, mainMap]);
-
-  // When main map size change we store it to use it for later exports.
-  // We keep only the biggest size in order to keep consistent exports event if window was resized.
-  const handleMapSizeChange = useCallback(
-    (ev: MapSizeChangedEvent) => {
-      const width = ev.dimensions.width;
-      const height = ev.dimensions.height;
-      const previousWidth = mapDimensions?.width || 0;
-      const previousHeight = mapDimensions?.height || 0;
-      if (width > previousWidth || height > previousHeight) {
-        dispatch(MapActions.setMainMapDimensions(width, height));
-      }
-    },
-    [dispatch, mapDimensions?.height, mapDimensions?.width]
-  );
-
-  useEffect(() => {
-    mainMap.addSizeListener(handleMapSizeChange);
-    return () => mainMap.removeSizeListener(handleMapSizeChange);
-  }, [handleMapSizeChange, mainMap]);
 
   // We setup keyboard shortcuts
   useEffect(() => {

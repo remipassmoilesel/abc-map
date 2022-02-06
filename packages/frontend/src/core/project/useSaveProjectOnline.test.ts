@@ -19,9 +19,7 @@
 import { newTestServices, TestServices } from '../utils/test/TestServices';
 import { ProjectStatus } from './ProjectStatus';
 import { saveProjectOnline } from './useSaveProjectOnline';
-import { OperationStatus } from '../ui/typings';
 
-// TODO: refactor test
 describe('saveProjectOnline', () => {
   let services: TestServices;
   beforeEach(() => {
@@ -32,43 +30,38 @@ describe('saveProjectOnline', () => {
   it('should display info on succeed', async () => {
     services.project.saveCurrent.resolves(ProjectStatus.Ok);
 
-    const status = await save();
+    const status = await saveProjectOnline(services);
 
-    expect(services.toasts.info.args).toEqual([['Project saved !']]);
-    expect(status).toEqual([OperationStatus.Succeed, ProjectStatus.Ok]);
+    expect(services.toasts.info.args).toEqual([['Saving ...'], ['Project saved !']]);
+    expect(status).toEqual(ProjectStatus.Ok);
   });
 
   it('should display nothing if canceled', async () => {
     services.project.saveCurrent.resolves(ProjectStatus.Canceled);
 
-    const status = await save();
+    const status = await saveProjectOnline(services);
 
-    expect(services.toasts.info.callCount).toEqual(0);
+    expect(services.toasts.info.args).toEqual([['Saving ...']]);
     expect(services.toasts.error.callCount).toEqual(0);
-    expect(status).toEqual([OperationStatus.Interrupted, ProjectStatus.Canceled]);
+    expect(status).toEqual(ProjectStatus.Canceled);
   });
 
   it('should display error if quota exceeded', async () => {
     services.project.saveCurrent.resolves(ProjectStatus.OnlineQuotaExceeded);
 
-    const status = await save();
+    const status = await saveProjectOnline(services);
 
     expect(services.toasts.error.args).toEqual([['Sorry 😞 you have reached your project quota. Delete one.']]);
-    expect(status).toEqual([OperationStatus.Interrupted, ProjectStatus.OnlineQuotaExceeded]);
+    expect(status).toEqual(ProjectStatus.OnlineQuotaExceeded);
   });
 
   it('should display error is save fail', async () => {
     services.project.saveCurrent.rejects(new Error('Test error'));
 
-    const err = await save().catch((err) => err);
+    const err = await saveProjectOnline(services).catch((err) => err);
 
     expect(err).toBeInstanceOf(Error);
     expect(err.message).toEqual('Test error');
     expect(services.toasts.genericError.callCount).toEqual(1);
   });
-
-  async function save() {
-    await saveProjectOnline(services);
-    return services.modals.longOperationModal.args[0][0]();
-  }
 });

@@ -17,12 +17,17 @@
  */
 
 import { AbcView } from '../AbcView';
+import { AbcLegend } from '../legend';
 
+/**
+ * Layouts are used to export as PDF or PNG
+ */
 export interface AbcLayout {
   id: string;
   name: string;
   format: LayoutFormat;
   view: AbcView;
+  legend: AbcLegend;
 }
 
 export interface LayoutFormat {

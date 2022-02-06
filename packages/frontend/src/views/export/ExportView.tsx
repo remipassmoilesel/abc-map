@@ -16,8 +16,9 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
+import Cls from './ExportView.module.scss';
 import React, { useCallback, useEffect, useRef } from 'react';
-import { AbcLayout, AbcProjection, LayoutFormat, LayoutFormats, LegendDisplay, Logger } from '@abc-map/shared';
+import { AbcLayout, AbcProjection, LayoutFormat, LayoutFormats, Logger } from '@abc-map/shared';
 import LayoutList from './layout-list/LayoutList';
 import LayoutPreview from './layout-preview/LayoutPreview';
 import { HistoryKey } from '../../core/history/HistoryKey';
@@ -28,11 +29,9 @@ import { LayoutRenderer } from '../../core/project/rendering/LayoutRenderer';
 import { UpdateLayoutChangeset } from '../../core/history/changesets/layouts/UpdateLayoutChangeset';
 import { FileIO } from '../../core/utils/FileIO';
 import { pageSetup } from '../../core/utils/page-setup';
-import LayoutControls from './layout-controls/LayoutControls';
+import LayoutControls from './export-controls/ExportControls';
 import { ExportFormat } from './ExportFormat';
-import Cls from './ExportView.module.scss';
 import { prefixedTranslation } from '../../i18n/i18n';
-import { OperationStatus } from '../../core/ui/typings';
 import uuid from 'uuid-random';
 import SideMenu from '../../components/side-menu/SideMenu';
 import { IconDefs } from '../../components/icon/IconDefs';
@@ -41,6 +40,10 @@ import { useAppSelector } from '../../core/store/hooks';
 import { withTranslation } from 'react-i18next';
 import { LayoutKeyboardListener } from './LayoutKeyboardListener';
 import { isDesktopDevice } from '../../core/ui/isDesktopDevice';
+import { LegendFactory } from '../../core/project/LegendFactory';
+import { useHistory } from 'react-router-dom';
+import { Routes } from '../../routes';
+import { OperationStatus } from '../../core/ui/typings';
 
 const logger = Logger.get('ExportView.tsx', 'warn');
 
@@ -50,11 +53,11 @@ function ExportView() {
   const { geo, project, history, toasts, modals } = useServices();
   const exportSupport = useRef<HTMLDivElement>(null);
   const keyboardShortcuts = useRef<LayoutKeyboardListener | null>(null);
+  const navHistory = useHistory();
 
   const layouts = useAppSelector((st) => st.project.layouts.list);
   const activeLayoutId = useAppSelector((st) => st.project.layouts.activeId);
   const activeLayout = layouts.find((lay) => lay.id === activeLayoutId);
-  const legend = useAppSelector((st) => st.project.legend);
 
   // Setup page
   useEffect(() => pageSetup(t('Layout'), t('Create_layout_to_export_your_map')));
@@ -102,6 +105,7 @@ function ExportView() {
           resolution: layoutRes,
           projection,
         },
+        legend: LegendFactory.newEmptyLegend(),
       };
 
       const cs = AddLayoutsChangeset.create([layout]);
@@ -158,8 +162,15 @@ function ExportView() {
     apply().catch((err) => logger.error('Cannot delete layouts: ', err));
   }, [history, layouts]);
 
-  // User change legend position
-  const handleLegendChanged = useCallback((display: LegendDisplay) => project.setLegendDisplay(display), [project]);
+  // User updates legend
+  const handleEditLegend = useCallback(() => {
+    if (!activeLayout) {
+      logger.error('No active layout');
+      return;
+    }
+
+    navHistory.push(Routes.mapLegend().withParams({ id: activeLayout.legend.id }));
+  }, [activeLayout, navHistory]);
 
   // User delete layout
   const handleDeleted = useCallback(
@@ -225,7 +236,7 @@ function ExportView() {
       const support = exportSupport.current;
       if (!support) {
         toasts.genericError();
-        logger.error('DOM not ready');
+        logger.error('Unable to export: DOM not ready');
         return;
       }
 
@@ -239,26 +250,28 @@ function ExportView() {
 
       const exportLayouts = async () => {
         let result: Blob | undefined;
+        let status: OperationStatus = OperationStatus.Succeed;
         switch (format) {
           case ExportFormat.PDF:
-            result = await renderer.renderLayoutsAsPdf(layouts, legend, geo.getMainMap());
+            result = await renderer.renderLayoutsAsPdf(layouts, geo.getMainMap());
             FileIO.outputBlob(result, 'map.pdf');
             break;
 
           case ExportFormat.PNG:
-            result = await renderer.renderLayoutsAsPng(layouts, legend, geo.getMainMap());
+            result = await renderer.renderLayoutsAsPng(layouts, geo.getMainMap());
             FileIO.outputBlob(result, 'map.zip');
             break;
 
           default:
             logger.error('Unhandled format: ', format);
             toasts.genericError();
-            return OperationStatus.Interrupted;
+            status = OperationStatus.Interrupted;
         }
 
-        return OperationStatus.Succeed;
+        return status;
       };
 
+      // We MUST block UI here as export map will be mounted on current view
       modals
         .longOperationModal(exportLayouts)
         .then(() => modals.solicitation())
@@ -268,7 +281,7 @@ function ExportView() {
         })
         .finally(() => renderer.dispose());
     },
-    [geo, layouts, legend, modals, toasts]
+    [geo, layouts, modals, toasts]
   );
 
   return (
@@ -284,11 +297,11 @@ function ExportView() {
           initiallyOpened={isDesktopDevice()}
           data-cy={'layouts-menu'}
         >
-          <LayoutList layouts={layouts} active={activeLayout} onSelected={handleSelected} onDeleted={handleDeleted} />
+          <LayoutList layouts={layouts} active={activeLayout} onSelected={handleSelected} onNewLayout={handleNewLayout} onDeleted={handleDeleted} />
         </SideMenu>
 
         {/* Layout preview on center */}
-        <LayoutPreview layout={activeLayout} legend={legend} mainMap={geo.getMainMap()} onLayoutChanged={handleLayoutChanged} onNewLayout={handleNewLayout} />
+        <LayoutPreview layout={activeLayout} mainMap={geo.getMainMap()} onLayoutChanged={handleLayoutChanged} onNewLayout={handleNewLayout} />
 
         {/* Controls on right */}
         <SideMenu
@@ -301,14 +314,13 @@ function ExportView() {
           data-cy={'controls-menu'}
         >
           <LayoutControls
-            format={activeLayout?.format}
-            legendDisplay={legend.display}
+            activeLayout={activeLayout}
             onFormatChanged={handleFormatChanged}
             onNewLayout={handleNewLayout}
             onLayoutUp={handleLayoutUp}
             onLayoutDown={handleLayoutDown}
             onClearAll={handleClearAll}
-            onLegendChanged={handleLegendChanged}
+            onEditLegend={handleEditLegend}
             onExport={handleExport}
           />
         </SideMenu>

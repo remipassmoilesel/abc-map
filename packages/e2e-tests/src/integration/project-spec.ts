@@ -29,7 +29,6 @@ import { Registration } from '../helpers/Registration';
 import { Authentication } from '../helpers/Authentication';
 import * as uuid from 'uuid-random';
 import 'cypress-file-upload';
-import { LongOperation } from '../helpers/LongOperation';
 import { Routes } from '../helpers/Routes';
 
 const PROJECT_PASSWORD = 'azerty1234';
@@ -82,13 +81,13 @@ describe('Project', function () {
         .click()
         .get('[data-cy=export-project]')
         .click()
-        .then(() => LongOperation.done())
+        .then(() => Toasts.assertText('Export done !'))
         .then(() => Download.fileAsBlob())
         .should(async (downloaded) => {
           const helper = ProjectHelper.forFrontend();
           const projectA = await helper.extractManifest(downloaded);
           expect(projectA.metadata.id).not.undefined;
-          expect(projectA.metadata.version).equals('0.6.0');
+          expect(projectA.metadata.version).equals('0.7.0');
           expect(projectA.layers).length(2);
           expect(projectA.layers[0].type).equals(LayerType.Predefined);
           expect(projectA.layers[1].type).equals(LayerType.Vector);
@@ -171,6 +170,9 @@ describe('Project', function () {
         .then((project) => {
           return cy.get('[data-cy=file-input]').attachFile({ filePath: 'project.abm2', fileContent: project });
         })
+        .then(() => Toasts.assertText('Opening in progress ...'))
+        // We must wait a little here otherwise password input will always be shown too late
+        .wait(500)
         .get('[data-cy=password-input]')
         .should('be.empty')
         .type(PROJECT_PASSWORD)
@@ -210,9 +212,7 @@ describe('Project', function () {
         .click()
         .get('[data-cy=save-project]')
         .click()
-        .then(() => Toasts.assertText('Project saved !'))
-        .get('[data-cy=close-solicitation-modal]')
-        .click();
+        .then(() => Toasts.assertText('Project saved !'));
     });
 
     it('can store project online with credentials', function () {
@@ -231,9 +231,7 @@ describe('Project', function () {
         .type(PROJECT_PASSWORD)
         .get('[data-cy=password-confirm]')
         .click()
-        .then(() => Toasts.assertText('Project saved !'))
-        .get('[data-cy=close-solicitation-modal]')
-        .click();
+        .then(() => Toasts.assertText('Project saved !'));
     });
 
     it('can load remote project', function () {
@@ -244,8 +242,6 @@ describe('Project', function () {
         .get('[data-cy=save-project]')
         .click()
         .then(() => Toasts.assertText('Project saved !'))
-        .get('[data-cy=close-solicitation-modal]')
-        .click()
         // Clean map
         .get('[data-cy=new-project]')
         .click()
@@ -259,7 +255,7 @@ describe('Project', function () {
         .click()
         .get('[data-cy=open-project-confirm]')
         .click()
-        .then(() => Toasts.assertText('Projet ouvert !'))
+        .then(() => Toasts.assertText('Project open !'))
         .then(() => MainMap.getReference())
         .should((map) => {
           const layers = map.getLayersMetadata();
@@ -285,8 +281,6 @@ describe('Project', function () {
         .get('[data-cy=password-confirm]')
         .click()
         .then(() => Toasts.assertText('Project saved !'))
-        .get('[data-cy=close-solicitation-modal]')
-        .click()
         // Clean map
         .get('[data-cy=new-project]')
         .click()
@@ -303,7 +297,7 @@ describe('Project', function () {
         .type(PROJECT_PASSWORD)
         .get('[data-cy=open-project-confirm]')
         .click()
-        .then(() => Toasts.assertText('Projet ouvert !'))
+        .then(() => Toasts.assertText('Project open !'))
         .then(() => MainMap.getReference())
         .should((map) => {
           const layers = map.getLayersMetadata();
@@ -331,8 +325,6 @@ describe('Project', function () {
         .get('[data-cy=save-project]')
         .click()
         .then(() => Toasts.assertText('Project saved !'))
-        .get('[data-cy=close-solicitation-modal]')
-        .click()
         // Delete it
         .get('[data-cy=remote-projects]')
         .click()

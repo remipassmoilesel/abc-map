@@ -19,11 +19,8 @@
 import { StorePersistence } from './StorePersistence';
 import { LocalStorageService, StorageKey } from '../../local-storage/LocalStorageService';
 import sinon, { SinonStub } from 'sinon';
-import { FillPatterns, LegendDisplay, UserStatus } from '@abc-map/shared';
+import { FillPatterns, ProjectConstants, UserStatus } from '@abc-map/shared';
 import { MainState } from '../reducer';
-import { TestHelper } from '../../utils/test/TestHelper';
-import { DimensionsPx } from '../../utils/DimensionsPx';
-import { Views } from '../../geo/Views';
 import { IconName } from '../../../assets/point-icons/IconName';
 import { deepFreeze } from '../../utils/deepFreeze';
 
@@ -40,23 +37,27 @@ describe('StorePersistence', () => {
 
   it('persist should clean state, without undesirable state fields', () => {
     // Prepare
-    const sampleState: MainState = deepFreeze({
+    const sampleState: MainState = deepFreeze<MainState>({
       project: {
-        metadata: { name: 'test-project' } as any,
-        mainView: Views.random(),
-        legend: {
-          display: LegendDisplay.BottomRightCorner,
-          items: [],
-          width: 300,
-          height: 500,
+        metadata: {
+          id: 'test-project-id',
+          version: ProjectConstants.CurrentVersion,
+          name: `Test project`,
+          containsCredentials: false,
+          public: false,
+        },
+        mainView: {
+          center: [0, 1],
+          projection: { name: 'EPSG:4326' },
+          resolution: 1,
         },
         layouts: {
-          list: [TestHelper.sampleLayout()],
-          activeId: 'test-active-id',
+          list: [],
+          activeId: 'test-active-layout-id',
         },
         sharedViews: {
-          list: [TestHelper.sampleSharedView()],
-          activeId: 'test-active-id',
+          list: [],
+          activeId: 'test-active-view-id',
         },
       },
       map: {
@@ -84,17 +85,15 @@ describe('StorePersistence', () => {
             color: '#FF5733',
           },
         },
-        mainMapDimensions: {
-          width: 640,
-          height: 480,
-        },
       },
       authentication: {
         tokenString: 'abcd',
         userStatus: UserStatus.Authenticated,
         user: {
           id: 'test-user-id',
-        } as any,
+          email: 'test-user@mail.fr',
+          password: 'test-password-value',
+        },
       },
       ui: {
         historyCapabilities: {
@@ -124,7 +123,30 @@ describe('StorePersistence', () => {
     });
 
     const expectedState: MainState = {
-      project: undefined as any, // A new project is created on bootstrap
+      project: {
+        metadata: {
+          id: 'test-project-id',
+          version: ProjectConstants.CurrentVersion,
+          name: `Test project`,
+          containsCredentials: false,
+          public: false,
+        },
+        mainView: {
+          center: [0, 1],
+          projection: { name: 'EPSG:4326' },
+          resolution: 1,
+        },
+        layouts: {
+          list: [],
+          // Active layout may have 'disappear'
+          activeId: undefined,
+        },
+        sharedViews: {
+          list: [],
+          // Active view may have 'disappear'
+          activeId: undefined,
+        },
+      },
       map: {
         currentStyle: {
           fill: {
@@ -150,14 +172,15 @@ describe('StorePersistence', () => {
             color: '#FF5733',
           },
         },
-        mainMapDimensions: undefined as unknown as DimensionsPx,
       },
       authentication: {
         tokenString: 'abcd',
         userStatus: UserStatus.Authenticated,
         user: {
           id: 'test-user-id',
-        } as any,
+          email: 'test-user@mail.fr',
+          password: 'test-password-value',
+        },
       },
       ui: {
         historyCapabilities: {},

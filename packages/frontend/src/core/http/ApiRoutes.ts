@@ -31,6 +31,10 @@ export class ProjectRoutes {
     return `/projects/${id}`;
   }
 
+  public static findSharedById(id: string): string {
+    return `/projects/shared/${id}`;
+  }
+
   public static delete(id: string): string {
     return `/projects/${id}`;
   }

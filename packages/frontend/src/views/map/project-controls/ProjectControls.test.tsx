@@ -16,14 +16,16 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 import { abcRender } from '../../../core/utils/test/abcRender';
-import ProjectControls from './ProjectControls';
+import ProjectControls, { logger } from './ProjectControls';
 import { newTestServices, TestServices } from '../../../core/utils/test/TestServices';
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { ModalStatus, OperationStatus } from '../../../core/ui/typings';
+import { ModalStatus } from '../../../core/ui/typings';
 import { TestHelper } from '../../../core/utils/test/TestHelper';
 import { MapFactory } from '../../../core/geo/map/MapFactory';
 import { FileIO } from '../../../core/utils/FileIO';
+
+logger.disable();
 
 jest.mock('../../../core/utils/FileIO');
 
@@ -31,6 +33,7 @@ describe('ProjectControls', () => {
   let services: TestServices;
   beforeEach(() => {
     services = newTestServices();
+    services.geo.getMainMap.returns(MapFactory.createNaked());
   });
 
   describe('new project', () => {
@@ -68,46 +71,27 @@ describe('ProjectControls', () => {
   });
 
   describe('export project', () => {
-    it('should export', async () => {
+    it('should export then show sollicitation modal', async () => {
       // Prepare
-      services.modals.longOperationModal.resolves(OperationStatus.Succeed);
-
       abcRender(<ProjectControls />, { services });
-      userEvent.click(screen.getByTestId('export-project'));
-
-      const exportProject = services.modals.longOperationModal.args[0][0]; // We grab export handler
-      services.geo.getMainMap.returns(MapFactory.createNaked());
 
       const [compressed] = await TestHelper.sampleCompressedProject();
       services.project.exportCurrentProject.resolves(compressed);
 
       // Act
-      await exportProject();
-
-      // Assert
-      await waitFor(() => {
-        expect(FileIO.outputBlob).toHaveBeenCalled();
-      });
-    });
-
-    it('should show sollicitation modal', async () => {
-      // Prepare
-      services.modals.longOperationModal.resolves(OperationStatus.Succeed);
-      abcRender(<ProjectControls />, { services });
-
-      // Act
       userEvent.click(screen.getByTestId('export-project'));
 
       // Assert
       await waitFor(() => {
+        expect(FileIO.outputBlob).toHaveBeenCalled();
         expect(services.modals.solicitation.callCount).toEqual(1);
       });
     });
 
     it('should not show sollicitation modal', async () => {
       // Prepare
-      services.modals.longOperationModal.resolves(OperationStatus.Interrupted);
       abcRender(<ProjectControls />, { services });
+      services.project.exportCurrentProject.rejects(new Error('Test error'));
 
       // Act
       userEvent.click(screen.getByTestId('export-project'));

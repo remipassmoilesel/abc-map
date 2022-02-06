@@ -21,7 +21,6 @@ import { AbcFile, Logger } from '@abc-map/shared';
 import { FileIO, InputResultType, InputType } from '../../../core/utils/FileIO';
 import { ServiceProps, withServices } from '../../../core/withServices';
 import { ImportStatus } from '../../../core/data/DataService';
-import { OperationStatus } from '../../../core/ui/typings';
 import { withTranslation } from 'react-i18next';
 import { prefixedTranslation } from '../../../i18n/i18n';
 import { IconDefs } from '../../../components/icon/IconDefs';
@@ -47,7 +46,7 @@ class ImportData extends Component<ServiceProps, {}> {
   }
 
   private importFile = () => {
-    const { toasts, data, modals } = this.props.services;
+    const { toasts, data } = this.props.services;
 
     const selectFiles = async (): Promise<AbcFile<Blob>[] | undefined> => {
       const result = await FileIO.openInput(InputType.Multiple);
@@ -61,26 +60,27 @@ class ImportData extends Component<ServiceProps, {}> {
     const importFiles = async (files: AbcFile<Blob>[]) => {
       const result = await data.importFiles(files);
 
-      switch (result.status) {
-        case ImportStatus.Failed:
-          toasts.error(t('Formats_not_supported'));
-          return OperationStatus.Interrupted;
-        case ImportStatus.Canceled:
-          return OperationStatus.Interrupted;
-        case ImportStatus.Succeed:
-          return OperationStatus.Succeed;
+      if (result.status === ImportStatus.Failed) {
+        toasts.error(t('Formats_not_supported'));
       }
     };
 
+    let firstToast = '';
     selectFiles()
       .then((files) => {
         if (files) {
-          return modals.longOperationModal(() => importFiles(files));
+          firstToast = toasts.info(t('Import_in_progress'));
+          return importFiles(files);
         }
       })
       .catch((err) => {
-        logger.error(err);
+        logger.error('File import error:', err);
         toasts.genericError();
+      })
+      .finally(() => {
+        if (firstToast) {
+          toasts.dismiss(firstToast);
+        }
       });
   };
 }

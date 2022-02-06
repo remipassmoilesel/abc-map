@@ -16,6 +16,9 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
+/**
+ * Return the size in pixel of one REM or a default value.
+ */
 export function getRemSize(): number {
-  return parseFloat(getComputedStyle(document.documentElement).fontSize);
+  return parseFloat(getComputedStyle(document.documentElement).fontSize) || 15;
 }

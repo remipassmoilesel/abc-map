@@ -17,88 +17,111 @@
  */
 
 import Cls from './SharedMapView.module.scss';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { pageSetup } from '../../core/utils/page-setup';
 import { Link, useRouteMatch } from 'react-router-dom';
-import { Logger, SharedMapParams } from '@abc-map/shared';
+import { getAbcWindow, Logger, SharedMapParams } from '@abc-map/shared';
 import { useServices } from '../../core/useServices';
 import NavigationMenu from './navigation-menu/NavigationMenu';
-import { useAppSelector } from '../../core/store/hooks';
 import { MapFactory } from '../../core/geo/map/MapFactory';
 import MainIcon from '../../assets/main-icon.svg';
 import { Routes } from '../../routes';
 import { prefixedTranslation } from '../../i18n/i18n';
+import { MapWrapper } from '../../core/geo/map/MapWrapper';
+import { useActiveSharedView } from '../../core/project/useActiveSharedView';
+import { MapLegend } from '../../components/map-legend/MapLegend';
+import { MapUi } from '../../components/map-ui/MapUi';
+import { E2eMapWrapper } from '../../core/geo/map/E2eMapWrapper';
+import { resolveInAtLeast } from '../../core/utils/resolveInAtLeast';
 
-const logger = Logger.get('SharedMapView.tsx');
+export const logger = Logger.get('SharedMapView.tsx');
 
 const t = prefixedTranslation('SharedMapView:');
 
 export function SharedMapView() {
   const { project, geo } = useServices();
   const match = useRouteMatch<SharedMapParams>();
-  const mapRef = useRef(MapFactory.createDefault());
-  const mapSupportRef = useRef<HTMLDivElement | null>(null);
+  // Here we use a state for map because we have to re-render after map init
+  const [map, setMap] = useState<MapWrapper | undefined>();
   const [error, setError] = useState(false);
-  const activeViewId = useAppSelector((st) => st.project.sharedViews.activeId);
+  const [loading, setLoading] = useState(false);
+  const activeView = useActiveSharedView();
 
   // Setup page
-  useEffect(() => pageSetup(t('Shared_map')), []);
+  useEffect(() => {
+    pageSetup(t('Shared_map'));
+
+    if (!map) {
+      const map = MapFactory.createDefault();
+      setMap(map);
+      getAbcWindow().abc.sharedMap = new E2eMapWrapper(map);
+    }
+    return () => map?.dispose();
+  }, [map]);
 
   // Fetch and setup project
   useEffect(() => {
-    const map = mapRef.current;
-    const mapSupport = mapSupportRef.current;
     const projectId = match.params.projectId;
-    if (!map || !projectId || !mapSupport) {
-      logger.error('Cannot show project, not ready: ', { map, projectId, mapSupport });
+
+    if (!map) {
+      logger.debug('Cannot setup project, not ready', { map });
+      return;
+    }
+
+    if (!projectId) {
+      logger.error('Cannot show project, no id found');
       setError(true);
       return;
     }
 
-    project
-      .loadRemoteProject(projectId)
-      .then(() => {
-        map.setTarget(mapSupport);
-        map.importLayersFrom(geo.getMainMap());
-      })
+    setError(false);
+    setLoading(true);
+    resolveInAtLeast(project.loadSharedProject(projectId), 1000)
+      .then(() => map.importLayersFrom(geo.getMainMap(), { withSelection: false }))
       .catch((err) => {
         logger.error('Loading error: ', err);
         setError(true);
-      });
-
-    return () => map.setTarget(undefined);
-  }, [geo, match.params.projectId, project]);
+      })
+      .finally(() => setLoading(false));
+  }, [geo, map, match.params.projectId, project]);
 
   // Update map when active view change
   useEffect(() => {
-    const map = mapRef.current;
-    const activeView = project.getActiveSharedView();
     if (!map || !activeView) {
-      logger.error('Cannot set view, not ready: ', { map, activeView });
+      logger.debug('Cannot update map view, not ready: ', { map, activeView });
       return;
     }
-
-    // Apply view
-    map.setView(activeView.view);
 
     // Apply layers visibility
     const layers = map.getLayers();
     for (const layerState of activeView.layers) {
       layers.find((lay) => lay.getId() === layerState.layerId)?.setVisible(layerState.visible);
     }
-  }, [activeViewId, project]);
+  }, [activeView, map, project]);
 
   return (
     <div className={Cls.sharedMap}>
-      {!error && (
+      {!loading && !error && (
         <>
-          <NavigationMenu />
-          <div ref={mapSupportRef} className={Cls.map} />
+          <NavigationMenu attributions={map?.getTextAttributions() ?? []} />
+          {activeView && map && (
+            <>
+              <MapUi map={map} view={activeView?.view} data-testid={'shared-map'} className={Cls.map} data-cy={'shared-map'} />
+              <MapLegend legend={activeView.legend} map={map} />
+            </>
+          )}
         </>
       )}
 
+      {loading && !error && (
+        <div className={Cls.textBlock}>
+          <img src={MainIcon} alt={'Logo'} className={Cls.logo} />
+          <h2>{t('Loading_map')}</h2>
+        </div>
+      )}
+
       {error && (
-        <div className={Cls.error}>
+        <div className={Cls.textBlock} data-testid={'error'}>
           <img src={MainIcon} alt={'Logo'} className={Cls.logo} />
           <h2>{t('Cannot_display_map')}</h2>
           <div className={Cls.punchline}>

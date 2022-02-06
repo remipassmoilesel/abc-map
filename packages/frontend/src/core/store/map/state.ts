@@ -17,7 +17,6 @@
  */
 
 import { FillPatterns } from '@abc-map/shared';
-import { DimensionsPx } from '../../utils/DimensionsPx';
 import { IconName } from '../../../assets/point-icons/IconName';
 
 export interface MapState {
@@ -48,11 +47,6 @@ export interface MapState {
       color: string;
     };
   };
-
-  /**
-   * Largest dimensions of the main map. Used for rendering in previews and export to "guess" a style ratio.
-   */
-  mainMapDimensions: DimensionsPx;
 }
 
 export const mapInitialState: MapState = {
@@ -79,10 +73,5 @@ export const mapInitialState: MapState = {
       size: 30,
       color: 'rgba(18,90,147,0.9)',
     },
-  },
-  mainMapDimensions: {
-    // FIXME: this is an ugly hack, if user does not display map before rendering a layout we must "guess" values
-    width: window.innerWidth,
-    height: window.innerHeight * 0.95,
   },
 };

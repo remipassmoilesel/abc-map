@@ -16,14 +16,18 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
+import Cls from './SharingCodesModal.module.scss';
 import { useServices } from '../../../../core/useServices';
 import { Modal } from 'react-bootstrap';
 import React, { ChangeEvent, useCallback, useRef, useState } from 'react';
-import Cls from './SharingCodesModal.module.scss';
 import { CopyButton } from '../../../../components/copy-button/CopyButton';
+import QrCode from '../../../../components/qrcode/QrCode';
+import { prefixedTranslation } from '../../../../i18n/i18n';
 
-const defaultWidth = 800;
-const defaultHeight = 600;
+const t = prefixedTranslation('ShareSettingsView:');
+
+const defaultWidth = Math.round(document.body.clientWidth * 0.8);
+const defaultHeight = Math.round(document.body.clientHeight * 0.8);
 
 interface Props {
   onClose: () => void;
@@ -60,33 +64,45 @@ function SharingCodesModal(props: Props) {
   return (
     <Modal show={true} onHide={onClose} size={'lg'} centered>
       <Modal.Header closeButton>
-        <Modal.Title>Partage 🔗</Modal.Title>
+        <Modal.Title>{t('Sharing_codes')} 🔗</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {/* Sharing link */}
-        <div className={Cls.section}>Lien de partage</div>
-        <div className={Cls.shareLinkForm}>
-          <input type={'text'} value={publicLink} ref={shareLinkRef} readOnly={true} className={'form-control flex-grow-1 mr-3'} />
-          <CopyButton inputRef={shareLinkRef} />
-        </div>
+        <div className={'container'}>
+          <div className={'row'}>
+            <div className={'col-xl-8'}>
+              {/* Sharing link */}
+              <div className={Cls.sectionTitle}>{t('Share_link')}</div>
+              <div className={Cls.shareLinkForm}>
+                <input type={'text'} value={publicLink} ref={shareLinkRef} readOnly={true} className={'form-control flex-grow-1 mr-3'} data-cy={'public-url'} />
+                <CopyButton inputRef={shareLinkRef} />
+              </div>
 
-        {/* Iframe integration */}
-        <div className={Cls.section}>Code d&apos;intégration iframe</div>
-        <div className={Cls.iframeForm}>
-          <textarea value={iframeCode} ref={iframeCodeRef} readOnly={true} className={'form-control flex-grow-1 mr-3'} />
-          <CopyButton inputRef={iframeCodeRef} />
-        </div>
-        <div className={Cls.dimensions}>
-          <div className={'mr-3'}>Largeur (px)</div>
-          <input type={'number'} min={100} value={iframeWidth} onChange={handleWidthChange} className={'form-control mr-3'} />
-          <div className={'mr-3'}>Hauteur (px)</div>
-          <input type={'number'} min={50} value={iframeHeight} onChange={handleHeightChange} className={'form-control mr-3'} />
-        </div>
+              {/* Iframe integration */}
+              <div className={Cls.sectionTitle}>{t('Iframe_embed_code')}</div>
+              <div className={Cls.iframeForm}>
+                <textarea value={iframeCode} ref={iframeCodeRef} readOnly={true} className={'form-control flex-grow-1 mr-3'} />
+                <CopyButton inputRef={iframeCodeRef} />
+              </div>
+              <div className={Cls.dimensions}>
+                <div className={'mr-3'}>{t('Width')}</div>
+                <input type={'number'} min={100} value={iframeWidth} onChange={handleWidthChange} className={'form-control mr-3'} />
+                <div className={'mr-3'}>{t('Height')}</div>
+                <input type={'number'} min={50} value={iframeHeight} onChange={handleHeightChange} className={'form-control mr-3'} />
+              </div>
+            </div>
 
-        <div className={'d-flex justify-content-end mt-4'}>
-          <button onClick={onClose} className={'btn btn-outline-secondary'}>
-            Fermer
-          </button>
+            <div className={'col-xl-4 d-flex justify-content-center align-items-center'}>
+              <QrCode text={publicLink} width={'15rem'} height={'15rem'} />
+            </div>
+          </div>
+
+          <div className={'row d-flex mt-4'}>
+            <div className={'col-xl-12 d-flex justify-content-end'}>
+              <button onClick={onClose} className={'btn btn-outline-secondary'} data-cy={'close-modal'}>
+                Fermer
+              </button>
+            </div>
+          </div>
         </div>
       </Modal.Body>
     </Modal>

@@ -30,6 +30,17 @@ interface Options extends RenderOptions {
   services?: TestServices;
   state?: Partial<MainState>;
   store?: MainStore;
+  router?: {
+    /**
+     * You will probably need to use Switch and Route to use this:
+     * ```
+     *   <Switch>
+     *     <Route exact path={'/shared/:projectId'} component={SharedMapView} />
+     *   </Switch>,
+     * ```
+     */
+    initialEntries?: string[];
+  };
 }
 
 export function abcRender(ui: React.ReactElement, options?: Options): RenderResult {
@@ -37,9 +48,10 @@ export function abcRender(ui: React.ReactElement, options?: Options): RenderResu
     public render() {
       const store = options?.store || storeFactory(options?.state as unknown as MainState);
       const services = options?.services || newTestServices();
+      const initialEntries = options?.router?.initialEntries;
 
       return (
-        <MemoryRouter>
+        <MemoryRouter initialEntries={initialEntries}>
           <ServiceProvider value={services as unknown as Services}>
             <Provider store={store}>{ui}</Provider>
           </ServiceProvider>

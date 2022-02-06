@@ -24,7 +24,6 @@ import {
   DEFAULT_PROJECTION,
   Language,
   LayerType,
-  LegendDisplay,
   NodeBinary,
   PredefinedLayerModel,
   ProjectConstants,
@@ -96,12 +95,6 @@ export class TestHelper {
         },
       ],
       layouts: [],
-      legend: {
-        display: LegendDisplay.Hidden,
-        items: [],
-        width: 300,
-        height: 500,
-      },
       view: {
         center: [1, 2],
         projection: DEFAULT_PROJECTION,

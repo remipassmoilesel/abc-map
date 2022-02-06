@@ -51,6 +51,16 @@ export function FloatingButton(props: Props) {
   // Last position of button
   const position = useAppSelector((st) => st.ui.floatingButtons[buttonId]) || [0, 0];
 
+  // We limit drag in order to not permit drag out of window, as there are no means to restore original positions
+  const height = window.innerHeight - 130;
+  const bounds = { top: -(height / 2), bottom: height / 2, right: 0, left: 0 };
+  if (position[1] < bounds.top) {
+    position[1] = bounds.top;
+  }
+  if (position[1] > bounds.bottom) {
+    position[1] = bounds.bottom;
+  }
+
   const handleDrag = useCallback(() => {
     dragging.current = true;
   }, []);
@@ -73,8 +83,6 @@ export function FloatingButton(props: Props) {
     [onClick]
   );
 
-  // We limit drag in order to not permit drag out of window, as there are no means to restore original positions
-  const bounds = { top: -200, bottom: 200, right: 0, left: 0 };
   return (
     <Draggable nodeRef={nodeRef} position={{ x: position[0], y: position[1] }} onDrag={handleDrag} onStop={handleStop} bounds={bounds}>
       {/* react-draggable work best with a div element, others are less well supported */}

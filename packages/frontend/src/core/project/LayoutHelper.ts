@@ -17,8 +17,6 @@
  */
 import { LayoutFormat, Logger } from '@abc-map/shared';
 import { DimensionsPx } from '../utils/DimensionsPx';
-import { mainStore } from '../store/store';
-import { toPrecision } from '../utils/numbers';
 
 const logger = Logger.get('LayoutHelper.ts');
 
@@ -30,21 +28,5 @@ export class LayoutHelper {
     const width = Math.round((format.width * LayoutHelper.PRINT_RESOLUTION) / LayoutHelper.DPI);
     const height = Math.round((format.height * LayoutHelper.PRINT_RESOLUTION) / LayoutHelper.DPI);
     return { width, height };
-  }
-
-  /**
-   * Here we compute a style ratio for previews and exports.
-   *
-   * We use diagonals of main map and provided dimension.
-   *
-   * @param mapWidth
-   * @param mapHeight
-   */
-  public static styleRatio(mapWidth: number, mapHeight: number): number {
-    const { width, height } = mainStore.getState().map.mainMapDimensions;
-    const targetDiag = Math.sqrt(mapWidth ** 2 + mapHeight ** 2);
-    const mainMapDiag = Math.sqrt(width ** 2 + height ** 2);
-
-    return toPrecision(targetDiag / mainMapDiag, 2);
   }
 }

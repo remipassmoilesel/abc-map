@@ -23,6 +23,7 @@ import { Point, Polygon } from 'ol/geom';
 import {
   AbcArtefact,
   AbcLayout,
+  AbcLegend,
   AbcLegendItem,
   AbcPredefinedLayer,
   AbcProjectManifest,
@@ -108,12 +109,6 @@ export class TestHelper {
       },
       layers: [this.sampleOsmLayer(), this.sampleVectorLayer()],
       layouts: [],
-      legend: {
-        display: LegendDisplay.Hidden,
-        items: [],
-        width: 300,
-        height: 500,
-      },
       view: {
         center: [1, 2],
         projection: DEFAULT_PROJECTION,
@@ -324,6 +319,7 @@ export class TestHelper {
         resolution: 1000,
         projection: DEFAULT_PROJECTION,
       },
+      legend: this.sampleLegend(),
     };
   }
 
@@ -341,6 +337,7 @@ export class TestHelper {
       title: 'Sample layout',
       view: this.sampleView(),
       layers: [],
+      legend: this.sampleLegend(),
     };
   }
 
@@ -457,6 +454,16 @@ export class TestHelper {
     return layer;
   }
 
+  public static sampleLegend(): AbcLegend {
+    return {
+      id: nanoid(),
+      display: LegendDisplay.BottomLeftCorner,
+      items: [this.sampleLegendItem(), this.sampleLegendItem()],
+      height: 250,
+      width: 350,
+    };
+  }
+
   public static sampleLegendItem(): AbcLegendItem {
     return {
       id: nanoid(),
@@ -484,5 +491,9 @@ export class TestHelper {
 
   public static sampleCsvFile(content: string): File {
     return new File([content], 'test.csv', { type: 'text/csv' });
+  }
+
+  public static comparableObjects<T extends { id: string }>(objs: T[]): T[] {
+    return objs.map((obj) => ({ ...obj, id: '#comparable-id#' }));
   }
 }

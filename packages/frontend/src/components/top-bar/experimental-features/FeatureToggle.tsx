@@ -26,19 +26,18 @@ interface Props {
   feature: ExperimentalFeature;
   state: boolean;
   onChange: (feature: ExperimentalFeature, state: boolean) => void;
+  'data-cy'?: string;
 }
 
 const t = prefixedTranslation('ExperimentalFeaturesModal:');
 
 function FeatureToggle(props: Props) {
-  const { feature, onChange, state } = props;
+  const { feature, onChange, state, 'data-cy': dataCy } = props;
 
-  const handleChange = useCallback(() => {
-    onChange(feature, !state);
-  }, [onChange, feature, state]);
+  const handleChange = useCallback(() => onChange(feature, !state), [onChange, feature, state]);
 
   return (
-    <div onClick={handleChange} className={'d-flex flex-row align-items-center justify-content-between mb-3 cursor-pointer'}>
+    <div onClick={handleChange} className={'d-flex flex-row align-items-center justify-content-between mb-3 cursor-pointer'} data-cy={dataCy}>
       {t(feature.id)}
       <Switch onChange={handleChange} value={state} className={'ml-3'} />
     </div>

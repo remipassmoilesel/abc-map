@@ -17,54 +17,46 @@
  */
 
 import React, { ChangeEvent, Component, ReactNode } from 'react';
-import { LayoutFormat, LayoutFormats, LegendDisplay, Logger } from '@abc-map/shared';
+import { AbcLayout, LayoutFormat, LayoutFormats, Logger } from '@abc-map/shared';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { ExportFormat } from '../ExportFormat';
-import { LabeledLegendDisplays } from './LabeledLegendDisplay';
 import { prefixedTranslation } from '../../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
 import { LabeledLayoutFormats } from './LabeledLayoutFormats';
 import HistoryControls from '../../../components/history-controls/HistoryControls';
 import { HistoryKey } from '../../../core/history/HistoryKey';
-import { Routes } from '../../../routes';
 import { FaIcon } from '../../../components/icon/FaIcon';
 import { IconDefs } from '../../../components/icon/IconDefs';
+import { EditLegendControl } from '../../../components/edit-legend-control/EditLegendControl';
 
 const logger = Logger.get('LayoutControls.tsx', 'warn');
 
 interface Props extends RouteComponentProps {
-  format?: LayoutFormat;
-  legendDisplay?: LegendDisplay;
+  activeLayout?: AbcLayout;
   onFormatChanged: (f: LayoutFormat) => void;
   onNewLayout: () => void;
   onLayoutUp: () => void;
   onLayoutDown: () => void;
   onClearAll: () => void;
-  onLegendChanged: (d: LegendDisplay) => void;
+  onEditLegend: () => void;
   onExport: (f: ExportFormat) => void;
 }
 
 const t = prefixedTranslation('ExportView:');
 
-class LayoutControls extends Component<Props, {}> {
+class ExportControls extends Component<Props, {}> {
   public render(): ReactNode {
-    const format = this.props.format;
-    const legendDisplay = this.props.legendDisplay;
+    const { activeLayout } = this.props;
     const handleNewLayout = this.props.onNewLayout;
     const handleLayoutUp = this.props.onLayoutUp;
     const handleLayoutDown = this.props.onLayoutDown;
     const handleClearAll = this.props.onClearAll;
     const handleExport = this.props.onExport;
+    const handleEditLegend = this.props.onEditLegend;
 
     const formatOptions = LabeledLayoutFormats.All.map((fmt) => (
       <option key={fmt.format.id} value={fmt.format.id}>
         {t(fmt.i18nLabel)}
-      </option>
-    ));
-
-    const legendOptions = LabeledLegendDisplays.All.map((opt) => (
-      <option key={opt.value} value={opt.value}>
-        {t(opt.i18nLabel)}
       </option>
     ));
 
@@ -76,7 +68,7 @@ class LayoutControls extends Component<Props, {}> {
         {/* Change format */}
         <div className={'control-block'}>
           <div className={'mb-2'}>{t('Format')}:</div>
-          <select onChange={this.handleFormatChanged} value={format?.id} className={'form-select mb-3'} data-cy={'format-select'}>
+          <select onChange={this.handleFormatChanged} value={activeLayout?.format?.id} className={'form-select mb-3'} data-cy={'format-select'}>
             <option>...</option>
             {formatOptions}
           </select>
@@ -111,20 +103,7 @@ class LayoutControls extends Component<Props, {}> {
         </div>
 
         {/* Legend */}
-        <div className={'control-block'}>
-          <div className={'mb-2'}>{t('Legend')}</div>
-          <select onChange={this.handleLegendDisplayChanged} value={legendDisplay} className={'form-select mb-3'} data-cy={'legend-select'}>
-            <option>...</option>
-            {legendOptions}
-          </select>
-
-          <div className={'control-item'}>
-            <button onClick={this.handleEditLegend} className={'btn btn-link'} data-cy={'edit-legend'}>
-              <FaIcon icon={IconDefs.faPen} className={'mr-2'} />
-              {t('Edit_legend')}
-            </button>
-          </div>
-        </div>
+        <EditLegendControl legendId={activeLayout?.legend.id} onEdit={handleEditLegend} />
 
         {/* Export buttons */}
         <div className={'control-block'}>
@@ -145,10 +124,6 @@ class LayoutControls extends Component<Props, {}> {
     );
   }
 
-  private handleEditLegend = () => {
-    this.props.history.push(Routes.mapLegend().format());
-  };
-
   private handleFormatChanged = (ev: ChangeEvent<HTMLSelectElement>) => {
     const value = ev.target.value;
     const format = LayoutFormats.All.find((fmt) => fmt.id === value);
@@ -159,17 +134,6 @@ class LayoutControls extends Component<Props, {}> {
 
     this.props.onFormatChanged(format);
   };
-
-  private handleLegendDisplayChanged = (ev: ChangeEvent<HTMLSelectElement>) => {
-    const value = ev.target.value;
-    const display = LabeledLegendDisplays.All.find((fmt) => fmt.value === value);
-    if (!display) {
-      logger.error(`Display not found: ${value}`);
-      return;
-    }
-
-    this.props.onLegendChanged(display.value);
-  };
 }
 
-export default withTranslation()(withRouter(LayoutControls));
+export default withTranslation()(withRouter(ExportControls));

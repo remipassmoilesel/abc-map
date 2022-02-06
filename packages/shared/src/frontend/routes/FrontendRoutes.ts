@@ -47,7 +47,7 @@ export class FrontendRoutes {
   }
 
   public mapLegend() {
-    return new Route<EmptyParams>('/:lang/layout/map-legend', this.lang);
+    return new Route<LegendParams>('/:lang/legend/:id', this.lang);
   }
 
   public documentation() {
@@ -122,4 +122,8 @@ export interface DataProcessingParams extends Params {
 
 export interface SharedMapParams extends Params {
   projectId?: string;
+}
+
+export interface LegendParams extends Params {
+  id?: string;
 }

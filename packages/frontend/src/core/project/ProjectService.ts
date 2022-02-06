@@ -20,7 +20,6 @@ import { ProjectActions } from '../store/project/actions';
 import {
   AbcFile,
   AbcLayout,
-  AbcLegend,
   AbcLegendItem,
   AbcProjectManifest,
   AbcProjectMetadata,
@@ -52,6 +51,9 @@ import { ProjectStatus } from './ProjectStatus';
 import { Routes } from '../../routes';
 
 export const logger = Logger.get('ProjectService.ts');
+
+// This timeout is used for download / upload of projects
+const LongTimeout = 45_000;
 
 export class ProjectService {
   public static create(
@@ -97,21 +99,22 @@ export class ProjectService {
     logger.info('New project created');
   }
 
-  public loadRemoteProject(id: string, password?: string): Promise<void> {
-    return (
-      this.findById(id)
-        // We handle network errors before project loading
-        .catch((err) => {
-          this.toasts.genericError(err);
-          return Promise.reject(err);
-        })
-        .then((blob) => {
-          if (!blob) {
-            return Promise.reject(new Error('Project not found'));
-          }
-          return this.loadBlobProject(blob, password);
-        })
-    );
+  public loadPrivateProject(id: string, password?: string): Promise<void> {
+    return this.findById(id).then((blob) => {
+      if (!blob) {
+        return Promise.reject(new Error('Project not found'));
+      }
+      return this.loadBlobProject(blob, password);
+    });
+  }
+
+  public loadSharedProject(id: string): Promise<void> {
+    return this.findSharedById(id).then((blob) => {
+      if (!blob) {
+        return Promise.reject(new Error('Project not found'));
+      }
+      return this.loadBlobProject(blob);
+    });
   }
 
   /**
@@ -208,7 +211,6 @@ export class ProjectService {
       metadata: cloneDeep(state.metadata),
       layers: await this.geoService.exportLayers(this.geoService.getMainMap()),
       view: cloneDeep(state.mainView),
-      legend: cloneDeep(state.legend),
       layouts: cloneDeep(state.layouts.list),
       sharedViews: cloneDeep(state.sharedViews.list),
     };
@@ -236,6 +238,7 @@ export class ProjectService {
     formData.append('project', compressed.project);
     return this.jsonClient
       .post(Api.saveProject(), formData, {
+        timeout: LongTimeout,
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -279,20 +282,28 @@ export class ProjectService {
     this.store.dispatch(ProjectActions.setLayoutIndex(layout, index));
   }
 
-  public addLegendItems(items: AbcLegendItem[]): void {
-    this.store.dispatch(ProjectActions.addLegendItems(items));
+  public addLegendItems(legendId: string, items: AbcLegendItem[]): void {
+    this.store.dispatch(ProjectActions.addLegendItems(legendId, items));
   }
 
-  public updateLegendItem(item: AbcLegendItem): void {
-    this.store.dispatch(ProjectActions.updateLegendItem(item));
+  public updateLegendItem(legendId: string, item: AbcLegendItem): void {
+    this.store.dispatch(ProjectActions.updateLegendItem(legendId, item));
   }
 
-  public setLegendSize(width: number, height: number) {
-    this.store.dispatch(ProjectActions.setLegendSize(width, height));
+  public setLegendSize(legendId: string, width: number, height: number) {
+    this.store.dispatch(ProjectActions.setLegendSize(legendId, width, height));
   }
 
-  public setLegendDisplay(display: LegendDisplay) {
-    this.store.dispatch(ProjectActions.setLegendDisplay(display));
+  public setLegendDisplay(legendId: string, display: LegendDisplay) {
+    this.store.dispatch(ProjectActions.setLegendDisplay(legendId, display));
+  }
+
+  public deleteLegendItem(legendId: string, item: AbcLegendItem) {
+    this.store.dispatch(ProjectActions.deleteLegendItem(legendId, item));
+  }
+
+  public setLegendItemIndex(legendId: string, item: AbcLegendItem, newIndex: number) {
+    this.store.dispatch(ProjectActions.setLegendItemIndex(legendId, item, newIndex));
   }
 
   public updateLayout(layout: AbcLayout) {
@@ -316,18 +327,6 @@ export class ProjectService {
 
   public renameProject(name: string) {
     this.store.dispatch(ProjectActions.setProjectName(name));
-  }
-
-  public getLegend(): AbcLegend {
-    return this.store.getState().project.legend;
-  }
-
-  public deleteLegendItem(item: AbcLegendItem) {
-    this.store.dispatch(ProjectActions.deleteLegendItem(item));
-  }
-
-  public setLegendItemIndex(item: AbcLegendItem, newIndex: number) {
-    this.store.dispatch(ProjectActions.setLegendItemIndex(item, newIndex));
   }
 
   public addSharedViews(views: AbcSharedView[]): void {
@@ -384,22 +383,14 @@ export class ProjectService {
   }
 
   public findById(id: string): Promise<Blob | undefined> {
-    return this.downloadClient
-      .get(Api.findById(id))
-      .then((res) => res.data)
-      .catch((err) => {
-        this.toasts.genericError(err);
-        return Promise.reject(err);
-      });
+    return this.downloadClient.get(Api.findById(id), { timeout: LongTimeout }).then((res) => res.data);
+  }
+
+  public findSharedById(id: string): Promise<Blob | undefined> {
+    return this.downloadClient.get(Api.findSharedById(id), { timeout: LongTimeout }).then((res) => res.data);
   }
 
   public deleteById(id: string): Promise<void> {
-    return this.jsonClient
-      .delete(Api.findById(id))
-      .then(() => undefined)
-      .catch((err) => {
-        this.toasts.genericError(err);
-        return Promise.reject(err);
-      });
+    return this.jsonClient.delete(Api.findById(id)).then(() => undefined);
   }
 }

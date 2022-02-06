@@ -16,7 +16,17 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-export interface PreviewDimensions {
-  width: string;
-  height: string;
+import { AbcLegend, LegendDisplay } from '@abc-map/shared';
+import { nanoid } from 'nanoid';
+
+export class LegendFactory {
+  public static newEmptyLegend(): AbcLegend {
+    return {
+      id: nanoid(),
+      display: LegendDisplay.Hidden,
+      items: [],
+      width: 250,
+      height: 250,
+    };
+  }
 }

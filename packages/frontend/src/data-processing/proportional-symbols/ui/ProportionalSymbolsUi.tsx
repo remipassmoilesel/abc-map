@@ -16,6 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
+import Cls from './ProportionalSymbolsUi.module.scss';
 import React, { Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/shared';
 import { newParameters, Parameters } from '../Parameters';
@@ -32,9 +33,7 @@ import { FormState } from '../../../components/form-validation-label/FormState';
 import { isProcessingResult, ProcessingResult } from '../ProcessingResult';
 import ProcessingReportModal from './components/report-modal/ProcessingReportModal';
 import { prefixedTranslation } from '../../../i18n/i18n';
-import Cls from './ProportionalSymbolsUi.module.scss';
 import { withTranslation } from 'react-i18next';
-import { OperationStatus } from '../../../core/ui/typings';
 
 const logger = Logger.get('ProportionalSymbolsUi.tsx');
 
@@ -192,7 +191,7 @@ class ProportionalSymbolsUi extends Component<Props, State> {
   };
 
   private handleSubmit = () => {
-    const { toasts, modals } = this.props.services;
+    const { toasts } = this.props.services;
 
     const formState = this.validateParameters();
     this.setState({ formState });
@@ -200,20 +199,19 @@ class ProportionalSymbolsUi extends Component<Props, State> {
       return;
     }
 
-    modals
-      .longOperationModal<ProcessingResult>(async () => {
-        const result = await this.props.onProcess();
+    const firstToast = toasts.info(t('Processing_in_progress'));
+    this.props
+      .onProcess()
+      .then((result) => {
         if (isProcessingResult(result)) {
           this.setState({ result });
-          return OperationStatus.Succeed;
-        } else {
-          return OperationStatus.Interrupted;
         }
       })
       .catch((err) => {
         logger.error('Data processing failed', err);
         toasts.genericError();
-      });
+      })
+      .finally(() => toasts.dismiss(firstToast));
   };
 
   private handleModalClosed = () => {

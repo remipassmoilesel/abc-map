@@ -17,14 +17,23 @@
  */
 
 import { AbcLayout, LayoutFormats } from './AbcLayout';
+import { LegendDisplay } from '../legend';
 
 /**
  * If this test fail, you should write a migration script then adapt it
  */
 describe('AbcLayout', () => {
+  it('layout formats should not change without migration', () => {
+    /* eslint-disable */
+    const formatsWitness = '[{"id":"A5_PORTRAIT","width":148,"height":210,"orientation":"portrait"},{"id":"A5_LANDSCAPE","width":210,"height":148,"orientation":"landscape"},{"id":"A4_PORTRAIT","width":210,"height":297,"orientation":"portrait"},{"id":"A4_LANDSCAPE","width":297,"height":210,"orientation":"landscape"},{"id":"A3_PORTRAIT","width":297,"height":420,"orientation":"portrait"},{"id":"A3_LANDSCAPE","width":420,"height":297,"orientation":"landscape"}]';
+    /* eslint-enable */
+
+    expect(JSON.stringify(LayoutFormats.All)).toEqual(formatsWitness);
+  });
+
   it('layout should not change without migration', () => {
     /* eslint-disable */
-    const layoutWitness = '{"id":"test-layout-id","name":"Test layout","format":{"id":"Test layout format","width":800,"height":600,"orientation":"portrait"},"view":{"center":[1,2],"resolution":3,"projection":{"name":"EPSG:4326"}}}';
+    const layoutWitness = '{"id":"test-layout-id","name":"Test layout","format":{"id":"Test layout format","width":800,"height":600,"orientation":"portrait"},"view":{"center":[1,2],"resolution":3,"projection":{"name":"EPSG:4326"}},"legend":{"id":"test-id","display":"Hidden","width":200,"height":200,"items":[]}}';
     /* eslint-enable */
 
     const currentLayout: AbcLayout = {
@@ -43,16 +52,15 @@ describe('AbcLayout', () => {
           name: 'EPSG:4326',
         },
       },
+      legend: {
+        id: 'test-id',
+        display: LegendDisplay.Hidden,
+        width: 200,
+        height: 200,
+        items: [],
+      },
     };
 
     expect(JSON.stringify(currentLayout)).toEqual(layoutWitness);
-  });
-
-  it('layout formats should not change without migration', () => {
-    /* eslint-disable */
-    const formatsWitness = '[{"id":"A5_PORTRAIT","width":148,"height":210,"orientation":"portrait"},{"id":"A5_LANDSCAPE","width":210,"height":148,"orientation":"landscape"},{"id":"A4_PORTRAIT","width":210,"height":297,"orientation":"portrait"},{"id":"A4_LANDSCAPE","width":297,"height":210,"orientation":"landscape"},{"id":"A3_PORTRAIT","width":297,"height":420,"orientation":"portrait"},{"id":"A3_LANDSCAPE","width":420,"height":297,"orientation":"landscape"}]';
-    /* eslint-enable */
-
-    expect(JSON.stringify(LayoutFormats.All)).toEqual(formatsWitness);
   });
 });

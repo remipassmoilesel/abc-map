@@ -21,6 +21,7 @@ import { UserStatus } from '@abc-map/shared';
 import { bootstrap, logger } from './bootstrap';
 import { MainStore, storeFactory } from './core/store/store';
 import { render } from './render';
+import { MapFactory } from './core/geo/map/MapFactory';
 
 jest.mock('./render');
 
@@ -40,6 +41,8 @@ describe('bootstrap', () => {
     root = document.createElement('div');
     root.id = 'root';
     document.body.append(root);
+
+    services.geo.getMainMap.returns(MapFactory.createNaked());
   });
 
   describe('bootstrap()', () => {

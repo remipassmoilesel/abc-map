@@ -30,7 +30,12 @@ import { prefixedTranslation } from '../../../i18n/i18n';
 
 const t = prefixedTranslation('SharedMapView:');
 
-function NavigationMenu() {
+interface Props {
+  attributions: string[];
+}
+
+function NavigationMenu(props: Props) {
+  const { attributions } = props;
   const { project } = useServices();
   const [open, setOpen] = useState(false);
 
@@ -99,10 +104,17 @@ function NavigationMenu() {
 
           <div className={'flex-grow-1'} />
 
-          <div>{t('This_map_was_created_and_published_with_Abc-Map')}</div>
-          <div className={'mb-2'}>{t('Abc-Map_is_free_mapping_software_try_it')}</div>
+          {/* Attributions */}
+          <div>
+            {attributions.map((attr) => (
+              <div key={attr}>{attr}</div>
+            ))}
+          </div>
+          <hr />
 
           {/* Software credits */}
+          <div>{t('This_map_was_created_and_published_with_Abc-Map')}</div>
+          <div className={'mb-2'}>{t('Abc-Map_is_free_mapping_software_try_it')}</div>
           <div className={Cls.softwareCredits}>
             <img src={MainIcon} alt={'Logo'} className={Cls.logo} />
             <a href={'/'} target={'_blank'} rel="noreferrer">

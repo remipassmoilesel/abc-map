@@ -25,7 +25,7 @@ export class ProjectConstants {
   /**
    * Version of project, useful for migrations
    */
-  public static readonly CurrentVersion = '0.6.0';
+  public static readonly CurrentVersion = '0.7.0';
 
   /**
    * Name of main data file in project archive
@@ -33,4 +33,9 @@ export class ProjectConstants {
   public static readonly ManifestName = 'project.json';
 
   public static readonly FileExtension = '.abm2';
+
+  /**
+   * We must accept ".zip" in inputs too, for mobile devices
+   */
+  public static readonly InputFileExtensions = '.abm2,.zip';
 }

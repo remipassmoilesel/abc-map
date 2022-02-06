@@ -16,22 +16,24 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 import { Services } from './core/Services';
-import { Logger } from '@abc-map/shared';
+import { Logger, UserStatus } from '@abc-map/shared';
 import { AxiosError } from 'axios';
 import { HttpError } from './core/http/HttpError';
 import { BUILD_INFO } from './build-version';
 import { render } from './render';
 import { MainStore } from './core/store/store';
-import { solvesInAtLeast } from './core/utils/solvesInAtLeast';
+import { resolveInAtLeast } from './core/utils/resolveInAtLeast';
+import { ProjectEventType } from './core/project/ProjectEvent';
+import { StyleFactory } from './core/geo/styles/StyleFactory';
 
 export const logger = Logger.get('bootstrap.tsx', 'warn');
 
 export function bootstrap(svc: Services, store: MainStore) {
   logger.info('Version: ', BUILD_INFO);
 
-  return solvesInAtLeast(authentication(svc), 400)
+  return resolveInAtLeast(authentication(svc), 400)
     .then(() => render(svc, store))
-    .then(() => svc.project.newProject())
+    .then(() => initProject(svc, store))
     .catch((err) => bootstrapError(err));
 }
 
@@ -51,6 +53,44 @@ function authentication(svc: Services): Promise<void> {
   // Else we authenticate as anonymous
   else {
     return svc.authentication.anonymousLogin();
+  }
+}
+
+async function initProject({ project, geo, history }: Services, store: MainStore) {
+  // When project loaded, we clean style cache and undo/redo history
+  project.addProjectLoadedListener((ev) => {
+    if (ProjectEventType.ProjectLoaded === ev.type) {
+      history.resetHistory();
+      StyleFactory.get().clearCache();
+    } else {
+      logger.error('Unhandled event type: ', ev);
+    }
+  });
+
+  // When main map move we save view in project
+  geo.getMainMap().addViewMoveListener(() => {
+    const view = geo.getMainMap().getView();
+    project.setView(view);
+  });
+
+  // We create a new project or load an existing one
+  // We must load an existing one only if user is authenticated
+  const prevProject = store.getState().project.metadata;
+  const userStatus = store.getState().authentication.userStatus;
+  const loadPrivateProject = prevProject.id && !prevProject.public && UserStatus.Authenticated === userStatus;
+  const loadPublicProject = prevProject.id && prevProject.public && UserStatus.Authenticated === userStatus;
+  try {
+    if (loadPrivateProject) {
+      await project.loadPrivateProject(prevProject.id);
+    } else if (loadPublicProject) {
+      await project.loadSharedProject(prevProject.id);
+    } else {
+      await project.newProject();
+    }
+  } catch (err) {
+    // No need to notify user, a new project is created
+    logger.error(`Project init error`, err);
+    await project.newProject();
   }
 }
 

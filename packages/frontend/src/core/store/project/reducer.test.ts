@@ -25,6 +25,7 @@ import { deepFreeze } from '../../utils/deepFreeze';
 
 describe('Project reducer', function () {
   let initialState: ProjectState;
+
   beforeEach(() => {
     initialState = deepFreeze({
       metadata: {
@@ -146,68 +147,74 @@ describe('Project reducer', function () {
   it('AddLegendItems', () => {
     // Prepare
     const item = TestHelper.sampleLegendItem();
+    const legendId = initialState.sharedViews.list[0].legend.id;
 
     // Act
-    const state = projectReducer(initialState, ProjectActions.addLegendItems([item]));
+    const state = projectReducer(initialState, ProjectActions.addLegendItems(legendId, [item]));
 
     // Assert
-    expect(state.legend.items[1]).toEqual(item);
+    expect(state.sharedViews.list[0].legend.items[2]).toEqual(item);
   });
 
   it('UpdateLegendItem', () => {
     // Prepare
+    const legend = initialState.sharedViews.list[0].legend;
     const item: AbcLegendItem = {
-      ...initialState.legend.items[0],
+      ...legend.items[0],
       text: 'Test text',
     };
 
     // Act
-    const state = projectReducer(initialState, ProjectActions.updateLegendItem(item));
+    const state = projectReducer(initialState, ProjectActions.updateLegendItem(legend.id, item));
 
     // Assert
-    expect(state.legend.items[0].text).toEqual('Test text');
+    expect(state.sharedViews.list[0].legend.items[0].text).toEqual('Test text');
   });
 
   it('SetLegendSize', () => {
     // Act
-    const state = projectReducer(initialState, ProjectActions.setLegendSize(3000, 4000));
+    const legendId = initialState.sharedViews.list[0].legend.id;
+    const state = projectReducer(initialState, ProjectActions.setLegendSize(legendId, 3000, 4000));
 
     // Assert
-    expect(state.legend.width).toEqual(3000);
-    expect(state.legend.height).toEqual(4000);
+    expect(state.sharedViews.list[0].legend.width).toEqual(3000);
+    expect(state.sharedViews.list[0].legend.height).toEqual(4000);
   });
 
   it('SetLegendDisplay', () => {
     // Act
-    const state = projectReducer(initialState, ProjectActions.setLegendDisplay(LegendDisplay.BottomLeftCorner));
+    const legendId = initialState.sharedViews.list[0].legend.id;
+    const state = projectReducer(initialState, ProjectActions.setLegendDisplay(legendId, LegendDisplay.BottomLeftCorner));
 
     // Assert
-    expect(state.legend.display).toEqual(LegendDisplay.BottomLeftCorner);
+    expect(state.sharedViews.list[0].legend.display).toEqual(LegendDisplay.BottomLeftCorner);
   });
 
   it('DeleteLegendItem', () => {
     // Prepare
-    const item = initialState.legend.items[0];
+    const legend = initialState.sharedViews.list[0].legend;
+    const item = legend.items[0];
 
     // Act
-    const state = projectReducer(initialState, ProjectActions.deleteLegendItem(item));
+    const state = projectReducer(initialState, ProjectActions.deleteLegendItem(legend.id, item));
 
     // Assert
-    expect(state.legend.items.length).toEqual(0);
+    expect(state.sharedViews.list[0].legend.items.length).toEqual(1);
   });
 
   it('SetLegendItemIndex', () => {
     // Prepare
-    const item1 = initialState.legend.items[0];
+    const legend = initialState.sharedViews.list[0].legend;
+    const item1 = legend.items[0];
     const item2 = TestHelper.sampleLegendItem();
-    let state = projectReducer(initialState, ProjectActions.addLegendItems([item2]));
+    let state = projectReducer(initialState, ProjectActions.addLegendItems(legend.id, [item2]));
 
     // Act
-    state = projectReducer(state, ProjectActions.setLegendItemIndex(item2, 0));
+    state = projectReducer(state, ProjectActions.setLegendItemIndex(legend.id, item2, 0));
 
     // Assert
-    expect(state.legend.items[0].id).toEqual(item2.id);
-    expect(state.legend.items[1].id).toEqual(item1.id);
+    expect(state.sharedViews.list[0].legend.items[0].id).toEqual(item2.id);
+    expect(state.sharedViews.list[0].legend.items[1].id).toEqual(item1.id);
   });
 
   it('AddSharedViews', () => {

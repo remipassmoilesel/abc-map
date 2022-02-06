@@ -19,41 +19,39 @@
 import { useServices } from '../useServices';
 import { ProjectStatus } from './ProjectStatus';
 import { prefixedTranslation } from '../../i18n/i18n';
-import { OperationStatus } from '../ui/typings';
 import { Services } from '../Services';
+import { resolveInAtLeast } from '../utils/resolveInAtLeast';
 
 const t = prefixedTranslation('core:useSaveProjectOnline.');
 
 export async function saveProjectOnline(services: Services): Promise<ProjectStatus> {
-  const { project, toasts, modals } = services;
+  const { project, toasts } = services;
 
-  const save = (): Promise<[OperationStatus, ProjectStatus]> =>
-    project
-      .saveCurrent()
-      .then<[OperationStatus, ProjectStatus]>((status) => {
-        switch (status) {
-          case ProjectStatus.OnlineQuotaExceeded:
-            toasts.error(t('Too_much_projects'));
-            return [OperationStatus.Interrupted, status];
+  const previousToast = toasts.info(t('Saving'));
+  return resolveInAtLeast(project.saveCurrent(), 800)
+    .then<ProjectStatus>((status) => {
+      toasts.dismiss(previousToast);
+      switch (status) {
+        case ProjectStatus.OnlineQuotaExceeded:
+          toasts.error(t('Too_much_projects'));
+          return status;
 
-          case ProjectStatus.TooHeavy:
-            toasts.error(t('Project_too_heavy'));
-            return [OperationStatus.Interrupted, status];
+        case ProjectStatus.TooHeavy:
+          toasts.error(t('Project_too_heavy'));
+          return status;
 
-          case ProjectStatus.Canceled:
-            return [OperationStatus.Interrupted, status];
+        case ProjectStatus.Canceled:
+          return status;
 
-          case ProjectStatus.Ok:
-            toasts.info(t('Project_saved'));
-            return [OperationStatus.Succeed, status];
-        }
-      })
-      .catch((err) => {
-        toasts.genericError();
-        return Promise.reject(err);
-      });
-
-  return modals.longOperationModal<ProjectStatus>(save).then((res) => res as ProjectStatus);
+        case ProjectStatus.Ok:
+          toasts.info(t('Project_saved'));
+          return status;
+      }
+    })
+    .catch((err) => {
+      toasts.genericError();
+      return Promise.reject(err);
+    });
 }
 
 export function useSaveProjectOnline(): () => Promise<ProjectStatus> {

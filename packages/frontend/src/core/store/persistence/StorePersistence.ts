@@ -19,7 +19,6 @@
 import { LocalStorageService, StorageKey } from '../../local-storage/LocalStorageService';
 import { Logger } from '@abc-map/shared';
 import { MainState } from '../reducer';
-import { DimensionsPx } from '../../utils/DimensionsPx';
 
 const logger = Logger.get('StorePersistence', 'warn');
 
@@ -62,6 +61,12 @@ export class StorePersistence {
       ...state,
       project: {
         ...state.project,
+        layouts: {
+          ...state.project.layouts,
+        },
+        sharedViews: {
+          ...state.project.sharedViews,
+        },
       },
       map: {
         ...state.map,
@@ -71,11 +76,9 @@ export class StorePersistence {
       },
     };
 
-    // We can not store project as most of informations are only present in map
-    cleanState.project = undefined as any;
-    // Dimensions will be set at next bootstrap
-    cleanState.map.mainMapDimensions = undefined as unknown as DimensionsPx;
     cleanState.ui.historyCapabilities = {};
+    cleanState.project.layouts.activeId = undefined;
+    cleanState.project.sharedViews.activeId = undefined;
 
     try {
       const serializedState = JSON.stringify(cleanState);

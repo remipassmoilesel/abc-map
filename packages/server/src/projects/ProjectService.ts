@@ -80,4 +80,8 @@ export class ProjectService extends AbstractService {
   public async countByUserId(userId: string): Promise<number> {
     return this.dao.countByUserId(userId);
   }
+
+  public async exists(id: string): Promise<boolean> {
+    return this.dao.exists(id);
+  }
 }

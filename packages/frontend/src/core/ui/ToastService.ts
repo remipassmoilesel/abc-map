@@ -40,23 +40,36 @@ const defaultOptions: ToastOptions = {
 const t = prefixedTranslation('core:ToastService.');
 
 export class ToastService {
-  public info(message: string): void {
+  /**
+   * Show toast then return toast id. You can dismiss it with dismiss().
+   * @param message
+   */
+  public info(message: string): string {
     const options = { ...defaultOptions };
     options.toastId = message;
     toast.info(message, options);
+    return options.toastId;
   }
 
-  public error(message: string): void {
+  /**
+   * Show toast then return toast id. You can dismiss it with dismiss().
+   * @param message
+   */
+  public error(message: string): string {
     const options = { ...defaultOptions };
     options.toastId = message;
     toast.error(message, options);
+    return options.toastId;
   }
 
-  public featureNotReady(): void {
-    this.info(t('This_feature_is_not_yet_available'));
+  /**
+   * Show toast then return toast id. You can dismiss it with dismiss().
+   */
+  public featureNotReady(): string {
+    return this.info(t('This_feature_is_not_yet_available'));
   }
 
-  public genericError(err?: AxiosError | Error): void {
+  public genericError(err?: AxiosError | Error | unknown): void {
     // Too many requests
     if (HttpError.isTooManyRequests(err)) {
       const reset = parseInt(err.response?.headers['x-ratelimit-reset'] || '0');
@@ -79,7 +92,7 @@ export class ToastService {
     }
 
     // Network error
-    else if (err?.message === 'Network Error') {
+    else if (err instanceof Error && 'message' in err && err?.message === 'Network Error') {
       this.error(t('Are_you_connected'));
     }
 
@@ -87,5 +100,13 @@ export class ToastService {
     else {
       this.error(t('Unknown_technical_problem'));
     }
+  }
+
+  /**
+   * Dismiss specified toast. Use id returned by info(), error() ...
+   * @param id
+   */
+  public dismiss(id: string): void {
+    toast.dismiss(id);
   }
 }

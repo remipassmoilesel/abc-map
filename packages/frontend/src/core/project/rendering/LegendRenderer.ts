@@ -25,6 +25,7 @@ import { DimensionsPx } from '../../utils/DimensionsPx';
 import ImageState from 'ol/ImageState';
 import { CanvasHelper } from '../../utils/CanvasHelper';
 import { Position } from '../../utils/Position';
+import { StyleFactoryOptions } from '../../geo/styles/StyleFactoryOptions';
 
 const logger = Logger.get('LegendRenderer.ts');
 
@@ -120,6 +121,8 @@ export class LegendRenderer {
   }
 
   public async renderLegend(legend: AbcLegend, canvas: HTMLCanvasElement, styleRatio: number) {
+    const options: StyleFactoryOptions = { withSelection: false, ratio: styleRatio };
+
     const ctx = canvas.getContext('2d');
     if (!ctx) {
       logger.error('Cannot render legend, invalid canvas context');
@@ -135,7 +138,7 @@ export class LegendRenderer {
         continue;
       }
 
-      const style = this.styleFactory.getForProperties(item.symbol.properties, item.symbol.geomType, styleRatio);
+      const style = this.styleFactory.getForProperties(item.symbol.properties, item.symbol.geomType, options);
       const symbolSize = this.symbolSizeForStyle(style, item.symbol.geomType, styleRatio);
       if (maxSymbolWidth < symbolSize.width) {
         maxSymbolWidth = symbolSize.width;
@@ -167,7 +170,7 @@ export class LegendRenderer {
 
       // We draw symbol if any
       if (item.symbol) {
-        const style = this.styleFactory.getForProperties(item.symbol.properties, item.symbol.geomType, styleRatio);
+        const style = this.styleFactory.getForProperties(item.symbol.properties, item.symbol.geomType, options);
 
         symbolSize = this.symbolSizeForStyle(style, item.symbol.geomType, styleRatio);
         symbolCanvas.width = symbolSize.width;
@@ -192,12 +195,13 @@ export class LegendRenderer {
   }
 
   /**
-   * This method is used to set canvas position for preview only
-   * @param legend
-   * @param legendCanvas
+   * This method is used to set canvas position for preview or hsared maps
    */
-  public setPreviewStyle(legend: AbcLegend, legendCanvas: HTMLCanvasElement) {
+  public setDomPosition(legend: AbcLegend, legendCanvas: HTMLCanvasElement, ratio = 1) {
     legendCanvas.style.position = 'absolute';
+    legendCanvas.width = legend.width * ratio;
+    legendCanvas.height = legend.height * ratio;
+
     switch (legend.display) {
       case LegendDisplay.Hidden:
         legendCanvas.style.display = 'none';
@@ -241,7 +245,7 @@ export class LegendRenderer {
    * @param legendCv
    * @param exportCv
    */
-  public getLegendPosition(legend: AbcLegend, legendCv: HTMLCanvasElement, exportCv: HTMLCanvasElement): Position | undefined {
+  public getPixelPosition(legend: AbcLegend, legendCv: HTMLCanvasElement, exportCv: HTMLCanvasElement): Position | undefined {
     switch (legend.display) {
       case LegendDisplay.UpperLeftCorner:
         return { x: 0, y: 0 };

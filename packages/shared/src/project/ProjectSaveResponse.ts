@@ -18,7 +18,6 @@
 
 export interface ProjectSaveResponse {
   status: ProjectSaveStatus;
-  projectsLeft: number;
 }
 
 export enum ProjectSaveStatus {

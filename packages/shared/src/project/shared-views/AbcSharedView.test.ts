@@ -17,6 +17,7 @@
  */
 
 import { AbcSharedView } from './AbcSharedView';
+import { LegendDisplay } from '../legend';
 
 /**
  * If this test fail, you should write a migration script then adapt it
@@ -24,7 +25,7 @@ import { AbcSharedView } from './AbcSharedView';
 describe('AbcSharedView', () => {
   it('should not change without migration', () => {
     /* eslint-disable */
-    const witness = '{"id":"test-id","title":"test-title","view":{"center":[12,34],"resolution":5678,"projection":{"name":"test-projection"}},"layers":[{"layerId":"test-layer-id","visible":true}]}';
+    const witness = '{"id":"test-id","title":"test-title","view":{"center":[12,34],"resolution":5678,"projection":{"name":"test-projection"}},"layers":[{"layerId":"test-layer-id","visible":true}],"legend":{"id":"test-id","display":"Hidden","width":200,"height":200,"items":[]}}';
     /* eslint-enable */
 
     const current: AbcSharedView = {
@@ -36,6 +37,13 @@ describe('AbcSharedView', () => {
         projection: { name: 'test-projection' },
       },
       layers: [{ layerId: 'test-layer-id', visible: true }],
+      legend: {
+        id: 'test-id',
+        display: LegendDisplay.Hidden,
+        width: 200,
+        height: 200,
+        items: [],
+      },
     };
 
     expect(JSON.stringify(current)).toEqual(witness);

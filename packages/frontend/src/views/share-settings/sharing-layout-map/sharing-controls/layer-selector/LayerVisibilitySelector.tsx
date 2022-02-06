@@ -73,8 +73,8 @@ function LayerVisibilitySelector(props: Props) {
   return (
     <div>
       {layers.map((metadata) => {
-        const state = view.layers.find((st) => metadata.id === st.layerId);
-        return <LayerListItem key={metadata.id} metadata={metadata} visible={state?.visible || false} onSelect={handleSelect} />;
+        const state: LayerState = view.layers.find((st) => metadata.id === st.layerId) || { layerId: metadata.id, visible: true };
+        return <LayerListItem key={metadata.id} metadata={metadata} visible={state.visible} onSelect={handleSelect} />;
       })}
     </div>
   );

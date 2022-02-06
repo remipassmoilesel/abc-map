@@ -18,7 +18,6 @@
 
 import { AbcLayer } from './layer';
 import { AbcLayout } from './layout';
-import { AbcLegend } from './legend';
 import { AbcView } from './AbcView';
 import { AbcSharedView } from './shared-views';
 
@@ -31,8 +30,6 @@ export interface AbcProjectManifest {
   layers: AbcLayer[];
   // Layouts for PDF exports
   layouts: AbcLayout[];
-  // Main legend
-  legend: AbcLegend;
   // Views publicly accessible
   sharedViews: AbcSharedView[];
 }

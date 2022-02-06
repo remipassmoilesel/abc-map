@@ -24,6 +24,7 @@ import { ModalService } from '../ui/ModalService';
 import { FromV030ToV040 } from './migrations/FromV030ToV040';
 import { FromV040ToV050 } from './migrations/FromV040ToV050';
 import { FromV050ToV060 } from './migrations/FromV050ToV060';
+import { FromV060ToV070 } from './migrations/FromV060ToV070';
 
 export const logger = Logger.get('ProjectUpdater.ts', 'debug');
 
@@ -33,7 +34,14 @@ export const logger = Logger.get('ProjectUpdater.ts', 'debug');
 export class ProjectUpdater {
   public static create(modal: ModalService) {
     // Migrations must be passed in chronological order
-    return new ProjectUpdater(() => [new FromV010ToV020(), new FromV020ToV030(modal), new FromV030ToV040(), new FromV040ToV050(), new FromV050ToV060()]);
+    return new ProjectUpdater(() => [
+      new FromV010ToV020(),
+      new FromV020ToV030(modal),
+      new FromV030ToV040(),
+      new FromV040ToV050(),
+      new FromV050ToV060(),
+      new FromV060ToV070(),
+    ]);
   }
 
   constructor(private migrations: MigrationsFactory) {}

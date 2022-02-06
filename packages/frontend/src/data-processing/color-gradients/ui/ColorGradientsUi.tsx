@@ -16,6 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
+import Cls from './ColorGradientsUi.module.scss';
 import React, { Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/shared';
 import { newParameters, Parameters } from '../Parameters';
@@ -26,14 +27,12 @@ import GradientsConfigForm, { ColorsConfigFormValues } from './components/Gradie
 import GeometryLayerForm, { GeometryLayerFormValues } from '../../_common/geometry-layer-form/GeometryLayerForm';
 import Sample from './sample.png';
 import { ColorGradientTips } from '@abc-map/user-documentation';
-import Cls from './ColorGradientsUi.module.scss';
 import { FormState } from '../../../components/form-validation-label/FormState';
 import FormValidationLabel from '../../../components/form-validation-label/FormValidationLabel';
 import { isProcessingResult, ProcessingResult } from '../ProcessingResult';
 import ProcessingReportModal from './components/report-modal/ProcessingReportModal';
 import { prefixedTranslation } from '../../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
-import { OperationStatus } from '../../../core/ui/typings';
 
 const logger = Logger.get('ColorGradientsUI.tsx');
 
@@ -206,7 +205,7 @@ class ColorGradientsUI extends Component<Props, State> {
   };
 
   private handleSubmit = () => {
-    const { toasts, modals } = this.props.services;
+    const { toasts } = this.props.services;
 
     const formState = this.validateParameters();
     this.setState({ formState });
@@ -214,20 +213,19 @@ class ColorGradientsUI extends Component<Props, State> {
       return;
     }
 
-    modals
-      .longOperationModal<ProcessingResult>(async () => {
-        const result = await this.props.onProcess();
+    const firstToast = toasts.info(t('Processing_in_progress'));
+    this.props
+      .onProcess()
+      .then((result) => {
         if (isProcessingResult(result)) {
           this.setState({ result });
-          return OperationStatus.Succeed;
-        } else {
-          return OperationStatus.Interrupted;
         }
       })
       .catch((err) => {
         logger.error('Data processing failed', err);
         toasts.genericError();
-      });
+      })
+      .finally(() => toasts.dismiss(firstToast));
   };
 
   private handleModalClosed = () => {

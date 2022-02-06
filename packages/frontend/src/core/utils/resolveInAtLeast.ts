@@ -21,7 +21,7 @@
  *
  * This is useful to display a waiting screen that will be at list shown for delay seconds.
  */
-export function solvesInAtLeast<T>(promise: Promise<T>, minDurationMs = 1000): Promise<T> {
+export function resolveInAtLeast<T>(promise: Promise<T>, minDurationMs: number): Promise<T> {
   const start = Date.now();
   return new Promise<T>((resolve, reject) => {
     promise

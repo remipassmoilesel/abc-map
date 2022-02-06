@@ -30,7 +30,7 @@ module.exports = {
   },
   authentication: {
     secret: 'azerty1234',
-    tokenExpiresIn: '45min',
+    tokenExpiresIn: '6h',
     passwordLostExpiresIn: '30min',
   },
   registration: {

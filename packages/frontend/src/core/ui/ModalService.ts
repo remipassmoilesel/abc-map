@@ -35,7 +35,7 @@ import {
   TextFeedbackClosed,
 } from './typings';
 import { SimplePropertiesMap } from '../geo/features/FeatureWrapper';
-import { solvesInAtLeast } from '../utils/solvesInAtLeast';
+import { resolveInAtLeast } from '../utils/resolveInAtLeast';
 import { prefixedTranslation } from '../../i18n/i18n';
 
 const logger = Logger.get('ModalService.ts', 'warn');
@@ -94,12 +94,21 @@ export class ModalService {
     return this.modalPromise({ type: ModalEventType.ShowTextFeedback }, ModalEventType.TextFeedbackClosed);
   }
 
+  /**
+   * Sometimes it is necessary to block the whole UI while an operation is in progress.
+   *
+   * You can use this method to block UI while returned promise does not resolve.
+   *
+   * This is generally a bad UX practice.
+   *
+   * @param operation
+   */
   public longOperationModal<Result = void>(operation: () => Promise<OperationStatus | [OperationStatus, Result]>): Promise<OperationStatus | Result> {
     // We show waiting screen
     this.dispatch({ type: ModalEventType.ShowLongOperationModal, processing: true });
 
     return new Promise<OperationStatus | Result>((resolve, reject) => {
-      const start = () => solvesInAtLeast(operation(), 1000).then(hideOnSuccess).catch(hideOnFail);
+      const start = () => resolveInAtLeast(operation(), 1000).then(hideOnSuccess).catch(hideOnFail);
 
       const hideOnSuccess = (_result: OperationStatus | [OperationStatus, Result]) => {
         const status = _result instanceof Array ? _result[0] : _result;

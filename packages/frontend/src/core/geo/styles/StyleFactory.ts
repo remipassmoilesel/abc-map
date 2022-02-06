@@ -27,6 +27,7 @@ import { DefaultIcon, safeGetIcon } from '../../../assets/point-icons/PointIcon'
 import { IconName } from '../../../assets/point-icons/IconName';
 import { FeatureWrapper } from '../features/FeatureWrapper';
 import { toRadians } from '../../utils/numbers';
+import { DefaultStyleOptions, StyleFactoryOptions } from './StyleFactoryOptions';
 
 const logger = Logger.get('StyleFactory.ts');
 
@@ -45,27 +46,31 @@ export class StyleFactory {
 
   constructor(private cache = new StyleCache()) {}
 
-  public getForFeature(feature: FeatureWrapper, ratio: number): Style[] {
+  public getForFeature(feature: FeatureWrapper, _options?: Partial<StyleFactoryOptions>): Style[] {
+    const options: StyleFactoryOptions = { ...DefaultStyleOptions, ..._options };
+
     const type = feature.getGeometry()?.getType();
     if (!type) {
       return [];
     }
 
     const properties = feature.getStyleProperties();
-    const style = this.getForProperties(properties, type, ratio);
+    const style = this.getForProperties(properties, type, options);
 
-    if (feature.isSelected()) {
+    if (feature.isSelected() && options.withSelection) {
       return [style, ...this.selection.getForFeature(feature)];
     }
 
     return [style];
   }
 
-  public getForProperties(properties: FeatureStyle, type: GeometryType, ratio: number): Style {
-    let style = this.cache.get(type, properties, ratio);
+  public getForProperties(properties: FeatureStyle, type: GeometryType, _options?: Partial<StyleFactoryOptions>): Style {
+    const options: StyleFactoryOptions = { ...DefaultStyleOptions, ..._options };
+
+    let style = this.cache.get(type, properties, options);
     if (!style) {
-      style = this.createStyle(type, properties, ratio);
-      this.cache.put(type, properties, ratio, style);
+      style = this.createStyle(type, properties, options);
+      this.cache.put(type, properties, options, style);
     }
 
     return style;
@@ -74,7 +79,7 @@ export class StyleFactory {
   public getAvailableStyles(ratio: number): StyleCacheEntry[] {
     return this.cache
       .getAll()
-      .filter((item) => item.ratio === ratio)
+      .filter((item) => item.options.ratio === ratio)
       .sort((a, b) => {
         // First we sort by geometry type
         const geomOrder = a.geomType.localeCompare(b.geomType);
@@ -115,7 +120,9 @@ export class StyleFactory {
     this.cache.clear();
   }
 
-  private createStyle(type: GeometryType, properties: FeatureStyle, ratio: number): Style {
+  private createStyle(type: GeometryType, properties: FeatureStyle, options: StyleFactoryOptions): Style {
+    const { ratio } = options;
+
     // Text can apply to all geometries
     let textStyle: Text | undefined;
     if (properties.text?.value) {

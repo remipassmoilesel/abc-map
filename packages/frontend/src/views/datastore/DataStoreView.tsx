@@ -25,7 +25,7 @@ import { FileFormat, FileFormats } from '../../core/data/FileFormats';
 import { FileIO } from '../../core/utils/FileIO';
 import { pageSetup } from '../../core/utils/page-setup';
 import { ImportStatus } from '../../core/data/DataService';
-import { solvesInAtLeast } from '../../core/utils/solvesInAtLeast';
+import { resolveInAtLeast } from '../../core/utils/resolveInAtLeast';
 import { prefixedTranslation } from '../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
 import { IconDefs } from '../../components/icon/IconDefs';
@@ -166,7 +166,7 @@ class DataStoreView extends Component<ServiceProps, State> {
 
     this.setState({ searching: true });
 
-    solvesInAtLeast(data.searchArtefacts(searchQuery), 400)
+    resolveInAtLeast(data.searchArtefacts(searchQuery), 400)
       .then((res) => this.setState({ artefacts: res.content }))
       .catch((err) => logger.error(err))
       .finally(() => this.setState({ searching: false }));
@@ -191,7 +191,7 @@ class DataStoreView extends Component<ServiceProps, State> {
     const { toasts, data } = this.props.services;
 
     this.setState({ downloading: true });
-    solvesInAtLeast(data.importArtefact(artefact))
+    resolveInAtLeast(data.importArtefact(artefact), 800)
       .then((res) => {
         if (res.status === ImportStatus.Failed) {
           toasts.error(t('Formats_not_supported'));
@@ -214,7 +214,7 @@ class DataStoreView extends Component<ServiceProps, State> {
     const { toasts, data } = this.props.services;
 
     this.setState({ downloading: true });
-    solvesInAtLeast(data.downloadFilesFrom(artefact))
+    resolveInAtLeast(data.downloadFilesFrom(artefact), 800)
       .then(async (res) => {
         let content: Blob;
         if (res.length === 1 && FileFormat.ZIP === FileFormats.fromPath(res[0].path)) {

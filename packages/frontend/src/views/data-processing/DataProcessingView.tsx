@@ -53,7 +53,6 @@ class DataProcessingView extends Component<Props, {}> {
           buttonStyle={{ top: '50vh', right: '6vmin' }}
           title={t('Modules')}
           menuPlacement={'right'}
-          closeOnClick={true}
           menuId={'views/DataProcessingView'}
           initiallyOpened={isDesktopDevice()}
           data-cy={'modules-menu'}

@@ -25,9 +25,6 @@ export class TestHelper {
       cy
         // We set viewport
         .viewport(1980, 1080)
-        // We clear local storage data (and redux store persistence)
-        // Despite docs says it run automatically before each test, it does not clear side menu states
-        .clearLocalStorage()
         // We set default language
         .visit(Routes.map().format(), {
           onBeforeLoad(win) {
@@ -36,6 +33,9 @@ export class TestHelper {
             Object.defineProperty(win.navigator, 'accept_languages', { value: ['en'] });
           },
         })
+        // We clear local storage data (and redux store persistence)
+        // Despite docs says it run automatically before each test, it does not clear side menu states
+        .clearLocalStorage()
     );
   }
 }

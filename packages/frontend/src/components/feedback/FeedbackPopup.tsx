@@ -35,8 +35,8 @@ function FeedbackPopup() {
       }
     };
 
-    const timeout1 = setTimeout(showBubble, 2 * 60 * 1000);
-    const timeout2 = setTimeout(showBubble, 15 * 60 * 1000);
+    const timeout1 = setTimeout(showBubble, 10 * 60 * 1000);
+    const timeout2 = setTimeout(showBubble, 30 * 60 * 1000);
 
     return () => {
       clearTimeout(timeout1);

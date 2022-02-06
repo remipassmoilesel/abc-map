@@ -17,18 +17,17 @@
  */
 
 import React, { useCallback, useEffect } from 'react';
-import { AbcLegendItem, Logger } from '@abc-map/shared';
+import { AbcLegendItem, LegendParams, Logger } from '@abc-map/shared';
 import LegendPreview from './preview/LegendPreview';
 import LegendUpdateForm from './legend-update/LegendUpdateForm';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useRouteMatch } from 'react-router-dom';
 import { pageSetup } from '../../core/utils/page-setup';
 import { prefixedTranslation } from '../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
-import { Routes } from '../../routes';
 import { IconDefs } from '../../components/icon/IconDefs';
 import { FaIcon } from '../../components/icon/FaIcon';
-import { useAppSelector } from '../../core/store/hooks';
 import { useServices } from '../../core/useServices';
+import { useMapLegend } from '../../core/project/useMapLegend';
 import Cls from './MapLegendView.module.scss';
 
 const logger = Logger.get('MapLegendView.tsx');
@@ -37,22 +36,69 @@ const t = prefixedTranslation('MapLegendView:');
 
 export function MapLegendView() {
   const { project, toasts } = useServices();
-  const legend = useAppSelector((st) => st.project.legend);
   const history = useHistory();
+  const match = useRouteMatch<LegendParams>();
+  const legend = useMapLegend(match.params.id || '');
 
-  useEffect(() => {
-    pageSetup(t('Edit_legend'), t('Create_legend_for_your_map'));
-  }, []);
+  useEffect(() => pageSetup(t('Edit_legend'), t('Create_legend_for_your_map')), []);
 
-  const handleGoToExport = useCallback(() => history.push(Routes.export().format()), [history]);
-  const handleSizeChanged = useCallback((width: number, height: number) => project.setLegendSize(width, height), [project]);
+  const handleGoBack = useCallback(() => history.goBack(), [history]);
 
-  const handleNewItem = useCallback((item: AbcLegendItem) => project.addLegendItems([item]), [project]);
-  const handleItemChanged = useCallback((item: AbcLegendItem) => project.updateLegendItem(item), [project]);
-  const handleItemDeleted = useCallback((item: AbcLegendItem) => project.deleteLegendItem(item), [project]);
+  const handleSizeChanged = useCallback(
+    (width: number, height: number) => {
+      if (!legend) {
+        logger.error('Legend not ready');
+        return;
+      }
+
+      project.setLegendSize(legend.id, width, height);
+    },
+    [legend, project]
+  );
+
+  const handleNewItem = useCallback(
+    (item: AbcLegendItem) => {
+      if (!legend) {
+        logger.error('Legend not ready');
+        return;
+      }
+
+      project.addLegendItems(legend.id, [item]);
+    },
+    [legend, project]
+  );
+
+  const handleItemChanged = useCallback(
+    (item: AbcLegendItem) => {
+      if (!legend) {
+        logger.error('Legend not ready');
+        return;
+      }
+
+      project.updateLegendItem(legend.id, item);
+    },
+    [legend, project]
+  );
+
+  const handleItemDeleted = useCallback(
+    (item: AbcLegendItem) => {
+      if (!legend) {
+        logger.error('Legend not ready');
+        return;
+      }
+
+      project.deleteLegendItem(legend.id, item);
+    },
+    [legend, project]
+  );
 
   const moveItem = useCallback(
     (item: AbcLegendItem, diff: number) => {
+      if (!legend) {
+        logger.error('Legend not ready');
+        return;
+      }
+
       const items = legend.items;
       const oldIndex = items.findIndex((i) => i.id === item.id);
       if (oldIndex === -1) {
@@ -69,46 +115,59 @@ export function MapLegendView() {
         newIndex = items.length - 1;
       }
 
-      project.setLegendItemIndex(item, newIndex);
+      project.setLegendItemIndex(legend.id, item, newIndex);
     },
-    [legend.items, project, toasts]
+    [legend, project, toasts]
   );
   const handleItemUp = useCallback((item: AbcLegendItem) => moveItem(item, -1), [moveItem]);
   const handleItemDown = useCallback((item: AbcLegendItem) => moveItem(item, +1), [moveItem]);
 
   return (
     <div className={Cls.mapLegendView}>
-      <div className={'container'}>
-        <div className={'row justify-content-end'}>
-          {/* Go back button */}
-          <div className={'col-sm-4 d-flex justify-content-end'}>
-            <button className={'btn btn-outline-primary'} onClick={handleGoToExport} data-cy={'back-to-layout'}>
-              <FaIcon icon={IconDefs.faArrowCircleLeft} className={'mr-2'} />
-              {t('Go_back_to_layout')}
-            </button>
+      {!legend && (
+        <div className={'flex-grow-1 d-flex flex-column justify-content-center align-items-center'}>
+          <h4 className={'mb-5'}>{t('This_map_legend_cannot_be_found')} 🏝️</h4>
+
+          <button className={'btn btn-outline-primary'} onClick={handleGoBack} data-cy={'back-to-layout'}>
+            <FaIcon icon={IconDefs.faArrowCircleLeft} className={'mr-2'} />
+            {t('Go_back')}
+          </button>
+        </div>
+      )}
+
+      {legend && (
+        <div className={'container'}>
+          <div className={'row justify-content-end'}>
+            {/* Go back button */}
+            <div className={'col-sm-4 d-flex justify-content-end'}>
+              <button className={'btn btn-outline-primary'} onClick={handleGoBack} data-cy={'back-to-layout'}>
+                <FaIcon icon={IconDefs.faArrowCircleLeft} className={'mr-2'} />
+                {t('Go_back')}
+              </button>
+            </div>
+          </div>
+          <div className={'row'}>
+            {/* Add / update legend items */}
+            <div className={'col-xl-6 '}>
+              <h1 className={'mt-3 mb-4'}>{t('Edit_legend')}</h1>
+              <LegendUpdateForm
+                legend={legend}
+                onSizeChanged={handleSizeChanged}
+                onNewItem={handleNewItem}
+                onItemChanged={handleItemChanged}
+                onItemDeleted={handleItemDeleted}
+                onItemUp={handleItemUp}
+                onItemDown={handleItemDown}
+              />
+            </div>
+            {/* Legend preview */}
+            <div className={'col-xl-6'}>
+              <h4 className={'mt-4 mb-4'}>{t('Preview')}</h4>
+              <LegendPreview legend={legend} onSizeChanged={handleSizeChanged} />
+            </div>
           </div>
         </div>
-        <div className={'row'}>
-          {/* Add / update legend items */}
-          <div className={'col-xl-6 '}>
-            <h1 className={'mt-3 mb-4'}>{t('Edit_legend')}</h1>
-            <LegendUpdateForm
-              legend={legend}
-              onSizeChanged={handleSizeChanged}
-              onNewItem={handleNewItem}
-              onItemChanged={handleItemChanged}
-              onItemDeleted={handleItemDeleted}
-              onItemUp={handleItemUp}
-              onItemDown={handleItemDown}
-            />
-          </div>
-          {/* Legend preview */}
-          <div className={'col-xl-6'}>
-            <h4 className={'mt-4 mb-4'}>{t('Preview')}</h4>
-            <LegendPreview legend={legend} onSizeChanged={handleSizeChanged} />
-          </div>
-        </div>
-      </div>
+      )}
     </div>
   );
 }

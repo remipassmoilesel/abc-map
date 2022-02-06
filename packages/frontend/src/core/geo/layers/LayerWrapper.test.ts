@@ -40,6 +40,7 @@ import VectorImageLayer from 'ol/layer/VectorImage';
 import { WmsSettings } from './LayerFactory.types';
 import TileSource from 'ol/source/Tile';
 import { WMTS, XYZ } from 'ol/source';
+import { DefaultStyleOptions } from '../styles/StyleFactoryOptions';
 
 wrapperLogger.disable();
 
@@ -408,14 +409,14 @@ describe('shallowClone()', () => {
     const layer = LayerFactory.newVectorLayer();
 
     // Act
-    const clone = layer.shallowClone(2);
+    const clone = layer.shallowClone({ ratio: 4 });
 
     // Assert
     expect(clone.unwrap()).toBeInstanceOf(VectorImageLayer);
     expect(clone.unwrap().getSource()).toStrictEqual(layer.unwrap().getSource());
     expect(clone.unwrap()).not.toStrictEqual(layer.unwrap());
     expect(clone.getMetadata()).toEqual(layer.getMetadata());
-    expect(clone.unwrap().get(LayerProperties.StyleRatio)).toEqual(2);
+    expect(clone.unwrap().get(LayerProperties.StyleOptions)).toEqual({ ...DefaultStyleOptions, ratio: 4 });
   });
 
   it('with WMS layer', () => {

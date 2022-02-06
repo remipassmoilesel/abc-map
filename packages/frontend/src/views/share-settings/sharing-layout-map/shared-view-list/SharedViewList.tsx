@@ -34,13 +34,18 @@ const logger = Logger.get('SharedViewList');
 
 const t = prefixedTranslation('ShareSettingsView:');
 
-function SharedViewList() {
+interface Props {
+  onNewView: () => void;
+}
+
+function SharedViewList(props: Props) {
   const { project, history, toasts } = useServices();
   const sharedViews = useAppSelector((st) => st.project.sharedViews.list);
   const activeViewId = useAppSelector((st) => st.project.sharedViews.activeId);
   const activeIndex = sharedViews.findIndex((v) => v.id === activeViewId);
   const hasNext = activeIndex < sharedViews.length - 1;
   const hasPrevious = activeIndex > 0;
+  const handleNewView = props.onNewView;
 
   const handleItemClick = useCallback((view: AbcSharedView) => project.setActiveSharedView(view.id), [project]);
 
@@ -106,6 +111,15 @@ function SharedViewList() {
             <SharedViewListItem key={view.id} view={view} active={active} onClick={handleItemClick} onDelete={handleDeleteView} onUpdate={handleUpateView} />
           );
         })}
+      </div>
+
+      {/* New view */}
+      <div className={'d-flex justify-content-end align-items-center p-3 mb-3'}>
+        <WithTooltip title={t('New_view')}>
+          <button onClick={handleNewView} className={`btn btn-link`}>
+            <FaIcon icon={IconDefs.faPlus} size={'1.1rem'} className={'mr-2'} /> {t('New_view')}
+          </button>
+        </WithTooltip>
       </div>
     </div>
   );

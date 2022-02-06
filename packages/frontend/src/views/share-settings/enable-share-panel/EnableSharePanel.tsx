@@ -17,7 +17,7 @@
  */
 
 import React, { useCallback } from 'react';
-import { Logger, UserStatus } from '@abc-map/shared';
+import { LayerState, Logger, UserStatus } from '@abc-map/shared';
 import { useAppSelector } from '../../../core/store/hooks';
 import { FaIcon } from '../../../components/icon/FaIcon';
 import { IconDefs } from '../../../components/icon/IconDefs';
@@ -27,6 +27,8 @@ import { prefixedTranslation } from '../../../i18n/i18n';
 import { InformationModal } from './information-modal/InformationModal';
 import { useSaveProjectOnline } from '../../../core/project/useSaveProjectOnline';
 import { ProjectStatus } from '../../../core/project/ProjectStatus';
+import { nanoid } from 'nanoid';
+import { LegendFactory } from '../../../core/project/LegendFactory';
 
 const logger = Logger.get('EnableSharePanel.tsx');
 
@@ -34,14 +36,30 @@ const t = prefixedTranslation('ShareSettingsView:');
 
 export function EnableSharePanel() {
   const services = useServices();
+  const { project, modals, geo } = services;
+  const sharedViews = useAppSelector((st) => st.project.sharedViews.list);
   const saveProject = useSaveProjectOnline();
-  const { project, modals } = services;
 
   // User status, project status
   const userAuthenticated = useAppSelector((st) => st.authentication.userStatus) === UserStatus.Authenticated;
 
   const publishProject = useCallback(() => {
+    // Set public
     project.setPublic(true);
+
+    // Create shared view if none. This action is not undoable, at least one view is necessary for public maps.
+    if (!sharedViews.length) {
+      const mainMap = geo.getMainMap();
+      const viewId = nanoid();
+      const layers: LayerState[] = mainMap
+        .getLayers()
+        .map((layer) => ({ layerId: layer.getId(), visible: true }))
+        .filter((st): st is LayerState => !!st.layerId);
+      project.addSharedViews([{ id: viewId, title: t('Main_view'), view: mainMap.getView(), layers, legend: LegendFactory.newEmptyLegend() }]);
+      project.setActiveSharedView(viewId);
+    }
+
+    // Save project
     saveProject()
       .then((status) => {
         if (ProjectStatus.Ok !== status) {
@@ -52,7 +70,7 @@ export function EnableSharePanel() {
         project.setPublic(false);
         logger.error('Cannot publish project: ', err);
       });
-  }, [project, saveProject]);
+  }, [geo, project, saveProject, sharedViews.length]);
 
   // Login, register
   const handleLogin = useCallback(() => modals.login().catch((err) => logger.error('Login modal error: ', err)), [modals]);
@@ -104,7 +122,7 @@ export function EnableSharePanel() {
 
                 <div className={'flex-grow-1'} />
 
-                <button className={'btn btn-outline-primary'} onClick={publishProject}>
+                <button className={'btn btn-outline-primary'} onClick={publishProject} data-cy={'enable-sharing'}>
                   {t('Enable_sharing')}
                 </button>
               </div>

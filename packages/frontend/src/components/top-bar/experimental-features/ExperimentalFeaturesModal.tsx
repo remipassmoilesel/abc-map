@@ -51,11 +51,11 @@ function ExperimentalFeaturesModal(props: Props) {
       <Modal.Body className={'d-flex flex-column justify-content-center'}>
         <div className={'mb-4'}>{t('Here_you_can_enable_features')}</div>
         {features.map((feature) => (
-          <FeatureToggle key={feature.id} feature={feature} state={featureStates[feature.id] ?? false} onChange={handleChange} />
+          <FeatureToggle key={feature.id} feature={feature} state={featureStates[feature.id] ?? false} onChange={handleChange} data-cy={feature.id} />
         ))}
       </Modal.Body>
       <Modal.Footer>
-        <button onClick={onClose} className={'btn btn-outline-secondary'}>
+        <button onClick={onClose} className={'btn btn-outline-secondary'} data-cy={'close-modal'}>
           {t('Close')}
         </button>
       </Modal.Footer>

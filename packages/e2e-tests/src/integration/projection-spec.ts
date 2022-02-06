@@ -20,7 +20,7 @@ import { TestHelper } from '../helpers/TestHelper';
 import { LayerControls } from '../helpers/LayerControls';
 import { TopBar } from '../helpers/TopBar';
 import { MainMap } from '../helpers/MainMap';
-import { LayoutPreview } from '../helpers/LayoutPreview';
+import { LayoutPreviewMap } from '../helpers/LayoutPreviewMap';
 import { Download } from '../helpers/Download';
 import { LongOperation } from '../helpers/LongOperation';
 import { Routes } from '../helpers/Routes';
@@ -53,9 +53,9 @@ describe('Projection', () => {
       .then(() => TopBar.export())
       .get('[data-cy=add-layout]')
       .click()
-      .then(() => LayoutPreview.getReference())
+      .then(() => LayoutPreviewMap.getReference())
       .should((map) => {
-        expect(map.getViewExtent()).deep.equal([-2744233.909179308, 4337487.32319157, 3686577.670445441, 8903429.910169719]);
+        expect(map.getViewExtent()).deep.equal([-3573801.9664063957, 3763426.227590426, 4516145.727672528, 9477491.005770862]);
       })
       .get('[data-cy=pdf-export]')
       .click()

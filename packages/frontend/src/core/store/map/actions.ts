@@ -17,7 +17,6 @@
  */
 
 import { FeatureStyle, FillPatterns } from '@abc-map/shared';
-import { DimensionsPx } from '../../utils/DimensionsPx';
 import { IconName } from '../../../assets/point-icons/IconName';
 
 export enum ActionType {
@@ -34,7 +33,6 @@ export enum ActionType {
   SetPointIcon = 'SetPointIcon',
   SetPointSize = 'SetPointSize',
   SetPointColor = 'SetPointColor',
-  SetMainMapDimensions = 'SetMainMapDimensions',
   SetDrawingStyle = 'SetDrawingStyle',
 }
 
@@ -103,11 +101,6 @@ export interface SetPointColor {
   color: string;
 }
 
-export interface SetMainMapDimensions {
-  type: ActionType.SetMainMapDimensions;
-  dimensions: DimensionsPx;
-}
-
 export interface SetDrawingStyle {
   type: ActionType.SetDrawingStyle;
   style: FeatureStyle;
@@ -127,7 +120,6 @@ export type MapAction =
   | SetPointIcon
   | SetPointSize
   | SetPointColor
-  | SetMainMapDimensions
   | SetDrawingStyle;
 
 export class MapActions {
@@ -219,13 +211,6 @@ export class MapActions {
     return {
       type: ActionType.SetPointColor,
       color,
-    };
-  }
-
-  public static setMainMapDimensions(width: number, height: number): MapAction {
-    return {
-      type: ActionType.SetMainMapDimensions,
-      dimensions: { width, height },
     };
   }
 

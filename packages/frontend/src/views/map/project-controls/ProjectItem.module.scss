@@ -16,20 +16,23 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcWindow, E2eMap } from '@abc-map/shared';
-import Chainable = Cypress.Chainable;
+@import "src/assets/styles/variables";
 
-export class LayoutPreview {
-  public static getComponent() {
-    return cy.get(`[data-cy=layout-preview-map]`);
-  }
+.item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 
-  public static getReference(): Chainable<E2eMap> {
-    return cy.window().then((_window) => {
-      const window: AbcWindow = _window as any;
-      const map = window.abc.layoutPreview;
-      expect(map).not.undefined;
-      return map as E2eMap;
-    });
+  margin: 0.4rem 0;
+  padding: 0.5rem;
+  cursor: pointer;
+}
+
+.selected {
+  color: white;
+  background-color: $primary;
+
+  :global(.abc-icon) {
+    color: white;
   }
 }

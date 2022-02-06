@@ -37,6 +37,10 @@ import { ToolMode } from '../../tools/ToolMode';
 import PluggableMap from 'ol/PluggableMap';
 import { ToolModeHelper } from '../../tools/common/ToolModeHelper';
 import { MoveMapTool } from '../../tools/move/MoveMapTool';
+import { StyleFactoryOptions } from '../styles/StyleFactoryOptions';
+import { DimensionsPx } from '../../utils/DimensionsPx';
+import { toPrecision } from '../../utils/numbers';
+import { getRemSize } from '../../ui/getRemSize';
 
 export const logger = Logger.get('MapWrapper.ts');
 
@@ -71,18 +75,38 @@ export class MapWrapper {
     return new MapWrapper(map);
   }
 
-  private sizeObserver?: ResizeObserver;
+  private mapSizeObserver?: ResizeObserver;
+  private bodySizeObserver?: ResizeObserver;
   private eventTarget = document.createDocumentFragment();
+
+  /**
+   * This size approximates the size of the main editing map.
+   *
+   * As users choose the styles on the main map, when exporting and sharing a "ratio" is
+   * used to display the symbols in a consistent way.
+   *
+   * In pixels.
+   */
+  private mainReferenceSize: DimensionsPx = { width: 0, height: 0 };
 
   private constructor(private readonly internalMap: Map) {
     this.addLayerChangeListener(this.handleLayerChange);
+
+    this.bodySizeObserver = ResizeObserverFactory.create(debounce(this.updateMainSizeReference, 100));
+    this.bodySizeObserver.observe(document.body);
+    this.updateMainSizeReference();
   }
 
   public dispose() {
     this.removeLayerChangeListener(this.handleLayerChange);
+
+    this.mapSizeObserver?.disconnect();
+    this.mapSizeObserver = undefined;
+
+    this.bodySizeObserver?.disconnect();
+    this.bodySizeObserver = undefined;
+
     this.internalMap.dispose();
-    this.sizeObserver?.disconnect();
-    this.sizeObserver = undefined;
   }
 
   public setTarget(node: HTMLDivElement | undefined) {
@@ -91,14 +115,21 @@ export class MapWrapper {
     if (node) {
       // Here we listen to div support size change
       const resize = debounce(this.handleSizeChange, 100);
-      this.sizeObserver = ResizeObserverFactory.create(resize);
-      this.sizeObserver.observe(node);
+      this.mapSizeObserver = ResizeObserverFactory.create(resize);
+      this.mapSizeObserver.observe(node);
     } else {
-      this.sizeObserver?.disconnect();
-      this.sizeObserver = undefined;
+      this.mapSizeObserver?.disconnect();
+      this.mapSizeObserver = undefined;
     }
   }
 
+  /**
+   * Register a listener that will be executed when:
+   * - User modify view
+   * - Map is resized
+   *
+   * @param listener
+   */
   public addViewMoveListener(listener: () => void) {
     this.internalMap.on('moveend', listener);
   }
@@ -130,13 +161,12 @@ export class MapWrapper {
     }
   }
 
-  public importLayersFrom(other: MapWrapper, styleRatio = 1) {
+  /**
+   * Clear layers from this mapn, shallow clone other's layers and add them to this map.
+   */
+  public importLayersFrom(other: MapWrapper, options?: Partial<StyleFactoryOptions>) {
     this.unwrap().getLayers().clear();
-
-    other.getLayers().forEach((layer) => {
-      const clone = layer.shallowClone(styleRatio);
-      this.addLayer(clone);
-    });
+    other.getLayers().forEach((layer) => this.addLayer(layer.shallowClone(options)));
   }
 
   /**
@@ -327,6 +357,22 @@ export class MapWrapper {
   }
 
   /**
+   * When body size change, we must keep the largest value for style ratio.
+   */
+  private updateMainSizeReference = () => {
+    const width = document.body.clientWidth || 1700;
+    const height = (document.body.clientHeight || 850) - 4 * getRemSize();
+
+    if (this.mainReferenceSize.width < width) {
+      this.mainReferenceSize.width = width;
+    }
+
+    if (this.mainReferenceSize.height < height) {
+      this.mainReferenceSize.height = height;
+    }
+  };
+
+  /**
    * If user select a raster layer, we must disable tools
    */
   private handleLayerChange = () => {
@@ -337,7 +383,7 @@ export class MapWrapper {
   };
 
   public getSizeObserver(): ResizeObserver | undefined {
-    return this.sizeObserver;
+    return this.mapSizeObserver;
   }
 
   public setLayerVisible(layer: LayerWrapper, value: boolean) {
@@ -409,6 +455,44 @@ export class MapWrapper {
     this.eventTarget.removeEventListener(EventType.TileLoadError, listener as EventListener);
   }
 
+  /**
+   * Get a ratio that can be used to display style proportional to the main editing map.
+   *
+   * @param otherWidthPx
+   * @param otherHeightPx
+   */
+  public getMainRatio(otherWidthPx: number, otherHeightPx: number): number {
+    const { width, height } = this.mainReferenceSize;
+    if (!width || !height) {
+      throw new Error('Invalid reference size');
+    }
+
+    const referenceDiag = Math.sqrt(width ** 2 + height ** 2);
+    const otherDiag = Math.sqrt(otherWidthPx ** 2 + otherHeightPx ** 2);
+
+    return toPrecision(otherDiag / referenceDiag, 5);
+  }
+
+  public getTarget(): HTMLDivElement | undefined {
+    return this.internalMap.getTarget() as HTMLDivElement | undefined;
+  }
+
+  public getRatioWith(otherWidthPx: number, otherHeightPx: number): number {
+    const target = this.internalMap.getTarget() as HTMLDivElement | undefined;
+    if (!target) {
+      throw new Error('Invalid map target');
+    }
+
+    const mapDiag = Math.sqrt(target.clientWidth ** 2 + target.clientHeight ** 2);
+    const otherDiag = Math.sqrt(otherWidthPx ** 2 + otherHeightPx ** 2);
+
+    return toPrecision(otherDiag / mapDiag, 5);
+  }
+
+  public getMainReferenceSize(): DimensionsPx {
+    return this.mainReferenceSize;
+  }
+
   private handleSizeChange = () => {
     // Each time support size change, we update map
     this.internalMap.updateSize();
@@ -420,7 +504,10 @@ export class MapWrapper {
       return;
     }
 
-    this.eventTarget.dispatchEvent(new MapSizeChangedEvent({ width: target.clientWidth, height: target.clientHeight }));
+    // We keep the largest size for style ratio
+    const width = target.clientWidth;
+    const height = target.clientHeight;
+    this.eventTarget.dispatchEvent(new MapSizeChangedEvent({ width, height }));
   };
 
   private handleTileLoadError = (ev: BaseEvent) => {

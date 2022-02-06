@@ -19,6 +19,7 @@
 import { AbcLegendItem } from './AbcLegendItem';
 
 export interface AbcLegend {
+  id: string;
   display: LegendDisplay;
   items: AbcLegendItem[];
   width: number;
