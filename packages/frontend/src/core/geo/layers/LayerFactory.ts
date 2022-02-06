@@ -30,6 +30,7 @@ import { styleFunction } from '../styles/style-function';
 import { tileLoadingPublic } from './tileLoadingPublic';
 import { WmsSettings, WmtsSettings } from './LayerFactory.types';
 import { prefixedTranslation } from '../../../i18n/i18n';
+import { DefaultStyleOptions } from '../styles/StyleFactoryOptions';
 
 const t = prefixedTranslation('core:LayerFactory.');
 
@@ -79,7 +80,7 @@ export class LayerFactory {
 
   public static newVectorLayer(source?: VectorSource<Geometry>): VectorLayerWrapper {
     const _source = source || new VectorSource();
-    const layer = new VectorImageLayer({ style: (f) => styleFunction(1, f), source: _source });
+    const layer = new VectorImageLayer({ style: (f) => styleFunction(DefaultStyleOptions, f), source: _source });
 
     const metadata: VectorMetadata = {
       id: uuid(),

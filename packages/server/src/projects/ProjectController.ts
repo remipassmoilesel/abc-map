@@ -54,6 +54,7 @@ export class ProjectController extends Controller {
     });
     app.post('/', this.save);
     app.get('/', { schema: ListSchema }, this.list);
+    app.get('/shared/:projectId', { schema: ByIdSchema }, this.findSharedProjectById);
     app.get('/:projectId', { schema: ByIdSchema }, this.findById);
     app.delete('/:projectId', { schema: ByIdSchema }, this.deleteById);
   };
@@ -81,23 +82,27 @@ export class ProjectController extends Controller {
       return;
     }
 
-    if (!(await this.authz.canWriteProject(req, metadata.id))) {
+    const [canWrite, isNewProject] = await this.authz.canWriteProject(req, metadata.id);
+    if (!canWrite) {
       reply.forbidden();
       return;
     }
 
-    const projectNumbers = await projectService.countByUserId(user.id);
-    const projectsLeft = this.config.project.maxPerUser - projectNumbers;
-    if (projectsLeft < 1) {
-      const response: ProjectSaveResponse = { status: ProjectSaveStatus.LimitReached, projectsLeft };
-      void reply.status(402).send(response);
-      return;
+    // If project is new, we check that user can create a new project
+    if (isNewProject) {
+      const projectNumbers = await projectService.countByUserId(user.id);
+      const projectsLeft = this.config.project.maxPerUser - projectNumbers;
+      if (projectsLeft < 1) {
+        const response: ProjectSaveResponse = { status: ProjectSaveStatus.LimitReached };
+        void reply.status(402).send(response);
+        return;
+      }
     }
 
     const project: CompressedProject<NodeBinary> = { metadata, project: data.file };
     await projectService.save(user.id, project);
 
-    const response: ProjectSaveResponse = { status: ProjectSaveStatus.Saved, projectsLeft };
+    const response: ProjectSaveResponse = { status: ProjectSaveStatus.Saved };
     void reply.status(200).send(response);
 
     metrics.projectSaved();
@@ -137,6 +142,26 @@ export class ProjectController extends Controller {
     void reply.status(200).send(result.project);
 
     metrics.projectFetch();
+  };
+
+  private findSharedProjectById = async (req: FastifyRequest<{ Params: ByIdParams }>, reply: FastifyReply): Promise<void> => {
+    const { project, metrics } = this.services;
+
+    const projectId = req.params.projectId;
+    if (!(await this.authz.canReadSharedProject(req, projectId))) {
+      reply.forbidden();
+      return;
+    }
+
+    const result = await project.findById(projectId);
+    if (!result) {
+      reply.notFound();
+      return;
+    }
+
+    void reply.status(200).send(result.project);
+
+    metrics.sharedProjectFetch();
   };
 
   private deleteById = async (req: FastifyRequest<{ Params: ByIdParams }>, reply: FastifyReply): Promise<void> => {

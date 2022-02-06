@@ -49,7 +49,7 @@ export function InformationModal() {
             <div className={'text-center mb-2'}>{t('It_certainly_lacks_options')}</div>
 
             <div className={'d-flex justify-content-end mt-4'}>
-              <button onClick={onClose} className={'btn btn-outline-secondary'}>
+              <button onClick={onClose} className={'btn btn-outline-secondary'} data-cy={'close-information-modal'}>
                 {t('Close')}
               </button>
             </div>

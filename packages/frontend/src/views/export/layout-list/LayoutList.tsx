@@ -16,13 +16,15 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { Component, ReactNode } from 'react';
+import Cls from './LayoutList.module.scss';
+import React from 'react';
 import { Logger } from '@abc-map/shared';
 import { AbcLayout } from '@abc-map/shared';
-import Cls from './LayoutList.module.scss';
 import LayoutListItem from './LayoutListItem';
 import { prefixedTranslation } from '../../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
+import { FaIcon } from '../../../components/icon/FaIcon';
+import { IconDefs } from '../../../components/icon/IconDefs';
 
 const logger = Logger.get('LayoutList.tsx', 'warn');
 
@@ -30,32 +32,39 @@ interface Props {
   active?: AbcLayout;
   layouts: AbcLayout[];
   onSelected: (lay: AbcLayout) => void;
+  onNewLayout: () => void;
   onDeleted: (lay: AbcLayout) => void;
 }
 
 const t = prefixedTranslation('ExportView:');
 
-class LayoutList extends Component<Props, {}> {
-  public render(): ReactNode {
-    const handleSelected = this.props.onSelected;
-    const handleDeleted = this.props.onDeleted;
-    const items = this.props.layouts.map((lay) => {
-      const active = this.props.active?.id === lay.id;
-      return <LayoutListItem key={lay.id} active={active} layout={lay} onSelected={handleSelected} onDeleted={handleDeleted} />;
-    });
+function LayoutList(props: Props) {
+  const handleSelected = props.onSelected;
+  const handleDeleted = props.onDeleted;
+  const handleNewLayout = props.onNewLayout;
+  const items = props.layouts.map((lay) => {
+    const active = props.active?.id === lay.id;
+    return <LayoutListItem key={lay.id} active={active} layout={lay} onSelected={handleSelected} onDeleted={handleDeleted} />;
+  });
 
-    return (
-      <div className={Cls.layoutList} data-cy={'layout-list'}>
-        <div className={'m-4 fw-bold'}>{t('Layouts')}</div>
-        {items}
-        {!items.length && (
-          <div className={'m-4'} data-cy={'no-layout'}>
-            {t('List_of_layouts_displayed_here')}
-          </div>
-        )}
+  return (
+    <div className={Cls.layoutList} data-cy={'layout-list'}>
+      <div className={'m-4 fw-bold'}>{t('Layouts')}</div>
+      {items}
+      {!items.length && (
+        <div className={'m-4'} data-cy={'no-layout'}>
+          {t('List_of_layouts_displayed_here')}
+        </div>
+      )}
+
+      {/* New layout */}
+      <div className={'d-flex justify-content-end align-items-center p-3 mb-3'}>
+        <button onClick={handleNewLayout} className={`btn btn-link`}>
+          <FaIcon icon={IconDefs.faPlus} size={'1.1rem'} className={'mr-2'} /> {t('New_layout')}
+        </button>
       </div>
-    );
-  }
+    </div>
+  );
 }
 
 export default withTranslation()(LayoutList);

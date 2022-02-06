@@ -27,9 +27,9 @@ import './index.scss';
 // Load translations
 import './i18n/i18n';
 
-export const logger = Logger.get('index.tsx', 'warn');
+export const logger = Logger.get('index.tsx');
 
-// Bootstrap app
+// Start application
 const svc = getServices();
 bootstrap(svc, mainStore).catch((err) => logger.error('Bootstrap fail: ', err));
 

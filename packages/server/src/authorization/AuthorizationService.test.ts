@@ -72,7 +72,7 @@ describe('AuthorizationService', () => {
       const req = anonymousRequest();
 
       // Act, assert
-      assert.isFalse(await service.canWriteProject(req, uuid()));
+      assert.deepEqual(await service.canWriteProject(req, uuid()), [false, false]);
     });
 
     it('authenticated user can write non existing project', async () => {
@@ -80,7 +80,7 @@ describe('AuthorizationService', () => {
       const req = authenticatedRequest();
 
       // Act, assert
-      assert.isTrue(await service.canWriteProject(req, uuid()));
+      assert.deepEqual(await service.canWriteProject(req, uuid()), [true, true]);
     });
 
     it('authenticated user can write its own project', async () => {
@@ -94,7 +94,7 @@ describe('AuthorizationService', () => {
       const req = authenticatedRequest(ownerId);
 
       // Act, assert
-      assert.isTrue(await service.canWriteProject(req, uuid()));
+      assert.deepEqual(await service.canWriteProject(req, project._id), [true, false]);
     });
 
     it('authenticated user cannot write other project', async () => {
@@ -105,7 +105,7 @@ describe('AuthorizationService', () => {
       const req = authenticatedRequest(ownerId);
 
       // Act, assert
-      assert.isTrue(await service.canWriteProject(req, uuid()));
+      assert.deepEqual(await service.canWriteProject(req, project._id), [false, false]);
     });
   });
 

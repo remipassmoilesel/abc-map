@@ -52,7 +52,7 @@
   },
   "ExperimentalFeaturesModal": {
     "Experimental_features": "Fonctionnalités expérimentales",
-    "Here_you_can_enable_features": "Ici vous pouvez activer des fonctionnalités qui ne sont pas encore stable.",
+    "Here_you_can_enable_features": "Ici vous pouvez activer des fonctionnalités qui ne sont pas encore stables.",
     "Close": "Fermer",
     "MapSharing": "Partage de carte"
   },
@@ -75,7 +75,9 @@
       "Scale": "Echelle",
       "Attributions": "Attributions",
       "Zoom_in": "Zoom avant",
-      "Zoom_out": "Zoom arrière"
+      "Zoom_out": "Zoom arrière",
+      "Import_in_progress": "Import en cours...",
+      "Done": "Import terminé !"
     },
     "ProjectStatus": {
       "Projection": "Projection",
@@ -97,7 +99,7 @@
       "No_results": "Aucun résultat"
     },
     "ProjectControls": {
-      "Open_project": "Ouvrir un projet",
+      "My_projects": "Mes projets",
       "Save_online": "Enregistrer en ligne",
       "New_project": "Nouveau projet",
       "Import_project": "Importer un projet",
@@ -109,12 +111,16 @@
       "Incorrect_password": "Mot de passe incorrect !",
       "Password_is_mandatory": "Le mot de passe est obligatoire pour ouvrir ce projet",
       "Project_saved": "Projet enregistré !",
-      "New_project_created": "Nouveau projet !"
+      "New_project_created": "Nouveau projet !",
+      "Opening_in_progress": "Ouverture en cours ...",
+      "Export_in_progress": "Export en cours ...",
+      "Export_done": "Export terminé !"
     },
     "ImportData": {
       "Import_data": "Importer des données",
       "You_can_also_drop_on_map": "Vous pouvez aussi déposer des fichiers sur la carte.",
-      "Formats_not_supported": "Ces formats de fichiers ne sont pas supportés, aucune donnée n'a été importée"
+      "Formats_not_supported": "Ces formats de fichiers ne sont pas supportés, aucune donnée n'a été importée",
+      "Import_in_progress": "Import en cours..."
     },
     "CursorPosition": {
       "Cursor_position": "Position du curseur",
@@ -217,7 +223,6 @@
     },
     "RemoteProjectsModal": {
       "Projects_saved": "Projets enregistrés",
-      "Select_a_project": "Sélectionnez un projet",
       "No_saved_project": "Aucun projet enregistré.",
       "Current_changes_will_be_lost": "Les modifications en cours seront perdues !",
       "Are_you_sure": "Etes vous sur ? Vous allez supprimer définitivement:",
@@ -232,7 +237,9 @@
       "You_must_enter_a_password": "Vous devez entrer un mot de passe",
       "Incorrect_password": "Mot de passe incorrect.",
       "Delete_project": "Supprimer le projet",
-      "This_project_is_password_protected": "Ce projet est protégé par mot de passe"
+      "This_project_is_password_protected": "Ce projet est protégé par mot de passe",
+      "This_project_is_public": "Ce projet est public",
+      "Project_open": "Projet ouvert !"
     }
   },
   "ColorSelector": {
@@ -400,7 +407,8 @@
       "Classes": "Classes",
       "Calculate_classes": "Calculer les classes",
       "Name_of_new_layer": "Nom de la nouvelle couche",
-      "Scale_or_classification": "Echelle ou classification"
+      "Scale_or_classification": "Echelle ou classification",
+      "Processing_in_progress": "Traitement en cours ..."
     },
     "VectorLayerSelector": {
       "Select_a_layer": "Sélectionnez une couche"
@@ -480,7 +488,8 @@
       "Some_symbol_values_are_incorrect": "⚠️ Certaines valeurs du champ de taille ({{invalidValues}}) ne peuvent pas être exploitées comme des nombres.",
       "Some_geometries_does_not_have_data": "⚠️ Certaines géométries ({{missingDataRows}}) n'ont pas de données correspondant à leur propriété <code>{{joinBy}}</code>.",
       "Undefined_property": "Undefined property",
-      "Close": "Fermer"
+      "Close": "Fermer",
+      "Processing_in_progress": "Traitement en cours ..."
     },
     "Scripts": {
       "Script_module_allow_advanced_data_modification": "Le module d'exécution de scripts permet de traiter les données de la carte de manière programmatique en écrivant du code Javascript.",
@@ -505,11 +514,6 @@
     "Layout": "Mise en page",
     "Create_layout_to_export_your_map": "Mettez en page et exportez vos cartes au format PDF ou PNG \uD83D\uDCD0 \uD83D\uDEB6\u200D♀️",
     "You_muse_select_a_layout": "Vous devez sélectionner une mise en page",
-    "No_legend": "Pas de légende",
-    "Top_left_corner": "En haut à gauche",
-    "Top_right_corner": "En haut à droite",
-    "Bottom_right_corner": "En bas à droite",
-    "Bottom_left_corner": "En bas à gauche",
     "New_layout": "Nouvelle page",
     "A5_portrait": "A5 portrait",
     "A5_landscape": "A5 paysage",
@@ -517,8 +521,6 @@
     "A4_landscape": "A4 paysage",
     "A3_portrait": "A3 portrait",
     "A3_landscape": "A3 paysage",
-    "Legend": "Légende",
-    "Edit_legend": "Editer la légende",
     "Move_up": "Monter la page",
     "Move_Down": "Descendre la page",
     "Delete_all": "Supprimer tout",
@@ -526,10 +528,20 @@
     "PNG_export": "Export PNG",
     "You_must_create_layouts_first": "Vous devez d'abord créer une mise en page",
     "Layouts_menu": "Liste des mises en page",
-    "Controls_menu": "Actions"
+    "Controls_menu": "Actions",
+    "Export_in_progress": "Export en cours ..."
+  },
+  "EditLegendControl": {
+    "Legend": "Légende",
+    "Edit_legend": "Editer la légende",
+    "No_legend": "Pas de légende",
+    "Top_left_corner": "En haut à gauche",
+    "Top_right_corner": "En haut à droite",
+    "Bottom_right_corner": "En bas à droite",
+    "Bottom_left_corner": "En bas à gauche"
   },
   "MapLegendView": {
-    "Go_back_to_layout": "Revenir à la mise en page",
+    "Go_back": "Retour",
     "Edit_legend": "Edition de la légende",
     "Preview": "Prévisualisation",
     "Create_legend_for_your_map": "Créez une légende pour votre carte \uD83C\uDF0D",
@@ -543,7 +555,8 @@
     "Delete": "Supprimer",
     "Move_up": "Monter",
     "Move_down": "Descendre",
-    "Entry_name": "Nom de l'élément: zone forestière, itinéraire balisé, ..."
+    "Entry_name": "Nom de l'élément: zone forestière, itinéraire balisé, ...",
+    "This_map_legend_cannot_be_found": "Cette légende est introuvable"
   },
   "FundingView": {
     "Support_AbcMap": "Soutenez d'Abc-Map",
@@ -748,14 +761,20 @@
     "View": "Vue",
     "Overview": "Aperçu",
     "Publish": "Publier",
-    "Address_and_share_code": "Adresse et code de partage",
+    "Address_and_sharing_codes": "Adresse et codes de partage",
     "Disable_sharing": "Désactiver le partage",
     "New_view": "Nouvelle vue",
     "Visible_layers": "Couches visibles",
     "Work_in_progress": "Travail en cours",
     "This_feature_is_under_development": "Cette fonctionnalité est en cours de développement.",
     "It_certainly_lacks_options": "Il manque certainement des options, et vous rencontrerez peut-être quelques bugs.",
-    "Close": "Fermer"
+    "Close": "Fermer",
+    "Remember_to_publish_your_changes": "Pensez à publier vos changements",
+    "Sharing_codes": "Codes de partage",
+    "Share_link": "Lien de partage",
+    "Iframe_embed_code": "Code d'intégration iframe",
+    "Width": "Largeur (px)",
+    "Height": "Hauteur (px)"
   },
   "CopyButton": {
     "Copied": "Copié !",
@@ -764,7 +783,8 @@
   },
   "SharedMapView": {
     "Shared_map": "Carte partagée",
-    "Cannot_display_map": "Aie ! Impossible de trouver cette carte",
+    "Loading_map": "Chargement de la carte ...",
+    "Cannot_display_map": "Aie ! Impossible d'afficher cette carte",
     "But_dont_panic_you_can_create_your_own": "Mais pas de panique, vous pouvez créer votre propre carte avec",
     "Navigation": "Navigation",
     "Previous_view": "Vue précédente",
@@ -814,6 +834,7 @@
     "useSaveProjectOnline": {
       "Too_much_projects": "Désolé \uD83D\uDE1E vous avez atteint votre quota de projet. Supprimez-en un.",
       "Project_too_heavy": "Ce projet est trop lourd",
+      "Saving": "Enregistrement en cours ...",
       "Project_saved": "Projet enregistré !"
     },
     "tools": {

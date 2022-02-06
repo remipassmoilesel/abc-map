@@ -67,11 +67,11 @@ describe('Legend', function () {
       .get('[data-cy=back-to-layout]')
       .click()
       // Set legend position
-      .get('[data-cy=legend-select]')
+      .get('[data-cy=legend-position-selector]')
       .select('Bottom right')
       .then(() => Store.getReference())
       .then((store) => {
-        const legend: AbcLegend = store.getState().project.legend;
+        const legend: AbcLegend = store.getState().project.layouts.list[0].legend;
         expect(legend.display).equal(LegendDisplay.BottomRightCorner);
         expect(legend.width).equal(250);
         expect(legend.height).equal(250);

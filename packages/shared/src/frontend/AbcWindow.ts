@@ -22,6 +22,8 @@ export interface AbcWindow extends Window {
   abc: {
     mainMap?: E2eMap;
     layoutPreview?: E2eMap;
+    sharingLayoutMap?: E2eMap;
+    sharedMap?: E2eMap;
     services?: any;
     store?: any;
     goToFunding?: () => void;

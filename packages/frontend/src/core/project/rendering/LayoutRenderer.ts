@@ -19,7 +19,7 @@
 import { MapWrapper } from '../../geo/map/MapWrapper';
 import { LayoutHelper } from '../LayoutHelper';
 import View from 'ol/View';
-import { AbcLegend, BlobIO, LegendDisplay, Logger } from '@abc-map/shared';
+import { BlobIO, LegendDisplay, Logger } from '@abc-map/shared';
 import { AbcFile, AbcLayout, Zipper } from '@abc-map/shared';
 import { MapFactory } from '../../geo/map/MapFactory';
 import { jsPDF } from 'jspdf';
@@ -50,7 +50,7 @@ export class LayoutRenderer {
     this.map?.dispose();
   }
 
-  public async renderLayoutsAsPdf(layouts: AbcLayout[], legend: AbcLegend, sourceMap: MapWrapper): Promise<Blob> {
+  public async renderLayoutsAsPdf(layouts: AbcLayout[], sourceMap: MapWrapper): Promise<Blob> {
     const pdf = new jsPDF();
 
     // jsPDF create a first page that may not correspond to first layout
@@ -60,17 +60,17 @@ export class LayoutRenderer {
       const format = layout.format;
       pdf.addPage([format.width, format.height], format.orientation);
 
-      const canvas = await this.renderLayout(layout, legend, sourceMap);
+      const canvas = await this.renderLayout(layout, sourceMap);
       pdf.addImage(canvas.toDataURL('image/jpeg', 1), 'JPEG', 0, 0, layout.format.width, layout.format.height, undefined, 'NONE');
     }
 
     return pdf.output('blob');
   }
 
-  public async renderLayoutsAsPng(layouts: AbcLayout[], legend: AbcLegend, sourceMap: MapWrapper): Promise<Blob> {
+  public async renderLayoutsAsPng(layouts: AbcLayout[], sourceMap: MapWrapper): Promise<Blob> {
     const files: AbcFile<Blob>[] = [];
     for (const layout of layouts) {
-      const canvas = await this.renderLayout(layout, legend, sourceMap);
+      const canvas = await this.renderLayout(layout, sourceMap);
       const image = await BlobIO.canvasToPng(canvas);
       files.push({ path: `${layout.name}.png`, content: image });
     }
@@ -78,7 +78,7 @@ export class LayoutRenderer {
     return Zipper.forFrontend().zipFiles(files);
   }
 
-  private renderLayout(layout: AbcLayout, legend: AbcLegend, sourceMap: MapWrapper): Promise<HTMLCanvasElement> {
+  private renderLayout(layout: AbcLayout, sourceMap: MapWrapper): Promise<HTMLCanvasElement> {
     logger.info('Rendering layout: ', layout);
     const support = this.support;
     const renderingMap = this.map;
@@ -96,12 +96,11 @@ export class LayoutRenderer {
     support.style.height = `${exportDimensions.height}px`;
     renderingMap.unwrap().setSize([exportDimensions.width, exportDimensions.height]);
 
-    const styleRatio = LayoutHelper.styleRatio(exportDimensions.width, exportDimensions.height);
-    logger.info(`Rendering style ratio: ${styleRatio}`);
+    const ratio = sourceMap.getMainRatio(exportDimensions.width, exportDimensions.height);
+    logger.info(`Rendering style ratio: ${ratio}`);
 
     // Copy layers from sourceMap to exportMap
-    renderingMap.unwrap().getLayers().clear();
-    sourceMap.getLayers().forEach((lay) => renderingMap.addLayer(lay.shallowClone(styleRatio)));
+    renderingMap.importLayersFrom(sourceMap, { withSelection: false, ratio });
 
     // Set view
     renderingMap.unwrap().setView(
@@ -159,9 +158,9 @@ export class LayoutRenderer {
     // Attribution rendering
     const renderAttributions = async () => {
       const attributions = sourceMap.getTextAttributions();
-      await this.attributionRenderer.render(attributions, attributionCanvas, styleRatio);
+      await this.attributionRenderer.render(attributions, attributionCanvas, ratio);
 
-      const attrPosition = this.attributionRenderer.getAttributionPosition(legend, attributionCanvas, exportCanvas);
+      const attrPosition = this.attributionRenderer.getPixelPosition(layout.legend, attributionCanvas, exportCanvas);
 
       // We reset transform then paint attributions
       ctx.resetTransform();
@@ -170,16 +169,18 @@ export class LayoutRenderer {
 
     // Legend rendering
     const renderLegend = async () => {
+      const legend = layout.legend;
+
       if (LegendDisplay.Hidden === legend.display) {
         return;
       }
 
       // Render legend
-      legendCanvas.width = legend.width * styleRatio;
-      legendCanvas.height = legend.height * styleRatio;
-      await this.legendRenderer.renderLegend(legend, legendCanvas, styleRatio);
+      legendCanvas.width = legend.width * ratio;
+      legendCanvas.height = legend.height * ratio;
+      await this.legendRenderer.renderLegend(legend, legendCanvas, ratio);
 
-      const position = this.legendRenderer.getLegendPosition(legend, legendCanvas, exportCanvas);
+      const position = this.legendRenderer.getPixelPosition(legend, legendCanvas, exportCanvas);
       if (!position) {
         logger.error('Unhandled legend display: ', legend);
         return;

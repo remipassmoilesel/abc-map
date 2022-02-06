@@ -21,7 +21,7 @@ import { Logger, ProjectConstants, UserStatus } from '@abc-map/shared';
 import { connect, ConnectedProps } from 'react-redux';
 import { MainState } from '../../../core/store/reducer';
 import { FileIO, InputResultType, InputType } from '../../../core/utils/FileIO';
-import RemoteProjectModal from './RemoteProjectsModal';
+import RemoteProjectsModal from './RemoteProjectsModal';
 import { ModalStatus, OperationStatus } from '../../../core/ui/typings';
 import { ServiceProps, withServices } from '../../../core/withServices';
 import { Errors } from '../../../core/utils/Errors';
@@ -32,7 +32,7 @@ import { FaIcon } from '../../../components/icon/FaIcon';
 import { ProjectStatus } from '../../../core/project/ProjectStatus';
 import { saveProjectOnline } from '../../../core/project/useSaveProjectOnline';
 
-const logger = Logger.get('ProjectControls.tsx');
+export const logger = Logger.get('ProjectControls.tsx');
 
 export interface State {
   remoteProjectModal: boolean;
@@ -57,7 +57,7 @@ class ProjectControls extends Component<Props, State> {
   }
 
   public render(): ReactNode {
-    const remoteProjectModal = this.state.remoteProjectModal;
+    const remoteProjectsModal = this.state.remoteProjectModal;
     const userAuthenticated = this.props.userStatus === UserStatus.Authenticated;
 
     return (
@@ -67,7 +67,7 @@ class ProjectControls extends Component<Props, State> {
             <div className={'control-item'}>
               <button onClick={this.handleOpenProject} type={'button'} className={'btn btn-link'} data-cy={'remote-projects'}>
                 <FaIcon icon={IconDefs.faGlobeEurope} className={'mr-2'} />
-                {t('Open_project')}
+                {t('My_projects')}
               </button>
             </div>
             <div className={'control-item'}>
@@ -97,7 +97,8 @@ class ProjectControls extends Component<Props, State> {
             {t('Import_project')}
           </button>
         </div>
-        {remoteProjectModal && <RemoteProjectModal onHide={this.handleRemoteProjectModalHide} />}
+
+        {remoteProjectsModal && <RemoteProjectsModal onHide={this.handleRemoteProjectModalHide} />}
       </div>
     );
   }
@@ -116,15 +117,7 @@ class ProjectControls extends Component<Props, State> {
   };
 
   private handleSaveProject = () => {
-    const services = this.props.services;
-
-    saveProjectOnline(this.props.services)
-      .then((status) => {
-        if (ProjectStatus.Ok === status) {
-          return services.modals.solicitation();
-        }
-      })
-      .catch((err) => logger.error('Cannot save project: ', err));
+    saveProjectOnline(this.props.services).catch((err) => logger.error('Cannot save project: ', err));
   };
 
   private handleOpenProject = () => {
@@ -148,16 +141,19 @@ class ProjectControls extends Component<Props, State> {
       return OperationStatus.Succeed;
     };
 
-    modals
-      .longOperationModal(exportProject)
+    const firstToast = toasts.info(t('Export_in_progress'));
+    exportProject()
       .then((status) => {
         if (status === OperationStatus.Succeed) {
+          toasts.dismiss(firstToast);
+          toasts.info(t('Export_done'));
           return modals.solicitation();
         }
       })
       .catch((err) => {
         logger.error('Cannot export project: ', err);
         toasts.genericError();
+        toasts.dismiss(firstToast);
       });
   };
 
@@ -165,7 +161,7 @@ class ProjectControls extends Component<Props, State> {
     const { toasts, project, modals } = this.props.services;
 
     const selectProject = async (): Promise<File | undefined> => {
-      const result = await FileIO.openInput(InputType.Single, ProjectConstants.FileExtension);
+      const result = await FileIO.openInput(InputType.Single, ProjectConstants.InputFileExtensions);
 
       if (InputResultType.Canceled === result.type) {
         return;
@@ -192,6 +188,7 @@ class ProjectControls extends Component<Props, State> {
       return OperationStatus.Succeed;
     };
 
+    let firstToast = '';
     modals
       .modificationsLostConfirmation()
       .then((res) => {
@@ -201,7 +198,8 @@ class ProjectControls extends Component<Props, State> {
       })
       .then((file) => {
         if (file) {
-          return modals.longOperationModal(() => importProject(file));
+          firstToast = toasts.info(t('Opening_in_progress'));
+          return importProject(file);
         }
       })
       .catch((err) => {
@@ -214,7 +212,8 @@ class ProjectControls extends Component<Props, State> {
         } else {
           toasts.genericError();
         }
-      });
+      })
+      .finally(() => toasts.dismiss(firstToast));
   };
 }
 

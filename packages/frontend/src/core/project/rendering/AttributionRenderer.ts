@@ -54,7 +54,7 @@ export class AttributionRenderer {
     // Take in account software attribution in whole size
     const sw = ctx.measureText(this.softwareAttribution).width + margin * 3 + iconWidth;
     width = width < sw ? sw : width;
-    height += fontSize + margin * 2;
+    height += fontSize + margin * 2.5;
 
     // Set canvas are, clean attributions area
     canvas.width = width;
@@ -83,10 +83,10 @@ export class AttributionRenderer {
   /**
    * Attributions are rendered in opposite corner of legend
    */
-  public setPreviewStyle(attributions: string[], legend: AbcLegend, canvas: HTMLCanvasElement) {
+  public setDomPosition(legendDisplay: LegendDisplay, canvas: HTMLCanvasElement) {
     canvas.style.position = 'absolute';
 
-    switch (legend.display) {
+    switch (legendDisplay) {
       case LegendDisplay.Hidden:
       case LegendDisplay.BottomLeftCorner:
         canvas.style.display = 'block';
@@ -117,14 +117,14 @@ export class AttributionRenderer {
         canvas.style.left = '0';
         break;
       default:
-        logger.error('Unhandled legend display for attributions: ', { legend, display: legend.display });
+        logger.error('Unhandled legend display for attributions: ', { legendDisplay });
     }
   }
 
   /**
    * Attributions are rendered in opposite corner of legend
    */
-  public getAttributionPosition(legend: AbcLegend, attrCanvas: HTMLCanvasElement, exportCv: HTMLCanvasElement): Position {
+  public getPixelPosition(legend: AbcLegend, attrCanvas: HTMLCanvasElement, exportCv: HTMLCanvasElement): Position {
     switch (legend.display) {
       case LegendDisplay.Hidden:
       case LegendDisplay.BottomLeftCorner:

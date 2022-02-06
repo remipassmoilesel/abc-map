@@ -51,12 +51,6 @@ describe('ProjectFactory', () => {
     const manifest = ProjectFactory.newProjectManifest();
     expect(manifest.layers).toHaveLength(0);
     expect(manifest.layouts).toHaveLength(0);
-    expect(manifest.legend).toBeDefined();
     expect(manifest.view).toBeDefined();
-  });
-
-  it('newLegend()', () => {
-    const legend = ProjectFactory.newLegend();
-    expect(legend).toEqual({ display: 'Hidden', height: 250, items: [], width: 250 });
   });
 });

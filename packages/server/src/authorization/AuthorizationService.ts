@@ -59,26 +59,45 @@ export class AuthorizationService extends AbstractService {
       return false;
     }
 
-    return metadata.public || metadata.ownerId === user.id;
+    return metadata.ownerId === user.id;
   }
 
-  public async canWriteProject(req: FastifyRequest, projectId: string): Promise<boolean> {
+  public async canReadSharedProject(req: FastifyRequest, projectId: string): Promise<boolean> {
     const user = Authentication.from(req);
     if (!user) {
       return false;
     }
 
-    if (isUserAnonymous(user)) {
+    const metadata = await this.project.findMetadataById(projectId);
+    if (!metadata) {
       return false;
+    }
+
+    return metadata.public;
+  }
+
+  /**
+   * Return [true if user can write, true] if project is new
+   * @param req
+   * @param projectId
+   */
+  public async canWriteProject(req: FastifyRequest, projectId: string): Promise<[boolean, boolean]> {
+    const user = Authentication.from(req);
+    if (!user) {
+      return [false, false];
+    }
+
+    if (isUserAnonymous(user)) {
+      return [false, false];
     }
 
     const project = await this.project.findMetadataById(projectId);
     if (!project) {
-      // If project does not exists, user can create a new one
-      return true;
+      // If project does not exist, user can create a new one
+      return [true, true];
     }
 
-    return project.ownerId === user.id;
+    return [project.ownerId === user.id, false];
   }
 
   public async canDeleteProject(req: FastifyRequest, projectId: string): Promise<boolean> {

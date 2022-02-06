@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcLegend, AbcProjectManifest, AbcProjectMetadata, LegendDisplay, ProjectConstants } from '@abc-map/shared';
+import { AbcProjectManifest, AbcProjectMetadata, ProjectConstants } from '@abc-map/shared';
 import uuid from 'uuid-random';
 import { DateTime } from 'luxon';
 import { Views } from '../geo/Views';
@@ -40,18 +40,8 @@ export class ProjectFactory {
       metadata: ProjectFactory.newProjectMetadata(),
       layers: [],
       layouts: [],
-      legend: this.newLegend(),
       view: Views.random(),
       sharedViews: [],
-    };
-  }
-
-  public static newLegend(): AbcLegend {
-    return {
-      display: LegendDisplay.Hidden,
-      items: [],
-      width: 250,
-      height: 250,
     };
   }
 }

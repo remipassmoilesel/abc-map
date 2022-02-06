@@ -2,6 +2,37 @@
 
 Presently there are no versions, since nobody has asked for it yet 👍
 
+## Project sharing, part 2 (XXXXX XX/XX/2021)
+
+This feature is still in experimental stage.
+
+- Legends can be displayed on shared views
+- It is now possible to create a legend by shared view or by export view
+- Selection style is hidden on export views and shared views
+- Projects saved online are automatically re-opened when the application is loaded
+- Less fullscreen loading
+- Less sollicitations for donations !
+- TBC...
+
+## Experimental features UI (855f1391 19/01/2021)
+
+- Experimental feature system for the frontend application, see packages/frontend/src/ExperimentalFeatures.ts
+- New dialog box with list of experimental features, ability to enable or disable features
+- Parameters persisted between sessions
+
+## Project sharing, part 1 (2ba159d0 19/01/2021)
+
+This feature is released in experimental stage.
+
+- Logged in users can publish projects
+- Several "shared views" can be created
+- Add UI for shared views layout, and sharing settings
+
+## Updating dependencies (2e7e9ce7 28/12/2021)
+
+- Frontend, backend, libraries
+- Typescript 4.5.X, react-script 5.X, Jest 27.X, ...
+
 ## Feedback form (d1c94ae0 27/12/2021)
 
 - Add feedback prompt in frontend

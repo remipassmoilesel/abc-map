@@ -28,7 +28,7 @@ import Cls from './Search.module.scss';
 import { IconDefs } from '../../../components/icon/IconDefs';
 import { FaIcon } from '../../../components/icon/FaIcon';
 import { useServices } from '../../../core/useServices';
-import { solvesInAtLeast } from '../../../core/utils/solvesInAtLeast';
+import { resolveInAtLeast } from '../../../core/utils/resolveInAtLeast';
 import { InlineLoader } from '../../../components/inline-loader/InlineLoader';
 
 const logger = Logger.get('Search.tsx');
@@ -54,7 +54,7 @@ function Search() {
         setLoading(true);
         setTyping(false);
 
-        solvesInAtLeast(geo.geocode(query), 600)
+        resolveInAtLeast(geo.geocode(query), 600)
           .then((results) => {
             results.sort((res) => res.importance);
             setResults(results);

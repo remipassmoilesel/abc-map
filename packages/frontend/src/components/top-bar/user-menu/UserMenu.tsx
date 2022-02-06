@@ -104,7 +104,7 @@ class UserMenu extends React.Component<Props, State> {
             </Dropdown.Item>
 
             {experimentalFeaturesMenuEntry && (
-              <Dropdown.Item onClick={this.handleExperimentalFeaturesModal}>
+              <Dropdown.Item onClick={this.handleExperimentalFeaturesModal} data-cy={'experimental-features'}>
                 <FaIcon icon={IconDefs.faFlask} className={'mr-3'} />
                 {t('Experimental_features')}
               </Dropdown.Item>

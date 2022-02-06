@@ -48,7 +48,7 @@ describe('LegendRenderer', function () {
   describe('renderSymbol()', () => {
     it('Point, image not loaded', async () => {
       // Prepare
-      const style = StyleFactory.get().getForProperties(TestHelper.sampleStyleProperties(), GeometryType.POINT, 1);
+      const style = StyleFactory.get().getForProperties(TestHelper.sampleStyleProperties(), GeometryType.POINT);
       const imageStub = sinon.createStubInstance(Icon);
       style.setImage(imageStub);
       imageStub.getImageState.returns(ImageState.LOADING);
@@ -75,7 +75,7 @@ describe('LegendRenderer', function () {
 
     it('Point, image loaded', async () => {
       // Prepare
-      const style = StyleFactory.get().getForProperties(TestHelper.sampleStyleProperties(), GeometryType.POINT, 1);
+      const style = StyleFactory.get().getForProperties(TestHelper.sampleStyleProperties(), GeometryType.POINT);
       const imageStub = sinon.createStubInstance(Icon);
       style.setImage(imageStub);
       imageStub.getImageState.returns(ImageState.LOADED);

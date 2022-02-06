@@ -44,6 +44,7 @@ import { Layer } from 'ol/layer';
 import LayerRenderer from 'ol/renderer/Layer';
 import { styleFunction } from '../styles/style-function';
 import { stripHtml } from '../../utils/strings';
+import { DefaultStyleOptions, StyleFactoryOptions } from '../styles/StyleFactoryOptions';
 
 export const logger = Logger.get('LayerWrapper');
 
@@ -168,7 +169,9 @@ export class LayerWrapper<Layer extends OlLayers = OlLayers, Source extends OlSo
   /**
    * Shallow clone layer
    */
-  public shallowClone(styleRatio = 1): LayerWrapper<Layer, Source, Meta> {
+  public shallowClone(_options?: Partial<StyleFactoryOptions>): LayerWrapper<Layer, Source, Meta> {
+    const options: StyleFactoryOptions = { ...DefaultStyleOptions, ..._options };
+
     let layer: TileLayer<TileSource> | VectorImageLayer<VectorSource<Geometry>>;
     if (this.isPredefined()) {
       layer = new TileLayer({ source: this.layer.getSource() as TileSource });
@@ -179,8 +182,8 @@ export class LayerWrapper<Layer extends OlLayers = OlLayers, Source extends OlSo
     } else if (this.isXyz()) {
       layer = new TileLayer({ source: this.layer.getSource() as XYZ });
     } else if (this.isVector()) {
-      layer = new VectorImageLayer({ source: this.layer.getSource() as VectorSource<Geometry>, style: (f) => styleFunction(styleRatio, f) });
-      layer.set(LayerProperties.StyleRatio, styleRatio);
+      layer = new VectorImageLayer({ source: this.layer.getSource() as VectorSource<Geometry>, style: (f) => styleFunction(options, f) });
+      layer.set(LayerProperties.StyleOptions, options);
     } else {
       throw new Error(`Cannot clone layer, type is not supported: ${this.getType()}`);
     }

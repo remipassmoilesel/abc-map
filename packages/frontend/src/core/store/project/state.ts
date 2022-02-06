@@ -18,11 +18,13 @@
 
 import { AbcLayout, AbcProjectMetadata } from '@abc-map/shared';
 import { ProjectFactory } from '../../project/ProjectFactory';
-import { AbcLegend } from '@abc-map/shared';
 import { AbcView } from '@abc-map/shared/build/project/AbcView';
 import { Views } from '../../geo/Views';
 import { AbcSharedView } from '@abc-map/shared';
 
+/**
+ * This state must not contain heavy data (like layer data), because it is persisted in local storage.
+ */
 export interface ProjectState {
   /**
    * Metadata of current project.
@@ -33,11 +35,6 @@ export interface ProjectState {
    * View used on main map, and persisted with project
    */
   mainView: AbcView;
-
-  /**
-   * Legend of current project
-   */
-  legend: AbcLegend;
 
   layouts: {
     /**
@@ -64,11 +61,10 @@ export interface ProjectState {
   };
 }
 
-// This state is not used, a new project is created on bootstrap
+// This state will be replaced by a new projet on bootstrap
 export const projectInitialState: ProjectState = {
   metadata: ProjectFactory.newProjectMetadata(),
   mainView: Views.defaultView(),
-  legend: ProjectFactory.newLegend(),
   layouts: {
     list: [],
   },

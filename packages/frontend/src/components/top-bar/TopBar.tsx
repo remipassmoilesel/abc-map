@@ -58,7 +58,7 @@ function TopBar() {
         <TopBarLink label={t('Data_store')} to={Routes.dataStore().format()} data-cy={'data-store'} />
         <TopBarLink label={t('Data_processing')} to={Routes.dataProcessing().format()} data-cy={'data-processing'} />
         <TopBarLink label={t('Export')} to={Routes.export().format()} data-cy={'export'} />
-        {withSharing && <TopBarLink label={t('Share')} to={Routes.shareSettings().format()} data-cy={'share'} />}
+        {withSharing && <TopBarLink label={t('Share')} to={Routes.shareSettings().format()} data-cy={'share-settings'} />}
         <TopBarLink label={t('Documentation')} to={Routes.documentation().format()} data-cy={'help'} />
         <TopBarLink label={`${t('Support_AbcMap')} 💌`} to={Routes.funding().format()} data-cy={'help'} />
       </div>

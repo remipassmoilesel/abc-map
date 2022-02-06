@@ -39,6 +39,10 @@ export class TopBar {
     return cy.get('[data-cy=top-bar] [data-cy=export]').click();
   }
 
+  public static shareSettings(): Chainable<any> {
+    return cy.get('[data-cy=top-bar] [data-cy=share-settings]').click();
+  }
+
   public static documentation(): Chainable<any> {
     return cy.get('[data-cy=top-bar] [data-cy=help]').click();
   }

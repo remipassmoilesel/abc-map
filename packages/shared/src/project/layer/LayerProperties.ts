@@ -50,7 +50,7 @@ export enum LayerProperties {
    */
   LastLayerChange = 'abc:layers:last-change',
 
-  StyleRatio = 'abc:layers:style-ratio',
+  StyleOptions = 'abc:layers:style-options',
 }
 
 /**

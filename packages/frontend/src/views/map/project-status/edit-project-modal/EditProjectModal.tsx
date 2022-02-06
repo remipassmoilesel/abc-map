@@ -42,6 +42,7 @@ const mapStateToProps = (state: MainState) => ({
   name: state.project.metadata.name,
   projection: state.project.mainView.projection,
   layouts: state.project.layouts.list,
+  sharedViews: state.project.sharedViews.list,
 });
 
 const connector = connect(mapStateToProps);
@@ -74,9 +75,10 @@ class EditProjectModal extends Component<Props, State> {
 
     // As we do not migrate vector features and layouts for the moment, we do not allow projection changes
     // if vector layers or layouts are present.
-    const hasLayouts = !!this.props.layouts.length;
     const hasVectorLayers = !!this.mainMap.getLayers().find((l) => l.isVector());
-    const projectionDisabled = hasVectorLayers || hasLayouts;
+    const hasLayouts = !!this.props.layouts.length;
+    const hasSharedViews = !!this.props.sharedViews.length;
+    const projectionDisabled = hasVectorLayers || hasLayouts || hasSharedViews;
 
     let link: string;
     switch (getLang()) {

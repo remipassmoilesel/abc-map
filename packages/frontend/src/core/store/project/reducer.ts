@@ -18,6 +18,7 @@
 
 import { ActionType, ProjectAction } from './actions';
 import { projectInitialState, ProjectState } from './state';
+import { AbcLegend } from '@abc-map/shared';
 
 /**
  * Warning: this function MUST be fast, and we MUST clone state to return a new state object
@@ -36,7 +37,6 @@ export function projectReducer(state = projectInitialState, action: ProjectActio
         sharedViews: {
           list: action.project.sharedViews,
         },
-        legend: action.project.legend,
       };
     }
 
@@ -89,45 +89,50 @@ export function projectReducer(state = projectInitialState, action: ProjectActio
     }
 
     case ActionType.AddLegendItems: {
-      const newState: ProjectState = { ...state, legend: { ...state.legend } };
-      newState.legend.items = [...state.legend.items, ...action.items];
-      return newState;
+      return transformLegend(state, action.legendId, (legend) => ({
+        ...legend,
+        items: [...legend.items, ...action.items],
+      }));
     }
 
     case ActionType.UpdateLegendItem: {
-      const newState: ProjectState = { ...state, legend: { ...state.legend } };
-      newState.legend.items = state.legend.items.map((item) => {
-        return item.id === action.item.id ? action.item : item;
-      });
-      return newState;
+      return transformLegend(state, action.legendId, (legend) => ({
+        ...legend,
+        items: legend.items.map((item) => {
+          return item.id === action.item.id ? action.item : item;
+        }),
+      }));
     }
 
     case ActionType.SetLegendSize: {
-      const newState: ProjectState = { ...state, legend: { ...state.legend } };
-      newState.legend.width = action.width;
-      newState.legend.height = action.height;
-      return newState;
+      return transformLegend(state, action.legendId, (legend) => ({
+        ...legend,
+        width: action.width,
+        height: action.height,
+      }));
     }
 
     case ActionType.SetLegendDisplay: {
-      const newState: ProjectState = { ...state, legend: { ...state.legend } };
-      newState.legend.display = action.display;
-      return newState;
+      return transformLegend(state, action.legendId, (legend) => ({
+        ...legend,
+        display: action.display,
+      }));
     }
 
     case ActionType.DeleteLegendItem: {
-      const newState: ProjectState = { ...state, legend: { ...state.legend } };
-      newState.legend.items = state.legend.items.filter((it) => it.id !== action.item.id);
-      return newState;
+      return transformLegend(state, action.legendId, (legend) => ({
+        ...legend,
+        items: legend.items.filter((it) => it.id !== action.item.id),
+      }));
     }
 
     case ActionType.SetLegendItemIndex: {
-      const items = state.legend.items.filter((it) => it.id !== action.item.id);
-      items.splice(action.index, 0, action.item);
+      return transformLegend(state, action.legendId, (legend) => {
+        const items = legend.items.filter((it) => it.id !== action.item.id);
+        items.splice(action.index, 0, action.item);
 
-      const newState: ProjectState = { ...state, legend: { ...state.legend } };
-      newState.legend.items = items;
-      return newState;
+        return { ...legend, items };
+      });
     }
 
     case ActionType.AddSharedViews: {
@@ -177,4 +182,26 @@ export function projectReducer(state = projectInitialState, action: ProjectActio
     default:
       return state;
   }
+}
+
+function transformLegend(state: ProjectState, legendId: string, cb: (legend: AbcLegend) => AbcLegend): ProjectState {
+  const newState: ProjectState = { ...state, layouts: { ...state.layouts }, sharedViews: { ...state.sharedViews } };
+
+  newState.layouts.list = newState.layouts.list.map((layout) => {
+    if (layout.legend.id === legendId) {
+      return { ...layout, legend: cb(layout.legend) };
+    } else {
+      return layout;
+    }
+  });
+
+  newState.sharedViews.list = newState.sharedViews.list.map((view) => {
+    if (view.legend.id === legendId) {
+      return { ...view, legend: cb(view.legend) };
+    } else {
+      return view;
+    }
+  });
+
+  return newState;
 }

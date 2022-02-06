@@ -39,11 +39,6 @@ import { Point } from 'ol/geom';
 import { UpdateStyleChangeset } from '../history/changesets/features/UpdateStyleChangeset';
 import { HistoryKey } from '../history/HistoryKey';
 
-// Default parser fail with WMS capabilities
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const { DOMParser } = require('xmldom');
-global.DOMParser = DOMParser;
-
 geoLogger.disable();
 mapLogger.disable();
 

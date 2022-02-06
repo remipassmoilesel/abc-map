@@ -22,10 +22,8 @@ import { FaIcon } from '../../../../components/icon/FaIcon';
 import { IconDefs } from '../../../../components/icon/IconDefs';
 import React, { useCallback, useState } from 'react';
 import { useServices } from '../../../../core/useServices';
-import { AbcSharedView, LayerState, Logger } from '@abc-map/shared';
+import { AbcSharedView, Logger } from '@abc-map/shared';
 import SharingCodesModal from '../sharing-codes-modal/SharingCodesModal';
-import { nanoid } from 'nanoid';
-import { AddSharedViewChangeset } from '../../../../core/history/changesets/shared-views/AddSharedViewChangeset';
 import { prefixedTranslation } from '../../../../i18n/i18n';
 import { useAppSelector } from '../../../../core/store/hooks';
 import LayerVisibilitySelector from './layer-selector/LayerVisibilitySelector';
@@ -34,18 +32,27 @@ import isEqual from 'lodash/isEqual';
 import { withTranslation } from 'react-i18next';
 import { useSaveProjectOnline } from '../../../../core/project/useSaveProjectOnline';
 import { ProjectStatus } from '../../../../core/project/ProjectStatus';
+import { Routes } from '../../../../routes';
+import { useHistory } from 'react-router-dom';
+import { EditLegendControl } from '../../../../components/edit-legend-control/EditLegendControl';
 
 const t = prefixedTranslation('ShareSettingsView:');
 
 const logger = Logger.get('SharingControls.tsx');
 
-function SharingControls() {
+interface Props {
+  onNewView: () => void;
+}
+
+function SharingControls(props: Props) {
   const saveProject = useSaveProjectOnline();
-  const { project, geo, history } = useServices();
+  const { project, history } = useServices();
+  const navHistory = useHistory();
   const [codesModal, showCodesModal] = useState(false);
   const views = useAppSelector((st) => st.project.sharedViews.list);
   const activeViewId = useAppSelector((st) => st.project.sharedViews.activeId);
   const activeView = views.find((v) => v.id === activeViewId);
+  const handleNewView = props.onNewView;
 
   const handlePublish = useCallback(() => {
     saveProject().catch((err) => logger.error('Cannot save project: ', err));
@@ -63,30 +70,6 @@ function SharingControls() {
   }, [project, saveProject]);
 
   const handleToggleSharingCodes = useCallback(() => showCodesModal(!codesModal), [codesModal]);
-
-  const handleNewSharedView = useCallback(() => {
-    const add = async () => {
-      // Create new view from main map
-      const map = geo.getMainMap();
-      const id = nanoid();
-      const title = `${t('View')} ${views.length}`;
-      const layers = map
-        .getLayers()
-        .map((l) => ({ layerId: l.getId(), visible: true }))
-        .filter((st): st is LayerState => !!st.layerId);
-      const view: AbcSharedView = { id, title, view: map.getView(), layers };
-
-      // Create change set, apply and register it
-      const cs = AddSharedViewChangeset.create([view]);
-      await cs.apply();
-      history.register(HistoryKey.SharedViews, cs);
-
-      // Set new layer as active
-      project.setActiveSharedView(id);
-    };
-
-    add().catch((err) => logger.error('Cannot add layer: ', err));
-  }, [geo, history, project, views.length]);
 
   const handleDisableSharing = useCallback(() => {
     project.setPublic(false);
@@ -110,11 +93,23 @@ function SharingControls() {
     [activeView, history]
   );
 
+  // User updates legend
+  const handleEditLegend = useCallback(() => {
+    if (!activeView) {
+      logger.error('No active view');
+      return;
+    }
+
+    navHistory.push(Routes.mapLegend().withParams({ id: activeView.legend.id }));
+  }, [activeView, navHistory]);
+
   return (
     <>
       <HistoryControls historyKey={HistoryKey.SharedViews} />
 
       <div className={'control-block'}>
+        <div className={'alert alert-info'}>{t('Remember_to_publish_your_changes')} 😉</div>
+
         <div className={'control-item'}>
           <button onClick={handleShowPreview} className={'btn btn-link'}>
             <FaIcon icon={IconDefs.faEye} className={'mr-2'} />
@@ -122,15 +117,15 @@ function SharingControls() {
           </button>
         </div>
         <div className={'control-item'}>
-          <button onClick={handlePublish} className={'btn btn-link'}>
+          <button onClick={handlePublish} className={'btn btn-link'} data-cy={'publish'}>
             <FaIcon icon={IconDefs.faUpload} className={'mr-2'} />
             {t('Publish')}
           </button>
         </div>
         <div className={'control-item'}>
-          <button onClick={handleToggleSharingCodes} className={'btn btn-link'}>
+          <button onClick={handleToggleSharingCodes} className={'btn btn-link'} data-cy={'sharing-codes'}>
             <FaIcon icon={IconDefs.faLink} className={'mr-2'} />
-            {t('Address_and_share_code')}
+            {t('Address_and_sharing_codes')}
           </button>
         </div>
         <div className={'control-item'}>
@@ -143,13 +138,14 @@ function SharingControls() {
 
       <div className={'control-block'}>
         <div className={'control-item'}>
-          <button onClick={handleNewSharedView} className={'btn btn-link'}>
+          <button onClick={handleNewView} className={'btn btn-link'}>
             <FaIcon icon={IconDefs.faPlus} className={'mr-2'} />
             {t('New_view')}
           </button>
         </div>
       </div>
 
+      {/* Layer selection */}
       {activeView && (
         <div className={'control-block'}>
           <div className={'control-item'}>{t('Visible_layers')}</div>
@@ -157,6 +153,10 @@ function SharingControls() {
         </div>
       )}
 
+      {/* Legend */}
+      {activeView && <EditLegendControl legendId={activeView?.legend.id} onEdit={handleEditLegend} />}
+
+      {/* Sharing codes */}
       {codesModal && <SharingCodesModal onClose={handleToggleSharingCodes} />}
     </>
   );

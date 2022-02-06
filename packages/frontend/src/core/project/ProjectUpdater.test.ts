@@ -22,6 +22,7 @@ import sinon, { SinonStubbedInstance } from 'sinon';
 import { TestHelper } from '../utils/test/TestHelper';
 import { ModalService } from '../ui/ModalService';
 import { TestData } from './migrations/test-data/TestData';
+import { ProjectConstants } from '@abc-map/shared';
 
 logger.disable();
 
@@ -99,7 +100,8 @@ describe('ProjectUpdater', () => {
 
       const result = await updater.update(project.manifest, project.files);
 
-      expect(result.manifest.metadata.version).toEqual('0.6.0');
+      expect(result.manifest.metadata.version).toEqual('0.7.0');
+      expect(result.manifest.metadata.version).toEqual(ProjectConstants.CurrentVersion);
     });
   });
 });

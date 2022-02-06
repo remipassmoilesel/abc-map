@@ -81,7 +81,7 @@ describe('View', () => {
 
       // Assert
       expect(actual.resolution).toEqual(39135);
-      expect(actual.center).toEqual([1113194.9079327357, 5621521.486192066]);
+      expect(actual.center).toEqual([1113194.907932736, 5621521.486192066]);
       expect(actual.projection.name).toEqual(original.getProjection().getCode());
     });
 

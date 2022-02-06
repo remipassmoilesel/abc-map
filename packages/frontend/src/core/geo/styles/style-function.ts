@@ -20,14 +20,15 @@ import { StyleFactory } from './StyleFactory';
 import { FeatureWrapper } from '../features/FeatureWrapper';
 import { Logger } from '@abc-map/shared';
 import { Style } from 'ol/style';
+import { StyleFactoryOptions } from './StyleFactoryOptions';
 
 const logger = Logger.get('style-function.ts');
 
-export const styleFunction = function (ratio: number, f: FeatureLike): Style[] {
+export const styleFunction = function (options: StyleFactoryOptions, f: FeatureLike): Style[] {
   const feature = FeatureWrapper.fromUnknown(f);
   if (!feature) {
     return [];
   }
 
-  return StyleFactory.get().getForFeature(feature, ratio);
+  return StyleFactory.get().getForFeature(feature, options);
 };

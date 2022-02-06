@@ -39,8 +39,8 @@ export class MapFactory {
     const internal = new Map({
       controls: [],
       interactions: [],
-      view: Views.defaultOlView(),
       layers: [],
+      view: Views.defaultOlView(),
     });
 
     const map = MapWrapper.from(internal);
@@ -53,8 +53,8 @@ export class MapFactory {
     const internal = new Map({
       controls: [],
       interactions: [],
-      view: Views.defaultOlView(),
       layers: [],
+      view: Views.defaultOlView(),
     });
 
     return MapWrapper.from(internal);

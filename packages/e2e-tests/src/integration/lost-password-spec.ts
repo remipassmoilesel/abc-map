@@ -19,6 +19,7 @@
 import { TestHelper } from '../helpers/TestHelper';
 import { Registration } from '../helpers/Registration';
 import { Toasts } from '../helpers/Toasts';
+import { UrlHelper } from '../helpers/UrlHelper';
 
 describe('Reset password', function () {
   beforeEach(() => {
@@ -51,7 +52,7 @@ describe('Reset password', function () {
       .then((content) => {
         const resetLink = Cypress.$(content).find('a[data-cy=reset-password-link]').attr('href') || '';
         expect(resetLink).to.match(/^http:\/\/localhost:[0-9]+\/[a-z]{2}\/reset-password\//);
-        return cy.visit(resetLink);
+        return cy.visit(UrlHelper.adaptToConfig(resetLink));
       })
       // Fill form reset password form
       .get('[data-cy=new-password]')

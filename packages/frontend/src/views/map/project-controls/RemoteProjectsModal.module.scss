@@ -28,33 +28,10 @@
   border: solid 0.1rem darkgray;
 }
 
-.item {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-
-  margin: 0.4rem 0;
-  padding: 0.5rem;
-  cursor: pointer;
-}
-
-.selected {
-  color: white;
-  background-color: $primary;
-
-  :global(.abc-icon) {
-    color: white;
-  }
-}
-
 .passwordInput {
   margin: 1rem 0;
 
   input {
     margin: 1rem 0;
   }
-}
-
-.deleteConfirmation {
-  margin: 1rem 0;
 }

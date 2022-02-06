@@ -34,6 +34,7 @@ import Geometry from 'ol/geom/Geometry';
 import Feature from 'ol/Feature';
 import Map from 'ol/Map';
 import MapBrowserEvent from 'ol/MapBrowserEvent';
+import { DefaultStyleOptions } from '../../../geo/styles/StyleFactoryOptions';
 
 const logger = Logger.get('DrawInteraction');
 
@@ -175,10 +176,10 @@ export class DrawInteractionsBundle {
       freehandCondition: () => false,
       style: (f) => {
         if (f.getGeometry()?.getType() === GeometryType.POINT) {
-          return styleFunction(1, f).concat(editingStyle.Point);
+          return styleFunction(DefaultStyleOptions, f).concat(editingStyle.Point);
         }
 
-        return styleFunction(1, f);
+        return styleFunction(DefaultStyleOptions, f);
       },
       stopClick: true,
       // Snap tolerance is low in order to allow users to draw close vertices

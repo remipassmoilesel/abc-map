@@ -16,9 +16,10 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { useEffect, useRef } from 'react';
+import Cls from './SharingLayoutMap.module.scss';
+import { useCallback, useEffect, useState } from 'react';
 import { MapFactory } from '../../../core/geo/map/MapFactory';
-import { LayerState, Logger } from '@abc-map/shared';
+import { AbcSharedView, AbcView, getAbcWindow, LayerState, Logger } from '@abc-map/shared';
 import SideMenu from '../../../components/side-menu/SideMenu';
 import { IconDefs } from '../../../components/icon/IconDefs';
 import { useAppSelector } from '../../../core/store/hooks';
@@ -26,12 +27,20 @@ import { useServices } from '../../../core/useServices';
 import SharingControls from './sharing-controls/SharingControls';
 import { nanoid } from 'nanoid';
 import SharedViewList from './shared-view-list/SharedViewList';
-import Cls from './SharingLayoutMap.module.scss';
 import { UpdateSharedViewsChangeset } from '../../../core/history/changesets/shared-views/UpdateSharedViewChangeset';
 import { HistoryKey } from '../../../core/history/HistoryKey';
 import isEqual from 'lodash/isEqual';
 import { prefixedTranslation } from '../../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
+import { AddSharedViewChangeset } from '../../../core/history/changesets/shared-views/AddSharedViewChangeset';
+import { LegendFactory } from '../../../core/project/LegendFactory';
+import { useActiveSharedView } from '../../../core/project/useActiveSharedView';
+import { MapWrapper } from '../../../core/geo/map/MapWrapper';
+import { MapLegend } from '../../../components/map-legend/MapLegend';
+import { MapUi } from '../../../components/map-ui/MapUi';
+import { DimensionsPx } from '../../../core/utils/DimensionsPx';
+import { toPrecision } from '../../../core/utils/numbers';
+import { E2eMapWrapper } from '../../../core/geo/map/E2eMapWrapper';
 
 const t = prefixedTranslation('ShareSettingsView:');
 
@@ -39,91 +48,117 @@ const logger = Logger.get('SharingLayoutMap');
 
 function SharingLayoutMap() {
   const { project, geo, history } = useServices();
-  const previewMap = useRef(MapFactory.createDefault());
-  const mapTarget = useRef<HTMLDivElement>(null);
-
+  const [map, setMap] = useState<MapWrapper>();
+  const [styleRatio, setStyleRatio] = useState(1);
+  const [{ width: mapWidth, height: mapHeight }, setMapDimensions] = useState<DimensionsPx>({ width: 0, height: 0 });
   const sharedViews = useAppSelector((st) => st.project.sharedViews.list);
-  const activeViewId = useAppSelector((st) => st.project.sharedViews.activeId);
-  const activeView = activeViewId ? sharedViews.find((v) => v.id === activeViewId) : undefined;
+  const activeView = useActiveSharedView();
+  const [previewView, setPreviewView] = useState<AbcView>();
 
   // Setup map on mount
   useEffect(() => {
-    if (!mapTarget.current) {
-      logger.error('Cannot display map, target not ready');
+    if (!map) {
+      const map = MapFactory.createDefault();
+      setMap(map);
+      getAbcWindow().abc.sharingLayoutMap = new E2eMapWrapper(map);
+    }
+  }, [geo, map]);
+
+  // Update map dimensions for style ratio
+  const handleMapSizeChanged = useCallback((d: DimensionsPx) => setMapDimensions(d), []);
+
+  // Compute style ratio
+  useEffect(() => {
+    if (!mapWidth || !mapHeight) {
       return;
     }
 
-    const mainMap = geo.getMainMap();
-    previewMap.current.setTarget(mapTarget.current);
-    previewMap.current.importLayersFrom(mainMap);
-  }, [geo]);
+    const ratio = geo.getMainMap().getMainRatio(mapWidth, mapHeight);
+    setStyleRatio(ratio);
+  }, [mapWidth, mapHeight, geo]);
 
   // Update map when visible layers change
   useEffect(() => {
-    if (!previewMap.current || !activeView?.layers) {
-      logger.error('Cannot update preview map, not ready');
+    if (!map || !activeView?.layers) {
+      logger.debug('Cannot update preview map, not ready');
       return;
     }
 
     const mainMap = geo.getMainMap();
-    previewMap.current.importLayersFrom(mainMap);
-    const layers = previewMap.current.getLayers();
+    map.importLayersFrom(mainMap, { withSelection: false, ratio: styleRatio });
 
+    const layers = map.getLayers();
     for (const layerState of activeView.layers) {
       layers.find((lay) => lay.getId() === layerState.layerId)?.setVisible(layerState.visible);
     }
-  }, [activeView?.layers, geo]);
+  }, [activeView?.layers, geo, map, styleRatio]);
 
-  // Create layout if none. This action is not undoable.
+  // Set map view when active shared view change
   useEffect(() => {
-    if (!sharedViews.length) {
-      const mainMap = geo.getMainMap();
-      const id = nanoid();
-      const layers: LayerState[] = mainMap
-        .getLayers()
-        .map((layer) => ({ layerId: layer.getId(), visible: true }))
-        .filter((st): st is LayerState => !!st.layerId);
-      project.addSharedViews([{ id, title: t('Main_view'), view: mainMap.getView(), layers }]);
-      project.setActiveSharedView(id);
-    }
-  }, [geo, project, sharedViews.length]);
-
-  // Set map view when active shared view changes
-  useEffect(() => {
-    if (!activeView) {
+    if (!activeView?.view || !map || !mapWidth || !mapHeight) {
+      logger.debug('Cannot update map, reference not ready', { view: activeView?.view, map });
       return;
     }
 
-    if (!previewMap.current) {
-      logger.error('Cannot update map, reference not ready');
-      return;
-    }
-
-    previewMap.current.setView(activeView.view);
-  }, [activeViewId, project, activeView, activeView?.view]);
-
-  // Update view when map position changes
-  useEffect(() => {
-    const map = previewMap.current;
-    const listener = () => {
-      const sharedViews = project.getActiveSharedView();
-      if (!sharedViews) {
-        logger.error('Active view not found');
-        return;
-      }
-
-      const newView = map.getView();
-      if (!isEqual(sharedViews.view, newView)) {
-        const cs = UpdateSharedViewsChangeset.create([{ before: sharedViews, after: { ...sharedViews, view: map.getView() } }]);
-        cs.apply()
-          .then(() => history.register(HistoryKey.SharedViews, cs))
-          .catch((err) => logger.error('Cannot update shared view: ', err));
-      }
+    const ratio = geo.getMainMap().getMainRatio(mapWidth, mapHeight);
+    const updatedView = {
+      resolution: toPrecision(activeView.view.resolution / ratio, 9),
+      projection: activeView.view.projection,
+      center: activeView.view.center.slice(),
     };
 
-    map.addViewMoveListener(listener);
-    return () => map?.removeViewMoveListener(listener);
-  }, [history, project]);
+    if (!isEqual(previewView, updatedView)) {
+      setPreviewView(updatedView);
+    }
+  }, [project, activeView?.view, map, mapWidth, mapHeight, geo, previewView]);
+
+  // Update view when user change map position
+  const handleViewMove = useCallback(() => {
+    const sharedView = project.getActiveSharedView();
+    if (!map || !sharedView || !mapWidth || !mapHeight) {
+      logger.error('Cannot register view, not ready', { map, sharedView, mapWidth, mapHeight });
+      return;
+    }
+
+    const ratio = geo.getMainMap().getMainRatio(mapWidth, mapHeight);
+    const previewView = map.getView();
+    const view: AbcView = {
+      resolution: toPrecision(previewView.resolution * ratio, 9),
+      projection: previewView.projection,
+      center: previewView.center.slice(),
+    };
+
+    if (!isEqual(sharedView.view, view)) {
+      const cs = UpdateSharedViewsChangeset.create([{ before: sharedView, after: { ...sharedView, view } }]);
+      cs.apply()
+        .then(() => history.register(HistoryKey.SharedViews, cs))
+        .catch((err) => logger.error('Cannot update shared view: ', err));
+    }
+  }, [geo, history, map, mapHeight, mapWidth, project]);
+
+  const handleNewView = useCallback(() => {
+    const add = async () => {
+      // Create new view from main map
+      const map = geo.getMainMap();
+      const id = nanoid();
+      const title = `${t('View')} ${sharedViews.length + 1}`;
+      const layers = map
+        .getLayers()
+        .map((l) => ({ layerId: l.getId(), visible: true }))
+        .filter((st): st is LayerState => !!st.layerId);
+      const view: AbcSharedView = { id, title, view: map.getView(), layers, legend: LegendFactory.newEmptyLegend() };
+
+      // Create change set, apply and register it
+      const cs = AddSharedViewChangeset.create([view]);
+      await cs.apply();
+      history.register(HistoryKey.SharedViews, cs);
+
+      // Set new layer as active
+      project.setActiveSharedView(id);
+    };
+
+    add().catch((err) => logger.error('Cannot add layer: ', err));
+  }, [geo, history, project, sharedViews.length]);
 
   return (
     <>
@@ -135,11 +170,23 @@ function SharingLayoutMap() {
         buttonStyle={{ top: '50vh', left: '2rem' }}
         title={t('View_list')}
       >
-        <SharedViewList />
+        <SharedViewList onNewView={handleNewView} />
       </SideMenu>
 
       {/* Preview map */}
-      <div ref={mapTarget} className={Cls.map} />
+      {map && (
+        <MapUi
+          map={map}
+          view={previewView}
+          onViewMove={handleViewMove}
+          width={'65vw'}
+          height={'65vh'}
+          onSizeChange={handleMapSizeChanged}
+          className={Cls.map}
+          data-cy={'sharing-layout-map'}
+        />
+      )}
+      {activeView && map && <MapLegend legend={activeView.legend} map={map} ratio={styleRatio} />}
 
       {/* Controls on right */}
       <SideMenu
@@ -148,8 +195,9 @@ function SharingLayoutMap() {
         buttonIcon={IconDefs.faCogs}
         buttonStyle={{ top: '50vh', right: '2rem' }}
         title={t('Configuration')}
+        initiallyOpened={true}
       >
-        <SharingControls />
+        <SharingControls onNewView={handleNewView} />
       </SideMenu>
     </>
   );

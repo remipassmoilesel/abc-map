@@ -37,6 +37,7 @@ export const CounterNames = {
   ProjectSaved: `${Prefix}_project_saved`,
   ProjectList: `${Prefix}_project_list`,
   ProjectFetch: `${Prefix}_project_fetch`,
+  SharedProjectFetch: `${Prefix}_shared_project_fetch`,
   Vote: `${Prefix}_vote`,
   TextFeedback: `${Prefix}_text_feedback`,
 };
@@ -100,7 +101,11 @@ export const Counters: { [k: string]: CounterConfiguration<string> } = {
   },
   [CounterNames.ProjectFetch]: {
     name: CounterNames.ProjectFetch,
-    help: 'Number project read requests',
+    help: 'Number of project read requests',
+  },
+  [CounterNames.SharedProjectFetch]: {
+    name: CounterNames.SharedProjectFetch,
+    help: 'Number of shared project read requests',
   },
   [CounterNames.Vote]: {
     name: CounterNames.Vote,

@@ -26,6 +26,7 @@ import Style from 'ol/style/Style';
 import { IconName } from '../../../assets/point-icons/IconName';
 import { FeatureWrapper } from '../features/FeatureWrapper';
 import { GeometryType } from '@abc-map/shared';
+import { DefaultStyleOptions } from './StyleFactoryOptions';
 
 // TODO: test other geometries
 
@@ -45,14 +46,14 @@ describe('StyleFactory', () => {
         feature.setStyleProperties(properties);
         cache.get.returns(undefined);
 
-        const styles = factory.getForFeature(feature, 1);
+        const styles = factory.getForFeature(feature, { ratio: 4 });
 
         expect(styles.length).toEqual(1);
         expect(cache.get.callCount).toEqual(1);
         expect(cache.put.callCount).toEqual(1);
         expect(cache.put.args[0][0]).toEqual('Point');
         expect(cache.put.args[0][1]).toEqual(properties);
-        expect(cache.put.args[0][2]).toEqual(1);
+        expect(cache.put.args[0][2]).toEqual({ ...DefaultStyleOptions, ratio: 4 });
         expect(cache.put.args[0][3]).toEqual(styles[0]);
       });
 
@@ -63,7 +64,7 @@ describe('StyleFactory', () => {
         const style = new Style();
         cache.get.returns(style);
 
-        const styles = factory.getForFeature(feature, 1);
+        const styles = factory.getForFeature(feature);
 
         expect(styles.length).toEqual(1);
         expect(cache.get.callCount).toEqual(1);
@@ -75,12 +76,30 @@ describe('StyleFactory', () => {
       it('should sort styles', () => {
         // Prepare
         const cacheContent: StyleCacheEntry[] = [
-          { id: '6', ratio: 1, geomType: GeometryType.POLYGON, properties: { fill: { color1: '#FFFFFF' } }, style: new Style() },
-          { id: '5', ratio: 1, geomType: GeometryType.POLYGON, properties: { fill: { color1: '#FFFF00' } }, style: new Style() },
-          { id: '4', ratio: 1, geomType: GeometryType.POLYGON, properties: { fill: { color1: '#000000' } }, style: new Style() },
-          { id: '3', ratio: 1, geomType: GeometryType.POINT, properties: { point: { size: 25 } }, style: new Style() },
-          { id: '2', ratio: 1, geomType: GeometryType.POINT, properties: { point: { size: 15 } }, style: new Style() },
-          { id: '1', ratio: 1, geomType: GeometryType.POINT, properties: { point: { size: 5 } }, style: new Style() },
+          {
+            id: '6',
+            options: { ratio: 1, withSelection: true },
+            geomType: GeometryType.POLYGON,
+            properties: { fill: { color1: '#FFFFFF' } },
+            style: new Style(),
+          },
+          {
+            id: '5',
+            options: { ratio: 1, withSelection: true },
+            geomType: GeometryType.POLYGON,
+            properties: { fill: { color1: '#FFFF00' } },
+            style: new Style(),
+          },
+          {
+            id: '4',
+            options: { ratio: 1, withSelection: true },
+            geomType: GeometryType.POLYGON,
+            properties: { fill: { color1: '#000000' } },
+            style: new Style(),
+          },
+          { id: '3', options: { ratio: 1, withSelection: true }, geomType: GeometryType.POINT, properties: { point: { size: 25 } }, style: new Style() },
+          { id: '2', options: { ratio: 1, withSelection: true }, geomType: GeometryType.POINT, properties: { point: { size: 15 } }, style: new Style() },
+          { id: '1', options: { ratio: 1, withSelection: true }, geomType: GeometryType.POINT, properties: { point: { size: 5 } }, style: new Style() },
         ];
         cache.getAll.returns(cacheContent);
 
@@ -112,7 +131,7 @@ describe('StyleFactory', () => {
         };
         feature.setStyleProperties(properties);
 
-        const style = factory.getForFeature(feature, 1);
+        const style = factory.getForFeature(feature);
 
         expect(style).toHaveLength(1);
         expect(style[0].getImage().getImageSize()).toEqual([25, 25]);
@@ -135,7 +154,7 @@ describe('StyleFactory', () => {
         feature.setStyleProperties(properties);
         feature.setSelected(true);
 
-        const style = factory.getForFeature(feature, 1);
+        const style = factory.getForFeature(feature);
 
         expect(style).toHaveLength(2);
         expect(style[0].getImage().getImageSize()).toEqual([25, 25]);

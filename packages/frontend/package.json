@@ -61,11 +61,12 @@
     "lodash": "^4.17.21",
     "luxon": "^2.2.0",
     "mousetrap": "^1.6.5",
-    "nanoid": "^3.1.30",
+    "nanoid": "^3.2.0",
     "ol": "6.12.0",
     "papaparse": "^5.3.1",
     "prismjs": "1.25.0",
     "proj4": "^2.7.5",
+    "qrcode": "^1.5.0",
     "react": "^17.0.2",
     "react-bootstrap": "^2.0.4",
     "react-color": "^2.19.3",
@@ -104,6 +105,7 @@
     "@types/papaparse": "^5.3.1",
     "@types/prismjs": "^1.16.6",
     "@types/proj4": "^2.5.2",
+    "@types/qrcode": "^1.4.2",
     "@types/react": "^17.0.38",
     "@types/react-color": "^3.0.6",
     "@types/react-dom": "^17.0.11",
@@ -139,8 +141,7 @@
     "react-test-renderer": "^17.0.2",
     "stream-browserify": "^3.0.0",
     "typescript": "^4.5.4",
-    "webpack-bundle-analyzer": "^4.5.0",
-    "xmldom": "^0.6.0"
+    "webpack-bundle-analyzer": "^4.5.0"
   },
   "proxy": "http://127.0.0.1:10082"
 }

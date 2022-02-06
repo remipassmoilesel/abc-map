@@ -119,6 +119,10 @@ export class MetricsService extends AbstractService {
     this.counters[CounterNames.ProjectFetch]?.inc();
   }
 
+  public sharedProjectFetch() {
+    this.counters[CounterNames.SharedProjectFetch]?.inc();
+  }
+
   public vote() {
     this.counters[CounterNames.Vote]?.inc();
   }

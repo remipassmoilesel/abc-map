@@ -32,7 +32,7 @@ import { WmsSettings } from '../../../../../core/geo/layers/LayerFactory.types';
 import { prefixedTranslation } from '../../../../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
 import Cls from './WmsLayerPanel.module.scss';
-import { solvesInAtLeast } from '../../../../../core/utils/solvesInAtLeast';
+import { resolveInAtLeast } from '../../../../../core/utils/resolveInAtLeast';
 
 const logger = Logger.get('WmsLayerPanel.tsx');
 
@@ -254,7 +254,7 @@ class WmsLayerPanel extends Component<Props, State> {
       auth = { username: value.auth.username, password: value.auth.password };
     }
 
-    solvesInAtLeast(geo.getWmsCapabilities(value.capabilitiesUrl, auth), 600)
+    resolveInAtLeast(geo.getWmsCapabilities(value.capabilitiesUrl, auth), 600)
       .then((capabilities) => this.setState({ capabilities }))
       .catch((err) => {
         toasts.error(t('Cannot_get_capacities'));

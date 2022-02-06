@@ -84,33 +84,39 @@ export interface SetActiveLayout {
 export interface AddLegendItems {
   type: ActionType.AddLegendItems;
   items: AbcLegendItem[];
+  legendId: string;
 }
 
 export interface UpdateLegendItem {
   type: ActionType.UpdateLegendItem;
   item: AbcLegendItem;
+  legendId: string;
 }
 
 export interface SetLegendSize {
   type: ActionType.SetLegendSize;
   width: number;
   height: number;
+  legendId: string;
 }
 
 export interface SetLegendDisplay {
   type: ActionType.SetLegendDisplay;
   display: LegendDisplay;
+  legendId: string;
 }
 
 export interface DeleteLegendItem {
   type: ActionType.DeleteLegendItem;
   item: AbcLegendItem;
+  legendId: string;
 }
 
 export interface SetLegendItemIndex {
   type: ActionType.SetLegendItemIndex;
   item: AbcLegendItem;
   index: number;
+  legendId: string;
 }
 
 export interface AddSharedViews {
@@ -222,47 +228,53 @@ export class ProjectActions {
     };
   }
 
-  public static addLegendItems(items: AbcLegendItem[]): ProjectAction {
+  public static addLegendItems(legendId: string, items: AbcLegendItem[]): ProjectAction {
     return {
       type: ActionType.AddLegendItems,
       items,
+      legendId,
     };
   }
 
-  public static updateLegendItem(item: AbcLegendItem): ProjectAction {
+  public static updateLegendItem(legendId: string, item: AbcLegendItem): ProjectAction {
     return {
       type: ActionType.UpdateLegendItem,
       item,
+      legendId,
     };
   }
 
-  public static setLegendSize(width: number, height: number): ProjectAction {
+  public static setLegendSize(legendId: string, width: number, height: number): ProjectAction {
     return {
       type: ActionType.SetLegendSize,
       width,
       height,
+      legendId,
     };
   }
 
-  public static setLegendDisplay(display: LegendDisplay): ProjectAction {
+  public static setLegendDisplay(legendId: string, display: LegendDisplay): ProjectAction {
     return {
       type: ActionType.SetLegendDisplay,
       display,
+      legendId,
     };
   }
 
-  public static deleteLegendItem(item: AbcLegendItem): ProjectAction {
+  public static deleteLegendItem(legendId: string, item: AbcLegendItem): ProjectAction {
     return {
       type: ActionType.DeleteLegendItem,
       item,
+      legendId,
     };
   }
 
-  public static setLegendItemIndex(item: AbcLegendItem, index: number): ProjectAction {
+  public static setLegendItemIndex(legendId: string, item: AbcLegendItem, index: number): ProjectAction {
     return {
       type: ActionType.SetLegendItemIndex,
       item,
       index,
+      legendId,
     };
   }
 

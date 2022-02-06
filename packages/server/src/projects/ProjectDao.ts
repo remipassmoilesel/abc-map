@@ -44,6 +44,10 @@ export class ProjectDao {
   }
 
   public async saveAllMetadata(projects: ProjectDocument[]): Promise<void> {
+    if (!projects.length) {
+      return;
+    }
+
     const coll = await this.collection();
     const bulk = coll.initializeUnorderedBulkOp();
     projects.forEach((doc) =>
@@ -131,5 +135,10 @@ export class ProjectDao {
     const cursor = collection.aggregate(pipeline);
     const result = (await cursor.next()) as unknown as { projects: number } | null;
     return result?.projects || 0;
+  }
+
+  public async exists(id: string): Promise<boolean> {
+    const collection = await this.collection();
+    return !!(await collection.find({ _id: id }).project({ _id: 1 }).limit(1).toArray());
   }
 }

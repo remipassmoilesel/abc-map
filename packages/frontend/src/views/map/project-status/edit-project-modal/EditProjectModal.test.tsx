@@ -46,6 +46,9 @@ describe('EditProjectModal', () => {
       layouts: {
         list: [],
       },
+      sharedViews: {
+        list: [],
+      },
     } as any,
   };
 

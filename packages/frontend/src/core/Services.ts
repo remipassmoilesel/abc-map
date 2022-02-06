@@ -26,9 +26,7 @@ import { MainStore, mainStore } from './store/store';
 import { ToastService } from './ui/ToastService';
 import { ModalService } from './ui/ModalService';
 import { FeedbackService } from './feedback/FeedbackService';
-import { StyleFactory } from './geo/styles/StyleFactory';
 import { LegalMentionsService } from './legal-mentions/LegalMentionsService';
-import { ProjectEventType } from './project/ProjectEvent';
 import { Logger } from '@abc-map/shared';
 import { LocalStorageService } from './local-storage/LocalStorageService';
 
@@ -70,22 +68,6 @@ export function servicesFactory(store: MainStore): Services {
   const feedback = new FeedbackService(apiClient, toasts);
   const legalMentions = new LegalMentionsService(downloadClient, toasts);
   const storage = new LocalStorageService();
-
-  // When project loaded, we clean style cache and undo/redo history
-  project.addProjectLoadedListener((ev) => {
-    if (ProjectEventType.ProjectLoaded === ev.type) {
-      history.resetHistory();
-      StyleFactory.get().clearCache();
-    } else {
-      logger.error('Unhandled event type: ', ev);
-    }
-  });
-
-  // When main map move we save view in project
-  geo.getMainMap().addViewMoveListener(() => {
-    const view = geo.getMainMap().getView();
-    project.setView(view);
-  });
 
   return {
     project,

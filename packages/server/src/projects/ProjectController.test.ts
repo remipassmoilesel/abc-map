@@ -299,7 +299,9 @@ describe('ProjectController', () => {
       assert.equal(res.statusCode, 403);
     });
 
-    it('should work for public project with anonymous user', async () => {
+    it('should fail for public project with anonymous user', async () => {
+      // Prepare
+      // Anonymous users should not be able to access project via this route
       const project3 = await TestHelper.sampleCompressedProject();
       project3.metadata.public = true;
       await services.project.save(user1.id, project3);
@@ -307,6 +309,73 @@ describe('ProjectController', () => {
       // Act
       const res = await server.getApp().inject({
         url: `/api/projects/${project3.metadata.id}`,
+        method: 'GET',
+        headers: { ...testAuth.anonymous() },
+      });
+
+      assert.equal(res.statusCode, 403);
+    });
+
+    it('should fail for public project with connected user', async () => {
+      // Prepare
+      // Users should not be able to access project of other users via this route
+      const project3 = await TestHelper.sampleCompressedProject();
+      project3.metadata.public = true;
+      await services.project.save(user2.id, project3);
+
+      // Act
+      const res = await server.getApp().inject({
+        url: `/api/projects/${project3.metadata.id}`,
+        method: 'GET',
+        headers: user1Auth,
+      });
+
+      assert.equal(res.statusCode, 403);
+    });
+  });
+
+  describe('GET /api/projects/shared/:projectId', () => {
+    it('should fail for non connected user and private project', async () => {
+      const res = await server.getApp().inject({
+        url: `/api/projects/shared/${project1.metadata.id}`,
+        method: 'GET',
+      });
+
+      assert.equal(res.statusCode, 403);
+    });
+
+    it('should fail for non connected user and public project', async () => {
+      const project3 = await TestHelper.sampleCompressedProject();
+      project3.metadata.public = true;
+      await services.project.save(user1.id, project3);
+
+      // Act
+      const res = await server.getApp().inject({
+        url: `/api/projects/shared/${project3.metadata.id}`,
+        method: 'GET',
+      });
+
+      assert.equal(res.statusCode, 403);
+    });
+
+    it('should fail for private project with anonymous user', async () => {
+      const res = await server.getApp().inject({
+        url: `/api/projects/shared/${project1.metadata.id}`,
+        method: 'GET',
+        headers: { ...testAuth.anonymous() },
+      });
+
+      assert.equal(res.statusCode, 403);
+    });
+
+    it('should work for public project with anonymous user', async () => {
+      const project3 = await TestHelper.sampleCompressedProject();
+      project3.metadata.public = true;
+      await services.project.save(user1.id, project3);
+
+      // Act
+      const res = await server.getApp().inject({
+        url: `/api/projects/shared/${project3.metadata.id}`,
         method: 'GET',
         headers: { ...testAuth.anonymous() },
       });
@@ -321,7 +390,7 @@ describe('ProjectController', () => {
 
       // Act
       const res = await server.getApp().inject({
-        url: `/api/projects/${project3.metadata.id}`,
+        url: `/api/projects/shared/${project3.metadata.id}`,
         method: 'GET',
         headers: user1Auth,
       });

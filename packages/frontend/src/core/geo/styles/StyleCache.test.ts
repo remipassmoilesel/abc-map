@@ -21,6 +21,7 @@ import { TestHelper } from '../../utils/test/TestHelper';
 import { Style } from 'ol/style';
 import { FeatureStyle } from '@abc-map/shared';
 import { GeometryType } from '@abc-map/shared';
+import { DefaultStyleOptions } from './StyleFactoryOptions';
 
 describe('StyleCache', function () {
   let cache: StyleCache;
@@ -33,16 +34,16 @@ describe('StyleCache', function () {
 
   it('should return style', function () {
     const style = new Style();
-    cache.put(GeometryType.LINE_STRING, props, 1, style);
+    cache.put(GeometryType.LINE_STRING, props, DefaultStyleOptions, style);
 
-    const fromCache = cache.get(GeometryType.LINE_STRING, props, 1);
+    const fromCache = cache.get(GeometryType.LINE_STRING, props, DefaultStyleOptions);
 
     expect(fromCache).toStrictEqual(style);
   });
 
   it('should return nothing if properties are different', function () {
     const style = new Style();
-    cache.put(GeometryType.LINE_STRING, props, 1, style);
+    cache.put(GeometryType.LINE_STRING, props, DefaultStyleOptions, style);
     const otherProps: FeatureStyle = {
       ...props,
       fill: {
@@ -50,25 +51,25 @@ describe('StyleCache', function () {
       },
     };
 
-    const fromCache = cache.get(GeometryType.LINE_STRING, otherProps, 1);
+    const fromCache = cache.get(GeometryType.LINE_STRING, otherProps, DefaultStyleOptions);
 
     expect(fromCache).toBeUndefined();
   });
 
   it('should return nothing if geometry is different', function () {
     const style = new Style();
-    cache.put(GeometryType.LINE_STRING, props, 1, style);
+    cache.put(GeometryType.LINE_STRING, props, DefaultStyleOptions, style);
 
-    const fromCache = cache.get(GeometryType.POLYGON, props, 1);
+    const fromCache = cache.get(GeometryType.POLYGON, props, DefaultStyleOptions);
 
     expect(fromCache).toBeUndefined();
   });
 
-  it('should return nothing if ratio is different', function () {
+  it('should return nothing if options are different', function () {
     const style = new Style();
-    cache.put(GeometryType.LINE_STRING, props, 1, style);
+    cache.put(GeometryType.LINE_STRING, props, DefaultStyleOptions, style);
 
-    const fromCache = cache.get(GeometryType.LINE_STRING, props, 0.5);
+    const fromCache = cache.get(GeometryType.LINE_STRING, props, { ...DefaultStyleOptions, withSelection: false });
 
     expect(fromCache).toBeUndefined();
   });

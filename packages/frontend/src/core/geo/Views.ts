@@ -77,12 +77,12 @@ export class Views {
   }
 
   public static olToAbc(view: View): AbcView {
-    const prevision = 10;
+    const precision = 9;
     const olProj = view.getProjection();
     const projection = olProj ? { name: olProj.getCode() } : DefaultView.projection;
     return {
-      center: (view.getCenter() || DefaultView.center).map((n) => toPrecision(n, prevision)),
-      resolution: toPrecision(view.getResolution() || DefaultView.resolution, prevision),
+      center: (view.getCenter() || DefaultView.center).map((n) => toPrecision(n, precision)),
+      resolution: toPrecision(view.getResolution() || DefaultView.resolution, precision),
       projection,
     };
   }

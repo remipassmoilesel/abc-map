@@ -74,7 +74,9 @@
       "Scale": "Scale",
       "Attributions": "Attributions",
       "Zoom_in": "Zoom in",
-      "Zoom_out": "Zoom out"
+      "Zoom_out": "Zoom out",
+      "Import_in_progress": "Import in progress ...",
+      "Done": "Import done !"
     },
     "ProjectStatus": {
       "Projection": "Projection",
@@ -97,6 +99,7 @@
     },
     "ProjectControls": {
       "Open_project": "Open project",
+      "My_projects": "My projects",
       "Save_online": "Save project online",
       "New_project": "New project",
       "Import_project": "Import project",
@@ -108,12 +111,16 @@
       "Incorrect_password": "Incorrect password !",
       "Password_is_mandatory": "Password is required to open this project",
       "Project_saved": "Project saved !",
-      "New_project_created": "New project !"
+      "New_project_created": "New project !",
+      "Opening_in_progress": "Opening in progress ...",
+      "Export_in_progress": "Export in progress ...",
+      "Export_done": "Export done !"
     },
     "ImportData": {
       "Import_data": "Import data",
       "You_can_also_drop_on_map": "You can also drop files on the map.",
-      "Formats_not_supported": "These file formats are not supported, no data has been imported"
+      "Formats_not_supported": "These file formats are not supported, no data has been imported",
+      "Import_in_progress": "Import in progress ..."
     },
     "CursorPosition": {
       "Cursor_position": "Cursor position",
@@ -215,8 +222,7 @@
       "Keyboard_shortcut": "Use {{shortcut}} to enable this mode"
     },
     "RemoteProjectsModal": {
-      "Projects_saved": "Projets enregistrés",
-      "Select_a_project": "Select a project",
+      "Projects_saved": "Projects saved",
       "No_saved_project": "No saved project.",
       "Current_changes_will_be_lost": "Current changes will be lost !",
       "Are_you_sure": "Are you sure ? You will permanently delete:",
@@ -231,7 +237,9 @@
       "You_must_enter_a_password": "You must enter a password",
       "Incorrect_password": "Incorrect password.",
       "Delete_project": "Delete project",
-      "This_project_is_password_protected": "This project is password protected"
+      "This_project_is_password_protected": "This project is password protected",
+      "This_project_is_public": "This project is public",
+      "Project_open": "Project open !"
     }
   },
   "ColorSelector": {
@@ -399,7 +407,8 @@
       "Classes": "Classes",
       "Calculate_classes": "Calculate classes",
       "Name_of_new_layer": "Name of new layer",
-      "Scale_or_classification": "Scale or classification"
+      "Scale_or_classification": "Scale or classification",
+      "Processing_in_progress": "Processing in progress ..."
     },
     "VectorLayerSelector": {
       "Select_a_layer": "Select a layer"
@@ -479,7 +488,8 @@
       "Some_colors_values_are_incorrect": "⚠️ Some values of size field ({{invalidValues}}) cannot be used as numbers.",
       "Some_geometries_does_not_have_data": "⚠️ Some geometries ({{missingDataRows}}) do not have data corresponding to their <code>{{joinBy}}</code> property.",
       "Undefined_property": "Undefined property",
-      "Close": "Close"
+      "Close": "Close",
+      "Processing_in_progress": "Processing in progress ..."
     },
     "Scripts": {
       "Script_module_allow_advanced_data_modification": "The script execution module is used to process card data programmatically by writing JavaScript code.",
@@ -504,11 +514,6 @@
     "Layout": "Layout",
     "Create_layout_to_export_your_map": "Layout and export your maps as PDF or PNG \uD83D\uDCD0 \uD83D\uDEB6\u200D♀️",
     "You_muse_select_a_layout": "You must select a layout",
-    "No_legend": "No legend",
-    "Top_left_corner": "Top left",
-    "Top_right_corner": "Top right",
-    "Bottom_right_corner": "Bottom right",
-    "Bottom_left_corner": "Bottom left",
     "New_layout": "New layout",
     "A5_portrait": "A5 portrait",
     "A5_landscape": "A5 landscape",
@@ -516,8 +521,6 @@
     "A4_landscape": "A4 landscape",
     "A3_portrait": "A3 portrait",
     "A3_landscape": "A3 landscape",
-    "Legend": "Legend",
-    "Edit_legend": "Edit legend",
     "Move_up": "Move layout up",
     "Move_Down": "Move layout down",
     "Delete_all": "Delete all",
@@ -525,10 +528,20 @@
     "PNG_export": "PNG export",
     "You_must_create_layouts_first": "You must first create a layout",
     "Layouts_menu": "Layouts list",
-    "Controls_menu": "Controls"
+    "Controls_menu": "Controls",
+    "Export_in_progress": "Export in progress ..."
+  },
+  "EditLegendControl": {
+    "Legend": "Legend",
+    "Edit_legend": "Edit legend",
+    "No_legend": "No legend",
+    "Top_left_corner": "Top left",
+    "Top_right_corner": "Top right",
+    "Bottom_right_corner": "Bottom right",
+    "Bottom_left_corner": "Bottom left"
   },
   "MapLegendView": {
-    "Go_back_to_layout": "Go back to layout",
+    "Go_back": "Go back",
     "Edit_legend": "Edit legend",
     "Preview": "Preview",
     "Create_legend_for_your_map": "Create a legend for your map \uD83C\uDF0D",
@@ -542,7 +555,8 @@
     "Delete": "Delete",
     "Move_up": "Move up",
     "Move_down": "Move down",
-    "Entry_name": "Item name: forest area, marked route, ..."
+    "Entry_name": "Item name: forest area, marked route, ...",
+    "This_map_legend_cannot_be_found": "This map legend cannot be found"
   },
   "FundingView": {
     "Support_AbcMap": "Support Abc-Map",
@@ -747,14 +761,20 @@
     "View": "View",
     "Overview": "Overview",
     "Publish": "Publish",
-    "Address_and_share_code": "Address and share code",
+    "Address_and_sharing_codes": "Address and sharing codes",
     "Disable_sharing": "Disable sharing",
     "New_view": "New view",
     "Visible_layers": "Visible layers",
     "Work_in_progress": "Work in progress",
     "This_feature_is_under_development": "This feature is under development.",
     "It_certainly_lacks_options": "It certainly lacks options, and you might run into a few bugs.",
-    "Close": "Close"
+    "Close": "Close",
+    "Remember_to_publish_your_changes": "Remember to publish your changes",
+    "Sharing_codes": "Sharing codes",
+    "Share_link": "Share link",
+    "Iframe_embed_code": "Iframe embed code",
+    "Width": "Width (px)",
+    "Height": "Height (px)"
   },
   "CopyButton": {
     "Copied": "Copied !",
@@ -763,7 +783,8 @@
   },
   "SharedMapView": {
     "Shared_map": "Shared map",
-    "Cannot_display_map": "Ouch ! Could not find this map",
+    "Loading_map": "Loading map ...",
+    "Cannot_display_map": "Ouch ! Could not display this map",
     "But_dont_panic_you_can_create_your_own": "But don't panic, you can create your own map with",
     "Navigation": "Navigation",
     "Previous_view": "Previous view",
@@ -813,6 +834,7 @@
     "useSaveProjectOnline": {
       "Too_much_projects": "Sorry \uD83D\uDE1E you have reached your project quota. Delete one.",
       "Project_too_heavy": "This project is too heavy",
+      "Saving": "Saving ...",
       "Project_saved": "Project saved !"
     },
     "tools": {
