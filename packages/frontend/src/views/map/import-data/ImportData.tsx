@@ -16,16 +16,17 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
+import Cls from './ImportData.module.scss';
 import React, { Component, ReactNode } from 'react';
 import { AbcFile, Logger } from '@abc-map/shared';
 import { FileIO, InputResultType, InputType } from '../../../core/utils/FileIO';
 import { ServiceProps, withServices } from '../../../core/withServices';
-import { ImportStatus } from '../../../core/data/DataService';
 import { withTranslation } from 'react-i18next';
 import { prefixedTranslation } from '../../../i18n/i18n';
 import { IconDefs } from '../../../components/icon/IconDefs';
 import { FaIcon } from '../../../components/icon/FaIcon';
-import Cls from './ImportData.module.scss';
+import { DataReader } from '../../../core/data/DataReader';
+import { ReadStatus } from '../../../core/data/ReadResult';
 
 const logger = Logger.get('ImportData.tsx');
 
@@ -46,7 +47,8 @@ class ImportData extends Component<ServiceProps, {}> {
   }
 
   private importFile = () => {
-    const { toasts, data } = this.props.services;
+    const { toasts } = this.props.services;
+    const dataReader = DataReader.create();
 
     const selectFiles = async (): Promise<AbcFile<Blob>[] | undefined> => {
       const result = await FileIO.openInput(InputType.Multiple);
@@ -58,9 +60,9 @@ class ImportData extends Component<ServiceProps, {}> {
     };
 
     const importFiles = async (files: AbcFile<Blob>[]) => {
-      const result = await data.importFiles(files);
+      const result = await dataReader.importFiles(files);
 
-      if (result.status === ImportStatus.Failed) {
+      if (result.status === ReadStatus.Failed) {
         toasts.error(t('Formats_not_supported'));
       }
     };

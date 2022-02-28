@@ -23,7 +23,8 @@ const cors = require('cors');
 
 const PORT = 3010;
 const responses = path.resolve(__dirname, 'responses');
-const authorization = 'Basic amVhbi1ib25ubzphemVydHkxMjM0'; // jean-bonno:azerty1234
+const authorizationBasic = 'Basic amVhbi1ib25ubzphemVydHkxMjM0'; // jean-bonno:azerty1234
+const authorizationApiKey = '5e46d49fce0';
 
 const app = express();
 app.use(cors());
@@ -36,7 +37,16 @@ app.use(cors());
 
 const tileXyz = fs.readFileSync(path.resolve(responses, 'tile-xyz.png'));
 
-app.get('/xyz*', function (req, res) {
+app.get('/xyz/public/*', function (req, res) {
+  handleXyzRequest(req, res);
+});
+
+app.get('/xyz/authenticated/*', function (req, res) {
+  if(req.query.api_key !== authorizationApiKey){
+    res.status(401).send();
+    return;
+  }
+
   handleXyzRequest(req, res);
 });
 
@@ -58,7 +68,7 @@ app.get('/wms/public', function (req, res) {
 });
 
 app.get('/wms/authenticated', function (req, res) {
-  if (req.headers['authorization'] !== authorization) {
+  if (req.headers['authorization'] !== authorizationBasic) {
     res.status(401).send();
     return;
   }
@@ -96,7 +106,7 @@ app.get('/wmts/public*', function (req, res) {
 });
 
 app.get('/wmts/authenticated*', function (req, res) {
-  if (req.headers['authorization'] !== authorization) {
+  if (req.headers['authorization'] !== authorizationBasic) {
     res.status(401).send();
     return;
   }

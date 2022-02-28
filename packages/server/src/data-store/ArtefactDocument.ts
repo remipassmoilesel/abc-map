@@ -18,13 +18,22 @@
 
 import { MongodbDocument } from '../mongodb/MongodbDocument';
 import { MongoI18nList, MongoI18nText } from '../mongodb/MongodbI18n';
+import { ArtefactType } from '@abc-map/shared';
 
+/**
+ * There is no need to migrate artefacts, as they are recreated at each startup
+ */
 export interface ArtefactDocument extends MongodbDocument {
   name: MongoI18nText[];
+  type: ArtefactType;
   description: MongoI18nText[];
   keywords: MongoI18nList[];
   license: string;
-  link: string | null;
+  attributions: string[];
+  provider: string;
+  link: string;
   path: string;
   files: string[];
+  previews?: string[];
+  weight?: number;
 }

@@ -16,10 +16,10 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { prettyStringify } from './strings';
+import { linkify, prettyStringify } from './strings';
 
 describe('strings', () => {
-  it('prettyStringify', () => {
+  it('prettyStringify()', () => {
     expect(prettyStringify(null)).toEqual('Valeur non définie');
     expect(prettyStringify(undefined)).toEqual('Valeur non définie');
     expect(prettyStringify({})).toEqual('{}');
@@ -27,5 +27,15 @@ describe('strings', () => {
     expect(prettyStringify(0)).toEqual('0');
     expect(prettyStringify(11)).toEqual('11');
     expect(prettyStringify([])).toEqual('[]');
+  });
+
+  it('linkify()', () => {
+    expect(linkify('Hello')).toEqual('Hello');
+    expect(linkify('Hello click here: https://somewhere.net/section?q1=p1&q2=p2')).toEqual(
+      'Hello click here: <a href="https://somewhere.net/section?q1=p1&q2=p2" target="_blank">https://somewhere.net/section?q1=p1&q2=p2</a>'
+    );
+    expect(linkify('Hello mail me here: somewhere@somebody.net')).toEqual(
+      'Hello mail me here: <a href="mailto:somewhere@somebody.net">somewhere@somebody.net</a>'
+    );
   });
 });

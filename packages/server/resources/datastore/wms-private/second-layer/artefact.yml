@@ -1,0 +1,33 @@
+version: 0.0.1
+artefact:
+  name:
+    - language: fr
+      text: Serveur WMS local privé second-layer
+    - language: en
+      text: Private WMS local server second-layer
+  description:
+    - language: fr
+      text: 'Serveur WMS local privé, sur le port 3010 Layer-Group type layer: ne:ne'
+    - language: en
+      text: 'Private WMS local server, on port 3010 Layer-Group type layer: ne:ne'
+  keywords:
+    - language: fr
+      text:
+        - wms
+        - privé
+    - language: en
+      text:
+        - wms
+        - private
+  license: LICENSE.txt
+  attributions:
+    - ©℗®™ WTF Company
+  files:
+    - definition.wms
+  previews:
+    - preview-0.png
+    - preview-1.png
+    - preview-2.png
+  type: basemap
+  link: https://www.openstreetmap.org/about
+  provider: OpenStreetMap

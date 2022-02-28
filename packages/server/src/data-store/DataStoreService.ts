@@ -21,7 +21,7 @@ import { ArtefactDao } from './ArtefactDao';
 import { MongodbClient } from '../mongodb/MongodbClient';
 import { ArtefactMapper } from './ArtefactMapper';
 import { AbstractService } from '../services/AbstractService';
-import { AbcArtefact, Language } from '@abc-map/shared';
+import { AbcArtefact, ArtefactFilter, Language } from '@abc-map/shared';
 import * as path from 'path';
 import { Logger } from '@abc-map/shared';
 import * as crypto from 'crypto';
@@ -59,17 +59,18 @@ export class DataStoreService extends AbstractService {
     return this.dao.findById(id).then((res) => (res ? ArtefactMapper.docToDto(res) : undefined));
   }
 
-  public async list(limit: number, offset = 0): Promise<AbcArtefact[]> {
-    const docs = await this.dao.list(limit, offset);
+  public async list(limit: number, offset = 0, filter: ArtefactFilter = ArtefactFilter.All): Promise<AbcArtefact[]> {
+    const docs = await this.dao.list(limit, offset, filter);
     return docs.map((doc) => ArtefactMapper.docToDto(doc));
   }
 
-  public async search(query: string, lang: Language, limit: number, offset = 0): Promise<AbcArtefact[]> {
-    return this.dao.search(query, MongoI18nMapper.langToMongo(lang), limit, offset).then((res) => res.map(ArtefactMapper.docToDto));
+  public async search(query: string, lang: Language, limit: number, offset = 0, filter: ArtefactFilter = ArtefactFilter.All): Promise<AbcArtefact[]> {
+    const mongoLang = MongoI18nMapper.langToMongo(lang);
+    return this.dao.search(query, mongoLang, limit, offset, filter).then((res) => res.map(ArtefactMapper.docToDto));
   }
 
-  public async countArtefacts(): Promise<number> {
-    return this.dao.count();
+  public async countArtefacts(filter: ArtefactFilter = ArtefactFilter.All): Promise<number> {
+    return this.dao.count(filter);
   }
 
   public getRoot(): string {
@@ -103,18 +104,24 @@ export class DataStoreService extends AbstractService {
       try {
         const artefact = manifest.artefact;
         const artefactPath = path.relative(datastorePath, manifest.path);
-        const files = manifest.artefact.files.map((file) => relativePath(manifest.path, file));
+        const files = manifest.artefact.files?.map((file) => relativePath(manifest.path, file));
+        const previews = manifest.artefact.previews?.map((preview) => relativePath(manifest.path, preview));
         const license = relativePath(manifest.path, manifest.artefact.license);
 
         const doc: ArtefactDocument = {
           _id: hash(artefactPath),
           name: artefact.name.map(MongoI18nMapper.textToMongo),
+          type: artefact.type,
           description: (artefact.description || []).map(MongoI18nMapper.textToMongo),
-          keywords: artefact.keywords.map(MongoI18nMapper.listToMongo),
+          keywords: (artefact.keywords || []).map(MongoI18nMapper.listToMongo),
           files,
-          link: artefact.link || null,
+          previews,
+          provider: artefact.provider,
+          link: artefact.link,
           license,
+          attributions: artefact.attributions,
           path: artefactPath,
+          weight: artefact.weight,
         };
 
         artefacts.push(doc);

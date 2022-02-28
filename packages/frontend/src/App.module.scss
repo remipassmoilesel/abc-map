@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-@import "src/assets/styles/variables";
+@import "src/styles/variables";
 
 .appViewport {
   position: relative;
@@ -28,4 +28,13 @@
 
   // Overflow here prevent child block oversizing (e.g: documentation view)
   overflow: hidden;
+}
+
+.suspense {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  height: 100%;
 }

@@ -26,3 +26,12 @@ export function stripHtml(value: string): string {
   div.innerHTML = value;
   return div.textContent || div.innerText || '';
 }
+
+const urlPattern = /(\bhttps?:\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/gim;
+const emailPattern = /(([a-zA-Z0-9_\-.]+)@[a-zA-Z_]+?(?:\.[a-zA-Z]{2,6}))+/gim;
+
+export function linkify(input: string): string {
+  let output = input.replace(urlPattern, '<a href="$1" target="_blank">$1</a>');
+  output = output.replace(emailPattern, '<a href="mailto:$1">$1</a>');
+  return output;
+}

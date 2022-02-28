@@ -192,7 +192,7 @@ export class LayerWrapper<Layer extends OlLayers = OlLayers, Source extends OlSo
   }
 
   public getAttributions(): string[] | undefined {
-    const getAttributions = this.layer.getSource().getAttributions();
+    const getAttributions = this.layer.getSource()?.getAttributions();
     if (!getAttributions) {
       return;
     }
@@ -203,7 +203,7 @@ export class LayerWrapper<Layer extends OlLayers = OlLayers, Source extends OlSo
   }
 
   public setAttributions(attr: string[]): LayerWrapper<Layer, Source, Meta> {
-    this.layer.getSource().setAttributions(attr);
+    this.layer.getSource()?.setAttributions(attr);
     return this;
   }
 
@@ -216,7 +216,7 @@ export class LayerWrapper<Layer extends OlLayers = OlLayers, Source extends OlSo
     this.layer.setOpacity(props.opacity);
     this.layer.setVisible(props.visible);
     if (props.attributions && props.attributions.length) {
-      this.layer.getSource().setAttributions(props.attributions);
+      this.layer.getSource()?.setAttributions(props.attributions);
     }
 
     if (LayerType.Predefined === props.type) {

@@ -16,6 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
+import Cls from './TopBar.module.scss';
 import React, { useCallback, useState } from 'react';
 import { Logger } from '@abc-map/shared';
 import TopBarLink from './link/TopBarLink';
@@ -23,13 +24,13 @@ import MainIcon from '../../assets/main-icon.svg';
 import LangSelector from './lang-selector/LangSelector';
 import UserMenu from './user-menu/UserMenu';
 import { prefixedTranslation } from '../../i18n/i18n';
-import Cls from './TopBar.module.scss';
 import { Routes } from '../../routes';
 import { useHistory } from 'react-router-dom';
 import { FaIcon } from '../icon/FaIcon';
 import { IconDefs } from '../icon/IconDefs';
-import { useAppSelector } from '../../core/store/hooks';
-import { MapSharing } from '../../ExperimentalFeatures';
+import { MapSharing } from '../../experimental-features';
+import { useExperimentalFeature } from '../../core/ui/useExperimentalFeature';
+import clsx from 'clsx';
 
 const logger = Logger.get('TopBar.tsx');
 
@@ -39,9 +40,7 @@ function TopBar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const history = useHistory();
   const goToLanding = useCallback(() => history.push(Routes.landing().format()), [history]);
-
-  const linksClasses = `${Cls.links} ${mobileOpen ? Cls.open : ''}`;
-  const withSharing = useAppSelector((st) => st.ui.experimentalFeatures[MapSharing.id]) ?? false;
+  const withSharing = useExperimentalFeature(MapSharing);
 
   return (
     <div className={Cls.topBar} data-cy={'top-bar'}>
@@ -52,7 +51,7 @@ function TopBar() {
 
       <div className={Cls.spacer} />
 
-      <div className={linksClasses} onClick={() => setMobileOpen(false)}>
+      <div className={clsx(Cls.links, mobileOpen && Cls.mobileOpen)} onClick={() => setMobileOpen(false)}>
         <h1 className={Cls.menuTitle}>{t('Menu')}</h1>
         <TopBarLink label={t('Map')} to={Routes.map().format()} data-cy={'map'} />
         <TopBarLink label={t('Data_store')} to={Routes.dataStore().format()} data-cy={'data-store'} />

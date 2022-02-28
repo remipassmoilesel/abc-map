@@ -17,5 +17,5 @@
  */
 
 export class XyzConstants {
-  public static readonly PUBLIC_URL = 'http://localhost:3010/xyz/{x}/{y}/{z}.png';
+  public static readonly PUBLIC_URL = 'http://localhost:3010/xyz/public/{x}/{y}/{z}.png';
 }

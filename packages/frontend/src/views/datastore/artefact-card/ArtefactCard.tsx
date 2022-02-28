@@ -16,132 +16,41 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { Component, ReactNode } from 'react';
-import { getListByLang, getTextByLang, Logger } from '@abc-map/shared';
-import { AbcArtefact } from '@abc-map/shared';
-import { ServiceProps, withServices } from '../../../core/withServices';
-import { Button, ButtonGroup, Dropdown, Modal } from 'react-bootstrap';
-import { getLang, prefixedTranslation } from '../../../i18n/i18n';
-import { withTranslation } from 'react-i18next';
-import { IconDefs } from '../../../components/icon/IconDefs';
-import { FaIcon } from '../../../components/icon/FaIcon';
 import Cls from './ArtefactCard.module.scss';
+import React, { useCallback } from 'react';
+import { AbcArtefact, getTextByLang, Logger } from '@abc-map/shared';
+import { getLang } from '../../../i18n/i18n';
+import { withTranslation } from 'react-i18next';
+import clsx from 'clsx';
+import { getArtefactIcon } from '../../../core/data/getArtefactIcon';
+import { FaIcon } from '../../../components/icon/FaIcon';
+import { stripHtml } from '../../../core/utils/strings';
 
 const logger = Logger.get('ArtefactCard.tsx');
 
-interface LocalProps {
+interface Props {
+  selected: boolean;
   artefact: AbcArtefact;
-  onImport: (artefact: AbcArtefact) => void;
-  onDownload: (artefact: AbcArtefact) => void;
+  onSelected: (artefact: AbcArtefact) => void;
 }
 
-declare type Props = LocalProps & ServiceProps;
+function ArtefactCard(props: Props) {
+  const { artefact, selected, onSelected } = props;
+  const name = getTextByLang(artefact.name, getLang());
+  const description = getTextByLang(artefact.description, getLang());
+  const icon = getArtefactIcon(artefact);
 
-interface State {
-  licenseModal: boolean;
-  license?: string;
+  const handleSelected = useCallback(() => onSelected(artefact), [artefact, onSelected]);
+
+  return (
+    <div className={clsx('card card-body', Cls.artefact, selected && Cls.selected)} onClick={handleSelected}>
+      <h1 className={'d-flex align-items-center'} data-cy={'artefact-name'}>
+        <FaIcon icon={icon} size={'1.4rem'} className={'mr-2'} />
+        {name}
+      </h1>
+      {description && <div className={Cls.description}>{stripHtml(description)}</div>}
+    </div>
+  );
 }
 
-const t = prefixedTranslation('DataStoreView:');
-
-class ArtefactCard extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = { licenseModal: false };
-  }
-
-  public render(): ReactNode {
-    const link = this.props.artefact.link;
-    const name = getTextByLang(this.props.artefact.name, getLang());
-    const description = getTextByLang(this.props.artefact.description, getLang());
-    const keywords = getListByLang(this.props.artefact.keywords, getLang());
-    const licenseModal = this.state.licenseModal;
-    const license = this.state.license;
-
-    return (
-      <>
-        <div className={`card card-body ${Cls.artefact}`}>
-          <h4 data-cy={'artefact-name'}>{name}</h4>
-
-          {description && <div className={'mb-3'}>{description}</div>}
-
-          <div className={'flex-grow-1'} />
-
-          {keywords && (
-            <small className={Cls.keywords}>
-              {t('Keywords')}: {keywords.join(', ')}
-            </small>
-          )}
-
-          {/* Actions */}
-
-          <div className={'d-flex flex-row justify-content-end'}>
-            <Dropdown as={ButtonGroup}>
-              <Button variant={'outline-secondary'} onClick={this.handleImportArtefact} data-cy={'import-artefact'}>
-                <FaIcon icon={IconDefs.faPlus} className={'mr-2'} />
-                {t('Add_to_project')}
-              </Button>
-
-              <Dropdown.Toggle split variant="outline-secondary" data-cy={'more-actions-menu'} />
-
-              <Dropdown.Menu>
-                <Dropdown.Item onClick={this.handleDownloadArtefact} data-cy={'download-artefact'}>
-                  <FaIcon icon={IconDefs.faDownload} className={'mr-2'} />
-                  {t('Download')}
-                </Dropdown.Item>
-                <Dropdown.Item href={link} rel="noreferrer" target={'_blank'}>
-                  <FaIcon icon={IconDefs.faLink} className={'mr-2'} />
-                  {t('Source')}
-                </Dropdown.Item>
-                <Dropdown.Item onClick={this.handleShowLicense} data-cy={'show-license'}>
-                  <FaIcon icon={IconDefs.faBalanceScale} className={'mr-2'} />
-                  {t('Licence')}
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          </div>
-        </div>
-
-        {/* License modal */}
-
-        <Modal show={licenseModal} onHide={this.handleModalClose} size={'lg'} centered>
-          <Modal.Header closeButton data-cy={'license-header'}>
-            {name} : {t('Licence')}
-          </Modal.Header>
-          <Modal.Body className={'d-flex justify-content-center'}>
-            <pre className={Cls.licenseView}>{license}</pre>
-          </Modal.Body>
-          <Modal.Footer>
-            <button className={'btn btn-outline-secondary'} onClick={this.handleModalClose} data-cy={'close-modal'}>
-              {t('Close')}
-            </button>
-          </Modal.Footer>
-        </Modal>
-      </>
-    );
-  }
-
-  private handleShowLicense = () => {
-    const { data } = this.props.services;
-    const artefact = this.props.artefact;
-
-    data
-      .downloadLicense(artefact)
-      .then((license) => this.setState({ licenseModal: true, license }))
-      .catch((err) => logger.error(err));
-  };
-
-  private handleImportArtefact = () => {
-    this.props.onImport(this.props.artefact);
-  };
-
-  private handleDownloadArtefact = () => {
-    this.props.onDownload(this.props.artefact);
-  };
-
-  private handleModalClose = () => {
-    this.setState({ licenseModal: false });
-  };
-}
-
-export default withTranslation()(withServices(ArtefactCard));
+export default withTranslation()(ArtefactCard);

@@ -3,7 +3,7 @@
 <!-- toc -->
 
 - [How to start Abc-Map locally ?](#how-to-start-abc-map-locally-)
-- [Desktop or mobile ?](#desktop-or-mobile-)
+- [UI, UX, styling: Desktop or mobile ?](#ui-ux-styling-desktop-or-mobile-)
 - [React: functional component or class component ?](#react-functional-component-or-class-component-)
 - [How to add a dependency ?](#how-to-add-a-dependency-)
 - [How to search outdated dependencies ?](#how-to-search-outdated-dependencies-)
@@ -23,9 +23,11 @@ Check [setup-workstation.md](./1_set-up-workstation.md) first, then:
     $ ./abc-cli watch       # Watch and compile sources
     $ ./abc-cli start       # Start application
 
-## Desktop or mobile ?
+## UI, UX, styling: Desktop or mobile ?
 
 Abc-Map is a desktop application, but it must be usable on a mobile device.
+
+The user interface is designed for large devices and occasionally adapted for small ones.
 
 ## React: functional component or class component ?
 

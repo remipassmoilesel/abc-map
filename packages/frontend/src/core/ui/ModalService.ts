@@ -29,6 +29,7 @@ import {
   ModalStatus,
   OperationStatus,
   PasswordInputClosedEvent,
+  PromptVariablesClosed,
   RegistrationClosedEvent,
   SetPasswordModalClosedEvent,
   SolicitationClosedEvent,
@@ -37,6 +38,7 @@ import {
 import { SimplePropertiesMap } from '../geo/features/FeatureWrapper';
 import { resolveInAtLeast } from '../utils/resolveInAtLeast';
 import { prefixedTranslation } from '../../i18n/i18n';
+import { PromptDefinition } from './PromptDefinition';
 
 const logger = Logger.get('ModalService.ts', 'warn');
 
@@ -170,6 +172,11 @@ export class ModalService {
   public confirmation(title: string, message: string): Promise<ModalStatus> {
     const input: ModalEvent = { type: ModalEventType.ShowConfirmation, title, message };
     return this.modalPromise<ConfirmationClosedEvent>(input, ModalEventType.ConfirmationClosed).then((res) => res.status);
+  }
+
+  public promptVariables(title: string, message: string, definitions: PromptDefinition[]): Promise<PromptVariablesClosed> {
+    const input: ModalEvent = { type: ModalEventType.ShowPromptVariables, title, message, definitions };
+    return this.modalPromise<PromptVariablesClosed>(input, ModalEventType.PromptVariablesClosed);
   }
 
   private modalPromise<O extends ModalEvent>(input: ModalEvent, closeEventType: ModalEventType): Promise<O> {

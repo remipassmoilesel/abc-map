@@ -16,8 +16,8 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-@import "src/assets/styles/variables";
-@import "node_modules/bootstrap/scss/bootstrap";
+@import "src/styles/variables";
+@import "src/styles/mixins";
 
 .topBar {
   position: relative;
@@ -86,7 +86,7 @@
   @include media-breakpoint-down(xl) {
     display: none;
 
-    &.open {
+    &.mobileOpen {
       position: fixed;
       top: $top-bar-height;
       left: 0;

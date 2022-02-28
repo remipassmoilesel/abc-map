@@ -21,18 +21,21 @@ export enum FileFormat {
   GPX = 'GPX',
   KML = 'KML',
   SHAPEFILE = 'SHAPEFILE',
-  WMS_DEFINITION = 'WMS_DEFINITION',
   GEOJSON = 'GEOJSON',
+  WMS_DEFINITION = 'WMS_DEFINITION',
+  WMTS_DEFINITION = 'WMTS_DEFINITION',
+  XYZ_DEFINITION = 'XYZ_DEFINITION',
 }
 
-declare type ExtensionMap = { [k: string]: string[] | undefined };
-const extensionMap: ExtensionMap = {
+const extensionMap: { [k: string]: string[] | undefined } = {
   [FileFormat.ZIP]: ['.zip'],
   [FileFormat.GPX]: ['.gpx'],
   [FileFormat.KML]: ['.kml'],
   [FileFormat.SHAPEFILE]: ['.shp', '.dbf'],
   [FileFormat.GEOJSON]: ['.geojson', '.json'],
   [FileFormat.WMS_DEFINITION]: ['.wms'],
+  [FileFormat.WMTS_DEFINITION]: ['.wmts'],
+  [FileFormat.XYZ_DEFINITION]: ['.xyz'],
 };
 
 export class FileFormats {

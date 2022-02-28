@@ -42,6 +42,9 @@ import { faCogs } from '@fortawesome/free-solid-svg-icons/faCogs';
 import { faFileCode } from '@fortawesome/free-solid-svg-icons/faFileCode';
 import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
 import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
+import { faDrawPolygon } from '@fortawesome/free-solid-svg-icons/faDrawPolygon';
+import { faVectorSquare } from '@fortawesome/free-solid-svg-icons/faVectorSquare';
+import { faImage } from '@fortawesome/free-solid-svg-icons/faImage';
 import { faEdit } from '@fortawesome/free-solid-svg-icons/faEdit';
 import { faSearchPlus } from '@fortawesome/free-solid-svg-icons/faSearchPlus';
 import { faSearchMinus } from '@fortawesome/free-solid-svg-icons/faSearchMinus';
@@ -65,6 +68,8 @@ import { faPenAlt } from '@fortawesome/free-solid-svg-icons/faPenAlt';
 import { faGlobeEurope } from '@fortawesome/free-solid-svg-icons/faGlobeEurope';
 import { faTable } from '@fortawesome/free-solid-svg-icons/faTable';
 import { faArrowCircleLeft } from '@fortawesome/free-solid-svg-icons/faArrowCircleLeft';
+import { faImages } from '@fortawesome/free-solid-svg-icons/faImages';
+import { faArrowCircleRight } from '@fortawesome/free-solid-svg-icons/faArrowCircleRight';
 import { faLink } from '@fortawesome/free-solid-svg-icons/faLink';
 import { faBalanceScale } from '@fortawesome/free-solid-svg-icons/faBalanceScale';
 import { faFeatherAlt } from '@fortawesome/free-solid-svg-icons/faFeatherAlt';
@@ -84,6 +89,8 @@ import { faRulerCombined } from '@fortawesome/free-solid-svg-icons/faRulerCombin
 import { faRuler } from '@fortawesome/free-solid-svg-icons/faRuler';
 import { faCopy } from '@fortawesome/free-solid-svg-icons/faCopy';
 import { faList } from '@fortawesome/free-solid-svg-icons/faList';
+import { faBoxOpen } from '@fortawesome/free-solid-svg-icons/faBoxOpen';
+import { faGift } from '@fortawesome/free-solid-svg-icons/faGift';
 import { faBars } from '@fortawesome/free-solid-svg-icons/faBars';
 import { faLanguage } from '@fortawesome/free-solid-svg-icons/faLanguage';
 import { faShareAltSquare } from '@fortawesome/free-solid-svg-icons/faShareAltSquare';
@@ -97,6 +104,8 @@ export const IconDefs = {
   faLanguage,
   faBars,
   faList,
+  faBoxOpen,
+  faGift,
   faMapSigns,
   faChevronCircleDown,
   faSearch,
@@ -125,6 +134,9 @@ export const IconDefs = {
   faFileCode,
   faTrash,
   faPlus,
+  faDrawPolygon,
+  faVectorSquare,
+  faImage,
   faMinus,
   faEdit,
   faSearchPlus,
@@ -149,7 +161,9 @@ export const IconDefs = {
   faPenAlt,
   faGlobeEurope,
   faTable,
+  faArrowCircleRight,
   faArrowCircleLeft,
+  faImages,
   faLink,
   faBalanceScale,
   faFeatherAlt,

@@ -15,28 +15,10 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
-import { I18nList, I18nText } from '@abc-map/shared';
+import { ArtefactManifest } from '@abc-map/shared';
 
-export interface ArtefactManifest {
-  version: string;
+export interface ArtefactManifestRead extends ArtefactManifest {
   path: string;
-  artefact: {
-    /**
-     * Readable name of the artefact
-     */
-    name: I18nText[];
-    description?: I18nText[];
-    keywords: I18nList[];
-    /**
-     * Path to the license file
-     */
-    license: string;
-    link?: string;
-    /**
-     * List of files that will be downloaded
-     */
-    files: string[];
-  };
 }
 
 const I18nTextArray = {
@@ -53,16 +35,18 @@ const I18nTextArray = {
 
 export const ArtefactManifestSchema = {
   type: 'object',
-  required: ['artefact'],
+  required: ['version', 'artefact'],
   additionalProperties: false,
   properties: {
     version: { type: 'string' },
     path: { type: 'string' },
     artefact: {
       type: 'object',
-      required: ['name', 'keywords', 'license', 'files'],
+      required: ['name', 'license', 'attributions', 'link', 'provider'],
+      additionalProperties: false,
       properties: {
         name: I18nTextArray,
+        type: { type: 'string' },
         description: I18nTextArray,
         keywords: {
           type: 'array',
@@ -79,6 +63,13 @@ export const ArtefactManifestSchema = {
           },
         },
         license: { type: 'string' },
+        attributions: {
+          type: 'array',
+          items: {
+            type: 'string',
+          },
+        },
+        provider: { type: 'string' },
         link: { type: 'string' },
         files: {
           type: 'array',
@@ -89,6 +80,13 @@ export const ArtefactManifestSchema = {
         metadata: {
           type: 'object',
         },
+        previews: {
+          type: 'array',
+          items: {
+            type: 'string',
+          },
+        },
+        weight: { type: 'number' },
       },
     },
   },

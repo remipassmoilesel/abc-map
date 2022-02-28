@@ -7,7 +7,11 @@ Started with `abc-cli start` command.
 URLs and credentials:    
 ```
 
-    http://localhost:3010/xyz/{x}/{y}/{z}
+    http://localhost:3010/xyz/public/{x}/{y}/{z}
+    No credentials
+    
+    http://localhost:3010/xyz/authenticated/{x}/{y}/{z}?api_key=XXXXXXXX
+    Api key: 5e46d49fce0
     
     http://localhost:3010/wms/public
     No credentials

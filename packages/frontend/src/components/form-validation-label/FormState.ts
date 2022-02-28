@@ -46,4 +46,6 @@ export enum FormState {
   MissingGeometryLayer = 'MissingGeometryLayer',
   MissingStartColor = 'MissingStartColor',
   MissingEndColor = 'MissingEndColor',
+
+  FieldMissing = 'FieldMissing',
 }

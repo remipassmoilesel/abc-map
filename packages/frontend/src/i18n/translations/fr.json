@@ -54,7 +54,8 @@
     "Experimental_features": "Fonctionnalités expérimentales",
     "Here_you_can_enable_features": "Ici vous pouvez activer des fonctionnalités qui ne sont pas encore stables.",
     "Close": "Fermer",
-    "MapSharing": "Partage de carte"
+    "MapSharing": "Partage de carte",
+    "ArtefactGenerator": "Générateur d'artefact"
   },
   "MapView": {
     "The_map": "La carte !",
@@ -136,8 +137,7 @@
       "Delete_active_layer": "Supprimer la couche active",
       "Move_back": "Déplacer vers l'arrière",
       "Move_forward": "Déplacer vers l'avant",
-      "Add": "Ajouter",
-      "Add_layer": "Ajouter une nouvelle couche",
+      "Add_layer": "Ajouter une couche",
       "You_must_first_select_layer": "Vous devez d'abord sélectionner une couche",
       "Unable_to_zoom": "Impossible de zoomer sur cette couche"
     },
@@ -319,7 +319,8 @@
     "Symbol_type_is_mandatory": "Le type de symbole est obligatoire.",
     "Geometry_layer_is_mandatory": "La couche de géométrie est obligatoire.",
     "Start_color_mandatory": "La couleur de début est obligatoire.",
-    "End_color_mandatory": "La couleur de fin est obligatoire."
+    "End_color_mandatory": "La couleur de fin est obligatoire.",
+    "Missing_fields": "Champs manquants"
   },
   "LongOperationModal": {
     "Things_are_getting_hot": "Ça chauffe !",
@@ -333,7 +334,6 @@
   "DataStoreView": {
     "France_regions_world": "France, régions, monde ...",
     "Search": "Rechercher",
-    "A_bit_of_patience": "Un peu de patience",
     "No_result": "Aucun résultat",
     "Data_store": "Catalogue de données",
     "Add_data_easily": "Ajoutez des données compatibles et sélectionnées en un clic \uD83D\uDED2",
@@ -344,7 +344,24 @@
     "Licence": "Licence",
     "Download": "Télécharger",
     "Add_to_project": "Importer",
-    "Close": "Fermer"
+    "Close": "Fermer",
+    "Import_in_progress": "Import en cours",
+    "Download_in_progress": "Téléchargement en cours",
+    "Select_an_artifact_to_see_what_it_contains": "Sélectionnez un artefact pour voir ce qu'il contient !",
+    "Description": "Description",
+    "Kind": "Type",
+    "Basemap": "Fond de carte",
+    "Geometries": "Géometries",
+    "Attributions": "Attributions",
+    "Preview": "Aperçu",
+    "Actions": "Actions",
+    "No_preview_available": "Pas d'aperçu disponible",
+    "Preview_of_artifact": "Aperçu de l'artefact",
+    "All": "Tous",
+    "About_this_data": "A propos de ces données",
+    "About_data_store_and_data": "<div>\n    <p>Le magasin de données vous propose:</p>\n    <ul>\n        <li>Des données issues de sources libres</li>\n        <li>Des configurations de sources de données</li>\n    </ul>\n\n    <p>Certaines de ces données sont gratuites pour tous usages, certaines sont payantes pour des usages commerciaux.</p>\n    <p>Toutes les données ont des conditions d'utilisation. Référez-vous aux licences et aux liens vers les sources.</p>\n</div>",
+    "About": "A propos",
+    "Provider": "Fournisseur"
   },
   "DataProcessingView": {
     "Modules": "Modules",
@@ -359,6 +376,7 @@
     "Different_symbols": "Symboles différents",
     "Proportional_symbols": "Symboles proportionnels",
     "Running_scripts": "Exécution de scripts",
+    "Artefact_generator": "Générateur d'artefact",
     "DataViewer": {
       "Select_a_layer": "Sélectionnez une couche pour visualiser ses données.",
       "Download_CSV": "Télécharger au format CSV",
@@ -793,6 +811,14 @@
     "This_map_was_created_and_published_with_Abc-Map": "Cette carte a été créée et publiée avec Abc-Map.",
     "Abc-Map_is_free_mapping_software_try_it": "Abc-Map est un logiciel libre de cartographie, essayez le !"
   },
+  "PromptVariablesModal": {
+    "About_credential_storage": "A propos du stockage des identifiants",
+    "Credentials_are_stored_in_your_project": "Les identifiants sont stockés dans votre projet",
+    "If_your_project_is_private": "Si votre projet est privé, les identifiants sont protégés par un mot de passe",
+    "If_your_project_is_public": "Si votre projet est public, alors toute personne avec l'adresse de votre projet pourra lire ces identifiants",
+    "Cancel": "Annuler",
+    "Confirm": "Confirmer"
+  },
   "core": {
     "ProjectFactory": {
       "Project": "Projet du {{date}}"
@@ -806,8 +832,10 @@
       "Geometries": "Géométries",
       "XYZ_layer": "Couche XYZ"
     },
-    "DataService": {
-      "Import_of": "Import n°{{n}} de {{hour}}"
+    "DataReader": {
+      "Import_of": "Import n°{{n}} de {{hour}}",
+      "Further_information": "Informations supplémentaires",
+      "You_must_full_in_this_form": "Pour importer cette couche, vous devez remplir ce formulaire."
     },
     "LayerDataSource": {
       "Layer_without_name": "Couche sans nom"

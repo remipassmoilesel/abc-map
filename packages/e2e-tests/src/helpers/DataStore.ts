@@ -29,8 +29,8 @@ export class DataStore {
       .get('[data-cy=artefact-name]')
       .eq(0)
       .contains(name)
+      .click()
       .get('[data-cy=import-artefact]')
-      .eq(0)
       .click()
       .then(() => Toasts.assertText('Import done !'))
       .then(() => Toasts.dismiss());

@@ -17,7 +17,7 @@
  */
 
 import React, { ChangeEvent, Component, ReactNode } from 'react';
-import { BasicAuthentication, Logger } from '@abc-map/shared';
+import { BasicAuthentication, Logger, normalizedProjectionName } from '@abc-map/shared';
 import WmtsLayerItem from './WmtsLayerItem';
 import { ServiceProps, withServices } from '../../../../../core/withServices';
 import FormValidationLabel from '../../../../../components/form-validation-label/FormValidationLabel';
@@ -33,6 +33,7 @@ import { prefixedTranslation } from '../../../../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
 import Cls from './WmtsLayerPanel.module.scss';
 import { resolveInAtLeast } from '../../../../../core/utils/resolveInAtLeast';
+import { Projection } from 'ol/proj';
 
 const logger = Logger.get('WmtsLayerPanel.tsx');
 
@@ -192,6 +193,18 @@ class WmtsLayerPanel extends Component<Props, State> {
     }
 
     const options = await geo.getWmtsLayerOptions(remoteLayerName, capabilities);
+
+    // We load projection if needed
+    let projection: string | undefined;
+    if (options.projection && options.projection instanceof Projection) {
+      projection = normalizedProjectionName(options.projection.getCode());
+    } else if (options.projection && typeof options.projection === 'string') {
+      projection = normalizedProjectionName(options.projection);
+    }
+    if (projection) {
+      // FIXME: we should try to load and try others options on fail
+      await geo.loadProjection(projection);
+    }
 
     return {
       ...this.props.value,

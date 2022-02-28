@@ -157,7 +157,7 @@ export class MapWrapper {
     }
 
     if (olLayer instanceof TileLayer) {
-      olLayer.getSource().on('tileloaderror', this.handleTileLoadError);
+      olLayer.getSource()?.on('tileloaderror', this.handleTileLoadError);
     }
   }
 
@@ -219,7 +219,7 @@ export class MapWrapper {
     this.internalMap.getLayers().remove(olLayer);
 
     if (olLayer instanceof TileLayer) {
-      olLayer.getSource().un('tileloaderror', this.handleTileLoadError);
+      olLayer.getSource()?.un('tileloaderror', this.handleTileLoadError);
     }
   }
 

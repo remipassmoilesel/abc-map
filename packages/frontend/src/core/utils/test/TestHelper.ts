@@ -33,6 +33,7 @@ import {
   AbcWmsLayer,
   AbcWmtsLayer,
   AbcXyzLayer,
+  ArtefactType,
   CompressedProject,
   DEFAULT_PROJECTION,
   FeatureStyle,
@@ -299,11 +300,14 @@ export class TestHelper {
   public static sampleArtefact(): AbcArtefact {
     return {
       id: uuid(),
-      path: '/sample/manifest.yaml',
       name: [{ language: Language.English, text: 'Sample artefact' }],
+      type: ArtefactType.Vector,
+      path: '/sample/manifest.yaml',
       files: ['file/1.gpx', 'file/2.kml'],
+      provider: 'Somewhere inc',
       link: 'http://somewhere',
       license: 'LICENSE.txt',
+      attributions: ['Copyright somewhat somewhere'],
       keywords: [{ language: Language.English, text: ['gpx', 'kml'] }],
       description: [{ language: Language.English, text: 'A sample artefact' }],
     };

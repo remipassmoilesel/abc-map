@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ArtefactManifest } from './ArtefactManifest';
+import { ArtefactManifestRead } from './ArtefactManifest';
 import { ManifestReader } from './ManifestReader';
 import { glob } from 'glob';
 import * as util from 'util';
@@ -37,10 +37,10 @@ export class DataStoreScanner {
 
   constructor(private reader: ManifestReader, private glob: GlobFunction) {}
 
-  public async scan(root: string): Promise<ArtefactManifest[]> {
+  public async scan(root: string): Promise<ArtefactManifestRead[]> {
     const paths = await this.glob(`{${root}/**/artefact.yml,${root}/**/artefact.yaml}`, { nocase: true });
 
     const manifests = Promise.all(paths.map((path) => this.reader.read(path).catch((err) => logger.error(`Invalid manifest: ${path}`, err))));
-    return manifests.then((res) => res.filter((m): m is ArtefactManifest => !!m));
+    return manifests.then((res) => res.filter((m): m is ArtefactManifestRead => !!m));
   }
 }

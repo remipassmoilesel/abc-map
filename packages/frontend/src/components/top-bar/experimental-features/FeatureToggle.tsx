@@ -20,7 +20,7 @@ import { withTranslation } from 'react-i18next';
 import React, { useCallback } from 'react';
 import { prefixedTranslation } from '../../../i18n/i18n';
 import { Switch } from '../../switch/Switch';
-import { ExperimentalFeature } from '../../../ExperimentalFeatures';
+import { ExperimentalFeature } from '../../../experimental-features';
 
 interface Props {
   feature: ExperimentalFeature;

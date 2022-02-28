@@ -19,7 +19,7 @@
 import { FileFormat, FileFormats } from './FileFormats';
 
 describe('FileFormats.ts', function () {
-  it('should work', function () {
+  it('fromPath()', function () {
     expect(FileFormats.fromPath('')).toBeUndefined();
     expect(FileFormats.fromPath('test.KML')).toEqual(FileFormat.KML);
     expect(FileFormats.fromPath('test.kml')).toEqual(FileFormat.KML);

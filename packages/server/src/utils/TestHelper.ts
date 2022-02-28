@@ -20,6 +20,7 @@ import {
   AbcArtefact,
   AbcProjectManifest,
   AbcUser,
+  ArtefactType,
   CompressedProject,
   DEFAULT_PROJECTION,
   Language,
@@ -32,7 +33,7 @@ import {
 import * as uuid from 'uuid-random';
 import { ProjectDocument } from '../projects/ProjectDocument';
 import { DateTime } from 'luxon';
-import { ArtefactManifest } from '../data-store/ArtefactManifest';
+import { ArtefactManifestRead } from '../data-store/ArtefactManifest';
 
 export class TestHelper {
   public static sampleUser(): AbcUser {
@@ -129,25 +130,32 @@ export class TestHelper {
     return {
       id: uuid(),
       name: [{ language: Language.French, text: 'Burgers around the world' }],
+      type: ArtefactType.Vector,
       license: 'AGPLv3.txt',
+      attributions: ['Copyright somebody somewhere inc'],
       description: [{ language: Language.English, text: 'A beautiful artefact' }],
       files: ['/datastore/artefact/file1.gpx', '/datastore/artefact/file2.shp'],
       path: '/datastore/artefact/manifest.yml',
+      provider: 'Nowhere inc',
       link: 'http://nowhere.net',
+      previews: ['preview1.png'],
       keywords: [{ language: Language.English, text: ['beautiful', 'artifact'] }],
     };
   }
 
-  public static sampleArtefactManifest(name: string): ArtefactManifest {
+  public static sampleArtefactManifest(name: string): ArtefactManifestRead {
     return {
       version: '0.0.1',
       path: `/datastore/${name}/manifest.yml`,
       artefact: {
         name: [{ language: Language.English, text: name }],
+        type: ArtefactType.BaseMap,
         license: `${name}-AGPLv3.txt`,
+        attributions: ['Copyright somebody somewhere inc'],
         description: [{ language: Language.English, text: `A beautiful artefact named ${name}` }],
         keywords: [{ language: Language.English, text: ['beautiful', 'artifact', name] }],
         files: [`file1.gpx`, `file2.shp`],
+        provider: `Nowhere inc`,
         link: `http://nowhere.net/${name}`,
       },
     };

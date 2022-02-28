@@ -16,10 +16,11 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
+import Cls from './Icon.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { CSSProperties } from 'react';
-import Cls from './Icon.module.scss';
+import clsx from 'clsx';
 
 interface Props {
   icon: IconDefinition;
@@ -31,10 +32,9 @@ interface Props {
 }
 
 export function FaIcon(props: Props) {
-  const { icon, size, color, title } = props;
-  const className = `abc-icon ${Cls.icon} ${props.className || ''}`;
+  const { icon, size, color, title, className } = props;
   const dimensions = (props.size && { width: size, height: size }) || undefined;
   const style: CSSProperties = { ...props.style, color, ...dimensions };
 
-  return <FontAwesomeIcon icon={icon} style={style} className={className} title={title} />;
+  return <FontAwesomeIcon icon={icon} style={style} className={clsx(`abc-icon`, Cls.icon, className)} title={title} />;
 }

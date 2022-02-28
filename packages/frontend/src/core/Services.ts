@@ -21,7 +21,7 @@ import { GeoService } from './geo/GeoService';
 import { httpApiClient, httpDownloadClient, httpExternalClient } from './http/http-clients';
 import { AuthenticationService } from './authentication/AuthenticationService';
 import { HistoryService } from './history/HistoryService';
-import { DataService } from './data/DataService';
+import { DataStoreService } from './data/DataStoreService';
 import { MainStore, mainStore } from './store/store';
 import { ToastService } from './ui/ToastService';
 import { ModalService } from './ui/ModalService';
@@ -39,7 +39,7 @@ export interface Services {
   modals: ModalService;
   authentication: AuthenticationService;
   history: HistoryService;
-  data: DataService;
+  dataStore: DataStoreService;
   feedback: FeedbackService;
   legalMentions: LegalMentionsService;
   storage: LocalStorageService;
@@ -64,7 +64,7 @@ export function servicesFactory(store: MainStore): Services {
   const geo = new GeoService(apiClient, externalClient, toasts, history, store);
   const project = ProjectService.create(apiClient, downloadClient, store, toasts, geo, modals);
   const authentication = new AuthenticationService(apiClient, store);
-  const data = new DataService(apiClient, downloadClient, toasts, geo, modals, history);
+  const dataStore = new DataStoreService(apiClient, downloadClient, toasts);
   const feedback = new FeedbackService(apiClient, toasts);
   const legalMentions = new LegalMentionsService(downloadClient, toasts);
   const storage = new LocalStorageService();
@@ -76,7 +76,7 @@ export function servicesFactory(store: MainStore): Services {
     toasts,
     authentication,
     history,
-    data,
+    dataStore,
     feedback,
     legalMentions,
     storage,

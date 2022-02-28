@@ -24,10 +24,11 @@ import { ArtefactDao } from './ArtefactDao';
 import { DataStoreScanner } from './DataStoreScanner';
 import * as sinon from 'sinon';
 import { SinonStubbedInstance } from 'sinon';
-import { AbcArtefact, Language } from '@abc-map/shared';
+import { AbcArtefact, ArtefactFilter, ArtefactType, Language } from '@abc-map/shared';
 import { TestHelper } from '../utils/TestHelper';
+import * as _ from 'lodash';
 import * as uuid from 'uuid-random';
-import { ArtefactManifest } from './ArtefactManifest';
+import { ArtefactManifestRead } from './ArtefactManifest';
 
 logger.disable();
 
@@ -63,27 +64,87 @@ describe('DatastoreService', () => {
     assert.deepEqual(dbArtefact, artefact);
   });
 
-  it('search()', async () => {
-    // Prepare
-    const needle = uuid().replace(/[^a-z0-9]/gi, '');
+  describe('search()', async () => {
+    it('without filter', async () => {
+      // Prepare
+      const needle = uuid().replace(/[^a-z0-9]/gi, '');
 
-    const artefact: AbcArtefact = {
-      ...TestHelper.sampleArtefact(),
-      description: [
+      const artefacts: AbcArtefact[] = [
         {
-          language: Language.English,
-          text: `Burger of country ${needle}`,
+          ...TestHelper.sampleArtefact(),
+          type: ArtefactType.Vector,
+          description: [
+            {
+              language: Language.English,
+              text: `Burger of country ${needle}`,
+            },
+          ],
         },
-      ],
-    };
-    await service.saveAll([artefact]);
+        {
+          ...TestHelper.sampleArtefact(),
+          type: ArtefactType.BaseMap,
+          description: [
+            {
+              language: Language.English,
+              text: `Burger of country ${needle}`,
+            },
+          ],
+        },
+      ];
+      await service.saveAll(artefacts);
 
-    // Act
-    const results = await service.search(needle, Language.English, 10, 0);
+      // Act
+      const results = await service.search(needle, Language.English, 10, 0);
 
-    // Assert
-    assert.lengthOf(results, 1);
-    assert.deepEqual(results[0], artefact);
+      // Assert
+      assert.lengthOf(results, 2);
+      assert.deepEqual(
+        _(results)
+          .sortBy((r) => r.id)
+          .map((r) => r.id)
+          .value(),
+        _(artefacts)
+          .sortBy((r) => r.id)
+          .map((r) => r.id)
+          .value()
+      );
+    });
+
+    it('with filter', async () => {
+      // Prepare
+      const needle = uuid().replace(/[^a-z0-9]/gi, '');
+
+      const artefacts: AbcArtefact[] = [
+        {
+          ...TestHelper.sampleArtefact(),
+          type: ArtefactType.Vector,
+          description: [
+            {
+              language: Language.English,
+              text: `Burger of country ${needle}`,
+            },
+          ],
+        },
+        {
+          ...TestHelper.sampleArtefact(),
+          type: ArtefactType.BaseMap,
+          description: [
+            {
+              language: Language.English,
+              text: `Burger of country ${needle}`,
+            },
+          ],
+        },
+      ];
+      await service.saveAll(artefacts);
+
+      // Act
+      const results = await service.search(needle, Language.English, 10, 0, ArtefactFilter.OnlyVectors);
+
+      // Assert
+      assert.lengthOf(results, 1);
+      assert.deepEqual(results[0].id, artefacts[0].id);
+    });
   });
 
   it('countArtefacts()', async () => {
@@ -104,7 +165,7 @@ describe('DatastoreService', () => {
   it('index() should work', async () => {
     // Prepare
     const testId = uuid();
-    const artefacts: ArtefactManifest[] = [
+    const artefacts: ArtefactManifestRead[] = [
       TestHelper.sampleArtefactManifest(`${testId}-0`),
       TestHelper.sampleArtefactManifest(`${testId}-1`),
       TestHelper.sampleArtefactManifest(`${testId}-2`),
@@ -130,7 +191,7 @@ describe('DatastoreService', () => {
       // Downloadable file paths must be relative to datastore path
       assert.deepEqual(
         actual.files,
-        expected.artefact.files.map((file) => `${testId}-${i}/${file}`)
+        expected.artefact.files?.map((file) => `${testId}-${i}/${file}`)
       );
       assert.deepEqual(actual.license, `${testId}-${i}/${expected.artefact.license}`);
     }

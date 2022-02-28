@@ -17,7 +17,8 @@
  */
 import { newTestServices, TestServices } from '../../core/utils/test/TestServices';
 import { abcRender } from '../../core/utils/test/abcRender';
-import { logger, SharedMapView } from './SharedMapView';
+import { logger } from './SharedMapView';
+import SharedMapView from './SharedMapView';
 import { Route, Switch } from 'react-router-dom';
 import React from 'react';
 import { SinonStubbedInstance } from 'sinon';

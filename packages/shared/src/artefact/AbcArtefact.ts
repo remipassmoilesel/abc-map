@@ -16,10 +16,15 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 import { I18nList, I18nText } from '../lang';
+import { ArtefactType } from './ArtefactType';
 
+/**
+ * This interface represents an artefact as it is generally used in application.
+ */
 export interface AbcArtefact {
   id: string;
   name: I18nText[];
+  type: ArtefactType;
   description: I18nText[];
   /**
    * Keywords used for search and filter
@@ -30,9 +35,17 @@ export interface AbcArtefact {
    */
   license: string;
   /**
+   * Attributions text will be added to export and credits
+   */
+  attributions: string[];
+  /**
+   * Name of the organism who provide this artefact
+   */
+  provider: string;
+  /**
    * Link to the source of data
    */
-  link?: string;
+  link: string;
   /**
    * Path to the manifest file relative to the datastore
    */
@@ -41,4 +54,9 @@ export interface AbcArtefact {
    * Paths to artefact's files relative to the manifest
    */
   files: string[];
+
+  /**
+   * Path to one or more preview images
+   */
+  previews?: string[];
 }

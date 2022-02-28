@@ -18,3 +18,4 @@
 
 export * from './AbcLayer';
 export * from './LayerProperties';
+export * from './LayerAuthentication';

@@ -1,0 +1,40 @@
+version: 0.0.1
+artefact:
+  name:
+    - language: fr
+      text: OpenStreetMap France
+    - language: en
+      text: OpenStreetMap France
+  type: basemap
+  description:
+    - language: fr
+      text: >-
+        Fond de carte basé sur OpenStreetMap. Priorité donnée aux noms et
+        symboles français (baguette au lieu de bretzel pour la boulangerie !).
+        Présentoir spécial pour les terrains de sport.
+    - language: en
+      text: >-
+        Basemap based on OpenStreetMap. Priority given to French names and
+        symbols (baguette instead of pretzel for the bakery!). Special display
+        for sports fields.
+  keywords:
+    - language: fr
+      text:
+        - openstreetmap
+        - france
+    - language: en
+      text:
+        - openstreetmap
+        - france
+  provider: OpenStreetMap France
+  link: https://www.openstreetmap.fr/
+  license: LICENSE.txt
+  attributions:
+    - © OpenStreetMap contributors.
+  files:
+    - definition.xyz
+  previews:
+    - preview-0.png
+    - preview-1.png
+    - preview-2.png
+  weight: 100

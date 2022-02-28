@@ -19,6 +19,8 @@
 import JSZip from 'jszip';
 import { AbcFile } from './AbcFile';
 
+// TODO: try https://www.npmjs.com/package/unzipit ?
+
 export class Zipper<T extends Blob | Buffer> {
   public static forBackend(): Zipper<Buffer> {
     return new Zipper<Buffer>('nodebuffer');

@@ -1,0 +1,11 @@
+version: 0.0.1
+xyz:
+  url: http://localhost:3010/xyz/authenticated/{x}/{y}/{z}?api_key=${apikey}
+  prompt:
+    - name: apikey
+      type: string
+      description:
+        - language: fr
+          text: Votre clé d'API, par exemple <code>5e46d49fce0</code>
+        - language: en
+          text: Your API key, per example <code>5e46d49fce0</code>

@@ -24,6 +24,7 @@ import { Services } from '../../core/Services';
 import { Logger } from '@abc-map/shared';
 import { ChromiumErrorRegexp, ErrorPosition, Example, FirefoxErrorRegexp, ScriptArguments, ScriptError } from './typings';
 import { ScriptMap } from './api/ScriptMap';
+import { errorMessage } from '../../core/utils/errorMessage';
 
 export const logger = Logger.get('Scripts.tsx', 'info');
 
@@ -105,12 +106,4 @@ export function parseError(error: Error | unknown | any): ErrorPosition | undefi
   const line = parseInt(match[1]) - 3; // 3 is the default offset
   const column = parseInt(match[2]);
   return { line, column };
-}
-
-export function errorMessage(error: Error | unknown | any): string {
-  if ('message' in error) {
-    return error.message;
-  } else {
-    return '<no-message>';
-  }
 }

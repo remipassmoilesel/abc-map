@@ -25,12 +25,16 @@ export class ArtefactMapper {
     return {
       _id: dto.id,
       name: dto.name.map(MongoI18nMapper.textToMongo),
+      type: dto.type,
       path: dto.path,
       files: dto.files,
       description: dto.description.map(MongoI18nMapper.textToMongo),
       keywords: dto.keywords.map(MongoI18nMapper.listToMongo),
       license: dto.license,
-      link: dto.link || null,
+      attributions: dto.attributions,
+      provider: dto.provider,
+      link: dto.link,
+      previews: dto.previews,
     };
   }
 
@@ -38,12 +42,16 @@ export class ArtefactMapper {
     return {
       id: doc._id,
       name: doc.name.map(MongoI18nMapper.textFromMongo),
+      type: doc.type,
       path: doc.path,
       files: doc.files,
       description: doc.description.map(MongoI18nMapper.textFromMongo),
       keywords: doc.keywords.map(MongoI18nMapper.listFromMongo),
       license: doc.license,
-      link: doc.link || undefined,
+      provider: doc.provider,
+      link: doc.link,
+      previews: doc.previews,
+      attributions: doc.attributions,
     };
   }
 }

@@ -1,0 +1,95 @@
+/**
+ * Copyright © 2021 Rémi Pace.
+ * This file is part of Abc-Map.
+ *
+ * Abc-Map is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of
+ * the License, or (at your option) any later version.
+ *
+ * Abc-Map is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General
+ * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+@import "src/styles/variables";
+
+$height: 30vh;
+
+.previews {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+
+  // Some elements are absolutely positioned
+  position: relative;
+
+  height: $height;
+  min-height: $height;
+  max-height: $height;
+}
+
+.smallPreview {
+  height: $height;
+  max-height: $height;
+  width: 100%;
+  max-width: 100%;
+}
+
+.noPreview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 25rem;
+  width: 25vw;
+  height: 100%;
+
+  border: solid 0.1rem $gray-400;
+  border-radius: $border-radius;
+}
+
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  height: 100%;
+}
+
+.fullscreenModal {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  h3 {
+    color: white;
+    margin-bottom: 2rem;
+  }
+
+  background: rgba(0, 0, 0, 0.5);
+
+  z-index: $zIndex-datastore-fullscreenPreview;
+}
+
+.largePreview {
+  height: 75vh;
+  max-height: 75vh;
+  width: 80vw;
+  max-width: 80vw;
+}

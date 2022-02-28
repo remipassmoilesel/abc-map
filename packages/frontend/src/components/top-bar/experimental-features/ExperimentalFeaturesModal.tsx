@@ -20,7 +20,7 @@ import { withTranslation } from 'react-i18next';
 import { Modal } from 'react-bootstrap';
 import React, { useCallback } from 'react';
 import { prefixedTranslation } from '../../../i18n/i18n';
-import { ExperimentalFeature, ExperimentalFeatures } from '../../../ExperimentalFeatures';
+import { ExperimentalFeature, ExperimentalFeatures } from '../../../experimental-features';
 import { useAppDispatch, useAppSelector } from '../../../core/store/hooks';
 import FeatureToggle from './FeatureToggle';
 import { UiActions } from '../../../core/store/ui/actions';
@@ -34,23 +34,17 @@ const t = prefixedTranslation('ExperimentalFeaturesModal:');
 
 function ExperimentalFeaturesModal(props: Props) {
   const { visible, onClose } = props;
-  const features = ExperimentalFeatures;
   const featureStates = useAppSelector((st) => st.ui.experimentalFeatures);
   const dispatch = useAppDispatch();
 
-  const handleChange = useCallback(
-    (f: ExperimentalFeature, state: boolean) => {
-      dispatch(UiActions.setExperimentalFeature(f.id, state));
-    },
-    [dispatch]
-  );
+  const handleChange = useCallback((f: ExperimentalFeature, state: boolean) => dispatch(UiActions.setExperimentalFeature(f.id, state)), [dispatch]);
 
   return (
     <Modal show={visible} size={'sm'} onHide={onClose} centered>
       <Modal.Header closeButton>{t('Experimental_features')}</Modal.Header>
       <Modal.Body className={'d-flex flex-column justify-content-center'}>
         <div className={'mb-4'}>{t('Here_you_can_enable_features')}</div>
-        {features.map((feature) => (
+        {ExperimentalFeatures.map((feature) => (
           <FeatureToggle key={feature.id} feature={feature} state={featureStates[feature.id] ?? false} onChange={handleChange} data-cy={feature.id} />
         ))}
       </Modal.Body>

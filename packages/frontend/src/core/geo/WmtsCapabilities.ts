@@ -78,6 +78,8 @@ export interface TileMatrixSetLink {
 export interface TileMatrixSet {
   Identifier?: string;
   SupportedCRS?: string;
+  BoundingBox?: [number, number, number, number];
+  WellKnownScaleSet?: string;
   TileMatrix?: {
     Identifier?: string;
     ScaleDenominator?: number;

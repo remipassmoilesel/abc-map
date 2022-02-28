@@ -16,8 +16,8 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-@import "src/assets/styles/variables";
-@import "node_modules/bootstrap/scss/bootstrap";
+@import "src/styles/variables";
+@import "src/styles/mixins";
 
 .modal {
   position: absolute;
@@ -34,7 +34,9 @@
   align-items: center;
   justify-content: center;
 
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(0, 0, 0, 0.5);
+  transition: background-color 0.5s;
+
   color: $secondary;
 
   h1 {
@@ -53,10 +55,8 @@
   width: 40rem;
   height: 35rem;
 
+  background-color: white;
   border-radius: $border-radius;
-
-  background-color: rgba(255, 255, 255, 0.7);
-
   user-select: none;
 }
 

@@ -1,40 +1,42 @@
----
 version: 0.1.0
 artefact:
   license: LICENCE.txt
+  attributions:
+    - © somebody somewhere inc ${year}
   name:
     - language: en
-      text: "Afghanistan (admin. level 4)"
+      text: Afghanistan (admin. level 4)
     - language: fr
-      text: "Afghanistan (niveau admin. 4)"
-
+      text: Afghanistan (niveau admin. 4)
   description:
     - language: en
-      text: "Administrative boundaries (provinces, regions, ...)"
+      text: Administrative boundaries (provinces, regions, ...)
     - language: fr
-      text: "Limites administratives (provinces, régions, ...)"
+      text: Limites administratives (provinces, régions, ...)
   link: https://www.openstreetmap.org/
   files:
-    - "afghanistan-l4.zip"
-
+    - afghanistan-l4.zip
   keywords:
     - language: en
       text:
-        - "AF"
-        - "AFG"
-        - "افغانستان"
-        - "Afghanistan"
-        - "Islamic Republic of Afghanistan"
-        - "Level 4"
+        - AF
+        - AFG
+        - افغانستان
+        - Afghanistan
+        - Islamic Republic of Afghanistan
+        - Level 4
     - language: fr
       text:
-        - "AF"
-        - "AFG"
-        - "افغانستان"
-        - "Afghanistan"
-        - "République islamique d'Afghanistan"
-
+        - AF
+        - AFG
+        - افغانستان
+        - Afghanistan
+        - République islamique d'Afghanistan
   metadata:
-    osm_id: "-303427"
-    name: "Afghanistan"
-    admin_level: "4"
+    osm_id: '-303427'
+    name: Afghanistan
+    admin_level: '4'
+  type: vector
+  previews:
+    - preview-1.png
+  provider: OpenStreetMap

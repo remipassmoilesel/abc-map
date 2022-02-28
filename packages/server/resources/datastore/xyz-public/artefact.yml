@@ -1,0 +1,35 @@
+version: 0.0.1
+artefact:
+  name:
+    - language: fr
+      text: Serveur XYZ local
+    - language: en
+      text: XYZ local server
+  description:
+    - language: fr
+      text: Serveur XYZ local, sur le port 3010
+    - language: en
+      text: XYZ local server, on port 3010
+  keywords:
+    - language: fr
+      text:
+        - XYZ
+        - public
+        - serveur
+    - language: en
+      text:
+        - XYZ
+        - public
+        - server
+  license: LICENSE.txt
+  attributions:
+    - ©℗®™ WTF Company
+  files:
+    - definition.xyz
+  previews:
+    - preview-0.png
+    - preview-1.png
+    - preview-2.png
+  type: basemap
+  link: https://www.openstreetmap.org/about
+  provider: OpenStreetMap
