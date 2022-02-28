@@ -56,12 +56,12 @@ export function getServices(): Services {
 export function servicesFactory(store: MainStore): Services {
   const apiClient = httpApiClient(5_000);
   const downloadClient = httpDownloadClient(5_000);
-  const externalClient = httpExternalClient(5_000);
+  const capabilitiesClient = httpExternalClient(20_000);
 
   const toasts = new ToastService();
   const modals = new ModalService();
   const history = HistoryService.create(store);
-  const geo = new GeoService(apiClient, externalClient, toasts, history, store);
+  const geo = new GeoService(apiClient, capabilitiesClient, toasts, history, store);
   const project = ProjectService.create(apiClient, downloadClient, store, toasts, geo, modals);
   const authentication = new AuthenticationService(apiClient, store);
   const dataStore = new DataStoreService(apiClient, downloadClient, toasts);

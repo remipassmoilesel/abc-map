@@ -574,7 +574,14 @@
     "Move_up": "Move up",
     "Move_down": "Move down",
     "Entry_name": "Item name: forest area, marked route, ...",
-    "This_map_legend_cannot_be_found": "This map legend cannot be found"
+    "This_map_legend_cannot_be_found": "This map legend cannot be found",
+    "Copy_another_legend": "Copy another legend",
+    "Page": "Page",
+    "View": "View",
+    "First_you_need_to_create_a_legend": "First you need to create a legend",
+    "Close": "Close",
+    "Layouts": "Layouts",
+    "Shared_views": "Shared views"
   },
   "FundingView": {
     "Support_AbcMap": "Support Abc-Map",

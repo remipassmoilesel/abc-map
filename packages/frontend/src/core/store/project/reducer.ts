@@ -95,6 +95,10 @@ export function projectReducer(state = projectInitialState, action: ProjectActio
       }));
     }
 
+    case ActionType.UpdateLegend: {
+      return transformLegend(state, action.legend.id, () => ({ ...action.legend }));
+    }
+
     case ActionType.UpdateLegendItem: {
       return transformLegend(state, action.legendId, (legend) => ({
         ...legend,

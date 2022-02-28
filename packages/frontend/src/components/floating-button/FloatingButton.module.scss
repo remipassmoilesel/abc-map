@@ -38,15 +38,14 @@
 
   padding: 1rem !important;
 
-  background-color: rgba(white, 0.7);
+  background-color: rgba(white, 0.8);
   border-radius: 100%;
-  border: solid 0.1rem rgba($control-color, 0.4);
+  border: solid 0.1rem $control-color;
 
   box-shadow: $box-shadow;
 
   .icon {
-    opacity: $control-color-opacity;
-    color: rgba($control-color, 0.8);
+    color: $control-color;
   }
 
   &:hover:not([disabled]) {
@@ -54,7 +53,6 @@
 
     .icon {
       color: white;
-      opacity: 1;
     }
   }
 }

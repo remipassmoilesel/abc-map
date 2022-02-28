@@ -2,7 +2,14 @@
 
 For the moment we use git hashes as version, since no one complained about it 👍
 
-## Better datastore  (XXXXXXX 28/02/2021)
+## Legend clone  (XXXXXXX 28/02/2021)
+
+- Add ability to clone legends
+- Datastore preview optimization
+- Greater timeout for capabilities requests
+- Minor style improvements
+
+## Better datastore  (f3a2e8f4 28/02/2021)
 
 - Better artefacts, added fields `attributions`, `previews`, `weight`. See: `packages/shared/src/artefact/ArtefactManifest.ts`.
 - Better data store UI, with details panel and previews

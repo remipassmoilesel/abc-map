@@ -59,8 +59,7 @@ $badge-font-size: 0.9rem;
 $body-color: $gray-800;
 $input-color: $gray-800;
 
-$control-color-opacity: 0.6;
-$control-color: rgba($secondary, $control-color-opacity);
+$control-color: rgba($secondary, 0.75);
 
 $control-color-active-opacity: 0.9;
 $control-color-active: rgba($secondary, $control-color-active-opacity);

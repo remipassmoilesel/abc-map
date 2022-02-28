@@ -20,6 +20,7 @@ import { ProjectActions } from '../store/project/actions';
 import {
   AbcFile,
   AbcLayout,
+  AbcLegend,
   AbcLegendItem,
   AbcProjectManifest,
   AbcProjectMetadata,
@@ -284,6 +285,10 @@ export class ProjectService {
 
   public addLegendItems(legendId: string, items: AbcLegendItem[]): void {
     this.store.dispatch(ProjectActions.addLegendItems(legendId, items));
+  }
+
+  public updateLegend(legend: AbcLegend): void {
+    this.store.dispatch(ProjectActions.updateLegend(legend));
   }
 
   public updateLegendItem(legendId: string, item: AbcLegendItem): void {
