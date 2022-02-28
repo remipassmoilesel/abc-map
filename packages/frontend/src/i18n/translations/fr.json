@@ -574,7 +574,14 @@
     "Move_up": "Monter",
     "Move_down": "Descendre",
     "Entry_name": "Nom de l'élément: zone forestière, itinéraire balisé, ...",
-    "This_map_legend_cannot_be_found": "Cette légende est introuvable"
+    "This_map_legend_cannot_be_found": "Cette légende est introuvable",
+    "Copy_another_legend": "Copier une autre légende",
+    "Page": "Page",
+    "View": "Vue",
+    "First_you_need_to_create_a_legend": "Vous devez d'abord créer une légende",
+    "Close": "Fermer",
+    "Layouts": "Mises en pages",
+    "Shared_views": "Vue partagées"
   },
   "FundingView": {
     "Support_AbcMap": "Soutenez d'Abc-Map",

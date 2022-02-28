@@ -56,7 +56,7 @@ export class GeoService {
 
   constructor(
     private apiClient: AxiosInstance,
-    private externalClient: AxiosInstance,
+    private capabilitiesClient: AxiosInstance,
     private toasts: ToastService,
     private history: HistoryService,
     private store: MainStore,
@@ -167,7 +167,7 @@ export class GeoService {
       capabilitiesUrl = `${url}?service=wms&request=GetCapabilities`;
     }
 
-    const xmlCapabilities = await this.externalClient.get(capabilitiesUrl, { auth }).then((res) => res.data);
+    const xmlCapabilities = await this.capabilitiesClient.get(capabilitiesUrl, { auth }).then((res) => res.data);
     const result = this.wmsCapabilitiesParser(xmlCapabilities);
     if (!result?.Capability?.Layer?.Layer?.length) {
       return Promise.reject(new Error('Invalid WMS capabilities, no layer found'));
@@ -185,7 +185,7 @@ export class GeoService {
       capabilitiesUrl = `${url}?service=wmts&request=GetCapabilities`;
     }
 
-    const xmlCapabilities = await this.externalClient.get(capabilitiesUrl, { auth }).then((res) => res.data);
+    const xmlCapabilities = await this.capabilitiesClient.get(capabilitiesUrl, { auth }).then((res) => res.data);
     const result = this.wmtsCapabilitiesParser(xmlCapabilities);
     if (!result?.Contents?.Layer?.length) {
       return Promise.reject(new Error('Invalid WMTS capabilities, no layer found'));
@@ -263,7 +263,7 @@ export class GeoService {
 
   public async geocode(query: string): Promise<NominatimResult[]> {
     const url = 'https://nominatim.openstreetmap.org/search';
-    return this.externalClient
+    return this.capabilitiesClient
       .get(url, {
         params: {
           q: query,

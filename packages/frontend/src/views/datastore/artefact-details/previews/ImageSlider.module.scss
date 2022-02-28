@@ -31,34 +31,52 @@
   border-radius: $border-radius;
 
   img {
-    height: 100%;
-    max-height: 100%;
     max-width: 100%;
+    max-height: 100%;
   }
 }
 
-.button {
-  border: none;
-  background: none;
-  border-radius: 50%;
-  padding: 0.1rem;
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 
+  width: 100%;
+  height: 100%;
+}
+
+.button {
   position: absolute;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  background: none;
+  box-shadow: $box-shadow;
+  border-radius: 50%;
+  border: none;
+  padding: 0;
+  margin: 0;
 
   &.left {
     top: 50%;
     transform: translate(0, -50%);
     left: 1rem;
-
-    box-shadow: $box-shadow;
   }
 
   &.right {
     top: 50%;
     transform: translate(0, -50%);
     right: 1rem;
+  }
 
-    box-shadow: $box-shadow;
+  &:disabled {
+    :global(.abc-icon) {
+      display: none;
+    }
   }
 }
 

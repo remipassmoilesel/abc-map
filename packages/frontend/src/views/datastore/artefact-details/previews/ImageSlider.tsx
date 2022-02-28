@@ -17,13 +17,19 @@
  */
 
 import Cls from './ImageSlider.module.scss';
-import { MouseEvent } from 'react';
+import { MouseEvent, useEffect } from 'react';
 import { FaIcon } from '../../../../components/icon/FaIcon';
 import { IconDefs } from '../../../../components/icon/IconDefs';
 import { withTranslation } from 'react-i18next';
 import clsx from 'clsx';
 import { useCallback, useState } from 'react';
 import { prefixedTranslation } from '../../../../i18n/i18n';
+import { useServices } from '../../../../core/useServices';
+import { Logger } from '@abc-map/shared';
+import { BlueLoader } from '../../../../components/blue-loader/BlueLoader';
+import { resolveInAtLeast } from '../../../../core/utils/resolveInAtLeast';
+
+const logger = Logger.get('ImageSlider.tsx');
 
 const t = prefixedTranslation('DataStoreView:');
 
@@ -36,17 +42,48 @@ interface Props {
 }
 
 function ImageSlider(props: Props) {
+  const { dataStore, toasts } = useServices();
   const { urls, attributions, onClick, className, buttonSize } = props;
-  const [activePreview, setActivePreview] = useState<string>(urls[0]);
+  const [activeIndex, setActiveIndex] = useState<number>(0);
+  const [activePreview, setActivePreview] = useState<string | undefined>();
+  const [loading, setLoading] = useState(false);
+  const hasPrevious = activeIndex > 0;
+  const hasNext = activeIndex < urls.length - 1;
+
+  // Download active preview
+  useEffect(() => {
+    if (!urls.length) {
+      return;
+    }
+
+    let objectUrl: string | undefined;
+    setLoading(true);
+    resolveInAtLeast(dataStore.downloadFile(urls[activeIndex]), 300)
+      .then((res) => {
+        objectUrl = URL.createObjectURL(res.content);
+        setActivePreview(objectUrl);
+      })
+      .catch((err) => {
+        toasts.genericError(err);
+        logger.error('Cannot download preview: ', err);
+      })
+      .finally(() => setLoading(false));
+
+    return () => {
+      if (objectUrl) {
+        URL.revokeObjectURL(objectUrl);
+      }
+    };
+  }, [activeIndex, dataStore, toasts, urls]);
 
   // Change current image, in specified direction. +1 for next, -1 for previous.
   const changePreview = useCallback(
     (direction: number) => {
-      if (!activePreview) {
+      if (!urls.length) {
         return;
       }
 
-      let index = urls.findIndex((url) => url === activePreview) + direction;
+      let index = activeIndex + direction;
       if (index < 0) {
         index = 0;
       }
@@ -54,9 +91,9 @@ function ImageSlider(props: Props) {
         index = urls.length - 1;
       }
 
-      setActivePreview(urls[index]);
+      setActiveIndex(index);
     },
-    [activePreview, urls]
+    [activeIndex, urls]
   );
 
   const handlePrevious = useCallback(
@@ -77,15 +114,23 @@ function ImageSlider(props: Props) {
 
   return (
     <div className={clsx(Cls.slider, className)}>
-      {/* Preview */}
-      {activePreview && <img src={activePreview} alt={t('Preview_of_artifact')} onClick={onClick} />}
+      {/* Loading animation */}
+      {loading && (
+        <div className={Cls.loading}>
+          <BlueLoader />
+        </div>
+      )}
 
+      {/* Preview */}
+      {!loading && activePreview && <img src={activePreview} alt={t('Preview_of_artifact')} onClick={onClick} />}
+
+      {/* Control buttons */}
       {urls.length > 1 && (
         <>
-          <button className={clsx(Cls.button, Cls.left)} onClick={handlePrevious}>
+          <button className={clsx(Cls.button, Cls.left)} onClick={handlePrevious} disabled={!hasPrevious}>
             <FaIcon icon={IconDefs.faArrowCircleLeft} size={buttonSize || '2rem'} />
           </button>
-          <button className={clsx(Cls.button, Cls.right)} onClick={handleNext}>
+          <button className={clsx(Cls.button, Cls.right)} onClick={handleNext} disabled={!hasNext}>
             <FaIcon icon={IconDefs.faArrowCircleRight} size={buttonSize || '2rem'} />
           </button>
         </>

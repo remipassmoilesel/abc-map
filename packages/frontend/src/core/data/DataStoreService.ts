@@ -54,33 +54,12 @@ export class DataStoreService {
       return Promise.resolve([]);
     }
 
-    const files = artefact.files.map((file) =>
-      this.downloadClient
-        .get(Api.download(file))
-        .then((res) => ({ path: file, content: res.data }))
-        .catch((err) => {
-          this.toasts.genericError(err);
-          return Promise.reject(err);
-        })
-    );
+    const files = artefact.files.map((file) => this.downloadFile(file));
     return Promise.all(files);
   }
 
-  public downloadPreviewsFrom(artefact: AbcArtefact): Promise<AbcFile<Blob>[]> {
-    if (!artefact.previews?.length) {
-      return Promise.resolve([]);
-    }
-
-    const files = artefact.previews.map((preview) =>
-      this.downloadClient
-        .get(Api.download(preview))
-        .then((res) => ({ path: preview, content: res.data }))
-        .catch((err) => {
-          this.toasts.genericError(err);
-          return Promise.reject(err);
-        })
-    );
-    return Promise.all(files);
+  public downloadFile(path: string): Promise<AbcFile<Blob>> {
+    return this.downloadClient.get(Api.download(path)).then((res) => ({ path, content: res.data }));
   }
 
   public downloadLicense(artefact: AbcArtefact): Promise<string> {

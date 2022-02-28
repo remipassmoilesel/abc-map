@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcLayout, AbcLegendItem, AbcProjectManifest, AbcSharedView, AbcView, LegendDisplay } from '@abc-map/shared';
+import { AbcLayout, AbcLegend, AbcLegendItem, AbcProjectManifest, AbcSharedView, AbcView, LegendDisplay } from '@abc-map/shared';
 
 export enum ActionType {
   LoadProject = 'LoadProject',
@@ -28,6 +28,7 @@ export enum ActionType {
   RemoveLayouts = 'RemoveLayouts',
   SetActiveLayout = 'SetActiveLayout',
   AddLegendItems = 'AddLegendItems',
+  UpdateLegend = 'UpdateLegend',
   UpdateLegendItem = 'UpdateLegendItem',
   SetLegendSize = 'SetLegendSize',
   SetLegendDisplay = 'SetLegendDisplay',
@@ -91,6 +92,11 @@ export interface UpdateLegendItem {
   type: ActionType.UpdateLegendItem;
   item: AbcLegendItem;
   legendId: string;
+}
+
+export interface UpdateLegend {
+  type: ActionType.UpdateLegend;
+  legend: AbcLegend;
 }
 
 export interface SetLegendSize {
@@ -159,6 +165,7 @@ export type ProjectAction =
   | ClearLayouts
   | SetActiveLayout
   | AddLegendItems
+  | UpdateLegend
   | UpdateLegendItem
   | SetLegendSize
   | SetLegendDisplay
@@ -233,6 +240,13 @@ export class ProjectActions {
       type: ActionType.AddLegendItems,
       items,
       legendId,
+    };
+  }
+
+  public static updateLegend(legend: AbcLegend): ProjectAction {
+    return {
+      type: ActionType.UpdateLegend,
+      legend,
     };
   }
 

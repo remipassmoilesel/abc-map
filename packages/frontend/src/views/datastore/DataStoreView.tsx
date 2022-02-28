@@ -59,7 +59,7 @@ function DataStoreView() {
       setSearching(false);
       setLoading(true);
 
-      resolveInAtLeast(dataStore.listArtefacts(filter, PageSize, offset), 400)
+      resolveInAtLeast(dataStore.listArtefacts(filter, PageSize, offset), 300)
         .then((res) => {
           setOffset(res.offset);
           setTotal(res.total);
@@ -77,7 +77,7 @@ function DataStoreView() {
       setSearching(true);
       setLoading(true);
 
-      resolveInAtLeast(dataStore.searchArtefacts(query, filter), 400)
+      resolveInAtLeast(dataStore.searchArtefacts(query, filter), 300)
         .then((res) => setArtefacts(res.content))
         .catch((err) => logger.error(err))
         .finally(() => setLoading(false));
@@ -154,7 +154,7 @@ function DataStoreView() {
             const selected = activeArtefact?.id === art.id;
             return <ArtefactCard key={i} selected={selected} artefact={art} onSelected={handleArtefactSelected} />;
           })}
-          {!artefacts.length && <div className={'mx-3'}>{t('No_result')}</div>}
+          {!artefacts.length && !loading && <div className={'mx-3'}>{t('No_result')}</div>}
         </div>
 
         {!searching && (

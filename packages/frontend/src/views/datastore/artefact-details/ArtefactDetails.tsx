@@ -195,7 +195,7 @@ function ArtefactDetails(props: Props) {
 
           {/* Artefact preview */}
           <h4>{t('Preview')}</h4>
-          <Previews artefact={artefact} className={'mb-4'} />
+          <Previews artefact={artefact} className={'mb-4'} key={artefact.id} />
 
           {/* Actions */}
           <h4 className={'mb-3'}>{t('Actions')}</h4>

@@ -16,7 +16,8 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useCallback, useEffect } from 'react';
+import Cls from './MapLegendView.module.scss';
+import React, { useCallback, useEffect, useState } from 'react';
 import { AbcLegendItem, LegendParams, Logger } from '@abc-map/shared';
 import LegendPreview from './preview/LegendPreview';
 import LegendUpdateForm from './legend-update/LegendUpdateForm';
@@ -28,7 +29,7 @@ import { IconDefs } from '../../components/icon/IconDefs';
 import { FaIcon } from '../../components/icon/FaIcon';
 import { useServices } from '../../core/useServices';
 import { useMapLegend } from '../../core/project/useMapLegend';
-import Cls from './MapLegendView.module.scss';
+import CloneLegendModal from './clone-legend-modal/CloneLegendModal';
 
 const logger = Logger.get('MapLegendView.tsx');
 
@@ -39,6 +40,7 @@ export function MapLegendView() {
   const history = useHistory();
   const match = useRouteMatch<LegendParams>();
   const legend = useMapLegend(match.params.id || '');
+  const [cloneModal, displayCloneModal] = useState(false);
 
   useEffect(() => pageSetup(t('Edit_legend'), t('Create_legend_for_your_map')), []);
 
@@ -122,6 +124,9 @@ export function MapLegendView() {
   const handleItemUp = useCallback((item: AbcLegendItem) => moveItem(item, -1), [moveItem]);
   const handleItemDown = useCallback((item: AbcLegendItem) => moveItem(item, +1), [moveItem]);
 
+  const handleDisplayModal = useCallback(() => displayCloneModal(true), []);
+  const handleHideModal = useCallback(() => displayCloneModal(false), []);
+
   return (
     <div className={Cls.mapLegendView}>
       {!legend && (
@@ -146,10 +151,12 @@ export function MapLegendView() {
               </button>
             </div>
           </div>
+
           <div className={'row'}>
-            {/* Add / update legend items */}
             <div className={'col-xl-6 '}>
               <h1 className={'mt-3 mb-4'}>{t('Edit_legend')}</h1>
+
+              {/* Add / update legend items */}
               <LegendUpdateForm
                 legend={legend}
                 onSizeChanged={handleSizeChanged}
@@ -160,10 +167,22 @@ export function MapLegendView() {
                 onItemDown={handleItemDown}
               />
             </div>
+
             {/* Legend preview */}
             <div className={'col-xl-6'}>
               <h4 className={'mt-4 mb-4'}>{t('Preview')}</h4>
               <LegendPreview legend={legend} onSizeChanged={handleSizeChanged} />
+            </div>
+          </div>
+
+          <div className={'row'}>
+            <div className={'col-xl-6'}>
+              {/* Clone legend */}
+              <button className={'btn btn-link'} onClick={handleDisplayModal}>
+                <FaIcon icon={IconDefs.faCopy} className={'mr-2'} />
+                {t('Copy_another_legend')}
+              </button>
+              {cloneModal && <CloneLegendModal legendId={legend.id} onHide={handleHideModal} />}
             </div>
           </div>
         </div>
