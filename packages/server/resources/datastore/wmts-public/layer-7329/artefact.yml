@@ -1,0 +1,43 @@
+version: 0.0.1
+artefact:
+  name:
+    - language: fr
+      text: Serveur WMTS local layer-7329
+    - language: en
+      text: WMTS local server layer-7329
+  description:
+    - language: fr
+      text: >-
+        Serveur WMTS local, sur le port 3010 Historical earthquake data,
+        accessed via the [GeoNet WFS
+        feed](http://info.geonet.org.nz/display/appdata/Advanced+Queries). The
+        data has...
+    - language: en
+      text: >-
+        WMTS local server, sur le port 3010 Historical earthquake data, accessed
+        via the [GeoNet WFS
+        feed](http://info.geonet.org.nz/display/appdata/Advanced+Queries). The
+        data has...
+  keywords:
+    - language: fr
+      text:
+        - wmts
+        - public
+        - serveur
+    - language: en
+      text:
+        - wmts
+        - public
+        - server
+  license: LICENSE.txt
+  attributions:
+    - ©℗®™ WTF Company
+  files:
+    - definition.wmts
+  previews:
+    - preview-0.png
+    - preview-1.png
+    - preview-2.png
+  type: basemap
+  link: https://www.openstreetmap.org/about
+  provider: OpenStreetMap

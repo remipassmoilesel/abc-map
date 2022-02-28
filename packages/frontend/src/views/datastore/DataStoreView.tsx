@@ -16,221 +16,158 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { ChangeEvent, Component, KeyboardEvent, ReactNode } from 'react';
-import { AbcArtefact, Logger, Zipper } from '@abc-map/shared';
+import Cls from './DataStoreView.module.scss';
+import React, { useCallback, useEffect, useState } from 'react';
+import { AbcArtefact, ArtefactFilter, Logger } from '@abc-map/shared';
 import ArtefactCard from './artefact-card/ArtefactCard';
-import { ServiceProps, withServices } from '../../core/withServices';
-import NavigationBar from './NavigationBar';
-import { FileFormat, FileFormats } from '../../core/data/FileFormats';
-import { FileIO } from '../../core/utils/FileIO';
+import NavigationBar from './navigation-bar/NavigationBar';
 import { pageSetup } from '../../core/utils/page-setup';
-import { ImportStatus } from '../../core/data/DataService';
 import { resolveInAtLeast } from '../../core/utils/resolveInAtLeast';
 import { prefixedTranslation } from '../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
-import { IconDefs } from '../../components/icon/IconDefs';
-import { FaIcon } from '../../components/icon/FaIcon';
-import Cls from './DataStoreView.module.scss';
-import { InlineLoader } from '../../components/inline-loader/InlineLoader';
+import { useServices } from '../../core/useServices';
+import ArtefactDetails from './artefact-details/ArtefactDetails';
+import SearchBar from './search-bar/SearchBar';
 
 const logger = Logger.get('DataStoreView.tsx');
 
-const PageSize = 9;
-
-interface State {
-  artefacts: AbcArtefact[];
-  limit: number;
-  offset: number;
-  total: number;
-  activePage: number;
-  searchQuery: string;
-  downloading: boolean;
-  searching: boolean;
-}
-
 const t = prefixedTranslation('DataStoreView:');
 
-class DataStoreView extends Component<ServiceProps, State> {
-  constructor(props: ServiceProps) {
-    super(props);
-    this.state = {
-      artefacts: [],
-      limit: PageSize,
-      offset: 0,
-      total: 0,
-      activePage: 1,
-      searchQuery: '',
-      downloading: false,
-      searching: false,
-    };
-  }
+const PageSize = 14;
 
-  public render(): ReactNode {
-    const query = this.state.searchQuery;
-    const artefacts = this.state.artefacts;
-    const total = this.state.total;
-    const activePage = this.state.activePage;
-    const numberOfPages = Math.ceil(total / PageSize);
-    const downloading = this.state.downloading;
-    const searching = this.state.searching;
+function DataStoreView() {
+  const { dataStore } = useServices();
+  // List of artefacts displayed in list
+  const [artefacts, setArtefacts] = useState<AbcArtefact[]>([]);
+  // Artefact displayed in detail panel, on right
+  const [activeArtefact, setActiveArtefact] = useState<AbcArtefact>();
+  const [offset, setOffset] = useState(0);
+  const [total, setTotal] = useState(0);
+  const [searching, setSearching] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [filter, setFilter] = useState(ArtefactFilter.All);
+  const [query, setQuery] = useState('');
+  // Details can be hidden on mobile device
+  const [detailsVisible, setDetailsVisible] = useState(false);
 
-    return (
-      <div className={Cls.datastore}>
-        <div className={Cls.header}>
-          {/* Search bar */}
-          <input
-            type={'text'}
-            value={query}
-            onChange={this.handleQueryChange}
-            onKeyUp={this.handleKeyUp}
-            placeholder={t('France_regions_world')}
-            className={'form-control mr-2'}
-            data-cy={'data-store-search'}
-          />
+  // Page setup
+  useEffect(() => pageSetup(t('Data_store'), t('Add_data_easily')), []);
 
-          <button onClick={this.handleSearch} className={'btn btn-primary'}>
-            {t('Search')}
-          </button>
+  // List page on component mount or on demand
+  const listArtefacts = useCallback(
+    (filter: ArtefactFilter, offset: number) => {
+      setSearching(false);
+      setLoading(true);
 
-          {/* Clear search button */}
-          {query && (
-            <button className={'btn btn-outline-secondary mx-2'} onClick={this.clearSearch}>
-              <FaIcon icon={IconDefs.faTimes} />
-            </button>
-          )}
+      resolveInAtLeast(dataStore.listArtefacts(filter, PageSize, offset), 400)
+        .then((res) => {
+          setOffset(res.offset);
+          setTotal(res.total);
+          setArtefacts(res.content);
+        })
+        .catch((err) => logger.error(err))
+        .finally(() => setLoading(false));
+    },
+    [dataStore]
+  );
 
-          <InlineLoader size={2} active={searching} />
+  // Search artefacts on demand
+  const searchArtefacts = useCallback(
+    (query: string, filter: ArtefactFilter) => {
+      setSearching(true);
+      setLoading(true);
+
+      resolveInAtLeast(dataStore.searchArtefacts(query, filter), 400)
+        .then((res) => setArtefacts(res.content))
+        .catch((err) => logger.error(err))
+        .finally(() => setLoading(false));
+    },
+    [dataStore]
+  );
+
+  // On mount we list artefacts
+  useEffect(() => listArtefacts(ArtefactFilter.All, 0), [listArtefacts]);
+
+  // User clicks on navbar page list
+  const handlePageChange = useCallback(
+    (offset: number) => {
+      setOffset(offset);
+      listArtefacts(filter, offset);
+    },
+    [filter, listArtefacts]
+  );
+
+  // User clicks on search
+  const handleRequest = useCallback(
+    (query: string) => {
+      if (query) {
+        searchArtefacts(query, filter);
+      } else {
+        setOffset(0);
+        listArtefacts(filter, 0);
+      }
+    },
+    [filter, listArtefacts, searchArtefacts]
+  );
+
+  // User clicks on filter
+  const handleFilterChange = useCallback(
+    (filter: ArtefactFilter) => {
+      setFilter(filter);
+      if (query) {
+        searchArtefacts(query, filter);
+      } else {
+        setOffset(0);
+        listArtefacts(filter, 0);
+      }
+    },
+    [listArtefacts, query, searchArtefacts]
+  );
+
+  const handleQueryChange = useCallback((query: string) => setQuery(query), []);
+
+  // User clicks on "clear" button
+  const handleClear = useCallback(() => {
+    setQuery('');
+    setFilter(ArtefactFilter.All);
+    setOffset(0);
+    listArtefacts(ArtefactFilter.All, 0);
+  }, [listArtefacts]);
+
+  // User clicks on artefact
+  const handleArtefactSelected = useCallback((artefact) => {
+    setActiveArtefact(artefact);
+    setDetailsVisible(true);
+  }, []);
+
+  // User can hide details on mobile device
+  const handleHideDetails = useCallback(() => setDetailsVisible(false), []);
+
+  return (
+    <div className={Cls.datastoreView}>
+      {/* Left part with search bar and list */}
+      <div className={Cls.leftPart}>
+        <SearchBar loading={loading} onSearch={handleRequest} onFilterChange={handleFilterChange} onQueryChange={handleQueryChange} onClear={handleClear} />
+
+        <div className={Cls.artefactList}>
+          {artefacts.map((art, i) => {
+            const selected = activeArtefact?.id === art.id;
+            return <ArtefactCard key={i} selected={selected} artefact={art} onSelected={handleArtefactSelected} />;
+          })}
+          {!artefacts.length && <div className={'mx-3'}>{t('No_result')}</div>}
         </div>
 
-        {/* Waiting screen */}
-        {downloading && (
-          <div className={Cls.loading}>
-            <h4 className={'my-3 mx-2'}>{t('A_bit_of_patience')} ⌛</h4>
+        {!searching && (
+          <div className={Cls.navigationBar}>
+            <NavigationBar offset={offset} limit={PageSize} total={total} onClick={handlePageChange} />
           </div>
         )}
-
-        {/* Artefact list */}
-        {!downloading && (
-          <>
-            <div className={Cls.artefactList}>
-              {artefacts.map((art, i) => (
-                <ArtefactCard artefact={art} key={i} onImport={this.handleImportArtefact} onDownload={this.handleDownloadArtefact} />
-              ))}
-              {!artefacts.length && query && <div className={'mx-3'}>{t('No_result')}</div>}
-            </div>
-
-            {/* Navigation bar */}
-            {!query && !!artefacts.length && (
-              <div className={Cls.navigationBar}>
-                <NavigationBar activePage={activePage} numberOfPages={numberOfPages} onClick={this.handlePageChange} />
-              </div>
-            )}
-          </>
-        )}
       </div>
-    );
-  }
 
-  public componentDidMount() {
-    pageSetup(t('Data_store'), t('Add_data_easily'));
-
-    this.listArtefacts();
-  }
-
-  private handleQueryChange = (ev: ChangeEvent<HTMLInputElement>) => {
-    // We set query and we reset offset and limit parameters
-    this.setState({ searchQuery: ev.target.value, limit: PageSize, offset: 0 });
-  };
-
-  private handleKeyUp = (ev: KeyboardEvent<HTMLInputElement>) => {
-    if (ev.key === 'Enter') {
-      this.handleSearch();
-    }
-  };
-
-  private clearSearch = () => {
-    this.setState({ searchQuery: '' }, () => this.listArtefacts());
-  };
-
-  private handleSearch = () => {
-    this.searchArtefacts();
-  };
-
-  private searchArtefacts() {
-    const { data } = this.props.services;
-    const { searchQuery } = this.state;
-
-    if (!searchQuery) {
-      return;
-    }
-
-    this.setState({ searching: true });
-
-    resolveInAtLeast(data.searchArtefacts(searchQuery), 400)
-      .then((res) => this.setState({ artefacts: res.content }))
-      .catch((err) => logger.error(err))
-      .finally(() => this.setState({ searching: false }));
-  }
-
-  private handlePageChange = (activePage: number) => {
-    const offset = Math.round((activePage - 1) * PageSize);
-    this.setState({ activePage, offset }, () => this.listArtefacts());
-  };
-
-  private listArtefacts() {
-    const { data } = this.props.services;
-    const { limit, offset } = this.state;
-
-    data
-      .listArtefacts(limit, offset)
-      .then((res) => this.setState({ artefacts: res.content, limit: res.limit, offset: res.offset, total: res.total }))
-      .catch((err) => logger.error(err));
-  }
-
-  private handleImportArtefact = (artefact: AbcArtefact) => {
-    const { toasts, data } = this.props.services;
-
-    this.setState({ downloading: true });
-    resolveInAtLeast(data.importArtefact(artefact), 800)
-      .then((res) => {
-        if (res.status === ImportStatus.Failed) {
-          toasts.error(t('Formats_not_supported'));
-          return;
-        }
-        if (res.status === ImportStatus.Canceled) {
-          return;
-        }
-
-        toasts.info(t('Import_done'));
-      })
-      .catch((err) => {
-        logger.error(err);
-        toasts.genericError();
-      })
-      .finally(() => this.setState({ downloading: false }));
-  };
-
-  private handleDownloadArtefact = (artefact: AbcArtefact) => {
-    const { toasts, data } = this.props.services;
-
-    this.setState({ downloading: true });
-    resolveInAtLeast(data.downloadFilesFrom(artefact), 800)
-      .then(async (res) => {
-        let content: Blob;
-        if (res.length === 1 && FileFormat.ZIP === FileFormats.fromPath(res[0].path)) {
-          content = res[0].content;
-        } else {
-          content = await Zipper.forFrontend().zipFiles(res);
-        }
-
-        FileIO.outputBlob(content, 'artefact.zip');
-      })
-      .catch((err) => {
-        logger.error(err);
-        toasts.genericError();
-      })
-      .finally(() => this.setState({ downloading: false }));
-  };
+      {/* Right part with artefact details, preview, ... */}
+      <ArtefactDetails activeArtefact={activeArtefact} mobileVisible={detailsVisible} mobileOnHide={handleHideDetails} className={Cls.rightPart} />
+    </div>
+  );
 }
 
-export default withTranslation()(withServices(DataStoreView));
+export default withTranslation()(DataStoreView);

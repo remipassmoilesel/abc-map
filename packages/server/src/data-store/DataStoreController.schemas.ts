@@ -17,10 +17,18 @@
  */
 import { FastifySchema } from 'fastify/types/schema';
 import { PaginatedQuery } from '../server/PaginationHelper';
+import { ArtefactFilter } from '@abc-map/shared';
+
+export interface ListQuery extends PaginatedQuery {
+  query: string;
+  lang: string;
+  filter: ArtefactFilter;
+}
 
 export interface SearchQuery extends PaginatedQuery {
   query: string;
   lang: string;
+  filter: ArtefactFilter;
 }
 
 export interface ByIdParams {
@@ -30,10 +38,12 @@ export interface ByIdParams {
 export const ListSchema: FastifySchema = {
   querystring: {
     type: 'object',
+    required: ['filter'],
     additionalProperties: false,
     properties: {
       limit: { type: 'string' },
       offset: { type: 'string' },
+      filter: { type: 'string' },
     },
   },
 };
@@ -41,13 +51,14 @@ export const ListSchema: FastifySchema = {
 export const SearchSchema: FastifySchema = {
   querystring: {
     type: 'object',
-    required: ['query'],
+    required: ['query', 'lang', 'filter'],
     additionalProperties: false,
     properties: {
       limit: { type: 'string' },
       offset: { type: 'string' },
       query: { type: 'string' },
       lang: { type: 'string' },
+      filter: { type: 'string' },
     },
   },
 };

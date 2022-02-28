@@ -1,4 +1,3 @@
----
 version: 0.1.0
 artefact:
   license: README.txt
@@ -17,7 +16,9 @@ artefact:
       text:
         - monde
         - hydrography
-
   files:
     - world-hydrography.zip
-
+  attributions:
+    - © Carlos Efraín Porto Tapiquén
+  type: vector
+  provider: Carlos Efraín Porto Tapiquén

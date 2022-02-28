@@ -1,39 +1,42 @@
----
 version: 0.1.0
 artefact:
   license: LICENCE.txt
   name:
     - language: en
-      text: "Bolivia (admin. level 8)"
+      text: Bolivia (admin. level 8)
     - language: fr
-      text: "Bolivie (niveau admin. 8)"
-
+      text: Bolivie (niveau admin. 8)
   description:
     - language: en
-      text: "Administrative boundaries (provinces, regions, ...)"
+      text: Administrative boundaries (provinces, regions, ...)
     - language: fr
-      text: "Limites administratives (provinces, régions, ...)"
+      text: Limites administratives (provinces, régions, ...)
   link: https://www.openstreetmap.org/
   files:
-    - "bolivia-l8.zip"
-
+    - bolivia-l8.zip
   keywords:
     - language: en
       text:
-        - "Bolivia"
-        - "BO"
-        - "BOL"
-        - "Plurinational State of Bolivia"
-        - "Level 8"
+        - Bolivia
+        - BO
+        - BOL
+        - Plurinational State of Bolivia
+        - Level 8
     - language: fr
       text:
-        - "Bolivia"
-        - "BO"
-        - "BOL"
-        - "Bolivie"
-        - "État plurinational de Bolivie"
-
+        - Bolivia
+        - BO
+        - BOL
+        - Bolivie
+        - État plurinational de Bolivie
   metadata:
-    osm_id: "-252645"
-    name: "Bolivia"
-    admin_level: "8"
+    osm_id: '-252645'
+    name: Bolivia
+    admin_level: '8'
+  attributions:
+    - © OpenStreetMap contributors.
+  type: vector
+  previews:
+    - preview-1.png
+  provider: OpenStreetMap
+  weight: 100

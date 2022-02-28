@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-@import "src/assets/styles/variables";
+@import "src/styles/variables";
 
 .container {
   position: fixed;
@@ -66,7 +66,7 @@
     background-color: white;
     padding: 0.2rem 0.5rem;
     border: none;
-    color: $gray-600;
+    color: $secondary;
 
     margin: 0.4rem;
   }

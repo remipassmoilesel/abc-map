@@ -26,13 +26,14 @@ import { AbcFile } from '@abc-map/shared';
 import uuid from 'uuid-random';
 import { LayerWrapper } from '../../geo/layers/LayerWrapper';
 import { LayerFactory } from '../../geo/layers/LayerFactory';
+import { ReadResult, ReadStatus } from '../ReadResult';
 
 export class GpxReader extends AbstractDataReader {
   public async isSupported(files: AbcFile<Blob>[]): Promise<boolean> {
     return files.filter((f) => FileFormats.fromPath(f.path) === FileFormat.GPX).length > 0;
   }
 
-  public async read(files: AbcFile<Blob>[], projection: AbcProjection): Promise<LayerWrapper[]> {
+  public async read(files: AbcFile<Blob>[], projection: AbcProjection): Promise<ReadResult> {
     const layers: LayerWrapper[] = [];
     const format = new GPX();
     const gpxFiles = files.filter((f) => FileFormats.fromPath(f.path) === FileFormat.GPX);
@@ -56,6 +57,6 @@ export class GpxReader extends AbstractDataReader {
       layers.push(layer);
     }
 
-    return layers;
+    return { status: ReadStatus.Succeed, layers };
   }
 }

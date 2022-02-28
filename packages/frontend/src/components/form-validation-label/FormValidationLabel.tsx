@@ -186,6 +186,11 @@ class FormValidationLabel extends Component<Props, {}> {
         icon = IconDefs.faExclamationCircle;
         message = t('End_color_mandatory');
         break;
+
+      case FormState.FieldMissing:
+        icon = IconDefs.faExclamationCircle;
+        message = t('Missing_fields');
+        break;
     }
 
     return { icon, message };

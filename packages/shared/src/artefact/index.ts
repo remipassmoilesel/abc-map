@@ -17,4 +17,9 @@
  */
 
 export * from './AbcArtefact';
-export * from './WmsDefinition';
+export * from './ArtefactFilter';
+export * from './ArtefactManifest';
+export * from './ArtefactType';
+export * from './WmsDefinitionManifest';
+export * from './WmtsDefinitionManifest';
+export * from './XyzDefinitionManifest';

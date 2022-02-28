@@ -310,6 +310,9 @@ export class GeoService {
     // See: https://openlayers.org/en/latest/doc/tutorials/raster-reprojection.html
     // See: https://openlayers.org/en/latest/examples/reprojection-by-code.html
     const proj = getProjection(_code);
+    if (!proj) {
+      return Promise.reject(new Error(`Projection not found: ${_code}, even after proj4.defs()`));
+    }
     let worldExtent: Extent = [bbox[1], bbox[2], bbox[3], bbox[0]];
     proj.setWorldExtent(worldExtent);
 

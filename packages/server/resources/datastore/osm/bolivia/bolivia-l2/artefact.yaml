@@ -1,39 +1,41 @@
----
 version: 0.1.0
 artefact:
   license: LICENCE.txt
+  attributions:
+    - © somebody somewhere inc ${year}
   name:
     - language: en
-      text: "Bolivia (borders)"
+      text: Bolivia (borders)
     - language: fr
-      text: "Bolivie (frontières)"
-
+      text: Bolivie (frontières)
   description:
     - language: en
-      text: "International borders"
+      text: International borders
     - language: fr
-      text: "Frontières internationales"
+      text: Frontières internationales
   link: https://www.openstreetmap.org/
   files:
-    - "bolivia-l2.zip"
-
+    - bolivia-l2.zip
   keywords:
     - language: en
       text:
-        - "Bolivia"
-        - "BO"
-        - "BOL"
-        - "Plurinational State of Bolivia"
-        - "Level 2"
+        - Bolivia
+        - BO
+        - BOL
+        - Plurinational State of Bolivia
+        - Level 2
     - language: fr
       text:
-        - "Bolivia"
-        - "BO"
-        - "BOL"
-        - "Bolivie"
-        - "État plurinational de Bolivie"
-
+        - Bolivia
+        - BO
+        - BOL
+        - Bolivie
+        - État plurinational de Bolivie
   metadata:
-    osm_id: "-252645"
-    name: "Bolivia"
-    admin_level: "2"
+    osm_id: '-252645'
+    name: Bolivia
+    admin_level: '2'
+  type: vector
+  previews:
+    - preview-1.png
+  provider: OpenStreetMap

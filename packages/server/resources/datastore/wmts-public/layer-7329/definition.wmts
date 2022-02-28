@@ -1,0 +1,4 @@
+version: 0.0.1
+wmts:
+  capabilitiesUrl: http://localhost:3010/wmts/public
+  remoteLayerName: layer-7329

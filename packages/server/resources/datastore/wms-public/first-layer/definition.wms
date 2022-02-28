@@ -1,0 +1,7 @@
+version: 0.0.1
+wms:
+  urls:
+    - http://localhost:3010/wms/public?SERVICE=WMS&
+  remoteLayerName: first-layer
+  projection:
+    name: EPSG:4326

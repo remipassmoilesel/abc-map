@@ -1,0 +1,3 @@
+version: 0.0.1
+xyz:
+  url: http://localhost:3010/xyz/public/{x}/{y}/{z}

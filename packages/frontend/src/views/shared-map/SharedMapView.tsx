@@ -33,12 +33,13 @@ import { MapLegend } from '../../components/map-legend/MapLegend';
 import { MapUi } from '../../components/map-ui/MapUi';
 import { E2eMapWrapper } from '../../core/geo/map/E2eMapWrapper';
 import { resolveInAtLeast } from '../../core/utils/resolveInAtLeast';
+import { withTranslation } from 'react-i18next';
 
 export const logger = Logger.get('SharedMapView.tsx');
 
 const t = prefixedTranslation('SharedMapView:');
 
-export function SharedMapView() {
+function SharedMapView() {
   const { project, geo } = useServices();
   const match = useRouteMatch<SharedMapParams>();
   // Here we use a state for map because we have to re-render after map init
@@ -132,3 +133,5 @@ export function SharedMapView() {
     </div>
   );
 }
+
+export default withTranslation()(SharedMapView);

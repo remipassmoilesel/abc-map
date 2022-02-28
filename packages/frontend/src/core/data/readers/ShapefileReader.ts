@@ -26,11 +26,11 @@ import { GeoJSON } from 'ol/format';
 import VectorSource from 'ol/source/Vector';
 import { BlobIO } from '@abc-map/shared';
 import uuid from 'uuid-random';
-import { LayerWrapper } from '../../geo/layers/LayerWrapper';
 import { LayerFactory } from '../../geo/layers/LayerFactory';
 import proj4 from 'proj4';
 import { WktParser } from '../wkt/WktParser';
 import { register } from 'ol/proj/proj4';
+import { ReadResult, ReadStatus } from '../ReadResult';
 
 const logger = Logger.get('ShapefileReader.ts');
 
@@ -39,7 +39,7 @@ export class ShapefileReader extends AbstractDataReader {
     return files.filter((f) => FileFormats.fromPath(f.path) === FileFormat.SHAPEFILE).length > 0;
   }
 
-  public async read(files: AbcFile<Blob>[], projection: AbcProjection): Promise<LayerWrapper[]> {
+  public async read(files: AbcFile<Blob>[], projection: AbcProjection): Promise<ReadResult> {
     const _files = files.filter((f) => FileFormats.fromPath(f.path) === FileFormat.SHAPEFILE);
     if (_files.length > 2) {
       return Promise.reject(new Error('Cannot parse more than one shapefile at once'));
@@ -79,6 +79,6 @@ export class ShapefileReader extends AbstractDataReader {
     };
     layer.setMetadata(metadata);
 
-    return [layer];
+    return { status: ReadStatus.Succeed, layers: [layer] };
   }
 }

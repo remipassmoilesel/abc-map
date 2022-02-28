@@ -1,4 +1,3 @@
----
 version: 0.1.0
 artefact:
   license: README.txt
@@ -19,4 +18,7 @@ artefact:
   link: http://tapiquen-sig.jimdo.com
   files:
     - world-countries.zip
-
+  attributions:
+    - © Carlos Efraín Porto Tapiquén
+  type: vector
+  provider: Carlos Efraín Porto Tapiquén

@@ -26,13 +26,14 @@ import { AbcFile } from '@abc-map/shared';
 import uuid from 'uuid-random';
 import { LayerWrapper } from '../../geo/layers/LayerWrapper';
 import { LayerFactory } from '../../geo/layers/LayerFactory';
+import { ReadResult, ReadStatus } from '../ReadResult';
 
 export class GeoJsonReader extends AbstractDataReader {
   public async isSupported(files: AbcFile<Blob>[]): Promise<boolean> {
     return files.filter((f) => FileFormats.fromPath(f.path) === FileFormat.GEOJSON).length > 0;
   }
 
-  public async read(files: AbcFile<Blob>[], projection: AbcProjection): Promise<LayerWrapper[]> {
+  public async read(files: AbcFile<Blob>[], projection: AbcProjection): Promise<ReadResult> {
     const layers: LayerWrapper[] = [];
     const format = new GeoJSON();
     const _files = files.filter((f) => FileFormats.fromPath(f.path) === FileFormat.GEOJSON);
@@ -55,6 +56,6 @@ export class GeoJsonReader extends AbstractDataReader {
       layers.push(layer);
     }
 
-    return layers;
+    return { status: ReadStatus.Succeed, layers };
   }
 }

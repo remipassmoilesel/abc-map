@@ -26,10 +26,11 @@ import { assert } from 'chai';
 import { IncomingHttpHeaders } from 'http';
 import * as uuid from 'uuid-random';
 import { TestAuthentication } from '../utils/TestAuthentication';
+import { ArtefactFilter } from '@abc-map/shared';
 
 disableSmtpClientLogging();
 
-describe('AuthenticationController', () => {
+describe('DataStoreController', () => {
   let config: Config;
   let services: Services;
   let server: HttpServer;
@@ -73,6 +74,7 @@ describe('AuthenticationController', () => {
         query: {
           limit: '10',
           offset: '0',
+          filter: ArtefactFilter.OnlyVectors,
         },
         headers: authentication,
       });
@@ -103,6 +105,7 @@ describe('AuthenticationController', () => {
         query: {
           query: 'test query',
           lang: 'en',
+          filter: ArtefactFilter.OnlyVectors,
         },
         headers: authentication,
       });

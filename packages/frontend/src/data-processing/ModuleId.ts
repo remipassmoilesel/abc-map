@@ -23,4 +23,5 @@ export enum ModuleId {
   CountPointsInPolygon = 'count-points-in-polygon',
   ColorGradients = 'color-gradients',
   Scripts = 'scripts',
+  ArtefactGenerator = 'artefact-generator',
 }

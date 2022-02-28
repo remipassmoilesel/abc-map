@@ -29,6 +29,7 @@ import Cls from './SolicitationModal.module.scss';
 import { Routes } from '../../routes';
 import { FullscreenModal } from '../fullscreen-modal/FullscreenModal';
 import TextFeedbackForm from '../feedback/form/TextFeedbackForm';
+import confetti from 'canvas-confetti';
 
 const logger = Logger.get('SolicitationModal.ts');
 
@@ -68,7 +69,7 @@ class SolicitationModal extends Component<Props, State> {
 
             <FundingLinks />
 
-            <button onClick={this.handleDonate} className={'btn btn-link mt-3'}>
+            <button onClick={this.handleExplainDonation} className={'btn btn-link mt-3'}>
               {t('What_are_donations_used_for')}
             </button>
           </div>
@@ -131,10 +132,15 @@ class SolicitationModal extends Component<Props, State> {
     // We do not wait for vote
     feedback.vote(value).catch((err) => logger.error('Error while voting: ', err));
     this.setState({ voteDone: true, voteValue: value });
+
+    if (value > VoteValue.BLAH) {
+      this.confetti();
+    }
   };
 
-  private handleDonate = () => {
+  private handleExplainDonation = () => {
     const { history } = this.props;
+
     history.push(Routes.funding().format());
     this.close();
   };
@@ -149,6 +155,14 @@ class SolicitationModal extends Component<Props, State> {
 
     this.setState({ visible: false });
   };
+
+  private confetti() {
+    confetti({
+      particleCount: 100,
+      spread: 70,
+      origin: { y: 0.6 },
+    })?.catch((err) => logger.error(`Confetti error: ${err.message}`, err));
+  }
 }
 
 export default withTranslation()(withRouter(withServices(SolicitationModal)));

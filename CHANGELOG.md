@@ -1,8 +1,19 @@
 # Changelog
 
-Presently there are no versions, since nobody has asked for it yet 👍
+For the moment we use git hashes as version, since no one complained about it 👍
 
-## Project sharing, part 2 (XXXXX XX/XX/2021)
+## Better datastore  (XXXXXXX 28/02/2021)
+
+- Better artefacts, added fields `attributions`, `previews`, `weight`. See: `packages/shared/src/artefact/ArtefactManifest.ts`.
+- Better data store UI, with details panel and previews
+- Transform URLs from artefacts in links on display
+- Definition files and readers for WMS, WMTS and XYZ layers
+- Variable prompts for definitions, and variable expansion for API keys and credentials
+- Fixed style bundles, imports are now optimized and bundles are lighter
+- Lazy loading of pages, js bundles are now lighter
+- Migration to Openlayers 6.13
+
+## Project sharing, part 2 (be7ddb2b 06/02/2021)
 
 This feature is still in experimental stage.
 
@@ -12,7 +23,6 @@ This feature is still in experimental stage.
 - Projects saved online are automatically re-opened when the application is loaded
 - Less fullscreen loading
 - Less sollicitations for donations !
-- TBC...
 
 ## Experimental features UI (855f1391 19/01/2021)
 

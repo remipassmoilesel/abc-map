@@ -16,16 +16,15 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcProjection } from '@abc-map/shared';
-import { AbcFile } from '@abc-map/shared';
+import { AbcFile, AbcProjection } from '@abc-map/shared';
 import Feature from 'ol/Feature';
 import { Geometry } from 'ol/geom';
 import { FeatureWrapper } from '../../geo/features/FeatureWrapper';
-import { LayerWrapper } from '../../geo/layers/LayerWrapper';
+import { ReadResult } from '../ReadResult';
 
 export abstract class AbstractDataReader {
   public abstract isSupported(files: AbcFile<Blob>[]): Promise<boolean>;
-  public abstract read(files: AbcFile<Blob>[], projection: AbcProjection): Promise<LayerWrapper[]>;
+  public abstract read(files: AbcFile<Blob>[], projection: AbcProjection): Promise<ReadResult>;
 
   /**
    * This methods add an id if absent and set default style

@@ -16,11 +16,11 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
+import Cls from './MainMap.module.scss';
 import React, { Component, DragEvent, ReactNode } from 'react';
 import { AbcFile, Logger, ProjectConstants } from '@abc-map/shared';
 import throttle from 'lodash/throttle';
 import { ServiceProps, withServices } from '../../../core/withServices';
-import { ImportStatus } from '../../../core/data/DataService';
 import { TileLoadErrorEvent } from '../../../core/geo/map/MapWrapper.events';
 import { prefixedTranslation } from '../../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
@@ -31,8 +31,9 @@ import { Attributions } from './attributions/Attributions';
 import { Zoom } from './zoom/Zoom';
 import { WithTooltip } from '../../../components/with-tooltip/WithTooltip';
 import { MapWrapper } from '../../../core/geo/map/MapWrapper';
-import Cls from './MainMap.module.scss';
 import BaseEvent from 'ol/events/Event';
+import { DataReader } from '../../../core/data/DataReader';
+import { ReadStatus } from '../../../core/data/ReadResult';
 
 export const logger = Logger.get('MainMap.ts');
 
@@ -165,7 +166,9 @@ class MainMap extends Component<ServiceProps, State> {
   };
 
   private handleDrop = (ev: DragEvent<HTMLDivElement>) => {
-    const { data, toasts } = this.props.services;
+    const { toasts } = this.props.services;
+    const dataReader = DataReader.create();
+
     ev.preventDefault();
     this.setState({ dragOverlay: false });
 
@@ -182,13 +185,13 @@ class MainMap extends Component<ServiceProps, State> {
     }
 
     const firstToast = toasts.info(t('Import_in_progress'));
-    data
+    dataReader
       .importFiles(files)
       .then((result) => {
-        if (result.status === ImportStatus.Failed) {
-          toasts.error(t('Formats_not_supported'));
-        } else {
+        if (result.status === ReadStatus.Succeed) {
           toasts.info(t('Done'));
+        } else if (result.status === ReadStatus.Failed) {
+          toasts.error(t('Formats_not_supported'));
         }
       })
       .catch((err) => {

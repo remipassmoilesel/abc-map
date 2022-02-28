@@ -19,7 +19,7 @@ import { FileModule, ManifestReader } from './ManifestReader';
 import * as sinon from 'sinon';
 import { SinonStub } from 'sinon';
 import { assert } from 'chai';
-import { Language } from '@abc-map/shared';
+import { ArtefactType, Language } from '@abc-map/shared';
 
 describe('ManifestReader', () => {
   let readFileStub: SinonStub;
@@ -39,11 +39,15 @@ describe('ManifestReader', () => {
 ---
 version: 0.1.0
 artefact:
-  license: LICENCE.txt
-  link: https://www.data.gouv.fr/fr/datasets/contours-des-regions-francaises-sur-openstreetmap/
   name:
     - language: fr
       text: Régions de France
+  type: basemap
+  license: LICENCE.txt
+  attributions:
+    - Copyright somebody somewhere inc
+  provider: 'data.gouv.fr'
+  link: https://www.data.gouv.fr/fr/datasets/contours-des-regions-francaises-sur-openstreetmap/
   description:
     - language: fr
       text: Régions de France 2016, avec noms et surfaces
@@ -72,7 +76,9 @@ artefact:
       version: '0.1.0',
       artefact: {
         name: [{ language: Language.French, text: 'Régions de France' }],
+        type: ArtefactType.BaseMap,
         license: 'LICENCE.txt',
+        attributions: ['Copyright somebody somewhere inc'],
         description: [
           { language: Language.French, text: 'Régions de France 2016, avec noms et surfaces' },
           { language: Language.English, text: 'Regions of France 2016, with names and surfaces' },
@@ -81,6 +87,7 @@ artefact:
           { language: Language.French, text: ['régions', 'France'] },
           { language: Language.English, text: ['regions', 'France'] },
         ],
+        provider: 'data.gouv.fr',
         link: 'https://www.data.gouv.fr/fr/datasets/contours-des-regions-francaises-sur-openstreetmap/',
         files: ['regions-20161121-shp.zip'],
       },
@@ -95,12 +102,13 @@ artefact:
 version: 0.1.0
 artefact:
   license: LICENCE.txt
-  link: https://www.data.gouv.fr/fr/datasets/contours-des-regions-francaises-sur-openstreetmap/
   name:
     - language: fr
       text: Régions de France
     - language: en
       text: Regions of France
+  attributions:
+    - Copyright someone somewhere
   description:
     - language: fr
       text: Régions de France 2016, avec noms et surfaces
@@ -115,6 +123,8 @@ artefact:
       text:
         - regions
         - France
+  provider: Nowhere inc
+  link: https://www.data.gouv.fr/fr/datasets/contours-des-regions-francaises-sur-openstreetmap/
   files:
     - regions-20161121-shp.zip
     `;

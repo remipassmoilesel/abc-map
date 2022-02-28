@@ -1,0 +1,43 @@
+version: 0.1.0
+artefact:
+  license: LICENCE.txt
+  name:
+    - language: en
+      text: Russia (admin. level 4)
+    - language: fr
+      text: Russie (niveau admin. 4)
+  description:
+    - language: en
+      text: Administrative boundaries (provinces, regions, ...)
+    - language: fr
+      text: Limites administratives (provinces, régions, ...)
+  link: https://www.openstreetmap.org/
+  files:
+    - russia-l4.zip
+  keywords:
+    - language: en
+      text:
+        - Russia
+        - RU
+        - RUS
+        - Россия
+        - Russian Federation
+        - Level 4
+    - language: fr
+      text:
+        - Russia
+        - RU
+        - RUS
+        - Россия
+        - Russie
+        - Fédération de Russie
+  metadata:
+    osm_id: '-60189'
+    name: Russia
+    admin_level: '4'
+  attributions:
+    - © OpenStreetMap contributors.
+  type: vector
+  previews:
+    - preview-1.png
+  provider: OpenStreetMap

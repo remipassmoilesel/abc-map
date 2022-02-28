@@ -89,6 +89,35 @@
       <ResourceURL format="text/html" resourceType="FeatureInfo"
                    template="http://localhost:3010/wmts/public/layer=7328/featureinfo/{TileMatrixSet}/{TileMatrix}/{TileCol}/{TileRow}/{I}/{J}.html"/>
     </Layer>
+    <Layer>
+      <ows:Title>Australia Earthquakes</ows:Title>
+      <ows:Abstract>Historical earthquake data, accessed via the [GeoNet WFS feed](http://info.geonet.org.nz/display/appdata/Advanced+Queries). The data has...</ows:Abstract>
+      <ows:Identifier>layer-7329</ows:Identifier>
+      <ows:BoundingBox crs="urn:ogc:def:crs:EPSG::3857">
+        <ows:LowerCorner>-20037508.342789 -6406581.708337</ows:LowerCorner>
+        <ows:UpperCorner>20037508.342789 -3653545.667928</ows:UpperCorner>
+      </ows:BoundingBox>
+      <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:2:84">
+        <ows:LowerCorner>-180.000000 -49.454297</ows:LowerCorner>
+        <ows:UpperCorner>180.000000 -31.160000</ows:UpperCorner>
+      </ows:WGS84BoundingBox>
+      <Style isDefault="true">
+        <ows:Title>Weighted point styles</ows:Title>
+        <ows:Identifier>style=39</ows:Identifier>
+      </Style>
+      <Format>image/png</Format>
+      <InfoFormat>application/json</InfoFormat>
+      <InfoFormat>text/html</InfoFormat>
+      <TileMatrixSetLink>
+        <TileMatrixSet>EPSG:3857</TileMatrixSet>
+      </TileMatrixSetLink>
+      <ResourceURL format="image/png" resourceType="tile"
+                   template="http://localhost:3010/wmts/public/layer=7328,{style}/{TileMatrixSet}/{TileMatrix}/{TileCol}/{TileRow}.png"/>
+      <ResourceURL format="application/json" resourceType="FeatureInfo"
+                   template="http://localhost:3010/wmts/public/layer=7328/featureinfo/{TileMatrixSet}/{TileMatrix}/{TileCol}/{TileRow}/{I}/{J}.json"/>
+      <ResourceURL format="text/html" resourceType="FeatureInfo"
+                   template="http://localhost:3010/wmts/public/layer=7328/featureinfo/{TileMatrixSet}/{TileMatrix}/{TileCol}/{TileRow}/{I}/{J}.html"/>
+    </Layer>
     <TileMatrixSet>
       <ows:Title>GoogleMapsCompatible</ows:Title>
       <ows:Abstract>The well-known 'GoogleMapsCompatible' tile matrix set defined by the OGC WMTS specification</ows:Abstract>

@@ -18,6 +18,8 @@
 
 import { SimplePropertiesMap } from '../geo/features/FeatureWrapper';
 import { StyleCacheEntry } from '../geo/styles/StyleCache';
+import { PromptDefinition } from './PromptDefinition';
+import { VariableMap } from '../utils/variableExpansion';
 
 export enum ModalEventType {
   ShowPasswordInput = 'ShowPasswordInput',
@@ -42,6 +44,8 @@ export enum ModalEventType {
   LongOperationModalClosed = 'LongOperationModalClosed',
   ShowConfirmation = 'ShowConfirmation',
   ConfirmationClosed = 'ConfirmationClosed',
+  ShowPromptVariables = 'ShowPromptVariables',
+  PromptVariablesClosed = 'PromptVariablesClosed',
 }
 
 export enum ModalStatus {
@@ -163,6 +167,19 @@ export interface ConfirmationClosedEvent {
   status: ModalStatus;
 }
 
+export interface ShowPromptVariables {
+  type: ModalEventType.ShowPromptVariables;
+  title: string;
+  message: string;
+  definitions: PromptDefinition[];
+}
+
+export interface PromptVariablesClosed {
+  type: ModalEventType.PromptVariablesClosed;
+  status: ModalStatus;
+  variables: VariableMap;
+}
+
 export declare type ModalEvent =
   | ShowPasswordInputModal
   | PasswordInputClosedEvent
@@ -185,7 +202,9 @@ export declare type ModalEvent =
   | ShowLongOperationModal
   | LongOperationModalClosedEvent
   | ShowConfirmation
-  | ConfirmationClosedEvent;
+  | ConfirmationClosedEvent
+  | ShowPromptVariables
+  | PromptVariablesClosed;
 
 export class InternalEvent extends Event {
   constructor(type: ModalEventType, public readonly payload: ModalEvent) {

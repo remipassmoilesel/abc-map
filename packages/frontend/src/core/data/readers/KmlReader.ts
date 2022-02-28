@@ -26,13 +26,14 @@ import { AbcFile } from '@abc-map/shared';
 import uuid from 'uuid-random';
 import { LayerFactory } from '../../geo/layers/LayerFactory';
 import { LayerWrapper } from '../../geo/layers/LayerWrapper';
+import { ReadResult, ReadStatus } from '../ReadResult';
 
 export class KmlReader extends AbstractDataReader {
   public async isSupported(files: AbcFile<Blob>[]): Promise<boolean> {
     return files.filter((f) => FileFormats.fromPath(f.path) === FileFormat.KML).length > 0;
   }
 
-  public async read(files: AbcFile<Blob>[], projection: AbcProjection): Promise<LayerWrapper[]> {
+  public async read(files: AbcFile<Blob>[], projection: AbcProjection): Promise<ReadResult> {
     const layers: LayerWrapper[] = [];
     const format = new KML();
     const _files = files.filter((f) => FileFormats.fromPath(f.path) === FileFormat.KML);
@@ -55,6 +56,6 @@ export class KmlReader extends AbstractDataReader {
       layers.push(layer);
     }
 
-    return layers;
+    return { status: ReadStatus.Succeed, layers };
   }
 }

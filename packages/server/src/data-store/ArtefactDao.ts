@@ -20,8 +20,9 @@ import { Config } from '../config/Config';
 import { MongodbClient } from '../mongodb/MongodbClient';
 import { ArtefactDocument } from './ArtefactDocument';
 import { MongodbCollection } from '../mongodb/MongodbCollection';
-import { CreateIndexesOptions, IndexSpecification } from 'mongodb';
+import { CreateIndexesOptions, Filter, IndexSpecification } from 'mongodb';
 import { MongoLanguage } from '../mongodb/MongodbI18n';
+import { ArtefactFilter, ArtefactType } from '@abc-map/shared';
 
 export class ArtefactDao {
   constructor(private config: Config, private client: MongodbClient) {}
@@ -74,24 +75,39 @@ export class ArtefactDao {
     return res || undefined;
   }
 
-  public async list(limit: number, offset: number): Promise<ArtefactDocument[]> {
+  public async list(limit: number, offset: number, filter: ArtefactFilter): Promise<ArtefactDocument[]> {
     const coll = await this.collection();
-    return coll.find({}).sort({ name: 1, _id: 1 }).skip(offset).limit(limit).toArray();
+
+    let query: Filter<ArtefactDocument> = {};
+    if (filter && filter !== ArtefactFilter.All) {
+      query = this.filter(filter);
+    }
+
+    return coll.find(query).sort({ type: 1, weight: -1, name: 1, _id: 1 }).skip(offset).limit(limit).toArray();
   }
 
-  public async search(query: string, lang: MongoLanguage, limit: number, offset: number): Promise<ArtefactDocument[]> {
+  public async search(textQuery: string, lang: MongoLanguage, limit: number, offset: number, filter: ArtefactFilter): Promise<ArtefactDocument[]> {
     const coll = await this.collection();
-    const cleanQuery = query.toLocaleLowerCase().trim();
+    const cleanQuery = textQuery.toLocaleLowerCase().trim();
 
     // First we try a text search
+    const query: Filter<ArtefactDocument> = {
+      $and: [{ $text: { $search: cleanQuery, $language: lang, $caseSensitive: false, $diacriticSensitive: false } }],
+    };
+
+    if (filter && filter !== ArtefactFilter.All) {
+      query.$and?.push(this.filter(filter));
+    }
+
     const results = await coll
-      .find({ $text: { $search: cleanQuery, $language: lang, $caseSensitive: false, $diacriticSensitive: false } })
+      .find(query)
       .project<ArtefactDocument>({ score: { $meta: 'textScore' } })
       .limit(limit)
       .skip(offset)
-      .sort({ score: { $meta: 'textScore' } })
+      .sort({ score: { $meta: 'textScore' }, type: 1, weight: -1, _id: 1 })
       .toArray();
 
+    // If results found, we stop
     if (results.length) {
       return results;
     }
@@ -99,11 +115,15 @@ export class ArtefactDao {
     // If nothing were found, we list document name beginning with needle
     else {
       const regexp = new RegExp(`^${cleanQuery}`, 'i');
-      const query = {
+      const query: Filter<ArtefactDocument> = {
         $or: [{ 'name.text': { $regex: regexp } }, { 'description.text': { $regex: regexp } }, { 'keywords.text': { $regex: regexp } }],
       };
 
-      return coll.find(query).limit(limit).skip(offset).sort({ name: 1, _id: 1 }).toArray();
+      if (filter && filter !== ArtefactFilter.All) {
+        query.$and = [this.filter(filter)];
+      }
+
+      return coll.find(query).limit(limit).skip(offset).sort({ name: 1, type: 1, weight: -1, _id: 1 }).toArray();
     }
   }
 
@@ -122,14 +142,31 @@ export class ArtefactDao {
     return coll.deleteMany({ _id: { $in: ids } });
   }
 
-  public async count(): Promise<number> {
+  public async count(filter: ArtefactFilter): Promise<number> {
     const coll = await this.collection();
-    return coll.countDocuments();
+
+    let query: Filter<ArtefactDocument> = {};
+    if (filter && filter !== ArtefactFilter.All) {
+      query = this.filter(filter);
+    }
+
+    return coll.find(query).count();
   }
 
   public async findAll(): Promise<ArtefactDocument[]> {
     const coll = await this.collection();
     return coll.find({}).toArray();
+  }
+
+  private filter(filter: ArtefactFilter): Filter<ArtefactDocument> {
+    switch (filter) {
+      case ArtefactFilter.OnlyBaseMaps:
+        return { type: { $eq: ArtefactType.BaseMap } };
+      case ArtefactFilter.OnlyVectors:
+        return { type: { $eq: ArtefactType.Vector } };
+      default:
+        throw new Error(`Unsupported filter: ${filter}`);
+    }
   }
 
   private async collection() {

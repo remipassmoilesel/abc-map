@@ -18,11 +18,11 @@
 
 import { Controller } from '../server/Controller';
 import { Services } from '../services/services';
-import { AbcArtefact, langFromString, PaginatedResponse } from '@abc-map/shared';
+import { AbcArtefact, artefactFilterFromString, langFromString, PaginatedResponse } from '@abc-map/shared';
 import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import fastifyStatic from 'fastify-static';
-import { ByIdParams, GetByIdSchema, ListSchema, SearchQuery, SearchSchema } from './DataStoreController.schemas';
-import { PaginatedQuery, PaginationHelper } from '../server/PaginationHelper';
+import { ByIdParams, GetByIdSchema, ListQuery, ListSchema, SearchQuery, SearchSchema } from './DataStoreController.schemas';
+import { PaginationHelper } from '../server/PaginationHelper';
 
 export class DataStoreController extends Controller {
   constructor(private services: Services) {
@@ -44,11 +44,17 @@ export class DataStoreController extends Controller {
     void app.register(fastifyStatic, { root, prefix: '/download', wildcard: true, index: false });
   };
 
-  private list = async (req: FastifyRequest<{ Querystring: PaginatedQuery }>, reply: FastifyReply): Promise<void> => {
+  private list = async (req: FastifyRequest<{ Querystring: ListQuery }>, reply: FastifyReply): Promise<void> => {
     const { datastore, metrics } = this.services;
 
     const { limit, offset } = PaginationHelper.fromQuery(req);
-    const [content, total] = await Promise.all([datastore.list(limit, offset), datastore.countArtefacts()]);
+    const filter = artefactFilterFromString(req.query.filter);
+    if (!filter) {
+      reply.badRequest('Invalid "filter" parameter');
+      return;
+    }
+
+    const [content, total] = await Promise.all([datastore.list(limit, offset, filter), datastore.countArtefacts(filter)]);
     const result: PaginatedResponse<AbcArtefact> = {
       content,
       limit,
@@ -65,14 +71,20 @@ export class DataStoreController extends Controller {
 
     const { limit, offset } = PaginationHelper.fromQuery(req);
     const query = decodeURI(req.query.query);
-    const lang = langFromString(req.query.lang);
 
-    if (!lang || !query) {
-      reply.badRequest('"lang" and "query" parameters are mandatory');
+    const lang = langFromString(req.query.lang);
+    if (!lang) {
+      reply.badRequest('Invalid "lang" parameter');
       return;
     }
 
-    const [content, total] = await Promise.all([datastore.search(query, lang, limit, offset), datastore.countArtefacts()]);
+    const filter = artefactFilterFromString(req.query.filter);
+    if (!filter) {
+      reply.badRequest('Invalid "filter" parameter');
+      return;
+    }
+
+    const [content, total] = await Promise.all([datastore.search(query, lang, limit, offset, filter), datastore.countArtefacts(filter)]);
     const result: PaginatedResponse<AbcArtefact> = {
       content,
       limit,

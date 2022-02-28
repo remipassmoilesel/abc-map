@@ -19,7 +19,7 @@
 import { LoadFunction } from 'ol/Tile';
 import { Logger } from '@abc-map/shared';
 import ImageTile from 'ol/ImageTile';
-import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
+import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios';
 import TileState from 'ol/TileState';
 
 export const logger = Logger.get('tileLoadingPublic.ts');
@@ -54,9 +54,15 @@ export function tileLoadingPublic(factory: HttpClientFactory = defaultHttpClient
           logger.error('Unhandled tile type: ', tile);
         }
       })
-      .catch((err) => {
-        tile.setState(TileState.ERROR);
-        logger.error(err);
+      .catch((err: Error | AxiosError | undefined) => {
+        logger.error('Cannot load tile: ', err);
+
+        // If no extent set, function can be called to load tiles that does not exist
+        if (err && 'message' in err && err.message.indexOf('404') !== -1) {
+          tile.setState(TileState.EMPTY);
+        } else {
+          tile.setState(TileState.ERROR);
+        }
       });
   };
 }

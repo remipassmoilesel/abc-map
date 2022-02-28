@@ -53,7 +53,8 @@
     "Experimental_features": "Experimental features",
     "Here_you_can_enable_features": "Here you can enable features that are not yet stable.",
     "Close": "Close",
-    "MapSharing": "Map sharing"
+    "MapSharing": "Map sharing",
+    "ArtefactGenerator": "Artefact generator"
   },
   "MapView": {
     "The_map": "The map !",
@@ -136,8 +137,7 @@
       "Delete_active_layer": "Delete active layer",
       "Move_back": "Move back",
       "Move_forward": "Move forward",
-      "Add": "Add",
-      "Add_layer": "Add a new layer",
+      "Add_layer": "Add a layer",
       "You_must_first_select_layer": "You must first select a layer",
       "Unable_to_zoom": "Unable to zoom in on this layer"
     },
@@ -319,7 +319,8 @@
     "Symbol_type_is_mandatory": "The type of symbol is required.",
     "Geometry_layer_is_mandatory": "The geometry layer is mandatory.",
     "Start_color_mandatory": "The start color is mandatory.",
-    "End_color_mandatory": "The end color is mandatory."
+    "End_color_mandatory": "The end color is mandatory.",
+    "Missing_fields": "Missing fields"
   },
   "LongOperationModal": {
     "Things_are_getting_hot": "Things are getting hot !",
@@ -333,7 +334,6 @@
   "DataStoreView": {
     "France_regions_world": "France, regions, world ...",
     "Search": "Search",
-    "A_bit_of_patience": "Wait for it",
     "No_result": "No result",
     "Data_store": "Data store",
     "Add_data_easily": "Add compatible and selected data with one click \uD83D\uDED2",
@@ -344,7 +344,24 @@
     "Licence": "Licence",
     "Download": "Download",
     "Add_to_project": "Import",
-    "Close": "Close"
+    "Close": "Close",
+    "Import_in_progress": "Import in progress",
+    "Download_in_progress": "Download in progress",
+    "Select_an_artifact_to_see_what_it_contains": "Select an artifact to see what it contains !",
+    "Description": "Description",
+    "Kind": "Kind",
+    "Basemap": "Basemap",
+    "Geometries": "Geometries",
+    "Attributions": "Attributions",
+    "Preview": "Preview",
+    "Actions": "Actions",
+    "No_preview_available": "No preview available",
+    "Preview_of_artifact": "Preview of artifact",
+    "All": "All",
+    "About_this_data": "About this data",
+    "About_data_store_and_data": "<div>\n    <p>The data store offers you:</p>\n    <ul>\n        <li>Data from open sources</li>\n        <li>Data source configurations</li>\n    </ul>\n\n    <p>Some of this data is free for all uses, some is chargeable for commercial use.</p>\n    <p>All data has terms of use. Refer to licenses and source links.</p>\n</div>",
+    "About": "About",
+    "Provider": "Provider"
   },
   "DataProcessingView": {
     "Modules": "Modules",
@@ -359,6 +376,7 @@
     "Different_symbols": "Different symbols",
     "Proportional_symbols": "Proportional symbols",
     "Running_scripts": "Running scripts",
+    "Artefact_generator": "Artefact generator",
     "DataViewer": {
       "Select_a_layer": "Select a layer to view its data.",
       "Download_CSV": "Download CSV workbook",
@@ -793,6 +811,14 @@
     "This_map_was_created_and_published_with_Abc-Map": "This map was created and published with Abc-Map.",
     "Abc-Map_is_free_mapping_software_try_it": "Abc-Map is free mapping software, try it !"
   },
+  "PromptVariablesModal": {
+    "About_credential_storage": "About credential storage",
+    "Credentials_are_stored_in_your_project": "Credentials are stored in your project",
+    "If_your_project_is_private": "If your project is private, credentials are protected by a password",
+    "If_your_project_is_public": "If your project is public, then anyone with your project's address will be able to read those credentials",
+    "Cancel": "Cancel",
+    "Confirm": "Confirm"
+  },
   "core": {
     "ProjectFactory": {
       "Project": "Project of {{date}}"
@@ -806,8 +832,10 @@
       "Geometries": "Geometries",
       "XYZ_layer": "XYZ layer"
     },
-    "DataService": {
-      "Import_of": "Import n°{{n}} of {{hour}}"
+    "DataReader": {
+      "Import_of": "Import n°{{n}} of {{hour}}",
+      "Further_information": "Further information",
+      "You_must_full_in_this_form": "To import this layer, you must fill in this form."
     },
     "LayerDataSource": {
       "Layer_without_name": "Layer without name"

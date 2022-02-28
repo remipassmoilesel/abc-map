@@ -21,7 +21,7 @@ import { SinonStub, SinonStubbedInstance } from 'sinon';
 import { ManifestReader } from './ManifestReader';
 import * as sinon from 'sinon';
 import { assert } from 'chai';
-import { ArtefactManifest } from './ArtefactManifest';
+import { ArtefactManifestRead } from './ArtefactManifest';
 
 logger.disable();
 
@@ -65,6 +65,6 @@ describe('DataStoreScanner', () => {
   });
 });
 
-function fakeManifest(name: string): ArtefactManifest {
-  return { name } as unknown as ArtefactManifest;
+function fakeManifest(name: string): ArtefactManifestRead {
+  return { name } as unknown as ArtefactManifestRead;
 }

@@ -28,7 +28,7 @@ import { withTranslation } from 'react-i18next';
 import { Routes } from '../../../routes';
 import { FaIcon } from '../../icon/FaIcon';
 import { IconDefs } from '../../icon/IconDefs';
-import { ExperimentalFeatures } from '../../../ExperimentalFeatures';
+import { ExperimentalFeatures } from '../../../experimental-features';
 import ExperimentalFeaturesModal from '../experimental-features/ExperimentalFeaturesModal';
 import Cls from './UserMenu.module.scss';
 

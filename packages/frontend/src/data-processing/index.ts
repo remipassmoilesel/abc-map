@@ -24,10 +24,13 @@ import { ColorGradients } from './color-gradients/ColorGradients';
 import { getServices } from '../core/Services';
 import { Scripts } from './scripts/Scripts';
 import { FeatureCountByGeometries } from './count-by-geometries/FeatureCountByGeometries';
+import { isExperimentalFeatureEnabled } from '../core/ui/useExperimentalFeature';
+import { ArtefactGenerator } from '../experimental-features';
+import { ArtefactGenerator as ArtefactGeneratorModule } from './artefact-generator/ArtefactGenerator';
 
 export function getModules(): Module[] {
   const services = getServices();
-  return [
+  const modules = [
     new DataViewer(),
     new ColorGradients(services),
     new ProportionalSymbols(services),
@@ -35,4 +38,10 @@ export function getModules(): Module[] {
     new FeatureCountByGeometries(),
     new Scripts(services),
   ];
+
+  if (isExperimentalFeatureEnabled(ArtefactGenerator)) {
+    modules.push(ArtefactGeneratorModule.create(services));
+  }
+
+  return modules;
 }

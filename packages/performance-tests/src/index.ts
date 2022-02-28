@@ -78,13 +78,13 @@ export default () => {
   sleep(3);
 
   // We list artefacts
-  const req3 = jsonGet(`${fileOptions.host}/api/datastore/list?limit=6&offset=0`, auth);
+  const req3 = jsonGet(`${fileOptions.host}/api/datastore/list?limit=6&offset=0&filter=All`, auth);
   check(req3, {
     'List artefacts status is 200': (res) => res.status === 200,
   });
 
   // We search artefacts
-  const req4 = jsonGet(`${fileOptions.host}/api/datastore/search?query=world&lang=en&limit=6&offset=0`, auth);
+  const req4 = jsonGet(`${fileOptions.host}/api/datastore/search?query=world&lang=en&limit=6&offset=0&filter=All`, auth);
   check(req4, {
     'Search artefacts status is 200': (res) => res.status === 200,
   });

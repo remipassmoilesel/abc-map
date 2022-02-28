@@ -1,0 +1,25 @@
+version: 0.0.1
+wms:
+  urls:
+    - http://localhost:3010/wms/authenticated?SERVICE=WMS&
+  remoteLayerName: second-layer
+  projection:
+    name: EPSG:4326
+  auth:
+    password: ${password}
+    username: ${username}
+  prompt:
+    - name: username
+      type: string
+      description:
+        - language: fr
+          text: Votre nom d'utilisateur local, par exemple <code>jean-bonno</code>
+        - language: en
+          text: Your local username, per example <code>jean-bonno</code>
+    - name: password
+      type: string
+      description:
+        - language: fr
+          text: Votre mot de passe local, par exemple <code>azerty1234</code>
+        - language: en
+          text: Your local password, per example <code>azerty1234</code>

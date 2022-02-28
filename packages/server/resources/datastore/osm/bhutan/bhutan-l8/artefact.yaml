@@ -1,39 +1,41 @@
----
 version: 0.1.0
 artefact:
   license: LICENCE.txt
+  attributions:
+    - © somebody somewhere inc ${year}
   name:
     - language: en
-      text: "Bhutan (admin. level 8)"
+      text: Bhutan (admin. level 8)
     - language: fr
-      text: "Bhoutan (niveau admin. 8)"
-
+      text: Bhoutan (niveau admin. 8)
   description:
     - language: en
-      text: "Administrative boundaries (provinces, regions, ...)"
+      text: Administrative boundaries (provinces, regions, ...)
     - language: fr
-      text: "Limites administratives (provinces, régions, ...)"
+      text: Limites administratives (provinces, régions, ...)
   link: https://www.openstreetmap.org/
   files:
-    - "bhutan-l8.zip"
-
+    - bhutan-l8.zip
   keywords:
     - language: en
       text:
-        - "Bhutan"
-        - "BT"
-        - "BTN"
-        - "Kingdom of Bhutan"
-        - "Level 8"
+        - Bhutan
+        - BT
+        - BTN
+        - Kingdom of Bhutan
+        - Level 8
     - language: fr
       text:
-        - "Bhutan"
-        - "BT"
-        - "BTN"
-        - "Bhoutan"
-        - "Royaume du Bhoutan"
-
+        - Bhutan
+        - BT
+        - BTN
+        - Bhoutan
+        - Royaume du Bhoutan
   metadata:
-    osm_id: "-184629"
-    name: "Bhutan"
-    admin_level: "8"
+    osm_id: '-184629'
+    name: Bhutan
+    admin_level: '8'
+  type: vector
+  previews:
+    - preview-1.png
+  provider: OpenStreetMap

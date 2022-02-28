@@ -1,0 +1,3 @@
+version: 0.0.1
+xyz:
+  url: https://{a-c}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png

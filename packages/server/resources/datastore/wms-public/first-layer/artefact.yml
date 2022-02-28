@@ -1,0 +1,35 @@
+version: 0.0.1
+artefact:
+  name:
+    - language: fr
+      text: Serveur WMS local first-layer
+    - language: en
+      text: WMS local server first-layer
+  description:
+    - language: fr
+      text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur eget molestie neque. Aliquam vitae aliquet sapien, vitae hendrerit neque. Donec sed dolor eu augue rhoncus pellentesque. Aliquam ut mollis magna. Vivamus quam nulla, auctor vel ornare at, suscipit ut felis. Suspendisse finibus scelerisque tellus vel fringilla. Phasellus vel neque at diam lobortis accumsan et quis sem. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nullam quis hendrerit urna, quis consequat massa. Mauris nec molestie nunc. Donec quis tortor dictum, scelerisque lectus eget, rhoncus lacus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Maecenas et cursus dui.'
+    - language: en
+      text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur eget molestie neque. Aliquam vitae aliquet sapien, vitae hendrerit neque. Donec sed dolor eu augue rhoncus pellentesque. Aliquam ut mollis magna. Vivamus quam nulla, auctor vel ornare at, suscipit ut felis. Suspendisse finibus scelerisque tellus vel fringilla. Phasellus vel neque at diam lobortis accumsan et quis sem. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nullam quis hendrerit urna, quis consequat massa. Mauris nec molestie nunc. Donec quis tortor dictum, scelerisque lectus eget, rhoncus lacus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Maecenas et cursus dui.'
+  keywords:
+    - language: fr
+      text:
+        - wms
+        - public
+        - serveur
+    - language: en
+      text:
+        - wms
+        - public
+        - server
+  license: LICENSE.txt
+  attributions:
+    - ©℗®™ WTF Company
+  files:
+    - definition.wms
+  previews:
+    - preview-0.png
+    - preview-1.png
+    - preview-2.png
+  type: basemap
+  link: https://www.openstreetmap.org/about
+  provider: OpenStreetMap
