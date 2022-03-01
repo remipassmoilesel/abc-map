@@ -78,7 +78,7 @@ describe('Data store', function () {
       .click()
       .get('[data-cy=show-license]')
       .click()
-      .get('[data-cy=license-header]')
-      .should('contain', 'Countries of the world : Licence');
+      .get('[data-cy=licence-header]')
+      .should('contain', 'License and terms of use');
   });
 });

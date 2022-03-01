@@ -23,7 +23,7 @@ import { FaIcon } from '../../../components/icon/FaIcon';
 import { IconDefs } from '../../../components/icon/IconDefs';
 import React, { useCallback, useState } from 'react';
 import { getLang, prefixedTranslation } from '../../../i18n/i18n';
-import LicenseModal from '../license-modal/LicenseModal';
+import LicenceModal from '../licence-modal/LicenceModal';
 import { DataReader } from '../../../core/data/DataReader';
 import { resolveInAtLeast } from '../../../core/utils/resolveInAtLeast';
 import { FileFormat, FileFormats } from '../../../core/data/FileFormats';
@@ -34,7 +34,6 @@ import { getArtefactIcon } from '../../../core/data/getArtefactIcon';
 import clsx from 'clsx';
 import { ReadStatus } from '../../../core/data/ReadResult';
 import { Modal } from 'react-bootstrap';
-import AboutDatastore from '../about-datastore/AboutDatastore';
 import { attributionsVariableExpansion } from '../../../core/utils/variableExpansion';
 import { linkify, stripHtml } from '../../../core/utils/strings';
 
@@ -52,15 +51,11 @@ interface Props {
 function ArtefactDetails(props: Props) {
   const { activeArtefact: artefact, mobileVisible, mobileOnHide, className } = props;
   const { dataStore, toasts } = useServices();
-  const [licenceModal, showLicenseModal] = useState(false);
   const [descriptionModal, showDescriptionModal] = useState(false);
   const name = artefact && getTextByLang(artefact.name, getLang());
   const description = artefact && getTextByLang(artefact.description, getLang());
   const keywords = artefact && getListByLang(artefact.keywords, getLang());
   const icon = artefact && getArtefactIcon(artefact);
-
-  const handleShowLicense = useCallback(() => showLicenseModal(true), []);
-  const handleLicenceModalClose = useCallback(() => showLicenseModal(false), []);
 
   const handleShowDescription = useCallback(() => showDescriptionModal(true), []);
   const handleDescriptionModalClose = useCallback(() => showDescriptionModal(false), []);
@@ -125,6 +120,7 @@ function ArtefactDetails(props: Props) {
       {/* Artefact selected, we display details */}
       {artefact && (
         <>
+          {/* Artefact name and close button on mobile */}
           <div className={Cls.header}>
             <h2 data-cy={'artefact-name'}>{name}</h2>
             <button onClick={mobileOnHide} className={Cls.mobileCloseButton}>
@@ -132,6 +128,7 @@ function ArtefactDetails(props: Props) {
             </button>
           </div>
 
+          {/* About block */}
           <div className={'mb-3'}>
             <h4>{t('About')}</h4>
             <div className={Cls.aboutLine}>
@@ -159,9 +156,12 @@ function ArtefactDetails(props: Props) {
               {attributionsVariableExpansion(artefact.attributions).join(' ')}
             </div>
 
-            <AboutDatastore className={'mb-2'} />
+            <div className={Cls.aboutLine}>
+              <LicenceModal artefact={artefact} />
+            </div>
           </div>
 
+          {/* Description block */}
           {description && (
             <div className={'mb-3'}>
               <h4>{t('Description')}</h4>
@@ -186,6 +186,7 @@ function ArtefactDetails(props: Props) {
             </div>
           )}
 
+          {/* Keywords block */}
           {keywords && (
             <div className={'mb-3'}>
               <h4>{t('Keywords')}</h4>
@@ -209,15 +210,7 @@ function ArtefactDetails(props: Props) {
               <FaIcon icon={IconDefs.faDownload} className={'mr-2'} />
               {t('Download')}
             </button>
-
-            <button className={'btn btn-outline-secondary'} onClick={handleShowLicense} data-cy={'show-license'}>
-              <FaIcon icon={IconDefs.faBalanceScale} className={'mr-2'} />
-              {t('Licence')}
-            </button>
           </div>
-
-          {/* License modal */}
-          {licenceModal && <LicenseModal artefact={artefact} onClose={handleLicenceModalClose} />}
         </>
       )}
     </div>

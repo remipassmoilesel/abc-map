@@ -16,11 +16,14 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-.licenseView {
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  max-height: 70vh;
-  overflow-x: hidden;
-  overflow-y: auto;
-  font-size: 1.1rem;
+.title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+
+  &.open {
+    font-size: 1.1rem;
+    margin-bottom: 1.2rem;
+  }
 }

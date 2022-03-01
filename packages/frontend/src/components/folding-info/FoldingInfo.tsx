@@ -20,30 +20,31 @@ import { FaIcon } from '../icon/FaIcon';
 import { IconDefs } from '../icon/IconDefs';
 import React, { ReactNode, useCallback, useState } from 'react';
 import clsx from 'clsx';
+import Cls from './FoldingInfo.module.scss';
 
 interface Props {
   title: string;
   type?: string;
-  initallyOpen?: boolean;
+  initiallyOpen?: boolean;
   className?: string;
   children: ReactNode;
 }
 
 export function FoldingInfo(props: Props) {
-  const { title, initallyOpen, children, className } = props;
+  const { title, initiallyOpen, children, className } = props;
   const type = props.type || 'info';
-  const [isOpen, setOpen] = useState(initallyOpen ?? false);
+  const [isOpen, setOpen] = useState(initiallyOpen ?? false);
 
   const handleClick = useCallback(() => setOpen(!isOpen), [isOpen]);
 
   return (
-    <div className={clsx('alert alert-' + type, className)}>
-      <div onClick={handleClick} className={'d-flex justify-content-between cursor-pointer'}>
+    <div className={clsx(`alert alert-${type}`, className)}>
+      <div onClick={handleClick} className={clsx(Cls.title, isOpen && Cls.open)}>
         {title}
         {isOpen && <FaIcon icon={IconDefs.faChevronDown} />}
         {!isOpen && <FaIcon icon={IconDefs.faChevronRight} />}
       </div>
-      {isOpen && <div className={'mt-2'}>{children}</div>}
+      {isOpen && children}
     </div>
   );
 }

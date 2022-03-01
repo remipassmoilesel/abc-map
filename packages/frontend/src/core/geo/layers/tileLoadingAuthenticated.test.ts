@@ -28,8 +28,7 @@ import { AxiosInstance } from 'axios';
 
 logger.disable();
 
-// FIXME: flickering test
-describe.skip('tileLoadingAuthenticated', () => {
+describe('tileLoadingAuthenticated', () => {
   let getStub: SinonStub;
   let fakeClient: AxiosInstance;
   let factoryStub: SinonStub;

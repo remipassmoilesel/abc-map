@@ -26,8 +26,7 @@ import { Point } from 'ol/geom';
 import { Icon } from 'ol/style';
 import ImageState from 'ol/ImageState';
 
-// FIXME: flickering test
-describe.skip('LegendRenderer', function () {
+describe('LegendRenderer', function () {
   let styleFactory: SinonStubbedInstance<StyleFactory>;
   let toContext: SinonStub;
   let vectorContext: SinonStubbedInstance<CanvasImmediateRenderer>;
