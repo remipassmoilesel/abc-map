@@ -358,8 +358,9 @@
     "No_preview_available": "Pas d'aperçu disponible",
     "Preview_of_artifact": "Aperçu de l'artefact",
     "All": "Tous",
-    "About_this_data": "A propos de ces données",
-    "About_data_store_and_data": "<div>\n    <p>Le magasin de données vous propose:</p>\n    <ul>\n        <li>Des données issues de sources libres</li>\n        <li>Des configurations de sources de données</li>\n    </ul>\n\n    <p>Certaines de ces données sont gratuites pour tous usages, certaines sont payantes pour des usages commerciaux.</p>\n    <p>Toutes les données ont des conditions d'utilisation. Référez-vous aux licences et aux liens vers les sources.</p>\n</div>",
+    "Licence_and_terms_of_use": "Licence et conditions d'utilisation",
+    "About_data_store": "A propos du magasin de données",
+    "About_data_store_and_data": "<div>\n    <p>Le magasin de données vous propose:</p>\n    <ul>\n        <li>Des données issues de sources libres</li>\n        <li>Des configurations de sources de données</li>\n    </ul>\n\n    <p>Certaines de ces données sont gratuites pour tous usages, certaines sont payantes pour des usages commerciaux.</p>\n    <p>Toutes les données ont des conditions d'utilisation. Référez-vous aux informations de licence et aux liens vers les sources.</p>\n</div>",
     "About": "A propos",
     "Provider": "Fournisseur"
   },
