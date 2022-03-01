@@ -2,7 +2,11 @@
 
 For the moment we use git hashes as version, since no one complained about it 👍
 
-## Legend clone  (XXXXXXX 28/02/2021)
+## Better licence display in data store  (0e08cce6 01/02/2021)
+
+- Everything is in the title
+
+## Legend clone  (9e39f6d9 28/02/2021)
 
 - Add ability to clone legends
 - Datastore preview optimization

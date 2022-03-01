@@ -42,10 +42,12 @@ describe('Layout', function () {
         .should((elem) => expect(elem).deep.equal(['Page 1', 'Page 2']))
         .get('[data-cy=undo]')
         .click()
+        .wait(800)
         .then(() => getLayoutNames())
         .should((elem) => expect(elem).deep.equal(['Page 1']))
         .get('[data-cy=redo]')
         .click()
+        .wait(800)
         .then(() => getLayoutNames())
         .should((elem) => expect(elem).deep.equal(['Page 1', 'Page 2']));
     });
