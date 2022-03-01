@@ -44,7 +44,9 @@ module.exports = {
       '\\.inline\\.svg$': '<rootDir>/scripts/inline-svg-transformer.js',
       ...config.transform,
     };
-    config.setupFiles = ['<rootDir>/scripts/test-setup.js']
+    config.setupFiles = ['<rootDir>/scripts/test-setup.js'];
+    // This option is needed in order to prevent weird errors in low ressources environment
+    config.maxWorkers = '50%';
     return config;
   },
 };
