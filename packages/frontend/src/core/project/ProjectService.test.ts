@@ -304,6 +304,28 @@ describe('ProjectService', function () {
       expect(modals.setProjectPassword.callCount).toEqual(1);
     });
 
+    it('should not prompt several times for credentials', async function () {
+      // Prepare
+      const originalManifest = ProjectFactory.newProjectManifest();
+      store.dispatch(ProjectActions.loadProject(originalManifest));
+
+      map.addLayer(LayerFactory.newXyzLayer('http://nowhere.net/{x}/{y}/{z}'));
+
+      const originalLayer = TestHelper.sampleXyzLayer({ remoteUrl: 'http://nowhere.net/{x}/{y}/{z}' });
+      const layers: AbcLayer[] = [originalLayer];
+      geoMock.exportLayers.resolves(layers);
+
+      modals.setProjectPassword.resolves({ type: ModalEventType.SetPasswordClosed, value: 'azerty1234', status: ModalStatus.Confirmed });
+
+      // Act
+      await projectService.exportCurrentProject();
+      await projectService.exportCurrentProject();
+      await projectService.exportCurrentProject();
+
+      // Assert
+      expect(modals.setProjectPassword.callCount).toEqual(1);
+    });
+
     it('should return ProjectStatus.Canceled if user does not provide credentials for private project', async function () {
       // Prepare
       const originalManifest = ProjectFactory.newProjectManifest();

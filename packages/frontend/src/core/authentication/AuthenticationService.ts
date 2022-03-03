@@ -46,7 +46,10 @@ import { AuthenticationError, ErrorType } from './AuthenticationError';
 
 const logger = Logger.get('AuthenticationService.ts');
 
+const Disconnect = 'disconnect';
+
 export class AuthenticationService {
+  private eventTarget = document.createDocumentFragment();
   private tokenInterval: any;
 
   constructor(private httpClient: AxiosInstance, private store: MainStore) {}
@@ -93,7 +96,9 @@ export class AuthenticationService {
   }
 
   public logout(): Promise<void> {
-    return this.anonymousLogin();
+    return this.anonymousLogin().then(() => {
+      this.eventTarget.dispatchEvent(new CustomEvent(Disconnect));
+    });
   }
 
   public anonymousLogin(): Promise<void> {
@@ -198,5 +203,13 @@ export class AuthenticationService {
     const decoded = jwtDecode<AuthenticationToken>(token);
     this.store.dispatch(AuthenticationActions.login(decoded, token));
     return decoded.userStatus;
+  }
+
+  public addDisconnectListener(handler: () => void) {
+    this.eventTarget.addEventListener(Disconnect, handler);
+  }
+
+  public removeDisconnectListener(handler: () => void) {
+    this.eventTarget.removeEventListener(Disconnect, handler);
   }
 }

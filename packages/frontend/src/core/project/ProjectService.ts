@@ -50,11 +50,12 @@ import { ProjectUpdater } from './ProjectUpdater';
 import cloneDeep from 'lodash/cloneDeep';
 import { ProjectStatus } from './ProjectStatus';
 import { Routes } from '../../routes';
+import { PasswordCache } from './PasswordCache';
 
 export const logger = Logger.get('ProjectService.ts');
 
 // This timeout is used for download / upload of projects
-const LongTimeout = 45_000;
+const SaveProjectTimeout = 45_000;
 
 export class ProjectService {
   public static create(
@@ -70,6 +71,7 @@ export class ProjectService {
   }
 
   private eventTarget = document.createDocumentFragment();
+  private passwordCache = new PasswordCache();
 
   constructor(
     private jsonClient: AxiosInstance,
@@ -96,6 +98,8 @@ export class ProjectService {
 
     // Reset main map layers
     this.geoService.getMainMap().setDefaultLayers();
+
+    this.passwordCache.reset();
 
     logger.info('New project created');
   }
@@ -160,6 +164,7 @@ export class ProjectService {
     // Decrypt project manifest if password set
     if (password) {
       manifest = await Encryption.decryptManifest(manifest, password);
+      this.passwordCache.set(password);
     }
 
     // Load view and layers projection
@@ -199,13 +204,14 @@ export class ProjectService {
     const containsCredentials = Encryption.mapContainsCredentials(this.geoService.getMainMap());
     const shouldBeEncrypted = containsCredentials && !state.metadata.public;
 
-    let password: string | undefined;
-    if (shouldBeEncrypted) {
+    let password = this.passwordCache.get();
+    if (shouldBeEncrypted && !password) {
       const event = await this.modals.setProjectPassword();
       if (event.status === ModalStatus.Canceled) {
         return ProjectStatus.Canceled;
       }
       password = event.value;
+      this.passwordCache.set(password);
     }
 
     let manifest: AbcProjectManifest = {
@@ -239,7 +245,7 @@ export class ProjectService {
     formData.append('project', compressed.project);
     return this.jsonClient
       .post(Api.saveProject(), formData, {
-        timeout: LongTimeout,
+        timeout: SaveProjectTimeout,
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -388,14 +394,18 @@ export class ProjectService {
   }
 
   public findById(id: string): Promise<Blob | undefined> {
-    return this.downloadClient.get(Api.findById(id), { timeout: LongTimeout }).then((res) => res.data);
+    return this.downloadClient.get(Api.findById(id)).then((res) => res.data);
   }
 
   public findSharedById(id: string): Promise<Blob | undefined> {
-    return this.downloadClient.get(Api.findSharedById(id), { timeout: LongTimeout }).then((res) => res.data);
+    return this.downloadClient.get(Api.findSharedById(id)).then((res) => res.data);
   }
 
   public deleteById(id: string): Promise<void> {
     return this.jsonClient.delete(Api.findById(id)).then(() => undefined);
+  }
+
+  public resetCache() {
+    this.passwordCache.reset();
   }
 }
