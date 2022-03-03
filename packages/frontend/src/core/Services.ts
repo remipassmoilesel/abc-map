@@ -55,7 +55,7 @@ export function getServices(): Services {
 
 export function servicesFactory(store: MainStore): Services {
   const apiClient = httpApiClient(5_000);
-  const downloadClient = httpDownloadClient(5_000);
+  const downloadClient = httpDownloadClient(40_000);
   const capabilitiesClient = httpExternalClient(20_000);
 
   const toasts = new ToastService();
@@ -68,6 +68,8 @@ export function servicesFactory(store: MainStore): Services {
   const feedback = new FeedbackService(apiClient, toasts);
   const legalMentions = new LegalMentionsService(downloadClient, toasts);
   const storage = new LocalStorageService();
+
+  authentication.addDisconnectListener(() => project.resetCache());
 
   return {
     project,

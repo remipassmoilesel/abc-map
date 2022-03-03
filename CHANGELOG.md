@@ -2,7 +2,11 @@
 
 For the moment we use git hashes as version, since no one complained about it ğŸ‘
 
-## Better licence display in data store  (0e08cce6 01/02/2021)
+## Password cache (XXXXXX 03/02/2022)
+
+- Add password cache in order to prevent too many prompts in one session.
+
+## Better licence display in data store  (0e08cce6 01/02/2022)
 
 - Everything is in the title
 
@@ -13,7 +17,7 @@ For the moment we use git hashes as version, since no one complained about it ğŸ
 - Greater timeout for capabilities requests
 - Minor style improvements
 
-## Better datastore  (f3a2e8f4 28/02/2021)
+## Better datastore  (f3a2e8f4 28/02/2022)
 
 - Better artefacts, added fields `attributions`, `previews`, `weight`. See: `packages/shared/src/artefact/ArtefactManifest.ts`.
 - Better data store UI, with details panel and previews
@@ -24,7 +28,7 @@ For the moment we use git hashes as version, since no one complained about it ğŸ
 - Lazy loading of pages, js bundles are now lighter
 - Migration to Openlayers 6.13
 
-## Project sharing, part 2 (be7ddb2b 06/02/2021)
+## Project sharing, part 2 (be7ddb2b 06/02/2022)
 
 This feature is still in experimental stage.
 
@@ -35,13 +39,13 @@ This feature is still in experimental stage.
 - Less fullscreen loading
 - Less sollicitations for donations !
 
-## Experimental features UI (855f1391 19/01/2021)
+## Experimental features UI (855f1391 19/01/2022)
 
 - Experimental feature system for the frontend application, see packages/frontend/src/ExperimentalFeatures.ts
 - New dialog box with list of experimental features, ability to enable or disable features
 - Parameters persisted between sessions
 
-## Project sharing, part 1 (2ba159d0 19/01/2021)
+## Project sharing, part 1 (2ba159d0 19/01/2022)
 
 This feature is released in experimental stage.
 
