@@ -2,7 +2,7 @@
 
 /*
 
-This script is an helper redirecting commands to packages/abc-cli/build/main.js
+This is a helper forwarding commands to packages/abc-cli/build/main.js
 
  */
 
@@ -10,7 +10,7 @@ const path = require("path");
 const fs = require("fs");
 const child_process = require("child_process");
 
-const NodeVersionMin = '14';
+const NodeVersionMin = 14;
 
 const projectRoot = path.resolve(__dirname);
 const cliRoot = path.resolve(projectRoot, 'packages/abc-cli');
@@ -44,8 +44,11 @@ function main(args) {
 
 function checkNodeVersion() {
   const output = child_process.execSync("node -v", {cwd: cliRoot, stdio: 'pipe'});
-  if (!output || !output.toString('utf-8').startsWith(`v${NodeVersionMin}`)) {
-    throw new Error(`Please use Node.js ${NodeVersionMin}`);
+  const versionMatch = output && output.toString('utf-8').match(/^v([0-9]+)/);
+  const version = versionMatch && versionMatch.length && parseInt(versionMatch[1]);
+
+  if (!version || version < NodeVersionMin) {
+    throw new Error(`Please use at least Node.js ${NodeVersionMin}`);
   }
 }
 

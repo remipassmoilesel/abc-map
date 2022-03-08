@@ -12,7 +12,7 @@
 - [Scale on exports](#scale-on-exports)
 - [Text labels not attached to features](#text-labels-not-attached-to-features)
 - [Backgrounds for text label](#backgrounds-for-text-label)
-- [Users should be able to measure distances](#users-should-be-able-to-measure-distances)
+- [Users should be able to measure distances and areas](#users-should-be-able-to-measure-distances-and-areas)
 - [Lines with arrows](#lines-with-arrows)
 - [Better user experience](#better-user-experience)
 - [Better icons and visuals](#better-icons-and-visuals)
@@ -86,10 +86,10 @@ special polygons.
 
 Users should be able to background color of text labels.
 
-## Users should be able to measure distances
+## Users should be able to measure distances and areas
 
-Users should be able to measure distances with a drawing tool. Distances should be linestring with
-text label (for exports).
+Users should be able to measure distances with a map tool. Distances should be linestring with
+text label (for exports). Areas polygons with text label (for exports).
 
 ## Lines with arrows
 
