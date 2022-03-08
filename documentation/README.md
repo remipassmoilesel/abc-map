@@ -1,7 +1,6 @@
 # Developer documentation
 
-Welcome ! This is the developer documentation 👨‍💻. If you are looking for user documentation, please  
-check [https://abc-map.fr/documentation](https://abc-map.fr/documentation).
+Welcome ! This is the developer documentation 👨‍💻. If you are looking for user documentation, please check [https://abc-map.fr/en/documentation](https://abc-map.fr/en/documentation).
 
 ## Table of contents
 

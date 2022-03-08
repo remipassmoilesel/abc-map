@@ -5,11 +5,12 @@
 All developments of this project are under free license AGPL 3. This license guarantees that this software will
 always remain a Free (as in Freedom) software.
 
-## User comes first
+## User first
 
 This software is intended for end users. It is assumed that our users either do not have a lot of skills in
-the area, or do not have a lot of time to devote to the software. All functionality should be as easy to understand
-and use as possible.
+the area, or do not have a lot of time to devote to the software.
+
+All functionality should be as easy to understand and use as possible.
 
 Privacy and security are primary concerns, and data collection must be justified by a technical need for security.
 

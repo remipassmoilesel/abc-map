@@ -1,50 +1,128 @@
 # Set up a developer workstation
 
-**The development environment has only been tested under GNU / Linux, it may not work on Windows.**
+<!-- toc -->
 
-Windows is supported as a target operating system, via browsers. It is not actively supported
-as a development operating system. You can use dual boot or [virtual machines](https://brb.nci.nih.gov/seqtools/installUbuntu.html).
+- [Introduction](#introduction)
+- [Basic setup](#basic-setup)
+  - [Ubuntu 20.04 (actively supported)](#ubuntu-2004-actively-supported)
+  - [Windows 11, Windows Subsystem for Linux version 2](#windows-11-windows-subsystem-for-linux-version-2)
+- [Start and build Abc-Map locally](#start-and-build-abc-map-locally)
+- [Local services](#local-services)
+- [Additional tools](#additional-tools)
 
-Tested environments:
+<!-- tocstop -->
+
+## Introduction
+
+This document explains how to set up a development workstation. This document will guide you through the installation
+dependencies needed to start and build Abc-Map.
+
+Although these operations are simple and common, apply the steps described below with caution.
+
+**The easiest and most reliable way to start developing on Abc-Map is to use Ubuntu 20.04.**
+
+Tested operating systems:
 
 - Manjaro Linux
 - Ubuntu 20.04
+- Windows 11, Windows Subsystem for Linux version 2
 
-## Minimal setup
+## Basic setup
 
-With this setup, you can modify project but all tests will not pass and you can not deploy.
+### Ubuntu 20.04 (actively supported)
 
-For Debian like and Ubuntu:
+Install basic tools and dependencies:
 
-    # Install git, docker and tools
     $ sudo apt install git docker.io docker-compose curl build-essential
 
     # This command allow you to use Docker without being root.
     # You MUST logout then login after, or reboot your computer.
     $ sudo usermod -aG docker $USER
 
-    # Install NodeJS and yarn. There are several ways to do that, but n rocks !
-    # You MUST restart your terminal after.
+Install Node.js and yarn. There are several ways to do that.
+
     $ curl -L https://git.io/n-install | bash
+    $ source ~/.bashrc  # or restart your terminal
+    $ n 14
     $ npm i -g yarn
+
+Clone source code:
+
+    $ git clone https://gitlab.com/abc-map/abc-map.git
+    $ cd abc-map
+
+### Windows 11, Windows Subsystem for Linux version 2
+
+Install WSL, see: [https://docs.microsoft.com/en-us/windows/wsl/install](https://docs.microsoft.com/en-us/windows/wsl/install)
+
+Download and install Docker Desktop with WSL backend, see [https://docs.docker.com/desktop/windows/wsl/](https://docs.docker.com/desktop/windows/wsl/)
+
+If everything works fine, you can launch the Ubuntu application, then type these commands:
+
+    $ sudo apt update
+
+    ...
+    Reading package lists... Done
+    Building dependency tree
+    Reading state information... Done
+    ...
+
+    $ docker run hello-world
+
+    ...
+    Hello from Docker!
+    This message shows that your installation appears to be working correctly.
+    ...
+
+Install basic tools and dependencies
+
+    $ sudo apt update
+    $ sudo apt install -y git curl build-essential
+
+Install Node.js and yarn. There are several ways to do that.
+
+    $ curl -L https://git.io/n-install | bash -s -- -y
+    $ source ~/.bashrc
+    $ n 14
+    $ npm i -g yarn
+
+Clone source code then start and IDE (per example VSCode):
 
     # Clone source code
     $ git clone https://gitlab.com/abc-map/abc-map.git
     $ cd abc-map
+    $ code .
 
-## Start commands
+Remarks:
 
-A CLI tool builds and starts the project:
+- On the first start of Abc-Map, your firewall will ask you for permissions for Abc-Map and Docker, you must accept them
+- You can install and use the Windows terminal to improve the display, otherwise you will see weird characters
+- On first start, the frontend can be very slow
 
-    $ ./abc-cli install     # Install all dependencies
-    $ ./abc-cli build       # Build all packages, needed the first time or after many changes
-    $ ./abc-cli start       # Start application
+## Start and build Abc-Map locally
 
-You can watch sources with:
+A tool called `abc-cli` helps to build and start the project.
+
+The first time, or after a lot of modifications you must install dependencies and build the whole project:
+
+    $ ./abc-cli install     # Install all dependencies. The first time it can take several minutes.
+    $ ./abc-cli build       # Build all packages, needed the first time or after many changes.
+
+Then you can start Abc-Map locally:
+
+    $ ./abc-cli start
+
+You can access the development frontend at [http://localhost:3005](http://localhost:3005).
+
+Every time you modify sources you can apply your changes with:
 
     $ ./abc-cli watch
 
-See CLI help for more commands:
+You can format your code with:
+
+    $ ./abc-cli lint
+
+See tool help for more commands:
 
     $ ./abc-cli help
 
@@ -63,18 +141,21 @@ You can build, test, start packages independently too:
 
 ## Local services
 
-After start, several services are launched on start:
+After startup, several local services are accessible:
 
 - A Mongodb instance on port `27019`
 - A Mongo Express instance on port `27020`
-- Server on port `10082`. This port serves the backend API and the last frontend build.
+- Abc-Map server on port `10082`. This port serves the backend API and the last frontend build.
 - Webpack dev server on port `3005`
 
-You can clean local data by using command:
+You can clean up local data using the command:
 
     $ ./abc-cli clean-restart-services
 
 ## Additional tools
+
+With the configuration explained above, you can modify the source code but not all tests will pass and you will not be able
+to deploy your own instance of Abc-Map
 
 With these tools, all tests should pass, and you can deploy your own instance of Abc-Map.
 
