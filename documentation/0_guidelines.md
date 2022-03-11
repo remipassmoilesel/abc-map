@@ -14,6 +14,20 @@ All functionality should be as easy to understand and use as possible.
 
 Privacy and security are primary concerns, and data collection must be justified by a technical need for security.
 
+Who uses Abc-Map ?
+
+- Sportsmen and women for running or cycling routes
+- Teachers and students for workshops
+- Entrepreneurs to georeference their activities or one-off events
+- Police, gendarmes and coastguards for public service missions
+- Ecological associations for the organization of community actions
+- Professional researchers and enthusiasts to illustrate historical or political narratives
+- Tourist offices for tour itineraries
+- Town halls and citizens' committees for the organization of markets or celebrations
+- Humanitarian and solidarity organizations for social action missions
+
+And much more, which we don't hear about because... we don't track users 👏👏
+
 ## Then developer's turn
 
 In order to promote quality developments, it is desirable to maintain a good development experience.

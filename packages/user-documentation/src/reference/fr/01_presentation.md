@@ -18,6 +18,20 @@ Avec Abc-Map vous pouvez créer:
 - <a href="https://youtu.be/majmp2GFfkE" target="_blank">Import et export de données</a>
 - <a href="https://youtu.be/irT6eV7JGDw" target="_blank">Représenter la densité de population en France métropolitaine avec des dégradés de couleurs</a>
 
+Qui utilise Abc-Map ?
+
+- Des sportifs pour des parcours running ou vélo
+- Des enseignants et des élèves pour des ateliers
+- Des entrepreneurs pour géoréférencer leurs activités ou événements ponctuels
+- Des policiers, gendarmes et garde-côtes pour des missions de service public
+- Des associations écologiques pour l'organisation d'actions communautaires
+- Des chercheurs professionnels et passionnés pour illustrer des récits historiques ou politiques
+- Des offices de tourisme pour des itinéraires de visite
+- Des mairies et comités de citoyens pour l'organisation de marchés ou de fêtes
+- Des organisations humanitaires et solidaires pour des missions d'action sociale
+
+Et bien plus encore, dont nous n'entendons pas parler car... nous ne traquons pas nos utilisateurs 👏👏
+
 <div class='alert alert-info my-4 d-flex flex-column'>
   <b class="mb-2">Ce logiciel est tout neuf ✨ </b>
   <div class="mb-2">Abc-Map est en constante évolution, chaque semaine une amélioration est publiée.</div>
