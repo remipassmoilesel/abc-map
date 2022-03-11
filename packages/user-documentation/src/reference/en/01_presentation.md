@@ -20,6 +20,20 @@ With Abc-Map you can create:
 
 (<i>Automatic translation only 🤭</i>)
 
+Who uses Abc-Map ?
+
+- Sportsmen and women for running or cycling routes
+- Teachers and students for workshops
+- Entrepreneurs to georeference their activities or one-off events
+- Police, gendarmes and coastguards for public service missions
+- Ecological associations for the organization of community actions
+- Professional researchers and enthusiasts to illustrate historical or political narratives
+- Tourist offices for tour itineraries
+- Town halls and citizens' committees for the organization of markets or celebrations
+- Humanitarian and solidarity organizations for social action missions
+
+And much more, which we don't hear about because... we don't track users 👏👏
+
 <div class='alert alert-info my-4 d-flex flex-column'>
   <b class="mb-2">This software is brand new ✨ </b>
   <div class="mb-2">Abc-Map is constantly evolving, every week an improvement is published.</div>

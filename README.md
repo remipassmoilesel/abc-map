@@ -27,6 +27,20 @@ designed by and for experts, and are hard to use.
 Abc-Map is a lightweight GIS whose objective is to offer a good user experience for neophytes as for experts in a
 hurry.
 
+## Who uses Abc-Map ?
+
+- Sportsmen and women for running or cycling routes
+- Teachers and students for workshops
+- Entrepreneurs to georeference their activities or one-off events
+- Police, gendarmes and coastguards for public service missions
+- Ecological associations for the organization of community actions
+- Professional researchers and enthusiasts to illustrate historical or political narratives
+- Tourist offices for tour itineraries
+- Town halls and citizens' committees for the organization of markets or celebrations
+- Humanitarian and solidarity organizations for social action missions
+
+And much more, which we don't hear about because... we don't track users 👏👏
+
 ## How can I help ?
 
 See [CONTRIBUTING](./CONTRIBUTING.md) and [backlog](./documentation/5_backlog.md).
