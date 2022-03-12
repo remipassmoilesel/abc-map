@@ -800,7 +800,8 @@
     "Share_link": "Share link",
     "Iframe_embed_code": "Iframe embed code",
     "Width": "Width (px)",
-    "Height": "Height (px)"
+    "Height": "Height (px)",
+    "Shared_views": "Shared views"
   },
   "CopyButton": {
     "Copied": "Copied !",

@@ -16,12 +16,8 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as sinon from 'sinon';
-import { SinonStubbedInstance } from 'sinon';
-import { GeoService } from '../../core/geo/GeoService';
 import { MapWrapper } from '../../core/geo/map/MapWrapper';
 import { MapFactory } from '../../core/geo/map/MapFactory';
-import { Services } from '../../core/Services';
 import { ClassificationAlgorithm, ScaleAlgorithm } from '../_common/algorithm/Algorithm';
 import VectorSource from 'ol/source/Vector';
 import { newParameters, Parameters } from './Parameters';
@@ -33,21 +29,25 @@ import { DataSource, DataValue } from '../../core/data/data-source/DataSource';
 import { VectorLayerWrapper } from '../../core/geo/layers/LayerWrapper';
 import { TestDataSource } from '../../core/data/data-source/TestDataSource';
 import Geometry from 'ol/geom/Geometry';
+import { mockServices, restoreServices } from '../../core/utils/test/mock-services';
 
 logger.disable();
 
 describe('ColorGradients', () => {
-  let geoMock: SinonStubbedInstance<GeoService>;
   let map: MapWrapper;
   let module: ColorGradients;
 
   beforeEach(() => {
     map = MapFactory.createNaked();
-    geoMock = sinon.createStubInstance(GeoService);
-    geoMock.getMainMap.returns(map);
-    const services = { geo: geoMock } as unknown as Services;
+
+    const services = mockServices();
+    services.geo.getMainMap.returns(map);
 
     module = new ColorGradients(services);
+  });
+
+  afterEach(() => {
+    restoreServices();
   });
 
   it('should fail if parameter is missing', async () => {

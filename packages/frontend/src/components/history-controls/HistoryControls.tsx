@@ -42,14 +42,14 @@ function HistoryControls(props: Props) {
   const canUndo = capabilities?.canUndo ?? false;
   const canRedo = capabilities?.canRedo ?? false;
 
-  const undo = useCallback(() => {
+  const handleUndo = useCallback(() => {
     history.undo(historyKey).catch((err) => {
       logger.error(err);
       toasts.genericError();
     });
   }, [historyKey, history, toasts]);
 
-  const redo = useCallback(() => {
+  const handleRedo = useCallback(() => {
     history.redo(historyKey).catch((err) => {
       logger.error(err);
       toasts.genericError();
@@ -58,10 +58,10 @@ function HistoryControls(props: Props) {
 
   return (
     <div className={`control-block ${Cls.historyControls}`}>
-      <button onClick={undo} type={'button'} className={'btn btn-outline-secondary'} disabled={!canUndo} data-cy={'undo'}>
+      <button onClick={handleUndo} disabled={!canUndo} data-cy={'undo'} type={'button'} className={'btn btn-outline-secondary'}>
         <FaIcon icon={IconDefs.faUndo} className={'mr-2'} /> {t('Undo')}
       </button>
-      <button onClick={redo} type={'button'} className={'btn btn-outline-secondary'} disabled={!canRedo} data-cy={'redo'}>
+      <button onClick={handleRedo} disabled={!canRedo} data-cy={'redo'} type={'button'} className={'btn btn-outline-secondary'}>
         <FaIcon icon={IconDefs.faRedo} className={'mr-2'} /> {t('Redo')}
       </button>
     </div>

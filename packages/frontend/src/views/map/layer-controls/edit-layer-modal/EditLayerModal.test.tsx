@@ -23,11 +23,12 @@ import EditLayerModal from './EditLayerModal';
 import sinon, { SinonStub } from 'sinon';
 import userEvent from '@testing-library/user-event';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
-import { newTestServices, TestServices } from '../../../../core/utils/test/TestServices';
+import { TestServices } from '../../../../core/utils/test/TestServices';
 import { HistoryKey } from '../../../../core/history/HistoryKey';
 import { EditLayerChangeset } from '../../../../core/history/changesets/layers/EditLayerChangeset';
 import { MapWrapper } from '../../../../core/geo/map/MapWrapper';
 import { MapFactory } from '../../../../core/geo/map/MapFactory';
+import { mockServices, restoreServices } from '../../../../core/utils/test/mock-services';
 
 describe('EditLayerModal', () => {
   let onHide: SinonStub;
@@ -42,8 +43,12 @@ describe('EditLayerModal', () => {
 
     map = MapFactory.createNaked();
 
-    services = newTestServices();
+    services = mockServices();
     services.geo.getMainMap.returns(map);
+  });
+
+  afterEach(() => {
+    restoreServices();
   });
 
   it('should change name', async () => {

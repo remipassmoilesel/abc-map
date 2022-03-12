@@ -181,25 +181,16 @@ export class MapWrapper {
   }
 
   public setActiveLayer(layer: LayerWrapper): void {
-    const id: string | undefined = layer.getId();
-    if (!id) {
-      throw new Error('Layer is not managed');
-    }
-
-    this.setActiveLayerById(id);
-  }
-
-  public setActiveLayerById(layerId: string): void {
     const layers = this.getLayers();
-    const targetLayers = layers.find((lay) => lay.getId() === layerId);
-    if (!targetLayers) {
+
+    // We check if layer belong to map
+    const foundInMap = layers.find((lay) => lay.getId() === layer.getId());
+    if (!foundInMap) {
       throw new Error('Layer does not belong to map');
     }
 
-    layers.forEach((lay) => {
-      const id = lay.getId();
-      lay.setActive(id === layerId);
-    });
+    // We set layer active, we set others not active
+    layers.forEach((lay) => lay.setActive(lay.getId() === layer.getId()));
 
     this.triggerLayerChange();
   }

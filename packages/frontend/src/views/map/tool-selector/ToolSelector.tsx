@@ -115,18 +115,15 @@ function ToolSelector(props: Props) {
   // If tools are disabled, user can create a new vector layer here
   const handleCreateVectorLayer = useCallback(() => {
     const add = async () => {
-      const map = geo.getMainMap();
       const layer = LayerFactory.newVectorLayer();
 
-      const cs = new AddLayersChangeset(map, [layer]);
+      const cs = AddLayersChangeset.create([layer]);
       await cs.apply();
       history.register(HistoryKey.Map, cs);
-
-      map.setActiveLayer(layer);
     };
 
     add().catch((err) => logger.error('Cannot add layer', err));
-  }, [geo, history]);
+  }, [history]);
 
   const toolOptions = toolsEnabled && getToolOptions();
   const toolTip = toolsEnabled && getToolTip();

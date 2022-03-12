@@ -33,7 +33,6 @@ export function render(svc: Services, store: MainStore) {
   // For tests and debug purposes
   const _window = getAbcWindow();
   _window.abc.mainMap = new E2eMapWrapper(svc.geo.getMainMap());
-  _window.abc.services = svc;
   _window.abc.store = store;
 
   ReactDOM.render(

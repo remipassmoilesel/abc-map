@@ -2,22 +2,32 @@
 
 For the moment we use git hashes as version, since no one complained about it 👍
 
-## Password cache (XXXXXX 03/02/2022)
+## Improve undo / redo history (XXXXXXXX 12/03/2022)
+
+- In some cases it seemed impossible to undo the creation of an export view. It is now fixed.
+- Actions have been added to history, in order to have a more consistent behavior (activation of layers, layouts, ...)
+- There are still some issues with histories that need to be fixed.
+
+## Windows development setup documentation (b5384943 08/03/2022)
+
+- Pff... it had to be done !
+
+## Password cache (dcb384fd 03/03/2022)
 
 - Add password cache in order to prevent too many prompts in one session.
 
-## Better licence display in data store  (0e08cce6 01/02/2022)
+## Better licence display in data store (0e08cce6 01/02/2022)
 
 - Everything is in the title
 
-## Legend clone  (9e39f6d9 28/02/2021)
+## Legend clone (9e39f6d9 28/02/2021)
 
 - Add ability to clone legends
 - Datastore preview optimization
 - Greater timeout for capabilities requests
 - Minor style improvements
 
-## Better datastore  (f3a2e8f4 28/02/2022)
+## Better datastore (f3a2e8f4 28/02/2022)
 
 - Better artefacts, added fields `attributions`, `previews`, `weight`. See: `packages/shared/src/artefact/ArtefactManifest.ts`.
 - Better data store UI, with details panel and previews

@@ -56,11 +56,11 @@ $list-height: 6rem;
   justify-content: center;
 
   button {
-    font-size: 1.1rem;
-    padding: 0.5rem !important;
+    font-size: 1.2rem;
+    padding: 0 0.5rem !important;
 
     @include media-breakpoint-down(xl) {
-      font-size: 1.3rem;
+      font-size: 1.4rem;
     }
 
     :global(.abc-icon) {

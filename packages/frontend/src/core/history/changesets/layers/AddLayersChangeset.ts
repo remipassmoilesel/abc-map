@@ -19,8 +19,15 @@
 import { Changeset } from '../../Changeset';
 import { MapWrapper } from '../../../geo/map/MapWrapper';
 import { LayerWrapper } from '../../../geo/layers/LayerWrapper';
+import { getServices } from '../../../Services';
 
 export class AddLayersChangeset extends Changeset {
+  public static create(layers: LayerWrapper[]): AddLayersChangeset {
+    const { geo } = getServices();
+    const map = geo.getMainMap();
+    return new AddLayersChangeset(map, layers);
+  }
+
   constructor(private map: MapWrapper, private layers: LayerWrapper[]) {
     super();
   }

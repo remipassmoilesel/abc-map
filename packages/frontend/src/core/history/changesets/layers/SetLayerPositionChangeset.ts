@@ -17,26 +17,33 @@
  */
 
 import { Changeset } from '../../Changeset';
-import { LayerWrapper } from '../../../geo/layers/LayerWrapper';
 import { MapWrapper } from '../../../geo/map/MapWrapper';
+import { LayerWrapper } from '../../../geo/layers/LayerWrapper';
 import { getServices } from '../../../Services';
 
-export class ToggleLayerVisibilityChangeset extends Changeset {
-  public static create(layer: LayerWrapper, state: boolean): ToggleLayerVisibilityChangeset {
+export class SetLayerPositionChangeset extends Changeset {
+  public static create(layer: LayerWrapper, nextPosition: number): SetLayerPositionChangeset {
     const { geo } = getServices();
     const map = geo.getMainMap();
-    return new ToggleLayerVisibilityChangeset(map, layer, state);
+    const previousPosition = map.getLayers().findIndex((lay) => lay.getId() === layer.getId());
+    if (previousPosition === -1) {
+      throw new Error('Layer does not belong to main map');
+    }
+
+    return new SetLayerPositionChangeset(map, layer, previousPosition, nextPosition);
   }
 
-  constructor(private map: MapWrapper, private layer: LayerWrapper, private state: boolean) {
+  constructor(private map: MapWrapper, private layer: LayerWrapper, private previousPosition: number, private nextPosition: number) {
     super();
   }
 
-  public async apply(): Promise<void> {
-    this.map.setLayerVisible(this.layer, this.state);
+  public async undo(): Promise<void> {
+    this.map.removeLayer(this.layer);
+    this.map.addLayer(this.layer, this.previousPosition);
   }
 
-  public async undo(): Promise<void> {
-    this.map.setLayerVisible(this.layer, !this.state);
+  public async apply(): Promise<void> {
+    this.map.removeLayer(this.layer);
+    this.map.addLayer(this.layer, this.nextPosition);
   }
 }

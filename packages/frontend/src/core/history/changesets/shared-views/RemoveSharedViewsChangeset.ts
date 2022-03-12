@@ -23,7 +23,8 @@ import { getServices } from '../../../Services';
 
 export class RemoveSharedViewsChangeset extends Changeset {
   public static create(views: AbcSharedView[]) {
-    return new RemoveSharedViewsChangeset(getServices().project, views);
+    const { project } = getServices();
+    return new RemoveSharedViewsChangeset(project, views);
   }
 
   private views: AbcSharedView[];
@@ -35,9 +36,19 @@ export class RemoveSharedViewsChangeset extends Changeset {
 
   public async apply(): Promise<void> {
     this.project.removeSharedViews(this.views);
+
+    const views = this.project.getSharedViews();
+    if (views.length) {
+      this.project.setActiveSharedView(views[views.length - 1].id);
+    }
   }
 
   public async undo(): Promise<void> {
     this.project.addSharedViews(this.views);
+
+    const views = this.project.getSharedViews();
+    if (views.length) {
+      this.project.setActiveSharedView(views[views.length - 1].id);
+    }
   }
 }

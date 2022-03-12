@@ -39,8 +39,8 @@ import { MapWrapper } from '../../../core/geo/map/MapWrapper';
 import { MapLegend } from '../../../components/map-legend/MapLegend';
 import { MapUi } from '../../../components/map-ui/MapUi';
 import { DimensionsPx } from '../../../core/utils/DimensionsPx';
-import { toPrecision } from '../../../core/utils/numbers';
 import { E2eMapWrapper } from '../../../core/geo/map/E2eMapWrapper';
+import { Views } from '../../../core/geo/Views';
 
 const t = prefixedTranslation('ShareSettingsView:');
 
@@ -101,11 +101,11 @@ function SharingLayoutMap() {
     }
 
     const ratio = geo.getMainMap().getMainRatio(mapWidth, mapHeight);
-    const updatedView = {
-      resolution: toPrecision(activeView.view.resolution / ratio, 9),
+    const updatedView = Views.normalize({
+      resolution: activeView.view.resolution / ratio,
       projection: activeView.view.projection,
-      center: activeView.view.center.slice(),
-    };
+      center: activeView.view.center,
+    });
 
     if (!isEqual(previewView, updatedView)) {
       setPreviewView(updatedView);
@@ -122,11 +122,11 @@ function SharingLayoutMap() {
 
     const ratio = geo.getMainMap().getMainRatio(mapWidth, mapHeight);
     const previewView = map.getView();
-    const view: AbcView = {
-      resolution: toPrecision(previewView.resolution * ratio, 9),
+    const view: AbcView = Views.normalize({
+      resolution: previewView.resolution * ratio,
       projection: previewView.projection,
-      center: previewView.center.slice(),
-    };
+      center: previewView.center,
+    });
 
     if (!isEqual(sharedView.view, view)) {
       const cs = UpdateSharedViewsChangeset.create([{ before: sharedView, after: { ...sharedView, view } }]);
@@ -146,19 +146,17 @@ function SharingLayoutMap() {
         .getLayers()
         .map((l) => ({ layerId: l.getId(), visible: true }))
         .filter((st): st is LayerState => !!st.layerId);
-      const view: AbcSharedView = { id, title, view: map.getView(), layers, legend: LegendFactory.newEmptyLegend() };
+      const mapView = Views.normalize(map.getView());
+      const view: AbcSharedView = { id, title, view: mapView, layers, legend: LegendFactory.newEmptyLegend() };
 
       // Create change set, apply and register it
       const cs = AddSharedViewChangeset.create([view]);
       await cs.apply();
       history.register(HistoryKey.SharedViews, cs);
-
-      // Set new layer as active
-      project.setActiveSharedView(id);
     };
 
     add().catch((err) => logger.error('Cannot add layer: ', err));
-  }, [geo, history, project, sharedViews.length]);
+  }, [geo, history, sharedViews.length]);
 
   return (
     <>

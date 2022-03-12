@@ -20,11 +20,12 @@ import XYZLayerPanel from './XYZLayerPanel';
 import sinon, { SinonStub } from 'sinon';
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { newTestServices, TestServices } from '../../../../../core/utils/test/TestServices';
+import { TestServices } from '../../../../../core/utils/test/TestServices';
 import { MapFactory } from '../../../../../core/geo/map/MapFactory';
 import { XYZ } from 'ol/source';
 import { AddLayersChangeset } from '../../../../../core/history/changesets/layers/AddLayersChangeset';
 import { HistoryKey } from '../../../../../core/history/HistoryKey';
+import { mockServices, restoreServices } from '../../../../../core/utils/test/mock-services';
 
 describe('XYZLayerPanel', () => {
   let onChange: SinonStub;
@@ -37,7 +38,11 @@ describe('XYZLayerPanel', () => {
     onCancel = sinon.stub();
     onConfirm = sinon.stub();
 
-    services = newTestServices();
+    services = mockServices();
+  });
+
+  afterEach(() => {
+    restoreServices();
   });
 
   it('should render', () => {

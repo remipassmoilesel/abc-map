@@ -17,25 +17,28 @@
  */
 
 import { Changeset } from '../../Changeset';
-import { ProjectService } from '../../../project/ProjectService';
-import { AbcLayout } from '@abc-map/shared';
 import { getServices } from '../../../Services';
+import { ProjectService } from '../../../project/ProjectService';
+import { AbcSharedView } from '@abc-map/shared';
 
-export class UpdateLayoutChangeset extends Changeset {
-  public static create(before: AbcLayout, after: AbcLayout) {
+export class SetActiveSharedViewChangeset extends Changeset {
+  public static create(view: AbcSharedView): SetActiveSharedViewChangeset {
     const { project } = getServices();
-    return new UpdateLayoutChangeset(project, before, after);
+    const previous = project.getActiveSharedView();
+    return new SetActiveSharedViewChangeset(project, previous, view);
   }
 
-  constructor(private project: ProjectService, private before: AbcLayout, private after: AbcLayout) {
+  constructor(private project: ProjectService, private previous: AbcSharedView | undefined, private next: AbcSharedView) {
     super();
   }
 
-  public async apply(): Promise<void> {
-    this.project.updateLayout(this.after);
+  public async undo(): Promise<void> {
+    if (this.previous) {
+      this.project.setActiveSharedView(this.previous.id);
+    }
   }
 
-  public async undo(): Promise<void> {
-    this.project.updateLayout(this.before);
+  public async apply(): Promise<void> {
+    this.project.setActiveSharedView(this.next.id);
   }
 }

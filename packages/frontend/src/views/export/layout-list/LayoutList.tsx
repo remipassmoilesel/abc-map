@@ -39,27 +39,28 @@ interface Props {
 const t = prefixedTranslation('ExportView:');
 
 function LayoutList(props: Props) {
-  const handleSelected = props.onSelected;
-  const handleDeleted = props.onDeleted;
-  const handleNewLayout = props.onNewLayout;
-  const items = props.layouts.map((lay) => {
-    const active = props.active?.id === lay.id;
-    return <LayoutListItem key={lay.id} active={active} layout={lay} onSelected={handleSelected} onDeleted={handleDeleted} />;
-  });
+  const { layouts, onSelected, onDeleted, onNewLayout } = props;
 
   return (
     <div className={Cls.layoutList} data-cy={'layout-list'}>
       <div className={'m-4 fw-bold'}>{t('Layouts')}</div>
-      {items}
-      {!items.length && (
+
+      {/* List of layouts */}
+      {layouts.map((lay) => {
+        const active = props.active?.id === lay.id;
+        return <LayoutListItem key={lay.id} active={active} layout={lay} onSelected={onSelected} onDeleted={onDeleted} />;
+      })}
+
+      {/* No layouts, information message */}
+      {!layouts.length && (
         <div className={'m-4'} data-cy={'no-layout'}>
           {t('List_of_layouts_displayed_here')}
         </div>
       )}
 
-      {/* New layout */}
+      {/* New layout button */}
       <div className={'d-flex justify-content-end align-items-center p-3 mb-3'}>
-        <button onClick={handleNewLayout} className={`btn btn-link`}>
+        <button onClick={onNewLayout} className={`btn btn-link`}>
           <FaIcon icon={IconDefs.faPlus} size={'1.1rem'} className={'mr-2'} /> {t('New_layout')}
         </button>
       </div>

@@ -33,6 +33,8 @@ import * as chroma from 'chroma-js';
 import { asNumberOrString, isValidNumber, toPrecision } from '../../core/utils/numbers';
 import { ProcessingResult, Status } from './ProcessingResult';
 import { prettyStringify } from '../../core/utils/strings';
+import { HistoryKey } from '../../core/history/HistoryKey';
+import { AddLayersChangeset } from '../../core/history/changesets/layers/AddLayersChangeset';
 
 export const logger = Logger.get('ColorGradients.tsx');
 
@@ -58,6 +60,7 @@ export class ColorGradients extends Module {
   public async process(params: Parameters): Promise<ProcessingResult> {
     logger.info('Using parameters: ', params);
 
+    const { history } = this.services;
     const { newLayerName } = params;
     const { valueField, source, joinBy: dataJoinBy } = params.data;
     const { layer: geometryLayer, joinBy: geometryJoinBy } = params.geometries;
@@ -150,14 +153,15 @@ export class ColorGradients extends Module {
       .filter((f) => !!f)
       .map((f) => f?.unwrap()) as Feature<Geometry>[];
 
-    // Then we create and add a new layer with symbols
+    // Then we create a layer
     const newLayer = LayerFactory.newVectorLayer();
     newLayer.setName(newLayerName);
     newLayer.getSource().addFeatures(newFeatures);
 
-    const map = this.services.geo.getMainMap();
-    map.addLayer(newLayer);
-    map.setActiveLayer(newLayer);
+    // We add that layer
+    const addLayer = AddLayersChangeset.create([newLayer]);
+    await addLayer.apply();
+    history.register(HistoryKey.Map, addLayer);
 
     if (result.missingDataRows.length || result.invalidValues.length || result.invalidFeatures) {
       result.status = Status.BadProcessing;

@@ -127,15 +127,12 @@ export class DataReader {
     const hour = DateTime.local().toFormat('HH:mm');
     layers.forEach((lay, i) => lay.setName(t('Import_of', { hour, n: i + 1 })));
 
-    const cs = new AddLayersChangeset(map, layers);
+    const cs = AddLayersChangeset.create(layers);
     await cs.apply();
     history.register(HistoryKey.Map, cs);
 
-    // We set last one active
-    const last = layers[layers.length - 1];
-    map.setActiveLayer(last);
-
     // We fit view on last one
+    const last = layers[layers.length - 1];
     const extent = last.unwrap().getExtent();
     if (extent && getArea(extent)) {
       map.unwrap().getView().fit(extent);

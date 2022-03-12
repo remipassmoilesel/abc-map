@@ -19,8 +19,15 @@
 import { Changeset } from '../../Changeset';
 import { MapWrapper } from '../../../geo/map/MapWrapper';
 import { LayerWrapper } from '../../../geo/layers/LayerWrapper';
+import { getServices } from '../../../Services';
 
 export class RemoveLayerChangeset extends Changeset {
+  public static create(layer: LayerWrapper) {
+    const { geo } = getServices();
+    const map = geo.getMainMap();
+    return new RemoveLayerChangeset(map, layer);
+  }
+
   constructor(private map: MapWrapper, private layer: LayerWrapper) {
     super();
   }

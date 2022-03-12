@@ -75,18 +75,16 @@ class PredefinedLayerPanel extends Component<Props, {}> {
   }
 
   private handleConfirm = () => {
-    const { geo, history } = this.props.services;
+    const { history } = this.props.services;
     const { value } = this.props;
 
     const add = async () => {
-      const map = geo.getMainMap();
       const layer = LayerFactory.newPredefinedLayer(value);
 
-      const cs = new AddLayersChangeset(map, [layer]);
+      const cs = AddLayersChangeset.create([layer]);
       await cs.apply();
       history.register(HistoryKey.Map, cs);
 
-      map.setActiveLayer(layer);
       this.props.onConfirm();
     };
 

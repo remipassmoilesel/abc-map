@@ -582,7 +582,7 @@
     "First_you_need_to_create_a_legend": "Vous devez d'abord créer une légende",
     "Close": "Fermer",
     "Layouts": "Mises en pages",
-    "Shared_views": "Vue partagées"
+    "Shared_views": "Vues partagées"
   },
   "FundingView": {
     "Support_AbcMap": "Soutenez d'Abc-Map",
@@ -800,7 +800,8 @@
     "Share_link": "Lien de partage",
     "Iframe_embed_code": "Code d'intégration iframe",
     "Width": "Largeur (px)",
-    "Height": "Hauteur (px)"
+    "Height": "Hauteur (px)",
+    "Shared_views": "Vues partagées"
   },
   "CopyButton": {
     "Copied": "Copié !",

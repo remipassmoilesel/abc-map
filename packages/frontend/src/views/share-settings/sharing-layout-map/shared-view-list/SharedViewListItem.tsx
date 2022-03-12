@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { useCallback, useState } from 'react';
+import React, { useCallback, useState, MouseEvent } from 'react';
 import { AbcSharedView } from '@abc-map/shared';
 import { prefixedTranslation } from '../../../../i18n/i18n';
 import Cls from './SharedViewListItem.module.scss';
@@ -30,18 +30,25 @@ const t = prefixedTranslation('ShareSettingsView:');
 interface Props {
   view: AbcSharedView;
   active: boolean;
-  onClick: (v: AbcSharedView) => void;
+  onSelected: (v: AbcSharedView) => void;
   onDelete: (v: AbcSharedView) => void;
   onUpdate: (before: AbcSharedView, after: AbcSharedView) => void;
 }
 
 function SharedViewListItem(props: Props) {
-  const { view, onClick, active, onUpdate, onDelete } = props;
+  const { view, onSelected, active, onUpdate, onDelete } = props;
   const [editModal, showEditModal] = useState(false);
 
-  const handleClick = useCallback(() => onClick(view), [onClick, view]);
+  const handleClick = useCallback(() => onSelected(view), [onSelected, view]);
 
-  const handleDelete = useCallback(() => onDelete(view), [onDelete, view]);
+  const handleDelete = useCallback(
+    (ev: MouseEvent) => {
+      // We must stop propagation in order to not trigger selection
+      ev.stopPropagation();
+      onDelete(view);
+    },
+    [onDelete, view]
+  );
 
   const handleEdit = useCallback(() => showEditModal(true), []);
 

@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { Component, ReactNode } from 'react';
+import React, { useCallback, MouseEvent } from 'react';
 import { Logger } from '@abc-map/shared';
 import { AbcLayout } from '@abc-map/shared';
 import Cls from './LayoutListItem.module.scss';
@@ -24,6 +24,7 @@ import { withTranslation } from 'react-i18next';
 import { prefixedTranslation } from '../../../i18n/i18n';
 import { FaIcon } from '../../../components/icon/FaIcon';
 import { IconDefs } from '../../../components/icon/IconDefs';
+import clsx from 'clsx';
 
 const logger = Logger.get('LayoutListItem.tsx', 'warn');
 
@@ -36,36 +37,36 @@ interface Props {
 
 const t = prefixedTranslation('ExportView:');
 
-class LayoutListItem extends Component<Props, {}> {
-  public render(): ReactNode {
-    const layout = this.props.layout;
-    const classes = this.props.active ? `${Cls.item} ${Cls.active}` : Cls.item;
+function LayoutListItem(props: Props) {
+  const { layout, active, onSelected, onDeleted } = props;
 
-    return (
-      <div className={classes} onClick={this.handleSelected}>
-        <div className={'d-flex align-items-center'}>
-          <div className={Cls.layoutName} data-cy={'list-item'}>
-            {layout.name}
-          </div>
-          <button className={'btn btn-sm btn-link'} onClick={this.handleDeleted}>
-            <FaIcon icon={IconDefs.faTrash} />
-          </button>
-        </div>
+  const handleSelected = useCallback(() => onSelected(layout), [layout, onSelected]);
 
-        <div className={Cls.format}>
-          {t('Format')}: {layout.format.width}x{layout.format.height} mm
+  const handleDeleted = useCallback(
+    (ev: MouseEvent) => {
+      // We must stop propagation in order to prevent a selection
+      ev.stopPropagation();
+      onDeleted(layout);
+    },
+    [layout, onDeleted]
+  );
+
+  return (
+    <div onClick={handleSelected} className={clsx(Cls.item, active && Cls.active)}>
+      <div className={'d-flex align-items-center'}>
+        <div className={Cls.layoutName} data-cy={'list-item'}>
+          {layout.name}
         </div>
+        <button className={'btn btn-sm btn-link'} onClick={handleDeleted}>
+          <FaIcon icon={IconDefs.faTrash} />
+        </button>
       </div>
-    );
-  }
 
-  private handleSelected = (): void => {
-    this.props.onSelected(this.props.layout);
-  };
-
-  private handleDeleted = (): void => {
-    this.props.onDeleted(this.props.layout);
-  };
+      <div className={Cls.format}>
+        {t('Format')}: {layout.format.width}x{layout.format.height} mm
+      </div>
+    </div>
+  );
 }
 
 export default withTranslation()(LayoutListItem);

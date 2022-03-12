@@ -28,7 +28,8 @@ export interface Change {
 
 export class UpdateSharedViewsChangeset extends Changeset {
   public static create(changes: Change[]) {
-    return new UpdateSharedViewsChangeset(getServices().project, changes);
+    const { project } = getServices();
+    return new UpdateSharedViewsChangeset(project, changes);
   }
 
   constructor(private project: ProjectService, private changes: Change[]) {

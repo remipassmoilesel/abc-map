@@ -18,10 +18,6 @@
 
 import { logger, ProportionalSymbols } from './ProportionalSymbols';
 import { newParameters, Parameters } from './Parameters';
-import * as sinon from 'sinon';
-import { SinonStubbedInstance } from 'sinon';
-import { GeoService } from '../../core/geo/GeoService';
-import { Services } from '../../core/Services';
 import { MapFactory } from '../../core/geo/map/MapFactory';
 import VectorSource from 'ol/source/Vector';
 import {
@@ -42,21 +38,25 @@ import { Status } from './ProcessingResult';
 import { TestHelper } from '../../core/utils/test/TestHelper';
 import { TestDataSource } from '../../core/data/data-source/TestDataSource';
 import Geometry from 'ol/geom/Geometry';
+import { mockServices, restoreServices } from '../../core/utils/test/mock-services';
 
 logger.disable();
 
 describe('ProportionalSymbols', () => {
-  let geoMock: SinonStubbedInstance<GeoService>;
   let map: MapWrapper;
   let module: ProportionalSymbols;
 
   beforeEach(() => {
     map = MapFactory.createNaked();
-    geoMock = sinon.createStubInstance(GeoService);
-    geoMock.getMainMap.returns(map);
-    const services = { geo: geoMock } as unknown as Services;
+
+    const services = mockServices();
+    services.geo.getMainMap.returns(map);
 
     module = new ProportionalSymbols(services);
+  });
+
+  afterAll(() => {
+    restoreServices();
   });
 
   it('should fail if parameter is missing', async () => {

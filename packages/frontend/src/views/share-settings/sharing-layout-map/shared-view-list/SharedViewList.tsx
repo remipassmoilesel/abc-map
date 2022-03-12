@@ -28,7 +28,7 @@ import { WithTooltip } from '../../../../components/with-tooltip/WithTooltip';
 import { RemoveSharedViewsChangeset } from '../../../../core/history/changesets/shared-views/RemoveSharedViewsChangeset';
 import { HistoryKey } from '../../../../core/history/HistoryKey';
 import { UpdateSharedViewsChangeset } from '../../../../core/history/changesets/shared-views/UpdateSharedViewChangeset';
-import Cls from './SharedViewList.module.scss';
+import { SetActiveSharedViewChangeset } from '../../../../core/history/changesets/shared-views/SetActiveSharedViewChangeset';
 
 const logger = Logger.get('SharedViewList');
 
@@ -39,27 +39,21 @@ interface Props {
 }
 
 function SharedViewList(props: Props) {
-  const { project, history, toasts } = useServices();
+  const { history, toasts } = useServices();
   const sharedViews = useAppSelector((st) => st.project.sharedViews.list);
   const activeViewId = useAppSelector((st) => st.project.sharedViews.activeId);
-  const activeIndex = sharedViews.findIndex((v) => v.id === activeViewId);
-  const hasNext = activeIndex < sharedViews.length - 1;
-  const hasPrevious = activeIndex > 0;
   const handleNewView = props.onNewView;
 
-  const handleItemClick = useCallback((view: AbcSharedView) => project.setActiveSharedView(view.id), [project]);
-
-  const handlePreviousView = useCallback(() => {
-    const newActiveIndex = sharedViews.findIndex((v) => v.id === activeViewId) - 1;
-    const newActiveId = sharedViews[newActiveIndex]?.id || sharedViews[sharedViews.length - 1]?.id;
-    project.setActiveSharedView(newActiveId);
-  }, [activeViewId, project, sharedViews]);
-
-  const handleNextView = useCallback(() => {
-    const newActiveIndex = sharedViews.findIndex((v) => v.id === activeViewId) + 1;
-    const newActiveId = sharedViews[newActiveIndex]?.id || sharedViews[0]?.id;
-    project.setActiveSharedView(newActiveId);
-  }, [activeViewId, project, sharedViews]);
+  const handleItemClick = useCallback(
+    (view: AbcSharedView) => {
+      const setActiveView = SetActiveSharedViewChangeset.create(view);
+      setActiveView
+        .apply()
+        .then(() => history.register(HistoryKey.SharedViews, setActiveView))
+        .catch((err) => logger.error('Cannot set active view', err));
+    },
+    [history]
+  );
 
   const handleDeleteView = useCallback(
     (view: AbcSharedView) => {
@@ -88,27 +82,14 @@ function SharedViewList(props: Props) {
 
   return (
     <div className={'d-flex flex-column'}>
-      {/* Previous and next view buttons */}
-      <div className={'d-flex justify-content-end align-items-center p-3 mb-3'}>
-        <WithTooltip title={t('Previous_view')}>
-          <button onClick={handlePreviousView} disabled={!hasPrevious} className={`btn btn-outline-secondary ${Cls.btn}`}>
-            <FaIcon icon={IconDefs.faArrowLeft} size={'1.1rem'} />
-          </button>
-        </WithTooltip>
-
-        <WithTooltip title={t('Next_view')}>
-          <button onClick={handleNextView} disabled={!hasNext} className={`btn btn-outline-secondary ${Cls.btn}`}>
-            <FaIcon icon={IconDefs.faArrowRight} size={'1.1rem'} />
-          </button>
-        </WithTooltip>
-      </div>
+      <div className={'m-4 fw-bold'}>{t('Shared_views')}</div>
 
       {/* Views list */}
       <div>
         {sharedViews.map((view) => {
           const active = view.id === activeViewId;
           return (
-            <SharedViewListItem key={view.id} view={view} active={active} onClick={handleItemClick} onDelete={handleDeleteView} onUpdate={handleUpateView} />
+            <SharedViewListItem key={view.id} view={view} active={active} onSelected={handleItemClick} onDelete={handleDeleteView} onUpdate={handleUpateView} />
           );
         })}
       </div>
