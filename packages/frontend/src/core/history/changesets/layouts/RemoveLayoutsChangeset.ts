@@ -26,7 +26,8 @@ const logger = Logger.get('RemoveLayoutsChangeset');
 
 export class RemoveLayoutsChangeset extends Changeset {
   public static create(layouts: AbcLayout[]) {
-    return new RemoveLayoutsChangeset(getServices().project, layouts);
+    const { project } = getServices();
+    return new RemoveLayoutsChangeset(project, layouts);
   }
 
   private layouts: AbcLayout[];
@@ -38,9 +39,19 @@ export class RemoveLayoutsChangeset extends Changeset {
 
   public async apply(): Promise<void> {
     this.project.removeLayouts(this.layouts.map((lay) => lay.id));
+
+    const layouts = this.project.getLayouts();
+    if (layouts.length) {
+      this.project.setActiveLayout(layouts[layouts.length - 1].id);
+    }
   }
 
   public async undo(): Promise<void> {
     this.project.addLayouts(this.layouts);
+
+    const layouts = this.project.getLayouts();
+    if (layouts.length) {
+      this.project.setActiveLayout(layouts[layouts.length - 1].id);
+    }
   }
 }

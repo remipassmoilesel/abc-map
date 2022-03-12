@@ -271,18 +271,16 @@ class WmtsLayerPanel extends Component<Props, State> {
   };
 
   private handleConfirm = () => {
-    const { history, geo } = this.props.services;
+    const { history } = this.props.services;
     const { value: settings } = this.props;
 
     const add = async () => {
-      const map = geo.getMainMap();
       const layer = LayerFactory.newWmtsLayer(settings);
 
-      const cs = new AddLayersChangeset(map, [layer]);
+      const cs = AddLayersChangeset.create([layer]);
       await cs.apply();
       history.register(HistoryKey.Map, cs);
 
-      map.setActiveLayer(layer);
       this.props.onConfirm();
     };
 

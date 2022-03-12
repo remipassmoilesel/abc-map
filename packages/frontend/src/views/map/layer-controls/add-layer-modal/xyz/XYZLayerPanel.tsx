@@ -41,7 +41,7 @@ interface Props {
 }
 
 function XYZLayerPanel(props: Props) {
-  const { history, geo } = useServices();
+  const { history } = useServices();
   const [formState, setFormState] = useState(FormState.InvalidUrl);
   const { url, onCancel, onConfirm, onChange } = props;
   const submitDisabled = formState !== FormState.Ok;
@@ -61,19 +61,17 @@ function XYZLayerPanel(props: Props) {
 
   const handleConfirm = useCallback(() => {
     const add = async () => {
-      const map = geo.getMainMap();
       const layer = LayerFactory.newXyzLayer(url);
 
-      const cs = new AddLayersChangeset(map, [layer]);
+      const cs = AddLayersChangeset.create([layer]);
       await cs.apply();
       history.register(HistoryKey.Map, cs);
 
-      map.setActiveLayer(layer);
       onConfirm();
     };
 
     add().catch((err) => logger.error('Cannot add layer', err));
-  }, [geo, url, history, onConfirm]);
+  }, [url, history, onConfirm]);
 
   const handleUrlChanged = useCallback(
     (ev: ChangeEvent<HTMLInputElement>) => {

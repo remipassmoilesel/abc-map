@@ -18,8 +18,9 @@
 import { Views } from './Views';
 import { AbcView } from '@abc-map/shared';
 import View from 'ol/View';
+import { deepFreeze } from '../utils/deepFreeze';
 
-describe('View', () => {
+describe('Views', () => {
   it('defaultView()', () => {
     expect(Views.defaultView()).toEqual({
       resolution: 39135,
@@ -100,6 +101,24 @@ describe('View', () => {
       expect(actual.resolution).toEqual(original.getResolution());
       expect(actual.center).toEqual(original.getCenter());
       expect(actual.projection.name).toEqual(original.getProjection().getCode());
+    });
+  });
+
+  it('normalize()', () => {
+    const view: AbcView = deepFreeze({
+      resolution: 1.8888888888,
+      center: [2.7777777777, 3.6666666666],
+      projection: {
+        name: 'EPSG:3857',
+      },
+    });
+
+    expect(Views.normalize(view)).toEqual({
+      resolution: 1.888888889,
+      center: [2.777777778, 3.666666667],
+      projection: {
+        name: 'EPSG:3857',
+      },
     });
   });
 });

@@ -152,8 +152,7 @@ class EditLayerModal extends Component<Props, State> {
   };
 
   private handleConfirm = () => {
-    const { history, geo } = this.props.services;
-    const map = geo.getMainMap();
+    const { history } = this.props.services;
     const layer = this.props.layer;
     const name = this.state.nameInput;
     const opacity = this.state.opacityInput;
@@ -163,7 +162,7 @@ class EditLayerModal extends Component<Props, State> {
       const before = { name: layer.getName() || '', opacity: layer.getOpacity(), attributions: layer.getAttributions()?.slice() || [] };
       const after = { name, opacity, attributions };
       if (!isEqual(before, after)) {
-        const cs = new EditLayerChangeset(map, layer, before, after);
+        const cs = EditLayerChangeset.create(layer, before, after);
         await cs.apply();
         history.register(HistoryKey.Map, cs);
       }

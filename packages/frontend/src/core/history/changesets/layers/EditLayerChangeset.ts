@@ -19,6 +19,7 @@
 import { Changeset } from '../../Changeset';
 import { LayerWrapper } from '../../../geo/layers/LayerWrapper';
 import { MapWrapper } from '../../../geo/map/MapWrapper';
+import { getServices } from '../../../Services';
 
 export interface EditableLayerProperties {
   name: string;
@@ -33,6 +34,12 @@ export interface EditableLayerProperties {
  *
  */
 export class EditLayerChangeset extends Changeset {
+  public static create(layer: LayerWrapper, before: EditableLayerProperties, after: EditableLayerProperties): EditLayerChangeset {
+    const { geo } = getServices();
+    const map = geo.getMainMap();
+    return new EditLayerChangeset(map, layer, before, after);
+  }
+
   constructor(private map: MapWrapper, private layer: LayerWrapper, private before: EditableLayerProperties, private after: EditableLayerProperties) {
     super();
   }

@@ -34,6 +34,8 @@ import isEqual from 'lodash/isEqual';
 import { FaIcon } from '../../../components/icon/FaIcon';
 import { IconDefs } from '../../../components/icon/IconDefs';
 import { ToggleLayerVisibilityChangeset } from '../../../core/history/changesets/layers/ToggleLayerVisibilityChangeset';
+import { SetActiveLayerChangeset } from '../../../core/history/changesets/layers/SetActiveLayerChangeset';
+import { SetLayerPositionChangeset } from '../../../core/history/changesets/layers/SetLayerPositionChangeset';
 
 const logger = Logger.get('LayerControls.tsx');
 
@@ -140,9 +142,29 @@ class LayerControls extends Component<Props, State> {
   }
 
   private handleSelection = (layerId: string) => {
-    const { geo } = this.props.services;
+    const { geo, toasts, history } = this.props.services;
 
-    geo.getMainMap().setActiveLayerById(layerId);
+    const map = geo.getMainMap();
+
+    if (map.getActiveLayer()?.getId() === layerId) {
+      return;
+    }
+
+    const layer = map.getLayers().find((lay) => lay.getId() === layerId);
+
+    if (!layer) {
+      logger.error('Layer not found: ' + layerId);
+      toasts.genericError();
+      return;
+    }
+
+    // We set it active
+    const setActiveLayer = SetActiveLayerChangeset.create(layer);
+    setActiveLayer
+      .apply()
+      // We register action in history
+      .then(() => history.register(HistoryKey.Map, setActiveLayer))
+      .catch((err) => logger.error('Cannot set layer active', err));
   };
 
   private handleZoom = () => {
@@ -249,7 +271,7 @@ class LayerControls extends Component<Props, State> {
   };
 
   private moveLayer = (move: number) => {
-    const { toasts, geo } = this.props.services;
+    const { toasts, geo, history } = this.props.services;
 
     const map = geo.getMainMap();
     const active = map.getActiveLayer();
@@ -268,8 +290,12 @@ class LayerControls extends Component<Props, State> {
       position = layers.length - 1;
     }
 
-    map.removeLayer(active);
-    map.addLayer(active, position);
+    const setLayerPosition = SetLayerPositionChangeset.create(active, position);
+
+    setLayerPosition
+      .apply()
+      .then(() => history.register(HistoryKey.Map, setLayerPosition))
+      .catch((err) => logger.error('Cannot set layer position', err));
   };
 }
 

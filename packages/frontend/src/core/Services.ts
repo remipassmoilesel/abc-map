@@ -27,7 +27,7 @@ import { ToastService } from './ui/ToastService';
 import { ModalService } from './ui/ModalService';
 import { FeedbackService } from './feedback/FeedbackService';
 import { LegalMentionsService } from './legal-mentions/LegalMentionsService';
-import { Logger } from '@abc-map/shared';
+import { getAbcWindow, Logger } from '@abc-map/shared';
 import { LocalStorageService } from './local-storage/LocalStorageService';
 
 const logger = Logger.get('Services.ts');
@@ -45,12 +45,13 @@ export interface Services {
   storage: LocalStorageService;
 }
 
-let instance: Services | undefined;
 export function getServices(): Services {
-  if (!instance) {
-    instance = servicesFactory(mainStore);
+  const window = getAbcWindow();
+  if (!window.abc.services) {
+    window.abc.services = servicesFactory(mainStore);
   }
-  return instance;
+
+  return getAbcWindow().abc.services;
 }
 
 export function servicesFactory(store: MainStore): Services {

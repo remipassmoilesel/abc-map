@@ -35,6 +35,7 @@ import { MapLegend } from '../../../components/map-legend/MapLegend';
 import { MapUi } from '../../../components/map-ui/MapUi';
 import { DimensionsPx } from '../../../core/utils/DimensionsPx';
 import { useServices } from '../../../core/useServices';
+import { Views } from '../../../core/geo/Views';
 
 const logger = Logger.get('LayoutPreview.tsx');
 
@@ -110,8 +111,14 @@ function LayoutPreview(props: Props) {
 
       const dimensionPx = LayoutHelper.formatToPixel(layout.format);
       const ratio = previewMap.getRatioWith(dimensionPx.width, dimensionPx.height);
-      const resolution = toPrecision(view.resolution / ratio, 9);
-      const updated: AbcLayout = { ...layout, view: { ...view, resolution } };
+
+      const updated: AbcLayout = {
+        ...layout,
+        view: Views.normalize({
+          ...view,
+          resolution: view.resolution / ratio,
+        }),
+      };
 
       if (!isEqual(layout.view, updated.view)) {
         onLayoutChanged(updated);

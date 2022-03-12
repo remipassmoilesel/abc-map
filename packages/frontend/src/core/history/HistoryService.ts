@@ -24,6 +24,8 @@ import { MainStore } from '../store/store';
 
 const logger = Logger.get('HistoryService.ts');
 
+const MaxHistoryStackSize = 100;
+
 export declare type HistoryStack = {
   undo: Changeset[];
   redo: Changeset[];
@@ -41,7 +43,7 @@ export declare type History = {
  */
 export class HistoryService {
   public static create(store: MainStore): HistoryService {
-    return new HistoryService(50, {}, store);
+    return new HistoryService(MaxHistoryStackSize, {}, store);
   }
 
   constructor(private maxSize: number, private history: History = {}, private store: MainStore) {}

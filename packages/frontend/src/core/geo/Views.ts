@@ -86,6 +86,18 @@ export class Views {
       projection,
     };
   }
+
+  /**
+   * Round view values in order to avoid bad comparison issues
+   * @param view
+   */
+  public static normalize(view: AbcView): AbcView {
+    return {
+      ...view,
+      center: view.center.map((n) => toPrecision(n, 9)),
+      resolution: toPrecision(view.resolution, 9),
+    };
+  }
 }
 
 function createView(resolution: number, lonLat: [number, number], projection = DEFAULT_PROJECTION): AbcView {

@@ -17,27 +17,29 @@
  */
 
 import { Changeset } from '../../Changeset';
-import { ProjectService } from '../../../project/ProjectService';
-import { AbcLayout } from '@abc-map/shared';
+import { MapWrapper } from '../../../geo/map/MapWrapper';
+import { LayerWrapper } from '../../../geo/layers/LayerWrapper';
 import { getServices } from '../../../Services';
-import { Logger } from '@abc-map/shared';
 
-const logger = Logger.get('SetLayoutIndexChangeset');
-
-export class SetLayoutIndexChangeset extends Changeset {
-  public static create(layout: AbcLayout, oldIndex: number, newIndex: number) {
-    return new SetLayoutIndexChangeset(getServices().project, layout, oldIndex, newIndex);
+export class SetActiveLayerChangeset extends Changeset {
+  public static create(layer: LayerWrapper): SetActiveLayerChangeset {
+    const { geo } = getServices();
+    const map = geo.getMainMap();
+    const previous = geo.getMainMap().getActiveLayer();
+    return new SetActiveLayerChangeset(map, previous, layer);
   }
 
-  constructor(private project: ProjectService, private layout: AbcLayout, private oldIndex: number, private newIndex: number) {
+  constructor(private map: MapWrapper, private previous: LayerWrapper | undefined, private next: LayerWrapper) {
     super();
   }
 
-  public async apply(): Promise<void> {
-    this.project.setLayoutIndex(this.layout, this.newIndex);
+  public async undo(): Promise<void> {
+    if (this.previous) {
+      this.map.setActiveLayer(this.previous);
+    }
   }
 
-  public async undo(): Promise<void> {
-    this.project.setLayoutIndex(this.layout, this.oldIndex);
+  public async apply(): Promise<void> {
+    this.map.setActiveLayer(this.next);
   }
 }

@@ -20,22 +20,25 @@ import { Changeset } from '../../Changeset';
 import { ProjectService } from '../../../project/ProjectService';
 import { AbcLayout } from '@abc-map/shared';
 import { getServices } from '../../../Services';
+import { Logger } from '@abc-map/shared';
 
-export class UpdateLayoutChangeset extends Changeset {
-  public static create(before: AbcLayout, after: AbcLayout) {
+const logger = Logger.get('SetLayoutIndexChangeset');
+
+export class SetLayoutPositionChangeset extends Changeset {
+  public static create(layout: AbcLayout, oldIndex: number, newIndex: number) {
     const { project } = getServices();
-    return new UpdateLayoutChangeset(project, before, after);
+    return new SetLayoutPositionChangeset(project, layout, oldIndex, newIndex);
   }
 
-  constructor(private project: ProjectService, private before: AbcLayout, private after: AbcLayout) {
+  constructor(private project: ProjectService, private layout: AbcLayout, private previousPosition: number, private nextPosition: number) {
     super();
   }
 
   public async apply(): Promise<void> {
-    this.project.updateLayout(this.after);
+    this.project.setLayoutIndex(this.layout, this.nextPosition);
   }
 
   public async undo(): Promise<void> {
-    this.project.updateLayout(this.before);
+    this.project.setLayoutIndex(this.layout, this.previousPosition);
   }
 }

@@ -24,7 +24,7 @@ import LayoutPreview from './layout-preview/LayoutPreview';
 import { HistoryKey } from '../../core/history/HistoryKey';
 import { AddLayoutsChangeset } from '../../core/history/changesets/layouts/AddLayoutsChangeset';
 import { RemoveLayoutsChangeset } from '../../core/history/changesets/layouts/RemoveLayoutsChangeset';
-import { SetLayoutIndexChangeset } from '../../core/history/changesets/layouts/SetLayoutIndexChangeset';
+import { SetLayoutPositionChangeset } from '../../core/history/changesets/layouts/SetLayoutPositionChangeset';
 import { LayoutRenderer } from '../../core/project/rendering/LayoutRenderer';
 import { UpdateLayoutChangeset } from '../../core/history/changesets/layouts/UpdateLayoutChangeset';
 import { FileIO } from '../../core/utils/FileIO';
@@ -44,13 +44,15 @@ import { LegendFactory } from '../../core/project/LegendFactory';
 import { useHistory } from 'react-router-dom';
 import { Routes } from '../../routes';
 import { OperationStatus } from '../../core/ui/typings';
+import { Views } from '../../core/geo/Views';
+import { SetActiveLayoutChangeset } from '../../core/history/changesets/layouts/SetActiveLayoutChangeset';
 
 const logger = Logger.get('ExportView.tsx', 'warn');
 
 const t = prefixedTranslation('ExportView:');
 
 function ExportView() {
-  const { geo, project, history, toasts, modals } = useServices();
+  const { geo, history, toasts, modals } = useServices();
   const exportSupport = useRef<HTMLDivElement>(null);
   const keyboardShortcuts = useRef<LayoutKeyboardListener | null>(null);
   const navHistory = useHistory();
@@ -71,15 +73,17 @@ function ExportView() {
     };
   }, []);
 
-  // If one layout was deleted, update active layout
-  useEffect(() => {
-    if (!activeLayout && layouts.length) {
-      project.setActiveLayout(layouts[layouts.length - 1].id);
-    }
-  }, [activeLayout, layouts, project]);
-
   // User has selected a layout
-  const handleSelected = useCallback((lay: AbcLayout) => project.setActiveLayout(lay.id), [project]);
+  const handleSelected = useCallback(
+    (lay: AbcLayout) => {
+      const setActiveLayout = SetActiveLayoutChangeset.create(lay);
+      setActiveLayout
+        .apply()
+        .then(() => history.register(HistoryKey.Export, setActiveLayout))
+        .catch((err) => logger.error('Cannot set active layout: ', err));
+    },
+    [history]
+  );
 
   // User creates a new layout
   const handleNewLayout = useCallback(() => {
@@ -100,23 +104,17 @@ function ExportView() {
         id: uuid(),
         name,
         format: LayoutFormats.A4_LANDSCAPE,
-        view: {
-          center,
-          resolution: layoutRes,
-          projection,
-        },
+        view: Views.normalize({ center, resolution: layoutRes, projection }),
         legend: LegendFactory.newEmptyLegend(),
       };
 
       const cs = AddLayoutsChangeset.create([layout]);
       await cs.apply();
       history.register(HistoryKey.Export, cs);
-
-      project.setActiveLayout(layout.id);
     };
 
     apply().catch((err) => logger.error('Cannot create layout: ', err));
-  }, [geo, history, layouts.length, project]);
+  }, [geo, history, layouts.length]);
 
   // User change layout position in list
   const updateLayoutIndex = useCallback(
@@ -137,7 +135,7 @@ function ExportView() {
         }
 
         if (newIndex !== oldIndex) {
-          const cs = SetLayoutIndexChangeset.create(activeLayout, oldIndex, newIndex);
+          const cs = SetLayoutPositionChangeset.create(activeLayout, oldIndex, newIndex);
           await cs.apply();
           history.register(HistoryKey.Export, cs);
         }
