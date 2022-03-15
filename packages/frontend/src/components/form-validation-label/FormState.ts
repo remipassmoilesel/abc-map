@@ -26,6 +26,7 @@ export enum FormState {
   PasswordNotConfirmed = 'PasswordNotConfirmed',
   PasswordEqualEmail = 'PasswordEqualEmail',
   DeletionNotConfirmed = 'DeletionNotConfirmed',
+  InvalidHttpsUrl = 'InvalidHttpsUrl',
   InvalidUrl = 'InvalidUrl',
   MissingXYZPlaceHolders = 'MissingXYZPlaceHolders',
   MissingRemoteLayer = 'MissingRemoteLayer',
@@ -48,4 +49,8 @@ export enum FormState {
   MissingEndColor = 'MissingEndColor',
 
   FieldMissing = 'FieldMissing',
+
+  InvalidFile = 'InvalidFile',
+  FileTooHeavy = 'FileTooHeavy',
+  InvalidLinkText = 'InvalidLinkText',
 }

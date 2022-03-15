@@ -42,14 +42,14 @@ interface Props {
 
 function XYZLayerPanel(props: Props) {
   const { history } = useServices();
-  const [formState, setFormState] = useState(FormState.InvalidUrl);
+  const [formState, setFormState] = useState(FormState.InvalidHttpsUrl);
   const { url, onCancel, onConfirm, onChange } = props;
   const submitDisabled = formState !== FormState.Ok;
   const wrongPlaceholders = getWrongPlaceholders(url);
 
   const validateForm = useCallback((url: string): FormState => {
-    if (!ValidationHelper.url(url)) {
-      return FormState.InvalidUrl;
+    if (!ValidationHelper.secureUrl(url)) {
+      return FormState.InvalidHttpsUrl;
     }
 
     if (!ValidationHelper.xyzUrl(url)) {

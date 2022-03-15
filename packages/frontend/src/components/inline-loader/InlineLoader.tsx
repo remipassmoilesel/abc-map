@@ -17,6 +17,7 @@
  */
 
 import Cls from './InlineLoader.module.scss';
+import clsx from 'clsx';
 
 interface Props {
   // In rem
@@ -42,7 +43,7 @@ export function InlineLoader(props: Props) {
   const loaderStyle = { width: _size + 'rem', height: _size + 'rem' };
 
   return (
-    <div className={Cls.ldsRing + (className || '')} style={loaderStyle}>
+    <div className={clsx(Cls.ldsRing, className)} style={loaderStyle}>
       {active && (
         <>
           <div style={partsStyle} />

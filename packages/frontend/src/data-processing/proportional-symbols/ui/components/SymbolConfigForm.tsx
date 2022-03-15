@@ -23,7 +23,7 @@ import AlgorithmSelector from '../../../_common/algorithm/AlgorithmSelector';
 import FormLine from '../../../_common/form-line/FormLine';
 import { ProportionalSymbolsTips } from '@abc-map/user-documentation';
 import PointIconPicker from '../../../../components/icon-picker/PointIconPicker';
-import ColorPicker from '../../../../components/color-picker/ColorPicker';
+import ColorPicker from '../../../../components/color-picker/ColorPickerButton';
 import { IconName } from '../../../../assets/point-icons/IconName';
 import { prefixedTranslation } from '../../../../i18n/i18n';
 

@@ -55,7 +55,7 @@ const t = prefixedTranslation('MapView:AddLayerModal.');
 class WmtsLayerPanel extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = { formState: FormState.InvalidUrl, loading: false };
+    this.state = { formState: FormState.InvalidHttpsUrl, loading: false };
   }
 
   public render(): ReactNode {
@@ -288,8 +288,8 @@ class WmtsLayerPanel extends Component<Props, State> {
   };
 
   private validateForm(value: WmtsSettings): FormState {
-    if (!ValidationHelper.url(value.capabilitiesUrl || '')) {
-      return FormState.InvalidUrl;
+    if (!ValidationHelper.secureUrl(value.capabilitiesUrl || '')) {
+      return FormState.InvalidHttpsUrl;
     }
 
     if (!value.remoteLayerName) {

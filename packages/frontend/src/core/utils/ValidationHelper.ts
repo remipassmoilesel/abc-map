@@ -28,6 +28,10 @@ const VALID_HTTP_URL = /^https?:\/\/.+$/;
 const VALID_HTTPS_URL = /^https:\/\/.+$/;
 
 export class ValidationHelper {
+  public static isSecureContext(): boolean {
+    return window.location.protocol.indexOf('https') !== -1;
+  }
+
   public static email(email: string): boolean {
     return email.match(VALID_EMAIL) !== null;
   }
@@ -37,22 +41,33 @@ export class ValidationHelper {
    *
    * Warning:
    * - URL validation is weak.
-   * - We enforce usage of HTTPS because of browser security policies.*
+   * - We enforce usage of HTTPS because of browser security policies.
    * @param url
    */
-  public static url(url: string): boolean {
-    if (window.location.protocol.indexOf('https') !== -1) {
+  public static secureUrl(url: string): boolean {
+    if (this.isSecureContext()) {
       return url.match(VALID_HTTPS_URL) !== null;
     } else {
       return url.match(VALID_HTTP_URL) !== null;
     }
   }
 
+  /**
+   * This method return true if 'url' looks like a URL.
+   *
+   * Warning:
+   * - URL validation is weak.
+   * @param url
+   */
+  public static url(url: string): boolean {
+    return !!(url.match(VALID_HTTP_URL) || url.match(VALID_HTTPS_URL));
+  }
+
   public static xyzUrl(url: string): boolean {
     const x = url.indexOf('{x}') !== -1;
     const y = url.indexOf('{y}') !== -1;
     const z = url.indexOf('{z}') !== -1;
-    return this.url(url) && x && y && z;
+    return this.secureUrl(url) && x && y && z;
   }
 
   // WARNING: modify this method may require data migration (user profiles)

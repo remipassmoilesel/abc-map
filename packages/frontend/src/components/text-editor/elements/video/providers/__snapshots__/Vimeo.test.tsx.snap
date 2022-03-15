@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Vimeo should return integration 1`] = `
+<div>
+  <div>
+    <iframe
+      allow="fullscreen; picture-in-picture"
+      allowfullscreen=""
+      frameborder="0"
+      src="https://player.vimeo.com/video/677973953"
+      title="Vimeo video player"
+    />
+  </div>
+</div>
+`;

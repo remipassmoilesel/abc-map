@@ -17,33 +17,41 @@
  */
 
 import { PasswordStrength, ValidationHelper } from './ValidationHelper';
+import sinon, { SinonStub } from 'sinon';
 
 describe('ValidationHelper', () => {
+  let isSecureContext: SinonStub;
+  beforeEach(() => {
+    isSecureContext = sinon.stub();
+    sinon.stub(ValidationHelper, 'isSecureContext').callsFake(isSecureContext);
+  });
+
+  afterEach(() => {
+    sinon.restore();
+  });
+
   it('email()', () => {
     expect(ValidationHelper.email('abcd')).toBe(false);
     expect(ValidationHelper.email('abcd@efgh.ijk')).toBe(true);
   });
 
-  describe('url()', () => {
-    const _window = window as any;
-    delete _window.location;
-
+  describe('secureUrl()', () => {
     it('in http context', () => {
-      _window.location = { protocol: 'http:' };
+      isSecureContext.returns(false);
 
-      expect(ValidationHelper.url('abcd')).toBe(false);
-      expect(ValidationHelper.url('http://abcdefgh.ijk')).toBe(true);
-      expect(ValidationHelper.url('https://abcdefgh.ijk')).toBe(true);
-      expect(ValidationHelper.url('https://abc.def-gh.ijk')).toBe(true);
+      expect(ValidationHelper.secureUrl('abcd')).toBe(false);
+      expect(ValidationHelper.secureUrl('http://abcdefgh.ijk')).toBe(true);
+      expect(ValidationHelper.secureUrl('https://abcdefgh.ijk')).toBe(true);
+      expect(ValidationHelper.secureUrl('https://abc.def-gh.ijk')).toBe(true);
     });
 
     it('in https context', () => {
-      _window.location = { protocol: 'https:' };
+      isSecureContext.returns(true);
 
-      expect(ValidationHelper.url('abcd')).toBe(false);
-      expect(ValidationHelper.url('http://abcdefgh.ijk')).toBe(false);
-      expect(ValidationHelper.url('https://abcdefgh.ijk')).toBe(true);
-      expect(ValidationHelper.url('https://abc.def-gh.ijk')).toBe(true);
+      expect(ValidationHelper.secureUrl('abcd')).toBe(false);
+      expect(ValidationHelper.secureUrl('http://abcdefgh.ijk')).toBe(false);
+      expect(ValidationHelper.secureUrl('https://abcdefgh.ijk')).toBe(true);
+      expect(ValidationHelper.secureUrl('https://abc.def-gh.ijk')).toBe(true);
     });
   });
 

@@ -2,7 +2,12 @@
 
 For the moment we use git hashes as version, since no one complained about it 👍
 
-## Improve undo / redo history (XXXXXXXX 12/03/2022)
+## Rich text editor (XXXXXXXX 15/03/2022)
+
+- Built with SlateJS
+- Note used for the moment, but will be used soon to improve map legends and in shared views
+
+## Improve undo / redo history (789e7a9f 12/03/2022)
 
 - In some cases it seemed impossible to undo the creation of an export view. It is now fixed.
 - Actions have been added to history, in order to have a more consistent behavior (activation of layers, layouts, ...)

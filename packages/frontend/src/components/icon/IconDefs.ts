@@ -16,6 +16,19 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { faAlignLeft } from '@fortawesome/free-solid-svg-icons/faAlignLeft';
+import { faAlignCenter } from '@fortawesome/free-solid-svg-icons/faAlignCenter';
+import { faAlignRight } from '@fortawesome/free-solid-svg-icons/faAlignRight';
+import { faAlignJustify } from '@fortawesome/free-solid-svg-icons/faAlignJustify';
+import { faQuoteLeft } from '@fortawesome/free-solid-svg-icons/faQuoteLeft';
+import { faHeading } from '@fortawesome/free-solid-svg-icons/faHeading';
+import { faParagraph } from '@fortawesome/free-solid-svg-icons/faParagraph';
+import { faUpRightAndDownLeftFromCenter } from '@fortawesome/free-solid-svg-icons/faUpRightAndDownLeftFromCenter';
+import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons/faEllipsisVertical';
+import { faFont } from '@fortawesome/free-solid-svg-icons/faFont';
+import { faPhotoVideo } from '@fortawesome/free-solid-svg-icons/faPhotoVideo';
+import { faHighlighter } from '@fortawesome/free-solid-svg-icons/faHighlighter';
+import { faPalette } from '@fortawesome/free-solid-svg-icons/faPalette';
 import { faBan } from '@fortawesome/free-solid-svg-icons/faBan';
 import { faEraser } from '@fortawesome/free-solid-svg-icons/faEraser';
 import { faChevronCircleDown } from '@fortawesome/free-solid-svg-icons/faChevronCircleDown';
@@ -42,6 +55,7 @@ import { faCogs } from '@fortawesome/free-solid-svg-icons/faCogs';
 import { faFileCode } from '@fortawesome/free-solid-svg-icons/faFileCode';
 import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
 import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
+import { faBorderNone } from '@fortawesome/free-solid-svg-icons/faBorderNone';
 import { faDrawPolygon } from '@fortawesome/free-solid-svg-icons/faDrawPolygon';
 import { faVectorSquare } from '@fortawesome/free-solid-svg-icons/faVectorSquare';
 import { faImage } from '@fortawesome/free-solid-svg-icons/faImage';
@@ -83,11 +97,15 @@ import { faMapSigns } from '@fortawesome/free-solid-svg-icons/faMapSigns';
 import { faExpandAlt } from '@fortawesome/free-solid-svg-icons/faExpandAlt';
 import { faCompressAlt } from '@fortawesome/free-solid-svg-icons/faCompressAlt';
 import { faListOl } from '@fortawesome/free-solid-svg-icons/faListOl';
+import { faListUl } from '@fortawesome/free-solid-svg-icons/faListUl';
 import { faMinus } from '@fortawesome/free-solid-svg-icons/faMinus';
 import { faDraftingCompass } from '@fortawesome/free-solid-svg-icons/faDraftingCompass';
 import { faRulerCombined } from '@fortawesome/free-solid-svg-icons/faRulerCombined';
 import { faRuler } from '@fortawesome/free-solid-svg-icons/faRuler';
 import { faCopy } from '@fortawesome/free-solid-svg-icons/faCopy';
+import { faBold } from '@fortawesome/free-solid-svg-icons/faBold';
+import { faUnderline } from '@fortawesome/free-solid-svg-icons/faUnderline';
+import { faItalic } from '@fortawesome/free-solid-svg-icons/faItalic';
 import { faList } from '@fortawesome/free-solid-svg-icons/faList';
 import { faBoxOpen } from '@fortawesome/free-solid-svg-icons/faBoxOpen';
 import { faGift } from '@fortawesome/free-solid-svg-icons/faGift';
@@ -99,6 +117,21 @@ import { faClipboard } from '@fortawesome/free-solid-svg-icons/faClipboard';
 import { faStickyNote } from '@fortawesome/free-solid-svg-icons/faStickyNote';
 
 export const IconDefs = {
+  faAlignLeft,
+  faAlignCenter,
+  faAlignRight,
+  faAlignJustify,
+  faListOl,
+  faListUl,
+  faQuoteLeft,
+  faHeading,
+  faParagraph,
+  faUpRightAndDownLeftFromCenter,
+  faEllipsisVertical,
+  faFont,
+  faPhotoVideo,
+  faHighlighter,
+  faPalette,
   faBan,
   faEraser,
   faLanguage,
@@ -131,9 +164,13 @@ export const IconDefs = {
   faRulerCombined,
   faRuler,
   faCopy,
+  faBold,
+  faUnderline,
+  faItalic,
   faFileCode,
   faTrash,
   faPlus,
+  faBorderNone,
   faDrawPolygon,
   faVectorSquare,
   faImage,
@@ -175,7 +212,6 @@ export const IconDefs = {
   faMinusCircle,
   faExpandAlt,
   faCompressAlt,
-  faListOl,
   faShareAltSquare,
   faExternalLinkAlt,
   faClipboard,

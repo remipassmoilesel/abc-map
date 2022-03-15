@@ -19,7 +19,7 @@
 import React, { Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/shared';
 import { GradientClass } from '../../../GradientClass';
-import ColorPicker from '../../../../../components/color-picker/ColorPicker';
+import ColorPickerButton from '../../../../../components/color-picker/ColorPickerButton';
 import { prefixedTranslation } from '../../../../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
 import Cls from './ClassRow.module.scss';
@@ -39,7 +39,7 @@ class ClassRow extends Component<Props, {}> {
 
     return (
       <div className={`d-flex flex-row my-1 ${Cls.row}`}>
-        <ColorPicker value={gradientClass.color} onClose={this.handleColorChange} />
+        <ColorPickerButton value={gradientClass.color} onClose={this.handleColorChange} />
         <div className={'mx-3'}>
           {t('From')} <code>{gradientClass.lower}</code> {t('To')} <code>{gradientClass.upper}</code>
         </div>

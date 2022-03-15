@@ -24,7 +24,7 @@ import { deepFreeze } from '../../../../../core/utils/deepFreeze';
 import { screen } from '@testing-library/react';
 
 let colorChangedHandler: (color: string) => void;
-jest.mock('../../../../../components/color-picker/ColorPicker', () => {
+jest.mock('../../../../../components/color-picker/ColorPickerButton', () => {
   return {
     __esModule: true,
     // eslint-disable-next-line react/display-name
