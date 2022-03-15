@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Dailymotion should return integration for long url 1`] = `
+<div>
+  <div>
+    <iframe
+      allowfullscreen=""
+      frameborder="0"
+      src="https://www.dailymotion.com/embed/video/x88qja8"
+      title="Dailymotion video player"
+    />
+  </div>
+</div>
+`;
+
+exports[`Dailymotion should return integration for small url 1`] = `
+<div>
+  <div>
+    <iframe
+      allowfullscreen=""
+      frameborder="0"
+      src="https://www.dailymotion.com/embed/video/x88qja8"
+      title="Dailymotion video player"
+    />
+  </div>
+</div>
+`;

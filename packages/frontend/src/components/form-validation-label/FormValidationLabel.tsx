@@ -102,6 +102,11 @@ class FormValidationLabel extends Component<Props, {}> {
         message = t('You_must_confirm_account_deletion');
         break;
 
+      case FormState.InvalidHttpsUrl:
+        icon = IconDefs.faExclamationCircle;
+        message = t('Invalid_https_URL');
+        break;
+
       case FormState.InvalidUrl:
         icon = IconDefs.faExclamationCircle;
         message = t('Invalid_URL');
@@ -190,6 +195,21 @@ class FormValidationLabel extends Component<Props, {}> {
       case FormState.FieldMissing:
         icon = IconDefs.faExclamationCircle;
         message = t('Missing_fields');
+        break;
+
+      case FormState.InvalidFile:
+        icon = IconDefs.faExclamationCircle;
+        message = t('Invalid_file');
+        break;
+
+      case FormState.FileTooHeavy:
+        icon = IconDefs.faExclamationCircle;
+        message = t('File_too_heavy');
+        break;
+
+      case FormState.InvalidLinkText:
+        icon = IconDefs.faExclamationCircle;
+        message = t('Invalid_link_text');
         break;
     }
 

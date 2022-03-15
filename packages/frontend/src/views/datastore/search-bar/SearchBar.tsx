@@ -104,7 +104,7 @@ function SearchBar(props: Props) {
           </button>
         )}
 
-        <InlineLoader size={2} active={loading} />
+        <InlineLoader size={2} active={loading} className={'ml-2'} />
       </div>
 
       {/* Filters */}

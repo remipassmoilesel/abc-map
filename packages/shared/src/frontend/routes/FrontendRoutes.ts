@@ -78,6 +78,10 @@ export class FrontendRoutes {
     return new Route<EmptyParams>('/:lang/funding', this.lang);
   }
 
+  public textEditor() {
+    return new Route<EmptyParams>('/:lang/text-editor', this.lang);
+  }
+
   public getAll(): Route<any>[] {
     return [
       this.landing(),

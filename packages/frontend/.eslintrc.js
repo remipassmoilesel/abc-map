@@ -59,7 +59,8 @@ module.exports = {
     ],
     "@typescript-eslint/no-floating-promises": ["error"],
     "react-hooks/exhaustive-deps": "error",
-    "no-useless-rename": "error"
+    "no-useless-rename": "error",
+    "react/prop-types": 0
   },
   "settings": {
     "react": {

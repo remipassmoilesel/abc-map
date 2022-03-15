@@ -18,7 +18,7 @@
 
 import React, { ChangeEvent, useCallback } from 'react';
 import { MapActions } from '../../../../../core/store/map/actions';
-import ColorPicker from '../../../../../components/color-picker/ColorPicker';
+import ColorPicker from '../../../../../components/color-picker/ColorPickerButton';
 import OptionRow from '../option-row/OptionRow';
 import { prefixedTranslation } from '../../../../../i18n/i18n';
 import { withTranslation } from 'react-i18next';

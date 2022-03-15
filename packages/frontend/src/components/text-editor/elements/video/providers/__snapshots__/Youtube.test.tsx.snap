@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Youtube should return integration for long url 1`] = `
+<div>
+  <div>
+    <iframe
+      allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen=""
+      frameborder="0"
+      src="https://www.youtube.com/embed/uTC1mW4ua74"
+      title="YouTube video player"
+    />
+  </div>
+</div>
+`;
+
+exports[`Youtube should return integration for short url 1`] = `
+<div>
+  <div>
+    <iframe
+      allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen=""
+      frameborder="0"
+      src="https://www.youtube.com/embed/uTC1mW4ua74"
+      title="YouTube video player"
+    />
+  </div>
+</div>
+`;

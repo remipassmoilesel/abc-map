@@ -20,7 +20,7 @@ import React, { Component, ReactNode } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { MainState } from '../../core/store/reducer';
 import { MapActions } from '../../core/store/map/actions';
-import ColorPicker from './ColorPicker';
+import ColorPicker from './ColorPickerButton';
 import { ServiceProps, withServices } from '../../core/withServices';
 import OptionRow from '../../views/map/tool-selector/_common/option-row/OptionRow';
 import { withTranslation } from 'react-i18next';
@@ -64,6 +64,9 @@ type Props = ConnectedProps<typeof connector> & LocalProps & ServiceProps;
 
 const t = prefixedTranslation('ColorSelector:');
 
+/**
+ * Color selector is a group of color pickers used for drawing purposes
+ */
 class ColorSelector extends Component<Props, {}> {
   public render(): ReactNode {
     const strokeColor = this.props.stroke;

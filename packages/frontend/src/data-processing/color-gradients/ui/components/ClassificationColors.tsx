@@ -28,7 +28,7 @@ import range from 'lodash/range';
 import * as chroma from 'chroma-js';
 import { nanoid } from 'nanoid';
 import ClassRow from './class-row/ClassRow';
-import ColorPicker from '../../../../components/color-picker/ColorPicker';
+import ColorPicker from '../../../../components/color-picker/ColorPickerButton';
 import { asNumberOrString, isValidNumber } from '../../../../core/utils/numbers';
 import { prefixedTranslation } from '../../../../i18n/i18n';
 import { IconDefs } from '../../../../components/icon/IconDefs';

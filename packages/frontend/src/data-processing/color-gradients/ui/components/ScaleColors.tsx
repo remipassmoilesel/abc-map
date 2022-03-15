@@ -18,7 +18,7 @@
 
 import React, { Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/shared';
-import ColorPicker from '../../../../components/color-picker/ColorPicker';
+import ColorPicker from '../../../../components/color-picker/ColorPickerButton';
 import FormLine from '../../../_common/form-line/FormLine';
 import { prefixedTranslation } from '../../../../i18n/i18n';
 
