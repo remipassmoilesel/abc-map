@@ -19,17 +19,19 @@
 import Cls from './TableElement.module.scss';
 import { RenderElementProps } from 'slate-react';
 import clsx from 'clsx';
-import { TableElement as TableElementDef } from '../../typings';
+import { TableElement as TableElementDef } from '@abc-map/shared';
+import { useEditor } from '../../useEditor';
 
 const classes = [Cls.border0, Cls.border1, Cls.border2, Cls.border3];
 
 type Props = RenderElementProps & { element: TableElementDef };
 
 export function TableElement(props: Props) {
+  const { readOnly } = useEditor();
   const { border = 1 } = props.element;
 
   return (
-    <table {...props.attributes} className={clsx(Cls.table, classes[border] ?? classes[0])}>
+    <table {...props.attributes} className={clsx(Cls.table, readOnly && Cls.readOnly, classes[border] ?? classes[0])}>
       <tbody>{props.children}</tbody>
     </table>
   );

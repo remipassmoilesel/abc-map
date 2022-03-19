@@ -11,6 +11,7 @@
 - [How to fix my broken repository ?](#how-to-fix-my-broken-repository-)
 - [Server crashed: Error: Frontend root 'abc-map/packages/server/public' must be a directory](#server-crashed-error-frontend-root-abc-mappackagesserverpublic-must-be-a-directory)
 - [(node:132766) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' ...](#node132766-dep_webpack_dev_server_on_after_setup_middleware-deprecationwarning-onaftersetupmiddleware-)
+- [How to create videos for help page ?](#how-to-create-videos-for-help-page-)
 
 <!-- tocstop -->
 
@@ -69,3 +70,7 @@ You must run `abc build`.
 ## (node:132766) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' ...
 
 This message comes from react-scripts 5.
+
+## How to create videos for help page ?
+
+You can use [peek](https://github.com/phw/peek).

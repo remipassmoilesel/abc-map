@@ -31,6 +31,8 @@ import { image } from './elements/image/image';
 import { align } from './marks/align';
 import { list } from './elements/list/list';
 import { link } from './elements/link/link';
+import { mapSymbol } from './elements/map-symbol/map-symbol';
+import { size } from './marks/size';
 
 export const CustomEditor = {
   bold,
@@ -47,11 +49,15 @@ export const CustomEditor = {
   align,
   list,
   link,
+  mapSymbol,
+  size,
   setParagraph(editor: Editor) {
     Transforms.setNodes(editor, { type: 'paragraph' }, { match: (n) => Element.isElement(n), split: true });
   },
   clearStyle(editor: Editor) {
     const properties = {
+      type: undefined,
+      size: undefined,
       bold: undefined,
       italic: undefined,
       underline: undefined,
@@ -60,5 +66,6 @@ export const CustomEditor = {
     };
 
     Transforms.setNodes(editor, properties, { match: (n) => Text.isText(n), split: true });
+    Transforms.setNodes(editor, properties, { match: (n) => Element.isElement(n), split: true });
   },
 };

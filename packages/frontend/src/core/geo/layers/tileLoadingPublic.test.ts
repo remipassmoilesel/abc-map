@@ -32,6 +32,7 @@ describe('tileLoadingPublic', () => {
   let getStub: SinonStub;
   let fakeClient: AxiosInstance;
   let factoryStub: SinonStub;
+  const createObjectUrlStub = URL.createObjectURL as SinonStub;
 
   beforeEach(() => {
     getStub = sinon.stub();
@@ -40,7 +41,11 @@ describe('tileLoadingPublic', () => {
     factoryStub = sinon.stub();
     factoryStub.returns(fakeClient);
 
-    global.URL.createObjectURL = jest.fn(() => 'http://test-object-url');
+    createObjectUrlStub.returns('http://test-object-url');
+  });
+
+  afterEach(() => {
+    createObjectUrlStub.reset();
   });
 
   it('loadTile() should set image attributes', async () => {

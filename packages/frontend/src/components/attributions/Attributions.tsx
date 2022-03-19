@@ -16,55 +16,46 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AttributionRenderer } from '../../core/project/rendering/AttributionRenderer';
-import { useServices } from '../../core/useServices';
-import React, { useEffect, useRef } from 'react';
+import React, { CSSProperties, useMemo } from 'react';
 import { MapWrapper } from '../../core/geo/map/MapWrapper';
-import { Control } from 'ol/control';
-import { LegendDisplay, Logger } from '@abc-map/shared';
+import { Logger } from '@abc-map/shared';
+import Cls from './Attributions.module.scss';
+import MainIcon from '../../assets/main-icon.png';
 
 const logger = Logger.get('Attributions.tsx');
 
 interface Props {
-  // Attributions are on the opposite side of legend
-  legendDisplay: LegendDisplay;
   map: MapWrapper;
   ratio?: number;
 }
 
-const attrRenderer = new AttributionRenderer();
+const baseFontSizeVmin = 1.3;
 
+/**
+ * This component displays attributions as they are statically exported.
+ * @param props
+ * @constructor
+ */
 export function Attributions(props: Props) {
-  const { map, legendDisplay, ratio } = props;
-  const { project } = useServices();
-  const canvasRef = useRef<HTMLCanvasElement>();
-  const controlRef = useRef<Control>();
+  const { map, ratio: _ratio } = props;
+  const ratio = _ratio ?? 3;
+  const attributions = map.getTextAttributions();
+  const style: CSSProperties = useMemo(() => ({ fontSize: `${baseFontSizeVmin * ratio}vmin` }), [ratio]);
 
-  // Update attributions when map or legend change
-  useEffect(() => {
-    if (!canvasRef.current || !controlRef.current) {
-      canvasRef.current = document.createElement('canvas');
-      controlRef.current = new Control({ element: canvasRef.current });
-      map.unwrap().addControl(controlRef.current);
-    }
-
-    const canvas = canvasRef.current;
-    const control = controlRef.current;
-
-    const render = async () => {
-      attrRenderer.setDomPosition(legendDisplay, canvas);
-      await attrRenderer.render(map.getTextAttributions(), canvas, ratio ?? 1);
-    };
-
-    render().catch((err) => logger.error('Cannot render attributions: ', err));
-
-    return () => {
-      map.unwrap().removeControl(control);
-      control.dispose();
-      canvasRef.current = undefined;
-      controlRef.current = undefined;
-    };
-  }, [legendDisplay, map, project, ratio]);
-
-  return <></>;
+  return (
+    <div className={Cls.attributions} style={style}>
+      {/* We use a sub-level in order to use 'em' units in a consistent way */}
+      <div className={Cls.content}>
+        {attributions.map((attr) => (
+          <div key={attr} className={Cls.attribution}>
+            {attr}
+          </div>
+        ))}
+        <div className={Cls.softwareBrand}>
+          <img src={MainIcon} alt={MainIcon} />
+          Abc-Map
+        </div>
+      </div>
+    </div>
+  );
 }

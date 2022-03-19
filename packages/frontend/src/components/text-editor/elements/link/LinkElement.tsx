@@ -18,7 +18,7 @@
 
 import Cls from './LinkElement.module.scss';
 import { RenderElementProps } from 'slate-react';
-import { LinkElement as LinkElementDef } from '../../typings';
+import { LinkElement as LinkElementDef } from '@abc-map/shared';
 
 type Props = RenderElementProps & { element: LinkElementDef };
 

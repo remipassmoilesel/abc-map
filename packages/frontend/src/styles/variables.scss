@@ -59,10 +59,7 @@ $badge-font-size: 0.9rem;
 $body-color: $gray-800;
 $input-color: $gray-800;
 
-$control-color: rgba($secondary, 0.75);
-
-$control-color-active-opacity: 0.9;
-$control-color-active: rgba($secondary, $control-color-active-opacity);
+$control-color: rgba($secondary, 0.8);
 
 $box-shadow: 0 0.5rem 0.8rem rgba($gray-600, 0.1);
 $box-shadow-sm: 0 0.125rem 0.25rem rgba($gray-600, 0.075);
@@ -78,20 +75,26 @@ $top-bar-height: 4rem;
 
 $zIndex-mainMap-tileLoadError: 11;
 
-$zIndex-sideMenu-button: 11;
-$zIndex-sideMenu-panel: 12;
+$zIndex-floatingTextFrame: 11;
+$zIndex-scale: 12;
+$zIndex-attributions: 13;
 
-$zIndex-sharedMap-menu: 12;
+$zIndex-sideMenu-button: 15;
+$zIndex-sideMenu-panel: 15;
 
-$zIndex-feedback-bubble: 13;
+$zIndex-sharedMap-menu: 15;
 
-$zIndex-topBar: 14;
-$zIndex-topBar-links: 14;
+$zIndex-feedback-bubble: 15;
+
+$zIndex-topBar: 16;
+$zIndex-topBar-links: 16;
 
 $zIndex-longOperation-modal: 20;
 
 $zIndex-fullscreenModal-modal: 21;
 $zIndex-datastore-fullscreenPreview: 21;
-$zIndex-textEditor-fullscreenPreview: 21;
+
+$zIndex-floatingTextFrame-fullscreenEditor: 21;
+$zIndex-textEditor-fullscreenPreview: 22;
 
 $zIndex-deviceWarning-modal: 9999;

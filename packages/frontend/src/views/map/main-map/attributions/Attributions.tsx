@@ -16,7 +16,6 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { useServices } from '../../../../core/useServices';
 import React, { useState } from 'react';
 import { FaIcon } from '../../../../components/icon/FaIcon';
 import { IconDefs } from '../../../../components/icon/IconDefs';
@@ -24,12 +23,25 @@ import { Modal } from 'react-bootstrap';
 import { WithTooltip } from '../../../../components/with-tooltip/WithTooltip';
 import { prefixedTranslation } from '../../../../i18n/i18n';
 import Cls from './Attributions.module.scss';
+import { MapWrapper } from '../../../../core/geo/map/MapWrapper';
+
+interface Props {
+  map: MapWrapper;
+}
 
 const t = prefixedTranslation('MapView:MainMap.');
 
-export function Attributions() {
-  const { geo } = useServices();
+/**
+ * This component show a button that can be used to display attributions of specified map.
+ *
+ * It is used for interactive maps.
+ *
+ * @constructor
+ */
+export function Attributions(props: Props) {
+  const { map } = props;
   const [open, setOpen] = useState(false);
+  const attributions = map.getTextAttributions();
 
   return (
     <>
@@ -42,14 +54,11 @@ export function Attributions() {
       <Modal show={open} onHide={() => setOpen(false)} centered>
         <Modal.Header closeButton>{t('Attributions')}</Modal.Header>
         <Modal.Body className={'d-flex flex-column justify-content-center'}>
-          {geo
-            .getMainMap()
-            .getTextAttributions()
-            .map((attr) => (
-              <div key={attr} className={'mb-3'}>
-                {attr}
-              </div>
-            ))}
+          {attributions.map((attr) => (
+            <div key={attr} className={'mb-3'}>
+              {attr}
+            </div>
+          ))}
         </Modal.Body>
         <Modal.Footer>
           <button onClick={() => setOpen(false)} className={'btn btn-outline-secondary'}>

@@ -23,11 +23,7 @@ import { AbcProjectManifest } from './AbcProjectManifest';
  */
 describe('AbcProjectManifest', () => {
   it('should not change without migration', () => {
-    /* eslint-disable */
-    const witness = '{"metadata":{"id":"test-project-id","version":"0.1","name":"Test project","containsCredentials":false,"public":false},"layers":[],"layouts":[],"view":{"center":[1,2],"resolution":1000,"projection":{"name":"EPSG:4326"}},"sharedViews":[]}';
-    /* eslint-enable */
-
-    const current: AbcProjectManifest = {
+    const actual: AbcProjectManifest = {
       metadata: {
         id: 'test-project-id',
         version: '0.1',
@@ -45,6 +41,6 @@ describe('AbcProjectManifest', () => {
       sharedViews: [],
     };
 
-    expect(JSON.stringify(current)).toEqual(witness);
+    expect(actual).toMatchSnapshot();
   });
 });

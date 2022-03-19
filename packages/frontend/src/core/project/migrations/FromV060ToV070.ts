@@ -19,7 +19,7 @@
 import { AbcFile, AbcProjectManifest, Logger } from '@abc-map/shared';
 import { MigratedProject, ProjectMigration } from './typings';
 import semver from 'semver';
-import { AbcProjectManifest060 } from './old-typings/project-060';
+import { AbcProjectManifest060 } from './old-typings/060-project';
 import { nanoid } from 'nanoid';
 
 const NEXT = '0.7.0';
@@ -35,7 +35,7 @@ export class FromV060ToV070 implements ProjectMigration {
     return semver.lt(version, NEXT);
   }
 
-  public async migrate(_manifest: AbcProjectManifest, files: AbcFile[]): Promise<MigratedProject> {
+  public async migrate(_manifest: AbcProjectManifest, files: AbcFile<Blob>[]): Promise<MigratedProject> {
     const manifest = _manifest as AbcProjectManifest060;
 
     const layouts = manifest.layouts.map((lay) => ({

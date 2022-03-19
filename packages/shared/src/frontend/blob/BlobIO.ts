@@ -52,4 +52,8 @@ export class BlobIO {
       canvas.toBlob(cb, 'image/png', 1);
     });
   }
+
+  public static blobUrlToBlob(url: string): Promise<Blob> {
+    return fetch(url).then((r) => r.blob());
+  }
 }

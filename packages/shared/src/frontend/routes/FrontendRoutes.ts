@@ -46,10 +46,6 @@ export class FrontendRoutes {
     return new Route<SharedMapParams>('/:lang/shared-map/:projectId', this.lang);
   }
 
-  public mapLegend() {
-    return new Route<LegendParams>('/:lang/legend/:id', this.lang);
-  }
-
   public documentation() {
     return new Route<EmptyParams>('/:lang/documentation', this.lang);
   }
@@ -78,10 +74,6 @@ export class FrontendRoutes {
     return new Route<EmptyParams>('/:lang/funding', this.lang);
   }
 
-  public textEditor() {
-    return new Route<EmptyParams>('/:lang/text-editor', this.lang);
-  }
-
   public getAll(): Route<any>[] {
     return [
       this.landing(),
@@ -90,7 +82,6 @@ export class FrontendRoutes {
       this.export(),
       this.shareSettings(),
       this.sharedMap(),
-      this.mapLegend(),
       this.documentation(),
       this.dataProcessing(),
       this.confirmAccount(),

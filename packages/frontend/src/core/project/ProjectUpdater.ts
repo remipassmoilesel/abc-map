@@ -25,6 +25,7 @@ import { FromV030ToV040 } from './migrations/FromV030ToV040';
 import { FromV040ToV050 } from './migrations/FromV040ToV050';
 import { FromV050ToV060 } from './migrations/FromV050ToV060';
 import { FromV060ToV070 } from './migrations/FromV060ToV070';
+import { FromV070ToV080 } from './migrations/FromV070ToV080';
 
 export const logger = Logger.get('ProjectUpdater.ts', 'debug');
 
@@ -41,12 +42,13 @@ export class ProjectUpdater {
       new FromV040ToV050(),
       new FromV050ToV060(),
       new FromV060ToV070(),
+      new FromV070ToV080(),
     ]);
   }
 
   constructor(private migrations: MigrationsFactory) {}
 
-  public async update(manifest: AbcProjectManifest, files: AbcFile[]): Promise<MigratedProject> {
+  public async update(manifest: AbcProjectManifest, files: AbcFile<Blob>[]): Promise<MigratedProject> {
     const migrations = this.migrations();
     let result = { manifest, files };
 

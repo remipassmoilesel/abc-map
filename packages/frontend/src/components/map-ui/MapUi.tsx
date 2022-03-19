@@ -18,7 +18,7 @@
 
 import { MapWrapper } from '../../core/geo/map/MapWrapper';
 import { AbcView, Logger } from '@abc-map/shared';
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { DimensionsPx } from '../../core/utils/DimensionsPx';
 import { MapSizeChangedEvent } from '../../core/geo/map/MapWrapper.events';
 
@@ -48,6 +48,7 @@ interface Props {
 export function MapUi(props: Props) {
   const { map, view, width, height, onViewMove, onSizeChange, 'data-cy': dataCy, 'data-testid': dateTestId, className } = props;
   const supportRef = useRef<HTMLDivElement>(null);
+  const style = useMemo(() => ({ width, height }), [height, width]);
 
   const handleViewMove = useCallback(() => onViewMove && onViewMove(map.getView()), [map, onViewMove]);
   const handleSizeChange = useCallback((ev: MapSizeChangedEvent) => onSizeChange && onSizeChange(ev.dimensions), [onSizeChange]);
@@ -82,5 +83,5 @@ export function MapUi(props: Props) {
     }
   }, [map, view]);
 
-  return <div ref={supportRef} style={{ width, height }} className={className} data-cy={dataCy} data-testid={dateTestId} />;
+  return <div ref={supportRef} style={style} className={className} data-cy={dataCy} data-testid={dateTestId} />;
 }

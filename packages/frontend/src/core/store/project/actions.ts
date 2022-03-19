@@ -16,24 +16,20 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcLayout, AbcLegend, AbcLegendItem, AbcProjectManifest, AbcSharedView, AbcView, LegendDisplay } from '@abc-map/shared';
+import { AbcLayout, AbcProjectManifest, AbcSharedView, AbcTextFrame, AbcView } from '@abc-map/shared';
 
 export enum ActionType {
   LoadProject = 'LoadProject',
   SetProjectName = 'SetProjectName',
+  AddLayout = 'AddLayout',
   AddLayouts = 'AddLayouts',
   UpdateLayout = 'UpdateLayout',
   SetLayoutIndex = 'SetLayoutIndex',
   ClearLayouts = 'ClearLayouts',
   RemoveLayouts = 'RemoveLayouts',
   SetActiveLayout = 'SetActiveLayout',
-  AddLegendItems = 'AddLegendItems',
-  UpdateLegend = 'UpdateLegend',
-  UpdateLegendItem = 'UpdateLegendItem',
-  SetLegendSize = 'SetLegendSize',
-  SetLegendDisplay = 'SetLegendDisplay',
-  SetLegendItemIndex = 'SetLegendItemIndex',
-  DeleteLegendItem = 'DeleteLegendItem',
+  UpdateTextFrame = 'UpdateTextFrame',
+  AddSharedView = 'AddSharedView',
   AddSharedViews = 'AddSharedViews',
   SetActiveSharedView = 'SetActiveSharedView',
   UpdateSharedView = 'UpdateSharedView',
@@ -50,6 +46,12 @@ export interface LoadProject {
 export interface SetProjectName {
   type: ActionType.SetProjectName;
   name: string;
+}
+
+export interface AddLayout {
+  type: ActionType.AddLayout;
+  layout: AbcLayout;
+  index?: number;
 }
 
 export interface AddLayouts {
@@ -82,47 +84,15 @@ export interface SetActiveLayout {
   id: string | undefined;
 }
 
-export interface AddLegendItems {
-  type: ActionType.AddLegendItems;
-  items: AbcLegendItem[];
-  legendId: string;
+export interface UpdateTextFrame {
+  type: ActionType.UpdateTextFrame;
+  frame: AbcTextFrame;
 }
 
-export interface UpdateLegendItem {
-  type: ActionType.UpdateLegendItem;
-  item: AbcLegendItem;
-  legendId: string;
-}
-
-export interface UpdateLegend {
-  type: ActionType.UpdateLegend;
-  legend: AbcLegend;
-}
-
-export interface SetLegendSize {
-  type: ActionType.SetLegendSize;
-  width: number;
-  height: number;
-  legendId: string;
-}
-
-export interface SetLegendDisplay {
-  type: ActionType.SetLegendDisplay;
-  display: LegendDisplay;
-  legendId: string;
-}
-
-export interface DeleteLegendItem {
-  type: ActionType.DeleteLegendItem;
-  item: AbcLegendItem;
-  legendId: string;
-}
-
-export interface SetLegendItemIndex {
-  type: ActionType.SetLegendItemIndex;
-  item: AbcLegendItem;
-  index: number;
-  legendId: string;
+export interface AddSharedView {
+  type: ActionType.AddSharedView;
+  view: AbcSharedView;
+  index?: number;
 }
 
 export interface AddSharedViews {
@@ -158,19 +128,15 @@ export interface SetPublic {
 export type ProjectAction =
   | LoadProject
   | SetProjectName
+  | AddLayout
   | AddLayouts
   | RemoveLayouts
   | UpdateLayout
   | SetLayoutIndex
   | ClearLayouts
   | SetActiveLayout
-  | AddLegendItems
-  | UpdateLegend
-  | UpdateLegendItem
-  | SetLegendSize
-  | SetLegendDisplay
-  | DeleteLegendItem
-  | SetLegendItemIndex
+  | UpdateTextFrame
+  | AddSharedView
   | AddSharedViews
   | SetActiveSharedView
   | UpdateSharedView
@@ -190,6 +156,14 @@ export class ProjectActions {
     return {
       type: ActionType.SetProjectName,
       name,
+    };
+  }
+
+  public static addLayout(layout: AbcLayout, index?: number): ProjectAction {
+    return {
+      type: ActionType.AddLayout,
+      layout,
+      index,
     };
   }
 
@@ -235,60 +209,10 @@ export class ProjectActions {
     };
   }
 
-  public static addLegendItems(legendId: string, items: AbcLegendItem[]): ProjectAction {
+  public static updateTextFrame(frame: AbcTextFrame): ProjectAction {
     return {
-      type: ActionType.AddLegendItems,
-      items,
-      legendId,
-    };
-  }
-
-  public static updateLegend(legend: AbcLegend): ProjectAction {
-    return {
-      type: ActionType.UpdateLegend,
-      legend,
-    };
-  }
-
-  public static updateLegendItem(legendId: string, item: AbcLegendItem): ProjectAction {
-    return {
-      type: ActionType.UpdateLegendItem,
-      item,
-      legendId,
-    };
-  }
-
-  public static setLegendSize(legendId: string, width: number, height: number): ProjectAction {
-    return {
-      type: ActionType.SetLegendSize,
-      width,
-      height,
-      legendId,
-    };
-  }
-
-  public static setLegendDisplay(legendId: string, display: LegendDisplay): ProjectAction {
-    return {
-      type: ActionType.SetLegendDisplay,
-      display,
-      legendId,
-    };
-  }
-
-  public static deleteLegendItem(legendId: string, item: AbcLegendItem): ProjectAction {
-    return {
-      type: ActionType.DeleteLegendItem,
-      item,
-      legendId,
-    };
-  }
-
-  public static setLegendItemIndex(legendId: string, item: AbcLegendItem, index: number): ProjectAction {
-    return {
-      type: ActionType.SetLegendItemIndex,
-      item,
-      index,
-      legendId,
+      type: ActionType.UpdateTextFrame,
+      frame,
     };
   }
 
@@ -296,6 +220,14 @@ export class ProjectActions {
     return {
       type: ActionType.AddSharedViews,
       views,
+    };
+  }
+
+  public static addSharedView(view: AbcSharedView, index?: number): ProjectAction {
+    return {
+      type: ActionType.AddSharedView,
+      view,
+      index,
     };
   }
 

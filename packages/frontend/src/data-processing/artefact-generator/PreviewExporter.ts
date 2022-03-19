@@ -25,6 +25,7 @@ import { MapWrapper } from '../../core/geo/map/MapWrapper';
 
 export const logger = Logger.get('PreviewExporter');
 
+// FIXME: use html2canvas instead ?
 export class PreviewExporter {
   private support?: HTMLDivElement;
   private map?: MapWrapper;

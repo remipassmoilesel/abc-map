@@ -60,5 +60,5 @@ export function FullscreenButton(props: Props) {
     }
   }, [toasts]);
 
-  return <FloatingButton buttonId={'map/FullscreenButton'} icon={fullscreenIcon} title={t('Fullscreen')} onClick={toggleFullscreen} style={style} />;
+  return <FloatingButton icon={fullscreenIcon} title={t('Fullscreen')} onClick={toggleFullscreen} style={style} />;
 }

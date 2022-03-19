@@ -16,9 +16,8 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcLegend, LegendDisplay, Logger } from '@abc-map/shared';
+import { Logger } from '@abc-map/shared';
 import { CanvasHelper } from '../../utils/CanvasHelper';
-import { Position } from '../../utils/Position';
 import mainIcon from '../../../assets/main-icon.png';
 
 export const logger = Logger.get('AttributionRenderer');
@@ -78,64 +77,6 @@ export class AttributionRenderer {
     ctx.fillStyle = 'black';
     ctx.font = `${fontSize}px AbcCantarell`;
     ctx.fillText('Abc-Map', x + iconWidth + margin, y);
-  }
-
-  /**
-   * Attributions are rendered in opposite corner of legend
-   */
-  public setDomPosition(legendDisplay: LegendDisplay, canvas: HTMLCanvasElement) {
-    canvas.style.position = 'absolute';
-
-    switch (legendDisplay) {
-      case LegendDisplay.Hidden:
-      case LegendDisplay.BottomLeftCorner:
-        canvas.style.display = 'block';
-        canvas.style.top = '';
-        canvas.style.right = '0';
-        canvas.style.bottom = '0';
-        canvas.style.left = '';
-        break;
-      case LegendDisplay.UpperLeftCorner:
-        canvas.style.display = 'block';
-        canvas.style.top = '0';
-        canvas.style.right = '0';
-        canvas.style.bottom = '';
-        canvas.style.left = '';
-        break;
-      case LegendDisplay.UpperRightCorner:
-        canvas.style.display = 'block';
-        canvas.style.top = '0';
-        canvas.style.right = '';
-        canvas.style.bottom = '';
-        canvas.style.left = '0';
-        break;
-      case LegendDisplay.BottomRightCorner:
-        canvas.style.display = 'block';
-        canvas.style.top = '';
-        canvas.style.right = '';
-        canvas.style.bottom = '0';
-        canvas.style.left = '0';
-        break;
-      default:
-        logger.error('Unhandled legend display for attributions: ', { legendDisplay });
-    }
-  }
-
-  /**
-   * Attributions are rendered in opposite corner of legend
-   */
-  public getPixelPosition(legend: AbcLegend, attrCanvas: HTMLCanvasElement, exportCv: HTMLCanvasElement): Position {
-    switch (legend.display) {
-      case LegendDisplay.Hidden:
-      case LegendDisplay.BottomLeftCorner:
-        return { x: exportCv.width - attrCanvas.width, y: exportCv.height - attrCanvas.height };
-      case LegendDisplay.UpperLeftCorner:
-        return { x: exportCv.width - attrCanvas.width, y: 0 };
-      case LegendDisplay.UpperRightCorner:
-        return { x: 0, y: 0 };
-      case LegendDisplay.BottomRightCorner:
-        return { x: 0, y: exportCv.height - attrCanvas.height };
-    }
   }
 
   private loadSoftwareIcon(): Promise<HTMLImageElement> {

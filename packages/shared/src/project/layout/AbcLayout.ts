@@ -17,7 +17,8 @@
  */
 
 import { AbcView } from '../AbcView';
-import { AbcLegend } from '../legend';
+import { AbcTextFrame } from '../text-frame';
+import { AbcScale } from '../AbcScale';
 
 /**
  * Layouts are used to export as PDF or PNG
@@ -26,8 +27,18 @@ export interface AbcLayout {
   id: string;
   name: string;
   format: LayoutFormat;
+  /**
+   * Layout view is relative to exported size (using format)
+   */
   view: AbcView;
-  legend: AbcLegend;
+  /**
+   * Sizes and positions of frames are relative to exported dimensions
+   */
+  textFrames: AbcTextFrame[];
+  /**
+   * Position is relative to exported dimensions
+   */
+  scale?: AbcScale;
 }
 
 export interface LayoutFormat {

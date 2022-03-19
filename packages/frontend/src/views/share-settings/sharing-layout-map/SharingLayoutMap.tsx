@@ -19,7 +19,7 @@
 import Cls from './SharingLayoutMap.module.scss';
 import { useCallback, useEffect, useState } from 'react';
 import { MapFactory } from '../../../core/geo/map/MapFactory';
-import { AbcSharedView, AbcView, getAbcWindow, LayerState, Logger } from '@abc-map/shared';
+import { AbcView, getAbcWindow, LayerState, Logger } from '@abc-map/shared';
 import SideMenu from '../../../components/side-menu/SideMenu';
 import { IconDefs } from '../../../components/icon/IconDefs';
 import { useAppSelector } from '../../../core/store/hooks';
@@ -33,10 +33,8 @@ import isEqual from 'lodash/isEqual';
 import { prefixedTranslation } from '../../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
 import { AddSharedViewChangeset } from '../../../core/history/changesets/shared-views/AddSharedViewChangeset';
-import { LegendFactory } from '../../../core/project/LegendFactory';
 import { useActiveSharedView } from '../../../core/project/useActiveSharedView';
 import { MapWrapper } from '../../../core/geo/map/MapWrapper';
-import { MapLegend } from '../../../components/map-legend/MapLegend';
 import { MapUi } from '../../../components/map-ui/MapUi';
 import { DimensionsPx } from '../../../core/utils/DimensionsPx';
 import { E2eMapWrapper } from '../../../core/geo/map/E2eMapWrapper';
@@ -146,11 +144,11 @@ function SharingLayoutMap() {
         .getLayers()
         .map((l) => ({ layerId: l.getId(), visible: true }))
         .filter((st): st is LayerState => !!st.layerId);
+
       const mapView = Views.normalize(map.getView());
-      const view: AbcSharedView = { id, title, view: mapView, layers, legend: LegendFactory.newEmptyLegend() };
 
       // Create change set, apply and register it
-      const cs = AddSharedViewChangeset.create([view]);
+      const cs = AddSharedViewChangeset.create([{ id, title, view: mapView, layers }]);
       await cs.apply();
       history.register(HistoryKey.SharedViews, cs);
     };
@@ -184,7 +182,6 @@ function SharingLayoutMap() {
           data-cy={'sharing-layout-map'}
         />
       )}
-      {activeView && map && <MapLegend legend={activeView.legend} map={map} ratio={styleRatio} />}
 
       {/* Controls on right */}
       <SideMenu

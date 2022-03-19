@@ -27,6 +27,7 @@ import { prefixedTranslation } from '../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '../../core/store/hooks';
 import { UiActions } from '../../core/store/ui/actions';
+import { createPortal } from 'react-dom';
 
 interface Props {
   title: string;
@@ -46,6 +47,12 @@ interface Props {
 
 const t = prefixedTranslation('SideMenu:');
 
+/**
+ * This is a large menu, attached to a side of the app, that we can open with a floating button.
+ *
+ * @param props
+ * @constructor
+ */
 function SideMenu(props: Props) {
   const {
     menuId,
@@ -74,8 +81,8 @@ function SideMenu(props: Props) {
   const menuClasses = `${Cls.menuPanel} ${menuPlacement === 'left' ? Cls.left : Cls.right}`;
   return (
     <>
-      {open && (
-        <>
+      {open &&
+        createPortal(
           <div className={menuClasses}>
             <WithTooltip title={t('Close')}>
               <button onClick={handleToggleClick} className={Cls.closeButton}>
@@ -86,20 +93,12 @@ function SideMenu(props: Props) {
             <div className={Cls.menuContent} style={{ width: menuWidth, ...menuStyle }} onClick={handleContentClick}>
               {children}
             </div>
-          </div>
-        </>
-      )}
+          </div>,
+          document.body
+        )}
 
       {!open && (
-        <FloatingButton
-          buttonId={`components/SideMenu-${menuId}`}
-          icon={buttonIcon}
-          title={title}
-          onClick={handleToggleClick}
-          titlePlacement={titlePlacement}
-          style={buttonStyle}
-          data-cy={dataCy}
-        />
+        <FloatingButton icon={buttonIcon} title={title} onClick={handleToggleClick} titlePlacement={titlePlacement} style={buttonStyle} data-cy={dataCy} />
       )}
     </>
   );

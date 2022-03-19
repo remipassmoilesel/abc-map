@@ -70,22 +70,30 @@ export class BuildService {
     }
 
     // Production dependencies.
-    // We use a local registry and we publish then install a canary version.
+    // We publish then install a canary version.
     const registryUrl = this.config.registryUrl();
     const registry = await this.registry.start();
     return new Promise((resolve, reject) => {
       registry.onError(reject);
       try {
-        const version = new Date().toISOString().replace(/[^a-z0-9]/gi, '-');
-        this.shell.sync(`lerna publish --canary --yes \
-                                            --preid '${version}' \
-                                            --no-git-tag-version --no-push --no-git-reset \
+        // Publish canary release
+        const preid = `rc.${new Date().toISOString().replace(/[^a-z0-9]/gi, '-')}`;
+        this.shell.sync(`lerna publish --canary \
+                                            --preid '${preid}' \
                                             --registry ${registryUrl} \
-                                            --force-publish`);
+                                            --no-git-tag-version \
+                                            --no-push \
+                                            --force-publish \
+                                            --yes`);
 
+        // Update project version
+        this.shell.sync(`lerna version prerelease --preid ${preid} -y --no-git-tag-version --no-push`);
+
+        // Install production dependencies
+        // This is a bit ugly but this is the only way I found to install ONLY production dependencies
         // Here we must limit concurrency to prevent bad use of Yarn cache
-        const installProduction = `YARN_REGISTRY="${registryUrl}" yarn install --production`;
-        this.shell.sync(`lerna exec  --ignore e2e-tests --concurrency 1 '${installProduction}'`);
+        const installProduction = `YARN_REGISTRY="${registryUrl}" yarn install --non-interactive --production`;
+        this.shell.sync(`lerna exec --ignore e2e-tests --concurrency 1 '${installProduction}'`);
 
         resolve();
       } catch (err) {

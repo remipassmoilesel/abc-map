@@ -19,7 +19,7 @@
 import { TestData } from './test-data/TestData';
 import { MigratedProject } from './typings';
 import { FromV040ToV050 } from './FromV040ToV050';
-import { AbcProjectMetadata040 } from './old-typings/project-040';
+import { AbcProjectMetadata040 } from './old-typings/040-project';
 
 describe('FromV040ToV050', () => {
   let sampleProject: MigratedProject;

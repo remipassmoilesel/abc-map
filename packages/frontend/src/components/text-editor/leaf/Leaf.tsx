@@ -21,12 +21,15 @@ import { RenderLeafProps } from 'slate-react';
 import { CSSProperties, useMemo } from 'react';
 import clsx from 'clsx';
 
+const sizeClasses = [Cls.size1, Cls.size2, Cls.size3, Cls.size4];
+
 export function Leaf(props: RenderLeafProps) {
   const {
-    leaf: { bold, italic, underline, foregroundColor, backgroundColor },
+    leaf: { bold, italic, underline, foregroundColor, backgroundColor, size = 1 },
   } = props;
 
-  const className = clsx(bold && Cls.bold, italic && Cls.italic, underline && Cls.underline);
+  const sizeClass = sizeClasses[size - 1] || sizeClasses[0];
+  const className = clsx(Cls.leaf, bold && Cls.bold, italic && Cls.italic, underline && Cls.underline, sizeClass);
   const style: CSSProperties = useMemo(() => ({ color: foregroundColor, backgroundColor }), [foregroundColor, backgroundColor]);
 
   return (

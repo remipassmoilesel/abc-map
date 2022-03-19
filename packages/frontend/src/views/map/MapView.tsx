@@ -125,7 +125,6 @@ function MapView() {
         buttonStyle={{ top: '50vh', right: '2vw' }}
         menuPlacement={'right'}
         menuId={'views/MapView-draw'}
-        menuStyle={{ overflowY: 'scroll' }}
         initiallyOpened={isDesktopDevice()}
         data-cy={'draw-menu'}
       >

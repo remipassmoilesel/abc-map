@@ -24,13 +24,15 @@
   align-items: stretch;
   justify-content: stretch;
 
+  height: 100%;
+  width: 100%;
   max-width: 100%;
   max-height: 100%;
 
-  background-color: white;
   overflow: hidden;
 
-  border: solid 1px $gray-400;
+  // Editor must be white for pdf exports 🤷
+  background-color: white;
   border-radius: $border-radius;
 }
 
@@ -40,6 +42,11 @@
 
 .editorContainer {
   flex-grow: 1;
+  padding: 0.5em;
+
   overflow: auto;
-  padding: 0.8rem;
+
+  &.readOnly {
+    overflow: hidden;
+  }
 }

@@ -16,14 +16,27 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
+@import "src/styles/variables";
+
 .table {
+  font-size: 1em;
+
   td {
-    padding: 0.5rem;
+    vertical-align: center;
+    min-width: 3em;
   }
 
+  // When no border and edition enabled we display a slight border to help user
   &.border0 {
     td {
-      border: none;
+      border: dashed 1px $gray-400;
+    }
+  }
+
+  // When no border and edition disabled we display a transparent border to prevent shifts
+  &.border0.readOnly {
+    td {
+      border: solid 1px transparent;
     }
   }
 

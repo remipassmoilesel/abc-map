@@ -97,7 +97,7 @@
 .bottomBar {
   position: absolute;
 
-  bottom: 0;
+  bottom: 1.5rem;
   left: 25vw;
   right: 25vw;
 
@@ -110,32 +110,8 @@
 
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: flex-end;
   justify-content: space-between;
-
-  .scale {
-    display: flex;
-    align-items: flex-start;
-    justify-content: flex-start;
-
-    width: 20vw;
-    max-width: 40vw;
-
-    :global(.ol-scale-line) {
-      position: static;
-      background: $control-color;
-      border-radius: $border-radius;
-      padding: 0.4rem;
-
-      &:hover {
-        background: $control-color-active;
-      }
-
-      :global(.ol-scale-line-inner) {
-        font-size: 1rem !important;
-      }
-    }
-  }
 
   .controls {
     display: flex;

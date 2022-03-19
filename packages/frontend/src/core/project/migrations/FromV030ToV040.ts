@@ -18,7 +18,7 @@
 
 import { AbcFile, AbcLayer, AbcProjectManifest, AbcProjectMetadata, LayerType } from '@abc-map/shared';
 import { MigratedProject, ProjectMigration } from './typings';
-import { AbcProjectMetadata030, WmsMetadata030 } from './old-typings/project-030';
+import { AbcProjectMetadata030, WmsMetadata030 } from './old-typings/030-project';
 import semver from 'semver';
 
 const NEXT = '0.4.0';
@@ -34,7 +34,7 @@ export class FromV030ToV040 implements ProjectMigration {
     return semver.lt(version, NEXT);
   }
 
-  public async migrate(manifest: AbcProjectManifest, files: AbcFile[]): Promise<MigratedProject> {
+  public async migrate(manifest: AbcProjectManifest, files: AbcFile<Blob>[]): Promise<MigratedProject> {
     const upgrated: AbcLayer[] = manifest.layers.map((layer) => {
       // We ignore other layers
       if (layer.type !== LayerType.Wms) {

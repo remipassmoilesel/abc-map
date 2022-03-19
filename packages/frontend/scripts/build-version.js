@@ -17,7 +17,13 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-/* This script generate a file with current git hash and build date in source directory. */
+/*
+
+This script generate a file with current git hash and build date in source directory.
+
+This will allow to display the current version in frontend.
+
+*/
 
 const childProcess = require('child_process');
 const fs = require('fs');

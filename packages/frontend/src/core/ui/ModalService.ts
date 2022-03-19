@@ -21,7 +21,6 @@ import {
   ConfirmationClosedEvent,
   FeaturePropertiesClosedEvent,
   InternalEvent,
-  LegendSymbolPickerClosedEvent,
   LoginClosedEvent,
   ModalEvent,
   ModalEventListener,
@@ -86,10 +85,6 @@ export class ModalService {
 
   public passwordLost(): Promise<RegistrationClosedEvent> {
     return this.modalPromise({ type: ModalEventType.ShowPasswordLost }, ModalEventType.PasswordLostClosed);
-  }
-
-  public legendSymbolPicker(): Promise<LegendSymbolPickerClosedEvent> {
-    return this.modalPromise({ type: ModalEventType.ShowLegendSymbolPicker }, ModalEventType.LegendSymbolPickerClosed);
   }
 
   public textFeedback(): Promise<TextFeedbackClosed> {

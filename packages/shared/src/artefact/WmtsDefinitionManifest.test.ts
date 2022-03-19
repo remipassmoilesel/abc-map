@@ -20,10 +20,6 @@ import { WmtsDefinitionManifest } from './WmtsDefinitionManifest';
 
 describe('WmtsDefinitionManifest', () => {
   it('should not change without datastore migration', () => {
-    /* eslint-disable */
-    const witness = "{\"version\":\"version\",\"wmts\":{\"remoteLayerName\":\"remoteLayerName\",\"capabilitiesUrl\":\"capabilitiesUrl\",\"auth\":{\"username\":\"username\",\"password\":\"password\"},\"prompt\":[{\"name\":\"name\",\"type\":\"string\",\"description\":[{\"language\":\"fr\",\"text\":\"description\"},{\"language\":\"en\",\"text\":\"description\"}]}]}}";
-    /* eslint-enable */
-
     const manifest: WmtsDefinitionManifest = {
       version: 'version',
       wmts: {
@@ -46,6 +42,6 @@ describe('WmtsDefinitionManifest', () => {
       },
     };
 
-    expect(JSON.stringify(manifest)).toEqual(witness);
+    expect(manifest).toMatchSnapshot();
   });
 });

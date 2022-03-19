@@ -31,9 +31,6 @@ export interface UiState {
   sideMenu: {
     [k: string]: boolean | undefined;
   };
-  floatingButtons: {
-    [k: string]: [number, number] | undefined;
-  };
   informations: {
     sharedMapAlpha: boolean;
   };
@@ -46,7 +43,6 @@ export const uiInitialState: UiState = {
   historyCapabilities: {},
   documentation: { scrollPosition: 0 },
   sideMenu: {},
-  floatingButtons: {},
   informations: {
     sharedMapAlpha: false,
   },

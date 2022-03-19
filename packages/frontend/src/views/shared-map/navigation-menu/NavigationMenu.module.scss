@@ -73,10 +73,10 @@
   }
 
   &:hover {
-    background-color: $control-color-active;
+    background-color: $secondary;
 
     .icon {
-      opacity: $control-color-active-opacity;
+      opacity: 0.9;
     }
   }
 }

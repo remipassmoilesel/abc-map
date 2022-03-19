@@ -1,4 +1,4 @@
-<div class="toc-section">Summary</div>
+<div class="toc-section">📚 Summary</div>
 
 [Presentation](#presentation)
 [Basic notions](#basics)

@@ -16,6 +16,9 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { faTextHeight } from '@fortawesome/free-solid-svg-icons/faTextHeight';
+import { faExpand } from '@fortawesome/free-solid-svg-icons/faExpand';
+import { faMaximize } from '@fortawesome/free-solid-svg-icons/faMaximize';
 import { faAlignLeft } from '@fortawesome/free-solid-svg-icons/faAlignLeft';
 import { faAlignCenter } from '@fortawesome/free-solid-svg-icons/faAlignCenter';
 import { faAlignRight } from '@fortawesome/free-solid-svg-icons/faAlignRight';
@@ -26,6 +29,7 @@ import { faParagraph } from '@fortawesome/free-solid-svg-icons/faParagraph';
 import { faUpRightAndDownLeftFromCenter } from '@fortawesome/free-solid-svg-icons/faUpRightAndDownLeftFromCenter';
 import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons/faEllipsisVertical';
 import { faFont } from '@fortawesome/free-solid-svg-icons/faFont';
+import { faRulerHorizontal } from '@fortawesome/free-solid-svg-icons/faRulerHorizontal';
 import { faPhotoVideo } from '@fortawesome/free-solid-svg-icons/faPhotoVideo';
 import { faHighlighter } from '@fortawesome/free-solid-svg-icons/faHighlighter';
 import { faPalette } from '@fortawesome/free-solid-svg-icons/faPalette';
@@ -117,6 +121,9 @@ import { faClipboard } from '@fortawesome/free-solid-svg-icons/faClipboard';
 import { faStickyNote } from '@fortawesome/free-solid-svg-icons/faStickyNote';
 
 export const IconDefs = {
+  faTextHeight,
+  faExpand,
+  faMaximize,
   faAlignLeft,
   faAlignCenter,
   faAlignRight,
@@ -129,6 +136,7 @@ export const IconDefs = {
   faUpRightAndDownLeftFromCenter,
   faEllipsisVertical,
   faFont,
+  faRulerHorizontal,
   faPhotoVideo,
   faHighlighter,
   faPalette,

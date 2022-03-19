@@ -18,7 +18,7 @@
 
 import { Logger } from '@abc-map/shared';
 import { Editor, Element, Range, Transforms } from 'slate';
-import { LinkElement } from '../../typings';
+import { LinkElement } from '@abc-map/shared';
 
 const logger = Logger.get('link.ts');
 

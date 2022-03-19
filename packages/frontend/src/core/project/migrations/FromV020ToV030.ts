@@ -22,7 +22,7 @@ import semver from 'semver';
 import { ModalService } from '../../ui/ModalService';
 import { ModalStatus } from '../../ui/typings';
 import { Encryption } from '../../utils/Encryption';
-import { AbcWmsLayer020, WmsMetadata020 } from './old-typings/project-020';
+import { AbcWmsLayer020, WmsMetadata020 } from './old-typings/020-project';
 
 const NEXT = '0.3.0';
 
@@ -37,7 +37,7 @@ export class FromV020ToV030 implements ProjectMigration {
     return semver.lt(version, NEXT);
   }
 
-  public async migrate(manifest: AbcProjectManifest, files: AbcFile[]): Promise<MigratedProject> {
+  public async migrate(manifest: AbcProjectManifest, files: AbcFile<Blob>[]): Promise<MigratedProject> {
     const wmsLayers = manifest.layers.filter((lay) => lay.metadata.type === LayerType.Wms) as unknown as AbcWmsLayer020[];
     const clearUrl = wmsLayers?.find((layer) => !layer.metadata.remoteUrl.startsWith('encrypted:'))?.metadata.remoteUrl;
 

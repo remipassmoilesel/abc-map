@@ -121,6 +121,13 @@
   align-items: center;
   margin-bottom: 0.3rem;
 
+  a {
+    max-width: 60%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
   .label {
     width: 25%;
     margin-right: 0.5rem;

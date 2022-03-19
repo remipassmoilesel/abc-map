@@ -18,43 +18,35 @@
 
 import Cls from './TitleElement.module.scss';
 import { RenderElementProps } from 'slate-react';
-import { TitleElement as TitleElementDef } from '../../typings';
+import { TitleElement as TitleElementDef } from '@abc-map/shared';
+import { ReactElement } from 'react';
 
 type Props = RenderElementProps & { element: TitleElementDef };
 
 export function TitleElement(props: Props) {
   const { level } = props.element;
 
+  let title: ReactElement;
   switch (level) {
     case 1:
-      return (
-        <h1 {...props.attributes} className={Cls.title}>
-          {props.children}
-        </h1>
-      );
+      title = <h1>{props.children}</h1>;
+      break;
     case 2:
-      return (
-        <h2 {...props.attributes} className={Cls.title}>
-          {props.children}
-        </h2>
-      );
+      title = <h2>{props.children}</h2>;
+      break;
     case 3:
-      return (
-        <h3 {...props.attributes} className={Cls.title}>
-          {props.children}
-        </h3>
-      );
+      title = <h3>{props.children}</h3>;
+      break;
     case 4:
-      return (
-        <h4 {...props.attributes} className={Cls.title}>
-          {props.children}
-        </h4>
-      );
+      title = <h4>{props.children}</h4>;
+      break;
     default:
-      return (
-        <h5 {...props.attributes} className={Cls.title}>
-          {props.children}
-        </h5>
-      );
+      title = <h5>{props.children}</h5>;
   }
+
+  return (
+    <div {...props.attributes} className={Cls.title}>
+      {title}
+    </div>
+  );
 }

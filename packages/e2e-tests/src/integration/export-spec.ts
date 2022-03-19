@@ -186,6 +186,42 @@ describe('Layout', function () {
         .get('[data-cy=close-solicitation-modal]')
         .click();
     });
+
+    it('can create a text frame then export', () => {
+      cy.visit(Routes.export().format())
+        // Create layout
+        .get('[data-cy=add-layout]')
+        .click()
+        // Create text frame
+        .get('[data-cy=create-text-frame]')
+        .click()
+        .get('[data-cy=floating-text-frame]')
+        .should('exist')
+        .get('[data-cy=toggle-full-screen-editor]')
+        .click()
+        .get('[data-cy=full-screen-editor]')
+        .type('{selectAll}')
+        .type('{del}')
+        .type('Hello World')
+        .type('{selectAll}')
+        .get('[data-cy=bold]')
+        .click()
+        .get('[data-cy=italic]')
+        .click()
+        .get('[data-cy=underline]')
+        .click()
+        .get('[data-cy=close-full-screen-editor]')
+        .click()
+        .get('[data-cy=pdf-export]')
+        .click()
+        .then(() => LongOperation.done(50_000))
+        .then(() => Download.fileAsBlob())
+        .should((pdf) => {
+          expect(pdf.size).greaterThan(100_000);
+        })
+        .get('[data-cy=close-solicitation-modal]')
+        .click();
+    });
   });
 });
 

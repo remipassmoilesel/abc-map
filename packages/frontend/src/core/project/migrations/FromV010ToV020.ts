@@ -31,7 +31,7 @@ export class FromV010ToV020 implements ProjectMigration {
     return isV1 || semver.lt(version, '0.2.0');
   }
 
-  public async migrate(manifest: AbcProjectManifest, files: AbcFile[]): Promise<MigratedProject> {
+  public async migrate(manifest: AbcProjectManifest, files: AbcFile<Blob>[]): Promise<MigratedProject> {
     return {
       manifest: {
         ...manifest,

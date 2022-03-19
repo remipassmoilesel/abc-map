@@ -22,9 +22,10 @@ import { createEditor, Editor } from 'slate';
 export interface EditorContext {
   editor: Editor;
   readOnly: boolean;
+  ratio: number;
 }
 
-const context = React.createContext<EditorContext>({ readOnly: false, editor: createEditor() });
+const context = React.createContext<EditorContext>({ readOnly: false, editor: createEditor(), ratio: 1 });
 
 export const EditorProvider = context.Provider;
 

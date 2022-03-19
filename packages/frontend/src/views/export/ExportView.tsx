@@ -17,8 +17,8 @@
  */
 
 import Cls from './ExportView.module.scss';
-import React, { useCallback, useEffect, useRef } from 'react';
-import { AbcLayout, AbcProjection, LayoutFormat, LayoutFormats, Logger } from '@abc-map/shared';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
+import { AbcLayout, AbcProjection, AbcTextFrame, LayoutFormat, LayoutFormats, Logger } from '@abc-map/shared';
 import LayoutList from './layout-list/LayoutList';
 import LayoutPreview from './layout-preview/LayoutPreview';
 import { HistoryKey } from '../../core/history/HistoryKey';
@@ -40,22 +40,25 @@ import { useAppSelector } from '../../core/store/hooks';
 import { withTranslation } from 'react-i18next';
 import { LayoutKeyboardListener } from './LayoutKeyboardListener';
 import { isDesktopDevice } from '../../core/ui/isDesktopDevice';
-import { LegendFactory } from '../../core/project/LegendFactory';
-import { useHistory } from 'react-router-dom';
-import { Routes } from '../../routes';
 import { OperationStatus } from '../../core/ui/typings';
 import { Views } from '../../core/geo/Views';
 import { SetActiveLayoutChangeset } from '../../core/history/changesets/layouts/SetActiveLayoutChangeset';
+import { AddLayoutTextFrameChangeset } from '../../core/history/changesets/layouts/AddLayoutTextFrameChangeset';
+import { RemoveLayoutTextFrameChangeset } from '../../core/history/changesets/layouts/RemoveLayoutTextFrameChangeset';
+import { UpdateTextFrameChangeset } from '../../core/history/changesets/UpdateTextFrameChangeset';
+import debounce from 'lodash/debounce';
+import { AddScaleChangeset } from '../../core/history/changesets/layouts/AddScaleChangeset';
+import { AbcScale } from '@abc-map/shared';
+import { RemoveScaleChangeset } from '../../core/history/changesets/layouts/RemoveScaleChangeset';
+import { UpdateScaleChangeset } from '../../core/history/changesets/layouts/UpdateScaleChangeset';
 
 const logger = Logger.get('ExportView.tsx', 'warn');
 
 const t = prefixedTranslation('ExportView:');
 
 function ExportView() {
-  const { geo, history, toasts, modals } = useServices();
-  const exportSupport = useRef<HTMLDivElement>(null);
-  const keyboardShortcuts = useRef<LayoutKeyboardListener | null>(null);
-  const navHistory = useHistory();
+  const { geo, history, toasts, modals, project } = useServices();
+  const shortcuts = useRef<LayoutKeyboardListener | null>(null);
 
   const layouts = useAppSelector((st) => st.project.layouts.list);
   const activeLayoutId = useAppSelector((st) => st.project.layouts.activeId);
@@ -66,10 +69,10 @@ function ExportView() {
 
   // Keyboard shortcut setup
   useEffect(() => {
-    keyboardShortcuts.current = LayoutKeyboardListener.create();
-    keyboardShortcuts.current.initialize();
+    shortcuts.current = LayoutKeyboardListener.create();
+    shortcuts.current.initialize();
     return () => {
-      keyboardShortcuts.current?.destroy();
+      shortcuts.current?.destroy();
     };
   }, []);
 
@@ -105,7 +108,7 @@ function ExportView() {
         name,
         format: LayoutFormats.A4_LANDSCAPE,
         view: Views.normalize({ center, resolution: layoutRes, projection }),
-        legend: LegendFactory.newEmptyLegend(),
+        textFrames: [],
       };
 
       const cs = AddLayoutsChangeset.create([layout]);
@@ -159,16 +162,6 @@ function ExportView() {
 
     apply().catch((err) => logger.error('Cannot delete layouts: ', err));
   }, [history, layouts]);
-
-  // User updates legend
-  const handleEditLegend = useCallback(() => {
-    if (!activeLayout) {
-      logger.error('No active layout');
-      return;
-    }
-
-    navHistory.push(Routes.mapLegend().withParams({ id: activeLayout.legend.id }));
-  }, [activeLayout, navHistory]);
 
   // User delete layout
   const handleDeleted = useCallback(
@@ -231,15 +224,8 @@ function ExportView() {
   // User exports layouts to PDF or PNG
   const handleExport = useCallback(
     (format: ExportFormat) => {
-      const support = exportSupport.current;
-      if (!support) {
-        toasts.genericError();
-        logger.error('Unable to export: DOM not ready');
-        return;
-      }
-
       const renderer = new LayoutRenderer();
-      renderer.init(support);
+      renderer.init();
 
       if (!layouts.length) {
         toasts.info(t('You_must_create_layouts_first'));
@@ -282,6 +268,103 @@ function ExportView() {
     [geo, layouts, modals, toasts]
   );
 
+  const handleAddTextFrame = useCallback(
+    (frame: AbcTextFrame) => {
+      if (!activeLayout) {
+        return;
+      }
+
+      const addFrame = AddLayoutTextFrameChangeset.create(activeLayout, frame);
+      addFrame
+        .apply()
+        .then(() => history.register(HistoryKey.Export, addFrame))
+        .catch((err) => logger.error('Cannot add text frame: ', err));
+    },
+    [activeLayout, history]
+  );
+
+  const handleDeleteTextFrame = useCallback(
+    (frame: AbcTextFrame) => {
+      if (!activeLayout) {
+        return;
+      }
+
+      const removeFrame = RemoveLayoutTextFrameChangeset.create(activeLayout, frame);
+      removeFrame
+        .apply()
+        .then(() => history.register(HistoryKey.Export, removeFrame))
+        .catch((err) => logger.error('Cannot remove text frame: ', err));
+    },
+    [activeLayout, history]
+  );
+
+  const handleTextFrameChangeDebounced = useMemo(
+    () =>
+      debounce((before: AbcTextFrame, after: AbcTextFrame) => {
+        const updateFrame = UpdateTextFrameChangeset.create(before, after);
+        updateFrame
+          .apply()
+          .then(() => history.register(HistoryKey.Export, updateFrame))
+          .catch((err) => logger.error('Cannot update text frame: ', err));
+      }, 500),
+    [history]
+  );
+
+  const handleTextFrameChange = useCallback(
+    (before: AbcTextFrame, after: AbcTextFrame) => {
+      if (!activeLayout) {
+        return;
+      }
+
+      // We update text frame, but we limit creation of history changesets
+      project.updateTextFrame(after);
+      handleTextFrameChangeDebounced(before, after);
+    },
+    [activeLayout, handleTextFrameChangeDebounced, project]
+  );
+
+  const handleAddScale = useCallback(
+    (scale: AbcScale) => {
+      if (!activeLayout) {
+        return;
+      }
+
+      const addScale = AddScaleChangeset.create(activeLayout, scale);
+      addScale
+        .apply()
+        .then(() => history.register(HistoryKey.Export, addScale))
+        .catch((err) => logger.error('Cannot add scale: ', err));
+    },
+    [activeLayout, history]
+  );
+
+  const handleRemoveScale = useCallback(() => {
+    if (!activeLayout || !activeLayout.scale) {
+      return;
+    }
+
+    const addScale = RemoveScaleChangeset.create(activeLayout, activeLayout.scale);
+    addScale
+      .apply()
+      .then(() => history.register(HistoryKey.Export, addScale))
+      .catch((err) => logger.error('Cannot remove scale: ', err));
+  }, [activeLayout, history]);
+
+  const handleScaleChanged = useCallback(
+    (scale: AbcScale) => {
+      if (!activeLayout || !activeLayout.scale) {
+        return;
+      }
+
+      const addScale = UpdateScaleChangeset.create(activeLayout, activeLayout.scale, scale);
+      addScale
+        .apply()
+        .then(() => history.register(HistoryKey.Export, addScale))
+        .catch((err) => logger.error('Cannot update scale: ', err));
+    },
+    [activeLayout, history]
+  );
+
   return (
     <>
       <div className={Cls.exportView}>
@@ -299,7 +382,15 @@ function ExportView() {
         </SideMenu>
 
         {/* Layout preview on center */}
-        <LayoutPreview layout={activeLayout} mainMap={geo.getMainMap()} onLayoutChanged={handleLayoutChanged} onNewLayout={handleNewLayout} />
+        <LayoutPreview
+          layout={activeLayout}
+          mainMap={geo.getMainMap()}
+          onLayoutChanged={handleLayoutChanged}
+          onNewLayout={handleNewLayout}
+          onTextFrameChange={handleTextFrameChange}
+          onDeleteTextFrame={handleDeleteTextFrame}
+          onScaleChange={handleScaleChanged}
+        />
 
         {/* Controls on right */}
         <SideMenu
@@ -318,12 +409,13 @@ function ExportView() {
             onLayoutUp={handleLayoutUp}
             onLayoutDown={handleLayoutDown}
             onClearAll={handleClearAll}
-            onEditLegend={handleEditLegend}
+            onAddTextFrame={handleAddTextFrame}
             onExport={handleExport}
+            onAddScale={handleAddScale}
+            onRemoveScale={handleRemoveScale}
           />
         </SideMenu>
       </div>
-      <div ref={exportSupport} />
     </>
   );
 }

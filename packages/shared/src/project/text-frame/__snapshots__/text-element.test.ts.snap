@@ -1,0 +1,115 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Text elements elements should not change without migration 1`] = `
+Array [
+  Object {
+    "align": "justify",
+    "children": Array [],
+    "type": "paragraph",
+  },
+  Object {
+    "align": "center",
+    "children": Array [],
+    "type": "paragraph",
+  },
+  Object {
+    "align": "left",
+    "children": Array [],
+    "type": "paragraph",
+  },
+  Object {
+    "align": "right",
+    "children": Array [],
+    "type": "paragraph",
+  },
+  Object {
+    "children": Array [],
+    "type": "code",
+  },
+  Object {
+    "children": Array [],
+    "type": "quote",
+  },
+  Object {
+    "children": Array [],
+    "level": 1,
+    "type": "title",
+  },
+  Object {
+    "children": Array [],
+    "type": "table",
+  },
+  Object {
+    "children": Array [],
+    "type": "table-row",
+  },
+  Object {
+    "children": Array [],
+    "type": "table-cell",
+  },
+  Object {
+    "children": Array [
+      Object {
+        "text": "",
+      },
+    ],
+    "type": "video",
+    "url": "http://video.url",
+  },
+  Object {
+    "children": Array [
+      Object {
+        "text": "",
+      },
+    ],
+    "size": 1,
+    "type": "image",
+    "url": "http://image.blob.url",
+  },
+  Object {
+    "children": Array [],
+    "ordered": true,
+    "type": "list",
+  },
+  Object {
+    "children": Array [],
+    "ordered": false,
+    "type": "list",
+  },
+  Object {
+    "children": Array [],
+    "type": "list-item",
+  },
+  Object {
+    "children": Array [],
+    "type": "link",
+    "url": "http://somewhere.net",
+  },
+  Object {
+    "children": Array [
+      Object {
+        "text": "",
+      },
+    ],
+    "geometryType": "Point",
+    "style": Object {
+      "fill": Object {
+        "color1": "red",
+      },
+    },
+    "type": "map-symbol",
+  },
+]
+`;
+
+exports[`Text elements texts should not change without migration 1`] = `
+Object {
+  "backgroundColor": "backgroundColor",
+  "bold": true,
+  "foregroundColor": "foregroundColor",
+  "italic": true,
+  "size": 4,
+  "text": "text1",
+  "underline": true,
+}
+`;

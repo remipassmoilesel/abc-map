@@ -19,7 +19,7 @@
 import Cls from './ParagraphElement.module.scss';
 import { RenderElementProps } from 'slate-react';
 import clsx from 'clsx';
-import { ParagraphElement as ParagraphElementDef } from '../../typings';
+import { ParagraphElement as ParagraphElementDef } from '@abc-map/shared';
 import { Element } from 'slate';
 
 type Props = RenderElementProps & { element: Element | ParagraphElementDef };

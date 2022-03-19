@@ -1,6 +1,6 @@
 {
   "name": "@abc-map/abc-cli",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "license": "AGPL-3.0-or-later",
   "files": [
@@ -18,13 +18,13 @@
     "watch": "tsc --watch | sed -u 's/\\x1Bc//g'"
   },
   "dependencies": {
-    "fast-glob": "^3.2.7",
+    "fast-glob": "^3.2.11",
     "lerna": "^4.0.0",
     "loglevel": "^1.8.0",
-    "sort-package-json": "^1.53.1",
+    "sort-package-json": "^1.54.0",
     "source-map-support": "^0.5.21",
-    "verdaccio": "^5.4.0",
-    "wait-on": "^6.0.0"
+    "verdaccio": "^5.8.0",
+    "wait-on": "^6.0.1"
   },
   "devDependencies": {
     "@types/chai": "^4.3.0",

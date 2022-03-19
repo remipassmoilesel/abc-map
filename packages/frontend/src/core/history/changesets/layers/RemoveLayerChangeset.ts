@@ -25,16 +25,13 @@ export class RemoveLayerChangeset extends Changeset {
   public static create(layer: LayerWrapper) {
     const { geo } = getServices();
     const map = geo.getMainMap();
-    return new RemoveLayerChangeset(map, layer);
+
+    const index = map.getLayers().findIndex((lay) => lay.getId() === layer.getId());
+    return new RemoveLayerChangeset(map, layer, index);
   }
 
-  constructor(private map: MapWrapper, private layer: LayerWrapper) {
+  constructor(private map: MapWrapper, private layer: LayerWrapper, private index: number) {
     super();
-  }
-
-  public async undo(): Promise<void> {
-    this.map.addLayer(this.layer);
-    this.map.setActiveLayer(this.layer);
   }
 
   public async apply(): Promise<void> {
@@ -45,5 +42,10 @@ export class RemoveLayerChangeset extends Changeset {
     if (layers.length) {
       this.map.setActiveLayer(layers[layers.length - 1]);
     }
+  }
+
+  public async undo(): Promise<void> {
+    this.map.addLayer(this.layer, this.index);
+    this.map.setActiveLayer(this.layer);
   }
 }

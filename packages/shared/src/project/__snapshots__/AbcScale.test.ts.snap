@@ -1,0 +1,8 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AbcScale should not change without migration 1`] = `
+Object {
+  "x": 123,
+  "y": 456,
+}
+`;

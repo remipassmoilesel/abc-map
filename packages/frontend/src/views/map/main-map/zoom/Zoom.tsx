@@ -19,20 +19,28 @@
 import { useCallback } from 'react';
 import { FaIcon } from '../../../../components/icon/FaIcon';
 import { IconDefs } from '../../../../components/icon/IconDefs';
-import { useServices } from '../../../../core/useServices';
 import { easeOut } from 'ol/easing';
 import { WithTooltip } from '../../../../components/with-tooltip/WithTooltip';
 import { prefixedTranslation } from '../../../../i18n/i18n';
 import Cls from './Zoom.module.scss';
+import { MapWrapper } from '../../../../core/geo/map/MapWrapper';
 
 const t = prefixedTranslation('MapView:MainMap.');
 
-export function Zoom() {
-  const { geo } = useServices();
+interface Props {
+  map: MapWrapper;
+}
+
+/**
+ * This component allows user to zoom on map with two buttons, "+" and "-".
+ * @constructor
+ */
+export function Zoom(props: Props) {
+  const { map } = props;
 
   const zoom = useCallback(
     (delta: number) => {
-      const view = geo.getMainMap().unwrap().getView();
+      const view = map.unwrap().getView();
       if (!view) {
         return;
       }
@@ -51,7 +59,7 @@ export function Zoom() {
         });
       }
     },
-    [geo]
+    [map]
   );
 
   const handleZoomOut = useCallback(() => {

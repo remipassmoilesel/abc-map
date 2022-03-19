@@ -21,16 +21,14 @@ import { I18nList, I18nText } from './I18n';
 
 describe('I18n', () => {
   it('changes on I18nText require data migration', () => {
-    const witness = '{"language":"fr","text":"Salut"}';
     const actual: I18nText = { language: Language.French, text: 'Salut' };
 
-    expect(JSON.stringify(actual)).toEqual(witness);
+    expect(actual).toMatchSnapshot();
   });
 
   it('changes on I18nList require data migration', () => {
-    const witness = '{"language":"fr","text":["Salut"]}';
     const actual: I18nList = { language: Language.French, text: ['Salut'] };
 
-    expect(JSON.stringify(actual)).toEqual(witness);
+    expect(actual).toMatchSnapshot();
   });
 });

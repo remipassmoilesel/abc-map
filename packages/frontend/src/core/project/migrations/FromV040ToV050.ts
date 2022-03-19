@@ -18,7 +18,7 @@
 
 import { AbcFile, AbcLayout, AbcProjectManifest, AbcProjectMetadata, LayoutFormats, Logger } from '@abc-map/shared';
 import { MigratedProject, ProjectMigration } from './typings';
-import { LayoutFormat040 } from './old-typings/project-040';
+import { LayoutFormat040 } from './old-typings/040-project';
 import semver from 'semver';
 
 const NEXT = '0.5.0';
@@ -54,7 +54,7 @@ export class FromV040ToV050 implements ProjectMigration {
     return semver.lt(version, NEXT);
   }
 
-  public async migrate(manifest: AbcProjectManifest, files: AbcFile[]): Promise<MigratedProject> {
+  public async migrate(manifest: AbcProjectManifest, files: AbcFile<Blob>[]): Promise<MigratedProject> {
     const layouts: AbcLayout[] = manifest.layouts.map((layout) => {
       // There was a mistake in migrations, some projects were migrated without version upgrade
       if (layout.format.id) {

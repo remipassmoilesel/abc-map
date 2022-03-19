@@ -1,6 +1,7 @@
 {
   "name": "@abc-map/server",
-  "version": "0.1.0",
+  "version": "1.0.0",
+  "private": true,
   "license": "AGPL-3.0-or-later",
   "main": "build/main.js",
   "files": [
@@ -21,7 +22,7 @@
     "watch": "tsc --watch | sed -u 's/\\x1Bc//g'"
   },
   "dependencies": {
-    "@abc-map/shared": "0.1.0",
+    "@abc-map/shared": ">1.0.0-rc",
     "accept-language-parser": "^1.5.0",
     "ajv": "8.8.2",
     "bson": "^4.6.0",

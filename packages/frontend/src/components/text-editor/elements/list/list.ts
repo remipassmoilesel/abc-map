@@ -18,7 +18,7 @@
 
 import { Logger } from '@abc-map/shared';
 import { Editor, Element, Transforms } from 'slate';
-import { ListElement } from '../../typings';
+import { ListElement } from '@abc-map/shared';
 import { prefixedTranslation } from '../../../../i18n/i18n';
 
 const logger = Logger.get('list.ts');

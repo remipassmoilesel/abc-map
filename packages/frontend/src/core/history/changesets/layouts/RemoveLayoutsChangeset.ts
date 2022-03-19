@@ -24,21 +24,31 @@ import { Logger } from '@abc-map/shared';
 
 const logger = Logger.get('RemoveLayoutsChangeset');
 
+interface RemoveLayoutOperation {
+  layout: AbcLayout;
+  index: number;
+}
+
 export class RemoveLayoutsChangeset extends Changeset {
-  public static create(layouts: AbcLayout[]) {
+  public static create(toRemove: AbcLayout[]) {
     const { project } = getServices();
-    return new RemoveLayoutsChangeset(project, layouts);
+    const layouts = project.getLayouts();
+    const operations: RemoveLayoutOperation[] = toRemove.map((lay) => ({ layout: lay, index: layouts.findIndex((l) => l.id === lay.id) }));
+    return new RemoveLayoutsChangeset(project, operations);
   }
 
-  private layouts: AbcLayout[];
+  private operations: RemoveLayoutOperation[];
 
-  constructor(private project: ProjectService, layouts: AbcLayout[]) {
+  constructor(private project: ProjectService, operations: RemoveLayoutOperation[]) {
     super();
-    this.layouts = layouts.slice();
+    if (!operations.length) {
+      throw new Error('List of operations cannot be empty');
+    }
+    this.operations = operations;
   }
 
   public async apply(): Promise<void> {
-    this.project.removeLayouts(this.layouts.map((lay) => lay.id));
+    this.project.removeLayouts(this.operations.map((op) => op.layout.id));
 
     const layouts = this.project.getLayouts();
     if (layouts.length) {
@@ -47,11 +57,9 @@ export class RemoveLayoutsChangeset extends Changeset {
   }
 
   public async undo(): Promise<void> {
-    this.project.addLayouts(this.layouts);
+    this.operations.forEach((op) => this.project.addLayout(op.layout, op.index));
 
-    const layouts = this.project.getLayouts();
-    if (layouts.length) {
-      this.project.setActiveLayout(layouts[layouts.length - 1].id);
-    }
+    const last = this.operations[this.operations.length - 1].layout;
+    this.project.setActiveLayout(last.id);
   }
 }
