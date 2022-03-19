@@ -20,7 +20,7 @@ import { projectReducer } from './reducer';
 import { ProjectActions } from './actions';
 import { ProjectState } from './state';
 import { TestHelper } from '../../utils/test/TestHelper';
-import { AbcLayout, AbcLegendItem, AbcSharedView, AbcView, LegendDisplay } from '@abc-map/shared';
+import { AbcLayout, AbcSharedView, AbcView } from '@abc-map/shared';
 import { deepFreeze } from '../../utils/deepFreeze';
 
 describe('Project reducer', function () {
@@ -34,12 +34,6 @@ describe('Project reducer', function () {
       },
       mainView: {
         ...TestHelper.sampleView(),
-      },
-      legend: {
-        display: LegendDisplay.BottomRightCorner,
-        items: [TestHelper.sampleLegendItem()],
-        width: 800,
-        height: 600,
       },
       layouts: {
         list: [TestHelper.sampleLayout()],
@@ -75,6 +69,32 @@ describe('Project reducer', function () {
 
     // Assert
     expect(state.metadata.name).toEqual('New name');
+  });
+
+  describe('AddLayout', () => {
+    it('without index', () => {
+      // Prepare
+      const layout = TestHelper.sampleLayout();
+
+      // Act
+      const state = projectReducer(initialState, ProjectActions.addLayout(layout));
+
+      // Assert
+      expect(state.layouts.list.length).toEqual(2);
+      expect(state.layouts.list[1]).toEqual(layout);
+    });
+
+    it('with index', () => {
+      // Prepare
+      const layout = TestHelper.sampleLayout();
+
+      // Act
+      const state = projectReducer(initialState, ProjectActions.addLayout(layout, 0));
+
+      // Assert
+      expect(state.layouts.list.length).toEqual(2);
+      expect(state.layouts.list[0]).toEqual(layout);
+    });
   });
 
   it('AddLayouts', () => {
@@ -142,79 +162,6 @@ describe('Project reducer', function () {
 
     // Assert
     expect(state.layouts.activeId).toEqual(layout.id);
-  });
-
-  it('AddLegendItems', () => {
-    // Prepare
-    const item = TestHelper.sampleLegendItem();
-    const legendId = initialState.sharedViews.list[0].legend.id;
-
-    // Act
-    const state = projectReducer(initialState, ProjectActions.addLegendItems(legendId, [item]));
-
-    // Assert
-    expect(state.sharedViews.list[0].legend.items[2]).toEqual(item);
-  });
-
-  it('UpdateLegendItem', () => {
-    // Prepare
-    const legend = initialState.sharedViews.list[0].legend;
-    const item: AbcLegendItem = {
-      ...legend.items[0],
-      text: 'Test text',
-    };
-
-    // Act
-    const state = projectReducer(initialState, ProjectActions.updateLegendItem(legend.id, item));
-
-    // Assert
-    expect(state.sharedViews.list[0].legend.items[0].text).toEqual('Test text');
-  });
-
-  it('SetLegendSize', () => {
-    // Act
-    const legendId = initialState.sharedViews.list[0].legend.id;
-    const state = projectReducer(initialState, ProjectActions.setLegendSize(legendId, 3000, 4000));
-
-    // Assert
-    expect(state.sharedViews.list[0].legend.width).toEqual(3000);
-    expect(state.sharedViews.list[0].legend.height).toEqual(4000);
-  });
-
-  it('SetLegendDisplay', () => {
-    // Act
-    const legendId = initialState.sharedViews.list[0].legend.id;
-    const state = projectReducer(initialState, ProjectActions.setLegendDisplay(legendId, LegendDisplay.BottomLeftCorner));
-
-    // Assert
-    expect(state.sharedViews.list[0].legend.display).toEqual(LegendDisplay.BottomLeftCorner);
-  });
-
-  it('DeleteLegendItem', () => {
-    // Prepare
-    const legend = initialState.sharedViews.list[0].legend;
-    const item = legend.items[0];
-
-    // Act
-    const state = projectReducer(initialState, ProjectActions.deleteLegendItem(legend.id, item));
-
-    // Assert
-    expect(state.sharedViews.list[0].legend.items.length).toEqual(1);
-  });
-
-  it('SetLegendItemIndex', () => {
-    // Prepare
-    const legend = initialState.sharedViews.list[0].legend;
-    const item1 = legend.items[0];
-    const item2 = TestHelper.sampleLegendItem();
-    let state = projectReducer(initialState, ProjectActions.addLegendItems(legend.id, [item2]));
-
-    // Act
-    state = projectReducer(state, ProjectActions.setLegendItemIndex(legend.id, item2, 0));
-
-    // Assert
-    expect(state.sharedViews.list[0].legend.items[0].id).toEqual(item2.id);
-    expect(state.sharedViews.list[0].legend.items[1].id).toEqual(item1.id);
   });
 
   it('AddSharedViews', () => {

@@ -20,10 +20,6 @@ import { WmsDefinitionManifest } from './WmsDefinitionManifest';
 
 describe('WmsDefinitionManifest', () => {
   it('should not change without datastore migration', () => {
-    /* eslint-disable */
-    const witness = "{\"version\":\"version\",\"wms\":{\"urls\":[\"urls\"],\"remoteLayerName\":\"remoteLayerName\",\"projection\":{\"name\":\"projection\"},\"extent\":[1,2,3,4],\"auth\":{\"username\":\"username\",\"password\":\"password\"},\"prompt\":[{\"name\":\"name\",\"type\":\"string\",\"description\":[{\"language\":\"fr\",\"text\":\"description\"},{\"language\":\"en\",\"text\":\"description\"}]}]}}";
-    /* eslint-enable */
-
     const manifest: WmsDefinitionManifest = {
       version: 'version',
       wms: {
@@ -48,6 +44,6 @@ describe('WmsDefinitionManifest', () => {
       },
     };
 
-    expect(JSON.stringify(manifest)).toEqual(witness);
+    expect(manifest).toMatchSnapshot();
   });
 });

@@ -109,9 +109,6 @@ describe('StorePersistence', () => {
           'menu-1': true,
           'menu-2': false,
         },
-        floatingButtons: {
-          'button-1': [1, 1],
-        },
         informations: {
           sharedMapAlpha: true,
         },
@@ -190,9 +187,6 @@ describe('StorePersistence', () => {
         sideMenu: {
           'menu-1': true,
           'menu-2': false,
-        },
-        floatingButtons: {
-          'button-1': [1, 1],
         },
         informations: {
           sharedMapAlpha: true,

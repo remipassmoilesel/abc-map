@@ -9,6 +9,9 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'build'),
     filename: 'index.js',
+    // Absolute public path is needed for ressources
+    publicPath: '/',
+    assetModuleFilename: 'static/documentation-assets/[name]-[hash][ext][query]',
     library: {
       name: 'documentation',
       type: 'umd',
@@ -31,8 +34,8 @@ module.exports = {
         ],
       },
       {
-        test: /\.(png|jpe?g|gif)$/i,
-        type: 'asset/inline',
+        test: /\.(png|jpe?g|gif|mp4)$/i,
+        type: 'asset/resource',
       },
       {
         test: /\.tsx?$/,

@@ -26,10 +26,9 @@
   height: 2.7rem;
   width: 2.7rem;
 
-  background-color: rgba(white, 0.8);
   border-radius: $border-radius;
   border: solid 0.1rem $control-color;
-
+  background-color: rgba(white, 0.9);
   box-shadow: $box-shadow;
 
   .icon {
@@ -37,7 +36,7 @@
   }
 
   &:hover {
-    background-color: $control-color-active;
+    background-color: $control-color;
 
     .icon {
       color: white;

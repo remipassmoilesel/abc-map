@@ -17,7 +17,6 @@
  */
 
 import { SimplePropertiesMap } from '../geo/features/FeatureWrapper';
-import { StyleCacheEntry } from '../geo/styles/StyleCache';
 import { PromptDefinition } from './PromptDefinition';
 import { VariableMap } from '../utils/variableExpansion';
 
@@ -36,10 +35,8 @@ export enum ModalEventType {
   RegistrationClosed = 'RegistrationClosed',
   ShowPasswordLost = 'ShowPasswordLost',
   PasswordLostClosed = 'PasswordLostClosed',
-  ShowLegendSymbolPicker = 'ShowLegendSymbolPicker',
   ShowTextFeedback = 'ShowTextFeedback',
   TextFeedbackClosed = 'TextFeedbackClosed',
-  LegendSymbolPickerClosed = 'LegendSymbolPickerClosed',
   ShowLongOperationModal = 'ShowLongOperationModal',
   LongOperationModalClosed = 'LongOperationModalClosed',
   ShowConfirmation = 'ShowConfirmation',
@@ -128,10 +125,6 @@ export interface PasswordLostClosedEvent {
   status: ModalStatus;
 }
 
-export interface ShowLegendSymbolPicker {
-  type: ModalEventType.ShowLegendSymbolPicker;
-}
-
 export interface ShowTextFeedback {
   type: ModalEventType.ShowTextFeedback;
 }
@@ -139,12 +132,6 @@ export interface ShowTextFeedback {
 export interface TextFeedbackClosed {
   type: ModalEventType.TextFeedbackClosed;
   status: ModalStatus;
-}
-
-export interface LegendSymbolPickerClosedEvent {
-  type: ModalEventType.LegendSymbolPickerClosed;
-  status: ModalStatus;
-  style?: StyleCacheEntry;
 }
 
 export interface ShowLongOperationModal {
@@ -195,10 +182,8 @@ export declare type ModalEvent =
   | RegistrationClosedEvent
   | ShowPasswordLostModal
   | PasswordLostClosedEvent
-  | ShowLegendSymbolPicker
   | ShowTextFeedback
   | TextFeedbackClosed
-  | LegendSymbolPickerClosedEvent
   | ShowLongOperationModal
   | LongOperationModalClosedEvent
   | ShowConfirmation

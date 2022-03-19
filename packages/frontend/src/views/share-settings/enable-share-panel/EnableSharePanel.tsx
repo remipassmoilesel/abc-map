@@ -28,7 +28,6 @@ import { InformationModal } from './information-modal/InformationModal';
 import { useSaveProjectOnline } from '../../../core/project/useSaveProjectOnline';
 import { ProjectStatus } from '../../../core/project/ProjectStatus';
 import { nanoid } from 'nanoid';
-import { LegendFactory } from '../../../core/project/LegendFactory';
 
 const logger = Logger.get('EnableSharePanel.tsx');
 
@@ -55,7 +54,7 @@ export function EnableSharePanel() {
         .getLayers()
         .map((layer) => ({ layerId: layer.getId(), visible: true }))
         .filter((st): st is LayerState => !!st.layerId);
-      project.addSharedViews([{ id: viewId, title: t('Main_view'), view: mainMap.getView(), layers, legend: LegendFactory.newEmptyLegend() }]);
+      project.addSharedViews([{ id: viewId, title: t('Main_view'), view: mainMap.getView(), layers }]);
       project.setActiveSharedView(viewId);
     }
 

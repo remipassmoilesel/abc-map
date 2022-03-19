@@ -18,7 +18,7 @@
 
 /*
 
-This file analyze dependencies sizes and display a graph.
+This file analyzes dependencies and display a graph.
 
 */
 

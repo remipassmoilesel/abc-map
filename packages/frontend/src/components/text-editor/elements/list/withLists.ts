@@ -17,7 +17,7 @@
  */
 
 import { Editor, Element, Range, Transforms } from 'slate';
-import { ListElement, ListItemElement, ParagraphElement } from '../../typings';
+import { ListElement, ListItemElement, ParagraphElement } from '@abc-map/shared';
 
 export const withLists = (editor: Editor) => {
   const { insertBreak } = editor;

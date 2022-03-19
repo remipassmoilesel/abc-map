@@ -17,7 +17,7 @@
  */
 
 import { Editor, Transforms } from 'slate';
-import { VideoElement } from '../../typings';
+import { VideoElement } from '@abc-map/shared';
 
 export const video = {
   create(editor: Editor, url: string) {

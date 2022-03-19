@@ -35,7 +35,7 @@ export class FromV050ToV060 implements ProjectMigration {
     return semver.lt(version, NEXT);
   }
 
-  public async migrate(manifest: AbcProjectManifest, files: AbcFile[]): Promise<MigratedProject> {
+  public async migrate(manifest: AbcProjectManifest, files: AbcFile<Blob>[]): Promise<MigratedProject> {
     return {
       manifest: {
         ...manifest,

@@ -20,8 +20,7 @@ import { ArtefactType } from './ArtefactType';
 
 describe('ArtefactType', function () {
   it('should not change without migration', () => {
-    const witness = '{"BaseMap":"basemap","Vector":"vector"}';
-    expect(JSON.stringify(ArtefactType)).toEqual(witness);
+    expect(ArtefactType).toMatchSnapshot();
   });
 
   // Types are used for sorts in mongodb, and we want to display basemap first.

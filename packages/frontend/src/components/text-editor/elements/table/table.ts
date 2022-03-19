@@ -17,7 +17,7 @@
  */
 
 import { Editor, Element, Transforms } from 'slate';
-import { TableElement, TableCellElement, TableRowElement } from '../../typings';
+import { TableElement, TableCellElement, TableRowElement } from '@abc-map/shared';
 import { Logger } from '@abc-map/shared';
 
 const logger = Logger.get('table.ts');
@@ -182,5 +182,5 @@ export const table = {
 };
 
 function newEmptyCell(): TableCellElement {
-  return { type: 'table-cell', children: [{ type: 'paragraph', children: [{ text: '          ' }] }] };
+  return { type: 'table-cell', children: [{ type: 'paragraph', children: [{ text: '' }] }] };
 }

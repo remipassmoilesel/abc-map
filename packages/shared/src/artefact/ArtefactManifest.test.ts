@@ -21,10 +21,6 @@ import { ArtefactManifest } from './ArtefactManifest';
 
 describe('ArtefactManifest', () => {
   it('should not change without datastore migration', () => {
-    /* eslint-disable */
-    const witness = '{"version":"version","artefact":{"name":[{"language":"fr","text":"name"},{"language":"en","text":"name"}],"type":"basemap","provider":"provider","description":[{"language":"fr","text":"description"},{"language":"en","text":"description"}],"keywords":[{"language":"fr","text":["keywords"]},{"language":"en","text":["keywords"]}],"license":"license","attributions":["attributions"],"link":"link","files":["file"],"previews":["previews"]}}';
-    /* eslint-enable */
-
     const manifest: ArtefactManifest = {
       version: 'version',
       artefact: {
@@ -50,6 +46,6 @@ describe('ArtefactManifest', () => {
       },
     };
 
-    expect(JSON.stringify(manifest)).toEqual(witness);
+    expect(manifest).toMatchSnapshot();
   });
 });

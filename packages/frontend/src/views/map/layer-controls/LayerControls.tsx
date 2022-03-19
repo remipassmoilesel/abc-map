@@ -230,7 +230,7 @@ class LayerControls extends Component<Props, State> {
 
     const remove = async () => {
       // We remove active layer
-      const cs = new RemoveLayerChangeset(map, layer);
+      const cs = RemoveLayerChangeset.create(layer);
       await cs.apply();
       history.register(HistoryKey.Map, cs);
 

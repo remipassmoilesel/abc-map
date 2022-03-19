@@ -73,7 +73,6 @@
       "Formats_not_supported": "Ces formats de fichiers ne sont pas supportés, aucune donnée n'a été importée",
       "Layer_does_not_load": "La couche '{{name}}' ne charge pas correctement. Vérifiez ses paramètres ou votre connexion internet.",
       "Layer_without_name": "*Couche sans nom*",
-      "Scale": "Echelle",
       "Attributions": "Attributions",
       "Zoom_in": "Zoom avant",
       "Zoom_out": "Zoom arrière",
@@ -241,6 +240,9 @@
       "This_project_is_public": "Ce projet est public",
       "Project_open": "Projet ouvert !"
     }
+  },
+  "Scale": {
+    "Scale": "Scale"
   },
   "ColorPicker": {
     "Line": "Trait",
@@ -552,41 +554,23 @@
     "You_must_create_layouts_first": "Vous devez d'abord créer une mise en page",
     "Layouts_menu": "Liste des mises en page",
     "Controls_menu": "Actions",
-    "Export_in_progress": "Export en cours ..."
+    "Export_in_progress": "Export en cours ...",
+    "New_text_frame": "Nouveau cadre de texte",
+    "Copy_text_frame": "Copier un cadre de texte ...",
+    "Add_scale": "Ajouter l'échelle",
+    "Remove_scale": "Supprimer l'échelle"
   },
-  "EditLegendControl": {
-    "Legend": "Légende",
-    "Edit_legend": "Editer la légende",
-    "No_legend": "Pas de légende",
-    "Top_left_corner": "En haut à gauche",
-    "Top_right_corner": "En haut à droite",
-    "Bottom_right_corner": "En bas à droite",
-    "Bottom_left_corner": "En bas à gauche"
+  "CopyTextFrameModal": {
+    "Copy_text_frame": "Copier un cadre de texte",
+    "No_frame_to_copy": "Pas de cadre de texte à copier. Créez en un !",
+    "Frames_from_layouts": "Cadres appartenant à des mises en page",
+    "Frame_X_from_layout_X": "Cadre {{frame}} de la mise en page {{layout}}"
   },
-  "MapLegendView": {
-    "Go_back": "Retour",
-    "Edit_legend": "Edition de la légende",
+  "FloatingTextFrame": {
+    "Full_screen_editor": "Editer en plein écran",
+    "Delete": "Supprimer ce cadre",
     "Preview": "Prévisualisation",
-    "Create_legend_for_your_map": "Créez une légende pour votre carte \uD83C\uDF0D",
-    "No_entry": "Aucune entrée, ajoutez-en une ⬇️",
-    "Width": "Largeur",
-    "Height": "Hauteur",
-    "pixels": "pixels",
-    "Drag_to_resize": "Déplacez ce coin pour redimensionner ⬆",
-    "Add_entry": "Ajouter une entrée",
-    "Change_symbol": "Changer le symbole",
-    "Delete": "Supprimer",
-    "Move_up": "Monter",
-    "Move_down": "Descendre",
-    "Entry_name": "Nom de l'élément: zone forestière, itinéraire balisé, ...",
-    "This_map_legend_cannot_be_found": "Cette légende est introuvable",
-    "Copy_another_legend": "Copier une autre légende",
-    "Page": "Page",
-    "View": "Vue",
-    "First_you_need_to_create_a_legend": "Vous devez d'abord créer une légende",
-    "Close": "Fermer",
-    "Layouts": "Mises en pages",
-    "Shared_views": "Vues partagées"
+    "Edit": "Editer sur place"
   },
   "FundingView": {
     "Support_AbcMap": "Soutenez d'Abc-Map",
@@ -669,7 +653,7 @@
     "Password_updated": "Mot de passe mis à jour !",
     "Your_password_is_incorrect": "Votre mot de passe est incorrect"
   },
-  "LegendSymbolPickerModal": {
+  "MapSymbolPickerModal": {
     "Select_symbol": "Sélectionnez un symbole",
     "Here_are_the_geometry_styles_used_on_the_map": "Voici les styles de géométries utilisés sur la carte",
     "Add_something_on_map_then_come_back": "Ajoutez quelque chose sur la carte et revenez ensuite"
@@ -838,6 +822,9 @@
     "Bold": "Gras",
     "Italic": "Italique",
     "Underline": "Souligné",
+    "Font_size": "Taille de la police",
+    "Normal_size": "Taille de base",
+    "Size_X": "Taille",
     "Clear_style": "Effacer le style",
     "Foreground_color": "Couleur de premier plan",
     "Background_color": "Couleur de d'arrière plan",
@@ -864,7 +851,9 @@
     "Small_image": "Petite image",
     "Medium_image": "Image moyenne",
     "Large_image": "Grande image",
+    "Map_symbols": "Symboles de la carte",
     "Insert_map_symbol": "Insérer un symbole de la carte",
+    "Insert_map_legend": "Insérer une légende",
     "Insert_photo_or_video": "Insérer une photo ou une vidéo",
     "Block_type": "Type de bloc",
     "Quote": "Citation",
@@ -881,7 +870,7 @@
     "Link": "Lien",
     "Create_or_edit_a_link": "Créer / éditer un lien",
     "Remove_a_link": "Supprimer un lien",
-    "This_video_cannot_be_embedded": "This video cannot be embedded, click here to see it in a new window."
+    "This_video_cannot_be_embedded": "Cette vidéo ne peut pas être intégrée, cliquez ici pour la voir dans une nouvelle fenêtre."
   },
   "core": {
     "ProjectFactory": {
@@ -945,6 +934,13 @@
       "EditText": "Editer le texte",
       "Select": "Sélectionner",
       "EditProperties": "Editer les propriétés"
+    },
+    "TextFrameFactory": {
+      "This_is_a_brand_new_text_frame": "Ceci est un tout nouveau cadre de texte !",
+      "You_can_edit_it_in_full_screen_editor": "Vous pouvez le modifier dans l'éditeur plein écran \uD83D\uDE0E",
+      "Or_you_can_edit_it_in_place": "Ou vous pouvez le modifier sur place.",
+      "You_can_move_and_resize_it": "Vous pouvez le déplacer et le redimensionner ✨",
+      "And_you_can_include_images_and_videos": "Et vous pouvez inclure des images et des vidéos \uD83C\uDFAC !"
     }
   }
 }

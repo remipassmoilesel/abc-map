@@ -23,21 +23,31 @@
 
   .menu {
     position: absolute;
-    top: 1rem;
-    left: 1rem;
+    top: 1em;
+    left: 1em;
+
+    width: 2em;
+    height: 2.5em;
+    background-color: white;
+    border-radius: $border-radius;
+
+    opacity: 0;
+    transition: opacity 400ms;
+  }
+
+  &:hover {
+    .menu {
+      opacity: 1;
+    }
   }
 
   .img {
     border: solid 1px $gray-400;
-    box-shadow: $box-shadow;
+    box-shadow: 0 0.5em 0.8em rgba($gray-600, 0.1);
     cursor: move;
 
     &.readonly {
       cursor: pointer;
-    }
-
-    &.selected {
-      border: solid 1px $primary;
     }
   }
 

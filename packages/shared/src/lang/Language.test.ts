@@ -20,9 +20,7 @@ import { Language } from './Language';
 
 describe('Language', () => {
   it('changes require data migration', () => {
-    const witness = '{"English":"en","French":"fr"}';
-
-    expect(JSON.stringify(Language)).toEqual(witness);
+    expect(Language).toMatchSnapshot();
   });
 
   it('all langs must be two letters lowercase', () => {

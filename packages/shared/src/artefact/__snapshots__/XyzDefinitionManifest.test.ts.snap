@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`XyzDefinitionManifest should not change without datastore migration 1`] = `
+Object {
+  "version": "version",
+  "xyz": Object {
+    "projection": Object {
+      "name": "projection",
+    },
+    "prompt": Array [
+      Object {
+        "description": Array [
+          Object {
+            "language": "fr",
+            "text": "description",
+          },
+          Object {
+            "language": "en",
+            "text": "description",
+          },
+        ],
+        "name": "name",
+        "type": "string",
+      },
+    ],
+    "url": "remoteLayerName",
+  },
+}
+`;

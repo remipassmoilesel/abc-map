@@ -24,10 +24,18 @@ import { IconDefs } from '../../../icon/IconDefs';
 import { WithTooltip } from '../../../with-tooltip/WithTooltip';
 import { prefixedTranslation } from '../../../../i18n/i18n';
 import { useEditor } from '../../useEditor';
+import clsx from 'clsx';
+import { ButtonMenu } from '../../../button-menu/ButtonMenu';
+import { Action } from '../../../button-menu/Action';
 
 const t = prefixedTranslation('TextEditor:');
 
-export function StyleControls() {
+interface Props {
+  className?: string;
+}
+
+export function StyleControls(props: Props) {
+  const { className } = props;
   const { editor } = useEditor();
 
   const handleClearStyle = useCallback(
@@ -62,28 +70,44 @@ export function StyleControls() {
     [editor]
   );
 
+  const handleSetSize = useCallback(
+    (event: MouseEvent, size: number) => {
+      event.preventDefault();
+      CustomEditor.size.set(editor, size);
+    },
+    [editor]
+  );
+
   return (
-    <div className={Cls.container}>
+    <div className={clsx(Cls.container, className)}>
       {/* Bold */}
       <WithTooltip title={t('Bold')} placement={'bottom'}>
-        <button onClick={handleToggleBold}>
+        <button onClick={handleToggleBold} data-cy={'bold'}>
           <FaIcon icon={IconDefs.faBold} />
         </button>
       </WithTooltip>
 
       {/* Italic */}
       <WithTooltip title={t('Italic')} placement={'bottom'}>
-        <button onClick={handleToggleItalic}>
+        <button onClick={handleToggleItalic} data-cy={'italic'}>
           <FaIcon icon={IconDefs.faItalic} />
         </button>
       </WithTooltip>
 
       {/* Underline */}
       <WithTooltip title={t('Underline')} placement={'bottom'}>
-        <button onClick={handleToggleUnderline}>
+        <button onClick={handleToggleUnderline} data-cy={'underline'}>
           <FaIcon icon={IconDefs.faUnderline} />
         </button>
       </WithTooltip>
+
+      {/* Size */}
+      <ButtonMenu label={t('Font_size')} icon={IconDefs.faTextHeight} closeOnClick={true}>
+        <Action label={t('Normal_size')} onClick={(ev) => handleSetSize(ev, 1)} />
+        <Action label={`${t('Size_X')} 2`} onClick={(ev) => handleSetSize(ev, 2)} />
+        <Action label={`${t('Size_X')} 3`} onClick={(ev) => handleSetSize(ev, 3)} />
+        <Action label={`${t('Size_X')} 4`} onClick={(ev) => handleSetSize(ev, 4)} />
+      </ButtonMenu>
 
       {/* Clear style */}
       <WithTooltip title={t('Clear_style')} placement={'bottom'}>

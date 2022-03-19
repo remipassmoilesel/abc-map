@@ -43,7 +43,7 @@ export function BlockSelector(props: Props) {
   const handleToggleListOl = useCallback(() => CustomEditor.list.create(editor, true), [editor]);
 
   return (
-    <ButtonMenu label={t('Block_type')} icon={IconDefs.faParagraph} className={className} data-testid={'block-selector'}>
+    <ButtonMenu label={t('Block_type')} icon={IconDefs.faParagraph} closeOnClick={true} className={className} data-testid={'block-selector'}>
       {/* Paragraph */}
       <Action label={t('Normal')} icon={IconDefs.faParagraph} onClick={handleSetParagraph} />
 

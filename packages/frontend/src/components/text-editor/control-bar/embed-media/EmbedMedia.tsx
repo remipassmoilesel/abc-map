@@ -25,10 +25,16 @@ import { EmbedMediaModal } from './EmbedMediaModal';
 import { CustomEditor } from '../../CustomEditor';
 import { WithTooltip } from '../../../with-tooltip/WithTooltip';
 import { prefixedTranslation } from '../../../../i18n/i18n';
+import clsx from 'clsx';
 
 const t = prefixedTranslation('TextEditor:');
 
-export function EmbedMedia() {
+interface Props {
+  className?: string;
+}
+
+export function EmbedMedia(props: Props) {
+  const { className } = props;
   const { editor } = useEditor();
   const [open, setOpen] = useState(false);
   const handleOpen = useCallback(() => setOpen(true), []);
@@ -51,7 +57,7 @@ export function EmbedMedia() {
   );
 
   return (
-    <div className={Cls.container}>
+    <div className={clsx(Cls.container, className)}>
       <WithTooltip title={t('Insert_photo_or_video')}>
         <button onClick={handleOpen}>
           <FaIcon icon={IconDefs.faPhotoVideo} />

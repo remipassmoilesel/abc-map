@@ -52,6 +52,7 @@
 }
 
 .toc {
+  font-size: 1.15rem;
   padding: 1.5rem;
 
   p {
@@ -60,12 +61,12 @@
   }
 
   a {
-    margin: 0 0 1rem 0;
+    margin: 0 0 1rem 2.5rem;
   }
 
   :global(.toc-section) {
-    font-size: 1.1rem;
-    margin-bottom: 1rem;
+    font-size: 1.6rem;
+    margin-bottom: 1.5rem;
   }
 }
 
@@ -136,6 +137,18 @@
 
     &:hover {
       text-decoration: underline !important;
+    }
+  }
+
+  video {
+    box-shadow: $box-shadow;
+    max-width: 50%;
+    border: solid 0.1rem $gray-400;
+    border-radius: $border-radius;
+    padding: 1rem;
+
+    @include media-breakpoint-down(xl) {
+      max-width: 100%;
     }
   }
 }

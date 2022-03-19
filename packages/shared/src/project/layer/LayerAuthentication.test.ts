@@ -23,10 +23,8 @@ import { LayerAuthentication } from './LayerAuthentication';
  */
 describe('LayerAuthentication', () => {
   it('should not change without migration', () => {
-    const witness = '{"username":"test-username","password":"test-password"}';
-
     const current: LayerAuthentication = { username: 'test-username', password: 'test-password' };
 
-    expect(JSON.stringify(current)).toEqual(witness);
+    expect(current).toMatchSnapshot();
   });
 });

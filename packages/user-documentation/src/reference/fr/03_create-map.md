@@ -8,7 +8,7 @@ Dans cette section, vous découvrirez les étapes de création d'une carte avec 
 2. Importer des données
 3. Ajouter et modifier des formes
 4. Appliquer un traitement de données
-5. Créer une légende
+5. Créer une légende et ajouter une échelle
 6. Mettre en page et exporter
 7. Sauvegarder ou exporter votre projet
 
@@ -21,18 +21,24 @@ Sur la page carte, conservez le fond de carte par défaut, ou choisissez un fond
 
 Vous pouvez utiliser:
 
-- Les couches prédéfinies (des couches préparées et configurées pour être utilisées facilement)
-- Les couches <a href="https://fr.wikipedia.org/wiki/Web_Map_Service" target="_blank">WMS</a>
-- Les couches <a href="https://fr.wikipedia.org/wiki/Web_Map_Tile_Service" target="_blank">WMTS</a>
-- Les couches <a href="https://developers.planet.com/planetschool/xyz-tiles-and-slippy-maps/">XYZ</a>
+- Des couches prédéfinies (des couches préparées et configurées pour être utilisées facilement)
+- Des couches <a href="https://fr.wikipedia.org/wiki/Web_Map_Service" target="_blank">WMS</a>
+- Des couches <a href="https://fr.wikipedia.org/wiki/Web_Map_Tile_Service" target="_blank">WMTS</a>
+- Des couches <a href="https://developers.planet.com/planetschool/xyz-tiles-and-slippy-maps/">XYZ</a>
+
+<video controls src="./assets/add-predefined-layer.mp4" preload="metadata"></video>
 
 ### Quelle couche choisir ?
 
 Essayez tout d'abord les `couches prédéfinies`, ce sont les plus simples à utiliser.
 
+Vous pouvez aussi importer des fonds de carte à partir du magasin de données.
+
 Si vous ne trouvez pas votre bonheur, utilisez votre moteur de recherche préféré pour trouver alternative.
 Essayez par exemple de rechercher <a href="https://duckduckgo.com/?q=couche+wms+france&t=h_&ia=web" target="_blank">"couche wms france"</a>. Vous devrez ensuite remplir le formulaire d'ajout de couche,
 généralement avec une URL et des identifiants fournis par le propriétaire des données.
+
+<video controls src="./assets/add-datastore-layer.mp4" preload="metadata"></video>
 
 ## 2. Importer des données
 
@@ -43,15 +49,12 @@ Vous pouvez importer des données de plusieurs manières:
 - En cliquant sur le contrôle d'import de données de la page `Carte`, puis en sélectionnant des fichiers de
   votre ordinateur
 
+<video controls src="./assets/import-by-drop.mp4" preload="metadata"></video>
+
 ## 3. Ajouter et modifier des formes
 
 Utilisez les outils de dessin pour créer ou modifier des géométries et leurs propriétés. Le fonctionnement de chaque outil  
 est expliqué dans son aide respective.
-
-<figure>
-    <img src="../assets/drawing-tool-help_fr.png" alt="Aide de l'outil"/>
-    <figcaption>Aide de l'outil</figcaption>
-</figure>
 
 Gardez en tête que:
 
@@ -59,19 +62,24 @@ Gardez en tête que:
 - Chaque outil ne modifie que son type de géométrie associé: l'outil polygone ne modifie que les polygones, l'outil point  
   ne modifie que les points, ...
 
+<video controls src="./assets/create-points.mp4" preload="metadata"></video>
+
 ## 4. Appliquer un traitement de données
 
 Sur la page "Traitement de données", vous pouvez appliquer un traitement de données. Les traitements sont expliquées
 sur leurs pages correspondantes.
 
-## 5. Créer une légende
+<video controls src="./assets/color-gradients.mp4" preload="metadata"></video>
 
-Sur la page "Mise en page", cliquez sur "Editer la légende".
+## 5. Créer une légende et ajouter une échelle
+
+Sur la page "Mise en page", cliquez sur "Créer une nouvelle page A4" puis sur "Ajouter un cadre de texte".
+
+Un cadre apparait, vous pouvez le redimensionner, ajouter des images ou documenter vos symboles.
 
 Ajoutez un titre et une description pour chaque forme utilisée sur votre carte.
 
-**Par défaut la légende n'est pas affichée.** Sur la page `Mise en page` sélectionnez la position de légende que vous
-souhaitez pour afficher la légende.
+<video controls src="./assets/create-scale-legend.mp4" preload="metadata"></video>
 
 ## 6. Mettre en page et exporter
 
@@ -81,8 +89,12 @@ exportez-la au format `PDF` ou `PNG`:
 - Le format PDF permet de créer un document autonome, utilisable sur tout ordinateur ou smartphone
 - Le format PNG permet d'intégrer votre carte dans un document, par exemple dans un traitement de texte
 
+<video controls src="./assets/pdf-export.mp4" preload="metadata"></video>
+
 ## 7. Sauvegarder ou exporter votre projet
 
 Inscrivez-vous pour sauvegarder votre projet en ligne, c'est gratuit !
 
 Ou exportez votre projet pour l'enregistrer sur votre ordinateur. Vous pourrez le réimporter par la suite.
+
+<video controls src="./assets/export-project.mp4" preload="metadata"></video>

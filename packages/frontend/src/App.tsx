@@ -30,7 +30,6 @@ import LoginModal from './components/login-modal/LoginModal';
 import RegistrationModal from './components/registration-modal/RegistrationModal';
 import PasswordLostModal from './components/password-lost-modal/PasswordLostModal';
 import SetPasswordModal from './components/set-password-modal/SetPasswordModal';
-import LegendSymbolPickerModal from './components/legend-symbol-picker-modal/LegendSymbolPickerModal';
 import LongOperationModal from './components/long-operation-modal/LongOperationModal';
 import ConfirmationModal from './components/confirmation-modal/ConfirmationModal';
 import { withTranslation } from 'react-i18next';
@@ -52,13 +51,11 @@ const DataProcessingView = lazy(() => import('./views/data-processing/DataProces
 const ResetPasswordView = lazy(() => import('./views/reset-password/ResetPasswordView'));
 const MapView = lazy(() => import('./views/map/MapView'));
 const UserAccountView = lazy(() => import('./views/user-account/UserAccountView'));
-const MapLegendView = lazy(() => import('./views/map-legend/MapLegendView'));
 const LegalMentionsView = lazy(() => import('./views/legal-mentions/LegalMentionsView'));
 const FundingView = lazy(() => import('./views/funding/FundingView'));
 const SharedMapView = lazy(() => import('./views/shared-map/SharedMapView'));
 const ShareSettingsView = lazy(() => import('./views/share-settings/ShareSettingsView'));
 const DocumentationView = lazy(() => import('./views/documentation/DocumentationView'));
-const TextEditorView = lazy(() => import('./views/text-editor/TextEditorView'));
 
 const fullscreenRoutes = [Routes.sharedMap().raw()];
 
@@ -88,7 +85,6 @@ export function App() {
                 <Route exact path={Routes.dataStore().raw()} component={DataStoreView} />
                 <Route exact path={Routes.shareSettings().raw()} component={ShareSettingsView} />
                 <Route exact path={Routes.export().raw()} component={ExportView} />
-                <Route exact path={Routes.mapLegend().raw()} component={MapLegendView} />
                 <Route exact path={Routes.documentation().raw()} component={DocumentationView} />
                 <Route exact path={Routes.confirmAccount().raw()} component={ConfirmAccountView} />
                 <Route exact path={Routes.dataProcessing().raw()} component={DataProcessingView} />
@@ -96,7 +92,6 @@ export function App() {
                 <Route exact path={Routes.userAccount().raw()} component={UserAccountView} />
                 <Route exact path={Routes.legalMentions().raw()} component={LegalMentionsView} />
                 <Route exact path={Routes.funding().raw()} component={FundingView} />
-                <Route exact path={Routes.textEditor().raw()} component={TextEditorView} />
                 <Route path={'*'} component={NotFoundView} />
               </Switch>
             </Suspense>
@@ -107,7 +102,6 @@ export function App() {
           <EditPropertiesModal />
           <FeedbackModal />
           <FeedbackPopup />
-          <LegendSymbolPickerModal />
           <LoginModal />
           <LongOperationModal />
           <PasswordInputModal />

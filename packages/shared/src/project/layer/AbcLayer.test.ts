@@ -23,10 +23,6 @@ import { AbcPredefinedLayer, AbcVectorLayer, AbcWmsLayer, AbcXyzLayer, LayerType
  */
 describe('AbcLayer', () => {
   it('VectorLayer should not change without migration', () => {
-    /* eslint-disable */
-    const witness = '{"type":"Vector","metadata":{"id":"test-layer-id","name":"Test vector layer","active":true,"visible":true,"opacity":0.5,"type":"Vector"},"features":{"type":"FeatureCollection","bbox":[1,2,3,4],"features":[{"id":"feature-id","type":"Feature","bbox":[5,6,7,8],"properties":{"property1":"value1"},"geometry":{"type":"Point","coordinates":[9,10]}}]}}';
-    /* eslint-enable */
-
     const current: AbcVectorLayer = {
       type: LayerType.Vector,
       metadata: {
@@ -57,15 +53,10 @@ describe('AbcLayer', () => {
       },
     };
 
-    expect(JSON.stringify(current)).toEqual(witness);
+    expect(current).toMatchSnapshot();
   });
 
   it('PredefinedLayer should not change without migration', () => {
-    /* eslint-disable */
-    const layerWitness = '{"type":"Predefined","metadata":{"id":"test-layer-id","name":"Test predefined layer","active":true,"visible":true,"opacity":0.5,"type":"Predefined","model":"OSM"}}';
-    const modelsWitness = '"{\\"OSM\\":\\"OSM\\",\\"StamenToner\\":\\"StamenToner\\",\\"StamenTonerLite\\":\\"StamenTonerLite\\",\\"StamenTerrain\\":\\"StamenTerrain\\",\\"StamenWatercolor\\":\\"StamenWatercolor\\"}"';
-    /* eslint-enable */
-
     const currentLayer: AbcPredefinedLayer = {
       type: LayerType.Predefined,
       metadata: {
@@ -78,17 +69,12 @@ describe('AbcLayer', () => {
         model: PredefinedLayerModel.OSM,
       },
     };
-    const currentModels = JSON.stringify(PredefinedLayerModel);
 
-    expect(JSON.stringify(currentLayer)).toEqual(layerWitness);
-    expect(JSON.stringify(currentModels)).toEqual(modelsWitness);
+    expect(currentLayer).toMatchSnapshot();
+    expect(PredefinedLayerModel).toMatchSnapshot();
   });
 
   it('WMS layer should not change without migration', () => {
-    /* eslint-disable */
-    const layerWitness = '{"type":"Wms","metadata":{"id":"test-layer-id","name":"Test wms layer","active":true,"visible":true,"opacity":0.5,"type":"Wms","auth":{"username":"test-username","password":"test-password"},"extent":[1,1,1,1],"projection":{"name":"EPSG:4326"},"remoteLayerName":"test-remoteLayerName","remoteUrls":["test-remoteUrls"]}}';
-    /* eslint-enable */
-
     const currentLayer: AbcWmsLayer = {
       type: LayerType.Wms,
       metadata: {
@@ -109,14 +95,10 @@ describe('AbcLayer', () => {
       },
     };
 
-    expect(JSON.stringify(currentLayer)).toEqual(layerWitness);
+    expect(currentLayer).toMatchSnapshot();
   });
 
   it('XYZ layer should not change without migration', () => {
-    /* eslint-disable */
-    const layerWitness = '{"type":"Xyz","metadata":{"id":"test-layer-id","name":"Test wms layer","active":true,"visible":true,"opacity":0.5,"type":"Xyz","remoteUrl":"test-remoteUrl"}}';
-    /* eslint-enable */
-
     const currentLayer: AbcXyzLayer = {
       type: LayerType.Xyz,
       metadata: {
@@ -130,6 +112,6 @@ describe('AbcLayer', () => {
       },
     };
 
-    expect(JSON.stringify(currentLayer)).toEqual(layerWitness);
+    expect(currentLayer).toMatchSnapshot();
   });
 });

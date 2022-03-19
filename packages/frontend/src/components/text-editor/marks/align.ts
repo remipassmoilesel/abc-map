@@ -17,7 +17,7 @@
  */
 
 import { Editor, Element, Transforms } from 'slate';
-import { TextAlign } from '../typings';
+import { TextAlign } from '@abc-map/shared';
 
 export const align = {
   set(editor: Editor, align: TextAlign) {

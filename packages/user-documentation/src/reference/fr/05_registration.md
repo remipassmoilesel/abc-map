@@ -16,6 +16,8 @@ L'inscription est _facultative_, elle ne donne pas accès à plus de fonctionnal
 </ul>
 </div>
 
+<video controls src="./assets/register.mp4" preload="metadata"></video>
+
 ## Emails d'inscription
 
 Pour finaliser votre inscription vous devez cliquer sur un lien de confirmation envoyé par email.

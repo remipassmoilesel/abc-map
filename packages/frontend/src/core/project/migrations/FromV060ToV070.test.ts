@@ -19,9 +19,10 @@
 import { MigratedProject } from './typings';
 import { TestData } from './test-data/TestData';
 import { FromV060ToV070 } from './FromV060ToV070';
-import { AbcProjectManifest060 } from './old-typings/project-060';
+import { AbcProjectManifest060 } from './old-typings/060-project';
 import uniq from 'lodash/uniq';
 import { TestHelper } from '../../utils/test/TestHelper';
+import { AbcProjectManifest070 } from './old-typings/070-project';
 
 describe('FromV060ToV070', () => {
   let sampleProject: MigratedProject;
@@ -40,9 +41,10 @@ describe('FromV060ToV070', () => {
   it('migrate should work', async () => {
     // Act
     const result = await migration.migrate(sampleProject.manifest, sampleProject.files);
+    const manifest = result.manifest as AbcProjectManifest070;
 
     // Assert
-    expect((result.manifest as AbcProjectManifest060).legend).toBeUndefined();
+    expect((manifest as unknown as AbcProjectManifest060).legend).toBeUndefined();
 
     const expectedLegend = {
       id: '',
@@ -69,23 +71,23 @@ describe('FromV060ToV070', () => {
       ]),
     };
 
-    const layoutLegends = result.manifest.layouts.map((lay) => lay.legend);
+    const layoutLegends = manifest.layouts.map((lay) => lay.legend);
     expect(layoutLegends.length).toEqual(1);
     expect(layoutLegends[0].display).toEqual(expectedLegend.display);
     expect(layoutLegends[0].width).toEqual(expectedLegend.width);
     expect(layoutLegends[0].height).toEqual(expectedLegend.height);
     expect(TestHelper.comparableObjects(layoutLegends[0].items)).toEqual(TestHelper.comparableObjects(expectedLegend.items));
 
-    const viewLegends = result.manifest.sharedViews.map((lay) => lay.legend);
+    const viewLegends = manifest.sharedViews.map((lay) => lay.legend);
     expect(viewLegends.length).toEqual(1);
     expect(viewLegends[0].display).toEqual(expectedLegend.display);
     expect(viewLegends[0].width).toEqual(expectedLegend.width);
     expect(viewLegends[0].height).toEqual(expectedLegend.height);
     expect(TestHelper.comparableObjects(viewLegends[0].items)).toEqual(TestHelper.comparableObjects(expectedLegend.items));
 
-    expect(result.manifest.metadata.version).toEqual('0.7.0');
+    expect(manifest.metadata.version).toEqual('0.7.0');
 
-    const legends = result.manifest.layouts.map((lay) => lay.legend).concat(result.manifest.sharedViews.map((view) => view.legend));
+    const legends = manifest.layouts.map((lay) => lay.legend).concat(manifest.sharedViews.map((view) => view.legend));
     const ids = legends.flatMap((legend) => [legend.id, legend.items.map((item) => item.id)]);
     expect(uniq(ids)).toEqual(ids);
   });

@@ -16,6 +16,8 @@ Registration is _optional_, it does not give access to more features, it only al
 </ul>
 </div>
 
+<video controls src="./assets/register.mp4" preload="metadata"></video>
+
 ## Registration emails
 
 To complete your registration you must click on a confirmation link sent by email.

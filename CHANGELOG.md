@@ -2,7 +2,17 @@
 
 For the moment we use git hashes as version, since no one complained about it 👍
 
-## Rich text editor (XXXXXXXX 15/03/2022)
+## Better map legends and better exports (XXXXXX XX/03/2022)
+
+- Introduce notion of rich text frames: users can now add rich texts, pictures and videos to maps
+- Migration script to transform legends in text frames
+- Delete old notion of map legend
+- New static export: using html2canvas instead of our own custom soup
+- Users can now export line scales too
+- User documentation assets are handled as webpack resources now, not anymore as inline assets
+- Add firsts git screen capture in documentation
+
+## Rich text editor (1194f64d 15/03/2022)
 
 - Built with SlateJS
 - Note used for the moment, but will be used soon to improve map legends and in shared views

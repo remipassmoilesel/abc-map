@@ -26,14 +26,13 @@ import { prefixedTranslation } from '../../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
 import { FaIcon } from '../../../components/icon/FaIcon';
 import { IconDefs } from '../../../components/icon/IconDefs';
-import { Control, ScaleLine } from 'ol/control';
 import { Attributions } from './attributions/Attributions';
 import { Zoom } from './zoom/Zoom';
-import { WithTooltip } from '../../../components/with-tooltip/WithTooltip';
 import { MapWrapper } from '../../../core/geo/map/MapWrapper';
 import BaseEvent from 'ol/events/Event';
 import { DataReader } from '../../../core/data/DataReader';
 import { ReadStatus } from '../../../core/data/ReadResult';
+import { Scale } from '../../../components/scale/Scale';
 
 export const logger = Logger.get('MainMap.ts');
 
@@ -47,8 +46,6 @@ const t = prefixedTranslation('MapView:MainMap.');
 class MainMap extends Component<ServiceProps, State> {
   private map: MapWrapper;
   private mapRef = React.createRef<HTMLDivElement>();
-  private scaleRef = React.createRef<HTMLDivElement>();
-  private controls: Control[] = [];
 
   constructor(props: ServiceProps) {
     super(props);
@@ -66,14 +63,11 @@ class MainMap extends Component<ServiceProps, State> {
         <div ref={this.mapRef} data-cy={'main-map'} className={Cls.map} onDragOver={this.handleDragOver} />
 
         <div className={Cls.bottomBar}>
-          <div className={Cls.scale}>
-            <WithTooltip title={t('Scale')} placement={'top'}>
-              <div ref={this.scaleRef} />
-            </WithTooltip>
-          </div>
+          <Scale map={this.map} />
+
           <div className={Cls.controls}>
-            <Attributions />
-            <Zoom />
+            <Attributions map={this.map} />
+            <Zoom map={this.map} />
           </div>
         </div>
 
@@ -123,22 +117,13 @@ class MainMap extends Component<ServiceProps, State> {
 
     logger.info('Initializing map');
     const mapSupport = this.mapRef.current;
-    const scaleSupport = this.scaleRef.current;
-    if (!mapSupport || !scaleSupport) {
-      logger.error('Cannot mount map, div reference not ready', {
-        mapSupport,
-        scaleSupport,
-      });
+    if (!mapSupport) {
+      logger.error('Cannot mount map, div reference not ready', { mapSupport });
       return;
     }
 
     map.setTarget(mapSupport);
     map.addTileErrorListener(this.handleTileError);
-
-    const scale = new ScaleLine({ units: 'metric', target: scaleSupport });
-
-    this.controls = [scale];
-    this.controls.forEach((c) => map.unwrap().addControl(c));
 
     map.unwrap().on('error', this.handleMapError);
   }
@@ -148,8 +133,6 @@ class MainMap extends Component<ServiceProps, State> {
 
     map.setTarget(undefined);
     map.removeTileErrorListener(this.handleTileError);
-
-    this.controls.forEach((c) => map.unwrap().removeControl(c));
 
     map.unwrap().un('error', this.handleMapError);
   }

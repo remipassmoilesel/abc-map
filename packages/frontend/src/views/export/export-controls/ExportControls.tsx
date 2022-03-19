@@ -16,9 +16,8 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { ChangeEvent, Component, ReactNode } from 'react';
-import { AbcLayout, LayoutFormat, LayoutFormats, Logger } from '@abc-map/shared';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
+import React, { ChangeEvent, useCallback, useState } from 'react';
+import { AbcLayout, AbcTextFrame, LayoutFormat, LayoutFormats, Logger } from '@abc-map/shared';
 import { ExportFormat } from '../ExportFormat';
 import { prefixedTranslation } from '../../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
@@ -27,113 +26,161 @@ import HistoryControls from '../../../components/history-controls/HistoryControl
 import { HistoryKey } from '../../../core/history/HistoryKey';
 import { FaIcon } from '../../../components/icon/FaIcon';
 import { IconDefs } from '../../../components/icon/IconDefs';
-import { EditLegendControl } from '../../../components/edit-legend-control/EditLegendControl';
+import CopyTextFrameModal from '../../../components/copy-text-frame-modal/CopyTextFrameModal';
+import { TextFrameFactory } from '../../../core/project/TextFrameFactory';
+import { AbcScale } from '@abc-map/shared';
 
-const logger = Logger.get('LayoutControls.tsx', 'warn');
+const logger = Logger.get('ExportControls.tsx', 'warn');
 
-interface Props extends RouteComponentProps {
+interface Props {
   activeLayout?: AbcLayout;
   onFormatChanged: (f: LayoutFormat) => void;
   onNewLayout: () => void;
   onLayoutUp: () => void;
   onLayoutDown: () => void;
   onClearAll: () => void;
-  onEditLegend: () => void;
-  onExport: (f: ExportFormat) => void;
+  onAddTextFrame: (frame: AbcTextFrame) => void;
+  onExport: (format: ExportFormat) => void;
+  onAddScale: (scale: AbcScale) => void;
+  onRemoveScale: () => void;
 }
 
 const t = prefixedTranslation('ExportView:');
 
-class ExportControls extends Component<Props, {}> {
-  public render(): ReactNode {
-    const { activeLayout } = this.props;
-    const handleNewLayout = this.props.onNewLayout;
-    const handleLayoutUp = this.props.onLayoutUp;
-    const handleLayoutDown = this.props.onLayoutDown;
-    const handleClearAll = this.props.onClearAll;
-    const handleExport = this.props.onExport;
-    const handleEditLegend = this.props.onEditLegend;
+function ExportControls(props: Props) {
+  const {
+    activeLayout,
+    onNewLayout: handleNewLayout,
+    onLayoutUp: handleLayoutUp,
+    onLayoutDown: handleLayoutDown,
+    onClearAll: handleClearAll,
+    onExport: handleExport,
+    onAddTextFrame: handleAddTextFrame,
+    onFormatChanged,
+    onAddScale,
+    onRemoveScale,
+  } = props;
 
-    const formatOptions = LabeledLayoutFormats.All.map((fmt) => (
-      <option key={fmt.format.id} value={fmt.format.id}>
-        {t(fmt.i18nLabel)}
-      </option>
-    ));
+  const [copyFrameModal, showCopyFrameModal] = useState(false);
 
-    return (
-      <>
-        {/* Undo redo */}
-        <HistoryControls historyKey={HistoryKey.Export} />
+  const handleFormatChanged = useCallback(
+    (ev: ChangeEvent<HTMLSelectElement>) => {
+      const value = ev.target.value;
+      const format = LayoutFormats.All.find((fmt) => fmt.id === value);
+      if (!format) {
+        logger.error(`Format not found: ${value}`);
+        return;
+      }
 
-        {/* Change format */}
-        <div className={'control-block'}>
-          <div className={'mb-2'}>{t('Format')}:</div>
-          <select onChange={this.handleFormatChanged} value={activeLayout?.format?.id} className={'form-select mb-3'} data-cy={'format-select'}>
-            <option>...</option>
-            {formatOptions}
-          </select>
-        </div>
+      onFormatChanged(format);
+    },
+    [onFormatChanged]
+  );
 
-        {/* New layout, move layout, delete */}
-        <div className={'control-block'}>
-          <div className={'control-item'}>
-            <button onClick={handleNewLayout} className={'btn btn-link'} data-cy={'add-layout'}>
-              <FaIcon icon={IconDefs.faPlus} className={'mr-2'} />
-              {t('New_layout')}
-            </button>
-          </div>
-          <div className={'control-item'}>
-            <button onClick={handleLayoutUp} className={'btn btn-link'} data-cy={'layout-up'}>
-              <FaIcon icon={IconDefs.faArrowUp} className={'mr-2'} />
-              {t('Move_up')}
-            </button>
-          </div>
-          <div className={'control-item'}>
-            <button onClick={handleLayoutDown} className={'btn btn-link'} data-cy={'layout-down'}>
-              <FaIcon icon={IconDefs.faArrowDown} className={'mr-2'} />
-              {t('Move_Down')}
-            </button>
-          </div>
-          <div className={'control-item'}>
-            <button onClick={handleClearAll} className={'btn btn-link'} data-cy={'clear-all'}>
-              <FaIcon icon={IconDefs.faTrashAlt} className={'mr-2'} />
-              {t('Delete_all')}
-            </button>
-          </div>
-        </div>
+  const handleNewTextFrame = useCallback(() => handleAddTextFrame(TextFrameFactory.newFrame()), [handleAddTextFrame]);
 
-        {/* Legend */}
-        <EditLegendControl legendId={activeLayout?.legend.id} onEdit={handleEditLegend} />
+  const handleToggleCopyFrameModal = useCallback(() => showCopyFrameModal(!copyFrameModal), [copyFrameModal]);
 
-        {/* Export buttons */}
-        <div className={'control-block'}>
-          <div className={'control-item d-flex justify-content-center my-3'}>
-            <button onClick={() => handleExport(ExportFormat.PDF)} className={'btn btn-primary'} data-cy={'pdf-export'}>
-              <FaIcon icon={IconDefs.faDownload} className={'mr-2'} />
-              {t('PDF_export')}
-            </button>
-          </div>
-          <div className={'control-item d-flex justify-content-center mb-3'}>
-            <button onClick={() => handleExport(ExportFormat.PNG)} className={'btn btn-outline-primary'} data-cy={'png-export'}>
-              <FaIcon icon={IconDefs.faDownload} className={'mr-2'} />
-              {t('PNG_export')}
-            </button>
-          </div>
-        </div>
-      </>
-    );
-  }
+  const handleCopyFrameConfirm = useCallback((frame: AbcTextFrame) => handleAddTextFrame(frame), [handleAddTextFrame]);
 
-  private handleFormatChanged = (ev: ChangeEvent<HTMLSelectElement>) => {
-    const value = ev.target.value;
-    const format = LayoutFormats.All.find((fmt) => fmt.id === value);
-    if (!format) {
-      logger.error(`Format not found: ${value}`);
-      return;
+  const handleToggleScale = useCallback(() => {
+    if (activeLayout?.scale) {
+      onRemoveScale();
+    } else {
+      onAddScale({ x: 30, y: 30 });
     }
+  }, [activeLayout?.scale, onAddScale, onRemoveScale]);
 
-    this.props.onFormatChanged(format);
-  };
+  return (
+    <>
+      {/* Undo redo */}
+      <HistoryControls historyKey={HistoryKey.Export} />
+
+      {/* Change format */}
+      <div className={'control-block'}>
+        <div className={'mb-2'}>{t('Format')}:</div>
+        <select onChange={handleFormatChanged} value={activeLayout?.format?.id} className={'form-select mb-3'} data-cy={'format-select'}>
+          <option>...</option>
+          {LabeledLayoutFormats.All.map((fmt) => (
+            <option key={fmt.format.id} value={fmt.format.id}>
+              {t(fmt.i18nLabel)}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* New layout, move layout, delete */}
+      <div className={'control-block'}>
+        <div className={'control-item'}>
+          <button onClick={handleNewLayout} className={'btn btn-link'} data-cy={'add-layout'}>
+            <FaIcon icon={IconDefs.faPlus} className={'mr-2'} />
+            {t('New_layout')}
+          </button>
+        </div>
+        <div className={'control-item'}>
+          <button onClick={handleLayoutUp} disabled={!activeLayout} className={'btn btn-link'} data-cy={'layout-up'}>
+            <FaIcon icon={IconDefs.faArrowUp} className={'mr-2'} />
+            {t('Move_up')}
+          </button>
+        </div>
+        <div className={'control-item'}>
+          <button onClick={handleLayoutDown} disabled={!activeLayout} className={'btn btn-link'} data-cy={'layout-down'}>
+            <FaIcon icon={IconDefs.faArrowDown} className={'mr-2'} />
+            {t('Move_Down')}
+          </button>
+        </div>
+        <div className={'control-item'}>
+          <button onClick={handleClearAll} disabled={!activeLayout} className={'btn btn-link'} data-cy={'clear-all'}>
+            <FaIcon icon={IconDefs.faTrashAlt} className={'mr-2'} />
+            {t('Delete_all')}
+          </button>
+        </div>
+      </div>
+
+      {/* Text frames */}
+      <div className={'control-block'}>
+        <div className={'control-item'}>
+          <button onClick={handleNewTextFrame} disabled={!activeLayout} className={'btn btn-link'} data-cy={'create-text-frame'}>
+            <FaIcon icon={IconDefs.faFont} className={'mr-2'} />
+            {t('New_text_frame')}
+          </button>
+        </div>
+        <div className={'control-item'}>
+          <button onClick={handleToggleCopyFrameModal} disabled={!activeLayout} className={'btn btn-link'}>
+            <FaIcon icon={IconDefs.faCopy} className={'mr-2'} />
+            {t('Copy_text_frame')}
+          </button>
+        </div>
+
+        {copyFrameModal && <CopyTextFrameModal onConfirm={handleCopyFrameConfirm} onCancel={handleToggleCopyFrameModal} />}
+      </div>
+
+      {/* Scale */}
+      <div className={'control-block'}>
+        <div className={'control-item'}>
+          <button onClick={handleToggleScale} disabled={!activeLayout} className={'btn btn-link'}>
+            <FaIcon icon={IconDefs.faRulerHorizontal} className={'mr-2'} />
+            {activeLayout?.scale ? t('Remove_scale') : t('Add_scale')}
+          </button>
+        </div>
+      </div>
+
+      {/* Export buttons */}
+      <div className={'control-block'}>
+        <div className={'control-item d-flex justify-content-center my-3'}>
+          <button onClick={() => handleExport(ExportFormat.PDF)} className={'btn btn-primary'} data-cy={'pdf-export'}>
+            <FaIcon icon={IconDefs.faDownload} className={'mr-2'} />
+            {t('PDF_export')}
+          </button>
+        </div>
+        <div className={'control-item d-flex justify-content-center mb-3'}>
+          <button onClick={() => handleExport(ExportFormat.PNG)} className={'btn btn-outline-primary'} data-cy={'png-export'}>
+            <FaIcon icon={IconDefs.faDownload} className={'mr-2'} />
+            {t('PNG_export')}
+          </button>
+        </div>
+      </div>
+    </>
+  );
 }
-
-export default withTranslation()(withRouter(ExportControls));
+export default withTranslation()(ExportControls);

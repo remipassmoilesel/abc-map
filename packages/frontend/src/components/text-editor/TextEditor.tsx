@@ -17,10 +17,9 @@
  */
 
 import Cls from './TextEditor.module.scss';
-import React, { Ref, useCallback } from 'react';
+import React, { CSSProperties, useCallback, useEffect, useMemo, useState } from 'react';
 import { createEditor, Descendant } from 'slate';
-import { Slate, Editable, withReact, ReactEditor } from 'slate-react';
-import { useImperativeHandle, useState } from 'react';
+import { Editable, ReactEditor, Slate, withReact } from 'slate-react';
 import { renderElement, renderLeaf } from './render';
 import ControlBar from './control-bar/ControlBar';
 import { keyboardShortcuts } from './keyboardShortcuts';
@@ -29,26 +28,44 @@ import { withTables } from './elements/table/withTables';
 import { withVideos } from './elements/video/withVideos';
 import clsx from 'clsx';
 import { withImages } from './elements/image/withImages';
-import { EditorProvider } from './useEditor';
+import { EditorContext, EditorProvider } from './useEditor';
 import { withLists } from './elements/list/withLists';
 import { withLinks } from './elements/link/withLinks';
+import { TextFrameChild } from '@abc-map/shared';
+import { withTranslation } from 'react-i18next';
+import { withMapSymbol } from './elements/map-symbol/withMapSymbol';
 
 export interface Props {
+  value: TextFrameChild[];
+  onChange: (content: TextFrameChild[]) => void;
   readOnly?: boolean;
-  initialValue?: string;
   className?: string;
+  controlBar?: boolean;
+  ratio?: number;
+  'data-cy'?: string;
 }
 
-export interface TextEditorReference {
-  serialize(): string;
-}
+const baseFontSizeVmin = 1.5;
 
+/**
+ * Rich text editor, used in frames for static exports and shared map.
+ *
+ * This is component is not a pure controlled component.
+ *
+ * All styles and sizes that scales (e.g for exports) must be in 'em' unit, in order to scale.
+ *
+ * @param props
+ * @constructor
+ */
 // TODO: Setup nested tables
-// TODO: Insert legend symbols
-// TODO: Use "em" for sizes in order to scale editors for static exports
 // TODO: Add history wiring with HistoryService
-function TextEditor(props: Props, ref: Ref<TextEditorReference>) {
-  const { readOnly, initialValue, className } = props;
+// TODO: Disable videos for exports ?
+function TextEditor(props: Props) {
+  const { value, onChange, readOnly, className, controlBar: _controlBar, ratio: _ratio, 'data-cy': dataCy } = props;
+  const ratio = _ratio ?? 1;
+  const controlBar = _controlBar ?? true;
+
+  // Create editor
   const [editor] = useState(() => {
     // eslint-disable-next-line prettier/prettier
     return [
@@ -59,35 +76,46 @@ function TextEditor(props: Props, ref: Ref<TextEditorReference>) {
       withImages,
       withLists,
       withLinks,
+      withMapSymbol,
     ].reduce((editor, f) => f(editor), createEditor());
   });
 
-  const [value, setValue] = useState<Descendant[]>(() => {
-    // Editor must have a child in all cases
-    const defaultValue = [{ type: 'paragraph', children: [{ text: '' }] }];
-    return initialValue ? JSON.parse(initialValue) : defaultValue;
-  });
+  // We use a derived state as explained in slate documentation
+  // We must use a setState() and set children property of editor to update it correctly in all cases
+  const [derivedValue, setDerivedValue] = useState<Descendant[]>(() => value ?? [{ type: 'paragraph', children: [{ text: '' }] }]);
+  useEffect(() => {
+    editor.children = value;
+    setDerivedValue(value);
+  }, [editor, value]);
 
   // When user clicks on editor, we focus so he can start typing
   const handleClick = useCallback(() => ReactEditor.focus(editor), [editor]);
 
-  useImperativeHandle(ref, () => ({
-    // Serialization can be heavy, so we expose it as an imperative handle
-    serialize: () => JSON.stringify(editor.children),
-  }));
+  // Context returned by useEditor() hook
+  const context: EditorContext = useMemo(() => ({ readOnly: readOnly ?? false, editor, ratio }), [editor, readOnly, ratio]);
 
-  const context = { readOnly: readOnly ?? false, editor };
+  // We set font size according to ratio
+  // All children use 'em' units and will adapt styles according to this value
+  const style: CSSProperties = useMemo(() => ({ fontSize: `${baseFontSizeVmin * ratio}vmin` }), [ratio]);
 
   return (
-    <div className={clsx(Cls.textEditor, className)} onClick={handleClick}>
+    <div onClick={handleClick} style={style} className={clsx(Cls.textEditor, className)}>
       <EditorProvider value={context}>
-        {/* Control bar, visible only if readonly */}
-        {!readOnly && <ControlBar className={Cls.controlBar} />}
+        {/* Control bar, visible only if readonly not disabled */}
+        {!readOnly && controlBar && <ControlBar className={Cls.controlBar} />}
 
         {/* Editor, scrollable */}
-        <div className={Cls.editorContainer}>
-          <Slate editor={editor} value={value} onChange={(value) => setValue(value)}>
-            <Editable readOnly={readOnly} renderElement={renderElement} renderLeaf={renderLeaf} onKeyDown={keyboardShortcuts(editor)} data-testid={'editor'} />
+        <div className={clsx(Cls.editorContainer, readOnly && Cls.readOnly)}>
+          <Slate editor={editor} value={derivedValue} onChange={onChange}>
+            <Editable
+              spellCheck
+              autoFocus
+              readOnly={readOnly}
+              renderElement={renderElement}
+              renderLeaf={renderLeaf}
+              onKeyDown={keyboardShortcuts(editor)}
+              data-cy={dataCy}
+            />
           </Slate>
         </div>
       </EditorProvider>
@@ -95,4 +123,4 @@ function TextEditor(props: Props, ref: Ref<TextEditorReference>) {
   );
 }
 
-export default React.forwardRef<TextEditorReference, Props>(TextEditor);
+export default withTranslation()(TextEditor);

@@ -17,7 +17,7 @@
  */
 
 import { Editor, Path, Transforms } from 'slate';
-import { ImageElement } from '../../typings';
+import { ImageElement } from '@abc-map/shared';
 
 export const image = {
   create(editor: Editor, url: string) {

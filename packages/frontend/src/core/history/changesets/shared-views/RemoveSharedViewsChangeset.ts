@@ -21,21 +21,32 @@ import { ProjectService } from '../../../project/ProjectService';
 import { AbcSharedView } from '@abc-map/shared';
 import { getServices } from '../../../Services';
 
+interface RemoveViewOperation {
+  view: AbcSharedView;
+  index: number;
+}
+
 export class RemoveSharedViewsChangeset extends Changeset {
-  public static create(views: AbcSharedView[]) {
+  public static create(toRemove: AbcSharedView[]) {
     const { project } = getServices();
-    return new RemoveSharedViewsChangeset(project, views);
+    const views = project.getSharedViews();
+    const operations: RemoveViewOperation[] = toRemove.map((view) => ({ view, index: views.findIndex((v) => v.id === view.id) }));
+    return new RemoveSharedViewsChangeset(project, operations);
   }
 
-  private views: AbcSharedView[];
+  private operations: RemoveViewOperation[];
 
-  constructor(private project: ProjectService, views: AbcSharedView[]) {
+  constructor(private project: ProjectService, operations: RemoveViewOperation[]) {
     super();
-    this.views = views.slice();
+    if (!operations.length) {
+      throw new Error('Operation list cannot be empty');
+    }
+
+    this.operations = operations;
   }
 
   public async apply(): Promise<void> {
-    this.project.removeSharedViews(this.views);
+    this.project.removeSharedViews(this.operations.map((op) => op.view));
 
     const views = this.project.getSharedViews();
     if (views.length) {
@@ -44,11 +55,9 @@ export class RemoveSharedViewsChangeset extends Changeset {
   }
 
   public async undo(): Promise<void> {
-    this.project.addSharedViews(this.views);
+    this.operations.forEach((op) => this.project.addSharedView(op.view, op.index));
 
-    const views = this.project.getSharedViews();
-    if (views.length) {
-      this.project.setActiveSharedView(views[views.length - 1].id);
-    }
+    const last = this.operations[this.operations.length - 1].view;
+    this.project.setActiveSharedView(last.id);
   }
 }

@@ -38,14 +38,14 @@ function ControlBar(props: Props) {
 
   return (
     <div className={clsx(Cls.controlBar, className)}>
-      <BlockSelector className={'mr-4'} />
-      <StyleControls />
+      <BlockSelector className={'mr-2'} />
+      <StyleControls className={'mr-2'} />
       <ColorSelector className={'mx-4'} />
-      <AlignmentSelector />
-      <TableControls />
-      <EmbedMedia />
-      <LinkControls />
-      <MapSymbol />
+      <AlignmentSelector className={'mr-2'} />
+      <TableControls className={'mr-2'} />
+      <EmbedMedia className={'mr-2'} />
+      <LinkControls className={'mr-2'} />
+      <MapSymbol className={'mr-2'} />
       <UndoRedoControls className={'mx-4'} />
     </div>
   );

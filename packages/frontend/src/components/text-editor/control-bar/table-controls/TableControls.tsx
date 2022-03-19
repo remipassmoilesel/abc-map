@@ -27,7 +27,12 @@ import { Separator } from '../../../button-menu/Separator';
 
 const t = prefixedTranslation('TextEditor:');
 
-export function TableControls() {
+interface Props {
+  className?: string;
+}
+
+export function TableControls(props: Props) {
+  const { className } = props;
   const { editor } = useEditor();
 
   const handleCreateTable = useCallback(() => CustomEditor.table.createTable(editor), [editor]);
@@ -42,7 +47,7 @@ export function TableControls() {
   const handleSetBorders = useCallback((size: number) => CustomEditor.table.setBorders(editor, size), [editor]);
 
   return (
-    <ButtonMenu label={t('Tables')} icon={IconDefs.faTable}>
+    <ButtonMenu label={t('Tables')} icon={IconDefs.faTable} className={className}>
       <Action label={t('Create_a_table')} onClick={handleCreateTable} icon={IconDefs.faPlus} />
       <Action label={t('Remove_a_table')} onClick={handleRemoveTable} />
 

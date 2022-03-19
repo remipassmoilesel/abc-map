@@ -23,10 +23,6 @@ import { FeatureProperties } from './FeatureProperties';
  */
 describe('FeatureProperties', () => {
   it('should not change without migration', () => {
-    /* eslint-disable */
-    const witness = '{"Selected":"abc:feature:selected"}';
-    /* eslint-enable */
-
-    expect(JSON.stringify(FeatureProperties)).toEqual(witness);
+    expect(FeatureProperties).toMatchSnapshot();
   });
 });

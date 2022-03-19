@@ -23,6 +23,7 @@ import { FaIcon } from '../icon/FaIcon';
 import { IconDefs } from '../icon/IconDefs';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { WithTooltip } from '../with-tooltip/WithTooltip';
+import clsx from 'clsx';
 
 interface Props {
   label: string;
@@ -31,11 +32,14 @@ interface Props {
   onToggle?: (open: boolean) => void;
   className?: string;
   'data-testid'?: string;
+  // If true, menu will be closed when user click on popover too
+  closeOnClick?: boolean;
 }
 
 export function ButtonMenu(props: Props) {
-  const { label, icon, children, className, onToggle, 'data-testid': dataTestid } = props;
+  const { label, icon, children, className, onToggle, 'data-testid': dataTestid, closeOnClick } = props;
   const [open, setOpen] = useState(false);
+
   const handleToggle = useCallback(() => {
     setOpen(!open);
     onToggle && onToggle(!open);
@@ -43,13 +47,13 @@ export function ButtonMenu(props: Props) {
 
   const popover = (
     <Popover>
-      <Popover.Header className={Cls.header}>
+      <Popover.Header className={clsx(Cls.header, 'abc-menu-popover')}>
         <div>{label}</div>
         <button onClick={handleToggle} className={Cls.closeButton}>
           <FaIcon icon={IconDefs.faTimes} />
         </button>
       </Popover.Header>
-      <Popover.Body className={Cls.panel} onClick={handleToggle}>
+      <Popover.Body className={Cls.panel} onClick={closeOnClick ? handleToggle : undefined}>
         {children}
       </Popover.Body>
     </Popover>
@@ -57,7 +61,7 @@ export function ButtonMenu(props: Props) {
 
   return (
     <OverlayTrigger trigger={'click'} show={open} onToggle={handleToggle} placement="bottom" overlay={popover}>
-      <div className={className}>
+      <div className={clsx(Cls.container, className)}>
         <WithTooltip title={label}>
           <button className={Cls.openButton} onClick={handleToggle} data-testid={dataTestid}>
             <FaIcon icon={icon} />

@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AbcSharedView should not change without migration 1`] = `
+Object {
+  "id": "test-id",
+  "layers": Array [
+    Object {
+      "layerId": "test-layer-id",
+      "visible": true,
+    },
+  ],
+  "title": "test-title",
+  "view": Object {
+    "center": Array [
+      12,
+      34,
+    ],
+    "projection": Object {
+      "name": "test-projection",
+    },
+    "resolution": 5678,
+  },
+}
+`;

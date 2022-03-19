@@ -19,7 +19,7 @@
 import Cls from './VideoElement.module.scss';
 import { RenderElementProps } from 'slate-react';
 import { Provider } from './Provider';
-import { VideoElement as VideoElementDef } from '../../typings';
+import { VideoElement as VideoElementDef } from '@abc-map/shared';
 import { Youtube } from './providers/Youtube';
 import { DefaultIntegration } from './DefaultIntegration';
 import { Vimeo } from './providers/Vimeo';

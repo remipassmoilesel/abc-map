@@ -20,12 +20,12 @@ import { AbcFile, AbcProjectManifest } from '@abc-map/shared';
 
 export interface MigratedProject {
   manifest: AbcProjectManifest;
-  files: AbcFile[];
+  files: AbcFile<Blob>[];
 }
 
 export interface ProjectMigration {
-  interestedBy(manifest: AbcProjectManifest, files: AbcFile[]): Promise<boolean>;
-  migrate(manifest: AbcProjectManifest, files: AbcFile[]): Promise<MigratedProject>;
+  interestedBy(manifest: AbcProjectManifest, files: AbcFile<Blob>[]): Promise<boolean>;
+  migrate(manifest: AbcProjectManifest, files: AbcFile<Blob>[]): Promise<MigratedProject>;
 }
 
 export declare type MigrationsFactory = () => ProjectMigration[];

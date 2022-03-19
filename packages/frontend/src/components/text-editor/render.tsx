@@ -30,6 +30,7 @@ import { ImageElement } from './elements/image/ImageElement';
 import { ListElement } from './elements/list/ListElement';
 import { ListItemElement } from './elements/list/ListItemElement';
 import { LinkElement } from './elements/link/LinkElement';
+import { MapSymbolElement } from './elements/map-symbol/MapSymbolElement';
 
 export function renderLeaf(props: RenderLeafProps) {
   return <Leaf {...props}>{props.children}</Leaf>;
@@ -98,6 +99,12 @@ export function renderElement(props: RenderElementProps) {
         <LinkElement {...props} element={props.element}>
           {props.children}
         </LinkElement>
+      );
+    case 'map-symbol':
+      return (
+        <MapSymbolElement {...props} element={props.element}>
+          {props.children}
+        </MapSymbolElement>
       );
 
     case 'paragraph':

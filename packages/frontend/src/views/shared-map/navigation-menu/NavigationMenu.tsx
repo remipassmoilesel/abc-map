@@ -64,15 +64,7 @@ function NavigationMenu(props: Props) {
   return (
     <>
       {/* Navigation closed, we display a button */}
-      {!open && (
-        <FloatingButton
-          buttonId={'shared-map/NavigationMenu'}
-          onClick={handleToggleMenu}
-          icon={IconDefs.faListOl}
-          style={{ top: '50vh', right: '3rem' }}
-          title={t('Navigation')}
-        />
-      )}
+      {!open && <FloatingButton onClick={handleToggleMenu} icon={IconDefs.faListOl} style={{ top: '50vh', right: '3rem' }} title={t('Navigation')} />}
 
       {/* Navigation opened, we display drawer*/}
       {open && (

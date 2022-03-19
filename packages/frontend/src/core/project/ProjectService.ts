@@ -20,16 +20,14 @@ import { ProjectActions } from '../store/project/actions';
 import {
   AbcFile,
   AbcLayout,
-  AbcLegend,
-  AbcLegendItem,
   AbcProjectManifest,
   AbcProjectMetadata,
   AbcSharedView,
+  AbcTextFrame,
   AbcView,
   BlobIO,
   CompressedProject,
   LayerType,
-  LegendDisplay,
   Logger,
   ProjectConstants,
   Zipper,
@@ -47,10 +45,10 @@ import { ModalService } from '../ui/ModalService';
 import { ProjectEvent, ProjectEventType } from './ProjectEvent';
 import { Errors } from '../utils/Errors';
 import { ProjectUpdater } from './ProjectUpdater';
-import cloneDeep from 'lodash/cloneDeep';
 import { ProjectStatus } from './ProjectStatus';
 import { Routes } from '../../routes';
 import { PasswordCache } from './PasswordCache';
+import { TextFrameHelpers } from './TextFrameHelpers';
 
 export const logger = Logger.get('ProjectService.ts');
 
@@ -94,7 +92,7 @@ export class ProjectService {
   public async newProject(): Promise<void> {
     // Create new manifest
     const manifest = ProjectFactory.newProjectManifest();
-    await this.loadExtracted(manifest, undefined);
+    await this.loadExtracted(manifest, undefined, []);
 
     // Reset main map layers
     this.geoService.getMainMap().setDefaultLayers();
@@ -142,12 +140,13 @@ export class ProjectService {
 
     // Parse manifest
     const manifest: AbcProjectManifest = JSON.parse(await BlobIO.asString(manifestFile.content));
-    return this.loadExtracted(manifest, password);
+    return this.loadExtracted(manifest, password, unzipped);
   }
 
-  private async loadExtracted(_manifest: AbcProjectManifest, _password: string | undefined, _files: AbcFile[] = []): Promise<void> {
+  private async loadExtracted(_manifest: AbcProjectManifest, _password: string | undefined, _files: AbcFile<Blob>[]): Promise<void> {
     // Migrate project if necessary
-    let { manifest } = await this.updater.update(_manifest, _files);
+    // eslint-disable-next-line prefer-const
+    let { manifest, files } = await this.updater.update(_manifest, _files);
 
     // Prompt password if necessary
     let password = _password;
@@ -168,6 +167,7 @@ export class ProjectService {
     }
 
     // Load view and layers projection
+    // FIXME: we should batch projection loading here
     await this.geoService.loadProjection(manifest.view.projection.name);
     for (const lay of manifest.layers) {
       if (LayerType.Wms === lay.type && lay.metadata.projection) {
@@ -177,7 +177,13 @@ export class ProjectService {
       }
     }
 
-    // Load project
+    // We load frame images
+    manifest = {
+      ...manifest,
+      layouts: TextFrameHelpers.loadImagesOfLayouts(manifest.layouts, files),
+    };
+
+    // Load project manifest and layers
     this.store.dispatch(ProjectActions.loadProject(manifest));
     await this.geoService.importLayers(manifest.layers);
 
@@ -214,20 +220,23 @@ export class ProjectService {
       this.passwordCache.set(password);
     }
 
+    const [images, layouts] = await TextFrameHelpers.extractImagesFromLayouts(state.layouts.list);
+
     let manifest: AbcProjectManifest = {
-      metadata: cloneDeep(state.metadata),
+      metadata: state.metadata,
       layers: await this.geoService.exportLayers(this.geoService.getMainMap()),
-      view: cloneDeep(state.mainView),
-      layouts: cloneDeep(state.layouts.list),
-      sharedViews: cloneDeep(state.sharedViews.list),
+      view: state.mainView,
+      layouts,
+      sharedViews: state.sharedViews.list,
     };
 
     if (shouldBeEncrypted && password) {
       manifest = await Encryption.encryptManifest(manifest, password);
     }
 
-    const project = await Zipper.forFrontend().zipFiles([{ path: ProjectConstants.ManifestName, content: new Blob([JSON.stringify(manifest)]) }]);
-    return { project, metadata: manifest.metadata };
+    const files: AbcFile[] = [{ path: ProjectConstants.ManifestName, content: new Blob([JSON.stringify(manifest)]) }, ...images];
+    const compressed = await Zipper.forFrontend().zipFiles(files);
+    return { project: compressed, metadata: manifest.metadata };
   }
 
   public async saveCurrent(): Promise<ProjectStatus> {
@@ -271,6 +280,10 @@ export class ProjectService {
     this.store.dispatch(ProjectActions.addLayouts(layouts));
   }
 
+  public addLayout(layout: AbcLayout, index?: number): void {
+    this.store.dispatch(ProjectActions.addLayout(layout, index));
+  }
+
   public setActiveLayout(id: string | undefined) {
     this.store.dispatch(ProjectActions.setActiveLayout(id));
   }
@@ -289,32 +302,26 @@ export class ProjectService {
     this.store.dispatch(ProjectActions.setLayoutIndex(layout, index));
   }
 
-  public addLegendItems(legendId: string, items: AbcLegendItem[]): void {
-    this.store.dispatch(ProjectActions.addLegendItems(legendId, items));
+  public addLayoutTextFrame(layout: AbcLayout, frame: AbcTextFrame): void {
+    const updated: AbcLayout = {
+      ...layout,
+      textFrames: layout.textFrames.concat(frame),
+    };
+
+    this.updateLayout(updated);
   }
 
-  public updateLegend(legend: AbcLegend): void {
-    this.store.dispatch(ProjectActions.updateLegend(legend));
+  public updateTextFrame(frame: AbcTextFrame): void {
+    this.store.dispatch(ProjectActions.updateTextFrame(frame));
   }
 
-  public updateLegendItem(legendId: string, item: AbcLegendItem): void {
-    this.store.dispatch(ProjectActions.updateLegendItem(legendId, item));
-  }
+  public removeLayoutTextFrame(layout: AbcLayout, frame: AbcTextFrame): void {
+    const updated: AbcLayout = {
+      ...layout,
+      textFrames: layout.textFrames.filter((frm) => frm.id !== frame.id),
+    };
 
-  public setLegendSize(legendId: string, width: number, height: number) {
-    this.store.dispatch(ProjectActions.setLegendSize(legendId, width, height));
-  }
-
-  public setLegendDisplay(legendId: string, display: LegendDisplay) {
-    this.store.dispatch(ProjectActions.setLegendDisplay(legendId, display));
-  }
-
-  public deleteLegendItem(legendId: string, item: AbcLegendItem) {
-    this.store.dispatch(ProjectActions.deleteLegendItem(legendId, item));
-  }
-
-  public setLegendItemIndex(legendId: string, item: AbcLegendItem, newIndex: number) {
-    this.store.dispatch(ProjectActions.setLegendItemIndex(legendId, item, newIndex));
+    this.updateLayout(updated);
   }
 
   public updateLayout(layout: AbcLayout) {
@@ -342,6 +349,10 @@ export class ProjectService {
 
   public addSharedViews(views: AbcSharedView[]): void {
     this.store.dispatch(ProjectActions.addSharedViews(views));
+  }
+
+  public addSharedView(view: AbcSharedView, index: number): void {
+    this.store.dispatch(ProjectActions.addSharedView(view, index));
   }
 
   public getSharedViews(): AbcSharedView[] {

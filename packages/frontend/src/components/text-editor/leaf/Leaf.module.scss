@@ -16,6 +16,24 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
+.leaf {
+  &.size1 {
+    font-size: 1em;
+  }
+
+  &.size2 {
+    font-size: 1.1em;
+  }
+
+  &.size3 {
+    font-size: 1.2em;
+  }
+
+  &.size4 {
+    font-size: 1.3em;
+  }
+}
+
 .bold {
   font-weight: bolder;
 }

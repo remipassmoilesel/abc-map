@@ -87,7 +87,7 @@ describe('Project', function () {
           const helper = ProjectHelper.forFrontend();
           const projectA = await helper.extractManifest(downloaded);
           expect(projectA.metadata.id).not.undefined;
-          expect(projectA.metadata.version).equals('0.7.0');
+          expect(projectA.metadata.version).equals('0.8.0');
           expect(projectA.layers).length(2);
           expect(projectA.layers[0].type).equals(LayerType.Predefined);
           expect(projectA.layers[1].type).equals(LayerType.Vector);

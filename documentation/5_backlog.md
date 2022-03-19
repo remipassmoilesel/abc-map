@@ -2,8 +2,8 @@
 
 <!-- toc -->
 
-- [Better legend (coming soon)](#better-legend-coming-soon)
 - [Story maps (coming soon)](#story-maps-coming-soon)
+- [Better documentation](#better-documentation)
 - [SVG Export](#svg-export)
 - [Custom (and better) map tools](#custom-and-better-map-tools)
 - ["Go to coordinates" UI control](#go-to-coordinates-ui-control)
@@ -29,18 +29,17 @@
 - [Images](#images)
 - [Datastore artefact with prompt](#datastore-artefact-with-prompt)
 - [Better errors for bad server configuration](#better-errors-for-bad-server-configuration)
+- [Floating attributions for exports](#floating-attributions-for-exports)
 
 <!-- tocstop -->
-
-## Better legend (coming soon)
-
-Users should be able to enter rich text in legends. Legends need to be prettier.
-
-A possible solution would be to use HTML, a rich text editor like SlateJS, and HTML2Canvas for PDF exports.
 
 ## Story maps (coming soon)
 
 Connected users should be able to create and share story maps.
+
+## Better documentation
+
+User documentation should cover more features and be regularly updated.
 
 ## SVG Export
 
@@ -186,3 +185,7 @@ the data on map.
 When server starts it validates configuration with AJV. Errors are thrown without formatting.
 We should format errors in order to provide better installation experience.
 See per example: https://atlassian.github.io/better-ajv-errors/
+
+## Floating attributions for exports
+
+Users must be able to move attributions before exports. Attributions must stay always visible.

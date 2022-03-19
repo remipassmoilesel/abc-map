@@ -29,7 +29,6 @@ import { Routes } from '../../routes';
 import { prefixedTranslation } from '../../i18n/i18n';
 import { MapWrapper } from '../../core/geo/map/MapWrapper';
 import { useActiveSharedView } from '../../core/project/useActiveSharedView';
-import { MapLegend } from '../../components/map-legend/MapLegend';
 import { MapUi } from '../../components/map-ui/MapUi';
 import { E2eMapWrapper } from '../../core/geo/map/E2eMapWrapper';
 import { resolveInAtLeast } from '../../core/utils/resolveInAtLeast';
@@ -105,12 +104,7 @@ function SharedMapView() {
       {!loading && !error && (
         <>
           <NavigationMenu attributions={map?.getTextAttributions() ?? []} />
-          {activeView && map && (
-            <>
-              <MapUi map={map} view={activeView?.view} data-testid={'shared-map'} className={Cls.map} data-cy={'shared-map'} />
-              <MapLegend legend={activeView.legend} map={map} />
-            </>
-          )}
+          {activeView && map && <MapUi map={map} view={activeView?.view} data-testid={'shared-map'} className={Cls.map} data-cy={'shared-map'} />}
         </>
       )}
 

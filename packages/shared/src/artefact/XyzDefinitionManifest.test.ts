@@ -20,10 +20,6 @@ import { XyzDefinitionManifest } from './XyzDefinitionManifest';
 
 describe('XyzDefinitionManifest', () => {
   it('should not change without datastore migration', () => {
-    /* eslint-disable */
-    const witness = "{\"version\":\"version\",\"xyz\":{\"url\":\"remoteLayerName\",\"projection\":{\"name\":\"projection\"},\"prompt\":[{\"name\":\"name\",\"type\":\"string\",\"description\":[{\"language\":\"fr\",\"text\":\"description\"},{\"language\":\"en\",\"text\":\"description\"}]}]}}";
-    /* eslint-enable */
-
     const manifest: XyzDefinitionManifest = {
       version: 'version',
       xyz: {
@@ -42,6 +38,6 @@ describe('XyzDefinitionManifest', () => {
       },
     };
 
-    expect(JSON.stringify(manifest)).toEqual(witness);
+    expect(manifest).toMatchSnapshot();
   });
 });

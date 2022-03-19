@@ -19,107 +19,12 @@
 import { BaseEditor } from 'slate';
 import { ReactEditor } from 'slate-react';
 import { HistoryEditor } from 'slate-history';
+import { AbcElement, AbcText } from '@abc-map/shared';
 
 declare module 'slate' {
   interface CustomTypes {
     Editor: BaseEditor & ReactEditor & HistoryEditor;
-    Element: CustomElement;
-    Text: CustomText;
+    Element: AbcElement;
+    Text: AbcText;
   }
-}
-
-export type CustomText = {
-  text: string;
-  bold?: boolean;
-  italic?: boolean;
-  underline?: boolean;
-  foregroundColor?: string;
-  backgroundColor?: string;
-};
-
-export type CustomElement =
-  | ParagraphElement
-  | CodeElement
-  | QuoteElement
-  | TitleElement
-  | TableElement
-  | TableRowElement
-  | TableCellElement
-  | VideoElement
-  | ImageElement
-  | ListElement
-  | ListItemElement
-  | LinkElement;
-
-export interface ParagraphElement {
-  type: 'paragraph';
-  align?: TextAlign;
-  children: CustomText[];
-}
-
-export type TextAlign = 'left' | 'center' | 'right' | 'justify';
-
-export interface CodeElement {
-  type: 'code';
-  children: CustomText[];
-}
-
-export interface QuoteElement {
-  type: 'quote';
-  children: CustomText[];
-}
-
-export interface TitleElement {
-  type: 'title';
-  level: number;
-  children: CustomText[];
-}
-
-export interface TableElement {
-  type: 'table';
-  children: TableRowElement[];
-  border?: number;
-}
-
-export interface TableRowElement {
-  type: 'table-row';
-  children: TableCellElement[];
-}
-
-export interface TableCellElement {
-  type: 'table-cell';
-  // We must use paragraph inside tables, otherwise we can not have multiple lines cells
-  children: ParagraphElement[];
-}
-
-export interface VideoElement {
-  type: 'video';
-  url: string;
-  // Content is not editable
-  children: [{ text: '' }];
-}
-
-export interface ImageElement {
-  type: 'image';
-  url: string;
-  size: number;
-  // Content is not editable
-  children: [{ text: '' }];
-}
-
-export interface ListElement {
-  type: 'list';
-  ordered: boolean;
-  children: ListItemElement[];
-}
-
-export interface ListItemElement {
-  type: 'list-item';
-  children: CustomText[];
-}
-
-export interface LinkElement {
-  type: 'link';
-  url: string;
-  children: CustomText[];
 }

@@ -72,7 +72,6 @@
       "Formats_not_supported": "These file formats are not supported, no data has been imported",
       "Layer_does_not_load": "Layer '{{name}}' is not loading correctly. Check its settings or your internet connection.",
       "Layer_without_name": "*Layer without name*",
-      "Scale": "Scale",
       "Attributions": "Attributions",
       "Zoom_in": "Zoom in",
       "Zoom_out": "Zoom out",
@@ -241,6 +240,9 @@
       "This_project_is_public": "This project is public",
       "Project_open": "Project open !"
     }
+  },
+  "Scale": {
+    "Scale": "Scale"
   },
   "ColorPicker": {
     "Line": "Line",
@@ -552,41 +554,23 @@
     "You_must_create_layouts_first": "You must first create a layout",
     "Layouts_menu": "Layouts list",
     "Controls_menu": "Controls",
-    "Export_in_progress": "Export in progress ..."
+    "Export_in_progress": "Export in progress ...",
+    "New_text_frame": "New text frame",
+    "Copy_text_frame": "Copy a text frame ...",
+    "Add_scale": "Add scale",
+    "Remove_scale": "Remove scale"
   },
-  "EditLegendControl": {
-    "Legend": "Legend",
-    "Edit_legend": "Edit legend",
-    "No_legend": "No legend",
-    "Top_left_corner": "Top left",
-    "Top_right_corner": "Top right",
-    "Bottom_right_corner": "Bottom right",
-    "Bottom_left_corner": "Bottom left"
+  "CopyTextFrameModal": {
+    "Copy_text_frame": "Copy a text frame",
+    "No_frame_to_copy": "No text frame to copy. Create one !",
+    "Frames_from_layouts": "Frames from layouts",
+    "Frame_X_from_layout_X": "Frame {{frame}} from layout {{layout}}"
   },
-  "MapLegendView": {
-    "Go_back": "Go back",
-    "Edit_legend": "Edit legend",
+  "FloatingTextFrame": {
+    "Full_screen_editor": "Full screen editor",
+    "Delete": "Delete this frame",
     "Preview": "Preview",
-    "Create_legend_for_your_map": "Create a legend for your map \uD83C\uDF0D",
-    "No_entry": "No entry, add one ⬇️",
-    "Width": "Width",
-    "Height": "Height",
-    "pixels": "pixels",
-    "Drag_to_resize": "Move this corner to resize ⬆",
-    "Add_entry": "Add an entry",
-    "Change_symbol": "Change symbol",
-    "Delete": "Delete",
-    "Move_up": "Move up",
-    "Move_down": "Move down",
-    "Entry_name": "Item name: forest area, marked route, ...",
-    "This_map_legend_cannot_be_found": "This map legend cannot be found",
-    "Copy_another_legend": "Copy another legend",
-    "Page": "Page",
-    "View": "View",
-    "First_you_need_to_create_a_legend": "First you need to create a legend",
-    "Close": "Close",
-    "Layouts": "Layouts",
-    "Shared_views": "Shared views"
+    "Edit": "Edit in place"
   },
   "FundingView": {
     "Support_AbcMap": "Support Abc-Map",
@@ -669,7 +653,7 @@
     "Password_updated": "Password updated !",
     "Your_password_is_incorrect": "Your password is incorrect"
   },
-  "LegendSymbolPickerModal": {
+  "MapSymbolPickerModal": {
     "Select_symbol": "Select a symbol",
     "Here_are_the_geometry_styles_used_on_the_map": "Here are the geometry styles used on the map",
     "Add_something_on_map_then_come_back": "Add something to the map then come back"
@@ -838,6 +822,9 @@
     "Bold": "Bold",
     "Italic": "Italic",
     "Underline": "Underline",
+    "Font_size": "Font size",
+    "Normal_size": "Standard size",
+    "Size_X": "Size",
     "Clear_style": "Clear style",
     "Foreground_color": "Foreground color",
     "Background_color": "Background color",
@@ -864,7 +851,9 @@
     "Small_image": "Small image",
     "Medium_image": "Medium image",
     "Large_image": "Large image",
+    "Map_symbols": "Map symbols",
     "Insert_map_symbol": "Insert map symbol",
+    "Insert_map_legend": "Insert map legend",
     "Insert_photo_or_video": "Insert photo or video",
     "Block_type": "Block type",
     "Quote": "Quote",
@@ -945,6 +934,13 @@
       "EditText": "Edit text",
       "Select": "Select",
       "EditProperties": "Edit properties"
+    },
+    "TextFrameFactory": {
+      "This_is_a_brand_new_text_frame": "This is a brand new text frame !",
+      "You_can_edit_it_in_full_screen_editor": "You can edit it in full screen editor \uD83D\uDE0E",
+      "Or_you_can_edit_it_in_place": "Or you can edit it in place.",
+      "You_can_move_and_resize_it": "You can move and resize it ✨",
+      "And_you_can_include_images_and_videos": "And you can include images and videos \uD83C\uDFAC !"
     }
   }
 }

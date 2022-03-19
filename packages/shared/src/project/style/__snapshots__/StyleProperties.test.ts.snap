@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`StyleProperties FillPatterns should not change without migration 1`] = `
+Object {
+  "Circles": "abc:style:fill:circles",
+  "Flat": "abc:style:fill:flat",
+  "HatchingHorizontal": "abc:style:fill:hatching:horizontal",
+  "HatchingObliqueLeft": "abc:style:fill:hatching:oblique:left",
+  "HatchingObliqueRight": "abc:style:fill:hatching:oblique:right",
+  "HatchingVertical": "abc:style:fill:hatching:vertical",
+  "Squares": "abc:style:fill:squares",
+}
+`;
+
+exports[`StyleProperties StyleProperties should not change without migration 1`] = `
+Object {
+  "FillColor1": "abc:style:fill:color1",
+  "FillColor2": "abc:style:fill:color2",
+  "FillPattern": "abc:style:fill:pattern",
+  "PointColor": "abc:style:point:color",
+  "PointIcon": "abc:style:point:icon",
+  "PointSize": "abc:style:point:size",
+  "StrokeColor": "abc:style:stroke:color",
+  "StrokeWidth": "abc:style:stroke:width",
+  "TextAlignment": "abc:style:text:alignment",
+  "TextColor": "abc:style:text:color",
+  "TextFont": "abc:style:text:font",
+  "TextOffsetX": "abc:style:text:offset-x",
+  "TextOffsetY": "abc:style:text:offset-y",
+  "TextRotation": "abc:style:text:rotation",
+  "TextSize": "abc:style:text:size",
+  "TextValue": "abc:style:text:value",
+  "ZIndex": "abc:style:z-index",
+}
+`;

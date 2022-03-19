@@ -23,11 +23,10 @@ import { Point, Polygon } from 'ol/geom';
 import {
   AbcArtefact,
   AbcLayout,
-  AbcLegend,
-  AbcLegendItem,
   AbcPredefinedLayer,
   AbcProjectManifest,
   AbcSharedView,
+  AbcTextFrame,
   AbcVectorLayer,
   AbcView,
   AbcWmsLayer,
@@ -41,7 +40,6 @@ import {
   Language,
   LayerType,
   LayoutFormats,
-  LegendDisplay,
   PredefinedLayerModel,
   ProjectConstants,
   ProjectionDto,
@@ -315,7 +313,7 @@ export class TestHelper {
 
   public static sampleLayout(): AbcLayout {
     return {
-      id: uuid(),
+      id: nanoid(),
       name: 'Sample layout',
       format: LayoutFormats.A4_PORTRAIT,
       view: {
@@ -323,7 +321,16 @@ export class TestHelper {
         resolution: 1000,
         projection: DEFAULT_PROJECTION,
       },
-      legend: this.sampleLegend(),
+      textFrames: [this.sampleTextFrame()],
+    };
+  }
+
+  public static sampleTextFrame(): AbcTextFrame {
+    return {
+      id: nanoid(),
+      position: { x: 10, y: 10 },
+      size: { width: 100, height: 100 },
+      content: [{ type: 'paragraph', children: [{ text: 'Hey man, how are you ?' }] }],
     };
   }
 
@@ -341,7 +348,6 @@ export class TestHelper {
       title: 'Sample layout',
       view: this.sampleView(),
       layers: [],
-      legend: this.sampleLegend(),
     };
   }
 
@@ -456,23 +462,6 @@ export class TestHelper {
     layer.getSource().addFeatures(features);
 
     return layer;
-  }
-
-  public static sampleLegend(): AbcLegend {
-    return {
-      id: nanoid(),
-      display: LegendDisplay.BottomLeftCorner,
-      items: [this.sampleLegendItem(), this.sampleLegendItem()],
-      height: 250,
-      width: 350,
-    };
-  }
-
-  public static sampleLegendItem(): AbcLegendItem {
-    return {
-      id: nanoid(),
-      text: 'Legend item text',
-    };
   }
 
   public static sampleProjectionDto(): ProjectionDto {

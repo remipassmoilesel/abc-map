@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AbcTextFrame should not change without migration 1`] = `
+Object {
+  "content": Array [
+    Object {
+      "children": Array [
+        Object {
+          "text": "",
+        },
+      ],
+      "type": "paragraph",
+    },
+  ],
+  "id": "test-id",
+  "position": Object {
+    "x": 10,
+    "y": 20,
+  },
+  "size": Object {
+    "height": 40,
+    "width": 30,
+  },
+}
+`;

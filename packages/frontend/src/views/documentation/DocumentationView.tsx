@@ -29,6 +29,7 @@ import SideMenu from '../../components/side-menu/SideMenu';
 import { useAppDispatch, useAppSelector } from '../../core/store/hooks';
 import { withTranslation } from 'react-i18next';
 import { FloatingButton } from '../../components/floating-button/FloatingButton';
+import { isDesktopDevice } from '../../core/ui/isDesktopDevice';
 
 const logger = Logger.get('DocumentationView.tsx');
 
@@ -94,18 +95,13 @@ function DocumentationView() {
             menuPlacement={'right'}
             menuId={'views/DocumentationView-toc'}
             closeOnClick={true}
+            initiallyOpened={isDesktopDevice()}
           >
             <div className={Cls.toc} dangerouslySetInnerHTML={{ __html: reference?.toc }} />
           </SideMenu>
 
           {/* Go to top button */}
-          <FloatingButton
-            icon={IconDefs.faArrowUp}
-            style={{ top: '55vh', right: '6vmin' }}
-            title={t('Back_to_top')}
-            buttonId={'views/DocumentationView-go-to-top'}
-            onClick={handleGoToTop}
-          />
+          <FloatingButton icon={IconDefs.faArrowUp} style={{ top: '55vh', right: '6vmin' }} title={t('Back_to_top')} onClick={handleGoToTop} />
 
           {/* Documentation viewport */}
           <div className={Cls.viewport}>

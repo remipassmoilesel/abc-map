@@ -1,0 +1,8 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Language changes require data migration 1`] = `
+Object {
+  "English": "en",
+  "French": "fr",
+}
+`;

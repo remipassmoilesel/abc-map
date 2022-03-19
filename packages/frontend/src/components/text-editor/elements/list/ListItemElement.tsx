@@ -17,7 +17,7 @@
  */
 
 import { RenderElementProps } from 'slate-react';
-import { ListItemElement as ListItemElementDef } from '../../typings';
+import { ListItemElement as ListItemElementDef } from '@abc-map/shared';
 
 type Props = RenderElementProps & { element: ListItemElementDef };
 

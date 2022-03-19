@@ -18,9 +18,20 @@ With Abc-Map you can create:
 - <a href="https://youtu.be/majmp2GFfkE" target="_blank">Import and export of data</a>
 - <a href="https://youtu.be/irT6eV7JGDw" target="_blank">Represent the population density in metropolitan France with color gradients</a>
 
-(<i>Automatic translation only 🤭</i>)
+<i>Automatic translation only 🤭</i>  
+<i>Videos can be outdated 🙇</b>
 
-Who uses Abc-Map ?
+<div class='alert alert-info my-4 d-flex flex-column'>
+  <b class="mb-2">This software is brand new ✨ </b>
+  <div class="mb-2">Abc-Map is constantly evolving, every week an improvement is published.</div>
+  <div>So there are a lot of things to improve, starting with this documentation.</div>
+
+  <a class='btn btn-link mt-3' onclick='abc.goTo("/funding")'>
+    Help fund Abc-Map&nbsp;&nbsp;💌
+  </a>
+</div>
+
+## Who uses Abc-Map ?
 
 - Sportsmen and women for running or cycling routes
 - Teachers and students for workshops
@@ -33,16 +44,6 @@ Who uses Abc-Map ?
 - Humanitarian and solidarity organizations for social action missions
 
 And much more, which we don't hear about because... we don't track users 👏👏
-
-<div class='alert alert-info my-4 d-flex flex-column'>
-  <b class="mb-2">This software is brand new ✨ </b>
-  <div class="mb-2">Abc-Map is constantly evolving, every week an improvement is published.</div>
-  <div>So there are a lot of things to improve, starting with this documentation.</div>
-
-  <a class='btn btn-link mt-3' onclick='abc.goTo("/funding")'>
-    Help fund Abc-Map&nbsp;&nbsp;💌
-  </a>
-</div>
 
 ## Alternatives
 

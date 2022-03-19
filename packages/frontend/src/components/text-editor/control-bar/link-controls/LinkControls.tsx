@@ -25,11 +25,16 @@ import { ButtonMenu } from '../../../button-menu/ButtonMenu';
 import { Action } from '../../../button-menu/Action';
 import { LinkModal } from './LinkModal';
 import { Editor } from 'slate';
-import { LinkElement } from '../../typings';
+import { LinkElement } from '@abc-map/shared';
 
 const t = prefixedTranslation('TextEditor:');
 
-export function LinkControls() {
+interface Props {
+  className?: string;
+}
+
+export function LinkControls(props: Props) {
+  const { className } = props;
   const { editor } = useEditor();
   const [prompt, setPrompt] = useState(false);
   const [initialText, setInitialText] = useState('');
@@ -74,7 +79,7 @@ export function LinkControls() {
 
   return (
     <>
-      <ButtonMenu label={t('Links')} icon={IconDefs.faLink}>
+      <ButtonMenu label={t('Links')} icon={IconDefs.faLink} className={className}>
         <Action label={t('Create_or_edit_a_link')} onClick={handleEditLink} icon={IconDefs.faPlus} />
         <Action label={t('Remove_a_link')} onClick={handleClearLink} icon={IconDefs.faBan} />
       </ButtonMenu>

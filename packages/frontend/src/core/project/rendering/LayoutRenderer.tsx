@@ -1,0 +1,147 @@
+/**
+ * Copyright © 2021 Rémi Pace.
+ * This file is part of Abc-Map.
+ *
+ * Abc-Map is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of
+ * the License, or (at your option) any later version.
+ *
+ * Abc-Map is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General
+ * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+import { MapWrapper } from '../../geo/map/MapWrapper';
+import { LayoutHelper } from '../LayoutHelper';
+import View from 'ol/View';
+import { AbcFile, AbcLayout, BlobIO, Logger, Zipper } from '@abc-map/shared';
+import { MapFactory } from '../../geo/map/MapFactory';
+import { jsPDF } from 'jspdf';
+import ReactDOM from 'react-dom';
+import { Attributions } from '../../../components/attributions/Attributions';
+import { MapUi } from '../../../components/map-ui/MapUi';
+import html2canvas from 'html2canvas';
+import { FloatingTextFrame } from '../../../components/text-frame/FloatingTextFrame';
+import { FloatingScale } from '../../../components/floating-scale/FloatingScale';
+
+export const logger = Logger.get('LayoutRenderer');
+
+export class LayoutRenderer {
+  private rootElement?: HTMLDivElement;
+  private map?: MapWrapper;
+
+  public init() {
+    // Create support for map and others elements
+    this.rootElement = document.createElement('div');
+    this.rootElement.style.position = 'fixed';
+    this.rootElement.style.bottom = '-10000px';
+    document.body.append(this.rootElement);
+
+    // Create map
+    this.map = MapFactory.createNaked();
+  }
+
+  public dispose() {
+    this.map?.dispose();
+    this.rootElement?.remove();
+  }
+
+  public async renderLayoutsAsPdf(layouts: AbcLayout[], sourceMap: MapWrapper): Promise<Blob> {
+    const pdf = new jsPDF();
+
+    // jsPDF create a first page that may not correspond to first layout
+    pdf.deletePage(1);
+
+    for (const layout of layouts) {
+      const format = layout.format;
+      pdf.addPage([format.width, format.height], format.orientation);
+
+      const canvas = await this.renderLayout(layout, sourceMap);
+      pdf.addImage(canvas.toDataURL('image/jpeg', 1), 'JPEG', 0, 0, layout.format.width, layout.format.height, undefined, 'NONE');
+    }
+
+    return pdf.output('blob');
+  }
+
+  public async renderLayoutsAsPng(layouts: AbcLayout[], sourceMap: MapWrapper): Promise<Blob> {
+    const files: AbcFile<Blob>[] = [];
+    for (const layout of layouts) {
+      const canvas = await this.renderLayout(layout, sourceMap);
+      const image = await BlobIO.canvasToPng(canvas);
+      files.push({ path: `${layout.name}.png`, content: image });
+    }
+
+    return Zipper.forFrontend().zipFiles(files);
+  }
+
+  private async renderLayout(layout: AbcLayout, sourceMap: MapWrapper): Promise<HTMLCanvasElement> {
+    logger.info('Rendering layout: ', layout);
+    const renderingMap = this.map;
+    const rootElement = this.rootElement;
+    if (!renderingMap || !rootElement) {
+      throw new Error('You must call init() before rendering');
+    }
+
+    // Adapt size of map to layout
+    const dimensions = LayoutHelper.formatToPixel(layout.format);
+    const ratio = sourceMap.getMainRatio(dimensions.width, dimensions.height);
+    logger.info(`Rendering style ratio: ${ratio}`);
+
+    // Copy layers from sourceMap to exportMap
+    renderingMap.importLayersFrom(sourceMap, { withSelection: false, ratio });
+
+    await this.renderMapDom(renderingMap, layout, `${dimensions.width}px`, `${dimensions.height}px`, ratio);
+
+    // Set view
+    renderingMap.unwrap().setView(
+      new View({
+        center: layout.view.center,
+        resolution: layout.view.resolution,
+        projection: layout.view.projection.name,
+      })
+    );
+
+    return new Promise<HTMLCanvasElement>((resolve, reject) => {
+      // We trigger map rendering
+      renderingMap.unwrap().once('rendercomplete', () => {
+        html2canvas(rootElement, { backgroundColor: '#ffffff', imageTimeout: 0 }).then(resolve).catch(reject);
+      });
+
+      renderingMap.unwrap().render();
+    });
+  }
+
+  private renderMapDom(map: MapWrapper, layout: AbcLayout, width: string, height: string, ratio: number): Promise<void> {
+    const root = this.rootElement;
+    if (!root) {
+      return Promise.reject(new Error('You must call init() before'));
+    }
+
+    return new Promise((resolve) => {
+      ReactDOM.render(
+        <>
+          {/* Map */}
+          <MapUi map={map} width={width} height={height} />
+
+          {/* Text frames */}
+          {layout.textFrames.map((frame) => (
+            <FloatingTextFrame key={frame.id} frame={frame} editable={false} ratio={ratio} />
+          ))}
+
+          {/* Scale */}
+          {layout.scale && <FloatingScale map={map} scale={layout.scale} />}
+
+          {/* Attributions */}
+          <Attributions map={map} ratio={ratio} />
+        </>,
+        root,
+        resolve
+      );
+    });
+  }
+}

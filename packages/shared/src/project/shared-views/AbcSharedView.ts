@@ -17,14 +17,12 @@
  */
 
 import { AbcView } from '../AbcView';
-import { AbcLegend } from '../legend';
 
 export interface AbcSharedView {
   id: string;
   title: string;
   view: AbcView;
   layers: LayerState[];
-  legend: AbcLegend;
 }
 
 // Each view can show or hide layers

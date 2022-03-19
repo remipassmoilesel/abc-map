@@ -17,8 +17,8 @@
  */
 
 import Cls from './ImageElement.module.scss';
-import { ReactEditor, RenderElementProps, useSelected } from 'slate-react';
-import { ImageElement as ImageElementDef } from '../../typings';
+import { ReactEditor, RenderElementProps } from 'slate-react';
+import { ImageElement as ImageElementDef } from '@abc-map/shared';
 import clsx from 'clsx';
 import { IconDefs } from '../../../icon/IconDefs';
 import { MouseEvent, useCallback, useState } from 'react';
@@ -28,6 +28,7 @@ import { ButtonMenu } from '../../../button-menu/ButtonMenu';
 import { prefixedTranslation } from '../../../../i18n/i18n';
 import { Action } from '../../../button-menu/Action';
 import { Separator } from '../../../button-menu/Separator';
+import { createPortal } from 'react-dom';
 
 const t = prefixedTranslation('TextEditor:');
 
@@ -40,37 +41,38 @@ const labels = [t('Small_image'), t('Medium_image'), t('Large_image')];
 export function ImageElement(props: Props) {
   const { url, size } = props.element;
   const { editor, readOnly } = useEditor();
-  const [menuOpen, setMenuOpen] = useState(false);
   const [fullscreenPreview, setFullscreenPreview] = useState(false);
 
   const path = ReactEditor.findPath(editor, props.element);
-
-  const selected = useSelected();
-  const hightlighted = !readOnly && selected;
 
   const handleDelete = useCallback(() => CustomEditor.image.delete(editor, path), [editor, path]);
 
   const handleImageSize = useCallback(
     (ev: MouseEvent, size: number) => {
       ev.preventDefault();
-      ev.stopPropagation();
       CustomEditor.image.setSize(editor, size, path);
     },
     [editor, path]
   );
 
-  const toggleFullScreenPreview = useCallback(() => setFullscreenPreview(!fullscreenPreview), [fullscreenPreview]);
+  const toggleFullScreenPreview = useCallback(() => {
+    if (!readOnly && !fullscreenPreview) {
+      return;
+    }
 
-  const sizeClass = classes[size - 1] ?? classes[0];
+    setFullscreenPreview(!fullscreenPreview);
+  }, [fullscreenPreview, readOnly]);
+
+  const sizeClass = classes[size - 1] ?? classes[1];
 
   return (
     <div {...props.attributes} className={clsx(Cls.container, sizeClass)}>
       {/* Image itself */}
-      <img src={url} alt={url} onClick={toggleFullScreenPreview} className={clsx(Cls.img, readOnly && Cls.readonly, hightlighted && Cls.selected)} />
+      <img src={url} alt={url} onClick={toggleFullScreenPreview} className={clsx(Cls.img, readOnly && Cls.readonly)} />
 
       {/* Image menu, if editable */}
-      {(hightlighted || menuOpen) && (
-        <ButtonMenu label={t('Manage_image')} icon={IconDefs.faEllipsisVertical} onToggle={(state) => setMenuOpen(state)} className={Cls.menu}>
+      {!readOnly && (
+        <ButtonMenu label={t('Manage_image')} icon={IconDefs.faEllipsisVertical} closeOnClick={true} className={Cls.menu}>
           {/* Image sizes */}
           {[1, 2, 3].map((size) => (
             <Action
@@ -89,11 +91,14 @@ export function ImageElement(props: Props) {
       )}
 
       {/* Fullscreen preview */}
-      {fullscreenPreview && (
-        <div className={Cls.fullscreenModal} onClick={toggleFullScreenPreview}>
-          <img src={url} alt={url} className={Cls.largePreview} />
-        </div>
-      )}
+      {fullscreenPreview &&
+        // We must display modal on body because fixed position may not work due to text editor
+        createPortal(
+          <div className={Cls.fullscreenModal} onClick={toggleFullScreenPreview}>
+            <img src={url} alt={url} className={Cls.largePreview} />
+          </div>,
+          document.body
+        )}
 
       {props.children}
     </div>

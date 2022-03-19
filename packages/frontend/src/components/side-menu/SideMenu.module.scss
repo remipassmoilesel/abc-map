@@ -60,6 +60,7 @@
 
     overflow-x: hidden;
     overflow-y: auto;
+    scrollbar-gutter: stable;
 
     box-shadow: $box-shadow;
   }
@@ -79,10 +80,10 @@
     box-shadow: $box-shadow;
 
     &:hover {
-      background-color: $control-color-active;
+      background-color: $control-color;
 
       .icon {
-        opacity: $control-color-active-opacity;
+        opacity: 0.9;
       }
     }
   }

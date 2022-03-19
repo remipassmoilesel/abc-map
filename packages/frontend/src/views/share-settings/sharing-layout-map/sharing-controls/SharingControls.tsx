@@ -32,9 +32,6 @@ import isEqual from 'lodash/isEqual';
 import { withTranslation } from 'react-i18next';
 import { useSaveProjectOnline } from '../../../../core/project/useSaveProjectOnline';
 import { ProjectStatus } from '../../../../core/project/ProjectStatus';
-import { Routes } from '../../../../routes';
-import { useHistory } from 'react-router-dom';
-import { EditLegendControl } from '../../../../components/edit-legend-control/EditLegendControl';
 
 const t = prefixedTranslation('ShareSettingsView:');
 
@@ -47,7 +44,6 @@ interface Props {
 function SharingControls(props: Props) {
   const saveProject = useSaveProjectOnline();
   const { project, history } = useServices();
-  const navHistory = useHistory();
   const [codesModal, showCodesModal] = useState(false);
   const views = useAppSelector((st) => st.project.sharedViews.list);
   const activeViewId = useAppSelector((st) => st.project.sharedViews.activeId);
@@ -92,16 +88,6 @@ function SharingControls(props: Props) {
     },
     [activeView, history]
   );
-
-  // User updates legend
-  const handleEditLegend = useCallback(() => {
-    if (!activeView) {
-      logger.error('No active view');
-      return;
-    }
-
-    navHistory.push(Routes.mapLegend().withParams({ id: activeView.legend.id }));
-  }, [activeView, navHistory]);
 
   return (
     <>
@@ -152,9 +138,6 @@ function SharingControls(props: Props) {
           <LayerVisibilitySelector view={activeView} onUpdate={handleUpdate} />
         </div>
       )}
-
-      {/* Legend */}
-      {activeView && <EditLegendControl legendId={activeView?.legend.id} onEdit={handleEditLegend} />}
 
       {/* Sharing codes */}
       {codesModal && <SharingCodesModal onClose={handleToggleSharingCodes} />}

@@ -58,16 +58,6 @@ export function uiReducer(state = uiInitialState, action: UiAction): UiState {
       };
     }
 
-    case ActionType.SetFloatingButtonPosition: {
-      return {
-        ...state,
-        floatingButtons: {
-          ...state.floatingButtons,
-          [action.id]: [action.x, action.y],
-        },
-      };
-    }
-
     case ActionType.AckSharedMapInformation: {
       return {
         ...state,
