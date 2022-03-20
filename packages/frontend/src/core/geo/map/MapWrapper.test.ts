@@ -454,26 +454,4 @@ describe('MapWrapper', function () {
     expect(destination.getLayers().map((l) => l.getName())).toEqual(['Test layer 1', 'Test layer 2']);
     expect(destination.getLayers().map((l) => l.unwrap().get(LayerProperties.StyleOptions))).toEqual([undefined, DefaultStyleOptions]);
   });
-
-  describe('getRatioWith(), getMainRatio()', () => {
-    it('getMainRatio()', () => {
-      const map = MapFactory.createNaked();
-
-      const ratio = map.getMainRatio(500, 500);
-
-      expect(ratio).toEqual(0.37721);
-    });
-
-    it('getRatioWith()', () => {
-      const map = MapFactory.createNaked();
-      const target = document.createElement('div');
-      Object.defineProperty(target, 'clientWidth', { value: 500 });
-      Object.defineProperty(target, 'clientHeight', { value: 500 });
-      map.setTarget(target);
-
-      const ratio = map.getRatioWith(1000, 1000);
-
-      expect(ratio).toEqual(2);
-    });
-  });
 });

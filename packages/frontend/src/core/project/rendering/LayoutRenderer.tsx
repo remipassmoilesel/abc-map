@@ -19,7 +19,7 @@
 import { MapWrapper } from '../../geo/map/MapWrapper';
 import { LayoutHelper } from '../LayoutHelper';
 import View from 'ol/View';
-import { AbcFile, AbcLayout, BlobIO, Logger, Zipper } from '@abc-map/shared';
+import { AbcFile, AbcLayout, BlobIO, LayoutFormat, Logger, Zipper } from '@abc-map/shared';
 import { MapFactory } from '../../geo/map/MapFactory';
 import { jsPDF } from 'jspdf';
 import ReactDOM from 'react-dom';
@@ -28,6 +28,8 @@ import { MapUi } from '../../../components/map-ui/MapUi';
 import html2canvas from 'html2canvas';
 import { FloatingTextFrame } from '../../../components/text-frame/FloatingTextFrame';
 import { FloatingScale } from '../../../components/floating-scale/FloatingScale';
+import { DimensionsPx } from '../../utils/DimensionsPx';
+import { toPrecision } from '../../utils/numbers';
 
 export const logger = Logger.get('LayoutRenderer');
 
@@ -87,9 +89,10 @@ export class LayoutRenderer {
       throw new Error('You must call init() before rendering');
     }
 
-    // Adapt size of map to layout
+    // Compute style ratio
     const dimensions = LayoutHelper.formatToPixel(layout.format);
-    const ratio = sourceMap.getMainRatio(dimensions.width, dimensions.height);
+    const previewDimensions = this.getPreviewDimensionsFor(layout.format);
+    const ratio = this.getStyleRatio(previewDimensions, dimensions);
     logger.info(`Rendering style ratio: ${ratio}`);
 
     // Copy layers from sourceMap to exportMap
@@ -116,6 +119,30 @@ export class LayoutRenderer {
     });
   }
 
+  /**
+   * Compute preview map dimensions from layout. The main goal of this function is to create
+   * a map that fit both layout and user screen.
+   */
+  public getPreviewDimensionsFor(format: LayoutFormat): DimensionsPx {
+    const maxWidth = Math.round(document.body.offsetWidth - document.body.offsetWidth / 5);
+    const maxHeight = Math.round(document.body.offsetHeight - document.body.offsetHeight / 5);
+
+    let width = maxWidth;
+    let height = Math.round((format.height * width) / format.width);
+    if (height > maxHeight) {
+      height = maxHeight;
+      width = Math.round((format.width * height) / format.height);
+    }
+    return { width, height };
+  }
+
+  private getStyleRatio(preview: DimensionsPx, layout: DimensionsPx) {
+    const previewDiag = Math.sqrt(preview.width ** 2 + preview.height ** 2);
+    const layoutDiag = Math.sqrt(layout.width ** 2 + layout.height ** 2);
+
+    return toPrecision(layoutDiag / previewDiag, 9);
+  }
+
   private renderMapDom(map: MapWrapper, layout: AbcLayout, width: string, height: string, ratio: number): Promise<void> {
     const root = this.rootElement;
     if (!root) {
@@ -134,7 +161,7 @@ export class LayoutRenderer {
           ))}
 
           {/* Scale */}
-          {layout.scale && <FloatingScale map={map} scale={layout.scale} />}
+          {layout.scale && <FloatingScale map={map} scale={layout.scale} ratio={ratio} baseFontSizeVmin={0.9} />}
 
           {/* Attributions */}
           <Attributions map={map} ratio={ratio} />

@@ -27,7 +27,7 @@ export class TextFrameFactory {
     return {
       id: nanoid(),
       position: { x: 20, y: 100 },
-      size: { width: 650, height: 400 },
+      size: { width: 800, height: 400 },
       content: [
         { type: 'title', level: 3, children: [{ text: t('This_is_a_brand_new_text_frame') }] },
         { type: 'paragraph', children: [{ text: t('You_can_edit_it_in_full_screen_editor') }] },

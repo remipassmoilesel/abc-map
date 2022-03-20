@@ -38,9 +38,7 @@ import PluggableMap from 'ol/PluggableMap';
 import { ToolModeHelper } from '../../tools/common/ToolModeHelper';
 import { MoveMapTool } from '../../tools/move/MoveMapTool';
 import { StyleFactoryOptions } from '../styles/StyleFactoryOptions';
-import { DimensionsPx } from '../../utils/DimensionsPx';
 import { toPrecision } from '../../utils/numbers';
-import { getRemSize } from '../../ui/getRemSize';
 
 export const logger = Logger.get('MapWrapper.ts');
 
@@ -76,25 +74,10 @@ export class MapWrapper {
   }
 
   private mapSizeObserver?: ResizeObserver;
-  private bodySizeObserver?: ResizeObserver;
   private eventTarget = document.createDocumentFragment();
-
-  /**
-   * This size approximates the size of the main editing map.
-   *
-   * As users choose the styles on the main map, when exporting and sharing a "ratio" is
-   * used to display the symbols in a consistent way.
-   *
-   * In pixels.
-   */
-  private mainReferenceSize: DimensionsPx = { width: 0, height: 0 };
 
   private constructor(private readonly internalMap: Map) {
     this.addLayerChangeListener(this.handleLayerChange);
-
-    this.bodySizeObserver = ResizeObserverFactory.create(debounce(this.updateMainSizeReference, 100));
-    this.bodySizeObserver.observe(document.body);
-    this.updateMainSizeReference();
   }
 
   public dispose() {
@@ -102,9 +85,6 @@ export class MapWrapper {
 
     this.mapSizeObserver?.disconnect();
     this.mapSizeObserver = undefined;
-
-    this.bodySizeObserver?.disconnect();
-    this.bodySizeObserver = undefined;
 
     this.internalMap.dispose();
   }
@@ -348,22 +328,6 @@ export class MapWrapper {
   }
 
   /**
-   * When body size change, we must keep the largest value for style ratio.
-   */
-  private updateMainSizeReference = () => {
-    const width = document.body.clientWidth || 1700;
-    const height = (document.body.clientHeight || 850) - 4 * getRemSize();
-
-    if (this.mainReferenceSize.width < width) {
-      this.mainReferenceSize.width = width;
-    }
-
-    if (this.mainReferenceSize.height < height) {
-      this.mainReferenceSize.height = height;
-    }
-  };
-
-  /**
    * If user select a raster layer, we must disable tools
    */
   private handleLayerChange = () => {
@@ -446,28 +410,18 @@ export class MapWrapper {
     this.eventTarget.removeEventListener(EventType.TileLoadError, listener as EventListener);
   }
 
-  /**
-   * Get a ratio that can be used to display style proportional to the main editing map.
-   *
-   * @param otherWidthPx
-   * @param otherHeightPx
-   */
-  public getMainRatio(otherWidthPx: number, otherHeightPx: number): number {
-    const { width, height } = this.mainReferenceSize;
-    if (!width || !height) {
-      throw new Error('Invalid reference size');
-    }
-
-    const referenceDiag = Math.sqrt(width ** 2 + height ** 2);
-    const otherDiag = Math.sqrt(otherWidthPx ** 2 + otherHeightPx ** 2);
-
-    return toPrecision(otherDiag / referenceDiag, 5);
-  }
-
   public getTarget(): HTMLDivElement | undefined {
     return this.internalMap.getTarget() as HTMLDivElement | undefined;
   }
 
+  /**
+   * Get the ratio of this map with others dimensions.
+   *
+   * E.g: If this method return 3, you will have to multiply point size to 3 to adapt it to provided dimensions.
+   *
+   * @param otherWidthPx
+   * @param otherHeightPx
+   */
   public getRatioWith(otherWidthPx: number, otherHeightPx: number): number {
     const target = this.internalMap.getTarget() as HTMLDivElement | undefined;
     if (!target) {
@@ -478,10 +432,6 @@ export class MapWrapper {
     const otherDiag = Math.sqrt(otherWidthPx ** 2 + otherHeightPx ** 2);
 
     return toPrecision(otherDiag / mapDiag, 5);
-  }
-
-  public getMainReferenceSize(): DimensionsPx {
-    return this.mainReferenceSize;
   }
 
   private handleSizeChange = () => {

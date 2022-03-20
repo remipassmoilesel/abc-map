@@ -73,10 +73,15 @@ export class StorePersistence {
       },
       ui: {
         ...state.ui,
+        documentation: {
+          ...state.ui.documentation,
+        },
       },
     };
 
     cleanState.ui.historyCapabilities = {};
+    cleanState.ui.documentation.scrollPosition = 0;
+    cleanState.ui.sideMenu = {};
     cleanState.project.layouts.activeId = undefined;
     cleanState.project.sharedViews.activeId = undefined;
 

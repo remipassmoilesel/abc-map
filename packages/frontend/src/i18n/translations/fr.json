@@ -870,7 +870,8 @@
     "Link": "Lien",
     "Create_or_edit_a_link": "Créer / éditer un lien",
     "Remove_a_link": "Supprimer un lien",
-    "This_video_cannot_be_embedded": "Cette vidéo ne peut pas être intégrée, cliquez ici pour la voir dans une nouvelle fenêtre."
+    "This_video_cannot_be_embedded": "Cette vidéo ne peut pas être intégrée, cliquez ici pour la voir dans une nouvelle fenêtre.",
+    "There_is_no_symbol_to_insert": "Il n'y a pas de symbole à insérer"
   },
   "core": {
     "ProjectFactory": {

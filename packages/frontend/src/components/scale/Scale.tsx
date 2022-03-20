@@ -33,10 +33,11 @@ interface Props {
   dpi?: number;
   className?: string;
   ratio?: number;
+  baseFontSizeVmin?: number;
   tooltip?: boolean;
 }
 
-const baseFontSizeVmin = 1.4;
+const defaultBaseFontSizeVmin = 1.2;
 
 /**
  * This component show a line representing the current scale of map specified in props.
@@ -47,12 +48,13 @@ const baseFontSizeVmin = 1.4;
  * @constructor
  */
 export function Scale(props: Props) {
-  const { map, minWidth = 80, className, ratio = 1, tooltip = true } = props;
+  const { map, minWidth: _minWidth, className, baseFontSizeVmin = defaultBaseFontSizeVmin, ratio = 1, tooltip = true } = props;
+  const minWidth = _minWidth ?? 60 * ratio;
   const [visible, setVisible] = useState(false);
   const [width, setWidth] = useState(minWidth);
   const [value, setValue] = useState('');
 
-  const containerStyle: CSSProperties = useMemo(() => ({ fontSize: `${baseFontSizeVmin * ratio}vmin` }), [ratio]);
+  const containerStyle: CSSProperties = useMemo(() => ({ fontSize: `${baseFontSizeVmin * ratio}vmin` }), [baseFontSizeVmin, ratio]);
 
   useEffect(() => {
     // This code was shamelessly borrowed from Openlayers ScaleLine, see: openlayers/src/ol/control/ScaleLine.js

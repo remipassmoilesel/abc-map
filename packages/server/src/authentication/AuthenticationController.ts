@@ -50,7 +50,7 @@ import {
 } from './AuthenticationController.schemas';
 import { jwtPlugin } from '../server/jwtPlugin';
 
-const logger = Logger.get('AuthenticationController.ts');
+export const logger = Logger.get('AuthenticationController.ts');
 
 export class AuthenticationController extends Controller {
   constructor(private config: Config, private services: Services) {

@@ -55,7 +55,7 @@ describe('Rendering spec', function () {
       .then(() => TopBar.export())
       .get('[data-cy=pdf-export]')
       .click()
-      .then(() => LongOperation.done(20_000))
+      .then(() => LongOperation.done(50_000))
       .then(() => Download.fileAsBlob())
       .then((pdf) => pdf.arrayBuffer())
       .then((pdfContent) => cy.task<PdfComparison>('comparePdf', { actual: pdfContent, expected: 'test-project-3.pdf' }))

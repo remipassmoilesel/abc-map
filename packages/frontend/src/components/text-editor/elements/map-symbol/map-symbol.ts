@@ -17,7 +17,9 @@
  */
 
 import { Editor, Transforms } from 'slate';
-import { FeatureStyle, GeometryType, MapSymbolElement, TableElement, TableRowElement } from '@abc-map/shared';
+import { FeatureStyle, GeometryType, Logger, MapSymbolElement, TableElement, TableRowElement } from '@abc-map/shared';
+
+const logger = Logger.get('mapSymbol.ts');
 
 export const mapSymbol = {
   create(editor: Editor, style: FeatureStyle, geometryType: GeometryType) {
@@ -26,6 +28,11 @@ export const mapSymbol = {
   },
 
   createLegend(editor: Editor, styles: [FeatureStyle, GeometryType][]) {
+    if (!styles.length) {
+      logger.error('Styles are empty');
+      return;
+    }
+
     // We create a table
     const table: TableElement = { type: 'table', border: 0, children: [] };
     for (let i = 0; i < styles.length; i++) {

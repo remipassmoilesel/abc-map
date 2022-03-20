@@ -29,7 +29,7 @@ interface Props {
   ratio?: number;
 }
 
-const baseFontSizeVmin = 1.3;
+const baseFontSizeVmin = 0.9;
 
 /**
  * This component displays attributions as they are statically exported.
@@ -38,7 +38,7 @@ const baseFontSizeVmin = 1.3;
  */
 export function Attributions(props: Props) {
   const { map, ratio: _ratio } = props;
-  const ratio = _ratio ?? 3;
+  const ratio = _ratio ?? 1;
   const attributions = map.getTextAttributions();
   const style: CSSProperties = useMemo(() => ({ fontSize: `${baseFontSizeVmin * ratio}vmin` }), [ratio]);
 

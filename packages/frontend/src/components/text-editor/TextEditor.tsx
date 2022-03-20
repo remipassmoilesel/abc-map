@@ -45,7 +45,7 @@ export interface Props {
   'data-cy'?: string;
 }
 
-const baseFontSizeVmin = 1.5;
+const baseFontSizeVmin = 1.2;
 
 /**
  * Rich text editor, used in frames for static exports and shared map.

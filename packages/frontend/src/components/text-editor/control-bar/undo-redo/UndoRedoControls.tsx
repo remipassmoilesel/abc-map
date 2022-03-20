@@ -42,15 +42,15 @@ export function UndoRedoControls(props: Props) {
     <div className={clsx(Cls.container, className)}>
       {/* Undo */}
       <WithTooltip title={t('Undo')}>
-        <button onClick={handleUndo}>
-          <FaIcon icon={IconDefs.faUndo} />
+        <button onClick={handleUndo} className={'mr-4'}>
+          <FaIcon icon={IconDefs.faUndo} className={'mr-2'} /> {t('Undo')}
         </button>
       </WithTooltip>
 
       {/* Redo */}
       <WithTooltip title={t('Redo')}>
         <button onClick={handleRedo}>
-          <FaIcon icon={IconDefs.faRedo} />
+          <FaIcon icon={IconDefs.faRedo} className={'mr-2'} /> {t('Redo')}
         </button>
       </WithTooltip>
     </div>
