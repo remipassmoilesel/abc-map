@@ -22,7 +22,7 @@ const logger = Logger.get('LayoutHelper.ts');
 
 export class LayoutHelper {
   public static readonly DPI = 25.4;
-  public static readonly PRINT_RESOLUTION = 200;
+  public static readonly PRINT_RESOLUTION = 250;
 
   public static formatToPixel(format: LayoutFormat): DimensionsPx {
     const width = Math.round((format.width * LayoutHelper.PRINT_RESOLUTION) / LayoutHelper.DPI);

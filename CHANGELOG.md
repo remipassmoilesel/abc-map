@@ -2,7 +2,13 @@
 
 For the moment we use git hashes as version, since no one complained about it 👍
 
-## Better map legends and better exports (XXXXXX XX/03/2022)
+## Better style ratios (xxxxxxxx XX/03/2022)
+
+- Previously the style was adapted from the main map to the preview. This is no longer the case, the style is the same on these two maps.
+  This will allow for easier layouts.
+- Now the style is adapted from the layout to the export map only.
+
+## Better map legends and better exports (a62a8f73 19/03/2022)
 
 - Introduce notion of rich text frames: users can now add rich texts, pictures and videos to maps
 - Migration script to transform legends in text frames

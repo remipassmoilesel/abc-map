@@ -18,7 +18,7 @@
 
 import Cls from './LayoutPreview.module.scss';
 import React, { useCallback, useEffect, useState } from 'react';
-import { AbcScale, AbcTextFrame, AbcView, getAbcWindow, LayoutFormat, Logger } from '@abc-map/shared';
+import { AbcScale, AbcTextFrame, AbcView, getAbcWindow, Logger } from '@abc-map/shared';
 import { AbcLayout } from '@abc-map/shared';
 import isEqual from 'lodash/isEqual';
 import { LayoutHelper } from '../../../core/project/LayoutHelper';
@@ -37,10 +37,9 @@ import { useServices } from '../../../core/useServices';
 import { Views } from '../../../core/geo/Views';
 import { FloatingTextFrame } from '../../../components/text-frame/FloatingTextFrame';
 import { FloatingScale } from '../../../components/floating-scale/FloatingScale';
+import { LayoutRenderer } from '../../../core/project/rendering/LayoutRenderer';
 
 const logger = Logger.get('LayoutPreview.tsx');
-
-const t = prefixedTranslation('ExportView:');
 
 interface Props {
   layout?: AbcLayout;
@@ -52,6 +51,10 @@ interface Props {
   onScaleChange: (scale: AbcScale) => void;
 }
 
+const t = prefixedTranslation('ExportView:');
+
+const render = new LayoutRenderer();
+
 function LayoutPreview(props: Props) {
   const { layout, onNewLayout, onLayoutChanged, onTextFrameChange, onDeleteTextFrame, onScaleChange } = props;
   const { geo } = useServices();
@@ -61,23 +64,8 @@ function LayoutPreview(props: Props) {
   const [previewFrames, setPreviewFrames] = useState<AbcTextFrame[]>([]);
   const [previewScale, setPreviewScale] = useState<AbcScale | undefined>(undefined);
 
-  // Ratio used for styles, between main map and preview map
-  const [styleRatio, setStyleRatio] = useState(1);
-
   // Ratio used for dimensions, between layout and preview map
   const [previewRatio, setPreviewRatio] = useState<number | undefined>(undefined);
-
-  // We update preview ratio
-  useEffect(() => {
-    if (!previewMap || !previewMap.getTarget() || !layout?.view || !previewDimensions) {
-      setPreviewRatio(undefined);
-      return;
-    }
-
-    const dimensionPx = LayoutHelper.formatToPixel(layout.format);
-    const ratio = previewMap.getRatioWith(dimensionPx.width, dimensionPx.height);
-    setPreviewRatio(ratio);
-  }, [layout?.format, layout?.view, previewDimensions, previewMap]);
 
   // Preview map setup
   // We must instantiate a new map each time layout or layout format change
@@ -94,18 +82,27 @@ function LayoutPreview(props: Props) {
     setPreviewMap(map);
 
     // We compute preview map dimensions
-    const { width, height } = getPreviewDimensionsFor(layout.format);
+    const { width, height } = render.getPreviewDimensionsFor(layout.format);
     setPreviewDimensions({ width, height });
 
-    // We clone layers with adapted style ratio
-    const styleRatio = geo.getMainMap().getMainRatio(width, height);
-    setStyleRatio(styleRatio);
-
+    // We clone layers
     const mainMap = geo.getMainMap();
-    map.importLayersFrom(mainMap, { ratio: styleRatio, withSelection: false });
+    map.importLayersFrom(mainMap, { withSelection: false });
 
     return () => map.dispose();
   }, [geo, layout?.format]);
+
+  // We update preview ratio
+  useEffect(() => {
+    if (!previewMap || !previewMap.getTarget() || !layout?.view || !previewDimensions) {
+      setPreviewRatio(undefined);
+      return;
+    }
+
+    const dimensionPx = LayoutHelper.formatToPixel(layout.format);
+    const ratio = previewMap.getRatioWith(dimensionPx.width, dimensionPx.height);
+    setPreviewRatio(ratio);
+  }, [layout?.format, layout?.view, previewDimensions, previewMap]);
 
   // Preview view setup
   useEffect(() => {
@@ -246,22 +243,14 @@ function LayoutPreview(props: Props) {
 
           {/* Text frames */}
           {previewFrames.map((f) => (
-            <FloatingTextFrame
-              key={f.id}
-              frame={f}
-              ratio={styleRatio}
-              editable={true}
-              onChange={handleTextFrameChanged}
-              onDelete={onDeleteTextFrame}
-              bounds={'parent'}
-            />
+            <FloatingTextFrame key={f.id} frame={f} editable={true} onChange={handleTextFrameChanged} onDelete={onDeleteTextFrame} bounds={'parent'} />
           ))}
 
           {/* Scale */}
-          {previewScale && <FloatingScale map={previewMap} scale={previewScale} minWidth={50} ratio={styleRatio} onChange={handleScaleChange} />}
+          {previewScale && <FloatingScale map={previewMap} scale={previewScale} baseFontSizeVmin={0.9} minWidth={50} onChange={handleScaleChange} />}
 
           {/* Attributions */}
-          <Attributions map={previewMap} ratio={styleRatio} />
+          <Attributions map={previewMap} />
         </div>
       )}
 
@@ -280,23 +269,6 @@ function LayoutPreview(props: Props) {
       )}
     </div>
   );
-}
-
-/**
- * Compute preview map dimensions from layout. The main goal of this function is to create
- * a map that fit both layout and user screen.
- */
-function getPreviewDimensionsFor(format: LayoutFormat): DimensionsPx {
-  const maxWidth = Math.round(document.body.offsetWidth - document.body.offsetWidth / 5);
-  const maxHeight = Math.round(document.body.offsetHeight - document.body.offsetHeight / 5);
-
-  let width = maxWidth;
-  let height = Math.round((format.height * width) / format.width);
-  if (height > maxHeight) {
-    height = maxHeight;
-    width = Math.round((format.width * height) / format.height);
-  }
-  return { width, height };
 }
 
 export default withTranslation()(LayoutPreview);

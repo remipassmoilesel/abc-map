@@ -182,12 +182,9 @@ describe('StorePersistence', () => {
       ui: {
         historyCapabilities: {},
         documentation: {
-          scrollPosition: 15,
+          scrollPosition: 0,
         },
-        sideMenu: {
-          'menu-1': true,
-          'menu-2': false,
-        },
+        sideMenu: {},
         informations: {
           sharedMapAlpha: true,
         },

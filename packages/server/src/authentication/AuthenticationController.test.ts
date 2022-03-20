@@ -29,7 +29,9 @@ import { AnonymousUser, AuthenticationRequest, Language, RegistrationConfirmatio
 import * as jwt from 'jsonwebtoken';
 import { RegistrationDao } from './RegistrationDao';
 import { MongodbClient } from '../mongodb/MongodbClient';
+import { logger } from './AuthenticationController';
 
+logger.disable();
 disableSmtpClientLogging();
 
 describe('AuthenticationController', () => {

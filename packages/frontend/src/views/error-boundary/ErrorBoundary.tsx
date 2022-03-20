@@ -25,6 +25,12 @@ import Cls from './ErrorBoundary.module.scss';
 
 const logger = Logger.get('ErrorBoundary');
 
+// Errors with one of these messages are ignored by boundary
+const ignoredErrorMessages = [
+  // Observed in 03/2022, this error occurs on Chromium when users toggle videos fullscreen, but has no effect
+  'ResizeObserver loop limit exceeded',
+];
+
 interface State {
   hasError: boolean;
 }
@@ -63,11 +69,12 @@ class ErrorBoundary extends React.Component<ServiceProps, State> {
     return this.props.children;
   }
 
-  public componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    logger.error('Unhandled React error: ', { error, errorInfo });
-    logger.error(`Error stack: ${error.stack || 'Not defined'}`);
-    logger.error(`Component stack: ${errorInfo.componentStack}`);
-    this.setState({ hasError: true });
+  public componentDidCatch(err: Error | undefined, errorInfo: React.ErrorInfo) {
+    logger.error('Unhandled error: ', { error: err, errorInfo, stack: err?.stack || 'Not defined', componentStack: errorInfo.componentStack });
+
+    if (!isErrorIgnored(err)) {
+      this.setState({ hasError: true });
+    }
   }
 
   public componentDidMount() {
@@ -90,8 +97,15 @@ class ErrorBoundary extends React.Component<ServiceProps, State> {
 
   private handleError = (err: ErrorEvent) => {
     logger.error('Unhandled error: ', err);
-    this.setState({ hasError: true });
+
+    if (!isErrorIgnored(err)) {
+      this.setState({ hasError: true });
+    }
   };
+}
+
+function isErrorIgnored(error: Error | ErrorEvent | undefined): boolean {
+  return !!ignoredErrorMessages.find((msg) => error?.message.indexOf(msg) !== -1);
 }
 
 export default withTranslation()(withServices(ErrorBoundary));

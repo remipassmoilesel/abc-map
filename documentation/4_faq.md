@@ -12,6 +12,7 @@
 - [Server crashed: Error: Frontend root 'abc-map/packages/server/public' must be a directory](#server-crashed-error-frontend-root-abc-mappackagesserverpublic-must-be-a-directory)
 - [(node:132766) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' ...](#node132766-dep_webpack_dev_server_on_after_setup_middleware-deprecationwarning-onaftersetupmiddleware-)
 - [How to create videos for help page ?](#how-to-create-videos-for-help-page-)
+- [About style ratios](#about-style-ratios)
 
 <!-- tocstop -->
 
@@ -74,3 +75,10 @@ This message comes from react-scripts 5.
 ## How to create videos for help page ?
 
 You can use [peek](https://github.com/phw/peek).
+
+## About style ratios
+
+Styles can be artificially scaled, for example between two screen sizes or for exports.
+
+To this end, the functions and methods that handle styles take a "style ratio" as a parameter. For example,
+a map with dots 10 pixels in diameter displayed with a ratio of 2 will have dots 20 pixels in diameter.

@@ -26,6 +26,8 @@ import { CustomEditor } from '../../CustomEditor';
 import { ButtonMenu } from '../../../button-menu/ButtonMenu';
 import { Action } from '../../../button-menu/Action';
 import { StyleFactory } from '../../../../core/geo/styles/StyleFactory';
+import { useServices } from '../../../../core/useServices';
+import { FeatureStyle, GeometryType } from '@abc-map/shared';
 
 const t = prefixedTranslation('TextEditor:');
 
@@ -36,6 +38,7 @@ interface Props {
 const styleFactory = StyleFactory.get();
 
 export function MapSymbol(props: Props) {
+  const { toasts } = useServices();
   const { className } = props;
   const { editor } = useEditor();
   const [modal, showModal] = useState(false);
@@ -51,18 +54,20 @@ export function MapSymbol(props: Props) {
   );
 
   const handleCreateLegend = useCallback(() => {
-    const styles = styleFactory.getAvailableStyles(1);
-    CustomEditor.mapSymbol.createLegend(
-      editor,
-      styles.map((st) => [st.properties, st.geomType])
-    );
-  }, [editor]);
+    const styles: [FeatureStyle, GeometryType][] = styleFactory.getAvailableStyles(1).map((st) => [st.properties, st.geomType]);
+    if (!styles.length) {
+      toasts.info(t('There_is_no_symbol_to_insert'));
+      return;
+    }
+
+    CustomEditor.mapSymbol.createLegend(editor, styles);
+  }, [editor, toasts]);
 
   return (
     <>
-      <ButtonMenu label={t('Map_symbols')} icon={IconDefs.faMapMarkerAlt} className={className}>
-        <Action label={t('Insert_map_symbol')} onClick={handleToggleModal} />
-        <Action label={t('Insert_map_legend')} icon={IconDefs.faTable} onClick={handleCreateLegend} />
+      <ButtonMenu label={t('Map_symbols')} icon={IconDefs.faMapMarkerAlt} className={className} closeOnClick={true}>
+        <Action label={t('Insert_map_symbol')} onClick={handleToggleModal} icon={IconDefs.faMapMarkerAlt} />
+        <Action label={t('Insert_map_legend')} onClick={handleCreateLegend} icon={IconDefs.faTable} />
       </ButtonMenu>
       {modal && <MapSymbolPickerModal onSelected={handleSelection} onCancel={handleToggleModal} />}
     </>

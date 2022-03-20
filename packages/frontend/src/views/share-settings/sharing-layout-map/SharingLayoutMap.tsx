@@ -47,7 +47,6 @@ const logger = Logger.get('SharingLayoutMap');
 function SharingLayoutMap() {
   const { project, geo, history } = useServices();
   const [map, setMap] = useState<MapWrapper>();
-  const [styleRatio, setStyleRatio] = useState(1);
   const [{ width: mapWidth, height: mapHeight }, setMapDimensions] = useState<DimensionsPx>({ width: 0, height: 0 });
   const sharedViews = useAppSelector((st) => st.project.sharedViews.list);
   const activeView = useActiveSharedView();
@@ -65,16 +64,6 @@ function SharingLayoutMap() {
   // Update map dimensions for style ratio
   const handleMapSizeChanged = useCallback((d: DimensionsPx) => setMapDimensions(d), []);
 
-  // Compute style ratio
-  useEffect(() => {
-    if (!mapWidth || !mapHeight) {
-      return;
-    }
-
-    const ratio = geo.getMainMap().getMainRatio(mapWidth, mapHeight);
-    setStyleRatio(ratio);
-  }, [mapWidth, mapHeight, geo]);
-
   // Update map when visible layers change
   useEffect(() => {
     if (!map || !activeView?.layers) {
@@ -83,13 +72,13 @@ function SharingLayoutMap() {
     }
 
     const mainMap = geo.getMainMap();
-    map.importLayersFrom(mainMap, { withSelection: false, ratio: styleRatio });
+    map.importLayersFrom(mainMap, { withSelection: false });
 
     const layers = map.getLayers();
     for (const layerState of activeView.layers) {
       layers.find((lay) => lay.getId() === layerState.layerId)?.setVisible(layerState.visible);
     }
-  }, [activeView?.layers, geo, map, styleRatio]);
+  }, [activeView?.layers, geo, map]);
 
   // Set map view when active shared view change
   useEffect(() => {
@@ -98,9 +87,8 @@ function SharingLayoutMap() {
       return;
     }
 
-    const ratio = geo.getMainMap().getMainRatio(mapWidth, mapHeight);
     const updatedView = Views.normalize({
-      resolution: activeView.view.resolution / ratio,
+      resolution: activeView.view.resolution,
       projection: activeView.view.projection,
       center: activeView.view.center,
     });
@@ -118,10 +106,9 @@ function SharingLayoutMap() {
       return;
     }
 
-    const ratio = geo.getMainMap().getMainRatio(mapWidth, mapHeight);
     const previewView = map.getView();
     const view: AbcView = Views.normalize({
-      resolution: previewView.resolution * ratio,
+      resolution: previewView.resolution,
       projection: previewView.projection,
       center: previewView.center,
     });
@@ -132,7 +119,7 @@ function SharingLayoutMap() {
         .then(() => history.register(HistoryKey.SharedViews, cs))
         .catch((err) => logger.error('Cannot update shared view: ', err));
     }
-  }, [geo, history, map, mapHeight, mapWidth, project]);
+  }, [history, map, mapHeight, mapWidth, project]);
 
   const handleNewView = useCallback(() => {
     const add = async () => {

@@ -30,11 +30,12 @@ interface Props {
   scale: AbcScale;
   minWidth?: number;
   ratio?: number;
+  baseFontSizeVmin?: number;
   onChange?: (before: AbcScale) => void;
 }
 
 export function FloatingScale(props: Props) {
-  const { map, scale, minWidth, ratio, onChange } = props;
+  const { map, scale, minWidth, ratio, baseFontSizeVmin, onChange } = props;
 
   const handleDragStop: RndDragCallback = useCallback(
     (ev, data) => {
@@ -45,7 +46,7 @@ export function FloatingScale(props: Props) {
 
   return (
     <Rnd position={{ x: scale.x, y: scale.y }} onDragStop={handleDragStop} enableResizing={false} bounds={'parent'}>
-      <Scale map={map} minWidth={minWidth} ratio={ratio} tooltip={false} className={Cls.scale} />
+      <Scale map={map} minWidth={minWidth} ratio={ratio} baseFontSizeVmin={baseFontSizeVmin} tooltip={false} className={Cls.scale} />
     </Rnd>
   );
 }
