@@ -20,6 +20,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import AskFeedbackBubble from './ask-bubble/AskFeedbackBubble';
 import { useServices } from '../../core/useServices';
 import { Logger } from '@abc-map/shared';
+import { createPortal } from 'react-dom';
 
 const logger = Logger.get('FeedbackPopup.tsx');
 
@@ -55,10 +56,10 @@ function FeedbackPopup() {
   }, [modals]);
 
   if (showBubble) {
-    return <AskFeedbackBubble onCancel={handleBubbleCancel} onConfirm={handleBubbleConfirm} />;
-  } else {
-    return <></>;
+    return createPortal(<AskFeedbackBubble onCancel={handleBubbleCancel} onConfirm={handleBubbleConfirm} />, document.body);
   }
+
+  return <></>;
 }
 
 export default FeedbackPopup;
