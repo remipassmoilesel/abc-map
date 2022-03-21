@@ -276,6 +276,12 @@ export class ProjectService {
     return this.store.getState().project.layouts.list;
   }
 
+  public getTextFrames(): AbcTextFrame[] {
+    // TODO: add shared view frames
+    const project = this.store.getState().project;
+    return project.layouts.list.flatMap((lay) => lay.textFrames);
+  }
+
   public addLayouts(layouts: AbcLayout[]): void {
     this.store.dispatch(ProjectActions.addLayouts(layouts));
   }
@@ -302,26 +308,8 @@ export class ProjectService {
     this.store.dispatch(ProjectActions.setLayoutIndex(layout, index));
   }
 
-  public addLayoutTextFrame(layout: AbcLayout, frame: AbcTextFrame): void {
-    const updated: AbcLayout = {
-      ...layout,
-      textFrames: layout.textFrames.concat(frame),
-    };
-
-    this.updateLayout(updated);
-  }
-
   public updateTextFrame(frame: AbcTextFrame): void {
     this.store.dispatch(ProjectActions.updateTextFrame(frame));
-  }
-
-  public removeLayoutTextFrame(layout: AbcLayout, frame: AbcTextFrame): void {
-    const updated: AbcLayout = {
-      ...layout,
-      textFrames: layout.textFrames.filter((frm) => frm.id !== frame.id),
-    };
-
-    this.updateLayout(updated);
   }
 
   public updateLayout(layout: AbcLayout) {
