@@ -301,13 +301,19 @@ function ExportView() {
   const handleTextFrameChangeDebounced = useMemo(
     () =>
       debounce((before: AbcTextFrame, after: AbcTextFrame) => {
+        // Layout may have been deleted
+        if (!project.getTextFrames().find((lay) => after.id === lay.id)) {
+          logger.warn('Layer have been deleted, cannot add history task');
+          return;
+        }
+
         const updateFrame = UpdateTextFrameChangeset.create(before, after);
         updateFrame
           .apply()
           .then(() => history.register(HistoryKey.Export, updateFrame))
           .catch((err) => logger.error('Cannot update text frame: ', err));
       }, 500),
-    [history]
+    [history, project]
   );
 
   const handleTextFrameChange = useCallback(

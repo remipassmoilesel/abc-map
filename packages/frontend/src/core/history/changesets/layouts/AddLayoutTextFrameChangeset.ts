@@ -32,10 +32,16 @@ export class AddLayoutTextFrameChangeset extends Changeset {
   }
 
   public async undo(): Promise<void> {
-    this.project.removeLayoutTextFrame(this.layout, this.frame);
+    const updated: AbcLayout = { ...this.layout };
+    this.project.updateLayout(updated);
   }
 
   public async apply(): Promise<void> {
-    this.project.addLayoutTextFrame(this.layout, this.frame);
+    const updated: AbcLayout = {
+      ...this.layout,
+      textFrames: this.layout.textFrames.concat([this.frame]),
+    };
+
+    this.project.updateLayout(updated);
   }
 }

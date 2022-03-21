@@ -62,8 +62,8 @@ export function projectReducer(state = projectInitialState, action: ProjectActio
 
     case ActionType.UpdateLayout: {
       const newState: ProjectState = { ...state, layouts: { ...state.layouts } };
-      newState.layouts.list = state.layouts.list.map((lay) => {
-        return lay.id === action.layout.id ? action.layout : lay;
+      newState.layouts.list = state.layouts.list.map((previous) => {
+        return previous.id === action.layout.id ? action.layout : previous;
       });
       return newState;
     }
@@ -112,8 +112,8 @@ export function projectReducer(state = projectInitialState, action: ProjectActio
 
     case ActionType.UpdateSharedView: {
       const newState: ProjectState = { ...state, sharedViews: { ...state.sharedViews } };
-      newState.sharedViews.list = newState.sharedViews.list.map((view) => {
-        return view.id === action.view.id ? action.view : view;
+      newState.sharedViews.list = newState.sharedViews.list.map((previous) => {
+        return previous.id === action.view.id ? action.view : previous;
       });
       return newState;
     }
