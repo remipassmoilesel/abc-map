@@ -2,7 +2,12 @@
 
 For the moment we use git hashes as version, since no one complained about it 👍
 
-## Better style ratios (xxxxxxxx XX/03/2022)
+## Better "Add layer" dialog (xxxxxxx XX/03/2022)
+
+- Bigger dialog
+- Better style, more readable
+
+## Better style ratios (c6c10ada 20/03/2022)
 
 - Previously the style was adapted from the main map to the preview. This is no longer the case, the style is the same on these two maps.
   This will allow for easier layouts.

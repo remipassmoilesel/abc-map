@@ -83,34 +83,30 @@ function AddLayerModal(props: Props) {
         <Modal.Title>{t('New_layer')} 🗺️</Modal.Title>
       </Modal.Header>
       <Modal.Body className={Cls.modal}>
-        <div className={'container'}>
-          {/* Left panel, type selector and advice*/}
-          <div className={`row ${Cls.mainRow}`}>
-            <div className={`col-xl-4 ${Cls.leftPanel}`}>
-              <div className={Cls.subTitle}>{t('What_kind_of_layer')}</div>
+        {/* Selector and advice on left*/}
+        <div className={Cls.leftPanel}>
+          <div className={Cls.subTitle}>{t('What_kind_of_layer')}</div>
 
-              <select value={layerType.id} onChange={handleLayerTypeChange} className={'form-select'} data-cy={'add-layer-type'}>
-                {LabeledLayerTypes.All.map((type) => (
-                  <option key={type.id} value={type.id}>
-                    {t(type.i18nLabel)}
-                  </option>
-                ))}
-              </select>
+          <select value={layerType.id} onChange={handleLayerTypeChange} className={'form-select'} data-cy={'add-layer-type'}>
+            {LabeledLayerTypes.All.map((type) => (
+              <option key={type.id} value={type.id}>
+                {t(type.i18nLabel)}
+              </option>
+            ))}
+          </select>
 
-              <HelpPanel type={layerType.id} />
-            </div>
+          <HelpPanel type={layerType.id} />
+        </div>
 
-            {/* Settings panels on right */}
-            <div className={`col-xl-8 ${Cls.rightPanel}`}>
-              <div className={Cls.subTitle}>{t('Parameters')}</div>
+        {/* Settings on right */}
+        <div className={Cls.rightPanel}>
+          <div className={Cls.subTitle}>{t('Parameters')}</div>
 
-              {predefinedSelected && <PredefinedPanel value={predefinedValues} onChange={handlePredefinedValueChanged} onCancel={onHide} onConfirm={onHide} />}
-              {geometrySelected && <GeometryLayerPanel onConfirm={onHide} onCancel={onHide} />}
-              {xyzSelected && <XYZLayerPanel url={xyzValues} onChange={handleXyzValuesChange} onCancel={onHide} onConfirm={onHide} />}
-              {wmsSelected && <WmsLayerPanel projection={projection} value={wmsValues} onChange={handleWmsValuesChange} onCancel={onHide} onConfirm={onHide} />}
-              {wmtsSelected && <WmtsLayerPanel value={wmtsValues} onChange={handleWmtsValuesChange} onCancel={onHide} onConfirm={onHide} />}
-            </div>
-          </div>
+          {predefinedSelected && <PredefinedPanel value={predefinedValues} onChange={handlePredefinedValueChanged} onCancel={onHide} onConfirm={onHide} />}
+          {geometrySelected && <GeometryLayerPanel onConfirm={onHide} onCancel={onHide} />}
+          {xyzSelected && <XYZLayerPanel url={xyzValues} onChange={handleXyzValuesChange} onCancel={onHide} onConfirm={onHide} />}
+          {wmsSelected && <WmsLayerPanel projection={projection} value={wmsValues} onChange={handleWmsValuesChange} onCancel={onHide} onConfirm={onHide} />}
+          {wmtsSelected && <WmtsLayerPanel value={wmtsValues} onChange={handleWmtsValuesChange} onCancel={onHide} onConfirm={onHide} />}
         </div>
       </Modal.Body>
     </Modal>

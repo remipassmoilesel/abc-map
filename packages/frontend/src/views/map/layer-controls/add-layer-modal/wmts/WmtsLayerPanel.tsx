@@ -69,7 +69,7 @@ class WmtsLayerPanel extends Component<Props, State> {
     const protocolWarn = this.props.value.capabilitiesUrl?.toLocaleLowerCase().includes('wms');
 
     return (
-      <div className={'flex-grow-1 d-flex flex-column justify-content-between'}>
+      <div className={Cls.panel}>
         {/* URL and credentials form */}
         <div className={'d-flex flex-row'}>
           <input
@@ -110,7 +110,9 @@ class WmtsLayerPanel extends Component<Props, State> {
         </div>
 
         {/* Capabilities and layers selection */}
-        <div className={'d-flex justify-content-end mb-3'}>
+        <div className={'d-flex align-items-center justify-content-end mb-3'}>
+          {capabilities && <div className={'flex-grow-1'}>{t('Select_layer')} : </div>}
+
           <button onClick={this.fetchCapabilities} disabled={loading} data-cy={'wmts-settings-capabilities'} className={'btn btn-primary ml-2'}>
             {t('List_available_layers')}
           </button>
@@ -120,8 +122,7 @@ class WmtsLayerPanel extends Component<Props, State> {
 
         {capabilities && (
           <>
-            <div className={'mb-2'}>{t('Select_layer')} : </div>
-            <div className={Cls.wmtsLayerSelector}>
+            <div className={Cls.layerSelector}>
               {layers.length < 1 && <div className={'p-3 text-center'}>Pas de couche disponible</div>}
               {layers.map((lay, i) => (
                 <WmtsLayerItem
@@ -138,7 +139,9 @@ class WmtsLayerPanel extends Component<Props, State> {
         <div className={'flex-grow-1'} />
 
         {/* Form validation and controls */}
-        <FormValidationLabel state={formState} />
+        <div className={'d-flex justify-content-end mt-2'}>
+          <FormValidationLabel state={formState} />
+        </div>
 
         <ControlButtons onCancel={onCancel} onConfirm={this.handleConfirm} submitDisabled={submitDisabled} />
       </div>

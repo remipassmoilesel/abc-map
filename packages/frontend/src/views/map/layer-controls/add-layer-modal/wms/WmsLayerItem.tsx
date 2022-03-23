@@ -35,7 +35,7 @@ class WmsLayerItem extends Component<Props, {}> {
     const classes = this.props.selected ? `${Cls.wmsLayerItem} ${Cls.selected}` : Cls.wmsLayerItem;
     return (
       <div className={classes} onClick={this.handleClick} data-cy={'wms-layer-item'}>
-        <div>{layer.Name}</div>
+        <div className={'fw-bold'}>{layer.Name}</div>
         <small>{layer.Abstract}</small>
       </div>
     );
