@@ -18,38 +18,47 @@
 @import "src/styles/variables";
 @import "src/styles/mixins";
 
-$height: 65vh;
+$height: 75vh;
 
 .modal {
+  height: $height;
   min-height: $height;
 
   display: flex;
-  justify-content: stretch;
-  align-items: stretch;
-}
+  flex-direction: row;
 
-.mainRow {
-  min-height: 60vh;
+  @include media-breakpoint-down(xl) {
+    display: flex;
+    flex-direction: column;
+  }
 }
 
 .leftPanel {
+  padding-right: 2rem;
+  margin-right: 2rem;
   border-right: solid $gray-300 0.1rem;
-  padding-right: 3rem !important;
+
+  min-width: 30%;
+  height: 100%;
 
   @include media-breakpoint-down(xl) {
+    width: 100%;
+    height: auto;
     border: none;
   }
 }
 
 .rightPanel {
+  flex-grow: 1;
+
   display: flex;
   flex-direction: column;
-  align-items: stretch;
-  justify-content: stretch;
+
+  overflow: hidden;
 }
 
 .subTitle {
   height: 2rem;
   font-size: 1.2rem;
-  margin-bottom: 2rem;
+  margin-bottom: 0.7rem;
 }

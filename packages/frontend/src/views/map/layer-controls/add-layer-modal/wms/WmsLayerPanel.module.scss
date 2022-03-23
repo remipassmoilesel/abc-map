@@ -16,12 +16,23 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-.wmsLayerSelector {
-  height: 20vh;
+@import "src/styles/variables";
+
+.panel {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  max-height: 95%;
+}
+
+.layerSelector {
+  padding: 0.5rem;
+  border: solid 0.1rem $gray-200;
+
   overflow-x: hidden;
   overflow-y: scroll;
-  padding: 0.5rem;
-  border: solid 0.1rem lightgrey;
 }
 
 .warn {
