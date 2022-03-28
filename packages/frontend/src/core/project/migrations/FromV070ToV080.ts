@@ -37,7 +37,7 @@ export class FromV070ToV080 implements ProjectMigration {
   }
 
   public async migrate(_manifest: AbcProjectManifest, files: AbcFile<Blob>[]): Promise<MigratedProject> {
-    const manifest = _manifest as AbcProjectManifest070;
+    const manifest = _manifest as unknown as AbcProjectManifest070;
 
     const layouts: AbcLayout[] = manifest.layouts.map((lay) => {
       const frame = this.legendToFrame(lay.legend);
@@ -46,9 +46,9 @@ export class FromV070ToV080 implements ProjectMigration {
       return migrated;
     });
 
-    const sharedViews: AbcSharedView[] = manifest.sharedViews.map((views) => {
-      const frame = this.legendToFrame(views.legend);
-      const migrated = { ...views, textFrames: frame ? [frame] : [] };
+    const sharedViews: AbcSharedView[] = manifest.sharedViews.map((view) => {
+      const frame = this.legendToFrame(view.legend);
+      const migrated = { ...view, textFrames: frame ? [frame] : [] };
       delete (migrated as Partial<AbcSharedView070>).legend;
       return migrated;
     });
@@ -62,7 +62,7 @@ export class FromV070ToV080 implements ProjectMigration {
           ...manifest.metadata,
           version: NEXT,
         },
-      },
+      } as unknown as AbcProjectManifest,
       files,
     };
   }

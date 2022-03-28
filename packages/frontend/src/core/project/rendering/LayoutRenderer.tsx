@@ -157,11 +157,11 @@ export class LayoutRenderer {
 
           {/* Text frames */}
           {layout.textFrames.map((frame) => (
-            <FloatingTextFrame key={frame.id} frame={frame} editable={false} ratio={ratio} />
+            <FloatingTextFrame key={frame.id} frame={frame} readOnly={true} ratio={ratio} />
           ))}
 
           {/* Scale */}
-          {layout.scale && <FloatingScale map={map} scale={layout.scale} ratio={ratio} baseFontSizeVmin={0.9} />}
+          {layout.scale && <FloatingScale map={map} scale={layout.scale} readOnly={true} ratio={ratio} baseFontSizeEm={0.9} />}
 
           {/* Attributions */}
           <Attributions map={map} ratio={ratio} />

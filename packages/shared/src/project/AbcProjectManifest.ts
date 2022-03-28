@@ -31,7 +31,14 @@ export interface AbcProjectManifest {
   // Layouts for PDF exports
   layouts: AbcLayout[];
   // Views publicly accessible
-  sharedViews: AbcSharedView[];
+  sharedViews: {
+    // If true, map is fullscreen
+    fullscreen: boolean;
+    // If not fullscreen, these dimensions are used
+    mapDimensions: { width: number; height: number };
+    // List of views
+    list: AbcSharedView[];
+  };
 }
 
 export interface AbcProjectMetadata {

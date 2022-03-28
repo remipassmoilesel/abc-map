@@ -101,7 +101,14 @@ export class TestHelper {
         projection: DEFAULT_PROJECTION,
         resolution: 1000,
       },
-      sharedViews: [],
+      sharedViews: {
+        list: [],
+        fullscreen: false,
+        mapDimensions: {
+          width: 800,
+          height: 600,
+        },
+      },
     };
   }
 

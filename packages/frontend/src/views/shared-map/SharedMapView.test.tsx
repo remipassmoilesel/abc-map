@@ -20,7 +20,7 @@ import { abcRender } from '../../core/utils/test/abcRender';
 import { logger } from './SharedMapView';
 import SharedMapView from './SharedMapView';
 import { Route, Switch } from 'react-router-dom';
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { SinonStubbedInstance } from 'sinon';
 import { ProjectService } from '../../core/project/ProjectService';
 import { MapWrapper } from '../../core/geo/map/MapWrapper';
@@ -56,12 +56,11 @@ describe('SharedMapView', () => {
     });
 
     // Act
-    abcRender(
-      <Switch>
-        <Route exact path={'/shared/:projectId'} component={SharedMapView} />
-      </Switch>,
-      { services, store, router: { initialEntries: ['/shared/e5e02711-ee9a-4210-b2ca-7d60c1a52613'] } }
-    );
+    abcRender(withViewport(<Route exact path={'/shared/:projectId'} component={SharedMapView} />), {
+      services,
+      store,
+      router: { initialEntries: ['/shared/e5e02711-ee9a-4210-b2ca-7d60c1a52613'] },
+    });
 
     // Assert
     await waitFor(async () => {
@@ -76,12 +75,10 @@ describe('SharedMapView', () => {
     project.loadSharedProject.rejects();
 
     // Act
-    abcRender(
-      <Switch>
-        <Route exact path={'/shared/:projectId'} component={SharedMapView} />
-      </Switch>,
-      { services, router: { initialEntries: ['/shared/e5e02711-ee9a-4210-b2ca-7d60c1a52613'] } }
-    );
+    abcRender(withViewport(<Route exact path={'/shared/:projectId'} component={SharedMapView} />), {
+      services,
+      router: { initialEntries: ['/shared/e5e02711-ee9a-4210-b2ca-7d60c1a52613'] },
+    });
 
     // Assert
     expect(project.loadSharedProject.args).toEqual([['e5e02711-ee9a-4210-b2ca-7d60c1a52613']]);
@@ -89,3 +86,11 @@ describe('SharedMapView', () => {
     expect(await screen.findByTestId('error')).toBeDefined();
   });
 });
+
+function withViewport(node: ReactElement) {
+  return (
+    <div className={'abc-app-viewport'}>
+      <Switch>{node}</Switch>
+    </div>
+  );
+}

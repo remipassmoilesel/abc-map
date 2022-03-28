@@ -26,6 +26,7 @@ import { FromV040ToV050 } from './migrations/FromV040ToV050';
 import { FromV050ToV060 } from './migrations/FromV050ToV060';
 import { FromV060ToV070 } from './migrations/FromV060ToV070';
 import { FromV070ToV080 } from './migrations/FromV070ToV080';
+import { FromV080ToV090 } from './migrations/FromV080ToV090';
 
 export const logger = Logger.get('ProjectUpdater.ts', 'debug');
 
@@ -43,6 +44,7 @@ export class ProjectUpdater {
       new FromV050ToV060(),
       new FromV060ToV070(),
       new FromV070ToV080(),
+      new FromV080ToV090(),
     ]);
   }
 
@@ -55,7 +57,7 @@ export class ProjectUpdater {
     for (const migration of migrations) {
       if (await migration.interestedBy(result.manifest, result.files)) {
         logger.debug(`Applying migration ${migration.constructor.name}`);
-        result = await migration.migrate(result.manifest, result.files);
+        result = (await migration.migrate(result.manifest, result.files)) as MigratedProject;
       }
     }
 

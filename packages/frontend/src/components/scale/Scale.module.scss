@@ -33,6 +33,9 @@
   font-size: 0.9em;
   border-radius: 0.4em;
   border: solid 0.1rem $control-color;
+
+  cursor: default;
+  user-select: none;
 }
 
 .line {

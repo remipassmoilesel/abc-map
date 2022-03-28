@@ -17,5 +17,9 @@
  */
 
 .scale {
-  cursor: move;
+  cursor: move !important;
+
+  &.readOnly {
+    cursor: default;
+  }
 }

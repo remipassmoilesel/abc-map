@@ -19,13 +19,7 @@
 @import "src/styles/variables";
 @import "src/styles/mixins";
 
-.drawer {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  bottom: 1rem;
-  left: 80vw;
-
+.navigationMenu {
   z-index: $zIndex-sharedMap-menu;
 
   display: flex;
@@ -39,18 +33,11 @@
   border: solid 0.1rem $gray-400;
   border-radius: $border-radius;
 
+  width: 30rem;
+
   @include media-breakpoint-down(xl) {
     left: 1rem;
   }
-}
-
-.navButton {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  margin: 0.5rem;
-  padding: 0.5rem;
 }
 
 .closeButton {

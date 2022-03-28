@@ -58,7 +58,7 @@ function ImageSlider(props: Props) {
 
     let objectUrl: string | undefined;
     setLoading(true);
-    resolveInAtLeast(dataStore.downloadFile(urls[activeIndex]), 300)
+    resolveInAtLeast(dataStore.downloadFile(urls[activeIndex]), 200)
       .then((res) => {
         objectUrl = URL.createObjectURL(res.content);
         setActivePreview(objectUrl);

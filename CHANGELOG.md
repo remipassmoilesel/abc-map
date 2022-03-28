@@ -2,7 +2,16 @@
 
 For the moment we use git hashes as version, since no one complained about it üëç
 
-## Better "Add layer" dialog (xxxxxxx XX/03/2022)
+## Shared maps, part 3 (XXXXXX XX/03/2022)
+
+- Better management of the size of shared maps, fullscreen shared maps
+- Better positioning of scale and rich text frames
+- Better navigation between shared views
+- Better "My projects" dialog
+  - Better user experience
+  - No more layout shifts
+
+## Better "Add layer" dialog (d63aae91 23/03/2022)
 
 - Bigger dialog
 - Better style, more readable
@@ -64,7 +73,7 @@ For the moment we use git hashes as version, since no one complained about it ü
 - Lazy loading of pages, js bundles are now lighter
 - Migration to Openlayers 6.13
 
-## Project sharing, part 2 (be7ddb2b 06/02/2022)
+## Shared maps, part 2 (be7ddb2b 06/02/2022)
 
 This feature is still in experimental stage.
 
@@ -81,7 +90,7 @@ This feature is still in experimental stage.
 - New dialog box with list of experimental features, ability to enable or disable features
 - Parameters persisted between sessions
 
-## Project sharing, part 1 (2ba159d0 19/01/2022)
+## Shared maps, part 1 (2ba159d0 19/01/2022)
 
 This feature is released in experimental stage.
 

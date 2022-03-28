@@ -57,6 +57,11 @@ describe('StorePersistence', () => {
         },
         sharedViews: {
           list: [],
+          fullscreen: true,
+          mapDimensions: {
+            width: 800,
+            height: 600,
+          },
           activeId: 'test-active-view-id',
         },
       },
@@ -140,6 +145,12 @@ describe('StorePersistence', () => {
         },
         sharedViews: {
           list: [],
+          fullscreen: true,
+          mapDimensions: {
+            // Values will be overwritten at project loading
+            width: 0,
+            height: 0,
+          },
           // Active view may have 'disappear'
           activeId: undefined,
         },

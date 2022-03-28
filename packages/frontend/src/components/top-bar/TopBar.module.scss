@@ -20,12 +20,11 @@
 @import "src/styles/mixins";
 
 .topBar {
-  position: relative;
-  z-index: $zIndex-topBar;
-
   height: $top-bar-height;
   min-height: $top-bar-height;
   max-height: $top-bar-height;
+
+  z-index: $zIndex-topBar;
 
   width: 100vw;
   max-width: 100vw;
@@ -49,6 +48,7 @@
   justify-content: center;
 
   height: 4vh;
+  max-height: 100%;
 
   border-radius: $border-radius;
   border: none;

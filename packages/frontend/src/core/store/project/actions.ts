@@ -34,6 +34,8 @@ export enum ActionType {
   SetActiveSharedView = 'SetActiveSharedView',
   UpdateSharedView = 'UpdateSharedView',
   RemoveSharedViews = 'RemoveSharedViews',
+  SetSharedMapDimensions = 'SetSharedMapDimensions',
+  SetSharedMapFullscreen = 'SetSharedMapFullscreen',
   SetView = 'SetView',
   SetPublic = 'SetPublic',
 }
@@ -115,6 +117,17 @@ export interface RemoveSharedViews {
   views: AbcSharedView[];
 }
 
+export interface SetSharedMapDimensions {
+  type: ActionType.SetSharedMapDimensions;
+  width: number;
+  height: number;
+}
+
+export interface SetSharedMapFullscreen {
+  type: ActionType.SetSharedMapFullscreen;
+  value: boolean;
+}
+
 export interface SetView {
   type: ActionType.SetView;
   view: AbcView;
@@ -141,6 +154,8 @@ export type ProjectAction =
   | SetActiveSharedView
   | UpdateSharedView
   | RemoveSharedViews
+  | SetSharedMapDimensions
+  | SetSharedMapFullscreen
   | SetView
   | SetPublic;
 
@@ -249,6 +264,21 @@ export class ProjectActions {
     return {
       type: ActionType.RemoveSharedViews,
       views,
+    };
+  }
+
+  public static setSharedMapDimensions(width: number, height: number): ProjectAction {
+    return {
+      type: ActionType.SetSharedMapDimensions,
+      width,
+      height,
+    };
+  }
+
+  public static setSharedMapFullscreen(value: boolean): ProjectAction {
+    return {
+      type: ActionType.SetSharedMapFullscreen,
+      value,
     };
   }
 

@@ -39,7 +39,7 @@ export class AddLayoutTextFrameChangeset extends Changeset {
   public async apply(): Promise<void> {
     const updated: AbcLayout = {
       ...this.layout,
-      textFrames: this.layout.textFrames.concat([this.frame]),
+      textFrames: this.layout.textFrames.concat(this.frame),
     };
 
     this.project.updateLayout(updated);

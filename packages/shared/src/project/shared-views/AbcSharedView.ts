@@ -17,12 +17,16 @@
  */
 
 import { AbcView } from '../AbcView';
+import { AbcTextFrame } from '../text-frame';
+import { AbcScale } from '../AbcScale';
 
 export interface AbcSharedView {
   id: string;
   title: string;
   view: AbcView;
   layers: LayerState[];
+  textFrames: AbcTextFrame[];
+  scale?: AbcScale;
 }
 
 // Each view can show or hide layers

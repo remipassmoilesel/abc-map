@@ -19,11 +19,11 @@
 import { AbcSharedView } from '@abc-map/shared';
 import { useAppSelector } from '../store/hooks';
 
-export const useActiveSharedView = (): AbcSharedView | undefined => {
+export function useActiveSharedView(): AbcSharedView | undefined {
   const { activeId, list } = useAppSelector((st) => st.project.sharedViews);
   if (!activeId) {
     return;
   }
 
   return list.find((view) => view.id === activeId);
-};
+}

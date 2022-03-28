@@ -66,6 +66,9 @@ export class StorePersistence {
         },
         sharedViews: {
           ...state.project.sharedViews,
+          mapDimensions: {
+            ...state.project.sharedViews.mapDimensions,
+          },
         },
       },
       map: {
@@ -84,6 +87,8 @@ export class StorePersistence {
     cleanState.ui.sideMenu = {};
     cleanState.project.layouts.activeId = undefined;
     cleanState.project.sharedViews.activeId = undefined;
+    cleanState.project.sharedViews.mapDimensions.width = 0;
+    cleanState.project.sharedViews.mapDimensions.height = 0;
 
     try {
       const serializedState = JSON.stringify(cleanState);

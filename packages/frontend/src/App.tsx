@@ -40,6 +40,7 @@ import { WarningBeforeUnload } from './components/warning-before-unload/WarningB
 import { TokenWatcher } from './components/token-watcher/TokenWatcher';
 import PromptVariablesModal from './components/prompt-variables-modal/PromptVariablesModal';
 import { BlueLoader } from './components/blue-loader/BlueLoader';
+import clsx from 'clsx';
 
 // App views, all lazy loaded
 const LandingView = lazy(() => import('./views/landing/LandingView'));
@@ -54,7 +55,7 @@ const UserAccountView = lazy(() => import('./views/user-account/UserAccountView'
 const LegalMentionsView = lazy(() => import('./views/legal-mentions/LegalMentionsView'));
 const FundingView = lazy(() => import('./views/funding/FundingView'));
 const SharedMapView = lazy(() => import('./views/shared-map/SharedMapView'));
-const ShareSettingsView = lazy(() => import('./views/share-settings/ShareSettingsView'));
+const SharedMapSettingsView = lazy(() => import('./views/shared-map-settings/SharedMapSettingsView'));
 const DocumentationView = lazy(() => import('./views/documentation/DocumentationView'));
 
 const fullscreenRoutes = [Routes.sharedMap().raw()];
@@ -76,14 +77,14 @@ export function App() {
         <>
           <TopBar />
 
-          <div className={Cls.appViewport}>
+          <div className={clsx(Cls.appViewport, 'abc-app-viewport')}>
             <Suspense fallback={fallbackUi()}>
               <Switch>
                 <Route exact path={'/'} component={LandingView} />
                 <Route exact path={Routes.landing().raw()} component={LandingView} />
                 <Route exact path={Routes.map().raw()} component={MapView} />
                 <Route exact path={Routes.dataStore().raw()} component={DataStoreView} />
-                <Route exact path={Routes.shareSettings().raw()} component={ShareSettingsView} />
+                <Route exact path={Routes.shareSettings().raw()} component={SharedMapSettingsView} />
                 <Route exact path={Routes.export().raw()} component={ExportView} />
                 <Route exact path={Routes.documentation().raw()} component={DocumentationView} />
                 <Route exact path={Routes.confirmAccount().raw()} component={ConfirmAccountView} />
@@ -117,12 +118,14 @@ export function App() {
       {/* Map share, fullscreen */}
       {!fullscreenView && (
         <>
-          <Suspense fallback={fallbackUi()}>
-            <Switch>
-              <Route exact path={Routes.sharedMap().raw()} component={SharedMapView} />
-              <Route path={'*'} component={NotFoundView} />
-            </Switch>
-          </Suspense>
+          <div className={clsx(Cls.appViewport, 'abc-app-viewport')}>
+            <Suspense fallback={fallbackUi()}>
+              <Switch>
+                <Route exact path={Routes.sharedMap().raw()} component={SharedMapView} />
+                <Route path={'*'} component={NotFoundView} />
+              </Switch>
+            </Suspense>
+          </div>
         </>
       )}
 

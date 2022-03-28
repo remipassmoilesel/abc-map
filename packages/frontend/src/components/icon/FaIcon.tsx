@@ -19,7 +19,7 @@
 import Cls from './Icon.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
-import { CSSProperties } from 'react';
+import { CSSProperties, useMemo } from 'react';
 import clsx from 'clsx';
 
 interface Props {
@@ -32,9 +32,8 @@ interface Props {
 }
 
 export function FaIcon(props: Props) {
-  const { icon, size, color, title, className } = props;
-  const dimensions = (props.size && { width: size, height: size }) || undefined;
-  const style: CSSProperties = { ...props.style, color, ...dimensions };
+  const { icon, size, color, title, style: _style, className } = props;
+  const style: CSSProperties = useMemo(() => ({ ..._style, color, width: size, height: size }), [_style, color, size]);
 
   return <FontAwesomeIcon icon={icon} style={style} className={clsx(`abc-icon`, Cls.icon, className)} title={title} />;
 }

@@ -16,10 +16,10 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
+import Cls from './Attributions.module.scss';
 import React, { CSSProperties, useMemo } from 'react';
 import { MapWrapper } from '../../core/geo/map/MapWrapper';
 import { Logger } from '@abc-map/shared';
-import Cls from './Attributions.module.scss';
 import MainIcon from '../../assets/main-icon.png';
 
 const logger = Logger.get('Attributions.tsx');
@@ -29,7 +29,7 @@ interface Props {
   ratio?: number;
 }
 
-const baseFontSizeVmin = 0.9;
+const baseFontSizeEm = 0.9;
 
 /**
  * This component displays attributions as they are statically exported.
@@ -40,7 +40,7 @@ export function Attributions(props: Props) {
   const { map, ratio: _ratio } = props;
   const ratio = _ratio ?? 1;
   const attributions = map.getTextAttributions();
-  const style: CSSProperties = useMemo(() => ({ fontSize: `${baseFontSizeVmin * ratio}vmin` }), [ratio]);
+  const style: CSSProperties = useMemo(() => ({ fontSize: `${baseFontSizeEm * ratio}em` }), [ratio]);
 
   return (
     <div className={Cls.attributions} style={style}>

@@ -51,17 +51,17 @@ class ErrorBoundary extends React.Component<ServiceProps, State> {
           <h1>{t('Aouch')} 😵</h1>
           <div className={'m-5 text-center'} dangerouslySetInnerHTML={{ __html: t('Error_occurred') }} />
 
-          {/* Reload page */}
-          <button className={'btn btn-primary mt-4'} onClick={this.handleRefresh}>
-            {t('Reload_page')}
-          </button>
-          <div className={'mb-4 mt-2 text-center'} dangerouslySetInnerHTML={{ __html: t('Recommended_action') }} />
-
           {/* Return to app */}
-          <button className={'btn btn-outline-primary mt-4'} onClick={this.handleClose}>
+          <button className={'btn btn-primary mt-4'} onClick={this.handleClose}>
             {t('Return_to_application')}
           </button>
           <div className={'mb-5 mt-2 text-center'} dangerouslySetInnerHTML={{ __html: t('Application_will_be_unstable') }} />
+
+          {/* Reload page */}
+          <button className={'btn btn-outline-primary mt-4'} onClick={this.handleRefresh}>
+            {t('Reload_page')}
+          </button>
+          <div className={'mb-4 mt-2 text-center'} dangerouslySetInnerHTML={{ __html: t('Recommended_action') }} />
         </div>
       );
     }

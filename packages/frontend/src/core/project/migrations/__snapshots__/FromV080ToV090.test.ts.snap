@@ -1,0 +1,517 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FromV070ToV080 migrate should work 1`] = `
+Object {
+  "layers": Array [
+    Object {
+      "metadata": Object {
+        "active": false,
+        "attributions": Array [
+          "© OpenStreetMap contributors.",
+        ],
+        "id": "3baf449f-83d7-4ee4-bf9b-66ab377c9d3a",
+        "model": "OSM",
+        "name": "OpenStreetMap",
+        "opacity": 1,
+        "type": "Predefined",
+        "visible": true,
+      },
+      "type": "Predefined",
+    },
+    Object {
+      "features": Object {
+        "features": Array [
+          Object {
+            "geometry": Object {
+              "coordinates": Array [
+                483537.70856973104,
+                5384734.194694325,
+              ],
+              "type": "Point",
+            },
+            "id": "PKNy6gKXSc",
+            "properties": Object {
+              "abc:feature:selected": false,
+              "abc:style:point:color": "rgba(147,18,49,0.9)",
+              "abc:style:point:icon": "twbs/0_star-fill.inline.svg",
+              "abc:style:point:size": 20,
+            },
+            "type": "Feature",
+          },
+          Object {
+            "geometry": Object {
+              "coordinates": Array [
+                462762.70856973104,
+                5390434.194694325,
+              ],
+              "type": "Point",
+            },
+            "id": "G0_XyWz64a",
+            "properties": Object {
+              "abc:feature:selected": false,
+              "abc:style:point:color": "rgba(147,18,49,0.9)",
+              "abc:style:point:icon": "twbs/0_star-fill.inline.svg",
+              "abc:style:point:size": 20,
+            },
+            "type": "Feature",
+          },
+          Object {
+            "geometry": Object {
+              "coordinates": Array [
+                474012.70856973104,
+                5385034.194694325,
+              ],
+              "type": "Point",
+            },
+            "id": "yOHGhoTseI",
+            "properties": Object {
+              "abc:feature:selected": false,
+              "abc:style:point:color": "rgba(18,19,147,0.9)",
+              "abc:style:point:icon": "twbs/0_square-fill.inline.svg",
+              "abc:style:point:size": 40,
+            },
+            "type": "Feature",
+          },
+          Object {
+            "geometry": Object {
+              "coordinates": Array [
+                Array [
+                  Array [
+                    494187.70856973104,
+                    5392909.194694325,
+                  ],
+                  Array [
+                    485262.70856973104,
+                    5390959.194694325,
+                  ],
+                  Array [
+                    482637.70856973104,
+                    5401984.194694325,
+                  ],
+                  Array [
+                    496362.70856973104,
+                    5405884.194694325,
+                  ],
+                  Array [
+                    499512.70856973104,
+                    5391934.194694325,
+                  ],
+                  Array [
+                    494187.70856973104,
+                    5392909.194694325,
+                  ],
+                ],
+              ],
+              "type": "Polygon",
+            },
+            "id": "JNI5QMnOHS",
+            "properties": Object {
+              "abc:feature:selected": true,
+              "abc:style:fill:color1": "#cc8d70",
+              "abc:style:fill:color2": "rgba(255,255,255,0.60)",
+              "abc:style:fill:pattern": "abc:style:fill:hatching:oblique:right",
+              "abc:style:stroke:color": "rgba(18,90,147,0.60)",
+              "abc:style:stroke:width": 3,
+            },
+            "type": "Feature",
+          },
+          Object {
+            "geometry": Object {
+              "coordinates": Array [
+                472362.70856973104,
+                5396659.194694325,
+              ],
+              "type": "Point",
+            },
+            "id": "NXvMFHnhSk",
+            "properties": Object {
+              "abc:feature:selected": false,
+              "abc:style:point:color": "rgba(147,18,49,0.9)",
+              "abc:style:point:icon": "twbs/0_star-fill.inline.svg",
+              "abc:style:point:size": 20,
+            },
+            "type": "Feature",
+          },
+          Object {
+            "geometry": Object {
+              "coordinates": Array [
+                Array [
+                  518412.70856973104,
+                  5390209.194694325,
+                ],
+                Array [
+                  507687.70856973104,
+                  5377984.194694325,
+                ],
+                Array [
+                  513387.70856973104,
+                  5370109.194694325,
+                ],
+                Array [
+                  526812.708569731,
+                  5377684.194694325,
+                ],
+                Array [
+                  504762.70856973104,
+                  5393809.194694325,
+                ],
+              ],
+              "type": "LineString",
+            },
+            "id": "f9ToQfhmws",
+            "properties": Object {
+              "abc:feature:selected": false,
+              "abc:style:stroke:color": "rgba(18,90,147,0.60)",
+              "abc:style:stroke:width": 3,
+            },
+            "type": "Feature",
+          },
+          Object {
+            "geometry": Object {
+              "coordinates": Array [
+                478137.70856973104,
+                5378659.194694325,
+              ],
+              "type": "Point",
+            },
+            "id": "gmbpVxddjV",
+            "properties": Object {
+              "abc:feature:selected": false,
+              "abc:style:point:color": "rgba(147,18,49,0.9)",
+              "abc:style:point:icon": "twbs/0_star-fill.inline.svg",
+              "abc:style:point:size": 20,
+            },
+            "type": "Feature",
+          },
+          Object {
+            "geometry": Object {
+              "coordinates": Array [
+                488862.70856973104,
+                5383534.194694325,
+              ],
+              "type": "Point",
+            },
+            "id": "Ydq46oceSH",
+            "properties": Object {
+              "abc:feature:selected": false,
+              "abc:style:point:color": "rgba(18,19,147,0.9)",
+              "abc:style:point:icon": "twbs/0_star-fill.inline.svg",
+              "abc:style:point:size": 20,
+              "abc:style:text:value": "",
+            },
+            "type": "Feature",
+          },
+          Object {
+            "geometry": Object {
+              "coordinates": Array [
+                498912.70856973104,
+                5377459.194694325,
+              ],
+              "type": "Point",
+            },
+            "id": "LneUQyncso",
+            "properties": Object {
+              "abc:feature:selected": false,
+              "abc:style:point:color": "rgba(147,18,49,0.9)",
+              "abc:style:point:icon": "twbs/0_star-fill.inline.svg",
+              "abc:style:point:size": 20,
+              "abc:style:text:value": "",
+            },
+            "type": "Feature",
+          },
+          Object {
+            "geometry": Object {
+              "coordinates": Array [
+                501837.70856973104,
+                5381734.194694325,
+              ],
+              "type": "Point",
+            },
+            "id": "C2NdE0ZmyU",
+            "properties": Object {
+              "abc:feature:selected": false,
+              "abc:style:point:color": "rgba(18,19,147,0.9)",
+              "abc:style:point:icon": "twbs/0_star-fill.inline.svg",
+              "abc:style:point:size": 20,
+            },
+            "type": "Feature",
+          },
+        ],
+        "type": "FeatureCollection",
+      },
+      "metadata": Object {
+        "active": true,
+        "id": "81775cd7-1e77-4c07-ac37-e6989a9b229f",
+        "name": "Géométries",
+        "opacity": 1,
+        "type": "Vector",
+        "visible": true,
+      },
+      "type": "Vector",
+    },
+  ],
+  "layouts": Array [
+    Object {
+      "format": Object {
+        "height": 210,
+        "id": "A4_LANDSCAPE",
+        "orientation": "landscape",
+        "width": 297,
+      },
+      "id": "f3418195-aa3c-4add-870c-a3e09dc33e0a",
+      "legend": Object {
+        "display": "BottomLeftCorner",
+        "height": 207,
+        "id": "RR7iLNFmS7C1j6XdQDucC",
+        "items": Array [
+          Object {
+            "id": "rBmSYoe6BdurvwC44PHKw",
+            "symbol": Object {
+              "geomType": "LineString",
+              "properties": Object {
+                "fill": Object {},
+                "point": Object {},
+                "stroke": Object {},
+                "text": Object {},
+              },
+            },
+            "text": "Entry 1",
+          },
+          Object {
+            "id": "yHWWSWGImCFbQbfKD6FlR",
+            "symbol": Object {
+              "geomType": "Point",
+              "properties": Object {
+                "fill": Object {},
+                "point": Object {
+                  "color": "rgba(18,19,147,0.9)",
+                  "icon": "twbs/0_star-fill.inline.svg",
+                  "size": 12,
+                },
+                "stroke": Object {},
+                "text": Object {
+                  "value": "",
+                },
+              },
+            },
+            "text": "Entry 2",
+          },
+          Object {
+            "id": "NW9Zym_WIwMbT0I6sx14k",
+            "symbol": Object {
+              "geomType": "Point",
+              "properties": Object {
+                "fill": Object {},
+                "point": Object {
+                  "color": "rgba(147,18,49,0.9)",
+                  "icon": "twbs/0_star-fill.inline.svg",
+                  "size": 20,
+                },
+                "stroke": Object {},
+                "text": Object {
+                  "value": "",
+                },
+              },
+            },
+            "text": "Entry 3",
+          },
+          Object {
+            "id": "8MmVGYh01HChFeCKpZ_p_",
+            "symbol": Object {
+              "geomType": "Point",
+              "properties": Object {
+                "fill": Object {},
+                "point": Object {
+                  "color": "rgba(18,19,147,0.9)",
+                  "icon": "twbs/0_star-fill.inline.svg",
+                  "size": 20,
+                },
+                "stroke": Object {},
+                "text": Object {
+                  "value": "",
+                },
+              },
+            },
+            "text": "Entry 4",
+          },
+          Object {
+            "id": "LUdSZXQPlQs8pvT3gzwwg",
+            "symbol": Object {
+              "geomType": "Point",
+              "properties": Object {
+                "fill": Object {},
+                "point": Object {
+                  "color": "rgba(18,19,147,0.9)",
+                  "icon": "twbs/0_square-fill.inline.svg",
+                  "size": 40,
+                },
+                "stroke": Object {},
+                "text": Object {},
+              },
+            },
+            "text": "Entry 5",
+          },
+        ],
+        "width": 196,
+      },
+      "name": "Page 1",
+      "view": Object {
+        "center": Array [
+          479684.677727075,
+          5377825.024768071,
+        ],
+        "projection": Object {
+          "name": "EPSG:3857",
+        },
+        "resolution": 46.966404979,
+      },
+    },
+  ],
+  "metadata": Object {
+    "containsCredentials": false,
+    "id": "224855c1-7085-4410-abcc-5b3d845c7ad0",
+    "name": "Projet du 15/03/2022",
+    "public": true,
+    "version": "0.9.0",
+  },
+  "sharedViews": Object {
+    "fullscreen": false,
+    "list": Array [
+      Object {
+        "id": "VxtjLCKzWPXB1g2CSjLir",
+        "layers": Array [
+          Object {
+            "layerId": "3baf449f-83d7-4ee4-bf9b-66ab377c9d3a",
+            "visible": true,
+          },
+          Object {
+            "layerId": "81775cd7-1e77-4c07-ac37-e6989a9b229f",
+            "visible": true,
+          },
+        ],
+        "legend": Object {
+          "display": "BottomLeftCorner",
+          "height": 207,
+          "id": "n8FdvpLTilS41IvnoKLzd",
+          "items": Array [
+            Object {
+              "id": "p2gpd3TsBq421PcZizkfo",
+              "symbol": Object {
+                "geomType": "LineString",
+                "properties": Object {
+                  "fill": Object {},
+                  "point": Object {},
+                  "stroke": Object {},
+                  "text": Object {},
+                },
+              },
+              "text": "Entry 1",
+            },
+            Object {
+              "id": "lqWYtRg3nZFlba_vNdvGf",
+              "symbol": Object {
+                "geomType": "Point",
+                "properties": Object {
+                  "fill": Object {},
+                  "point": Object {
+                    "color": "rgba(18,19,147,0.9)",
+                    "icon": "twbs/0_star-fill.inline.svg",
+                    "size": 12,
+                  },
+                  "stroke": Object {},
+                  "text": Object {
+                    "value": "",
+                  },
+                },
+              },
+              "text": "Entry 2",
+            },
+            Object {
+              "id": "IDSImNil3E_F2ZVcaPdWP",
+              "symbol": Object {
+                "geomType": "Point",
+                "properties": Object {
+                  "fill": Object {},
+                  "point": Object {
+                    "color": "rgba(147,18,49,0.9)",
+                    "icon": "twbs/0_star-fill.inline.svg",
+                    "size": 20,
+                  },
+                  "stroke": Object {},
+                  "text": Object {
+                    "value": "",
+                  },
+                },
+              },
+              "text": "Entry 3",
+            },
+            Object {
+              "id": "yMLYoMmKt0zJfBC-THSYY",
+              "symbol": Object {
+                "geomType": "Point",
+                "properties": Object {
+                  "fill": Object {},
+                  "point": Object {
+                    "color": "rgba(18,19,147,0.9)",
+                    "icon": "twbs/0_star-fill.inline.svg",
+                    "size": 20,
+                  },
+                  "stroke": Object {},
+                  "text": Object {
+                    "value": "",
+                  },
+                },
+              },
+              "text": "Entry 4",
+            },
+            Object {
+              "id": "UPDgRRzsVF2p8BLu8mSr2",
+              "symbol": Object {
+                "geomType": "Point",
+                "properties": Object {
+                  "fill": Object {},
+                  "point": Object {
+                    "color": "rgba(18,19,147,0.9)",
+                    "icon": "twbs/0_square-fill.inline.svg",
+                    "size": 40,
+                  },
+                  "stroke": Object {},
+                  "text": Object {},
+                },
+              },
+              "text": "Entry 5",
+            },
+          ],
+          "width": 196,
+        },
+        "textFrames": Array [],
+        "title": "Vue principale",
+        "view": Object {
+          "center": Array [
+            500937.708569731,
+            5388389.272819325,
+          ],
+          "projection": Object {
+            "name": "EPSG:3857",
+          },
+          "resolution": 75,
+        },
+      },
+    ],
+    "mapDimensions": Object {
+      "height": 461,
+      "width": 614,
+    },
+  },
+  "view": Object {
+    "center": Array [
+      500937.708569731,
+      5388389.272819325,
+    ],
+    "projection": Object {
+      "name": "EPSG:3857",
+    },
+    "resolution": 75,
+  },
+}
+`;

@@ -24,6 +24,7 @@ import { FaIcon } from '../icon/FaIcon';
 import { IconDefs } from '../icon/IconDefs';
 import { WithTooltip } from '../with-tooltip/WithTooltip';
 import { prefixedTranslation } from '../../i18n/i18n';
+import clsx from 'clsx';
 
 const logger = Logger.get('TextFrame.tsx');
 
@@ -31,7 +32,8 @@ const t = prefixedTranslation('FloatingTextFrame:');
 
 interface Props {
   frame: AbcTextFrame;
-  editable?: boolean;
+  readOnly?: boolean;
+  // Modify font sizes and dimensions based on this ratio. Useful for static exports.
   ratio?: number;
   // Limits move to parent bound
   bounds?: 'parent';
@@ -45,7 +47,7 @@ enum FrameDisplay {
 }
 
 export function FloatingTextFrame(props: Props) {
-  const { frame, ratio: _ratio, editable, onDelete, onChange, bounds } = props;
+  const { frame, ratio: _ratio, readOnly, onDelete, onChange, bounds } = props;
   const { position, size } = frame;
 
   const ratio = _ratio ?? 1;
@@ -54,10 +56,6 @@ export function FloatingTextFrame(props: Props) {
 
   const handleDragStop: RndDragCallback = useCallback(
     (event, data) => {
-      if (!editable) {
-        return;
-      }
-
       const updated: AbcTextFrame = {
         ...frame,
         position: {
@@ -67,15 +65,11 @@ export function FloatingTextFrame(props: Props) {
       };
       onChange && onChange(frame, updated);
     },
-    [editable, frame, onChange]
+    [frame, onChange]
   );
 
   const handleResizeStop: RndResizeCallback = useCallback(
     (event, direction, ref, delta, position) => {
-      if (!editable) {
-        return;
-      }
-
       const updated: AbcTextFrame = {
         ...frame,
         position: {
@@ -89,19 +83,15 @@ export function FloatingTextFrame(props: Props) {
       };
       onChange && onChange(frame, updated);
     },
-    [frame, editable, onChange]
+    [frame, onChange]
   );
 
   const handleContentChange = useCallback(
     (content: TextFrameChild[]) => {
-      if (!editable) {
-        return;
-      }
-
       const updated: AbcTextFrame = { ...frame, content };
       onChange && onChange(frame, updated);
     },
-    [editable, frame, onChange]
+    [frame, onChange]
   );
 
   const handleToggleEdition = useCallback(() => setDisplay(FrameDisplay.Edition === display ? FrameDisplay.Preview : FrameDisplay.Edition), [display]);
@@ -119,14 +109,15 @@ export function FloatingTextFrame(props: Props) {
         minWidth={100}
         onDragStop={handleDragStop}
         onResizeStop={handleResizeStop}
-        disableDragging={FrameDisplay.Edition === display}
+        enableResizing={!readOnly}
+        disableDragging={readOnly || FrameDisplay.Edition === display}
         bounds={bounds}
         data-cy={'floating-text-frame'}
       >
-        <div className={Cls.container}>
+        <div className={clsx(Cls.container, readOnly && Cls.readonly)}>
           <TextEditor ratio={ratio} value={frame.content} onChange={handleContentChange} readOnly={FrameDisplay.Preview === display} controlBar={false} />
 
-          {editable && (
+          {!readOnly && (
             <div className={Cls.controls}>
               <WithTooltip title={t('Full_screen_editor')}>
                 <button onClick={handleToggleFullscreen} data-cy={'toggle-full-screen-editor'}>

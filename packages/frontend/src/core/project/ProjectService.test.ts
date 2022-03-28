@@ -243,7 +243,10 @@ describe('ProjectService', function () {
       const originalManifest: AbcProjectManifest = {
         ...ProjectFactory.newProjectManifest(),
         layouts: [TestHelper.sampleLayout()],
-        sharedViews: [TestHelper.sampleSharedView()],
+        sharedViews: {
+          ...ProjectFactory.newProjectManifest().sharedViews,
+          list: [TestHelper.sampleSharedView()],
+        },
       };
       store.dispatch(ProjectActions.loadProject(originalManifest));
 

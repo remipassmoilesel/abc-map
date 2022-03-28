@@ -45,7 +45,7 @@ export class FromV050ToV060 implements ProjectMigration {
           version: NEXT,
           public: false,
         },
-      },
+      } as unknown as AbcProjectManifest,
       files,
     };
   }

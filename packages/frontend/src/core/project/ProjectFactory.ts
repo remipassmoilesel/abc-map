@@ -36,12 +36,19 @@ export class ProjectFactory {
   }
 
   public static newProjectManifest(): AbcProjectManifest {
+    const width = Math.round(document.body.clientWidth * 0.6);
+    const height = Math.round(document.body.clientHeight * 0.6);
+
     return {
       metadata: ProjectFactory.newProjectMetadata(),
       layers: [],
       layouts: [],
       view: Views.random(),
-      sharedViews: [],
+      sharedViews: {
+        fullscreen: false,
+        mapDimensions: { width, height },
+        list: [],
+      },
     };
   }
 }

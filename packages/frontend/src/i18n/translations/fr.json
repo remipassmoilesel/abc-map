@@ -221,10 +221,11 @@
       "Keyboard_shortcut": "Utilisez {{shortcut}} pour activer ce mode"
     },
     "RemoteProjectsModal": {
-      "Projects_saved": "Projets enregistrés",
+      "My_online_projects": "Mes projets en ligne",
       "No_saved_project": "Aucun projet enregistré.",
       "Current_changes_will_be_lost": "Les modifications en cours seront perdues !",
-      "Are_you_sure": "Etes vous sur ? Vous allez supprimer définitivement:",
+      "Are_you_sure": "Etes vous sur ?",
+      "You_will_permanently_delete": "Vous allez supprimer définitivement",
       "Do_not_delete": "Ne pas supprimer",
       "Delete_definitely": "Supprimer définitivement",
       "This_project_is_protected_by_a_password": "Ce projet est protégé par un mot de passe",
@@ -238,6 +239,7 @@
       "Delete_project": "Supprimer le projet",
       "This_project_is_password_protected": "Ce projet est protégé par mot de passe",
       "This_project_is_public": "Ce projet est public",
+      "This_project_is_private": "Ce projet est privé",
       "Project_open": "Projet ouvert !"
     }
   },
@@ -554,9 +556,13 @@
     "You_must_create_layouts_first": "Vous devez d'abord créer une mise en page",
     "Layouts_menu": "Liste des mises en page",
     "Controls_menu": "Actions",
-    "Export_in_progress": "Export en cours ...",
+    "Export_in_progress": "Export en cours ..."
+  },
+  "TextFrameControls": {
     "New_text_frame": "Nouveau cadre de texte",
-    "Copy_text_frame": "Copier un cadre de texte ...",
+    "Copy_text_frame": "Copier un cadre de texte ..."
+  },
+  "ScaleControls": {
     "Add_scale": "Ajouter l'échelle",
     "Remove_scale": "Supprimer l'échelle"
   },
@@ -591,7 +597,9 @@
     "And_more": "Et plus !",
     "Links": "Liens",
     "Source_code": "Code source",
-    "Author_personal_website": "Site personnel de l'auteur"
+    "Author_personal_website": "Site personnel de l'auteur",
+    "Fund_Abc-map": "Financez Abc-Map !",
+    "Fund_a_little_piece_of_free_internet": "Financez un petit bout d'Internet libre \uD83D\uDC8C"
   },
   "FundingLinks": {
     "By_CB_paypal": "Par <b>Carte bleue</b> ou <b>Paypal</b>.",
@@ -748,7 +756,7 @@
     "Cancel": "Annuler",
     "Send": "Envoyer"
   },
-  "ShareSettingsView": {
+  "SharedMapSettingsView": {
     "Share": "Partage",
     "Share_your_maps_online": "Partagez vos cartes en ligne",
     "Project_shared": "Projet partagé !",
@@ -762,8 +770,6 @@
     "If_these_identifiers_give_access_to_paid_services": "Si ces identifiants donnent accès à des services payants, cela peut entrainer une facturation excessive.",
     "This_map_is_private": "Cette carte est privée.",
     "Enable_sharing": "Activer le partage",
-    "Previous_view": "Vue précédente",
-    "Next_view": "Vue suivante",
     "Edit_view": "Editer la vue",
     "Delete_view": "Supprimer la vue",
     "Cancel": "Annuler",
@@ -787,9 +793,17 @@
     "Sharing_codes": "Codes de partage",
     "Share_link": "Lien de partage",
     "Iframe_embed_code": "Code d'intégration iframe",
+    "Qrcode_link": "Lien QR code",
     "Width": "Largeur (px)",
     "Height": "Hauteur (px)",
-    "Shared_views": "Vues partagées"
+    "Shared_views": "Vues partagées",
+    "Map_size": "Taille de la carte",
+    "Full_page": "Pleine page"
+  },
+  "SharedViewNavigation": {
+    "Previous_view": "Vue précédente",
+    "Next_view": "Vue suivante",
+    "More": "Plus ..."
   },
   "CopyButton": {
     "Copied": "Copié !",
@@ -802,8 +816,6 @@
     "Cannot_display_map": "Aie ! Impossible d'afficher cette carte",
     "But_dont_panic_you_can_create_your_own": "Mais pas de panique, vous pouvez créer votre propre carte avec",
     "Navigation": "Navigation",
-    "Previous_view": "Vue précédente",
-    "Next_view": "Vue suivante",
     "Close": "Fermer",
     "This_map_was_created_and_published_with_Abc-Map": "Cette carte a été créée et publiée avec Abc-Map.",
     "Abc-Map_is_free_mapping_software_try_it": "Abc-Map est un logiciel libre de cartographie, essayez le !"

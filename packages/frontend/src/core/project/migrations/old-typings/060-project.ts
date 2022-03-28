@@ -15,9 +15,12 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
-import { AbcProjectManifest } from '@abc-map/shared';
+import { AbcLayout, AbcProjectMetadata, AbcSharedView } from '@abc-map/shared';
 import { AbcLegend060 } from './060-legend';
 
-export interface AbcProjectManifest060 extends AbcProjectManifest {
+export interface AbcProjectManifest060 {
+  metadata: AbcProjectMetadata;
+  layouts: AbcLayout[];
+  sharedViews: AbcSharedView[];
   legend: AbcLegend060;
 }

@@ -100,7 +100,7 @@ describe('ProjectUpdater', () => {
 
       const result = await updater.update(project.manifest, project.files);
 
-      expect(result.manifest.metadata.version).toEqual('0.8.0');
+      expect(result.manifest.metadata.version).toEqual('0.9.0');
       expect(result.manifest.metadata.version).toEqual(ProjectConstants.CurrentVersion);
     });
   });
