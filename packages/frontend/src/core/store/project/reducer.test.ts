@@ -41,6 +41,8 @@ describe('Project reducer', function () {
       },
       sharedViews: {
         list: [TestHelper.sampleSharedView()],
+        fullscreen: true,
+        mapDimensions: { width: 800, height: 600 },
         activeId: 'test-active-share-view-id',
       },
     });
@@ -209,6 +211,14 @@ describe('Project reducer', function () {
 
     // Assert
     expect(state.sharedViews.activeId).toEqual(view.id);
+  });
+
+  it('SetSharedMapDimensions', () => {
+    // Act
+    const state = projectReducer(initialState, ProjectActions.setSharedMapDimensions(8000, 9000));
+
+    // Assert
+    expect(state.sharedViews.mapDimensions).toEqual({ width: 8000, height: 9000 });
   });
 
   it('SetView', () => {

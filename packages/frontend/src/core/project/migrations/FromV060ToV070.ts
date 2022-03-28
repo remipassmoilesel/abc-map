@@ -36,7 +36,7 @@ export class FromV060ToV070 implements ProjectMigration {
   }
 
   public async migrate(_manifest: AbcProjectManifest, files: AbcFile<Blob>[]): Promise<MigratedProject> {
-    const manifest = _manifest as AbcProjectManifest060;
+    const manifest = _manifest as unknown as AbcProjectManifest060;
 
     const layouts = manifest.layouts.map((lay) => ({
       ...lay,
@@ -67,7 +67,7 @@ export class FromV060ToV070 implements ProjectMigration {
           ...manifest.metadata,
           version: NEXT,
         },
-      },
+      } as unknown as AbcProjectManifest,
       files,
     };
   }

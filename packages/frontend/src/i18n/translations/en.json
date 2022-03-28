@@ -98,7 +98,6 @@
       "No_results": "No results"
     },
     "ProjectControls": {
-      "Open_project": "Open project",
       "My_projects": "My projects",
       "Save_online": "Save project online",
       "New_project": "New project",
@@ -221,10 +220,11 @@
       "Keyboard_shortcut": "Use {{shortcut}} to enable this mode"
     },
     "RemoteProjectsModal": {
-      "Projects_saved": "Projects saved",
+      "My_online_projects": "My online projects",
       "No_saved_project": "No saved project.",
       "Current_changes_will_be_lost": "Current changes will be lost !",
-      "Are_you_sure": "Are you sure ? You will permanently delete:",
+      "Are_you_sure": "Are you sure ?",
+      "You_will_permanently_delete": "You will permanently delete",
       "Do_not_delete": "Do not delete",
       "Delete_definitely": "Delete definitely",
       "This_project_is_protected_by_a_password": "This project is protected by a password",
@@ -238,6 +238,7 @@
       "Delete_project": "Delete project",
       "This_project_is_password_protected": "This project is password protected",
       "This_project_is_public": "This project is public",
+      "This_project_is_private": "This project is private",
       "Project_open": "Project open !"
     }
   },
@@ -554,9 +555,13 @@
     "You_must_create_layouts_first": "You must first create a layout",
     "Layouts_menu": "Layouts list",
     "Controls_menu": "Controls",
-    "Export_in_progress": "Export in progress ...",
+    "Export_in_progress": "Export in progress ..."
+  },
+  "TextFrameControls": {
     "New_text_frame": "New text frame",
-    "Copy_text_frame": "Copy a text frame ...",
+    "Copy_text_frame": "Copy a text frame ..."
+  },
+  "ScaleControls": {
     "Add_scale": "Add scale",
     "Remove_scale": "Remove scale"
   },
@@ -591,7 +596,9 @@
     "And_more": "And more !",
     "Links": "Links",
     "Source_code": "Source code",
-    "Author_personal_website": "Author's personal website"
+    "Author_personal_website": "Author's personal website",
+    "Fund_Abc-map": "Fund Abc-Map !",
+    "Fund_a_little_piece_of_free_internet": "Fund a little piece of free internet \uD83D\uDC8C"
   },
   "FundingLinks": {
     "By_CB_paypal": "By <b>Credit card</b> or <b>Paypal</b>.",
@@ -748,7 +755,7 @@
     "Cancel": "Cancel",
     "Send": "Send"
   },
-  "ShareSettingsView": {
+  "SharedMapSettingsView": {
     "Share": "Share",
     "Share_your_maps_online": "Share your maps online",
     "Project_shared": "Project shared !",
@@ -762,8 +769,6 @@
     "If_these_identifiers_give_access_to_paid_services": "If these identifiers give access to paid services, this can lead to excessive billing.",
     "This_map_is_private": "This map is private",
     "Enable_sharing": "Enable sharing",
-    "Previous_view": "Previous view",
-    "Next_view": "Next view",
     "Edit_view": "Edit view",
     "Delete_view": "Delete view",
     "Cancel": "Cancel",
@@ -787,9 +792,17 @@
     "Sharing_codes": "Sharing codes",
     "Share_link": "Share link",
     "Iframe_embed_code": "Iframe embed code",
+    "Qrcode_link": "QR code link",
     "Width": "Width (px)",
     "Height": "Height (px)",
-    "Shared_views": "Shared views"
+    "Shared_views": "Shared views",
+    "Map_size": "Map size",
+    "Full_page": "Full page"
+  },
+  "SharedViewNavigation": {
+    "Previous_view": "Previous view",
+    "Next_view": "Next view",
+    "More": "More ..."
   },
   "CopyButton": {
     "Copied": "Copied !",
@@ -802,8 +815,6 @@
     "Cannot_display_map": "Ouch ! Could not display this map",
     "But_dont_panic_you_can_create_your_own": "But don't panic, you can create your own map with",
     "Navigation": "Navigation",
-    "Previous_view": "Previous view",
-    "Next_view": "Next view",
     "Close": "Close",
     "This_map_was_created_and_published_with_Abc-Map": "This map was created and published with Abc-Map.",
     "Abc-Map_is_free_mapping_software_try_it": "Abc-Map is free mapping software, try it !"

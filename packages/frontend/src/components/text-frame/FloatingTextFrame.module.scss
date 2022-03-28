@@ -53,6 +53,10 @@
     }
   }
 
+  .readonly {
+    user-select: none;
+  }
+
   &:hover {
     .controls {
       opacity: 1;

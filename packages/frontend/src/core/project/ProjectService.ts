@@ -193,8 +193,8 @@ export class ProjectService {
     }
 
     // Set active shared view
-    if (manifest.sharedViews.length) {
-      this.store.dispatch(ProjectActions.setActiveSharedView(manifest.sharedViews[0].id));
+    if (manifest.sharedViews.list.length) {
+      this.store.dispatch(ProjectActions.setActiveSharedView(manifest.sharedViews.list[0].id));
     }
 
     // Set view
@@ -227,7 +227,11 @@ export class ProjectService {
       layers: await this.geoService.exportLayers(this.geoService.getMainMap()),
       view: state.mainView,
       layouts,
-      sharedViews: state.sharedViews.list,
+      sharedViews: {
+        list: state.sharedViews.list,
+        fullscreen: state.sharedViews.fullscreen,
+        mapDimensions: state.sharedViews.mapDimensions,
+      },
     };
 
     if (shouldBeEncrypted && password) {
@@ -277,9 +281,8 @@ export class ProjectService {
   }
 
   public getTextFrames(): AbcTextFrame[] {
-    // TODO: add shared view frames
     const project = this.store.getState().project;
-    return project.layouts.list.flatMap((lay) => lay.textFrames);
+    return project.layouts.list.flatMap((lay) => lay.textFrames).concat(project.sharedViews.list.flatMap((view) => view.textFrames));
   }
 
   public addLayouts(layouts: AbcLayout[]): void {
@@ -371,6 +374,15 @@ export class ProjectService {
     if (remainingViews.list.length) {
       this.store.dispatch(ProjectActions.setActiveSharedView(remainingViews.list[0].id));
     }
+  }
+
+  public setSharedMapDimensions(width: number, height: number): void {
+    this.store.dispatch(ProjectActions.setSharedMapDimensions(width, height));
+  }
+
+  public toggleSharedMapFullScreen(): void {
+    const fullscreen = this.store.getState().project.sharedViews.fullscreen;
+    this.store.dispatch(ProjectActions.setSharedMapFullscreen(!fullscreen));
   }
 
   public setView(view: AbcView): void {

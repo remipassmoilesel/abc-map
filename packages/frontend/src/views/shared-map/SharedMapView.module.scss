@@ -16,14 +16,59 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
+@import "src/styles/variables";
+@import "src/styles/mixins";
+
+html,
+body {
+  // Iframe display, for shared views only, we must increase font size
+  &:global(.abc-framed) {
+    // For the size, we use an adaptive value (% of the minimum side of the screen)
+    // We need to increase the font size for small frames, otherwise the font will be too small.
+    font-size: 1.8vmin;
+
+    @include media-breakpoint-down(md) {
+      font-size: 2.8vmin;
+    }
+
+    @include media-breakpoint-down(sm) {
+      font-size: 3.4vmin;
+    }
+  }
+}
+
 .sharedMap {
+  position: relative;
+
   display: flex;
   flex-direction: column;
-  align-items: stretch;
-  justify-content: stretch;
+  align-items: center;
+  justify-content: center;
 
   width: 100%;
   height: 100%;
+}
+
+.navigationButton {
+  position: absolute;
+  top: 0;
+  right: 0;
+
+  padding: 1rem;
+}
+
+.navigationMenu {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  bottom: 1rem;
+}
+
+.mapContainer {
+  position: relative;
+
+  border: solid 0.1rem $gray-400;
+  box-shadow: $box-shadow;
 }
 
 .map {

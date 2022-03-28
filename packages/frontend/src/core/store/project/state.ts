@@ -21,6 +21,7 @@ import { ProjectFactory } from '../../project/ProjectFactory';
 import { AbcView } from '@abc-map/shared/build/project/AbcView';
 import { Views } from '../../geo/Views';
 import { AbcSharedView } from '@abc-map/shared';
+import { DimensionsPx } from '../../utils/DimensionsPx';
 
 /**
  * This state must not contain heavy data (like layer data), because it is persisted in local storage.
@@ -49,6 +50,10 @@ export interface ProjectState {
   };
 
   sharedViews: {
+    // If true, shared map is fullscreen
+    fullscreen: boolean;
+    // If not fullscreen, these dimensions are used
+    mapDimensions: DimensionsPx;
     /**
      * Shared views of current project
      */
@@ -69,6 +74,8 @@ export const projectInitialState: ProjectState = {
     list: [],
   },
   sharedViews: {
+    fullscreen: false,
+    mapDimensions: { width: 0, height: 0 },
     list: [],
   },
 };

@@ -113,7 +113,14 @@ export class TestHelper {
         projection: DEFAULT_PROJECTION,
         resolution: 1000,
       },
-      sharedViews: [],
+      sharedViews: {
+        list: [],
+        fullscreen: false,
+        mapDimensions: {
+          width: 800,
+          height: 600,
+        },
+      },
     };
   }
 
@@ -348,6 +355,8 @@ export class TestHelper {
       title: 'Sample layout',
       view: this.sampleView(),
       layers: [],
+      textFrames: [],
+      scale: { x: 30, y: 100 },
     };
   }
 

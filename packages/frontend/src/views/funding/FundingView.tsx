@@ -88,7 +88,7 @@ class FundingView extends Component<ServiceProps, {}> {
   }
 
   public componentDidMount() {
-    pageSetup('Financez Abc-Map', "Financez un petit bout d'Internet libre 💌");
+    pageSetup(t('Fund_Abc-map'), t('Fund_a_little_piece_of_free_internet'));
   }
 }
 

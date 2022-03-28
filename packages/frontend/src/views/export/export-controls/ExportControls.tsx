@@ -16,8 +16,8 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { ChangeEvent, useCallback, useState } from 'react';
-import { AbcLayout, AbcTextFrame, LayoutFormat, LayoutFormats, Logger } from '@abc-map/shared';
+import React, { ChangeEvent, useCallback } from 'react';
+import { AbcScale, AbcTextFrame, LayoutFormat, LayoutFormats, Logger } from '@abc-map/shared';
 import { ExportFormat } from '../ExportFormat';
 import { prefixedTranslation } from '../../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
@@ -26,14 +26,14 @@ import HistoryControls from '../../../components/history-controls/HistoryControl
 import { HistoryKey } from '../../../core/history/HistoryKey';
 import { FaIcon } from '../../../components/icon/FaIcon';
 import { IconDefs } from '../../../components/icon/IconDefs';
-import CopyTextFrameModal from '../../../components/copy-text-frame-modal/CopyTextFrameModal';
-import { TextFrameFactory } from '../../../core/project/TextFrameFactory';
-import { AbcScale } from '@abc-map/shared';
+import { useAppSelector } from '../../../core/store/hooks';
+import { useActiveLayout } from '../../../core/project/useActiveLayout';
+import { ScaleControls } from '../../../components/scale-controls/ScaleControls';
+import { TextFrameControls } from '../../../components/text-frame-controls/TextFrameControls';
 
 const logger = Logger.get('ExportControls.tsx', 'warn');
 
 interface Props {
-  activeLayout?: AbcLayout;
   onFormatChanged: (f: LayoutFormat) => void;
   onNewLayout: () => void;
   onLayoutUp: () => void;
@@ -49,19 +49,20 @@ const t = prefixedTranslation('ExportView:');
 
 function ExportControls(props: Props) {
   const {
-    activeLayout,
     onNewLayout: handleNewLayout,
     onLayoutUp: handleLayoutUp,
     onLayoutDown: handleLayoutDown,
     onClearAll: handleClearAll,
     onExport: handleExport,
-    onAddTextFrame: handleAddTextFrame,
+    onAddTextFrame,
     onFormatChanged,
     onAddScale,
     onRemoveScale,
   } = props;
 
-  const [copyFrameModal, showCopyFrameModal] = useState(false);
+  const activeLayout = useActiveLayout();
+  const layouts = useAppSelector((st) => st.project.layouts.list);
+  const exportDisabled = !layouts.length;
 
   const handleFormatChanged = useCallback(
     (ev: ChangeEvent<HTMLSelectElement>) => {
@@ -77,19 +78,21 @@ function ExportControls(props: Props) {
     [onFormatChanged]
   );
 
-  const handleNewTextFrame = useCallback(() => handleAddTextFrame(TextFrameFactory.newFrame()), [handleAddTextFrame]);
-
-  const handleToggleCopyFrameModal = useCallback(() => showCopyFrameModal(!copyFrameModal), [copyFrameModal]);
-
-  const handleCopyFrameConfirm = useCallback((frame: AbcTextFrame) => handleAddTextFrame(frame), [handleAddTextFrame]);
-
-  const handleToggleScale = useCallback(() => {
-    if (activeLayout?.scale) {
-      onRemoveScale();
-    } else {
-      onAddScale({ x: 30, y: 30 });
-    }
-  }, [activeLayout?.scale, onAddScale, onRemoveScale]);
+  const handleAddTextFrame = useCallback(
+    (frame: AbcTextFrame) =>
+      onAddTextFrame({
+        ...frame,
+        position: {
+          x: 30,
+          y: 30,
+        },
+        size: {
+          width: 1100,
+          height: 450,
+        },
+      }),
+    [onAddTextFrame]
+  );
 
   return (
     <>
@@ -138,43 +141,21 @@ function ExportControls(props: Props) {
       </div>
 
       {/* Text frames */}
-      <div className={'control-block'}>
-        <div className={'control-item'}>
-          <button onClick={handleNewTextFrame} disabled={!activeLayout} className={'btn btn-link'} data-cy={'create-text-frame'}>
-            <FaIcon icon={IconDefs.faFont} className={'mr-2'} />
-            {t('New_text_frame')}
-          </button>
-        </div>
-        <div className={'control-item'}>
-          <button onClick={handleToggleCopyFrameModal} disabled={!activeLayout} className={'btn btn-link'}>
-            <FaIcon icon={IconDefs.faCopy} className={'mr-2'} />
-            {t('Copy_text_frame')}
-          </button>
-        </div>
-
-        {copyFrameModal && <CopyTextFrameModal onConfirm={handleCopyFrameConfirm} onCancel={handleToggleCopyFrameModal} />}
-      </div>
+      <TextFrameControls disabled={!activeLayout} onAddTextFrame={handleAddTextFrame} />
 
       {/* Scale */}
-      <div className={'control-block'}>
-        <div className={'control-item'}>
-          <button onClick={handleToggleScale} disabled={!activeLayout} className={'btn btn-link'}>
-            <FaIcon icon={IconDefs.faRulerHorizontal} className={'mr-2'} />
-            {activeLayout?.scale ? t('Remove_scale') : t('Add_scale')}
-          </button>
-        </div>
-      </div>
+      <ScaleControls disabled={!activeLayout} hasScale={!!activeLayout?.scale} onAddScale={onAddScale} onRemoveScale={onRemoveScale} />
 
       {/* Export buttons */}
       <div className={'control-block'}>
         <div className={'control-item d-flex justify-content-center my-3'}>
-          <button onClick={() => handleExport(ExportFormat.PDF)} className={'btn btn-primary'} data-cy={'pdf-export'}>
+          <button onClick={() => handleExport(ExportFormat.PDF)} disabled={exportDisabled} className={'btn btn-primary'} data-cy={'pdf-export'}>
             <FaIcon icon={IconDefs.faDownload} className={'mr-2'} />
             {t('PDF_export')}
           </button>
         </div>
         <div className={'control-item d-flex justify-content-center mb-3'}>
-          <button onClick={() => handleExport(ExportFormat.PNG)} className={'btn btn-outline-primary'} data-cy={'png-export'}>
+          <button onClick={() => handleExport(ExportFormat.PNG)} disabled={exportDisabled} className={'btn btn-outline-primary'} data-cy={'png-export'}>
             <FaIcon icon={IconDefs.faDownload} className={'mr-2'} />
             {t('PNG_export')}
           </button>

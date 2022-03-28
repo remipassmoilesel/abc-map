@@ -87,7 +87,7 @@ describe('Project', function () {
           const helper = ProjectHelper.forFrontend();
           const projectA = await helper.extractManifest(downloaded);
           expect(projectA.metadata.id).not.undefined;
-          expect(projectA.metadata.version).equals('0.8.0');
+          expect(projectA.metadata.version).equals('0.9.0');
           expect(projectA.layers).length(2);
           expect(projectA.layers[0].type).equals(LayerType.Predefined);
           expect(projectA.layers[1].type).equals(LayerType.Vector);
@@ -253,6 +253,8 @@ describe('Project', function () {
         .get('[data-cy=remote-project]')
         .eq(0)
         .click()
+        .get('[data-cy=open-project]')
+        .click()
         .get('[data-cy=open-project-confirm]')
         .click()
         .then(() => Toasts.assertText('Project open !'))
@@ -291,6 +293,8 @@ describe('Project', function () {
         .click()
         .get('[data-cy=remote-project]')
         .eq(0)
+        .click()
+        .get('[data-cy=open-project]')
         .click()
         .get('[data-cy=project-password]')
         .clear()

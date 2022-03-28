@@ -243,11 +243,11 @@ function LayoutPreview(props: Props) {
 
           {/* Text frames */}
           {previewFrames.map((f) => (
-            <FloatingTextFrame key={f.id} frame={f} editable={true} onChange={handleTextFrameChanged} onDelete={onDeleteTextFrame} bounds={'parent'} />
+            <FloatingTextFrame key={f.id} frame={f} onChange={handleTextFrameChanged} onDelete={onDeleteTextFrame} bounds={'parent'} />
           ))}
 
           {/* Scale */}
-          {previewScale && <FloatingScale map={previewMap} scale={previewScale} baseFontSizeVmin={0.9} minWidth={50} onChange={handleScaleChange} />}
+          {previewScale && <FloatingScale map={previewMap} scale={previewScale} baseFontSizeEm={0.9} minWidth={50} onChange={handleScaleChange} />}
 
           {/* Attributions */}
           <Attributions map={previewMap} />

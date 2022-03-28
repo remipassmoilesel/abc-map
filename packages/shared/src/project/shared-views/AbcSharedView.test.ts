@@ -32,6 +32,8 @@ describe('AbcSharedView', () => {
         projection: { name: 'test-projection' },
       },
       layers: [{ layerId: 'test-layer-id', visible: true }],
+      textFrames: [],
+      scale: { x: 80, y: 180 },
     };
 
     expect(current).toMatchSnapshot();

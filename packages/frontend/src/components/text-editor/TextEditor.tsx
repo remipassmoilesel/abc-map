@@ -45,8 +45,6 @@ export interface Props {
   'data-cy'?: string;
 }
 
-const baseFontSizeVmin = 1.2;
-
 /**
  * Rich text editor, used in frames for static exports and shared map.
  *
@@ -96,7 +94,7 @@ function TextEditor(props: Props) {
 
   // We set font size according to ratio
   // All children use 'em' units and will adapt styles according to this value
-  const style: CSSProperties = useMemo(() => ({ fontSize: `${baseFontSizeVmin * ratio}vmin` }), [ratio]);
+  const style: CSSProperties = useMemo(() => ({ fontSize: `${ratio}em` }), [ratio]);
 
   return (
     <div onClick={handleClick} style={style} className={clsx(Cls.textEditor, className)}>

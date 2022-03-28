@@ -16,6 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { faCaretDown } from '@fortawesome/free-solid-svg-icons/faCaretDown';
 import { faTextHeight } from '@fortawesome/free-solid-svg-icons/faTextHeight';
 import { faExpand } from '@fortawesome/free-solid-svg-icons/faExpand';
 import { faMaximize } from '@fortawesome/free-solid-svg-icons/faMaximize';
@@ -53,6 +54,7 @@ import { faLockOpen } from '@fortawesome/free-solid-svg-icons/faLockOpen';
 import { faFeather } from '@fortawesome/free-solid-svg-icons/faFeather';
 import { faKey } from '@fortawesome/free-solid-svg-icons/faKey';
 import { faLock } from '@fortawesome/free-solid-svg-icons/faLock';
+import { faUnlock } from '@fortawesome/free-solid-svg-icons/faUnlock';
 import { faComments } from '@fortawesome/free-solid-svg-icons/faComments';
 import { faFlask } from '@fortawesome/free-solid-svg-icons/faFlask';
 import { faCogs } from '@fortawesome/free-solid-svg-icons/faCogs';
@@ -121,6 +123,7 @@ import { faClipboard } from '@fortawesome/free-solid-svg-icons/faClipboard';
 import { faStickyNote } from '@fortawesome/free-solid-svg-icons/faStickyNote';
 
 export const IconDefs = {
+  faCaretDown,
   faTextHeight,
   faExpand,
   faMaximize,
@@ -166,6 +169,7 @@ export const IconDefs = {
   faFeather,
   faKey,
   faLock,
+  faUnlock,
   faComments,
   faFlask,
   faCogs,

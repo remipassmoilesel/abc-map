@@ -26,6 +26,8 @@ body {
   margin: 0;
   background-color: white;
 
+  // For the size, we use an adaptive value (% of the minimum side of the screen)
+  // We need to increase the font size for small devices, otherwise the font will be too small.
   font-size: 1.3vmin;
 
   @include media-breakpoint-down(xl) {

@@ -32,9 +32,7 @@ interface Props {
  * @constructor
  */
 export function WithTooltip(props: Props) {
-  const children = props.children;
-  const title = props.title;
-  const placement = props.placement ?? 'bottom';
+  const { children, title, placement = 'bottom' } = props;
 
   const overlay = (
     <Tooltip id={title} className={Cls.tooltip}>

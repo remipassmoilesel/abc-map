@@ -11,7 +11,14 @@ Object {
     "public": false,
     "version": "0.1",
   },
-  "sharedViews": Array [],
+  "sharedViews": Object {
+    "fullscreen": false,
+    "list": Array [],
+    "mapDimensions": Object {
+      "height": 600,
+      "width": 800,
+    },
+  },
   "view": Object {
     "center": Array [
       1,

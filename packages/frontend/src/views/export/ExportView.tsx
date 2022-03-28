@@ -47,10 +47,11 @@ import { AddLayoutTextFrameChangeset } from '../../core/history/changesets/layou
 import { RemoveLayoutTextFrameChangeset } from '../../core/history/changesets/layouts/RemoveLayoutTextFrameChangeset';
 import { UpdateTextFrameChangeset } from '../../core/history/changesets/UpdateTextFrameChangeset';
 import debounce from 'lodash/debounce';
-import { AddScaleChangeset } from '../../core/history/changesets/layouts/AddScaleChangeset';
+import { AddLayoutScaleChangeset } from '../../core/history/changesets/layouts/AddLayoutScaleChangeset';
 import { AbcScale } from '@abc-map/shared';
 import { RemoveScaleChangeset } from '../../core/history/changesets/layouts/RemoveScaleChangeset';
-import { UpdateScaleChangeset } from '../../core/history/changesets/layouts/UpdateScaleChangeset';
+import { UpdateLayoutScaleChangeset } from '../../core/history/changesets/layouts/UpdateLayoutScaleChangeset';
+import { useActiveLayout } from '../../core/project/useActiveLayout';
 
 const logger = Logger.get('ExportView.tsx', 'warn');
 
@@ -61,8 +62,7 @@ function ExportView() {
   const shortcuts = useRef<LayoutKeyboardListener | null>(null);
 
   const layouts = useAppSelector((st) => st.project.layouts.list);
-  const activeLayoutId = useAppSelector((st) => st.project.layouts.activeId);
-  const activeLayout = layouts.find((lay) => lay.id === activeLayoutId);
+  const activeLayout = useActiveLayout();
 
   // Setup page
   useEffect(() => pageSetup(t('Layout'), t('Create_layout_to_export_your_map')));
@@ -301,7 +301,7 @@ function ExportView() {
   const handleTextFrameChangeDebounced = useMemo(
     () =>
       debounce((before: AbcTextFrame, after: AbcTextFrame) => {
-        // Layout may have been deleted
+        // Text frame may have been deleted
         if (!project.getTextFrames().find((lay) => after.id === lay.id)) {
           logger.warn('Layer have been deleted, cannot add history task');
           return;
@@ -312,7 +312,7 @@ function ExportView() {
           .apply()
           .then(() => history.register(HistoryKey.Export, updateFrame))
           .catch((err) => logger.error('Cannot update text frame: ', err));
-      }, 500),
+      }, 150),
     [history, project]
   );
 
@@ -335,7 +335,7 @@ function ExportView() {
         return;
       }
 
-      const addScale = AddScaleChangeset.create(activeLayout, scale);
+      const addScale = AddLayoutScaleChangeset.create(activeLayout, scale);
       addScale
         .apply()
         .then(() => history.register(HistoryKey.Export, addScale))
@@ -362,7 +362,7 @@ function ExportView() {
         return;
       }
 
-      const addScale = UpdateScaleChangeset.create(activeLayout, activeLayout.scale, scale);
+      const addScale = UpdateLayoutScaleChangeset.create(activeLayout, activeLayout.scale, scale);
       addScale
         .apply()
         .then(() => history.register(HistoryKey.Export, addScale))
@@ -409,7 +409,6 @@ function ExportView() {
           data-cy={'controls-menu'}
         >
           <LayoutControls
-            activeLayout={activeLayout}
             onFormatChanged={handleFormatChanged}
             onNewLayout={handleNewLayout}
             onLayoutUp={handleLayoutUp}

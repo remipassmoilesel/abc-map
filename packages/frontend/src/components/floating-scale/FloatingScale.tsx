@@ -22,20 +22,21 @@ import { Scale } from '../scale/Scale';
 import React, { useCallback } from 'react';
 import { MapWrapper } from '../../core/geo/map/MapWrapper';
 import { AbcScale } from '@abc-map/shared';
-
-// TODO: attach scale positions to shared views
+import clsx from 'clsx';
 
 interface Props {
   map: MapWrapper;
   scale: AbcScale;
+  readOnly?: boolean;
   minWidth?: number;
+  // Modify font sizes and dimensions based on this ratio. Useful for static exports.
   ratio?: number;
-  baseFontSizeVmin?: number;
+  baseFontSizeEm?: number;
   onChange?: (before: AbcScale) => void;
 }
 
 export function FloatingScale(props: Props) {
-  const { map, scale, minWidth, ratio, baseFontSizeVmin, onChange } = props;
+  const { map, scale, readOnly, minWidth, ratio, baseFontSizeEm, onChange } = props;
 
   const handleDragStop: RndDragCallback = useCallback(
     (ev, data) => {
@@ -45,8 +46,15 @@ export function FloatingScale(props: Props) {
   );
 
   return (
-    <Rnd position={{ x: scale.x, y: scale.y }} onDragStop={handleDragStop} enableResizing={false} bounds={'parent'}>
-      <Scale map={map} minWidth={minWidth} ratio={ratio} baseFontSizeVmin={baseFontSizeVmin} tooltip={false} className={Cls.scale} />
+    <Rnd position={{ x: scale.x, y: scale.y }} disableDragging={readOnly} onDragStop={handleDragStop} enableResizing={false} bounds={'parent'}>
+      <Scale
+        map={map}
+        minWidth={minWidth}
+        ratio={ratio}
+        baseFontSizeEm={baseFontSizeEm}
+        tooltip={false}
+        className={clsx(Cls.scale, readOnly && Cls.readOnly)}
+      />
     </Rnd>
   );
 }

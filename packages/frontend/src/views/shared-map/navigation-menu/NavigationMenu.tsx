@@ -20,102 +20,74 @@ import ListItem from './ListItem';
 import { AbcSharedView } from '@abc-map/shared';
 import { useServices } from '../../../core/useServices';
 import { useAppSelector } from '../../../core/store/hooks';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import { IconDefs } from '../../../components/icon/IconDefs';
 import { FaIcon } from '../../../components/icon/FaIcon';
-import { FloatingButton } from '../../../components/floating-button/FloatingButton';
 import Cls from './NavigationMenu.module.scss';
 import MainIcon from '../../../assets/main-icon.svg';
 import { prefixedTranslation } from '../../../i18n/i18n';
+import { useActiveSharedView } from '../../../core/project/useActiveSharedView';
+import clsx from 'clsx';
 
 const t = prefixedTranslation('SharedMapView:');
 
 interface Props {
   attributions: string[];
+  onClose: () => void;
+  className?: string;
 }
 
 function NavigationMenu(props: Props) {
-  const { attributions } = props;
+  const { attributions, onClose, className } = props;
   const { project } = useServices();
-  const [open, setOpen] = useState(false);
 
   const sharedViews = useAppSelector((st) => st.project.sharedViews.list);
-  const activeViewId = useAppSelector((st) => st.project.sharedViews.activeId);
-  const activeIndex = sharedViews.findIndex((v) => v.id === activeViewId);
-  const hasNext = activeIndex < sharedViews.length - 1;
-  const hasPrevious = activeIndex > 0;
+  const activeView = useActiveSharedView();
 
-  const handlePreviousView = useCallback(() => {
-    const newActiveIndex = sharedViews.findIndex((v) => v.id === activeViewId) - 1;
-    const newActiveId = sharedViews[newActiveIndex]?.id || sharedViews[sharedViews.length - 1]?.id;
-    project.setActiveSharedView(newActiveId);
-  }, [activeViewId, project, sharedViews]);
-
-  const handleNextView = useCallback(() => {
-    const newActiveIndex = sharedViews.findIndex((v) => v.id === activeViewId) + 1;
-    const newActiveId = sharedViews[newActiveIndex]?.id || sharedViews[0]?.id;
-    project.setActiveSharedView(newActiveId);
-  }, [activeViewId, project, sharedViews]);
-
-  const handleItemClick = useCallback((view: AbcSharedView) => project.setActiveSharedView(view.id), [project]);
-
-  const handleToggleMenu = useCallback(() => setOpen(!open), [open]);
+  const handleItemClick = useCallback(
+    (view: AbcSharedView) => {
+      project.setActiveSharedView(view.id);
+      onClose();
+    },
+    [onClose, project]
+  );
 
   return (
-    <>
-      {/* Navigation closed, we display a button */}
-      {!open && <FloatingButton onClick={handleToggleMenu} icon={IconDefs.faListOl} style={{ top: '50vh', right: '3rem' }} title={t('Navigation')} />}
+    <div className={clsx(Cls.navigationMenu, className)}>
+      <div className={'d-flex align-items-center justify-content-end mb-4'}>
+        <button onClick={onClose} className={Cls.closeButton}>
+          <FaIcon icon={IconDefs.faTimes} size={'1rem'} color={'white'} className={Cls.icon} /> {t('Close')}
+        </button>
+      </div>
 
-      {/* Navigation opened, we display drawer*/}
-      {open && (
-        <div className={Cls.drawer}>
-          <div className={'d-flex align-items-center mb-4'}>
-            {/* Previous and next view buttons */}
-            <button onClick={handlePreviousView} disabled={!hasPrevious} title={t('Previous_view')} className={`btn btn-outline-secondary ${Cls.navButton}`}>
-              <FaIcon icon={IconDefs.faArrowLeft} size={'1rem'} />
-            </button>
-            <button onClick={handleNextView} disabled={!hasNext} title={t('Next_view')} className={`btn btn-outline-secondary ${Cls.navButton}`}>
-              <FaIcon icon={IconDefs.faArrowRight} size={'1rem'} />
-            </button>
+      {/* Views list */}
+      <div className={'d-flex flex-column'}>
+        {sharedViews.map((view, i) => {
+          const active = view.id === activeView?.id;
+          return <ListItem key={view.id} view={view} index={i + 1} active={active} onClick={handleItemClick} />;
+        })}
+      </div>
 
-            <div className={'flex-grow-1'} />
+      <div className={'flex-grow-1'} />
 
-            {/* Close menu button */}
-            <button onClick={handleToggleMenu} className={Cls.closeButton}>
-              <FaIcon icon={IconDefs.faTimes} size={'1rem'} color={'white'} className={Cls.icon} /> {t('Close')}
-            </button>
-          </div>
+      {/* Attributions */}
+      <div>
+        {attributions.map((attr) => (
+          <div key={attr}>{attr}</div>
+        ))}
+      </div>
+      <hr />
 
-          {/* Views list */}
-          <div className={'d-flex flex-column'}>
-            {sharedViews.map((view, i) => {
-              const active = view.id === activeViewId;
-              return <ListItem key={view.id} view={view} index={i + 1} active={active} onClick={handleItemClick} />;
-            })}
-          </div>
-
-          <div className={'flex-grow-1'} />
-
-          {/* Attributions */}
-          <div>
-            {attributions.map((attr) => (
-              <div key={attr}>{attr}</div>
-            ))}
-          </div>
-          <hr />
-
-          {/* Software credits */}
-          <div>{t('This_map_was_created_and_published_with_Abc-Map')}</div>
-          <div className={'mb-2'}>{t('Abc-Map_is_free_mapping_software_try_it')}</div>
-          <div className={Cls.softwareCredits}>
-            <img src={MainIcon} alt={'Logo'} className={Cls.logo} />
-            <a href={'/'} target={'_blank'} rel="noreferrer">
-              Abc-Map
-            </a>
-          </div>
-        </div>
-      )}
-    </>
+      {/* Software credits */}
+      <div>{t('This_map_was_created_and_published_with_Abc-Map')}</div>
+      <div className={'mb-2'}>{t('Abc-Map_is_free_mapping_software_try_it')}</div>
+      <div className={Cls.softwareCredits}>
+        <img src={MainIcon} alt={'Logo'} className={Cls.logo} />
+        <a href={'/'} target={'_blank'} rel="noreferrer">
+          Abc-Map
+        </a>
+      </div>
+    </div>
   );
 }
 

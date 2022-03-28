@@ -21,7 +21,7 @@ import { Logger, ProjectConstants, UserStatus } from '@abc-map/shared';
 import { connect, ConnectedProps } from 'react-redux';
 import { MainState } from '../../../core/store/reducer';
 import { FileIO, InputResultType, InputType } from '../../../core/utils/FileIO';
-import RemoteProjectsModal from './RemoteProjectsModal';
+import RemoteProjectsModal from './remote-projects-modal/RemoteProjectsModal';
 import { ModalStatus, OperationStatus } from '../../../core/ui/typings';
 import { ServiceProps, withServices } from '../../../core/withServices';
 import { Errors } from '../../../core/utils/Errors';

@@ -41,7 +41,7 @@ describe('FromV060ToV070', () => {
   it('migrate should work', async () => {
     // Act
     const result = await migration.migrate(sampleProject.manifest, sampleProject.files);
-    const manifest = result.manifest as AbcProjectManifest070;
+    const manifest = result.manifest as unknown as AbcProjectManifest070;
 
     // Assert
     expect((manifest as unknown as AbcProjectManifest060).legend).toBeUndefined();

@@ -35,7 +35,9 @@ export function projectReducer(state = projectInitialState, action: ProjectActio
           list: action.project.layouts,
         },
         sharedViews: {
-          list: action.project.sharedViews,
+          list: action.project.sharedViews.list,
+          fullscreen: action.project.sharedViews.fullscreen,
+          mapDimensions: action.project.sharedViews.mapDimensions,
         },
       };
     }
@@ -124,6 +126,18 @@ export function projectReducer(state = projectInitialState, action: ProjectActio
       return newState;
     }
 
+    case ActionType.SetSharedMapDimensions: {
+      const newState: ProjectState = { ...state, sharedViews: { ...state.sharedViews } };
+      newState.sharedViews.mapDimensions = { width: action.width, height: action.height };
+      return newState;
+    }
+
+    case ActionType.SetSharedMapFullscreen: {
+      const newState: ProjectState = { ...state, sharedViews: { ...state.sharedViews } };
+      newState.sharedViews.fullscreen = action.value;
+      return newState;
+    }
+
     case ActionType.SetActiveSharedView: {
       return { ...state, sharedViews: { ...state.sharedViews, activeId: action.id } };
     }
@@ -149,7 +163,6 @@ export function projectReducer(state = projectInitialState, action: ProjectActio
   }
 }
 
-// TODO: handle frames from shared views
 function transformTextFrame(state: ProjectState, frameId: string, cb: (frame: AbcTextFrame) => AbcTextFrame): ProjectState {
   const newState: ProjectState = { ...state, layouts: { ...state.layouts }, sharedViews: { ...state.sharedViews } };
 
@@ -163,6 +176,18 @@ function transformTextFrame(state: ProjectState, frameId: string, cb: (frame: Ab
     });
 
     return { ...layout, textFrames };
+  });
+
+  newState.sharedViews.list = newState.sharedViews.list.map((view) => {
+    const textFrames: AbcTextFrame[] = view.textFrames.map((frame) => {
+      if (frame.id === frameId) {
+        return cb(frame);
+      } else {
+        return frame;
+      }
+    });
+
+    return { ...view, textFrames };
   });
 
   return newState;

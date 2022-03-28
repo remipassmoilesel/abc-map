@@ -38,7 +38,14 @@ describe('AbcProjectManifest', () => {
         resolution: 1000,
         projection: { name: 'EPSG:4326' },
       },
-      sharedViews: [],
+      sharedViews: {
+        fullscreen: false,
+        mapDimensions: {
+          width: 800,
+          height: 600,
+        },
+        list: [],
+      },
     };
 
     expect(actual).toMatchSnapshot();
