@@ -16,36 +16,16 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-@import "src/styles/variables";
+import { getViewportDimensions } from './getViewportDimensions';
+import { TestHelper } from '../utils/test/TestHelper';
 
-.bubble {
-  cursor: pointer;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
+describe('getViewportDimensions()', () => {
+  beforeEach(() => {
+    TestHelper.fakeAppViewport(888, 666);
+  });
 
-  margin: 0.3rem 1rem;
-
-  .icon {
-    color: $primary;
-  }
-}
-
-.modalContent {
-  h1,
-  h2,
-  h3,
-  h4 {
-    margin-bottom: 1.5rem;
-  }
-
-  ul {
-    list-style: none;
-    padding: 0.5rem 1.5rem;
-
-    li {
-      margin-bottom: 1rem;
-    }
-  }
-}
+  it('should return viewport dimensions', () => {
+    const dimensions = getViewportDimensions();
+    expect(dimensions).toEqual({ width: 888, height: 666 });
+  });
+});

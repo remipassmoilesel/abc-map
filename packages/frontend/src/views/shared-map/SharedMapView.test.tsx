@@ -49,7 +49,7 @@ describe('SharedMapView', () => {
 
   it('should load map then display it', async () => {
     // Prepare
-    project.loadSharedProject.callsFake(async () => {
+    project.loadPublicProject.callsFake(async () => {
       const view = TestHelper.sampleSharedView();
       store.dispatch(ProjectActions.addSharedViews([view]));
       store.dispatch(ProjectActions.setActiveSharedView(view.id));
@@ -64,7 +64,7 @@ describe('SharedMapView', () => {
 
     // Assert
     await waitFor(async () => {
-      expect(project.loadSharedProject.args).toEqual([['e5e02711-ee9a-4210-b2ca-7d60c1a52613']]);
+      expect(project.loadPublicProject.args).toEqual([['e5e02711-ee9a-4210-b2ca-7d60c1a52613']]);
       expect(screen.getByTestId('shared-map')).toBeDefined();
       expect(screen.queryByTestId('error')).toBeNull();
     });
@@ -72,7 +72,7 @@ describe('SharedMapView', () => {
 
   it('should display error', async () => {
     // Prepare
-    project.loadSharedProject.rejects();
+    project.loadPublicProject.rejects();
 
     // Act
     abcRender(withViewport(<Route exact path={'/shared/:projectId'} component={SharedMapView} />), {
@@ -81,7 +81,7 @@ describe('SharedMapView', () => {
     });
 
     // Assert
-    expect(project.loadSharedProject.args).toEqual([['e5e02711-ee9a-4210-b2ca-7d60c1a52613']]);
+    expect(project.loadPublicProject.args).toEqual([['e5e02711-ee9a-4210-b2ca-7d60c1a52613']]);
     expect(screen.queryByTestId('shared-map')).toBeNull();
     expect(await screen.findByTestId('error')).toBeDefined();
   });

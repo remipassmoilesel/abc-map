@@ -19,6 +19,7 @@
 import { ProjectActions } from '../store/project/actions';
 import {
   AbcFile,
+  AbcLayer,
   AbcLayout,
   AbcProjectManifest,
   AbcProjectMetadata,
@@ -49,11 +50,14 @@ import { ProjectStatus } from './ProjectStatus';
 import { Routes } from '../../routes';
 import { PasswordCache } from './PasswordCache';
 import { TextFrameHelpers } from './TextFrameHelpers';
+import uuid from 'uuid-random';
 
 export const logger = Logger.get('ProjectService.ts');
 
 // This timeout is used for download / upload of projects
 const SaveProjectTimeout = 45_000;
+
+export type ExportResult = { manifest: AbcProjectManifest; files: AbcFile<Blob>[] } | ProjectStatus.Canceled;
 
 export class ProjectService {
   public static create(
@@ -111,7 +115,7 @@ export class ProjectService {
     });
   }
 
-  public loadSharedProject(id: string): Promise<void> {
+  public loadPublicProject(id: string): Promise<void> {
     return this.findSharedById(id).then((blob) => {
       if (!blob) {
         return Promise.reject(new Error('Project not found'));
@@ -150,7 +154,7 @@ export class ProjectService {
 
     // Prompt password if necessary
     let password = _password;
-    if (Encryption.manifestContainsCredentials(manifest) && !password) {
+    if (!manifest.metadata.public && Encryption.manifestContainsCredentials(manifest) && !password) {
       const witness = Encryption.extractEncryptedData(manifest);
       const ev = await this.modals.getProjectPassword(witness || '');
       const canceled = ev.status === ModalStatus.Canceled;
@@ -205,7 +209,7 @@ export class ProjectService {
     logger.info('Project loaded');
   }
 
-  public async exportCurrentProject(): Promise<CompressedProject<Blob> | ProjectStatus.Canceled> {
+  public async exportCurrentProject(): Promise<ExportResult> {
     const state = this.store.getState().project;
     const containsCredentials = Encryption.mapContainsCredentials(this.geoService.getMainMap());
     const shouldBeEncrypted = containsCredentials && !state.metadata.public;
@@ -238,13 +242,64 @@ export class ProjectService {
       manifest = await Encryption.encryptManifest(manifest, password);
     }
 
-    const files: AbcFile[] = [{ path: ProjectConstants.ManifestName, content: new Blob([JSON.stringify(manifest)]) }, ...images];
+    return { manifest, files: images };
+  }
+
+  public async exportAndZipCurrentProject(): Promise<CompressedProject<Blob> | ProjectStatus.Canceled> {
+    const exported = await this.exportCurrentProject();
+    if (exported === ProjectStatus.Canceled) {
+      return exported;
+    }
+
+    const files: AbcFile<Blob>[] = [
+      {
+        path: ProjectConstants.ManifestName,
+        content: new Blob([JSON.stringify(exported.manifest)]),
+      },
+      ...exported.files,
+    ];
     const compressed = await Zipper.forFrontend().zipFiles(files);
-    return { project: compressed, metadata: manifest.metadata };
+    return { project: compressed, metadata: exported.manifest.metadata };
+  }
+
+  /**
+   * Export and return a compressed project that can be imported in another session.
+   *
+   * For this purpose, some ids are modified, but not all.
+   */
+  public async cloneCurrent(): Promise<CompressedProject<Blob> | ProjectStatus.Canceled> {
+    const exported = await this.exportCurrentProject();
+    if (exported === ProjectStatus.Canceled) {
+      return exported;
+    }
+
+    const cloned: AbcProjectManifest = {
+      ...exported.manifest,
+      metadata: {
+        ...exported.manifest.metadata,
+        id: uuid(),
+      },
+      layers: exported.manifest.layers.map((lay) => ({ ...lay, metadata: { ...lay.metadata, id: uuid() } })) as AbcLayer[], // Typings are borked
+      layouts: exported.manifest.layouts.map((lay) => ({ ...lay, id: uuid() })),
+      sharedViews: {
+        ...exported.manifest.sharedViews,
+        list: exported.manifest.sharedViews.list.map((view) => ({ ...view, id: uuid() })),
+      },
+    };
+
+    const files: AbcFile<Blob>[] = [
+      {
+        path: ProjectConstants.ManifestName,
+        content: new Blob([JSON.stringify(cloned)]),
+      },
+      ...exported.files,
+    ];
+    const compressed = await Zipper.forFrontend().zipFiles(files);
+    return { project: compressed, metadata: cloned.metadata };
   }
 
   public async saveCurrent(): Promise<ProjectStatus> {
-    const compressed = await this.exportCurrentProject();
+    const compressed = await this.exportAndZipCurrentProject();
     if (ProjectStatus.Canceled === compressed) {
       return ProjectStatus.Canceled;
     }

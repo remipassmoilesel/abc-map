@@ -16,56 +16,29 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-@import "src/styles/variables";
-@import "src/styles/mixins";
+import { DimensionsPx } from '../utils/DimensionsPx';
+import { getViewportDimensions } from '../ui/getViewportDimensions';
 
-.sharedMap {
-  position: relative;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
-  width: 100%;
-  height: 100%;
-}
-
-.navigationButton {
-  position: absolute;
-  top: 0;
-  right: 0;
-
-  padding: 1rem;
-}
-
-.mapContainer {
-  position: relative;
-
-  border: solid 0.1rem $gray-400;
-  box-shadow: $box-shadow;
-}
-
-.map {
-  width: 100%;
-  height: 100%;
-}
-
-.textBlock {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-
-  .logo {
-    height: 6rem;
-    margin-bottom: 2rem;
+/**
+ * Return shared map dimensions adapted to viewport.
+ * @param fullscreen
+ * @param mapDimensions
+ */
+export function adaptMapDimensions(fullscreen: boolean, mapDimensions: DimensionsPx): DimensionsPx {
+  const viewport = getViewportDimensions();
+  if (!viewport) {
+    return mapDimensions;
   }
 
-  .punchline {
-    margin: 2rem;
-    font-size: 1.2rem;
+  // Fullscreen, we return viewport dimensions
+  if (fullscreen) {
+    return viewport;
   }
+
+  // Map is bigger than viewport, we return viewport dimensions (e.g. in responsive iframes)
+  if (mapDimensions.width > viewport.width || mapDimensions.height > viewport.height) {
+    return viewport;
+  }
+
+  return mapDimensions;
 }

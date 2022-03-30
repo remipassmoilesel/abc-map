@@ -20,7 +20,7 @@ import Cls from './SharedMapView.module.scss';
 import React, { useCallback, useEffect, useState } from 'react';
 import { pageSetup } from '../../core/utils/page-setup';
 import { Link, useRouteMatch } from 'react-router-dom';
-import { AbcScale, AbcTextFrame, getAbcWindow, Logger, SharedMapParams } from '@abc-map/shared';
+import { AbcScale, AbcTextFrame, AbcView, getAbcWindow, Logger, ProjectConstants, SharedMapParams } from '@abc-map/shared';
 import { useServices } from '../../core/useServices';
 import NavigationMenu from './navigation-menu/NavigationMenu';
 import { MapFactory } from '../../core/geo/map/MapFactory';
@@ -38,9 +38,12 @@ import { FloatingScale } from '../../components/floating-scale/FloatingScale';
 import { toPrecision } from '../../core/utils/numbers';
 import { useAppSelector } from '../../core/store/hooks';
 import { DimensionsStyle } from '../../core/utils/DimensionsStyle';
-import { getSharedMapDimensions } from '../../core/project/getSharedMapDimensions';
-import { isFramed } from '../../core/ui/isFramed';
+import { adaptMapDimensions } from '../../core/project/adaptMapDimensions';
 import SharedViewNavigation from '../../components/shared-view-navigation/SharedViewNavigation';
+import { adaptView } from './adaptView';
+import { ProjectStatus } from '../../core/project/ProjectStatus';
+import { FileIO } from '../../core/utils/FileIO';
+import DownloadExplanation from './download-explanation/DownloadExplanation';
 
 export const logger = Logger.get('SharedMapView.tsx');
 
@@ -51,9 +54,11 @@ const t = prefixedTranslation('SharedMapView:');
  *
  * All the links to the main application should target another tab / window, for security purposes.
  *
+ * /!\ This view is (almost) responsive, but statically.
+ *
  */
 function SharedMapView() {
-  const { project, geo } = useServices();
+  const { project, geo, toasts } = useServices();
   const match = useRouteMatch<SharedMapParams>();
   // Here we use a state for map because we have to re-render after map init
   const [map, setMap] = useState<MapWrapper | undefined>();
@@ -64,6 +69,8 @@ function SharedMapView() {
   const [previewScale, setPreviewScale] = useState<AbcScale | undefined>(undefined);
   const { fullscreen, mapDimensions } = useAppSelector((st) => st.project.sharedViews);
   const [mapDimensionsStyle, setMapDimensionsStyle] = useState<DimensionsStyle | undefined>();
+  const [previewView, setPreviewView] = useState<AbcView | undefined>();
+  const [downloadExplanation, showDownloadExplanation] = useState(false);
   const activeView = useActiveSharedView();
 
   // Setup page
@@ -77,14 +84,6 @@ function SharedMapView() {
     }
     return () => map?.dispose();
   }, [map]);
-
-  // If app is displayed in iframe, we add a marker class to adapt global styles.
-  // Only shared maps are allowed to be displayed in iframe.
-  useEffect(() => {
-    const marker = isFramed() ? 'abc-framed' : 'abc-top';
-    document.documentElement.className += ` ${marker}`;
-    document.body.className += ` ${marker}`;
-  }, []);
 
   // Fetch and setup project
   useEffect(() => {
@@ -103,7 +102,7 @@ function SharedMapView() {
 
     setError(false);
     setLoading(true);
-    resolveInAtLeast(project.loadSharedProject(projectId), 1000)
+    resolveInAtLeast(project.loadPublicProject(projectId), 1000)
       .then(() => map.importLayersFrom(geo.getMainMap(), { withSelection: false }))
       .catch((err) => {
         logger.error('Loading error: ', err);
@@ -114,17 +113,11 @@ function SharedMapView() {
 
   // Set map size
   useEffect(() => {
-    let width = mapDimensions.width + 'px';
-    let height = mapDimensions.height + 'px';
-    if (fullscreen) {
-      width = '100%';
-      height = '100%';
-    }
+    const { width, height } = adaptMapDimensions(fullscreen, mapDimensions);
+    setMapDimensionsStyle({ width: `${width}px`, height: `${height}px` });
+  }, [fullscreen, mapDimensions]);
 
-    setMapDimensionsStyle({ width, height });
-  }, [fullscreen, mapDimensions.height, mapDimensions.width]);
-
-  // Update map when active view change
+  // Update map layers when active view change
   useEffect(() => {
     if (!map || !activeView) {
       logger.debug('Cannot update map view, not ready: ', { map, activeView });
@@ -138,6 +131,26 @@ function SharedMapView() {
     }
   }, [activeView, map, project]);
 
+  // Update map view when active view change
+  useEffect(() => {
+    if (!activeView?.view) {
+      setPreviewView(undefined);
+      return;
+    }
+
+    const view = adaptView(activeView.view, fullscreen, mapDimensions);
+    setPreviewView(view);
+  }, [activeView?.view, fullscreen, mapDimensions]);
+
+  const handleRestoreView = useCallback(() => {
+    if (!activeView?.view) {
+      return;
+    }
+
+    const view = adaptView(activeView.view, fullscreen, mapDimensions);
+    setPreviewView(view);
+  }, [activeView?.view, fullscreen, mapDimensions]);
+
   // Adapt relative values of frames
   useEffect(() => {
     if (!activeView?.textFrames) {
@@ -145,7 +158,7 @@ function SharedMapView() {
       return;
     }
 
-    const { width, height } = getSharedMapDimensions(fullscreen, mapDimensions);
+    const { width, height } = adaptMapDimensions(fullscreen, mapDimensions);
 
     const previewFrames = activeView.textFrames.map((frame) => ({
       ...frame,
@@ -169,7 +182,7 @@ function SharedMapView() {
       return;
     }
 
-    const { width, height } = getSharedMapDimensions(fullscreen, mapDimensions);
+    const { width, height } = adaptMapDimensions(fullscreen, mapDimensions);
 
     const previewScale = {
       ...activeView.scale,
@@ -182,23 +195,48 @@ function SharedMapView() {
 
   const handleToggleMenu = useCallback(() => showMenu(!menu), [menu]);
 
+  const handleDownload = useCallback(() => {
+    const toastId = toasts.info(t('Downloading'));
+    resolveInAtLeast(project.cloneCurrent(), 800)
+      .then((exported) => {
+        if (exported === ProjectStatus.Canceled) {
+          return;
+        }
+
+        showDownloadExplanation(true);
+        FileIO.outputBlob(exported.project, `project${ProjectConstants.FileExtension}`);
+      })
+      .catch((err) => {
+        toasts.genericError(err);
+        logger.error('Clone error: ', err);
+      })
+      .finally(() => toasts.dismiss(toastId));
+  }, [project, toasts]);
+
   return (
     <div className={Cls.sharedMap}>
       {!loading && !error && (
         <>
           {activeView && map && (
             <div className={Cls.mapContainer} style={mapDimensionsStyle}>
-              <MapUi map={map} view={activeView?.view} width={'100%'} height={'100%'} data-testid={'shared-map'} className={Cls.map} data-cy={'shared-map'} />
+              <MapUi map={map} view={previewView} width={'100%'} height={'100%'} data-testid={'shared-map'} className={Cls.map} data-cy={'shared-map'} />
 
               {previewFrames.map((frame) => (
-                <FloatingTextFrame key={frame.id} readOnly={true} frame={frame} bounds={'parent'} />
+                <FloatingTextFrame key={frame.id} frame={frame} bounds={'parent'} readOnly={true} />
               ))}
 
-              {previewScale && <FloatingScale readOnly={true} map={map} scale={previewScale} />}
+              {previewScale && <FloatingScale map={map} scale={previewScale} readOnly={true} />}
 
               {/* Navigation controls */}
               {!menu && <SharedViewNavigation onMore={handleToggleMenu} className={Cls.navigationButton} />}
-              {menu && <NavigationMenu attributions={map?.getTextAttributions() ?? []} onClose={handleToggleMenu} className={Cls.navigationMenu} />}
+              {menu && (
+                <NavigationMenu
+                  onDownload={handleDownload}
+                  attributions={map?.getTextAttributions() ?? []}
+                  onClose={handleToggleMenu}
+                  onRestoreView={handleRestoreView}
+                />
+              )}
             </div>
           )}
         </>
@@ -220,6 +258,8 @@ function SharedMapView() {
           </div>
         </div>
       )}
+
+      {downloadExplanation && <DownloadExplanation onClose={() => showDownloadExplanation(false)} />}
     </div>
   );
 }

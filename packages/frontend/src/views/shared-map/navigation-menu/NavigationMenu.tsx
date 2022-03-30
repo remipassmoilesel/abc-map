@@ -34,11 +34,13 @@ const t = prefixedTranslation('SharedMapView:');
 interface Props {
   attributions: string[];
   onClose: () => void;
+  onRestoreView: () => void;
+  onDownload: () => void;
   className?: string;
 }
 
 function NavigationMenu(props: Props) {
-  const { attributions, onClose, className } = props;
+  const { attributions, onClose, onRestoreView, onDownload, className } = props;
   const { project } = useServices();
 
   const sharedViews = useAppSelector((st) => st.project.sharedViews.list);
@@ -54,7 +56,9 @@ function NavigationMenu(props: Props) {
 
   return (
     <div className={clsx(Cls.navigationMenu, className)}>
-      <div className={'d-flex align-items-center justify-content-end mb-4'}>
+      <div className={'d-flex align-items-end mb-3'}>
+        <h5 className={'flex-grow-1'}>{t('Views')}</h5>
+
         <button onClick={onClose} className={Cls.closeButton}>
           <FaIcon icon={IconDefs.faTimes} size={'1rem'} color={'white'} className={Cls.icon} /> {t('Close')}
         </button>
@@ -70,19 +74,37 @@ function NavigationMenu(props: Props) {
 
       <div className={'flex-grow-1'} />
 
-      {/* Attributions */}
-      <div>
+      <h5>{t('Actions')}</h5>
+
+      <div className={'control-block mb-4'}>
+        {/* Restore original view */}
+        <div className={'control-item'}>
+          <button onClick={onRestoreView} className={'btn btn-link d-flex align-items-center'}>
+            <FaIcon icon={IconDefs.faArrowsToCircle} size={'1.2rem'} className={'mr-2'} /> {t('Map_at_its_original_position')}
+          </button>
+        </div>
+
+        {/* Download project */}
+        <div className={'control-item'}>
+          <button onClick={onDownload} className={'btn btn-link d-flex align-items-center'}>
+            <FaIcon icon={IconDefs.faDownload} size={'1.2rem'} className={'mr-2'} /> {t('Download_data')}
+          </button>
+        </div>
+      </div>
+
+      <h5>{t('Attributions')}</h5>
+
+      <div className={Cls.attributions}>
         {attributions.map((attr) => (
           <div key={attr}>{attr}</div>
         ))}
       </div>
-      <hr />
 
       {/* Software credits */}
       <div>{t('This_map_was_created_and_published_with_Abc-Map')}</div>
       <div className={'mb-2'}>{t('Abc-Map_is_free_mapping_software_try_it')}</div>
       <div className={Cls.softwareCredits}>
-        <img src={MainIcon} alt={'Logo'} className={Cls.logo} />
+        <img src={MainIcon} alt={'Abc-Map'} className={Cls.logo} />
         <a href={'/'} target={'_blank'} rel="noreferrer">
           Abc-Map
         </a>

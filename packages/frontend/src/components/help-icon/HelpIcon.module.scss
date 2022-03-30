@@ -18,28 +18,17 @@
 
 @import "src/styles/variables";
 
-.shareLinkForm {
+.icon {
+  cursor: pointer;
+
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: stretch;
+  justify-content: center;
 
-  margin-bottom: 3rem;
-}
+  margin: 0.3rem 0.5rem;
 
-.sectionTitle {
-  display: flex;
-  align-items: center;
-
-  font-weight: bold;
-  margin: 1.5rem 0;
-}
-
-.iframeForm {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: stretch;
-
-  margin-bottom: 1rem;
+  .inner {
+    color: $primary;
+  }
 }

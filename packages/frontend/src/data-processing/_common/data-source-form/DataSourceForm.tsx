@@ -22,7 +22,7 @@ import DataSourceSelector from './DataSourceSelector';
 import { DataRow, DataSource, getFields } from '../../../core/data/data-source/DataSource';
 import DataTable from '../../../components/data-table/DataTable';
 import { ServiceProps, withServices } from '../../../core/withServices';
-import TipBubble from '../../../components/tip-bubble/TipBubble';
+import DialogBoxAdvice from '../../../components/dialog-box-advice/DialogBoxAdvice';
 import { DataProcessingTips } from '@abc-map/user-documentation';
 import FormLine from '../form-line/FormLine';
 import { prefixedTranslation } from '../../../i18n/i18n';
@@ -79,7 +79,7 @@ class DataSourceForm extends Component<Props, State> {
             {valuesFieldLabel}
           </label>
 
-          <TipBubble id={valuesFieldTip} />
+          <DialogBoxAdvice id={valuesFieldTip} />
           <select
             value={valueField}
             onChange={this.handleSourceFieldChange}
@@ -105,7 +105,7 @@ class DataSourceForm extends Component<Props, State> {
             {t('Join_geometries_with')}:
           </label>
 
-          <TipBubble id={DataProcessingTips.JoinBy} />
+          <DialogBoxAdvice id={DataProcessingTips.JoinBy} />
           <select
             value={joinBy}
             onChange={this.handleJoinByChange}

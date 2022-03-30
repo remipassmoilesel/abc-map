@@ -18,7 +18,7 @@
 
 import React, { ChangeEvent, Component, ReactNode } from 'react';
 import { Algorithm, allAlgorithms, LabeledAlgorithms } from './Algorithm';
-import TipBubble from '../../../components/tip-bubble/TipBubble';
+import DialogBoxAdvice from '../../../components/dialog-box-advice/DialogBoxAdvice';
 import { prefixedTranslation } from '../../../i18n/i18n';
 
 interface Props {
@@ -51,7 +51,7 @@ class AlgorithmSelector extends Component<Props, {}> {
         <label htmlFor="algorithm" className={'flex-grow-1'}>
           {label}
         </label>
-        <TipBubble id={tip} />
+        <DialogBoxAdvice id={tip} />
         <select value={value} onChange={this.handleAlgorithmChange} className={'form-select'} id={'algorithm'}>
           <option value={undefined}>{t('Choose_algorithm')}</option>
           {options}

@@ -115,7 +115,7 @@ export function EnableSharePanel() {
             <div className={Cls.enableForm}>
               <div className={'alert alert-warning'}>
                 <div className={'mb-2'}>
-                  <b>⚠️ {t('Warning')}</b>
+                  <h5>⚠️ {t('Warning')}</h5>
                 </div>
                 <div>{t('If_your_card_contains_identifiers')}</div>
                 <div>{t('If_these_identifiers_give_access_to_paid_services')}</div>

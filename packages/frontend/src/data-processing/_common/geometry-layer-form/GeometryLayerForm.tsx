@@ -24,7 +24,7 @@ import { ServiceProps, withServices } from '../../../core/withServices';
 import { VectorLayerWrapper } from '../../../core/geo/layers/LayerWrapper';
 import VectorLayerSelector from '../vector-layer-selector/VectorLayerSelector';
 import { LayerDataSource } from '../../../core/data/data-source/LayerDataSource';
-import TipBubble from '../../../components/tip-bubble/TipBubble';
+import DialogBoxAdvice from '../../../components/dialog-box-advice/DialogBoxAdvice';
 import { DataProcessingTips } from '@abc-map/user-documentation';
 import FormLine from '../form-line/FormLine';
 import MessageLabel from '../../../components/message-label/MessageLabel';
@@ -82,7 +82,7 @@ class GeometryLayerForm extends Component<Props, State> {
             {t('Join_with_data_by')}:
           </label>
 
-          <TipBubble id={DataProcessingTips.JoinBy} />
+          <DialogBoxAdvice id={DataProcessingTips.JoinBy} />
           <select
             value={joinBy}
             onChange={this.handleJoinByChanged}

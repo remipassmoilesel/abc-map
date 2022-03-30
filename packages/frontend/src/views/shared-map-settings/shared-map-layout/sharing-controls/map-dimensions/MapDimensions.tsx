@@ -17,10 +17,11 @@
  */
 
 import Cls from './MapDimensions.module.scss';
-import React, { ChangeEvent, useCallback } from 'react';
+import React, { ChangeEvent, useCallback, useMemo } from 'react';
 import { prefixedTranslation } from '../../../../../i18n/i18n';
 import clsx from 'clsx';
 import { Switch } from '../../../../../components/switch/Switch';
+import { getViewportDimensions } from '../../../../../core/ui/getViewportDimensions';
 
 const t = prefixedTranslation('SharedMapSettingsView:');
 
@@ -34,21 +35,22 @@ interface Props {
 
 export function MapDimensions(props: Props) {
   const { width, height, fullscreen, onChange, onToggleFullscreen } = props;
+  const maxDimensions = useMemo(() => getViewportDimensions(), []);
 
   const handleWidthChange = useCallback(
     (ev: ChangeEvent<HTMLInputElement>) => {
-      const value = parseInt(ev.target.value);
+      const value = Math.min(parseInt(ev.target.value), maxDimensions?.width || 3000) || 0;
       onChange(value, height);
     },
-    [onChange, height]
+    [maxDimensions?.width, onChange, height]
   );
 
   const handleHeightChange = useCallback(
     (ev: ChangeEvent<HTMLInputElement>) => {
-      const value = parseInt(ev.target.value);
+      const value = Math.min(parseInt(ev.target.value), maxDimensions?.height || 3000) || 0;
       onChange(width, value);
     },
-    [onChange, width]
+    [maxDimensions?.height, onChange, width]
   );
 
   return (

@@ -64,6 +64,7 @@ import { WmtsSettings } from '../../geo/layers/LayerFactory.types';
 import { WmtsCapabilities } from '../../geo/WmtsCapabilities';
 import { optionsFromCapabilities } from 'ol/source/WMTS';
 import { WmsCapabilities } from '../../geo/WmsCapabilities';
+import { DeepPartial } from 'utility-types';
 
 interface EventSettings {
   coordinate?: Coordinate;
@@ -75,6 +76,7 @@ interface EventSettings {
   pixel?: [number, number];
 }
 
+// FIXME: we should split this helper in several helpers
 export class TestHelper {
   public static renderMap(map: Map): Promise<void> {
     return new Promise<void>((resolve) => {
@@ -124,7 +126,7 @@ export class TestHelper {
     };
   }
 
-  public static async sampleCompressedProject(template?: Partial<AbcProjectManifest>): Promise<[CompressedProject<Blob>, AbcProjectManifest]> {
+  public static async sampleCompressedProject(template?: DeepPartial<AbcProjectManifest>): Promise<[CompressedProject<Blob>, AbcProjectManifest]> {
     const sampleProject = this.sampleProjectManifest();
     const project: AbcProjectManifest = {
       ...sampleProject,
@@ -133,13 +135,13 @@ export class TestHelper {
         ...sampleProject.metadata,
         ...template?.metadata,
       },
-    };
+    } as AbcProjectManifest;
 
     const zip = await Zipper.forFrontend().zipFiles([{ path: ProjectConstants.ManifestName, content: new Blob([JSON.stringify(project)]) }]);
     return [{ metadata: project.metadata, project: zip }, project];
   }
 
-  public static async sampleCompressedProtectedProject(template?: Partial<AbcProjectManifest>): Promise<[CompressedProject<Blob>, AbcProjectManifest]> {
+  public static async sampleCompressedProtectedProject(template?: DeepPartial<AbcProjectManifest>): Promise<[CompressedProject<Blob>, AbcProjectManifest]> {
     let project = this.sampleProjectManifest();
     project = {
       ...project,
@@ -148,13 +150,11 @@ export class TestHelper {
         ...project.metadata,
         ...template?.metadata,
       },
-    };
+    } as AbcProjectManifest;
 
-    if (typeof template === 'undefined') {
-      const wmsLayer = this.sampleWmsLayer();
-      wmsLayer.metadata.auth = { username: 'test-username', password: 'test-password' };
-      project.layers.push(wmsLayer);
-    }
+    const wmsLayer = this.sampleWmsLayer();
+    wmsLayer.metadata.auth = { username: 'test-username', password: 'test-password' };
+    project.layers.push(wmsLayer);
 
     project = await Encryption.encryptManifest(project, 'azerty1234');
 
@@ -497,5 +497,15 @@ export class TestHelper {
 
   public static comparableObjects<T extends { id: string }>(objs: T[]): T[] {
     return objs.map((obj) => ({ ...obj, id: '#comparable-id#' }));
+  }
+
+  public static fakeAppViewport(width: number, height: number): void {
+    const div = document.createElement('div');
+
+    div.className = 'abc-app-viewport';
+    Object.defineProperty(div, 'clientWidth', { value: width });
+    Object.defineProperty(div, 'clientHeight', { value: height });
+
+    document.body.append(div);
   }
 }

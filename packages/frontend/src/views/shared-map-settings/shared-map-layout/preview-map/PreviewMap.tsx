@@ -31,7 +31,7 @@ import { Views } from '../../../../core/geo/Views';
 import { useAppSelector } from '../../../../core/store/hooks';
 import { toPrecision } from '../../../../core/utils/numbers';
 import { DimensionsStyle } from '../../../../core/utils/DimensionsStyle';
-import { getSharedMapDimensions } from '../../../../core/project/getSharedMapDimensions';
+import { adaptMapDimensions } from '../../../../core/project/adaptMapDimensions';
 import SharedViewNavigation from '../../../../components/shared-view-navigation/SharedViewNavigation';
 import SharedViewList from '../shared-view-list/SharedViewList';
 
@@ -115,7 +115,7 @@ export function PreviewMap(props: Props) {
       return;
     }
 
-    const { width, height } = getSharedMapDimensions(fullscreen, mapDimensions);
+    const { width, height } = adaptMapDimensions(fullscreen, mapDimensions);
 
     const previewFrames = activeView.textFrames.map((frame) => ({
       ...frame,
@@ -134,7 +134,7 @@ export function PreviewMap(props: Props) {
 
   const handleTextFrameChange = useCallback(
     (before: AbcTextFrame, after: AbcTextFrame) => {
-      const { width, height } = getSharedMapDimensions(fullscreen, mapDimensions);
+      const { width, height } = adaptMapDimensions(fullscreen, mapDimensions);
 
       onTextFrameChange(
         {
@@ -171,7 +171,7 @@ export function PreviewMap(props: Props) {
       return;
     }
 
-    const { width, height } = getSharedMapDimensions(fullscreen, mapDimensions);
+    const { width, height } = adaptMapDimensions(fullscreen, mapDimensions);
 
     const previewScale: AbcScale = {
       ...activeView.scale,
@@ -184,7 +184,7 @@ export function PreviewMap(props: Props) {
 
   const handleScaleChange = useCallback(
     (before: AbcScale) => {
-      const { width, height } = getSharedMapDimensions(fullscreen, mapDimensions);
+      const { width, height } = adaptMapDimensions(fullscreen, mapDimensions);
 
       onScaleChange({
         ...before,

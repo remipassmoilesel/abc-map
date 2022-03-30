@@ -35,7 +35,7 @@ import { MapWrapper } from '../geo/map/MapWrapper';
 const logger = Logger.get('Encryption.ts');
 
 /**
- * These types of layer contains credentials
+ * These types of layer contain credentials
  */
 const ProtectedLayerTypes = [LayerType.Wms, LayerType.Wmts, LayerType.Xyz];
 

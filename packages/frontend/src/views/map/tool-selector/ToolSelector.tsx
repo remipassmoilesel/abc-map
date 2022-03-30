@@ -30,7 +30,7 @@ import { AddLayersChangeset } from '../../../core/history/changesets/layers/AddL
 import { prefixedTranslation } from '../../../i18n/i18n';
 import { useServices } from '../../../core/useServices';
 import CommonActions from './_common/common-actions/CommonActions';
-import TipBubble from '../../../components/tip-bubble/TipBubble';
+import DialogBoxAdvice from '../../../components/dialog-box-advice/DialogBoxAdvice';
 import { ToolTips } from '@abc-map/user-documentation';
 import { ToolButton } from './ToolButton';
 import TextToolPanel from './text/TextToolPanel';
@@ -98,17 +98,17 @@ function ToolSelector(props: Props) {
     const size = '1.5rem';
     switch (activeTool?.getId()) {
       case MapTool.Point:
-        return <TipBubble id={ToolTips.Point} size={size} />;
+        return <DialogBoxAdvice id={ToolTips.Point} size={size} />;
       case MapTool.LineString:
-        return <TipBubble id={ToolTips.LineString} size={size} />;
+        return <DialogBoxAdvice id={ToolTips.LineString} size={size} />;
       case MapTool.Polygon:
-        return <TipBubble id={ToolTips.Polygon} size={size} />;
+        return <DialogBoxAdvice id={ToolTips.Polygon} size={size} />;
       case MapTool.Text:
-        return <TipBubble id={ToolTips.Text} size={size} />;
+        return <DialogBoxAdvice id={ToolTips.Text} size={size} />;
       case MapTool.Selection:
-        return <TipBubble id={ToolTips.Selection} size={size} />;
+        return <DialogBoxAdvice id={ToolTips.Selection} size={size} />;
       case MapTool.EditProperties:
-        return <TipBubble id={ToolTips.EditProperties} size={size} />;
+        return <DialogBoxAdvice id={ToolTips.EditProperties} size={size} />;
     }
   }, [activeTool]);
 

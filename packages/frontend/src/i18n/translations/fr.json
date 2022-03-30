@@ -727,7 +727,7 @@
     "Open": "Ouvrir",
     "Close": "Fermer"
   },
-  "TipBubble": {
+  "DialogBoxAdvice": {
     "This_tip_is_not_available": "Ce conseil n'est pas disponible",
     "Help": "Aide"
   },
@@ -792,8 +792,10 @@
     "Remember_to_publish_your_changes": "Pensez à publier vos changements",
     "Sharing_codes": "Codes de partage",
     "Share_link": "Lien de partage",
-    "Iframe_embed_code": "Code d'intégration iframe",
-    "Qrcode_link": "Lien QR code",
+    "Iframe_embed_code": "Code d'intégration classique",
+    "Responsive_iframe_embed_code": "Code d'intégration adaptatif",
+    "Responsive_iframe_embed_code_will_adapt_better": "Le code de partage adaptatif essaye de s'adapter automatiquement au contenu auquel il est ajouté. Quelquefois le résultat est meilleur, quelquefois non \uD83E\uDD37",
+    "Qrcode_link": "Lien de partage QR code",
     "Width": "Largeur (px)",
     "Height": "Hauteur (px)",
     "Shared_views": "Vues partagées",
@@ -818,7 +820,17 @@
     "Navigation": "Navigation",
     "Close": "Fermer",
     "This_map_was_created_and_published_with_Abc-Map": "Cette carte a été créée et publiée avec Abc-Map.",
-    "Abc-Map_is_free_mapping_software_try_it": "Abc-Map est un logiciel libre de cartographie, essayez le !"
+    "Abc-Map_is_free_mapping_software_try_it": "Abc-Map est un logiciel libre de cartographie, essayez le !",
+    "Map_at_its_original_position": "Carte à sa position originale",
+    "Download_data": "Télécharger les données",
+    "Views": "Vues",
+    "Actions": "Actions",
+    "Attributions": "Attributions",
+    "Downloading": "Téléchargement en cours",
+    "Map_data": "Données de la carte",
+    "Beautiful_data_ready_to_use": "De belle données, prêtes à être utilisé",
+    "See_you_on": "Rendez-vous sur",
+    "Lets_go": "C'est parti !"
   },
   "PromptVariablesModal": {
     "About_credential_storage": "A propos du stockage des identifiants",

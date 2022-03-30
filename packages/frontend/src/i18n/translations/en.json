@@ -726,7 +726,7 @@
     "Open": "Open",
     "Close": "Close"
   },
-  "TipBubble": {
+  "DialogBoxAdvice": {
     "This_tip_is_not_available": "This advice is not available",
     "Help": "Help"
   },
@@ -791,8 +791,10 @@
     "Remember_to_publish_your_changes": "Remember to publish your changes",
     "Sharing_codes": "Sharing codes",
     "Share_link": "Share link",
-    "Iframe_embed_code": "Iframe embed code",
-    "Qrcode_link": "QR code link",
+    "Iframe_embed_code": "Classic embed code",
+    "Responsive_iframe_embed_code": "Responsive embed code",
+    "Responsive_iframe_embed_code_will_adapt_better": "The responsive sharing code tries to automatically adapt to the content it is added to. Sometimes the result is better, sometimes not \uD83E\uDD37",
+    "Qrcode_link": "QR code share link",
     "Width": "Width (px)",
     "Height": "Height (px)",
     "Shared_views": "Shared views",
@@ -817,7 +819,17 @@
     "Navigation": "Navigation",
     "Close": "Close",
     "This_map_was_created_and_published_with_Abc-Map": "This map was created and published with Abc-Map.",
-    "Abc-Map_is_free_mapping_software_try_it": "Abc-Map is free mapping software, try it !"
+    "Abc-Map_is_free_mapping_software_try_it": "Abc-Map is free mapping software, try it !",
+    "Map_at_its_original_position": "Map at its original position",
+    "Download_data": "Download data",
+    "Views": "Views",
+    "Actions": "Actions",
+    "Attributions": "Attributions",
+    "Downloading": "Downloading",
+    "Map_data": "Map data",
+    "Beautiful_data_ready_to_use": "Beautiful data, ready to use",
+    "See_you_on": "See you on",
+    "Lets_go": "Let's go !"
   },
   "PromptVariablesModal": {
     "About_credential_storage": "About credential storage",

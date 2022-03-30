@@ -16,16 +16,26 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { DimensionsPx } from '../utils/DimensionsPx';
-import { getViewportDimensions } from '../ui/getViewportDimensions';
+import Cls from './SmallAdvice.module.scss';
+import React from 'react';
+import { HelpIcon } from '../help-icon/HelpIcon';
+import { WithTooltip } from '../with-tooltip/WithTooltip';
 
-export function getSharedMapDimensions(fullscreen: boolean, mapDimensions: DimensionsPx): DimensionsPx {
-  const viewport = getViewportDimensions();
-  if (!viewport) {
-    return mapDimensions;
-  }
+interface Props {
+  advice: string;
+  className?: string;
+  size?: string;
+  placement?: 'top' | 'right' | 'bottom' | 'left';
+}
 
-  const width = fullscreen ? viewport.width : mapDimensions.width;
-  const height = fullscreen ? viewport.height : mapDimensions.height;
-  return { width, height };
+export function SmallAdvice(props: Props) {
+  const { advice, className, size = '1.2rem', placement = 'right' } = props;
+
+  return (
+    <WithTooltip title={advice} placement={placement}>
+      <div className={Cls.container}>
+        <HelpIcon className={className} size={size} />
+      </div>
+    </WithTooltip>
+  );
 }

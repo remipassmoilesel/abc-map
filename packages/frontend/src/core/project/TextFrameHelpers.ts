@@ -24,8 +24,8 @@ const logger = Logger.get('TextFrameHelpers');
 
 // FIXME: we should cache images per source links
 export class TextFrameHelpers {
-  public static async extractImagesFromLayouts(input: AbcLayout[]): Promise<[AbcFile[], AbcLayout[]]> {
-    let images: AbcFile[] = [];
+  public static async extractImagesFromLayouts(input: AbcLayout[]): Promise<[AbcFile<Blob>[], AbcLayout[]]> {
+    let images: AbcFile<Blob>[] = [];
     const output: AbcLayout[] = [];
     for (const layout of input) {
       const [imgs, frames] = await this.extractImagesFromFrames(layout.textFrames);
@@ -36,8 +36,8 @@ export class TextFrameHelpers {
     return [images, output];
   }
 
-  private static async extractImagesFromFrames(input: AbcTextFrame[]): Promise<[AbcFile[], AbcTextFrame[]]> {
-    let images: AbcFile[] = [];
+  private static async extractImagesFromFrames(input: AbcTextFrame[]): Promise<[AbcFile<Blob>[], AbcTextFrame[]]> {
+    let images: AbcFile<Blob>[] = [];
     const output: AbcTextFrame[] = [];
 
     for (const frame of input) {
@@ -49,8 +49,8 @@ export class TextFrameHelpers {
     return [images, output];
   }
 
-  private static async extractImagesFromElements(input: TextFrameChild[]): Promise<[AbcFile[], TextFrameChild[]]> {
-    let images: AbcFile[] = [];
+  private static async extractImagesFromElements(input: TextFrameChild[]): Promise<[AbcFile<Blob>[], TextFrameChild[]]> {
+    let images: AbcFile<Blob>[] = [];
     const output: TextFrameChild[] = [];
 
     for (const element of input) {

@@ -16,30 +16,26 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
+import Cls from './DialogBoxAdvice.module.scss';
 import React, { useCallback, useState } from 'react';
 import { Modal } from 'react-bootstrap';
 import { AllTips } from '@abc-map/user-documentation';
 import { getDocumentationLang, prefixedTranslation } from '../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
-import { FaIcon } from '../icon/FaIcon';
-import { IconDefs } from '../icon/IconDefs';
-import Cls from './TipBubble.module.scss';
+import { HelpIcon } from '../help-icon/HelpIcon';
 
 interface Props {
+  // Id of the advice to display on click
   id: string;
   label?: string;
   className?: string;
   size?: string;
 }
 
-const t = prefixedTranslation('TipBubble:');
+const t = prefixedTranslation('DialogBoxAdvice:');
 
-function TipBubble(props: Props) {
-  const id = props.id;
-  const label = props.label;
-  const className = props.className || '';
-  const size = props.size;
-
+function DialogBoxAdvice(props: Props) {
+  const { id, label, className, size } = props;
   const [open, setOpen] = useState(false);
 
   const handleClick = useCallback(() => {
@@ -56,10 +52,7 @@ function TipBubble(props: Props) {
   return (
     <>
       {/* Help icon */}
-      <div onClick={handleClick} className={`${Cls.bubble} ${className}`} title={label || t('Help')}>
-        {label && <div className={'mr-2'}>{label}</div>}
-        <FaIcon icon={IconDefs.faQuestionCircle} size={size} className={Cls.icon} />
-      </div>
+      <HelpIcon label={label} onClick={handleClick} className={className} size={size} />
 
       {/* Modal */}
       {open && (
@@ -73,4 +66,4 @@ function TipBubble(props: Props) {
   );
 }
 
-export default withTranslation()(TipBubble);
+export default withTranslation()(DialogBoxAdvice);

@@ -20,6 +20,6 @@
   cursor: move !important;
 
   &.readOnly {
-    cursor: default;
+    cursor: default !important;
   }
 }
