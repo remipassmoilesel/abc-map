@@ -2,18 +2,17 @@
 
 For the moment we use git hashes as version, since no one complained about it 👍
 
-## Shared maps, part 3 (XXXXXX XX/03/2022)
+## Shared maps, part 3 (459dce66 30/03/2022)
 
 - Shared map are now enabled by default 🚀
-- Add component for small tips (SmallAdvice). Tip is visible in a tooltip when user hover component
-
-
 - Better management of the size of shared maps, fullscreen shared maps
 - Better positioning of scale and rich text frames
 - Better navigation between shared views
+- Button "Download data" on shared maps
 - Better "My projects" dialog
   - Better user experience
   - No more layout shifts
+- Add component for small tips (SmallAdvice). Tip is visible in a tooltip when user hover component
 
 ## Better "Add layer" dialog (d63aae91 23/03/2022)
 
