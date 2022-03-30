@@ -132,12 +132,12 @@ class ProjectControls extends Component<Props, State> {
     const { toasts, project, modals } = this.props.services;
 
     const exportProject = async () => {
-      const compressed = await project.exportCurrentProject();
+      const compressed = await project.exportAndZipCurrentProject();
       if (ProjectStatus.Canceled === compressed) {
         return OperationStatus.Interrupted;
       }
 
-      FileIO.outputBlob(compressed.project, `projet${ProjectConstants.FileExtension}`);
+      FileIO.outputBlob(compressed.project, `project${ProjectConstants.FileExtension}`);
       return OperationStatus.Succeed;
     };
 

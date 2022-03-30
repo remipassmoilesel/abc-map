@@ -4,6 +4,10 @@ For the moment we use git hashes as version, since no one complained about it ðŸ
 
 ## Shared maps, part 3 (XXXXXX XX/03/2022)
 
+- Shared map are now enabled by default ðŸš€
+- Add component for small tips (SmallAdvice). Tip is visible in a tooltip when user hover component
+
+
 - Better management of the size of shared maps, fullscreen shared maps
 - Better positioning of scale and rich text frames
 - Better navigation between shared views

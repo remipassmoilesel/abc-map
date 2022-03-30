@@ -35,6 +35,7 @@ import { LayerFactory } from '../geo/layers/LayerFactory';
 import { ProjectUpdater } from './ProjectUpdater';
 import { ProjectFactory } from './ProjectFactory';
 import { ProjectStatus } from './ProjectStatus';
+import { deepFreeze } from '../utils/deepFreeze';
 
 logger.disable();
 
@@ -149,6 +150,30 @@ describe('ProjectService', function () {
       expect(wmsLayer.metadata.auth?.password).toEqual('test-password');
     });
 
+    it('should not prompt if project is public', async () => {
+      // Prepare
+      const map = MapFactory.createNaked();
+      geoMock.getMainMap.returns(map);
+
+      modals.getProjectPassword.rejects();
+
+      const [zippedProject] = await TestHelper.sampleCompressedProject({
+        metadata: { public: true },
+        layers: [TestHelper.sampleXyzLayer()],
+      });
+
+      // Act
+      await projectService.loadBlobProject(zippedProject.project);
+
+      // Assert
+      expect(store.getState().project.metadata.id).toEqual(zippedProject.metadata.id);
+      expect(modals.getProjectPassword.callCount).toEqual(0);
+      expect(geoMock.importLayers.callCount).toEqual(1);
+
+      const wmsLayer = geoMock.importLayers.args[0][0][0] as AbcXyzLayer;
+      expect(wmsLayer.metadata.remoteUrl).toEqual('http://domain.fr/xyz/{x}/{y}/{z}');
+    });
+
     it('should throw if no password given and protected project', async () => {
       // Prepare
       const map = MapFactory.createNaked();
@@ -218,9 +243,9 @@ describe('ProjectService', function () {
       const map = MapFactory.createNaked();
       geoMock.getMainMap.returns(map);
 
-      const wms = TestHelper.sampleWmsLayer({ projection: { name: 'EPSG:2154' } });
-      const xyz = TestHelper.sampleXyzLayer({ projection: { name: 'EPSG:4326' } });
-      const [zippedProject] = await TestHelper.sampleCompressedProtectedProject({ layers: [wms, xyz] });
+      const predefined = TestHelper.sampleOsmLayer();
+      const xyz = TestHelper.sampleXyzLayer({ projection: { name: 'EPSG:2154' } });
+      const [zippedProject] = await TestHelper.sampleCompressedProtectedProject({ layers: [predefined, xyz] });
 
       // Act
       await projectService.loadBlobProject(zippedProject.project);
@@ -231,163 +256,206 @@ describe('ProjectService', function () {
     });
   });
 
-  describe('exportCurrentProject()', () => {
+  describe('With a fake map', () => {
     let map: MapWrapper;
     beforeEach(() => {
       map = MapFactory.createNaked();
       geoMock.getMainMap.returns(map);
     });
 
-    it('should export private project without credentials', async function () {
-      // Prepare
-      const originalManifest: AbcProjectManifest = {
-        ...ProjectFactory.newProjectManifest(),
-        layouts: [TestHelper.sampleLayout()],
-        sharedViews: {
-          ...ProjectFactory.newProjectManifest().sharedViews,
-          list: [TestHelper.sampleSharedView()],
-        },
-      };
-      store.dispatch(ProjectActions.loadProject(originalManifest));
+    describe('exportAndZipCurrentProject()', () => {
+      it('should export private project without credentials', async function () {
+        // Prepare
+        const originalManifest: AbcProjectManifest = {
+          ...ProjectFactory.newProjectManifest(),
+          layouts: [TestHelper.sampleLayout()],
+          sharedViews: {
+            ...ProjectFactory.newProjectManifest().sharedViews,
+            list: [TestHelper.sampleSharedView()],
+          },
+        };
+        store.dispatch(ProjectActions.loadProject(originalManifest));
 
-      const layers: AbcLayer[] = [TestHelper.sampleOsmLayer(), TestHelper.sampleVectorLayer()];
-      geoMock.exportLayers.resolves(layers);
+        const layers: AbcLayer[] = [TestHelper.sampleOsmLayer(), TestHelper.sampleVectorLayer()];
+        geoMock.exportLayers.resolves(layers);
 
-      // Act
-      const exported = (await projectService.exportCurrentProject()) as CompressedProject<Blob>;
+        // Act
+        const exported = (await projectService.exportAndZipCurrentProject()) as CompressedProject<Blob>;
 
-      // Assert
-      expect(exported.metadata).toEqual(originalManifest.metadata);
+        // Assert
+        expect(exported.metadata).toEqual(originalManifest.metadata);
 
-      const manifest: AbcProjectManifest = await ProjectHelper.forFrontend().extractManifest(exported.project);
-      expect(manifest.metadata).toEqual(originalManifest.metadata);
-      expect(manifest.layers).toEqual(layers);
-      expect(manifest.layouts).toEqual(originalManifest.layouts);
-      expect(manifest.sharedViews).toEqual(originalManifest.sharedViews);
+        const manifest: AbcProjectManifest = await ProjectHelper.forFrontend().extractManifest(exported.project);
+        expect(manifest.metadata).toEqual(originalManifest.metadata);
+        expect(manifest.layers).toEqual(layers);
+        expect(manifest.layouts).toEqual(originalManifest.layouts);
+        expect(manifest.sharedViews).toEqual(originalManifest.sharedViews);
 
-      expect(modals.setProjectPassword.callCount).toEqual(0);
+        expect(modals.setProjectPassword.callCount).toEqual(0);
+      });
+
+      it('should export private project with credentials', async function () {
+        // Prepare
+        const originalManifest = ProjectFactory.newProjectManifest();
+        store.dispatch(ProjectActions.loadProject(originalManifest));
+
+        map.addLayer(LayerFactory.newXyzLayer('http://nowhere.net/{x}/{y}/{z}'));
+
+        const originalLayer = TestHelper.sampleXyzLayer({ remoteUrl: 'http://nowhere.net/{x}/{y}/{z}' });
+        const layers: AbcLayer[] = [originalLayer];
+        geoMock.exportLayers.resolves(layers);
+
+        modals.setProjectPassword.resolves({ type: ModalEventType.SetPasswordClosed, value: 'azerty1234', status: ModalStatus.Confirmed });
+
+        // Act
+        const exported = (await projectService.exportAndZipCurrentProject()) as CompressedProject<Blob>;
+
+        // Assert
+        expect(exported.metadata.id).toEqual(originalManifest.metadata.id);
+        expect(exported.metadata.public).toEqual(false);
+        expect(exported.metadata.name).toEqual(originalManifest.metadata.name);
+        expect(exported.metadata.containsCredentials).toEqual(true);
+
+        const manifest: AbcProjectManifest = await ProjectHelper.forFrontend().extractManifest(exported.project);
+        expect(manifest.metadata.id).toEqual(originalManifest.metadata.id);
+        expect(manifest.metadata.public).toEqual(false);
+        expect(manifest.metadata.name).toEqual(originalManifest.metadata.name);
+        expect(manifest.metadata.containsCredentials).toEqual(true);
+
+        expect(manifest.layers.length).toEqual(1);
+        const layer = manifest.layers[0] as AbcXyzLayer;
+        expect(layer.type).toEqual(LayerType.Xyz);
+        expect(layer.metadata.id).toEqual(originalLayer.metadata.id);
+        expect(layer.metadata.opacity).toEqual(originalLayer.metadata.opacity);
+        expect(layer.metadata.remoteUrl).toBeDefined();
+        expect(layer.metadata.remoteUrl).not.toEqual('http://nowhere.net/{x}/{y}/{z}');
+
+        expect(modals.setProjectPassword.callCount).toEqual(1);
+      });
+
+      it('should not prompt several times for credentials', async function () {
+        // Prepare
+        const originalManifest = ProjectFactory.newProjectManifest();
+        store.dispatch(ProjectActions.loadProject(originalManifest));
+
+        map.addLayer(LayerFactory.newXyzLayer('http://nowhere.net/{x}/{y}/{z}'));
+
+        const originalLayer = TestHelper.sampleXyzLayer({ remoteUrl: 'http://nowhere.net/{x}/{y}/{z}' });
+        const layers: AbcLayer[] = [originalLayer];
+        geoMock.exportLayers.resolves(layers);
+
+        modals.setProjectPassword.resolves({ type: ModalEventType.SetPasswordClosed, value: 'azerty1234', status: ModalStatus.Confirmed });
+
+        // Act
+        await projectService.exportAndZipCurrentProject();
+        await projectService.exportAndZipCurrentProject();
+        await projectService.exportAndZipCurrentProject();
+
+        // Assert
+        expect(modals.setProjectPassword.callCount).toEqual(1);
+      });
+
+      it('should return ProjectStatus.Canceled if user does not provide credentials for private project', async function () {
+        // Prepare
+        const originalManifest = ProjectFactory.newProjectManifest();
+        store.dispatch(ProjectActions.loadProject(originalManifest));
+
+        map.addLayer(LayerFactory.newXyzLayer('http://nowhere.net/{x}/{y}/{z}'));
+
+        const originalLayer = TestHelper.sampleXyzLayer({ remoteUrl: 'http://nowhere.net/{x}/{y}/{z}' });
+        const layers: AbcLayer[] = [originalLayer];
+        geoMock.exportLayers.resolves(layers);
+
+        modals.setProjectPassword.resolves({ type: ModalEventType.SetPasswordClosed, value: '', status: ModalStatus.Canceled });
+
+        // Act
+        const exported = await projectService.exportAndZipCurrentProject();
+
+        // Assert
+        expect(exported).toEqual(ProjectStatus.Canceled);
+      });
+
+      it('should export public project with credentials', async function () {
+        // Prepare
+        const originalManifest = {
+          ...ProjectFactory.newProjectManifest(),
+          metadata: {
+            ...ProjectFactory.newProjectManifest().metadata,
+            public: true,
+          },
+        };
+        store.dispatch(ProjectActions.loadProject(originalManifest));
+
+        map.addLayer(LayerFactory.newXyzLayer('http://nowhere.net/{x}/{y}/{z}'));
+
+        const originalLayer = TestHelper.sampleXyzLayer({ remoteUrl: 'http://nowhere.net/{x}/{y}/{z}' });
+        const layers: AbcLayer[] = [originalLayer];
+        geoMock.exportLayers.resolves(layers);
+
+        // Act
+        const exported = (await projectService.exportAndZipCurrentProject()) as CompressedProject<Blob>;
+
+        // Assert
+        expect(exported.metadata.id).toEqual(originalManifest.metadata.id);
+        expect(exported.metadata.public).toEqual(true);
+        expect(exported.metadata.name).toEqual(originalManifest.metadata.name);
+        expect(exported.metadata.containsCredentials).toEqual(false);
+
+        const manifest: AbcProjectManifest = await ProjectHelper.forFrontend().extractManifest(exported.project);
+        expect(manifest.metadata.id).toEqual(originalManifest.metadata.id);
+        expect(manifest.metadata.public).toEqual(true);
+        expect(manifest.metadata.name).toEqual(originalManifest.metadata.name);
+        expect(manifest.metadata.containsCredentials).toEqual(false);
+
+        expect(manifest.layers.length).toEqual(1);
+        const layer = manifest.layers[0] as AbcXyzLayer;
+        expect(layer.type).toEqual(LayerType.Xyz);
+        expect(layer.metadata.id).toEqual(originalLayer.metadata.id);
+        expect(layer.metadata.opacity).toEqual(originalLayer.metadata.opacity);
+        expect(layer.metadata.remoteUrl).toBeDefined();
+        expect(layer.metadata.remoteUrl).toEqual('http://nowhere.net/{x}/{y}/{z}');
+      });
     });
 
-    it('should export private project with credentials', async function () {
+    it('cloneProject()', async () => {
       // Prepare
-      const originalManifest = ProjectFactory.newProjectManifest();
-      store.dispatch(ProjectActions.loadProject(originalManifest));
+      const original = TestHelper.sampleProjectManifest();
+      original.metadata.public = true;
+      original.layouts.push(TestHelper.sampleLayout());
+      original.layouts.push(TestHelper.sampleLayout());
+      original.sharedViews.list.push(TestHelper.sampleSharedView());
+      original.sharedViews.list.push(TestHelper.sampleSharedView());
+      original.sharedViews.list.push(TestHelper.sampleSharedView());
+      deepFreeze(original);
+      store.dispatch(ProjectActions.loadProject(original));
 
-      map.addLayer(LayerFactory.newXyzLayer('http://nowhere.net/{x}/{y}/{z}'));
-
-      const originalLayer = TestHelper.sampleXyzLayer({ remoteUrl: 'http://nowhere.net/{x}/{y}/{z}' });
-      const layers: AbcLayer[] = [originalLayer];
-      geoMock.exportLayers.resolves(layers);
-
-      modals.setProjectPassword.resolves({ type: ModalEventType.SetPasswordClosed, value: 'azerty1234', status: ModalStatus.Confirmed });
-
-      // Act
-      const exported = (await projectService.exportCurrentProject()) as CompressedProject<Blob>;
-
-      // Assert
-      expect(exported.metadata.id).toEqual(originalManifest.metadata.id);
-      expect(exported.metadata.public).toEqual(false);
-      expect(exported.metadata.name).toEqual(originalManifest.metadata.name);
-      expect(exported.metadata.containsCredentials).toEqual(true);
-
-      const manifest: AbcProjectManifest = await ProjectHelper.forFrontend().extractManifest(exported.project);
-      expect(manifest.metadata.id).toEqual(originalManifest.metadata.id);
-      expect(manifest.metadata.public).toEqual(false);
-      expect(manifest.metadata.name).toEqual(originalManifest.metadata.name);
-      expect(manifest.metadata.containsCredentials).toEqual(true);
-
-      expect(manifest.layers.length).toEqual(1);
-      const layer = manifest.layers[0] as AbcXyzLayer;
-      expect(layer.type).toEqual(LayerType.Xyz);
-      expect(layer.metadata.id).toEqual(originalLayer.metadata.id);
-      expect(layer.metadata.opacity).toEqual(originalLayer.metadata.opacity);
-      expect(layer.metadata.remoteUrl).toBeDefined();
-      expect(layer.metadata.remoteUrl).not.toEqual('http://nowhere.net/{x}/{y}/{z}');
-
-      expect(modals.setProjectPassword.callCount).toEqual(1);
-    });
-
-    it('should not prompt several times for credentials', async function () {
-      // Prepare
-      const originalManifest = ProjectFactory.newProjectManifest();
-      store.dispatch(ProjectActions.loadProject(originalManifest));
-
-      map.addLayer(LayerFactory.newXyzLayer('http://nowhere.net/{x}/{y}/{z}'));
-
-      const originalLayer = TestHelper.sampleXyzLayer({ remoteUrl: 'http://nowhere.net/{x}/{y}/{z}' });
-      const layers: AbcLayer[] = [originalLayer];
-      geoMock.exportLayers.resolves(layers);
-
-      modals.setProjectPassword.resolves({ type: ModalEventType.SetPasswordClosed, value: 'azerty1234', status: ModalStatus.Confirmed });
-
-      // Act
-      await projectService.exportCurrentProject();
-      await projectService.exportCurrentProject();
-      await projectService.exportCurrentProject();
-
-      // Assert
-      expect(modals.setProjectPassword.callCount).toEqual(1);
-    });
-
-    it('should return ProjectStatus.Canceled if user does not provide credentials for private project', async function () {
-      // Prepare
-      const originalManifest = ProjectFactory.newProjectManifest();
-      store.dispatch(ProjectActions.loadProject(originalManifest));
-
-      map.addLayer(LayerFactory.newXyzLayer('http://nowhere.net/{x}/{y}/{z}'));
-
-      const originalLayer = TestHelper.sampleXyzLayer({ remoteUrl: 'http://nowhere.net/{x}/{y}/{z}' });
-      const layers: AbcLayer[] = [originalLayer];
-      geoMock.exportLayers.resolves(layers);
-
-      modals.setProjectPassword.resolves({ type: ModalEventType.SetPasswordClosed, value: '', status: ModalStatus.Canceled });
-
-      // Act
-      const exported = await projectService.exportCurrentProject();
-
-      // Assert
-      expect(exported).toEqual(ProjectStatus.Canceled);
-    });
-
-    it('should export public project with credentials', async function () {
-      // Prepare
-      const originalManifest = {
-        ...ProjectFactory.newProjectManifest(),
-        metadata: {
-          ...ProjectFactory.newProjectManifest().metadata,
-          public: true,
-        },
-      };
-      store.dispatch(ProjectActions.loadProject(originalManifest));
-
-      map.addLayer(LayerFactory.newXyzLayer('http://nowhere.net/{x}/{y}/{z}'));
-
-      const originalLayer = TestHelper.sampleXyzLayer({ remoteUrl: 'http://nowhere.net/{x}/{y}/{z}' });
-      const layers: AbcLayer[] = [originalLayer];
+      const layers: AbcLayer[] = [TestHelper.sampleOsmLayer(), TestHelper.sampleXyzLayer(), TestHelper.sampleWmtsLayer(), TestHelper.sampleWmtsLayer()];
       geoMock.exportLayers.resolves(layers);
 
       // Act
-      const exported = (await projectService.exportCurrentProject()) as CompressedProject<Blob>;
+      const clone = (await projectService.cloneCurrent()) as CompressedProject<Blob>;
 
       // Assert
-      expect(exported.metadata.id).toEqual(originalManifest.metadata.id);
-      expect(exported.metadata.public).toEqual(true);
-      expect(exported.metadata.name).toEqual(originalManifest.metadata.name);
-      expect(exported.metadata.containsCredentials).toEqual(false);
+      const clonedManifest: AbcProjectManifest = await ProjectHelper.forFrontend().extractManifest(clone.project);
+      expect(clonedManifest.metadata.id).toBeDefined();
+      expect(clonedManifest.metadata.id).toEqual(clone.metadata.id);
+      expect(clonedManifest.metadata.id).not.toEqual(original.metadata.id);
+      expect(clone.metadata.id).not.toEqual(original.metadata.id);
 
-      const manifest: AbcProjectManifest = await ProjectHelper.forFrontend().extractManifest(exported.project);
-      expect(manifest.metadata.id).toEqual(originalManifest.metadata.id);
-      expect(manifest.metadata.public).toEqual(true);
-      expect(manifest.metadata.name).toEqual(originalManifest.metadata.name);
-      expect(manifest.metadata.containsCredentials).toEqual(false);
+      const clonedLayerIds = clonedManifest.layers.map((lay) => lay.metadata.id);
+      const originalLayerIds = layers.map((lay) => lay.metadata.id);
+      expect(clonedLayerIds.length).toEqual(layers.length);
+      expect(clonedLayerIds).not.toEqual(originalLayerIds);
 
-      expect(manifest.layers.length).toEqual(1);
-      const layer = manifest.layers[0] as AbcXyzLayer;
-      expect(layer.type).toEqual(LayerType.Xyz);
-      expect(layer.metadata.id).toEqual(originalLayer.metadata.id);
-      expect(layer.metadata.opacity).toEqual(originalLayer.metadata.opacity);
-      expect(layer.metadata.remoteUrl).toBeDefined();
-      expect(layer.metadata.remoteUrl).toEqual('http://nowhere.net/{x}/{y}/{z}');
+      const clonedLayoutIds = clonedManifest.layouts.map((lay) => lay.id);
+      const originalLayoutIds = original.layouts.map((lay) => lay.id);
+      expect(clonedLayoutIds.length).toEqual(originalLayoutIds.length);
+      expect(clonedLayoutIds).not.toEqual(originalLayoutIds);
+
+      const clonedViewIds = clonedManifest.sharedViews.list.map((view) => view.id);
+      const originalViewIds = original.sharedViews.list.map((view) => view.id);
+      expect(clonedViewIds.length).toEqual(originalViewIds.length);
+      expect(clonedViewIds).not.toEqual(originalViewIds);
     });
   });
 

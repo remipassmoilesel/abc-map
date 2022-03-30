@@ -22,6 +22,17 @@
 .navigationMenu {
   z-index: $zIndex-sharedMap-menu;
 
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  bottom: 1rem;
+  width: 30rem;
+
+  @include media-breakpoint-down(xl) {
+    width: auto;
+    left: 1rem;
+  }
+
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -33,10 +44,12 @@
   border: solid 0.1rem $gray-400;
   border-radius: $border-radius;
 
-  width: 30rem;
+  overflow-x: hidden;
+  overflow-y: auto;
 
-  @include media-breakpoint-down(xl) {
-    left: 1rem;
+  h5 {
+    font-size: 1.1rem;
+    margin-bottom: 0.6rem;
   }
 }
 
@@ -68,6 +81,12 @@
   }
 }
 
+.attributions {
+  border-bottom: solid $gray-300 0.1rem;
+  margin-bottom: 1rem;
+  padding: 0.7rem 1rem;
+}
+
 .softwareCredits {
   display: flex;
   align-items: center;
@@ -83,7 +102,7 @@
   }
 
   .logo {
-    height: 1.5rem;
+    height: 1.3rem;
     margin-right: 1rem;
   }
 }

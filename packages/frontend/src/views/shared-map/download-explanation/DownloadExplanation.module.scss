@@ -16,30 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-@import "src/styles/variables";
-
-.shareLinkForm {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: stretch;
-
-  margin-bottom: 3rem;
-}
-
-.sectionTitle {
-  display: flex;
-  align-items: center;
-
-  font-weight: bold;
-  margin: 1.5rem 0;
-}
-
-.iframeForm {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: stretch;
-
-  margin-bottom: 1rem;
+.icon {
+  max-width: 10vmin;
+  margin: 2vmin;
 }

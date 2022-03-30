@@ -24,7 +24,11 @@ export interface ExperimentalFeature {
   id: string;
 }
 
-export const MapSharing = { id: 'MapSharing' };
+/**
+ * Artefact generator is a data processing module used to create artefacts for WMS/WMTS/XYZ layers.
+ *
+ * It will never be public.
+ */
 export const ArtefactGenerator = { id: 'ArtefactGenerator' };
 
-export const ExperimentalFeatures: ExperimentalFeature[] = [MapSharing, ArtefactGenerator];
+export const ExperimentalFeatures: ExperimentalFeature[] = [ArtefactGenerator];

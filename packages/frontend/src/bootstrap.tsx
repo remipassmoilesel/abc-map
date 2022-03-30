@@ -83,7 +83,7 @@ async function initProject({ project, geo, history }: Services, store: MainStore
     if (loadPrivateProject) {
       await project.loadPrivateProject(prevProject.id);
     } else if (loadPublicProject) {
-      await project.loadSharedProject(prevProject.id);
+      await project.loadPublicProject(prevProject.id);
     } else {
       await project.newProject();
     }

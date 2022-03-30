@@ -19,7 +19,7 @@
 import Cls from './SharedMapSettingsView.module.scss';
 import React, { useEffect, useRef } from 'react';
 import { pageSetup } from '../../core/utils/page-setup';
-import { Logger } from '@abc-map/shared';
+import { Logger, UserStatus } from '@abc-map/shared';
 import { useAppSelector } from '../../core/store/hooks';
 import { EnableSharePanel } from './enable-share-panel/EnableSharePanel';
 import SharedMapLayout from './shared-map-layout/SharedMapLayout';
@@ -34,12 +34,16 @@ const t = prefixedTranslation('SharedMapSettingsView:');
 
 function SharedMapSettingsView() {
   // User status, project status
-  const mapShared = useAppSelector((st) => st.project.metadata.public);
-  const keyboardListener = useRef<HistoryKeyboardListener>();
+  // We must ensure that user is connected as we can share projects
+  const publicMap = useAppSelector((st) => st.project.metadata.public);
+  const userConnected = useAppSelector((st) => st.authentication.userStatus) === UserStatus.Authenticated;
+  const showLayout = publicMap && userConnected;
 
   // Page setup on mount
   useEffect(() => pageSetup(t('Share'), t('Share_your_maps_online')), []);
 
+  // Keyboard setup
+  const keyboardListener = useRef<HistoryKeyboardListener>();
   useEffect(() => {
     keyboardListener.current = HistoryKeyboardListener.create(HistoryKey.SharedViews);
     keyboardListener.current?.initialize();
@@ -50,8 +54,8 @@ function SharedMapSettingsView() {
   return (
     <div className={Cls.sharedMapSettings}>
       {/* User is not authenticated or map is not shared, we ask him to connect or share map */}
-      {!mapShared && <EnableSharePanel />}
-      {mapShared && <SharedMapLayout />}
+      {!showLayout && <EnableSharePanel />}
+      {showLayout && <SharedMapLayout />}
     </div>
   );
 }

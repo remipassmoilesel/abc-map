@@ -76,7 +76,7 @@ describe('ProjectControls', () => {
       abcRender(<ProjectControls />, { services });
 
       const [compressed] = await TestHelper.sampleCompressedProject();
-      services.project.exportCurrentProject.resolves(compressed);
+      services.project.exportAndZipCurrentProject.resolves(compressed);
 
       // Act
       userEvent.click(screen.getByTestId('export-project'));
@@ -91,7 +91,7 @@ describe('ProjectControls', () => {
     it('should not show sollicitation modal', async () => {
       // Prepare
       abcRender(<ProjectControls />, { services });
-      services.project.exportCurrentProject.rejects(new Error('Test error'));
+      services.project.exportAndZipCurrentProject.rejects(new Error('Test error'));
 
       // Act
       userEvent.click(screen.getByTestId('export-project'));

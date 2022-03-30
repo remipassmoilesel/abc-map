@@ -16,9 +16,26 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-/**
- * Return true if app is displayed in an iframe
- */
-export function isFramed() {
-  return window.self !== window.top;
+import React from 'react';
+import { FaIcon } from '../icon/FaIcon';
+import { IconDefs } from '../icon/IconDefs';
+import Cls from './HelpIcon.module.scss';
+import clsx from 'clsx';
+
+interface Props {
+  label?: string;
+  className?: string;
+  size?: string;
+  onClick?: () => void;
+}
+
+export function HelpIcon(props: Props) {
+  const { label, className, size = '1.2rem', onClick } = props;
+
+  return (
+    <div onClick={onClick} className={clsx(Cls.icon, className)}>
+      {label && <div className={'mr-2'}>{label}</div>}
+      <FaIcon icon={IconDefs.faQuestionCircle} size={size} className={Cls.inner} />
+    </div>
+  );
 }

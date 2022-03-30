@@ -4,19 +4,32 @@
 
 You can register and connect to Abc-Map.
 
-Registration is _optional_, it does not give access to more features, it only allows you to keep your projects online.
+Registration is _optional_, it allows you:
+
+- to save your projects online
+- to share your projects
+
+<br/>
 
 <div class='alert alert-warning'>
-<div class="mb-3">⚠️ Limitations:</div> 
-<ul>
-  <li>This platform is offered in order to be useful, but without any guarantee</li>
-  <li>The number of projects saved online is limited per user</li>
-  <li>Projects that are too large cannot be saved online</li>
-  <li>Projects can be deleted after one month of inactivity</li>
-</ul>
+  <div class="mb-3">⚠️ Limitations:</div> 
+  <ul>
+    <li>This platform is offered in order to be useful, but without any guarantee</li>
+    <li>The number of projects saved online is limited per user</li>
+    <li>Projects that are too large cannot be saved online</li>
+    <li>Projects can be deleted after one month of inactivity</li>
+  </ul>
 </div>
 
+<br/>
+
 <video controls src="./assets/register.mp4" preload="metadata"></video>
+
+## Manage your projects online
+
+The number of projects per user is limited, you can manage your projects from the map view.
+
+<video controls src="./assets/manage-remote-projects.mp4" preload="metadata"></video>
 
 ## Registration emails
 

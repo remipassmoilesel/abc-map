@@ -24,6 +24,9 @@ import { CopyButton } from '../../../../components/copy-button/CopyButton';
 import QrCode from '../../../../components/qrcode/QrCode';
 import { prefixedTranslation } from '../../../../i18n/i18n';
 import { useAppSelector } from '../../../../core/store/hooks';
+import { adaptMapDimensions } from '../../../../core/project/adaptMapDimensions';
+import { SmallAdvice } from '../../../../components/small-advice/SmallAdvice';
+import { classicIframeIntegration, responsiveIframeIntegration } from './integrations';
 
 const t = prefixedTranslation('SharedMapSettingsView:');
 
@@ -37,9 +40,16 @@ function SharingCodesModal(props: Props) {
 
   const publicLink = project.getPublicLink();
   const shareLinkRef = useRef<HTMLInputElement | null>(null);
-  const { width, height } = useAppSelector((st) => st.project.sharedViews.mapDimensions);
-  const iframeCode = `<iframe src="${publicLink}" width="${width}" height="${height}"></iframe>`;
-  const iframeCodeRef = useRef<HTMLTextAreaElement | null>(null);
+  const sharedMapProperties = useAppSelector((st) => st.project.sharedViews);
+  const { width, height } = adaptMapDimensions(sharedMapProperties.fullscreen, sharedMapProperties.mapDimensions);
+
+  // Iframe code
+  const simpleIframeCode = classicIframeIntegration(publicLink, width, height);
+  const simpleIframeCodeRef = useRef<HTMLTextAreaElement | null>(null);
+
+  // Responsive iframe code
+  const responsiveIframeCode = responsiveIframeIntegration(publicLink, width, height);
+  const responsiveIframeCodeRef = useRef<HTMLTextAreaElement | null>(null);
 
   return (
     <Modal show={true} onHide={onClose} size={'lg'} centered>
@@ -50,11 +60,21 @@ function SharingCodesModal(props: Props) {
         <div className={'container'}>
           <div className={'row'}>
             <div className={'col-xl-8'}>
-              {/* Iframe integration */}
+              {/* Responsive iframe integration */}
+              <div className={Cls.sectionTitle}>
+                {t('Responsive_iframe_embed_code')}
+                <SmallAdvice advice={t('Responsive_iframe_embed_code_will_adapt_better')} />
+              </div>
+              <div className={Cls.iframeForm}>
+                <textarea value={responsiveIframeCode} ref={responsiveIframeCodeRef} readOnly={true} className={'form-control flex-grow-1 mr-3'} />
+                <CopyButton inputRef={responsiveIframeCodeRef} />
+              </div>
+
+              {/* Normal iframe integration */}
               <div className={Cls.sectionTitle}>{t('Iframe_embed_code')}</div>
               <div className={Cls.iframeForm}>
-                <textarea value={iframeCode} ref={iframeCodeRef} readOnly={true} className={'form-control flex-grow-1 mr-3'} />
-                <CopyButton inputRef={iframeCodeRef} />
+                <textarea value={simpleIframeCode} ref={simpleIframeCodeRef} readOnly={true} className={'form-control flex-grow-1 mr-3'} />
+                <CopyButton inputRef={simpleIframeCodeRef} />
               </div>
 
               {/* Sharing link */}
@@ -74,7 +94,7 @@ function SharingCodesModal(props: Props) {
           <div className={'row d-flex mt-4'}>
             <div className={'col-xl-12 d-flex justify-content-end'}>
               <button onClick={onClose} className={'btn btn-outline-secondary'} data-cy={'close-modal'}>
-                Fermer
+                {t('Close')}
               </button>
             </div>
           </div>

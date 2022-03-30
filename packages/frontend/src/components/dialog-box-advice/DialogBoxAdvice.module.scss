@@ -18,28 +18,20 @@
 
 @import "src/styles/variables";
 
-.shareLinkForm {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: stretch;
+.modalContent {
+  h1,
+  h2,
+  h3,
+  h4 {
+    margin-bottom: 1.5rem;
+  }
 
-  margin-bottom: 3rem;
-}
+  ul {
+    list-style: none;
+    padding: 0.5rem 1.5rem;
 
-.sectionTitle {
-  display: flex;
-  align-items: center;
-
-  font-weight: bold;
-  margin: 1.5rem 0;
-}
-
-.iframeForm {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: stretch;
-
-  margin-bottom: 1rem;
+    li {
+      margin-bottom: 1rem;
+    }
+  }
 }

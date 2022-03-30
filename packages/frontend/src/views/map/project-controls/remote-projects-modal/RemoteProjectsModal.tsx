@@ -105,7 +105,10 @@ function RemoteProjectsModal(props: Props) {
     showOpenConfirmation(true);
   }, [selected]);
 
-  const handleOpenCanceled = useCallback(() => showOpenConfirmation(false), []);
+  const handleOpenCanceled = useCallback(() => {
+    showOpenConfirmation(false);
+    setMessage('');
+  }, []);
 
   const handleOpenConfirmed = useCallback(
     (password: string) => {

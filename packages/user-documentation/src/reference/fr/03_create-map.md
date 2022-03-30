@@ -4,13 +4,14 @@
 
 Dans cette section, vous découvrirez les étapes de création d'une carte avec Abc-Map:
 
-1. Choisir un fond de carte
-2. Importer des données
-3. Ajouter et modifier des formes
-4. Appliquer un traitement de données
-5. Créer une légende et ajouter une échelle
-6. Mettre en page et exporter
-7. Sauvegarder ou exporter votre projet
+1. [Choisir un fond de carte](#1-choisir-un-fond-de-carte)
+2. [Importer des données](#2-importer-des-donnees)
+3. [Ajouter et modifier des formes](#3-ajouter-et-modifier-des-formes)
+4. [Appliquer un traitement de données](#4-appliquer-un-traitement-de-donnees)
+5. [Créer une légende et ajouter une échelle](#5-creer-une-legende-et-ajouter-une-echelle)
+6. [Mettre en page et exporter](#6-mettre-en-page-et-exporter)
+7. [Partager votre carte](#7-partager-votre-carte)
+8. [Sauvegarder en ligne ou exporter votre projet](#8-sauvegarder-en-ligne-ou-exporter-votre-projet)
 
 Toutes ces étapes sont facultatives.
 
@@ -91,7 +92,19 @@ exportez-la au format `PDF` ou `PNG`:
 
 <video controls src="./assets/pdf-export.mp4" preload="metadata"></video>
 
-## 7. Sauvegarder ou exporter votre projet
+## 7. Partager votre carte
+
+Vous pouvez partager votre carte en ligne, via un lien ou en l'intégrant sur votre site.
+
+<div class="alert alert-warning">
+  <b>⚠️ Attention</b><br />
+  Si votre carte contient des identifiants, ces identifiants seront accessibles publiquement.<br />  
+  Si ces identifiants donnent accès à des services payants, cela peut entrainer une facturation excessive.<br />  
+</div>
+
+<video controls src="./assets/shared-map.mp4" preload="metadata"></video>
+
+## 8. Sauvegarder en ligne ou exporter votre projet
 
 Inscrivez-vous pour sauvegarder votre projet en ligne, c'est gratuit !
 

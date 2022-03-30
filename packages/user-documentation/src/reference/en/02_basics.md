@@ -26,6 +26,7 @@ A project contains:
 - All layers and data from your map
 - The layouts of your map
 - The legend of your map
+- The images of your layouts and shares
 
 Exported projects have the file extension `.abm2`. They can only be used with Abc-Map. Those are
 <a href="https://en.wikipedia.org/wiki/ZIP_(file_format)" target="_blank">Zip archives</a> containing

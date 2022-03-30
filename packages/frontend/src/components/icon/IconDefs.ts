@@ -75,6 +75,7 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons/faArrowLeft';
 import { faEye } from '@fortawesome/free-solid-svg-icons/faEye';
 import { faEyeSlash } from '@fortawesome/free-solid-svg-icons/faEyeSlash';
 import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
+import { faArrowsToCircle } from '@fortawesome/free-solid-svg-icons/faArrowsToCircle';
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons/faTimesCircle';
 import { faClone } from '@fortawesome/free-solid-svg-icons/faClone';
 import { faPaintRoller } from '@fortawesome/free-solid-svg-icons/faPaintRoller';
@@ -197,6 +198,7 @@ export const IconDefs = {
   faEye,
   faEyeSlash,
   faTimes,
+  faArrowsToCircle,
   faTimesCircle,
   faClone,
   faPaintRoller,

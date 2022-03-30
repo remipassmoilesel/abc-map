@@ -4,13 +4,14 @@
 
 In this section, you will discover the steps to create a map with Abc-Map:
 
-1. Choose a basemap
-2. Import data
-3. Add and edit geometries
-4. Apply data processing
-5. Create a legend and add a scale
-6. Layout and export
-7. Save or export project
+1. [Choose a basemap](#1-choose-a-basemap)
+2. [Import data](#2-import-data)
+3. [Add and modify shapes](#3-add-and-modify-shapes)
+4. [Apply data processing](#4-apply-data-processing)
+5. [Create a legend and add a scale](#5-create-a-legend-and-add-a-scale)
+6. [Layout and export](#6-layout-and-export)
+7. [Share your map](#7-share-your-map)
+8. [Save or export your project](#8-save-or-export-your-project)
 
 All of these steps are optional.
 
@@ -87,7 +88,19 @@ On the "Layout" page, create one or more pages according to your needs. When you
 
 <video controls src="./assets/pdf-export.mp4" preload="metadata"></video>
 
-## 7. Save or export your project
+## 7. Share your map
+
+You can share your map online, via a link or by embedding it on your site.
+
+<div class="alert alert-warning">
+  <b>⚠️ Warning</b><br />
+  If your card contains identifiers, these identifiers will be publicly accessible.<br />  
+  If these identifiers give access to paid services, this may lead to excessive billing.<br />  
+</div>
+
+<video controls src="./assets/shared-map.mp4" preload="metadata"></video>
+
+## 8. Save or export your project
 
 Register to save your project online, it's free!
 

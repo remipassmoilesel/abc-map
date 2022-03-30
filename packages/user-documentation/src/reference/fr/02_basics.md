@@ -26,6 +26,7 @@ Un projet contient:
 - Toutes les couches et données de votre carte
 - Les mises en page de votre carte
 - Les cadres de texte et les images de votre carte
+- Les images de vos mises en pages et partages
 
 Les projets exportés ont l'extension de fichier `.abm2`. Il ne sont utilisables qu'avec Abc-Map. Ce sont des
 <a href="https://fr.wikipedia.org/wiki/ZIP_(format_de_fichier)" target="_blank">archives Zip</a> contenant

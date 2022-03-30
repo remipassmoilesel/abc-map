@@ -22,7 +22,6 @@ import { Routes } from '../helpers/Routes';
 import { Registration } from '../helpers/Registration';
 import { Authentication } from '../helpers/Authentication';
 import { TopBar } from '../helpers/TopBar';
-import { ExperimentalFeatures } from '../helpers/ExperimentalFeatures';
 import { SharingLayoutMap } from '../helpers/SharingLayoutMap';
 import { UrlHelper } from '../helpers/UrlHelper';
 import { SharedMap } from '../helpers/SharedMap';
@@ -42,8 +41,6 @@ describe('Shared maps', function () {
 
   it('connected user can share map', function () {
     cy.visit(Routes.map().format())
-      // Enable map sharing
-      .then(() => ExperimentalFeatures.enableMapSharing())
       // Set fixed view, draw
       .then(() => MainMap.fixedView())
       .then(() => ToolSelector.enable(MapTool.Point))
