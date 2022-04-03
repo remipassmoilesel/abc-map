@@ -44,6 +44,7 @@ import { adaptView } from './adaptView';
 import { ProjectStatus } from '../../core/project/ProjectStatus';
 import { FileIO } from '../../core/utils/FileIO';
 import DownloadExplanation from './download-explanation/DownloadExplanation';
+import { SharedMapKeyboardListener } from './SharedMapKeyboardListener';
 
 export const logger = Logger.get('SharedMapView.tsx');
 
@@ -84,6 +85,14 @@ function SharedMapView() {
     }
     return () => map?.dispose();
   }, [map]);
+
+  // Setup keyboard shortcuts
+  useEffect(() => {
+    const listener = SharedMapKeyboardListener.create();
+    listener.initialize();
+
+    return () => listener.destroy();
+  }, []);
 
   // Fetch and setup project
   useEffect(() => {

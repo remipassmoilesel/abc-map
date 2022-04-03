@@ -28,9 +28,9 @@ const logger = Logger.get('MapKeyboardListener.ts');
 
 const t = prefixedTranslation('core:MapKeyboardListener.');
 
-export class MapKeyboardListener {
+export class MainMapKeyboardListener {
   public static create() {
-    return new MapKeyboardListener(getServices());
+    return new MainMapKeyboardListener(getServices());
   }
 
   private historyListeners?: HistoryKeyboardListener;

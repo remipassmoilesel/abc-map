@@ -27,6 +27,13 @@ designed by and for experts, and are hard to use.
 Abc-Map is a lightweight GIS whose objective is to offer a good user experience for neophytes as for experts in a
 hurry.
 
+## What can I do with this thing ?
+
+- You can create and process geographic data (geojson, shapefiles, WMS, WMTS, XYZ, ...)
+- You can export maps in PDF or PNG format
+- You can share online maps on your sites in iframe or fullscreen
+- If you are a nerd you can practice Javascript, Typescript, React, Openlayers and more !
+
 ## Who uses Abc-Map ?
 
 - Sportsmen and women for running or cycling routes

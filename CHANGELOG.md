@@ -2,7 +2,7 @@
 
 For the moment we use git hashes as version, since no one complained about it 👍
 
-## Text frames style (xxxxxx 03/04/2022)
+## Text frames style (606a2fd6 03/04/2022)
 
 - Style options for text frames. You can now open a modal on text frames to change background color,
   enable or disable shadows and borders. You can also use transparent frames !
