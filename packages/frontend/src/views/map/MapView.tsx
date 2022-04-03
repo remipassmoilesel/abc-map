@@ -17,7 +17,7 @@
  */
 
 import Cls from './MapView.module.scss';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import MainMap from './main-map/MainMap';
 import LayerControls from './layer-controls/LayerControls';
 import ProjectStatus from './project-status/ProjectStatus';
@@ -30,7 +30,7 @@ import { LayerWrapper } from '../../core/geo/layers/LayerWrapper';
 import Search from './search/Search';
 import ImportData from './import-data/ImportData';
 import CursorPosition from './cursor-position/CursorPosition';
-import { MapKeyboardListener } from './MapKeyboardListener';
+import { MainMapKeyboardListener } from './MainMapKeyboardListener';
 import { pageSetup } from '../../core/utils/page-setup';
 import { withTranslation } from 'react-i18next';
 import { prefixedTranslation } from '../../i18n/i18n';
@@ -46,7 +46,6 @@ const t = prefixedTranslation('MapView:');
 
 function MapView() {
   const { geo } = useServices();
-  const keyboardListeners = useRef<MapKeyboardListener | undefined>();
   const [layers, setLayers] = useState<LayerWrapper[]>([]);
   const [activeLayer, setActiveLayer] = useState<LayerWrapper | undefined>();
 
@@ -69,13 +68,13 @@ function MapView() {
     return () => mainMap.removeLayerChangeListener(handleLayerChange);
   }, [handleLayerChange, mainMap]);
 
-  // We setup keyboard shortcuts
+  // Keyboard shortcuts
   useEffect(() => {
-    keyboardListeners.current = MapKeyboardListener.create();
-    keyboardListeners.current.initialize();
+    const listener = MainMapKeyboardListener.create();
+    listener.initialize();
 
-    return () => keyboardListeners.current?.destroy();
-  }, [keyboardListeners]);
+    return () => listener.destroy();
+  }, []);
 
   return (
     <div className={Cls.mapView}>

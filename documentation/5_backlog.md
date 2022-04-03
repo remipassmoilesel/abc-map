@@ -8,7 +8,6 @@
 - ["Go to coordinates" UI control](#go-to-coordinates-ui-control)
 - [Progressive web app](#progressive-web-app)
 - [Performance: WebASM and web worker usage](#performance-webasm-and-web-worker-usage)
-- [Scale on exports](#scale-on-exports)
 - [Text labels not attached to features](#text-labels-not-attached-to-features)
 - [Backgrounds for text label](#backgrounds-for-text-label)
 - [Users should be able to measure distances and areas](#users-should-be-able-to-measure-distances-and-areas)
@@ -17,19 +16,16 @@
 - [Better icons and visuals](#better-icons-and-visuals)
 - [Lighter deployment options](#lighter-deployment-options)
 - [More unit tests on frontend, refactoring of E2E tests.](#more-unit-tests-on-frontend-refactoring-of-e2e-tests)
-- [Internationalization](#internationalization)
-- [Projection change](#projection-change)
 - [Geopackage import](#geopackage-import)
 - [Geopackage export](#geopackage-export)
 - [Shapefile export](#shapefile-export)
 - [Vector tiles support](#vector-tiles-support)
-- [Map legend](#map-legend)
 - [Custom icons](#custom-icons)
 - [Images](#images)
-- [Datastore artefact with prompt](#datastore-artefact-with-prompt)
 - [Better errors for bad server configuration](#better-errors-for-bad-server-configuration)
 - [Floating attributions for exports](#floating-attributions-for-exports)
 - [Embed audio files](#embed-audio-files)
+- [Shared map: links to views](#shared-map-links-to-views)
 
 <!-- tocstop -->
 
@@ -39,7 +35,7 @@ User documentation should cover more features and be regularly updated.
 
 ## SVG Export
 
-For interoperability with other software. Per example better layouts using Inkscape.
+For interoperability with other software (Per example for better layouts using Inkscape).
 
 ## Custom (and better) map tools
 
@@ -67,10 +63,6 @@ Tasks:
 - Data parsing
 - Data processing
 - ...
-
-## Scale on exports
-
-Users should be able to export scale optionally.
 
 ## Text labels not attached to features
 
@@ -109,15 +101,6 @@ a standalone script for installation on GNU/Linux. MS Windows is not a target sy
 
 Frontend needs more unit tests, and some E2E tests needs to be refactored.
 
-## Internationalization
-
-Frontend should be available in French and in English, with an extensible system.
-
-## Projection change
-
-A user must be able to modify the projection of projects. By selecting a projection from a predefined list,
-or by importing their own.
-
 ## Geopackage import
 
 A user should be able to import geopackages in map. A DataReader can be created.
@@ -134,10 +117,6 @@ A user should be able to export layers as shapefiles. A DataWriter can be create
 
 A user should be able to use vector tiles layers.
 
-## Map legend
-
-A user should be able to generate a legend on layout page.
-
 ## Custom icons
 
 A user should be able to use their own icons.
@@ -145,36 +124,6 @@ A user should be able to use their own icons.
 ## Images
 
 A user should be able to import images.
-
-## Datastore artefact with prompt
-
-A user should be able to use preconfigured data layer as an artifact.
-
-For example, he should be able to use Mapbox layers with his own API keys, by selecting a model from the datastore and
-enter the necessary information in a prompt.
-
-Information prompt can be described in resource manifests such as for a WMS layer:
-
-    remoteUrl: 'https://company.com/wms/$$key'    # $$key will be replaced by prompted value
-    remoteLayerName: 'usa:states'
-    username: '$$username'                        # $$userame will be replaced by prompted value
-    password: '$$password'                        # $$password will be replaced by prompted value
-    prompt:
-    - name: key                                   # Prompt definitions
-      labels:
-      en: "API Key"
-      fr: "Clé d'API"
-    - name: username
-      labels:
-      en: "Username"
-      fr: "Nom d'utilisateur"
-    - name: password
-      labels:
-      en: "Password"
-      fr: "Mot de passe"
-
-With these prompt statements, we can build a suitable interface to enter the necessary variables, and use
-the data on map.
 
 ## Better errors for bad server configuration
 
@@ -189,3 +138,7 @@ Users must be able to move attributions before exports. Attributions must stay a
 ## Embed audio files
 
 Users must be able to embed audio files in shared maps.
+
+## Shared map: links to views
+
+Users should be able to create links that can change the current view of the map, in an animated way.
