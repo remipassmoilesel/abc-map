@@ -22,6 +22,7 @@ import { prefixedTranslation } from '../../../../../i18n/i18n';
 import clsx from 'clsx';
 import { Switch } from '../../../../../components/switch/Switch';
 import { getViewportDimensions } from '../../../../../core/ui/getViewportDimensions';
+import { SmallAdvice } from '../../../../../components/small-advice/SmallAdvice';
 
 const t = prefixedTranslation('SharedMapSettingsView:');
 
@@ -73,6 +74,10 @@ export function MapDimensions(props: Props) {
       <div className={'control-item d-flex justify-content-end align-items-center p-2'}>
         {t('Full_page')}
         <Switch value={fullscreen} onChange={onToggleFullscreen} className={'ml-3'} />
+      </div>
+
+      <div className={'control-item'}>
+        <SmallAdvice label={t('About_map_size')} advice={t('If_map_size_is_bigger_than_actual_window')} placement={'left'} />
       </div>
     </div>
   );

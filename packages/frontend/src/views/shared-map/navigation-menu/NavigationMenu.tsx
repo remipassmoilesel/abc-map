@@ -66,9 +66,9 @@ function NavigationMenu(props: Props) {
 
       {/* Views list */}
       <div className={'d-flex flex-column'}>
-        {sharedViews.map((view, i) => {
+        {sharedViews.map((view) => {
           const active = view.id === activeView?.id;
-          return <ListItem key={view.id} view={view} index={i + 1} active={active} onClick={handleItemClick} />;
+          return <ListItem key={view.id} view={view} active={active} onClick={handleItemClick} />;
         })}
       </div>
 

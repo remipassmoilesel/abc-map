@@ -17,41 +17,45 @@
  */
 
 @import "src/styles/variables";
+@import "src/styles/mixins";
 
-.layoutPreview {
-  flex-grow: 1;
+.controls {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
 
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 
-  overflow: auto;
+  background: white;
+  border-radius: $border-radius;
+  border: solid 1px $gray-400;
+  padding: 0.5rem;
+  font-size: 1.4rem;
 
-  h4 {
-    margin: 0 0 1rem 1rem;
+  button {
+    border: none;
+    background: none;
   }
 }
 
-.noLayout {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-
-  font-size: 1.3rem;
-}
-
-.previewContainer {
-  position: relative;
-
+.styleModal {
   display: flex;
   flex-direction: row;
-  align-items: center;
-  justify-content: center;
+  justify-content: space-between;
 }
 
-.previewMap {
-  border: solid 0.1rem darkgrey;
-  box-shadow: $box-shadow;
+.option {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+
+  margin-bottom: 0.5rem;
+  margin-left: 1rem;
+
+  input[type="checkbox"] {
+    margin-right: 0.5rem;
+  }
 }

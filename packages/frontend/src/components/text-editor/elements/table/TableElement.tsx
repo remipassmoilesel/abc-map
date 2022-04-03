@@ -27,12 +27,13 @@ const classes = [Cls.border0, Cls.border1, Cls.border2, Cls.border3];
 type Props = RenderElementProps & { element: TableElementDef };
 
 export function TableElement(props: Props) {
+  const { children, attributes } = props;
   const { readOnly } = useEditor();
   const { border = 1 } = props.element;
 
   return (
-    <table {...props.attributes} className={clsx(Cls.table, readOnly && Cls.readOnly, classes[border] ?? classes[0])}>
-      <tbody>{props.children}</tbody>
+    <table className={clsx(Cls.table, readOnly && Cls.readOnly, classes[border] ?? classes[0])} {...attributes}>
+      <tbody>{children}</tbody>
     </table>
   );
 }

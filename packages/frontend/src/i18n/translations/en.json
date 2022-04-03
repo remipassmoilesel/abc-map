@@ -70,7 +70,7 @@
       "You_must_select_files": "You must select one or more files",
       "You_must_import_project_with_import_control": "You need to import your project using the 'Import Project' control",
       "Formats_not_supported": "These file formats are not supported, no data has been imported",
-      "Layer_does_not_load": "Layer '{{name}}' is not loading correctly. Check its settings or your internet connection.",
+      "Layer_does_not_load": "Layer '{{name}}' may not be loading correctly.",
       "Layer_without_name": "*Layer without name*",
       "Attributions": "Attributions",
       "Zoom_in": "Zoom in",
@@ -239,7 +239,9 @@
       "This_project_is_password_protected": "This project is password protected",
       "This_project_is_public": "This project is public",
       "This_project_is_private": "This project is private",
-      "Project_open": "Project open !"
+      "Project_open": "Project open !",
+      "x_projects_saved_on_y_projects_allowed": "{{currently}} projects saved on {{allowed}} projects allowed.",
+      "It_is_full": "It's full !"
     }
   },
   "Scale": {
@@ -550,8 +552,8 @@
     "Move_up": "Move layout up",
     "Move_Down": "Move layout down",
     "Delete_all": "Delete all",
-    "PDF_export": "PDF export",
-    "PNG_export": "PNG export",
+    "PDF_document": "PDF document",
+    "PNG_images": "PNG images",
     "You_must_create_layouts_first": "You must first create a layout",
     "Layouts_menu": "Layouts list",
     "Controls_menu": "Controls",
@@ -569,13 +571,20 @@
     "Copy_text_frame": "Copy a text frame",
     "No_frame_to_copy": "No text frame to copy. Create one !",
     "Frames_from_layouts": "Frames from layouts",
-    "Frame_X_from_layout_X": "Frame {{frame}} from layout {{layout}}"
+    "Frame_X_from_layout_X": "Frame {{frame}} from layout {{layout}}",
+    "Frames_from_shared_views": "Frames from shared views",
+    "Frame_X_from_shared_view_X": "Frame {{frame}} from shared view {{view}}"
   },
   "FloatingTextFrame": {
     "Full_screen_editor": "Full screen editor",
     "Delete": "Delete this frame",
-    "Preview": "Preview",
-    "Edit": "Edit in place"
+    "Style_properties": "Style properties",
+    "Properties": "Properties",
+    "With_a_background": "With a background",
+    "With_borders": "With borders",
+    "With_shadows": "With shadows",
+    "Cancel": "Cancel",
+    "Confirm": "Confirm"
   },
   "FundingView": {
     "Support_AbcMap": "Support Abc-Map",
@@ -779,7 +788,7 @@
     "Configuration": "Configuration",
     "View": "View",
     "Overview": "Overview",
-    "Publish": "Publish",
+    "Save": "Save",
     "Address_and_sharing_codes": "Address and sharing codes",
     "Disable_sharing": "Disable sharing",
     "New_view": "New view",
@@ -788,7 +797,7 @@
     "This_feature_is_under_development": "This feature is under development.",
     "It_certainly_lacks_options": "It certainly lacks options, and you might run into a few bugs.",
     "Close": "Close",
-    "Remember_to_publish_your_changes": "Remember to publish your changes",
+    "Remember_to_save_your_changes": "Remember to save your changes",
     "Sharing_codes": "Sharing codes",
     "Share_link": "Share link",
     "Iframe_embed_code": "Classic embed code",
@@ -799,7 +808,9 @@
     "Height": "Height (px)",
     "Shared_views": "Shared views",
     "Map_size": "Map size",
-    "Full_page": "Full page"
+    "Full_page": "Full page",
+    "About_map_size": "About map size",
+    "If_map_size_is_bigger_than_actual_window": "If the map size is larger than the window, it will be displayed in full screen"
   },
   "SharedViewNavigation": {
     "Previous_view": "Previous view",
@@ -934,10 +945,10 @@
       "You_have_exceeded_the_number_of_requests_allowed": "You have exceeded the number of requests allowed, please try again later.",
       "Forbidden": "This operation is prohibited.",
       "You_must_connect_before": "You must be logged in to perform this operation.",
-      "Are_you_connected": "Unable to connect to the server \uD83D\uDCE1 Are you connected ?"
+      "Are_you_connected": "Unable to connect to the server \uD83D\uDCE1 Are you connected ?",
+      "Too_much_projects": "Sorry \uD83D\uDE1E you have reached your project quota. Delete one."
     },
     "useSaveProjectOnline": {
-      "Too_much_projects": "Sorry \uD83D\uDE1E you have reached your project quota. Delete one.",
       "Project_too_heavy": "This project is too heavy",
       "Saving": "Saving ...",
       "Project_saved": "Project saved !"

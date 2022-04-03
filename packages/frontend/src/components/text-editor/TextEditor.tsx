@@ -42,6 +42,7 @@ export interface Props {
   className?: string;
   controlBar?: boolean;
   ratio?: number;
+  background?: string;
   'data-cy'?: string;
 }
 
@@ -57,9 +58,8 @@ export interface Props {
  */
 // TODO: Setup nested tables
 // TODO: Add history wiring with HistoryService
-// TODO: Disable videos for exports ?
 function TextEditor(props: Props) {
-  const { value, onChange, readOnly, className, controlBar: _controlBar, ratio: _ratio, 'data-cy': dataCy } = props;
+  const { value, onChange, readOnly, className, controlBar: _controlBar, ratio: _ratio, background, 'data-cy': dataCy } = props;
   const ratio = _ratio ?? 1;
   const controlBar = _controlBar ?? true;
 
@@ -87,14 +87,18 @@ function TextEditor(props: Props) {
   }, [editor, value]);
 
   // When user clicks on editor, we focus so he can start typing
-  const handleClick = useCallback(() => ReactEditor.focus(editor), [editor]);
+  const handleClick = useCallback(() => {
+    if (!readOnly) {
+      ReactEditor.focus(editor);
+    }
+  }, [editor, readOnly]);
 
   // Context returned by useEditor() hook
   const context: EditorContext = useMemo(() => ({ readOnly: readOnly ?? false, editor, ratio }), [editor, readOnly, ratio]);
 
   // We set font size according to ratio
   // All children use 'em' units and will adapt styles according to this value
-  const style: CSSProperties = useMemo(() => ({ fontSize: `${ratio}em` }), [ratio]);
+  const style: CSSProperties = useMemo(() => ({ fontSize: `${ratio}em`, background }), [background, ratio]);
 
   return (
     <div onClick={handleClick} style={style} className={clsx(Cls.textEditor, className)}>

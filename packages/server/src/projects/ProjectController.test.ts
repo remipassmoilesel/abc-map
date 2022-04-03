@@ -443,4 +443,38 @@ describe('ProjectController', () => {
       assert.equal(res.statusCode, 403);
     });
   });
+
+  describe('GET /api/projects/quotas', () => {
+    it('should fail for non connected user', async () => {
+      const res = await server.getApp().inject({
+        url: `/api/projects/quotas`,
+        method: 'GET',
+      });
+
+      assert.equal(res.statusCode, 403);
+    });
+
+    it('should fail for anonymous user', async () => {
+      const res = await server.getApp().inject({
+        url: `/api/projects/quotas`,
+        method: 'GET',
+        headers: {
+          ...testAuth.anonymous(),
+        },
+      });
+
+      assert.equal(res.statusCode, 403);
+    });
+
+    it('should work for connected user', async () => {
+      // Act
+      const res = await server.getApp().inject({
+        url: `/api/projects/quotas`,
+        method: 'GET',
+        headers: user1Auth,
+      });
+
+      assert.equal(res.statusCode, 200);
+    });
+  });
 });

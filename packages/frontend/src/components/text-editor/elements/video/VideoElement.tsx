@@ -30,17 +30,17 @@ type Props = RenderElementProps & { element: VideoElementDef };
 const Providers: Provider[] = [new Youtube(), new Vimeo(), new Dailymotion()];
 
 export function VideoElement(props: Props) {
-  const url = props.element.url;
-  const provider = Providers.find((p) => p.canHandle(url));
+  const { children, attributes, element } = props;
+  const provider = Providers.find((p) => p.canHandle(element.url));
 
   return (
-    <div {...props.attributes} className={Cls.video}>
+    <div className={Cls.video} {...attributes}>
       <div className={Cls.integration}>
-        {!provider && <DefaultIntegration url={url} />}
-        {provider?.getIntegration(url)}
+        {!provider && <DefaultIntegration url={element.url} />}
+        {provider?.getIntegration(element.url)}
       </div>
 
-      {props.children}
+      {children}
     </div>
   );
 }

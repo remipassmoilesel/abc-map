@@ -33,82 +33,40 @@ import { LinkElement } from './elements/link/LinkElement';
 import { MapSymbolElement } from './elements/map-symbol/MapSymbolElement';
 
 export function renderLeaf(props: RenderLeafProps) {
-  return <Leaf {...props}>{props.children}</Leaf>;
+  return <Leaf {...props} />;
 }
 
 export function renderElement(props: RenderElementProps) {
-  switch (props.element.type) {
+  const { element } = props;
+
+  switch (element.type) {
     case 'code':
-      return <CodeElement {...props}>{props.children}</CodeElement>;
+      return <CodeElement {...props} element={element} />;
     case 'quote':
-      return (
-        <QuoteElement {...props} element={props.element}>
-          {props.children}
-        </QuoteElement>
-      );
+      return <QuoteElement {...props} element={element} />;
     case 'title':
-      return (
-        <TitleElement {...props} element={props.element}>
-          {props.children}
-        </TitleElement>
-      );
+      return <TitleElement {...props} element={element} />;
     case 'table':
-      return (
-        <TableElement {...props} element={props.element}>
-          {props.children}
-        </TableElement>
-      );
+      return <TableElement {...props} element={element} />;
     case 'table-row':
-      return (
-        <TableRowElement {...props} element={props.element}>
-          {props.children}
-        </TableRowElement>
-      );
+      return <TableRowElement {...props} element={element} />;
     case 'table-cell':
-      return (
-        <TableCellElement {...props} element={props.element}>
-          {props.children}
-        </TableCellElement>
-      );
+      return <TableCellElement {...props} element={element} />;
     case 'video':
-      return (
-        <VideoElement {...props} element={props.element}>
-          {props.children}
-        </VideoElement>
-      );
+      return <VideoElement {...props} element={element} />;
     case 'image':
-      return (
-        <ImageElement {...props} element={props.element}>
-          {props.children}
-        </ImageElement>
-      );
+      return <ImageElement {...props} element={element} />;
     case 'list':
-      return (
-        <ListElement {...props} element={props.element}>
-          {props.children}
-        </ListElement>
-      );
+      return <ListElement {...props} element={element} />;
     case 'list-item':
-      return (
-        <ListItemElement {...props} element={props.element}>
-          {props.children}
-        </ListItemElement>
-      );
+      return <ListItemElement {...props} element={element} />;
     case 'link':
-      return (
-        <LinkElement {...props} element={props.element}>
-          {props.children}
-        </LinkElement>
-      );
+      return <LinkElement {...props} element={element} />;
     case 'map-symbol':
-      return (
-        <MapSymbolElement {...props} element={props.element}>
-          {props.children}
-        </MapSymbolElement>
-      );
+      return <MapSymbolElement {...props} element={element} />;
 
     case 'paragraph':
     default:
-      return <ParagraphElement {...props}>{props.children}</ParagraphElement>;
+      return <ParagraphElement {...props} element={element} />;
   }
 }

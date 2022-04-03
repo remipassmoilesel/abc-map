@@ -20,7 +20,7 @@ import Cls from './ExportView.module.scss';
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { AbcLayout, AbcProjection, AbcTextFrame, LayoutFormat, LayoutFormats, Logger } from '@abc-map/shared';
 import LayoutList from './layout-list/LayoutList';
-import LayoutPreview from './layout-preview/LayoutPreview';
+import LayoutPreviewMap from './layout-preview/LayoutPreviewMap';
 import { HistoryKey } from '../../core/history/HistoryKey';
 import { AddLayoutsChangeset } from '../../core/history/changesets/layouts/AddLayoutsChangeset';
 import { RemoveLayoutsChangeset } from '../../core/history/changesets/layouts/RemoveLayoutsChangeset';
@@ -303,7 +303,7 @@ function ExportView() {
       debounce((before: AbcTextFrame, after: AbcTextFrame) => {
         // Text frame may have been deleted
         if (!project.getTextFrames().find((lay) => after.id === lay.id)) {
-          logger.warn('Layer have been deleted, cannot add history task');
+          logger.warn('Export view have been deleted, cannot add history task');
           return;
         }
 
@@ -388,7 +388,7 @@ function ExportView() {
         </SideMenu>
 
         {/* Layout preview on center */}
-        <LayoutPreview
+        <LayoutPreviewMap
           layout={activeLayout}
           mainMap={geo.getMainMap()}
           onLayoutChanged={handleLayoutChanged}

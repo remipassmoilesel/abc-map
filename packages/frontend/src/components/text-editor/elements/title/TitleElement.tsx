@@ -20,32 +20,41 @@ import Cls from './TitleElement.module.scss';
 import { RenderElementProps } from 'slate-react';
 import { TitleElement as TitleElementDef } from '@abc-map/shared';
 import { ReactElement } from 'react';
+import clsx from 'clsx';
 
 type Props = RenderElementProps & { element: TitleElementDef };
 
 export function TitleElement(props: Props) {
-  const { level } = props.element;
+  const { children, attributes, element } = props;
+
+  const classes = clsx(
+    Cls.title,
+    element.align === 'left' && Cls.alignLeft,
+    element.align === 'center' && Cls.alignCenter,
+    element.align === 'right' && Cls.alignRight,
+    element.align === 'justify' && Cls.alignJustify
+  );
 
   let title: ReactElement;
-  switch (level) {
+  switch (element.level) {
     case 1:
-      title = <h1>{props.children}</h1>;
+      title = <h1>{children}</h1>;
       break;
     case 2:
-      title = <h2>{props.children}</h2>;
+      title = <h2>{children}</h2>;
       break;
     case 3:
-      title = <h3>{props.children}</h3>;
+      title = <h3>{children}</h3>;
       break;
     case 4:
-      title = <h4>{props.children}</h4>;
+      title = <h4>{children}</h4>;
       break;
     default:
-      title = <h5>{props.children}</h5>;
+      title = <h5>{children}</h5>;
   }
 
   return (
-    <div {...props.attributes} className={Cls.title}>
+    <div className={classes} {...attributes}>
       {title}
     </div>
   );

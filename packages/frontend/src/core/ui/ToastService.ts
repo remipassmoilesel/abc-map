@@ -102,6 +102,10 @@ export class ToastService {
     }
   }
 
+  public tooMuchProjectError() {
+    return this.error(t('Too_much_projects'));
+  }
+
   /**
    * Dismiss specified toast. Use id returned by info(), error() ...
    * @param id

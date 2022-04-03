@@ -16,14 +16,14 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { MigrationScript } from '../../MigrationScript';
+import { DatabaseMigrationScript } from '../../DatabaseMigrationScript';
 import { MongodbClient } from '../../../MongodbClient';
 import { ProjectDao } from '../../../../projects/ProjectDao';
 
 /**
  * This script add public field to project document
  */
-export class S2022_01_04_AddPublicField implements MigrationScript {
+export class S2022_01_04_AddPublicField implements DatabaseMigrationScript {
   public static create(client: MongodbClient): S2022_01_04_AddPublicField {
     return new S2022_01_04_AddPublicField(new ProjectDao(client));
   }

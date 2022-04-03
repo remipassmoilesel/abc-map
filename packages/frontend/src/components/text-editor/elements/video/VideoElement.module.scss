@@ -17,6 +17,7 @@
  */
 
 @import "src/styles/variables";
+@import "src/styles/mixins";
 
 .video {
   display: flex;
@@ -24,9 +25,10 @@
   align-items: flex-start;
   justify-content: flex-start;
 
+  max-width: 50rem;
+
   iframe {
     width: 100%;
-    max-width: 30vw;
     max-height: 100%;
   }
 }
@@ -39,6 +41,8 @@
 
   padding: 0.5em;
 
-  box-shadow: 0 0.5em 0.8em rgba($gray-600, 0.1);
   border: solid 1px $gray-400;
+  border-radius: $border-radius;
+  box-shadow: 0 0.5em 0.8em rgba($gray-600, 0.1);
+  background: white;
 }

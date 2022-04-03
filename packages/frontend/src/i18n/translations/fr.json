@@ -71,7 +71,7 @@
       "You_must_select_files": "Vous devez sélectionner un ou plusieurs fichiers",
       "You_must_import_project_with_import_control": "Vous devez importer votre projet à l'aide du contrôle 'Importer un projet'",
       "Formats_not_supported": "Ces formats de fichiers ne sont pas supportés, aucune donnée n'a été importée",
-      "Layer_does_not_load": "La couche '{{name}}' ne charge pas correctement. Vérifiez ses paramètres ou votre connexion internet.",
+      "Layer_does_not_load": "La couche '{{name}}' ne charge peut être pas correctement.",
       "Layer_without_name": "*Couche sans nom*",
       "Attributions": "Attributions",
       "Zoom_in": "Zoom avant",
@@ -240,7 +240,9 @@
       "This_project_is_password_protected": "Ce projet est protégé par mot de passe",
       "This_project_is_public": "Ce projet est public",
       "This_project_is_private": "Ce projet est privé",
-      "Project_open": "Projet ouvert !"
+      "Project_open": "Projet ouvert !",
+      "x_projects_saved_on_y_projects_allowed": "{{currently}} projets enregistrés sur {{allowed}} projets autorisés.",
+      "It_is_full": "C'est plein !"
     }
   },
   "Scale": {
@@ -551,8 +553,8 @@
     "Move_up": "Monter la page",
     "Move_Down": "Descendre la page",
     "Delete_all": "Supprimer tout",
-    "PDF_export": "Export PDF",
-    "PNG_export": "Export PNG",
+    "PDF_document": "Document PDF",
+    "PNG_images": "Images PNG",
     "You_must_create_layouts_first": "Vous devez d'abord créer une mise en page",
     "Layouts_menu": "Liste des mises en page",
     "Controls_menu": "Actions",
@@ -570,13 +572,20 @@
     "Copy_text_frame": "Copier un cadre de texte",
     "No_frame_to_copy": "Pas de cadre de texte à copier. Créez en un !",
     "Frames_from_layouts": "Cadres appartenant à des mises en page",
-    "Frame_X_from_layout_X": "Cadre {{frame}} de la mise en page {{layout}}"
+    "Frame_X_from_layout_X": "Cadre {{frame}} de la mise en page {{layout}}",
+    "Frames_from_shared_views": "Cadres appartenant à des vues partagées",
+    "Frame_X_from_shared_view_X": "Cadre {{frame}} de la vue partagée {{view}}"
   },
   "FloatingTextFrame": {
     "Full_screen_editor": "Editer en plein écran",
     "Delete": "Supprimer ce cadre",
-    "Preview": "Prévisualisation",
-    "Edit": "Editer sur place"
+    "Style_properties": "Propriétés de style",
+    "Properties": "Propriétés",
+    "With_a_background": "Avec un fond",
+    "With_borders": "Avec des bordures",
+    "With_shadows": "Avec des ombres",
+    "Cancel": "Cancel",
+    "Confirm": "Confirm"
   },
   "FundingView": {
     "Support_AbcMap": "Soutenez d'Abc-Map",
@@ -780,7 +789,7 @@
     "Configuration": "Configuration",
     "View": "Vue",
     "Overview": "Aperçu",
-    "Publish": "Publier",
+    "Save": "Sauvegarder",
     "Address_and_sharing_codes": "Adresse et codes de partage",
     "Disable_sharing": "Désactiver le partage",
     "New_view": "Nouvelle vue",
@@ -789,7 +798,7 @@
     "This_feature_is_under_development": "Cette fonctionnalité est en cours de développement.",
     "It_certainly_lacks_options": "Il manque certainement des options, et vous rencontrerez peut-être quelques bugs.",
     "Close": "Fermer",
-    "Remember_to_publish_your_changes": "Pensez à publier vos changements",
+    "Remember_to_save_your_changes": "Pensez à sauvegarder vos changements",
     "Sharing_codes": "Codes de partage",
     "Share_link": "Lien de partage",
     "Iframe_embed_code": "Code d'intégration classique",
@@ -800,7 +809,9 @@
     "Height": "Hauteur (px)",
     "Shared_views": "Vues partagées",
     "Map_size": "Taille de la carte",
-    "Full_page": "Pleine page"
+    "Full_page": "Pleine page",
+    "About_map_size": "A propos de la taille de la carte",
+    "If_map_size_is_bigger_than_actual_window": "Si la taille de la carte est plus grande que la fenêtre, elle sera affichée en plein écran"
   },
   "SharedViewNavigation": {
     "Previous_view": "Vue précédente",
@@ -935,10 +946,10 @@
       "You_have_exceeded_the_number_of_requests_allowed": "Vous avez dépassé le nombre de demandes autorisés, veuillez réessayer plus tard.",
       "Forbidden": "Cette opération est interdite.",
       "You_must_connect_before": "Vous devez être connecté pour effectuer cette opération.",
-      "Are_you_connected": "Impossible de se connecter au serveur \uD83D\uDCE1 Êtes vous connecté ?"
+      "Are_you_connected": "Impossible de se connecter au serveur \uD83D\uDCE1 Êtes vous connecté ?",
+      "Too_much_projects": "Désolé \uD83D\uDE1E vous avez atteint votre quota de projet. Supprimez-en un."
     },
     "useSaveProjectOnline": {
-      "Too_much_projects": "Désolé \uD83D\uDE1E vous avez atteint votre quota de projet. Supprimez-en un.",
       "Project_too_heavy": "Ce projet est trop lourd",
       "Saving": "Enregistrement en cours ...",
       "Project_saved": "Projet enregistré !"

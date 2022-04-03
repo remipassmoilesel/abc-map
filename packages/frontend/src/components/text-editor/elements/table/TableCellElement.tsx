@@ -19,5 +19,7 @@
 import { RenderElementProps } from 'slate-react';
 
 export function TableCellElement(props: RenderElementProps) {
-  return <td {...props.attributes}>{props.children}</td>;
+  const { children, attributes } = props;
+
+  return <td {...attributes}>{children}</td>;
 }

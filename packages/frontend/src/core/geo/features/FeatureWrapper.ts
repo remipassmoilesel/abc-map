@@ -81,8 +81,6 @@ export class FeatureWrapper<Geom extends OlGeometry = OlGeometry> {
   /**
    * Set id of feature if specified, or generate one
    *
-   * UUID is overkill for features, we must find another solution
-   *
    * @param id
    */
   public setId(id?: string | number): FeatureWrapper {

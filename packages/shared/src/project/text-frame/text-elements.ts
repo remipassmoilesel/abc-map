@@ -72,6 +72,7 @@ export interface TitleElement {
   type: 'title';
   level: number;
   children: AbcText[];
+  align?: TextAlign;
 }
 
 export interface TableElement {

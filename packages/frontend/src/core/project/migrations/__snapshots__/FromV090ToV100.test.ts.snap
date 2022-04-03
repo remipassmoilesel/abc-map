@@ -1,0 +1,694 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FromV090ToV100 migrate should work 1`] = `
+Object {
+  "layers": Array [
+    Object {
+      "metadata": Object {
+        "active": true,
+        "attributions": Array [
+          "© OpenTopoMap.org 2022 CC-BY-SA",
+        ],
+        "id": "72467822-2446-488a-ba28-139929db84d7",
+        "name": "Import n°1 of 23:15",
+        "opacity": 1,
+        "remoteUrl": "https://{a-c}.tile.opentopomap.org/{z}/{x}/{y}.png",
+        "type": "Xyz",
+        "visible": true,
+      },
+      "type": "Xyz",
+    },
+  ],
+  "layouts": Array [
+    Object {
+      "format": Object {
+        "height": 210,
+        "id": "A4_LANDSCAPE",
+        "orientation": "landscape",
+        "width": 297,
+      },
+      "id": "937086d1-ff77-4a01-972a-0aaebd32d305",
+      "name": "Page 1",
+      "textFrames": Array [
+        Object {
+          "content": Array [
+            Object {
+              "children": Array [
+                Object {
+                  "text": "This is a brand new text frame !",
+                },
+              ],
+              "level": 3,
+              "type": "title",
+            },
+            Object {
+              "children": Array [
+                Object {
+                  "text": "You can edit it in full screen editor 😎",
+                },
+              ],
+              "type": "paragraph",
+            },
+            Object {
+              "children": Array [
+                Object {
+                  "text": "Or you can edit it in place.",
+                },
+              ],
+              "type": "paragraph",
+            },
+            Object {
+              "children": Array [
+                Object {
+                  "text": "You can move and resize it ✨",
+                },
+              ],
+              "type": "paragraph",
+            },
+            Object {
+              "children": Array [
+                Object {
+                  "text": "And you can include images and videos 🎬 !",
+                },
+              ],
+              "type": "paragraph",
+            },
+          ],
+          "id": "Bbo-G4223D7MWB2qyl48V",
+          "position": Object {
+            "x": 30,
+            "y": 30,
+          },
+          "size": Object {
+            "height": 450,
+            "width": 1100,
+          },
+          "style": Object {
+            "background": "#FFFFFF",
+            "withBorders": true,
+            "withShadows": true,
+          },
+        },
+      ],
+      "view": Object {
+        "center": Array [
+          20559.458412894,
+          5984262.955072035,
+        ],
+        "projection": Object {
+          "name": "EPSG:3857",
+        },
+        "resolution": 737,
+      },
+    },
+  ],
+  "metadata": Object {
+    "containsCredentials": false,
+    "id": "a1dcc00d-9668-4980-927a-728aa45a5545",
+    "name": "Project of 30/03/2022",
+    "public": true,
+    "version": "1.0.0",
+  },
+  "sharedViews": Object {
+    "fullscreen": false,
+    "list": Array [
+      Object {
+        "id": "S3uX1OvhDxeL_PTOnzy29",
+        "layers": Array [
+          Object {
+            "layerId": "72467822-2446-488a-ba28-139929db84d7",
+            "visible": true,
+          },
+        ],
+        "scale": Object {
+          "x": 4.5,
+          "y": 2.11,
+        },
+        "textFrames": Array [
+          Object {
+            "content": Array [
+              Object {
+                "children": Array [
+                  Object {
+                    "text": "Voici une carte partagée 🪄",
+                  },
+                ],
+                "level": 1,
+                "type": "title",
+              },
+              Object {
+                "children": Array [
+                  Object {
+                    "size": 4,
+                    "text": "",
+                  },
+                ],
+                "level": 1,
+                "type": "paragraph",
+              },
+              Object {
+                "children": Array [
+                  Object {
+                    "size": 4,
+                    "text": "Créée avec ",
+                  },
+                  Object {
+                    "children": Array [
+                      Object {
+                        "size": 4,
+                        "text": "Abc-Map !",
+                      },
+                    ],
+                    "type": "link",
+                    "url": "https://abc-map.fr",
+                  },
+                  Object {
+                    "text": "",
+                  },
+                ],
+                "level": 1,
+                "type": "paragraph",
+              },
+              Object {
+                "children": Array [
+                  Object {
+                    "size": 4,
+                    "text": "",
+                  },
+                ],
+                "level": 1,
+                "type": "paragraph",
+              },
+              Object {
+                "children": Array [
+                  Object {
+                    "size": 4,
+                    "text": "Vous pouvez passer à la vue suivante en utilisant ",
+                  },
+                ],
+                "level": 1,
+                "type": "paragraph",
+              },
+              Object {
+                "children": Array [
+                  Object {
+                    "size": 4,
+                    "text": "les flèches en haut de l'écran ",
+                  },
+                ],
+                "level": 1,
+                "type": "paragraph",
+              },
+              Object {
+                "children": Array [
+                  Object {
+                    "size": 4,
+                    "text": "",
+                  },
+                ],
+                "level": 1,
+                "type": "paragraph",
+              },
+            ],
+            "id": "7QmQztqH1cupHBqKNW7Z2",
+            "position": Object {
+              "x": 0,
+              "y": 74.83,
+            },
+            "size": Object {
+              "height": 25.17,
+              "width": 100,
+            },
+            "style": Object {
+              "background": "#FFFFFF",
+              "withBorders": true,
+              "withShadows": true,
+            },
+          },
+        ],
+        "title": "Main view",
+        "view": Object {
+          "center": Array [
+            8912.065195865,
+            5991300.474677441,
+          ],
+          "projection": Object {
+            "name": "EPSG:3857",
+          },
+          "resolution": 3708.299833211,
+        },
+      },
+      Object {
+        "id": "MOTFDJ6Mwl-TYtNamAAtD",
+        "layers": Array [
+          Object {
+            "layerId": "72467822-2446-488a-ba28-139929db84d7",
+            "visible": true,
+          },
+        ],
+        "scale": Object {
+          "x": 4,
+          "y": 2.56,
+        },
+        "textFrames": Array [
+          Object {
+            "content": Array [
+              Object {
+                "children": Array [
+                  Object {
+                    "size": 4,
+                    "text": "Cette carte peut être embarquée dans un site web, ou accessible de manière autonome à l'aide d'un lien 🔗",
+                  },
+                ],
+                "type": "paragraph",
+              },
+            ],
+            "id": "kSXOyDn-sxwUg0O60SaeK",
+            "position": Object {
+              "x": 4,
+              "y": 9.99,
+            },
+            "size": Object {
+              "height": 11.6,
+              "width": 78,
+            },
+            "style": Object {
+              "background": "#FFFFFF",
+              "withBorders": true,
+              "withShadows": true,
+            },
+          },
+          Object {
+            "content": Array [
+              Object {
+                "children": Array [
+                  Object {
+                    "size": 4,
+                    "text": "Vous pouvez ajouter un ou plusieurs cadres de texte, où vous voulez, et de la taille que vous voulez.",
+                  },
+                ],
+                "type": "paragraph",
+              },
+              Object {
+                "children": Array [
+                  Object {
+                    "size": 4,
+                    "text": "",
+                  },
+                ],
+                "type": "paragraph",
+              },
+              Object {
+                "children": Array [
+                  Object {
+                    "size": 4,
+                    "text": "Titres, couleurs, tableaux: on peut déjà faire quelques trucs sympas. Mais ce n'est qu'un début !",
+                  },
+                ],
+                "type": "paragraph",
+              },
+              Object {
+                "children": Array [
+                  Object {
+                    "size": 4,
+                    "text": "",
+                  },
+                ],
+                "type": "paragraph",
+              },
+              Object {
+                "children": Array [
+                  Object {
+                    "text": "Population par tranches d'âges, en %",
+                  },
+                  Object {
+                    "children": Array [
+                      Object {
+                        "text": "",
+                      },
+                    ],
+                    "type": "link",
+                    "url": "https://www.insee.fr/fr/statistiques/2011101?geo=COM-50129",
+                  },
+                  Object {
+                    "text": "",
+                  },
+                ],
+                "level": 2,
+                "type": "title",
+              },
+              Object {
+                "children": Array [
+                  Object {
+                    "children": Array [
+                      Object {
+                        "children": Array [
+                          Object {
+                            "children": Array [
+                              Object {
+                                "text": "",
+                              },
+                            ],
+                            "type": "paragraph",
+                          },
+                        ],
+                        "type": "table-cell",
+                      },
+                      Object {
+                        "children": Array [
+                          Object {
+                            "children": Array [
+                              Object {
+                                "bold": true,
+                                "text": "2008  ",
+                              },
+                            ],
+                            "type": "paragraph",
+                          },
+                        ],
+                        "type": "table-cell",
+                      },
+                      Object {
+                        "children": Array [
+                          Object {
+                            "children": Array [
+                              Object {
+                                "bold": true,
+                                "text": "2013  ",
+                              },
+                            ],
+                            "type": "paragraph",
+                          },
+                        ],
+                        "type": "table-cell",
+                      },
+                      Object {
+                        "children": Array [
+                          Object {
+                            "children": Array [
+                              Object {
+                                "bold": true,
+                                "text": "2018  ",
+                              },
+                            ],
+                            "type": "paragraph",
+                          },
+                        ],
+                        "type": "table-cell",
+                      },
+                    ],
+                    "type": "table-row",
+                  },
+                  Object {
+                    "children": Array [
+                      Object {
+                        "children": Array [
+                          Object {
+                            "children": Array [
+                              Object {
+                                "bold": true,
+                                "text": "0 à 14 ans	",
+                              },
+                            ],
+                            "type": "paragraph",
+                          },
+                        ],
+                        "type": "table-cell",
+                      },
+                      Object {
+                        "children": Array [
+                          Object {
+                            "children": Array [
+                              Object {
+                                "text": "18,3",
+                              },
+                            ],
+                            "type": "paragraph",
+                          },
+                        ],
+                        "type": "table-cell",
+                      },
+                      Object {
+                        "children": Array [
+                          Object {
+                            "children": Array [
+                              Object {
+                                "text": "17,0",
+                              },
+                            ],
+                            "type": "paragraph",
+                          },
+                        ],
+                        "type": "table-cell",
+                      },
+                      Object {
+                        "children": Array [
+                          Object {
+                            "children": Array [
+                              Object {
+                                "text": "16,3",
+                              },
+                            ],
+                            "type": "paragraph",
+                          },
+                        ],
+                        "type": "table-cell",
+                      },
+                    ],
+                    "type": "table-row",
+                  },
+                  Object {
+                    "children": Array [
+                      Object {
+                        "children": Array [
+                          Object {
+                            "children": Array [
+                              Object {
+                                "bold": true,
+                                "text": "15 à 29 ans	",
+                              },
+                            ],
+                            "type": "paragraph",
+                          },
+                        ],
+                        "type": "table-cell",
+                      },
+                      Object {
+                        "children": Array [
+                          Object {
+                            "children": Array [
+                              Object {
+                                "text": "20,2",
+                              },
+                            ],
+                            "type": "paragraph",
+                          },
+                        ],
+                        "type": "table-cell",
+                      },
+                      Object {
+                        "children": Array [
+                          Object {
+                            "children": Array [
+                              Object {
+                                "text": "19.4",
+                              },
+                            ],
+                            "type": "paragraph",
+                          },
+                        ],
+                        "type": "table-cell",
+                      },
+                      Object {
+                        "children": Array [
+                          Object {
+                            "children": Array [
+                              Object {
+                                "text": "18.5",
+                              },
+                            ],
+                            "type": "paragraph",
+                          },
+                        ],
+                        "type": "table-cell",
+                      },
+                    ],
+                    "type": "table-row",
+                  },
+                  Object {
+                    "children": Array [
+                      Object {
+                        "children": Array [
+                          Object {
+                            "children": Array [
+                              Object {
+                                "bold": true,
+                                "text": "30 à 44 ans	",
+                              },
+                            ],
+                            "type": "paragraph",
+                          },
+                        ],
+                        "type": "table-cell",
+                      },
+                      Object {
+                        "children": Array [
+                          Object {
+                            "children": Array [
+                              Object {
+                                "text": "19.1",
+                              },
+                            ],
+                            "type": "paragraph",
+                          },
+                        ],
+                        "type": "table-cell",
+                      },
+                      Object {
+                        "children": Array [
+                          Object {
+                            "children": Array [
+                              Object {
+                                "text": "17.8",
+                              },
+                            ],
+                            "type": "paragraph",
+                          },
+                        ],
+                        "type": "table-cell",
+                      },
+                      Object {
+                        "children": Array [
+                          Object {
+                            "children": Array [
+                              Object {
+                                "text": "17.6",
+                              },
+                            ],
+                            "type": "paragraph",
+                          },
+                        ],
+                        "type": "table-cell",
+                      },
+                    ],
+                    "type": "table-row",
+                  },
+                ],
+                "type": "table",
+              },
+              Object {
+                "children": Array [
+                  Object {
+                    "text": "",
+                  },
+                  Object {
+                    "children": Array [
+                      Object {
+                        "text": "Source Insee",
+                      },
+                    ],
+                    "type": "link",
+                    "url": "https://www.insee.fr/fr/statistiques/2011101?geo=COM-50129",
+                  },
+                  Object {
+                    "text": "",
+                  },
+                  Object {
+                    "children": Array [
+                      Object {
+                        "text": "",
+                      },
+                    ],
+                    "type": "link",
+                    "url": "https://www.insee.fr/fr/statistiques/2011101?geo=COM-50129",
+                  },
+                  Object {
+                    "text": "",
+                  },
+                ],
+                "type": "paragraph",
+              },
+              Object {
+                "children": Array [
+                  Object {
+                    "text": "",
+                  },
+                ],
+                "type": "paragraph",
+              },
+              Object {
+                "children": Array [
+                  Object {
+                    "text": "",
+                  },
+                ],
+                "type": "paragraph",
+              },
+            ],
+            "id": "xw5_TwXfoa5_ENaHG9X1u",
+            "position": Object {
+              "x": 0,
+              "y": 61.72,
+            },
+            "size": Object {
+              "height": 38.28,
+              "width": 100,
+            },
+            "style": Object {
+              "background": "#FFFFFF",
+              "withBorders": true,
+              "withShadows": true,
+            },
+          },
+        ],
+        "title": "View 2",
+        "view": Object {
+          "center": Array [
+            -202784.873013322,
+            6212083.888081631,
+          ],
+          "projection": Object {
+            "name": "EPSG:3857",
+          },
+          "resolution": 1156.08759485,
+        },
+      },
+      Object {
+        "id": "nh2B0ibcoYLMhWg4MN8HG",
+        "layers": Array [
+          Object {
+            "layerId": "72467822-2446-488a-ba28-139929db84d7",
+            "visible": true,
+          },
+        ],
+        "textFrames": Array [],
+        "title": "View 3",
+        "view": Object {
+          "center": Array [
+            26674.594589871,
+            6112720.185948792,
+          ],
+          "projection": Object {
+            "name": "EPSG:3857",
+          },
+          "resolution": 905.418608562,
+        },
+      },
+    ],
+    "mapDimensions": Object {
+      "height": 862,
+      "width": 400,
+    },
+  },
+  "view": Object {
+    "center": Array [
+      20559.458412894,
+      5984262.955072035,
+    ],
+    "projection": Object {
+      "name": "EPSG:3857",
+    },
+    "resolution": 921.822663104,
+  },
+}
+`;

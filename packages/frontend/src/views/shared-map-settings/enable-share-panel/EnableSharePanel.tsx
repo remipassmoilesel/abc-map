@@ -33,8 +33,7 @@ const logger = Logger.get('EnableSharePanel.tsx');
 const t = prefixedTranslation('SharedMapSettingsView:');
 
 export function EnableSharePanel() {
-  const services = useServices();
-  const { project, modals, geo } = services;
+  const { project, modals, geo, toasts } = useServices();
   const sharedViews = useAppSelector((st) => st.project.sharedViews.list);
   const saveProject = useSaveProjectOnline();
 
@@ -42,31 +41,41 @@ export function EnableSharePanel() {
   const userAuthenticated = useAppSelector((st) => st.authentication.userStatus) === UserStatus.Authenticated;
 
   const publishProject = useCallback(() => {
-    // Set public
-    project.setPublic(true);
+    const publish = async () => {
+      const quotas = await project.getQuotas();
+      if (quotas.remaining < 1) {
+        toasts.tooMuchProjectError();
+        return;
+      }
 
-    // Create shared view if none. This action is not undoable, at least one view is necessary for public maps.
-    if (!sharedViews.length) {
-      const mainMap = geo.getMainMap();
-      const viewId = nanoid();
-      const layers: LayerState[] = mainMap
-        .getLayers()
-        .map((layer) => ({ layerId: layer.getId(), visible: true }))
-        .filter((st): st is LayerState => !!st.layerId);
-      project.addSharedViews([
-        {
-          id: viewId,
-          title: t('Main_view'),
-          view: mainMap.getView(),
-          layers,
-          textFrames: [],
-        },
-      ]);
-      project.setActiveSharedView(viewId);
-    }
+      // Set public
+      project.setPublic(true);
 
-    // Save project
-    saveProject()
+      // Create shared view if none. This action is not undoable, at least one view is necessary for public maps.
+      if (!sharedViews.length) {
+        const mainMap = geo.getMainMap();
+        const viewId = nanoid();
+        const layers: LayerState[] = mainMap
+          .getLayers()
+          .map((layer) => ({ layerId: layer.getId(), visible: true }))
+          .filter((st): st is LayerState => !!st.layerId);
+        project.addSharedViews([
+          {
+            id: viewId,
+            title: t('Main_view'),
+            view: mainMap.getView(),
+            layers,
+            textFrames: [],
+          },
+        ]);
+        project.setActiveSharedView(viewId);
+      }
+
+      // Save project
+      return saveProject();
+    };
+
+    publish()
       .then((status) => {
         if (ProjectStatus.Ok !== status) {
           project.setPublic(false);
@@ -76,7 +85,7 @@ export function EnableSharePanel() {
         project.setPublic(false);
         logger.error('Cannot publish project: ', err);
       });
-  }, [geo, project, saveProject, sharedViews.length]);
+  }, [geo, project, saveProject, sharedViews.length, toasts]);
 
   // Login, register
   const handleLogin = useCallback(() => modals.login().catch((err) => logger.error('Login modal error: ', err)), [modals]);

@@ -57,6 +57,7 @@ export class ProjectController extends Controller {
     app.get('/shared/:projectId', { schema: ByIdSchema }, this.findSharedProjectById);
     app.get('/:projectId', { schema: ByIdSchema }, this.findById);
     app.delete('/:projectId', { schema: ByIdSchema }, this.deleteById);
+    app.get('/quotas', this.getQuotas);
   };
 
   private save = async (req: FastifyRequest, reply: FastifyReply): Promise<void> => {
@@ -173,5 +174,17 @@ export class ProjectController extends Controller {
 
     await this.services.project.deleteById(projectId);
     void reply.status(200).send({ status: 'deleted' });
+  };
+
+  private getQuotas = async (req: FastifyRequest, reply: FastifyReply): Promise<void> => {
+    if (!this.authz.canGetQuotas(req)) {
+      reply.forbidden();
+      return;
+    }
+
+    const user = Authentication.from(req) as AbcUser;
+
+    const quotas = await this.services.project.getQuotasForUser(user.id);
+    void reply.status(200).send(quotas);
   };
 }

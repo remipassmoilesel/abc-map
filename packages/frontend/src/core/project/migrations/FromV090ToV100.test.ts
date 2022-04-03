@@ -18,20 +18,20 @@
 
 import { MigratedProject } from './typings';
 import { TestData } from './test-data/TestData';
-import { FromV080ToV090 } from './FromV080ToV090';
+import { FromV090ToV100 } from './FromV090ToV100';
 
-describe('FromV070ToV080', () => {
+describe('FromV090ToV100', () => {
   let sampleProject: MigratedProject;
-  let migration: FromV080ToV090;
+  let migration: FromV090ToV100;
 
   beforeEach(async () => {
-    sampleProject = await TestData.project080();
-    migration = new FromV080ToV090();
+    sampleProject = await TestData.project090();
+    migration = new FromV090ToV100();
   });
 
-  it('interestedBy() should return true if version < 0.9', async () => {
+  it('interestedBy() should return true if version < 1.0.0', async () => {
     expect(await migration.interestedBy(sampleProject.manifest)).toEqual(true);
-    expect(await migration.interestedBy(TestData.fakeProject('0.9.0'))).toEqual(false);
+    expect(await migration.interestedBy(TestData.fakeProject('1.0.0'))).toEqual(false);
   });
 
   it('migrate should work', async () => {

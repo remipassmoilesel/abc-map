@@ -38,7 +38,7 @@
   background: white;
   padding: 0 2vw 0 0;
 
-  box-shadow: $box-shadow;
+  box-shadow: 0 0.5rem 0.8rem rgba($gray-600, 0.15);
 }
 
 .brand {
@@ -105,8 +105,6 @@
       background-color: white;
       border-radius: $border-radius;
       border: solid 0.1rem $gray-400;
-
-      box-shadow: $box-shadow;
 
       .menuTitle {
         display: block;

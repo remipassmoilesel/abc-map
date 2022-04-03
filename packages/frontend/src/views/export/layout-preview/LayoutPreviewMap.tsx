@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import Cls from './LayoutPreview.module.scss';
+import Cls from './LayoutPreviewMap.module.scss';
 import React, { useCallback, useEffect, useState } from 'react';
 import { AbcScale, AbcTextFrame, AbcView, getAbcWindow, Logger } from '@abc-map/shared';
 import { AbcLayout } from '@abc-map/shared';
@@ -25,7 +25,6 @@ import { LayoutHelper } from '../../../core/project/LayoutHelper';
 import { MapWrapper } from '../../../core/geo/map/MapWrapper';
 import { MapFactory } from '../../../core/geo/map/MapFactory';
 import { E2eMapWrapper } from '../../../core/geo/map/E2eMapWrapper';
-import { toPrecision } from '../../../core/utils/numbers';
 import { prefixedTranslation } from '../../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
 import { IconDefs } from '../../../components/icon/IconDefs';
@@ -38,6 +37,7 @@ import { Views } from '../../../core/geo/Views';
 import { FloatingTextFrame } from '../../../components/text-frame/FloatingTextFrame';
 import { FloatingScale } from '../../../components/floating-scale/FloatingScale';
 import { LayoutRenderer } from '../../../core/project/rendering/LayoutRenderer';
+import { normalize, toPrecision } from '../../../core/utils/numbers';
 
 const logger = Logger.get('LayoutPreview.tsx');
 
@@ -55,7 +55,7 @@ const t = prefixedTranslation('ExportView:');
 
 const render = new LayoutRenderer();
 
-function LayoutPreview(props: Props) {
+function LayoutPreviewMap(props: Props) {
   const { layout, onNewLayout, onLayoutChanged, onTextFrameChange, onDeleteTextFrame, onScaleChange } = props;
   const { geo } = useServices();
   const [previewView, setPreviewView] = useState<AbcView | undefined>();
@@ -104,7 +104,7 @@ function LayoutPreview(props: Props) {
     setPreviewRatio(ratio);
   }, [layout?.format, layout?.view, previewDimensions, previewMap]);
 
-  // Preview view setup
+  // Adapt layout view to preview
   useEffect(() => {
     if (!previewRatio || !layout) {
       return;
@@ -140,90 +140,99 @@ function LayoutPreview(props: Props) {
   // Triggered when user change a text frame
   const handleTextFrameChanged = useCallback(
     (before: AbcTextFrame, after: AbcTextFrame) => {
-      if (!previewRatio) {
+      if (!previewRatio || !layout?.format) {
         return;
       }
+
+      const { width, height } = LayoutHelper.formatToPixel(layout.format);
 
       onTextFrameChange(
         {
           ...before,
           position: {
-            x: toPrecision(before.position.x * previewRatio, 9),
-            y: toPrecision(before.position.y * previewRatio, 9),
+            x: normalize(before.position.x * previewRatio, 0, width),
+            y: normalize(before.position.y * previewRatio, 0, height),
           },
           size: {
-            width: toPrecision(before.size.width * previewRatio, 9),
-            height: toPrecision(before.size.height * previewRatio, 9),
+            width: normalize(before.size.width * previewRatio, 0, width),
+            height: normalize(before.size.height * previewRatio, 0, height),
           },
         },
         {
           ...after,
           position: {
-            x: toPrecision(after.position.x * previewRatio, 9),
-            y: toPrecision(after.position.y * previewRatio, 9),
+            x: normalize(after.position.x * previewRatio, 0, width),
+            y: normalize(after.position.y * previewRatio, 0, height),
           },
           size: {
-            width: toPrecision(after.size.width * previewRatio, 9),
-            height: toPrecision(after.size.height * previewRatio, 9),
+            width: normalize(after.size.width * previewRatio, 0, width),
+            height: normalize(after.size.height * previewRatio, 0, height),
           },
         }
       );
     },
-    [onTextFrameChange, previewRatio]
+    [layout?.format, onTextFrameChange, previewRatio]
   );
 
-  // Update text frame positions and sizes to match preview
+  // Adapt text frame positions and sizes to preview
   useEffect(() => {
-    if (!layout || !previewRatio) {
+    if (!layout || !previewRatio || !previewDimensions) {
       setPreviewFrames([]);
       return;
     }
 
-    const frames: AbcTextFrame[] = (layout?.textFrames || []).map((frame) => ({
+    const { width, height } = previewDimensions;
+
+    const frames: AbcTextFrame[] = layout.textFrames.map((frame) => ({
       ...frame,
       position: {
-        x: toPrecision(frame.position.x / previewRatio, 9),
-        y: toPrecision(frame.position.y / previewRatio, 9),
+        x: normalize(frame.position.x / previewRatio, 0, width),
+        y: normalize(frame.position.y / previewRatio, 0, height),
       },
       size: {
-        width: toPrecision(frame.size.width / previewRatio, 9),
-        height: toPrecision(frame.size.height / previewRatio, 9),
+        width: normalize(frame.size.width / previewRatio, 0, width),
+        height: normalize(frame.size.height / previewRatio, 0, height),
       },
     }));
 
     setPreviewFrames(frames);
-  }, [layout, layout?.textFrames, previewMap, previewRatio]);
+  }, [layout, previewDimensions, previewMap, previewRatio]);
 
+  // Triggered when user modify scale position
   const handleScaleChange = useCallback(
     (scale: AbcScale) => {
-      if (!previewRatio) {
+      if (!previewRatio || !layout?.format) {
         return;
       }
 
+      const { width, height } = LayoutHelper.formatToPixel(layout.format);
+
       onScaleChange({
         ...scale,
-        x: toPrecision(scale.x * previewRatio, 9),
-        y: toPrecision(scale.y * previewRatio, 9),
+        x: normalize(scale.x * previewRatio, 0, width),
+        y: normalize(scale.y * previewRatio, 0, height),
       });
     },
-    [onScaleChange, previewRatio]
+    [layout?.format, onScaleChange, previewRatio]
   );
 
-  // Update scale position to match preview
+  // Adapt scale position to preview
   useEffect(() => {
-    if (!layout?.scale || !previewRatio) {
+    if (!layout?.scale || !previewRatio || !previewDimensions) {
       setPreviewScale(undefined);
       return;
     }
 
+    const { width, height } = previewDimensions;
+
     const previewScale: AbcScale = {
       ...layout.scale,
-      x: toPrecision(layout.scale.x / previewRatio, 9),
-      y: toPrecision(layout.scale.y / previewRatio, 9),
+      x: normalize(layout.scale.x / previewRatio, 0, width),
+      y: normalize(layout.scale.y / previewRatio, 0, height),
     };
 
     setPreviewScale(previewScale);
-  }, [layout, layout?.textFrames, previewMap, previewRatio]);
+  }, [layout?.scale, previewDimensions, previewMap, previewRatio]);
 
   return (
     <div className={Cls.layoutPreview} data-cy={'layout-preview'}>
@@ -237,7 +246,6 @@ function LayoutPreview(props: Props) {
             onViewMove={handleViewChange}
             width={previewDimensions.width + 'px'}
             height={previewDimensions.height + 'px'}
-            className={Cls.previewMap}
             data-cy={'layout-preview-map'}
           />
 
@@ -271,4 +279,4 @@ function LayoutPreview(props: Props) {
   );
 }
 
-export default withTranslation()(LayoutPreview);
+export default withTranslation()(LayoutPreviewMap);

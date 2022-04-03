@@ -31,6 +31,7 @@ Array [
     "type": "quote",
   },
   Object {
+    "align": "center",
     "children": Array [],
     "level": 1,
     "type": "title",

@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { LayerType, WmsMetadata } from '@abc-map/shared';
+import { LayerType, ProjectConstants, WmsMetadata } from '@abc-map/shared';
 import { ProjectHelper } from '@abc-map/shared';
 import { Toasts } from '../helpers/Toasts';
 import { TestHelper } from '../helpers/TestHelper';
@@ -87,7 +87,7 @@ describe('Project', function () {
           const helper = ProjectHelper.forFrontend();
           const projectA = await helper.extractManifest(downloaded);
           expect(projectA.metadata.id).not.undefined;
-          expect(projectA.metadata.version).equals('0.9.0');
+          expect(projectA.metadata.version).equals(ProjectConstants.CurrentVersion);
           expect(projectA.layers).length(2);
           expect(projectA.layers[0].type).equals(LayerType.Predefined);
           expect(projectA.layers[1].type).equals(LayerType.Vector);

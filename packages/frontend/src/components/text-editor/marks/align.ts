@@ -21,6 +21,6 @@ import { TextAlign } from '@abc-map/shared';
 
 export const align = {
   set(editor: Editor, align: TextAlign) {
-    Transforms.setNodes(editor, { align }, { match: (n) => Element.isElement(n) && n.type === 'paragraph' });
+    Transforms.setNodes(editor, { align }, { match: (n) => Element.isElement(n) });
   },
 };

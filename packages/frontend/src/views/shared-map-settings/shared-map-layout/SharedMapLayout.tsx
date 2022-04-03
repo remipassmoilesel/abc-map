@@ -123,7 +123,7 @@ function SharedMapLayout() {
       debounce((before: AbcTextFrame, after: AbcTextFrame) => {
         // Text frame may have been deleted
         if (!project.getTextFrames().find((lay) => after.id === lay.id)) {
-          logger.warn('Layer have been deleted, cannot add history task');
+          logger.warn('Shared view have been deleted, cannot add history task');
           return;
         }
 

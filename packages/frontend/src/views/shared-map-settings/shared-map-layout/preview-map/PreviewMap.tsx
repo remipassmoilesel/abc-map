@@ -29,13 +29,13 @@ import { AbcScale, AbcTextFrame, AbcView, getAbcWindow, Logger } from '@abc-map/
 import { useActiveSharedView } from '../../../../core/project/useActiveSharedView';
 import { Views } from '../../../../core/geo/Views';
 import { useAppSelector } from '../../../../core/store/hooks';
-import { toPrecision } from '../../../../core/utils/numbers';
+import { normalize } from '../../../../core/utils/numbers';
 import { DimensionsStyle } from '../../../../core/utils/DimensionsStyle';
 import { adaptMapDimensions } from '../../../../core/project/adaptMapDimensions';
 import SharedViewNavigation from '../../../../components/shared-view-navigation/SharedViewNavigation';
 import SharedViewList from '../shared-view-list/SharedViewList';
 
-const logger = Logger.get('PreviewMap');
+const logger = Logger.get('PreviewMap.tsx');
 
 interface Props {
   onNewView: () => void;
@@ -66,15 +66,9 @@ export function PreviewMap(props: Props) {
 
   // Set map size
   useEffect(() => {
-    let width = mapDimensions.width + 'px';
-    let height = mapDimensions.height + 'px';
-    if (fullscreen) {
-      width = '100%';
-      height = '100%';
-    }
-
-    setMapDimensionsStyle({ width, height });
-  }, [fullscreen, mapDimensions.height, mapDimensions.width]);
+    const { width, height } = adaptMapDimensions(fullscreen, mapDimensions);
+    setMapDimensionsStyle({ width: `${width}px`, height: `${height}px` });
+  }, [fullscreen, mapDimensions]);
 
   // Update map when visible layers change
   useEffect(() => {
@@ -120,12 +114,12 @@ export function PreviewMap(props: Props) {
     const previewFrames = activeView.textFrames.map((frame) => ({
       ...frame,
       position: {
-        x: toPrecision((frame.position.x * width) / 100, 2),
-        y: toPrecision((frame.position.y * height) / 100, 2),
+        x: normalize((frame.position.x * width) / 100, 0, width, 2),
+        y: normalize((frame.position.y * height) / 100, 0, height, 2),
       },
       size: {
-        width: toPrecision((frame.size.width * width) / 100, 2),
-        height: toPrecision((frame.size.height * height) / 100, 2),
+        width: normalize((frame.size.width * width) / 100, 0, width, 2),
+        height: normalize((frame.size.height * height) / 100, 0, height, 2),
       },
     }));
 
@@ -140,23 +134,23 @@ export function PreviewMap(props: Props) {
         {
           ...before,
           position: {
-            x: toPrecision((before.position.x / width) * 100, 2),
-            y: toPrecision((before.position.y / height) * 100, 2),
+            x: normalize((before.position.x / width) * 100, 0, 100, 2),
+            y: normalize((before.position.y / height) * 100, 0, 100, 2),
           },
           size: {
-            width: toPrecision((before.size.width / width) * 100, 2),
-            height: toPrecision((before.size.height / height) * 100, 2),
+            width: normalize((before.size.width / width) * 100, 0, 100, 2),
+            height: normalize((before.size.height / height) * 100, 0, 100, 2),
           },
         },
         {
           ...after,
           position: {
-            x: toPrecision((after.position.x / width) * 100, 2),
-            y: toPrecision((after.position.y / height) * 100, 2),
+            x: normalize((after.position.x / width) * 100, 0, 100, 2),
+            y: normalize((after.position.y / height) * 100, 0, 100, 2),
           },
           size: {
-            width: toPrecision((after.size.width / width) * 100, 2),
-            height: toPrecision((after.size.height / height) * 100, 2),
+            width: normalize((after.size.width / width) * 100, 0, 100, 2),
+            height: normalize((after.size.height / height) * 100, 0, 100, 2),
           },
         }
       );
@@ -175,8 +169,8 @@ export function PreviewMap(props: Props) {
 
     const previewScale: AbcScale = {
       ...activeView.scale,
-      x: toPrecision((activeView.scale.x * width) / 100, 2),
-      y: toPrecision((activeView.scale.y * height) / 100, 2),
+      x: normalize((activeView.scale.x * width) / 100, 0, width, 2),
+      y: normalize((activeView.scale.y * height) / 100, 0, height, 2),
     };
 
     setPreviewScale(previewScale);
@@ -188,8 +182,8 @@ export function PreviewMap(props: Props) {
 
       onScaleChange({
         ...before,
-        x: toPrecision((before.x / width) * 100, 2),
-        y: toPrecision((before.y / height) * 100, 2),
+        x: normalize((before.x / width) * 100, 0, 100, 2),
+        y: normalize((before.y / height) * 100, 0, 100, 2),
       });
     },
     [fullscreen, mapDimensions, onScaleChange]
@@ -207,7 +201,7 @@ export function PreviewMap(props: Props) {
           <MapUi map={map} view={activeView?.view} onViewMove={handleViewMove} width={'100%'} height={'100%'} data-cy={'sharing-layout-map'} />
 
           {previewFrames.map((frame) => (
-            <FloatingTextFrame key={frame.id} frame={frame} bounds={'parent'} onChange={handleTextFrameChange} onDelete={onRemoveTextFrame} />
+            <FloatingTextFrame key={frame.id} frame={frame} onChange={handleTextFrameChange} onDelete={onRemoveTextFrame} bounds={'parent'} />
           ))}
 
           {previewScale && <FloatingScale map={map} scale={previewScale} onChange={handleScaleChange} />}

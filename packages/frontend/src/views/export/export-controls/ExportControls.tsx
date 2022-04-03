@@ -16,6 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
+import Cls from './ExportControls.module.scss';
 import React, { ChangeEvent, useCallback } from 'react';
 import { AbcScale, AbcTextFrame, LayoutFormat, LayoutFormats, Logger } from '@abc-map/shared';
 import { ExportFormat } from '../ExportFormat';
@@ -30,6 +31,7 @@ import { useAppSelector } from '../../../core/store/hooks';
 import { useActiveLayout } from '../../../core/project/useActiveLayout';
 import { ScaleControls } from '../../../components/scale-controls/ScaleControls';
 import { TextFrameControls } from '../../../components/text-frame-controls/TextFrameControls';
+import clsx from 'clsx';
 
 const logger = Logger.get('ExportControls.tsx', 'warn');
 
@@ -148,16 +150,16 @@ function ExportControls(props: Props) {
 
       {/* Export buttons */}
       <div className={'control-block'}>
-        <div className={'control-item d-flex justify-content-center my-3'}>
-          <button onClick={() => handleExport(ExportFormat.PDF)} disabled={exportDisabled} className={'btn btn-primary'} data-cy={'pdf-export'}>
+        <div className={'mb-3'}>{t('Export')}:</div>
+
+        <div className={clsx('control-item', Cls.exportButtons)}>
+          <button onClick={() => handleExport(ExportFormat.PDF)} disabled={exportDisabled} className={'btn btn-primary mb-2'} data-cy={'pdf-export'}>
             <FaIcon icon={IconDefs.faDownload} className={'mr-2'} />
-            {t('PDF_export')}
+            {t('PDF_document')}
           </button>
-        </div>
-        <div className={'control-item d-flex justify-content-center mb-3'}>
-          <button onClick={() => handleExport(ExportFormat.PNG)} disabled={exportDisabled} className={'btn btn-outline-primary'} data-cy={'png-export'}>
+          <button onClick={() => handleExport(ExportFormat.PNG)} disabled={exportDisabled} className={'btn btn-outline-primary mb-2'} data-cy={'png-export'}>
             <FaIcon icon={IconDefs.faDownload} className={'mr-2'} />
-            {t('PNG_export')}
+            {t('PNG_images')}
           </button>
         </div>
       </div>

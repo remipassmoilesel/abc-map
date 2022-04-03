@@ -22,6 +22,9 @@
   position: relative;
   border: solid $gray-400 0.1rem;
   box-shadow: $box-shadow;
+
+  // Needed for frame shadows
+  overflow: hidden;
 }
 
 .navigation {

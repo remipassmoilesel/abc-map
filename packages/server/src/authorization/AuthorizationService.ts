@@ -117,4 +117,13 @@ export class AuthorizationService extends AbstractService {
 
     return project.ownerId === user.id;
   }
+
+  public canGetQuotas(req: FastifyRequest): boolean {
+    const user = Authentication.from(req);
+    if (!user) {
+      return false;
+    }
+
+    return !isUserAnonymous(user);
+  }
 }

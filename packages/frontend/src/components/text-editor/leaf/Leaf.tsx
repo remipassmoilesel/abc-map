@@ -25,6 +25,8 @@ const sizeClasses = [Cls.size1, Cls.size2, Cls.size3, Cls.size4];
 
 export function Leaf(props: RenderLeafProps) {
   const {
+    attributes,
+    children,
     leaf: { bold, italic, underline, foregroundColor, backgroundColor, size = 1 },
   } = props;
 
@@ -33,8 +35,8 @@ export function Leaf(props: RenderLeafProps) {
   const style: CSSProperties = useMemo(() => ({ color: foregroundColor, backgroundColor }), [foregroundColor, backgroundColor]);
 
   return (
-    <span {...props.attributes} style={style} className={className}>
-      {props.children}
+    <span style={style} className={className} {...attributes}>
+      {children}
     </span>
   );
 }

@@ -23,6 +23,7 @@ import {
   AbcLayout,
   AbcProjectManifest,
   AbcProjectMetadata,
+  AbcProjectQuotas,
   AbcSharedView,
   AbcTextFrame,
   AbcView,
@@ -136,15 +137,15 @@ export class ProjectService {
    */
   public async loadBlobProject(blob: Blob, password?: string): Promise<void> {
     // Unzip project
-    const unzipped = await Zipper.forFrontend().unzip(blob);
-    const manifestFile = unzipped.find((f) => f.path.endsWith(ProjectConstants.ManifestName));
+    const files = await Zipper.forFrontend().unzip(blob);
+    const manifestFile = files.find((f) => f.path.endsWith(ProjectConstants.ManifestName));
     if (!manifestFile) {
       return Promise.reject(new Error('Invalid project, manifest not found'));
     }
 
     // Parse manifest
     const manifest: AbcProjectManifest = JSON.parse(await BlobIO.asString(manifestFile.content));
-    return this.loadExtracted(manifest, password, unzipped);
+    return this.loadExtracted(manifest, password, files);
   }
 
   private async loadExtracted(_manifest: AbcProjectManifest, _password: string | undefined, _files: AbcFile<Blob>[]): Promise<void> {
@@ -185,6 +186,10 @@ export class ProjectService {
     manifest = {
       ...manifest,
       layouts: TextFrameHelpers.loadImagesOfLayouts(manifest.layouts, files),
+      sharedViews: {
+        ...manifest.sharedViews,
+        list: TextFrameHelpers.loadImagesOfSharedViews(manifest.sharedViews.list, files),
+      },
     };
 
     // Load project manifest and layers
@@ -224,7 +229,8 @@ export class ProjectService {
       this.passwordCache.set(password);
     }
 
-    const [images, layouts] = await TextFrameHelpers.extractImagesFromLayouts(state.layouts.list);
+    const [imagesFromLayouts, layouts] = await TextFrameHelpers.extractImagesFromLayouts(state.layouts.list);
+    const [imagesFromViews, sharedViews] = await TextFrameHelpers.extractImagesFromSharedViews(state.sharedViews.list);
 
     let manifest: AbcProjectManifest = {
       metadata: state.metadata,
@@ -232,7 +238,7 @@ export class ProjectService {
       view: state.mainView,
       layouts,
       sharedViews: {
-        list: state.sharedViews.list,
+        list: sharedViews,
         fullscreen: state.sharedViews.fullscreen,
         mapDimensions: state.sharedViews.mapDimensions,
       },
@@ -242,7 +248,7 @@ export class ProjectService {
       manifest = await Encryption.encryptManifest(manifest, password);
     }
 
-    return { manifest, files: images };
+    return { manifest, files: imagesFromLayouts.concat(imagesFromViews) };
   }
 
   public async exportAndZipCurrentProject(): Promise<CompressedProject<Blob> | ProjectStatus.Canceled> {
@@ -469,6 +475,10 @@ export class ProjectService {
 
   public deleteById(id: string): Promise<void> {
     return this.jsonClient.delete(Api.findById(id)).then(() => undefined);
+  }
+
+  public getQuotas(): Promise<AbcProjectQuotas> {
+    return this.jsonClient.get(Api.quotas()).then((res) => res.data);
   }
 
   public resetCache() {

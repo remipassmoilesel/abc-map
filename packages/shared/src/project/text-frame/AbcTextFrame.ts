@@ -23,6 +23,16 @@ export interface AbcTextFrame {
   position: { x: number; y: number };
   size: { width: number; height: number };
   content: TextFrameChild[];
+  style: AbcTextFrameStyle;
+}
+
+export interface AbcTextFrameStyle {
+  // If true, frame will have a border
+  withBorders: boolean;
+  // If true, frame will have shadows around
+  withShadows: boolean;
+  // Color of background
+  background: string;
 }
 
 export type TextFrameChild = AbcElement | AbcText;

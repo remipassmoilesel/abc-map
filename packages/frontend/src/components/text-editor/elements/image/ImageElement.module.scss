@@ -53,18 +53,21 @@
 
   &.size1 {
     .img {
+      width: 30%;
       max-width: 30%;
     }
   }
 
   &.size2 {
     .img {
+      width: 70%;
       max-width: 70%;
     }
   }
 
   &.size3 {
     .img {
+      width: 100%;
       max-width: 100%;
     }
   }

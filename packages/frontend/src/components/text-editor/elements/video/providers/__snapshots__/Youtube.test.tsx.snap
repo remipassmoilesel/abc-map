@@ -27,3 +27,17 @@ exports[`Youtube should return integration for short url 1`] = `
   </div>
 </div>
 `;
+
+exports[`Youtube should work with https://youtu.be/tEpMEl-_syY 1`] = `
+<div>
+  <div>
+    <iframe
+      allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen=""
+      frameborder="0"
+      src="https://www.youtube.com/embed/tEpMEl-_syY"
+      title="YouTube video player"
+    />
+  </div>
+</div>
+`;

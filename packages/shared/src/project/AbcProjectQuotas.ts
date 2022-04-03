@@ -16,14 +16,12 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import Cls from './QuoteElement.module.scss';
-import { RenderElementProps } from 'slate-react';
-
-export function QuoteElement(props: RenderElementProps) {
-  const { attributes, children } = props;
-  return (
-    <q className={Cls.quote} {...attributes}>
-      {children}
-    </q>
-  );
+/**
+ * This interface represents the quantity of projects a user owns and can create on a server.
+ */
+export interface AbcProjectQuotas {
+  userId: string;
+  allowed: number;
+  currently: number;
+  remaining: number;
 }
