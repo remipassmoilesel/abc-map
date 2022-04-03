@@ -32,7 +32,7 @@ const renderer = new MapSymbolRenderer();
 const styleFactory = StyleFactory.get();
 
 export function MapSymbolElement(props: Props) {
-  const { element } = props;
+  const { attributes, children, element } = props;
   const { ratio } = useEditor();
   const canvas = useRef<HTMLCanvasElement>(null);
 
@@ -54,9 +54,9 @@ export function MapSymbolElement(props: Props) {
   }, [element.geometryType, element.style, ratio]);
 
   return (
-    <span {...props.attributes} className={Cls.container}>
+    <span className={Cls.container} {...attributes}>
       <canvas ref={canvas} width={0} height={0} className={Cls.canvas} />
-      {props.children}
+      {children}
     </span>
   );
 }

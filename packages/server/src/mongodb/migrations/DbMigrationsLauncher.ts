@@ -18,7 +18,7 @@
 
 import { MongodbClient } from '../MongodbClient';
 import { MigrationDao } from './MigrationDao';
-import { MigrationScript } from './MigrationScript';
+import { DatabaseMigrationScript } from './DatabaseMigrationScript';
 import { getScripts } from './scripts';
 import { Config } from '../../config/Config';
 import { Logger } from '@abc-map/shared';
@@ -38,7 +38,7 @@ export class DbMigrationsLauncher {
     return new DbMigrationsLauncher(client, dao, getScripts(client));
   }
 
-  constructor(private client: MongodbClient, private dao: MigrationDao, private scripts: MigrationScript[]) {}
+  constructor(private client: MongodbClient, private dao: MigrationDao, private scripts: DatabaseMigrationScript[]) {}
 
   public async migrate() {
     try {

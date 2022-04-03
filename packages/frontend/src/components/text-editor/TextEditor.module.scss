@@ -31,8 +31,6 @@
 
   overflow: hidden;
 
-  // Editor must be white for pdf exports 🤷
-  background-color: white;
   border-radius: $border-radius;
 }
 
@@ -44,9 +42,6 @@
   flex-grow: 1;
   padding: 0.5em;
 
+  // We must scroll to show all content on small devices
   overflow: auto;
-
-  &.readOnly {
-    overflow: hidden;
-  }
 }

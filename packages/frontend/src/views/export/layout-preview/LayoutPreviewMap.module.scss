@@ -16,14 +16,43 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import Cls from './QuoteElement.module.scss';
-import { RenderElementProps } from 'slate-react';
+@import "src/styles/variables";
 
-export function QuoteElement(props: RenderElementProps) {
-  const { attributes, children } = props;
-  return (
-    <q className={Cls.quote} {...attributes}>
-      {children}
-    </q>
-  );
+.layoutPreview {
+  flex-grow: 1;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  overflow: auto;
+
+  h4 {
+    margin: 0 0 1rem 1rem;
+  }
+}
+
+.noLayout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+
+  font-size: 1.3rem;
+}
+
+.previewContainer {
+  position: relative;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  border: solid 0.1rem darkgrey;
+  box-shadow: $box-shadow;
+
+  // Needed for frame shadows
+  overflow: hidden;
 }

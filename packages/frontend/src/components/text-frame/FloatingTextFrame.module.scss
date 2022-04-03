@@ -20,41 +20,30 @@
 @import "src/styles/mixins";
 
 .container {
+  position: relative;
   width: 100%;
   height: 100%;
-  box-shadow: $box-shadow;
   z-index: $zIndex-floatingTextFrame;
 
+  // Can be overrided by style
   background: white;
-  border: solid 1px $gray-400;
-  border-radius: $border-radius;
 
-  .controls {
-    position: absolute;
-    top: 0.5rem;
-    right: 0.5rem;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-
-    opacity: 0;
-    transition: opacity 0.3s;
-    background: white;
-    border-radius: $border-radius;
-    border: solid 1px $gray-400;
-    padding: 0.5rem;
-    font-size: 1.4rem;
-
-    button {
-      border: none;
-      background: none;
-    }
+  &.withBorders {
+    border: solid 0.1em $gray-400;
+    border-radius: 0.4em;
   }
 
-  .readonly {
+  &.withShadows {
+    box-shadow: 0 0 0.5em 0.5em rgba($gray-600, 0.3);
+  }
+
+  &.readonly {
     user-select: none;
+  }
+
+  .controls {
+    opacity: 0;
+    transition: opacity 0.3s;
   }
 
   &:hover {

@@ -22,11 +22,11 @@ import { ListElement as ListElementDef } from '@abc-map/shared';
 type Props = RenderElementProps & { element: ListElementDef };
 
 export function ListElement(props: Props) {
-  const { ordered } = props.element;
+  const { children, attributes, element } = props;
 
-  if (ordered) {
-    return <ol {...props.attributes}>{props.children}</ol>;
+  if (element.ordered) {
+    return <ol {...attributes}>{children}</ol>;
   }
 
-  return <ul {...props.attributes}>{props.children}</ul>;
+  return <ul {...attributes}>{children}</ul>;
 }

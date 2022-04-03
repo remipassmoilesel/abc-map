@@ -40,4 +40,9 @@ describe('Youtube', () => {
     const { container } = render(<div>{provider.getIntegration('https://www.youtube.com/watch?v=uTC1mW4ua74')}</div>);
     expect(container).toMatchSnapshot();
   });
+
+  it('should work with https://youtu.be/tEpMEl-_syY', () => {
+    const { container } = render(<div>{provider.getIntegration('https://youtu.be/tEpMEl-_syY')}</div>);
+    expect(container).toMatchSnapshot();
+  });
 });

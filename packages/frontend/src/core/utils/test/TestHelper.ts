@@ -338,6 +338,11 @@ export class TestHelper {
       position: { x: 10, y: 10 },
       size: { width: 100, height: 100 },
       content: [{ type: 'paragraph', children: [{ text: 'Hey man, how are you ?' }] }],
+      style: {
+        background: '#FFFFFF',
+        withBorders: true,
+        withShadows: true,
+      },
     };
   }
 

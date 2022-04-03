@@ -38,6 +38,10 @@ export class ProjectRoutes {
   public static delete(id: string): string {
     return `/projects/${id}`;
   }
+
+  public static quotas(): string {
+    return `/projects/quotas`;
+  }
 }
 
 export class AuthenticationRoutes {

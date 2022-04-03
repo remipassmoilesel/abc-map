@@ -17,10 +17,10 @@
  */
 
 import { MongodbClient } from '../../MongodbClient';
-import { MigrationScript } from '../MigrationScript';
+import { DatabaseMigrationScript } from '../DatabaseMigrationScript';
 import { S2022_01_04_AddPublicField } from './S2022_01_04_AddPublicField/S2022_01_04_AddPublicField';
 
 // Scripts are executed in provided order
-export function getScripts(client: MongodbClient): MigrationScript[] {
+export function getScripts(client: MongodbClient): DatabaseMigrationScript[] {
   return [S2022_01_04_AddPublicField.create(client)];
 }

@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { asNumberOrString, isValidNumber, toDegrees, toPrecision, toRadians } from './numbers';
+import { asNumberOrString, isValidNumber, normalize, toDegrees, toPrecision, toRadians } from './numbers';
 
 describe('numbers', () => {
   it('isValidNumber()', () => {
@@ -60,5 +60,11 @@ describe('numbers', () => {
 
   it('toDegrees()', () => {
     expect(toRadians(1)).toEqual(0.0175);
+  });
+
+  it('normalize()', () => {
+    expect(normalize(-55, 0, 100, 2)).toEqual(0);
+    expect(normalize(155, 0, 100, 2)).toEqual(100);
+    expect(normalize(77.8888888, 0, 100, 2)).toEqual(77.89);
   });
 });

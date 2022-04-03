@@ -28,6 +28,11 @@ describe('AbcTextFrame', () => {
       position: { x: 10, y: 20 },
       size: { width: 30, height: 40 },
       content: [{ type: 'paragraph', children: [{ text: '' }] }],
+      style: {
+        withBorders: true,
+        withShadows: true,
+        background: '#FFFFFF',
+      },
     };
 
     expect(actual).toMatchSnapshot();

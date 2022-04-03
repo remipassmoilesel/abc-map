@@ -22,5 +22,7 @@ import { ListItemElement as ListItemElementDef } from '@abc-map/shared';
 type Props = RenderElementProps & { element: ListItemElementDef };
 
 export function ListItemElement(props: Props) {
-  return <li {...props.attributes}>{props.children}</li>;
+  const { children, attributes } = props;
+
+  return <li {...attributes}>{children}</li>;
 }

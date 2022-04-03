@@ -29,6 +29,8 @@ const logger = Logger.get('ErrorBoundary');
 const ignoredErrorMessages = [
   // Observed in 03/2022, this error occurs on Chromium when users toggle videos fullscreen, but has no effect
   'ResizeObserver loop limit exceeded',
+  // This error occurs from time to time on user selection in editor, and no fix have been found
+  'Cannot resolve a Slate point from DOM point',
 ];
 
 interface State {
@@ -67,6 +69,14 @@ class ErrorBoundary extends React.Component<ServiceProps, State> {
     }
 
     return this.props.children;
+  }
+
+  public static getDerivedStateFromError(err: Error | undefined): Partial<State> | null {
+    if (!isErrorIgnored(err)) {
+      return { hasError: true };
+    }
+
+    return null;
   }
 
   public componentDidCatch(err: Error | undefined, errorInfo: React.ErrorInfo) {

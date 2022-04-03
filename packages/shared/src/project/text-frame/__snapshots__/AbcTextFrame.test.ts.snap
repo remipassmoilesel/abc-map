@@ -21,5 +21,10 @@ Object {
     "height": 40,
     "width": 30,
   },
+  "style": Object {
+    "background": "#FFFFFF",
+    "withBorders": true,
+    "withShadows": true,
+  },
 }
 `;

@@ -19,5 +19,7 @@
 import { RenderElementProps } from 'slate-react';
 
 export function TableRowElement(props: RenderElementProps) {
-  return <tr {...props.attributes}>{props.children}</tr>;
+  const { children, attributes } = props;
+
+  return <tr {...attributes}>{children}</tr>;
 }

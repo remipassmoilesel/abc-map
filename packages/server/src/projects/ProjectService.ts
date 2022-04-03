@@ -19,7 +19,7 @@
 import { Config } from '../config/Config';
 import { ProjectDao } from './ProjectDao';
 import { MongodbClient } from '../mongodb/MongodbClient';
-import { AbcProjectMetadata, CompressedProject, NodeBinary } from '@abc-map/shared';
+import { AbcProjectMetadata, AbcProjectQuotas, CompressedProject, NodeBinary } from '@abc-map/shared';
 import { ProjectMapper } from './ProjectMapper';
 import { AbstractService } from '../services/AbstractService';
 
@@ -83,5 +83,16 @@ export class ProjectService extends AbstractService {
 
   public async exists(id: string): Promise<boolean> {
     return this.dao.exists(id);
+  }
+
+  public async getQuotasForUser(userId: string): Promise<AbcProjectQuotas> {
+    const allowed = this.config.project.maxPerUser;
+    const currently = await this.dao.countByUserId(userId);
+    return {
+      userId,
+      allowed,
+      currently,
+      remaining: allowed - currently,
+    };
   }
 }

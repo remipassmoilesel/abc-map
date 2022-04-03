@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcFile, AbcLayout, AbcTextFrame, Logger, TextFrameChild } from '@abc-map/shared';
+import { AbcFile, AbcLayout, AbcSharedView, AbcTextFrame, Logger, TextFrameChild } from '@abc-map/shared';
 import { nanoid } from 'nanoid';
 import { cloneDeep } from 'lodash';
 
@@ -31,6 +31,18 @@ export class TextFrameHelpers {
       const [imgs, frames] = await this.extractImagesFromFrames(layout.textFrames);
       images = images.concat(imgs);
       output.push({ ...layout, textFrames: frames });
+    }
+
+    return [images, output];
+  }
+
+  public static async extractImagesFromSharedViews(input: AbcSharedView[]): Promise<[AbcFile<Blob>[], AbcSharedView[]]> {
+    let images: AbcFile<Blob>[] = [];
+    const output: AbcSharedView[] = [];
+    for (const view of input) {
+      const [imgs, frames] = await this.extractImagesFromFrames(view.textFrames);
+      images = images.concat(imgs);
+      output.push({ ...view, textFrames: frames });
     }
 
     return [images, output];
@@ -83,6 +95,10 @@ export class TextFrameHelpers {
     return layouts.map((layout) => ({ ...layout, textFrames: this.loadImagesOfFrames(layout.textFrames, files) }));
   }
 
+  public static loadImagesOfSharedViews(views: AbcSharedView[], files: AbcFile<Blob>[]): AbcSharedView[] {
+    return views.map((view) => ({ ...view, textFrames: this.loadImagesOfFrames(view.textFrames, files) }));
+  }
+
   private static loadImagesOfFrames(input: AbcTextFrame[], files: AbcFile<Blob>[]): AbcTextFrame[] {
     return input.map((frame) => ({ ...frame, content: this.loadImagesOfElements(frame.content, files) }));
   }
@@ -92,7 +108,7 @@ export class TextFrameHelpers {
 
     for (const element of input) {
       // Element is an image, we create blob url from file
-      // If file does not exists we use original path to create a broken image element
+      // If file does not exist we use original path to create a broken image element
       if (element && 'type' in element && element.type === 'image') {
         const file = files.find((f) => f.path === element.url);
         if (!file) {

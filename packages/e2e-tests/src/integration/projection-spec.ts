@@ -55,7 +55,7 @@ describe('Projection', () => {
       .click()
       .then(() => LayoutPreviewMap.getReference())
       .should((map) => {
-        expect(map.getViewExtent()).deep.equal([-3573801.966406443, 3763426.2275903923, 4516145.727672575, 9477491.005770896]);
+        expect(map.getViewExtent()).deep.equal([-3583756.783093121, 3753471.4109037006, 4526100.544359253, 9487445.82245759]);
       })
       .get('[data-cy=pdf-export]')
       .click()

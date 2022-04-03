@@ -33,7 +33,7 @@ export async function saveProjectOnline(services: Services): Promise<ProjectStat
       toasts.dismiss(previousToast);
       switch (status) {
         case ProjectStatus.OnlineQuotaExceeded:
-          toasts.error(t('Too_much_projects'));
+          toasts.tooMuchProjectError();
           return status;
 
         case ProjectStatus.TooHeavy:

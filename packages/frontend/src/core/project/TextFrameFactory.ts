@@ -35,6 +35,11 @@ export class TextFrameFactory {
         { type: 'paragraph', children: [{ text: t('You_can_move_and_resize_it') }] },
         { type: 'paragraph', children: [{ text: t('And_you_can_include_images_and_videos') }] },
       ],
+      style: {
+        background: '#FFFFFF',
+        withBorders: true,
+        withShadows: true,
+      },
     };
   }
 }

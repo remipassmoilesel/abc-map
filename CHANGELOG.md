@@ -2,6 +2,17 @@
 
 For the moment we use git hashes as version, since no one complained about it 👍
 
+## Text frames style (xxxxxx 03/04/2022)
+
+- Style options for text frames. You can now open a modal on text frames to change background color,
+  enable or disable shadows and borders. You can also use transparent frames !
+- Fix of text frames positions, they could in some cases overflow their parents
+- Simplification of text frames menu, you can't edit them in place anymore
+- Fix of Youtube integration, some urls did not work
+- Better shadow management in UI
+- Project quotas: there is now an API to get the maximum number of project allowed and the current number of
+  projects saved. These quotas are used before a publication and displayed in "My projects" dialog.
+
 ## Shared maps, part 3 (459dce66 30/03/2022)
 
 - Shared map are now enabled by default 🚀

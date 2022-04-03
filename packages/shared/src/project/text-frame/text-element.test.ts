@@ -45,7 +45,7 @@ describe('Text elements', () => {
       { type: 'paragraph', align: 'right', children: [] },
       { type: 'code', children: [] },
       { type: 'quote', children: [] },
-      { type: 'title', level: 1, children: [] },
+      { type: 'title', level: 1, align: 'center', children: [] },
       { type: 'table', children: [] },
       { type: 'table-row', children: [] },
       { type: 'table-cell', children: [] },

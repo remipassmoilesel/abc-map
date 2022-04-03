@@ -28,11 +28,11 @@ type Props = RenderElementProps & { element: LinkElementDef };
  * @constructor
  */
 export function LinkElement(props: Props) {
-  const { element } = props;
+  const { children, attributes, element } = props;
 
   return (
-    <a href={element.url} target={'_blank'} rel="noreferrer" className={Cls.link} {...props.attributes}>
-      {props.children}
+    <a href={element.url} target={'_blank'} rel="noreferrer" className={Cls.link} {...attributes}>
+      {children}
     </a>
   );
 }

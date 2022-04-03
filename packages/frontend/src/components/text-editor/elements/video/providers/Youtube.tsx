@@ -20,8 +20,8 @@ import React from 'react';
 import { Provider } from '../Provider';
 import { DefaultIntegration } from '../DefaultIntegration';
 
-const shortUrlRegexp = /youtu\.be\/([a-z0-9]+)/i;
-const longUrlRegexp = /youtube\.com\/watch\?v=([a-z0-9]+)/i;
+const shortUrlRegexp = /youtu\.be\/([0-9A-Za-z_-]+)/i;
+const longUrlRegexp = /youtube\.com\/watch\?v=([0-9A-Za-z_-]+)/i;
 
 export class Youtube implements Provider {
   public canHandle(url: string): boolean {

@@ -20,8 +20,8 @@ import React from 'react';
 import { Provider } from '../Provider';
 import { DefaultIntegration } from '../DefaultIntegration';
 
-const longUrlRegexp = /dailymotion\.com\/video\/([a-z0-9]+)/i;
-const smallUrlRegexp = /dai\.ly\/([a-z0-9]+)/i;
+const longUrlRegexp = /dailymotion\.com\/video\/([a-z0-9_]+)/i;
+const smallUrlRegexp = /dai\.ly\/([a-z0-9_]+)/i;
 
 export class Dailymotion implements Provider {
   public canHandle(url: string): boolean {

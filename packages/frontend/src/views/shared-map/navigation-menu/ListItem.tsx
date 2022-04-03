@@ -22,19 +22,18 @@ import Cls from './ListItem.module.scss';
 
 interface Props {
   view: AbcSharedView;
-  index: number;
   active: boolean;
   onClick: (v: AbcSharedView) => void;
 }
 
 function ListItem(props: Props) {
-  const { view, index, onClick, active } = props;
+  const { view, onClick, active } = props;
 
   const handleClick = useCallback(() => onClick(view), [onClick, view]);
 
   return (
     <div className={`${Cls.listItem} ${active ? Cls.active : ''}`} onClick={handleClick}>
-      #{index} {view.title}
+      {view.title}
     </div>
   );
 }

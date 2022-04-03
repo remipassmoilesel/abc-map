@@ -63,7 +63,7 @@ class MainMap extends Component<ServiceProps, State> {
         <div ref={this.mapRef} data-cy={'main-map'} className={Cls.map} onDragOver={this.handleDragOver} />
 
         <div className={Cls.bottomBar}>
-          <Scale map={this.map} />
+          <Scale map={this.map} className={Cls.scale} />
 
           <div className={Cls.controls}>
             <Attributions map={this.map} />

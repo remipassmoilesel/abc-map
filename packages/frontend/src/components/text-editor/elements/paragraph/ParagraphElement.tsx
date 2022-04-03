@@ -30,7 +30,7 @@ type Props = RenderElementProps & { element: Element | ParagraphElementDef };
  * @constructor
  */
 export function ParagraphElement(props: Props) {
-  const { element } = props;
+  const { attributes, children, element } = props;
   const align = 'align' in element && element.align;
 
   const classes = clsx(
@@ -41,8 +41,8 @@ export function ParagraphElement(props: Props) {
     align === 'justify' && Cls.alignJustify
   );
   return (
-    <div className={classes} {...props.attributes} data-testid={'paragraph'}>
-      {props.children}
+    <div className={classes} data-testid={'paragraph'} {...attributes}>
+      {children}
     </div>
   );
 }

@@ -51,7 +51,7 @@ describe('saveProjectOnline', () => {
 
     const status = await saveProjectOnline(services);
 
-    expect(services.toasts.error.args).toEqual([['Sorry 😞 you have reached your project quota. Delete one.']]);
+    expect(services.toasts.tooMuchProjectError.callCount).toEqual(1);
     expect(status).toEqual(ProjectStatus.OnlineQuotaExceeded);
   });
 

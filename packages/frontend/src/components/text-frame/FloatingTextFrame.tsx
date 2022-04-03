@@ -16,19 +16,16 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 import Cls from './FloatingTextFrame.module.scss';
-import React, { useCallback, useState } from 'react';
-import { AbcTextFrame, Logger, TextFrameChild } from '@abc-map/shared';
+import React, { CSSProperties, useCallback, useMemo, useState } from 'react';
+import { AbcTextFrame, AbcTextFrameStyle, Logger, TextFrameChild } from '@abc-map/shared';
 import TextEditor from '../text-editor/TextEditor';
 import { Rnd, RndDragCallback, RndResizeCallback } from 'react-rnd';
 import { FaIcon } from '../icon/FaIcon';
 import { IconDefs } from '../icon/IconDefs';
-import { WithTooltip } from '../with-tooltip/WithTooltip';
-import { prefixedTranslation } from '../../i18n/i18n';
 import clsx from 'clsx';
+import { FrameControls } from './FrameControls';
 
 const logger = Logger.get('TextFrame.tsx');
-
-const t = prefixedTranslation('FloatingTextFrame:');
 
 interface Props {
   frame: AbcTextFrame;
@@ -41,19 +38,14 @@ interface Props {
   onChange?: (before: AbcTextFrame, after: AbcTextFrame) => void;
 }
 
-enum FrameDisplay {
-  Preview = 'Preview',
-  Edition = 'Edition',
-}
-
 export function FloatingTextFrame(props: Props) {
   const { frame, ratio: _ratio, readOnly, onDelete, onChange, bounds } = props;
-  const { position, size } = frame;
+  const { position, size, style } = frame;
 
   const ratio = _ratio ?? 1;
-  const [display, setDisplay] = useState(FrameDisplay.Preview);
   const [fullscreenEdition, setFullscreenEdition] = useState(false);
 
+  // User drags frame
   const handleDragStop: RndDragCallback = useCallback(
     (event, data) => {
       const updated: AbcTextFrame = {
@@ -68,6 +60,7 @@ export function FloatingTextFrame(props: Props) {
     [frame, onChange]
   );
 
+  // User resizes frame
   const handleResizeStop: RndResizeCallback = useCallback(
     (event, direction, ref, delta, position) => {
       const updated: AbcTextFrame = {
@@ -86,6 +79,7 @@ export function FloatingTextFrame(props: Props) {
     [frame, onChange]
   );
 
+  // User change frame content
   const handleContentChange = useCallback(
     (content: TextFrameChild[]) => {
       const updated: AbcTextFrame = { ...frame, content };
@@ -94,49 +88,64 @@ export function FloatingTextFrame(props: Props) {
     [frame, onChange]
   );
 
-  const handleToggleEdition = useCallback(() => setDisplay(FrameDisplay.Edition === display ? FrameDisplay.Preview : FrameDisplay.Edition), [display]);
-  const toggleTitle = FrameDisplay.Edition === display ? t('Preview') : t('Edit');
-  const toggleIcon = FrameDisplay.Edition === display ? IconDefs.faEye : IconDefs.faPen;
+  // User edits frame in fullscreen
   const handleToggleFullscreen = useCallback(() => setFullscreenEdition(!fullscreenEdition), [fullscreenEdition]);
+
+  // User deletes frame
   const handleDelete = useCallback(() => onDelete && onDelete(frame), [frame, onDelete]);
+
+  // User set frame style
+  const handleStyleChange = useCallback(
+    (style: AbcTextFrameStyle) => {
+      onChange &&
+        onChange(frame, {
+          ...frame,
+          style: {
+            ...frame.style,
+            ...style,
+          },
+        });
+    },
+    [frame, onChange]
+  );
+
+  const containerStyle: CSSProperties = useMemo(() => ({ background: style.background }), [style.background]);
 
   return (
     <>
       <Rnd
         position={position}
         size={size}
-        minHeight={100}
+        minHeight={60}
         minWidth={100}
         onDragStop={handleDragStop}
         onResizeStop={handleResizeStop}
         enableResizing={!readOnly}
-        disableDragging={readOnly || FrameDisplay.Edition === display}
+        disableDragging={readOnly}
         bounds={bounds}
         data-cy={'floating-text-frame'}
       >
-        <div className={clsx(Cls.container, readOnly && Cls.readonly)}>
-          <TextEditor ratio={ratio} value={frame.content} onChange={handleContentChange} readOnly={FrameDisplay.Preview === display} controlBar={false} />
+        <div
+          className={clsx(Cls.container, readOnly && Cls.readonly, style.withShadows && Cls.withShadows, style.withBorders && Cls.withBorders)}
+          style={containerStyle}
+        >
+          <TextEditor
+            ratio={ratio}
+            value={frame.content}
+            onChange={handleContentChange}
+            readOnly={true}
+            controlBar={false}
+            background={frame.style.background}
+          />
 
           {!readOnly && (
-            <div className={Cls.controls}>
-              <WithTooltip title={t('Full_screen_editor')}>
-                <button onClick={handleToggleFullscreen} data-cy={'toggle-full-screen-editor'}>
-                  <FaIcon icon={IconDefs.faExpand} />
-                </button>
-              </WithTooltip>
-
-              <WithTooltip title={toggleTitle}>
-                <button onClick={handleToggleEdition}>
-                  <FaIcon icon={toggleIcon} />
-                </button>
-              </WithTooltip>
-
-              <WithTooltip title={t('Delete')}>
-                <button onClick={handleDelete}>
-                  <FaIcon icon={IconDefs.faTrash} />
-                </button>
-              </WithTooltip>
-            </div>
+            <FrameControls
+              frame={frame}
+              onDelete={handleDelete}
+              onEditFullscreen={handleToggleFullscreen}
+              onStyleChange={handleStyleChange}
+              className={Cls.controls}
+            />
           )}
         </div>
       </Rnd>
@@ -145,7 +154,7 @@ export function FloatingTextFrame(props: Props) {
         <div className={Cls.fullscreenEditor}>
           <div className={Cls.editorContainer}>
             {/* Large editor */}
-            <TextEditor value={frame.content} onChange={handleContentChange} data-cy={'full-screen-editor'} />
+            <TextEditor value={frame.content} onChange={handleContentChange} background={frame.style.background} data-cy={'full-screen-editor'} />
 
             {/* Close button */}
             <button onClick={handleToggleFullscreen} className={Cls.closeButton} data-cy={'close-full-screen-editor'}>

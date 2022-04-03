@@ -21,7 +21,7 @@ import { ReactEditor, RenderElementProps } from 'slate-react';
 import { ImageElement as ImageElementDef } from '@abc-map/shared';
 import clsx from 'clsx';
 import { IconDefs } from '../../../icon/IconDefs';
-import { MouseEvent, useCallback, useState } from 'react';
+import { MouseEvent, useCallback, useState, PointerEvent } from 'react';
 import { CustomEditor } from '../../CustomEditor';
 import { useEditor } from '../../useEditor';
 import { ButtonMenu } from '../../../button-menu/ButtonMenu';
@@ -39,36 +39,51 @@ const classes = [Cls.size1, Cls.size2, Cls.size3];
 const labels = [t('Small_image'), t('Medium_image'), t('Large_image')];
 
 export function ImageElement(props: Props) {
-  const { url, size } = props.element;
+  const { children, attributes, element } = props;
+  const { url, size } = element;
   const { editor, readOnly } = useEditor();
   const [fullscreenPreview, setFullscreenPreview] = useState(false);
 
-  const path = ReactEditor.findPath(editor, props.element);
-
-  const handleDelete = useCallback(() => CustomEditor.image.delete(editor, path), [editor, path]);
+  const handleDelete = useCallback(() => {
+    const path = ReactEditor.findPath(editor, element);
+    CustomEditor.image.delete(editor, path);
+  }, [editor, element]);
 
   const handleImageSize = useCallback(
     (ev: MouseEvent, size: number) => {
       ev.preventDefault();
+      ev.stopPropagation();
+
+      const path = ReactEditor.findPath(editor, element);
       CustomEditor.image.setSize(editor, size, path);
     },
-    [editor, path]
+    [editor, element]
   );
 
-  const toggleFullScreenPreview = useCallback(() => {
-    if (!readOnly && !fullscreenPreview) {
-      return;
-    }
+  const toggleFullScreenPreview = useCallback(
+    (ev: MouseEvent) => {
+      ev.preventDefault();
+      ev.stopPropagation();
+      if (!readOnly && !fullscreenPreview) {
+        return;
+      }
 
-    setFullscreenPreview(!fullscreenPreview);
-  }, [fullscreenPreview, readOnly]);
+      setFullscreenPreview(!fullscreenPreview);
+    },
+    [fullscreenPreview, readOnly]
+  );
+
+  const handlePointerDown = useCallback((ev: PointerEvent) => {
+    ev.stopPropagation();
+    ev.preventDefault();
+  }, []);
 
   const sizeClass = classes[size - 1] ?? classes[1];
 
   return (
-    <div {...props.attributes} className={clsx(Cls.container, sizeClass)}>
+    <div className={clsx(Cls.container, sizeClass)} {...attributes}>
       {/* Image itself */}
-      <img src={url} alt={url} onClick={toggleFullScreenPreview} className={clsx(Cls.img, readOnly && Cls.readonly)} />
+      <img src={url} alt={url} onClick={toggleFullScreenPreview} onPointerDown={handlePointerDown} className={clsx(Cls.img, readOnly && Cls.readonly)} />
 
       {/* Image menu, if editable */}
       {!readOnly && (
@@ -100,7 +115,7 @@ export function ImageElement(props: Props) {
           document.body
         )}
 
-      {props.children}
+      {children}
     </div>
   );
 }

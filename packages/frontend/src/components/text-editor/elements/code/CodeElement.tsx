@@ -20,9 +20,10 @@ import Cls from './CodeElement.module.scss';
 import { RenderElementProps } from 'slate-react';
 
 export function CodeElement(props: RenderElementProps) {
+  const { attributes, children } = props;
   return (
-    <pre {...props.attributes} className={Cls.code}>
-      <code>{props.children}</code>
+    <pre className={Cls.code} {...attributes}>
+      <code>{children}</code>
     </pre>
   );
 }

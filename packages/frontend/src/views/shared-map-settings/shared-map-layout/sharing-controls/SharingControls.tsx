@@ -109,7 +109,7 @@ function SharingControls(props: Props) {
       <HistoryControls historyKey={HistoryKey.SharedViews} />
 
       <div className={'control-block'}>
-        <div className={'alert alert-info'}>{t('Remember_to_publish_your_changes')} 😉</div>
+        <div className={'alert alert-info'}>{t('Remember_to_save_your_changes')} 😉</div>
 
         <div className={'control-item'}>
           <button onClick={handleShowPreview} className={'btn btn-link'}>
@@ -120,7 +120,7 @@ function SharingControls(props: Props) {
         <div className={'control-item'}>
           <button onClick={handlePublish} className={'btn btn-link'} data-cy={'publish'}>
             <FaIcon icon={IconDefs.faUpload} className={'mr-2'} />
-            {t('Publish')}
+            {t('Save')}
           </button>
         </div>
         <div className={'control-item'}>

@@ -18,7 +18,7 @@
 
 import { MongodbClient } from '../MongodbClient';
 import { MigrationDao } from './MigrationDao';
-import { MigrationScript } from './MigrationScript';
+import { DatabaseMigrationScript } from './DatabaseMigrationScript';
 import * as sinon from 'sinon';
 import { DbMigrationsLauncher, logger } from './DbMigrationsLauncher';
 import { assert } from 'chai';
@@ -29,14 +29,14 @@ logger.disable();
 describe('DbMigrationsLauncher', () => {
   let client: SinonStubbedInstance<MongodbClient>;
   let dao: SinonStubbedInstance<MigrationDao>;
-  let script: SinonStubbedInstance<MigrationScript>;
+  let script: SinonStubbedInstance<DatabaseMigrationScript>;
   let launcher: DbMigrationsLauncher;
 
   beforeEach(() => {
     client = sinon.createStubInstance(MongodbClient);
     dao = sinon.createStubInstance(MigrationDao);
     script = sinon.createStubInstance(FakeMigration);
-    launcher = new DbMigrationsLauncher(client as unknown as MongodbClient, dao as unknown as MigrationDao, [script as unknown as MigrationScript]);
+    launcher = new DbMigrationsLauncher(client as unknown as MongodbClient, dao as unknown as MigrationDao, [script as unknown as DatabaseMigrationScript]);
   });
 
   it('migrate should execute then persist script name', async () => {
@@ -88,7 +88,7 @@ describe('DbMigrationsLauncher', () => {
   });
 });
 
-class FakeMigration implements MigrationScript {
+class FakeMigration implements DatabaseMigrationScript {
   public getName(): string {
     return '';
   }

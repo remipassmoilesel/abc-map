@@ -46,12 +46,22 @@ export const sampleFramesWithBlobUrls = (): AbcTextFrame[] => [
         ],
       },
     ],
+    style: {
+      background: '#FFFFFF',
+      withBorders: true,
+      withShadows: true,
+    },
   },
   {
     id: 'test-frame-2',
     position: { x: 500, y: 600 },
     size: { width: 700, height: 800 },
     content: [{ text: 'Hello 2' }, { text: 'Hello 3' }],
+    style: {
+      background: '#FFFFFF',
+      withBorders: true,
+      withShadows: true,
+    },
   },
 ];
 
@@ -62,7 +72,7 @@ export const sampleFramesWithPaths = (): AbcTextFrame[] => [
     size: { width: 300, height: 400 },
     content: [
       { text: 'Hello' },
-      { type: 'image', url: '/images/image-23dXh_mJxZqnQFxlzVuaK', size: 1, children: [{ text: '' }] },
+      { type: 'image', url: '/images/image-IMAGE_1', size: 1, children: [{ text: '' }] },
       {
         type: 'table',
         children: [
@@ -74,7 +84,7 @@ export const sampleFramesWithPaths = (): AbcTextFrame[] => [
                 children: [
                   {
                     type: 'paragraph',
-                    children: [{ type: 'image', url: '/images/image-84PQJv8Ll_yGal7zUPiJ8', size: 2, children: [{ text: '' }] }],
+                    children: [{ type: 'image', url: '/images/image-IMAGE_2', size: 2, children: [{ text: '' }] }],
                   },
                 ],
               },
@@ -83,11 +93,21 @@ export const sampleFramesWithPaths = (): AbcTextFrame[] => [
         ],
       },
     ],
+    style: {
+      background: '#FFFFFF',
+      withBorders: true,
+      withShadows: true,
+    },
   },
   {
     id: 'test-frame-2',
     position: { x: 500, y: 600 },
     size: { width: 700, height: 800 },
     content: [{ text: 'Hello 2' }, { text: 'Hello 3' }],
+    style: {
+      background: '#FFFFFF',
+      withBorders: true,
+      withShadows: true,
+    },
   },
 ];

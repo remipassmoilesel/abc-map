@@ -103,6 +103,6 @@ export class FromV070ToV080 implements ProjectMigration {
       size: { width: legend.width * 2, height: legend.height * 2.5 },
       position: { x: 0, y: 0 },
       content: [{ type: 'paragraph', children: [{ text: '' }] }, table, { type: 'paragraph', children: [{ text: '' }] }],
-    };
+    } as AbcTextFrame;
   }
 }

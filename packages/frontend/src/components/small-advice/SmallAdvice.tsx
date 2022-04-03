@@ -23,17 +23,19 @@ import { WithTooltip } from '../with-tooltip/WithTooltip';
 
 interface Props {
   advice: string;
+  label?: string;
   className?: string;
   size?: string;
   placement?: 'top' | 'right' | 'bottom' | 'left';
 }
 
 export function SmallAdvice(props: Props) {
-  const { advice, className, size = '1.2rem', placement = 'right' } = props;
+  const { label, advice, className, size = '1.2rem', placement = 'right' } = props;
 
   return (
     <WithTooltip title={advice} placement={placement}>
       <div className={Cls.container}>
+        {label && <span className={'mr-1'}>{label}</span>}
         <HelpIcon className={className} size={size} />
       </div>
     </WithTooltip>

@@ -61,10 +61,10 @@ $input-color: $gray-800;
 
 $control-color: rgba($secondary, 0.8);
 
-$box-shadow: 0 0.5rem 0.8rem rgba($gray-600, 0.1);
-$box-shadow-sm: 0 0.125rem 0.25rem rgba($gray-600, 0.075);
-$box-shadow-lg: 0 1rem 3rem rgba($gray-600, 0.175);
-$box-shadow-inset: inset 0 0.1rem 2px rgba($gray-600, 0.075);
+$box-shadow: 0 0.5rem 0.8rem rgba($gray-600, 0.3);
+$box-shadow-sm: 0 0.125rem 0.25rem rgba($gray-600, 0.2);
+$box-shadow-lg: 0 1rem 3rem rgba($gray-600, 0.2);
+$box-shadow-inset: inset 0 0.1rem 2px rgba($gray-600, 0.2);
 
 // Top bar height
 // As the main map view surface influences the export style ratios, you should not modify
@@ -84,10 +84,10 @@ $zIndex-sideMenu-panel: 15;
 
 $zIndex-sharedMap-menu: 15;
 
-$zIndex-feedback-bubble: 15;
+$zIndex-feedback-bubble: 16;
 
-$zIndex-topBar: 16;
-$zIndex-topBar-links: 16;
+$zIndex-topBar: 17;
+$zIndex-topBar-links: 17;
 
 $zIndex-longOperation-modal: 20;
 

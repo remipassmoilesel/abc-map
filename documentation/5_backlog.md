@@ -2,7 +2,6 @@
 
 <!-- toc -->
 
-- [Story maps (coming soon)](#story-maps-coming-soon)
 - [Better documentation](#better-documentation)
 - [SVG Export](#svg-export)
 - [Custom (and better) map tools](#custom-and-better-map-tools)
@@ -30,12 +29,9 @@
 - [Datastore artefact with prompt](#datastore-artefact-with-prompt)
 - [Better errors for bad server configuration](#better-errors-for-bad-server-configuration)
 - [Floating attributions for exports](#floating-attributions-for-exports)
+- [Embed audio files](#embed-audio-files)
 
 <!-- tocstop -->
-
-## Story maps (coming soon)
-
-Connected users should be able to create and share story maps.
 
 ## Better documentation
 
@@ -189,3 +185,7 @@ See per example: https://atlassian.github.io/better-ajv-errors/
 ## Floating attributions for exports
 
 Users must be able to move attributions before exports. Attributions must stay always visible.
+
+## Embed audio files
+
+Users must be able to embed audio files in shared maps.

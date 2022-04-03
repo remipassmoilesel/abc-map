@@ -18,7 +18,7 @@
 
 import Cls from './RemoteProjectsModal.module.scss';
 import React, { useCallback, useEffect, useState } from 'react';
-import { AbcProjectMetadata } from '@abc-map/shared';
+import { AbcProjectMetadata, AbcProjectQuotas } from '@abc-map/shared';
 import { Logger } from '@abc-map/shared';
 import { Modal } from 'react-bootstrap';
 import { Errors } from '../../../../core/utils/Errors';
@@ -41,6 +41,7 @@ function RemoteProjectsModal(props: Props) {
   const { onHide: handleHide } = props;
   const { project: projectService, toasts } = useServices();
   const [projects, setProjects] = useState<AbcProjectMetadata[]>([]);
+  const [quotas, setQuotas] = useState<AbcProjectQuotas | undefined>();
   const [selected, setSelected] = useState<AbcProjectMetadata | undefined>();
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
@@ -51,9 +52,11 @@ function RemoteProjectsModal(props: Props) {
 
   // List projects on mount or after deletion
   const listProjects = useCallback(() => {
-    projectService
-      .listRemoteProjects()
-      .then((projects) => setProjects(projects.reverse()))
+    Promise.all([projectService.listRemoteProjects(), projectService.getQuotas()])
+      .then(([projects, quotas]) => {
+        setProjects(projects.reverse());
+        setQuotas(quotas);
+      })
       .catch((err) => logger.error('Cannot list projects: ', err));
   }, [projectService]);
 
@@ -154,6 +157,7 @@ function RemoteProjectsModal(props: Props) {
         {showList && (
           <List
             projects={projects}
+            quotas={quotas}
             selected={selected}
             onSelect={handleItemSelected}
             onDelete={handleDeleteProject}

@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcFile, AbcLayout } from '@abc-map/shared';
+import { AbcFile, AbcLayout, AbcSharedView } from '@abc-map/shared';
 import { TextFrameHelpers } from './TextFrameHelpers';
 import { SinonStub } from 'sinon';
 import { mockNanoid, restoreNanoid } from '../utils/test/mock-nanoid';
@@ -28,18 +28,35 @@ describe('TextFrameHelpers', () => {
   describe('Extract images', () => {
     const fetchStub = fetch as SinonStub;
     let layouts: AbcLayout[];
+    let sharedViews: AbcSharedView[];
 
     beforeEach(() => {
       layouts = deepFreeze([
         {
           ...TestHelper.sampleLayout(),
+          id: 'test-layout-1',
           textFrames: sampleFramesWithBlobUrls(),
         },
         {
           ...TestHelper.sampleLayout(),
+          id: 'test-layout-2',
           textFrames: [sampleFramesWithBlobUrls()[0]],
         },
       ]);
+
+      sharedViews = deepFreeze([
+        {
+          ...TestHelper.sampleSharedView(),
+          id: 'test-shared-view-1',
+          textFrames: sampleFramesWithBlobUrls(),
+        },
+        {
+          ...TestHelper.sampleSharedView(),
+          id: 'test-shared-view-2',
+          textFrames: [sampleFramesWithBlobUrls()[0]],
+        },
+      ]);
+
       mockNanoid();
 
       fetchStub.callsFake((url) => {
@@ -63,85 +80,54 @@ describe('TextFrameHelpers', () => {
         { content: { type: 'blob', url: 'http://blob:image-2:a31099f5-2a60-47cf-a2e0-9dea8e932e93' }, path: '/images/image-###-FAKE-NANOID-4-###' },
       ]);
 
-      expect(output).toEqual([
-        {
-          ...layouts[0],
-          textFrames: [
-            {
-              id: 'test-frame-1',
-              position: { x: 100, y: 200 },
-              size: { width: 300, height: 400 },
-              content: [
-                { text: 'Hello' },
-                { type: 'image', url: '/images/image-###-FAKE-NANOID-1-###', size: 1, children: [{ text: '' }] },
-                {
-                  type: 'table',
-                  children: [
-                    {
-                      type: 'table-row',
-                      children: [
-                        {
-                          type: 'table-cell',
-                          children: [
-                            { type: 'paragraph', children: [{ type: 'image', url: '/images/image-###-FAKE-NANOID-2-###', size: 2, children: [{ text: '' }] }] },
-                          ],
-                        },
-                      ],
-                    },
-                  ],
-                },
-              ],
-            },
-            { id: 'test-frame-2', position: { x: 500, y: 600 }, size: { width: 700, height: 800 }, content: [{ text: 'Hello 2' }, { text: 'Hello 3' }] },
-          ],
-        },
-        {
-          ...layouts[1],
-          textFrames: [
-            {
-              id: 'test-frame-1',
-              position: { x: 100, y: 200 },
-              size: { width: 300, height: 400 },
-              content: [
-                { text: 'Hello' },
-                { type: 'image', url: '/images/image-###-FAKE-NANOID-3-###', size: 1, children: [{ text: '' }] },
-                {
-                  type: 'table',
-                  children: [
-                    {
-                      type: 'table-row',
-                      children: [
-                        {
-                          type: 'table-cell',
-                          children: [
-                            { type: 'paragraph', children: [{ type: 'image', url: '/images/image-###-FAKE-NANOID-4-###', size: 2, children: [{ text: '' }] }] },
-                          ],
-                        },
-                      ],
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
-        },
+      expect(output).toMatchSnapshot();
+    });
+
+    it('extractImagesFromSharedViews()', async () => {
+      // Act
+      const [images, output] = await TextFrameHelpers.extractImagesFromSharedViews(sharedViews);
+
+      // Assert
+      expect(images).toEqual([
+        { content: { type: 'blob', url: 'http://blob:image-1:17dfc0d8-82af-4602-b84e-9d139c80a406' }, path: '/images/image-###-FAKE-NANOID-1-###' },
+        { content: { type: 'blob', url: 'http://blob:image-2:a31099f5-2a60-47cf-a2e0-9dea8e932e93' }, path: '/images/image-###-FAKE-NANOID-2-###' },
+        { content: { type: 'blob', url: 'http://blob:image-1:17dfc0d8-82af-4602-b84e-9d139c80a406' }, path: '/images/image-###-FAKE-NANOID-3-###' },
+        { content: { type: 'blob', url: 'http://blob:image-2:a31099f5-2a60-47cf-a2e0-9dea8e932e93' }, path: '/images/image-###-FAKE-NANOID-4-###' },
       ]);
+
+      expect(output).toMatchSnapshot();
     });
   });
 
   describe('Load images', function () {
     const createObjectUrlStub = URL.createObjectURL as SinonStub;
     let layouts: AbcLayout[];
+    let sharedViews: AbcSharedView[];
     let files: AbcFile<Blob>[];
 
     beforeEach(() => {
       layouts = deepFreeze([
         {
           ...TestHelper.sampleLayout(),
+          id: 'test-layout-1',
           textFrames: sampleFramesWithPaths(),
         },
         {
           ...TestHelper.sampleLayout(),
+          id: 'test-layout-2',
+          textFrames: [sampleFramesWithPaths()[0]],
+        },
+      ]);
+
+      sharedViews = deepFreeze([
+        {
+          ...TestHelper.sampleSharedView(),
+          id: 'test-shared-view-1',
+          textFrames: sampleFramesWithPaths(),
+        },
+        {
+          ...TestHelper.sampleSharedView(),
+          id: 'test-shared-view-2',
           textFrames: [sampleFramesWithPaths()[0]],
         },
       ]);
@@ -149,8 +135,8 @@ describe('TextFrameHelpers', () => {
       createObjectUrlStub.callsFake((blob) => 'http://blob:' + blob.name);
 
       files = [
-        { path: '/images/image-23dXh_mJxZqnQFxlzVuaK', content: { name: '23dXh_mJxZqnQFxlzVuaK' } as unknown as Blob },
-        { path: '/images/image-84PQJv8Ll_yGal7zUPiJ8', content: { name: '84PQJv8Ll_yGal7zUPiJ8' } as unknown as Blob },
+        { path: '/images/image-IMAGE_1', content: { name: 'IMAGE_1' } as unknown as Blob },
+        { path: '/images/image-IMAGE_2', content: { name: 'IMAGE_2' } as unknown as Blob },
       ];
     });
 
@@ -163,69 +149,15 @@ describe('TextFrameHelpers', () => {
       const output = TextFrameHelpers.loadImagesOfLayouts(layouts, files);
 
       // Assert
-      expect(output).toEqual([
-        {
-          ...layouts[0],
-          textFrames: [
-            {
-              id: 'test-frame-1',
-              position: { x: 100, y: 200 },
-              size: { width: 300, height: 400 },
-              content: [
-                { text: 'Hello' },
-                { type: 'image', url: 'http://blob:23dXh_mJxZqnQFxlzVuaK', size: 1, children: [{ text: '' }] },
-                {
-                  type: 'table',
-                  children: [
-                    {
-                      type: 'table-row',
-                      children: [
-                        {
-                          type: 'table-cell',
-                          children: [
-                            { type: 'paragraph', children: [{ type: 'image', url: 'http://blob:84PQJv8Ll_yGal7zUPiJ8', size: 2, children: [{ text: '' }] }] },
-                          ],
-                        },
-                      ],
-                    },
-                  ],
-                },
-              ],
-            },
-            { id: 'test-frame-2', position: { x: 500, y: 600 }, size: { width: 700, height: 800 }, content: [{ text: 'Hello 2' }, { text: 'Hello 3' }] },
-          ],
-        },
-        {
-          ...layouts[1],
-          textFrames: [
-            {
-              id: 'test-frame-1',
-              position: { x: 100, y: 200 },
-              size: { width: 300, height: 400 },
-              content: [
-                { text: 'Hello' },
-                { type: 'image', url: 'http://blob:23dXh_mJxZqnQFxlzVuaK', size: 1, children: [{ text: '' }] },
-                {
-                  type: 'table',
-                  children: [
-                    {
-                      type: 'table-row',
-                      children: [
-                        {
-                          type: 'table-cell',
-                          children: [
-                            { type: 'paragraph', children: [{ type: 'image', url: 'http://blob:84PQJv8Ll_yGal7zUPiJ8', size: 2, children: [{ text: '' }] }] },
-                          ],
-                        },
-                      ],
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
-        },
-      ]);
+      expect(output).toMatchSnapshot();
+    });
+
+    it('loadImagesOfSharedViews()', async () => {
+      // Act
+      const output = TextFrameHelpers.loadImagesOfSharedViews(sharedViews, files);
+
+      // Assert
+      expect(output).toMatchSnapshot();
     });
   });
 });

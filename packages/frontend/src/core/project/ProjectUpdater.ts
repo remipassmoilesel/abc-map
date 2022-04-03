@@ -27,6 +27,7 @@ import { FromV050ToV060 } from './migrations/FromV050ToV060';
 import { FromV060ToV070 } from './migrations/FromV060ToV070';
 import { FromV070ToV080 } from './migrations/FromV070ToV080';
 import { FromV080ToV090 } from './migrations/FromV080ToV090';
+import { FromV090ToV100 } from './migrations/FromV090ToV100';
 
 export const logger = Logger.get('ProjectUpdater.ts', 'debug');
 
@@ -45,6 +46,7 @@ export class ProjectUpdater {
       new FromV060ToV070(),
       new FromV070ToV080(),
       new FromV080ToV090(),
+      new FromV090ToV100(),
     ]);
   }
 

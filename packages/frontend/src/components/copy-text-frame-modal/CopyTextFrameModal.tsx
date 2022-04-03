@@ -43,6 +43,10 @@ function CopyTextFrameModal(props: Props) {
   const { onCancel, onConfirm } = props;
 
   const fromLayouts = useAppSelector((st) => st.project.layouts.list).flatMap((lay, i) => lay.textFrames.map<[AbcTextFrame, number]>((frame) => [frame, i]));
+  const fromSharedViews = useAppSelector((st) => st.project.sharedViews.list).flatMap((view, i) =>
+    view.textFrames.map<[AbcTextFrame, number]>((frame) => [frame, i])
+  );
+  const noTextFrames = !fromLayouts.length && !fromSharedViews.length;
 
   const handleConfirm = useCallback(
     (frame: AbcTextFrame) => {
@@ -58,7 +62,7 @@ function CopyTextFrameModal(props: Props) {
         <Modal.Title>{t('Copy_text_frame')}</Modal.Title>
       </Modal.Header>
       <Modal.Body className={Cls.modal}>
-        {!fromLayouts.length && <div className={'text-center mt-5'}>{t('No_frame_to_copy')}</div>}
+        {noTextFrames && <div className={'text-center mt-5'}>{t('No_frame_to_copy')}</div>}
         {!!fromLayouts.length && (
           <>
             <div className={'mb-3'}>{t('Frames_from_layouts')}</div>
@@ -66,6 +70,19 @@ function CopyTextFrameModal(props: Props) {
               {fromLayouts.map((frame, i) => (
                 <button key={frame[0].id} onClick={() => handleConfirm(frame[0])} className={'btn btn-link'}>
                   {t('Frame_X_from_layout_X', { frame: i + 1, layout: frame[1] + 1 })}
+                </button>
+              ))}
+            </div>
+          </>
+        )}
+
+        {!!fromSharedViews.length && (
+          <>
+            <div className={'mb-3'}>{t('Frames_from_shared_views')}</div>
+            <div className={'d-flex flex-column align-items-start mb-3'}>
+              {fromSharedViews.map((frame, i) => (
+                <button key={frame[0].id} onClick={() => handleConfirm(frame[0])} className={'btn btn-link'}>
+                  {t('Frame_X_from_shared_view_X', { frame: i + 1, view: frame[1] + 1 })}
                 </button>
               ))}
             </div>
