@@ -27,7 +27,7 @@ import { ButtonMenu } from '../../../button-menu/ButtonMenu';
 import { Action } from '../../../button-menu/Action';
 import { StyleFactory } from '../../../../core/geo/styles/StyleFactory';
 import { useServices } from '../../../../core/useServices';
-import { FeatureStyle, GeometryType } from '@abc-map/shared';
+import { AbcGeometryType, FeatureStyle } from '@abc-map/shared';
 
 const t = prefixedTranslation('TextEditor:');
 
@@ -54,7 +54,7 @@ export function MapSymbol(props: Props) {
   );
 
   const handleCreateLegend = useCallback(() => {
-    const styles: [FeatureStyle, GeometryType][] = styleFactory.getAvailableStyles(1).map((st) => [st.properties, st.geomType]);
+    const styles: [FeatureStyle, AbcGeometryType][] = styleFactory.getAvailableStyles(1).map((st) => [st.properties, st.geomType]);
     if (!styles.length) {
       toasts.info(t('There_is_no_symbol_to_insert'));
       return;

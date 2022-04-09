@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FeatureStyle, GeometryType } from '@abc-map/shared';
+import { FeatureStyle, AbcGeometryType } from '@abc-map/shared';
 
 export interface AbcLegend060 {
   id: string;
@@ -30,7 +30,7 @@ export interface AbcLegendItem {
   id: string;
   text: string;
   symbol?: {
-    geomType: GeometryType;
+    geomType: AbcGeometryType;
     properties: FeatureStyle;
   };
 }

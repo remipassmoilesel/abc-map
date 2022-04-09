@@ -1,6 +1,15 @@
 ---
-image: registry.gitlab.com/abc-map/abc-map/build-image:v0.16
+#
+# Continuous integration configuration
+# ------------------------------------
+#
+# By default, a "lightweight" continuous integration is run, without starting the application and E2E tests
+# This makes it easy to run pipelines in Gitlab shared runners, for forks for example.
+#
+# If you want to run a full CI pipeline in a Gitlab Runner, set ABC_FULL_CI variable to "true
+# 
 
+image: registry.gitlab.com/abc-map/abc-map/build-image:v0.16
 
 variables:
   CI: "true"
@@ -18,8 +27,27 @@ cache:
     - packages/shared/node_modules/
     - packages/user-documentation/node_modules/
 
+light continuous integration:
+  script:
+    - source ci-env.sh
+    - ./abc-cli ci --light
+  services:
+    - name: mongo:4.2-bionic
+      alias: mongodb
+  variables:
+    MONGO_INITDB_ROOT_USERNAME: admin
+    MONGO_INITDB_ROOT_PASSWORD: admin
+  artifacts:
+    expire_in: 1 week
+    when: always
+    paths:
+      - "packages/e2e-tests/screenshots"
+      - "packages/e2e-tests/generated"
+  except:
+    variables:
+      - $ABC_FULL_CI
 
-test:
+full continuous integration:
   script:
     - source ci-env.sh
     - ./abc-cli ci
@@ -35,3 +63,6 @@ test:
     paths:
       - "packages/e2e-tests/screenshots"
       - "packages/e2e-tests/generated"
+  only:
+    variables:
+      - $ABC_FULL_CI

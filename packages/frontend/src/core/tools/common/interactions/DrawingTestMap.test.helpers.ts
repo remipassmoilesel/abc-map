@@ -22,12 +22,13 @@ import MapBrowserEventType from 'ol/MapBrowserEventType';
 import MapBrowserEvent from 'ol/MapBrowserEvent';
 import View from 'ol/View';
 import { TestHelper } from '../../../utils/test/TestHelper';
-import { FeatureWrapper, OlGeometry } from '../../../geo/features/FeatureWrapper';
+import { FeatureWrapper } from '../../../geo/features/FeatureWrapper';
 import Feature from 'ol/Feature';
 import { LayerFactory } from '../../../geo/layers/LayerFactory';
 import { VectorLayerWrapper } from '../../../geo/layers/LayerWrapper';
 import { Geometry } from 'ol/geom';
 import { MapWrapper } from '../../../geo/map/MapWrapper';
+import { OlGeometry } from '../../../geo/features/OlGeometry';
 
 interface SimulatedEventOptions {
   shift?: boolean;

@@ -17,17 +17,17 @@
  */
 
 import { Editor, Transforms } from 'slate';
-import { FeatureStyle, GeometryType, Logger, MapSymbolElement, TableElement, TableRowElement } from '@abc-map/shared';
+import { AbcGeometryType, FeatureStyle, Logger, MapSymbolElement, TableElement, TableRowElement } from '@abc-map/shared';
 
 const logger = Logger.get('mapSymbol.ts');
 
 export const mapSymbol = {
-  create(editor: Editor, style: FeatureStyle, geometryType: GeometryType) {
+  create(editor: Editor, style: FeatureStyle, geometryType: AbcGeometryType) {
     const node: MapSymbolElement = { type: 'map-symbol', style, geometryType, children: [{ text: '' }] };
     Transforms.insertNodes(editor, [node]);
   },
 
-  createLegend(editor: Editor, styles: [FeatureStyle, GeometryType][]) {
+  createLegend(editor: Editor, styles: [FeatureStyle, AbcGeometryType][]) {
     if (!styles.length) {
       logger.error('Styles are empty');
       return;

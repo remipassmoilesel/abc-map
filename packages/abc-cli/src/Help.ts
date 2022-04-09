@@ -31,6 +31,7 @@ Common commands are:
   $ ./abc-cli watch                      Watch source code of all packages and compile on change.
   $ ./abc-cli start                      Start project and associated services (database, mail server, ...).
   $ ./abc-cli clean-restart-services     Stop services, clean data, then start services.
+  $ ./abc-cli ci [--light]               Execute a full/light continuous integration pipeline locally.
 
 
 Other commands:

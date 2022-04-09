@@ -17,7 +17,7 @@
  */
 
 import TileLayer from 'ol/layer/Tile';
-import { Logger, WmtsLayerProperties, WmtsMetadata, XyzLayerProperties, XyzMetadata } from '@abc-map/shared';
+import { Logger, normalizedProjectionName, WmtsLayerProperties, WmtsMetadata, XyzLayerProperties, XyzMetadata } from '@abc-map/shared';
 import {
   AbcLayer,
   AbcProjection,
@@ -477,5 +477,20 @@ export class LayerWrapper<Layer extends OlLayers = OlLayers, Source extends OlSo
     }
 
     return Promise.reject(new Error(`Unhandled layer type: ${commonMeta.type}`));
+  }
+
+  public getProjection(): AbcProjection | undefined {
+    // Projection is nullable, even if not typed as such
+    const projection = this.layer.getSource()?.getProjection()?.getCode();
+    if (!projection) {
+      return;
+    }
+
+    const name = normalizedProjectionName(projection);
+    if (!name) {
+      return;
+    }
+
+    return { name };
   }
 }

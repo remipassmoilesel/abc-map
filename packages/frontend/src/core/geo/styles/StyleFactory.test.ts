@@ -25,8 +25,8 @@ import { StyleCache, StyleCacheEntry } from './StyleCache';
 import Style from 'ol/style/Style';
 import { IconName } from '../../../assets/point-icons/IconName';
 import { FeatureWrapper } from '../features/FeatureWrapper';
-import { GeometryType } from '@abc-map/shared';
 import { DefaultStyleOptions } from './StyleFactoryOptions';
+import { AbcGeometryType } from '@abc-map/shared';
 
 // TODO: test other geometries
 
@@ -79,27 +79,27 @@ describe('StyleFactory', () => {
           {
             id: '6',
             options: { ratio: 1, withSelection: true },
-            geomType: GeometryType.POLYGON,
+            geomType: AbcGeometryType.POLYGON,
             properties: { fill: { color1: '#FFFFFF' } },
             style: new Style(),
           },
           {
             id: '5',
             options: { ratio: 1, withSelection: true },
-            geomType: GeometryType.POLYGON,
+            geomType: AbcGeometryType.POLYGON,
             properties: { fill: { color1: '#FFFF00' } },
             style: new Style(),
           },
           {
             id: '4',
             options: { ratio: 1, withSelection: true },
-            geomType: GeometryType.POLYGON,
+            geomType: AbcGeometryType.POLYGON,
             properties: { fill: { color1: '#000000' } },
             style: new Style(),
           },
-          { id: '3', options: { ratio: 1, withSelection: true }, geomType: GeometryType.POINT, properties: { point: { size: 25 } }, style: new Style() },
-          { id: '2', options: { ratio: 1, withSelection: true }, geomType: GeometryType.POINT, properties: { point: { size: 15 } }, style: new Style() },
-          { id: '1', options: { ratio: 1, withSelection: true }, geomType: GeometryType.POINT, properties: { point: { size: 5 } }, style: new Style() },
+          { id: '3', options: { ratio: 1, withSelection: true }, geomType: AbcGeometryType.POINT, properties: { point: { size: 25 } }, style: new Style() },
+          { id: '2', options: { ratio: 1, withSelection: true }, geomType: AbcGeometryType.POINT, properties: { point: { size: 15 } }, style: new Style() },
+          { id: '1', options: { ratio: 1, withSelection: true }, geomType: AbcGeometryType.POINT, properties: { point: { size: 5 } }, style: new Style() },
         ];
         cache.getAll.returns(cacheContent);
 

@@ -18,13 +18,13 @@
 import { MapSymbolRenderer } from './MapSymbolRenderer';
 import { StyleFactory } from '../../geo/styles/StyleFactory';
 import { TestHelper } from '../../utils/test/TestHelper';
-import { GeometryType } from '@abc-map/shared';
 import sinon, { SinonStub, SinonStubbedInstance } from 'sinon';
 import CanvasImmediateRenderer from 'ol/render/canvas/Immediate';
 import { CanvasRenderingContext2D } from 'canvas';
 import { Point } from 'ol/geom';
 import { Icon } from 'ol/style';
 import ImageState from 'ol/ImageState';
+import { AbcGeometryType } from '@abc-map/shared';
 
 describe('MapSymbolRenderer', function () {
   let styleFactory: SinonStubbedInstance<StyleFactory>;
@@ -48,7 +48,7 @@ describe('MapSymbolRenderer', function () {
   describe('renderSymbol()', () => {
     it('Point, image not loaded', async () => {
       // Prepare
-      const style = StyleFactory.get().getForProperties(TestHelper.sampleStyleProperties(), GeometryType.POINT);
+      const style = StyleFactory.get().getForProperties(TestHelper.sampleStyleProperties(), AbcGeometryType.POINT);
       const imageStub = sinon.createStubInstance(Icon);
       style.setImage(imageStub);
       imageStub.getImageState.returns(ImageState.LOADING);
@@ -59,7 +59,7 @@ describe('MapSymbolRenderer', function () {
       }, 100);
 
       // Act
-      await renderer.renderSymbol(style, GeometryType.POINT, canvas, 1);
+      await renderer.renderSymbol(style, AbcGeometryType.POINT, canvas, 1);
 
       // Assert
       expect(toContext.callCount).toEqual(1);
@@ -75,13 +75,13 @@ describe('MapSymbolRenderer', function () {
 
     it('Point, image loaded', async () => {
       // Prepare
-      const style = StyleFactory.get().getForProperties(TestHelper.sampleStyleProperties(), GeometryType.POINT);
+      const style = StyleFactory.get().getForProperties(TestHelper.sampleStyleProperties(), AbcGeometryType.POINT);
       const imageStub = sinon.createStubInstance(Icon);
       style.setImage(imageStub);
       imageStub.getImageState.returns(ImageState.LOADED);
 
       // Act
-      await renderer.renderSymbol(style, GeometryType.POINT, canvas, 1);
+      await renderer.renderSymbol(style, AbcGeometryType.POINT, canvas, 1);
 
       // Assert
       expect(toContext.callCount).toEqual(1);

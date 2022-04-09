@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { DefaultStyle, FeatureProperties, FillPatterns, StyleProperties } from '@abc-map/shared';
+import { AbcGeometryType, DefaultStyle, FeatureProperties, FillPatterns, StyleProperties } from '@abc-map/shared';
 import { Circle, LineString, Point, Polygon } from 'ol/geom';
 import { FeatureWrapper } from './FeatureWrapper';
 import { FeatureStyle } from '@abc-map/shared';
@@ -344,6 +344,24 @@ describe('FeatureWrapper', () => {
     expect(properties).toEqual({
       population: 123,
       geometry: feature.getGeometry(),
+    });
+  });
+
+  describe('hasGeometry()', () => {
+    it('Without geometry type as argument', () => {
+      const feature1 = FeatureWrapper.create(new LineString([2, 2, 3, 3]));
+      const feature2 = FeatureWrapper.create();
+      expect(feature1.hasGeometry()).toBe(true);
+      expect(feature2.hasGeometry()).toBe(false);
+    });
+
+    it('With geometry type as argument', () => {
+      const feature1 = FeatureWrapper.create(new LineString([2, 2, 3, 3]));
+      const feature2 = FeatureWrapper.create();
+      expect(feature1.hasGeometry(AbcGeometryType.LINE_STRING)).toBe(true);
+      expect(feature1.hasGeometry(AbcGeometryType.POLYGON)).toBe(false);
+      expect(feature1.hasGeometry(AbcGeometryType.LINE_STRING, AbcGeometryType.POLYGON)).toBe(true);
+      expect(feature2.hasGeometry(AbcGeometryType.POLYGON)).toBe(false);
     });
   });
 });

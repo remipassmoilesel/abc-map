@@ -21,6 +21,9 @@ import { Logger } from '@abc-map/shared';
 import { mainStore } from './core/store/store';
 import { bootstrap } from './bootstrap';
 
+// Create global references to entities
+import './core/globals';
+
 // Load main style
 import './index.scss';
 

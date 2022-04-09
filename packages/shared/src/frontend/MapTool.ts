@@ -24,4 +24,5 @@ export enum MapTool {
   Text = 'Text',
   Selection = 'Selection',
   EditProperties = 'EditProperties',
+  Measures = 'Measures',
 }

@@ -19,8 +19,7 @@
 import { StyleCache } from './StyleCache';
 import { TestHelper } from '../../utils/test/TestHelper';
 import { Style } from 'ol/style';
-import { FeatureStyle } from '@abc-map/shared';
-import { GeometryType } from '@abc-map/shared';
+import { AbcGeometryType, FeatureStyle } from '@abc-map/shared';
 import { DefaultStyleOptions } from './StyleFactoryOptions';
 
 describe('StyleCache', function () {
@@ -34,16 +33,16 @@ describe('StyleCache', function () {
 
   it('should return style', function () {
     const style = new Style();
-    cache.put(GeometryType.LINE_STRING, props, DefaultStyleOptions, style);
+    cache.put(AbcGeometryType.LINE_STRING, props, DefaultStyleOptions, style);
 
-    const fromCache = cache.get(GeometryType.LINE_STRING, props, DefaultStyleOptions);
+    const fromCache = cache.get(AbcGeometryType.LINE_STRING, props, DefaultStyleOptions);
 
     expect(fromCache).toStrictEqual(style);
   });
 
   it('should return nothing if properties are different', function () {
     const style = new Style();
-    cache.put(GeometryType.LINE_STRING, props, DefaultStyleOptions, style);
+    cache.put(AbcGeometryType.LINE_STRING, props, DefaultStyleOptions, style);
     const otherProps: FeatureStyle = {
       ...props,
       fill: {
@@ -51,25 +50,25 @@ describe('StyleCache', function () {
       },
     };
 
-    const fromCache = cache.get(GeometryType.LINE_STRING, otherProps, DefaultStyleOptions);
+    const fromCache = cache.get(AbcGeometryType.LINE_STRING, otherProps, DefaultStyleOptions);
 
     expect(fromCache).toBeUndefined();
   });
 
   it('should return nothing if geometry is different', function () {
     const style = new Style();
-    cache.put(GeometryType.LINE_STRING, props, DefaultStyleOptions, style);
+    cache.put(AbcGeometryType.LINE_STRING, props, DefaultStyleOptions, style);
 
-    const fromCache = cache.get(GeometryType.POLYGON, props, DefaultStyleOptions);
+    const fromCache = cache.get(AbcGeometryType.POLYGON, props, DefaultStyleOptions);
 
     expect(fromCache).toBeUndefined();
   });
 
   it('should return nothing if options are different', function () {
     const style = new Style();
-    cache.put(GeometryType.LINE_STRING, props, DefaultStyleOptions, style);
+    cache.put(AbcGeometryType.LINE_STRING, props, DefaultStyleOptions, style);
 
-    const fromCache = cache.get(GeometryType.LINE_STRING, props, { ...DefaultStyleOptions, withSelection: false });
+    const fromCache = cache.get(AbcGeometryType.LINE_STRING, props, { ...DefaultStyleOptions, withSelection: false });
 
     expect(fromCache).toBeUndefined();
   });

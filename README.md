@@ -1,5 +1,9 @@
 # Welcome to Abc-Map !
 
+<div style="margin-bottom: 3rem">
+  <img alt="Abc-Map" src="./documentation/assets/main-icon.png" />
+</div>
+
 <div style="margin-bottom: 1.5rem">
   <a href="https://gitlab.com/abc-map/abc-map/-/commits/master">
     <img alt="Pipeline status" src="https://gitlab.com/abc-map/abc-map/badges/master/pipeline.svg" />

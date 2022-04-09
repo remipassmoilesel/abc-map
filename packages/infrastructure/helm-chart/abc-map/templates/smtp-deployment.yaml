@@ -35,6 +35,9 @@ spec:
               exec:
                 # This command is a workaround for read only secrets, as opendkim needs specific permissions on key
                 command: ["/bin/sh", "-c", "cp /etc/opendkim/keys/{{ .Values.smtp.dkim.domain }}/{{ .Values.smtp.dkim.selector }}.private.original /etc/opendkim/keys/{{ .Values.smtp.dkim.domain }}/{{ .Values.smtp.dkim.selector }}.private"]
+          # We wait a few seconds to ensure that DKIM key is copied before start
+          command: [ "/bin/sh" ]
+          args: ["-c", "sleep 3 && /root/run"]
           livenessProbe:
             # We do not perform a TCP check in order to keep logs clean
             exec:

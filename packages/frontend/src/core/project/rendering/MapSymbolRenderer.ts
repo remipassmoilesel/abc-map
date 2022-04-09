@@ -18,11 +18,12 @@
 
 import { toContext } from 'ol/render';
 import { LineString, Point, Polygon } from 'ol/geom';
-import { GeometryType, Logger } from '@abc-map/shared';
+import { AbcGeometryType, Logger } from '@abc-map/shared';
 import { Style } from 'ol/style';
 import { StyleFactory } from '../../geo/styles/StyleFactory';
 import { DimensionsPx } from '../../utils/DimensionsPx';
 import ImageState from 'ol/ImageState';
+import GeometryType from 'ol/geom/GeometryType';
 
 const logger = Logger.get('MapSymbolRenderer.ts');
 
@@ -32,11 +33,9 @@ const logger = Logger.get('MapSymbolRenderer.ts');
 export const DefaultSymbolSize: DimensionsPx = { width: 35, height: 35 };
 
 export class MapSymbolRenderer {
-  private readonly borderWidth = 3;
-
   constructor(private styleFactory = StyleFactory.get(), private olContext = toContext) {}
 
-  public symbolSizeForStyle(style: Style, geom: GeometryType, styleRatio: number): DimensionsPx {
+  public symbolSizeForStyle(style: Style, geom: AbcGeometryType, styleRatio: number): DimensionsPx {
     // Points have variable sizes and must keep them in legend
     if (GeometryType.POINT === geom) {
       const size = style.getImage().getImageSize();
@@ -48,7 +47,7 @@ export class MapSymbolRenderer {
     }
   }
 
-  public async renderSymbol(style: Style, geom: GeometryType, canvas: HTMLCanvasElement, styleRatio: number): Promise<void> {
+  public async renderSymbol(style: Style, geom: AbcGeometryType, canvas: HTMLCanvasElement, styleRatio: number): Promise<void> {
     const ctx = canvas.getContext('2d');
     if (!ctx) {
       logger.error('Cannot render legend, invalid context');

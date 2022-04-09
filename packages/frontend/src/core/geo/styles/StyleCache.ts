@@ -19,13 +19,13 @@
 import Style from 'ol/style/Style';
 import { FeatureStyle } from '@abc-map/shared';
 import { nanoid } from 'nanoid';
-import { GeometryType } from '@abc-map/shared';
+import { AbcGeometryType } from '@abc-map/shared';
 import { StyleFactoryOptions } from './StyleFactoryOptions';
 
 export interface StyleCacheEntry {
   id: string;
   style: Style;
-  geomType: GeometryType;
+  geomType: AbcGeometryType;
   options: StyleFactoryOptions;
   properties: FeatureStyle;
 }
@@ -33,7 +33,7 @@ export interface StyleCacheEntry {
 export class StyleCache {
   private cache = new Map<string, StyleCacheEntry>();
 
-  public put(geomType: GeometryType, properties: FeatureStyle, options: StyleFactoryOptions, style: Style): void {
+  public put(geomType: AbcGeometryType, properties: FeatureStyle, options: StyleFactoryOptions, style: Style): void {
     const key = this.cacheKey(geomType, properties, options);
     const entry = {
       id: nanoid(),
@@ -45,7 +45,7 @@ export class StyleCache {
     this.cache.set(key, entry);
   }
 
-  public get(geom: GeometryType, properties: FeatureStyle, options: StyleFactoryOptions): Style | undefined {
+  public get(geom: AbcGeometryType, properties: FeatureStyle, options: StyleFactoryOptions): Style | undefined {
     const key = this.cacheKey(geom, properties, options);
     return this.cache.get(key)?.style;
   }
@@ -58,7 +58,7 @@ export class StyleCache {
     this.cache.clear();
   }
 
-  private cacheKey(geomType: GeometryType, properties: FeatureStyle, options: StyleFactoryOptions): string {
+  private cacheKey(geomType: AbcGeometryType, properties: FeatureStyle, options: StyleFactoryOptions): string {
     const key = { geomType, properties, options };
     return JSON.stringify(key);
   }

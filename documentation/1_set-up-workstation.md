@@ -14,18 +14,18 @@
 
 ## Introduction
 
-This document explains how to set up a development workstation. This document will guide you through the installation
-dependencies needed to start and build Abc-Map.
+This document explains how to set up a development workstation. This document will guide you through
+the installation of dependencies needed to start and build Abc-Map.
 
 Although these operations are simple and common, apply the steps described below with caution.
 
-**The easiest and most reliable way to start developing on Abc-Map is to use Ubuntu 20.04.**
-
-Tested operating systems:
+This setup has been tested on these operating systems:
 
 - Manjaro Linux
 - Ubuntu 20.04
 - Windows 11, Windows Subsystem for Linux version 2
+
+**The easiest and most reliable way to start developing on Abc-Map is to use Ubuntu 20.04.**
 
 ## Basic setup
 
@@ -41,9 +41,9 @@ Install basic tools and dependencies:
 
 Install Node.js and yarn. There are several ways to do that.
 
-    $ curl -L https://git.io/n-install | bash
+    $ curl https://get.volta.sh | bash
     $ source ~/.bashrc  # or restart your terminal
-    $ n 14
+    $ volta install node@14
     $ npm i -g yarn
 
 Clone source code:
@@ -81,9 +81,9 @@ Install basic tools and dependencies
 
 Install Node.js and yarn. There are several ways to do that.
 
-    $ curl -L https://git.io/n-install | bash -s -- -y
-    $ source ~/.bashrc
-    $ n 14
+    $ curl https://get.volta.sh | bash
+    $ source ~/.bashrc  # or restart your terminal
+    $ volta install node@14
     $ npm i -g yarn
 
 Clone source code then start and IDE (per example VSCode):
@@ -154,8 +154,8 @@ You can clean up local data using the command:
 
 ## Additional tools
 
-With the configuration explained above, you can modify the source code but not all tests will pass and you will not be able
-to deploy your own instance of Abc-Map
+With the configuration explained above, you can modify the source code but not all tests will pass and you will
+not be able to deploy your own instance of Abc-Map
 
 With these tools, all tests should pass, and you can deploy your own instance of Abc-Map.
 

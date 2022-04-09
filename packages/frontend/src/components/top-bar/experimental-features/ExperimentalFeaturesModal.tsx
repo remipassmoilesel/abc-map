@@ -40,7 +40,7 @@ function ExperimentalFeaturesModal(props: Props) {
   const handleChange = useCallback((f: ExperimentalFeature, state: boolean) => dispatch(UiActions.setExperimentalFeature(f.id, state)), [dispatch]);
 
   return (
-    <Modal show={visible} size={'sm'} onHide={onClose} centered>
+    <Modal show={visible} onHide={onClose} centered>
       <Modal.Header closeButton>{t('Experimental_features')}</Modal.Header>
       <Modal.Body className={'d-flex flex-column justify-content-center'}>
         <div className={'mb-4'}>{t('Here_you_can_enable_features')}</div>

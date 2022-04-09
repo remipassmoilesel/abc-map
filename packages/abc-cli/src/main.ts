@@ -43,14 +43,14 @@ async function main(args: string[]) {
   const service = new BuildService(config, registry, shell);
 
   // We use node_modules bin from command line
-  process.env.PATH = `${process.env.PATH}:${config.getCliRoot()}/node_modules/.bin/`;
+  process.env.PATH = `${config.getCliRoot()}/node_modules/.bin/:${process.env.PATH}`;
 
   banners.cli();
   const command = await parser.parse(args);
 
   switch (command.name) {
     case CommandName.CI: {
-      await service.continuousIntegration();
+      await service.continuousIntegration(command.light);
       banners.bigDone();
       break;
     }

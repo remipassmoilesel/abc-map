@@ -17,7 +17,7 @@
  */
 
 import { Tool } from '../Tool';
-import { GeometryType, Logger, MapTool } from '@abc-map/shared';
+import { Logger, MapTool } from '@abc-map/shared';
 import { DragBox, Interaction, Translate } from 'ol/interaction';
 import VectorSource, { VectorSourceEvent } from 'ol/source/Vector';
 import Geometry from 'ol/geom/Geometry';
@@ -36,6 +36,7 @@ import { Conditions, Modes } from './Modes';
 import Collection from 'ol/Collection';
 import Feature from 'ol/Feature';
 import { EventsKey } from 'ol/events';
+import GeometryType from 'ol/geom/GeometryType';
 
 const logger = Logger.get('SelectionTool.ts');
 
