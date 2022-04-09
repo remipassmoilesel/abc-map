@@ -3,6 +3,7 @@
 <!-- toc -->
 
 - [Better documentation](#better-documentation)
+- [Text labels for multi-polygons and multi-lines](#text-labels-for-multi-polygons-and-multi-lines)
 - [SVG Export](#svg-export)
 - [Custom (and better) map tools](#custom-and-better-map-tools)
 - ["Go to coordinates" UI control](#go-to-coordinates-ui-control)
@@ -32,6 +33,15 @@
 ## Better documentation
 
 User documentation should cover more features and be regularly updated.
+
+## Text labels for multi-polygons and multi-lines
+
+If we add a text label to a multi polygon, it is displayed on each polygon of the multi polygon.
+We should be able to choose to display text on only one of the polygons.
+
+Applies to multi lines, and to the measure tools.
+
+See: https://github.com/openlayers/openlayers/issues/6588
 
 ## SVG Export
 

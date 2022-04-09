@@ -69,6 +69,7 @@ export interface Watch {
 
 export interface Ci {
   name: CommandName.CI;
+  light: boolean;
 }
 
 export interface Start {

@@ -39,6 +39,7 @@ import { FaIcon } from '../../../components/icon/FaIcon';
 import ToolModeSelector from './_common/tool-mode-selector/ToolModeSelector';
 import { Tool } from '../../../core/tools/Tool';
 import Cls from './ToolSelector.module.scss';
+import MeasuresToolPanel from './measures/MeasuresToolPanel';
 
 const logger = Logger.get('ToolSelector');
 
@@ -90,6 +91,8 @@ function ToolSelector(props: Props) {
         return <SelectionPanel />;
       case MapTool.Text:
         return <TextToolPanel />;
+      case MapTool.Measures:
+        return <MeasuresToolPanel />;
     }
   }, [activeTool]);
 
@@ -109,6 +112,8 @@ function ToolSelector(props: Props) {
         return <DialogBoxAdvice id={ToolTips.Selection} size={size} />;
       case MapTool.EditProperties:
         return <DialogBoxAdvice id={ToolTips.EditProperties} size={size} />;
+      case MapTool.Measures:
+        return <DialogBoxAdvice id={ToolTips.Measures} size={size} />;
     }
   }, [activeTool]);
 

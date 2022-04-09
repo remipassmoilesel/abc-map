@@ -16,7 +16,12 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-export enum GeometryType {
+/**
+ * This enum is the exact copy of openlayers/src/ol/geom/GeometryType.js because:
+ * - We need our own type for serialization of projects
+ * - And current typings are borked (06/04/2022), these constants are currently typed as strings
+ */
+export enum AbcGeometryType {
   POINT = 'Point',
   LINE_STRING = 'LineString',
   POLYGON = 'Polygon',

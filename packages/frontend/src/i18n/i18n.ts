@@ -88,3 +88,13 @@ export function getDocumentationLang(): DocumentationLang {
       return DocumentationLang.French;
   }
 }
+
+export function getNumberFormatter(): Intl.NumberFormat {
+  const lang = getLang();
+  switch (lang) {
+    case Language.French:
+      return new Intl.NumberFormat('fr-FR');
+    default:
+      return new Intl.NumberFormat('en-EN');
+  }
+}

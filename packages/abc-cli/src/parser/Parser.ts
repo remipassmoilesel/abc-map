@@ -41,7 +41,8 @@ export class Parser {
         return { name: CommandName.WATCH };
       }
       case CommandName.CI: {
-        return { name: CommandName.CI };
+        const light = !!args.find((a) => a === '--light');
+        return { name: CommandName.CI, light };
       }
       case CommandName.START: {
         return { name: CommandName.START };

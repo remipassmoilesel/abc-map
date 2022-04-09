@@ -16,11 +16,13 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
+import Cls from './FeatureToggle.module.scss';
 import { withTranslation } from 'react-i18next';
 import React, { useCallback } from 'react';
-import { prefixedTranslation } from '../../../i18n/i18n';
+import { getLang, prefixedTranslation } from '../../../i18n/i18n';
 import { Switch } from '../../switch/Switch';
 import { ExperimentalFeature } from '../../../experimental-features';
+import { getTextByLang } from '@abc-map/shared';
 
 interface Props {
   feature: ExperimentalFeature;
@@ -37,9 +39,12 @@ function FeatureToggle(props: Props) {
   const handleChange = useCallback(() => onChange(feature, !state), [onChange, feature, state]);
 
   return (
-    <div onClick={handleChange} className={'d-flex flex-row align-items-center justify-content-between mb-3 cursor-pointer'} data-cy={dataCy}>
-      {t(feature.id)}
-      <Switch onChange={handleChange} value={state} className={'ml-3'} />
+    <div onClick={handleChange} className={Cls.featureToggle} data-cy={dataCy}>
+      <div className={'d-flex flex-row align-items-center justify-content-between mb-2'}>
+        {t(feature.id)}
+        <Switch onChange={handleChange} value={state} className={'ml-3'} />
+      </div>
+      <small>{getTextByLang(feature.description, getLang())}</small>
     </div>
   );
 }

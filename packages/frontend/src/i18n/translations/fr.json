@@ -215,7 +215,9 @@
       "Lines_and_polygons": "Lignes et polygones",
       "Text": "Texte",
       "Rotation": "Rotation",
-      "Position": "Position"
+      "Position": "Position",
+      "Mesure_lengths": "Mesurer les longueurs",
+      "Mesure_areas": "Mesurer les aires"
     },
     "ToolModeSelector": {
       "Keyboard_shortcut": "Utilisez {{shortcut}} pour activer ce mode"
@@ -961,7 +963,8 @@
       "Points": "Points",
       "Polygons": "Polygones",
       "Select": "Selection",
-      "Text": "Texte"
+      "Text": "Texte",
+      "Measures": "Mesures"
     },
     "toolModes": {
       "Create": "Créer",

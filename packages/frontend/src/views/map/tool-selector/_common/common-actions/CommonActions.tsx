@@ -17,7 +17,7 @@
  */
 
 import React, { useCallback } from 'react';
-import { FeatureStyle, GeometryType, Logger } from '@abc-map/shared';
+import { FeatureStyle, AbcGeometryType, Logger } from '@abc-map/shared';
 import { FeatureWrapper } from '../../../../../core/geo/features/FeatureWrapper';
 import { HistoryKey } from '../../../../../core/history/HistoryKey';
 import { AddFeaturesChangeset } from '../../../../../core/history/changesets/features/AddFeaturesChangeset';
@@ -54,7 +54,7 @@ function CommonActions() {
       }
 
       // Point
-      if ([GeometryType.POINT, GeometryType.MULTI_POINT].includes(type)) {
+      if ([AbcGeometryType.POINT, AbcGeometryType.MULTI_POINT].includes(type)) {
         newStyle = {
           ...style,
           ...newStyle,
@@ -68,7 +68,7 @@ function CommonActions() {
       }
 
       // Lines
-      if ([GeometryType.LINE_STRING, GeometryType.MULTI_LINE_STRING].includes(type)) {
+      if ([AbcGeometryType.LINE_STRING, AbcGeometryType.MULTI_LINE_STRING].includes(type)) {
         newStyle = {
           ...style,
           ...newStyle,
@@ -81,7 +81,7 @@ function CommonActions() {
       }
 
       // Polygons
-      if ([GeometryType.POLYGON, GeometryType.MULTI_POLYGON].includes(type)) {
+      if ([AbcGeometryType.POLYGON, AbcGeometryType.MULTI_POLYGON].includes(type)) {
         newStyle = {
           ...style,
           ...newStyle,

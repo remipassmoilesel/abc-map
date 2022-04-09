@@ -27,6 +27,7 @@ import { SelectionTool } from './selection/SelectionTool';
 import { TextTool } from './text/TextTool';
 import { getServices } from '../Services';
 import { EditPropertiesTool } from './edit-properties/EditPropertiesTool';
+import { MeasureTool } from './measure/MeasureTool';
 
 export class ToolRegistry {
   public static getAll(): Tool[] {
@@ -40,6 +41,7 @@ export class ToolRegistry {
       new TextTool(mainStore, history),
       new SelectionTool(mainStore, history),
       new EditPropertiesTool(mainStore, history, modals),
+      new MeasureTool(),
     ];
   }
 

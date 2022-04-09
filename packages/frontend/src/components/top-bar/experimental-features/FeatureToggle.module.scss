@@ -16,5 +16,8 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-export * from './FeatureProperties';
-export * from './AbcGeometryType';
+.featureToggle {
+  user-select: none;
+  margin-bottom: 1rem;
+  cursor: pointer;
+}

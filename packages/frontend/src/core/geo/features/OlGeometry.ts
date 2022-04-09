@@ -16,5 +16,17 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-export * from './FeatureProperties';
-export * from './AbcGeometryType';
+import Geometry from 'ol/geom/Geometry';
+import { Circle, GeometryCollection, LinearRing, LineString, MultiLineString, MultiPoint, MultiPolygon, Point, Polygon } from 'ol/geom';
+
+export declare type OlGeometry =
+  | Geometry
+  | Point
+  | LineString
+  | LinearRing
+  | Polygon
+  | MultiPoint
+  | MultiLineString
+  | MultiPolygon
+  | GeometryCollection
+  | Circle;

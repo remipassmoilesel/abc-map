@@ -16,5 +16,23 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-export * from './FeatureProperties';
-export * from './AbcGeometryType';
+import { FeatureWrapper } from './geo/features/FeatureWrapper';
+import { LayerWrapper } from './geo/layers/LayerWrapper';
+import { MapWrapper } from './geo/map/MapWrapper';
+import { MapFactory } from './geo/map/MapFactory';
+import { LayerFactory } from './geo/layers/LayerFactory';
+
+/*
+
+We keep a reference to these tools for hcking in consoles
+
+ */
+
+declare let window: any;
+
+window.FeatureWrapper = FeatureWrapper;
+window.LayerWrapper = LayerWrapper;
+window.MapWrapper = MapWrapper;
+
+window.LayerFactory = LayerFactory;
+window.MapFactory = MapFactory;

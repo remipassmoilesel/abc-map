@@ -18,7 +18,7 @@
 
 import Style from 'ol/style/Style';
 import { Fill, Icon, Stroke, Text } from 'ol/style';
-import { DefaultStyle, FeatureStyle, GeometryType, Logger } from '@abc-map/shared';
+import { AbcGeometryType, DefaultStyle, FeatureStyle, Logger } from '@abc-map/shared';
 import { SelectionStyleFactory } from './SelectionStyleFactory';
 import { StyleCache, StyleCacheEntry } from './StyleCache';
 import { FillPatternFactory } from './FillPatternFactory';
@@ -64,7 +64,7 @@ export class StyleFactory {
     return [style];
   }
 
-  public getForProperties(properties: FeatureStyle, type: GeometryType, _options?: Partial<StyleFactoryOptions>): Style {
+  public getForProperties(properties: FeatureStyle, type: AbcGeometryType, _options?: Partial<StyleFactoryOptions>): Style {
     const options: StyleFactoryOptions = { ...DefaultStyleOptions, ..._options };
 
     let style = this.cache.get(type, properties, options);
@@ -120,7 +120,7 @@ export class StyleFactory {
     this.cache.clear();
   }
 
-  private createStyle(type: GeometryType, properties: FeatureStyle, options: StyleFactoryOptions): Style {
+  private createStyle(type: AbcGeometryType, properties: FeatureStyle, options: StyleFactoryOptions): Style {
     const { ratio } = options;
 
     // Text can apply to all geometries
@@ -130,7 +130,7 @@ export class StyleFactory {
     }
 
     // Points
-    if (GeometryType.POINT === type || GeometryType.MULTI_POINT === type) {
+    if (AbcGeometryType.POINT === type || AbcGeometryType.MULTI_POINT === type) {
       const size = (properties.point?.size || 10) * ratio;
       const name = (properties.point?.icon as IconName) || DefaultIcon;
       const color = properties.point?.color || '#000000';
@@ -141,7 +141,7 @@ export class StyleFactory {
     }
 
     // Line strings
-    else if (GeometryType.LINE_STRING === type || GeometryType.MULTI_LINE_STRING === type || GeometryType.LINEAR_RING === type) {
+    else if (AbcGeometryType.LINE_STRING === type || AbcGeometryType.MULTI_LINE_STRING === type || AbcGeometryType.LINEAR_RING === type) {
       const stroke = this.createStroke(properties, ratio);
       return new Style({ stroke, text: textStyle, zIndex: properties.zIndex });
     }
@@ -175,7 +175,7 @@ export class StyleFactory {
       textAlign,
       padding: [0, fontSize / 2, 0, fontSize / 2],
       backgroundFill: new Fill({ color: 'rgba(255,255,255,0.7)' }),
-      backgroundStroke: new Stroke({ color: 'rgba(0,0,0,0.2)' }),
+      backgroundStroke: new Stroke({ color: 'rgba(0,0,0,0.2)', lineJoin: 'round' }),
     });
   }
 

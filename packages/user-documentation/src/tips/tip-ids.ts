@@ -23,6 +23,7 @@ export enum ToolTips {
   Text = 'Text',
   Selection = 'Selection',
   EditProperties = 'EditProperties',
+  Measures = 'Measures',
 }
 
 export enum DataProcessingTips {

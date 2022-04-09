@@ -17,7 +17,7 @@
  */
 
 import { FeatureStyle } from '../style';
-import { GeometryType } from '../feature';
+import { AbcGeometryType } from '../feature';
 
 /**
  * This is a text slice used in text editor
@@ -127,7 +127,7 @@ export interface LinkElement {
 export interface MapSymbolElement {
   type: 'map-symbol';
   style: FeatureStyle;
-  geometryType: GeometryType;
+  geometryType: AbcGeometryType;
   // Content is not editable
   children: [{ text: '' }];
 }

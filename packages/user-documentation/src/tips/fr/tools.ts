@@ -123,4 +123,16 @@ export const Tools: Tip[] = [
               </ul>
               `,
   },
+  {
+    id: ToolTips.Measures,
+    content: `<h4>Outil de mesure</h4>
+
+              <ul>
+                ${moveMapTip}
+                <li><b>Pour mesurer une ou plusieurs lignes</b>, sélectionnez-les puis cliquez sur <code>Mesurer les longueurs</code></li>
+                <li><b>Pour mesurer un ou plusieurs plygones</b>, sélectionnez-les puis cliquez sur <code>Mesurer les aires</code></li>
+                ${undoRedoTip}
+              </ul>
+              `,
+  },
 ];

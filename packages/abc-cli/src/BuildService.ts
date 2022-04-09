@@ -37,7 +37,7 @@ export enum Dependencies {
 export class BuildService {
   constructor(private config: Config, private registry: Registry, private shell: Shell) {}
 
-  public async continuousIntegration() {
+  public async continuousIntegration(light: boolean) {
     const start = new Date().getTime();
 
     await this.install(Dependencies.Development);
@@ -45,6 +45,12 @@ export class BuildService {
     this.cleanBuild();
     this.dependencyCheck(); // Dependency check must be launched AFTER build for local dependencies
     this.test();
+
+    if (light) {
+      logger.info('\n\nThis is a light pipeline, end to end tests will not be executed.\n\n');
+      return;
+    }
+
     await this.install(Dependencies.Production);
 
     const servers = await this.startServersForE2e();

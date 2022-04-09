@@ -16,19 +16,36 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { I18nText, Language } from '@abc-map/shared';
+
 /*
  * You can reference in this file features that will not be enabled by default.
  */
 
 export interface ExperimentalFeature {
   id: string;
+  description: I18nText[];
 }
 
 /**
  * Artefact generator is a data processing module used to create artefacts for WMS/WMTS/XYZ layers.
  *
- * It will never be public.
+ * It will never be enabled by default.
  */
-export const ArtefactGenerator = { id: 'ArtefactGenerator' };
+export const ArtefactGenerator: ExperimentalFeature = {
+  id: 'ArtefactGenerator',
+  description: [
+    {
+      language: Language.English,
+      text: 'This is an experimental data processing module, not intended for use by end users. You need to reload the app after activating it.',
+    },
+    {
+      language: Language.French,
+      text:
+        "C'est un module de traitement de données expérimental, non destiné à être utilisé par les utilisateurs finaux. " +
+        "Vous devez recharger l'application après l'avoir activée.",
+    },
+  ],
+};
 
 export const ExperimentalFeatures: ExperimentalFeature[] = [ArtefactGenerator];

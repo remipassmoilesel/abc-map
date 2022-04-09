@@ -17,7 +17,7 @@
  */
 
 import { AbcElement, AbcText } from './text-elements';
-import { GeometryType } from '../feature';
+import { AbcGeometryType } from '../feature';
 
 /**
  * If this test fail, you should write a migration script then adapt it
@@ -55,7 +55,7 @@ describe('Text elements', () => {
       { type: 'list', ordered: false, children: [] },
       { type: 'list-item', children: [] },
       { type: 'link', url: 'http://somewhere.net', children: [] },
-      { type: 'map-symbol', style: { fill: { color1: 'red' } }, geometryType: GeometryType.POINT, children: [{ text: '' }] },
+      { type: 'map-symbol', style: { fill: { color1: 'red' } }, geometryType: AbcGeometryType.POINT, children: [{ text: '' }] },
     ];
 
     expect(actual).toMatchSnapshot();

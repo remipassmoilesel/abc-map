@@ -16,5 +16,16 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-export * from './FeatureProperties';
-export * from './AbcGeometryType';
+import GeometryType from 'ol/geom/GeometryType';
+import { AbcGeometryType } from '@abc-map/shared';
+
+describe('OlGeometry', () => {
+  /**
+   * AbcGeometryType is the exact copy of openlayers/src/ol/geom/GeometryType.js because:
+   * - We need our own type for serialization of projects
+   * - And current openlayers typings are borked (06/04/2022), these constants are currently typed as strings
+   */
+  it('GeometryType', () => {
+    expect(GeometryType).toEqual(AbcGeometryType);
+  });
+});

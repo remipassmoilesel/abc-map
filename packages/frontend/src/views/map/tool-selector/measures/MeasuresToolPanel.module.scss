@@ -16,5 +16,16 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-export * from './FeatureProperties';
-export * from './AbcGeometryType';
+.measuresPanel {
+  display: flex;
+  flex-direction: column;
+
+  .button {
+    display: flex;
+    align-items: center;
+
+    text-align: left;
+    width: 15rem;
+    margin-bottom: 1rem;
+  }
+}

@@ -18,28 +18,17 @@
 
 import Feature, { FeatureLike } from 'ol/Feature';
 import Geometry from 'ol/geom/Geometry';
-import { FeatureProperties, StyleProperties } from '@abc-map/shared';
+import { AbcGeometryType, FeatureProperties, StyleProperties } from '@abc-map/shared';
 import { FeatureStyle, DefaultStyle } from '@abc-map/shared';
 import { nanoid } from 'nanoid';
 import GeometryType from 'ol/geom/GeometryType';
-import { Point, Circle, GeometryCollection, LinearRing, LineString, MultiLineString, MultiPoint, MultiPolygon, Polygon } from 'ol/geom';
 import { Logger } from '@abc-map/shared';
+import { OlGeometry } from './OlGeometry';
 
 const logger = Logger.get('FeatureWrapper.ts');
 
 export declare type PropertiesMap = { [key: string]: any };
 export declare type SimplePropertiesMap = { [key: string]: string | number | undefined };
-export declare type OlGeometry =
-  | Geometry
-  | Point
-  | LineString
-  | LinearRing
-  | Polygon
-  | MultiPoint
-  | MultiLineString
-  | MultiPolygon
-  | GeometryCollection
-  | Circle;
 
 /**
  * This class is a thin wrapper around Openlayers features, used to ensure that critical operations
@@ -211,6 +200,22 @@ export class FeatureWrapper<Geom extends OlGeometry = OlGeometry> {
 
   public getGeometry(): Geom | undefined {
     return this.feature.getGeometry();
+  }
+
+  /**
+   * If you do not specify geometry types, returns true if there is a geometry attached.
+   *
+   * If you do specify geometry types, returns true if there is a geometry with specified type, false otherwise.
+   *
+   * @param geoms
+   */
+  public hasGeometry(...geoms: AbcGeometryType[]): boolean {
+    if (!geoms.length) {
+      return !!this.getGeometry();
+    }
+
+    const type = this.getGeometry()?.getType();
+    return geoms.includes(type);
   }
 
   public setText(text: string): FeatureWrapper {

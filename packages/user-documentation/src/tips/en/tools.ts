@@ -121,4 +121,16 @@ export const Tools: Tip[] = [
               </ul>
               `,
   },
+  {
+    id: ToolTips.Measures,
+    content: `<h4>Measure tool</h4>
+
+              <ul>
+                ${moveMapTip}
+                <li><b>To measure one or more lines</b>, select them then click on <code>Measure lengths</code></li>
+                <li><b>To measure one or more polygons</b>, select them then click on <code>Measure areas</code></li>
+                ${undoRedoTip}
+              </ul>
+              `,
+  },
 ];
