@@ -7,7 +7,7 @@
 # This makes it easy to run pipelines in Gitlab shared runners, for forks for example.
 #
 # If you want to run a full CI pipeline in a Gitlab Runner, set ABC_FULL_CI variable to "true
-# 
+#
 
 image: registry.gitlab.com/abc-map/abc-map/build-image:v0.16
 

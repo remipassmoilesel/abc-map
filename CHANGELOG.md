@@ -2,7 +2,7 @@
 
 For the moment we use git hashes as version, since no one complained about it 👍
 
-## Measure tools and better continuous integration (xxxxx XX/04/2022)
+## Measure tools and better continuous integration (3f79d57b XX/04/2022)
 
 - Users can now measure existing shapes. Length for lines, Areas for polygons.
 - Add "light" pipelines of continuous integration, per default. These pipelines execute: lint, build, unit and 

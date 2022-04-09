@@ -1,8 +1,8 @@
-# Welcome to Abc-Map !
-
-<div style="margin-bottom: 3rem">
+<div>
   <img alt="Abc-Map" src="./documentation/assets/main-icon.png" />
 </div>
+
+# Welcome to Abc-Map !
 
 <div style="margin-bottom: 1.5rem">
   <a href="https://gitlab.com/abc-map/abc-map/-/commits/master">
