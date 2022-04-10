@@ -17,7 +17,7 @@
  */
 import { Config } from '../config/Config';
 import { Services, servicesFactory } from '../services/services';
-import { hashSource, HttpServer } from './HttpServer';
+import { hashSource, HttpServer, isItWorthLogging } from './HttpServer';
 import { ConfigLoader } from '../config/ConfigLoader';
 import { assert } from 'chai';
 import { FrontendRoutes, Language } from '@abc-map/shared';
@@ -152,13 +152,26 @@ describe('HttpServer', () => {
   });
 
   it('hashSource()', () => {
-    const req1 = { headers: {} } as unknown as FastifyRequest;
+    const req1 = fakeRequest();
     assert.deepEqual(hashSource(req1), '5fe14f265f1aab15f4474efeb0b9bffeac3793a7c6905f8344f638653231bc2a');
 
-    const req2 = { headers: { 'x-forwarded-for': '90.90.90.90' } } as unknown as FastifyRequest;
+    const req2 = fakeRequest({ headers: { 'x-forwarded-for': '90.90.90.90' } });
     assert.deepEqual(hashSource(req2), 'ff05e2ffcb03cfea04d594778ef2e19ca6657f7d5856f9ee7d947ddf835bce5e');
 
-    const req3 = { headers: { 'x-forwarded-for': '90.90.90.90', 'user-agent': 'Mozilla/5.0 Firefox/5.0.1' } } as unknown as FastifyRequest;
+    const req3 = fakeRequest({ headers: { 'x-forwarded-for': '90.90.90.90', 'user-agent': 'Mozilla/5.0 Firefox/5.0.1' } });
     assert.deepEqual(hashSource(req3), '450f862a2f253aee6ff4679dcea399eb3ad1566033cc0bd42d491e29ae613b2f');
   });
+
+  it('isItWorthLogging()', () => {
+    assert.isTrue(isItWorthLogging(fakeRequest()));
+    assert.isTrue(isItWorthLogging(fakeRequest({ url: '/', headers: { 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' } })));
+    assert.isTrue(isItWorthLogging(fakeRequest({ url: '/api/authentication', headers: { 'user-agent': 'Go-http-client/1.0' } })));
+
+    assert.isFalse(isItWorthLogging(fakeRequest({ url: '/', headers: { 'user-agent': 'Go-http-client/1.0' } })));
+    assert.isFalse(isItWorthLogging(fakeRequest({ url: '/api/health', headers: { 'user-agent': 'kube-probe/1.0' } })));
+  });
 });
+
+function fakeRequest(source?: Partial<FastifyRequest>): FastifyRequest {
+  return { ...source, headers: { ...source?.headers } } as unknown as FastifyRequest;
+}
