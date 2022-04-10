@@ -196,6 +196,11 @@ export class HttpServer {
   };
 
   private logRequest = (request: FastifyRequest, reply: FastifyReply, done: HookHandlerDoneFunction) => {
+    if (!isItWorthLogging(request)) {
+      done();
+      return;
+    }
+
     const logTrace = {
       date: new Date().toISOString(),
       source: hashSource(request),
@@ -231,4 +236,26 @@ export function hashSource(req: FastifyRequest): string {
   const ip = (req.headers['x-forwarded-for']?.toString() || '000.000.000.000').split('.').slice(1).join('.');
   const ua = req.headers['user-agent'] || 'no-user-agent';
   return hasher.update(ip + ua).digest('hex');
+}
+
+export function isItWorthLogging(req: FastifyRequest): boolean {
+  const userAgent: string | undefined = req.headers['user-agent'];
+  const url: string | undefined = req.url;
+  if (!userAgent || !url) {
+    return true;
+  }
+
+  const blacklist: { userAgent: string; route: string }[] = [
+    { userAgent: 'kube-probe/', route: '/api/health' },
+    { userAgent: 'Prometheus/', route: '/api/metrics' },
+    { userAgent: 'Go-http-client/', route: '/' },
+  ];
+
+  for (const item of blacklist) {
+    if (userAgent.startsWith(item.userAgent) && url === item.route) {
+      return false;
+    }
+  }
+
+  return true;
 }
