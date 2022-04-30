@@ -16,12 +16,12 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ScriptMap } from './api/ScriptMap';
+import { ModuleApi } from '@abc-map/module-api';
 
 export type LogFunction = (data: object | undefined) => void;
 
 export interface ScriptArguments {
-  map: ScriptMap;
+  moduleApi: ModuleApi;
   log: LogFunction;
 }
 
@@ -40,12 +40,14 @@ export class ScriptError extends Error {
 }
 
 export const Example = `\
-// A simplified API of map is available as 'map' variable
-map.listLayers().forEach((layer) => {
+// You can access various helpers from "moduleApi" constant
+const { mainMap } = moduleApi;
+mainMap.getLayers().forEach((layer) => {
   if (layer.isVector()) {
-    log(\`Layer \${layer.name}: \${layer.getFeatures().length} features\`);
+    log(\`Layer \${layer.getName()}: \${layer.getSource().getFeatures().length} features\`);
   } else {
-    log(\`Layer \${layer.name}: Not vector (\${layer.unwrap().constructor.name})\`);
+    log(\`Layer \${layer.getName()}: \${layer.getType()} layer\`);
   }
 });
+
 `;

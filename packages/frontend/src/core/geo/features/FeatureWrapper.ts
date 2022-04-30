@@ -24,6 +24,7 @@ import { nanoid } from 'nanoid';
 import GeometryType from 'ol/geom/GeometryType';
 import { Logger } from '@abc-map/shared';
 import { OlGeometry } from './OlGeometry';
+import { isOpenlayersGeometry, isOpenlayersFeature } from '../../utils/crossContextInstanceof';
 
 const logger = Logger.get('FeatureWrapper.ts');
 
@@ -40,25 +41,29 @@ export class FeatureWrapper<Geom extends OlGeometry = OlGeometry> {
   }
 
   public static from<T extends OlGeometry = OlGeometry>(ol: Feature<T>): FeatureWrapper<T> {
-    if (!this.isFeature(ol)) {
+    if (!FeatureWrapper.isFeature(ol)) {
       throw new Error(`Invalid feature: ${ol ?? 'undefined'}`);
     }
     return new FeatureWrapper<T>(ol);
   }
 
   public static fromUnknown<T extends OlGeometry = OlGeometry>(ol: unknown): FeatureWrapper<T> | undefined {
-    if (!this.isFeature(ol)) {
+    if (!FeatureWrapper.isFeature(ol)) {
       return;
     }
 
-    const hasGeometry = ol.getGeometry() instanceof Geometry;
+    const hasGeometry = isOpenlayersGeometry(ol.getGeometry());
     if (hasGeometry) {
       return FeatureWrapper.from(ol as Feature<T>);
     }
   }
 
   public static isFeature(ol: FeatureLike | unknown): ol is Feature<Geometry> {
-    return ol instanceof Feature;
+    if (!ol || typeof ol !== 'object') {
+      return false;
+    }
+
+    return isOpenlayersFeature(ol);
   }
 
   constructor(private feature: Feature<Geom>) {}

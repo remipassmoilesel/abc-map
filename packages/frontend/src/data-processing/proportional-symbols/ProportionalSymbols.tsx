@@ -16,10 +16,9 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { ReactNode } from 'react';
-import { Module } from '../Module';
+import React from 'react';
+import { Module, ModuleId } from '@abc-map/module-api';
 import ProportionalSymbolsUi from './ui/ProportionalSymbolsUi';
-import { ModuleId } from '../ModuleId';
 import { newParameters, Parameters } from './Parameters';
 import { LayerFactory } from '../../core/geo/layers/LayerFactory';
 import { Services } from '../../core/Services';
@@ -37,25 +36,27 @@ import { Status } from '../color-gradients/ProcessingResult';
 import { prettyStringify } from '../../core/utils/strings';
 import { AddLayersChangeset } from '../../core/history/changesets/layers/AddLayersChangeset';
 import { HistoryKey } from '../../core/history/HistoryKey';
+import { LocalModuleId } from '../LocalModuleId';
+import { prefixedTranslation } from '../../i18n/i18n';
+
+const t = prefixedTranslation('DataProcessingModules:ProportionalSymbols.');
 
 export const logger = Logger.get('ProportionalSymbols.tsx');
 
-export class ProportionalSymbols extends Module {
+export class ProportionalSymbols implements Module {
   private params = newParameters();
 
-  constructor(private services: Services) {
-    super();
-  }
+  constructor(private services: Services) {}
 
   public getId(): ModuleId {
-    return ModuleId.ProportionalSymbols;
+    return LocalModuleId.ProportionalSymbols;
   }
 
-  public getI18nName(): string {
-    return 'Proportional_symbols';
+  public getReadableName(): string {
+    return t('Proportional_symbols');
   }
 
-  public getUserInterface(): ReactNode {
+  public getUserInterface() {
     return <ProportionalSymbolsUi initialValue={this.params} onChange={this.handleParamsChange} onProcess={() => this.process(this.params)} />;
   }
 

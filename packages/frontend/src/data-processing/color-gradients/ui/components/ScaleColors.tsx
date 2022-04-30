@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { Component, ReactNode } from 'react';
+import React, { Component } from 'react';
 import { Logger } from '@abc-map/shared';
 import ColorPicker from '../../../../components/color-picker/ColorPickerButton';
 import FormLine from '../../../_common/form-line/FormLine';
@@ -33,7 +33,7 @@ interface Props {
 const t = prefixedTranslation('DataProcessingModules:ColorGradients.');
 
 class ScaleColors extends Component<Props, {}> {
-  public render(): ReactNode {
+  public render() {
     const start = this.props.start;
     const end = this.props.end;
 

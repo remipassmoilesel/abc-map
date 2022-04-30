@@ -39,6 +39,7 @@ import { ToolModeHelper } from '../../tools/common/ToolModeHelper';
 import { MoveMapTool } from '../../tools/move/MoveMapTool';
 import { StyleFactoryOptions } from '../styles/StyleFactoryOptions';
 import { toPrecision } from '../../utils/numbers';
+import { isOpenlayersMap, isTileLayer, isTileSource } from '../../utils/crossContextInstanceof';
 
 export const logger = Logger.get('MapWrapper.ts');
 
@@ -58,7 +59,7 @@ const ToolProperty = 'abc:map:tool';
  */
 export class MapWrapper {
   public static from(map: PluggableMap): MapWrapper {
-    if (!(map instanceof Map)) {
+    if (!isOpenlayersMap(map)) {
       throw new Error('Invalid map: ' + (map ?? 'undefined'));
     }
 
@@ -66,7 +67,7 @@ export class MapWrapper {
   }
 
   public static fromUnknown(map: unknown): MapWrapper | undefined {
-    if (!(map instanceof Map)) {
+    if (!isOpenlayersMap(map)) {
       return undefined;
     }
 
@@ -136,7 +137,7 @@ export class MapWrapper {
       this.internalMap.addLayer(olLayer);
     }
 
-    if (olLayer instanceof TileLayer) {
+    if (isTileLayer(olLayer)) {
       olLayer.getSource()?.on('tileloaderror', this.handleTileLoadError);
     }
   }
@@ -189,7 +190,7 @@ export class MapWrapper {
     const olLayer = layer.unwrap();
     this.internalMap.getLayers().remove(olLayer);
 
-    if (olLayer instanceof TileLayer) {
+    if (isTileLayer(olLayer)) {
       olLayer.getSource()?.un('tileloaderror', this.handleTileLoadError);
     }
   }
@@ -452,7 +453,7 @@ export class MapWrapper {
   };
 
   private handleTileLoadError = (ev: BaseEvent) => {
-    if (!(ev.target instanceof TileSource)) {
+    if (!isTileSource(ev.target)) {
       logger.error('Unhandled event target: ', ev);
       return true;
     }
@@ -460,7 +461,7 @@ export class MapWrapper {
     const layer = this.internalMap
       .getLayers()
       .getArray()
-      .find((lay) => lay instanceof TileLayer && lay.getSource() === ev.target) as TileLayer<TileSource> | undefined;
+      .find((lay) => isTileLayer(lay) && lay.getSource() === ev.target) as TileLayer<TileSource> | undefined;
 
     if (layer) {
       this.eventTarget.dispatchEvent(new TileLoadErrorEvent(LayerWrapper.from(layer)));

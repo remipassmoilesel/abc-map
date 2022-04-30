@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { ChangeEvent, Component, ReactNode } from 'react';
+import React, { ChangeEvent, Component } from 'react';
 import { Logger } from '@abc-map/shared';
 import { DataRow, getFields } from '../../../core/data/data-source/DataSource';
 import DataTable from '../../../components/data-table/DataTable';
@@ -64,7 +64,7 @@ class GeometryLayerForm extends Component<Props, State> {
     };
   }
 
-  public render(): ReactNode {
+  public render() {
     const layer = this.props.values.layer;
     const joinBy = this.props.values.joinBy;
     const geometries = this.state.geometries;

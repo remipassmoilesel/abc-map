@@ -380,17 +380,15 @@
     "Modules": "Modules",
     "Select_a_module_on_right": "Sélectionnez un module <br /> dans le menu de droite.",
     "Data_processing": "Traitements de données",
-    "Visualize_data_on_map": "Visualisez des données sur vos cartes: symboles proportionnels, dégradés et couleurs, et plus ⚙️⚙️"
+    "Visualize_data_on_map": "Visualisez des données sur vos cartes: symboles proportionnels, dégradés et couleurs, et plus ⚙️⚙️",
+    "Reload_module": "Recharger le module",
+    "Aouch": "Aie",
+    "Module_crashed": "Ce module a planté",
+    "Back_to_index": "Revenir à l'index"
   },
   "DataProcessingModules": {
-    "Color_gradients": "Dégradés de couleurs",
-    "Geometry_count": "Compte de géométries",
-    "Data_tables": "Tableaux de données",
-    "Different_symbols": "Symboles différents",
-    "Proportional_symbols": "Symboles proportionnels",
-    "Running_scripts": "Exécution de scripts",
-    "Artefact_generator": "Générateur d'artefact",
     "DataViewer": {
+      "Data_tables": "Tableaux de données",
       "Select_a_layer": "Sélectionnez une couche pour visualiser ses données.",
       "Download_CSV": "Télécharger au format CSV",
       "X_entries_displayed": "<b>{{entries}}</b> entrées affichées",
@@ -481,16 +479,18 @@
       "Layer": "Couche:"
     },
     "FeatureCountByGeometries": {
+      "Geometry_count": "Compte de géométries",
       "Module_not_terminated": "Ce module n'est pas terminé !",
       "This_module_will": "Ce module permettra de compter le nombre de géométries présentes dans chaque polygone d’une couche."
     },
     "DifferentSymbols": {
+      "Different_symbols": "Symboles différents",
       "Module_not_terminated": "Ce module n'est pas terminé !",
       "This_module_will": "Ce module permettra de créer des symboles à partir d'un classeur CSV."
     },
     "ProportionalSymbols": {
-      "Introduction": "Introduction",
       "Proportional_symbols": "Symboles proportionnels",
+      "Introduction": "Introduction",
       "Proportional_symbols_are_used_to_represent_absolute_data": "Les symboles proportionnels permettent de représenter des données statistiques absolues (population, budgets annuels, etc ...)",
       "How_does_it_work": "Comment ça marche ?",
       "Select_data_source_and_data_field": "Sélectionnez une source de données et un champ de valeur. C'est ce champ qui déterminera la taille des symboles. Par exemple, un classeur CSV contenant la population française par département et le champ <code>population_2011</code> contenant les données de population.",
@@ -523,6 +523,7 @@
       "Processing_in_progress": "Traitement en cours ..."
     },
     "Scripts": {
+      "Running_scripts": "Exécution de scripts",
       "Script_module_allow_advanced_data_modification": "Le module d'exécution de scripts permet de traiter les données de la carte de manière programmatique en écrivant du code Javascript.",
       "Keep_in_mind_recommendations": "Gardez en tête ces recommandations",
       "Dont_use_it_if_you_dont_understand_it": "Si vous ne comprenez pas à quoi sert ce module, ne l'utilisez pas",
@@ -533,6 +534,21 @@
       "Output": "Sortie",
       "Executed_without_errors": "Script exécuté sans erreurs ✨",
       "Error": "Erreur d'exécution"
+    },
+    "ArtefactGenerator": {
+      "Artefact_generator": "Générateur d'artefact"
+    },
+    "RemoteModuleLoader": {
+      "Load_a_module": "Charger un module",
+      "Loading_done": "Chargement terminé !",
+      "You_can_load_data_processing_modules": "Vous pouvez charger des modules de traitement de données.",
+      "Enter_a_list_of_adresses": "Entrez une liste d'adresses, ces modules seront chargés et ajoutés à la liste des modules.",
+      "Use_only_modules_whose_source_you_know": "N'utilisez que des modules dont vous connaissez la source. Un module malicieux peut par exemple voler les identifiants présents dans cette application.",
+      "Load_modules": "Charger les modules",
+      "You_can_write_your_own_data_processing_module": "Vous pouvez écrire votre propre module de traitement de données",
+      "Follow_these_instructions_to_create_a_module": "Suivez ces instructions pour créer un module",
+      "modify_it_publish_it_on_Github_or_Gitlab": "modifiez-le, publiez-le sur Github ou Gitlab, et vous pourrez l'utiliser sur Abc-Map.",
+      "Writing_a_module_requires_advanced_programming_knowledge": "L'écriture d'un module nécessite des connaissances avancées en programmation."
     }
   },
   "ExportView": {

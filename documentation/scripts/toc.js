@@ -1,7 +1,8 @@
 const path = require("path");
 const { execSync } = require("child_process");
+const fs = require("fs");
 
-const files = ["0_guidelines.md", "1_set-up-workstation.md", "2_architecture.md", "3_deployment.md", "4_faq.md", "5_backlog.md"];
+const files = fs.readdirSync(process.cwd()).filter((f) => f.toLocaleLowerCase().endsWith(".md"));
 
 const absolutePath = (f) => path.resolve(process.cwd(), f);
 

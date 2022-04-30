@@ -16,34 +16,35 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Module } from '../Module';
 import ScriptsUI from './ui/ScriptsUI';
-import { ModuleId } from '../ModuleId';
-import React, { ReactNode } from 'react';
+import React from 'react';
 import { Services } from '../../core/Services';
 import { Logger } from '@abc-map/shared';
 import { ChromiumErrorRegexp, ErrorPosition, Example, FirefoxErrorRegexp, ScriptArguments, ScriptError } from './typings';
-import { ScriptMap } from './api/ScriptMap';
 import { errorMessage } from '../../core/utils/errorMessage';
+import { Module, ModuleId } from '@abc-map/module-api';
+import { LocalModuleId } from '../LocalModuleId';
+import { prefixedTranslation } from '../../i18n/i18n';
+import { getModuleApi } from '../getModuleApi';
+
+const t = prefixedTranslation('DataProcessingModules:Scripts.');
 
 export const logger = Logger.get('Scripts.tsx', 'info');
 
-export class Scripts extends Module {
+export class Scripts implements Module {
   private scriptContent = Example;
 
-  constructor(private services: Services) {
-    super();
-  }
+  constructor(private services: Services) {}
 
   public getId(): ModuleId {
-    return ModuleId.Scripts;
+    return LocalModuleId.Scripts;
   }
 
-  public getI18nName(): string {
-    return 'Running_scripts';
+  public getReadableName(): string {
+    return t('Running_scripts');
   }
 
-  public getUserInterface(): ReactNode {
+  public getUserInterface() {
     return <ScriptsUI initialValue={this.scriptContent} onProcess={() => this.process(this.scriptContent)} onChange={this.handleScriptChange} />;
   }
 
@@ -55,7 +56,7 @@ export class Scripts extends Module {
     }
 
     const args: ScriptArguments = {
-      map: new ScriptMap(this.services.geo.getMainMap()),
+      moduleApi: getModuleApi(),
       log,
     };
 

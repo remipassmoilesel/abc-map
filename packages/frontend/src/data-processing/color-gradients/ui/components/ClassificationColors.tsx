@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { ChangeEvent, Component, ReactNode } from 'react';
+import React, { ChangeEvent, Component } from 'react';
 import { Logger } from '@abc-map/shared';
 import FormLine from '../../../_common/form-line/FormLine';
 import { DataSource } from '../../../../core/data/data-source/DataSource';
@@ -62,7 +62,7 @@ class ClassificationColors extends Component<Props, State> {
     this.state = { numberOfClasses: props.value.classes.length || 5 };
   }
 
-  public render(): ReactNode {
+  public render() {
     const numberOfClasses = this.state.numberOfClasses;
     const classes = this.props.value.classes;
     const startColor = this.props.value.startColor;

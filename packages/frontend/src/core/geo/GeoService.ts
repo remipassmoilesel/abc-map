@@ -45,7 +45,7 @@ import { ProjectionRoutes } from '../http/ApiRoutes';
 export const logger = Logger.get('GeoService.ts');
 
 /**
- * This projections are supported by OL and do not need external projection loading.
+ * These projections are supported by OL and do not need external projection loading.
  */
 const OlSupportedProjections = ['EPSG:4326', 'CRS:84', 'EPSG:3857', 'EPSG:102100', 'EPSG:102113', 'EPSG:900913'];
 

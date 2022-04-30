@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { Component, ReactNode } from 'react';
+import React, { Component } from 'react';
 import { Logger } from '@abc-map/shared';
 import CodeEditor from './CodeEditor';
 import { ScriptError } from '../typings';
@@ -48,7 +48,7 @@ class ScriptsUI extends Component<Props, State> {
     this.state = { content: this.props.initialValue, message: '', output: [] };
   }
 
-  public render(): ReactNode {
+  public render() {
     const content = this.state.content;
     const message = this.state.message;
     const output = this.state.output;

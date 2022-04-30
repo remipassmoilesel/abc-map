@@ -19,7 +19,7 @@
 /**
  * Nominatim API result.
  *
- * Here lot of numbers are returned as strings.
+ * Here a lot of numbers are returned as strings.
  */
 export interface NominatimResult {
   /**
@@ -29,7 +29,7 @@ export interface NominatimResult {
   class: string;
   display_name: string;
   icon: string;
-  importance: 0.8783421083469705;
+  importance: number;
   lat: string;
   lon: string;
   licence: string;

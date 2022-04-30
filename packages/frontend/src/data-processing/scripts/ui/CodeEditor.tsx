@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { Component, ReactNode } from 'react';
+import React, { Component } from 'react';
 import Editor from 'react-simple-code-editor';
 import { highlight, languages } from 'prismjs';
 import 'prismjs/components/prism-javascript';
@@ -38,7 +38,7 @@ class CodeEditor extends Component<Props, State> {
     this.state = { content: this.props.initialContent };
   }
 
-  public render(): ReactNode {
+  public render() {
     const content = this.state.content;
 
     return (

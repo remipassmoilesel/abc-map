@@ -18,6 +18,14 @@
 
 @import "src/styles/mixins";
 
+.section {
+  margin: 1rem;
+}
+
+.explanation {
+  margin: 1rem 0;
+}
+
 .panel {
   @include media-breakpoint-up(xl) {
     width: 60vw;

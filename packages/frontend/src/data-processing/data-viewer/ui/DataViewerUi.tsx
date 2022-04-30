@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { Component, ReactNode } from 'react';
+import React, { Component } from 'react';
 import { Logger } from '@abc-map/shared';
 import isEqual from 'lodash/isEqual';
 import { DataRow } from '../../../core/data/data-source/DataSource';
@@ -60,7 +60,7 @@ class DataViewerUi extends Component<Props, State> {
     };
   }
 
-  public render(): ReactNode {
+  public render() {
     const data = this.state.data;
     const layer = this.state.layer;
     const disableDownload = this.state.disableDownload;

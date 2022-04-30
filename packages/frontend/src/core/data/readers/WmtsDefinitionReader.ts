@@ -26,10 +26,10 @@ import { ModalService } from '../../ui/ModalService';
 import { variableExpansion, VariableMap } from '../../utils/variableExpansion';
 import { ModalStatus } from '../../ui/typings';
 import { prefixedTranslation } from '../../../i18n/i18n';
-import { Projection } from 'ol/proj';
 import { WmtsSettings } from '../../geo/layers/LayerFactory.types';
 import { GeoService } from '../../geo/GeoService';
 import { ReadResult, ReadStatus } from '../ReadResult';
+import { isOpenlayersProjection } from '../../utils/crossContextInstanceof';
 
 const logger = Logger.get('WmtsDefinitionReader.ts');
 
@@ -77,7 +77,7 @@ export class WmtsDefinitionReader extends AbstractDataReader {
 
       // We load projection if needed
       let projection: string | undefined;
-      if (options.projection && options.projection instanceof Projection) {
+      if (options.projection && isOpenlayersProjection(options.projection)) {
         projection = normalizedProjectionName(options.projection.getCode());
       } else if (options.projection && typeof options.projection === 'string') {
         projection = normalizedProjectionName(options.projection);

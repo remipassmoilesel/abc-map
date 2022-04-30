@@ -13,6 +13,8 @@
 - [(node:132766) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' ...](#node132766-dep_webpack_dev_server_on_after_setup_middleware-deprecationwarning-onaftersetupmiddleware-)
 - [How to create videos for help page ?](#how-to-create-videos-for-help-page-)
 - [About style ratios](#about-style-ratios)
+- [About 'instanceof' in frontend](#about-instanceof-in-frontend)
+- [How do I publish public packages ?](#how-do-i-publish-public-packages-)
 
 <!-- tocstop -->
 
@@ -82,3 +84,21 @@ Styles can be artificially scaled, for example between two screen sizes or for e
 
 To this end, the functions and methods that handle styles take a "style ratio" as a parameter. For example,
 a map with dots 10 pixels in diameter displayed with a ratio of 2 will have dots 20 pixels in diameter.
+
+## About 'instanceof' in frontend
+
+`instanceof` usage can have weird behavior in frontend because it cannot works with external modules.  
+See: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/instanceof#instanceof_and_multiple_context_e.g._frames_or_windows
+
+You can use instead `crossContextInstanceof()`.
+
+## How do I publish public packages ?
+
+To publish packages to the NPM registry:
+
+```
+  $ npm adduser
+  $ lerna run public-publish
+```
+
+Not all public packages are published on NPM registry.

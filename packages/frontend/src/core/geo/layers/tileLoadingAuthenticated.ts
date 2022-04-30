@@ -18,9 +18,9 @@
 
 import { LoadFunction } from 'ol/Tile';
 import { BasicAuthentication, Logger } from '@abc-map/shared';
-import ImageTile from 'ol/ImageTile';
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios';
 import TileState from 'ol/TileState';
+import { isImageTile } from '../../utils/crossContextInstanceof';
 
 export const logger = Logger.get('tileLoadingAuthenticated.ts');
 
@@ -46,7 +46,7 @@ export function tileLoadingAuthenticated(auth: BasicAuthentication, factory: Htt
   });
 
   return function (tile, src) {
-    if (!(tile instanceof ImageTile)) {
+    if (!isImageTile(tile)) {
       tile.setState(TileState.ERROR);
       logger.error('Unhandled tile type: ', tile);
       return;

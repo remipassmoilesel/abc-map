@@ -17,7 +17,7 @@
  */
 
 import Cls from './ProportionalSymbolsUi.module.scss';
-import React, { Component, ReactNode } from 'react';
+import React, { Component } from 'react';
 import { Logger } from '@abc-map/shared';
 import { newParameters, Parameters } from '../Parameters';
 import FoldingCard from '../../../components/folding-card/FoldingCard';
@@ -57,7 +57,7 @@ class ProportionalSymbolsUi extends Component<Props, State> {
     this.state = { params: this.props.initialValue };
   }
 
-  public render(): ReactNode {
+  public render() {
     const params = this.state.params;
     const formState = this.state.formState;
     const result = this.state.result;
@@ -85,7 +85,7 @@ class ProportionalSymbolsUi extends Component<Props, State> {
     return (
       <div className={Cls.panel}>
         {/* Module introduction */}
-        <FoldingCard title={`1. ${t('Introduction')}`} className={'section'}>
+        <FoldingCard title={`1. ${t('Introduction')}`} className={Cls.section}>
           <div className={Cls.introduction}>
             <div>
               <p>{t('Proportional_symbols_are_used_to_represent_absolute_data')}</p>
@@ -102,8 +102,8 @@ class ProportionalSymbolsUi extends Component<Props, State> {
         </FoldingCard>
 
         {/* Data source selection */}
-        <FoldingCard title={`2. ${t('Select_data_source')}`} className={'section'}>
-          <div className={'explanation'}>{t('Data_source_contains_field_that_will_determine_symbol_size')}</div>
+        <FoldingCard title={`2. ${t('Select_data_source')}`} className={Cls.section}>
+          <div className={Cls.explanation}>{t('Data_source_contains_field_that_will_determine_symbol_size')}</div>
           <DataSourceForm
             valuesFieldLabel={t('Symbol_size_from')}
             valuesFieldTip={ProportionalSymbolsTips.SizeField}
@@ -113,14 +113,14 @@ class ProportionalSymbolsUi extends Component<Props, State> {
         </FoldingCard>
 
         {/* Vector layer selection */}
-        <FoldingCard title={`3. ${t('Select_a_geometry_layer')}`} className={'section'}>
-          <div className={'explanation'}>{t('The_geometry_layer_will_be_used_to_determine_the_position_of_the_symbols')}</div>
+        <FoldingCard title={`3. ${t('Select_a_geometry_layer')}`} className={Cls.section}>
+          <div className={Cls.explanation}>{t('The_geometry_layer_will_be_used_to_determine_the_position_of_the_symbols')}</div>
           <GeometryLayerForm values={geometryLayerValues} onChange={this.handleGeometryLayerChange} />
         </FoldingCard>
 
         {/* Data processing parameters */}
-        <FoldingCard title={`4. ${t('Processing_parameters')}`} className={'section'}>
-          <div className={'explanation'}>{t('Symbols_are_create_in_a_new_layer')}</div>
+        <FoldingCard title={`4. ${t('Processing_parameters')}`} className={Cls.section}>
+          <div className={Cls.explanation}>{t('Symbols_are_create_in_a_new_layer')}</div>
           <SymbolConfigForm values={configValues} onChange={this.handleConfigChange} />
         </FoldingCard>
 

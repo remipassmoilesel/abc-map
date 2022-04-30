@@ -25,3 +25,5 @@ yarn-error.log*
 src/build-version.ts
 
 public/static/documentation-assets
+
+public/module-template-master.zip

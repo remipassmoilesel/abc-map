@@ -16,21 +16,23 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ReactNode } from 'react';
-import { Module } from '../Module';
 import FeatureCountByGeometriesUi from './ui/FeatureCountByGeometriesUi';
-import { ModuleId } from '../ModuleId';
+import { Module, ModuleId } from '@abc-map/module-api';
+import { LocalModuleId } from '../LocalModuleId';
+import { prefixedTranslation } from '../../i18n/i18n';
 
-export class FeatureCountByGeometries extends Module {
+const t = prefixedTranslation('DataProcessingModules:FeatureCountByGeometries.');
+
+export class FeatureCountByGeometries implements Module {
   public getId(): ModuleId {
-    return ModuleId.CountPointsInPolygon;
+    return LocalModuleId.CountPointsInPolygon;
   }
 
-  public getI18nName(): string {
-    return 'Geometry_count';
+  public getReadableName(): string {
+    return t('Geometry_count');
   }
 
-  public getUserInterface(): ReactNode {
+  public getUserInterface() {
     return <FeatureCountByGeometriesUi />;
   }
 }

@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { ChangeEvent, Component, ReactNode } from 'react';
+import React, { ChangeEvent, Component } from 'react';
 import { Logger } from '@abc-map/shared';
 import { ServiceProps, withServices } from '../../../core/withServices';
 import { LayerChangeHandler } from '../../../core/geo/map/MapWrapper';
@@ -56,7 +56,7 @@ class VectorLayerSelector extends Component<Props, State> {
     this.state = { layers: [] };
   }
 
-  public render(): ReactNode {
+  public render() {
     const value = this.props.value || None;
     const layers = this.state.layers;
     const dataCy = this.props['data-cy'];

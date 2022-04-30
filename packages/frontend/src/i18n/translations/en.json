@@ -379,17 +379,15 @@
     "Modules": "Modules",
     "Select_a_module_on_right": "Select a module <br /> in the right menu.",
     "Data_processing": "Data processing",
-    "Visualize_data_on_map": "Visualize data on your maps: proportional symbols, color gradients, and more ⚙️⚙️"
+    "Visualize_data_on_map": "Visualize data on your maps: proportional symbols, color gradients, and more ⚙️⚙️",
+    "Reload_module": "Reload module",
+    "Aouch": "Aouch",
+    "Module_crashed": "This module has crashed",
+    "Back_to_index": "Back to index"
   },
   "DataProcessingModules": {
-    "Color_gradients": "Color gradients",
-    "Geometry_count": "Geometry count",
-    "Data_tables": "Data tables",
-    "Different_symbols": "Different symbols",
-    "Proportional_symbols": "Proportional symbols",
-    "Running_scripts": "Running scripts",
-    "Artefact_generator": "Artefact generator",
     "DataViewer": {
+      "Data_tables": "Data tables",
       "Select_a_layer": "Select a layer to view its data.",
       "Download_CSV": "Download CSV workbook",
       "X_entries_displayed": "<b>{{entries}}</b> entries displayed",
@@ -480,16 +478,18 @@
       "Layer": "Layer:"
     },
     "FeatureCountByGeometries": {
+      "Geometry_count": "Geometry count",
       "Module_not_terminated": "This module is not finished !",
       "This_module_will": "This module will count the number of geometries present in each polygon of a layer."
     },
     "DifferentSymbols": {
+      "Different_symbols": "Different symbols",
       "Module_not_terminated": "This module is not finished !",
       "This_module_will": "This module will allow you to create symbols from a CSV workbook."
     },
     "ProportionalSymbols": {
-      "Introduction": "Introduction",
       "Proportional_symbols": "Proportional symbols",
+      "Introduction": "Introduction",
       "Proportional_symbols_are_used_to_represent_absolute_data": "Proportional symbols are used to represent absolute data (population, annual budgets, etc.)",
       "How_does_it_work": "How does it work ?",
       "Select_data_source_and_data_field": "Select a data source and a value field. This field will determine the size of the symbols. For example, a CSV workbook containing the French population by department and the <code>population_2011</code> field containing the population data.",
@@ -522,6 +522,7 @@
       "Processing_in_progress": "Processing in progress ..."
     },
     "Scripts": {
+      "Running_scripts": "Running scripts",
       "Script_module_allow_advanced_data_modification": "The script execution module is used to process card data programmatically by writing JavaScript code.",
       "Keep_in_mind_recommendations": "Keep these recommendations in mind",
       "Dont_use_it_if_you_dont_understand_it": "If you do not understand what this module is for, do not use it",
@@ -532,6 +533,21 @@
       "Output": "Sortie",
       "Executed_without_errors": "Script executed without errors ✨",
       "Error": "Execution error"
+    },
+    "ArtefactGenerator": {
+      "Artefact_generator": "Artefact generator"
+    },
+    "RemoteModuleLoader": {
+      "Load_a_module": "Load a module",
+      "Loading_done": "Loading done !",
+      "You_can_load_data_processing_modules": "You can load data processing modules.",
+      "Enter_a_list_of_adresses": "Enter a list of addresses, these modules will be loaded and added to the list of modules.",
+      "Use_only_modules_whose_source_you_know": "Use only modules whose source you know. Per example, a malicious module can steal identifiers present in this application.",
+      "Load_modules": "Load modules",
+      "You_can_write_your_own_data_processing_module": "You can write your own data processing module",
+      "Follow_these_instructions_to_create_a_module": "Follow these instructions to create a module",
+      "modify_it_publish_it_on_Github_or_Gitlab": "modify it, publish it on Github or Gitlab, and you can use it on Abc-Map.",
+      "Writing_a_module_requires_advanced_programming_knowledge": "Writing a module requires advanced programming knowledge."
     }
   },
   "ExportView": {

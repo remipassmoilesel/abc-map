@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { ChangeEvent, Component, ReactNode } from 'react';
+import React, { ChangeEvent, Component } from 'react';
 import { Logger } from '@abc-map/shared';
 import DataSourceSelector from './DataSourceSelector';
 import { DataRow, DataSource, getFields } from '../../../core/data/data-source/DataSource';
@@ -59,7 +59,7 @@ class DataSourceForm extends Component<Props, State> {
     };
   }
 
-  public render(): ReactNode {
+  public render() {
     const source = this.props.values.source;
     const valueField = this.props.values.valueField;
     const joinBy = this.props.values.joinBy;

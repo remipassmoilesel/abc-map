@@ -16,6 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
+import Cls from './WmtsLayerPanel.module.scss';
 import React, { ChangeEvent, Component, ReactNode } from 'react';
 import { BasicAuthentication, Logger, normalizedProjectionName } from '@abc-map/shared';
 import WmtsLayerItem from './WmtsLayerItem';
@@ -31,9 +32,8 @@ import { WmtsSettings } from '../../../../../core/geo/layers/LayerFactory.types'
 import { LayerFactory } from '../../../../../core/geo/layers/LayerFactory';
 import { prefixedTranslation } from '../../../../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
-import Cls from './WmtsLayerPanel.module.scss';
 import { resolveInAtLeast } from '../../../../../core/utils/resolveInAtLeast';
-import { Projection } from 'ol/proj';
+import { isOpenlayersProjection } from '../../../../../core/utils/crossContextInstanceof';
 
 const logger = Logger.get('WmtsLayerPanel.tsx');
 
@@ -199,7 +199,7 @@ class WmtsLayerPanel extends Component<Props, State> {
 
     // We load projection if needed
     let projection: string | undefined;
-    if (options.projection && options.projection instanceof Projection) {
+    if (options.projection && isOpenlayersProjection(options.projection)) {
       projection = normalizedProjectionName(options.projection.getCode());
     } else if (options.projection && typeof options.projection === 'string') {
       projection = normalizedProjectionName(options.projection);

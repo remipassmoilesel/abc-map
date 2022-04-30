@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { ChangeEvent, Component, ReactNode } from 'react';
+import React, { ChangeEvent, Component } from 'react';
 import { Logger } from '@abc-map/shared';
 import { Algorithm, isScaleAlgorithm, ScaleAlgorithm } from '../../../_common/algorithm/Algorithm';
 import AlgorithmSelector from '../../../_common/algorithm/AlgorithmSelector';
@@ -48,7 +48,7 @@ const algorithms = Object.values(ScaleAlgorithm);
 const t = prefixedTranslation('DataProcessingModules:ProportionalSymbols.');
 
 class SymbolConfigForm extends Component<Props, {}> {
-  public render(): ReactNode {
+  public render() {
     const values = this.props.values;
 
     return (
