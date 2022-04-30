@@ -16,23 +16,26 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Module } from '../Module';
+import { Module, ModuleId } from '@abc-map/module-api';
 import DataViewerUi from './ui/DataViewerUi';
-import { ModuleId } from '../ModuleId';
-import React, { ReactNode } from 'react';
+import React from 'react';
+import { LocalModuleId } from '../LocalModuleId';
+import { prefixedTranslation } from '../../i18n/i18n';
 
-export class DataViewer extends Module {
+const t = prefixedTranslation('DataProcessingModules:DataViewer.');
+
+export class DataViewer implements Module {
   private layerId: string | undefined;
 
   public getId(): ModuleId {
-    return ModuleId.DataViewer;
+    return LocalModuleId.DataViewer;
   }
 
-  public getI18nName(): string {
-    return 'Data_tables';
+  public getReadableName(): string {
+    return t('Data_tables');
   }
 
-  public getUserInterface(): ReactNode {
+  public getUserInterface() {
     return <DataViewerUi initialValue={this.layerId} onChange={this.handleLayerChange} />;
   }
 

@@ -39,9 +39,10 @@ describe('Scripts', function () {
     it('should work', async () => {
       geoStub.getMainMap.returns({} as any);
       const script = `
+         const {mainMap} = moduleApi;
          log('Hello')
          log('World')
-         log(map)
+         log(mainMap)
       `;
 
       const result = await scripts.process(script);
@@ -51,19 +52,16 @@ describe('Scripts', function () {
     it('should return correct error', async () => {
       geoStub.getMainMap.returns({} as any);
       const script = `\
+         const {mainMap} = moduleApi;
          log('Hello')
          log('World')
-         log(map)
+         log(mainMap)
          throw new Error('Test error')
       `;
 
       const error: ScriptError = await scripts.process(script).catch((err) => err);
       expect(error.message).toMatch(/Error line [0-9], column [0-9]{2}. Message: Test error/); // Position is not correct, but is in browser
       expect(error.output).toEqual(['Hello', 'World', '[object Object]']);
-    });
-
-    it('should parse a Chromium error stack', () => {
-      expect(parseError({ stack: ChromiumStack })).toEqual({ line: 1, column: 7 });
     });
   });
 

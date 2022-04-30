@@ -108,8 +108,8 @@ export class ModalService {
       const start = () => resolveInAtLeast(operation(), 1000).then(hideOnSuccess).catch(hideOnFail);
 
       const hideOnSuccess = (_result: OperationStatus | [OperationStatus, Result]) => {
-        const status = _result instanceof Array ? _result[0] : _result;
-        const result = _result instanceof Array ? _result[1] : _result;
+        const status = Array.isArray(_result) ? _result[0] : _result;
+        const result = Array.isArray(_result) ? _result[1] : _result;
 
         // Operation was interrupted (per example canceled)
         if (status === OperationStatus.Interrupted) {

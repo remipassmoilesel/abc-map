@@ -32,7 +32,8 @@ module.exports = {
           '\\.test\\.ts$',                              // Tests
           '\\.test\\.helpers\\.ts$',                    // Tests helpers
           'src/service-worker.ts$',                     // Service worker
-          'src/serviceWorkerRegistration.ts$'           // Service worker
+          'src/serviceWorkerRegistration.ts$',           // Service worker
+          'TestError.tsx$'
         ]
       },
       to: {},

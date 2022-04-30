@@ -16,9 +16,8 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Module } from '../Module';
-import { ModuleId } from '../ModuleId';
-import React, { ReactNode } from 'react';
+import { Module, ModuleId } from '@abc-map/module-api';
+import React from 'react';
 import { Services } from '../../core/Services';
 import {
   AbcFile,
@@ -42,7 +41,11 @@ import { PreviewExporter } from './PreviewExporter';
 import { DimensionsPx } from '../../core/utils/DimensionsPx';
 import { WmsSettings, WmtsSettings } from '../../core/geo/layers/LayerFactory.types';
 import { toSlug } from '../../core/utils/toSlug';
-import { Projection } from 'ol/proj';
+import { LocalModuleId } from '../LocalModuleId';
+import { prefixedTranslation } from '../../i18n/i18n';
+import { isOpenlayersProjection } from '../../core/utils/crossContextInstanceof';
+
+const t = prefixedTranslation('DataProcessingModules:ArtefactGenerator.');
 
 export const logger = Logger.get('Scripts.tsx', 'info');
 
@@ -51,26 +54,24 @@ export const logger = Logger.get('Scripts.tsx', 'info');
  *
  * It will remain an experimental feature since there is little chance that it will interest ordinary users.
  */
-export class ArtefactGenerator extends Module {
+export class ArtefactGenerator implements Module {
   public static create(services: Services): ArtefactGenerator {
     return new ArtefactGenerator(services, new PreviewExporter());
   }
 
   private parameters = newParameters();
 
-  constructor(private services: Services, private previewExporter: PreviewExporter) {
-    super();
-  }
+  constructor(private services: Services, private previewExporter: PreviewExporter) {}
 
   public getId(): ModuleId {
-    return ModuleId.ArtefactGenerator;
+    return LocalModuleId.ArtefactGenerator;
   }
 
-  public getI18nName(): string {
-    return 'Artefact_generator';
+  public getReadableName(): string {
+    return t('Artefact_generator');
   }
 
-  public getUserInterface(): ReactNode {
+  public getUserInterface() {
     return <ArtefactGeneratorUi initialValue={this.parameters} onChange={this.handleParametersChange} onProcess={this.process} />;
   }
 
@@ -302,7 +303,7 @@ export class ArtefactGenerator extends Module {
 
         // We load projection if needed
         let projection: string | undefined;
-        if (options.projection && options.projection instanceof Projection) {
+        if (options.projection && isOpenlayersProjection(options.projection)) {
           projection = normalizedProjectionName(options.projection.getCode());
         } else if (options.projection && typeof options.projection === 'string') {
           projection = normalizedProjectionName(options.projection);

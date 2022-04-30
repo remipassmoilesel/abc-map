@@ -37,6 +37,10 @@ export interface UiState {
   experimentalFeatures: {
     [k: string]: boolean | undefined;
   };
+  // These ids are used to update UI when list of modules change
+  modulesLoaded: string[];
+  // These URLs are used to load modules on startup
+  remoteModuleUrls: string[];
 }
 
 export const uiInitialState: UiState = {
@@ -47,4 +51,6 @@ export const uiInitialState: UiState = {
     sharedMapAlpha: false,
   },
   experimentalFeatures: {},
+  modulesLoaded: [],
+  remoteModuleUrls: [],
 };

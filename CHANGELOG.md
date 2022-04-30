@@ -2,13 +2,21 @@
 
 For the moment we use git hashes as version, since no one complained about it 👍
 
+## External module system
+
+- Users can now load data processing modules from public URLs.
+- Creation of a module template, see: https://gitlab.com/abc-map/module-template.
+- Creation of a command line tool: `create-module`. It allows to bootstap a module easily.
+- Creation of package `module-api`, it exposes API usable in external modules.
+
 ## Measure tools and better continuous integration (3f79d57b XX/04/2022)
 
 - Users can now measure existing shapes. Length for lines, Areas for polygons.
-- Add "light" pipelines of continuous integration, per default. These pipelines execute: lint, build, unit and 
-integration tests, but not end to end tests or performance tests. It allows executing CI even on Gitlab  
-shared runners.
+- Add "light" pipelines of continuous integration, per default. These pipelines execute: lint, build, unit and
+  integration tests, but not end to end tests or performance tests. It allows executing CI even on Gitlab  
+  shared runners.
 - Some entities are not available globally: FeatureWrapper, LayerWrapper, MapWrapper, ... for hacking in consoles.
+- Add [Volta](https://volta.sh/) configuration to project
 
 ## Text frames style (606a2fd6 03/04/2022)
 

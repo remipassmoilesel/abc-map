@@ -1,0 +1,61 @@
+{
+  "name": "@abc-map/module-api",
+  "version": "1.0.7",
+  "license": "AGPL-3.0-or-later",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "files": [
+    "build",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "yarn run build:scss && yarn run build:ts",
+    "build:scss": "copy-and-watch 'src/**/*.scss' build",
+    "build:ts": "tsc",
+    "clean": "rm -rf build",
+    "clean-build": "yarn run clean && yarn run build && cp src/**/*.scss build/",
+    "dep-check": "depcruise -c .dependency-cruiser.js src",
+    "lint": "eslint './src/**/{*.tsx,*.ts}' --max-warnings=0 && prettier --check 'src/**/*.scss' && sort-package-json --check",
+    "lint-fix": "eslint './src/**/{*.tsx,*.ts}' --max-warnings=0 --fix && prettier --write 'src/**/*.scss' && sort-package-json",
+    "public-publish": "scripts/public-publish.sh",
+    "test": "tsc && CI=true jest src --verbose",
+    "test:interactive": "jest src --watch",
+    "watch": "concurrently 'yarn run watch:ts' 'yarn run watch:scss'",
+    "watch:scss": "copy-and-watch 'src/**/*.scss' build --watch",
+    "watch:ts": "tsc --watch | sed -u 's/\\x1Bc//g'"
+  },
+  "dependencies": {
+    "loglevel": "^1.8.0",
+    "ol": "^6.14.1",
+    "react": "^17.0.2",
+    "react-hook-form": "^7.29.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.16.5",
+    "@babel/preset-env": "^7.16.5",
+    "@babel/preset-react": "^7.16.7",
+    "@babel/preset-typescript": "^7.16.5",
+    "@testing-library/react": "^12.1.5",
+    "@testing-library/user-event": "^14.1.1",
+    "@types/jest": "^27.4.1",
+    "@types/react": "^17.0.44",
+    "@types/sinon": "^10.0.11",
+    "@typescript-eslint/eslint-plugin": "^5.8.0",
+    "@typescript-eslint/parser": "^5.8.0",
+    "babel-jest": "^27.5.1",
+    "concurrently": "^7.1.0",
+    "copy-and-watch": "^0.1.6",
+    "dependency-cruiser": "^11.2.0",
+    "eslint": "^8.5.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-config-react-app": "^7.0.0",
+    "eslint-plugin-no-only-tests": "^2.6.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "jest": "^27.5.1",
+    "prettier": "^2.5.1",
+    "react-dom": "^17.0.2",
+    "react-test-renderer": "17.0.2",
+    "sinon": "^13.0.1",
+    "typescript": "^4.5.4"
+  }
+}

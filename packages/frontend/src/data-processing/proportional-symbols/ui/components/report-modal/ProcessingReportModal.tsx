@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { Component, ReactNode } from 'react';
+import React, { Component } from 'react';
 import { Modal } from 'react-bootstrap';
 import { ProcessingResult, Status } from '../../../ProcessingResult';
 import { Parameters } from '../../../Parameters';
@@ -33,7 +33,7 @@ interface Props {
 const t = prefixedTranslation('DataProcessingModules:ProportionalSymbols.');
 
 class ProcessingReportModal extends Component<Props, {}> {
-  public render(): ReactNode {
+  public render() {
     const result = this.props.result;
     const params = this.props.params;
     const handleClose = this.props.onClose;

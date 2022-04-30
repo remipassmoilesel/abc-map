@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { ChangeEvent, Component, ReactNode } from 'react';
+import React, { ChangeEvent, Component } from 'react';
 import { Algorithm, allAlgorithms, LabeledAlgorithms } from './Algorithm';
 import DialogBoxAdvice from '../../../components/dialog-box-advice/DialogBoxAdvice';
 import { prefixedTranslation } from '../../../i18n/i18n';
@@ -32,7 +32,7 @@ interface Props {
 const t = prefixedTranslation('DataProcessingModules:AlgorithmSelector.');
 
 class AlgorithmSelector extends Component<Props, {}> {
-  public render(): ReactNode {
+  public render() {
     const value = this.props.value;
     const label = this.props.label;
     const tip = this.props.tip;

@@ -38,7 +38,10 @@ module.exports = {
     // React app rewired merge 'transformIgnorePatterns' field with automagical stuff that break Openlayers support in tests, so we replace it
     // See: https://github.com/timarney/react-app-rewired/issues/241
     config.transformIgnorePatterns = ['node_modules/(?!(ol|geotiff)/)'];
-    config.moduleNameMapper = {'\\.css$': '<rootDir>/src/styles/mocks/style.js'};
+    config.moduleNameMapper = {
+      '\\.css$': '<rootDir>/src/styles/mocks/style.js',
+      '\\.scss$': '<rootDir>/src/styles/mocks/style.js'
+    };
     config.coverageReporters = ['text', 'html'];
     config.transform = {
       '\\.inline\\.svg$': '<rootDir>/scripts/inline-svg-transformer.js',

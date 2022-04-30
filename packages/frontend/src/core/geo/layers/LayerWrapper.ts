@@ -45,17 +45,18 @@ import LayerRenderer from 'ol/renderer/Layer';
 import { styleFunction } from '../styles/style-function';
 import { stripHtml } from '../../utils/strings';
 import { DefaultStyleOptions, StyleFactoryOptions } from '../styles/StyleFactoryOptions';
+import { isTileLayer, isVectorImageLayer } from '../../utils/crossContextInstanceof';
 
 export const logger = Logger.get('LayerWrapper');
 
-export declare type OlLayers = Layer<Source, LayerRenderer<any>> | VectorImageLayer<VectorSource<Geometry>> | TileLayer<TileSource>;
-export declare type OlSources = Source | VectorSource<Geometry> | TileSource | TileWMS | WMTS;
+export type OlLayers = Layer<Source, LayerRenderer<any>> | VectorImageLayer<VectorSource<Geometry>> | TileLayer<TileSource>;
+export type OlSources = Source | VectorSource<Geometry> | TileSource | TileWMS | WMTS;
 
-export declare type VectorLayerWrapper = LayerWrapper<VectorImageLayer<VectorSource<Geometry>>, VectorSource<Geometry>, VectorMetadata>;
-export declare type PredefinedLayerWrapper = LayerWrapper<TileLayer<TileSource>, TileSource, PredefinedMetadata>;
-export declare type WmsLayerWrapper = LayerWrapper<TileLayer<TileSource>, TileWMS, WmsMetadata>;
-export declare type WmtsLayerWrapper = LayerWrapper<TileLayer<TileSource>, WMTS, WmtsMetadata>;
-export declare type XyzLayerWrapper = LayerWrapper<TileLayer<TileSource>, XYZ, XyzMetadata>;
+export type VectorLayerWrapper = LayerWrapper<VectorImageLayer<VectorSource<Geometry>>, VectorSource<Geometry>, VectorMetadata>;
+export type PredefinedLayerWrapper = LayerWrapper<TileLayer<TileSource>, TileSource, PredefinedMetadata>;
+export type WmsLayerWrapper = LayerWrapper<TileLayer<TileSource>, TileWMS, WmsMetadata>;
+export type WmtsLayerWrapper = LayerWrapper<TileLayer<TileSource>, WMTS, WmtsMetadata>;
+export type XyzLayerWrapper = LayerWrapper<TileLayer<TileSource>, XYZ, XyzMetadata>;
 
 export class LayerWrapper<Layer extends OlLayers = OlLayers, Source extends OlSources = OlSources, Meta extends LayerMetadata = LayerMetadata> {
   public static from<L extends OlLayers, S extends OlSources, M extends LayerMetadata>(layer: L): LayerWrapper<L, S, M> {
@@ -64,7 +65,7 @@ export class LayerWrapper<Layer extends OlLayers = OlLayers, Source extends OlSo
 
   public static isManaged(layer: BaseLayer): boolean {
     const hasProperty = !!layer.get(LayerProperties.Managed);
-    const isSupported = layer instanceof TileLayer || layer instanceof VectorImageLayer;
+    const isSupported = isTileLayer(layer) || isVectorImageLayer(layer);
     return hasProperty && isSupported;
   }
 
@@ -198,7 +199,7 @@ export class LayerWrapper<Layer extends OlLayers = OlLayers, Source extends OlSo
     }
 
     let attributions = getAttributions({} as any); // Typings are borked
-    attributions = attributions instanceof Array ? attributions : [attributions];
+    attributions = Array.isArray(attributions) ? attributions : [attributions];
     return attributions.filter((s) => !!s).map((attr) => stripHtml(attr));
   }
 

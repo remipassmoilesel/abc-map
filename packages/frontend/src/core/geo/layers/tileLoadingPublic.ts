@@ -18,9 +18,9 @@
 
 import { LoadFunction } from 'ol/Tile';
 import { Logger } from '@abc-map/shared';
-import ImageTile from 'ol/ImageTile';
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios';
 import TileState from 'ol/TileState';
+import { isImageTile } from '../../utils/crossContextInstanceof';
 
 export const logger = Logger.get('tileLoadingPublic.ts');
 
@@ -34,7 +34,7 @@ export function tileLoadingPublic(factory: HttpClientFactory = defaultHttpClient
   const publicCLient = factory({ timeout: 10_000, responseType: 'blob' });
 
   return function (tile, src) {
-    if (!(tile instanceof ImageTile)) {
+    if (!isImageTile(tile)) {
       tile.setState(TileState.ERROR);
       logger.error('Unhandled tile type: ', tile);
       return;

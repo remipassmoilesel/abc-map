@@ -17,11 +17,11 @@
  */
 
 import { AbcProjection } from '@abc-map/shared';
-import Projection from 'ol/proj/Projection';
 import { ProjectionLike } from 'ol/proj';
+import { isOpenlayersProjection } from '../utils/crossContextInstanceof';
 
 export function toAbcProjection(proj: ProjectionLike | undefined): AbcProjection | undefined {
-  if (proj instanceof Projection) {
+  if (isOpenlayersProjection(proj)) {
     return { name: proj.getCode() };
   } else if (typeof proj === 'string') {
     return { name: proj };

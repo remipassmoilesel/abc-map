@@ -35,15 +35,16 @@ describe('Script module', function () {
       .get('[data-cy=message]')
       .should('contain', 'Script executed without errors')
       .get('[data-cy=output]')
-      .should('contain', 'Layer OpenStreetMap: Not vector')
+      .should('contain', 'Layer OpenStreetMap: Predefined layer')
       .should('contain', 'Layer Geometries: 0 features');
   });
 
   it('User can update features', () => {
     const script = `\
-const layerName = map.listLayers()[2].name;
-map.findByName(layerName).getFeatures().forEach((f, i) => f.set('e2e', i))
-map.findByName(layerName).getFeatures().forEach((f) => log(f.get('e2e')))
+const mainMap = moduleApi.mainMap;
+const layer = mainMap.getLayers()[2];
+layer.getSource().getFeatures().forEach((f, i) => f.set('e2e', i));
+layer.getSource().getFeatures().forEach((f) => log(f.get('e2e')));
 `;
     cy.visit(Routes.dataProcessing().format())
       .then(() => DataStore.importByName('Countries of the world'))

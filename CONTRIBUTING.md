@@ -4,9 +4,6 @@ This project is licensed under GPL v3, see [LICENSE.txt](./LICENSE.txt) for more
 
 All contributions are welcome, but must follow this guide.
 
-Please keep in mind that this is a side project, developed at night after often 10 hours of code during the day.  
-A lot of things needs to be improved, and code reviews can take a long time.
-
 ## Translations
 
 See: [https://crowdin.com/project/abc-map](https://crowdin.com/project/abc-map)
@@ -14,6 +11,8 @@ See: [https://crowdin.com/project/abc-map](https://crowdin.com/project/abc-map)
 ## Before starting
 
 Ensure that your idea is a need that will be shared by other people.
+
+Ensure that your idea cannot fit in a [custom data processing module](documentation/6_modules.md)
 
 [Open an issue](https://gitlab.com/abc-map/abc-map/-/issues/new) to discuss it and to avoid unnecessary or duplicate work.
 

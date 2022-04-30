@@ -16,10 +16,8 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { ReactNode } from 'react';
-import { Module } from '../Module';
+import React from 'react';
 import ColorGradientsUi from './ui/ColorGradientsUi';
-import { ModuleId } from '../ModuleId';
 import { newParameters, Parameters } from './Parameters';
 import { Logger } from '@abc-map/shared';
 import { FeatureWrapper } from '../../core/geo/features/FeatureWrapper';
@@ -35,25 +33,28 @@ import { ProcessingResult, Status } from './ProcessingResult';
 import { prettyStringify } from '../../core/utils/strings';
 import { HistoryKey } from '../../core/history/HistoryKey';
 import { AddLayersChangeset } from '../../core/history/changesets/layers/AddLayersChangeset';
+import { Module, ModuleId } from '@abc-map/module-api';
+import { LocalModuleId } from '../LocalModuleId';
+import { prefixedTranslation } from '../../i18n/i18n';
+
+const t = prefixedTranslation('DataProcessingModules:ColorGradients.');
 
 export const logger = Logger.get('ColorGradients.tsx');
 
-export class ColorGradients extends Module {
+export class ColorGradients implements Module {
   private params = newParameters();
 
-  constructor(private services: Services) {
-    super();
-  }
+  constructor(private services: Services) {}
 
   public getId(): ModuleId {
-    return ModuleId.ColorGradients;
+    return LocalModuleId.ColorGradients;
   }
 
-  public getI18nName(): string {
-    return 'Color_gradients';
+  public getReadableName(): string {
+    return t('Color_gradients');
   }
 
-  public getUserInterface(): ReactNode {
+  public getUserInterface() {
     return <ColorGradientsUi initialValue={this.params} onChange={this.handleParamsChange} onProcess={() => this.process(this.params)} />;
   }
 

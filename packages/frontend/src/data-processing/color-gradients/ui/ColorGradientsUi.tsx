@@ -17,7 +17,7 @@
  */
 
 import Cls from './ColorGradientsUi.module.scss';
-import React, { Component, ReactNode } from 'react';
+import React, { Component } from 'react';
 import { Logger } from '@abc-map/shared';
 import { newParameters, Parameters } from '../Parameters';
 import FoldingCard from '../../../components/folding-card/FoldingCard';
@@ -56,7 +56,7 @@ class ColorGradientsUI extends Component<Props, State> {
     this.state = { params: this.props.initialValue };
   }
 
-  public render(): ReactNode {
+  public render() {
     const params = this.state.params;
     const formState = this.state.formState;
     const result = this.state.result;
@@ -83,7 +83,7 @@ class ColorGradientsUI extends Component<Props, State> {
     return (
       <div className={Cls.panel}>
         {/* Module introduction */}
-        <FoldingCard title={`1. ${t('Introduction')}`} className={'section'}>
+        <FoldingCard title={`1. ${t('Introduction')}`} className={Cls.section}>
           <div className={Cls.introduction}>
             <div>
               <p>{t('Color_gradients_are_used_to_represent_relative_data')}</p>
@@ -100,8 +100,8 @@ class ColorGradientsUI extends Component<Props, State> {
         </FoldingCard>
 
         {/* Data source selection */}
-        <FoldingCard title={`2. ${t('Select_data_source')}`} className={'section'}>
-          <div className={'explanation'}>{t('Data_source_contains_field_that_determine_colors')}</div>
+        <FoldingCard title={`2. ${t('Select_data_source')}`} className={Cls.section}>
+          <div className={Cls.explanation}>{t('Data_source_contains_field_that_determine_colors')}</div>
           <DataSourceForm
             valuesFieldLabel={t('Colors_from')}
             valuesFieldTip={ColorGradientTips.ColorField}
@@ -111,14 +111,14 @@ class ColorGradientsUI extends Component<Props, State> {
         </FoldingCard>
 
         {/* Vector layer selection */}
-        <FoldingCard title={`3. ${t('Select_geometry_layer')}`} className={'section'}>
-          <div className={'explanation'}>{t('Colors_applied_to_copy_of_geometries')}</div>
+        <FoldingCard title={`3. ${t('Select_geometry_layer')}`} className={Cls.section}>
+          <div className={Cls.explanation}>{t('Colors_applied_to_copy_of_geometries')}</div>
           <GeometryLayerForm values={geometryLayerValues} onChange={this.handleGeometryLayerChange} />
         </FoldingCard>
 
         {/* Data processing parameters */}
-        <FoldingCard title={`4. ${t('Select_parameters')}`} className={'section'}>
-          <div className={'explanation'}>{t('Colors_depends_on_algorithm')}</div>
+        <FoldingCard title={`4. ${t('Select_parameters')}`} className={Cls.section}>
+          <div className={Cls.explanation}>{t('Colors_depends_on_algorithm')}</div>
           {!dataSourceValues.valueField && <div>{t('You_must_select_a_value_field')}</div>}
           {!dataSourceValues.source && <div>{t('You_must_select_a_datasource')}</div>}
           {dataSourceValues.valueField && dataSourceValues.source && (

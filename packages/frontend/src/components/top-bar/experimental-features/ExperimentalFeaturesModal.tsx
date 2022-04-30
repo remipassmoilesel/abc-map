@@ -24,6 +24,7 @@ import { ExperimentalFeature, ExperimentalFeatures } from '../../../experimental
 import { useAppDispatch, useAppSelector } from '../../../core/store/hooks';
 import FeatureToggle from './FeatureToggle';
 import { UiActions } from '../../../core/store/ui/actions';
+import { ModuleRegistry } from '../../../data-processing/ModuleRegistry';
 
 interface Props {
   visible: boolean;
@@ -39,8 +40,16 @@ function ExperimentalFeaturesModal(props: Props) {
 
   const handleChange = useCallback((f: ExperimentalFeature, state: boolean) => dispatch(UiActions.setExperimentalFeature(f.id, state)), [dispatch]);
 
+  const handleClose = useCallback(() => {
+    // We reset data processing modules, in case some have been enabled/disabled
+    ModuleRegistry.get().resetLocalModules();
+
+    // We close modal
+    onClose();
+  }, [onClose]);
+
   return (
-    <Modal show={visible} onHide={onClose} centered>
+    <Modal show={visible} onHide={handleClose} centered>
       <Modal.Header closeButton>{t('Experimental_features')}</Modal.Header>
       <Modal.Body className={'d-flex flex-column justify-content-center'}>
         <div className={'mb-4'}>{t('Here_you_can_enable_features')}</div>
@@ -49,7 +58,7 @@ function ExperimentalFeaturesModal(props: Props) {
         ))}
       </Modal.Body>
       <Modal.Footer>
-        <button onClick={onClose} className={'btn btn-outline-secondary'} data-cy={'close-modal'}>
+        <button onClick={handleClose} className={'btn btn-outline-secondary'} data-cy={'close-modal'}>
           {t('Close')}
         </button>
       </Modal.Footer>

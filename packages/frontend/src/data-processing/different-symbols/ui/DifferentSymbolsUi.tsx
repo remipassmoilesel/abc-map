@@ -16,10 +16,10 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { Component, ReactNode } from 'react';
+import Cls from './DifferentSymbolsUi.module.scss';
+import React, { Component } from 'react';
 import { Logger } from '@abc-map/shared';
 import { prefixedTranslation } from '../../../i18n/i18n';
-import Cls from './DifferentSymbolsUi.module.scss';
 import { withTranslation } from 'react-i18next';
 import { FaIcon } from '../../../components/icon/FaIcon';
 import { IconDefs } from '../../../components/icon/IconDefs';
@@ -29,7 +29,7 @@ const logger = Logger.get('DifferentSymbolsUi.tsx');
 const t = prefixedTranslation('DataProcessingModules:DifferentSymbols.');
 
 class DifferentSymbolsUi extends Component<{}, {}> {
-  public render(): ReactNode {
+  public render() {
     return (
       <div className={Cls.panel}>
         <FaIcon icon={IconDefs.faFileCode} size={'4rem'} />

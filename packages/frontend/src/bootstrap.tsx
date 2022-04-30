@@ -25,6 +25,8 @@ import { MainStore } from './core/store/store';
 import { resolveInAtLeast } from './core/utils/resolveInAtLeast';
 import { ProjectEventType } from './core/project/ProjectEvent';
 import { StyleFactory } from './core/geo/styles/StyleFactory';
+import { ModuleRegistry } from './data-processing/ModuleRegistry';
+import { LoadingStatus, ModuleLoadingFailed } from './data-processing/ModuleLoadingStatus';
 
 export const logger = Logger.get('bootstrap.tsx', 'warn');
 
@@ -34,6 +36,7 @@ export function bootstrap(svc: Services, store: MainStore) {
   return resolveInAtLeast(authentication(svc), 400)
     .then(() => render(svc, store))
     .then(() => initProject(svc, store))
+    .then(() => loadRemoteModules())
     .catch((err) => bootstrapError(err));
 }
 
@@ -114,4 +117,15 @@ function bootstrapError(err: Error | AxiosError | undefined): void {
     <h1 class='text-center my-5'>Abc-Map</h1>
     <h5 class='text-center my-5'>${message}</h5>
   `;
+}
+
+async function loadRemoteModules(): Promise<void> {
+  return ModuleRegistry.get()
+    .loadRemoteModules()
+    .then((statusList) => {
+      const errors = statusList.filter((st): st is ModuleLoadingFailed => st.status === LoadingStatus.Failed);
+      if (errors.length) {
+        logger.error('Some modules where not loaded: ', errors);
+      }
+    });
 }

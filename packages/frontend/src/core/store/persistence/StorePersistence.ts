@@ -85,6 +85,7 @@ export class StorePersistence {
     cleanState.ui.historyCapabilities = {};
     cleanState.ui.documentation.scrollPosition = 0;
     cleanState.ui.sideMenu = {};
+    cleanState.ui.modulesLoaded = [];
     cleanState.project.layouts.activeId = undefined;
     cleanState.project.sharedViews.activeId = undefined;
     cleanState.project.sharedViews.mapDimensions.width = 0;

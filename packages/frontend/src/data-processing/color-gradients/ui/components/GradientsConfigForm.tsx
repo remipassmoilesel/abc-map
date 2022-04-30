@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { ChangeEvent, Component, ReactNode } from 'react';
+import React, { ChangeEvent, Component } from 'react';
 import { Logger } from '@abc-map/shared';
 import {
   Algorithm,
@@ -58,7 +58,7 @@ const algorithms: Algorithm[] = [ScaleAlgorithm.Interpolated, ...Object.values(C
 const t = prefixedTranslation('DataProcessingModules:ColorGradients.');
 
 class GradientsConfigForm extends Component<Props, {}> {
-  public render(): ReactNode {
+  public render() {
     const values = this.props.values;
     const dataSource = this.props.dataSource;
     const valueField = this.props.valueField;

@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { Component, ReactNode } from 'react';
+import React, { Component } from 'react';
 import { Logger } from '@abc-map/shared';
 import { prefixedTranslation } from '../../../i18n/i18n';
 import Cls from './FeatureCountByGeometriesUI.module.scss';
@@ -29,7 +29,7 @@ const logger = Logger.get('CountPointsInPolygonUi.tsx');
 const t = prefixedTranslation('DataProcessingModules:FeatureCountByGeometries.');
 
 class FeatureCountByGeometriesUi extends Component<{}, {}> {
-  public render(): ReactNode {
+  public render() {
     return (
       <div className={Cls.panel}>
         <FaIcon icon={IconDefs.faFileCode} size={'4rem'} />

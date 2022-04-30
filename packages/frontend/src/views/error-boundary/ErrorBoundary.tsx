@@ -87,14 +87,6 @@ class ErrorBoundary extends React.Component<ServiceProps, State> {
     }
   }
 
-  public componentDidMount() {
-    window.addEventListener('error', this.handleError);
-  }
-
-  public componentWillUnmount() {
-    window.removeEventListener('error', this.handleError);
-  }
-
   private handleClose = () => {
     this.setState({ hasError: false });
   };
@@ -103,14 +95,6 @@ class ErrorBoundary extends React.Component<ServiceProps, State> {
     const { storage } = this.props.services;
     storage.clear();
     window.location.reload();
-  };
-
-  private handleError = (err: ErrorEvent) => {
-    logger.error('Unhandled error: ', err);
-
-    if (!isErrorIgnored(err)) {
-      this.setState({ hasError: true });
-    }
   };
 }
 

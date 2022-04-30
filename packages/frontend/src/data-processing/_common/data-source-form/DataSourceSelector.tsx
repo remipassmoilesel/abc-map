@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { Component, ReactNode } from 'react';
+import React, { Component } from 'react';
 import { Logger } from '@abc-map/shared';
 import { FileIO, InputResultType, InputType } from '../../../core/utils/FileIO';
 import { ServiceProps, withServices } from '../../../core/withServices';
@@ -64,7 +64,7 @@ class DataSourceSelector extends Component<Props, State> {
     this.state = { display: Display.Layers, error: false, errorAtLine: NoLineInformation, rows: NoRowsInformation };
   }
 
-  public render(): ReactNode {
+  public render() {
     const source = this.props.value;
     const display = this.state.display;
     const rows = this.state.rows;

@@ -16,21 +16,23 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ReactNode } from 'react';
-import { Module } from '../Module';
+import { Module, ModuleId } from '@abc-map/module-api';
 import DifferentSymbolsUi from './ui/DifferentSymbolsUi';
-import { ModuleId } from '../ModuleId';
+import { LocalModuleId } from '../LocalModuleId';
+import { prefixedTranslation } from '../../i18n/i18n';
 
-export class DifferentSymbols extends Module {
+const t = prefixedTranslation('DataProcessingModules:DifferentSymbols.');
+
+export class DifferentSymbols implements Module {
   public getId(): ModuleId {
-    return ModuleId.DifferentSymbols;
+    return LocalModuleId.DifferentSymbols;
   }
 
-  public getI18nName(): string {
-    return 'Different_symbols';
+  public getReadableName(): string {
+    return t('Different_symbols');
   }
 
-  public getUserInterface(): ReactNode {
+  public getUserInterface() {
     return <DifferentSymbolsUi />;
   }
 }

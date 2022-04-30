@@ -1,9 +1,6 @@
 {
   "name": "@abc-map/root",
   "private": true,
-  "devDependencies": {
-    "lerna": "^4.0.0"
-  },
   "volta": {
     "node": "14.19.1"
   }

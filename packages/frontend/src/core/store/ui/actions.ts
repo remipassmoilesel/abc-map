@@ -25,6 +25,8 @@ export enum ActionType {
   SetSideMenuState = 'SetSideMenuState',
   AckSharedMapInformation = 'AckSharedMapInformation',
   SetExperimentalFeature = 'SetExperimentalFeature',
+  SetRemoteModules = 'SetRemoteModules',
+  SetLoadedModules = 'SetLoadedModules',
 }
 
 export interface SetHistoryCapabilities {
@@ -59,13 +61,25 @@ export interface SetExperimentalFeature {
   state: boolean;
 }
 
+export interface SetRemoteModules {
+  type: ActionType.SetRemoteModules;
+  moduleUrls: string[];
+}
+
+export interface SetLoadedModules {
+  type: ActionType.SetLoadedModules;
+  loadedModules: string[];
+}
+
 export type UiAction =
   | SetHistoryCapabilities
   | CleanHistoryCapabilities
   | SetDocumentationScrollPosition
   | SetSideMenuState
   | AckSharedMapInformation
-  | SetExperimentalFeature;
+  | SetExperimentalFeature
+  | SetRemoteModules
+  | SetLoadedModules;
 
 export class UiActions {
   public static setHistoryCapabilities(key: HistoryKey, canUndo: boolean, canRedo: boolean): UiAction {
@@ -109,6 +123,20 @@ export class UiActions {
       type: ActionType.SetExperimentalFeature,
       id,
       state,
+    };
+  }
+
+  public static setRemoteModuleUrls(moduleUrls: string[]): UiAction {
+    return {
+      type: ActionType.SetRemoteModules,
+      moduleUrls: moduleUrls,
+    };
+  }
+
+  public static setLoadedModules(moduleIds: string[]): UiAction {
+    return {
+      type: ActionType.SetLoadedModules,
+      loadedModules: moduleIds,
     };
   }
 }

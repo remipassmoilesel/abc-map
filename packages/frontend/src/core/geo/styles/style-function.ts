@@ -27,6 +27,7 @@ const logger = Logger.get('style-function.ts');
 export const styleFunction = function (options: StyleFactoryOptions, f: FeatureLike): Style[] {
   const feature = FeatureWrapper.fromUnknown(f);
   if (!feature) {
+    logger.error('Invalid feature: ', feature);
     return [];
   }
 

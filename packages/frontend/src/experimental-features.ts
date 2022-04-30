@@ -37,13 +37,11 @@ export const ArtefactGenerator: ExperimentalFeature = {
   description: [
     {
       language: Language.English,
-      text: 'This is an experimental data processing module, not intended for use by end users. You need to reload the app after activating it.',
+      text: `This is an experimental data processing module, not intended for use by end users.`,
     },
     {
       language: Language.French,
-      text:
-        "C'est un module de traitement de données expérimental, non destiné à être utilisé par les utilisateurs finaux. " +
-        "Vous devez recharger l'application après l'avoir activée.",
+      text: "C'est un module de traitement de données expérimental, non destiné à être utilisé par les utilisateurs finaux.",
     },
   ],
 };
