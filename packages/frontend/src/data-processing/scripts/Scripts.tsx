@@ -25,7 +25,7 @@ import { errorMessage } from '../../core/utils/errorMessage';
 import { Module, ModuleId } from '@abc-map/module-api';
 import { LocalModuleId } from '../LocalModuleId';
 import { prefixedTranslation } from '../../i18n/i18n';
-import { getModuleApi } from '../getModuleApi';
+import { getModuleApi } from '../_common/registry/getModuleApi';
 
 const t = prefixedTranslation('DataProcessingModules:Scripts.');
 

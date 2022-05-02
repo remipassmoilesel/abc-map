@@ -18,20 +18,23 @@
 
 import { Module, ModuleId } from '@abc-map/module-api';
 import React from 'react';
-import { Services } from '../../core/Services';
 import { Logger } from '@abc-map/shared';
 import { RemoteModuleLoaderUI } from './ui/RemoteModuleLoaderUI';
-import { MainStore } from '../../core/store/store';
 import { LocalModuleId } from '../LocalModuleId';
 import { prefixedTranslation } from '../../i18n/i18n';
-import { ModuleLoadingStatus } from '../ModuleLoadingStatus';
+import { ModuleSource } from './ModuleSource';
+import { ModuleLoadingStatus } from '../_common/registry/ModuleLoadingStatus';
 
 const t = prefixedTranslation('DataProcessingModules:RemoteModuleLoader.');
 
 export const logger = Logger.get('RemoteModuleLoader.tsx', 'info');
 
 export class RemoteModuleLoader implements Module {
-  constructor(private services: Services, private store: MainStore, private onLoad: () => Promise<ModuleLoadingStatus[]>) {}
+  constructor(
+    private moduleSource: ModuleSource,
+    private onLoad: (urls: string[]) => Promise<ModuleLoadingStatus[]>,
+    private onUnload: (module: Module) => void
+  ) {}
 
   public getId(): ModuleId {
     return LocalModuleId.RemoteModuleLoader;
@@ -42,6 +45,11 @@ export class RemoteModuleLoader implements Module {
   }
 
   public getUserInterface() {
-    return <RemoteModuleLoaderUI onProcess={this.onLoad} />;
+    return <RemoteModuleLoaderUI source={this.moduleSource} onProcess={this.handleLoading} onUnload={(module) => this.onUnload(module)} />;
   }
+
+  private handleLoading = (_urls: string[]) => {
+    const urls = _urls.filter((u) => u.trim()).filter((u) => !!u);
+    return this.onLoad(urls);
+  };
 }

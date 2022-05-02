@@ -15,6 +15,7 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
+import { RemoteModuleRef } from '../../../data-processing/_common/registry/RemoteModuleRef';
 
 export interface UiState {
   historyCapabilities: {
@@ -37,9 +38,18 @@ export interface UiState {
   experimentalFeatures: {
     [k: string]: boolean | undefined;
   };
-  // These ids are used to update UI when list of modules change
+  /**
+   * These ids are used to update UI when list of modules change
+   * It contains local and remote modules
+   */
   modulesLoaded: string[];
-  // These URLs are used to load modules on startup
+  /**
+   * This list contains only the loaded modules
+   */
+  remoteModules: RemoteModuleRef[];
+  /**
+   * This list is used in inputs. URLs here may not have been loaded
+   */
   remoteModuleUrls: string[];
 }
 
@@ -52,5 +62,6 @@ export const uiInitialState: UiState = {
   },
   experimentalFeatures: {},
   modulesLoaded: [],
+  remoteModules: [],
   remoteModuleUrls: [],
 };

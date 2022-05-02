@@ -17,6 +17,7 @@
  */
 
 import { HistoryKey } from '../../history/HistoryKey';
+import { RemoteModuleRef } from '../../../data-processing/_common/registry/RemoteModuleRef';
 
 export enum ActionType {
   SetHistoryCapabilities = 'SetHistoryCapabilities',
@@ -25,8 +26,9 @@ export enum ActionType {
   SetSideMenuState = 'SetSideMenuState',
   AckSharedMapInformation = 'AckSharedMapInformation',
   SetExperimentalFeature = 'SetExperimentalFeature',
-  SetRemoteModules = 'SetRemoteModules',
   SetLoadedModules = 'SetLoadedModules',
+  SetRemoteModules = 'SetRemoteModules',
+  SetRemoteModuleUrls = 'SetRemoteModuleUrls',
 }
 
 export interface SetHistoryCapabilities {
@@ -61,14 +63,19 @@ export interface SetExperimentalFeature {
   state: boolean;
 }
 
-export interface SetRemoteModules {
-  type: ActionType.SetRemoteModules;
+export interface SetLoadedModules {
+  type: ActionType.SetLoadedModules;
+  moduleIds: string[];
+}
+
+export interface SetRemoteModuleUrls {
+  type: ActionType.SetRemoteModuleUrls;
   moduleUrls: string[];
 }
 
-export interface SetLoadedModules {
-  type: ActionType.SetLoadedModules;
-  loadedModules: string[];
+export interface SetRemoteModules {
+  type: ActionType.SetRemoteModules;
+  modules: RemoteModuleRef[];
 }
 
 export type UiAction =
@@ -78,8 +85,9 @@ export type UiAction =
   | SetSideMenuState
   | AckSharedMapInformation
   | SetExperimentalFeature
-  | SetRemoteModules
-  | SetLoadedModules;
+  | SetLoadedModules
+  | SetRemoteModuleUrls
+  | SetRemoteModules;
 
 export class UiActions {
   public static setHistoryCapabilities(key: HistoryKey, canUndo: boolean, canRedo: boolean): UiAction {
@@ -126,17 +134,24 @@ export class UiActions {
     };
   }
 
-  public static setRemoteModuleUrls(moduleUrls: string[]): UiAction {
-    return {
-      type: ActionType.SetRemoteModules,
-      moduleUrls: moduleUrls,
-    };
-  }
-
   public static setLoadedModules(moduleIds: string[]): UiAction {
     return {
       type: ActionType.SetLoadedModules,
-      loadedModules: moduleIds,
+      moduleIds,
+    };
+  }
+
+  public static setRemoteModules(modules: RemoteModuleRef[]): UiAction {
+    return {
+      type: ActionType.SetRemoteModules,
+      modules,
+    };
+  }
+
+  public static setRemoteModuleUrls(moduleUrls: string[]): UiAction {
+    return {
+      type: ActionType.SetRemoteModuleUrls,
+      moduleUrls: moduleUrls,
     };
   }
 }

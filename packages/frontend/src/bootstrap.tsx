@@ -25,8 +25,8 @@ import { MainStore } from './core/store/store';
 import { resolveInAtLeast } from './core/utils/resolveInAtLeast';
 import { ProjectEventType } from './core/project/ProjectEvent';
 import { StyleFactory } from './core/geo/styles/StyleFactory';
-import { ModuleRegistry } from './data-processing/ModuleRegistry';
-import { LoadingStatus, ModuleLoadingFailed } from './data-processing/ModuleLoadingStatus';
+import { LoadingStatus, ModuleLoadingFailed } from './data-processing/_common/registry/ModuleLoadingStatus';
+import { ModuleRegistry } from './data-processing/_common/registry/ModuleRegistry';
 
 export const logger = Logger.get('bootstrap.tsx', 'warn');
 
@@ -36,7 +36,7 @@ export function bootstrap(svc: Services, store: MainStore) {
   return resolveInAtLeast(authentication(svc), 400)
     .then(() => render(svc, store))
     .then(() => initProject(svc, store))
-    .then(() => loadRemoteModules())
+    .then(() => loadRemoteModules(store))
     .catch((err) => bootstrapError(err));
 }
 
@@ -119,9 +119,10 @@ function bootstrapError(err: Error | AxiosError | undefined): void {
   `;
 }
 
-async function loadRemoteModules(): Promise<void> {
+async function loadRemoteModules(store: MainStore): Promise<void> {
+  const urls = store.getState().ui.remoteModules.map((mod) => mod.url);
   return ModuleRegistry.get()
-    .loadRemoteModules()
+    .loadRemoteModules(urls)
     .then((statusList) => {
       const errors = statusList.filter((st): st is ModuleLoadingFailed => st.status === LoadingStatus.Failed);
       if (errors.length) {

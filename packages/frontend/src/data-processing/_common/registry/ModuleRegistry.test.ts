@@ -18,15 +18,19 @@
 
 import { SinonStub } from 'sinon';
 import { ModuleRegistry } from './ModuleRegistry';
-import { MainStore, storeFactory } from '../core/store/store';
+import { MainStore, storeFactory } from '../../../core/store/store';
+import { newTestServices, TestServices } from '../../../core/utils/test/TestServices';
+import { localModulesFactory } from '../../localModulesFactory';
 
 describe('ModuleRegistry', () => {
+  let services: TestServices;
   let store: MainStore;
   let registry: ModuleRegistry;
 
   beforeEach(() => {
+    services = newTestServices();
     store = storeFactory();
-    registry = new ModuleRegistry(store);
+    registry = new ModuleRegistry(services, store, localModulesFactory);
   });
 
   describe('load()', () => {

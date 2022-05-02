@@ -30,9 +30,9 @@ import { isDesktopDevice } from '../../core/ui/isDesktopDevice';
 import { useAppDispatch, useAppSelector } from '../../core/store/hooks';
 import { FloatingButton } from '../../components/floating-button/FloatingButton';
 import { UiActions } from '../../core/store/ui/actions';
-import { ModuleRegistry } from '../../data-processing/ModuleRegistry';
 import ModuleErrorBoundary from './ModuleErrorBoundary';
 import { useServices } from '../../core/useServices';
+import { ModuleRegistry } from '../../data-processing/_common/registry/ModuleRegistry';
 
 const logger = Logger.get('DataProcessingView.tsx', 'info');
 
@@ -40,8 +40,10 @@ const t = prefixedTranslation('DataProcessingView:');
 
 function DataProcessingView() {
   const { toasts } = useServices();
-  const modules = ModuleRegistry.get().getAllModules();
+  const registry = ModuleRegistry.get();
+  const modules = registry.getAllModules();
   const loadedModules = useAppSelector((st) => st.ui.modulesLoaded);
+  const remoteModules = useAppSelector((st) => st.ui.remoteModules);
   const activeModuleId = useParams<DataProcessingParams>().moduleId;
   const activeModule = modules.find((mod) => mod.getId() === activeModuleId);
   const dispatch = useAppDispatch();
@@ -61,14 +63,15 @@ function DataProcessingView() {
   }, [dispatch, location.search]);
 
   const updateRemoteModules = useCallback(() => {
-    ModuleRegistry.get()
-      .loadRemoteModules()
+    const urls = remoteModules.map((mod) => mod.url);
+    registry
+      .loadRemoteModules(urls)
       .then(() => setUpdateKey(updateKey + 1))
       .catch((err) => {
         toasts.genericError();
         logger.error('Update error: ', err);
       });
-  }, [toasts, updateKey]);
+  }, [registry, remoteModules, toasts, updateKey]);
 
   return (
     <div className={Cls.dataProcessingView}>
@@ -87,7 +90,7 @@ function DataProcessingView() {
           {modules.map((mod) => {
             const to = Routes.dataProcessing().withParams({ moduleId: mod.getId() });
             return (
-              <Link key={mod.getId()} className={'btn btn-link mb-1'} to={to} data-cy={mod.getId()}>
+              <Link key={mod.getId()} to={to} className={'btn btn-link mb-1'} data-cy={mod.getId()}>
                 {mod.getReadableName()}
               </Link>
             );
@@ -96,7 +99,7 @@ function DataProcessingView() {
       </SideMenu>
 
       {/* Reload button on right, only for remote modules */}
-      {activeModule && ModuleRegistry.get().isRemote(activeModule) && (
+      {activeModule && registry.isRemote(activeModule) && (
         <FloatingButton
           icon={IconDefs.faRedo}
           title={t('Reload_module')}

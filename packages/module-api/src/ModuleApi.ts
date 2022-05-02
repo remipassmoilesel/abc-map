@@ -21,16 +21,20 @@ import { LayerFactory } from './layers';
 import { MapFactory, MapWrapper } from './map';
 import { GeoService } from './services/GeoService';
 import { HistoryService } from './services';
+import { ChangesetFactories } from './services/ChangesetFactories';
 
 /**
  *
  * All interfaces will have an implementation injected at runtime in global scope of modules.
+ *
+ * You can't rename or remove things from this interface.
  */
 export interface ModuleApi {
   resourceBaseUrl: string;
   FeatureWrapperFactory: FeatureWrapperFactory;
   LayerFactory: LayerFactory;
   MapFactory: MapFactory;
+  changesets: ChangesetFactories;
   mainMap: MapWrapper;
   services: {
     geo: GeoService;

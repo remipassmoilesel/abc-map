@@ -548,7 +548,10 @@
       "You_can_write_your_own_data_processing_module": "Vous pouvez écrire votre propre module de traitement de données",
       "Follow_these_instructions_to_create_a_module": "Suivez ces instructions pour créer un module",
       "modify_it_publish_it_on_Github_or_Gitlab": "modifiez-le, publiez-le sur Github ou Gitlab, et vous pourrez l'utiliser sur Abc-Map.",
-      "Writing_a_module_requires_advanced_programming_knowledge": "L'écriture d'un module nécessite des connaissances avancées en programmation."
+      "Writing_a_module_requires_advanced_programming_knowledge": "L'écriture d'un module nécessite des connaissances avancées en programmation.",
+      "Remote_modules": "Modules chargés",
+      "Remove_module": "Enlever le module",
+      "You_can_try": "Vous pouvez essayer"
     }
   },
   "ExportView": {

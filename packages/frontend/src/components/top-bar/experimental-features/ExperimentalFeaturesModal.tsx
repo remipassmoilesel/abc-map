@@ -24,7 +24,7 @@ import { ExperimentalFeature, ExperimentalFeatures } from '../../../experimental
 import { useAppDispatch, useAppSelector } from '../../../core/store/hooks';
 import FeatureToggle from './FeatureToggle';
 import { UiActions } from '../../../core/store/ui/actions';
-import { ModuleRegistry } from '../../../data-processing/ModuleRegistry';
+import { ModuleRegistry } from '../../../data-processing/_common/registry/ModuleRegistry';
 
 interface Props {
   visible: boolean;

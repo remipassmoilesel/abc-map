@@ -16,7 +16,7 @@ You can create your own data processing module, and use it online on Abc-Map.
 
 ## Why should I create an Abc-Map module ?
 
-- It is relatively simple to write: using this template you just have to implement your feature
+- It is relatively simple to write: using a template you just have to implement your feature
 - It will be easily accessible to users: you can share your modules thanks to Gitlab pages and GitHub pages
 
 ## Getting started

@@ -22,11 +22,12 @@ import { ModuleApi } from '../ModuleApi';
 import { FeatureWrapper, FeatureWrapperFactory } from '../features';
 import { MapFactory, MapWrapper } from '../map';
 import Feature from 'ol/Feature';
-import { LayerFactory } from '../layers';
+import { LayerFactory, LayerWrapper } from '../layers';
 import { newTestMapWrapper } from './TestMapWrapper';
 import { newTestGeoService } from './TestGeoService';
-import { GeoService } from '../services';
+import { Changeset, GeoService } from '../services';
 import Geometry from 'ol/geom/Geometry';
+import VectorSource from 'ol/source/Vector';
 
 export interface TestModuleApi {
   resourceBaseUrl: string;
@@ -52,7 +53,7 @@ export interface TestModuleApi {
 }
 
 type SameKeys<T> = {
-  [P in keyof T]: SinonStub | SinonStubbedInstance<any>;
+  [P in keyof T]: SinonStub | SinonStubbedInstance<any> | { [k: string]: SinonStub | SinonStubbedInstance<any> };
 };
 
 export function testModuleApi(): TestModuleApi {
@@ -81,6 +82,12 @@ export function testModuleApi(): TestModuleApi {
     FeatureWrapperFactory,
     LayerFactory,
     MapFactory,
+    changesets: {
+      addLayers: sinon.stub<[LayerWrapper[]], Changeset>(),
+      removeLayer: sinon.stub<[LayerWrapper], Changeset>(),
+      addFeatures: sinon.stub<[VectorSource, FeatureWrapper[]], Changeset>(),
+      removeFeatures: sinon.stub<[VectorSource, FeatureWrapper[]], Changeset>(),
+    },
     mainMap: newTestMapWrapper(),
     services: {
       geo: newTestGeoService(),

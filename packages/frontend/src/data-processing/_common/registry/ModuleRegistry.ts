@@ -16,34 +16,30 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { getServices } from '../core/Services';
+import { getServices, Services } from '../../../core/Services';
 import * as react from 'react';
+import * as _ from 'lodash';
 import { Module, ModuleFactory } from '@abc-map/module-api';
-import { mainStore, MainStore } from '../core/store/store';
-import { DataViewer } from './data-viewer/DataViewer';
-import { ColorGradients } from './color-gradients/ColorGradients';
-import { ProportionalSymbols } from './proportional-symbols/ProportionalSymbols';
-import { DifferentSymbols } from './different-symbols/DifferentSymbols';
-import { FeatureCountByGeometries } from './count-by-geometries/FeatureCountByGeometries';
-import { Scripts } from './scripts/Scripts';
-import { isExperimentalFeatureEnabled } from '../core/ui/useExperimentalFeature';
-import { ArtefactGenerator } from '../experimental-features';
-import { ArtefactGenerator as ArtefactGeneratorModule } from './artefact-generator/ArtefactGenerator';
-import { RemoteModuleLoader } from './remote-module-loader/RemoteModuleLoader';
-import { UiActions } from '../core/store/ui/actions';
+import { mainStore, MainStore } from '../../../core/store/store';
+import { UiActions } from '../../../core/store/ui/actions';
 import { Logger } from '@abc-map/shared';
-import { errorMessage } from '../core/utils/errorMessage';
+import { errorMessage } from '../../../core/utils/errorMessage';
 import { LoadingStatus, ModuleLoadingFailed, ModuleLoadingStatus, ModuleLoadingSucceed } from './ModuleLoadingStatus';
 import { getModuleApi } from './getModuleApi';
+import { RemoteModuleRef } from './RemoteModuleRef';
+import { RemoteModuleLoader } from '../../remote-module-loader/RemoteModuleLoader';
+import { localModulesFactory } from '../../localModulesFactory';
 
 const logger = Logger.get('ModuleRegistry.ts');
+
+export type LocalModulesFactory = (services: Services, store: MainStore) => Module[];
 
 let instance: ModuleRegistry | undefined;
 
 export class ModuleRegistry {
   public static get(): ModuleRegistry {
     if (!instance) {
-      instance = new ModuleRegistry(mainStore);
+      instance = new ModuleRegistry(getServices(), mainStore, localModulesFactory);
     }
 
     return instance;
@@ -52,65 +48,86 @@ export class ModuleRegistry {
   private remoteModules: Module[] = [];
   private localModules: Module[] = [];
 
-  constructor(private store: MainStore) {
+  /**
+   * You should use getModuleRegistry()
+   *
+   * @param services
+   * @param store
+   * @param localModuleFactory
+   */
+  constructor(private services: Services, private store: MainStore, private localModuleFactory: LocalModulesFactory) {
     this.resetLocalModules();
   }
 
   public getAllModules() {
-    return this.localModules.concat(ModuleRegistry.get().getRemoteModules());
+    return this.localModules.concat(this.remoteModules);
   }
 
   public getRemoteModules() {
     return this.remoteModules;
   }
 
-  public isRemote(module: Module): boolean {
-    return !!this.remoteModules.find((mod) => mod.getId() === module.getId());
+  public isRemote(module: Module | string): boolean {
+    return !!this.remoteModules.find((mod) => {
+      if (typeof module === 'string') {
+        return mod.getId() === module;
+      } else {
+        return mod.getId() === module.getId();
+      }
+    });
+  }
+
+  public unload(module: Module) {
+    this.localModules = this.localModules.filter((mod) => mod.getId() !== module.getId());
+    this.remoteModules = this.remoteModules.filter((mod) => mod.getId() !== module.getId());
+
+    this.updateStore();
   }
 
   public resetLocalModules() {
-    const services = getServices();
-    this.localModules = [
-      new DataViewer(),
-      new ColorGradients(services),
-      new ProportionalSymbols(services),
-      new DifferentSymbols(),
-      new FeatureCountByGeometries(),
-      new Scripts(services),
-      new RemoteModuleLoader(services, mainStore, this.loadRemoteModules),
-    ];
+    // Add local modules
+    this.localModules = this.localModuleFactory(this.services, this.store);
 
-    if (isExperimentalFeatureEnabled(ArtefactGenerator)) {
-      this.localModules.push(ArtefactGeneratorModule.create(services));
-    }
+    // Add module loader
+    this.localModules.push(
+      new RemoteModuleLoader(
+        this,
+        (urls) => this.loadRemoteModules(urls),
+        (module) => this.unload(module)
+      )
+    );
 
-    this.updateUi();
+    this.updateStore();
   }
 
-  public loadRemoteModules = (): Promise<ModuleLoadingStatus[]> => {
-    const remoteUrls = this.store.getState().ui.remoteModuleUrls;
+  public loadRemoteModules(urls: string[]): Promise<ModuleLoadingStatus[]> {
     return Promise.all(
-      remoteUrls.map((url) =>
+      urls.map((url) =>
         this.load(url)
-          .then<ModuleLoadingSucceed>(() => {
+          .then<ModuleLoadingSucceed>((module) => {
             logger.info(`Module ${url} loaded`);
-            return { status: LoadingStatus.Succeed, url };
+            return { status: LoadingStatus.Succeed, url, id: module.getId() };
           })
           .catch<ModuleLoadingFailed>((err) => {
             return { status: LoadingStatus.Failed, url, error: errorMessage(err) };
           })
       )
     ).then((statusList) => {
-      // Keep loaded URL in store
-      const urls = statusList.filter((st): st is ModuleLoadingSucceed => st.status === LoadingStatus.Succeed).map((st) => st.url);
-      this.store.dispatch(UiActions.setRemoteModuleUrls(urls));
+      // Update store
+      const modules: RemoteModuleRef[] = statusList
+        .filter((st): st is ModuleLoadingSucceed => st.status === LoadingStatus.Succeed)
+        .map((st) => ({ id: st.id, url: st.url }));
+
+      const existing = this.store.getState().ui.remoteModules;
+      const all = _.uniqBy(existing.concat(modules), (mod) => mod.id);
+      this.store.dispatch(UiActions.setRemoteModules(all));
 
       // Update UI
-      this.updateUi();
+      this.updateStore();
 
       return statusList;
     });
-  };
+  }
 
   public async load(_url: string): Promise<Module> {
     const url = _url.replace(new RegExp('/$', 'i'), '');
@@ -168,18 +185,25 @@ export class ModuleRegistry {
     }
 
     const module = moduleFactory();
+
     // We remove previous modules
     this.remoteModules = this.remoteModules.filter((mod) => mod.getId() !== module.getId());
 
     // We add module to remotes, then reset module list
     this.remoteModules.push(module);
 
-    this.updateUi();
+    this.updateStore();
     return module;
   }
 
-  private updateUi() {
+  private updateStore() {
+    // Update module ids, used for UI updates
     const moduleIds = this.localModules.concat(this.remoteModules).map((mod) => mod.getId());
     this.store.dispatch(UiActions.setLoadedModules(moduleIds));
+
+    // Update module storage
+    const remotesFromStore = this.store.getState().ui.remoteModules;
+    const updated = remotesFromStore.filter((mod) => this.remoteModules.find((modB) => mod.id === modB.getId()));
+    this.store.dispatch(UiActions.setRemoteModules(updated));
   }
 }

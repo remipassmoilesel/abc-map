@@ -28,23 +28,31 @@ import { FormState } from '../../../components/form-validation-label/FormState';
 import { ValidationHelper } from '../../../core/utils/ValidationHelper';
 import { useAppDispatch, useAppSelector } from '../../../core/store/hooks';
 import { UiActions } from '../../../core/store/ui/actions';
-import { LoadingStatus, ModuleLoadingStatus } from '../../ModuleLoadingStatus';
+import { LoadingStatus, ModuleLoadingStatus } from '../../_common/registry/ModuleLoadingStatus';
+import { Module } from '@abc-map/module-api';
+import RemoteModuleItem from './RemoteModuleItem';
+import { FoldingInfo } from '../../../components/folding-info/FoldingInfo';
+import { ModuleSource } from '../ModuleSource';
 
 const logger = Logger.get('RemoteModuleLoader.tsx');
 
 interface Props {
-  onProcess: () => Promise<ModuleLoadingStatus[]>;
+  source: ModuleSource;
+  onProcess: (urls: string[]) => Promise<ModuleLoadingStatus[]>;
+  onUnload: (module: Module) => void;
 }
 
 const t = prefixedTranslation('DataProcessingModules:RemoteModuleLoader.');
 
 export function RemoteModuleLoaderUI(props: Props) {
-  const { onProcess } = props;
+  const { source, onProcess, onUnload } = props;
   const { toasts } = useServices();
   const dispatch = useAppDispatch();
-  const urls = useAppSelector((st) => st.ui.remoteModuleUrls);
   const [formState, setFormState] = useState(FormState.InvalidHttpsUrl);
   const [message, setMessage] = useState('');
+  const remoteUrls = useAppSelector((st) => st.ui.remoteModuleUrls);
+  const [remoteModules, setRemoteModules] = useState<Module[]>([]);
+  const modulesLoaded = useAppSelector((st) => st.ui.modulesLoaded);
 
   const validate = useCallback((urls: string[]) => {
     let hasError = false;
@@ -63,25 +71,25 @@ export function RemoteModuleLoaderUI(props: Props) {
   }, []);
 
   const handleLoad = useCallback(() => {
-    onProcess()
+    onProcess(remoteUrls)
       .then((statusList) => {
         const message = statusList
           .map((st) => {
-            if (st.status === LoadingStatus.Succeed) {
-              return `${st.url} : Ok`;
-            } else {
+            if (st.status === LoadingStatus.Failed) {
               return `${st.url} : ${st.error}`;
+            } else {
+              return '';
             }
           })
           .join('\n');
 
-        setMessage(message + '\n' + t('Loading_done'));
+        setMessage(message);
       })
       .catch((err) => {
         logger.error('Module loading error: ', err);
         toasts.genericError(err);
       });
-  }, [onProcess, toasts]);
+  }, [onProcess, remoteUrls, toasts]);
 
   const handleChange = useCallback(
     (ev: ChangeEvent<HTMLTextAreaElement>) => {
@@ -91,7 +99,13 @@ export function RemoteModuleLoaderUI(props: Props) {
     [dispatch]
   );
 
-  useEffect(() => validate(urls), [urls, validate]);
+  // Validate URLs each time they change
+  useEffect(() => validate(remoteUrls), [remoteUrls, validate]);
+
+  // Update remote module list each time modulesLoaded list change
+  useEffect(() => {
+    setRemoteModules(source.getRemoteModules());
+  }, [modulesLoaded, source]);
 
   return (
     <div className={Cls.panel}>
@@ -100,8 +114,7 @@ export function RemoteModuleLoaderUI(props: Props) {
         <p>{t('Enter_a_list_of_adresses')}</p>
       </div>
 
-      <div className={'alert alert-secondary'}>
-        <div className={'fw-bold mb-2'}>{t('You_can_write_your_own_data_processing_module')} ✨</div>
+      <FoldingInfo title={`${t('You_can_write_your_own_data_processing_module')} ✨`}>
         <div>
           <a href={'https://gitlab.com/abc-map/abc-map_private/-/blob/master/documentation/6_modules.md'} target={'_blank'} rel="noreferrer">
             {t('Follow_these_instructions_to_create_a_module')},
@@ -109,15 +122,19 @@ export function RemoteModuleLoaderUI(props: Props) {
           &nbsp;{t('modify_it_publish_it_on_Github_or_Gitlab')}
         </div>
         <div>{t('Writing_a_module_requires_advanced_programming_knowledge')}</div>
-      </div>
+      </FoldingInfo>
 
       <div className={'alert alert-danger mt-2 mb-4'}>
         <FaIcon icon={IconDefs.faExclamationTriangle} className={'mr-2'} size={'1.2rem'} />
         {t('Use_only_modules_whose_source_you_know')}
       </div>
 
+      <div className={Cls.example}>
+        {t('You_can_try')}&nbsp;<i>https://abc-map.gitlab.io/module-template/</i>
+      </div>
+
       <div>
-        <textarea value={urls.join('\n')} onChange={handleChange} rows={5} className={'form-control'} data-cy={'module-urls'} />
+        <textarea value={remoteUrls.join('\n')} onChange={handleChange} rows={5} className={'form-control'} data-cy={'module-urls'} />
       </div>
 
       <FormValidationLabel state={formState} className={'my-4'} />
@@ -130,6 +147,15 @@ export function RemoteModuleLoaderUI(props: Props) {
 
       {/* Error or result message */}
       {message && <pre>{message}</pre>}
+
+      {!!remoteModules.length && (
+        <div className={'mt-4'}>
+          <h4 className={'mb-4'}>{t('Remote_modules')}</h4>
+          {remoteModules.map((mod) => (
+            <RemoteModuleItem key={mod.getId()} module={mod} onUnload={onUnload}></RemoteModuleItem>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
