@@ -16,10 +16,13 @@
 # Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
 
 set -e
+set -x
 
-rm -rf playground
-mkdir -p playground
-cd playground
+PLAYGROUND="playground"
+
+rm -rf $PLAYGROUND
+mkdir -p $PLAYGROUND
+cd $PLAYGROUND
 
 export ABC_CREATE_MODULE_DEBUG=true
 

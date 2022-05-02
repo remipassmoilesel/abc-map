@@ -16,23 +16,14 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-export interface HistoryService {
-  register(key: HistoryKey, cs: Changeset): void;
-  remove(key: HistoryKey, cs: Changeset): void;
-  undo(key: HistoryKey): Promise<void>;
-  redo(key: HistoryKey): Promise<void>;
-  canUndo(key: HistoryKey): boolean;
-  canRedo(key: HistoryKey): boolean;
-}
+import { Changeset } from './HistoryService';
+import { LayerWrapper } from '../layers';
+import { FeatureWrapper } from '../features';
+import VectorSource from 'ol/source/Vector';
 
-export enum HistoryKey {
-  Map = 'Map',
-  Export = 'Export',
-  SharedViews = 'SharedViews',
-}
-
-export interface Changeset {
-  apply(): Promise<void>;
-  undo(): Promise<void>;
-  dispose(): Promise<void>;
+export interface ChangesetFactories {
+  addLayers: (layers: LayerWrapper[]) => Changeset;
+  removeLayer: (layer: LayerWrapper) => Changeset;
+  addFeatures: (source: VectorSource, features: FeatureWrapper[]) => Changeset;
+  removeFeatures: (source: VectorSource, features: FeatureWrapper[]) => Changeset;
 }

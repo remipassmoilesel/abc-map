@@ -78,17 +78,24 @@ export function uiReducer(state = uiInitialState, action: UiAction): UiState {
       };
     }
 
-    case ActionType.SetRemoteModules: {
-      return {
-        ...state,
-        remoteModuleUrls: action.moduleUrls,
-      };
-    }
-
     case ActionType.SetLoadedModules: {
       return {
         ...state,
-        modulesLoaded: action.loadedModules,
+        modulesLoaded: action.moduleIds,
+      };
+    }
+
+    case ActionType.SetRemoteModules: {
+      return {
+        ...state,
+        remoteModules: action.modules,
+      };
+    }
+
+    case ActionType.SetRemoteModuleUrls: {
+      return {
+        ...state,
+        remoteModuleUrls: action.moduleUrls,
       };
     }
 

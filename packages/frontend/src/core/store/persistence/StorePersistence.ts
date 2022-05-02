@@ -79,6 +79,7 @@ export class StorePersistence {
         documentation: {
           ...state.ui.documentation,
         },
+        remoteModuleUrls: [],
       },
     };
 

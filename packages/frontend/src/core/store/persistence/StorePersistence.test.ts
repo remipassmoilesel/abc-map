@@ -123,6 +123,7 @@ describe('StorePersistence', () => {
         },
         modulesLoaded: ['module1', 'module2', 'module3', 'module4'],
         remoteModuleUrls: ['https://module3', 'https://module4'],
+        remoteModules: [{ id: 'module3', url: 'https://module3' }],
       },
     });
 
@@ -206,7 +207,8 @@ describe('StorePersistence', () => {
           Feature2: false,
         },
         modulesLoaded: [],
-        remoteModuleUrls: ['https://module3', 'https://module4'],
+        remoteModuleUrls: [],
+        remoteModules: [{ id: 'module3', url: 'https://module3' }],
       },
     };
 

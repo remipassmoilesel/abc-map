@@ -1,6 +1,6 @@
 {
   "name": "@abc-map/module-api",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "license": "AGPL-3.0-or-later",
   "main": "build/index.js",
   "types": "build/index.d.ts",

@@ -23,7 +23,7 @@ import * as chalk from 'chalk';
 import * as path from 'path';
 import * as AdmZip from 'adm-zip';
 import * as sortPackageJson from 'sort-package-json';
-import { promises as fs } from 'fs';
+import { promises as fs, Stats } from 'fs';
 import { Shell } from './utils/Shell';
 
 export const logger = Logger.get('Bootstrap.tsx');
@@ -77,8 +77,20 @@ export class Bootstrap {
       throw err;
     }
 
-    // Create root directory
     const root = this.getRoot();
+    // Check if root directory does not exist
+    let stats: Stats | undefined = undefined;
+    try {
+      stats = await fs.stat(root);
+      // eslint-disable-next-line no-empty
+    } catch (err) {}
+
+    if (stats?.isDirectory()) {
+      logger.error(chalk.red(`'${this.params.name}' already exists. Choose a different name.`));
+      throw new Error('Root already exists');
+    }
+
+    // Create root directory
     try {
       await fs.mkdir(root, { recursive: true });
     } catch (err) {

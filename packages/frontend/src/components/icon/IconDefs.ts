@@ -16,6 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { faPlug } from '@fortawesome/free-solid-svg-icons/faPlug';
 import { faGear } from '@fortawesome/free-solid-svg-icons/faGear';
 import { faCropSimple } from '@fortawesome/free-solid-svg-icons/faCropSimple';
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons/faCaretDown';
@@ -126,6 +127,7 @@ import { faClipboard } from '@fortawesome/free-solid-svg-icons/faClipboard';
 import { faStickyNote } from '@fortawesome/free-solid-svg-icons/faStickyNote';
 
 export const IconDefs = {
+  faPlug,
   faGear,
   faCropSimple,
   faCaretDown,
