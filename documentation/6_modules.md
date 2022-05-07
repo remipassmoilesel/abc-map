@@ -48,7 +48,7 @@ Start:
 4. Share the public URL of your module, per example `https://abc-map.gitlab.io/module-template/`
 5. Users can now browse this URL and enable module in their browsers
 
-FIXME: add a video here
+Watch this video to see the process in action: https://www.youtube.com/embed/mqt_CzSplJg
 
 ## How does it work ?
 

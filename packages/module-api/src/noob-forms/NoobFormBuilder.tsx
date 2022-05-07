@@ -49,6 +49,7 @@ const logger = Logger.get('NoobFormBuilder.tsx');
 
 interface CommonLabels {
   submitButton: string;
+  cancelButton: string;
   formHasErrors: string;
 }
 
@@ -58,9 +59,12 @@ export type ErrorHandler<T extends FieldValues> = (errors: FormErrors<T>) => str
 export class NoobFormBuilder<T extends FieldValues> {
   private fields: FieldDefinition<T>[] = [];
   private submitHandler?: SubmitHandler<T>;
+  private submitDisabled?: boolean;
+  private cancelHandler?: () => void;
   private errorHandler?: ErrorHandler<T>;
   private labels: CommonLabels = {
     submitButton: 'Submit',
+    cancelButton: 'Cancel',
     formHasErrors: 'Form has errors',
   };
 
@@ -94,12 +98,27 @@ export class NoobFormBuilder<T extends FieldValues> {
   }
 
   /**
+   * Register a function that will be called each time form change
+   *
+   * @param handler
+   */
+  public onCancel(handler: () => void) {
+    this.cancelHandler = handler;
+    return this;
+  }
+
+  /**
    * Register a function that will be called each time user submit form
    *
    * @param handler
    */
   public onSubmit(handler: SubmitHandler<T>): NoobFormBuilder<T> {
     this.submitHandler = handler;
+    return this;
+  }
+
+  public disableSubmit(value: boolean): NoobFormBuilder<T> {
+    this.submitDisabled = value;
     return this;
   }
 
@@ -247,7 +266,7 @@ export class NoobFormBuilder<T extends FieldValues> {
 
     return (
       <NoobFormContext.Provider value={context}>
-        <form onSubmit={handleSubmit(this.submitHandler as RHFSubmitHandler<T>)} className={Cls.form}>
+        <form onSubmit={handleSubmit(this.submitHandler as RHFSubmitHandler<T>)} onReset={this.cancelHandler} className={Cls.form}>
           {/* Form fields */}
           {this.fields.map((field) => {
             switch (field.type) {
@@ -279,7 +298,11 @@ export class NoobFormBuilder<T extends FieldValues> {
 
           {/* Submit controls */}
           <div className={'d-flex justify-content-end'}>
-            <button type={'submit'} className={'btn btn-primary'} data-testid={'submit-button'}>
+            <button type={'reset'} className={'btn btn-secondary mr-3'} data-testid={'cancel-button'}>
+              {this.labels.cancelButton}
+            </button>
+
+            <button type={'submit'} disabled={this.submitDisabled} className={'btn btn-primary'} data-testid={'submit-button'}>
               {this.labels.submitButton}
             </button>
           </div>

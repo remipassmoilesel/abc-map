@@ -76,7 +76,7 @@ describe('useNoobFormBuilder', () => {
           .addText({ name: 'name', label: 'Name' })
           .addDatePicker({ name: 'startDate', label: 'Start date' })
           .addNumber({ name: 'size', label: 'Size' }, { min: 0, max: 1000 })
-          .setCommonLabels({ submitButton: 'Submit' })
+          .setCommonLabels({ submitButton: 'Submit button', cancelButton: 'Cancel button' })
           .build()}
       </div>
     );

@@ -122,11 +122,18 @@ exports[`useNoobFormBuilder should render without values 1`] = `
         class="d-flex justify-content-end"
       >
         <button
+          class="btn btn-secondary mr-3"
+          data-testid="cancel-button"
+          type="reset"
+        >
+          Cancel button
+        </button>
+        <button
           class="btn btn-primary"
           data-testid="submit-button"
           type="submit"
         >
-          Submit
+          Submit button
         </button>
       </div>
     </form>
@@ -256,11 +263,18 @@ exports[`useNoobFormBuilder should render without values 2`] = `
         class="d-flex justify-content-end"
       >
         <button
+          class="btn btn-secondary mr-3"
+          data-testid="cancel-button"
+          type="reset"
+        >
+          Cancel button
+        </button>
+        <button
           class="btn btn-primary"
           data-testid="submit-button"
           type="submit"
         >
-          Submit
+          Submit button
         </button>
       </div>
     </form>
@@ -398,11 +412,18 @@ exports[`useNoobFormBuilder should trigger onError if any 1`] = `
         class="d-flex justify-content-end"
       >
         <button
+          class="btn btn-secondary mr-3"
+          data-testid="cancel-button"
+          type="reset"
+        >
+          Cancel button
+        </button>
+        <button
           class="btn btn-primary"
           data-testid="submit-button"
           type="submit"
         >
-          Submit
+          Submit button
         </button>
       </div>
     </form>

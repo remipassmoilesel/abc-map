@@ -25,6 +25,7 @@ import * as AdmZip from 'adm-zip';
 import * as sortPackageJson from 'sort-package-json';
 import { promises as fs, Stats } from 'fs';
 import { Shell } from './utils/Shell';
+import { getErrorMessage } from './utils/getErrorMessage';
 
 export const logger = Logger.get('Bootstrap.tsx');
 
@@ -145,6 +146,7 @@ export class Bootstrap {
 
   private async gitInit() {
     if (!(await hasBinary('git'))) {
+      logger.warn('git binary not found, skipping git initialization');
       return;
     }
 
@@ -155,7 +157,9 @@ export class Bootstrap {
       this.shell.sync('git add -A', { cwd: root, stdio: 'ignore' });
       this.shell.sync('git commit -m "Add template 🚀"', { cwd: root, stdio: 'ignore' });
     } catch (err) {
-      logger.debug('Git init error: ', err);
+      logger.error('git init error: ', getErrorMessage(err));
+      logger.error('You may have to configure git.');
+      logger.debug('git init error: ', err);
     }
   }
 
