@@ -5,5 +5,6 @@
 [Créer une carte](#create-map)
 [Import de données](#data-import)
 [Inscription, connexion](#registration)
+[Modules](#modules)
 [Questions fréquentes](#faq)
 [🔥 A l'aide !](#helpme)

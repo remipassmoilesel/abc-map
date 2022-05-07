@@ -125,7 +125,7 @@ export class BuildService {
   }
 
   public test(): void {
-    this.shell.sync('lerna run test --stream');
+    this.shell.sync('lerna run test --stream --concurrency 1');
   }
 
   public async e2eTests(): Promise<void> {

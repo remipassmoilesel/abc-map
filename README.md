@@ -1,6 +1,4 @@
-<div>
-  <img alt="Abc-Map" src="./documentation/assets/main-icon.png" />
-</div>
+<img alt="Abc-Map" src="./documentation/assets/main-icon.png" style="width: 70px"/>
 
 # Welcome to Abc-Map !
 

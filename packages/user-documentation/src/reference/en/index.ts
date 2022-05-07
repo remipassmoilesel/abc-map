@@ -22,9 +22,10 @@ import basics from './02_basics.md';
 import createMap from './03_create-map.md';
 import importData from './04_import-data.md';
 import registration from './05_registration.md';
-import faq from './06_faq.md';
-import help from './07_helpme.md';
+import modules from './06_modules.md';
+import faq from './98_faq.md';
+import help from './99_helpme.md';
 
-const content = [presentation, basics, createMap, importData, registration, faq, help];
+const content = [presentation, basics, createMap, importData, registration, modules, faq, help];
 
 export { toc, content };

@@ -17,3 +17,12 @@
  */
 
 import 'source-map-support/register';
+import { execSync } from 'child_process';
+
+describe('Integration test', function () {
+  this.timeout(120_000);
+
+  it('should bootstrap module', () => {
+    execSync('node scripts/integration-test.js', { stdio: 'pipe' }).toString('utf-8');
+  });
+});
