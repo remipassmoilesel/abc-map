@@ -16,11 +16,11 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
+import Cls from './LicenceModal.module.scss';
 import { withTranslation } from 'react-i18next';
 import { AbcArtefact, getTextByLang, Logger } from '@abc-map/shared';
 import { useServices } from '../../../core/useServices';
 import { Modal } from 'react-bootstrap';
-import Cls from './LicenceModal.module.scss';
 import React, { useCallback, useEffect, useState } from 'react';
 import { getLang, prefixedTranslation } from '../../../i18n/i18n';
 import { FaIcon } from '../../../components/icon/FaIcon';
@@ -45,7 +45,7 @@ function LicenceModal(props: Props) {
   const [visible, setVisible] = useState(false);
   const [license, setLicense] = useState('');
   const name = getTextByLang(artefact.name, getLang());
-  const attributions = attributionsVariableExpansion(artefact.attributions).join('\n');
+  const attributionsHtml = attributionsVariableExpansion(artefact.attributions).join('<br/>');
 
   useEffect(() => {
     dataStore
@@ -80,10 +80,10 @@ function LicenceModal(props: Props) {
 
             <div className={Cls.section}>
               <h2>{t('Source')}</h2>
-              <div>
+              <div className={'pl-4'}>
                 {t('Provider')}: {artefact.provider}
               </div>
-              <div>
+              <div className={'pl-4'}>
                 <a href={artefact.link} rel="noreferrer" target={'_blank'}>
                   {artefact.link}
                 </a>
@@ -92,12 +92,12 @@ function LicenceModal(props: Props) {
 
             <div className={Cls.section}>
               <h2>{t('Attributions')}</h2>
-              <div>{attributions}</div>
+              <div className={'pl-4'} dangerouslySetInnerHTML={{ __html: attributionsHtml }} />
             </div>
 
             <div className={Cls.section}>
               <h2>{t('Licence')}</h2>
-              <pre className={Cls.licenceBlock} dangerouslySetInnerHTML={{ __html: linkify(license) }} />
+              <pre className={clsx(Cls.licenceBlock, 'pl-4')} dangerouslySetInnerHTML={{ __html: linkify(license) }} />
             </div>
           </Modal.Body>
           <Modal.Footer>

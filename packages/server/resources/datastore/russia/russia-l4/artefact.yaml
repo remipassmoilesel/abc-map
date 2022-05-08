@@ -36,7 +36,7 @@ artefact:
     name: Russia
     admin_level: '4'
   attributions:
-    - © OpenStreetMap contributors.
+    - © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a> contributors.
   type: vector
   previews:
     - preview-1.png

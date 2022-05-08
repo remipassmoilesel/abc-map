@@ -9,7 +9,7 @@ You can create your own data processing module, and use it online on Abc-Map.
 - [What is the development/deployment workflow ?](#what-is-the-developmentdeployment-workflow-)
 - [How does it work ?](#how-does-it-work-)
 - [Status, API, documentation](#status-api-documentation)
-- [Template source code](#template-source-code)
+- [Templates](#templates)
 - [Developing with a local Abc-Map monorepo](#developing-with-a-local-abc-map-monorepo)
 
 <!-- tocstop -->
@@ -25,30 +25,32 @@ You must install NodeJS 14 or above. You can use [volta](https://docs.volta.sh/g
 
 ```
   $ curl https://get.volta.sh | bash
+  $ volta install node
+  $ npm install --global yarn
 ```
 
-Initialize your own module:
+Initialize your module:
 
 ```
-    $ npx -p @abc-map/create-module create-module --name my-module
+  $ npx -p @abc-map/create-module create-module --name my-module
 ```
 
-Start:
+Start it:
 
 ```
-  $ yarn
+  $ cd my-module
   $ yarn dev
 ```
 
 ## What is the development/deployment workflow ?
 
 1. Create a module: `$ npx -p @abc-map/create-module create-module --name my-module`
-2. Implement your feature using Openlayers, TurfJS, @abc-map/module-api and whatever you want
+2. Implement your feature using `Openlayers`, `TurfJS`, `@abc-map/module-api` and whatever you want
 3. Publish your module on Gitlab or GitHub, or on any static server
 4. Share the public URL of your module, per example `https://abc-map.gitlab.io/module-template/`
 5. Users can now browse this URL and enable module in their browsers
 
-Watch this video to see the process in action: https://www.youtube.com/embed/mqt_CzSplJg
+Watch this video to see the whole process in action: https://www.youtube.com/embed/mqt_CzSplJg
 
 ## How does it work ?
 
@@ -85,9 +87,11 @@ Module system is young, there is little documentation, and the API can change qu
 
 See [@abc-map/module-api](../packages/module-api) package source code.
 
-## Template source code
+## Templates
 
-You can see template source code here: [https://gitlab.com/abc-map/module-template](https://gitlab.com/abc-map/module-template)
+- Typescript + web workers: [https://gitlab.com/abc-map/module-template](https://gitlab.com/abc-map/module-template)
+- Python: TBD
+- WebASM: TBD
 
 ## Developing with a local Abc-Map monorepo
 

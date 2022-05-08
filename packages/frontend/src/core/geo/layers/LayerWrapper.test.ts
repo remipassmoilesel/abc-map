@@ -41,6 +41,7 @@ import { WmsSettings } from './LayerFactory.types';
 import TileSource from 'ol/source/Tile';
 import { WMTS, XYZ } from 'ol/source';
 import { DefaultStyleOptions } from '../styles/StyleFactoryOptions';
+import { AttributionFormat } from '../AttributionFormat';
 
 wrapperLogger.disable();
 
@@ -263,7 +264,7 @@ describe('LayerWrapper', () => {
         opacity: 0.5,
         visible: false,
         model: PredefinedLayerModel.OSM,
-        attributions: ['© OpenStreetMap contributors.'],
+        attributions: ['&#169; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors.'],
       };
       expect(abcLayer.metadata).toEqual(expectedMetadata);
     });
@@ -474,5 +475,22 @@ describe('shallowClone()', () => {
     expect(clone.unwrap().getSource()).toStrictEqual(layer.unwrap().getSource());
     expect(clone.unwrap()).not.toStrictEqual(layer.unwrap());
     expect(clone.getMetadata()).toEqual(layer.getMetadata());
+  });
+
+  describe('getAttributions()', () => {
+    let layer: LayerWrapper;
+
+    beforeEach(() => {
+      layer = LayerFactory.newVectorLayer();
+      layer.setAttributions(['<a href="https://somewhere.net">Copyright nowhere, no one</a>']);
+    });
+
+    it('Text', () => {
+      expect(layer.getAttributions(AttributionFormat.Text)).toEqual(['Copyright nowhere, no one']);
+    });
+
+    it('HTML', () => {
+      expect(layer.getAttributions(AttributionFormat.HTML)).toEqual(['<a href="https://somewhere.net">Copyright nowhere, no one</a>']);
+    });
   });
 });

@@ -16,6 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
+import Cls from './EditLayerModal.module.scss';
 import React, { ChangeEvent, Component, ReactNode } from 'react';
 import { Modal } from 'react-bootstrap';
 import isEqual from 'lodash/isEqual';
@@ -26,7 +27,7 @@ import { HistoryKey } from '../../../../core/history/HistoryKey';
 import { EditLayerChangeset } from '../../../../core/history/changesets/layers/EditLayerChangeset';
 import { prefixedTranslation } from '../../../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
-import Cls from './EditLayerModal.module.scss';
+import { AttributionFormat } from '../../../../core/geo/AttributionFormat';
 
 const logger = Logger.get('EditLayerModal.tsx');
 
@@ -135,7 +136,7 @@ class EditLayerModal extends Component<Props, State> {
     this.setState({
       nameInput: layer.getName() || '',
       opacityInput: layer.getOpacity(),
-      attributionsInput: layer.getAttributions()?.join('\r\n') || '',
+      attributionsInput: layer.getAttributions(AttributionFormat.HTML)?.join('\r\n') || '',
     });
   }
 
@@ -159,7 +160,7 @@ class EditLayerModal extends Component<Props, State> {
     const attributions = this.state.attributionsInput.split(/\r?\n/);
 
     const change = async () => {
-      const before = { name: layer.getName() || '', opacity: layer.getOpacity(), attributions: layer.getAttributions()?.slice() || [] };
+      const before = { name: layer.getName() || '', opacity: layer.getOpacity(), attributions: layer.getAttributions(AttributionFormat.HTML)?.slice() || [] };
       const after = { name, opacity, attributions };
       if (!isEqual(before, after)) {
         const cs = EditLayerChangeset.create(layer, before, after);

@@ -1,0 +1,30 @@
+version: 0.0.1
+artefact:
+  name:
+    - language: fr
+      text: Toner Lite
+    - language: en
+      text: Toner Lite
+  type: basemap
+  keywords:
+    - language: fr
+      text:
+        - openstreetmap
+        - stamen
+    - language: en
+      text:
+        - openstreetmap
+        - stamen
+  provider: Stamen
+  link: http://maps.stamen.com/
+  license: LICENSE.txt
+  attributions:
+    - © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a> contributors.
+    - Map tiles by <a href="https://stamen.com/" target="_blank" rel="noreferrer">Stamen Design</a>, under CC BY 3.0.
+  files:
+    - definition.xyz
+  previews:
+    - preview-0.png
+    - preview-1.png
+    - preview-2.png
+  weight: 113

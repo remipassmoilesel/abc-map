@@ -8,9 +8,9 @@ artefact:
   type: basemap
   description:
     - language: fr
-      text: 'Fond de carte basé sur OpenStreetMap, avec des couleurs sombres.'
+      text: Fond de carte basé sur OpenStreetMap, avec des couleurs sombres.
     - language: en
-      text: 'Basemap based on OpenStreetMap, with dark colors.'
+      text: Basemap based on OpenStreetMap, with dark colors.
   keywords:
     - language: fr
       text:

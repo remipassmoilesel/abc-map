@@ -9,14 +9,12 @@ artefact:
   description:
     - language: fr
       text: >-
-        Fond de carte basé sur OpenStreetMap. Priorité donnée aux noms et
-        symboles français (baguette au lieu de bretzel pour la boulangerie !).
-        Présentoir spécial pour les terrains de sport.
+        Fond de carte basé sur OpenStreetMap. Priorité donnée aux noms et symboles français (baguette au lieu de bretzel pour la boulangerie !). Présentoir
+        spécial pour les terrains de sport.
     - language: en
       text: >-
-        Basemap based on OpenStreetMap. Priority given to French names and
-        symbols (baguette instead of pretzel for the bakery!). Special display
-        for sports fields.
+        Basemap based on OpenStreetMap. Priority given to French names and symbols (baguette instead of pretzel for the bakery!). Special display for sports
+        fields.
   keywords:
     - language: fr
       text:
@@ -30,7 +28,7 @@ artefact:
   link: https://www.openstreetmap.fr/
   license: LICENSE.txt
   attributions:
-    - © OpenStreetMap contributors.
+    - © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a> contributors.
   files:
     - definition.xyz
   previews:

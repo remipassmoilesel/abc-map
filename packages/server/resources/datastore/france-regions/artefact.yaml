@@ -10,9 +10,13 @@ artefact:
       text: Regions of France
   description:
     - language: fr
-      text: 'Régions de France 2016, avec noms et surfaces. <br/> Régions de France 2016, avec noms et surfaces. <br/> Régions de France 2016, avec noms et surfaces. Voir: https://www.data.gouv.fr/fr/datasets/contours-des-regions-francaises-sur-openstreetmap/'
+      text: >-
+        Régions de France 2016, avec noms et surfaces. <br/> Régions de France 2016, avec noms et surfaces. <br/> Régions de France 2016, avec noms et surfaces.
+        Voir: https://www.data.gouv.fr/fr/datasets/contours-des-regions-francaises-sur-openstreetmap/
     - language: en
-      text: 'Regions of France 2016, with names and areas. <br/> Regions of France 2016, with names and areas. <br/> Regions of France 2016, with names and areas. See: https://www.data.gouv.fr/fr/datasets/contours-des-regions-francaises-sur-openstreetmap/'
+      text: >-
+        Regions of France 2016, with names and areas. <br/> Regions of France 2016, with names and areas. <br/> Regions of France 2016, with names and areas.
+        See: https://www.data.gouv.fr/fr/datasets/contours-des-regions-francaises-sur-openstreetmap/
   keywords:
     - language: fr
       text:
@@ -22,8 +26,7 @@ artefact:
       text:
         - régions
         - France
-  link: >-
-    https://www.data.gouv.fr/fr/datasets/contours-des-regions-francaises-sur-openstreetmap/
+  link: https://www.data.gouv.fr/fr/datasets/contours-des-regions-francaises-sur-openstreetmap/
   files:
     - regions-20161121-shp.zip
   type: vector

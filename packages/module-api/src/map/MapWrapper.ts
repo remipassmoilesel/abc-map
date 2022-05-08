@@ -36,10 +36,8 @@ export declare type FeatureCallback = (feat: FeatureWrapper, layer: VectorLayerW
  */
 export interface MapWrapper {
   dispose(): void;
-  setTarget(node: HTMLDivElement | undefined): void;
   addViewMoveListener(listener: () => void): void;
   removeViewMoveListener(listener: () => void): void;
-  setDefaultLayers(): void;
   addLayer(layer: LayerWrapper, position?: number): void;
   importLayersFrom(other: MapWrapper, options?: any): void;
   getLayers(): LayerWrapper[];
@@ -56,8 +54,8 @@ export interface MapWrapper {
   setLayerVisible(layer: LayerWrapper, value: boolean): void;
   moveViewToExtent(extent: Extent, sourceProjection?: AbcProjection, duration?: number): void;
   moveViewToPosition(coords: Coordinate, zoom: number): void;
-  getTextAttributions(): string[];
   setView(view: AbcView): void;
   getView(): AbcView;
   getTarget(): HTMLDivElement | undefined;
+  setTarget(node: HTMLDivElement | undefined): void;
 }

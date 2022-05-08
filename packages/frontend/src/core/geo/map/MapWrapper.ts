@@ -19,7 +19,6 @@
 import Map from 'ol/Map';
 import { AbcProjection, AbcView, EPSG_4326, LayerProperties, Logger, PredefinedLayerModel } from '@abc-map/shared';
 import debounce from 'lodash/debounce';
-import uniq from 'lodash/uniq';
 import { ResizeObserverFactory } from '../../utils/ResizeObserverFactory';
 import BaseEvent from 'ol/events/Event';
 import { Tool } from '../../tools/Tool';
@@ -40,6 +39,9 @@ import { MoveMapTool } from '../../tools/move/MoveMapTool';
 import { StyleFactoryOptions } from '../styles/StyleFactoryOptions';
 import { toPrecision } from '../../utils/numbers';
 import { isOpenlayersMap, isTileLayer, isTileSource } from '../../utils/crossContextInstanceof';
+import { AttributionFormat } from '../AttributionFormat';
+import uniqBy from 'lodash/uniqBy';
+import { stripHtml } from '../../utils/strings';
 
 export const logger = Logger.get('MapWrapper.ts');
 
@@ -378,13 +380,13 @@ export class MapWrapper {
     view.setZoom(zoom);
   }
 
-  public getTextAttributions(): string[] {
+  public getAttributions(format: AttributionFormat): string[] {
     const attributions = this.getLayers()
       .filter((lay) => lay.isVisible())
-      .flatMap((lay) => lay.getAttributions())
-      .filter((attr) => !!attr) as string[];
+      .flatMap((lay) => lay.getAttributions(format))
+      .filter((attr): attr is string => !!attr);
 
-    return uniq(attributions); // Some attributions can appear twice
+    return uniqBy(attributions, (s) => stripHtml(s)); // Some attributions can appear twice
   }
 
   public setView(view: AbcView) {

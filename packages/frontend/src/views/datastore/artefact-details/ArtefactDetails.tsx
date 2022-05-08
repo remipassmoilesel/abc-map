@@ -56,6 +56,7 @@ function ArtefactDetails(props: Props) {
   const description = artefact && getTextByLang(artefact.description, getLang());
   const keywords = artefact && getListByLang(artefact.keywords, getLang());
   const icon = artefact && getArtefactIcon(artefact);
+  const attributions = artefact?.attributions && attributionsVariableExpansion(artefact.attributions).join('<br/>');
 
   const handleShowDescription = useCallback(() => showDescriptionModal(true), []);
   const handleDescriptionModalClose = useCallback(() => showDescriptionModal(false), []);
@@ -151,10 +152,12 @@ function ArtefactDetails(props: Props) {
               </a>
             </div>
 
-            <div className={Cls.aboutLine}>
-              <div className={Cls.label}>{t('Attributions')}:</div>
-              {attributionsVariableExpansion(artefact.attributions).join(' ')}
-            </div>
+            {!!attributions?.length && (
+              <div className={Cls.aboutLine}>
+                <div className={Cls.label}>{t('Attributions')}:</div>
+                <div dangerouslySetInnerHTML={{ __html: attributions }} />
+              </div>
+            )}
 
             <div className={Cls.aboutLine}>
               <LicenceModal artefact={artefact} />

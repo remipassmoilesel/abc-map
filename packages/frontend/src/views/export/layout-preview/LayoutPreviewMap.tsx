@@ -29,7 +29,7 @@ import { prefixedTranslation } from '../../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
 import { IconDefs } from '../../../components/icon/IconDefs';
 import { FaIcon } from '../../../components/icon/FaIcon';
-import { Attributions } from '../../../components/attributions/Attributions';
+import { StaticAttributions } from '../../../components/static-attributions/StaticAttributions';
 import { MapUi } from '../../../components/map-ui/MapUi';
 import { DimensionsPx } from '../../../core/utils/DimensionsPx';
 import { useServices } from '../../../core/useServices';
@@ -258,7 +258,7 @@ function LayoutPreviewMap(props: Props) {
           {previewScale && <FloatingScale map={previewMap} scale={previewScale} baseFontSizeEm={0.9} minWidth={50} onChange={handleScaleChange} />}
 
           {/* Attributions */}
-          <Attributions map={previewMap} />
+          <StaticAttributions map={previewMap} />
         </div>
       )}
 
