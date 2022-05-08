@@ -32,7 +32,6 @@ import clsx from 'clsx';
 const t = prefixedTranslation('SharedMapView:');
 
 interface Props {
-  attributions: string[];
   onClose: () => void;
   onRestoreView: () => void;
   onDownload: () => void;
@@ -40,7 +39,7 @@ interface Props {
 }
 
 function NavigationMenu(props: Props) {
-  const { attributions, onClose, onRestoreView, onDownload, className } = props;
+  const { onClose, onRestoreView, onDownload, className } = props;
   const { project } = useServices();
 
   const sharedViews = useAppSelector((st) => st.project.sharedViews.list);
@@ -90,14 +89,6 @@ function NavigationMenu(props: Props) {
             <FaIcon icon={IconDefs.faDownload} size={'1.2rem'} className={'mr-2'} /> {t('Download_data')}
           </button>
         </div>
-      </div>
-
-      <h5>{t('Attributions')}</h5>
-
-      <div className={Cls.attributions}>
-        {attributions.map((attr) => (
-          <div key={attr}>{attr}</div>
-        ))}
       </div>
 
       {/* Software credits */}

@@ -31,11 +31,6 @@
     padding: 0.6em 1em;
     background: rgba(white, 0.6);
     border-radius: 0.4em;
-
-    img {
-      width: 1.5em;
-      margin-right: 0.8em;
-    }
   }
 
   .attribution {
@@ -48,5 +43,10 @@
     flex-direction: row;
     align-items: center;
     justify-content: flex-end;
+
+    img {
+      width: 1.5em;
+      margin-left: 0.5em;
+    }
   }
 }

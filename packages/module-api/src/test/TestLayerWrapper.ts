@@ -19,6 +19,7 @@
 import { SinonStubbedInstance } from 'sinon';
 import * as sinon from 'sinon';
 import {
+  AttributionFormat,
   LayerType,
   LayerWrapper,
   OlLayers,
@@ -40,7 +41,7 @@ export function newTestLayerWrapper(): SinonStubbedInstance<LayerWrapper> {
 
 /* eslint-disable */
 export class DumbLayerWrapper implements LayerWrapper {
-  getAttributions(): string[] | undefined {
+  getAttributions(format: AttributionFormat): string[] | undefined {
     return {} as any;
   }
 

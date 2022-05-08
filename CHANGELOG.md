@@ -2,14 +2,19 @@
 
 For the moment we use git hashes as version, since no one complained about it 👍
 
-## External module system
+## Better attributions (XXXXXXXX XX/05/2022)
+
+- Attributions are now displayed without interaction on interactive maps. (See https://gitlab.com/abc-map/abc-map/-/issues/5)
+- HTML is now supported for attributions.
+
+## External module system (b1c07ab7 30/04/2022)
 
 - Users can now load data processing modules from public URLs.
 - Creation of a module template, see: https://gitlab.com/abc-map/module-template.
 - Creation of a command line tool: `create-module`. It allows to bootstap a module easily.
 - Creation of package `module-api`, it exposes API usable in external modules.
 
-## Measure tools and better continuous integration (3f79d57b XX/04/2022)
+## Measure tools and better continuous integration (3f79d57b 09/04/2022)
 
 - Users can now measure existing shapes. Length for lines, Areas for polygons.
 - Add "light" pipelines of continuous integration, per default. These pipelines execute: lint, build, unit and

@@ -7,9 +7,19 @@ artefact:
       text: WMS local server first-layer
   description:
     - language: fr
-      text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur eget molestie neque. Aliquam vitae aliquet sapien, vitae hendrerit neque. Donec sed dolor eu augue rhoncus pellentesque. Aliquam ut mollis magna. Vivamus quam nulla, auctor vel ornare at, suscipit ut felis. Suspendisse finibus scelerisque tellus vel fringilla. Phasellus vel neque at diam lobortis accumsan et quis sem. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nullam quis hendrerit urna, quis consequat massa. Mauris nec molestie nunc. Donec quis tortor dictum, scelerisque lectus eget, rhoncus lacus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Maecenas et cursus dui.'
+      text: >-
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur eget molestie neque. Aliquam vitae aliquet sapien, vitae hendrerit neque. Donec sed
+        dolor eu augue rhoncus pellentesque. Aliquam ut mollis magna. Vivamus quam nulla, auctor vel ornare at, suscipit ut felis. Suspendisse finibus
+        scelerisque tellus vel fringilla. Phasellus vel neque at diam lobortis accumsan et quis sem. Class aptent taciti sociosqu ad litora torquent per conubia
+        nostra, per inceptos himenaeos. Nullam quis hendrerit urna, quis consequat massa. Mauris nec molestie nunc. Donec quis tortor dictum, scelerisque lectus
+        eget, rhoncus lacus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Maecenas et cursus dui.
     - language: en
-      text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur eget molestie neque. Aliquam vitae aliquet sapien, vitae hendrerit neque. Donec sed dolor eu augue rhoncus pellentesque. Aliquam ut mollis magna. Vivamus quam nulla, auctor vel ornare at, suscipit ut felis. Suspendisse finibus scelerisque tellus vel fringilla. Phasellus vel neque at diam lobortis accumsan et quis sem. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nullam quis hendrerit urna, quis consequat massa. Mauris nec molestie nunc. Donec quis tortor dictum, scelerisque lectus eget, rhoncus lacus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Maecenas et cursus dui.'
+      text: >-
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur eget molestie neque. Aliquam vitae aliquet sapien, vitae hendrerit neque. Donec sed
+        dolor eu augue rhoncus pellentesque. Aliquam ut mollis magna. Vivamus quam nulla, auctor vel ornare at, suscipit ut felis. Suspendisse finibus
+        scelerisque tellus vel fringilla. Phasellus vel neque at diam lobortis accumsan et quis sem. Class aptent taciti sociosqu ad litora torquent per conubia
+        nostra, per inceptos himenaeos. Nullam quis hendrerit urna, quis consequat massa. Mauris nec molestie nunc. Donec quis tortor dictum, scelerisque lectus
+        eget, rhoncus lacus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Maecenas et cursus dui.
   keywords:
     - language: fr
       text:

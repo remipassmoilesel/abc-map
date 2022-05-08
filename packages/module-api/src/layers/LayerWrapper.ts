@@ -63,7 +63,7 @@ export interface LayerWrapper<Layer extends OlLayers = OlLayers, Source extends 
   isWms(): this is WmsLayerWrapper;
   isWmts(): this is WmtsLayerWrapper;
   isXyz(): this is XyzLayerWrapper;
-  getAttributions(): string[] | undefined;
+  getAttributions(format: AttributionFormat): string[] | undefined;
   setAttributions(attr: string[]): LayerWrapper<Layer, Source>;
   getProjection(): AbcProjection | undefined;
 }
@@ -74,4 +74,9 @@ export enum LayerType {
   Wms = 'Wms',
   Wmts = 'Wmts',
   Xyz = 'Xyz',
+}
+
+export enum AttributionFormat {
+  Text = 'Text',
+  HTML = 'HTML',
 }

@@ -27,7 +27,7 @@ artefact:
     - KML_Samples.kml
     - stations.geojson
   attributions:
-    - © OpenStreetMap contributors.
+    - © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a> contributors.
   type: vector
   link: https://www.openstreetmap.org/about
   provider: OpenStreetMap

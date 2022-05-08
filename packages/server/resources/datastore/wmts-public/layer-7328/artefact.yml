@@ -8,16 +8,12 @@ artefact:
   description:
     - language: fr
       text: >-
-        Serveur WMTS local, sur le port 3010 Historical earthquake data,
-        accessed via the [GeoNet WFS
-        feed](http://info.geonet.org.nz/display/appdata/Advanced+Queries). The
-        data has...
+        Serveur WMTS local, sur le port 3010 Historical earthquake data, accessed via the [GeoNet WFS
+        feed](http://info.geonet.org.nz/display/appdata/Advanced+Queries). The data has...
     - language: en
       text: >-
-        WMTS local server, sur le port 3010 Historical earthquake data, accessed
-        via the [GeoNet WFS
-        feed](http://info.geonet.org.nz/display/appdata/Advanced+Queries). The
-        data has...
+        WMTS local server, sur le port 3010 Historical earthquake data, accessed via the [GeoNet WFS
+        feed](http://info.geonet.org.nz/display/appdata/Advanced+Queries). The data has...
   keywords:
     - language: fr
       text:

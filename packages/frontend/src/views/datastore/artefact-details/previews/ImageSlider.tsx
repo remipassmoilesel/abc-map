@@ -136,7 +136,7 @@ function ImageSlider(props: Props) {
         </>
       )}
 
-      <div className={Cls.attributions}>{attributions}</div>
+      <div className={Cls.attributions} dangerouslySetInnerHTML={{ __html: attributions }} />
     </div>
   );
 }

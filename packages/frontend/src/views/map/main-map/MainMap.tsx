@@ -26,7 +26,7 @@ import { prefixedTranslation } from '../../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
 import { FaIcon } from '../../../components/icon/FaIcon';
 import { IconDefs } from '../../../components/icon/IconDefs';
-import { Attributions } from './attributions/Attributions';
+import { InteractiveAttributions } from '../../../components/interactive-attributions/InteractiveAttributions';
 import { Zoom } from './zoom/Zoom';
 import { MapWrapper } from '../../../core/geo/map/MapWrapper';
 import BaseEvent from 'ol/events/Event';
@@ -62,11 +62,12 @@ class MainMap extends Component<ServiceProps, State> {
         {/* Main map support */}
         <div ref={this.mapRef} data-cy={'main-map'} className={Cls.map} onDragOver={this.handleDragOver} />
 
+        <InteractiveAttributions map={this.map} className={Cls.attributions} />
+
         <div className={Cls.bottomBar}>
           <Scale map={this.map} className={Cls.scale} />
 
           <div className={Cls.controls}>
-            <Attributions map={this.map} />
             <Zoom map={this.map} />
           </div>
         </div>

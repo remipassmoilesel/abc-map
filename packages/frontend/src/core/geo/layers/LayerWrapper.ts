@@ -17,7 +17,6 @@
  */
 
 import TileLayer from 'ol/layer/Tile';
-import { Logger, normalizedProjectionName, WmtsLayerProperties, WmtsMetadata, XyzLayerProperties, XyzMetadata } from '@abc-map/shared';
 import {
   AbcLayer,
   AbcProjection,
@@ -25,12 +24,18 @@ import {
   LayerMetadata,
   LayerProperties,
   LayerType,
+  Logger,
+  normalizedProjectionName,
   PredefinedLayerModel,
   PredefinedLayerProperties,
   PredefinedMetadata,
   VectorMetadata,
   WmsLayerProperties,
   WmsMetadata,
+  WmtsLayerProperties,
+  WmtsMetadata,
+  XyzLayerProperties,
+  XyzMetadata,
 } from '@abc-map/shared';
 import uuid from 'uuid-random';
 import { GeoJSON } from 'ol/format';
@@ -46,6 +51,8 @@ import { styleFunction } from '../styles/style-function';
 import { stripHtml } from '../../utils/strings';
 import { DefaultStyleOptions, StyleFactoryOptions } from '../styles/StyleFactoryOptions';
 import { isTileLayer, isVectorImageLayer } from '../../utils/crossContextInstanceof';
+import { AttributionFormat } from '../AttributionFormat';
+import uniqBy from 'lodash/uniqBy';
 
 export const logger = Logger.get('LayerWrapper');
 
@@ -192,7 +199,7 @@ export class LayerWrapper<Layer extends OlLayers = OlLayers, Source extends OlSo
     return LayerWrapper.from<Layer, Source, Meta>(layer as Layer).setMetadata(this.getMetadata() as Meta);
   }
 
-  public getAttributions(): string[] | undefined {
+  public getAttributions(format: AttributionFormat): string[] | undefined {
     const getAttributions = this.layer.getSource()?.getAttributions();
     if (!getAttributions) {
       return;
@@ -200,7 +207,14 @@ export class LayerWrapper<Layer extends OlLayers = OlLayers, Source extends OlSo
 
     let attributions = getAttributions({} as any); // Typings are borked
     attributions = Array.isArray(attributions) ? attributions : [attributions];
-    return attributions.filter((s) => !!s).map((attr) => stripHtml(attr));
+    attributions = attributions.filter((s) => !!s);
+    attributions = uniqBy(attributions, (s) => stripHtml(s));
+
+    if (AttributionFormat.Text === format) {
+      return attributions.map((attr) => stripHtml(attr));
+    } else {
+      return attributions;
+    }
   }
 
   public setAttributions(attr: string[]): LayerWrapper<Layer, Source, Meta> {
@@ -279,7 +293,7 @@ export class LayerWrapper<Layer extends OlLayers = OlLayers, Source extends OlSo
     const active: boolean | undefined = this.layer.get(LayerProperties.Active);
     const opacity: number | undefined = this.layer.getOpacity();
     const visible: boolean | undefined = this.layer.getVisible();
-    const attributions: string[] | undefined = this.getAttributions();
+    const attributions: string[] | undefined = this.getAttributions(AttributionFormat.HTML);
     if (!id || !name || !type) {
       logger.error('Invalid layer: ', [this.layer, id, name, type]);
       return;

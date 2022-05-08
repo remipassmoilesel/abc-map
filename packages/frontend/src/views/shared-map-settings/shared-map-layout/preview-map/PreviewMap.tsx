@@ -34,6 +34,7 @@ import { DimensionsStyle } from '../../../../core/utils/DimensionsStyle';
 import { adaptMapDimensions } from '../../../../core/project/adaptMapDimensions';
 import SharedViewNavigation from '../../../../components/shared-view-navigation/SharedViewNavigation';
 import SharedViewList from '../shared-view-list/SharedViewList';
+import { InteractiveAttributions } from '../../../../components/interactive-attributions/InteractiveAttributions';
 
 const logger = Logger.get('PreviewMap.tsx');
 
@@ -211,6 +212,8 @@ export function PreviewMap(props: Props) {
 
           {/* List of views, only if open */}
           {viewList && <SharedViewList onNewView={handleNewView} onClose={handleToggleList} className={Cls.viewList} />}
+
+          <InteractiveAttributions map={map} className={Cls.attributions} />
         </div>
       )}
     </>

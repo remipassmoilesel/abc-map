@@ -29,6 +29,7 @@ import { EditLayerChangeset } from '../../../../core/history/changesets/layers/E
 import { MapWrapper } from '../../../../core/geo/map/MapWrapper';
 import { MapFactory } from '../../../../core/geo/map/MapFactory';
 import { mockServices, restoreServices } from '../../../../core/utils/test/mock-services';
+import { AttributionFormat } from '../../../../core/geo/AttributionFormat';
 
 describe('EditLayerModal', () => {
   let onHide: SinonStub;
@@ -70,8 +71,16 @@ describe('EditLayerModal', () => {
           new EditLayerChangeset(
             map,
             layer,
-            { attributions: ['© World company', 'All rights reserved'], name: 'Layer 1', opacity: 0.5 },
-            { attributions: ['© World company', 'All rights reserved'], name: 'New layer name', opacity: 0.5 }
+            {
+              attributions: ['<a href="http://world.company">© World company</a>', 'All rights reserved'],
+              name: 'Layer 1',
+              opacity: 0.5,
+            },
+            {
+              attributions: ['<a href="http://world.company">© World company</a>', 'All rights reserved'],
+              name: 'New layer name',
+              opacity: 0.5,
+            }
           ),
         ],
       ]);
@@ -96,8 +105,16 @@ describe('EditLayerModal', () => {
           new EditLayerChangeset(
             map,
             layer,
-            { attributions: ['© World company', 'All rights reserved'], name: 'Layer 1', opacity: 0.5 },
-            { attributions: ['© World company', 'All rights reserved'], name: 'Layer 1', opacity: 1 }
+            {
+              attributions: ['<a href="http://world.company">© World company</a>', 'All rights reserved'],
+              name: 'Layer 1',
+              opacity: 0.5,
+            },
+            {
+              attributions: ['<a href="http://world.company">© World company</a>', 'All rights reserved'],
+              name: 'Layer 1',
+              opacity: 1,
+            }
           ),
         ],
       ]);
@@ -114,7 +131,7 @@ describe('EditLayerModal', () => {
 
     // Assert
     await waitFor(() => {
-      expect(layer.getAttributions()).toEqual(['© World company', 'All rights reserved', 'All lefts too']);
+      expect(layer.getAttributions(AttributionFormat.Text)).toEqual(['© World company', 'All rights reserved', 'All lefts too']);
       expect(onHide.callCount).toEqual(1);
       expect(services.history.register.args).toEqual([
         [
@@ -122,8 +139,16 @@ describe('EditLayerModal', () => {
           new EditLayerChangeset(
             map,
             layer,
-            { attributions: ['© World company', 'All rights reserved'], name: 'Layer 1', opacity: 0.5 },
-            { attributions: ['© World company', 'All rights reserved', 'All lefts too'], name: 'Layer 1', opacity: 0.5 }
+            {
+              attributions: ['<a href="http://world.company">© World company</a>', 'All rights reserved'],
+              name: 'Layer 1',
+              opacity: 0.5,
+            },
+            {
+              attributions: ['<a href="http://world.company">© World company</a>', 'All rights reserved', 'All lefts too'],
+              name: 'Layer 1',
+              opacity: 0.5,
+            }
           ),
         ],
       ]);

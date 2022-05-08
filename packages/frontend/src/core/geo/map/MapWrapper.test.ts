@@ -34,6 +34,7 @@ import { MoveMapTool } from '../../tools/move/MoveMapTool';
 import { CommonModes } from '../../tools/common/common-modes';
 import { ToolModeHelper } from '../../tools/common/ToolModeHelper';
 import { DefaultStyleOptions } from '../styles/StyleFactoryOptions';
+import { AttributionFormat } from '../AttributionFormat';
 
 logger.disable();
 
@@ -350,11 +351,11 @@ describe('MapWrapper', function () {
     });
   });
 
-  describe('getTextAttributions()', () => {
+  describe('getAttributions()', () => {
     it('with no layer', () => {
       const map = MapFactory.createNaked();
 
-      expect(map.getTextAttributions()).toEqual([]);
+      expect(map.getAttributions(AttributionFormat.Text)).toEqual([]);
     });
 
     it('with several layers', () => {
@@ -362,7 +363,7 @@ describe('MapWrapper', function () {
       map.addLayer(LayerFactory.newPredefinedLayer(PredefinedLayerModel.OSM));
       map.addLayer(LayerFactory.newPredefinedLayer(PredefinedLayerModel.StamenToner));
 
-      expect(map.getTextAttributions()).toEqual(['© OpenStreetMap contributors.', 'Map tiles by Stamen Design, under CC BY 3.0.']);
+      expect(map.getAttributions(AttributionFormat.Text)).toEqual(['© OpenStreetMap contributors.', 'Map tiles by Stamen Design, under CC BY 3.0.']);
     });
 
     it('with hidden layers', () => {
@@ -370,7 +371,30 @@ describe('MapWrapper', function () {
       map.addLayer(LayerFactory.newPredefinedLayer(PredefinedLayerModel.OSM).setVisible(false));
       map.addLayer(LayerFactory.newVectorLayer());
 
-      expect(map.getTextAttributions()).toEqual([]);
+      expect(map.getAttributions(AttributionFormat.Text)).toEqual([]);
+    });
+
+    it('with same attributions', () => {
+      // Prepare
+      const map = MapFactory.createNaked();
+
+      const layer1 = LayerFactory.newVectorLayer();
+      layer1.setAttributions([
+        '&#169; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors.',
+        '© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a> contributors.',
+        'Map tiles by <a href="https://stamen.com/" target="_blank" rel="noreferrer">Stamen Design</a>, under CC BY 3.0.',
+      ]);
+      map.addLayer(layer1);
+
+      const layer2 = LayerFactory.newVectorLayer();
+      layer2.setAttributions([
+        '© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a> contributors.',
+        'Map tiles by <a href="https://stamen.com/" target="_blank" rel="noreferrer">Stamen Design</a>, under CC BY 3.0.',
+      ]);
+      map.addLayer(layer2);
+
+      // Act & assert
+      expect(map.getAttributions(AttributionFormat.Text)).toEqual(['© OpenStreetMap contributors.', 'Map tiles by Stamen Design, under CC BY 3.0.']);
     });
   });
 

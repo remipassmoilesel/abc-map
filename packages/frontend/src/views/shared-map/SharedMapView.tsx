@@ -45,6 +45,7 @@ import { ProjectStatus } from '../../core/project/ProjectStatus';
 import { FileIO } from '../../core/utils/FileIO';
 import DownloadExplanation from './download-explanation/DownloadExplanation';
 import { SharedMapKeyboardListener } from './SharedMapKeyboardListener';
+import { InteractiveAttributions } from '../../components/interactive-attributions/InteractiveAttributions';
 
 export const logger = Logger.get('SharedMapView.tsx');
 
@@ -238,14 +239,9 @@ function SharedMapView() {
 
               {/* Navigation controls */}
               {!menu && <SharedViewNavigation onMore={handleToggleMenu} className={Cls.navigationButton} />}
-              {menu && (
-                <NavigationMenu
-                  onDownload={handleDownload}
-                  attributions={map?.getTextAttributions() ?? []}
-                  onClose={handleToggleMenu}
-                  onRestoreView={handleRestoreView}
-                />
-              )}
+              {menu && <NavigationMenu onDownload={handleDownload} onClose={handleToggleMenu} onRestoreView={handleRestoreView} />}
+
+              <InteractiveAttributions map={map} className={Cls.attributions} />
             </div>
           )}
         </>

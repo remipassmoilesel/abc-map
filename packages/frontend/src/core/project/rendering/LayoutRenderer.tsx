@@ -23,7 +23,7 @@ import { AbcFile, AbcLayout, BlobIO, LayoutFormat, Logger, Zipper } from '@abc-m
 import { MapFactory } from '../../geo/map/MapFactory';
 import { jsPDF } from 'jspdf';
 import ReactDOM from 'react-dom';
-import { Attributions } from '../../../components/attributions/Attributions';
+import { StaticAttributions } from '../../../components/static-attributions/StaticAttributions';
 import { MapUi } from '../../../components/map-ui/MapUi';
 import html2canvas from 'html2canvas';
 import { FloatingTextFrame } from '../../../components/text-frame/FloatingTextFrame';
@@ -164,7 +164,7 @@ export class LayoutRenderer {
           {layout.scale && <FloatingScale map={map} scale={layout.scale} readOnly={true} ratio={ratio} baseFontSizeEm={0.9} />}
 
           {/* Attributions */}
-          <Attributions map={map} ratio={ratio} />
+          <StaticAttributions map={map} ratio={ratio} />
         </>,
         root,
         resolve
