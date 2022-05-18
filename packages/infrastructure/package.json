@@ -2,5 +2,8 @@
   "name": "@abc-map/infrastructure",
   "version": "1.0.0",
   "private": true,
-  "license": "AGPL-3.0-or-later"
+  "license": "AGPL-3.0-or-later",
+  "volta": {
+    "node": "16.15.0"
+  }
 }

@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU Affero General
 # Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
 
-FROM node:14-alpine
+FROM node:16-alpine
 
 RUN mkdir -p /srv
 WORKDIR /srv

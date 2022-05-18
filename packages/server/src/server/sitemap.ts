@@ -41,6 +41,12 @@ const Sitemap: Url[] = [
     priority: '0.9',
   },
   {
+    routeEn: routesEn.changelog(),
+    changefreq: 'monthly',
+    lastmod: '2022-05-18',
+    priority: '0.9',
+  },
+  {
     routeEn: routesEn.funding(),
     changefreq: 'monthly',
     lastmod: '2022-01-04',

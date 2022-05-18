@@ -90,8 +90,9 @@ function LandingView() {
             <p className={Cls.intro}>{t('AbcMap_is_a_free_software')}</p>
 
             {/* Explanation and start link */}
-            <h3>{t('How_does_it_work')}</h3>
-            <ul className={'mt-3'}>
+            <h3 className={'mb-3'}>{t('How_does_it_work')}</h3>
+
+            <ul className={'mb-4'}>
               <li>
                 <a href={'https://www.youtube.com/channel/UCrlsEykrLNpK12Id7c7GP7g'} target={'_blank'} rel="noreferrer">
                   {t('Watch_a_presentation_video')} 📹
@@ -102,7 +103,8 @@ function LandingView() {
                 <Link to={Routes.map().format()}>{t('Then_open_map')} 🌍</Link>
               </li>
             </ul>
-            <div className={'mt-4'}>
+
+            <div>
               <button className={'btn btn-primary'} onClick={handleGoToMap}>
                 <FaIcon icon={IconDefs.faRocket} className={'mr-2'} />
                 {t('Lets_go')}
@@ -130,7 +132,7 @@ function LandingView() {
             {/* Vote results, legal mentions, current version */}
             <div className={Cls.bottomMentions}>
               {!!voteAggregation?.total && (
-                <div>
+                <div className={'mb-2'}>
                   {t('For_7_days_opinions_are_positive', { votes: voteAggregation.satisfied })}&nbsp;
                   {voteAggregation.satisfied < 60 && (
                     <>
@@ -145,7 +147,11 @@ function LandingView() {
                 </div>
               )}
 
-              <div className={'mt-2'}>
+              <div className={'mb-2'}>
+                <Link to={Routes.changelog().format()}>{t('What_changed')}&nbsp;&nbsp;👷🏿</Link>
+              </div>
+
+              <div className={'mb-2'}>
                 <Link to={Routes.legalMentions().format()}>{t('About_this_platform')}&nbsp;&nbsp;⚖️</Link>
               </div>
 

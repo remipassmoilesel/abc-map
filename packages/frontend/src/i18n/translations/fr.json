@@ -24,7 +24,8 @@
     "For_7_days_opinions_are_positive": "Depuis 7 jours, {{votes}} % des avis sur Abc-Map sont positifs.",
     "Champagne": "Champagne",
     "Will_have_to_do_better": "Va falloir faire mieux",
-    "About_this_platform": "A propos de cette plateforme"
+    "About_this_platform": "A propos de cette plateforme",
+    "What_changed": "Qu'est-ce qui a changé ?"
   },
   "TopBar": {
     "Map": "Carte",
@@ -916,9 +917,9 @@
     "Ordered_list": "Liste ordonnée",
     "Alignment": "Alignement",
     "Alignment_left": "Aligné à gauche",
-    "Alignment_center":"Aligné au centre",
+    "Alignment_center": "Aligné au centre",
     "Alignment_right": "Aligné à droite",
-    "Alignment_justify":"Contenu justifié",
+    "Alignment_justify": "Contenu justifié",
     "Element": "Element",
     "Links": "Liens",
     "Link": "Lien",
@@ -926,6 +927,10 @@
     "Remove_a_link": "Supprimer un lien",
     "This_video_cannot_be_embedded": "Cette vidéo ne peut pas être intégrée, cliquez ici pour la voir dans une nouvelle fenêtre.",
     "There_is_no_symbol_to_insert": "Il n'y a pas de symbole à insérer"
+  },
+  "ChangelogView": {
+    "Changelog": "Journal de modifications",
+    "Follow_us_on_twitter": "Suivez nous sur Twitter"
   },
   "core": {
     "ProjectFactory": {

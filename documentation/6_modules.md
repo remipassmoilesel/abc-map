@@ -21,11 +21,11 @@ You can create your own data processing module, and use it online on Abc-Map.
 
 ## Getting started
 
-You must install NodeJS 14 or above. You can use [volta](https://docs.volta.sh/guide/getting-started):
+You must install NodeJS 16 or above. You can use [volta](https://docs.volta.sh/guide/getting-started):
 
 ```
   $ curl https://get.volta.sh | bash
-  $ volta install node
+  $ volta install node@16
   $ npm install --global yarn
 ```
 

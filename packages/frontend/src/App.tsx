@@ -57,6 +57,7 @@ const FundingView = lazy(() => import('./views/funding/FundingView'));
 const SharedMapView = lazy(() => import('./views/shared-map/SharedMapView'));
 const SharedMapSettingsView = lazy(() => import('./views/shared-map-settings/SharedMapSettingsView'));
 const DocumentationView = lazy(() => import('./views/documentation/DocumentationView'));
+const ChangelogView = lazy(() => import('./views/changelog/ChangelogView'));
 
 const fullscreenRoutes = [Routes.sharedMap().raw()];
 
@@ -93,6 +94,7 @@ export function App() {
                 <Route exact path={Routes.userAccount().raw()} component={UserAccountView} />
                 <Route exact path={Routes.legalMentions().raw()} component={LegalMentionsView} />
                 <Route exact path={Routes.funding().raw()} component={FundingView} />
+                <Route exact path={Routes.changelog().raw()} component={ChangelogView} />
                 <Route path={'*'} component={NotFoundView} />
               </Switch>
             </Suspense>
