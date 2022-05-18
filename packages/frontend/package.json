@@ -7,7 +7,8 @@
     "build"
   ],
   "scripts": {
-    "build": "CI=true yarn run build:version && yarn run build:doc-assets && yarn run type-check && react-app-rewired build && yarn run build:check && yarn run build:package",
+    "build": "CI=true yarn run build:version && yarn run build:changelog && yarn run build:doc-assets && yarn run type-check && react-app-rewired build && yarn run build:check && yarn run build:package",
+    "build:changelog": "scripts/build-changelog.js",
     "build:check": "./scripts/check-build.js",
     "build:doc-assets": "./scripts/link-doc-assets.js",
     "build:package": "./scripts/package.js",
@@ -147,10 +148,14 @@
     "react-app-rewired": "^2.1.9",
     "react-scripts": "^5.0.0",
     "react-test-renderer": "^17.0.2",
+    "showdown": "^2.1.0",
     "stream-browserify": "^3.0.0",
     "typescript": "^4.5.4",
     "utility-types": "^3.10.0",
     "webpack-bundle-analyzer": "^4.5.0"
   },
-  "proxy": "http://127.0.0.1:10082"
+  "proxy": "http://127.0.0.1:10082",
+  "volta": {
+    "node": "16.15.0"
+  }
 }

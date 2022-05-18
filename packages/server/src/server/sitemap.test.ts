@@ -48,6 +48,16 @@ describe('sitemap', () => {
         </url>
 
         <url>
+          <loc>http://domain.fr/en/changelog</loc>
+          <xhtml:link rel="alternate" hreflang="en" href="http://domain.fr/en/changelog"/>
+          <xhtml:link rel="alternate" hreflang="fr" href="http://domain.fr/fr/changelog"/>
+          <xhtml:link rel="alternate" hreflang="x-default" href="http://domain.fr/en/changelog"/>
+          <lastmod>2021-11-15</lastmod>
+          <changefreq>monthly</changefreq>
+          <priority>0.9</priority>
+        </url>
+
+        <url>
           <loc>http://domain.fr/en/funding</loc>
           <xhtml:link rel="alternate" hreflang="en" href="http://domain.fr/en/funding"/>
           <xhtml:link rel="alternate" hreflang="fr" href="http://domain.fr/fr/funding"/>
@@ -110,9 +120,9 @@ describe('sitemap', () => {
       </urlset>
     `;
 
-    // Uncomment this to fix test
-    // require('fs').writeFileSync("actual.xml", actual)
-    // require('fs').writeFileSync("expected.xml", expected)
+    // // Uncomment this to compare to files
+    // require('fs').writeFileSync('actual.xml', actual);
+    // require('fs').writeFileSync('expected.xml', expected);
 
     assert.equal(removeBlanks(removeDates(actual)), removeBlanks(removeDates(expected)));
   });

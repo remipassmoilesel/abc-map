@@ -74,6 +74,10 @@ export class FrontendRoutes {
     return new Route<EmptyParams>('/:lang/funding', this.lang);
   }
 
+  public changelog() {
+    return new Route<EmptyParams>('/:lang/changelog', this.lang);
+  }
+
   public getAll(): Route<any>[] {
     return [
       this.landing(),
@@ -83,6 +87,7 @@ export class FrontendRoutes {
       this.shareSettings(),
       this.sharedMap(),
       this.documentation(),
+      this.changelog(),
       this.dataProcessing(),
       this.confirmAccount(),
       this.resetPassword(),

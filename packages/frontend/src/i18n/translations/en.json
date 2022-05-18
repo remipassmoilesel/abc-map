@@ -23,7 +23,8 @@
     "For_7_days_opinions_are_positive": "For 7 days, {{votes}} % of opinions on Abc-Map are positive.",
     "Champagne": "Champagne",
     "Will_have_to_do_better": "Will have to do better",
-    "About_this_platform": "About this plateform"
+    "About_this_platform": "About this plateform",
+    "What_changed": "What changed ?"
   },
   "TopBar": {
     "Map": "Map",
@@ -915,9 +916,9 @@
     "Ordered_list": "Ordered list",
     "Alignment": "Alignment",
     "Alignment_left": "Left alignment",
-    "Alignment_center":"Center alignment",
+    "Alignment_center": "Center alignment",
     "Alignment_right": "Right alignment",
-    "Alignment_justify":"Justify content",
+    "Alignment_justify": "Justify content",
     "Element": "Element",
     "Links": "Links",
     "Link": "Link",
@@ -925,6 +926,10 @@
     "Remove_a_link": "Remove a link",
     "This_video_cannot_be_embedded": "This video cannot be embedded, click here to see it in a new window.",
     "There_is_no_symbol_to_insert": "There is no symbol to insert"
+  },
+  "ChangelogView": {
+    "Changelog": "Changelog",
+    "Follow_us_on_twitter": "Follow us on Twitter"
   },
   "core": {
     "ProjectFactory": {

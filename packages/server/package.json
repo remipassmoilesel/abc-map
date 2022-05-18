@@ -81,5 +81,8 @@
   },
   "docker": {
     "imageName": "server"
+  },
+  "volta": {
+    "node": "16.15.0"
   }
 }

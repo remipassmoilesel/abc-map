@@ -16,7 +16,48 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-export enum AttributionFormat {
-  Text = 'Text',
-  HTML = 'HTML',
+@import "src/styles/mixins";
+
+.view {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+
+  height: 100%;
+  max-height: 100%;
+  width: 100vw;
+
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  font-size: 1.3rem;
+  padding: 1rem;
+}
+
+.viewport {
+  margin-left: 2vw;
+  padding-bottom: 80vmin;
+  padding-top: 5vmin;
+
+  width: 60vw;
+
+  @include media-breakpoint-down(xl) {
+    width: 100%;
+  }
+
+  h1 {
+    margin-bottom: 2.5rem;
+    font-size: 3.5rem;
+  }
+
+  h2 {
+    margin-top: 3rem;
+    margin-bottom: 2rem;
+    font-size: 2rem;
+  }
+}
+
+.followLink {
+  margin-bottom: 4rem;
 }
