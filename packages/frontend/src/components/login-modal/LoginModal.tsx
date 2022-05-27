@@ -16,215 +16,42 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { ChangeEvent, Component, KeyboardEvent, ReactNode } from 'react';
+import React, { ChangeEvent, KeyboardEvent, useCallback, useEffect, useState } from 'react';
 import { Logger, UserStatus } from '@abc-map/shared';
 import { Modal } from 'react-bootstrap';
-import { ServiceProps, withServices } from '../../core/withServices';
 import { ModalEventType, ModalStatus } from '../../core/ui/typings';
 import { PasswordStrength, ValidationHelper } from '../../core/utils/ValidationHelper';
 import FormValidationLabel from '../form-validation-label/FormValidationLabel';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { FormState } from '../form-validation-label/FormState';
 import { prefixedTranslation } from '../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
 import { AuthenticationError, ErrorType } from '../../core/authentication/AuthenticationError';
+import { FormOfflineIndicator } from '../offline-indicator/FormOfflineIndicator';
+import { useOfflineStatus } from '../../core/pwa/OnlineStatusContext';
+import { useServices } from '../../core/useServices';
 
 const logger = Logger.get('LoginModal.tsx');
 
-declare type Props = ServiceProps & RouteComponentProps<any>;
-
-interface State {
-  visible: boolean;
-  email: string;
-  password: string;
-  formState: FormState;
-}
-
 const t = prefixedTranslation('LoginModal:');
 
-class LoginModal extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      visible: false,
-      email: '',
-      password: '',
-      formState: FormState.InvalidEmail,
-    };
-  }
+function LoginModal() {
+  const { modals, toasts, authentication } = useServices();
 
-  public render(): ReactNode {
-    const visible = this.state.visible;
-    const email = this.state.email;
-    const password = this.state.password;
-    const formState = this.state.formState;
-    if (!visible) {
-      return <div />;
-    }
+  const [visible, setVisible] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [formState, setFormState] = useState(FormState.InvalidEmail);
 
-    return (
-      <Modal show={visible} onHide={this.handleCancel} centered>
-        <Modal.Header closeButton>
-          <Modal.Title>{t('Login')} 🔓</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <div className={`d-flex flex-column p-3`}>
-            {/* Intro */}
-            <p>{t('To_connect_type_email_password')}</p>
+  const offline = useOfflineStatus();
 
-            {/* Login form */}
+  useEffect(() => {
+    const handleOpen = () => setVisible(true);
 
-            <div className={'d-flex flex-column mb-3'}>
-              <input
-                type={'email'}
-                value={email}
-                onInput={this.handleEmailChange}
-                onKeyUp={this.handleKeyUp}
-                placeholder={t('Email')}
-                className={'form-control my-2'}
-                data-cy={'email'}
-                data-testid={'email'}
-              />
-              <input
-                type={'password'}
-                value={password}
-                onInput={this.handlePasswordChange}
-                onKeyUp={this.handleKeyUp}
-                placeholder={t('Password')}
-                className={'form-control my-2'}
-                data-cy={'password'}
-                data-testid={'password'}
-              />
-            </div>
+    modals.addListener(ModalEventType.ShowLogin, handleOpen);
+    return () => modals.removeListener(ModalEventType.ShowLogin, handleOpen);
+  }, [modals]);
 
-            {/* Form validation */}
-
-            <FormValidationLabel state={formState} className={'mb-5'} />
-
-            {/* Action buttons */}
-
-            <div className={'d-flex justify-content-end'}>
-              <button onClick={this.handlePasswordLost} className={'btn btn-link mr-3'}>
-                {t('Password_lost')}
-              </button>
-              <button type={'button'} onClick={this.handleCancel} className={`btn btn-outline-secondary`} data-cy={'cancel-login'} data-testid={'cancel-login'}>
-                {t('Cancel')}
-              </button>
-              <button
-                type={'button'}
-                disabled={formState !== FormState.Ok}
-                onClick={this.handleSubmit}
-                className={`btn btn-primary ml-2`}
-                data-cy={'confirm-login'}
-                data-testid={'confirm-login'}
-              >
-                {t('Connect')}
-              </button>
-            </div>
-          </div>
-        </Modal.Body>
-      </Modal>
-    );
-  }
-
-  public componentDidMount() {
-    const { modals } = this.props.services;
-
-    modals.addListener(ModalEventType.ShowLogin, this.handleOpen);
-  }
-
-  public componentWillUnmount() {
-    const { modals } = this.props.services;
-
-    modals.removeListener(ModalEventType.ShowLogin, this.handleOpen);
-  }
-
-  private handleOpen = () => {
-    this.setState({ visible: true });
-  };
-
-  private handlePasswordLost = () => {
-    const { modals, toasts } = this.props.services;
-
-    modals.dispatch({
-      type: ModalEventType.LoginClosed,
-      status: ModalStatus.Canceled,
-    });
-    this.setState({ visible: false, email: '', password: '' });
-
-    setTimeout(() => {
-      modals.passwordLost().catch((err) => {
-        toasts.genericError();
-        logger.error('Cannot open password lost modal', err);
-      });
-    }, 400);
-  };
-
-  private handleCancel = () => {
-    const { modals } = this.props.services;
-
-    modals.dispatch({
-      type: ModalEventType.LoginClosed,
-      status: ModalStatus.Canceled,
-    });
-
-    this.setState({ visible: false, email: '', password: '' });
-  };
-
-  private handleSubmit = () => {
-    const { authentication, modals, toasts } = this.props.services;
-    const email = this.state.email;
-    const password = this.state.password;
-
-    const formState = this.validateForm(email, password);
-    if (formState !== FormState.Ok) {
-      this.setState({ formState });
-      return;
-    }
-
-    authentication
-      .login(email, password)
-      .then((status) => {
-        if (UserStatus.Authenticated === status) {
-          toasts.info(t('You_are_connected'));
-        }
-
-        modals.dispatch({
-          type: ModalEventType.LoginClosed,
-          status: ModalStatus.Confirmed,
-        });
-        this.setState({ visible: false, email: '', password: '' });
-      })
-      .catch((err) => {
-        logger.error('Login error: ', err);
-
-        if (err instanceof AuthenticationError && err.type === ErrorType.InvalidCredentials) {
-          toasts.error(t('Invalid_credentials'));
-        } else {
-          toasts.genericError(err);
-        }
-      });
-  };
-
-  private handleEmailChange = (ev: ChangeEvent<HTMLInputElement>) => {
-    const email = ev.target.value;
-    const formState = this.validateForm(email, this.state.password);
-    this.setState({ email, formState });
-  };
-
-  private handlePasswordChange = (ev: ChangeEvent<HTMLInputElement>) => {
-    const password = ev.target.value;
-    const formState = this.validateForm(this.state.email, password);
-    this.setState({ password, formState });
-  };
-
-  private handleKeyUp = (ev: KeyboardEvent<HTMLInputElement>) => {
-    if (ev.key === 'Enter') {
-      this.handleSubmit();
-    }
-  };
-
-  private validateForm(email: string, password: string): FormState {
+  const validateForm = useCallback((email: string, password: string): FormState => {
     // Check email
     if (!ValidationHelper.email(email)) {
       return FormState.InvalidEmail;
@@ -236,7 +63,162 @@ class LoginModal extends Component<Props, State> {
     }
 
     return FormState.Ok;
+  }, []);
+
+  const handlePasswordLost = useCallback(() => {
+    modals.dispatch({ type: ModalEventType.LoginClosed, status: ModalStatus.Canceled });
+    setVisible(false);
+    setEmail('');
+    setPassword('');
+
+    setTimeout(() => {
+      modals.passwordLost().catch((err) => {
+        toasts.genericError();
+        logger.error('Cannot open password lost modal', err);
+      });
+    }, 400);
+  }, [modals, toasts]);
+
+  const handleCancel = useCallback(() => {
+    modals.dispatch({
+      type: ModalEventType.LoginClosed,
+      status: ModalStatus.Canceled,
+    });
+
+    setVisible(false);
+    setEmail('');
+    setPassword('');
+  }, [modals]);
+
+  const handleSubmit = useCallback(() => {
+    const formState = validateForm(email, password);
+    if (formState !== FormState.Ok) {
+      setFormState(formState);
+      return;
+    }
+
+    authentication
+      .login(email, password)
+      .then((status) => {
+        if (UserStatus.Authenticated === status) {
+          toasts.info(t('You_are_connected'));
+        }
+
+        setVisible(false);
+        setEmail('');
+        setPassword('');
+
+        modals.dispatch({ type: ModalEventType.LoginClosed, status: ModalStatus.Confirmed });
+      })
+      .catch((err) => {
+        logger.error('Login error: ', err);
+
+        if (err instanceof AuthenticationError && err.type === ErrorType.InvalidCredentials) {
+          toasts.error(t('Invalid_credentials'));
+        } else {
+          toasts.genericError(err);
+        }
+      });
+  }, [authentication, email, modals, password, toasts, validateForm]);
+
+  const handleEmailChange = useCallback(
+    (ev: ChangeEvent<HTMLInputElement>) => {
+      const email = ev.target.value;
+      setEmail(email);
+      setFormState(validateForm(email, password));
+    },
+    [password, validateForm]
+  );
+
+  const handlePasswordChange = useCallback(
+    (ev: ChangeEvent<HTMLInputElement>) => {
+      const password = ev.target.value;
+      setPassword(password);
+      setFormState(validateForm(email, password));
+    },
+    [email, validateForm]
+  );
+
+  const handleKeyUp = useCallback(
+    (ev: KeyboardEvent<HTMLInputElement>) => {
+      if (ev.key === 'Enter') {
+        handleSubmit();
+      }
+    },
+    [handleSubmit]
+  );
+
+  if (!visible) {
+    return <div />;
   }
+
+  return (
+    <Modal show={visible} onHide={handleCancel} centered>
+      <Modal.Header closeButton>
+        <Modal.Title>{t('Login')} 🔓</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <div className={`d-flex flex-column p-3`}>
+          {/* Intro */}
+          <p>{t('To_connect_type_email_password')}</p>
+
+          {/* Login form */}
+
+          <FormOfflineIndicator />
+
+          <div className={'d-flex flex-column mb-3'}>
+            <input
+              type={'email'}
+              value={email}
+              onInput={handleEmailChange}
+              disabled={offline}
+              onKeyUp={handleKeyUp}
+              placeholder={t('Email')}
+              className={'form-control my-2'}
+              data-cy={'email'}
+              data-testid={'email'}
+            />
+            <input
+              type={'password'}
+              value={password}
+              onInput={handlePasswordChange}
+              disabled={offline}
+              onKeyUp={handleKeyUp}
+              placeholder={t('Password')}
+              className={'form-control my-2'}
+              data-cy={'password'}
+              data-testid={'password'}
+            />
+          </div>
+
+          {/* Form validation */}
+
+          <FormValidationLabel state={formState} className={'mb-5'} />
+
+          {/* Action buttons */}
+
+          <div className={'d-flex justify-content-end'}>
+            <button onClick={handlePasswordLost} className={'btn btn-link mr-3'}>
+              {t('Password_lost')}
+            </button>
+            <button type={'button'} onClick={handleCancel} className={`btn btn-outline-secondary`} data-cy={'cancel-login'} data-testid={'cancel-login'}>
+              {t('Cancel')}
+            </button>
+            <button
+              type={'button'}
+              disabled={formState !== FormState.Ok || offline}
+              onClick={handleSubmit}
+              className={`btn btn-primary ml-2`}
+              data-cy={'confirm-login'}
+              data-testid={'confirm-login'}
+            >
+              {t('Connect')}
+            </button>
+          </div>
+        </div>
+      </Modal.Body>
+    </Modal>
+  );
 }
 
-export default withTranslation()(withRouter(withServices(LoginModal)));
+export default withTranslation()(LoginModal);

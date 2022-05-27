@@ -25,6 +25,8 @@ import { Provider as ReduxProvider } from 'react-redux';
 import { ServiceProvider } from './core/context';
 import ErrorBoundary from './views/error-boundary/ErrorBoundary';
 import { BrowserRouter } from 'react-router-dom';
+import { OnlineStatusProvider } from './core/pwa/OnlineStatusContext';
+import { PwaInstallPromptProvider } from './core/pwa/PwaInstallReadinessContext';
 import App from './App';
 
 export function render(svc: Services, store: MainStore) {
@@ -37,15 +39,19 @@ export function render(svc: Services, store: MainStore) {
 
   ReactDOM.render(
     <ReduxProvider store={store}>
-      <ServiceProvider value={svc}>
-        <React.StrictMode>
+      <React.StrictMode>
+        <ServiceProvider value={svc}>
           <ErrorBoundary>
-            <BrowserRouter>
-              <App />
-            </BrowserRouter>
+            <OnlineStatusProvider>
+              <PwaInstallPromptProvider>
+                <BrowserRouter>
+                  <App />
+                </BrowserRouter>
+              </PwaInstallPromptProvider>
+            </OnlineStatusProvider>
           </ErrorBoundary>
-        </React.StrictMode>
-      </ServiceProvider>
+        </ServiceProvider>
+      </React.StrictMode>
     </ReduxProvider>,
     root
   );

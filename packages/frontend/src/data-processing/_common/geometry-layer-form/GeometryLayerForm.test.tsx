@@ -54,7 +54,7 @@ describe('GeometryLayerForm', () => {
     abcRender(<GeometryLayerForm values={{ layer: undefined, joinBy: '' }} onChange={handleChanges} />, { services });
 
     // Act
-    userEvent.selectOptions(screen.getByTestId('vector-layer-selector'), 'Regions of France');
+    await userEvent.selectOptions(screen.getByTestId('vector-layer-selector'), 'Regions of France');
 
     // Assert
     await waitFor(() => {
@@ -70,13 +70,13 @@ describe('GeometryLayerForm', () => {
 
     // We render then select one layer
     abcRender(<GeometryLayerForm values={{ layer: layer, joinBy: '' }} onChange={handleChanges} />, { services });
-    userEvent.selectOptions(screen.getByTestId('vector-layer-selector'), 'Regions of France');
+    await userEvent.selectOptions(screen.getByTestId('vector-layer-selector'), 'Regions of France');
 
     await waitFor(() => screen.getAllByText('Select a join field'));
     handleChanges.reset();
 
     // Act
-    userEvent.selectOptions(screen.getByTestId('geometries-join-by'), 'CODE');
+    await userEvent.selectOptions(screen.getByTestId('geometries-join-by'), 'CODE');
 
     // Assert
     await waitFor(() => {
@@ -92,7 +92,7 @@ describe('GeometryLayerForm', () => {
     abcRender(<GeometryLayerForm values={{ layer: undefined, joinBy: '' }} onChange={handleChanges} />, { services });
 
     // Act
-    userEvent.selectOptions(screen.getByTestId('vector-layer-selector'), 'Regions of France');
+    await userEvent.selectOptions(screen.getByTestId('vector-layer-selector'), 'Regions of France');
 
     // Assert
     await waitFor(() => {
@@ -109,7 +109,7 @@ describe('GeometryLayerForm', () => {
     abcRender(<GeometryLayerForm values={{ layer, joinBy: '' }} onChange={handleChanges} />, { services });
 
     // Act
-    userEvent.selectOptions(screen.getByTestId('vector-layer-selector'), 'Empty layer');
+    await userEvent.selectOptions(screen.getByTestId('vector-layer-selector'), 'Empty layer');
 
     // Assert
     await waitFor(() => {

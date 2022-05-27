@@ -22,13 +22,14 @@ import { Logger } from '@abc-map/shared';
 import TopBarLink from './link/TopBarLink';
 import MainIcon from '../../assets/main-icon.svg';
 import LangSelector from './lang-selector/LangSelector';
-import UserMenu from './user-menu/UserMenu';
+import { UserMenu } from './user-menu/UserMenu';
 import { prefixedTranslation } from '../../i18n/i18n';
 import { Routes } from '../../routes';
 import { useHistory } from 'react-router-dom';
 import { FaIcon } from '../icon/FaIcon';
 import { IconDefs } from '../icon/IconDefs';
 import clsx from 'clsx';
+import { SmallOfflineIndicator } from '../offline-indicator/SmallOfflineIndicator';
 
 const logger = Logger.get('TopBar.tsx');
 
@@ -46,10 +47,13 @@ function TopBar() {
         <span>Abc-Map</span>
       </button>
 
+      <SmallOfflineIndicator />
+
       <div className={Cls.spacer} />
 
       <div className={clsx(Cls.links, mobileOpen && Cls.mobileOpen)} onClick={() => setMobileOpen(false)}>
         <h1 className={Cls.menuTitle}>{t('Menu')}</h1>
+
         <TopBarLink label={t('Map')} to={Routes.map().format()} data-cy={'map'} />
         <TopBarLink label={t('Data_store')} to={Routes.dataStore().format()} data-cy={'data-store'} />
         <TopBarLink label={t('Data_processing')} to={Routes.dataProcessing().format()} data-cy={'data-processing'} />

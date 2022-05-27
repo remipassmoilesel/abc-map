@@ -23,9 +23,10 @@ import createMap from './03_create-map.md';
 import importData from './04_import-data.md';
 import registration from './05_registration.md';
 import modules from './06_modules.md';
+import mobileApp from './07_mobile-application.md';
 import faq from './98_faq.md';
 import help from './99_helpme.md';
 
-const content = [presentation, basics, createMap, importData, registration, modules, faq, help];
+const content = [presentation, basics, createMap, importData, registration, modules, mobileApp, faq, help];
 
 export { toc, content };

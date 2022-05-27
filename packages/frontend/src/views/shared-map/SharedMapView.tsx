@@ -46,6 +46,8 @@ import { FileIO } from '../../core/utils/FileIO';
 import DownloadExplanation from './download-explanation/DownloadExplanation';
 import { SharedMapKeyboardListener } from './SharedMapKeyboardListener';
 import { InteractiveAttributions } from '../../components/interactive-attributions/InteractiveAttributions';
+import { useOfflineStatus } from '../../core/pwa/OnlineStatusContext';
+import { LargeOfflineIndicator } from '../../components/offline-indicator/LargeOfflineIndicator';
 
 export const logger = Logger.get('SharedMapView.tsx');
 
@@ -74,6 +76,8 @@ function SharedMapView() {
   const [previewView, setPreviewView] = useState<AbcView | undefined>();
   const [downloadExplanation, showDownloadExplanation] = useState(false);
   const activeView = useActiveSharedView();
+
+  const offline = useOfflineStatus();
 
   // Setup page
   useEffect(() => {
@@ -110,6 +114,10 @@ function SharedMapView() {
       return;
     }
 
+    if (offline) {
+      return;
+    }
+
     setError(false);
     setLoading(true);
     resolveInAtLeast(project.loadPublicProject(projectId), 1000)
@@ -119,7 +127,7 @@ function SharedMapView() {
         setError(true);
       })
       .finally(() => setLoading(false));
-  }, [geo, map, match.params.projectId, project]);
+  }, [geo, map, match.params.projectId, offline, project]);
 
   // Set map size
   useEffect(() => {
@@ -222,6 +230,10 @@ function SharedMapView() {
       })
       .finally(() => toasts.dismiss(toastId));
   }, [project, toasts]);
+
+  if (offline) {
+    return <LargeOfflineIndicator />;
+  }
 
   return (
     <div className={Cls.sharedMap}>

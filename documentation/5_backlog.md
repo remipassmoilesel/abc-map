@@ -7,7 +7,6 @@
 - [SVG Export](#svg-export)
 - [Custom (and better) map tools](#custom-and-better-map-tools)
 - ["Go to coordinates" UI control](#go-to-coordinates-ui-control)
-- [Progressive web app](#progressive-web-app)
 - [Performance: WebASM and web worker usage](#performance-webasm-and-web-worker-usage)
 - [Text labels not attached to features](#text-labels-not-attached-to-features)
 - [Backgrounds for text label](#backgrounds-for-text-label)
@@ -27,6 +26,7 @@
 - [Floating attributions for exports](#floating-attributions-for-exports)
 - [Embed audio files](#embed-audio-files)
 - [Shared map: links to views](#shared-map-links-to-views)
+- [Publishing PWA in store](#publishing-pwa-in-store)
 
 <!-- tocstop -->
 
@@ -56,10 +56,6 @@ Tool "modes" should be removed.
 ## "Go to coordinates" UI control
 
 Users should be able to move map to WGS84 coordinates.
-
-## Progressive web app
-
-Experiment with creating a PWA, trying to cache projects, tiles, etc.
 
 ## Performance: WebASM and web worker usage
 
@@ -152,3 +148,7 @@ Users must be able to embed audio files in shared maps.
 ## Shared map: links to views
 
 Users should be able to create links that can change the current view of the map, in an animated way.
+
+## Publishing PWA in store
+
+Users should be able to download Abc-Map from F-Droid and Android Store, see: https://github.com/GoogleChromeLabs/bubblewrap

@@ -60,10 +60,10 @@ describe('XYZLayerPanel', () => {
     expect(screen.queryByTestId('placeholder-warning')?.textContent).toMatch('Some placeholders may not be correctly interpreted');
   });
 
-  it('should fire onchange', () => {
+  it('should fire onchange', async () => {
     abcRender(<XYZLayerPanel url={''} onChange={onChange} onConfirm={onConfirm} onCancel={onCancel} />, { services });
 
-    userEvent.type(screen.getByRole('textbox'), 'https');
+    await userEvent.type(screen.getByRole('textbox'), 'https');
 
     expect(onChange.args.flatMap((x) => x)).toEqual(['h', 't', 't', 'p', 's']);
   });
@@ -76,7 +76,7 @@ describe('XYZLayerPanel', () => {
     abcRender(<XYZLayerPanel url={'https://{s-s}-test-url/{x}/{y}/{z}.png'} onChange={onChange} onConfirm={onConfirm} onCancel={onCancel} />, { services });
 
     // Act
-    userEvent.click(screen.getByTestId('confirm'));
+    await userEvent.click(screen.getByTestId('confirm'));
 
     // Assert
     expect(map.getLayers().length).toEqual(1);

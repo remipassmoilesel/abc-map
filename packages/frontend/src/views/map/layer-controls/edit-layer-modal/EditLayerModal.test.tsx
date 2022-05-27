@@ -57,9 +57,9 @@ describe('EditLayerModal', () => {
     abcRender(<EditLayerModal layer={layer} onHide={onHide} />, { services });
 
     // Act
-    userEvent.clear(screen.getByTestId('name-input'));
-    userEvent.type(screen.getByTestId('name-input'), 'New layer name');
-    userEvent.click(screen.getByTestId('submit-button'));
+    await userEvent.clear(screen.getByTestId('name-input'));
+    await userEvent.type(screen.getByTestId('name-input'), 'New layer name');
+    await userEvent.click(screen.getByTestId('submit-button'));
 
     // Assert
     await waitFor(() => {
@@ -93,7 +93,7 @@ describe('EditLayerModal', () => {
 
     // Act
     fireEvent.change(screen.getByTestId('opacity-input'), { target: { value: 1 } });
-    userEvent.click(screen.getByTestId('submit-button'));
+    await userEvent.click(screen.getByTestId('submit-button'));
 
     // Assert
     await waitFor(() => {
@@ -126,8 +126,8 @@ describe('EditLayerModal', () => {
     abcRender(<EditLayerModal layer={layer} onHide={onHide} />, { services });
 
     // Act
-    userEvent.type(screen.getByTestId('attributions-input'), '\nAll lefts too');
-    userEvent.click(screen.getByTestId('submit-button'));
+    await userEvent.type(screen.getByTestId('attributions-input'), '\nAll lefts too');
+    await userEvent.click(screen.getByTestId('submit-button'));
 
     // Assert
     await waitFor(() => {
@@ -160,7 +160,7 @@ describe('EditLayerModal', () => {
     abcRender(<EditLayerModal layer={layer} onHide={onHide} />, { services });
 
     // Act
-    userEvent.click(screen.getByTestId('submit-button'));
+    await userEvent.click(screen.getByTestId('submit-button'));
 
     // Assert
     await waitFor(() => {
@@ -169,12 +169,12 @@ describe('EditLayerModal', () => {
     });
   });
 
-  it('should close on cancel', () => {
+  it('should close on cancel', async () => {
     // Prepare
     abcRender(<EditLayerModal layer={layer} onHide={onHide} />);
 
     // Act
-    userEvent.click(screen.getByTestId('cancel-button'));
+    await userEvent.click(screen.getByTestId('cancel-button'));
 
     // Assert
     expect(onHide.callCount).toEqual(1);

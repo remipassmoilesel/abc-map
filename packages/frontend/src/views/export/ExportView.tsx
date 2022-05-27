@@ -52,6 +52,8 @@ import { AbcScale } from '@abc-map/shared';
 import { RemoveScaleChangeset } from '../../core/history/changesets/layouts/RemoveScaleChangeset';
 import { UpdateLayoutScaleChangeset } from '../../core/history/changesets/layouts/UpdateLayoutScaleChangeset';
 import { useActiveLayout } from '../../core/project/useActiveLayout';
+import { useOfflineStatus } from '../../core/pwa/OnlineStatusContext';
+import { LargeOfflineIndicator } from '../../components/offline-indicator/LargeOfflineIndicator';
 
 const logger = Logger.get('ExportView.tsx', 'warn');
 
@@ -63,6 +65,8 @@ function ExportView() {
 
   const layouts = useAppSelector((st) => st.project.layouts.list);
   const activeLayout = useActiveLayout();
+
+  const offline = useOfflineStatus();
 
   // Setup page
   useEffect(() => pageSetup(t('Layout'), t('Create_layout_to_export_your_map')));
@@ -370,6 +374,14 @@ function ExportView() {
     },
     [activeLayout, history]
   );
+
+  if (offline) {
+    return (
+      <LargeOfflineIndicator>
+        <span dangerouslySetInnerHTML={{ __html: t('Connect_to_the_Internet_to_export_your_map') }}></span>
+      </LargeOfflineIndicator>
+    );
+  }
 
   return (
     <>

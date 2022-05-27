@@ -28,6 +28,8 @@ import { withTranslation } from 'react-i18next';
 import { useServices } from '../../core/useServices';
 import ArtefactDetails from './artefact-details/ArtefactDetails';
 import SearchBar from './search-bar/SearchBar';
+import { useOnlineStatus } from '../../core/pwa/OnlineStatusContext';
+import { LargeOfflineIndicator } from '../../components/offline-indicator/LargeOfflineIndicator';
 
 const logger = Logger.get('DataStoreView.tsx');
 
@@ -47,6 +49,8 @@ function DataStoreView() {
   const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState(ArtefactFilter.All);
   const [query, setQuery] = useState('');
+  const online = useOnlineStatus();
+
   // Details can be hidden on mobile device
   const [detailsVisible, setDetailsVisible] = useState(false);
 
@@ -86,7 +90,11 @@ function DataStoreView() {
   );
 
   // On mount we list artefacts
-  useEffect(() => listArtefacts(ArtefactFilter.All, 0), [listArtefacts]);
+  useEffect(() => {
+    if (online) {
+      listArtefacts(ArtefactFilter.All, 0);
+    }
+  }, [listArtefacts, online]);
 
   // User clicks on navbar page list
   const handlePageChange = useCallback(
@@ -142,6 +150,14 @@ function DataStoreView() {
 
   // User can hide details on mobile device
   const handleHideDetails = useCallback(() => setDetailsVisible(false), []);
+
+  if (!online) {
+    return (
+      <LargeOfflineIndicator>
+        <span dangerouslySetInnerHTML={{ __html: t('Connect_to_the_Internet_to_use_the_data_store') }}></span>
+      </LargeOfflineIndicator>
+    );
+  }
 
   return (
     <div className={Cls.datastoreView}>

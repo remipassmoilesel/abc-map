@@ -29,7 +29,7 @@ import Cls from './SolicitationModal.module.scss';
 import { Routes } from '../../routes';
 import { FullscreenModal } from '../fullscreen-modal/FullscreenModal';
 import TextFeedbackForm from '../feedback/form/TextFeedbackForm';
-import confetti from 'canvas-confetti';
+import { confetti } from '../../core/ui/confetti';
 
 const logger = Logger.get('SolicitationModal.ts');
 
@@ -56,57 +56,55 @@ class SolicitationModal extends Component<Props, State> {
     }
 
     return (
-      <FullscreenModal>
-        <div className={Cls.modalContent}>
-          <button className={`btn btn-outline-secondary ${Cls.closeButton}`} onClick={this.close} data-cy={'close-solicitation-modal'}>
-            {t('Close')}
+      <FullscreenModal className={Cls.modal}>
+        <button className={`btn btn-outline-secondary ${Cls.closeButton}`} onClick={this.close} data-cy={'close-solicitation-modal'}>
+          {t('Close')}
+        </button>
+
+        <h1>{t('So_how_was_it')}</h1>
+
+        <div className={'border rounded p-4 d-flex flex-column justify-content-center align-items-center mb-5'}>
+          <h4 className={'text-center mb-5'}>{t('Support_your_software')} ✊</h4>
+
+          <FundingLinks />
+
+          <button onClick={this.handleExplainDonation} className={'btn btn-link mt-3'}>
+            {t('What_are_donations_used_for')}
           </button>
-
-          <h1>{t('So_how_was_it')}</h1>
-
-          <div className={'border rounded p-4 d-flex flex-column justify-content-center align-items-center mb-5'}>
-            <h4 className={'text-center mb-5'}>{t('Support_your_software')} ✊</h4>
-
-            <FundingLinks />
-
-            <button onClick={this.handleExplainDonation} className={'btn btn-link mt-3'}>
-              {t('What_are_donations_used_for')}
-            </button>
-          </div>
-
-          {!voteDone && (
-            <div className={'d-flex flex-column'}>
-              <h4 className={'mx-4 mb-3 text-center'}>{t('How_did_it_go')}</h4>
-              <div className={'d-flex flex-row justify-content-center mb-4'}>
-                <button onClick={() => this.handleVote(VoteValue.SATISFIED)} className={`btn btn-outline-primary ${Cls.voteBtn}`}>
-                  <span className={Cls.face}>🥰</span>
-                  {t('Well')}
-                </button>
-                <button onClick={() => this.handleVote(VoteValue.BLAH)} className={`btn btn-outline-primary ${Cls.voteBtn}`}>
-                  <span className={Cls.face}>😐</span>
-                  {t('Blah')}
-                </button>
-                <button onClick={() => this.handleVote(VoteValue.NOT_SATISFIED)} className={`btn btn-outline-primary ${Cls.voteBtn}`}>
-                  <span className={Cls.face}>😞</span>
-                  {t('Not_good')}
-                </button>
-              </div>
-            </div>
-          )}
-
-          {voteDone && voteValue && voteValue < VoteValue.SATISFIED && (
-            <div className={Cls.feedbackArea}>
-              <h5>{t('What_happened')}</h5>
-              <TextFeedbackForm onCancel={this.close} onDone={this.close} className={'mt-4'} />
-            </div>
-          )}
-          {voteDone && voteValue && voteValue === VoteValue.SATISFIED && (
-            <div className={Cls.feedbackArea}>
-              <h5>{t('Thanks_for_your_feedback')} 👍️</h5>
-              <h5>{t('Support_project')} ⬆</h5>
-            </div>
-          )}
         </div>
+
+        {!voteDone && (
+          <div className={'d-flex flex-column'}>
+            <h4 className={'mx-4 mb-3 text-center'}>{t('How_did_it_go')}</h4>
+            <div className={'d-flex flex-row justify-content-center mb-4'}>
+              <button onClick={() => this.handleVote(VoteValue.SATISFIED)} className={`btn btn-outline-primary ${Cls.voteBtn}`}>
+                <span className={Cls.face}>🥰</span>
+                {t('Well')}
+              </button>
+              <button onClick={() => this.handleVote(VoteValue.BLAH)} className={`btn btn-outline-primary ${Cls.voteBtn}`}>
+                <span className={Cls.face}>😐</span>
+                {t('Blah')}
+              </button>
+              <button onClick={() => this.handleVote(VoteValue.NOT_SATISFIED)} className={`btn btn-outline-primary ${Cls.voteBtn}`}>
+                <span className={Cls.face}>😞</span>
+                {t('Not_good')}
+              </button>
+            </div>
+          </div>
+        )}
+
+        {voteDone && voteValue && voteValue < VoteValue.SATISFIED && (
+          <div className={Cls.feedbackArea}>
+            <h5>{t('What_happened')}</h5>
+            <TextFeedbackForm onCancel={this.close} onDone={this.close} className={'mt-4'} />
+          </div>
+        )}
+        {voteDone && voteValue && voteValue === VoteValue.SATISFIED && (
+          <div className={Cls.feedbackArea}>
+            <h5>{t('Thanks_for_your_feedback')} 👍️</h5>
+            <h5>{t('Support_project')} ⬆</h5>
+          </div>
+        )}
       </FullscreenModal>
     );
   }
@@ -134,7 +132,7 @@ class SolicitationModal extends Component<Props, State> {
     this.setState({ voteDone: true, voteValue: value });
 
     if (value > VoteValue.BLAH) {
-      this.confetti();
+      confetti();
     }
   };
 
@@ -155,14 +153,6 @@ class SolicitationModal extends Component<Props, State> {
 
     this.setState({ visible: false });
   };
-
-  private confetti() {
-    confetti({
-      particleCount: 100,
-      spread: 70,
-      origin: { y: 0.6 },
-    })?.catch((err) => logger.error(`Confetti error: ${err.message}`, err));
-  }
 }
 
 export default withTranslation()(withRouter(withServices(SolicitationModal)));

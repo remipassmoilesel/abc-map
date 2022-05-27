@@ -22,10 +22,6 @@ Vous pouvez utiliser dans ce logiciel:
 - des couches XYZ
 - des classeurs CSV
 
-<div class="frequent-question">Je veux utiliser une carte sur mon téléphone mobile</div>
-
-Pour l'instant il n'y a pas d'application mobile.
-
 Vous pouvez cependant exporter vos cartes au format PDF: c'est facile, et vous prendrez soin de votre batterie.
 N'hésitez pas à soutenir le projet.
 

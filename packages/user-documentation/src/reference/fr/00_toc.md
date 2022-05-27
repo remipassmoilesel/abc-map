@@ -6,5 +6,6 @@
 [Import de données](#data-import)
 [Inscription, connexion](#registration)
 [Modules](#modules)
+[Application mobile](#mobile-application)
 [Questions fréquentes](#faq)
 [🔥 A l'aide !](#helpme)

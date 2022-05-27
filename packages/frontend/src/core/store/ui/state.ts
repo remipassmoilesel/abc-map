@@ -29,12 +29,22 @@ export interface UiState {
   documentation: {
     scrollPosition: number;
   };
+  /**
+   * State of side menus (open / closed)
+   */
   sideMenu: {
     [k: string]: boolean | undefined;
   };
+  /**
+   * Information screens, that have to be shown and acknowledged once
+   */
   informations: {
-    sharedMapAlpha: boolean;
+    riskyDevice: boolean;
+    installApp: boolean;
   };
+  /**
+   * Experimental features are features not enabled by default
+   */
   experimentalFeatures: {
     [k: string]: boolean | undefined;
   };
@@ -51,17 +61,27 @@ export interface UiState {
    * This list is used in inputs. URLs here may not have been loaded
    */
   remoteModuleUrls: string[];
+  /**
+   * Number of visits
+   *
+   * We do not store more than one visit for privacy purposes.
+   */
+  visits: number;
 }
+
+export type InformationKey = keyof UiState['informations'];
 
 export const uiInitialState: UiState = {
   historyCapabilities: {},
   documentation: { scrollPosition: 0 },
   sideMenu: {},
   informations: {
-    sharedMapAlpha: false,
+    riskyDevice: false,
+    installApp: false,
   },
   experimentalFeatures: {},
   modulesLoaded: [],
   remoteModules: [],
   remoteModuleUrls: [],
+  visits: 0,
 };

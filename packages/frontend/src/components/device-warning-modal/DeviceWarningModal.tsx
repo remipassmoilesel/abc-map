@@ -16,39 +16,45 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useCallback, useEffect, useState } from 'react';
+import Cls from './DeviceWarningModal.module.scss';
+import React, { useEffect, useState } from 'react';
 import * as Bowser from 'bowser';
 import mainLogo from '../../assets/main-icon.png';
 import { prefixedTranslation } from '../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
-import Cls from './DeviceWarningModal.module.scss';
+import { useAppDispatch, useAppSelector } from '../../core/store/hooks';
+import { UiActions } from '../../core/store/ui/actions';
+import { FullscreenModal } from '../fullscreen-modal/FullscreenModal';
 
 const t = prefixedTranslation('DeviceWarningModal:');
 
 function DeviceWarningModal() {
   const [visible, setVisible] = useState(false);
-
-  const isRiskyDevice = useCallback(() => {
-    const browser = Bowser.getParser(window.navigator.userAgent);
-    const platformUnsupported = browser.getPlatform().type !== 'desktop';
-    const browserNotSupported = ['chrome', 'electron', 'firefox'].indexOf(browser.getBrowserName(true)) === -1;
-    const windowTooSmall = window.innerWidth < 1366 || window.innerHeight < 768;
-    const windowTooBig = window.innerWidth >= 2560 || window.innerHeight >= 1440;
-    return platformUnsupported || browserNotSupported || windowTooSmall || windowTooBig;
-  }, []);
+  const alreadyShown = useAppSelector((st) => st.ui.informations.riskyDevice);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (isRiskyDevice()) {
-      setVisible(true);
+    function isRiskyDevice() {
+      const bowser = Bowser.getParser(window.navigator.userAgent);
+      const platformUnsupported = bowser.getPlatform().type !== 'desktop';
+      const browserNotSupported = ['chrome', 'electron', 'firefox'].indexOf(bowser.getBrowserName(true)) === -1;
+      const windowTooSmall = window.innerWidth < 1366 || window.innerHeight < 768;
+      const windowTooBig = window.innerWidth >= 2560 || window.innerHeight >= 1440;
+      return platformUnsupported || browserNotSupported || windowTooSmall || windowTooBig;
     }
-  }, [isRiskyDevice]);
+
+    if (!alreadyShown && isRiskyDevice()) {
+      setVisible(true);
+      dispatch(UiActions.ackInformation('riskyDevice'));
+    }
+  }, [alreadyShown, dispatch]);
 
   if (!visible) {
     return <div />;
   }
 
   return (
-    <div className={Cls.modal}>
+    <FullscreenModal className={Cls.modal}>
       <img src={mainLogo} alt={'Abc-Map'} />
 
       <h1 className={Cls.title}>{t('Hello')} 👋</h1>
@@ -60,7 +66,7 @@ function DeviceWarningModal() {
           {t('I_understand')}
         </button>
       </div>
-    </div>
+    </FullscreenModal>
   );
 }
 

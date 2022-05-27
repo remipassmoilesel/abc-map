@@ -16,19 +16,19 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { useCallback } from 'react';
 import Cls from './Switch.module.scss';
+import React, { useCallback, SyntheticEvent } from 'react';
 import clsx from 'clsx';
 
 interface Props {
-  onChange: (ev: boolean) => void;
+  onChange: (ev: SyntheticEvent) => void;
   value: boolean;
   className?: string;
 }
 
 export function Switch(props: Props) {
   const { value, onChange, className } = props;
-  const toggle = useCallback(() => onChange(!value), [onChange, value]);
+  const toggle = useCallback((ev: SyntheticEvent) => onChange(ev), [onChange]);
 
   return (
     <div className={clsx(Cls.toggle, className)} onClick={toggle}>

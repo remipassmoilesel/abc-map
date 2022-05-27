@@ -18,6 +18,7 @@
 
 export enum StorageKey {
   REDUX_STATE = 'ABC_MAP_STATE',
+  DEV_SERVICE_WORKER = 'ABC_DEV_SERVICE_WORKER',
 }
 
 export class LocalStorageService {

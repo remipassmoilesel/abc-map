@@ -117,7 +117,7 @@ function TextFormat() {
           type={'number'}
           min={'5'}
           max={'100'}
-          onChange={handleSizeChange}
+          onInput={handleSizeChange}
           value={size}
           className={`form-control form-control-sm ${Cls.input}`}
           data-testid={'text-size'}

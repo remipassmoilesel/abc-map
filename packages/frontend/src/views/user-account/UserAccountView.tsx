@@ -16,14 +16,11 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { Component, ReactNode } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Logger, UserStatus } from '@abc-map/shared';
-import { ServiceProps, withServices } from '../../core/withServices';
-import { MainState } from '../../core/store/reducer';
-import { connect, ConnectedProps } from 'react-redux';
 import ChangePasswordForm from './ChangePasswordForm';
 import DeleteAccountForm from './DeleteAccountForm';
-import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { pageSetup } from '../../core/utils/page-setup';
 import { prefixedTranslation } from '../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
@@ -31,111 +28,109 @@ import Cls from './UserAccountView.module.scss';
 import { Routes } from '../../routes';
 import AccountInformations from './AccountInformations';
 import { AuthenticationError, ErrorType } from '../../core/authentication/AuthenticationError';
+import { useAppSelector } from '../../core/store/hooks';
+import { useServices } from '../../core/useServices';
+import { useOfflineStatus } from '../../core/pwa/OnlineStatusContext';
+import { LargeOfflineIndicator } from '../../components/offline-indicator/LargeOfflineIndicator';
 
 const logger = Logger.get('UserAccountView.tsx');
 
-const mapStateToProps = (state: MainState) => ({
-  user: state.authentication.user,
-  status: state.authentication.userStatus,
-});
-
-const connector = connect(mapStateToProps);
-
-type Props = ConnectedProps<typeof connector> & RouteComponentProps<any> & ServiceProps;
-
 const t = prefixedTranslation('UserAccountView:');
 
-interface State {
-  passwordFormVersion: number;
-}
+function UserAccountView() {
+  const { authentication, toasts } = useServices();
+  const [passwordFormVersion, setPasswordFormVersion] = useState(0);
 
-class UserAccountView extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = { passwordFormVersion: 0 };
-  }
+  const user = useAppSelector((st) => st.authentication.user);
+  const authenticated = useAppSelector((st) => st.authentication.userStatus) === UserStatus.Authenticated;
+  const history = useHistory();
 
-  public render(): ReactNode {
-    const authenticated = this.props.user && this.props.status === UserStatus.Authenticated;
-    const user = this.props.user;
-    const passwordFormVersion = this.state.passwordFormVersion;
+  const offline = useOfflineStatus();
 
+  useEffect(() => pageSetup('Mon compte'), []);
+
+  const handleChangePassword = useCallback(
+    (previousPassword: string, newPassword: string) => {
+      authentication
+        .updatePassword(previousPassword, newPassword)
+        .then(() => {
+          toasts.info(t('Password_updated'));
+          setPasswordFormVersion(passwordFormVersion + 1);
+        })
+        .catch((err) => {
+          logger.error('Cannot update password', err);
+
+          if (err instanceof AuthenticationError && err.type === ErrorType.InvalidCredentials) {
+            toasts.error(t('Your_password_is_incorrect'));
+          } else {
+            toasts.genericError(err);
+          }
+        });
+    },
+    [authentication, passwordFormVersion, toasts]
+  );
+
+  const handleDeleteAccount = useCallback(
+    (password: string) => {
+      authentication
+        .deleteAccount(password)
+        .then(() => {
+          toasts.info(t('Your_account_has_been_deleted'));
+          history.push(Routes.landing().format());
+          return authentication.logout();
+        })
+        .catch((err) => {
+          logger.error('Cannot delete account: ', err);
+
+          if (err instanceof AuthenticationError && err.type === ErrorType.InvalidCredentials) {
+            toasts.error(t('Your_password_is_incorrect'));
+          } else {
+            toasts.genericError(err);
+          }
+        });
+    },
+    [authentication, history, toasts]
+  );
+
+  if (offline) {
     return (
-      <div className={Cls.userAccount}>
-        <h1 className={'my-5'}>{t('My_account')}</h1>
-        {!authenticated && (
-          <div className={'my-5 d-flex flex-column align-items-center'}>
-            <div className={'mb-4'}>{t('You_must_connect_to_display_your_account')}</div>
-            <Link to={Routes.landing().format()} className={'btn btn-outline-primary'}>
-              {t('Go_back_to_landing')}
-            </Link>
-          </div>
-        )}
-
-        {authenticated && user && (
-          <div className={'container'}>
-            <div className={'row'}>
-              <div className={'col-xl-4 mb-3'}>
-                <AccountInformations user={user} />
-              </div>
-
-              <div className={'col-xl-4 mb-3'}>
-                <ChangePasswordForm key={passwordFormVersion} onSubmit={this.handleChangePassword} />
-              </div>
-
-              <div className={'col-xl-4 mb-3'}>
-                <DeleteAccountForm onSubmit={this.handleDeleteAccount} />
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
+      <LargeOfflineIndicator>
+        <span dangerouslySetInnerHTML={{ __html: t('Connect_to_the_Internet_to_manage_your_account') }}></span>
+      </LargeOfflineIndicator>
     );
   }
 
-  public componentDidMount() {
-    pageSetup('Mon compte');
-  }
+  return (
+    <div className={Cls.userAccount}>
+      <h1 className={'my-5'}>{t('My_account')}</h1>
+      {!authenticated && (
+        <div className={'my-5 d-flex flex-column align-items-center'}>
+          <div className={'mb-4'}>{t('You_must_connect_to_display_your_account')}</div>
+          <Link to={Routes.landing().format()} className={'btn btn-outline-primary'}>
+            {t('Go_back_to_landing')}
+          </Link>
+        </div>
+      )}
 
-  private handleChangePassword = (previousPassword: string, newPassword: string) => {
-    const { authentication, toasts } = this.props.services;
+      {authenticated && user && (
+        <div className={'container'}>
+          <div className={'row'}>
+            <div className={'col-xl-4 mb-3'}>
+              <AccountInformations user={user} />
+            </div>
 
-    authentication
-      .updatePassword(previousPassword, newPassword)
-      .then(() => {
-        toasts.info(t('Password_updated'));
-        this.setState({ passwordFormVersion: this.state.passwordFormVersion + 1 });
-      })
-      .catch((err) => {
-        logger.error('Cannot update password', err);
+            <div className={'col-xl-4 mb-3'}>
+              <ChangePasswordForm key={passwordFormVersion} onSubmit={handleChangePassword} />
+            </div>
 
-        if (err instanceof AuthenticationError && err.type === ErrorType.InvalidCredentials) {
-          toasts.error(t('Your_password_is_incorrect'));
-        } else {
-          toasts.genericError(err);
-        }
-      });
-  };
-
-  private handleDeleteAccount = (password: string) => {
-    const { authentication, toasts } = this.props.services;
-    authentication
-      .deleteAccount(password)
-      .then(() => {
-        toasts.info(t('Your_account_has_been_deleted'));
-        this.props.history.push(Routes.landing().format());
-        return authentication.logout();
-      })
-      .catch((err) => {
-        logger.error('Cannot delete account: ', err);
-
-        if (err instanceof AuthenticationError && err.type === ErrorType.InvalidCredentials) {
-          toasts.error(t('Your_password_is_incorrect'));
-        } else {
-          toasts.genericError(err);
-        }
-      });
-  };
+            <div className={'col-xl-4 mb-3'}>
+              <DeleteAccountForm onSubmit={handleDeleteAccount} />
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 }
 
-export default withTranslation()(connector(withServices(withRouter(UserAccountView))));
+export default withTranslation()(UserAccountView);

@@ -52,7 +52,9 @@ export class AuthenticationService {
   private eventTarget = document.createDocumentFragment();
   private tokenInterval: any;
 
-  constructor(private httpClient: AxiosInstance, private store: MainStore) {}
+  constructor(private httpClient: AxiosInstance, private store: MainStore) {
+    window.addEventListener('online', () => this.renewToken());
+  }
 
   public watchToken() {
     this.tokenInterval = setInterval(() => {

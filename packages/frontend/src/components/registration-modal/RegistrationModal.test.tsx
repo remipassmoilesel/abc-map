@@ -38,15 +38,15 @@ describe('RegistrationModal', () => {
     expect(screen.getByPlaceholderText('Email address')).toBeDefined();
   });
 
-  it('should have disabled button if form is invalid', () => {
+  it('should have disabled button if form is invalid', async () => {
     // Prepare
     abcRender(<RegistrationModal />, { services });
     dispatch({ type: ModalEventType.ShowRegistration });
 
     // Act
-    userEvent.type(screen.getByTestId('email'), 'heyhey@hey.com');
-    userEvent.type(screen.getByTestId('password'), 'azerty1234');
-    userEvent.type(screen.getByTestId('password-confirmation'), 'azerty1235');
+    await userEvent.type(screen.getByTestId('email'), 'heyhey@hey.com');
+    await userEvent.type(screen.getByTestId('password'), 'azerty1234');
+    await userEvent.type(screen.getByTestId('password-confirmation'), 'azerty1235');
 
     // Assert
     expect(screen.getByTestId('submit-registration')).toBeDisabled();
@@ -56,9 +56,9 @@ describe('RegistrationModal', () => {
     // Prepare
     abcRender(<RegistrationModal />, { services });
     dispatch({ type: ModalEventType.ShowRegistration });
-    userEvent.type(screen.getByTestId('email'), 'heyhey@hey.com');
-    userEvent.type(screen.getByTestId('password'), 'azerty1234');
-    userEvent.type(screen.getByTestId('password-confirmation'), 'azerty1234');
+    await userEvent.type(screen.getByTestId('email'), 'heyhey@hey.com');
+    await userEvent.type(screen.getByTestId('password'), 'azerty1234');
+    await userEvent.type(screen.getByTestId('password-confirmation'), 'azerty1234');
     services.authentication.registration.resolves();
 
     // Act
@@ -71,13 +71,13 @@ describe('RegistrationModal', () => {
     });
   });
 
-  it('should not keep state after cancel', () => {
+  it('should not keep state after cancel', async () => {
     // Prepare
     abcRender(<RegistrationModal />, { services });
     dispatch({ type: ModalEventType.ShowRegistration });
-    userEvent.type(screen.getByTestId('email'), 'heyhey@hey.com');
-    userEvent.type(screen.getByTestId('password'), 'azerty1234');
-    userEvent.type(screen.getByTestId('password-confirmation'), 'azerty1234');
+    await userEvent.type(screen.getByTestId('email'), 'heyhey@hey.com');
+    await userEvent.type(screen.getByTestId('password'), 'azerty1234');
+    await userEvent.type(screen.getByTestId('password-confirmation'), 'azerty1234');
     services.authentication.registration.resolves();
 
     // Act
@@ -94,9 +94,9 @@ describe('RegistrationModal', () => {
     // Prepare
     abcRender(<RegistrationModal />, { services });
     dispatch({ type: ModalEventType.ShowRegistration });
-    userEvent.type(screen.getByTestId('email'), 'heyhey@hey.com');
-    userEvent.type(screen.getByTestId('password'), 'azerty1234');
-    userEvent.type(screen.getByTestId('password-confirmation'), 'azerty1234');
+    await userEvent.type(screen.getByTestId('email'), 'heyhey@hey.com');
+    await userEvent.type(screen.getByTestId('password'), 'azerty1234');
+    await userEvent.type(screen.getByTestId('password-confirmation'), 'azerty1234');
     services.authentication.registration.resolves();
 
     // Act

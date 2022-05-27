@@ -80,7 +80,7 @@ describe('VectorLayerSelector', () => {
     expect(screen.getByText('Layer 3')).toBeDefined();
   });
 
-  it('should notify on layer selected', () => {
+  it('should notify on layer selected', async () => {
     const layer1 = LayerFactory.newVectorLayer().setName('Layer 1');
     map.addLayer(layer1);
     map.addLayer(LayerFactory.newVectorLayer().setName('Layer 2'));
@@ -89,24 +89,24 @@ describe('VectorLayerSelector', () => {
     abcRender(<VectorLayerSelector value={undefined} onSelected={handleSelected} />, { services });
 
     // Act
-    userEvent.selectOptions(screen.getByTestId('vector-layer-selector'), ['Layer 1']);
+    await userEvent.selectOptions(screen.getByTestId('vector-layer-selector'), ['Layer 1']);
 
     // Assert
     expect(handleSelected.callCount).toEqual(1);
     expect(handleSelected.args[0]).toEqual([layer1]);
   });
 
-  it('should notify if layer unselected', () => {
+  it('should notify if layer unselected', async () => {
     const layer1 = LayerFactory.newVectorLayer().setName('Layer 1');
     map.addLayer(layer1);
 
     abcRender(<VectorLayerSelector value={undefined} onSelected={handleSelected} />, { services });
 
-    userEvent.selectOptions(screen.getByTestId('vector-layer-selector'), ['Layer 1']);
+    await userEvent.selectOptions(screen.getByTestId('vector-layer-selector'), ['Layer 1']);
     handleSelected.reset();
 
     // Act
-    userEvent.selectOptions(screen.getByTestId('vector-layer-selector'), ['Select a layer']);
+    await userEvent.selectOptions(screen.getByTestId('vector-layer-selector'), ['Select a layer']);
 
     // Assert
     expect(handleSelected.callCount).toEqual(1);

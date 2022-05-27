@@ -29,6 +29,7 @@ import {
   OperationStatus,
   PasswordInputClosedEvent,
   PromptVariablesClosed,
+  PwaInstallClosed,
   RegistrationClosedEvent,
   SetPasswordModalClosedEvent,
   SolicitationClosedEvent,
@@ -89,6 +90,10 @@ export class ModalService {
 
   public textFeedback(): Promise<TextFeedbackClosed> {
     return this.modalPromise({ type: ModalEventType.ShowTextFeedback }, ModalEventType.TextFeedbackClosed);
+  }
+
+  public pwaInstall(): Promise<PwaInstallClosed> {
+    return this.modalPromise({ type: ModalEventType.ShowPwaInstall }, ModalEventType.PwaInstallClosed);
   }
 
   /**

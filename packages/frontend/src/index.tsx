@@ -20,6 +20,7 @@ import { getServices } from './core/Services';
 import { Logger } from '@abc-map/shared';
 import { mainStore } from './core/store/store';
 import { bootstrap } from './bootstrap';
+import { serviceWorkerRegistration } from './serviceWorkerRegistration';
 
 // Create global references to entities
 import './core/globals';
@@ -35,6 +36,9 @@ export const logger = Logger.get('index.tsx');
 // Start application
 const svc = getServices();
 bootstrap(svc, mainStore).catch((err) => logger.error('Bootstrap fail: ', err));
+
+// Register service worker
+serviceWorkerRegistration();
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

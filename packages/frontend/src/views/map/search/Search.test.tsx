@@ -40,7 +40,7 @@ describe('Search', () => {
     services.geo.getUserPosition.resolves([5, 6]);
 
     // Act
-    userEvent.click(screen.getByTestId('geolocate'));
+    await userEvent.click(screen.getByTestId('geolocate'));
 
     // Assert
     await waitFor(() => {

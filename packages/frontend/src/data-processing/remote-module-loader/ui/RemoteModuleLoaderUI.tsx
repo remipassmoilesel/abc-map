@@ -33,6 +33,8 @@ import { Module } from '@abc-map/module-api';
 import RemoteModuleItem from './RemoteModuleItem';
 import { FoldingInfo } from '../../../components/folding-info/FoldingInfo';
 import { ModuleSource } from '../ModuleSource';
+import { useOfflineStatus } from '../../../core/pwa/OnlineStatusContext';
+import { FormOfflineIndicator } from '../../../components/offline-indicator/FormOfflineIndicator';
 
 const logger = Logger.get('RemoteModuleLoader.tsx');
 
@@ -53,6 +55,8 @@ export function RemoteModuleLoaderUI(props: Props) {
   const remoteUrls = useAppSelector((st) => st.ui.remoteModuleUrls);
   const [remoteModules, setRemoteModules] = useState<Module[]>([]);
   const modulesLoaded = useAppSelector((st) => st.ui.modulesLoaded);
+
+  const offline = useOfflineStatus();
 
   const validate = useCallback((urls: string[]) => {
     let hasError = false;
@@ -114,32 +118,38 @@ export function RemoteModuleLoaderUI(props: Props) {
         <p>{t('Enter_a_list_of_adresses')}</p>
       </div>
 
-      <FoldingInfo title={`${t('You_can_write_your_own_data_processing_module')} ✨`}>
-        <div>
-          <a href={'https://gitlab.com/abc-map/abc-map_private/-/blob/master/documentation/6_modules.md'} target={'_blank'} rel="noreferrer">
-            {t('Follow_these_instructions_to_create_a_module')},
-          </a>
-          &nbsp;{t('modify_it_publish_it_on_Github_or_Gitlab')}
-        </div>
-        <div>{t('Writing_a_module_requires_advanced_programming_knowledge')}</div>
-      </FoldingInfo>
+      <FormOfflineIndicator />
 
-      <div className={'alert alert-danger mt-2 mb-4'}>
-        <FaIcon icon={IconDefs.faExclamationTriangle} className={'mr-2'} size={'1.2rem'} />
-        {t('Use_only_modules_whose_source_you_know')}
-      </div>
+      {!offline && (
+        <FoldingInfo title={`${t('You_can_write_your_own_data_processing_module')} ✨`}>
+          <div>
+            <a href={'https://gitlab.com/abc-map/abc-map_private/-/blob/master/documentation/6_modules.md'} target={'_blank'} rel="noreferrer">
+              {t('Follow_these_instructions_to_create_a_module')},
+            </a>
+            &nbsp;{t('modify_it_publish_it_on_Github_or_Gitlab')}
+          </div>
+          <div>{t('Writing_a_module_requires_advanced_programming_knowledge')}</div>
+        </FoldingInfo>
+      )}
+
+      {!offline && (
+        <div className={'alert alert-danger mt-2 mb-4'}>
+          <FaIcon icon={IconDefs.faExclamationTriangle} className={'mr-2'} size={'1.2rem'} />
+          {t('Use_only_modules_whose_source_you_know')}
+        </div>
+      )}
 
       <div className={Cls.example}>
         {t('You_can_try')}&nbsp;<i>https://abc-map.gitlab.io/module-template/</i>
       </div>
 
       <div>
-        <textarea value={remoteUrls.join('\n')} onChange={handleChange} rows={5} className={'form-control'} data-cy={'module-urls'} />
+        <textarea value={remoteUrls.join('\n')} onChange={handleChange} disabled={offline} rows={5} className={'form-control'} data-cy={'module-urls'} />
       </div>
 
       <FormValidationLabel state={formState} className={'my-4'} />
       <div className={'d-flex justify-content-end'}>
-        <button className={'btn btn-primary mt-3'} onClick={handleLoad} disabled={formState !== FormState.Ok} data-cy={'load-modules'}>
+        <button className={'btn btn-primary mt-3'} onClick={handleLoad} disabled={formState !== FormState.Ok || offline} data-cy={'load-modules'}>
           <FaIcon icon={IconDefs.faGear} className={'mr-2'} />
           {t('Load_modules')}
         </button>

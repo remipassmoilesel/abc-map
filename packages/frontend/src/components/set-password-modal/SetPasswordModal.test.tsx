@@ -40,25 +40,25 @@ describe('SetPasswordModal', () => {
     expect(screen.getByText('Enter password')).toBeDefined();
   });
 
-  it('should have disabled button if confirmation invalid', () => {
+  it('should have disabled button if confirmation invalid', async () => {
     // Prepare
     abcRender(<SetPasswordModal />, { services });
     dispatch(showModalCmd);
 
     // Act
-    userEvent.type(screen.getByTestId('password-input'), 'azerty1234');
-    userEvent.type(screen.getByTestId('password-confirmation'), 'azerty1235');
+    await userEvent.type(screen.getByTestId('password-input'), 'azerty1234');
+    await userEvent.type(screen.getByTestId('password-confirmation'), 'azerty1235');
 
     // Assert
     expect(screen.getByTestId('password-confirm')).toBeDisabled();
   });
 
-  it('should emit after submit', () => {
+  it('should emit after submit', async () => {
     // Prepare
     abcRender(<SetPasswordModal />, { services });
     dispatch(showModalCmd);
-    userEvent.type(screen.getByTestId('password-input'), 'azerty1234');
-    userEvent.type(screen.getByTestId('password-confirmation'), 'azerty1234');
+    await userEvent.type(screen.getByTestId('password-input'), 'azerty1234');
+    await userEvent.type(screen.getByTestId('password-confirmation'), 'azerty1234');
 
     // Act
     screen.getByTestId('password-confirm').click();
@@ -67,12 +67,12 @@ describe('SetPasswordModal', () => {
     expect(services.modals.dispatch.args).toEqual([[{ status: 'Confirmed', type: 'SetPasswordClosed', value: 'azerty1234' }]]);
   });
 
-  it('should not keep state after cancel', () => {
+  it('should not keep state after cancel', async () => {
     // Prepare
     abcRender(<SetPasswordModal />, { services });
     dispatch(showModalCmd);
-    userEvent.type(screen.getByTestId('password-input'), 'azerty1234');
-    userEvent.type(screen.getByTestId('password-confirmation'), 'azerty1234');
+    await userEvent.type(screen.getByTestId('password-input'), 'azerty1234');
+    await userEvent.type(screen.getByTestId('password-confirmation'), 'azerty1234');
 
     // Act
     screen.getByTestId('password-cancel').click();
@@ -83,12 +83,12 @@ describe('SetPasswordModal', () => {
     expect(screen.getByTestId('password-confirmation')).toHaveValue('');
   });
 
-  it('should not keep state after confirm', () => {
+  it('should not keep state after confirm', async () => {
     // Prepare
     abcRender(<SetPasswordModal />, { services });
     dispatch(showModalCmd);
-    userEvent.type(screen.getByTestId('password-input'), 'azerty1234');
-    userEvent.type(screen.getByTestId('password-confirmation'), 'azerty1234');
+    await userEvent.type(screen.getByTestId('password-input'), 'azerty1234');
+    await userEvent.type(screen.getByTestId('password-confirmation'), 'azerty1234');
 
     // Act
     screen.getByTestId('password-confirm').click();
