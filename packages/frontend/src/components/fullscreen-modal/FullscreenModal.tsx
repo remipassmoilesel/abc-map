@@ -18,11 +18,20 @@
 
 import React, { ReactNode } from 'react';
 import Classes from './FullscreenModal.module.scss';
+import clsx from 'clsx';
+import { AppearAnimation } from '../appear-animation/AppearAnimation';
 
 interface Props {
   children: ReactNode;
+  className?: ReactNode;
 }
 
 export function FullscreenModal(props: Props) {
-  return <div className={Classes.modal}>{props.children}</div>;
+  const { children, className } = props;
+
+  return (
+    <AppearAnimation>
+      <div className={clsx(Classes.modal, className)}>{children}</div>
+    </AppearAnimation>
+  );
 }

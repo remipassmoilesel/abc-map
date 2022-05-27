@@ -41,6 +41,7 @@ import { TokenWatcher } from './components/token-watcher/TokenWatcher';
 import PromptVariablesModal from './components/prompt-variables-modal/PromptVariablesModal';
 import { BlueLoader } from './components/blue-loader/BlueLoader';
 import clsx from 'clsx';
+import InstallAppModal from './components/install-app-modal/InstallAppModal';
 
 // App views, all lazy loaded
 const LandingView = lazy(() => import('./views/landing/LandingView'));
@@ -114,6 +115,7 @@ export function App() {
           <SolicitationModal />
           <WarningBeforeUnload />
           <PromptVariablesModal />
+          <InstallAppModal />
         </>
       )}
 

@@ -46,7 +46,8 @@
     "Logout": "Se déconnecter",
     "You_are_disconnected": "Vous êtes déconnecté",
     "Feedbacks": "Commentaires ?",
-    "Experimental_features": "Fonctionnalités expérimentales"
+    "Experimental_features": "Fonctionnalités expérimentales",
+    "Install_app": "Installer l'application"
   },
   "FeedbackModal": {
     "So_how_is_it_going": "Alors, comment ça se passe ?"
@@ -56,7 +57,8 @@
     "Here_you_can_enable_features": "Ici vous pouvez activer des fonctionnalités qui ne sont pas encore stables.",
     "Close": "Fermer",
     "MapSharing": "Partage de carte",
-    "ArtefactGenerator": "Générateur d'artefact"
+    "ArtefactGenerator": "Générateur d'artefact",
+    "DevServiceWorker": "Service worker de dévelopement"
   },
   "MapView": {
     "The_map": "La carte !",
@@ -77,7 +79,12 @@
       "Zoom_in": "Zoom avant",
       "Zoom_out": "Zoom arrière",
       "Import_in_progress": "Import en cours...",
-      "Done": "Import terminé !"
+      "Done": "Import terminé !",
+      "Preload_map": "Pré-charger la carte",
+      "Cancel": "Annuler",
+      "ALittle": "Charger ma vue",
+      "ALot": "Charger plusieurs niveaux de zoom",
+      "You_can_preload_a_map_area_for_offline_use": "Vous pouvez précharger une zone de carte pour l'utiliser hors ligne"
     },
     "ProjectStatus": {
       "Projection": "Projection",
@@ -248,7 +255,7 @@
     }
   },
   "Scale": {
-    "Scale": "Scale"
+    "Scale": "Echelle"
   },
   "ColorPicker": {
     "Line": "Trait",
@@ -374,7 +381,8 @@
     "About_data_store": "A propos du magasin de données",
     "About_data_store_and_data": "<div>\n    <p>Le magasin de données vous propose:</p>\n    <ul>\n        <li>Des données issues de sources libres</li>\n        <li>Des configurations de sources de données</li>\n    </ul>\n\n    <p>Certaines de ces données sont gratuites pour tous usages, certaines sont payantes pour des usages commerciaux.</p>\n    <p>Toutes les données ont des conditions d'utilisation. Référez-vous aux informations de licence et aux liens vers les sources.</p>\n</div>",
     "About": "A propos",
-    "Provider": "Fournisseur"
+    "Provider": "Fournisseur",
+    "Connect_to_the_Internet_to_use_the_data_store": "Connectez-vous à internet pour utiliser <br/>le magasin de données"
   },
   "DataProcessingView": {
     "Modules": "Modules",
@@ -579,7 +587,8 @@
     "You_must_create_layouts_first": "Vous devez d'abord créer une mise en page",
     "Layouts_menu": "Liste des mises en page",
     "Controls_menu": "Actions",
-    "Export_in_progress": "Export en cours ..."
+    "Export_in_progress": "Export en cours ...",
+    "Connect_to_the_Internet_to_export_your_map": "Connectez-vous à Internet pour <br/>exporter votre carte"
   },
   "TextFrameControls": {
     "New_text_frame": "Nouveau cadre de texte",
@@ -689,7 +698,8 @@
     "Delete_my_account_permanently": "Supprimer définitivement mon compte",
     "Your_account_has_been_deleted": "Votre compte a été supprimé \uD83D\uDE2D",
     "Password_updated": "Mot de passe mis à jour !",
-    "Your_password_is_incorrect": "Votre mot de passe est incorrect"
+    "Your_password_is_incorrect": "Votre mot de passe est incorrect",
+    "Connect_to_the_Internet_to_manage_your_account": "Connectez-vous à Internet pour gérer votre compte"
   },
   "MapSymbolPickerModal": {
     "Select_symbol": "Sélectionnez un symbole",
@@ -832,7 +842,8 @@
     "Map_size": "Taille de la carte",
     "Full_page": "Pleine page",
     "About_map_size": "A propos de la taille de la carte",
-    "If_map_size_is_bigger_than_actual_window": "Si la taille de la carte est plus grande que la fenêtre, elle sera affichée en plein écran"
+    "If_map_size_is_bigger_than_actual_window": "Si la taille de la carte est plus grande que la fenêtre, elle sera affichée en plein écran",
+    "Connect_to_the_Internet_to_share_your_map": "Connectez-vous à Internet pour <br/>partager votre carte"
   },
   "SharedViewNavigation": {
     "Previous_view": "Vue précédente",
@@ -931,6 +942,39 @@
   "ChangelogView": {
     "Changelog": "Journal de modifications",
     "Follow_us_on_twitter": "Suivez nous sur Twitter"
+  },
+  "InstallAppModal": {
+    "Install_app": "Installer l'application ?",
+    "You_can_then_start_Abc-Map_from_your_home_screen": "Vous pouvez ensuite lancer Abc-Map depuis votre écran d'accueil.",
+    "This_app_respects_your_privacy_just_like_the_online_version": "Cette application respecte votre vie privée, tout comme la version en ligne.",
+    "Install": "Installer",
+    "Not_now": "Pas maintenant",
+    "Do_not_ask_again": "Ne plus demander",
+    "Done": "C'est fait !",
+    "Something_went_wrong": "Quelque chose s'est mal passé",
+    "Damn_bugs": "Maudits bugs",
+    "Close": "Fermer",
+    "You_cant_install_the_app_now": "Vous ne pouvez pas installer l'application maintenant",
+    "Its_probably_because": "C'est surement parce que :",
+    "App_is_already_installed": "L'application est déjà installée",
+    "Or_you_are_using_an_unsupported_device": "Ou bien vous utilisez un appareil non compatible",
+    "Maybe_its_already_installed": "Peut être est-elle déjà installée ?",
+    "You_may_have_to_wait_a_bit_or_close_this_page": "Vous devrez peut-être attendre un peu ou fermer cette page",
+    "Tap_the_menu_button_next_to_the_address_bar": "Appuyez sur le bouton de menu à côté de la barre d'adresse",
+    "Then_tap_Add_to_Home_screen": "Puis appuyez sur \"Ajouter à l'écran d'accueil\"",
+    "See_firefox_documentation": "Voir la documentation de Firefox",
+    "To_install_the_application_you_will_need_this_extension": "Pour installer l'application, vous aurez besoin de cette extension",
+    "Just_one_more_step": "Plus qu'une étape"
+  },
+  "FormOfflineIndicator": {
+    "You_are_offline": "Vous êtes hors ligne"
+  },
+  "SmallOfflineIndicator": {
+    "You_are_not_connected_to_the_Internet": "Vous n'êtes pas connecté à Internet",
+    "Offline": "Hors ligne"
+  },
+  "LargeOfflineIndicator": {
+    "You_are_offline": "Vous êtes hors ligne"
   },
   "core": {
     "ProjectFactory": {

@@ -6,5 +6,6 @@
 [Import data](#data-import)
 [Registration, login](#registration)
 [Modules](#modules)
+[Mobile app](#mobile-application)
 [Frequently asked questions](#faq)
 [🔥 Help !](#helpme)

@@ -47,7 +47,7 @@ describe('PasswordInputModal', () => {
     // Prepare
     abcRender(<PasswordInputModal />, { services });
     dispatch(showCmd);
-    userEvent.type(screen.getByTestId('password-input'), 'azerty1234');
+    await userEvent.type(screen.getByTestId('password-input'), 'azerty1234');
 
     // Act
     screen.getByTestId('password-confirm').click();
@@ -58,11 +58,11 @@ describe('PasswordInputModal', () => {
     });
   });
 
-  it('should not keep state after cancel', () => {
+  it('should not keep state after cancel', async () => {
     // Prepare
     abcRender(<PasswordInputModal />, { services });
     dispatch(showCmd);
-    userEvent.type(screen.getByTestId('password-input'), 'azerty1234');
+    await userEvent.type(screen.getByTestId('password-input'), 'azerty1234');
 
     // Act
     screen.getByTestId('password-cancel').click();
@@ -76,7 +76,7 @@ describe('PasswordInputModal', () => {
     // Prepare
     abcRender(<PasswordInputModal />, { services });
     dispatch(showCmd);
-    userEvent.type(screen.getByTestId('password-input'), 'azerty1234');
+    await userEvent.type(screen.getByTestId('password-input'), 'azerty1234');
 
     // Act
     screen.getByTestId('password-confirm').click();
@@ -95,7 +95,7 @@ describe('PasswordInputModal', () => {
     dispatch(showCmd);
 
     // Act
-    userEvent.type(screen.getByTestId('password-input'), 'azerty5678');
+    await userEvent.type(screen.getByTestId('password-input'), 'azerty5678');
     screen.getByTestId('password-confirm').click();
 
     // Assert

@@ -78,16 +78,6 @@ interface EventSettings {
 
 // FIXME: we should split this helper in several helpers
 export class TestHelper {
-  public static renderMap(map: Map): Promise<void> {
-    return new Promise<void>((resolve) => {
-      map.render();
-      // This should be rendercomplete
-      map.once('rendercomplete', () => {
-        resolve();
-      });
-    });
-  }
-
   public static samplePointFeature(): Feature<Geometry> {
     const feature = new Feature<Geometry>();
     feature.setGeometry(new Point([1, 2]));

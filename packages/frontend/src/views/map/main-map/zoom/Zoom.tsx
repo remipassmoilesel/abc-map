@@ -24,6 +24,7 @@ import { WithTooltip } from '../../../../components/with-tooltip/WithTooltip';
 import { prefixedTranslation } from '../../../../i18n/i18n';
 import Cls from './Zoom.module.scss';
 import { MapWrapper } from '../../../../core/geo/map/MapWrapper';
+import clsx from 'clsx';
 
 const t = prefixedTranslation('MapView:MainMap.');
 
@@ -71,9 +72,9 @@ export function Zoom(props: Props) {
   }, [zoom]);
 
   return (
-    <>
+    <div className={'d-flex align-items-center'}>
       <WithTooltip title={t('Zoom_out')} placement={'top'}>
-        <button onClick={handleZoomOut} className={Cls.button}>
+        <button onClick={handleZoomOut} className={clsx(Cls.button, 'mr-3')}>
           <FaIcon icon={IconDefs.faMinus} size={'1.1rem'} className={Cls.icon} />
         </button>
       </WithTooltip>
@@ -82,6 +83,6 @@ export function Zoom(props: Props) {
           <FaIcon icon={IconDefs.faPlus} size={'1.1rem'} className={Cls.icon} />
         </button>
       </WithTooltip>
-    </>
+    </div>
   );
 }

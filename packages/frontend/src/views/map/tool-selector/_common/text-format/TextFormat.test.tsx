@@ -42,14 +42,13 @@ describe('TextFormat', () => {
     abcRender(<TextFormat />, { services, store });
 
     // Act
-    userEvent.clear(screen.getByTestId('text-size'));
-    userEvent.type(screen.getByTestId('text-size'), '45');
+    await userEvent.type(screen.getByTestId('text-size'), '5');
     await TestHelper.wait(250); // We must wait for debounce
     callTransform();
 
     // Assert
-    expect(store.getState().map.currentStyle.text.size).toEqual(45);
-    expect(feature.getStyleProperties().text?.size).toEqual(45);
+    expect(store.getState().map.currentStyle.text.size).toEqual(155);
+    expect(feature.getStyleProperties().text?.size).toEqual(155);
   });
 
   it('should set offsetX', async () => {
@@ -57,15 +56,14 @@ describe('TextFormat', () => {
     abcRender(<TextFormat />, { services, store });
 
     // Act
-    userEvent.clear(screen.getByTestId('text-offsetX'));
-    userEvent.type(screen.getByTestId('text-offsetX'), '9');
+    await userEvent.type(screen.getByTestId('text-offsetX'), '9');
 
     await TestHelper.wait(250); // We must wait for debounce
     callTransform();
 
     // Assert
-    expect(store.getState().map.currentStyle.text.offsetX).toEqual(9);
-    expect(feature.getStyleProperties().text?.offsetX).toEqual(9);
+    expect(store.getState().map.currentStyle.text.offsetX).toEqual(209);
+    expect(feature.getStyleProperties().text?.offsetX).toEqual(209);
   });
 
   it('should set offsetY', async () => {
@@ -73,15 +71,14 @@ describe('TextFormat', () => {
     abcRender(<TextFormat />, { services, store });
 
     // Act
-    userEvent.clear(screen.getByTestId('text-offsetY'));
-    userEvent.type(screen.getByTestId('text-offsetY'), '9');
+    await userEvent.type(screen.getByTestId('text-offsetY'), '9');
 
     await TestHelper.wait(250); // We must wait for debounce
     callTransform();
 
     // Assert
-    expect(store.getState().map.currentStyle.text.offsetY).toEqual(9);
-    expect(feature.getStyleProperties().text?.offsetY).toEqual(9);
+    expect(store.getState().map.currentStyle.text.offsetY).toEqual(209);
+    expect(feature.getStyleProperties().text?.offsetY).toEqual(209);
   });
 
   it('should set rotation', async () => {
@@ -89,8 +86,7 @@ describe('TextFormat', () => {
     abcRender(<TextFormat />, { services, store });
 
     // Act
-    userEvent.clear(screen.getByTestId('text-rotation'));
-    userEvent.type(screen.getByTestId('text-rotation'), '9');
+    await userEvent.type(screen.getByTestId('text-rotation'), '9');
 
     await TestHelper.wait(250); // We must wait for debounce
     callTransform();

@@ -104,9 +104,9 @@ describe('EditProjectModal', () => {
     abcRender(<EditProjectModal visible={true} onClose={onClose} />, { services, state: baseState });
 
     // Act
-    userEvent.clear(screen.getByTestId('projection-input'));
-    userEvent.type(screen.getByTestId('projection-input'), 'EPSG:3857');
-    userEvent.click(screen.getByTestId('button-confirm'));
+    await userEvent.clear(screen.getByTestId('projection-input'));
+    await userEvent.type(screen.getByTestId('projection-input'), 'EPSG:3857');
+    await userEvent.click(screen.getByTestId('button-confirm'));
 
     // Assert
     await waitFor(() => {

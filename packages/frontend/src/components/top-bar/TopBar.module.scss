@@ -55,14 +55,14 @@
 
   font-size: 1.3rem;
   background: white;
-  padding: 1rem 2vmin;
+  padding: 1rem 2rem;
 
   span {
     white-space: nowrap;
   }
 
   @include media-breakpoint-down(xl) {
-    padding: 0.5vmin;
+    padding: 0.5rem 1rem;
   }
 
   img {

@@ -21,7 +21,6 @@ import VectorSource from 'ol/source/Vector';
 import MapBrowserEventType from 'ol/MapBrowserEventType';
 import MapBrowserEvent from 'ol/MapBrowserEvent';
 import View from 'ol/View';
-import { TestHelper } from '../../../utils/test/TestHelper';
 import { FeatureWrapper } from '../../../geo/features/FeatureWrapper';
 import Feature from 'ol/Feature';
 import { LayerFactory } from '../../../geo/layers/LayerFactory';
@@ -104,11 +103,7 @@ export class DrawingTestMap {
     // This is needed to make event dispatch effective
     this.map.setSize([this.mapWidth, this.mapHeight]);
 
-    await TestHelper.renderMap(this.map);
-  }
-
-  public render(): Promise<void> {
-    return TestHelper.renderMap(this.map);
+    await this.toMapWrapper().render();
   }
 
   public getMap(): Map {
@@ -198,7 +193,7 @@ export class DrawingTestMap {
     const simulatedEvent = new MapBrowserEvent(type, this.map, event as any);
 
     this.map.handleMapBrowserEvent(simulatedEvent);
-    await this.render();
+    await this.toMapWrapper().render();
 
     return simulatedEvent;
   }

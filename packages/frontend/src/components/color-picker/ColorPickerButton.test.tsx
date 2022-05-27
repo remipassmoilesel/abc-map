@@ -44,7 +44,7 @@ describe('ColorPickerButton', () => {
     abcRender(<ColorPickerButton value={'#AABBCCDD'} onClose={handleClose} />);
 
     // Act
-    userEvent.click(screen.getByRole('button'));
+    await userEvent.click(screen.getByRole('button'));
 
     // Assert
     await waitFor(() => {
@@ -57,7 +57,7 @@ describe('ColorPickerButton', () => {
     abcRender(<ColorPickerButton value={'rgba(170, 50, 204, 0.87)'} onClose={handleClose} />);
 
     // Act
-    userEvent.click(screen.getByRole('button'));
+    await userEvent.click(screen.getByRole('button'));
 
     // Assert
     await waitFor(() => {
@@ -68,11 +68,11 @@ describe('ColorPickerButton', () => {
   it('should trigger onClose()', async () => {
     // Prepare
     abcRender(<ColorPickerButton value={'#AA32CCDD'} onClose={handleClose} />);
-    userEvent.click(screen.getByRole('button'));
+    await userEvent.click(screen.getByRole('button'));
 
     // Act
-    setModalValue(175, 55, 209, 50);
-    userEvent.click(screen.getByTestId('close-modal'));
+    await setModalValue(175, 55, 209, 50);
+    await userEvent.click(screen.getByTestId('close-modal'));
 
     // Assert
     expect(handleClose.args).toEqual([['rgba(175,55,209,0.5)']]);
@@ -90,17 +90,17 @@ describe('ColorPickerButton', () => {
     };
   }
 
-  function setModalValue(r: number, g: number, b: number, a: number): void {
+  async function setModalValue(r: number, g: number, b: number, a: number): Promise<void> {
     const inputs = selectModalInputs();
-    const typeIn = (index: number, value: string) => {
-      userEvent.clear(inputs[index]);
-      userEvent.type(inputs[index], value);
+    const typeIn = async (index: number, value: string) => {
+      await userEvent.clear(inputs[index]);
+      await userEvent.type(inputs[index], value);
     };
 
-    typeIn(1, `${r}`);
-    typeIn(2, `${g}`);
-    typeIn(3, `${b}`);
-    typeIn(4, `${a}`);
+    await typeIn(1, `${r}`);
+    await typeIn(2, `${g}`);
+    await typeIn(3, `${b}`);
+    await typeIn(4, `${a}`);
   }
 
   function selectModalInputs() {

@@ -27,7 +27,7 @@ export interface ServiceProps {
 declare type WrappedComponent<P> = React.ComponentClass<Omit<P, keyof ServiceProps>>;
 
 export function withServices<P extends ServiceProps>(Component: React.ComponentType<P>): WrappedComponent<P> {
-  class ServiceWrapper extends React.Component<any, any> {
+  class ServiceContextWrapper extends React.Component<any, any> {
     public render() {
       return (
         <ServiceContext.Consumer>
@@ -42,5 +42,5 @@ export function withServices<P extends ServiceProps>(Component: React.ComponentT
     }
   }
 
-  return ServiceWrapper;
+  return ServiceContextWrapper;
 }

@@ -18,6 +18,8 @@
 
 @import "src/styles/variables";
 
+// Here we must use em as unit, for exports
+
 .scale {
   display: flex;
   flex-direction: row;
@@ -27,7 +29,7 @@
   z-index: $zIndex-scale;
 
   background: rgba(white, 0.9);
-  padding: 0.8em 1em;
+  padding: 0.5em 1em;
 
   color: $secondary;
   font-size: 0.9em;

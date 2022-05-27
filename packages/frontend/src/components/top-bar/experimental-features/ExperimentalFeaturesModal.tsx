@@ -20,11 +20,12 @@ import { withTranslation } from 'react-i18next';
 import { Modal } from 'react-bootstrap';
 import React, { useCallback } from 'react';
 import { prefixedTranslation } from '../../../i18n/i18n';
-import { ExperimentalFeature, ExperimentalFeatures } from '../../../experimental-features';
+import { DevServiceWorker, ExperimentalFeature, ExperimentalFeatures } from '../../../experimental-features';
 import { useAppDispatch, useAppSelector } from '../../../core/store/hooks';
 import FeatureToggle from './FeatureToggle';
 import { UiActions } from '../../../core/store/ui/actions';
 import { ModuleRegistry } from '../../../data-processing/_common/registry/ModuleRegistry';
+import { useServices } from '../../../core/useServices';
 
 interface Props {
   visible: boolean;
@@ -35,10 +36,23 @@ const t = prefixedTranslation('ExperimentalFeaturesModal:');
 
 function ExperimentalFeaturesModal(props: Props) {
   const { visible, onClose } = props;
+  const { pwa } = useServices();
   const featureStates = useAppSelector((st) => st.ui.experimentalFeatures);
   const dispatch = useAppDispatch();
 
-  const handleChange = useCallback((f: ExperimentalFeature, state: boolean) => dispatch(UiActions.setExperimentalFeature(f.id, state)), [dispatch]);
+  const handleChange = useCallback(
+    (f: ExperimentalFeature, state: boolean) => {
+      if (DevServiceWorker.id === f.id) {
+        if (!state) {
+          alert('You will have to reload twice to get rid of service worker');
+        }
+        pwa.setDevWorkerEnabled(state);
+      }
+
+      dispatch(UiActions.setExperimentalFeature(f.id, state));
+    },
+    [dispatch, pwa]
+  );
 
   const handleClose = useCallback(() => {
     // We reset data processing modules, in case some have been enabled/disabled
@@ -53,7 +67,7 @@ function ExperimentalFeaturesModal(props: Props) {
       <Modal.Header closeButton>{t('Experimental_features')}</Modal.Header>
       <Modal.Body className={'d-flex flex-column justify-content-center'}>
         <div className={'mb-4'}>{t('Here_you_can_enable_features')}</div>
-        {ExperimentalFeatures.map((feature) => (
+        {ExperimentalFeatures.filter((f) => !f.condition || f.condition()).map((feature) => (
           <FeatureToggle key={feature.id} feature={feature} state={featureStates[feature.id] ?? false} onChange={handleChange} data-cy={feature.id} />
         ))}
       </Modal.Body>

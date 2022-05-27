@@ -23,6 +23,8 @@ import FormValidationLabel from '../form-validation-label/FormValidationLabel';
 import { FormState } from '../form-validation-label/FormState';
 import { prefixedTranslation } from '../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
+import { FormOfflineIndicator } from '../offline-indicator/FormOfflineIndicator';
+import { OnlineStatusProps, withOnlineStatus } from '../../core/pwa/withOnlineStatus';
 
 const logger = Logger.get('RegistrationForm.tsx');
 
@@ -31,7 +33,7 @@ export interface FormValues {
   password: string;
 }
 
-interface Props {
+interface Props extends OnlineStatusProps {
   onSubmit: (values: FormValues) => void;
   onCancel: () => void;
 }
@@ -62,6 +64,7 @@ class RegistrationForm extends Component<Props, State> {
     const confirmation = this.state.confirmation;
     const handleCancel = this.props.onCancel;
     const formState = this.state.formState;
+    const offline = !this.props.onlineStatus;
 
     return (
       <>
@@ -69,11 +72,14 @@ class RegistrationForm extends Component<Props, State> {
 
         <p className={'mb-3'}>{t('Please_fill_the_form_to_register')}</p>
 
+        <FormOfflineIndicator />
+
         {/* Registration form */}
 
         <input
           type={'email'}
           value={email}
+          disabled={offline}
           onChange={this.handleEmailChange}
           onKeyUp={this.handleKeyUp}
           placeholder={t('Email')}
@@ -84,6 +90,7 @@ class RegistrationForm extends Component<Props, State> {
         <input
           type={'password'}
           value={password}
+          disabled={offline}
           onChange={this.handlePasswordChange}
           onKeyUp={this.handleKeyUp}
           placeholder={t('Password')}
@@ -94,6 +101,7 @@ class RegistrationForm extends Component<Props, State> {
         <input
           type={'password'}
           value={confirmation}
+          disabled={offline}
           onChange={this.handleConfirmationChange}
           onKeyUp={this.handleKeyUp}
           placeholder={t('Password_confirmation')}
@@ -121,7 +129,7 @@ class RegistrationForm extends Component<Props, State> {
 
           <button
             type={'button'}
-            disabled={formState !== FormState.Ok}
+            disabled={formState !== FormState.Ok || offline}
             onClick={this.handleSubmit}
             className={'btn btn-primary ml-2'}
             data-cy={'submit-registration'}
@@ -197,4 +205,4 @@ class RegistrationForm extends Component<Props, State> {
   }
 }
 
-export default withTranslation()(RegistrationForm);
+export default withOnlineStatus(withTranslation()(RegistrationForm));

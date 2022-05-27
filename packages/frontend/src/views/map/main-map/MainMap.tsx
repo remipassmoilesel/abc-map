@@ -33,6 +33,8 @@ import BaseEvent from 'ol/events/Event';
 import { DataReader } from '../../../core/data/DataReader';
 import { ReadStatus } from '../../../core/data/ReadResult';
 import { Scale } from '../../../components/scale/Scale';
+import { Preloader } from './preloader/Preloader';
+import clsx from 'clsx';
 
 export const logger = Logger.get('MainMap.ts');
 
@@ -58,18 +60,19 @@ class MainMap extends Component<ServiceProps, State> {
     const dragOverlay = this.state.dragOverlay;
 
     return (
-      <div className={`${Cls.mapContainer} abc-main-map`}>
+      <div className={Cls.mapContainer}>
         {/* Main map support */}
         <div ref={this.mapRef} data-cy={'main-map'} className={Cls.map} onDragOver={this.handleDragOver} />
 
         <InteractiveAttributions map={this.map} className={Cls.attributions} />
 
         <div className={Cls.bottomBar}>
-          <Scale map={this.map} className={Cls.scale} />
-
-          <div className={Cls.controls}>
-            <Zoom map={this.map} />
+          <div className={'d-flex align-items-center'}>
+            <Scale map={this.map} className={clsx(Cls.scale, 'mr-2')} />
+            <Preloader map={this.map} />
           </div>
+
+          <Zoom map={this.map} />
         </div>
 
         {/* Warning if tiles does not load */}

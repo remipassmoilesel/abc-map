@@ -45,7 +45,8 @@
     "Logout": "Logout",
     "You_are_disconnected": "You are disconnected",
     "Feedbacks": "Feedbacks ?",
-    "Experimental_features": "Experimental features"
+    "Experimental_features": "Experimental features",
+    "Install_app": "Install application"
   },
   "FeedbackModal": {
     "So_how_is_it_going": "So how is it going ?"
@@ -54,8 +55,8 @@
     "Experimental_features": "Experimental features",
     "Here_you_can_enable_features": "Here you can enable features that are not yet stable.",
     "Close": "Close",
-    "MapSharing": "Map sharing",
-    "ArtefactGenerator": "Artefact generator"
+    "ArtefactGenerator": "Artefact generator",
+    "DevServiceWorker": "Development service worker"
   },
   "MapView": {
     "The_map": "The map !",
@@ -76,7 +77,12 @@
       "Zoom_in": "Zoom in",
       "Zoom_out": "Zoom out",
       "Import_in_progress": "Import in progress ...",
-      "Done": "Import done !"
+      "Done": "Import done !",
+      "Preload_map": "Preload map",
+      "Cancel": "Cancel",
+      "ALittle": "Load this view",
+      "ALot": "Load several zoom level",
+      "You_can_preload_a_map_area_for_offline_use": "You can preload a map area for offline use"
     },
     "ProjectStatus": {
       "Projection": "Projection",
@@ -373,7 +379,8 @@
     "About_data_store": "About data store",
     "About_data_store_and_data": "<div>\n    <p>The data store offers you:</p>\n    <ul>\n        <li>Data from open sources</li>\n        <li>Data source configurations</li>\n    </ul>\n\n    <p>Some of this data is free for all uses, some is chargeable for commercial use.</p>\n    <p>All data has terms of use. Refer to license and source links.</p>\n</div>",
     "About": "About",
-    "Provider": "Provider"
+    "Provider": "Provider",
+    "Connect_to_the_Internet_to_use_the_data_store": "Connect to the Internet to use <br/>the data store"
   },
   "DataProcessingView": {
     "Modules": "Modules",
@@ -578,7 +585,8 @@
     "You_must_create_layouts_first": "You must first create a layout",
     "Layouts_menu": "Layouts list",
     "Controls_menu": "Controls",
-    "Export_in_progress": "Export in progress ..."
+    "Export_in_progress": "Export in progress ...",
+    "Connect_to_the_Internet_to_export_your_map": "Connect to the Internet to <br/>export your map"
   },
   "TextFrameControls": {
     "New_text_frame": "New text frame",
@@ -688,7 +696,8 @@
     "Delete_my_account_permanently": "Permanently delete my account",
     "Your_account_has_been_deleted": "Your account has been deleted \uD83D\uDE2D",
     "Password_updated": "Password updated !",
-    "Your_password_is_incorrect": "Your password is incorrect"
+    "Your_password_is_incorrect": "Your password is incorrect",
+    "Connect_to_the_Internet_to_manage_your_account": "Connect to the Internet to manage your account"
   },
   "MapSymbolPickerModal": {
     "Select_symbol": "Select a symbol",
@@ -831,7 +840,8 @@
     "Map_size": "Map size",
     "Full_page": "Full page",
     "About_map_size": "About map size",
-    "If_map_size_is_bigger_than_actual_window": "If the map size is larger than the window, it will be displayed in full screen"
+    "If_map_size_is_bigger_than_actual_window": "If the map size is larger than the window, it will be displayed in full screen",
+    "Connect_to_the_Internet_to_share_your_map": "Connect to the Internet to <br/>share your map"
   },
   "SharedViewNavigation": {
     "Previous_view": "Previous view",
@@ -930,6 +940,39 @@
   "ChangelogView": {
     "Changelog": "Changelog",
     "Follow_us_on_twitter": "Follow us on Twitter"
+  },
+  "InstallAppModal": {
+    "Install_app": "Install application ?",
+    "You_can_then_start_Abc-Map_from_your_home_screen": "You can then start Abc-Map from your home screen.",
+    "This_app_respects_your_privacy_just_like_the_online_version": "This app respects your privacy just like the online version.",
+    "Install": "Install",
+    "Not_now": "Not now",
+    "Do_not_ask_again": "Do not ask again",
+    "Done": "Done !",
+    "Something_went_wrong": "Something went wrong",
+    "Damn_bugs": "Damn bugs",
+    "Close": "Close",
+    "You_cant_install_the_app_now": "You can't install the app now",
+    "Its_probably_because": "It's probably because :",
+    "App_is_already_installed": "App is already installed",
+    "Or_you_are_using_an_unsupported_device": "Or you are using an unsupported device",
+    "Maybe_its_already_installed": "Maybe it's already installed ?",
+    "You_may_have_to_wait_a_bit_or_close_this_page": "You may have to wait a bit or close this page",
+    "Tap_the_menu_button_next_to_the_address_bar": "Tap the menu button next to the address bar",
+    "Then_tap_Add_to_Home_screen": "Then select \"Add to Home Screen\"",
+    "See_firefox_documentation": "See Firefox documentation",
+    "To_install_the_application_you_will_need_this_extension": "To install the application you will need this extension",
+    "Just_one_more_step": "Just one more step"
+  },
+  "FormOfflineIndicator": {
+    "You_are_offline": "You are offline"
+  },
+  "SmallOfflineIndicator": {
+    "You_are_not_connected_to_the_Internet": "You are not connected to the Internet",
+    "Offline": "Offline"
+  },
+  "LargeOfflineIndicator": {
+    "You_are_offline": "You are offline"
   },
   "core": {
     "ProjectFactory": {

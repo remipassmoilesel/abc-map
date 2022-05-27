@@ -26,7 +26,7 @@ import { TestHelper } from '../../../core/utils/test/TestHelper';
 import userEvent from '@testing-library/user-event';
 import { LayerDataSource } from '../../../core/data/data-source/LayerDataSource';
 
-describe('GeometryLayerForm', () => {
+describe('DataSourceForm', () => {
   let map: MapWrapper;
   let services: TestServices;
   let handleChanges: SinonStub;
@@ -91,7 +91,7 @@ describe('GeometryLayerForm', () => {
     );
 
     // Act
-    userEvent.selectOptions(screen.getByTestId('vector-layer-selector'), 'Regions of France');
+    await userEvent.selectOptions(screen.getByTestId('vector-layer-selector'), 'Regions of France');
 
     // Assert
     await waitFor(() => {
@@ -115,12 +115,12 @@ describe('GeometryLayerForm', () => {
       />,
       { services }
     );
-    userEvent.selectOptions(screen.getByTestId('vector-layer-selector'), 'Regions of France');
+    await userEvent.selectOptions(screen.getByTestId('vector-layer-selector'), 'Regions of France');
     await waitFor(() => screen.getAllByText(/Select a field/));
     handleChanges.reset();
 
     // Act
-    userEvent.selectOptions(screen.getByTestId('value-field'), 'POP');
+    await userEvent.selectOptions(screen.getByTestId('value-field'), 'POP');
 
     // Assert
     await waitFor(() => {
@@ -144,12 +144,12 @@ describe('GeometryLayerForm', () => {
       />,
       { services }
     );
-    userEvent.selectOptions(screen.getByTestId('vector-layer-selector'), 'Regions of France');
+    await userEvent.selectOptions(screen.getByTestId('vector-layer-selector'), 'Regions of France');
     await waitFor(() => screen.getAllByText(/Select a field/));
     handleChanges.reset();
 
     // Act
-    userEvent.selectOptions(screen.getByTestId('data-join-by'), 'CODE');
+    await userEvent.selectOptions(screen.getByTestId('data-join-by'), 'CODE');
 
     // Assert
     await waitFor(() => {
@@ -174,7 +174,7 @@ describe('GeometryLayerForm', () => {
     );
 
     // Act
-    userEvent.selectOptions(screen.getByTestId('vector-layer-selector'), 'Regions of France');
+    await userEvent.selectOptions(screen.getByTestId('vector-layer-selector'), 'Regions of France');
 
     // Assert
     await waitFor(() => {

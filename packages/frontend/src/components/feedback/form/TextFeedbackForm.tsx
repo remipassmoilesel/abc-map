@@ -21,6 +21,8 @@ import Cls from './TextFeedbackForm.module.scss';
 import { useServices } from '../../../core/useServices';
 import { Logger } from '@abc-map/shared';
 import { prefixedTranslation } from '../../../i18n/i18n';
+import { useOfflineStatus } from '../../../core/pwa/OnlineStatusContext';
+import { FormOfflineIndicator } from '../../offline-indicator/FormOfflineIndicator';
 
 const logger = Logger.get('TextFeedbackForm.tsx');
 
@@ -36,6 +38,8 @@ function TextFeedbackForm(props: Props) {
   const { feedback, toasts } = useServices();
   const { onDone, onCancel, className } = props;
   const [feedbackValue, setFeedbackValue] = useState('');
+
+  const offline = useOfflineStatus();
 
   const handleFeedbackChange = useCallback((ev: ChangeEvent<HTMLTextAreaElement>) => setFeedbackValue(ev.target.value), []);
 
@@ -54,14 +58,21 @@ function TextFeedbackForm(props: Props) {
 
   return (
     <div className={`w-100 ${className || ''}`}>
+      {/* Description */}
       <div className={'mb-2'}>{t('Contextualize_comments')}</div>
       <div className={'mb-2'}>{t('If_you_want_a_response_add_email')}</div>
-      <textarea value={feedbackValue} onInput={handleFeedbackChange} className={`form-control ${Cls.textarea}`} />
+
+      <FormOfflineIndicator />
+
+      {/* Feedback form */}
+      <textarea value={feedbackValue} onInput={handleFeedbackChange} disabled={offline} className={`form-control ${Cls.textarea}`} />
+
+      {/* Actions */}
       <div className={'mt-4 d-flex justify-content-end'}>
         <button onClick={onCancel} className={'btn btn-outline-secondary mr-2'} data-cy={'confirmation-cancel'}>
           {t('Cancel')}
         </button>
-        <button onClick={handleConfirm} className={'btn btn-primary'} data-cy={'confirmation-confirm'}>
+        <button onClick={handleConfirm} disabled={offline} className={'btn btn-primary'} data-cy={'confirmation-confirm'}>
           {t('Send')}
         </button>
       </div>

@@ -18,7 +18,7 @@
 import { newTestServices, TestServices } from '../../core/utils/test/TestServices';
 import { abcRender } from '../../core/utils/test/abcRender';
 import { ModalEvent, ModalEventType } from '../../core/ui/typings';
-import { screen } from '@testing-library/react';
+import { act, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import LoginModal from './LoginModal';
 import { TestHelper } from '../../core/utils/test/TestHelper';
@@ -33,50 +33,62 @@ describe('LoginModal', () => {
   it('should become visible', () => {
     abcRender(<LoginModal />, { services });
 
-    dispatch({ type: ModalEventType.ShowLogin });
+    act(() => dispatch({ type: ModalEventType.ShowLogin }));
 
     expect(screen.getByPlaceholderText('Email address')).toBeDefined();
   });
 
-  it('should have disabled button if form is invalid', () => {
+  it('should have disabled button if form is invalid', async () => {
     // Prepare
     abcRender(<LoginModal />, { services });
-    dispatch({ type: ModalEventType.ShowLogin });
+
+    act(() => dispatch({ type: ModalEventType.ShowLogin }));
 
     // Act
-    userEvent.type(screen.getByTestId('email'), 'heyhey@hey.com');
-    userEvent.type(screen.getByTestId('password'), 'azerty');
+    await userEvent.type(screen.getByTestId('email'), 'heyhey@hey.com');
+    await userEvent.type(screen.getByTestId('password'), 'azerty');
 
     // Assert
     expect(screen.getByTestId('confirm-login')).toBeDisabled();
   });
 
-  it('should authenticate on submit', () => {
+  it('should authenticate on submit', async () => {
     // Prepare
     abcRender(<LoginModal />, { services });
-    dispatch({ type: ModalEventType.ShowLogin });
-    userEvent.type(screen.getByTestId('email'), 'heyhey@hey.com');
-    userEvent.type(screen.getByTestId('password'), 'azerty1234');
+
+    act(() => dispatch({ type: ModalEventType.ShowLogin }));
+
+    await userEvent.type(screen.getByTestId('email'), 'heyhey@hey.com');
+    await userEvent.type(screen.getByTestId('password'), 'azerty1234');
+
     services.authentication.login.resolves();
 
     // Act
-    screen.getByTestId('confirm-login').click();
+    await act(async () => {
+      screen.getByTestId('confirm-login').click();
+
+      // We wait for authentication promise resolution
+      await TestHelper.wait(10);
+    });
 
     // Assert
     expect(services.authentication.login.args).toEqual([['heyhey@hey.com', 'azerty1234']]);
   });
 
-  it('should not keep state after cancel', () => {
+  it('should not keep state after cancel', async () => {
     // Prepare
     abcRender(<LoginModal />, { services });
-    dispatch({ type: ModalEventType.ShowLogin });
-    userEvent.type(screen.getByTestId('email'), 'heyhey@hey.com');
-    userEvent.type(screen.getByTestId('password'), 'azerty1234');
+
+    act(() => dispatch({ type: ModalEventType.ShowLogin }));
+
+    await userEvent.type(screen.getByTestId('email'), 'heyhey@hey.com');
+    await userEvent.type(screen.getByTestId('password'), 'azerty1234');
+
     services.authentication.login.resolves();
 
     // Act
     screen.getByTestId('cancel-login').click();
-    dispatch({ type: ModalEventType.ShowLogin });
+    act(() => dispatch({ type: ModalEventType.ShowLogin }));
 
     // Assert
     expect(screen.getByTestId('email')).toHaveValue('');
@@ -86,15 +98,22 @@ describe('LoginModal', () => {
   it('should not keep state after confirm', async () => {
     // Prepare
     abcRender(<LoginModal />, { services });
-    dispatch({ type: ModalEventType.ShowLogin });
-    userEvent.type(screen.getByTestId('email'), 'heyhey@hey.com');
-    userEvent.type(screen.getByTestId('password'), 'azerty1234');
+
+    act(() => dispatch({ type: ModalEventType.ShowLogin }));
+
+    await userEvent.type(screen.getByTestId('email'), 'heyhey@hey.com');
+    await userEvent.type(screen.getByTestId('password'), 'azerty1234');
+
     services.authentication.login.resolves();
 
     // Act
-    screen.getByTestId('confirm-login').click();
-    await TestHelper.wait(10); // Wait internal promise
-    dispatch({ type: ModalEventType.ShowLogin });
+    await act(async () => {
+      screen.getByTestId('confirm-login').click();
+
+      // We wait for authentication promise resolution
+      await TestHelper.wait(10);
+    });
+    act(() => dispatch({ type: ModalEventType.ShowLogin }));
 
     // Assert
     expect(screen.getByTestId('email')).toHaveValue('');

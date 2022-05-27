@@ -58,12 +58,12 @@ export function uiReducer(state = uiInitialState, action: UiAction): UiState {
       };
     }
 
-    case ActionType.AckSharedMapInformation: {
+    case ActionType.AckInformation: {
       return {
         ...state,
         informations: {
           ...state.informations,
-          sharedMapAlpha: true,
+          [action.name]: true,
         },
       };
     }
@@ -97,6 +97,11 @@ export function uiReducer(state = uiInitialState, action: UiAction): UiState {
         ...state,
         remoteModuleUrls: action.moduleUrls,
       };
+    }
+
+    case ActionType.IncrementVisitCounter: {
+      // We do not store more than one visit for privacy purposes
+      return { ...state, visits: 1 };
     }
 
     default:

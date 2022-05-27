@@ -18,11 +18,12 @@
 
 import Cls from './FeatureToggle.module.scss';
 import { withTranslation } from 'react-i18next';
-import React, { useCallback } from 'react';
+import React, { SyntheticEvent, useCallback } from 'react';
 import { getLang, prefixedTranslation } from '../../../i18n/i18n';
 import { Switch } from '../../switch/Switch';
 import { ExperimentalFeature } from '../../../experimental-features';
 import { getTextByLang } from '@abc-map/shared';
+import { linkify } from '../../../core/utils/strings';
 
 interface Props {
   feature: ExperimentalFeature;
@@ -35,8 +36,15 @@ const t = prefixedTranslation('ExperimentalFeaturesModal:');
 
 function FeatureToggle(props: Props) {
   const { feature, onChange, state, 'data-cy': dataCy } = props;
+  const description = getTextByLang(feature.description, getLang());
 
-  const handleChange = useCallback(() => onChange(feature, !state), [onChange, feature, state]);
+  const handleChange = useCallback(
+    (ev: SyntheticEvent) => {
+      ev.stopPropagation();
+      onChange(feature, !state);
+    },
+    [onChange, feature, state]
+  );
 
   return (
     <div onClick={handleChange} className={Cls.featureToggle} data-cy={dataCy}>
@@ -44,7 +52,7 @@ function FeatureToggle(props: Props) {
         {t(feature.id)}
         <Switch onChange={handleChange} value={state} className={'ml-3'} />
       </div>
-      <small>{getTextByLang(feature.description, getLang())}</small>
+      {description && <small dangerouslySetInnerHTML={{ __html: linkify(description) }}></small>}
     </div>
   );
 }

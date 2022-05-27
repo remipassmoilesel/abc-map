@@ -115,7 +115,8 @@ describe('StorePersistence', () => {
           'menu-2': false,
         },
         informations: {
-          sharedMapAlpha: true,
+          riskyDevice: true,
+          installApp: true,
         },
         experimentalFeatures: {
           Feature1: true,
@@ -124,6 +125,7 @@ describe('StorePersistence', () => {
         modulesLoaded: ['module1', 'module2', 'module3', 'module4'],
         remoteModuleUrls: ['https://module3', 'https://module4'],
         remoteModules: [{ id: 'module3', url: 'https://module3' }],
+        visits: 1,
       },
     });
 
@@ -200,7 +202,8 @@ describe('StorePersistence', () => {
         },
         sideMenu: {},
         informations: {
-          sharedMapAlpha: true,
+          riskyDevice: true,
+          installApp: true,
         },
         experimentalFeatures: {
           Feature1: true,
@@ -209,6 +212,7 @@ describe('StorePersistence', () => {
         modulesLoaded: [],
         remoteModuleUrls: [],
         remoteModules: [{ id: 'module3', url: 'https://module3' }],
+        visits: 1,
       },
     };
 

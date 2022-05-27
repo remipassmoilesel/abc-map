@@ -17,6 +17,7 @@
  */
 
 import { I18nText, Language } from '@abc-map/shared';
+import { isDevelopmentWorkerEnv } from './serviceWorkerRegistration';
 
 /*
  * You can reference in this file features that will not be enabled by default.
@@ -25,6 +26,7 @@ import { I18nText, Language } from '@abc-map/shared';
 export interface ExperimentalFeature {
   id: string;
   description: I18nText[];
+  condition?: () => boolean;
 }
 
 /**
@@ -46,4 +48,25 @@ export const ArtefactGenerator: ExperimentalFeature = {
   ],
 };
 
-export const ExperimentalFeatures: ExperimentalFeature[] = [ArtefactGenerator];
+/**
+ * Enable service worker on development environment.
+ *
+ */
+export const DevServiceWorker: ExperimentalFeature = {
+  id: 'DevServiceWorker',
+  condition: isDevelopmentWorkerEnv,
+  description: [
+    {
+      language: Language.English,
+      text: `You should not enable this feature unless you know what you are doing.<br/>
+             See: https://create-react-app.dev/docs/making-a-progressive-web-app/#offline-first-considerations`,
+    },
+    {
+      language: Language.French,
+      text: `Vous ne devriez pas activer cette fonction à moins que vous ne sachiez ce que vous faites.<br/>
+             Voir: https://create-react-app.dev/docs/making-a-progressive-web-app/#offline-first-considerations`,
+    },
+  ],
+};
+
+export const ExperimentalFeatures: ExperimentalFeature[] = [ArtefactGenerator, DevServiceWorker];

@@ -126,8 +126,8 @@ describe('Text', () => {
     await map.click(20, 0);
 
     // Act
-    userEvent.type(screen.getByTestId('text-box'), 'hello');
-    userEvent.click(screen.getByTestId('validate'));
+    await userEvent.type(screen.getByTestId('text-box'), 'hello');
+    await userEvent.click(screen.getByTestId('validate'));
 
     // Assert
     expect(feature.getText()).toEqual('hello');
@@ -166,9 +166,9 @@ describe('Text', () => {
     await map.click(20, 0);
 
     // Act
-    userEvent.clear(screen.getByTestId('text-box'));
-    userEvent.type(screen.getByTestId('text-box'), 'hello');
-    userEvent.click(screen.getByTestId('validate'));
+    await userEvent.clear(screen.getByTestId('text-box'));
+    await userEvent.type(screen.getByTestId('text-box'), 'hello');
+    await userEvent.click(screen.getByTestId('validate'));
 
     // Assert
     expect(feature.getText()).toEqual('hello');

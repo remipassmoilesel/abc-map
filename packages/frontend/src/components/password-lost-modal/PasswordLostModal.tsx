@@ -16,134 +16,58 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { KeyboardEvent, ChangeEvent, Component, ReactNode } from 'react';
+import React, { ChangeEvent, KeyboardEvent, useCallback, useEffect, useState } from 'react';
 import { Logger } from '@abc-map/shared';
 import { Modal } from 'react-bootstrap';
-import { ServiceProps, withServices } from '../../core/withServices';
+import { withServices } from '../../core/withServices';
 import { ModalEventType, ModalStatus } from '../../core/ui/typings';
 import { ValidationHelper } from '../../core/utils/ValidationHelper';
 import FormValidationLabel from '../form-validation-label/FormValidationLabel';
 import { prefixedTranslation } from '../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
+import { FormState } from '../form-validation-label/FormState';
+import { useServices } from '../../core/useServices';
+import { useOfflineStatus } from '../../core/pwa/OnlineStatusContext';
+import { FormOfflineIndicator } from '../offline-indicator/FormOfflineIndicator';
 
 const logger = Logger.get('PasswordLostModal.tsx');
 
-interface State {
-  visible: boolean;
-  email: string;
-  formState: FormState;
-}
-
-enum FormState {
-  InvalidEmail = 'InvalidEmail',
-  Ok = 'Ok',
-}
-
 const t = prefixedTranslation('PasswordLostModal:');
 
-class PasswordLostModal extends Component<ServiceProps, State> {
-  constructor(props: ServiceProps) {
-    super(props);
-    this.state = {
-      visible: false,
-      email: '',
-      formState: FormState.InvalidEmail,
-    };
-  }
+function PasswordLostModal() {
+  const { modals, toasts, authentication } = useServices();
+  const [visible, setVisible] = useState(false);
+  const [email, setEmail] = useState('');
+  const [formState, setFormState] = useState(FormState.InvalidEmail);
 
-  public render(): ReactNode {
-    const visible = this.state.visible;
-    const email = this.state.email;
-    const formState = this.state.formState;
-    if (!visible) {
-      return <div />;
+  const offline = useOfflineStatus();
+
+  useEffect(() => {
+    const handleOpen = () => setVisible(true);
+
+    modals.addListener(ModalEventType.ShowPasswordLost, handleOpen);
+    return () => modals.removeListener(ModalEventType.ShowPasswordLost, handleOpen);
+  }, [modals]);
+
+  const validateForm = useCallback((email: string): FormState => {
+    // Check email
+    if (!ValidationHelper.email(email)) {
+      return FormState.InvalidEmail;
     }
 
-    return (
-      <Modal show={visible} onHide={this.close} centered>
-        <Modal.Header closeButton>
-          <Modal.Title>{t('Password_lost')} 🔑</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <div className={`d-flex flex-column p-3`}>
-            {/*Intro*/}
+    return FormState.Ok;
+  }, []);
 
-            <p className={'mb-3'}>{t('Fill_this_form_to_recover_your_password')}</p>
+  const handleClose = useCallback(() => {
+    setVisible(false);
+    setEmail('');
+    modals.dispatch({ type: ModalEventType.LoginClosed, status: ModalStatus.Canceled });
+  }, [modals]);
 
-            {/* Email form */}
-
-            <div className={`form-group`}>
-              <input
-                type={'email'}
-                value={email}
-                onInput={this.handleEmailChange}
-                onKeyUp={this.handleKeyUp}
-                placeholder={t('Email_address')}
-                className={'form-control mb-4'}
-                data-cy={'email'}
-              />
-            </div>
-
-            {/* Form validation */}
-
-            <FormValidationLabel state={formState} className={'mb-4'} />
-
-            {/* Action buttons */}
-
-            <div className={'d-flex justify-content-end'}>
-              <button type={'button'} onClick={this.close} className={`btn btn-outline-secondary`} data-cy={'cancel-login'}>
-                {t('Cancel')}
-              </button>
-              <button
-                type={'button'}
-                disabled={formState !== FormState.Ok}
-                onClick={this.handleSubmit}
-                className={`btn btn-primary ml-2`}
-                data-cy={'confirm-reset-password'}
-              >
-                {t('Confirm')}
-              </button>
-            </div>
-          </div>
-        </Modal.Body>
-      </Modal>
-    );
-  }
-
-  public componentDidMount() {
-    const { modals } = this.props.services;
-
-    modals.addListener(ModalEventType.ShowPasswordLost, this.handleOpen);
-  }
-
-  public componentWillUnmount() {
-    const { modals } = this.props.services;
-
-    modals.removeListener(ModalEventType.ShowPasswordLost, this.handleOpen);
-  }
-
-  private handleOpen = () => {
-    this.setState({ visible: true });
-  };
-
-  private close = () => {
-    const { modals } = this.props.services;
-
-    modals.dispatch({
-      type: ModalEventType.LoginClosed,
-      status: ModalStatus.Canceled,
-    });
-
-    this.setState({ visible: false, email: '' });
-  };
-
-  private handleSubmit = () => {
-    const { toasts, authentication } = this.props.services;
-
-    const email = this.state.email;
-    const formState = this.validateForm(email);
+  const handleSubmit = useCallback(() => {
+    const formState = validateForm(email);
     if (formState !== FormState.Ok) {
-      this.setState({ formState });
+      setFormState(formState);
       return;
     }
 
@@ -151,34 +75,89 @@ class PasswordLostModal extends Component<ServiceProps, State> {
       .passwordLost(email)
       .then(() => {
         toasts.info(t('Email_sent_check_your_spam'));
-        this.close();
+        setEmail('');
+        setVisible(false);
       })
       .catch((err) => {
         logger.error('Cannot send request for password reset: ', err);
         toasts.genericError(err);
       });
-  };
+  }, [authentication, email, toasts, validateForm]);
 
-  private handleEmailChange = (ev: ChangeEvent<HTMLInputElement>) => {
-    const email = ev.target.value;
-    const formState = this.validateForm(email);
-    this.setState({ email, formState });
-  };
+  const handleEmailChange = useCallback(
+    (ev: ChangeEvent<HTMLInputElement>) => {
+      const email = ev.target.value;
+      setEmail(email);
+      setFormState(validateForm(email));
+    },
+    [validateForm]
+  );
 
-  private handleKeyUp = (ev: KeyboardEvent<HTMLInputElement>) => {
-    if (ev.key === 'Enter') {
-      this.handleSubmit();
-    }
-  };
+  const handleKeyUp = useCallback(
+    (ev: KeyboardEvent<HTMLInputElement>) => {
+      if (ev.key === 'Enter') {
+        handleSubmit();
+      }
+    },
+    [handleSubmit]
+  );
 
-  private validateForm(email: string): FormState {
-    // Check email
-    if (!ValidationHelper.email(email)) {
-      return FormState.InvalidEmail;
-    }
-
-    return FormState.Ok;
+  if (!visible) {
+    return <div />;
   }
+
+  return (
+    <Modal show={visible} onHide={handleClose} centered>
+      <Modal.Header closeButton>
+        <Modal.Title>{t('Password_lost')} 🔑</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <div className={`d-flex flex-column p-3`}>
+          {/*Intro*/}
+
+          <p className={'mb-3'}>{t('Fill_this_form_to_recover_your_password')}</p>
+
+          <FormOfflineIndicator />
+
+          {/* Email form */}
+
+          <div className={`form-group`}>
+            <input
+              type={'email'}
+              value={email}
+              onInput={handleEmailChange}
+              onKeyUp={handleKeyUp}
+              disabled={offline}
+              placeholder={t('Email_address')}
+              className={'form-control mb-4'}
+              data-cy={'email'}
+            />
+          </div>
+
+          {/* Form validation */}
+
+          <FormValidationLabel state={formState} className={'mb-4'} />
+
+          {/* Action buttons */}
+
+          <div className={'d-flex justify-content-end'}>
+            <button type={'button'} onClick={handleClose} className={`btn btn-outline-secondary`} data-cy={'cancel-login'}>
+              {t('Cancel')}
+            </button>
+            <button
+              type={'button'}
+              disabled={formState !== FormState.Ok || offline}
+              onClick={handleSubmit}
+              className={`btn btn-primary ml-2`}
+              data-cy={'confirm-reset-password'}
+            >
+              {t('Confirm')}
+            </button>
+          </div>
+        </div>
+      </Modal.Body>
+    </Modal>
+  );
 }
 
 export default withTranslation()(withServices(PasswordLostModal));

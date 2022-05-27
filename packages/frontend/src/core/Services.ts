@@ -29,6 +29,7 @@ import { FeedbackService } from './feedback/FeedbackService';
 import { LegalMentionsService } from './legal-mentions/LegalMentionsService';
 import { getAbcWindow, Logger } from '@abc-map/shared';
 import { LocalStorageService } from './local-storage/LocalStorageService';
+import { PwaService } from './pwa/PwaService';
 
 const logger = Logger.get('Services.ts');
 
@@ -43,6 +44,7 @@ export interface Services {
   feedback: FeedbackService;
   legalMentions: LegalMentionsService;
   storage: LocalStorageService;
+  pwa: PwaService;
 }
 
 export function getServices(): Services {
@@ -69,6 +71,7 @@ export function servicesFactory(store: MainStore): Services {
   const feedback = new FeedbackService(apiClient, toasts);
   const legalMentions = new LegalMentionsService(downloadClient, toasts);
   const storage = new LocalStorageService();
+  const pwa = new PwaService(storage);
 
   authentication.addDisconnectListener(() => project.resetCache());
 
@@ -83,5 +86,6 @@ export function servicesFactory(store: MainStore): Services {
     feedback,
     legalMentions,
     storage,
+    pwa,
   };
 }

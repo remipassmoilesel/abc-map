@@ -18,17 +18,19 @@
 
 import { HistoryKey } from '../../history/HistoryKey';
 import { RemoteModuleRef } from '../../../data-processing/_common/registry/RemoteModuleRef';
+import { InformationKey } from './state';
 
 export enum ActionType {
   SetHistoryCapabilities = 'SetHistoryCapabilities',
   CleanHistoryCapabilities = 'CleanHistoryCapabilities',
   SetDocumentationScrollPosition = 'SetDocumentationScrollPosition',
   SetSideMenuState = 'SetSideMenuState',
-  AckSharedMapInformation = 'AckSharedMapInformation',
+  AckInformation = 'AckInformation',
   SetExperimentalFeature = 'SetExperimentalFeature',
   SetLoadedModules = 'SetLoadedModules',
   SetRemoteModules = 'SetRemoteModules',
   SetRemoteModuleUrls = 'SetRemoteModuleUrls',
+  IncrementVisitCounter = 'IncrementVisitCounter',
 }
 
 export interface SetHistoryCapabilities {
@@ -53,8 +55,9 @@ export interface SetSideMenuState {
   state: boolean;
 }
 
-export interface AckSharedMapInformation {
-  type: ActionType.AckSharedMapInformation;
+export interface AckInformation {
+  type: ActionType.AckInformation;
+  name: InformationKey;
 }
 
 export interface SetExperimentalFeature {
@@ -78,16 +81,21 @@ export interface SetRemoteModules {
   modules: RemoteModuleRef[];
 }
 
+export interface IncrementVisitCounter {
+  type: ActionType.IncrementVisitCounter;
+}
+
 export type UiAction =
   | SetHistoryCapabilities
   | CleanHistoryCapabilities
   | SetDocumentationScrollPosition
   | SetSideMenuState
-  | AckSharedMapInformation
+  | AckInformation
   | SetExperimentalFeature
   | SetLoadedModules
   | SetRemoteModuleUrls
-  | SetRemoteModules;
+  | SetRemoteModules
+  | IncrementVisitCounter;
 
 export class UiActions {
   public static setHistoryCapabilities(key: HistoryKey, canUndo: boolean, canRedo: boolean): UiAction {
@@ -120,9 +128,10 @@ export class UiActions {
     };
   }
 
-  public static ackSharedMapInformation(): UiAction {
+  public static ackInformation(name: InformationKey): UiAction {
     return {
-      type: ActionType.AckSharedMapInformation,
+      type: ActionType.AckInformation,
+      name,
     };
   }
 
@@ -152,6 +161,12 @@ export class UiActions {
     return {
       type: ActionType.SetRemoteModuleUrls,
       moduleUrls: moduleUrls,
+    };
+  }
+
+  public static incrementVisitCounter(): UiAction {
+    return {
+      type: ActionType.IncrementVisitCounter,
     };
   }
 }

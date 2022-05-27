@@ -112,17 +112,6 @@
   flex-direction: row;
   align-items: flex-end;
   justify-content: space-between;
-
-  .controls {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-
-    button {
-      margin-left: 1rem;
-    }
-  }
 }
 
 .scale {

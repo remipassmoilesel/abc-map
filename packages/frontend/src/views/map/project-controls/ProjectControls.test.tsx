@@ -44,7 +44,7 @@ describe('ProjectControls', () => {
       abcRender(<ProjectControls />, { services });
 
       // Act
-      userEvent.click(screen.getByTestId('new-project'));
+      await userEvent.click(screen.getByTestId('new-project'));
 
       // Assert
       await waitFor(() => {
@@ -60,7 +60,7 @@ describe('ProjectControls', () => {
       abcRender(<ProjectControls />, { services });
 
       // Act
-      userEvent.click(screen.getByTestId('new-project'));
+      await userEvent.click(screen.getByTestId('new-project'));
 
       // Assert
       await TestHelper.wait(10); // We must wait a little, otherwise test cannot fail
@@ -79,7 +79,7 @@ describe('ProjectControls', () => {
       services.project.exportAndZipCurrentProject.resolves(compressed);
 
       // Act
-      userEvent.click(screen.getByTestId('export-project'));
+      await userEvent.click(screen.getByTestId('export-project'));
 
       // Assert
       await waitFor(() => {
@@ -94,7 +94,7 @@ describe('ProjectControls', () => {
       services.project.exportAndZipCurrentProject.rejects(new Error('Test error'));
 
       // Act
-      userEvent.click(screen.getByTestId('export-project'));
+      await userEvent.click(screen.getByTestId('export-project'));
 
       // Assert
       await TestHelper.wait(10); // We must wait for internal promise completion, otherwise test cannot fail

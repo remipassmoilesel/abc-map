@@ -147,11 +147,10 @@ function LandingView() {
                 </div>
               )}
 
-              <div className={'mb-2'}>
-                <Link to={Routes.changelog().format()}>{t('What_changed')}&nbsp;&nbsp;👷🏿</Link>
-              </div>
-
-              <div className={'mb-2'}>
+              <div className={'d-flex flex-wrap mb-2'}>
+                <Link to={Routes.changelog().format()} className={'mr-3'}>
+                  {t('What_changed')}&nbsp;&nbsp;👷🏿
+                </Link>
                 <Link to={Routes.legalMentions().format()}>{t('About_this_platform')}&nbsp;&nbsp;⚖️</Link>
               </div>
 

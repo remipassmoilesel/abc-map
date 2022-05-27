@@ -22,19 +22,20 @@ import { HttpError } from './core/http/HttpError';
 import { BUILD_INFO } from './build-version';
 import { render } from './render';
 import { MainStore } from './core/store/store';
-import { resolveInAtLeast } from './core/utils/resolveInAtLeast';
 import { ProjectEventType } from './core/project/ProjectEvent';
 import { StyleFactory } from './core/geo/styles/StyleFactory';
 import { LoadingStatus, ModuleLoadingFailed } from './data-processing/_common/registry/ModuleLoadingStatus';
 import { ModuleRegistry } from './data-processing/_common/registry/ModuleRegistry';
+import { UiActions } from './core/store/ui/actions';
 
 export const logger = Logger.get('bootstrap.tsx', 'warn');
 
 export function bootstrap(svc: Services, store: MainStore) {
   logger.info('Version: ', BUILD_INFO);
 
-  return resolveInAtLeast(authentication(svc), 400)
+  return authentication(svc)
     .then(() => render(svc, store))
+    .then(() => dispatchVisit(store))
     .then(() => initProject(svc, store))
     .then(() => loadRemoteModules(store))
     .catch((err) => bootstrapError(err));
@@ -44,8 +45,11 @@ export function bootstrap(svc: Services, store: MainStore) {
  * All users are authenticated, as connected users or as anonymous users
  * @param svc
  */
-function authentication(svc: Services): Promise<void> {
-  // If we are connected or connected as anonymous we try to renew token
+async function authentication(svc: Services): Promise<void> {
+  if (!svc.pwa.isOnline()) {
+    return;
+  }
+
   const connected = !!svc.authentication.getUserStatus();
   if (connected) {
     return svc.authentication.renewToken().catch((err) => {
@@ -57,6 +61,10 @@ function authentication(svc: Services): Promise<void> {
   else {
     return svc.authentication.anonymousLogin();
   }
+}
+
+function dispatchVisit(store: MainStore) {
+  store.dispatch(UiActions.incrementVisitCounter());
 }
 
 async function initProject({ project, geo, history }: Services, store: MainStore) {

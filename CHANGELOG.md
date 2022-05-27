@@ -2,7 +2,17 @@
 
 For the moment we use git hashes as version, since no one complained about it 👍
 
-## 18/05/2022 - Changelog in interface + NodeJS upgrade (git: master)
+## 27/05/2022 - Progressive web app (git: master)
+
+- Add ability to use Abc-Map as a  [Progressive Web App](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps)
+- Users are invited to install Abc-Map as PWA on their second visit 
+- There is now an offline indicator on top bar
+- There are now offline indicators on forms (login, register, ...)
+- Some screens are not available offline (data store, online map sharing, ...)
+- CSS transitions for fullscreen modals
+- Device warnings can now be dismissed
+
+## 18/05/2022 - Changelog in interface + NodeJS upgrade (git: 8f6d10ea)
 
 - Changelog is available in interface now 🚀
 - [NodeJS](https://nodejs.org/en/) have been upgraded to 16.

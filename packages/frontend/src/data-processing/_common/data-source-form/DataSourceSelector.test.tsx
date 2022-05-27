@@ -50,10 +50,10 @@ describe('DataSourceSelector', () => {
     expect(screen.getByText(/Use a CSV workbook/)).toBeDefined();
   });
 
-  it('should change display if user wants to choose a file', () => {
+  it('should change display if user wants to choose a file', async () => {
     abcRender(<DataSourceSelector value={undefined} onSelected={handleSelection} />, { services });
 
-    userEvent.click(screen.getByText(/Use a CSV workbook/));
+    await userEvent.click(screen.getByText(/Use a CSV workbook/));
 
     expect(screen.getByText(/Choose a CSV file/)).toBeDefined();
   });

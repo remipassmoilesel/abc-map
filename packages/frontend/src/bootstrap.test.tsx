@@ -27,99 +27,120 @@ jest.mock('./render');
 
 logger.disable();
 
-describe('bootstrap', () => {
-  let services: TestServices;
+describe('bootstrap()', () => {
+  let testServices: TestServices;
   let svc: Services;
   let store: MainStore;
   let root: HTMLDivElement;
 
   beforeEach(() => {
-    services = newTestServices();
-    svc = services as unknown as Services;
+    testServices = newTestServices();
+    svc = testServices as unknown as Services;
     store = storeFactory();
 
     root = document.createElement('div');
     root.id = 'root';
     document.body.append(root);
 
-    services.geo.getMainMap.returns(MapFactory.createNaked());
+    testServices.geo.getMainMap.returns(MapFactory.createNaked());
   });
 
-  describe('bootstrap()', () => {
+  describe('online', () => {
+    beforeEach(() => {
+      testServices.pwa.isOnline.returns(true);
+    });
+
     it('should render app then create new project', async () => {
-      services.project.newProject.resolves();
-      services.authentication.getUserStatus.returns(false);
-      services.authentication.anonymousLogin.resolves();
+      testServices.project.newProject.resolves();
+      testServices.authentication.getUserStatus.returns(false);
+      testServices.authentication.anonymousLogin.resolves();
 
       await bootstrap(svc, store);
 
-      expect(services.project.newProject.callCount).toEqual(1);
+      expect(testServices.project.newProject.callCount).toEqual(1);
       expect(render).toHaveBeenCalledTimes(1);
     });
 
     it('should try to login as anonymous if not authenticated', async () => {
-      services.project.newProject.resolves();
-      services.authentication.getUserStatus.returns(false);
-      services.authentication.anonymousLogin.resolves();
+      testServices.project.newProject.resolves();
+      testServices.authentication.getUserStatus.returns(false);
+      testServices.authentication.anonymousLogin.resolves();
 
       await bootstrap(svc, store);
 
-      expect(services.authentication.anonymousLogin.callCount).toEqual(1);
+      expect(testServices.authentication.anonymousLogin.callCount).toEqual(1);
       expect(render).toHaveBeenCalledTimes(1);
     });
 
     it('should try to renew token if authenticated', async () => {
-      services.authentication.getUserStatus.returns(UserStatus.Authenticated);
-      services.authentication.renewToken.resolves();
+      testServices.authentication.getUserStatus.returns(UserStatus.Authenticated);
+      testServices.authentication.renewToken.resolves();
 
       await bootstrap(svc, store);
 
-      expect(services.authentication.renewToken.callCount).toEqual(1);
+      expect(testServices.authentication.renewToken.callCount).toEqual(1);
       expect(render).toHaveBeenCalledTimes(1);
     });
 
     it('should try to renew token if authenticated as anonymous', async () => {
-      services.authentication.getUserStatus.returns(UserStatus.Anonymous);
-      services.authentication.renewToken.resolves();
+      testServices.authentication.getUserStatus.returns(UserStatus.Anonymous);
+      testServices.authentication.renewToken.resolves();
 
       await bootstrap(svc, store);
 
-      expect(services.authentication.renewToken.callCount).toEqual(1);
+      expect(testServices.authentication.renewToken.callCount).toEqual(1);
       expect(render).toHaveBeenCalledTimes(1);
     });
 
     it('should login as anonymous if token renewal failed', async () => {
-      services.authentication.getUserStatus.returns(UserStatus.Authenticated);
-      services.authentication.renewToken.rejects();
-      services.authentication.anonymousLogin.resolves();
+      testServices.authentication.getUserStatus.returns(UserStatus.Authenticated);
+      testServices.authentication.renewToken.rejects();
+      testServices.authentication.anonymousLogin.resolves();
 
       await bootstrap(svc, store);
 
-      expect(services.authentication.renewToken.callCount).toEqual(1);
-      expect(services.authentication.anonymousLogin.callCount).toEqual(1);
+      expect(testServices.authentication.renewToken.callCount).toEqual(1);
+      expect(testServices.authentication.anonymousLogin.callCount).toEqual(1);
       expect(render).toHaveBeenCalledTimes(1);
     });
 
     it('should show error if anonymous login failed', async () => {
-      services.authentication.getUserStatus.returns(false);
-      services.authentication.anonymousLogin.rejects();
+      testServices.authentication.getUserStatus.returns(false);
+      testServices.authentication.anonymousLogin.rejects();
 
       await bootstrap(svc, store);
 
-      expect(services.authentication.anonymousLogin.callCount).toEqual(1);
+      expect(testServices.authentication.anonymousLogin.callCount).toEqual(1);
       expect(render).toHaveBeenCalledTimes(0);
       expect(document.body).toHaveTextContent('Abc-Map Small technical issue 😅 Please try again later.');
     });
 
     it('should show special error on 429 error', async () => {
-      services.authentication.getUserStatus.returns(false);
-      services.authentication.anonymousLogin.rejects({ response: { status: 429 } });
+      testServices.authentication.getUserStatus.returns(false);
+      testServices.authentication.anonymousLogin.rejects({ response: { status: 429 } });
 
       await bootstrap(svc, store);
 
-      expect(services.authentication.anonymousLogin.callCount).toEqual(1);
+      expect(testServices.authentication.anonymousLogin.callCount).toEqual(1);
       expect(render).toHaveBeenCalledTimes(0);
       expect(document.body).toHaveTextContent('Abc-Map You have exceeded the number of authorized requests 😭. Please try again later.');
+    });
+  });
+
+  describe('offline', () => {
+    beforeEach(() => {
+      testServices.pwa.isOnline.returns(false);
+    });
+
+    it('should render app then create new project', async () => {
+      testServices.project.newProject.resolves();
+
+      await bootstrap(svc, store);
+
+      expect(testServices.project.newProject.callCount).toEqual(1);
+      expect(testServices.authentication.anonymousLogin.callCount).toEqual(0);
+      expect(testServices.authentication.login.callCount).toEqual(0);
+      expect(render).toHaveBeenCalledTimes(1);
     });
   });
 });

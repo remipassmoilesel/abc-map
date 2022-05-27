@@ -27,6 +27,8 @@ import { prefixedTranslation } from '../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
 import { HistoryKeyboardListener } from '../../core/ui/HistoryKeyboardListener';
 import { HistoryKey } from '../../core/history/HistoryKey';
+import { useOfflineStatus } from '../../core/pwa/OnlineStatusContext';
+import { LargeOfflineIndicator } from '../../components/offline-indicator/LargeOfflineIndicator';
 
 const logger = Logger.get('SharedMapSettingsView.tsx');
 
@@ -39,6 +41,8 @@ function SharedMapSettingsView() {
   const userConnected = useAppSelector((st) => st.authentication.userStatus) === UserStatus.Authenticated;
   const showLayout = publicMap && userConnected;
 
+  const offline = useOfflineStatus();
+
   // Page setup on mount
   useEffect(() => pageSetup(t('Share'), t('Share_your_maps_online')), []);
 
@@ -50,6 +54,14 @@ function SharedMapSettingsView() {
 
     return () => keyboardListener.current?.destroy();
   }, []);
+
+  if (offline) {
+    return (
+      <LargeOfflineIndicator>
+        <span dangerouslySetInnerHTML={{ __html: t('Connect_to_the_Internet_to_share_your_map') }}></span>
+      </LargeOfflineIndicator>
+    );
+  }
 
   return (
     <div className={Cls.sharedMapSettings}>

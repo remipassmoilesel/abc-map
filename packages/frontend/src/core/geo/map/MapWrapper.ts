@@ -472,6 +472,13 @@ export class MapWrapper {
     return true;
   };
 
+  public render(): Promise<void> {
+    return new Promise<void>((resolve) => {
+      this.internalMap.render();
+      this.internalMap.once('rendercomplete', () => resolve());
+    });
+  }
+
   public unwrap(): Map {
     return this.internalMap;
   }
