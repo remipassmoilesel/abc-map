@@ -100,8 +100,13 @@ export function uiReducer(state = uiInitialState, action: UiAction): UiState {
     }
 
     case ActionType.IncrementVisitCounter: {
-      // We do not store more than one visit for privacy purposes
-      return { ...state, visits: 1 };
+      // We do not store all visits for privacy purposes
+      let visits = state.visits + 1;
+      if (visits > 2) {
+        visits = 2;
+      }
+
+      return { ...state, visits };
     }
 
     default:

@@ -63,7 +63,7 @@ function InstallAppModal() {
   // Make visible if installation is possible
   // We do not pop installation modal on first visit, in order to prevent too many prompts
   useEffect(() => {
-    const visible = appInstallReady && visits > 0 && !dismissed;
+    const visible = appInstallReady && visits > 1 && !dismissed;
 
     logger.warn('Installation modal: ', { visible, appInstallReady, visitsUp0: visits > 0, dismissed });
     setState(appInstallReady ? InstallationState.NotInstalled : InstallationState.NotInstallable);
