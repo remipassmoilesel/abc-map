@@ -165,7 +165,7 @@ export function MapGeolocation(props: Props) {
                 [t('Accuracy'), `${Math.round(accuracy)} m`],
                 [t('Altitude'), `${toPrecision(altitude)} m +/- ${Math.round(altitudeAccuracy)} m`],
                 [t('Heading'), `${toPrecision(toDegrees(heading))} °`],
-                [t('Speed'), `${speed} m/s`],
+                [t('Speed'), `${toPrecision(speed, 3)} m/s`],
               ].map(([label, value]) => (
                 <div key={label} className={'d-flex'}>
                   <div className={'flex-grow-1'}>{label}</div>
