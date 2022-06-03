@@ -75,6 +75,8 @@ self.addEventListener('message', (event) => {
   }
 });
 
+const maxAgeSeconds = 30 * 24 * 60 * 60; // 30 Days
+
 // Cache all images and tiles
 registerRoute(
   ({ request }) => request.destination === 'image',
@@ -86,7 +88,41 @@ registerRoute(
       }),
       new ExpirationPlugin({
         maxEntries: 5000,
-        maxAgeSeconds: 30 * 24 * 60 * 60, // 30 Days
+        maxAgeSeconds,
+      }),
+    ],
+  })
+);
+
+// Cache datastore searches
+registerRoute(
+  ({ request }) => request.url.includes('/api/datastore/search'),
+  new CacheFirst({
+    cacheName: 'datastore-searches',
+    plugins: [
+      new CacheableResponsePlugin({
+        statuses: [0, 200],
+      }),
+      new ExpirationPlugin({
+        maxEntries: 1000,
+        maxAgeSeconds,
+      }),
+    ],
+  })
+);
+
+// Cache datastore lists
+registerRoute(
+  ({ request }) => request.url.includes('/api/datastore/list'),
+  new CacheFirst({
+    cacheName: 'datastore-lists',
+    plugins: [
+      new CacheableResponsePlugin({
+        statuses: [0, 200],
+      }),
+      new ExpirationPlugin({
+        maxEntries: 1000,
+        maxAgeSeconds,
       }),
     ],
   })

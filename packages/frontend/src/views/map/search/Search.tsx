@@ -16,6 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
+import Cls from './Search.module.scss';
 import React, { ChangeEvent, useCallback, useMemo, useState } from 'react';
 import { Logger } from '@abc-map/shared';
 import { NominatimResult } from '../../../core/geo/NominatimResult';
@@ -24,9 +25,6 @@ import { Extent } from 'ol/extent';
 import { prefixedTranslation } from '../../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
 import debounce from 'lodash/debounce';
-import Cls from './Search.module.scss';
-import { IconDefs } from '../../../components/icon/IconDefs';
-import { FaIcon } from '../../../components/icon/FaIcon';
 import { useServices } from '../../../core/useServices';
 import { resolveInAtLeast } from '../../../core/utils/resolveInAtLeast';
 import { InlineLoader } from '../../../components/inline-loader/InlineLoader';
@@ -42,7 +40,7 @@ export interface State {
 const t = prefixedTranslation('MapView:Search.');
 
 function Search() {
-  const { geo, toasts } = useServices();
+  const { geo } = useServices();
   const [query, setQuery] = useState('');
   const [loading, setLoading] = useState(false);
   const [typing, setTyping] = useState(false);
@@ -88,25 +86,8 @@ function Search() {
     [geo]
   );
 
-  const handleGeolocation = useCallback(() => {
-    geo
-      .getUserPosition()
-      .then((coords) => geo.getMainMap().moveViewToPosition(coords, 9))
-      .catch((err) => {
-        toasts.genericError();
-        logger.error('Cannot get current position', err);
-      });
-  }, [geo, toasts]);
-
   return (
     <div className={`control-block`}>
-      {/* Center map around my position */}
-      <div className={'control-item'}>
-        <button className={'btn btn-link my-2'} onClick={handleGeolocation} data-testid={'geolocate'}>
-          <FaIcon icon={IconDefs.faMapMarkerAlt} className={'mr-2'} /> {t('My_location')}
-        </button>
-      </div>
-
       {/* Search input */}
       <div className={'control-item d-flex align-items-center mb-3'}>
         <input type={'text'} value={query} onChange={handleQueryChanged} placeholder={t('Search')} className={`form-control mr-3`} data-cy={'search-on-map'} />

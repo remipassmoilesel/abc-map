@@ -170,6 +170,18 @@ export function mapReducer(state = mapInitialState, action: MapAction): MapState
       return newState;
     }
 
+    case ActionType.SetGeolocation: {
+      const newState: MapState = { ...state, geolocation: { ...state.geolocation } };
+      newState.geolocation.enabled = action.value;
+      return newState;
+    }
+
+    case ActionType.SetFollowPosition: {
+      const newState: MapState = { ...state, geolocation: { ...state.geolocation } };
+      newState.geolocation.followPosition = action.value;
+      return newState;
+    }
+
     default:
       return state;
   }

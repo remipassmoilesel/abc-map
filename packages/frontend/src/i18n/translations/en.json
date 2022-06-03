@@ -100,7 +100,6 @@
     },
     "Search": {
       "Search": "Search",
-      "My_location": "My location",
       "No_results": "No results"
     },
     "ProjectControls": {
@@ -130,7 +129,8 @@
     "CursorPosition": {
       "Cursor_position": "Cursor position",
       "Latitude": "Latitude",
-      "Longitude": "Longitude"
+      "Longitude": "Longitude",
+      "Unknown": "Unknown"
     },
     "LayerControls": {
       "Layers": "Layers",
@@ -250,6 +250,23 @@
       "Project_open": "Project open !",
       "x_projects_saved_on_y_projects_allowed": "{{currently}} projects saved on {{allowed}} projects allowed.",
       "It_is_full": "It's full !"
+    },
+    "MapGeolocation": {
+      "Geolocation": "Geolocation",
+      "Enable_geolocation": "Enable geolocation",
+      "Follow_position": "Follow position",
+      "About_confidentiality": "About confidentiality",
+      "AbcMap_will_not_disclose_your_location": "Abc-Map will not disclose your location",
+      "But_your_device_can_do_it": "But your device can do it !",
+      "Accuracy": "Accuracy",
+      "Altitude": "Altitude",
+      "Heading": "Heading",
+      "Speed": "Speed",
+      "Latitude": "Latitude",
+      "Longitude": "Longitude",
+      "Your_position": "Your position",
+      "Show_map_around_me": "Show map around me",
+      "Unknown_error": "Unknown error"
     }
   },
   "Scale": {

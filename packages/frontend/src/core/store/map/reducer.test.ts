@@ -141,4 +141,38 @@ describe('Map reducer', function () {
     // Assert
     expect(state.currentStyle.text?.rotation).toEqual(10);
   });
+
+  it('SetGeolocation', function () {
+    // Prepare
+    const initial: MapState = deepFreeze({
+      ...mapInitialState,
+      geolocation: {
+        enabled: false,
+        followPosition: false,
+      },
+    });
+
+    // Act
+    const state = mapReducer(initial, MapActions.setGeolocation(true));
+
+    // Assert
+    expect(state.geolocation.enabled).toEqual(true);
+  });
+
+  it('SetGeolocation', function () {
+    // Prepare
+    const initial: MapState = deepFreeze({
+      ...mapInitialState,
+      geolocation: {
+        enabled: false,
+        followPosition: false,
+      },
+    });
+
+    // Act
+    const state = mapReducer(initial, MapActions.setFollowPosition(true));
+
+    // Assert
+    expect(state.geolocation.followPosition).toEqual(true);
+  });
 });
