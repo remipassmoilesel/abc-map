@@ -22,7 +22,6 @@ import { AbcArtefact, ArtefactFilter, Logger } from '@abc-map/shared';
 import ArtefactCard from './artefact-card/ArtefactCard';
 import NavigationBar from './navigation-bar/NavigationBar';
 import { pageSetup } from '../../core/utils/page-setup';
-import { resolveInAtLeast } from '../../core/utils/resolveInAtLeast';
 import { prefixedTranslation } from '../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
 import { useServices } from '../../core/useServices';
@@ -63,7 +62,8 @@ function DataStoreView() {
       setSearching(false);
       setLoading(true);
 
-      resolveInAtLeast(dataStore.listArtefacts(filter, PageSize, offset), 300)
+      dataStore
+        .listArtefacts(filter, PageSize, offset)
         .then((res) => {
           setOffset(res.offset);
           setTotal(res.total);
@@ -81,7 +81,8 @@ function DataStoreView() {
       setSearching(true);
       setLoading(true);
 
-      resolveInAtLeast(dataStore.searchArtefacts(query, filter), 300)
+      dataStore
+        .searchArtefacts(query, filter)
         .then((res) => setArtefacts(res.content))
         .catch((err) => logger.error(err))
         .finally(() => setLoading(false));

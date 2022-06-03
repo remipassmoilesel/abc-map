@@ -24,16 +24,25 @@ interface Props {
   onChange: (ev: SyntheticEvent) => void;
   value: boolean;
   className?: string;
+  disabled?: boolean;
 }
 
 export function Switch(props: Props) {
-  const { value, onChange, className } = props;
-  const toggle = useCallback((ev: SyntheticEvent) => onChange(ev), [onChange]);
+  const { value, onChange, className, disabled = false } = props;
+
+  const toggle = useCallback(
+    (ev: SyntheticEvent) => {
+      if (!disabled) {
+        onChange(ev);
+      }
+    },
+    [disabled, onChange]
+  );
 
   return (
-    <div className={clsx(Cls.toggle, className)} onClick={toggle}>
-      <input type="checkbox" checked={value} onChange={toggle} className={Cls.toggleCheckbox} />
-      <div className={Cls.toggleSwitch} />
+    <div className={clsx(Cls.toggle, className, disabled && Cls.disabled)} onClick={toggle}>
+      <input type="checkbox" checked={value} onChange={toggle} className={Cls.toggleCheckbox} disabled={disabled} />
+      <div className={clsx(Cls.toggleSwitch, disabled && Cls.disabled)} />
     </div>
   );
 }

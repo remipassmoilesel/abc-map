@@ -38,12 +38,12 @@ import clsx from 'clsx';
 
 export const logger = Logger.get('MainMap.ts');
 
+const t = prefixedTranslation('MapView:MainMap.');
+
 interface State {
   dragOverlay: boolean;
   tileError: string;
 }
-
-const t = prefixedTranslation('MapView:MainMap.');
 
 class MainMap extends Component<ServiceProps, State> {
   private map: MapWrapper;

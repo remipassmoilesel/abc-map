@@ -37,6 +37,7 @@ export function bootstrap(svc: Services, store: MainStore) {
     .then(() => render(svc, store))
     .then(() => dispatchVisit(store))
     .then(() => initProject(svc, store))
+    .then(() => enableGeolocation(svc, store))
     .then(() => loadRemoteModules(store))
     .catch((err) => bootstrapError(err));
 }
@@ -102,6 +103,20 @@ async function initProject({ project, geo, history }: Services, store: MainStore
     // No need to notify user, a new project is created
     logger.error(`Project init error`, err);
     await project.newProject();
+  }
+}
+
+// Enable and disable geolocation according to store on the first map display
+function enableGeolocation(svc: Services, store: MainStore) {
+  const map = svc.geo.getMainMap();
+  const geolocationEnabled = store.getState().map.geolocation.enabled;
+  const followPosition = store.getState().map.geolocation.followPosition;
+
+  if (geolocationEnabled) {
+    map.enableGeolocation(followPosition);
+    map.getGeolocation()?.onNextAccuracyChange(() => map.getGeolocation()?.updateMapView());
+  } else {
+    map.disableGeolocation();
   }
 }
 

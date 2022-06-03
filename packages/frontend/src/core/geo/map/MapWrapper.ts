@@ -42,6 +42,7 @@ import { isOpenlayersMap, isTileLayer, isTileSource } from '../../utils/crossCon
 import { AttributionFormat } from '../AttributionFormat';
 import uniqBy from 'lodash/uniqBy';
 import { stripHtml } from '../../utils/strings';
+import { Geolocation } from '../geolocation/Geolocation';
 
 export const logger = Logger.get('MapWrapper.ts');
 
@@ -77,6 +78,7 @@ export class MapWrapper {
   }
 
   private mapSizeObserver?: ResizeObserver;
+  private geolocation?: Geolocation;
   private eventTarget = document.createDocumentFragment();
 
   private constructor(private readonly internalMap: Map) {
@@ -477,6 +479,20 @@ export class MapWrapper {
       this.internalMap.render();
       this.internalMap.once('rendercomplete', () => resolve());
     });
+  }
+
+  public enableGeolocation(follow = false) {
+    this.geolocation = Geolocation.create(this.internalMap);
+    this.geolocation.enable(follow);
+  }
+
+  public disableGeolocation() {
+    this.geolocation?.disable();
+    this.geolocation = undefined;
+  }
+
+  public getGeolocation(): Geolocation | undefined {
+    return this.geolocation;
   }
 
   public unwrap(): Map {

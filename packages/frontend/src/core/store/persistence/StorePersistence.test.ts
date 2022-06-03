@@ -90,6 +90,10 @@ describe('StorePersistence', () => {
             color: '#FF5733',
           },
         },
+        geolocation: {
+          enabled: true,
+          followPosition: true,
+        },
       },
       authentication: {
         tokenString: 'abcd',
@@ -184,6 +188,10 @@ describe('StorePersistence', () => {
             size: 15,
             color: '#FF5733',
           },
+        },
+        geolocation: {
+          enabled: true,
+          followPosition: true,
         },
       },
       authentication: {

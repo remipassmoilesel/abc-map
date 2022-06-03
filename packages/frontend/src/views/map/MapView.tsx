@@ -17,7 +17,7 @@
  */
 
 import Cls from './MapView.module.scss';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import MainMap from './main-map/MainMap';
 import LayerControls from './layer-controls/LayerControls';
 import ProjectStatus from './project-status/ProjectStatus';
@@ -39,6 +39,7 @@ import SideMenu from '../../components/side-menu/SideMenu';
 import { useServices } from '../../core/useServices';
 import { FullscreenButton } from './fullscreen-button/FullscreenButton';
 import { isDesktopDevice } from '../../core/ui/isDesktopDevice';
+import { MapGeolocation } from './geolocation/MapGeolocation';
 
 const logger = Logger.get('MapView.tsx');
 
@@ -49,24 +50,23 @@ function MapView() {
   const [layers, setLayers] = useState<LayerWrapper[]>([]);
   const [activeLayer, setActiveLayer] = useState<LayerWrapper | undefined>();
 
-  const mainMap = geo.getMainMap();
-
   // Page title
   useEffect(() => pageSetup(t('The_map'), t('Visualize_and_create_in_your_browser')), []);
 
   // When layer list change we update layer list state
-  const handleLayerChange = useCallback(() => {
-    logger.debug('Layers changed');
-    setLayers(mainMap.getLayers());
-    setActiveLayer(mainMap.getActiveLayer());
-  }, [mainMap]);
-
   useEffect(() => {
-    mainMap.addLayerChangeListener(handleLayerChange);
+    const mainMap = geo.getMainMap();
+
+    const handleLayerChange = () => {
+      setLayers(mainMap.getLayers());
+      setActiveLayer(mainMap.getActiveLayer());
+    };
+
     handleLayerChange(); // We manually trigger the first setup
 
+    mainMap.addLayerChangeListener(handleLayerChange);
     return () => mainMap.removeLayerChangeListener(handleLayerChange);
-  }, [handleLayerChange, mainMap]);
+  }, [geo]);
 
   // Keyboard shortcuts
   useEffect(() => {
@@ -79,7 +79,22 @@ function MapView() {
   return (
     <div className={Cls.mapView}>
       {/* Toggle fullscreen button */}
-      <FullscreenButton style={{ top: '40vh', left: '2vw' }} />
+      <FullscreenButton style={{ top: '30vh', left: '2vw' }} />
+
+      {/* Position controls */}
+      <SideMenu
+        title={t('Position')}
+        buttonIcon={IconDefs.faCrosshairs}
+        buttonStyle={{ top: '40vh', left: '2vw' }}
+        menuPlacement={'left'}
+        menuId={'views/MapView-position'}
+        data-cy={'position-menu'}
+      >
+        <div className={Cls.spacer} />
+        <CursorPosition />
+        <div className={Cls.spacer} />
+        <MapGeolocation map={geo.getMainMap()} />
+      </SideMenu>
 
       {/* Search menu */}
       <SideMenu
@@ -92,9 +107,6 @@ function MapView() {
       >
         <div className={Cls.spacer} />
         <Search />
-        <div className={'flex-grow-1'} />
-        <CursorPosition />
-        <div className={Cls.spacer} />
       </SideMenu>
 
       {/* Project menu */}

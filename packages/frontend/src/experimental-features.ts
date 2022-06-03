@@ -43,7 +43,7 @@ export const ArtefactGenerator: ExperimentalFeature = {
     },
     {
       language: Language.French,
-      text: "C'est un module de traitement de données expérimental, non destiné à être utilisé par les utilisateurs finaux.",
+      text: "C'est un module de traitement de données expérimental, non destiné à être utilisé par des utilisateurs finaux.",
     },
   ],
 };

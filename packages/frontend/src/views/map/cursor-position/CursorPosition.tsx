@@ -60,20 +60,18 @@ function CursorPosition() {
     };
   }, [geo, handlePointerMove]);
 
-  if (!position) {
-    return <div />;
-  }
-
-  const lon = toPrecision(position[0], 3);
-  const lat = toPrecision(position[1], 3);
+  const lon = position && toPrecision(position[0], 3);
+  const lat = position && toPrecision(position[1], 3);
   return (
     <div className={'control-block'}>
-      <div className={'mb-2'}>{t('Cursor_position')}</div>
-      <div className={Cls.latLon}>
-        <span className={Cls.label}>{t('Latitude')}</span> {lat}
+      <div className={'mb-3'}>
+        <b>{t('Cursor_position')}</b>
       </div>
       <div className={Cls.latLon}>
-        <span className={Cls.label}>{t('Longitude')}</span> {lon}
+        <div>{t('Latitude')}</div> <div>{lat ?? t('Unknown')} °</div>
+      </div>
+      <div className={Cls.latLon}>
+        <div>{t('Longitude')}</div> <div>{lon ?? t('Unknown')} °</div>
       </div>
     </div>
   );

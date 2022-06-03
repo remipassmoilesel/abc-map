@@ -47,6 +47,10 @@ export interface MapState {
       color: string;
     };
   };
+  geolocation: {
+    enabled: boolean;
+    followPosition: boolean;
+  };
 }
 
 export const mapInitialState: MapState = {
@@ -73,5 +77,9 @@ export const mapInitialState: MapState = {
       size: 30,
       color: 'rgba(18,90,147,0.9)',
     },
+  },
+  geolocation: {
+    enabled: false,
+    followPosition: false,
   },
 };
