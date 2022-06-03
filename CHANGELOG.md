@@ -2,10 +2,17 @@
 
 For the moment we use git hashes as version, since no one complained about it 👍
 
-## 27/05/2022 - Progressive web app (git: master)
+## 03/06/2022 - Geolocation (git: 83a26fe7)
 
-- Add ability to use Abc-Map as a  [Progressive Web App](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps)
-- Users are invited to install Abc-Map as PWA on their second visit 
+- Add ability to display user position
+- Add ability to follow user position
+- Better position display
+- Display speed, heading, etc ...
+
+## 27/05/2022 - Progressive web app (git: 2e92ba10)
+
+- Add ability to use Abc-Map as a [Progressive Web App](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps)
+- Users are invited to install Abc-Map as PWA on their second visit
 - There is now an offline indicator on top bar
 - There are now offline indicators on forms (login, register, ...)
 - Some screens are not available offline (data store, online map sharing, ...)
