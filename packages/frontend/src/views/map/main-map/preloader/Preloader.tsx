@@ -115,9 +115,8 @@ export function Preloader(props: Props) {
         <button onClick={handleOpenModal} className={clsx(Cls.button, className)}>
           {!loading && <FaIcon icon={IconDefs.faDownload} className={Cls.icon} />}
           {loading && (
-            <div className={'d-flex align-items-center'}>
-              <InlineLoader active={loading} size={2} className={'mr-2'} />
-              {loading && <div>{loadingProgress + '%'}</div>}
+            <div className={'d-flex align-items-center justify-content-center'}>
+              <InlineLoader active={loading} size={2} />
             </div>
           )}
         </button>
