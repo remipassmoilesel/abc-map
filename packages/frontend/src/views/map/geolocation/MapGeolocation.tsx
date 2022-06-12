@@ -1,3 +1,21 @@
+/**
+ * Copyright © 2022 Rémi Pace.
+ * This file is part of Abc-Map.
+ *
+ * Abc-Map is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of
+ * the License, or (at your option) any later version.
+ *
+ * Abc-Map is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General
+ * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 import React, { useCallback, useEffect, useState } from 'react';
 import { prefixedTranslation } from '../../../i18n/i18n';
 import { MapWrapper } from '../../../core/geo/map/MapWrapper';
@@ -27,6 +45,7 @@ export function MapGeolocation(props: Props) {
   const dispatch = useAppDispatch();
   const geolocEnabled = useAppSelector((st) => st.map.geolocation.enabled);
   const followPosition = useAppSelector((st) => st.map.geolocation.followPosition);
+  const rotateMap = useAppSelector((st) => st.map.geolocation.rotateMap);
   const [accuracy, setAccuracy] = useState(0);
   const [altitude, setAltitude] = useState(0);
   const [altitudeAccuracy, setAltitudeAccuracy] = useState(0);
@@ -82,6 +101,7 @@ export function MapGeolocation(props: Props) {
       } else {
         map.disableGeolocation();
         dispatch(MapActions.setFollowPosition(false));
+        dispatch(MapActions.setRotateMap(false));
       }
 
       dispatch(MapActions.setGeolocation(val));
@@ -93,10 +113,24 @@ export function MapGeolocation(props: Props) {
     (val: boolean) => {
       if (val) {
         map.getGeolocation()?.updateMapView();
+      } else {
+        dispatch(MapActions.setRotateMap(false));
       }
 
       map.getGeolocation()?.followPosition(val);
       dispatch(MapActions.setFollowPosition(val));
+    },
+    [dispatch, map]
+  );
+
+  const handleRotateMap = useCallback(
+    (val: boolean) => {
+      if (val) {
+        map.getGeolocation()?.updateMapView();
+      }
+
+      map.getGeolocation()?.rotateMap(val);
+      dispatch(MapActions.setRotateMap(val));
     },
     [dispatch, map]
   );
@@ -132,6 +166,13 @@ export function MapGeolocation(props: Props) {
           <div className={'d-flex justify-content-between align-items-center mb-4'}>
             {t('Follow_position')}
             <Switch value={followPosition} onChange={() => handleFollowPosition(!followPosition)} disabled={!geolocEnabled} />
+          </div>
+        </div>
+
+        <div className={'control-item'}>
+          <div className={'d-flex justify-content-between align-items-center mb-4'}>
+            {t('Orient_map')}
+            <Switch value={rotateMap} onChange={() => handleRotateMap(!rotateMap)} disabled={!geolocEnabled || !followPosition} />
           </div>
         </div>
 

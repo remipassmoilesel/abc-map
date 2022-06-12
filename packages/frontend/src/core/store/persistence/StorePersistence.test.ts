@@ -50,6 +50,7 @@ describe('StorePersistence', () => {
           center: [0, 1],
           projection: { name: 'EPSG:4326' },
           resolution: 1,
+          rotation: 6,
         },
         layouts: {
           list: [],
@@ -93,6 +94,7 @@ describe('StorePersistence', () => {
         geolocation: {
           enabled: true,
           followPosition: true,
+          rotateMap: true,
         },
       },
       authentication: {
@@ -146,6 +148,7 @@ describe('StorePersistence', () => {
           center: [0, 1],
           projection: { name: 'EPSG:4326' },
           resolution: 1,
+          rotation: 6,
         },
         layouts: {
           list: [],
@@ -192,6 +195,7 @@ describe('StorePersistence', () => {
         geolocation: {
           enabled: true,
           followPosition: true,
+          rotateMap: true,
         },
       },
       authentication: {

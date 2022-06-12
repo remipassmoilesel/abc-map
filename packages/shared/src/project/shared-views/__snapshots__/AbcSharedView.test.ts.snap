@@ -24,6 +24,7 @@ Object {
       "name": "test-projection",
     },
     "resolution": 5678,
+    "rotation": 0,
   },
 }
 `;

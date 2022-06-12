@@ -33,7 +33,7 @@ describe('MoveMapTool', () => {
   });
 
   it('setup()', () => {
-    expect(TestHelper.interactionNames(map.getMap())).toEqual(['DragPan', 'PinchZoom', 'MouseWheelZoom']);
+    expect(TestHelper.interactionNames(map.getMap())).toEqual(['DragRotate', 'DragPan', 'PinchRotate', 'PinchZoom', 'MouseWheelZoom']);
   });
 
   it('dispose()', () => {

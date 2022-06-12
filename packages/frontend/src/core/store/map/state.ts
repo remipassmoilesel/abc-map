@@ -50,6 +50,7 @@ export interface MapState {
   geolocation: {
     enabled: boolean;
     followPosition: boolean;
+    rotateMap: boolean;
   };
 }
 
@@ -81,5 +82,6 @@ export const mapInitialState: MapState = {
   geolocation: {
     enabled: false,
     followPosition: false,
+    rotateMap: false,
   },
 };

@@ -266,7 +266,8 @@
       "Longitude": "Longitude",
       "Your_position": "Your position",
       "Show_map_around_me": "Show map around me",
-      "Unknown_error": "Unknown error"
+      "Unknown_error": "Unknown error",
+      "Orient_map": "Orient map"
     }
   },
   "Scale": {
@@ -612,6 +613,10 @@
   "ScaleControls": {
     "Add_scale": "Add scale",
     "Remove_scale": "Remove scale"
+  },
+  "NorthControls": {
+    "Add_north": "Add North",
+    "Remove_north": "Remove North"
   },
   "CopyTextFrameModal": {
     "Copy_text_frame": "Copy a text frame",
@@ -990,6 +995,16 @@
   },
   "LargeOfflineIndicator": {
     "You_are_offline": "You are offline"
+  },
+  "NorthArrow": {
+    "North": "North"
+  },
+  "MapRotation": {
+    "Rotation": "Rotation",
+    "To_rotate_the_map_use_alt_shift_drag_or_pinch_and_rotate_the_map": "To rotate the map use ALT + drag, or pinch and rotate the map.",
+    "Restore_rotation": "Restore rotation",
+    "Close": "Close",
+    "North_direction": "North direction"
   },
   "core": {
     "ProjectFactory": {

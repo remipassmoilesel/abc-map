@@ -111,9 +111,12 @@ function enableGeolocation(svc: Services, store: MainStore) {
   const map = svc.geo.getMainMap();
   const geolocationEnabled = store.getState().map.geolocation.enabled;
   const followPosition = store.getState().map.geolocation.followPosition;
+  const rotateMap = store.getState().map.geolocation.rotateMap;
 
   if (geolocationEnabled) {
-    map.enableGeolocation(followPosition);
+    map.enableGeolocation();
+    map.getGeolocation()?.followPosition(followPosition);
+    map.getGeolocation()?.rotateMap(rotateMap);
     map.getGeolocation()?.onNextAccuracyChange(() => map.getGeolocation()?.updateMapView());
   } else {
     map.disableGeolocation();

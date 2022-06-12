@@ -28,6 +28,7 @@ Object {
       "name": "EPSG:4326",
     },
     "resolution": 1000,
+    "rotation": 0,
   },
 }
 `;

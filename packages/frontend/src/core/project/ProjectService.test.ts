@@ -216,6 +216,7 @@ describe('ProjectService', function () {
               name: 'EPSG:3857',
             },
             resolution: 1000,
+            rotation: 0,
           },
         ],
       ]);

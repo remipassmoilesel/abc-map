@@ -29,7 +29,6 @@ interface Props {
   scale: AbcScale;
   readOnly?: boolean;
   minWidth?: number;
-  // Modify font sizes and dimensions based on this ratio. Useful for static exports.
   ratio?: number;
   baseFontSizeEm?: number;
   onChange?: (before: AbcScale) => void;

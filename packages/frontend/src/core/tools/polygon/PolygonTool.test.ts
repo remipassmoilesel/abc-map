@@ -69,7 +69,17 @@ describe('PolygonTool', () => {
   });
 
   it('setup()', () => {
-    expect(TestHelper.interactionNames(map.getMap())).toEqual(['DragPan', 'PinchZoom', 'MouseWheelZoom', 'Select', 'Modify', 'Snap', 'Draw']);
+    expect(TestHelper.interactionNames(map.getMap())).toEqual([
+      'DragRotate',
+      'DragPan',
+      'PinchRotate',
+      'PinchZoom',
+      'MouseWheelZoom',
+      'Select',
+      'Modify',
+      'Snap',
+      'Draw',
+    ]);
   });
 
   it('dispose()', () => {

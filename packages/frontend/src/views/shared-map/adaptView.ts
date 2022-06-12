@@ -21,6 +21,15 @@ import { DimensionsPx } from '../../core/utils/DimensionsPx';
 import { adaptMapDimensions } from '../../core/project/adaptMapDimensions';
 import { Views } from '../../core/geo/Views';
 
+/**
+ * This function adapt view resolution depending on screen size.
+ *
+ * The main goal is to show what users want to show even if visitor screen is smaller than original map.
+ *
+ * @param original
+ * @param fullscreen
+ * @param mapDimensions
+ */
 export function adaptView(original: AbcView, fullscreen: boolean, mapDimensions: DimensionsPx): AbcView {
   const { width: actualWidth, height: actualHeight } = adaptMapDimensions(fullscreen, mapDimensions);
 

@@ -6,8 +6,12 @@ The next steps for this project are:
 
 - ~~Creation of a better export system with rich text frames~~
 - ~~Creation of shared maps~~
-- ~~Creation of a custom module system~~
-- Creation of better data processing modules: better data tables, and creation of geometries from spreadsheet data
+- ~~Creation of a module system~~
+- Creation of better data processing modules: 
+  - better data tables
+  - export data modules
+  - creation of features from spreadsheet data
+  - And more !
 
 And who knows what will happen next ?
 

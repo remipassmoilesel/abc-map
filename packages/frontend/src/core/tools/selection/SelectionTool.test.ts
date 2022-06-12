@@ -65,7 +65,7 @@ describe('SelectionTool', () => {
   });
 
   it('setup()', () => {
-    expect(TestHelper.interactionNames(map.getMap())).toEqual(['DragPan', 'PinchZoom', 'MouseWheelZoom', 'DragBox', 'Translate']);
+    expect(TestHelper.interactionNames(map.getMap())).toEqual(['DragRotate', 'DragPan', 'PinchRotate', 'PinchZoom', 'MouseWheelZoom', 'DragBox', 'Translate']);
   });
 
   it('dispose()', () => {

@@ -15,19 +15,19 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
-
+export * from './constants';
 export * from './feature';
 export * from './helpers';
 export * from './layer';
 export * from './layout';
+export * from './north';
 export * from './projection';
+export * from './scale';
 export * from './shared-views';
 export * from './style';
 export * from './text-frame';
 export * from './AbcProjectManifest';
-export * from './AbcScale';
 export * from './AbcView';
 export * from './CompressedProject';
-export * from './ProjectConstants';
 export * from './ProjectSaveResponse';
 export * from './AbcProjectQuotas';

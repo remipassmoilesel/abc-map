@@ -1,0 +1,115 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FromV100ToV110 migrate should work 1`] = `
+Object {
+  "layers": Array [
+    Object {
+      "metadata": Object {
+        "active": false,
+        "attributions": Array [
+          "&#169; <a href=\\"https://www.openstreetmap.org/copyright\\" target=\\"_blank\\">OpenStreetMap</a> contributors.",
+        ],
+        "id": "de2850f3-0037-4c41-89ec-ef23419908bf",
+        "model": "OSM",
+        "name": "OpenStreetMap",
+        "opacity": 1,
+        "type": "Predefined",
+        "visible": true,
+      },
+      "type": "Predefined",
+    },
+    Object {
+      "features": Object {
+        "features": Array [],
+        "type": "FeatureCollection",
+      },
+      "metadata": Object {
+        "active": true,
+        "id": "241e8770-d820-4263-9a7d-63dc57590ae1",
+        "name": "Geometries",
+        "opacity": 1,
+        "type": "Vector",
+        "visible": true,
+      },
+      "type": "Vector",
+    },
+  ],
+  "layouts": Array [
+    Object {
+      "format": Object {
+        "height": 210,
+        "id": "A4_LANDSCAPE",
+        "orientation": "landscape",
+        "width": 297,
+      },
+      "id": "cf712c36-14e2-44a2-b61c-8074bcf6003c",
+      "name": "Page 1",
+      "textFrames": Array [],
+      "view": Object {
+        "center": Array [
+          -7259113.740949023,
+          5770940.436761187,
+        ],
+        "projection": Object {
+          "name": "EPSG:3857",
+        },
+        "resolution": 1274.842772762,
+        "rotation": 0,
+      },
+    },
+  ],
+  "metadata": Object {
+    "containsCredentials": false,
+    "id": "5a10bcb7-f886-407f-9836-a5f2b8652314",
+    "name": "Project of 11/06/2022",
+    "public": true,
+    "version": "1.1.0",
+  },
+  "sharedViews": Object {
+    "fullscreen": false,
+    "list": Array [
+      Object {
+        "id": "MFtLWKC1o8BaLgmnjPjaN",
+        "layers": Array [
+          Object {
+            "layerId": "de2850f3-0037-4c41-89ec-ef23419908bf",
+            "visible": true,
+          },
+          Object {
+            "layerId": "241e8770-d820-4263-9a7d-63dc57590ae1",
+            "visible": true,
+          },
+        ],
+        "textFrames": Array [],
+        "title": "Main view",
+        "view": Object {
+          "center": Array [
+            -9243891.068067212,
+            6025756.166287624,
+          ],
+          "projection": Object {
+            "name": "EPSG:3857",
+          },
+          "resolution": 7822.866279527,
+          "rotation": 0,
+        },
+      },
+    ],
+    "mapDimensions": Object {
+      "height": 545,
+      "width": 1152,
+    },
+  },
+  "view": Object {
+    "center": Array [
+      -7235766.901562782,
+      5942074.072431108,
+    ],
+    "projection": Object {
+      "name": "EPSG:3857",
+    },
+    "resolution": 2445,
+    "rotation": 0,
+  },
+}
+`;

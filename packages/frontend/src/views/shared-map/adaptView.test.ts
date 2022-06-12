@@ -29,6 +29,7 @@ describe('adaptView()', () => {
       resolution: 10_000,
       center: [123, 456],
       projection: { name: 'EPSG:4326' },
+      rotation: 0,
     };
   });
 

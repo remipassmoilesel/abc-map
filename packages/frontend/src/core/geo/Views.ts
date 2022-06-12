@@ -27,6 +27,7 @@ const DefaultView: AbcView = {
   resolution: 39135,
   center: fromLonLat([10, 45], DEFAULT_PROJECTION.name),
   projection: DEFAULT_PROJECTION,
+  rotation: 0,
 };
 
 // These are selected places, shown when a new project is created
@@ -61,6 +62,7 @@ export class Views {
       projection: DefaultView.projection.name,
       center: DefaultView.center,
       resolution: DefaultView.resolution,
+      rotation: 0,
     });
   }
 
@@ -73,6 +75,7 @@ export class Views {
       projection: view.projection.name,
       center: view.center,
       resolution: view.resolution,
+      rotation: view.rotation,
     });
   }
 
@@ -80,10 +83,12 @@ export class Views {
     const precision = 9;
     const olProj = view.getProjection();
     const projection = olProj ? { name: olProj.getCode() } : DefaultView.projection;
+    const rotation = view.getRotation();
     return {
       center: (view.getCenter() || DefaultView.center).map((n) => toPrecision(n, precision)),
       resolution: toPrecision(view.getResolution() || DefaultView.resolution, precision),
       projection,
+      rotation,
     };
   }
 
@@ -92,10 +97,12 @@ export class Views {
    * @param view
    */
   public static normalize(view: AbcView): AbcView {
+    const precision = 9;
     return {
       ...view,
-      center: view.center.map((n) => toPrecision(n, 9)),
-      resolution: toPrecision(view.resolution, 9),
+      center: view.center.map((n) => toPrecision(n, precision)),
+      resolution: toPrecision(view.resolution, precision),
+      rotation: toPrecision(view.rotation, precision),
     };
   }
 }
@@ -105,5 +112,6 @@ function createView(resolution: number, lonLat: [number, number], projection = D
     resolution,
     center: fromLonLat(lonLat, projection.name),
     projection,
+    rotation: 0,
   };
 }

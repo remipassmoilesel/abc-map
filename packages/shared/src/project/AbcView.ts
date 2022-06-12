@@ -22,4 +22,5 @@ export interface AbcView {
   center: number[];
   resolution: number;
   projection: AbcProjection;
+  rotation: number;
 }

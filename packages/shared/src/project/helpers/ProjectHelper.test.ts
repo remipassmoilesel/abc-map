@@ -18,7 +18,7 @@
 
 import { ProjectHelper } from './ProjectHelper';
 import { AbcFile, Zipper } from '../../zip';
-import { ProjectConstants } from '../ProjectConstants';
+import { ProjectConstants } from '../constants/ProjectConstants';
 
 describe('ProjectHelper', () => {
   it('should find manifest', async () => {

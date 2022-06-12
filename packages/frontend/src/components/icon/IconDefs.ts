@@ -112,6 +112,7 @@ import { faListOl } from '@fortawesome/free-solid-svg-icons/faListOl';
 import { faListUl } from '@fortawesome/free-solid-svg-icons/faListUl';
 import { faMinus } from '@fortawesome/free-solid-svg-icons/faMinus';
 import { faDraftingCompass } from '@fortawesome/free-solid-svg-icons/faDraftingCompass';
+import { faCompass } from '@fortawesome/free-solid-svg-icons/faCompass';
 import { faRulerCombined } from '@fortawesome/free-solid-svg-icons/faRulerCombined';
 import { faRuler } from '@fortawesome/free-solid-svg-icons/faRuler';
 import { faCopy } from '@fortawesome/free-solid-svg-icons/faCopy';
@@ -214,6 +215,7 @@ export const IconDefs = {
   faPaintRoller,
   faPencilAlt,
   faDraftingCompass,
+  faCompass,
   faTrashAlt,
   faUndo,
   faRedo,

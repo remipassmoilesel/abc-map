@@ -37,7 +37,7 @@ import PluggableMap from 'ol/PluggableMap';
 import { ToolModeHelper } from '../../tools/common/ToolModeHelper';
 import { MoveMapTool } from '../../tools/move/MoveMapTool';
 import { StyleFactoryOptions } from '../styles/StyleFactoryOptions';
-import { toPrecision } from '../../utils/numbers';
+import { toDegrees, toPrecision } from '../../utils/numbers';
 import { isOpenlayersMap, isTileLayer, isTileSource } from '../../utils/crossContextInstanceof';
 import { AttributionFormat } from '../AttributionFormat';
 import uniqBy from 'lodash/uniqBy';
@@ -293,8 +293,8 @@ export class MapWrapper {
 
     const interactions = this.internalMap.getInteractions().getArray().slice();
     interactions.forEach((i) => {
-      i.dispose();
       this.internalMap.removeInteraction(i);
+      i.dispose();
     });
 
     // Setup Move Map tool
@@ -481,9 +481,9 @@ export class MapWrapper {
     });
   }
 
-  public enableGeolocation(follow = false) {
+  public enableGeolocation() {
     this.geolocation = Geolocation.create(this.internalMap);
-    this.geolocation.enable(follow);
+    this.geolocation.enable();
   }
 
   public disableGeolocation() {
@@ -493,6 +493,14 @@ export class MapWrapper {
 
   public getGeolocation(): Geolocation | undefined {
     return this.geolocation;
+  }
+
+  /**
+   * Return rotation of map in degrees
+   */
+  public getRotation(): number {
+    const rotationRadians = this.internalMap.getView().getRotation();
+    return Math.round(toDegrees(rotationRadians) % 360);
   }
 
   public unwrap(): Map {

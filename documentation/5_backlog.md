@@ -2,6 +2,7 @@
 
 <!-- toc -->
 
+- [Feature explorer](#feature-explorer)
 - [Better documentation](#better-documentation)
 - [Text labels for multi-polygons and multi-lines](#text-labels-for-multi-polygons-and-multi-lines)
 - [SVG Export](#svg-export)
@@ -29,6 +30,10 @@
 - [Publishing PWA in store](#publishing-pwa-in-store)
 
 <!-- tocstop -->
+
+## Feature explorer
+
+On main map view, users should be able to view features as a table, to edit / delete them, etc ...
 
 ## Better documentation
 

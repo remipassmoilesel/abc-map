@@ -30,6 +30,7 @@ import { FloatingTextFrame } from '../../../components/text-frame/FloatingTextFr
 import { FloatingScale } from '../../../components/floating-scale/FloatingScale';
 import { DimensionsPx } from '../../utils/DimensionsPx';
 import { toPrecision } from '../../utils/numbers';
+import { FloatingNorthArrow } from '../../../components/floating-north-arrow/FloatingNorthArrow';
 
 export const logger = Logger.get('LayoutRenderer');
 
@@ -106,6 +107,7 @@ export class LayoutRenderer {
         center: layout.view.center,
         resolution: layout.view.resolution,
         projection: layout.view.projection.name,
+        rotation: layout.view.rotation,
       })
     );
 
@@ -162,6 +164,9 @@ export class LayoutRenderer {
 
           {/* Scale */}
           {layout.scale && <FloatingScale map={map} scale={layout.scale} readOnly={true} ratio={ratio} baseFontSizeEm={0.9} />}
+
+          {/* North */}
+          {layout.north && <FloatingNorthArrow map={map} north={layout.north} ratio={ratio} readOnly={true} />}
 
           {/* Attributions */}
           <StaticAttributions map={map} ratio={ratio} />

@@ -16,12 +16,12 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import View from 'ol/View';
 import { AbcView, BlobIO, Logger } from '@abc-map/shared';
 import { MapFactory } from '../../core/geo/map/MapFactory';
 import { DimensionsPx } from '../../core/utils/DimensionsPx';
 import { LayerWrapper } from '../../core/geo/layers/LayerWrapper';
 import { MapWrapper } from '../../core/geo/map/MapWrapper';
+import { Views } from '../../core/geo/Views';
 
 export const logger = Logger.get('PreviewExporter');
 
@@ -78,13 +78,7 @@ export class PreviewExporter {
     support.style.height = `${exportDimensions.height}px`;
 
     // Set view
-    renderingMap.unwrap().setView(
-      new View({
-        center: view.center,
-        resolution: view.resolution,
-        projection: view.projection.name,
-      })
-    );
+    renderingMap.unwrap().setView(Views.abcToOl(view));
 
     // Prepare a canvas for export
     const exportCanvas = document.createElement('canvas');

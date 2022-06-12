@@ -37,6 +37,7 @@ describe('AbcProjectManifest', () => {
         center: [1, 2],
         resolution: 1000,
         projection: { name: 'EPSG:4326' },
+        rotation: 0,
       },
       sharedViews: {
         fullscreen: false,

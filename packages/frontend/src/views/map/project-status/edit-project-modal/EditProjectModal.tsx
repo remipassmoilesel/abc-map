@@ -210,8 +210,9 @@ class EditProjectModal extends Component<Props, State> {
   private updateProjection = async (projection: AbcProjection): Promise<void> => {
     const { geo, project } = this.props.services;
 
+    // We update project and view, and we reset rotation
     const extent = await geo.loadProjection(projection.name);
-    const newView = new View({ projection: projection.name });
+    const newView = new View({ projection: projection.name, rotation: 0 });
     newView.fit(extent);
 
     geo.getMainMap().unwrap().setView(newView);

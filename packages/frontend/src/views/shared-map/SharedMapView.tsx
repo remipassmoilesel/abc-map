@@ -20,7 +20,7 @@ import Cls from './SharedMapView.module.scss';
 import React, { useCallback, useEffect, useState } from 'react';
 import { pageSetup } from '../../core/utils/page-setup';
 import { Link, useRouteMatch } from 'react-router-dom';
-import { AbcScale, AbcTextFrame, AbcView, getAbcWindow, Logger, ProjectConstants, SharedMapParams } from '@abc-map/shared';
+import { AbcNorth, AbcScale, AbcTextFrame, AbcView, getAbcWindow, Logger, ProjectConstants, SharedMapParams } from '@abc-map/shared';
 import { useServices } from '../../core/useServices';
 import NavigationMenu from './navigation-menu/NavigationMenu';
 import { MapFactory } from '../../core/geo/map/MapFactory';
@@ -48,6 +48,7 @@ import { SharedMapKeyboardListener } from './SharedMapKeyboardListener';
 import { InteractiveAttributions } from '../../components/interactive-attributions/InteractiveAttributions';
 import { useOfflineStatus } from '../../core/pwa/OnlineStatusContext';
 import { LargeOfflineIndicator } from '../../components/offline-indicator/LargeOfflineIndicator';
+import { FloatingNorthArrow } from '../../components/floating-north-arrow/FloatingNorthArrow';
 
 export const logger = Logger.get('SharedMapView.tsx');
 
@@ -71,6 +72,7 @@ function SharedMapView() {
   const [menu, showMenu] = useState(false);
   const [previewFrames, setPreviewFrames] = useState<AbcTextFrame[]>([]);
   const [previewScale, setPreviewScale] = useState<AbcScale | undefined>(undefined);
+  const [previewNorth, setPreviewNorth] = useState<AbcNorth | undefined>(undefined);
   const { fullscreen, mapDimensions } = useAppSelector((st) => st.project.sharedViews);
   const [mapDimensionsStyle, setMapDimensionsStyle] = useState<DimensionsStyle | undefined>();
   const [previewView, setPreviewView] = useState<AbcView | undefined>();
@@ -211,6 +213,24 @@ function SharedMapView() {
     setPreviewScale(previewScale);
   }, [activeView?.scale, fullscreen, mapDimensions]);
 
+  // Adapt relative values of north arrow
+  useEffect(() => {
+    if (!activeView?.north) {
+      setPreviewNorth(undefined);
+      return;
+    }
+
+    const { width, height } = adaptMapDimensions(fullscreen, mapDimensions);
+
+    const previewNorth = {
+      ...activeView.north,
+      x: toPrecision((activeView.north.x * width) / 100, 2),
+      y: toPrecision((activeView.north.y * height) / 100, 2),
+    };
+
+    setPreviewNorth(previewNorth);
+  }, [activeView?.north, fullscreen, mapDimensions]);
+
   const handleToggleMenu = useCallback(() => showMenu(!menu), [menu]);
 
   const handleDownload = useCallback(() => {
@@ -248,6 +268,8 @@ function SharedMapView() {
               ))}
 
               {previewScale && <FloatingScale map={map} scale={previewScale} readOnly={true} />}
+
+              {previewNorth && <FloatingNorthArrow map={map} north={previewNorth} readOnly={true} />}
 
               {/* Navigation controls */}
               {!menu && <SharedViewNavigation onMore={handleToggleMenu} className={Cls.navigationButton} />}

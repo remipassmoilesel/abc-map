@@ -30,6 +30,7 @@ const t = prefixedTranslation('MapView:MainMap.');
 
 interface Props {
   map: MapWrapper;
+  className?: string;
 }
 
 /**
@@ -37,7 +38,7 @@ interface Props {
  * @constructor
  */
 export function Zoom(props: Props) {
-  const { map } = props;
+  const { map, className } = props;
 
   const zoom = useCallback(
     (delta: number) => {
@@ -63,16 +64,12 @@ export function Zoom(props: Props) {
     [map]
   );
 
-  const handleZoomOut = useCallback(() => {
-    zoom(-1);
-  }, [zoom]);
+  const handleZoomOut = useCallback(() => zoom(-1), [zoom]);
 
-  const handleZoomIn = useCallback(() => {
-    zoom(+1);
-  }, [zoom]);
+  const handleZoomIn = useCallback(() => zoom(+1), [zoom]);
 
   return (
-    <div className={'d-flex align-items-center'}>
+    <div className={clsx('d-flex align-items-center', className)}>
       <WithTooltip title={t('Zoom_out')} placement={'top'}>
         <button onClick={handleZoomOut} className={clsx(Cls.button, 'mr-3')}>
           <FaIcon icon={IconDefs.faMinus} size={'1.1rem'} className={Cls.icon} />

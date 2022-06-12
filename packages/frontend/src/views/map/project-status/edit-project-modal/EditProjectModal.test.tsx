@@ -120,6 +120,7 @@ describe('EditProjectModal', () => {
               name: 'EPSG:3857',
             },
             resolution: 3.6,
+            rotation: 0,
           },
         ],
       ]);

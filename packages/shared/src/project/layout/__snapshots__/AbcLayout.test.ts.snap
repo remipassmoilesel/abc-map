@@ -65,6 +65,7 @@ Object {
       "name": "EPSG:4326",
     },
     "resolution": 3,
+    "rotation": 0,
   },
 }
 `;

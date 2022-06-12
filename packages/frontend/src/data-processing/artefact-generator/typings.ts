@@ -100,8 +100,8 @@ export type ProgressHandler = (progress: ExportProgress) => void;
 
 export function defaultPreviewViews() {
   return [
-    { center: [255127.43458646, 5854183.083256814], resolution: 2500, projection: { name: 'EPSG:3857' } },
-    { center: [-516837.321601631, 6144242.706693536], resolution: 125, projection: { name: 'EPSG:3857' } },
-    { center: [-501363.481609926, 6170022.999313944], resolution: 10, projection: { name: 'EPSG:3857' } },
+    { center: [255127.43458646, 5854183.083256814], resolution: 2500, projection: { name: 'EPSG:3857' }, rotation: 0 },
+    { center: [-516837.321601631, 6144242.706693536], resolution: 125, projection: { name: 'EPSG:3857' }, rotation: 0 },
+    { center: [-501363.481609926, 6170022.999313944], resolution: 10, projection: { name: 'EPSG:3857' }, rotation: 0 },
   ];
 }

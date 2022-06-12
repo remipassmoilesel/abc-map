@@ -182,6 +182,12 @@ export function mapReducer(state = mapInitialState, action: MapAction): MapState
       return newState;
     }
 
+    case ActionType.SetRotateMap: {
+      const newState: MapState = { ...state, geolocation: { ...state.geolocation } };
+      newState.geolocation.rotateMap = action.value;
+      return newState;
+    }
+
     default:
       return state;
   }

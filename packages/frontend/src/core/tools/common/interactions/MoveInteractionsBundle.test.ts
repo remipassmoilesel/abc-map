@@ -34,7 +34,7 @@ describe('MoveMapInteractionsBundle', () => {
   });
 
   it('setup()', () => {
-    expect(TestHelper.interactionNames(testMap.getMap())).toEqual(['DragPan', 'PinchZoom', 'MouseWheelZoom']);
+    expect(TestHelper.interactionNames(testMap.getMap())).toEqual(['DragRotate', 'DragPan', 'PinchRotate', 'PinchZoom', 'MouseWheelZoom']);
   });
 
   it('dispose()', () => {

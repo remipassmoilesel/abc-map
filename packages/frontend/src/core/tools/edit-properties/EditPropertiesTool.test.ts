@@ -58,7 +58,7 @@ describe('EditPropertiesTool', () => {
   });
 
   it('setup()', () => {
-    expect(TestHelper.interactionNames(map.getMap())).toEqual(['DragPan', 'PinchZoom', 'MouseWheelZoom', 'Select']);
+    expect(TestHelper.interactionNames(map.getMap())).toEqual(['DragRotate', 'DragPan', 'PinchRotate', 'PinchZoom', 'MouseWheelZoom', 'Select']);
   });
 
   it('dispose()', () => {

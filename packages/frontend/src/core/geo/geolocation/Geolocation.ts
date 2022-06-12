@@ -1,3 +1,21 @@
+/**
+ * Copyright © 2022 Rémi Pace.
+ * This file is part of Abc-Map.
+ *
+ * Abc-Map is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of
+ * the License, or (at your option) any later version.
+ *
+ * Abc-Map is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General
+ * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 import Feature from 'ol/Feature';
 import Geometry from 'ol/geom/Geometry';
 import OlGeolocation from 'ol/Geolocation';
@@ -20,6 +38,7 @@ export class Geolocation {
 
   private enabled = false;
   private _followPosition = false;
+  private _rotateMap = false;
   private geolocation?: OlGeolocation;
   private layer = new VectorLayer<VectorSource<Geometry>>();
   private accuracyFeature = new Feature<Geometry>();
@@ -29,9 +48,7 @@ export class Geolocation {
 
   constructor(private readonly map: Map) {}
 
-  public enable(follow: boolean) {
-    this._followPosition = follow;
-
+  public enable() {
     // See: https://openlayers.org/en/latest/examples/geolocation.html
     this.geolocation = new OlGeolocation({
       // enableHighAccuracy must be set to true to have the heading value.
@@ -95,22 +112,27 @@ export class Geolocation {
     const view = this.map.getView();
     const accuracyGeom = this.accuracyFeature.getGeometry();
     const position = this.geolocation?.getPosition();
+    const rotationRadians = this.geolocation?.getHeading() ?? 0;
 
     const updateZoom = () => {
       const zoom = view.getZoom() ?? 7;
       view.setZoom(zoom - zoom * 0.06);
     };
 
+    const updateRotation = () => view.setRotation(rotationRadians);
+
     // If accuracy geom we fit it
     if (accuracyGeom) {
       view.fit(accuracyGeom.getExtent());
       updateZoom();
+      updateRotation();
     }
     // Else we try position
     else if (position) {
       logger.warn('Cannot update view, no accuracy geometry');
       view.setCenter(position);
       updateZoom();
+      updateRotation();
     }
     // Else no update !
     else {
@@ -154,6 +176,10 @@ export class Geolocation {
 
   public followPosition(val: boolean) {
     this._followPosition = val;
+  }
+
+  public rotateMap(val: boolean) {
+    this._rotateMap = val;
   }
 
   public onNextChange(handler: (ev: GeolocationChanged) => void) {

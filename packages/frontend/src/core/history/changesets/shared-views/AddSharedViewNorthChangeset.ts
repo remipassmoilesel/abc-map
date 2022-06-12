@@ -18,25 +18,25 @@
 
 import { Changeset } from '../../Changeset';
 import { ProjectService } from '../../../project/ProjectService';
-import { AbcLayout } from '@abc-map/shared';
+import { AbcSharedView } from '@abc-map/shared';
 import { getServices } from '../../../Services';
-import { AbcScale } from '@abc-map/shared';
+import { AbcNorth } from '@abc-map/shared';
 
-export class RemoveScaleChangeset extends Changeset {
-  public static create(layout: AbcLayout, scale: AbcScale) {
+export class AddSharedViewNorthChangeset extends Changeset {
+  public static create(view: AbcSharedView, north: AbcNorth) {
     const { project } = getServices();
-    return new RemoveScaleChangeset(project, layout, scale);
+    return new AddSharedViewNorthChangeset(project, view, north);
   }
 
-  constructor(private project: ProjectService, private layout: AbcLayout, private scale: AbcScale) {
+  constructor(private project: ProjectService, private view: AbcSharedView, private north: AbcNorth) {
     super();
   }
 
   public async apply(): Promise<void> {
-    this.project.updateLayout({ ...this.layout, scale: undefined });
+    this.project.updateSharedView({ ...this.view, north: { ...this.north } });
   }
 
   public async undo(): Promise<void> {
-    this.project.updateLayout({ ...this.layout, scale: { ...this.scale } });
+    this.project.updateSharedView({ ...this.view, north: undefined });
   }
 }

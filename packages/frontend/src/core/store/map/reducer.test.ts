@@ -149,6 +149,7 @@ describe('Map reducer', function () {
       geolocation: {
         enabled: false,
         followPosition: false,
+        rotateMap: false,
       },
     });
 
@@ -166,6 +167,7 @@ describe('Map reducer', function () {
       geolocation: {
         enabled: false,
         followPosition: false,
+        rotateMap: false,
       },
     });
 
@@ -174,5 +176,23 @@ describe('Map reducer', function () {
 
     // Assert
     expect(state.geolocation.followPosition).toEqual(true);
+  });
+
+  it('SetRotateMap', function () {
+    // Prepare
+    const initial: MapState = deepFreeze({
+      ...mapInitialState,
+      geolocation: {
+        enabled: false,
+        followPosition: false,
+        rotateMap: false,
+      },
+    });
+
+    // Act
+    const state = mapReducer(initial, MapActions.setRotateMap(true));
+
+    // Assert
+    expect(state.geolocation.rotateMap).toEqual(true);
   });
 });
