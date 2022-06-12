@@ -18,7 +18,7 @@
 
 import Cls from './ExportControls.module.scss';
 import React, { ChangeEvent, useCallback } from 'react';
-import { AbcScale, AbcTextFrame, LayoutFormat, LayoutFormats, Logger } from '@abc-map/shared';
+import { AbcNorth, AbcScale, AbcTextFrame, LayoutFormat, LayoutFormats, Logger } from '@abc-map/shared';
 import { ExportFormat } from '../ExportFormat';
 import { prefixedTranslation } from '../../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
@@ -32,6 +32,7 @@ import { useActiveLayout } from '../../../core/project/useActiveLayout';
 import { ScaleControls } from '../../../components/scale-controls/ScaleControls';
 import { TextFrameControls } from '../../../components/text-frame-controls/TextFrameControls';
 import clsx from 'clsx';
+import { NorthControls } from '../../../components/north-controls/NorthControls';
 
 const logger = Logger.get('ExportControls.tsx', 'warn');
 
@@ -45,6 +46,8 @@ interface Props {
   onExport: (format: ExportFormat) => void;
   onAddScale: (scale: AbcScale) => void;
   onRemoveScale: () => void;
+  onAddNorth: (north: AbcNorth) => void;
+  onRemoveNorth: () => void;
 }
 
 const t = prefixedTranslation('ExportView:');
@@ -60,6 +63,8 @@ function ExportControls(props: Props) {
     onFormatChanged,
     onAddScale,
     onRemoveScale,
+    onAddNorth,
+    onRemoveNorth,
   } = props;
 
   const activeLayout = useActiveLayout();
@@ -147,6 +152,9 @@ function ExportControls(props: Props) {
 
       {/* Scale */}
       <ScaleControls disabled={!activeLayout} hasScale={!!activeLayout?.scale} onAddScale={onAddScale} onRemoveScale={onRemoveScale} />
+
+      {/* Scale */}
+      <NorthControls disabled={!activeLayout} hasNorth={!!activeLayout?.north} onAddNorth={onAddNorth} onRemoveNorth={onRemoveNorth} />
 
       {/* Export buttons */}
       <div className={'control-block'}>

@@ -18,7 +18,8 @@
 
 import { AbcView } from '../AbcView';
 import { AbcTextFrame } from '../text-frame';
-import { AbcScale } from '../AbcScale';
+import { AbcScale } from '../scale';
+import { AbcNorth } from '../north';
 
 /**
  * Layouts are used to export as PDF or PNG
@@ -36,9 +37,17 @@ export interface AbcLayout {
    */
   textFrames: AbcTextFrame[];
   /**
-   * Position is relative to exported dimensions
+   * Scale configuration.
+   *
+   * Position is relative to exported dimensions.
    */
   scale?: AbcScale;
+  /**
+   * North configuration.
+   *
+   * Position is relative to exported dimensions.
+   */
+  north?: AbcNorth;
 }
 
 export interface LayoutFormat {

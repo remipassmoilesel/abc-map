@@ -95,6 +95,7 @@ export class DrawingTestMap {
         projection: 'EPSG:4326',
         center: [0, 0],
         resolution: 1,
+        rotation: 0,
       }),
     });
   }

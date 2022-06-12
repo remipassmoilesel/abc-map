@@ -28,6 +28,7 @@ import { FaIcon } from '../../../../components/icon/FaIcon';
 import { IconDefs } from '../../../../components/icon/IconDefs';
 import { Modal } from 'react-bootstrap';
 import { InlineLoader } from '../../../../components/inline-loader/InlineLoader';
+import clsx from 'clsx';
 
 const logger = Logger.get('Preloader.tsx');
 
@@ -35,6 +36,7 @@ const t = prefixedTranslation('MapView:MainMap.');
 
 interface Props {
   map: MapWrapper;
+  className?: string;
 }
 
 enum Quantity {
@@ -48,7 +50,7 @@ const Params: { [k: string]: number } = {
 };
 
 export function Preloader(props: Props) {
-  const { map } = props;
+  const { map, className } = props;
   const { toasts } = useServices();
   const preloaderRef = useRef<MapPreloader | null>(null);
   const cancelLoading = useRef<(() => void) | null>(null);
@@ -110,8 +112,8 @@ export function Preloader(props: Props) {
   return (
     <>
       <WithTooltip title={t('Preload_map')} placement={'top'}>
-        <button onClick={handleOpenModal} className={Cls.button}>
-          {!loading && <FaIcon icon={IconDefs.faDownload} />}
+        <button onClick={handleOpenModal} className={clsx(Cls.button, className)}>
+          {!loading && <FaIcon icon={IconDefs.faDownload} className={Cls.icon} />}
           {loading && (
             <div className={'d-flex align-items-center'}>
               <InlineLoader active={loading} size={2} className={'mr-2'} />

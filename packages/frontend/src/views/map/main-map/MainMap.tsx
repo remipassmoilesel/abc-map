@@ -35,6 +35,7 @@ import { ReadStatus } from '../../../core/data/ReadResult';
 import { Scale } from '../../../components/scale/Scale';
 import { Preloader } from './preloader/Preloader';
 import clsx from 'clsx';
+import { MapRotation } from '../../../components/map-rotation/MapRotation';
 
 export const logger = Logger.get('MainMap.ts');
 
@@ -68,11 +69,14 @@ class MainMap extends Component<ServiceProps, State> {
 
         <div className={Cls.bottomBar}>
           <div className={'d-flex align-items-center'}>
+            <MapRotation map={this.map} className={'mr-4'} />
             <Scale map={this.map} className={clsx(Cls.scale, 'mr-2')} />
-            <Preloader map={this.map} />
           </div>
 
-          <Zoom map={this.map} />
+          <div className={'d-flex align-items-center'}>
+            <Zoom map={this.map} className={'mr-3'} />
+            <Preloader map={this.map} />
+          </div>
         </div>
 
         {/* Warning if tiles does not load */}

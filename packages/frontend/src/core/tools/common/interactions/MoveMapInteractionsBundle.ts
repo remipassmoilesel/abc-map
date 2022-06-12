@@ -16,9 +16,10 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { DragPan, Interaction, MouseWheelZoom, PinchZoom } from 'ol/interaction';
+import { DragPan, DragRotate, Interaction, MouseWheelZoom, PinchRotate, PinchZoom } from 'ol/interaction';
 import MapBrowserEvent from 'ol/MapBrowserEvent';
 import Map from 'ol/Map';
+import { altKeyOnly } from 'ol/events/condition';
 
 export interface Options {
   condition?: (ev: MapBrowserEvent<UIEvent>) => boolean;
@@ -38,7 +39,13 @@ export class MoveMapInteractionsBundle {
 
     const condition = this.options.condition;
 
-    this.interactions = [new DragPan({ condition }), new PinchZoom(), new MouseWheelZoom({ condition, onFocusOnly: false })];
+    this.interactions = [
+      new DragRotate({ condition: (ev) => altKeyOnly(ev) }),
+      new DragPan({ condition }),
+      new PinchRotate(),
+      new PinchZoom(),
+      new MouseWheelZoom({ condition, onFocusOnly: false }),
+    ];
     this.interactions.forEach((inter) => map.addInteraction(inter));
   }
 

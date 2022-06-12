@@ -57,9 +57,9 @@ describe('ArtefactGenerator', () => {
     previews: {
       enabled: true,
       views: [
-        { center: [255127.43458646, 5854183.083256814], resolution: 13000, projection: { name: 'EPSG:3857' } },
-        { center: [255127.43458646, 5854183.083256814], resolution: 2500, projection: { name: 'EPSG:3857' } },
-        { center: [-516837.321601631, 6144242.706693536], resolution: 125, projection: { name: 'EPSG:3857' } },
+        { center: [255127.43458646, 5854183.083256814], resolution: 13000, projection: { name: 'EPSG:3857' }, rotation: 0 },
+        { center: [255127.43458646, 5854183.083256814], resolution: 2500, projection: { name: 'EPSG:3857' }, rotation: 0 },
+        { center: [-516837.321601631, 6144242.706693536], resolution: 125, projection: { name: 'EPSG:3857' }, rotation: 0 },
       ],
     },
     layerIndexes: {

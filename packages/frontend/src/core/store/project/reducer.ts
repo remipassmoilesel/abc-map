@@ -145,7 +145,7 @@ export function projectReducer(state = projectInitialState, action: ProjectActio
     case ActionType.SetView: {
       const newState: ProjectState = { ...state };
       newState.mainView = {
-        resolution: action.view.resolution,
+        ...action.view,
         center: action.view.center.slice(),
         projection: { ...action.view.projection },
       };

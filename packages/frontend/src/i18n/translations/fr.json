@@ -268,7 +268,8 @@
       "Longitude": "Longitude",
       "Your_position": "Votre position",
       "Show_map_around_me": "Afficher la carte autour de moi",
-      "Unknown_error": "Erreur inconnue"
+      "Unknown_error": "Erreur inconnue",
+      "Orient_map": "Orienter la carte"
     }
   },
   "Scale": {
@@ -614,6 +615,10 @@
   "ScaleControls": {
     "Add_scale": "Ajouter l'échelle",
     "Remove_scale": "Supprimer l'échelle"
+  },
+  "NorthControls": {
+    "Add_north": "Ajouter le Nord",
+    "Remove_north": "Enlever le Nord"
   },
   "CopyTextFrameModal": {
     "Copy_text_frame": "Copier un cadre de texte",
@@ -992,6 +997,16 @@
   },
   "LargeOfflineIndicator": {
     "You_are_offline": "Vous êtes hors ligne"
+  },
+  "NorthArrow": {
+    "North": "Nord"
+  },
+  "MapRotation": {
+    "Rotation": "Rotation",
+    "To_rotate_the_map_use_alt_shift_drag_or_pinch_and_rotate_the_map": "Pour faire pivoter la carte utilisez ALT + glisser, ou pincez et faites pivoter la carte.",
+    "Restore_rotation": "Rétablir la rotation",
+    "Close": "Fermer",
+    "North_direction": "Direction du Nord"
   },
   "core": {
     "ProjectFactory": {

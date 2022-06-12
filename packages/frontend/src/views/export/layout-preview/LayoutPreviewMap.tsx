@@ -18,7 +18,7 @@
 
 import Cls from './LayoutPreviewMap.module.scss';
 import React, { useCallback, useEffect, useState } from 'react';
-import { AbcScale, AbcTextFrame, AbcView, getAbcWindow, Logger } from '@abc-map/shared';
+import { AbcNorth, AbcScale, AbcTextFrame, AbcView, getAbcWindow, Logger } from '@abc-map/shared';
 import { AbcLayout } from '@abc-map/shared';
 import isEqual from 'lodash/isEqual';
 import { LayoutHelper } from '../../../core/project/LayoutHelper';
@@ -38,6 +38,7 @@ import { FloatingTextFrame } from '../../../components/text-frame/FloatingTextFr
 import { FloatingScale } from '../../../components/floating-scale/FloatingScale';
 import { LayoutRenderer } from '../../../core/project/rendering/LayoutRenderer';
 import { normalize, toPrecision } from '../../../core/utils/numbers';
+import { FloatingNorthArrow } from '../../../components/floating-north-arrow/FloatingNorthArrow';
 
 const logger = Logger.get('LayoutPreview.tsx');
 
@@ -49,6 +50,7 @@ interface Props {
   onTextFrameChange: (before: AbcTextFrame, after: AbcTextFrame) => void;
   onDeleteTextFrame: (frame: AbcTextFrame) => void;
   onScaleChange: (scale: AbcScale) => void;
+  onNorthChange: (north: AbcNorth) => void;
 }
 
 const t = prefixedTranslation('ExportView:');
@@ -56,13 +58,14 @@ const t = prefixedTranslation('ExportView:');
 const render = new LayoutRenderer();
 
 function LayoutPreviewMap(props: Props) {
-  const { layout, onNewLayout, onLayoutChanged, onTextFrameChange, onDeleteTextFrame, onScaleChange } = props;
+  const { layout, onNewLayout, onLayoutChanged, onTextFrameChange, onDeleteTextFrame, onScaleChange, onNorthChange } = props;
   const { geo } = useServices();
   const [previewView, setPreviewView] = useState<AbcView | undefined>();
   const [previewMap, setPreviewMap] = useState<MapWrapper | undefined>();
   const [previewDimensions, setPreviewDimensions] = useState<DimensionsPx | undefined>();
   const [previewFrames, setPreviewFrames] = useState<AbcTextFrame[]>([]);
   const [previewScale, setPreviewScale] = useState<AbcScale | undefined>(undefined);
+  const [previewNorth, setPreviewNorth] = useState<AbcNorth | undefined>(undefined);
 
   // Ratio used for dimensions, between layout and preview map
   const [previewRatio, setPreviewRatio] = useState<number | undefined>(undefined);
@@ -234,6 +237,42 @@ function LayoutPreviewMap(props: Props) {
     setPreviewScale(previewScale);
   }, [layout?.scale, previewDimensions, previewMap, previewRatio]);
 
+  // Triggered when user modify north position
+  const handleNorthChange = useCallback(
+    (north: AbcNorth) => {
+      if (!previewRatio || !layout?.format) {
+        return;
+      }
+
+      const { width, height } = LayoutHelper.formatToPixel(layout.format);
+
+      onNorthChange({
+        ...north,
+        x: normalize(north.x * previewRatio, 0, width),
+        y: normalize(north.y * previewRatio, 0, height),
+      });
+    },
+    [layout?.format, onNorthChange, previewRatio]
+  );
+
+  // Adapt north position to preview
+  useEffect(() => {
+    if (!layout?.north || !previewRatio || !previewDimensions) {
+      setPreviewNorth(undefined);
+      return;
+    }
+
+    const { width, height } = previewDimensions;
+
+    const previewNorth: AbcNorth = {
+      ...layout.north,
+      x: normalize(layout.north.x / previewRatio, 0, width),
+      y: normalize(layout.north.y / previewRatio, 0, height),
+    };
+
+    setPreviewNorth(previewNorth);
+  }, [layout?.north, previewDimensions, previewMap, previewRatio]);
+
   return (
     <div className={Cls.layoutPreview} data-cy={'layout-preview'}>
       {/* There is one layout to preview, we display it */}
@@ -256,6 +295,9 @@ function LayoutPreviewMap(props: Props) {
 
           {/* Scale */}
           {previewScale && <FloatingScale map={previewMap} scale={previewScale} baseFontSizeEm={0.9} minWidth={50} onChange={handleScaleChange} />}
+
+          {/* North */}
+          {previewNorth && <FloatingNorthArrow map={previewMap} north={previewNorth} onChange={handleNorthChange} />}
 
           {/* Attributions */}
           <StaticAttributions map={previewMap} />

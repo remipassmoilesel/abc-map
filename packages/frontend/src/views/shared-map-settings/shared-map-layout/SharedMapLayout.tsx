@@ -17,7 +17,7 @@
  */
 
 import { useCallback, useMemo } from 'react';
-import { AbcScale, AbcTextFrame, AbcView, LayerState, Logger } from '@abc-map/shared';
+import { AbcNorth, AbcScale, AbcTextFrame, AbcView, LayerState, Logger } from '@abc-map/shared';
 import SideMenu from '../../../components/side-menu/SideMenu';
 import { IconDefs } from '../../../components/icon/IconDefs';
 import { useAppSelector } from '../../../core/store/hooks';
@@ -40,6 +40,9 @@ import { UpdateTextFrameChangeset } from '../../../core/history/changesets/Updat
 import { UpdateSharedViewScaleChangeset } from '../../../core/history/changesets/shared-views/UpdateSharedViewScaleChangeset';
 import { PreviewMap } from './preview-map/PreviewMap';
 import { RemoveSharedViewScaleChangeset } from '../../../core/history/changesets/shared-views/RemoveSharedViewScaleChangeset';
+import { UpdateSharedViewNorthChangeset } from '../../../core/history/changesets/shared-views/UpdateSharedViewNorthChangeset';
+import { AddSharedViewNorthChangeset } from '../../../core/history/changesets/shared-views/AddSharedViewNorthChangeset';
+import { RemoveSharedViewNorthChangeset } from '../../../core/history/changesets/shared-views/RemoveSharedViewNorthChangeset';
 
 const t = prefixedTranslation('SharedMapSettingsView:');
 
@@ -187,6 +190,45 @@ function SharedMapLayout() {
     [activeView, history]
   );
 
+  const handleNorthChanged = useCallback(
+    (north: AbcNorth) => {
+      if (!activeView?.north) {
+        return;
+      }
+
+      const cs = UpdateSharedViewNorthChangeset.create(activeView, activeView.north, north);
+      cs.apply()
+        .then(() => history.register(HistoryKey.SharedViews, cs))
+        .catch((err) => logger.error('Cannot update scale: ', err));
+    },
+    [activeView, history]
+  );
+
+  const handleAddNorth = useCallback(
+    (scale: AbcNorth) => {
+      if (!activeView) {
+        return;
+      }
+
+      const cs = AddSharedViewNorthChangeset.create(activeView, scale);
+      cs.apply()
+        .then(() => history.register(HistoryKey.SharedViews, cs))
+        .catch((err) => logger.error('Cannot add north:', err));
+    },
+    [activeView, history]
+  );
+
+  const handleRemoveNorth = useCallback(() => {
+    if (!activeView || !activeView.north) {
+      return;
+    }
+
+    const cs = RemoveSharedViewNorthChangeset.create(activeView, activeView.north);
+    cs.apply()
+      .then(() => history.register(HistoryKey.SharedViews, cs))
+      .catch((err) => logger.error('Cannot remove scale:', err));
+  }, [activeView, history]);
+
   return (
     <>
       {/* Shared view controls */}
@@ -198,7 +240,14 @@ function SharedMapLayout() {
         title={t('Configuration')}
         initiallyOpened={true}
       >
-        <SharingControls onNewView={handleNewView} onAddTextFrame={handleAddTextFrame} onAddScale={handleAddScale} onRemoveScale={handleRemoveScale} />
+        <SharingControls
+          onNewView={handleNewView}
+          onAddTextFrame={handleAddTextFrame}
+          onAddScale={handleAddScale}
+          onRemoveScale={handleRemoveScale}
+          onAddNorth={handleAddNorth}
+          onRemoveNorth={handleRemoveNorth}
+        />
       </SideMenu>
 
       {/* Preview map */}
@@ -208,6 +257,7 @@ function SharedMapLayout() {
         onTextFrameChange={handleTextFrameChange}
         onRemoveTextFrame={handleRemoveTextFrame}
         onScaleChange={handleScaleChanged}
+        onNorthChange={handleNorthChanged}
       />
     </>
   );

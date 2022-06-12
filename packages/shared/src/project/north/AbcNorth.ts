@@ -16,16 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ProjectConstants } from './ProjectConstants';
-import semver from 'semver';
-
-describe('ProjectConstants', () => {
-  it('version should be valid', () => {
-    expect(semver.valid(ProjectConstants.CurrentVersion)).toBeTruthy();
-  });
-
-  it('modifications require data migration', () => {
-    expect(ProjectConstants.CurrentVersion).toEqual('1.0.0');
-    expect(ProjectConstants.ManifestName).toEqual('project.json');
-  });
-});
+export interface AbcNorth {
+  x: number;
+  y: number;
+}

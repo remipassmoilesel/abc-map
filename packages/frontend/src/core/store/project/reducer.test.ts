@@ -227,6 +227,7 @@ describe('Project reducer', function () {
       center: [111, 222],
       projection: { name: 'EPSG:XXXX' },
       resolution: 888888,
+      rotation: 6,
     };
 
     // Act

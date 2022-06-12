@@ -22,7 +22,7 @@ import { FaIcon } from '../../../../components/icon/FaIcon';
 import { IconDefs } from '../../../../components/icon/IconDefs';
 import React, { useCallback, useState } from 'react';
 import { useServices } from '../../../../core/useServices';
-import { AbcScale, AbcSharedView, AbcTextFrame, Logger } from '@abc-map/shared';
+import { AbcNorth, AbcScale, AbcSharedView, AbcTextFrame, Logger } from '@abc-map/shared';
 import SharingCodesModal from '../sharing-codes-modal/SharingCodesModal';
 import { prefixedTranslation } from '../../../../i18n/i18n';
 import { useAppSelector } from '../../../../core/store/hooks';
@@ -35,6 +35,7 @@ import { ProjectStatus } from '../../../../core/project/ProjectStatus';
 import { MapDimensions } from './map-dimensions/MapDimensions';
 import { TextFrameControls } from '../../../../components/text-frame-controls/TextFrameControls';
 import { ScaleControls } from '../../../../components/scale-controls/ScaleControls';
+import { NorthControls } from '../../../../components/north-controls/NorthControls';
 
 const logger = Logger.get('SharingControls.tsx');
 
@@ -45,13 +46,22 @@ interface Props {
   onAddTextFrame: (frame: AbcTextFrame) => void;
   onAddScale: (scale: AbcScale) => void;
   onRemoveScale: () => void;
+  onAddNorth: (north: AbcNorth) => void;
+  onRemoveNorth: () => void;
 }
 
 function SharingControls(props: Props) {
   const saveProject = useSaveProjectOnline();
   const { project, history } = useServices();
 
-  const { onNewView: handleNewView, onAddTextFrame: handleAddTextFrame, onAddScale, onRemoveScale: handleRemoveScale } = props;
+  const {
+    onNewView: handleNewView,
+    onAddTextFrame: handleAddTextFrame,
+    onAddScale,
+    onRemoveScale: handleRemoveScale,
+    onAddNorth,
+    onRemoveNorth: handleRemoveNorth,
+  } = props;
   const [codesModal, showCodesModal] = useState(false);
   const views = useAppSelector((st) => st.project.sharedViews.list);
   const { width, height } = useAppSelector((st) => st.project.sharedViews.mapDimensions);
@@ -104,6 +114,8 @@ function SharingControls(props: Props) {
 
   const handleAddScale = useCallback((scale: AbcScale) => onAddScale({ ...scale, x: 45, y: 5 }), [onAddScale]);
 
+  const handleAddNorth = useCallback((north: AbcNorth) => onAddNorth({ ...north, x: 45, y: 5 }), [onAddNorth]);
+
   return (
     <>
       <HistoryControls historyKey={HistoryKey.SharedViews} />
@@ -146,9 +158,10 @@ function SharingControls(props: Props) {
         </div>
       </div>
 
-      {/* Text frames and scale */}
+      {/* Text frames, scale, North */}
       <TextFrameControls disabled={!activeView} onAddTextFrame={handleAddTextFrame} />
       <ScaleControls disabled={!activeView} hasScale={!!activeView?.scale} onAddScale={handleAddScale} onRemoveScale={handleRemoveScale} />
+      <NorthControls disabled={!activeView} hasNorth={!!activeView?.north} onAddNorth={handleAddNorth} onRemoveNorth={handleRemoveNorth} />
 
       {/* Layer selection */}
       {activeView && (

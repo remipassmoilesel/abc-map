@@ -51,7 +51,7 @@ export function toPrecision(n: number, precision = 4): number {
 }
 
 export function toDegrees(radians: number): number {
-  return Math.round((radians * 180) / Math.PI);
+  return toPrecision((radians * 180) / Math.PI, 4);
 }
 
 export function toRadians(degrees: number): number {

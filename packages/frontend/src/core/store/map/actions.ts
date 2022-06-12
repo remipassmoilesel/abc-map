@@ -36,6 +36,7 @@ export enum ActionType {
   SetDrawingStyle = 'SetDrawingStyle',
   SetGeolocation = 'SetGeolocation',
   SetFollowPosition = 'SetFollowPosition',
+  SetRotateMap = 'SetRotateMap',
 }
 
 export interface SetFillColor1 {
@@ -118,6 +119,11 @@ export interface SetFollowPosition {
   value: boolean;
 }
 
+export interface SetRotateMap {
+  type: ActionType.SetRotateMap;
+  value: boolean;
+}
+
 export type MapAction =
   | SetStrokeColor
   | SetFillColor1
@@ -134,7 +140,8 @@ export type MapAction =
   | SetPointColor
   | SetDrawingStyle
   | SetGeolocation
-  | SetFollowPosition;
+  | SetFollowPosition
+  | SetRotateMap;
 
 export class MapActions {
   public static setFillColor1(color: string): MapAction {
@@ -245,6 +252,13 @@ export class MapActions {
   public static setFollowPosition(value: boolean): MapAction {
     return {
       type: ActionType.SetFollowPosition,
+      value,
+    };
+  }
+
+  public static setRotateMap(value: boolean): MapAction {
+    return {
+      type: ActionType.SetRotateMap,
       value,
     };
   }

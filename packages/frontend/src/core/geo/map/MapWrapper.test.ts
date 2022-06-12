@@ -222,7 +222,7 @@ describe('MapWrapper', function () {
 
       expect(map.getTool()).toBeInstanceOf(MoveMapTool);
       expect(map.getTool()?.getId()).toEqual(MapTool.MoveMap);
-      expect(TestHelper.interactionNames(map.unwrap())).toEqual(['DragPan', 'PinchZoom', 'MouseWheelZoom']);
+      expect(TestHelper.interactionNames(map.unwrap())).toEqual(['DragRotate', 'DragPan', 'PinchRotate', 'PinchZoom', 'MouseWheelZoom']);
     });
 
     it('setDefaultTool() should dispatch', () => {
@@ -269,7 +269,7 @@ describe('MapWrapper', function () {
 
       // Assert
       expect(map.getTool()).toBeInstanceOf(MoveMapTool);
-      expect(TestHelper.interactionNames(map.unwrap())).toEqual(['DragPan', 'PinchZoom', 'MouseWheelZoom']);
+      expect(TestHelper.interactionNames(map.unwrap())).toEqual(['DragRotate', 'DragPan', 'PinchRotate', 'PinchZoom', 'MouseWheelZoom']);
     });
 
     it('setTool() should setup tool', () => {
@@ -426,7 +426,12 @@ describe('MapWrapper', function () {
 
     map.moveViewToExtent([41.2611155, 51.3055721, -5.4517733, 9.8282225], EPSG_4326, 0);
 
-    expect(map.getView()).toEqual({ projection: { name: 'EPSG:3857' }, center: [1993138.869673042, 3887501.414438], resolution: 55760.470248396 });
+    expect(map.getView()).toEqual({
+      center: [1993138.869673042, 3887501.414438],
+      resolution: 55760.470248396,
+      rotation: 0,
+      projection: { name: 'EPSG:3857' },
+    });
   });
 
   it('moveViewToPosition()', () => {
@@ -435,7 +440,12 @@ describe('MapWrapper', function () {
 
     map.moveViewToPosition([3.8371328, 43.6207616], 5);
 
-    expect(map.getView()).toEqual({ projection: { name: 'EPSG:3857' }, center: [427147.669402168, 5406940.509560228], resolution: 4891.969810251 });
+    expect(map.getView()).toEqual({
+      center: [427147.669402168, 5406940.509560228],
+      resolution: 4891.969810251,
+      rotation: 0,
+      projection: { name: 'EPSG:3857' },
+    });
   });
 
   it('forEachFeatureSelected()', () => {

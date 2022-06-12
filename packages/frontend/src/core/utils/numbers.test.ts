@@ -55,7 +55,7 @@ describe('numbers', () => {
   });
 
   it('toDegrees()', () => {
-    expect(toDegrees(1)).toEqual(57);
+    expect(toDegrees(10)).toEqual(572.9578);
   });
 
   it('toDegrees()', () => {

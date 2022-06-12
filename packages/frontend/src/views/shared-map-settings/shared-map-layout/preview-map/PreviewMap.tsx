@@ -25,7 +25,7 @@ import { MapWrapper } from '../../../../core/geo/map/MapWrapper';
 import { MapFactory } from '../../../../core/geo/map/MapFactory';
 import { E2eMapWrapper } from '../../../../core/geo/map/E2eMapWrapper';
 import { useServices } from '../../../../core/useServices';
-import { AbcScale, AbcTextFrame, AbcView, getAbcWindow, Logger } from '@abc-map/shared';
+import { AbcNorth, AbcScale, AbcTextFrame, AbcView, getAbcWindow, Logger } from '@abc-map/shared';
 import { useActiveSharedView } from '../../../../core/project/useActiveSharedView';
 import { Views } from '../../../../core/geo/Views';
 import { useAppSelector } from '../../../../core/store/hooks';
@@ -35,6 +35,7 @@ import { adaptMapDimensions } from '../../../../core/project/adaptMapDimensions'
 import SharedViewNavigation from '../../../../components/shared-view-navigation/SharedViewNavigation';
 import SharedViewList from '../shared-view-list/SharedViewList';
 import { InteractiveAttributions } from '../../../../components/interactive-attributions/InteractiveAttributions';
+import { FloatingNorthArrow } from '../../../../components/floating-north-arrow/FloatingNorthArrow';
 
 const logger = Logger.get('PreviewMap.tsx');
 
@@ -44,14 +45,16 @@ interface Props {
   onRemoveTextFrame: (f: AbcTextFrame) => void;
   onTextFrameChange: (before: AbcTextFrame, after: AbcTextFrame) => void;
   onScaleChange: (scale: AbcScale) => void;
+  onNorthChange: (scale: AbcNorth) => void;
 }
 
 export function PreviewMap(props: Props) {
-  const { onNewView: handleNewView, onViewMove, onRemoveTextFrame, onTextFrameChange, onScaleChange } = props;
+  const { onNewView, onViewMove, onRemoveTextFrame, onTextFrameChange, onScaleChange, onNorthChange } = props;
   const { geo } = useServices();
   const [map, setMap] = useState<MapWrapper>();
   const [previewFrames, setPreviewFrames] = useState<AbcTextFrame[]>([]);
   const [previewScale, setPreviewScale] = useState<AbcScale | undefined>(undefined);
+  const [previewNorth, setPreviewNorth] = useState<AbcNorth | undefined>(undefined);
   const { fullscreen, mapDimensions } = useAppSelector((st) => st.project.sharedViews);
   const [mapDimensionsStyle, setMapDimensionsStyle] = useState<DimensionsStyle | undefined>();
   const activeView = useActiveSharedView();
@@ -99,6 +102,7 @@ export function PreviewMap(props: Props) {
         resolution: previewView.resolution,
         projection: previewView.projection,
         center: previewView.center,
+        rotation: previewView.rotation,
       })
     );
   }, [map, onViewMove]);
@@ -190,6 +194,37 @@ export function PreviewMap(props: Props) {
     [fullscreen, mapDimensions, onScaleChange]
   );
 
+  // Adapt relative position of north
+  useEffect(() => {
+    if (!activeView?.north) {
+      setPreviewNorth(undefined);
+      return;
+    }
+
+    const { width, height } = adaptMapDimensions(fullscreen, mapDimensions);
+
+    const previewNorth: AbcScale = {
+      ...activeView.north,
+      x: normalize((activeView.north.x * width) / 100, 0, width, 2),
+      y: normalize((activeView.north.y * height) / 100, 0, height, 2),
+    };
+
+    setPreviewNorth(previewNorth);
+  }, [activeView?.north, fullscreen, mapDimensions]);
+
+  const handleNorthChange = useCallback(
+    (before: AbcNorth) => {
+      const { width, height } = adaptMapDimensions(fullscreen, mapDimensions);
+
+      onNorthChange({
+        ...before,
+        x: normalize((before.x / width) * 100, 0, 100, 2),
+        y: normalize((before.y / height) * 100, 0, 100, 2),
+      });
+    },
+    [fullscreen, mapDimensions, onNorthChange]
+  );
+
   // List of views
   const [viewList, showViewList] = useState(false);
   const handleToggleList = useCallback(() => showViewList(!viewList), [viewList]);
@@ -207,11 +242,13 @@ export function PreviewMap(props: Props) {
 
           {previewScale && <FloatingScale map={map} scale={previewScale} onChange={handleScaleChange} />}
 
+          {previewNorth && <FloatingNorthArrow map={map} north={previewNorth} onChange={handleNorthChange} />}
+
           {/* The same menu as in preview */}
           {!viewList && <SharedViewNavigation onMore={handleToggleList} className={Cls.navigation} />}
 
           {/* List of views, only if open */}
-          {viewList && <SharedViewList onNewView={handleNewView} onClose={handleToggleList} className={Cls.viewList} />}
+          {viewList && <SharedViewList onNewView={onNewView} onClose={handleToggleList} className={Cls.viewList} />}
 
           <InteractiveAttributions map={map} className={Cls.attributions} />
         </div>

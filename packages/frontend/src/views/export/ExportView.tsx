@@ -18,7 +18,7 @@
 
 import Cls from './ExportView.module.scss';
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
-import { AbcLayout, AbcProjection, AbcTextFrame, LayoutFormat, LayoutFormats, Logger } from '@abc-map/shared';
+import { AbcLayout, AbcNorth, AbcProjection, AbcTextFrame, LayoutFormat, LayoutFormats, Logger } from '@abc-map/shared';
 import LayoutList from './layout-list/LayoutList';
 import LayoutPreviewMap from './layout-preview/LayoutPreviewMap';
 import { HistoryKey } from '../../core/history/HistoryKey';
@@ -49,11 +49,15 @@ import { UpdateTextFrameChangeset } from '../../core/history/changesets/UpdateTe
 import debounce from 'lodash/debounce';
 import { AddLayoutScaleChangeset } from '../../core/history/changesets/layouts/AddLayoutScaleChangeset';
 import { AbcScale } from '@abc-map/shared';
-import { RemoveScaleChangeset } from '../../core/history/changesets/layouts/RemoveScaleChangeset';
+import { RemoveLayoutScaleChangeset } from '../../core/history/changesets/layouts/RemoveLayoutScaleChangeset';
 import { UpdateLayoutScaleChangeset } from '../../core/history/changesets/layouts/UpdateLayoutScaleChangeset';
 import { useActiveLayout } from '../../core/project/useActiveLayout';
 import { useOfflineStatus } from '../../core/pwa/OnlineStatusContext';
 import { LargeOfflineIndicator } from '../../components/offline-indicator/LargeOfflineIndicator';
+import { AddLayoutNorthChangeset } from '../../core/history/changesets/layouts/AddLayoutNorthChangeset';
+import { RemoveLayoutNorthChangeset } from '../../core/history/changesets/layouts/RemoveLayoutNorthChangeset';
+import { UpdateLayoutNorthChangeset } from '../../core/history/changesets/layouts/UpdateLayoutNorthChangeset';
+import isEqual from 'lodash/isEqual';
 
 const logger = Logger.get('ExportView.tsx', 'warn');
 
@@ -98,6 +102,7 @@ function ExportView() {
     const view = geo.getMainMap().unwrap().getView();
     const center = view.getCenter();
     const resolution = view.getResolution();
+    const rotation = view.getRotation();
     if (!center || !resolution) {
       logger.error('Cannot create new layout: ', { center, resolution });
       return;
@@ -111,7 +116,7 @@ function ExportView() {
         id: uuid(),
         name,
         format: LayoutFormats.A4_LANDSCAPE,
-        view: Views.normalize({ center, resolution: layoutRes, projection }),
+        view: Views.normalize({ center, resolution: layoutRes, projection, rotation }),
         textFrames: [],
       };
 
@@ -311,10 +316,10 @@ function ExportView() {
           return;
         }
 
-        const updateFrame = UpdateTextFrameChangeset.create(before, after);
-        updateFrame
+        const changeset = UpdateTextFrameChangeset.create(before, after);
+        changeset
           .apply()
-          .then(() => history.register(HistoryKey.Export, updateFrame))
+          .then(() => history.register(HistoryKey.Export, changeset))
           .catch((err) => logger.error('Cannot update text frame: ', err));
       }, 150),
     [history, project]
@@ -339,10 +344,10 @@ function ExportView() {
         return;
       }
 
-      const addScale = AddLayoutScaleChangeset.create(activeLayout, scale);
-      addScale
+      const changeset = AddLayoutScaleChangeset.create(activeLayout, scale);
+      changeset
         .apply()
-        .then(() => history.register(HistoryKey.Export, addScale))
+        .then(() => history.register(HistoryKey.Export, changeset))
         .catch((err) => logger.error('Cannot add scale: ', err));
     },
     [activeLayout, history]
@@ -353,10 +358,37 @@ function ExportView() {
       return;
     }
 
-    const addScale = RemoveScaleChangeset.create(activeLayout, activeLayout.scale);
-    addScale
+    const changeset = RemoveLayoutScaleChangeset.create(activeLayout, activeLayout.scale);
+    changeset
       .apply()
-      .then(() => history.register(HistoryKey.Export, addScale))
+      .then(() => history.register(HistoryKey.Export, changeset))
+      .catch((err) => logger.error('Cannot remove scale: ', err));
+  }, [activeLayout, history]);
+
+  const handleAddNorth = useCallback(
+    (north: AbcNorth) => {
+      if (!activeLayout) {
+        return;
+      }
+
+      const changeset = AddLayoutNorthChangeset.create(activeLayout, north);
+      changeset
+        .apply()
+        .then(() => history.register(HistoryKey.Export, changeset))
+        .catch((err) => logger.error('Cannot add scale: ', err));
+    },
+    [activeLayout, history]
+  );
+
+  const handleRemoveNorth = useCallback(() => {
+    if (!activeLayout || !activeLayout.north) {
+      return;
+    }
+
+    const changeset = RemoveLayoutNorthChangeset.create(activeLayout, activeLayout.north);
+    changeset
+      .apply()
+      .then(() => history.register(HistoryKey.Export, changeset))
       .catch((err) => logger.error('Cannot remove scale: ', err));
   }, [activeLayout, history]);
 
@@ -366,10 +398,33 @@ function ExportView() {
         return;
       }
 
-      const addScale = UpdateLayoutScaleChangeset.create(activeLayout, activeLayout.scale, scale);
-      addScale
+      if (isEqual(activeLayout.scale, scale)) {
+        return;
+      }
+
+      const changeset = UpdateLayoutScaleChangeset.create(activeLayout, activeLayout.scale, scale);
+      changeset
         .apply()
-        .then(() => history.register(HistoryKey.Export, addScale))
+        .then(() => history.register(HistoryKey.Export, changeset))
+        .catch((err) => logger.error('Cannot update scale: ', err));
+    },
+    [activeLayout, history]
+  );
+
+  const handleNorthChange = useCallback(
+    (north: AbcNorth) => {
+      if (!activeLayout || !activeLayout.north) {
+        return;
+      }
+
+      if (isEqual(activeLayout.north, north)) {
+        return;
+      }
+
+      const changeset = UpdateLayoutNorthChangeset.create(activeLayout, activeLayout.north, north);
+      changeset
+        .apply()
+        .then(() => history.register(HistoryKey.Export, changeset))
         .catch((err) => logger.error('Cannot update scale: ', err));
     },
     [activeLayout, history]
@@ -408,6 +463,7 @@ function ExportView() {
           onTextFrameChange={handleTextFrameChange}
           onDeleteTextFrame={handleDeleteTextFrame}
           onScaleChange={handleScaleChanged}
+          onNorthChange={handleNorthChange}
         />
 
         {/* Controls on right */}
@@ -430,6 +486,8 @@ function ExportView() {
             onExport={handleExport}
             onAddScale={handleAddScale}
             onRemoveScale={handleRemoveScale}
+            onAddNorth={handleAddNorth}
+            onRemoveNorth={handleRemoveNorth}
           />
         </SideMenu>
       </div>

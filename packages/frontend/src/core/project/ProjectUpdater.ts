@@ -17,17 +17,9 @@
  */
 
 import { MigratedProject, MigrationsFactory } from './migrations/typings';
-import { FromV010ToV020 } from './migrations/FromV010ToV020';
 import { AbcFile, AbcProjectManifest, Logger } from '@abc-map/shared';
-import { FromV020ToV030 } from './migrations/FromV020ToV030';
+import { getMigrations } from './migrations';
 import { ModalService } from '../ui/ModalService';
-import { FromV030ToV040 } from './migrations/FromV030ToV040';
-import { FromV040ToV050 } from './migrations/FromV040ToV050';
-import { FromV050ToV060 } from './migrations/FromV050ToV060';
-import { FromV060ToV070 } from './migrations/FromV060ToV070';
-import { FromV070ToV080 } from './migrations/FromV070ToV080';
-import { FromV080ToV090 } from './migrations/FromV080ToV090';
-import { FromV090ToV100 } from './migrations/FromV090ToV100';
 
 export const logger = Logger.get('ProjectUpdater.ts', 'debug');
 
@@ -35,19 +27,8 @@ export const logger = Logger.get('ProjectUpdater.ts', 'debug');
  * This class take a project and update its format to the latest version
  */
 export class ProjectUpdater {
-  public static create(modal: ModalService) {
-    // Migrations must be passed in chronological order
-    return new ProjectUpdater(() => [
-      new FromV010ToV020(),
-      new FromV020ToV030(modal),
-      new FromV030ToV040(),
-      new FromV040ToV050(),
-      new FromV050ToV060(),
-      new FromV060ToV070(),
-      new FromV070ToV080(),
-      new FromV080ToV090(),
-      new FromV090ToV100(),
-    ]);
+  public static create(modals: ModalService) {
+    return new ProjectUpdater(() => getMigrations(modals));
   }
 
   constructor(private migrations: MigrationsFactory) {}

@@ -107,6 +107,7 @@ Array [
         "name": "EPSG:3857",
       },
       "resolution": 1000,
+      "rotation": 0,
     },
   },
   Object {
@@ -190,6 +191,7 @@ Array [
         "name": "EPSG:3857",
       },
       "resolution": 1000,
+      "rotation": 0,
     },
   },
 ]
@@ -301,6 +303,7 @@ Array [
         "name": "EPSG:3857",
       },
       "resolution": 1000,
+      "rotation": 0,
     },
   },
   Object {
@@ -383,6 +386,7 @@ Array [
         "name": "EPSG:3857",
       },
       "resolution": 1000,
+      "rotation": 0,
     },
   },
 ]
@@ -495,6 +499,7 @@ Array [
         "name": "EPSG:3857",
       },
       "resolution": 1000,
+      "rotation": 0,
     },
   },
   Object {
@@ -578,6 +583,7 @@ Array [
         "name": "EPSG:3857",
       },
       "resolution": 1000,
+      "rotation": 0,
     },
   },
 ]
@@ -689,6 +695,7 @@ Array [
         "name": "EPSG:3857",
       },
       "resolution": 1000,
+      "rotation": 0,
     },
   },
   Object {
@@ -771,6 +778,7 @@ Array [
         "name": "EPSG:3857",
       },
       "resolution": 1000,
+      "rotation": 0,
     },
   },
 ]

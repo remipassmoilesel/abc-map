@@ -25,6 +25,7 @@ describe('Views', () => {
     expect(Views.defaultView()).toEqual({
       resolution: 39135,
       center: [1113194.9079327357, 5621521.486192066],
+      rotation: 0,
       projection: {
         name: 'EPSG:3857',
       },
@@ -44,6 +45,7 @@ describe('Views', () => {
       resolution: 12345,
       center: [1113194, 5621521],
       projection: { name: 'EPSG:3857' },
+      rotation: 7,
     };
 
     // Act
@@ -53,6 +55,7 @@ describe('Views', () => {
     expect(actual.getResolution()).toEqual(original.resolution);
     expect(actual.getCenter()).toEqual(original.center);
     expect(actual.getProjection().getCode()).toEqual(original.projection.name);
+    expect(actual.getRotation()).toEqual(7);
   });
 
   describe('olToAbc()', () => {
@@ -62,15 +65,21 @@ describe('Views', () => {
         resolution: 12345,
         center: [1113194, 5621521],
         projection: 'EPSG:3857',
+        rotation: 7,
       });
 
       // Act
       const actual = Views.olToAbc(original);
 
       // Assert
-      expect(actual.resolution).toEqual(original.getResolution());
-      expect(actual.center).toEqual(original.getCenter());
-      expect(actual.projection.name).toEqual(original.getProjection().getCode());
+      expect(actual).toEqual({
+        resolution: 12345,
+        center: [1113194, 5621521],
+        rotation: 7,
+        projection: {
+          name: 'EPSG:3857',
+        },
+      });
     });
 
     it('should use default view if no values set', () => {
@@ -111,6 +120,7 @@ describe('Views', () => {
       projection: {
         name: 'EPSG:3857',
       },
+      rotation: 7,
     });
 
     expect(Views.normalize(view)).toEqual({
@@ -119,6 +129,7 @@ describe('Views', () => {
       projection: {
         name: 'EPSG:3857',
       },
+      rotation: 7,
     });
   });
 });

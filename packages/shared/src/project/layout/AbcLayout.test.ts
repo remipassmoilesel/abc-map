@@ -42,6 +42,7 @@ describe('AbcLayout', () => {
         projection: {
           name: 'EPSG:4326',
         },
+        rotation: 0,
       },
       textFrames: [],
       scale: {

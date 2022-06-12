@@ -30,6 +30,7 @@ describe('AbcSharedView', () => {
         center: [12, 34],
         resolution: 5678,
         projection: { name: 'test-projection' },
+        rotation: 0,
       },
       layers: [{ layerId: 'test-layer-id', visible: true }],
       textFrames: [],

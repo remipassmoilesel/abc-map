@@ -19,7 +19,7 @@
 import { AbcProjectManifest } from '../AbcProjectManifest';
 import { Zipper } from '../../zip';
 import { BlobIO } from '../../frontend/blob/BlobIO';
-import { ProjectConstants } from '../ProjectConstants';
+import { ProjectConstants } from '../constants/ProjectConstants';
 
 export class ProjectHelper<T extends Blob | Buffer = Blob | Buffer> {
   public static forFrontend(): ProjectHelper<Blob> {

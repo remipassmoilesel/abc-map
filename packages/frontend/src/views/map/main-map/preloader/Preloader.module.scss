@@ -23,10 +23,23 @@
   align-items: center;
   justify-content: center;
 
+  width: 2.7rem;
   height: 2.7rem;
 
   border-radius: $border-radius;
   border: solid 0.1rem $control-color;
   background-color: rgba(white, 0.9);
   box-shadow: $box-shadow;
+
+  .icon {
+    color: $control-color;
+  }
+
+  &:hover {
+    background-color: $control-color;
+
+    .icon {
+      color: white;
+    }
+  }
 }

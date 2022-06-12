@@ -100,6 +100,7 @@ export class TestHelper {
         center: [1, 2],
         projection: DEFAULT_PROJECTION,
         resolution: 1000,
+        rotation: 0,
       },
       sharedViews: {
         list: [],

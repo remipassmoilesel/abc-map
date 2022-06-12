@@ -92,7 +92,7 @@ describe('Text', () => {
   });
 
   it('setup()', () => {
-    expect(TestHelper.interactionNames(map.getMap())).toEqual(['DragPan', 'PinchZoom', 'MouseWheelZoom', 'Select', 'Select']);
+    expect(TestHelper.interactionNames(map.getMap())).toEqual(['DragRotate', 'DragPan', 'PinchRotate', 'PinchZoom', 'MouseWheelZoom', 'Select', 'Select']);
   });
 
   it('dispose()', () => {

@@ -104,6 +104,7 @@ export class TestHelper {
         center: [1, 2],
         projection: DEFAULT_PROJECTION,
         resolution: 1000,
+        rotation: 0,
       },
       sharedViews: {
         list: [],
@@ -317,6 +318,7 @@ export class TestHelper {
         center: [1.5, 45.4],
         resolution: 1000,
         projection: DEFAULT_PROJECTION,
+        rotation: 0,
       },
       textFrames: [this.sampleTextFrame()],
     };
@@ -341,6 +343,7 @@ export class TestHelper {
       center: [1.5, 45.4],
       resolution: 1000,
       projection: DEFAULT_PROJECTION,
+      rotation: 0,
     };
   }
 

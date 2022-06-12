@@ -2,6 +2,13 @@
 
 For the moment we use git hashes as version, since no one complained about it 👍
 
+## 11/06/2022 - Map view rotations (git: master)
+
+- Add ability to rotate main map, layouts and shared views
+- Creation of a "North direction" component 
+- Add rotation dialog on main map
+- React Bootstrap minor upgrade
+
 ## 03/06/2022 - Geolocation (git: 83a26fe7)
 
 - Add ability to display user position
