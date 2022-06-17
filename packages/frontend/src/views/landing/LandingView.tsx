@@ -86,18 +86,15 @@ function LandingView() {
         <div className={'row'}>
           <div className={'col-xl-6  mt-5'}>
             {/* Title */}
-            <h1>{t('Welcome')}</h1>
-            <p className={Cls.intro}>{t('AbcMap_is_a_free_software')}</p>
+            <h1 className={Cls.title}>Abc-Map</h1>
+            <p className={Cls.intro}>{t('Open_source_extensible_online_mapping')}</p>
 
             {/* Explanation and start link */}
             <h3 className={'mb-3'}>{t('How_does_it_work')}</h3>
 
             <ul className={'mb-4'}>
               <li>
-                <a href={'https://www.youtube.com/channel/UCrlsEykrLNpK12Id7c7GP7g'} target={'_blank'} rel="noreferrer">
-                  {t('Watch_a_presentation_video')} 📹
-                </a>
-                &nbsp; <Link to={Routes.documentation().format()}>{t('or_read_the_doc')} 📖</Link>
+                <Link to={Routes.documentation().format()}>{t('Browse_the_doc')} 📖</Link>
               </li>
               <li>
                 <Link to={Routes.map().format()}>{t('Then_open_map')} 🌍</Link>
@@ -159,7 +156,7 @@ function LandingView() {
           </div>
 
           {/* Illustration */}
-          <div className={'col-xl-6 d-flex flex-column align-items-end justify-content-end'}>
+          <div onClick={handleGoToMap} className={'col-xl-6 d-flex flex-column align-items-end justify-content-end'}>
             <img src={illustration} alt={t('A_pretty_illustration')} className={Cls.illustration} />
           </div>
         </div>

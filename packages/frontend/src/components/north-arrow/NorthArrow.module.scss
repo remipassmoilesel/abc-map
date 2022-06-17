@@ -20,9 +20,21 @@
 .arrow {
   padding: 0.4em;
 
+  border: solid 0.1rem $control-color;
   border-radius: 100%;
-  border: solid 0.1em $control-color;
-  background-color: rgb(255, 255, 255);
 
-  opacity: 0.8;
+  box-shadow: $box-shadow;
+  background-color: rgba(white, 0.9);
+
+  .icon {
+    color: $control-color;
+  }
+
+  &:hover:not([disabled]) {
+    background-color: $control-color;
+
+    .icon {
+      color: white;
+    }
+  }
 }

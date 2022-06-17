@@ -1,0 +1,72 @@
+# Copyright © 2021 Rémi Pace.
+# This file is part of Abc-Map.
+#
+# Abc-Map is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as
+# published by the Free Software Foundation, either version 3 of
+# the License, or (at your option) any later version.
+#
+# Abc-Map is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General
+# Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
+---
+
+version: '3'
+
+services:
+  abc-server:
+    image: registry.gitlab.com/abc-map/abc-map/server:${ABC_SERVER_TAG}
+    container_name: abc-server
+    restart: on-failure
+    ports:
+      - '10082:10082'
+    networks:
+      - abc-map
+    environment:
+      ABC_CONFIGURATION: /srv/config/config.js
+    volumes:
+      - './config.js:/srv/config/config.js:ro'
+      - './datastore:/srv/datastore:rw'
+
+  abc-mongodb:
+    image: 'mongo:4.2-bionic'
+    container_name: abc-mongodb
+    restart: on-failure
+    ports:
+      - '27017:27017'
+    networks:
+      - abc-map
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASSWORD}
+    volumes:
+      - './mongodb-data:/data/db'
+
+  abc-mongo-express:
+    image: 'mongo-express:0.54'
+    container_name: abc-mongo-express
+    restart: on-failure
+    ports:
+      - '8081:8081'
+    networks:
+      - abc-map
+    environment:
+      ME_CONFIG_MONGODB_SERVER: abc-mongodb
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGODB_USER}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGODB_PASSWORD}
+      ME_CONFIG_MONGODB_PORT: 27017
+
+  abc-smtp:
+    # See https://github.com/namshi/docker-smtp/blob/master/docker-compose.yml for more parameters
+    image: namshi/smtp
+    container_name: abc-smtp
+    restart: always
+    networks:
+      - abc-map
+
+networks:
+  abc-map:

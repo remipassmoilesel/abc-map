@@ -29,6 +29,5 @@ module.exports = {
   registry: 'my-registry.gitlab.com',
   tag: 'my-tag',
   namespace: 'my-kubernetes-namespace',
-  valuesFile: 'my-values-file',
-  healthCheckUrl: 'https://abc-map.my-domain.fr/api/health/'
+  valuesFile: 'my-values-file'
 }

@@ -1,0 +1,3 @@
+version: 0.0.1
+xyz:
+  url: https://cartodb-basemaps-b.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png

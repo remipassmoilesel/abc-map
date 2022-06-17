@@ -37,10 +37,10 @@ function AskFeedbackBubble(props: Props) {
         <p>{t('Everything_is_fine')}</p>
         <p>{t('Give_your_opinion')}</p>
         <div className={'d-flex justify-content-end'}>
-          <button onClick={onConfirm} className={Cls.btnOk}>
+          <button onClick={onConfirm} className={Cls.btn}>
             {t('Ok')}
           </button>
-          <button onClick={onCancel} className={Cls.btnNo}>
+          <button onClick={onCancel} className={Cls.btn}>
             {t('No_thanks')}
           </button>
         </div>

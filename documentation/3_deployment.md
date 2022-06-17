@@ -76,4 +76,6 @@ Then you can deploy your instance by calling:
 
 ## Deployment with Docker Compose
 
-Work in progress.
+You can deploy Abc-Map with Docker-Compose.
+
+See [infrastructure/docker-compose](../packages/infrastructure/docker-compose) folder.

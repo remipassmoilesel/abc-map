@@ -149,7 +149,7 @@ export class HttpServer {
 
     // Frontend service
     this.app.get('/*', (req: FastifyRequest, reply: FastifyReply) => {
-      void reply.view('index', indexParameters(getLang(req), this.config.externalUrl));
+      void reply.view('index', indexParameters(this.config, getLang(req)));
     });
     this.app.head('/', (req: FastifyRequest, reply: FastifyReply) => {
       void reply.status(200).send();
