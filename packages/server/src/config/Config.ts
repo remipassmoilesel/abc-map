@@ -39,6 +39,7 @@ export interface ConfigInput {
   smtp: SmtpConfig;
   datastore: DatastoreConfig;
   legalMentions: string;
+  frontend?: FrontendConfig;
 }
 
 /**
@@ -110,4 +111,8 @@ export interface SmtpConfig {
 
 export interface DatastoreConfig {
   path: string;
+}
+
+export interface FrontendConfig {
+  appendToBody?: string;
 }

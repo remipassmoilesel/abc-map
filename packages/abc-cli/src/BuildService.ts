@@ -250,11 +250,6 @@ export class BuildService {
                         --wait`);
 
     logger.info(`Waiting for services readiness ...`);
-    const options = {
-      resources: [config.healthCheckUrl],
-      timeout: 30_000,
-    };
-    await waitOn(options);
 
     const tookMin = Math.round((Date.now() - start) / 1000 / 60);
     logger.info(`Ready ! Deployment took ${tookMin} minutes.`);
@@ -308,10 +303,6 @@ export class BuildService {
 
     if (!config.valuesFile) {
       throw new Error(`Values file is mandatory in configuration ${path}`);
-    }
-
-    if (!config.healthCheckUrl) {
-      throw new Error(`Health check URL is mandatory in configuration ${path}`);
     }
 
     return config;

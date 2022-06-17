@@ -2,10 +2,16 @@
 
 For the moment we use git hashes as version, since no one complained about it 👍
 
-## 11/06/2022 - Map view rotations (git: master)
+## 11/06/2022 - Docker compose deployment (git: master)
+
+- Add ability to deploy Abc-Map with Docker Compose
+- UI style fixes
+- Added a parameter to add code at the bottom of the index
+
+## 11/06/2022 - Map view rotations (git: 5f6c932a)
 
 - Add ability to rotate main map, layouts and shared views
-- Creation of a "North direction" component 
+- Creation of a "North direction" component
 - Add rotation dialog on main map
 - React Bootstrap minor upgrade
 

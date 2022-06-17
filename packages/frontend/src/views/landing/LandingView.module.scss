@@ -26,6 +26,8 @@
 
   height: 100%;
 
+  font-size: 1.2rem;
+
   button {
     height: 3rem;
     width: 11rem;
@@ -47,9 +49,21 @@
   }
 }
 
+.title {
+  font-size: 4rem;
+  font-weight: 900;
+  background: #3f3d56;
+  background: linear-gradient(to right, #0094e3 5%, #3f3d56 72%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  margin-bottom: 1rem;
+}
+
 .intro {
-  font-size: 1.5rem;
-  margin: 2rem 0 4rem 0;
+  font-size: 2rem;
+  margin: 0.5rem 0 4rem 0;
+  line-height: 1;
 }
 
 .authenticationButtons {
@@ -61,8 +75,8 @@
 }
 
 .illustration {
-  width: 40vw;
-  margin-bottom: 2rem;
+  cursor: pointer;
+  width: 45vw;
 
   @include media-breakpoint-down(xl) {
     display: none;

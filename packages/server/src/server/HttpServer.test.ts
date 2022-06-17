@@ -35,6 +35,9 @@ describe('HttpServer', () => {
     config.server.globalRateLimit.max = 2;
     config.server.globalRateLimit.timeWindow = '1min';
 
+    const bottomScript = '<script>console.log("Bottom script")</script>';
+    config.frontend = { appendToBody: bottomScript };
+
     services = await servicesFactory(config);
   });
 
@@ -69,6 +72,13 @@ describe('HttpServer', () => {
 
     assert.equal(res.statusCode, 200);
     assert.match(res.body, /Abc-Map - Cartographie libre et gratuite en ligne/);
+  });
+
+  it('should template "appendToBody" variable', async () => {
+    const res = await server.getApp().inject({ method: 'GET', path: '/' });
+
+    assert.equal(res.statusCode, 200);
+    assert.include(res.body, '<script>console.log("Bottom script")</script>');
   });
 
   it('should reply 200 on head request', async () => {

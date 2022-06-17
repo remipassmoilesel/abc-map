@@ -138,5 +138,15 @@ export const ConfigInputSchema: JSONSchemaType<ConfigInput> = {
     legalMentions: {
       type: 'string',
     },
+    frontend: {
+      type: 'object',
+      nullable: true,
+      properties: {
+        appendToBody: {
+          type: 'string',
+          nullable: true,
+        },
+      },
+    },
   },
 };

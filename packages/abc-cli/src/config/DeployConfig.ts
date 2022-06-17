@@ -25,5 +25,4 @@ export interface DeployConfig {
   tag: string;
   namespace: string;
   valuesFile: string;
-  healthCheckUrl: string;
 }

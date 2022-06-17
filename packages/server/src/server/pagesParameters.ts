@@ -17,6 +17,7 @@
  */
 
 import { Language } from '@abc-map/shared';
+import { Config } from '../config/Config';
 
 //
 //  /!\ As values are templated in arguments, use quotes with caution
@@ -29,9 +30,10 @@ interface IndexParameters {
   keywords: string;
   noScript: string;
   externalUrl: string;
+  appendToBody: string | undefined;
 }
 
-export function indexParameters(lang: Language, externalUrl: string): IndexParameters {
+export function indexParameters(config: Config, lang: Language): IndexParameters {
   switch (lang) {
     case Language.French:
       return {
@@ -40,7 +42,8 @@ export function indexParameters(lang: Language, externalUrl: string): IndexParam
         description: 'Abc-Map, nouvelle version 🚀 Créez des cartes géographiques simplement: importez, dessinez, visualisez des données, et bien plus !',
         keywords: 'carte, cartographie, géographie, système information géographique, statistique, analyse spatiale, logiciel en ligne',
         noScript: 'Vous devez activer Javascript pour utiliser cette application',
-        externalUrl,
+        externalUrl: config.externalUrl,
+        appendToBody: config.frontend?.appendToBody,
       };
     case Language.English:
       return {
@@ -49,7 +52,8 @@ export function indexParameters(lang: Language, externalUrl: string): IndexParam
         description: 'Abc-Map, new version 🚀 Easily create geographic maps: import, draw, visualize data, and more!',
         keywords: 'map, cartography, geography, geographic information system, statistics, spatial analysis, online software',
         noScript: 'You must enable JavaScript to use this application',
-        externalUrl,
+        externalUrl: config.externalUrl,
+        appendToBody: config.frontend?.appendToBody,
       };
   }
 }
