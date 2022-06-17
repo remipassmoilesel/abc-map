@@ -1,6 +1,6 @@
 # Docker compose deployment
 
-This deployment is not actively used (we use Helm Chart for official instance). 
+This deployment is not actively used (we use Helm Chart for official instance).
 
 Please open an issue in case of problem.
 
@@ -15,3 +15,5 @@ You need to install [Docker and Docker Compose](https://docs.docker.com/get-star
   $ docker-compose up
 
 ```
+
+Visit then [http://localhost:10082](http://localhost:10082).
