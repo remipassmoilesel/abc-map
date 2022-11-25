@@ -74,7 +74,7 @@ export function App() {
 
   return (
     <>
-      {/* Edition: with top bar, most of views are enabled */}
+      {/* Edition: with top bar, most of the views are enabled */}
       {fullscreenView && (
         <>
           <TopBar />
