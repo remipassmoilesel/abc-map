@@ -148,15 +148,20 @@ export class HttpServer {
     this.app.get('/sitemap.xml', this.generateSitemap);
 
     // Frontend service
+    // We MUST overwrite /index.html route, otherwise it will be served without templating
     this.app.get('/*', (req: FastifyRequest, reply: FastifyReply) => {
       void reply.view('index', indexParameters(this.config, getLang(req)));
     });
+    this.app.get('/index.html', (req: FastifyRequest, reply: FastifyReply) => {
+      void reply.view('index', indexParameters(this.config, getLang(req)));
+    });
+
     this.app.head('/', (req: FastifyRequest, reply: FastifyReply) => {
       void reply.status(200).send();
     });
 
     void this.app.register(fastifyStatic, {
-      root: this.config.frontendPath,
+      root: path.join(this.config.frontendPath, '/assets'),
       wildcard: false,
       index: false,
       etag: true,

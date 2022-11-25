@@ -14,5 +14,8 @@ const targetDir = path.resolve(`${__dirname}/../../server/public`);
 console.info(`Copying frontend distribution to ${targetDir}`);
 
 execSync(`rm -rf ${targetDir}`);
-execSync(`cp -R ${sourceDir} ${targetDir}`);
+execSync(`mkdir -p ${targetDir}/assets`);
+execSync(`cp -R ${sourceDir}/* ${targetDir}/assets`);
+execSync(`mv ${targetDir}/assets/index.html ${targetDir}/index.html`);
+execSync(`mv ${targetDir}/assets/error429.html ${targetDir}/error429.html`);
 

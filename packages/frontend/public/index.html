@@ -25,149 +25,147 @@
 -->
 
 <html lang="{{{lang}}}">
-<head>
-  <meta charset="utf-8"/>
+  <head>
+    <meta charset="utf-8" />
 
-  <title>{{{title}}}</title>
+    <title>{{{title}}}</title>
 
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="{{{description}}}"/>
-  <meta name="keywords" content="{{{keywords}}}"/>
-  <meta name="theme-color" content="#0077b6"/>
-  <meta property="og:title" content="{{{title}}}"/>
-  <meta property="og:description" content="{{{description}}}"/>
-  <meta property="og:image" content="{{externalUrl}}/og-graph-image.png"/>
-  <meta property="og:image:width" content="1200"/>
-  <meta property="og:image:height" content="627"/>
-  <meta property="og:type" content="website"/>
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="{{{description}}}" />
+    <meta name="keywords" content="{{{keywords}}}" />
+    <meta name="theme-color" content="#0077b6" />
+    <meta property="og:title" content="{{{title}}}" />
+    <meta property="og:description" content="{{{description}}}" />
+    <meta property="og:image" content="{{externalUrl}}/og-graph-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="627" />
+    <meta property="og:type" content="website" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
 
-  <link rel="icon" href="%PUBLIC_URL%/favicon.ico"/>
-  <link rel="alternate" hreflang="fr" href="{{{externalUrl}}}/fr/"/>
-  <link rel="alternate" hreflang="en" href="{{{externalUrl}}}/en/"/>
-  <link rel="alternate" hreflang="x-default" href="{{{externalUrl}}}"/>
-  <link rel='apple-touch-icon' href='%PUBLIC_URL%/logo192.png'/>
-  <link rel='manifest' href='%PUBLIC_URL%/manifest.json'/>
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <link rel="alternate" hreflang="fr" href="{{{externalUrl}}}/fr/" />
+    <link rel="alternate" hreflang="en" href="{{{externalUrl}}}/en/" />
+    <link rel="alternate" hreflang="x-default" href="{{{externalUrl}}}" />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
 
-  <style>
-    html, body {
-      overflow: hidden;
-      margin: 0;
-      padding: 0;
-    }
-
-    #root {
-      width: 100vw;
-      min-width: 100vw;
-      max-width: 100vw;
-
-      height: 100vh;
-      max-height: 100vh;
-      min-height: 100vh;
-
-      overflow: hidden;
-      margin: 0;
-      padding: 0;
-
-      display: flex;
-      flex-direction: column;
-      align-items: stretch;
-      justify-content: stretch;
-    }
-
-    .loading-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-
-      height: 100vh;
-    }
-
-    .lds-ellipsis {
-      display: inline-block;
-      position: relative;
-      width: 7.3vmin;
-      height: 7.3vmin;
-    }
-
-    .lds-ellipsis div {
-      position: absolute;
-      top: 3vmin;
-      width: 1.2vmin;
-      height: 1.2vmin;
-      border-radius: 50%;
-      background: rgba(0, 119, 182, 0.48);
-      animation-timing-function: cubic-bezier(0, 1, 1, 0);
-    }
-
-    .lds-ellipsis div:nth-child(1) {
-      left: 0.72vmin;
-      animation: lds-ellipsis1 0.4s infinite;
-    }
-
-    .lds-ellipsis div:nth-child(2) {
-      left: 0.72vmin;
-      animation: lds-ellipsis2 0.4s infinite;
-    }
-
-    .lds-ellipsis div:nth-child(3) {
-      left: 3vmin;
-      animation: lds-ellipsis2 0.4s infinite;
-    }
-
-    .lds-ellipsis div:nth-child(4) {
-      left: 6vmin;
-      animation: lds-ellipsis3 0.4s infinite;
-    }
-
-    @keyframes lds-ellipsis1 {
-      0% {
-        transform: scale(0);
+    <style>
+      html,
+      body {
+        overflow: hidden;
+        margin: 0;
+        padding: 0;
       }
-      100% {
-        transform: scale(1);
-      }
-    }
 
-    @keyframes lds-ellipsis3 {
-      0% {
-        transform: scale(1);
-      }
-      100% {
-        transform: scale(0);
-      }
-    }
+      #root {
+        width: 100vw;
+        min-width: 100vw;
+        max-width: 100vw;
 
-    @keyframes lds-ellipsis2 {
-      0% {
-        transform: translate(0, 0);
+        height: 100vh;
+        max-height: 100vh;
+        min-height: 100vh;
+
+        overflow: hidden;
+        margin: 0;
+        padding: 0;
+
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        justify-content: stretch;
       }
-      100% {
-        transform: translate(2.18vmin, 0);
+
+      .loading-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        height: 100vh;
       }
-    }
 
-  </style>
+      .lds-ellipsis {
+        display: inline-block;
+        position: relative;
+        width: 7.3vmin;
+        height: 7.3vmin;
+      }
 
-</head>
-<body>
-<noscript>{{{noScript}}}</noscript>
+      .lds-ellipsis div {
+        position: absolute;
+        top: 3vmin;
+        width: 1.2vmin;
+        height: 1.2vmin;
+        border-radius: 50%;
+        background: rgba(0, 119, 182, 0.48);
+        animation-timing-function: cubic-bezier(0, 1, 1, 0);
+      }
 
-<div id='root'>
-  <div class="loading-container">
-    <div class="lds-ellipsis">
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
+      .lds-ellipsis div:nth-child(1) {
+        left: 0.72vmin;
+        animation: lds-ellipsis1 0.4s infinite;
+      }
+
+      .lds-ellipsis div:nth-child(2) {
+        left: 0.72vmin;
+        animation: lds-ellipsis2 0.4s infinite;
+      }
+
+      .lds-ellipsis div:nth-child(3) {
+        left: 3vmin;
+        animation: lds-ellipsis2 0.4s infinite;
+      }
+
+      .lds-ellipsis div:nth-child(4) {
+        left: 6vmin;
+        animation: lds-ellipsis3 0.4s infinite;
+      }
+
+      @keyframes lds-ellipsis1 {
+        0% {
+          transform: scale(0);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      @keyframes lds-ellipsis3 {
+        0% {
+          transform: scale(1);
+        }
+        100% {
+          transform: scale(0);
+        }
+      }
+
+      @keyframes lds-ellipsis2 {
+        0% {
+          transform: translate(0, 0);
+        }
+        100% {
+          transform: translate(2.18vmin, 0);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <noscript>{{{noScript}}}</noscript>
+
+    <div id="root">
+      <div class="loading-container">
+        <div class="lds-ellipsis">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
 
-<!-- Server may template a value here -->
-{{{appendToBody}}}
-
-</body>
+    <!-- Server may template a value here -->
+    <div style="display: none">{{{appendToBody}}}</div>
+  </body>
 </html>
