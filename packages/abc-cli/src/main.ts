@@ -19,11 +19,9 @@
 import 'source-map-support/register';
 import { Logger } from './tools/Logger';
 import { Config } from './config/Config';
-import { Shell } from './tools/Shell';
 import { Parser } from './parser/Parser';
 import { Dependencies, BuildService } from './BuildService';
 import { Banners } from './tools/Banners';
-import { Registry } from './tools/Registry';
 import { CommandName } from './parser/Command';
 import { Help } from './Help';
 
@@ -37,10 +35,8 @@ main(process.argv).catch((err) => {
 async function main(args: string[]) {
   const banners = new Banners();
   const config = new Config();
-  const shell = new Shell(config);
-  const registry = new Registry(config, shell);
   const parser = new Parser();
-  const service = new BuildService(config, registry, shell);
+  const service = BuildService.create(config);
 
   // We use node_modules bin from command line
   process.env.PATH = `${config.getCliRoot()}/node_modules/.bin/:${process.env.PATH}`;

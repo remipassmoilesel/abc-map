@@ -37,6 +37,10 @@ export class RegistryProcess {
 }
 
 export class Registry {
+  public static create(config: Config) {
+    return new Registry(config, new Shell(config));
+  }
+
   constructor(private config: Config, private shell: Shell) {}
 
   public start(logOutput = false): Promise<RegistryProcess> {

@@ -26,6 +26,7 @@ import * as path from 'path';
 import { DockerConfig } from './config/DockerConfig';
 import { DeployConfig } from './config/DeployConfig';
 import { ChildProcess } from 'child_process';
+import { Git } from './tools/Git';
 
 const logger = Logger.get('Service.ts', 'info');
 
@@ -35,7 +36,12 @@ export enum Dependencies {
 }
 
 export class BuildService {
-  constructor(private config: Config, private registry: Registry, private shell: Shell) {}
+  public static create(config: Config) {
+    const shell = new Shell(config);
+    return new BuildService(config, Registry.create(config), shell, Git.create(config));
+  }
+
+  constructor(private config: Config, private registry: Registry, private shell: Shell, private git: Git) {}
 
   public async continuousIntegration(light: boolean) {
     const start = new Date().getTime();
@@ -225,6 +231,10 @@ export class BuildService {
   public async deploy(configPath: string, buildImages: boolean): Promise<void> {
     const start = Date.now();
     const config = this.loadDeployConfig(configPath);
+
+    if (this.git.isRepoDirty()) {
+      throw new Error('Repository is dirty, deployment canceled.');
+    }
 
     // Build images
     if (buildImages) {
