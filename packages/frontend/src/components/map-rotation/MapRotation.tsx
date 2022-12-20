@@ -84,7 +84,7 @@ export function MapRotation(props: Props) {
       <button onClick={handleCompassClick} className={clsx(Cls.button, className)}>
         <WithTooltip title={t('North_direction')} placement={'top'}>
           <div>
-            <NorthArrow size={'4em'} rotation={rotationDegrees} className={Cls.arrow} />
+            <NorthArrow size={'3.5rem'} rotation={rotationDegrees} className={Cls.arrow} />
           </div>
         </WithTooltip>
       </button>

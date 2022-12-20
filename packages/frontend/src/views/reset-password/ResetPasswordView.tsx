@@ -16,6 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
+import Cls from './ResetPasswordView.module.scss';
 import React, { ChangeEvent, Component, ReactNode } from 'react';
 import { Logger, PasswordLostParams } from '@abc-map/shared';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
@@ -24,9 +25,7 @@ import FormValidationLabel from '../../components/form-validation-label/FormVali
 import { pageSetup } from '../../core/utils/page-setup';
 import { PasswordStrength, ValidationHelper } from '../../core/utils/ValidationHelper';
 import { FormState } from '../../components/form-validation-label/FormState';
-import { prefixedTranslation } from '../../i18n/i18n';
-import { withTranslation } from 'react-i18next';
-import Cls from './ResetPasswordView.module.scss';
+import { WithTranslation, withTranslation } from 'react-i18next';
 import { Routes } from '../../routes';
 
 const logger = Logger.get('InitPasswordView.tsx', 'info');
@@ -37,25 +36,19 @@ interface State {
   formState: FormState;
 }
 
-type Props = RouteComponentProps<PasswordLostParams> & ServiceProps;
-
-const t = prefixedTranslation('ResetPasswordView:');
+type Props = RouteComponentProps<PasswordLostParams> & ServiceProps & WithTranslation;
 
 class ResetPasswordView extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = {
-      password: '',
-      confirmation: '',
-      formState: FormState.PasswordTooWeak,
-    };
+    this.state = { password: '', confirmation: '', formState: FormState.PasswordTooWeak };
   }
 
   public render(): ReactNode {
-    const password = this.state.password;
-    const confirmation = this.state.confirmation;
-    const formState = this.state.formState;
+    const { password, confirmation, formState } = this.state;
     const submitDisabled = this.state.formState !== FormState.Ok;
+
+    const { t } = this.props;
 
     return (
       <div className={Cls.resetPassword}>
@@ -96,6 +89,7 @@ class ResetPasswordView extends Component<Props, State> {
   }
 
   public handleSubmit = () => {
+    const { t } = this.props;
     const { authentication, toasts, modals } = this.props.services;
 
     const token = this.props.match.params.token;
@@ -154,4 +148,4 @@ class ResetPasswordView extends Component<Props, State> {
   }
 }
 
-export default withTranslation()(withRouter(withServices(ResetPasswordView)));
+export default withTranslation('ResetPasswordView')(withRouter(withServices(ResetPasswordView)));

@@ -37,7 +37,7 @@ class FundingView extends Component<ServiceProps, {}> {
             <h3 className={'my-4'}>{t('Why')} ?</h3>
             <p>{t('AbcMap_is_FOSS')}</p>
             <p>{t('No_ads_no_race_for_attention')} 💪</p>
-            <p>{t('Fund_a_free_internet_territory')} 🙏🏻</p>
+            <p>{t('Fund_a_free_internet_territory')}</p>
           </div>
 
           <div>

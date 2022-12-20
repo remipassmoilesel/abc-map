@@ -18,12 +18,12 @@
 
 import { TestHelper } from '../helpers/TestHelper';
 import { LayerControls } from '../helpers/LayerControls';
-import { TopBar } from '../helpers/TopBar';
 import { MainMap } from '../helpers/MainMap';
 import { LayoutPreviewMap } from '../helpers/LayoutPreviewMap';
 import { Download } from '../helpers/Download';
 import { LongOperation } from '../helpers/LongOperation';
 import { Routes } from '../helpers/Routes';
+import { Modules } from '../helpers/Modules';
 
 describe('Projection', () => {
   beforeEach(() => {
@@ -32,7 +32,7 @@ describe('Projection', () => {
 
   it('can use projection and export project', function () {
     cy.visit(Routes.map().format())
-      .then(() => MainMap.fixedView())
+      .then(() => MainMap.fixedView1())
       .get('[data-cy=project-menu]')
       .click()
       // Delete geometry layer
@@ -48,14 +48,16 @@ describe('Projection', () => {
       .wait(1000)
       .then(() => MainMap.getReference())
       .should((map) => {
-        expect(map.getViewExtent()).deep.equal([-6099007.132605841, 3225866.126507209, 7041350.893871974, 10015051.10685408]);
+        const extent = map.getViewExtent();
+        expect(extent).deep.equal([-6099007.132605841, 3199319.9486759407, 7041350.893871974, 10041597.284685347], `Actual: "${JSON.stringify(extent)}"`);
       })
-      .then(() => TopBar.export())
+      .then(() => Modules.open('static-export'))
       .get('[data-cy=add-layout]')
       .click()
       .then(() => LayoutPreviewMap.getReference())
       .should((map) => {
-        expect(map.getViewExtent()).deep.equal([-3583756.783093121, 3753471.4109037006, 4526100.544359253, 9487445.82245759]);
+        const extent = map.getViewExtent();
+        expect(extent).deep.equal([-3583756.783093121, 3753471.4109037006, 4526100.544359253, 9487445.82245759], `Actual: "${JSON.stringify(extent)}"`);
       })
       .get('[data-cy=pdf-export]')
       .click()

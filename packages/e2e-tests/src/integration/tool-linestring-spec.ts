@@ -32,7 +32,7 @@ describe('Tool LineString', function () {
 
   it('user can draw', function () {
     cy.visit(Routes.map().format())
-      .then(() => MainMap.fixedView())
+      .then(() => MainMap.fixedView1())
       .then(() => ToolSelector.enable(MapTool.LineString))
       // First
       .then(() => Draw.click(100, 100))
@@ -47,8 +47,8 @@ describe('Tool LineString', function () {
       .then(() => MainMap.getReference())
       .should((map) => {
         const features = map.getActiveLayerFeatures();
+        const extents = features.map((f) => f.getGeometry()?.getExtent());
 
-        expect(features).length(2);
         expect(features[0].getGeometry()?.getType()).equal('LineString');
         expect(features[0].get(StyleProperties.StrokeWidth)).equal(DefaultDrawingStyle.stroke.width);
         expect(features[0].get(StyleProperties.StrokeColor)).equal(DefaultDrawingStyle.stroke.color);
@@ -57,17 +57,20 @@ describe('Tool LineString', function () {
         expect(features[1].get(StyleProperties.StrokeWidth)).equal(DefaultDrawingStyle.stroke.width);
         expect(features[1].get(StyleProperties.StrokeColor)).equal(DefaultDrawingStyle.stroke.color);
 
-        expect(features.map((f) => f.getGeometry()?.getExtent())).deep.equals([
-          [-3564850.149620659, 3540875.778108865, -3075653.168595531, 4030072.759133993],
-          [-1608062.225520147, 1584087.8540083533, -1118865.2444950193, 2073284.835033481],
-        ]);
+        expect(extents).deep.equals(
+          [
+            [-3564850.149620659, 3583374.765835424, -3075653.168595531, 4072571.746860552],
+            [-1608062.225520147, 1626586.8417349122, -1118865.2444950193, 2115783.82276004],
+          ],
+          `Actual: "${JSON.stringify(extents)}"`
+        );
       });
   });
 
   it('user can modify', function () {
     cy.visit(Routes.map().format())
       // Create line
-      .then(() => MainMap.fixedView())
+      .then(() => MainMap.fixedView1())
       .then(() => ToolSelector.enable(MapTool.LineString))
       .then(() => Draw.click(100, 100))
       .then(() => Draw.click(150, 150))
@@ -81,9 +84,10 @@ describe('Tool LineString', function () {
       .then(() => MainMap.getReference())
       .should((map) => {
         const features = map.getActiveLayerFeatures();
-        expect(features).length(1);
+        const extents = features.map((f) => f.getGeometry()?.getExtent());
+
         expect(features[0].getGeometry()?.getType()).equal('LineString');
-        expect(features[0].getGeometry()?.getExtent()).deep.equals([-3564850.149620659, -861897.051117287, 1327119.660630621, 4030072.759133993]);
+        expect(extents).deep.equals([[-3564850.149620659, -819398.0633907281, 1327119.660630621, 4072571.746860552]], `Actual: "${JSON.stringify(extents)}"`);
       });
   });
 });

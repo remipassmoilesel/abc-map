@@ -34,4 +34,8 @@ all the information about your project in a format similar to GeoJSON.
 
 ### Identifiers
 
-If your project contains layers that use identifiers (WMS, XYZ, ...), for each export and each import you will have to enter a password.
+If your project contains access identifiers to third-party services (per example XYZ tile layer identifiers), then your project will be protected by a password. This password will be used to encrypt these credentials.
+
+You will therefore have to choose a password and enter it each time you open this project. If lost, these passwords cannot be recovered.
+
+Be careful, if you share your project publicly then the identifiers are public too.

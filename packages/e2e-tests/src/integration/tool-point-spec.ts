@@ -32,29 +32,32 @@ describe('Tool Point', function () {
 
   it('user can move map', function () {
     cy.visit(Routes.map().format())
-      .then(() => MainMap.fixedView())
+      .then(() => MainMap.fixedView1())
       .then(() => ToolSelector.enable(MapTool.Point))
       .then(() => ToolSelector.toolMode(ModeName.MoveMap))
       // Move map
-      .then(() => Draw.drag(200, 200, 400, 200))
+      .then(() => Draw.drag(200, 200, 600, 200))
       .then(() => MainMap.getReference())
       .should((map) => {
-        const view = map.getViewExtent();
-        expect(view).deep.equal([-7380586.601616657, -4116585.715500091, 11991613.846978411, 5892384.516274028]);
+        const viewExtent = map.getViewExtent();
+        expect(viewExtent).deep.equal(
+          [-9337374.525717169, -4155721.4739821013, 10034825.9228779, 5931520.274756039],
+          `Actual: "${JSON.stringify(viewExtent)}"`
+        );
       });
   });
 
   it('user can draw', function () {
     cy.visit(Routes.map().format())
-      .then(() => MainMap.fixedView())
+      .then(() => MainMap.fixedView1())
       .then(() => ToolSelector.enable(MapTool.Point))
       .then(() => Draw.click(300, 300))
       .then(() => Draw.click(350, 350))
       .then(() => MainMap.getReference())
       .should((map) => {
         const features = map.getActiveLayerFeatures();
+        const extents = features.map((f) => f.getGeometry()?.getExtent());
 
-        expect(features).length(2);
         expect(features[0].getGeometry()?.getType()).equal('Point');
         expect(features[0].get(StyleProperties.PointSize)).equal(DefaultDrawingStyle.point.size);
         expect(features[0].get(StyleProperties.PointColor)).equal(DefaultDrawingStyle.point.color);
@@ -65,16 +68,19 @@ describe('Tool Point', function () {
         expect(features[1].get(StyleProperties.PointColor)).equal(DefaultDrawingStyle.point.color);
         expect(features[1].get(StyleProperties.PointIcon)).equal(DefaultDrawingStyle.point.icon);
 
-        expect(features.map((f) => f.getGeometry()?.getExtent())).deep.equals([
-          [-1608062.225520147, 2073284.835033481, -1608062.225520147, 2073284.835033481],
-          [-1118865.2444950193, 1584087.8540083533, -1118865.2444950193, 1584087.8540083533],
-        ]);
+        expect(extents).deep.equals(
+          [
+            [-1608062.225520147, 2115783.82276004, -1608062.225520147, 2115783.82276004],
+            [-1118865.2444950193, 1626586.8417349122, -1118865.2444950193, 1626586.8417349122],
+          ],
+          `Actual: "${JSON.stringify(extents)}"`
+        );
       });
   });
 
   it('user can move points', function () {
     cy.visit(Routes.map().format())
-      .then(() => MainMap.fixedView())
+      .then(() => MainMap.fixedView1())
       .then(() => ToolSelector.enable(MapTool.Point))
       // Create point
       .then(() => Draw.click(300, 300))
@@ -86,10 +92,10 @@ describe('Tool Point', function () {
       .then(() => MainMap.getReference())
       .should((map) => {
         const features = map.getActiveLayerFeatures();
+        const extents = features.map((f) => f.getGeometry()?.getExtent());
 
-        expect(features).length(1);
         expect(features[0].getGeometry()?.getType()).equal('Point');
-        expect(features[0].getGeometry()?.getExtent()).deep.equals([1327119.660630621, -861897.051117287, 1327119.660630621, -861897.051117287]);
+        expect(extents).deep.equals([[1327119.660630621, -819398.0633907281, 1327119.660630621, -819398.0633907281]], `Actual: "${JSON.stringify(extents)}"`);
       });
   });
 });

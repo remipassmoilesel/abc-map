@@ -64,24 +64,6 @@ const Sitemap: Url[] = [
     lastmod: '2022-01-04',
     priority: '0.7',
   },
-  {
-    routeEn: routesEn.dataStore(),
-    changefreq: 'monthly',
-    lastmod: '2022-01-04',
-    priority: '0.6',
-  },
-  {
-    routeEn: routesEn.shareSettings(),
-    changefreq: 'monthly',
-    lastmod: '2022-01-04',
-    priority: '0.5',
-  },
-  {
-    routeEn: routesEn.export(),
-    changefreq: 'monthly',
-    lastmod: '2022-01-04',
-    priority: '0.5',
-  },
 ];
 
 export function generateSitemap(baseUrl: string, languages: Language[]): string {

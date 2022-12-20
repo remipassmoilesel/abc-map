@@ -19,7 +19,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { ToolRegistry } from '../../../core/tools/ToolRegistry';
 import { Logger, MapTool } from '@abc-map/shared';
-import SelectionPanel from './selection/SelectionToolPanel';
+import { SelectionToolPanel } from './selection/SelectionToolPanel';
 import LineStringPanel from './line-string/LineStringToolPanel';
 import PointPanel from './point/PointToolPanel';
 import PolygonPanel from './polygon/PolygonToolPanel';
@@ -88,7 +88,7 @@ function ToolSelector(props: Props) {
       case MapTool.Polygon:
         return <PolygonPanel />;
       case MapTool.Selection:
-        return <SelectionPanel />;
+        return <SelectionToolPanel />;
       case MapTool.Text:
         return <TextToolPanel />;
       case MapTool.Measures:

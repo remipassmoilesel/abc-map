@@ -16,9 +16,14 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import QRCode from 'qrcode';
-import { Logger } from '@abc-map/shared';
+import { BlobIO, Logger } from '@abc-map/shared';
+import { FileIO } from '../../core/utils/FileIO';
+import { useServices } from '../../core/useServices';
+import { useTranslation } from 'react-i18next';
+import { FaIcon } from '../icon/FaIcon';
+import { IconDefs } from '../icon/IconDefs';
 
 const logger = Logger.get('QrCode.tsx');
 
@@ -30,8 +35,13 @@ interface Props {
 
 function QrCode(props: Props) {
   const { text, width, height } = props;
+  const { t } = useTranslation('QrCode');
+  const { toasts } = useServices();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
+
+  const qrCodeRef = useRef<Blob>();
+  const [downloadDisabled, setDownloadDisabled] = useState(false);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -48,14 +58,39 @@ function QrCode(props: Props) {
       }
 
       image.src = canvas.toDataURL('image/jpg', 1);
+
+      BlobIO.blobUrlToBlob(image.src)
+        .then((res) => {
+          qrCodeRef.current = res;
+          setDownloadDisabled(false);
+        })
+        .catch((err) => {
+          logger.error('Blob error: ', err);
+          setDownloadDisabled(true);
+        });
     });
   }, [text]);
 
+  const handleDownloadQrCode = useCallback(() => {
+    if (qrCodeRef.current) {
+      FileIO.outputBlob(qrCodeRef.current, 'qrcode.jpg');
+    } else {
+      toasts.genericError();
+    }
+  }, [toasts]);
+
   return (
-    <div style={{ position: 'relative', width, height }}>
-      <canvas ref={canvasRef} style={{ position: 'absolute', width, height }} />
-      {/* We use an image in order to allow users to save qrcode with right click */}
-      <img ref={imageRef} style={{ position: 'absolute', width, height }} alt={text} />
+    <div className={'d-flex flex-column align-items-center'}>
+      <div style={{ position: 'relative', width, height }}>
+        <canvas ref={canvasRef} style={{ position: 'absolute', width, height }} />
+        {/* We use an image in order to allow users to save qrcode with right click */}
+        <img ref={imageRef} style={{ position: 'absolute', width, height }} alt={text} />
+      </div>
+
+      <button onClick={handleDownloadQrCode} disabled={downloadDisabled} className={'btn btn-sm btn-outline-secondary'}>
+        <FaIcon icon={IconDefs.faDownload} className={'mr-2'} />
+        {t('Download')}
+      </button>
     </div>
   );
 }

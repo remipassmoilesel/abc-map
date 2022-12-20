@@ -30,28 +30,12 @@ export class FrontendRoutes {
     return new Route<EmptyParams>('/:lang/map', this.lang);
   }
 
-  public dataStore() {
-    return new Route<EmptyParams>('/:lang/datastore', this.lang);
-  }
-
-  public export() {
-    return new Route<EmptyParams>('/:lang/export', this.lang);
-  }
-
-  public shareSettings() {
-    return new Route<EmptyParams>('/:lang/share/settings', this.lang);
-  }
-
   public sharedMap() {
     return new Route<SharedMapParams>('/:lang/shared-map/:projectId', this.lang);
   }
 
   public documentation() {
     return new Route<EmptyParams>('/:lang/documentation', this.lang);
-  }
-
-  public dataProcessing() {
-    return new Route<DataProcessingParams>('/:lang/data-processing/:moduleId?', this.lang);
   }
 
   public confirmAccount() {
@@ -78,22 +62,27 @@ export class FrontendRoutes {
     return new Route<EmptyParams>('/:lang/changelog', this.lang);
   }
 
+  public moduleIndex() {
+    return new Route<EmptyParams>('/:lang/modules', this.lang);
+  }
+
+  public module() {
+    return new Route<ModuleParams>('/:lang/modules/:moduleId', this.lang);
+  }
+
   public getAll(): Route<any>[] {
     return [
       this.landing(),
       this.map(),
-      this.dataStore(),
-      this.export(),
-      this.shareSettings(),
       this.sharedMap(),
       this.documentation(),
-      this.changelog(),
-      this.dataProcessing(),
       this.confirmAccount(),
       this.resetPassword(),
       this.userAccount(),
       this.legalMentions(),
       this.funding(),
+      this.changelog(),
+      this.moduleIndex(),
     ];
   }
 }
@@ -108,16 +97,8 @@ export interface ResetPasswordParams extends Params {
   token?: string;
 }
 
-export interface DataProcessingParams extends Params {
-  moduleId?: string;
-}
-
 export interface PasswordLostParams extends Params {
   token?: string;
-}
-
-export interface DataProcessingParams extends Params {
-  moduleId?: string;
 }
 
 export interface SharedMapParams extends Params {
@@ -126,4 +107,8 @@ export interface SharedMapParams extends Params {
 
 export interface LegendParams extends Params {
   id?: string;
+}
+
+export interface ModuleParams extends Params {
+  moduleId?: string;
 }

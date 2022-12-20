@@ -42,3 +42,9 @@ You must modify Image Magick configuration:
 ### Why numTestsKeptInMemory = 0 ?
 
 It helps to avoid memory errors with Cypress.
+
+### About dependencies
+
+All dependencies declared in `package.json` must be registered in `dependencies` section.
+
+In continuous integration, development dependencies are pruned before tests.

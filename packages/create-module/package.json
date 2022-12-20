@@ -1,21 +1,20 @@
 {
   "name": "@abc-map/create-module",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "license": "AGPL-3.0-or-later",
-  "main": "src/main.js",
+  "main": "build/create-module.js",
   "bin": {
-    "create-module": "build/main.js"
+    "create-module": "build/create-module.js"
   },
   "files": [
     "build",
     "README.md"
   ],
   "scripts": {
-    "build": "tsc && chmod +x build/main.js",
+    "build": "tsc && chmod +x build/create-module.js && ln -sf ../../build/create-module.js ./node_modules/.bin/create-module",
     "clean": "rm -rf build",
     "clean-build": "yarn run clean && yarn run build",
     "dep-check": "depcruise -c .dependency-cruiser.js src",
-    "dev": "node scripts/integration-test.js",
     "lint": "eslint './src/**/{*.tsx,*.ts}' --max-warnings=0 && sort-package-json --check",
     "lint-fix": "eslint './src/**/{*.tsx,*.ts}' --max-warnings=0 --fix && sort-package-json",
     "public-publish": "scripts/public-publish.sh",
@@ -41,6 +40,7 @@
     "@types/mocha": "^9.0.0",
     "@types/node": "^14.18.13",
     "@types/sinon": "^10.0.11",
+    "@types/uuid": "^9.0.0",
     "@typescript-eslint/eslint-plugin": "^5.8.0",
     "@typescript-eslint/parser": "^5.8.0",
     "chai": "^4.3.6",

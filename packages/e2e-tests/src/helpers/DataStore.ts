@@ -16,12 +16,12 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { TopBar } from './TopBar';
 import { Toasts } from './Toasts';
+import { Modules } from './Modules';
 
 export class DataStore {
   public static importByName(name: string): Cypress.Chainable<any> {
-    return TopBar.dataStore()
+    return Modules.open('data-store')
       .get('[data-cy=data-store-search]')
       .type(name)
       .type('{enter}')

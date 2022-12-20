@@ -30,7 +30,7 @@ interface Props {
   ratio?: number;
 }
 
-const baseFontSizeEm = 0.9;
+const baseFontSizeEm = 0.7;
 
 /**
  * This component displays attributions for static exports.

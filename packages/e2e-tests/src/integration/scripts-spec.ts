@@ -18,8 +18,8 @@
 
 import { TestHelper } from '../helpers/TestHelper';
 import { DataStore } from '../helpers/DataStore';
-import { TopBar } from '../helpers/TopBar';
 import { Routes } from '../helpers/Routes';
+import { Modules } from '../helpers/Modules';
 
 describe('Script module', function () {
   beforeEach(() => {
@@ -27,9 +27,7 @@ describe('Script module', function () {
   });
 
   it('User can execute sample script', () => {
-    cy.visit(Routes.dataProcessing().format())
-      .get('[data-cy=scripts]')
-      .click()
+    cy.visit(Routes.module().withParams({ moduleId: 'scripts' }))
       .get('[data-cy=execute]')
       .click()
       .get('[data-cy=message]')
@@ -46,11 +44,8 @@ const layer = mainMap.getLayers()[2];
 layer.getSource().getFeatures().forEach((f, i) => f.set('e2e', i));
 layer.getSource().getFeatures().forEach((f) => log(f.get('e2e')));
 `;
-    cy.visit(Routes.dataProcessing().format())
-      .then(() => DataStore.importByName('Countries of the world'))
-      .then(() => TopBar.dataProcessing())
-      .get('[data-cy=scripts]')
-      .click()
+    DataStore.importByName('Countries of the world')
+      .then(() => Modules.open('scripts'))
       .get('#code-editor')
       .clear()
       .type(script)

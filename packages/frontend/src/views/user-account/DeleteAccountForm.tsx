@@ -20,10 +20,9 @@ import React, { ChangeEvent, Component, ReactNode } from 'react';
 import FormValidationLabel from '../../components/form-validation-label/FormValidationLabel';
 import { PasswordStrength, ValidationHelper } from '../../core/utils/ValidationHelper';
 import { FormState } from '../../components/form-validation-label/FormState';
-import { prefixedTranslation } from '../../i18n/i18n';
-import { withTranslation } from 'react-i18next';
+import { WithTranslation, withTranslation } from 'react-i18next';
 
-interface Props {
+interface Props extends WithTranslation {
   onSubmit: (password: string) => void;
 }
 
@@ -32,8 +31,6 @@ interface State {
   confirmation: boolean;
   password: string;
 }
-
-const t = prefixedTranslation('UserAccountView:');
 
 class DeleteAccountForm extends Component<Props, State> {
   constructor(props: Props) {
@@ -46,9 +43,8 @@ class DeleteAccountForm extends Component<Props, State> {
   }
 
   public render(): ReactNode {
-    const formState = this.state.formState;
-    const confirmation = this.state.confirmation;
-    const password = this.state.password;
+    const { t } = this.props;
+    const { formState, confirmation, password } = this.state;
 
     return (
       <div className={'card card-body h-100'}>
@@ -114,4 +110,4 @@ class DeleteAccountForm extends Component<Props, State> {
   }
 }
 
-export default withTranslation()(DeleteAccountForm);
+export default withTranslation('UserAccountView')(DeleteAccountForm);

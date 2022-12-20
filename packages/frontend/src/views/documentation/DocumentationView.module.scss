@@ -39,16 +39,37 @@
   align-items: flex-start;
   justify-content: flex-start;
 
-  width: 60vw;
-
-  margin-left: 2vw;
-  padding-bottom: 80vmin;
+  width: 50vw;
+  margin-right: 10vw;
 
   padding-top: 5vmin;
+  padding-bottom: 80vmin;
+
+  @include media-breakpoint-down(xl) {
+    margin: 1rem;
+    width: 100%;
+  }
+}
+
+@mixin videoStyle() {
+  width: 35vw;
+  height: auto;
 
   @include media-breakpoint-down(xl) {
     width: 100%;
+    height: auto;
   }
+
+  border: solid 0.1rem $gray-400;
+  border-radius: $border-radius;
+  box-shadow: $box-shadow;
+}
+
+:global(.youTubeIntegration) {
+  @include videoStyle();
+
+  // Youtube iframes have a very low height, we set to 9/16 of video width
+  height: 19vw;
 }
 
 .toc {
@@ -141,14 +162,6 @@
   }
 
   video {
-    box-shadow: $box-shadow;
-    max-width: 50%;
-    border: solid 0.1rem $gray-400;
-    border-radius: $border-radius;
-    padding: 1rem;
-
-    @include media-breakpoint-down(xl) {
-      max-width: 100%;
-    }
+    @include videoStyle();
   }
 }

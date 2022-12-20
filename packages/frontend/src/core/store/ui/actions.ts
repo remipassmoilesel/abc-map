@@ -17,7 +17,6 @@
  */
 
 import { HistoryKey } from '../../history/HistoryKey';
-import { RemoteModuleRef } from '../../../data-processing/_common/registry/RemoteModuleRef';
 import { InformationKey } from './state';
 
 export enum ActionType {
@@ -27,10 +26,11 @@ export enum ActionType {
   SetSideMenuState = 'SetSideMenuState',
   AckInformation = 'AckInformation',
   SetExperimentalFeature = 'SetExperimentalFeature',
-  SetLoadedModules = 'SetLoadedModules',
-  SetRemoteModules = 'SetRemoteModules',
-  SetRemoteModuleUrls = 'SetRemoteModuleUrls',
   IncrementVisitCounter = 'IncrementVisitCounter',
+  SetRemoteModuleUrls = 'SetRemoteModuleUrls',
+  RegisterModuleUsage = 'RegisterModuleUsage',
+  MarkFavorite = 'MarkFavorite',
+  RestoreDefaultFavoriteModules = 'RestoreDefaultFavoriteModules',
 }
 
 export interface SetHistoryCapabilities {
@@ -66,9 +66,8 @@ export interface SetExperimentalFeature {
   state: boolean;
 }
 
-export interface SetLoadedModules {
-  type: ActionType.SetLoadedModules;
-  moduleIds: string[];
+export interface IncrementVisitCounter {
+  type: ActionType.IncrementVisitCounter;
 }
 
 export interface SetRemoteModuleUrls {
@@ -76,13 +75,19 @@ export interface SetRemoteModuleUrls {
   moduleUrls: string[];
 }
 
-export interface SetRemoteModules {
-  type: ActionType.SetRemoteModules;
-  modules: RemoteModuleRef[];
+export interface RegisterModuleUsage {
+  type: ActionType.RegisterModuleUsage;
+  moduleId: string;
 }
 
-export interface IncrementVisitCounter {
-  type: ActionType.IncrementVisitCounter;
+export interface MarkFavorite {
+  type: ActionType.MarkFavorite;
+  moduleId: string;
+  favorite: boolean;
+}
+
+export interface RestoreDefaultFavoriteModules {
+  type: ActionType.RestoreDefaultFavoriteModules;
 }
 
 export type UiAction =
@@ -91,11 +96,12 @@ export type UiAction =
   | SetDocumentationScrollPosition
   | SetSideMenuState
   | AckInformation
+  | IncrementVisitCounter
   | SetExperimentalFeature
-  | SetLoadedModules
   | SetRemoteModuleUrls
-  | SetRemoteModules
-  | IncrementVisitCounter;
+  | RegisterModuleUsage
+  | MarkFavorite
+  | RestoreDefaultFavoriteModules;
 
 export class UiActions {
   public static setHistoryCapabilities(key: HistoryKey, canUndo: boolean, canRedo: boolean): UiAction {
@@ -143,30 +149,37 @@ export class UiActions {
     };
   }
 
-  public static setLoadedModules(moduleIds: string[]): UiAction {
+  public static incrementVisitCounter(): UiAction {
     return {
-      type: ActionType.SetLoadedModules,
-      moduleIds,
-    };
-  }
-
-  public static setRemoteModules(modules: RemoteModuleRef[]): UiAction {
-    return {
-      type: ActionType.SetRemoteModules,
-      modules,
+      type: ActionType.IncrementVisitCounter,
     };
   }
 
   public static setRemoteModuleUrls(moduleUrls: string[]): UiAction {
     return {
       type: ActionType.SetRemoteModuleUrls,
-      moduleUrls: moduleUrls,
+      moduleUrls,
     };
   }
 
-  public static incrementVisitCounter(): UiAction {
+  public static registerModuleUsage(moduleId: string): UiAction {
     return {
-      type: ActionType.IncrementVisitCounter,
+      type: ActionType.RegisterModuleUsage,
+      moduleId,
+    };
+  }
+
+  public static markFavorite(moduleId: string, favorite: boolean): UiAction {
+    return {
+      type: ActionType.MarkFavorite,
+      moduleId,
+      favorite,
+    };
+  }
+
+  public static restoreDefaultFavoriteModules(): UiAction {
+    return {
+      type: ActionType.RestoreDefaultFavoriteModules,
     };
   }
 }

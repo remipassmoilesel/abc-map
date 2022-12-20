@@ -103,9 +103,9 @@ export class BuildService {
 
         // Install production dependencies
         // This is a bit ugly but this is the only way I found to install ONLY production dependencies
-        // Here we must limit concurrency to prevent bad use of Yarn cache
+        // Here we must limit concurrency to 1 in order prevent bad use of Yarn cache
         const installProduction = `YARN_REGISTRY="${registryUrl}" yarn install --non-interactive --production`;
-        this.shell.sync(`lerna exec --ignore e2e-tests --concurrency 1 '${installProduction}'`);
+        this.shell.sync(`lerna exec --concurrency 1 '${installProduction}'`);
 
         resolve();
       } catch (err) {
@@ -188,10 +188,12 @@ export class BuildService {
 
   public clean(): void {
     this.shell.sync('lerna run clean');
-    this.shell.sync('lerna exec "rm -rf node_modules"');
     this.shell.sync('lerna exec "rm -rf .nyc_output"');
     this.shell.sync('lerna exec "rm -rf coverage"');
     this.shell.sync(`rm -rf ${this.config.getServerPublicRoot()}`);
+
+    // This must be the last command, as lerna will not be available anymore after
+    this.shell.sync('lerna exec "rm -rf node_modules"');
   }
 
   public dependencyCheck(): void {

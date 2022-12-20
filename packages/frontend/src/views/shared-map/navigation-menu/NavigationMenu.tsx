@@ -25,11 +25,9 @@ import { IconDefs } from '../../../components/icon/IconDefs';
 import { FaIcon } from '../../../components/icon/FaIcon';
 import Cls from './NavigationMenu.module.scss';
 import MainIcon from '../../../assets/main-icon.svg';
-import { prefixedTranslation } from '../../../i18n/i18n';
 import { useActiveSharedView } from '../../../core/project/useActiveSharedView';
 import clsx from 'clsx';
-
-const t = prefixedTranslation('SharedMapView:');
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   onClose: () => void;
@@ -41,6 +39,7 @@ interface Props {
 function NavigationMenu(props: Props) {
   const { onClose, onRestoreView, onDownload, className } = props;
   const { project } = useServices();
+  const { t } = useTranslation('SharedMapView');
 
   const sharedViews = useAppSelector((st) => st.project.sharedViews.list);
   const activeView = useActiveSharedView();

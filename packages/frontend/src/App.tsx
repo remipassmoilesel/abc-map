@@ -42,23 +42,22 @@ import PromptVariablesModal from './components/prompt-variables-modal/PromptVari
 import { BlueLoader } from './components/blue-loader/BlueLoader';
 import clsx from 'clsx';
 import InstallAppModal from './components/install-app-modal/InstallAppModal';
+import { MainKeyboardListener } from './components/main-keyboard-listener/MainKeyboardListener';
 
 // App views, all lazy loaded
 const LandingView = lazy(() => import('./views/landing/LandingView'));
-const ExportView = lazy(() => import('./views/export/ExportView'));
-const DataStoreView = lazy(() => import('./views/datastore/DataStoreView'));
 const NotFoundView = lazy(() => import('./views/not-found/NotFoundView'));
 const ConfirmAccountView = lazy(() => import('./views/confirm-account/ConfirmAccountView'));
-const DataProcessingView = lazy(() => import('./views/data-processing/DataProcessingView'));
 const ResetPasswordView = lazy(() => import('./views/reset-password/ResetPasswordView'));
 const MapView = lazy(() => import('./views/map/MapView'));
 const UserAccountView = lazy(() => import('./views/user-account/UserAccountView'));
 const LegalMentionsView = lazy(() => import('./views/legal-mentions/LegalMentionsView'));
 const FundingView = lazy(() => import('./views/funding/FundingView'));
 const SharedMapView = lazy(() => import('./views/shared-map/SharedMapView'));
-const SharedMapSettingsView = lazy(() => import('./views/shared-map-settings/SharedMapSettingsView'));
 const DocumentationView = lazy(() => import('./views/documentation/DocumentationView'));
 const ChangelogView = lazy(() => import('./views/changelog/ChangelogView'));
+const ModuleIndexView = lazy(() => import('./views/module-index-view/ModuleIndexView'));
+const ModuleView = lazy(() => import('./views/module-view/ModuleView'));
 
 const fullscreenRoutes = [Routes.sharedMap().raw()];
 
@@ -85,17 +84,15 @@ export function App() {
                 <Route exact path={'/'} component={LandingView} />
                 <Route exact path={Routes.landing().raw()} component={LandingView} />
                 <Route exact path={Routes.map().raw()} component={MapView} />
-                <Route exact path={Routes.dataStore().raw()} component={DataStoreView} />
-                <Route exact path={Routes.shareSettings().raw()} component={SharedMapSettingsView} />
-                <Route exact path={Routes.export().raw()} component={ExportView} />
                 <Route exact path={Routes.documentation().raw()} component={DocumentationView} />
                 <Route exact path={Routes.confirmAccount().raw()} component={ConfirmAccountView} />
-                <Route exact path={Routes.dataProcessing().raw()} component={DataProcessingView} />
                 <Route exact path={Routes.resetPassword().raw()} component={ResetPasswordView} />
                 <Route exact path={Routes.userAccount().raw()} component={UserAccountView} />
                 <Route exact path={Routes.legalMentions().raw()} component={LegalMentionsView} />
                 <Route exact path={Routes.funding().raw()} component={FundingView} />
                 <Route exact path={Routes.changelog().raw()} component={ChangelogView} />
+                <Route exact path={Routes.moduleIndex().raw()} component={ModuleIndexView} />
+                <Route exact path={Routes.module().raw()} component={ModuleView} />
                 <Route path={'*'} component={NotFoundView} />
               </Switch>
             </Suspense>
@@ -116,6 +113,7 @@ export function App() {
           <WarningBeforeUnload />
           <PromptVariablesModal />
           <InstallAppModal />
+          <MainKeyboardListener />
         </>
       )}
 

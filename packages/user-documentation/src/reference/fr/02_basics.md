@@ -34,4 +34,8 @@ toutes les informations de votre projet dans un format proche de GeoJSON.
 
 ### Identifiants
 
-Si votre projet contient des couches qui utilisent des identifiants (WMS, XYZ, ...), à chaque export et à chaque import vous devrez saisir un mot de passe.
+Si votre projet contient des identifiants d'accès à des services tiers (par exemple des identifiants de couches de tuiles XYZ), alors votre projet sera protégé par un mot de passe. Ce mot de passe sera utilisé pour chiffrer ces identifiants.
+
+Vous devrez donc choisir un mot de passe et le saisir à chaque fois que vous ouvrirez ce projet. En cas de perte, ces mots de passe ne peuvent pas être récupérés.
+
+Attention, si vous partagez publiquement votre projet alors les identifiants sont publics aussi.

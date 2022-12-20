@@ -16,21 +16,19 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
+import Cls from './PointSizeSelector.module.scss';
 import React, { ChangeEvent, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { MapActions } from '../../../../../core/store/map/actions';
 import OptionRow from '../../_common/option-row/OptionRow';
-import { withTranslation } from 'react-i18next';
-import { prefixedTranslation } from '../../../../../i18n/i18n';
+import { useTranslation } from 'react-i18next';
 import { useAppSelector } from '../../../../../core/store/hooks';
 import { useDebouncedStyleTransform } from '../../../../../core/geo/useDebouncedStyleTransform';
-import Cls from './PointSizeSelector.module.scss';
 
-const t = prefixedTranslation('MapView:ToolSelector.');
-
-function PointSizeSelector() {
+export default function PointSizeSelector() {
   const size = useAppSelector((st) => st.map.currentStyle.point.size);
   const dispatch = useDispatch();
+  const { t } = useTranslation('MapView', { keyPrefix: 'ToolSelector' });
 
   const styleTransform = useDebouncedStyleTransform();
 
@@ -54,5 +52,3 @@ function PointSizeSelector() {
     </OptionRow>
   );
 }
-
-export default withTranslation()(PointSizeSelector);

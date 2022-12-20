@@ -33,7 +33,8 @@
     "Share": "Share",
     "Documentation": "Documentation",
     "Support_AbcMap": "Support Abc-Map",
-    "Menu": "Menu"
+    "Menu": "Menu",
+    "Plus": "More"
   },
   "UserMenu": {
     "Hello_visitor": "Hello visitor !",
@@ -159,7 +160,7 @@
       "Select_basemap_you_want": "Select the basemap you want",
       "Preview": "Preview",
       "Origin_of_data_license": "Origin of data and license",
-      "Add": "Add",
+      "Add_layer": "Add layer",
       "Cancel": "Cancel",
       "Predefined_basemap": "Predefined basemap",
       "Geometry_layer": "Geometry layer",
@@ -365,7 +366,7 @@
     "Undo": "Undo",
     "Redo": "Redo"
   },
-  "DataStoreView": {
+  "DataStoreModule": {
     "France_regions_world": "France, regions, world ...",
     "Search": "Search",
     "No_result": "No result",
@@ -399,185 +400,163 @@
     "Provider": "Provider",
     "Connect_to_the_Internet_to_use_the_data_store": "Connect to the Internet to use <br/>the data store"
   },
-  "DataProcessingView": {
-    "Modules": "Modules",
-    "Select_a_module_on_right": "Select a module <br /> in the right menu.",
-    "Data_processing": "Data processing",
-    "Visualize_data_on_map": "Visualize data on your maps: proportional symbols, color gradients, and more ⚙️⚙️",
-    "Reload_module": "Reload module",
-    "Aouch": "Aouch",
-    "Module_crashed": "This module has crashed",
-    "Back_to_index": "Back to index"
+  "DataTableModule": {
+    "Data_tables": "Data tables",
+    "Select_a_layer": "Select a layer to view its data.",
+    "Download_CSV": "Download CSV workbook",
+    "X_entries": "<b>{{entries}}</b> entries",
+    "No_data_to_display": "No data to display",
+    "You_must_select_a_layer_with_data": "You must select a layer that contains data",
+    "Visualize_feature_layers_as_tables": "Visualize feature layers as tables"
   },
-  "DataProcessingModules": {
-    "DataViewer": {
-      "Data_tables": "Data tables",
-      "Select_a_layer": "Select a layer to view its data.",
-      "Download_CSV": "Download CSV workbook",
-      "X_entries_displayed": "<b>{{entries}}</b> entries displayed",
-      "No_data_to_display": "No data to display",
-      "You_must_select_a_layer_with_data": "You must select a layer that contains data"
-    },
-    "ColorGradients": {
-      "Color_gradients": "Color gradients",
-      "Introduction": "Introduction",
-      "Color_gradients_are_used_to_represent_relative_data": "Color gradients are used to represent relative statistical data (population density, income per inhabitant, etc.)",
-      "How_does_it_work": "How does it work ?",
-      "Select_data_source_and_data_field": "Select a data source and a value field. This field will be used to determine the colors. For example, a CSV workbook containing the French population by department and the <code>densite_pop</code> field containing the density data.",
-      "Select_geometry_layer_explanation": "Select a geometry layer. The geometries will be duplicated and filled with the calculated color.",
-      "Select_join_field_explanation": "Select a join field between the data and the geometries.",
-      "Select_parameters_explanation": "Then select the characteristics of the geometries to create.",
-      "Map_Sample": "Map sample",
-      "Select_data_source": "Select a data source",
-      "Data_source_contains_field_that_determine_colors": "The data source contains the field that will determine the colors of the geometries. The data source can be a map layer or a CSV format workbook.",
-      "Colors_from": "Colors from:",
-      "Select_geometry_layer": "Select geometry layer",
-      "Colors_applied_to_copy_of_geometries": "The colors will be applied to a copy of the geometries of the selected layer.",
-      "Select_parameters": "Processing parameters",
-      "Colors_depends_on_algorithm": "The colors will be created in a new layer. Their values will be determined by the source field used, and by the type of algorithm.",
-      "You_must_select_a_value_field": "You must choose a value field.",
-      "You_must_select_a_datasource": "You must choose a data source.",
-      "Reset": "Reset",
-      "Start_processing": "Start processing",
-      "From": "From",
-      "To": "to",
-      "End_of_processing": "End of processing",
-      "X_features_has_been_processed": "{{featuresProcessed}} geometries have been processed.",
-      "Nothing_has_been_processed": "No geometry has been processed. Processing has been misconfigured or the data is invalid.",
-      "Some_features_cannot_be_joined": "⚠️ Some geometries ({{invalidFeatures}}) do not have the <code>{{geometryJoinBy}}</code> join property. They have not been used.",
-      "Some_colors_values_are_incorrect": "⚠️ Some values of color field ({{invalidValues}}) cannot be used as numbers.",
-      "Some_geometries_does_not_have_data": "⚠️ Some geometries ({{missingDataRows}}) do not have data corresponding to their <code>{{joinBy}}</code> property.",
-      "Undefined_property": "Undefined property",
-      "Close": "Close",
-      "Processing_done": "Processing is complete",
-      "Processing_done_with_warnings": "Processing is complete, but it did not go as expected",
-      "Processing_was_interrupted_because_of_wrong_data": "Processing was interrupted because some data is incorrect",
-      "Processing_interrupted_data_must_be_greater_than_0": "Values must be greater than zero and the minimum value must be less than the maximum value",
-      "Start_color": "Start color",
-      "End_color": "End color",
-      "Number_of_classes": "Number of classes",
-      "Classes": "Classes",
-      "Calculate_classes": "Calculate classes",
-      "Name_of_new_layer": "Name of new layer",
-      "Scale_or_classification": "Scale or classification",
-      "Processing_in_progress": "Processing in progress ..."
-    },
-    "VectorLayerSelector": {
-      "Select_a_layer": "Select a layer"
-    },
-    "AlgorithmSelector": {
-      "Choose_algorithm": "Choose an algorithm",
-      "Invalid_option": "Invalid option",
-      "Absolute_scale": "Absolute scale",
-      "Interpolated_scale": "Interpolated scale",
-      "Equal_intervals": "Equal intervals",
-      "Quantiles": "Quantiles",
-      "Natural_breaks": "Natural breaks"
-    },
-    "DataSourceForm": {
-      "Select_data_source": "Select a data source",
-      "Select_field": "Select a field",
-      "Join_geometries_with": "Join with geometries by",
-      "Data_samples": "Data samples",
-      "Use_geometry_layer": "Use a geometry layer",
-      "Use_CSV_workbook": "Use a CSV workbook",
-      "Select_file_on_computer": "Select a file on your computer. This file must",
-      "Be_in_CSV_format": "Be in CSV format: comma separator, double quotes",
-      "Have_header_row": "Have a header row with the name of the columns",
-      "Be_encoded_UTF8": "Be encoded in UTF-8",
-      "Choose_CSV_file": "Choose a CSV file",
-      "This_source_contains_a_lot_of_data": "This source contains a lot of data ({{rows}}), processing may take a long time.",
-      "Data_source_empty": "This data source is empty",
-      "X_entries_will_be_processed": "{{rows}} entries will be processed.",
-      "This_data_source_is_incorrect": "This data source is incorrect.",
-      "Error_on_line_X": "An error occurred on line {{errorAtLine}}."
-    },
-    "GeometryLayerForm": {
-      "Join_with_data_by": "Join with data by",
-      "Select_layer": "Select a layer",
-      "Select_join_field": "Select a join field",
-      "No_geometry_found": "This layer does not contain any geometry.",
-      "X_geometries_will_be_processed": "{{geometries}} geometries will be processed.",
-      "Data_samples": "Data samples",
-      "Layer": "Layer:"
-    },
-    "FeatureCountByGeometries": {
-      "Geometry_count": "Geometry count",
-      "Module_not_terminated": "This module is not finished !",
-      "This_module_will": "This module will count the number of geometries present in each polygon of a layer."
-    },
-    "DifferentSymbols": {
-      "Different_symbols": "Different symbols",
-      "Module_not_terminated": "This module is not finished !",
-      "This_module_will": "This module will allow you to create symbols from a CSV workbook."
-    },
-    "ProportionalSymbols": {
-      "Proportional_symbols": "Proportional symbols",
-      "Introduction": "Introduction",
-      "Proportional_symbols_are_used_to_represent_absolute_data": "Proportional symbols are used to represent absolute data (population, annual budgets, etc.)",
-      "How_does_it_work": "How does it work ?",
-      "Select_data_source_and_data_field": "Select a data source and a value field. This field will determine the size of the symbols. For example, a CSV workbook containing the French population by department and the <code>population_2011</code> field containing the population data.",
-      "Select_geometry_layer_explanation": "Select a geometry layer. The geometries will determine the position of each symbol.",
-      "Select_join_field_explanation": "Select a join field between the data and the geometries.",
-      "Select_parameters_explanation": "Then select the characteristics of the symbols to create.",
-      "Map_sample": "Map sample",
-      "Select_data_source": "Select a data source",
-      "Data_source_contains_field_that_will_determine_symbol_size": "The data source contains the field that will determine the size of the symbols. The data source can be a map layer or a CSV format workbook.",
-      "Symbol_size_from": "Symbol size from:",
-      "Select_a_geometry_layer": "Select a geometry layer",
-      "Processing_parameters": "Processing parameters",
-      "The_geometry_layer_will_be_used_to_determine_the_position_of_the_symbols": "The geometry layer will be used to determine the position of the symbols. In the case of polygons, the symbols will be positioned in the center polygons. In the case of points, the symbols will be positioned on the points.",
-      "Symbols_are_create_in_a_new_layer": "The symbols will be created in a new layer. Their sizes will be determined by the source field used, between the minimum size and the maximum size specified.",
-      "Reset": "Reset",
-      "Start_processing": "Start processing",
-      "Name_of_new_layer": "Name of new layer",
-      "Symbol_type": "Symbol type",
-      "Color": "Color",
-      "Minimal_size": "Minimal size",
-      "Maximal_size": "Maximal size",
-      "Symbol_scale": "Symbol scale:",
-      "X_features_has_been_processed": "{{featuresProcessed}} geometries have been processed.",
-      "Nothing_has_been_processed": "No geometry has been processed. Processing has been misconfigured or the data is invalid.",
-      "Some_features_cannot_be_joined": "⚠️ Some geometries ({{invalidFeatures}}) do not have the <code>{{geometryJoinBy}}</code> join property. They have not been used.",
-      "Some_colors_values_are_incorrect": "⚠️ Some values of size field ({{invalidValues}}) cannot be used as numbers.",
-      "Some_geometries_does_not_have_data": "⚠️ Some geometries ({{missingDataRows}}) do not have data corresponding to their <code>{{joinBy}}</code> property.",
-      "Undefined_property": "Undefined property",
-      "Close": "Close",
-      "Processing_in_progress": "Processing in progress ..."
-    },
-    "Scripts": {
-      "Running_scripts": "Running scripts",
-      "Script_module_allow_advanced_data_modification": "The script execution module is used to process card data programmatically by writing JavaScript code.",
-      "Keep_in_mind_recommendations": "Keep these recommendations in mind",
-      "Dont_use_it_if_you_dont_understand_it": "If you do not understand what this module is for, do not use it",
-      "Dont_run_code_you_dont_understand": "Don't run code you don't understand",
-      "Actions_cannot_be_undone": "Actions performed by a script cannot be undone",
-      "Improper_use_can_cause_security_issue": "Improper use of this module may present a security risk",
-      "Execute": "Execute",
-      "Output": "Sortie",
-      "Executed_without_errors": "Script executed without errors ✨",
-      "Error": "Execution error"
-    },
-    "ArtefactGenerator": {
-      "Artefact_generator": "Artefact generator"
-    },
-    "RemoteModuleLoader": {
-      "Load_a_module": "Load a module",
-      "Loading_done": "Loading done !",
-      "You_can_load_data_processing_modules": "You can load data processing modules.",
-      "Enter_a_list_of_adresses": "Enter a list of addresses, these modules will be loaded and added to the list of modules.",
-      "Use_only_modules_whose_source_you_know": "Use only modules whose source you know. Per example, a malicious module can steal identifiers present in this application.",
-      "Load_modules": "Load modules",
-      "You_can_write_your_own_data_processing_module": "You can write your own data processing module",
-      "Follow_these_instructions_to_create_a_module": "Follow these instructions to create a module",
-      "modify_it_publish_it_on_Github_or_Gitlab": "modify it, publish it on Github or Gitlab, and you can use it on Abc-Map.",
-      "Writing_a_module_requires_advanced_programming_knowledge": "Writing a module requires advanced programming knowledge.",
-      "Remote_modules": "Modules loaded",
-      "Remove_module": "Remove module",
-      "You_can_try": "You can try"
-    }
+  "ColorGradientsModule": {
+    "Color_gradients": "Color gradients",
+    "Introduction": "Introduction",
+    "Color_gradients_are_used_to_represent_relative_data": "Color gradients are used to represent relative statistical data (population density, income per inhabitant, etc.)",
+    "How_does_it_work": "How does it work ?",
+    "Select_data_source_and_data_field": "Select a data source and a value field. This field will be used to determine the colors. For example, a CSV workbook containing the French population by department and the <code>densite_pop</code> field containing the density data.",
+    "Select_geometry_layer_explanation": "Select a geometry layer. The geometries will be duplicated and filled with the calculated color.",
+    "Select_join_field_explanation": "Select a join field between the data and the geometries.",
+    "Select_parameters_explanation": "Then select the characteristics of the geometries to create.",
+    "Map_Sample": "Map sample",
+    "Select_data_source": "Select a data source",
+    "Data_source_contains_field_that_determine_colors": "The data source contains the field that will determine the colors of the geometries. The data source can be a map layer or a CSV format workbook.",
+    "Colors_from": "Colors from:",
+    "Select_geometry_layer": "Select geometry layer",
+    "Colors_applied_to_copy_of_geometries": "The colors will be applied to a copy of the geometries of the selected layer.",
+    "Select_parameters": "Processing parameters",
+    "Colors_depends_on_algorithm": "The colors will be created in a new layer. Their values will be determined by the source field used, and by the type of algorithm.",
+    "You_must_select_a_value_field": "You must choose a value field.",
+    "You_must_select_a_datasource": "You must choose a data source.",
+    "Reset": "Reset",
+    "Start_processing": "Start processing",
+    "From": "From",
+    "To": "to",
+    "End_of_processing": "End of processing",
+    "X_features_has_been_processed": "{{featuresProcessed}} geometries have been processed.",
+    "Nothing_has_been_processed": "No geometry has been processed. Processing has been misconfigured or the data is invalid.",
+    "Some_features_cannot_be_joined": "⚠️ Some geometries ({{invalidFeatures}}) do not have the <code>{{geometryJoinBy}}</code> join property. They have not been used.",
+    "Some_colors_values_are_incorrect": "⚠️ Some values of color field ({{invalidValues}}) cannot be used as numbers.",
+    "Some_geometries_does_not_have_data": "⚠️ Some geometries ({{missingDataRows}}) do not have data corresponding to their <code>{{joinBy}}</code> property.",
+    "Undefined_property": "Undefined property",
+    "Close": "Close",
+    "Processing_done": "Processing is complete",
+    "Processing_done_with_warnings": "Processing is complete, but it did not go as expected",
+    "Processing_was_interrupted_because_of_wrong_data": "Processing was interrupted because some data is incorrect",
+    "Processing_interrupted_data_must_be_greater_than_0": "Values must be greater than zero and the minimum value must be less than the maximum value",
+    "Start_color": "Start color",
+    "End_color": "End color",
+    "Number_of_classes": "Number of classes",
+    "Classes": "Classes",
+    "Calculate_classes": "Calculate classes",
+    "Name_of_new_layer": "Name of new layer",
+    "Scale_or_classification": "Scale or classification",
+    "Processing_in_progress": "Processing in progress ..."
   },
-  "ExportView": {
+  "VectorLayerSelector": {
+    "Select_a_layer": "Select a layer"
+  },
+  "AlgorithmSelector": {
+    "Choose_algorithm": "Choose an algorithm",
+    "Invalid_option": "Invalid option",
+    "Absolute_scale": "Absolute scale",
+    "Interpolated_scale": "Interpolated scale",
+    "Equal_intervals": "Equal intervals",
+    "Quantiles": "Quantiles",
+    "Natural_breaks": "Natural breaks"
+  },
+  "DataSourceForm": {
+    "Select_data_source": "Select a data source",
+    "Select_field": "Select a field",
+    "Join_geometries_with": "Join with geometries by",
+    "Data_samples": "Data samples",
+    "Use_geometry_layer": "Use a geometry layer",
+    "Use_CSV_workbook": "Use a CSV workbook",
+    "Select_file_on_computer": "Select a file on your computer. This file must",
+    "Be_in_CSV_format": "Be in CSV format: comma separator, double quotes",
+    "Have_header_row": "Have a header row with the name of the columns",
+    "Be_encoded_UTF8": "Be encoded in UTF-8",
+    "Choose_CSV_file": "Choose a CSV file",
+    "This_source_contains_a_lot_of_data": "This source contains a lot of data ({{rows}}), processing may take a long time.",
+    "Data_source_empty": "This data source is empty",
+    "X_entries_will_be_processed": "{{rows}} entries will be processed.",
+    "This_data_source_is_incorrect": "This data source is incorrect.",
+    "Error_on_line_X": "An error occurred on line {{errorAtLine}}."
+  },
+  "GeometryLayerForm": {
+    "Join_with_data_by": "Join with data by",
+    "Select_layer": "Select a layer",
+    "Select_join_field": "Select a join field",
+    "No_geometry_found": "This layer does not contain any geometry.",
+    "X_geometries_will_be_processed": "{{geometries}} geometries will be processed.",
+    "Data_samples": "Data samples",
+    "Layer": "Layer:"
+  },
+  "FeatureCountByGeometriesModule": {
+    "Geometry_count": "Geometry count",
+    "Module_not_terminated": "This module is not finished !",
+    "This_module_will": "This module will count the number of geometries present in each polygon of a layer."
+  },
+  "DifferentSymbolsModule": {
+    "Different_symbols": "Different symbols",
+    "Module_not_terminated": "This module is not finished !",
+    "This_module_will": "This module will allow you to create symbols from a CSV workbook."
+  },
+  "ProportionalSymbolsModule": {
+    "Proportional_symbols": "Proportional symbols",
+    "Introduction": "Introduction",
+    "Proportional_symbols_are_used_to_represent_absolute_data": "Proportional symbols are used to represent absolute data (population, annual budgets, etc.)",
+    "How_does_it_work": "How does it work ?",
+    "Select_data_source_and_data_field": "Select a data source and a value field. This field will determine the size of the symbols. For example, a CSV workbook containing the French population by department and the <code>population_2011</code> field containing the population data.",
+    "Select_geometry_layer_explanation": "Select a geometry layer. The geometries will determine the position of each symbol.",
+    "Select_join_field_explanation": "Select a join field between the data and the geometries.",
+    "Select_parameters_explanation": "Then select the characteristics of the symbols to create.",
+    "Map_sample": "Map sample",
+    "Select_data_source": "Select a data source",
+    "Data_source_contains_field_that_will_determine_symbol_size": "The data source contains the field that will determine the size of the symbols. The data source can be a map layer or a CSV format workbook.",
+    "Symbol_size_from": "Symbol size from:",
+    "Select_a_geometry_layer": "Select a geometry layer",
+    "Processing_parameters": "Processing parameters",
+    "The_geometry_layer_will_be_used_to_determine_the_position_of_the_symbols": "The geometry layer will be used to determine the position of the symbols. In the case of polygons, the symbols will be positioned in the center polygons. In the case of points, the symbols will be positioned on the points.",
+    "Symbols_are_create_in_a_new_layer": "The symbols will be created in a new layer. Their sizes will be determined by the source field used, between the minimum size and the maximum size specified.",
+    "Reset": "Reset",
+    "Start_processing": "Start processing",
+    "Name_of_new_layer": "Name of new layer",
+    "Symbol_type": "Symbol type",
+    "Color": "Color",
+    "Minimal_size": "Minimal size",
+    "Maximal_size": "Maximal size",
+    "Symbol_scale": "Symbol scale:",
+    "End_of_processing": "End of processing",
+    "X_features_has_been_processed": "{{featuresProcessed}} geometries have been processed.",
+    "Nothing_has_been_processed": "No geometry has been processed. Processing has been misconfigured or the data is invalid.",
+    "Some_features_cannot_be_joined": "⚠️ Some geometries ({{invalidFeatures}}) do not have the <code>{{geometryJoinBy}}</code> join property. They have not been used.",
+    "Some_colors_values_are_incorrect": "⚠️ Some values of size field ({{invalidValues}}) cannot be used as numbers.",
+    "Some_geometries_does_not_have_data": "⚠️ Some geometries ({{missingDataRows}}) do not have data corresponding to their <code>{{joinBy}}</code> property.",
+    "Undefined_property": "Undefined property",
+    "Close": "Close",
+    "Processing_in_progress": "Processing in progress ...",
+    "Processing_done": "Processing is complete",
+    "Processing_done_with_warnings": "Processing is complete, but it did not go as expected"
+  },
+  "ScriptsModule": {
+    "Running_scripts": "Running scripts",
+    "Script_module_allow_advanced_data_modification": "The script execution module is used to process map data programmatically by writing JavaScript code.",
+    "Keep_in_mind_recommendations": "Keep these recommendations in mind",
+    "Dont_use_it_if_you_dont_understand_it": "If you do not understand what this module is for, do not use it",
+    "Dont_run_code_you_dont_understand": "Don't run code you don't understand",
+    "Actions_cannot_be_undone": "Actions performed by a script cannot be undone",
+    "Improper_use_can_cause_security_issue": "Improper use of this module may present a security risk",
+    "Execute": "Execute",
+    "Output": "Sortie",
+    "Executed_without_errors": "Script executed without errors",
+    "Error": "Execution error"
+  },
+  "ArtefactGeneratorModule": {
+    "Artefact_generator": "Artefact generator",
+    "Generate_data_store_artefacts": "Generate data store artifacts. Unless you are administering an Abc-Map instance, this module is useless."
+  },
+  "StaticExport": {
     "Format": "Format",
     "List_of_layouts_displayed_here": "The list of layouts will be displayed here.",
     "Layouts": "Layouts",
@@ -603,7 +582,8 @@
     "Layouts_menu": "Layouts list",
     "Controls_menu": "Controls",
     "Export_in_progress": "Export in progress ...",
-    "Connect_to_the_Internet_to_export_your_map": "Connect to the Internet to <br/>export your map"
+    "Connect_to_the_Internet_to_export_your_map": "Connect to the Internet to <br/>export your map",
+    "Nothing_to_delete": "There is nothing to delete"
   },
   "TextFrameControls": {
     "New_text_frame": "New text frame",
@@ -641,7 +621,7 @@
     "Why": "Why",
     "AbcMap_is_FOSS": "Abc-Map is a free software developed and hosted on a voluntary basis.",
     "No_ads_no_race_for_attention": "You have noticed ? No ads, no race for attention, no collection of personal data",
-    "Fund_a_free_internet_territory": "By funding this software you are funding a free territory of the internet, where the software serves the user. It just might become a norm one day",
+    "Fund_a_free_internet_territory": "By funding this software you are funding a free territory of the internet, where the software serves the user.",
     "How": "How",
     "What_is_the_point": "What is the point",
     "Money_collected": "Money collected",
@@ -649,7 +629,7 @@
     "Funds_development_sessions": "Funds development sessions",
     "Funds_documentation": "Funds documentation",
     "Next_planned_features_are": "The next planned features are",
-    "Better_styles": "Better styles to create better looking cards",
+    "Better_styles": "Better styles to create better looking maps",
     "Creating_symbols_from_CSV_workbooks": "Creating symbols from CSV workbooks",
     "Counting_geometries_in_polygons": "Counting geometries in polygons",
     "And_more": "And more !",
@@ -772,7 +752,8 @@
     "No_data": "No data",
     "Undefined": "Undefined",
     "Modify": "Modify",
-    "Delete": "Delete"
+    "Delete": "Delete",
+    "Actions": "Actions"
   },
   "EditPropertiesModal": {
     "Properties": "Properties",
@@ -815,17 +796,17 @@
     "Cancel": "Cancel",
     "Send": "Send"
   },
-  "SharedMapSettingsView": {
+  "SharedMapSettingsModule": {
     "Share": "Share",
     "Share_your_maps_online": "Share your maps online",
     "Project_shared": "Project shared !",
     "Map_sharing": "Map sharing",
-    "You_can_share_your_map_using_a_public_link": "You can share your map using a public link or embed it <br/> into your websites using an <code>iframe</code> code.",
+    "You_can_share_your_map_using_a_public_link": "You can share your map using a public link or embed it into your websites using an <code>iframe</code> code.",
     "You_must_sign_in_to_share_your_maps": "You must sign in to share your maps.",
     "Login": "Login",
     "Register": "Register",
     "Warning": "Warning",
-    "If_your_card_contains_identifiers": "If your map contains identifiers, these identifiers will be publicly accessible.",
+    "If_your_map_contains_identifiers": "If your map contains identifiers, these identifiers will be publicly accessible.",
     "If_these_identifiers_give_access_to_paid_services": "If these identifiers give access to paid services, this can lead to excessive billing.",
     "This_map_is_private": "This map is private",
     "Enable_sharing": "Enable sharing",
@@ -840,7 +821,7 @@
     "View": "View",
     "Overview": "Overview",
     "Save": "Save",
-    "Address_and_sharing_codes": "Address and sharing codes",
+    "Share_link_and_code": "Share link and code",
     "Disable_sharing": "Disable sharing",
     "New_view": "New view",
     "Visible_layers": "Visible layers",
@@ -960,7 +941,8 @@
   },
   "ChangelogView": {
     "Changelog": "Changelog",
-    "Follow_us_on_twitter": "Follow us on Twitter"
+    "Follow_us_on_twitter": "Follow us on Twitter",
+    "Failed_to_load_log_try_again_later": "Failed to load log, try again later"
   },
   "InstallAppModal": {
     "Install_app": "Install application ?",
@@ -1005,6 +987,49 @@
     "Close": "Close",
     "North_direction": "North direction"
   },
+  "ModuleIndexView": {
+    "Essential_modules": "Essential modules",
+    "See_module_source": "See module source",
+    "Remove_module": "Remove module",
+    "All_modules": "All modules",
+    "Last_modules_used": "Last modules used",
+    "Recently_loaded": "Recently loaded",
+    "Favorite_modules": "Favorite modules",
+    "Restore_default_modules": "Restore default modules",
+    "Search_for_a_feature_or_module": "Search for a feature or module",
+    "Add_a_module": "Add a module",
+    "What_do_you_want_to_do": "What do you want to do ?",
+    "Nothing_matches": "Nothing matches !",
+    "Try_rephrasing_or_browse_the_features_below": "Try rephrasing, or browse the features below.",
+    "You_can_display_this_search_at_any_time_by_using_CTRL_M": "You can display this search at any time by using CTRL+M",
+    "AddModuleModal": {
+      "Add_a_module": "Add a module",
+      "Loading_done": "Loading done !",
+      "Enter_module_addresses_then_confirm": "Enter module addresses then confirm:",
+      "Use_only_modules_whose_source_you_know": "Use only modules whose source you know. Per example, a malicious module can steal identifiers present in this application.",
+      "Load_modules": "Load modules",
+      "Remote_modules": "Modules loaded",
+      "Remove_module": "Remove module",
+      "You_can_try": "You can try",
+      "Close": "Close",
+      "Modules_loaded": "Modules loaded",
+      "Ok": "Ok",
+      "Error": "Error"
+    },
+    "Click_on_stars": "Click on the stars to mark the modules as favorites. You can then access it more easily.",
+    "Remove_all": "Remove all"
+  },
+  "ModuleView": {
+    "Something_went_wrong": "Something went wrong",
+    "This_module_does_not_work_correctly": "This module does not work correctly",
+    "Unknown_module": "Unknown module",
+    "Maybe_you_will_find_what_you_are_looking_for_here": "Maybe you will find what you are looking for here",
+    "Back_to_index": "Back to index",
+    "Aouch": "Aouch"
+  },
+  "QrCode": {
+    "Download": "Download"
+  },
   "core": {
     "ProjectFactory": {
       "Project": "Project of {{date}}"
@@ -1032,9 +1057,6 @@
     "HistoryKeyboardListener": {
       "Nothing_more_to_undo": "There is nothing more to undo",
       "Nothing_more_to_redo": "There is nothing more to redo"
-    },
-    "LayoutKeyboardListener": {
-      "Nothing_to_delete": "There is nothing to delete"
     },
     "ToastService": {
       "Unknown_technical_problem": "Ouch ! Small technical issue \uD83D\uDE05 Please try again later.",

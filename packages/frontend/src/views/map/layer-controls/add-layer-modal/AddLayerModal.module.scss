@@ -39,6 +39,7 @@ $height: 75vh;
   border-right: solid $gray-300 0.1rem;
 
   min-width: 30%;
+  width: 30%;
   height: 100%;
 
   @include media-breakpoint-down(xl) {

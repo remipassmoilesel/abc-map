@@ -23,7 +23,40 @@ export type ModuleFactory = () => Module;
 export type ModuleId = string;
 
 export interface Module {
+  /**
+   * Returns the unique id of this module. You should use your module name and a random part, per example:
+   * ```
+   *    my-awesome-module-36b98e4026b05
+   * ```
+   */
   getId(): ModuleId;
+
+  /**
+   * Return the name that should be displayed in user interface
+   */
   getReadableName(): string;
-  getUserInterface(): ReactElement;
+
+  /**
+   * Return the description that should be displayed in user interface.
+   *
+   * Will be displayed as text.
+   *
+   * Description is used for searches too.
+   */
+  getShortDescription(): string;
+
+  /**
+   * User interface of module
+   */
+  getView(): ReactElement;
+}
+
+export abstract class ModuleAdapter implements Module {
+  public abstract getId(): ModuleId;
+
+  public abstract getReadableName(): string;
+
+  public abstract getShortDescription(): string;
+
+  public abstract getView(): ReactElement;
 }

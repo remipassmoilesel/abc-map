@@ -24,22 +24,31 @@ import { render } from './render';
 import { MainStore } from './core/store/store';
 import { ProjectEventType } from './core/project/ProjectEvent';
 import { StyleFactory } from './core/geo/styles/StyleFactory';
-import { LoadingStatus, ModuleLoadingFailed } from './data-processing/_common/registry/ModuleLoadingStatus';
-import { ModuleRegistry } from './data-processing/_common/registry/ModuleRegistry';
+import { ModuleRegistry } from './core/modules/registry/ModuleRegistry';
 import { UiActions } from './core/store/ui/actions';
+import React from 'react';
 
-export const logger = Logger.get('bootstrap.tsx', 'warn');
+export const logger = Logger.get('bootstrap.tsx', 'info');
 
 export function bootstrap(svc: Services, store: MainStore) {
   logger.info('Version: ', BUILD_INFO);
 
-  return authentication(svc)
+  return setGlobals()
+    .then(() => authentication(svc))
+    .then(() => initializeModules())
     .then(() => render(svc, store))
     .then(() => dispatchVisit(store))
     .then(() => initProject(svc, store))
     .then(() => enableGeolocation(svc, store))
-    .then(() => loadRemoteModules(store))
     .catch((err) => bootstrapError(err));
+}
+
+async function setGlobals() {
+  // We keep a global reference of our instance of React in order to use it in remote modules
+  // See https://github.com/facebook/react/issues/13991 and related issues
+  // Reference must be lower case
+  type HasReact = Window & { react?: typeof React };
+  (window as HasReact).react = React;
 }
 
 /**
@@ -145,14 +154,6 @@ function bootstrapError(err: Error | AxiosError | undefined): void {
   `;
 }
 
-async function loadRemoteModules(store: MainStore): Promise<void> {
-  const urls = store.getState().ui.remoteModules.map((mod) => mod.url);
-  return ModuleRegistry.get()
-    .loadRemoteModules(urls)
-    .then((statusList) => {
-      const errors = statusList.filter((st): st is ModuleLoadingFailed => st.status === LoadingStatus.Failed);
-      if (errors.length) {
-        logger.error('Some modules where not loaded: ', errors);
-      }
-    });
+async function initializeModules(): Promise<void> {
+  await ModuleRegistry.get().initialize();
 }

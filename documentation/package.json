@@ -8,5 +8,8 @@
   "dependencies": {
     "prettier": "2.5.1",
     "markdown-toc": "1.2.0"
+  },
+  "volta": {
+    "node": "16.15.0"
   }
 }

@@ -21,29 +21,25 @@ import { DataStore } from '../helpers/DataStore';
 import { TopBar } from '../helpers/TopBar';
 import { TestData } from '../test-data/TestData';
 import { MainMap } from '../helpers/MainMap';
-import { Routes } from '../helpers/Routes';
+import { Modules } from '../helpers/Modules';
 
 describe('Color gradients', function () {
   beforeEach(() => {
     TestHelper.init();
   });
 
-  it('User can create proportional symbols', () => {
-    cy.visit(Routes.dataProcessing().format())
-      // Import layer
-      .then(() => DataStore.importByName('Countries of the world'))
-      .then(() => TopBar.dataProcessing())
-      .get('[data-cy=color-gradients]')
-      .click()
+  it('User can create color gradients', () => {
+    // Import layer
+    DataStore.importByName('Countries of the world')
+      // Open module
+      .then(() => Modules.open('color-gradients'))
       // Data source parameters
       .get('[data-cy=data-source-file]')
       .click()
       .get('[data-cy=data-source-import-file]')
       .click()
       .then(() => TestData.countriesCsv())
-      .then((file) => {
-        return cy.get('[data-cy=file-input]').attachFile({ filePath: 'project.csv', fileContent: file });
-      })
+      .then((file) => cy.get('[data-cy=file-input]').attachFile({ filePath: 'project.csv', fileContent: file }))
       .get('[data-cy=value-field]')
       .select('VALUE')
       .get('[data-cy=data-join-by]')
@@ -55,8 +51,6 @@ describe('Color gradients', function () {
       .get('[data-cy=geometries-join-by]')
       .select('COUNTRY')
       .wait(800) // We must wait for asynchronous display
-      .get('[data-cy=data-processing-viewport]')
-      .scrollTo('bottom')
       .get('[data-cy=process]')
       .click()
       .get('[data-cy=close-processing-report]')

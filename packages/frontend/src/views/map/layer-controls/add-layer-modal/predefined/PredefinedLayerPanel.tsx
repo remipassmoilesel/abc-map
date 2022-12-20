@@ -58,7 +58,7 @@ class PredefinedLayerPanel extends Component<Props, {}> {
 
         <div className={'mb-2'}>{t('Preview')} : </div>
         <div className={'d-flex justify-content-center mb-4'}>
-          <img src={labelledModel?.preview} width={440} alt={labelledModel?.label} className={Cls.preview} />
+          <img src={labelledModel?.preview} alt={labelledModel?.label} className={Cls.preview} />
         </div>
         <div className={'text-center'}>
           {t('Origin_of_data_license')}:&nbsp;

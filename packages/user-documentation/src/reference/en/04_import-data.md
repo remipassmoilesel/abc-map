@@ -37,4 +37,4 @@ Many sites offer free or paid data, such as:
 - <a href="https://public.opendatasoft.com/explore" target="_blank">opendatasoft.com</a>
 
 Also look for local data providers, such as <a href="https://geoservices.ign.fr/" target="_blank">geoservices</a>
-(France) or <a href = "https://www.swisstopo.admin.ch/ "target="\_blank">swisstopo</a> (Switzerland).
+(France) or <a href="https://www.swisstopo.admin.ch/" target="_blank">swisstopo</a> (Switzerland).

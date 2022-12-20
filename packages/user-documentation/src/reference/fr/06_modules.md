@@ -21,4 +21,4 @@ Vous pouvez utiliser des modules écrits par d'autres personnes ou écrire votre
 
 Documentation par ici: [https://gitlab.com/abc-map/abc-map/-/blob/master/documentation/6_modules.md](https://gitlab.com/abc-map/abc-map/-/blob/master/documentation/6_modules.md)
 
-<iframe width="600" height="400" src="https://www.youtube.com/embed/mqt_CzSplJg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe class="youTubeIntegration" src="https://www.youtube.com/embed/mqt_CzSplJg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>

@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import i18n from 'i18next';
+import i18n, { TFunction } from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import { FallbackLang, Language, Logger } from '@abc-map/shared';
 import LanguageDetector from 'i18next-browser-languagedetector';
@@ -53,7 +53,9 @@ export interface StringMap {
 }
 
 /**
- * This function reduce translation boilerplate. Usage:
+ * Use this function outside of react component to reduce translation boilerplate.
+ *
+ * Usage:
  *
  * ```
  *  const t = prefixedTranslation('Namespace:Parent.');
@@ -61,12 +63,21 @@ export interface StringMap {
  *  t('Key') // Will use 'Namespace:Parent.Key'
  * ```
  *
- * If you use it within a react component, you must wrap component with withTranslation();
+ * Do not use it in React components, use `keyPrefix` instead:
+ *
+ * ```
+ *    const t = useTranslation('TopLevelNamespace', {keyPrefix: 'Nested.Namespaces'})
+ * ```
  *
  * @param prefix
  */
+// TODO: terminate refactoring, remove bad usages
 export function prefixedTranslation(prefix: string) {
-  return (key: string, params?: StringMap) => i18n.t(`${prefix}${key}`, params);
+  return prefixTtFunc(prefix, i18n.t);
+}
+
+export function prefixTtFunc(prefix: string, tFunc: TFunction) {
+  return (key: string, params?: StringMap) => tFunc(`${prefix}${key}`, params);
 }
 
 export async function setLang(lang: Language): Promise<void> {

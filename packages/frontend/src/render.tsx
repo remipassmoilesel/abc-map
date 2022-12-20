@@ -27,6 +27,8 @@ import ErrorBoundary from './views/error-boundary/ErrorBoundary';
 import { BrowserRouter } from 'react-router-dom';
 import { OnlineStatusProvider } from './core/pwa/OnlineStatusContext';
 import { PwaInstallPromptProvider } from './core/pwa/PwaInstallReadinessContext';
+import { ModuleRegistryProvider } from './core/modules/registry/context';
+import { ModuleRegistry } from './core/modules/registry/ModuleRegistry';
 import App from './App';
 
 export function render(svc: Services, store: MainStore) {
@@ -41,15 +43,17 @@ export function render(svc: Services, store: MainStore) {
     <ReduxProvider store={store}>
       <React.StrictMode>
         <ServiceProvider value={svc}>
-          <ErrorBoundary>
-            <OnlineStatusProvider>
-              <PwaInstallPromptProvider>
-                <BrowserRouter>
-                  <App />
-                </BrowserRouter>
-              </PwaInstallPromptProvider>
-            </OnlineStatusProvider>
-          </ErrorBoundary>
+          <ModuleRegistryProvider value={ModuleRegistry.get()}>
+            <ErrorBoundary>
+              <OnlineStatusProvider>
+                <PwaInstallPromptProvider>
+                  <BrowserRouter>
+                    <App />
+                  </BrowserRouter>
+                </PwaInstallPromptProvider>
+              </OnlineStatusProvider>
+            </ErrorBoundary>
+          </ModuleRegistryProvider>
         </ServiceProvider>
       </React.StrictMode>
     </ReduxProvider>,

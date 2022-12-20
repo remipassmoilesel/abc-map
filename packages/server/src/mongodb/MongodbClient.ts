@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Collection, Db, GridFSBucket, MongoClient, MongoClientOptions } from 'mongodb';
+import { Collection, Db, Document, GridFSBucket, MongoClient, MongoClientOptions } from 'mongodb';
 import { Config } from '../config/Config';
 import { MongodbCollection } from './MongodbCollection';
 import { MongodbBucket } from './MongodbBucket';
@@ -66,7 +66,7 @@ export class MongodbClient {
     return this.dbRef;
   }
 
-  public async collection<T>(collectionName: MongodbCollection): Promise<Collection<T>> {
+  public async collection<T extends Document>(collectionName: MongodbCollection): Promise<Collection<T>> {
     const db = await this.db();
     return db.collection(collectionName);
   }

@@ -2,6 +2,15 @@
 
 For the moment we use git hashes as version, since no one complained about it 👍
 
+## 20/12/2022 - Better modules, better UI (git: master)
+
+- Improved module registry and API
+- Added module index instead of data processing view, removed
+- Export, data store and map sharing are now modules
+- Added ability to download sharing QR codes
+- New top bar, with display of favorite modules
+- General style improvements, increased font size, lighter shadows
+
 ## 11/06/2022 - Docker compose deployment (git: master)
 
 - Add ability to deploy Abc-Map with Docker Compose
