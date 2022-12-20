@@ -26,13 +26,12 @@ import NavigationMenu from './navigation-menu/NavigationMenu';
 import { MapFactory } from '../../core/geo/map/MapFactory';
 import MainIcon from '../../assets/main-icon.svg';
 import { Routes } from '../../routes';
-import { prefixedTranslation } from '../../i18n/i18n';
 import { MapWrapper } from '../../core/geo/map/MapWrapper';
 import { useActiveSharedView } from '../../core/project/useActiveSharedView';
 import { MapUi } from '../../components/map-ui/MapUi';
 import { E2eMapWrapper } from '../../core/geo/map/E2eMapWrapper';
 import { resolveInAtLeast } from '../../core/utils/resolveInAtLeast';
-import { withTranslation } from 'react-i18next';
+import { useTranslation, withTranslation } from 'react-i18next';
 import { FloatingTextFrame } from '../../components/text-frame/FloatingTextFrame';
 import { FloatingScale } from '../../components/floating-scale/FloatingScale';
 import { toPrecision } from '../../core/utils/numbers';
@@ -43,16 +42,14 @@ import SharedViewNavigation from '../../components/shared-view-navigation/Shared
 import { adaptView } from './adaptView';
 import { ProjectStatus } from '../../core/project/ProjectStatus';
 import { FileIO } from '../../core/utils/FileIO';
-import DownloadExplanation from './download-explanation/DownloadExplanation';
 import { SharedMapKeyboardListener } from './SharedMapKeyboardListener';
 import { InteractiveAttributions } from '../../components/interactive-attributions/InteractiveAttributions';
 import { useOfflineStatus } from '../../core/pwa/OnlineStatusContext';
 import { LargeOfflineIndicator } from '../../components/offline-indicator/LargeOfflineIndicator';
 import { FloatingNorthArrow } from '../../components/floating-north-arrow/FloatingNorthArrow';
+import { DownloadExplanation } from './download-explanation/DownloadExplanation';
 
 export const logger = Logger.get('SharedMapView.tsx');
-
-const t = prefixedTranslation('SharedMapView:');
 
 /**
  * This is the only view of Abc-Map that can be displayed in an iframe.
@@ -64,6 +61,7 @@ const t = prefixedTranslation('SharedMapView:');
  */
 function SharedMapView() {
   const { project, geo, toasts } = useServices();
+  const { t } = useTranslation('SharedMapView');
   const match = useRouteMatch<SharedMapParams>();
   // Here we use a state for map because we have to re-render after map init
   const [map, setMap] = useState<MapWrapper | undefined>();
@@ -91,7 +89,7 @@ function SharedMapView() {
       getAbcWindow().abc.sharedMap = new E2eMapWrapper(map);
     }
     return () => map?.dispose();
-  }, [map]);
+  }, [map, t]);
 
   // Setup keyboard shortcuts
   useEffect(() => {
@@ -133,8 +131,12 @@ function SharedMapView() {
 
   // Set map size
   useEffect(() => {
-    const { width, height } = adaptMapDimensions(fullscreen, mapDimensions);
-    setMapDimensionsStyle({ width: `${width}px`, height: `${height}px` });
+    if (fullscreen) {
+      setMapDimensionsStyle({ width: `100%`, height: `100%` });
+    } else {
+      const { width, height } = adaptMapDimensions(fullscreen, mapDimensions);
+      setMapDimensionsStyle({ width: `${width}px`, height: `${height}px` });
+    }
   }, [fullscreen, mapDimensions]);
 
   // Update map layers when active view change
@@ -249,7 +251,7 @@ function SharedMapView() {
         logger.error('Clone error: ', err);
       })
       .finally(() => toasts.dismiss(toastId));
-  }, [project, toasts]);
+  }, [project, t, toasts]);
 
   if (offline) {
     return <LargeOfflineIndicator />;

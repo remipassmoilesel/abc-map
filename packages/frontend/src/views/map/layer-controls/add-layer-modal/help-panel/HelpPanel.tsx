@@ -48,7 +48,7 @@ class HelpPanel extends Component<Props, {}> {
           <div>
             {t('Cant_find_what_you_want')}
             <br />
-            <Link to={Routes.dataStore().format()}>{t('Try_data_store')}</Link>
+            <Link to={Routes.module().withParams({ moduleId: 'data-store' })}>{t('Try_data_store')}</Link>
           </div>
         </div>
       </div>

@@ -22,11 +22,10 @@ import ChangePasswordForm from './ChangePasswordForm';
 import DeleteAccountForm from './DeleteAccountForm';
 import { Link, useHistory } from 'react-router-dom';
 import { pageSetup } from '../../core/utils/page-setup';
-import { prefixedTranslation } from '../../i18n/i18n';
-import { withTranslation } from 'react-i18next';
+import { useTranslation, withTranslation } from 'react-i18next';
 import Cls from './UserAccountView.module.scss';
 import { Routes } from '../../routes';
-import AccountInformations from './AccountInformations';
+import { AccountInformations } from './AccountInformations';
 import { AuthenticationError, ErrorType } from '../../core/authentication/AuthenticationError';
 import { useAppSelector } from '../../core/store/hooks';
 import { useServices } from '../../core/useServices';
@@ -35,9 +34,8 @@ import { LargeOfflineIndicator } from '../../components/offline-indicator/LargeO
 
 const logger = Logger.get('UserAccountView.tsx');
 
-const t = prefixedTranslation('UserAccountView:');
-
 function UserAccountView() {
+  const { t } = useTranslation('UserAccountView');
   const { authentication, toasts } = useServices();
   const [passwordFormVersion, setPasswordFormVersion] = useState(0);
 
@@ -67,7 +65,7 @@ function UserAccountView() {
           }
         });
     },
-    [authentication, passwordFormVersion, toasts]
+    [authentication, passwordFormVersion, t, toasts]
   );
 
   const handleDeleteAccount = useCallback(
@@ -89,13 +87,13 @@ function UserAccountView() {
           }
         });
     },
-    [authentication, history, toasts]
+    [authentication, history, t, toasts]
   );
 
   if (offline) {
     return (
       <LargeOfflineIndicator>
-        <span dangerouslySetInnerHTML={{ __html: t('Connect_to_the_Internet_to_manage_your_account') }}></span>
+        <span dangerouslySetInnerHTML={{ __html: t('Connect_to_the_Internet_to_manage_your_account') }} />
       </LargeOfflineIndicator>
     );
   }
@@ -133,4 +131,4 @@ function UserAccountView() {
   );
 }
 
-export default withTranslation()(UserAccountView);
+export default withTranslation('UserAccountView')(UserAccountView);

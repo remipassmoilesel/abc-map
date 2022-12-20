@@ -21,7 +21,6 @@ import { MainMap } from '../helpers/MainMap';
 import { Routes } from '../helpers/Routes';
 import { Registration } from '../helpers/Registration';
 import { Authentication } from '../helpers/Authentication';
-import { TopBar } from '../helpers/TopBar';
 import { SharingLayoutMap } from '../helpers/SharingLayoutMap';
 import { UrlHelper } from '../helpers/UrlHelper';
 import { SharedMap } from '../helpers/SharedMap';
@@ -29,6 +28,7 @@ import { Toasts } from '../helpers/Toasts';
 import { ToolSelector } from '../helpers/ToolSelector';
 import { Draw } from '../helpers/Draw';
 import { MapTool } from '@abc-map/shared';
+import { Modules } from '../helpers/Modules';
 
 describe('Shared maps', function () {
   beforeEach(() => {
@@ -42,12 +42,12 @@ describe('Shared maps', function () {
   it('connected user can share map', function () {
     cy.visit(Routes.map().format())
       // Set fixed view, draw
-      .then(() => MainMap.fixedView())
+      .then(() => MainMap.fixedView1())
       .then(() => ToolSelector.enable(MapTool.Point))
       .then(() => Draw.click(300, 300))
       .then(() => Draw.click(350, 350))
       // Show share settings, enable sharing
-      .then(() => TopBar.shareSettings())
+      .then(() => Modules.open('share-settings'))
       .get('[data-cy=enable-sharing]')
       .click()
       .then(() => Toasts.assertText('Project saved !'))

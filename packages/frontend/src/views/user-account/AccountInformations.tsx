@@ -16,19 +16,17 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { withTranslation } from 'react-i18next';
-import { prefixedTranslation } from '../../i18n/i18n';
+import { useTranslation } from 'react-i18next';
 import React from 'react';
 import { AbcUser } from '@abc-map/shared';
-
-const t = prefixedTranslation('UserAccountView:');
 
 interface Props {
   user: AbcUser;
 }
 
-function AccountInformations(props: Props) {
+export function AccountInformations(props: Props) {
   const { user } = props;
+  const { t } = useTranslation('UserAccountView');
 
   return (
     <div className={'card card-body h-100'}>
@@ -40,5 +38,3 @@ function AccountInformations(props: Props) {
     </div>
   );
 }
-
-export default withTranslation()(AccountInformations);

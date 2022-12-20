@@ -20,11 +20,15 @@
   overflow-x: auto;
   overflow-y: auto;
 
-  border: solid 0.1rem silver;
-
   td,
   th {
     white-space: nowrap;
+  }
+
+  thead th {
+    position: sticky;
+    top: 0;
+    background: white;
   }
 }
 

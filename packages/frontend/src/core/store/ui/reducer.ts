@@ -17,7 +17,8 @@
  */
 
 import { ActionType, UiAction } from './actions';
-import { uiInitialState, UiState } from './state';
+import { DefaultFavoriteModules, uiInitialState, UiState } from './state';
+import uniq from 'lodash/uniq';
 
 /**
  * Warning: this function MUST be fast, and we MUST clone state to return a new state object
@@ -78,18 +79,14 @@ export function uiReducer(state = uiInitialState, action: UiAction): UiState {
       };
     }
 
-    case ActionType.SetLoadedModules: {
-      return {
-        ...state,
-        modulesLoaded: action.moduleIds,
-      };
-    }
+    case ActionType.IncrementVisitCounter: {
+      // We do not store all visits for privacy purposes
+      let visits = state.visits + 1;
+      if (visits > 2) {
+        visits = 2;
+      }
 
-    case ActionType.SetRemoteModules: {
-      return {
-        ...state,
-        remoteModules: action.modules,
-      };
+      return { ...state, visits };
     }
 
     case ActionType.SetRemoteModuleUrls: {
@@ -99,14 +96,29 @@ export function uiReducer(state = uiInitialState, action: UiAction): UiState {
       };
     }
 
-    case ActionType.IncrementVisitCounter: {
-      // We do not store all visits for privacy purposes
-      let visits = state.visits + 1;
-      if (visits > 2) {
-        visits = 2;
+    case ActionType.RegisterModuleUsage: {
+      const newState = { ...state };
+      newState.lastModulesUsed = state.lastModulesUsed.slice();
+      newState.lastModulesUsed.unshift(action.moduleId);
+      newState.lastModulesUsed = uniq(newState.lastModulesUsed).slice(0, 10);
+      return newState;
+    }
+
+    case ActionType.MarkFavorite: {
+      const newState = { ...state };
+
+      let favoriteModules: string[];
+      if (action.favorite) {
+        favoriteModules = uniq(state.favoriteModules.concat([action.moduleId]));
+      } else {
+        favoriteModules = state.favoriteModules.filter((moduleId) => moduleId !== action.moduleId);
       }
 
-      return { ...state, visits };
+      return { ...newState, favoriteModules };
+    }
+
+    case ActionType.RestoreDefaultFavoriteModules: {
+      return { ...state, favoriteModules: DefaultFavoriteModules };
     }
 
     default:

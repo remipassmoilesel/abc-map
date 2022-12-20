@@ -27,20 +27,8 @@ export class TopBar {
     return cy.get('[data-cy=top-bar] [data-cy=map]').click();
   }
 
-  public static dataStore(): Chainable<any> {
-    return cy.get('[data-cy=top-bar] [data-cy=data-store]').click();
-  }
-
-  public static dataProcessing(): Chainable<any> {
-    return cy.get('[data-cy=top-bar] [data-cy=data-processing]').click();
-  }
-
-  public static export(): Chainable<any> {
-    return cy.get('[data-cy=top-bar] [data-cy=export]').click();
-  }
-
-  public static shareSettings(): Chainable<any> {
-    return cy.get('[data-cy=top-bar] [data-cy=share-settings]').click();
+  public static moduleIndex(): Chainable<any> {
+    return cy.get('[data-cy=top-bar] [data-cy=module-index]').click();
   }
 
   public static documentation(): Chainable<any> {

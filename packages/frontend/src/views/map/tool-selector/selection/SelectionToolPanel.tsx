@@ -16,6 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
+import Cls from './SelectionToolPanel.module.scss';
 import React from 'react';
 import { Logger } from '@abc-map/shared';
 import StrokeWidthSelector from '../_common/stroke-width-selector/StrokeWidthSelector';
@@ -24,15 +25,13 @@ import FillPatternSelector from '../_common/fill-pattern-selector/FillPatternSel
 import TextFormat from '../_common/text-format/TextFormat';
 import PointIconSelector from '../point/icon-selector/PointIconSelector';
 import PointSizeSelector from '../point/size-selector/PointSizeSelector';
-import { prefixedTranslation } from '../../../../i18n/i18n';
-import { withTranslation } from 'react-i18next';
-import Cls from './SelectionToolPanel.module.scss';
+import { useTranslation } from 'react-i18next';
 
 const logger = Logger.get('SelectionToolPanel.tsx');
 
-const t = prefixedTranslation('MapView:ToolSelector.');
+export function SelectionToolPanel() {
+  const { t } = useTranslation('MapView', { keyPrefix: 'ToolSelector' });
 
-function SelectionToolPanel() {
   return (
     <div className={Cls.selectionPanel}>
       <div className={Cls.section}>
@@ -56,5 +55,3 @@ function SelectionToolPanel() {
     </div>
   );
 }
-
-export default withTranslation()(SelectionToolPanel);

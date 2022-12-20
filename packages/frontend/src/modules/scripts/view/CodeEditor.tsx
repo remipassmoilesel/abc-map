@@ -1,0 +1,78 @@
+/**
+ * Copyright © 2021 Rémi Pace.
+ * This file is part of Abc-Map.
+ *
+ * Abc-Map is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of
+ * the License, or (at your option) any later version.
+ *
+ * Abc-Map is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General
+ * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+import React, { Component } from 'react';
+import Editor from 'react-simple-code-editor';
+import { highlight, languages } from 'prismjs';
+import 'prismjs/components/prism-javascript';
+import 'prismjs/themes/prism.css';
+import Cls from './CodeEditor.module.scss';
+import clsx from 'clsx';
+
+interface Props {
+  initialContent: string;
+  onChange: (content: string) => void;
+  className?: string;
+}
+
+interface State {
+  content: string;
+}
+
+class CodeEditor extends Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+    this.state = { content: this.props.initialContent };
+  }
+
+  public render() {
+    const { className } = this.props;
+    const { content } = this.state;
+
+    return (
+      <Editor
+        value={content}
+        onValueChange={this.onChange}
+        highlight={this.highlightWithLineNumbers}
+        padding={10}
+        textareaClassName={Cls.textarea}
+        className={clsx(Cls.editor, className)}
+        style={{
+          fontFamily: '"Fira code", "Fira Mono", monospace',
+          outline: 0,
+        }}
+        // This id is used in E2E tests
+        textareaId={'code-editor'}
+      />
+    );
+  }
+
+  private onChange = (content: string) => {
+    this.setState({ content });
+    this.props.onChange(content);
+  };
+
+  private highlightWithLineNumbers = (input: string) => {
+    return highlight(input, languages.javascript, 'javascript')
+      .split('\n')
+      .map((line, i) => `<span class='${Cls.lineNumber}'>${i + 1}</span>${line}`)
+      .join('\n');
+  };
+}
+
+export default CodeEditor;

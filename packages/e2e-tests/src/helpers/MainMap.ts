@@ -35,10 +35,19 @@ export class MainMap {
       });
   }
 
-  public static fixedView(): Chainable<any> {
+  public static fixedView1(): Chainable<any> {
     return this.getReference()
       .then((map) => {
         map.setView(4, 37.41, 8.82);
+        return map;
+      })
+      .wait(600);
+  }
+
+  public static fixedView2(): Chainable<any> {
+    return this.getReference()
+      .then((map) => {
+        map.setView(8, 37.41, 8.82);
         return map;
       })
       .wait(600);

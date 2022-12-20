@@ -39,7 +39,7 @@ class ControlButtons extends React.Component<Props, {}> {
           {t('Cancel')}
         </button>
         <button disabled={submitDisabled} className={'btn btn-primary'} onClick={onConfirm} data-testid={'confirm'} data-cy={'add-layer-confirm'}>
-          {t('Add')}
+          {t('Add_layer')}
         </button>
       </div>
     );

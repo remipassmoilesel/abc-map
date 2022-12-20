@@ -32,10 +32,11 @@ export class ToolSelector {
   }
 
   public static getActive(): Cypress.Chainable<MapTool | undefined> {
+    // FIXME: better typings
     return cy.get('[data-cy=tool-selector] [data-active=true]').then((elem) => {
-      const name = (elem.data()['cy'] || '').substr('tool-'.length);
-      return Object.values(MapTool).find((t) => t.toLocaleLowerCase() === name) as MapTool;
-    });
+      const name = (elem.data()['cy'] || '').substring('tool-'.length);
+      return Object.values(MapTool).find((t) => t.toLocaleLowerCase() === name);
+    }) as Cypress.Chainable<MapTool | undefined>;
   }
 
   public static toolMode(mode: ModeName) {

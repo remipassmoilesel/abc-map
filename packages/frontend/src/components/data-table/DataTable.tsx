@@ -23,6 +23,7 @@ import RowActions from './RowActions';
 import { prefixedTranslation } from '../../i18n/i18n';
 import Cls from './DataTable.module.scss';
 import _ from 'lodash';
+import clsx from 'clsx';
 
 const logger = Logger.get('DataSourceSelector.tsx');
 
@@ -57,8 +58,8 @@ function DataTable(props: Props) {
   }
 
   return (
-    <div className={`${Cls.dataTable} ${className}`} data-cy={dataCy}>
-      <table className={'table'}>
+    <div className={clsx(Cls.dataTable, className)} data-cy={dataCy}>
+      <table className={'table table-sm table-bordered table-hover'}>
         <thead>
           <tr>
             <th scope="col" className={Cls.numberColumn}>
@@ -69,6 +70,8 @@ function DataTable(props: Props) {
                 {key}
               </th>
             ))}
+
+            {withActions && <th>{t('Actions')}</th>}
           </tr>
         </thead>
         <tbody>
@@ -85,9 +88,6 @@ function DataTable(props: Props) {
                   {normalize(row[key])}
                 </td>
               ))}
-
-              {/* Filler */}
-              <td className={'flex-grow-1'} />
 
               {/* Actions */}
               {withActions && (

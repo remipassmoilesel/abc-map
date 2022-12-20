@@ -20,7 +20,6 @@ import { TestHelper } from '../helpers/TestHelper';
 import { DataStore } from '../helpers/DataStore';
 import { TopBar } from '../helpers/TopBar';
 import { MainMap } from '../helpers/MainMap';
-import { Routes } from '../helpers/Routes';
 
 describe('Load module', function () {
   beforeEach(() => {
@@ -28,12 +27,11 @@ describe('Load module', function () {
   });
 
   it('User can load module then use it', () => {
-    cy.visit(Routes.dataProcessing().format())
-      // Import layer
-      .then(() => DataStore.importByName('Cities of the world'))
+    // Import layer
+    DataStore.importByName('Cities of the world')
+      .then(() => TopBar.moduleIndex())
       // Open remote module loader
-      .then(() => TopBar.dataProcessing())
-      .get('[data-cy=remote-module-loader]')
+      .get('[data-cy=add-module-modal]')
       .click()
       // Type module URL then load it
       .get('[data-cy=module-urls]')
@@ -42,17 +40,17 @@ describe('Load module', function () {
       .get('[data-cy=load-modules]')
       .click()
       // Open module, process layer
-      .get('[data-cy^=example-module]')
+      .get('[data-cy^=open_example-module]')
       .eq(0)
       .click()
-      .get('[data-cy=module-title]')
-      .should('have.text', 'Create buffers (Module template)')
+      .get('h2')
+      .should('have.text', 'Buffers (Module template)')
       .get('select[name="layerId"]')
       .select(3)
       .get('button[type="submit"]')
       .click()
       // Wait for completion
-      .get('[data-cy=data-processing-viewport]')
+      .get('[data-cy=module-viewport]')
       .contains('Processing done')
       .then(() => TopBar.map())
       .then(() => MainMap.getReference())

@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
-import { RemoteModuleRef } from '../../../data-processing/_common/registry/RemoteModuleRef';
+import { LocalModuleId } from '../../../modules/LocalModuleId';
 
 export interface UiState {
   historyCapabilities: {
@@ -49,27 +49,29 @@ export interface UiState {
     [k: string]: boolean | undefined;
   };
   /**
-   * These ids are used to update UI when list of modules change
-   * It contains local and remote modules
-   */
-  modulesLoaded: string[];
-  /**
-   * This list contains only the loaded modules
-   */
-  remoteModules: RemoteModuleRef[];
-  /**
-   * This list is used in inputs. URLs here may not have been loaded
-   */
-  remoteModuleUrls: string[];
-  /**
    * Number of visits
    *
    * We do not store more than one visit for privacy purposes.
    */
   visits: number;
+  /**
+   * This list is used in inputs. URLs here may not have been loaded
+   */
+  remoteModuleUrls: string[];
+  /**
+   * We keep the list of the last modules used.
+   *
+   */
+  lastModulesUsed: string[];
+  /**
+   * List of user preferred module IDs
+   */
+  favoriteModules: string[];
 }
 
 export type InformationKey = keyof UiState['informations'];
+
+export const DefaultFavoriteModules = [LocalModuleId.StaticExport];
 
 export const uiInitialState: UiState = {
   historyCapabilities: {},
@@ -80,8 +82,8 @@ export const uiInitialState: UiState = {
     installApp: false,
   },
   experimentalFeatures: {},
-  modulesLoaded: [],
-  remoteModules: [],
-  remoteModuleUrls: [],
   visits: 0,
+  remoteModuleUrls: [],
+  lastModulesUsed: [],
+  favoriteModules: DefaultFavoriteModules,
 };

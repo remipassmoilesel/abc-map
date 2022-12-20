@@ -19,11 +19,13 @@
 @import "src/styles/variables";
 
 .langSelector {
-  height: 4vh;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
+
+  height: 100%;
+  margin: 0 1rem;
 
   .toggleIcon {
     height: 2.2vh;

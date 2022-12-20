@@ -27,7 +27,7 @@ describe('Search on map', function () {
 
   it('user can search', function () {
     cy.visit(Routes.map().format())
-      .then(() => MainMap.fixedView())
+      .then(() => MainMap.fixedView1())
       .then(() => MainMap.getComponent())
       .get('[data-cy=search-menu]')
       .click()
@@ -42,7 +42,7 @@ describe('Search on map', function () {
       .then(() => MainMap.getReference())
       .should((map) => {
         const extent = map.getViewExtent();
-        expect(extent).deep.equals([408038.177297224, 5394212.793119373, 419930.7475875498, 5400357.287769375]);
+        expect(extent).deep.equals([414107.002487285, 5397227.23333822, 414136.50305347895, 5397242.594491627], `Actual: "${JSON.stringify(extent)}"`);
       });
   });
 });

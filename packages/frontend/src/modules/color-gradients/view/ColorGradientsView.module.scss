@@ -1,0 +1,67 @@
+/**
+ * Copyright © 2021 Rémi Pace.
+ * This file is part of Abc-Map.
+ *
+ * Abc-Map is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of
+ * the License, or (at your option) any later version.
+ *
+ * Abc-Map is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General
+ * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+@import "src/styles/mixins";
+
+.view {
+  display: flex;
+  flex-direction: column;
+
+  width: 60vw;
+  margin: 0 auto;
+  padding: 2rem;
+
+  @include media-breakpoint-down(md) {
+    width: 100%;
+    padding: 1rem;
+  }
+
+  h1 {
+    margin: 2rem 0;
+  }
+}
+
+.section {
+  margin: 1rem;
+}
+
+.explanation {
+  margin: 1rem 0;
+}
+
+.introduction {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  @include media-breakpoint-up(xl) {
+    div {
+      width: 60%;
+    }
+
+    img {
+      width: 20vw;
+    }
+  }
+
+  @include media-breakpoint-down(xl) {
+    img {
+      height: 30vh;
+    }
+  }
+}

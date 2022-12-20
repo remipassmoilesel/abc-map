@@ -24,8 +24,8 @@ import { ServiceProps, withServices } from '../../../../../core/withServices';
 import OptionRow from '../../_common/option-row/OptionRow';
 import PointIconPicker from '../../../../../components/icon-picker/PointIconPicker';
 import { IconName } from '../../../../../assets/point-icons/IconName';
+import { WithTranslation, withTranslation } from 'react-i18next';
 import { prefixedTranslation } from '../../../../../i18n/i18n';
-import { withTranslation } from 'react-i18next';
 
 const mapStateToProps = (state: MainState) => ({
   point: state.map.currentStyle.point,
@@ -37,7 +37,7 @@ const mapDispatchToProps = {
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
-type Props = ConnectedProps<typeof connector> & ServiceProps;
+type Props = ConnectedProps<typeof connector> & ServiceProps & WithTranslation;
 
 const t = prefixedTranslation('MapView:ToolSelector.');
 

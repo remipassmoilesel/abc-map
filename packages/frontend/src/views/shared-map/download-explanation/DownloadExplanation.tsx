@@ -17,20 +17,18 @@
  */
 
 import Cls from './DownloadExplanation.module.scss';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { Modal } from 'react-bootstrap';
 import React from 'react';
-import { prefixedTranslation } from '../../../i18n/i18n';
 import MainIcon from '../../../assets/main-icon.svg';
 
 interface Props {
   onClose: () => void;
 }
 
-const t = prefixedTranslation('SharedMapView:');
-
-function DownloadExplanation(props: Props) {
+export function DownloadExplanation(props: Props) {
   const { onClose } = props;
+  const { t } = useTranslation('SharedMapView');
   const mainAppAddress = `${window.location.protocol}//${window.location.host}`;
 
   return (
@@ -68,5 +66,3 @@ function DownloadExplanation(props: Props) {
     </Modal>
   );
 }
-
-export default withTranslation()(DownloadExplanation);

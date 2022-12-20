@@ -19,10 +19,12 @@
 @import "src/styles/variables";
 
 .userMenu {
-  height: 3vh;
   display: flex;
   align-items: center;
   justify-content: center;
+
+  height: 100%;
+  margin: 0 1rem;
 
   :global(.dropdown-toggle) {
     background-color: white;

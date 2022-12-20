@@ -39,7 +39,7 @@ interface Props {
   readOnly?: boolean;
 }
 
-const defaultBaseFontSizeEm = 1.2;
+const defaultBaseFontSizeEm = 1.1;
 
 /**
  * This component show a line representing the current scale of map specified in props.

@@ -30,6 +30,7 @@ const t = prefixedTranslation('ChangelogView:');
 
 function ChangelogView() {
   const [changelog, setChangelog] = useState('');
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => pageSetup(t('Changelog')), []);
 
@@ -38,7 +39,10 @@ function ChangelogView() {
       .get('/static/CHANGELOG.html', { responseType: 'blob' })
       .then((res) => BlobIO.asString(res.data))
       .then((content) => setChangelog(content))
-      .catch((err) => logger.error('Changelog error: ', err));
+      .catch((err) => {
+        logger.error('Changelog error: ', err);
+        setIsError(true);
+      });
   }, []);
 
   return (
@@ -60,6 +64,8 @@ function ChangelogView() {
         </div>
 
         <div dangerouslySetInnerHTML={{ __html: changelog }} />
+
+        {isError && <div className={'alert alert-warning'}>{t('Failed_to_load_log_try_again_later')} 🤭</div>}
       </div>
     </div>
   );

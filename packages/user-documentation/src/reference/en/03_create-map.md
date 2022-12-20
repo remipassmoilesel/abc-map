@@ -32,7 +32,7 @@ You can use:
 
 First, try the `predefined layers`, they are the easiest to use.
 
-Vous pouvez aussi importer des fonds de carte à partir du magasin de données.
+You can also import basemaps from the data store.
 
 If you do not find what you are looking for, use your favorite search engine to find an alternative. For example,
 try searching for <a href="https://duckduckgo.com/?q=couche+wms+france&t=h_&ia=web" target="_blank">"wms layer france"</a>.

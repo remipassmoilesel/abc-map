@@ -2,6 +2,7 @@
 
 <!-- toc -->
 
+- [Better project storage](#better-project-storage)
 - [Feature explorer](#feature-explorer)
 - [Better documentation](#better-documentation)
 - [Text labels for multi-polygons and multi-lines](#text-labels-for-multi-polygons-and-multi-lines)
@@ -28,8 +29,15 @@
 - [Embed audio files](#embed-audio-files)
 - [Shared map: links to views](#shared-map-links-to-views)
 - [Publishing PWA in store](#publishing-pwa-in-store)
+- [Feedback on modules](#feedback-on-modules)
 
 <!-- tocstop -->
+
+## Better project storage
+
+Presently projects are loaded "in memory", which causes data loss when refreshing the page.
+
+Projects must be persisted as users modify.
 
 ## Feature explorer
 
@@ -157,3 +165,7 @@ Users should be able to create links that can change the current view of the map
 ## Publishing PWA in store
 
 Users should be able to download Abc-Map from F-Droid and Android Store, see: https://github.com/GoogleChromeLabs/bubblewrap
+
+## Feedback on modules
+
+Users should be able to up/down vote modules.

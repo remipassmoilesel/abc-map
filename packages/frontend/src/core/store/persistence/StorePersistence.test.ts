@@ -128,10 +128,10 @@ describe('StorePersistence', () => {
           Feature1: true,
           Feature2: false,
         },
-        modulesLoaded: ['module1', 'module2', 'module3', 'module4'],
-        remoteModuleUrls: ['https://module3', 'https://module4'],
-        remoteModules: [{ id: 'module3', url: 'https://module3' }],
         visits: 1,
+        remoteModuleUrls: ['https://module3', 'https://module4'],
+        lastModulesUsed: ['module1', 'module2'],
+        favoriteModules: ['module-1', 'module-2'],
       },
     });
 
@@ -221,10 +221,10 @@ describe('StorePersistence', () => {
           Feature1: true,
           Feature2: false,
         },
-        modulesLoaded: [],
-        remoteModuleUrls: [],
-        remoteModules: [{ id: 'module3', url: 'https://module3' }],
         visits: 1,
+        remoteModuleUrls: ['https://module3', 'https://module4'],
+        lastModulesUsed: ['module1', 'module2'],
+        favoriteModules: ['module-1', 'module-2'],
       },
     };
 

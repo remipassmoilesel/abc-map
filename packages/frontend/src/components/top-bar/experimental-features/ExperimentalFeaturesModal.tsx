@@ -24,8 +24,8 @@ import { DevServiceWorker, ExperimentalFeature, ExperimentalFeatures } from '../
 import { useAppDispatch, useAppSelector } from '../../../core/store/hooks';
 import FeatureToggle from './FeatureToggle';
 import { UiActions } from '../../../core/store/ui/actions';
-import { ModuleRegistry } from '../../../data-processing/_common/registry/ModuleRegistry';
 import { useServices } from '../../../core/useServices';
+import { useModuleRegistry } from '../../../core/modules/hooks';
 
 interface Props {
   visible: boolean;
@@ -39,6 +39,7 @@ function ExperimentalFeaturesModal(props: Props) {
   const { pwa } = useServices();
   const featureStates = useAppSelector((st) => st.ui.experimentalFeatures);
   const dispatch = useAppDispatch();
+  const registry = useModuleRegistry();
 
   const handleChange = useCallback(
     (f: ExperimentalFeature, state: boolean) => {
@@ -56,11 +57,11 @@ function ExperimentalFeaturesModal(props: Props) {
 
   const handleClose = useCallback(() => {
     // We reset data processing modules, in case some have been enabled/disabled
-    ModuleRegistry.get().resetLocalModules();
+    registry.resetModules();
 
     // We close modal
     onClose();
-  }, [onClose]);
+  }, [onClose, registry]);
 
   return (
     <Modal show={visible} onHide={handleClose} centered>

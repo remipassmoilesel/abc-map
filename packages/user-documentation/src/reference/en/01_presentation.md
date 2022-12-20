@@ -12,19 +12,10 @@ With Abc-Map you can create:
 - Statistical maps: population density by regions, budgets by municipalities, ...
 - And more !
 
-👋 How it works ? Discover it in video 📹
-
-- <a href="https://youtu.be/bXl3Uq5fU34" target="_blank">Presentation of basic functions in 5 minutes</a>
-- <a href="https://youtu.be/majmp2GFfkE" target="_blank">Import and export of data</a>
-- <a href="https://youtu.be/irT6eV7JGDw" target="_blank">Represent the population density in metropolitan France with color gradients</a>
-
-<i>Automatic translation only 🤭</i>  
-<i>Videos can be outdated 🙇</b>
-
 <div class='alert alert-info my-4 d-flex flex-column'>
   <b class="mb-2">This software is brand new ✨ </b>
   <div class="mb-2">Abc-Map is constantly evolving, every week an improvement is published.</div>
-  <div>So there are a lot of things to improve, starting with this documentation.</div>
+  <div>So there are a lot of things to improve, and this documentation may be partially outdated.</div>
 
   <a class='btn btn-link mt-3' onclick='abc.goToFunding()'>
     Help fund Abc-Map&nbsp;&nbsp;💌

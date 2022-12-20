@@ -54,29 +54,29 @@ Watch this video to see the whole process in action: https://www.youtube.com/emb
 
 ## How does it work ?
 
-Modules are JSX functions that returns a Module. They are loaded at runtime in [Abc-Map](https://abc-map.fr/)
+Abc-Map modules are JSX functions that returns a `Module` instance. They are loaded at runtime in [Abc-Map](https://abc-map.fr/)
 
 ```
-function MyModule(require, moduleApi){
-  return {
-    getId() {
-      return 'MyModule';
-    },
-    getReadableName() {
-      return 'My module';
-    },
-    getUserInterface() {
-      return <div onClick={this.process}>Hello !</div>;
-    }
-    process() {
-      const { mainMap, geo: geoService } = moduleApi;
-      // ....
-    }
-  }
+// See: https://gitlab.com/abc-map/abc-map/-/tree/master/packages/module-api
+export interface Module {
+    // Metadata methods
+    getId(): ModuleId;
+    getReadableName(): string;
+    getShortDescription(): string;
+    getFullDescription(): string | undefined;
+
+    // User interface of module
+    getView(): ReactElement;
 }
+
+function moduleFactory(): Module {
+  return new ModuleImplementation()
+}
+
+export default moduleFactory;
 ```
 
-This template is a supercharged version of this code. It includes [Openlayers](https://openlayers.org/) and [Turfjs](https://turfjs.org/).
+This template includes [Openlayers](https://openlayers.org/) and [Turfjs](https://turfjs.org/).
 
 It is built with [Webpack](https://webpack.js.org/), you can distribute assets (images, videos, +) with
 your modules.

@@ -29,7 +29,7 @@ describe('Data store', function () {
   });
 
   it('User can search then download artefact', () => {
-    cy.visit(Routes.dataStore().format())
+    cy.visit(Routes.module().withParams({ moduleId: 'data-store' }))
       .get('[data-cy=data-store-search]')
       .type('countries')
       .type('{enter}')
@@ -46,7 +46,7 @@ describe('Data store', function () {
   });
 
   it('User can search then add artefact to project', () => {
-    cy.visit(Routes.dataStore().format())
+    cy.visit(Routes.module().withParams({ moduleId: 'data-store' }))
       .get('[data-cy=data-store-search]')
       .type('countries')
       .type('{enter}')
@@ -69,7 +69,7 @@ describe('Data store', function () {
   });
 
   it('User can search then show license', () => {
-    cy.visit(Routes.dataStore().format())
+    cy.visit(Routes.module().withParams({ moduleId: 'data-store' }))
       .get('[data-cy=data-store-search]')
       .type('countries')
       .type('{enter}')

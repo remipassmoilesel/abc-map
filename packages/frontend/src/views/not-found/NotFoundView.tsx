@@ -16,20 +16,22 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
+import Cls from './NotFoundView.module.scss';
 import React, { Component, ReactNode } from 'react';
 import { Logger } from '@abc-map/shared';
 import { Link } from 'react-router-dom';
 import { addNoIndexMeta, pageSetup, removeNoIndexMeta } from '../../core/utils/page-setup';
-import { prefixedTranslation } from '../../i18n/i18n';
-import Cls from './NotFoundView.module.scss';
 import { Routes } from '../../routes';
+import { WithTranslation, withTranslation } from 'react-i18next';
 
 const logger = Logger.get('NotFoundView.tsx');
 
-const t = prefixedTranslation('NotFoundView:');
+type Props = WithTranslation;
 
-class NotFoundView extends Component<{}, {}> {
+class NotFoundView extends Component<Props, {}> {
   public render(): ReactNode {
+    const { t } = this.props;
+
     return (
       <div className={Cls.notFoundView}>
         <h3 className={'mb-5'}>{t('You_are_lost')} 😱</h3>
@@ -39,6 +41,8 @@ class NotFoundView extends Component<{}, {}> {
   }
 
   public componentDidMount() {
+    const { t } = this.props;
+
     pageSetup(`404 - ${t('You_are_lost')}`);
     addNoIndexMeta();
   }
@@ -48,4 +52,4 @@ class NotFoundView extends Component<{}, {}> {
   }
 }
 
-export default NotFoundView;
+export default withTranslation('NotFoundView')(NotFoundView);

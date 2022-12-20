@@ -23,7 +23,7 @@ import { TestHelper } from '../helpers/TestHelper';
 import { PdfComparison } from '../plugins/PdfComparison';
 import { LongOperation } from '../helpers/LongOperation';
 import { Routes } from '../helpers/Routes';
-import { TopBar } from '../helpers/TopBar';
+import { Modules } from '../helpers/Modules';
 
 describe('Rendering spec', function () {
   beforeEach(() => {
@@ -44,15 +44,13 @@ describe('Rendering spec', function () {
       .get('[data-cy=confirmation-confirm]')
       .click()
       .then(() => TestData.projectSample3())
-      .then((project) => {
-        return cy.get('[data-cy=file-input]').attachFile({ filePath: 'project.abm2', fileContent: project });
-      })
+      .then((project) => cy.get('[data-cy=file-input]').attachFile({ filePath: 'project.abm2', fileContent: project }))
       .get('[data-cy=password-input]')
       .type('azerty1234')
       .get('[data-cy=password-confirm]')
       .click()
       .then(() => Toasts.assertText('Project loaded !'))
-      .then(() => TopBar.export())
+      .then(() => Modules.open('static-export'))
       .get('[data-cy=pdf-export]')
       .click()
       .then(() => LongOperation.done(50_000))

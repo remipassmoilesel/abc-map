@@ -12,18 +12,10 @@ Avec Abc-Map vous pouvez créer:
 - Des cartes statistiques : densité de population par régions, budgets par communes, ...
 - Et plus !
 
-👋 Comment ça marche ? Découvrez-le en vidéo 📹
-
-- <a href="https://youtu.be/bXl3Uq5fU34" target="_blank">Présentation des fonctionnalités basiques en 5 minutes</a>
-- <a href="https://youtu.be/majmp2GFfkE" target="_blank">Import et export de données</a>
-- <a href="https://youtu.be/irT6eV7JGDw" target="_blank">Représenter la densité de population en France métropolitaine avec des dégradés de couleurs</a>
-
-<i>Les vidéos peuvent être obsolètes 🙇</b>
-
 <div class='alert alert-info my-4 d-flex flex-column'>
   <b class="mb-2">Ce logiciel est tout neuf ✨ </b>
   <div class="mb-2">Abc-Map est en constante évolution, chaque semaine une amélioration est publiée.</div>
-  <div>Du coup il y a beaucoup de choses à améliorer, à commencer par cette documentation.</div>
+  <div>Il y a donc beaucoup de choses à améliorer, et cette documentation est peut-être partiellement obsolète.</div>
 
   <a class='btn btn-link mt-3' onclick='abc.goToFunding()'>
     Participez au financement d&apos;Abc-Map&nbsp;&nbsp;💌

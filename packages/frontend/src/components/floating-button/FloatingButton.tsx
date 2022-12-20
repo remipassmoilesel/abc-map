@@ -46,7 +46,7 @@ export function FloatingButton(props: Props) {
     <div className={Cls.container} style={style}>
       <WithTooltip title={title} placement={titlePlacement}>
         <button onPointerUp={handleClick} className={Cls.button} data-cy={dataCy} disabled={disabled}>
-          <FaIcon icon={icon} size={size || '2rem'} className={Cls.icon} />
+          <FaIcon icon={icon} size={size || '1.8rem'} className={Cls.icon} />
         </button>
       </WithTooltip>
     </div>

@@ -20,10 +20,9 @@ import React, { ChangeEvent, Component, ReactNode } from 'react';
 import FormValidationLabel from '../../components/form-validation-label/FormValidationLabel';
 import { PasswordStrength, ValidationHelper } from '../../core/utils/ValidationHelper';
 import { FormState } from '../../components/form-validation-label/FormState';
-import { prefixedTranslation } from '../../i18n/i18n';
-import { withTranslation } from 'react-i18next';
+import { WithTranslation, withTranslation } from 'react-i18next';
 
-interface Props {
+interface Props extends WithTranslation {
   onSubmit: (previousPassword: string, newPassword: string) => void;
 }
 
@@ -33,8 +32,6 @@ interface State {
   newPassword: string;
   confirmation: string;
 }
-
-const t = prefixedTranslation('UserAccountView:');
 
 class ChangePasswordForm extends Component<Props, State> {
   constructor(props: Props) {
@@ -48,10 +45,8 @@ class ChangePasswordForm extends Component<Props, State> {
   }
 
   public render(): ReactNode {
-    const formState = this.state.formState;
-    const previousPassword = this.state.previousPassword;
-    const newPassword = this.state.newPassword;
-    const confirmation = this.state.confirmation;
+    const { t } = this.props;
+    const { formState, previousPassword, newPassword, confirmation } = this.state;
 
     return (
       <div className={'card card-body h-100'}>
@@ -139,4 +134,4 @@ class ChangePasswordForm extends Component<Props, State> {
   }
 }
 
-export default withTranslation()(ChangePasswordForm);
+export default withTranslation('UserAccountView')(ChangePasswordForm);

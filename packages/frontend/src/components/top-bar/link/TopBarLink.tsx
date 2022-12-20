@@ -16,35 +16,32 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useCallback } from 'react';
+import React, { ReactNode, useCallback } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import Cls from './TopBarLink.module.scss';
+import clsx from 'clsx';
 
 export interface Props {
   to: string;
   activeMatch?: RegExp;
-  label: string;
+  children: ReactNode | ReactNode[];
   'data-cy'?: string;
+  className?: string;
 }
 
-function TopBarLink(props: Props) {
+export function TopBarLink(props: Props) {
+  const { to, activeMatch, children, 'data-cy': dataCy, className } = props;
   const location = useLocation();
   const history = useHistory();
 
-  const dataCy = props['data-cy'];
-  const to = props.to;
-  const label = props.label;
-  const match = props.activeMatch || new RegExp(`^${to}`, 'i');
+  const match = activeMatch || new RegExp(`^${to}`, 'i');
   const isActive = !!location.pathname.match(match);
-  const classes = `${Cls.topBarLink} ${isActive ? Cls.active : ''}`;
 
   const handleClick = useCallback(() => history.push(to), [history, to]);
 
   return (
-    <button onClick={handleClick} className={classes} data-cy={dataCy}>
-      {label}
+    <button onClick={handleClick} className={clsx(Cls.topBarLink, isActive && Cls.active, className)} data-cy={dataCy}>
+      {children}
     </button>
   );
 }
-
-export default TopBarLink;
