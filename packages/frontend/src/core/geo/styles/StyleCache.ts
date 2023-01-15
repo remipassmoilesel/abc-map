@@ -17,9 +17,8 @@
  */
 
 import Style from 'ol/style/Style';
-import { FeatureStyle } from '@abc-map/shared';
+import { AbcGeometryType, FeatureStyle } from '@abc-map/shared';
 import { nanoid } from 'nanoid';
-import { AbcGeometryType } from '@abc-map/shared';
 import { StyleFactoryOptions } from './StyleFactoryOptions';
 
 export interface StyleCacheEntry {

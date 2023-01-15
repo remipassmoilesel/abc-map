@@ -67,7 +67,7 @@ export class DataReader {
     const _files: AbcFile<Blob>[] = [];
     for (const f of files) {
       if (FileFormats.fromPath(f.path) === FileFormat.ZIP) {
-        const unzipped = await Zipper.forFrontend().unzip(f.content);
+        const unzipped = await Zipper.forBrowser().unzip(f.content);
         _files.push(...unzipped);
       } else {
         _files.push(f);

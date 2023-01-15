@@ -43,7 +43,7 @@ Install Node.js and yarn. There are several ways to do that.
 
     $ curl https://get.volta.sh | bash
     $ source ~/.bashrc  # or restart your terminal
-    $ volta install node@16
+    $ volta install node@18
     $ npm i -g yarn
 
 Clone source code:
@@ -83,7 +83,7 @@ Install Node.js and yarn. There are several ways to do that.
 
     $ curl https://get.volta.sh | bash
     $ source ~/.bashrc  # or restart your terminal
-    $ volta install node@16
+    $ volta install node@18
     $ npm i -g yarn
 
 Clone source code then start and IDE (per example VSCode):

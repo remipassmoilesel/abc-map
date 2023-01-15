@@ -20,7 +20,7 @@ import { Controller } from '../server/Controller';
 import { Services } from '../services/services';
 import { AbcArtefact, artefactFilterFromString, langFromString, PaginatedResponse } from '@abc-map/shared';
 import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
-import fastifyStatic from 'fastify-static';
+import fastifyStatic from '@fastify/static';
 import { ByIdParams, GetByIdSchema, ListQuery, ListSchema, SearchQuery, SearchSchema } from './DataStoreController.schemas';
 import { PaginationHelper } from '../server/PaginationHelper';
 

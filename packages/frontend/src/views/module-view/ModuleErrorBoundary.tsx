@@ -17,18 +17,18 @@
  */
 
 import Cls from './ModuleErrorBoundary.module.scss';
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { ServiceProps, withServices } from '../../core/withServices';
 import { Logger } from '@abc-map/shared';
 import { WithTranslation, withTranslation } from 'react-i18next';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Routes } from '../../routes';
 import { FaIcon } from '../../components/icon/FaIcon';
 import { IconDefs } from '../../components/icon/IconDefs';
+import { withRouter, WithRouterProps } from '../../core/utils/withRouter';
 
 const logger = Logger.get('ModuleErrorBoundary.tsx');
 
-type Props = ServiceProps & RouteComponentProps & WithTranslation;
+type Props = ServiceProps & WithRouterProps & WithTranslation & { children: ReactNode | ReactNode[] };
 
 interface State {
   hasError: boolean;
@@ -74,10 +74,10 @@ class ModuleErrorBoundary extends React.Component<Props, State> {
   }
 
   private handleBackToModuleSearch = () => {
-    const { history } = this.props;
+    const { navigate } = this.props.router;
 
     this.setState({ hasError: false });
-    history.push(Routes.moduleIndex().format());
+    navigate(Routes.moduleIndex().format());
   };
 }
 

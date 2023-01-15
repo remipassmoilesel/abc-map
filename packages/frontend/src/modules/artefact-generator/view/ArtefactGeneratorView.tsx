@@ -23,8 +23,7 @@ import React, { ChangeEvent, useCallback, useState } from 'react';
 import clsx from 'clsx';
 import { I18nInput } from './I18nInput';
 import { useServices } from '../../../core/useServices';
-import { I18nText, Logger, LayerType, AbcView } from '@abc-map/shared';
-import { errorMessage } from '../../../core/utils/errorMessage';
+import { I18nText, Logger, LayerType, AbcView, errorMessage } from '@abc-map/shared';
 import { ModuleContainer } from '../../../components/module-container/ModuleContainer';
 import { ModuleTitle } from '../../../components/module-title/ModuleTitle';
 

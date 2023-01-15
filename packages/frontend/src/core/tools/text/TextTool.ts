@@ -17,7 +17,7 @@
  */
 
 import { Tool } from '../Tool';
-import { Logger, MapTool } from '@abc-map/shared';
+import { AbcGeometryType, Logger, MapTool } from '@abc-map/shared';
 import VectorSource from 'ol/source/Vector';
 import Geometry from 'ol/geom/Geometry';
 import Map from 'ol/Map';
@@ -33,8 +33,6 @@ import { MoveMapInteractionsBundle } from '../common/interactions/MoveMapInterac
 import { LayerWrapper } from '../../geo/layers/LayerWrapper';
 import { DefaultTolerancePx } from '../common/constants';
 import MapBrowserEvent from 'ol/MapBrowserEvent';
-import PluggableMap from 'ol/PluggableMap';
-import GeometryType from 'ol/geom/GeometryType';
 import { SelectionInteractionsBundle } from '../common/interactions/SelectionInteractionsBundle';
 import { SupportedGeometries } from '../common/interactions/SupportedGeometry';
 import { getRemSize } from '../../ui/getRemSize';
@@ -121,7 +119,7 @@ export class TextTool implements Tool {
 
       // We apply current style to feature
       const currentStyle = this.store.getState().map.currentStyle;
-      const alignment = feature.getGeometry()?.getType() === GeometryType.POINT ? 'left' : 'center';
+      const alignment = feature.getGeometry()?.getType() === AbcGeometryType.POINT ? 'left' : 'center';
       feature.setStyleProperties({
         text: {
           color: currentStyle.text?.color,
@@ -136,7 +134,7 @@ export class TextTool implements Tool {
 
       // We grab feature position in pixel then display text box
       const originalEv = ev.mapBrowserEvent as MapBrowserEvent<UIEvent> | undefined;
-      const map = originalEv?.map as PluggableMap | undefined;
+      const map = originalEv?.map as Map | undefined;
       const mapTarget = map?.getTarget() as HTMLDivElement | undefined;
       if (!originalEv || !mapTarget || !(mapTarget instanceof HTMLDivElement)) {
         logger.error('Cannot show textbox: ', { originalEv, map, mapTarget });

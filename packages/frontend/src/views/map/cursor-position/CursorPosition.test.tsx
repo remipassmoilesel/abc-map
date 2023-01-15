@@ -52,7 +52,7 @@ describe('CursorPosition', () => {
     const handler = map.unwrap().on.args[0][1];
 
     // Act
-    act(() => {
+    await act(() => {
       handler({ coordinate: [-20026376.39, -20048966.1], map: map.unwrap() });
     });
 

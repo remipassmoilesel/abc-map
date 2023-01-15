@@ -16,25 +16,25 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import GeometryType from 'ol/geom/GeometryType';
+import { AbcGeometryType } from '@abc-map/shared';
 
 // For the moment, we support only those geometries
 // Circles does not serialize in geojson
 // Rectangle cannot be modified in a correct way with this method
 
 export declare type SupportedGeometry =
-  | typeof GeometryType.POINT
-  | typeof GeometryType.MULTI_POINT
-  | typeof GeometryType.LINE_STRING
-  | typeof GeometryType.MULTI_LINE_STRING
-  | typeof GeometryType.MULTI_POLYGON
-  | typeof GeometryType.POLYGON;
+  | typeof AbcGeometryType.POINT
+  | typeof AbcGeometryType.MULTI_POINT
+  | typeof AbcGeometryType.LINE_STRING
+  | typeof AbcGeometryType.MULTI_LINE_STRING
+  | typeof AbcGeometryType.MULTI_POLYGON
+  | typeof AbcGeometryType.POLYGON;
 
 export const SupportedGeometries: SupportedGeometry[] = [
-  GeometryType.POINT,
-  GeometryType.MULTI_POINT,
-  GeometryType.LINE_STRING,
-  GeometryType.MULTI_LINE_STRING,
-  GeometryType.MULTI_POLYGON,
-  GeometryType.POLYGON,
+  AbcGeometryType.POINT,
+  AbcGeometryType.MULTI_POINT,
+  AbcGeometryType.LINE_STRING,
+  AbcGeometryType.MULTI_LINE_STRING,
+  AbcGeometryType.MULTI_POLYGON,
+  AbcGeometryType.POLYGON,
 ];

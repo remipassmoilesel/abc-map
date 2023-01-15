@@ -16,8 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import GeometryType from 'ol/geom/GeometryType';
-import { FeatureStyle, Logger } from '@abc-map/shared';
+import { AbcGeometryType, FeatureStyle, Logger } from '@abc-map/shared';
 import { Draw, Modify, Snap } from 'ol/interaction';
 import { FeatureWrapper } from '../../../geo/features/FeatureWrapper';
 import { DrawEvent } from 'ol/interaction/Draw';
@@ -43,7 +42,7 @@ export declare type ChangesetHandler = (t: Changeset) => void;
 export declare type FeatureAddedHandler = (f: FeatureWrapper) => void;
 
 // This represent the kind of draw interactions will do
-export declare type ToolType = typeof GeometryType.POINT | typeof GeometryType.LINE_STRING | typeof GeometryType.POLYGON;
+export declare type ToolType = typeof AbcGeometryType.POINT | typeof AbcGeometryType.LINE_STRING | typeof AbcGeometryType.POLYGON;
 
 const editingStyle = createEditingStyle();
 
@@ -175,7 +174,7 @@ export class DrawInteractionsBundle {
       freehand: false,
       freehandCondition: () => false,
       style: (f) => {
-        if (f.getGeometry()?.getType() === GeometryType.POINT) {
+        if (f.getGeometry()?.getType() === AbcGeometryType.POINT) {
           return styleFunction(DefaultStyleOptions, f).concat(editingStyle.Point);
         }
 

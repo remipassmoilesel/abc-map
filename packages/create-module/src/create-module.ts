@@ -17,11 +17,13 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'source-map-support/register';
-import { Logger } from './utils/Logger';
-import { Bootstrap } from './Bootstrap';
-import * as commandLineArgs from 'command-line-args';
-import * as chalk from 'chalk';
+import 'source-map-support/register.js';
+import { Logger } from './utils/Logger.js';
+import { Bootstrap } from './Bootstrap.js';
+import { Headers } from './utils/HttpClient.js';
+import commandLineArgs from 'command-line-args';
+import chalk from 'chalk';
+import { errorMessage } from './utils/errorMessage.js';
 
 const level = process.env.ABC_CREATE_MODULE_DEBUG ? 'debug' : 'info';
 const logger = Logger.get('index.ts', level);
@@ -37,7 +39,17 @@ async function createModule() {
   const name = options.name || 'my-awesome-module';
 
   const defaultSourceUrl = 'https://gitlab.com/abc-map/module-template/-/archive/master/module-template-master.zip';
-  const sourceUrl = process.env.ABC_CREATE_MODULE_SOURCE_URL ?? defaultSourceUrl;
+  const sourceUrl = process.env.ABC_CREATE_MODULE_SOURCE_URL || defaultSourceUrl;
+
+  let headers: Headers;
+  try {
+    headers = JSON.parse(process.env.ABC_CREATE_MODULE_HEADERS ?? '{}');
+    if (typeof headers !== 'object') {
+      throw new Error('Invalid value');
+    }
+  } catch (err) {
+    throw new Error(`${errorMessage(err)}. You must use valid a JSON string in ABC_CREATE_MODULE_HEADERS variable. Example: {"Authentication":"abcde"}`);
+  }
 
   logger.info(`\nBootstraping module ${chalk.blue(name)} 🌍\n`);
 
@@ -45,6 +57,7 @@ async function createModule() {
     name,
     sourceUrl,
     destination: process.cwd(),
+    headers,
   });
 
   await bootstrap.start();

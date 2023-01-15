@@ -1,5 +1,5 @@
 /**
- * Copyright © 2021 Rémi Pace.
+ * Copyright © 2022 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,16 +16,13 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as path from 'path';
+import { Routes } from '../../routes';
+import { matchRoutes, useLocation } from 'react-router-dom';
 
-const root = path.resolve(__dirname, '..', '..', 'resources');
+const fullscreenRoutes = [{ path: Routes.sharedMap().raw() }];
 
-export class Resources {
-  public getResourcePath(name: string): string {
-    return path.resolve(root, name);
-  }
-
-  public getSampleProject(): string {
-    return this.getResourcePath('sample-project.abm2');
-  }
+export function useFullscreenView(): boolean {
+  const location = useLocation();
+  const match = matchRoutes(fullscreenRoutes, location);
+  return !!match?.length;
 }

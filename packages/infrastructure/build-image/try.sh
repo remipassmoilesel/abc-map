@@ -15,8 +15,10 @@
 # You should have received a copy of the GNU Affero General
 # Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
 
+set -e
 
-IMAGE_NAME="registry.gitlab.com/abc-map/abc-map/build-image:v0.18"
+IMAGE_NAME="registry.gitlab.com/abc-map/abc-map/build-image:v0.23"
 
-docker run -v `realpath ../../..`:/build/abc-map -ti $IMAGE_NAME bash
+docker build . -t $IMAGE_NAME
+docker run --net=host -v `realpath ../../..`:/build/abc-map -ti $IMAGE_NAME bash
 

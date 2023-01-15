@@ -16,10 +16,10 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import GeometryType from 'ol/geom/GeometryType';
 import { logger, SelectionStyleFactory } from './SelectionStyleFactory';
 import { FeatureWrapper } from '../features/FeatureWrapper';
 import { SupportedGeometry } from '../../tools/common/interactions/SupportedGeometry';
+import { AbcGeometryType } from '@abc-map/shared';
 
 logger.disable();
 
@@ -34,28 +34,28 @@ describe('SelectionStyleFactory', function () {
 
   describe('getForFeature()', function () {
     it('Point', function () {
-      const feature = fakeFeature(GeometryType.POINT);
+      const feature = fakeFeature(AbcGeometryType.POINT);
       const styles = factory.getForFeature(feature);
       expect(styles).toHaveLength(1);
       expect(styles[0].getZIndex()).toEqual(Infinity);
     });
 
     it('LineString', function () {
-      const feature = fakeFeature(GeometryType.LINE_STRING);
+      const feature = fakeFeature(AbcGeometryType.LINE_STRING);
       const styles = factory.getForFeature(feature);
       expect(styles).toHaveLength(1);
       expect(styles[0].getZIndex()).toEqual(Infinity);
     });
 
     it('Polygon', function () {
-      const feature = fakeFeature(GeometryType.POLYGON);
+      const feature = fakeFeature(AbcGeometryType.POLYGON);
       const styles = factory.getForFeature(feature);
       expect(styles).toHaveLength(1);
       expect(styles[0].getZIndex()).toEqual(Infinity);
     });
 
     it('Circle', function () {
-      const feature = fakeFeature(GeometryType.CIRCLE);
+      const feature = fakeFeature(AbcGeometryType.CIRCLE);
       const styles = factory.getForFeature(feature);
       expect(styles).toHaveLength(2);
       expect(styles[0].getZIndex()).toEqual(Infinity);
@@ -69,7 +69,7 @@ describe('SelectionStyleFactory', function () {
   });
 });
 
-function fakeFeature(geom: SupportedGeometry): FeatureWrapper {
+function fakeFeature(geom: AbcGeometryType): FeatureWrapper {
   return {
     getGeometry() {
       return {

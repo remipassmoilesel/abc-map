@@ -20,7 +20,7 @@ import Cls from './ModuleIndexView.module.scss';
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { ModuleCard } from './module-card/ModuleCard';
 import clsx from 'clsx';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useEssentialModules, useFavoriteModules, useLastModulesUsed, useModuleRegistry } from '../../core/modules/hooks';
 import { Routes } from '../../routes';
 import { Module } from '@abc-map/module-api';
@@ -35,7 +35,7 @@ import { useSearchParamsModuleUrls } from './hooks';
 export default function ModuleIndexView() {
   const { search } = useLocation();
   const registry = useModuleRegistry();
-  const history = useHistory();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation('ModuleIndexView');
 
@@ -48,8 +48,8 @@ export default function ModuleIndexView() {
   const hideAddModuleModal = useCallback(() => {
     setAddModuleModal(false);
     // When we hide modal, we reset eventual module urls in search parameters
-    history.push({ pathname: Routes.moduleIndex().format(), search: '' });
-  }, [history]);
+    navigate({ pathname: Routes.moduleIndex().format(), search: '' });
+  }, [navigate]);
 
   const searchParamsUrls = useSearchParamsModuleUrls();
 
@@ -65,9 +65,9 @@ export default function ModuleIndexView() {
     (ev: ChangeEvent<HTMLInputElement>) => {
       const newQuery = ev.target.value;
       setQuery(newQuery);
-      history.push({ pathname: Routes.moduleIndex().format(), search: '?q=' + newQuery });
+      navigate({ pathname: Routes.moduleIndex().format(), search: '?q=' + newQuery });
     },
-    [history]
+    [navigate]
   );
 
   // Update search query when query parameters changes
@@ -81,10 +81,10 @@ export default function ModuleIndexView() {
 
   const handleShowModule = useCallback(
     (mod: Module) => {
-      history.push({ pathname: Routes.module().withParams({ moduleId: mod.getId() }) });
+      navigate({ pathname: Routes.module().withParams({ moduleId: mod.getId() }) });
       setQuery('');
     },
-    [history]
+    [navigate]
   );
 
   const handleRemoveModule = useCallback((mod: Module) => registry.unload(mod), [registry]);

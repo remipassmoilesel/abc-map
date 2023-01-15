@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as logLevel from 'loglevel';
+import logLevel from 'loglevel';
 import { Logger as LogLevelLogger } from 'loglevel';
 
 export declare type LogSeverity = 'trace' | 'debug' | 'info' | 'warn' | 'error' | 'silent';

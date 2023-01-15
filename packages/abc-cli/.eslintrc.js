@@ -56,7 +56,9 @@ module.exports = {
       }
     ],
     "max-len": ["error", { "code": 160 }],
-    "@typescript-eslint/no-floating-promises": ["error"]
+    "@typescript-eslint/no-floating-promises": ["error"],
+    "require-await": "error",
+    "@typescript-eslint/await-thenable": "error"
   }
 }
 

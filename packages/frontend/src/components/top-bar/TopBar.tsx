@@ -24,7 +24,7 @@ import MainIcon from '../../assets/main-icon.svg';
 import LangSelector from './lang-selector/LangSelector';
 import { UserMenu } from './user-menu/UserMenu';
 import { Routes } from '../../routes';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { FaIcon } from '../icon/FaIcon';
 import { IconDefs } from '../icon/IconDefs';
 import { SmallOfflineIndicator } from '../offline-indicator/SmallOfflineIndicator';
@@ -51,11 +51,11 @@ interface LinkDef {
 
 function TopBar() {
   const { t } = useTranslation('TopBar');
-  const history = useHistory();
+  const navigate = useNavigate();
   const favoriteModules = useFavoriteModules().slice(0, 20);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const handleGoToLanding = useCallback(() => history.push(Routes.landing().format()), [history]);
+  const handleGoToLanding = useCallback(() => navigate(Routes.landing().format()), [navigate]);
 
   const [menuType, setMenuType] = useState(MenuType.Folding);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -63,11 +63,6 @@ function TopBar() {
 
   // Links are displayed in two menus: a static one when there is enough space, a folding one when not
   const linkDefs: LinkDef[] = [
-    {
-      to: Routes.documentation().format(),
-      label: t('Documentation'),
-      dataCy: 'help',
-    },
     {
       to: Routes.map().format(),
       label: t('Map'),
@@ -87,6 +82,11 @@ function TopBar() {
       ),
       activeMatch: /^\/[a-z]{2}\/modules$/gi,
       dataCy: 'module-index',
+    },
+    {
+      to: Routes.documentation().format(),
+      label: t('Documentation'),
+      dataCy: 'help',
     },
     {
       to: Routes.funding().format(),

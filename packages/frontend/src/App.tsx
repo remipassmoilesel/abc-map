@@ -17,9 +17,8 @@
  */
 
 import Cls from './App.module.scss';
-import React, { lazy, useEffect, Suspense } from 'react';
-import { matchPath, Route, Switch, useHistory, useLocation } from 'react-router-dom';
-import { getAbcWindow } from '@abc-map/shared';
+import React, { lazy, Suspense } from 'react';
+import { Route, Routes as RoutesContainer } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import TopBar from './components/top-bar/TopBar';
 import PasswordInputModal from './components/password-input-modal/PasswordInputModal';
@@ -43,6 +42,7 @@ import { BlueLoader } from './components/blue-loader/BlueLoader';
 import clsx from 'clsx';
 import InstallAppModal from './components/install-app-modal/InstallAppModal';
 import { MainKeyboardListener } from './components/main-keyboard-listener/MainKeyboardListener';
+import { useFullscreenView } from './core/ui/useFullscreenView';
 
 // App views, all lazy loaded
 const LandingView = lazy(() => import('./views/landing/LandingView'));
@@ -59,42 +59,33 @@ const ChangelogView = lazy(() => import('./views/changelog/ChangelogView'));
 const ModuleIndexView = lazy(() => import('./views/module-index-view/ModuleIndexView'));
 const ModuleView = lazy(() => import('./views/module-view/ModuleView'));
 
-const fullscreenRoutes = [Routes.sharedMap().raw()];
-
 export function App() {
-  const history = useHistory();
-  const location = useLocation();
-  const fullscreenView = !fullscreenRoutes.find((r) => matchPath(location.pathname, { path: r }));
-
-  useEffect(() => {
-    // This route is used in documentation
-    getAbcWindow().abc.goToFunding = () => history.push(Routes.funding().format());
-  }, [history]);
+  const fullscreenView = useFullscreenView();
 
   return (
     <>
       {/* Edition: with top bar, most of the views are enabled */}
-      {fullscreenView && (
+      {!fullscreenView && (
         <>
           <TopBar />
 
           <div className={clsx(Cls.appViewport, 'abc-app-viewport')}>
             <Suspense fallback={fallbackUi()}>
-              <Switch>
-                <Route exact path={'/'} component={LandingView} />
-                <Route exact path={Routes.landing().raw()} component={LandingView} />
-                <Route exact path={Routes.map().raw()} component={MapView} />
-                <Route exact path={Routes.documentation().raw()} component={DocumentationView} />
-                <Route exact path={Routes.confirmAccount().raw()} component={ConfirmAccountView} />
-                <Route exact path={Routes.resetPassword().raw()} component={ResetPasswordView} />
-                <Route exact path={Routes.userAccount().raw()} component={UserAccountView} />
-                <Route exact path={Routes.legalMentions().raw()} component={LegalMentionsView} />
-                <Route exact path={Routes.funding().raw()} component={FundingView} />
-                <Route exact path={Routes.changelog().raw()} component={ChangelogView} />
-                <Route exact path={Routes.moduleIndex().raw()} component={ModuleIndexView} />
-                <Route exact path={Routes.module().raw()} component={ModuleView} />
-                <Route path={'*'} component={NotFoundView} />
-              </Switch>
+              <RoutesContainer>
+                <Route path={'/'} element={<LandingView />} />
+                <Route path={Routes.landing().raw()} element={<LandingView />} />
+                <Route path={Routes.map().raw()} element={<MapView />} />
+                <Route path={Routes.documentation().raw()} element={<DocumentationView />} />
+                <Route path={Routes.confirmAccount().raw()} element={<ConfirmAccountView />} />
+                <Route path={Routes.resetPassword().raw()} element={<ResetPasswordView />} />
+                <Route path={Routes.userAccount().raw()} element={<UserAccountView />} />
+                <Route path={Routes.legalMentions().raw()} element={<LegalMentionsView />} />
+                <Route path={Routes.funding().raw()} element={<FundingView />} />
+                <Route path={Routes.changelog().raw()} element={<ChangelogView />} />
+                <Route path={Routes.moduleIndex().raw()} element={<ModuleIndexView />} />
+                <Route path={Routes.module().raw()} element={<ModuleView />} />
+                <Route path={'*'} element={<NotFoundView />} />
+              </RoutesContainer>
             </Suspense>
           </div>
 
@@ -118,14 +109,14 @@ export function App() {
       )}
 
       {/* Map share, fullscreen */}
-      {!fullscreenView && (
+      {fullscreenView && (
         <>
           <div className={clsx(Cls.appViewport, 'abc-app-viewport')}>
             <Suspense fallback={fallbackUi()}>
-              <Switch>
-                <Route exact path={Routes.sharedMap().raw()} component={SharedMapView} />
-                <Route path={'*'} component={NotFoundView} />
-              </Switch>
+              <RoutesContainer>
+                <Route path={Routes.sharedMap().raw()} element={<SharedMapView />} />
+                <Route path={'*'} element={<NotFoundView />} />
+              </RoutesContainer>
             </Suspense>
           </div>
         </>

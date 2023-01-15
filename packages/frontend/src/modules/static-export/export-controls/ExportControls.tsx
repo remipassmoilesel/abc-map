@@ -89,8 +89,8 @@ function ExportControls(props: Props) {
       onAddTextFrame({
         ...frame,
         position: {
-          x: 30,
-          y: 30,
+          x: 60,
+          y: 60,
         },
         size: {
           width: 1100,

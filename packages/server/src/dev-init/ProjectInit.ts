@@ -17,51 +17,90 @@
  */
 
 import { Services } from '../services/services';
-import { AbcUser, Logger, ProjectHelper } from '@abc-map/shared';
-import { Resources } from '../utils/Resources';
+import { AbcProjectManifest, Logger, ProjectHelper } from '@abc-map/shared';
+import { ResourcePath } from '../utils/ResourcePath';
 import { promises as fs } from 'fs';
 import * as uuid from 'uuid-random';
-import { CompressedProject, NodeBinary } from '@abc-map/shared/build/project/CompressedProject';
+import { Config } from '../config/Config';
 
-const logger = Logger.get('ProjectInit');
+const logger = Logger.get('ProjectInit.ts', 'info');
 
 export class ProjectInit {
-  public static create(services: Services) {
-    const resources = new Resources();
-    return new ProjectInit(services, resources);
+  public static create(config: Config, services: Services) {
+    const resources = new ResourcePath();
+    return new ProjectInit(config, services, resources);
   }
 
-  constructor(private services: Services, private resources: Resources) {}
+  constructor(private config: Config, private services: Services, private resources: ResourcePath) {}
 
-  public async init(users: AbcUser[]): Promise<void> {
-    let sampleProject: CompressedProject | undefined;
-    try {
-      sampleProject = await this.loadSampleProject();
-    } catch (e) {
-      logger.warn('Cannot read sample project, no project will be created');
+  public async init(): Promise<void> {
+    if (!this.config.development?.generateData) {
       return;
     }
 
+    const alreadyDone = !!(await this.services.project.findAllMetadatas()).length;
+    if (alreadyDone) {
+      return;
+    }
+
+    let projectsCreated = 0;
+    const users = await this.services.user.findAll(100);
+
+    const { project: privateProject, manifest: privateManifest } = await this.loadSampleProject(this.resources.getSamplePrivateProject());
+    const { project: publicProject, manifest: publicManifest } = await this.loadSampleProject(this.resources.getSamplePublicProject());
+
     for (const user of users) {
-      const prs = await this.services.project.list(user.id, 0, 1);
-      if (prs.length) {
+      const hasProjects = !!(await this.services.project.findByUserId(user.id, 0, 1)).length;
+      if (hasProjects) {
         continue;
       }
 
-      const project: CompressedProject<NodeBinary> = {
-        ...sampleProject,
-        metadata: {
-          ...sampleProject.metadata,
-          id: uuid(),
-        },
-      };
-      await this.services.project.save(user.id, project);
+      const projectsPerUser = this.config.development.generateData.projectsPerUser;
+      const privateProjects = Math.max(2, Math.round(projectsPerUser * 0.5));
+      const publicProjects = projectsPerUser - privateProjects;
+
+      let p = 0;
+      const projectName = (prefix: string) => `${prefix} project ${++p}`;
+
+      for (let i = 0; i < privateProjects; i++) {
+        const manifest: AbcProjectManifest = {
+          ...privateManifest,
+
+          metadata: {
+            ...privateManifest.metadata,
+            id: uuid(),
+            name: projectName(`Private`),
+          },
+        };
+
+        const project = await ProjectHelper.forNodeJS().updateManifest(privateProject, manifest);
+        await this.services.project.save(user.id, project);
+        projectsCreated++;
+      }
+
+      for (let i = 0; i < publicProjects; i++) {
+        const manifest: AbcProjectManifest = {
+          ...publicManifest,
+
+          metadata: {
+            ...publicManifest.metadata,
+            id: uuid(),
+            name: projectName(`Public`),
+          },
+        };
+
+        const project = await ProjectHelper.forNodeJS().updateManifest(publicProject, manifest);
+        await this.services.project.save(user.id, project);
+        projectsCreated++;
+      }
     }
+
+    logger.info(`${projectsCreated} projects created.`);
   }
 
-  private async loadSampleProject(): Promise<CompressedProject> {
-    const project = await fs.readFile(this.resources.getSampleProject());
-    const manifest = await ProjectHelper.forBackend().extractManifest(project);
-    return { metadata: manifest.metadata, project };
+  private async loadSampleProject(path: string): Promise<{ manifest: AbcProjectManifest; project: Buffer }> {
+    const project = await fs.readFile(path);
+    const manifest = await ProjectHelper.forNodeJS().extractManifest(project);
+    return { manifest, project };
   }
 }

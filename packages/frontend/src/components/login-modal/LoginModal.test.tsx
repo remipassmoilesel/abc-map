@@ -30,10 +30,10 @@ describe('LoginModal', () => {
     services = newTestServices();
   });
 
-  it('should become visible', () => {
+  it('should become visible', async () => {
     abcRender(<LoginModal />, { services });
 
-    act(() => dispatch({ type: ModalEventType.ShowLogin }));
+    await openModal();
 
     expect(screen.getByPlaceholderText('Email address')).toBeDefined();
   });
@@ -42,7 +42,7 @@ describe('LoginModal', () => {
     // Prepare
     abcRender(<LoginModal />, { services });
 
-    act(() => dispatch({ type: ModalEventType.ShowLogin }));
+    await openModal();
 
     // Act
     await userEvent.type(screen.getByTestId('email'), 'heyhey@hey.com');
@@ -56,7 +56,7 @@ describe('LoginModal', () => {
     // Prepare
     abcRender(<LoginModal />, { services });
 
-    act(() => dispatch({ type: ModalEventType.ShowLogin }));
+    await openModal();
 
     await userEvent.type(screen.getByTestId('email'), 'heyhey@hey.com');
     await userEvent.type(screen.getByTestId('password'), 'azerty1234');
@@ -79,7 +79,7 @@ describe('LoginModal', () => {
     // Prepare
     abcRender(<LoginModal />, { services });
 
-    act(() => dispatch({ type: ModalEventType.ShowLogin }));
+    await openModal();
 
     await userEvent.type(screen.getByTestId('email'), 'heyhey@hey.com');
     await userEvent.type(screen.getByTestId('password'), 'azerty1234');
@@ -87,8 +87,11 @@ describe('LoginModal', () => {
     services.authentication.login.resolves();
 
     // Act
-    screen.getByTestId('cancel-login').click();
-    act(() => dispatch({ type: ModalEventType.ShowLogin }));
+    await act(() => {
+      screen.getByTestId('cancel-login').click();
+    });
+
+    await openModal();
 
     // Assert
     expect(screen.getByTestId('email')).toHaveValue('');
@@ -99,7 +102,7 @@ describe('LoginModal', () => {
     // Prepare
     abcRender(<LoginModal />, { services });
 
-    act(() => dispatch({ type: ModalEventType.ShowLogin }));
+    await openModal();
 
     await userEvent.type(screen.getByTestId('email'), 'heyhey@hey.com');
     await userEvent.type(screen.getByTestId('password'), 'azerty1234');
@@ -113,14 +116,17 @@ describe('LoginModal', () => {
       // We wait for authentication promise resolution
       await TestHelper.wait(10);
     });
-    act(() => dispatch({ type: ModalEventType.ShowLogin }));
+    await openModal();
 
     // Assert
     expect(screen.getByTestId('email')).toHaveValue('');
     expect(screen.getByTestId('password')).toHaveValue('');
   });
 
-  function dispatch(ev: ModalEvent) {
-    services.modals.addListener.args[0][1](ev);
+  async function openModal() {
+    await act(() => {
+      const ev: ModalEvent = { type: ModalEventType.ShowLogin };
+      services.modals.addListener.args[0][1](ev);
+    });
   }
 });

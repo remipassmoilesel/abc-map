@@ -38,7 +38,7 @@ import ImageTile from 'ol/ImageTile';
 import Map from 'ol/Map';
 import { OSM } from 'ol/source';
 
-describe('crossContextInstanceof()', function () {
+describe('crossContextInstanceof', function () {
   it('should return false', () => {
     crossContextInstanceof(null, ['getGeometry']);
     crossContextInstanceof(undefined, ['getGeometry']);

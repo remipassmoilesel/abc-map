@@ -1,38 +1,38 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`AbcLayout layout formats should not change without migration 1`] = `
-Array [
-  Object {
+[
+  {
     "height": 210,
     "id": "A5_PORTRAIT",
     "orientation": "portrait",
     "width": 148,
   },
-  Object {
+  {
     "height": 148,
     "id": "A5_LANDSCAPE",
     "orientation": "landscape",
     "width": 210,
   },
-  Object {
+  {
     "height": 297,
     "id": "A4_PORTRAIT",
     "orientation": "portrait",
     "width": 210,
   },
-  Object {
+  {
     "height": 210,
     "id": "A4_LANDSCAPE",
     "orientation": "landscape",
     "width": 297,
   },
-  Object {
+  {
     "height": 420,
     "id": "A3_PORTRAIT",
     "orientation": "portrait",
     "width": 297,
   },
-  Object {
+  {
     "height": 297,
     "id": "A3_LANDSCAPE",
     "orientation": "landscape",
@@ -42,8 +42,8 @@ Array [
 `;
 
 exports[`AbcLayout layout should not change without migration 1`] = `
-Object {
-  "format": Object {
+{
+  "format": {
     "height": 600,
     "id": "Test layout format",
     "orientation": "portrait",
@@ -51,17 +51,17 @@ Object {
   },
   "id": "test-layout-id",
   "name": "Test layout",
-  "scale": Object {
+  "scale": {
     "x": 123,
     "y": 456,
   },
-  "textFrames": Array [],
-  "view": Object {
-    "center": Array [
+  "textFrames": [],
+  "view": {
+    "center": [
       1,
       2,
     ],
-    "projection": Object {
+    "projection": {
       "name": "EPSG:4326",
     },
     "resolution": 3,

@@ -20,30 +20,33 @@
 
 import { AbstractService } from '../services/AbstractService';
 import { Logger } from '@abc-map/shared';
-import { collectDefaultMetrics, Counter, Registry } from 'prom-client';
+import { Counter } from 'prom-client';
 import { CounterMap, CounterNames, Counters } from './MetricsService.definitions';
+import { PromClient, promClient } from './PromClient';
 
 const logger = Logger.get('MetricsService.ts');
 
 export class MetricsService extends AbstractService {
   public static create(): MetricsService {
-    const registry = new Registry();
-    return new MetricsService(registry);
+    return new MetricsService(promClient);
   }
 
-  private counters: CounterMap;
+  private counters: CounterMap = {};
 
-  constructor(private registry: Registry) {
+  constructor(private client: PromClient) {
     super();
+  }
 
-    collectDefaultMetrics({ register: registry });
+  public async init() {
+    this.clearMetrics();
+    this.client.collectDefaultMetrics();
 
     this.counters = {};
     for (const name of Object.values(CounterNames)) {
       try {
         this.counters[name] = new Counter({
           ...Counters[name],
-          registers: [registry],
+          registers: [this.client.register],
         });
       } catch (e) {
         logger.error(`Cannot register counter ${name}`, e);
@@ -51,12 +54,16 @@ export class MetricsService extends AbstractService {
     }
   }
 
-  public getRegistry(): Registry {
-    return this.registry;
+  public async shutdown() {
+    this.clearMetrics();
+  }
+
+  public clearMetrics() {
+    this.client.register.clear();
   }
 
   public getMetrics(): Promise<string> {
-    return this.registry.metrics();
+    return this.client.register.metrics();
   }
 
   public authenticationFailed() {

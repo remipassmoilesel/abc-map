@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, ReactNode } from 'react';
 import { useServices } from '../useServices';
 
 /**
@@ -24,7 +24,12 @@ import { useServices } from '../useServices';
  */
 export const PwaInstallReadinessContext = React.createContext(false);
 
-export const PwaInstallPromptProvider: React.FC = ({ children }) => {
+interface Props {
+  children: ReactNode | ReactNode[];
+}
+
+export function PwaInstallPromptProvider(props: Props) {
+  const { children } = props;
   const { pwa } = useServices();
   const [beforeInstall, setBeforeInstall] = useState<boolean>(pwa.isInstallationReady());
 
@@ -36,7 +41,7 @@ export const PwaInstallPromptProvider: React.FC = ({ children }) => {
   }, []);
 
   return <PwaInstallReadinessContext.Provider value={beforeInstall}>{children}</PwaInstallReadinessContext.Provider>;
-};
+}
 
 /**
  * If true, app can be installed as a progressive web app

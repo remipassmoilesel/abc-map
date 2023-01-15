@@ -17,7 +17,7 @@
  */
 
 import { AbcFile, AbcProjectManifest, AbcView, Logger } from '@abc-map/shared';
-import { MigratedProject, ProjectMigration } from './typings';
+import { MigrationProject, ProjectMigration } from './typings';
 import semver from 'semver';
 
 const NEXT = '1.1.0';
@@ -33,7 +33,7 @@ export class FromV100ToV110 implements ProjectMigration {
     return semver.lt(version, NEXT);
   }
 
-  public async migrate(manifest: AbcProjectManifest, files: AbcFile<Blob>[]): Promise<MigratedProject> {
+  public async migrate(manifest: AbcProjectManifest, files: AbcFile<Blob>[]): Promise<MigrationProject> {
     const sharedViews = manifest.sharedViews.list.map((view) => ({
       ...view,
       view: {

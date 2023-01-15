@@ -33,7 +33,7 @@ export class DevInit {
 
   // TODO: test
   public async init(): Promise<void> {
-    logger.warn(`/!\\ WARNING, development data will be created with parameters: ${JSON.stringify(this.config.development)}`);
+    logger.warn(`/!\\ WARNING, development data will be created with parameters: ${JSON.stringify(this.config.development?.generateData)}`);
 
     const authorizedEnvs = [LOCAL_ENVIRONMENT, TEST_ENVIRONMENT, STAGING_ENVIRONMENT];
     if (authorizedEnvs.indexOf(this.config.environmentName) === -1) {
@@ -41,9 +41,9 @@ export class DevInit {
     }
 
     const user = UserInit.create(this.config, this.services);
-    const users = await user.init();
+    await user.init();
 
-    const project = ProjectInit.create(this.services);
-    await project.init(users);
+    const project = ProjectInit.create(this.config, this.services);
+    await project.init();
   }
 }

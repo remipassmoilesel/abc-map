@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`AbcLayer PredefinedLayer should not change without migration 1`] = `
-Object {
-  "metadata": Object {
+{
+  "metadata": {
     "active": true,
     "id": "test-layer-id",
     "model": "OSM",
@@ -16,7 +16,7 @@ Object {
 `;
 
 exports[`AbcLayer PredefinedLayer should not change without migration 2`] = `
-Object {
+{
   "OSM": "OSM",
   "StamenTerrain": "StamenTerrain",
   "StamenToner": "StamenToner",
@@ -26,31 +26,31 @@ Object {
 `;
 
 exports[`AbcLayer VectorLayer should not change without migration 1`] = `
-Object {
-  "features": Object {
-    "bbox": Array [
+{
+  "features": {
+    "bbox": [
       1,
       2,
       3,
       4,
     ],
-    "features": Array [
-      Object {
-        "bbox": Array [
+    "features": [
+      {
+        "bbox": [
           5,
           6,
           7,
           8,
         ],
-        "geometry": Object {
-          "coordinates": Array [
+        "geometry": {
+          "coordinates": [
             9,
             10,
           ],
           "type": "Point",
         },
         "id": "feature-id",
-        "properties": Object {
+        "properties": {
           "property1": "value1",
         },
         "type": "Feature",
@@ -58,7 +58,7 @@ Object {
     ],
     "type": "FeatureCollection",
   },
-  "metadata": Object {
+  "metadata": {
     "active": true,
     "id": "test-layer-id",
     "name": "Test vector layer",
@@ -71,14 +71,14 @@ Object {
 `;
 
 exports[`AbcLayer WMS layer should not change without migration 1`] = `
-Object {
-  "metadata": Object {
+{
+  "metadata": {
     "active": true,
-    "auth": Object {
+    "auth": {
       "password": "test-password",
       "username": "test-username",
     },
-    "extent": Array [
+    "extent": [
       1,
       1,
       1,
@@ -87,11 +87,11 @@ Object {
     "id": "test-layer-id",
     "name": "Test wms layer",
     "opacity": 0.5,
-    "projection": Object {
+    "projection": {
       "name": "EPSG:4326",
     },
     "remoteLayerName": "test-remoteLayerName",
-    "remoteUrls": Array [
+    "remoteUrls": [
       "test-remoteUrls",
     ],
     "type": "Wms",
@@ -102,8 +102,8 @@ Object {
 `;
 
 exports[`AbcLayer XYZ layer should not change without migration 1`] = `
-Object {
-  "metadata": Object {
+{
+  "metadata": {
     "active": true,
     "id": "test-layer-id",
     "name": "Test wms layer",

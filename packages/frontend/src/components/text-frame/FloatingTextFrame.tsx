@@ -19,11 +19,11 @@ import Cls from './FloatingTextFrame.module.scss';
 import React, { CSSProperties, useCallback, useMemo, useState } from 'react';
 import { AbcTextFrame, AbcTextFrameStyle, Logger, TextFrameChild } from '@abc-map/shared';
 import TextEditor from '../text-editor/TextEditor';
-import { Rnd, RndDragCallback, RndResizeCallback } from 'react-rnd';
 import { FaIcon } from '../icon/FaIcon';
 import { IconDefs } from '../icon/IconDefs';
 import clsx from 'clsx';
 import { FrameControls } from './FrameControls';
+import { FloatingContainer, FloatingCtrDragCallback, FloatingCtrResizeCallback } from '../floating-container/FloatingContainer';
 
 const logger = Logger.get('TextFrame.tsx');
 
@@ -46,14 +46,11 @@ export function FloatingTextFrame(props: Props) {
   const [fullscreenEdition, setFullscreenEdition] = useState(false);
 
   // User drags frame
-  const handleDragStop: RndDragCallback = useCallback(
-    (event, data) => {
+  const handleDrag: FloatingCtrDragCallback = useCallback(
+    (x, y) => {
       const updated: AbcTextFrame = {
         ...frame,
-        position: {
-          x: data.x,
-          y: data.y,
-        },
+        position: { x, y },
       };
       onChange && onChange(frame, updated);
     },
@@ -61,18 +58,12 @@ export function FloatingTextFrame(props: Props) {
   );
 
   // User resizes frame
-  const handleResizeStop: RndResizeCallback = useCallback(
-    (event, direction, ref, delta, position) => {
+  const handleResize: FloatingCtrResizeCallback = useCallback(
+    (x, y, width, height) => {
       const updated: AbcTextFrame = {
         ...frame,
-        position: {
-          x: position.x,
-          y: position.y,
-        },
-        size: {
-          width: ref.clientWidth,
-          height: ref.clientHeight,
-        },
+        position: { x, y },
+        size: { width, height },
       };
       onChange && onChange(frame, updated);
     },
@@ -113,15 +104,15 @@ export function FloatingTextFrame(props: Props) {
 
   return (
     <>
-      <Rnd
+      <FloatingContainer
         position={position}
         size={size}
         minHeight={60}
         minWidth={100}
-        onDragStop={handleDragStop}
-        onResizeStop={handleResizeStop}
-        enableResizing={!readOnly}
-        disableDragging={readOnly}
+        onDrag={handleDrag}
+        onResize={handleResize}
+        resizing={!readOnly}
+        dragging={!readOnly}
         bounds={bounds}
         data-cy={'floating-text-frame'}
       >
@@ -148,7 +139,7 @@ export function FloatingTextFrame(props: Props) {
             />
           )}
         </div>
-      </Rnd>
+      </FloatingContainer>
 
       {fullscreenEdition && (
         <div className={Cls.fullscreenEditor}>

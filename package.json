@@ -2,6 +2,6 @@
   "name": "@abc-map/root",
   "private": true,
   "volta": {
-    "node": "16.15.0"
+    "node": "18.12.1"
   }
 }

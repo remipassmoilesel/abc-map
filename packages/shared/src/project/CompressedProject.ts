@@ -16,12 +16,9 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import ReadableStream = NodeJS.ReadableStream;
 import { AbcProjectMetadata } from './AbcProjectManifest';
 
-export declare type NodeBinary = Buffer | ReadableStream;
-
-export interface CompressedProject<T extends NodeBinary | Blob = NodeBinary | Blob> {
+export interface CompressedProject<T extends Buffer | Blob = Buffer | Blob> {
   metadata: AbcProjectMetadata;
   project: T;
 }

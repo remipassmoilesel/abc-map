@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { ServiceProps, withServices } from '../../core/withServices';
 import { Logger } from '@abc-map/shared';
 import { prefixedTranslation } from '../../i18n/i18n';
@@ -24,6 +24,8 @@ import { withTranslation } from 'react-i18next';
 import Cls from './ErrorBoundary.module.scss';
 
 const logger = Logger.get('ErrorBoundary');
+
+type Props = ServiceProps & { children: ReactNode | ReactNode[] };
 
 // Errors with one of these messages are ignored by boundary
 const ignoredErrorMessages = [
@@ -39,8 +41,8 @@ interface State {
 
 const t = prefixedTranslation('ErrorBoundary:');
 
-class ErrorBoundary extends React.Component<ServiceProps, State> {
-  constructor(props: ServiceProps) {
+class ErrorBoundary extends React.Component<Props, State> {
+  constructor(props: Props) {
     super(props);
     this.state = { hasError: false };
   }

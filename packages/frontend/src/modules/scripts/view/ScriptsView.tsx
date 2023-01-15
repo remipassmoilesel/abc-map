@@ -17,21 +17,21 @@
  */
 
 import React, { useCallback, useState } from 'react';
-import { Logger } from '@abc-map/shared';
+import { errorMessage, Logger } from '@abc-map/shared';
 import CodeEditor from './CodeEditor';
-import { ScriptError } from '../typings';
 import { useTranslation } from 'react-i18next';
 import { IconDefs } from '../../../components/icon/IconDefs';
 import { FaIcon } from '../../../components/icon/FaIcon';
 import Cls from './ScriptsView.module.scss';
 import { ModuleContainer } from '../../../components/module-container/ModuleContainer';
 import { ModuleTitle } from '../../../components/module-title/ModuleTitle';
+import { getScriptErrorOutput } from '../typings';
 
 const logger = Logger.get('ScriptsView.tsx');
 
 interface Props {
   initialValue: string;
-  onProcess: () => Promise<string[]>;
+  onProcess: () => string[];
   onChange: (content: string) => void;
 }
 
@@ -45,19 +45,19 @@ export function ScriptsView(props: Props) {
   const { t } = useTranslation('ScriptsModule');
 
   const execute = useCallback(() => {
-    onProcess()
-      .then((output) => {
-        setMessage(`✨ ${t('Executed_without_errors')}`);
-        setOutput(output);
-      })
-      .catch((err: ScriptError | Error) => {
-        logger.error('Script error: ', err);
+    try {
+      const output = onProcess();
+      setMessage(`✨ ${t('Executed_without_errors')}`);
+      setOutput(output);
+    } catch (err: unknown) {
+      logger.error('Script error: ', err);
 
-        setMessage(`${t('Error')}: ${err.message || '<no-message>'}`);
+      const message = errorMessage(err);
+      setMessage(`${t('Error')}: ${message || '<no-message>'}`);
 
-        const output = 'output' in err ? err.output : [];
-        setOutput(output);
-      });
+      const output = getScriptErrorOutput(err);
+      setOutput(output);
+    }
   }, [onProcess, t]);
 
   const handleChange = useCallback(

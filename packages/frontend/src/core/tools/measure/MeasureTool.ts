@@ -17,8 +17,7 @@
  */
 
 import { Tool } from '../Tool';
-import { MapTool } from '@abc-map/shared';
-import GeometryType from 'ol/geom/GeometryType';
+import { AbcGeometryType, MapTool } from '@abc-map/shared';
 import VectorSource from 'ol/source/Vector';
 import Geometry from 'ol/geom/Geometry';
 import Icon from '../../../assets/tool-icons/measures.inline.svg';
@@ -60,7 +59,7 @@ export class MeasureTool implements Tool {
 
     // Selection for modifications
     this.selection = new SelectionInteractionsBundle({ condition: Conditions.Select });
-    this.selection.setup(map, source, [GeometryType.LINE_STRING, GeometryType.MULTI_LINE_STRING, GeometryType.POLYGON, GeometryType.MULTI_POLYGON]);
+    this.selection.setup(map, source, [AbcGeometryType.LINE_STRING, AbcGeometryType.MULTI_LINE_STRING, AbcGeometryType.POLYGON, AbcGeometryType.MULTI_POLYGON]);
   }
 
   public modeChanged(): void {

@@ -52,7 +52,6 @@ export function httpDownloadClient(timeout: number, errorHandler?: HttpErrorHand
     baseURL: '/api',
     timeout,
     responseType: 'blob',
-    transformResponse: (data) => data,
   });
 
   client.interceptors.request.use(authenticationInterceptor);

@@ -18,14 +18,14 @@
 
 import { AbcFile, AbcProjectManifest } from '@abc-map/shared';
 
-export interface MigratedProject {
+export interface MigrationProject {
   manifest: AbcProjectManifest;
   files: AbcFile<Blob>[];
 }
 
 export interface ProjectMigration {
   interestedBy(manifest: AbcProjectManifest, files: AbcFile<Blob>[]): Promise<boolean>;
-  migrate(manifest: AbcProjectManifest, files: AbcFile<Blob>[]): Promise<MigratedProject>;
+  migrate(manifest: AbcProjectManifest, files: AbcFile<Blob>[]): Promise<MigrationProject>;
 }
 
 export declare type MigrationsFactory = () => ProjectMigration[];

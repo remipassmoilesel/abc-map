@@ -1,5 +1,5 @@
 /**
- * Copyright © 2021 Rémi Pace.
+ * Copyright © 2022 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,12 +16,8 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-const noMessage = '<no-message>';
+import * as promClient from 'prom-client';
 
-export function messageFromError(e: unknown): string {
-  if (typeof e === 'string') {
-    return e || noMessage;
-  } else if (e instanceof Error) {
-    return e.message || noMessage;
-  } else return noMessage;
-}
+declare type PromClient = typeof promClient;
+
+export { promClient, PromClient };

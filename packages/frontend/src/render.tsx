@@ -20,7 +20,6 @@ import { Services } from './core/Services';
 import { getAbcWindow } from '@abc-map/shared';
 import { E2eMapWrapper } from './core/geo/map/E2eMapWrapper';
 import { MainStore } from './core/store/store';
-import ReactDOM from 'react-dom';
 import { Provider as ReduxProvider } from 'react-redux';
 import { ServiceProvider } from './core/context';
 import ErrorBoundary from './views/error-boundary/ErrorBoundary';
@@ -30,16 +29,22 @@ import { PwaInstallPromptProvider } from './core/pwa/PwaInstallReadinessContext'
 import { ModuleRegistryProvider } from './core/modules/registry/context';
 import { ModuleRegistry } from './core/modules/registry/ModuleRegistry';
 import App from './App';
+import { createRoot } from 'react-dom/client';
 
 export function render(svc: Services, store: MainStore) {
-  const root = document.getElementById('root');
+  const container = document.getElementById('root');
+  if (!container) {
+    throw new Error('Not ready');
+  }
+
+  const root = createRoot(container);
 
   // For tests and debug purposes
   const _window = getAbcWindow();
   _window.abc.mainMap = new E2eMapWrapper(svc.geo.getMainMap());
   _window.abc.store = store;
 
-  ReactDOM.render(
+  root.render(
     <ReduxProvider store={store}>
       <React.StrictMode>
         <ServiceProvider value={svc}>
@@ -56,7 +61,6 @@ export function render(svc: Services, store: MainStore) {
           </ModuleRegistryProvider>
         </ServiceProvider>
       </React.StrictMode>
-    </ReduxProvider>,
-    root
+    </ReduxProvider>
   );
 }

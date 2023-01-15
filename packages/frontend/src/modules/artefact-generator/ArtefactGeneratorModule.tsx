@@ -87,7 +87,7 @@ export class ArtefactGeneratorModule extends ModuleAdapter {
     }
 
     // Create artefact files
-    let files: AbcFile[] = [];
+    let files: AbcFile<Blob>[] = [];
     switch (this.parameters.type) {
       case LayerType.Xyz:
         files = await this.xyzArtefact(this.parameters, onProgress);
@@ -103,15 +103,15 @@ export class ArtefactGeneratorModule extends ModuleAdapter {
     }
 
     // Zip then download
-    const zip = await Zipper.forFrontend().zipFiles(files);
-    await FileIO.outputBlob(zip, 'artefact.zip');
+    const zip = await Zipper.forBrowser().zipFiles(files);
+    FileIO.outputBlob(zip, 'artefact.zip');
   };
 
   /**
    * This method creates one artefact per XYZ url
    */
-  public async xyzArtefact(params: Parameters, onProgress: ProgressHandler): Promise<AbcFile[]> {
-    const files: AbcFile[] = [];
+  public async xyzArtefact(params: Parameters, onProgress: ProgressHandler): Promise<AbcFile<Blob>[]> {
+    const files: AbcFile<Blob>[] = [];
 
     onProgress({ total: 1, done: 0 });
 
@@ -163,9 +163,9 @@ export class ArtefactGeneratorModule extends ModuleAdapter {
   /**
    * This methode create one artefact per WMS layer
    */
-  public async wmsArtefacts(params: Parameters, onProgress: ProgressHandler): Promise<AbcFile[]> {
+  public async wmsArtefacts(params: Parameters, onProgress: ProgressHandler): Promise<AbcFile<Blob>[]> {
     const { geo, toasts } = this.services;
-    const files: AbcFile[] = [];
+    const files: AbcFile<Blob>[] = [];
 
     const capabilities = await geo.getWmsCapabilities(params.wms.url, params.auth);
     let layers = capabilities?.Capability?.Layer?.Layer || [];
@@ -274,9 +274,9 @@ export class ArtefactGeneratorModule extends ModuleAdapter {
   /**
    * This methode create one artefact per WMTS layer
    */
-  public async wmtsArtefacts(params: Parameters, onProgress: ProgressHandler): Promise<AbcFile[]> {
+  public async wmtsArtefacts(params: Parameters, onProgress: ProgressHandler): Promise<AbcFile<Blob>[]> {
     const { geo, toasts } = this.services;
-    const files: AbcFile[] = [];
+    const files: AbcFile<Blob>[] = [];
 
     const capabilities = await geo.getWmtsCapabilities(params.wmts.url, params.auth);
     let layers = capabilities?.Contents?.Layer || [];
@@ -389,7 +389,7 @@ function licenseFileName(): string {
   return 'LICENSE.txt';
 }
 
-function license(path: string, params: Parameters): AbcFile {
+function license(path: string, params: Parameters): AbcFile<Blob> {
   return { path, content: new Blob([params.license]) };
 }
 

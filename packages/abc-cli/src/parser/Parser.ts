@@ -18,7 +18,7 @@
 import { Command, CommandName } from './Command';
 
 export class Parser {
-  public async parse(args: string[]): Promise<Command> {
+  public parse(args: string[]): Command {
     const commandName = (args.length > 2 && args[2]) || undefined;
     switch (commandName) {
       case CommandName.INSTALL: {
@@ -34,8 +34,8 @@ export class Parser {
       case CommandName.TEST: {
         return { name: CommandName.TEST };
       }
-      case CommandName.E2E: {
-        return { name: CommandName.E2E };
+      case CommandName.E2E_TESTS: {
+        return { name: CommandName.E2E_TESTS };
       }
       case CommandName.WATCH: {
         return { name: CommandName.WATCH };
@@ -86,8 +86,11 @@ export class Parser {
       case CommandName.HELP: {
         return { name: CommandName.HELP };
       }
+      case CommandName.PERFORMANCE_TESTS: {
+        return { name: CommandName.PERFORMANCE_TESTS };
+      }
       default: {
-        return Promise.reject(new Error('Invalid command, try $ ./abc-cli help'));
+        throw new Error('Invalid command, try $ ./abc-cli help');
       }
     }
   }

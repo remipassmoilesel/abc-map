@@ -57,11 +57,11 @@ export class Config {
     return path.resolve(this.getProjectRoot(), 'packages/performance-tests');
   }
 
-  public getFrontendE2eUrl(): string {
+  public getFrontendUrl(): string {
     return 'http://localhost:10082/';
   }
 
-  public getBackendE2eUrl(): string {
+  public getBackendUrl(): string {
     return 'http://localhost:10082/api/health/';
   }
 

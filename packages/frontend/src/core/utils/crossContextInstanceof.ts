@@ -25,7 +25,14 @@ import VectorSource from 'ol/source/Vector';
 import ImageTile from 'ol/ImageTile';
 import Map from 'ol/Map';
 
-// Sometimes we cannot use instanceof, per example if there are several global scopes (different frames / modules)
+/*
+
+These functions allow to perform "instanceof" on objects of other JavaScript contexts (ex: iframes, plugins, ...)
+
+See per example: https://stackoverflow.com/questions/52222237/instanceof-fails-in-iframe
+
+*/
+
 export function crossContextInstanceof<T extends object>(obj: unknown, properties: string[]): obj is T {
   const isNonNullObject = !obj || typeof obj !== 'object';
   if (isNonNullObject) {
@@ -82,7 +89,7 @@ export function isImageTile(obj: unknown): obj is ImageTile {
 }
 
 export function isOpenlayersMap(obj: unknown): obj is Map {
-  return crossContextInstanceof(obj, ['createRenderer', 'addControl', 'addInteraction', 'addLayer', 'addOverlay']);
+  return crossContextInstanceof(obj, ['addControl', 'addInteraction', 'addLayer', 'addOverlay']);
 }
 
 export function isTileSource(obj: unknown): obj is TileSource {

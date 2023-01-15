@@ -27,6 +27,7 @@ import { DockerConfig } from './config/DockerConfig';
 import { DeployConfig } from './config/DeployConfig';
 import { ChildProcess } from 'child_process';
 import { Git } from './tools/Git';
+import { errorMessage } from './tools/errorMessage';
 
 const logger = Logger.get('Service.ts', 'info');
 
@@ -59,10 +60,10 @@ export class BuildService {
 
     await this.install(Dependencies.Production);
 
-    const servers = await this.startServersForE2e();
+    const servers = await this.startServers();
     try {
-      await this.e2eTests();
-      await this.performanceTests();
+      this.e2eTests();
+      this.performanceTests();
     } finally {
       servers.kill('SIGTERM');
     }
@@ -124,6 +125,14 @@ export class BuildService {
     this.shell.sync(`lerna exec "${sortScript}"`);
 
     this.shell.sync(`helm lint ${this.config.getChartRoot()}`);
+
+    if (!fix) {
+      try {
+        this.shell.sync('git diff --exit-code');
+      } catch (err) {
+        throw new Error('Changes not comitted, you should probably run "./abc-cli lint" then commit result. Underlying error: ' + errorMessage(err));
+      }
+    }
   }
 
   public cleanBuild(): void {
@@ -134,26 +143,28 @@ export class BuildService {
     this.shell.sync('lerna run test --stream --concurrency 1');
   }
 
-  public async e2eTests(): Promise<void> {
+  public e2eTests(): void {
     this.shell.sync('yarn run e2e:ci', { cwd: this.config.getE2eRoot() });
   }
 
-  public async performanceTests(): Promise<void> {
+  public performanceTests(): void {
     this.shell.sync('yarn run test:performance:ci', { cwd: this.config.getPerformanceTestsRoot() });
   }
 
   /**
-   * Start server and associated service for E2E testing
+   * Start server and associated service for testing purposes.
+   *
+   * Services should start in the closest possible conditions to production.
    */
-  public async startServersForE2e(): Promise<ChildProcess> {
+  public startServers(): Promise<ChildProcess> {
     return new Promise((resolve, reject) => {
-      const startCmd = this.shell.async('lerna run start:e2e --parallel');
+      const startCmd = this.shell.async('lerna run start:ci --parallel');
       startCmd.on('error', reject);
 
       logger.info('Waiting for services readiness ...');
 
       const options = {
-        resources: [this.config.getBackendE2eUrl(), this.config.getFrontendE2eUrl()],
+        resources: [this.config.getBackendUrl(), this.config.getFrontendUrl()],
         timeout: 30_000,
       };
       waitOn(options)

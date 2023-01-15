@@ -144,7 +144,7 @@ function DataStoreView() {
   }, [listArtefacts]);
 
   // User clicks on artefact
-  const handleArtefactSelected = useCallback((artefact) => {
+  const handleArtefactSelected = useCallback((artefact: AbcArtefact) => {
     setActiveArtefact(artefact);
     setDetailsVisible(true);
   }, []);

@@ -16,8 +16,8 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
+export * from './BasicAuthentication';
+export * from './errorMessage';
 export * from './Logger';
-export * from './messageFromError';
 export * from './PaginatedResponse';
 export * from './ProjectionDto';
-export * from './BasicAuthentication';

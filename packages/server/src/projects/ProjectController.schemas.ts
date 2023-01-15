@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 import { FastifySchema } from 'fastify/types/schema';
-import { MultipartFile, MultipartValue } from 'fastify-multipart';
+import { MultipartFile, MultipartValue } from '@fastify/multipart';
 
 export interface SaveRequest {
   metadata: MultipartValue<string>;

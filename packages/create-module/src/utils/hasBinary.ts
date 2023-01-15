@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as hasbin from 'hasbin';
+import hasbin from 'hasbin';
 
 export function hasBinary(name: string): Promise<boolean> {
   return new Promise<boolean>((resolve) => {

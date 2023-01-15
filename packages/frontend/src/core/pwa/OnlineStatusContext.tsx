@@ -16,11 +16,16 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, ReactNode } from 'react';
 
 export const OnlineStatusContext = React.createContext(true);
 
-export const OnlineStatusProvider: React.FC = ({ children }) => {
+interface Props {
+  children: ReactNode | ReactNode[];
+}
+
+export function OnlineStatusProvider(props: Props) {
+  const { children } = props;
   const [onlineStatus, setOnlineStatus] = useState<boolean>(navigator.onLine ?? true);
 
   useEffect(() => {
@@ -36,7 +41,7 @@ export const OnlineStatusProvider: React.FC = ({ children }) => {
   }, []);
 
   return <OnlineStatusContext.Provider value={onlineStatus}>{children}</OnlineStatusContext.Provider>;
-};
+}
 
 /**
  * Return true if app is currently online

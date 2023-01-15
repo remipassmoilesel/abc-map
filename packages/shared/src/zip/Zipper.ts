@@ -22,17 +22,17 @@ import { AbcFile } from './AbcFile';
 // TODO: try https://www.npmjs.com/package/unzipit ?
 
 export class Zipper<T extends Blob | Buffer> {
-  public static forBackend(): Zipper<Buffer> {
+  public static forNodeJS(): Zipper<Buffer> {
     return new Zipper<Buffer>('nodebuffer');
   }
 
-  public static forFrontend(): Zipper<Blob> {
+  public static forBrowser(): Zipper<Blob> {
     return new Zipper<Blob>('blob');
   }
 
   constructor(private binaryFormat: 'blob' | 'nodebuffer') {}
 
-  public zipFiles(files: AbcFile[]): Promise<T> {
+  public zipFiles(files: AbcFile<T>[]): Promise<T> {
     const zip = new JSZip();
     files.forEach((file) => zip.file(file.path, file.content));
     return zip.generateAsync({ type: this.binaryFormat, compression: 'DEFLATE' }) as Promise<T>;
@@ -51,6 +51,7 @@ export class Zipper<T extends Blob | Buffer> {
         result.push({ path: name, content: file as T });
       }
     }
+
     return result;
   }
 }

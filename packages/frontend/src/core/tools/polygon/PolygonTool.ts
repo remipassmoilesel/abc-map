@@ -17,8 +17,7 @@
  */
 
 import { Tool } from '../Tool';
-import { FeatureStyle, Logger, MapTool } from '@abc-map/shared';
-import GeometryType from 'ol/geom/GeometryType';
+import { AbcGeometryType, FeatureStyle, Logger, MapTool } from '@abc-map/shared';
 import VectorSource from 'ol/source/Vector';
 import Geometry from 'ol/geom/Geometry';
 import Map from 'ol/Map';
@@ -66,7 +65,7 @@ export class PolygonTool implements Tool {
     // Selection for modifications
     this.selection = new SelectionInteractionsBundle({ condition: CommonConditions.Selection });
     this.selection.onStyleSelected = (style: FeatureStyle) => this.store.dispatch(MapActions.setDrawingStyle({ stroke: style.stroke, fill: style.fill }));
-    this.selection.setup(map, source, [GeometryType.POLYGON, GeometryType.MULTI_POLYGON]);
+    this.selection.setup(map, source, [AbcGeometryType.POLYGON, AbcGeometryType.MULTI_POLYGON]);
 
     // Draw interactions
     const getStyle: GetStyleFunc = () => {
@@ -75,7 +74,7 @@ export class PolygonTool implements Tool {
     };
 
     this.draw = new DrawInteractionsBundle({
-      type: GeometryType.POLYGON,
+      type: AbcGeometryType.POLYGON,
       getStyle,
       drawCondition: CommonConditions.CreateGeometry,
       modifyCondition: CommonConditions.ModifyGeometry,

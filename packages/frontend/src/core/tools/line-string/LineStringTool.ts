@@ -17,8 +17,7 @@
  */
 
 import { Tool } from '../Tool';
-import { FeatureStyle, MapTool } from '@abc-map/shared';
-import GeometryType from 'ol/geom/GeometryType';
+import { AbcGeometryType, FeatureStyle, MapTool } from '@abc-map/shared';
 import VectorSource from 'ol/source/Vector';
 import Geometry from 'ol/geom/Geometry';
 import Icon from '../../../assets/tool-icons/line.inline.svg';
@@ -64,7 +63,7 @@ export class LineStringTool implements Tool {
     // Selection for modifications
     this.selection = new SelectionInteractionsBundle({ condition: CommonConditions.Selection });
     this.selection.onStyleSelected = (style: FeatureStyle) => this.store.dispatch(MapActions.setDrawingStyle({ stroke: style.stroke }));
-    this.selection.setup(map, source, [GeometryType.LINE_STRING, GeometryType.MULTI_LINE_STRING]);
+    this.selection.setup(map, source, [AbcGeometryType.LINE_STRING, AbcGeometryType.MULTI_LINE_STRING]);
 
     // Draw interactions
     const getStyle: GetStyleFunc = () => {
@@ -75,7 +74,7 @@ export class LineStringTool implements Tool {
     // Modification is obviously allowed in modification but also in creation,
     // because we must be able to modify a just created geometry
     this.draw = new DrawInteractionsBundle({
-      type: GeometryType.LINE_STRING,
+      type: AbcGeometryType.LINE_STRING,
       getStyle,
       drawCondition: CommonConditions.CreateGeometry,
       modifyCondition: CommonConditions.ModifyGeometry,

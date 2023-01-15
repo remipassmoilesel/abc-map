@@ -25,6 +25,7 @@ export interface Props {
   icon: IconDefinition;
   className?: string;
   'data-testid'?: string;
+  children: ReactNode | ReactNode[];
 }
 
 class MessageLabel extends Component<Props, {}> {

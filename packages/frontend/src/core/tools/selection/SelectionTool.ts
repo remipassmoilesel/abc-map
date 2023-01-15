@@ -36,7 +36,6 @@ import { Conditions, Modes } from './Modes';
 import Collection from 'ol/Collection';
 import Feature from 'ol/Feature';
 import { EventsKey } from 'ol/events';
-import GeometryType from 'ol/geom/GeometryType';
 
 const logger = Logger.get('SelectionTool.ts');
 
@@ -77,15 +76,15 @@ export class SelectionTool implements Tool {
     const dispatchStyle = (feat: FeatureWrapper) => {
       const style = feat.getStyleProperties();
       switch (feat.getGeometry()?.getType()) {
-        case GeometryType.POINT:
+        case 'Point':
           this.store.dispatch(MapActions.setDrawingStyle({ point: style.point }));
           break;
-        case GeometryType.LINE_STRING:
-        case GeometryType.MULTI_LINE_STRING:
+        case 'LineString':
+        case 'MultiLineString':
           this.store.dispatch(MapActions.setDrawingStyle({ stroke: style.stroke }));
           break;
-        case GeometryType.POLYGON:
-        case GeometryType.MULTI_POLYGON:
+        case 'Polygon':
+        case 'MultiPolygon':
           this.store.dispatch(MapActions.setDrawingStyle({ stroke: style.stroke, fill: style.fill }));
           break;
         default:

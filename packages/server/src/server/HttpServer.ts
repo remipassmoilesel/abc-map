@@ -16,26 +16,26 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Language, Logger } from '@abc-map/shared';
+import { Logger } from '@abc-map/shared';
 import { Config } from '../config/Config';
 import { Services } from '../services/services';
 import * as path from 'path';
 import { fastify, FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
-import fastifyStatic from 'fastify-static';
-import fastifySensible from 'fastify-sensible';
+import fastifySensible from '@fastify/sensible';
 import { Controller } from './Controller';
 import { jwtPlugin } from './jwtPlugin';
-import fastifyRateLimit from 'fastify-rate-limit';
-import * as helmet from 'helmet';
-import { generateSitemap } from './sitemap';
-import pointOfView from 'point-of-view';
+import fastifyRateLimit from '@fastify/rate-limit';
+import helmet from 'helmet';
+import fastifyView from '@fastify/view';
 import { getLang } from './getLang';
-import { error409Parameters, indexParameters } from './pagesParameters';
+import { error409Parameters } from './pagesParameters';
 import { HookHandlerDoneFunction } from 'fastify/types/hooks';
-import { FastifyError } from 'fastify-error';
-import { createHash } from 'crypto';
-import { privateControllers, publicControllers } from './controllers';
-import * as metricsPlugin from 'fastify-metrics';
+import { FastifyError } from '@fastify/error';
+import { privateApiControllers, publicApiControllers } from './controllers';
+import metricsPlugin from 'fastify-metrics';
+import { defaultRateLimitConfig } from './defaultRateLimitConfig';
+import { hashRequestSource } from './hashRequestSource';
+import { RootController } from './RootController';
 
 const logger = Logger.get('HttpServer.ts', 'trace');
 
@@ -47,12 +47,19 @@ const logger = Logger.get('HttpServer.ts', 'trace');
  */
 export class HttpServer {
   public static create(config: Config, services: Services): HttpServer {
-    return new HttpServer(config, services, publicControllers(config, services), privateControllers(config, services));
+    return new HttpServer(config, services, publicApiControllers(config, services), privateApiControllers(config, services), new RootController(config));
   }
 
   private app: FastifyInstance;
 
-  constructor(private config: Config, private services: Services, private publicControllers: Controller[], private privateControllers: Controller[]) {
+  constructor(
+    private config: Config,
+    private services: Services,
+    private publicControllers: Controller[],
+    private privateControllers: Controller[],
+    private rootController: RootController
+  ) {
+    // This server is designed to be used behind a TLS proxy
     this.app = fastify({ trustProxy: true });
   }
 
@@ -62,14 +69,13 @@ export class HttpServer {
    * Returned promise resolve when server is closed.
    */
   public async listen(): Promise<void> {
-    const port = this.config.server.port;
-    const host = this.config.server.host;
+    const { host, port } = this.config.server;
 
     return new Promise((resolve, reject) => {
       this.app.addHook('onClose', () => resolve());
 
       this.app
-        .listen(port, host)
+        .listen({ port, host })
         .then(() => logger.info(`Abc-Map server listening on http://${host}:${port}`))
         .catch((err) => reject(err));
     });
@@ -88,11 +94,23 @@ export class HttpServer {
       this.app.addHook('onRequest', this.logRequest);
     }
 
+    // Global error handler
+    this.app.setErrorHandler(this.handleError);
+
+    // Rate limit
+    void this.app.register(fastifyRateLimit, {
+      global: true,
+      ...defaultRateLimitConfig(this.config),
+    });
+
+    // Utility methods
+    void this.app.register(fastifySensible);
+
     // Metrics
-    void this.app.register(metricsPlugin, { register: this.services.metrics.getRegistry(), enableDefaultMetrics: false });
+    void this.app.register(metricsPlugin, { defaultMetrics: { enabled: false } });
 
     // Templating engine
-    void this.app.register(pointOfView, {
+    void this.app.register(fastifyView, {
       engine: { handlebars: require('handlebars') },
       root: path.resolve(__dirname, '../../public'),
       viewExt: 'html',
@@ -111,18 +129,8 @@ export class HttpServer {
       }
     });
 
-    // Utility methods
-    void this.app.register(fastifySensible, { errorHandler: false });
-
-    // Global error handler
-    this.app.setErrorHandler(this.handleError);
-
-    // Rate limit
-    const globalRateLimit = this.config.server.globalRateLimit;
-    void this.app.register(fastifyRateLimit, {
-      max: globalRateLimit.max,
-      timeWindow: globalRateLimit.timeWindow,
-    });
+    // Root controller with frontend and special routes
+    void this.app.register(this.rootController.setup);
 
     // Public API controllers
     void this.app.register(
@@ -140,33 +148,6 @@ export class HttpServer {
       },
       { prefix: '/api' }
     );
-
-    // Legal mentions
-    this.app.get('/api/legal-mentions', (req, reply) => void reply.send(this.config.legalMentions));
-
-    // Sitemap
-    this.app.get('/sitemap.xml', this.generateSitemap);
-
-    // Frontend service
-    // We MUST overwrite /index.html route, otherwise it will be served without templating
-    this.app.get('/*', (req: FastifyRequest, reply: FastifyReply) => {
-      void reply.view('index', indexParameters(this.config, getLang(req)));
-    });
-    this.app.get('/index.html', (req: FastifyRequest, reply: FastifyReply) => {
-      void reply.view('index', indexParameters(this.config, getLang(req)));
-    });
-
-    this.app.head('/', (req: FastifyRequest, reply: FastifyReply) => {
-      void reply.status(200).send();
-    });
-
-    void this.app.register(fastifyStatic, {
-      root: path.join(this.config.frontendPath, '/assets'),
-      wildcard: false,
-      index: false,
-      etag: true,
-      maxAge: '3d',
-    });
   }
 
   private handleError = (err: FastifyError, request: FastifyRequest, reply: FastifyReply) => {
@@ -177,7 +158,7 @@ export class HttpServer {
       const logTrace = {
         date: new Date().toISOString(),
         error: err.message,
-        source: hashSource(request),
+        source: hashRequestSource(request, !this.config.server.log.warnings),
         userAgent: request.headers['user-agent'],
         method: request.method,
         url: request.url,
@@ -208,7 +189,7 @@ export class HttpServer {
 
     const logTrace = {
       date: new Date().toISOString(),
-      source: hashSource(request),
+      source: hashRequestSource(request, !this.config.server.log.warnings),
       userAgent: request.headers['user-agent'],
       method: request.method,
       url: request.url,
@@ -217,11 +198,6 @@ export class HttpServer {
 
     logger.log(JSON.stringify(logTrace));
     done();
-  };
-
-  private generateSitemap = (req: FastifyRequest, reply: FastifyReply) => {
-    const sitemap = generateSitemap(this.config.externalUrl, Object.values(Language));
-    void reply.status(200).header('Content-Type', 'text/xml; charset=utf-8').send(sitemap);
   };
 
   private authenticationHook(app: FastifyInstance) {
@@ -234,13 +210,6 @@ export class HttpServer {
       }
     });
   }
-}
-
-export function hashSource(req: FastifyRequest): string {
-  const hasher = createHash('sha256');
-  const ip = (req.headers['x-forwarded-for']?.toString() || '000.000.000.000').split('.').slice(1).join('.');
-  const ua = req.headers['user-agent'] || 'no-user-agent';
-  return hasher.update(ip + ua).digest('hex');
 }
 
 export function isItWorthLogging(req: FastifyRequest): boolean {

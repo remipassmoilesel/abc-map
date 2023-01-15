@@ -20,11 +20,11 @@ import { FromV010ToV020 } from './FromV010ToV020';
 import { AbcProjectManifest } from '@abc-map/shared';
 import { deepFreeze } from '../../utils/deepFreeze';
 import { Views } from '../../geo/Views';
-import { MigratedProject } from './typings';
+import { MigrationProject } from './typings';
 import { TestData } from './test-data/TestData';
 
 describe('FromV010ToV020', () => {
-  let project: MigratedProject;
+  let project: MigrationProject;
   let migration: FromV010ToV020;
   beforeEach(async () => {
     project = await TestData.project01();

@@ -54,7 +54,7 @@ function CommonActions() {
       }
 
       // Point
-      if ([AbcGeometryType.POINT, AbcGeometryType.MULTI_POINT].includes(type)) {
+      if ([AbcGeometryType.POINT, AbcGeometryType.MULTI_POINT].find((t) => t === type)) {
         newStyle = {
           ...style,
           ...newStyle,
@@ -68,7 +68,7 @@ function CommonActions() {
       }
 
       // Lines
-      if ([AbcGeometryType.LINE_STRING, AbcGeometryType.MULTI_LINE_STRING].includes(type)) {
+      if ([AbcGeometryType.LINE_STRING, AbcGeometryType.MULTI_LINE_STRING].find((t) => t === type)) {
         newStyle = {
           ...style,
           ...newStyle,
@@ -81,7 +81,7 @@ function CommonActions() {
       }
 
       // Polygons
-      if ([AbcGeometryType.POLYGON, AbcGeometryType.MULTI_POLYGON].includes(type)) {
+      if ([AbcGeometryType.POLYGON, AbcGeometryType.MULTI_POLYGON].find((t) => t === type)) {
         newStyle = {
           ...style,
           ...newStyle,

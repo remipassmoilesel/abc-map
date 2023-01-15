@@ -22,7 +22,6 @@ import View from 'ol/View';
 import { AbcFile, AbcLayout, BlobIO, LayoutFormat, Logger, Zipper } from '@abc-map/shared';
 import { MapFactory } from '../../geo/map/MapFactory';
 import { jsPDF } from 'jspdf';
-import ReactDOM from 'react-dom';
 import { StaticAttributions } from '../../../components/static-attributions/StaticAttributions';
 import { MapUi } from '../../../components/map-ui/MapUi';
 import html2canvas from 'html2canvas';
@@ -31,6 +30,7 @@ import { FloatingScale } from '../../../components/floating-scale/FloatingScale'
 import { DimensionsPx } from '../../utils/DimensionsPx';
 import { toPrecision } from '../../utils/numbers';
 import { FloatingNorthArrow } from '../../../components/floating-north-arrow/FloatingNorthArrow';
+import { createRoot } from 'react-dom/client';
 
 export const logger = Logger.get('LayoutRenderer');
 
@@ -79,7 +79,7 @@ export class LayoutRenderer {
       files.push({ path: `${layout.name}.png`, content: image });
     }
 
-    return Zipper.forFrontend().zipFiles(files);
+    return Zipper.forBrowser().zipFiles(files);
   }
 
   private async renderLayout(layout: AbcLayout, sourceMap: MapWrapper): Promise<HTMLCanvasElement> {
@@ -146,13 +146,15 @@ export class LayoutRenderer {
   }
 
   private renderMapDom(map: MapWrapper, layout: AbcLayout, width: string, height: string, ratio: number): Promise<void> {
-    const root = this.rootElement;
-    if (!root) {
+    const container = this.rootElement;
+    if (!container) {
       return Promise.reject(new Error('You must call init() before'));
     }
 
+    const reactRoot = createRoot(container);
+
     return new Promise((resolve) => {
-      ReactDOM.render(
+      reactRoot.render(
         <>
           {/* Map */}
           <MapUi map={map} width={width} height={height} />
@@ -170,9 +172,10 @@ export class LayoutRenderer {
 
           {/* Attributions */}
           <StaticAttributions map={map} ratio={ratio} />
-        </>,
-        root,
-        resolve
+
+          {/*resolve() will be called when div will be created, see: https://github.com/reactwg/react-18/discussions/5*/}
+          <div ref={() => resolve()} />
+        </>
       );
     });
   }

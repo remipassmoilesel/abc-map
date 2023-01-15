@@ -16,12 +16,12 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { MigratedProject } from './typings';
+import { MigrationProject } from './typings';
 import { TestData } from './test-data/TestData';
 import { FromV100ToV110 } from './FromV100ToV110';
 
 describe('FromV100ToV110', () => {
-  let sampleProject: MigratedProject;
+  let sampleProject: MigrationProject;
   let migration: FromV100ToV110;
 
   beforeEach(async () => {

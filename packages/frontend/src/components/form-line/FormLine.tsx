@@ -16,10 +16,14 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { Component } from 'react';
+import React, { Component, ReactNode } from 'react';
 import Cls from './FormLine.module.scss';
 
-class FormLine extends Component<{}, {}> {
+interface Props {
+  children: ReactNode | ReactNode[];
+}
+
+class FormLine extends Component<Props, {}> {
   public render() {
     return <div className={Cls.formLine}>{this.props.children}</div>;
   }

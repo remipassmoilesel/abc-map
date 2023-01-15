@@ -56,8 +56,8 @@ describe('Data table module', function () {
       .then((opt) => cy.get('[data-cy=layer-selector]').select(opt.text()))
       .get('[data-cy=download]')
       .click()
-      .then(() => Download.fileAsBlob())
-      .should(async (file) => {
+      .then(() => Download.currentFileAsBlob())
+      .should((file) => {
         expect(file).not.undefined;
         expect(file.size).equal(3_422);
       });

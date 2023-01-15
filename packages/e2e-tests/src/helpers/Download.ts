@@ -17,7 +17,10 @@
  */
 
 export class Download {
-  public static fileAsBlob(): Cypress.Chainable<Blob> {
+  /**
+   * Return the last file downloaded if any
+   */
+  public static currentFileAsBlob(): Cypress.Chainable<Blob> {
     return cy.get('[data-cy=file-output]').then(
       (anchor) =>
         new Cypress.Promise<Blob>((resolve, reject) => {
@@ -29,5 +32,14 @@ export class Download {
           xhr.send();
         })
     );
+  }
+
+  /**
+   * Write the last file downloaded if any
+   */
+  public static writeCurrentFile(path: string): Cypress.Chainable<null> {
+    return Download.currentFileAsBlob()
+      .then((content) => content.arrayBuffer())
+      .then((content) => cy.writeFile(path, Buffer.from(content)));
   }
 }

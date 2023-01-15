@@ -137,7 +137,7 @@ export class ProjectService {
    */
   public async loadBlobProject(blob: Blob, password?: string): Promise<void> {
     // Unzip project
-    const files = await Zipper.forFrontend().unzip(blob);
+    const files = await Zipper.forBrowser().unzip(blob);
     const manifestFile = files.find((f) => f.path.endsWith(ProjectConstants.ManifestName));
     if (!manifestFile) {
       return Promise.reject(new Error('Invalid project, manifest not found'));
@@ -264,7 +264,7 @@ export class ProjectService {
       },
       ...exported.files,
     ];
-    const compressed = await Zipper.forFrontend().zipFiles(files);
+    const compressed = await Zipper.forBrowser().zipFiles(files);
     return { project: compressed, metadata: exported.manifest.metadata };
   }
 
@@ -300,7 +300,7 @@ export class ProjectService {
       },
       ...exported.files,
     ];
-    const compressed = await Zipper.forFrontend().zipFiles(files);
+    const compressed = await Zipper.forBrowser().zipFiles(files);
     return { project: compressed, metadata: cloned.metadata };
   }
 

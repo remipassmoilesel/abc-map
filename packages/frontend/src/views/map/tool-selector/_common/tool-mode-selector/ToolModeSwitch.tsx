@@ -16,15 +16,11 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { withTranslation } from 'react-i18next';
+import { useTranslation, withTranslation } from 'react-i18next';
 import { ToolMode } from '../../../../../core/tools/ToolMode';
 import { Switch } from '../../../../../components/switch/Switch';
 import KeyboardKey from './KeyboardKey';
 import { useCallback } from 'react';
-import { prefixedTranslation } from '../../../../../i18n/i18n';
-
-const t = prefixedTranslation('MapView:ToolModeSelector.');
-const tModes = prefixedTranslation('core:toolModes.');
 
 interface Props {
   mode: ToolMode;
@@ -36,6 +32,8 @@ function ToolModeSwitch(props: Props) {
   const { mode, value, onSelect } = props;
   const keys = mode.shortcut.split(/( +|\+)/i);
   const handleToggle = useCallback(() => onSelect(mode), [mode, onSelect]);
+  const { t } = useTranslation('MapView', { keyPrefix: 'ToolModeSelector' });
+  const { t: tModes } = useTranslation('core', { keyPrefix: 'toolModes' });
 
   return (
     <div onClick={handleToggle} data-cy={`tool-mode-${mode.name.toLocaleLowerCase()}`} className={'cursor-pointer d-flex align-items-center mb-2'}>

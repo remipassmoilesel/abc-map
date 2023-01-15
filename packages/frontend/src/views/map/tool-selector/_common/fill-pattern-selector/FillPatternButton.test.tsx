@@ -56,7 +56,7 @@ describe('FillPatternButton', () => {
     ]);
   });
 
-  it('should update pattern', async () => {
+  it('should update pattern', () => {
     // Prepare
     factory.create.returns('white' as unknown as CanvasPattern);
     const { rerender } = render(<FillPatternButton {...props} />);

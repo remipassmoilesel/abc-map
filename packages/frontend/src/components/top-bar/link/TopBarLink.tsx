@@ -17,7 +17,7 @@
  */
 
 import React, { ReactNode, useCallback } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Cls from './TopBarLink.module.scss';
 import clsx from 'clsx';
 
@@ -32,12 +32,12 @@ export interface Props {
 export function TopBarLink(props: Props) {
   const { to, activeMatch, children, 'data-cy': dataCy, className } = props;
   const location = useLocation();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const match = activeMatch || new RegExp(`^${to}`, 'i');
   const isActive = !!location.pathname.match(match);
 
-  const handleClick = useCallback(() => history.push(to), [history, to]);
+  const handleClick = useCallback(() => navigate(to), [navigate, to]);
 
   return (
     <button onClick={handleClick} className={clsx(Cls.topBarLink, isActive && Cls.active, className)} data-cy={dataCy}>

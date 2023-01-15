@@ -85,12 +85,12 @@ export class ProjectDao {
     return res || undefined;
   }
 
-  public async findCompressedFileById(projectId: string): Promise<Readable> {
+  public async findProjectStreamById(projectId: string): Promise<Readable> {
     const bucket = await this.bucket();
     return bucket.openDownloadStreamByName(projectId);
   }
 
-  public async list(userId: string, offset: number, limit: number): Promise<ProjectDocument[]> {
+  public async findByUserId(userId: string, offset: number, limit: number): Promise<ProjectDocument[]> {
     const coll = await this.collection();
     return coll
       .find({ ownerId: { $eq: userId } })

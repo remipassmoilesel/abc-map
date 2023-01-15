@@ -17,14 +17,13 @@
  */
 
 import { Tool } from '../Tool';
-import { FeatureStyle, MapTool } from '@abc-map/shared';
+import { AbcGeometryType, FeatureStyle, MapTool } from '@abc-map/shared';
 import VectorSource from 'ol/source/Vector';
 import Geometry from 'ol/geom/Geometry';
 import Icon from '../../../assets/tool-icons/point.inline.svg';
 import Map from 'ol/Map';
 import { HistoryKey } from '../../history/HistoryKey';
 import { DrawInteractionsBundle, GetStyleFunc } from '../common/interactions/DrawInteractionsBundle';
-import GeometryType from 'ol/geom/GeometryType';
 import { MainStore } from '../../store/store';
 import { HistoryService } from '../../history/HistoryService';
 import { MapActions } from '../../store/map/actions';
@@ -64,7 +63,7 @@ export class PointTool implements Tool {
     // Selection for modifications
     this.selection = new SelectionInteractionsBundle({ condition: CommonConditions.Selection });
     this.selection.onStyleSelected = (style: FeatureStyle) => this.store.dispatch(MapActions.setDrawingStyle({ point: style.point }));
-    this.selection.setup(map, source, [GeometryType.POINT, GeometryType.MULTI_POINT]);
+    this.selection.setup(map, source, [AbcGeometryType.POINT, AbcGeometryType.MULTI_POINT]);
 
     // Draw interactions
     const getStyle: GetStyleFunc = () => {
@@ -73,7 +72,7 @@ export class PointTool implements Tool {
     };
 
     this.draw = new DrawInteractionsBundle({
-      type: GeometryType.POINT,
+      type: AbcGeometryType.POINT,
       getStyle,
       drawCondition: CommonConditions.CreateGeometry,
       modifyCondition: CommonConditions.ModifyGeometry,

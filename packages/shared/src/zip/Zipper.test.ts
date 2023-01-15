@@ -26,7 +26,7 @@ describe('Zipper', () => {
   it('should unzip', async () => {
     const archive = await testData.getSampleArchive();
 
-    const result = await Zipper.forBackend().unzip(archive);
+    const result = await Zipper.forNodeJS().unzip(archive);
 
     const paths = result.map((r) => r.path).sort();
     expect(paths).toEqual(['KML_Samples.kml', 'campings-bretagne.gpx', 'stations.geojson']);
@@ -36,9 +36,9 @@ describe('Zipper', () => {
   });
 
   it('should zip', async () => {
-    const testFile: AbcFile = { path: 'test.json', content: Buffer.from(JSON.stringify({ a: 'b', c: 'd', e: 'f' })) };
+    const testFile: AbcFile<Buffer> = { path: 'test.json', content: Buffer.from(JSON.stringify({ a: 'b', c: 'd', e: 'f' })) };
 
-    const result = await Zipper.forBackend().zipFiles([testFile]);
+    const result = await Zipper.forNodeJS().zipFiles([testFile]);
 
     expect(result.length).toEqual(139);
   });

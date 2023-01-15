@@ -18,7 +18,7 @@
 
 import React, { useCallback, useEffect, useState } from 'react';
 import { AbcVoteAggregation, Logger, UserStatus } from '@abc-map/shared';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { DateTime } from 'luxon';
 import Illustration1Icon from '../../assets/illustrations/illustration-1.svg';
 import Illustration2Icon from '../../assets/illustrations/illustration-2.svg';
@@ -41,7 +41,7 @@ const t = prefixedTranslation('LandingView:');
 
 function LandingView() {
   const { feedback, modals, toasts } = useServices();
-  const history = useHistory();
+  const navigate = useNavigate();
   const authenticated = useAppSelector((st) => st.authentication.userStatus) === UserStatus.Authenticated;
   const [voteAggregation, setVoteAggregation] = useState<AbcVoteAggregation | undefined>();
   const [illustration, setIllustration] = useState('');
@@ -64,7 +64,7 @@ function LandingView() {
       .catch((err) => logger.error(err));
   }, [feedback]);
 
-  const handleGoToMap = useCallback(() => history.push(Routes.map().format()), [history]);
+  const handleGoToMap = useCallback(() => navigate(Routes.map().format()), [navigate]);
 
   const handleLogin = useCallback(() => {
     modals.login().catch((err) => {

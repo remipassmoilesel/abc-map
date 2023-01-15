@@ -28,6 +28,8 @@ import { IconName } from '../../../assets/point-icons/IconName';
 import { FeatureWrapper } from '../features/FeatureWrapper';
 import { toRadians } from '../../utils/numbers';
 import { DefaultStyleOptions, StyleFactoryOptions } from './StyleFactoryOptions';
+import { Type } from 'ol/geom/Geometry';
+import { toAbcGeometryType } from '@abc-map/shared';
 
 const logger = Logger.get('StyleFactory.ts');
 
@@ -64,13 +66,13 @@ export class StyleFactory {
     return [style];
   }
 
-  public getForProperties(properties: FeatureStyle, type: AbcGeometryType, _options?: Partial<StyleFactoryOptions>): Style {
+  public getForProperties(properties: FeatureStyle, type: Type | AbcGeometryType, _options?: Partial<StyleFactoryOptions>): Style {
     const options: StyleFactoryOptions = { ...DefaultStyleOptions, ..._options };
 
-    let style = this.cache.get(type, properties, options);
+    let style = this.cache.get(toAbcGeometryType(type), properties, options);
     if (!style) {
       style = this.createStyle(type, properties, options);
-      this.cache.put(type, properties, options, style);
+      this.cache.put(toAbcGeometryType(type), properties, options, style);
     }
 
     return style;
@@ -120,7 +122,7 @@ export class StyleFactory {
     this.cache.clear();
   }
 
-  private createStyle(type: AbcGeometryType, properties: FeatureStyle, options: StyleFactoryOptions): Style {
+  private createStyle(type: Type, properties: FeatureStyle, options: StyleFactoryOptions): Style {
     const { ratio } = options;
 
     // Text can apply to all geometries

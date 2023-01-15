@@ -16,13 +16,13 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { MigratedProject } from './typings';
+import { MigrationProject } from './typings';
 import { TestData } from './test-data/TestData';
 import { FromV070ToV080 } from './FromV070ToV080';
 import { mockNanoid, restoreNanoid } from '../../utils/test/mock-nanoid';
 
 describe('FromV070ToV080', () => {
-  let sampleProject: MigratedProject;
+  let sampleProject: MigrationProject;
   let migration: FromV070ToV080;
 
   beforeEach(async () => {

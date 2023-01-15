@@ -33,10 +33,11 @@ export const ConfigInputSchema: JSONSchemaType<ConfigInput> = {
         port: { type: 'number' },
         log: {
           type: 'object',
-          required: ['requests', 'errors'],
+          required: ['requests', 'errors', 'warnings'],
           properties: {
             requests: { type: 'boolean' },
             errors: { type: 'boolean' },
+            warnings: { type: 'boolean' },
           },
         },
         globalRateLimit: {
@@ -127,12 +128,22 @@ export const ConfigInputSchema: JSONSchemaType<ConfigInput> = {
     },
     development: {
       type: 'object',
-      required: ['generateData', 'users', 'persistEmails'],
+      required: [],
       nullable: true,
       properties: {
-        generateData: { type: 'boolean' },
-        users: { type: 'number' },
-        persistEmails: { type: 'boolean' },
+        generateData: {
+          type: 'object',
+          nullable: true,
+          required: ['users'],
+          properties: {
+            users: { type: 'number' },
+            projectsPerUser: { type: 'number' },
+          },
+        },
+        persistEmails: {
+          type: 'boolean',
+          nullable: true,
+        },
       },
     },
     legalMentions: {

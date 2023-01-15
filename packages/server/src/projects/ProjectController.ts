@@ -18,16 +18,17 @@
 
 import { Controller } from '../server/Controller';
 import { Services } from '../services/services';
-import { AbcProjectMetadata, AbcUser, CompressedProject, NodeBinary, ProjectConstants, ProjectSaveResponse, ProjectSaveStatus } from '@abc-map/shared';
+import { AbcUser, ProjectConstants, ProjectSaveResponse, ProjectSaveStatus } from '@abc-map/shared';
 import { Authentication } from '../authentication/Authentication';
 import { AuthorizationService } from '../authorization/AuthorizationService';
 import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
-import fastifyMultipart, { MultipartValue } from 'fastify-multipart';
+import fastifyMultipart, { MultipartValue } from '@fastify/multipart';
 import { ByIdParams, ByIdSchema, ListSchema } from './ProjectController.schemas';
 import { Validation } from '../utils/Validation';
 import { PaginatedQuery, PaginationHelper } from '../server/PaginationHelper';
 import { Config } from '../config/Config';
-import 'fastify-sensible';
+import { CompressedProjectStream } from '@abc-map/shared';
+import '@fastify/sensible';
 
 export class ProjectController extends Controller {
   private authz: AuthorizationService;
@@ -70,14 +71,24 @@ export class ProjectController extends Controller {
     }
 
     const data = await req.file();
-
-    const metadataField = data.fields['metadata'] as unknown as MultipartValue<string>;
-    if (!metadataField.value) {
-      reply.badRequest(`Invalid form data`);
+    if (!data) {
+      reply.badRequest(`Invalid request`);
       return;
     }
 
-    const metadata: AbcProjectMetadata = JSON.parse(metadataField.value);
+    // Fastify multipart truncates data, so if we reached max project may be broken
+    if (data.file.readableLength === ProjectConstants.MaxSizeBytes) {
+      reply.payloadTooLarge('Max size allowed (bytes): ' + ProjectConstants.MaxSizeBytes);
+      return;
+    }
+
+    const metadataField = data.fields['metadata'] as unknown as MultipartValue<string>;
+    if (!metadataField.value) {
+      reply.badRequest(`Invalid request`);
+      return;
+    }
+
+    const metadata: unknown = JSON.parse(metadataField.value);
     if (!Validation.ProjectMetadata(metadata)) {
       reply.badRequest(`Invalid project metadata: ${Validation.formatErrors(Validation.ProjectMetadata)}`);
       return;
@@ -100,7 +111,7 @@ export class ProjectController extends Controller {
       }
     }
 
-    const project: CompressedProject<NodeBinary> = { metadata, project: data.file };
+    const project: CompressedProjectStream = { metadata, project: data.file };
     await projectService.save(user.id, project);
 
     const response: ProjectSaveResponse = { status: ProjectSaveStatus.Saved };
@@ -119,13 +130,13 @@ export class ProjectController extends Controller {
     }
 
     const user = Authentication.from(req) as AbcUser;
-    const result = await project.list(user.id, offset, limit);
+    const result = await project.findByUserId(user.id, offset, limit);
     void reply.status(200).send(result);
 
     metrics.projectList();
   };
 
-  private findById = async (req: FastifyRequest<{ Params: ByIdParams }>, reply: FastifyReply): Promise<void> => {
+  private findById = async (req: FastifyRequest<{ Params: ByIdParams }>, reply: FastifyReply): Promise<unknown> => {
     const { project, metrics } = this.services;
 
     const projectId = req.params.projectId;
@@ -134,15 +145,18 @@ export class ProjectController extends Controller {
       return;
     }
 
-    const result = await project.findById(projectId);
+    const result = await project.findStreamById(projectId);
     if (!result) {
       reply.notFound();
       return;
     }
 
-    void reply.status(200).send(result.project);
-
     metrics.projectFetch();
+
+    // We MUST return reply object, otherwise asynchronous response will not work.
+    // See: https://www.fastify.io/docs/latest/Guides/Migration-Guide-V4/#need-to-return-reply-to-signal-a-fork-of-the-promise-chain
+    void reply.header('Content-Type', 'application/octet-stream');
+    return reply.send(result.project);
   };
 
   private findSharedProjectById = async (req: FastifyRequest<{ Params: ByIdParams }>, reply: FastifyReply): Promise<void> => {
@@ -154,15 +168,18 @@ export class ProjectController extends Controller {
       return;
     }
 
-    const result = await project.findById(projectId);
+    const result = await project.findStreamById(projectId);
     if (!result) {
       reply.notFound();
       return;
     }
 
-    void reply.status(200).send(result.project);
-
     metrics.sharedProjectFetch();
+
+    // We MUST return reply object, otherwise asynchronous response will not work.
+    // See: https://www.fastify.io/docs/latest/Guides/Migration-Guide-V4/#need-to-return-reply-to-signal-a-fork-of-the-promise-chain
+    void reply.header('Content-Type', 'application/octet-stream');
+    return reply.send(result.project);
   };
 
   private deleteById = async (req: FastifyRequest<{ Params: ByIdParams }>, reply: FastifyReply): Promise<void> => {

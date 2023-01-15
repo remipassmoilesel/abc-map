@@ -23,7 +23,7 @@ import { Style } from 'ol/style';
 import { StyleFactory } from '../../geo/styles/StyleFactory';
 import { DimensionsPx } from '../../utils/DimensionsPx';
 import ImageState from 'ol/ImageState';
-import GeometryType from 'ol/geom/GeometryType';
+import { Type } from 'ol/geom/Geometry';
 
 const logger = Logger.get('MapSymbolRenderer.ts');
 
@@ -35,9 +35,9 @@ export const DefaultSymbolSize: DimensionsPx = { width: 35, height: 35 };
 export class MapSymbolRenderer {
   constructor(private styleFactory = StyleFactory.get(), private olContext = toContext) {}
 
-  public symbolSizeForStyle(style: Style, geom: AbcGeometryType, styleRatio: number): DimensionsPx {
+  public symbolSizeForStyle(style: Style, geom: Type | AbcGeometryType, styleRatio: number): DimensionsPx {
     // Points have variable sizes and must keep them in legend
-    if (GeometryType.POINT === geom) {
+    if (AbcGeometryType.POINT === geom) {
       const size = style.getImage().getImageSize();
       return { width: size[0] + 5, height: size[1] + 5 };
     }
@@ -47,7 +47,7 @@ export class MapSymbolRenderer {
     }
   }
 
-  public async renderSymbol(style: Style, geom: AbcGeometryType, canvas: HTMLCanvasElement, styleRatio: number): Promise<void> {
+  public async renderSymbol(style: Style, geom: Type | AbcGeometryType, canvas: HTMLCanvasElement, styleRatio: number): Promise<void> {
     const ctx = canvas.getContext('2d');
     if (!ctx) {
       logger.error('Cannot render legend, invalid context');
@@ -65,7 +65,7 @@ export class MapSymbolRenderer {
     vectorContext.setStyle(style);
 
     // Point rendering
-    if (GeometryType.POINT === geom || GeometryType.MULTI_POINT === geom) {
+    if (AbcGeometryType.POINT === geom || AbcGeometryType.MULTI_POINT === geom) {
       // Style is image, and not loaded yet. Rendering is async 🤷
       const image = style.getImage();
       if (image && image.getImageState() !== ImageState.LOADED) {
@@ -86,7 +86,7 @@ export class MapSymbolRenderer {
     }
 
     // Polygon rendering
-    else if (GeometryType.POLYGON === geom || GeometryType.MULTI_POLYGON === geom) {
+    else if (AbcGeometryType.POLYGON === geom || AbcGeometryType.MULTI_POLYGON === geom) {
       const polygon = new Polygon([
         [
           [margin, margin],
@@ -100,7 +100,7 @@ export class MapSymbolRenderer {
     }
 
     // Line rendering
-    else if (GeometryType.LINE_STRING === geom || GeometryType.MULTI_LINE_STRING === geom || GeometryType.LINEAR_RING === geom) {
+    else if (AbcGeometryType.LINE_STRING === geom || AbcGeometryType.MULTI_LINE_STRING === geom || AbcGeometryType.LINEAR_RING === geom) {
       const line = new LineString([
         [margin, margin],
         [width - margin, margin],

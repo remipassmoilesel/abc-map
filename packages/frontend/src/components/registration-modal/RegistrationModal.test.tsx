@@ -18,7 +18,7 @@
 import { newTestServices, TestServices } from '../../core/utils/test/TestServices';
 import { abcRender } from '../../core/utils/test/abcRender';
 import { ModalEvent, ModalEventType } from '../../core/ui/typings';
-import { screen, waitFor } from '@testing-library/react';
+import { act, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { TestHelper } from '../../core/utils/test/TestHelper';
 import RegistrationModal from './RegistrationModal';
@@ -30,10 +30,10 @@ describe('RegistrationModal', () => {
     services = newTestServices();
   });
 
-  it('should become visible', () => {
+  it('should become visible', async () => {
     abcRender(<RegistrationModal />, { services });
 
-    dispatch({ type: ModalEventType.ShowRegistration });
+    await openModal();
 
     expect(screen.getByPlaceholderText('Email address')).toBeDefined();
   });
@@ -41,7 +41,7 @@ describe('RegistrationModal', () => {
   it('should have disabled button if form is invalid', async () => {
     // Prepare
     abcRender(<RegistrationModal />, { services });
-    dispatch({ type: ModalEventType.ShowRegistration });
+    await openModal();
 
     // Act
     await userEvent.type(screen.getByTestId('email'), 'heyhey@hey.com');
@@ -55,7 +55,7 @@ describe('RegistrationModal', () => {
   it('should register on submit then show confirm button', async () => {
     // Prepare
     abcRender(<RegistrationModal />, { services });
-    dispatch({ type: ModalEventType.ShowRegistration });
+    await openModal();
     await userEvent.type(screen.getByTestId('email'), 'heyhey@hey.com');
     await userEvent.type(screen.getByTestId('password'), 'azerty1234');
     await userEvent.type(screen.getByTestId('password-confirmation'), 'azerty1234');
@@ -74,15 +74,17 @@ describe('RegistrationModal', () => {
   it('should not keep state after cancel', async () => {
     // Prepare
     abcRender(<RegistrationModal />, { services });
-    dispatch({ type: ModalEventType.ShowRegistration });
+    await openModal();
     await userEvent.type(screen.getByTestId('email'), 'heyhey@hey.com');
     await userEvent.type(screen.getByTestId('password'), 'azerty1234');
     await userEvent.type(screen.getByTestId('password-confirmation'), 'azerty1234');
     services.authentication.registration.resolves();
 
     // Act
-    screen.getByTestId('cancel-registration').click();
-    dispatch({ type: ModalEventType.ShowRegistration });
+    await act(() => {
+      screen.getByTestId('cancel-registration').click();
+    });
+    await openModal();
 
     // Assert
     expect(screen.getByTestId('email')).toHaveValue('');
@@ -93,16 +95,19 @@ describe('RegistrationModal', () => {
   it('should not keep state after confirm', async () => {
     // Prepare
     abcRender(<RegistrationModal />, { services });
-    dispatch({ type: ModalEventType.ShowRegistration });
+    await openModal();
     await userEvent.type(screen.getByTestId('email'), 'heyhey@hey.com');
     await userEvent.type(screen.getByTestId('password'), 'azerty1234');
     await userEvent.type(screen.getByTestId('password-confirmation'), 'azerty1234');
     services.authentication.registration.resolves();
 
     // Act
-    screen.getByTestId('submit-registration').click();
-    await TestHelper.wait(10); // Wait internal promise
-    dispatch({ type: ModalEventType.ShowRegistration });
+    await act(async () => {
+      screen.getByTestId('submit-registration').click();
+      await TestHelper.wait(10); // Wait internal promise
+    });
+
+    await openModal();
 
     // Assert
     expect(screen.getByTestId('email')).toHaveValue('');
@@ -110,7 +115,10 @@ describe('RegistrationModal', () => {
     expect(screen.getByTestId('password-confirmation')).toHaveValue('');
   });
 
-  function dispatch(ev: ModalEvent) {
-    services.modals.addListener.args[0][1](ev);
+  async function openModal() {
+    await act(() => {
+      const ev: ModalEvent = { type: ModalEventType.ShowRegistration };
+      services.modals.addListener.args[0][1](ev);
+    });
   }
 });

@@ -17,7 +17,7 @@
  */
 
 export class LongOperation {
-  public static done(timeout = 4000): Cypress.Chainable<any> {
-    return cy.get('[data-cy=long-operation-done]', { timeout });
+  public static done(timeoutMs = 4000): Cypress.Chainable<any> {
+    return cy.get('[data-cy=long-operation-done]', { timeout: timeoutMs });
   }
 }

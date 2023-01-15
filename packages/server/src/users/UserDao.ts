@@ -46,6 +46,11 @@ export class UserDao {
     return res || undefined;
   }
 
+  public async findAll(limit: number, offset: number): Promise<UserDocument[]> {
+    const coll = await this.collection();
+    return coll.find({}).limit(limit).skip(offset).toArray();
+  }
+
   public async count(): Promise<number> {
     const coll = await this.collection();
     return coll.countDocuments();

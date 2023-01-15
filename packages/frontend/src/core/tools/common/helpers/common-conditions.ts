@@ -41,7 +41,7 @@ export function withAltKey(ev: MapBrowserEvent<UIEvent | KeyboardEvent | MouseEv
 
 export function withGeometryOfType(feat: FeatureLike, types: SupportedGeometry[]): boolean {
   const type = feat?.getGeometry()?.getType();
-  return (type && types.includes(type)) || false;
+  return (type && !!types.find((t) => t === type)) || false;
 }
 
 export function withGeometry(feat: FeatureLike): boolean {

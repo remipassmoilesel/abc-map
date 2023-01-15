@@ -25,7 +25,6 @@ import {
   DEFAULT_PROJECTION,
   Language,
   LayerType,
-  NodeBinary,
   PredefinedLayerModel,
   ProjectConstants,
   Zipper,
@@ -113,10 +112,10 @@ export class TestHelper {
     };
   }
 
-  public static async sampleCompressedProject(): Promise<CompressedProject<NodeBinary>> {
+  public static async sampleCompressedProject(): Promise<CompressedProject<Buffer>> {
     const project = this.sampleProject();
     const metadata = project.metadata;
-    const zip = await Zipper.forBackend().zipFiles([{ path: ProjectConstants.ManifestName, content: Buffer.from(JSON.stringify(project), 'utf-8') }]);
+    const zip = await Zipper.forNodeJS().zipFiles([{ path: ProjectConstants.ManifestName, content: Buffer.from(JSON.stringify(project), 'utf-8') }]);
     return {
       metadata: metadata,
       project: zip,

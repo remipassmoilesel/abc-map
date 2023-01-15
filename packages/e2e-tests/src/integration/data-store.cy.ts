@@ -38,8 +38,8 @@ describe('Data store', function () {
       .click()
       .get('[data-cy=download-artefact]')
       .click()
-      .then(() => Download.fileAsBlob())
-      .should(async (file) => {
+      .then(() => Download.currentFileAsBlob())
+      .should((file) => {
         expect(file).not.undefined;
         expect(file.size).equal(1_577_455);
       });

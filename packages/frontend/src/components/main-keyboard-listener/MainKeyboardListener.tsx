@@ -18,23 +18,23 @@
 
 import { useEffect } from 'react';
 import Mousetrap from 'mousetrap';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Routes } from '../../routes';
 
 export function MainKeyboardListener() {
-  const history = useHistory();
+  const navigate = useNavigate();
 
   useEffect(() => {
     Mousetrap.bind('ctrl+m', showModuleIndex);
 
     function showModuleIndex() {
-      history.push(Routes.moduleIndex().format());
+      navigate(Routes.moduleIndex().format());
     }
 
     return () => {
       Mousetrap.unbind('ctrl+m');
     };
-  }, [history]);
+  }, [navigate]);
 
   return <></>;
 }

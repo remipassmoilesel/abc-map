@@ -22,10 +22,8 @@ import { ConfigLoader } from '../config/ConfigLoader';
 import { TestHelper } from '../utils/TestHelper';
 import { assert } from 'chai';
 import * as uuid from 'uuid-random';
-import { StreamReader } from '../utils/StreamReader';
-import ReadableStream = NodeJS.ReadableStream;
 import { Readable } from 'stream';
-import { CompressedProject } from '@abc-map/shared';
+import { CompressedProjectStream } from '@abc-map/shared';
 import { UserService } from '../users/UserService';
 
 describe('ProjectService', () => {
@@ -75,27 +73,20 @@ describe('ProjectService', () => {
 
       // Assert
       const dbProject = await service.findById(sampleProject.metadata.id);
-      assert.isDefined(dbProject?.project);
-      const buffer = await StreamReader.read(dbProject?.project as ReadableStream);
-      assert.deepEqual(buffer, sampleProject.project);
+      assert.deepEqual(dbProject?.project, sampleProject.project);
     });
 
     it('save() stream should work', async () => {
       // Prepare
       const sampleProject = await TestHelper.sampleCompressedProject();
-      const streamProject: CompressedProject = {
-        ...sampleProject,
-        project: Readable.from(sampleProject.project),
-      };
+      const streamProject: CompressedProjectStream = { ...sampleProject, project: Readable.from(sampleProject.project) };
 
       // Act
       await service.save(userId, streamProject);
 
       // Assert
       const dbProject = await service.findById(sampleProject.metadata.id);
-      assert.isDefined(dbProject?.project);
-      const buffer = await StreamReader.read(dbProject?.project as ReadableStream);
-      assert.deepEqual(buffer, sampleProject.project);
+      assert.deepEqual(dbProject?.project, sampleProject.project);
     });
 
     it('should fail without userId', async () => {
@@ -122,8 +113,7 @@ describe('ProjectService', () => {
       // Assert
       const dbProject = await service.findById(sampleProject.metadata.id);
       assert.equal(dbProject?.metadata.name, sampleProject.metadata.name);
-      const buffer = await StreamReader.read(dbProject?.project as ReadableStream);
-      assert.deepEqual(buffer, sampleProject.project);
+      assert.deepEqual(dbProject?.project, sampleProject.project);
     });
   });
 
@@ -140,9 +130,7 @@ describe('ProjectService', () => {
       assert.isDefined(dbProject);
       assert.equal(dbProject?.metadata.id, project.metadata.id);
       assert.equal(dbProject?.metadata.name, project.metadata.name);
-      assert.isDefined(dbProject?.project);
-      const buffer = await StreamReader.read(dbProject?.project as ReadableStream);
-      assert.deepEqual(buffer, project.project);
+      assert.deepEqual(dbProject?.project, project.project);
     });
 
     it('should return undefined', async () => {
@@ -152,16 +140,32 @@ describe('ProjectService', () => {
       // Assert
       assert.isUndefined(dbProject);
     });
+
+    // FIXME: improve test
+    it('findStreamById()', async () => {
+      // Prepare
+      const sampleProject = await TestHelper.sampleCompressedProject();
+
+      // Act
+      await service.save(userId, sampleProject);
+
+      // Assert
+      const dbProject = await service.findStreamById(sampleProject.metadata.id);
+      assert.isDefined(dbProject);
+      assert.equal(dbProject?.metadata.id, sampleProject.metadata.id);
+      assert.equal(dbProject?.metadata.name, sampleProject.metadata.name);
+      assert.isDefined(dbProject?.project);
+    });
   });
 
-  describe('list()', () => {
+  describe('findByUserId()', () => {
     it('should work', async () => {
       // Prepare
       const p1 = await TestHelper.sampleCompressedProject();
       await service.save(userId, p1);
 
       // Act
-      const dbProjects = await service.list(userId, 0, 10);
+      const dbProjects = await service.findByUserId(userId, 0, 10);
 
       // Assert
       assert.lengthOf(dbProjects, 1);
@@ -176,7 +180,7 @@ describe('ProjectService', () => {
       await service.save(userId, p2);
       await service.save(uuid(), p3);
 
-      const dbProjects = await service.list(userId, 0, 10);
+      const dbProjects = await service.findByUserId(userId, 0, 10);
 
       assert.deepEqual(dbProjects.map((p) => p.id).sort(), [p1.metadata.id, p2.metadata.id].sort());
     });

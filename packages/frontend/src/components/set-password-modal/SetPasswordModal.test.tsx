@@ -17,24 +17,22 @@
  */
 import { newTestServices, TestServices } from '../../core/utils/test/TestServices';
 import { abcRender } from '../../core/utils/test/abcRender';
-import { ModalEvent, ModalEventType, ShowSetPasswordModal } from '../../core/ui/typings';
-import { screen } from '@testing-library/react';
+import { ModalEvent, ModalEventType } from '../../core/ui/typings';
+import { act, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import SetPasswordModal from './SetPasswordModal';
 
 describe('SetPasswordModal', () => {
-  let showModalCmd: ShowSetPasswordModal;
   let services: TestServices;
 
   beforeEach(() => {
-    showModalCmd = { type: ModalEventType.ShowSetPassword, title: 'Password needed', message: 'Enter password' };
     services = newTestServices();
   });
 
-  it('should become visible', () => {
+  it('should become visible', async () => {
     abcRender(<SetPasswordModal />, { services });
 
-    dispatch(showModalCmd);
+    await showModal();
 
     expect(screen.getByText('Password needed')).toBeDefined();
     expect(screen.getByText('Enter password')).toBeDefined();
@@ -43,7 +41,7 @@ describe('SetPasswordModal', () => {
   it('should have disabled button if confirmation invalid', async () => {
     // Prepare
     abcRender(<SetPasswordModal />, { services });
-    dispatch(showModalCmd);
+    await showModal();
 
     // Act
     await userEvent.type(screen.getByTestId('password-input'), 'azerty1234');
@@ -56,12 +54,12 @@ describe('SetPasswordModal', () => {
   it('should emit after submit', async () => {
     // Prepare
     abcRender(<SetPasswordModal />, { services });
-    dispatch(showModalCmd);
+    await showModal();
     await userEvent.type(screen.getByTestId('password-input'), 'azerty1234');
     await userEvent.type(screen.getByTestId('password-confirmation'), 'azerty1234');
 
     // Act
-    screen.getByTestId('password-confirm').click();
+    await act(() => screen.getByTestId('password-confirm').click());
 
     // Assert
     expect(services.modals.dispatch.args).toEqual([[{ status: 'Confirmed', type: 'SetPasswordClosed', value: 'azerty1234' }]]);
@@ -70,13 +68,14 @@ describe('SetPasswordModal', () => {
   it('should not keep state after cancel', async () => {
     // Prepare
     abcRender(<SetPasswordModal />, { services });
-    dispatch(showModalCmd);
+    await showModal();
+
     await userEvent.type(screen.getByTestId('password-input'), 'azerty1234');
     await userEvent.type(screen.getByTestId('password-confirmation'), 'azerty1234');
 
     // Act
-    screen.getByTestId('password-cancel').click();
-    dispatch(showModalCmd);
+    await act(() => screen.getByTestId('password-cancel').click());
+    await showModal();
 
     // Assert
     expect(screen.getByTestId('password-input')).toHaveValue('');
@@ -86,20 +85,24 @@ describe('SetPasswordModal', () => {
   it('should not keep state after confirm', async () => {
     // Prepare
     abcRender(<SetPasswordModal />, { services });
-    dispatch(showModalCmd);
+    await showModal();
+
     await userEvent.type(screen.getByTestId('password-input'), 'azerty1234');
     await userEvent.type(screen.getByTestId('password-confirmation'), 'azerty1234');
 
     // Act
-    screen.getByTestId('password-confirm').click();
-    dispatch(showModalCmd);
+    await act(() => screen.getByTestId('password-confirm').click());
+    await showModal();
 
     // Assert
     expect(screen.getByTestId('password-input')).toHaveValue('');
     expect(screen.getByTestId('password-confirmation')).toHaveValue('');
   });
 
-  function dispatch(ev: ModalEvent) {
-    services.modals.addListener.args[0][1](ev);
+  async function showModal() {
+    await act(async () => {
+      const ev: ModalEvent = { type: ModalEventType.ShowSetPassword, title: 'Password needed', message: 'Enter password' };
+      services.modals.addListener.args[0][1](ev);
+    });
   }
 });

@@ -19,8 +19,7 @@
 import { getServices, Services } from '../../../core/Services';
 import { Module, ModuleFactory } from '@abc-map/module-api';
 import { mainStore, MainStore } from '../../../core/store/store';
-import { Logger } from '@abc-map/shared';
-import { errorMessage } from '../../../core/utils/errorMessage';
+import { errorMessage, Logger } from '@abc-map/shared';
 import { LoadingStatus, ModuleLoadingFailed, ModuleLoadingStatus, ModuleLoadingSucceed } from './ModuleLoadingStatus';
 import { getModuleApi } from './getModuleApi';
 import Fuse from 'fuse.js';
@@ -102,7 +101,8 @@ export class ModuleRegistry {
 
   public search(query: string): Module[] {
     if (!this.moduleIndex) {
-      throw new Error('Not ready');
+      logger.error('Search not ready');
+      return [];
     }
 
     return this.moduleIndex.search(query).map((item) => item.item.module);

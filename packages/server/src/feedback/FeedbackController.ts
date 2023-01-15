@@ -22,9 +22,11 @@ import { AbcTextFeedback, AbcVote } from '@abc-map/shared';
 import { DateTime } from 'luxon';
 import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import { StatParams, TextFeedbackSchema, VoteSchema } from './FeedbackController.schemas';
+import { Config } from '../config/Config';
+import { defaultRateLimitConfig } from '../server/defaultRateLimitConfig';
 
 export class FeedbackController extends Controller {
-  constructor(private services: Services) {
+  constructor(private config: Config, private services: Services) {
     super();
   }
 
@@ -33,12 +35,9 @@ export class FeedbackController extends Controller {
   }
 
   public setup = async (app: FastifyInstance): Promise<void> => {
-    // We restrict vote by ip
     const config = {
-      rateLimit: {
-        max: 30,
-        timeWindow: '1h',
-      },
+      // We restrict vote by ip
+      rateLimit: { ...defaultRateLimitConfig(this.config), max: 30, timeWindow: '1h' },
     };
 
     app.post('/text', { config, schema: TextFeedbackSchema }, this.textFeedback);

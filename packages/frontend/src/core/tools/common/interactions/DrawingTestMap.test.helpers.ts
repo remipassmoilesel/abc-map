@@ -42,6 +42,7 @@ interface SimulatedEventOptions {
  * This was inspired by openlayers tests but behavior can be weird as we use JSDom and no rendering is done.
  *
  */
+// FIXME: use a better test setup, this helper does not work since OL 7
 export class DrawingTestMap {
   private target: HTMLDivElement;
   private map: Map;

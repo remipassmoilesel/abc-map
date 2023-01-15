@@ -1,5 +1,5 @@
 /**
- * Copyright © 2021 Rémi Pace.
+ * Copyright © 2022 Rémi Pace.
  * This file is part of Abc-Map.
  *
  * Abc-Map is free software: you can redistribute it and/or modify
@@ -16,7 +16,8 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-export function getErrorMessage(err: unknown | undefined | any): string {
-  const message = !!err && typeof err === 'object' && 'message' in err && err.message;
-  return message || '<no-error-message>';
+export function wait(ms: number): Promise<void> {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
 }

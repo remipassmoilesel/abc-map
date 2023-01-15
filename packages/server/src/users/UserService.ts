@@ -70,6 +70,10 @@ export class UserService extends AbstractService {
     });
   }
 
+  public async findAll(limit = 100, offset = 0): Promise<AbcUser[]> {
+    return this.dao.findAll(limit, offset).then((users) => users.map((u) => UserMapper.docToDto(u)));
+  }
+
   public async count(): Promise<number> {
     return this.dao.count();
   }

@@ -17,60 +17,60 @@
  */
 
 import * as fs from 'fs';
-import { MigratedProject } from '../typings';
+import { MigrationProject } from '../typings';
 import { AbcProjectManifest, ProjectHelper, Zipper } from '@abc-map/shared';
 
 export class TestData {
-  public static async project01(): Promise<MigratedProject> {
-    return this.fileToMigratedProject(`${__dirname}/project-0.1.abm2`);
+  public static async project01(): Promise<MigrationProject> {
+    return this.readFile(`${__dirname}/project-0.1.abm2`);
   }
 
-  public static async project020(): Promise<MigratedProject> {
-    return this.fileToMigratedProject(`${__dirname}/project-0.2.0.abm2`);
+  public static async project020(): Promise<MigrationProject> {
+    return this.readFile(`${__dirname}/project-0.2.0.abm2`);
   }
 
-  public static async project030(): Promise<MigratedProject> {
-    return this.fileToMigratedProject(`${__dirname}/project-0.3.0.abm2`);
+  public static async project030(): Promise<MigrationProject> {
+    return this.readFile(`${__dirname}/project-0.3.0.abm2`);
   }
 
-  public static async project040(): Promise<MigratedProject> {
-    return this.fileToMigratedProject(`${__dirname}/project-0.4.0.abm2`);
+  public static async project040(): Promise<MigrationProject> {
+    return this.readFile(`${__dirname}/project-0.4.0.abm2`);
   }
 
-  public static async project050(): Promise<MigratedProject> {
-    return this.fileToMigratedProject(`${__dirname}/project-0.5.0.abm2`);
+  public static async project050(): Promise<MigrationProject> {
+    return this.readFile(`${__dirname}/project-0.5.0.abm2`);
   }
 
-  public static async project060(): Promise<MigratedProject> {
-    return this.fileToMigratedProject(`${__dirname}/project-0.6.0.abm2`);
+  public static async project060(): Promise<MigrationProject> {
+    return this.readFile(`${__dirname}/project-0.6.0.abm2`);
   }
 
-  public static async project070(): Promise<MigratedProject> {
-    return this.fileToMigratedProject(`${__dirname}/project-0.7.0.abm2`);
+  public static async project070(): Promise<MigrationProject> {
+    return this.readFile(`${__dirname}/project-0.7.0.abm2`);
   }
 
-  public static async project080(): Promise<MigratedProject> {
-    return this.fileToMigratedProject(`${__dirname}/project-0.8.0.abm2`);
+  public static async project080(): Promise<MigrationProject> {
+    return this.readFile(`${__dirname}/project-0.8.0.abm2`);
   }
 
-  public static async project090(): Promise<MigratedProject> {
-    return this.fileToMigratedProject(`${__dirname}/project-0.9.0.abm2`);
+  public static async project090(): Promise<MigrationProject> {
+    return this.readFile(`${__dirname}/project-0.9.0.abm2`);
   }
 
-  public static async project100(): Promise<MigratedProject> {
-    return this.fileToMigratedProject(`${__dirname}/project-1.0.0.abm2`);
+  public static async project100(): Promise<MigrationProject> {
+    return this.readFile(`${__dirname}/project-1.0.0.abm2`);
   }
 
   public static fakeProject(version: string) {
     return { metadata: { version } } as unknown as AbcProjectManifest;
   }
 
-  private static async fileToMigratedProject(path: string): Promise<MigratedProject> {
-    const zip = fs.readFileSync(path);
-    const res = await Zipper.forBackend().unzip(zip);
-    const manifest = await ProjectHelper.forBackend().extractManifest(zip);
-    const files = res.map((f) => ({ path: f.path, content: new Blob([f.content]) }));
+  private static async readFile(path: string): Promise<MigrationProject> {
+    const archive = fs.readFileSync(path);
+    const files = await Zipper.forNodeJS().unzip(archive);
+    const manifest = await ProjectHelper.forNodeJS().extractManifest(archive);
+    const blobFiles = files.map((f) => ({ path: f.path, content: new Blob([f.content as Buffer]) }));
 
-    return { manifest, files };
+    return { manifest, files: blobFiles };
   }
 }

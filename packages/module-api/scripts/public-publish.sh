@@ -19,5 +19,8 @@ set -e
 
 yarn run lint
 yarn run clean-build
+# We do not publish tests
+find build -name '*.test.js' -delete
+
 npx -y is-published || npm publish --access public --registry "https://registry.npmjs.org/"
 

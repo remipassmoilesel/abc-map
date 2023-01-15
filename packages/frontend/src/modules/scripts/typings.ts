@@ -39,6 +39,10 @@ export class ScriptError extends Error {
   }
 }
 
+export function getScriptErrorOutput(err: unknown): string[] {
+  return (!!err && typeof err === 'object' && 'output' in err && (err as ScriptError).output) || [];
+}
+
 export const Example = `\
 // You can access various helpers from "moduleApi" constant
 const { mainMap } = moduleApi;
