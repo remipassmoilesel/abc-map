@@ -49,6 +49,8 @@ import {
   UpdatePasswordRequestSchema,
 } from './AuthenticationController.schemas';
 import { jwtPlugin } from '../server/jwtPlugin';
+import '@fastify/rate-limit';
+import { defaultRateLimitConfig } from '../server/defaultRateLimitConfig';
 
 export const logger = Logger.get('AuthenticationController.ts');
 
@@ -61,24 +63,25 @@ export class AuthenticationController extends Controller {
     return '/authentication';
   }
 
+  // WARNING: This controller is public, authentication is not verified before
   public setup = async (app: FastifyInstance): Promise<void> => {
-    // WARNING: This controller is public, authentication is not verified before
     jwtPlugin(this.config, app);
 
-    // We limit usage of these routes in order to prevent bruteforce
-    // FIXME We should use responses (200, 403, 401) to alter limits and ban for a larger period brute-forcers
-    const authRateLimit = {
-      config: { rateLimit: { max: this.config.server.authenticationRateLimit.max, timeWindow: this.config.server.authenticationRateLimit.timeWindow } },
+    const { max, timeWindow } = this.config.server.authenticationRateLimit;
+    const config = {
+      // We limit usage of these routes in order to prevent bruteforce
+      // FIXME: We should use responses (200, 403, 401) to alter limits and ban for a larger period brute-forcers
+      rateLimit: { ...defaultRateLimitConfig(this.config), max, timeWindow },
     };
 
-    app.post('/', { schema: LoginRequestSchema, ...authRateLimit }, this.login);
-    app.delete('/', { schema: DeleteAccountSchema, ...authRateLimit }, this.deleteAccount);
-    app.patch('/password', { schema: UpdatePasswordRequestSchema, ...authRateLimit }, this.updatePassword);
-    app.post('/password', { schema: ResetPasswordSchema, ...authRateLimit }, this.resetPassword);
-    app.post('/password/reset-email', { schema: PasswordLostRequestSchema, ...authRateLimit }, this.passwordResetEmail);
-    app.post('/account', { schema: RegistrationRequestSchema, ...authRateLimit }, this.registration);
-    app.post('/account/confirmation', { schema: RegistrationConfirmationRequestSchema, ...authRateLimit }, this.confirmRegistration);
-    app.get('/token', { ...authRateLimit }, this.renew);
+    app.post('/', { config, schema: LoginRequestSchema }, this.login);
+    app.delete('/', { config, schema: DeleteAccountSchema }, this.deleteAccount);
+    app.patch('/password', { config, schema: UpdatePasswordRequestSchema }, this.updatePassword);
+    app.post('/password', { config, schema: ResetPasswordSchema }, this.resetPassword);
+    app.post('/password/reset-email', { config, schema: PasswordLostRequestSchema }, this.passwordResetEmail);
+    app.post('/account', { config, schema: RegistrationRequestSchema }, this.registration);
+    app.post('/account/confirmation', { config, schema: RegistrationConfirmationRequestSchema }, this.confirmRegistration);
+    app.get('/token', { config }, this.renew);
   };
 
   private registration = async (req: FastifyRequest<{ Body: RegistrationRequest }>, reply: FastifyReply): Promise<void> => {

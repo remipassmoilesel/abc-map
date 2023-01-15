@@ -36,6 +36,7 @@ describe('ProjectionController', () => {
     config = await ConfigLoader.load();
     config.server.log.requests = false;
     config.server.log.errors = false;
+    config.server.log.warnings = false;
 
     services = await servicesFactory(config);
 

@@ -19,7 +19,7 @@ import { newTestServices, TestServices } from '../../core/utils/test/TestService
 import { abcRender } from '../../core/utils/test/abcRender';
 import { logger } from './SharedMapView';
 import SharedMapView from './SharedMapView';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import React, { ReactElement } from 'react';
 import { SinonStubbedInstance } from 'sinon';
 import { ProjectService } from '../../core/project/ProjectService';
@@ -49,21 +49,22 @@ describe('SharedMapView', () => {
 
   it('should load map then display it', async () => {
     // Prepare
-    project.loadPublicProject.callsFake(async () => {
+    project.loadPublicProject.callsFake(() => {
       const view = TestHelper.sampleSharedView();
       store.dispatch(ProjectActions.addSharedViews([view]));
       store.dispatch(ProjectActions.setActiveSharedView(view.id));
+      return Promise.resolve();
     });
 
     // Act
-    abcRender(withViewport(<Route exact path={'/shared/:projectId'} component={SharedMapView} />), {
+    abcRender(withViewport(<Route path={'/shared/:projectId'} element={<SharedMapView />} />), {
       services,
       store,
       router: { initialEntries: ['/shared/e5e02711-ee9a-4210-b2ca-7d60c1a52613'] },
     });
 
     // Assert
-    await waitFor(async () => {
+    await waitFor(() => {
       expect(project.loadPublicProject.args).toEqual([['e5e02711-ee9a-4210-b2ca-7d60c1a52613']]);
       expect(screen.getByTestId('shared-map')).toBeDefined();
       expect(screen.queryByTestId('error')).toBeNull();
@@ -75,7 +76,7 @@ describe('SharedMapView', () => {
     project.loadPublicProject.rejects();
 
     // Act
-    abcRender(withViewport(<Route exact path={'/shared/:projectId'} component={SharedMapView} />), {
+    abcRender(withViewport(<Route path={'/shared/:projectId'} element={<SharedMapView />} />), {
       services,
       router: { initialEntries: ['/shared/e5e02711-ee9a-4210-b2ca-7d60c1a52613'] },
     });
@@ -90,7 +91,7 @@ describe('SharedMapView', () => {
 function withViewport(node: ReactElement) {
   return (
     <div className={'abc-app-viewport'}>
-      <Switch>{node}</Switch>
+      <Routes>{node}</Routes>
     </div>
   );
 }

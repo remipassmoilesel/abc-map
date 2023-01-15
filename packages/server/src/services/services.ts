@@ -63,8 +63,6 @@ export async function servicesFactory(config: Config): Promise<Services> {
   const metrics = MetricsService.create();
   const projections = ProjectionService.create(config, mongodb);
 
-  const shutdown: ShutdownFunc = () => mongodb.disconnect().catch((err) => logger.error(err));
-
   const services: Services = {
     project,
     user,
@@ -76,7 +74,7 @@ export async function servicesFactory(config: Config): Promise<Services> {
     metrics,
     emails,
     projections,
-    shutdown,
+    shutdown: () => undefined,
   };
 
   for (const name in services) {
@@ -85,6 +83,17 @@ export async function servicesFactory(config: Config): Promise<Services> {
       await svc.init();
     }
   }
+
+  services.shutdown = async () => {
+    for (const name in services) {
+      const svc: AbstractService | ShutdownFunc = services[name];
+      if (svc instanceof AbstractService) {
+        await svc.shutdown().catch((err) => logger.error(err));
+      }
+    }
+
+    mongodb.disconnect().catch((err) => logger.error(err));
+  };
 
   return services;
 }

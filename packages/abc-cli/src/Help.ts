@@ -41,7 +41,8 @@ Other commands:
   $ ./abc-cli dep-check                   Check dependencies and source code with Dependency Cruiser.
   $ ./abc-cli build                       Build all packages.
   $ ./abc-cli test                        Test all packages.
-  $ ./abc-cli e2e                         Launch E2E tests.
+  $ ./abc-cli e2e-tests                   Launch application and E2E tests.
+  $ ./abc-cli performance-tests           Launch application and performance tests.
   $ ./abc-cli start-services              Start associated services.
   $ ./abc-cli stop-services               Stop associated services.
   $ ./abc-cli clean-restart-services      Stop associated services.

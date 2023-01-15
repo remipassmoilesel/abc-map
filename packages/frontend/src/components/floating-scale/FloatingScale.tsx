@@ -17,12 +17,12 @@
  */
 
 import Cls from './FloatingScale.module.scss';
-import { Rnd, RndDragCallback } from 'react-rnd';
 import { Scale } from '../scale/Scale';
 import React, { useCallback } from 'react';
 import { MapWrapper } from '../../core/geo/map/MapWrapper';
 import { AbcScale } from '@abc-map/shared';
 import clsx from 'clsx';
+import { FloatingContainer, FloatingCtrDragCallback } from '../floating-container/FloatingContainer';
 
 interface Props {
   map: MapWrapper;
@@ -37,15 +37,15 @@ interface Props {
 export function FloatingScale(props: Props) {
   const { map, scale, readOnly, minWidth, ratio, baseFontSizeEm, onChange } = props;
 
-  const handleDragStop: RndDragCallback = useCallback(
-    (ev, data) => {
-      onChange && onChange({ ...scale, x: data.x, y: data.y });
+  const handleDrag: FloatingCtrDragCallback = useCallback(
+    (x, y) => {
+      onChange && onChange({ ...scale, x, y });
     },
     [onChange, scale]
   );
 
   return (
-    <Rnd position={{ x: scale.x, y: scale.y }} disableDragging={readOnly} onDragStop={handleDragStop} enableResizing={false} bounds={'parent'}>
+    <FloatingContainer position={{ x: scale.x, y: scale.y }} dragging={!readOnly} onDrag={handleDrag} resizing={false}>
       <Scale
         map={map}
         minWidth={minWidth}
@@ -54,6 +54,6 @@ export function FloatingScale(props: Props) {
         tooltip={false}
         className={clsx(Cls.scale, readOnly && Cls.readOnly)}
       />
-    </Rnd>
+    </FloatingContainer>
   );
 }

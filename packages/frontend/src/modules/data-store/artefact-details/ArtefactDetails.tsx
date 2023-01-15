@@ -97,7 +97,7 @@ function ArtefactDetails(props: Props) {
         if (res.length === 1 && FileFormat.ZIP === FileFormats.fromPath(res[0].path)) {
           content = res[0].content;
         } else {
-          content = await Zipper.forFrontend().zipFiles(res);
+          content = await Zipper.forBrowser().zipFiles(res);
         }
 
         FileIO.outputBlob(content, 'artefact.zip');
@@ -192,8 +192,7 @@ function ArtefactDetails(props: Props) {
           {/* Keywords block */}
           {keywords && (
             <div className={'mb-3'}>
-              <h4>{t('Keywords')}</h4>
-              {keywords.join(', ')}
+              {t('Keywords')}: {keywords.join(', ')}
             </div>
           )}
 
@@ -201,8 +200,9 @@ function ArtefactDetails(props: Props) {
           <h4>{t('Preview')}</h4>
           <Previews artefact={artefact} className={'mb-4'} key={artefact.id} />
 
+          <div className={'flex-grow-1'} />
+
           {/* Actions */}
-          <h4 className={'mb-3'}>{t('Actions')}</h4>
           <div className={Cls.actions}>
             <button className={'btn btn-primary'} onClick={handleImportArtefact} data-cy={'import-artefact'}>
               <FaIcon icon={IconDefs.faPlus} className={'mr-2'} />

@@ -15,4 +15,5 @@ module.exports = {
     '\\.css$': '<rootDir>/src/__mocks__/style.js',
     '\\.scss$': '<rootDir>/src/__mocks__/style.js'
   },
+  setupFiles: ['<rootDir>/scripts/test-setup.js']
 };

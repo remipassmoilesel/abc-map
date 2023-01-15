@@ -16,11 +16,11 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'source-map-support/register';
+import 'source-map-support/register.js';
 import { execSync } from 'child_process';
-import { Logger } from './utils/Logger';
-import * as path from 'path';
+import { Logger } from './utils/Logger.js';
 import * as uuid from 'uuid';
+import * as url from 'url';
 
 const logger = Logger.get('create-module.test.ts', 'warn');
 
@@ -29,11 +29,24 @@ const DEBUG = false;
 describe('create-module', function () {
   this.timeout(120_000);
 
-  it('should create a module template', () => {
+  it('should create a module template that can build', () => {
     const moduleName = `create-module-test-${uuid.v4()}`;
-    const createModuleRoot = path.resolve(__dirname, '..');
+    const createModule = url.fileURLToPath(new URL('..', import.meta.url));
 
-    shellCommand(`echo $PATH; npx -p ${createModuleRoot} create-module --name ${moduleName}`, '/tmp');
+    shellCommand(`npx -p ${createModule} create-module --name ${moduleName}`, '/tmp');
+    shellCommand('yarn run build', `/tmp/${moduleName}`);
+  });
+
+  // Use this test to check another template
+  it.skip('should create a module template from specified source URL', () => {
+    const templateUrl = 'https://gitlab.com/api/v4/projects/MY_USERNAME%2Fmodule-template/repository/archive.zip?sha=ac1fea6';
+    const headers = { 'Private-Token': 'XXXXXXXXXXXXXXXXXXXXXXXXXXX' };
+    const env = `ABC_CREATE_MODULE_SOURCE_URL='${templateUrl}' ABC_CREATE_MODULE_HEADERS='${JSON.stringify(headers)}'`;
+
+    const moduleName = `create-module-test-${uuid.v4()}`;
+    const createModule = url.fileURLToPath(new URL('..', import.meta.url));
+
+    shellCommand(`${env} npx -p ${createModule} create-module --name ${moduleName}`, '/tmp');
     shellCommand('yarn run build', `/tmp/${moduleName}`);
   });
 });

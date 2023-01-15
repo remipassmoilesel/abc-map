@@ -16,11 +16,10 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import GeometryType from 'ol/geom/GeometryType';
 import Style from 'ol/style/Style';
 import { Fill, Stroke } from 'ol/style';
 import CircleStyle from 'ol/style/Circle';
-import { Logger } from '@abc-map/shared';
+import { AbcGeometryType, Logger } from '@abc-map/shared';
 import { FeatureWrapper } from '../features/FeatureWrapper';
 
 export const logger = Logger.get('SelectionStyleFactory.ts');
@@ -81,23 +80,23 @@ export class SelectionStyleFactory {
       return [];
     }
 
-    if (GeometryType.POINT === geometry) {
+    if (AbcGeometryType.POINT === geometry) {
       return point;
-    } else if (GeometryType.LINE_STRING === geometry) {
+    } else if (AbcGeometryType.LINE_STRING === geometry) {
       return lineString;
-    } else if (GeometryType.LINEAR_RING === geometry) {
+    } else if (AbcGeometryType.LINEAR_RING === geometry) {
       return lineString;
-    } else if (GeometryType.POLYGON === geometry) {
+    } else if (AbcGeometryType.POLYGON === geometry) {
       return polygon;
-    } else if (GeometryType.MULTI_POINT === geometry) {
+    } else if (AbcGeometryType.MULTI_POINT === geometry) {
       return point;
-    } else if (GeometryType.MULTI_LINE_STRING === geometry) {
+    } else if (AbcGeometryType.MULTI_LINE_STRING === geometry) {
       return lineString;
-    } else if (GeometryType.MULTI_POLYGON === geometry) {
+    } else if (AbcGeometryType.MULTI_POLYGON === geometry) {
       return polygon;
-    } else if (GeometryType.GEOMETRY_COLLECTION === geometry) {
+    } else if (AbcGeometryType.GEOMETRY_COLLECTION === geometry) {
       return geometryCollection;
-    } else if (GeometryType.CIRCLE === geometry) {
+    } else if (AbcGeometryType.CIRCLE === geometry) {
       return circle;
     }
 

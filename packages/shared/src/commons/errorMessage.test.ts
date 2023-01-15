@@ -16,7 +16,14 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-export interface PdfComparison {
-  value: number;
-  diff: string;
-}
+import { errorMessage } from './errorMessage';
+
+describe('errorMessage', () => {
+  it('should work', () => {
+    expect(errorMessage(new Error('Test error'))).toEqual('Test error');
+    expect(errorMessage('Test error')).toEqual('Test error');
+    expect(errorMessage(new Error())).toEqual('<no-message>');
+    expect(errorMessage('')).toEqual('<no-message>');
+    expect(errorMessage(undefined)).toEqual('<no-message>');
+  });
+});

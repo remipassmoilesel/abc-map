@@ -26,8 +26,6 @@ import * as FormData from 'form-data';
 import { TestAuthentication } from '../utils/TestAuthentication';
 import { AbcProjectMetadata, AbcUser, CompressedProject, ProjectConstants } from '@abc-map/shared';
 import { IncomingHttpHeaders } from 'http';
-import { StreamReader } from '../utils/StreamReader';
-import ReadableStream = NodeJS.ReadableStream;
 import * as _ from 'lodash';
 
 describe('ProjectController', () => {
@@ -37,14 +35,15 @@ describe('ProjectController', () => {
   let user1: AbcUser;
   let user2: AbcUser;
   let user1Auth: IncomingHttpHeaders;
-  let project1: CompressedProject;
-  let project2: CompressedProject;
+  let project1: CompressedProject<Buffer>;
+  let project2: CompressedProject<Buffer>;
   let server: HttpServer;
 
   before(async () => {
     config = await ConfigLoader.load();
     config.server.log.requests = false;
     config.server.log.errors = false;
+    config.server.log.warnings = false;
 
     services = await servicesFactory(config);
     server = HttpServer.create(config, services);
@@ -140,8 +139,7 @@ describe('ProjectController', () => {
       // If fastify setup is borked, file streams are empty
       // Here we check that file is well sent to BDD
       const dbProject = await services.project.findById(project.metadata.id);
-      const buffer = await StreamReader.read(dbProject?.project as ReadableStream);
-      assert.deepEqual(buffer, project.project);
+      assert.deepEqual(dbProject?.project, project.project);
     });
 
     it('should fail if metadata field is too big', async () => {
@@ -172,7 +170,7 @@ describe('ProjectController', () => {
     it('should fail if project is too big', async () => {
       // Prepare
       const project = await TestHelper.sampleCompressedProject();
-      const heavyProject = Buffer.from(_.range(1, ProjectConstants.MaxSizeBytes + 1000).map(() => 128));
+      const heavyProject = Buffer.from(_.range(1, ProjectConstants.MaxSizeBytes * 1.1).map(() => 128));
       const form = new FormData();
       form.append('metadata', JSON.stringify(project.metadata));
       form.append('project', heavyProject);
@@ -190,10 +188,7 @@ describe('ProjectController', () => {
 
       // Assert
       assert.equal(res.statusCode, 413);
-      assert.equal(
-        res.body,
-        '{"statusCode":413,"code":"FST_REQ_FILE_TOO_LARGE","error":"Payload Too Large","message":"request file too large, please check multipart config"}'
-      );
+      assert.equal(res.body, '{"statusCode":413,"error":"Payload Too Large","message":"Max size allowed (bytes): 5242880"}');
     });
 
     it('should not work with bad request', async () => {
@@ -286,6 +281,7 @@ describe('ProjectController', () => {
       });
 
       assert.equal(res.statusCode, 200);
+      assert.isTrue(res.body.length > 500, `Expected body length > 500, got ${res.body.length}`);
     });
 
     it('should fail for connected user if not owner', async () => {
@@ -381,6 +377,7 @@ describe('ProjectController', () => {
       });
 
       assert.equal(res.statusCode, 200);
+      assert.isTrue(res.body.length > 500, `Expected body length > 500, got ${res.body.length}`);
     });
 
     it('should work for public project with connected user', async () => {
@@ -396,6 +393,7 @@ describe('ProjectController', () => {
       });
 
       assert.equal(res.statusCode, 200);
+      assert.isTrue(res.body.length > 500, `Expected body length > 500, got ${res.body.length}`);
     });
   });
 

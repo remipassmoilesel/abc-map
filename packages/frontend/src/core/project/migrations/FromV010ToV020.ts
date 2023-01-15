@@ -18,7 +18,7 @@
 
 import { AbcFile, AbcProjectManifest } from '@abc-map/shared';
 import { Views } from '../../geo/Views';
-import { MigratedProject, ProjectMigration } from './typings';
+import { MigrationProject, ProjectMigration } from './typings';
 import semver from 'semver';
 
 /**
@@ -31,7 +31,7 @@ export class FromV010ToV020 implements ProjectMigration {
     return isV1 || semver.lt(version, '0.2.0');
   }
 
-  public async migrate(manifest: AbcProjectManifest, files: AbcFile<Blob>[]): Promise<MigratedProject> {
+  public async migrate(manifest: AbcProjectManifest, files: AbcFile<Blob>[]): Promise<MigrationProject> {
     return {
       manifest: {
         ...manifest,

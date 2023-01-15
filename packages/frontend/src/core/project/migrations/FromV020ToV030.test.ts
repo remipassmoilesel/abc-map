@@ -22,12 +22,12 @@ import { ModalService } from '../../ui/ModalService';
 import sinon, { SinonStubbedInstance } from 'sinon';
 import { ModalEventType, ModalStatus } from '../../ui/typings';
 import { TestData } from './test-data/TestData';
-import { MigratedProject } from './typings';
+import { MigrationProject } from './typings';
 import { WmsMetadata030 } from './old-typings/030-project';
 
 describe('FromV020ToV030', () => {
   let modals: SinonStubbedInstance<ModalService>;
-  let sampleProject: MigratedProject;
+  let sampleProject: MigrationProject;
   let migration: FromV020ToV030;
 
   beforeEach(async () => {

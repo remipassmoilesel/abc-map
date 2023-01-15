@@ -42,7 +42,7 @@ async function main(args: string[]) {
   process.env.PATH = `${config.getCliRoot()}/node_modules/.bin/:${process.env.PATH}`;
 
   banners.cli();
-  const command = await parser.parse(args);
+  const command = parser.parse(args);
 
   switch (command.name) {
     case CommandName.CI: {
@@ -75,10 +75,10 @@ async function main(args: string[]) {
       service.watch();
       break;
 
-    case CommandName.E2E: {
-      const servers = await service.startServersForE2e();
+    case CommandName.E2E_TESTS: {
+      const servers = await service.startServers();
       try {
-        await service.e2eTests();
+        service.e2eTests();
       } finally {
         servers.kill('SIGTERM');
       }
@@ -110,7 +110,7 @@ async function main(args: string[]) {
       break;
 
     case CommandName.APPLY_LICENSE:
-      await service.applyLicense();
+      service.applyLicense();
       break;
 
     case CommandName.DOCKER_BUILD:
@@ -129,5 +129,15 @@ async function main(args: string[]) {
       banners.big();
       Help.display();
       break;
+
+    case CommandName.PERFORMANCE_TESTS: {
+      const servers = await service.startServers();
+      try {
+        service.performanceTests();
+      } finally {
+        servers.kill('SIGTERM');
+      }
+      break;
+    }
   }
 }

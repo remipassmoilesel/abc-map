@@ -21,7 +21,6 @@ import Geometry from 'ol/geom/Geometry';
 import { AbcGeometryType, FeatureProperties, StyleProperties } from '@abc-map/shared';
 import { FeatureStyle, DefaultStyle } from '@abc-map/shared';
 import { nanoid } from 'nanoid';
-import GeometryType from 'ol/geom/GeometryType';
 import { Logger } from '@abc-map/shared';
 import { OlGeometry } from './OlGeometry';
 import { isOpenlayersGeometry, isOpenlayersFeature } from '../../utils/crossContextInstanceof';
@@ -179,19 +178,19 @@ export class FeatureWrapper<Geom extends OlGeometry = OlGeometry> {
     }
 
     switch (geom.getType()) {
-      case GeometryType.POLYGON:
-      case GeometryType.MULTI_POLYGON:
-      case GeometryType.CIRCLE:
-      case GeometryType.GEOMETRY_COLLECTION:
+      case AbcGeometryType.POLYGON:
+      case AbcGeometryType.MULTI_POLYGON:
+      case AbcGeometryType.CIRCLE:
+      case AbcGeometryType.GEOMETRY_COLLECTION:
         this.setStyleProperties({ fill: DefaultStyle.fill, stroke: DefaultStyle.stroke });
         break;
-      case GeometryType.POINT:
-      case GeometryType.MULTI_POINT:
+      case AbcGeometryType.POINT:
+      case AbcGeometryType.MULTI_POINT:
         this.setStyleProperties({ point: DefaultStyle.point });
         break;
-      case GeometryType.LINE_STRING:
-      case GeometryType.MULTI_LINE_STRING:
-      case GeometryType.LINEAR_RING:
+      case AbcGeometryType.LINE_STRING:
+      case AbcGeometryType.MULTI_LINE_STRING:
+      case AbcGeometryType.LINEAR_RING:
         this.setStyleProperties({ stroke: DefaultStyle.stroke });
         break;
     }
@@ -220,7 +219,7 @@ export class FeatureWrapper<Geom extends OlGeometry = OlGeometry> {
     }
 
     const type = this.getGeometry()?.getType();
-    return geoms.includes(type);
+    return !!geoms.find((t) => t === type);
   }
 
   public setText(text: string): FeatureWrapper {

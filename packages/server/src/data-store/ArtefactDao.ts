@@ -150,7 +150,7 @@ export class ArtefactDao {
       query = this.filter(filter);
     }
 
-    return coll.find(query).count();
+    return coll.countDocuments(query);
   }
 
   public async findAll(): Promise<ArtefactDocument[]> {

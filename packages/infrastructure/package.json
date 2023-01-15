@@ -4,6 +4,6 @@
   "private": true,
   "license": "AGPL-3.0-or-later",
   "volta": {
-    "node": "16.15.0"
+    "node": "18.12.1"
   }
 }

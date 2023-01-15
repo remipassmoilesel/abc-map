@@ -286,7 +286,7 @@ describe('ProjectService', function () {
         // Assert
         expect(exported.metadata).toEqual(originalManifest.metadata);
 
-        const manifest: AbcProjectManifest = await ProjectHelper.forFrontend().extractManifest(exported.project);
+        const manifest: AbcProjectManifest = await ProjectHelper.forBrowser().extractManifest(exported.project);
         expect(manifest.metadata).toEqual(originalManifest.metadata);
         expect(manifest.layers).toEqual(layers);
         expect(manifest.layouts).toEqual(originalManifest.layouts);
@@ -317,7 +317,7 @@ describe('ProjectService', function () {
         expect(exported.metadata.name).toEqual(originalManifest.metadata.name);
         expect(exported.metadata.containsCredentials).toEqual(true);
 
-        const manifest: AbcProjectManifest = await ProjectHelper.forFrontend().extractManifest(exported.project);
+        const manifest: AbcProjectManifest = await ProjectHelper.forBrowser().extractManifest(exported.project);
         expect(manifest.metadata.id).toEqual(originalManifest.metadata.id);
         expect(manifest.metadata.public).toEqual(false);
         expect(manifest.metadata.name).toEqual(originalManifest.metadata.name);
@@ -402,7 +402,7 @@ describe('ProjectService', function () {
         expect(exported.metadata.name).toEqual(originalManifest.metadata.name);
         expect(exported.metadata.containsCredentials).toEqual(false);
 
-        const manifest: AbcProjectManifest = await ProjectHelper.forFrontend().extractManifest(exported.project);
+        const manifest: AbcProjectManifest = await ProjectHelper.forBrowser().extractManifest(exported.project);
         expect(manifest.metadata.id).toEqual(originalManifest.metadata.id);
         expect(manifest.metadata.public).toEqual(true);
         expect(manifest.metadata.name).toEqual(originalManifest.metadata.name);
@@ -437,7 +437,7 @@ describe('ProjectService', function () {
       const clone = (await projectService.cloneCurrent()) as CompressedProject<Blob>;
 
       // Assert
-      const clonedManifest: AbcProjectManifest = await ProjectHelper.forFrontend().extractManifest(clone.project);
+      const clonedManifest: AbcProjectManifest = await ProjectHelper.forBrowser().extractManifest(clone.project);
       expect(clonedManifest.metadata.id).toBeDefined();
       expect(clonedManifest.metadata.id).toEqual(clone.metadata.id);
       expect(clonedManifest.metadata.id).not.toEqual(original.metadata.id);

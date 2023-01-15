@@ -51,7 +51,7 @@ describe('Load module', function () {
       .click()
       // Wait for completion
       .get('[data-cy=module-viewport]')
-      .contains('Processing done')
+      .contains('Processing done', { timeout: 16_000 })
       .then(() => TopBar.map())
       .then(() => MainMap.getReference())
       .should((map) => {

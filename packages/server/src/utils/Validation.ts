@@ -20,6 +20,7 @@ import { ValidateFunction } from 'ajv';
 import { ProjectMetadataSchema } from '../projects/ProjectMetadata.schema';
 import { ConfigInputSchema } from '../config/ConfigInputSchema';
 import { ArtefactManifestSchema } from '../data-store/ArtefactManifest';
+import { AbcProjectMetadata } from '@abc-map/shared';
 
 const ajv = new Ajv();
 
@@ -35,7 +36,7 @@ export class Validation {
 
   public static readonly ConfigInput = ajv.compile(ConfigInputSchema);
 
-  public static readonly ProjectMetadata = ajv.compile(ProjectMetadataSchema);
+  public static readonly ProjectMetadata = ajv.compile<AbcProjectMetadata>(ProjectMetadataSchema);
 
   public static readonly ArtefactManifest = ajv.compile(ArtefactManifestSchema);
 

@@ -21,7 +21,6 @@ import { ModalEventType, ModalStatus } from '../../core/ui/typings';
 import { ServiceProps, withServices } from '../../core/withServices';
 import { Logger } from '@abc-map/shared';
 import { VoteValue } from '@abc-map/shared';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
 import FundingLinks from '../funding-links/FundingLinks';
 import { prefixedTranslation } from '../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
@@ -30,10 +29,11 @@ import { Routes } from '../../routes';
 import { FullscreenModal } from '../fullscreen-modal/FullscreenModal';
 import TextFeedbackForm from '../feedback/form/TextFeedbackForm';
 import { confetti } from '../../core/ui/confetti';
+import { withRouter, WithRouterProps } from '../../core/utils/withRouter';
 
 const logger = Logger.get('SolicitationModal.ts');
 
-declare type Props = ServiceProps & RouteComponentProps;
+declare type Props = ServiceProps & WithRouterProps;
 
 interface State {
   visible: boolean;
@@ -137,9 +137,9 @@ class SolicitationModal extends Component<Props, State> {
   };
 
   private handleExplainDonation = () => {
-    const { history } = this.props;
+    const { navigate } = this.props.router;
 
-    history.push(Routes.funding().format());
+    navigate(Routes.funding().format());
     this.close();
   };
 

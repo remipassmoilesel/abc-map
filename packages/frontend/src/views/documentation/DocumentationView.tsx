@@ -17,7 +17,7 @@
  */
 
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
-import { Logger } from '@abc-map/shared';
+import { getAbcWindow, Logger } from '@abc-map/shared';
 import { References } from '@abc-map/user-documentation';
 import debounce from 'lodash/debounce';
 import { UiActions } from '../../core/store/ui/actions';
@@ -30,6 +30,8 @@ import { useAppDispatch, useAppSelector } from '../../core/store/hooks';
 import { withTranslation } from 'react-i18next';
 import { FloatingButton } from '../../components/floating-button/FloatingButton';
 import { isDesktopDevice } from '../../core/ui/isDesktopDevice';
+import { useNavigate } from 'react-router-dom';
+import { Routes } from '../../routes';
 
 const logger = Logger.get('DocumentationView.tsx');
 
@@ -40,6 +42,7 @@ function DocumentationView() {
   const dispatch = useAppDispatch();
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const reference = References.find((ref) => ref.lang === getDocumentationLang());
+  const navigate = useNavigate();
 
   // Page setup
   useEffect(() => {
@@ -82,6 +85,11 @@ function DocumentationView() {
 
     scroll.scroll({ top: 0, behavior: 'smooth' });
   }, []);
+
+  useEffect(() => {
+    // This function is used in documentation
+    getAbcWindow().abc.goToFunding = () => navigate(Routes.funding().format());
+  }, [navigate]);
 
   return (
     <div className={Cls.documentation} ref={scrollRef}>

@@ -19,9 +19,10 @@
 import { Config } from '../config/Config';
 import { ProjectDao } from './ProjectDao';
 import { MongodbClient } from '../mongodb/MongodbClient';
-import { AbcProjectMetadata, AbcProjectQuotas, CompressedProject, NodeBinary } from '@abc-map/shared';
+import { AbcProjectMetadata, AbcProjectQuotas, CompressedProject, CompressedProjectStream } from '@abc-map/shared';
 import { ProjectMapper } from './ProjectMapper';
 import { AbstractService } from '../services/AbstractService';
+import { StreamReader } from '../utils/StreamReader';
 
 export class ProjectService extends AbstractService {
   public static create(config: Config, client: MongodbClient): ProjectService {
@@ -36,7 +37,7 @@ export class ProjectService extends AbstractService {
     await this.dao.init();
   }
 
-  public async save(ownerId: string, project: CompressedProject<NodeBinary>): Promise<void> {
+  public async save(ownerId: string, project: CompressedProject<Buffer> | CompressedProjectStream): Promise<void> {
     if (!ownerId || typeof ownerId !== 'string') {
       throw new Error('Owner id is mandatory');
     }
@@ -45,21 +46,40 @@ export class ProjectService extends AbstractService {
     return Promise.all([this.dao.saveMetadata(doc), this.dao.saveCompressedFile(project.metadata.id, project.project)]).then(() => undefined);
   }
 
-  public async findById(id: string): Promise<CompressedProject<NodeBinary> | undefined> {
+  /**
+   * WARNING: this method loads the whole project in memory, you should probably use findStreamById() instead.
+   * @param id
+   */
+  public async findById(id: string): Promise<CompressedProject<Buffer> | undefined> {
     const metadata = await this.dao.findMetadataById(id);
     if (!metadata) {
       return;
     }
 
-    const compressed = await this.dao.findCompressedFileById(id);
+    const compressed = await this.dao.findProjectStreamById(id);
     return {
       metadata: ProjectMapper.docToDto(metadata),
-      project: compressed,
+      project: await StreamReader.read(compressed),
     };
   }
 
-  public async list(userId: string, offset: number, limit: number): Promise<AbcProjectMetadata[]> {
-    const docs = await this.dao.list(userId, offset, limit);
+  public async findStreamById(id: string): Promise<CompressedProjectStream | undefined> {
+    return Promise.all([this.dao.findMetadataById(id), this.dao.findProjectStreamById(id)]).then(([metadata, project]) => {
+      if (!metadata) {
+        return;
+      }
+
+      return { metadata: ProjectMapper.docToDto(metadata), project };
+    });
+  }
+
+  public async findAllMetadatas(limit = 100, offset = 0): Promise<AbcProjectMetadata[]> {
+    const metadatas = await this.dao.findAllMetadata(limit, offset);
+    return metadatas.map((doc) => ProjectMapper.docToDto(doc));
+  }
+
+  public async findByUserId(userId: string, offset: number, limit: number): Promise<AbcProjectMetadata[]> {
+    const docs = await this.dao.findByUserId(userId, offset, limit);
     return docs.map((doc) => ProjectMapper.docToDto(doc));
   }
 
@@ -68,7 +88,7 @@ export class ProjectService extends AbstractService {
   }
 
   public async deleteByUserId(userId: string): Promise<void> {
-    const projects = await this.dao.list(userId, 0, this.config.project.maxPerUser);
+    const projects = await this.dao.findByUserId(userId, 0, this.config.project.maxPerUser);
     if (!projects.length) {
       return;
     }

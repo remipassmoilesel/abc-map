@@ -21,6 +21,7 @@ import FormValidationLabel from '../../components/form-validation-label/FormVali
 import { PasswordStrength, ValidationHelper } from '../../core/utils/ValidationHelper';
 import { FormState } from '../../components/form-validation-label/FormState';
 import { WithTranslation, withTranslation } from 'react-i18next';
+import { prefixI18nTFunc } from '../../i18n/i18n';
 
 interface Props extends WithTranslation {
   onSubmit: (previousPassword: string, newPassword: string) => void;
@@ -45,7 +46,7 @@ class ChangePasswordForm extends Component<Props, State> {
   }
 
   public render(): ReactNode {
-    const { t } = this.props;
+    const t = prefixI18nTFunc('UserAccountView:', this.props.t);
     const { formState, previousPassword, newPassword, confirmation } = this.state;
 
     return (
@@ -134,4 +135,4 @@ class ChangePasswordForm extends Component<Props, State> {
   }
 }
 
-export default withTranslation('UserAccountView')(ChangePasswordForm);
+export default withTranslation()(ChangePasswordForm);

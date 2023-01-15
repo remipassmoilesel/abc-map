@@ -39,11 +39,11 @@ export const ArtefactGenerator: ExperimentalFeature = {
   description: [
     {
       language: Language.English,
-      text: `This is an experimental data processing module, not intended for use by end users.`,
+      text: `This is an experimental data processing module.`,
     },
     {
       language: Language.French,
-      text: "C'est un module de traitement de données expérimental, non destiné à être utilisé par des utilisateurs finaux.",
+      text: 'Ceci est un module de traitement de données expérimental.',
     },
   ],
 };

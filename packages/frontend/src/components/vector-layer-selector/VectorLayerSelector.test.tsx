@@ -20,7 +20,7 @@ import { MapWrapper } from '../../core/geo/map/MapWrapper';
 import { MapFactory } from '../../core/geo/map/MapFactory';
 import { newTestServices, TestServices } from '../../core/utils/test/TestServices';
 import { abcRender } from '../../core/utils/test/abcRender';
-import { screen } from '@testing-library/react';
+import { act, screen } from '@testing-library/react';
 import VectorLayerSelector from './VectorLayerSelector';
 import sinon, { SinonStub } from 'sinon';
 import { LayerFactory } from '../../core/geo/layers/LayerFactory';
@@ -64,7 +64,7 @@ describe('VectorLayerSelector', () => {
     expect(screen.getByText('Layer 2')).toBeDefined();
   });
 
-  it('should watch layers', () => {
+  it('should watch layers', async () => {
     map.addLayer(LayerFactory.newVectorLayer().setName('Layer 1'));
     map.addLayer(LayerFactory.newVectorLayer().setName('Layer 2'));
     map.addLayer(LayerFactory.newPredefinedLayer(PredefinedLayerModel.StamenToner));
@@ -72,7 +72,9 @@ describe('VectorLayerSelector', () => {
     abcRender(<VectorLayerSelector value={undefined} onSelected={handleSelected} />, { services });
 
     // Act
-    map.addLayer(LayerFactory.newVectorLayer().setName('Layer 3'));
+    await act(() => {
+      map.addLayer(LayerFactory.newVectorLayer().setName('Layer 3'));
+    });
 
     // Assert
     expect(screen.getByText('Layer 1')).toBeDefined();

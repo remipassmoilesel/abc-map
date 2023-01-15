@@ -16,10 +16,10 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import PluggableMap from 'ol/PluggableMap';
+import Map from 'ol/Map';
 import { MapWrapper } from './MapWrapper';
 
 export interface MapFactory {
-  from(map: PluggableMap): MapWrapper;
+  from(map: Map): MapWrapper;
   fromUnknown(map: unknown): MapWrapper | undefined;
 }

@@ -15,13 +15,13 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
-
+import 'source-map-support/register.js';
 import * as sinon from 'sinon';
 import * as os from 'os';
 import * as path from 'path';
-import { Bootstrap, BootstrapParameters, logger } from './Bootstrap';
-import { HttpClient } from './utils/HttpClient';
-import { Shell } from './utils/Shell';
+import { Bootstrap, BootstrapParameters, logger } from './Bootstrap.js';
+import { HttpClient } from './utils/HttpClient.js';
+import { Shell } from './utils/Shell.js';
 import { nanoid } from 'nanoid';
 import * as fs from 'fs';
 import { SinonStubbedInstance } from 'sinon';
@@ -43,8 +43,9 @@ describe('Bootstrap', function () {
       name: 'test-module',
       destination: path.join(os.tmpdir(), `test-${nanoid()}`),
       sourceUrl: 'http://nowhere.net/template.zip',
+      headers: { Authorization: 'abcdef' },
     };
-    template = fs.readFileSync(path.resolve(__dirname, '..', '__fixtures__/test-template.zip'));
+    template = fs.readFileSync(path.resolve('__fixtures__/test-template.zip'));
 
     bootstrap = new Bootstrap(params, http, shell);
   });
@@ -61,8 +62,8 @@ describe('Bootstrap', function () {
     assert.isTrue(fs.existsSync(path.join(root, 'README.md')));
     assert.isTrue(fs.existsSync(path.join(root, 'package.json')));
 
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    assert.equal(require(path.join(root, 'package.json')).name, 'test-module');
+    const packageJson = JSON.parse(fs.readFileSync(path.join(root, 'package.json')).toString('utf-8'));
+    assert.equal(packageJson.name, 'test-module');
 
     assert.deepEqual(shell.sync.args, [
       ['git init', { cwd: root, stdio: 'ignore' }],

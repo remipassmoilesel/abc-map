@@ -17,19 +17,19 @@
  */
 
 import Cls from './FloatingNorthArrow.module.scss';
-import { Rnd, RndDragCallback } from 'react-rnd';
 import React, { useCallback, useEffect, useState } from 'react';
 import { MapWrapper } from '../../core/geo/map/MapWrapper';
 import { AbcNorth } from '@abc-map/shared';
 import clsx from 'clsx';
 import { NorthArrow } from '../north-arrow/NorthArrow';
+import { FloatingContainer } from '../floating-container/FloatingContainer';
 
 interface Props {
   map: MapWrapper;
   north: AbcNorth;
   ratio?: number;
   readOnly?: boolean;
-  onChange?: (before: AbcNorth) => void;
+  onChange?: (north: AbcNorth) => void;
 }
 
 export function FloatingNorthArrow(props: Props) {
@@ -37,9 +37,9 @@ export function FloatingNorthArrow(props: Props) {
   const [rotation, setRotation] = useState(0);
   const size = `${ratio * 3}em`;
 
-  const handleDragStop: RndDragCallback = useCallback(
-    (ev, data) => {
-      onChange && onChange({ ...north, x: data.x, y: data.y });
+  const handleDrag = useCallback(
+    (x: number, y: number) => {
+      onChange && onChange({ ...north, x, y });
     },
     [onChange, north]
   );
@@ -60,8 +60,8 @@ export function FloatingNorthArrow(props: Props) {
   }, [map]);
 
   return (
-    <Rnd position={{ x: north.x, y: north.y }} disableDragging={readOnly} onDragStop={handleDragStop} enableResizing={false} bounds={'parent'}>
+    <FloatingContainer position={{ x: north.x, y: north.y }} onDrag={handleDrag} dragging={!readOnly} resizing={false}>
       <NorthArrow rotation={rotation} size={size} className={clsx(Cls.northArrow, readOnly && Cls.readOnly)} />
-    </Rnd>
+    </FloatingContainer>
   );
 }

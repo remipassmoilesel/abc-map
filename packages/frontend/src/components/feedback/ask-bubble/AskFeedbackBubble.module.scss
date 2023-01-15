@@ -23,6 +23,7 @@
   bottom: 3vmin;
   right: 5vmin;
   z-index: $zIndex-feedback-bubble;
+  box-shadow: $box-shadow;
 
   .bubble {
     position: relative;

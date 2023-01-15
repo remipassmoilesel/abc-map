@@ -2,7 +2,13 @@
 
 For the moment we use git hashes as version, since no one complained about it 👍
 
-## 20/12/2022 - Better modules, better UI (git: master)
+## XX/01/2023 - General dependency update (git: master)
+
+- NodeJS 18
+- Backend dependencies: Fastify 4, ...
+- Frontend dependencies: React 18, Openlayers 7, ...
+
+## 20/12/2022 - Better modules, better UI (git: f3a9d40d)
 
 - Improved module registry and API
 - Added module index instead of data processing view, removed

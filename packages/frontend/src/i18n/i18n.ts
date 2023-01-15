@@ -45,6 +45,7 @@ i18n
     interpolation: {
       escapeValue: false,
     },
+    returnNull: false,
   })
   .catch((err) => logger.error('i18n init error:', err));
 
@@ -73,11 +74,11 @@ export interface StringMap {
  */
 // TODO: terminate refactoring, remove bad usages
 export function prefixedTranslation(prefix: string) {
-  return prefixTtFunc(prefix, i18n.t);
+  return prefixI18nTFunc(prefix, i18n.t);
 }
 
-export function prefixTtFunc(prefix: string, tFunc: TFunction) {
-  return (key: string, params?: StringMap) => tFunc(`${prefix}${key}`, params);
+export function prefixI18nTFunc(prefix: string, tFunc: TFunction) {
+  return (key: string, params?: StringMap) => tFunc(`${prefix}${key}`, params || {});
 }
 
 export async function setLang(lang: Language): Promise<void> {

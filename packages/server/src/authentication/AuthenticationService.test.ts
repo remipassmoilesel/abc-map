@@ -24,7 +24,7 @@ import { MongodbClient } from '../mongodb/MongodbClient';
 import { ConfigLoader } from '../config/ConfigLoader';
 import { AuthenticationService, logger } from './AuthenticationService';
 import { UserService } from '../users/UserService';
-import { Config, DevelopmentDataConfig } from '../config/Config';
+import { Config } from '../config/Config';
 import {
   AbcUser,
   AnonymousUser,
@@ -58,8 +58,8 @@ describe('AuthenticationService', () => {
 
   before(async () => {
     config = await ConfigLoader.load();
-    // We can disable this option because we mock smtp client
-    config.development = { generateData: false } as DevelopmentDataConfig;
+    // We disable development option because we mock smtp client
+    config.development = undefined;
     mongodbClient = await MongodbClient.createAndConnect(config);
 
     hasher = new PasswordHasher(config);

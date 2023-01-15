@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { MigratedProject } from './typings';
+import { MigrationProject } from './typings';
 import { TestData } from './test-data/TestData';
 import { FromV060ToV070 } from './FromV060ToV070';
 import { AbcProjectManifest060 } from './old-typings/060-project';
@@ -25,7 +25,7 @@ import { TestHelper } from '../../utils/test/TestHelper';
 import { AbcProjectManifest070 } from './old-typings/070-project';
 
 describe('FromV060ToV070', () => {
-  let sampleProject: MigratedProject;
+  let sampleProject: MigrationProject;
   let migration: FromV060ToV070;
 
   beforeEach(async () => {

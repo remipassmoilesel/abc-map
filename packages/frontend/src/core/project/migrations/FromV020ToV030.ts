@@ -17,7 +17,7 @@
  */
 
 import { AbcFile, AbcProjectManifest, LayerType } from '@abc-map/shared';
-import { MigratedProject, ProjectMigration } from './typings';
+import { MigrationProject, ProjectMigration } from './typings';
 import semver from 'semver';
 import { ModalService } from '../../ui/ModalService';
 import { ModalStatus } from '../../ui/typings';
@@ -37,7 +37,7 @@ export class FromV020ToV030 implements ProjectMigration {
     return semver.lt(version, NEXT);
   }
 
-  public async migrate(manifest: AbcProjectManifest, files: AbcFile<Blob>[]): Promise<MigratedProject> {
+  public async migrate(manifest: AbcProjectManifest, files: AbcFile<Blob>[]): Promise<MigrationProject> {
     const wmsLayers = manifest.layers.filter((lay) => lay.metadata.type === LayerType.Wms) as unknown as AbcWmsLayer020[];
     const clearUrl = wmsLayers?.find((layer) => !layer.metadata.remoteUrl.startsWith('encrypted:'))?.metadata.remoteUrl;
 

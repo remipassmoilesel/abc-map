@@ -33,7 +33,6 @@ import { Coordinate } from 'ol/coordinate';
 import TileSource from 'ol/source/Tile';
 import { Extent } from 'ol/extent';
 import { ToolMode } from '../../tools/ToolMode';
-import PluggableMap from 'ol/PluggableMap';
 import { ToolModeHelper } from '../../tools/common/ToolModeHelper';
 import { MoveMapTool } from '../../tools/move/MoveMapTool';
 import { StyleFactoryOptions } from '../styles/StyleFactoryOptions';
@@ -61,7 +60,7 @@ const ToolProperty = 'abc:map:tool';
  * that critical operations are well done (set active layer, etc ...)
  */
 export class MapWrapper {
-  public static from(map: PluggableMap): MapWrapper {
+  public static from(map: Map): MapWrapper {
     if (!isOpenlayersMap(map)) {
       throw new Error('Invalid map: ' + (map ?? 'undefined'));
     }

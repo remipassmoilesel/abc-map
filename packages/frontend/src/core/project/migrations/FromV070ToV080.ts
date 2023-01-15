@@ -17,7 +17,7 @@
  */
 
 import { AbcFile, AbcLayout, AbcProjectManifest, AbcSharedView, AbcTextFrame, Logger, TableElement, TableRowElement, TextFrameChild } from '@abc-map/shared';
-import { MigratedProject, ProjectMigration } from './typings';
+import { MigrationProject, ProjectMigration } from './typings';
 import semver from 'semver';
 import { AbcLayout070, AbcProjectManifest070, AbcSharedView070 } from './old-typings/070-project';
 import { AbcLegend060, LegendDisplay } from './old-typings/060-legend';
@@ -36,7 +36,7 @@ export class FromV070ToV080 implements ProjectMigration {
     return semver.lt(version, NEXT);
   }
 
-  public async migrate(_manifest: AbcProjectManifest, files: AbcFile<Blob>[]): Promise<MigratedProject> {
+  public async migrate(_manifest: AbcProjectManifest, files: AbcFile<Blob>[]): Promise<MigrationProject> {
     const manifest = _manifest as unknown as AbcProjectManifest070;
 
     const layouts: AbcLayout[] = manifest.layouts.map((lay) => {

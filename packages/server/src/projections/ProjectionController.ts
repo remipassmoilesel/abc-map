@@ -20,7 +20,7 @@ import { Controller } from '../server/Controller';
 import { Services } from '../services/services';
 import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import { ByCodeParams, ByCodeSchema } from './ProjectionController.schemas';
-import 'fastify-sensible';
+import '@fastify/sensible';
 
 export class ProjectionController extends Controller {
   constructor(private services: Services) {

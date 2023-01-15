@@ -17,23 +17,24 @@
  */
 
 import { AbcProjectManifest } from '../AbcProjectManifest';
-import { Zipper } from '../../zip';
+import { AbcFile, Zipper } from '../../zip';
 import { BlobIO } from '../../frontend/blob/BlobIO';
 import { ProjectConstants } from '../constants/ProjectConstants';
+import { CompressedProject } from '../CompressedProject';
 
 export class ProjectHelper<T extends Blob | Buffer = Blob | Buffer> {
-  public static forFrontend(): ProjectHelper<Blob> {
+  public static forBrowser(): ProjectHelper<Blob> {
     return new ProjectHelper<Blob>('blob');
   }
 
-  public static forBackend(): ProjectHelper<Buffer> {
+  public static forNodeJS(): ProjectHelper<Buffer> {
     return new ProjectHelper<Buffer>('nodebuffer');
   }
 
   constructor(private binaryFormat: 'nodebuffer' | 'blob') {}
 
   public async extractManifest(zip: T): Promise<AbcProjectManifest> {
-    const files = await new Zipper(this.binaryFormat).unzip(zip);
+    const files = await new Zipper<T>(this.binaryFormat).unzip(zip);
     const manifest = files.find((f) => f.path.endsWith(ProjectConstants.ManifestName));
     if (!manifest) {
       return Promise.reject(new Error('No manifest found'));
@@ -47,5 +48,23 @@ export class ProjectHelper<T extends Blob | Buffer = Blob | Buffer> {
     }
 
     return JSON.parse(content);
+  }
+
+  public async updateManifest(zip: T, manifest: AbcProjectManifest): Promise<CompressedProject<T>> {
+    const zipper = new Zipper<T>(this.binaryFormat);
+    let files: AbcFile<T>[] = await zipper.unzip(zip);
+    // We remove previous manifest
+    files = files.filter((f) => !f.path.endsWith(ProjectConstants.ManifestName));
+    // We add new one
+    let manifestContent: T;
+    if (this.binaryFormat === 'nodebuffer') {
+      manifestContent = Buffer.from(JSON.stringify(manifest)) as T;
+    } else {
+      manifestContent = new Blob([JSON.stringify(manifest)], { type: 'application/json' }) as T;
+    }
+
+    files = files.concat([{ path: ProjectConstants.ManifestName, content: manifestContent }]);
+
+    return { metadata: manifest.metadata, project: await zipper.zipFiles(files) };
   }
 }

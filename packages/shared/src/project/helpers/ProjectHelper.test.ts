@@ -19,26 +19,62 @@
 import { ProjectHelper } from './ProjectHelper';
 import { AbcFile, Zipper } from '../../zip';
 import { ProjectConstants } from '../constants/ProjectConstants';
+import { AbcProjectManifest } from '../AbcProjectManifest';
 
 describe('ProjectHelper', () => {
-  it('should find manifest', async () => {
-    const files: AbcFile[] = [{ path: ProjectConstants.ManifestName, content: Buffer.from('{"variable":"value"}') }];
-    const project = await Zipper.forBackend().zipFiles(files);
+  describe('extractManifest()', () => {
+    it('should find manifest', async () => {
+      // Prepare
+      const files: AbcFile<Buffer>[] = [{ path: ProjectConstants.ManifestName, content: Buffer.from('{"variable":"value"}') }];
+      const project = await Zipper.forNodeJS().zipFiles(files);
 
-    const manifest = await ProjectHelper.forBackend().extractManifest(project);
+      // Act
+      const manifest = await ProjectHelper.forNodeJS().extractManifest(project);
 
-    expect(manifest as object).toEqual({ variable: 'value' });
+      // Assert
+      expect(manifest).toEqual({ variable: 'value' });
+    });
+
+    it('should fail', async () => {
+      // Prepare
+      const files: AbcFile<Buffer>[] = [];
+      const project = await Zipper.forNodeJS().zipFiles(files);
+
+      // Act
+      const err: Error = await ProjectHelper.forNodeJS()
+        .extractManifest(project)
+        .catch((err) => err);
+
+      // Assert
+      expect(err).toBeInstanceOf(Error);
+      expect(err.message).toEqual('No manifest found');
+    });
   });
 
-  it('should fail', async () => {
-    const files: AbcFile[] = [];
-    const project = await Zipper.forBackend().zipFiles(files);
+  describe('updateManifest()', () => {
+    it('should update manifest', async () => {
+      // Prepare
+      const files: AbcFile<Buffer>[] = [];
+      const originalManifest = { metadata: { id: 'project-1', name: 'Project 1' } } as unknown as AbcProjectManifest;
+      files.push({ path: ProjectConstants.ManifestName, content: Buffer.from(JSON.stringify(originalManifest)) });
+      files.push({ path: 'asset.png', content: Buffer.from([1, 2, 3, 4]) });
 
-    const err: Error = await ProjectHelper.forBackend()
-      .extractManifest(project)
-      .catch((err) => err);
+      const original = await Zipper.forNodeJS().zipFiles(files);
 
-    expect(err).toBeInstanceOf(Error);
-    expect(err.message).toEqual('No manifest found');
+      // Act
+      const manifestUpdate = { metadata: { id: 'project-2', name: 'Project 2' } } as unknown as AbcProjectManifest;
+      const newProject = await ProjectHelper.forNodeJS().updateManifest(original, manifestUpdate);
+
+      // Assert
+      expect(newProject.metadata).toEqual(manifestUpdate.metadata);
+      const newProjectFiles = await Zipper.forNodeJS().unzip(newProject.project);
+      expect(newProjectFiles.length).toEqual(2);
+
+      const dManifest = JSON.parse(newProjectFiles.find((f) => f.path === ProjectConstants.ManifestName)?.content.toString() || '');
+      expect(dManifest).toEqual(manifestUpdate);
+
+      const asset = newProjectFiles.find((f) => f.path !== ProjectConstants.ManifestName);
+      expect(asset).toEqual({ path: 'asset.png', content: Buffer.from([1, 2, 3, 4]) });
+    });
   });
 });

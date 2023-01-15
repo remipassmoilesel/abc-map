@@ -16,18 +16,21 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import nanoid from 'nanoid';
+import * as nanoid from 'nanoid';
+import * as sinon from 'sinon';
+import { SinonStub } from 'sinon';
 
-const original = nanoid.nanoid;
+let stub: SinonStub | undefined;
 
 export function mockNanoid() {
   let i = 0;
-  nanoid.nanoid = () => {
+  stub = sinon.stub(nanoid, 'nanoid');
+  stub.callsFake(() => {
     i++;
     return `###-FAKE-NANOID-${i}-###`;
-  };
+  });
 }
 
 export function restoreNanoid() {
-  nanoid.nanoid = original;
+  stub?.restore();
 }

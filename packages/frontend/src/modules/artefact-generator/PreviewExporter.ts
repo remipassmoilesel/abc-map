@@ -95,7 +95,7 @@ export class PreviewExporter {
     ctx.fillRect(0, 0, exportDimensions.width, exportDimensions.height);
 
     // Layers rendering
-    const renderLayers = async () => {
+    const renderLayers = () => {
       const layers = support.querySelectorAll('.ol-layer canvas');
       layers.forEach((layer) => {
         logger.info('Rendering layer: ', layer);
@@ -128,17 +128,20 @@ export class PreviewExporter {
       // Trigger timeout in order to not block whole export
       const timeout = setTimeout(() => {
         logger.error('Timeout exporting view', view);
+        // We don't fail if a preview is not rendered, previews are not critical
         resolve(undefined);
       }, timeoutSec * 1000);
 
       // We trigger map rendering
       renderingMap.unwrap().once('rendercomplete', () => {
-        renderLayers()
-          .then(() => {
-            clearTimeout(timeout);
-            resolve(exportCanvas);
-          })
-          .catch(reject);
+        try {
+          renderLayers();
+          resolve(exportCanvas);
+        } catch (err) {
+          reject(err);
+        } finally {
+          clearTimeout(timeout);
+        }
       });
 
       renderingMap.unwrap().render();

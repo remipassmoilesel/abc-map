@@ -4,7 +4,7 @@
   "private": true,
   "license": "AGPL-3.0-or-later",
   "scripts": {
-    "start:e2e": "node main.js",
+    "start:ci": "node main.js",
     "start:watch": "node main.js"
   },
   "dependencies": {

@@ -207,7 +207,7 @@ export function PreviewMap(props: Props) {
 
     const { width, height } = adaptMapDimensions(fullscreen, mapDimensions);
 
-    const previewNorth: AbcScale = {
+    const previewNorth: AbcNorth = {
       ...activeView.north,
       x: normalize((activeView.north.x * width) / 100, 0, width, 2),
       y: normalize((activeView.north.y * height) / 100, 0, height, 2),

@@ -2,12 +2,16 @@ module.exports = {
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
-    "react-app",
     "plugin:react/recommended",
     "plugin:react-hooks/recommended",
     "plugin:prettier/recommended",
     "prettier"
   ],
+  "settings": {
+    "react": {
+      "version": "detect",
+    }
+  },
   "plugins": [
     "no-only-tests",
     "@typescript-eslint",

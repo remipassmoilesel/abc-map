@@ -128,7 +128,7 @@ export class TestHelper {
       },
     } as AbcProjectManifest;
 
-    const zip = await Zipper.forFrontend().zipFiles([{ path: ProjectConstants.ManifestName, content: new Blob([JSON.stringify(project)]) }]);
+    const zip = await Zipper.forBrowser().zipFiles([{ path: ProjectConstants.ManifestName, content: new Blob([JSON.stringify(project)]) }]);
     return [{ metadata: project.metadata, project: zip }, project];
   }
 
@@ -149,7 +149,7 @@ export class TestHelper {
 
     project = await Encryption.encryptManifest(project, 'azerty1234');
 
-    const zip = await Zipper.forFrontend().zipFiles([{ path: ProjectConstants.ManifestName, content: new Blob([JSON.stringify(project)]) }]);
+    const zip = await Zipper.forBrowser().zipFiles([{ path: ProjectConstants.ManifestName, content: new Blob([JSON.stringify(project)]) }]);
     return [{ metadata: project.metadata, project: zip }, project];
   }
 
@@ -361,7 +361,7 @@ export class TestHelper {
   /**
    * Warning: use this is generally a very bad idea
    */
-  public static wait(timeMs: number): Promise<void> {
+  public static wait(timeMs = 10): Promise<void> {
     return new Promise((resolve) => {
       setTimeout(resolve, timeMs);
     });

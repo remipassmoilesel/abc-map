@@ -17,12 +17,12 @@
  */
 
 import { TestData } from './test-data/TestData';
-import { MigratedProject } from './typings';
+import { MigrationProject } from './typings';
 import { FromV040ToV050 } from './FromV040ToV050';
 import { AbcProjectMetadata040 } from './old-typings/040-project';
 
 describe('FromV040ToV050', () => {
-  let sampleProject: MigratedProject;
+  let sampleProject: MigrationProject;
   let migration: FromV040ToV050;
 
   beforeEach(async () => {

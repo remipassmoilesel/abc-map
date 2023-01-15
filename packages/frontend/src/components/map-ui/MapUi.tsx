@@ -62,6 +62,8 @@ export function MapUi(props: Props) {
     }
 
     map.setTarget(supportRef.current);
+    // Starting with OL7, sometimes maps are not rendered immediatly
+    map.render().catch((err) => logger.error('Rendering error: ', err));
     return () => map.setTarget(undefined);
   }, [map]);
 

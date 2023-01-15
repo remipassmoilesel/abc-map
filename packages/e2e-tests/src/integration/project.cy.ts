@@ -82,9 +82,9 @@ describe('Project', function () {
         .get('[data-cy=export-project]')
         .click()
         .then(() => Toasts.assertText('Export done !'))
-        .then(() => Download.fileAsBlob())
+        .then(() => Download.currentFileAsBlob())
         .should(async (downloaded) => {
-          const helper = ProjectHelper.forFrontend();
+          const helper = ProjectHelper.forBrowser();
           const projectA = await helper.extractManifest(downloaded);
           expect(projectA.metadata.id).not.undefined;
           expect(projectA.metadata.version).equals(ProjectConstants.CurrentVersion);
@@ -141,9 +141,9 @@ describe('Project', function () {
         .type(PROJECT_PASSWORD)
         .get('[data-cy=password-confirm]')
         .click()
-        .then(() => Download.fileAsBlob())
+        .then(() => Download.currentFileAsBlob())
         .should(async (downloaded) => {
-          const project = await ProjectHelper.forFrontend().extractManifest(downloaded);
+          const project = await ProjectHelper.forBrowser().extractManifest(downloaded);
           expect(project.layers[2].type).equals(LayerType.Wms);
           const wmsMeta = project.layers[2].metadata as WmsMetadata;
           expect(wmsMeta.remoteUrls[0]).not.equal(WmsConstants.AUTHENTICATED_URL);

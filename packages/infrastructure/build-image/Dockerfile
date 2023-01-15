@@ -14,22 +14,34 @@
 # You should have received a copy of the GNU Affero General
 # Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
 
-FROM node:16-bullseye
+FROM ubuntu:focal
 
 ENV DEBIAN_FRONTEND="noninteractive" TZ="Europe/London"
 
-# Toos and cypress dependencies
-RUN apt-get update && \
-      apt-get install -y libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libgconf-2-4 libnss3 libxss1 \
-      libasound2 libxtst6 xauth xvfb chromium curl imagemagick ghostscript git build-essential
+# Cypress dependencies
+RUN apt-get update \
+      && apt-get install -y libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libgconf-2-4 libnss3 libxss1 \
+                              libasound2 libxtst6 xauth xvfb fonts-emojione fonts-noto-color-emoji
 
-# Default Image magick policy does not allow PDF processing
-COPY policy.xml /etc/ImageMagick-6/policy.xml
+# Chromium
+COPY phd-chromium-browser /etc/apt/preferences.d/phd-chromium-browser
+RUN apt-get install -y software-properties-common && add-apt-repository ppa:phd/chromium-browser \
+     && apt-get update && apt-get -y install chromium-browser fonts-emojione fonts-noto-color-emoji
+
+# We adapt chromium bin name for Cypress
+RUN ln -s /usr/bin/chromium-browser /usr/bin/chromium
+
+# Tools
+RUN apt-get install -y bash curl git build-essential
 
 # Helm
-RUN curl -sL https://get.helm.sh/helm-v3.5.4-linux-amd64.tar.gz -o helm.tar.gz && tar -xf helm.tar.gz \
+RUN curl -sL https://get.helm.sh/helm-v3.10.3-linux-amd64.tar.gz -o helm.tar.gz && tar -xf helm.tar.gz \
       && mv linux-amd64/helm /usr/local/bin
 
 # K6
-RUN curl -sL https://github.com/k6io/k6/releases/download/v0.32.0/k6-v0.32.0-linux-amd64.deb -o k6.deb && dpkg -i k6.deb
+RUN curl -sL https://github.com/grafana/k6/releases/download/v0.42.0/k6-v0.42.0-linux-amd64.deb -o k6.deb \
+      && dpkg -i k6.deb
+
+RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - && apt-get install -y nodejs
+RUN npm i -g npm yarn
 

@@ -29,5 +29,6 @@ export * from './text-frame';
 export * from './AbcProjectManifest';
 export * from './AbcView';
 export * from './CompressedProject';
+export * from './CompressedProjectStream';
 export * from './ProjectSaveResponse';
 export * from './AbcProjectQuotas';

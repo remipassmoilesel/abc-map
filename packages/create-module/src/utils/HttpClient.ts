@@ -18,12 +18,15 @@
 
 import axios from 'axios';
 
+export type Headers = { [k: string]: string };
+
 export class HttpClient {
-  public getArchive(url: string): Promise<Buffer> {
+  public getArchive(url: string, headers: Headers): Promise<Buffer> {
     return axios
       .get(url, {
         timeout: 20_000,
         responseType: 'arraybuffer',
+        headers,
       })
       .then((res) => res.data);
   }

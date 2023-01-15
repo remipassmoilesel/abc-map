@@ -19,7 +19,7 @@
 import Cls from './SharedMapView.module.scss';
 import React, { useCallback, useEffect, useState } from 'react';
 import { pageSetup } from '../../core/utils/page-setup';
-import { Link, useRouteMatch } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { AbcNorth, AbcScale, AbcTextFrame, AbcView, getAbcWindow, Logger, ProjectConstants, SharedMapParams } from '@abc-map/shared';
 import { useServices } from '../../core/useServices';
 import NavigationMenu from './navigation-menu/NavigationMenu';
@@ -62,7 +62,7 @@ export const logger = Logger.get('SharedMapView.tsx');
 function SharedMapView() {
   const { project, geo, toasts } = useServices();
   const { t } = useTranslation('SharedMapView');
-  const match = useRouteMatch<SharedMapParams>();
+  const params = useParams<SharedMapParams>();
   // Here we use a state for map because we have to re-render after map init
   const [map, setMap] = useState<MapWrapper | undefined>();
   const [error, setError] = useState(false);
@@ -101,7 +101,7 @@ function SharedMapView() {
 
   // Fetch and setup project
   useEffect(() => {
-    const projectId = match.params.projectId;
+    const projectId = params.projectId;
 
     if (!map) {
       logger.debug('Cannot setup project, not ready', { map });
@@ -127,7 +127,7 @@ function SharedMapView() {
         setError(true);
       })
       .finally(() => setLoading(false));
-  }, [geo, map, match.params.projectId, offline, project]);
+  }, [geo, map, params.projectId, offline, project]);
 
   // Set map size
   useEffect(() => {

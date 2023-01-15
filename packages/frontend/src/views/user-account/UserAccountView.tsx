@@ -20,7 +20,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Logger, UserStatus } from '@abc-map/shared';
 import ChangePasswordForm from './ChangePasswordForm';
 import DeleteAccountForm from './DeleteAccountForm';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { pageSetup } from '../../core/utils/page-setup';
 import { useTranslation, withTranslation } from 'react-i18next';
 import Cls from './UserAccountView.module.scss';
@@ -41,7 +41,7 @@ function UserAccountView() {
 
   const user = useAppSelector((st) => st.authentication.user);
   const authenticated = useAppSelector((st) => st.authentication.userStatus) === UserStatus.Authenticated;
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const offline = useOfflineStatus();
 
@@ -74,7 +74,7 @@ function UserAccountView() {
         .deleteAccount(password)
         .then(() => {
           toasts.info(t('Your_account_has_been_deleted'));
-          history.push(Routes.landing().format());
+          navigate(Routes.landing().format());
           return authentication.logout();
         })
         .catch((err) => {
@@ -87,7 +87,7 @@ function UserAccountView() {
           }
         });
     },
-    [authentication, history, t, toasts]
+    [authentication, navigate, t, toasts]
   );
 
   if (offline) {

@@ -50,9 +50,13 @@ export interface Config extends ConfigInput {
 }
 
 export interface DevelopmentDataConfig {
-  generateData: boolean;
-  users: number;
-  persistEmails: boolean;
+  // If set, data will be generated in order to facilitate development (users, projects, ...)
+  generateData?: {
+    users: number;
+    projectsPerUser: number;
+  };
+  // If true, mails will not be sent but persisted on disk
+  persistEmails?: boolean;
 }
 
 export interface ServerConfig {
@@ -61,6 +65,7 @@ export interface ServerConfig {
   log: {
     requests: boolean;
     errors: boolean;
+    warnings: boolean;
   };
   globalRateLimit: {
     max: number;

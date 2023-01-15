@@ -18,7 +18,7 @@
 
 import React, { useCallback, useEffect, useState } from 'react';
 import { ConfirmAccountParams, ConfirmationStatus, Logger } from '@abc-map/shared';
-import { Link, useRouteMatch } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { HttpError } from '../../core/http/HttpError';
 import { addNoIndexMeta, pageSetup, removeNoIndexMeta } from '../../core/utils/page-setup';
 import { prefixedTranslation } from '../../i18n/i18n';
@@ -34,7 +34,7 @@ const t = prefixedTranslation('ConfirmAccountView:');
 function ConfirmAccountView() {
   const { authentication, toasts } = useServices();
   const [status, setStatus] = useState(ConfirmationStatus.InProgress);
-  const token = useRouteMatch<ConfirmAccountParams>().params.token;
+  const token = useParams<ConfirmAccountParams>().token;
 
   const confirmRegistration = useCallback(() => {
     if (!token) {

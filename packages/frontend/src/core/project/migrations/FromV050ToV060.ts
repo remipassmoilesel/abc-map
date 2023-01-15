@@ -17,7 +17,7 @@
  */
 
 import { AbcFile, AbcProjectManifest, Logger } from '@abc-map/shared';
-import { MigratedProject, ProjectMigration } from './typings';
+import { MigrationProject, ProjectMigration } from './typings';
 import semver from 'semver';
 
 const NEXT = '0.6.0';
@@ -35,7 +35,7 @@ export class FromV050ToV060 implements ProjectMigration {
     return semver.lt(version, NEXT);
   }
 
-  public async migrate(manifest: AbcProjectManifest, files: AbcFile<Blob>[]): Promise<MigratedProject> {
+  public async migrate(manifest: AbcProjectManifest, files: AbcFile<Blob>[]): Promise<MigrationProject> {
     return {
       manifest: {
         ...manifest,

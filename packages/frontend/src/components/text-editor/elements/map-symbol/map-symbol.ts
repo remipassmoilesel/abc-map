@@ -21,13 +21,15 @@ import { AbcGeometryType, FeatureStyle, Logger, MapSymbolElement, TableElement, 
 
 const logger = Logger.get('mapSymbol.ts');
 
+export type StyleInput = [FeatureStyle, AbcGeometryType];
+
 export const mapSymbol = {
   create(editor: Editor, style: FeatureStyle, geometryType: AbcGeometryType) {
     const node: MapSymbolElement = { type: 'map-symbol', style, geometryType, children: [{ text: '' }] };
     Transforms.insertNodes(editor, [node]);
   },
 
-  createLegend(editor: Editor, styles: [FeatureStyle, AbcGeometryType][]) {
+  createLegend(editor: Editor, styles: StyleInput[]) {
     if (!styles.length) {
       logger.error('Styles are empty');
       return;

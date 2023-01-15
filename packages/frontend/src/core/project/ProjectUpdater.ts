@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { MigratedProject, MigrationsFactory } from './migrations/typings';
+import { MigrationProject, MigrationsFactory } from './migrations/typings';
 import { AbcFile, AbcProjectManifest, Logger } from '@abc-map/shared';
 import { getMigrations } from './migrations';
 import { ModalService } from '../ui/ModalService';
@@ -33,14 +33,14 @@ export class ProjectUpdater {
 
   constructor(private migrations: MigrationsFactory) {}
 
-  public async update(manifest: AbcProjectManifest, files: AbcFile<Blob>[]): Promise<MigratedProject> {
+  public async update(manifest: AbcProjectManifest, files: AbcFile<Blob>[]): Promise<MigrationProject> {
     const migrations = this.migrations();
     let result = { manifest, files };
 
     for (const migration of migrations) {
       if (await migration.interestedBy(result.manifest, result.files)) {
         logger.debug(`Applying migration ${migration.constructor.name}`);
-        result = (await migration.migrate(result.manifest, result.files)) as MigratedProject;
+        result = (await migration.migrate(result.manifest, result.files)) as MigrationProject;
       }
     }
 

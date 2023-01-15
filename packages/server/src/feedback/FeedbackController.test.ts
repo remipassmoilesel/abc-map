@@ -34,13 +34,14 @@ describe('FeedbackController', () => {
     config = await ConfigLoader.load();
     config.server.log.requests = false;
     config.server.log.errors = false;
+    config.server.log.warnings = false;
 
     services = await servicesFactory(config);
     testAuth = new TestAuthentication(services);
   });
 
   beforeEach(async () => {
-    services.metrics.getRegistry().clear();
+    services.metrics.clearMetrics();
 
     server = HttpServer.create(config, services);
     await server.initialize();

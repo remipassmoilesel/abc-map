@@ -134,6 +134,9 @@ class MainMap extends Component<ServiceProps, State> {
     map.addTileErrorListener(this.handleTileError);
 
     map.unwrap().on('error', this.handleMapError);
+
+    // Starting with OL7, sometimes maps are not rendered immediatly
+    map.render().catch((err) => logger.error('Rendering error: ', err));
   }
 
   private cleanupMap() {

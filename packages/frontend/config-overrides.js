@@ -56,9 +56,9 @@ module.exports = {
     }
   },
   jest: function (config) {
-    // React app rewired merge 'transformIgnorePatterns' field with automagical stuff that break Openlayers support in tests, so we replace it
-    // See: https://github.com/timarney/react-app-rewired/issues/241
-    config.transformIgnorePatterns = ['node_modules/(?!(ol|geotiff)/)'];
+    // Add a module here if it use modern js syntax
+    // We do not keep default config because it breaks Openlayers support in tests, see: https://github.com/timarney/react-app-rewired/issues/241
+    config.transformIgnorePatterns = [];
     config.moduleNameMapper = {
       '\\.css$': '<rootDir>/src/styles/mocks/style.js',
       '\\.scss$': '<rootDir>/src/styles/mocks/style.js'

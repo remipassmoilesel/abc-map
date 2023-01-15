@@ -32,3 +32,37 @@ export enum AbcGeometryType {
   GEOMETRY_COLLECTION = 'GeometryCollection',
   CIRCLE = 'Circle',
 }
+
+type OpenlayersGeometryType =
+  | 'Point'
+  | 'LineString'
+  | 'LinearRing'
+  | 'Polygon'
+  | 'MultiPoint'
+  | 'MultiLineString'
+  | 'MultiPolygon'
+  | 'GeometryCollection'
+  | 'Circle';
+
+export function toAbcGeometryType(type: OpenlayersGeometryType): AbcGeometryType {
+  switch (type) {
+    case 'Point':
+      return AbcGeometryType.POINT;
+    case 'LineString':
+      return AbcGeometryType.LINE_STRING;
+    case 'LinearRing':
+      return AbcGeometryType.LINEAR_RING;
+    case 'Polygon':
+      return AbcGeometryType.POLYGON;
+    case 'MultiPoint':
+      return AbcGeometryType.MULTI_POINT;
+    case 'MultiLineString':
+      return AbcGeometryType.MULTI_LINE_STRING;
+    case 'MultiPolygon':
+      return AbcGeometryType.MULTI_POLYGON;
+    case 'GeometryCollection':
+      return AbcGeometryType.GEOMETRY_COLLECTION;
+    case 'Circle':
+      return AbcGeometryType.CIRCLE;
+  }
+}

@@ -1,51 +1,51 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ArtefactManifest should not change without datastore migration 1`] = `
-Object {
-  "artefact": Object {
-    "attributions": Array [
+{
+  "artefact": {
+    "attributions": [
       "attributions",
     ],
-    "description": Array [
-      Object {
+    "description": [
+      {
         "language": "fr",
         "text": "description",
       },
-      Object {
+      {
         "language": "en",
         "text": "description",
       },
     ],
-    "files": Array [
+    "files": [
       "file",
     ],
-    "keywords": Array [
-      Object {
+    "keywords": [
+      {
         "language": "fr",
-        "text": Array [
+        "text": [
           "keywords",
         ],
       },
-      Object {
+      {
         "language": "en",
-        "text": Array [
+        "text": [
           "keywords",
         ],
       },
     ],
     "license": "license",
     "link": "link",
-    "name": Array [
-      Object {
+    "name": [
+      {
         "language": "fr",
         "text": "name",
       },
-      Object {
+      {
         "language": "en",
         "text": "name",
       },
     ],
-    "previews": Array [
+    "previews": [
       "previews",
     ],
     "provider": "provider",

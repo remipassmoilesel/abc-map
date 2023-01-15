@@ -18,13 +18,13 @@
 
 import { WmsMetadata } from '@abc-map/shared';
 import { TestData } from './test-data/TestData';
-import { MigratedProject } from './typings';
+import { MigrationProject } from './typings';
 import { FromV030ToV040 } from './FromV030ToV040';
 import { WmsMetadata030 } from './old-typings/030-project';
 import { AbcProjectMetadata040 } from './old-typings/040-project';
 
 describe('FromV030ToV040', () => {
-  let sampleProject: MigratedProject;
+  let sampleProject: MigrationProject;
   let migration: FromV030ToV040;
 
   beforeEach(async () => {

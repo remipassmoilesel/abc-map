@@ -39,17 +39,15 @@ export class UserInit {
 
   constructor(private config: Config, private hasher: PasswordHasher, private services: Services) {}
 
-  public async init(): Promise<AbcUser[]> {
-    const users: AbcUser[] = [];
-
-    const numberOfUsers = this.config.development?.users || 0;
+  public async init(): Promise<void> {
+    const numberOfUsers = this.config.development?.generateData?.users || 0;
     if (!numberOfUsers) {
-      return [];
+      return;
     }
 
     const existing = await this.services.user.count();
     if (existing >= numberOfUsers) {
-      return [];
+      return;
     }
 
     for (let i = 0; i < numberOfUsers; i++) {
@@ -64,7 +62,5 @@ export class UserInit {
     }
 
     logger.info(`${numberOfUsers} users created.`);
-
-    return users;
   }
 }

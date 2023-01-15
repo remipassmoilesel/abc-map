@@ -9,7 +9,7 @@
 # If you want to run a full CI pipeline in a Gitlab Runner, set ABC_FULL_CI variable to "true
 #
 
-image: registry.gitlab.com/abc-map/abc-map/build-image:v0.18
+image: registry.gitlab.com/abc-map/abc-map/build-image:v0.23
 
 variables:
   CI: "true"

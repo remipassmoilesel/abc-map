@@ -16,22 +16,23 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { HttpClient } from './utils/HttpClient';
-import { Logger } from './utils/Logger';
-import { hasBinary } from './utils/hasBinary';
-import * as chalk from 'chalk';
-import * as path from 'path';
-import * as AdmZip from 'adm-zip';
-import * as sortPackageJson from 'sort-package-json';
+import { Logger } from './utils/Logger.js';
+import { hasBinary } from './utils/hasBinary.js';
+import chalk from 'chalk';
+import path from 'path';
+import AdmZip from 'adm-zip';
+import sortPackageJson from 'sort-package-json';
 import { promises as fs, Stats } from 'fs';
-import { Shell } from './utils/Shell';
-import { getErrorMessage } from './utils/getErrorMessage';
+import { Shell } from './utils/Shell.js';
+import { errorMessage } from './utils/errorMessage.js';
+import { Headers, HttpClient } from './utils/HttpClient.js';
 
 export const logger = Logger.get('Bootstrap.tsx');
 
 export interface BootstrapParameters {
   name: string;
   sourceUrl: string;
+  headers: Headers;
   destination: string;
 }
 
@@ -72,7 +73,7 @@ export class Bootstrap {
     // Download template
     let template: Buffer;
     try {
-      template = await this.client.getArchive(this.params.sourceUrl);
+      template = await this.client.getArchive(this.params.sourceUrl, this.params.headers);
     } catch (err) {
       logger.error(chalk.red(`Cannot download template at location: ${this.params.sourceUrl}`));
       throw err;
@@ -157,7 +158,7 @@ export class Bootstrap {
       this.shell.sync('git add -A', { cwd: root, stdio: 'ignore' });
       this.shell.sync('git commit -m "Add template 🚀"', { cwd: root, stdio: 'ignore' });
     } catch (err) {
-      logger.error('git init error: ', getErrorMessage(err));
+      logger.error('git init error: ', errorMessage(err));
       logger.error('You may have to configure git.');
       logger.debug('git init error: ', err);
     }

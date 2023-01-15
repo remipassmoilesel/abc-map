@@ -19,7 +19,6 @@
 import Cls from './ResetPasswordView.module.scss';
 import React, { ChangeEvent, Component, ReactNode } from 'react';
 import { Logger, PasswordLostParams } from '@abc-map/shared';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { ServiceProps, withServices } from '../../core/withServices';
 import FormValidationLabel from '../../components/form-validation-label/FormValidationLabel';
 import { pageSetup } from '../../core/utils/page-setup';
@@ -27,6 +26,8 @@ import { PasswordStrength, ValidationHelper } from '../../core/utils/ValidationH
 import { FormState } from '../../components/form-validation-label/FormState';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { Routes } from '../../routes';
+import { withRouter, WithRouterProps } from '../../core/utils/withRouter';
+import { prefixI18nTFunc } from '../../i18n/i18n';
 
 const logger = Logger.get('InitPasswordView.tsx', 'info');
 
@@ -36,7 +37,7 @@ interface State {
   formState: FormState;
 }
 
-type Props = RouteComponentProps<PasswordLostParams> & ServiceProps & WithTranslation;
+type Props = WithRouterProps<PasswordLostParams> & ServiceProps & WithTranslation;
 
 class ResetPasswordView extends Component<Props, State> {
   constructor(props: Props) {
@@ -45,10 +46,10 @@ class ResetPasswordView extends Component<Props, State> {
   }
 
   public render(): ReactNode {
+    const t = prefixI18nTFunc('ResetPasswordView:', this.props.t);
     const { password, confirmation, formState } = this.state;
-    const submitDisabled = this.state.formState !== FormState.Ok;
 
-    const { t } = this.props;
+    const submitDisabled = this.state.formState !== FormState.Ok;
 
     return (
       <div className={Cls.resetPassword}>
@@ -89,10 +90,11 @@ class ResetPasswordView extends Component<Props, State> {
   }
 
   public handleSubmit = () => {
-    const { t } = this.props;
+    const t = prefixI18nTFunc('ResetPasswordView:', this.props.t);
     const { authentication, toasts, modals } = this.props.services;
+    const { params, navigate } = this.props.router;
 
-    const token = this.props.match.params.token;
+    const token = params?.token;
     if (!token) {
       toasts.genericError();
       return;
@@ -114,7 +116,7 @@ class ResetPasswordView extends Component<Props, State> {
         this.setState({ password: '', confirmation: '' });
         return modals.login();
       })
-      .then(() => this.props.history.push(Routes.map().format()))
+      .then(() => navigate(Routes.map().format()))
       .catch((err) => {
         toasts.genericError(err);
         logger.error('Reset password error: ', err);
@@ -148,4 +150,4 @@ class ResetPasswordView extends Component<Props, State> {
   }
 }
 
-export default withTranslation('ResetPasswordView')(withRouter(withServices(ResetPasswordView)));
+export default withTranslation()(withRouter(withServices(ResetPasswordView)));

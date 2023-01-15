@@ -52,7 +52,9 @@ async function main() {
 
   // Create dev data if needed
   if (config.development) {
-    await DevInit.create(config, services).init();
+    DevInit.create(config, services)
+      .init()
+      .catch((err) => logger.error('Dev init failed: ', err));
   }
 
   // Index datastore and projections

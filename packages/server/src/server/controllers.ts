@@ -32,7 +32,7 @@ import { ProjectionController } from '../projections/ProjectionController';
  * @param config
  * @param services
  */
-export function publicControllers(config: Config, services: Services): Controller[] {
+export function publicApiControllers(config: Config, services: Services): Controller[] {
   return [new MetricsController(services), new HealthCheckController(services), new AuthenticationController(config, services)];
 }
 
@@ -41,6 +41,11 @@ export function publicControllers(config: Config, services: Services): Controlle
  * @param config
  * @param services
  */
-export function privateControllers(config: Config, services: Services): Controller[] {
-  return [new ProjectController(config, services), new DataStoreController(services), new FeedbackController(services), new ProjectionController(services)];
+export function privateApiControllers(config: Config, services: Services): Controller[] {
+  return [
+    new ProjectController(config, services),
+    new DataStoreController(services),
+    new FeedbackController(config, services),
+    new ProjectionController(services),
+  ];
 }

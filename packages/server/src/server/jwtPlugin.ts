@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import fastifyJWT from 'fastify-jwt';
+import fastifyJWT from '@fastify/jwt';
 import { FastifyInstance } from 'fastify';
 import { Config } from '../config/Config';
 

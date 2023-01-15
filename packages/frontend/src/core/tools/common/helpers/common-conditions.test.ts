@@ -19,10 +19,10 @@
 import MapBrowserEvent from 'ol/MapBrowserEvent';
 import MapBrowserEventType from 'ol/MapBrowserEventType';
 import { withControlKey, withControlKeyOnly, withGeometryOfType, withShiftKey } from './common-conditions';
-import PluggableMap from 'ol/PluggableMap';
 import { LineString } from 'ol/geom';
-import GeometryType from 'ol/geom/GeometryType';
 import Feature from 'ol/Feature';
+import Map from 'ol/Map';
+import { AbcGeometryType } from '@abc-map/shared';
 
 describe('Common conditions', () => {
   it('withShiftKey()', () => {
@@ -60,16 +60,16 @@ describe('Common conditions', () => {
       ])
     );
 
-    expect(withGeometryOfType(feature1, [GeometryType.LINE_STRING])).toBe(true);
-    expect(withGeometryOfType(feature1, [GeometryType.POLYGON])).toBe(false);
+    expect(withGeometryOfType(feature1, [AbcGeometryType.LINE_STRING])).toBe(true);
+    expect(withGeometryOfType(feature1, [AbcGeometryType.POLYGON])).toBe(false);
 
     const feature2 = new Feature();
-    expect(withGeometryOfType(feature2, [GeometryType.LINE_STRING])).toBe(false);
+    expect(withGeometryOfType(feature2, [AbcGeometryType.LINE_STRING])).toBe(false);
   });
 });
 
 function fakeEvent(initDict: MouseEventInit): MapBrowserEvent<UIEvent> {
-  const map: PluggableMap = {} as any;
+  const map: Map = {} as any;
   const original = new MouseEvent('pointerup', initDict);
   return new MapBrowserEvent(MapBrowserEventType.POINTERUP, map, original);
 }

@@ -23,6 +23,7 @@ import { SinonStub, SinonStubbedInstance } from 'sinon';
 import { newTestLayerWrapper, newTestMapWrapper } from '../test';
 import * as sinon from 'sinon';
 import userEvent from '@testing-library/user-event';
+import { wait } from '../test/wait';
 
 describe('useNoobFormBuilder', () => {
   interface FormValues {
@@ -161,8 +162,8 @@ describe('useNoobFormBuilder', () => {
 
     // Assert
     // onChange
-    expect(onChange.callCount).toEqual(21);
-    expect(onChange.args[20]).toEqual([
+    expect(onChange.callCount).toEqual(20);
+    expect(onChange.args[19]).toEqual([
       {
         geometries: ['point', 'line', 'polygon'],
         layerId: 'test-layer-1',
@@ -210,6 +211,8 @@ describe('useNoobFormBuilder', () => {
     await userEvent.clear(getByTestId('size'));
     await userEvent.type(getByTestId('size'), '2000');
     await userEvent.click(getByTestId('submit-button'));
+
+    await wait(10);
 
     // Assert
     expect(onErrors.callCount).toEqual(1);

@@ -62,7 +62,7 @@ describe('Projection', () => {
       .get('[data-cy=pdf-export]')
       .click()
       .then(() => LongOperation.done(50_000))
-      .then(() => Download.fileAsBlob())
+      .then(() => Download.currentFileAsBlob())
       .should((pdf) => {
         expect(pdf.size).greaterThan(50_000);
       })

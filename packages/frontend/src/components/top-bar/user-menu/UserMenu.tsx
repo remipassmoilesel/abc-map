@@ -20,7 +20,7 @@ import Cls from './UserMenu.module.scss';
 import React, { useCallback, useState } from 'react';
 import { Dropdown } from 'react-bootstrap';
 import { Logger, UserStatus } from '@abc-map/shared';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { prefixedTranslation } from '../../../i18n/i18n';
 import { Routes } from '../../../routes';
 import { FaIcon } from '../../icon/FaIcon';
@@ -43,7 +43,7 @@ export function UserMenu() {
   const userAuthenticated = userStatus === UserStatus.Authenticated;
   const userLabel = user && userAuthenticated ? user.email : t('Hello_visitor');
   const experimentalFeaturesMenuEntry = ExperimentalFeatures.length > 0;
-  const history = useHistory();
+  const navigate = useNavigate();
   const runningAsPwa = useRunningAsPwa();
 
   const handleInstallApp = useCallback(() => {
@@ -77,7 +77,7 @@ export function UserMenu() {
     [modals, toasts]
   );
 
-  const handleUserAccount = useCallback(() => history.push(Routes.userAccount().format()), [history]);
+  const handleUserAccount = useCallback(() => navigate(Routes.userAccount().format()), [navigate]);
 
   const handleLogout = useCallback(() => {
     project
@@ -85,13 +85,13 @@ export function UserMenu() {
       .then(() => authentication.logout())
       .then(() => {
         toasts.info(`${t('You_are_disconnected')} 👋`);
-        history.push(Routes.landing().format());
+        navigate(Routes.landing().format());
       })
       .catch((err) => {
         toasts.genericError();
         logger.error('Logout error: ', err);
       });
-  }, [authentication, history, project, toasts]);
+  }, [authentication, navigate, project, toasts]);
 
   const handleFeedback = useCallback(() => modals.textFeedback().catch((err) => logger.error('Feedback modal error: ', err)), [modals]);
 
@@ -132,7 +132,7 @@ export function UserMenu() {
           {userAuthenticated && (
             <>
               <Dropdown.Item onClick={handleUserAccount} data-cy={'user-profile'}>
-                <FaIcon icon={IconDefs.faCogs} className={'mr-3'} /> {t('My_account')}
+                <FaIcon icon={IconDefs.faCogs} className={'mr-2'} /> {t('My_account')}
               </Dropdown.Item>
               <Dropdown.Item onClick={handleLogout} data-cy={'logout'}>
                 <FaIcon icon={IconDefs.faLock} className={'mr-3'} /> {t('Logout')}

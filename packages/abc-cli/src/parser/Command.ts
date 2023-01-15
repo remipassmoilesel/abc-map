@@ -21,7 +21,7 @@ export enum CommandName {
   LINT = 'lint',
   BUILD = 'build',
   TEST = 'test',
-  E2E = 'e2e',
+  E2E_TESTS = 'e2e',
   WATCH = 'watch',
   CI = 'ci',
   START = 'start',
@@ -36,6 +36,7 @@ export enum CommandName {
   DOCKER_PUSH = 'docker-push',
   DEPLOY = 'deploy',
   HELP = 'help',
+  PERFORMANCE_TESTS = 'performance-tests',
 }
 
 export interface BaseCommand {
@@ -59,8 +60,8 @@ export interface Test {
   name: CommandName.TEST;
 }
 
-export interface E2e {
-  name: CommandName.E2E;
+export interface E2eTests {
+  name: CommandName.E2E_TESTS;
 }
 
 export interface Watch {
@@ -126,12 +127,16 @@ export interface Help {
   name: CommandName.HELP;
 }
 
+export interface PerformanceTests {
+  name: CommandName.PERFORMANCE_TESTS;
+}
+
 export declare type Command =
   | Install
   | Lint
   | Build
   | Test
-  | E2e
+  | E2eTests
   | Watch
   | Ci
   | Start
@@ -145,4 +150,5 @@ export declare type Command =
   | DockerBuild
   | DockerPush
   | Deploy
-  | Help;
+  | Help
+  | PerformanceTests;

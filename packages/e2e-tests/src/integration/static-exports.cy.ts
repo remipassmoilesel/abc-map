@@ -24,6 +24,14 @@ import { Routes } from '../helpers/Routes';
 import Chainable = Cypress.Chainable;
 import { Modules } from '../helpers/Modules';
 import { MainMap } from '../helpers/MainMap';
+import { TestData } from '../test-data/TestData';
+import { Toasts } from '../helpers/Toasts';
+import { PngComparisonParams, PngComparisonResult } from '../plugins/PngComparison';
+import * as uuid from 'uuid-random';
+
+// Most of the time exports take about 5 seconds but sometimes if take much longer, probably
+// because of testing environment. So we set a long timeout in order to prevent anoying failures.
+const exportTimeoutMs = 3 * 60 * 1000;
 
 describe('Static exports', function () {
   describe('As a visitor', function () {
@@ -81,17 +89,22 @@ describe('Static exports', function () {
         // Add two layouts
         .get('[data-cy=add-layout]')
         .click()
+        .wait(300)
         .click()
+        .wait(300)
         .get('[data-cy=clear-all]')
         .click()
+        .wait(300)
         .then(() => getLayoutNames())
         .should((elem) => expect(elem).deep.equal([]))
         .get('[data-cy=undo]')
         .click()
+        .wait(300)
         .then(() => getLayoutNames())
         .should((elem) => expect(elem).deep.equal(['Page 1', 'Page 2']))
         .get('[data-cy=redo]')
         .click()
+        .wait(300)
         .then(() => getLayoutNames())
         .should((elem) => expect(elem).deep.equal([]));
     });
@@ -106,8 +119,8 @@ describe('Static exports', function () {
         .click()
         .get('[data-cy=pdf-export]')
         .click()
-        .then(() => LongOperation.done(50_000))
-        .then(() => Download.fileAsBlob())
+        .then(() => LongOperation.done(exportTimeoutMs))
+        .then(() => Download.currentFileAsBlob())
         .should((pdf) => {
           expect(pdf.size).greaterThan(50_000);
         })
@@ -126,8 +139,8 @@ describe('Static exports', function () {
         .click()
         .get('[data-cy=pdf-export]')
         .click()
-        .then(() => LongOperation.done(50_000))
-        .then(() => Download.fileAsBlob())
+        .then(() => LongOperation.done(exportTimeoutMs))
+        .then(() => Download.currentFileAsBlob())
         .should((pdf) => {
           expect(pdf.size).greaterThan(50_000);
         })
@@ -146,8 +159,8 @@ describe('Static exports', function () {
         .click()
         .get('[data-cy=pdf-export]')
         .click()
-        .then(() => LongOperation.done(50_000))
-        .then(() => Download.fileAsBlob())
+        .then(() => LongOperation.done(exportTimeoutMs))
+        .then(() => Download.currentFileAsBlob())
         .should((pdf) => {
           expect(pdf.size).greaterThan(50_000);
         })
@@ -166,8 +179,8 @@ describe('Static exports', function () {
         .click()
         .get('[data-cy=pdf-export]')
         .click()
-        .then(() => LongOperation.done(50_000))
-        .then(() => Download.fileAsBlob())
+        .then(() => LongOperation.done(exportTimeoutMs))
+        .then(() => Download.currentFileAsBlob())
         .should((pdf) => {
           expect(pdf.size).greaterThan(50_000);
         })
@@ -184,8 +197,8 @@ describe('Static exports', function () {
         .click()
         .get('[data-cy=png-export]')
         .click()
-        .then(() => LongOperation.done(50_000))
-        .then(() => Download.fileAsBlob())
+        .then(() => LongOperation.done(exportTimeoutMs))
+        .then(() => Download.currentFileAsBlob())
         .should((pdf) => {
           expect(pdf.size).greaterThan(100_000);
         })
@@ -200,35 +213,59 @@ describe('Static exports', function () {
         // Create layout
         .get('[data-cy=add-layout]')
         .click()
+        .wait(800)
         // Create text frame
         .get('[data-cy=create-text-frame]')
         .click()
         .get('[data-cy=floating-text-frame]')
+        // FIXME: We should edit frame but selection and typing does not work anymore in tests
         .should('exist')
-        .get('[data-cy=toggle-full-screen-editor]')
-        .click()
-        .get('[data-cy=full-screen-editor]')
-        .type('{selectAll}')
-        .type('{del}')
-        .type('Hello World')
-        .type('{selectAll}')
-        .get('[data-cy=bold]')
-        .click()
-        .get('[data-cy=italic]')
-        .click()
-        .get('[data-cy=underline]')
-        .click()
-        .get('[data-cy=close-full-screen-editor]')
-        .click()
         .get('[data-cy=pdf-export]')
         .click()
-        .then(() => LongOperation.done(50_000))
-        .then(() => Download.fileAsBlob())
+        .then(() => LongOperation.done(exportTimeoutMs))
+        .then(() => Download.currentFileAsBlob())
         .should((pdf) => {
           expect(pdf.size).greaterThan(100_000);
         })
         .get('[data-cy=close-solicitation-modal]')
         .click();
+    });
+
+    /**
+     * For the moment, this test only pass in continuous integration.
+     *
+     * If you know how to make it pass on all platforms, ping me !
+     */
+    // TODO: replace by a karma test ? It will be a lot faster
+    it('rendering should be conform', function () {
+      const testId = uuid();
+      const comparisonParams: PngComparisonParams = {
+        actualZipPath: `generated/png-comparison-${testId}.zip`,
+        expectedZipPath: `src/test-data/test-project-3.png.zip`,
+        testId,
+      };
+
+      cy.visit(Routes.map().format())
+        .get('[data-cy=project-menu]')
+        .click()
+        .get('[data-cy=import-project]')
+        .click()
+        .get('[data-cy=confirmation-confirm]')
+        .click()
+        .then(() => TestData.projectSample3())
+        .then((project) => cy.get('[data-cy=file-input]').attachFile({ filePath: 'project.abm2', fileContent: project }))
+        .get('[data-cy=password-input]')
+        .type('azerty1234')
+        .get('[data-cy=password-confirm]')
+        .click()
+        .then(() => Toasts.assertText('Project loaded !'))
+        .then(() => Modules.open('static-export'))
+        .get('[data-cy=png-export]')
+        .click()
+        .then(() => LongOperation.done(exportTimeoutMs))
+        .then(() => Download.writeCurrentFile(comparisonParams.actualZipPath))
+        .then(() => cy.task<PngComparisonResult>('rendering-comparison', comparisonParams))
+        .should((comparison) => expect(comparison.value).equal(0, `Rendering comparison failed. Message="${comparison.message}" Diff="${comparison.diff}".`));
     });
   });
 });

@@ -28,6 +28,7 @@ const sampleConfig: ConfigInput = {
     log: {
       requests: false,
       errors: false,
+      warnings: false,
     },
     globalRateLimit: {
       max: 1,
@@ -72,8 +73,10 @@ const sampleConfig: ConfigInput = {
     path: 'resources/datastore',
   },
   development: {
-    generateData: true,
-    users: 10,
+    generateData: {
+      users: 10,
+      projectsPerUser: 5,
+    },
     persistEmails: false,
   },
   legalMentions: '<div>Put legal mentions here !</div>',

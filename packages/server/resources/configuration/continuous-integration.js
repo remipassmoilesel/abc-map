@@ -7,6 +7,7 @@ module.exports = {
     log: {
       requests: false,
       errors: false,
+      warnings: false,
     },
     globalRateLimit: {
       max: 1000,
@@ -51,8 +52,10 @@ module.exports = {
     path: 'resources/datastore',
   },
   development: {
-    generateData: true,
-    users: 100,
+    generateData: {
+      users: 100,
+      projectsPerUser: 0
+    },
     persistEmails: true,
   },
   legalMentions: `

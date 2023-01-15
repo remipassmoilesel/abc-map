@@ -26,7 +26,7 @@ export class ProjectionSource {
 
   public async init() {
     const buffer = await fs.readFile(this.projectionArchive);
-    this.files = await Zipper.forBackend().unzip(buffer);
+    this.files = await Zipper.forNodeJS().unzip(buffer);
   }
 
   public count(): number {

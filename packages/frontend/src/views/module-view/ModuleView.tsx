@@ -18,7 +18,7 @@
 import Cls from './ModuleView.module.scss';
 import React, { useCallback, useEffect, useMemo } from 'react';
 import { Logger, ModuleParams } from '@abc-map/shared';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { pageSetup } from '../../core/utils/page-setup';
 import { useTranslation, withTranslation } from 'react-i18next';
 import { useAppDispatch } from '../../core/store/hooks';
@@ -35,7 +35,7 @@ function ModuleView() {
   const activeModule = useMemo(() => registry.getModules().find((mod) => mod.getId() === activeModuleId), [activeModuleId, registry]);
   const dispatch = useAppDispatch();
   const { i18n, t } = useTranslation('ModuleView');
-  const history = useHistory();
+  const navigate = useNavigate();
 
   // Page setup
   useEffect(() => pageSetup(activeModule?.getReadableName() || ''), [activeModule]);
@@ -47,7 +47,7 @@ function ModuleView() {
 
   const moduleUi = activeModule?.getView();
 
-  const handleShowIndex = useCallback(() => history.push(Routes.moduleIndex().format()), [history]);
+  const handleShowIndex = useCallback(() => navigate(Routes.moduleIndex().format()), [navigate]);
 
   return (
     <div className={Cls.view}>
@@ -71,7 +71,7 @@ function ModuleView() {
 
       {/* Module is unknown, we display an error */}
       {!activeModule && (
-        <div className={'h-100 d-flex flex-column justify-content-center align-items-center'}>
+        <div className={'h-100 d-flex flex-column justify-content-center align-items-center'} data-cy={'module-viewport'}>
           <h2 className={'mb-4'}>{t('Unknown_module')} 😕</h2>
           <button onClick={handleShowIndex} className={'btn btn-link'}>
             {t('Maybe_you_will_find_what_you_are_looking_for_here')}

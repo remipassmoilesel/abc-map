@@ -18,9 +18,8 @@
 
 import { ScriptsView } from './view/ScriptsView';
 import React from 'react';
-import { Logger } from '@abc-map/shared';
+import { errorMessage, Logger } from '@abc-map/shared';
 import { ChromiumErrorRegexp, ErrorPosition, Example, FirefoxErrorRegexp, ScriptArguments, ScriptError } from './typings';
-import { errorMessage } from '../../core/utils/errorMessage';
 import { ModuleAdapter, ModuleId } from '@abc-map/module-api';
 import { LocalModuleId } from '../LocalModuleId';
 import { prefixedTranslation } from '../../i18n/i18n';
@@ -49,7 +48,7 @@ export class Scripts extends ModuleAdapter {
     return <ScriptsView initialValue={this.scriptContent} onProcess={() => this.process(this.scriptContent)} onChange={this.handleScriptChange} />;
   }
 
-  public async process(content: string): Promise<string[]> {
+  public process(content: string): string[] {
     const output: string[] = [];
     function log(data: object | undefined) {
       logger.info('log()', data);
@@ -76,8 +75,7 @@ export class Scripts extends ModuleAdapter {
       }
       message += ` Message: ${errorMessage(err)}`;
 
-      const error = new ScriptError(message, output);
-      return Promise.reject(error);
+      throw new ScriptError(message, output);
     }
   }
 

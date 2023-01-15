@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { Component } from 'react';
+import React, { Component, ReactNode } from 'react';
 import { withTranslation } from 'react-i18next';
 import { prefixedTranslation } from '../../i18n/i18n';
 import { IconDefs } from '../icon/IconDefs';
@@ -26,6 +26,7 @@ import Cls from './FoldingCard.module.scss';
 interface Props {
   className?: string;
   title: string;
+  children: ReactNode | ReactNode[];
 }
 
 interface State {

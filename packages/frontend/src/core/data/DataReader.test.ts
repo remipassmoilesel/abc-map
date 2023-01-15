@@ -203,7 +203,7 @@ describe('DataReader', function () {
     it('should read unzipped', async () => {
       // Prepare
       const content = await testData.getSampleShapefile();
-      const files = await Zipper.forFrontend().unzip(content);
+      const files = await Zipper.forBrowser().unzip(content);
 
       // Act
       const result = await reader.read(files, projection);

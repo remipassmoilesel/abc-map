@@ -23,7 +23,12 @@
   display: flex;
   flex-direction: column;
 
-  padding: 2rem 2rem 4rem 2rem;
+  min-height: 100%;
+  height: 100%;
+
+  overflow: auto;
+
+  padding: 2rem;
 
   border: solid 1px $gray-400;
   border-radius: $border-radius;
@@ -38,14 +43,16 @@
   &.mobileVisible {
     @include media-breakpoint-down(xl) {
       display: flex;
+      z-index: $zIndex-datastore-detailsPartMobile;
+
       position: fixed;
-      top: $top-bar-height;
+      top: 0;
       left: 0;
 
-      width: 100%;
-      max-width: 100%;
-      height: 100%;
-      max-height: 100%;
+      width: 100vw;
+      max-width: 100vw;
+      height: 100vh;
+      max-height: 100vh;
     }
   }
 }
@@ -75,8 +82,6 @@
   display: flex;
   justify-content: flex-start;
   align-items: center;
-
-  margin-bottom: 1.5rem;
 
   a,
   button {
