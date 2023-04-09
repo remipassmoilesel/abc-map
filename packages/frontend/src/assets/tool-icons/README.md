@@ -1,9 +1,9 @@
 # Tool icons
 
-If icons are created or edited with Inkscape, you must delete 
+If icons are created or edited with Inkscape, you must delete
 
 - `fill` attributes (`style="fill:#48484a;fill-opacity:1;"` or `fill="#48484a"`)
-- `namedview` and `metadata`:      
+- `namedview` and `metadata`:
 
 ```
   <sodipodi:namedview
@@ -26,7 +26,7 @@ If icons are created or edited with Inkscape, you must delete
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1" />
-     
+
   <metadata
      id="metadata5">
     <rdf:RDF>

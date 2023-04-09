@@ -27,7 +27,7 @@ import { useServices } from '../../../../../core/useServices';
 import { useDebouncedStyleTransform } from '../../../../../core/geo/useDebouncedStyleTransform';
 import Cls from './TextFormat.module.scss';
 
-const t = prefixedTranslation('MapView:ToolSelector.');
+const t = prefixedTranslation('MapView:');
 
 function TextFormat() {
   const { geo } = useServices();

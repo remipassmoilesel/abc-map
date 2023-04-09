@@ -33,7 +33,7 @@ import clsx from 'clsx';
 
 const logger = Logger.get('MapGeolocation.tsx');
 
-const t = prefixedTranslation('MapView:MapGeolocation.');
+const t = prefixedTranslation('MapView:');
 
 export interface Props {
   map: MapWrapper;

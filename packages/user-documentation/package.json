@@ -12,8 +12,8 @@
     "clean": "rm -rf build",
     "clean-build": "yarn run clean && yarn run build",
     "dep-check": "depcruise -c .dependency-cruiser.js src",
-    "lint": "eslint './src/**/*.ts' --max-warnings=0 && prettier --check src/**/*.md",
-    "lint-fix": "eslint './src/**/*.ts' --fix --max-warnings=0 && prettier --write src/**/*.md",
+    "lint": "prettier --loglevel warn --check . && eslint './src/**/{*.tsx,*.ts}' --max-warnings=0",
+    "lint-fix": "prettier --loglevel warn --write . && eslint './src/**/{*.tsx,*.ts}' --max-warnings=0 --fix",
     "watch": "webpack -w"
   },
   "devDependencies": {
@@ -21,8 +21,6 @@
     "@typescript-eslint/parser": "^5.47.0",
     "dependency-cruiser": "^12.1.1",
     "eslint": "^8.30.0",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-prettier": "^4.2.1",
     "html-loader": "^4.2.0",
     "markdown-loader": "^8.0.0",
     "prettier": "^2.8.1",

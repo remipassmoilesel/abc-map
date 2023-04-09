@@ -23,7 +23,7 @@ import { IconDefs } from '../../../../components/icon/IconDefs';
 import React, { useCallback, useState } from 'react';
 import { useServices } from '../../../../core/useServices';
 import { AbcNorth, AbcScale, AbcSharedView, AbcTextFrame, Logger } from '@abc-map/shared';
-import SharingCodesModal from '../sharing-codes-modal/SharingCodesModal';
+import { SharingCodesModal } from '../../../../components/sharing-codes-modal/SharingCodesModal';
 import { useAppSelector } from '../../../../core/store/hooks';
 import LayerVisibilitySelector from './layer-selector/LayerVisibilitySelector';
 import { UpdateSharedViewsChangeset } from '../../../../core/history/changesets/shared-views/UpdateSharedViewChangeset';
@@ -58,8 +58,9 @@ function SharingControls(props: Props) {
   } = props;
 
   const { t } = useTranslation('SharedMapSettingsModule');
+  const { project: projectService, history } = useServices();
   const saveProject = useSaveProjectOnline();
-  const { project, history } = useServices();
+  const project = useAppSelector((st) => st.project.metadata);
 
   const [codesModal, showCodesModal] = useState(false);
   const views = useAppSelector((st) => st.project.sharedViews.list);
@@ -76,22 +77,22 @@ function SharingControls(props: Props) {
     saveProject()
       .then((status) => {
         if (ProjectStatus.Ok === status) {
-          const url = project.getPublicLink();
+          const url = projectService.getPublicLink();
           window.open(url, 'abc-map_preview')?.focus();
         }
       })
       .catch((err) => logger.error('Preview error: ', err));
-  }, [project, saveProject]);
+  }, [projectService, saveProject]);
 
   const handleToggleSharingCodes = useCallback(() => showCodesModal(!codesModal), [codesModal]);
 
   const handleDisableSharing = useCallback(() => {
-    project.setPublic(false);
+    projectService.setPublic(false);
     saveProject().catch((err) => {
       logger.error('Cannot publish project: ', err);
-      project.setPublic(true);
+      projectService.setPublic(true);
     });
-  }, [project, saveProject]);
+  }, [projectService, saveProject]);
 
   const handleUpdate = useCallback(
     (view: AbcSharedView) => {
@@ -107,9 +108,9 @@ function SharingControls(props: Props) {
     [activeView, history]
   );
 
-  const handleDimensionsChanged = useCallback((width: number, height: number) => project.setSharedMapDimensions(width, height), [project]);
+  const handleDimensionsChanged = useCallback((width: number, height: number) => projectService.setSharedMapDimensions(width, height), [projectService]);
 
-  const handleToggleFullscreen = useCallback(() => project.toggleSharedMapFullScreen(), [project]);
+  const handleToggleFullscreen = useCallback(() => projectService.toggleSharedMapFullScreen(), [projectService]);
 
   const handleAddScale = useCallback((scale: AbcScale) => onAddScale({ ...scale, x: 45, y: 5 }), [onAddScale]);
 
@@ -174,7 +175,7 @@ function SharingControls(props: Props) {
       <MapDimensions width={width} height={height} fullscreen={fullscreen} onChange={handleDimensionsChanged} onToggleFullscreen={handleToggleFullscreen} />
 
       {/* Sharing codes */}
-      {codesModal && <SharingCodesModal onClose={handleToggleSharingCodes} />}
+      {codesModal && <SharingCodesModal project={project} onClose={handleToggleSharingCodes} />}
     </>
   );
 }

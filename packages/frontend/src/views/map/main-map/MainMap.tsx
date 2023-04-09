@@ -39,7 +39,7 @@ import { MapRotation } from '../../../components/map-rotation/MapRotation';
 
 export const logger = Logger.get('MainMap.ts');
 
-const t = prefixedTranslation('MapView:MainMap.');
+const t = prefixedTranslation('MapView:');
 
 interface State {
   dragOverlay: boolean;

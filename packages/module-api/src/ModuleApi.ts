@@ -22,6 +22,7 @@ import { MapFactory, MapWrapper } from './map';
 import { GeoService } from './services/GeoService';
 import { HistoryService } from './services';
 import { ChangesetFactories } from './services/ChangesetFactories';
+import { ModalService } from './services/ModalService';
 
 /**
  *
@@ -39,5 +40,6 @@ export interface ModuleApi {
   services: {
     geo: GeoService;
     history: HistoryService;
+    modals: ModalService;
   };
 }

@@ -16,8 +16,8 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-@import "src/styles/variables";
-@import "src/styles/mixins";
+@import 'src/styles/variables';
+@import 'src/styles/mixins';
 
 .documentation {
   display: flex;
@@ -129,7 +129,7 @@
   }
 
   figcaption {
-    font: italic smaller "AbcCantarell";
+    font: italic smaller 'AbcCantarell';
     padding: 0.4rem;
     text-align: center;
   }
@@ -148,7 +148,7 @@
     font-size: 1.5rem;
 
     &::before {
-      content: "ℹ️️ ";
+      content: 'ℹ️️ ';
     }
   }
 

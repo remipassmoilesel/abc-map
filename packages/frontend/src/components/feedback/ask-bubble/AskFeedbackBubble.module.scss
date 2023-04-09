@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-@import "src/styles/variables";
+@import 'src/styles/variables';
 
 .container {
   position: fixed;
@@ -36,7 +36,7 @@
   }
 
   .bubble:after {
-    content: "";
+    content: '';
     position: absolute;
     bottom: 0;
     right: 10%;

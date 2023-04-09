@@ -24,6 +24,7 @@ import { Download } from '../helpers/Download';
 import { LongOperation } from '../helpers/LongOperation';
 import { Routes } from '../helpers/Routes';
 import { Modules } from '../helpers/Modules';
+import { TopBar } from '../helpers/TopBar';
 
 describe('Projection', () => {
   beforeEach(() => {
@@ -33,23 +34,23 @@ describe('Projection', () => {
   it('can use projection and export project', function () {
     cy.visit(Routes.map().format())
       .then(() => MainMap.fixedView1())
-      .get('[data-cy=project-menu]')
-      .click()
       // Delete geometry layer
       .then(() => LayerControls.deleteActiveLayer())
       // Change projection
-      .get('[data-cy=edit-project]')
+      .then(() => Modules.open('project-management'))
+      .get('[data-cy=edit-projection]')
       .click()
-      .get('[data-cy=projection-input]')
+      .get('[data-cy=prompt-input]')
       .clear()
       .type('EPSG:2154')
-      .get('[data-cy=button-confirm]')
+      .get('[data-cy=prompt-confirm]')
       .click()
+      .then(() => TopBar.map())
       .wait(1000)
       .then(() => MainMap.getReference())
       .should((map) => {
         const extent = map.getViewExtent();
-        expect(extent).deep.equal([-6099007.132605841, 3199319.9486759407, 7041350.893871974, 10041597.284685347], `Actual: "${JSON.stringify(extent)}"`);
+        expect(extent).deep.equal([139344.6577422124, 6288631.393789791, 802999.1035239202, 6952285.839571498], `Actual: "${JSON.stringify(extent)}"`);
       })
       .then(() => Modules.open('static-export'))
       .get('[data-cy=add-layout]')

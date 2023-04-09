@@ -32,7 +32,7 @@ import clsx from 'clsx';
 
 const logger = Logger.get('Preloader.tsx');
 
-const t = prefixedTranslation('MapView:MainMap.');
+const t = prefixedTranslation('MapView:');
 
 interface Props {
   map: MapWrapper;

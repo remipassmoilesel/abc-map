@@ -40,9 +40,9 @@ describe('Encryption', () => {
      * If this test fail, you must migrate projects
      */
     it('with correct secret', async () => {
-      /* eslint-disable */
+      // prettier-ignore
+      // eslint-disable-next-line max-len
       const encrypted = 'encrypted:IntcIml2XCI6XCJsZm5XeTVoeUlSU1BuRWh4WWlOazZnPT1cIixcInZcIjoxLFwiaXRlclwiOjEwMDAwLFwia3NcIjoxMjgsXCJ0c1wiOjY0LFwibW9kZVwiOlwiY2NtXCIsXCJhZGF0YVwiOlwiXCIsXCJjaXBoZXJcIjpcImFlc1wiLFwic2FsdFwiOlwiZ25mM2RZbmxBVEE9XCIsXCJjdFwiOlwic09McnlaYjJ0dFNKV0dnenhKOTdiamFtdHZNWnVjND1cIn0i';
-      /* eslint-enable */
       const result = await Encryption.decrypt(encrypted, 'secret');
       expect(result).toEqual('text to decrypt');
     });

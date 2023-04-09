@@ -37,7 +37,7 @@ export interface State {
   loading: boolean;
 }
 
-const t = prefixedTranslation('MapView:Search.');
+const t = prefixedTranslation('MapView:');
 
 function Search() {
   const { geo } = useServices();

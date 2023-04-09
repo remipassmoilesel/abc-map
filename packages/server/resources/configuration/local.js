@@ -54,7 +54,7 @@ module.exports = {
   development: {
     generateData: {
       users: 100,
-      projectsPerUser: 5
+      projectsPerUser: 5,
     },
     persistEmails: true,
   },
@@ -125,5 +125,5 @@ module.exports = {
                 </div>
             </div>
         </div>
-        `
+        `,
 };

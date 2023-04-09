@@ -28,7 +28,7 @@ import { useDebouncedStyleTransform } from '../../../../../core/geo/useDebounced
 export default function PointSizeSelector() {
   const size = useAppSelector((st) => st.map.currentStyle.point.size);
   const dispatch = useDispatch();
-  const { t } = useTranslation('MapView', { keyPrefix: 'ToolSelector' });
+  const { t } = useTranslation('MapView');
 
   const styleTransform = useDebouncedStyleTransform();
 

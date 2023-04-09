@@ -35,13 +35,9 @@
   border-radius: 0.3rem 0.3rem 0.4rem 0.4rem;
 
   background-color: #eff0f2;
-  background-image: linear-gradient(
-    180deg,
-    hsla(0, 0%, 100%, 0.75),
-    hsla(0, 0%, 100%, 0.75)
-  );
+  background-image: linear-gradient(180deg, hsla(0, 0%, 100%, 0.75), hsla(0, 0%, 100%, 0.75));
   box-shadow: 0 0.1rem 0.3rem 0 rgba(0, 0, 0, 0.45);
-  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
   color: #aaa;
   text-decoration: none;
   text-transform: uppercase;

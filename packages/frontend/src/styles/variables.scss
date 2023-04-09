@@ -16,9 +16,9 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-$font-family-sans-serif: "AbcCantarell", sans-serif;
+$font-family-sans-serif: 'AbcCantarell', sans-serif;
 $font-family-serif: serif;
-$font-family-monospace: Menlo, Monaco, Consolas, "Courier New", monospace;
+$font-family-monospace: Menlo, Monaco, Consolas, 'Courier New', monospace;
 $font-family-base: $font-family-sans-serif;
 
 $black: #000;
@@ -50,10 +50,13 @@ $grid-breakpoints: (
   xxl: 1400px,
 );
 
-$card-border-color: rgba($black, 0.125);
+$border-width: 1px;
 $border-radius: 0.4rem;
 
+$card-border-color: rgba($black, 0.125);
+
 $badge-border-radius: 0.2rem;
+
 $badge-font-size: 0.9rem;
 
 $body-color: $gray-800;

@@ -30,18 +30,20 @@ import { ArtefactGeneratorModule } from './artefact-generator/ArtefactGeneratorM
 import { DataStoreModule } from './data-store/DataStoreModule';
 import { StaticExport } from './static-export/StaticExport';
 import { SharedMapSettings } from './shared-map-settings/SharedMapSettings';
+import { ProjectManagement } from './projects/ProjectManagement';
 
 export function localModulesFactory(services: Services): Module[] {
   const modules: Module[] = [
-    new DataStoreModule(),
-    new StaticExport(),
-    new SharedMapSettings(),
-    new DataTableModule(),
     new ColorGradientsModule(services),
-    new ProportionalSymbolsModule(services),
-    new FeatureCountByGeometriesModule(),
+    new DataStoreModule(),
+    new DataTableModule(),
     new DifferentSymbolsModule(),
+    new FeatureCountByGeometriesModule(),
+    new ProjectManagement(),
+    new ProportionalSymbolsModule(services),
     new Scripts(),
+    new SharedMapSettings(),
+    new StaticExport(),
   ];
 
   // Add experimental modules

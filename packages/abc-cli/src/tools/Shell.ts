@@ -21,7 +21,7 @@ import { Config } from '../config/Config';
 import { Logger } from './Logger';
 import { ChildProcess, ExecSyncOptions, SpawnOptions } from 'child_process';
 
-const logger = Logger.get('Banners.ts', 'info');
+const logger = Logger.get('Shell.ts', 'info');
 
 export class Shell {
   constructor(private config: Config) {}

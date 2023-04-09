@@ -33,7 +33,7 @@ function ToolModeSwitch(props: Props) {
   const keys = mode.shortcut.split(/( +|\+)/i);
   const handleToggle = useCallback(() => onSelect(mode), [mode, onSelect]);
   const { t } = useTranslation('MapView', { keyPrefix: 'ToolModeSelector' });
-  const { t: tModes } = useTranslation('core', { keyPrefix: 'toolModes' });
+  const { t: tModes } = useTranslation('ToolModeSwitch');
 
   return (
     <div onClick={handleToggle} data-cy={`tool-mode-${mode.name.toLocaleLowerCase()}`} className={'cursor-pointer d-flex align-items-center mb-2'}>

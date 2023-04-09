@@ -25,7 +25,7 @@ import { useAppDispatch, useAppSelector } from '../../../../../core/store/hooks'
 import { useDebouncedStyleTransform } from '../../../../../core/geo/useDebouncedStyleTransform';
 import Cls from './StrokeWidthSelector.module.scss';
 
-const t = prefixedTranslation('MapView:ToolSelector.');
+const t = prefixedTranslation('MapView:');
 
 function StrokeWidthSelector() {
   const strokeWidth = useAppSelector((st) => st.map.currentStyle.stroke.width);

@@ -28,9 +28,9 @@ describe('Data import', () => {
 
   it('User can import data via graphical control, then undo', () => {
     cy.visit(Routes.map().format())
-      .get('[data-cy=project-menu]')
+      .get('[data-cy=data-menu]')
       .click()
-      .get('[data-cy=import-data]')
+      .get('[data-cy=browse-files]')
       .click()
       .then(() => TestData.sampleGpx())
       .then((gpx) => {

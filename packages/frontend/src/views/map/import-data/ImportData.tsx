@@ -16,42 +16,32 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
+import React, { useCallback } from 'react';
 import Cls from './ImportData.module.scss';
-import React, { Component, ReactNode } from 'react';
 import { AbcFile, Logger } from '@abc-map/shared';
 import { FileIO, InputResultType, InputType } from '../../../core/utils/FileIO';
-import { ServiceProps, withServices } from '../../../core/withServices';
-import { withTranslation } from 'react-i18next';
-import { prefixedTranslation } from '../../../i18n/i18n';
-import { IconDefs } from '../../../components/icon/IconDefs';
-import { FaIcon } from '../../../components/icon/FaIcon';
+import { useTranslation } from 'react-i18next';
 import { DataReader } from '../../../core/data/DataReader';
 import { ReadStatus } from '../../../core/data/ReadResult';
+import { useServices } from '../../../core/useServices';
+import { useNavigate } from 'react-router-dom';
+import { Routes } from '../../../routes';
+import { LocalModuleId } from '../../../modules/LocalModuleId';
 
 const logger = Logger.get('ImportData.tsx');
 
-const t = prefixedTranslation('MapView:ImportData.');
+export function ImportData() {
+  const { toasts } = useServices();
+  const { t } = useTranslation('MapView');
+  const navigate = useNavigate();
 
-class ImportData extends Component<ServiceProps, {}> {
-  public render(): ReactNode {
-    return (
-      <div className={'control-block'}>
-        <div className={'control-item'}>
-          <button onClick={this.importFile} type={'button'} className={'btn btn-link'} data-cy={'import-data'}>
-            <FaIcon icon={IconDefs.faTable} className={'mr-2'} /> {t('Import_data')}
-          </button>
-        </div>
-        <div className={`mb-2 ${Cls.advice}`}>{t('You_can_also_drop_on_map')}</div>
-      </div>
-    );
-  }
+  const handleBrowseDocumentation = useCallback(() => navigate(Routes.documentation().format()), [navigate]);
 
-  private importFile = () => {
-    const { toasts } = this.props.services;
+  const handleImportLocalFile = useCallback(() => {
     const dataReader = DataReader.create();
 
     const selectFiles = async (): Promise<AbcFile<Blob>[] | undefined> => {
-      const result = await FileIO.openInput(InputType.Multiple);
+      const result = await FileIO.openPrompt(InputType.Multiple);
       if (InputResultType.Canceled === result.type) {
         return;
       }
@@ -84,7 +74,58 @@ class ImportData extends Component<ServiceProps, {}> {
           toasts.dismiss(firstToast);
         }
       });
-  };
-}
+  }, [t, toasts]);
 
-export default withTranslation()(withServices(ImportData));
+  const handleBrowseDatastore = useCallback(() => navigate(Routes.module().withParams({ moduleId: LocalModuleId.DataStore })), [navigate]);
+
+  return (
+    <div className={'d-flex flex-column p-3'}>
+      <h5 className={'mb-3'}>{t('Import_data')}</h5>
+
+      <div className={'d-flex flex-column align-items-start mb-2'}>
+        <div className={'mb-2'}>{t('You_can_display_on_the_map')}:</div>
+        <ul>
+          <li>{t('GPX_files')}</li>
+          <li>{t('KML_files')}</li>
+          <li>{t('GeoJSON_files')}</li>
+          <li>{t('Shapefiles')}</li>
+          <li>{t('WMS_layer_definitions')}</li>
+          <li>{t('WMTS_layer_definitions')}</li>
+          <li>{t('XYZ_layer_definitions')}</li>
+        </ul>
+      </div>
+
+      <div className={'alert alert-info'}>
+        <div className={'mb-3'}>{t('You_can_also_use_CSV_files_but_with_a_data_processing_module')}</div>
+
+        <div className={'d-flex justify-content-end'}>
+          <button onClick={handleBrowseDocumentation} className={'btn btn-sm btn-outline-primary'}>
+            {t('See_documentation')}
+          </button>
+        </div>
+      </div>
+
+      <div className={'mb-2'}>{t('There_are_several_ways_to_import_data')}</div>
+
+      <div className={Cls.importChoice}>{t('You_can_drop_files_directly_on_map')}</div>
+
+      <div className={Cls.importChoice}>
+        <div className={'mb-3'}>{t('You_can_browse_local_files')}</div>
+        <div className={'d-flex justify-content-end'}>
+          <button onClick={handleImportLocalFile} className={'btn btn-sm btn-outline-primary'} data-cy={'browse-files'}>
+            {t('Browse')}
+          </button>
+        </div>
+      </div>
+
+      <div className={Cls.importChoice}>
+        <div className={'mb-3'}>{t('You_can_browse_the_data_store')}</div>
+        <div className={'d-flex justify-content-end'}>
+          <button onClick={handleBrowseDatastore} className={'btn btn-sm btn-primary'}>
+            {t('Show_data_store')}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}

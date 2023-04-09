@@ -15,7 +15,7 @@
 # Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
 
 storage: /tmp/verdaccio-storage
-listen: localhost:4873
+listen: 127.0.0.1:4873
 max_body_size: 50mb
 auth:
   htpasswd:

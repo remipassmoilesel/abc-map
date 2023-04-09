@@ -26,7 +26,7 @@ import Cls from './Zoom.module.scss';
 import { MapWrapper } from '../../../../core/geo/map/MapWrapper';
 import clsx from 'clsx';
 
-const t = prefixedTranslation('MapView:MainMap.');
+const t = prefixedTranslation('MapView:');
 
 interface Props {
   map: MapWrapper;

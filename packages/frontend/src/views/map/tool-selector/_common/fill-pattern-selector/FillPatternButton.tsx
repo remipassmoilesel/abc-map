@@ -37,7 +37,7 @@ export interface Props {
   factory?: FillPatternFactory;
 }
 
-const t = prefixedTranslation('MapView:ToolSelector.');
+const t = prefixedTranslation('MapView:');
 
 function FillPatternButton(props: Props) {
   const { size, onClick, pattern, color1, color2 } = props;

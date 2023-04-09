@@ -16,8 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { LayerType, ProjectConstants, WmsMetadata } from '@abc-map/shared';
-import { ProjectHelper } from '@abc-map/shared';
+import { LayerType, ProjectConstants, ProjectHelper, WmsMetadata } from '@abc-map/shared';
 import { Toasts } from '../helpers/Toasts';
 import { TestHelper } from '../helpers/TestHelper';
 import { Download } from '../helpers/Download';
@@ -30,6 +29,8 @@ import { Authentication } from '../helpers/Authentication';
 import * as uuid from 'uuid-random';
 import 'cypress-file-upload';
 import { Routes } from '../helpers/Routes';
+import { Modules } from '../helpers/Modules';
+import { TopBar } from '../helpers/TopBar';
 
 const PROJECT_PASSWORD = 'azerty1234';
 
@@ -41,13 +42,13 @@ describe('Project', function () {
 
     it('can create new project', function () {
       cy.visit(Routes.map().format())
-        .get('[data-cy=project-menu]')
-        .click()
+        .then(() => Modules.open('project-management'))
         .get('[data-cy=new-project]')
         .click()
         .get('[data-cy=confirmation-confirm]')
         .click()
         .then(() => Toasts.assertText('New project !'))
+        .then(() => TopBar.map())
         .then(() => MainMap.getReference())
         .should((map) => {
           const layers = map.getLayersMetadata();
@@ -60,14 +61,13 @@ describe('Project', function () {
 
     it('can rename project', function () {
       cy.visit(Routes.map().format())
-        .get('[data-cy=project-menu]')
+        .then(() => Modules.open('project-management'))
+        .get('[data-cy=edit-project-name]')
         .click()
-        .get('[data-cy=edit-project]')
-        .click()
-        .get('[data-cy=project-name-input]')
+        .get('[data-cy=prompt-input]')
         .clear()
         .type('My awesome project')
-        .get('[data-cy=button-confirm]')
+        .get('[data-cy=prompt-confirm]')
         .click()
         .get('[data-cy=project-name]')
         .should((elem) => {
@@ -77,8 +77,7 @@ describe('Project', function () {
 
     it('can export project', function () {
       cy.visit(Routes.map().format())
-        .get('[data-cy=project-menu]')
-        .click()
+        .then(() => Modules.open('project-management'))
         .get('[data-cy=export-project]')
         .click()
         .then(() => Toasts.assertText('Export done !'))
@@ -101,8 +100,7 @@ describe('Project', function () {
 
     it('can import project', function () {
       cy.visit(Routes.map().format())
-        .get('[data-cy=project-menu]')
-        .click()
+        .then(() => Modules.open('project-management'))
         .get('[data-cy=import-project]')
         .click()
         .get('[data-cy=confirmation-confirm]')
@@ -117,6 +115,7 @@ describe('Project', function () {
         .should((elem) => {
           expect(elem.text()).equal('Test project made on 28/12/2020');
         })
+        .then(() => TopBar.map())
         .then(() => MainMap.getReference())
         .should((map) => {
           const layers = map.getLayersMetadata();
@@ -129,8 +128,7 @@ describe('Project', function () {
     it('can export project with credentials', function () {
       cy.visit(Routes.map().format())
         .then(() => LayerControls.addWmsLayerWithCredentials())
-        .get('[data-cy=project-menu]')
-        .click()
+        .then(() => Modules.open('project-management'))
         .get('[data-cy=export-project]')
         .click()
         .get('[data-cy=password-input]')
@@ -160,8 +158,7 @@ describe('Project', function () {
 
     it('can import project with credentials', function () {
       cy.visit(Routes.map().format())
-        .get('[data-cy=project-menu]')
-        .click()
+        .then(() => Modules.open('project-management'))
         .get('[data-cy=import-project]')
         .click()
         .get('[data-cy=confirmation-confirm]')
@@ -184,6 +181,7 @@ describe('Project', function () {
         .should((elem) => {
           expect(elem.text()).equal('Test project with credentials made on 30/01/2021');
         })
+        .then(() => TopBar.map())
         .then(() => MainMap.getReference())
         .should((map) => {
           const layers = map.getLayersMetadata();
@@ -208,8 +206,7 @@ describe('Project', function () {
 
     it('can store project online without credentials', function () {
       cy.visit(Routes.map().format())
-        .get('[data-cy=project-menu]')
-        .click()
+        .then(() => Modules.open('project-management'))
         .get('[data-cy=save-project]')
         .click()
         .then(() => Toasts.assertText('Project saved !'));
@@ -217,10 +214,10 @@ describe('Project', function () {
 
     it('can store project online with credentials', function () {
       cy.visit(Routes.map().format())
-        .get('[data-cy=project-menu]')
-        .click()
-        // Create a project and store it online
+        // Create a layer with credentials
         .then(() => LayerControls.addWmsLayerWithCredentials())
+        // Save project online
+        .then(() => Modules.open('project-management'))
         .get('[data-cy=save-project]')
         .click()
         .get('[data-cy=password-input]')
@@ -236,42 +233,44 @@ describe('Project', function () {
 
     it('can load remote project', function () {
       cy.visit(Routes.map().format())
-        .get('[data-cy=project-menu]')
-        .click()
-        // Create a project and store it online
+        // Add layers
+        .then(() => LayerControls.addVectorLayer())
+        .then(() => LayerControls.addVectorLayer())
+        // Save project online
+        .then(() => Modules.open('project-management'))
         .get('[data-cy=save-project]')
         .click()
-        .then(() => Toasts.assertText('Project saved !'))
-        // Clean map
+        // Clean current projet and map
         .get('[data-cy=new-project]')
         .click()
         .get('[data-cy=confirmation-confirm]')
         .click()
         // Open remote project
-        .get('[data-cy=remote-projects]')
-        .click()
         .get('[data-cy=remote-project]')
         .eq(0)
         .click()
         .get('[data-cy=open-project]')
         .click()
-        .get('[data-cy=open-project-confirm]')
+        .get('[data-cy=confirmation-confirm]')
         .click()
         .then(() => Toasts.assertText('Project open !'))
+        .then(() => TopBar.map())
         .then(() => MainMap.getReference())
         .should((map) => {
           const layers = map.getLayersMetadata();
           expect(layers[0].type).equal(LayerType.Predefined);
+          expect(layers[1].type).equal(LayerType.Vector);
+          expect(layers[1].type).equal(LayerType.Vector);
           expect(layers[1].type).equal(LayerType.Vector);
         });
     });
 
     it('can load remote remote project with credentials', function () {
       cy.visit(Routes.map().format())
-        .get('[data-cy=project-menu]')
-        .click()
-        // Create a project and store it online
+        // Add a layer
         .then(() => LayerControls.addWmsLayerWithCredentials())
+        // Save project online
+        .then(() => Modules.open('project-management'))
         .get('[data-cy=save-project]')
         .click()
         .get('[data-cy=password-input]')
@@ -289,19 +288,20 @@ describe('Project', function () {
         .get('[data-cy=confirmation-confirm]')
         .click()
         // Open remote project
-        .get('[data-cy=remote-projects]')
-        .click()
         .get('[data-cy=remote-project]')
         .eq(0)
         .click()
         .get('[data-cy=open-project]')
         .click()
-        .get('[data-cy=project-password]')
+        .get('[data-cy=confirmation-confirm]')
+        .click()
+        .get('[data-cy=password-input]')
         .clear()
         .type(PROJECT_PASSWORD)
-        .get('[data-cy=open-project-confirm]')
+        .get('[data-cy=password-confirm]')
         .click()
         .then(() => Toasts.assertText('Project open !'))
+        .then(() => TopBar.map())
         .then(() => MainMap.getReference())
         .should((map) => {
           const layers = map.getLayersMetadata();
@@ -312,17 +312,16 @@ describe('Project', function () {
     });
 
     it('can delete project', function () {
-      const projectName = uuid();
+      const projectName = `Project ${uuid()}`;
       cy.visit(Routes.map().format())
-        .get('[data-cy=project-menu]')
-        .click()
+        .then(() => Modules.open('project-management'))
         // Rename project
-        .get('[data-cy=edit-project]')
+        .get('[data-cy=edit-project-name]')
         .click()
-        .get('[data-cy=project-name-input]')
+        .get('[data-cy=prompt-input]')
         .clear()
         .type(projectName)
-        .get('[data-cy=button-confirm]')
+        .get('[data-cy=prompt-confirm]')
         .click()
         .get('[data-cy=project-name]')
         // Save project
@@ -330,17 +329,13 @@ describe('Project', function () {
         .click()
         .then(() => Toasts.assertText('Project saved !'))
         // Delete it
-        .get('[data-cy=remote-projects]')
-        .click()
         .get('[data-cy=delete-project]')
         .click()
-        .get('[data-cy=confirm-deletion]')
+        .get('[data-cy=confirmation-confirm]')
         .click()
         .then(() => Toasts.assertText('Project deleted !'))
         .get('[data-cy=remote-project]')
-        .should('not.exist')
-        .get('[data-cy=cancel-button]')
-        .click();
+        .should('not.exist');
     });
   });
 });

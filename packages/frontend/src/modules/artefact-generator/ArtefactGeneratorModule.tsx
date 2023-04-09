@@ -104,7 +104,7 @@ export class ArtefactGeneratorModule extends ModuleAdapter {
 
     // Zip then download
     const zip = await Zipper.forBrowser().zipFiles(files);
-    FileIO.outputBlob(zip, 'artefact.zip');
+    FileIO.downloadBlob(zip, 'artefact.zip');
   };
 
   /**

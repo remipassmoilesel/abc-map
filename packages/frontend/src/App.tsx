@@ -43,6 +43,7 @@ import clsx from 'clsx';
 import InstallAppModal from './components/install-app-modal/InstallAppModal';
 import { MainKeyboardListener } from './components/main-keyboard-listener/MainKeyboardListener';
 import { useFullscreenView } from './core/ui/useFullscreenView';
+import { SimplePromptModal } from './components/simple-prompt-modal/SimplePromptModal';
 
 // App views, all lazy loaded
 const LandingView = lazy(() => import('./views/landing/LandingView'));
@@ -105,6 +106,7 @@ export function App() {
           <PromptVariablesModal />
           <InstallAppModal />
           <MainKeyboardListener />
+          <SimplePromptModal />
         </>
       )}
 

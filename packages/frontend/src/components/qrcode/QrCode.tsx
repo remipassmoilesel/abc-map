@@ -33,7 +33,7 @@ interface Props {
   height: string;
 }
 
-function QrCode(props: Props) {
+export function QrCode(props: Props) {
   const { text, width, height } = props;
   const { t } = useTranslation('QrCode');
   const { toasts } = useServices();
@@ -58,6 +58,13 @@ function QrCode(props: Props) {
       }
 
       image.src = canvas.toDataURL('image/jpg', 1);
+      image.style.width = width;
+      image.style.height = height;
+
+      canvas.width = 0;
+      canvas.height = 0;
+      canvas.style.width = width;
+      canvas.style.height = height;
 
       BlobIO.blobUrlToBlob(image.src)
         .then((res) => {
@@ -69,11 +76,11 @@ function QrCode(props: Props) {
           setDownloadDisabled(true);
         });
     });
-  }, [text]);
+  }, [height, text, width]);
 
   const handleDownloadQrCode = useCallback(() => {
     if (qrCodeRef.current) {
-      FileIO.outputBlob(qrCodeRef.current, 'qrcode.jpg');
+      FileIO.downloadBlob(qrCodeRef.current, 'qrcode.jpg');
     } else {
       toasts.genericError();
     }
@@ -94,5 +101,3 @@ function QrCode(props: Props) {
     </div>
   );
 }
-
-export default QrCode;

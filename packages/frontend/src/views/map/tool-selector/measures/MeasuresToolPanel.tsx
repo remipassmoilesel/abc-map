@@ -30,7 +30,7 @@ import clsx from 'clsx';
 
 const logger = Logger.get('MeasuresToolPanel.tsx');
 
-const t = prefixedTranslation('MapView:ToolSelector.');
+const t = prefixedTranslation('MapView:');
 
 function MeasuresToolPanel() {
   const { geo } = useServices();

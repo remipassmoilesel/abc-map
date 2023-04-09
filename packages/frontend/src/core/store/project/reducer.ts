@@ -39,6 +39,8 @@ export function projectReducer(state = projectInitialState, action: ProjectActio
           fullscreen: action.project.sharedViews.fullscreen,
           mapDimensions: action.project.sharedViews.mapDimensions,
         },
+        lastSaveOnline: null,
+        lastExport: null,
       };
     }
 
@@ -155,6 +157,18 @@ export function projectReducer(state = projectInitialState, action: ProjectActio
     case ActionType.SetPublic: {
       const newState: ProjectState = { ...state, metadata: { ...state.metadata } };
       newState.metadata.public = action.value;
+      return newState;
+    }
+
+    case ActionType.SetLastSaveOnline: {
+      const newState: ProjectState = { ...state };
+      newState.lastSaveOnline = action.date;
+      return newState;
+    }
+
+    case ActionType.SetLastExport: {
+      const newState: ProjectState = { ...state };
+      newState.lastExport = action.date;
       return newState;
     }
 

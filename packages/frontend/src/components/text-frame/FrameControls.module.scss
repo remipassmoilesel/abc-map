@@ -16,8 +16,8 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-@import "src/styles/variables";
-@import "src/styles/mixins";
+@import 'src/styles/variables';
+@import 'src/styles/mixins';
 
 .controls {
   position: absolute;
@@ -55,7 +55,7 @@
   margin-bottom: 0.5rem;
   margin-left: 1rem;
 
-  input[type="checkbox"] {
+  input[type='checkbox'] {
     margin-right: 0.5rem;
   }
 }

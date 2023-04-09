@@ -19,7 +19,11 @@
 import 'source-map-support/register';
 import { ConfigLoader } from './config/ConfigLoader';
 import { Logger } from '@abc-map/shared';
+import * as chai from 'chai';
+import { jestSnapshotPlugin } from 'mocha-chai-jest-snapshot';
 
 const logger = Logger.get('main.test.ts');
 
 ConfigLoader.load().catch((err) => logger.error(err));
+
+chai.use(jestSnapshotPlugin({}));

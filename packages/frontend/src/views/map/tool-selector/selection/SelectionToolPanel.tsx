@@ -30,7 +30,7 @@ import { useTranslation } from 'react-i18next';
 const logger = Logger.get('SelectionToolPanel.tsx');
 
 export function SelectionToolPanel() {
-  const { t } = useTranslation('MapView', { keyPrefix: 'ToolSelector' });
+  const { t } = useTranslation('MapView');
 
   return (
     <div className={Cls.selectionPanel}>

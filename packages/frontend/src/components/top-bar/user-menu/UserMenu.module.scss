@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-@import "src/styles/variables";
+@import 'src/styles/variables';
 
 .userMenu {
   display: flex;
@@ -25,6 +25,10 @@
 
   height: 100%;
   margin: 0 1rem;
+
+  .toggleIcon {
+    color: $gray-600;
+  }
 
   :global(.dropdown-toggle) {
     background-color: white;

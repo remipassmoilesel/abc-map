@@ -50,7 +50,7 @@ interface State {
 
 declare type Props = LocalProps & ServiceProps;
 
-const t = prefixedTranslation('MapView:LayerControls.');
+const t = prefixedTranslation('MapView:');
 
 class LayerControls extends Component<Props, State> {
   private listRef = React.createRef<HTMLDivElement>();

@@ -31,7 +31,7 @@ import { GeoService } from '../../geo/GeoService';
 
 const logger = Logger.get('XyzDefinitionReader.ts');
 
-const t = prefixedTranslation('core:DataReader.');
+const t = prefixedTranslation('DataReader:');
 
 export class XyzDefinitionReader extends AbstractDataReader {
   constructor(private geo: GeoService, private modals: ModalService) {

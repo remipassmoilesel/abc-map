@@ -47,8 +47,8 @@ interface Props {
   activeLayer: LayerWrapper | undefined;
 }
 
-const t = prefixedTranslation('MapView:ToolSelector.');
-const tTools = prefixedTranslation('core:tools.');
+const t = prefixedTranslation('MapView:');
+const tTools = prefixedTranslation('tools:');
 
 function ToolSelector(props: Props) {
   const { activeLayer } = props;

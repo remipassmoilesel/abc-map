@@ -148,7 +148,7 @@ class SetPasswordModal extends Component<ServiceProps, State> {
     const { modals } = this.props.services;
 
     modals.dispatch({
-      type: ModalEventType.SetPasswordClosed,
+      type: ModalEventType.CreatePasswordClosed,
       value: '',
       status: ModalStatus.Canceled,
     });
@@ -166,7 +166,7 @@ class SetPasswordModal extends Component<ServiceProps, State> {
     }
 
     modals.dispatch({
-      type: ModalEventType.SetPasswordClosed,
+      type: ModalEventType.CreatePasswordClosed,
       value: this.state.password,
       status: ModalStatus.Confirmed,
     });

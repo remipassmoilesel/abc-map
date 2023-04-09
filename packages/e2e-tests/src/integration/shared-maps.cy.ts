@@ -54,9 +54,12 @@ describe('Shared maps', function () {
       .then(() => SharingLayoutMap.getComponent())
       .then(() => SharingLayoutMap.getReference())
       .should((map) => {
-        // FIXME Assertions here does not work well
         expect(map.getViewExtent()).not.undefined;
-        // expect(map.getViewExtent()).deep.equal([-5394208.487445235, -4217930.032050605, 13723132.788597964, 6189407.6252345955]);
+        // FIXME Assertions here does not work well
+        // expect(map.getViewExtent()).deep.equal(
+        //   [-1637414.044381916, -2174473.7008304745, 9966338.345534643, 4145951.294014464],
+        //   'Actual: ' + JSON.stringify(map.getViewExtent())
+        // );
       })
       // Publish map
       .get('[data-cy=publish]')
@@ -81,7 +84,7 @@ describe('Shared maps', function () {
       .should((map) => {
         // FIXME Assertions here does not work well
         expect(map.getViewExtent()).not.undefined;
-        // expect(map.getViewExtent()).deep.equal([-5521638.073721606, -4297588.598479625, 13850562.374874335, 6269066.191663615]);
+        // expect(map.getViewExtent()).deep.equal([-5521638.073721606, ...
       });
   });
 });

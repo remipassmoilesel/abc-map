@@ -17,6 +17,7 @@
  */
 
 import { AbcLayout, AbcProjectManifest, AbcSharedView, AbcTextFrame, AbcView } from '@abc-map/shared';
+import { DateTime } from 'luxon';
 
 export enum ActionType {
   LoadProject = 'LoadProject',
@@ -38,6 +39,8 @@ export enum ActionType {
   SetSharedMapFullscreen = 'SetSharedMapFullscreen',
   SetView = 'SetView',
   SetPublic = 'SetPublic',
+  SetLastSaveOnline = 'SetLastSaveOnline',
+  SetLastExport = 'SetLastExport',
 }
 
 export interface LoadProject {
@@ -138,6 +141,16 @@ export interface SetPublic {
   value: boolean;
 }
 
+export interface SetLastSaveOnline {
+  type: ActionType.SetLastSaveOnline;
+  date: DateTime;
+}
+
+export interface SetLastExport {
+  type: ActionType.SetLastExport;
+  date: DateTime;
+}
+
 export type ProjectAction =
   | LoadProject
   | SetProjectName
@@ -157,7 +170,9 @@ export type ProjectAction =
   | SetSharedMapDimensions
   | SetSharedMapFullscreen
   | SetView
-  | SetPublic;
+  | SetPublic
+  | SetLastSaveOnline
+  | SetLastExport;
 
 export class ProjectActions {
   public static loadProject(project: AbcProjectManifest): ProjectAction {
@@ -293,6 +308,20 @@ export class ProjectActions {
     return {
       type: ActionType.SetPublic,
       value,
+    };
+  }
+
+  public static setLastSaveOnline(date: DateTime): ProjectAction {
+    return {
+      type: ActionType.SetLastSaveOnline,
+      date,
+    };
+  }
+
+  public static setLastExport(date: DateTime): ProjectAction {
+    return {
+      type: ActionType.SetLastExport,
+      date,
     };
   }
 }

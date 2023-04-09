@@ -35,17 +35,13 @@ export function newTestMapWrapper(): SinonStubbedInstance<MapWrapper> {
 
 /* eslint-disable */
 class DumbMapWrapper implements MapWrapper {
-  addLayer(layer: LayerWrapper, position?: number): void {
-  }
+  addLayer(layer: LayerWrapper, position?: number): void {}
 
-  addLayerChangeListener(handler: LayerChangeHandler): void {
-  }
+  addLayerChangeListener(handler: LayerChangeHandler): void {}
 
-  addViewMoveListener(listener: () => void): void {
-  }
+  addViewMoveListener(listener: () => void): void {}
 
-  dispose(): void {
-  }
+  dispose(): void {}
 
   forEachFeatureSelected(callback: FeatureCallback): number {
     return {} as any;
@@ -83,41 +79,28 @@ class DumbMapWrapper implements MapWrapper {
     return {} as any;
   }
 
-  importLayersFrom(other: MapWrapper, options?: any): void {
-  }
+  importLayersFrom(other: MapWrapper, options?: any): void {}
 
-  moveViewToExtent(extent: Extent, sourceProjection?: AbcProjection, duration?: number): void {
-  }
+  moveViewToExtent(extent: Extent, sourceProjection?: AbcProjection, duration?: number): void {}
 
-  moveViewToPosition(coords: Coordinate, zoom: number): void {
-  }
+  moveViewToPosition(coords: Coordinate, zoom: number): void {}
 
-  removeLayer(layer: LayerWrapper): void {
-  }
+  removeLayer(layer: LayerWrapper): void {}
 
-  removeLayerChangeListener(handler: LayerChangeHandler): void {
-  }
+  removeLayerChangeListener(handler: LayerChangeHandler): void {}
 
-  removeViewMoveListener(listener: () => void): void {
-  }
+  removeViewMoveListener(listener: () => void): void {}
 
-  renameLayer(layer: LayerWrapper, name: string): void {
-  }
+  renameLayer(layer: LayerWrapper, name: string): void {}
 
-  setActiveLayer(layer: LayerWrapper): void {
-  }
+  setActiveLayer(layer: LayerWrapper): void {}
 
-  setDefaultLayers(): void {
-  }
+  setDefaultLayers(): void {}
 
-  setLayerVisible(layer: LayerWrapper, value: boolean): void {
-  }
+  setLayerVisible(layer: LayerWrapper, value: boolean): void {}
 
-  setTarget(node: HTMLDivElement | undefined): void {
-  }
+  setTarget(node: HTMLDivElement | undefined): void {}
 
-  setView(view: AbcView): void {
-  }
-
+  setView(view: AbcView): void {}
 }
 /* eslint-enable */

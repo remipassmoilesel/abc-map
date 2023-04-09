@@ -19,42 +19,43 @@
 import { useServices } from '../useServices';
 import { ProjectStatus } from './ProjectStatus';
 import { prefixedTranslation } from '../../i18n/i18n';
-import { Services } from '../Services';
 import { resolveInAtLeast } from '../utils/resolveInAtLeast';
+import { useAppDispatch } from '../store/hooks';
+import { ProjectActions } from '../store/project/actions';
+import { DateTime } from 'luxon';
 
-const t = prefixedTranslation('core:useSaveProjectOnline.');
-
-export async function saveProjectOnline(services: Services): Promise<ProjectStatus> {
-  const { project, toasts } = services;
-
-  const previousToast = toasts.info(t('Saving'));
-  return resolveInAtLeast(project.saveCurrent(), 800)
-    .then<ProjectStatus>((status) => {
-      toasts.dismiss(previousToast);
-      switch (status) {
-        case ProjectStatus.OnlineQuotaExceeded:
-          toasts.tooMuchProjectError();
-          return status;
-
-        case ProjectStatus.TooHeavy:
-          toasts.error(t('Project_too_heavy'));
-          return status;
-
-        case ProjectStatus.Canceled:
-          return status;
-
-        case ProjectStatus.Ok:
-          toasts.info(t('Project_saved'));
-          return status;
-      }
-    })
-    .catch((err) => {
-      toasts.genericError();
-      return Promise.reject(err);
-    });
-}
+const t = prefixedTranslation('useSaveProjectOnline:');
 
 export function useSaveProjectOnline(): () => Promise<ProjectStatus> {
-  const services = useServices();
-  return () => saveProjectOnline(services);
+  const { project, toasts } = useServices();
+  const dispatch = useAppDispatch();
+
+  return () => {
+    const previousToast = toasts.info(t('Saving'));
+    return resolveInAtLeast(project.saveCurrent(), 800)
+      .then<ProjectStatus>((status) => {
+        toasts.dismiss(previousToast);
+        switch (status) {
+          case ProjectStatus.OnlineQuotaExceeded:
+            toasts.tooMuchProjectError();
+            return status;
+
+          case ProjectStatus.TooHeavy:
+            toasts.error(t('Project_too_heavy'));
+            return status;
+
+          case ProjectStatus.Canceled:
+            return status;
+
+          case ProjectStatus.Ok:
+            toasts.info(t('Project_saved'));
+            return status;
+        }
+      })
+      .catch((err) => {
+        toasts.genericError();
+        return Promise.reject(err);
+      })
+      .finally(() => dispatch(ProjectActions.setLastSaveOnline(DateTime.now())));
+  };
 }

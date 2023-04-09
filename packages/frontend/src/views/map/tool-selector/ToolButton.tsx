@@ -29,7 +29,7 @@ interface Props {
   onSelect: (tool: MapTool) => void;
 }
 
-const t = prefixedTranslation('core:tools.');
+const t = prefixedTranslation('tools:');
 
 export function ToolButton(props: Props) {
   const { tool, active, onSelect } = props;

@@ -43,7 +43,7 @@ describe('FromV020ToV030', () => {
 
   it('migrate should work', async () => {
     // Prepare
-    modals.setPasswordModal.resolves({ type: ModalEventType.SetPasswordClosed, status: ModalStatus.Confirmed, value: 'azerty1234' });
+    modals.createPassword.resolves({ type: ModalEventType.CreatePasswordClosed, status: ModalStatus.Confirmed, value: 'azerty1234' });
 
     // Act
     const result = await migration.migrate(sampleProject.manifest, sampleProject.files);
@@ -75,12 +75,12 @@ describe('FromV020ToV030', () => {
     await migration.migrate(project as unknown as AbcProjectManifest, []).catch((err) => err);
 
     // Assert
-    expect(modals.setPasswordModal.callCount).toEqual(0);
+    expect(modals.createPassword.callCount).toEqual(0);
   });
 
   it('migrate should fail if password not provided', async () => {
     // Prepare
-    modals.setPasswordModal.resolves({ type: ModalEventType.SetPasswordClosed, status: ModalStatus.Canceled, value: '' });
+    modals.createPassword.resolves({ type: ModalEventType.CreatePasswordClosed, status: ModalStatus.Canceled, value: '' });
 
     // Act
     const error: Error = await migration.migrate(sampleProject.manifest as unknown as AbcProjectManifest, []).catch((err) => err);

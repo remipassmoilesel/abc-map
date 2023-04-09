@@ -47,7 +47,7 @@ interface State {
   modal: boolean;
 }
 
-const t = prefixedTranslation('MapView:ToolSelector.');
+const t = prefixedTranslation('MapView:');
 
 class FillPatternSelector extends Component<Props, State> {
   constructor(props: Props) {

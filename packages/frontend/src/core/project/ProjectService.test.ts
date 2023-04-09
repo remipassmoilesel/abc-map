@@ -132,7 +132,7 @@ describe('ProjectService', function () {
       const map = MapFactory.createNaked();
       geoMock.getMainMap.returns(map);
 
-      modals.getProjectPassword.resolves({ type: ModalEventType.PasswordInputClosed, value: 'azerty1234', status: ModalStatus.Confirmed });
+      modals.promptProjectPassword.resolves({ type: ModalEventType.PasswordInputClosed, value: 'azerty1234', status: ModalStatus.Confirmed });
 
       const [zippedProject] = await TestHelper.sampleCompressedProtectedProject();
 
@@ -141,7 +141,7 @@ describe('ProjectService', function () {
 
       // Assert
       expect(store.getState().project.metadata.id).toEqual(zippedProject.metadata.id);
-      expect(modals.getProjectPassword.callCount).toEqual(1);
+      expect(modals.promptProjectPassword.callCount).toEqual(1);
       expect(geoMock.importLayers.callCount).toEqual(1);
 
       const wmsLayer = geoMock.importLayers.args[0][0][2] as AbcWmsLayer;
@@ -155,7 +155,7 @@ describe('ProjectService', function () {
       const map = MapFactory.createNaked();
       geoMock.getMainMap.returns(map);
 
-      modals.getProjectPassword.rejects();
+      modals.promptProjectPassword.rejects();
 
       const [zippedProject] = await TestHelper.sampleCompressedProject({
         metadata: { public: true },
@@ -167,7 +167,7 @@ describe('ProjectService', function () {
 
       // Assert
       expect(store.getState().project.metadata.id).toEqual(zippedProject.metadata.id);
-      expect(modals.getProjectPassword.callCount).toEqual(0);
+      expect(modals.promptProjectPassword.callCount).toEqual(0);
       expect(geoMock.importLayers.callCount).toEqual(1);
 
       const wmsLayer = geoMock.importLayers.args[0][0][0] as AbcXyzLayer;
@@ -182,7 +182,7 @@ describe('ProjectService', function () {
       const eventListener = sinon.stub();
       projectService.addProjectLoadedListener(eventListener);
 
-      modals.getProjectPassword.resolves({ type: ModalEventType.PasswordInputClosed, value: '', status: ModalStatus.Confirmed });
+      modals.promptProjectPassword.resolves({ type: ModalEventType.PasswordInputClosed, value: '', status: ModalStatus.Confirmed });
 
       const [zippedProject] = await TestHelper.sampleCompressedProtectedProject();
 
@@ -192,7 +192,7 @@ describe('ProjectService', function () {
       // Assert
       expect(Errors.isMissingPassword(error)).toEqual(true);
       expect(store.getState().project.metadata.id).not.toEqual(zippedProject.metadata.id);
-      expect(modals.getProjectPassword.callCount).toEqual(1);
+      expect(modals.promptProjectPassword.callCount).toEqual(1);
       expect(geoMock.importLayers.callCount).toEqual(0);
       expect(eventListener.callCount).toEqual(0);
     });
@@ -239,7 +239,7 @@ describe('ProjectService', function () {
 
     it('should load projections', async () => {
       // Prepare
-      modals.getProjectPassword.resolves({ type: ModalEventType.PasswordInputClosed, value: 'azerty1234', status: ModalStatus.Confirmed });
+      modals.promptProjectPassword.resolves({ type: ModalEventType.PasswordInputClosed, value: 'azerty1234', status: ModalStatus.Confirmed });
 
       const map = MapFactory.createNaked();
       geoMock.getMainMap.returns(map);
@@ -292,7 +292,7 @@ describe('ProjectService', function () {
         expect(manifest.layouts).toEqual(originalManifest.layouts);
         expect(manifest.sharedViews).toEqual(originalManifest.sharedViews);
 
-        expect(modals.setProjectPassword.callCount).toEqual(0);
+        expect(modals.createProjectPassword.callCount).toEqual(0);
       });
 
       it('should export private project with credentials', async function () {
@@ -306,7 +306,7 @@ describe('ProjectService', function () {
         const layers: AbcLayer[] = [originalLayer];
         geoMock.exportLayers.resolves(layers);
 
-        modals.setProjectPassword.resolves({ type: ModalEventType.SetPasswordClosed, value: 'azerty1234', status: ModalStatus.Confirmed });
+        modals.createProjectPassword.resolves({ type: ModalEventType.CreatePasswordClosed, value: 'azerty1234', status: ModalStatus.Confirmed });
 
         // Act
         const exported = (await projectService.exportAndZipCurrentProject()) as CompressedProject<Blob>;
@@ -331,7 +331,7 @@ describe('ProjectService', function () {
         expect(layer.metadata.remoteUrl).toBeDefined();
         expect(layer.metadata.remoteUrl).not.toEqual('http://nowhere.net/{x}/{y}/{z}');
 
-        expect(modals.setProjectPassword.callCount).toEqual(1);
+        expect(modals.createProjectPassword.callCount).toEqual(1);
       });
 
       it('should not prompt several times for credentials', async function () {
@@ -345,7 +345,7 @@ describe('ProjectService', function () {
         const layers: AbcLayer[] = [originalLayer];
         geoMock.exportLayers.resolves(layers);
 
-        modals.setProjectPassword.resolves({ type: ModalEventType.SetPasswordClosed, value: 'azerty1234', status: ModalStatus.Confirmed });
+        modals.createProjectPassword.resolves({ type: ModalEventType.CreatePasswordClosed, value: 'azerty1234', status: ModalStatus.Confirmed });
 
         // Act
         await projectService.exportAndZipCurrentProject();
@@ -353,7 +353,7 @@ describe('ProjectService', function () {
         await projectService.exportAndZipCurrentProject();
 
         // Assert
-        expect(modals.setProjectPassword.callCount).toEqual(1);
+        expect(modals.createProjectPassword.callCount).toEqual(1);
       });
 
       it('should return ProjectStatus.Canceled if user does not provide credentials for private project', async function () {
@@ -367,7 +367,7 @@ describe('ProjectService', function () {
         const layers: AbcLayer[] = [originalLayer];
         geoMock.exportLayers.resolves(layers);
 
-        modals.setProjectPassword.resolves({ type: ModalEventType.SetPasswordClosed, value: '', status: ModalStatus.Canceled });
+        modals.createProjectPassword.resolves({ type: ModalEventType.CreatePasswordClosed, value: '', status: ModalStatus.Canceled });
 
         // Act
         const exported = await projectService.exportAndZipCurrentProject();
@@ -464,5 +464,10 @@ describe('ProjectService', function () {
     projectService.renameProject('New title');
 
     expect(store.getState().project.metadata.name).toEqual('New title');
+  });
+
+  it('getPublicLink()', () => {
+    expect(projectService.getPublicLink()).toMatch(/^http:\/\/localhost\/en\/shared-map\/[a-z0-9-]+$/i);
+    expect(projectService.getPublicLink('test-project-id')).toEqual('http://localhost/en/shared-map/test-project-id');
   });
 });

@@ -32,7 +32,7 @@ import { RemoveFeaturesChangeset } from '../../../core/history/changesets/featur
  * This API is used in external modules and in scripts
  */
 export function getModuleApi(): ModuleApi {
-  const { geo, history } = getServices();
+  const { geo, history, modals } = getServices();
 
   return {
     FeatureWrapperFactory: {
@@ -55,6 +55,7 @@ export function getModuleApi(): ModuleApi {
     services: {
       geo,
       history,
+      modals,
     },
     // This variable will be set at runtime
     resourceBaseUrl: '',

@@ -18,8 +18,6 @@
 
 import React from 'react';
 import PaypalButton from './PaypalButton';
-import utipLogo from './utip.png';
-import tipeeeLogo from './tipeee.png';
 import { prefixedTranslation } from '../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
 import Cls from './FundingLinks.module.scss';
@@ -34,24 +32,6 @@ class FundingLinks extends React.Component<{}, {}> {
           <div className={'mb-3'} dangerouslySetInnerHTML={{ __html: t('By_CB_paypal') }} />
           <div className={Cls.logo}>
             <PaypalButton className={Cls.paypalImage} />
-          </div>
-        </div>
-
-        <div className={Cls.fundingMedium}>
-          <div className={'mb-3'} dangerouslySetInnerHTML={{ __html: t('With_utip') }} />
-          <div className={Cls.logo}>
-            <a href={'https://utip.io/abcmap'} target={'_blank'} rel="noreferrer">
-              <img src={utipLogo} alt={'uTip'} className={Cls.utipImage} />
-            </a>
-          </div>
-        </div>
-
-        <div className={Cls.fundingMedium}>
-          <div className={'mb-3'} dangerouslySetInnerHTML={{ __html: t('With_tipeee') }} />
-          <div className={Cls.logo}>
-            <a href={'https://fr.tipeee.com/abc-map'} target={'_blank'} rel="noreferrer">
-              <img src={tipeeeLogo} alt={'Tipeee'} className={Cls.tipeeeImage} />
-            </a>
           </div>
         </div>
       </div>

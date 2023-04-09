@@ -31,7 +31,7 @@ import { IconDefs } from '../../../../../components/icon/IconDefs';
 
 const logger = Logger.get('CommonActions.tsx');
 
-const t = prefixedTranslation('MapView:ToolSelector.');
+const t = prefixedTranslation('MapView:');
 
 function CommonActions() {
   const { geo, toasts, history } = useServices();

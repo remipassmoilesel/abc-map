@@ -38,6 +38,7 @@ import { FeatureWrapper } from './features/FeatureWrapper';
 import { Point } from 'ol/geom';
 import { UpdateStyleChangeset } from '../history/changesets/features/UpdateStyleChangeset';
 import { HistoryKey } from '../history/HistoryKey';
+import { GeoServiceErrors } from './GeoServiceErrors';
 
 geoLogger.disable();
 mapLogger.disable();
@@ -347,6 +348,19 @@ describe('GeoService', () => {
         // Assert
         expect(result).toEqual([-5810242.794404252, 6034305.735038247, 7288727.539464668, 16806543.64439309]);
       });
+
+      it('should throw if projection not found', async () => {
+        // Prepare
+        apiClient.get.resolves({ data: undefined });
+
+        // Act
+        const err: Error = await service.loadProjection('EPSG:999999999999').catch((err) => err);
+
+        // Assert
+        expect(err).toBeInstanceOf(Error);
+        expect(err.message).toEqual('Projection not found: EPSG:999999999999');
+        expect(GeoServiceErrors.isProjectionNotFound(err)).toEqual(true);
+      });
     });
 
     describe('updateSelectedFeatures()', () => {
@@ -396,7 +410,18 @@ describe('GeoService', () => {
         service.updateSelectedFeatures(handler);
 
         // Assert
-        expect(history.register.args).toEqual([[HistoryKey.Map, new UpdateStyleChangeset([{ feature: f1, before: f1Style, after: { zIndex: 5 } }])]]);
+        expect(history.register.args).toEqual([
+          [
+            HistoryKey.Map,
+            new UpdateStyleChangeset([
+              {
+                feature: f1,
+                before: f1Style,
+                after: { zIndex: 5 },
+              },
+            ]),
+          ],
+        ]);
       });
 
       it('should not register changeset if style change', () => {

@@ -245,12 +245,12 @@ export function StaticExportView() {
         switch (format) {
           case ExportFormat.PDF:
             result = await renderer.renderLayoutsAsPdf(layouts, geo.getMainMap());
-            FileIO.outputBlob(result, 'map.pdf');
+            FileIO.downloadBlob(result, 'map.pdf');
             break;
 
           case ExportFormat.PNG:
             result = await renderer.renderLayoutsAsPng(layouts, geo.getMainMap());
-            FileIO.outputBlob(result, 'map.zip');
+            FileIO.downloadBlob(result, 'map.zip');
             break;
 
           default:

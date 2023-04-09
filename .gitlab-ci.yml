@@ -12,7 +12,7 @@
 image: registry.gitlab.com/abc-map/abc-map/build-image:v0.23
 
 variables:
-  CI: "true"
+  CI: 'true'
 
 cache:
   key: $CI_PROJECT_ID
@@ -41,8 +41,8 @@ light continuous integration:
     expire_in: 1 week
     when: always
     paths:
-      - "packages/e2e-tests/screenshots"
-      - "packages/e2e-tests/generated"
+      - 'packages/e2e-tests/screenshots'
+      - 'packages/e2e-tests/generated'
   except:
     variables:
       - $ABC_FULL_CI
@@ -61,8 +61,8 @@ full continuous integration:
     expire_in: 1 week
     when: always
     paths:
-      - "packages/e2e-tests/screenshots"
-      - "packages/e2e-tests/generated"
+      - 'packages/e2e-tests/screenshots'
+      - 'packages/e2e-tests/generated'
   only:
     variables:
       - $ABC_FULL_CI

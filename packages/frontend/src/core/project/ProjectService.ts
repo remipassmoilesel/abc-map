@@ -107,6 +107,14 @@ export class ProjectService {
     logger.info('New project created');
   }
 
+  /**
+   * Download then load project.
+   *
+   * If no password specified, user will be prompted if needed.
+   *
+   * @param id
+   * @param password
+   */
   public loadPrivateProject(id: string, password?: string): Promise<void> {
     return this.findById(id).then((blob) => {
       if (!blob) {
@@ -157,7 +165,7 @@ export class ProjectService {
     let password = _password;
     if (!manifest.metadata.public && Encryption.manifestContainsCredentials(manifest) && !password) {
       const witness = Encryption.extractEncryptedData(manifest);
-      const ev = await this.modals.getProjectPassword(witness || '');
+      const ev = await this.modals.promptProjectPassword(witness || '');
       const canceled = ev.status === ModalStatus.Canceled;
       password = ev.value;
       if (canceled || !password) {
@@ -221,7 +229,7 @@ export class ProjectService {
 
     let password = this.passwordCache.get();
     if (shouldBeEncrypted && !password) {
-      const event = await this.modals.setProjectPassword();
+      const event = await this.modals.createProjectPassword();
       if (event.status === ModalStatus.Canceled) {
         return ProjectStatus.Canceled;
       }
@@ -450,8 +458,11 @@ export class ProjectService {
     this.store.dispatch(ProjectActions.setView(view));
   }
 
-  public getPublicLink(): string {
-    const projectId = this.store.getState().project.metadata.id;
+  public getPublicLink(_projectId?: string): string {
+    const projectId = _projectId ?? this.store.getState().project.metadata.id;
+    if (!projectId) {
+      throw new Error('Invalid project id: ' + projectId);
+    }
     return `${window.location.protocol}//${window.location.host}${Routes.sharedMap().withParams({ projectId })}`;
   }
 

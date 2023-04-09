@@ -15,8 +15,8 @@
     "e2e:ci:3005": "cypress run --browser chromium --headless",
     "e2e:interactive:10082": "ABC_CYPRESS_BASE_URL=http://localhost:10082 cypress open --browser chromium",
     "e2e:interactive:3005": "cypress open --browser chromium",
-    "lint": "eslint 'src/**/*.ts' --max-warnings=0",
-    "lint-fix": "yarn run lint --fix",
+    "lint": "prettier --loglevel warn --check . && eslint './src/**/{*.tsx,*.ts}' --max-warnings=0",
+    "lint-fix": "prettier --loglevel warn --write . && eslint './src/**/{*.tsx,*.ts}' --max-warnings=0 --fix",
     "watch": "tsc --watch | sed -u 's/\\x1Bc//g'"
   },
   "dependencies": {
@@ -33,10 +33,9 @@
     "cypress-log-to-output": "^1.1.2",
     "dependency-cruiser": "^12.1.1",
     "eslint": "^8.30.0",
-    "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-cypress": "^2.12.1",
     "eslint-plugin-no-only-tests": "^3.1.0",
-    "eslint-plugin-prettier": "^4.2.1",
+    "nanoid": "^4.0.0",
     "pixelmatch": "^5.3.0",
     "pngjs": "^6.0.0",
     "prettier": "^2.8.1",

@@ -26,7 +26,7 @@ import { HistoryKeyboardListener } from '../../core/ui/HistoryKeyboardListener';
 
 const logger = Logger.get('MapKeyboardListener.ts');
 
-const t = prefixedTranslation('core:MapKeyboardListener.');
+const t = prefixedTranslation('MapKeyboardListener:');
 
 export class MainMapKeyboardListener {
   public static create() {

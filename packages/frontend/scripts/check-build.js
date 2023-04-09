@@ -17,7 +17,6 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-
 /*
 
 This script check that build "looks" correct. With React CRA, sometimes build can fail silently, without emitting

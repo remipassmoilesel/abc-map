@@ -50,7 +50,7 @@ interface State {
   loading: boolean;
 }
 
-const t = prefixedTranslation('MapView:AddLayerModal.');
+const t = prefixedTranslation('MapView:');
 
 class WmsLayerPanel extends Component<Props, State> {
   constructor(props: Props) {

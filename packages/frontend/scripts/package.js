@@ -4,9 +4,8 @@
  * This script copy frontend build result to backend.
  */
 
-const {execSync} = require('child_process');
+const { execSync } = require('child_process');
 const path = require('path');
-
 
 const sourceDir = path.resolve(`${__dirname}/../build`);
 const targetDir = path.resolve(`${__dirname}/../../server/public`);
@@ -18,4 +17,3 @@ execSync(`mkdir -p ${targetDir}/assets`);
 execSync(`cp -R ${sourceDir}/* ${targetDir}/assets`);
 execSync(`mv ${targetDir}/assets/index.html ${targetDir}/index.html`);
 execSync(`mv ${targetDir}/assets/error429.html ${targetDir}/error429.html`);
-

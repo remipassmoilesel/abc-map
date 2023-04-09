@@ -9,26 +9,26 @@ module.exports = {
         'your solution (i.e. use dependency inversion, make sure the modules have a single responsibility) ',
       from: {},
       to: {
-        circular: true
-      }
+        circular: true,
+      },
     },
     {
       name: 'no-orphans',
       comment:
         "This is an orphan module - it's likely not used (anymore?). Either use it or " +
         "remove it. If it's logical this module is an orphan (i.e. it's a config file), " +
-        "add an exception for it in your dependency-cruiser configuration. By default " +
-        "this rule does not scrutinize dotfiles (e.g. .eslintrc.js), TypeScript declaration " +
-        "files (.d.ts), tsconfig.json and some of the babel and webpack configs.",
+        'add an exception for it in your dependency-cruiser configuration. By default ' +
+        'this rule does not scrutinize dotfiles (e.g. .eslintrc.js), TypeScript declaration ' +
+        'files (.d.ts), tsconfig.json and some of the babel and webpack configs.',
       severity: 'error',
       from: {
         orphan: true,
         pathNot: [
           '(^|/)\\.[^/]+\\.(js|cjs|mjs|ts|json)$', // dot files
-          '\\.d\\.ts$',                            // TypeScript declaration files
-          '(^|/)tsconfig\\.json$',                 // TypeScript config
-          '(^|/)(babel|webpack)\\.config\\.(js|cjs|mjs|ts|json)$' // other configs
-        ]
+          '\\.d\\.ts$', // TypeScript declaration files
+          '(^|/)tsconfig\\.json$', // TypeScript config
+          '(^|/)(babel|webpack)\\.config\\.(js|cjs|mjs|ts|json)$', // other configs
+        ],
       },
       to: {},
     },
@@ -40,23 +40,21 @@ module.exports = {
       severity: 'error',
       from: {},
       to: {
-        dependencyTypes: [
-          'core'
-        ],
+        dependencyTypes: ['core'],
         path: [
-          '^(v8\/tools\/codemap)$',
-          '^(v8\/tools\/consarray)$',
-          '^(v8\/tools\/csvparser)$',
-          '^(v8\/tools\/logreader)$',
-          '^(v8\/tools\/profile_view)$',
-          '^(v8\/tools\/profile)$',
-          '^(v8\/tools\/SourceMap)$',
-          '^(v8\/tools\/splaytree)$',
-          '^(v8\/tools\/tickprocessor-driver)$',
-          '^(v8\/tools\/tickprocessor)$',
-          '^(node-inspect\/lib\/_inspect)$',
-          '^(node-inspect\/lib\/internal\/inspect_client)$',
-          '^(node-inspect\/lib\/internal\/inspect_repl)$',
+          '^(v8/tools/codemap)$',
+          '^(v8/tools/consarray)$',
+          '^(v8/tools/csvparser)$',
+          '^(v8/tools/logreader)$',
+          '^(v8/tools/profile_view)$',
+          '^(v8/tools/profile)$',
+          '^(v8/tools/SourceMap)$',
+          '^(v8/tools/splaytree)$',
+          '^(v8/tools/tickprocessor-driver)$',
+          '^(v8/tools/tickprocessor)$',
+          '^(node-inspect/lib/_inspect)$',
+          '^(node-inspect/lib/internal/inspect_client)$',
+          '^(node-inspect/lib/internal/inspect_repl)$',
           '^(async_hooks)$',
           '^(assert)$',
           '^(punycode)$',
@@ -64,9 +62,9 @@ module.exports = {
           '^(constants)$',
           '^(sys)$',
           '^(_linklist)$',
-          '^(_stream_wrap)$'
+          '^(_stream_wrap)$',
         ],
-      }
+      },
     },
     {
       name: 'not-to-deprecated',
@@ -76,10 +74,8 @@ module.exports = {
       severity: 'error',
       from: {},
       to: {
-        dependencyTypes: [
-          'deprecated'
-        ]
-      }
+        dependencyTypes: ['deprecated'],
+      },
     },
     {
       name: 'no-non-package-json',
@@ -87,15 +83,12 @@ module.exports = {
       comment:
         "This module depends on an npm package that isn't in the 'dependencies' section of your package.json. " +
         "That's problematic as the package either (1) won't be available on live (2 - worse) will be " +
-        "available on live with an non-guaranteed version. Fix it by adding the package to the dependencies " +
-        "in your package.json.",
+        'available on live with an non-guaranteed version. Fix it by adding the package to the dependencies ' +
+        'in your package.json.',
       from: {},
       to: {
-        dependencyTypes: [
-          'npm-no-pkg',
-          'npm-unknown'
-        ]
-      }
+        dependencyTypes: ['npm-no-pkg', 'npm-unknown'],
+      },
     },
     {
       name: 'not-to-unresolvable',
@@ -105,20 +98,20 @@ module.exports = {
       severity: 'error',
       from: {},
       to: {
-        couldNotResolve: true
-      }
+        couldNotResolve: true,
+      },
     },
     {
       name: 'no-duplicate-dep-types',
       comment:
         "Likeley this module depends on an external ('npm') package that occurs more than once " +
-        "in your package.json i.e. bot as a devDependencies and in dependencies. This will cause " +
-        "maintenance problems later on.",
+        'in your package.json i.e. bot as a devDependencies and in dependencies. This will cause ' +
+        'maintenance problems later on.',
       severity: 'error',
       from: {},
       to: {
-        moreThanOneDependencyType: true
-      }
+        moreThanOneDependencyType: true,
+      },
     },
 
     /* rules you might want to tweak for your specific situation: */
@@ -131,8 +124,8 @@ module.exports = {
       severity: 'error',
       from: {},
       to: {
-        path: '\\.(spec|test)\\.(js|mjs|cjs|ts|ls|coffee|litcoffee|coffee\\.md)$'
-      }
+        path: '\\.(spec|test)\\.(js|mjs|cjs|ts|ls|coffee|litcoffee|coffee\\.md)$',
+      },
     },
     {
       name: 'not-to-dev-dep',
@@ -145,60 +138,47 @@ module.exports = {
         'from.pathNot re of the not-to-dev-dep rule in the dependency-cruiser configuration',
       from: {
         path: '^(src)',
-        pathNot: '\\.(spec|test)\\.(js|mjs|cjs|ts|ls|coffee|litcoffee|coffee\\.md)$'
+        pathNot: '\\.(spec|test)\\.(js|mjs|cjs|ts|ls|coffee|litcoffee|coffee\\.md)$',
       },
       to: {
-        dependencyTypes: [
-          'npm-dev'
-        ]
-      }
+        dependencyTypes: ['npm-dev'],
+      },
     },
     {
       name: 'optional-deps-used',
       severity: 'info',
       comment:
-        "This module depends on an npm package that is declared as an optional dependency " +
+        'This module depends on an npm package that is declared as an optional dependency ' +
         "in your package.json. As this makes sense in limited situations only, it's flagged here. " +
         "If you're using an optional dependency here by design - add an exception to your" +
-        "depdency-cruiser configuration.",
+        'depdency-cruiser configuration.',
       from: {},
       to: {
-        dependencyTypes: [
-          'npm-optional'
-        ]
-      }
+        dependencyTypes: ['npm-optional'],
+      },
     },
     {
       name: 'peer-deps-used',
       comment:
-        "This module depends on an npm package that is declared as a peer dependency " +
-        "in your package.json. This makes sense if your package is e.g. a plugin, but in " +
-        "other cases - maybe not so much. If the use of a peer dependency is intentional " +
-        "add an exception to your dependency-cruiser configuration.",
+        'This module depends on an npm package that is declared as a peer dependency ' +
+        'in your package.json. This makes sense if your package is e.g. a plugin, but in ' +
+        'other cases - maybe not so much. If the use of a peer dependency is intentional ' +
+        'add an exception to your dependency-cruiser configuration.',
       severity: 'error',
       from: {},
       to: {
-        dependencyTypes: [
-          'npm-peer'
-        ]
-      }
-    }
+        dependencyTypes: ['npm-peer'],
+      },
+    },
   ],
   options: {
     doNotFollow: {
       path: 'node_modules',
-      dependencyTypes: [
-        'npm',
-        'npm-dev',
-        'npm-optional',
-        'npm-peer',
-        'npm-bundled',
-        'npm-no-pkg'
-      ]
+      dependencyTypes: ['npm', 'npm-dev', 'npm-optional', 'npm-peer', 'npm-bundled', 'npm-no-pkg'],
     },
     tsPreCompilationDeps: true,
     tsConfig: {
-      fileName: 'tsconfig.json'
+      fileName: 'tsconfig.json',
     },
     reporterOptions: {
       dot: {
@@ -206,7 +186,7 @@ module.exports = {
       },
       archi: {
         collapsePattern: '^(node_modules|packages|src|lib|app|bin|test(s?)|spec(s?))/[^/]+',
-      }
-    }
-  }
+      },
+    },
+  },
 };

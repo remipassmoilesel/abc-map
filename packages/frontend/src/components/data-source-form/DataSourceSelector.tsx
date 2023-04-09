@@ -158,7 +158,7 @@ class DataSourceSelector extends Component<Props, State> {
   private handleImportFile = () => {
     const { toasts } = this.props.services;
 
-    FileIO.openInput(InputType.Single, '.csv')
+    FileIO.openPrompt(InputType.Single, '.csv')
       .then((res) => {
         if (res.type !== InputResultType.Confirmed) {
           return;
