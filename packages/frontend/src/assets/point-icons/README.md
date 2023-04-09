@@ -1,10 +1,11 @@
 # Point icons
 
-Warning:             
+Warning:
+
 - All files here must be suffixed with `.inline.svg`
 - All files here will be inlined in js code so for the moment we must limit the icon number
 
-If icons are created or edited with Inkscape, you must delete `namedview` and `metadata`:      
+If icons are created or edited with Inkscape, you must delete `namedview` and `metadata`:
 
 ```
   <sodipodi:namedview
@@ -27,7 +28,7 @@ If icons are created or edited with Inkscape, you must delete `namedview` and `m
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1" />
-     
+
   <metadata
      id="metadata5">
     <rdf:RDF>

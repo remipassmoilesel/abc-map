@@ -23,6 +23,7 @@ import { FillPatterns, ProjectConstants, UserStatus } from '@abc-map/shared';
 import { MainState } from '../reducer';
 import { IconName } from '../../../assets/point-icons/IconName';
 import { deepFreeze } from '../../utils/deepFreeze';
+import { DateTime } from 'luxon';
 
 describe('StorePersistence', () => {
   let storage: LocalStorageService;
@@ -65,6 +66,8 @@ describe('StorePersistence', () => {
           },
           activeId: 'test-active-view-id',
         },
+        lastSaveOnline: DateTime.now(),
+        lastExport: DateTime.now(),
       },
       map: {
         currentStyle: {
@@ -166,6 +169,8 @@ describe('StorePersistence', () => {
           // Active view may have 'disappear'
           activeId: undefined,
         },
+        lastSaveOnline: null,
+        lastExport: null,
       },
       map: {
         currentStyle: {

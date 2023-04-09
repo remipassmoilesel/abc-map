@@ -21,7 +21,7 @@ import React, { ReactNode, useCallback, useEffect, useRef, useState } from 'reac
 import { Logger } from '@abc-map/shared';
 import { TopBarLink } from './link/TopBarLink';
 import MainIcon from '../../assets/main-icon.svg';
-import LangSelector from './lang-selector/LangSelector';
+import { LanguageMenu } from './language-menu/LanguageMenu';
 import { UserMenu } from './user-menu/UserMenu';
 import { Routes } from '../../routes';
 import { useNavigate } from 'react-router-dom';
@@ -34,6 +34,7 @@ import Grid from './grid.svg';
 import { getRemSize } from '../../core/ui/getRemSize';
 import { ResizeObserverFactory } from '../../core/utils/ResizeObserverFactory';
 import debounce from 'lodash/debounce';
+import { ProjectMenu } from './project-menu/ProjectMenu';
 
 const logger = Logger.get('TopBar.tsx');
 
@@ -164,7 +165,11 @@ function TopBar() {
 
       <div className={Cls.verticalBorder} />
 
-      <LangSelector />
+      <ProjectMenu />
+
+      <div className={Cls.verticalBorder} />
+
+      <LanguageMenu />
 
       <div className={Cls.verticalBorder} />
 

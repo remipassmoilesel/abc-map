@@ -59,7 +59,7 @@ export class FromV020ToV030 implements ProjectMigration {
     const title = 'Mot de passe';
     const message = `Désormais toutes les couches WMS sont chiffrées. Veuillez saisir un mot de passe,
       ce mot de passe vous sera demandé pour ouvrir le projet.`;
-    const password = await this.modalService.setPasswordModal(title, message);
+    const password = await this.modalService.createPassword(title, message);
     if (password.status !== ModalStatus.Confirmed || !password.value) {
       return Promise.reject(new Error('Password is mandatory'));
     }

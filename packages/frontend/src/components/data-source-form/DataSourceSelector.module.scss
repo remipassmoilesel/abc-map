@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-@import "src/styles/variables";
+@import 'src/styles/variables';
 
 .dataSourceSelector {
   display: flex;
@@ -34,7 +34,7 @@
   margin-right: 1.8rem;
   cursor: pointer;
 
-  input[type="radio"] {
+  input[type='radio'] {
     margin-right: 0.8rem;
   }
 }

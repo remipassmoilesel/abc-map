@@ -34,7 +34,7 @@ import { EmptyWmsValues, EmptyWmtsValues } from './AddLayerModal.empty-values';
 import { useAppSelector } from '../../../../core/store/hooks';
 
 const logger = Logger.get('AddLayerModal.tsx');
-const t = prefixedTranslation('MapView:AddLayerModal.');
+const t = prefixedTranslation('MapView:');
 
 interface Props {
   visible: boolean;

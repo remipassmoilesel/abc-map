@@ -89,6 +89,8 @@ export class StorePersistence {
     cleanState.project.sharedViews.activeId = undefined;
     cleanState.project.sharedViews.mapDimensions.width = 0;
     cleanState.project.sharedViews.mapDimensions.height = 0;
+    cleanState.project.lastSaveOnline = null;
+    cleanState.project.lastExport = null;
 
     try {
       const serializedState = JSON.stringify(cleanState);

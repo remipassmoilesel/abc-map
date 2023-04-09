@@ -16,11 +16,12 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as uuid from 'uuid-random';
 import Chainable = Cypress.Chainable;
 import { Routes } from './Routes';
 import { UrlHelper } from './UrlHelper';
+import { customAlphabet } from 'nanoid';
 
+const emailIdGenerator = customAlphabet('0123456789abcdefghijklmnopqrstuvwxyz', 15);
 const defaultPassword = 'azerty1234';
 
 export class Registration {
@@ -29,7 +30,7 @@ export class Registration {
   }
 
   public static newEmail() {
-    return `e2e-${uuid().substr(24)}@abc-map.fr`;
+    return `e2e-${emailIdGenerator()}@abc-map.fr`;
   }
 
   public static newUser(email: string): Chainable<any> {

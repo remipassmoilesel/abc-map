@@ -20,7 +20,7 @@ import { AbcTextFrame } from '@abc-map/shared';
 import { nanoid } from 'nanoid';
 import { prefixedTranslation } from '../../i18n/i18n';
 
-const t = prefixedTranslation('core:TextFrameFactory.');
+const t = prefixedTranslation('TextFrameFactory:');
 
 export class TextFrameFactory {
   public static newFrame(): AbcTextFrame {

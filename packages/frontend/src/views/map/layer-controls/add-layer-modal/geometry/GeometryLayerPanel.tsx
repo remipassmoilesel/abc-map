@@ -32,7 +32,7 @@ interface Props extends ServiceProps {
   onConfirm: () => void;
 }
 
-const t = prefixedTranslation('MapView:AddLayerModal.');
+const t = prefixedTranslation('MapView:');
 
 class GeometryLayerPanel extends Component<Props, {}> {
   public render(): ReactNode {

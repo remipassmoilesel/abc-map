@@ -1,0 +1,51 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EmailService confirmRegistration() EN 1`] = `
+"
+          <p>Hi !</p>
+          <p>To activate your Abc-Map account, please <a href=\\"http://localhost:10082/en/confirm-account/confirm-registration-token\\" data-cy=\\"enable-account-link\\">click on this link.</a></p>
+          
+  <p>&nbsp;</p>
+  <small>This is an automatic message, sent by the platform <a href=\\"http://localhost:10082\\">http://localhost:10082</a>.
+  You cannot reply to this message.</small>
+
+        "
+`;
+
+exports[`EmailService confirmRegistration() FR 1`] = `
+"
+          <p>Bonjour !</p>
+          <p>Pour activer votre compte Abc-Map, veuillez <a href=\\"http://localhost:10082/fr/confirm-account/confirm-registration-token\\" data-cy=\\"enable-account-link\\">cliquer sur ce lien.</a></p>
+          
+  <p>&nbsp;</p>
+  <small>Ceci est un message automatique, envoyé par la plateforme <a href=\\"http://localhost:10082\\">http://localhost:10082</a>.
+  Vous ne pouvez pas répondre à ce message.</small>
+
+        "
+`;
+
+exports[`EmailService resetPassword() EN 1`] = `
+"
+          <p>Hi !</p>
+          <p>To reset your Abc-Map password, please <a href=\\"http://localhost:10082/en/reset-password/reset-password-token\\" data-cy=\\"reset-password-link\\">click on this link.</a></p>
+          <p>If you are not the initiator of this request, ignore this message.</p>
+          
+  <p>&nbsp;</p>
+  <small>This is an automatic message, sent by the platform <a href=\\"http://localhost:10082\\">http://localhost:10082</a>.
+  You cannot reply to this message.</small>
+
+        "
+`;
+
+exports[`EmailService resetPassword() FR 1`] = `
+"
+          <p>Bonjour !</p>
+          <p>Pour réinitialiser votre mot de passe Abc-Map, veuillez <a href=\\"http://localhost:10082/fr/reset-password/reset-password-token\\" data-cy=\\"reset-password-link\\">cliquer sur ce lien.</a></p>
+          <p>Si vous n'êtes pas à l'origine de cette demande, ne tenez pas compte de ce message.</p>
+          
+  <p>&nbsp;</p>
+  <small>Ceci est un message automatique, envoyé par la plateforme <a href=\\"http://localhost:10082\\">http://localhost:10082</a>.
+  Vous ne pouvez pas répondre à ce message.</small>
+
+        "
+`;

@@ -37,7 +37,7 @@ const defaultOptions: ToastOptions = {
   icon: false,
 };
 
-const t = prefixedTranslation('core:ToastService.');
+const t = prefixedTranslation('ToastService:');
 
 export class ToastService {
   /**

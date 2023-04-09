@@ -54,7 +54,7 @@ export class LayerControls {
   }
 
   public static addVectorLayer(): Cypress.Chainable<any> {
-    const option = 'Couche de formes';
+    const option = 'Geometry layer';
     return cy.get('[data-cy=add-layer]').click().get('[data-cy=add-layer-type]').select(option).get('[data-cy=add-layer-confirm]').click();
   }
 

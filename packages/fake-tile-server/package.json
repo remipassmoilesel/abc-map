@@ -1,0 +1,17 @@
+{
+  "name": "@abc-map/fake-tile-server",
+  "version": "1.0.0",
+  "private": true,
+  "license": "AGPL-3.0-or-later",
+  "scripts": {
+    "lint": "prettier --loglevel warn --check .",
+    "lint-fix": "prettier --loglevel warn --write .",
+    "start:ci": "node main.js",
+    "start:watch": "node main.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.2",
+    "express-basic-auth": "^1.2.1"
+  }
+}

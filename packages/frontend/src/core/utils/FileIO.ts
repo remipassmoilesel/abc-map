@@ -52,7 +52,7 @@ export class FileIO {
    * @param type
    * @param accept
    */
-  public static openInput(type = InputType.Single, accept?: string): Promise<FileInputResult> {
+  public static openPrompt(type = InputType.Single, accept?: string): Promise<FileInputResult> {
     const fileNode = document.createElement('input');
     fileNode.setAttribute('type', 'file');
     fileNode.multiple = type === InputType.Multiple;
@@ -80,11 +80,11 @@ export class FileIO {
     });
   }
 
-  public static outputBlob(blob: Blob, name: string): void {
-    this.outputString(URL.createObjectURL(blob), name);
+  public static downloadBlob(blob: Blob, name: string): void {
+    this.downloadDataString(URL.createObjectURL(blob), name);
   }
 
-  public static outputString(dataStr: string, name: string): void {
+  public static downloadDataString(dataStr: string, name: string): void {
     const anchor = document.createElement('a');
     anchor.style.display = 'none';
     anchor.setAttribute('href', dataStr);

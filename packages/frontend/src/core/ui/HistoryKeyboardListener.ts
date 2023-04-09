@@ -24,7 +24,7 @@ import { getServices, Services } from '../Services';
 
 const logger = Logger.get('HistoryKeyboardListener.ts');
 
-const t = prefixedTranslation('core:HistoryKeyboardListener.');
+const t = prefixedTranslation('HistoryKeyboardListener:');
 
 export class HistoryKeyboardListener {
   public static create(key: HistoryKey) {

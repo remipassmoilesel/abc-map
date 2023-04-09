@@ -22,6 +22,7 @@ import { AbcView } from '@abc-map/shared/build/project/AbcView';
 import { Views } from '../../geo/Views';
 import { AbcSharedView } from '@abc-map/shared';
 import { DimensionsPx } from '../../utils/DimensionsPx';
+import { DateTime } from 'luxon';
 
 /**
  * This state must not contain heavy data (like layer data), because it is persisted in local storage.
@@ -64,6 +65,9 @@ export interface ProjectState {
      */
     activeId?: string;
   };
+
+  lastSaveOnline: DateTime | null;
+  lastExport: DateTime | null;
 }
 
 // This state will be replaced by a new projet on bootstrap
@@ -78,4 +82,6 @@ export const projectInitialState: ProjectState = {
     mapDimensions: { width: 0, height: 0 },
     list: [],
   },
+  lastSaveOnline: null,
+  lastExport: null,
 };

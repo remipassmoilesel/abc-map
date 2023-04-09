@@ -25,7 +25,7 @@ import { prefixedTranslation } from '../../../i18n/i18n';
 
 const logger = Logger.get('FullscreenButton.tsx');
 
-const t = prefixedTranslation('MapView:FullscreenButton.');
+const t = prefixedTranslation('MapView:');
 
 interface Props {
   style: CSSProperties;

@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-@import "src/styles/mixins";
+@import 'src/styles/mixins';
 
 .fundingLinks {
   display: flex;
@@ -58,14 +58,6 @@
 
     @include media-breakpoint-down(xl) {
       height: 10vmin;
-    }
-  }
-
-  .utipImage {
-    height: 9vmin;
-
-    @include media-breakpoint-down(xl) {
-      height: 14vmin;
     }
   }
 

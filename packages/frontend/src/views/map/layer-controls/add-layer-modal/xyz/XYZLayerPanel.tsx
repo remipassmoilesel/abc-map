@@ -31,7 +31,7 @@ import { useServices } from '../../../../../core/useServices';
 
 const logger = Logger.get('XYZLayerPanel.tsx');
 
-const t = prefixedTranslation('MapView:AddLayerModal.');
+const t = prefixedTranslation('MapView:');
 
 interface Props {
   url: string;

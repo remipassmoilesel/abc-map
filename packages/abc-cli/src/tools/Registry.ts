@@ -58,11 +58,17 @@ export class Registry {
 
       const options = {
         resources: [this.config.registryUrl()],
-        timeout: 2_000,
+        timeout: 20_000,
+        verbose: false,
       };
+      const registry = new RegistryProcess(startCmd);
+
       waitOn(options)
-        .then(() => resolve(new RegistryProcess(startCmd)))
-        .catch(reject);
+        .then(() => resolve(registry))
+        .catch((err) => {
+          registry.terminate();
+          reject(err);
+        });
     });
   }
 }

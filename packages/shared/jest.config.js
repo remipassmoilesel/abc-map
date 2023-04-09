@@ -11,5 +11,5 @@ module.exports = {
   coverageReporters: ['text', 'html'],
   errorOnDeprecated: true,
   roots: ['src'],
-  setupFiles: ['./scripts/test-setup.js']
+  setupFiles: ['./scripts/test-setup.js'],
 };

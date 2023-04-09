@@ -32,7 +32,7 @@ interface Props {
   type: LayerType;
 }
 
-const t = prefixedTranslation('MapView:AddLayerModal.');
+const t = prefixedTranslation('MapView:');
 
 class HelpPanel extends Component<Props, {}> {
   public render(): ReactNode {

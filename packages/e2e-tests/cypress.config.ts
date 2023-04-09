@@ -16,11 +16,11 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {defineConfig} from 'cypress'
-import {BrowserConfig} from "./src/plugins/BrowserConfig";
-import {PngComparison} from "./src/plugins/PngComparison";
-import {DebugOutput} from "./src/plugins/DebugOutput";
-import * as path from "path";
+import { defineConfig } from 'cypress';
+import { BrowserConfig } from './src/plugins/BrowserConfig';
+import { PngComparison } from './src/plugins/PngComparison';
+import { DebugOutput } from './src/plugins/DebugOutput';
+import * as path from 'path';
 
 const baseUrl = process.env.ABC_CYPRESS_BASE_URL || 'http://localhost:3005';
 
@@ -44,6 +44,6 @@ export default defineConfig({
   },
   retries: {
     openMode: 0,
-    runMode: 3
-  }
-})
+    runMode: 3,
+  },
+});

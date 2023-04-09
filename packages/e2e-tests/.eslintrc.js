@@ -1,71 +1,49 @@
 module.exports = {
-  "extends": [
-    "eslint:recommended",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:prettier/recommended",
-    "prettier"
-  ],
-  "plugins": [
-    "no-only-tests",
-    "@typescript-eslint",
-    "cypress",
-    "prettier"
-  ],
-  "env": {
-    "node": true,
-    "mocha": true,
-    "es6": true,
-    "cypress/globals": true
+  extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended'],
+  plugins: ['no-only-tests', '@typescript-eslint', 'cypress'],
+  env: {
+    node: true,
+    mocha: true,
+    es6: true,
+    'cypress/globals': true,
   },
-  "parser": "@typescript-eslint/parser",
-  "parserOptions": {
-    "project": "./tsconfig.json"
+  parser: '@typescript-eslint/parser',
+  parserOptions: {
+    project: './tsconfig.json',
   },
-  "rules": {
-    "no-only-tests/no-only-tests": "error",
-    "no-console": 1,
-    "prettier/prettier": [
-      "error",
+  rules: {
+    'no-only-tests/no-only-tests': 'error',
+    'no-console': 1,
+    '@typescript-eslint/explicit-module-boundary-types': 0,
+    '@typescript-eslint/no-explicit-any': 0,
+    '@typescript-eslint/ban-types': 0,
+    '@typescript-eslint/explicit-member-accessibility': [
+      'error',
       {
-        "singleQuote": true
-      }
+        accessibility: 'explicit',
+        overrides: {
+          constructors: 'no-public',
+        },
+      },
     ],
-    "@typescript-eslint/explicit-module-boundary-types": 0,
-    "@typescript-eslint/no-explicit-any": 0,
-    "@typescript-eslint/ban-types": 0,
-    "@typescript-eslint/explicit-member-accessibility": [
-      "error",
+    '@typescript-eslint/no-use-before-define': [
+      'error',
       {
-        "accessibility": "explicit",
-        "overrides": {
-          "constructors": "no-public"
-        }
-      }
+        functions: false,
+        classes: false,
+      },
     ],
-    "@typescript-eslint/no-use-before-define": [
-      "error",
+    'prefer-promise-reject-errors': 'error',
+    'no-unused-vars': 'off',
+    '@typescript-eslint/no-unused-vars': [
+      'error',
       {
-        "functions": false,
-        "classes": false
-      }
+        varsIgnorePattern: 'logger',
+      },
     ],
-    "prefer-promise-reject-errors": "error",
-    "no-unused-vars": "off",
-    "@typescript-eslint/no-unused-vars": [
-      "error",
-      {
-        "varsIgnorePattern": "logger"
-      }
-    ],
-    "max-len": [
-      "error",
-      {
-        "code": 160
-      }
-    ],
-    "@typescript-eslint/no-floating-promises": ["error"],
-    "require-await": "error",
-    "@typescript-eslint/await-thenable": "error"
-  }
-}
-
+    'max-len': ['error', { code: 160 }],
+    '@typescript-eslint/no-floating-promises': ['error'],
+    'require-await': 'error',
+    '@typescript-eslint/await-thenable': 'error',
+  },
+};

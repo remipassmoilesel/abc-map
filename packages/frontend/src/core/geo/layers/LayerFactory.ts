@@ -32,7 +32,7 @@ import { WmsSettings, WmtsSettings } from './LayerFactory.types';
 import { prefixedTranslation } from '../../../i18n/i18n';
 import { DefaultStyleOptions } from '../styles/StyleFactoryOptions';
 
-const t = prefixedTranslation('core:LayerFactory.');
+const t = prefixedTranslation('LayerFactory:');
 
 export class LayerFactory {
   public static newPredefinedLayer(model: PredefinedLayerModel): PredefinedLayerWrapper {

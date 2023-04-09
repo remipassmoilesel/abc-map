@@ -61,7 +61,10 @@ export class PngComparison {
         const expectedContent = await Zipper.forNodeJS().unzip(fs.readFileSync(expectedZipPath));
 
         if (actualContent.length !== expectedContent.length) {
-          return { value: 1, message: `Not the same number of pages, actual=${actualContent.length} expected=${expectedContent.length}` };
+          return {
+            value: 1,
+            message: `Not the same number of pages, actual=${actualContent.length} expected=${expectedContent.length}`,
+          };
         }
 
         for (let i = 0; i < actualContent.length; i++) {
@@ -76,7 +79,9 @@ export class PngComparison {
           }
 
           const diff = new PNG({ width: actual.width, height: actual.height });
-          const numDiffPixels = pixelmatch(actual.data, expected.data, diff.data, expected.width, expected.height, { threshold: 0.1 });
+          const numDiffPixels = pixelmatch(actual.data, expected.data, diff.data, expected.width, expected.height, {
+            threshold: 0.1,
+          });
 
           if (numDiffPixels) {
             const diffPath = path.resolve(generatedFolder, `diff-${testId}.png`);

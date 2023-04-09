@@ -174,7 +174,8 @@ export class LayoutRenderer {
           <StaticAttributions map={map} ratio={ratio} />
 
           {/*resolve() will be called when div will be created, see: https://github.com/reactwg/react-18/discussions/5*/}
-          <div ref={() => resolve()} />
+          {/*  We leave a second more in order to avoid occasional CSS style loading errors */}
+          <div ref={() => setTimeout(resolve, 1000)} />
         </>
       );
     });

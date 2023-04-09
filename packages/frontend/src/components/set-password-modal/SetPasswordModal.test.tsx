@@ -62,7 +62,7 @@ describe('SetPasswordModal', () => {
     await act(() => screen.getByTestId('password-confirm').click());
 
     // Assert
-    expect(services.modals.dispatch.args).toEqual([[{ status: 'Confirmed', type: 'SetPasswordClosed', value: 'azerty1234' }]]);
+    expect(services.modals.dispatch.args).toEqual([[{ status: 'Confirmed', type: 'CreatePasswordClosed', value: 'azerty1234' }]]);
   });
 
   it('should not keep state after cancel', async () => {

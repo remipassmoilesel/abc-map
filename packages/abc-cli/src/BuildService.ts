@@ -186,15 +186,15 @@ export class BuildService {
   }
 
   public startServices(): void {
-    this.shell.sync('docker-compose up -d', { cwd: this.config.getDevServicesRoot() });
+    this.shell.sync('docker compose up -d', { cwd: this.config.getDevServicesRoot() });
   }
 
   public stopServices(): void {
-    this.shell.sync('docker-compose down', { cwd: this.config.getDevServicesRoot() });
+    this.shell.sync('docker compose down', { cwd: this.config.getDevServicesRoot() });
   }
 
   public cleanRestartServices(): void {
-    this.shell.sync('docker-compose down -v && docker-compose up -d', { cwd: this.config.getDevServicesRoot() });
+    this.shell.sync('docker compose down -v && docker compose up -d', { cwd: this.config.getDevServicesRoot() });
   }
 
   public clean(): void {
@@ -283,7 +283,10 @@ export class BuildService {
   }
 
   private getDockerConfigs(): DockerConfig[] {
-    const packages = glob.sync('**/package.json', { cwd: this.config.getProjectRoot(), ignore: ['**/node_modules/**'] });
+    const packages = glob.sync('**/package.json', {
+      cwd: this.config.getProjectRoot(),
+      ignore: ['**/node_modules/**'],
+    });
     return packages
       .map((p) => path.resolve(this.config.getProjectRoot(), p))
       .map((packagePath) => ({ packagePath, packageJson: require(packagePath) }))

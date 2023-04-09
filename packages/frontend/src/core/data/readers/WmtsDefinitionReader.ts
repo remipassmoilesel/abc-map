@@ -33,7 +33,7 @@ import { isOpenlayersProjection } from '../../utils/crossContextInstanceof';
 
 const logger = Logger.get('WmtsDefinitionReader.ts');
 
-const t = prefixedTranslation('core:DataReader.');
+const t = prefixedTranslation('DataReader:');
 
 export class WmtsDefinitionReader extends AbstractDataReader {
   constructor(private geo: GeoService, private modals: ModalService) {

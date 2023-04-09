@@ -22,6 +22,7 @@ import { ProjectState } from './state';
 import { TestHelper } from '../../utils/test/TestHelper';
 import { AbcLayout, AbcSharedView, AbcView } from '@abc-map/shared';
 import { deepFreeze } from '../../utils/deepFreeze';
+import { DateTime } from 'luxon';
 
 describe('Project reducer', function () {
   let initialState: ProjectState;
@@ -45,6 +46,8 @@ describe('Project reducer', function () {
         mapDimensions: { width: 800, height: 600 },
         activeId: 'test-active-share-view-id',
       },
+      lastSaveOnline: DateTime.now(),
+      lastExport: DateTime.now(),
     });
   });
 

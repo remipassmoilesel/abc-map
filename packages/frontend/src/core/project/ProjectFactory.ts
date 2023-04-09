@@ -22,7 +22,7 @@ import { DateTime } from 'luxon';
 import { Views } from '../geo/Views';
 import { prefixedTranslation } from '../../i18n/i18n';
 
-const t = prefixedTranslation('core:ProjectFactory.');
+const t = prefixedTranslation('ProjectFactory:');
 
 export class ProjectFactory {
   public static newProjectMetadata(): AbcProjectMetadata {

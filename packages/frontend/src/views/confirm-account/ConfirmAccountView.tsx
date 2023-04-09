@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ConfirmAccountParams, ConfirmationStatus, Logger } from '@abc-map/shared';
 import { Link, useParams } from 'react-router-dom';
 import { HttpError } from '../../core/http/HttpError';
@@ -36,12 +36,25 @@ function ConfirmAccountView() {
   const [status, setStatus] = useState(ConfirmationStatus.InProgress);
   const token = useParams<ConfirmAccountParams>().token;
 
-  const confirmRegistration = useCallback(() => {
+  useEffect(() => {
+    pageSetup(t('Registration_confirmation'));
+    addNoIndexMeta();
+
+    return () => removeNoIndexMeta();
+  }, []);
+
+  const confirmationInProgress = useRef(false);
+  useEffect(() => {
     if (!token) {
       setStatus(ConfirmationStatus.Failed);
       return;
     }
+    if (confirmationInProgress.current) {
+      logger.error('Confirmation already in progress');
+      return;
+    }
 
+    confirmationInProgress.current = true;
     authentication
       .confirmRegistration(token)
       .then((res) => setStatus(res.status))
@@ -55,17 +68,9 @@ function ConfirmAccountView() {
           toasts.genericError(err);
           setStatus(ConfirmationStatus.Failed);
         }
-      });
+      })
+      .finally(() => (confirmationInProgress.current = false));
   }, [authentication, toasts, token]);
-
-  useEffect(() => {
-    pageSetup(t('Registration_confirmation'));
-    addNoIndexMeta();
-
-    confirmRegistration();
-
-    return () => removeNoIndexMeta();
-  }, [confirmRegistration]);
 
   return (
     <div className={Cls.confirmAccount}>

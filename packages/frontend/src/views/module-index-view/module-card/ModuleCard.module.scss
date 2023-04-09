@@ -16,8 +16,8 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-@import "src/styles/variables";
-@import "src/styles/mixins";
+@import 'src/styles/variables';
+@import 'src/styles/mixins';
 
 .card {
   display: flex;
@@ -38,6 +38,8 @@
 
   border: solid 1px $gray-400;
   border-radius: 0.2rem;
+
+  box-shadow: $box-shadow;
 }
 
 .name {

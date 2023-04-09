@@ -19,7 +19,7 @@
 import Cls from './UserMenu.module.scss';
 import React, { useCallback, useState } from 'react';
 import { Dropdown } from 'react-bootstrap';
-import { Logger, UserStatus } from '@abc-map/shared';
+import { Logger } from '@abc-map/shared';
 import { useNavigate } from 'react-router-dom';
 import { prefixedTranslation } from '../../../i18n/i18n';
 import { Routes } from '../../../routes';
@@ -30,6 +30,7 @@ import ExperimentalFeaturesModal from '../experimental-features/ExperimentalFeat
 import { useAppSelector } from '../../../core/store/hooks';
 import { useServices } from '../../../core/useServices';
 import { useRunningAsPwa } from '../../../core/pwa/useRunningAsPwa';
+import { useIsUserAuthenticated } from '../../../core/authentication/useIsUserAuthenticated';
 
 const logger = Logger.get('UserMenu.tsx');
 
@@ -39,8 +40,7 @@ export function UserMenu() {
   const { modals, toasts, authentication, project } = useServices();
   const [experimentalFeaturesModal, setExperimentalFeaturesModal] = useState(false);
   const user = useAppSelector((st) => st.authentication.user);
-  const userStatus = useAppSelector((st) => st.authentication.userStatus);
-  const userAuthenticated = userStatus === UserStatus.Authenticated;
+  const userAuthenticated = useIsUserAuthenticated();
   const userLabel = user && userAuthenticated ? user.email : t('Hello_visitor');
   const experimentalFeaturesMenuEntry = ExperimentalFeatures.length > 0;
   const navigate = useNavigate();
@@ -103,7 +103,7 @@ export function UserMenu() {
       <Dropdown className={Cls.userMenu} align={'end'}>
         {/* Open button */}
         <Dropdown.Toggle variant="light" data-cy={'user-menu'}>
-          <FaIcon icon={IconDefs.faUserCircle} size={'1.7rem'} />
+          <FaIcon icon={IconDefs.faUserCircle} size={'1.7rem'} className={Cls.toggleIcon} />
         </Dropdown.Toggle>
 
         <Dropdown.Menu className={Cls.dropDown}>

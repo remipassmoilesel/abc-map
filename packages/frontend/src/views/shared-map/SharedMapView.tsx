@@ -244,7 +244,7 @@ function SharedMapView() {
         }
 
         showDownloadExplanation(true);
-        FileIO.outputBlob(exported.project, `project${ProjectConstants.FileExtension}`);
+        FileIO.downloadBlob(exported.project, `project${ProjectConstants.FileExtension}`);
       })
       .catch((err) => {
         toasts.genericError(err);

@@ -140,7 +140,7 @@ class DataTableView extends Component<Props, State> {
     toDownload.forEach((r) => delete r._id);
 
     CsvParser.unparse(toDownload, fileName)
-      .then((file) => FileIO.outputBlob(file, fileName))
+      .then((file) => FileIO.downloadBlob(file, fileName))
       .catch((err) => {
         logger.error(err);
         toasts.genericError();

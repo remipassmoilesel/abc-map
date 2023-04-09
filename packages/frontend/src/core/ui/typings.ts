@@ -24,7 +24,7 @@ export enum ModalEventType {
   ShowPasswordInput = 'ShowPasswordInput',
   PasswordInputClosed = 'PasswordInputClosed',
   ShowSetPassword = 'ShowSetPassword',
-  SetPasswordClosed = 'SetPasswordClosed',
+  CreatePasswordClosed = 'CreatePasswordClosed',
   ShowFeatureProperties = 'ShowFeatureProperties',
   FeaturePropertiesClosed = 'FeaturePropertiesClosed',
   ShowSolicitation = 'ShowSolicitation',
@@ -45,6 +45,8 @@ export enum ModalEventType {
   PromptVariablesClosed = 'PromptVariablesClosed',
   ShowPwaInstall = 'ShowPwaInstall',
   PwaInstallClosed = 'PwaInstallClosed',
+  ShowSimplePrompt = 'ShowSimplePrompt',
+  SimplePromptClosed = 'SimplePromptClosed',
 }
 
 export enum ModalStatus {
@@ -74,8 +76,8 @@ export interface ShowSetPasswordModal {
   message: string;
 }
 
-export interface SetPasswordModalClosedEvent {
-  type: ModalEventType.SetPasswordClosed;
+export interface CreatePasswordModalClosedEvent {
+  type: ModalEventType.CreatePasswordClosed;
   value: string;
   status: ModalStatus;
 }
@@ -177,11 +179,26 @@ export interface PwaInstallClosed {
   type: ModalEventType.PwaInstallClosed;
 }
 
+export interface ShowSimplePrompt {
+  type: ModalEventType.ShowSimplePrompt;
+  title: string;
+  message: string;
+  validationRegexp: RegExp;
+  validationErrorMessage: string;
+  value: string;
+}
+
+export interface SimplePromptClosed {
+  type: ModalEventType.SimplePromptClosed;
+  status: ModalStatus;
+  value: string;
+}
+
 export declare type ModalEvent =
   | ShowPasswordInputModal
   | PasswordInputClosedEvent
   | ShowSetPasswordModal
-  | SetPasswordModalClosedEvent
+  | CreatePasswordModalClosedEvent
   | ShowFeaturePropertiesModal
   | FeaturePropertiesClosedEvent
   | ShowSolicitationModal
@@ -201,7 +218,9 @@ export declare type ModalEvent =
   | ShowPromptVariables
   | PromptVariablesClosed
   | ShowPwaInstall
-  | PwaInstallClosed;
+  | PwaInstallClosed
+  | ShowSimplePrompt
+  | SimplePromptClosed;
 
 export class InternalEvent extends Event {
   constructor(type: ModalEventType, public readonly payload: ModalEvent) {

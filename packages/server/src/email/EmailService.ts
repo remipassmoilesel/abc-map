@@ -59,7 +59,6 @@ export class EmailService extends AbstractService {
         content = `
           <p>Bonjour !</p>
           <p>Pour activer votre compte Abc-Map, veuillez <a href="${href}" data-cy="enable-account-link">cliquer sur ce lien.</a></p>
-          <p>A bientôt !</p>
           ${footerFr(this.config)}
         `;
         break;
@@ -68,7 +67,6 @@ export class EmailService extends AbstractService {
         content = `
           <p>Hi !</p>
           <p>To activate your Abc-Map account, please <a href="${href}" data-cy="enable-account-link">click on this link.</a></p>
-          <p>Goodbye !</p>
           ${footerEn(this.config)}
         `;
         break;
@@ -90,7 +88,6 @@ export class EmailService extends AbstractService {
           <p>Bonjour !</p>
           <p>Pour réinitialiser votre mot de passe Abc-Map, veuillez <a href="${href}" data-cy="reset-password-link">cliquer sur ce lien.</a></p>
           <p>Si vous n'êtes pas à l'origine de cette demande, ne tenez pas compte de ce message.</p>
-          <p>A bientôt !</p>
           ${footerFr(this.config)}
         `;
         break;
@@ -100,7 +97,6 @@ export class EmailService extends AbstractService {
           <p>Hi !</p>
           <p>To reset your Abc-Map password, please <a href="${href}" data-cy="reset-password-link">click on this link.</a></p>
           <p>If you are not the initiator of this request, ignore this message.</p>
-          <p>Goodbye !</p>
           ${footerEn(this.config)}
         `;
         break;

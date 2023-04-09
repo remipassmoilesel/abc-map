@@ -123,7 +123,7 @@ describe('MapPreloader', () => {
 
     // Assert
     expect(renderingView.setCenter.args).toEqual(
-      /* eslint-disable prettier/prettier */
+      /* prettier-ignore */
       [
         // Step 1
         [[-50, 100]],
@@ -144,11 +144,10 @@ describe('MapPreloader', () => {
         [[-50, 175]], [[-25, 175]], [[0, 175]], [[25, 175]], [[50, 175]],
         [[-50, 200]], [[-25, 200]], [[0, 200]], [[25, 200]], [[50, 200]],
       ]
-      /* eslint-enable prettier/prettier */
     );
 
     expect(renderingView.setZoom.args).toEqual(
-      /* eslint-disable prettier/prettier */
+      /* prettier-ignore */
       [
         // Step 1
         [5],
@@ -167,7 +166,6 @@ describe('MapPreloader', () => {
         [7], [7], [7], [7], [7],
         [7], [7], [7], [7], [7],
       ]
-      /* eslint-enable prettier/prettier */
     );
   });
 

@@ -58,7 +58,7 @@ class FundingView extends Component<ServiceProps, {}> {
             <ul>
               <li>{t('Better_styles')}</li>
               <li>{t('Creating_symbols_from_CSV_workbooks')}</li>
-              <li>{t('Counting_geometries_in_polygons')}</li>
+              <li>{t('Automatic_saving_of_projects')}</li>
               <li>
                 <a href={'https://gitlab.com/abc-map/abc-map/-/blob/master/documentation/5_the_bottomless_well.md'} target={'_blank'} rel="noreferrer">
                   {t('And_more')}

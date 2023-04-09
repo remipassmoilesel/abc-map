@@ -100,7 +100,7 @@ function ArtefactDetails(props: Props) {
           content = await Zipper.forBrowser().zipFiles(res);
         }
 
-        FileIO.outputBlob(content, 'artefact.zip');
+        FileIO.downloadBlob(content, 'artefact.zip');
       })
       .catch((err) => {
         logger.error('Cannot donwload artefact', err);

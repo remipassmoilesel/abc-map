@@ -42,7 +42,7 @@ interface State {
   attributionsInput: string;
 }
 
-const t = prefixedTranslation('MapView:EditLayerModal.');
+const t = prefixedTranslation('MapView:');
 
 class EditLayerModal extends Component<Props, State> {
   constructor(props: Props) {

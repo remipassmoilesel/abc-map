@@ -17,14 +17,15 @@
  */
 
 export enum LocalModuleId {
-  DataTable = 'data-table',
-  ProportionalSymbols = 'proportional-symbols',
-  DifferentSymbols = 'different-symbols',
-  CountPointsInPolygon = 'count-points-in-polygon',
-  ColorGradients = 'color-gradients',
-  Scripts = 'scripts',
   ArtefactGenerator = 'artefact-generator',
+  ColorGradients = 'color-gradients',
+  CountPointsInPolygon = 'count-points-in-polygon',
   DataStore = 'data-store',
-  StaticExport = 'static-export',
+  DataTable = 'data-table',
+  DifferentSymbols = 'different-symbols',
+  ProjectManagement = 'project-management',
+  ProportionalSymbols = 'proportional-symbols',
+  Scripts = 'scripts',
   SharedMapSettings = 'shared-map-settings',
+  StaticExport = 'static-export',
 }

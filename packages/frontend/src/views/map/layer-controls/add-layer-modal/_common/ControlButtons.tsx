@@ -26,7 +26,7 @@ interface Props {
   onConfirm: () => void;
 }
 
-const t = prefixedTranslation('MapView:AddLayerModal.');
+const t = prefixedTranslation('MapView:');
 
 class ControlButtons extends React.Component<Props, {}> {
   public render() {

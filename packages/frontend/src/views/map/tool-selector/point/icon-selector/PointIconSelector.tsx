@@ -39,7 +39,7 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type Props = ConnectedProps<typeof connector> & ServiceProps & WithTranslation;
 
-const t = prefixedTranslation('MapView:ToolSelector.');
+const t = prefixedTranslation('MapView:');
 
 class PointIconSelector extends Component<Props, {}> {
   public render(): ReactNode {

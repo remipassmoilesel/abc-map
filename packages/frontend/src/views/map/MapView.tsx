@@ -17,56 +17,41 @@
  */
 
 import Cls from './MapView.module.scss';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import MainMap from './main-map/MainMap';
 import LayerControls from './layer-controls/LayerControls';
-import ProjectStatus from './project-status/ProjectStatus';
 import { Logger } from '@abc-map/shared';
-import ProjectControls from './project-controls/ProjectControls';
 import ToolSelector from './tool-selector/ToolSelector';
 import HistoryControls from '../../components/history-controls/HistoryControls';
 import { HistoryKey } from '../../core/history/HistoryKey';
-import { LayerWrapper } from '../../core/geo/layers/LayerWrapper';
 import Search from './search/Search';
-import ImportData from './import-data/ImportData';
+import { ImportData } from './import-data/ImportData';
 import CursorPosition from './cursor-position/CursorPosition';
 import { MainMapKeyboardListener } from './MainMapKeyboardListener';
 import { pageSetup } from '../../core/utils/page-setup';
-import { withTranslation } from 'react-i18next';
-import { prefixedTranslation } from '../../i18n/i18n';
+import { useTranslation, withTranslation } from 'react-i18next';
 import { IconDefs } from '../../components/icon/IconDefs';
 import SideMenu from '../../components/side-menu/SideMenu';
 import { useServices } from '../../core/useServices';
 import { FullscreenButton } from './fullscreen-button/FullscreenButton';
 import { isDesktopDevice } from '../../core/ui/isDesktopDevice';
 import { MapGeolocation } from './geolocation/MapGeolocation';
+import { useMapLayers } from '../../core/geo/useMapLayers';
+import { FaIcon } from '../../components/icon/FaIcon';
+import { Routes } from '../../routes';
+import { LocalModuleId } from '../../modules/LocalModuleId';
+import { useNavigate } from 'react-router-dom';
 
 const logger = Logger.get('MapView.tsx');
 
-const t = prefixedTranslation('MapView:');
-
 function MapView() {
   const { geo } = useServices();
-  const [layers, setLayers] = useState<LayerWrapper[]>([]);
-  const [activeLayer, setActiveLayer] = useState<LayerWrapper | undefined>();
+  const { layers, activeLayer } = useMapLayers();
+  const { t } = useTranslation('MapView');
+  const navigate = useNavigate();
 
   // Page title
-  useEffect(() => pageSetup(t('The_map'), t('Visualize_and_create_in_your_browser')), []);
-
-  // When layer list change we update layer list state
-  useEffect(() => {
-    const mainMap = geo.getMainMap();
-
-    const handleLayerChange = () => {
-      setLayers(mainMap.getLayers());
-      setActiveLayer(mainMap.getActiveLayer());
-    };
-
-    handleLayerChange(); // We manually trigger the first setup
-
-    mainMap.addLayerChangeListener(handleLayerChange);
-    return () => mainMap.removeLayerChangeListener(handleLayerChange);
-  }, [geo]);
+  useEffect(() => pageSetup(t('The_map'), t('Visualize_and_create_in_your_browser')), [t]);
 
   // Keyboard shortcuts
   useEffect(() => {
@@ -75,6 +60,8 @@ function MapView() {
 
     return () => listener.destroy();
   }, []);
+
+  const handleShowProjectManagement = useCallback(() => navigate(Routes.module().withParams({ moduleId: LocalModuleId.ProjectManagement })), [navigate]);
 
   return (
     <div className={Cls.mapView}>
@@ -109,24 +96,33 @@ function MapView() {
         <Search />
       </SideMenu>
 
-      {/* Project menu */}
+      {/* Import data menu */}
       <SideMenu
-        title={t('Project_menu')}
-        buttonIcon={IconDefs.faFileAlt}
+        title={t('Import_data')}
+        buttonIcon={IconDefs.faTable}
         buttonStyle={{ top: '60vh', left: '2vw' }}
         menuPlacement={'left'}
-        menuId={'views/MapView-project'}
-        data-cy={'project-menu'}
+        menuId={'views/MapView-data'}
+        data-cy={'data-menu'}
       >
         <div className={Cls.spacer} />
-        <ProjectStatus />
-        <ProjectControls />
         <ImportData />
-        <div className={'flex-grow-1'} />
+
+        {/*TODO: remove after september 2023*/}
         <div className={Cls.spacer} />
+        <div className={'m-3 alert alert-info'}>
+          <div>
+            {t('Are_you_looking_for_project_management')} <FaIcon icon={IconDefs.faArrowDown} />
+          </div>
+          <div className={'d-flex justify-content-end'}>
+            <button onClick={handleShowProjectManagement} className={'btn btn-sm btn-primary'}>
+              {t('Project_management')}
+            </button>
+          </div>
+        </div>
       </SideMenu>
 
-      {/*Main map*/}
+      {/* Main map */}
       <MainMap />
 
       {/* Draw menu */}

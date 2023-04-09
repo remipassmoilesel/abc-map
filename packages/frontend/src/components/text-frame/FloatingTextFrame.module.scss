@@ -16,8 +16,8 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-@import "src/styles/variables";
-@import "src/styles/mixins";
+@import 'src/styles/variables';
+@import 'src/styles/mixins';
 
 .container {
   position: relative;
@@ -35,10 +35,6 @@
 
   &.withShadows {
     box-shadow: 0 0 0.5em 0.5em rgba($gray-600, 0.3);
-  }
-
-  &.readonly {
-    user-select: none;
   }
 
   .controls {

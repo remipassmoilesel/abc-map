@@ -16,6 +16,9 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { faQrcode } from '@fortawesome/free-solid-svg-icons/faQrcode';
+import { faQuestion } from '@fortawesome/free-solid-svg-icons/faQuestion';
+import { faFolder } from '@fortawesome/free-solid-svg-icons/faFolder';
 import { faEarthEurope } from '@fortawesome/free-solid-svg-icons/faEarthEurope';
 import { faPlay } from '@fortawesome/free-solid-svg-icons/faPlay';
 import { faStar as faStarRegular } from '@fortawesome/free-regular-svg-icons/faStar';
@@ -56,6 +59,7 @@ import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons/faQuestionCi
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons/faExclamationTriangle';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons/faInfoCircle';
 import { faFile } from '@fortawesome/free-solid-svg-icons/faFile';
+import { faFileImport } from '@fortawesome/free-solid-svg-icons/faFileImport';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons/faChevronDown';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons/faChevronRight';
 import { faUserCircle } from '@fortawesome/free-solid-svg-icons/faUserCircle';
@@ -134,6 +138,10 @@ import { faClipboard } from '@fortawesome/free-solid-svg-icons/faClipboard';
 import { faStickyNote } from '@fortawesome/free-solid-svg-icons/faStickyNote';
 
 export const IconDefs = {
+  faQrcode,
+  faFileImport,
+  faQuestion,
+  faFolder,
   faEarthEurope,
   faPlay,
   faStarRegular,

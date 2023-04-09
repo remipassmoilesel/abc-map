@@ -16,14 +16,14 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-@import "variables";
-@import "scrollbars";
+@import 'variables';
+@import 'scrollbars';
 
 // html, body and #root are reset earlier in index.html
 
 html,
 body {
-  font-family: "AbcCantarell", sans-serif;
+  font-family: 'AbcCantarell', sans-serif;
   margin: 0;
   background-color: white;
 

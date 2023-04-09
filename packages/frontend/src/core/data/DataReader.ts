@@ -36,7 +36,7 @@ import { WmtsDefinitionReader } from './readers/WmtsDefinitionReader';
 import { ReadResult, ReadStatus } from './ReadResult';
 import { attributionsVariableExpansion } from '../utils/variableExpansion';
 
-const t = prefixedTranslation('core:DataReader.');
+const t = prefixedTranslation('DataReader:');
 
 export const readersFactory = (services: Services) => [
   new GpxReader(),

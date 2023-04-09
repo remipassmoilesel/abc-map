@@ -65,7 +65,7 @@ function TextEditor(props: Props) {
 
   // Create editor
   const [editor] = useState(() => {
-    // eslint-disable-next-line prettier/prettier
+    /* prettier-ignore */
     return [
       withReact,
       withHistory,

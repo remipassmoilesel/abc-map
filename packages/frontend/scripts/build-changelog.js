@@ -33,7 +33,7 @@ function buildHtmlChangelog() {
   changelog = changelog.split('\n').slice(1).join('\n'); // We skip title
   changelog = linkify(changelog);
 
-  const converter = new showdown.Converter({openLinksInNewWindow: true});
+  const converter = new showdown.Converter({ openLinksInNewWindow: true });
   const html = converter.makeHtml(changelog);
   fs.writeFileSync(target, html);
 
@@ -51,5 +51,3 @@ function linkify(input) {
   output = output.replace(commitPattern, ` <a href="${commitBaseUrl}/$2" target="_blank">$1</a>`);
   return output;
 }
-
-

@@ -13,7 +13,7 @@ module.exports = {
   roots: ['src'],
   moduleNameMapper: {
     '\\.css$': '<rootDir>/src/__mocks__/style.js',
-    '\\.scss$': '<rootDir>/src/__mocks__/style.js'
+    '\\.scss$': '<rootDir>/src/__mocks__/style.js',
   },
-  setupFiles: ['<rootDir>/scripts/test-setup.js']
+  setupFiles: ['<rootDir>/scripts/test-setup.js'],
 };

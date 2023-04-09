@@ -31,7 +31,8 @@ import {
   PromptVariablesClosed,
   PwaInstallClosed,
   RegistrationClosedEvent,
-  SetPasswordModalClosedEvent,
+  CreatePasswordModalClosedEvent,
+  SimplePromptClosed,
   SolicitationClosedEvent,
   TextFeedbackClosed,
 } from './typings';
@@ -48,24 +49,43 @@ export class ModalService {
   private eventTarget = document.createDocumentFragment();
   private listeners = new Map<ModalEventListener<any>, EventListener>();
 
-  public setProjectPassword(): Promise<SetPasswordModalClosedEvent> {
+  public prompt(title: string, message: string, value: string, validationRegexp: RegExp, validationErrorMessage: string): Promise<SimplePromptClosed> {
+    const input: ModalEvent = { type: ModalEventType.ShowSimplePrompt, title, message, value, validationRegexp, validationErrorMessage };
+    return this.modalPromise<SimplePromptClosed>(input, ModalEventType.SimplePromptClosed);
+  }
+
+  public confirmation(title: string, message: string): Promise<ModalStatus> {
+    const input: ModalEvent = { type: ModalEventType.ShowConfirmation, title, message };
+    return this.modalPromise<ConfirmationClosedEvent>(input, ModalEventType.ConfirmationClosed).then((res) => res.status);
+  }
+
+  /**
+   * Show a modal with two password input fields, allowing the user to create a new password
+   * @param title
+   * @param message
+   */
+  public createPassword(title: string, message: string): Promise<CreatePasswordModalClosedEvent> {
+    return this.modalPromise({ type: ModalEventType.ShowSetPassword, title, message }, ModalEventType.CreatePasswordClosed);
+  }
+
+  public createProjectPassword(): Promise<CreatePasswordModalClosedEvent> {
     const title = t('Project_password');
     const message = t('Your_project_contains_credentials');
-    return this.setPasswordModal(title, message);
+    return this.createPassword(title, message);
   }
 
-  public getProjectPassword(witness: string): Promise<PasswordInputClosedEvent> {
-    const title = t('Project_password');
-    const message = t('Enter_project_password');
-    return this.passwordInputModal(title, message, witness);
-  }
-
-  public passwordInputModal(title: string, message: string, witness: string): Promise<PasswordInputClosedEvent> {
+  public promptPassword(title: string, message: string, witness: string): Promise<PasswordInputClosedEvent> {
     return this.modalPromise({ type: ModalEventType.ShowPasswordInput, title, message, witness }, ModalEventType.PasswordInputClosed);
   }
 
-  public setPasswordModal(title: string, message: string): Promise<SetPasswordModalClosedEvent> {
-    return this.modalPromise({ type: ModalEventType.ShowSetPassword, title, message }, ModalEventType.SetPasswordClosed);
+  /**
+   * Show a modal with one password input, allowing user to enter an existing password
+   * @param witness
+   */
+  public promptProjectPassword(witness: string): Promise<PasswordInputClosedEvent> {
+    const title = t('Project_password');
+    const message = t('Enter_project_password');
+    return this.promptPassword(title, message, witness);
   }
 
   public featurePropertiesModal(properties: SimplePropertiesMap): Promise<FeaturePropertiesClosedEvent> {
@@ -166,11 +186,6 @@ export class ModalService {
           <div class='my-3'>${t('Prefer_small_dataset')}</div>
       `,
     };
-    return this.modalPromise<ConfirmationClosedEvent>(input, ModalEventType.ConfirmationClosed).then((res) => res.status);
-  }
-
-  public confirmation(title: string, message: string): Promise<ModalStatus> {
-    const input: ModalEvent = { type: ModalEventType.ShowConfirmation, title, message };
     return this.modalPromise<ConfirmationClosedEvent>(input, ModalEventType.ConfirmationClosed).then((res) => res.status);
   }
 

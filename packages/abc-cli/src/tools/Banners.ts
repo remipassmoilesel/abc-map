@@ -22,7 +22,7 @@ const logger = Logger.get('Banners.ts', 'info');
 
 export class Banners {
   public cli(): void {
-    logger.info('🌍 Abc-CLI 🔨');
+    logger.info('🌍 abc-cli 🔨');
   }
 
   public big(): void {

@@ -16,10 +16,10 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { useServices } from '../../../../../core/useServices';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback } from 'react';
 import { AbcSharedView, BaseMetadata, LayerMetadata, LayerState } from '@abc-map/shared';
 import LayerListItem from './LayerListItem';
+import { useMapLayers } from '../../../../../core/geo/useMapLayers';
 
 interface Props {
   view: AbcSharedView;
@@ -28,26 +28,8 @@ interface Props {
 
 function LayerVisibilitySelector(props: Props) {
   const { view, onUpdate } = props;
-  const { geo } = useServices();
-  const [layers, setLayers] = useState<BaseMetadata[]>([]);
-
-  useEffect(() => {
-    const map = geo.getMainMap();
-
-    const handleLayerChange = () => {
-      const metadatas = map
-        .getLayers()
-        .map((lay) => lay.getMetadata())
-        .filter((m): m is LayerMetadata => !!m);
-      setLayers(metadatas);
-    };
-
-    // We trigger first setup manually
-    handleLayerChange();
-
-    map.addLayerChangeListener(handleLayerChange);
-    return () => map.removeLayerChangeListener(handleLayerChange);
-  }, [geo]);
+  const { layers } = useMapLayers();
+  const layersMetadata = layers.map((lay) => lay.getMetadata()).filter((m): m is LayerMetadata => !!m);
 
   const handleSelect = useCallback(
     (meta: BaseMetadata) => {
@@ -72,7 +54,7 @@ function LayerVisibilitySelector(props: Props) {
 
   return (
     <div>
-      {layers.map((metadata) => {
+      {layersMetadata.map((metadata) => {
         const state: LayerState = view.layers.find((st) => metadata.id === st.layerId) || { layerId: metadata.id, visible: true };
         return <LayerListItem key={metadata.id} metadata={metadata} visible={state.visible} onSelect={handleSelect} />;
       })}

@@ -34,7 +34,7 @@ import { GeoService } from '../../geo/GeoService';
 
 const logger = Logger.get('WmsDefinitionReader.ts');
 
-const t = prefixedTranslation('core:DataReader.');
+const t = prefixedTranslation('DataReader:');
 
 export class WmsDefinitionReader extends AbstractDataReader {
   constructor(private geo: GeoService, private modals: ModalService) {

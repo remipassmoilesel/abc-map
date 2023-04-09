@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-@import "src/styles/mixins";
+@import 'src/styles/mixins';
 
 .searchBar {
   display: flex;
@@ -27,7 +27,7 @@
   width: 100%;
   max-width: 100%;
 
-  input[type="text"] {
+  input[type='text'] {
     width: 33%;
   }
 }

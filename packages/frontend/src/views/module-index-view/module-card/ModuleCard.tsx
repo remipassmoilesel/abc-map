@@ -19,7 +19,7 @@
 import Cls from './ModuleCard.module.scss';
 import { Module } from '@abc-map/module-api';
 import clsx from 'clsx';
-import { useCallback } from 'react';
+import { useCallback, MouseEvent } from 'react';
 import { FaIcon } from '../../../components/icon/FaIcon';
 import { IconDefs } from '../../../components/icon/IconDefs';
 import { useAppDispatch, useAppSelector } from '../../../core/store/hooks';
@@ -47,13 +47,34 @@ export function ModuleCard(props: Props) {
   const favorites = useAppSelector((st) => st.ui.favoriteModules);
   const isFavorite = favorites.includes(module.getId());
 
-  const handleToggleFavorite = useCallback(() => dispatch(UiActions.markFavorite(module.getId(), !isFavorite)), [dispatch, module, isFavorite]);
   const handleOpenModule = useCallback(() => onOpen(module), [onOpen, module]);
-  const handleOpenSource = useCallback(() => window.open(sourceUrl, '_blank'), [sourceUrl]);
-  const handleRemoveModule = useCallback(() => onRemove(module), [module, onRemove]);
+
+  const handleToggleFavorite = useCallback(
+    (ev: MouseEvent) => {
+      ev.stopPropagation();
+      dispatch(UiActions.markFavorite(module.getId(), !isFavorite));
+    },
+    [dispatch, module, isFavorite]
+  );
+
+  const handleOpenSource = useCallback(
+    (ev: MouseEvent) => {
+      ev.stopPropagation();
+      window.open(sourceUrl, '_blank');
+    },
+    [sourceUrl]
+  );
+
+  const handleRemoveModule = useCallback(
+    (ev: MouseEvent) => {
+      ev.stopPropagation();
+      onRemove(module);
+    },
+    [module, onRemove]
+  );
 
   return (
-    <div className={clsx(Cls.card, className)}>
+    <div className={clsx(Cls.card, className)} onClick={handleOpenModule}>
       <button onClick={handleOpenModule} className={clsx(Cls.name, 'btn btn-link mb-4')} data-cy={'open-module'}>
         {name}
       </button>

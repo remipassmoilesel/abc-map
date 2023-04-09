@@ -29,7 +29,7 @@ import Cls from './CursorPosition.module.scss';
 
 const logger = Logger.get('CursorPosition.tsx');
 
-const t = prefixedTranslation('MapView:CursorPosition.');
+const t = prefixedTranslation('MapView:');
 
 function CursorPosition() {
   const { geo } = useServices();

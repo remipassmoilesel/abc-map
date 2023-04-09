@@ -29,11 +29,19 @@ This setup has been tested on these operating systems:
 
 ## Basic setup
 
-### Ubuntu 20.04 (actively supported)
+### Ubuntu 22.04 (recommended)
 
 Install basic tools and dependencies:
 
-    $ sudo apt install git docker.io docker-compose curl build-essential
+    $ sudo apt-get update
+    $ sudo apt-get install ca-certificates curl gnupg lsb-release git build-essential
+    $ sudo mkdir -m 0755 -p /etc/apt/keyrings
+    $ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+    $ echo \
+        "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+        $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+    $ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
     # This command allow you to use Docker without being root.
     # You MUST logout then login after, or reboot your computer.
@@ -51,7 +59,7 @@ Clone source code:
     $ git clone https://gitlab.com/abc-map/abc-map.git
     $ cd abc-map
 
-### Windows 11, Windows Subsystem for Linux version 2
+### Windows 11, Windows Subsystem for Linux version 2 (not recommended)
 
 Install WSL, see: [https://docs.microsoft.com/en-us/windows/wsl/install](https://docs.microsoft.com/en-us/windows/wsl/install)
 
