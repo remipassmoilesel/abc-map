@@ -21,10 +21,15 @@ import { AbcArtefact, AbcFile, ArtefactFilter, BlobIO, Logger, PaginatedResponse
 import { DatastoreRoutes as Api } from '../http/ApiRoutes';
 import { ToastService } from '../ui/ToastService';
 import { getLang } from '../../i18n/i18n';
+import { ApiClient, DownloadClient } from '../http/http-clients';
 
 const logger = Logger.get('DataStoreService.ts');
 
 export class DataStoreService {
+  public static create(toasts: ToastService): DataStoreService {
+    return new DataStoreService(ApiClient, DownloadClient, toasts);
+  }
+
   constructor(private apiClient: AxiosInstance, private downloadClient: AxiosInstance, private toasts: ToastService) {}
 
   public listArtefacts(filter: ArtefactFilter, limit = 50, offset = 0): Promise<PaginatedResponse<AbcArtefact>> {

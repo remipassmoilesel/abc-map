@@ -35,7 +35,7 @@ export class UndoCallbackChangeset extends Changeset {
     this.onUndo();
   }
 
-  public async apply(): Promise<void> {
+  public async execute(): Promise<void> {
     return;
   }
 

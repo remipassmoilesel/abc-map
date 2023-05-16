@@ -69,7 +69,7 @@ describe('DataSourceSelector', () => {
   });
 
   it('should warn if data source is too big', async () => {
-    const fakeSource = TestDataSource.from(range(0, 550).map((i) => ({ code: i })));
+    const fakeSource = TestDataSource.from(range(0, 550).map((i) => ({ data: { code: i } })));
 
     abcRender(<DataSourceSelector value={fakeSource} onSelected={handleSelection} />, { services });
 
@@ -79,7 +79,7 @@ describe('DataSourceSelector', () => {
   });
 
   it('should warn on error', async () => {
-    const fakeSource = TestDataSource.from(range(0, 550).map((i) => ({ code: i })));
+    const fakeSource = TestDataSource.from(range(0, 550).map((i) => ({ data: { code: i } })));
     const getRowsStub = sinon.stub();
     getRowsStub.rejects();
     fakeSource.getRows = getRowsStub;
@@ -92,7 +92,7 @@ describe('DataSourceSelector', () => {
   });
 
   it('should show line error if any', async () => {
-    const fakeSource = TestDataSource.from(range(0, 550).map((i) => ({ code: i })));
+    const fakeSource = TestDataSource.from(range(0, 550).map((i) => ({ data: { code: i } })));
     const getRowsStub = sinon.stub();
     getRowsStub.rejects(new CsvParsingError('Missing comma', 5));
     fakeSource.getRows = getRowsStub;

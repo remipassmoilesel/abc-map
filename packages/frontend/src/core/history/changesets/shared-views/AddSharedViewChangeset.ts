@@ -34,7 +34,7 @@ export class AddSharedViewChangeset extends Changeset {
     this.views = views.slice();
   }
 
-  public async apply(): Promise<void> {
+  public async execute(): Promise<void> {
     this.project.addSharedViews(this.views);
 
     const views = this.project.getSharedViews();

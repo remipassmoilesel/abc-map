@@ -28,7 +28,7 @@ import { GradientAlgorithm, ScaleAlgorithm } from '../../core/modules/Algorithm'
 import { Services } from '../../core/Services';
 import { GradientClass } from './typings/GradientClass';
 import * as chroma from 'chroma-js';
-import { asNumberOrString, isValidNumber, toPrecision } from '../../core/utils/numbers';
+import { asValidNumber, toPrecision } from '../../core/utils/numbers';
 import { ProcessingResult, Status } from './typings/ProcessingResult';
 import { prettyStringify } from '../../core/utils/strings';
 import { HistoryKey } from '../../core/history/HistoryKey';
@@ -89,17 +89,17 @@ export class ColorGradientsModule extends ModuleAdapter {
       return Promise.reject(new Error('Classes are mandatory with ScaleAlgorithm.Interpolated'));
     }
 
-    // We sort data source items to extract min and max values
+    // We filter invalid data and we sort data to extract min and max values
     const rows = await source.getRows();
     const sortedValues = rows
-      .map((row) => asNumberOrString(row[valueField] ?? NaN))
-      .filter((value) => isValidNumber(value))
-      .sort((a, b) => (a as number) - (b as number)) as number[];
+      .map((row) => asValidNumber(row.data[valueField]))
+      .filter((v): v is number => v !== null)
+      .sort((a, b) => a - b);
 
     if (!sortedValues.length || rows.length !== sortedValues.length) {
       const invalidValues = rows
-        .map((row) => asNumberOrString(row[valueField] ?? NaN))
-        .filter((value) => !isValidNumber(value))
+        .map((row) => (asValidNumber(row.data[valueField]) ? null : row.data[valueField]))
+        .filter((invalidValue) => invalidValue !== null)
         .map((value) => `${valueField}: ${prettyStringify(value)}`);
       return { ...result, status: Status.InvalidValues, invalidValues };
     }
@@ -123,15 +123,15 @@ export class ColorGradientsModule extends ModuleAdapter {
           return null;
         }
 
-        const row = rows.find((r) => r[dataJoinBy] === joinKey);
+        const row = rows.find((row) => row.data[dataJoinBy] === joinKey);
         if (!row) {
           logger.error(`Row does not exist for join key ${joinKey}`);
           result.missingDataRows.push(prettyStringify(joinKey));
           return null;
         }
 
-        const value = asNumberOrString(row[valueField] ?? NaN);
-        if (!isValidNumber(value) || value <= 0) {
+        const value = asValidNumber(row.data[valueField]);
+        if (!value || value <= 0) {
           // Invalid values should have been inspected at sort()
           logger.error(`Invalid color value: ${value}`);
           return null;
@@ -150,7 +150,7 @@ export class ColorGradientsModule extends ModuleAdapter {
         });
 
         newFeat.unwrap().setProperties({
-          [dataJoinBy]: row[dataJoinBy],
+          [dataJoinBy]: row.data[dataJoinBy],
           'gradient-value': value,
         });
 
@@ -167,7 +167,7 @@ export class ColorGradientsModule extends ModuleAdapter {
 
     // We add that layer
     const addLayer = AddLayersChangeset.create([newLayer]);
-    await addLayer.apply();
+    await addLayer.execute();
     history.register(HistoryKey.Map, addLayer);
 
     if (result.missingDataRows.length || result.invalidValues.length || result.invalidFeatures) {

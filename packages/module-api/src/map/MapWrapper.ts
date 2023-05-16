@@ -41,7 +41,7 @@ export interface MapWrapper {
   addLayer(layer: LayerWrapper, position?: number): void;
   importLayersFrom(other: MapWrapper, options?: any): void;
   getLayers(): LayerWrapper[];
-  setActiveLayer(layer: LayerWrapper): void;
+  setActiveLayer(layer: LayerWrapper | undefined): void;
   renameLayer(layer: LayerWrapper, name: string): void;
   getActiveLayer(): LayerWrapper | undefined;
   removeLayer(layer: LayerWrapper): void;

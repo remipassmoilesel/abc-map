@@ -31,28 +31,36 @@ import Geometry from 'ol/geom/Geometry';
 export const testDataSource1 = (): TestDataSource =>
   TestDataSource.from([
     {
-      _id: 1,
-      code_reg: '01',
-      name: 'Ain',
-      population: 647_634,
+      id: 1,
+      data: {
+        code_reg: '01',
+        name: 'Ain',
+        population: 647_634,
+      },
     },
     {
-      _id: 2,
-      code_reg: '02',
-      name: 'Aisne',
-      population: 533_316,
+      id: 2,
+      data: {
+        code_reg: '02',
+        name: 'Aisne',
+        population: 533_316,
+      },
     },
     {
-      _id: 3,
-      code_reg: '03',
-      name: 'Allier',
-      population: 337_171,
+      id: 3,
+      data: {
+        code_reg: '03',
+        name: 'Allier',
+        population: 337_171,
+      },
     },
     {
-      _id: 4,
-      code_reg: '04',
-      name: 'Alpes-de-Haute-Provence',
-      population: 164_068,
+      id: 4,
+      data: {
+        code_reg: '04',
+        name: 'Alpes-de-Haute-Provence',
+        population: 164_068,
+      },
     },
   ]);
 
@@ -81,24 +89,24 @@ export const testGeometryLayer1 = (): VectorLayerWrapper => {
 
 export const testDataSource2 = () => {
   const dataset: Partial<DataRow>[] = shuffle([
-    { code: 1, value: 377.730620008599 },
-    { code: 2, value: 1089.36697551601 },
-    { code: 3, value: 1634.1807405057 },
-    { code: 4, value: 2504.8084547204 },
-    { code: 5, value: 8728.32490346905 },
-    { code: 6, value: 12069.9719351141 },
-    { code: 7, value: 27630.7566577526 },
-    { code: 8, value: 30139.2938373139 },
-    { code: 9, value: 31840.4276059089 },
-    { code: 10, value: 31978.3795751166 },
-    { code: 11, value: 32431.2716032757 },
-    { code: 12, value: 39530.669755169 },
-    { code: 13, value: 48059.6549778473 },
-    { code: 14, value: 57717.6338705954 },
-    { code: 15, value: 71134.3725767045 },
-    { code: 16, value: 73367.0697261891 },
-    { code: 17, value: 83550.7462972935 },
-    { code: 18, value: 84841.8565894046 },
+    { data: { code: 1, value: 377.730620008599 } },
+    { data: { code: 2, value: 1089.36697551601 } },
+    { data: { code: 3, value: 1634.1807405057 } },
+    { data: { code: 4, value: 2504.8084547204 } },
+    { data: { code: 5, value: 8728.32490346905 } },
+    { data: { code: 6, value: 12069.9719351141 } },
+    { data: { code: 7, value: 27630.7566577526 } },
+    { data: { code: 8, value: 30139.2938373139 } },
+    { data: { code: 9, value: 31840.4276059089 } },
+    { data: { code: 10, value: 31978.3795751166 } },
+    { data: { code: 11, value: 32431.2716032757 } },
+    { data: { code: 12, value: 39530.669755169 } },
+    { data: { code: 13, value: 48059.6549778473 } },
+    { data: { code: 14, value: 57717.6338705954 } },
+    { data: { code: 15, value: 71134.3725767045 } },
+    { data: { code: 16, value: 73367.0697261891 } },
+    { data: { code: 17, value: 83550.7462972935 } },
+    { data: { code: 18, value: 84841.8565894046 } },
   ]);
   return TestDataSource.from(dataset);
 };
@@ -118,10 +126,10 @@ export const testGeometryLayer2 = (): VectorLayerWrapper => {
 
 export const testDataSource3 = () => {
   const dataset: Partial<DataRow>[] = [
-    { code: 0, value: 5 },
-    { code: 1, value: 0 },
-    { code: 2, value: 2 },
-    { code: 3, value: 3 },
+    { data: { code: 0, value: 5 } },
+    { data: { code: 1, value: 0 } },
+    { data: { code: 2, value: 2 } },
+    { data: { code: 3, value: 3 } },
   ];
   return TestDataSource.from(dataset);
 };

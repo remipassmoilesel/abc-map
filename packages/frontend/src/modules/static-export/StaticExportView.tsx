@@ -87,7 +87,7 @@ export function StaticExportView() {
     (lay: AbcLayout) => {
       const setActiveLayout = SetActiveLayoutChangeset.create(lay);
       setActiveLayout
-        .apply()
+        .execute()
         .then(() => history.register(HistoryKey.Export, setActiveLayout))
         .catch((err) => logger.error('Cannot set active layout: ', err));
     },
@@ -119,7 +119,7 @@ export function StaticExportView() {
       };
 
       const cs = AddLayoutsChangeset.create([layout]);
-      await cs.apply();
+      await cs.execute();
       history.register(HistoryKey.Export, cs);
     };
 
@@ -146,7 +146,7 @@ export function StaticExportView() {
 
         if (newIndex !== oldIndex) {
           const cs = SetLayoutPositionChangeset.create(activeLayout, oldIndex, newIndex);
-          await cs.apply();
+          await cs.execute();
           history.register(HistoryKey.Export, cs);
         }
       };
@@ -163,7 +163,7 @@ export function StaticExportView() {
   const handleClearAll = useCallback(() => {
     const apply = async () => {
       const cs = RemoveLayoutsChangeset.create(layouts);
-      await cs.apply();
+      await cs.execute();
       history.register(HistoryKey.Export, cs);
     };
 
@@ -175,7 +175,7 @@ export function StaticExportView() {
     (lay: AbcLayout) => {
       const apply = async () => {
         const cs = RemoveLayoutsChangeset.create([lay]);
-        await cs.apply();
+        await cs.execute();
         history.register(HistoryKey.Export, cs);
       };
 
@@ -199,7 +199,7 @@ export function StaticExportView() {
 
       const apply = async () => {
         const cs = UpdateLayoutChangeset.create(activeLayout, update);
-        await cs.apply();
+        await cs.execute();
         history.register(HistoryKey.Export, cs);
       };
 
@@ -219,7 +219,7 @@ export function StaticExportView() {
 
       const apply = async () => {
         const cs = UpdateLayoutChangeset.create(before, layout);
-        await cs.apply();
+        await cs.execute();
         history.register(HistoryKey.Export, cs);
       };
 
@@ -283,7 +283,7 @@ export function StaticExportView() {
 
       const addFrame = AddLayoutTextFrameChangeset.create(activeLayout, frame);
       addFrame
-        .apply()
+        .execute()
         .then(() => history.register(HistoryKey.Export, addFrame))
         .catch((err) => logger.error('Cannot add text frame: ', err));
     },
@@ -298,7 +298,7 @@ export function StaticExportView() {
 
       const removeFrame = RemoveLayoutTextFrameChangeset.create(activeLayout, frame);
       removeFrame
-        .apply()
+        .execute()
         .then(() => history.register(HistoryKey.Export, removeFrame))
         .catch((err) => logger.error('Cannot remove text frame: ', err));
     },
@@ -316,7 +316,7 @@ export function StaticExportView() {
 
         const changeset = UpdateTextFrameChangeset.create(before, after);
         changeset
-          .apply()
+          .execute()
           .then(() => history.register(HistoryKey.Export, changeset))
           .catch((err) => logger.error('Cannot update text frame: ', err));
       }, 150),
@@ -344,7 +344,7 @@ export function StaticExportView() {
 
       const changeset = AddLayoutScaleChangeset.create(activeLayout, scale);
       changeset
-        .apply()
+        .execute()
         .then(() => history.register(HistoryKey.Export, changeset))
         .catch((err) => logger.error('Cannot add scale: ', err));
     },
@@ -358,7 +358,7 @@ export function StaticExportView() {
 
     const changeset = RemoveLayoutScaleChangeset.create(activeLayout, activeLayout.scale);
     changeset
-      .apply()
+      .execute()
       .then(() => history.register(HistoryKey.Export, changeset))
       .catch((err) => logger.error('Cannot remove scale: ', err));
   }, [activeLayout, history]);
@@ -371,7 +371,7 @@ export function StaticExportView() {
 
       const changeset = AddLayoutNorthChangeset.create(activeLayout, north);
       changeset
-        .apply()
+        .execute()
         .then(() => history.register(HistoryKey.Export, changeset))
         .catch((err) => logger.error('Cannot add scale: ', err));
     },
@@ -385,7 +385,7 @@ export function StaticExportView() {
 
     const changeset = RemoveLayoutNorthChangeset.create(activeLayout, activeLayout.north);
     changeset
-      .apply()
+      .execute()
       .then(() => history.register(HistoryKey.Export, changeset))
       .catch((err) => logger.error('Cannot remove scale: ', err));
   }, [activeLayout, history]);
@@ -402,7 +402,7 @@ export function StaticExportView() {
 
       const changeset = UpdateLayoutScaleChangeset.create(activeLayout, activeLayout.scale, scale);
       changeset
-        .apply()
+        .execute()
         .then(() => history.register(HistoryKey.Export, changeset))
         .catch((err) => logger.error('Cannot update scale: ', err));
     },
@@ -421,7 +421,7 @@ export function StaticExportView() {
 
       const changeset = UpdateLayoutNorthChangeset.create(activeLayout, activeLayout.north, north);
       changeset
-        .apply()
+        .execute()
         .then(() => history.register(HistoryKey.Export, changeset))
         .catch((err) => logger.error('Cannot update scale: ', err));
     },

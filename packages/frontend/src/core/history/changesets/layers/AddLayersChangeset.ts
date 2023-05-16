@@ -32,7 +32,7 @@ export class AddLayersChangeset extends Changeset {
     super();
   }
 
-  public async apply(): Promise<void> {
+  public async execute(): Promise<void> {
     this.layers.forEach((lay) => this.map.addLayer(lay));
 
     // We activate the last layer

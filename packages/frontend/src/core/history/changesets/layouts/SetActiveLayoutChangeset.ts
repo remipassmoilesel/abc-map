@@ -38,7 +38,7 @@ export class SetActiveLayoutChangeset extends Changeset {
     }
   }
 
-  public async apply(): Promise<void> {
+  public async execute(): Promise<void> {
     this.project.setActiveLayout(this.next.id);
   }
 }

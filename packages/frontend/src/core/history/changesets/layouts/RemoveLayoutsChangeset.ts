@@ -47,7 +47,7 @@ export class RemoveLayoutsChangeset extends Changeset {
     this.operations = operations;
   }
 
-  public async apply(): Promise<void> {
+  public async execute(): Promise<void> {
     this.project.removeLayouts(this.operations.map((op) => op.layout.id));
 
     const layouts = this.project.getLayouts();

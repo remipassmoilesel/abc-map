@@ -51,7 +51,7 @@ describe('UpdateStyleChangeset', function () {
   });
 
   it('should redo', async () => {
-    await changeset.apply();
+    await changeset.execute();
 
     expect(feature.getStyleProperties().stroke?.width).toEqual(20);
   });

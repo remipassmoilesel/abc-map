@@ -18,17 +18,33 @@
 
 import Feature, { FeatureLike } from 'ol/Feature';
 import Geometry from 'ol/geom/Geometry';
-import { AbcGeometryType, FeatureProperties, StyleProperties } from '@abc-map/shared';
-import { FeatureStyle, DefaultStyle } from '@abc-map/shared';
+import { AbcGeometryType, DefaultStyle, FeatureProperties, FeatureStyle, Logger, StyleProperties } from '@abc-map/shared';
 import { nanoid } from 'nanoid';
-import { Logger } from '@abc-map/shared';
 import { OlGeometry } from './OlGeometry';
-import { isOpenlayersGeometry, isOpenlayersFeature } from '../../utils/crossContextInstanceof';
+import { isOpenlayersFeature, isOpenlayersGeometry } from '../../utils/crossContextInstanceof';
+import { GeoJSON } from 'ol/format';
+import { Projection } from 'ol/proj';
+import { GeoJSONFeature } from 'ol/format/GeoJSON';
+import { DataRow } from '../../data/data-source/DataSource';
+import { isValidDataField } from './isValidDataField';
+import { HighlightedStyleFactory } from '../styles/HighlightedStyleFactory';
 
 const logger = Logger.get('FeatureWrapper.ts');
 
-export declare type PropertiesMap = { [key: string]: any };
-export declare type SimplePropertiesMap = { [key: string]: string | number | undefined };
+export function disableFeatureWrapperLogging() {
+  logger.disable();
+}
+
+export declare type OlPropertiesMap = { [key: string]: any };
+
+export declare type DataPropertiesMap = { [key: string]: string | boolean | number | undefined | null };
+
+const geoJson = new GeoJSON();
+
+const highLightStylefactory = new HighlightedStyleFactory();
+
+export const HlPreviousStyleKey = 'abc:highlight:previous-style';
+export const HlStyleKey = 'abc:highlight:highlight-style';
 
 /**
  * This class is a thin wrapper around Openlayers features, used to ensure that critical operations
@@ -63,6 +79,10 @@ export class FeatureWrapper<Geom extends OlGeometry = OlGeometry> {
     }
 
     return isOpenlayersFeature(ol);
+  }
+
+  public static fromGeoJSON(feature: GeoJSONFeature, dataProjection?: Projection | string): FeatureWrapper {
+    return FeatureWrapper.from(geoJson.readFeature(feature, { dataProjection }));
   }
 
   constructor(private feature: Feature<Geom>) {}
@@ -238,7 +258,7 @@ export class FeatureWrapper<Geom extends OlGeometry = OlGeometry> {
     return this.getStyleProperties().text?.value;
   }
 
-  public getAllProperties(): PropertiesMap {
+  public getAllProperties(): OlPropertiesMap {
     return this.feature.getProperties();
   }
 
@@ -247,13 +267,13 @@ export class FeatureWrapper<Geom extends OlGeometry = OlGeometry> {
    * - that are not internal
    * - that are numbers or strings
    */
-  public getSimpleProperties(): SimplePropertiesMap {
-    const result: SimplePropertiesMap = {};
+  public getDataProperties(): DataPropertiesMap {
+    const result: DataPropertiesMap = {};
     const properties = this.feature.getProperties();
 
     for (const key in properties) {
       const property = properties[key];
-      const typeIsCorrect = typeof property === 'string' || typeof property === 'number';
+      const typeIsCorrect = isValidDataField(property);
       const notAbcProperty = key.indexOf('abc:') === -1;
       if (typeIsCorrect && notAbcProperty) {
         result[key] = property;
@@ -263,21 +283,87 @@ export class FeatureWrapper<Geom extends OlGeometry = OlGeometry> {
     return result;
   }
 
-  public setProperties(properties: SimplePropertiesMap): FeatureWrapper {
+  public setProperties(properties: DataPropertiesMap): FeatureWrapper {
     this.feature.setProperties(properties);
     return this;
   }
 
-  public overwriteSimpleProperties(properties: SimplePropertiesMap): FeatureWrapper {
-    const original = this.getSimpleProperties();
+  /**
+   * Set and overwrite all data properties.
+   * @param properties
+   */
+  public setDataProperties(properties: DataPropertiesMap): FeatureWrapper {
+    const original = this.getDataProperties();
     const propertyKeys = Object.keys(properties);
 
     // First we remove properties
     const toRemove = Object.keys(original).filter((k) => !propertyKeys.find((k2) => k === k2));
     toRemove.forEach((k) => this.feature.unset(k));
 
-    // Then we set
+    // Then we set and trigger change
     this.feature.setProperties(properties);
     return this;
+  }
+
+  public toGeoJSON(dataProjection?: Projection | string): GeoJSONFeature {
+    const clone = this.clone();
+    const data = clone.getAllProperties();
+
+    // We must delete non serializable properties
+    for (const key in data) {
+      const field = data[key];
+
+      if (key !== 'geometry' && !isValidDataField(field)) {
+        clone.unwrap().unset(key);
+      }
+    }
+
+    return geoJson.writeFeatureObject(clone.unwrap(), { dataProjection });
+  }
+
+  public toDataRow(): DataRow {
+    let id = this.getId();
+    if (!id) {
+      logger.warn('Feature does not have an id, we generate a new one');
+      this.setId();
+      id = this.getId();
+      if (!id) {
+        throw new Error('Invalid id');
+      }
+    }
+
+    return {
+      id,
+      data: this.getDataProperties(),
+    };
+  }
+
+  public isHighlighted(): boolean {
+    return !!this.feature.get(HlStyleKey);
+  }
+
+  public setHighlighted(value: boolean, timeoutMs = -1): void {
+    if (this.isHighlighted() === value) {
+      return;
+    }
+
+    if (value) {
+      this.feature.set(HlPreviousStyleKey, this.feature.getStyle());
+
+      const style = highLightStylefactory.getForFeature(this);
+      this.feature.setStyle(style);
+
+      this.feature.set(HlStyleKey, style);
+
+      if (timeoutMs > 0) {
+        setTimeout(() => this.setHighlighted(false), timeoutMs);
+      }
+    } else {
+      const previousStyle = this.feature.get(HlPreviousStyleKey);
+      this.feature.setStyle(previousStyle);
+
+      this.feature.unset(HlPreviousStyleKey);
+      this.feature.unset(HlStyleKey);
+    }
   }
 }

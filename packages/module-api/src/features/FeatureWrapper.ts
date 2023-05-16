@@ -34,10 +34,10 @@ export declare type OlGeometry =
   | Circle;
 
 export declare type PropertiesMap = { [key: string]: any };
-export declare type SimplePropertiesMap = { [key: string]: string | number | undefined };
+export declare type DataPropertiesMap = { [key: string]: string | boolean | number | null | undefined };
 
 /**
- * FeatureWrapper wraps Openlayers features, mainly for Abc-Map specific critical operations (selection, styling, ...)
+ * This class is used to complete OpenLayers features (selection, styling, serialisation, ...)
  *
  * The goal is not to replace the use of Openlayers features, but to extend them by composition.
  *
@@ -58,9 +58,9 @@ export interface FeatureWrapper<Geom extends OlGeometry = OlGeometry> {
   setText(text: string): FeatureWrapper;
   getText(): string | undefined;
   getAllProperties(): PropertiesMap;
-  getSimpleProperties(): SimplePropertiesMap;
-  setProperties(properties: SimplePropertiesMap): FeatureWrapper;
-  overwriteSimpleProperties(properties: SimplePropertiesMap): FeatureWrapper;
+  getDataProperties(): DataPropertiesMap;
+  setProperties(properties: DataPropertiesMap): FeatureWrapper;
+  setDataProperties(properties: DataPropertiesMap): FeatureWrapper;
 }
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -82,7 +82,7 @@ export class DumbFeatureWrapper implements FeatureWrapper {
     return {} as any;
   }
 
-  public getSimpleProperties(): SimplePropertiesMap {
+  public getDataProperties(): DataPropertiesMap {
     return {} as any;
   }
 
@@ -102,7 +102,7 @@ export class DumbFeatureWrapper implements FeatureWrapper {
     return {} as any;
   }
 
-  public overwriteSimpleProperties(properties: SimplePropertiesMap): FeatureWrapper {
+  public setDataProperties(properties: DataPropertiesMap): FeatureWrapper {
     return {} as any;
   }
 
@@ -114,7 +114,7 @@ export class DumbFeatureWrapper implements FeatureWrapper {
     return {} as any;
   }
 
-  public setProperties(properties: SimplePropertiesMap): FeatureWrapper {
+  public setProperties(properties: DataPropertiesMap): FeatureWrapper {
     return {} as any;
   }
 

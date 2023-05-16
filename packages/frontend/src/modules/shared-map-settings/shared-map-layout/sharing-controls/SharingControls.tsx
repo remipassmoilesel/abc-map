@@ -101,7 +101,7 @@ function SharingControls(props: Props) {
       }
 
       const cs = UpdateSharedViewsChangeset.create([{ before: activeView, after: view }]);
-      cs.apply()
+      cs.execute()
         .then(() => history.register(HistoryKey.SharedViews, cs))
         .catch((err) => logger.error('Cannot update view: ', err));
     },

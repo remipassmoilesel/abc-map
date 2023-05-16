@@ -60,7 +60,7 @@ function SharedMapLayout() {
 
       if (!isEqual(activeView.view, view)) {
         const cs = UpdateSharedViewsChangeset.create([{ before: activeView, after: { ...activeView, view } }]);
-        cs.apply()
+        cs.execute()
           .then(() => history.register(HistoryKey.SharedViews, cs))
           .catch((err) => logger.error('Cannot update shared view: ', err));
       }
@@ -82,7 +82,7 @@ function SharedMapLayout() {
 
     // Create change set, apply and register it
     const cs = AddSharedViewChangeset.create([{ id, title, view: mapView, layers, textFrames: [] }]);
-    cs.apply()
+    cs.execute()
       .then(() => history.register(HistoryKey.SharedViews, cs))
       .catch((err) => logger.error('Cannot add view:', err));
   }, [geo, history, sharedViews.length, t]);
@@ -98,7 +98,7 @@ function SharedMapLayout() {
         position: { x: 5, y: 5 },
         size: { width: 30, height: 30 },
       });
-      cs.apply()
+      cs.execute()
         .then(() => history.register(HistoryKey.SharedViews, cs))
         .catch((err) => logger.error('Cannot add text frame:', err));
     },
@@ -112,7 +112,7 @@ function SharedMapLayout() {
       }
 
       const cs = RemoveSharedViewTextFrameChangeset.create(activeView, frame);
-      cs.apply()
+      cs.execute()
         .then(() => history.register(HistoryKey.SharedViews, cs))
         .catch((err) => logger.error('Cannot remove text frame:', err));
     },
@@ -129,7 +129,7 @@ function SharedMapLayout() {
         }
 
         const cs = UpdateTextFrameChangeset.create(before, after);
-        cs.apply()
+        cs.execute()
           .then(() => history.register(HistoryKey.SharedViews, cs))
           .catch((err) => logger.error('Cannot update text frame: ', err));
       }, 150),
@@ -156,7 +156,7 @@ function SharedMapLayout() {
       }
 
       const cs = AddSharedViewScaleChangeset.create(activeView, scale);
-      cs.apply()
+      cs.execute()
         .then(() => history.register(HistoryKey.SharedViews, cs))
         .catch((err) => logger.error('Cannot add scale:', err));
     },
@@ -169,7 +169,7 @@ function SharedMapLayout() {
     }
 
     const cs = RemoveSharedViewScaleChangeset.create(activeView, activeView.scale);
-    cs.apply()
+    cs.execute()
       .then(() => history.register(HistoryKey.SharedViews, cs))
       .catch((err) => logger.error('Cannot remove scale:', err));
   }, [activeView, history]);
@@ -181,7 +181,7 @@ function SharedMapLayout() {
       }
 
       const cs = UpdateSharedViewScaleChangeset.create(activeView, activeView.scale, scale);
-      cs.apply()
+      cs.execute()
         .then(() => history.register(HistoryKey.SharedViews, cs))
         .catch((err) => logger.error('Cannot update scale: ', err));
     },
@@ -195,7 +195,7 @@ function SharedMapLayout() {
       }
 
       const cs = UpdateSharedViewNorthChangeset.create(activeView, activeView.north, north);
-      cs.apply()
+      cs.execute()
         .then(() => history.register(HistoryKey.SharedViews, cs))
         .catch((err) => logger.error('Cannot update scale: ', err));
     },
@@ -209,7 +209,7 @@ function SharedMapLayout() {
       }
 
       const cs = AddSharedViewNorthChangeset.create(activeView, scale);
-      cs.apply()
+      cs.execute()
         .then(() => history.register(HistoryKey.SharedViews, cs))
         .catch((err) => logger.error('Cannot add north:', err));
     },
@@ -222,7 +222,7 @@ function SharedMapLayout() {
     }
 
     const cs = RemoveSharedViewNorthChangeset.create(activeView, activeView.north);
-    cs.apply()
+    cs.execute()
       .then(() => history.register(HistoryKey.SharedViews, cs))
       .catch((err) => logger.error('Cannot remove scale:', err));
   }, [activeView, history]);

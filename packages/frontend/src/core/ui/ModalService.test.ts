@@ -30,27 +30,28 @@ describe('ModalService', function () {
   });
 
   it('addListener()', () => {
-    expect(service.getListeners().size).toEqual(0);
+    // Prepare
     const listener = sinon.stub();
 
+    // Act
     service.addListener(ModalEventType.FeaturePropertiesClosed, listener);
     service.dispatch(event);
 
-    expect(service.getListeners().size).toEqual(1);
-    expect(service.getListeners().get(listener)).toBeDefined();
+    // Assert
     expect(listener.callCount).toEqual(1);
     expect(listener.args[0][0]).toEqual(event);
   });
 
   it('removeListener()', () => {
+    // Prepare
     const listener = sinon.stub();
     service.addListener(ModalEventType.FeaturePropertiesClosed, listener);
 
+    // Act
     service.removeListener(ModalEventType.FeaturePropertiesClosed, listener);
     service.dispatch(event);
 
-    expect(service.getListeners().size).toEqual(0);
-    expect(service.getListeners().get(listener)).toBeUndefined();
+    // Assert
     expect(listener.callCount).toEqual(0);
   });
 
@@ -105,7 +106,15 @@ describe('ModalService', function () {
 
       expect(error).toBeInstanceOf(Error);
       expect(error.message).toEqual('Huuooo');
-      expect(listener.args).toEqual([[{ type: ModalEventType.ShowLongOperationModal, processing: true }], [{ type: ModalEventType.LongOperationModalClosed }]]);
+      expect(listener.args).toEqual([
+        [
+          {
+            type: ModalEventType.ShowLongOperationModal,
+            processing: true,
+          },
+        ],
+        [{ type: ModalEventType.LongOperationModalClosed }],
+      ]);
     });
 
     it('should close quickly on interruption', async () => {
@@ -119,7 +128,15 @@ describe('ModalService', function () {
       });
 
       expect(res).toEqual(OperationStatus.Interrupted);
-      expect(listener.args).toEqual([[{ type: ModalEventType.ShowLongOperationModal, processing: true }], [{ type: ModalEventType.LongOperationModalClosed }]]);
+      expect(listener.args).toEqual([
+        [
+          {
+            type: ModalEventType.ShowLongOperationModal,
+            processing: true,
+          },
+        ],
+        [{ type: ModalEventType.LongOperationModalClosed }],
+      ]);
     });
 
     it('should return result even on interruption', async () => {
@@ -133,7 +150,15 @@ describe('ModalService', function () {
       });
 
       expect(res).toEqual(12345);
-      expect(listener.args).toEqual([[{ type: ModalEventType.ShowLongOperationModal, processing: true }], [{ type: ModalEventType.LongOperationModalClosed }]]);
+      expect(listener.args).toEqual([
+        [
+          {
+            type: ModalEventType.ShowLongOperationModal,
+            processing: true,
+          },
+        ],
+        [{ type: ModalEventType.LongOperationModalClosed }],
+      ]);
     });
   });
 });

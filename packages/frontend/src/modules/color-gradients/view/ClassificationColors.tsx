@@ -29,7 +29,7 @@ import * as chroma from 'chroma-js';
 import { nanoid } from 'nanoid';
 import ClassRow from './class-row/ClassRow';
 import ColorPicker from '../../../components/color-picker/ColorPickerButton';
-import { asNumberOrString, isValidNumber } from '../../../core/utils/numbers';
+import { asValidNumber, isValidNumber } from '../../../core/utils/numbers';
 import { prefixedTranslation } from '../../../i18n/i18n';
 import { IconDefs } from '../../../components/icon/IconDefs';
 import { FaIcon } from '../../../components/icon/FaIcon';
@@ -181,7 +181,7 @@ class ClassificationColors extends Component<Props, State> {
 
     const colorFunc = chroma.scale([startColor, endColor]).domain([0, numberOfClasses]).classes(numberOfClasses);
     const rows = await dataSource.getRows();
-    const data = rows.map((row) => asNumberOrString(row[valueField] ?? NaN)).filter(isValidNumber);
+    const data = rows.map((row) => asValidNumber(row.data[valueField])).filter(isValidNumber);
     const classes = Stats.classify(algo, numberOfClasses, data).map((cl, i) => {
       return { ...cl, id: nanoid(), color: colorFunc(i).hex() };
     });

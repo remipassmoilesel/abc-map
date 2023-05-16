@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { LocalStorageService, StorageKey } from '../../local-storage/LocalStorageService';
+import { LocalStorageService, StorageKey } from '../../storage/local-storage/LocalStorageService';
 import { Logger } from '@abc-map/shared';
 import { MainState } from '../reducer';
 

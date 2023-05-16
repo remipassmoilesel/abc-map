@@ -19,8 +19,10 @@
 import { useEffect, useState } from 'react';
 import { useServices } from '../useServices';
 import { LayerWrapper, VectorLayerWrapper } from './layers/LayerWrapper';
+import { MapWrapper } from './map/MapWrapper';
 
 interface Result {
+  map: MapWrapper;
   layers: LayerWrapper[];
   activeLayer: LayerWrapper | undefined;
   activeVectorLayer: VectorLayerWrapper | undefined;
@@ -50,6 +52,7 @@ export function useMapLayers(): Result {
   }, [map]);
 
   return {
+    map,
     layers,
     activeLayer,
     activeVectorLayer,

@@ -16,13 +16,13 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FeatureWrapper, SimplePropertiesMap } from '../../../geo/features/FeatureWrapper';
+import { FeatureWrapper, DataPropertiesMap } from '../../../geo/features/FeatureWrapper';
 import { SetFeaturePropertiesChangeset } from './SetFeaturePropertiesChangeset';
 
 describe('SetFeaturePropertiesChangeset', function () {
   let feature: FeatureWrapper;
-  let before: SimplePropertiesMap;
-  let after: SimplePropertiesMap;
+  let before: DataPropertiesMap;
+  let after: DataPropertiesMap;
   let changeset: SetFeaturePropertiesChangeset;
 
   beforeEach(() => {
@@ -35,12 +35,12 @@ describe('SetFeaturePropertiesChangeset', function () {
   it('should undo', async () => {
     await changeset.undo();
 
-    expect(feature.getSimpleProperties()).toEqual(before);
+    expect(feature.getDataProperties()).toEqual(before);
   });
 
   it('should redo', async () => {
-    await changeset.apply();
+    await changeset.execute();
 
-    expect(feature.getSimpleProperties()).toEqual(after);
+    expect(feature.getDataProperties()).toEqual(after);
   });
 });

@@ -36,7 +36,7 @@ export class RemoveLayoutTextFrameChangeset extends Changeset {
     this.project.updateLayout(updated);
   }
 
-  public async apply(): Promise<void> {
+  public async execute(): Promise<void> {
     const updated: AbcLayout = {
       ...this.layout,
       textFrames: this.layout.textFrames.filter((frm) => frm.id !== this.frame.id),

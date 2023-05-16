@@ -58,13 +58,13 @@ import { FeatureWrapper } from '../../geo/features/FeatureWrapper';
 import { LayerFactory } from '../../geo/layers/LayerFactory';
 import { IconName } from '../../../assets/point-icons/IconName';
 import { nanoid } from 'nanoid';
-import { Encryption } from '../Encryption';
 import MapBrowserEventType from 'ol/MapBrowserEventType';
 import { WmtsSettings } from '../../geo/layers/LayerFactory.types';
 import { WmtsCapabilities } from '../../geo/WmtsCapabilities';
 import { optionsFromCapabilities } from 'ol/source/WMTS';
 import { WmsCapabilities } from '../../geo/WmsCapabilities';
 import { DeepPartial } from 'utility-types';
+import { DataRow } from '../../data/data-source/DataSource';
 
 interface EventSettings {
   coordinate?: Coordinate;
@@ -127,27 +127,6 @@ export class TestHelper {
         ...template?.metadata,
       },
     } as AbcProjectManifest;
-
-    const zip = await Zipper.forBrowser().zipFiles([{ path: ProjectConstants.ManifestName, content: new Blob([JSON.stringify(project)]) }]);
-    return [{ metadata: project.metadata, project: zip }, project];
-  }
-
-  public static async sampleCompressedProtectedProject(template?: DeepPartial<AbcProjectManifest>): Promise<[CompressedProject<Blob>, AbcProjectManifest]> {
-    let project = this.sampleProjectManifest();
-    project = {
-      ...project,
-      ...template,
-      metadata: {
-        ...project.metadata,
-        ...template?.metadata,
-      },
-    } as AbcProjectManifest;
-
-    const wmsLayer = this.sampleWmsLayer();
-    wmsLayer.metadata.auth = { username: 'test-username', password: 'test-password' };
-    project.layers.push(wmsLayer);
-
-    project = await Encryption.encryptManifest(project, 'azerty1234');
 
     const zip = await Zipper.forBrowser().zipFiles([{ path: ProjectConstants.ManifestName, content: new Blob([JSON.stringify(project)]) }]);
     return [{ metadata: project.metadata, project: zip }, project];
@@ -309,7 +288,7 @@ export class TestHelper {
     };
   }
 
-  public static sampleLayout(): AbcLayout {
+  public static sampleLayout(template?: Partial<AbcLayout>): AbcLayout {
     return {
       id: nanoid(),
       name: 'Sample layout',
@@ -321,6 +300,7 @@ export class TestHelper {
         rotation: 0,
       },
       textFrames: [this.sampleTextFrame()],
+      ...template,
     };
   }
 
@@ -347,7 +327,7 @@ export class TestHelper {
     };
   }
 
-  public static sampleSharedView(): AbcSharedView {
+  public static sampleSharedView(template?: Partial<AbcSharedView>): AbcSharedView {
     return {
       id: uuid(),
       title: 'Sample layout',
@@ -355,6 +335,7 @@ export class TestHelper {
       layers: [],
       textFrames: [],
       scale: { x: 30, y: 100 },
+      ...template,
     };
   }
 
@@ -435,27 +416,28 @@ export class TestHelper {
       .map((inter) => inter.constructor.name);
   }
 
-  public static regionsOfFrance() {
+  public static regionsOfFranceAsDataRow(): DataRow[] {
     return RegionsOfMetropolitanFrance()
       .slice()
-      .map((row) => ({ ...row }));
+      .map((region) => ({
+        id: region._id,
+        selected: false,
+        data: {
+          code: region.code,
+          name: region.name,
+          popPercent: region.popPercent,
+          population: region.population,
+        },
+      }));
   }
 
   public static regionsOfFranceDataSource(): TestDataSource {
-    return TestDataSource.from(this.regionsOfFrance());
+    return TestDataSource.from(this.regionsOfFranceAsDataRow());
   }
 
   public static regionsOfFranceVectorLayer(): VectorLayerWrapper {
-    const features = this.regionsOfFrance().map((reg) => {
-      const feat = FeatureWrapper.create(
-        new Polygon([
-          [
-            [reg.code, reg.code],
-            [reg.code + 1, reg.code + 1],
-            [reg.code, reg.code],
-          ],
-        ])
-      );
+    const features = RegionsOfMetropolitanFrance().map((reg) => {
+      const feat = FeatureWrapper.create(this.samplePolygon());
       feat.unwrap().setId(reg._id);
       feat.unwrap().set('CODE', reg.code);
       feat.unwrap().set('NAME', reg.name);
@@ -469,6 +451,16 @@ export class TestHelper {
     layer.getSource().addFeatures(features);
 
     return layer;
+  }
+
+  public static samplePolygon(): Polygon {
+    return new Polygon([
+      [
+        [0, 0],
+        [100, 100],
+        [0, 0],
+      ],
+    ]);
   }
 
   public static sampleProjectionDto(): ProjectionDto {

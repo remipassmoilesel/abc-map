@@ -39,7 +39,7 @@ export class UpdateStyleChangeset extends Changeset {
     });
   }
 
-  public async apply(): Promise<void> {
+  public async execute(): Promise<void> {
     this.items.forEach((item) => {
       item.feature.setStyleProperties(cloneFeatureStyle(item.after));
       // We must set text here in order to erase it if necessary

@@ -25,8 +25,21 @@ import VectorImageLayer from 'ol/layer/VectorImage';
 import { WmsSettings } from './LayerFactory.types';
 import { TestHelper } from '../../utils/test/TestHelper';
 import WMTSTileGrid from 'ol/tilegrid/WMTS';
+import { tileLoadingAuthenticated } from '../tiles/tileLoadingAuthenticated';
+import { tileLoadingPublic } from '../tiles/tileLoadingPublic';
+import MockedFn = jest.MockedFn;
+
+jest.mock('../tiles/tileLoadingPublic');
+jest.mock('../tiles/tileLoadingAuthenticated');
 
 describe('LayerFactory', () => {
+  beforeEach(() => {
+    /* eslint-disable @typescript-eslint/no-empty-function */
+    (tileLoadingPublic as MockedFn<any>).mockImplementation(() => function () {});
+    (tileLoadingAuthenticated as MockedFn<any>).mockImplementation(() => function () {});
+    /* eslint-enable @typescript-eslint/no-empty-function */
+  });
+
   describe('newPredefinedLayer()', () => {
     it('OSM', () => {
       // Act
@@ -178,7 +191,9 @@ describe('LayerFactory', () => {
       expect(source).toBeInstanceOf(TileWMS);
       expect(source.getUrls()).toEqual(['http://test-url']);
       expect(source.getParams()).toEqual({ LAYERS: 'test-layer-name', TILED: true });
-      expect(source.getTileLoadFunction().toString()).not.toContain('authClient');
+
+      expect(tileLoadingPublic).toBeCalledTimes(1);
+      expect(tileLoadingAuthenticated).toBeCalledTimes(0);
     });
 
     it('with authentication', () => {
@@ -212,7 +227,9 @@ describe('LayerFactory', () => {
       expect(source).toBeInstanceOf(TileWMS);
       expect(source.getUrls()).toEqual(['http://test-url']);
       expect(source.getParams()).toEqual({ LAYERS: 'test-layer-name', TILED: true });
-      expect(source.getTileLoadFunction().toString()).toContain('authClient');
+
+      expect(tileLoadingPublic).toBeCalledTimes(0);
+      expect(tileLoadingAuthenticated).toBeCalledTimes(1);
     });
   });
 
@@ -245,7 +262,9 @@ describe('LayerFactory', () => {
       const source = layer.unwrap().getSource() as WMTS;
       expect(source).toBeInstanceOf(WMTS);
       expect(source.getTileGrid()).toBeInstanceOf(WMTSTileGrid);
-      expect(source.getTileLoadFunction().toString()).not.toContain('authClient');
+
+      expect(tileLoadingPublic).toBeCalledTimes(1);
+      expect(tileLoadingAuthenticated).toBeCalledTimes(0);
     });
 
     it('with authentication', () => {
@@ -273,7 +292,9 @@ describe('LayerFactory', () => {
       const source = layer.unwrap().getSource() as WMTS;
       expect(source).toBeInstanceOf(WMTS);
       expect(source.getTileGrid()).toBeInstanceOf(WMTSTileGrid);
-      expect(source.getTileLoadFunction().toString()).toContain('authClient');
+
+      expect(tileLoadingPublic).toBeCalledTimes(0);
+      expect(tileLoadingAuthenticated).toBeCalledTimes(1);
     });
   });
 });

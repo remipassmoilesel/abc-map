@@ -19,7 +19,7 @@
 import { AbcFile, AbcProjectManifest, Logger } from '@abc-map/shared';
 import { MigrationProject, ProjectMigration } from './typings';
 import semver from 'semver';
-import { AbcProjectManifest080 } from './old-typings/080-project';
+import { AbcProjectManifest080 } from './dependencies/080-project';
 
 const NEXT = '0.9.0';
 

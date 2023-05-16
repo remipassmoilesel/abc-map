@@ -38,7 +38,7 @@ export class UpdateGeometriesChangeset extends Changeset {
     });
   }
 
-  public async apply(): Promise<void> {
+  public async execute(): Promise<void> {
     // As geometries are mutated, here we must clone it
     this.items.forEach((item) => {
       item.feature.unwrap().setGeometry(item.after.clone());

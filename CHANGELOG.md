@@ -2,7 +2,19 @@
 
 For the moment we use git hashes as version, since no one complained about it üëç
 
-## XX/01/2023 - General dependency update (git: master)
+## XX/04/2023 - Auto save and feature explorer (git: master)
+
+- Projects, layers, features and tiles are automatically saved clientside with IndexedDB
+- In order to simplify user experience, projet passwords are removed
+- If you use several tabs a warning will be displayed, in order to prevent data loss
+- New feature explorer on map view, it allows viewing features and data easily
+
+## 09/04/2023 - Better project management (git: 528570d3)
+
+- New module for managing projects
+- New menu in topbar for managing projects
+
+## 15/01/2023 - General dependency update (git: 1657e006)
 
 - NodeJS 18
 - Backend dependencies: Fastify 4, ...
@@ -67,20 +79,21 @@ For the moment we use git hashes as version, since no one complained about it ü
 ## 09/04/2022 - Measure tools and better continuous integration (git: 3f79d57b)
 
 - Users can now measure existing shapes. Length for lines, Areas for polygons.
-- Add a "light" pipelines of continuous integration, per default. These pipelines execute: lint, build, unit and integration tests, but not end-to-end tests or performance tests. It allows executing CI even on Gitlab shared runners.
+- Add a "light" pipelines of continuous integration, per default. These pipelines execute: lint, build, unit and integration tests, but not end-to-end tests or
+  performance tests. It allows executing CI even on Gitlab shared runners.
 - Some entities are not available globally: FeatureWrapper, LayerWrapper, MapWrapper, ... for hacking in consoles.
 - Add [Volta](https://volta.sh/) configuration to project
 
 ## 03/04/2022 - Text frames style (git: 606a2fd6)
 
-- Style options for text frames. You can now open a modal on text frames to change background color,
-  enable or disable shadows and borders. You can also use transparent frames !
+- Style options for text frames. You can now open a modal on text frames to change background color, enable or disable shadows and borders. You can also use
+  transparent frames !
 - Fix of text frames positions, they could in some cases overflow their parents
 - Simplification of text frames menu, you can't edit them in place anymore
 - Fix of Youtube integration, some urls did not work
 - Better shadow management in UI
-- Project quotas: there is now an API to get the maximum number of project allowed and the current number of
-  projects saved. These quotas are used before a publication and displayed in "My projects" dialog.
+- Project quotas: there is now an API to get the maximum number of project allowed and the current number of projects saved. These quotas are used before a
+  publication and displayed in "My projects" dialog.
 
 ## 30/03/2022 - Shared maps, part 3 (git: 459dce66)
 
@@ -90,8 +103,8 @@ For the moment we use git hashes as version, since no one complained about it ü
 - Better navigation between shared views
 - Button "Download data" on shared maps
 - Better "My projects" dialog
-  - Better user experience
-  - No more layout shifts
+    - Better user experience
+    - No more layout shifts
 - Add component for small tips (SmallAdvice). Tip is visible in a tooltip when user hover component
 
 ## 23/03/2022 - Better "Add layer" dialog (git: d63aae91)
@@ -101,8 +114,8 @@ For the moment we use git hashes as version, since no one complained about it ü
 
 ## 20/03/2022 - Better style ratios (git: c6c10ada)
 
-- Previously the style was adapted from the main map to the preview. This is no longer the case, the style is the same on these two maps.
-  This will allow for easier layouts.
+- Previously the style was adapted from the main map to the preview. This is no longer the case, the style is the same on these two maps. This will allow for
+  easier layouts.
 - Now the style is adapted from the layout to the export map only.
 
 ## 19/03/2022 - Rich text frames, better map legends and better exports (git: a62a8f73)
@@ -222,8 +235,7 @@ This feature is released in experimental stage.
 
 ## 09/11/2021 - First UX/UI improvements (git: 22357c6f)
 
-Based on the work of @redroseven (see https://gitlab.com/abc-map/ux/-/tree/master/part1/sketches), first UX/UI
-improvements:
+Based on the work of @redroseven (see https://gitlab.com/abc-map/ux/-/tree/master/part1/sketches), first UX/UI improvements:
 
 - Improved Map screen
 - Improved Layout screen

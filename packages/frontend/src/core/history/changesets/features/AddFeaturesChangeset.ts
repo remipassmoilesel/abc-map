@@ -26,7 +26,7 @@ export class AddFeaturesChangeset extends Changeset {
     super();
   }
 
-  public async apply(): Promise<void> {
+  public async execute(): Promise<void> {
     this.source.addFeatures(this.features.map((f) => f.unwrap()));
   }
 

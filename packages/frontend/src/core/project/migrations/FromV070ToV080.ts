@@ -19,8 +19,8 @@
 import { AbcFile, AbcLayout, AbcProjectManifest, AbcSharedView, AbcTextFrame, Logger, TableElement, TableRowElement, TextFrameChild } from '@abc-map/shared';
 import { MigrationProject, ProjectMigration } from './typings';
 import semver from 'semver';
-import { AbcLayout070, AbcProjectManifest070, AbcSharedView070 } from './old-typings/070-project';
-import { AbcLegend060, LegendDisplay } from './old-typings/060-legend';
+import { AbcLayout070, AbcProjectManifest070, AbcSharedView070 } from './dependencies/070-project';
+import { AbcLegend060, LegendDisplay } from './dependencies/060-legend';
 import { nanoid } from 'nanoid';
 
 const NEXT = '0.8.0';

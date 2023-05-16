@@ -64,7 +64,7 @@ function XYZLayerPanel(props: Props) {
       const layer = LayerFactory.newXyzLayer(url);
 
       const cs = AddLayersChangeset.create([layer]);
-      await cs.apply();
+      await cs.execute();
       history.register(HistoryKey.Map, cs);
 
       onConfirm();

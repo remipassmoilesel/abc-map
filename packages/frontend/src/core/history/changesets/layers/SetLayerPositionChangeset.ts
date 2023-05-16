@@ -42,7 +42,7 @@ export class SetLayerPositionChangeset extends Changeset {
     this.map.addLayer(this.layer, this.previousPosition);
   }
 
-  public async apply(): Promise<void> {
+  public async execute(): Promise<void> {
     this.map.removeLayer(this.layer);
     this.map.addLayer(this.layer, this.nextPosition);
   }

@@ -18,11 +18,11 @@
 
 import React, { ChangeEvent, Component } from 'react';
 import { Logger } from '@abc-map/shared';
-import { DataRow, getFields } from '../../core/data/data-source/DataSource';
+import { DataRow } from '../../core/data/data-source/DataSource';
 import DataTable from '../data-table/DataTable';
 import { ServiceProps, withServices } from '../../core/withServices';
 import { VectorLayerWrapper } from '../../core/geo/layers/LayerWrapper';
-import VectorLayerSelector from '../vector-layer-selector/VectorLayerSelector';
+import { LayerSelector } from '../layer-selector/LayerSelector';
 import { LayerDataSource } from '../../core/data/data-source/LayerDataSource';
 import DialogBoxAdvice from '../dialog-box-advice/DialogBoxAdvice';
 import { DataProcessingTips } from '@abc-map/user-documentation';
@@ -31,6 +31,7 @@ import MessageLabel from '../message-label/MessageLabel';
 import { prefixedTranslation } from '../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
 import { IconDefs } from '../icon/IconDefs';
+import { getAllFieldNames } from '../../core/data/getFieldNames';
 
 const logger = Logger.get('GeometryLayerForm.tsx');
 
@@ -74,7 +75,14 @@ class GeometryLayerForm extends Component<Props, State> {
     return (
       <>
         <FormLine>
-          <VectorLayerSelector label={t('Layer')} value={layer?.getId()} onSelected={this.handleGeometryLayerSelected} data-cy={'geometry-layer'} />
+          <LayerSelector
+            label={t('Layer')}
+            value={layer}
+            onSelected={this.handleGeometryLayerSelected}
+            onlyVector={true}
+            data-cy={'geometry-layer'}
+            data-testid={'layer-selector'}
+          />
         </FormLine>
 
         <FormLine>
@@ -130,7 +138,7 @@ class GeometryLayerForm extends Component<Props, State> {
     }
   }
 
-  private handleGeometryLayerSelected = (layer: VectorLayerWrapper | undefined) => {
+  private handleGeometryLayerSelected = (_: unknown, layer: VectorLayerWrapper | undefined) => {
     this.layerDataPreview(layer)
       .then(() => {
         const values: GeometryLayerFormValues = {
@@ -163,15 +171,15 @@ class GeometryLayerForm extends Component<Props, State> {
 
     return new LayerDataSource(layer)
       .getRows()
-      .then((res) => {
-        if (!res.length) {
+      .then((rows) => {
+        if (!rows.length) {
           this.setState({ featureFields: [], dataSamples: [], geometries: 0 });
           return;
         }
 
-        const featureFields = getFields(res[0]);
-        const dataSamples = res.slice(0, 3);
-        const geometries = res.length;
+        const featureFields = getAllFieldNames(rows);
+        const dataSamples = rows.slice(0, 3);
+        const geometries = rows.length;
         this.setState({ featureFields, dataSamples, geometries });
       })
       .catch((err) => {

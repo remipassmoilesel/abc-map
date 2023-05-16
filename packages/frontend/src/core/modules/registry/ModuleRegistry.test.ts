@@ -23,6 +23,9 @@ import { newTestServices, TestServices } from '../../../core/utils/test/TestServ
 import { localModulesFactory } from '../../../modules';
 import { UiActions } from '../../store/ui/actions';
 import { LocalModuleId } from '../../../modules/LocalModuleId';
+import { disableSearchIndexLogging } from '../../utils/SearchIndex';
+
+disableSearchIndexLogging();
 
 describe('ModuleRegistry', () => {
   let services: TestServices;

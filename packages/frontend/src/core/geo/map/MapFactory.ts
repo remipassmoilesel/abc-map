@@ -21,7 +21,7 @@ import { MapWrapper } from './MapWrapper';
 import { Views } from '../Views';
 
 export class MapFactory {
-  public static createDefault(): MapWrapper {
+  public static createDefault(empty = false): MapWrapper {
     const internal = new Map({
       layers: [],
       controls: [],
@@ -29,7 +29,7 @@ export class MapFactory {
     });
 
     const map = MapWrapper.from(internal);
-    map.setDefaultLayers();
+    !empty && map.setDefaultLayers();
     map.setDefaultTool();
 
     return map;

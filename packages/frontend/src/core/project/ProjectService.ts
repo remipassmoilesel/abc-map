@@ -29,7 +29,6 @@ import {
   AbcView,
   BlobIO,
   CompressedProject,
-  LayerType,
   Logger,
   ProjectConstants,
   Zipper,
@@ -38,22 +37,22 @@ import { AxiosInstance } from 'axios';
 import { ProjectFactory } from './ProjectFactory';
 import { GeoService } from '../geo/GeoService';
 import { ProjectRoutes as Api } from '../http/ApiRoutes';
-import { MainStore } from '../store/store';
-import { Encryption } from '../utils/Encryption';
+import { mainStore, MainStore } from '../store/store';
 import { HttpError } from '../http/HttpError';
 import { ToastService } from '../ui/ToastService';
-import { ModalStatus } from '../ui/typings';
 import { ModalService } from '../ui/ModalService';
 import { ProjectEvent, ProjectEventType } from './ProjectEvent';
-import { Errors } from '../utils/Errors';
 import { ProjectUpdater } from './ProjectUpdater';
 import { ProjectStatus } from './ProjectStatus';
 import { Routes } from '../../routes';
-import { PasswordCache } from './PasswordCache';
 import { TextFrameHelpers } from './TextFrameHelpers';
 import uuid from 'uuid-random';
+import { LayoutStorage, ProjectDbStorage, SharedViewStorage } from '../storage/indexeddb/storage/ProjectDbStorage';
+import { ApiClient, DownloadClient } from '../http/http-clients';
+import { throttleDbStorage } from '../storage/indexeddb/storage/throttleDbStorage';
+import { LayerDbStorage } from '../storage/indexeddb/storage/LayerDbStorage';
 
-export const logger = Logger.get('ProjectService.ts');
+export const logger = Logger.get('ProjectService.ts', 'debug');
 
 // This timeout is used for download / upload of projects
 const SaveProjectTimeout = 45_000;
@@ -61,30 +60,95 @@ const SaveProjectTimeout = 45_000;
 export type ExportResult = { manifest: AbcProjectManifest; files: AbcFile<Blob>[] } | ProjectStatus.Canceled;
 
 export class ProjectService {
-  public static create(
-    jsonClient: AxiosInstance,
-    downloadClient: AxiosInstance,
-    store: MainStore,
-    toasts: ToastService,
-    geoService: GeoService,
-    modals: ModalService
-  ) {
+  public static create(toasts: ToastService, geoService: GeoService, modals: ModalService) {
     const updater = ProjectUpdater.create(modals);
-    return new ProjectService(jsonClient, downloadClient, store, toasts, geoService, modals, updater);
+    const storage = ProjectDbStorage.create();
+    return new ProjectService(ApiClient, DownloadClient, mainStore, toasts, geoService, modals, updater, storage);
   }
 
   private eventTarget = document.createDocumentFragment();
-  private passwordCache = new PasswordCache();
+  private autoSaveSubscription?: () => void;
 
   constructor(
-    private jsonClient: AxiosInstance,
+    private apiClient: AxiosInstance,
     private downloadClient: AxiosInstance,
     private store: MainStore,
     private toasts: ToastService,
     private geoService: GeoService,
     private modals: ModalService,
-    private updater: ProjectUpdater
+    private updater: ProjectUpdater,
+    private storage: ProjectDbStorage
   ) {}
+
+  public enableProjectAutoSave() {
+    const mainMap = this.geoService.getMainMap();
+
+    // We save project each time store change
+    const persistProjectThrottled = throttleDbStorage(this.persistProjectLocally, 5_000);
+    this.autoSaveSubscription = this.store.subscribe(persistProjectThrottled);
+    this.persistProjectLocally();
+
+    // We watch store for special objects of project
+    LayoutStorage.watch(this.store);
+    SharedViewStorage.watch(this.store);
+
+    // When layers change, we enable storage for them if needed, then we call project persistence
+    const persistLayers = () => {
+      const layers = mainMap.getLayers();
+      for (const layer of layers) {
+        if (!LayerDbStorage.isStorageEnabled(layer)) {
+          logger.debug(`Enabling storage on layer ${layer.getName()} (vector=${layer.isVector()})`);
+          if (layer.isVector()) {
+            LayerDbStorage.enableVectorLayerStorage(layer);
+          } else {
+            LayerDbStorage.enableTileLayerStorage(layer);
+          }
+        }
+      }
+
+      persistProjectThrottled();
+    };
+
+    persistLayers();
+    mainMap.addLayerChangeListener(persistLayers);
+  }
+
+  public disableProjectAutoSave() {
+    this.autoSaveSubscription && this.autoSaveSubscription();
+
+    LayoutStorage.unwatch();
+    SharedViewStorage.unwatch();
+  }
+
+  private persistProjectLocally = () => {
+    logger.debug('Saving project ...');
+    const start = Date.now();
+    const { mainView, metadata, sharedViews, layouts } = this.store.getState().project;
+
+    const layerIds = this.geoService
+      .getMainMap()
+      .getLayers()
+      .map((layer) => layer.getId())
+      .filter((layerId): layerId is string => !!layerId);
+
+    const sharedViewIds = sharedViews.list.map((view) => view.id);
+    const layoutIds = layouts.list.map((layout) => layout.id);
+
+    this.storage
+      .put({
+        metadata,
+        view: mainView,
+        layerIds,
+        layoutIds,
+        sharedViews: {
+          fullscreen: sharedViews.fullscreen,
+          mapDimensions: sharedViews.mapDimensions,
+          viewIds: sharedViewIds,
+        },
+      })
+      .catch((err) => logger.error('Project storage error: ', err))
+      .finally(() => logger.debug('Saved project in ' + (Date.now() - start) + 'ms'));
+  };
 
   public addProjectLoadedListener(listener: (ev: ProjectEvent) => void) {
     this.eventTarget.addEventListener(ProjectEventType.ProjectLoaded, listener);
@@ -97,35 +161,20 @@ export class ProjectService {
   public async newProject(): Promise<void> {
     // Create new manifest
     const manifest = ProjectFactory.newProjectManifest();
-    await this.loadExtracted(manifest, undefined, []);
+    await this.loadExtracted(manifest, []);
 
     // Reset main map layers
     this.geoService.getMainMap().setDefaultLayers();
-
-    this.passwordCache.reset();
 
     logger.info('New project created');
   }
 
   /**
    * Download then load project.
-   *
-   * If no password specified, user will be prompted if needed.
-   *
    * @param id
-   * @param password
    */
-  public loadPrivateProject(id: string, password?: string): Promise<void> {
-    return this.findById(id).then((blob) => {
-      if (!blob) {
-        return Promise.reject(new Error('Project not found'));
-      }
-      return this.loadBlobProject(blob, password);
-    });
-  }
-
-  public loadPublicProject(id: string): Promise<void> {
-    return this.findSharedById(id).then((blob) => {
+  public loadRemotePrivateProject(id: string): Promise<void> {
+    return this.findRemoteById(id).then((blob) => {
       if (!blob) {
         return Promise.reject(new Error('Project not found'));
       }
@@ -134,16 +183,43 @@ export class ProjectService {
   }
 
   /**
+   * Download then load project.
+   *
+   * @param id
+   */
+  public loadRemotePublicProject(id: string): Promise<void> {
+    return this.findRemotePublicById(id).then((blob) => {
+      if (!blob) {
+        return Promise.reject(new Error('Project not found'));
+      }
+      return this.loadBlobProject(blob);
+    });
+  }
+
+  public async isStoredLocally(projectId: string): Promise<boolean> {
+    return this.storage.exists(projectId);
+  }
+
+  /**
+   * Load a project stored in IndexedDB.
+   *
+   * @param id
+   */
+  public async loadLocalProject(id: string): Promise<void> {
+    const project = await this.storage.getManifest(id);
+    if (!project) {
+      throw new Error(`Not found: ${id}`);
+    }
+
+    return this.loadExtracted(project, []);
+  }
+
+  /**
    * Load a zipped project.
    *
-   * If password is missing and project is encrypted, password will be prompted.
-   *
-   * We must prompt here to prevent several unzip of project, which is an expensive operation.
-   *
    * @param blob
-   * @param password
    */
-  public async loadBlobProject(blob: Blob, password?: string): Promise<void> {
+  public async loadBlobProject(blob: Blob): Promise<void> {
     // Unzip project
     const files = await Zipper.forBrowser().unzip(blob);
     const manifestFile = files.find((f) => f.path.endsWith(ProjectConstants.ManifestName));
@@ -153,40 +229,22 @@ export class ProjectService {
 
     // Parse manifest
     const manifest: AbcProjectManifest = JSON.parse(await BlobIO.asString(manifestFile.content));
-    return this.loadExtracted(manifest, password, files);
+    return this.loadExtracted(manifest, files);
   }
 
-  private async loadExtracted(_manifest: AbcProjectManifest, _password: string | undefined, _files: AbcFile<Blob>[]): Promise<void> {
+  private async loadExtracted(_manifest: AbcProjectManifest, _files: AbcFile<Blob>[]): Promise<void> {
     // Migrate project if necessary
-    // eslint-disable-next-line prefer-const
-    let { manifest, files } = await this.updater.update(_manifest, _files);
-
-    // Prompt password if necessary
-    let password = _password;
-    if (!manifest.metadata.public && Encryption.manifestContainsCredentials(manifest) && !password) {
-      const witness = Encryption.extractEncryptedData(manifest);
-      const ev = await this.modals.promptProjectPassword(witness || '');
-      const canceled = ev.status === ModalStatus.Canceled;
-      password = ev.value;
-      if (canceled || !password) {
-        Errors.missingPassword();
-      }
-    }
-
-    // Decrypt project manifest if password set
-    if (password) {
-      manifest = await Encryption.decryptManifest(manifest, password);
-      this.passwordCache.set(password);
-    }
+    const migrated = await this.updater.update(_manifest, _files);
+    let manifest = migrated.manifest;
+    const files = migrated.files;
 
     // Load view and layers projection
     // FIXME: we should batch projection loading here
     await this.geoService.loadProjection(manifest.view.projection.name);
     for (const lay of manifest.layers) {
-      if (LayerType.Wms === lay.type && lay.metadata.projection) {
-        await this.geoService.loadProjection(lay.metadata.projection.name);
-      } else if (LayerType.Xyz === lay.type && lay.metadata.projection) {
-        await this.geoService.loadProjection(lay.metadata.projection.name);
+      const projectionName = 'projection' in lay.metadata && lay.metadata.projection?.name;
+      if (projectionName) {
+        await this.geoService.loadProjection(projectionName);
       }
     }
 
@@ -202,7 +260,15 @@ export class ProjectService {
 
     // Load project manifest and layers
     this.store.dispatch(ProjectActions.loadProject(manifest));
-    await this.geoService.importLayers(manifest.layers);
+    const layerDefs = manifest.layers.map((layer) => ({ ...layer, metadata: { ...layer.metadata, active: false } } as AbcLayer));
+    await this.geoService.importLayers(layerDefs);
+
+    // Set active layer if any
+    const map = this.geoService.getMainMap();
+    const layers = map.getLayers();
+    if (layers.length) {
+      map.setActiveLayer(layers.slice(-1)[0]);
+    }
 
     // Set active layout if any
     if (manifest.layouts.length) {
@@ -224,23 +290,11 @@ export class ProjectService {
 
   public async exportCurrentProject(): Promise<ExportResult> {
     const state = this.store.getState().project;
-    const containsCredentials = Encryption.mapContainsCredentials(this.geoService.getMainMap());
-    const shouldBeEncrypted = containsCredentials && !state.metadata.public;
-
-    let password = this.passwordCache.get();
-    if (shouldBeEncrypted && !password) {
-      const event = await this.modals.createProjectPassword();
-      if (event.status === ModalStatus.Canceled) {
-        return ProjectStatus.Canceled;
-      }
-      password = event.value;
-      this.passwordCache.set(password);
-    }
 
     const [imagesFromLayouts, layouts] = await TextFrameHelpers.extractImagesFromLayouts(state.layouts.list);
     const [imagesFromViews, sharedViews] = await TextFrameHelpers.extractImagesFromSharedViews(state.sharedViews.list);
 
-    let manifest: AbcProjectManifest = {
+    const manifest: AbcProjectManifest = {
       metadata: state.metadata,
       layers: await this.geoService.exportLayers(this.geoService.getMainMap()),
       view: state.mainView,
@@ -251,10 +305,6 @@ export class ProjectService {
         mapDimensions: state.sharedViews.mapDimensions,
       },
     };
-
-    if (shouldBeEncrypted && password) {
-      manifest = await Encryption.encryptManifest(manifest, password);
-    }
 
     return { manifest, files: imagesFromLayouts.concat(imagesFromViews) };
   }
@@ -325,7 +375,7 @@ export class ProjectService {
     const formData = new FormData();
     formData.append('metadata', JSON.stringify(compressed.metadata));
     formData.append('project', compressed.project);
-    return this.jsonClient
+    return this.apiClient
       .post(Api.saveProject(), formData, {
         timeout: SaveProjectTimeout,
         headers: {
@@ -467,7 +517,7 @@ export class ProjectService {
   }
 
   public listRemoteProjects(): Promise<AbcProjectMetadata[]> {
-    return this.jsonClient
+    return this.apiClient
       .get(Api.listProject())
       .then((res) => res.data)
       .catch((err) => {
@@ -476,23 +526,19 @@ export class ProjectService {
       });
   }
 
-  public findById(id: string): Promise<Blob | undefined> {
+  public findRemoteById(id: string): Promise<Blob | undefined> {
     return this.downloadClient.get(Api.findById(id)).then((res) => res.data);
   }
 
-  public findSharedById(id: string): Promise<Blob | undefined> {
+  public findRemotePublicById(id: string): Promise<Blob | undefined> {
     return this.downloadClient.get(Api.findSharedById(id)).then((res) => res.data);
   }
 
   public deleteById(id: string): Promise<void> {
-    return this.jsonClient.delete(Api.findById(id)).then(() => undefined);
+    return this.apiClient.delete(Api.findById(id)).then(() => undefined);
   }
 
   public getQuotas(): Promise<AbcProjectQuotas> {
-    return this.jsonClient.get(Api.quotas()).then((res) => res.data);
-  }
-
-  public resetCache() {
-    this.passwordCache.reset();
+    return this.apiClient.get(Api.quotas()).then((res) => res.data);
   }
 }

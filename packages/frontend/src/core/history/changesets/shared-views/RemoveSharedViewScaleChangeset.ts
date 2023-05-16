@@ -32,7 +32,7 @@ export class RemoveSharedViewScaleChangeset extends Changeset {
     super();
   }
 
-  public async apply(): Promise<void> {
+  public async execute(): Promise<void> {
     this.project.updateSharedView({ ...this.view, scale: undefined });
   }
 

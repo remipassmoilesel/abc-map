@@ -16,197 +16,240 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { Component } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Logger } from '@abc-map/shared';
-import isEqual from 'lodash/isEqual';
 import { DataRow } from '../../core/data/data-source/DataSource';
-import VectorLayerSelector from '../../components/vector-layer-selector/VectorLayerSelector';
+import { LayerSelector } from '../../components/layer-selector/LayerSelector';
 import { VectorLayerWrapper } from '../../core/geo/layers/LayerWrapper';
 import DataTable from '../../components/data-table/DataTable';
-import { LayerDataSource } from '../../core/data/data-source/LayerDataSource';
-import { ServiceProps, withServices } from '../../core/withServices';
-import { CsvParser } from '../../core/data/csv-parser/CsvParser';
-import { FileIO } from '../../core/utils/FileIO';
 import Cls from './DataTableView.module.scss';
-import { FeatureWrapper } from '../../core/geo/features/FeatureWrapper';
-import { ModalStatus } from '../../core/ui/typings';
-import { HistoryKey } from '../../core/history/HistoryKey';
-import { SetFeaturePropertiesChangeset } from '../../core/history/changesets/features/SetFeaturePropertiesChangeset';
-import { RemoveFeaturesChangeset } from '../../core/history/changesets/features/RemoveFeaturesChangeset';
-import { prefixedTranslation } from '../../i18n/i18n';
-import { withTranslation } from 'react-i18next';
-import { ModuleContainer } from '../../components/module-container/ModuleContainer';
+import { useTranslation } from 'react-i18next';
 import { ModuleTitle } from '../../components/module-title/ModuleTitle';
 import clsx from 'clsx';
+import { LayerDataSource } from '../../core/data/data-source/LayerDataSource';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { DataViewSearchParams } from './DataViewSearchParams';
+import { useMapLayers } from '../../core/geo/useMapLayers';
+import { CsvParser } from '../../core/data/csv-parser/CsvParser';
+import { CsvRow } from '../../core/data/csv-parser/typings';
+import { useServices } from '../../core/useServices';
+import { ModalStatus } from '../../core/ui/typings';
+import { SetFeaturePropertiesChangeset } from '../../core/history/changesets/features/SetFeaturePropertiesChangeset';
+import { HistoryKey } from '../../core/history/HistoryKey';
+import { getFeature } from './getFeature';
+import { RemoveFeaturesChangeset } from '../../core/history/changesets/features/RemoveFeaturesChangeset';
+import { FileIO } from '../../core/utils/FileIO';
+import isEqual from 'lodash/isEqual';
+import { Routes } from '../../routes';
+import { asNumberOrString } from '../../core/utils/numbers';
+import { useShowDataTableView } from './useShowDataTableView';
 
 const logger = Logger.get('DataTableView.tsx');
 
-interface Props extends ServiceProps {
-  initialValue?: string;
-  onChange: (layerId?: string) => void;
+interface Props {
+  layerId: string | undefined;
+  onChange: (layerId: string | undefined) => void;
 }
 
-interface State {
-  data: DataRow[];
-  layer?: VectorLayerWrapper;
-  disableDownload: boolean;
-}
+export function DataTableView(props: Props) {
+  const { layerId: inMemoryLayerId, onChange } = props;
+  const { t } = useTranslation('DataTableModule');
+  const [data, setData] = useState<DataRow[]>();
+  const [loading, setLoading] = useState(false);
+  const [disableDownload, setDisableDownload] = useState<boolean>();
+  const { layers } = useMapLayers();
+  const { toasts, modals, history, geo } = useServices();
+  const navigate = useNavigate();
+  const showDataTable = useShowDataTableView();
 
-const t = prefixedTranslation('DataTableModule:');
-
-class DataTableView extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      data: [],
-      disableDownload: true,
-    };
-  }
-
-  public render() {
-    const data = this.state.data;
-    const layer = this.state.layer;
-    const disableDownload = this.state.disableDownload;
-
-    return (
-      <ModuleContainer>
-        <ModuleTitle>{t('Data_tables')}</ModuleTitle>
-
-        <div className={'d-flex flex-column'}>
-          <div className={'my-3'}>{t('Select_a_layer')}</div>
-          <div className={'d-flex flex-row align-items-center mb-4'}>
-            <div className={clsx(Cls.vectorSelection, 'mr-3')}>
-              <VectorLayerSelector value={layer?.getId()} onSelected={this.handleSelected} data-cy={'layer-selector'} />
-            </div>
-
-            <button className={'mr-3 btn btn-secondary'} disabled={disableDownload} onClick={this.handleDownload} data-cy={'download'}>
-              {t('Download_CSV')}
-            </button>
-
-            {!!data.length && <div dangerouslySetInnerHTML={{ __html: t('X_entries', { entries: data.length }) }} />}
-          </div>
-        </div>
-
-        {!!data.length && (
-          <DataTable rows={data} withActions={true} onEdit={this.handleEdit} onDelete={this.handleDelete} className={Cls.dataTable} data-cy={'data-table'} />
-        )}
-
-        {layer && !data.length && <div className={'my-3'}>{t('No_data_to_display')}</div>}
-      </ModuleContainer>
-    );
-  }
-
-  public componentDidMount() {
-    const layerId = this.props.initialValue;
-    if (layerId) {
-      const map = this.props.services.geo.getMainMap();
-      const layer = map.getLayers().find((lay) => lay.getId() === layerId);
-      layer && layer.isVector() && this.showData(layer);
-    }
-  }
-
-  private handleSelected = (layer: VectorLayerWrapper | undefined) => {
-    this.props.onChange(layer?.getId());
-    this.showData(layer);
-  };
-
-  private showData(layer: VectorLayerWrapper | undefined) {
+  const showData = useCallback((layer: VectorLayerWrapper | undefined) => {
     if (!layer) {
-      this.setState({ data: [], layer, disableDownload: true });
+      setData([]);
+      setDisableDownload(true);
+      setLoading(false);
       return;
     }
 
+    setLoading(true);
     new LayerDataSource(layer)
       .getRows()
-      .then((data) => this.setState({ data, layer, disableDownload: data.length < 1 }))
+      .then((data) => {
+        setData(data);
+        setDisableDownload(data.length < 1);
+      })
       .catch((err) => {
-        this.setState({ data: [], layer, disableDownload: true });
-        logger.error(err);
-      });
-  }
+        setData([]);
+        setDisableDownload(true);
+        logger.error('Data display error:', err);
+      })
+      .finally(() => setLoading(false));
+  }, []);
 
-  private handleDownload = () => {
-    const { toasts } = this.props.services;
+  // Active Layer id is in search params
+  const [searchParams] = useSearchParams();
+  const searchParamKey: keyof DataViewSearchParams = 'layerId';
+  const layerId = searchParams.get(searchParamKey) ?? inMemoryLayerId;
+  const layer = layers.find((lay) => lay.getId() === layerId);
 
-    const rows = this.state.data;
-    const layer = this.state.layer;
-    if (!rows.length || !layer) {
+  // User selects a layer in selector
+  const handleLayerSelected = useCallback(
+    (_: unknown, layer: VectorLayerWrapper | undefined) => {
+      onChange(layer?.getId());
+      showDataTable(layer?.getId());
+    },
+    [onChange, showDataTable]
+  );
+
+  // Each time layer id change we show data
+  useEffect(() => {
+    if (layer && layer.isVector()) {
+      showData(layer);
+    }
+  }, [layer, layerId, showData]);
+
+  // User download data
+  const handleDownload = useCallback(() => {
+    if (!data?.length || !layer) {
       toasts.error(t('You_must_select_a_layer_with_data'));
       return;
     }
 
     const fileName = `${layer.getName()}.csv`;
-    const toDownload: Partial<DataRow>[] = rows.map((r) => ({ ...r }));
-    toDownload.forEach((r) => delete r._id);
+    const csvRows: CsvRow[] = data.map((r) => {
+      const result: CsvRow = {};
+      for (const key in r.data) {
+        const value = r.data[key];
+        result[key] = asNumberOrString(value);
+      }
+      return result;
+    });
 
-    CsvParser.unparse(toDownload, fileName)
+    CsvParser.unparse(csvRows, fileName)
       .then((file) => FileIO.downloadBlob(file, fileName))
       .catch((err) => {
-        logger.error(err);
+        logger.error('CSV parsing error:', err);
         toasts.genericError();
       });
-  };
+  }, [data, layer, t, toasts]);
 
-  private handleEdit = (r: DataRow) => {
-    const { toasts, modals, history } = this.props.services;
+  // User edit a row
+  const handleEdit = useCallback(
+    (row: DataRow) => {
+      if (!layer || !layer.isVector()) {
+        logger.error('Bad layer:', layer);
+        return;
+      }
 
-    const layer = this.state.layer;
-    const feature = this.getFeature(r);
-    if (!feature || !layer) {
-      toasts.genericError();
-      return;
-    }
+      const feature = getFeature(layer, row);
+      if (!feature) {
+        logger.error('Bad row:', row);
+        return;
+      }
 
-    const before = feature.getSimpleProperties();
+      const before = feature.getDataProperties();
 
-    modals
-      .featurePropertiesModal(before)
-      .then((modalEvent) => {
-        const after = modalEvent.properties;
-        if (ModalStatus.Confirmed === modalEvent.status && !isEqual(before, after)) {
-          const cs = new SetFeaturePropertiesChangeset(feature, before, after);
-          cs.apply().catch((err) => logger.error('Cannot set properties: ', err));
+      modals
+        .editPropertiesModal(before)
+        .then((modalEvent) => {
+          const after = modalEvent.properties;
+          if (ModalStatus.Confirmed === modalEvent.status && !isEqual(before, after)) {
+            const cs = new SetFeaturePropertiesChangeset(feature, before, after);
+            cs.execute()
+              .then(() => {
+                showData(layer);
+                history.register(HistoryKey.Map, cs);
+              })
+              .catch((err) => logger.error('Cannot set properties:', err));
+          }
+        })
+        .catch((err) => logger.error('Error while editing feature properties:', err));
+    },
+    [history, layer, modals, showData]
+  );
+
+  // User delete a row
+  const handleDelete = useCallback(
+    (row: DataRow) => {
+      if (!layer || !layer.isVector()) {
+        logger.error('Bad layer:', layer);
+        return;
+      }
+
+      const feature = getFeature(layer, row);
+      if (!feature || !layer) {
+        logger.error('Bad row :', row);
+        return;
+      }
+
+      const cs = new RemoveFeaturesChangeset(layer.getSource(), [feature]);
+      cs.execute()
+        .then(() => {
           history.register(HistoryKey.Map, cs);
+          showData(layer);
+        })
+        .catch((err) => logger.error('Cannot delete feature:', err));
+    },
+    [history, layer, showData]
+  );
 
-          this.showData(layer);
-        }
-      })
-      .catch((err) => logger.error('Error while editing feature properties: ', err));
-  };
+  // User show a feature on map
+  const handleShowOnMap = useCallback(
+    (row: DataRow) => {
+      if (!layer || !layer.isVector()) {
+        logger.error('Bad layer:', layer);
+        return;
+      }
 
-  private handleDelete = (r: DataRow) => {
-    const { toasts, history } = this.props.services;
+      const feature = getFeature(layer, row);
+      if (!feature || !layer) {
+        logger.error('Bad row :', row);
+        return;
+      }
 
-    const layer = this.state.layer;
-    const feature = this.getFeature(r);
-    if (!feature || !layer) {
-      toasts.genericError();
-      return;
-    }
+      const extent = feature.getGeometry()?.getExtent();
+      if (extent) {
+        navigate(Routes.map().format());
+        geo.getMainMap().unwrap().getView().fit(extent);
+        feature.setHighlighted(true, 3_000);
+      }
+    },
+    [geo, layer, navigate]
+  );
 
-    const cs = new RemoveFeaturesChangeset(layer.getSource(), [feature]);
-    cs.apply().catch((err) => logger.error('Cannot delete feature: ', err));
-    history.register(HistoryKey.Map, cs);
+  return (
+    <div className={Cls.container}>
+      <ModuleTitle>{t('Data_tables')}</ModuleTitle>
 
-    this.showData(layer);
-  };
+      <div className={'d-flex flex-column'}>
+        <div className={'my-3'}>{t('Select_a_layer')}</div>
+        <div className={'d-flex flex-row align-items-center mb-4'}>
+          <div className={clsx(Cls.vectorSelection, 'mr-3')}>
+            <LayerSelector value={layer} onSelected={handleLayerSelected} onlyVector={true} data-cy={'layer-selector'} />
+          </div>
 
-  private getFeature(r: DataRow): FeatureWrapper | undefined {
-    const layer = this.state.layer;
-    if (!layer) {
-      return;
-    }
+          <button className={'mr-3 btn btn-secondary'} disabled={disableDownload} onClick={handleDownload} data-cy={'download'}>
+            {t('Download_CSV')}
+          </button>
 
-    const feature = layer
-      .getSource()
-      .getFeatures()
-      .find((f) => f.getId() === r._id);
-    if (!feature) {
-      return;
-    }
+          {!!data?.length && <div dangerouslySetInnerHTML={{ __html: t('X_entries', { entries: data.length }) }} />}
+        </div>
+      </div>
 
-    return FeatureWrapper.from(feature);
-  }
+      {layer && !data?.length && !loading && <div className={'my-3'}>{t('No_data_to_display')}</div>}
+
+      {loading && <div className={'my-3'}>{t('Loading_data')}</div>}
+
+      {!!data?.length && (
+        <DataTable
+          rows={data}
+          withActions={true}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+          onShowOnmap={handleShowOnMap}
+          className={Cls.dataTable}
+          data-cy={'data-table'}
+        />
+      )}
+    </div>
+  );
 }
-
-export default withTranslation()(withServices(DataTableView));

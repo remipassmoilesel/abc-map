@@ -24,7 +24,7 @@ import { LayerFactory } from './geo/layers/LayerFactory';
 
 /*
 
-We keep a reference to these tools for hcking in consoles
+We keep a reference to these tools for hacking in consoles
 
  */
 

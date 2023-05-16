@@ -24,11 +24,11 @@ import { Stats } from '../../core/modules/Stats';
 import { ClassificationAlgorithm } from '../../core/modules/Algorithm';
 import { nanoid } from 'nanoid';
 import chroma from 'chroma-js';
-import { asNumberOrString, isValidNumber } from '../../core/utils/numbers';
+import { asValidNumber } from '../../core/utils/numbers';
 import { DataValue } from '../../core/data/data-source/DataSource';
 
 export const testGradientClasses = (values: DataValue[], algo: ClassificationAlgorithm, numberOfClasses: number): GradientClass[] => {
-  const _values = values.map((x) => asNumberOrString(x)).filter(isValidNumber);
+  const _values = values.map((x) => asValidNumber(x)).filter((x): x is number => x !== null);
   const classes = Stats.classify(algo, numberOfClasses, _values);
   const colorFunc = chroma.scale(['blue', 'red']).domain([0, numberOfClasses]).classes(numberOfClasses);
 

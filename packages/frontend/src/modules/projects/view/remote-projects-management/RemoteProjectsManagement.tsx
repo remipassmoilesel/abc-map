@@ -79,7 +79,10 @@ export function RemoteProjectsManagement(props: Props) {
               toasts.info(t('Project_deleted'));
               return listProjects();
             })
-            .finally(() => setLoading(false));
+            .finally(() => {
+              setLoading(false);
+              setSelected(undefined);
+            });
         })
         .catch((err) => {
           logger.error('Deletion error: ', err);
@@ -100,7 +103,7 @@ export function RemoteProjectsManagement(props: Props) {
 
           setLoading(true);
           return projectService
-            .loadPrivateProject(project.id)
+            .loadRemotePrivateProject(project.id)
             .then(() => {
               toasts.info(t('Project_open'));
             })
@@ -118,7 +121,7 @@ export function RemoteProjectsManagement(props: Props) {
     (project: AbcProjectMetadata) => {
       setLoading(true);
       return projectService
-        .findById(project.id)
+        .findRemoteById(project.id)
         .then((blob) => {
           if (!blob) {
             throw new Error('Project not found !');

@@ -18,7 +18,17 @@
 import { WmtsCapabilities } from '../../geo/WmtsCapabilities';
 import { WmsCapabilities } from '../../geo/WmsCapabilities';
 
-export const RegionsOfMetropolitanFrance = () => [
+export interface Region {
+  _id: number;
+  code: number;
+  name: string;
+  // We mix string and numbers for testing purposes. When users input data, we can read numbers or strings.
+  population: string | number;
+  // We mix string and numbers for testing purposes. When users input data, we can read numbers or strings.
+  popPercent: string | number;
+}
+
+export const RegionsOfMetropolitanFrance = (): Region[] => [
   {
     _id: 1,
     code: 11, // Code is arbitrary

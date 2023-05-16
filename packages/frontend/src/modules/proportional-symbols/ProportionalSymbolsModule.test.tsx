@@ -363,8 +363,8 @@ describe('ProportionalSymbolsModule', () => {
 
     it('should return InvalidValues status', async () => {
       // Prepare
-      const rows = TestHelper.regionsOfFrance();
-      rows[0].population = 'SeVeNtY PeRcEnT';
+      const rows = TestHelper.regionsOfFranceAsDataRow();
+      rows[0].data.population = 'SeVeNtY PeRcEnT';
       const source = TestDataSource.from(rows);
       const layer = TestHelper.regionsOfFranceVectorLayer();
 
@@ -383,7 +383,7 @@ describe('ProportionalSymbolsModule', () => {
 
     it('should return InvalidMinMax status', async () => {
       // Prepare
-      const rows = TestHelper.regionsOfFrance().map((row) => ({ ...row, population: 0 }));
+      const rows = TestHelper.regionsOfFranceAsDataRow().map((row) => ({ ...row, data: { ...row.data, population: 0 } }));
       const source = TestDataSource.from(rows);
       const layer = TestHelper.regionsOfFranceVectorLayer();
 
@@ -421,8 +421,8 @@ describe('ProportionalSymbolsModule', () => {
 
     it('should return BadProcessing status if feature does not have a matching data row', async () => {
       // Prepare
-      const rows = TestHelper.regionsOfFrance();
-      rows[0].code = 9999;
+      const rows = TestHelper.regionsOfFranceAsDataRow();
+      rows[0].data.code = 9999;
       const source = TestDataSource.from(rows);
       const layer = TestHelper.regionsOfFranceVectorLayer();
 

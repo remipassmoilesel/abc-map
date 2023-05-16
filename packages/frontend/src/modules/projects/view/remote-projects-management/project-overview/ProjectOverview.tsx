@@ -72,6 +72,13 @@ export function ProjectOverview(props: Props) {
 
   return (
     <div className={className}>
+      {!project && (
+        <h5 className={'my-3'}>
+          <FaIcon icon={IconDefs.faArrowLeft} className={'me-2'} />
+          {t('Select_a_project_to_see_more')}
+        </h5>
+      )}
+
       {project && (
         <>
           <h5>{project.name}</h5>

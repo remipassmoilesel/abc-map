@@ -22,6 +22,7 @@ import { TestHelper } from '../helpers/TestHelper';
 import { MainMap } from '../helpers/MainMap';
 import { Draw } from '../helpers/Draw';
 import { Routes } from '../helpers/Routes';
+import { ProjectMenu } from '../helpers/ProjectMenu';
 
 describe('Draw features history', function () {
   beforeEach(() => {
@@ -30,6 +31,7 @@ describe('Draw features history', function () {
 
   it('user can add feature then undo and redo', function () {
     cy.visit(Routes.map().format())
+      .then(() => ProjectMenu.newProject())
       .then(() => MainMap.fixedView1())
       .then(() => ToolSelector.enable(MapTool.LineString))
       // First line
@@ -103,6 +105,7 @@ describe('Draw features history', function () {
 
   it('user can modify feature then undo', function () {
     cy.visit(Routes.map().format())
+      .then(() => ProjectMenu.newProject())
       .then(() => MainMap.fixedView1())
       .then(() => ToolSelector.enable(MapTool.LineString))
       // Create line

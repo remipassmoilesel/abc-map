@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 import { Services } from './core/Services';
-import { Logger, UserStatus } from '@abc-map/shared';
+import { errorMessage, Logger, UserStatus } from '@abc-map/shared';
 import { AxiosError } from 'axios';
 import { HttpError } from './core/http/HttpError';
 import { BUILD_INFO } from './build-version';
@@ -27,8 +27,11 @@ import { StyleFactory } from './core/geo/styles/StyleFactory';
 import { ModuleRegistry } from './core/modules/registry/ModuleRegistry';
 import { UiActions } from './core/store/ui/actions';
 import React from 'react';
+import { initProjectDatabase } from './core/storage/indexeddb/projects-database';
+import { Routes } from './routes';
+import { matchRoutes } from 'react-router-dom';
 
-export const logger = Logger.get('bootstrap.tsx', 'info');
+export const logger = Logger.get('bootstrap.tsx');
 
 export function bootstrap(svc: Services, store: MainStore) {
   logger.info('Version: ', BUILD_INFO);
@@ -77,9 +80,13 @@ function dispatchVisit(store: MainStore) {
   store.dispatch(UiActions.incrementVisitCounter());
 }
 
-async function initProject({ project, geo, history }: Services, store: MainStore) {
+async function initProject(services: Services, store: MainStore) {
+  const { project: projectService, geo, history, authentication } = services;
+
+  await initProjectDatabase();
+
   // When project loaded, we clean style cache and undo/redo history
-  project.addProjectLoadedListener((ev) => {
+  projectService.addProjectLoadedListener((ev) => {
     if (ProjectEventType.ProjectLoaded === ev.type) {
       history.resetHistory();
       StyleFactory.get().clearCache();
@@ -91,28 +98,49 @@ async function initProject({ project, geo, history }: Services, store: MainStore
   // When main map move we save view in project
   geo.getMainMap().addViewMoveListener(() => {
     const view = geo.getMainMap().getView();
-    project.setView(view);
+    projectService.setView(view);
   });
 
-  // We create a new project or load an existing one
-  // We must load an existing one only if user is authenticated
-  const prevProject = store.getState().project.metadata;
-  const userStatus = store.getState().authentication.userStatus;
-  const loadPrivateProject = prevProject.id && !prevProject.public && UserStatus.Authenticated === userStatus;
-  const loadPublicProject = prevProject.id && prevProject.public && UserStatus.Authenticated === userStatus;
-  try {
-    if (loadPrivateProject) {
-      await project.loadPrivateProject(prevProject.id);
-    } else if (loadPublicProject) {
-      await project.loadPublicProject(prevProject.id);
-    } else {
-      await project.newProject();
-    }
-  } catch (err) {
-    // No need to notify user, a new project is created
-    logger.error(`Project init error`, err);
-    await project.newProject();
+  const isSharedMapRoute = matchRoutes([{ path: Routes.sharedMap().raw() }], window.location);
+
+  // If we are displaying a shared map, we do not need to load a project, project will be loaded by SharedMapView
+  // We initialize a new project because in app we assume that a project is always loaded
+  if (isSharedMapRoute) {
+    await projectService.newProject();
   }
+
+  // A project may have been stored locally or remotely, we load it if any
+  else {
+    const prevProject = store.getState().project.metadata;
+    if (await projectService.isStoredLocally(prevProject.id)) {
+      try {
+        await projectService.loadLocalProject(prevProject.id);
+      } catch (err) {
+        logger.error(`Local project init error:`, err);
+        await projectService.newProject();
+      }
+    }
+    // Otherwise we try to find it online
+    else {
+      // We create a new project or load an existing one
+      // We must load an existing one only if user is authenticated
+      const userIsAuthenticated = authentication.getUserStatus() === UserStatus.Authenticated;
+      try {
+        if (userIsAuthenticated) {
+          await projectService.loadRemotePrivateProject(prevProject.id);
+        } else {
+          await projectService.newProject();
+        }
+      } catch (err) {
+        // No need to notify user, a new project is created
+        logger.error(`Remote project init error:`, err);
+        await projectService.newProject();
+      }
+    }
+  }
+
+  // We must not save before project loading
+  projectService.enableProjectAutoSave();
 }
 
 // Enable and disable geolocation according to store on the first map display
@@ -132,7 +160,7 @@ function enableGeolocation(svc: Services, store: MainStore) {
   }
 }
 
-function bootstrapError(err: Error | AxiosError | undefined): void {
+function bootstrapError(err: Error | AxiosError | undefined): Promise<void> {
   logger.error('Bootstrap error: ', err);
 
   let message: string;
@@ -143,15 +171,16 @@ function bootstrapError(err: Error | AxiosError | undefined): void {
   }
 
   const root = document.querySelector('#root');
-  if (!root) {
-    alert(message);
-    return;
-  }
-
-  root.innerHTML = `
+  if (root) {
+    root.innerHTML = `
     <h1 class='text-center my-5'>Abc-Map</h1>
     <h5 class='text-center my-5'>${message}</h5>
   `;
+  } else {
+    alert(message);
+  }
+
+  return Promise.reject(err ?? new Error(errorMessage(err)));
 }
 
 async function initializeModules(): Promise<void> {

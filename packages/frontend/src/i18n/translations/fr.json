@@ -59,7 +59,8 @@
     "Close": "Fermer",
     "MapSharing": "Partage de carte",
     "ArtefactGenerator": "Générateur d'artefact",
-    "DevServiceWorker": "Service worker de dévelopement"
+    "DevServiceWorker": "Service worker de dévelopement",
+    "DisableWarningBeforeUnload": "Désactiver l'avertissement avant rechargement de la page"
   },
   "MapView": {
     "The_map": "La carte !",
@@ -97,6 +98,7 @@
     "Delete_active_layer": "Supprimer la couche active",
     "Move_back": "Déplacer vers l'arrière",
     "Move_forward": "Déplacer vers l'avant",
+    "Show_data": "Voir les données",
     "Add_layer": "Ajouter une couche",
     "You_must_first_select_layer": "Vous devez d'abord sélectionner une couche",
     "Unable_to_zoom": "Impossible de zoomer sur cette couche",
@@ -201,7 +203,23 @@
     "You_can_browse_the_data_store": "Vous pouvez parcourir le magasin de données",
     "Show_data_store": "Afficher le magasin de données",
     "Are_you_looking_for_project_management": "Vous recherchez une gestion de projet ? Désormais c'est par ici",
-    "Project_management": "Gestion des projet"
+    "Project_management": "Gestion des projet",
+    "Feature_explorer": "Explorateur d'entités",
+    "The_explorer_allows_you_to_view_and_modify_the_data_of_your_layers": "L'explorateur vous permet de visualiser et de modifier les données de vos couches",
+    "Select_a_vector_layer_to_view_its_data": "Sélectionnez une couche d'entités pour visualiser ses données",
+    "This_layer_contains_no_data": "Cette couche ne contient pas de données",
+    "Undefined_value": "Valeur non définie",
+    "Search_in_data": "Rechercher dans les données",
+    "Zoom_on": "Zoom dessus",
+    "Temporarily_highlight": "Surligner temporairement",
+    "Select_unselect": "Sélectionner / déselectionner",
+    "Edit_data": "Modifier les données",
+    "Delete": "Supprimer",
+    "Nothing_match": "Rien ne correspond",
+    "Name_field": "Attribut de nom d'entité:",
+    "Settings": "Paramètres",
+    "Geometry": "Géometrie",
+    "More": "Plus"
   },
   "Scale": {
     "Scale": "Echelle"
@@ -231,9 +249,6 @@
     "I_understand": "J'ai compris"
   },
   "ModalService": {
-    "Project_password": "Mot de passe du projet  \uD83D\uDD11",
-    "Your_project_contains_credentials": "Votre projet contient des identifiants, vous devez choisir un mot de passe pour les protéger.",
-    "Enter_project_password": "Saisissez le mot de passe du projet pour le déverrouiller.",
     "Current_changes": "Modifications en cours",
     "Current_changes_will_be_lost": "Si vous continuez, les modifications en cours seront perdues.",
     "If_project_saved_ignore_this_message": "Si vous avez exporté ou sauvegardé votre projet vous pouvez ignorer ce message.",
@@ -339,7 +354,8 @@
     "X_entries": "<b>{{entries}}</b> entrées",
     "No_data_to_display": "Pas de données à afficher",
     "You_must_select_a_layer_with_data": "Vous devez sélectionner une couche qui contient des données",
-    "Visualize_feature_layers_as_tables": "Visualisez les couches d'entités sous forme de tableaux"
+    "Visualize_feature_layers_as_tables": "Visualisez les couches d'entités sous forme de tableaux",
+    "Loading_data": "Chargement ..."
   },
   "ColorGradientsModule": {
     "Color_gradients": "Dégradés de couleurs",
@@ -685,7 +701,9 @@
     "Undefined": "Non défini",
     "Modify": "Modifier",
     "Delete": "Supprimer",
-    "Actions": "Actions"
+    "Actions": "Actions",
+    "Show_on_map": "Voir sur la carte",
+    "This_feature_is_empty": "Cette entité est vide"
   },
   "EditPropertiesModal": {
     "Properties": "Propriétés",
@@ -1125,5 +1143,15 @@
     "Or_you_can_edit_it_in_place": "Ou vous pouvez le modifier sur place.",
     "You_can_move_and_resize_it": "Vous pouvez le déplacer et le redimensionner ✨",
     "And_you_can_include_images_and_videos": "Et vous pouvez inclure des images et des vidéos \uD83C\uDFAC !"
+  },
+  "FromV110ToV120": {
+    "End_of_project_passwords": "Fin des mots de passe de projet",
+    "This_project_uses_an_older_Abc-Map_format": "Ce projet utilise un ancien format Abc-Map. Désormais il n'y a plus de mots de passe sur les projets Abc-Map. <br/><br/>Entrez le mot de passe de ce projet une dernière fois pour dévérouiller définitivement. Plus aucun mot de passe ne sera demandé pour ouvrir ce projet."
+  },
+  "MultipleTabsWarning": {
+    "Multiple_tabs_open": "Plusieurs onglets ouverts",
+    "Abc-Map_is_already_open_in_another_tab": "Abc-Map est déjà ouvert dans un autre onglet.",
+    "You_may_accidentally_overwrite_your_work": "Vous risquez d'écraser votre travail par accident.",
+    "Hide_this_message": "Masquer ce message"
   }
 }

@@ -51,7 +51,7 @@ function SharedViewList(props: Props) {
     (view: AbcSharedView) => {
       const setActiveView = SetActiveSharedViewChangeset.create(view);
       setActiveView
-        .apply()
+        .execute()
         .then(() => history.register(HistoryKey.SharedViews, setActiveView))
         .catch((err) => logger.error('Cannot set active view', err));
     },
@@ -66,7 +66,7 @@ function SharedViewList(props: Props) {
       }
 
       const cs = RemoveSharedViewsChangeset.create([view]);
-      cs.apply()
+      cs.execute()
         .then(() => history.register(HistoryKey.SharedViews, cs))
         .catch((err) => logger.error('Cannot delete view: ', err));
     },
@@ -76,7 +76,7 @@ function SharedViewList(props: Props) {
   const handleUpateView = useCallback(
     (before: AbcSharedView, after: AbcSharedView) => {
       const cs = UpdateSharedViewsChangeset.create([{ before, after }]);
-      cs.apply()
+      cs.execute()
         .then(() => history.register(HistoryKey.SharedViews, cs))
         .catch((err) => logger.error('Cannot delete view: ', err));
     },

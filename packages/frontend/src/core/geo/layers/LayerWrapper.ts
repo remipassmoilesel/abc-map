@@ -65,6 +65,9 @@ export type WmsLayerWrapper = LayerWrapper<TileLayer<TileSource>, TileWMS, WmsMe
 export type WmtsLayerWrapper = LayerWrapper<TileLayer<TileSource>, WMTS, WmtsMetadata>;
 export type XyzLayerWrapper = LayerWrapper<TileLayer<TileSource>, XYZ, XyzMetadata>;
 
+/**
+ * This class is used to complete OpenLayers layers with our features (layer selection, serialisation, better clone, ...)
+ */
 export class LayerWrapper<Layer extends OlLayers = OlLayers, Source extends OlSources = OlSources, Meta extends LayerMetadata = LayerMetadata> {
   public static from<L extends OlLayers, S extends OlSources, M extends LayerMetadata>(layer: L): LayerWrapper<L, S, M> {
     return new LayerWrapper<L, S, M>(layer);

@@ -63,7 +63,7 @@ export class MainMapKeyboardListener {
     features.forEach((f) => f.setSelected(false));
 
     const cs = new RemoveFeaturesChangeset(layer.getSource(), features);
-    cs.apply().catch((err) => logger.error('Cannot delete features: ', err));
+    cs.execute().catch((err) => logger.error('Cannot delete features: ', err));
     history.register(HistoryKey.Map, cs);
   };
 }

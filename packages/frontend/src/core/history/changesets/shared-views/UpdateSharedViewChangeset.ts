@@ -36,7 +36,7 @@ export class UpdateSharedViewsChangeset extends Changeset {
     super();
   }
 
-  public async apply(): Promise<void> {
+  public async execute(): Promise<void> {
     this.changes.forEach((change) => this.project.updateSharedView(change.after));
   }
 

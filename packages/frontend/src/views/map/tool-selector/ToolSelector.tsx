@@ -123,7 +123,7 @@ function ToolSelector(props: Props) {
       const layer = LayerFactory.newVectorLayer();
 
       const cs = AddLayersChangeset.create([layer]);
-      await cs.apply();
+      await cs.execute();
       history.register(HistoryKey.Map, cs);
     };
 

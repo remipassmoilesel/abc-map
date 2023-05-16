@@ -47,7 +47,7 @@ describe('UpdateGeometriesChangeset', function () {
   });
 
   it('should redo', async () => {
-    await changeset.apply();
+    await changeset.execute();
 
     expect(feature.getGeometry()).toBeInstanceOf(Point);
     expect((feature.getGeometry() as Point).getCoordinates()).toEqual([12, 12]);

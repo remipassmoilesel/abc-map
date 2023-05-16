@@ -77,23 +77,6 @@ self.addEventListener('message', (event) => {
 
 const maxAgeSeconds = 30 * 24 * 60 * 60; // 30 Days
 
-// Cache all images and tiles
-registerRoute(
-  ({ request }) => request.destination === 'image',
-  new CacheFirst({
-    cacheName: 'images-tiles',
-    plugins: [
-      new CacheableResponsePlugin({
-        statuses: [0, 200],
-      }),
-      new ExpirationPlugin({
-        maxEntries: 5000,
-        maxAgeSeconds,
-      }),
-    ],
-  })
-);
-
 // Cache datastore searches
 registerRoute(
   ({ request }) => request.url.includes('/api/datastore/search'),

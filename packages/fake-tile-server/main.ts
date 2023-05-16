@@ -15,11 +15,10 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
-
-const express = require('express');
-const path = require('path');
-const fs = require('fs');
-const cors = require('cors');
+import express from 'express';
+import * as path from 'path';
+import * as fs from 'fs';
+import cors from 'cors';
 
 const PORT = 3010;
 const responses = path.resolve(__dirname, 'responses');
@@ -53,7 +52,7 @@ app.get('/xyz/authenticated/*', function (req, res) {
   handleXyzRequest(req, res);
 });
 
-function handleXyzRequest(req, res) {
+function handleXyzRequest(req: express.Request, res: express.Response) {
   res.set('Content-Type', 'image/png').status(200).end(tileXyz, 'binary');
 }
 
@@ -74,7 +73,7 @@ app.get('/wms/authenticated', basicAuthorizationMiddleware(), function (req, res
   handleWmsRequest(req, res, true);
 });
 
-function handleWmsRequest(req, res, authenticated) {
+function handleWmsRequest(req: express.Request, res: express.Response, authenticated: boolean) {
   if (req.url.endsWith('request=GetCapabilities')) {
     const capabilities = authenticated
       ? wmsCapabilities.replace(/http:\/\/localhost:3010\/wms\/public/gi, 'http://localhost:3010/wms/authenticated')
@@ -109,7 +108,7 @@ app.get('/wmts/authenticated*', basicAuthorizationMiddleware(), function (req, r
   handleWmtsRequest(req, res, true);
 });
 
-function handleWmtsRequest(req, res, authenticated) {
+function handleWmtsRequest(req: express.Request, res: express.Response, authenticated: boolean) {
   if (req.url.endsWith('request=GetCapabilities') || req.url.indexOf('WMTSCapabilities.xml') !== -1) {
     const capabilities = authenticated
       ? wmtsCapabilities.replace(/http:\/\/localhost:3010\/wmts\/public/gi, 'http://localhost:3010/wmts/authenticated')
@@ -133,6 +132,7 @@ function handleWmtsRequest(req, res, authenticated) {
 
  */
 
-app.listen(PORT, 'localhost', () => {
+// We can't use localhost because app in Cypress cannot access it
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`Fake tile server listening on localhost:${PORT}`);
 });

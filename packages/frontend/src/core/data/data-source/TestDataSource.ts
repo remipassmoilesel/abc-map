@@ -22,13 +22,17 @@ import { nanoid } from 'nanoid';
 
 export class TestDataSource implements DataSource {
   public static from(rows: Partial<DataRow>[]): TestDataSource {
-    const _rows: DataRow[] = rows.map((r) => {
-      if (typeof r._id !== 'undefined') {
-        return r;
-      } else {
-        return { ...r, _id: nanoid(10) };
+    const _rows: DataRow[] = rows.map((row) => {
+      if (!row.data) {
+        throw new Error('data attribute is mandatory');
       }
-    }) as DataRow[];
+
+      return {
+        id: row.id ?? nanoid(10),
+        data: row.data,
+      };
+    });
+
     return new TestDataSource(uuid(), _rows, 'TestDataSource' as DataSourceType);
   }
 

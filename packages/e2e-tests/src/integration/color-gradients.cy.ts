@@ -22,6 +22,8 @@ import { TopBar } from '../helpers/TopBar';
 import { TestData } from '../test-data/TestData';
 import { MainMap } from '../helpers/MainMap';
 import { Modules } from '../helpers/Modules';
+import { Routes } from '../helpers/Routes';
+import { ProjectMenu } from '../helpers/ProjectMenu';
 
 describe('Color gradients', function () {
   beforeEach(() => {
@@ -29,8 +31,10 @@ describe('Color gradients', function () {
   });
 
   it('User can create color gradients', () => {
-    // Import layer
-    DataStore.importByName('Countries of the world')
+    cy.visit(Routes.map().format())
+      .then(() => ProjectMenu.newProject())
+      // Import layer
+      .then(() => DataStore.importByName('Countries of the world'))
       // Open module
       .then(() => Modules.open('color-gradients'))
       // Data source parameters

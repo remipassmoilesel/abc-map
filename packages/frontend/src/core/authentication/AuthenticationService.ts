@@ -38,21 +38,26 @@ import {
 } from '@abc-map/shared';
 import { AuthenticationActions } from '../store/authentication/actions';
 import jwtDecode from 'jwt-decode';
-import { MainStore } from '../store/store';
+import { mainStore, MainStore } from '../store/store';
 import { TokenHelper } from './TokenHelper';
 import { HttpError } from '../http/HttpError';
 import { getLang } from '../../i18n/i18n';
 import { AuthenticationError, ErrorType } from './AuthenticationError';
+import { ApiClient } from '../http/http-clients';
 
 const logger = Logger.get('AuthenticationService.ts');
 
 const Disconnect = 'disconnect';
 
 export class AuthenticationService {
+  public static create(): AuthenticationService {
+    return new AuthenticationService(ApiClient, mainStore);
+  }
+
   private eventTarget = document.createDocumentFragment();
   private tokenInterval: any;
 
-  constructor(private httpClient: AxiosInstance, private store: MainStore) {
+  constructor(private apiClient: AxiosInstance, private store: MainStore) {
     window.addEventListener('online', () => this.renewToken());
   }
 
@@ -80,7 +85,7 @@ export class AuthenticationService {
     }
 
     if (TokenHelper.getRemainingSecBeforeExpiration(token) < 10 * 60) {
-      return this.httpClient.get<RenewResponse>(Api.token()).then((result) => {
+      return this.apiClient.get<RenewResponse>(Api.token()).then((result) => {
         logger.info('Token renewed');
         this.dispatchToken(result.data.token);
       });
@@ -109,7 +114,7 @@ export class AuthenticationService {
 
   public login(email: string, password: string): Promise<UserStatus> {
     const request: AuthenticationRequest = { email, password };
-    return this.httpClient
+    return this.apiClient
       .post<AuthenticationResponse>(Api.authentication(), request)
       .then(async (res) => {
         const auth: AuthenticationResponse = res.data;
@@ -132,7 +137,7 @@ export class AuthenticationService {
 
   public updatePassword(previousPassword: string, newPassword: string): Promise<void> {
     const req: UpdatePasswordRequest = { previousPassword, newPassword };
-    return this.httpClient
+    return this.apiClient
       .patch(Api.password(), req)
       .then(() => undefined)
       .catch((err) => {
@@ -146,17 +151,17 @@ export class AuthenticationService {
 
   public passwordLost(email: string): Promise<void> {
     const req: PasswordLostRequest = { email, lang: getLang() };
-    return this.httpClient.post(Api.passwordResetEmail(), req).then(() => undefined);
+    return this.apiClient.post(Api.passwordResetEmail(), req).then(() => undefined);
   }
 
   public resetPassword(token: string, password: string): Promise<void> {
     const req: ResetPasswordRequest = { token, password };
-    return this.httpClient.post(Api.password(), req).then(() => undefined);
+    return this.apiClient.post(Api.password(), req).then(() => undefined);
   }
 
   public registration(email: string, password: string): Promise<RegistrationResponse> {
     const request: RegistrationRequest = { email, password, lang: getLang() };
-    return this.httpClient
+    return this.apiClient
       .post<RegistrationResponse>(Api.account(), request)
       .then((res) => {
         const registration: RegistrationResponse = res.data;
@@ -178,7 +183,7 @@ export class AuthenticationService {
 
   public confirmRegistration(token: string): Promise<RegistrationConfirmationResponse> {
     const request: RegistrationConfirmationRequest = { token };
-    return this.httpClient.post(Api.accountConfirmation(), request).then((res) => {
+    return this.apiClient.post(Api.accountConfirmation(), request).then((res) => {
       const response: RegistrationConfirmationResponse = res.data;
       if (response.token) {
         this.dispatchToken(response.token);
@@ -189,7 +194,7 @@ export class AuthenticationService {
 
   public deleteAccount(password: string): Promise<void> {
     const request: DeleteAccountRequest = { password };
-    return this.httpClient
+    return this.apiClient
       .delete(Api.authentication(), { data: request })
       .then(() => undefined)
       .catch((err) => {

@@ -48,8 +48,8 @@ describe('LayerDataSource', () => {
     const rows = await data.getRows();
 
     expect(rows).toEqual([
-      { _id: 1, label: 'value1', altitude: 1234 },
-      { _id: 2, label: 'value2', altitude: 5678 },
+      { id: 1, data: { label: 'value1', altitude: 1234 } },
+      { id: 2, data: { label: 'value2', altitude: 5678 } },
     ]);
   });
 

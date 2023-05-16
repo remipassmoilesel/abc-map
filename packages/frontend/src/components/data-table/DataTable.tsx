@@ -18,12 +18,12 @@
 
 import React, { useEffect, useState } from 'react';
 import { Logger } from '@abc-map/shared';
-import { DataRow, getFields } from '../../core/data/data-source/DataSource';
+import { DataRow, DataValue } from '../../core/data/data-source/DataSource';
 import RowActions from './RowActions';
 import { prefixedTranslation } from '../../i18n/i18n';
 import Cls from './DataTable.module.scss';
-import _ from 'lodash';
 import clsx from 'clsx';
+import { getAllFieldNames } from '../../core/data/getFieldNames';
 
 const logger = Logger.get('DataSourceSelector.tsx');
 
@@ -31,6 +31,7 @@ interface Props {
   rows: DataRow[];
   onEdit?: (r: DataRow) => void;
   onDelete?: (r: DataRow) => void;
+  onShowOnmap?: (r: DataRow) => void;
   withActions?: boolean;
   className?: string;
   'data-cy'?: string;
@@ -39,22 +40,18 @@ interface Props {
 const t = prefixedTranslation('DataTable:');
 
 function DataTable(props: Props) {
-  const { className, rows, 'data-cy': dataCy, onEdit, onDelete } = props;
+  const { className, rows, 'data-cy': dataCy, onEdit, onDelete, onShowOnmap } = props;
   const withActions = props.withActions ?? false;
   const [fields, setFields] = useState<string[]>([]);
 
   // Each time rows change, we get keys from objet. We must iterate on each row.
   useEffect(() => {
-    const fields = _(rows)
-      .flatMap((r) => getFields(r))
-      .uniqBy((f) => f)
-      .sort()
-      .value();
+    const fields = getAllFieldNames(rows);
     setFields(fields);
   }, [rows]);
 
   if (!rows.length) {
-    return <div className={`${Cls.dataTable} ${className}`}>{t('No_data')}</div>;
+    return <div className={clsx(Cls.dataTable, className)}>{t('No_data')}</div>;
   }
 
   return (
@@ -65,18 +62,21 @@ function DataTable(props: Props) {
             <th scope="col" className={Cls.numberColumn}>
               #
             </th>
+
             {fields.map((key, i) => (
               <th scope="col" key={key + i} data-cy={'header'}>
                 {key}
               </th>
             ))}
 
+            {!fields.length && <th scope="col">&nbsp;</th>}
+
             {withActions && <th>{t('Actions')}</th>}
           </tr>
         </thead>
         <tbody>
           {rows.map((row, i) => (
-            <tr key={row._id} data-testid={'data-row'}>
+            <tr key={row.id} data-testid={'data-row'}>
               {/* Row number */}
               <th scope="row" className={Cls.numberColumn}>
                 {i + 1}
@@ -84,17 +84,15 @@ function DataTable(props: Props) {
 
               {/* Data */}
               {fields.map((key) => (
-                <td key={key + i} title={row[key]?.toString()} data-cy={'cell'}>
-                  {normalize(row[key])}
+                <td key={key + i} title={row.data[key]?.toString()} data-cy={'cell'}>
+                  {normalize(row.data[key])}
                 </td>
               ))}
 
+              {!fields.length && <td>{t('This_feature_is_empty')}</td>}
+
               {/* Actions */}
-              {withActions && (
-                <td className={Cls.rowActions}>
-                  <RowActions row={row} onEdit={onEdit} onDelete={onDelete} />
-                </td>
-              )}
+              {withActions && <RowActions row={row} onEdit={onEdit} onDelete={onDelete} onShowOnMap={onShowOnmap} />}
             </tr>
           ))}
         </tbody>
@@ -103,15 +101,13 @@ function DataTable(props: Props) {
   );
 }
 
-function normalize(field: string | number | undefined): string | number | undefined {
-  if (typeof field === 'number') {
-    return field;
-  } else if (typeof field === 'string' && field.length > 50) {
+function normalize(field: DataValue | undefined): string | undefined {
+  if (typeof field === 'string' && field.length > 50) {
     return `${field.substring(0, 47)}...`;
   } else if (typeof field === 'undefined') {
     return t('Undefined');
   } else {
-    return field;
+    return field + '';
   }
 }
 

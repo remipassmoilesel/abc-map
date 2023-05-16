@@ -45,7 +45,7 @@ describe('AddLayersChangeset', () => {
     const layer2 = LayerFactory.newVectorLayer();
 
     const changeset = new AddLayersChangeset(map, [layer1, layer2]);
-    await changeset.apply();
+    await changeset.execute();
 
     expect(map.getLayers()).toHaveLength(2);
     expect(map.getLayers()[1].isActive()).toEqual(true);

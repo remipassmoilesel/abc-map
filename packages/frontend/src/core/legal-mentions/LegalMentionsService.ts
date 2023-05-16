@@ -19,8 +19,13 @@ import { AxiosInstance } from 'axios';
 import { ToastService } from '../ui/ToastService';
 import { LegalMentionsRoutes as Api } from '../http/ApiRoutes';
 import { BlobIO } from '@abc-map/shared';
+import { ApiClient } from '../http/http-clients';
 
 export class LegalMentionsService {
+  public static create(toasts: ToastService): LegalMentionsService {
+    return new LegalMentionsService(ApiClient, toasts);
+  }
+
   constructor(private httpClient: AxiosInstance, private toasts: ToastService) {}
 
   public get(): Promise<string> {

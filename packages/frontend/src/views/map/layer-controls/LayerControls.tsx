@@ -16,172 +16,87 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { Component, ReactNode } from 'react';
+import Cls from './LayerControls.module.scss';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Logger } from '@abc-map/shared';
-import { Extent, getArea } from 'ol/extent';
-import { RemoveLayerChangeset } from '../../../core/history/changesets/layers/RemoveLayerChangeset';
-import { HistoryKey } from '../../../core/history/HistoryKey';
 import LayerListItem from './list-item/LayerListItem';
 import AddLayerModal from './add-layer-modal/AddLayerModal';
 import { LayerWrapper } from '../../../core/geo/layers/LayerWrapper';
-import { ServiceProps, withServices } from '../../../core/withServices';
 import EditLayerModal from './edit-layer-modal/EditLayerModal';
-import Cls from './LayerControls.module.scss';
-import { prefixedTranslation } from '../../../i18n/i18n';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { WithTooltip } from '../../../components/with-tooltip/WithTooltip';
-import isEqual from 'lodash/isEqual';
 import { FaIcon } from '../../../components/icon/FaIcon';
 import { IconDefs } from '../../../components/icon/IconDefs';
+import isEqual from 'lodash/isEqual';
+import { usePrevious } from '../../../core/utils/usePrevious';
+import { useServices } from '../../../core/useServices';
+import { HistoryKey } from '../../../core/history/HistoryKey';
+import { Extent, getArea } from 'ol/extent';
+import { RemoveLayerChangeset } from '../../../core/history/changesets/layers/RemoveLayerChangeset';
 import { ToggleLayerVisibilityChangeset } from '../../../core/history/changesets/layers/ToggleLayerVisibilityChangeset';
-import { SetActiveLayerChangeset } from '../../../core/history/changesets/layers/SetActiveLayerChangeset';
 import { SetLayerPositionChangeset } from '../../../core/history/changesets/layers/SetLayerPositionChangeset';
+import { useMapLayers } from '../../../core/geo/useMapLayers';
+import { SetActiveLayerChangeset } from '../../../core/history/changesets/layers/SetActiveLayerChangeset';
+import { useShowDataTableView } from '../../../modules/data-table/useShowDataTableView';
 
 const logger = Logger.get('LayerControls.tsx');
 
-interface LocalProps {
-  layers: LayerWrapper[];
-}
+export function LayerControls() {
+  const { layers, activeLayer, activeVectorLayer } = useMapLayers();
+  const { geo, toasts, history } = useServices();
+  const { t } = useTranslation('MapView');
+  const showDataTableView = useShowDataTableView();
 
-interface State {
-  editLayer?: LayerWrapper;
-  addModalVisible: boolean;
-}
+  const [editedLayer, setEditedLayer] = useState<LayerWrapper | undefined>();
+  const [addModalVisible, setAddModalVisible] = useState(false);
 
-declare type Props = LocalProps & ServiceProps;
+  const listRef = useRef<HTMLDivElement | null>(null);
 
-const t = prefixedTranslation('MapView:');
-
-class LayerControls extends Component<Props, State> {
-  private listRef = React.createRef<HTMLDivElement>();
-
-  constructor(props: Props) {
-    super(props);
-    this.state = { addModalVisible: false };
-  }
-
-  public render(): ReactNode {
-    const addModalVisible = this.state.addModalVisible;
-    const editLayer = this.state.editLayer;
-    const layers = this.props.layers;
-
-    return (
-      <div className={`control-block ${Cls.layerControls}`}>
-        <div className={Cls.titleRow}>
-          {t('Layers')}
-
-          <button onClick={this.handleAddLayer} className={'btn btn-sm btn-secondary fw-bold'} data-cy={'add-layer'}>
-            {t('Add_layer')}
-            <FaIcon icon={IconDefs.faPlus} className={'ml-2'} />
-          </button>
-        </div>
-
-        {/* List of layers */}
-        <div className={`control-item ${Cls.layerList}`} data-cy="layers-list" ref={this.listRef}>
-          {!layers.length && <div className={Cls.noLayers}>{t('No_layer')}</div>}
-          {layers
-            .map((layer) => {
-              const metadata = layer.getMetadata();
-              if (!metadata) {
-                logger.error('Unsupported layer: ', layer);
-                return undefined;
-              }
-              return <LayerListItem key={metadata.id} metadata={metadata} onSelect={this.handleSelection} onToggleVisibility={this.handleToggleVisibility} />;
-            })
-            .filter((elem) => !!elem)}
-        </div>
-
-        {/* Controls */}
-        <div className={`control-item`}>
-          <div className={Cls.buttonBar}>
-            <WithTooltip title={t('Edit_layer')}>
-              <button onClick={this.handleEditLayer} className={'btn btn-link'} data-cy={'edit-layer'}>
-                <FaIcon icon={IconDefs.faEdit} />
-              </button>
-            </WithTooltip>
-            <WithTooltip title={t('Zoom_on_layer')}>
-              <button onClick={this.handleZoom} className={'btn btn-link'}>
-                <FaIcon icon={IconDefs.faSearchPlus} />
-              </button>
-            </WithTooltip>
-            <WithTooltip title={t('Delete_active_layer')}>
-              <button onClick={this.handleRemoveActive} className={'btn btn-link'} data-cy={'delete-layer'}>
-                <FaIcon icon={IconDefs.faTrash} />
-              </button>
-            </WithTooltip>
-            <WithTooltip title={t('Move_back')}>
-              <button onClick={this.handleLayerBack} className={'btn btn-link'} title={t('Move_back')}>
-                <FaIcon icon={IconDefs.faArrowUp} />
-              </button>
-            </WithTooltip>
-            <WithTooltip title={t('Move_forward')}>
-              <button onClick={this.handleLayerForward} className={'btn btn-link'}>
-                <FaIcon icon={IconDefs.faArrowDown} />
-              </button>
-            </WithTooltip>
-          </div>
-        </div>
-
-        {/* Modals */}
-        <AddLayerModal visible={addModalVisible} onHide={this.handleAddLayerModalClosed} />
-        {editLayer && <EditLayerModal layer={editLayer} onHide={this.handleEditLayerClosed} />}
-      </div>
-    );
-  }
-
-  public componentDidUpdate(prevProps: Readonly<Props>) {
-    const previousIds = prevProps.layers.map((lay) => lay.getId());
-    const layerIds = this.props.layers.map((lay) => lay.getId());
+  const layerIds = layers.map((layer) => layer.getId());
+  const previousIds = usePrevious(layerIds);
+  useEffect(() => {
     if (!isEqual(previousIds, layerIds)) {
       // We scroll to bottom of list if layer list change
-      const div = this.listRef.current;
-      if (div) {
-        div.scrollTop = div.scrollHeight;
+      if (listRef.current) {
+        listRef.current.scrollTop = listRef.current.scrollHeight;
       }
     }
-  }
+  }, [layerIds, previousIds]);
 
-  private handleSelection = (layerId: string) => {
-    const { geo, toasts, history } = this.props.services;
+  const handleSelection = useCallback(
+    (layerId: string) => {
+      const layer = layers.find((lay) => lay.getId() === layerId);
+      if (!layer) {
+        toasts.genericError(new Error(`Layer not found: ${layerId}`));
+        return;
+      }
 
-    const map = geo.getMainMap();
+      if (activeLayer?.getId() === layerId) {
+        return;
+      }
 
-    if (map.getActiveLayer()?.getId() === layerId) {
-      return;
-    }
+      // We set it active
+      const setActiveLayer = SetActiveLayerChangeset.create(layer);
+      setActiveLayer
+        .execute()
+        // We register action in history
+        .then(() => history.register(HistoryKey.Map, setActiveLayer))
+        .catch((err) => logger.error('Cannot set layer active', err));
+    },
+    [activeLayer, history, layers, toasts]
+  );
 
-    const layer = map.getLayers().find((lay) => lay.getId() === layerId);
-
-    if (!layer) {
-      logger.error('Layer not found: ' + layerId);
-      toasts.genericError();
-      return;
-    }
-
-    // We set it active
-    const setActiveLayer = SetActiveLayerChangeset.create(layer);
-    setActiveLayer
-      .apply()
-      // We register action in history
-      .then(() => history.register(HistoryKey.Map, setActiveLayer))
-      .catch((err) => logger.error('Cannot set layer active', err));
-  };
-
-  private handleZoom = () => {
-    const { toasts, geo } = this.props.services;
-
-    const layer = geo.getMainMap().getActiveLayer();
-    if (!layer) {
+  const handleZoom = useCallback(() => {
+    if (!activeLayer) {
       toasts.info(t('You_must_first_select_layer'));
-      logger.error('No layer selected');
       return;
     }
 
     let extent: Extent | undefined;
-    if (layer.isVector()) {
-      extent = layer.getSource().getExtent();
+    if (activeLayer.isVector()) {
+      extent = activeLayer.getSource().getExtent();
     } else {
-      extent = layer.unwrap().getExtent();
+      extent = activeLayer.unwrap().getExtent();
     }
 
     if (!extent || !getArea(extent)) {
@@ -191,50 +106,36 @@ class LayerControls extends Component<Props, State> {
     }
 
     geo.getMainMap().unwrap().getView().fit(extent);
-  };
+  }, [activeLayer, geo, t, toasts]);
 
-  private handleAddLayer = () => {
-    this.setState({ addModalVisible: true });
-  };
+  const handleToggleAddLayerModal = useCallback(() => setAddModalVisible((st) => !st), []);
 
-  private handleAddLayerModalClosed = () => {
-    this.setState({ addModalVisible: false });
-  };
-
-  private handleEditLayerClosed = () => {
-    this.setState({ editLayer: undefined });
-  };
-
-  private handleEditLayer = () => {
-    const { toasts, geo } = this.props.services;
-
-    const map = geo.getMainMap();
-    const active = map.getActiveLayer();
-    if (!active) {
-      toasts.info(t('You_must_first_select_layer'));
-      return;
+  const handleToggleEditLayer = useCallback(() => {
+    if (editedLayer) {
+      setEditedLayer(undefined);
+    } else {
+      if (!activeLayer) {
+        toasts.info(t('You_must_first_select_layer'));
+      } else {
+        setEditedLayer(activeLayer);
+      }
     }
+  }, [activeLayer, editedLayer, t, toasts]);
 
-    this.setState({ editLayer: active });
-  };
-
-  private handleRemoveActive = () => {
-    const { toasts, geo, history } = this.props.services;
-
-    const map = geo.getMainMap();
-    const layer = map.getActiveLayer();
-    if (!layer) {
+  const handleRemoveActive = useCallback(() => {
+    if (!activeLayer) {
       toasts.info(t('You_must_first_select_layer'));
       return;
     }
 
     const remove = async () => {
       // We remove active layer
-      const cs = RemoveLayerChangeset.create(layer);
-      await cs.apply();
+      const cs = RemoveLayerChangeset.create(activeLayer);
+      await cs.execute();
       history.register(HistoryKey.Map, cs);
 
       // We activate last layer if any
+      const map = geo.getMainMap();
       const layers = map.getLayers();
       if (layers.length) {
         map.setActiveLayer(layers[layers.length - 1]);
@@ -242,61 +143,128 @@ class LayerControls extends Component<Props, State> {
     };
 
     remove().catch((err) => logger.error('Cannot remove layer', err));
-  };
+  }, [activeLayer, geo, history, t, toasts]);
 
-  private handleToggleVisibility = (layerId: string) => {
-    const { geo, history } = this.props.services;
+  const handleToggleVisibility = useCallback(
+    (layerId: string) => {
+      const map = geo.getMainMap();
+      if (!activeLayer) {
+        logger.error('Layer not found: ', layerId);
+        return;
+      }
 
-    const map = geo.getMainMap();
-    const layer = map.getLayers().find((lay) => lay.getId() === layerId);
-    if (!layer) {
-      logger.error('Layer not found: ', layerId);
-      return;
-    }
+      const toggle = async () => {
+        const cs = new ToggleLayerVisibilityChangeset(map, activeLayer, !activeLayer.isVisible());
+        await cs.execute();
+        history.register(HistoryKey.Map, cs);
+      };
+      toggle().catch((err) => logger.error('Cannot toggle visibility of layer', err));
+    },
+    [activeLayer, geo, history]
+  );
 
-    const toggle = async () => {
-      const cs = new ToggleLayerVisibilityChangeset(map, layer, !layer.isVisible());
-      await cs.apply();
-      history.register(HistoryKey.Map, cs);
-    };
-    toggle().catch((err) => logger.error('Cannot toggle visibility of layer', err));
-  };
+  const moveActiveLayer = useCallback(
+    (move: number) => {
+      if (!activeLayer) {
+        toasts.info(t('You_must_first_select_layer'));
+        return;
+      }
 
-  private handleLayerForward = () => {
-    this.moveLayer(+1);
-  };
+      let position = layers.findIndex((l) => l.getId() && l.getId() === activeLayer.getId()) + move;
+      if (position < 0) {
+        position = 0;
+      }
+      if (position >= layers.length) {
+        position = layers.length - 1;
+      }
 
-  private handleLayerBack = () => {
-    this.moveLayer(-1);
-  };
+      const setLayerPosition = SetLayerPositionChangeset.create(activeLayer, position);
+      setLayerPosition
+        .execute()
+        .then(() => history.register(HistoryKey.Map, setLayerPosition))
+        .catch((err) => logger.error('Cannot set layer position', err));
+    },
+    [activeLayer, history, layers, t, toasts]
+  );
 
-  private moveLayer = (move: number) => {
-    const { toasts, geo, history } = this.props.services;
+  const handleLayerForward = useCallback(() => moveActiveLayer(+1), [moveActiveLayer]);
+  const handleLayerBack = useCallback(() => moveActiveLayer(-1), [moveActiveLayer]);
 
-    const map = geo.getMainMap();
-    const active = map.getActiveLayer();
-    if (!active) {
+  const handleShowData = useCallback(() => {
+    const layerId = activeLayer?.getId();
+    if (!layerId) {
       toasts.info(t('You_must_first_select_layer'));
       return;
     }
 
-    const layers = map.getLayers();
-    let position = layers.findIndex((l) => l.getId() && l.getId() === active.getId()) + move;
+    showDataTableView(layerId);
+  }, [activeLayer, showDataTableView, t, toasts]);
 
-    if (position < 0) {
-      position = 0;
-    }
-    if (position >= layers.length) {
-      position = layers.length - 1;
-    }
+  return (
+    <div className={`control-block ${Cls.layerControls}`}>
+      <div className={Cls.titleRow}>
+        {t('Layers')}
 
-    const setLayerPosition = SetLayerPositionChangeset.create(active, position);
+        <button onClick={handleToggleAddLayerModal} className={'btn btn-sm btn-secondary fw-bold'} data-cy={'add-layer'}>
+          {t('Add_layer')}
+          <FaIcon icon={IconDefs.faPlus} className={'ml-2'} />
+        </button>
+      </div>
 
-    setLayerPosition
-      .apply()
-      .then(() => history.register(HistoryKey.Map, setLayerPosition))
-      .catch((err) => logger.error('Cannot set layer position', err));
-  };
+      {/* List of layers */}
+      <div className={`control-item ${Cls.layerList}`} data-cy="layers-list" ref={listRef}>
+        {!layers.length && <div className={Cls.noLayers}>{t('No_layer')}</div>}
+        {layers
+          .map((layer) => {
+            const metadata = layer.getMetadata();
+            if (!metadata) {
+              logger.error('Unsupported layer: ', layer);
+              return undefined;
+            }
+            return <LayerListItem key={metadata.id} metadata={metadata} onSelect={handleSelection} onToggleVisibility={handleToggleVisibility} />;
+          })
+          .filter((elem) => !!elem)}
+      </div>
+
+      {/* Controls */}
+      <div className={`control-item`}>
+        <div className={Cls.buttonBar}>
+          <WithTooltip title={t('Edit_layer')}>
+            <button onClick={handleToggleEditLayer} className={'btn btn-link'} data-cy={'edit-layer'}>
+              <FaIcon icon={IconDefs.faEdit} />
+            </button>
+          </WithTooltip>
+          <WithTooltip title={t('Zoom_on_layer')}>
+            <button onClick={handleZoom} className={'btn btn-link'}>
+              <FaIcon icon={IconDefs.faSearchPlus} />
+            </button>
+          </WithTooltip>
+          <WithTooltip title={t('Delete_active_layer')}>
+            <button onClick={handleRemoveActive} className={'btn btn-link'} data-cy={'delete-layer'}>
+              <FaIcon icon={IconDefs.faTrash} />
+            </button>
+          </WithTooltip>
+          <WithTooltip title={t('Move_back')}>
+            <button onClick={handleLayerBack} className={'btn btn-link'} title={t('Move_back')}>
+              <FaIcon icon={IconDefs.faArrowUp} />
+            </button>
+          </WithTooltip>
+          <WithTooltip title={t('Move_forward')}>
+            <button onClick={handleLayerForward} className={'btn btn-link'}>
+              <FaIcon icon={IconDefs.faArrowDown} />
+            </button>
+          </WithTooltip>
+          <WithTooltip title={t('Show_data')}>
+            <button onClick={handleShowData} disabled={!activeVectorLayer} className={'btn btn-link'}>
+              <FaIcon icon={IconDefs.faTable} />
+            </button>
+          </WithTooltip>
+        </div>
+      </div>
+
+      {/* Modals */}
+      <AddLayerModal visible={addModalVisible} onHide={handleToggleAddLayerModal} />
+      {editedLayer && <EditLayerModal layer={editedLayer} onHide={handleToggleEditLayer} />}
+    </div>
+  );
 }
-
-export default withTranslation()(withServices(LayerControls));

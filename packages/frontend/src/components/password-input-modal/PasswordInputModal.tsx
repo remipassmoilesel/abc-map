@@ -23,10 +23,10 @@ import { ServiceProps, withServices } from '../../core/withServices';
 import FormValidationLabel from '../form-validation-label/FormValidationLabel';
 import { PasswordStrength, ValidationHelper } from '../../core/utils/ValidationHelper';
 import { FormState } from '../form-validation-label/FormState';
-import { Encryption } from '../../core/utils/Encryption';
 import { Errors } from '../../core/utils/Errors';
 import { Logger } from '@abc-map/shared';
 import { prefixedTranslation } from '../../i18n/i18n';
+import { Encryption } from '../../core/utils/Encryption';
 
 const logger = Logger.get('PasswordInputModal.tsx');
 
@@ -73,7 +73,7 @@ class PasswordInputModal extends Component<ServiceProps, State> {
         </Modal.Header>
         <Modal.Body>
           <div className={'p-3'}>
-            <div className={'mb-3'}>{message}</div>
+            <div className={'mb-3'} dangerouslySetInnerHTML={{ __html: message }} />
 
             <div className={'mb-3'}>
               <input
@@ -135,7 +135,7 @@ class PasswordInputModal extends Component<ServiceProps, State> {
     const { modals } = this.props.services;
 
     modals.dispatch({
-      type: ModalEventType.PasswordInputClosed,
+      type: ModalEventType.PasswordPromptClosed,
       value: '',
       status: ModalStatus.Canceled,
     });
@@ -156,7 +156,7 @@ class PasswordInputModal extends Component<ServiceProps, State> {
     Encryption.decrypt(witness, value)
       .then(() => {
         modals.dispatch({
-          type: ModalEventType.PasswordInputClosed,
+          type: ModalEventType.PasswordPromptClosed,
           value: this.state.value,
           status: ModalStatus.Confirmed,
         });
@@ -171,7 +171,7 @@ class PasswordInputModal extends Component<ServiceProps, State> {
           toasts.genericError();
 
           modals.dispatch({
-            type: ModalEventType.PasswordInputClosed,
+            type: ModalEventType.PasswordPromptClosed,
             value: '',
             status: ModalStatus.Canceled,
           });

@@ -69,4 +69,18 @@ export const DevServiceWorker: ExperimentalFeature = {
   ],
 };
 
-export const ExperimentalFeatures: ExperimentalFeature[] = [ArtefactGenerator, DevServiceWorker];
+export const DisableWarningBeforeUnload: ExperimentalFeature = {
+  id: 'DisableWarningBeforeUnload',
+  description: [
+    {
+      language: Language.English,
+      text: `Disable the "Reload page ? Changes you made may not be saved." warning shown by the browser.`,
+    },
+    {
+      language: Language.French,
+      text: `Désactiver l'avertissement "Etes vous sur ? Les modifications ne sont peut être pas enregistrées" montré par le navigateur.`,
+    },
+  ],
+};
+
+export const ExperimentalFeatures: ExperimentalFeature[] = [ArtefactGenerator, DevServiceWorker, DisableWarningBeforeUnload];

@@ -35,7 +35,7 @@ export class UpdateTextFrameChangeset extends Changeset {
     this.project.updateTextFrame(this.before);
   }
 
-  public async apply(): Promise<void> {
+  public async execute(): Promise<void> {
     this.project.updateTextFrame(this.after);
   }
 }

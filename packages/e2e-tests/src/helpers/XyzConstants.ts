@@ -17,5 +17,6 @@
  */
 
 export class XyzConstants {
-  public static readonly PUBLIC_URL = 'http://localhost:3010/xyz/public/{x}/{y}/{z}.png';
+  // We can't use localhost because app in Cypress cannot access it
+  public static readonly PUBLIC_URL = 'http://0.0.0.0:3010/xyz/public/{x}/{y}/{z}.png';
 }

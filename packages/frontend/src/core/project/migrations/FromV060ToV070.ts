@@ -19,7 +19,7 @@
 import { AbcFile, AbcProjectManifest, Logger } from '@abc-map/shared';
 import { MigrationProject, ProjectMigration } from './typings';
 import semver from 'semver';
-import { AbcProjectManifest060 } from './old-typings/060-project';
+import { AbcProjectManifest060 } from './dependencies/060-project';
 import { nanoid } from 'nanoid';
 
 const NEXT = '0.7.0';

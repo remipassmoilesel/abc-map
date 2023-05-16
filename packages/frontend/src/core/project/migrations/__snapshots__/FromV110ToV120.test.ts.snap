@@ -1,0 +1,147 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FromV110ToV120 migrate should work 1`] = `
+Object {
+  "layers": Array [
+    Object {
+      "metadata": Object {
+        "active": false,
+        "attributions": Array [
+          "&#169; <a href=\\"https://www.openstreetmap.org/copyright\\" target=\\"_blank\\">OpenStreetMap</a> contributors.",
+        ],
+        "id": "c323b4db-7c1e-4007-ac3c-909d9cfc42bc",
+        "model": "OSM",
+        "name": "OpenStreetMap",
+        "opacity": 1,
+        "type": "Predefined",
+        "visible": true,
+      },
+      "type": "Predefined",
+    },
+    Object {
+      "features": Object {
+        "features": Array [],
+        "type": "FeatureCollection",
+      },
+      "metadata": Object {
+        "active": false,
+        "id": "c6d662e6-2958-4b3d-91bb-f2cd24c5f65a",
+        "name": "Géométries",
+        "opacity": 1,
+        "type": "Vector",
+        "visible": true,
+      },
+      "type": "Vector",
+    },
+    Object {
+      "metadata": Object {
+        "active": false,
+        "attributions": Array [
+          "Map tiles by Carto, under CC BY 3.0. Data by OpenStreetMap, under ODbL.",
+        ],
+        "id": "b11acf7f-0d1a-473e-b9d3-42bd7f31135e",
+        "name": "Import n°1 de 17:53",
+        "opacity": 1,
+        "remoteUrl": "https://cartodb-basemaps-b.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png",
+        "type": "Xyz",
+        "visible": true,
+      },
+      "type": "Xyz",
+    },
+    Object {
+      "features": Object {
+        "features": Array [
+          Object {
+            "geometry": Object {
+              "coordinates": Array [
+                563668.6058644486,
+                8543859.921068361,
+              ],
+              "type": "Point",
+            },
+            "id": "8sCeHRwfOt",
+            "properties": Object {
+              "abc:feature:selected": false,
+              "abc:style:point:color": "rgba(65,8,8,0.9)",
+              "abc:style:point:icon": "twbs/0_star-fill.inline.svg",
+              "abc:style:point:size": 116,
+            },
+            "type": "Feature",
+          },
+          Object {
+            "geometry": Object {
+              "coordinates": Array [
+                595388.6058644486,
+                8455409.921068361,
+              ],
+              "type": "Point",
+            },
+            "id": "NGEZiopFDG",
+            "properties": Object {
+              "abc:feature:selected": false,
+              "abc:style:point:color": "rgba(65,8,8,0.9)",
+              "abc:style:point:icon": "twbs/0_star-fill.inline.svg",
+              "abc:style:point:size": 116,
+            },
+            "type": "Feature",
+          },
+          Object {
+            "geometry": Object {
+              "coordinates": Array [
+                580138.6058644486,
+                8362079.921068361,
+              ],
+              "type": "Point",
+            },
+            "id": "ZsCMAjpCjm",
+            "properties": Object {
+              "abc:feature:selected": true,
+              "abc:style:point:color": "rgba(65,8,8,0.9)",
+              "abc:style:point:icon": "twbs/0_star-fill.inline.svg",
+              "abc:style:point:size": 116,
+            },
+            "type": "Feature",
+          },
+        ],
+        "type": "FeatureCollection",
+      },
+      "metadata": Object {
+        "active": true,
+        "id": "1f8c1da4-807e-4e39-816e-cf2b34d42ef7",
+        "name": "Géométries",
+        "opacity": 1,
+        "type": "Vector",
+        "visible": true,
+      },
+      "type": "Vector",
+    },
+  ],
+  "layouts": Array [],
+  "metadata": Object {
+    "containsCredentials": false,
+    "id": "663f65ee-6d9c-4ca5-9235-19cee829ced7",
+    "name": "Projet du 06/05/2023",
+    "public": false,
+    "version": "1.2.0",
+  },
+  "sharedViews": Object {
+    "fullscreen": false,
+    "list": Array [],
+    "mapDimensions": Object {
+      "height": 568,
+      "width": 1152,
+    },
+  },
+  "view": Object {
+    "center": Array [
+      654558.605864449,
+      8399737.889818361,
+    ],
+    "projection": Object {
+      "name": "EPSG:3857",
+    },
+    "resolution": 610,
+    "rotation": 0,
+  },
+}
+`;

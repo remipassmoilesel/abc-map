@@ -32,7 +32,7 @@ export class ToggleLayerVisibilityChangeset extends Changeset {
     super();
   }
 
-  public async apply(): Promise<void> {
+  public async execute(): Promise<void> {
     this.map.setLayerVisible(this.layer, this.state);
   }
 

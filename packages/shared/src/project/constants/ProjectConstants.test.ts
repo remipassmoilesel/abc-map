@@ -25,7 +25,7 @@ describe('ProjectConstants', () => {
   });
 
   it('modifications require data migration', () => {
-    expect(ProjectConstants.CurrentVersion).toEqual('1.1.0');
+    expect(ProjectConstants.CurrentVersion).toEqual('1.2.0');
     expect(ProjectConstants.ManifestName).toEqual('project.json');
   });
 });

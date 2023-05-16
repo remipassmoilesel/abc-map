@@ -20,19 +20,31 @@ import TileLayer from 'ol/layer/Tile';
 import { OSM, Stamen, TileWMS, WMTS, XYZ } from 'ol/source';
 import uuid from 'uuid-random';
 import VectorSource from 'ol/source/Vector';
-import { tileLoadingAuthenticated } from './tileLoadingAuthenticated';
-import { AbcProjection, LayerType, PredefinedLayerModel, PredefinedMetadata, VectorMetadata, WmsMetadata, WmtsMetadata, XyzMetadata } from '@abc-map/shared';
+import { tileLoadingAuthenticated } from '../tiles/tileLoadingAuthenticated';
+import {
+  AbcProjection,
+  LayerType,
+  Logger,
+  PredefinedLayerModel,
+  PredefinedMetadata,
+  VectorMetadata,
+  WmsMetadata,
+  WmtsMetadata,
+  XyzMetadata,
+} from '@abc-map/shared';
 import { LayerWrapper, PredefinedLayerWrapper, VectorLayerWrapper, WmsLayerWrapper, WmtsLayerWrapper, XyzLayerWrapper } from './LayerWrapper';
 import VectorImageLayer from 'ol/layer/VectorImage';
 import Geometry from 'ol/geom/Geometry';
 import TileSource from 'ol/source/Tile';
 import { styleFunction } from '../styles/style-function';
-import { tileLoadingPublic } from './tileLoadingPublic';
+import { tileLoadingPublic } from '../tiles/tileLoadingPublic';
 import { WmsSettings, WmtsSettings } from './LayerFactory.types';
 import { prefixedTranslation } from '../../../i18n/i18n';
 import { DefaultStyleOptions } from '../styles/StyleFactoryOptions';
 
 const t = prefixedTranslation('LayerFactory:');
+
+const logger = Logger.get('LayerFactory.ts');
 
 export class LayerFactory {
   public static newPredefinedLayer(model: PredefinedLayerModel): PredefinedLayerWrapper {
@@ -40,30 +52,30 @@ export class LayerFactory {
     let source: TileSource;
     switch (model) {
       case PredefinedLayerModel.OSM:
-        source = new OSM();
+        source = new OSM({ tileLoadFunction: tileLoadingPublic() });
         name = t('OpenStreetMap');
         break;
       case PredefinedLayerModel.StamenToner:
-        source = new Stamen({ layer: 'toner' });
+        source = new Stamen({ layer: 'toner', tileLoadFunction: tileLoadingPublic() });
         name = t('Stamen_Toner');
         break;
       case PredefinedLayerModel.StamenTonerLite:
-        source = new Stamen({ layer: 'toner-lite' });
+        source = new Stamen({ layer: 'toner-lite', tileLoadFunction: tileLoadingPublic() });
         name = t('Stamen_Toner_Lite');
         break;
       case PredefinedLayerModel.StamenTerrain:
-        source = new Stamen({ layer: 'terrain' });
+        source = new Stamen({ layer: 'terrain', tileLoadFunction: tileLoadingPublic() });
         name = t('Stamen_Terrain');
         break;
       case PredefinedLayerModel.StamenWatercolor:
-        source = new Stamen({ layer: 'watercolor' });
+        source = new Stamen({ layer: 'watercolor', tileLoadFunction: tileLoadingPublic() });
         name = t('Stamen_Watercolor');
         break;
       default:
         throw new Error(`Unhandled predefined layer type: ${model}`);
     }
 
-    const layer = new TileLayer({ source });
+    const olLayer = new TileLayer({ source });
 
     const metadata: PredefinedMetadata = {
       id: uuid(),
@@ -75,12 +87,12 @@ export class LayerFactory {
       model,
     };
 
-    return LayerWrapper.from<TileLayer<TileSource>, TileSource, PredefinedMetadata>(layer).setMetadata(metadata);
+    return LayerWrapper.from<TileLayer<TileSource>, TileSource, PredefinedMetadata>(olLayer).setMetadata(metadata);
   }
 
   public static newVectorLayer(source?: VectorSource<Geometry>): VectorLayerWrapper {
     const _source = source || new VectorSource();
-    const layer = new VectorImageLayer({ style: (f) => styleFunction(DefaultStyleOptions, f), source: _source });
+    const vectorImageLayer = new VectorImageLayer({ style: (f) => styleFunction(DefaultStyleOptions, f), source: _source });
 
     const metadata: VectorMetadata = {
       id: uuid(),
@@ -91,13 +103,13 @@ export class LayerFactory {
       visible: true,
     };
 
-    return LayerWrapper.from<VectorImageLayer<VectorSource<Geometry>>, VectorSource<Geometry>, VectorMetadata>(layer).setMetadata(metadata);
+    return LayerWrapper.from<VectorImageLayer<VectorSource<Geometry>>, VectorSource<Geometry>, VectorMetadata>(vectorImageLayer).setMetadata(metadata);
   }
 
   public static newWmsLayer(settings: WmsSettings): WmsLayerWrapper {
     const tileLoadFunction = settings.auth?.username && settings.auth?.password ? tileLoadingAuthenticated(settings.auth) : tileLoadingPublic();
 
-    const layer = new TileLayer({
+    const olLayer = new TileLayer({
       extent: settings.extent,
       source: new TileWMS({
         urls: settings.remoteUrls,
@@ -121,7 +133,7 @@ export class LayerFactory {
       auth: settings.auth,
     };
 
-    return LayerWrapper.from<TileLayer<TileSource>, TileWMS, WmsMetadata>(layer).setMetadata(metadata);
+    return LayerWrapper.from<TileLayer<TileSource>, TileWMS, WmsMetadata>(olLayer).setMetadata(metadata);
   }
 
   public static newWmtsLayer(settings: WmtsSettings): WmtsLayerWrapper {
@@ -132,7 +144,7 @@ export class LayerFactory {
     const tileLoadFunction = settings.auth?.username && settings.auth?.password ? tileLoadingAuthenticated(settings.auth) : tileLoadingPublic();
 
     // We do not set extent here as it can have weird behaviors
-    const layer = new TileLayer({
+    const olLayer = new TileLayer({
       source: new WMTS({
         ...settings.sourceOptions,
         tileLoadFunction,
@@ -151,12 +163,12 @@ export class LayerFactory {
       auth: settings.auth,
     };
 
-    return LayerWrapper.from<TileLayer<TileSource>, WMTS, WmtsMetadata>(layer).setMetadata(metadata);
+    return LayerWrapper.from<TileLayer<TileSource>, WMTS, WmtsMetadata>(olLayer).setMetadata(metadata);
   }
 
   public static newXyzLayer(url: string, projection?: AbcProjection): XyzLayerWrapper {
     const source = new XYZ({ url, projection: projection?.name, tileLoadFunction: tileLoadingPublic() });
-    const layer = new TileLayer({ source });
+    const olLayer = new TileLayer({ source });
 
     const metadata: XyzMetadata = {
       id: uuid(),
@@ -169,6 +181,6 @@ export class LayerFactory {
       projection,
     };
 
-    return LayerWrapper.from<TileLayer<TileSource>, XYZ, XyzMetadata>(layer).setMetadata(metadata);
+    return LayerWrapper.from<TileLayer<TileSource>, XYZ, XyzMetadata>(olLayer).setMetadata(metadata);
   }
 }

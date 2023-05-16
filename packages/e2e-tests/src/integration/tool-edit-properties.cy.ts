@@ -24,6 +24,8 @@ import { DataStore } from '../helpers/DataStore';
 import { TopBar } from '../helpers/TopBar';
 import { Routes } from '../helpers/Routes';
 import { Draw } from '../helpers/Draw';
+import { ProjectMenu } from '../helpers/ProjectMenu';
+import { Modules } from '../helpers/Modules';
 
 describe('Edit properties', function () {
   beforeEach(() => {
@@ -32,6 +34,7 @@ describe('Edit properties', function () {
 
   it('user can move map', function () {
     cy.visit(Routes.map().format())
+      .then(() => ProjectMenu.newProject())
       .then(() => MainMap.fixedView1())
       .then(() => ToolSelector.enable(MapTool.EditProperties))
       .then(() => ToolSelector.toolMode(ModeName.MoveMap))
@@ -46,7 +49,9 @@ describe('Edit properties', function () {
   });
 
   it('user can edit properties, then undo', function () {
-    cy.visit(Routes.module().withParams({ moduleId: 'data-store' }))
+    cy.visit(Routes.map().format())
+      .then(() => ProjectMenu.newProject())
+      .then(() => Modules.open('data-store'))
       .then(() => DataStore.importByName('Countries of the world'))
       .then(() => TopBar.map())
       .then(() => MainMap.fixedView1())
@@ -54,27 +59,36 @@ describe('Edit properties', function () {
       // Edit Algeria
       .then(() => Draw.click(500, 200))
       .get('[data-cy=property-name]')
-      .should('have.text', 'COUNTRY')
+      .eq(0)
+      .should('have.value', 'COUNTRY')
       .get('[data-cy=property-value]')
+      .eq(0)
       .should('have.value', 'Algeria')
       // Add property 1
-      .get('[data-cy=new-name-unknown]')
-      .clear()
-      .type('population')
-      .get('[data-cy=new-value-population]')
-      .clear()
-      .type('123456')
       .get('[data-cy=new-property-button]')
       .click()
+      .get('[data-cy=property-name]')
+      .eq(1)
+      .clear()
+      .type('population')
+      .get('[data-cy=property-value]')
+      .eq(1)
+      .clear()
+      .type('123456')
       // Add property 2
-      .get('[data-cy=new-name-unknown]')
+      .get('[data-cy=new-property-button]')
+      .click()
+      .get('[data-cy=property-name]')
+      .eq(2)
       .clear()
       .type('pib')
-      .get('[data-cy=new-value-pib]')
+      .get('[data-cy=property-value]')
+      .eq(2)
       .clear()
       .type('180')
       .get('[data-cy=new-property-button]')
       .click()
+      // Confirm
       .get('[data-cy=properties-modal-confirm]')
       .click()
       // Check property names
@@ -82,7 +96,7 @@ describe('Edit properties', function () {
       .then(() => Draw.click(500, 200))
       .get('[data-cy=property-name]')
       .should((elem) => {
-        const names = elem.toArray().map((e) => e.textContent);
+        const names = elem.toArray().map((e) => (e as HTMLInputElement).value);
         expect(names).deep.equal(['COUNTRY', 'population', 'pib']);
       })
       // Check property values
@@ -100,7 +114,7 @@ describe('Edit properties', function () {
       .then(() => Draw.click(500, 200))
       .get('[data-cy=property-name]')
       .should((elem) => {
-        const names = elem.toArray().map((e) => e.textContent);
+        const names = elem.toArray().map((e) => (e as HTMLInputElement).value);
         expect(names).deep.equal(['COUNTRY']);
       })
       // Check property values

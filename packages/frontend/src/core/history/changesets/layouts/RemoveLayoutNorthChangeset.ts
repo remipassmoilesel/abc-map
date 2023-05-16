@@ -32,7 +32,7 @@ export class RemoveLayoutNorthChangeset extends Changeset {
     super();
   }
 
-  public async apply(): Promise<void> {
+  public async execute(): Promise<void> {
     this.project.updateLayout({ ...this.layout, north: undefined });
   }
 

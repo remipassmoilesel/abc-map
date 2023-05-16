@@ -147,9 +147,9 @@ describe('HistoryService', () => {
       await service.redo(key).catch((err) => expect(err.message).toEqual('Nothing to redo'));
     });
 
-    it('should call redo() on last changeset then dispatch', async () => {
+    it('should call execute() on last changeset then dispatch', async () => {
       const expectedCs = fakeHistory[HistoryKey.Map]?.redo[2] as Changeset;
-      const undoStub = sinon.stub(expectedCs, 'apply');
+      const undoStub = sinon.stub(expectedCs, 'execute');
 
       await service.redo(HistoryKey.Map);
 

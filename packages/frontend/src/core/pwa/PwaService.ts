@@ -17,7 +17,7 @@
  */
 
 import { BeforeInstallPromptEvent } from './BeforeInstallPromptEvent';
-import { LocalStorageService, StorageKey } from '../local-storage/LocalStorageService';
+import { LocalStorageService, StorageKey } from '../storage/local-storage/LocalStorageService';
 import { Logger } from '@abc-map/shared';
 
 const logger = Logger.get('PwaService.ts');

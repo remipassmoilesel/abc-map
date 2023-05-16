@@ -18,17 +18,15 @@
 
 import { ProjectService } from './project/ProjectService';
 import { GeoService } from './geo/GeoService';
-import { httpApiClient, httpDownloadClient, httpExternalClient } from './http/http-clients';
 import { AuthenticationService } from './authentication/AuthenticationService';
 import { HistoryService } from './history/HistoryService';
 import { DataStoreService } from './data/DataStoreService';
-import { MainStore, mainStore } from './store/store';
 import { ToastService } from './ui/ToastService';
 import { ModalService } from './ui/ModalService';
 import { FeedbackService } from './feedback/FeedbackService';
 import { LegalMentionsService } from './legal-mentions/LegalMentionsService';
 import { getAbcWindow, Logger } from '@abc-map/shared';
-import { LocalStorageService } from './local-storage/LocalStorageService';
+import { LocalStorageService } from './storage/local-storage/LocalStorageService';
 import { PwaService } from './pwa/PwaService';
 
 const logger = Logger.get('Services.ts');
@@ -50,30 +48,24 @@ export interface Services {
 export function getServices(): Services {
   const window = getAbcWindow();
   if (!window.abc.services) {
-    window.abc.services = servicesFactory(mainStore);
+    window.abc.services = servicesFactory();
   }
 
   return getAbcWindow().abc.services;
 }
 
-export function servicesFactory(store: MainStore): Services {
-  const apiClient = httpApiClient(5_000);
-  const downloadClient = httpDownloadClient(40_000);
-  const capabilitiesClient = httpExternalClient(20_000);
-
+export function servicesFactory(): Services {
   const toasts = new ToastService();
   const modals = new ModalService();
-  const history = HistoryService.create(store);
-  const geo = new GeoService(apiClient, capabilitiesClient, toasts, history, store);
-  const project = ProjectService.create(apiClient, downloadClient, store, toasts, geo, modals);
-  const authentication = new AuthenticationService(apiClient, store);
-  const dataStore = new DataStoreService(apiClient, downloadClient, toasts);
-  const feedback = new FeedbackService(apiClient, toasts);
-  const legalMentions = new LegalMentionsService(downloadClient, toasts);
+  const history = HistoryService.create();
+  const geo = GeoService.create(toasts, history);
+  const project = ProjectService.create(toasts, geo, modals);
+  const authentication = AuthenticationService.create();
+  const dataStore = DataStoreService.create(toasts);
+  const feedback = FeedbackService.create(toasts);
+  const legalMentions = LegalMentionsService.create(toasts);
   const storage = new LocalStorageService();
   const pwa = new PwaService(storage);
-
-  authentication.addDisconnectListener(() => project.resetCache());
 
   return {
     project,

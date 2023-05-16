@@ -21,8 +21,8 @@ import { MigrationProject, ProjectMigration } from './typings';
 import semver from 'semver';
 import { ModalService } from '../../ui/ModalService';
 import { ModalStatus } from '../../ui/typings';
+import { AbcWmsLayer020, WmsMetadata020 } from './dependencies/020-project';
 import { Encryption } from '../../utils/Encryption';
-import { AbcWmsLayer020, WmsMetadata020 } from './old-typings/020-project';
 
 const NEXT = '0.3.0';
 

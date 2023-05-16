@@ -262,7 +262,7 @@ class WmsLayerPanel extends Component<Props, State> {
       .then((capabilities) => this.setState({ capabilities }))
       .catch((err) => {
         toasts.error(t('Cannot_get_capacities'));
-        logger.error(err);
+        logger.error('Fetch capabilities error: ', err);
       })
       .finally(() => this.setState({ loading: false }));
   };
@@ -275,7 +275,7 @@ class WmsLayerPanel extends Component<Props, State> {
       const layer = LayerFactory.newWmsLayer(settings);
 
       const cs = AddLayersChangeset.create([layer]);
-      await cs.apply();
+      await cs.execute();
       history.register(HistoryKey.Map, cs);
 
       this.props.onConfirm();

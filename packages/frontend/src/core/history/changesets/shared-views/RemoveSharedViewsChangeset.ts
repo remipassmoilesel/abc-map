@@ -45,7 +45,7 @@ export class RemoveSharedViewsChangeset extends Changeset {
     this.operations = operations;
   }
 
-  public async apply(): Promise<void> {
+  public async execute(): Promise<void> {
     this.project.removeSharedViews(this.operations.map((op) => op.view));
 
     const views = this.project.getSharedViews();

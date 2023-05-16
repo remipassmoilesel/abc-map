@@ -36,7 +36,7 @@ export class AddSharedViewTextFrameChangeset extends Changeset {
     this.project.updateSharedView(updated);
   }
 
-  public async apply(): Promise<void> {
+  public async execute(): Promise<void> {
     const updated: AbcSharedView = {
       ...this.view,
       textFrames: this.view.textFrames.concat(this.frame),

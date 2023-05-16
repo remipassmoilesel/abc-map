@@ -59,7 +59,7 @@ describe('EditLayerChangeset', () => {
   });
 
   it('redo()', async () => {
-    await changeset.apply();
+    await changeset.execute();
 
     expect(map.triggerLayerChange.callCount).toEqual(1);
     expect(layer.setName.args).toEqual([['After layer']]);

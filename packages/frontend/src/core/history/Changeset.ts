@@ -17,7 +17,7 @@
  */
 
 export abstract class Changeset {
-  public abstract apply(): Promise<void>;
+  public abstract execute(): Promise<void>;
   public abstract undo(): Promise<void>;
   public dispose(): Promise<void> {
     return Promise.resolve();

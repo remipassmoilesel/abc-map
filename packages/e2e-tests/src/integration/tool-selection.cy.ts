@@ -23,6 +23,7 @@ import { Draw } from '../helpers/Draw';
 import { MainMap } from '../helpers/MainMap';
 import { DefaultDrawingStyle } from '../helpers/DefaultDrawingStyle';
 import { Routes } from '../helpers/Routes';
+import { ProjectMenu } from '../helpers/ProjectMenu';
 
 describe('Tool Selection', function () {
   beforeEach(() => {
@@ -31,6 +32,7 @@ describe('Tool Selection', function () {
 
   it('user can select', function () {
     cy.visit(Routes.map().format())
+      .then(() => ProjectMenu.newProject())
       .then(() => MainMap.fixedView1())
       .then(() => ToolSelector.enable(MapTool.Point))
       // Create points
@@ -58,6 +60,7 @@ describe('Tool Selection', function () {
 
   it('user can duplicate selection then undo', function () {
     cy.visit(Routes.map().format())
+      .then(() => ProjectMenu.newProject())
       .then(() => MainMap.fixedView1())
       .then(() => ToolSelector.enable(MapTool.Point))
       // Create points
@@ -103,6 +106,7 @@ describe('Tool Selection', function () {
 
   it('user can drag selection then undo', function () {
     cy.visit(Routes.map().format())
+      .then(() => ProjectMenu.newProject())
       .then(() => MainMap.fixedView1())
       // Draw points
       .then(() => ToolSelector.enable(MapTool.Point))
@@ -162,6 +166,7 @@ describe('Tool Selection', function () {
 
   it('user can drag duplicated features', function () {
     cy.visit(Routes.map().format())
+      .then(() => ProjectMenu.newProject())
       .then(() => MainMap.fixedView1())
       // Draw points
       .then(() => ToolSelector.enable(MapTool.Point))
@@ -194,6 +199,7 @@ describe('Tool Selection', function () {
 
   it('user can change stroke style then undo', function () {
     cy.visit(Routes.map().format())
+      .then(() => ProjectMenu.newProject())
       .then(() => MainMap.fixedView1())
       .then(() => ToolSelector.enable(MapTool.Polygon))
       // Draw feature
@@ -236,6 +242,7 @@ describe('Tool Selection', function () {
 
   it('user can change fill style then undo', function () {
     cy.visit(Routes.map().format())
+      .then(() => ProjectMenu.newProject())
       .then(() => MainMap.fixedView1())
       .then(() => ToolSelector.enable(MapTool.Polygon))
       // Draw feature then select

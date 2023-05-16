@@ -34,7 +34,7 @@ export class SetLayoutPositionChangeset extends Changeset {
     super();
   }
 
-  public async apply(): Promise<void> {
+  public async execute(): Promise<void> {
     this.project.setLayoutIndex(this.layout, this.nextPosition);
   }
 

@@ -32,7 +32,7 @@ export class AddSharedViewScaleChangeset extends Changeset {
     super();
   }
 
-  public async apply(): Promise<void> {
+  public async execute(): Promise<void> {
     this.project.updateSharedView({ ...this.view, scale: { ...this.scale } });
   }
 
