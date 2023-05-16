@@ -16,31 +16,54 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-export function isValidNumber(x: any): x is number {
-  return !isNaN(x) && !isNaN(parseFloat(x));
+export function asValidNumber(x: unknown): number | null {
+  if (!['number', 'string'].includes(typeof x)) {
+    return null;
+  }
+
+  const number = asNumberOrString(x as string | number);
+  return isValidNumber(number) ? number : null;
+}
+
+export function isValidNumber(x: unknown): x is number {
+  if (!['number', 'string'].includes(typeof x)) {
+    return false;
+  }
+
+  return !isNaN(x as number) && !isNaN(parseFloat(x as string));
 }
 
 /**
- * If passed argument "looks like" a number (001, 111, 1 000 000, ...) it will be converted to.
+ * If passed argument "looks like" a number (001, 111, 1 000 000, 1.111, "1,111", ...) it will be converted.
+ *
+ * Otherwise argument will be returned as a string. It is useful for text inputs.
+ *
  * @param x
  */
-export function asNumberOrString(x: string | number): number | string {
-  let value = x;
+export function asNumberOrString(x: string | number | boolean | null | undefined): number | string {
+  if (x === null || x === undefined) {
+    return '';
+  }
 
-  if (typeof value === 'number') {
-    return value;
+  if (typeof x === 'boolean') {
+    return x + '';
+  }
+
+  if (typeof x === 'number') {
+    return x;
   }
 
   // We normalize float separator
-  if (value.indexOf(',')) {
-    value = value.replace(',', '.');
+  let maybeNumber = x;
+  if (maybeNumber.indexOf(',')) {
+    maybeNumber = maybeNumber.replace(',', '.');
   }
 
   // We remove blank chars
-  value = value.replace(new RegExp('\\s', 'ig'), '');
+  maybeNumber = maybeNumber.replace(new RegExp('\\s', 'ig'), '');
 
-  if (isValidNumber(value)) {
-    return parseFloat(value);
+  if (isValidNumber(maybeNumber)) {
+    return parseFloat(maybeNumber);
   } else {
     return x;
   }

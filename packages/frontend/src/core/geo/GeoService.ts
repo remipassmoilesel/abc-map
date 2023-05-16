@@ -19,7 +19,7 @@
 import { AbcLayer, BasicAuthentication, EPSG_4326, FeatureStyle, LayerType, Logger, normalizedProjectionName, ProjectionDto } from '@abc-map/shared';
 import { MapWrapper } from './map/MapWrapper';
 import { MapFactory } from './map/MapFactory';
-import { MainStore } from '../store/store';
+import { mainStore, MainStore } from '../store/store';
 import { AxiosInstance } from 'axios';
 import { GeoJSON } from 'ol/format';
 import { parseWmsCapabilities, WmsCapabilities } from './WmsCapabilities';
@@ -41,6 +41,7 @@ import { LayerWrapper } from './layers/LayerWrapper';
 import VectorSource from 'ol/source/Vector';
 import { WmtsSettings, WmtsSourceOptions } from './layers/LayerFactory.types';
 import { ProjectionRoutes } from '../http/ApiRoutes';
+import { ApiClient, CapabilitiesClient } from '../http/http-clients';
 
 export const logger = Logger.get('GeoService.ts');
 
@@ -52,7 +53,11 @@ const OlSupportedProjections = ['EPSG:4326', 'CRS:84', 'EPSG:3857', 'EPSG:102100
 export declare type StyleTransformFunc = (x: FeatureStyle, f: FeatureWrapper) => FeatureStyle | undefined;
 
 export class GeoService {
-  private mainMap = MapFactory.createDefault();
+  public static create(toasts: ToastService, history: HistoryService): GeoService {
+    return new GeoService(ApiClient, CapabilitiesClient, toasts, history, mainStore);
+  }
+
+  private mainMap = MapFactory.createDefault(true);
 
   constructor(
     private apiClient: AxiosInstance,
@@ -254,7 +259,7 @@ export class GeoService {
 
     if (changeSets.length) {
       const cs = new UpdateStyleChangeset(changeSets);
-      cs.apply().catch((err) => logger.error('Cannot apply style: ', err));
+      cs.execute().catch((err) => logger.error('Cannot apply style: ', err));
       this.history.register(HistoryKey.Map, cs);
     }
 

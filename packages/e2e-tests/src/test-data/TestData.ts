@@ -32,9 +32,11 @@ export class TestData {
   }
 
   /**
-   * Sample project with credentials
+   * Sample project with credentials.
+   *
+   * Credentials have been removed, this sample is just used for migration testing.
    */
-  public static projectSample2(): Chainable<Blob> {
+  public static deprecatedProjectSample2(): Chainable<Blob> {
     return cy.readFile(`${root}/test-project-2.abm2`, 'base64').then((str) => Cypress.Blob.base64StringToBlob(str));
   }
 

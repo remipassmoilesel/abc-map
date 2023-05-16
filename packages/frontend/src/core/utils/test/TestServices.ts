@@ -28,7 +28,7 @@ import { FeedbackService } from '../../feedback/FeedbackService';
 import { SinonStubbedInstance } from 'sinon';
 import { Services } from '../../Services';
 import { LegalMentionsService } from '../../legal-mentions/LegalMentionsService';
-import { LocalStorageService } from '../../local-storage/LocalStorageService';
+import { LocalStorageService } from '../../storage/local-storage/LocalStorageService';
 import { PwaService } from '../../pwa/PwaService';
 
 type SameKeys<T> = {

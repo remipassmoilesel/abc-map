@@ -16,206 +16,147 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { ChangeEvent, Component, ReactNode } from 'react';
-import { SimplePropertiesMap } from '../../core/geo/features/FeatureWrapper';
-import { asNumberOrString } from '../../core/utils/numbers';
-import { ServiceProps, withServices } from '../../core/withServices';
 import Cls from './PropertiesForm.module.scss';
-import { nanoid } from 'nanoid';
+import React, { ChangeEvent, useCallback } from 'react';
 import { Logger } from '@abc-map/shared';
-import { prefixedTranslation } from '../../i18n/i18n';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { FaIcon } from '../icon/FaIcon';
 import { IconDefs } from '../icon/IconDefs';
-
-// TODO: unit test
+import { Property } from './Property';
+import { nanoid } from 'nanoid';
+import clsx from 'clsx';
 
 const logger = Logger.get('PropertiesForm.tsx');
 
-interface Props extends ServiceProps {
-  properties: SimplePropertiesMap;
-  // Triggered when properties change. Properties must be normalized before submission (spaces, ...)
-  onChange: (value: SimplePropertiesMap) => void;
-  onNewPropertiesChange: (value: SimplePropertiesMap) => void;
+interface Props {
+  properties: Property[];
+  onChange: (values: Property[]) => void;
 }
 
-interface State {
-  newProperties: NewProperty[];
+export function PropertiesForm(props: Props) {
+  const { properties, onChange } = props;
+
+  const handleChange = useCallback(
+    (property: Property) => {
+      const updated: Property[] = properties.map((prop) => {
+        if (prop.id === property.id) {
+          return property;
+        }
+        return prop;
+      });
+      onChange(updated);
+    },
+    [onChange, properties]
+  );
+
+  const handleDelete = useCallback(
+    (property: Property) => {
+      const updated: Property[] = properties.filter((prop) => prop.id !== property.id);
+      onChange(updated);
+    },
+    [onChange, properties]
+  );
+
+  const handleNewProperty = useCallback(() => {
+    const updated = properties.concat([{ id: nanoid(), name: '', value: '' }]);
+    onChange(updated);
+  }, [onChange, properties]);
+
+  return (
+    <table className={Cls.table}>
+      <tbody>
+        {properties.map((property, i) => (
+          <PropertyRow
+            key={property.id}
+            property={property}
+            onChange={handleChange}
+            onDelete={handleDelete}
+            onNewProperty={handleNewProperty}
+            isLast={i === properties.length - 1}
+          />
+        ))}
+      </tbody>
+    </table>
+  );
 }
 
-interface NewProperty {
-  id: string;
-  name: string;
-  value: string;
+interface PropertyRowProps {
+  property: Property;
+  onChange: (property: Property) => void;
+  onDelete: (property: Property) => void;
+  onNewProperty: () => void;
+  isLast: boolean;
 }
 
-const t = prefixedTranslation('EditPropertiesModal:');
+function PropertyRow(props: PropertyRowProps) {
+  const { property, onChange, onDelete, onNewProperty, isLast } = props;
+  const { t } = useTranslation('EditPropertiesModal');
 
-class PropertiesForm extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = { newProperties: [{ id: nanoid(), name: '', value: '' }] };
-  }
+  const handleNameChange = useCallback(
+    (ev: ChangeEvent<HTMLInputElement>) => {
+      const name = ev.target.value;
+      onChange({ ...property, name });
+    },
+    [onChange, property]
+  );
 
-  public render(): ReactNode {
-    const properties = this.props.properties;
-    const newProperties = this.state.newProperties;
+  const handleValueChange = useCallback(
+    (ev: ChangeEvent<HTMLInputElement>) => {
+      const value = ev.target.value;
+      onChange({ ...property, value });
+    },
+    [onChange, property]
+  );
 
-    const rows = Object.keys(properties).map((property) => {
-      const value = properties[property];
-      if (typeof value !== 'string' && typeof value !== 'number') {
-        return (
-          <tr key={property}>
-            <td>Propriété invalide</td>
-          </tr>
-        );
-      }
+  const handleDelete = useCallback(() => {
+    onDelete(property);
+  }, [onDelete, property]);
 
-      return (
-        <tr key={property}>
-          <td className={Cls.label} data-cy={'property-name'}>
-            {property}
-          </td>
-          <td className={Cls.value}>
-            <input
-              type={'text'}
-              value={value}
-              onChange={(ev) => this.handlePropertyChange(property, ev)}
-              data-cy={'property-value'}
-              className={'form-control'}
-            />
-            <button
-              onClick={() => this.handleDeleteProperty(property)}
-              className={'ml-2 btn btn-link btn-sm'}
-              title={t('Delete_property')}
-              data-cy={`delete-property-button-${property}`}
-            >
-              <FaIcon icon={IconDefs.faTrash} />
-            </button>
-          </td>
-        </tr>
-      );
-    });
-
-    const newPropertyRows = newProperties.map((property, i) => {
-      const isLast = i === newProperties.length - 1;
-      const key = `${property.id}`;
-      return (
-        <tr className={'mt-2'} key={key}>
-          <td className={Cls.label}>
-            <input
-              placeholder={'Nom'}
-              value={property.name}
-              onChange={(ev) => this.handleNewNameChange(property.id, ev)}
-              className={'form-control'}
-              data-cy={`new-name-${property.name || 'unknown'}`}
-            />
-          </td>
-          <td className={Cls.value}>
-            <input
-              placeholder={t('Value')}
-              value={property.value}
-              onChange={(ev) => this.handleNewValueChange(property.id, ev)}
-              className={'form-control'}
-              data-cy={`new-value-${property.name || 'unknown'}`}
-            />
-            <button
-              onClick={() => this.handleDeleteNewProperty(property.id)}
-              title={t('Delete_property')}
-              className={'ml-2 btn btn-link btn-sm'}
-              data-cy={`delete-button-${property.name || 'unknown'}`}
-            >
-              <FaIcon icon={IconDefs.faTrash} />
-            </button>
-            {isLast && (
-              <button
-                onClick={this.handleNewPropertyField}
-                className={`btn btn-link btn-sm ${Cls.buttonNew}`}
-                title={t('New_property')}
-                data-cy={'new-property-button'}
-              >
-                <FaIcon icon={IconDefs.faPlus} size={'1.2rem'} />
-              </button>
-            )}
-          </td>
-        </tr>
-      );
-    });
-
-    return (
-      <table className={Cls.form}>
-        <tbody>
-          {rows}
-          {newPropertyRows}
-        </tbody>
-      </table>
-    );
-  }
-
-  private handlePropertyChange(property: string, ev: ChangeEvent<HTMLInputElement>): void {
-    const res: SimplePropertiesMap = {
-      ...this.props.properties,
-      [property]: asNumberOrString(ev.target.value),
-    };
-
-    this.props.onChange(res);
-  }
-
-  private handleDeleteProperty = (property: string) => {
-    const res: SimplePropertiesMap = {
-      ...this.props.properties,
-    };
-
-    delete res[property];
-
-    this.props.onChange(res);
-  };
-
-  private handleNewNameChange = (propertyId: string, ev: ChangeEvent<HTMLInputElement>) => {
-    const newProperties = this.state.newProperties.map((p) => {
-      if (p.id === propertyId) {
-        return { ...p, name: ev.target.value };
-      }
-      return p;
-    });
-
-    this.setState({ newProperties });
-    this.dispatchNewPropertiesChange(newProperties);
-  };
-
-  private handleNewValueChange = (propertyId: string, ev: ChangeEvent<HTMLInputElement>) => {
-    const newProperties = this.state.newProperties.map((p) => {
-      if (p.id === propertyId) {
-        return { ...p, value: ev.target.value };
-      }
-      return p;
-    });
-
-    this.setState({ newProperties });
-    this.dispatchNewPropertiesChange(newProperties);
-  };
-
-  private handleDeleteNewProperty = (propertyId: string) => {
-    const newProperties = this.state.newProperties.filter((p) => p.id !== propertyId);
-    this.setState({ newProperties });
-  };
-
-  private handleNewPropertyField = () => {
-    const newProperties = this.state.newProperties.slice();
-    newProperties.push({ id: nanoid(), name: '', value: '' });
-    this.setState({ newProperties });
-  };
-
-  private dispatchNewPropertiesChange(newProperties: NewProperty[]) {
-    const res: SimplePropertiesMap = {};
-    for (const newProp of newProperties) {
-      if (newProp.name) {
-        res[newProp.name] = newProp.value;
-      }
-    }
-
-    this.props.onNewPropertiesChange(res);
-  }
+  return (
+    <tr>
+      <td className={Cls.label}>
+        <input
+          placeholder={'Nom'}
+          value={property.name}
+          onChange={handleNameChange}
+          className={'form-control'}
+          data-cy={`property-name`}
+          data-testid={`property-name`}
+        />
+      </td>
+      <td className={Cls.value}>
+        <input
+          placeholder={t('Value')}
+          value={property.value + ''}
+          onChange={handleValueChange}
+          className={'form-control'}
+          data-cy={`property-value`}
+          data-testid={`property-value`}
+        />
+        <button
+          title={t('Delete_property')}
+          onClick={handleDelete}
+          className={'ml-2 btn btn-link btn-sm'}
+          data-cy={`delete-button`}
+          data-testid={`delete-button`}
+        >
+          <FaIcon icon={IconDefs.faTrash} />
+        </button>
+      </td>
+      <td>
+        {!isLast && <>&nbsp;</>}
+        {isLast && (
+          <button
+            onClick={onNewProperty}
+            className={clsx(`btn btn-link btn-sm`, Cls.buttonNew)}
+            title={t('New_property')}
+            data-cy={'new-property-button'}
+            data-testid={'new-property-button'}
+          >
+            <FaIcon icon={IconDefs.faPlus} size={'1.2rem'} />
+          </button>
+        )}
+      </td>
+    </tr>
+  );
 }
-
-export default withTranslation()(withServices(PropertiesForm));

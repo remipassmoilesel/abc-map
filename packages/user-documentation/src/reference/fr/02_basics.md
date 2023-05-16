@@ -18,8 +18,7 @@ Ces couches contiennent des géométries et peuvent être modifiées avec les ou
 
 ## Les projets
 
-Les projets permettent de sauvegarder votre travail. Lorsque vous exportez votre projet, vous créez un fichier qui
-contient tout votre travail en cours.
+Les projets permettent de sauvegarder votre travail. Lorsque vous exportez votre projet, vous créez un fichier qui contient tout votre travail en cours.
 
 Un projet contient:
 
@@ -29,13 +28,16 @@ Un projet contient:
 - Les images de vos mises en pages et partages
 
 Les projets exportés ont l'extension de fichier `.abm2`. Il ne sont utilisables qu'avec Abc-Map. Ce sont des
-<a href="https://fr.wikipedia.org/wiki/ZIP_(format_de_fichier)" target="_blank">archives Zip</a> contenant
-toutes les informations de votre projet dans un format proche de GeoJSON.
+<a href="https://fr.wikipedia.org/wiki/ZIP_(format_de_fichier)" target="_blank">archives Zip</a> contenant toutes les informations de votre projet dans un
+format proche de GeoJSON.
 
 ### Identifiants
 
-Si votre projet contient des identifiants d'accès à des services tiers (par exemple des identifiants de couches de tuiles XYZ), alors votre projet sera protégé par un mot de passe. Ce mot de passe sera utilisé pour chiffrer ces identifiants.
+Si votre projet contient des identifiants d'accès à des services tiers (par exemple des identifiants de couches de tuiles XYZ), alors ces identifiants seront
+sauvegardés avec votre projet.
 
-Vous devrez donc choisir un mot de passe et le saisir à chaque fois que vous ouvrirez ce projet. En cas de perte, ces mots de passe ne peuvent pas être récupérés.
+Attention, si vous partagez votre projet alors vous partagerez vos identifiants.
 
-Attention, si vous partagez publiquement votre projet alors les identifiants sont publics aussi.
+<div class='alert alert-info'>
+Dans une version précédente, les projets était protégés par mot de passe mais cette fonctionnalité a été enlevée.
+</div>

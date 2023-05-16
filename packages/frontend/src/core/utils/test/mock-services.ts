@@ -18,7 +18,6 @@
 
 import { getAbcWindow } from '@abc-map/shared';
 import { newTestServices, TestServices } from './TestServices';
-import { getServices } from '../../Services';
 
 /**
  * This function mocks the main service map, which is returned by getServices().
@@ -38,6 +37,6 @@ export function mockServices(): TestServices {
 
 export function restoreServices() {
   const window = getAbcWindow();
+  // Services will be recreated at next call of getServices()
   window.abc.services = undefined;
-  return getServices();
 }

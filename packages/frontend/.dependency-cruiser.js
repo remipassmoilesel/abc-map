@@ -1,5 +1,23 @@
 module.exports = {
   forbidden: [
+    {
+      name: 'no-plain-lodash',
+      severity: 'error',
+      comment: `You must import Lodash functions selectively. Example: import chunk from "lodash/chunk";`,
+      from: {},
+      to: {
+        path: 'lodash/lodash.js$',
+      },
+    },
+    {
+      name: 'no-plain-fontawesome',
+      severity: 'error',
+      comment: 'You must import Font Awesome icons selectively. ' + 'Example: import { faClipboard } from "@fortawesome/free-solid-svg-icons/faClipboard"',
+      from: {},
+      to: {
+        path: '@fortawesome/free-solid-svg-icons/index.js',
+      },
+    },
     /* rules from the 'recommended' preset: */
     {
       name: 'no-circular',

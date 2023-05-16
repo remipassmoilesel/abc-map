@@ -18,7 +18,7 @@
 
 import { AbcFile, AbcLayout, AbcProjectManifest, AbcProjectMetadata, LayoutFormats, Logger } from '@abc-map/shared';
 import { MigrationProject, ProjectMigration } from './typings';
-import { LayoutFormat040 } from './old-typings/040-project';
+import { LayoutFormat040 } from './dependencies/040-project';
 import semver from 'semver';
 
 const NEXT = '0.5.0';

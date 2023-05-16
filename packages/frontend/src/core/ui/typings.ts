@@ -16,16 +16,16 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { SimplePropertiesMap } from '../geo/features/FeatureWrapper';
+import { DataPropertiesMap } from '../geo/features/FeatureWrapper';
 import { PromptDefinition } from './PromptDefinition';
 import { VariableMap } from '../utils/variableExpansion';
 
 export enum ModalEventType {
   ShowPasswordInput = 'ShowPasswordInput',
-  PasswordInputClosed = 'PasswordInputClosed',
+  PasswordPromptClosed = 'PasswordPromptClosed',
   ShowSetPassword = 'ShowSetPassword',
   CreatePasswordClosed = 'CreatePasswordClosed',
-  ShowFeatureProperties = 'ShowFeatureProperties',
+  ShowEditProperties = 'ShowEditProperties',
   FeaturePropertiesClosed = 'FeaturePropertiesClosed',
   ShowSolicitation = 'ShowSolicitation',
   SolicitationClosed = 'SolicitationClosed',
@@ -65,7 +65,7 @@ export interface ShowPasswordInputModal {
 }
 
 export interface PasswordInputClosedEvent {
-  type: ModalEventType.PasswordInputClosed;
+  type: ModalEventType.PasswordPromptClosed;
   value: string;
   status: ModalStatus;
 }
@@ -82,15 +82,15 @@ export interface CreatePasswordModalClosedEvent {
   status: ModalStatus;
 }
 
-export interface ShowFeaturePropertiesModal {
-  type: ModalEventType.ShowFeatureProperties;
-  properties: SimplePropertiesMap;
+export interface ShowEditPropertiesModal {
+  type: ModalEventType.ShowEditProperties;
+  properties: DataPropertiesMap;
 }
 
-export interface FeaturePropertiesClosedEvent {
+export interface EditPropertiesClosedEvent {
   type: ModalEventType.FeaturePropertiesClosed;
   status: ModalStatus;
-  properties: SimplePropertiesMap;
+  properties: DataPropertiesMap;
 }
 
 export interface ShowSolicitationModal {
@@ -147,7 +147,7 @@ export interface LongOperationModalClosedEvent {
   type: ModalEventType.LongOperationModalClosed;
 }
 
-export interface ShowConfirmation {
+export interface ShowConfirmationModalEvent {
   type: ModalEventType.ShowConfirmation;
   title: string;
   message: string;
@@ -199,8 +199,8 @@ export declare type ModalEvent =
   | PasswordInputClosedEvent
   | ShowSetPasswordModal
   | CreatePasswordModalClosedEvent
-  | ShowFeaturePropertiesModal
-  | FeaturePropertiesClosedEvent
+  | ShowEditPropertiesModal
+  | EditPropertiesClosedEvent
   | ShowSolicitationModal
   | SolicitationClosedEvent
   | ShowLoginModal
@@ -213,7 +213,7 @@ export declare type ModalEvent =
   | TextFeedbackClosed
   | ShowLongOperationModal
   | LongOperationModalClosedEvent
-  | ShowConfirmation
+  | ShowConfirmationModalEvent
   | ConfirmationClosedEvent
   | ShowPromptVariables
   | PromptVariablesClosed

@@ -23,7 +23,7 @@ import sinon, { SinonStubbedInstance } from 'sinon';
 import { ModalEventType, ModalStatus } from '../../ui/typings';
 import { TestData } from './test-data/TestData';
 import { MigrationProject } from './typings';
-import { WmsMetadata030 } from './old-typings/030-project';
+import { WmsMetadata030 } from './dependencies/030-project';
 
 describe('FromV020ToV030', () => {
   let modals: SinonStubbedInstance<ModalService>;

@@ -82,7 +82,7 @@ class PredefinedLayerPanel extends Component<Props, {}> {
       const layer = LayerFactory.newPredefinedLayer(value);
 
       const cs = AddLayersChangeset.create([layer]);
-      await cs.apply();
+      await cs.execute();
       history.register(HistoryKey.Map, cs);
 
       this.props.onConfirm();

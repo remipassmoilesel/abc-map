@@ -21,8 +21,8 @@ import PasswordInputModal from './PasswordInputModal';
 import { ModalEvent, ModalEventType } from '../../core/ui/typings';
 import { act, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { Encryption } from '../../core/utils/Encryption';
 import { TestHelper } from '../../core/utils/test/TestHelper';
+import { Encryption } from '../../core/utils/Encryption';
 
 describe('PasswordInputModal', () => {
   let services: TestServices;
@@ -51,7 +51,7 @@ describe('PasswordInputModal', () => {
 
     // Assert
     await waitFor(() => {
-      expect(services.modals.dispatch.args).toEqual([[{ status: 'Confirmed', type: 'PasswordInputClosed', value: 'azerty1234' }]]);
+      expect(services.modals.dispatch.args).toEqual([[{ status: 'Confirmed', type: ModalEventType.PasswordPromptClosed, value: 'azerty1234' }]]);
     });
   });
 

@@ -63,7 +63,7 @@ describe('ColorGradients', () => {
 
     beforeEach(async () => {
       source = TestHelper.regionsOfFranceDataSource();
-      values = (await source.getRows()).map((row) => row['popPercent']) as DataValue[];
+      values = (await source.getRows()).map((row) => row.data.popPercent) as DataValue[];
       layer = TestHelper.regionsOfFranceVectorLayer();
       baseParameters = {
         newLayerName: 'New gradient layer',
@@ -302,8 +302,8 @@ describe('ColorGradients', () => {
 
     it('should return InvalidValues status', async () => {
       // Prepare
-      const rows = TestHelper.regionsOfFrance();
-      rows[0].popPercent = 'SeVeNtY PeRcEnT';
+      const rows = TestHelper.regionsOfFranceAsDataRow();
+      rows[0].data.popPercent = 'SeVeNtY PeRcEnT';
       const source = TestDataSource.from(rows);
       const layer = TestHelper.regionsOfFranceVectorLayer();
 
@@ -322,7 +322,7 @@ describe('ColorGradients', () => {
 
     it('should return InvalidMinMax status', async () => {
       // Prepare
-      const rows = TestHelper.regionsOfFrance().map((row) => ({ ...row, popPercent: 0 }));
+      const rows = TestHelper.regionsOfFranceAsDataRow().map((row) => ({ ...row, data: { ...row.data, popPercent: 0 } }));
       const source = TestDataSource.from(rows);
       const layer = TestHelper.regionsOfFranceVectorLayer();
 
@@ -360,8 +360,8 @@ describe('ColorGradients', () => {
 
     it('should return BadProcessing status if feature does not have a matching data row', async () => {
       // Prepare
-      const rows = TestHelper.regionsOfFrance();
-      rows[0].code = 9999;
+      const rows = TestHelper.regionsOfFranceAsDataRow();
+      rows[0].data.code = 9999;
       const source = TestDataSource.from(rows);
       const layer = TestHelper.regionsOfFranceVectorLayer();
 

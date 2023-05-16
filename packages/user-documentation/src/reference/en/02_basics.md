@@ -18,8 +18,7 @@ These layers contain geometries and can be edited with the drawing tools.
 
 ## Projects
 
-Projects allow you to save your work. When you export your project, you create a file that
-contains all your work in progress.
+Projects allow you to save your work. When you export your project, you create a file that contains all your work in progress.
 
 A project contains:
 
@@ -29,13 +28,15 @@ A project contains:
 - The images of your layouts and shares
 
 Exported projects have the file extension `.abm2`. They can only be used with Abc-Map. Those are
-<a href="https://en.wikipedia.org/wiki/ZIP_(file_format)" target="_blank">Zip archives</a> containing
-all the information about your project in a format similar to GeoJSON.
+<a href="https://en.wikipedia.org/wiki/ZIP_(file_format)" target="_blank">Zip archives</a> containing all the information about your project in a format similar
+to GeoJSON.
 
 ### Identifiers
 
-If your project contains access identifiers to third-party services (per example XYZ tile layer identifiers), then your project will be protected by a password. This password will be used to encrypt these credentials.
+If your project contains credentials for accessing third-party services (eg XYZ tile layer credentials), then these credentials will be saved with your project.
 
-You will therefore have to choose a password and enter it each time you open this project. If lost, these passwords cannot be recovered.
+Attention, if you share your project then you will share your identifiers.
 
-Be careful, if you share your project publicly then the identifiers are public too.
+<div class='alert alert-info'>
+In a previous version, projects were password protected but this feature has been removed.
+</div>

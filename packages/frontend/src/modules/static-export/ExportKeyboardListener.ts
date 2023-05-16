@@ -61,7 +61,7 @@ export class ExportKeyboardListener {
 
     const apply = async () => {
       const cs = RemoveLayoutsChangeset.create([layout]);
-      await cs.apply();
+      await cs.execute();
       history.register(HistoryKey.Export, cs);
     };
 

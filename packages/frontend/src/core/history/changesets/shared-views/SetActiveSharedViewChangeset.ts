@@ -38,7 +38,7 @@ export class SetActiveSharedViewChangeset extends Changeset {
     }
   }
 
-  public async apply(): Promise<void> {
+  public async execute(): Promise<void> {
     this.project.setActiveSharedView(this.next.id);
   }
 }

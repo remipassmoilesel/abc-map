@@ -19,8 +19,8 @@
 import { Logger } from '@abc-map/shared';
 import {
   ConfirmationClosedEvent,
-  FeaturePropertiesClosedEvent,
-  InternalEvent,
+  CreatePasswordModalClosedEvent,
+  EditPropertiesClosedEvent,
   LoginClosedEvent,
   ModalEvent,
   ModalEventListener,
@@ -31,23 +31,22 @@ import {
   PromptVariablesClosed,
   PwaInstallClosed,
   RegistrationClosedEvent,
-  CreatePasswordModalClosedEvent,
   SimplePromptClosed,
   SolicitationClosedEvent,
   TextFeedbackClosed,
 } from './typings';
-import { SimplePropertiesMap } from '../geo/features/FeatureWrapper';
+import { DataPropertiesMap } from '../geo/features/FeatureWrapper';
 import { resolveInAtLeast } from '../utils/resolveInAtLeast';
 import { prefixedTranslation } from '../../i18n/i18n';
 import { PromptDefinition } from './PromptDefinition';
+import EventEmitter from 'eventemitter3';
 
 const logger = Logger.get('ModalService.ts', 'warn');
 
 const t = prefixedTranslation('ModalService:');
 
 export class ModalService {
-  private eventTarget = document.createDocumentFragment();
-  private listeners = new Map<ModalEventListener<any>, EventListener>();
+  private emitter = new EventEmitter();
 
   public prompt(title: string, message: string, value: string, validationRegexp: RegExp, validationErrorMessage: string): Promise<SimplePromptClosed> {
     const input: ModalEvent = { type: ModalEventType.ShowSimplePrompt, title, message, value, validationRegexp, validationErrorMessage };
@@ -68,28 +67,12 @@ export class ModalService {
     return this.modalPromise({ type: ModalEventType.ShowSetPassword, title, message }, ModalEventType.CreatePasswordClosed);
   }
 
-  public createProjectPassword(): Promise<CreatePasswordModalClosedEvent> {
-    const title = t('Project_password');
-    const message = t('Your_project_contains_credentials');
-    return this.createPassword(title, message);
-  }
-
   public promptPassword(title: string, message: string, witness: string): Promise<PasswordInputClosedEvent> {
-    return this.modalPromise({ type: ModalEventType.ShowPasswordInput, title, message, witness }, ModalEventType.PasswordInputClosed);
+    return this.modalPromise({ type: ModalEventType.ShowPasswordInput, title, message, witness }, ModalEventType.PasswordPromptClosed);
   }
 
-  /**
-   * Show a modal with one password input, allowing user to enter an existing password
-   * @param witness
-   */
-  public promptProjectPassword(witness: string): Promise<PasswordInputClosedEvent> {
-    const title = t('Project_password');
-    const message = t('Enter_project_password');
-    return this.promptPassword(title, message, witness);
-  }
-
-  public featurePropertiesModal(properties: SimplePropertiesMap): Promise<FeaturePropertiesClosedEvent> {
-    return this.modalPromise({ type: ModalEventType.ShowFeatureProperties, properties }, ModalEventType.FeaturePropertiesClosed);
+  public editPropertiesModal(properties: DataPropertiesMap): Promise<EditPropertiesClosedEvent> {
+    return this.modalPromise({ type: ModalEventType.ShowEditProperties, properties }, ModalEventType.FeaturePropertiesClosed);
   }
 
   public solicitation(): Promise<SolicitationClosedEvent> {
@@ -211,36 +194,15 @@ export class ModalService {
   }
 
   public addListener<T extends ModalEvent = ModalEvent>(type: ModalEventType, listener: ModalEventListener<T>) {
-    // We create a listener wrapper that filters events
-    const _listener: EventListener = (ev) => {
-      if (!(ev instanceof InternalEvent) || ev.payload.type !== type) {
-        logger.error('Bad event received: ', ev);
-        return;
-      }
-      listener(ev.payload as T);
-    };
-
-    this.eventTarget.addEventListener(type, _listener);
-    this.listeners.set(listener, _listener);
+    this.emitter.addListener(type, listener);
   }
 
   public removeListener(type: ModalEventType, listener: ModalEventListener<any>) {
-    const _listener = this.listeners.get(listener);
-    if (!_listener) {
-      logger.warn('Listener was not registered: ', _listener);
-      return;
-    }
-
-    this.listeners.delete(listener);
-    this.eventTarget.removeEventListener(type, _listener);
+    this.emitter.removeListener(type, listener);
   }
 
   public dispatch(event: ModalEvent): void {
     logger.debug('Dispatch event: ', event);
-    this.eventTarget.dispatchEvent(new InternalEvent(event.type, event));
-  }
-
-  public getListeners() {
-    return this.listeners;
+    this.emitter.emit(event.type, event);
   }
 }

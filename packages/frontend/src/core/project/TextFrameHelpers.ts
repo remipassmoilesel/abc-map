@@ -18,7 +18,7 @@
 
 import { AbcFile, AbcLayout, AbcSharedView, AbcTextFrame, Logger, TextFrameChild } from '@abc-map/shared';
 import { nanoid } from 'nanoid';
-import { cloneDeep } from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
 
 const logger = Logger.get('TextFrameHelpers');
 

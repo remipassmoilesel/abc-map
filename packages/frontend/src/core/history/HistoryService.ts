@@ -20,7 +20,7 @@ import { HistoryKey } from './HistoryKey';
 import { Changeset } from './Changeset';
 import { Logger } from '@abc-map/shared';
 import { UiActions } from '../store/ui/actions';
-import { MainStore } from '../store/store';
+import { mainStore, MainStore } from '../store/store';
 
 const logger = Logger.get('HistoryService.ts');
 
@@ -42,8 +42,8 @@ export declare type History = {
  * directly UI components, actually canUndo and canRedo only.
  */
 export class HistoryService {
-  public static create(store: MainStore): HistoryService {
-    return new HistoryService(MaxHistoryStackSize, {}, store);
+  public static create(): HistoryService {
+    return new HistoryService(MaxHistoryStackSize, {}, mainStore);
   }
 
   constructor(private maxSize: number, private history: History = {}, private store: MainStore) {}
@@ -109,7 +109,7 @@ export class HistoryService {
     // Changeset reference must be hold in one list reference, in case we want to use remove()
     stack.undo.push(changeset);
 
-    await changeset.apply();
+    await changeset.execute();
 
     this.limitHistorySize(key);
     this.updateUiState(key);

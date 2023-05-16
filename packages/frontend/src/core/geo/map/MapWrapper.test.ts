@@ -168,6 +168,21 @@ describe('MapWrapper', function () {
       expect(layers[1].isActive()).toEqual(false);
       expect(layers[2].isActive()).toEqual(true);
     });
+
+    it('with undefined value', () => {
+      // Prepare
+      const map = MapFactory.createNaked();
+      const layer = LayerFactory.newPredefinedLayer(PredefinedLayerModel.OSM);
+      map.addLayer(layer);
+      map.setActiveLayer(layer);
+
+      // Act
+      map.setActiveLayer(undefined);
+
+      // Assert
+      expect(map.getActiveLayer()).toEqual(undefined);
+      expect(layer.isActive()).toEqual(false);
+    });
   });
 
   describe('getActiveLayer()', () => {

@@ -18,18 +18,25 @@
 
 import React from 'react';
 import { screen } from '@testing-library/react';
-import LayerControls from './LayerControls';
+import { LayerControls } from './LayerControls';
 import { newTestServices, TestServices } from '../../../core/utils/test/TestServices';
 import { abcRender } from '../../../core/utils/test/abcRender';
+import { MapWrapper } from '../../../core/geo/map/MapWrapper';
+import { MapFactory } from '../../../core/geo/map/MapFactory';
 
 describe('LayerControls', () => {
+  let map: MapWrapper;
   let testServices: TestServices;
+
   beforeEach(() => {
     testServices = newTestServices();
+
+    map = MapFactory.createNaked();
+    testServices.geo.getMainMap.returns(map);
   });
 
   it('renders without layers', () => {
-    abcRender(<LayerControls layers={[]} />, { services: testServices });
+    abcRender(<LayerControls />, { services: testServices });
     const linkElement = screen.getByText(/No layer/i);
     expect(linkElement).toBeInTheDocument();
   });

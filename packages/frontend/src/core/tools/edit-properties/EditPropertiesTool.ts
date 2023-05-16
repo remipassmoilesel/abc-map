@@ -97,16 +97,16 @@ export class EditPropertiesTool implements Tool {
       feature.setSelected(true);
 
       // Keep previous properties for undo / redo
-      const before = feature.getSimpleProperties();
+      const before = feature.getDataProperties();
 
       // Pop up modal, when modification done overwrite properties, register changeset
       this.modals
-        .featurePropertiesModal(before)
+        .editPropertiesModal(before)
         .then((modalEvent) => {
           const after = modalEvent.properties;
           if (ModalStatus.Confirmed === modalEvent.status && !isEqual(before, after)) {
             const cs = new SetFeaturePropertiesChangeset(feature, before, after);
-            cs.apply().catch((err) => logger.error('Cannot modify properties: ', err));
+            cs.execute().catch((err) => logger.error('Cannot modify properties: ', err));
             this.history.register(HistoryKey.Map, cs);
           }
         })

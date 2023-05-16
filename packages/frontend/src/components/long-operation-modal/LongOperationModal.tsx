@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ModalEvent, ModalEventType } from '../../core/ui/typings';
 import { Logger } from '@abc-map/shared';
 import { prefixedTranslation } from '../../i18n/i18n';
@@ -33,26 +33,25 @@ function LongOperationModal() {
   const [visible, setVisible] = useState(false);
   const [processing, setProcessing] = useState(false);
 
-  const handleVisibilityChanged = useCallback((ev: ModalEvent) => {
-    if (ModalEventType.ShowLongOperationModal === ev.type) {
-      setVisible(true);
-      setProcessing(ev.processing);
-    } else if (ModalEventType.LongOperationModalClosed === ev.type) {
-      setVisible(false);
-    } else {
-      logger.error('Unhandled event: ', ev);
-    }
-  }, []);
-
   useEffect(() => {
+    const handleVisibilityChanged = (ev: ModalEvent) => {
+      if (ModalEventType.ShowLongOperationModal === ev.type) {
+        setVisible(true);
+        setProcessing(ev.processing);
+      } else if (ModalEventType.LongOperationModalClosed === ev.type) {
+        setVisible(false);
+      } else {
+        logger.error('Unhandled event: ', ev);
+      }
+    };
+
     modals.addListener(ModalEventType.ShowLongOperationModal, handleVisibilityChanged);
     modals.addListener(ModalEventType.LongOperationModalClosed, handleVisibilityChanged);
-
     return () => {
       modals.removeListener(ModalEventType.ShowLongOperationModal, handleVisibilityChanged);
       modals.removeListener(ModalEventType.LongOperationModalClosed, handleVisibilityChanged);
     };
-  }, [handleVisibilityChanged, modals]);
+  }, [modals]);
 
   if (!visible) {
     return <div />;

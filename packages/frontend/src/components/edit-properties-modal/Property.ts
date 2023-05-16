@@ -16,11 +16,8 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Module } from '@abc-map/module-api';
-
-export interface ModuleIndexItem {
-  module: Module;
+export interface Property {
   id: string;
   name: string;
-  shortDescription: string;
+  value: string | number | boolean | null | undefined;
 }

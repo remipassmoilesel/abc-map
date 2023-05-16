@@ -41,11 +41,12 @@ describe('CsvDataSource', () => {
     const rows = await data.getRows();
 
     expect(rows).toHaveLength(2);
-    rows.forEach((r) => expect(r._id).toBeDefined());
-    const comparable = rows.map((r) => ({ ...r, _id: '' }));
+    rows.forEach((r) => expect(r.id).toBeDefined());
+
+    const comparable = rows.map((r) => ({ ...r, id: '' }));
     expect(comparable).toEqual([
-      { _id: '', label: 'value1', altitude: '1234' },
-      { _id: '', label: 'value2', altitude: '5678' },
+      { id: '', data: { label: 'value1', altitude: '1234' } },
+      { id: '', data: { label: 'value2', altitude: '5678' } },
     ]);
   });
 

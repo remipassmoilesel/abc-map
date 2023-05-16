@@ -20,14 +20,14 @@ import Feature from 'ol/Feature';
 import { SinonStubbedInstance } from 'sinon';
 import * as sinon from 'sinon';
 import { FeatureStyle } from '../features/FeatureStyle';
-import { FeatureWrapper, OlGeometry, PropertiesMap, SimplePropertiesMap } from '../features/FeatureWrapper';
+import { FeatureWrapper, OlGeometry, PropertiesMap, DataPropertiesMap } from '../features/FeatureWrapper';
 
 /**
  * Initialize a new feature wrapper stub. Based on sinonjs, see: https://sinonjs.org/releases/latest/stubs/
  */
 export function newTestFeatureWrapper(): SinonStubbedInstance<FeatureWrapper> {
   const stub = sinon.createStubInstance(DumbFeatureWrapper);
-  stub.overwriteSimpleProperties.returns(stub);
+  stub.setDataProperties.returns(stub);
   stub.setDefaultStyle.returns(stub);
   stub.setId.returns(stub);
   stub.setProperties.returns(stub);
@@ -55,7 +55,7 @@ class DumbFeatureWrapper implements FeatureWrapper {
     return {} as any;
   }
 
-  public getSimpleProperties(): SimplePropertiesMap {
+  public getDataProperties(): DataPropertiesMap {
     return {} as any;
   }
 
@@ -75,7 +75,7 @@ class DumbFeatureWrapper implements FeatureWrapper {
     return {} as any;
   }
 
-  public overwriteSimpleProperties(properties: SimplePropertiesMap): FeatureWrapper {
+  public setDataProperties(properties: DataPropertiesMap): FeatureWrapper {
     return {} as any;
   }
 
@@ -87,7 +87,7 @@ class DumbFeatureWrapper implements FeatureWrapper {
     return {} as any;
   }
 
-  public setProperties(properties: SimplePropertiesMap): FeatureWrapper {
+  public setProperties(properties: DataPropertiesMap): FeatureWrapper {
     return {} as any;
   }
 

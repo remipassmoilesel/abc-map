@@ -16,126 +16,121 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { Component, ReactNode } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Modal } from 'react-bootstrap';
-import { ModalEventType, ModalStatus, ShowFeaturePropertiesModal } from '../../core/ui/typings';
-import { ServiceProps, withServices } from '../../core/withServices';
-import { SimplePropertiesMap } from '../../core/geo/features/FeatureWrapper';
-import PropertiesForm from './PropertiesForm';
-import { prefixedTranslation } from '../../i18n/i18n';
-import { withTranslation } from 'react-i18next';
+import { ModalEventType, ModalStatus, ShowEditPropertiesModal } from '../../core/ui/typings';
+import { DataPropertiesMap } from '../../core/geo/features/FeatureWrapper';
+import { PropertiesForm } from './PropertiesForm';
+import { useTranslation } from 'react-i18next';
+import { useServices } from '../../core/useServices';
+import { Property } from './Property';
+import { nanoid } from 'nanoid';
+import { Logger } from '@abc-map/shared';
+import { isValidDataField } from '../../core/geo/features/isValidDataField';
+import { asNumberOrString, isValidNumber } from '../../core/utils/numbers';
 
-interface State {
-  visible: boolean;
-  properties?: SimplePropertiesMap;
-  newProperties?: SimplePropertiesMap;
-}
+export const logger = Logger.get('EditPropertiesModal.tsx');
 
-const t = prefixedTranslation('EditPropertiesModal:');
+export function EditPropertiesModal() {
+  const { modals } = useServices();
+  const { t } = useTranslation('EditPropertiesModal');
+  const [visible, setVisible] = useState(false);
+  const [properties, setProperties] = useState<Property[]>([]);
 
-class EditPropertiesModal extends Component<ServiceProps, State> {
-  constructor(props: ServiceProps) {
-    super(props);
-    this.state = { visible: false };
-  }
+  const handleOpen = useCallback((ev: ShowEditPropertiesModal) => {
+    const properties: Property[] = [];
+    for (const k in ev.properties) {
+      const value = ev.properties[k];
+      if (!isValidDataField(value)) {
+        logger.warn('Unsupported type: ', typeof value);
+        continue;
+      }
 
-  public render(): ReactNode {
-    const visible = this.state.visible;
-    const properties = this.state.properties;
-    if (!visible || !properties) {
-      return <div />;
+      properties.push({ id: nanoid(), name: k, value: value });
     }
 
-    return (
-      <Modal show={visible} onHide={this.handleCancel} size={'lg'} centered>
-        <Modal.Header closeButton>
-          <Modal.Title>{t('Properties')}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body className={'d-flex flex-column'}>
-          {/* Properties edition */}
-          <PropertiesForm properties={properties} onChange={this.handlePropertiesChange} onNewPropertiesChange={this.handleNewPropertiesChange} />
+    if (!properties.length) {
+      properties.push({ id: nanoid(), name: '', value: '' });
+    }
 
-          {/* Confirm and cancel buttons */}
-          <div className={'d-flex justify-content-end'}>
-            <button className={'btn btn-secondary mr-3'} onClick={this.handleCancel} data-cy="properties-modal-cancel">
-              {t('Cancel')}
-            </button>
-            <button className={'btn btn-primary'} onClick={this.handleConfirm} data-cy="properties-modal-confirm">
-              {t('Save')}
-            </button>
-          </div>
-        </Modal.Body>
-      </Modal>
-    );
-  }
+    setProperties(properties);
+    setVisible(true);
+  }, []);
 
-  public componentDidMount() {
-    const { modals } = this.props.services;
+  const handleChange = useCallback((properties: Property[]) => {
+    setProperties(properties);
+  }, []);
 
-    modals.addListener(ModalEventType.ShowFeatureProperties, this.handleOpen);
-  }
-
-  public componentWillUnmount() {
-    const { modals } = this.props.services;
-
-    modals.removeListener(ModalEventType.ShowFeatureProperties, this.handleOpen);
-  }
-
-  private handleOpen = (ev: ShowFeaturePropertiesModal) => {
-    this.setState({ visible: true, properties: ev.properties });
-  };
-
-  private handlePropertiesChange = (properties: SimplePropertiesMap) => {
-    this.setState({ properties });
-  };
-
-  private handleNewPropertiesChange = (properties: SimplePropertiesMap) => {
-    this.setState({ newProperties: properties });
-  };
-
-  private handleCancel = () => {
-    const { modals } = this.props.services;
-
+  const handleCancel = useCallback(() => {
     modals.dispatch({
       type: ModalEventType.FeaturePropertiesClosed,
       status: ModalStatus.Canceled,
-      properties: this.getProperties(),
+      properties: {},
     });
 
-    this.setState({ visible: false });
-  };
+    setVisible(false);
+  }, [modals]);
 
-  private handleConfirm = () => {
-    const { modals } = this.props.services;
+  const handleConfirm = useCallback(() => {
+    const result: DataPropertiesMap = {};
+    for (const property of properties) {
+      const name = property.name.trim();
+      if (!name) {
+        continue;
+      }
+
+      result[property.name.trim()] = normalizeValue(property.value);
+    }
 
     modals.dispatch({
       type: ModalEventType.FeaturePropertiesClosed,
       status: ModalStatus.Confirmed,
-      properties: this.getProperties(),
+      properties: result,
     });
 
-    this.setState({ visible: false });
-  };
+    setVisible(false);
+  }, [modals, properties]);
 
-  private getProperties(): SimplePropertiesMap {
-    const result = {
-      ...this.state.properties,
-      ...this.state.newProperties,
-    };
+  useEffect(() => {
+    modals.addListener(ModalEventType.ShowEditProperties, handleOpen);
+    return () => modals.removeListener(ModalEventType.ShowEditProperties, handleOpen);
+  }, [handleOpen, modals]);
 
-    for (const k in result) {
-      result[k] = this.normalizeProperty(result[k]);
-    }
-
-    return result;
+  if (!visible || !properties) {
+    return <div />;
   }
 
-  private normalizeProperty(property: string | number | undefined): string | number | undefined {
-    if (typeof property === 'string') {
-      return property.trim();
-    }
-    return property;
-  }
+  return (
+    <Modal show={visible} onHide={handleCancel} size={'lg'} centered>
+      <Modal.Header closeButton>
+        <Modal.Title>{t('Properties')}</Modal.Title>
+      </Modal.Header>
+      <Modal.Body className={'d-flex flex-column'}>
+        {/* Properties edition */}
+        <PropertiesForm properties={properties} onChange={handleChange} />
+
+        {/* Confirm and cancel buttons */}
+        <div className={'d-flex justify-content-end'}>
+          <button className={'btn btn-secondary mr-2'} onClick={handleCancel} data-cy="properties-modal-cancel" data-testid="cancel">
+            {t('Cancel')}
+          </button>
+          <button className={'btn btn-primary'} onClick={handleConfirm} data-cy="properties-modal-confirm" data-testid="confirm">
+            {t('Save')}
+          </button>
+        </div>
+      </Modal.Body>
+    </Modal>
+  );
 }
 
-export default withTranslation()(withServices(EditPropertiesModal));
+function normalizeValue(property: string | number | boolean | undefined | null): string | number | boolean | undefined | null {
+  if (isValidNumber(property)) {
+    return asNumberOrString(property);
+  }
+
+  if (typeof property === 'string') {
+    return property.trim();
+  }
+
+  return property;
+}

@@ -20,6 +20,7 @@ import React, { Component, ReactNode } from 'react';
 import Cls from './MessageLabel.module.scss';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { FaIcon } from '../icon/FaIcon';
+import clsx from 'clsx';
 
 export interface Props {
   icon: IconDefinition;
@@ -36,7 +37,7 @@ class MessageLabel extends Component<Props, {}> {
     const dataTestId = this.props['data-testid'] || undefined;
 
     return (
-      <div className={`${Cls.message} ${className}`} data-testid={dataTestId}>
+      <div className={clsx(Cls.message, className)} data-testid={dataTestId}>
         <FaIcon icon={icon} className={'mr-2'} size={'1.2rem'} />
         {children}
       </div>

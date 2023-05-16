@@ -93,7 +93,7 @@ class DumbMapWrapper implements MapWrapper {
 
   renameLayer(layer: LayerWrapper, name: string): void {}
 
-  setActiveLayer(layer: LayerWrapper): void {}
+  setActiveLayer(layer: LayerWrapper | undefined): void {}
 
   setDefaultLayers(): void {}
 

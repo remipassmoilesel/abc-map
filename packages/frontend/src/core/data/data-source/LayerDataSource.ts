@@ -16,11 +16,9 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { VectorLayerWrapper } from '../../geo/layers/LayerWrapper';
+import { LayerWrapper, VectorLayerWrapper } from '../../geo/layers/LayerWrapper';
 import { DataRow, DataSource, DataSourceType } from './DataSource';
 import { Logger } from '@abc-map/shared';
-import Geometry from 'ol/geom/Geometry';
-import Feature from 'ol/Feature';
 import { FeatureWrapper } from '../../geo/features/FeatureWrapper';
 import { prefixedTranslation } from '../../../i18n/i18n';
 
@@ -50,7 +48,7 @@ export class LayerDataSource implements DataSource {
 
   public async getRows(): Promise<DataRow[]> {
     const features = this.layer.getSource().getFeatures();
-    const rows: DataRow[] = features.map((f) => this.featureToDataRow(f)).filter((r): r is DataRow => !!r);
+    const rows: DataRow[] = features.map((f) => FeatureWrapper.from(f).toDataRow());
 
     if (features.length !== rows.length) {
       return Promise.reject(new Error(`Some features does not have an id. Original array: ${features.length} rows: ${rows.length}`));
@@ -59,16 +57,7 @@ export class LayerDataSource implements DataSource {
     return rows;
   }
 
-  private featureToDataRow(feature: Feature<Geometry>): DataRow | undefined {
-    const id = feature.getId();
-    if (!id) {
-      return;
-    }
-
-    const properties = FeatureWrapper.from(feature).getSimpleProperties();
-    return {
-      ...properties,
-      _id: id,
-    };
+  public getLayer(): LayerWrapper {
+    return this.layer;
   }
 }

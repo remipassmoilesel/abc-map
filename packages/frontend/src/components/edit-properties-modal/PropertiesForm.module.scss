@@ -17,41 +17,45 @@
  */
 
 @import 'src/styles/variables';
+@import 'src/styles/mixins';
 
-.form {
+.table {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
 
+  border-collapse: separate;
+  border-spacing: 0.4rem;
+
   flex-grow: 1;
   height: 40vh;
   overflow-x: hidden;
-  overflow-y: scroll;
+  overflow-y: auto;
 
   margin-bottom: 1rem;
-
-  border: solid 0.1rem lightgrey;
-  padding: 1rem;
 }
 
 .label {
-  min-width: 10vw;
+  width: 12rem;
+  min-width: 12rem;
+  max-width: 12rem;
 }
 
 .value {
-  width: 40vw;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-
-  input {
-    width: 60% !important;
+  width: 35rem;
+  @include media-breakpoint-down(md) {
+    width: 25rem;
+    max-width: 100%;
   }
+
+  display: flex;
+  align-items: center;
 }
 
 .buttonNew {
   margin-left: 0.4rem;
+
   :global(.abc-icon) {
     color: $primary;
   }

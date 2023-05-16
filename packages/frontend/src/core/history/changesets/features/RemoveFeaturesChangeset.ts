@@ -26,7 +26,7 @@ export class RemoveFeaturesChangeset extends Changeset {
     super();
   }
 
-  public async apply(): Promise<void> {
+  public async execute(): Promise<void> {
     this.features.forEach((feat) => this.source.removeFeature(feat.unwrap()));
   }
 

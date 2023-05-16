@@ -18,8 +18,11 @@
 
 export interface DataSource {
   getId(): string;
+
   getName(): string;
+
   getRows(): Promise<DataRow[]>;
+
   getType(): DataSourceType;
 }
 
@@ -30,14 +33,12 @@ export enum DataSourceType {
 
 export declare type DataRow = {
   /**
-   * ID is the unique identifier of row. It should not be visible in UI.
+   * ID is the unique identifier of row
    */
-  _id: string | number;
-  [k: string]: DataValue | undefined;
+  id: string | number;
+  data: {
+    [k: string]: DataValue | undefined;
+  };
 };
 
-export declare type DataValue = string | number;
-
-export function getFields(row: DataRow): string[] {
-  return Object.keys(row).filter((f) => f !== '_id');
-}
+export declare type DataValue = string | boolean | number | null | undefined;

@@ -16,15 +16,15 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AbcGeometryType, DefaultStyle, FeatureProperties, FillPatterns, StyleProperties } from '@abc-map/shared';
+import { AbcGeometryType, DefaultStyle, FeatureProperties, FeatureStyle, FillPatterns, StyleProperties } from '@abc-map/shared';
 import { Circle, LineString, Point, Polygon } from 'ol/geom';
-import { FeatureWrapper } from './FeatureWrapper';
-import { FeatureStyle } from '@abc-map/shared';
+import { FeatureWrapper, HlPreviousStyleKey, HlStyleKey } from './FeatureWrapper';
 import { TestHelper } from '../../utils/test/TestHelper';
 import { Style } from 'ol/style';
 import Feature from 'ol/Feature';
 import Geometry from 'ol/geom/Geometry';
 import { IconName } from '../../../assets/point-icons/IconName';
+import * as sinon from 'sinon';
 
 describe('FeatureWrapper', () => {
   describe('create(), from(), fromUnknwon()', () => {
@@ -56,6 +56,12 @@ describe('FeatureWrapper', () => {
       expect(FeatureWrapper.fromUnknown(ol)).toBeDefined();
       expect(FeatureWrapper.fromUnknown(undefined)).toBeUndefined();
       expect(FeatureWrapper.fromUnknown(new Style())).toBeUndefined();
+    });
+
+    it('fromGeoJSON()', () => {
+      expect(FeatureWrapper.fromGeoJSON(TestHelper.sampleGeojsonFeature())).toBeDefined();
+      expect(() => FeatureWrapper.fromGeoJSON({} as any)).toThrow();
+      expect(() => FeatureWrapper.fromGeoJSON(undefined as any)).toThrow();
     });
   });
 
@@ -304,17 +310,21 @@ describe('FeatureWrapper', () => {
     });
   });
 
-  it('getSimpleProperties()', () => {
+  it('getDataProperties()', () => {
     const feature = new Feature<Geometry>();
     feature.set(StyleProperties.FillColor2, 'black');
     feature.set('name', 'Amsterdam');
     feature.set('population', 12345);
+    feature.set('updated', false);
     feature.setGeometry(new Point([1, 2]));
+    feature.set('tags', ['tag1', 'tag2']);
+    feature.set('properties', { color: 'blue' });
 
-    const properties = FeatureWrapper.from(feature).getSimpleProperties();
-    expect(properties).toEqual({
+    const dataProperties = FeatureWrapper.from(feature).getDataProperties();
+    expect(dataProperties).toEqual({
       name: 'Amsterdam',
       population: 12345,
+      updated: false,
     });
   });
 
@@ -333,17 +343,29 @@ describe('FeatureWrapper', () => {
     });
   });
 
-  it('overwriteSimpleProperties()', () => {
-    const feature = FeatureWrapper.create(new Point([1, 1]));
-    feature.unwrap().set('code', '#abcd');
-    feature.unwrap().set('population', 123);
+  describe('setDataProperties()', () => {
+    it('should work', () => {
+      const feature = FeatureWrapper.create(new Point([1, 1]));
+      feature.unwrap().set('code', '#abcd');
+      feature.unwrap().set('population', 123);
 
-    feature.overwriteSimpleProperties({ population: 123 });
+      feature.setDataProperties({ population: 123 });
 
-    const properties = feature.getAllProperties();
-    expect(properties).toEqual({
-      population: 123,
-      geometry: feature.getGeometry(),
+      const properties = feature.getAllProperties();
+      expect(properties).toEqual({
+        population: 123,
+        geometry: feature.getGeometry(),
+      });
+    });
+
+    it('should emit change event', () => {
+      const listenerStub = sinon.stub();
+      const feature = FeatureWrapper.create(new Point([1, 1]));
+      feature.unwrap().on('propertychange', listenerStub);
+
+      feature.setDataProperties({ population: 123 });
+
+      expect(listenerStub.callCount).toEqual(1);
     });
   });
 
@@ -362,6 +384,135 @@ describe('FeatureWrapper', () => {
       expect(feature1.hasGeometry(AbcGeometryType.POLYGON)).toBe(false);
       expect(feature1.hasGeometry(AbcGeometryType.LINE_STRING, AbcGeometryType.POLYGON)).toBe(true);
       expect(feature2.hasGeometry(AbcGeometryType.POLYGON)).toBe(false);
+    });
+  });
+
+  describe('toGeoJSON()', () => {
+    it('With a geometry and properties', () => {
+      const feature = FeatureWrapper.create(new LineString([2, 2, 3, 3]))
+        .setId('ABCD1234')
+        .setSelected(true)
+        .setStyleProperties({ point: { icon: 'test-icon' } });
+
+      expect(feature.toGeoJSON()).toEqual({
+        id: 'ABCD1234',
+        type: 'Feature',
+        geometry: { coordinates: [], type: 'LineString' },
+        properties: {
+          'abc:feature:selected': true,
+          'abc:style:point:icon': 'test-icon',
+        },
+      });
+    });
+
+    it('Without a geometry and properties', () => {
+      const feature = FeatureWrapper.create().setId('ABCD1234');
+
+      expect(feature.toGeoJSON()).toEqual({
+        id: 'ABCD1234',
+        type: 'Feature',
+        geometry: null,
+        properties: null,
+      });
+    });
+
+    it('With non serializable properties', () => {
+      const feature = FeatureWrapper.create().setId('ABCD1234');
+      feature.unwrap().set('pop2023', 1234);
+      feature.unwrap().set('some stange property', new Style());
+
+      expect(feature.toGeoJSON()).toEqual({
+        id: 'ABCD1234',
+        type: 'Feature',
+        geometry: null,
+        properties: {
+          pop2023: 1234,
+        },
+      });
+    });
+  });
+
+  describe('setHighlighted()', () => {
+    it('should work', () => {
+      // Prepare
+      const originalStyle = new Style();
+      const feature = FeatureWrapper.from(TestHelper.sampleFeatures()[0]).setId();
+      feature.unwrap().setStyle(originalStyle);
+
+      expect(feature.isHighlighted()).toBe(false);
+      expect(feature.unwrap().getStyle()).not.toBeNull();
+
+      // Act & assert
+      feature.setHighlighted(true);
+      expect(feature.isHighlighted()).toBe(true);
+      expect(feature.unwrap().getStyle()).toBeDefined();
+      expect(feature.unwrap().getStyle()).not.toStrictEqual(originalStyle);
+
+      feature.setHighlighted(false);
+      expect(feature.isHighlighted()).toBe(false);
+      expect(feature.unwrap().getStyle()).toStrictEqual(originalStyle);
+      expect(feature.unwrap().get(HlStyleKey)).toBeUndefined();
+      expect(feature.unwrap().get(HlPreviousStyleKey)).toBeUndefined();
+    });
+
+    it('should work even with bad calls', () => {
+      // Prepare
+      const originalStyle = new Style();
+      const feature = FeatureWrapper.from(TestHelper.sampleFeatures()[0]).setId();
+      feature.unwrap().setStyle(originalStyle);
+
+      // Act & assert
+      feature.setHighlighted(true);
+      feature.setHighlighted(true);
+      feature.setHighlighted(true);
+      expect(feature.isHighlighted()).toBe(true);
+      expect(feature.unwrap().getStyle()).toBeDefined();
+      expect(feature.unwrap().getStyle()).not.toStrictEqual(originalStyle);
+
+      feature.setHighlighted(false);
+      feature.setHighlighted(false);
+      feature.setHighlighted(false);
+      expect(feature.isHighlighted()).toBe(false);
+      expect(feature.unwrap().getStyle()).toStrictEqual(originalStyle);
+      expect(feature.unwrap().get(HlStyleKey)).toBeUndefined();
+      expect(feature.unwrap().get(HlPreviousStyleKey)).toBeUndefined();
+    });
+  });
+
+  describe('toDataRow()', () => {
+    it('with a feature that already has an id', () => {
+      // Prepare
+      const feature = FeatureWrapper.create();
+      feature.setDataProperties({
+        variable1: 'value1',
+        variable2: 'value2',
+      });
+      expect(feature.getId()).toBeDefined();
+
+      // Act & assert
+      expect(feature.toDataRow()).toEqual({
+        id: feature.getId(),
+        data: {
+          variable1: 'value1',
+          variable2: 'value2',
+        },
+      });
+    });
+
+    it('with a feature that does not have an id', () => {
+      // Prepare
+      const feature = FeatureWrapper.create();
+      feature.setDataProperties({
+        variable1: 'value1',
+        variable2: 'value2',
+      });
+      feature.setId(undefined);
+
+      // Act & assert
+      const row1 = feature.toDataRow();
+      const row2 = feature.toDataRow();
+      expect(row1.id).toBeDefined();
+      expect(row1).toEqual(row2);
     });
   });
 });

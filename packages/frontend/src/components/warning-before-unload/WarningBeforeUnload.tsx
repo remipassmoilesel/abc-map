@@ -16,34 +16,43 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { useCallback, useEffect } from 'react';
+import { useEffect } from 'react';
 import { Env } from '../../core/utils/Env';
 import { prefixedTranslation } from '../../i18n/i18n';
+import { useExperimentalFeature } from '../../core/ui/useExperimentalFeature';
+import { DisableWarningBeforeUnload } from '../../experimental-features';
 
 const t = prefixedTranslation('WarningBeforeUnload:');
 
 export function WarningBeforeUnload() {
-  const warnBeforeUnload = useCallback((ev: BeforeUnloadEvent | undefined): string => {
-    const message = t('Modification_in_progress_will_be_lost');
-    if (ev) {
-      ev.returnValue = message;
-    }
-    return message;
-  }, []);
+  const disabled = useExperimentalFeature(DisableWarningBeforeUnload);
 
   useEffect(() => {
-    if (!Env.isE2e()) {
-      window.addEventListener('beforeunload', warnBeforeUnload);
-      window.addEventListener('unload', warnBeforeUnload);
+    // Warning is never enabled in E2E tests
+    if (Env.isE2e()) {
+      return;
     }
 
-    return () => {
-      if (!Env.isE2e()) {
-        window.removeEventListener('beforeunload', warnBeforeUnload);
-        window.removeEventListener('unload', warnBeforeUnload);
+    if (disabled) {
+      return;
+    }
+
+    const warning = (ev: BeforeUnloadEvent | undefined): string => {
+      const message = t('Modification_in_progress_will_be_lost');
+      if (ev) {
+        ev.returnValue = message;
       }
+      return message;
     };
-  }, [warnBeforeUnload]);
+
+    window.addEventListener('beforeunload', warning);
+    window.addEventListener('unload', warning);
+
+    return () => {
+      window.removeEventListener('beforeunload', warning);
+      window.removeEventListener('unload', warning);
+    };
+  }, [disabled]);
 
   return <></>;
 }

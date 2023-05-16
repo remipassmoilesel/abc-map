@@ -34,7 +34,7 @@ export class RemoveLayerChangeset extends Changeset {
     super();
   }
 
-  public async apply(): Promise<void> {
+  public async execute(): Promise<void> {
     this.map.removeLayer(this.layer);
 
     // We activate the last layer

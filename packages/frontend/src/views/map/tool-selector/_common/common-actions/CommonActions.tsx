@@ -145,7 +145,7 @@ function CommonActions() {
       .filter((feat): feat is FeatureWrapper => !!feat);
 
     const cs = new AddFeaturesChangeset(layer.getSource(), clones);
-    cs.apply().catch((err) => logger.error('Cannot clone features: ', err));
+    cs.execute().catch((err) => logger.error('Cannot clone features: ', err));
     history.register(HistoryKey.Map, cs);
   }, [geo, history, toasts]);
 
@@ -161,7 +161,7 @@ function CommonActions() {
     features.forEach((f) => f.setSelected(false));
 
     const cs = new RemoveFeaturesChangeset(layer.getSource(), features);
-    cs.apply().catch((err) => logger.error('Cannot delete features: ', err));
+    cs.execute().catch((err) => logger.error('Cannot delete features: ', err));
     history.register(HistoryKey.Map, cs);
   }, [geo, history, toasts]);
 

@@ -45,7 +45,7 @@ describe('XYZ layers', function () {
       .get('[data-cy=add-layer-confirm]')
       .click()
       // Ensure requests return correct code
-      .intercept('GET', 'http://localhost:3010/xyz/**')
+      .intercept('GET', 'http://0.0.0.0:3010/xyz/**')
       .as('xyz')
       .wait('@xyz')
       .should((req) => {

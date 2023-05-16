@@ -23,7 +23,7 @@ import { ToastContainer } from 'react-toastify';
 import TopBar from './components/top-bar/TopBar';
 import PasswordInputModal from './components/password-input-modal/PasswordInputModal';
 import DeviceWarningModal from './components/device-warning-modal/DeviceWarningModal';
-import EditPropertiesModal from './components/edit-properties-modal/EditPropertiesModal';
+import { EditPropertiesModal } from './components/edit-properties-modal/EditPropertiesModal';
 import SolicitationModal from './components/solicitation-modal/SolicitationModal';
 import LoginModal from './components/login-modal/LoginModal';
 import RegistrationModal from './components/registration-modal/RegistrationModal';
@@ -44,6 +44,7 @@ import InstallAppModal from './components/install-app-modal/InstallAppModal';
 import { MainKeyboardListener } from './components/main-keyboard-listener/MainKeyboardListener';
 import { useFullscreenView } from './core/ui/useFullscreenView';
 import { SimplePromptModal } from './components/simple-prompt-modal/SimplePromptModal';
+import { MultipleTabsWarning } from './components/multiple-tabs-warning/MultipleTabsWarning';
 
 // App views, all lazy loaded
 const LandingView = lazy(() => import('./views/landing/LandingView'));
@@ -107,6 +108,7 @@ export function App() {
           <InstallAppModal />
           <MainKeyboardListener />
           <SimplePromptModal />
+          <MultipleTabsWarning />
         </>
       )}
 

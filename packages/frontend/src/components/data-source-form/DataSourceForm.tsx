@@ -19,7 +19,7 @@
 import React, { ChangeEvent, Component } from 'react';
 import { Logger } from '@abc-map/shared';
 import DataSourceSelector from './DataSourceSelector';
-import { DataRow, DataSource, getFields } from '../../core/data/data-source/DataSource';
+import { DataRow, DataSource } from '../../core/data/data-source/DataSource';
 import DataTable from '../data-table/DataTable';
 import { ServiceProps, withServices } from '../../core/withServices';
 import DialogBoxAdvice from '../dialog-box-advice/DialogBoxAdvice';
@@ -27,6 +27,7 @@ import { DataProcessingTips } from '@abc-map/user-documentation';
 import FormLine from '../form-line/FormLine';
 import { prefixedTranslation } from '../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
+import { getAllFieldNames } from '../../core/data/getFieldNames';
 
 const logger = Logger.get('DataSourceForm.tsx');
 
@@ -189,14 +190,14 @@ class DataSourceForm extends Component<Props, State> {
 
     return source
       .getRows()
-      .then((res) => {
-        if (!res.length) {
+      .then((rows) => {
+        if (!rows.length) {
           this.setState({ dataFields: [], dataSamples: [] });
           return;
         }
 
-        const dataFields = getFields(res[0]);
-        const dataSamples = res.slice(0, 3);
+        const dataFields = getAllFieldNames(rows);
+        const dataSamples = rows.slice(0, 3);
         this.setState({ dataFields, dataSamples });
       })
       .catch((err) => {

@@ -1,0 +1,17 @@
+{
+  "include": ["*.ts"],
+  "exclude": ["node_modules"],
+  "compilerOptions": {
+    "target": "es5",
+    "lib": ["esnext"],
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "resolveJsonModule": true,
+    "noEmit": true,
+    "downlevelIteration": true
+  }
+}

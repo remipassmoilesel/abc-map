@@ -281,7 +281,7 @@ class WmtsLayerPanel extends Component<Props, State> {
       const layer = LayerFactory.newWmtsLayer(settings);
 
       const cs = AddLayersChangeset.create([layer]);
-      await cs.apply();
+      await cs.execute();
       history.register(HistoryKey.Map, cs);
 
       this.props.onConfirm();

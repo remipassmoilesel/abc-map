@@ -128,7 +128,7 @@ export class DataReader {
     layers.forEach((lay, i) => lay.setName(t('Import_of', { hour, n: i + 1 })));
 
     const cs = AddLayersChangeset.create(layers);
-    await cs.apply();
+    await cs.execute();
     history.register(HistoryKey.Map, cs);
 
     // We fit view on last one

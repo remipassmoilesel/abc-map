@@ -41,6 +41,19 @@ describe('MapFactory', () => {
     expect(TestHelper.interactionNames(internal)).toEqual(['DragRotate', 'DragPan', 'PinchRotate', 'PinchZoom', 'MouseWheelZoom']);
   });
 
+  it('createDefault(empty = true)', () => {
+    // Act
+    const managed = MapFactory.createDefault(true);
+
+    // Assert
+    const internal = managed.unwrap();
+    const layers = internal.getLayers().getArray();
+    expect(layers).toHaveLength(0);
+    expect(internal.getView().getProjection().getCode()).toEqual(DEFAULT_PROJECTION.name);
+    expect(getControlNames(internal)).toEqual([]);
+    expect(TestHelper.interactionNames(internal)).toEqual(['DragRotate', 'DragPan', 'PinchRotate', 'PinchZoom', 'MouseWheelZoom']);
+  });
+
   it('createNaked()', () => {
     const managed = MapFactory.createNaked();
     const internal = managed.unwrap();

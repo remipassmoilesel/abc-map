@@ -24,7 +24,8 @@ import { nanoid } from 'nanoid';
 export const logger = Logger.get('CsvDataSource');
 
 export class CsvDataSource implements DataSource {
-  private _cache?: DataRow[];
+  private _cache: DataRow[] | undefined;
+
   constructor(private file: File) {}
 
   public getId(): string {
@@ -45,7 +46,11 @@ export class CsvDataSource implements DataSource {
     }
 
     const rows = await CsvParser.parse(this.file);
-    this._cache = rows.map((r) => ({ ...r, _id: nanoid(10) }));
+    this._cache = rows.map<DataRow>((row) => ({
+      id: nanoid(10),
+      data: row,
+    }));
+
     return this._cache;
   }
 }

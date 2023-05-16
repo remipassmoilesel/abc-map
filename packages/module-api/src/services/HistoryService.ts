@@ -32,7 +32,7 @@ export enum HistoryKey {
 }
 
 export interface Changeset {
-  apply(): Promise<void>;
+  execute(): Promise<void>;
   undo(): Promise<void>;
   dispose(): Promise<void>;
 }

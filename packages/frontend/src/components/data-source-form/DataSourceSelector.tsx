@@ -21,11 +21,11 @@ import { Logger } from '@abc-map/shared';
 import { FileIO, InputResultType, InputType } from '../../core/utils/FileIO';
 import { ServiceProps, withServices } from '../../core/withServices';
 import { LayerChangeHandler } from '../../core/geo/map/MapWrapper';
-import VectorLayerSelector from '../vector-layer-selector/VectorLayerSelector';
+import { LayerSelector } from '../layer-selector/LayerSelector';
 import { DataSource, DataSourceType } from '../../core/data/data-source/DataSource';
 import { LayerDataSource } from '../../core/data/data-source/LayerDataSource';
 import { CsvDataSource } from '../../core/data/data-source/CsvDataSource';
-import { VectorLayerWrapper } from '../../core/geo/layers/LayerWrapper';
+import { LayerWrapper, VectorLayerWrapper } from '../../core/geo/layers/LayerWrapper';
 import { CsvParsingError } from '../../core/data/csv-parser/typings';
 import Cls from './DataSourceSelector.module.scss';
 import MessageLabel from '../message-label/MessageLabel';
@@ -46,6 +46,7 @@ interface State {
   rows: number;
   errorAtLine: number;
   error: boolean;
+  layer?: LayerWrapper | undefined;
 }
 
 enum Display {
@@ -61,11 +62,16 @@ const t = prefixedTranslation('DataSourceForm:');
 class DataSourceSelector extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = { display: Display.Layers, error: false, errorAtLine: NoLineInformation, rows: NoRowsInformation };
+    this.state = {
+      display: Display.Layers,
+      error: false,
+      errorAtLine: NoLineInformation,
+      rows: NoRowsInformation,
+    };
   }
 
   public render() {
-    const source = this.props.value;
+    const layer = this.state.layer;
     const display = this.state.display;
     const rows = this.state.rows;
     const errorAtLine = this.state.errorAtLine;
@@ -86,7 +92,7 @@ class DataSourceSelector extends Component<Props, State> {
 
         {display === Display.Layers && (
           <div className={Cls.selectVectorLayer}>
-            <VectorLayerSelector onSelected={this.handleLayerSelected} value={source?.getId()} />
+            <LayerSelector value={layer} onSelected={this.handleLayerSelected} onlyVector={true} data-testid={'layer-selector'} />
           </div>
         )}
 
@@ -121,21 +127,35 @@ class DataSourceSelector extends Component<Props, State> {
   }
 
   public componentDidMount() {
+    const { geo } = this.props.services;
     const datasource = this.props.value;
 
     // If a datasource is set, we switch to the proper display
     if (datasource) {
       const display = datasource?.getType() && datasource.getType() === DataSourceType.CsvFile ? Display.File : Display.Layers;
       this.setState({ display }, () => this.inspectSource(datasource).catch((err) => logger.error('Data source error: ', err)));
+
+      const layer = geo
+        .getMainMap()
+        .getLayers()
+        .find((layer) => layer.getId() === datasource?.getId());
+      this.setState({ layer });
     }
   }
 
   public componentDidUpdate(prevProps: Readonly<Props>) {
+    const { geo } = this.props.services;
     const datasource = this.props.value;
 
     // If datasource was reset, we reset state
     if (datasource?.getId() !== prevProps.value?.getId()) {
       this.inspectSource(datasource).catch((err) => logger.error('Data source error: ', err));
+
+      const layer = geo
+        .getMainMap()
+        .getLayers()
+        .find((layer) => layer.getId() === datasource?.getId());
+      this.setState({ layer });
     }
   }
 
@@ -143,7 +163,9 @@ class DataSourceSelector extends Component<Props, State> {
     this.setState({ display, errorAtLine: NoLineInformation, error: false, rows: NoRowsInformation }, () => this.props.onSelected(undefined));
   };
 
-  private handleLayerSelected = (layer: VectorLayerWrapper | undefined) => {
+  private handleLayerSelected = (_: unknown, layer: VectorLayerWrapper | undefined) => {
+    this.setState({ layer });
+
     if (!layer) {
       this.props.onSelected(undefined);
       return;

@@ -30,7 +30,7 @@ import Feature from 'ol/Feature';
 import { Logger } from '@abc-map/shared';
 import { ScaleAlgorithm } from '../../core/modules/Algorithm';
 import { Stats } from '../../core/modules/Stats';
-import { asNumberOrString, isValidNumber } from '../../core/utils/numbers';
+import { asValidNumber } from '../../core/utils/numbers';
 import { ProcessingResult } from './ProcessingResult';
 import { Status } from '../color-gradients/typings/ProcessingResult';
 import { prettyStringify } from '../../core/utils/strings';
@@ -87,17 +87,17 @@ export class ProportionalSymbolsModule extends ModuleAdapter {
       return Promise.reject(new Error('Invalid parameters'));
     }
 
-    // We sort data source items to extract min and max values
+    // We filter invalid data and we sort data to extract min and max values
     const rows = await source.getRows();
     const sortedValues = rows
-      .map((r) => asNumberOrString(r[valueField] ?? NaN))
-      .filter((v) => isValidNumber(v))
-      .sort((a, b) => (a as number) - (b as number)) as number[];
+      .map((row) => asValidNumber(row.data[valueField]))
+      .filter((v): v is number => v !== null)
+      .sort((a, b) => a - b);
 
     if (!sortedValues.length || rows.length !== sortedValues.length) {
       const invalidValues = rows
-        .map((row) => asNumberOrString(row[valueField] ?? NaN))
-        .filter((value) => !isValidNumber(value))
+        .map((row) => (asValidNumber(row.data[valueField]) ? null : row.data[valueField]))
+        .filter((invalidValue) => invalidValue !== null)
         .map((value) => `${valueField}: ${prettyStringify(value)}`);
       return { ...result, status: Status.InvalidValues, invalidValues };
     }
@@ -121,15 +121,15 @@ export class ProportionalSymbolsModule extends ModuleAdapter {
           return null;
         }
 
-        const row = rows.find((r) => r[dataJoinBy] === joinKey);
+        const row = rows.find((row) => row.data[dataJoinBy] === joinKey);
         if (!row) {
           logger.error(`Row does not exist for join key ${joinKey}`);
           result.missingDataRows.push(prettyStringify(joinKey));
           return null;
         }
 
-        const value = asNumberOrString(row[valueField] ?? NaN);
-        if (!isValidNumber(value) || value <= 0) {
+        const value = asValidNumber(row.data[valueField]);
+        if (!value || value <= 0) {
           // Invalid values should have been inspected at sort()
           logger.error(`Invalid size value: ${value}`);
           return null;
@@ -151,7 +151,7 @@ export class ProportionalSymbolsModule extends ModuleAdapter {
         });
 
         newFeat.unwrap().setProperties({
-          [dataJoinBy]: row[dataJoinBy],
+          [dataJoinBy]: row.data[dataJoinBy],
           'point-value': value,
         });
 
@@ -168,7 +168,7 @@ export class ProportionalSymbolsModule extends ModuleAdapter {
 
     // We add that layer
     const addLayer = AddLayersChangeset.create([newLayer]);
-    await addLayer.apply();
+    await addLayer.execute();
     history.register(HistoryKey.Map, addLayer);
 
     if (result.missingDataRows.length || result.invalidValues.length || result.invalidFeatures) {

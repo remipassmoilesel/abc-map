@@ -17,9 +17,12 @@
  */
 
 export class WmtsConstants {
-  public static readonly AUTHENTICATED_URL = 'http://localhost:3010/wmts/authenticated';
+  // We can't use localhost because app in Cypress cannot access it
+  public static readonly AUTHENTICATED_URL = 'http://0.0.0.0:3010/wmts/authenticated';
+
   public static readonly USERNAME = 'jean-bonno';
   public static readonly PASSWORD = 'azerty1234';
 
-  public static readonly PUBLIC_URL = 'http://localhost:3010/wmts/public';
+  // We can't use localhost because app in Cypress cannot access it
+  public static readonly PUBLIC_URL = 'http://0.0.0.0:3010/wmts/public';
 }

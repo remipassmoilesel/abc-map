@@ -55,7 +55,7 @@ class GeometryLayerPanel extends Component<Props, {}> {
       const layer = LayerFactory.newVectorLayer();
 
       const cs = AddLayersChangeset.create([layer]);
-      await cs.apply();
+      await cs.execute();
       history.register(HistoryKey.Map, cs);
 
       this.props.onConfirm();

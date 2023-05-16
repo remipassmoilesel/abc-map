@@ -79,14 +79,14 @@ describe.skip('EditPropertiesTool', () => {
   it('should do nothing on cancel', async () => {
     // Prepare
     map.toMapWrapper().setToolMode(Modes.EditProperties);
-    modals.featurePropertiesModal.resolves({ status: ModalStatus.Canceled, properties: { abcd: 1234 }, type: ModalEventType.FeaturePropertiesClosed });
+    modals.editPropertiesModal.resolves({ status: ModalStatus.Canceled, properties: { abcd: 1234 }, type: ModalEventType.FeaturePropertiesClosed });
 
     // Act
     await map.click(5, 5);
     await TestHelper.wait(10); // We wait an internal promise
 
     // Assert
-    expect(modals.featurePropertiesModal.callCount).toEqual(1);
+    expect(modals.editPropertiesModal.callCount).toEqual(1);
     expect(history.register.callCount).toEqual(0);
   });
 
@@ -95,14 +95,14 @@ describe.skip('EditPropertiesTool', () => {
     map.toMapWrapper().setToolMode(Modes.EditProperties);
     feature.set('abcd', 1234);
 
-    modals.featurePropertiesModal.resolves({ status: ModalStatus.Confirmed, properties: { abcd: 1234 }, type: ModalEventType.FeaturePropertiesClosed });
+    modals.editPropertiesModal.resolves({ status: ModalStatus.Confirmed, properties: { abcd: 1234 }, type: ModalEventType.FeaturePropertiesClosed });
 
     // Act
     await map.click(5, 5);
     await TestHelper.wait(10); // We wait an internal promise
 
     // Assert
-    expect(modals.featurePropertiesModal.callCount).toEqual(1);
+    expect(modals.editPropertiesModal.callCount).toEqual(1);
     expect(history.register.callCount).toEqual(0);
   });
 
@@ -111,14 +111,14 @@ describe.skip('EditPropertiesTool', () => {
     map.toMapWrapper().setToolMode(Modes.EditProperties);
     feature.set('abcd', 12345);
 
-    modals.featurePropertiesModal.resolves({ status: ModalStatus.Confirmed, properties: { abcd: 4567 }, type: ModalEventType.FeaturePropertiesClosed });
+    modals.editPropertiesModal.resolves({ status: ModalStatus.Confirmed, properties: { abcd: 4567 }, type: ModalEventType.FeaturePropertiesClosed });
 
     // Act
     await map.click(5, 5);
     await TestHelper.wait(10); // We wait an internal promise
 
     // Assert
-    expect(modals.featurePropertiesModal.callCount).toEqual(1);
+    expect(modals.editPropertiesModal.callCount).toEqual(1);
     expect(history.register.callCount).toEqual(1);
     expect(history.register.args[0][0]).toEqual(HistoryKey.Map);
 

@@ -34,7 +34,7 @@ export class AddLayoutsChangeset extends Changeset {
     this.layouts = layouts.slice();
   }
 
-  public async apply(): Promise<void> {
+  public async execute(): Promise<void> {
     this.project.addLayouts(this.layouts);
 
     const layouts = this.project.getLayouts();

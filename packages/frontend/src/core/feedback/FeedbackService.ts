@@ -22,8 +22,13 @@ import { AbcTextFeedback, AbcVote, AbcVoteAggregation, VoteValue } from '@abc-ma
 import { DateTime } from 'luxon';
 import { ToastService } from '../ui/ToastService';
 import { getLang } from '../../i18n/i18n';
+import { ApiClient } from '../http/http-clients';
 
 export class FeedbackService {
+  public static create(toasts: ToastService): FeedbackService {
+    return new FeedbackService(ApiClient, toasts);
+  }
+
   constructor(private httpClient: AxiosInstance, private toasts: ToastService) {}
 
   public textFeedback(text: string): Promise<void> {

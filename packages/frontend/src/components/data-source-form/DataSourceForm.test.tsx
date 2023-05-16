@@ -20,7 +20,7 @@ import { newTestServices, TestServices } from '../../core/utils/test/TestService
 import sinon, { SinonStub } from 'sinon';
 import { MapFactory } from '../../core/geo/map/MapFactory';
 import { abcRender } from '../../core/utils/test/abcRender';
-import { screen, waitFor } from '@testing-library/react';
+import { act, screen, waitFor } from '@testing-library/react';
 import DataSourceForm from './DataSourceForm';
 import { TestHelper } from '../../core/utils/test/TestHelper';
 import userEvent from '@testing-library/user-event';
@@ -91,7 +91,7 @@ describe('DataSourceForm', () => {
     );
 
     // Act
-    await userEvent.selectOptions(screen.getByTestId('vector-layer-selector'), 'Regions of France');
+    await userEvent.selectOptions(screen.getByTestId('layer-selector'), 'Regions of France');
 
     // Assert
     await waitFor(() => {
@@ -115,7 +115,7 @@ describe('DataSourceForm', () => {
       />,
       { services }
     );
-    await userEvent.selectOptions(screen.getByTestId('vector-layer-selector'), 'Regions of France');
+    await userEvent.selectOptions(screen.getByTestId('layer-selector'), 'Regions of France');
     await waitFor(() => screen.getAllByText(/Select a field/));
     handleChanges.reset();
 
@@ -144,7 +144,7 @@ describe('DataSourceForm', () => {
       />,
       { services }
     );
-    await userEvent.selectOptions(screen.getByTestId('vector-layer-selector'), 'Regions of France');
+    await userEvent.selectOptions(screen.getByTestId('layer-selector'), 'Regions of France');
     await waitFor(() => screen.getAllByText(/Select a field/));
     handleChanges.reset();
 
@@ -163,18 +163,20 @@ describe('DataSourceForm', () => {
     const layer = TestHelper.regionsOfFranceVectorLayer();
     map.addLayer(layer);
 
-    abcRender(
-      <DataSourceForm
-        valuesFieldLabel={'Values field'}
-        valuesFieldTip={'tip-id'}
-        values={{ source: new LayerDataSource(layer), valueField: 'POP', joinBy: '' }}
-        onChange={handleChanges}
-      />,
-      { services }
-    );
+    await act(async () => {
+      abcRender(
+        <DataSourceForm
+          valuesFieldLabel={'Values field'}
+          valuesFieldTip={'tip-id'}
+          values={{ source: new LayerDataSource(layer), valueField: 'POP', joinBy: '' }}
+          onChange={handleChanges}
+        />,
+        { services }
+      );
+    });
 
     // Act
-    await userEvent.selectOptions(screen.getByTestId('vector-layer-selector'), 'Regions of France');
+    await userEvent.selectOptions(screen.getByTestId('layer-selector'), 'Regions of France');
 
     // Assert
     await waitFor(() => {

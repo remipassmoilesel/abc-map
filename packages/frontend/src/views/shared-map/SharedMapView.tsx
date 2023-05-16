@@ -120,7 +120,7 @@ function SharedMapView() {
 
     setError(false);
     setLoading(true);
-    resolveInAtLeast(project.loadPublicProject(projectId), 1000)
+    resolveInAtLeast(project.loadRemotePublicProject(projectId), 1000)
       .then(() => map.importLayersFrom(geo.getMainMap(), { withSelection: false }))
       .catch((err) => {
         logger.error('Loading error: ', err);

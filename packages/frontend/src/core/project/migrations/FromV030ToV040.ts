@@ -18,7 +18,7 @@
 
 import { AbcFile, AbcLayer, AbcProjectManifest, AbcProjectMetadata, LayerType } from '@abc-map/shared';
 import { MigrationProject, ProjectMigration } from './typings';
-import { AbcProjectMetadata030, WmsMetadata030 } from './old-typings/030-project';
+import { AbcProjectMetadata030, WmsMetadata030 } from './dependencies/030-project';
 import semver from 'semver';
 
 const NEXT = '0.4.0';

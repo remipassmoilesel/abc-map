@@ -17,20 +17,20 @@
  */
 
 import { Changeset } from '../../Changeset';
-import { FeatureWrapper, SimplePropertiesMap } from '../../../geo/features/FeatureWrapper';
+import { FeatureWrapper, DataPropertiesMap } from '../../../geo/features/FeatureWrapper';
 
 export class SetFeaturePropertiesChangeset extends Changeset {
-  constructor(private feature: FeatureWrapper, public readonly before: SimplePropertiesMap, public readonly after: SimplePropertiesMap) {
+  constructor(private feature: FeatureWrapper, public readonly before: DataPropertiesMap, public readonly after: DataPropertiesMap) {
     super();
   }
 
-  public async apply(): Promise<void> {
-    const properties: SimplePropertiesMap = { ...this.after };
-    this.feature.overwriteSimpleProperties(properties);
+  public async execute(): Promise<void> {
+    const properties: DataPropertiesMap = { ...this.after };
+    this.feature.setDataProperties(properties);
   }
 
   public async undo(): Promise<void> {
-    const properties: SimplePropertiesMap = { ...this.before };
-    this.feature.overwriteSimpleProperties(properties);
+    const properties: DataPropertiesMap = { ...this.before };
+    this.feature.setDataProperties(properties);
   }
 }

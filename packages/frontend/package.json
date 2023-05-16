@@ -39,6 +39,9 @@
       "last 1 safari version"
     ]
   },
+  "resolutions": {
+    "@typescript-eslint/eslint-plugin": "^5.59.1"
+  },
   "dependencies": {
     "@abc-map/module-api": ">1.0.0-rc",
     "@abc-map/shared": ">1.0.0-rc",
@@ -50,7 +53,8 @@
     "@fortawesome/free-solid-svg-icons": "^6.2.1",
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@juggle/resize-observer": "^3.4.0",
-    "axios": "1.2.1",
+    "@leeoniya/ufuzzy": "^1.0.6",
+    "axios": "^1.4.0",
     "bootstrap": "5.2.3",
     "bowser": "^2.11.0",
     "canvas-confetti": "^1.6.0",
@@ -58,7 +62,7 @@
     "chroma-js": "^2.4.2",
     "clsx": "^1.2.1",
     "colortranslator": "^1.9.3",
-    "fuse.js": "^6.6.2",
+    "eventemitter3": "^5.0.1",
     "html2canvas": "^1.4.1",
     "i18next": "^22.4.6",
     "i18next-browser-languagedetector": "^7.0.1",
@@ -75,7 +79,7 @@
     "proj4": "^2.8.0",
     "qrcode": "^1.5.1",
     "react": "^18.2.0",
-    "react-bootstrap": "2.7.0",
+    "react-bootstrap": "2.7.4",
     "react-color": "^2.19.3",
     "react-dom": "^18.2.0",
     "react-i18next": "^12.1.1",
@@ -144,8 +148,8 @@
     "@types/shapefile": "^0.6.1",
     "@types/sinon": "^10.0.13",
     "@types/sjcl": "^1.0.30",
-    "@typescript-eslint/eslint-plugin": "^5.47.0",
-    "@typescript-eslint/parser": "^5.47.0",
+    "@typescript-eslint/eslint-plugin": "^5.59.1",
+    "@typescript-eslint/parser": "^5.59.1",
     "camelcase": "^7.0.1",
     "canvas": "^2.10.2",
     "crypto-browserify": "^3.12.0",
@@ -155,6 +159,7 @@
     "eslint-plugin-no-only-tests": "^3.1.0",
     "eslint-plugin-react": "^7.31.11",
     "eslint-plugin-react-hooks": "^4.6.0",
+    "fake-indexeddb": "^4.0.1",
     "jsonwebtoken": "^9.0.0",
     "node-sass": "^8.0.0",
     "prettier": "^2.8.1",
@@ -164,12 +169,9 @@
     "resize-observer-polyfill": "^1.5.1",
     "showdown": "^2.1.0",
     "stream-browserify": "^3.0.0",
-    "typescript": "^4.9.4",
+    "typescript": "^5.0.4",
     "utility-types": "^3.10.0",
     "webpack-bundle-analyzer": "^4.7.0"
-  },
-  "volta": {
-    "node": "18.12.1"
   },
   "proxy": "http://127.0.0.1:10082"
 }

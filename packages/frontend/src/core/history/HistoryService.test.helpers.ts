@@ -27,7 +27,7 @@ export class FakeChangeset extends Changeset {
     this.dispose.resolves();
   }
 
-  public apply(): Promise<void> {
+  public execute(): Promise<void> {
     return Promise.resolve();
   }
 

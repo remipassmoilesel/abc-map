@@ -22,11 +22,10 @@ import { mainStore, MainStore } from '../../../core/store/store';
 import { errorMessage, Logger } from '@abc-map/shared';
 import { LoadingStatus, ModuleLoadingFailed, ModuleLoadingStatus, ModuleLoadingSucceed } from './ModuleLoadingStatus';
 import { getModuleApi } from './getModuleApi';
-import Fuse from 'fuse.js';
-import { ModuleIndexItem } from './ModuleIndexItem';
 import { isRemoteModule, RemoteModule, RemoteModuleWrapper } from './RemoteModule';
 import { localModulesFactory } from '../../../modules';
 import { UiActions } from '../../store/ui/actions';
+import { SearchIndex } from '../../utils/SearchIndex';
 
 const logger = Logger.get('ModuleRegistry.ts');
 
@@ -44,7 +43,8 @@ export class ModuleRegistry {
   }
 
   private modules: Module[] = [];
-  private moduleIndex: Fuse<ModuleIndexItem> | undefined;
+  private moduleIndex?: SearchIndex<Module>;
+
   private eventTarget = document.createDocumentFragment();
 
   /**
@@ -105,7 +105,7 @@ export class ModuleRegistry {
       return [];
     }
 
-    return this.moduleIndex.search(query).map((item) => item.item.module);
+    return this.moduleIndex.search(query);
   }
 
   // FIXME: Use ES modules when Webpack ES6 output will be stable, or change bundler
@@ -200,20 +200,8 @@ export class ModuleRegistry {
   }
 
   public updateSearchIndex(): void {
-    // Build module index for searches
-    const indexItems: ModuleIndexItem[] = this.modules.map((mod) => ({
-      module: mod,
-      name: mod.getReadableName(),
-      shortDescription: mod.getShortDescription(),
-      // We need ids for end to end tests
-      id: mod.getId(),
-    }));
-    const options: Fuse.IFuseOptions<ModuleIndexItem> = {
-      includeScore: true,
-      keys: ['name', 'shortDescription', 'fullDescription', 'id'],
-    };
-
-    this.moduleIndex = new Fuse(indexItems, options);
+    const indexify = (m: Module) => [m.getReadableName(), m.getShortDescription(), m.getId()];
+    this.moduleIndex = new SearchIndex(this.modules, indexify);
   }
 
   public addEventListener(listener: () => void): void {

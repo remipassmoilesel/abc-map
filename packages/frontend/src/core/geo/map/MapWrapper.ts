@@ -42,6 +42,7 @@ import { AttributionFormat } from '../AttributionFormat';
 import uniqBy from 'lodash/uniqBy';
 import { stripHtml } from '../../utils/strings';
 import { Geolocation } from '../geolocation/Geolocation';
+import uuid from 'uuid-random';
 
 export const logger = Logger.get('MapWrapper.ts');
 
@@ -76,6 +77,7 @@ export class MapWrapper {
     return new MapWrapper(map);
   }
 
+  public readonly id = uuid();
   private mapSizeObserver?: ResizeObserver;
   private geolocation?: Geolocation;
   private eventTarget = document.createDocumentFragment();
@@ -164,17 +166,19 @@ export class MapWrapper {
       .map((lay) => LayerWrapper.from(lay as OlLayers));
   }
 
-  public setActiveLayer(layer: LayerWrapper): void {
+  public setActiveLayer(layer: LayerWrapper | undefined): void {
     const layers = this.getLayers();
 
     // We check if layer belong to map
-    const foundInMap = layers.find((lay) => lay.getId() === layer.getId());
-    if (!foundInMap) {
-      throw new Error('Layer does not belong to map');
+    if (typeof layer !== 'undefined') {
+      const foundInMap = layers.find((lay) => lay.getId() === layer.getId());
+      if (!foundInMap) {
+        throw new Error('Layer does not belong to map');
+      }
     }
 
     // We set layer active, we set others not active
-    layers.forEach((lay) => lay.setActive(lay.getId() === layer.getId()));
+    layers.forEach((lay) => lay.setActive(lay.getId() === layer?.getId()));
 
     this.triggerLayerChange();
   }

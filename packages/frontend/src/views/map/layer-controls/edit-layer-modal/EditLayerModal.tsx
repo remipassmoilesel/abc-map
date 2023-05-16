@@ -164,7 +164,7 @@ class EditLayerModal extends Component<Props, State> {
       const after = { name, opacity, attributions };
       if (!isEqual(before, after)) {
         const cs = EditLayerChangeset.create(layer, before, after);
-        await cs.apply();
+        await cs.execute();
         history.register(HistoryKey.Map, cs);
       }
 

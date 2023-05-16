@@ -39,7 +39,7 @@ export class SetActiveLayerChangeset extends Changeset {
     }
   }
 
-  public async apply(): Promise<void> {
+  public async execute(): Promise<void> {
     this.map.setActiveLayer(this.next);
   }
 }

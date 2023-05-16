@@ -19,7 +19,7 @@
 import Cls from './MapView.module.scss';
 import React, { useCallback, useEffect } from 'react';
 import MainMap from './main-map/MainMap';
-import LayerControls from './layer-controls/LayerControls';
+import { LayerControls } from './layer-controls/LayerControls';
 import { Logger } from '@abc-map/shared';
 import ToolSelector from './tool-selector/ToolSelector';
 import HistoryControls from '../../components/history-controls/HistoryControls';
@@ -41,12 +41,13 @@ import { FaIcon } from '../../components/icon/FaIcon';
 import { Routes } from '../../routes';
 import { LocalModuleId } from '../../modules/LocalModuleId';
 import { useNavigate } from 'react-router-dom';
+import { FeatureExplorer } from './feature-exporer/FeatureExplorer';
 
 const logger = Logger.get('MapView.tsx');
 
 function MapView() {
   const { geo } = useServices();
-  const { layers, activeLayer } = useMapLayers();
+  const { activeLayer } = useMapLayers();
   const { t } = useTranslation('MapView');
   const navigate = useNavigate();
 
@@ -66,13 +67,13 @@ function MapView() {
   return (
     <div className={Cls.mapView}>
       {/* Toggle fullscreen button */}
-      <FullscreenButton style={{ top: '30vh', left: '2vw' }} />
+      <FullscreenButton style={{ top: '25vh', left: '2vw' }} />
 
       {/* Position controls */}
       <SideMenu
         title={t('Position')}
         buttonIcon={IconDefs.faCrosshairs}
-        buttonStyle={{ top: '40vh', left: '2vw' }}
+        buttonStyle={{ top: '35vh', left: '2vw' }}
         menuPlacement={'left'}
         menuId={'views/MapView-position'}
         data-cy={'position-menu'}
@@ -87,7 +88,7 @@ function MapView() {
       <SideMenu
         title={t('Search_menu')}
         buttonIcon={IconDefs.faSearch}
-        buttonStyle={{ top: '50vh', left: '2vw' }}
+        buttonStyle={{ top: '45vh', left: '2vw' }}
         menuPlacement={'left'}
         menuId={'views/MapView-search'}
         data-cy={'search-menu'}
@@ -99,10 +100,10 @@ function MapView() {
       {/* Import data menu */}
       <SideMenu
         title={t('Import_data')}
-        buttonIcon={IconDefs.faTable}
-        buttonStyle={{ top: '60vh', left: '2vw' }}
+        buttonIcon={IconDefs.faUpload}
+        buttonStyle={{ top: '55vh', left: '2vw' }}
         menuPlacement={'left'}
-        menuId={'views/MapView-data'}
+        menuId={'views/MapView-import-data'}
         data-cy={'data-menu'}
       >
         <div className={Cls.spacer} />
@@ -122,6 +123,18 @@ function MapView() {
         </div>
       </SideMenu>
 
+      {/* Feature explorer menu */}
+      <SideMenu
+        title={t('Feature_explorer')}
+        buttonIcon={IconDefs.faTable}
+        buttonStyle={{ top: '65vh', left: '2vw' }}
+        menuPlacement={'left'}
+        menuId={'views/MapView-feature-explorer'}
+        data-cy={'feature-explorer'}
+      >
+        <FeatureExplorer />
+      </SideMenu>
+
       {/* Main map */}
       <MainMap />
 
@@ -129,14 +142,14 @@ function MapView() {
       <SideMenu
         title={t('Draw_menu')}
         buttonIcon={IconDefs.faDraftingCompass}
-        buttonStyle={{ top: '50vh', right: '2vw' }}
+        buttonStyle={{ top: '45vh', right: '2vw' }}
         menuPlacement={'right'}
         menuId={'views/MapView-draw'}
         initiallyOpened={isDesktopDevice()}
         data-cy={'draw-menu'}
       >
         <HistoryControls historyKey={HistoryKey.Map} />
-        <LayerControls layers={layers} />
+        <LayerControls />
         <ToolSelector activeLayer={activeLayer} />
       </SideMenu>
     </div>

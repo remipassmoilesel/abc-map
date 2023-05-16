@@ -18,7 +18,7 @@
 
 import React, { Component, ReactNode } from 'react';
 import { Modal } from 'react-bootstrap';
-import { ModalEventType, ModalStatus, ShowPasswordInputModal } from '../../core/ui/typings';
+import { ModalEventType, ModalStatus, ShowConfirmationModalEvent } from '../../core/ui/typings';
 import { ServiceProps, withServices } from '../../core/withServices';
 import { prefixedTranslation } from '../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
@@ -82,7 +82,7 @@ class ConfirmationModal extends Component<ServiceProps, State> {
     modals.removeListener(ModalEventType.ShowConfirmation, this.handleOpen);
   }
 
-  private handleOpen = (ev: ShowPasswordInputModal) => {
+  private handleOpen = (ev: ShowConfirmationModalEvent) => {
     this.setState({ visible: true, title: ev.title, message: ev.message });
   };
 

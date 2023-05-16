@@ -16,18 +16,17 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { LayerType, ProjectConstants, ProjectHelper, WmsMetadata } from '@abc-map/shared';
+import 'cypress-file-upload';
+import { LayerType, ProjectConstants, ProjectHelper } from '@abc-map/shared';
 import { Toasts } from '../helpers/Toasts';
 import { TestHelper } from '../helpers/TestHelper';
 import { Download } from '../helpers/Download';
 import { TestData } from '../test-data/TestData';
 import { MainMap } from '../helpers/MainMap';
 import { LayerControls } from '../helpers/LayerControls';
-import { WmsConstants } from '../helpers/WmsConstants';
 import { Registration } from '../helpers/Registration';
 import { Authentication } from '../helpers/Authentication';
 import * as uuid from 'uuid-random';
-import 'cypress-file-upload';
 import { Routes } from '../helpers/Routes';
 import { Modules } from '../helpers/Modules';
 import { TopBar } from '../helpers/TopBar';
@@ -77,6 +76,7 @@ describe('Project', function () {
 
     it('can export project', function () {
       cy.visit(Routes.map().format())
+        .then(() => LayerControls.addWmsLayerWithCredentials())
         .then(() => Modules.open('project-management'))
         .get('[data-cy=export-project]')
         .click()
@@ -87,9 +87,10 @@ describe('Project', function () {
           const projectA = await helper.extractManifest(downloaded);
           expect(projectA.metadata.id).not.undefined;
           expect(projectA.metadata.version).equals(ProjectConstants.CurrentVersion);
-          expect(projectA.layers).length(2);
+          expect(projectA.layers).length(3);
           expect(projectA.layers[0].type).equals(LayerType.Predefined);
           expect(projectA.layers[1].type).equals(LayerType.Vector);
+          expect(projectA.layers[2].type).equals(LayerType.Wms);
           expect(projectA.view.projection).deep.equals({ name: 'EPSG:3857' });
           expect(projectA.view.resolution).not.undefined;
           expect(projectA.view.center).not.undefined;
@@ -125,45 +126,14 @@ describe('Project', function () {
         });
     });
 
-    it('can export project with credentials', function () {
-      cy.visit(Routes.map().format())
-        .then(() => LayerControls.addWmsLayerWithCredentials())
-        .then(() => Modules.open('project-management'))
-        .get('[data-cy=export-project]')
-        .click()
-        .get('[data-cy=password-input]')
-        .clear()
-        .type(PROJECT_PASSWORD)
-        .get('[data-cy=password-confirmation]')
-        .clear()
-        .type(PROJECT_PASSWORD)
-        .get('[data-cy=password-confirm]')
-        .click()
-        .then(() => Download.currentFileAsBlob())
-        .should(async (downloaded) => {
-          const project = await ProjectHelper.forBrowser().extractManifest(downloaded);
-          expect(project.layers[2].type).equals(LayerType.Wms);
-          const wmsMeta = project.layers[2].metadata as WmsMetadata;
-          expect(wmsMeta.remoteUrls[0]).not.equal(WmsConstants.AUTHENTICATED_URL);
-          expect(wmsMeta.remoteUrls[0]).contains('encrypted:');
-          expect(wmsMeta.auth?.username).contains('encrypted:');
-          expect(wmsMeta.auth?.username).not.equal(WmsConstants.USERNAME);
-          expect(wmsMeta.auth?.username).contains('encrypted:');
-          expect(wmsMeta.auth?.password).not.equal(WmsConstants.PASSWORD);
-          expect(wmsMeta.auth?.password).contains('encrypted:');
-        })
-        .get('[data-cy=close-solicitation-modal]')
-        .click();
-    });
-
-    it('can import project with credentials', function () {
+    it('can import old projects with credentials', function () {
       cy.visit(Routes.map().format())
         .then(() => Modules.open('project-management'))
         .get('[data-cy=import-project]')
         .click()
         .get('[data-cy=confirmation-confirm]')
         .click()
-        .then(() => TestData.projectSample2())
+        .then(() => TestData.deprecatedProjectSample2())
         .then((project) => {
           return cy.get('[data-cy=file-input]').attachFile({ filePath: 'project.abm2', fileContent: project });
         })
@@ -204,29 +174,14 @@ describe('Project', function () {
       return Authentication.logout();
     });
 
-    it('can store project online without credentials', function () {
-      cy.visit(Routes.map().format())
-        .then(() => Modules.open('project-management'))
-        .get('[data-cy=save-project]')
-        .click()
-        .then(() => Toasts.assertText('Project saved !'));
-    });
-
-    it('can store project online with credentials', function () {
+    it('can store project online', function () {
       cy.visit(Routes.map().format())
         // Create a layer with credentials
         .then(() => LayerControls.addWmsLayerWithCredentials())
         // Save project online
+
         .then(() => Modules.open('project-management'))
         .get('[data-cy=save-project]')
-        .click()
-        .get('[data-cy=password-input]')
-        .clear()
-        .type(PROJECT_PASSWORD)
-        .get('[data-cy=password-confirmation]')
-        .clear()
-        .type(PROJECT_PASSWORD)
-        .get('[data-cy=password-confirm]')
         .click()
         .then(() => Toasts.assertText('Project saved !'));
     });
@@ -234,7 +189,7 @@ describe('Project', function () {
     it('can load remote project', function () {
       cy.visit(Routes.map().format())
         // Add layers
-        .then(() => LayerControls.addVectorLayer())
+        .then(() => LayerControls.addWmsLayerWithCredentials())
         .then(() => LayerControls.addVectorLayer())
         // Save project online
         .then(() => Modules.open('project-management'))
@@ -260,54 +215,8 @@ describe('Project', function () {
           const layers = map.getLayersMetadata();
           expect(layers[0].type).equal(LayerType.Predefined);
           expect(layers[1].type).equal(LayerType.Vector);
-          expect(layers[1].type).equal(LayerType.Vector);
-          expect(layers[1].type).equal(LayerType.Vector);
-        });
-    });
-
-    it('can load remote remote project with credentials', function () {
-      cy.visit(Routes.map().format())
-        // Add a layer
-        .then(() => LayerControls.addWmsLayerWithCredentials())
-        // Save project online
-        .then(() => Modules.open('project-management'))
-        .get('[data-cy=save-project]')
-        .click()
-        .get('[data-cy=password-input]')
-        .clear()
-        .type(PROJECT_PASSWORD)
-        .get('[data-cy=password-confirmation]')
-        .clear()
-        .type(PROJECT_PASSWORD)
-        .get('[data-cy=password-confirm]')
-        .click()
-        .then(() => Toasts.assertText('Project saved !'))
-        // Clean map
-        .get('[data-cy=new-project]')
-        .click()
-        .get('[data-cy=confirmation-confirm]')
-        .click()
-        // Open remote project
-        .get('[data-cy=remote-project]')
-        .eq(0)
-        .click()
-        .get('[data-cy=open-project]')
-        .click()
-        .get('[data-cy=confirmation-confirm]')
-        .click()
-        .get('[data-cy=password-input]')
-        .clear()
-        .type(PROJECT_PASSWORD)
-        .get('[data-cy=password-confirm]')
-        .click()
-        .then(() => Toasts.assertText('Project open !'))
-        .then(() => TopBar.map())
-        .then(() => MainMap.getReference())
-        .should((map) => {
-          const layers = map.getLayersMetadata();
-          expect(layers[0].type).equal(LayerType.Predefined);
-          expect(layers[1].type).equal(LayerType.Vector);
           expect(layers[2].type).equal(LayerType.Wms);
+          expect(layers[3].type).equal(LayerType.Vector);
         });
     });
 

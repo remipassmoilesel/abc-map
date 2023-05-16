@@ -16,9 +16,9 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ModuleAdapter, ModuleId } from '@abc-map/module-api';
-import DataTableView from './DataTableView';
 import React from 'react';
+import { ModuleAdapter, ModuleId } from '@abc-map/module-api';
+import { DataTableView } from './DataTableView';
 import { LocalModuleId } from '../LocalModuleId';
 import { prefixedTranslation } from '../../i18n/i18n';
 
@@ -40,7 +40,7 @@ export class DataTableModule extends ModuleAdapter {
   }
 
   public getView() {
-    return <DataTableView initialValue={this.layerId} onChange={this.handleLayerChange} />;
+    return <DataTableView layerId={this.layerId} onChange={this.handleLayerChange} />;
   }
 
   private handleLayerChange = (layerId?: string) => {

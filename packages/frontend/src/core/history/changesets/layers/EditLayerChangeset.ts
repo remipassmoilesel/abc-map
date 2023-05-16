@@ -44,7 +44,7 @@ export class EditLayerChangeset extends Changeset {
     super();
   }
 
-  public async apply(): Promise<void> {
+  public async execute(): Promise<void> {
     this.layer.setName(this.after.name).setOpacity(this.after.opacity).setAttributions(this.after.attributions);
     this.map.triggerLayerChange();
   }

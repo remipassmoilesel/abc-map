@@ -21,16 +21,17 @@ import { MapFactory } from '../../core/geo/map/MapFactory';
 import { newTestServices, TestServices } from '../../core/utils/test/TestServices';
 import { abcRender } from '../../core/utils/test/abcRender';
 import { act, screen } from '@testing-library/react';
-import VectorLayerSelector from './VectorLayerSelector';
+import { LayerSelector } from './LayerSelector';
 import sinon, { SinonStub } from 'sinon';
 import { LayerFactory } from '../../core/geo/layers/LayerFactory';
 import { PredefinedLayerModel } from '@abc-map/shared';
 import userEvent from '@testing-library/user-event';
 
-describe('VectorLayerSelector', () => {
+describe('LayerSelector', () => {
   let map: MapWrapper;
   let services: TestServices;
   let handleSelected: SinonStub;
+
   beforeEach(() => {
     map = MapFactory.createNaked();
     services = newTestServices();
@@ -41,12 +42,15 @@ describe('VectorLayerSelector', () => {
 
   it('should render without layers', () => {
     // Act
-    abcRender(<VectorLayerSelector value={undefined} label={'Couche vecteur:'} onSelected={handleSelected} data-cy={'test-data-cy'} />, { services });
+    abcRender(
+      <LayerSelector value={undefined} label={'Couche vecteur:'} onSelected={handleSelected} data-testid={'layer-selector'} data-cy={'test-data-cy'} />,
+      { services }
+    );
 
     // Assert
     expect(screen.getByText('Couche vecteur:')).toBeDefined();
 
-    const select = screen.getByTestId('vector-layer-selector');
+    const select = screen.getByTestId('layer-selector');
     expect(select).toBeDefined();
     expect(select.dataset['cy']).toEqual('test-data-cy');
   });
@@ -57,7 +61,7 @@ describe('VectorLayerSelector', () => {
     map.addLayer(LayerFactory.newPredefinedLayer(PredefinedLayerModel.StamenToner));
 
     // Act
-    abcRender(<VectorLayerSelector value={undefined} onSelected={handleSelected} />, { services });
+    abcRender(<LayerSelector value={undefined} onSelected={handleSelected} data-testid={'layer-selector'} />, { services });
 
     // Assert
     expect(screen.getByText('Layer 1')).toBeDefined();
@@ -69,7 +73,7 @@ describe('VectorLayerSelector', () => {
     map.addLayer(LayerFactory.newVectorLayer().setName('Layer 2'));
     map.addLayer(LayerFactory.newPredefinedLayer(PredefinedLayerModel.StamenToner));
 
-    abcRender(<VectorLayerSelector value={undefined} onSelected={handleSelected} />, { services });
+    abcRender(<LayerSelector value={undefined} onSelected={handleSelected} data-testid={'layer-selector'} />, { services });
 
     // Act
     await act(() => {
@@ -88,30 +92,30 @@ describe('VectorLayerSelector', () => {
     map.addLayer(LayerFactory.newVectorLayer().setName('Layer 2'));
     map.addLayer(LayerFactory.newPredefinedLayer(PredefinedLayerModel.StamenToner));
 
-    abcRender(<VectorLayerSelector value={undefined} onSelected={handleSelected} />, { services });
+    abcRender(<LayerSelector value={undefined} onSelected={handleSelected} data-testid={'layer-selector'} />, { services });
 
     // Act
-    await userEvent.selectOptions(screen.getByTestId('vector-layer-selector'), ['Layer 1']);
+    await userEvent.selectOptions(screen.getByTestId('layer-selector'), ['Layer 1']);
 
     // Assert
     expect(handleSelected.callCount).toEqual(1);
-    expect(handleSelected.args[0]).toEqual([layer1]);
+    expect(handleSelected.args[0][0].getId()).toEqual(layer1.getId());
   });
 
   it('should notify if layer unselected', async () => {
     const layer1 = LayerFactory.newVectorLayer().setName('Layer 1');
     map.addLayer(layer1);
 
-    abcRender(<VectorLayerSelector value={undefined} onSelected={handleSelected} />, { services });
+    abcRender(<LayerSelector value={undefined} onSelected={handleSelected} data-testid={'layer-selector'} />, { services });
 
-    await userEvent.selectOptions(screen.getByTestId('vector-layer-selector'), ['Layer 1']);
+    await userEvent.selectOptions(screen.getByTestId('layer-selector'), ['Layer 1']);
     handleSelected.reset();
 
     // Act
-    await userEvent.selectOptions(screen.getByTestId('vector-layer-selector'), ['Select a layer']);
+    await userEvent.selectOptions(screen.getByTestId('layer-selector'), ['Select a layer']);
 
     // Assert
     expect(handleSelected.callCount).toEqual(1);
-    expect(handleSelected.args[0]).toEqual([undefined]);
+    expect(handleSelected.args[0]).toEqual([undefined, undefined]);
   });
 });

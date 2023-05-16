@@ -23,8 +23,7 @@ import { ModalEventType, ModalStatus } from '../../core/ui/typings';
 import { PasswordStrength, ValidationHelper } from '../../core/utils/ValidationHelper';
 import FormValidationLabel from '../form-validation-label/FormValidationLabel';
 import { FormState } from '../form-validation-label/FormState';
-import { prefixedTranslation } from '../../i18n/i18n';
-import { withTranslation } from 'react-i18next';
+import { useTranslation, withTranslation } from 'react-i18next';
 import { AuthenticationError, ErrorType } from '../../core/authentication/AuthenticationError';
 import { FormOfflineIndicator } from '../offline-indicator/FormOfflineIndicator';
 import { useOfflineStatus } from '../../core/pwa/OnlineStatusContext';
@@ -32,9 +31,8 @@ import { useServices } from '../../core/useServices';
 
 const logger = Logger.get('LoginModal.tsx');
 
-const t = prefixedTranslation('LoginModal:');
-
 function LoginModal() {
+  const { t } = useTranslation('LoginModal');
   const { modals, toasts, authentication } = useServices();
 
   const [visible, setVisible] = useState(false);
@@ -119,7 +117,7 @@ function LoginModal() {
           toasts.genericError(err);
         }
       });
-  }, [authentication, email, modals, password, toasts, validateForm]);
+  }, [authentication, email, modals, password, t, toasts, validateForm]);
 
   const handleEmailChange = useCallback(
     (ev: ChangeEvent<HTMLInputElement>) => {

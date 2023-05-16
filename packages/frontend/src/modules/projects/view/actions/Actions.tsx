@@ -44,24 +44,24 @@ export function Actions(props: Props) {
 
   return (
     <div className={clsx('d-flex flex-wrap', className)}>
-      <button onClick={exportProject} className={'btn btn-primary mr-3 mb-2'} data-cy={'export-project'}>
+      <button onClick={exportProject} className={'btn btn-primary me-3 mb-2'} data-cy={'export-project'}>
         <FaIcon icon={IconDefs.faDownload} className={'mr-2'} />
         {t('Export_project')}
       </button>
 
-      <button onClick={importProject} className={'btn btn-outline-primary mr-3 mb-2'} data-cy={'import-project'}>
+      <button onClick={saveProjectOnline} disabled={!userAuthenticated} className={'btn btn-primary me-3 mb-2'} data-cy={'save-project'}>
+        <FaIcon icon={IconDefs.faEarthEurope} className={'mr-2'} />
+        {t('Save_project_online')}
+      </button>
+
+      <button onClick={importProject} className={'btn btn-outline-primary me-3 mb-2'} data-cy={'import-project'}>
         <FaIcon icon={IconDefs.faUpload} className={'mr-2'} />
         {t('Import_project')}
       </button>
 
-      <button onClick={createNewProject} className={'btn btn-outline-primary mr-3 mb-2'} data-cy={'new-project'}>
+      <button onClick={createNewProject} className={'btn btn-outline-primary me-3 mb-2'} data-cy={'new-project'}>
         <FaIcon icon={IconDefs.faFile} className={'mr-2'} />
         {t('New_project')}
-      </button>
-
-      <button onClick={saveProjectOnline} disabled={!userAuthenticated} className={'btn btn-outline-primary mr-3 mb-2'} data-cy={'save-project'}>
-        <FaIcon icon={IconDefs.faEarthEurope} className={'mr-2'} />
-        {t('Save_project_online')}
       </button>
     </div>
   );

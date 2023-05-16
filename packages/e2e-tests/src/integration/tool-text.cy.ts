@@ -16,13 +16,13 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { StyleProperties } from '@abc-map/shared';
-import { MapTool } from '@abc-map/shared';
+import { MapTool, StyleProperties } from '@abc-map/shared';
 import { TestHelper } from '../helpers/TestHelper';
 import { ToolSelector } from '../helpers/ToolSelector';
 import { Draw } from '../helpers/Draw';
 import { MainMap } from '../helpers/MainMap';
 import { Routes } from '../helpers/Routes';
+import { ProjectMenu } from '../helpers/ProjectMenu';
 
 describe('Tool Text', function () {
   beforeEach(() => {
@@ -31,6 +31,7 @@ describe('Tool Text', function () {
 
   it('user can add text', function () {
     cy.visit(Routes.map().format())
+      .then(() => ProjectMenu.newProject())
       .then(() => MainMap.fixedView1())
       .then(() => MainMap.getComponent())
       .then(() => ToolSelector.enable(MapTool.Point))
