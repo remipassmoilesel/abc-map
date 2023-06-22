@@ -17,21 +17,22 @@
  */
 
 import Chainable = Cypress.Chainable;
+import { MainMenu } from './MainMenu';
 
 export class TopBar {
   public static landing(): Chainable<any> {
-    return cy.get('[data-cy=top-bar] [data-cy=landing]').click();
+    return MainMenu.open().get('[data-cy=main-menu] [data-cy=landing]').click();
   }
 
   public static map(): Chainable<any> {
-    return cy.get('[data-cy=top-bar] [data-cy=map]').click();
+    return MainMenu.open().get('[data-cy=main-menu] [data-cy=map]').click();
   }
 
   public static moduleIndex(): Chainable<any> {
-    return cy.get('[data-cy=top-bar] [data-cy=module-index]').click();
+    return MainMenu.open().get('[data-cy=main-menu] [data-cy=module-index]').click();
   }
 
   public static documentation(): Chainable<any> {
-    return cy.get('[data-cy=top-bar] [data-cy=help]').click();
+    return MainMenu.open().get('[data-cy=main-menu] [data-cy=documentation]').click();
   }
 }

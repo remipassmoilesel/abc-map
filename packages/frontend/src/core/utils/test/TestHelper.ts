@@ -419,9 +419,11 @@ export class TestHelper {
   public static regionsOfFranceAsDataRow(): DataRow[] {
     return RegionsOfMetropolitanFrance()
       .slice()
-      .map((region) => ({
+      .map<DataRow>((region) => ({
         id: region._id,
-        selected: false,
+        metadata: {
+          selected: false,
+        },
         data: {
           code: region.code,
           name: region.name,

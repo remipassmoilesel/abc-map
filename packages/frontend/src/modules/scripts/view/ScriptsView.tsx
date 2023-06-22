@@ -18,35 +18,35 @@
 
 import React, { useCallback, useState } from 'react';
 import { errorMessage, Logger } from '@abc-map/shared';
-import CodeEditor from './CodeEditor';
+import { CodeEditor } from './CodeEditor';
 import { useTranslation } from 'react-i18next';
 import { IconDefs } from '../../../components/icon/IconDefs';
 import { FaIcon } from '../../../components/icon/FaIcon';
-import Cls from './ScriptsView.module.scss';
 import { ModuleContainer } from '../../../components/module-container/ModuleContainer';
 import { ModuleTitle } from '../../../components/module-title/ModuleTitle';
-import { getScriptErrorOutput } from '../typings';
+import { Example, getScriptErrorOutput } from '../typings';
+import { usePersistentStore } from './state';
+import Cls from './ScriptsView.module.scss';
 
 const logger = Logger.get('ScriptsView.tsx');
 
 interface Props {
-  initialValue: string;
-  onProcess: () => string[];
-  onChange: (content: string) => void;
+  onProcess: (script: string) => string[];
 }
 
 export function ScriptsView(props: Props) {
-  const { initialValue, onChange, onProcess } = props;
+  const { onProcess } = props;
 
-  const [content, setContent] = useState(initialValue);
+  const { script, setScript } = usePersistentStore();
+
   const [message, setMessage] = useState('');
   const [output, setOutput] = useState<string[]>([]);
 
   const { t } = useTranslation('ScriptsModule');
 
-  const execute = useCallback(() => {
+  const handleExecute = useCallback(() => {
     try {
-      const output = onProcess();
+      const output = onProcess(script);
       setMessage(`✨ ${t('Executed_without_errors')}`);
       setOutput(output);
     } catch (err: unknown) {
@@ -58,15 +58,11 @@ export function ScriptsView(props: Props) {
       const output = getScriptErrorOutput(err);
       setOutput(output);
     }
-  }, [onProcess, t]);
+  }, [onProcess, script, t]);
 
-  const handleChange = useCallback(
-    (content: string) => {
-      setContent(content);
-      onChange(content);
-    },
-    [onChange]
-  );
+  const handleReset = useCallback(() => setScript(Example), [setScript]);
+
+  const handleChange = useCallback((content: string) => setScript(content), [setScript]);
 
   return (
     <ModuleContainer>
@@ -88,19 +84,23 @@ export function ScriptsView(props: Props) {
       </div>
 
       <div className={Cls.editorContainer}>
-        <CodeEditor initialContent={content} onChange={handleChange} className={Cls.editor} />
+        <CodeEditor content={script} onChange={handleChange} />
       </div>
 
       <div className={'d-flex justify-content-end'}>
-        {message && (
-          <div className={Cls.message} data-cy={'message'}>
-            {message}
-          </div>
-        )}
-        <button className={'btn btn-primary mt-3'} onClick={execute} data-cy={'execute'}>
+        <button className={'btn btn-outline-primary mt-3 me-2'} onClick={handleReset}>
+          {t('Default_content')}
+        </button>
+        <button className={'btn btn-primary mt-3'} onClick={handleExecute} data-cy={'execute'}>
           {t('Execute')}
         </button>
       </div>
+
+      {message && (
+        <div className={Cls.message} data-cy={'message'}>
+          {message}
+        </div>
+      )}
 
       {!!output.length && (
         <div className={Cls.output}>

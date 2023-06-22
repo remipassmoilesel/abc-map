@@ -25,13 +25,13 @@ import VectorTile from 'ol/VectorTile';
 import TileState from 'ol/TileState';
 import { waitFor } from '@testing-library/react';
 import { logger, tileLoadingAuthenticated } from './tileLoadingAuthenticated';
-import { TileStorage } from '../../storage/indexeddb/storage/TileDbStorage';
+import { TileStorage } from '../../storage/project-storage/TileDbStorage';
 import { TestHelper } from '../../utils/test/TestHelper';
 import { disableTileImageLogging } from './setTileImage';
 import MockedFn = jest.MockedFn;
 
 jest.mock('axios');
-jest.mock('../../storage/indexeddb/storage/TileDbStorage');
+jest.mock('../../storage/project-storage/TileDbStorage');
 
 logger.disable();
 disableTileImageLogging();

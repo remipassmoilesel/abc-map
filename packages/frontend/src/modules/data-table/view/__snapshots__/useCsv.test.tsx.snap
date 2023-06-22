@@ -1,0 +1,89 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`useCsv exportFile() 1`] = `
+<div>
+  {}
+</div>
+`;
+
+exports[`useCsv exportFile() 2`] = `
+Array [
+  Object {
+    "__id__": "ysZrLxikgJ",
+    "id": "11",
+    "name": "Montpellier",
+  },
+  Object {
+    "__id__": "FkgKCaSCFx",
+    "id": "22",
+    "name": "Cherbourg",
+  },
+  Object {
+    "__id__": "X_-J5_VShM",
+    "id": "33",
+    "name": "Grenoble",
+  },
+  Object {
+    "__id__": "-_HQZ2Mzmj",
+    "id": "44",
+    "name": "Toulon",
+  },
+]
+`;
+
+exports[`useCsv importFile() should fail if content is invalid 1`] = `
+<div>
+  {"result":{"file":{},"imported":0,"skipped":0,"skippedIds":[],"error":{}},"error":"Invalid CSV file, nothing was parsed"}
+</div>
+`;
+
+exports[`useCsv importFile() should update layer 1`] = `
+<div>
+  {"result":{"file":{},"imported":3,"skipped":1,"skippedIds":["C5VurN_4k_"],"error":null}}
+</div>
+`;
+
+exports[`useCsv importFile() should update layer 2`] = `
+Array [
+  Object {
+    "data": Object {
+      "id": "11",
+      "name": "Montpellier",
+    },
+    "id": "ysZrLxikgJ",
+    "metadata": Object {
+      "selected": false,
+    },
+  },
+  Object {
+    "data": Object {
+      "id": "22",
+      "name": "Cherbourg",
+    },
+    "id": "FkgKCaSCFx",
+    "metadata": Object {
+      "selected": false,
+    },
+  },
+  Object {
+    "data": Object {
+      "id": "33",
+      "name": "Gre-gre-noble",
+    },
+    "id": "X_-J5_VShM",
+    "metadata": Object {
+      "selected": false,
+    },
+  },
+  Object {
+    "data": Object {
+      "id": 44,
+      "name": "Toulon",
+    },
+    "id": "-_HQZ2Mzmj",
+    "metadata": Object {
+      "selected": false,
+    },
+  },
+]
+`;

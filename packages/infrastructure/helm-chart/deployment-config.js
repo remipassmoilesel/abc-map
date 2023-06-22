@@ -29,5 +29,5 @@ module.exports = {
   registry: 'my-registry.gitlab.com',
   tag: 'my-tag',
   namespace: 'my-kubernetes-namespace',
-  valuesFile: 'my-values-file'
-}
+  valuesFile: 'my-values-file',
+};

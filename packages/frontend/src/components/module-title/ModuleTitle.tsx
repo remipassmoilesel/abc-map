@@ -18,13 +18,15 @@
 
 import Cls from './ModuleTitle.module.scss';
 import { ReactNode } from 'react';
+import clsx from 'clsx';
 
 interface Props {
   children: ReactNode | ReactNode[];
+  className?: string;
 }
 
 export function ModuleTitle(props: Props) {
-  const { children } = props;
+  const { className, children } = props;
 
-  return <h2 className={Cls.title}>{children}</h2>;
+  return <h2 className={clsx(Cls.title, className)}>{children}</h2>;
 }

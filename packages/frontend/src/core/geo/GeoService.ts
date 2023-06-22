@@ -329,13 +329,4 @@ export class GeoService {
     proj.setExtent(extent);
     return extent;
   }
-
-  public deselectAllFeatures(): number {
-    const features = this.getMainMap().getSelectedFeatures();
-    features.forEach((f) => f.setSelected(false));
-
-    this.getMainMap().getTool()?.deselectAll();
-
-    return features.length;
-  }
 }

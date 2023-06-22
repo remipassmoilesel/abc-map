@@ -25,7 +25,7 @@ import { prefixedTranslation } from '../../i18n/i18n';
 const logger = Logger.get('ToastService');
 
 const defaultOptions: ToastOptions = {
-  position: 'bottom-center',
+  position: 'top-right',
   autoClose: 7_000,
   pauseOnFocusLoss: true,
   hideProgressBar: true,

@@ -36,6 +36,11 @@ export declare type DataRow = {
    * ID is the unique identifier of row
    */
   id: string | number;
+  // Metadata
+  metadata: {
+    selected: boolean;
+  };
+  // Actual data of row
   data: {
     [k: string]: DataValue | undefined;
   };

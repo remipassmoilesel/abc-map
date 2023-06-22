@@ -17,11 +17,12 @@
  */
 
 import { IconDefs } from '../../../components/icon/IconDefs';
-import React, { CSSProperties, useCallback, useState } from 'react';
+import React, { CSSProperties, useCallback } from 'react';
 import { useServices } from '../../../core/useServices';
 import { Logger } from '@abc-map/shared';
 import { FloatingButton } from '../../../components/floating-button/FloatingButton';
 import { prefixedTranslation } from '../../../i18n/i18n';
+import { useFullscreen } from '../../../core/ui/useFullscreen';
 
 const logger = Logger.get('FullscreenButton.tsx');
 
@@ -34,31 +35,16 @@ interface Props {
 export function FullscreenButton(props: Props) {
   const { style } = props;
   const { toasts } = useServices();
-  const [fullscreenIcon, setFullscreenIcon] = useState(document.fullscreenElement === null ? IconDefs.faExpandAlt : IconDefs.faCompressAlt);
+  const { fullscreen, toggleFullscreen } = useFullscreen();
 
-  const toggleFullscreen = useCallback(() => {
-    // Not in fullscreen, we enable it
-    if (!document.fullscreenElement) {
-      document.body
-        .requestFullscreen()
-        .then(() => setFullscreenIcon(IconDefs.faCompressAlt))
-        .catch((err) => {
-          logger.error('Cannot set fullscreen: ', err);
-          toasts.genericError();
-        });
-    }
+  const handleToggleFullscreen = useCallback(() => {
+    toggleFullscreen().catch((err) => {
+      logger.error('Fullscreen error: ', err);
+      toasts.genericError();
+    });
+  }, [toasts, toggleFullscreen]);
 
-    // Already in fullscreen, we disable it
-    else {
-      document
-        .exitFullscreen()
-        .then(() => setFullscreenIcon(IconDefs.faExpandAlt))
-        .catch((err) => {
-          logger.error('Cannot exit fullscreen: ', err);
-          toasts.genericError();
-        });
-    }
-  }, [toasts]);
+  const icon = fullscreen ? IconDefs.faCompressAlt : IconDefs.faExpandAlt;
 
-  return <FloatingButton icon={fullscreenIcon} title={t('Fullscreen')} onClick={toggleFullscreen} style={style} />;
+  return <FloatingButton icon={icon} title={t('Fullscreen')} onClick={handleToggleFullscreen} style={style} />;
 }

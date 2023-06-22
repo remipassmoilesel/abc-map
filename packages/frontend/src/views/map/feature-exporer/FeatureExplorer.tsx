@@ -21,7 +21,6 @@ import { useMapLayers } from '../../../core/geo/useMapLayers';
 import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import { Logger } from '@abc-map/shared';
 import { useTranslation } from 'react-i18next';
-import { FeatureCard } from './feature-card/FeatureCard';
 import { useServices } from '../../../core/useServices';
 import { HistoryKey } from '../../../core/history/HistoryKey';
 import { RemoveFeaturesChangeset } from '../../../core/history/changesets/features/RemoveFeaturesChangeset';
@@ -39,10 +38,11 @@ import { SettingsModal } from './settings-modal/SettingsModal';
 import { WithTooltip } from '../../../components/with-tooltip/WithTooltip';
 import { LayerSelector } from '../../../components/layer-selector/LayerSelector';
 import { VectorLayerWrapper } from '../../../core/geo/layers/LayerWrapper';
+import { FeatureList } from './FeatureList';
 
 export const logger = Logger.get('FeatureExplorer.ts', 'debug');
 
-const indexifyFeature = (feature: FeatureWrapper) => Object.values(feature.getDataProperties()).map((v) => `${v}`);
+const toFeatureIndexItem = (feature: FeatureWrapper) => Object.values(feature.getDataProperties()).map((v) => `${v}`);
 
 export function FeatureExplorer() {
   const { geo, history, modals } = useServices();
@@ -75,7 +75,7 @@ export function FeatureExplorer() {
 
   // Search
   const [query, setQuery] = useState<string>('');
-  const { search: searchFeatures, results: searchResults } = useIndexedSearch<FeatureWrapper>(features, indexifyFeature);
+  const { search: searchFeatures, results: searchResults } = useIndexedSearch<FeatureWrapper>(features, toFeatureIndexItem);
   const displayedFeatures = query ? searchResults : features;
 
   const handleHighlightFeature = useCallback((feature: FeatureWrapper) => {
@@ -109,10 +109,20 @@ export function FeatureExplorer() {
     [activeLayer, history]
   );
 
-  const handleSelect = useCallback((feature: FeatureWrapper) => {
-    feature.setSelected(!feature.isSelected());
-    feature.setHighlighted(false);
-  }, []);
+  const handleSelect = useCallback(
+    (feature: FeatureWrapper) => {
+      // We unhighlight to see selection style
+      feature.setHighlighted(false);
+
+      const selection = geo.getMainMap().getSelection();
+      if (feature.isSelected()) {
+        selection.remove([feature.unwrap()]);
+      } else {
+        selection.add([feature.unwrap()]);
+      }
+    },
+    [geo]
+  );
 
   const handleEditFeature = useCallback(
     (feature: FeatureWrapper) => {
@@ -178,7 +188,7 @@ export function FeatureExplorer() {
           </button>
 
           {settingsModal && (
-            <SettingsModal value={settings} nameFieldCandidate={fieldNames} onConfirm={handleSettingsChanged} onCancel={handleToggleSettingsModal} />
+            <SettingsModal value={settings} nameCandidates={fieldNames} onConfirm={handleSettingsChanged} onCancel={handleToggleSettingsModal} />
           )}
         </div>
       </div>
@@ -190,23 +200,19 @@ export function FeatureExplorer() {
         {activeLayer && !query && !displayedFeatures.length && !loading && <div>{t('This_layer_contains_no_data')}</div>}
         {activeLayer && query && !displayedFeatures.length && !loading && <div>{t('Nothing_match')}</div>}
 
-        {activeLayer &&
-          displayedFeatures.map((feature, index) => {
-            return (
-              <FeatureCard
-                key={feature.getId() ?? `BAD-ID-${index}`}
-                index={index + 1}
-                feature={feature}
-                onHighlight={handleHighlightFeature}
-                mainField={mainField}
-                onZoomOn={handleZoomOn}
-                onDelete={handleDelete}
-                onToggleSelect={handleSelect}
-                onEdit={handleEditFeature}
-                className={'mb-1'}
-              />
-            );
-          })}
+        {activeLayer && !!displayedFeatures.length && (
+          <FeatureList
+            // Each time layer change we reset list and states
+            key={activeLayer.getId()}
+            features={displayedFeatures}
+            mainField={mainField}
+            onHighlight={handleHighlightFeature}
+            onZoomOn={handleZoomOn}
+            onDelete={handleDelete}
+            onSelect={handleSelect}
+            onEdit={handleEditFeature}
+          />
+        )}
       </div>
     </div>
   );

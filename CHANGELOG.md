@@ -2,12 +2,23 @@
 
 For the moment we use git hashes as version, since no one complained about it üëç
 
-## XX/04/2023 - Auto save and feature explorer (git: master)
+## Recently - Better user interface (git: master)
+
+General improvments on user interface:
+
+- New general menu, easier to use.
+- Better management of entity selections. This allows for better drawing interactions.
+- The creation of lines and polygons now works even without double click (with a touchscreen for example).
+- Fixed the Paypal button, even if the users are big stingy.
+- Better data tables: you can now filter, sort, export to CSV and import to CSV.
+- Better scripts module user interface.
+
+## 16/05/2023 - Auto save and feature explorer (git: ababff39)
 
 - Projects, layers, features and tiles are automatically saved clientside with IndexedDB
-- In order to simplify user experience, projet passwords are removed
+- A "Feature explorer" have been added to map view, it allows viewing features and data easily
+- In order to simplify user experience, projet passwords have been removed
 - If you use several tabs a warning will be displayed, in order to prevent data loss
-- New feature explorer on map view, it allows viewing features and data easily
 
 ## 09/04/2023 - Better project management (git: 528570d3)
 
@@ -103,8 +114,8 @@ For the moment we use git hashes as version, since no one complained about it ü
 - Better navigation between shared views
 - Button "Download data" on shared maps
 - Better "My projects" dialog
-    - Better user experience
-    - No more layout shifts
+  - Better user experience
+  - No more layout shifts
 - Add component for small tips (SmallAdvice). Tip is visible in a tooltip when user hover component
 
 ## 23/03/2022 - Better "Add layer" dialog (git: d63aae91)

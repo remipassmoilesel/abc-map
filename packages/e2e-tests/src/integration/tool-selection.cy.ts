@@ -23,7 +23,7 @@ import { Draw } from '../helpers/Draw';
 import { MainMap } from '../helpers/MainMap';
 import { DefaultDrawingStyle } from '../helpers/DefaultDrawingStyle';
 import { Routes } from '../helpers/Routes';
-import { ProjectMenu } from '../helpers/ProjectMenu';
+import { Project } from '../helpers/Project';
 
 describe('Tool Selection', function () {
   beforeEach(() => {
@@ -32,13 +32,16 @@ describe('Tool Selection', function () {
 
   it('user can select', function () {
     cy.visit(Routes.map().format())
-      .then(() => ProjectMenu.newProject())
+      .then(() => Project.newProject())
       .then(() => MainMap.fixedView1())
       .then(() => ToolSelector.enable(MapTool.Point))
       // Create points
       .then(() => Draw.click(100, 100))
       .then(() => Draw.click(150, 150))
       .then(() => Draw.click(200, 200))
+      // Unselect all
+      .get('[data-cy=unselect-all]')
+      .click()
       // Select them
       .then(() => ToolSelector.enable(MapTool.Selection))
       .then(() => Draw.drag(150, 150, 600, 600))
@@ -60,13 +63,16 @@ describe('Tool Selection', function () {
 
   it('user can duplicate selection then undo', function () {
     cy.visit(Routes.map().format())
-      .then(() => ProjectMenu.newProject())
+      .then(() => Project.newProject())
       .then(() => MainMap.fixedView1())
       .then(() => ToolSelector.enable(MapTool.Point))
       // Create points
       .then(() => Draw.click(100, 100))
       .then(() => Draw.click(150, 150))
       .then(() => Draw.click(200, 200))
+      // Unselect all
+      .get('[data-cy=unselect-all]')
+      .click()
       // Select them
       .then(() => ToolSelector.enable(MapTool.Selection))
       .then(() => Draw.drag(150, 150, 600, 600))
@@ -106,7 +112,7 @@ describe('Tool Selection', function () {
 
   it('user can drag selection then undo', function () {
     cy.visit(Routes.map().format())
-      .then(() => ProjectMenu.newProject())
+      .then(() => Project.newProject())
       .then(() => MainMap.fixedView1())
       // Draw points
       .then(() => ToolSelector.enable(MapTool.Point))
@@ -166,7 +172,7 @@ describe('Tool Selection', function () {
 
   it('user can drag duplicated features', function () {
     cy.visit(Routes.map().format())
-      .then(() => ProjectMenu.newProject())
+      .then(() => Project.newProject())
       .then(() => MainMap.fixedView1())
       // Draw points
       .then(() => ToolSelector.enable(MapTool.Point))
@@ -199,7 +205,7 @@ describe('Tool Selection', function () {
 
   it('user can change stroke style then undo', function () {
     cy.visit(Routes.map().format())
-      .then(() => ProjectMenu.newProject())
+      .then(() => Project.newProject())
       .then(() => MainMap.fixedView1())
       .then(() => ToolSelector.enable(MapTool.Polygon))
       // Draw feature
@@ -207,7 +213,10 @@ describe('Tool Selection', function () {
       .then(() => Draw.click(150, 150))
       .then(() => Draw.click(100, 150))
       .then(() => Draw.dblclick(150, 100))
-      // Select it
+      // Unselect all
+      .get('[data-cy=unselect-all]')
+      .click()
+      // Select features
       .then(() => ToolSelector.enable(MapTool.Selection))
       .then(() => Draw.drag(50, 50, 400, 400))
       .get('[data-cy=stroke-color]')
@@ -242,14 +251,18 @@ describe('Tool Selection', function () {
 
   it('user can change fill style then undo', function () {
     cy.visit(Routes.map().format())
-      .then(() => ProjectMenu.newProject())
+      .then(() => Project.newProject())
       .then(() => MainMap.fixedView1())
       .then(() => ToolSelector.enable(MapTool.Polygon))
-      // Draw feature then select
+      // Draw feature
       .then(() => Draw.click(100, 100))
       .then(() => Draw.click(150, 150))
       .then(() => Draw.click(100, 150))
       .then(() => Draw.dblclick(150, 100))
+      // Unselect all
+      .get('[data-cy=unselect-all]')
+      .click()
+      // Select features
       .then(() => ToolSelector.enable(MapTool.Selection))
       .then(() => Draw.drag(50, 50, 400, 400))
       .get('[data-cy=fill-color1]')

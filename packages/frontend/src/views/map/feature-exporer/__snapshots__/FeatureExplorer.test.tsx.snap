@@ -89,381 +89,399 @@ exports[`FeatureExplorer should allow user to modify feature data 1`] = `
       class="p-1"
     >
       <div
-        class="card card-body mb-1"
+        style="height: 100%; overflow: auto;"
       >
         <div
-          class="mb-3"
-          data-testid="feature"
+          style="height: 360px; width: 100%; position: relative;"
         >
-          <span
-            class="text-secondary"
-          >
-            1
-            .
-          </span>
-           
-          <span
-            class="fw-bold"
-          >
-            Updated name
-          </span>
-        </div>
-        <table
-          class="w-100 table table-sm table-bordered table-hover"
-        >
-          <tbody>
-            <tr>
-              <td
-                class="w-25"
-              >
-                osm_id
-              </td>
-              <td
-                class="text-bold"
-              >
-                -4511221
-              </td>
-            </tr>
-            <tr>
-              <td
-                class="w-25"
-              >
-                boundary
-              </td>
-              <td
-                class="text-bold"
-              >
-                administrative
-              </td>
-            </tr>
-            <tr>
-              <td
-                class="w-25"
-              >
-                admin_level
-              </td>
-              <td
-                class="text-bold"
-              >
-                6
-              </td>
-            </tr>
-            <tr>
-              <td
-                class="w-25"
-              >
-                parents
-              </td>
-              <td
-                class="text-bold"
-              >
-                -3360565,-252645
-              </td>
-            </tr>
-            <tr>
-              <td
-                class="w-25"
-              >
-                name
-              </td>
-              <td
-                class="text-bold"
-              >
-                Updated name
-              </td>
-            </tr>
-            <tr>
-              <td
-                class="w-25"
-              >
-                local_name
-              </td>
-              <td
-                class="text-bold"
-              >
-                Updated name
-              </td>
-            </tr>
-            <tr>
-              <td
-                class="w-25"
-              >
-                name_en
-              </td>
-              <td
-                class="text-bold"
-              >
-                Undefined value
-              </td>
-            </tr>
-            <tr>
-              <td
-                class="w-25"
-              >
-                newVariable
-              </td>
-              <td
-                class="text-bold"
-              >
-                New value
-              </td>
-            </tr>
-            <tr>
-              <td>
-                Geometry
-              </td>
-              <td
-                class="text-bold"
-              >
-                MultiPolygon
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <div
-          class="w-100 d-flex justify-content-end"
-        >
-          <button
-            class="btn btn-sm btn-outline-secondary me-2"
-            data-testid="edit-data"
-            title="Edit data"
-          >
-            <svg
-              aria-hidden="true"
-              class="svg-inline--fa fa-pen abc-icon mx-1"
-              data-icon="pen"
-              data-prefix="fas"
-              focusable="false"
-              role="img"
-              viewBox="0 0 512 512"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M362.7 19.3L314.3 67.7 444.3 197.7l48.4-48.4c25-25 25-65.5 0-90.5L453.3 19.3c-25-25-65.5-25-90.5 0zm-71 71L58.6 323.5c-10.4 10.4-18 23.3-22.2 37.4L1 481.2C-1.5 489.7 .8 498.8 7 505s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L421.7 220.3 291.7 90.3z"
-                fill="currentColor"
-              />
-            </svg>
-          </button>
-          <button
-            class="btn btn-sm btn-outline-secondary me-2"
-            title="Zoom on"
-          >
-            <svg
-              aria-hidden="true"
-              class="svg-inline--fa fa-magnifying-glass abc-icon mx-1"
-              data-icon="magnifying-glass"
-              data-prefix="fas"
-              focusable="false"
-              role="img"
-              viewBox="0 0 512 512"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"
-                fill="currentColor"
-              />
-            </svg>
-          </button>
           <div
-            class="dropdown"
+            data-index="0"
+            style="position: absolute; top: 0px; left: 0px; width: 100%; transform: translateY(0px);"
           >
-            <button
-              aria-expanded="false"
-              class="dropdown-toggle btn btn-outline-secondary"
-              data-testid="feature-actions"
-              id="test-static-id-0"
-              type="button"
-            >
-              More
-            </button>
             <div
-              aria-labelledby="test-static-id-0"
-              class="dropdown-menu"
-              data-popper-escaped="true"
-              data-popper-placement="bottom-start"
-              data-popper-reference-hidden="true"
-              style="position: absolute; top: 0px; left: 0px; transform: translate(0px, 2px);"
-              x-placement="bottom-start"
+              class="me-1 mb-1"
             >
-              <a
-                class="dropdown-item"
-                data-rr-ui-dropdown-item=""
-                href="#"
-                role="button"
-                tabindex="0"
+              <div
+                class="card"
               >
-                <svg
-                  aria-hidden="true"
-                  class="svg-inline--fa fa-highlighter abc-icon me-2"
-                  data-icon="highlighter"
-                  data-prefix="fas"
-                  focusable="false"
-                  role="img"
-                  viewBox="0 0 576 512"
-                  xmlns="http://www.w3.org/2000/svg"
+                <div
+                  class="card-body"
                 >
-                  <path
-                    d="M331 315l158.4-215L460.1 70.6 245 229 331 315zm-187 5l0 0V248.3c0-15.3 7.2-29.6 19.5-38.6L436.6 8.4C444 2.9 453 0 462.2 0c11.4 0 22.4 4.5 30.5 12.6l54.8 54.8c8.1 8.1 12.6 19 12.6 30.5c0 9.2-2.9 18.2-8.4 25.6L350.4 396.5c-9 12.3-23.4 19.5-38.6 19.5H240l-25.4 25.4c-12.5 12.5-32.8 12.5-45.3 0l-50.7-50.7c-12.5-12.5-12.5-32.8 0-45.3L144 320zM23 466.3l63-63 70.6 70.6-31 31c-4.5 4.5-10.6 7-17 7H40c-13.3 0-24-10.7-24-24v-4.7c0-6.4 2.5-12.5 7-17z"
-                    fill="currentColor"
-                  />
-                </svg>
-                Select / unselect
-              </a>
-              <a
-                class="dropdown-item"
-                data-rr-ui-dropdown-item=""
-                href="#"
-                role="button"
-                tabindex="0"
-              >
-                <svg
-                  aria-hidden="true"
-                  class="svg-inline--fa fa-plus abc-icon me-2"
-                  data-icon="plus"
-                  data-prefix="fas"
-                  focusable="false"
-                  role="img"
-                  viewBox="0 0 448 512"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"
-                    fill="currentColor"
-                  />
-                </svg>
-                Temporarily highlight
-              </a>
-              <a
-                class="dropdown-item"
-                data-rr-ui-dropdown-item=""
-                href="#"
-                role="button"
-                tabindex="0"
-              >
-                <svg
-                  aria-hidden="true"
-                  class="svg-inline--fa fa-trash abc-icon me-2"
-                  data-icon="trash"
-                  data-prefix="fas"
-                  focusable="false"
-                  role="img"
-                  viewBox="0 0 448 512"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"
-                    fill="currentColor"
-                  />
-                </svg>
-                Delete
-              </a>
+                  <div
+                    class="mb-3"
+                    data-testid="feature"
+                    title="Updated name"
+                  >
+                    <span
+                      class="text-secondary"
+                    >
+                      1
+                      .
+                    </span>
+                     
+                    <span
+                      class="fw-bold"
+                    >
+                      Updated name
+                    </span>
+                  </div>
+                  <table
+                    class="w-100 table table-sm table-bordered table-hover"
+                  >
+                    <tbody>
+                      <tr>
+                        <td
+                          class="w-25"
+                        >
+                          osm_id
+                        </td>
+                        <td
+                          class="text-bold"
+                          title="-4511221"
+                        >
+                          -4511221
+                        </td>
+                      </tr>
+                      <tr>
+                        <td
+                          class="w-25"
+                        >
+                          boundary
+                        </td>
+                        <td
+                          class="text-bold"
+                          title="administrative"
+                        >
+                          administrative
+                        </td>
+                      </tr>
+                      <tr>
+                        <td
+                          class="w-25"
+                        >
+                          admin_level
+                        </td>
+                        <td
+                          class="text-bold"
+                          title="6"
+                        >
+                          6
+                        </td>
+                      </tr>
+                      <tr>
+                        <td
+                          class="w-25"
+                        >
+                          parents
+                        </td>
+                        <td
+                          class="text-bold"
+                          title="-3360565,-252645"
+                        >
+                          -3360565,-252645
+                        </td>
+                      </tr>
+                      <tr>
+                        <td
+                          class="w-25"
+                        >
+                          name
+                        </td>
+                        <td
+                          class="text-bold"
+                          title="Updated name"
+                        >
+                          Updated name
+                        </td>
+                      </tr>
+                      <tr>
+                        <td
+                          class="w-25"
+                        >
+                          local_name
+                        </td>
+                        <td
+                          class="text-bold"
+                          title="Updated name"
+                        >
+                          Updated name
+                        </td>
+                      </tr>
+                      <tr>
+                        <td
+                          class="w-25"
+                        >
+                          name_en
+                        </td>
+                        <td
+                          class="text-bold"
+                          title="Undefined value"
+                        >
+                          Undefined value
+                        </td>
+                      </tr>
+                      <tr>
+                        <td
+                          class="w-25"
+                        >
+                          newVariable
+                        </td>
+                        <td
+                          class="text-bold"
+                          title="New value"
+                        >
+                          New value
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          Geometry
+                        </td>
+                        <td
+                          class="text-bold"
+                        >
+                          MultiPolygon
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <div
+                    class="w-100 d-flex justify-content-end"
+                  >
+                    <button
+                      class="btn btn-sm btn-outline-secondary me-2"
+                      data-testid="edit-data"
+                      title="Edit data"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        class="svg-inline--fa fa-pen abc-icon mx-1"
+                        data-icon="pen"
+                        data-prefix="fas"
+                        focusable="false"
+                        role="img"
+                        viewBox="0 0 512 512"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M362.7 19.3L314.3 67.7 444.3 197.7l48.4-48.4c25-25 25-65.5 0-90.5L453.3 19.3c-25-25-65.5-25-90.5 0zm-71 71L58.6 323.5c-10.4 10.4-18 23.3-22.2 37.4L1 481.2C-1.5 489.7 .8 498.8 7 505s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L421.7 220.3 291.7 90.3z"
+                          fill="currentColor"
+                        />
+                      </svg>
+                    </button>
+                    <button
+                      class="btn btn-sm btn-outline-secondary me-2"
+                      title="Zoom on"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        class="svg-inline--fa fa-magnifying-glass abc-icon mx-1"
+                        data-icon="magnifying-glass"
+                        data-prefix="fas"
+                        focusable="false"
+                        role="img"
+                        viewBox="0 0 512 512"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"
+                          fill="currentColor"
+                        />
+                      </svg>
+                    </button>
+                    <div
+                      class="dropdown"
+                    >
+                      <button
+                        aria-expanded="false"
+                        class="dropdown-toggle btn btn-outline-secondary"
+                        data-testid="feature-actions"
+                        id="test-static-id-0"
+                        type="button"
+                      >
+                        More
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
-      <div
-        class="card card-body mb-1"
-      >
-        <div
-          class=""
-          data-testid="feature"
-        >
-          <span
-            class="text-secondary"
+          <div
+            data-index="1"
+            style="position: absolute; top: 0px; left: 0px; width: 100%; transform: translateY(0px);"
           >
-            2
-            .
-          </span>
-           
-          <span
-            class=""
+            <div
+              class="me-1 mb-1"
+            >
+              <div
+                class="card"
+              >
+                <div
+                  class="card-body"
+                >
+                  <div
+                    class=""
+                    data-testid="feature"
+                    title="Provincia Florida"
+                  >
+                    <span
+                      class="text-secondary"
+                    >
+                      2
+                      .
+                    </span>
+                     
+                    <span
+                      class=""
+                    >
+                      Provincia Florida
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            data-index="2"
+            style="position: absolute; top: 0px; left: 0px; width: 100%; transform: translateY(0px);"
           >
-            Provincia Florida
-          </span>
-        </div>
-      </div>
-      <div
-        class="card card-body mb-1"
-      >
-        <div
-          class=""
-          data-testid="feature"
-        >
-          <span
-            class="text-secondary"
+            <div
+              class="me-1 mb-1"
+            >
+              <div
+                class="card"
+              >
+                <div
+                  class="card-body"
+                >
+                  <div
+                    class=""
+                    data-testid="feature"
+                    title="Provincia Manuel M. Caballero"
+                  >
+                    <span
+                      class="text-secondary"
+                    >
+                      3
+                      .
+                    </span>
+                     
+                    <span
+                      class=""
+                    >
+                      Provincia Manuel M. Caballero
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            data-index="3"
+            style="position: absolute; top: 0px; left: 0px; width: 100%; transform: translateY(0px);"
           >
-            3
-            .
-          </span>
-           
-          <span
-            class=""
+            <div
+              class="me-1 mb-1"
+            >
+              <div
+                class="card"
+              >
+                <div
+                  class="card-body"
+                >
+                  <div
+                    class=""
+                    data-testid="feature"
+                    title="Provincia Warnes"
+                  >
+                    <span
+                      class="text-secondary"
+                    >
+                      4
+                      .
+                    </span>
+                     
+                    <span
+                      class=""
+                    >
+                      Provincia Warnes
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            data-index="4"
+            style="position: absolute; top: 0px; left: 0px; width: 100%; transform: translateY(0px);"
           >
-            Provincia Manuel M. Caballero
-          </span>
-        </div>
-      </div>
-      <div
-        class="card card-body mb-1"
-      >
-        <div
-          class=""
-          data-testid="feature"
-        >
-          <span
-            class="text-secondary"
+            <div
+              class="me-1 mb-1"
+            >
+              <div
+                class="card"
+              >
+                <div
+                  class="card-body"
+                >
+                  <div
+                    class=""
+                    data-testid="feature"
+                    title="Provincia Andrés Ibáñez"
+                  >
+                    <span
+                      class="text-secondary"
+                    >
+                      5
+                      .
+                    </span>
+                     
+                    <span
+                      class=""
+                    >
+                      Provincia Andrés Ibáñez
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            data-index="5"
+            style="position: absolute; top: 0px; left: 0px; width: 100%; transform: translateY(0px);"
           >
-            4
-            .
-          </span>
-           
-          <span
-            class=""
-          >
-            Provincia Warnes
-          </span>
-        </div>
-      </div>
-      <div
-        class="card card-body mb-1"
-      >
-        <div
-          class=""
-          data-testid="feature"
-        >
-          <span
-            class="text-secondary"
-          >
-            5
-            .
-          </span>
-           
-          <span
-            class=""
-          >
-            Provincia Andrés Ibáñez
-          </span>
-        </div>
-      </div>
-      <div
-        class="card card-body mb-1"
-      >
-        <div
-          class=""
-          data-testid="feature"
-        >
-          <span
-            class="text-secondary"
-          >
-            6
-            .
-          </span>
-           
-          <span
-            class=""
-          >
-            Provincia Obispo Santistevan
-          </span>
+            <div
+              class="me-1 mb-1"
+            >
+              <div
+                class="card"
+              >
+                <div
+                  class="card-body"
+                >
+                  <div
+                    class=""
+                    data-testid="feature"
+                    title="Provincia Obispo Santistevan"
+                  >
+                    <span
+                      class="text-secondary"
+                    >
+                      6
+                      .
+                    </span>
+                     
+                    <span
+                      class=""
+                    >
+                      Provincia Obispo Santistevan
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -560,287 +578,386 @@ exports[`FeatureExplorer should display feature data 1`] = `
       class="p-1"
     >
       <div
-        class="card card-body mb-1"
+        style="height: 100%; overflow: auto;"
       >
         <div
-          class="mb-3"
-          data-testid="feature"
+          style="height: 360px; width: 100%; position: relative;"
         >
-          <span
-            class="text-secondary"
-          >
-            1
-            .
-          </span>
-           
-          <span
-            class="fw-bold"
-          >
-            Provincia Cordillera
-          </span>
-        </div>
-        <table
-          class="w-100 table table-sm table-bordered table-hover"
-        >
-          <tbody>
-            <tr>
-              <td
-                class="w-25"
-              >
-                osm_id
-              </td>
-              <td
-                class="text-bold"
-              >
-                -4511221
-              </td>
-            </tr>
-            <tr>
-              <td
-                class="w-25"
-              >
-                boundary
-              </td>
-              <td
-                class="text-bold"
-              >
-                administrative
-              </td>
-            </tr>
-            <tr>
-              <td
-                class="w-25"
-              >
-                admin_level
-              </td>
-              <td
-                class="text-bold"
-              >
-                6
-              </td>
-            </tr>
-            <tr>
-              <td
-                class="w-25"
-              >
-                parents
-              </td>
-              <td
-                class="text-bold"
-              >
-                -3360565,-252645
-              </td>
-            </tr>
-            <tr>
-              <td
-                class="w-25"
-              >
-                name
-              </td>
-              <td
-                class="text-bold"
-              >
-                Provincia Cordillera
-              </td>
-            </tr>
-            <tr>
-              <td
-                class="w-25"
-              >
-                local_name
-              </td>
-              <td
-                class="text-bold"
-              >
-                Provincia Cordillera
-              </td>
-            </tr>
-            <tr>
-              <td
-                class="w-25"
-              >
-                name_en
-              </td>
-              <td
-                class="text-bold"
-              >
-                Undefined value
-              </td>
-            </tr>
-            <tr>
-              <td>
-                Geometry
-              </td>
-              <td
-                class="text-bold"
-              >
-                MultiPolygon
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <div
-          class="w-100 d-flex justify-content-end"
-        >
-          <button
-            class="btn btn-sm btn-outline-secondary me-2"
-            data-testid="edit-data"
-            title="Edit data"
-          >
-            <svg
-              aria-hidden="true"
-              class="svg-inline--fa fa-pen abc-icon mx-1"
-              data-icon="pen"
-              data-prefix="fas"
-              focusable="false"
-              role="img"
-              viewBox="0 0 512 512"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M362.7 19.3L314.3 67.7 444.3 197.7l48.4-48.4c25-25 25-65.5 0-90.5L453.3 19.3c-25-25-65.5-25-90.5 0zm-71 71L58.6 323.5c-10.4 10.4-18 23.3-22.2 37.4L1 481.2C-1.5 489.7 .8 498.8 7 505s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L421.7 220.3 291.7 90.3z"
-                fill="currentColor"
-              />
-            </svg>
-          </button>
-          <button
-            class="btn btn-sm btn-outline-secondary me-2"
-            title="Zoom on"
-          >
-            <svg
-              aria-hidden="true"
-              class="svg-inline--fa fa-magnifying-glass abc-icon mx-1"
-              data-icon="magnifying-glass"
-              data-prefix="fas"
-              focusable="false"
-              role="img"
-              viewBox="0 0 512 512"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"
-                fill="currentColor"
-              />
-            </svg>
-          </button>
           <div
-            class="dropdown"
+            data-index="0"
+            style="position: absolute; top: 0px; left: 0px; width: 100%; transform: translateY(0px);"
           >
-            <button
-              aria-expanded="false"
-              class="dropdown-toggle btn btn-outline-secondary"
-              data-testid="feature-actions"
-              id="test-static-id-0"
-              type="button"
+            <div
+              class="me-1 mb-1"
             >
-              More
-            </button>
+              <div
+                class="card"
+              >
+                <div
+                  class="card-body"
+                >
+                  <div
+                    class="mb-3"
+                    data-testid="feature"
+                    title="Provincia Cordillera"
+                  >
+                    <span
+                      class="text-secondary"
+                    >
+                      1
+                      .
+                    </span>
+                     
+                    <span
+                      class="fw-bold"
+                    >
+                      Provincia Cordillera
+                    </span>
+                  </div>
+                  <table
+                    class="w-100 table table-sm table-bordered table-hover"
+                  >
+                    <tbody>
+                      <tr>
+                        <td
+                          class="w-25"
+                        >
+                          osm_id
+                        </td>
+                        <td
+                          class="text-bold"
+                          title="-4511221"
+                        >
+                          -4511221
+                        </td>
+                      </tr>
+                      <tr>
+                        <td
+                          class="w-25"
+                        >
+                          boundary
+                        </td>
+                        <td
+                          class="text-bold"
+                          title="administrative"
+                        >
+                          administrative
+                        </td>
+                      </tr>
+                      <tr>
+                        <td
+                          class="w-25"
+                        >
+                          admin_level
+                        </td>
+                        <td
+                          class="text-bold"
+                          title="6"
+                        >
+                          6
+                        </td>
+                      </tr>
+                      <tr>
+                        <td
+                          class="w-25"
+                        >
+                          parents
+                        </td>
+                        <td
+                          class="text-bold"
+                          title="-3360565,-252645"
+                        >
+                          -3360565,-252645
+                        </td>
+                      </tr>
+                      <tr>
+                        <td
+                          class="w-25"
+                        >
+                          name
+                        </td>
+                        <td
+                          class="text-bold"
+                          title="Provincia Cordillera"
+                        >
+                          Provincia Cordillera
+                        </td>
+                      </tr>
+                      <tr>
+                        <td
+                          class="w-25"
+                        >
+                          local_name
+                        </td>
+                        <td
+                          class="text-bold"
+                          title="Provincia Cordillera"
+                        >
+                          Provincia Cordillera
+                        </td>
+                      </tr>
+                      <tr>
+                        <td
+                          class="w-25"
+                        >
+                          name_en
+                        </td>
+                        <td
+                          class="text-bold"
+                          title="Undefined value"
+                        >
+                          Undefined value
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          Geometry
+                        </td>
+                        <td
+                          class="text-bold"
+                        >
+                          MultiPolygon
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <div
+                    class="w-100 d-flex justify-content-end"
+                  >
+                    <button
+                      class="btn btn-sm btn-outline-secondary me-2"
+                      data-testid="edit-data"
+                      title="Edit data"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        class="svg-inline--fa fa-pen abc-icon mx-1"
+                        data-icon="pen"
+                        data-prefix="fas"
+                        focusable="false"
+                        role="img"
+                        viewBox="0 0 512 512"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M362.7 19.3L314.3 67.7 444.3 197.7l48.4-48.4c25-25 25-65.5 0-90.5L453.3 19.3c-25-25-65.5-25-90.5 0zm-71 71L58.6 323.5c-10.4 10.4-18 23.3-22.2 37.4L1 481.2C-1.5 489.7 .8 498.8 7 505s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L421.7 220.3 291.7 90.3z"
+                          fill="currentColor"
+                        />
+                      </svg>
+                    </button>
+                    <button
+                      class="btn btn-sm btn-outline-secondary me-2"
+                      title="Zoom on"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        class="svg-inline--fa fa-magnifying-glass abc-icon mx-1"
+                        data-icon="magnifying-glass"
+                        data-prefix="fas"
+                        focusable="false"
+                        role="img"
+                        viewBox="0 0 512 512"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"
+                          fill="currentColor"
+                        />
+                      </svg>
+                    </button>
+                    <div
+                      class="dropdown"
+                    >
+                      <button
+                        aria-expanded="false"
+                        class="dropdown-toggle btn btn-outline-secondary"
+                        data-testid="feature-actions"
+                        id="test-static-id-0"
+                        type="button"
+                      >
+                        More
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-      <div
-        class="card card-body mb-1"
-      >
-        <div
-          class=""
-          data-testid="feature"
-        >
-          <span
-            class="text-secondary"
+          <div
+            data-index="1"
+            style="position: absolute; top: 0px; left: 0px; width: 100%; transform: translateY(0px);"
           >
-            2
-            .
-          </span>
-           
-          <span
-            class=""
+            <div
+              class="me-1 mb-1"
+            >
+              <div
+                class="card"
+              >
+                <div
+                  class="card-body"
+                >
+                  <div
+                    class=""
+                    data-testid="feature"
+                    title="Provincia Florida"
+                  >
+                    <span
+                      class="text-secondary"
+                    >
+                      2
+                      .
+                    </span>
+                     
+                    <span
+                      class=""
+                    >
+                      Provincia Florida
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            data-index="2"
+            style="position: absolute; top: 0px; left: 0px; width: 100%; transform: translateY(0px);"
           >
-            Provincia Florida
-          </span>
-        </div>
-      </div>
-      <div
-        class="card card-body mb-1"
-      >
-        <div
-          class=""
-          data-testid="feature"
-        >
-          <span
-            class="text-secondary"
+            <div
+              class="me-1 mb-1"
+            >
+              <div
+                class="card"
+              >
+                <div
+                  class="card-body"
+                >
+                  <div
+                    class=""
+                    data-testid="feature"
+                    title="Provincia Manuel M. Caballero"
+                  >
+                    <span
+                      class="text-secondary"
+                    >
+                      3
+                      .
+                    </span>
+                     
+                    <span
+                      class=""
+                    >
+                      Provincia Manuel M. Caballero
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            data-index="3"
+            style="position: absolute; top: 0px; left: 0px; width: 100%; transform: translateY(0px);"
           >
-            3
-            .
-          </span>
-           
-          <span
-            class=""
+            <div
+              class="me-1 mb-1"
+            >
+              <div
+                class="card"
+              >
+                <div
+                  class="card-body"
+                >
+                  <div
+                    class=""
+                    data-testid="feature"
+                    title="Provincia Warnes"
+                  >
+                    <span
+                      class="text-secondary"
+                    >
+                      4
+                      .
+                    </span>
+                     
+                    <span
+                      class=""
+                    >
+                      Provincia Warnes
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            data-index="4"
+            style="position: absolute; top: 0px; left: 0px; width: 100%; transform: translateY(0px);"
           >
-            Provincia Manuel M. Caballero
-          </span>
-        </div>
-      </div>
-      <div
-        class="card card-body mb-1"
-      >
-        <div
-          class=""
-          data-testid="feature"
-        >
-          <span
-            class="text-secondary"
+            <div
+              class="me-1 mb-1"
+            >
+              <div
+                class="card"
+              >
+                <div
+                  class="card-body"
+                >
+                  <div
+                    class=""
+                    data-testid="feature"
+                    title="Provincia Andrés Ibáñez"
+                  >
+                    <span
+                      class="text-secondary"
+                    >
+                      5
+                      .
+                    </span>
+                     
+                    <span
+                      class=""
+                    >
+                      Provincia Andrés Ibáñez
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            data-index="5"
+            style="position: absolute; top: 0px; left: 0px; width: 100%; transform: translateY(0px);"
           >
-            4
-            .
-          </span>
-           
-          <span
-            class=""
-          >
-            Provincia Warnes
-          </span>
-        </div>
-      </div>
-      <div
-        class="card card-body mb-1"
-      >
-        <div
-          class=""
-          data-testid="feature"
-        >
-          <span
-            class="text-secondary"
-          >
-            5
-            .
-          </span>
-           
-          <span
-            class=""
-          >
-            Provincia Andrés Ibáñez
-          </span>
-        </div>
-      </div>
-      <div
-        class="card card-body mb-1"
-      >
-        <div
-          class=""
-          data-testid="feature"
-        >
-          <span
-            class="text-secondary"
-          >
-            6
-            .
-          </span>
-           
-          <span
-            class=""
-          >
-            Provincia Obispo Santistevan
-          </span>
+            <div
+              class="me-1 mb-1"
+            >
+              <div
+                class="card"
+              >
+                <div
+                  class="card-body"
+                >
+                  <div
+                    class=""
+                    data-testid="feature"
+                    title="Provincia Obispo Santistevan"
+                  >
+                    <span
+                      class="text-secondary"
+                    >
+                      6
+                      .
+                    </span>
+                     
+                    <span
+                      class=""
+                    >
+                      Provincia Obispo Santistevan
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -937,129 +1054,221 @@ exports[`FeatureExplorer should display features and select automatically a feat
       class="p-1"
     >
       <div
-        class="card card-body mb-1"
+        style="height: 100%; overflow: auto;"
       >
         <div
-          class=""
-          data-testid="feature"
+          style="height: 360px; width: 100%; position: relative;"
         >
-          <span
-            class="text-secondary"
+          <div
+            data-index="0"
+            style="position: absolute; top: 0px; left: 0px; width: 100%; transform: translateY(0px);"
           >
-            1
-            .
-          </span>
-           
-          <span
-            class=""
+            <div
+              class="me-1 mb-1"
+            >
+              <div
+                class="card"
+              >
+                <div
+                  class="card-body"
+                >
+                  <div
+                    class=""
+                    data-testid="feature"
+                    title="Provincia Cordillera"
+                  >
+                    <span
+                      class="text-secondary"
+                    >
+                      1
+                      .
+                    </span>
+                     
+                    <span
+                      class=""
+                    >
+                      Provincia Cordillera
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            data-index="1"
+            style="position: absolute; top: 0px; left: 0px; width: 100%; transform: translateY(0px);"
           >
-            Provincia Cordillera
-          </span>
-        </div>
-      </div>
-      <div
-        class="card card-body mb-1"
-      >
-        <div
-          class=""
-          data-testid="feature"
-        >
-          <span
-            class="text-secondary"
+            <div
+              class="me-1 mb-1"
+            >
+              <div
+                class="card"
+              >
+                <div
+                  class="card-body"
+                >
+                  <div
+                    class=""
+                    data-testid="feature"
+                    title="Provincia Florida"
+                  >
+                    <span
+                      class="text-secondary"
+                    >
+                      2
+                      .
+                    </span>
+                     
+                    <span
+                      class=""
+                    >
+                      Provincia Florida
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            data-index="2"
+            style="position: absolute; top: 0px; left: 0px; width: 100%; transform: translateY(0px);"
           >
-            2
-            .
-          </span>
-           
-          <span
-            class=""
+            <div
+              class="me-1 mb-1"
+            >
+              <div
+                class="card"
+              >
+                <div
+                  class="card-body"
+                >
+                  <div
+                    class=""
+                    data-testid="feature"
+                    title="Provincia Manuel M. Caballero"
+                  >
+                    <span
+                      class="text-secondary"
+                    >
+                      3
+                      .
+                    </span>
+                     
+                    <span
+                      class=""
+                    >
+                      Provincia Manuel M. Caballero
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            data-index="3"
+            style="position: absolute; top: 0px; left: 0px; width: 100%; transform: translateY(0px);"
           >
-            Provincia Florida
-          </span>
-        </div>
-      </div>
-      <div
-        class="card card-body mb-1"
-      >
-        <div
-          class=""
-          data-testid="feature"
-        >
-          <span
-            class="text-secondary"
+            <div
+              class="me-1 mb-1"
+            >
+              <div
+                class="card"
+              >
+                <div
+                  class="card-body"
+                >
+                  <div
+                    class=""
+                    data-testid="feature"
+                    title="Provincia Warnes"
+                  >
+                    <span
+                      class="text-secondary"
+                    >
+                      4
+                      .
+                    </span>
+                     
+                    <span
+                      class=""
+                    >
+                      Provincia Warnes
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            data-index="4"
+            style="position: absolute; top: 0px; left: 0px; width: 100%; transform: translateY(0px);"
           >
-            3
-            .
-          </span>
-           
-          <span
-            class=""
+            <div
+              class="me-1 mb-1"
+            >
+              <div
+                class="card"
+              >
+                <div
+                  class="card-body"
+                >
+                  <div
+                    class=""
+                    data-testid="feature"
+                    title="Provincia Andrés Ibáñez"
+                  >
+                    <span
+                      class="text-secondary"
+                    >
+                      5
+                      .
+                    </span>
+                     
+                    <span
+                      class=""
+                    >
+                      Provincia Andrés Ibáñez
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            data-index="5"
+            style="position: absolute; top: 0px; left: 0px; width: 100%; transform: translateY(0px);"
           >
-            Provincia Manuel M. Caballero
-          </span>
-        </div>
-      </div>
-      <div
-        class="card card-body mb-1"
-      >
-        <div
-          class=""
-          data-testid="feature"
-        >
-          <span
-            class="text-secondary"
-          >
-            4
-            .
-          </span>
-           
-          <span
-            class=""
-          >
-            Provincia Warnes
-          </span>
-        </div>
-      </div>
-      <div
-        class="card card-body mb-1"
-      >
-        <div
-          class=""
-          data-testid="feature"
-        >
-          <span
-            class="text-secondary"
-          >
-            5
-            .
-          </span>
-           
-          <span
-            class=""
-          >
-            Provincia Andrés Ibáñez
-          </span>
-        </div>
-      </div>
-      <div
-        class="card card-body mb-1"
-      >
-        <div
-          class=""
-          data-testid="feature"
-        >
-          <span
-            class="text-secondary"
-          >
-            6
-            .
-          </span>
-           
-          <span
-            class=""
-          >
-            Provincia Obispo Santistevan
-          </span>
+            <div
+              class="me-1 mb-1"
+            >
+              <div
+                class="card"
+              >
+                <div
+                  class="card-body"
+                >
+                  <div
+                    class=""
+                    data-testid="feature"
+                    title="Provincia Obispo Santistevan"
+                  >
+                    <span
+                      class="text-secondary"
+                    >
+                      6
+                      .
+                    </span>
+                     
+                    <span
+                      class=""
+                    >
+                      Provincia Obispo Santistevan
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -1346,24 +1555,46 @@ exports[`FeatureExplorer should filter features on search 1`] = `
       class="p-1"
     >
       <div
-        class="card card-body mb-1"
+        style="height: 100%; overflow: auto;"
       >
         <div
-          class=""
-          data-testid="feature"
+          style="height: 360px; width: 100%; position: relative;"
         >
-          <span
-            class="text-secondary"
+          <div
+            data-index="0"
+            style="position: absolute; top: 0px; left: 0px; width: 100%; transform: translateY(0px);"
           >
-            1
-            .
-          </span>
-           
-          <span
-            class=""
-          >
-            Provincia Cordillera
-          </span>
+            <div
+              class="me-1 mb-1"
+            >
+              <div
+                class="card"
+              >
+                <div
+                  class="card-body"
+                >
+                  <div
+                    class=""
+                    data-testid="feature"
+                    title="Provincia Cordillera"
+                  >
+                    <span
+                      class="text-secondary"
+                    >
+                      1
+                      .
+                    </span>
+                     
+                    <span
+                      class=""
+                    >
+                      Provincia Cordillera
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -1460,129 +1691,221 @@ exports[`FeatureExplorer should use selected title field 1`] = `
       class="p-1"
     >
       <div
-        class="card card-body mb-1"
+        style="height: 100%; overflow: auto;"
       >
         <div
-          class=""
-          data-testid="feature"
+          style="height: 360px; width: 100%; position: relative;"
         >
-          <span
-            class="text-secondary"
+          <div
+            data-index="0"
+            style="position: absolute; top: 0px; left: 0px; width: 100%; transform: translateY(0px);"
           >
-            1
-            .
-          </span>
-           
-          <span
-            class=""
+            <div
+              class="me-1 mb-1"
+            >
+              <div
+                class="card"
+              >
+                <div
+                  class="card-body"
+                >
+                  <div
+                    class=""
+                    data-testid="feature"
+                    title="-4511221"
+                  >
+                    <span
+                      class="text-secondary"
+                    >
+                      1
+                      .
+                    </span>
+                     
+                    <span
+                      class=""
+                    >
+                      -4511221
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            data-index="1"
+            style="position: absolute; top: 0px; left: 0px; width: 100%; transform: translateY(0px);"
           >
-            -4511221
-          </span>
-        </div>
-      </div>
-      <div
-        class="card card-body mb-1"
-      >
-        <div
-          class=""
-          data-testid="feature"
-        >
-          <span
-            class="text-secondary"
+            <div
+              class="me-1 mb-1"
+            >
+              <div
+                class="card"
+              >
+                <div
+                  class="card-body"
+                >
+                  <div
+                    class=""
+                    data-testid="feature"
+                    title="-4510333"
+                  >
+                    <span
+                      class="text-secondary"
+                    >
+                      2
+                      .
+                    </span>
+                     
+                    <span
+                      class=""
+                    >
+                      -4510333
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            data-index="2"
+            style="position: absolute; top: 0px; left: 0px; width: 100%; transform: translateY(0px);"
           >
-            2
-            .
-          </span>
-           
-          <span
-            class=""
+            <div
+              class="me-1 mb-1"
+            >
+              <div
+                class="card"
+              >
+                <div
+                  class="card-body"
+                >
+                  <div
+                    class=""
+                    data-testid="feature"
+                    title="-4510325"
+                  >
+                    <span
+                      class="text-secondary"
+                    >
+                      3
+                      .
+                    </span>
+                     
+                    <span
+                      class=""
+                    >
+                      -4510325
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            data-index="3"
+            style="position: absolute; top: 0px; left: 0px; width: 100%; transform: translateY(0px);"
           >
-            -4510333
-          </span>
-        </div>
-      </div>
-      <div
-        class="card card-body mb-1"
-      >
-        <div
-          class=""
-          data-testid="feature"
-        >
-          <span
-            class="text-secondary"
+            <div
+              class="me-1 mb-1"
+            >
+              <div
+                class="card"
+              >
+                <div
+                  class="card-body"
+                >
+                  <div
+                    class=""
+                    data-testid="feature"
+                    title="-4510305"
+                  >
+                    <span
+                      class="text-secondary"
+                    >
+                      4
+                      .
+                    </span>
+                     
+                    <span
+                      class=""
+                    >
+                      -4510305
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            data-index="4"
+            style="position: absolute; top: 0px; left: 0px; width: 100%; transform: translateY(0px);"
           >
-            3
-            .
-          </span>
-           
-          <span
-            class=""
+            <div
+              class="me-1 mb-1"
+            >
+              <div
+                class="card"
+              >
+                <div
+                  class="card-body"
+                >
+                  <div
+                    class=""
+                    data-testid="feature"
+                    title="-4510304"
+                  >
+                    <span
+                      class="text-secondary"
+                    >
+                      5
+                      .
+                    </span>
+                     
+                    <span
+                      class=""
+                    >
+                      -4510304
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            data-index="5"
+            style="position: absolute; top: 0px; left: 0px; width: 100%; transform: translateY(0px);"
           >
-            -4510325
-          </span>
-        </div>
-      </div>
-      <div
-        class="card card-body mb-1"
-      >
-        <div
-          class=""
-          data-testid="feature"
-        >
-          <span
-            class="text-secondary"
-          >
-            4
-            .
-          </span>
-           
-          <span
-            class=""
-          >
-            -4510305
-          </span>
-        </div>
-      </div>
-      <div
-        class="card card-body mb-1"
-      >
-        <div
-          class=""
-          data-testid="feature"
-        >
-          <span
-            class="text-secondary"
-          >
-            5
-            .
-          </span>
-           
-          <span
-            class=""
-          >
-            -4510304
-          </span>
-        </div>
-      </div>
-      <div
-        class="card card-body mb-1"
-      >
-        <div
-          class=""
-          data-testid="feature"
-        >
-          <span
-            class="text-secondary"
-          >
-            6
-            .
-          </span>
-           
-          <span
-            class=""
-          >
-            -4510265
-          </span>
+            <div
+              class="me-1 mb-1"
+            >
+              <div
+                class="card"
+              >
+                <div
+                  class="card-body"
+                >
+                  <div
+                    class=""
+                    data-testid="feature"
+                    title="-4510265"
+                  >
+                    <span
+                      class="text-secondary"
+                    >
+                      6
+                      .
+                    </span>
+                     
+                    <span
+                      class=""
+                    >
+                      -4510265
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

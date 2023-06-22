@@ -45,8 +45,8 @@ describe('CsvDataSource', () => {
 
     const comparable = rows.map((r) => ({ ...r, id: '' }));
     expect(comparable).toEqual([
-      { id: '', data: { label: 'value1', altitude: '1234' } },
-      { id: '', data: { label: 'value2', altitude: '5678' } },
+      { id: '', data: { label: 'value1', altitude: '1234' }, metadata: { selected: false } },
+      { id: '', data: { label: 'value2', altitude: '5678' }, metadata: { selected: false } },
     ]);
   });
 

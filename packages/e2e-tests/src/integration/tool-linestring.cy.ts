@@ -23,7 +23,7 @@ import { Draw } from '../helpers/Draw';
 import { MainMap } from '../helpers/MainMap';
 import { DefaultDrawingStyle } from '../helpers/DefaultDrawingStyle';
 import { Routes } from '../helpers/Routes';
-import { ProjectMenu } from '../helpers/ProjectMenu';
+import { Project } from '../helpers/Project';
 
 describe('Tool LineString', function () {
   beforeEach(() => {
@@ -32,7 +32,7 @@ describe('Tool LineString', function () {
 
   it('user can draw', function () {
     cy.visit(Routes.map().format())
-      .then(() => ProjectMenu.newProject())
+      .then(() => Project.newProject())
       .then(() => MainMap.fixedView1())
       .then(() => ToolSelector.enable(MapTool.LineString))
       // First
@@ -68,9 +68,9 @@ describe('Tool LineString', function () {
       });
   });
 
-  it('user can modify', function () {
+  it('user can modify right after creation', function () {
     cy.visit(Routes.map().format())
-      .then(() => ProjectMenu.newProject())
+      .then(() => Project.newProject())
       // Create line
       .then(() => MainMap.fixedView1())
       .then(() => ToolSelector.enable(MapTool.LineString))
@@ -78,9 +78,34 @@ describe('Tool LineString', function () {
       .then(() => Draw.click(150, 150))
       .then(() => Draw.click(100, 150))
       .then(() => Draw.dblclick(150, 100))
-      // Select it
-      .then(() => ToolSelector.toolMode(ModeName.Modify))
+      // Modify it
+      .then(() => Draw.drag(100, 100, 600, 600))
+      .then(() => MainMap.getReference())
+      .should((map) => {
+        const features = map.getActiveLayerFeatures();
+        const extents = features.map((f) => f.getGeometry()?.getExtent());
+
+        expect(features[0].getGeometry()?.getType()).equal('LineString');
+        expect(extents).deep.equals([[-3564850.149620659, -819398.0633907281, 1327119.660630621, 4072571.746860552]], `Actual: "${JSON.stringify(extents)}"`);
+      });
+  });
+
+  it('user can modify later', function () {
+    cy.visit(Routes.map().format())
+      .then(() => Project.newProject())
+      // Create line
+      .then(() => MainMap.fixedView1())
+      .then(() => ToolSelector.enable(MapTool.LineString))
+      .then(() => Draw.click(100, 100))
       .then(() => Draw.click(150, 150))
+      .then(() => Draw.click(100, 150))
+      .then(() => Draw.dblclick(150, 100))
+      // Unselect all
+      .get('[data-cy=unselect-all]')
+      .click()
+      // Select shape
+      .then(() => ToolSelector.toolMode(ModeName.Modify))
+      .then(() => Draw.click(100, 100))
       // Modify it
       .then(() => Draw.drag(100, 100, 600, 600))
       .then(() => MainMap.getReference())

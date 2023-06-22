@@ -60,7 +60,8 @@
   background: white;
 
   padding: 0.5rem;
-  margin-left: 3vw;
+  margin-left: 2rem;
+  margin-right: 2rem;
 
   span {
     white-space: nowrap;
@@ -72,95 +73,25 @@
   }
 }
 
-.staticMenu {
-  display: flex;
-  flex-direction: row;
-  align-items: stretch;
-  justify-content: flex-start;
-
-  height: 100%;
-  overflow: hidden;
+.link {
+  // Warning: this size is used to compute menu display in top bar
+  min-width: 12rem;
 }
 
-.foldingMenu {
-  display: flex;
-  flex-direction: row;
-  align-items: stretch;
-  justify-content: flex-start;
+.backdrop {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: -100vw;
+  width: 100vw;
+  height: 100vh;
 
-  height: 100%;
+  background: rgba(0, 0, 0, 0);
 
-  .openButton {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  transition: opacity ease-in-out 80ms;
 
-    height: 100%;
-    margin: 0 2rem;
-
-    background: none;
-    border: none;
-  }
-
-  .closeButton {
-    position: absolute;
-    top: 2rem;
-    right: 2rem;
-
-    border: none;
-    background: none;
-  }
-
-  .linksPanel {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
-
-    padding: 4rem;
-
-    position: fixed;
-    top: $top-bar-height;
+  &.visible {
+    background: rgba(0, 0, 0, 0.25);
     left: 0;
-    right: 0;
-    bottom: 0;
-
-    z-index: $zIndex-topBar-links;
-
-    background-color: white;
-    border-radius: $border-radius;
-    border: solid 0.1rem $gray-400;
-
-    overflow-y: auto;
-
-    .link {
-      justify-content: flex-start;
-
-      font-size: 1.2rem;
-      min-width: unset;
-      margin-bottom: 1rem;
-    }
   }
-
-  .menuTitle {
-    padding-bottom: 2rem;
-  }
-}
-
-.verticalBorder {
-  height: 100%;
-  border: none;
-  border-right: solid 0.1rem $gray-300;
-}
-
-.spacer {
-  flex-grow: 1;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-}
-
-.gridIcon {
-  height: 1.1rem;
-  margin-left: 0.5rem;
 }

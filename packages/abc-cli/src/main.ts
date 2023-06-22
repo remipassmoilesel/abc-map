@@ -20,7 +20,7 @@ import 'source-map-support/register';
 import { Logger } from './tools/Logger';
 import { Config } from './config/Config';
 import { Parser } from './parser/Parser';
-import { Dependencies, BuildService } from './BuildService';
+import { BuildService, Dependencies } from './BuildService';
 import { Banners } from './tools/Banners';
 import { CommandName } from './parser/Command';
 import { Help } from './Help';
@@ -56,14 +56,17 @@ async function main(args: string[]) {
       break;
 
     case CommandName.LINT:
+      service.version();
       service.lint(true);
       break;
 
     case CommandName.BUILD:
+      service.version();
       service.cleanBuild();
       break;
 
     case CommandName.DEPENDENCY_CHECK:
+      service.version();
       service.dependencyCheck();
       break;
 

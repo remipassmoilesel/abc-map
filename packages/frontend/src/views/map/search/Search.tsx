@@ -90,7 +90,14 @@ function Search() {
     <div className={`control-block`}>
       {/* Search input */}
       <div className={'control-item d-flex align-items-center mb-3'}>
-        <input type={'text'} value={query} onChange={handleQueryChanged} placeholder={t('Search')} className={`form-control mr-3`} data-cy={'search-on-map'} />
+        <input
+          type={'text'}
+          value={query}
+          onChange={handleQueryChanged}
+          placeholder={t('Search_for_a_place_or_an_address')}
+          className={`form-control mr-3`}
+          data-cy={'search-on-map'}
+        />
         <InlineLoader size={2} active={loading} />
       </div>
 

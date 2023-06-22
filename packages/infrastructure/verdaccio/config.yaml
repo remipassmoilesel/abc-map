@@ -15,6 +15,7 @@
 # Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
 
 storage: /tmp/verdaccio-storage
+# We must use "127.0.0.1" and not localhost here, otherwise start may fail on some OS
 listen: 127.0.0.1:4873
 max_body_size: 50mb
 auth:
@@ -24,10 +25,10 @@ uplinks:
   npmjs:
     url: https://registry.npmjs.org/
 packages:
-  "@abc-map/*":
+  '@abc-map/*':
     access: $all
     publish: $all
-  "**":
+  '**':
     access: $all
     publish: $all
     proxy: npmjs
@@ -36,4 +37,3 @@ middlewares:
     enabled: false
 logs:
   - { type: stdout, format: pretty, level: http }
-

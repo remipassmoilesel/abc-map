@@ -38,7 +38,7 @@ export class RootController {
     const { legalMentions, externalUrl, frontendPath } = this.config;
 
     // Legal mentions
-    app.get('/api/legal-mentions', (req, reply) => void reply.send(legalMentions));
+    app.get('/api/legal-mentions', (req, reply) => void reply.header('Content-Type', 'text/html').send(legalMentions));
 
     // Sitemap
     app.get('/sitemap.xml', (req: FastifyRequest, reply: FastifyReply) => {

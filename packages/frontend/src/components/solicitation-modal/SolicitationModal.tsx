@@ -19,9 +19,8 @@
 import React, { Component, ReactNode } from 'react';
 import { ModalEventType, ModalStatus } from '../../core/ui/typings';
 import { ServiceProps, withServices } from '../../core/withServices';
-import { Logger } from '@abc-map/shared';
-import { VoteValue } from '@abc-map/shared';
-import FundingLinks from '../funding-links/FundingLinks';
+import { Logger, VoteValue } from '@abc-map/shared';
+import { FundingLinks } from '../funding-links/FundingLinks';
 import { prefixedTranslation } from '../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
 import Cls from './SolicitationModal.module.scss';
@@ -57,10 +56,6 @@ class SolicitationModal extends Component<Props, State> {
 
     return (
       <FullscreenModal className={Cls.modal}>
-        <button className={`btn btn-outline-secondary ${Cls.closeButton}`} onClick={this.close} data-cy={'close-solicitation-modal'}>
-          {t('Close')}
-        </button>
-
         <h1>{t('So_how_was_it')}</h1>
 
         <div className={'border rounded p-4 d-flex flex-column justify-content-center align-items-center mb-5'}>
@@ -105,6 +100,10 @@ class SolicitationModal extends Component<Props, State> {
             <h5>{t('Support_project')} ⬆</h5>
           </div>
         )}
+
+        <button className={`btn btn-outline-secondary`} onClick={this.close} data-cy={'close-solicitation-modal'}>
+          {t('Close')}
+        </button>
       </FullscreenModal>
     );
   }

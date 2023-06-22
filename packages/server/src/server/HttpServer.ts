@@ -25,7 +25,7 @@ import fastifySensible from '@fastify/sensible';
 import { Controller } from './Controller';
 import { jwtPlugin } from './jwtPlugin';
 import fastifyRateLimit from '@fastify/rate-limit';
-import helmet from 'helmet';
+import helmet from '@fastify/helmet';
 import fastifyView from '@fastify/view';
 import { getLang } from './getLang';
 import { error409Parameters } from './pagesParameters';
@@ -117,17 +117,8 @@ export class HttpServer {
     });
 
     // Add security headers
-    // The first middleware is strict, for the classic use of frontend
-    const strictMiddleware = helmet({ contentSecurityPolicy: false });
-    // The second middleware allows iframes
-    const allowIframesMiddleware = helmet({ contentSecurityPolicy: false, frameguard: false });
-    this.app.addHook('onRequest', (req, reply, next) => {
-      if (req.url.indexOf('/shared-map/') !== -1) {
-        allowIframesMiddleware(req.raw, reply.raw, next as (err?: unknown) => void);
-      } else {
-        strictMiddleware(req.raw, reply.raw, next as (err?: unknown) => void);
-      }
-    });
+    // We allow iframes for shared maps
+    void this.app.register(helmet, { contentSecurityPolicy: false, frameguard: false });
 
     // Root controller with frontend and special routes
     void this.app.register(this.rootController.setup);

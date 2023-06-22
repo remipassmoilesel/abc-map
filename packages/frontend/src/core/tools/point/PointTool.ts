@@ -31,6 +31,7 @@ import { MoveMapInteractionsBundle } from '../common/interactions/MoveMapInterac
 import { SelectionInteractionsBundle } from '../common/interactions/SelectionInteractionsBundle';
 import { ToolMode } from '../ToolMode';
 import { CommonConditions, CommonModes } from '../common/common-modes';
+import { FeatureSelection } from '../../geo/feature-selection/FeatureSelection';
 
 export class PointTool implements Tool {
   private move?: MoveMapInteractionsBundle;
@@ -60,6 +61,8 @@ export class PointTool implements Tool {
     this.move = new MoveMapInteractionsBundle({ condition: CommonConditions.MoveMap });
     this.move.setup(map);
 
+    const globalSelection = FeatureSelection.getSelectionFromMap(map);
+
     // Selection for modifications
     this.selection = new SelectionInteractionsBundle({ condition: CommonConditions.Selection });
     this.selection.onStyleSelected = (style: FeatureStyle) => this.store.dispatch(MapActions.setDrawingStyle({ point: style.point }));
@@ -80,24 +83,16 @@ export class PointTool implements Tool {
     this.draw.onNewChangeset = (t) => this.history.register(HistoryKey.Map, t);
     this.draw.onDeleteChangeset = (t) => this.history.remove(HistoryKey.Map, t);
     this.draw.onFeatureAdded = (feat) => {
-      feat.setSelected(true);
-      this.selection?.getFeatures().push(feat.unwrap());
+      globalSelection.add([feat.unwrap()]);
     };
-    this.draw.setup(map, source, this.selection.getFeatures());
+    this.draw.setup(map, source);
   }
 
   public modeChanged(): void {
     this.draw?.abortDrawing();
-    this.selection?.clear();
-  }
-
-  public deselectAll() {
-    this.selection?.clear();
   }
 
   public dispose() {
-    this.deselectAll();
-
     this.move?.dispose();
     this.selection?.dispose();
     this.draw?.dispose();

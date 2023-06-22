@@ -20,7 +20,7 @@ import { Config } from './config/Config';
 import { Shell } from './tools/Shell';
 import * as waitOn from 'wait-on';
 import { Logger } from './tools/Logger';
-import { Registry } from './tools/Registry';
+import { NpmRegistry } from './tools/NpmRegistry';
 import * as glob from 'fast-glob';
 import * as path from 'path';
 import { DockerConfig } from './config/DockerConfig';
@@ -39,15 +39,16 @@ export enum Dependencies {
 export class BuildService {
   public static create(config: Config) {
     const shell = new Shell(config);
-    return new BuildService(config, Registry.create(config), shell, Git.create(config));
+    return new BuildService(config, NpmRegistry.create(config), shell, Git.create(config));
   }
 
-  constructor(private config: Config, private registry: Registry, private shell: Shell, private git: Git) {}
+  constructor(private config: Config, private registry: NpmRegistry, private shell: Shell, private git: Git) {}
 
   public async continuousIntegration(light: boolean) {
     const start = new Date().getTime();
 
     await this.install(Dependencies.Development);
+    this.version();
     this.lint(false);
     this.cleanBuild();
     this.dependencyCheck(); // Dependency check must be launched AFTER build for local dependencies
@@ -124,8 +125,6 @@ export class BuildService {
     const sortScript = fix ? 'sort-package-json' : 'sort-package-json --check';
     this.shell.sync(`lerna exec "${sortScript}"`);
 
-    this.shell.sync(`helm lint ${this.config.getChartRoot()}`);
-
     if (!fix) {
       try {
         this.shell.sync('git diff --exit-code');
@@ -133,6 +132,10 @@ export class BuildService {
         throw new Error('Changes not comitted, you should probably run "./abc-cli lint" then commit result. Underlying error: ' + errorMessage(err));
       }
     }
+  }
+
+  public version(): void {
+    this.shell.sync('lerna run version');
   }
 
   public cleanBuild(): void {
@@ -253,6 +256,7 @@ export class BuildService {
     if (buildImages) {
       logger.info('\n 🛠️  Building ... 🛠️\n');
       await this.install(Dependencies.Development);
+      this.version();
       this.cleanBuild();
 
       // Package and push

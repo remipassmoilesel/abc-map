@@ -16,6 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
+@import 'src/styles/variables';
 @import 'src/styles/mixins';
 
 .message {
@@ -35,12 +36,5 @@
 }
 
 .editorContainer {
-  min-height: 40vh;
-  height: 40vh;
-
-  .editor {
-    min-height: 40vh;
-  }
-
-  overflow: auto;
+  border: 0.1rem solid $gray-200;
 }

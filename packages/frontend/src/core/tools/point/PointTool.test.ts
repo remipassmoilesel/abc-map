@@ -16,58 +16,36 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { DrawingTestMap } from '../common/interactions/DrawingTestMap.test.helpers';
-import { newTestStore, TestStore } from '../../store/TestStore';
+import { Map } from 'ol';
+import * as sinon from 'sinon';
+import { SinonStubbedInstance } from 'sinon';
 import { HistoryService } from '../../history/HistoryService';
-import sinon, { SinonStubbedInstance } from 'sinon';
-import { MainStore } from '../../store/store';
-import { FillPatterns } from '@abc-map/shared';
-import { Point } from 'ol/geom';
+import { MainStore, storeFactory } from '../../store/store';
+import VectorSource from 'ol/source/Vector';
 import { TestHelper } from '../../utils/test/TestHelper';
-import { HistoryKey } from '../../history/HistoryKey';
-import { UndoCallbackChangeset } from '../../history/changesets/features/UndoCallbackChangeset';
-import { AddFeaturesChangeset } from '../../history/changesets/features/AddFeaturesChangeset';
-import { deepFreeze } from '../../utils/deepFreeze';
 import { PointTool } from './PointTool';
-import { IconName } from '../../../assets/point-icons/IconName';
-import { CommonModes } from '../common/common-modes';
 
-// FIXME: use a better test setup, this test does not work since OL 7
-// FIXME: selection does not work in tests with points
-describe.skip('PointTool', () => {
-  const pointStyle = deepFreeze({ icon: IconName.Icon0Circle, size: 30, color: 'rgba(18,90,147,0.9)' });
-
-  let map: DrawingTestMap;
-  let store: TestStore;
+describe('PointTool', () => {
   let history: SinonStubbedInstance<HistoryService>;
+  let store: MainStore;
+  let map: Map;
+  let source: VectorSource;
   let tool: PointTool;
 
-  beforeEach(async () => {
+  beforeEach(() => {
+    store = storeFactory();
     history = sinon.createStubInstance(HistoryService);
+    map = new Map();
+    map.getInteractions().clear();
 
-    map = new DrawingTestMap();
-    await map.init();
-
-    store = newTestStore();
-    store.getState.returns({
-      map: {
-        currentStyle: {
-          fill: {
-            color1: 'rgba(18,90,147,0.30)',
-            color2: 'rgba(255,255,255,0.60)',
-            pattern: FillPatterns.HatchingObliqueRight,
-          },
-          point: pointStyle,
-        },
-      },
-    } as any);
-
-    tool = new PointTool(store as unknown as MainStore, history as unknown as HistoryService);
-    tool.setup(map.getMap(), map.getVectorSource());
+    source = new VectorSource();
+    tool = new PointTool(store, history);
   });
 
   it('setup()', () => {
-    expect(TestHelper.interactionNames(map.getMap())).toEqual([
+    tool.setup(map, source);
+
+    expect(TestHelper.interactionNames(map)).toEqual([
       'DragRotate',
       'DragPan',
       'PinchRotate',
@@ -81,46 +59,9 @@ describe.skip('PointTool', () => {
   });
 
   it('dispose()', () => {
+    tool.setup(map, source);
     tool.dispose();
 
-    expect(TestHelper.interactionNames(map.getMap())).toEqual([]);
-  });
-
-  it('drag should move map view', async () => {
-    map.toMapWrapper().setToolMode(CommonModes.MoveMap);
-
-    await map.drag(0, 0, 50, 50);
-
-    expect(map.getMap().getView().getCenter()).toEqual([-45, 40]);
-  });
-
-  it('click should draw point', async () => {
-    // Prepare
-    map.toMapWrapper().setToolMode(CommonModes.CreateGeometry);
-
-    // Act
-    await map.click(10, 0);
-
-    // Assert
-    // Feature must exists
-    const feat = map.getFeature<Point>(0);
-    expect(feat).toBeDefined();
-    expect(feat?.getGeometry()).toBeInstanceOf(Point);
-    expect(feat?.getGeometry()?.getCoordinates()).toEqual([10, 0]);
-
-    // Feature must have store style
-    expect(feat?.getStyleProperties()).toEqual({ point: pointStyle, stroke: {}, fill: {}, text: {} });
-
-    // Changesets must have been registered
-    expect(history.register.callCount).toEqual(2);
-    expect(history.register.args[0][0]).toEqual(HistoryKey.Map);
-    expect(history.register.args[0][1]).toBeInstanceOf(UndoCallbackChangeset);
-    expect(history.register.args[1][0]).toEqual(HistoryKey.Map);
-    expect(history.register.args[1][1]).toBeInstanceOf(AddFeaturesChangeset);
-
-    // First changeset must have been removed
-    expect(history.remove.callCount).toEqual(1);
-    expect(history.register.args[0][0]).toEqual(HistoryKey.Map);
-    expect(history.register.args[0][1]).toBeInstanceOf(UndoCallbackChangeset);
+    expect(TestHelper.interactionNames(map)).toEqual([]);
   });
 });

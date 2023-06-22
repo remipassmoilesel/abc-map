@@ -18,8 +18,21 @@
 
 import { TopBar } from './TopBar';
 
+export type ModuleId =
+  | 'artefact-generator'
+  | 'color-gradients'
+  | 'count-points-in-polygon'
+  | 'data-store'
+  | 'data-table'
+  | 'different-symbols'
+  | 'project-management'
+  | 'proportional-symbols'
+  | 'scripts'
+  | 'shared-map-settings'
+  | 'static-export';
+
 export class Modules {
-  public static open(moduleId: string) {
+  public static open(moduleId: ModuleId) {
     return (
       TopBar.moduleIndex()
         // Search for module id

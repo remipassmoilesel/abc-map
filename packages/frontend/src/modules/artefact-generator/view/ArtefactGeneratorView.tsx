@@ -237,7 +237,7 @@ function ArtefactGeneratorView(props: Props) {
 
   return (
     <ModuleContainer>
-      <ModuleTitle>Artefact generator (English only) 😕</ModuleTitle>
+      <ModuleTitle>Artefact generator (English only)</ModuleTitle>
 
       <div className={'mb-4'}>Using this module you can generate artifact files and previews, which can then be offered in Abc-Map data stores.</div>
 

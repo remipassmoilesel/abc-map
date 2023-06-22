@@ -24,7 +24,7 @@ import { LayerControls } from '../helpers/LayerControls';
 import { Routes } from '../helpers/Routes';
 import { Modules } from '../helpers/Modules';
 import { TopBar } from '../helpers/TopBar';
-import { ProjectMenu } from '../helpers/ProjectMenu';
+import { Project } from '../helpers/Project';
 import { ToolSelector } from '../helpers/ToolSelector';
 import { Draw } from '../helpers/Draw';
 import { Store } from '../helpers/Store';
@@ -37,7 +37,7 @@ describe('Auto save', function () {
 
     it('should save features and layers', function () {
       cy.visit(Routes.map().format())
-        .then(() => ProjectMenu.newProject())
+        .then(() => Project.newProject())
         // We rename project
         .then(() => Modules.open('project-management'))
         .get('[data-cy=edit-project-name]')

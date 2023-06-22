@@ -47,7 +47,7 @@ describe('Shared maps', function () {
       .then(() => Draw.click(300, 300))
       .then(() => Draw.click(350, 350))
       // Show share settings, enable sharing
-      .then(() => Modules.open('share-settings'))
+      .then(() => Modules.open('shared-map-settings'))
       .get('[data-cy=enable-sharing]')
       .click()
       .then(() => Toasts.assertText('Project saved !'))

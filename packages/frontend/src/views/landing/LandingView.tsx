@@ -23,10 +23,8 @@ import { DateTime } from 'luxon';
 import Illustration1Icon from '../../assets/illustrations/illustration-1.svg';
 import Illustration2Icon from '../../assets/illustrations/illustration-2.svg';
 import Illustration3Icon from '../../assets/illustrations/illustration-3.svg';
-import { BUILD_INFO } from '../../build-version';
+import { VERSION } from '../../version';
 import { pageSetup } from '../../core/utils/page-setup';
-import { prefixedTranslation } from '../../i18n/i18n';
-import { withTranslation } from 'react-i18next';
 import sample from 'lodash/sample';
 import { Routes } from '../../routes';
 import { FaIcon } from '../../components/icon/FaIcon';
@@ -34,18 +32,18 @@ import { IconDefs } from '../../components/icon/IconDefs';
 import Cls from './LandingView.module.scss';
 import { useAppSelector } from '../../core/store/hooks';
 import { useServices } from '../../core/useServices';
+import { useTranslation } from 'react-i18next';
 
 const logger = Logger.get('LandingView.tsx');
 
-const t = prefixedTranslation('LandingView:');
-
 function LandingView() {
+  const { t } = useTranslation('LandingView');
   const { feedback, modals, toasts } = useServices();
   const navigate = useNavigate();
   const authenticated = useAppSelector((st) => st.authentication.userStatus) === UserStatus.Authenticated;
   const [voteAggregation, setVoteAggregation] = useState<AbcVoteAggregation | undefined>();
   const [illustration, setIllustration] = useState('');
-  const buildHash = BUILD_INFO.hash;
+  const buildHash = VERSION.hash;
 
   // Select illustration on mount
   useEffect(() => {
@@ -62,7 +60,7 @@ function LandingView() {
       .getStats(from, to)
       .then((res) => setVoteAggregation(res))
       .catch((err) => logger.error(err));
-  }, [feedback]);
+  }, [feedback, t]);
 
   const handleGoToMap = useCallback(() => navigate(Routes.map().format()), [navigate]);
 
@@ -165,4 +163,4 @@ function LandingView() {
   );
 }
 
-export default withTranslation()(LandingView);
+export default LandingView;

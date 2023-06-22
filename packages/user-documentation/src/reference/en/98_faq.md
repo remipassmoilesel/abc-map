@@ -22,13 +22,6 @@ You can use in this software:
 - XYZ layers
 - CSV workbooks
 
-<div class="frequent-question">I want to use a map on my mobile phone</div>
-
-At the moment there is no mobile application.
-
-However, you can export your maps to PDF format: it's easy, and you'll take care of your battery.
-Do not hesitate to support the project.
-
 <div class="frequent-question">I want to add text without adding geometry</div>
 
 For the moment this is not possible ! Do not hesitate to support the project.

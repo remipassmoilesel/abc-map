@@ -17,8 +17,8 @@
  */
 
 import { useServices } from '../../../../../core/useServices';
-import React, { useCallback, useRef, useState } from 'react';
-import { CopyButton } from '../../../../../components/copy-button/CopyButton';
+import React, { useCallback, useMemo, useState } from 'react';
+import { CopyToClipboardButton } from '../../../../../components/copy-to-clipboard-button/CopyToClipboardButton';
 import { useTranslation } from 'react-i18next';
 import { useAppSelector } from '../../../../../core/store/hooks';
 import { AbcProjectMetadata, Logger } from '@abc-map/shared';
@@ -43,7 +43,6 @@ export function ProjectOverview(props: Props) {
   const { t } = useTranslation('ProjectManagement');
   const loadedProject = useAppSelector((st) => st.project.metadata);
   const { project: projectService } = useServices();
-  const shareLinkRef = useRef<HTMLInputElement>(null);
 
   const [sharingCodes, showSharingCodes] = useState(false);
   const handleToggleSharingCodes = useCallback(() => showSharingCodes(!sharingCodes), [sharingCodes]);
@@ -70,6 +69,8 @@ export function ProjectOverview(props: Props) {
     onDownload(project);
   }, [onDownload, project]);
 
+  const publicLink = useMemo(() => projectService.getPublicLink(project?.id), [project?.id, projectService]);
+
   return (
     <div className={className}>
       {!project && (
@@ -95,15 +96,8 @@ export function ProjectOverview(props: Props) {
             <>
               <div className={'mb-2'}>{t('Share_link')}:</div>
               <div className={'d-flex align-items-center mb-4'}>
-                <input
-                  type={'text'}
-                  value={projectService.getPublicLink(project.id)}
-                  ref={shareLinkRef}
-                  readOnly={true}
-                  className={clsx('form-control me-3', Cls.copyInput)}
-                  data-cy={'public-url'}
-                />
-                <CopyButton inputRef={shareLinkRef} className={'me-3'} />
+                <input type={'text'} value={publicLink} readOnly={true} className={clsx('form-control me-3', Cls.copyInput)} data-cy={'public-url'} />
+                <CopyToClipboardButton value={publicLink} className={'me-3'} />
 
                 <button onClick={handleToggleSharingCodes} className={'d-flex align-items-center btn btn-outline-primary'}>
                   {t('See_more')} <FaIcon icon={IconDefs.faQrcode} className={'ms-2'} />

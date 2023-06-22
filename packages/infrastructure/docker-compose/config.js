@@ -50,5 +50,5 @@ module.exports = {
             <div class="p-2">
                 <h1>CHANGEME</h1>
             </div>
-            `
-}
+            `,
+};

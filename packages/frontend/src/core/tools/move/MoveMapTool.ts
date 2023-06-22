@@ -49,10 +49,6 @@ export class MoveMapTool implements Tool {
     this.move.setup(map);
   }
 
-  public deselectAll() {
-    return;
-  }
-
   public dispose() {
     this.move?.dispose();
   }

@@ -22,8 +22,8 @@ import { getServices } from './core/Services';
 const logger = Logger.get('serviceWorkerRegistration.ts', 'info');
 
 type Config = {
-  onSuccess?: (registration: ServiceWorkerRegistration) => void;
-  onUpdate?: (registration: ServiceWorkerRegistration) => void;
+  onSwInstalled?: (registration: ServiceWorkerRegistration) => void;
+  onUpdateAvailable?: (registration: ServiceWorkerRegistration) => void;
   onError?: (err: Error) => void;
 };
 
@@ -60,15 +60,16 @@ export function serviceWorkerRegistration(config?: Config) {
       .catch((err) => logger.error('Service worker loading failed: ', err));
 
     // Watch for registration states
+    // See: https://web.dev/service-worker-lifecycle/#handling-updates
     const registration = await navigator.serviceWorker.register(swUrl);
     registration.onupdatefound = () => {
-      const installingWorker = registration.installing;
-      if (installingWorker === null) {
+      const newWorker = registration.installing;
+      if (newWorker === null) {
         return;
       }
 
-      installingWorker.onstatechange = () => {
-        if (installingWorker.state === 'installed') {
+      newWorker.onstatechange = () => {
+        if (newWorker.state === 'installed') {
           if (navigator.serviceWorker.controller) {
             // At this point, the updated precached content has been fetched,
             // but the previous service worker will still serve the older
@@ -76,8 +77,8 @@ export function serviceWorkerRegistration(config?: Config) {
             logger.info('New content is available and will be used when all tabs for this page are closed. See https://cra.link/PWA.');
 
             // Execute callback
-            if (config?.onUpdate) {
-              config.onUpdate(registration);
+            if (config?.onUpdateAvailable) {
+              config.onUpdateAvailable(registration);
             }
           } else {
             // At this point, everything has been precached.
@@ -85,8 +86,8 @@ export function serviceWorkerRegistration(config?: Config) {
             logger.info('Content is cached for offline use.');
 
             // Execute callback
-            if (config?.onSuccess) {
-              config.onSuccess(registration);
+            if (config?.onSwInstalled) {
+              config.onSwInstalled(registration);
             }
           }
         }

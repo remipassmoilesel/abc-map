@@ -36,7 +36,7 @@ body {
 }
 
 // We must set it in global context
-@include scrollbars($scrollbar_width_md);
+@include defaultScrollbars($scrollbar_width_md);
 
 a {
   text-decoration: none;
@@ -62,7 +62,7 @@ button {
 }
 
 .abc-selection-box {
-  border: 0.3rem dashed #828282;
+  border: 0.15rem dashed #828282;
 }
 
 .abc-toast {

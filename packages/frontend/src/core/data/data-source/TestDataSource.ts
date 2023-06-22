@@ -29,6 +29,7 @@ export class TestDataSource implements DataSource {
 
       return {
         id: row.id ?? nanoid(10),
+        metadata: { selected: false },
         data: row.data,
       };
     });

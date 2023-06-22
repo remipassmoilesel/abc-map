@@ -40,7 +40,7 @@ export interface Canceled {
   type: InputResultType.Canceled;
 }
 
-export declare type FileInputResult = FilesSelected | Canceled;
+export declare type FilePromptResult = FilesSelected | Canceled;
 
 export class FileIO {
   /**
@@ -52,16 +52,23 @@ export class FileIO {
    * @param type
    * @param accept
    */
-  public static openPrompt(type = InputType.Single, accept?: string): Promise<FileInputResult> {
+  public static openPrompt(type = InputType.Single, accept?: string): Promise<FilePromptResult> {
+    // We remove an eventual previous element
+    const previous = document.querySelector('#abc-file-input');
+    if (previous) {
+      previous.remove();
+    }
+
     const fileNode = document.createElement('input');
     fileNode.setAttribute('type', 'file');
     fileNode.multiple = type === InputType.Multiple;
     fileNode.style.display = 'none';
     fileNode.dataset.cy = 'file-input';
     fileNode.accept = accept || '';
+    fileNode.id = 'abc-file-input';
     document.body.appendChild(fileNode);
 
-    return new Promise<FileInputResult>((resolve, reject) => {
+    return new Promise<FilePromptResult>((resolve, reject) => {
       fileNode.onchange = () => {
         const files = fileNode.files ? Array.from(fileNode.files) : [];
         fileNode.remove();

@@ -40,6 +40,12 @@ describe('UI reducer', function () {
       remoteModuleUrls: [],
       lastModulesUsed: [],
       favoriteModules: [],
+      serviceWorker: {
+        present: false,
+        updateAvailable: false,
+        error: false,
+        installed: false,
+      },
     });
   });
 

@@ -18,15 +18,13 @@
 
 import React from 'react';
 import { ModuleAdapter, ModuleId } from '@abc-map/module-api';
-import { DataTableView } from './DataTableView';
+import { DataTableView } from './view/DataTableView';
 import { LocalModuleId } from '../LocalModuleId';
 import { prefixedTranslation } from '../../i18n/i18n';
 
 const t = prefixedTranslation('DataTableModule:');
 
 export class DataTableModule extends ModuleAdapter {
-  private layerId: string | undefined;
-
   public getId(): ModuleId {
     return LocalModuleId.DataTable;
   }
@@ -40,10 +38,6 @@ export class DataTableModule extends ModuleAdapter {
   }
 
   public getView() {
-    return <DataTableView layerId={this.layerId} onChange={this.handleLayerChange} />;
+    return <DataTableView />;
   }
-
-  private handleLayerChange = (layerId?: string) => {
-    this.layerId = layerId;
-  };
 }

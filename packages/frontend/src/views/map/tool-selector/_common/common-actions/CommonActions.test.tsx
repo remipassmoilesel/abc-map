@@ -46,8 +46,8 @@ describe('CommonActions', () => {
     map.addLayer(layer);
     map.setActiveLayer(layer);
 
-    fPoint = FeatureWrapper.create(new Point([1, 1])).setSelected(true);
-    fLine = FeatureWrapper.create(new LineString([2, 2, 3, 3])).setSelected(false);
+    fPoint = FeatureWrapper.create(new Point([1, 1]));
+    fLine = FeatureWrapper.create(new LineString([2, 2, 3, 3]));
     fPolygon = FeatureWrapper.create(
       new Polygon([
         [
@@ -56,7 +56,10 @@ describe('CommonActions', () => {
           [2, 2],
         ],
       ])
-    ).setSelected(false);
+    );
+
+    map.getSelection().add([fPoint.unwrap()]);
+
     layer.getSource().addFeatures([fPoint.unwrap(), fLine.unwrap()]);
 
     state = {

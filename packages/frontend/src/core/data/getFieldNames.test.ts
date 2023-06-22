@@ -22,6 +22,9 @@ describe('getFieldNames', () => {
   it('getFieldNames', () => {
     const expected = getFieldNames({
       id: 'test-id',
+      metadata: {
+        selected: false,
+      },
       data: {
         'field-1': 'value-1',
         'field-2': 'value-1',
@@ -35,6 +38,9 @@ describe('getFieldNames', () => {
     const expected = getAllFieldNames([
       {
         id: 'test-id',
+        metadata: {
+          selected: false,
+        },
         data: {
           'field-1': 'value-1',
           'field-2': 'value-2',
@@ -42,6 +48,9 @@ describe('getFieldNames', () => {
       },
       {
         id: 'test-id',
+        metadata: {
+          selected: false,
+        },
         data: {
           'field-1': 'value-1',
           'field-2': 'value-2',

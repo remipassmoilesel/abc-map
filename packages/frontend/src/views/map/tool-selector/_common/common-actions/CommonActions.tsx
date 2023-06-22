@@ -17,23 +17,22 @@
  */
 
 import React, { useCallback } from 'react';
-import { FeatureStyle, AbcGeometryType, Logger } from '@abc-map/shared';
+import { AbcGeometryType, FeatureStyle, Logger } from '@abc-map/shared';
 import { FeatureWrapper } from '../../../../../core/geo/features/FeatureWrapper';
 import { HistoryKey } from '../../../../../core/history/HistoryKey';
 import { AddFeaturesChangeset } from '../../../../../core/history/changesets/features/AddFeaturesChangeset';
 import { RemoveFeaturesChangeset } from '../../../../../core/history/changesets/features/RemoveFeaturesChangeset';
-import { prefixedTranslation } from '../../../../../i18n/i18n';
 import Cls from './CommonActions.module.scss';
 import { useAppSelector } from '../../../../../core/store/hooks';
 import { useServices } from '../../../../../core/useServices';
 import { ActionButton } from './ActionButton';
 import { IconDefs } from '../../../../../components/icon/IconDefs';
+import { useTranslation } from 'react-i18next';
 
 const logger = Logger.get('CommonActions.tsx');
 
-const t = prefixedTranslation('MapView:');
-
 function CommonActions() {
+  const { t } = useTranslation('MapView');
   const { geo, toasts, history } = useServices();
 
   const stroke = useAppSelector((st) => st.map.currentStyle.stroke);
@@ -105,7 +104,7 @@ function CommonActions() {
     if (!changes) {
       toasts.info(t('You_must_select_geometries_first'));
     }
-  }, [fill.color1, fill.color2, fill.pattern, geo, point.color, point.icon, point.size, stroke.color, stroke.width, text, toasts]);
+  }, [fill.color1, fill.color2, fill.pattern, geo, point.color, point.icon, point.size, stroke.color, stroke.width, t, text, toasts]);
 
   const handleDuplicate = useCallback(() => {
     const map = geo.getMainMap();
@@ -120,7 +119,7 @@ function CommonActions() {
       return;
     }
 
-    features.forEach((feat) => feat.setSelected(false));
+    map.getSelection().remove(features);
 
     const clones = features
       .map((feat) => {
@@ -132,7 +131,6 @@ function CommonActions() {
 
         // We generate a new id
         clone.setId();
-        clone.setSelected(true);
 
         // We translate new geometries
         const resolution = map.unwrap().getView().getResolution() || 1;
@@ -144,10 +142,13 @@ function CommonActions() {
       })
       .filter((feat): feat is FeatureWrapper => !!feat);
 
+    // We select duplicated features for eventual moves
+    map.getSelection().add(clones);
+
     const cs = new AddFeaturesChangeset(layer.getSource(), clones);
     cs.execute().catch((err) => logger.error('Cannot clone features: ', err));
     history.register(HistoryKey.Map, cs);
-  }, [geo, history, toasts]);
+  }, [geo, history, t, toasts]);
 
   const handleDeleteFeatures = useCallback(() => {
     const map = geo.getMainMap();
@@ -158,38 +159,41 @@ function CommonActions() {
       return;
     }
 
-    features.forEach((f) => f.setSelected(false));
+    map.getSelection().remove(features);
 
     const cs = new RemoveFeaturesChangeset(layer.getSource(), features);
     cs.execute().catch((err) => logger.error('Cannot delete features: ', err));
     history.register(HistoryKey.Map, cs);
-  }, [geo, history, toasts]);
+  }, [geo, history, t, toasts]);
 
   const handleMoveBehind = useCallback(() => {
     const changes = geo.updateSelectedFeatures((s) => ({ ...s, zIndex: (s.zIndex || 0) - 1 }));
     if (!changes) {
       toasts.info(t('You_must_select_geometries_first'));
     }
-  }, [geo, toasts]);
+  }, [geo, t, toasts]);
 
   const handleMoveAhead = useCallback(() => {
     const changes = geo.updateSelectedFeatures((s) => ({ ...s, zIndex: (s.zIndex || 0) + 1 }));
     if (!changes) {
       toasts.info(t('You_must_select_geometries_first'));
     }
-  }, [geo, toasts]);
+  }, [geo, t, toasts]);
 
   const handleUnselectAll = useCallback(() => {
-    const deselected = geo.deselectAllFeatures();
-    if (!deselected) {
+    const selection = geo.getMainMap().getSelection();
+    if (!selection.getFeatures().length) {
       toasts.info(t('You_must_select_geometries_first'));
+      return;
     }
-  }, [geo, toasts]);
+
+    selection.clear();
+  }, [geo, t, toasts]);
 
   return (
     <div className={Cls.commonActions}>
       {/* Unselect all features */}
-      <ActionButton onClick={handleUnselectAll} title={t('Unselect_all')} icon={IconDefs.faTimesCircle} />
+      <ActionButton onClick={handleUnselectAll} title={t('Unselect_all')} icon={IconDefs.faTimesCircle} data-cy={'unselect-all'} />
 
       {/* Duplicate selected features  */}
       <ActionButton

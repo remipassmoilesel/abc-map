@@ -18,12 +18,19 @@
 
 export class Toasts {
   public static assertText(text: string, timeout = 4000): Cypress.Chainable<any> {
-    return cy.get('.abc-toast-container div', { timeout }).should((elem) => {
-      expect(elem.text()).to.contains(text);
-    });
+    return cy
+      .get('.abc-toast-container div', { timeout })
+      .should((elem) => {
+        expect(elem.text()).to.contains(text);
+      })
+      .then(() => Toasts.dismiss(text));
   }
 
-  public static dismiss(): Cypress.Chainable<any> {
-    return cy.get('.abc-toast').click({ multiple: true });
+  public static dismiss(text?: string): Cypress.Chainable<any> {
+    const elem = cy.get('.abc-toast');
+    if (text) {
+      elem.contains(text);
+    }
+    return elem.click({ multiple: true });
   }
 }

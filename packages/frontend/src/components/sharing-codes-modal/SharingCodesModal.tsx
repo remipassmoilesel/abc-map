@@ -19,8 +19,8 @@
 import Cls from './SharingCodesModal.module.scss';
 import { useServices } from '../../core/useServices';
 import { Modal } from 'react-bootstrap';
-import React, { useRef } from 'react';
-import { CopyButton } from '../copy-button/CopyButton';
+import React from 'react';
+import { CopyToClipboardButton } from '../copy-to-clipboard-button/CopyToClipboardButton';
 import { QrCode } from '../qrcode/QrCode';
 import { useAppSelector } from '../../core/store/hooks';
 import { adaptMapDimensions } from '../../core/project/adaptMapDimensions';
@@ -40,17 +40,11 @@ export function SharingCodesModal(props: Props) {
   const { t } = useTranslation('SharingCodesModal');
 
   const publicLink = projectService.getPublicLink(project.id);
-  const shareLinkRef = useRef<HTMLInputElement | null>(null);
   const sharedMapProperties = useAppSelector((st) => st.project.sharedViews);
   const { width, height } = adaptMapDimensions(sharedMapProperties.fullscreen, sharedMapProperties.mapDimensions);
 
-  // Iframe code
   const simpleIframeCode = classicIframeIntegration(publicLink, width, height);
-  const simpleIframeCodeRef = useRef<HTMLTextAreaElement | null>(null);
-
-  // Responsive iframe code
   const responsiveIframeCode = responsiveIframeIntegration(publicLink, width, height);
-  const responsiveIframeCodeRef = useRef<HTMLTextAreaElement | null>(null);
 
   return (
     <Modal show={true} onHide={onClose} size={'lg'} centered>
@@ -61,28 +55,28 @@ export function SharingCodesModal(props: Props) {
         <div className={'container'}>
           <div className={'row'}>
             <div className={'col-xl-8'}>
+              {/* Sharing link */}
+              <div className={Cls.sectionTitle}>{t('Share_link')}</div>
+              <div className={Cls.shareLinkForm}>
+                <input type={'text'} value={publicLink} readOnly={true} className={'form-control flex-grow-1 mr-3'} data-cy={'public-url'} />
+                <CopyToClipboardButton value={publicLink} />
+              </div>
+
               {/* Responsive iframe integration */}
               <div className={Cls.sectionTitle}>
                 {t('Responsive_iframe_embed_code')}
                 <SmallAdvice advice={t('Responsive_iframe_embed_code_will_adapt_better')} />
               </div>
               <div className={Cls.iframeForm}>
-                <textarea value={responsiveIframeCode} ref={responsiveIframeCodeRef} readOnly={true} className={'form-control flex-grow-1 mr-3'} />
-                <CopyButton inputRef={responsiveIframeCodeRef} />
+                <textarea value={responsiveIframeCode} readOnly={true} className={'form-control flex-grow-1 mr-3'} />
+                <CopyToClipboardButton value={responsiveIframeCode} />
               </div>
 
               {/* Normal iframe integration */}
               <div className={Cls.sectionTitle}>{t('Iframe_embed_code')}</div>
               <div className={Cls.iframeForm}>
-                <textarea value={simpleIframeCode} ref={simpleIframeCodeRef} readOnly={true} className={'form-control flex-grow-1 mr-3'} />
-                <CopyButton inputRef={simpleIframeCodeRef} />
-              </div>
-
-              {/* Sharing link */}
-              <div className={Cls.sectionTitle}>{t('Share_link')}</div>
-              <div className={Cls.shareLinkForm}>
-                <input type={'text'} value={publicLink} ref={shareLinkRef} readOnly={true} className={'form-control flex-grow-1 mr-3'} data-cy={'public-url'} />
-                <CopyButton inputRef={shareLinkRef} />
+                <textarea value={simpleIframeCode} readOnly={true} className={'form-control flex-grow-1 mr-3'} />
+                <CopyToClipboardButton value={simpleIframeCode} />
               </div>
             </div>
 

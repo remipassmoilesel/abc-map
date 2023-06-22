@@ -63,16 +63,10 @@ export class MeasureTool implements Tool {
   }
 
   public modeChanged(): void {
-    this.selection?.clear();
-  }
-
-  public deselectAll() {
-    this.selection?.clear();
+    return;
   }
 
   public dispose() {
-    this.deselectAll();
-
     this.move?.dispose();
     this.selection?.dispose();
   }

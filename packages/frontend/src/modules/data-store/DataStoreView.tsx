@@ -20,23 +20,19 @@ import Cls from './DataStoreView.module.scss';
 import React, { useCallback, useEffect, useState } from 'react';
 import { AbcArtefact, ArtefactFilter, Logger } from '@abc-map/shared';
 import ArtefactCard from './artefact-card/ArtefactCard';
-import NavigationBar from './navigation-bar/NavigationBar';
 import { pageSetup } from '../../core/utils/page-setup';
-import { prefixedTranslation } from '../../i18n/i18n';
-import { withTranslation } from 'react-i18next';
+import { useTranslation, withTranslation } from 'react-i18next';
 import { useServices } from '../../core/useServices';
 import ArtefactDetails from './artefact-details/ArtefactDetails';
-import SearchBar from './search-bar/SearchBar';
+import { Header } from './header/Header';
 import { useOnlineStatus } from '../../core/pwa/OnlineStatusContext';
 import { LargeOfflineIndicator } from '../../components/offline-indicator/LargeOfflineIndicator';
+import { useFullscreen } from '../../core/ui/useFullscreen';
 
 const logger = Logger.get('DataStoreView.tsx');
 
-const t = prefixedTranslation('DataStoreModule:');
-
-const PageSize = 12;
-
 function DataStoreView() {
+  const { t } = useTranslation('DataStoreModule');
   const { dataStore } = useServices();
   // List of artefacts displayed in list
   const [artefacts, setArtefacts] = useState<AbcArtefact[]>([]);
@@ -44,26 +40,32 @@ function DataStoreView() {
   const [activeArtefact, setActiveArtefact] = useState<AbcArtefact>();
   const [offset, setOffset] = useState(0);
   const [total, setTotal] = useState(0);
-  const [searching, setSearching] = useState(false);
   const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState(ArtefactFilter.All);
   const [query, setQuery] = useState('');
   const online = useOnlineStatus();
 
+  // Page setup
+  useEffect(() => pageSetup(t('Data_store'), t('Add_data_easily')), [t]);
+
+  // We adapt number of artefacts to UI
+  // FIXME: add a better sizing, see TopBar
+  const { fullscreen } = useFullscreen();
+  const [pageSize, setPageSize] = useState(16);
+  useEffect(() => {
+    setPageSize(fullscreen ? 18 : 16);
+  }, [fullscreen]);
+
   // Details can be hidden on mobile device
   const [detailsVisible, setDetailsVisible] = useState(false);
-
-  // Page setup
-  useEffect(() => pageSetup(t('Data_store'), t('Add_data_easily')), []);
 
   // List page on component mount or on demand
   const listArtefacts = useCallback(
     (filter: ArtefactFilter, offset: number) => {
-      setSearching(false);
       setLoading(true);
 
       dataStore
-        .listArtefacts(filter, PageSize, offset)
+        .listArtefacts(filter, pageSize, offset)
         .then((res) => {
           setOffset(res.offset);
           setTotal(res.total);
@@ -72,13 +74,12 @@ function DataStoreView() {
         .catch((err) => logger.error(err))
         .finally(() => setLoading(false));
     },
-    [dataStore]
+    [dataStore, pageSize]
   );
 
   // Search artefacts on demand
   const searchArtefacts = useCallback(
     (query: string, filter: ArtefactFilter) => {
-      setSearching(true);
       setLoading(true);
 
       dataStore
@@ -90,7 +91,7 @@ function DataStoreView() {
     [dataStore]
   );
 
-  // On mount we list artefacts
+  // On mount, we list artefacts
   useEffect(() => {
     if (online) {
       listArtefacts(ArtefactFilter.All, 0);
@@ -98,7 +99,7 @@ function DataStoreView() {
   }, [listArtefacts, online]);
 
   // User clicks on navbar page list
-  const handlePageChange = useCallback(
+  const handleOffsetChange = useCallback(
     (offset: number) => {
       setOffset(offset);
       listArtefacts(filter, offset);
@@ -164,30 +165,27 @@ function DataStoreView() {
     <div className={Cls.datastoreView}>
       {/* Left part with search bar and list */}
       <div className={Cls.leftPart}>
-        <h1 className={'mb-3'}>{t('Data_store')}</h1>
+        <h1 className={'mt-2 mb-2'}>{t('Data_store')}</h1>
 
-        <SearchBar
-          loading={loading}
+        <Header
           onSearch={handleRequest}
           onFilterChange={handleFilterChange}
           onQueryChange={handleQueryChange}
           onClear={handleClear}
-          className={'mb-3'}
+          offset={offset}
+          limit={pageSize}
+          total={total}
+          onOffsetChange={handleOffsetChange}
+          className={'my-2'}
         />
 
         <div className={Cls.artefactList}>
-          {artefacts.map((art, i) => {
-            const selected = activeArtefact?.id === art.id;
-            return <ArtefactCard key={i} selected={selected} artefact={art} onSelected={handleArtefactSelected} />;
+          {artefacts.map((artefact, i) => {
+            const selected = activeArtefact?.id === artefact.id;
+            return <ArtefactCard key={i} selected={selected} artefact={artefact} onSelected={handleArtefactSelected} />;
           })}
           {!artefacts.length && !loading && <div className={'mx-3'}>{t('No_result')}</div>}
         </div>
-
-        {!searching && (
-          <div className={Cls.navigationBar}>
-            <NavigationBar offset={offset} limit={PageSize} total={total} onClick={handlePageChange} />
-          </div>
-        )}
       </div>
 
       {/* Right part with artefact details, preview, ... */}

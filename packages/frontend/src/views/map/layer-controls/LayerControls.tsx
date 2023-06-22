@@ -37,7 +37,7 @@ import { ToggleLayerVisibilityChangeset } from '../../../core/history/changesets
 import { SetLayerPositionChangeset } from '../../../core/history/changesets/layers/SetLayerPositionChangeset';
 import { useMapLayers } from '../../../core/geo/useMapLayers';
 import { SetActiveLayerChangeset } from '../../../core/history/changesets/layers/SetActiveLayerChangeset';
-import { useShowDataTableView } from '../../../modules/data-table/useShowDataTableView';
+import { useShowDataTableModule } from '../../../modules/data-table/useShowDataTableModule';
 
 const logger = Logger.get('LayerControls.tsx');
 
@@ -45,7 +45,7 @@ export function LayerControls() {
   const { layers, activeLayer, activeVectorLayer } = useMapLayers();
   const { geo, toasts, history } = useServices();
   const { t } = useTranslation('MapView');
-  const showDataTableView = useShowDataTableView();
+  const showDataTableView = useShowDataTableModule();
 
   const [editedLayer, setEditedLayer] = useState<LayerWrapper | undefined>();
   const [addModalVisible, setAddModalVisible] = useState(false);

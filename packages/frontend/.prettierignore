@@ -1,1 +1,4 @@
 build
+src/version.ts
+public/static/CHANGELOG.html
+public/static/documentation-assets

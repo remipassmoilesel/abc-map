@@ -16,27 +16,22 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React from 'react';
-import PaypalButton from './PaypalButton';
-import { prefixedTranslation } from '../../i18n/i18n';
-import { withTranslation } from 'react-i18next';
 import Cls from './FundingLinks.module.scss';
+import React from 'react';
+import { PaypalButton } from './PaypalButton';
+import { useTranslation } from 'react-i18next';
 
-const t = prefixedTranslation('FundingLinks:');
+export function FundingLinks() {
+  const { t } = useTranslation('FundingLinks');
 
-class FundingLinks extends React.Component<{}, {}> {
-  public render() {
-    return (
-      <div className={Cls.fundingLinks}>
-        <div className={Cls.fundingMedium}>
-          <div className={'mb-3'} dangerouslySetInnerHTML={{ __html: t('By_CB_paypal') }} />
-          <div className={Cls.logo}>
-            <PaypalButton className={Cls.paypalImage} />
-          </div>
+  return (
+    <div className={Cls.fundingLinks}>
+      <div className={Cls.fundingMedium}>
+        <div className={'mb-3'} dangerouslySetInnerHTML={{ __html: t('By_CB_paypal') }} />
+        <div className={Cls.logo}>
+          <PaypalButton className={Cls.paypalImage} />
         </div>
       </div>
-    );
-  }
+    </div>
+  );
 }
-
-export default withTranslation()(FundingLinks);

@@ -17,90 +17,38 @@
  */
 
 import Cls from './TopBar.module.scss';
-import React, { ReactNode, useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Logger } from '@abc-map/shared';
-import { TopBarLink } from './link/TopBarLink';
 import MainIcon from '../../assets/main-icon.svg';
-import { LanguageMenu } from './language-menu/LanguageMenu';
-import { UserMenu } from './user-menu/UserMenu';
 import { Routes } from '../../routes';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { useLinks } from './useLinks';
 import { FaIcon } from '../icon/FaIcon';
 import { IconDefs } from '../icon/IconDefs';
-import { SmallOfflineIndicator } from '../offline-indicator/SmallOfflineIndicator';
-import { useFavoriteModules } from '../../core/modules/hooks';
-import { useTranslation } from 'react-i18next';
-import Grid from './grid.svg';
+import clsx from 'clsx';
+import { TopBarLink } from './link/TopBarLink';
 import { getRemSize } from '../../core/ui/getRemSize';
 import { ResizeObserverFactory } from '../../core/utils/ResizeObserverFactory';
 import debounce from 'lodash/debounce';
-import { ProjectMenu } from './project-menu/ProjectMenu';
+import { MainMenu } from './MainMenu';
 
 const logger = Logger.get('TopBar.tsx');
-
-enum MenuType {
-  Static = 'Static',
-  Folding = 'Folding',
-}
-
-interface LinkDef {
-  to: string;
-  activeMatch?: RegExp;
-  label: ReactNode | ReactNode[] | string;
-  dataCy?: string;
-}
 
 function TopBar() {
   const { t } = useTranslation('TopBar');
   const navigate = useNavigate();
-  const favoriteModules = useFavoriteModules().slice(0, 20);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const { topBarLinks } = useLinks();
 
   const handleGoToLanding = useCallback(() => navigate(Routes.landing().format()), [navigate]);
 
-  const [menuType, setMenuType] = useState(MenuType.Folding);
   const [menuOpen, setMenuOpen] = useState(false);
   const handleToggleMenu = useCallback(() => setMenuOpen(!menuOpen), [menuOpen]);
 
-  // Links are displayed in two menus: a static one when there is enough space, a folding one when not
-  const linkDefs: LinkDef[] = [
-    {
-      to: Routes.map().format(),
-      label: t('Map'),
-      dataCy: 'map',
-    },
-    ...favoriteModules.map((mod) => ({
-      to: Routes.module().withParams({ moduleId: mod.getId() }),
-      label: mod.getReadableName(),
-      dataCy: `top-bar-link_${mod.getId()}`,
-    })),
-    {
-      to: Routes.moduleIndex().format(),
-      label: (
-        <>
-          {t('Plus')} <img src={Grid} className={Cls.gridIcon} alt={t('Plus')} />
-        </>
-      ),
-      activeMatch: /^\/[a-z]{2}\/modules$/gi,
-      dataCy: 'module-index',
-    },
-    {
-      to: Routes.documentation().format(),
-      label: t('Documentation'),
-      dataCy: 'help',
-    },
-    {
-      to: Routes.funding().format(),
-      label: `${t('Support_AbcMap')} 💌`,
-    },
-  ];
+  const [displayTopBarLinks, setDisplayTopBarLinks] = useState(false);
 
-  const links = linkDefs.map((link) => (
-    <TopBarLink key={link.to} to={link.to} activeMatch={link.activeMatch} className={Cls.link} data-cy={link.dataCy}>
-      {link.label}
-    </TopBarLink>
-  ));
-
+  // We adapt number of links to UI
+  const containerRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const container = containerRef.current;
     if (!container) {
@@ -110,17 +58,12 @@ function TopBar() {
 
     const adaptDisplay = () => {
       // Since links are dynamic, we estimate the size of all links before display. If all the links measure
-      // less than 70% of the top bar we display them all, otherwise we collapse the menu
-      const estimatedLinkSizeRem = 13;
-      const linksLength = linkDefs.length * estimatedLinkSizeRem * getRemSize();
+      // less than 70% of the top bar we display them all, we don't display them
+      const estimatedLinkSizeRem = 12 * getRemSize();
+      const linksLength = topBarLinks.length * estimatedLinkSizeRem;
       const availableLength = container.clientWidth;
-      const enoughSpace = linksLength / availableLength < 0.7;
-      if (enoughSpace) {
-        setMenuType(MenuType.Static);
-      } else {
-        setMenuType(MenuType.Folding);
-        setMenuOpen(false);
-      }
+      const enoughSpace = linksLength / availableLength < 0.85;
+      setDisplayTopBarLinks(enoughSpace);
     };
 
     adaptDisplay();
@@ -128,52 +71,36 @@ function TopBar() {
     const observer = ResizeObserverFactory.create(debounce(adaptDisplay, 100));
     observer.observe(container);
     return () => observer.disconnect();
-  }, [linkDefs.length]);
+  }, [topBarLinks.length]);
 
   return (
     <div className={Cls.topBar} ref={containerRef} data-cy={'top-bar'}>
+      {/* Abc-Map icon */}
       <button onClick={handleGoToLanding} data-cy={'landing'} className={Cls.brand}>
         <img src={MainIcon} alt={'Logo'} />
         <span>Abc-Map</span>
       </button>
 
-      <SmallOfflineIndicator />
+      {/* Favorites modules, if enough places */}
+      {displayTopBarLinks &&
+        topBarLinks.map((link) => (
+          <TopBarLink key={link.to} to={link.to} display={'horizontal'} activeMatch={link.activeMatch} className={clsx(Cls.link, 'me-2')} data-cy={link.dataCy}>
+            {link.label}
+          </TopBarLink>
+        ))}
 
-      <div className={Cls.spacer} />
+      <div className={'flex-grow-1'} />
 
-      {MenuType.Static === menuType && <div className={Cls.staticMenu}>{links}</div>}
+      {/* Open menu button */}
+      <button onClick={handleToggleMenu} className={'btn btn-link d-flex align-items-center justify-content-center me-3'} data-cy={'open-main-menu'}>
+        <span className={'me-3 mb-1 fw-bold'}>{t('Menu')}</span>
+        <FaIcon icon={IconDefs.faMapSigns} size={'2rem'} />
+      </button>
 
-      {MenuType.Folding === menuType && (
-        <div className={Cls.foldingMenu}>
-          <button onClick={handleToggleMenu} className={Cls.openButton}>
-            <FaIcon icon={IconDefs.faMapSigns} size={'1.4rem'} className={'ml-3'} />
-          </button>
+      {/* When main menu is open, we show a blurry background */}
+      <div onClick={handleToggleMenu} className={clsx(Cls.backdrop, menuOpen && Cls.visible)} />
 
-          {menuOpen && (
-            <div className={Cls.linksPanel} onClick={handleToggleMenu}>
-              <h1 className={Cls.menuTitle}>{t('Menu')}</h1>
-
-              <button onClick={handleToggleMenu} className={Cls.closeButton}>
-                <FaIcon icon={IconDefs.faTimes} size={'2rem'} />
-              </button>
-
-              {links}
-            </div>
-          )}
-        </div>
-      )}
-
-      <div className={Cls.verticalBorder} />
-
-      <ProjectMenu />
-
-      <div className={Cls.verticalBorder} />
-
-      <LanguageMenu />
-
-      <div className={Cls.verticalBorder} />
-
-      <UserMenu />
+      <MainMenu open={menuOpen} onToggleMenu={handleToggleMenu} />
     </div>
   );
 }

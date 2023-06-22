@@ -20,6 +20,7 @@ import { TestData } from '../test-data/TestData';
 import { MainMap } from '../helpers/MainMap';
 import { TestHelper } from '../helpers/TestHelper';
 import { Routes } from '../helpers/Routes';
+import { FilePrompt } from '../helpers/FilePrompt';
 
 describe('Data import', () => {
   beforeEach(() => {
@@ -33,9 +34,7 @@ describe('Data import', () => {
       .get('[data-cy=browse-files]')
       .click()
       .then(() => TestData.sampleGpx())
-      .then((gpx) => {
-        return cy.get('[data-cy=file-input]').attachFile({ filePath: 'sample.gpx', fileContent: gpx });
-      })
+      .then((file) => FilePrompt.select('sample.gpx', file))
       .wait(1_000)
       .then(() => MainMap.getReference())
       .should((map) => {

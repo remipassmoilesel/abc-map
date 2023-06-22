@@ -19,7 +19,7 @@
 import React, { ChangeEvent, Component } from 'react';
 import { Logger } from '@abc-map/shared';
 import { DataRow } from '../../core/data/data-source/DataSource';
-import DataTable from '../data-table/DataTable';
+import { SmallDataTable } from '../small-data-table/SmallDataTable';
 import { ServiceProps, withServices } from '../../core/withServices';
 import { VectorLayerWrapper } from '../../core/geo/layers/LayerWrapper';
 import { LayerSelector } from '../layer-selector/LayerSelector';
@@ -119,7 +119,7 @@ class GeometryLayerForm extends Component<Props, State> {
         {!!dataSamples.length && (
           <>
             <div className={'mt-5 mb-3'}>{t('Data_samples')}</div>
-            <DataTable rows={dataSamples} />
+            <SmallDataTable rows={dataSamples} />
           </>
         )}
       </>

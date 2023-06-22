@@ -26,7 +26,7 @@ import { DataSource, DataSourceType } from '../../core/data/data-source/DataSour
 import { LayerDataSource } from '../../core/data/data-source/LayerDataSource';
 import { CsvDataSource } from '../../core/data/data-source/CsvDataSource';
 import { LayerWrapper, VectorLayerWrapper } from '../../core/geo/layers/LayerWrapper';
-import { CsvParsingError } from '../../core/data/csv-parser/typings';
+import { CsvParsingError, isCsvParsingError, UnknownLineNumber } from '../../core/data/csv-parser/typings';
 import Cls from './DataSourceSelector.module.scss';
 import MessageLabel from '../message-label/MessageLabel';
 import { prefixedTranslation } from '../../i18n/i18n';
@@ -43,7 +43,7 @@ interface Props extends ServiceProps {
 interface State {
   display: Display;
   layerChangeHandler?: LayerChangeHandler;
-  rows: number;
+  rowsNumber: number;
   errorAtLine: number;
   error: boolean;
   layer?: LayerWrapper | undefined;
@@ -54,8 +54,7 @@ enum Display {
   File = 'File',
 }
 
-const NoLineInformation = -1;
-const NoRowsInformation = -1;
+const UnknownRowsNumber = -1;
 
 const t = prefixedTranslation('DataSourceForm:');
 
@@ -65,17 +64,13 @@ class DataSourceSelector extends Component<Props, State> {
     this.state = {
       display: Display.Layers,
       error: false,
-      errorAtLine: NoLineInformation,
-      rows: NoRowsInformation,
+      errorAtLine: UnknownLineNumber,
+      rowsNumber: UnknownRowsNumber,
     };
   }
 
   public render() {
-    const layer = this.state.layer;
-    const display = this.state.display;
-    const rows = this.state.rows;
-    const errorAtLine = this.state.errorAtLine;
-    const error = this.state.error;
+    const { layer, display, rowsNumber, errorAtLine, error } = this.state;
 
     return (
       <div className={Cls.dataSourceSelector}>
@@ -115,13 +110,15 @@ class DataSourceSelector extends Component<Props, State> {
         )}
 
         <>
-          {rows >= 500 && <MessageLabel icon={IconDefs.faExclamationTriangle}>{t('This_source_contains_a_lot_of_data', { rows })}</MessageLabel>}
-          {rows === 0 && <MessageLabel icon={IconDefs.faExclamationTriangle}>{t('Data_source_empty')}</MessageLabel>}
-          {rows > 0 && <MessageLabel icon={IconDefs.faRocket}>{t('X_entries_will_be_processed', { rows })}</MessageLabel>}
+          {rowsNumber >= 500 && (
+            <MessageLabel icon={IconDefs.faExclamationTriangle}>{t('This_source_contains_a_lot_of_data', { rows: rowsNumber })}</MessageLabel>
+          )}
+          {rowsNumber === 0 && <MessageLabel icon={IconDefs.faExclamationTriangle}>{t('Data_source_empty')}</MessageLabel>}
+          {rowsNumber > 0 && <MessageLabel icon={IconDefs.faRocket}>{t('X_entries_will_be_processed', { rows: rowsNumber })}</MessageLabel>}
         </>
 
         {error && <MessageLabel icon={IconDefs.faExclamationCircle}>{t('This_data_source_is_incorrect')}</MessageLabel>}
-        {errorAtLine !== NoLineInformation && <MessageLabel icon={IconDefs.faChevronRight}>{t('Error_on_line_X', { errorAtLine })}</MessageLabel>}
+        {errorAtLine !== UnknownLineNumber && <MessageLabel icon={IconDefs.faChevronRight}>{t('Error_on_line_X', { errorAtLine })}</MessageLabel>}
       </div>
     );
   }
@@ -160,7 +157,7 @@ class DataSourceSelector extends Component<Props, State> {
   }
 
   private handleDisplayClick = (display: Display) => {
-    this.setState({ display, errorAtLine: NoLineInformation, error: false, rows: NoRowsInformation }, () => this.props.onSelected(undefined));
+    this.setState({ display, errorAtLine: UnknownLineNumber, error: false, rowsNumber: UnknownRowsNumber }, () => this.props.onSelected(undefined));
   };
 
   private handleLayerSelected = (_: unknown, layer: VectorLayerWrapper | undefined) => {
@@ -199,19 +196,19 @@ class DataSourceSelector extends Component<Props, State> {
 
   private async inspectSource(source: DataSource | undefined): Promise<void> {
     if (!source) {
-      this.setState({ rows: NoRowsInformation, error: false, errorAtLine: NoLineInformation });
+      this.setState({ rowsNumber: UnknownRowsNumber, error: false, errorAtLine: UnknownLineNumber });
       return;
     }
 
     // First we check that data source is valid
     return source
       .getRows()
-      .then((rows) => this.setState({ rows: rows.length, error: false, errorAtLine: NoLineInformation }))
+      .then((rows) => this.setState({ rowsNumber: rows.length, error: false, errorAtLine: UnknownLineNumber }))
       .catch((err: CsvParsingError | Error) => {
-        if ('row' in err && typeof err.row !== 'undefined') {
-          this.setState({ error: true, errorAtLine: err.row });
+        if (isCsvParsingError(err)) {
+          this.setState({ error: true, errorAtLine: err.line });
         } else {
-          this.setState({ error: true, errorAtLine: NoLineInformation });
+          this.setState({ error: true, errorAtLine: UnknownLineNumber });
         }
         return Promise.reject(err);
       });

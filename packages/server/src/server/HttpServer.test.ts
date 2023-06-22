@@ -20,7 +20,6 @@ import { Services, servicesFactory } from '../services/services';
 import { HttpServer, isItWorthLogging } from './HttpServer';
 import { ConfigLoader } from '../config/ConfigLoader';
 import { assert } from 'chai';
-import { FrontendRoutes, Language } from '@abc-map/shared';
 import { FastifyRequest } from 'fastify';
 
 describe('HttpServer', () => {
@@ -99,28 +98,14 @@ describe('HttpServer', () => {
     });
 
     assert.isDefined(res.headers['x-dns-prefetch-control']);
-    assert.isDefined(res.headers['x-frame-options']);
     assert.isDefined(res.headers['strict-transport-security']);
     assert.isDefined(res.headers['x-download-options']);
     assert.isDefined(res.headers['x-content-type-options']);
     assert.isDefined(res.headers['x-permitted-cross-domain-policies']);
     assert.isDefined(res.headers['referrer-policy']);
-  });
 
-  it('should allow iframe on shared maps', async () => {
-    const res = await server.getApp().inject({
-      method: 'GET',
-      path: new FrontendRoutes(Language.French).sharedMap().withParams({ projectId: 'test-project-id' }),
-    });
-
-    assert.isUndefined(res.headers['x-frame-options']);
-
-    assert.isDefined(res.headers['x-dns-prefetch-control']);
-    assert.isDefined(res.headers['strict-transport-security']);
-    assert.isDefined(res.headers['x-download-options']);
-    assert.isDefined(res.headers['x-content-type-options']);
-    assert.isDefined(res.headers['x-permitted-cross-domain-policies']);
-    assert.isDefined(res.headers['referrer-policy']);
+    // We must allow iframes for shared maps
+    assert.equal(res.headers['x-frame-options'], undefined);
   });
 
   describe('Rate limiting', () => {
@@ -155,7 +140,7 @@ describe('HttpServer', () => {
       });
 
       assert.equal(blocked.statusCode, 429, `Invalid status code for route ${route}`);
-      assert.match(blocked.body, /Quota of requests exceeded/, `Invalid body for route ${route}`);
+      assert.match(blocked.body, /Too Many Requests/, `Invalid body for route ${route}`);
       assert.equal(notBlocked.statusCode, 200, `Invalid status code for route ${route}`);
     }
 

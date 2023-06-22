@@ -22,9 +22,6 @@ Vous pouvez utiliser dans ce logiciel:
 - des couches XYZ
 - des classeurs CSV
 
-Vous pouvez cependant exporter vos cartes au format PDF: c'est facile, et vous prendrez soin de votre batterie.
-N'hésitez pas à soutenir le projet.
-
 <div class="frequent-question">Je veux ajouter du texte sans ajouter une géométrie</div>
 
 Pour l'instant ce n'est pas possible ! N'hésitez pas à soutenir le projet.

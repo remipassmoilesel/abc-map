@@ -80,7 +80,10 @@ describe('AuthenticationController', () => {
 
       // Assert
       assert.equal(response.statusCode, 400);
-      assert.equal(response.body, '{"statusCode":400,"error":"Bad Request","message":"body must have required property \'email\'"}');
+      assert.equal(
+        response.body,
+        '{"statusCode":400,"code":"FST_ERR_VALIDATION","error":"Bad Request","message":"body must have required property \'email\'"}'
+      );
     });
 
     it('should work', async () => {
@@ -114,7 +117,10 @@ describe('AuthenticationController', () => {
 
       // Assert
       assert.equal(response.statusCode, 400);
-      assert.equal(response.body, '{"statusCode":400,"error":"Bad Request","message":"body must have required property \'token\'"}');
+      assert.equal(
+        response.body,
+        '{"statusCode":400,"code":"FST_ERR_VALIDATION","error":"Bad Request","message":"body must have required property \'token\'"}'
+      );
     });
 
     it('should fail with invalid token', async () => {
@@ -209,7 +215,10 @@ describe('AuthenticationController', () => {
       });
 
       assert.equal(response.statusCode, 400);
-      assert.equal(response.body, '{"statusCode":400,"error":"Bad Request","message":"body must have required property \'email\'"}');
+      assert.equal(
+        response.body,
+        '{"statusCode":400,"code":"FST_ERR_VALIDATION","error":"Bad Request","message":"body must have required property \'email\'"}'
+      );
     });
 
     it('should fail with bad password', async () => {
@@ -298,7 +307,10 @@ describe('AuthenticationController', () => {
       });
 
       assert.equal(response.statusCode, 400);
-      assert.equal(response.body, '{"statusCode":400,"error":"Bad Request","message":"body must have required property \'previousPassword\'"}');
+      assert.equal(
+        response.body,
+        '{"statusCode":400,"code":"FST_ERR_VALIDATION","error":"Bad Request","message":"body must have required property \'previousPassword\'"}'
+      );
     });
 
     it('should reply 403 user is not connected', async () => {
@@ -371,7 +383,10 @@ describe('AuthenticationController', () => {
       });
 
       assert.equal(response.statusCode, 400);
-      assert.equal(response.body, '{"statusCode":400,"error":"Bad Request","message":"body must have required property \'token\'"}');
+      assert.equal(
+        response.body,
+        '{"statusCode":400,"code":"FST_ERR_VALIDATION","error":"Bad Request","message":"body must have required property \'token\'"}'
+      );
     });
 
     it('should reply 401 if token is invalid', async () => {
@@ -430,7 +445,10 @@ describe('AuthenticationController', () => {
       });
 
       assert.equal(response.statusCode, 400);
-      assert.equal(response.body, '{"statusCode":400,"error":"Bad Request","message":"body must have required property \'email\'"}');
+      assert.equal(
+        response.body,
+        '{"statusCode":400,"code":"FST_ERR_VALIDATION","error":"Bad Request","message":"body must have required property \'email\'"}'
+      );
     });
 
     it('should reply 200 even if user does not exist', async () => {
@@ -481,7 +499,10 @@ describe('AuthenticationController', () => {
       });
 
       assert.equal(response.statusCode, 400);
-      assert.equal(response.body, '{"statusCode":400,"error":"Bad Request","message":"body must have required property \'password\'"}');
+      assert.equal(
+        response.body,
+        '{"statusCode":400,"code":"FST_ERR_VALIDATION","error":"Bad Request","message":"body must have required property \'password\'"}'
+      );
     });
 
     it('should fail if password is incorrect', async () => {
@@ -555,7 +576,7 @@ describe('AuthenticationController', () => {
     });
 
     assert.equal(blocked.statusCode, 429);
-    assert.match(blocked.body, /Quota of requests exceeded/);
+    assert.match(blocked.body, /Too Many Requests/);
     assert.equal(notBlocked.statusCode, 200);
   });
 });

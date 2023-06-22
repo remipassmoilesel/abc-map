@@ -28,12 +28,12 @@ import { Changeset } from '../../../history/Changeset';
 import { styleFunction } from '../../../geo/styles/style-function';
 import { createEditingStyle } from 'ol/style/Style';
 import { UndoCallbackChangeset } from '../../../history/changesets/features/UndoCallbackChangeset';
-import Collection from 'ol/Collection';
 import Geometry from 'ol/geom/Geometry';
-import Feature from 'ol/Feature';
 import Map from 'ol/Map';
 import MapBrowserEvent from 'ol/MapBrowserEvent';
 import { DefaultStyleOptions } from '../../../geo/styles/StyleFactoryOptions';
+import { FeatureSelection } from '../../../geo/feature-selection/FeatureSelection';
+import { getSelectionFromMap } from '../../../geo/feature-selection/getSelectionFromMap';
 
 const logger = Logger.get('DrawInteraction');
 
@@ -41,7 +41,6 @@ export declare type GetStyleFunc = () => FeatureStyle;
 export declare type ChangesetHandler = (t: Changeset) => void;
 export declare type FeatureAddedHandler = (f: FeatureWrapper) => void;
 
-// This represent the kind of draw interactions will do
 export declare type ToolType = typeof AbcGeometryType.POINT | typeof AbcGeometryType.LINE_STRING | typeof AbcGeometryType.POLYGON;
 
 const editingStyle = createEditingStyle();
@@ -49,8 +48,8 @@ const editingStyle = createEditingStyle();
 export interface Options {
   type: ToolType;
   getStyle: GetStyleFunc;
-  drawCondition?: (ev: MapBrowserEvent<UIEvent>) => boolean;
-  modifyCondition?: (ev: MapBrowserEvent<UIEvent>) => boolean;
+  drawCondition: (ev: MapBrowserEvent<UIEvent>) => boolean;
+  modifyCondition: (ev: MapBrowserEvent<UIEvent>) => boolean;
   deleteVertex?: (ev: MapBrowserEvent<UIEvent>) => boolean;
 }
 
@@ -66,6 +65,11 @@ export class DrawInteractionsBundle {
   public onNewChangeset?: ChangesetHandler;
   public onDeleteChangeset?: ChangesetHandler;
   public onFeatureAdded?: FeatureAddedHandler;
+  public onDrawStart?: () => void;
+  public onDrawEnd?: () => void;
+  public onDrawAborted?: () => void;
+  public onModifyStart?: () => void;
+  public onModifyEnd?: () => void;
 
   private snap?: Snap;
   private modify?: Modify;
@@ -73,17 +77,20 @@ export class DrawInteractionsBundle {
 
   private map?: Map;
   private source?: VectorSource<Geometry>;
-  private selection?: Collection<Feature<Geometry>>;
+  private selection?: FeatureSelection;
 
   private drawingStartChangeset?: Changeset;
   private escapeKeyListener?: (ev: KeyboardEvent) => void;
 
+  // True when user is creating a new geometry. We use this state to prevent modifications will creating.
+  private creating = false;
+
   constructor(private options: Options) {}
 
-  public setup(map: Map, source: VectorSource<Geometry>, selection: Collection<Feature<Geometry>>) {
+  public setup(map: Map, source: VectorSource<Geometry>) {
     this.map = map;
     this.source = source;
-    this.selection = selection;
+    this.selection = getSelectionFromMap(map);
 
     this.initModification();
     this.initDraw();
@@ -92,11 +99,11 @@ export class DrawInteractionsBundle {
 
   // Modify features. Only selected features can be modified.
   private initModification() {
-    this.snap = new Snap({ features: this.selection });
+    this.snap = new Snap({ features: this.selection?.getFeatureCollection() });
 
     this.modify = new Modify({
-      features: this.selection,
-      condition: this.options.modifyCondition,
+      features: this.selection?.getFeatureCollection(),
+      condition: (ev) => !this.creating && this.options.modifyCondition(ev),
       deleteCondition: this.options.deleteVertex,
     });
 
@@ -119,6 +126,8 @@ export class DrawInteractionsBundle {
 
         modified.push(clone);
       });
+
+      this.onModifyStart && this.onModifyStart();
     });
 
     // Create a changeset
@@ -151,6 +160,8 @@ export class DrawInteractionsBundle {
 
       this.onNewChangeset && this.onNewChangeset(new UpdateGeometriesChangeset(items));
       modified = [];
+
+      this.onModifyEnd && this.onModifyEnd();
     });
 
     this.map?.addInteraction(this.modify);
@@ -187,8 +198,7 @@ export class DrawInteractionsBundle {
 
     // Clear selection, set style and id on feature
     this.draw.on('drawstart', (ev: DrawEvent) => {
-      selection.forEach((f) => FeatureWrapper.from(f).setSelected(false));
-      selection.clear();
+      this.creating = true;
 
       const feature = FeatureWrapper.from(ev.feature);
       feature.setId();
@@ -197,9 +207,13 @@ export class DrawInteractionsBundle {
       // Register changeset for drawing start
       this.drawingStartChangeset = new UndoCallbackChangeset(() => this.abortDrawing());
       this.onNewChangeset && this.onNewChangeset(this.drawingStartChangeset);
+
+      this.onDrawStart && this.onDrawStart();
     });
 
     this.draw.on('drawend', (ev: DrawEvent) => {
+      this.creating = false;
+
       const feature = FeatureWrapper.from(ev.feature);
 
       // When draw is confirmed, we replace changeset
@@ -209,19 +223,28 @@ export class DrawInteractionsBundle {
       this.onNewChangeset && this.onNewChangeset(new AddFeaturesChangeset(source, [feature]));
 
       this.onFeatureAdded && this.onFeatureAdded(feature);
+
+      this.onDrawEnd && this.onDrawEnd();
     });
 
     this.map?.addInteraction(this.draw);
   }
 
+  public finishDrawing() {
+    this.draw?.finishDrawing();
+  }
+
   public abortDrawing() {
     this.drawingStartChangeset && this.onDeleteChangeset && this.onDeleteChangeset(this.drawingStartChangeset);
     this.drawingStartChangeset = undefined;
+    this.creating = false;
 
     const featuresInDrawOverlay = this.draw?.getOverlay().getSource().getFeatures().length || 0;
     if (featuresInDrawOverlay > 1) {
       this.draw?.abortDrawing();
     }
+
+    this.onDrawAborted && this.onDrawAborted();
   }
 
   // If Escape key is pressed and if user is drawing, we cancel drawing

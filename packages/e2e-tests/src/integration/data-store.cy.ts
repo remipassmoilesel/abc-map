@@ -55,6 +55,7 @@ describe('Data store', function () {
       .click()
       .get('[data-cy=import-artefact]')
       .click()
+      .then(() => Toasts.assertText('Import in progress'))
       .then(() => Toasts.assertText('Import done !'))
       .then(() => TopBar.map())
       .then(() => MainMap.getReference())

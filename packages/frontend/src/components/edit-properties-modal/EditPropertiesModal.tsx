@@ -28,6 +28,8 @@ import { nanoid } from 'nanoid';
 import { Logger } from '@abc-map/shared';
 import { isValidDataField } from '../../core/geo/features/isValidDataField';
 import { asNumberOrString, isValidNumber } from '../../core/utils/numbers';
+import { FaIcon } from '../icon/FaIcon';
+import { IconDefs } from '../icon/IconDefs';
 
 export const logger = Logger.get('EditPropertiesModal.tsx');
 
@@ -58,7 +60,11 @@ export function EditPropertiesModal() {
   }, []);
 
   const handleChange = useCallback((properties: Property[]) => {
-    setProperties(properties);
+    if (!properties.length) {
+      setProperties([{ id: nanoid(), name: '', value: '' }]);
+    } else {
+      setProperties(properties);
+    }
   }, []);
 
   const handleCancel = useCallback(() => {
@@ -111,10 +117,12 @@ export function EditPropertiesModal() {
 
         {/* Confirm and cancel buttons */}
         <div className={'d-flex justify-content-end'}>
-          <button className={'btn btn-secondary mr-2'} onClick={handleCancel} data-cy="properties-modal-cancel" data-testid="cancel">
+          <button className={'btn btn-outline-secondary mr-2'} onClick={handleCancel} data-cy="properties-modal-cancel" data-testid="cancel">
+            <FaIcon icon={IconDefs.faTimes} className={'me-2'} />
             {t('Cancel')}
           </button>
           <button className={'btn btn-primary'} onClick={handleConfirm} data-cy="properties-modal-confirm" data-testid="confirm">
+            <FaIcon icon={IconDefs.faCheck} className={'me-2'} />
             {t('Save')}
           </button>
         </div>

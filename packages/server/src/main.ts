@@ -23,6 +23,7 @@ import { Services, servicesFactory } from './services/services';
 import { ConfigLoader } from './config/ConfigLoader';
 import { DevInit } from './dev-init/DevInit';
 import { DbMigrationsLauncher } from './mongodb/migrations/DbMigrationsLauncher';
+import { VERSION } from './version';
 
 const logger = Logger.get('main.ts', 'info');
 
@@ -35,7 +36,7 @@ main().catch((err: Error) => {
 });
 
 async function main() {
-  logger.info('Starting Abc-Map ...');
+  logger.info(`Starting Abc-Map (git:${VERSION.hash}, ${VERSION.date})`);
   setupProcessExitHandler();
 
   // Configuration loading

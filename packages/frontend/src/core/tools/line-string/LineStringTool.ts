@@ -17,7 +17,7 @@
  */
 
 import { Tool } from '../Tool';
-import { AbcGeometryType, FeatureStyle, MapTool } from '@abc-map/shared';
+import { AbcGeometryType, FeatureStyle, Logger, MapTool } from '@abc-map/shared';
 import VectorSource from 'ol/source/Vector';
 import Geometry from 'ol/geom/Geometry';
 import Icon from '../../../assets/tool-icons/line.inline.svg';
@@ -31,11 +31,17 @@ import { MoveMapInteractionsBundle } from '../common/interactions/MoveMapInterac
 import { SelectionInteractionsBundle } from '../common/interactions/SelectionInteractionsBundle';
 import { ToolMode } from '../ToolMode';
 import { CommonConditions, CommonModes } from '../common/common-modes';
+import { FeatureSelection } from '../../geo/feature-selection/FeatureSelection';
+import { FinishDrawingButton } from '../common/finish-button/FinishDrawingButton';
+
+const logger = Logger.get('LineStringTool.ts');
 
 export class LineStringTool implements Tool {
   private move?: MoveMapInteractionsBundle;
   private selection?: SelectionInteractionsBundle;
   private draw?: DrawInteractionsBundle;
+  private finishDrawing?: FinishDrawingButton;
+  private map?: Map;
 
   constructor(private store: MainStore, private history: HistoryService) {}
 
@@ -56,9 +62,13 @@ export class LineStringTool implements Tool {
   }
 
   public setup(map: Map, source: VectorSource<Geometry>): void {
+    this.map = map;
+
     // Interactions for map view manipulation
     this.move = new MoveMapInteractionsBundle({ condition: CommonConditions.MoveMap });
     this.move.setup(map);
+
+    const selection = FeatureSelection.getSelectionFromMap(map);
 
     // Selection for modifications
     this.selection = new SelectionInteractionsBundle({ condition: CommonConditions.Selection });
@@ -71,8 +81,7 @@ export class LineStringTool implements Tool {
       return { stroke: style.stroke };
     };
 
-    // Modification is obviously allowed in modification but also in creation,
-    // because we must be able to modify a just created geometry
+    // Modification is allowed in creation because we must be able to modify a just created geometry
     this.draw = new DrawInteractionsBundle({
       type: AbcGeometryType.LINE_STRING,
       getStyle,
@@ -82,28 +91,47 @@ export class LineStringTool implements Tool {
     });
     this.draw.onNewChangeset = (t) => this.history.register(HistoryKey.Map, t);
     this.draw.onDeleteChangeset = (t) => this.history.remove(HistoryKey.Map, t);
-    this.draw.onFeatureAdded = (feat) => {
-      feat.setSelected(true);
-      this.selection?.getFeatures().push(feat.unwrap());
+    this.draw.onFeatureAdded = (feat) => selection.add([feat.unwrap()]);
+    this.draw.onDrawAborted = () => this.removeFinishButton();
+
+    this.draw.setup(map, source);
+
+    // Finish drawing button
+    const addFinishButton = () => {
+      this.removeFinishButton();
+
+      this.finishDrawing = new FinishDrawingButton();
+      this.finishDrawing.onFinishDrawing = () => {
+        this.draw?.finishDrawing();
+      };
+      map.addInteraction(this.finishDrawing);
     };
 
-    this.draw.setup(map, source, this.selection.getFeatures());
+    this.draw.onDrawStart = () => addFinishButton();
+    this.draw.onDrawEnd = this.removeFinishButton;
+    this.draw.onModifyStart = this.removeFinishButton;
+    this.draw.onModifyEnd = this.removeFinishButton;
   }
 
   public modeChanged(): void {
     this.draw?.abortDrawing();
-    this.selection?.clear();
-  }
 
-  public deselectAll() {
-    this.selection?.clear();
+    this.removeFinishButton();
   }
 
   public dispose() {
-    this.deselectAll();
-
     this.move?.dispose();
     this.selection?.dispose();
     this.draw?.dispose();
+
+    this.removeFinishButton();
   }
+
+  private removeFinishButton = () => {
+    if (this.finishDrawing) {
+      this.finishDrawing.dispose();
+      this.finishDrawing && this.map?.removeInteraction(this.finishDrawing);
+      this.finishDrawing = undefined;
+    }
+  };
 }

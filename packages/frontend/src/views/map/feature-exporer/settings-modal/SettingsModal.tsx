@@ -23,13 +23,13 @@ import { Settings } from '../Settings';
 
 interface Props {
   value: Settings;
-  nameFieldCandidate: string[];
+  nameCandidates: string[];
   onConfirm: (settings: Settings) => void;
   onCancel: () => void;
 }
 
 export function SettingsModal(props: Props) {
-  const { value, nameFieldCandidate, onConfirm, onCancel } = props;
+  const { value, nameCandidates, onConfirm, onCancel } = props;
   const { t } = useTranslation('MapView');
   const [nameField, setNameField] = useState(value.nameField);
 
@@ -42,22 +42,37 @@ export function SettingsModal(props: Props) {
       </Modal.Header>
       <Modal.Body>
         <div className={'mb-2'}>{t('Name_field')}</div>
-        <div>
-          {nameFieldCandidate.map((candidate, i) => {
-            const handleSelect = () => setNameField(candidate);
-            return (
-              <div
-                key={`${candidate}_${i}`}
-                onClick={handleSelect}
-                className={'cursor-pointer d-flex align-items-center'}
-                data-testid={`candidate-${candidate}`}
-              >
-                <input key={candidate} type={'radio'} name={'name-field-name'} onChange={handleSelect} checked={candidate === nameField} className={'mx-2'} />
-                {candidate}
-              </div>
-            );
-          })}
-        </div>
+
+        {!!nameCandidates?.length && (
+          <>
+            <div className={'mb-2'}>
+              {nameCandidates.map((candidate, i) => {
+                const handleSelect = () => setNameField(candidate);
+                return (
+                  <div
+                    key={`${candidate}_${i}`}
+                    onClick={handleSelect}
+                    className={'cursor-pointer d-flex align-items-center'}
+                    data-testid={`candidate-${candidate}`}
+                  >
+                    <input
+                      key={candidate}
+                      type={'radio'}
+                      name={'name-field-name'}
+                      onChange={handleSelect}
+                      checked={candidate === nameField}
+                      className={'mx-2'}
+                    />
+                    {candidate}
+                  </div>
+                );
+              })}
+            </div>
+            <div className={'alert alert-info mb-3'}>{t('Select_the_attribute_that_you_want_to_use_as_the_principal_name_of_the_entities')}</div>
+          </>
+        )}
+
+        {!nameCandidates?.length && <div className={'alert alert-info mb-2'}>{t('You_cannot_change_the_name_attribute_Try_a_layer_with_data')}</div>}
 
         <div className={'d-flex justify-content-end'}>
           <button className={'btn btn-secondary mr-3'} onClick={onCancel}>

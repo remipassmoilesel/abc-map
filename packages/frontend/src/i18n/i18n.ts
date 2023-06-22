@@ -37,7 +37,7 @@ i18n
   .init({
     detection: {
       order: ['path', 'localStorage', 'navigator'],
-      lookupLocalStorage: 'ABC_LANGUAGE',
+      lookupLocalStorage: 'ABC_MAP_LANGUAGE',
     },
     resources: resources,
     supportedLngs: Object.values(Language),

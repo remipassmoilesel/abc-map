@@ -43,6 +43,8 @@ import uniqBy from 'lodash/uniqBy';
 import { stripHtml } from '../../utils/strings';
 import { Geolocation } from '../geolocation/Geolocation';
 import uuid from 'uuid-random';
+import { FeatureSelection } from '../feature-selection/FeatureSelection';
+import { getSelectionFromMap } from '../feature-selection/getSelectionFromMap';
 
 export const logger = Logger.get('MapWrapper.ts');
 
@@ -52,9 +54,9 @@ export declare type ToolChangedHandler = (ev: BaseEvent) => void;
 
 export declare type FeatureCallback = (feat: FeatureWrapper, layer: VectorLayerWrapper) => void;
 
-const ToolChangedEvent = 'abc:map:tool-changed';
-
-const ToolProperty = 'abc:map:tool';
+export const ToolChangedEvent = 'abc:map:tool-changed';
+export const ToolProperty = 'abc:map:tool';
+export const SelectionProperty = 'abc:map:selection';
 
 /**
  * This class wrap OpenLayers map. The goal is not to replace all methods, but to ensure
@@ -181,6 +183,9 @@ export class MapWrapper {
     layers.forEach((lay) => lay.setActive(lay.getId() === layer?.getId()));
 
     this.triggerLayerChange();
+
+    // Each time active layer change we clear selection
+    this.getSelection().clear();
   }
 
   public renameLayer(layer: LayerWrapper, name: string): void {
@@ -232,19 +237,6 @@ export class MapWrapper {
     });
 
     return i;
-  }
-
-  public getSelectedFeatures(): FeatureWrapper[] {
-    const layer = this.getActiveVectorLayer();
-    if (!layer) {
-      return [];
-    }
-
-    return layer
-      .getSource()
-      .getFeatures()
-      .map((f) => FeatureWrapper.from(f))
-      .filter((f) => f.isSelected());
   }
 
   public getProjection(): AbcProjection {
@@ -504,6 +496,15 @@ export class MapWrapper {
   public getRotation(): number {
     const rotationRadians = this.internalMap.getView().getRotation();
     return Math.round(toDegrees(rotationRadians) % 360);
+  }
+
+  public getSelection(): FeatureSelection {
+    return getSelectionFromMap(this.internalMap);
+  }
+
+  public getSelectedFeatures(): FeatureWrapper[] {
+    const features = this.getSelection().getFeatures();
+    return features.map((f) => FeatureWrapper.from(f));
   }
 
   public unwrap(): Map {

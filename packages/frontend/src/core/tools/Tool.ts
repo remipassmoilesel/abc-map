@@ -38,9 +38,6 @@ export interface Tool {
   // Called when tool is enabled
   setup(map: Map, source: VectorSource<Geometry>): void;
 
-  // Can on deselect all, in order to clean internal selections
-  deselectAll(): void;
-
   modeChanged?(mode: ToolMode): void;
 
   // Called when tool is disabled

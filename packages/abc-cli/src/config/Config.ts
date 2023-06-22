@@ -66,7 +66,8 @@ export class Config {
   }
 
   public registryUrl(): string {
-    return 'http://localhost:4873';
+    // We must use "127.0.0.1" and not localhost here, otherwise start may fail on some OS
+    return 'http://127.0.0.1:4873';
   }
 
   public getChartRoot(): string {

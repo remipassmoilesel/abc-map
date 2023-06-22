@@ -43,7 +43,7 @@ export function crossContextInstanceof<T extends object>(obj: unknown, propertie
   return !hasMissingProperty;
 }
 
-export function isOpenlayersFeature(obj: unknown): obj is Feature {
+export function isOpenlayersFeature(obj: unknown): obj is Feature<Geometry> {
   return crossContextInstanceof(obj, ['getId', 'getGeometry', 'getGeometryName', 'getStyle', 'getStyleFunction']);
 }
 
@@ -103,4 +103,8 @@ export function isTileSource(obj: unknown): obj is TileSource {
     'getTilePixelSize',
     'getTileCoordForTileUrlFunction',
   ]);
+}
+
+export function isFeatureWrapper(obj: unknown) {
+  return crossContextInstanceof(obj, ['isFeatureWrapper']);
 }

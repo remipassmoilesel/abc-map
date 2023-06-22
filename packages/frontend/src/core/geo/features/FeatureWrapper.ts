@@ -16,12 +16,12 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import Feature, { FeatureLike } from 'ol/Feature';
+import Feature from 'ol/Feature';
 import Geometry from 'ol/geom/Geometry';
 import { AbcGeometryType, DefaultStyle, FeatureProperties, FeatureStyle, Logger, StyleProperties } from '@abc-map/shared';
 import { nanoid } from 'nanoid';
 import { OlGeometry } from './OlGeometry';
-import { isOpenlayersFeature, isOpenlayersGeometry } from '../../utils/crossContextInstanceof';
+import { isOpenlayersFeature } from '../../utils/crossContextInstanceof';
 import { GeoJSON } from 'ol/format';
 import { Projection } from 'ol/proj';
 import { GeoJSONFeature } from 'ol/format/GeoJSON';
@@ -41,10 +41,12 @@ export declare type DataPropertiesMap = { [key: string]: string | boolean | numb
 
 const geoJson = new GeoJSON();
 
-const highLightStylefactory = new HighlightedStyleFactory();
+const highLightStyleFactory = new HighlightedStyleFactory();
 
 export const HlPreviousStyleKey = 'abc:highlight:previous-style';
 export const HlStyleKey = 'abc:highlight:highlight-style';
+
+export type SupportedFeature<T extends OlGeometry = OlGeometry> = FeatureWrapper | Feature<T>;
 
 /**
  * This class is a thin wrapper around Openlayers features, used to ensure that critical operations
@@ -55,30 +57,31 @@ export class FeatureWrapper<Geom extends OlGeometry = OlGeometry> {
     return new FeatureWrapper(new Feature<Geometry>(geom)).setId();
   }
 
-  public static from<T extends OlGeometry = OlGeometry>(ol: Feature<T>): FeatureWrapper<T> {
-    if (!FeatureWrapper.isFeature(ol)) {
-      throw new Error(`Invalid feature: ${ol ?? 'undefined'}`);
+  public static from<T extends OlGeometry = OlGeometry>(feature: SupportedFeature): FeatureWrapper<T> {
+    // If feature is already wrapped, we return it
+    if (isFeatureWrapper(feature)) {
+      return feature as FeatureWrapper<T>;
     }
-    return new FeatureWrapper<T>(ol);
+
+    if (!isOpenlayersFeature(feature)) {
+      throw new Error(`Invalid feature: ${feature ?? 'undefined'}`);
+    }
+
+    return new FeatureWrapper<T>(feature as Feature<T>);
   }
 
-  public static fromUnknown<T extends OlGeometry = OlGeometry>(ol: unknown): FeatureWrapper<T> | undefined {
-    if (!FeatureWrapper.isFeature(ol)) {
+  public static fromUnknown<T extends OlGeometry = OlGeometry>(feature: unknown): FeatureWrapper<T> | undefined {
+    // If feature is already wrapped, we return it
+    if (isFeatureWrapper(feature)) {
+      return feature as FeatureWrapper<T>;
+    }
+
+    // This is not an Openlayer feature, we can not process it
+    if (!isOpenlayersFeature(feature)) {
       return;
     }
 
-    const hasGeometry = isOpenlayersGeometry(ol.getGeometry());
-    if (hasGeometry) {
-      return FeatureWrapper.from(ol as Feature<T>);
-    }
-  }
-
-  public static isFeature(ol: FeatureLike | unknown): ol is Feature<Geometry> {
-    if (!ol || typeof ol !== 'object') {
-      return false;
-    }
-
-    return isOpenlayersFeature(ol);
+    return FeatureWrapper.from(feature as Feature<T>);
   }
 
   public static fromGeoJSON(feature: GeoJSONFeature, dataProjection?: Projection | string): FeatureWrapper {
@@ -118,6 +121,10 @@ export class FeatureWrapper<Geom extends OlGeometry = OlGeometry> {
     return !!this.feature.get(FeatureProperties.Selected);
   }
 
+  /**
+   * WARNING: You should probably use FeatureSelection class instead.
+   * @param value
+   */
   public setSelected(value: boolean): FeatureWrapper {
     this.feature.set(FeatureProperties.Selected, value);
     return this;
@@ -289,7 +296,8 @@ export class FeatureWrapper<Geom extends OlGeometry = OlGeometry> {
   }
 
   /**
-   * Set and overwrite all data properties.
+   * Overwrite all data properties.
+   *
    * @param properties
    */
   public setDataProperties(properties: DataPropertiesMap): FeatureWrapper {
@@ -334,6 +342,9 @@ export class FeatureWrapper<Geom extends OlGeometry = OlGeometry> {
 
     return {
       id,
+      metadata: {
+        selected: this.isSelected(),
+      },
       data: this.getDataProperties(),
     };
   }
@@ -350,7 +361,7 @@ export class FeatureWrapper<Geom extends OlGeometry = OlGeometry> {
     if (value) {
       this.feature.set(HlPreviousStyleKey, this.feature.getStyle());
 
-      const style = highLightStylefactory.getForFeature(this);
+      const style = highLightStyleFactory.getForFeature(this);
       this.feature.setStyle(style);
 
       this.feature.set(HlStyleKey, style);
@@ -366,4 +377,19 @@ export class FeatureWrapper<Geom extends OlGeometry = OlGeometry> {
       this.feature.unset(HlStyleKey);
     }
   }
+
+  /**
+   * This function helps to identify a FeatureWrapper, even in case of cross context objects.
+   *
+   * In most cases instanceof may work, but not for modules.
+   */
+  public isFeatureWrapper(): this is FeatureWrapper<Geom> {
+    return true;
+  }
+}
+
+export function isFeatureWrapper(feature: unknown) {
+  return (
+    !!feature && typeof feature === 'object' && 'isFeatureWrapper' in feature && typeof feature.isFeatureWrapper === 'function' && feature.isFeatureWrapper()
+  );
 }

@@ -19,7 +19,7 @@
 import { ScriptsView } from './view/ScriptsView';
 import React from 'react';
 import { errorMessage, Logger } from '@abc-map/shared';
-import { ChromiumErrorRegexp, ErrorPosition, Example, FirefoxErrorRegexp, ScriptArguments, ScriptError } from './typings';
+import { ChromiumErrorRegexp, ErrorPosition, FirefoxErrorRegexp, ScriptArguments, ScriptError } from './typings';
 import { ModuleAdapter, ModuleId } from '@abc-map/module-api';
 import { LocalModuleId } from '../LocalModuleId';
 import { prefixedTranslation } from '../../i18n/i18n';
@@ -27,11 +27,9 @@ import { getModuleApi } from '../../core/modules/registry/getModuleApi';
 
 const t = prefixedTranslation('ScriptsModule:');
 
-export const logger = Logger.get('Scripts.tsx', 'info');
+export const logger = Logger.get('Scripts.tsx', 'warn');
 
 export class Scripts extends ModuleAdapter {
-  private scriptContent = Example;
-
   public getId(): ModuleId {
     return LocalModuleId.Scripts;
   }
@@ -45,13 +43,12 @@ export class Scripts extends ModuleAdapter {
   }
 
   public getView() {
-    return <ScriptsView initialValue={this.scriptContent} onProcess={() => this.process(this.scriptContent)} onChange={this.handleScriptChange} />;
+    return <ScriptsView onProcess={this.process} />;
   }
 
-  public process(content: string): string[] {
+  public process = (content: string): string[] => {
     const output: string[] = [];
     function log(data: object | undefined) {
-      logger.info('log()', data);
       output.push(data?.toString() || 'undefined');
     }
 
@@ -77,10 +74,6 @@ export class Scripts extends ModuleAdapter {
 
       throw new ScriptError(message, output);
     }
-  }
-
-  private handleScriptChange = (content: string) => {
-    this.scriptContent = content;
   };
 }
 

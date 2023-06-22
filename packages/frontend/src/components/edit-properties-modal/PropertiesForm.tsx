@@ -34,6 +34,7 @@ interface Props {
 }
 
 export function PropertiesForm(props: Props) {
+  const { t } = useTranslation('EditPropertiesModal');
   const { properties, onChange } = props;
 
   const handleChange = useCallback(
@@ -64,6 +65,12 @@ export function PropertiesForm(props: Props) {
 
   return (
     <table className={Cls.table}>
+      <thead>
+        <tr>
+          <th className={Cls.label}>{t('Property_name')}</th>
+          <th className={Cls.value}>{t('Property_value')}</th>
+        </tr>
+      </thead>
       <tbody>
         {properties.map((property, i) => (
           <PropertyRow
