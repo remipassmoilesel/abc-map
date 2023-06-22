@@ -183,6 +183,32 @@ describe('MapWrapper', function () {
       expect(map.getActiveLayer()).toEqual(undefined);
       expect(layer.isActive()).toEqual(false);
     });
+
+    it('should reset selection', () => {
+      // Prepare
+      const map = MapFactory.createNaked();
+      const layer1 = LayerFactory.newVectorLayer();
+      const layer2 = LayerFactory.newVectorLayer();
+      map.addLayer(layer1);
+      map.addLayer(layer2);
+      map.setActiveLayer(layer1);
+
+      const feature1 = FeatureWrapper.create();
+      const feature2 = FeatureWrapper.create();
+      layer1.getSource().getFeaturesCollection()?.push(feature1.unwrap());
+      layer1.getSource().getFeaturesCollection()?.push(feature2.unwrap());
+
+      map.getSelection().add([feature1]);
+      map.getSelection().add([feature2]);
+
+      // Act
+      map.setActiveLayer(layer2);
+
+      // Assert
+      expect(map.getSelection().getFeatures()).toEqual([]);
+      expect(feature1.isSelected()).toBe(false);
+      expect(feature2.isSelected()).toBe(false);
+    });
   });
 
   describe('getActiveLayer()', () => {

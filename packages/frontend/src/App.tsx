@@ -45,6 +45,7 @@ import { MainKeyboardListener } from './components/main-keyboard-listener/MainKe
 import { useFullscreenView } from './core/ui/useFullscreenView';
 import { SimplePromptModal } from './components/simple-prompt-modal/SimplePromptModal';
 import { MultipleTabsWarning } from './components/multiple-tabs-warning/MultipleTabsWarning';
+import { IframeWarning } from './components/iframe-warning/IframeWarning';
 
 // App views, all lazy loaded
 const LandingView = lazy(() => import('./views/landing/LandingView'));
@@ -109,6 +110,7 @@ export function App() {
           <MainKeyboardListener />
           <SimplePromptModal />
           <MultipleTabsWarning />
+          <IframeWarning />
         </>
       )}
 

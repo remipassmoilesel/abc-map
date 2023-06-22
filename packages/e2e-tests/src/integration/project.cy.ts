@@ -30,6 +30,8 @@ import * as uuid from 'uuid-random';
 import { Routes } from '../helpers/Routes';
 import { Modules } from '../helpers/Modules';
 import { TopBar } from '../helpers/TopBar';
+import { Project } from '../helpers/Project';
+import { FilePrompt } from '../helpers/FilePrompt';
 
 const PROJECT_PASSWORD = 'azerty1234';
 
@@ -41,12 +43,7 @@ describe('Project', function () {
 
     it('can create new project', function () {
       cy.visit(Routes.map().format())
-        .then(() => Modules.open('project-management'))
-        .get('[data-cy=new-project]')
-        .click()
-        .get('[data-cy=confirmation-confirm]')
-        .click()
-        .then(() => Toasts.assertText('New project !'))
+        .then(() => Project.newProject())
         .then(() => TopBar.map())
         .then(() => MainMap.getReference())
         .should((map) => {
@@ -78,7 +75,7 @@ describe('Project', function () {
       cy.visit(Routes.map().format())
         .then(() => LayerControls.addWmsLayerWithCredentials())
         .then(() => Modules.open('project-management'))
-        .get('[data-cy=export-project]')
+        .get('[data-cy=project-management-module] [data-cy=export-project]')
         .click()
         .then(() => Toasts.assertText('Export done !'))
         .then(() => Download.currentFileAsBlob())
@@ -102,14 +99,12 @@ describe('Project', function () {
     it('can import project', function () {
       cy.visit(Routes.map().format())
         .then(() => Modules.open('project-management'))
-        .get('[data-cy=import-project]')
+        .get('[data-cy=project-management-module] [data-cy=import-project]')
         .click()
         .get('[data-cy=confirmation-confirm]')
         .click()
         .then(() => TestData.projectSample1())
-        .then((project) => {
-          return cy.get('[data-cy=file-input]').attachFile({ filePath: 'project.abm2', fileContent: project });
-        })
+        .then((file) => FilePrompt.select('project.abm2', file))
         .then(() => Toasts.assertText('Project loaded !'))
         // Check project name
         .get('[data-cy=project-name]')
@@ -129,7 +124,7 @@ describe('Project', function () {
     it('can import old projects with credentials', function () {
       cy.visit(Routes.map().format())
         .then(() => Modules.open('project-management'))
-        .get('[data-cy=import-project]')
+        .get('[data-cy=project-management-module] [data-cy=import-project]')
         .click()
         .get('[data-cy=confirmation-confirm]')
         .click()
@@ -193,13 +188,11 @@ describe('Project', function () {
         .then(() => LayerControls.addVectorLayer())
         // Save project online
         .then(() => Modules.open('project-management'))
-        .get('[data-cy=save-project]')
+        .get('[data-cy=project-management-module] [data-cy=save-project]')
         .click()
+        .then(() => Toasts.assertText('Project saved !'))
         // Clean current projet and map
-        .get('[data-cy=new-project]')
-        .click()
-        .get('[data-cy=confirmation-confirm]')
-        .click()
+        .then(() => Project.newProject())
         // Open remote project
         .get('[data-cy=remote-project]')
         .eq(0)

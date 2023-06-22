@@ -22,6 +22,7 @@ import { TopBar } from '../helpers/TopBar';
 import { TestData } from '../test-data/TestData';
 import { MainMap } from '../helpers/MainMap';
 import { Modules } from '../helpers/Modules';
+import { FilePrompt } from '../helpers/FilePrompt';
 
 describe('Proportional symbols', function () {
   beforeEach(() => {
@@ -37,7 +38,7 @@ describe('Proportional symbols', function () {
       .get('[data-cy=data-source-import-file]')
       .click()
       .then(() => TestData.countriesCsv())
-      .then((file) => cy.get('[data-cy=file-input]').attachFile({ filePath: 'project.csv', fileContent: file }))
+      .then((file) => FilePrompt.select('countries.csv', file))
       .get('[data-cy=value-field]')
       .select('VALUE')
       .get('[data-cy=data-join-by]')

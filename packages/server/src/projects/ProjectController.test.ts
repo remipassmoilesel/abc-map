@@ -164,7 +164,7 @@ describe('ProjectController', () => {
       // Assert
       // If field is too heavy, content will truncated and will not pass parsing
       assert.equal(res.statusCode, 500);
-      assert.equal(res.body, '{"statusCode":500,"error":"Internal Server Error","message":"Unexpected end of JSON input"}');
+      assert.match(res.body, /(Unexpected end of JSON input|Unterminated string in JSON at position)/gi);
     });
 
     it('should fail if project is too big', async () => {

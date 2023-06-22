@@ -1,0 +1,72 @@
+/**
+ * Copyright © 2021 Rémi Pace.
+ * This file is part of Abc-Map.
+ *
+ * Abc-Map is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of
+ * the License, or (at your option) any later version.
+ *
+ * Abc-Map is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General
+ * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+@import 'src/styles/variables';
+@import 'src/styles/mixins';
+@import 'src/styles/scrollbars';
+
+$sidemenu-width-desktop: calc(max(25vw, 35rem));
+$sidemenu-move-desktop: calc(max(25vw, 35rem) * -1);
+
+$sidemenu-width-mobile: 96vw;
+$sidemenu-move-mobile: -96vw;
+
+.sideMenu {
+  position: fixed;
+  top: 0;
+
+  width: $sidemenu-width-desktop;
+  right: $sidemenu-move-desktop;
+  @include media-breakpoint-down(md) {
+    width: $sidemenu-width-mobile;
+    right: $sidemenu-move-mobile;
+  }
+
+  height: 100vh;
+  opacity: 0.5;
+  border-radius: $border-radius 0 0 $border-radius;
+  overflow: auto;
+
+  display: flex;
+  flex-direction: column;
+
+  padding: 1rem;
+  background: white;
+
+  transition: right ease-in-out 250ms, opacity ease-in-out 150ms;
+
+  &.open {
+    right: 0;
+    opacity: 1;
+  }
+
+  h5 {
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: solid 0.1rem $gray-300;
+  }
+
+  h5:first-child {
+    margin-top: 0.3rem;
+  }
+}
+
+.link {
+  min-width: 40%;
+}

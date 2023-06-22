@@ -39,7 +39,9 @@ export function RemoteProjectsManagement(props: Props) {
   const { t } = useTranslation('ProjectManagement');
   const [projects, setProjects] = useState<AbcProjectMetadata[]>([]);
   const [quotas, setQuotas] = useState<AbcProjectQuotas | undefined>();
-  const [selected, setSelected] = useState<AbcProjectMetadata | undefined>();
+
+  const currectProject = useAppSelector((st) => st.project.metadata);
+  const [selected, setSelected] = useState<AbcProjectMetadata | undefined>(currectProject);
   const [loading, setLoading] = useState(false);
 
   // List projects on mount or after deletion
@@ -75,9 +77,15 @@ export function RemoteProjectsManagement(props: Props) {
 
           return projectService
             .deleteById(project.id)
-            .then(() => {
+            .then<unknown>(() => {
               toasts.info(t('Project_deleted'));
-              return listProjects();
+
+              // If this is the current project, we create a new one and we list projects
+              if (currectProject.name === project.name) {
+                return Promise.all([projectService.newProject(), listProjects()]);
+              } else {
+                return listProjects();
+              }
             })
             .finally(() => {
               setLoading(false);
@@ -89,7 +97,7 @@ export function RemoteProjectsManagement(props: Props) {
           toasts.genericError(err);
         });
     },
-    [listProjects, modals, projectService, t, toasts]
+    [currectProject.name, listProjects, modals, projectService, t, toasts]
   );
 
   const handleOpenProject = useCallback(

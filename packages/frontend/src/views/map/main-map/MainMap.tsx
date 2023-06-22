@@ -46,6 +46,7 @@ interface State {
   tileError: string;
 }
 
+// TODO: remove footer controls, not easily usable on mobile
 class MainMap extends Component<ServiceProps, State> {
   private map: MapWrapper;
   private mapRef = React.createRef<HTMLDivElement>();

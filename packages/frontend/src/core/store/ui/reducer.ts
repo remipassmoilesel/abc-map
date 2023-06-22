@@ -121,6 +121,10 @@ export function uiReducer(state = uiInitialState, action: UiAction): UiState {
       return { ...state, favoriteModules: DefaultFavoriteModules };
     }
 
+    case ActionType.SetServiceWorkerState: {
+      return { ...state, serviceWorker: { ...state.serviceWorker, ...action.state } };
+    }
+
     default:
       return state;
   }

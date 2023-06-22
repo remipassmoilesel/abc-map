@@ -22,7 +22,7 @@ import { TestHelper } from '../helpers/TestHelper';
 import { MainMap } from '../helpers/MainMap';
 import { Draw } from '../helpers/Draw';
 import { Routes } from '../helpers/Routes';
-import { ProjectMenu } from '../helpers/ProjectMenu';
+import { Project } from '../helpers/Project';
 
 describe('Draw features history', function () {
   beforeEach(() => {
@@ -31,7 +31,7 @@ describe('Draw features history', function () {
 
   it('user can add feature then undo and redo', function () {
     cy.visit(Routes.map().format())
-      .then(() => ProjectMenu.newProject())
+      .then(() => Project.newProject())
       .then(() => MainMap.fixedView1())
       .then(() => ToolSelector.enable(MapTool.LineString))
       // First line
@@ -105,12 +105,15 @@ describe('Draw features history', function () {
 
   it('user can modify feature then undo', function () {
     cy.visit(Routes.map().format())
-      .then(() => ProjectMenu.newProject())
+      .then(() => Project.newProject())
       .then(() => MainMap.fixedView1())
       .then(() => ToolSelector.enable(MapTool.LineString))
       // Create line
       .then(() => Draw.click(100, 100))
       .then(() => Draw.dblclick(150, 150))
+      // Unselect all
+      .get('[data-cy=unselect-all]')
+      .click()
       // Select it
       .then(() => ToolSelector.toolMode(ModeName.Modify))
       .then(() => Draw.click(150, 150))

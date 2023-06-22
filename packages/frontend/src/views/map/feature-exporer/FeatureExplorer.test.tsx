@@ -31,6 +31,8 @@ import { ModalEventType, ModalStatus } from '../../../core/ui/typings';
 import { replaceAriaAttributes } from '../../../core/utils/replaceAriaAttributes';
 import { disableUseFeatureLogging } from './useFeatures';
 
+jest.mock('../../../core/ui/getRemSize', () => ({ getRemSize: () => 15 }));
+
 logger.disable();
 
 disableSearchIndexLogging();

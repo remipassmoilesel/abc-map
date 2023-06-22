@@ -67,11 +67,19 @@ export interface UiState {
    * List of user preferred module IDs
    */
   favoriteModules: string[];
+  serviceWorker: ServiceWorkerUiState;
 }
 
 export type InformationKey = keyof UiState['informations'];
 
-export const DefaultFavoriteModules = [LocalModuleId.StaticExport];
+export const DefaultFavoriteModules = [LocalModuleId.DataStore, LocalModuleId.StaticExport, LocalModuleId.SharedMapSettings];
+
+export interface ServiceWorkerUiState {
+  present: boolean;
+  installed: boolean;
+  updateAvailable: boolean;
+  error: boolean;
+}
 
 export const uiInitialState: UiState = {
   historyCapabilities: {},
@@ -86,4 +94,10 @@ export const uiInitialState: UiState = {
   remoteModuleUrls: [],
   lastModulesUsed: [],
   favoriteModules: DefaultFavoriteModules,
+  serviceWorker: {
+    present: false,
+    installed: false,
+    error: false,
+    updateAvailable: false,
+  },
 };

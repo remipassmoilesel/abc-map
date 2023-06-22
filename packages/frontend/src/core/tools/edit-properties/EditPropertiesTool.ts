@@ -34,13 +34,15 @@ import { MoveMapInteractionsBundle } from '../common/interactions/MoveMapInterac
 import isEqual from 'lodash/isEqual';
 import { ToolMode } from '../ToolMode';
 import { Conditions, Modes } from './Modes';
+import { getSelectionFromMap } from '../../geo/feature-selection/getSelectionFromMap';
 
 const logger = Logger.get('EditPropertiesTool.ts');
 
 export class EditPropertiesTool implements Tool {
   private map?: Map;
   private move?: MoveMapInteractionsBundle;
-  private select?: Select;
+  // This interaction is used to select features to edit
+  private editSelect?: Select;
   private interactions: Interaction[] = [];
 
   constructor(private store: MainStore, private history: HistoryService, private modals: ModalService) {}
@@ -69,7 +71,7 @@ export class EditPropertiesTool implements Tool {
     this.move.setup(map);
 
     // Edit properties on selection
-    this.select = new Select({
+    this.editSelect = new Select({
       condition: Conditions.EditProperties,
       toggleCondition: Conditions.EditProperties,
       layers: (lay) => LayerWrapper.from(lay).isActive(),
@@ -79,22 +81,21 @@ export class EditPropertiesTool implements Tool {
       hitTolerance: DefaultTolerancePx,
     });
 
-    this.select.on('select', (ev) => {
-      // We clear deselected elements
-      ev.deselected.forEach((f) => FeatureWrapper.from(f).setSelected(false));
+    const selection = getSelectionFromMap(map);
 
+    this.editSelect.on('select', (ev) => {
       if (!ev.selected.length) {
         return;
       }
 
-      // We keep only the last feature in selection
-      this.select?.getFeatures().forEach((f) => FeatureWrapper.from(f).setSelected(false));
-      this.select?.getFeatures().clear();
-      this.select?.getFeatures().push(ev.selected[0]);
+      // We clear previous selection
+      this.editSelect?.getFeatures().clear();
 
-      // We select feature
+      // Then we select the new feature
       const feature = FeatureWrapper.from(ev.selected[0]);
-      feature.setSelected(true);
+      if (!selection.isSelected(feature)) {
+        selection.add([feature]);
+      }
 
       // Keep previous properties for undo / redo
       const before = feature.getDataProperties();
@@ -109,24 +110,20 @@ export class EditPropertiesTool implements Tool {
             cs.execute().catch((err) => logger.error('Cannot modify properties: ', err));
             this.history.register(HistoryKey.Map, cs);
           }
+
+          // Then we clear selection in order to let user click twice on same item
+          this.editSelect?.getFeatures().clear();
         })
         .catch((err) => logger.error('Error while editing feature properties: ', err));
     });
 
-    map.addInteraction(this.select);
-    this.interactions.push(this.select);
-  }
-
-  public deselectAll() {
-    this.select?.getFeatures().forEach((f) => FeatureWrapper.from(f).setSelected(false));
-    this.select?.getFeatures().clear();
+    map.addInteraction(this.editSelect);
+    this.interactions.push(this.editSelect);
   }
 
   public dispose() {
-    this.deselectAll();
-
     this.move?.dispose();
-    this.select?.dispose();
+    this.editSelect?.dispose();
 
     this.interactions.forEach((inter) => {
       this.map?.removeInteraction(inter);

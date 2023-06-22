@@ -20,46 +20,142 @@ import { TestHelper } from '../helpers/TestHelper';
 import { DataStore } from '../helpers/DataStore';
 import { Download } from '../helpers/Download';
 import { Modules } from '../helpers/Modules';
+import { FilePrompt } from '../helpers/FilePrompt';
 
-describe('Data table module', function () {
+describe('Data table', function () {
   beforeEach(() => {
     TestHelper.init();
   });
 
-  it('User can see layer data', () => {
+  it('User can display layer data', () => {
     DataStore.importByName('Countries of the world')
       .then(() => Modules.open('data-table'))
       .get('[data-cy=layer-selector] > option')
-      .eq(2)
+      .eq(3)
       .then((opt) => cy.get('[data-cy=layer-selector]').select(opt.text()))
-      .get('[data-cy=data-table] [data-cy=header]')
+      .get('[data-cy=table-header]')
       .should((elems) => {
-        expect(elems.toArray().map((e) => e.textContent)).deep.equal(['COUNTRY']);
+        expect(elems.toArray().map((e) => e.textContent)).deep.equal(['#', 'COUNTRY', '']);
       })
-      .get('[data-cy=data-table] [data-cy=cell]')
+      .get('[data-cy=table-cell]')
       .should((elems) => {
-        expect(elems).length(252);
+        expect(elems).length(54);
 
         const cells = elems
           .toArray()
-          .slice(0, 5)
+          .slice(0, 20)
           .map((e) => e.textContent);
-        expect(cells).deep.equal(['South Korea', 'Turkmenistan', 'Tajikistan', 'North Korea', 'Uzbekistan']);
+
+        expect(cells).deep.equal([
+          '1',
+          'South Korea',
+          '',
+          '2',
+          'Turkmenistan',
+          '',
+          '3',
+          'Tajikistan',
+          '',
+          '4',
+          'North Korea',
+          '',
+          '5',
+          'Uzbekistan',
+          '',
+          '6',
+          'Mongolia',
+          '',
+          '7',
+          'Kyrgyzstan',
+        ]);
       });
   });
 
-  it('User can download', () => {
+  it('User can export as CSV', () => {
     DataStore.importByName('Countries of the world')
       .then(() => Modules.open('data-table'))
       .get('[data-cy=layer-selector] > option')
-      .eq(2)
+      .eq(3)
       .then((opt) => cy.get('[data-cy=layer-selector]').select(opt.text()))
-      .get('[data-cy=download]')
+      .get('[data-cy=csv-export]')
       .click()
       .then(() => Download.currentFileAsBlob())
       .should((file) => {
         expect(file).not.undefined;
-        expect(file.size).equal(3_422);
+        // We do not check content here
+        expect(file.size).equal(6_201);
+      });
+  });
+
+  it('User can add column with import', () => {
+    let csvFile: string;
+
+    // We import from data store
+    DataStore.importByName('Countries of the world')
+      .then(() => Modules.open('data-table'))
+      .get('[data-cy=layer-selector] > option')
+      .eq(3)
+      .then((opt) => cy.get('[data-cy=layer-selector]').select(opt.text()))
+      // Then we export
+      .get('[data-cy=csv-export]')
+      .click()
+      .then(() => Download.currentFileAsBlob())
+      .then((file) => file.text())
+      // We modify file content then import it
+      .then((content) => {
+        csvFile = content
+          .split('\r\n')
+          .map((line, i) => (i === 0 ? line + ',NAME_SIZE' : line + ',' + line.length))
+          .join('\n');
+      })
+      .get('[data-cy=csv-import-modal]')
+      .click()
+      .get('[data-cy=csv-import]')
+      .click()
+      .then(() => FilePrompt.select('file.csv', new Blob([csvFile])))
+      // We check import result
+      .get('[data-cy=rows-imported]')
+      .contains('252 rows modified')
+      .get('[data-cy=rows-skipped]')
+      .contains('0 rows skipped')
+      .get('[data-cy=close-import-modal')
+      .click()
+      // We check display
+      .get('[data-cy=table-header]')
+      .should((elems) => {
+        expect(elems.toArray().map((e) => e.textContent)).deep.equal(['#', 'COUNTRY', 'NAME_SIZE', '']);
+      })
+      .get('[data-cy=table-cell]')
+      .should((elems) => {
+        expect(elems).length(72);
+
+        const cells = elems
+          .toArray()
+          .slice(0, 20)
+          .map((e) => e.textContent);
+
+        expect(cells).deep.equal([
+          '1',
+          'South Korea',
+          '22',
+          '',
+          '2',
+          'Turkmenistan',
+          '23',
+          '',
+          '3',
+          'Tajikistan',
+          '21',
+          '',
+          '4',
+          'North Korea',
+          '22',
+          '',
+          '5',
+          'Uzbekistan',
+          '21',
+          '',
+        ]);
       });
   });
 });

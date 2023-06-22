@@ -54,7 +54,8 @@ class LegalMentionsView extends Component<ServiceProps, State> {
   public componentDidMount() {
     pageSetup(t('About_this_platform'));
 
-    this.props.services.legalMentions
+    const { legalMentions } = this.props.services;
+    legalMentions
       .get()
       .then((legalMentions) => this.setState({ legalMentions }))
       .catch((err) => logger.error('Cannot fetch legal mentions: ', err));

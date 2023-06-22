@@ -74,12 +74,22 @@ export class FeedbackService extends AbstractService {
     const satisfied = agg.find((v) => v.value === VoteValue.SATISFIED)?.count || 0;
     const total = notSatisfied + blah + satisfied;
 
+    const startIso = start.toISODate();
+    if (!startIso) {
+      throw new Error('Invalid start: ' + start);
+    }
+
+    const endIso = end.toISODate();
+    if (!endIso) {
+      throw new Error('Invalid end: ' + end);
+    }
+
     return {
       notSatisfied: Math.round((notSatisfied * 100) / total) || 0,
       blah: Math.round((blah * 100) / total) || 0,
       satisfied: Math.round((satisfied * 100) / total) || 0,
-      start: start.toISODate(),
-      end: end.toISODate(),
+      start: startIso,
+      end: endIso,
       total,
     };
   }

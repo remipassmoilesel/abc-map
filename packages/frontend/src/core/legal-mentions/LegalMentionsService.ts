@@ -18,7 +18,6 @@
 import { AxiosInstance } from 'axios';
 import { ToastService } from '../ui/ToastService';
 import { LegalMentionsRoutes as Api } from '../http/ApiRoutes';
-import { BlobIO } from '@abc-map/shared';
 import { ApiClient } from '../http/http-clients';
 
 export class LegalMentionsService {
@@ -31,7 +30,7 @@ export class LegalMentionsService {
   public get(): Promise<string> {
     return this.httpClient
       .get(Api.legalMentions())
-      .then((res) => BlobIO.asString(res.data))
+      .then((res) => res.data)
       .catch((err) => {
         this.toasts.genericError(err);
         return Promise.reject(err);

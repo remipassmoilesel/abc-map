@@ -37,6 +37,12 @@ describe('FeatureWrapper', () => {
       expect(() => FeatureWrapper.from({} as any)).toThrow('Invalid feature: [object Object]');
     });
 
+    it('from() should not wrap twice', () => {
+      const feature = FeatureWrapper.create();
+
+      expect(FeatureWrapper.from(feature)).toStrictEqual(feature);
+    });
+
     it('from() should work and not mutate feature', () => {
       const feature = new Feature(new Point([1, 1]));
       const properties = JSON.stringify(feature.getProperties());
@@ -56,6 +62,12 @@ describe('FeatureWrapper', () => {
       expect(FeatureWrapper.fromUnknown(ol)).toBeDefined();
       expect(FeatureWrapper.fromUnknown(undefined)).toBeUndefined();
       expect(FeatureWrapper.fromUnknown(new Style())).toBeUndefined();
+    });
+
+    it('fromUnknown() should not wrap twice', () => {
+      const feature = FeatureWrapper.create();
+
+      expect(FeatureWrapper.fromUnknown(feature)).toStrictEqual(feature);
     });
 
     it('fromGeoJSON()', () => {
@@ -496,6 +508,7 @@ describe('FeatureWrapper', () => {
           variable1: 'value1',
           variable2: 'value2',
         },
+        metadata: { selected: false },
       });
     });
 

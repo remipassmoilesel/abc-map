@@ -18,8 +18,14 @@
 
 export declare type CsvRow = { [k: string]: string | number | undefined };
 
+export const UnknownLineNumber = -1;
+
 export class CsvParsingError extends Error {
-  constructor(message: string, public row?: number) {
+  constructor(message: string, public line: number) {
     super(message);
   }
+}
+
+export function isCsvParsingError(err: unknown): err is CsvParsingError {
+  return !!err && typeof err === 'object' && 'line' in err && typeof err.line !== 'undefined';
 }

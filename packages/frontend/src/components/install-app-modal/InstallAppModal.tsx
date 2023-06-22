@@ -19,8 +19,7 @@
 import Cls from './InstallAppModal.module.scss';
 import React, { useCallback, useEffect, useState } from 'react';
 import mainLogo from '../../assets/main-icon.png';
-import { prefixedTranslation } from '../../i18n/i18n';
-import { withTranslation } from 'react-i18next';
+import { useTranslation, withTranslation } from 'react-i18next';
 import { usePwaInstallReadiness } from '../../core/pwa/PwaInstallReadinessContext';
 import { useServices } from '../../core/useServices';
 import { Logger } from '@abc-map/shared';
@@ -37,8 +36,6 @@ import * as Bowser from 'bowser';
 
 const logger = Logger.get('InstallAppModal.tsx');
 
-const t = prefixedTranslation('InstallAppModal:');
-
 enum InstallationState {
   NotInstallable = 'NotInstallable',
   NotInstalled = 'NotInstalled',
@@ -52,6 +49,7 @@ const mobile = bowser.getPlatform().type !== 'desktop';
 const browser = bowser.getBrowserName(true);
 
 function InstallAppModal() {
+  const { t } = useTranslation('InstallAppModal');
   const { pwa, toasts, modals } = useServices();
   const [visible, setVisible] = useState(false);
   const [state, setState] = useState(InstallationState.NotInstallable);
@@ -65,7 +63,7 @@ function InstallAppModal() {
   useEffect(() => {
     const visible = appInstallReady && visits > 1 && !dismissed;
 
-    logger.warn('Installation modal: ', { visible, appInstallReady, visitsUp0: visits > 0, dismissed });
+    logger.debug('Installation modal: ', { visible, appInstallReady, visitsUp0: visits > 0, dismissed });
     setState(appInstallReady ? InstallationState.NotInstalled : InstallationState.NotInstallable);
     setVisible(visible);
   }, [dismissed, appInstallReady, visits]);
@@ -188,7 +186,7 @@ function InstallAppModal() {
               <small className={'mb-5'}>{t('This_app_respects_your_privacy_just_like_the_online_version')}</small>
             </div>
 
-            <div className={'d-flex justify-content-center'}>
+            <div className={'d-flex justify-content-center mb-4'}>
               <button onClick={handleInstallApp} className={'btn btn-primary'}>
                 <FaIcon icon={IconDefs.faDownload} className={'mr-2'} />
                 {t('Install')}

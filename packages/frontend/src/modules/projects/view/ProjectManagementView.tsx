@@ -47,7 +47,7 @@ export function ProjectManagementView() {
   }, [modals, toasts]);
 
   return (
-    <div className={Cls.panel}>
+    <div className={Cls.panel} data-cy={'project-management-module'}>
       <ProjectStatus className={'mt-5 mb-3'} />
 
       <Actions className={'mb-3'} />

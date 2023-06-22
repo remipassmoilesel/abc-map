@@ -20,10 +20,11 @@
 
 $scrollbar_bg: $gray-200;
 $scrollbar_fg: $gray-500;
+$scrollbar_width_lg: 0.8rem;
 $scrollbar_width_md: 0.5rem;
 $scrollbar_width_sm: 0.3rem;
 
-@mixin scrollbars($scrollbar_width: $scrollbar_width_md) {
+@mixin defaultScrollbars($scrollbar_width: $scrollbar_width_md) {
   &::-webkit-scrollbar {
     width: $scrollbar_width;
     height: $scrollbar_width;

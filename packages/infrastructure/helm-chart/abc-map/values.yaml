@@ -16,13 +16,13 @@
 
 # Default values for abc-map.
 
-nameOverride: ""
-fullnameOverride: ""
+nameOverride: ''
+fullnameOverride: ''
 
 abcMap:
   replicaCount: 2
   image:
-    tag: "0.1.0"
+    tag: '0.1.0'
     repository: registry.gitlab.com/abc-map/abc-map/server
     pullPolicy: IfNotPresent
 
@@ -112,7 +112,7 @@ abcMap:
   ingress:
     enabled: false
     host: <CHANGE_ME>
-    annotations: { }
+    annotations: {}
     tls:
       enabled: false
       secretName: <CHANGE_ME>
@@ -122,12 +122,11 @@ abcMap:
     prometheus.io/scrape: 'true'
     prometheus.io/path: '/api/metrics'
 
-  imagePullSecrets: [ ]
-  resources: { }
-  nodeSelector: { }
-  tolerations: [ ]
-  affinity: { }
-
+  imagePullSecrets: []
+  resources: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
 
 mongodb:
   enabled: true
@@ -137,11 +136,10 @@ mongodb:
   persistence:
     existingClaim: <CHANGE_ME>
 
-  resources: { }
-  nodeSelector: { }
-  tolerations: [ ]
-  affinity: { }
-
+  resources: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
 
 smtp:
   enabled: true
@@ -153,9 +151,7 @@ smtp:
       -----BEGIN RSA PRIVATE KEY-----
       <CHANGE_ME>
 
-
-  resources: { }
-  nodeSelector: { }
-  tolerations: [ ]
-  affinity: { }
-
+  resources: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}

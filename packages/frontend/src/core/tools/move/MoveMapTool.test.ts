@@ -16,36 +16,31 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { Map } from 'ol';
 import { TestHelper } from '../../utils/test/TestHelper';
 import { MoveMapTool } from './MoveMapTool';
-import { DrawingTestMap } from '../common/interactions/DrawingTestMap.test.helpers';
 
-// FIXME: use a better test setup, this test does not work since OL 7
-describe.skip('MoveMapTool', () => {
-  let map: DrawingTestMap;
+describe('MoveMapTool', () => {
+  let map: Map;
   let tool: MoveMapTool;
 
-  beforeEach(async () => {
-    map = new DrawingTestMap();
-    await map.init();
+  beforeEach(() => {
+    map = new Map();
+    map.getInteractions().clear();
 
     tool = new MoveMapTool();
-    tool.setup(map.getMap());
   });
 
   it('setup()', () => {
-    expect(TestHelper.interactionNames(map.getMap())).toEqual(['DragRotate', 'DragPan', 'PinchRotate', 'PinchZoom', 'MouseWheelZoom']);
+    tool.setup(map);
+
+    expect(TestHelper.interactionNames(map)).toEqual(['DragRotate', 'DragPan', 'PinchRotate', 'PinchZoom', 'MouseWheelZoom']);
   });
 
   it('dispose()', () => {
+    tool.setup(map);
     tool.dispose();
 
-    expect(TestHelper.interactionNames(map.getMap())).toEqual([]);
-  });
-
-  it('drag should move map view', async () => {
-    await map.drag(0, 0, 50, 50);
-
-    expect(map.getMap().getView().getCenter()).toEqual([-45, 40]);
+    expect(TestHelper.interactionNames(map)).toEqual([]);
   });
 });

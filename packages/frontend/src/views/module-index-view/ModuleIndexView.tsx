@@ -151,14 +151,18 @@ export default function ModuleIndexView() {
     dispatch(UiActions.restoreDefaultFavoriteModules());
   }, [dispatch]);
 
+  const restoreFavoritesButton = (
+    <button onClick={handleRestoreFavorites} className={'btn btn-outline-primary'}>
+      <FaIcon icon={IconDefs.faEraser} className={'mr-2'} /> {t('Restore_default_modules')}
+    </button>
+  );
+
   const favoriteModulesList = (
     <>
       <div className={'d-flex justify-content-start align-items-center'}>
         <h2 className={'mr-5'}>{t('Favorite_modules')}</h2>
 
-        <button onClick={handleRestoreFavorites} className={'btn btn-outline-primary'}>
-          <FaIcon icon={IconDefs.faEraser} className={'mr-2'} /> {t('Restore_default_modules')}
-        </button>
+        {restoreFavoritesButton}
       </div>
       <div className={'d-flex flex-wrap mb-4'}>
         {favoriteModules.map((module) => (
@@ -172,13 +176,7 @@ export default function ModuleIndexView() {
 
   return (
     <div className={Cls.view}>
-      <div className={'d-flex align-items-center flex-wrap my-4'}>
-        <h1 className={'mr-5'}>{t('Search_for_a_feature_or_module')}</h1>
-
-        <button onClick={showAddModuleModal} className={'btn btn-outline-primary'} data-cy={'add-module-modal'}>
-          <FaIcon icon={IconDefs.faPlus} /> {t('Add_a_module')}
-        </button>
-      </div>
+      <h1 className={'my-4'}>{t('Search_for_a_feature_or_module')}</h1>
 
       <input
         type={'text'}
@@ -190,10 +188,18 @@ export default function ModuleIndexView() {
         autoFocus={true}
       />
 
-      <small className={'mb-4'}>
-        <FaIcon icon={IconDefs.faInfoCircle} className={'mr-2'} />
-        {t('You_can_display_this_search_at_any_time_by_using_CTRL_M')}
-      </small>
+      <div className={'d-flex flex-wrap align-items-center flex-wrap mb-3'}>
+        <button onClick={showAddModuleModal} className={'btn btn-outline-primary me-2'} data-cy={'add-module-modal'}>
+          <FaIcon icon={IconDefs.faPlus} /> {t('Add_a_module')}
+        </button>
+
+        <div className={'me-4'}>{restoreFavoritesButton}</div>
+
+        <small>
+          <FaIcon icon={IconDefs.faInfoCircle} className={'mr-2'} />
+          {t('You_can_display_this_search_at_any_time_by_using_CTRL_M')}
+        </small>
+      </div>
 
       {/* Users search something */}
       {query && (

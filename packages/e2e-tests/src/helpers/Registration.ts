@@ -35,6 +35,7 @@ export class Registration {
 
   public static newUser(email: string): Chainable<any> {
     // We register user
+    // We MUST use button on landing page
     return cy
       .visit(Routes.landing().format())
       .get('[data-cy=open-registration]')

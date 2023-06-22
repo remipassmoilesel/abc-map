@@ -47,12 +47,12 @@ import { ProjectStatus } from './ProjectStatus';
 import { Routes } from '../../routes';
 import { TextFrameHelpers } from './TextFrameHelpers';
 import uuid from 'uuid-random';
-import { LayoutStorage, ProjectDbStorage, SharedViewStorage } from '../storage/indexeddb/storage/ProjectDbStorage';
+import { LayoutStorage, ProjectDbStorage, SharedViewStorage } from '../storage/project-storage/ProjectDbStorage';
 import { ApiClient, DownloadClient } from '../http/http-clients';
-import { throttleDbStorage } from '../storage/indexeddb/storage/throttleDbStorage';
-import { LayerDbStorage } from '../storage/indexeddb/storage/LayerDbStorage';
+import { throttleDbStorage } from '../storage/project-storage/throttleDbStorage';
+import { LayerDbStorage } from '../storage/project-storage/LayerDbStorage';
 
-export const logger = Logger.get('ProjectService.ts', 'debug');
+export const logger = Logger.get('ProjectService.ts', 'warn');
 
 // This timeout is used for download / upload of projects
 const SaveProjectTimeout = 45_000;

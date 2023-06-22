@@ -17,7 +17,7 @@
  */
 import defaultsDeep from 'lodash/defaultsDeep';
 import throttle from 'lodash/throttle';
-import { StorePersistence } from './persistence/StorePersistence';
+import { StorePersistence } from './utils/StorePersistence';
 import { initialState } from './state';
 import { MainState, mainReducer } from './reducer';
 import { createStore, Store } from 'redux';

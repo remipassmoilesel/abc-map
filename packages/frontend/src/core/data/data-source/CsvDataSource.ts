@@ -48,6 +48,7 @@ export class CsvDataSource implements DataSource {
     const rows = await CsvParser.parse(this.file);
     this._cache = rows.map<DataRow>((row) => ({
       id: nanoid(10),
+      metadata: { selected: false },
       data: row,
     }));
 

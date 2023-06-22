@@ -17,7 +17,7 @@
  */
 
 import { HistoryKey } from '../../history/HistoryKey';
-import { InformationKey } from './state';
+import { InformationKey, ServiceWorkerUiState } from './state';
 
 export enum ActionType {
   SetHistoryCapabilities = 'SetHistoryCapabilities',
@@ -31,6 +31,7 @@ export enum ActionType {
   RegisterModuleUsage = 'RegisterModuleUsage',
   MarkFavorite = 'MarkFavorite',
   RestoreDefaultFavoriteModules = 'RestoreDefaultFavoriteModules',
+  SetServiceWorkerState = 'SetServiceWorkerState',
 }
 
 export interface SetHistoryCapabilities {
@@ -90,6 +91,11 @@ export interface RestoreDefaultFavoriteModules {
   type: ActionType.RestoreDefaultFavoriteModules;
 }
 
+export interface SetServiceWorkerState {
+  type: ActionType.SetServiceWorkerState;
+  state: Partial<ServiceWorkerUiState>;
+}
+
 export type UiAction =
   | SetHistoryCapabilities
   | CleanHistoryCapabilities
@@ -101,7 +107,8 @@ export type UiAction =
   | SetRemoteModuleUrls
   | RegisterModuleUsage
   | MarkFavorite
-  | RestoreDefaultFavoriteModules;
+  | RestoreDefaultFavoriteModules
+  | SetServiceWorkerState;
 
 export class UiActions {
   public static setHistoryCapabilities(key: HistoryKey, canUndo: boolean, canRedo: boolean): UiAction {
@@ -180,6 +187,13 @@ export class UiActions {
   public static restoreDefaultFavoriteModules(): UiAction {
     return {
       type: ActionType.RestoreDefaultFavoriteModules,
+    };
+  }
+
+  public static setServiceWorkerState(state: Partial<ServiceWorkerUiState>): UiAction {
+    return {
+      type: ActionType.SetServiceWorkerState,
+      state,
     };
   }
 }

@@ -22,7 +22,6 @@ import { FullscreenModal } from '../fullscreen-modal/FullscreenModal';
 import mainLogo from '../../assets/main-icon.png';
 import Cls from '../device-warning-modal/DeviceWarningModal.module.scss';
 import { useTranslation } from 'react-i18next';
-import { useLocation } from 'react-router-dom';
 import uuid from 'uuid-random';
 import clsx from 'clsx';
 
@@ -39,11 +38,10 @@ interface Message {
 export function MultipleTabsWarning() {
   const { t } = useTranslation('MultipleTabsWarning');
   const [visible, setVisible] = useState(false);
-  const [dissmissed, setDissmissed] = useState(false);
-  const location = useLocation();
+  const [dismissed, setDismissed] = useState(false);
 
   useEffect(() => {
-    if (dissmissed) {
+    if (dismissed) {
       return;
     }
 
@@ -54,7 +52,7 @@ export function MultipleTabsWarning() {
       const fromAnotherInstance = event.data.instanceId !== instanceId;
       const otherIsOlder = event.data.instantiatedAt < instantiatedAt;
 
-      if (fromAnotherInstance && otherIsOlder && !dissmissed) {
+      if (fromAnotherInstance && otherIsOlder && !dismissed) {
         setVisible(true);
       }
     };
@@ -68,11 +66,11 @@ export function MultipleTabsWarning() {
       clearInterval(interval);
       channel.close();
     };
-  }, [dissmissed, location.pathname]);
+  }, [dismissed]);
 
   const handleDismissed = useCallback(() => {
     setVisible(false);
-    setDissmissed(true);
+    setDismissed(true);
   }, []);
 
   if (!visible) {

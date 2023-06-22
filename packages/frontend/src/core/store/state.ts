@@ -30,3 +30,47 @@ export function initialState(): MainState {
     ui: uiInitialState,
   };
 }
+
+export const CURRENT_STATE_VERSION = 1;
+
+export function toPersistedState(state: MainState): MainState {
+  return {
+    ...state,
+    project: {
+      ...state.project,
+      layouts: {
+        ...state.project.layouts,
+        activeId: undefined,
+      },
+      sharedViews: {
+        ...state.project.sharedViews,
+        activeId: undefined,
+        mapDimensions: {
+          ...state.project.sharedViews.mapDimensions,
+          width: 0,
+          height: 0,
+        },
+      },
+      lastSaveOnline: null,
+      lastExport: null,
+    },
+    map: {
+      ...state.map,
+    },
+    ui: {
+      ...state.ui,
+      historyCapabilities: {},
+      sideMenu: {},
+      serviceWorker: {
+        present: false,
+        error: false,
+        updateAvailable: false,
+        installed: false,
+      },
+      documentation: {
+        ...state.ui.documentation,
+        scrollPosition: 0,
+      },
+    },
+  };
+}

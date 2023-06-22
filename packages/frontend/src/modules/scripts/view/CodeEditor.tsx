@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { Component } from 'react';
+import React, { useCallback } from 'react';
 import Editor from 'react-simple-code-editor';
 import { highlight, languages } from 'prismjs';
 import 'prismjs/components/prism-javascript';
@@ -25,54 +25,35 @@ import Cls from './CodeEditor.module.scss';
 import clsx from 'clsx';
 
 interface Props {
-  initialContent: string;
+  content: string;
   onChange: (content: string) => void;
   className?: string;
 }
 
-interface State {
-  content: string;
-}
+export function CodeEditor(props: Props) {
+  const { content, className, onChange } = props;
 
-class CodeEditor extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = { content: this.props.initialContent };
-  }
-
-  public render() {
-    const { className } = this.props;
-    const { content } = this.state;
-
-    return (
-      <Editor
-        value={content}
-        onValueChange={this.onChange}
-        highlight={this.highlightWithLineNumbers}
-        padding={10}
-        textareaClassName={Cls.textarea}
-        className={clsx(Cls.editor, className)}
-        style={{
-          fontFamily: '"Fira code", "Fira Mono", monospace',
-          outline: 0,
-        }}
-        // This id is used in E2E tests
-        textareaId={'code-editor'}
-      />
-    );
-  }
-
-  private onChange = (content: string) => {
-    this.setState({ content });
-    this.props.onChange(content);
-  };
-
-  private highlightWithLineNumbers = (input: string) => {
+  const highlightWithLineNumbers = useCallback((input: string) => {
     return highlight(input, languages.javascript, 'javascript')
       .split('\n')
       .map((line, i) => `<span class='${Cls.lineNumber}'>${i + 1}</span>${line}`)
       .join('\n');
-  };
-}
+  }, []);
 
-export default CodeEditor;
+  return (
+    <Editor
+      value={content}
+      onValueChange={onChange}
+      highlight={highlightWithLineNumbers}
+      padding={10}
+      textareaClassName={Cls.textarea}
+      className={clsx(Cls.editor, className)}
+      style={{
+        fontFamily: '"Fira code", "Fira Mono", monospace',
+        outline: 0,
+      }}
+      // This id is used in E2E tests
+      textareaId={'code-editor'}
+    />
+  );
+}

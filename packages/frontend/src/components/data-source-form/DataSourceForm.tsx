@@ -20,7 +20,6 @@ import React, { ChangeEvent, Component } from 'react';
 import { Logger } from '@abc-map/shared';
 import DataSourceSelector from './DataSourceSelector';
 import { DataRow, DataSource } from '../../core/data/data-source/DataSource';
-import DataTable from '../data-table/DataTable';
 import { ServiceProps, withServices } from '../../core/withServices';
 import DialogBoxAdvice from '../dialog-box-advice/DialogBoxAdvice';
 import { DataProcessingTips } from '@abc-map/user-documentation';
@@ -28,6 +27,7 @@ import FormLine from '../form-line/FormLine';
 import { prefixedTranslation } from '../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
 import { getAllFieldNames } from '../../core/data/getFieldNames';
+import { SmallDataTable } from '../small-data-table/SmallDataTable';
 
 const logger = Logger.get('DataSourceForm.tsx');
 
@@ -130,7 +130,7 @@ class DataSourceForm extends Component<Props, State> {
         {!!dataSamples.length && (
           <>
             <div className={'my-3'}>{t('Data_samples')}</div>
-            <DataTable rows={dataSamples} />
+            <SmallDataTable rows={dataSamples} />
           </>
         )}
       </>

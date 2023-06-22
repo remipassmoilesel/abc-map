@@ -18,30 +18,24 @@
 
 import React from 'react';
 import Cls from './PaypalButton.module.scss';
-import { prefixedTranslation } from '../../i18n/i18n';
-import { withTranslation } from 'react-i18next';
-
-const t = prefixedTranslation('FundingLinks:');
+import { useTranslation } from 'react-i18next';
+import clsx from 'clsx';
+import PaypalGif from './paypal.gif';
 
 interface Props {
   className: string;
 }
 
-function PaypalButton(props: Props) {
+export function PaypalButton(props: Props) {
+  const { className } = props;
+  const { t } = useTranslation('FundingLinks');
+
   return (
     <form action="https://www.paypal.com/donate" method="post" target="_top">
       <input type="hidden" name="hosted_button_id" value="WH89JA8JJPRCQ" />
-      <input
-        type="image"
-        name="submit"
-        src="https://www.paypalobjects.com/fr_FR/FR/i/btn/btn_donateCC_LG.gif"
-        title={t('Donate_with_paypal')}
-        alt={t('Donate_with_paypal')}
-        className={`${Cls.input} ${props.className}`}
-      />
-      <img src="https://www.paypal.com/fr_FR/i/scr/pixel.gif" width="1" height="1" className={Cls.image} alt="" />
+      <input type="image" name="submit" src={PaypalGif} title={t('Donate_with_paypal')} alt={t('Donate_with_paypal')} className={clsx(Cls.input, className)} />
+      {/* Do not add a alt tag here, image loads often incorrectly */}
+      <img src="https://www.paypal.com/fr_FR/i/scr/pixel.gif" crossOrigin="anonymous" width="1" height="1" className={Cls.image} alt={''} />
     </form>
   );
 }
-
-export default withTranslation()(PaypalButton);

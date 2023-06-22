@@ -7,12 +7,11 @@
     "build"
   ],
   "scripts": {
-    "build": "CI=true yarn run build:version && yarn run build:changelog && yarn run build:doc-assets && yarn run type-check && react-app-rewired build && yarn run build:check && yarn run build:package",
+    "build": "CI=true yarn run build:changelog && yarn run build:doc-assets && yarn run type-check && react-app-rewired build && yarn run build:check && yarn run build:package",
     "build:changelog": "scripts/build-changelog.js",
     "build:check": "./scripts/check-build.js",
     "build:doc-assets": "./scripts/link-doc-assets.js",
     "build:package": "./scripts/package.js",
-    "build:version": "./scripts/build-version.js",
     "bundle-analyze": "node scripts/bundle-analyze.js",
     "clean": "rm -rf build",
     "clean-build": "yarn run clean && yarn run build",
@@ -25,6 +24,7 @@
     "test": "CI=true react-app-rewired test --verbose",
     "test:interactive": "react-app-rewired test",
     "type-check": "tsc --noEmit",
+    "version": "node scripts/version.js",
     "watch": "tsc --noEmit --watch | sed -u 's/\\x1Bc//g'"
   },
   "browserslist": {
@@ -54,9 +54,12 @@
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@juggle/resize-observer": "^3.4.0",
     "@leeoniya/ufuzzy": "^1.0.6",
+    "@tanstack/react-table": "^8.9.2",
+    "@tanstack/react-virtual": "3.0.0-beta.54",
     "axios": "^1.4.0",
     "bootstrap": "5.2.3",
     "bowser": "^2.11.0",
+    "buffer": "^6.0.3",
     "canvas-confetti": "^1.6.0",
     "check-password-strength": "^2.0.7",
     "chroma-js": "^2.4.2",
@@ -112,10 +115,10 @@
     "workbox-range-requests": "^6.5.4",
     "workbox-routing": "^6.5.4",
     "workbox-strategies": "^6.5.4",
-    "workbox-streams": "^6.5.4"
+    "workbox-streams": "^6.5.4",
+    "zustand": "^4.3.8"
   },
   "devDependencies": {
-    "@mixer/parallel-prettier": "^2.0.3",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^14.4.3",
@@ -169,7 +172,7 @@
     "resize-observer-polyfill": "^1.5.1",
     "showdown": "^2.1.0",
     "stream-browserify": "^3.0.0",
-    "typescript": "^5.0.4",
+    "typescript": "5.0.4",
     "utility-types": "^3.10.0",
     "webpack-bundle-analyzer": "^4.7.0"
   },

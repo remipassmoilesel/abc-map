@@ -36,19 +36,31 @@
     "Documentation": "Documentation",
     "Support_AbcMap": "Soutenez Abc-Map",
     "Menu": "Menu",
-    "Plus": "Plus"
-  },
-  "UserMenu": {
+    "Plus": "Plus",
+    "Close_menu": "Fermer le menu",
+    "New_project": "Nouveau projet",
+    "Import_project": "Importer un projet",
+    "Export_project": "Exporter le projet",
+    "Save_online": "Enregistrer en ligne",
+    "See_more": "Voir plus ...",
     "Hello_visitor": "Bonjour visiteur !",
     "Login": "Se connecter",
     "Register": "S'inscrire",
     "Lost_password": "Mot de passe perdu",
-    "My_account": "Mon compte",
     "Logout": "Se déconnecter",
     "You_are_disconnected": "Vous êtes déconnecté",
     "Feedbacks": "Commentaires ?",
-    "Experimental_features": "Fonctionnalités expérimentales",
-    "Install_app": "Installer l'application"
+    "More_features": "+ de fonctionnalités",
+    "Install_app": "Installer l'application",
+    "Toggle_fullscreen": "Plein écran",
+    "My_account": "Mon compte",
+    "My_projects": "Mes projets",
+    "Links": "Liens",
+    "Try_fullscreen_mode": "Essayez le plein écran",
+    "Close": "Fermer",
+    "New_version_available_Restart_Abc-Map": "Nouvelle version disponible ! Redémarrez Abc-Map",
+    "You_can_use_abc-map_offline": "Vous pouvez utiliser Abc-map hors ligne",
+    "You_cannot_use_abc-map_offline": "Vous ne pouvez pas utiliser Abc-map hors ligne"
   },
   "FeedbackModal": {
     "So_how_is_it_going": "Alors, comment ça se passe ?"
@@ -84,7 +96,7 @@
     "ALittle": "Charger ma vue",
     "ALot": "Charger plusieurs niveaux de zoom",
     "You_can_preload_a_map_area_for_offline_use": "Vous pouvez précharger une zone de carte pour l'utiliser hors ligne",
-    "Search": "Rechercher",
+    "Search_for_a_place_or_an_address": "Rechercher un endroit ou une adresse",
     "No_results": "Aucun résultat",
     "Cursor_position": "Position du curseur",
     "Latitude": "Latitude",
@@ -217,9 +229,12 @@
     "Delete": "Supprimer",
     "Nothing_match": "Rien ne correspond",
     "Name_field": "Attribut de nom d'entité:",
+    "Select_the_attribute_that_you_want_to_use_as_the_principal_name_of_the_entities": "Sélectionnez l'attribut que vous souhaitez utiliser comme nom principal des entités.",
+    "You_cannot_change_the_name_attribute_Try_a_layer_with_data": "Vous ne pouvez pas changer l'attribut de nom. Essayez une couche avec des données.",
     "Settings": "Paramètres",
     "Geometry": "Géometrie",
-    "More": "Plus"
+    "More": "Plus",
+    "Invalid_feature": "Entité invalide"
   },
   "Scale": {
     "Scale": "Echelle"
@@ -339,7 +354,7 @@
     "Preview": "Aperçu",
     "No_preview_available": "Pas d'aperçu disponible",
     "Preview_of_artifact": "Aperçu de l'artefact",
-    "All": "Tous",
+    "Display_all": "Afficher tout",
     "Licence_and_terms_of_use": "Licence et conditions d'utilisation",
     "About_data_store": "A propos du magasin de données",
     "About_data_store_and_data": "<div>\n    <p>Le magasin de données vous propose:</p>\n    <ul>\n        <li>Des données issues de sources libres</li>\n        <li>Des configurations de sources de données</li>\n    </ul>\n\n    <p>Certaines de ces données sont gratuites pour tous usages, certaines sont payantes pour des usages commerciaux.</p>\n    <p>Toutes les données ont des conditions d'utilisation. Référez-vous aux informations de licence et aux liens vers les sources.</p>\n</div>",
@@ -349,13 +364,50 @@
   },
   "DataTableModule": {
     "Data_tables": "Tableaux de données",
-    "Select_a_layer": "Sélectionnez une couche pour visualiser ses données.",
-    "Download_CSV": "Télécharger au format CSV",
+    "Layer": "Couche:",
+    "CSV_export": "Exporter au format CSV",
     "X_entries": "<b>{{entries}}</b> entrées",
     "No_data_to_display": "Pas de données à afficher",
     "You_must_select_a_layer_with_data": "Vous devez sélectionner une couche qui contient des données",
     "Visualize_feature_layers_as_tables": "Visualisez les couches d'entités sous forme de tableaux",
-    "Loading_data": "Chargement ..."
+    "Show_on_map": "Montrer sur la carte",
+    "Select": "Selectionner",
+    "Edit": "Modifier",
+    "Delete": "Supprimer",
+    "Deselect": "Désélectionner",
+    "This_layer_does_not_contain_data_that_can_be_used_in_this_module": "Cette couche ne contient pas de données utilisables dans ce module.",
+    "Search": "Recherche ...",
+    "Min": "Min",
+    "Max": "Max",
+    "Page": "Page",
+    "Go_to": "Aller à",
+    "Show": "Afficher",
+    "Filter_data": "Filtrer les données:",
+    "Sort_data": "Trier les données:",
+    "Ascending_order": "Ordre croissant",
+    "Descending_order": "Ordre décroissant",
+    "There_is_no_data_yet_click_to_add_some": "Il n'y a pas encore de données, cliquez pour en ajouter",
+    "CSV_import": "Importer au format CSV",
+    "You_can_import_a_CSV_file_to_edit_layer_data": "Vous pouvez importer un fichier CSV pour modifier les données d'une couche.",
+    "For_the_import_to_work_correctly": "Pour que l'importation fonctionne correctement:",
+    "Import_only_files_exported_with_the_Export_CSV_button": "Importez uniquement des fichiers exportés avec le bouton 'Exporter au format CSV'",
+    "Preserve_XX_column_values": "Préservez les valeurs de la colonne '{{id}}'",
+    "Import_a_CSV_file": "Importer un fichier CSV",
+    "Import_is_complete": "L'import est terminé",
+    "Lines_were_skipped_during_import": "Des lignes ont été ignorées pendant l'import.",
+    "You_should_probably_export_again_and_check_the_values_of_the_id_columns": "Vous devriez surement exportez à nouveau et vérifier les valeurs des colonnes id.",
+    "rows_modified": "lignes modifiées",
+    "rows_skipped": "lignes ignorées",
+    "File": "Fichier",
+    "Modified_at": "Modifié à",
+    "Import_error": "Erreur d'import",
+    "Skipped_rows": "Lignes ignorées",
+    "The_import_did_not_complete_successfully": "L'import ne s'est pas terminé correctement.",
+    "You_should_probably_check_the_input_data": "Vous devriez probablement vérifier les données d'entrée.",
+    "Error_message": "Message d'erreur",
+    "Error_at_line": "Erreur à la ligne",
+    "rows": "lignes",
+    "Attention_you_cannot_cancel_a_CSV_import": "Attention, vous ne pouvez pas annuler un import CSV."
   },
   "ColorGradientsModule": {
     "Color_gradients": "Dégradés de couleurs",
@@ -498,7 +550,8 @@
     "Execute": "Exécuter",
     "Output": "Sortie",
     "Executed_without_errors": "Script exécuté sans erreurs",
-    "Error": "Erreur d'exécution"
+    "Error": "Erreur d'exécution",
+    "Default_content": "Contenu par défaut"
   },
   "ArtefactGeneratorModule": {
     "Artefact_generator": "Générateur d'artefact",
@@ -565,7 +618,7 @@
     "Confirm": "Confirm"
   },
   "FundingView": {
-    "Support_AbcMap": "Soutenez d'Abc-Map",
+    "Support_AbcMap": "Soutenez Abc-Map",
     "Why": "Pourquoi",
     "AbcMap_is_FOSS": "Abc-Map est un logiciel libre développé et hébergé bénévolement.",
     "No_ads_no_race_for_attention": "Vous avez remarqué ? Pas de pub, pas de course à l'attention, pas de récolte de données personnelles",
@@ -696,7 +749,7 @@
     "Map_is_over_here": "Pour la carte, c'est par ici",
     "Registration_confirmation": "Confirmation d'inscription"
   },
-  "DataTable": {
+  "SmallDataTable": {
     "No_data": "Pas de données",
     "Undefined": "Non défini",
     "Modify": "Modifier",
@@ -711,7 +764,9 @@
     "Save": "Enregistrer",
     "Delete_property": "Supprimer la propriété",
     "Value": "Valeur",
-    "New_property": "Nouvelle propriété"
+    "New_property": "Nouvelle propriété",
+    "Property_name": "Nom de la propriété",
+    "Property_value": "Valeur de la propriété"
   },
   "FoldingCard": {
     "Open": "Ouvrir",
@@ -802,7 +857,7 @@
     "Next_view": "Vue suivante",
     "More": "Plus ..."
   },
-  "CopyButton": {
+  "CopyToClipboardButton": {
     "Copied": "Copié !",
     "Copy_to_clipboard": "Copier dans le presse papier",
     "Cannot_copy_to_clipboard": "Impossible de copier dans le presse-papiers avec ce navigateur"
@@ -822,7 +877,7 @@
     "Actions": "Actions",
     "Downloading": "Téléchargement en cours",
     "Map_data": "Données de la carte",
-    "Beautiful_data_ready_to_use": "De belle données, prêtes à être utilisé",
+    "Beautiful_data_ready_to_use": "De belle données, prêtes à être utilisées",
     "See_you_on": "Rendez-vous sur",
     "Lets_go": "C'est parti !"
   },
@@ -1068,15 +1123,6 @@
     "You_must_select_a_file_with_extension_": "Vous devez sélectionner un fichier au format {{extension}}",
     "Opening_in_progress": "Ouverture en cours ..."
   },
-  "ProjectMenu": {
-    "New_project": "Nouveau projet",
-    "Import_project": "Importer un projet",
-    "Export_project": "Exporter le projet",
-    "You_must_login_to_save_online": "Vous devez vous connecter pour enregistrer en ligne",
-    "Save_online": "Enregistrer en ligne",
-    "My_projects": "Mes projets",
-    "See_more": "Voir plus ..."
-  },
   "ProjectFactory": {
     "Project": "Projet du {{date}}"
   },
@@ -1152,6 +1198,14 @@
     "Multiple_tabs_open": "Plusieurs onglets ouverts",
     "Abc-Map_is_already_open_in_another_tab": "Abc-Map est déjà ouvert dans un autre onglet.",
     "You_may_accidentally_overwrite_your_work": "Vous risquez d'écraser votre travail par accident.",
+    "Hide_this_message": "Masquer ce message"
+  },
+  "IframeWarning": {
+    "Iframe_problem": "Problème d'IFrame",
+    "The_app_is_displayed_in_an_iframe_and_that_s_not_normal": "L'application est affichée dans une IFrame, et ce n'est pas normal.",
+    "To_avoid_any_security_risk_you_must_close_this_window_and_open_a_new_one_This_message_should_no_longer_appear": "Pour éviter tout risque de sécurité vous devez fermer cette fenêtre et en ouvrir une nouvelle. Ce message ne doit plus apparaitre ensuite.",
+    "Wait_a_few_seconds": "Patientez quelques secondes",
+    "I_will_close_this_window": "Je vais fermer cette fenêtre",
     "Hide_this_message": "Masquer ce message"
   }
 }

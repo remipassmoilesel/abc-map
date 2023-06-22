@@ -22,7 +22,7 @@ import { ToolSelector } from '../helpers/ToolSelector';
 import { Draw } from '../helpers/Draw';
 import { MainMap } from '../helpers/MainMap';
 import { Routes } from '../helpers/Routes';
-import { ProjectMenu } from '../helpers/ProjectMenu';
+import { Project } from '../helpers/Project';
 
 describe('Tool Text', function () {
   beforeEach(() => {
@@ -31,7 +31,7 @@ describe('Tool Text', function () {
 
   it('user can add text', function () {
     cy.visit(Routes.map().format())
-      .then(() => ProjectMenu.newProject())
+      .then(() => Project.newProject())
       .then(() => MainMap.fixedView1())
       .then(() => MainMap.getComponent())
       .then(() => ToolSelector.enable(MapTool.Point))

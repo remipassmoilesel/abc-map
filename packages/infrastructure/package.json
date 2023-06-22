@@ -2,5 +2,13 @@
   "name": "@abc-map/infrastructure",
   "version": "1.0.0",
   "private": true,
-  "license": "AGPL-3.0-or-later"
+  "license": "AGPL-3.0-or-later",
+  "scripts": {
+    "lint-fix": "yarn run lint-helm-chart && yarn run lint-others",
+    "lint-helm-chart": "helm lint helm-chart/abc-map",
+    "lint-others": "prettier --loglevel warn --write ."
+  },
+  "devDependencies": {
+    "prettier": "^2.8.8"
+  }
 }

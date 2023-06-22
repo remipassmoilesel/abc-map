@@ -41,16 +41,16 @@ import { LayerFactory } from '../geo/layers/LayerFactory';
 import { ProjectUpdater } from './ProjectUpdater';
 import { ProjectFactory } from './ProjectFactory';
 import { deepFreeze } from '../utils/deepFreeze';
-import { LayoutStorage, ProjectDbStorage, SharedViewStorage } from '../storage/indexeddb/storage/ProjectDbStorage';
-import { initProjectDatabase } from '../storage/indexeddb/projects-database';
+import { LayoutStorage, ProjectDbStorage, SharedViewStorage } from '../storage/project-storage/ProjectDbStorage';
+import { initProjectDatabase } from '../storage/project-storage/projects-database';
 import { ApiClient, DownloadClient } from '../http/http-clients';
-import { LayerDbStorage } from '../storage/indexeddb/storage/LayerDbStorage';
+import { LayerDbStorage } from '../storage/project-storage/LayerDbStorage';
 import { logger, ProjectService } from './ProjectService';
-import { throttleDbStorage } from '../storage/indexeddb/storage/throttleDbStorage';
-import { disableGenericStorageLog } from '../storage/indexeddb/storage/GenericReduxDbStorage';
+import { throttleDbStorage } from '../storage/project-storage/throttleDbStorage';
+import { disableGenericStorageLog } from '../storage/project-storage/GenericReduxDbStorage';
 import { VectorLayerWrapper } from '../geo/layers/LayerWrapper';
 import { FeatureWrapper } from '../geo/features/FeatureWrapper';
-import { disableFeatureStorageLog, FeatureDbStorage } from '../storage/indexeddb/storage/FeatureDbStorage';
+import { disableFeatureStorageLog, FeatureDbStorage } from '../storage/project-storage/FeatureDbStorage';
 import sortBy from 'lodash/sortBy';
 import MockedFn = jest.MockedFn;
 
@@ -59,12 +59,12 @@ disableGenericStorageLog();
 disableFeatureStorageLog();
 
 // We disable throttling for tests
-jest.mock('../storage/indexeddb/storage/throttleDbStorage', () => ({
+jest.mock('../storage/project-storage/throttleDbStorage', () => ({
   throttleDbStorage: jest.fn(),
 }));
 
 describe('ProjectService', function () {
-  // In tests we disable throttling
+  // We disable throttling
   beforeEach(() => {
     (throttleDbStorage as MockedFn<any>).mockImplementation((storageCb) => storageCb);
   });

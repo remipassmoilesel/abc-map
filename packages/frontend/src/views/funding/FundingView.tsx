@@ -19,7 +19,7 @@
 import React, { Component, ReactNode } from 'react';
 import { ServiceProps, withServices } from '../../core/withServices';
 import { pageSetup } from '../../core/utils/page-setup';
-import FundingLinks from '../../components/funding-links/FundingLinks';
+import { FundingLinks } from '../../components/funding-links/FundingLinks';
 import { prefixedTranslation } from '../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
 import Cls from './FundingView.module.scss';

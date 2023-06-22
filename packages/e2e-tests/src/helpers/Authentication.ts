@@ -18,13 +18,12 @@
 
 import Chainable = Cypress.Chainable;
 import { Toasts } from './Toasts';
-import { Routes } from './Routes';
+import { MainMenu } from './MainMenu';
 
 export class Authentication {
   public static login(email: string, password: string): Chainable<any> {
-    return cy
-      .visit(Routes.landing().format())
-      .get('[data-cy=open-login]')
+    return MainMenu.open()
+      .get('[data-cy=main-menu] [data-cy=open-login]')
       .click()
       .get('input[data-cy=email]')
       .type(email)
@@ -33,16 +32,16 @@ export class Authentication {
       .get('button[data-cy=confirm-login]')
       .click()
       .then(() => Toasts.assertText('You are connected !'))
-      .then(() => Toasts.dismiss());
+      .then(() => MainMenu.close());
   }
 
   public static logout(): Chainable<any> {
     return (
-      cy
-        .get('[data-cy=user-menu]')
+      MainMenu.open()
+        .get('[data-cy=main-menu] [data-cy=logout]')
         .click()
-        .get('[data-cy=logout]')
-        .click()
+        .then(() => Toasts.assertText('You are disconnected'))
+        .then(() => MainMenu.close())
         // We must wait a little for storage persistence
         .wait(700)
     );

@@ -19,7 +19,7 @@
 import { LoadFunction } from 'ol/Tile';
 import { Logger } from '@abc-map/shared';
 import axios, { AxiosError } from 'axios';
-import { TileStorage } from '../../storage/indexeddb/storage/TileDbStorage';
+import { TileStorage } from '../../storage/project-storage/TileDbStorage';
 import { setTileImage } from './setTileImage';
 import { setTileError } from './setTileError';
 

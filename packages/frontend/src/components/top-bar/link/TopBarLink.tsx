@@ -17,30 +17,35 @@
  */
 
 import React, { ReactNode, useCallback } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Cls from './TopBarLink.module.scss';
 import clsx from 'clsx';
 
 export interface Props {
   to: string;
-  activeMatch?: RegExp;
   children: ReactNode | ReactNode[];
+  display?: 'vertical' | 'horizontal';
+  activeMatch?: RegExp;
   'data-cy'?: string;
   className?: string;
+  onClick?: () => void;
 }
 
 export function TopBarLink(props: Props) {
-  const { to, activeMatch, children, 'data-cy': dataCy, className } = props;
+  const { to, children, activeMatch, display, 'data-cy': dataCy, className, onClick } = props;
   const location = useLocation();
   const navigate = useNavigate();
 
   const match = activeMatch || new RegExp(`^${to}`, 'i');
   const isActive = !!location.pathname.match(match);
 
-  const handleClick = useCallback(() => navigate(to), [navigate, to]);
-
+  const handleClick = useCallback(() => {
+    navigate(to);
+    onClick && onClick();
+  }, [navigate, onClick, to]);
+  const displayClass = display === 'horizontal' ? Cls.horizontal : Cls.vertical;
   return (
-    <button onClick={handleClick} className={clsx(Cls.topBarLink, isActive && Cls.active, className)} data-cy={dataCy}>
+    <button onClick={handleClick} className={clsx(Cls.topBarLink, displayClass, isActive && Cls.active, className)} data-cy={dataCy}>
       {children}
     </button>
   );

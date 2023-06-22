@@ -29,7 +29,7 @@ import { Routes } from '../../routes';
 import { withRouter, WithRouterProps } from '../../core/utils/withRouter';
 import { prefixI18nTFunc } from '../../i18n/i18n';
 
-const logger = Logger.get('InitPasswordView.tsx', 'info');
+const logger = Logger.get('ResetPasswordView.tsx', 'info');
 
 interface State {
   password: string;
@@ -52,33 +52,35 @@ class ResetPasswordView extends Component<Props, State> {
     const submitDisabled = this.state.formState !== FormState.Ok;
 
     return (
-      <div className={Cls.resetPassword}>
-        <h3 className={'mb-4'}>{t('Reset_your_password')}</h3>
+      <div className={Cls.view}>
         <div className={Cls.form}>
-          <div className={'my-4'}>{t('Enter_your_new_password_here')}</div>
-          <input
-            placeholder={t('Password')}
-            type={'password'}
-            value={password}
-            onChange={this.handlePasswordChange}
-            className={'form-control mb-2'}
-            data-cy={'new-password'}
-          />
-          <input
-            placeholder={t('Confirmation')}
-            type={'password'}
-            value={confirmation}
-            onChange={this.handleConfirmationChange}
-            className={'form-control mb-4'}
-            data-cy={'confirmation'}
-          />
+          <h3 className={'mb-4'}>{t('Reset_your_password')}</h3>
+          <div className={Cls.form}>
+            <div className={'my-4'}>{t('Enter_your_new_password_here')}</div>
+            <input
+              placeholder={t('Password')}
+              type={'password'}
+              value={password}
+              onChange={this.handlePasswordChange}
+              className={'form-control mb-2'}
+              data-cy={'new-password'}
+            />
+            <input
+              placeholder={t('Confirmation')}
+              type={'password'}
+              value={confirmation}
+              onChange={this.handleConfirmationChange}
+              className={'form-control mb-4'}
+              data-cy={'confirmation'}
+            />
 
-          <FormValidationLabel state={formState} />
+            <FormValidationLabel state={formState} />
 
-          <div className={'d-flex justify-content-end'}>
-            <button onClick={this.handleSubmit} className={'mt-4 btn btn-primary'} disabled={submitDisabled} data-cy={'reset-password'}>
-              {t('Change_my_password')}
-            </button>
+            <div className={'d-flex justify-content-end'}>
+              <button onClick={this.handleSubmit} className={'mt-4 btn btn-primary'} disabled={submitDisabled} data-cy={'confirm-new-password'}>
+                {t('Change_my_password')}
+              </button>
+            </div>
           </div>
         </div>
       </div>

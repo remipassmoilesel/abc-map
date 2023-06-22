@@ -55,76 +55,80 @@ export function useFeatures(vectorLayer: VectorLayerWrapper | undefined): Result
       return;
     }
 
-    const handleUpdateFeatures = (ev: VectorSourceEvent<Geometry>) => {
+    const lastDeletedIndex: { [k: string | number]: number | undefined } = {};
+
+    const handleAddFeature = (ev: VectorSourceEvent<Geometry>) => {
       const start = Date.now();
-      const features = [ev.feature, ...(ev.features ?? [])].filter((f): f is Feature => !!f);
+      const added = FeatureWrapper.fromUnknown(ev.feature);
+      const featureId = added?.getId();
+      if (!added || !featureId) {
+        logger.error('Cannot add feature: ', ev.feature);
+        return;
+      }
 
-      setFeatures((previousFeatures) => {
-        // First we update existing features
-        const updated: (string | number)[] = [];
-        const result = previousFeatures
-          .map((previousFeature) => {
-            const previousId = previousFeature.getId();
-            if (typeof previousId === 'undefined') {
-              logger.warn('Invalid feature: ');
-              return null;
-            }
-
-            const toUpdate = features.find((feature) => previousId === feature.getId());
-            if (!toUpdate) {
-              return previousFeature;
-            }
-
-            updated.push(previousId);
-            return FeatureWrapper.from(toUpdate);
-          })
-          .filter((value): value is FeatureWrapper => !!value);
-        logger.debug('Updated features ', updated);
-
-        // Then we add them which was not updated
-        const featuresToAdd = features.filter((feature) => !updated.find((id) => feature.getId() === id)).map((feature) => FeatureWrapper.from(feature));
-
-        logger.debug('Add features', featuresToAdd);
-        return result.concat(featuresToAdd);
-      });
+      // Feature was just deleted, we reinsert it at previous position
+      const index = lastDeletedIndex[featureId];
+      if (typeof index !== 'undefined') {
+        setFeatures((features) => {
+          const updated = features.slice();
+          updated.splice(index, 0, added);
+          return updated;
+        });
+      }
+      // Feature was not deleted recently
+      else {
+        setFeatures((features) => features.concat(added));
+      }
 
       logger.debug(`Update took ${Date.now() - start}ms`);
     };
 
-    const handleRemoveFeatures = (ev: VectorSourceEvent<Geometry>) => {
-      const start = Date.now();
-      const features = [ev.feature, ...(ev.features ?? [])].filter((f): f is Feature => !!f);
+    const handleUpdateFeature = (ev: VectorSourceEvent<Geometry>) => {
+      const updated = FeatureWrapper.fromUnknown(ev.feature);
+      const featureId = updated?.getId();
+      if (!updated || !featureId) {
+        logger.error('Cannot update feature: ', ev.feature);
+        return;
+      }
 
       setFeatures((previousFeatures) => {
-        const updated = previousFeatures
-          .map((previousFeat) => {
-            const toDelete = features.find((feature) => previousFeat.getId() === feature.getId());
-            if (!toDelete) {
-              return previousFeat;
-            }
+        return previousFeatures.map((feature) => (feature.getId() === updated.getId() ? updated : feature));
+      });
+    };
 
-            return undefined;
-          })
-          .filter((feature): feature is FeatureWrapper => !!feature);
+    const handleRemoveFeatures = (ev: VectorSourceEvent<Geometry>) => {
+      const start = Date.now();
+      const toDelete = [ev.feature, ...(ev.features ?? [])].filter((f): f is Feature => !!f);
 
-        logger.debug('Removed features: ', features);
+      setFeatures((previousFeatures) => {
+        // We delete rows and try to keep index used in case of cancel
+        const update: FeatureWrapper[] = [];
+        for (let i = 0; i < previousFeatures.length; i++) {
+          const feat = previousFeatures[i];
+          const featId = feat.getId();
+          if (featId && toDelete.find((f) => f.getId() === featId)) {
+            lastDeletedIndex[featId] = i;
+          } else {
+            update.push(feat);
+          }
+        }
 
-        return updated;
+        return update;
       });
 
       logger.debug(`Remove took ${Date.now() - start}ms`);
     };
 
-    source.on('addfeature', handleUpdateFeatures);
+    source.on('addfeature', handleAddFeature);
     source.on('removefeature', handleRemoveFeatures);
 
     // We throttle because when user drag shapes there is A LOT of events
     // But we must keep a very low wait value because otherwise some changes may be discarded
-    const changeFeatureListener = throttle(handleUpdateFeatures, 500);
+    const changeFeatureListener = throttle(handleUpdateFeature, 500);
     source.on('changefeature', changeFeatureListener);
 
     return () => {
-      source.un('addfeature', handleUpdateFeatures);
+      source.un('addfeature', handleAddFeature);
       source.un('removefeature', handleRemoveFeatures);
       source.un('changefeature', changeFeatureListener);
     };

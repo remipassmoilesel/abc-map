@@ -23,7 +23,8 @@ import { TestData } from '../test-data/TestData';
 import { MainMap } from '../helpers/MainMap';
 import { Modules } from '../helpers/Modules';
 import { Routes } from '../helpers/Routes';
-import { ProjectMenu } from '../helpers/ProjectMenu';
+import { Project } from '../helpers/Project';
+import { FilePrompt } from '../helpers/FilePrompt';
 
 describe('Color gradients', function () {
   beforeEach(() => {
@@ -32,7 +33,7 @@ describe('Color gradients', function () {
 
   it('User can create color gradients', () => {
     cy.visit(Routes.map().format())
-      .then(() => ProjectMenu.newProject())
+      .then(() => Project.newProject())
       // Import layer
       .then(() => DataStore.importByName('Countries of the world'))
       // Open module
@@ -43,7 +44,7 @@ describe('Color gradients', function () {
       .get('[data-cy=data-source-import-file]')
       .click()
       .then(() => TestData.countriesCsv())
-      .then((file) => cy.get('[data-cy=file-input]').attachFile({ filePath: 'project.csv', fileContent: file }))
+      .then((file) => FilePrompt.select('project.csv', file))
       .get('[data-cy=value-field]')
       .select('VALUE')
       .get('[data-cy=data-join-by]')

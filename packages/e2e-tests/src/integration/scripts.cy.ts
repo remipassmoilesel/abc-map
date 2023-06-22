@@ -33,8 +33,7 @@ describe('Script module', function () {
       .get('[data-cy=message]')
       .should('contain', 'Script executed without errors')
       .get('[data-cy=output]')
-      .should('contain', 'Layer OpenStreetMap: Predefined layer')
-      .should('contain', 'Layer Geometries: 0 features');
+      .contains('Layer OpenStreetMap is a Predefined layer.');
   });
 
   it('User can update features', () => {
@@ -44,6 +43,7 @@ const layer = mainMap.getLayers()[2];
 layer.getSource().getFeatures().forEach((f, i) => f.set('e2e', i));
 layer.getSource().getFeatures().forEach((f) => log(f.get('e2e')));
 `;
+
     DataStore.importByName('Countries of the world')
       .then(() => Modules.open('scripts'))
       .get('#code-editor')

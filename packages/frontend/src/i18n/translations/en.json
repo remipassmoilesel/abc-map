@@ -22,7 +22,7 @@
     "For_7_days_opinions_are_positive": "For 7 days, {{votes}} % of opinions on Abc-Map are positive.",
     "Champagne": "Champagne",
     "Will_have_to_do_better": "Will have to do better",
-    "About_this_platform": "About this plateform",
+    "About_this_platform": "About this platform",
     "What_changed": "What changed ?"
   },
   "TopBar": {
@@ -34,19 +34,31 @@
     "Documentation": "Documentation",
     "Support_AbcMap": "Support Abc-Map",
     "Menu": "Menu",
-    "Plus": "More"
-  },
-  "UserMenu": {
+    "Plus": "More",
+    "Close_menu": "Close menu",
+    "New_project": "New project",
+    "Import_project": "Import project",
+    "Export_project": "Export project",
+    "Save_online": "Save project online",
+    "See_more": "See more ...",
     "Hello_visitor": "Hello visitor !",
     "Login": "Login",
     "Register": "Register",
     "Lost_password": "Password lost",
-    "My_account": "My account",
     "Logout": "Logout",
     "You_are_disconnected": "You are disconnected",
     "Feedbacks": "Feedbacks ?",
-    "Experimental_features": "Experimental features",
-    "Install_app": "Install application"
+    "More_features": "More features",
+    "Install_app": "Install application",
+    "Toggle_fullscreen": "Toggle fullscreen",
+    "My_projects": "My projects",
+    "My_account": "My account",
+    "Links": "Links",
+    "Try_fullscreen_mode": "Try fullscreen mode",
+    "Close": "Close",
+    "New_version_available_Restart_Abc-Map": "New version available ! Restart Abc-Map",
+    "You_can_use_abc-map_offline": "You can use Abc-map offline",
+    "You_cannot_use_abc-map_offline": "You cannot use Abc-map offline"
   },
   "FeedbackModal": {
     "So_how_is_it_going": "So how is it going ?"
@@ -80,7 +92,7 @@
     "ALittle": "Load this view",
     "ALot": "Load several zoom level",
     "You_can_preload_a_map_area_for_offline_use": "You can preload a map area for offline use",
-    "Search": "Search",
+    "Search_for_a_place_or_an_address": "Search for a place or an address",
     "No_results": "No results",
     "Cursor_position": "Cursor position",
     "Unknown": "Unknown",
@@ -214,9 +226,12 @@
     "Delete": "Delete",
     "Nothing_match": "Nothing match",
     "Name_field": "Feature name field:",
+    "Select_the_attribute_that_you_want_to_use_as_the_principal_name_of_the_entities": "Select the attribute that you want to use as the principal name of the entities.",
+    "You_cannot_change_the_name_attribute_Try_a_layer_with_data": "You cannot change the name attribute. Try a layer with data.",
     "Settings": "Settings",
     "Geometry": "Geometry",
-    "More": "More"
+    "More": "More",
+    "Invalid_feature": "Invalid feature"
   },
   "Scale": {
     "Scale": "Scale"
@@ -336,7 +351,7 @@
     "Preview": "Preview",
     "No_preview_available": "No preview available",
     "Preview_of_artifact": "Preview of artifact",
-    "All": "All",
+    "Display_all": "Display all",
     "Licence_and_terms_of_use": "License and terms of use",
     "About_data_store": "About data store",
     "About_data_store_and_data": "<div>\n    <p>The data store offers you:</p>\n    <ul>\n        <li>Data from open sources</li>\n        <li>Data source configurations</li>\n    </ul>\n\n    <p>Some of this data is free for all uses, some is chargeable for commercial use.</p>\n    <p>All data has terms of use. Refer to license and source links.</p>\n</div>",
@@ -346,13 +361,50 @@
   },
   "DataTableModule": {
     "Data_tables": "Data tables",
-    "Select_a_layer": "Select a layer to view its data.",
-    "Download_CSV": "Download CSV workbook",
+    "Layer": "Layer:",
+    "CSV_export": "CSV export",
     "X_entries": "<b>{{entries}}</b> entries",
     "No_data_to_display": "No data to display",
     "You_must_select_a_layer_with_data": "You must select a layer that contains data",
     "Visualize_feature_layers_as_tables": "Visualize feature layers as tables",
-    "Loading_data": "Loading data ..."
+    "Show_on_map": "Show on map",
+    "Select": "Select",
+    "Edit": "Edit",
+    "Delete": "Delete",
+    "Deselect": "Deselect",
+    "This_layer_does_not_contain_data_that_can_be_used_in_this_module": "This layer does not contain data that can be used in this module.",
+    "Search": "Search ...",
+    "Min": "Min",
+    "Max": "Max",
+    "Page": "Page",
+    "Go_to": "Go to",
+    "Show": "Show",
+    "Filter_data": "Filter data:",
+    "Sort_data": "Sort data:",
+    "Ascending_order": "Ascending order",
+    "Descending_order": "Descending order",
+    "There_is_no_data_yet_click_to_add_some": "There is no data yet, click to add some",
+    "CSV_import": "CSV import",
+    "You_can_import_a_CSV_file_to_edit_layer_data": "You can import a CSV file to edit layer data.",
+    "For_the_import_to_work_correctly": "For the import to work correctly:",
+    "Import_only_files_exported_with_the_Export_CSV_button": "Import only files exported with the 'CSV export' button",
+    "Preserve_XX_column_values": "Preserve values from column '{{id}}'",
+    "Import_a_CSV_file": "Import a CSV file",
+    "Import_is_complete": "Import is complete",
+    "Lines_were_skipped_during_import": "Lines were skipped during import.",
+    "You_should_probably_export_again_and_check_the_values_of_the_id_columns": "You should probably export again and check the values of the id columns.",
+    "rows_modified": "rows modified",
+    "rows_skipped": "rows skipped",
+    "File": "File",
+    "Modified_at": "Modified at",
+    "Import_error": "Import error",
+    "Skipped_rows": "Skipped rows",
+    "The_import_did_not_complete_successfully": "The import did not complete successfully.",
+    "You_should_probably_check_the_input_data": "You should probably check the input data.",
+    "Error_message": "Error message",
+    "Error_at_line": "Error at line",
+    "rows": "rows",
+    "Attention_you_cannot_cancel_a_CSV_import": "Attention, you cannot cancel a CSV import."
   },
   "ColorGradientsModule": {
     "Color_gradients": "Color gradients",
@@ -495,7 +547,8 @@
     "Execute": "Execute",
     "Output": "Sortie",
     "Executed_without_errors": "Script executed without errors",
-    "Error": "Execution error"
+    "Error": "Execution error",
+    "Default_content": "Default content"
   },
   "ArtefactGeneratorModule": {
     "Artefact_generator": "Artefact generator",
@@ -598,7 +651,7 @@
     "Password_lost": "Forgot your password ?",
     "Cancel": "Cancel",
     "Connect": "Login",
-    "Invalid_credentials": "Your login details are incorrect",
+    "Invalid_credentials": "Your credentials are incorrect",
     "You_are_connected": "You are connected !"
   },
   "RegistrationModal": {
@@ -693,7 +746,7 @@
     "Map_is_over_here": "For the map, it's over here",
     "Registration_confirmation": "Registration confirmation"
   },
-  "DataTable": {
+  "SmallDataTable": {
     "No_data": "No data",
     "Undefined": "Undefined",
     "Modify": "Modify",
@@ -708,7 +761,9 @@
     "Save": "Save",
     "Delete_property": "Delete property",
     "Value": "Value",
-    "New_property": "New property"
+    "New_property": "New property",
+    "Property_name": "Property name",
+    "Property_value": "Property value"
   },
   "FoldingCard": {
     "Open": "Open",
@@ -799,7 +854,7 @@
     "Next_view": "Next view",
     "More": "More ..."
   },
-  "CopyButton": {
+  "CopyToClipboardButton": {
     "Copied": "Copied !",
     "Copy_to_clipboard": "Copy to clipboard",
     "Cannot_copy_to_clipboard": "Cannot copy to clipboard with this browser"
@@ -1065,15 +1120,6 @@
     "You_must_select_a_file_with_extension_": "You must select a file in {{extension}} format",
     "Opening_in_progress": "Opening in progress ..."
   },
-  "ProjectMenu": {
-    "New_project": "New project",
-    "Import_project": "Import project",
-    "Export_project": "Export project",
-    "You_must_login_to_save_online": "You must login to save online",
-    "Save_online": "Save project online",
-    "My_projects": "My projects",
-    "See_more": "See more ..."
-  },
   "ProjectFactory": {
     "Project": "Project of {{date}}"
   },
@@ -1149,6 +1195,14 @@
     "Multiple_tabs_open": "Multiple tabs open",
     "Abc-Map_is_already_open_in_another_tab": "Abc-Map is already open in another tab.",
     "You_may_accidentally_overwrite_your_work": "You may accidentally overwrite your work.",
+    "Hide_this_message": "Hide this message"
+  },
+  "IframeWarning": {
+    "Iframe_problem": "IFrame problem",
+    "The_app_is_displayed_in_an_iframe_and_that_s_not_normal": "The application is displayed in an IFrame, and this is not normal.",
+    "To_avoid_any_security_risk_you_must_close_this_window_and_open_a_new_one_This_message_should_no_longer_appear": "To avoid any security risk you must close this window and open a new one. This message should no longer appear.",
+    "Wait_a_few_seconds": "Wait a few seconds",
+    "I_will_close_this_window": "I will close this window",
     "Hide_this_message": "Hide this message"
   }
 }

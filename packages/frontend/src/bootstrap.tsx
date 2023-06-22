@@ -19,7 +19,7 @@ import { Services } from './core/Services';
 import { errorMessage, Logger, UserStatus } from '@abc-map/shared';
 import { AxiosError } from 'axios';
 import { HttpError } from './core/http/HttpError';
-import { BUILD_INFO } from './build-version';
+import { VERSION } from './version';
 import { render } from './render';
 import { MainStore } from './core/store/store';
 import { ProjectEventType } from './core/project/ProjectEvent';
@@ -27,14 +27,14 @@ import { StyleFactory } from './core/geo/styles/StyleFactory';
 import { ModuleRegistry } from './core/modules/registry/ModuleRegistry';
 import { UiActions } from './core/store/ui/actions';
 import React from 'react';
-import { initProjectDatabase } from './core/storage/indexeddb/projects-database';
+import { initProjectDatabase } from './core/storage/project-storage/projects-database';
 import { Routes } from './routes';
 import { matchRoutes } from 'react-router-dom';
 
 export const logger = Logger.get('bootstrap.tsx');
 
 export function bootstrap(svc: Services, store: MainStore) {
-  logger.info('Version: ', BUILD_INFO);
+  logger.info('Version: ', VERSION);
 
   return setGlobals()
     .then(() => authentication(svc))

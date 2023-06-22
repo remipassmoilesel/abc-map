@@ -23,7 +23,7 @@ import { Draw } from '../helpers/Draw';
 import { MainMap } from '../helpers/MainMap';
 import { DefaultDrawingStyle } from '../helpers/DefaultDrawingStyle';
 import { Routes } from '../helpers/Routes';
-import { ProjectMenu } from '../helpers/ProjectMenu';
+import { Project } from '../helpers/Project';
 
 describe('Tool Point', function () {
   beforeEach(() => {
@@ -32,7 +32,7 @@ describe('Tool Point', function () {
 
   it('user can move map', function () {
     cy.visit(Routes.map().format())
-      .then(() => ProjectMenu.newProject())
+      .then(() => Project.newProject())
       .then(() => MainMap.fixedView1())
       .then(() => ToolSelector.enable(MapTool.Point))
       .then(() => ToolSelector.toolMode(ModeName.MoveMap))
@@ -50,7 +50,7 @@ describe('Tool Point', function () {
 
   it('user can draw', function () {
     cy.visit(Routes.map().format())
-      .then(() => ProjectMenu.newProject())
+      .then(() => Project.newProject())
       .then(() => MainMap.fixedView1())
       .then(() => ToolSelector.enable(MapTool.Point))
       .then(() => Draw.click(300, 300))
@@ -80,16 +80,38 @@ describe('Tool Point', function () {
       });
   });
 
-  it('user can move points', function () {
+  it('user can modify right after creation', function () {
     cy.visit(Routes.map().format())
-      .then(() => ProjectMenu.newProject())
+      .then(() => Project.newProject())
       .then(() => MainMap.fixedView1())
       .then(() => ToolSelector.enable(MapTool.Point))
       // Create point
       .then(() => Draw.click(300, 300))
+      // Modify it
+      .then(() => Draw.drag(300, 295, 600, 600))
+      .then(() => MainMap.getReference())
+      .should((map) => {
+        const features = map.getActiveLayerFeatures();
+        const extents = features.map((f) => f.getGeometry()?.getExtent());
+
+        expect(features[0].getGeometry()?.getType()).equal('Point');
+        expect(extents).deep.equals([[1327119.660630621, -819398.0633907281, 1327119.660630621, -819398.0633907281]], `Actual: "${JSON.stringify(extents)}"`);
+      });
+  });
+
+  it('user can modify later', function () {
+    cy.visit(Routes.map().format())
+      .then(() => Project.newProject())
+      .then(() => MainMap.fixedView1())
+      .then(() => ToolSelector.enable(MapTool.Point))
+      // Create point
+      .then(() => Draw.click(300, 300))
+      // Unselect all
+      .get('[data-cy=unselect-all]')
+      .click()
       // Select it
       .then(() => ToolSelector.toolMode(ModeName.Modify))
-      .then(() => Draw.click(300, 295))
+      .then(() => Draw.click(300, 300))
       // Modify it
       .then(() => Draw.drag(300, 295, 600, 600))
       .then(() => MainMap.getReference())

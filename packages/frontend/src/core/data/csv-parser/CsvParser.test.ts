@@ -42,7 +42,7 @@ describe('CsvParser', () => {
 
       expect(error).toBeInstanceOf(CsvParsingError);
       expect(error.message).toMatch('Invalid data');
-      expect(error.row).toEqual(1);
+      expect(error.line).toEqual(1);
     });
 
     it('should fail and return line of error', async () => {
@@ -50,7 +50,7 @@ describe('CsvParser', () => {
 
       expect(error).toBeInstanceOf(CsvParsingError);
       expect(error.message).toMatch('Invalid data');
-      expect(error.row).toEqual(4);
+      expect(error.line).toEqual(4);
     });
   });
 

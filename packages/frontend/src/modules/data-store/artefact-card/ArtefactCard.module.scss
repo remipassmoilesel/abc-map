@@ -20,10 +20,11 @@
 @import 'src/styles/mixins';
 
 .artefact {
-  margin-bottom: 1rem;
+  margin-bottom: 0.7rem;
   margin-right: 1rem;
 
-  min-height: 7rem;
+  // Warning: this value is used to compute the number of displayed artifacts
+  min-height: 6rem;
 
   width: 28vw;
   max-width: 28vw;

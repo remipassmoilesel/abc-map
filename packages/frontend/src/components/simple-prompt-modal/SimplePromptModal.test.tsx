@@ -32,7 +32,7 @@ describe('SimplePromptModal', () => {
   it('should become visible', async () => {
     abcRender(<SimplePromptModal />, { services });
 
-    await openModal();
+    openModal();
 
     expect(screen.getByText('Edit project name')).toBeDefined();
     expect(screen.getByTestId('prompt-input')).toHaveValue('Project 1/2/3');
@@ -41,14 +41,12 @@ describe('SimplePromptModal', () => {
   it('should emit after submit', async () => {
     // Prepare
     abcRender(<SimplePromptModal />, { services });
-    await openModal();
+    openModal();
     await userEvent.clear(screen.getByTestId('prompt-input'));
     await userEvent.type(screen.getByTestId('prompt-input'), 'Project 4/5/6');
 
     // Act
-    act(() => {
-      screen.getByTestId('prompt-confirm').click();
-    });
+    await userEvent.click(screen.getByTestId('prompt-confirm'));
 
     // Assert
     await waitFor(() => {
@@ -59,16 +57,14 @@ describe('SimplePromptModal', () => {
   it('should reset state on event', async () => {
     // Prepare
     abcRender(<SimplePromptModal />, { services });
-    await openModal();
+    openModal();
     await userEvent.clear(screen.getByTestId('prompt-input'));
     await userEvent.type(screen.getByTestId('prompt-input'), 'Project 4/5/6');
 
     // Act
-    await act(() => {
-      screen.getByTestId('prompt-cancel').click();
-    });
+    await userEvent.click(screen.getByTestId('prompt-cancel'));
 
-    await openModal();
+    openModal();
 
     // Assert
     expect(screen.getByTestId('prompt-input')).toHaveValue('Project 1/2/3');
@@ -77,12 +73,10 @@ describe('SimplePromptModal', () => {
   it('should warn if prompt is incorrect', async () => {
     // Prepare
     abcRender(<SimplePromptModal />, { services });
-    await openModal();
+    openModal();
 
     // Act
-    await act(async () => {
-      await userEvent.clear(screen.getByTestId('prompt-input'));
-    });
+    await userEvent.clear(screen.getByTestId('prompt-input'));
 
     // Assert
     await waitFor(() => {
@@ -90,8 +84,8 @@ describe('SimplePromptModal', () => {
     });
   });
 
-  async function openModal() {
-    await act(async () => {
+  function openModal() {
+    act(() => {
       const event: ModalEvent = {
         type: ModalEventType.ShowSimplePrompt,
         title: 'Edit project name',

@@ -16,9 +16,16 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { useMemo } from 'react';
+
 /**
  * Return the size in pixel of one REM or a default value.
  */
 export function getRemSize(): number {
   return parseFloat(getComputedStyle(document.documentElement).fontSize) || 15;
+}
+
+// FIXME: should we listen for zoom actions ?
+export function useRemSize() {
+  return useMemo(() => getRemSize(), []);
 }

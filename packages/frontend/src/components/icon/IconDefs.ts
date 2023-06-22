@@ -16,6 +16,8 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { faFilter } from '@fortawesome/free-solid-svg-icons/faFilter';
+import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons/faMagnifyingGlass';
 import { faTag } from '@fortawesome/free-solid-svg-icons/faTag';
 import { faHandPointer } from '@fortawesome/free-solid-svg-icons/faHandPointer';
 import { faQrcode } from '@fortawesome/free-solid-svg-icons/faQrcode';
@@ -89,6 +91,7 @@ import { faArrowRight } from '@fortawesome/free-solid-svg-icons/faArrowRight';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons/faArrowLeft';
 import { faEye } from '@fortawesome/free-solid-svg-icons/faEye';
 import { faEyeSlash } from '@fortawesome/free-solid-svg-icons/faEyeSlash';
+import { faCheck } from '@fortawesome/free-solid-svg-icons/faCheck';
 import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
 import { faArrowsToCircle } from '@fortawesome/free-solid-svg-icons/faArrowsToCircle';
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons/faTimesCircle';
@@ -140,6 +143,8 @@ import { faClipboard } from '@fortawesome/free-solid-svg-icons/faClipboard';
 import { faStickyNote } from '@fortawesome/free-solid-svg-icons/faStickyNote';
 
 export const IconDefs = {
+  faFilter,
+  faMagnifyingGlass,
   faTag,
   faHandPointer,
   faQrcode,
@@ -228,6 +233,7 @@ export const IconDefs = {
   faArrowLeft,
   faEye,
   faEyeSlash,
+  faCheck,
   faTimes,
   faArrowsToCircle,
   faTimesCircle,

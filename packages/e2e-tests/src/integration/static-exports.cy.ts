@@ -21,13 +21,15 @@ import { Download } from '../helpers/Download';
 import { LayerControls } from '../helpers/LayerControls';
 import { LongOperation } from '../helpers/LongOperation';
 import { Routes } from '../helpers/Routes';
-import Chainable = Cypress.Chainable;
 import { Modules } from '../helpers/Modules';
 import { MainMap } from '../helpers/MainMap';
 import { TestData } from '../test-data/TestData';
 import { Toasts } from '../helpers/Toasts';
 import { PngComparisonParams, PngComparisonResult } from '../plugins/PngComparison';
 import * as uuid from 'uuid-random';
+import { MainMenu } from '../helpers/MainMenu';
+import { FilePrompt } from '../helpers/FilePrompt';
+import Chainable = Cypress.Chainable;
 
 // Most of the time exports take about 5 seconds but sometimes if take much longer, probably
 // because of testing environment. So we set a long timeout in order to prevent anoying failures.
@@ -236,7 +238,6 @@ describe('Static exports', function () {
      *
      * If you know how to make it pass on all platforms, ping me !
      */
-    // TODO: replace by a karma test ? It will be a lot faster
     it('rendering should be conform', function () {
       const testId = uuid();
       const comparisonParams: PngComparisonParams = {
@@ -246,19 +247,15 @@ describe('Static exports', function () {
       };
 
       cy.visit(Routes.map().format())
-        .get('[data-cy=project-menu]')
-        .click()
-        .get('[data-cy=import-project]')
+        .then(() => MainMenu.open())
+        .get('[data-cy=main-menu] [data-cy=import-project]')
         .click()
         .get('[data-cy=confirmation-confirm]')
         .click()
         .then(() => TestData.projectSample3())
-        .then((project) => cy.get('[data-cy=file-input]').attachFile({ filePath: 'project.abm2', fileContent: project }))
-        .get('[data-cy=password-input]')
-        .type('azerty1234')
-        .get('[data-cy=password-confirm]')
-        .click()
+        .then((file) => FilePrompt.select('project.abm2', file))
         .then(() => Toasts.assertText('Project loaded !'))
+        .then(() => MainMenu.close())
         .then(() => Modules.open('static-export'))
         .get('[data-cy=png-export]')
         .click()

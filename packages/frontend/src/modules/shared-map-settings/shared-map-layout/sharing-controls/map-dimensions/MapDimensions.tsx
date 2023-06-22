@@ -76,7 +76,7 @@ export function MapDimensions(props: Props) {
       </div>
 
       <div className={'control-item'}>
-        <SmallAdvice label={t('About_map_size')} advice={t('If_map_size_is_bigger_than_actual_window')} placement={'left'} />
+        <SmallAdvice label={t('About_map_size')} advice={t('If_map_size_is_bigger_than_actual_window')} placement={'right'} />
       </div>
     </div>
   );

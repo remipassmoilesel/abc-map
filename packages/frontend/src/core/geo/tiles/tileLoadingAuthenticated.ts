@@ -21,7 +21,7 @@ import { BasicAuthentication, Logger } from '@abc-map/shared';
 import axios, { AxiosError } from 'axios';
 import { setTileImage } from './setTileImage';
 import { setTileError } from './setTileError';
-import { TileStorage } from '../../storage/indexeddb/storage/TileDbStorage';
+import { TileStorage } from '../../storage/project-storage/TileDbStorage';
 
 export const logger = Logger.get('tileLoadingAuthenticated.ts');
 

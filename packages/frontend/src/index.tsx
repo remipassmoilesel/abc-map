@@ -30,6 +30,7 @@ import './index.scss';
 
 // Load translations
 import './i18n/i18n';
+import { UiActions } from './core/store/ui/actions';
 
 export const logger = Logger.get('index.tsx');
 
@@ -38,7 +39,11 @@ const svc = getServices();
 bootstrap(svc, mainStore).catch((err) => logger.error('Bootstrap fail: ', err));
 
 // Register service worker
-serviceWorkerRegistration();
+serviceWorkerRegistration({
+  onSwInstalled: () => mainStore.dispatch(UiActions.setServiceWorkerState({ installed: true })),
+  onUpdateAvailable: () => mainStore.dispatch(UiActions.setServiceWorkerState({ updateAvailable: true })),
+  onError: () => mainStore.dispatch(UiActions.setServiceWorkerState({ error: true })),
+});
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

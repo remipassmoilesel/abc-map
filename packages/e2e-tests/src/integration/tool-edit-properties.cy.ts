@@ -24,7 +24,7 @@ import { DataStore } from '../helpers/DataStore';
 import { TopBar } from '../helpers/TopBar';
 import { Routes } from '../helpers/Routes';
 import { Draw } from '../helpers/Draw';
-import { ProjectMenu } from '../helpers/ProjectMenu';
+import { Project } from '../helpers/Project';
 import { Modules } from '../helpers/Modules';
 
 describe('Edit properties', function () {
@@ -34,7 +34,7 @@ describe('Edit properties', function () {
 
   it('user can move map', function () {
     cy.visit(Routes.map().format())
-      .then(() => ProjectMenu.newProject())
+      .then(() => Project.newProject())
       .then(() => MainMap.fixedView1())
       .then(() => ToolSelector.enable(MapTool.EditProperties))
       .then(() => ToolSelector.toolMode(ModeName.MoveMap))
@@ -50,7 +50,7 @@ describe('Edit properties', function () {
 
   it('user can edit properties, then undo', function () {
     cy.visit(Routes.map().format())
-      .then(() => ProjectMenu.newProject())
+      .then(() => Project.newProject())
       .then(() => Modules.open('data-store'))
       .then(() => DataStore.importByName('Countries of the world'))
       .then(() => TopBar.map())
@@ -93,7 +93,6 @@ describe('Edit properties', function () {
       .click()
       // Check property names
       .then(() => Draw.click(500, 200))
-      .then(() => Draw.click(500, 200))
       .get('[data-cy=property-name]')
       .should((elem) => {
         const names = elem.toArray().map((e) => (e as HTMLInputElement).value);
@@ -110,7 +109,6 @@ describe('Edit properties', function () {
       // Undo
       .get('[data-cy=undo]')
       .click()
-      .then(() => Draw.click(500, 200))
       .then(() => Draw.click(500, 200))
       .get('[data-cy=property-name]')
       .should((elem) => {

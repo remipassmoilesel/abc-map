@@ -39,9 +39,11 @@ import { getRemSize } from '../../ui/getRemSize';
 import { ToolMode } from '../ToolMode';
 import { Conditions, Modes } from './Modes';
 import { TextBox } from './TextBox';
+import { getSelectionFromMap } from '../../geo/feature-selection/getSelectionFromMap';
 
 const logger = Logger.get('TextTool.ts');
 
+// TODO: refactor
 export class TextTool implements Tool {
   private map?: Map;
   private source?: VectorSource<Geometry>;
@@ -82,7 +84,10 @@ export class TextTool implements Tool {
     this.selection.setup(map, source, SupportedGeometries);
     this.selection.onStyleSelected = (style) => this.store.dispatch(MapActions.setDrawingStyle({ text: style.text }));
 
-    // Select interaction will condition modification of features
+    const selection = getSelectionFromMap(map);
+
+    // This interaction will condition modification of features
+    // We must not use the global selection, because users should be able to modify selected features
     this.textSelect = new Select({
       condition: Conditions.EditText,
       toggleCondition: Conditions.EditText,
@@ -94,27 +99,23 @@ export class TextTool implements Tool {
     });
 
     this.textSelect.on('select', (ev) => {
-      // We clear previous selection
-      ev.deselected.forEach((f) => FeatureWrapper.from(f).setSelected(false));
-
       if (!ev.selected.length) {
         return;
       }
 
-      // We keep only the last feature in selection
-      this.textSelect?.getFeatures().forEach((f) => FeatureWrapper.from(f).setSelected(false));
+      // We clear previous selection
       this.textSelect?.getFeatures().clear();
-      this.textSelect?.getFeatures().push(ev.selected[0]);
 
-      // We select feature
       const feature = FeatureWrapper.from(ev.selected[0]);
-      feature.setSelected(true);
+      if (!selection.isSelected(feature)) {
+        selection.add([feature]);
+      }
 
       // We display style
       const style = feature.getStyleProperties();
       this.store.dispatch(MapActions.setDrawingStyle({ text: style.text }));
 
-      // We keep previous styme for undo / redo
+      // We keep previous style for undo / redo
       const before = feature.getStyleProperties();
 
       // We apply current style to feature
@@ -147,6 +148,7 @@ export class TextTool implements Tool {
       this.textBox = new TextBox();
 
       // When input done, we set text and register a change set
+      // We MUST NOT clear the selection after, otherwise users cannot change style
       this.textBox.onValidation = (text) => {
         if (text !== feature.getText()) {
           feature.setText(text);
@@ -163,17 +165,8 @@ export class TextTool implements Tool {
     this.interactions.push(this.textSelect);
   }
 
-  public deselectAll() {
-    this.textBox?.dispose();
-
-    this.textSelect?.getFeatures().forEach((f) => FeatureWrapper.from(f).setSelected(false));
-    this.textSelect?.getFeatures().clear();
-
-    this.selection?.clear();
-  }
-
   public dispose() {
-    this.deselectAll();
+    this.textBox?.dispose();
 
     this.textSelect?.dispose();
     this.selection?.dispose();

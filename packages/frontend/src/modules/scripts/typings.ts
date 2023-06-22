@@ -44,14 +44,29 @@ export function getScriptErrorOutput(err: unknown): string[] {
 }
 
 export const Example = `\
-// You can access various helpers from "moduleApi" constant
-const { mainMap } = moduleApi;
-mainMap.getLayers().forEach((layer) => {
-  if (layer.isVector()) {
-    log(\`Layer \${layer.getName()}: \${layer.getSource().getFeatures().length} features\`);
-  } else {
-    log(\`Layer \${layer.getName()}: \${layer.getType()} layer\`);
-  }
-});
+// This is javascript code. Here you can modify map, layers and data.
 
+// You can access various helpers from "moduleApi" constant.
+// "moduleApi.mainMap" is a variable containing all the data of your project.
+for (const layer of moduleApi.mainMap.getLayers()) {
+    // If layer not is vector, we only display its type
+    if (layer.isVector() === false) {
+        log(\`Layer \${layer.getName()} is a \${layer.getType()} layer.\`);
+    }
+
+    // If layer is vector, we display features
+    else {
+        const features = layer.getSource().getFeatures();
+        log(\`Layer \${layer.getName()} has \${features.length} features\`);
+
+        for (const feature of features) {
+            const id = feature.getId();
+            const geometry = feature.getGeometry().getType();
+            log(\`    Feature \${id} has geometry \${geometry}\`);
+            console.log(\`Feature \${id} has properties\`, feature.getProperties())
+        }
+
+        !!features.length && '    This layer does not have a feature';
+    }
+}
 `;
