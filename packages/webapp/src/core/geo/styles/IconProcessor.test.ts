@@ -109,7 +109,7 @@ export function sample(): string {
    id="svg8"
    inkscape:version="1.0.2 (e86c870879, 2021-01-15, custom)"
    sodipodi:docname="square.svg"
-   inkscape:export-filename="/home/remo/projects/abcmap/abc-map-2.263/packages/frontend/src/assets/point-icons/square.png"
+   inkscape:export-filename="/home/remo/projects/abcmap/abc-map-2.263/packages/webapp/src/assets/point-icons/square.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96">
   <defs

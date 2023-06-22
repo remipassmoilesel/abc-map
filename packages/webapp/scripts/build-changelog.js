@@ -23,7 +23,7 @@ const showdown = require('showdown');
 
 const projectRoot = path.resolve(__dirname, '../../../');
 const source = path.resolve(projectRoot, 'CHANGELOG.md');
-const target = path.resolve(projectRoot, 'packages/frontend/public/static/CHANGELOG.html');
+const target = path.resolve(projectRoot, 'packages/webapp/public/static/CHANGELOG.html');
 const commitBaseUrl = 'https://gitlab.com/abc-map/abc-map/-/tree';
 
 buildHtmlChangelog();

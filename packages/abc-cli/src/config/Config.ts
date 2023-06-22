@@ -33,10 +33,6 @@ export class Config {
     return path.resolve(this.getServerRoot(), 'public');
   }
 
-  public getFrontendRoot(): string {
-    return path.resolve(this.getProjectRoot(), 'packages/frontend');
-  }
-
   public getCliRoot(): string {
     return path.resolve(this.getProjectRoot(), 'packages/abc-cli');
   }
