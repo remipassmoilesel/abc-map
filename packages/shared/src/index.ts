@@ -20,7 +20,7 @@ export * from './artefact';
 export * from './authentication';
 export * from './commons';
 export * from './e2e';
-export * from './frontend';
+export * from './webapp';
 export * from './lang';
 export * from './project';
 export * from './feedback';

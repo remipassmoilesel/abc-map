@@ -30,7 +30,6 @@ describe('Config', () => {
       path.resolve(config.getCliRoot(), 'src/parser/Parser.ts'),
       path.resolve(config.getDevServicesRoot(), 'docker-compose.yml'),
       path.resolve(config.getServerRoot(), 'src/server/HttpServer.ts'),
-      path.resolve(config.getFrontendRoot(), 'src/App.tsx'),
       path.resolve(config.getE2eRoot(), 'cypress.config.ts'),
       path.resolve(config.getChartRoot(), 'Chart.yaml'),
     ];

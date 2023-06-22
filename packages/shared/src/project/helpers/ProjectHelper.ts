@@ -18,7 +18,7 @@
 
 import { AbcProjectManifest } from '../AbcProjectManifest';
 import { AbcFile, Zipper } from '../../zip';
-import { BlobIO } from '../../frontend/blob/BlobIO';
+import { BlobIO } from '../../webapp/blob/BlobIO';
 import { ProjectConstants } from '../constants/ProjectConstants';
 import { CompressedProject } from '../CompressedProject';
 
