@@ -88,11 +88,8 @@ function PromptVariablesModal() {
           <div className={'mb-3'}>{message}</div>
 
           <FoldingInfo title={'🔒 ' + t('About_credential_storage')}>
-            {t('Credentials_are_stored_in_your_project')}:
-            <ul>
-              <li>{t('If_your_project_is_private')}</li>
-              <li>{t('If_your_project_is_public')}</li>
-            </ul>
+            <div className={'mb-2'}>{t('Credentials_are_stored_in_your_project')}</div>
+            <div>{t('If_your_project_is_public_then_your_credentials_are_public_too_This_can_lead_to_excessive_billing')}</div>
           </FoldingInfo>
 
           {definitions.map((def) => (

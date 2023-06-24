@@ -23,8 +23,8 @@ Then you have to choose a version of Abc-Map server here: https://gitlab.com/abc
 Next, you need to edit the [.env](.env) file.
 
 ```
--ABC_SERVER_TAG="..."
-+ABC_SERVER_TAG="stable-v2023-05-20-0be00cddc0"
+-ABCMAP_SERVER_TAG="..."
++ABCMAP_SERVER_TAG="stable-v2023-06-22-c2f47d4f14"
 ```
 
 Then you can start Abc-Map:

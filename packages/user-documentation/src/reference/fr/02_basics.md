@@ -36,7 +36,8 @@ format proche de GeoJSON.
 Si votre projet contient des identifiants d'accès à des services tiers (par exemple des identifiants de couches de tuiles XYZ), alors ces identifiants seront
 sauvegardés avec votre projet.
 
-Attention, si vous partagez votre projet alors vous partagerez vos identifiants.
+Attention: si vous partagez votre projet alors vous partagez vos identifiants. Si ces identifiants
+donnent accès à des services payants, cela peut entrainer une facturation excessive.
 
 <div class='alert alert-info'>
 Dans une version précédente, les projets était protégés par mot de passe mais cette fonctionnalité a été enlevée.

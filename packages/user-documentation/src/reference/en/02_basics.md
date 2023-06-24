@@ -35,7 +35,8 @@ to GeoJSON.
 
 If your project contains credentials for accessing third-party services (eg XYZ tile layer credentials), then these credentials will be saved with your project.
 
-Attention, if you share your project then you will share your identifiers.
+Warning: if you share your project then you share your credentials. If these credentials
+provide access to paid services, this may lead to excessive billing.
 
 <div class='alert alert-info'>
 In a previous version, projects were password protected but this feature has been removed.

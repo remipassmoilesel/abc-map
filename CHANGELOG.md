@@ -2,9 +2,9 @@
 
 For the moment we use git hashes as version, since no one complained about it 👍
 
-## Recently - Better user interface (git: master)
+## 22/06/2023 - Better user interface (git: 4c2976cb)
 
-General improvments on user interface:
+General improvements on user interface:
 
 - New general menu, easier to use.
 - Better management of entity selections. This allows for better drawing interactions.
