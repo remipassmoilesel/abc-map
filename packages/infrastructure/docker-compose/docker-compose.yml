@@ -18,7 +18,7 @@ version: '3'
 
 services:
   abc-server:
-    image: registry.gitlab.com/abc-map/abc-map/server:${ABC_SERVER_TAG}
+    image: registry.gitlab.com/abc-map/abc-map/server:${ABCMAP_SERVER_TAG}
     container_name: abc-server
     restart: on-failure
     ports:

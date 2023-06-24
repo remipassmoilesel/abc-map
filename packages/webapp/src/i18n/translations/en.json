@@ -881,8 +881,7 @@
   "PromptVariablesModal": {
     "About_credential_storage": "About credential storage",
     "Credentials_are_stored_in_your_project": "Credentials are stored in your project",
-    "If_your_project_is_private": "If your project is private, credentials are protected by a password",
-    "If_your_project_is_public": "If your project is public, then anyone with your project's address will be able to read those credentials",
+    "If_your_project_is_public_then_your_credentials_are_public_too_This_can_lead_to_excessive_billing": "If your project is public then your credentials are public too. This can lead to excessive billing.",
     "Cancel": "Cancel",
     "Confirm": "Confirm"
   },

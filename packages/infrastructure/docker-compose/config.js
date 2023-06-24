@@ -7,6 +7,7 @@ module.exports = {
     log: {
       requests: true,
       errors: true,
+      warnings: false,
     },
     globalRateLimit: {
       max: 1000,

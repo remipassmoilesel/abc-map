@@ -884,8 +884,7 @@
   "PromptVariablesModal": {
     "About_credential_storage": "A propos du stockage des identifiants",
     "Credentials_are_stored_in_your_project": "Les identifiants sont stockés dans votre projet",
-    "If_your_project_is_private": "Si votre projet est privé, les identifiants sont protégés par un mot de passe",
-    "If_your_project_is_public": "Si votre projet est public, alors toute personne avec l'adresse de votre projet pourra lire ces identifiants",
+    "If_your_project_is_public_then_your_credentials_are_public_too_This_can_lead_to_excessive_billing": "Si votre projet est public alors vos identifiants sont publics aussi. Cela peut entrainer des facturations excessives.",
     "Cancel": "Annuler",
     "Confirm": "Confirmer"
   },

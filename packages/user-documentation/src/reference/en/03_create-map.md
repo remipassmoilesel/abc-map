@@ -36,7 +36,7 @@ You can also import basemaps from the data store.
 
 If you do not find what you are looking for, use your favorite search engine to find an alternative. For example,
 try searching for <a href="https://duckduckgo.com/?q=couche+wms+france&t=h_&ia=web" target="_blank">"wms layer france"</a>.
-You will then need to complete the new layer form, usually with a URL and identifiers provided by the owner of the data.
+You will then need to complete the new layer form, usually with a URL and credentials provided by the owner of the data.
 
 <video controls src="./assets/add-datastore-layer.mp4" preload="metadata"></video>
 
@@ -94,8 +94,8 @@ You can share your map online, via a link or by embedding it on your site.
 
 <div class="alert alert-warning">
   <b>⚠️ Warning</b><br />
-  If your card contains identifiers, these identifiers will be publicly accessible.<br />  
-  If these identifiers give access to paid services, this may lead to excessive billing.<br />  
+  If your card contains credentials, these credentials will be publicly accessible.<br />  
+  If these credentials give access to paid services, this may lead to excessive billing.<br />  
 </div>
 
 <video controls src="./assets/shared-map.mp4" preload="metadata"></video>
