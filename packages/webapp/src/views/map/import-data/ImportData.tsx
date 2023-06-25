@@ -95,7 +95,7 @@ export function ImportData() {
         </ul>
       </div>
 
-      <div className={'alert alert-info'}>
+      <div className={'alert alert-info mb-3'}>
         <div className={'mb-3'}>{t('You_can_also_use_CSV_files_but_with_a_data_processing_module')}</div>
 
         <div className={'d-flex justify-content-end'}>
@@ -105,7 +105,7 @@ export function ImportData() {
         </div>
       </div>
 
-      <div className={'mb-2'}>{t('There_are_several_ways_to_import_data')}</div>
+      <div className={'fw-bold my-4'}>{t('There_are_several_ways_to_import_data')}</div>
 
       <div className={Cls.importChoice}>{t('You_can_drop_files_directly_on_map')}</div>
 

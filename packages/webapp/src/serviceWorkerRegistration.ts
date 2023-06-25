@@ -55,9 +55,7 @@ export function serviceWorkerRegistration(config?: Config) {
     const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`;
 
     // Log when worker is loaded
-    navigator.serviceWorker.ready
-      .then(() => logger.info(`Service worker loaded. To learn more, visit https://cra.link/PWA`))
-      .catch((err) => logger.error('Service worker loading failed: ', err));
+    navigator.serviceWorker.ready.then(() => logger.info(`Service worker loaded.`)).catch((err) => logger.error('Service worker loading failed: ', err));
 
     // Watch for registration states
     // See: https://web.dev/service-worker-lifecycle/#handling-updates

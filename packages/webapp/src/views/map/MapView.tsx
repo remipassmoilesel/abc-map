@@ -111,7 +111,7 @@ function MapView() {
 
         {/*TODO: remove after september 2023*/}
         <div className={Cls.spacer} />
-        <div className={'m-3 alert alert-info'}>
+        <div className={'m-3 alert alert-secondary'}>
           <div>
             {t('Are_you_looking_for_project_management')} <FaIcon icon={IconDefs.faArrowDown} />
           </div>
