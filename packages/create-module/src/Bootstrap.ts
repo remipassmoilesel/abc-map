@@ -44,9 +44,6 @@ export class Bootstrap {
   constructor(private params: BootstrapParameters, private client: HttpClient, private shell: Shell) {}
 
   public async start(): Promise<void> {
-    // Check if all prerequisites are present
-    await this.checkPrerequisites();
-
     // Download template in memory, then unzip it
     await this.expandTemplate();
 
@@ -61,11 +58,10 @@ export class Bootstrap {
   }
 
   private async checkPrerequisites(): Promise<void> {
-    if (!(await hasBinary('yarn'))) {
+    if (!(await hasBinary('npm'))) {
       logger.error(chalk.red('Missing prerequisites'));
-      logger.error('You must install yarn, try this command: npm install --global yarn');
-      logger.error('See: https://yarnpkg.com/');
-      throw new Error('yarn is missing');
+      logger.error('You must install npm.');
+      throw new Error('npm is missing');
     }
   }
 
@@ -168,7 +164,7 @@ export class Bootstrap {
     logger.info(chalk.green('Installing template dependencies, this may take a while ⌛\n'));
 
     const root = this.getRoot();
-    this.shell.sync('yarn', { cwd: root });
+    this.shell.sync('npm install', { cwd: root });
   }
 
   private getRoot(): string {

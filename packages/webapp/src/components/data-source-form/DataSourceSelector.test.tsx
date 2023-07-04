@@ -22,7 +22,7 @@ import sinon, { SinonStub } from 'sinon';
 import { MapFactory } from '../../core/geo/map/MapFactory';
 import { abcRender } from '../../core/utils/test/abcRender';
 import DataSourceSelector, { logger } from './DataSourceSelector';
-import { screen, waitFor } from '@testing-library/react';
+import { act, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { TestDataSource } from '../../core/data/data-source/TestDataSource';
 import { CsvParsingError } from '../../core/data/csv-parser/typings';
@@ -53,7 +53,9 @@ describe('DataSourceSelector', () => {
   it('should change display if user wants to choose a file', async () => {
     abcRender(<DataSourceSelector value={undefined} onSelected={handleSelection} />, { services });
 
-    await userEvent.click(screen.getByText(/Use a CSV workbook/));
+    await act(async () => {
+      await userEvent.click(screen.getByText(/Use a CSV workbook/));
+    });
 
     expect(screen.getByText(/Choose a CSV file/)).toBeDefined();
   });

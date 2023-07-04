@@ -1,22 +1,22 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`WmtsDefinitionManifest should not change without datastore migration 1`] = `
-{
+Object {
   "version": "version",
-  "wmts": {
-    "auth": {
+  "wmts": Object {
+    "auth": Object {
       "password": "password",
       "username": "username",
     },
     "capabilitiesUrl": "capabilitiesUrl",
-    "prompt": [
-      {
-        "description": [
-          {
+    "prompt": Array [
+      Object {
+        "description": Array [
+          Object {
             "language": "fr",
             "text": "description",
           },
-          {
+          Object {
             "language": "en",
             "text": "description",
           },

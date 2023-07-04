@@ -361,7 +361,7 @@ export class FeatureWrapper<Geom extends OlGeometry = OlGeometry> {
     if (value) {
       this.feature.set(HlPreviousStyleKey, this.feature.getStyle());
 
-      const style = highLightStyleFactory.getForFeature(this);
+      const style = highLightStyleFactory.getForGeometry(this.getGeometry(), this.getStyleProperties());
       this.feature.setStyle(style);
 
       this.feature.set(HlStyleKey, style);

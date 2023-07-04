@@ -28,11 +28,7 @@ export function hashRequestSource(req: FastifyRequest, disableWarning = false): 
   // We look for original client IP address and remove a part of it for privacy purposes
   let forwardedFor = req.headers['x-forwarded-for']?.toString().split('.').slice(1).join('.');
   if (!forwardedFor) {
-    !disableWarning &&
-      logger.error(
-        // eslint-disable-next-line max-len
-        `Header "x-forwarded-for" is not set correctly on requests (Value: ${forwardedFor}). You MUST use a proxy and set this header with a unique value per client.`
-      );
+    !disableWarning && logger.warn(`No "x-forwarded-for" header found for request: ${JSON.stringify(req.headers)}`);
     forwardedFor = '000.000.000.000';
   }
 

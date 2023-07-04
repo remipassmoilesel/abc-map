@@ -31,7 +31,7 @@ import { MoveMapInteractionsBundle } from '../common/interactions/MoveMapInterac
 import { SelectionInteractionsBundle } from '../common/interactions/SelectionInteractionsBundle';
 import { ToolMode } from '../ToolMode';
 import { CommonConditions, CommonModes } from '../common/common-modes';
-import { FeatureSelection } from '../../geo/feature-selection/FeatureSelection';
+import { getSelectionFromMap } from '../../geo/feature-selection/getSelectionFromMap';
 
 export class PointTool implements Tool {
   private move?: MoveMapInteractionsBundle;
@@ -61,7 +61,7 @@ export class PointTool implements Tool {
     this.move = new MoveMapInteractionsBundle({ condition: CommonConditions.MoveMap });
     this.move.setup(map);
 
-    const globalSelection = FeatureSelection.getSelectionFromMap(map);
+    const globalSelection = getSelectionFromMap(map);
 
     // Selection for modifications
     this.selection = new SelectionInteractionsBundle({ condition: CommonConditions.Selection });

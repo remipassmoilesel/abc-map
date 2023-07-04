@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Table as TanstackTable } from '@tanstack/table-core/build/lib/types';
+import { Table as TanstackTable } from '@tanstack/table-core';
 import { DataRow } from '../../../../core/data/data-source/DataSource';
 import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';

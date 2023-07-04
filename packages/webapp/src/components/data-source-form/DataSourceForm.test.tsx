@@ -91,7 +91,9 @@ describe('DataSourceForm', () => {
     );
 
     // Act
-    await userEvent.selectOptions(screen.getByTestId('layer-selector'), 'Regions of France');
+    await act(async () => {
+      await userEvent.selectOptions(screen.getByTestId('layer-selector'), 'Regions of France');
+    });
 
     // Assert
     await waitFor(() => {
@@ -115,12 +117,17 @@ describe('DataSourceForm', () => {
       />,
       { services }
     );
-    await userEvent.selectOptions(screen.getByTestId('layer-selector'), 'Regions of France');
+    await act(async () => {
+      await userEvent.selectOptions(screen.getByTestId('layer-selector'), 'Regions of France');
+    });
+
     await waitFor(() => screen.getAllByText(/Select a field/));
     handleChanges.reset();
 
     // Act
-    await userEvent.selectOptions(screen.getByTestId('value-field'), 'POP');
+    await act(async () => {
+      await userEvent.selectOptions(screen.getByTestId('value-field'), 'POP');
+    });
 
     // Assert
     await waitFor(() => {
@@ -144,12 +151,16 @@ describe('DataSourceForm', () => {
       />,
       { services }
     );
-    await userEvent.selectOptions(screen.getByTestId('layer-selector'), 'Regions of France');
+    await act(async () => {
+      await userEvent.selectOptions(screen.getByTestId('layer-selector'), 'Regions of France');
+    });
     await waitFor(() => screen.getAllByText(/Select a field/));
     handleChanges.reset();
 
     // Act
-    await userEvent.selectOptions(screen.getByTestId('data-join-by'), 'CODE');
+    await act(async () => {
+      await userEvent.selectOptions(screen.getByTestId('data-join-by'), 'CODE');
+    });
 
     // Assert
     await waitFor(() => {
@@ -176,7 +187,9 @@ describe('DataSourceForm', () => {
     });
 
     // Act
-    await userEvent.selectOptions(screen.getByTestId('layer-selector'), 'Regions of France');
+    await act(async () => {
+      await userEvent.selectOptions(screen.getByTestId('layer-selector'), 'Regions of France');
+    });
 
     // Assert
     await waitFor(() => {

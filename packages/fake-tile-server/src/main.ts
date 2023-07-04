@@ -15,15 +15,16 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
-import express from 'express';
+import * as express from 'express';
 import * as path from 'path';
 import * as fs from 'fs';
-import cors from 'cors';
+import * as cors from 'cors';
 
 const PORT = 3010;
-const responses = path.resolve(__dirname, 'responses');
+const responses = path.resolve(__dirname, '..', 'responses');
 const authorizationApiKey = '5e46d49fce0';
 const basicAuthorizationMiddleware = () =>
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
   require('express-basic-auth')({
     users: { 'jean-bonno': 'azerty1234' },
   });
@@ -87,7 +88,7 @@ function handleWmsRequest(req: express.Request, res: express.Response, authentic
     return;
   }
 
-  console.log(`Unexpected WMS request: ${req.url}`);
+  log(`Unexpected WMS request: ${req.url}`);
   res.status(404).send();
 }
 
@@ -122,7 +123,7 @@ function handleWmtsRequest(req: express.Request, res: express.Response, authenti
     return;
   }
 
-  console.log(`Unexpected WMTS request: ${req.url}`);
+  log(`Unexpected WMTS request: ${req.url}`);
   res.status(404).send();
 }
 
@@ -133,6 +134,15 @@ function handleWmtsRequest(req: express.Request, res: express.Response, authenti
  */
 
 // We can't use localhost because app in Cypress cannot access it
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Fake tile server listening on localhost:${PORT}`);
+const server = app.listen(PORT, '0.0.0.0', () => {
+  log(`Fake tile server listening on localhost:${PORT}`);
 });
+
+process.on('SIGINT', () => {
+  server.close();
+});
+
+function log(message: string, data?: unknown) {
+  // eslint-disable-next-line no-console
+  console.log(message, data ?? '');
+}

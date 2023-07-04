@@ -30,7 +30,7 @@ const fs = require('fs');
 const path = require('path');
 
 const build = {
-  date: new Date().toISOString(),
+  date: new Date().toISOString().slice(0, 13) + ':00:00.000Z',
   hash: childProcess.execSync('git rev-parse HEAD').toString('utf-8').substring(0, 20),
 };
 const filePath = path.resolve(process.cwd(), 'src', 'version.ts');

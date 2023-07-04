@@ -22,7 +22,7 @@ import sinon, { SinonStub } from 'sinon';
 import { MapFactory } from '../../core/geo/map/MapFactory';
 import { abcRender } from '../../core/utils/test/abcRender';
 import GeometryLayerForm from './GeometryLayerForm';
-import { screen, waitFor } from '@testing-library/react';
+import { act, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { LayerFactory } from '../../core/geo/layers/LayerFactory';
 
@@ -54,7 +54,9 @@ describe('GeometryLayerForm', () => {
     abcRender(<GeometryLayerForm values={{ layer: undefined, joinBy: '' }} onChange={handleChanges} />, { services });
 
     // Act
-    await userEvent.selectOptions(screen.getByTestId('layer-selector'), 'Regions of France');
+    await act(async () => {
+      await userEvent.selectOptions(screen.getByTestId('layer-selector'), 'Regions of France');
+    });
 
     // Assert
     await waitFor(() => {
@@ -70,7 +72,9 @@ describe('GeometryLayerForm', () => {
 
     // We render then select one layer
     abcRender(<GeometryLayerForm values={{ layer: layer, joinBy: '' }} onChange={handleChanges} />, { services });
-    await userEvent.selectOptions(screen.getByTestId('layer-selector'), 'Regions of France');
+    await act(async () => {
+      await userEvent.selectOptions(screen.getByTestId('layer-selector'), 'Regions of France');
+    });
 
     await waitFor(() => screen.getAllByText('Select a join field'));
     handleChanges.reset();
@@ -92,7 +96,9 @@ describe('GeometryLayerForm', () => {
     abcRender(<GeometryLayerForm values={{ layer: undefined, joinBy: '' }} onChange={handleChanges} />, { services });
 
     // Act
-    await userEvent.selectOptions(screen.getByTestId('layer-selector'), 'Regions of France');
+    await act(async () => {
+      await userEvent.selectOptions(screen.getByTestId('layer-selector'), 'Regions of France');
+    });
 
     // Assert
     await waitFor(() => {
@@ -109,7 +115,9 @@ describe('GeometryLayerForm', () => {
     abcRender(<GeometryLayerForm values={{ layer, joinBy: '' }} onChange={handleChanges} />, { services });
 
     // Act
-    await userEvent.selectOptions(screen.getByTestId('layer-selector'), 'Empty layer');
+    await act(async () => {
+      await userEvent.selectOptions(screen.getByTestId('layer-selector'), 'Empty layer');
+    });
 
     // Assert
     await waitFor(() => {

@@ -26,7 +26,7 @@ describe('Config', () => {
     const config = new Config();
 
     const paths = [
-      path.resolve(config.getProjectRoot(), 'lerna.json'),
+      path.resolve(config.getProjectRoot(), 'turbo.json'),
       path.resolve(config.getCliRoot(), 'src/parser/Parser.ts'),
       path.resolve(config.getDevServicesRoot(), 'docker-compose.yml'),
       path.resolve(config.getServerRoot(), 'src/server/HttpServer.ts'),

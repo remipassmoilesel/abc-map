@@ -37,14 +37,6 @@ interface Props {
   onClose: () => void;
 }
 
-export interface ImportResult {
-  file: File | undefined;
-  skipped: number;
-  skippedIds: string[];
-  imported: number;
-  error: unknown;
-}
-
 export function CsvImportModal(props: Props) {
   const { layer, rows, onClose } = props;
   const { t } = useTranslation('DataTableModule');

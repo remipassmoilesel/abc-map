@@ -37,10 +37,6 @@ export class Config {
     return path.resolve(this.getProjectRoot(), 'packages/abc-cli');
   }
 
-  public getVerdaccioConfig(): string {
-    return path.resolve(this.getProjectRoot(), 'packages/infrastructure/verdaccio/config.yaml');
-  }
-
   public getDevServicesRoot(): string {
     return path.resolve(this.getProjectRoot(), 'packages/infrastructure/dev-services');
   }
@@ -54,16 +50,11 @@ export class Config {
   }
 
   public getFrontendUrl(): string {
-    return 'http://localhost:10082/';
+    return 'http://127.0.0.1:10082/';
   }
 
   public getBackendUrl(): string {
-    return 'http://localhost:10082/api/health/';
-  }
-
-  public registryUrl(): string {
-    // We must use "127.0.0.1" and not localhost here, otherwise start may fail on some OS
-    return 'http://127.0.0.1:4873';
+    return 'http://127.0.0.1:10082/api/health/';
   }
 
   public getChartRoot(): string {

@@ -69,7 +69,7 @@ That's done ✌️
 You can now start your module using these commands:
 
     ${chalk.blue(`$ cd ${name}`)}
-    ${chalk.blue('$ yarn dev')}
+    ${chalk.blue('$ npm run dev')}
 
   `);
 }

@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`FeatureProperties should not change without migration 1`] = `
-{
+Object {
   "Selected": "abc:feature:selected",
 }
 `;

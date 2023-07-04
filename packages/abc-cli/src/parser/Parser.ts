@@ -22,8 +22,7 @@ export class Parser {
     const commandName = (args.length > 2 && args[2]) || undefined;
     switch (commandName) {
       case CommandName.INSTALL: {
-        const production = args.findIndex((a) => a === '--production') !== -1;
-        return { name: CommandName.INSTALL, production };
+        return { name: CommandName.INSTALL };
       }
       case CommandName.LINT: {
         return { name: CommandName.LINT };
@@ -61,9 +60,6 @@ export class Parser {
       }
       case CommandName.DEPENDENCY_CHECK: {
         return { name: CommandName.DEPENDENCY_CHECK };
-      }
-      case CommandName.NPM_REGISTRY: {
-        return { name: CommandName.NPM_REGISTRY };
       }
       case CommandName.DOCKER_BUILD: {
         const repository = getDockerRepository(args);

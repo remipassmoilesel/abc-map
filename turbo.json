@@ -1,0 +1,42 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "pipeline": {
+    "lint": {},
+    "lint:fix": {},
+    "write-version": {
+      "cache": false
+    },
+    "dependency-check": {},
+    "clean": {
+      "cache": false
+    },
+    "clean-build": {
+      "dependsOn": [
+        "^clean-build"
+      ],
+      "outputs": [
+        "build/**"
+      ]
+    },
+    "package": {
+      "cache": false
+    },
+    "test": {
+      "dependsOn": [
+        "^test"
+      ]
+    },
+    "start": {
+      "cache": false,
+      "persistent": true
+    },
+    "start:ci": {
+      "cache": false,
+      "persistent": true
+    },
+    "watch": {
+      "cache": false,
+      "persistent": true
+    }
+  }
+}

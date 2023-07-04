@@ -22,7 +22,7 @@ import { abcRender } from '../../../../../core/utils/test/abcRender';
 import TextFormat from './TextFormat';
 import { Point } from 'ol/geom';
 import userEvent from '@testing-library/user-event';
-import { screen } from '@testing-library/react';
+import { act, screen } from '@testing-library/react';
 import { MainStore, storeFactory } from '../../../../../core/store/store';
 import { TestHelper } from '../../../../../core/utils/test/TestHelper';
 
@@ -42,7 +42,9 @@ describe('TextFormat', () => {
     abcRender(<TextFormat />, { services, store });
 
     // Act
-    await userEvent.type(screen.getByTestId('text-size'), '5');
+    await act(async () => {
+      await userEvent.type(screen.getByTestId('text-size'), '5');
+    });
     await TestHelper.wait(250); // We must wait for debounce
     callTransform();
 
@@ -56,7 +58,9 @@ describe('TextFormat', () => {
     abcRender(<TextFormat />, { services, store });
 
     // Act
-    await userEvent.type(screen.getByTestId('text-offsetX'), '9');
+    await act(async () => {
+      await userEvent.type(screen.getByTestId('text-offsetX'), '9');
+    });
 
     await TestHelper.wait(250); // We must wait for debounce
     callTransform();
@@ -71,7 +75,9 @@ describe('TextFormat', () => {
     abcRender(<TextFormat />, { services, store });
 
     // Act
-    await userEvent.type(screen.getByTestId('text-offsetY'), '9');
+    await act(async () => {
+      await userEvent.type(screen.getByTestId('text-offsetY'), '9');
+    });
 
     await TestHelper.wait(250); // We must wait for debounce
     callTransform();
@@ -86,7 +92,9 @@ describe('TextFormat', () => {
     abcRender(<TextFormat />, { services, store });
 
     // Act
-    await userEvent.type(screen.getByTestId('text-rotation'), '9');
+    await act(async () => {
+      await userEvent.type(screen.getByTestId('text-rotation'), '9');
+    });
 
     await TestHelper.wait(250); // We must wait for debounce
     callTransform();

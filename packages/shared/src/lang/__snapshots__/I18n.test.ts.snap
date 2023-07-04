@@ -1,16 +1,16 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`I18n changes on I18nList require data migration 1`] = `
-{
+Object {
   "language": "fr",
-  "text": [
+  "text": Array [
     "Salut",
   ],
 }
 `;
 
 exports[`I18n changes on I18nText require data migration 1`] = `
-{
+Object {
   "language": "fr",
   "text": "Salut",
 }

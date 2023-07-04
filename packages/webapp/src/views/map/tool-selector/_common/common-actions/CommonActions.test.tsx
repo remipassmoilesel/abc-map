@@ -18,7 +18,7 @@
 import { newTestServices, TestServices } from '../../../../../core/utils/test/TestServices';
 import { abcRender } from '../../../../../core/utils/test/abcRender';
 import CommonActions from './CommonActions';
-import { screen } from '@testing-library/react';
+import { act, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { LayerFactory } from '../../../../../core/geo/layers/LayerFactory';
 import { MapFactory } from '../../../../../core/geo/map/MapFactory';
@@ -102,7 +102,10 @@ describe('CommonActions', () => {
       fPoint.setText('Hey !');
 
       // Act
-      await userEvent.click(screen.getByTestId('apply-style'));
+      await act(async () => {
+        await userEvent.click(screen.getByTestId('apply-style'));
+      });
+
       await TestHelper.wait(0); // We wait for overlay
       const style = services.geo.updateSelectedFeatures.args[0][0](fPoint.getStyleProperties(), fPoint);
 
@@ -133,7 +136,9 @@ describe('CommonActions', () => {
       abcRender(<CommonActions />, { services, state });
 
       // Act
-      await userEvent.click(screen.getByTestId('apply-style'));
+      await act(async () => {
+        await userEvent.click(screen.getByTestId('apply-style'));
+      });
       await TestHelper.wait(0); // We wait for overlay
       const style = services.geo.updateSelectedFeatures.args[0][0](fPoint.getStyleProperties(), fPoint);
 
@@ -152,7 +157,9 @@ describe('CommonActions', () => {
       abcRender(<CommonActions />, { services, state });
 
       // Act
-      await userEvent.click(screen.getByTestId('apply-style'));
+      await act(async () => {
+        await userEvent.click(screen.getByTestId('apply-style'));
+      });
       await TestHelper.wait(0); // We wait for overlay
       const style = services.geo.updateSelectedFeatures.args[0][0](fPoint.getStyleProperties(), fLine);
 
@@ -170,7 +177,9 @@ describe('CommonActions', () => {
       abcRender(<CommonActions />, { services, state });
 
       // Act
-      await userEvent.click(screen.getByTestId('apply-style'));
+      await act(async () => {
+        await userEvent.click(screen.getByTestId('apply-style'));
+      });
       await TestHelper.wait(0); // We wait for overlay
       const style = services.geo.updateSelectedFeatures.args[0][0](fPoint.getStyleProperties(), fPolygon);
 
@@ -196,7 +205,9 @@ describe('CommonActions', () => {
     fPoint.setStyleProperties(style);
 
     // Act
-    await userEvent.click(screen.getByTestId('duplicate-selection'));
+    await act(async () => {
+      await userEvent.click(screen.getByTestId('duplicate-selection'));
+    });
     await TestHelper.wait(0); // We wait for overlay
 
     // Assert
@@ -218,7 +229,9 @@ describe('CommonActions', () => {
     abcRender(<CommonActions />, { services, state });
 
     // Act
-    await userEvent.click(screen.getByTestId('delete-features'));
+    await act(async () => {
+      await userEvent.click(screen.getByTestId('delete-features'));
+    });
     await TestHelper.wait(0); // We wait for overlay
 
     // Assert
@@ -239,7 +252,9 @@ describe('CommonActions', () => {
     fPoint.setStyleProperties({ ...fPoint.getStyleProperties(), zIndex: 5 });
 
     // Act
-    await userEvent.click(screen.getByTestId('move-features-behind'));
+    await act(async () => {
+      await userEvent.click(screen.getByTestId('move-features-behind'));
+    });
     await TestHelper.wait(0); // We wait for overlay
     const style = services.geo.updateSelectedFeatures.args[0][0](fPoint.getStyleProperties(), fPoint);
 
@@ -254,7 +269,9 @@ describe('CommonActions', () => {
     fPoint.setStyleProperties({ ...fPoint.getStyleProperties(), zIndex: 5 });
 
     // Act
-    await userEvent.click(screen.getByTestId('move-features-forward'));
+    await act(async () => {
+      await userEvent.click(screen.getByTestId('move-features-forward'));
+    });
     await TestHelper.wait(0); // We wait for overlay
     const style = services.geo.updateSelectedFeatures.args[0][0](fPoint.getStyleProperties(), fPoint);
 

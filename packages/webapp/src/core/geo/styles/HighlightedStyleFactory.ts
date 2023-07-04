@@ -19,8 +19,8 @@
 import Style from 'ol/style/Style';
 import { Fill, Stroke } from 'ol/style';
 import CircleStyle from 'ol/style/Circle';
-import { AbcGeometryType, Logger } from '@abc-map/shared';
-import { FeatureWrapper } from '../features/FeatureWrapper';
+import { AbcGeometryType, FeatureStyle, Logger } from '@abc-map/shared';
+import Geometry from 'ol/geom/Geometry';
 
 export const logger = Logger.get('HighlightedStyleFactory.ts');
 
@@ -74,33 +74,34 @@ const point = (size: number) => [
 const geometryCollection = polygon.concat(lineString, point(15));
 
 export class HighlightedStyleFactory {
-  public getForFeature(feature: FeatureWrapper): Style[] {
-    const geometry = feature.getGeometry()?.getType();
+  public getForGeometry(geometry: Geometry | undefined, styleProperties: FeatureStyle): Style[] {
     if (!geometry) {
       return [];
     }
 
-    if (AbcGeometryType.POINT === geometry) {
-      return point((feature.getStyleProperties().point?.size ?? 15) * 1.1);
-    } else if (AbcGeometryType.LINE_STRING === geometry) {
+    const type = geometry.getType();
+
+    if (AbcGeometryType.POINT === type) {
+      return point((styleProperties.point?.size ?? 15) * 1.1);
+    } else if (AbcGeometryType.LINE_STRING === type) {
       return lineString;
-    } else if (AbcGeometryType.LINEAR_RING === geometry) {
+    } else if (AbcGeometryType.LINEAR_RING === type) {
       return lineString;
-    } else if (AbcGeometryType.POLYGON === geometry) {
+    } else if (AbcGeometryType.POLYGON === type) {
       return polygon;
-    } else if (AbcGeometryType.MULTI_POINT === geometry) {
-      return point((feature.getStyleProperties().point?.size ?? 15) * 1.1);
-    } else if (AbcGeometryType.MULTI_LINE_STRING === geometry) {
+    } else if (AbcGeometryType.MULTI_POINT === type) {
+      return point((styleProperties.point?.size ?? 15) * 1.1);
+    } else if (AbcGeometryType.MULTI_LINE_STRING === type) {
       return lineString;
-    } else if (AbcGeometryType.MULTI_POLYGON === geometry) {
+    } else if (AbcGeometryType.MULTI_POLYGON === type) {
       return polygon;
-    } else if (AbcGeometryType.GEOMETRY_COLLECTION === geometry) {
+    } else if (AbcGeometryType.GEOMETRY_COLLECTION === type) {
       return geometryCollection;
-    } else if (AbcGeometryType.CIRCLE === geometry) {
+    } else if (AbcGeometryType.CIRCLE === type) {
       return circle;
     }
 
-    logger.error(`Highligh style not found for: ${feature.getGeometry()?.getType()}`);
+    logger.error(`Highlighted style not found for: ${geometry.getType()}`);
     return [];
   }
 }

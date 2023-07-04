@@ -1,6 +1,6 @@
-# Custom data processing modules
+# Modules
 
-You can create your own data processing module, and use it online on Abc-Map.
+You can create Abc-Map modules and use them online on any instance of Abc-Map.
 
 <!-- toc -->
 
@@ -21,12 +21,11 @@ You can create your own data processing module, and use it online on Abc-Map.
 
 ## Getting started
 
-You must install NodeJS 16 or above. You can use [volta](https://docs.volta.sh/guide/getting-started):
+You must install NodeJS 18 or above. You can use [nvm](https://github.com/nvm-sh/nvm#installing-and-updating):
 
 ```
-  $ curl https://get.volta.sh | bash
-  $ volta install node@16
-  $ npm install --global yarn
+    $ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+    $ source ~/.bashrc  # or restart your terminal
 ```
 
 Initialize your module:
@@ -39,7 +38,7 @@ Start it:
 
 ```
   $ cd my-module
-  $ yarn dev
+  $ npm dev
 ```
 
 ## What is the development/deployment workflow ?
@@ -98,11 +97,11 @@ See [@abc-map/module-api](../packages/module-api) package source code.
 Link local module-api package:
 
     $ cd abc-map/packages/module-api
-    $ yarn link
+    $ npm link
 
 Link local dependency:
 
-    $ yarn link "@abc-map/module-api"
+    $ npm link "@abc-map/module-api"
 
 Use this URL to open your module:
 

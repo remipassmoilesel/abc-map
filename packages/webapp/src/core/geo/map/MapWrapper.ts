@@ -45,6 +45,7 @@ import { Geolocation } from '../geolocation/Geolocation';
 import uuid from 'uuid-random';
 import { FeatureSelection } from '../feature-selection/FeatureSelection';
 import { getSelectionFromMap } from '../feature-selection/getSelectionFromMap';
+import { ToolChangedEvent, ToolProperty } from './properties';
 
 export const logger = Logger.get('MapWrapper.ts');
 
@@ -53,10 +54,6 @@ export declare type LayerChangeHandler = (ev: BaseEvent) => void;
 export declare type ToolChangedHandler = (ev: BaseEvent) => void;
 
 export declare type FeatureCallback = (feat: FeatureWrapper, layer: VectorLayerWrapper) => void;
-
-export const ToolChangedEvent = 'abc:map:tool-changed';
-export const ToolProperty = 'abc:map:tool';
-export const SelectionProperty = 'abc:map:selection';
 
 /**
  * This class wrap OpenLayers map. The goal is not to replace all methods, but to ensure

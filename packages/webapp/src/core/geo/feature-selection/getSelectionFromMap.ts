@@ -17,8 +17,8 @@
  */
 
 import { Map } from 'ol';
-import { SelectionProperty } from '../map/MapWrapper';
 import { FeatureSelection } from './FeatureSelection';
+import { SelectionProperty } from '../map/properties';
 
 export function getSelectionFromMap(map: Map): FeatureSelection {
   let selection = map.get(SelectionProperty);

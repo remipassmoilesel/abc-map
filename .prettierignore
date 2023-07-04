@@ -1,0 +1,9 @@
+.cypress-cache
+.idea
+.pnpm-store
+.turbo
+documentation
+node_modules
+notes
+packages
+pnpm-lock.yaml

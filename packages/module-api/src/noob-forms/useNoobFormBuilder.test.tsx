@@ -16,12 +16,12 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 import React, { useEffect } from 'react';
-import { render } from '@testing-library/react';
+import { act, render } from '@testing-library/react';
 import { useNoobFormBuilder } from './useNoobFormBuilder';
 import { MapWrapper } from '../map';
+import * as sinon from 'sinon';
 import { SinonStub, SinonStubbedInstance } from 'sinon';
 import { newTestLayerWrapper, newTestMapWrapper } from '../test';
-import * as sinon from 'sinon';
 import userEvent from '@testing-library/user-event';
 import { wait } from '../test/wait';
 
@@ -141,24 +141,26 @@ describe('useNoobFormBuilder', () => {
     const { getByTestId } = render(<TestForm map={map} values={values} onChange={onChange} onSubmit={onSubmit} onErrors={onErrors} />);
 
     // Act
-    // Checkboxes
-    await userEvent.click(getByTestId('geometries-line'));
-    await userEvent.click(getByTestId('geometries-polygon'));
-    // Layer selector
-    await userEvent.selectOptions(getByTestId('layerId'), 'Test layer 1');
-    // Selector
-    await userEvent.selectOptions(getByTestId('unit'), 'Kilometers');
-    // Text input
-    await userEvent.clear(getByTestId('name'));
-    await userEvent.type(getByTestId('name'), 'New name');
-    // Date input
-    await userEvent.clear(getByTestId('startDate'));
-    await userEvent.type(getByTestId('startDate'), '2022-06-12T19:30');
-    // Number input
-    await userEvent.clear(getByTestId('size'));
-    await userEvent.type(getByTestId('size'), '88');
-    // Submit
-    await userEvent.click(getByTestId('submit-button'));
+    await act(async () => {
+      // Checkboxes
+      await userEvent.click(getByTestId('geometries-line'));
+      await userEvent.click(getByTestId('geometries-polygon'));
+      // Layer selector
+      await userEvent.selectOptions(getByTestId('layerId'), 'Test layer 1');
+      // Selector
+      await userEvent.selectOptions(getByTestId('unit'), 'Kilometers');
+      // Text input
+      await userEvent.clear(getByTestId('name'));
+      await userEvent.type(getByTestId('name'), 'New name');
+      // Date input
+      await userEvent.clear(getByTestId('startDate'));
+      await userEvent.type(getByTestId('startDate'), '2022-06-12T19:30');
+      // Number input
+      await userEvent.clear(getByTestId('size'));
+      await userEvent.type(getByTestId('size'), '88');
+      // Submit
+      await userEvent.click(getByTestId('submit-button'));
+    });
 
     // Assert
     // onChange
@@ -208,9 +210,11 @@ describe('useNoobFormBuilder', () => {
     const { container, getByTestId } = render(<TestForm map={map} values={values} onChange={onChange} onSubmit={onSubmit} onErrors={onErrors} />);
 
     // Act
-    await userEvent.clear(getByTestId('size'));
-    await userEvent.type(getByTestId('size'), '2000');
-    await userEvent.click(getByTestId('submit-button'));
+    await act(async () => {
+      await userEvent.clear(getByTestId('size'));
+      await userEvent.type(getByTestId('size'), '2000');
+      await userEvent.click(getByTestId('submit-button'));
+    });
 
     await wait(10);
 

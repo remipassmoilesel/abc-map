@@ -1,30 +1,30 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`WmsDefinitionManifest should not change without datastore migration 1`] = `
-{
+Object {
   "version": "version",
-  "wms": {
-    "auth": {
+  "wms": Object {
+    "auth": Object {
       "password": "password",
       "username": "username",
     },
-    "extent": [
+    "extent": Array [
       1,
       2,
       3,
       4,
     ],
-    "projection": {
+    "projection": Object {
       "name": "projection",
     },
-    "prompt": [
-      {
-        "description": [
-          {
+    "prompt": Array [
+      Object {
+        "description": Array [
+          Object {
             "language": "fr",
             "text": "description",
           },
-          {
+          Object {
             "language": "en",
             "text": "description",
           },
@@ -34,7 +34,7 @@ exports[`WmsDefinitionManifest should not change without datastore migration 1`]
       },
     ],
     "remoteLayerName": "remoteLayerName",
-    "urls": [
+    "urls": Array [
       "urls",
     ],
   },

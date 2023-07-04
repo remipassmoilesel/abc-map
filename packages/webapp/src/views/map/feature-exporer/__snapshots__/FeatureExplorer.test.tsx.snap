@@ -1558,7 +1558,7 @@ exports[`FeatureExplorer should filter features on search 1`] = `
         style="height: 100%; overflow: auto;"
       >
         <div
-          style="height: 360px; width: 100%; position: relative;"
+          style="height: 60px; width: 100%; position: relative;"
         >
           <div
             data-index="0"

@@ -41,9 +41,9 @@ describe('module-api', function () {
 
     const env = `ABC_CREATE_MODULE_SOURCE_URL='${TEMPLATE_URL}' ABC_CREATE_MODULE_HEADERS='${JSON.stringify(HEADERS)}'`;
     shellCommand(`${env}  ${createModule} --name ${moduleName}`, '/tmp');
-    shellCommand('yarn link', moduleApiRoot);
-    shellCommand('yarn link @abc-map/module-api', `/tmp/${moduleName}`);
-    shellCommand('yarn run build', `/tmp/${moduleName}`);
+    shellCommand('npm link', moduleApiRoot);
+    shellCommand('npm link @abc-map/module-api', `/tmp/${moduleName}`);
+    shellCommand('npm run build', `/tmp/${moduleName}`);
   });
 });
 

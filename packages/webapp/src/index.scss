@@ -17,9 +17,9 @@
  */
 
 @import 'styles/variables';
-@import '../node_modules/bootstrap/scss/bootstrap';
-@import '../node_modules/ol/ol.css';
-@import '../node_modules/react-toastify/dist/ReactToastify.css';
+@import '~bootstrap/scss/bootstrap';
+@import '~ol/ol.css';
+@import '~react-toastify/dist/ReactToastify.css';
 @import 'styles/font';
 @import 'styles/spacing.scss';
 @import 'src/styles/scrollbars';
