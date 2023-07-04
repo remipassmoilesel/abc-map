@@ -18,7 +18,7 @@
 import { abcRender } from '../../core/utils/test/abcRender';
 import ColorPickerButton from './ColorPickerButton';
 import sinon, { SinonStub } from 'sinon';
-import { screen, waitFor } from '@testing-library/react';
+import { act, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 describe('ColorPickerButton', () => {
@@ -44,7 +44,9 @@ describe('ColorPickerButton', () => {
     abcRender(<ColorPickerButton value={'#AABBCCDD'} onClose={handleClose} />);
 
     // Act
-    await userEvent.click(screen.getByRole('button'));
+    await act(async () => {
+      await userEvent.click(screen.getByRole('button'));
+    });
 
     // Assert
     await waitFor(() => {
@@ -57,7 +59,9 @@ describe('ColorPickerButton', () => {
     abcRender(<ColorPickerButton value={'rgba(170, 50, 204, 0.87)'} onClose={handleClose} />);
 
     // Act
-    await userEvent.click(screen.getByRole('button'));
+    await act(async () => {
+      await userEvent.click(screen.getByRole('button'));
+    });
 
     // Assert
     await waitFor(() => {
@@ -68,11 +72,15 @@ describe('ColorPickerButton', () => {
   it('should trigger onClose()', async () => {
     // Prepare
     abcRender(<ColorPickerButton value={'#AA32CCDD'} onClose={handleClose} />);
-    await userEvent.click(screen.getByRole('button'));
+    await act(async () => {
+      await userEvent.click(screen.getByRole('button'));
+    });
 
     // Act
-    await setModalValue(175, 55, 209, 50);
-    await userEvent.click(screen.getByTestId('close-modal'));
+    await act(async () => {
+      await setModalValue(175, 55, 209, 50);
+      await userEvent.click(screen.getByTestId('close-modal'));
+    });
 
     // Assert
     expect(handleClose.args).toEqual([['rgba(175,55,209,0.5)']]);

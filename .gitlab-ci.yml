@@ -9,7 +9,7 @@
 # If you want to run a full CI pipeline in a Gitlab Runner, set ABC_FULL_CI variable to "true
 #
 
-image: registry.gitlab.com/abc-map/abc-map/build-image:v0.23
+image: registry.gitlab.com/abc-map/abc-map/build-image:v0.24
 
 variables:
   CI: 'true'
@@ -17,8 +17,10 @@ variables:
 cache:
   key: $CI_PROJECT_ID
   paths:
-    - .yarn-cache
     - .cypress-cache
+    - .npm-cache
+    - .pnpm-store
+    - .turbo
     - packages/abc-cli/node_modules
     - packages/e2e-tests/node_modules/
     - packages/performance-tests/node_modules/

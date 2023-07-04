@@ -20,10 +20,13 @@ import 'source-map-support/register';
 import { Logger } from './tools/Logger';
 import { Config } from './config/Config';
 import { Parser } from './parser/Parser';
-import { BuildService, Dependencies } from './BuildService';
+import { BuildService } from './BuildService';
 import { Banners } from './tools/Banners';
 import { CommandName } from './parser/Command';
 import { Help } from './Help';
+import * as path from 'path';
+import { Shell } from './tools/Shell';
+import { ChildProcess } from 'child_process';
 
 const logger = Logger.get('main.ts', 'info');
 
@@ -37,9 +40,16 @@ async function main(args: string[]) {
   const config = new Config();
   const parser = new Parser();
   const service = BuildService.create(config);
+  const shell = new Shell(config);
 
   // We use node_modules bin from command line
   process.env.PATH = `${config.getCliRoot()}/node_modules/.bin/:${process.env.PATH}`;
+
+  if (process.env.CI === 'true') {
+    // NPM is used for @abc-map/create-module tests
+    logger.info('Configuring NPM for continuous integration ...');
+    shell.sync('npm config set cache ' + path.resolve(config.getProjectRoot(), '.npm-cache') + ' --global');
+  }
 
   banners.cli();
   const command = parser.parse(args);
@@ -52,7 +62,7 @@ async function main(args: string[]) {
     }
 
     case CommandName.INSTALL:
-      await service.install(command.production ? Dependencies.Production : Dependencies.Development);
+      service.install('development');
       break;
 
     case CommandName.LINT:
@@ -62,7 +72,7 @@ async function main(args: string[]) {
 
     case CommandName.BUILD:
       service.version();
-      service.cleanBuild();
+      service.build();
       break;
 
     case CommandName.DEPENDENCY_CHECK:
@@ -79,17 +89,18 @@ async function main(args: string[]) {
       break;
 
     case CommandName.E2E_TESTS: {
-      const servers = await service.startServers();
+      let servers: ChildProcess | undefined;
       try {
+        servers = await service.startServersForCi();
         service.e2eTests();
       } finally {
-        servers.kill('SIGTERM');
+        servers?.kill('SIGTERM');
       }
       break;
     }
 
     case CommandName.START:
-      service.start();
+      service.startForDev();
       break;
 
     case CommandName.START_SERVICES:
@@ -108,10 +119,6 @@ async function main(args: string[]) {
       service.clean();
       break;
 
-    case CommandName.NPM_REGISTRY:
-      await service.startRegistry(true);
-      break;
-
     case CommandName.APPLY_LICENSE:
       service.applyLicense();
       break;
@@ -125,7 +132,7 @@ async function main(args: string[]) {
       break;
 
     case CommandName.DEPLOY:
-      await service.deploy(command.configPath, !command.skipBuild);
+      service.deploy(command.configPath, !command.skipBuild);
       break;
 
     case CommandName.HELP:
@@ -134,11 +141,12 @@ async function main(args: string[]) {
       break;
 
     case CommandName.PERFORMANCE_TESTS: {
-      const servers = await service.startServers();
+      let servers: ChildProcess | undefined;
       try {
+        servers = await service.startServersForCi();
         service.performanceTests();
       } finally {
-        servers.kill('SIGTERM');
+        servers?.kill('SIGTERM');
       }
       break;
     }

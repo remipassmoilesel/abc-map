@@ -44,9 +44,11 @@ describe('RegistrationModal', () => {
     await openModal();
 
     // Act
-    await userEvent.type(screen.getByTestId('email'), 'heyhey@hey.com');
-    await userEvent.type(screen.getByTestId('password'), 'azerty1234');
-    await userEvent.type(screen.getByTestId('password-confirmation'), 'azerty1235');
+    await act(async () => {
+      await userEvent.type(screen.getByTestId('email'), 'heyhey@hey.com');
+      await userEvent.type(screen.getByTestId('password'), 'azerty1234');
+      await userEvent.type(screen.getByTestId('password-confirmation'), 'azerty1235');
+    });
 
     // Assert
     expect(screen.getByTestId('submit-registration')).toBeDisabled();
@@ -56,9 +58,13 @@ describe('RegistrationModal', () => {
     // Prepare
     abcRender(<RegistrationModal />, { services });
     await openModal();
-    await userEvent.type(screen.getByTestId('email'), 'heyhey@hey.com');
-    await userEvent.type(screen.getByTestId('password'), 'azerty1234');
-    await userEvent.type(screen.getByTestId('password-confirmation'), 'azerty1234');
+
+    await act(async () => {
+      await userEvent.type(screen.getByTestId('email'), 'heyhey@hey.com');
+      await userEvent.type(screen.getByTestId('password'), 'azerty1234');
+      await userEvent.type(screen.getByTestId('password-confirmation'), 'azerty1234');
+    });
+
     services.authentication.registration.resolves();
 
     // Act
@@ -75,9 +81,13 @@ describe('RegistrationModal', () => {
     // Prepare
     abcRender(<RegistrationModal />, { services });
     await openModal();
-    await userEvent.type(screen.getByTestId('email'), 'heyhey@hey.com');
-    await userEvent.type(screen.getByTestId('password'), 'azerty1234');
-    await userEvent.type(screen.getByTestId('password-confirmation'), 'azerty1234');
+
+    await act(async () => {
+      await userEvent.type(screen.getByTestId('email'), 'heyhey@hey.com');
+      await userEvent.type(screen.getByTestId('password'), 'azerty1234');
+      await userEvent.type(screen.getByTestId('password-confirmation'), 'azerty1234');
+    });
+
     services.authentication.registration.resolves();
 
     // Act
@@ -96,9 +106,13 @@ describe('RegistrationModal', () => {
     // Prepare
     abcRender(<RegistrationModal />, { services });
     await openModal();
-    await userEvent.type(screen.getByTestId('email'), 'heyhey@hey.com');
-    await userEvent.type(screen.getByTestId('password'), 'azerty1234');
-    await userEvent.type(screen.getByTestId('password-confirmation'), 'azerty1234');
+
+    await act(async () => {
+      await userEvent.type(screen.getByTestId('email'), 'heyhey@hey.com');
+      await userEvent.type(screen.getByTestId('password'), 'azerty1234');
+      await userEvent.type(screen.getByTestId('password-confirmation'), 'azerty1234');
+    });
+
     services.authentication.registration.resolves();
 
     // Act

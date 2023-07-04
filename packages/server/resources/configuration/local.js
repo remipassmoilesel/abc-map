@@ -49,7 +49,7 @@ module.exports = {
     },
   },
   datastore: {
-    path: 'resources/datastore',
+    path: 'resources/dev-datastore',
   },
   development: {
     generateData: {

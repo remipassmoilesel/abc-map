@@ -273,7 +273,7 @@ export class NoobFormBuilder<T extends FieldValues> {
               case FieldType.TextInput:
               case FieldType.NumberInput:
               case FieldType.DatePicker:
-                return <TextInput key={field.name} definition={field} />;
+                return <TextInput key={field.name} definition={field as TextInputDefinition<FieldValues>} />;
               case FieldType.Select:
                 return <Select key={field.name} definition={field as SelectDefinition<FieldValues>} />;
               case FieldType.CheckboxGroup:

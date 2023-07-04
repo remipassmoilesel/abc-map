@@ -30,6 +30,7 @@ import userEvent from '@testing-library/user-event';
 import { ModalEventType, ModalStatus } from '../../../core/ui/typings';
 import { replaceAriaAttributes } from '../../../core/utils/replaceAriaAttributes';
 import { disableUseFeatureLogging } from './useFeatures';
+import { act } from '@testing-library/react';
 
 jest.mock('../../../core/ui/getRemSize', () => ({ getRemSize: () => 15 }));
 
@@ -96,9 +97,17 @@ describe('FeatureExplorer', () => {
     const { container, getByTestId } = abcRender(<FeatureExplorer />, { services });
 
     // Act
-    await userEvent.click(getByTestId('settings'));
-    await userEvent.click(getByTestId('candidate-osm_id'));
-    await userEvent.click(getByTestId('confirm'));
+    await act(async () => {
+      await userEvent.click(getByTestId('settings'));
+    });
+
+    await act(async () => {
+      await userEvent.click(getByTestId('candidate-osm_id'));
+    });
+
+    await act(async () => {
+      await userEvent.click(getByTestId('confirm'));
+    });
 
     // Assert
     expect(container).toMatchSnapshot();
@@ -115,8 +124,10 @@ describe('FeatureExplorer', () => {
     const { container, getByTestId } = abcRender(<FeatureExplorer />, { services });
 
     // Act
-    await userEvent.clear(getByTestId('search-query'));
-    await userEvent.type(getByTestId('search-query'), 'Cordillera');
+    await act(async () => {
+      await userEvent.clear(getByTestId('search-query'));
+      await userEvent.type(getByTestId('search-query'), 'Cordillera');
+    });
 
     // Assert
     expect(container).toMatchSnapshot();
@@ -133,7 +144,9 @@ describe('FeatureExplorer', () => {
     const { container, getAllByTestId } = abcRender(<FeatureExplorer />, { services });
 
     // Act
-    await userEvent.click(getAllByTestId('feature')[0]);
+    await act(async () => {
+      await userEvent.click(getAllByTestId('feature')[0]);
+    });
 
     // Assert
     replaceAriaAttributes(container);
@@ -166,9 +179,17 @@ describe('FeatureExplorer', () => {
     const { container, getByTestId, getAllByTestId } = abcRender(<FeatureExplorer />, { services });
 
     // Act
-    await userEvent.click(getAllByTestId('feature')[0]);
-    await userEvent.click(getAllByTestId('feature-actions')[0]);
-    await userEvent.click(getByTestId('edit-data'));
+    await act(async () => {
+      await userEvent.click(getAllByTestId('feature')[0]);
+    });
+
+    await act(async () => {
+      await userEvent.click(getAllByTestId('feature-actions')[0]);
+    });
+
+    await act(async () => {
+      await userEvent.click(getByTestId('edit-data'));
+    });
 
     // Assert
     replaceAriaAttributes(container);

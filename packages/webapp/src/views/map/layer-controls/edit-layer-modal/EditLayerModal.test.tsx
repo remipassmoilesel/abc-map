@@ -22,7 +22,7 @@ import { abcRender } from '../../../../core/utils/test/abcRender';
 import EditLayerModal from './EditLayerModal';
 import sinon, { SinonStub } from 'sinon';
 import userEvent from '@testing-library/user-event';
-import { fireEvent, screen, waitFor } from '@testing-library/react';
+import { act, fireEvent, screen, waitFor } from '@testing-library/react';
 import { TestServices } from '../../../../core/utils/test/TestServices';
 import { HistoryKey } from '../../../../core/history/HistoryKey';
 import { EditLayerChangeset } from '../../../../core/history/changesets/layers/EditLayerChangeset';
@@ -57,9 +57,11 @@ describe('EditLayerModal', () => {
     abcRender(<EditLayerModal layer={layer} onHide={onHide} />, { services });
 
     // Act
-    await userEvent.clear(screen.getByTestId('name-input'));
-    await userEvent.type(screen.getByTestId('name-input'), 'New layer name');
-    await userEvent.click(screen.getByTestId('submit-button'));
+    await act(async () => {
+      await userEvent.clear(screen.getByTestId('name-input'));
+      await userEvent.type(screen.getByTestId('name-input'), 'New layer name');
+      await userEvent.click(screen.getByTestId('submit-button'));
+    });
 
     // Assert
     await waitFor(() => {
@@ -92,8 +94,10 @@ describe('EditLayerModal', () => {
     abcRender(<EditLayerModal layer={layer} onHide={onHide} />, { services });
 
     // Act
-    fireEvent.change(screen.getByTestId('opacity-input'), { target: { value: 1 } });
-    await userEvent.click(screen.getByTestId('submit-button'));
+    await act(async () => {
+      fireEvent.change(screen.getByTestId('opacity-input'), { target: { value: 1 } });
+      await userEvent.click(screen.getByTestId('submit-button'));
+    });
 
     // Assert
     await waitFor(() => {
@@ -126,8 +130,10 @@ describe('EditLayerModal', () => {
     abcRender(<EditLayerModal layer={layer} onHide={onHide} />, { services });
 
     // Act
-    await userEvent.type(screen.getByTestId('attributions-input'), '\nAll lefts too');
-    await userEvent.click(screen.getByTestId('submit-button'));
+    await act(async () => {
+      await userEvent.type(screen.getByTestId('attributions-input'), '\nAll lefts too');
+      await userEvent.click(screen.getByTestId('submit-button'));
+    });
 
     // Assert
     await waitFor(() => {
@@ -160,7 +166,9 @@ describe('EditLayerModal', () => {
     abcRender(<EditLayerModal layer={layer} onHide={onHide} />, { services });
 
     // Act
-    await userEvent.click(screen.getByTestId('submit-button'));
+    await act(async () => {
+      await userEvent.click(screen.getByTestId('submit-button'));
+    });
 
     // Assert
     await waitFor(() => {
@@ -174,7 +182,9 @@ describe('EditLayerModal', () => {
     abcRender(<EditLayerModal layer={layer} onHide={onHide} />);
 
     // Act
-    await userEvent.click(screen.getByTestId('cancel-button'));
+    await act(async () => {
+      await userEvent.click(screen.getByTestId('cancel-button'));
+    });
 
     // Assert
     expect(onHide.callCount).toEqual(1);

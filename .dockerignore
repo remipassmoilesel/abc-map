@@ -1,0 +1,15 @@
+.cypress-cache
+.git
+.idea
+.pnpm-store
+.turbo
+.vscode
+documentation
+node_modules
+node_modules/
+notes/
+packages/server/resources/dev-datastore
+packages/server/resources/sample-projects
+packages/server/resources/test
+packages/user-documentation
+packages/webapp

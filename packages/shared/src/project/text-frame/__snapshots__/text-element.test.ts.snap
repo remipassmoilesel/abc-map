@@ -1,65 +1,65 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Text elements elements should not change without migration 1`] = `
-[
-  {
+Array [
+  Object {
     "align": "justify",
-    "children": [],
+    "children": Array [],
     "type": "paragraph",
   },
-  {
+  Object {
     "align": "center",
-    "children": [],
+    "children": Array [],
     "type": "paragraph",
   },
-  {
+  Object {
     "align": "left",
-    "children": [],
+    "children": Array [],
     "type": "paragraph",
   },
-  {
+  Object {
     "align": "right",
-    "children": [],
+    "children": Array [],
     "type": "paragraph",
   },
-  {
-    "children": [],
+  Object {
+    "children": Array [],
     "type": "code",
   },
-  {
-    "children": [],
+  Object {
+    "children": Array [],
     "type": "quote",
   },
-  {
+  Object {
     "align": "center",
-    "children": [],
+    "children": Array [],
     "level": 1,
     "type": "title",
   },
-  {
-    "children": [],
+  Object {
+    "children": Array [],
     "type": "table",
   },
-  {
-    "children": [],
+  Object {
+    "children": Array [],
     "type": "table-row",
   },
-  {
-    "children": [],
+  Object {
+    "children": Array [],
     "type": "table-cell",
   },
-  {
-    "children": [
-      {
+  Object {
+    "children": Array [
+      Object {
         "text": "",
       },
     ],
     "type": "video",
     "url": "http://video.url",
   },
-  {
-    "children": [
-      {
+  Object {
+    "children": Array [
+      Object {
         "text": "",
       },
     ],
@@ -67,34 +67,34 @@ exports[`Text elements elements should not change without migration 1`] = `
     "type": "image",
     "url": "http://image.blob.url",
   },
-  {
-    "children": [],
+  Object {
+    "children": Array [],
     "ordered": true,
     "type": "list",
   },
-  {
-    "children": [],
+  Object {
+    "children": Array [],
     "ordered": false,
     "type": "list",
   },
-  {
-    "children": [],
+  Object {
+    "children": Array [],
     "type": "list-item",
   },
-  {
-    "children": [],
+  Object {
+    "children": Array [],
     "type": "link",
     "url": "http://somewhere.net",
   },
-  {
-    "children": [
-      {
+  Object {
+    "children": Array [
+      Object {
         "text": "",
       },
     ],
     "geometryType": "Point",
-    "style": {
-      "fill": {
+    "style": Object {
+      "fill": Object {
         "color1": "red",
       },
     },
@@ -104,7 +104,7 @@ exports[`Text elements elements should not change without migration 1`] = `
 `;
 
 exports[`Text elements texts should not change without migration 1`] = `
-{
+Object {
   "backgroundColor": "backgroundColor",
   "bold": true,
   "foregroundColor": "foregroundColor",

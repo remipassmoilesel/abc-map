@@ -69,7 +69,7 @@ describe('Bootstrap', function () {
       ['git init', { cwd: root, stdio: 'ignore' }],
       ['git add -A', { cwd: root, stdio: 'ignore' }],
       ['git commit -m "Add template 🚀"', { cwd: root, stdio: 'ignore' }],
-      ['yarn', { cwd: root }],
+      ['npm install', { cwd: root }],
     ]);
   });
 });

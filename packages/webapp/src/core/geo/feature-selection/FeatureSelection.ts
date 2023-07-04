@@ -19,8 +19,7 @@
 import Feature from 'ol/Feature';
 import Geometry from 'ol/geom/Geometry';
 import { FeatureWrapper, SupportedFeature } from '../features/FeatureWrapper';
-import { Collection, Map } from 'ol';
-import { getSelectionFromMap } from './getSelectionFromMap';
+import { Collection } from 'ol';
 
 /**
  * This class hold a reference to all features selected.
@@ -28,10 +27,6 @@ import { getSelectionFromMap } from './getSelectionFromMap';
  * Feature selections are attached to maps. Use getSelectionFromMap() to retrieve it.
  */
 export class FeatureSelection {
-  public static getSelectionFromMap(map: Map): FeatureSelection {
-    return getSelectionFromMap(map);
-  }
-
   private features = new Collection<Feature<Geometry>>();
 
   constructor() {

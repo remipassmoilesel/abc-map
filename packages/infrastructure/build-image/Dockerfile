@@ -43,5 +43,6 @@ RUN curl -sL https://github.com/grafana/k6/releases/download/v0.42.0/k6-v0.42.0-
       && dpkg -i k6.deb
 
 RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - && apt-get install -y nodejs
-RUN npm i -g npm yarn
 
+# PNPM
+RUN npm i -g pnpm

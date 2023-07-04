@@ -34,7 +34,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import clsx from 'clsx';
-import { OnChangeFn } from '@tanstack/table-core/src/types';
+import { OnChangeFn } from '@tanstack/table-core';
 import { TableSettings } from '../state';
 import { TableRow } from './TableRow';
 import { RowActions } from './RowActions';

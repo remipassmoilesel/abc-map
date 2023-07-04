@@ -45,8 +45,10 @@ describe('LoginModal', () => {
     await openModal();
 
     // Act
-    await userEvent.type(screen.getByTestId('email'), 'heyhey@hey.com');
-    await userEvent.type(screen.getByTestId('password'), 'azerty');
+    await act(async () => {
+      await userEvent.type(screen.getByTestId('email'), 'heyhey@hey.com');
+      await userEvent.type(screen.getByTestId('password'), 'azerty');
+    });
 
     // Assert
     expect(screen.getByTestId('confirm-login')).toBeDisabled();
@@ -58,8 +60,10 @@ describe('LoginModal', () => {
 
     await openModal();
 
-    await userEvent.type(screen.getByTestId('email'), 'heyhey@hey.com');
-    await userEvent.type(screen.getByTestId('password'), 'azerty1234');
+    await act(async () => {
+      await userEvent.type(screen.getByTestId('email'), 'heyhey@hey.com');
+      await userEvent.type(screen.getByTestId('password'), 'azerty1234');
+    });
 
     services.authentication.login.resolves();
 
@@ -81,8 +85,10 @@ describe('LoginModal', () => {
 
     await openModal();
 
-    await userEvent.type(screen.getByTestId('email'), 'heyhey@hey.com');
-    await userEvent.type(screen.getByTestId('password'), 'azerty1234');
+    await act(async () => {
+      await userEvent.type(screen.getByTestId('email'), 'heyhey@hey.com');
+      await userEvent.type(screen.getByTestId('password'), 'azerty1234');
+    });
 
     services.authentication.login.resolves();
 
@@ -104,8 +110,10 @@ describe('LoginModal', () => {
 
     await openModal();
 
-    await userEvent.type(screen.getByTestId('email'), 'heyhey@hey.com');
-    await userEvent.type(screen.getByTestId('password'), 'azerty1234');
+    await act(async () => {
+      await userEvent.type(screen.getByTestId('email'), 'heyhey@hey.com');
+      await userEvent.type(screen.getByTestId('password'), 'azerty1234');
+    });
 
     services.authentication.login.resolves();
 

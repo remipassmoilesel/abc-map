@@ -16,16 +16,18 @@
 
 FROM node:18-alpine
 
+# Dockerfiles are built with a context path at the root of the git repository
+
+RUN npm i -g pnpm
+
 RUN mkdir -p /srv
 WORKDIR /srv
 
-RUN mkdir -p resources
+COPY pnpm-lock.yaml .
+RUN pnpm fetch --prod
 
-COPY build build
-COPY node_modules node_modules
-COPY public public
-COPY package.json package.json
-COPY resources/projections.zip resources/projections.zip
+COPY . .
+RUN pnpm install --frozen-lockfile --prod -f --filter @abc-map/server
 
 ENV NODE_ENV=production
-CMD node /srv/build/main.js
+CMD node /srv/packages/server/build/main.js

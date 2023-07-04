@@ -10,11 +10,12 @@
 - [How to generate a markdown TOC ?](#how-to-generate-a-markdown-toc-)
 - [How to fix my broken repository ?](#how-to-fix-my-broken-repository-)
 - [Server crashed: Error: Frontend root 'abc-map/packages/server/public' must be a directory](#server-crashed-error-frontend-root-abc-mappackagesserverpublic-must-be-a-directory)
-- [(node:132766) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' ...](#node132766-dep_webpack_dev_server_on_after_setup_middleware-deprecationwarning-onaftersetupmiddleware-)
 - [How to create videos for help page ?](#how-to-create-videos-for-help-page-)
 - [About style ratios](#about-style-ratios)
 - [About 'instanceof' in frontend](#about-instanceof-in-frontend)
 - [How do I publish public packages ?](#how-do-i-publish-public-packages-)
+- [How to debug turborepo ?](#how-to-debug-turborepo-)
+- [Which package manager is used ?](#which-package-manager-is-used-)
 
 <!-- tocstop -->
 
@@ -44,15 +45,13 @@ Functional components must be privileged.
 
 ## How to search outdated dependencies ?
 
-    $ abc install --production
-    $ abc npm-registry
-    $ lerna exec 'npm outdated --registry http://localhost:4873' --no-bail | tee outdated.log
+    $ pnpm -r outdated
 
 ## How to generate a markdown TOC ?
 
 See https://github.com/jonschlinkert/markdown-toc#cli
 
-    $ npm i -g markdown-toc
+    $ pnpm i -g markdown-toc
     $ markdown-toc file.md
 
 ## How to fix my broken repository ?
@@ -70,10 +69,6 @@ In very rare case you may need before all commands above:
 
 You must run `abc build`.
 
-## (node:132766) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' ...
-
-This message comes from react-scripts 5.
-
 ## How to create videos for help page ?
 
 You can use [peek](https://github.com/phw/peek).
@@ -87,7 +82,7 @@ a map with dots 10 pixels in diameter displayed with a ratio of 2 will have dots
 
 ## About 'instanceof' in frontend
 
-`instanceof` usage can have weird behavior in frontend because it cannot works with external modules.  
+`instanceof` usage can have weird behavior in frontend because it cannot work with external modules.  
 See: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/instanceof#instanceof_and_multiple_context_e.g._frames_or_windows
 
 You can use instead `crossContextInstanceof()`.
@@ -102,3 +97,13 @@ To publish packages to the NPM registry:
 ```
 
 Not all public packages are published on NPM registry.
+
+## How to debug turborepo ?
+
+```
+$ turbo run clean-build --summarize
+```
+
+## Which package manager is used ?
+
+PNPM is preferred, NPM otherwise.

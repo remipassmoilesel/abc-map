@@ -17,7 +17,7 @@
 
 set -e
 
-IMAGE_NAME="registry.gitlab.com/abc-map/abc-map/build-image:v0.23"
+IMAGE_NAME="registry.gitlab.com/abc-map/abc-map/build-image:v0.24"
 
 docker build . -t $IMAGE_NAME
 docker run --net=host -v `realpath ../../..`:/build/abc-map -ti $IMAGE_NAME bash

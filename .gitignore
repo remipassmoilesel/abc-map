@@ -1,7 +1,7 @@
-.idea
 *.log
-notes/
-node_modules/
-
-.yarn-cache
 .cypress-cache
+.idea
+.pnpm-store
+.turbo
+node_modules/
+notes/

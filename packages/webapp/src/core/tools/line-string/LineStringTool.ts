@@ -31,8 +31,8 @@ import { MoveMapInteractionsBundle } from '../common/interactions/MoveMapInterac
 import { SelectionInteractionsBundle } from '../common/interactions/SelectionInteractionsBundle';
 import { ToolMode } from '../ToolMode';
 import { CommonConditions, CommonModes } from '../common/common-modes';
-import { FeatureSelection } from '../../geo/feature-selection/FeatureSelection';
 import { FinishDrawingButton } from '../common/finish-button/FinishDrawingButton';
+import { getSelectionFromMap } from '../../geo/feature-selection/getSelectionFromMap';
 
 const logger = Logger.get('LineStringTool.ts');
 
@@ -68,7 +68,7 @@ export class LineStringTool implements Tool {
     this.move = new MoveMapInteractionsBundle({ condition: CommonConditions.MoveMap });
     this.move.setup(map);
 
-    const selection = FeatureSelection.getSelectionFromMap(map);
+    const selection = getSelectionFromMap(map);
 
     // Selection for modifications
     this.selection = new SelectionInteractionsBundle({ condition: CommonConditions.Selection });

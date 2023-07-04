@@ -45,9 +45,11 @@ describe('EditPropertiesModal', () => {
       'Variable 5': undefined,
     });
 
-    await userEvent.clear(getAllByTestId('property-value')[0]);
-    await userEvent.type(getAllByTestId('property-value')[0], 'New value 1');
-    await userEvent.click(getByTestId('confirm'));
+    await act(async () => {
+      await userEvent.clear(getAllByTestId('property-value')[0]);
+      await userEvent.type(getAllByTestId('property-value')[0], 'New value 1');
+      await userEvent.click(getByTestId('confirm'));
+    });
 
     // Assert
     expect(services.modals.dispatch.callCount).toEqual(1);
@@ -81,9 +83,11 @@ describe('EditPropertiesModal', () => {
       } as any,
     });
 
-    await userEvent.clear(getAllByTestId('property-value')[0]);
-    await userEvent.type(getAllByTestId('property-value')[0], 'New value 1');
-    await userEvent.click(getByTestId('confirm'));
+    await act(async () => {
+      await userEvent.clear(getAllByTestId('property-value')[0]);
+      await userEvent.type(getAllByTestId('property-value')[0], 'New value 1');
+      await userEvent.click(getByTestId('confirm'));
+    });
 
     // Assert
     expect(services.modals.dispatch.callCount).toEqual(1);
@@ -109,9 +113,11 @@ describe('EditPropertiesModal', () => {
       'Variable 1': 'Value 1',
     });
 
-    await userEvent.clear(getAllByTestId('property-name')[0]);
-    await userEvent.type(getAllByTestId('property-name')[0], '  VARIABLE_1  ');
-    await userEvent.click(getByTestId('confirm'));
+    await act(async () => {
+      await userEvent.clear(getAllByTestId('property-name')[0]);
+      await userEvent.type(getAllByTestId('property-name')[0], '  VARIABLE_1  ');
+      await userEvent.click(getByTestId('confirm'));
+    });
 
     // Assert
     expect(services.modals.dispatch.callCount).toEqual(1);
@@ -137,15 +143,25 @@ describe('EditPropertiesModal', () => {
       'Variable 1': 'Value 1',
     });
 
-    await userEvent.click(getByTestId('new-property-button'));
-    await userEvent.type(getAllByTestId('property-name')[1], 'VARIABLE_2');
-    await userEvent.type(getAllByTestId('property-value')[1], 'VALUE 2');
+    await act(async () => {
+      await userEvent.click(getByTestId('new-property-button'));
+    });
 
-    await userEvent.click(getByTestId('new-property-button'));
-    await userEvent.type(getAllByTestId('property-name')[2], 'VARIABLE_3');
-    await userEvent.type(getAllByTestId('property-value')[2], 'VALUE 3');
+    await act(async () => {
+      await userEvent.type(getAllByTestId('property-name')[1], 'VARIABLE_2');
+      await userEvent.type(getAllByTestId('property-value')[1], 'VALUE 2');
+    });
 
-    await userEvent.click(getByTestId('confirm'));
+    await act(async () => {
+      await userEvent.click(getByTestId('new-property-button'));
+    });
+
+    await act(async () => {
+      await userEvent.type(getAllByTestId('property-name')[2], 'VARIABLE_3');
+      await userEvent.type(getAllByTestId('property-value')[2], 'VALUE 3');
+
+      await userEvent.click(getByTestId('confirm'));
+    });
 
     // Assert
     expect(services.modals.dispatch.callCount).toEqual(1);
@@ -172,15 +188,21 @@ describe('EditPropertiesModal', () => {
     await openModal({});
 
     // First property
-    await userEvent.type(getAllByTestId('property-name')[0], 'size');
-    await userEvent.type(getAllByTestId('property-value')[0], '12345');
+    await act(async () => {
+      await userEvent.type(getAllByTestId('property-name')[0], 'size');
+      await userEvent.type(getAllByTestId('property-value')[0], '12345');
+    });
 
     // Second property
-    await userEvent.click(getByTestId('new-property-button'));
-    await userEvent.type(getAllByTestId('property-name')[1], 'type');
-    await userEvent.type(getAllByTestId('property-value')[1], 'plain');
+    await act(async () => {
+      await userEvent.click(getByTestId('new-property-button'));
+    });
+    await act(async () => {
+      await userEvent.type(getAllByTestId('property-name')[1], 'type');
+      await userEvent.type(getAllByTestId('property-value')[1], 'plain');
 
-    await userEvent.click(getByTestId('confirm'));
+      await userEvent.click(getByTestId('confirm'));
+    });
 
     // Assert
     expect(services.modals.dispatch.callCount).toEqual(1);
@@ -209,10 +231,18 @@ describe('EditPropertiesModal', () => {
       color: 'red',
     });
 
-    await userEvent.click(getAllByTestId('delete-button')[1]);
-    await userEvent.click(getAllByTestId('delete-button')[1]);
+    // We click twice on second element
+    await act(async () => {
+      await userEvent.click(getAllByTestId('delete-button')[1]);
+    });
 
-    await userEvent.click(getByTestId('confirm'));
+    await act(async () => {
+      await userEvent.click(getAllByTestId('delete-button')[1]);
+    });
+
+    await act(async () => {
+      await userEvent.click(getByTestId('confirm'));
+    });
 
     // Assert
     expect(services.modals.dispatch.callCount).toEqual(1);

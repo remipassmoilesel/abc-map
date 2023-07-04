@@ -29,8 +29,7 @@ export enum CommandName {
   STOP_SERVICES = 'stop-services',
   CLEAN_RESTART_SERVICES = 'clean-restart-services',
   CLEAN = 'clean',
-  DEPENDENCY_CHECK = 'dep-check',
-  NPM_REGISTRY = 'npm-registry',
+  DEPENDENCY_CHECK = 'dependency-check',
   APPLY_LICENSE = 'apply-license',
   DOCKER_BUILD = 'docker-build',
   DOCKER_PUSH = 'docker-push',
@@ -39,13 +38,8 @@ export enum CommandName {
   PERFORMANCE_TESTS = 'performance-tests',
 }
 
-export interface BaseCommand {
-  name: CommandName;
-}
-
 export interface Install {
   name: CommandName.INSTALL;
-  production: boolean;
 }
 
 export interface Lint {
@@ -97,10 +91,6 @@ export interface DependencyCheck {
   name: CommandName.DEPENDENCY_CHECK;
 }
 
-export interface NpmRegistry {
-  name: CommandName.NPM_REGISTRY;
-}
-
 export interface ApplyLicense {
   name: CommandName.APPLY_LICENSE;
 }
@@ -145,7 +135,6 @@ export declare type Command =
   | CleanRestartServices
   | Clean
   | DependencyCheck
-  | NpmRegistry
   | ApplyLicense
   | DockerBuild
   | DockerPush

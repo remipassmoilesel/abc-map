@@ -26,7 +26,7 @@ const logger = Logger.get('Shell.ts', 'info');
 export class Shell {
   constructor(private config: Config) {}
 
-  public sync(cmd: string, options?: ExecSyncOptions): void {
+  public sync(cmd: string, options?: ExecSyncOptions): string | Buffer {
     const _options: ExecSyncOptions = {
       stdio: 'inherit',
       cwd: this.config.getProjectRoot(),
@@ -34,7 +34,7 @@ export class Shell {
     };
 
     logger.info(`➡️  Running '${cmd.replace(/\s+/gi, ' ')}' with options ${JSON.stringify(_options)}`);
-    childProcess.execSync(cmd, _options);
+    return childProcess.execSync(cmd, _options);
   }
 
   public async(cmd: string, options?: SpawnOptions): ChildProcess {

@@ -3,10 +3,15 @@
   "version": "0.1.0",
   "license": "AGPL-3.0-or-later",
   "scripts": {
-    "build": "node scripts/toc.js && prettier --write ."
+    "build": "node scripts/toc.js && prettier --write .",
+    "clean": "rm -rf build",
+    "clean-build": "pnpm run clean && pnpm run build",
+    "lint": "prettier --loglevel warn --check . && sort-package-json --check",
+    "lint:fix": "prettier --loglevel warn --write . && sort-package-json"
   },
   "dependencies": {
-    "prettier": "2.5.1",
-    "markdown-toc": "1.2.0"
+    "markdown-toc": "^1.2.0",
+    "prettier": "2.8.8",
+    "sort-package-json": "^2.4.1"
   }
 }

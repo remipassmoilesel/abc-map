@@ -44,7 +44,9 @@ describe('PasswordInputModal', () => {
     // Prepare
     abcRender(<PasswordInputModal />, { services });
     await openModal();
-    await userEvent.type(screen.getByTestId('password-input'), 'azerty1234');
+    await act(async () => {
+      await userEvent.type(screen.getByTestId('password-input'), 'azerty1234');
+    });
 
     // Act
     screen.getByTestId('password-confirm').click();
@@ -59,7 +61,9 @@ describe('PasswordInputModal', () => {
     // Prepare
     abcRender(<PasswordInputModal />, { services });
     await openModal();
-    await userEvent.type(screen.getByTestId('password-input'), 'azerty1234');
+    await act(async () => {
+      await userEvent.type(screen.getByTestId('password-input'), 'azerty1234');
+    });
 
     // Act
     await act(() => {
@@ -76,7 +80,9 @@ describe('PasswordInputModal', () => {
     // Prepare
     abcRender(<PasswordInputModal />, { services });
     await openModal();
-    await userEvent.type(screen.getByTestId('password-input'), 'azerty1234');
+    await act(async () => {
+      await userEvent.type(screen.getByTestId('password-input'), 'azerty1234');
+    });
 
     // Act
     await act(async () => {
@@ -98,7 +104,9 @@ describe('PasswordInputModal', () => {
     await openModal();
 
     // Act
-    await userEvent.type(screen.getByTestId('password-input'), 'azerty5678');
+    await act(async () => {
+      await userEvent.type(screen.getByTestId('password-input'), 'azerty5678');
+    });
     screen.getByTestId('password-confirm').click();
 
     // Assert

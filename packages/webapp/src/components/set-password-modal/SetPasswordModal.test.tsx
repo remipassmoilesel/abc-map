@@ -44,8 +44,10 @@ describe('SetPasswordModal', () => {
     await showModal();
 
     // Act
-    await userEvent.type(screen.getByTestId('password-input'), 'azerty1234');
-    await userEvent.type(screen.getByTestId('password-confirmation'), 'azerty1235');
+    await act(async () => {
+      await userEvent.type(screen.getByTestId('password-input'), 'azerty1234');
+      await userEvent.type(screen.getByTestId('password-confirmation'), 'azerty1235');
+    });
 
     // Assert
     expect(screen.getByTestId('password-confirm')).toBeDisabled();
@@ -55,8 +57,11 @@ describe('SetPasswordModal', () => {
     // Prepare
     abcRender(<SetPasswordModal />, { services });
     await showModal();
-    await userEvent.type(screen.getByTestId('password-input'), 'azerty1234');
-    await userEvent.type(screen.getByTestId('password-confirmation'), 'azerty1234');
+
+    await act(async () => {
+      await userEvent.type(screen.getByTestId('password-input'), 'azerty1234');
+      await userEvent.type(screen.getByTestId('password-confirmation'), 'azerty1234');
+    });
 
     // Act
     await act(() => screen.getByTestId('password-confirm').click());
@@ -70,8 +75,10 @@ describe('SetPasswordModal', () => {
     abcRender(<SetPasswordModal />, { services });
     await showModal();
 
-    await userEvent.type(screen.getByTestId('password-input'), 'azerty1234');
-    await userEvent.type(screen.getByTestId('password-confirmation'), 'azerty1234');
+    await act(async () => {
+      await userEvent.type(screen.getByTestId('password-input'), 'azerty1234');
+      await userEvent.type(screen.getByTestId('password-confirmation'), 'azerty1234');
+    });
 
     // Act
     await act(() => screen.getByTestId('password-cancel').click());
@@ -87,8 +94,10 @@ describe('SetPasswordModal', () => {
     abcRender(<SetPasswordModal />, { services });
     await showModal();
 
-    await userEvent.type(screen.getByTestId('password-input'), 'azerty1234');
-    await userEvent.type(screen.getByTestId('password-confirmation'), 'azerty1234');
+    await act(async () => {
+      await userEvent.type(screen.getByTestId('password-input'), 'azerty1234');
+      await userEvent.type(screen.getByTestId('password-confirmation'), 'azerty1234');
+    });
 
     // Act
     await act(() => screen.getByTestId('password-confirm').click());

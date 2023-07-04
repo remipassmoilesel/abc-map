@@ -17,7 +17,7 @@
  */
 
 import { useCallback, useState } from 'react';
-import { ImportResult } from './CsvImportModal';
+import { ImportResult } from './ImportResult';
 import { FileIO, InputResultType, InputType } from '../../../core/utils/FileIO';
 import { CsvParser } from '../../../core/data/csv-parser/CsvParser';
 import { FeatureWrapper } from '../../../core/geo/features/FeatureWrapper';

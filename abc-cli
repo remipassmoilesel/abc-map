@@ -6,16 +6,17 @@ This is a helper forwarding commands to packages/abc-cli/build/main.js
 
  */
 
-const path = require("path");
-const fs = require("fs");
-const child_process = require("child_process");
+const path = require('path');
+const fs = require('fs');
+const { execSync } = require('child_process');
 
-const NodeVersionMin = 14;
+const NodeVersionMin = 18;
 
 const projectRoot = path.resolve(__dirname);
 const cliRoot = path.resolve(projectRoot, 'packages/abc-cli');
 const cliMain = path.resolve(cliRoot, 'build', 'main.js');
-const nodeModules = path.resolve(cliRoot, 'node_modules');
+const rootNodeModules = path.resolve(cliRoot, 'node_modules');
+const cliNodeModules = path.resolve(cliRoot, 'node_modules');
 const lastBuildDateFile = path.resolve(cliRoot, '.last-build-date.json');
 
 if (require.main === module) {
@@ -24,7 +25,7 @@ if (require.main === module) {
     process.exit(0);
   } catch (err) {
     if (process.env.DEBUG) {
-      console.error(err)
+      console.error(err);
     } else {
       console.error(err.message);
     }
@@ -34,16 +35,17 @@ if (require.main === module) {
 
 function main(args) {
   checkNodeVersion();
+  checkPrerequisites();
 
   if (!isCliUpToDate()) {
     updateCli();
   }
 
-  cliCommand(args);
+  abcCliCommand(args);
 }
 
 function checkNodeVersion() {
-  const output = child_process.execSync("node -v", {cwd: cliRoot, stdio: 'pipe'});
+  const output = execSync('node -v', { cwd: cliRoot, stdio: 'pipe' });
   const versionMatch = output && output.toString('utf-8').match(/^v([0-9]+)/);
   const version = versionMatch && versionMatch.length && parseInt(versionMatch[1]);
 
@@ -52,30 +54,54 @@ function checkNodeVersion() {
   }
 }
 
+function checkPrerequisites() {
+  const tools = [{ name: 'pnpm', doc: 'https://pnpm.io/fr/installation' }];
+  for (const tool of tools) {
+    try {
+      execSync('command -v ' + tool.name);
+    } catch (err) {
+      throw new Error('You must install "' + tool.name + '", see: ' + tool.doc);
+    }
+  }
+}
+
 function isCliUpToDate() {
-  if (process.env.CI && process.env.CI === "true") {
+  if (isContinuousIntegration()) {
     return false;
   }
-  const nodeModulesExists = fs.existsSync(nodeModules);
+
+  const nodeModulesExists = fs.existsSync(cliNodeModules) && fs.existsSync(rootNodeModules);
   const cliMainExists = fs.existsSync(cliMain);
   const lastBuildDateExists = fs.existsSync(lastBuildDateFile);
   if (!nodeModulesExists || !cliMainExists || !lastBuildDateExists) {
     return false;
   }
-  const lastModification = new Date(child_process.execSync(`git log -1 --pretty="format:%ci" ${cliRoot}`, {cwd: cliRoot}).toString())
+  const lastModification = new Date(execSync(`git log -1 --pretty="format:%ci" ${cliRoot}`, { cwd: cliRoot }).toString());
   const lastBuildDate = new Date(require(lastBuildDateFile).date);
   return lastModification <= lastBuildDate;
 }
 
 function updateCli() {
-  console.log("\n🔨 Abc CLI must be initialized, it may take a few minutes ... 🔧\n");
-  child_process.execSync("yarn install --silent", {cwd: cliRoot, stdio: 'inherit'});
-  child_process.execSync("yarn run clean-build", {cwd: cliRoot, stdio: 'inherit'});
-  fs.writeFileSync(lastBuildDateFile, JSON.stringify({date: new Date()}));
-  console.log('\n')
+  console.log('\n🔨 Abc CLI must be initialized, it may take a few minutes ... 🔧\n');
+
+  // When we are in CI, we must configure PNPM before the first install
+  if (isContinuousIntegration()) {
+    console.log('CI environment detected, applying configuration...\n');
+    const storePath = path.resolve(projectRoot, '.pnpm-store');
+    execSync('pnpm config set store-dir ' + storePath);
+  }
+
+  execSync('pnpm install -f', { cwd: projectRoot, stdio: 'inherit' });
+  execSync('pnpm run clean-build', { cwd: cliRoot, stdio: 'inherit' });
+  fs.writeFileSync(lastBuildDateFile, JSON.stringify({ date: new Date() }));
+  console.log('\n');
 }
 
-function cliCommand(args) {
-  const argsStr = args.slice(2).join(" ");
-  child_process.execSync(`node ${cliMain} ${argsStr}`, {cwd: process.cwd(), stdio: 'inherit'});
+function isContinuousIntegration() {
+  return process.env.CI === 'true';
+}
+
+function abcCliCommand(args) {
+  const argsStr = args.slice(2).join(' ');
+  execSync(`node ${cliMain} ${argsStr}`, { cwd: process.cwd(), stdio: 'inherit' });
 }

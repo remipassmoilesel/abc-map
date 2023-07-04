@@ -27,14 +27,14 @@ const logger = Logger.get('create-module.test.ts', 'warn');
 const DEBUG = false;
 
 describe('create-module', function () {
-  this.timeout(120_000);
+  this.timeout(240_000);
 
   it('should create a module template that can build', () => {
     const moduleName = `create-module-test-${uuid.v4()}`;
     const createModule = url.fileURLToPath(new URL('..', import.meta.url));
 
     shellCommand(`npx -p ${createModule} create-module --name ${moduleName}`, '/tmp');
-    shellCommand('yarn run build', `/tmp/${moduleName}`);
+    shellCommand('npm run build', `/tmp/${moduleName}`);
   });
 
   // Use this test to check another template
@@ -47,7 +47,7 @@ describe('create-module', function () {
     const createModule = url.fileURLToPath(new URL('..', import.meta.url));
 
     shellCommand(`${env} npx -p ${createModule} create-module --name ${moduleName}`, '/tmp');
-    shellCommand('yarn run build', `/tmp/${moduleName}`);
+    shellCommand('npm run build', `/tmp/${moduleName}`);
   });
 });
 

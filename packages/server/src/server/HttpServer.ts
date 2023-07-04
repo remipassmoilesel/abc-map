@@ -107,7 +107,7 @@ export class HttpServer {
     void this.app.register(fastifySensible);
 
     // Metrics
-    void this.app.register(metricsPlugin, { defaultMetrics: { enabled: false } });
+    void this.app.register(metricsPlugin, { defaultMetrics: { enabled: false }, clearRegisterOnInit: true });
 
     // Templating engine
     void this.app.register(fastifyView, {
