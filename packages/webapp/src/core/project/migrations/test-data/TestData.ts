@@ -65,6 +65,10 @@ export class TestData {
     return this.readFile(`${__dirname}/project-1.1.0.abm2`);
   }
 
+  public static async project110_public(): Promise<MigrationProject> {
+    return this.readFile(`${__dirname}/project-1.1.0_public.abm2`);
+  }
+
   public static fakeProject(version: string) {
     return { metadata: { version } } as unknown as AbcProjectManifest;
   }

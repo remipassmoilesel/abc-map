@@ -16,7 +16,6 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { MigrationProject } from './typings';
 import { TestData } from './test-data/TestData';
 import { FromV110ToV120 } from './FromV110ToV120';
 import sinon, { SinonStubbedInstance } from 'sinon';
@@ -26,23 +25,23 @@ import { ModalEventType, ModalStatus } from '../../ui/typings';
 describe('FromV110ToV120', () => {
   let modals: SinonStubbedInstance<ModalService>;
 
-  let sampleProject: MigrationProject;
   let migration: FromV110ToV120;
 
   beforeEach(async () => {
-    sampleProject = await TestData.project110();
-
     modals = sinon.createStubInstance(ModalService);
     migration = new FromV110ToV120(modals);
   });
 
   it('interestedBy() should return true if version < 1.2.0', async () => {
+    const sampleProject = await TestData.project110();
+
     expect(await migration.interestedBy(sampleProject.manifest)).toEqual(true);
     expect(await migration.interestedBy(TestData.fakeProject('1.2.0'))).toEqual(false);
   });
 
-  it('migrate should work', async () => {
+  it('should migrate', async () => {
     // Prepare
+    const sampleProject = await TestData.project110();
     modals.promptPassword.resolves({ type: ModalEventType.PasswordPromptClosed, status: ModalStatus.Confirmed, value: 'azerty1234' });
 
     // Act
@@ -51,5 +50,18 @@ describe('FromV110ToV120', () => {
 
     // Assert
     expect(manifest).toMatchSnapshot();
+  });
+
+  it('should not try to migrate public projects', async () => {
+    // Prepare
+    const sampleProject = await TestData.project110_public();
+
+    // Act
+    const result = await migration.migrate(sampleProject.manifest, sampleProject.files);
+    const manifest = result.manifest;
+
+    // Assert
+    expect(manifest).toMatchSnapshot();
+    expect(modals.promptPassword.callCount).toEqual(0);
   });
 });

@@ -38,9 +38,12 @@ const logger = Logger.get('DeprecatedEncryption.ts');
 const ProtectedLayerTypes = [LayerType.Wms, LayerType.Wmts, LayerType.Xyz];
 
 export class DeprecatedEncryption {
-  public static deprecatedManifestContainsCredentials(project: AbcProjectManifest): boolean {
-    const protectedLayer = project.layers.find((lay) => ProtectedLayerTypes.includes(lay.type));
+  public static manifestContainsCredentials(project: AbcProjectManifest): boolean {
+    if (project.metadata.public) {
+      return false;
+    }
 
+    const protectedLayer = project.layers.find((lay) => ProtectedLayerTypes.includes(lay.type));
     return !!protectedLayer;
   }
 

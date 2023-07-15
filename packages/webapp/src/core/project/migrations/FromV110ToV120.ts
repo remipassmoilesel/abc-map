@@ -41,7 +41,7 @@ export class FromV110ToV120 implements ProjectMigration {
 
   public async migrate(manifest: AbcProjectManifest, files: AbcFile<Blob>[]): Promise<MigrationProject> {
     let migrated: AbcProjectManifest = { ...manifest };
-    if (DeprecatedEncryption.deprecatedManifestContainsCredentials(manifest)) {
+    if (DeprecatedEncryption.manifestContainsCredentials(manifest)) {
       // We prompt user for a password
       const t = prefixedTranslation('FromV110ToV120:');
       const title = t('End_of_project_passwords');
