@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ReactElement } from 'react';
+import { LazyExoticComponent, ReactElement } from 'react';
 
 export type ModuleFactory = () => Module;
 
@@ -48,7 +48,7 @@ export interface Module {
   /**
    * User interface of module
    */
-  getView(): ReactElement;
+  getView(): ReactElement | LazyExoticComponent<any>;
 }
 
 export abstract class ModuleAdapter implements Module {
@@ -58,5 +58,5 @@ export abstract class ModuleAdapter implements Module {
 
   public abstract getShortDescription(): string;
 
-  public abstract getView(): ReactElement;
+  public abstract getView(): ReactElement | LazyExoticComponent<any>;
 }

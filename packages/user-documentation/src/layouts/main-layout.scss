@@ -1,0 +1,113 @@
+/**
+ * Copyright © 2023 Rémi Pace.
+ * This file is part of Abc-Map.
+ *
+ * Abc-Map is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of
+ * the License, or (at your option) any later version.
+ *
+ * Abc-Map is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General
+ * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
+ *
+ *
+ *
+ */
+
+@import '../styles/variables';
+@import '../styles/font';
+@import '../../node_modules/bootstrap/scss/bootstrap';
+@import '../styles/shared-content-style';
+@import '../styles/scrollbars';
+
+$top-bar-height: 3rem;
+
+// We must set it in global context
+@include defaultScrollbars($scrollbar_width_md);
+
+html,
+body {
+  font-family: 'AbcCantarell', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: white;
+
+  font-size: 15px;
+}
+
+.top-bar {
+  position: sticky;
+  top: 0;
+
+  z-index: 10;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  width: 100vw;
+  max-width: 100vw;
+
+  height: $top-bar-height;
+  max-height: $top-bar-height;
+
+  border-bottom: solid 0.1rem $gray-400;
+  background: white;
+  padding: 0;
+
+  box-shadow: $box-shadow;
+}
+
+.page-content-wrapper {
+  // We must block X overflow otherwise it may breaks layout on mobile browsers
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+
+  padding: 2rem 25vw 2rem 25vw;
+  @include media-breakpoint-down(xl) {
+    padding: 2rem 1rem 1rem 1rem;
+  }
+}
+
+#page-content {
+  @include documentationContentStyle();
+}
+
+.brand {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+
+  height: 4vh;
+  max-height: 100%;
+
+  border-radius: $border-radius;
+  border: none;
+
+  font-size: 1.1rem !important;
+  background: white;
+
+  padding: 0.5rem;
+  margin-left: 2rem;
+  margin-right: 2rem;
+
+  span {
+    white-space: nowrap;
+  }
+
+  img {
+    height: 2.5vh;
+    margin-right: 1rem;
+  }
+}

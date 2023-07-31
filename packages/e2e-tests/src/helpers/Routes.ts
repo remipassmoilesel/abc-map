@@ -16,6 +16,6 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FrontendRoutes, Language } from '@abc-map/shared';
+import { WebappRoutes, Language } from '@abc-map/shared';
 
-export const Routes = new FrontendRoutes(Language.English);
+export const Routes = new WebappRoutes(Language.English);

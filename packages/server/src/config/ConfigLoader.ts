@@ -18,16 +18,19 @@
 
 import { Env, EnvKey } from './Env';
 import { Config, ConfigInput } from './Config';
-import { Logger, errorMessage } from '@abc-map/shared';
+import { errorMessage, Logger } from '@abc-map/shared';
 import * as path from 'path';
 import * as _ from 'lodash';
-import * as fs from 'fs';
 import { Validation } from '../utils/Validation';
+import { isDirectory } from '../utils/isDirectory';
+import { sampleConfig } from './sampleConfig';
 
-const logger = Logger.get('ConfigLoader.ts', 'info');
+export const logger = Logger.get('ConfigLoader.ts', 'info');
+
+export type LoadConfigFunc = () => Promise<Config>;
 
 export class ConfigLoader {
-  public static readonly DEFAULT_CONFIG = 'resources/configuration/local.js';
+  public static readonly DEFAULT_CONFIG = 'resources/configuration/development.js';
 
   public static getPathFromEnv(): string {
     const env = new Env();
@@ -35,7 +38,7 @@ export class ConfigLoader {
   }
 
   public static async load(): Promise<Config> {
-    const configPath = this.getPathFromEnv();
+    const configPath = ConfigLoader.getPathFromEnv();
     return new ConfigLoader().load(configPath);
   }
 
@@ -57,26 +60,55 @@ export class ConfigLoader {
 
   public async load(configPath: string): Promise<Config> {
     const _configPath = path.resolve(configPath);
+
+    const explainedError = (message: string) => {
+      logger.error(
+        [
+          '',
+          '',
+          '⚠️   Invalid configuration. ',
+          '',
+          'Message: ' + message,
+          '',
+          'This is a valid configuration example:',
+          '',
+          '------ config.js ------',
+          sampleConfig()
+            .split('\n')
+            .map((line) => '   ' + line)
+            .join('\n'),
+          '------ config.js ------',
+          '',
+          'You can see other examples here: https://gitlab.com/abc-map/abc-map/-/tree/master/packages/server/resources/configuration',
+          '',
+          '',
+        ].join('\n')
+      );
+    };
+
     let input: ConfigInput;
     try {
       /* eslint-disable @typescript-eslint/no-var-requires */
       input = _.cloneDeep(require(_configPath));
-    } catch (e) {
-      return Promise.reject(new Error(`Cannot load configuration '${configPath}': '${errorMessage(e)}'`));
+    } catch (err) {
+      explainedError(errorMessage(err));
+      return Promise.reject(new Error(`Cannot load configuration ${configPath}: ${errorMessage(err)}`));
     }
 
     // We validate config input
     if (!Validation.ConfigInput(input)) {
-      return Promise.reject(new Error(`Invalid configuration: ${Validation.formatErrors(Validation.ConfigInput)}`));
+      explainedError(Validation.formatErrors(Validation.ConfigInput));
+      return Promise.reject(new Error(`Invalid configuration ${configPath}: ${Validation.formatErrors(Validation.ConfigInput)}`));
     }
 
     const config: Config = {
       ...input,
-      frontendPath: path.resolve(__dirname, '..', '..', 'public'),
+      webappPath: path.resolve(__dirname, '../../public/webapp'),
+      userDocumentationPath: path.resolve(__dirname, '../../public/user-documentation'),
     };
 
     // We check if datastore is a directory
-    if (!this.isDir(config.datastore.path)) {
+    if (!(await isDirectory(config.datastore.path))) {
       throw new Error(`Datastore root '${config.datastore.path}' must be a directory`);
     }
 
@@ -86,15 +118,11 @@ export class ConfigLoader {
       config.externalUrl = config.externalUrl.slice(0, -1);
     }
 
-    // We check if frontend path is a directory
-    if (!this.isDir(config.frontendPath)) {
-      throw new Error(`Frontend root '${config.frontendPath}' must be a directory`);
+    // We check if webapp path is a directory
+    if (!(await isDirectory(config.webappPath))) {
+      throw new Error(`Webapp root '${config.webappPath}' must be a directory. Try "abc build" on a developer workstation.`);
     }
 
     return config;
-  }
-
-  private isDir(path: string): boolean {
-    return fs.existsSync(path) && fs.statSync(path).isDirectory();
   }
 }

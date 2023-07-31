@@ -119,9 +119,6 @@ describe('StorePersistence', () => {
               canRedo: true,
             },
           },
-          documentation: {
-            scrollPosition: 15,
-          },
           sideMenu: {
             'menu-1': true,
             'menu-2': false,
@@ -226,9 +223,6 @@ describe('StorePersistence', () => {
         },
         ui: {
           historyCapabilities: {},
-          documentation: {
-            scrollPosition: 0,
-          },
           sideMenu: {},
           informations: {
             riskyDevice: true,

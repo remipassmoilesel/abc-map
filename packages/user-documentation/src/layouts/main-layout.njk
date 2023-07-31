@@ -1,0 +1,93 @@
+---
+title: Documentation
+description: Abc-Map documentation - All you need to know about Abc-Map !
+keywords: gis,map,software,free
+with_toc: true
+with_title: true
+---
+<!DOCTYPE html>
+<html lang="{{ lang }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Abc-Map - Documentation - {{ title }}</title>
+
+    <link rel="stylesheet" href="/documentation/layouts/main-layout.css"/>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="description" content="{{ description }}"/>
+    <meta name="keywords" content="{{ keywords }}"/>
+    <meta name="theme-color" content="#0077b6"/>
+    <meta property="og:title" content="{{ title }}"/>
+    <meta property="og:description" content="{{ description }}"/>
+    <meta property="og:image" content="/documentation/assets/og-graph-image.png"/>
+    <meta property="og:image:width" content="1200"/>
+    <meta property="og:image:height" content="627"/>
+    <meta property="og:type" content="website"/>
+
+    <link rel="icon" href="/documentation/assets/favicon.ico"/>
+    <link rel="manifest" href="/documentation/assets/manifest.json"/>
+
+    {{ head | safe }}
+</head>
+<body>
+<div class="top-bar">
+    <div class="brand">
+        <img src="/documentation/assets/main-icon.png" alt="Logo"/>
+        <span>Abc-Map</span>
+    </div>
+
+    <button type="button" onclick="abc.openInMainApp()" data-cy="open-in-app" class="btn btn-outline-secondary me-4">
+        🌍 <span data-i18n="Open_in_app">Open in app</span>
+    </button>
+</div>
+
+<!-- We wrap content in order to preserve spacing while zooming  -->
+<div class="page-content-wrapper">
+    <!-- Content included here will be used in webapp too  -->
+    <div id="page-content" class="flex-grow-1" data-cy="documentation-content">
+        {% if with_title %}
+        <div class="title-wrapper">
+            <h1 class="py-3"> {{ title }} </h1>
+            <a class="anchor-link" href="">
+                <span class="visually-hidden">{{ title }}</span>
+                <span aria-hidden="true"><span data-kind="anchor-link">🔗</span></span>
+            </a>
+        </div>
+        {% endif %}
+
+        {% if with_toc %}
+        <div>
+            <div class="mb-4">
+                {{ content | toc | safe }}
+            </div>
+
+            <div class="d-flex hidden-in-webapp">
+                <button type="button" onclick="abc.tableOfContent()"
+                        class="btn btn-outline-primary me-2 mb-4"
+                        data-cy="go-to-table-of-content">
+                    📖 <span data-i18n="Table_of_content">Table of content</span>
+                </button>
+            </div>
+        </div>
+        {% endif %}
+
+        {{ content | safe }}
+
+        <div data-cy="document-title" data-title="{{ title | slugify }}"></div>
+        <div class="mt-5" style="color: white">git:{{ ABC_VERSION }}</div>
+    </div>
+</div>
+
+<!-- This marker is used to identify static documentation display in end-to-end tests -->
+<div data-cy="in-static-documentation"></div>
+
+<script src="/documentation/node_modules/i18next/dist/umd/i18next.min.js"></script>
+<script src="/documentation/layouts/translations.js"></script>
+<script src="/documentation/layouts/main-layout.js"></script>
+
+<!-- Server may template a value here -->
+<div style="display: none">%%%append-to-body%%%&nbsp;%%%end-append-to-body%%%</div>
+</body>
+</html>

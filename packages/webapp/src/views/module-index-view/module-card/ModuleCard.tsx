@@ -26,6 +26,7 @@ import { useAppDispatch, useAppSelector } from '../../../core/store/hooks';
 import { UiActions } from '../../../core/store/ui/actions';
 import { useTranslation } from 'react-i18next';
 import { isRemoteModule } from '../../../core/modules/registry/RemoteModule';
+import { WindowNames } from '../../../core/ui/WindowNames';
 
 interface Props {
   module: Module;
@@ -60,7 +61,7 @@ export function ModuleCard(props: Props) {
   const handleOpenSource = useCallback(
     (ev: MouseEvent) => {
       ev.stopPropagation();
-      window.open(sourceUrl, '_blank');
+      window.open(sourceUrl, WindowNames.Blank);
     },
     [sourceUrl]
   );

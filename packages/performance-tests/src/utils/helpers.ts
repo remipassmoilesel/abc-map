@@ -43,6 +43,14 @@ export function jsonGet(route: string, headers?: HeaderMap): RefinedResponse<Res
   });
 }
 
+export function get(route: string, headers?: HeaderMap): RefinedResponse<ResponseType | undefined> {
+  return http.get(route, {
+    headers: {
+      ...headers,
+    },
+  });
+}
+
 export function authentication(token: string): { [k: string]: string } {
   return {
     Authorization: `Beader ${token}`,

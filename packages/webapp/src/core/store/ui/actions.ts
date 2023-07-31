@@ -22,7 +22,6 @@ import { InformationKey, ServiceWorkerUiState } from './state';
 export enum ActionType {
   SetHistoryCapabilities = 'SetHistoryCapabilities',
   CleanHistoryCapabilities = 'CleanHistoryCapabilities',
-  SetDocumentationScrollPosition = 'SetDocumentationScrollPosition',
   SetSideMenuState = 'SetSideMenuState',
   AckInformation = 'AckInformation',
   SetExperimentalFeature = 'SetExperimentalFeature',
@@ -43,11 +42,6 @@ export interface SetHistoryCapabilities {
 
 export interface CleanHistoryCapabilities {
   type: ActionType.CleanHistoryCapabilities;
-}
-
-export interface SetDocumentationScrollPosition {
-  type: ActionType.SetDocumentationScrollPosition;
-  position: number;
 }
 
 export interface SetSideMenuState {
@@ -99,7 +93,6 @@ export interface SetServiceWorkerState {
 export type UiAction =
   | SetHistoryCapabilities
   | CleanHistoryCapabilities
-  | SetDocumentationScrollPosition
   | SetSideMenuState
   | AckInformation
   | IncrementVisitCounter
@@ -123,13 +116,6 @@ export class UiActions {
   public static cleanHistoryCapabilities(): UiAction {
     return {
       type: ActionType.CleanHistoryCapabilities,
-    };
-  }
-
-  public static setDocumentationScrollPosition(position: number): UiAction {
-    return {
-      type: ActionType.SetDocumentationScrollPosition,
-      position,
     };
   }
 

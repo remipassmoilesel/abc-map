@@ -67,10 +67,6 @@ export function toPersistedState(state: MainState): MainState {
         updateAvailable: false,
         installed: false,
       },
-      documentation: {
-        ...state.ui.documentation,
-        scrollPosition: 0,
-      },
     },
   };
 }

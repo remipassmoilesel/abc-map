@@ -41,7 +41,7 @@ import { LayerWrapper } from './layers/LayerWrapper';
 import VectorSource from 'ol/source/Vector';
 import { WmtsSettings, WmtsSourceOptions } from './layers/LayerFactory.types';
 import { ProjectionRoutes } from '../http/ApiRoutes';
-import { ApiClient, CapabilitiesClient } from '../http/http-clients';
+import { ApiClient, ExternalClient } from '../http/http-clients';
 
 export const logger = Logger.get('GeoService.ts');
 
@@ -54,14 +54,14 @@ export declare type StyleTransformFunc = (x: FeatureStyle, f: FeatureWrapper) =>
 
 export class GeoService {
   public static create(toasts: ToastService, history: HistoryService): GeoService {
-    return new GeoService(ApiClient, CapabilitiesClient, toasts, history, mainStore);
+    return new GeoService(ApiClient, ExternalClient, toasts, history, mainStore);
   }
 
   private mainMap = MapFactory.createDefault(true);
 
   constructor(
     private apiClient: AxiosInstance,
-    private capabilitiesClient: AxiosInstance,
+    private externalClient: AxiosInstance,
     private toasts: ToastService,
     private history: HistoryService,
     private store: MainStore,
@@ -172,7 +172,7 @@ export class GeoService {
       capabilitiesUrl = `${url}?service=wms&request=GetCapabilities`;
     }
 
-    const xmlCapabilities = await this.capabilitiesClient.get(capabilitiesUrl, { auth }).then((res) => res.data);
+    const xmlCapabilities = await this.externalClient.get(capabilitiesUrl, { auth }).then((res) => res.data);
     const result = this.wmsCapabilitiesParser(xmlCapabilities);
     if (!result?.Capability?.Layer?.Layer?.length) {
       return Promise.reject(new Error('Invalid WMS capabilities, no layer found'));
@@ -190,7 +190,7 @@ export class GeoService {
       capabilitiesUrl = `${url}?service=wmts&request=GetCapabilities`;
     }
 
-    const xmlCapabilities = await this.capabilitiesClient.get(capabilitiesUrl, { auth }).then((res) => res.data);
+    const xmlCapabilities = await this.externalClient.get(capabilitiesUrl, { auth }).then((res) => res.data);
     const result = this.wmtsCapabilitiesParser(xmlCapabilities);
     if (!result?.Contents?.Layer?.length) {
       return Promise.reject(new Error('Invalid WMTS capabilities, no layer found'));
@@ -268,7 +268,7 @@ export class GeoService {
 
   public async geocode(query: string): Promise<NominatimResult[]> {
     const url = 'https://nominatim.openstreetmap.org/search';
-    return this.capabilitiesClient
+    return this.externalClient
       .get(url, {
         params: {
           q: query,

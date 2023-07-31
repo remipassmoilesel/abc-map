@@ -18,11 +18,12 @@
 import { AxiosInstance } from 'axios';
 import { ToastService } from '../ui/ToastService';
 import { LegalMentionsRoutes as Api } from '../http/ApiRoutes';
-import { ApiClient } from '../http/http-clients';
+import { DownloadClient } from '../http/http-clients';
+import { BlobIO } from '@abc-map/shared';
 
 export class LegalMentionsService {
   public static create(toasts: ToastService): LegalMentionsService {
-    return new LegalMentionsService(ApiClient, toasts);
+    return new LegalMentionsService(DownloadClient, toasts);
   }
 
   constructor(private httpClient: AxiosInstance, private toasts: ToastService) {}
@@ -30,7 +31,12 @@ export class LegalMentionsService {
   public get(): Promise<string> {
     return this.httpClient
       .get(Api.legalMentions())
-      .then((res) => res.data)
+      .then((res) => BlobIO.asString(res.data))
+      .then((content) => {
+        const parser = new DOMParser();
+        const document = parser.parseFromString(content, 'text/html');
+        return document.body.innerHTML;
+      })
       .catch((err) => {
         this.toasts.genericError(err);
         return Promise.reject(err);

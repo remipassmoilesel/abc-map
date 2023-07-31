@@ -20,92 +20,92 @@ import { DateTime } from 'luxon';
 
 export class ProjectRoutes {
   public static saveProject(): string {
-    return '/projects/';
+    return '/api/projects/';
   }
 
   public static listProject(): string {
-    return '/projects/';
+    return '/api/projects/';
   }
 
   public static findById(id: string): string {
-    return `/projects/${id}`;
+    return `/api/projects/${id}`;
   }
 
   public static findSharedById(id: string): string {
-    return `/projects/shared/${id}`;
+    return `/api/projects/shared/${id}`;
   }
 
   public static delete(id: string): string {
-    return `/projects/${id}`;
+    return `/api/projects/${id}`;
   }
 
   public static quotas(): string {
-    return `/projects/quotas`;
+    return `/api/projects/quotas`;
   }
 }
 
 export class AuthenticationRoutes {
   public static authentication(): string {
-    return '/authentication';
+    return '/api/authentication';
   }
 
   public static token(): string {
-    return '/authentication/token';
+    return '/api/authentication/token';
   }
 
   public static password(): string {
-    return '/authentication/password';
+    return '/api/authentication/password';
   }
 
   public static passwordResetEmail(): string {
-    return '/authentication/password/reset-email';
+    return '/api/authentication/password/reset-email';
   }
 
   public static account(): string {
-    return '/authentication/account';
+    return '/api/authentication/account';
   }
 
   public static accountConfirmation(): string {
-    return '/authentication/account/confirmation';
+    return '/api/authentication/account/confirmation';
   }
 }
 
 export class DatastoreRoutes {
   public static list(): string {
-    return '/datastore/list';
+    return '/api/datastore/list';
   }
 
   public static search(): string {
-    return `/datastore/search`;
+    return `/api/datastore/search`;
   }
 
   public static download(path: string): string {
-    return `/datastore/download/${path}`;
+    return `/api/datastore/download/${path}`;
   }
 }
 
 export class FeedbackRoutes {
   public static textFeedback(): string {
-    return '/feedback/text';
+    return '/api/feedback/text';
   }
 
   public static vote(): string {
-    return '/feedback/vote';
+    return '/api/feedback/vote';
   }
 
   public static stats(from: DateTime, to: DateTime): string {
-    return `/feedback/vote/statistics/${from.toISODate()}/${to.toISODate()}`;
+    return `/api/feedback/vote/statistics/${from.toISODate()}/${to.toISODate()}`;
   }
 }
 
 export class LegalMentionsRoutes {
   public static legalMentions(): string {
-    return '/legal-mentions';
+    return '/legal-mentions.html';
   }
 }
 
 export class ProjectionRoutes {
   public static findByCode(code: string): string {
-    return `/projections/${code}`;
+    return `/api/projections/${code}`;
   }
 }

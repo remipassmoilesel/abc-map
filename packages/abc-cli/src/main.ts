@@ -81,7 +81,7 @@ async function main(args: string[]) {
       break;
 
     case CommandName.TEST:
-      service.test();
+      service.unitTest();
       break;
 
     case CommandName.WATCH:

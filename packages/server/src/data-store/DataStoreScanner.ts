@@ -18,9 +18,9 @@
 
 import { ArtefactManifestRead } from './ArtefactManifest';
 import { ManifestReader } from './ManifestReader';
-import { glob } from 'glob';
 import * as util from 'util';
 import { Logger } from '@abc-map/shared';
+import { glob } from 'glob';
 const globPromise = util.promisify(glob);
 
 export const logger = Logger.get('DataStoreScanner');

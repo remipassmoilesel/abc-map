@@ -16,49 +16,49 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Logger } from '@abc-map/shared';
+import { Language, Logger } from '@abc-map/shared';
 import { Config } from '../config/Config';
 import { Services } from '../services/services';
 import * as path from 'path';
 import { fastify, FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import fastifySensible from '@fastify/sensible';
 import { Controller } from './Controller';
-import { jwtPlugin } from './jwtPlugin';
+import { jwtPlugin } from './helpers/jwtPlugin';
 import fastifyRateLimit from '@fastify/rate-limit';
 import helmet from '@fastify/helmet';
 import fastifyView from '@fastify/view';
-import { getLang } from './getLang';
-import { error409Parameters } from './pagesParameters';
+import { getLang } from './helpers/getLang';
 import { HookHandlerDoneFunction } from 'fastify/types/hooks';
 import { FastifyError } from '@fastify/error';
-import { privateApiControllers, publicApiControllers } from './controllers';
+import { privateControllers, publicControllers } from './controllers';
 import metricsPlugin from 'fastify-metrics';
-import { defaultRateLimitConfig } from './defaultRateLimitConfig';
-import { hashRequestSource } from './hashRequestSource';
-import { RootController } from './RootController';
+import { defaultRateLimitConfig } from './helpers/defaultRateLimitConfig';
+import { hashRequestSource } from './helpers/hashRequestSource';
+import { isItWorthLogging } from './helpers/isItWorthLogging';
 
-const logger = Logger.get('HttpServer.ts', 'trace');
+const logger = Logger.get('HttpServer.ts', 'info');
 
 /**
- * API and frontend server.
+ * API and webapp server.
  *
- * Here responses are not compressed, this should be handled in reverse proxy (Envoy for public official instance)
+ * Here responses are not compressed, this should be handled in reverse proxy (Envoy per example)
  *
  */
 export class HttpServer {
   public static create(config: Config, services: Services): HttpServer {
-    return new HttpServer(config, services, publicApiControllers(config, services), privateApiControllers(config, services), new RootController(config));
+    const controllers = {
+      public: publicControllers(config, services),
+      private: privateControllers(config, services),
+    };
+    return new HttpServer(config, services, controllers);
   }
 
   private app: FastifyInstance;
 
-  constructor(
-    private config: Config,
-    private services: Services,
-    private publicControllers: Controller[],
-    private privateControllers: Controller[],
-    private rootController: RootController
-  ) {
+  private debugRoutes = false;
+  private routes: string[] = [];
+
+  constructor(private config: Config, private services: Services, private controllers: { public: Controller[]; private: Controller[] }) {
     // This server is designed to be used behind a TLS proxy
     this.app = fastify({ trustProxy: true });
   }
@@ -90,6 +90,18 @@ export class HttpServer {
   }
 
   public async initialize(): Promise<void> {
+    if (this.debugRoutes) {
+      this.app.addHook('onRoute', (routeOptions) => {
+        this.routes.push(
+          JSON.stringify({
+            method: routeOptions.method,
+            url: routeOptions.url,
+            prefix: routeOptions.prefix,
+          })
+        );
+      });
+    }
+
     if (this.config.server.log.requests) {
       this.app.addHook('onRequest', this.logRequest);
     }
@@ -98,19 +110,19 @@ export class HttpServer {
     this.app.setErrorHandler(this.handleError);
 
     // Rate limit
-    void this.app.register(fastifyRateLimit, {
+    await this.app.register(fastifyRateLimit, {
       global: true,
       ...defaultRateLimitConfig(this.config),
     });
 
     // Utility methods
-    void this.app.register(fastifySensible);
+    await this.app.register(fastifySensible);
 
     // Metrics
-    void this.app.register(metricsPlugin, { defaultMetrics: { enabled: false }, clearRegisterOnInit: true });
+    await this.app.register(metricsPlugin, { defaultMetrics: { enabled: false }, clearRegisterOnInit: true });
 
     // Templating engine
-    void this.app.register(fastifyView, {
+    await this.app.register(fastifyView, {
       engine: { handlebars: require('handlebars') },
       root: path.resolve(__dirname, '../../public'),
       viewExt: 'html',
@@ -118,27 +130,23 @@ export class HttpServer {
 
     // Add security headers
     // We allow iframes for shared maps
-    void this.app.register(helmet, { contentSecurityPolicy: false, frameguard: false });
+    await this.app.register(helmet, { contentSecurityPolicy: false, frameguard: false });
 
-    // Root controller with frontend and special routes
-    void this.app.register(this.rootController.setup);
-
-    // Public API controllers
-    void this.app.register(
-      async (app) => {
-        this.publicControllers.forEach((ctr) => app.register(ctr.setup, { prefix: ctr.getRoot() }));
-      },
-      { prefix: '/api' }
-    );
+    // Public controllers
+    await this.app.register(async (app) => {
+      this.controllers.public.forEach((ctr) => app.register(ctr.setup, { prefix: ctr.getRoot() }));
+    });
 
     // Private controllers, authentication needed
-    void this.app.register(
-      async (app) => {
-        this.authenticationHook(app);
-        this.privateControllers.forEach((ctr) => app.register(ctr.setup, { prefix: ctr.getRoot() }));
-      },
-      { prefix: '/api' }
-    );
+    await this.app.register(async (app) => {
+      this.authenticationHook(app);
+      this.controllers.private.forEach((ctr) => app.register(ctr.setup, { prefix: ctr.getRoot() }));
+    });
+
+    if (this.debugRoutes) {
+      logger.info('Registered routes: ');
+      this.routes.forEach((route) => logger.info(route));
+    }
   }
 
   private handleError = (err: FastifyError, request: FastifyRequest, reply: FastifyReply) => {
@@ -162,7 +170,7 @@ export class HttpServer {
 
     // Return 429 error page if necessary
     if (reply.statusCode === 429) {
-      void reply.view('error429', error409Parameters(getLang(request)));
+      void reply.view('webapp/error429', error409Parameters(getLang(request)));
       metrics.requestQuotaExceeded();
       return;
     }
@@ -203,24 +211,25 @@ export class HttpServer {
   }
 }
 
-export function isItWorthLogging(req: FastifyRequest): boolean {
-  const userAgent: string | undefined = req.headers['user-agent'];
-  const url: string | undefined = req.url;
-  if (!userAgent || !url) {
-    return true;
+interface Error409Parameters {
+  lang: string;
+  title: string;
+  message: string;
+}
+
+export function error409Parameters(lang: Language): Error409Parameters {
+  switch (lang) {
+    case Language.French:
+      return {
+        lang,
+        title: 'Quota de demandes dépassé 😭',
+        message: 'Nous avons reçu trop de demandes en provenance de votre adresse IP, veuillez réessayer plus tard.',
+      };
+    case Language.English:
+      return {
+        lang,
+        title: 'Quota of requests exceeded 😭',
+        message: 'We have received too many requests from your IP address, please try again later.',
+      };
   }
-
-  const blacklist: { userAgent: string; route: string }[] = [
-    { userAgent: 'kube-probe/', route: '/api/health' },
-    { userAgent: 'Prometheus/', route: '/api/metrics' },
-    { userAgent: 'Go-http-client/', route: '/' },
-  ];
-
-  for (const item of blacklist) {
-    if (userAgent.startsWith(item.userAgent) && url === item.route) {
-      return false;
-    }
-  }
-
-  return true;
 }

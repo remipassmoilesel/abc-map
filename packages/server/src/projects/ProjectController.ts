@@ -25,7 +25,7 @@ import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import fastifyMultipart, { MultipartValue } from '@fastify/multipart';
 import { ByIdParams, ByIdSchema, ListSchema } from './ProjectController.schemas';
 import { Validation } from '../utils/Validation';
-import { PaginatedQuery, PaginationHelper } from '../server/PaginationHelper';
+import { PaginatedQuery, PaginationHelper } from '../server/helpers/PaginationHelper';
 import { Config } from '../config/Config';
 import { CompressedProjectStream } from '@abc-map/shared';
 import '@fastify/sensible';
@@ -39,7 +39,7 @@ export class ProjectController extends Controller {
   }
 
   public getRoot(): string {
-    return '/projects';
+    return '/api/projects';
   }
 
   public setup = async (app: FastifyInstance): Promise<void> => {

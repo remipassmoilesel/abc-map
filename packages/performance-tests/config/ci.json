@@ -1,5 +1,5 @@
 {
   "vus": 10,
   "iterations": 10,
-  "host": "http://localhost:10082"
+  "host": "http://127.0.0.1:10082"
 }

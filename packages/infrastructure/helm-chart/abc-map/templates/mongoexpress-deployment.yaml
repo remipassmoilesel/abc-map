@@ -1,0 +1,73 @@
+{{- if .Values.mongoexpress.enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "abc-map.fullname" . }}-mongoexpress
+  labels:
+    {{- include "abc-map.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "abc-map.name" . }}-mongoexpress
+      app.kubernetes.io/instance: {{ .Release.Name }}-mongoexpress
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "abc-map.name" . }}-mongoexpress
+        app.kubernetes.io/instance: {{ .Release.Name }}-mongoexpress
+    spec:
+      containers:
+        - name: mongoexpress
+          image: "mongo-express:0.54"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: mongoexpress
+              containerPort: 8081
+              protocol: TCP
+          env:
+            - name: ME_CONFIG_MONGODB_SERVER
+              value: {{ include "abc-map.fullname" . }}-mongodb
+            - name: ME_CONFIG_MONGODB_ADMINUSERNAME
+              value: {{ .Values.mongodb.auth.rootUsername }}
+            - name: ME_CONFIG_MONGODB_ADMINPASSWORD
+              value: {{ .Values.mongodb.auth.rootPassword }}
+            - name: ME_CONFIG_MONGODB_PORT
+              value: '27017'
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8081
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 6
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8081
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 6
+          resources:
+            {{- toYaml .Values.mongoexpress.resources | nindent 12 }}
+
+      {{- with .Values.mongoexpress.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      {{- with .Values.mongoexpress.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      {{- with .Values.mongoexpress.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+  {{- end }}

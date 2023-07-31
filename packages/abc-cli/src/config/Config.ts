@@ -49,6 +49,10 @@ export class Config {
     return path.resolve(this.getProjectRoot(), 'packages/performance-tests');
   }
 
+  public getUserDocRoot(): string {
+    return path.resolve(this.getProjectRoot(), 'packages/user-documentation');
+  }
+
   public getFrontendUrl(): string {
     return 'http://127.0.0.1:10082/';
   }

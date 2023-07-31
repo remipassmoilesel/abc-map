@@ -26,14 +26,13 @@ export declare type HttpErrorHandler = (e: AxiosError | undefined) => void;
 
 export const ApiClient = httpApiClient(5_000);
 export const DownloadClient = httpDownloadClient(40_000);
-export const CapabilitiesClient = httpExternalClient(20_000);
+export const ExternalClient = httpExternalClient(20_000);
 
 /**
  * This client is configured for JSON requests and responses
  */
 export function httpApiClient(timeout: number, errorHandler?: HttpErrorHandler): AxiosInstance {
   const client = axios.create({
-    baseURL: '/api',
     timeout,
     responseType: 'json',
     headers: {
@@ -49,11 +48,10 @@ export function httpApiClient(timeout: number, errorHandler?: HttpErrorHandler):
 }
 
 /**
- * This client is configured for raw responses
+ * This client is configured for raw responses, and use server authentication
  */
 export function httpDownloadClient(timeout: number, errorHandler?: HttpErrorHandler): AxiosInstance {
   const client = axios.create({
-    baseURL: '/api',
     timeout,
     responseType: 'blob',
   });

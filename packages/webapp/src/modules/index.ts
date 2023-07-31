@@ -21,7 +21,7 @@ import { ColorGradientsModule } from './color-gradients/ColorGradientsModule';
 import { ProportionalSymbolsModule } from './proportional-symbols/ProportionalSymbolsModule';
 import { DifferentSymbolsModule } from './different-symbols/DifferentSymbolsModule';
 import { FeatureCountByGeometriesModule } from './count-by-geometries/FeatureCountByGeometriesModule';
-import { Scripts } from './scripts/Scripts';
+import { ScriptsModule } from './scripts/ScriptsModule';
 import { Module } from '@abc-map/module-api';
 import { Services } from '../core/Services';
 import { isExperimentalFeatureEnabled } from '../core/ui/useExperimentalFeature';
@@ -31,6 +31,7 @@ import { DataStoreModule } from './data-store/DataStoreModule';
 import { StaticExport } from './static-export/StaticExport';
 import { SharedMapSettings } from './shared-map-settings/SharedMapSettings';
 import { ProjectManagement } from './projects/ProjectManagement';
+import { DocumentationModule } from './documentation/DocumentationModule';
 
 export function localModulesFactory(services: Services): Module[] {
   const modules: Module[] = [
@@ -41,9 +42,10 @@ export function localModulesFactory(services: Services): Module[] {
     new FeatureCountByGeometriesModule(),
     new ProjectManagement(),
     new ProportionalSymbolsModule(services),
-    new Scripts(),
+    new ScriptsModule(),
     new SharedMapSettings(),
     new StaticExport(),
+    new DocumentationModule(),
   ];
 
   // Add experimental modules

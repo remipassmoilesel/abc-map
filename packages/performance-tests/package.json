@@ -22,7 +22,7 @@
   },
   "devDependencies": {
     "@abc-map/shared": ">1.0.0-rc",
-    "@types/k6": "0.42.0",
+    "@types/k6": "0.45.0",
     "@types/webpack": "5.28.0",
     "@typescript-eslint/eslint-plugin": "^5.59.1",
     "@typescript-eslint/parser": "^5.59.1",

@@ -17,7 +17,7 @@
  */
 
 export * from './blob/BlobIO';
-export * from './routes/FrontendRoutes';
+export * from './routes/WebappRoutes';
 export * from './routes/Route';
 export * from './AbcWindow';
 export * from './MapTool';

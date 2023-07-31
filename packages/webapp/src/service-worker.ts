@@ -17,7 +17,7 @@
  */
 
 /// <reference lib="webworker" />
-/* eslint-disable no-restricted-globals, no-console */
+/* eslint-disable no-restricted-globals */
 
 import { clientsClaim } from 'workbox-core';
 import { ExpirationPlugin } from 'workbox-expiration';
@@ -25,8 +25,11 @@ import { precacheAndRoute, createHandlerBoundToURL } from 'workbox-precaching';
 import { registerRoute } from 'workbox-routing';
 import { CacheableResponsePlugin } from 'workbox-cacheable-response';
 import { CacheFirst } from 'workbox-strategies';
+import { VERSION } from './version';
 
 // See https://developers.google.com/web/tools/workbox/modules
+const instantiatedAt = new Date().toISOString();
+log('Worker version ' + VERSION.hash + ' (instantiated at ' + instantiatedAt + ', built at ' + VERSION.date + ')');
 
 declare const self: ServiceWorkerGlobalScope;
 
@@ -50,6 +53,12 @@ registerRoute(
       return false;
     }
 
+    // Static documentation is not handled here
+    if (url.pathname.startsWith('/documentation')) {
+      return false;
+    }
+
+    // FIXME: is it necessary ?
     // If this is a URL that starts with /_, skip.
     if (url.pathname.startsWith('/_')) {
       return false;
@@ -71,7 +80,7 @@ registerRoute(
 // registration.waiting.postMessage({type: 'SKIP_WAITING'})
 self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'SKIP_WAITING') {
-    self.skipWaiting().catch((err) => console.error('skipWaiting error: ', err));
+    self.skipWaiting().catch((err) => logError('skipWaiting error: ', err));
   }
 });
 
@@ -127,3 +136,13 @@ registerRoute(
     ],
   })
 );
+
+function log(message: any, data?: any) {
+  // eslint-disable-next-line no-console
+  console.log(message, data);
+}
+
+function logError(message: any, data?: any) {
+  // eslint-disable-next-line no-console
+  console.error(message, data);
+}

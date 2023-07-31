@@ -31,7 +31,7 @@ import { prefixedTranslation } from '../../../i18n/i18n';
 import { useServices } from '../../../core/useServices';
 import CommonActions from './_common/common-actions/CommonActions';
 import DialogBoxAdvice from '../../../components/dialog-box-advice/DialogBoxAdvice';
-import { ToolTips } from '@abc-map/user-documentation';
+import { ToolTips } from '../../../core/tips';
 import { ToolButton } from './ToolButton';
 import TextToolPanel from './text/TextToolPanel';
 import { IconDefs } from '../../../components/icon/IconDefs';

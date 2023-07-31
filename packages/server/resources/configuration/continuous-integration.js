@@ -2,7 +2,7 @@ module.exports = {
   environmentName: 'test',
   externalUrl: 'http://localhost:10082/',
   server: {
-    host: '127.0.0.1',
+    host: 'localhost',
     port: 10_082,
     log: {
       requests: false,
@@ -57,6 +57,12 @@ module.exports = {
       projectsPerUser: 0,
     },
     persistEmails: true,
+  },
+  webapp: {
+    appendToBody: '<div>Server templated content (webapp)</div>',
+  },
+  userDocumentation: {
+    appendToBody: '<div>Server templated content (userDocumentation)</div>',
   },
   legalMentions: `
         <h3 class='my-3'>Conditions d'utilisation</h3>

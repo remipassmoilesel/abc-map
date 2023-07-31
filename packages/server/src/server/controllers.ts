@@ -26,22 +26,35 @@ import { ProjectController } from '../projects/ProjectController';
 import { DataStoreController } from '../data-store/DataStoreController';
 import { FeedbackController } from '../feedback/FeedbackController';
 import { ProjectionController } from '../projections/ProjectionController';
+import { WebappController } from './WebappController';
+import { SitemapController } from './sitemap/SitemapController';
+import { LegalMentionsController } from './LegalMentionsController';
+import { DocumentationController } from '../documentation/DocumentationController';
 
 /**
- * Routes exposed in this controllers are public and do not need a valid authentication
+ * Routes exposed in these controllers are public and do not need a valid authentication
  * @param config
  * @param services
  */
-export function publicApiControllers(config: Config, services: Services): Controller[] {
-  return [new MetricsController(services), new HealthCheckController(services), new AuthenticationController(config, services)];
+export function publicControllers(config: Config, services: Services): Controller[] {
+  return [
+    new SitemapController(config),
+    new LegalMentionsController(config),
+    new DocumentationController(config),
+    new MetricsController(services),
+    new HealthCheckController(services),
+    new AuthenticationController(config, services),
+    // Web app controller must be the last, it has a catch-all 404 handler
+    new WebappController(config),
+  ];
 }
 
 /**
- * Routes exposed in this controllers are private and need a valid authentication
+ * Routes exposed in these controllers are private and need a valid authentication
  * @param config
  * @param services
  */
-export function privateApiControllers(config: Config, services: Services): Controller[] {
+export function privateControllers(config: Config, services: Services): Controller[] {
   return [
     new ProjectController(config, services),
     new DataStoreController(services),

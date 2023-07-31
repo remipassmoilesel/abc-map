@@ -1,21 +1,15 @@
 {
-  "include": ["src/**/*.ts"],
+  "include": ["scripts/**/*.ts"],
   "exclude": ["node_modules"],
   "compilerOptions": {
     "target": "es6",
     "module": "commonjs",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
+    "outDir": "build",
     "strict": true,
+    "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "jsx": "react",
     "declaration": true,
-    "outDir": "build"
+    "sourceMap": true,
+    "lib": ["es2019"]
   }
 }

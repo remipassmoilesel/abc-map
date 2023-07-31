@@ -1,7 +1,9 @@
-node_modules
-build
 .nyc_output
+build
 coverage
-uploads
+node_modules
 public
+src/server/sitemap/test-data/actual-1.xml
+src/server/sitemap/test-data/actual-2.xml
+uploads
 version.ts

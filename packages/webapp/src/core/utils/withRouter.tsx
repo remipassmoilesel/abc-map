@@ -16,17 +16,19 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
 declare type RouteParams = { [k: string]: string | undefined };
 
 export interface WithRouterProps<RP extends RouteParams = any> {
   router: RouterProps<RP>;
+  searchParams: URLSearchParams;
 }
 
 interface RouterProps<RP extends RouteParams> {
   navigate: (s: string) => void;
   params?: RP;
+  searchParams: URLSearchParams;
 }
 
 declare type WrappedComponent<P, RP extends RouteParams> = React.FunctionComponent<Omit<P, keyof WithRouterProps<RP>>>;
@@ -35,7 +37,8 @@ export function withRouter<Props = any, RP extends RouteParams = any>(Component:
   const WithRouterWrapper = (props: Props) => {
     const navigate = useNavigate();
     const params = useParams<RP>();
-    const router: RouterProps<RP> = { navigate, params: params as RP };
+    const [searchParams] = useSearchParams();
+    const router: RouterProps<RP> = { navigate, params: params as RP, searchParams };
 
     return <Component {...props} router={router} />;
   };

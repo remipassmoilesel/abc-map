@@ -26,6 +26,8 @@ export enum Language {
   French = 'fr',
 }
 
+export const SupportedLanguages = Object.values(Language);
+
 export const FallbackLang = Language.English;
 
 export function isLangSupported(lang: string | Language): boolean {

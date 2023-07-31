@@ -16,8 +16,10 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ConfigLoader } from './ConfigLoader';
+import { ConfigLoader, logger } from './ConfigLoader';
 import { assert } from 'chai';
+
+logger.disable();
 
 describe('ConfigLoader', () => {
   let loader: ConfigLoader;
@@ -26,27 +28,29 @@ describe('ConfigLoader', () => {
   });
 
   it('load inexistant', async () => {
-    const err = await loader.load('not a config').catch((err) => err);
-    assert.match(err.message, /Cannot load configuration 'not a config'/);
+    const err = await loader.load('/not/a/config').catch((err) => err);
+    assert.match(err.message, /Cannot load configuration \/not\/a\/config/);
   });
 
   it('load bad config', async () => {
     const err = await loader.load('resources/test/wrong-config.js').catch((err) => err);
-    assert.match(err.message, /Invalid configuration: {"instancePath"/);
+    assert.match(err.message, /Invalid configuration resources\/test\/wrong-config.js: {"instancePath"/);
   });
 
-  it('load local.js', async () => {
+  it('load development.js', async () => {
     const config = await loader.load(ConfigLoader.DEFAULT_CONFIG);
     // We must keep this URL in source code for local CI
     assert.equal(config.externalUrl, 'http://localhost:10082');
     assert.isDefined(config.environmentName);
-    assert.isDefined(config.frontendPath);
+    assert.isDefined(config.webappPath);
+    assert.isDefined(config.userDocumentationPath);
   });
 
   it('load continuous-integration.js', async () => {
     const config = await loader.load('resources/configuration/continuous-integration.js');
     assert.equal(config.externalUrl, 'http://localhost:10082');
     assert.isDefined(config.environmentName);
-    assert.isDefined(config.frontendPath);
+    assert.isDefined(config.webappPath);
+    assert.isDefined(config.userDocumentationPath);
   });
 });

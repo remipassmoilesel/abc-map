@@ -32,7 +32,7 @@
     height: 3rem;
     width: 11rem;
 
-    margin-left: 1rem;
+    margin-left: 0.5rem;
 
     box-shadow: $box-shadow;
   }
@@ -76,7 +76,6 @@
 
 .illustration {
   cursor: pointer;
-  width: 45vw;
 
   @include media-breakpoint-down(xl) {
     display: none;
@@ -89,10 +88,13 @@
   align-items: flex-start;
   justify-content: flex-start;
 
-  margin-top: 7rem;
+  margin-top: 10rem;
+  @include media-breakpoint-up(xl) {
+    margin-top: 5rem;
+  }
 
-  @include media-breakpoint-down(xl) {
-    margin-top: 10rem;
+  @include media-breakpoint-down(xxl) {
+    display: none;
   }
 }
 

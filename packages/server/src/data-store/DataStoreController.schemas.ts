@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 import { FastifySchema } from 'fastify/types/schema';
-import { PaginatedQuery } from '../server/PaginationHelper';
+import { PaginatedQuery } from '../server/helpers/PaginationHelper';
 import { ArtefactFilter } from '@abc-map/shared';
 
 export interface ListQuery extends PaginatedQuery {

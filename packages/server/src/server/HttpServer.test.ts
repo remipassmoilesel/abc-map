@@ -17,10 +17,9 @@
  */
 import { Config } from '../config/Config';
 import { Services, servicesFactory } from '../services/services';
-import { HttpServer, isItWorthLogging } from './HttpServer';
+import { HttpServer } from './HttpServer';
 import { ConfigLoader } from '../config/ConfigLoader';
 import { assert } from 'chai';
-import { FastifyRequest } from 'fastify';
 
 describe('HttpServer', () => {
   let config: Config;
@@ -37,7 +36,7 @@ describe('HttpServer', () => {
     config.server.globalRateLimit.timeWindow = '1min';
 
     const bottomScript = '<script>console.log("Bottom script")</script>';
-    config.frontend = { appendToBody: bottomScript };
+    config.webapp = { appendToBody: bottomScript };
 
     services = await servicesFactory(config);
   });
@@ -108,8 +107,38 @@ describe('HttpServer', () => {
     assert.equal(res.headers['x-frame-options'], undefined);
   });
 
+  it('should serve sitemap.xml', async () => {
+    const req = await server.getApp().inject({
+      method: 'GET',
+      path: '/sitemap.xml',
+    });
+
+    assert.equal(req.headers['content-type'], 'text/xml; charset=utf-8');
+    assert.isTrue(req.body.replace(/\s/gi, '').startsWith('<?xmlversion="1.0"encoding="UTF-8"?>'));
+  });
+
+  it('should serve legal mentions', async () => {
+    const req = await server.getApp().inject({
+      method: 'GET',
+      path: '/legal-mentions.html',
+    });
+
+    assert.equal(req.headers['content-type'], 'text/html; charset=utf-8');
+    assert.isTrue(req.body.replace(/\s/gi, '').includes('<title>Legalmentions</title>'));
+  });
+
+  it('should serve documentation', async () => {
+    const req = await server.getApp().inject({
+      method: 'GET',
+      path: '/documentation/',
+    });
+
+    const body = req.body.slice(0, 300).replace(/\s/gi, '');
+    assert.equal(body.includes('<title>Abc-Map-Documentation-'), true);
+  });
+
   describe('Rate limiting', () => {
-    async function testRateLimit(route: string) {
+    async function testRateLimit(route: string, okStatus: number) {
       // We do a lot of requests on route with client 1
       for (let i = 0; i <= config.server.globalRateLimit.max * 1.2; i++) {
         await server.getApp().inject({
@@ -141,46 +170,24 @@ describe('HttpServer', () => {
 
       assert.equal(blocked.statusCode, 429, `Invalid status code for route ${route}`);
       assert.match(blocked.body, /Too Many Requests/, `Invalid body for route ${route}`);
-      assert.equal(notBlocked.statusCode, 200, `Invalid status code for route ${route}`);
+      assert.equal(notBlocked.statusCode, okStatus, `Invalid status code for route ${route}`);
     }
 
     [
       { label: 'should work on API', route: '/api/metrics' },
       //
       { label: 'should work for special routes', route: '/' },
-      { label: 'should work for special routes', route: '/index.html' },
-      { label: 'should work for special routes', route: '/sitemap.xml' },
-      { label: 'should work for special routes', route: '/api/legal-mentions' },
-      { label: 'should work for special routes', route: '/unknown/frontend/route' },
+      { label: 'should work for index', route: '/index.html' },
+      { label: 'should work for sitemap', route: '/sitemap.xml' },
+      { label: 'should work for legal mentions', route: '/legal-mentions.html' },
+      { label: 'should work for unknown route', route: '/unknown/route', okStatus: 404 },
+      { label: 'should work for unknown webapp route', route: '/en/unknown/webapp/route', okStatus: 404 },
       //
       { label: 'should work for static files', route: '/manifest.json' },
-    ].forEach(({ label, route }) => {
+    ].forEach(({ label, route, okStatus }) => {
       it(label, async () => {
-        await testRateLimit(route);
+        await testRateLimit(route, okStatus || 200);
       });
     });
   });
-
-  it('should serve sitemap.xml', async () => {
-    const req = await server.getApp().inject({
-      method: 'GET',
-      path: '/sitemap.xml',
-    });
-
-    assert.equal(req.headers['content-type'], 'text/xml; charset=utf-8');
-    assert.isTrue(req.body.replace(/\s/gi, '').startsWith('<?xmlversion="1.0"encoding="UTF-8"?>'));
-  });
-
-  it('isItWorthLogging()', () => {
-    assert.isTrue(isItWorthLogging(fakeRequest()));
-    assert.isTrue(isItWorthLogging(fakeRequest({ url: '/', headers: { 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' } })));
-    assert.isTrue(isItWorthLogging(fakeRequest({ url: '/api/authentication', headers: { 'user-agent': 'Go-http-client/1.0' } })));
-
-    assert.isFalse(isItWorthLogging(fakeRequest({ url: '/', headers: { 'user-agent': 'Go-http-client/1.0' } })));
-    assert.isFalse(isItWorthLogging(fakeRequest({ url: '/api/health', headers: { 'user-agent': 'kube-probe/1.0' } })));
-  });
 });
-
-function fakeRequest(source?: Partial<FastifyRequest>): FastifyRequest {
-  return { ...source, headers: { ...source?.headers } } as unknown as FastifyRequest;
-}

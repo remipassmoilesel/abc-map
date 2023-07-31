@@ -20,9 +20,9 @@ import i18n, { TFunction } from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import { FallbackLang, Language, Logger } from '@abc-map/shared';
 import LanguageDetector from 'i18next-browser-languagedetector';
-import { DocumentationLang } from '@abc-map/user-documentation';
 import en from './translations/en.json';
 import fr from './translations/fr.json';
+import { TipsLang } from '../core/tips';
 
 const logger = Logger.get('i18n.tsx');
 
@@ -90,14 +90,13 @@ export function getLang(): Language {
   return i18n.language as Language;
 }
 
-export function getDocumentationLang(): DocumentationLang {
-  // This weird switch will type check DocumentationLang match
+export function getTipsLang(): TipsLang {
   const lang = getLang();
   switch (lang) {
-    case Language.English:
-      return DocumentationLang.English;
     case Language.French:
-      return DocumentationLang.French;
+      return lang;
+    default:
+      return Language.English;
   }
 }
 

@@ -25,7 +25,7 @@ import { VectorLayerWrapper } from '../../core/geo/layers/LayerWrapper';
 import { LayerSelector } from '../layer-selector/LayerSelector';
 import { LayerDataSource } from '../../core/data/data-source/LayerDataSource';
 import DialogBoxAdvice from '../dialog-box-advice/DialogBoxAdvice';
-import { DataProcessingTips } from '@abc-map/user-documentation';
+import { DataProcessingTips } from '../../core/tips';
 import FormLine from '../form-line/FormLine';
 import MessageLabel from '../message-label/MessageLabel';
 import { prefixedTranslation } from '../../i18n/i18n';

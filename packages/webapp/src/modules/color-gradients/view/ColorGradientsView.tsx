@@ -26,7 +26,7 @@ import DataSourceForm, { DataSourceFormValues } from '../../../components/data-s
 import GradientsConfigForm, { ColorsConfigFormValues } from './GradientsConfigForm';
 import GeometryLayerForm, { GeometryLayerFormValues } from '../../../components/geometry-layer-form/GeometryLayerForm';
 import Sample from './sample.png';
-import { ColorGradientTips } from '@abc-map/user-documentation';
+import { ColorGradientTips } from '../../../core/tips';
 import { FormState } from '../../../components/form-validation-label/FormState';
 import FormValidationLabel from '../../../components/form-validation-label/FormValidationLabel';
 import { isProcessingResult, ProcessingResult } from '../typings/ProcessingResult';

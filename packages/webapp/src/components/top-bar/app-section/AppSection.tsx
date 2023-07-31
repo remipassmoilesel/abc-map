@@ -29,6 +29,8 @@ import { ActionButton } from '../action-button/ActionButton';
 import { FaIcon } from '../../icon/FaIcon';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useServiceWorker } from '../../../core/pwa/useServiceWorker';
+import { Link } from 'react-router-dom';
+import { Routes } from '../../../routes';
 
 const logger = Logger.get('AppSection.tsx');
 
@@ -78,10 +80,22 @@ export function AppSection() {
         )}
       </div>
 
-      <div className={'ps-2'}>
+      <div className={'d-flex flex-wrap ps-2 mb-4'}>
+        <Link to={Routes.changelog().format()} className={'mr-3'}>
+          {t('What_changed')}&nbsp;&nbsp;👷🏿
+        </Link>
+        <Link to={Routes.legalMentions().format()}>{t('About_this_platform')}&nbsp;&nbsp;⚖️</Link>
+      </div>
+
+      <div className={'ps-2 mb-2'}>
         {!runningAsPwa && (
           <>
-            {worksOffline && <div className={'mb-2'}>{t('You_can_use_abc-map_offline')}</div>}
+            {worksOffline && (
+              <div className={'alert alert-light border rounded w-100 mb-2'}>
+                <FaIcon icon={IconDefs.faInfoCircle} className={'mr-2'} />
+                {t('You_can_use_abc-map_offline')}
+              </div>
+            )}
 
             {!worksOffline && (
               <div className={'alert alert-light border rounded w-100 mb-2'}>

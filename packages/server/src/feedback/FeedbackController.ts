@@ -23,7 +23,7 @@ import { DateTime } from 'luxon';
 import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import { StatParams, TextFeedbackSchema, VoteSchema } from './FeedbackController.schemas';
 import { Config } from '../config/Config';
-import { defaultRateLimitConfig } from '../server/defaultRateLimitConfig';
+import { defaultRateLimitConfig } from '../server/helpers/defaultRateLimitConfig';
 
 export class FeedbackController extends Controller {
   constructor(private config: Config, private services: Services) {
@@ -31,7 +31,7 @@ export class FeedbackController extends Controller {
   }
 
   public getRoot(): string {
-    return '/feedback';
+    return '/api/feedback';
   }
 
   public setup = async (app: FastifyInstance): Promise<void> => {

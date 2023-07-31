@@ -22,13 +22,10 @@ export const LOCAL_ENVIRONMENT = 'local';
 export const TEST_ENVIRONMENT = 'test';
 export const STAGING_ENVIRONMENT = 'staging';
 
-/**
- * This config is supplied by users
- */
 export interface ConfigInput {
   environmentName: string;
   development?: DevelopmentDataConfig;
-  // External URL is the url that will be used by users. It must contains protocol dans full domain. E.g: 'https://abc-map.fr'.
+  // External URL is the url that will be used by users. It must contain protocol and full domain. E.g: 'https://abc-map.fr'.
   externalUrl: string;
   server: ServerConfig;
   project: ProjectConfig;
@@ -39,14 +36,16 @@ export interface ConfigInput {
   smtp: SmtpConfig;
   datastore: DatastoreConfig;
   legalMentions: string;
-  frontend?: FrontendConfig;
+  webapp?: WebappConfig;
+  userDocumentation?: UserDocConfig;
 }
 
 /**
  * This config is used in application
  */
 export interface Config extends ConfigInput {
-  frontendPath: string;
+  webappPath: string;
+  userDocumentationPath: string;
 }
 
 export interface DevelopmentDataConfig {
@@ -94,7 +93,7 @@ export interface JwtConfig {
 
 export interface AuthenticationConfig {
   secret: string;
-  tokenExpiresIn: '45min';
+  tokenExpiresIn: string;
   passwordLostExpiresIn: string;
 }
 
@@ -118,6 +117,10 @@ export interface DatastoreConfig {
   path: string;
 }
 
-export interface FrontendConfig {
+export interface WebappConfig {
+  appendToBody?: string;
+}
+
+export interface UserDocConfig {
   appendToBody?: string;
 }

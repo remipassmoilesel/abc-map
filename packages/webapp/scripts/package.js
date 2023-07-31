@@ -1,16 +1,16 @@
 #!/usr/bin/env node
 
 /*
- * This script copy frontend build result to backend.
+ * This script copy webapp build to server directory.
  */
 
 const { execSync } = require('child_process');
 const path = require('path');
 
 const sourceDir = path.resolve(`${__dirname}/../build`);
-const targetDir = path.resolve(`${__dirname}/../../server/public`);
+const targetDir = path.resolve(`${__dirname}/../../server/public/webapp`);
 
-console.info(`Copying frontend distribution to ${targetDir}`);
+console.info(`Copying webapp build to ${targetDir}`);
 
 execSync(`rm -rf ${targetDir}`);
 execSync(`mkdir -p ${targetDir}/assets`);

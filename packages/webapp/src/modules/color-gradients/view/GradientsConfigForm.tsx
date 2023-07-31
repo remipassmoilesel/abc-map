@@ -33,7 +33,7 @@ import ScaleColors from './ScaleColors';
 import ClassificationColors, { ClassesConfig } from './ClassificationColors';
 import { DataSource } from '../../../core/data/data-source/DataSource';
 import { GradientClass } from '../typings/GradientClass';
-import { ColorGradientTips } from '@abc-map/user-documentation';
+import { ColorGradientTips } from '../../../core/tips';
 import { prefixedTranslation } from '../../../i18n/i18n';
 
 const logger = Logger.get('SymbolConfigForm.tsx');

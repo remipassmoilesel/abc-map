@@ -16,7 +16,7 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 import Cls from './ModuleView.module.scss';
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { LazyExoticComponent, Suspense, ReactElement, useCallback, useEffect, useMemo } from 'react';
 import { Logger, ModuleParams } from '@abc-map/shared';
 import { useNavigate, useParams } from 'react-router-dom';
 import { pageSetup } from '../../core/utils/page-setup';
@@ -46,6 +46,8 @@ function ModuleView() {
   }, [activeModuleId, dispatch]);
 
   const moduleUi = activeModule?.getView();
+  const SyncUi = isReactElement(moduleUi) ? moduleUi : null;
+  const LazyUi = isLazyComponent(moduleUi) ? moduleUi : null;
 
   const handleShowIndex = useCallback(() => navigate(Routes.moduleIndex().format()), [navigate]);
 
@@ -56,7 +58,15 @@ function ModuleView() {
         <div className={Cls.moduleViewPort} key={activeModuleId} data-cy={'module-viewport'}>
           <ModuleErrorBoundary>
             {/* Display module ui if any */}
-            {moduleUi && React.cloneElement(moduleUi, { lang: i18n.language })}
+            {SyncUi && React.cloneElement(SyncUi, { lang: i18n.language })}
+
+            {LazyUi && (
+              // FIXME: With this implementation, UI may "flicker".
+              // FIXME: We can implement a fix like https://github.com/HanMoeHtet/route-level-code-split
+              <Suspense>
+                <LazyUi />
+              </Suspense>
+            )}
 
             {/* No module UI, display error */}
             {!moduleUi && (
@@ -80,6 +90,14 @@ function ModuleView() {
       )}
     </div>
   );
+}
+
+function isLazyComponent(comp: unknown): comp is LazyExoticComponent<any> {
+  return comp !== null && typeof comp === 'object' && '$$typeof' in comp && comp?.$$typeof?.toString() === 'Symbol(react.lazy)';
+}
+
+function isReactElement(comp: unknown): comp is ReactElement {
+  return comp !== null && typeof comp === 'object' && '$$typeof' in comp && comp?.$$typeof?.toString() === 'Symbol(react.element)';
 }
 
 export default withTranslation()(ModuleView);

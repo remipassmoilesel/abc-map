@@ -22,7 +22,7 @@ import http, { batch, ObjectBatchRequest } from 'k6/http';
 import { parseHTML } from 'k6/html';
 import { check, sleep } from 'k6';
 import { AuthenticationRequest } from '@abc-map/shared';
-import { extractAuthentication, jsonGet, jsonPost, sampleProjectMetadata } from './utils/helpers';
+import { extractAuthentication, get, jsonGet, jsonPost, sampleProjectMetadata } from './utils/helpers';
 import { FormData } from './utils/FormDataPolyfill';
 import { Config } from './utils/Config';
 
@@ -34,8 +34,8 @@ import { Config } from './utils/Config';
  *
  * Steps:
  * - First we fetch frontend
- * - We try to login with bad credentials
- * - We login with good credentials
+ * - We try to log in with bad credentials
+ * - We log in with good credentials
  * - We list artefacts
  * - We search for artefacts
  * - We download two artefacts
@@ -67,7 +67,7 @@ export default () => {
     'Bad authentication status is 401': (res) => res.status === 401,
   });
 
-  // We login with correct credentials
+  // We log in with correct credentials
   const goodCredentials: AuthenticationRequest = { email: `user-${__VU}@abc-map.fr`, password: 'azerty1234' };
   const req2 = jsonPost(`${fileOptions.host}/api/authentication`, goodCredentials);
   const auth = extractAuthentication(req2.body);
@@ -90,14 +90,14 @@ export default () => {
   });
 
   // We download artefact 1
-  const req5 = jsonGet(`${fileOptions.host}/api/datastore/download/world/world-cities/world-cities.zip`, auth);
+  const req5 = get(`${fileOptions.host}/api/datastore/download/tapiquen-sig/world/world-cities/world-cities.zip`, auth);
   check(req5, {
     'Download artefact 1 status is 200': (res) => res.status === 200,
     'Artefact 1 is heavy': (res) => (res.body?.length || 0) > 10_000,
   });
 
   // We download artefact 2
-  const req6 = jsonGet(`${fileOptions.host}/api/datastore/download/world/world-countries/world-countries.zip`, auth);
+  const req6 = get(`${fileOptions.host}/api/datastore/download/tapiquen-sig/world/world-countries/ne_10m_admin_0_countries.zip`, auth);
   check(req6, {
     'Download artefact 2 status is 200': (res) => res.status === 200,
     'Artefact 2 is heavy': (res) => (res.body?.length || 0) > 10_000,
@@ -153,20 +153,26 @@ function fetchFrontend() {
   const scripts = doc
     .find('script')
     .toArray()
-    .map((v) => v.attr('src'))
-    .filter((s) => !!s) as string[];
+    .map((v) => v.attr('src'));
+
   const assets = doc
     .find('link')
     .toArray()
     .filter((v) => v.attr('rel') !== 'alternate')
-    .map((v) => v.attr('href'))
-    .filter((s) => !!s) as string[];
+    .map((v) => v.attr('href'));
+
+  const ressources = scripts
+    .concat(assets)
+    .filter((s): s is string => !!s)
+    .map((url) => {
+      if (!url.startsWith('http')) {
+        return fileOptions.host + url;
+      }
+      return url;
+    });
 
   // Build requests
-  const requests: ObjectBatchRequest[] = scripts.concat(assets).map((src) => ({
-    method: 'GET',
-    url: fileOptions.host + src,
-  }));
+  const requests: ObjectBatchRequest[] = ressources.map((url) => ({ method: 'GET', url }));
   check(requests, { 'At least 3 frontend ressources to fetch': (r) => r.length > 0 });
 
   // Send requests

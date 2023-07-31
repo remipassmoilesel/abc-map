@@ -58,7 +58,9 @@
     "Close": "Close",
     "New_version_available_Restart_Abc-Map": "New version available ! Restart Abc-Map",
     "You_can_use_abc-map_offline": "You can use Abc-map offline",
-    "You_cannot_use_abc-map_offline": "You cannot use Abc-map offline"
+    "You_cannot_use_abc-map_offline": "You cannot use Abc-map offline",
+    "About_this_platform": "About this platform",
+    "What_changed": "What changed ?"
   },
   "FeedbackModal": {
     "So_how_is_it_going": "So how is it going ?"
@@ -779,9 +781,15 @@
   "SideMenu": {
     "Close": "Close"
   },
-  "DocumentationView": {
+  "DocumentationModule": {
+    "Documentation": "Documentation",
     "Table_of_content": "Table of content",
-    "Back_to_top": "Back to top"
+    "Back_to_top": "Back to top",
+    "Open_in_a_new_tab": "Open in a new tab",
+    "Everything_you_need_to_know_about_Abc-Map": "Everything you need to know about Abc-Map !",
+    "Previous": "Previous",
+    "This_page_is_not_loading": "This page is not loading",
+    "Zoom": "Zoom"
   },
   "AskFeedbackBubble": {
     "Hello": "Hello",

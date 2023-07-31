@@ -21,7 +21,7 @@ import { Logger } from '@abc-map/shared';
 import { Algorithm, isScaleAlgorithm, ScaleAlgorithm } from '../../../../core/modules/Algorithm';
 import AlgorithmSelector from '../../../../components/algorithm-selector/AlgorithmSelector';
 import FormLine from '../../../../components/form-line/FormLine';
-import { ProportionalSymbolsTips } from '@abc-map/user-documentation';
+import { ProportionalSymbolsTips } from '../../../../core/tips';
 import PointIconPicker from '../../../../components/icon-picker/PointIconPicker';
 import ColorPicker from '../../../../components/color-picker/ColorPickerButton';
 import { IconName } from '../../../../assets/point-icons/IconName';

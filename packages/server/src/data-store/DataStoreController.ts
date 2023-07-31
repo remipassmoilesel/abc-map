@@ -22,7 +22,7 @@ import { AbcArtefact, artefactFilterFromString, langFromString, PaginatedRespons
 import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import fastifyStatic from '@fastify/static';
 import { ByIdParams, GetByIdSchema, ListQuery, ListSchema, SearchQuery, SearchSchema } from './DataStoreController.schemas';
-import { PaginationHelper } from '../server/PaginationHelper';
+import { PaginationHelper } from '../server/helpers/PaginationHelper';
 
 export class DataStoreController extends Controller {
   constructor(private services: Services) {
@@ -30,7 +30,7 @@ export class DataStoreController extends Controller {
   }
 
   public getRoot(): string {
-    return '/datastore';
+    return '/api/datastore';
   }
 
   public setup = async (app: FastifyInstance): Promise<void> => {
