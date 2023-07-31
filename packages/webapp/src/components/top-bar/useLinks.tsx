@@ -21,6 +21,7 @@ import { Routes } from '../../routes';
 import Grid from './grid.svg';
 import { useFavoriteModules } from '../../core/modules/hooks';
 import { useTranslation } from 'react-i18next';
+import { LocalModuleId } from '../../modules/LocalModuleId';
 
 interface LinkDef {
   to: string;
@@ -78,20 +79,20 @@ export function useLinks(): Result {
     [favoriteModules]
   );
 
-  const menuLinks: LinkDef[] = useMemo(
-    () => [
-      map,
-      ...favorites,
-      moduleIndex,
+  const menuLinks: LinkDef[] = useMemo(() => {
+    const docRoute = Routes.module().withParams({ moduleId: LocalModuleId.Documentation });
+    return [
       {
-        to: Routes.documentation().format(),
+        to: docRoute,
         label: t('Documentation'),
         dataCy: 'documentation',
       },
+      map,
+      ...favorites.filter((r) => r.to !== docRoute),
+      moduleIndex,
       funding,
-    ],
-    [favorites, funding, map, moduleIndex, t]
-  );
+    ];
+  }, [favorites, funding, map, moduleIndex, t]);
 
   const topBarLinks: LinkDef[] = useMemo(() => {
     return [map, ...favorites.slice(0, 5), moduleIndex, funding];

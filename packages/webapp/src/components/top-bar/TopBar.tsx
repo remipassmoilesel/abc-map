@@ -62,7 +62,7 @@ function TopBar() {
       const estimatedLinkSizeRem = 12 * getRemSize();
       const linksLength = topBarLinks.length * estimatedLinkSizeRem;
       const availableLength = container.clientWidth;
-      const enoughSpace = linksLength / availableLength < 0.85;
+      const enoughSpace = linksLength / availableLength < 0.75;
       setDisplayTopBarLinks(enoughSpace);
     };
 

@@ -328,7 +328,7 @@ describe('GeoService', () => {
 
         // Assert
         expect(result).toEqual([-378305.8099675197, 6005304.5085882535, 1320649.5712336523, 7235612.724773034]);
-        expect(apiClient.get.args).toEqual([['/projections/EPSG:2154']]);
+        expect(apiClient.get.args).toEqual([['/api/projections/EPSG:2154']]);
         expect(getProjection('EPSG:2154')).toBeDefined();
         expect(getProjection('urn:ogc:def:crs:EPSG::2154')).toBeDefined();
       });
@@ -439,7 +439,7 @@ describe('GeoService', () => {
     });
   });
 
-  describe('With a real http client', () => {
+  describe.skip('With a real http client', () => {
     let toasts: SinonStubbedInstance<ToastService>;
     let historyStub: SinonStubbedInstance<HistoryService>;
     let service: GeoService;

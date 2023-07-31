@@ -1,0 +1,105 @@
+/*
+
+This style is shared between user-documentation and webapp packages.
+
+You can't use normal class selectors here, because of webapp CSS isolation. Use "[class='abcd']" notation instead.
+
+ */
+@mixin documentationContentStyle() {
+  h1 {
+    font-size: 2.5rem;
+    // We must keep a high padding value in order to show anchor links even if topbar is fixed
+    padding: 3rem 0 2rem 0;
+  }
+
+  h2 {
+    font-size: 2rem;
+    // We must keep a high padding value in order to show anchor links even if topbar is fixed
+    padding: 3rem 0 2rem 0;
+  }
+
+  h3 {
+    font-size: 1.7rem;
+    // We must keep a high padding value in order to show anchor links even if topbar is fixed
+    padding: 3rem 0 2rem 0;
+  }
+
+  h4 {
+    font-size: 1.6rem;
+    // We must keep a high padding value in order to show anchor links even if topbar is fixed
+    padding: 3rem 0 2rem 0;
+  }
+
+  [class='title-wrapper'] {
+    display: flex;
+    align-items: center;
+  }
+
+  [class='visually-hidden'] {
+    visibility: hidden;
+  }
+
+  a[class='anchor-link'] {
+    font-size: 1rem;
+
+    margin-left: 0.8rem;
+
+    opacity: 0.5;
+
+    &:hover {
+      opacity: 1;
+      text-decoration: none;
+    }
+  }
+
+  figure {
+    display: flex;
+    flex-direction: column;
+  }
+
+  figcaption {
+    font-style: italic;
+    font-size: 0.9rem;
+    text-align: center;
+
+    margin-bottom: 1rem;
+  }
+
+  video {
+    width: 35vw;
+    height: auto;
+
+    margin-bottom: 1rem;
+
+    @include media-breakpoint-down(xl) {
+      width: 100%;
+      height: auto;
+    }
+
+    border: solid 0.1rem $gray-400;
+    border-radius: $border-radius;
+    box-shadow: $box-shadow;
+  }
+
+  img,
+  picture {
+    max-width: 40vw;
+    @include media-breakpoint-down(md) {
+      max-width: 90vw;
+    }
+
+    margin-bottom: 1rem;
+
+    border: solid 0.1rem $gray-400;
+    border-radius: $border-radius;
+    box-shadow: $box-shadow;
+  }
+
+  p {
+    text-align: justify;
+  }
+
+  li {
+    text-align: justify;
+  }
+}

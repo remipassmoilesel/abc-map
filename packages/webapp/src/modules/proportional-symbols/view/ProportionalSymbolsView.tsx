@@ -27,7 +27,7 @@ import DataSourceForm, { DataSourceFormValues } from '../../../components/data-s
 import GeometryLayerForm, { GeometryLayerFormValues } from '../../../components/geometry-layer-form/GeometryLayerForm';
 import { ScaleAlgorithm } from '../../../core/modules/Algorithm';
 import Sample from './sample.png';
-import { ProportionalSymbolsTips } from '@abc-map/user-documentation';
+import { ProportionalSymbolsTips } from '../../../core/tips';
 import FormValidationLabel from '../../../components/form-validation-label/FormValidationLabel';
 import { FormState } from '../../../components/form-validation-label/FormState';
 import { isProcessingResult, ProcessingResult } from '../ProcessingResult';

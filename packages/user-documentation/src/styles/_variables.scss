@@ -1,0 +1,70 @@
+/**
+ * Copyright © 2021 Rémi Pace.
+ * This file is part of Abc-Map.
+ *
+ * Abc-Map is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of
+ * the License, or (at your option) any later version.
+ *
+ * Abc-Map is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General
+ * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+$font-family-sans-serif: 'AbcCantarell', sans-serif;
+$font-family-serif: serif;
+$font-family-monospace: Menlo, Monaco, Consolas, 'Courier New', monospace;
+$font-family-base: $font-family-sans-serif;
+
+$black: #000;
+$blue: #0077b6;
+$indigo: #6610f2;
+$cadet-blue: #607089;
+$yellow: #ffc107;
+
+$gray-100: #f8f9fa;
+$gray-200: #e9ecef;
+$gray-300: #dee2e6;
+$gray-400: #ced4da;
+$gray-500: #adb5bd;
+$gray-600: #6c757d;
+$gray-700: #495057;
+$gray-800: #343a40;
+$gray-900: #212529;
+
+$primary: $blue;
+$secondary: $cadet-blue;
+$warning: $yellow;
+
+$grid-breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+  xxl: 1400px,
+);
+
+$border-width: 1px;
+$border-radius: 0.4rem;
+
+$card-border-color: rgba($black, 0.125);
+
+$badge-border-radius: 0.2rem;
+
+$badge-font-size: 0.9rem;
+
+$body-color: $gray-800;
+$input-color: $gray-800;
+
+$control-color: rgba($secondary, 0.8);
+
+$box-shadow: 0 0.12rem 0.2rem rgba($gray-600, 0.15);
+$box-shadow-sm: 0 0.06rem 0.1rem rgba($gray-600, 0.15);
+$box-shadow-lg: 0 0.25rem 0.4rem rgba($gray-600, 0.15);
+$box-shadow-inset: inset 0 0.1rem 2px rgba($gray-600, 0.2);

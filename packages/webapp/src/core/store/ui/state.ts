@@ -26,9 +26,6 @@ export interface UiState {
         }
       | undefined;
   };
-  documentation: {
-    scrollPosition: number;
-  };
   /**
    * State of side menus (open / closed)
    */
@@ -83,7 +80,6 @@ export interface ServiceWorkerUiState {
 
 export const uiInitialState: UiState = {
   historyCapabilities: {},
-  documentation: { scrollPosition: 0 },
   sideMenu: {},
   informations: {
     riskyDevice: false,

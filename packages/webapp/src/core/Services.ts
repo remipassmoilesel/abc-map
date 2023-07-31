@@ -28,6 +28,7 @@ import { LegalMentionsService } from './legal-mentions/LegalMentionsService';
 import { getAbcWindow, Logger } from '@abc-map/shared';
 import { LocalStorageService } from './storage/local-storage/LocalStorageService';
 import { PwaService } from './pwa/PwaService';
+import { DocumentationService } from './documentation/DocumentationService';
 
 const logger = Logger.get('Services.ts');
 
@@ -43,6 +44,7 @@ export interface Services {
   legalMentions: LegalMentionsService;
   storage: LocalStorageService;
   pwa: PwaService;
+  documentation: DocumentationService;
 }
 
 export function getServices(): Services {
@@ -66,6 +68,7 @@ export function servicesFactory(): Services {
   const legalMentions = LegalMentionsService.create(toasts);
   const storage = new LocalStorageService();
   const pwa = new PwaService(storage);
+  const documentation = DocumentationService.create(toasts);
 
   return {
     project,
@@ -79,5 +82,6 @@ export function servicesFactory(): Services {
     legalMentions,
     storage,
     pwa,
+    documentation,
   };
 }

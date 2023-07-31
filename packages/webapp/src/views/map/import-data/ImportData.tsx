@@ -35,7 +35,7 @@ export function ImportData() {
   const { t } = useTranslation('MapView');
   const navigate = useNavigate();
 
-  const handleBrowseDocumentation = useCallback(() => navigate(Routes.documentation().format()), [navigate]);
+  const handleBrowseDocumentation = useCallback(() => navigate(Routes.module().withParams({ moduleId: LocalModuleId.Documentation })), [navigate]);
 
   const handleImportLocalFile = useCallback(() => {
     const dataReader = DataReader.create();

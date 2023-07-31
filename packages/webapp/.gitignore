@@ -22,6 +22,5 @@ npm-debug.log*
 
 src/version.ts
 
-public/static/documentation-assets
 public/static/CHANGELOG.html
 

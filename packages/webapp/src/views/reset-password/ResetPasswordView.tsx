@@ -18,7 +18,7 @@
 
 import Cls from './ResetPasswordView.module.scss';
 import React, { ChangeEvent, Component, ReactNode } from 'react';
-import { Logger, PasswordLostParams } from '@abc-map/shared';
+import { Logger, PasswordLostParams, ResetPasswordTokenParam } from '@abc-map/shared';
 import { ServiceProps, withServices } from '../../core/withServices';
 import FormValidationLabel from '../../components/form-validation-label/FormValidationLabel';
 import { pageSetup } from '../../core/utils/page-setup';
@@ -88,15 +88,16 @@ class ResetPasswordView extends Component<Props, State> {
   }
 
   public componentDidMount() {
-    pageSetup('Réinitialisation de mot de passe');
+    const t = prefixI18nTFunc('ResetPasswordView:', this.props.t);
+    pageSetup(t('Reset_your_password'));
   }
 
   public handleSubmit = () => {
     const t = prefixI18nTFunc('ResetPasswordView:', this.props.t);
     const { authentication, toasts, modals } = this.props.services;
-    const { params, navigate } = this.props.router;
+    const { searchParams, navigate } = this.props.router;
 
-    const token = params?.token;
+    const token = searchParams.get(ResetPasswordTokenParam);
     if (!token) {
       toasts.genericError();
       return;

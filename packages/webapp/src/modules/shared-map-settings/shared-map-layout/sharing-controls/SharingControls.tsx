@@ -35,6 +35,7 @@ import { MapDimensions } from './map-dimensions/MapDimensions';
 import { TextFrameControls } from '../../../../components/text-frame-controls/TextFrameControls';
 import { ScaleControls } from '../../../../components/scale-controls/ScaleControls';
 import { NorthControls } from '../../../../components/north-controls/NorthControls';
+import { WindowNames } from '../../../../core/ui/WindowNames';
 
 const logger = Logger.get('SharingControls.tsx');
 
@@ -78,7 +79,7 @@ function SharingControls(props: Props) {
       .then((status) => {
         if (ProjectStatus.Ok === status) {
           const url = projectService.getPublicLink();
-          window.open(url, 'abc-map_preview')?.focus();
+          window.open(url, WindowNames.Preview)?.focus();
         }
       })
       .catch((err) => logger.error('Preview error: ', err));

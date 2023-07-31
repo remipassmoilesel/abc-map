@@ -46,7 +46,7 @@ export class BuildService {
     this.lint(false);
     this.build();
     this.dependencyCheck(); // Dependency check must be launched AFTER build for local dependencies
-    this.test();
+    this.unitTest();
 
     if (light) {
       logger.info('\n\nThis is a light pipeline, end to end tests will not be executed.\n\n');
@@ -56,8 +56,10 @@ export class BuildService {
     let servers: ChildProcess | undefined;
     try {
       servers = await this.startServersForCi();
-      this.e2eTests();
+      // FIXME: we should create a task "test:with-server" to run all kinds of tests
+      this.documentationTests();
       this.performanceTests();
+      this.e2eTests();
     } finally {
       servers?.kill('SIGTERM');
     }
@@ -94,7 +96,7 @@ export class BuildService {
     this.shell.sync('turbo run package --concurrency 1 --no-daemon');
   }
 
-  public test(): void {
+  public unitTest(): void {
     this.shell.sync('turbo run test --concurrency 1');
   }
 
@@ -104,6 +106,10 @@ export class BuildService {
 
   public performanceTests(): void {
     this.shell.sync('pnpm run test:performance:ci', { cwd: this.config.getPerformanceTestsRoot() });
+  }
+
+  public documentationTests(): void {
+    this.shell.sync('pnpm run test:documentation:ci', { cwd: this.config.getUserDocRoot() });
   }
 
   /**

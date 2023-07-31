@@ -57,7 +57,6 @@ const UserAccountView = lazy(() => import('./views/user-account/UserAccountView'
 const LegalMentionsView = lazy(() => import('./views/legal-mentions/LegalMentionsView'));
 const FundingView = lazy(() => import('./views/funding/FundingView'));
 const SharedMapView = lazy(() => import('./views/shared-map/SharedMapView'));
-const DocumentationView = lazy(() => import('./views/documentation/DocumentationView'));
 const ChangelogView = lazy(() => import('./views/changelog/ChangelogView'));
 const ModuleIndexView = lazy(() => import('./views/module-index-view/ModuleIndexView'));
 const ModuleView = lazy(() => import('./views/module-view/ModuleView'));
@@ -78,7 +77,6 @@ export function App() {
                 <Route path={'/'} element={<LandingView />} />
                 <Route path={Routes.landing().raw()} element={<LandingView />} />
                 <Route path={Routes.map().raw()} element={<MapView />} />
-                <Route path={Routes.documentation().raw()} element={<DocumentationView />} />
                 <Route path={Routes.confirmAccount().raw()} element={<ConfirmAccountView />} />
                 <Route path={Routes.resetPassword().raw()} element={<ResetPasswordView />} />
                 <Route path={Routes.userAccount().raw()} element={<UserAccountView />} />
@@ -86,7 +84,7 @@ export function App() {
                 <Route path={Routes.funding().raw()} element={<FundingView />} />
                 <Route path={Routes.changelog().raw()} element={<ChangelogView />} />
                 <Route path={Routes.moduleIndex().raw()} element={<ModuleIndexView />} />
-                <Route path={Routes.module().raw()} element={<ModuleView />} />
+                <Route path={moduleCatchAll()} element={<ModuleView />} />
                 <Route path={'*'} element={<NotFoundView />} />
               </RoutesContainer>
             </Suspense>
@@ -141,6 +139,10 @@ function fallbackUi() {
       <BlueLoader />
     </div>
   );
+}
+
+export function moduleCatchAll(): string {
+  return Routes.module().raw() + '/*';
 }
 
 export default withTranslation()(App);

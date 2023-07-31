@@ -39,7 +39,7 @@ RUN curl -sL https://get.helm.sh/helm-v3.10.3-linux-amd64.tar.gz -o helm.tar.gz 
       && mv linux-amd64/helm /usr/local/bin
 
 # K6
-RUN curl -sL https://github.com/grafana/k6/releases/download/v0.42.0/k6-v0.42.0-linux-amd64.deb -o k6.deb \
+RUN curl -sL https://github.com/grafana/k6/releases/download/v0.45.0/k6-v0.45.0-linux-amd64.deb -o k6.deb \
       && dpkg -i k6.deb
 
 RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - && apt-get install -y nodejs

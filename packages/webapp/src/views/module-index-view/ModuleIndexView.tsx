@@ -17,7 +17,7 @@
  */
 
 import Cls from './ModuleIndexView.module.scss';
-import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react';
+import { ChangeEvent, KeyboardEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { ModuleCard } from './module-card/ModuleCard';
 import clsx from 'clsx';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -78,6 +78,15 @@ export default function ModuleIndexView() {
   }, [query, search]);
 
   const searchResults = useMemo(() => registry.search(query), [query, registry]);
+
+  const handleKeyUp = useCallback(
+    (ev: KeyboardEvent<HTMLInputElement>) => {
+      if (ev.key === 'Enter' && searchResults.length === 1) {
+        navigate(Routes.module().withParams({ moduleId: searchResults[0].getId() }));
+      }
+    },
+    [navigate, searchResults]
+  );
 
   const handleShowModule = useCallback(
     (mod: Module) => {
@@ -182,6 +191,7 @@ export default function ModuleIndexView() {
         type={'text'}
         value={query}
         onInput={handleQueryChange}
+        onKeyUp={handleKeyUp}
         placeholder={t('What_do_you_want_to_do')}
         className={clsx(Cls.searchField, 'form-control mb-4')}
         data-cy={'module-search'}

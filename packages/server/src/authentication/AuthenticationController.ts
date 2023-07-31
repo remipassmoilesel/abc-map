@@ -48,9 +48,9 @@ import {
   ResetPasswordSchema,
   UpdatePasswordRequestSchema,
 } from './AuthenticationController.schemas';
-import { jwtPlugin } from '../server/jwtPlugin';
+import { jwtPlugin } from '../server/helpers/jwtPlugin';
 import '@fastify/rate-limit';
-import { defaultRateLimitConfig } from '../server/defaultRateLimitConfig';
+import { defaultRateLimitConfig } from '../server/helpers/defaultRateLimitConfig';
 
 export const logger = Logger.get('AuthenticationController.ts');
 
@@ -60,7 +60,7 @@ export class AuthenticationController extends Controller {
   }
 
   public getRoot(): string {
-    return '/authentication';
+    return '/api/authentication';
   }
 
   // WARNING: This controller is public, authentication is not verified before

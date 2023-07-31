@@ -1,17 +1,14 @@
-const { override, addWebpackModuleRule } = require('customize-cra');
 const { InjectManifest } = require('workbox-webpack-plugin');
 const path = require('path');
 
 module.exports = {
   webpack: {
     configure: function (config, { env }) {
-      config = override(
-        // We inline SVG files suffixed with '.inline.svg'
-        addWebpackModuleRule({
-          test: /\.inline\.svg$/,
-          type: 'asset/source',
-        })
-      )(config);
+      // We inline SVG files suffixed with '.inline.svg'
+      addWebpackModuleRule(config, {
+        test: /\.inline\.svg$/,
+        type: 'asset/source',
+      });
 
       // We disable eslint and typescript check for a better DX as they are very slow.
       // Lint and typecheck pass only in CI. See package.json for eslint and tsc commands.
@@ -56,6 +53,22 @@ module.exports = {
     // We erase fake service worker setup
     config.onBeforeSetupMiddleware = undefined;
     config.onAfterSetupMiddleware = undefined;
+
+    // We set up development proxy
+    const defaultProxyConfig = {
+      target: 'http://localhost:10082',
+      logLevel: 'silent',
+      secure: false,
+      changeOrigin: true,
+      ws: true,
+      xfwd: true,
+    };
+    config.proxy = {
+      '/api': defaultProxyConfig,
+      '/documentation/': defaultProxyConfig,
+      '/legal-mentions.html': defaultProxyConfig,
+    };
+
     return config;
   },
   jest: {
@@ -80,3 +93,12 @@ module.exports = {
     },
   },
 };
+
+function addWebpackModuleRule(config, rule) {
+  for (let _rule of config.module.rules) {
+    if (_rule.oneOf) {
+      _rule.oneOf.unshift(rule);
+      break;
+    }
+  }
+}

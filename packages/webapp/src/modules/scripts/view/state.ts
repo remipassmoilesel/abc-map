@@ -32,7 +32,7 @@ export const usePersistentStore = create<State & Action>()(
   persist(
     (set) => ({
       script: Example,
-      setScript: (script) => set((state) => ({ ...state, script })),
+      setScript: (script) => set(() => ({ script })),
     }),
     { name: 'ABC_MAP_SCRIPTS_MODULE' }
   )

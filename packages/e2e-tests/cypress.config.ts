@@ -46,4 +46,5 @@ export default defineConfig({
     openMode: 0,
     runMode: 3,
   },
+  pageLoadTimeout: 15_000,
 });

@@ -11,20 +11,14 @@
       "cache": false
     },
     "clean-build": {
-      "dependsOn": [
-        "^clean-build"
-      ],
-      "outputs": [
-        "build/**"
-      ]
+      "dependsOn": ["^clean-build"],
+      "outputs": ["build/**"]
     },
     "package": {
       "cache": false
     },
     "test": {
-      "dependsOn": [
-        "^test"
-      ]
+      "dependsOn": ["^test"]
     },
     "start": {
       "cache": false,

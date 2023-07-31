@@ -31,7 +31,7 @@ export class MetricsController extends Controller {
   }
 
   public getRoot(): string {
-    return '/metrics';
+    return '/api/metrics';
   }
 
   public setup = async (app: FastifyInstance): Promise<void> => {

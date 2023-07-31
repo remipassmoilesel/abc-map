@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DocumentationTemplating with a fake index should template files if needed 1`] = `
+"
+      <html>
+        <head><title>Documentation</title></head>
+        <body>
+            <h1>Documentation</h1>
+            <div style=\\"display: none\\">%%%append-to-body%%%  <script src=\\"/analytics.js\\"></script>
+<script src=\\"/analytics-2.js\\"></script>  %%%end-append-to-body%%%</div>
+        </body>
+        </html>
+    "
+`;
+
+exports[`DocumentationTemplating with a fake index should template files if needed 2`] = `
+"<html><head></head></html>
+
+
+"
+`;
+
+exports[`DocumentationTemplating with a fake index should template files twice if needed 1`] = `
+"<html><head></head><body><div style=\\"display: none\\">%%%append-to-body%%%  <script src=\\"/another-analytics.js\\"></script>
+<script src=\\"/another-analytics-2.js\\"></script>  %%%end-append-to-body%%%</div></body></html>"
+`;
+
+exports[`DocumentationTemplating with a fake index should template files twice if needed 2`] = `
+"<html><head></head></html>
+
+
+"
+`;

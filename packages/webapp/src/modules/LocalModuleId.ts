@@ -28,4 +28,5 @@ export enum LocalModuleId {
   Scripts = 'scripts',
   SharedMapSettings = 'shared-map-settings',
   StaticExport = 'static-export',
+  Documentation = 'documentation',
 }

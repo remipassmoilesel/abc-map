@@ -36,13 +36,13 @@ describe('Search on map', function () {
       .type('Cournonterral')
       .wait(1_000)
       .get('[data-cy=search-result]')
-      .eq(1)
+      .eq(0)
       .click()
       .wait(2_000)
       .then(() => MainMap.getReference())
       .should((map) => {
         const extent = map.getViewExtent();
-        expect(extent).deep.equals([414107.002487285, 5397227.23333822, 414136.50305347895, 5397242.594491627], `Actual: "${JSON.stringify(extent)}"`);
+        expect(extent).deep.equals([401029.96381330665, 5393243.349349506, 424344.393171752, 5405383.337565949], `Actual: "${JSON.stringify(extent)}"`);
       });
   });
 });

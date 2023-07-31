@@ -30,6 +30,7 @@ import { Services } from '../../Services';
 import { LegalMentionsService } from '../../legal-mentions/LegalMentionsService';
 import { LocalStorageService } from '../../storage/local-storage/LocalStorageService';
 import { PwaService } from '../../pwa/PwaService';
+import { DocumentationService } from '../../documentation/DocumentationService';
 
 type SameKeys<T> = {
   [P in keyof T]: SinonStubbedInstance<any>;
@@ -47,6 +48,7 @@ export interface TestServices {
   legalMentions: SinonStubbedInstance<LegalMentionsService>;
   storage: SinonStubbedInstance<LocalStorageService>;
   pwa: SinonStubbedInstance<PwaService>;
+  documentation: SinonStubbedInstance<DocumentationService>;
 }
 
 export function newTestServices(): TestServices {
@@ -63,6 +65,7 @@ export function newTestServices(): TestServices {
     legalMentions: sinon.createStubInstance(LegalMentionsService),
     storage: sinon.createStubInstance(LocalStorageService),
     pwa: sinon.createStubInstance(PwaService),
+    documentation: sinon.createStubInstance(DocumentationService),
   };
   return services;
 }

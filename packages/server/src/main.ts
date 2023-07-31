@@ -24,6 +24,7 @@ import { ConfigLoader } from './config/ConfigLoader';
 import { DevInit } from './dev-init/DevInit';
 import { DbMigrationsLauncher } from './mongodb/migrations/DbMigrationsLauncher';
 import { VERSION } from './version';
+import { DocumentationTemplating } from './documentation/DocumentationTemplating';
 
 const logger = Logger.get('main.ts', 'info');
 
@@ -61,6 +62,9 @@ async function main() {
   // Index datastore and projections
   services.datastore.index().catch((err) => logger.error(`Datastore indexation failed: ${err.message}`, err));
   services.projections.index().catch((err) => logger.error(`Projections indexation failed: ${err.message}`, err));
+
+  // Prepare static documentation
+  await DocumentationTemplating.create(config).templatePages();
 
   // Instantiate then start server
   server = HttpServer.create(config, services);

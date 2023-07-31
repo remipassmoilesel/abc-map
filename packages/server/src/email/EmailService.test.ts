@@ -36,7 +36,7 @@ describe('EmailService', () => {
 
   describe('confirmRegistration()', () => {
     it('FR', async () => {
-      await service.confirmRegistration(Language.French, 'to@domain', 'confirm-registration-token');
+      await service.confirmRegistration(Language.French, 'to@domain', testToken());
 
       assert.deepEqual(client.sendMail.callCount, 1);
       assert.deepEqual(client.sendMail.args[0][0], 'to@domain');
@@ -45,7 +45,7 @@ describe('EmailService', () => {
     });
 
     it('EN', async () => {
-      await service.confirmRegistration(Language.English, 'to@domain', 'confirm-registration-token');
+      await service.confirmRegistration(Language.English, 'to@domain', testToken());
 
       assert.deepEqual(client.sendMail.callCount, 1);
       assert.deepEqual(client.sendMail.args[0][0], 'to@domain');
@@ -56,7 +56,7 @@ describe('EmailService', () => {
 
   describe('resetPassword()', () => {
     it('FR', async () => {
-      await service.resetPassword(Language.French, 'to@domain', 'reset-password-token');
+      await service.resetPassword(Language.French, 'to@domain', testToken());
 
       assert.deepEqual(client.sendMail.callCount, 1);
       assert.deepEqual(client.sendMail.args[0][0], 'to@domain');
@@ -65,7 +65,7 @@ describe('EmailService', () => {
     });
 
     it('EN', async () => {
-      await service.resetPassword(Language.English, 'to@domain', 'reset-password-token');
+      await service.resetPassword(Language.English, 'to@domain', testToken());
 
       assert.deepEqual(client.sendMail.callCount, 1);
       assert.deepEqual(client.sendMail.args[0][0], 'to@domain');
@@ -74,3 +74,9 @@ describe('EmailService', () => {
     });
   });
 });
+
+function testToken() {
+  /* eslint-disable max-len */
+  return 'eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJyZWdpc3RyYXRpb25JZCI6IjQ1OWVlOGE5LWViNTQtNGNmNy05MjMwLWE0YTVhZWFlMGU4OCIsImlhdCI6MTY4OTM3NTMzMywiZXhwIjoxNjg5NDYxNzMzfQ.YmvQ8F4OKfw8D6Ee-ACZIIvkotFo4HJkYAZiZimrIZQEy3eY38g_q57E0mFgfp9F_ujTaVzuuBcLAB71my4mdw';
+  /* eslint-enable max-len */
+}

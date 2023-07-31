@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
-import { FrontendRoutes } from '@abc-map/shared';
+import { WebappRoutes } from '@abc-map/shared';
 import { getLang } from './i18n/i18n';
 
-export const Routes = new FrontendRoutes(getLang);
+export const Routes = new WebappRoutes(getLang);

@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`helpers rewriteAssetsUrls() 1`] = `"<img src=\\"/documentation/en/automated-test-target/image.png\\"><video src=\\"/documentation/en/automated-test-target/video.mp4\\"></video>"`;

@@ -2,6 +2,13 @@
 
 For the moment we use git hashes as version, since no one complained about it 👍
 
+## ??/07/2023 - Better documentation (git: master)
+
+- New documentation, built with [Eleventy](https://www.11ty.dev/) more scalable, more SE friendly
+- In addition to the static site, the doc is directly available in the webapp
+- Server behavior have been improved: better sitemaps, 404 errors even for webapp routes that does not exist, ...
+- Added an optional instance of [Mongo Express](https://github.com/mongo-express/mongo-express) to the Helm chart
+
 ## 22/06/2023 - Better user interface (git: 4c2976cb)
 
 General improvements on user interface:

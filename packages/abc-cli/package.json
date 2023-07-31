@@ -35,7 +35,7 @@
     "prettier": "^2.8.8",
     "sort-package-json": "^2.4.1",
     "source-map-support": "^0.5.21",
-    "turbo": "^1.10.6",
+    "turbo": "^1.10.9",
     "typescript": "^5.0.4",
     "verdaccio": "^5.18.0",
     "wait-on": "^7.0.1"

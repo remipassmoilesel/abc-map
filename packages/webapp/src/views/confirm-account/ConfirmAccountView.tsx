@@ -17,8 +17,8 @@
  */
 
 import React, { useEffect, useRef, useState } from 'react';
-import { ConfirmAccountParams, ConfirmationStatus, Logger } from '@abc-map/shared';
-import { Link, useParams } from 'react-router-dom';
+import { ConfirmAccountTokenParam, ConfirmationStatus, Logger } from '@abc-map/shared';
+import { Link, useSearchParams } from 'react-router-dom';
 import { HttpError } from '../../core/http/HttpError';
 import { addNoIndexMeta, pageSetup, removeNoIndexMeta } from '../../core/utils/page-setup';
 import { prefixedTranslation } from '../../i18n/i18n';
@@ -34,7 +34,7 @@ const t = prefixedTranslation('ConfirmAccountView:');
 function ConfirmAccountView() {
   const { authentication, toasts } = useServices();
   const [status, setStatus] = useState(ConfirmationStatus.InProgress);
-  const token = useParams<ConfirmAccountParams>().token;
+  const [searchParams] = useSearchParams();
 
   useEffect(() => {
     pageSetup(t('Registration_confirmation'));
@@ -45,6 +45,7 @@ function ConfirmAccountView() {
 
   const confirmationInProgress = useRef(false);
   useEffect(() => {
+    const token = searchParams.get(ConfirmAccountTokenParam);
     if (!token) {
       setStatus(ConfirmationStatus.Failed);
       return;
@@ -70,7 +71,7 @@ function ConfirmAccountView() {
         }
       })
       .finally(() => (confirmationInProgress.current = false));
-  }, [authentication, toasts, token]);
+  }, [authentication, toasts, searchParams]);
 
   return (
     <div className={Cls.confirmAccount}>

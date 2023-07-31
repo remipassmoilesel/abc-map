@@ -28,7 +28,7 @@ export class ProjectionController extends Controller {
   }
 
   public getRoot(): string {
-    return '/projections';
+    return '/api/projections';
   }
 
   public setup = async (app: FastifyInstance): Promise<void> => {

@@ -17,7 +17,7 @@
  */
 
 export * from './BasicAuthentication';
-export * from './errorMessage';
 export * from './Logger';
 export * from './PaginatedResponse';
 export * from './ProjectionDto';
+export * from './errorMessage';

@@ -141,6 +141,14 @@ mongodb:
   tolerations: []
   affinity: {}
 
+mongoexpress:
+  enabled: true
+
+  resources: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
 smtp:
   enabled: true
   replicaCount: 1

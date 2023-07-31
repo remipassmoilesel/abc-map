@@ -17,13 +17,13 @@
  */
 
 export class Toasts {
-  public static assertText(text: string, timeout = 4000): Cypress.Chainable<any> {
+  public static assertText(text: string, timeout = 4000): Cypress.Chainable<string> {
     return cy
       .get('.abc-toast-container div', { timeout })
       .should((elem) => {
-        expect(elem.text()).to.contains(text);
+        expect(elem[0].innerText).to.contains(text);
       })
-      .then(() => Toasts.dismiss(text));
+      .then((elem) => Toasts.dismiss(text).then(() => elem[0].innerText));
   }
 
   public static dismiss(text?: string): Cypress.Chainable<any> {

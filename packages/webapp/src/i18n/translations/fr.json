@@ -60,7 +60,9 @@
     "Close": "Fermer",
     "New_version_available_Restart_Abc-Map": "Nouvelle version disponible ! Redémarrez Abc-Map",
     "You_can_use_abc-map_offline": "Vous pouvez utiliser Abc-map hors ligne",
-    "You_cannot_use_abc-map_offline": "Vous ne pouvez pas utiliser Abc-map hors ligne"
+    "You_cannot_use_abc-map_offline": "Vous ne pouvez pas utiliser Abc-map hors ligne",
+    "About_this_platform": "A propos de cette plateforme",
+    "What_changed": "Qu'est-ce qui a changé ?"
   },
   "FeedbackModal": {
     "So_how_is_it_going": "Alors, comment ça se passe ?"
@@ -782,9 +784,15 @@
   "SideMenu": {
     "Close": "Fermer"
   },
-  "DocumentationView": {
+  "DocumentationModule": {
+    "Documentation": "Documentation",
     "Table_of_content": "Sommaire",
-    "Back_to_top": "Retour en haut"
+    "Back_to_top": "Retour en haut",
+    "Open_in_a_new_tab": "Ouvrir dans un nouvel onglet",
+    "Everything_you_need_to_know_about_Abc-Map": "Tout ce que vous devez savoir sur Abc-Map !",
+    "Previous": "Précédent",
+    "This_page_is_not_loading": "Cette page ne se charge pas",
+    "Zoom": "Zoom"
   },
   "AskFeedbackBubble": {
     "Hello": "Salut",

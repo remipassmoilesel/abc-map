@@ -28,6 +28,7 @@ module.exports = {
           '\\.d\\.ts$', // TypeScript declaration files
           '(^|/)tsconfig\\.json$', // TypeScript config
           '(^|/)(babel|webpack)\\.config\\.(js|cjs|mjs|ts|tsx|json)$', // other configs
+          'src/layouts/.+\\.js$',
         ],
       },
       to: {},

@@ -16,13 +16,13 @@
  * Public License along with Abc-Map. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { CSSProperties, useCallback, useEffect, useMemo, useState } from 'react';
 import { AbcVoteAggregation, Logger, UserStatus } from '@abc-map/shared';
 import { Link, useNavigate } from 'react-router-dom';
 import { DateTime } from 'luxon';
-import Illustration1Icon from '../../assets/illustrations/illustration-1.svg';
-import Illustration2Icon from '../../assets/illustrations/illustration-2.svg';
-import Illustration3Icon from '../../assets/illustrations/illustration-3.svg';
+import Illustration1 from '../../assets/illustrations/illustration-1.svg';
+import Illustration2 from '../../assets/illustrations/illustration-2.svg';
+import Illustration3 from '../../assets/illustrations/illustration-3.svg';
 import { VERSION } from '../../version';
 import { pageSetup } from '../../core/utils/page-setup';
 import sample from 'lodash/sample';
@@ -33,8 +33,21 @@ import Cls from './LandingView.module.scss';
 import { useAppSelector } from '../../core/store/hooks';
 import { useServices } from '../../core/useServices';
 import { useTranslation } from 'react-i18next';
+import { LocalModuleId } from '../../modules/LocalModuleId';
 
 const logger = Logger.get('LandingView.tsx');
+
+interface Illustration {
+  src: string;
+  width: string;
+  height: string;
+}
+
+const Illustrations: Illustration[] = [
+  { src: Illustration1, width: 45 + 'vw', height: 33.75 + 'vw' },
+  { src: Illustration2, width: 45 + 'vw', height: 33.75 + 'vw' },
+  { src: Illustration3, width: 45 + 'vw', height: 33.75 + 'vw' },
+];
 
 function LandingView() {
   const { t } = useTranslation('LandingView');
@@ -42,13 +55,12 @@ function LandingView() {
   const navigate = useNavigate();
   const authenticated = useAppSelector((st) => st.authentication.userStatus) === UserStatus.Authenticated;
   const [voteAggregation, setVoteAggregation] = useState<AbcVoteAggregation | undefined>();
-  const [illustration, setIllustration] = useState('');
-  const buildHash = VERSION.hash;
 
-  // Select illustration on mount
-  useEffect(() => {
-    setIllustration(sample([Illustration1Icon, Illustration2Icon, Illustration3Icon]) || Illustration1Icon);
-  }, []);
+  const illustration = useMemo<Illustration>(() => sample(Illustrations) || Illustrations[0], []);
+  const illustrationSize = useMemo<CSSProperties>(
+    () => ({ width: illustration.width, height: illustration.height }),
+    [illustration.height, illustration.width]
+  );
 
   // Setup view
   useEffect(() => {
@@ -78,11 +90,13 @@ function LandingView() {
     });
   }, [modals, toasts]);
 
+  const satisfied = voteAggregation?.satisfied ?? 100;
+
   return (
     <div className={Cls.landing}>
       <div className={`container ${Cls.container}`}>
         <div className={'row'}>
-          <div className={'col-xl-6  mt-5'}>
+          <div className={'col-xl-6 mt-5'}>
             {/* Title */}
             <h1 className={Cls.title}>Abc-Map</h1>
             <p className={Cls.intro}>{t('Open_source_extensible_online_mapping')}</p>
@@ -92,7 +106,7 @@ function LandingView() {
 
             <ul className={'mb-4'}>
               <li>
-                <Link to={Routes.documentation().format()}>{t('Browse_the_doc')} 📖</Link>
+                <Link to={Routes.module().withParams({ moduleId: LocalModuleId.Documentation })}>{t('Browse_the_doc')} 📖</Link>
               </li>
               <li>
                 <Link to={Routes.map().format()}>{t('Then_open_map')} 🌍</Link>
@@ -107,40 +121,36 @@ function LandingView() {
             </div>
 
             {/* Authenticate and register buttons */}
-            {!authenticated && (
-              <div className={Cls.authenticationButtons}>
-                <h3>{t('Registration_Login')}</h3>
-                <p className={'mb-4'}>{t('Connection_is_optional')} 😉</p>
-                <div>
-                  <button className={'btn btn-outline-primary'} onClick={handleRegister} data-cy={'open-registration'}>
-                    <FaIcon icon={IconDefs.faFeatherAlt} className={'mr-3'} />
-                    {t('Register')}
-                  </button>
-                  <button className={'btn btn-outline-primary'} onClick={handleLogin} data-cy={'open-login'}>
-                    <FaIcon icon={IconDefs.faLockOpen} className={'mr-3'} />
-                    {t('Login')}
-                  </button>
-                </div>
+            <div className={Cls.authenticationButtons}>
+              <h3>{t('Registration_Login')}</h3>
+              <p className={'mb-4'}>{t('Connection_is_optional')} 😉</p>
+              <div>
+                <button className={'btn btn-outline-primary'} onClick={handleRegister} data-cy={'open-registration'} disabled={authenticated}>
+                  <FaIcon icon={IconDefs.faFeatherAlt} className={'mr-3'} />
+                  {t('Register')}
+                </button>
+                <button className={'btn btn-outline-primary'} onClick={handleLogin} data-cy={'open-login'} disabled={authenticated}>
+                  <FaIcon icon={IconDefs.faLockOpen} className={'mr-3'} />
+                  {t('Login')}
+                </button>
               </div>
-            )}
+            </div>
 
             {/* Vote results, legal mentions, current version */}
             <div className={Cls.bottomMentions}>
-              {!!voteAggregation?.total && (
-                <div className={'mb-2'}>
-                  {t('For_7_days_opinions_are_positive', { votes: voteAggregation.satisfied })}&nbsp;
-                  {voteAggregation.satisfied < 60 && (
-                    <>
-                      {t('Will_have_to_do_better')} <span className={'ml-2'}>🧑‍🏭</span>
-                    </>
-                  )}
-                  {voteAggregation.satisfied >= 60 && (
-                    <>
-                      {t('Champagne')} <span className={'ml-2'}>🎉</span>
-                    </>
-                  )}
-                </div>
-              )}
+              <div className={'mb-2'}>
+                {t('For_7_days_opinions_are_positive', { votes: satisfied })}&nbsp;
+                {satisfied < 60 && (
+                  <>
+                    {t('Will_have_to_do_better')} <span className={'ml-2'}>🧑‍🏭</span>
+                  </>
+                )}
+                {satisfied >= 60 && (
+                  <>
+                    {t('Champagne')} <span className={'ml-2'}>🎉</span>
+                  </>
+                )}
+              </div>
 
               <div className={'d-flex flex-wrap mb-2'}>
                 <Link to={Routes.changelog().format()} className={'mr-3'}>
@@ -149,13 +159,13 @@ function LandingView() {
                 <Link to={Routes.legalMentions().format()}>{t('About_this_platform')}&nbsp;&nbsp;⚖️</Link>
               </div>
 
-              <div className={Cls.version}>Version {buildHash}</div>
+              <div className={Cls.version}>git:{VERSION.hash}</div>
             </div>
           </div>
 
           {/* Illustration */}
-          <div onClick={handleGoToMap} className={'col-xl-6 d-flex flex-column align-items-end justify-content-end'}>
-            <img src={illustration} alt={t('A_pretty_illustration')} className={Cls.illustration} />
+          <div onClick={handleGoToMap} className={'col-xl-6 d-flex flex-column align-items-end justify-content-center'}>
+            <img src={illustration.src} style={illustrationSize} alt={t('A_pretty_illustration')} className={Cls.illustration} />
           </div>
         </div>
       </div>

@@ -19,8 +19,8 @@
 import Cls from './DialogBoxAdvice.module.scss';
 import React, { useCallback, useState } from 'react';
 import { Modal } from 'react-bootstrap';
-import { AllTips } from '@abc-map/user-documentation';
-import { getDocumentationLang, prefixedTranslation } from '../../i18n/i18n';
+import { AllTips } from '../../core/tips';
+import { getTipsLang, prefixedTranslation } from '../../i18n/i18n';
 import { withTranslation } from 'react-i18next';
 import { HelpIcon } from '../help-icon/HelpIcon';
 
@@ -45,7 +45,7 @@ function DialogBoxAdvice(props: Props) {
   const handleHide = useCallback(() => setOpen(false), []);
 
   const getTip = useCallback(() => {
-    const tip = AllTips.find((bundle) => bundle.lang === getDocumentationLang())?.tips.find((tip) => tip.id === id);
+    const tip = AllTips.find((bundle) => bundle.lang === getTipsLang())?.tips.find((tip) => tip.id === id);
     return tip?.content || t('This_tip_is_not_available');
   }, [id]);
 

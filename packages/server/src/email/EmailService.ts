@@ -19,11 +19,11 @@
 import { AbstractService } from '../services/AbstractService';
 import { SmtpClient } from './SmtpClient';
 import { Config } from '../config/Config';
-import { FrontendRoutes, Language } from '@abc-map/shared';
+import { WebappRoutes, Language, ConfirmAccountTokenParam, ResetPasswordTokenParam } from '@abc-map/shared';
 
 const Routes = {
-  [Language.French]: new FrontendRoutes(Language.French),
-  [Language.English]: new FrontendRoutes(Language.English),
+  [Language.French]: new WebappRoutes(Language.French),
+  [Language.English]: new WebappRoutes(Language.English),
 };
 
 const footerFr = (config: Config) => `
@@ -51,7 +51,7 @@ export class EmailService extends AbstractService {
   public confirmRegistration(lang: Language, to: string, token: string): Promise<void> {
     let subject: string;
     let content: string;
-    const href = `${this.config.externalUrl}${Routes[lang].confirmAccount().withParams({ token })}`;
+    const href = [this.config.externalUrl, Routes[lang].confirmAccount().format(), '?' + ConfirmAccountTokenParam + '=' + encodeURIComponent(token)].join('');
 
     switch (lang) {
       case Language.French:
@@ -79,7 +79,7 @@ export class EmailService extends AbstractService {
     let subject: string;
     let content: string;
 
-    const href = `${this.config.externalUrl}${Routes[lang].resetPassword().withParams({ token })}`;
+    const href = [this.config.externalUrl, Routes[lang].resetPassword().format(), '?' + ResetPasswordTokenParam + '=' + encodeURIComponent(token)].join('');
 
     switch (lang) {
       case Language.French:

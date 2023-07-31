@@ -30,7 +30,7 @@ export class HealthCheckController extends Controller {
   }
 
   public getRoot(): string {
-    return '/health';
+    return '/api/health';
   }
 
   public setup = async (app: FastifyInstance): Promise<void> => {
